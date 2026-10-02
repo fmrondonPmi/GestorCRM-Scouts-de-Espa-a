@@ -1,0 +1,117 @@
+<?php
+/**
+ * Tesorería · control de pagos de la ronda.
+ *
+ * @var string $ronda
+ * @var array  $cfg
+ * @var array  $lista     familia_id => ['familia' => …, 'calc' => …]
+ * @var array<string, AsdeBalears\AreaPrivada\Domain\Persona> $personas
+ * @var array  $resumen
+ * @var int    $sin_fam   Educandos activos sin familia (no se les cobra)
+ * @var string $estado
+ * @var string $q
+ * @var string $url
+ * @var string $url_fam
+ * @var string $url_csv
+ */
+use AsdeBalears\AreaPrivada\Domain\Secciones;
+use AsdeBalears\AreaPrivada\Frontend\Views\TesoreriaView;
+use AsdeBalears\AreaPrivada\Tesoreria\Calculadora;
+
+defined( 'ABSPATH' ) || exit;
+
+$pct = $resumen['a_pagar'] > 0 ? round( 100 * $resumen['pagado'] / $resumen['a_pagar'] ) : 0;
+?>
+<section class="asde-card">
+	<header class="asde-card__header asde-card__header--split">
+		<h2 class="asde-card__title">Control de pagos · <?php echo esc_html( $ronda ); ?></h2>
+		<a class="button asde-button-secundario" href="<?php echo esc_url( $url_csv ); ?>">Descargar CSV</a>
+	</header>
+	<dl class="asde-datos">
+		<div><dt>Familias con cuota</dt><dd><strong><?php echo (int) $resumen['familias']; ?></strong></dd></div>
+		<div><dt>Hijos que pagan</dt><dd><?php echo (int) $resumen['hijos']; ?></dd></div>
+		<div><dt>Total a cobrar</dt><dd><strong><?php echo esc_html( Calculadora::euros( $resumen['a_pagar'] ) ); ?></strong></dd></div>
+		<div><dt>Cobrado</dt><dd><?php echo esc_html( Calculadora::euros( $resumen['pagado'] ) ); ?> <span class="asde-muted">(<?php echo (int) $pct; ?> %)</span></dd></div>
+		<div><dt>Pendiente</dt><dd><?php echo esc_html( Calculadora::euros( $resumen['pendiente'] ) ); ?></dd></div>
+	</dl>
+	<div class="asde-progreso" role="img" aria-label="<?php echo esc_attr( $pct . ' % cobrado' ); ?>"><span style="width:<?php echo (int) min( 100, $pct ); ?>%"></span></div>
+	<p class="asde-muted">
+		<?php foreach ( $resumen['estados'] as $e => $n ) : ?>
+			<span class="asde-badge asde-badge--pago-<?php echo esc_attr( $e ); ?>"><?php echo esc_html( Calculadora::ETIQUETAS[ $e ] . ': ' . $n ); ?></span>
+		<?php endforeach; ?>
+	</p>
+	<p class="asde-muted">
+		Plazos:
+		<?php foreach ( $cfg['plazos'] as $pl ) : ?>
+			<?php echo esc_html( $pl['nombre'] . ' (' . number_format_i18n( (float) $pl['porcentaje'] ) . ' %, hasta el ' . wp_date( 'd/m/Y', strtotime( $pl['fecha'] . ' 12:00' ) ) . ')' ); ?> ·
+		<?php endforeach; ?>
+		Referencia para transferencias: el nº de familia (p. ej. <?php echo esc_html( ( reset( $lista )['familia']['numero'] ?? 'F684001' ) ); ?>).
+	</p>
+	<?php if ( $sin_fam ) : ?>
+		<div class="asde-notice asde-notice--warning" role="status">
+			Hay <strong><?php echo (int) $sin_fam; ?></strong> educandos con membresía activa que no están en ninguna familia: no se les está calculando cuota.
+			<a href="<?php echo esc_url( $url_fam ); ?>">Asignarles familia</a>.
+		</div>
+	<?php endif; ?>
+</section>
+
+<section class="asde-card">
+	<form method="get" action="<?php echo esc_url( $url ); ?>" class="asde-filter">
+		<input type="hidden" name="ronda" value="<?php echo esc_attr( $ronda ); ?>">
+		<label for="asde-estado">Mostrar</label>
+		<select id="asde-estado" name="estado" onchange="this.form.submit()">
+			<?php foreach ( TesoreriaView::FILTROS as $k => $label ) : ?>
+				<option value="<?php echo esc_attr( $k ); ?>" <?php selected( $estado, $k ); ?>><?php echo esc_html( $label ); ?></option>
+			<?php endforeach; ?>
+		</select>
+		<label for="asde-q-tes" class="screen-reader-text">Buscar</label>
+		<input type="search" id="asde-q-tes" name="q" value="<?php echo esc_attr( $q ); ?>" placeholder="Nº de familia o nombre">
+		<button type="submit" class="button">Filtrar</button>
+	</form>
+
+	<?php if ( ! $lista ) : ?>
+		<p>No hay familias<?php echo '' !== $estado || '' !== $q ? ' con estos filtros' : ''; ?>. <a href="<?php echo esc_url( $url_fam ); ?>">Gestionar familias</a></p>
+	<?php else : ?>
+		<table class="asde-table">
+			<thead>
+				<tr>
+					<th scope="col">Familia</th>
+					<th scope="col">Socios</th>
+					<th scope="col">Cuota</th>
+					<th scope="col">Pagado</th>
+					<th scope="col">Pendiente</th>
+					<th scope="col">Estado</th>
+					<th scope="col"><span class="screen-reader-text">Acciones</span></th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php foreach ( $lista as $id => $fila ) : ?>
+					<?php
+					$f = $fila['familia'];
+					$c = $fila['calc'];
+					?>
+					<tr>
+						<td data-label="Familia"><strong><?php echo esc_html( $f['numero'] ); ?></strong></td>
+						<td data-label="Socios">
+							<?php foreach ( $f['miembros'] as $n ) : ?>
+								<?php $p = $personas[ $n ] ?? null; ?>
+								<span class="asde-miembro<?php echo in_array( $n, $c['fuera'], true ) ? ' asde-miembro--fuera' : ''; ?>">
+									<?php echo esc_html( $p ? $p->nombre_completo() : 'Nº ' . $n ); ?><?php echo $p ? \AsdeBalears\AreaPrivada\Socios\Numeros::compacto( $p ) : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?>
+									<?php echo $p && $p->secciones ? Secciones::badge( $p->secciones[0] ) : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?>
+								</span>
+							<?php endforeach; ?>
+						</td>
+						<td data-label="Cuota">
+							<?php echo esc_html( Calculadora::euros( $c['a_pagar'] ) ); ?>
+							<br><span class="asde-muted"><?php echo esc_html( count( $c['pagan'] ) . ' hijo(s)' . ( $c['ajustes'] ? ' · ajuste ' . Calculadora::euros( $c['ajustes'] ) : '' ) ); ?></span>
+						</td>
+						<td data-label="Pagado"><?php echo esc_html( Calculadora::euros( $c['pagado'] ) ); ?></td>
+						<td data-label="Pendiente"><?php echo esc_html( Calculadora::euros( max( 0, $c['pendiente'] ) ) ); ?><?php echo $c['pendiente'] < 0 ? '<br><span class="asde-muted">Saldo a favor ' . esc_html( Calculadora::euros( -$c['pendiente'] ) ) . '</span>' : ''; ?></td>
+						<td data-label="Estado"><span class="asde-badge asde-badge--pago-<?php echo esc_attr( $c['estado'] ); ?>"><?php echo esc_html( Calculadora::ETIQUETAS[ $c['estado'] ] ); ?></span></td>
+						<td data-label=""><a class="button" href="<?php echo esc_url( add_query_arg( array( 'familia' => $id, 'ronda' => $ronda ), $url ) ); ?>">Ver / registrar pago</a></td>
+					</tr>
+				<?php endforeach; ?>
+			</tbody>
+		</table>
+	<?php endif; ?>
+</section>

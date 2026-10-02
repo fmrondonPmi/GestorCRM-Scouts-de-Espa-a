@@ -1,0 +1,17 @@
+# Paquetes generados (un .zip por versión; se construyen desde esta carpeta)
+*.zip
+
+# Credenciales y configuración local: nunca al repositorio
+.env
+.env.*
+local-test-credentials.md
+wp-config.php
+
+# Basura del sistema y de los editores
+Thumbs.db
+desktop.ini
+.DS_Store
+.vscode/
+.idea/
+*.log
+*.tmp

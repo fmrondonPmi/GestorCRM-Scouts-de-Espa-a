@@ -1,0 +1,246 @@
+<?php
+namespace AsdeBalears\AreaPrivada\Frontend\Views;
+
+use AsdeBalears\AreaPrivada\Audit\Logger;
+use AsdeBalears\AreaPrivada\Crm\CrmException;
+use AsdeBalears\AreaPrivada\Crm\PersonaRepository;
+use AsdeBalears\AreaPrivada\Frontend\Notices;
+use AsdeBalears\AreaPrivada\Informes\Generador;
+use AsdeBalears\AreaPrivada\Tesoreria\Calculadora;
+use AsdeBalears\AreaPrivada\Tesoreria\Config;
+use AsdeBalears\AreaPrivada\Tesoreria\FamiliasTable;
+use AsdeBalears\AreaPrivada\Tesoreria\MovimientosTable;
+use AsdeBalears\AreaPrivada\Usuarios\Usuarios;
+
+defined( 'ABSPATH' ) || exit;
+
+/**
+ * Tesorería · control de pagos: cuota de cada familia en la ronda, lo pagado,
+ * lo pendiente y los plazos; ficha de familia con sus movimientos.
+ */
+final class TesoreriaView extends TesoreriaBaseView {
+
+	public const FILTROS = array(
+		''                       => 'Todas',
+		Calculadora::ATRASADO    => 'Con plazos vencidos',
+		Calculadora::PENDIENTE   => 'Pendientes',
+		Calculadora::PARCIAL     => 'Pago parcial',
+		Calculadora::PAGADO      => 'Pagadas',
+		Calculadora::EXENTO      => 'Sin cuota',
+	);
+
+	public function render( string $content = '' ): string {
+		if ( ! current_user_can( self::CAP ) ) {
+			return $this->denegado();
+		}
+		$repo = PersonaRepository::make();
+		if ( ! $repo ) {
+			return $this->error_crm( 'tesoreria', 'La conexión de tu grupo con el CRM no está configurada o no se ha podido comprobar. Un administrador puede revisarla en wp-admin → Grupos Scouts.' );
+		}
+		$ronda = $this->ronda();
+
+		try {
+			$familia = (int) $this->get( 'familia' );
+			$html    = $familia ? $this->detalle( $repo, $familia, $ronda ) : $this->control( $repo, $ronda );
+		} catch ( CrmException $e ) {
+			return $this->error_crm( 'tesoreria', 'No se ha podido consultar el CRM: ' . $e->getMessage() );
+		}
+		return $this->layout( 'tesoreria', $this->subnav( 'tesoreria', $ronda ) . $html );
+	}
+
+	/** Todas las familias con su estado en la ronda. @return array{0: array, 1: array} [filas, personas] */
+	public static function estados( PersonaRepository $repo, string $ronda ): array {
+		$cfg      = Config::de( $ronda );
+		$familias = FamiliasTable::todas();
+		$nums     = array();
+		foreach ( $familias as $f ) {
+			$nums = array_merge( $nums, $f['miembros'] );
+		}
+		$personas = $repo->obtener_varias( $nums );
+		$totales  = MovimientosTable::totales( $ronda );
+		$filas    = array();
+		foreach ( $familias as $id => $f ) {
+			$filas[ $id ] = array(
+				'familia' => $f,
+				'calc'    => Calculadora::familia( $f, $personas, $cfg, $totales[ $id ] ?? array() ),
+			);
+		}
+		return array( $filas, $personas );
+	}
+
+	private function control( PersonaRepository $repo, string $ronda ): string {
+		list( $filas, $personas ) = self::estados( $repo, $ronda );
+		$cfg                      = Config::de( $ronda );
+
+		// Resumen.
+		$resumen = array(
+			'familias'  => 0,
+			'hijos'     => 0,
+			'a_pagar'   => 0.0,
+			'pagado'    => 0.0,
+			'pendiente' => 0.0,
+			'estados'   => array(),
+		);
+		foreach ( $filas as $f ) {
+			$c = $f['calc'];
+			if ( Calculadora::EXENTO !== $c['estado'] ) {
+				++$resumen['familias'];
+			}
+			$resumen['hijos']     += count( $c['pagan'] );
+			$resumen['a_pagar']   += $c['a_pagar'];
+			$resumen['pagado']    += $c['pagado'];
+			$resumen['pendiente'] += max( 0, $c['pendiente'] );
+			$resumen['estados'][ $c['estado'] ] = ( $resumen['estados'][ $c['estado'] ] ?? 0 ) + 1;
+		}
+
+		// Educandos activos que no están en ninguna familia (no se les está cobrando).
+		$mapa      = FamiliasTable::mapa_socios();
+		$sin_fam   = array_filter( $repo->todas( true ), static fn( $p ) => ! isset( $mapa[ $p->num_socio_asde ] ) && array_intersect( $p->secciones, $cfg['secciones_pagan'] ) );
+
+		// Filtros.
+		$estado = isset( self::FILTROS[ $this->get( 'estado' ) ] ) ? $this->get( 'estado' ) : '';
+		$q      = mb_strtolower( remove_accents( $this->get( 'q' ) ) );
+		$lista  = array_filter(
+			$filas,
+			function ( $f ) use ( $estado, $q, $personas ) {
+				if ( '' !== $estado && $estado !== $f['calc']['estado'] ) {
+					return false;
+				}
+				if ( '' === $q ) {
+					return true;
+				}
+				$texto = strtolower( $f['familia']['numero'] );
+				foreach ( $f['familia']['miembros'] as $n ) {
+					$texto .= ' ' . mb_strtolower( remove_accents( isset( $personas[ $n ] ) ? $personas[ $n ]->nombre_completo() : '' ) );
+				}
+				return str_contains( $texto, $q );
+			}
+		);
+
+		return $this->tpl(
+			'tesoreria/control',
+			array(
+				'ronda'     => $ronda,
+				'cfg'       => $cfg,
+				'lista'     => $lista,
+				'personas'  => $personas,
+				'resumen'   => $resumen,
+				'sin_fam'   => count( $sin_fam ),
+				'estado'    => $estado,
+				'q'         => $this->get( 'q' ),
+				'url'       => $this->url( 'tesoreria' ),
+				'url_fam'   => $this->url( 'familias' ),
+				'url_csv'   => $this->url( 'tesoreria', array( 'ronda' => $ronda, 'formato' => 'csv', '_wpnonce' => wp_create_nonce( 'asde_tesoreria_csv' ) ) ),
+			)
+		);
+	}
+
+	private function detalle( PersonaRepository $repo, int $id, string $ronda ): string {
+		$f = FamiliasTable::obtener( $id );
+		if ( ! $f ) {
+			return $this->tpl( 'comun/avisos', array( 'avisos' => array( array( 'error', 'Esa familia no existe.' ) ) ) ) . $this->control( $repo, $ronda );
+		}
+		$cfg      = Config::de( $ronda );
+		$personas = $repo->obtener_varias( $f['miembros'] );
+		$calc     = Calculadora::familia( $f, $personas, $cfg, MovimientosTable::totales( $ronda )[ $id ] ?? array() );
+
+		$cuenta = null;
+		foreach ( $f['miembros'] as $n ) {
+			$cuenta = Usuarios::tutores_de( $n )[0] ?? null;
+			if ( $cuenta ) {
+				break;
+			}
+		}
+
+		return $this->tpl(
+			'tesoreria/familia',
+			array(
+				'familia'     => $f,
+				'personas'    => $personas,
+				'calc'        => $calc,
+				'cfg'         => $cfg,
+				'ronda'       => $ronda,
+				'movimientos' => MovimientosTable::de_familia( $id, $ronda ),
+				'cuenta'      => $cuenta,
+				'url'         => $this->url( 'tesoreria', array( 'ronda' => $ronda ) ),
+				'url_editar'  => $this->url( 'familias', array( 'familia' => $id ) ),
+			)
+		);
+	}
+
+	/** Descarga CSV del control de pagos (se llama antes de pintar la página). */
+	public function exportar(): void {
+		if ( ! current_user_can( self::CAP ) || ! wp_verify_nonce( $this->get( '_wpnonce' ), 'asde_tesoreria_csv' ) ) {
+			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-area-privada' ), 403 );
+		}
+		$repo = PersonaRepository::make();
+		if ( ! $repo ) {
+			wp_die( esc_html__( 'CRM no configurado.', 'asde-area-privada' ), 500 );
+		}
+		$ronda = $this->ronda();
+		try {
+			list( $filas, $personas ) = self::estados( $repo, $ronda );
+		} catch ( CrmException $e ) {
+			wp_die( esc_html( $e->getMessage() ), 500 );
+		}
+		Logger::log( 'tesoreria_exportada', 'ronda', $ronda, array( 'familias' => count( $filas ) ) );
+
+		nocache_headers();
+		header( 'Content-Type: text/csv; charset=UTF-8' );
+		header( 'Content-Disposition: attachment; filename="control-pagos-' . $ronda . '-' . wp_date( 'Ymd' ) . '.csv"' );
+		$out = fopen( 'php://output', 'w' );
+		fwrite( $out, "\xEF\xBB\xBF" );
+		fputcsv( $out, array( 'Nº familia', 'Socios', 'Hijos que pagan', 'Cuota', 'Ajustes', 'A pagar', 'Pagado', 'Pendiente', 'Estado' ), ';' );
+		$num = static fn( float $v ) => number_format( $v, 2, ',', '' );
+		foreach ( $filas as $f ) {
+			$c       = $f['calc'];
+			$nombres = array_map( static fn( $n ) => isset( $personas[ $n ] ) ? $personas[ $n ]->nombre_completo() : $n, $f['familia']['miembros'] );
+			fputcsv( $out, array_map( array( Generador::class, 'celda_segura' ), array( $f['familia']['numero'], implode( ', ', $nombres ), count( $c['pagan'] ), $num( $c['cuota']['total'] ), $num( $c['ajustes'] ), $num( $c['a_pagar'] ), $num( $c['pagado'] ), $num( $c['pendiente'] ), Calculadora::ETIQUETAS[ $c['estado'] ] ) ), ';' );
+		}
+		fclose( $out );
+		exit;
+	}
+
+	public function handle_post(): void {
+		if ( ! current_user_can( self::CAP ) ) {
+			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-area-privada' ), 403 );
+		}
+		$familia = (int) $this->post( 'familia' );
+		$ronda   = Config::es_ronda( $this->post( 'ronda' ) ) ? $this->post( 'ronda' ) : Config::ronda_actual();
+		$volver  = $this->url( 'tesoreria', array( 'familia' => $familia, 'ronda' => $ronda ) );
+		if ( ! FamiliasTable::obtener( $familia ) ) {
+			Notices::add( 'error', 'Familia no válida.' );
+			$this->redirect( $this->url( 'tesoreria' ) );
+		}
+		check_admin_referer( 'asde_mov_' . $familia );
+		$importe = (float) str_replace( ',', '.', $this->post( 'importe' ) );
+
+		switch ( $this->post( 'asde_action' ) ) {
+			case 'registrar_pago':
+				$r = MovimientosTable::registrar( $familia, $ronda, MovimientosTable::PAGO, $this->post( 'fecha' ), $importe, sanitize_key( $this->post( 'metodo' ) ), $this->post( 'referencia' ), $this->post( 'nota' ) );
+				$ok = sprintf( 'Pago de %s registrado.', Calculadora::euros( $importe ) );
+				break;
+			case 'registrar_ajuste':
+				$signo = 'descuento' === $this->post( 'sentido' ) ? -1 : 1;
+				$r     = MovimientosTable::registrar( $familia, $ronda, MovimientosTable::AJUSTE, $this->post( 'fecha' ), $signo * abs( $importe ), '', '', $this->post( 'nota' ) );
+				$ok    = sprintf( 'Ajuste de %s registrado.', Calculadora::euros( $signo * abs( $importe ) ) );
+				break;
+			case 'anular':
+				$mov = MovimientosTable::obtener( (int) $this->post( 'movimiento' ) );
+				$r   = ( $mov && (int) $mov['familia_id'] === $familia && MovimientosTable::anular( (int) $mov['id'] ) ) ? (int) $mov['id'] : new \WP_Error( 'x', 'No se ha podido anular el movimiento.' );
+				$ok  = 'Movimiento anulado.';
+				break;
+			default:
+				$r = new \WP_Error( 'x', 'Acción desconocida.' );
+				$ok = '';
+		}
+
+		if ( is_wp_error( $r ) ) {
+			Notices::add( 'error', esc_html( $r->get_error_message() ) );
+		} else {
+			Logger::log( 'tesoreria_' . $this->post( 'asde_action' ), 'familia', (string) $familia, array( 'movimiento' => $r, 'ronda' => $ronda ) );
+			Notices::add( 'success', esc_html( $ok ) );
+		}
+		$this->redirect( $volver );
+	}
+}

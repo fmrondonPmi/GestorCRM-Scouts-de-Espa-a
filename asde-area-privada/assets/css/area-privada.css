@@ -1,0 +1,1760 @@
+/*
+ * Área privada · ASDE Scouts de Balears
+ * Complementa al tema Enfold: hereda tipografía, formularios y botones, y solo
+ * añade lo que el tema no tiene. Colores desde las variables de Enfold.
+ */
+
+.asde-ap {
+	--asde-primary: var(--enfold-main-color-primary, #632599);
+	--asde-primary-dark: #421866;
+	--asde-lila: #c7a2e8;
+	--asde-text: var(--enfold-main-color-color, #444444);
+	--asde-muted: #666666;
+	--asde-border: #e1e1e1;
+	--asde-radius: 6px;
+	margin-bottom: 40px;
+}
+
+/* Menú */
+.asde-ap .asde-nav {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px 16px;
+	margin: 0 0 24px;
+	border-bottom: 2px solid var(--asde-lila);
+}
+.asde-ap .asde-nav__tabs {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+.asde-ap .asde-nav__tabs li {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+.asde-ap .asde-nav__tabs a {
+	display: block;
+	margin-bottom: -2px;
+	padding: 10px 14px;
+	border-bottom: 3px solid transparent;
+	color: var(--asde-primary);
+	font-weight: 600;
+	text-decoration: none;
+}
+.asde-ap .asde-nav__tabs a:hover,
+.asde-ap .asde-nav__tabs a:focus-visible,
+.asde-ap .asde-nav__tabs a.is-active {
+	border-bottom-color: var(--asde-primary);
+}
+.asde-ap .asde-nav__user {
+	margin: 0;
+	padding: 8px 0;
+	color: var(--asde-muted);
+	font-size: 13px;
+}
+
+/* Tarjetas */
+.asde-ap .asde-card {
+	margin: 0 0 24px;
+	padding: 20px 24px;
+	border: 1px solid var(--asde-border);
+	border-radius: var(--asde-radius);
+	background: #ffffff;
+}
+.asde-ap .asde-card > h2:first-child,
+.asde-ap .asde-card > h3:first-child {
+	margin-top: 0;
+}
+.asde-ap .asde-card__header {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px 12px;
+	margin-bottom: 12px;
+}
+.asde-ap .asde-card__header--split {
+	justify-content: space-between;
+}
+.asde-ap .asde-card__title {
+	margin: 0;
+}
+/* Título suelto de la tarjeta (fuera de .asde-card__header): separado de lo que sigue. */
+.asde-ap .asde-card > .asde-card__title {
+	margin-bottom: 12px;
+}
+.asde-ap .asde-card--narrow {
+	max-width: 540px;
+}
+.asde-ap .asde-back {
+	margin: 0 0 12px;
+}
+
+/* Etiquetas */
+.asde-ap .asde-badge {
+	display: inline-block;
+	margin: 0 4px 4px 0;
+	padding: 2px 10px;
+	border-radius: 999px;
+	font-size: 12px;
+	font-weight: 600;
+	line-height: 1.6;
+	white-space: nowrap;
+	vertical-align: middle;
+}
+.asde-ap .asde-badge--rol {
+	background: #f1e9f8;
+	color: var(--asde-primary-dark);
+}
+.asde-ap .asde-badge--estado-invitado {
+	background: #fff3cd;
+	color: #664d03;
+}
+.asde-ap .asde-badge--estado-activo {
+	background: #e6f4d7;
+	color: #2d4f06;
+}
+.asde-ap .asde-badge--estado-desactivado {
+	background: #eeeeee;
+	color: #555555;
+}
+
+/* Avisos */
+.asde-ap .asde-notice {
+	margin: 0 0 16px;
+	padding: 12px 16px;
+	border-left: 4px solid;
+	border-radius: 4px;
+}
+.asde-ap .asde-notice--success {
+	border-color: #5a8f00;
+	background: #eef7e6;
+}
+.asde-ap .asde-notice--error {
+	border-color: #b32d2e;
+	background: #fdecea;
+}
+.asde-ap .asde-notice--warning {
+	border-color: #c99400;
+	background: #fff8e1;
+}
+.asde-ap .asde-notice--info {
+	border-color: var(--asde-primary);
+	background: #f3eefa;
+}
+
+/* Monitor de la corrección de números en segundo plano */
+.asde-ap .asde-tarea {
+	margin: 0 0 16px;
+	padding: 10px 16px 12px;
+	border: 1px solid var(--asde-lila);
+	border-left: 4px solid var(--asde-primary);
+	border-radius: 4px;
+	background: #f7f3fc;
+}
+.asde-ap .asde-tarea[hidden] {
+	display: none;
+}
+.asde-ap .asde-tarea--terminada {
+	border-left-color: #5a8f00;
+	background: #eef7e6;
+}
+.asde-ap .asde-tarea--cancelada,
+.asde-ap .asde-tarea--error {
+	border-left-color: #c99400;
+	background: #fff8e1;
+}
+.asde-ap .asde-tarea__fila {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	gap: 4px 12px;
+}
+.asde-ap .asde-tarea__texto {
+	color: var(--asde-muted);
+}
+.asde-ap .asde-tarea__barra {
+	display: block;
+	width: 100%;
+	height: 8px;
+	margin: 8px 0 6px;
+	accent-color: var(--asde-primary);
+}
+.asde-ap .asde-tarea__acciones {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4px 16px;
+	font-size: 0.9em;
+}
+.asde-ap .asde-tarea__acciones [hidden] {
+	display: none;
+}
+.asde-ap .asde-tarea-fallidas {
+	margin-top: 12px;
+}
+.asde-ap .asde-tarea-fallidas summary {
+	cursor: pointer;
+	color: #8a6500;
+	font-weight: 600;
+}
+
+/* Búsqueda y filtros */
+.asde-ap .asde-search {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	align-items: stretch;
+}
+.asde-ap .asde-search input[type="search"] {
+	flex: 1 1 260px;
+	min-width: 0;
+	margin: 0;
+}
+.asde-ap .asde-filter {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px;
+	margin: 0 0 16px;
+}
+.asde-ap .asde-filter select {
+	width: auto;
+	margin: 0;
+}
+.asde-ap .asde-filter label {
+	margin: 0;
+	font-weight: 600;
+}
+
+/* Tablas: en móvil, cada fila pasa a ser una tarjeta */
+.asde-ap .asde-table {
+	width: 100%;
+	border-collapse: collapse;
+}
+.asde-ap .asde-table th,
+.asde-ap .asde-table td {
+	padding: 10px 8px;
+	border-bottom: 1px solid var(--asde-border);
+	text-align: left;
+	vertical-align: top;
+}
+@media (max-width: 767px) {
+	.asde-ap .asde-table:not(.asde-table--informe) thead {
+		display: none;
+	}
+	.asde-ap .asde-table:not(.asde-table--informe) tr {
+		display: block;
+		margin-bottom: 12px;
+		padding: 8px 12px;
+		border: 1px solid var(--asde-border);
+		border-radius: var(--asde-radius);
+	}
+	/* La etiqueta va a la izquierda (absoluta) y el contenido, sea el que sea (texto, enlaces,
+	   saltos de línea, insignias), fluye en su columna. Con display:flex cada trozo de la celda
+	   pasaba a ser una columna y el texto se partía letra a letra. */
+	.asde-ap .asde-table:not(.asde-table--informe) td {
+		position: relative;
+		display: block;
+		padding: 4px 0;
+		border: 0;
+		overflow-wrap: anywhere;
+	}
+	.asde-ap .asde-table:not(.asde-table--informe) td[data-label]:not([data-label=""]) {
+		padding-left: 120px;
+		min-height: 1.6em;
+	}
+	.asde-ap .asde-table:not(.asde-table--informe) td[data-label]:not([data-label=""])::before {
+		content: attr(data-label);
+		position: absolute;
+		top: 4px;
+		left: 0;
+		width: 108px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		color: var(--asde-muted);
+		font-size: 13px;
+		font-weight: 600;
+	}
+	.asde-ap .asde-table:not(.asde-table--informe) tbody th {
+		display: block;
+		padding: 4px 0;
+		border: 0;
+		text-align: left;
+	}
+	.asde-ap .asde-table:not(.asde-table--informe) tfoot th,
+	.asde-ap .asde-table:not(.asde-table--informe) tfoot td {
+		display: block;
+		padding: 4px 0;
+		border: 0;
+	}
+}
+
+/* Cabecera plegable y menús fijos (páginas del área privada) */
+/* Enfold pone overflow: hidden en body y #wrap_all, y así position: sticky no
+   funciona. clip recorta igual (sin barra horizontal) pero deja funcionar sticky. */
+body.asde-ap-pagina {
+	overflow-x: clip !important;
+	overflow-y: visible !important;
+}
+body.asde-ap-pagina #wrap_all {
+	overflow: clip;
+}
+body.asde-ap-pagina .title_container {
+	display: none; /* Sin título ni migas: el área tiene su propio menú. */
+}
+.asde-ap .asde-nav__cabecera {
+	margin: 0 0 0 8px;
+	padding: 1px 10px;
+	border: 1px solid var(--asde-border);
+	border-radius: 999px;
+	background: transparent;
+	color: var(--asde-primary);
+	font-size: 12px;
+	line-height: 1.7;
+	cursor: pointer;
+}
+.asde-ap .asde-nav__cabecera:hover,
+.asde-ap .asde-nav__cabecera:focus-visible {
+	border-color: var(--asde-primary);
+}
+html.asde-cabecera-oculta #header_meta {
+	display: none !important;
+}
+html.asde-cabecera-oculta #top #header {
+	top: var(--asde-admin-h, 0px) !important;
+	margin-top: 0 !important; /* Enfold la sube al hacer scroll para despegar la franja superior. */
+	transform: none !important;
+}
+html.asde-cabecera-oculta body.asde-ap-pagina #main .template-page.content {
+	padding-top: 20px;
+}
+html.asde-cabecera-oculta .asde-ap .asde-nav {
+	position: sticky;
+	top: var(--asde-nav-top, 51px);
+	z-index: 480;
+	padding-top: 8px;
+	background: #ffffff;
+	box-shadow: 0 6px 6px -6px rgba(0, 0, 0, 0.18);
+}
+@media (min-width: 990px) {
+	html.asde-cabecera-oculta #header .av-logo-container {
+		display: none !important;
+	}
+	html.asde-cabecera-oculta #top #main {
+		padding-top: var(--asde-cabecera-h, 51px) !important;
+	}
+}
+@media (max-width: 989px) {
+	/* En móvil el menú hamburguesa está junto al logo: se oculta solo el logo. */
+	html.asde-cabecera-oculta #header .logo {
+		visibility: hidden;
+	}
+	html.asde-cabecera-oculta #top #header {
+		position: sticky;
+	}
+}
+
+/* Ficha editable */
+.asde-ap .asde-ro {
+	border-style: dashed !important;
+	background: #f5f5f5 !important;
+	color: #555555 !important;
+	cursor: not-allowed;
+}
+.asde-ap .asde-ro-icon {
+	margin-left: 2px;
+	font-size: 12px;
+	cursor: help;
+}
+.asde-ap .asde-ficha textarea {
+	min-height: 64px;
+}
+.asde-ap .asde-ficha__guardar {
+	position: sticky;
+	bottom: 0;
+	z-index: 5;
+	margin: 0;
+	padding: 12px 0;
+	background: linear-gradient(to top, #ffffff 70%, rgba(255, 255, 255, 0));
+}
+.asde-ap .asde-revisar {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 6px;
+}
+.asde-ap .asde-revisar input[type="text"] {
+	width: auto;
+	min-width: 160px;
+	margin: 0;
+}
+
+/* Apartados plegables de la ficha */
+.asde-ap details.asde-plegable > summary {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: baseline;
+	gap: 4px 12px;
+	list-style: none;
+	cursor: pointer;
+}
+.asde-ap details.asde-plegable > summary::-webkit-details-marker {
+	display: none;
+}
+.asde-ap details.asde-plegable > summary h3 {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	margin: 0;
+}
+.asde-ap details.asde-plegable > summary h3::before {
+	content: "▾";
+	display: inline-block;
+	color: var(--asde-primary);
+	font-size: 0.8em;
+	transition: transform 0.15s ease;
+}
+.asde-ap details.asde-plegable:not([open]) > summary h3::before {
+	transform: rotate(-90deg);
+}
+.asde-ap details.asde-plegable[open] > summary {
+	margin-bottom: 14px;
+}
+.asde-ap details.asde-plegable > summary:focus-visible {
+	outline: 2px solid var(--asde-primary);
+	outline-offset: 4px;
+	border-radius: 4px;
+}
+.asde-ap .asde-plegable__resumen {
+	font-size: 12px;
+}
+.asde-ap .asde-ficha__plegar {
+	display: flex;
+	justify-content: flex-end;
+	gap: 16px;
+	margin: 0 0 8px;
+}
+.asde-ap .asde-ficha__plegar[hidden] {
+	display: none;
+}
+@media (prefers-reduced-motion: reduce) {
+	.asde-ap details.asde-plegable > summary h3::before {
+		transition: none;
+	}
+}
+
+/* Desplegable con explicación de cada opción (la lista y el globo cuelgan del <body>) */
+.asde-ap .asde-select-ayuda__boton {
+	display: block;
+	width: 100%;
+	margin: 0;
+	padding-right: 32px !important;
+	background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23632599' d='M6 8 0 0h12z'/%3E%3C/svg%3E");
+	background-repeat: no-repeat;
+	background-position: right 12px center;
+	line-height: 1.4;
+	text-align: left;
+	cursor: pointer;
+}
+.asde-ap .asde-select-ayuda__boton:focus-visible {
+	outline: 2px solid var(--asde-primary);
+	outline-offset: 1px;
+}
+.asde-select-ayuda__lista {
+	position: absolute;
+	z-index: 100000;
+	max-height: 300px;
+	margin: 0;
+	padding: 4px 0;
+	overflow-y: auto;
+	border: 1px solid #e1e1e1;
+	border-radius: 6px;
+	background: #ffffff;
+	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+	list-style: none;
+	box-sizing: border-box;
+}
+.asde-select-ayuda__lista li {
+	margin: 0;
+	padding: 8px 12px;
+	list-style: none;
+	cursor: pointer;
+	font-size: 14px;
+	line-height: 1.4;
+}
+.asde-select-ayuda__lista li[aria-selected="true"] {
+	background: #f3ecfa;
+	color: #632599;
+}
+.asde-select-ayuda__globo {
+	position: absolute;
+	z-index: 100001;
+	max-width: 280px;
+	padding: 8px 12px;
+	border-radius: 6px;
+	background: #2b1a3d;
+	color: #ffffff;
+	font-size: 13px;
+	line-height: 1.45;
+	box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+	pointer-events: none;
+}
+.asde-select-ayuda__lista[hidden],
+.asde-select-ayuda__globo[hidden] {
+	display: none;
+}
+
+/* Desplegable predictivo */
+.asde-ap .asde-combobox {
+	position: relative;
+	flex: 1 1 320px;
+	min-width: 0;
+}
+.asde-ap .asde-combobox__input {
+	width: 100%;
+	margin: 0;
+	box-sizing: border-box;
+}
+/* La lista cuelga del <body> (fuera de .asde-ap) para no quedar tapada. */
+.asde-combobox__lista {
+	position: absolute;
+	z-index: 100000;
+	max-height: 280px;
+	margin: 0;
+	padding: 4px 0;
+	overflow-y: auto;
+	border: 1px solid #e1e1e1;
+	border-radius: 6px;
+	background: #ffffff;
+	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+	list-style: none;
+	box-sizing: border-box;
+}
+.asde-combobox__lista li {
+	margin: 0;
+	padding: 6px 12px;
+	list-style: none;
+	cursor: pointer;
+	font-size: 14px;
+	line-height: 1.4;
+}
+.asde-combobox__lista li:hover,
+.asde-combobox__lista li[aria-selected="true"] {
+	background: #f3ecfa;
+	color: #632599;
+}
+.asde-combobox__lista .asde-combobox__vacio {
+	color: #666666;
+	cursor: default;
+}
+
+/* Voluntario sin sección */
+.asde-ap .asde-badge--sin-seccion {
+	background: #eeeeee;
+	color: #444444;
+}
+.asde-ap .asde-choice--separada {
+	margin-top: 10px;
+	padding-top: 10px;
+	border-top: 1px dashed var(--asde-border);
+}
+
+/* Banco */
+.asde-ap .asde-importar {
+	margin: 16px 0;
+	padding: 12px 16px;
+	border: 1px solid var(--asde-border);
+	border-radius: var(--asde-radius);
+}
+.asde-ap .asde-importar summary {
+	cursor: pointer;
+}
+.asde-ap .asde-importe {
+	font-variant-numeric: tabular-nums;
+	white-space: nowrap;
+	text-align: right;
+}
+.asde-ap .asde-importe--ingreso {
+	color: #1e6b32;
+	font-weight: 600;
+}
+.asde-ap .asde-importe--gasto {
+	color: #a12622;
+}
+.asde-ap .asde-conciliar {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 6px;
+	margin: 4px 0;
+}
+.asde-ap .asde-conciliar select {
+	width: auto;
+	max-width: 100%;
+	margin: 0;
+}
+.asde-ap .asde-badge--banco-pendiente {
+	background: #fff4d6;
+	color: #7a5a00;
+}
+.asde-ap .asde-badge--banco-conciliado {
+	background: #e7f5ea;
+	color: #1e6b32;
+}
+.asde-ap .asde-badge--banco-ignorado {
+	background: #eeeeee;
+	color: #555555;
+}
+
+/* Registro de emails */
+.asde-ap .asde-badge--email-enviado {
+	background: #e7f5ea;
+	color: #1e6b32;
+}
+.asde-ap .asde-badge--email-error {
+	background: #fbeaea;
+	color: #a12622;
+}
+.asde-ap .asde-badge--email-sin_email {
+	background: #fff4d6;
+	color: #7a5a00;
+}
+.asde-ap .asde-email-preview {
+	display: block;
+	width: 100%;
+	height: 680px;
+	border: 1px solid var(--asde-border);
+	border-radius: var(--asde-radius);
+	background: #f4f1f7;
+}
+
+/* Ordenar por columnas */
+.asde-ap .asde-orden {
+	color: inherit;
+	text-decoration: none;
+	white-space: nowrap;
+}
+.asde-ap .asde-orden:hover,
+.asde-ap .asde-orden:focus {
+	color: var(--asde-primary);
+	text-decoration: underline;
+}
+.asde-ap .asde-orden__flecha {
+	font-size: 11px;
+	opacity: 0.45;
+}
+.asde-ap .asde-orden.is-active .asde-orden__flecha {
+	opacity: 1;
+	color: var(--asde-primary);
+}
+.asde-ap .asde-solo-movil {
+	display: none;
+}
+@media (max-width: 767px) {
+	.asde-ap .asde-solo-movil {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		gap: 8px;
+	}
+}
+
+/* Paginación */
+.asde-ap .asde-paginacion {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px 16px;
+	margin: 16px 0 0;
+}
+.asde-ap .asde-paginacion__info {
+	margin: 0;
+	color: var(--asde-muted);
+	font-size: 13px;
+}
+.asde-ap .asde-paginacion__botones {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+.asde-ap .asde-paginacion__botones li {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+.asde-ap .asde-paginacion__botones a,
+.asde-ap .asde-paginacion__botones span {
+	display: inline-block;
+	min-width: 34px;
+	padding: 5px 8px;
+	border: 1px solid var(--asde-border);
+	border-radius: var(--asde-radius);
+	line-height: 1.4;
+	text-align: center;
+	text-decoration: none;
+}
+.asde-ap .asde-paginacion__botones a:hover,
+.asde-ap .asde-paginacion__botones a:focus {
+	border-color: var(--asde-primary);
+	color: var(--asde-primary);
+}
+.asde-ap .asde-paginacion__botones .is-current {
+	border-color: var(--asde-primary);
+	background: var(--asde-primary);
+	color: #ffffff;
+	font-weight: 600;
+}
+.asde-ap .asde-paginacion__botones .is-disabled {
+	color: var(--asde-muted);
+	opacity: 0.5;
+}
+.asde-ap .asde-paginacion__botones .asde-paginacion__hueco {
+	border-color: transparent;
+}
+.asde-ap .asde-paginacion__tamano {
+	display: flex;
+	align-items: center;
+	gap: 6px;
+	margin: 0;
+	font-size: 13px;
+}
+.asde-ap .asde-paginacion__tamano select {
+	width: auto;
+	margin: 0;
+}
+
+/* Datos de la ficha */
+.asde-ap .asde-datos {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+	gap: 12px 24px;
+	margin: 0 0 12px;
+}
+.asde-ap .asde-datos div {
+	margin: 0;
+}
+.asde-ap .asde-datos dt {
+	margin: 0;
+	color: var(--asde-muted);
+	font-size: 12px;
+	letter-spacing: 0.04em;
+	text-transform: uppercase;
+}
+.asde-ap .asde-datos dd {
+	margin: 2px 0 0;
+	overflow-wrap: anywhere;
+}
+
+/* Formularios */
+.asde-ap .asde-form fieldset {
+	margin: 0 0 16px;
+	padding: 12px 16px;
+	border: 1px solid var(--asde-border);
+	border-radius: var(--asde-radius);
+}
+.asde-ap .asde-form legend {
+	padding: 0 6px;
+	font-weight: 600;
+}
+.asde-ap .asde-form p > label {
+	display: block;
+	margin: 0 0 4px;
+	font-weight: 600;
+}
+.asde-ap .asde-choice {
+	display: flex;
+	gap: 8px;
+	align-items: flex-start;
+	margin: 6px 0;
+	font-weight: normal;
+	cursor: pointer;
+}
+.asde-ap .asde-choice input {
+	flex: 0 0 auto;
+	margin: 4px 0 0;
+}
+.asde-ap .asde-choice.is-disabled {
+	color: var(--asde-muted);
+	cursor: not-allowed;
+}
+.asde-ap .asde-help {
+	display: block;
+	color: var(--asde-muted);
+	font-size: 12px;
+	font-weight: normal;
+}
+.asde-ap .asde-help--warning {
+	color: #7a5a00;
+}
+.asde-ap .asde-help--inline {
+	display: inline;
+}
+/* Enfold no da estilo a los campos de fecha: sin esto salen con el borde negro del navegador. */
+.asde-ap input[type="date"] {
+	min-height: 37px;
+	padding: 8px 6px;
+	border: 1px solid var(--asde-border);
+	border-radius: 2px;
+	background: #ffffff;
+	font: inherit;
+	color: inherit;
+}
+
+/* Acceso socios */
+.asde-ap .asde-acceso {
+	margin-right: auto;
+	margin-left: auto;
+}
+.asde-ap .asde-acceso select,
+.asde-ap .asde-acceso input[type="text"],
+.asde-ap .asde-acceso input[type="password"] {
+	width: 100%;
+	max-width: 100%;
+	box-sizing: border-box;
+}
+.asde-ap .asde-destacado {
+	padding: 10px 12px;
+	border-left: 4px solid var(--asde-primary);
+	background: #f7f2fb;
+}
+.asde-ap .asde-grid-2 {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+	gap: 0 16px;
+}
+.asde-ap .asde-muted {
+	color: var(--asde-muted);
+	font-size: 13px;
+}
+
+/* Acciones en tablas */
+.asde-ap .asde-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4px 12px;
+}
+.asde-ap .asde-actions form {
+	margin: 0;
+}
+.asde-ap .asde-btn-link {
+	padding: 0;
+	border: 0;
+	background: none;
+	color: var(--asde-primary);
+	font: inherit;
+	text-decoration: underline;
+	cursor: pointer;
+}
+.asde-ap .asde-btn-danger {
+	color: #b32d2e;
+}
+
+/* Accesos directos del inicio */
+.asde-ap .asde-tiles {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+	gap: 16px;
+	margin: 0 0 24px;
+}
+.asde-ap .asde-tile {
+	display: block;
+	padding: 16px 20px;
+	border: 1px solid var(--asde-border);
+	border-top: 4px solid var(--asde-primary);
+	border-radius: var(--asde-radius);
+	color: var(--asde-text);
+	text-decoration: none;
+}
+.asde-ap .asde-tile:hover,
+.asde-ap .asde-tile:focus-visible {
+	border-color: var(--asde-lila);
+	border-top-color: var(--asde-primary);
+}
+.asde-ap .asde-tile strong {
+	display: block;
+	margin-bottom: 4px;
+	color: var(--asde-primary);
+	font-size: 16px;
+}
+
+.asde-ap [hidden] {
+	display: none !important;
+}
+
+.asde-ap .asde-search__option {
+	flex: 1 1 100%;
+	margin: 0;
+	font-size: 13px;
+}
+
+/* Informes */
+.asde-ap .asde-table-wrap {
+	max-width: 100%;
+	overflow-x: auto;
+	-webkit-overflow-scrolling: touch;
+}
+.asde-ap .asde-table--informe {
+	min-width: 100%;
+	font-size: 13px;
+}
+.asde-ap .asde-table--informe th {
+	white-space: nowrap;
+}
+.asde-ap .asde-columnas {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+	gap: 0 16px;
+}
+.asde-ap .asde-columnas__grupo--salud {
+	border-color: #e3c9f5;
+	background: #fbf7fe;
+}
+.asde-ap .asde-columnas__todas {
+	margin: 0 0 4px;
+	font-size: 12px;
+}
+.asde-ap .asde-choice--inline {
+	display: inline-flex;
+	margin-right: 12px;
+}
+/* Dentro de un formulario, «p > label» pone las etiquetas en bloque y en negrita:
+   las casillas conservan su aspecto. */
+.asde-ap .asde-form p > label.asde-choice {
+	display: flex;
+	margin: 6px 0;
+	font-weight: normal;
+}
+.asde-ap .asde-form p > label.asde-choice--inline {
+	display: inline-flex;
+	margin-right: 12px;
+}
+.asde-ap .asde-badge--salud {
+	background: #fdecea;
+	color: #8a1c1c;
+}
+.asde-ap .asde-actions--botones {
+	gap: 8px;
+}
+.asde-ap .button.asde-button-secundario {
+	background: #ffffff;
+	color: var(--asde-primary);
+	border: 1px solid var(--asde-primary);
+}
+/* Enlaces con aspecto de botón: en una columna estrecha el texto se parte dentro del botón, no fuera. */
+.asde-ap a.button {
+	display: inline-block;
+	text-align: center;
+}
+
+/* Ventana emergente (v0.10): fichas, dar acceso y solicitudes sobre la página (assets/js/area.js). */
+dialog.asde-modal {
+	width: min(1100px, calc(100vw - 24px));
+	max-width: none;
+	max-height: calc(100vh - 32px);
+	padding: 0;
+	border: 0;
+	border-radius: 8px;
+	box-shadow: 0 12px 40px rgba(30, 15, 50, 0.35);
+	overflow: hidden;
+}
+dialog.asde-modal[open] {
+	display: flex;
+	flex-direction: column;
+}
+dialog.asde-modal::backdrop {
+	background: rgba(30, 15, 50, 0.55);
+}
+.asde-modal__barra {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+	padding: 10px 16px;
+	border-bottom: 1px solid #e5dcef;
+	background: #f7f3fb;
+}
+.asde-modal__titulo {
+	flex: 1;
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+	font-weight: 600;
+	color: #632599;
+}
+.asde-modal__pagina {
+	font-size: 13px;
+	white-space: nowrap;
+}
+.asde-modal__cerrar {
+	border: 0;
+	background: transparent;
+	color: #555555;
+	font-size: 28px;
+	line-height: 1;
+	padding: 0 4px;
+	cursor: pointer;
+}
+.asde-modal__cerrar:hover,
+.asde-modal__cerrar:focus-visible {
+	color: #632599;
+}
+.asde-modal__cuerpo {
+	overflow: auto;
+	padding: 16px 20px 24px;
+}
+.asde-modal__cuerpo:focus {
+	outline: none;
+}
+.asde-modal__cuerpo[aria-busy="true"] {
+	opacity: 0.55;
+	transition: opacity 0.15s;
+}
+.asde-ap--modal .asde-solo-pagina {
+	display: none !important;
+}
+@media (max-width: 600px) {
+	dialog.asde-modal {
+		width: 100vw;
+		height: 100vh;
+		max-height: 100vh;
+		border-radius: 0;
+	}
+}
+
+/* Solicitudes de acceso (v0.10). */
+.asde-trampa {
+	position: absolute !important;
+	left: -10000px !important;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+}
+.asde-ap .asde-copiar {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px 14px;
+}
+.asde-ap .asde-copiar__texto {
+	padding: 6px 10px;
+	background: #f7f3fb;
+	border: 1px solid #e5dcef;
+	border-radius: 4px;
+	word-break: break-all;
+}
+.asde-ap .asde-comparar th[scope="row"] {
+	white-space: nowrap;
+	width: 1%;
+}
+.asde-ap .asde-lista-pasos {
+	margin: 0 0 16px;
+	padding-left: 20px;
+	display: grid;
+	gap: 10px;
+}
+.asde-ap .asde-lista-pasos li:has(> fieldset) {
+	list-style: none; /* Los hermanos/as: el recuadro ya separa el paso. */
+}
+.asde-ap .asde-rechazar {
+	margin-top: 18px;
+}
+.asde-ap .asde-rechazar summary {
+	cursor: pointer;
+	color: #a12622;
+}
+.asde-ap .asde-pendientes {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 10px 22px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+.asde-ap .asde-wordfence {
+	overflow-x: auto;
+}
+
+@media print {
+	#header,
+	#footer,
+	#socket,
+	.title_container,
+	.asde-nav,
+	.asde-no-print,
+	.cky-consent-container,
+	.cky-btn-revisit-wrapper {
+		display: none !important;
+	}
+	.asde-ap .asde-card {
+		border: 0;
+		padding: 0;
+	}
+	.asde-ap .asde-table-wrap {
+		overflow: visible;
+	}
+	.asde-ap .asde-table--informe {
+		font-size: 10px;
+	}
+}
+
+/* Tesorería */
+.asde-ap .asde-subnav {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px 16px;
+	margin: -8px 0 20px;
+}
+.asde-ap .asde-subnav__tabs {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+.asde-ap .asde-subnav__tabs li {
+	margin: 0;
+	list-style: none;
+}
+.asde-ap .asde-subnav__tabs a {
+	display: block;
+	padding: 6px 12px;
+	border: 1px solid var(--asde-border);
+	border-radius: 999px;
+	color: var(--asde-primary);
+	font-size: 13px;
+	text-decoration: none;
+}
+.asde-ap .asde-subnav__tabs a.is-active,
+.asde-ap .asde-subnav__tabs a:hover {
+	border-color: var(--asde-primary);
+	background: #f1e9f8;
+}
+.asde-ap .asde-subnav__ronda {
+	display: flex;
+	align-items: center;
+	gap: 8px;
+	margin: 0;
+}
+.asde-ap .asde-subnav__ronda label {
+	margin: 0;
+	font-weight: 600;
+}
+.asde-ap .asde-subnav__ronda select {
+	width: auto;
+	margin: 0;
+}
+.asde-ap .asde-progreso {
+	height: 10px;
+	margin: 0 0 12px;
+	border-radius: 999px;
+	background: #eeeeee;
+	overflow: hidden;
+}
+.asde-ap .asde-progreso span {
+	display: block;
+	height: 100%;
+	background: var(--asde-primary);
+}
+.asde-ap .asde-badge--pago-pagado { background: #e6f4d7; color: #2d4f06; }
+.asde-ap .asde-badge--pago-parcial { background: #e3eefc; color: #0b3a7a; }
+.asde-ap .asde-badge--pago-pendiente { background: #fff3cd; color: #664d03; }
+.asde-ap .asde-badge--pago-atrasado { background: #fdecea; color: #8a1c1c; }
+.asde-ap .asde-badge--pago-exento { background: #eeeeee; color: #555555; }
+.asde-ap .asde-grid-3 {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+	gap: 0 16px;
+}
+.asde-ap .asde-grid-2--top {
+	align-items: start;
+}
+.asde-ap .asde-tramos {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+	gap: 0 12px;
+}
+.asde-ap .asde-miembro {
+	display: inline-block;
+	margin: 0 12px 4px 0;
+}
+.asde-ap .asde-miembro--fuera,
+.asde-ap .asde-anulado td {
+	color: var(--asde-muted);
+	text-decoration: line-through;
+}
+.asde-ap .asde-table--resumen th {
+	font-weight: normal;
+	text-align: left;
+}
+.asde-ap .asde-table--resumen td {
+	text-align: right;
+	white-space: nowrap;
+}
+.asde-ap .asde-total th,
+.asde-ap .asde-total td {
+	border-top: 2px solid var(--asde-border);
+	font-weight: 700;
+}
+.asde-ap .asde-lista-miembros {
+	margin: 0 0 12px;
+}
+.asde-ap .asde-sugerencia {
+	margin: 0 0 12px;
+	padding: 10px 14px;
+	border: 1px dashed var(--asde-lila);
+	border-radius: var(--asde-radius);
+}
+.asde-ap .asde-sugerencia ul {
+	margin: 0 0 8px;
+	list-style: none;
+}
+
+/* ------------------------------------------------------------------------
+ * Uniformes y Mis pagos (v0.11)
+ * --------------------------------------------------------------------- */
+.asde-ap .asde-resumen {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px 12px;
+	list-style: none;
+	margin: 12px 0;
+	padding: 0;
+}
+.asde-ap .asde-resumen li {
+	margin: 0;
+	padding: 6px 12px;
+	border: 1px solid var(--asde-border);
+	border-radius: 999px;
+	background: #fafafa;
+}
+.asde-ap .asde-resumen a[aria-current] {
+	font-weight: 600;
+}
+.asde-ap .asde-pedidos {
+	display: grid;
+	gap: 12px;
+}
+.asde-ap .asde-pedido {
+	border: 1px solid var(--asde-border);
+	border-left: 4px solid var(--asde-primary);
+	border-radius: var(--asde-radius);
+	padding: 12px 16px;
+}
+.asde-ap .asde-pedido--cancelado {
+	border-left-color: var(--asde-border);
+	opacity: 0.75;
+}
+.asde-ap .asde-pedido__cabecera {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 6px;
+}
+.asde-ap .asde-pedido__contenido {
+	margin: 6px 0;
+}
+.asde-ap .asde-pedido__accion {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px;
+	margin-top: 8px;
+}
+.asde-ap .asde-pasos {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px 18px;
+	list-style: none;
+	margin: 8px 0 0;
+	padding: 0;
+	color: var(--asde-muted);
+}
+.asde-ap .asde-pasos li {
+	margin: 0;
+}
+.asde-ap .asde-pasos li.is-hecho {
+	color: var(--asde-text);
+}
+.asde-ap .asde-pasos__marca {
+	display: inline-block;
+	width: 1.3em;
+	height: 1.3em;
+	line-height: 1.3em;
+	border: 1px solid var(--asde-border);
+	border-radius: 50%;
+	text-align: center;
+	font-size: 0.85em;
+}
+.asde-ap .asde-pasos li.is-hecho .asde-pasos__marca {
+	background: var(--asde-primary);
+	border-color: var(--asde-primary);
+	color: #fff;
+}
+.asde-ap .asde-pasos--gestion {
+	display: grid;
+	gap: 14px;
+}
+.asde-ap .asde-insignias {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+	gap: 12px;
+}
+.asde-ap .asde-insignia {
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	border: 1px solid var(--asde-border);
+	border-radius: var(--asde-radius);
+	padding: 8px 10px;
+}
+.asde-ap .asde-insignia img {
+	width: 56px;
+	height: 56px;
+	object-fit: contain;
+	flex: none;
+}
+.asde-ap .asde-insignia__texto {
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+	min-width: 0;
+	font-size: 0.95em;
+}
+/* Enfold pone width: 100% y margen inferior a los input con #top: sin esto la
+   casilla ocupa toda la tarjeta y el texto queda en una columna estrecha. */
+.asde-ap .asde-insignia input[type="number"],
+#top .asde-ap .asde-insignia input[type="number"] {
+	width: 4.5em;
+	margin: 0;
+	flex: none;
+}
+.asde-ap .asde-guia {
+	margin: 10px 0;
+}
+.asde-ap .asde-guia summary {
+	cursor: pointer;
+	color: var(--asde-primary);
+}
+.asde-ap .asde-guia figure {
+	margin: 10px 0;
+}
+.asde-ap .asde-guia img {
+	max-width: 100%;
+	height: auto;
+	border: 1px solid var(--asde-border);
+	border-radius: var(--asde-radius);
+}
+.asde-ap .asde-uniforme-total {
+	font-size: 1.1em;
+}
+.asde-ap .asde-check {
+	color: #2d4f06;
+	font-weight: 700;
+}
+.asde-ap .asde-fila--cancelada td {
+	color: var(--asde-muted);
+}
+.asde-ap .asde-form--compacta {
+	margin-top: 8px;
+}
+.asde-ap .asde-form__fila {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-end;
+	gap: 8px 14px;
+}
+.asde-ap .asde-inline-form {
+	display: inline;
+	margin-left: 6px;
+}
+.asde-ap .asde-config-img {
+	width: 64px;
+	height: 64px;
+	object-fit: contain;
+	vertical-align: middle;
+	border: 1px solid var(--asde-border);
+	border-radius: var(--asde-radius);
+}
+.asde-ap .asde-badge--uniforme-solicitado { background: #fff4d6; color: #6b4a00; }
+.asde-ap .asde-badge--uniforme-pagado { background: #e3eefc; color: #0b3a7a; }
+.asde-ap .asde-badge--uniforme-pedido { background: #efe4f8; color: #421866; }
+.asde-ap .asde-badge--uniforme-entregado { background: #e6f4d7; color: #2d4f06; }
+.asde-ap .asde-badge--uniforme-recibido { background: #d6efc0; color: #1f3a03; }
+.asde-ap .asde-badge--uniforme-cancelado { background: #eeeeee; color: #555555; }
+/* Texto solo para lectores de pantalla (por si el tema no lo define). */
+.asde-ap .screen-reader-text {
+	position: absolute !important;
+	width: 1px;
+	height: 1px;
+	margin: -1px;
+	padding: 0;
+	overflow: hidden;
+	clip: rect(0, 0, 0, 0);
+	white-space: nowrap;
+	border: 0;
+}
+.asde-ap .asde-table td[data-label="Importe"] {
+	white-space: nowrap;
+}
+
+/* v0.12 · Domiciliación SEPA y segundo tutor/a */
+.asde-ap .asde-grid-span {
+	grid-column: 1 / -1;
+}
+.asde-ap .asde-actions input[type="text"] {
+	max-width: 180px;
+}
+@media print {
+	.asde-ap .asde-autorizacion {
+		font-size: 13px;
+	}
+	.asde-ap .asde-autorizacion .asde-badge {
+		border: 1px solid #999999;
+	}
+}
+
+/* Móvil (v0.12.1): menús en una sola fila que se desplaza, cabeceras de tarjeta y formularios */
+@media (max-width: 767px) {
+	.asde-ap .asde-nav__tabs,
+	.asde-ap .asde-subnav__tabs {
+		flex-wrap: nowrap;
+		width: 100%;
+		overflow-x: auto;
+		padding-right: 28px;
+		scrollbar-width: none;
+		-webkit-overflow-scrolling: touch;
+		-webkit-mask-image: linear-gradient(to right, #000 calc(100% - 32px), transparent);
+		mask-image: linear-gradient(to right, #000 calc(100% - 32px), transparent);
+	}
+	.asde-ap .asde-nav__tabs::-webkit-scrollbar,
+	.asde-ap .asde-subnav__tabs::-webkit-scrollbar {
+		display: none;
+	}
+	.asde-ap .asde-nav__tabs li,
+	.asde-ap .asde-subnav__tabs li {
+		flex: 0 0 auto;
+	}
+	.asde-ap .asde-nav__tabs a {
+		padding: 10px 12px;
+		font-size: 15px;
+		white-space: nowrap;
+	}
+	.asde-ap .asde-subnav__tabs a {
+		white-space: nowrap;
+	}
+	.asde-ap .asde-card {
+		padding: 16px 14px;
+	}
+	.asde-ap fieldset {
+		min-width: 0;
+	}
+	.asde-ap .asde-form input:not([type="checkbox"]):not([type="radio"]),
+	.asde-ap .asde-form select,
+	.asde-ap .asde-form textarea {
+		max-width: 100%;
+		box-sizing: border-box;
+	}
+	/* Tablas de resumen (importes): concepto a la izquierda e importe a la derecha, sin tarjeta por fila. */
+	.asde-ap .asde-table.asde-table--resumen:not(.asde-table--informe) tr:not(:has(td[data-label])) {
+		display: flex;
+		justify-content: space-between;
+		align-items: baseline;
+		gap: 8px;
+		margin: 0;
+		padding: 6px 0;
+		border: 0;
+		border-bottom: 1px solid var(--asde-border);
+		border-radius: 0;
+	}
+	.asde-ap .asde-table.asde-table--resumen:not(.asde-table--informe) tr:not(:has(td[data-label])) > th,
+	.asde-ap .asde-table.asde-table--resumen:not(.asde-table--informe) tr:not(:has(td[data-label])) > td {
+		display: block;
+		padding: 0;
+		border: 0;
+	}
+	.asde-ap .asde-table.asde-table--resumen:not(.asde-table--informe) tr:not(:has(td[data-label])) > th {
+		flex: 1 1 auto;
+		min-width: 0;
+	}
+	.asde-ap .asde-table.asde-table--resumen:not(.asde-table--informe) tr:not(:has(td[data-label])) > td {
+		flex: 0 0 auto;
+		white-space: normal;
+	}
+	.asde-ap .asde-table.asde-table--resumen:not(.asde-table--informe) tr:not(:has(td[data-label])) > td:empty {
+		display: none;
+	}
+	.asde-ap .asde-table--resumen td[data-label]::before {
+		text-align: left;
+	}
+	.asde-ap .asde-table--resumen td[data-label] {
+		white-space: normal;
+	}
+	.asde-ap .asde-card__header--split > .button,
+	.asde-ap .asde-card__header--split > a.button {
+		flex: 1 1 100%;
+		text-align: center;
+	}
+}
+
+/* Listado de usuarios (v0.12.2): filtros por columna, orden y paginación en el navegador */
+.asde-ap .asde-table tr[hidden],
+.asde-ap .asde-solo-movil[hidden],
+.asde-ap .asde-usuarios__vacio[hidden],
+.asde-ap .asde-usuarios__total [hidden] {
+	display: none !important;
+}
+.asde-ap .asde-usuarios__total {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 4px 16px;
+	margin: 0 0 8px;
+}
+.asde-ap .asde-usuarios__total .asde-btn-link {
+	font-size: 13px;
+}
+.asde-ap .asde-usuarios__vacio {
+	margin: 12px 0;
+	padding: 12px;
+	border: 1px dashed var(--asde-border);
+	border-radius: var(--asde-radius);
+	color: var(--asde-muted);
+	text-align: center;
+}
+.asde-ap .asde-table .asde-filtros th {
+	padding: 4px 8px 10px;
+	font-weight: 400;
+}
+.asde-ap .asde-table .asde-filtros input,
+.asde-ap .asde-table .asde-filtros select {
+	width: 100%;
+	min-width: 0;
+	margin: 0;
+	padding: 4px 6px;
+	font-size: 13px;
+}
+.asde-ap .asde-table .asde-cabeceras th {
+	border-bottom: 0;
+	padding-bottom: 4px;
+}
+@media (max-width: 767px) {
+	/* En el móvil la cabecera no se ve, pero los filtros sí: una tarjeta con un campo por columna. */
+	.asde-ap .asde-table.asde-table--usuarios thead {
+		display: block;
+	}
+	.asde-ap .asde-table.asde-table--usuarios thead tr.asde-cabeceras {
+		display: none;
+	}
+	.asde-ap .asde-table.asde-table--usuarios thead tr.asde-filtros {
+		display: grid;
+		grid-template-columns: 1fr 1fr;
+		gap: 8px;
+		background: #f4f1f7;
+	}
+	.asde-ap .asde-table.asde-table--usuarios .asde-filtros th {
+		display: block;
+		width: auto;
+		min-width: 0;
+		padding: 0;
+		border: 0;
+	}
+	.asde-ap .asde-table.asde-table--usuarios .asde-filtros th:empty {
+		display: none;
+	}
+	.asde-ap .asde-table.asde-table--usuarios .asde-filtros th:first-child,
+	.asde-ap .asde-table.asde-table--usuarios .asde-filtros th:nth-child(2) {
+		grid-column: 1 / -1;
+	}
+	.asde-ap .asde-paginacion__botones {
+		justify-content: center;
+	}
+}
+@media (max-width: 767px) {
+	.asde-ap .asde-orden-movil {
+		display: grid;
+		grid-template-columns: auto 1fr 1fr;
+		gap: 8px;
+		align-items: center;
+		margin: 0 0 8px;
+	}
+	.asde-ap .asde-orden-movil[hidden] {
+		display: none !important;
+	}
+	.asde-ap .asde-orden-movil select {
+		width: 100%;
+		min-width: 0;
+		margin: 0;
+	}
+	.asde-ap .asde-table.asde-table--usuarios .asde-filtros th:nth-child(5) {
+		grid-column: 1 / -1;
+	}
+}
+@media (max-width: 767px) {
+	.asde-ap .asde-paginacion__botones {
+		gap: 3px;
+	}
+	.asde-ap .asde-paginacion__botones a,
+	.asde-ap .asde-paginacion__botones span {
+		min-width: 30px;
+		padding: 5px 6px;
+	}
+	.asde-ap .asde-paginacion__tamano,
+	.asde-ap .asde-paginacion__tamano span {
+		white-space: nowrap;
+	}
+}
+
+/* Aviso de carga (v0.12.3): barra arriba y cursor «cargando» mientras el servidor prepara la página */
+.asde-progreso {
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 100000;
+	width: 0;
+	height: 3px;
+	background: var(--asde-primary, #632599);
+	box-shadow: 0 0 6px var(--asde-primary, #632599);
+	animation: asde-progreso 12s cubic-bezier(0.1, 0.6, 0.2, 1) forwards;
+}
+.asde-progreso[hidden] {
+	display: none;
+}
+html.asde-cargando,
+html.asde-cargando .asde-ap a,
+html.asde-cargando .asde-ap button {
+	cursor: progress;
+}
+@keyframes asde-progreso {
+	to {
+		width: 92%;
+	}
+}
+@media (prefers-reduced-motion: reduce) {
+	.asde-progreso {
+		animation-duration: 0.01s;
+		width: 40%;
+	}
+}
+
+/* Tablas de medidas y guías de uniforme (v0.12.5): visor emergente encima del pedido */
+.asde-ap .asde-guia-enlaces {
+	margin: 4px 0 10px;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 6px 16px;
+}
+.asde-ap .asde-guia-enlaces a {
+	font-weight: 600;
+}
+.asde-ap .asde-guia-enlaces a.is-actual {
+	text-decoration: underline;
+}
+.asde-visor {
+	width: min(980px, 96vw);
+	max-width: 96vw;
+	max-height: 94vh;
+	padding: 0;
+	border: 1px solid var(--asde-border, #ddd);
+	border-radius: 10px;
+	background: #ffffff;
+	color: inherit;
+	overflow: hidden;
+}
+.asde-visor[open] {
+	display: flex;
+	flex-direction: column;
+}
+.asde-visor::backdrop {
+	background: rgba(30, 20, 45, 0.55);
+}
+.asde-visor__barra {
+	display: flex;
+	align-items: center;
+	gap: 14px;
+	padding: 10px 14px;
+	border-bottom: 1px solid var(--asde-border, #ddd);
+	background: #f6f3f9;
+}
+.asde-visor__titulo {
+	flex: 1;
+	min-width: 0;
+	font-weight: 600;
+	color: var(--asde-primary, #632599);
+}
+.asde-visor__abrir {
+	font-size: 13px;
+	white-space: nowrap;
+}
+.asde-visor__cerrar {
+	flex: none;
+	width: 36px;
+	height: 36px;
+	padding: 0;
+	border: 0;
+	background: transparent;
+	color: inherit;
+	font-size: 26px;
+	line-height: 1;
+	cursor: pointer;
+}
+.asde-visor__cuerpo {
+	flex: 1;
+	overflow: auto;
+	padding: 12px;
+	text-align: center;
+	outline: none;
+}
+.asde-visor__cuerpo img {
+	max-width: 100%;
+	height: auto;
+}
+@media (max-width: 767px) {
+	/* En el móvil la tabla se ve entera a lo ancho de la pantalla; se amplía con los dedos o se desplaza. */
+	.asde-visor {
+		width: 100vw;
+		max-width: 100vw;
+		max-height: 100vh;
+		height: 100vh;
+		border-radius: 0;
+	}
+	.asde-visor__abrir {
+		display: none;
+	}
+	.asde-visor__cuerpo {
+		padding: 6px;
+	}
+	.asde-visor__cuerpo img {
+		width: 720px;
+		max-width: none;
+	}
+}
+
+/* Números de socio/a (v0.14): el nº territorial y su advertencia junto a cada persona */
+.asde-ap .asde-numeros {
+	font-size: 0.9em;
+	white-space: nowrap;
+}
+.asde-ap .asde-numeros__aviso {
+	display: inline-block;
+	padding: 0 6px;
+	border-radius: 10px;
+	background: #fff3cd;
+	color: #7a5200;
+	font-size: 0.85em;
+	font-weight: 600;
+	white-space: normal;
+}

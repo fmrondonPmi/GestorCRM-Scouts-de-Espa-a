@@ -1,0 +1,176 @@
+<?php
+/**
+ * Uniforme · mis pedidos y nuevo pedido.
+ *
+ * @var array                                              $cfg
+ * @var array<string, AsdeBalears\AreaPrivada\Domain\Persona> $para    Para quién puede pedir (nº => persona)
+ * @var array[]                                            $pedidos
+ * @var AsdeBalears\AreaPrivada\Auth\Ambito                $ambito
+ * @var array<string, array{nombre:string, url:string}>   $guias   Guías de tallas por modelo
+ * @var string                                             $colocar Imagen «dónde van las insignias» ('' si no hay)
+ * @var string                                             $url
+ * @var string                                             $url_pagos
+ */
+use AsdeBalears\AreaPrivada\Tesoreria\Calculadora;
+use AsdeBalears\AreaPrivada\Uniformes\Config;
+use AsdeBalears\AreaPrivada\Uniformes\PedidosTable;
+use AsdeBalears\AreaPrivada\Uniformes\Servicio;
+
+defined( 'ABSPATH' ) || exit;
+
+$fecha     = static fn( ?string $f ) => $f ? wp_date( 'd/m/Y', strtotime( $f . ( strlen( $f ) > 10 ? ' UTC' : '' ) ) ) : '';
+$insignias = Config::insignias_activas( $cfg );
+?>
+<section class="asde-card">
+	<h2 class="asde-card__title">Uniforme</h2>
+	<p>
+		Pide aquí la <strong>camisa scout</strong> (<?php echo esc_html( Calculadora::euros( $cfg['precio_camisa'] ) ); ?>)<?php echo $insignias ? ' y las <strong>insignias</strong>' : ''; ?>.
+		Después, págalo en efectivo o con un ingreso en la cuenta del grupo, indicando el nº de pedido. Cuando Tesorería lo reciba lo verás aquí como pagado; el grupo lo incluirá en su pedido al proveedor y te lo entregará. Cuando lo tengas, confírmalo aquí.
+	</p>
+	<?php if ( '' !== trim( $cfg['texto_pago'] ) ) : ?>
+		<div class="asde-notice asde-notice--info"><?php echo wp_kses_post( wpautop( $cfg['texto_pago'] ) ); ?></div>
+	<?php endif; ?>
+	<p class="asde-muted">Lo que has pagado lo ves en <a href="<?php echo esc_url( $url_pagos ); ?>">Mis pagos</a>.</p>
+</section>
+
+<?php if ( $pedidos ) : ?>
+	<section class="asde-card">
+		<h3 class="asde-card__title">Tus pedidos</h3>
+		<div class="asde-pedidos">
+			<?php foreach ( $pedidos as $p ) : ?>
+				<?php
+				$persona = $para[ $p['socio'] ] ?? null;
+				$estado  = PedidosTable::estado( $p );
+				$pasos   = array(
+					array( 'Solicitado', true, $fecha( $p['creado'] ) ),
+					array( 'Pagado', null !== $p['pago_en'], null !== $p['pago_en'] ? $fecha( $p['pago_fecha'] ) . ' · ' . ( PedidosTable::METODOS[ $p['pago_metodo'] ] ?? '' ) : '' ),
+					array( 'En el pedido del grupo', null !== $p['pedido_en'], $fecha( $p['pedido_en'] ) ),
+					array( 'Entregado', null !== $p['entregado_en'], $fecha( $p['entregado_en'] ) ),
+					array( 'Recibido', null !== $p['recibido_en'], $fecha( $p['recibido_en'] ) ),
+				);
+				?>
+				<article class="asde-pedido<?php echo 'cancelado' === $estado ? ' asde-pedido--cancelado' : ''; ?>">
+					<header class="asde-pedido__cabecera">
+						<strong><?php echo esc_html( PedidosTable::numero( $p ) ); ?></strong>
+						<?php echo $persona ? ' · ' . esc_html( $persona->nombre_completo() ) : ''; ?>
+						<span class="asde-badge asde-badge--uniforme-<?php echo esc_attr( $estado ); ?>"><?php echo esc_html( PedidosTable::ESTADOS[ $estado ] ); ?></span>
+					</header>
+					<p class="asde-pedido__contenido"><?php echo esc_html( Servicio::descripcion( $p['lineas'] ) ); ?> — <strong><?php echo esc_html( null !== $p['pago_importe'] ? Calculadora::euros( $p['pago_importe'] ) : Servicio::importe( $p ) ); ?></strong></p>
+					<?php if ( 'cancelado' === $estado ) : ?>
+						<p class="asde-muted">Cancelado el <?php echo esc_html( $fecha( $p['cancelado_en'] ) ); ?>.</p>
+					<?php else : ?>
+						<ol class="asde-pasos">
+							<?php foreach ( $pasos as list( $texto, $hecho, $detalle ) ) : ?>
+								<li class="<?php echo $hecho ? 'is-hecho' : ''; ?>"><span class="asde-pasos__marca" aria-hidden="true"><?php echo $hecho ? '✓' : ''; ?></span> <?php echo esc_html( $texto ); ?><?php echo $hecho && '' !== $detalle ? ' <span class="asde-muted">' . esc_html( $detalle ) . '</span>' : ''; ?><span class="screen-reader-text"><?php echo $hecho ? ': sí' : ': todavía no'; ?></span></li>
+							<?php endforeach; ?>
+						</ol>
+					<?php endif; ?>
+					<?php if ( Servicio::puede_confirmar( $p, $ambito ) ) : ?>
+						<form method="post" class="asde-pedido__accion">
+							<?php wp_nonce_field( 'asde_uniforme_' . $p['id'] ); ?>
+							<input type="hidden" name="asde_action" value="uniforme_recibido">
+							<input type="hidden" name="pedido" value="<?php echo (int) $p['id']; ?>">
+							<button type="submit" class="button">Lo he recibido</button>
+							<span class="asde-help">El grupo lo ha marcado como entregado: confírmalo cuando lo tengas.</span>
+						</form>
+					<?php elseif ( Servicio::puede_cancelar_propio( $p, $ambito ) ) : ?>
+						<form method="post" class="asde-pedido__accion" onsubmit="return confirm('¿Cancelar el pedido <?php echo esc_js( PedidosTable::numero( $p ) ); ?>?');">
+							<?php wp_nonce_field( 'asde_uniforme_' . $p['id'] ); ?>
+							<input type="hidden" name="asde_action" value="uniforme_cancelar">
+							<input type="hidden" name="pedido" value="<?php echo (int) $p['id']; ?>">
+							<button type="submit" class="asde-btn-link asde-btn-danger">Cancelar el pedido</button>
+						</form>
+					<?php endif; ?>
+				</article>
+			<?php endforeach; ?>
+		</div>
+	</section>
+<?php endif; ?>
+
+<section class="asde-card">
+	<h3 class="asde-card__title">Nuevo pedido</h3>
+	<?php if ( ! $cfg['abierto'] ) : ?>
+		<p>Ahora mismo no se aceptan pedidos de uniforme. El grupo avisará cuando se abra el próximo.</p>
+	<?php else : ?>
+		<form method="post" class="asde-form asde-uniforme-form" data-asde-uniforme>
+			<?php wp_nonce_field( 'asde_uniforme_pedir' ); ?>
+			<input type="hidden" name="asde_action" value="uniforme_pedir">
+
+			<?php if ( count( $para ) > 1 ) : ?>
+				<fieldset>
+					<legend>¿Para quién?</legend>
+					<?php $primero = true; ?>
+					<?php foreach ( $para as $n => $persona ) : ?>
+						<label class="asde-choice"><input type="radio" name="socio" value="<?php echo esc_attr( $n ); ?>" <?php checked( $primero ); ?>><span><?php echo esc_html( $persona->nombre_completo() ); ?></span></label>
+						<?php $primero = false; ?>
+					<?php endforeach; ?>
+				</fieldset>
+			<?php else : ?>
+				<?php $persona = reset( $para ); ?>
+				<input type="hidden" name="socio" value="<?php echo esc_attr( (string) key( $para ) ); ?>">
+				<p>Para: <strong><?php echo esc_html( $persona->nombre_completo() ); ?></strong></p>
+			<?php endif; ?>
+
+			<fieldset>
+				<legend>Camisa scout</legend>
+				<label class="asde-choice"><input type="checkbox" name="con_camisa" value="1" checked data-precio="<?php echo esc_attr( (string) $cfg['precio_camisa'] ); ?>"><span>Quiero la camisa (<?php echo esc_html( Calculadora::euros( $cfg['precio_camisa'] ) ); ?>)</span></label>
+				<p>
+					<label for="asde-uni-talla">Modelo y talla</label>
+					<select id="asde-uni-talla" name="camisa">
+						<option value="">Elige la talla…</option>
+						<?php foreach ( $cfg['modelos'] as $mid => $m ) : ?>
+							<optgroup label="<?php echo esc_attr( $m['nombre'] ); ?>">
+								<?php foreach ( $m['tallas'] as $t ) : ?>
+									<option value="<?php echo esc_attr( $mid . '|' . $t ); ?>"><?php echo esc_html( $m['nombre'] . ' · ' . $t . ( Config::es_especial( $cfg, $t ) ? ' (talla especial)' : '' ) ); ?></option>
+								<?php endforeach; ?>
+							</optgroup>
+						<?php endforeach; ?>
+					</select>
+				</p>
+				<?php if ( $guias ) : ?>
+					<?php // Las tablas de medidas se abren encima del pedido (uniforme.js), sin salir de la página; sin JavaScript, en otra pestaña. ?>
+					<p class="asde-guia-enlaces">
+						<strong>Tabla de medidas:</strong>
+						<?php foreach ( $guias as $mid => $g ) : ?>
+							<a href="<?php echo esc_url( $g['url'] ); ?>" target="_blank" rel="noopener" data-asde-imagen data-modelo="<?php echo esc_attr( (string) $mid ); ?>" data-titulo="<?php echo esc_attr( 'Medidas de la ' . mb_strtolower( $g['nombre'] ) ); ?>"><?php echo esc_html( $g['nombre'] ); ?></a>
+						<?php endforeach; ?>
+					</p>
+				<?php endif; ?>
+			</fieldset>
+
+			<?php if ( $insignias ) : ?>
+				<fieldset>
+					<legend>Insignias</legend>
+					<div class="asde-insignias">
+						<?php foreach ( $insignias as $iid => $i ) : ?>
+							<?php $img = Config::imagen( $i['imagen'], 'thumbnail' ); ?>
+							<div class="asde-insignia">
+								<?php if ( '' !== $img ) : ?>
+									<img src="<?php echo esc_url( $img ); ?>" alt="" loading="lazy">
+								<?php endif; ?>
+								<div class="asde-insignia__texto">
+									<label for="asde-uni-<?php echo esc_attr( $iid ); ?>"><strong><?php echo esc_html( $i['nombre'] ); ?></strong></label>
+									<?php echo '' !== $i['lugar'] ? '<span class="asde-muted">' . esc_html( $i['lugar'] ) . '</span>' : ''; ?>
+									<span><?php echo null === $i['precio'] ? 'Precio por confirmar' : esc_html( Calculadora::euros( $i['precio'] ) . ' cada una' ); ?></span>
+								</div>
+								<input type="number" id="asde-uni-<?php echo esc_attr( $iid ); ?>" name="insignia_<?php echo esc_attr( $iid ); ?>" value="0" min="0" max="<?php echo (int) Config::MAX_INSIGNIAS; ?>" step="1" inputmode="numeric" data-precio="<?php echo esc_attr( null === $i['precio'] ? '' : (string) $i['precio'] ); ?>" aria-label="<?php echo esc_attr( 'Cantidad: ' . $i['nombre'] ); ?>">
+							</div>
+						<?php endforeach; ?>
+					</div>
+					<?php if ( '' !== $colocar ) : ?>
+						<p class="asde-guia-enlaces">
+							<a href="<?php echo esc_url( $colocar ); ?>" target="_blank" rel="noopener" data-asde-imagen data-titulo="Dónde va cada insignia en la camisa scout">Ver dónde va cada insignia</a>
+						</p>
+					<?php endif; ?>
+				</fieldset>
+			<?php endif; ?>
+
+			<p>
+				<label for="asde-uni-nota">Observaciones (opcional)</label>
+				<input type="text" id="asde-uni-nota" name="nota" maxlength="255">
+			</p>
+			<p class="asde-uniforme-total">Total: <strong data-asde-total><?php echo esc_html( Calculadora::euros( $cfg['precio_camisa'] ) ); ?></strong> <span class="asde-muted" data-asde-total-nota hidden>+ insignias con el precio por confirmar</span></p>
+			<p><button type="submit" class="button">Enviar el pedido</button></p>
+		</form>
+	<?php endif; ?>
+</section>

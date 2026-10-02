@@ -1,0 +1,177 @@
+<?php
+namespace AsdeBalears\AreaPrivada\Informes;
+
+use AsdeBalears\AreaPrivada\Auth\Ambito;
+
+defined( 'ABSPATH' ) || exit;
+
+/**
+ * Columnas disponibles en el generador de informes (campos del CRM de ASDE,
+ * ver docs/04 §7.3).
+ *
+ * Cada columna: [etiqueta, grupo, campos CRM, tipo, nivel]
+ *   tipo:  texto | fecha | bool | sino | enum | edad | seccion | num_local | nombre_tutor
+ *   nivel: todos  → cualquiera con acceso a informes (dentro de su ámbito)
+ *          salud  → requiere asde_view_health (scouters: solo su sección, solo lectura)
+ *          global → solo visión global (Secretaría, Coordinación, administradores)
+ * Los IBAN y datos bancarios NO están en el catálogo.
+ */
+final class Catalogo {
+
+	public const GRUPOS = array(
+		'identificacion' => 'Identificación',
+		'membresia'      => 'Membresía',
+		'contacto'       => 'Contacto',
+		'tutores'        => 'Familia / tutores',
+		'autorizaciones' => 'Autorizaciones y formación',
+		'salud'          => 'Salud y alimentación',
+	);
+
+	/** @return array<string, array{0:string, 1:string, 2:string[], 3:string, 4:string}> */
+	public static function columnas(): array {
+		return array(
+			// Identificación.
+			'num_local'        => array( 'Nº socio/a', 'identificacion', array( 'numsocioantiguo_enficha_c' ), 'num_local', 'todos' ),
+			'num_asde'         => array( 'Nº Scouts de España', 'identificacion', array( 'numerosocio_c' ), 'texto', 'todos' ),
+			'nombre'           => array( 'Nombre', 'identificacion', array( 'first_name' ), 'texto', 'todos' ),
+			'apellidos'        => array( 'Apellidos', 'identificacion', array( 'last_name' ), 'texto', 'todos' ),
+			'apodo'            => array( 'Apodo', 'identificacion', array( 'apodo_c' ), 'texto', 'todos' ),
+			'nacimiento'       => array( 'Fecha de nacimiento', 'identificacion', array( 'birthdate' ), 'fecha', 'todos' ),
+			'edad'             => array( 'Edad', 'identificacion', array( 'birthdate' ), 'edad', 'todos' ),
+			'genero'           => array( 'Género', 'identificacion', array( 'stic_gender_c' ), 'enum', 'todos' ),
+			'dni'              => array( 'DNI / NIE', 'identificacion', array( 'stic_identification_number_c' ), 'texto', 'global' ),
+			// Membresía.
+			'seccion'          => array( 'Sección', 'membresia', array( 'stic_relationship_type_c' ), 'seccion', 'todos' ),
+			'cargo'            => array( 'Cargo', 'membresia', array( 'cargoeducativo_c' ), 'enum', 'todos' ),
+			// Contacto.
+			'email'            => array( 'Email', 'contacto', array( 'email1' ), 'texto', 'todos' ),
+			'movil'            => array( 'Móvil', 'contacto', array( 'phone_mobile' ), 'texto', 'todos' ),
+			'telefono'         => array( 'Teléfono casa', 'contacto', array( 'phone_home' ), 'texto', 'todos' ),
+			'direccion'        => array( 'Dirección', 'contacto', array( 'primary_address_street' ), 'texto', 'todos' ),
+			'poblacion'        => array( 'Población', 'contacto', array( 'primary_address_city' ), 'texto', 'todos' ),
+			'cp'               => array( 'Código postal', 'contacto', array( 'primary_address_postalcode' ), 'texto', 'todos' ),
+			// Familia / tutores.
+			'tutor1'           => array( 'Tutor/a 1', 'tutores', array( 'tutor1_nombre_c', 'tutor1_apellidos_c' ), 'nombre_tutor', 'todos' ),
+			'tutor1_movil'     => array( 'Tutor/a 1 · móvil', 'tutores', array( 'tutor1_movil_c' ), 'texto', 'todos' ),
+			'tutor1_email'     => array( 'Tutor/a 1 · email', 'tutores', array( 'tutor1_email_c' ), 'texto', 'todos' ),
+			'tutor2'           => array( 'Tutor/a 2', 'tutores', array( 'tutor2_nombre_c', 'tutor2_apellidos_c' ), 'nombre_tutor', 'todos' ),
+			'tutor2_movil'     => array( 'Tutor/a 2 · móvil', 'tutores', array( 'tutor2_movil_c' ), 'texto', 'todos' ),
+			'tutor2_email'     => array( 'Tutor/a 2 · email', 'tutores', array( 'tutor2_email_c' ), 'texto', 'todos' ),
+			// Autorizaciones y formación.
+			'cesion_imagen'    => array( 'Cesión de imagen', 'autorizaciones', array( 'cesionimagen_c' ), 'bool', 'todos' ),
+			'consent_medic'    => array( 'Consentimiento para administrar medicación', 'autorizaciones', array( 'datosmedicos_consmedica_c' ), 'bool', 'salud' ),
+			'certificado_ds'   => array( 'Certificado delitos sexuales', 'autorizaciones', array( 'certificadods_c' ), 'bool', 'todos' ),
+			'certificado_ds_f' => array( 'Fecha certificado DS', 'autorizaciones', array( 'certificadods_fecha_c' ), 'fecha', 'todos' ),
+			'formacion_scout'  => array( 'Formación Scout', 'autorizaciones', array( 'formacionscout_c' ), 'enum', 'todos' ),
+			'formacion_tl'     => array( 'Formación tiempo libre', 'autorizaciones', array( 'formaciontiempolibre_c' ), 'enum', 'todos' ),
+			// Salud y alimentación (categoría especial RGPD).
+			'alergias'         => array( 'Alergias', 'salud', array( 'alergias_c' ), 'texto', 'salud' ),
+			'alergias_obs'     => array( 'Otros datos de alergias', 'salud', array( 'alergias_obs_c' ), 'texto', 'salud' ),
+			'alerg_medic'      => array( 'Alergia a medicamentos', 'salud', array( 'alergiamedicamentos_c' ), 'bool', 'salud' ),
+			'alerg_medic_cual' => array( '¿A qué medicamentos?', 'salud', array( 'alergiamedicamentos_cuales_c' ), 'texto', 'salud' ),
+			'medic_reaccion'   => array( 'Tiene medicación para reacciones alérgicas', 'salud', array( 'alergias_medicamentossn_c' ), 'bool', 'salud' ),
+			'alim_alergia'     => array( 'Alergia alimentaria', 'salud', array( 'alimentacion_alergia_c' ), 'sino', 'salud' ),
+			'alim_alergia_que' => array( 'Alimentos que producen alergia', 'salud', array( 'alimentacion_alerg_alimentos_c' ), 'texto', 'salud' ),
+			'alim_intol'       => array( 'Intolerancia alimentaria', 'salud', array( 'alimentacion_intolerancia_c' ), 'sino', 'salud' ),
+			'alim_intol_que'   => array( 'Alimentos con intolerancia', 'salud', array( 'alimentacion_intol_alimentos_c' ), 'texto', 'salud' ),
+			'alim_regimen'     => array( 'Régimen especial de comidas', 'salud', array( 'alimentacion_regimen_c' ), 'sino', 'salud' ),
+			'alim_regimen_que' => array( 'Tipo de régimen', 'salud', array( 'alimentacion_regimen_tipo_y__c' ), 'texto', 'salud' ),
+			'alim_regimen_por' => array( 'Motivo del régimen', 'salud', array( 'alimentacion_regimen_razon_c' ), 'enum', 'salud' ),
+			'alim_trastorno'   => array( 'Trastorno alimentario', 'salud', array( 'alimentacion_transtornos_c' ), 'sino', 'salud' ),
+			'alim_trast_desc'  => array( 'Descripción del trastorno', 'salud', array( 'alimentacion_transtorno_desc_c' ), 'texto', 'salud' ),
+			'tratamiento'      => array( 'Tratamiento médico', 'salud', array( 'medicos_tratamiento_c' ), 'enum', 'salud' ),
+			'tratamiento_desc' => array( 'Descripción del tratamiento', 'salud', array( 'medicos_tratamiento_desc_c' ), 'texto', 'salud' ),
+			'medicacion'       => array( 'Toma medicación', 'salud', array( 'datosmedicos_tomamedicacion_c' ), 'bool', 'salud' ),
+			'medicacion_cual'  => array( '¿Qué medicación?', 'salud', array( 'datosmedicos_medicacion_c' ), 'texto', 'salud' ),
+			'enfermedades'     => array( 'Enfermedades', 'salud', array( 'datosmedicos_enfermedades_c' ), 'texto', 'salud' ),
+			'discapacidad'     => array( 'Discapacidad / minusvalías', 'salud', array( 'datosmedicos_minusvalias_c' ), 'texto', 'salud' ),
+			'vacunas'          => array( 'Vacunas al día', 'salud', array( 'medicos_tienevacunas_c' ), 'bool', 'salud' ),
+			'tarjeta_sanit'    => array( 'Nº tarjeta sanitaria', 'salud', array( 'medicosnumtarjetasanitaria_c' ), 'texto', 'salud' ),
+			'seguro'           => array( 'Seguro médico privado', 'salud', array( 'medicos_tieneseguroprivado_c' ), 'bool', 'salud' ),
+			'seguro_cia'       => array( 'Compañía de seguro', 'salud', array( 'medicos_cia_seguro_c' ), 'texto', 'salud' ),
+			'seguro_poliza'    => array( 'Nº de póliza', 'salud', array( 'medicos_seguro_numpoliza_c' ), 'texto', 'salud' ),
+		);
+	}
+
+	/** Campos cuyo contenido cuenta para el filtro "con datos de salud relevantes". */
+	public const CAMPOS_SALUD_RELEVANTE = array(
+		'alergias_c'                    => 'texto',
+		'alergiamedicamentos_c'         => 'bool',
+		'alimentacion_alergia_c'        => 'sino',
+		'alimentacion_intolerancia_c'   => 'sino',
+		'alimentacion_regimen_c'        => 'sino',
+		'alimentacion_transtornos_c'    => 'sino',
+		'medicos_tratamiento_c'         => 'si',
+		'datosmedicos_tomamedicacion_c' => 'bool',
+		'datosmedicos_enfermedades_c'   => 'texto',
+	);
+
+	/** Etiquetas de valores de desplegables. */
+	public const ENUMS = array(
+		'stic_gender_c'                => array(
+			'masculino' => 'Masculino',
+			'femenino'  => 'Femenino',
+			'nobinario' => 'No binario',
+		),
+		'medicos_tratamiento_c'        => array(
+			'No'            => 'No',
+			'SinRelevancia' => 'Sin relevancia o autocontrolado',
+			'Si'            => 'Sí',
+		),
+		'alimentacion_regimen_razon_c' => array(
+			'voluntariamente' => 'Voluntariamente',
+			'prescripcion'    => 'Por prescripción médica',
+			'otros'           => 'Otros',
+		),
+		'cargoeducativo_c'             => array(
+			'coordinadorgrupoGS'          => 'Coordinador/a de Grupo',
+			'coordinadorseccionGS'        => 'Coordinador/a de sección',
+			'secretariogrupoGS'           => 'Secretario/a de Grupo',
+			'tesorerogrupoGS'             => 'Tesorero/a de Grupo',
+			'scouterseccionGS'            => 'Scouter de sección',
+			'responsablematerialGS'       => 'Responsable de Material',
+			'responsableformacionGS'      => 'Responsable de Formación',
+			'responsablecomunicacionGS'   => 'Responsable de Comunicación / RRSS',
+			'responsableeducacionscoutGS' => 'Responsable de Educación Scout',
+		),
+		'formacionscout_c'             => array(
+			'ninguno'            => 'Sin formación Scout',
+			'acogida'            => 'Etapa Acogida al Scouter (EAS)',
+			'educador'           => 'Etapa Educador/a Scout (EES)',
+			'coordinador'        => 'Etapa Coordinador/a Scout (ECS)',
+			'acogidaformador'    => 'Etapa Acogida al Formador/a (EAF)',
+			'formadorscouters'   => 'Etapa Formador/a de Scouters (EFS)',
+			'formadorformadores' => 'Etapa Formador/a de Formadores (EFF)',
+		),
+		'formaciontiempolibre_c'       => array(
+			'ninguno'         => 'Sin titulación',
+			'monitor'         => 'Monitor/a de Tiempo Libre',
+			'director'        => 'Director/a de Tiempo Libre',
+			'animador'        => 'Animador/a Juvenil',
+			'practicas'       => 'Prácticas de Monitor/a',
+			'monitoranimador' => 'Monitor/a y Animador/a Juvenil',
+			'otro'            => 'Otro',
+		),
+	);
+
+	/** Columnas que puede usar el ámbito dado. @return array<string, array> */
+	public static function permitidas( Ambito $ambito ): array {
+		$puede_salud = $ambito->user->has_cap( 'asde_view_health' );
+		$global      = $ambito->vision_global();
+		return array_filter(
+			self::columnas(),
+			static fn( $c ) => 'todos' === $c[4] || ( 'salud' === $c[4] && $puede_salud ) || ( 'global' === $c[4] && $global )
+		);
+	}
+
+	/** ¿Alguna de estas columnas es de salud? */
+	public static function incluye_salud( array $claves ): bool {
+		$cols = self::columnas();
+		foreach ( $claves as $k ) {
+			if ( isset( $cols[ $k ] ) && 'salud' === $cols[ $k ][4] ) {
+				return true;
+			}
+		}
+		return false;
+	}
+}

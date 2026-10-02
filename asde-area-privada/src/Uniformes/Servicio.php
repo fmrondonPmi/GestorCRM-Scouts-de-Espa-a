@@ -1,0 +1,296 @@
+<?php
+namespace AsdeBalears\AreaPrivada\Uniformes;
+
+use AsdeBalears\AreaPrivada\Audit\Logger;
+use AsdeBalears\AreaPrivada\Auth\Ambito;
+use AsdeBalears\AreaPrivada\Domain\Persona;
+use AsdeBalears\AreaPrivada\Tesoreria\Calculadora;
+
+defined( 'ABSPATH' ) || exit;
+
+/**
+ * Pedidos de uniforme (petición del usuario, 2026-09-29).
+ *
+ * - Cualquier asociado pide la camisa scout (y/o insignias) para él o ella, o
+ *   una familia para sus menores. Scouters incluidos.
+ * - Tesorería valida el pago (efectivo o ingreso en cuenta).
+ * - Coordinación valida que se ha incluido en el pedido del grupo al proveedor.
+ * - El grupo la marca como entregada y el socio/a (o su familia) confirma que
+ *   la ha recibido.
+ *
+ * Quién gestiona: Tesorería y Coordinación (y Secretaría, administradores) ven
+ * todos los pedidos del grupo; un scouter, los de socios de sus secciones que no
+ * son adultos, y los suyos.
+ */
+final class Servicio {
+
+	public const CAP_PEDIR   = 'asde_uniformes_pedir';
+	public const CAP_GESTION = 'asde_uniformes_gestion';
+	public const CAP_PAGO    = 'asde_uniformes_pago';
+	public const CAP_PEDIDO  = 'asde_uniformes_pedido';
+	public const CAP_ENTREGA = 'asde_uniformes_entrega';
+	public const CAP_CONFIG  = 'asde_uniformes_config';
+
+	// ---------------------------------------------------------------------
+	// Qué se pide y cuánto cuesta
+	// ---------------------------------------------------------------------
+
+	/**
+	 * Líneas del pedido a partir del formulario, con los precios de hoy.
+	 *
+	 * @param string              $modelo_talla «modelo|talla» o '' (sin camisa).
+	 * @param array<string, int>  $cantidades   id de insignia => cantidad.
+	 * @return array{camisa:?array, insignias:array}|\WP_Error
+	 */
+	public static function lineas( array $cfg, string $modelo_talla, array $cantidades ) {
+		$camisa = null;
+		if ( '' !== $modelo_talla ) {
+			list( $modelo, $talla ) = array_pad( explode( '|', $modelo_talla, 2 ), 2, '' );
+			if ( ! Config::talla_valida( $cfg, $modelo, $talla ) ) {
+				return new \WP_Error( 'asde_uniforme', 'Elige el modelo y la talla de la camisa.' );
+			}
+			$camisa = array(
+				'modelo'   => $modelo,
+				'nombre'   => $cfg['modelos'][ $modelo ]['nombre'],
+				'talla'    => $talla,
+				'especial' => Config::es_especial( $cfg, $talla ),
+				'precio'   => $cfg['precio_camisa'],
+			);
+		}
+		$insignias = array();
+		$activas   = Config::insignias_activas( $cfg );
+		foreach ( $cantidades as $id => $cantidad ) {
+			$cantidad = (int) $cantidad;
+			if ( $cantidad <= 0 ) {
+				continue;
+			}
+			if ( ! isset( $activas[ $id ] ) || $cantidad > Config::MAX_INSIGNIAS ) {
+				return new \WP_Error( 'asde_uniforme', 'Revisa las insignias: alguna no está disponible o la cantidad no es válida (máximo ' . Config::MAX_INSIGNIAS . ').' );
+			}
+			$insignias[] = array(
+				'id'       => (string) $id,
+				'nombre'   => $activas[ $id ]['nombre'],
+				'cantidad' => $cantidad,
+				'precio'   => $activas[ $id ]['precio'],
+			);
+		}
+		if ( ! $camisa && ! $insignias ) {
+			return new \WP_Error( 'asde_uniforme', 'Elige la camisa, alguna insignia o las dos cosas.' );
+		}
+		return array(
+			'camisa'    => $camisa,
+			'insignias' => $insignias,
+		);
+	}
+
+	/**
+	 * Importe del pedido. Las insignias que se pidieron con el precio «por
+	 * confirmar» toman el precio de hoy, si ya lo tienen.
+	 *
+	 * @return array{total:float, provisional:bool}
+	 */
+	public static function total( array $lineas, array $cfg ): array {
+		$total       = (float) ( $lineas['camisa']['precio'] ?? 0 );
+		$provisional = false;
+		foreach ( $lineas['insignias'] as $i ) {
+			$precio = $i['precio'] ?? ( $cfg['insignias'][ $i['id'] ]['precio'] ?? null );
+			if ( null === $precio ) {
+				$provisional = true;
+				continue;
+			}
+			$total += (int) $i['cantidad'] * (float) $precio;
+		}
+		return array(
+			'total'       => round( $total, 2 ),
+			'provisional' => $provisional,
+		);
+	}
+
+	/** «Camisa masculina, talla M · Insignia de grupo ×2». */
+	public static function descripcion( array $lineas ): string {
+		$partes = array();
+		if ( $lineas['camisa'] ) {
+			$partes[] = sprintf( '%s, talla %s%s', $lineas['camisa']['nombre'], $lineas['camisa']['talla'], ! empty( $lineas['camisa']['especial'] ) ? ' (especial)' : '' );
+		}
+		foreach ( $lineas['insignias'] as $i ) {
+			$partes[] = $i['nombre'] . ( (int) $i['cantidad'] > 1 ? ' ×' . (int) $i['cantidad'] : '' );
+		}
+		return implode( ' · ', $partes );
+	}
+
+	public static function importe( array $p ): string {
+		return Calculadora::euros( $p['total'] ) . ( $p['provisional'] ? ' + insignias (precio por confirmar)' : '' );
+	}
+
+	// ---------------------------------------------------------------------
+	// Quién
+	// ---------------------------------------------------------------------
+
+	/** @return array<string, Persona> Para quién puede pedir esta cuenta: la propia persona y sus menores. */
+	public static function para_quien( Ambito $a ): array {
+		$out = array();
+		if ( $a->persona && $a->socio_activo() ) {
+			$out[ $a->persona->num_socio_asde ] = $a->persona;
+		}
+		foreach ( $a->representados as $n => $p ) {
+			$out[ (string) $n ] = $p;
+		}
+		return $out;
+	}
+
+	public static function es_propio( array $p, Ambito $a ): bool {
+		return ( $a->persona && $a->persona->num_socio_asde === $p['socio'] ) || isset( $a->representados[ $p['socio'] ] );
+	}
+
+	/** ¿Ve todos los pedidos del grupo? Tesorería, Coordinación, Secretaría y administradores. */
+	public static function vision_global( Ambito $a ): bool {
+		return $a->vision_global() || current_user_can( self::CAP_PAGO ) || current_user_can( self::CAP_PEDIDO );
+	}
+
+	/** ¿Lo gestiona? Global, o un scouter con los de sus secciones que no son adultos, y los suyos. */
+	public static function en_gestion( array $p, Ambito $a ): bool {
+		if ( ! current_user_can( self::CAP_GESTION ) ) {
+			return false;
+		}
+		if ( self::vision_global( $a ) || self::es_propio( $p, $a ) ) {
+			return true;
+		}
+		return ! $p['adulto'] && (bool) array_intersect( $p['secciones'], $a->secciones_scouter() );
+	}
+
+	public static function puede_pagar( array $p ): bool {
+		return current_user_can( self::CAP_PAGO ) && null === $p['cancelado_en'];
+	}
+
+	public static function puede_pedir( array $p ): bool {
+		return current_user_can( self::CAP_PEDIDO ) && null === $p['cancelado_en'];
+	}
+
+	public static function puede_entregar( array $p, Ambito $a ): bool {
+		return current_user_can( self::CAP_ENTREGA ) && null === $p['cancelado_en'] && self::en_gestion( $p, $a );
+	}
+
+	/** El socio/a o su familia cancela el suyo mientras nadie haya validado nada. */
+	public static function puede_cancelar_propio( array $p, Ambito $a ): bool {
+		return self::es_propio( $p, $a ) && null === $p['cancelado_en'] && null === $p['pago_en'] && null === $p['pedido_en'] && null === $p['entregado_en'];
+	}
+
+	/** Tesorería o Coordinación cancelan cualquiera hasta que se entregue. */
+	public static function puede_cancelar_gestion( array $p ): bool {
+		return ( current_user_can( self::CAP_PAGO ) || current_user_can( self::CAP_PEDIDO ) ) && null === $p['cancelado_en'] && null === $p['entregado_en'];
+	}
+
+	/** Confirmar que se ha recibido: solo el socio/a o su familia, cuando el grupo la ha entregado. */
+	public static function puede_confirmar( array $p, Ambito $a ): bool {
+		return self::es_propio( $p, $a ) && null === $p['cancelado_en'] && null !== $p['entregado_en'] && null === $p['recibido_en'];
+	}
+
+	/** @return array[] Pedidos que gestiona este ámbito. */
+	public static function de_gestion( Ambito $a ): array {
+		return array_values( array_filter( PedidosTable::todos(), static fn( array $p ) => self::en_gestion( $p, $a ) ) );
+	}
+
+	/**
+	 * Lo que le toca hacer (para las pestañas y el inicio), sin consultar el CRM.
+	 *
+	 * @return array{pago:int, pedido:int, entrega:int, confirmar:int}
+	 */
+	public static function pendientes( Ambito $a ): array {
+		$out = array(
+			'pago'      => 0,
+			'pedido'    => 0,
+			'entrega'   => 0,
+			'confirmar' => 0,
+		);
+		$pagar   = current_user_can( self::CAP_PAGO );
+		$pedir   = current_user_can( self::CAP_PEDIDO );
+		$entrega = current_user_can( self::CAP_ENTREGA );
+		foreach ( PedidosTable::todos() as $p ) {
+			if ( null !== $p['cancelado_en'] ) {
+				continue;
+			}
+			if ( self::puede_confirmar( $p, $a ) ) {
+				++$out['confirmar'];
+			}
+			if ( ! self::en_gestion( $p, $a ) ) {
+				continue;
+			}
+			$out['pago']    += (int) ( $pagar && null === $p['pago_en'] );
+			$out['pedido']  += (int) ( $pedir && null === $p['pedido_en'] && null === $p['entregado_en'] );
+			$out['entrega'] += (int) ( $entrega && null !== $p['pedido_en'] && null === $p['entregado_en'] );
+		}
+		return $out;
+	}
+
+	// ---------------------------------------------------------------------
+	// Acciones
+	// ---------------------------------------------------------------------
+
+	/** @return int|\WP_Error Id del pedido. */
+	public static function pedir( Ambito $a, string $socio, array $lineas, string $nota ) {
+		$cfg = Config::de();
+		if ( ! $cfg['abierto'] ) {
+			return new \WP_Error( 'asde_uniforme', 'Ahora mismo no se aceptan pedidos de uniforme.' );
+		}
+		$p = self::para_quien( $a )[ $socio ] ?? null;
+		if ( ! $p ) {
+			return new \WP_Error( 'asde_uniforme', 'No puedes hacer un pedido para esa persona.' );
+		}
+		$t  = self::total( $lineas, $cfg );
+		$id = PedidosTable::crear( $p->num_socio_asde, $p->secciones, $p->es_adulto_voluntario(), $lineas, $t['total'], $t['provisional'], $nota );
+		if ( ! $id ) {
+			return new \WP_Error( 'asde_uniforme', 'No se ha podido guardar el pedido.' );
+		}
+		Logger::log(
+			'uniforme_pedido',
+			'uniforme',
+			(string) $id,
+			array(
+				'camisa'    => (bool) $lineas['camisa'],
+				'insignias' => count( $lineas['insignias'] ),
+				'total'     => $t['total'],
+			)
+		);
+		return $id;
+	}
+
+	/** Importe que Tesorería propone al validar el pago: el total con los precios de hoy. */
+	public static function importe_a_cobrar( array $p ): float {
+		return self::total( $p['lineas'], Config::de() )['total'];
+	}
+
+	/**
+	 * Resumen para el pedido al proveedor: camisas por modelo y talla, e insignias.
+	 *
+	 * @param array[] $pedidos
+	 * @return array{camisas: array<string, array{nombre:string, tallas: array<string, int>}>, insignias: array<string, array{nombre:string, cantidad:int}>, total_camisas:int}
+	 */
+	public static function resumen( array $pedidos, array $cfg ): array {
+		$camisas   = array();
+		$insignias = array();
+		$n         = 0;
+		foreach ( $cfg['modelos'] as $id => $m ) {
+			$camisas[ $id ] = array(
+				'nombre' => $m['nombre'],
+				'tallas' => array_fill_keys( $m['tallas'], 0 ),
+			);
+		}
+		foreach ( $pedidos as $p ) {
+			$c = $p['lineas']['camisa'];
+			if ( $c ) {
+				$camisas[ $c['modelo'] ]['nombre']                   ??= $c['nombre'];
+				$camisas[ $c['modelo'] ]['tallas'][ $c['talla'] ] = ( $camisas[ $c['modelo'] ]['tallas'][ $c['talla'] ] ?? 0 ) + 1;
+				++$n;
+			}
+			foreach ( $p['lineas']['insignias'] as $i ) {
+				$insignias[ $i['id'] ]['nombre']   = $i['nombre'];
+				$insignias[ $i['id'] ]['cantidad'] = ( $insignias[ $i['id'] ]['cantidad'] ?? 0 ) + (int) $i['cantidad'];
+			}
+		}
+		return array(
+			'camisas'       => $camisas,
+			'insignias'     => $insignias,
+			'total_camisas' => $n,
+		);
+	}
+}

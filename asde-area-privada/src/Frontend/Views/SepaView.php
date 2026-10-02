@@ -1,0 +1,281 @@
+<?php
+namespace AsdeBalears\AreaPrivada\Frontend\Views;
+
+use AsdeBalears\AreaPrivada\Audit\Logger;
+use AsdeBalears\AreaPrivada\Crm\CrmException;
+use AsdeBalears\AreaPrivada\Crm\PersonaRepository;
+use AsdeBalears\AreaPrivada\Frontend\Notices;
+use AsdeBalears\AreaPrivada\Sepa\Avisos;
+use AsdeBalears\AreaPrivada\Sepa\Config as SepaConfig;
+use AsdeBalears\AreaPrivada\Sepa\Iban;
+use AsdeBalears\AreaPrivada\Sepa\Mandatos;
+use AsdeBalears\AreaPrivada\Sepa\Remesas;
+use AsdeBalears\AreaPrivada\Tesoreria\Calculadora;
+use AsdeBalears\AreaPrivada\Tesoreria\Config;
+use AsdeBalears\AreaPrivada\Tesoreria\FamiliasTable;
+
+defined( 'ABSPATH' ) || exit;
+
+/**
+ * Tesorería · Domiciliaciones SEPA (Secretaría, Coordinación y Tesorería):
+ * - los datos del acreedor (nombre, identificador, IBAN);
+ * - las autorizaciones de las familias;
+ * - nueva remesa: qué se cobraría a cada familia y el fichero para el banco;
+ * - las remesas hechas: descargar, avisar a las familias, marcar como enviada
+ *   al banco y registrar los cobros y las devoluciones.
+ */
+final class SepaView extends TesoreriaBaseView {
+
+	public function render( string $content = '' ): string {
+		if ( ! current_user_can( self::CAP_CONFIG ) ) {
+			return $this->denegado();
+		}
+		$repo = PersonaRepository::make();
+		if ( ! $repo ) {
+			return $this->error_crm( 'tesoreria', 'La conexión de tu grupo con el CRM no está configurada o no se ha podido comprobar. Un administrador puede revisarla en wp-admin → Grupos Scouts.' );
+		}
+		$ronda = $this->ronda();
+		try {
+			$id = (int) $this->get( 'remesa' );
+			if ( $id && ( $r = Remesas::obtener( $id ) ) ) {
+				$ronda = $r['ronda']; // Las pestañas se marcan con la ronda de la remesa.
+			}
+			$html = $id ? $this->remesa( $repo, $id, $ronda ) : $this->panel( $repo, $ronda );
+		} catch ( CrmException $e ) {
+			return $this->error_crm( 'tesoreria', 'No se ha podido consultar el CRM: ' . $e->getMessage() );
+		}
+		return $this->layout( 'tesoreria', $this->subnav( 'sepa', $ronda ) . $html );
+	}
+
+	private function panel( PersonaRepository $repo, string $ronda ): string {
+		$cfg      = SepaConfig::de();
+		$tcfg     = Config::de( $ronda );
+		$familias = FamiliasTable::todas();
+		$nums     = array();
+		foreach ( $familias as $f ) {
+			$nums = array_merge( $nums, $f['miembros'] );
+		}
+		$personas = $repo->obtener_varias( $nums );
+
+		// Vista previa de la remesa (sin guardar nada), si se ha pedido.
+		$prep    = null;
+		$errores = array();
+		$plazo   = $this->get( 'plazo' );
+		$fecha   = $this->get( 'fecha' );
+		$concepto = $this->get( 'concepto' ) ?: SepaConfig::concepto( $cfg, $ronda );
+		if ( '1' === $this->get( 'preparar' ) && SepaConfig::lista( $cfg ) ) {
+			$errores = array_filter( array( Remesas::error_fecha( $fecha ) ) );
+			$prep    = Remesas::preparar( $repo, $ronda, $plazo );
+		}
+
+		return $this->tpl(
+			'tesoreria/sepa',
+			array(
+				'ronda'      => $ronda,
+				'cfg'        => $cfg,
+				'errores_cfg' => SepaConfig::errores( $cfg ),
+				'ics_aviso'  => '' !== $cfg['ics'] && SepaConfig::ics_formato( $cfg['ics'] ) && ! SepaConfig::ics_control_correcto( $cfg['ics'] ),
+				'lista'      => SepaConfig::lista( $cfg ),
+				'plazos'     => array_values( $tcfg['plazos'] ),
+				'familias'   => $familias,
+				'personas'   => $personas,
+				'mandatos'   => Mandatos::activos(),
+				'remesas'    => Remesas::listado(),
+				'prep'       => $prep,
+				'errores'    => $errores,
+				'plazo'      => $plazo,
+				'fecha'      => $fecha ?: Remesas::fecha_minima(),
+				'fecha_min'  => Remesas::fecha_minima(),
+				'concepto'   => $concepto,
+				'url'        => $this->url( 'sepa' ),
+				'url_ronda'  => $this->url( 'sepa', array( 'ronda' => $ronda ) ),
+			)
+		);
+	}
+
+	private function remesa( PersonaRepository $repo, int $id, string $ronda ): string {
+		$r = Remesas::obtener( $id );
+		if ( ! $r ) {
+			return $this->tpl( 'comun/avisos', array( 'avisos' => array( array( 'error', 'Esa remesa no existe.' ) ) ) ) . $this->panel( $repo, $ronda );
+		}
+		$lineas   = Remesas::lineas( $r );
+		$familias = array();
+		foreach ( $lineas as $l ) {
+			$f = FamiliasTable::obtener( (int) $l['familia'] );
+			if ( $f ) {
+				$familias[ (int) $l['familia'] ] = $f;
+			}
+		}
+		$nums = array();
+		foreach ( $familias as $f ) {
+			$nums = array_merge( $nums, $f['miembros'] );
+		}
+		return $this->tpl(
+			'tesoreria/sepa-remesa',
+			array(
+				'r'        => $r,
+				'lineas'   => $lineas,
+				'familias' => $familias,
+				'personas' => $repo->obtener_varias( $nums ),
+				'url'      => $this->url( 'sepa', array( 'ronda' => $r['ronda'] ) ),
+				'url_fam'  => $this->url( 'tesoreria' ),
+			)
+		);
+	}
+
+	public function handle_post(): void {
+		if ( ! current_user_can( self::CAP_CONFIG ) ) {
+			wp_die( esc_html__( 'No tienes permiso para cambiar las domiciliaciones.', 'asde-area-privada' ), 403 );
+		}
+		$ronda  = Config::es_ronda( $this->post( 'ronda' ) ) ? $this->post( 'ronda' ) : Config::ronda_actual();
+		$volver = $this->url( 'sepa', array( 'ronda' => $ronda ) );
+		$accion = $this->post( 'asde_action' );
+		$id     = (int) $this->post( 'remesa' );
+
+		switch ( $accion ) {
+			case 'sepa_config':
+				check_admin_referer( 'asde_sepa_config' );
+				$this->guardar_config();
+				$this->redirect( $volver );
+				break;
+
+			case 'sepa_generar':
+				check_admin_referer( 'asde_sepa_generar' );
+				$repo = PersonaRepository::make();
+				if ( ! $repo ) {
+					Notices::add( 'error', 'La conexión con el CRM no está disponible.' );
+					$this->redirect( $volver );
+				}
+				try {
+					$prep = Remesas::preparar( $repo, $ronda, $this->post( 'plazo' ) );
+				} catch ( CrmException $e ) {
+					Notices::add( 'error', esc_html( 'No se ha podido consultar el CRM: ' . $e->getMessage() ) );
+					$this->redirect( $volver );
+				}
+				$nueva = Remesas::crear( $prep, $ronda, $this->post( 'fecha' ), $this->post( 'concepto' ), get_current_user_id() );
+				if ( is_wp_error( $nueva ) ) {
+					Notices::add( 'error', esc_html( $nueva->get_error_message() ) );
+					$this->redirect( add_query_arg( array( 'preparar' => '1', 'plazo' => $this->post( 'plazo' ), 'fecha' => $this->post( 'fecha' ), 'concepto' => $this->post( 'concepto' ) ), $volver ) );
+				}
+				$r = Remesas::obtener( $nueva );
+				Notices::add( 'success', sprintf( 'Remesa <strong>%s</strong> creada: %s por %s. Descarga el fichero y súbelo al banco; después, márcala como enviada.', esc_html( $r['numero'] ), Remesas::adeudos( (int) $r['adeudos'] ), esc_html( Calculadora::euros( $r['total'] ) ) ) );
+				$this->redirect( $this->url( 'sepa', array( 'ronda' => $ronda, 'remesa' => (string) $nueva ) ) );
+				break;
+
+			case 'sepa_descargar':
+				check_admin_referer( 'asde_sepa_remesa_' . $id );
+				$this->descargar( $id );
+				break;
+
+			case 'sepa_avisar':
+				check_admin_referer( 'asde_sepa_remesa_' . $id );
+				$r = Remesas::obtener( $id );
+				if ( ! $r || Remesas::ANULADA === $r['estado'] ) {
+					Notices::add( 'error', 'Esa remesa no existe o está anulada.' );
+				} else {
+					$a = Avisos::preaviso( $r );
+					Logger::log( 'sepa_preaviso_enviado', 'remesa', $r['numero'], $a );
+					Notices::add( 'success', sprintf( 'Aviso previo enviado: %d emails a %d familias.', (int) $a['enviados'], (int) $a['familias'] ) );
+					if ( $a['sin_email'] ) {
+						Notices::add( 'warning', sprintf( 'A %d familias no se ha podido avisar por email (sin email o sin cuenta): avísalas por otro medio.', (int) $a['sin_email'] ) );
+					}
+				}
+				$this->redirect( $this->url( 'sepa', array( 'ronda' => $ronda, 'remesa' => (string) $id ) ) );
+				break;
+
+			case 'sepa_enviada':
+				check_admin_referer( 'asde_sepa_remesa_' . $id );
+				Remesas::marcar_enviada( $id, get_current_user_id() )
+					? Notices::add( 'success', 'Remesa marcada como enviada al banco. Las autorizaciones estrenadas pasan a «recurrentes» (RCUR) para la próxima. Cuando el banco cobre, registra los cobros aquí.' )
+					: Notices::add( 'error', 'Esa remesa no se puede marcar como enviada.' );
+				$this->redirect( $this->url( 'sepa', array( 'ronda' => $ronda, 'remesa' => (string) $id ) ) );
+				break;
+
+			case 'sepa_anular':
+				check_admin_referer( 'asde_sepa_remesa_' . $id );
+				Remesas::anular( $id, get_current_user_id() )
+					? Notices::add( 'success', 'Remesa anulada. Sus familias vuelven a poder incluirse en otra.' )
+					: Notices::add( 'error', 'Solo se puede anular una remesa que aún no se ha enviado al banco.' );
+				$this->redirect( $volver );
+				break;
+
+			case 'sepa_cobros':
+				check_admin_referer( 'asde_sepa_remesa_' . $id );
+				$res = Remesas::registrar_cobros( $id, array_map( 'intval', $this->post_array( 'cobrada' ) ), array_map( 'intval', $this->post_array( 'devuelta' ) ), $this->post( 'fecha' ), get_current_user_id() );
+				foreach ( $res['errores'] as $e ) {
+					Notices::add( 'error', esc_html( $e ) );
+				}
+				if ( $res['cobrados'] || $res['devueltos'] ) {
+					Notices::add( 'success', sprintf( 'Registrados %d cobros como pagos de las familias%s.', (int) $res['cobrados'], $res['devueltos'] ? sprintf( ' y %d devoluciones', (int) $res['devueltos'] ) : '' ) );
+				}
+				$this->redirect( $this->url( 'sepa', array( 'ronda' => $ronda, 'remesa' => (string) $id ) ) );
+				break;
+
+			case 'sepa_revocar':
+				check_admin_referer( 'asde_sepa_revocar' );
+				$m = Mandatos::obtener( (int) $this->post( 'mandato' ) );
+				if ( $m && Mandatos::revocar( $m['id'], get_current_user_id(), 'Anulada por Tesorería. ' . $this->post( 'motivo' ) ) ) {
+					Notices::add( 'success', sprintf( 'Autorización %s anulada.', esc_html( $m['referencia'] ) ) );
+				} else {
+					Notices::add( 'error', 'No se ha podido anular esa autorización.' );
+				}
+				$this->redirect( $volver );
+				break;
+
+			default:
+				Notices::add( 'error', 'Petición no válida.' );
+				$this->redirect( $volver );
+		}
+	}
+
+	private function guardar_config(): void {
+		$actual = SepaConfig::de();
+		$texto  = fn( string $k, int $max ) => mb_substr( sanitize_text_field( $this->post( $k ) ), 0, $max );
+		$nueva  = array(
+			'activo'     => '1' === $this->post( 'activo' ),
+			'nombre'     => $texto( 'nombre', 70 ),
+			'ics'        => SepaConfig::normalizar_ics( $this->post( 'ics' ) ),
+			'iban'       => Iban::normalizar( $this->post( 'iban' ) ),
+			'bic'        => strtoupper( (string) preg_replace( '/[^A-Za-z0-9]/', '', $this->post( 'bic' ) ) ),
+			'calle'      => $texto( 'calle', 70 ),
+			'cp'         => $texto( 'cp', 10 ),
+			'poblacion'  => $texto( 'poblacion', 50 ),
+			'provincia'  => $texto( 'provincia', 40 ),
+			'dias_aviso' => max( 1, min( 30, (int) $this->post( 'dias_aviso' ) ) ),
+			'concepto'   => $texto( 'concepto', 90 ),
+		);
+		if ( '' === $nueva['iban'] ) {
+			$nueva['iban'] = $actual['iban']; // Vacío: se conserva el guardado.
+		}
+		SepaConfig::guardar( $nueva );
+		Logger::log( 'sepa_configurada', 'grupo', \AsdeBalears\AreaPrivada\Domain\Grupo::numero(), array( 'activo' => $nueva['activo'] ) );
+		$errores = SepaConfig::errores( SepaConfig::de() );
+		if ( $errores ) {
+			Notices::add( 'warning', 'Guardado, pero todavía falta algo para poder domiciliar: ' . esc_html( implode( ' ', $errores ) ) );
+		} else {
+			Notices::add( 'success', $nueva['activo'] ? 'Datos del acreedor guardados. Las familias ya pueden firmar su autorización en «Mis pagos».' : 'Datos del acreedor guardados. Las familias aún no ven la opción: marca «Ofrecer la domiciliación a las familias» cuando quieras.' );
+		}
+	}
+
+	/** Envía el XML de la remesa al navegador (se llama antes de pintar la página). */
+	private function descargar( int $id ): void {
+		$r = Remesas::obtener( $id );
+		if ( ! $r || Remesas::ANULADA === $r['estado'] ) {
+			Notices::add( 'error', 'Esa remesa no existe o está anulada.' );
+			$this->redirect( $this->url( 'sepa' ) );
+		}
+		$xml = Remesas::xml( $r );
+		if ( is_wp_error( $xml ) ) {
+			Notices::add( 'error', esc_html( $xml->get_error_message() ) );
+			$this->redirect( $this->url( 'sepa', array( 'ronda' => $r['ronda'], 'remesa' => (string) $id ) ) );
+		}
+		Remesas::contar_descarga( $id );
+		Logger::log( 'sepa_remesa_descargada', 'remesa', $r['numero'] );
+		nocache_headers();
+		header( 'Content-Type: application/xml; charset=UTF-8' );
+		header( 'Content-Disposition: attachment; filename="' . Remesas::nombre_fichero( $r ) . '"' );
+		header( 'X-Content-Type-Options: nosniff' );
+		echo $xml; // phpcs:ignore WordPress.Security.EscapeOutput -- XML generado con DOM, ya escapado.
+		exit;
+	}
+}
