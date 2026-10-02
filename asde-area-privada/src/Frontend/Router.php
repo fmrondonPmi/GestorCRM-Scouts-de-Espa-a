@@ -183,6 +183,11 @@ final class Router {
 			return;
 		}
 		wp_enqueue_style( 'asde-area-privada', plugins_url( 'assets/css/area-privada.css', ASDE_AP_FILE ), array(), ASDE_AP_VERSION );
+		// Colores elegidos en wp-admin → Grupos Scouts → Colores (después del CSS de siempre, para que mande).
+		$colores = Colores::css();
+		if ( '' !== $colores ) {
+			wp_add_inline_style( 'asde-area-privada', $colores );
+		}
 		if ( 'informes' === $key ) {
 			wp_enqueue_script( 'asde-informes', plugins_url( 'assets/js/informes.js', ASDE_AP_FILE ), array(), ASDE_AP_VERSION, true );
 		}

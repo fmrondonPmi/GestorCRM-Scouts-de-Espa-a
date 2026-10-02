@@ -7,7 +7,7 @@ Petición del usuario (2026-10-02). Cinco cambios; cada uno se cierra con sus pr
 | 3 | Todo scouter pide su uniforme, no solo lo gestiona | ✅ |
 | 2 | Menús distintos para scouters (gestión) y familias | ✅ |
 | 4 | El plugin no depende del tema: se sugiere uno, no es obligatorio | ✅ |
-| 5 | Pantalla de gestión de colores | ⏳ |
+| 5 | Pantalla de gestión de colores | ✅ |
 | 1 | Selector de idioma (castellano, catalán, euskera, gallego) y gestión de etiquetas | ⏳ |
 
 ---
@@ -68,3 +68,31 @@ Pruebas: `tests/menus.php` (23 comprobaciones: familia, participante, scouter, C
 **Supuesto / límite.** En el Local solo está instalado Enfold, así que otro tema se ha comprobado **simulándolo** (filtro `asde_ap_tema_slug`) y no visualmente. Antes de usar otro tema en producción conviene revisar las pantallas con él (sobre todo el ancho de las tablas y el menú en el móvil).
 
 Pruebas: `tests/tema.php` (15 comprobaciones).
+
+---
+
+## 5 · Colores del área privada
+
+**Dónde.** wp-admin → Grupos Scouts → **Colores** (`Admin\ColoresPage`, solo administradores).
+
+**Qué se puede elegir (12 colores):**
+- *Color de marca:* Principal, Principal oscuro, Acento (la línea bajo el menú) y Fondo suave.
+- *Texto y fondos:* Texto, Texto atenuado, Bordes y Fondo de las tarjetas.
+- *Estados:* Correcto, Aviso, Error e Información.
+
+**Cómo funciona** (`Frontend\Colores`).
+- Todo el CSS del plugin usa ahora variables `--asde-*` (antes había ~90 colores fijos). Los valores de siempre siguen en el CSS; **solo se guardan los colores que se cambian** (opción `asde_ap_colores`) y se emite un bloque de CSS después del de siempre. Un color igual al de siempre no se guarda: así, si no se toca, el principal sigue siendo el de Enfold.
+- **De un color salen los demás**, para que el conjunto quede coherente: al elegir el principal salen su oscuro, el acento, tres fondos suaves/bordes y el color del texto que va encima (blanco o casi negro, según se lea mejor); al elegir un estado, su fondo y su texto (oscurecido hasta cumplir 4,5:1). Lo que se elige a mano manda sobre lo derivado.
+- **Modelos de partida:** morado de siempre, verde scout, azul, naranja, rojo y gris azulado: cada uno fija solo el principal.
+- **Vista previa en vivo** con las clases reales del área (menú, tarjetas, etiquetas, avisos, tabla, botón): al mover un color se pide al servidor el CSS y se pinta, así que lo que se ve es lo que se guardará.
+- **Avisos de contraste** (WCAG AA, 4,5:1) para el texto, el texto atenuado, el principal sobre el fondo y el texto sobre el principal.
+- Con otro color principal, los botones del área (`.button`, `input[type=submit]`) también lo siguen (si no se toca, siguen siendo los del tema).
+- **Emails** (invitación, SEPA, solicitud rechazada): llevan los colores elegidos (no usan el CSS del plugin; `Colores::para_email()`).
+- Cada cambio queda en el registro de auditoría; al desinstalar el plugin se borra la opción.
+
+**Decisiones / supuestos** (para confirmar).
+- Se unificaron los matices casi idénticos del CSS (8 lilas muy claros en uno, los verdes/amarillos/rojos de texto de cada estado en uno): el aspecto por defecto cambia, como mucho, en una tonalidad imperceptible.
+- Los colores son **globales para todo el sitio** (no por grupo).
+- La **PWA** (`theme_color` del manifiesto, de la otra sesión) **no** sigue aún el color principal: es de su sección 5 (ajustes de la PWA). Pendiente de que la otra sesión la enlace con `Colores::para_email()['primary']`.
+
+Pruebas: `tests/colores.php` (32 comprobaciones). Revisión visual con capturas de Chrome del área con los colores por defecto, verde y azul.

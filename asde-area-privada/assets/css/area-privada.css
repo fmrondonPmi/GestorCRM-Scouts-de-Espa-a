@@ -4,14 +4,41 @@
  * formularios y botones, y solo añade lo que el tema no tiene. Colores: los de la pantalla «Colores» o, por defecto, los de Enfold.
  */
 
+:root,
 .asde-ap {
+	/* Marca (por defecto, el color principal del tema Enfold si lo hay). Se personalizan en wp-admin → Grupos Scouts → Colores. */
 	--asde-primary: var(--enfold-main-color-primary, #632599);
 	--asde-primary-dark: #421866;
 	--asde-lila: #c7a2e8;
+	--asde-on-primary: #ffffff;
+	--asde-tint: #f7f3fb;
+	--asde-tint-strong: #f1e9f8;
+	--asde-tint-line: #e5dcef;
+	/* Texto, bordes y fondos neutros */
 	--asde-text: var(--enfold-main-color-color, #444444);
 	--asde-muted: #666666;
 	--asde-border: #e1e1e1;
+	--asde-surface: #ffffff;
+	--asde-neutral-bg: #eeeeee;
 	--asde-radius: 6px;
+	/* Estados: correcto, aviso, error e información (color, fondo, fondo suave y texto) */
+	--asde-ok: #5a8f00;
+	--asde-ok-bg: #e6f4d7;
+	--asde-ok-soft: #eef7e6;
+	--asde-ok-strong: #d6efc0;
+	--asde-ok-text: #2d4f06;
+	--asde-warn: #c99400;
+	--asde-warn-bg: #fff3cd;
+	--asde-warn-soft: #fff8e1;
+	--asde-warn-text: #664d03;
+	--asde-error: #b32d2e;
+	--asde-error-bg: #fdecea;
+	--asde-error-text: #8a1c1c;
+	--asde-info: #3b73b9;
+	--asde-info-bg: #e3eefc;
+	--asde-info-text: #0b3a7a;
+}
+.asde-ap {
 	margin-bottom: 40px;
 }
 
@@ -65,7 +92,7 @@
 	padding: 20px 24px;
 	border: 1px solid var(--asde-border);
 	border-radius: var(--asde-radius);
-	background: #ffffff;
+	background: var(--asde-surface);
 }
 .asde-ap .asde-card > h2:first-child,
 .asde-ap .asde-card > h3:first-child {
@@ -108,20 +135,20 @@
 	vertical-align: middle;
 }
 .asde-ap .asde-badge--rol {
-	background: #f1e9f8;
+	background: var(--asde-tint-strong);
 	color: var(--asde-primary-dark);
 }
 .asde-ap .asde-badge--estado-invitado {
-	background: #fff3cd;
-	color: #664d03;
+	background: var(--asde-warn-bg);
+	color: var(--asde-warn-text);
 }
 .asde-ap .asde-badge--estado-activo {
-	background: #e6f4d7;
-	color: #2d4f06;
+	background: var(--asde-ok-bg);
+	color: var(--asde-ok-text);
 }
 .asde-ap .asde-badge--estado-desactivado {
-	background: #eeeeee;
-	color: #555555;
+	background: var(--asde-neutral-bg);
+	color: var(--asde-muted);
 }
 
 /* Avisos */
@@ -132,20 +159,20 @@
 	border-radius: 4px;
 }
 .asde-ap .asde-notice--success {
-	border-color: #5a8f00;
-	background: #eef7e6;
+	border-color: var(--asde-ok);
+	background: var(--asde-ok-soft);
 }
 .asde-ap .asde-notice--error {
-	border-color: #b32d2e;
-	background: #fdecea;
+	border-color: var(--asde-error);
+	background: var(--asde-error-bg);
 }
 .asde-ap .asde-notice--warning {
-	border-color: #c99400;
-	background: #fff8e1;
+	border-color: var(--asde-warn);
+	background: var(--asde-warn-soft);
 }
 .asde-ap .asde-notice--info {
 	border-color: var(--asde-primary);
-	background: #f3eefa;
+	background: var(--asde-tint);
 }
 
 /* Monitor de la corrección de números en segundo plano */
@@ -155,19 +182,19 @@
 	border: 1px solid var(--asde-lila);
 	border-left: 4px solid var(--asde-primary);
 	border-radius: 4px;
-	background: #f7f3fc;
+	background: var(--asde-tint);
 }
 .asde-ap .asde-tarea[hidden] {
 	display: none;
 }
 .asde-ap .asde-tarea--terminada {
-	border-left-color: #5a8f00;
-	background: #eef7e6;
+	border-left-color: var(--asde-ok);
+	background: var(--asde-ok-soft);
 }
 .asde-ap .asde-tarea--cancelada,
 .asde-ap .asde-tarea--error {
-	border-left-color: #c99400;
-	background: #fff8e1;
+	border-left-color: var(--asde-warn);
+	background: var(--asde-warn-soft);
 }
 .asde-ap .asde-tarea__fila {
 	display: flex;
@@ -199,7 +226,7 @@
 }
 .asde-ap .asde-tarea-fallidas summary {
 	cursor: pointer;
-	color: #8a6500;
+	color: var(--asde-warn-text);
 	font-weight: 600;
 }
 
@@ -339,7 +366,7 @@ html.asde-cabecera-oculta .asde-ap .asde-nav {
 	top: var(--asde-nav-top, 51px);
 	z-index: 480;
 	padding-top: 8px;
-	background: #ffffff;
+	background: var(--asde-surface);
 	box-shadow: 0 6px 6px -6px rgba(0, 0, 0, 0.18);
 }
 @media (min-width: 990px) {
@@ -363,8 +390,8 @@ html.asde-cabecera-oculta .asde-ap .asde-nav {
 /* Ficha editable */
 .asde-ap .asde-ro {
 	border-style: dashed !important;
-	background: #f5f5f5 !important;
-	color: #555555 !important;
+	background: var(--asde-neutral-bg) !important;
+	color: var(--asde-muted) !important;
 	cursor: not-allowed;
 }
 .asde-ap .asde-ro-icon {
@@ -473,9 +500,9 @@ html.asde-cabecera-oculta .asde-ap .asde-nav {
 	margin: 0;
 	padding: 4px 0;
 	overflow-y: auto;
-	border: 1px solid #e1e1e1;
+	border: 1px solid var(--asde-border);
 	border-radius: 6px;
-	background: #ffffff;
+	background: var(--asde-surface);
 	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
 	list-style: none;
 	box-sizing: border-box;
@@ -489,8 +516,8 @@ html.asde-cabecera-oculta .asde-ap .asde-nav {
 	line-height: 1.4;
 }
 .asde-select-ayuda__lista li[aria-selected="true"] {
-	background: #f3ecfa;
-	color: #632599;
+	background: var(--asde-tint);
+	color: var(--asde-primary);
 }
 .asde-select-ayuda__globo {
 	position: absolute;
@@ -529,9 +556,9 @@ html.asde-cabecera-oculta .asde-ap .asde-nav {
 	margin: 0;
 	padding: 4px 0;
 	overflow-y: auto;
-	border: 1px solid #e1e1e1;
+	border: 1px solid var(--asde-border);
 	border-radius: 6px;
-	background: #ffffff;
+	background: var(--asde-surface);
 	box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
 	list-style: none;
 	box-sizing: border-box;
@@ -546,18 +573,18 @@ html.asde-cabecera-oculta .asde-ap .asde-nav {
 }
 .asde-combobox__lista li:hover,
 .asde-combobox__lista li[aria-selected="true"] {
-	background: #f3ecfa;
-	color: #632599;
+	background: var(--asde-tint);
+	color: var(--asde-primary);
 }
 .asde-combobox__lista .asde-combobox__vacio {
-	color: #666666;
+	color: var(--asde-muted);
 	cursor: default;
 }
 
 /* Voluntario sin sección */
 .asde-ap .asde-badge--sin-seccion {
-	background: #eeeeee;
-	color: #444444;
+	background: var(--asde-neutral-bg);
+	color: var(--asde-text);
 }
 .asde-ap .asde-choice--separada {
 	margin-top: 10px;
@@ -581,11 +608,11 @@ html.asde-cabecera-oculta .asde-ap .asde-nav {
 	text-align: right;
 }
 .asde-ap .asde-importe--ingreso {
-	color: #1e6b32;
+	color: var(--asde-ok-text);
 	font-weight: 600;
 }
 .asde-ap .asde-importe--gasto {
-	color: #a12622;
+	color: var(--asde-error-text);
 }
 .asde-ap .asde-conciliar {
 	display: flex;
@@ -600,30 +627,30 @@ html.asde-cabecera-oculta .asde-ap .asde-nav {
 	margin: 0;
 }
 .asde-ap .asde-badge--banco-pendiente {
-	background: #fff4d6;
-	color: #7a5a00;
+	background: var(--asde-warn-bg);
+	color: var(--asde-warn-text);
 }
 .asde-ap .asde-badge--banco-conciliado {
-	background: #e7f5ea;
-	color: #1e6b32;
+	background: var(--asde-ok-soft);
+	color: var(--asde-ok-text);
 }
 .asde-ap .asde-badge--banco-ignorado {
-	background: #eeeeee;
-	color: #555555;
+	background: var(--asde-neutral-bg);
+	color: var(--asde-muted);
 }
 
 /* Registro de emails */
 .asde-ap .asde-badge--email-enviado {
-	background: #e7f5ea;
-	color: #1e6b32;
+	background: var(--asde-ok-soft);
+	color: var(--asde-ok-text);
 }
 .asde-ap .asde-badge--email-error {
-	background: #fbeaea;
-	color: #a12622;
+	background: var(--asde-error-bg);
+	color: var(--asde-error-text);
 }
 .asde-ap .asde-badge--email-sin_email {
-	background: #fff4d6;
-	color: #7a5a00;
+	background: var(--asde-warn-bg);
+	color: var(--asde-warn-text);
 }
 .asde-ap .asde-email-preview {
 	display: block;
@@ -631,7 +658,7 @@ html.asde-cabecera-oculta .asde-ap .asde-nav {
 	height: 680px;
 	border: 1px solid var(--asde-border);
 	border-radius: var(--asde-radius);
-	background: #f4f1f7;
+	background: var(--asde-tint);
 }
 
 /* Ordenar por columnas */
@@ -711,7 +738,7 @@ html.asde-cabecera-oculta .asde-ap .asde-nav {
 .asde-ap .asde-paginacion__botones .is-current {
 	border-color: var(--asde-primary);
 	background: var(--asde-primary);
-	color: #ffffff;
+	color: var(--asde-on-primary);
 	font-weight: 600;
 }
 .asde-ap .asde-paginacion__botones .is-disabled {
@@ -794,7 +821,7 @@ html.asde-cabecera-oculta .asde-ap .asde-nav {
 	font-weight: normal;
 }
 .asde-ap .asde-help--warning {
-	color: #7a5a00;
+	color: var(--asde-warn-text);
 }
 .asde-ap .asde-help--inline {
 	display: inline;
@@ -805,7 +832,7 @@ html.asde-cabecera-oculta .asde-ap .asde-nav {
 	padding: 8px 6px;
 	border: 1px solid var(--asde-border);
 	border-radius: 2px;
-	background: #ffffff;
+	background: var(--asde-surface);
 	font: inherit;
 	color: inherit;
 }
@@ -825,7 +852,7 @@ html.asde-cabecera-oculta .asde-ap .asde-nav {
 .asde-ap .asde-destacado {
 	padding: 10px 12px;
 	border-left: 4px solid var(--asde-primary);
-	background: #f7f2fb;
+	background: var(--asde-tint);
 }
 .asde-ap .asde-grid-2 {
 	display: grid;
@@ -856,7 +883,7 @@ html.asde-cabecera-oculta .asde-ap .asde-nav {
 	cursor: pointer;
 }
 .asde-ap .asde-btn-danger {
-	color: #b32d2e;
+	color: var(--asde-error);
 }
 
 /* Accesos directos del inicio */
@@ -916,8 +943,8 @@ html.asde-cabecera-oculta .asde-ap .asde-nav {
 	gap: 0 16px;
 }
 .asde-ap .asde-columnas__grupo--salud {
-	border-color: #e3c9f5;
-	background: #fbf7fe;
+	border-color: var(--asde-tint-line);
+	background: var(--asde-tint);
 }
 .asde-ap .asde-columnas__todas {
 	margin: 0 0 4px;
@@ -939,14 +966,14 @@ html.asde-cabecera-oculta .asde-ap .asde-nav {
 	margin-right: 12px;
 }
 .asde-ap .asde-badge--salud {
-	background: #fdecea;
-	color: #8a1c1c;
+	background: var(--asde-error-bg);
+	color: var(--asde-error-text);
 }
 .asde-ap .asde-actions--botones {
 	gap: 8px;
 }
 .asde-ap .button.asde-button-secundario {
-	background: #ffffff;
+	background: var(--asde-surface);
 	color: var(--asde-primary);
 	border: 1px solid var(--asde-primary);
 }
@@ -979,8 +1006,8 @@ dialog.asde-modal::backdrop {
 	align-items: center;
 	gap: 14px;
 	padding: 10px 16px;
-	border-bottom: 1px solid #e5dcef;
-	background: #f7f3fb;
+	border-bottom: 1px solid var(--asde-tint-line);
+	background: var(--asde-tint);
 }
 .asde-modal__titulo {
 	flex: 1;
@@ -989,7 +1016,7 @@ dialog.asde-modal::backdrop {
 	text-overflow: ellipsis;
 	white-space: nowrap;
 	font-weight: 600;
-	color: #632599;
+	color: var(--asde-primary);
 }
 .asde-modal__pagina {
 	font-size: 13px;
@@ -998,7 +1025,7 @@ dialog.asde-modal::backdrop {
 .asde-modal__cerrar {
 	border: 0;
 	background: transparent;
-	color: #555555;
+	color: var(--asde-muted);
 	font-size: 28px;
 	line-height: 1;
 	padding: 0 4px;
@@ -1006,7 +1033,7 @@ dialog.asde-modal::backdrop {
 }
 .asde-modal__cerrar:hover,
 .asde-modal__cerrar:focus-visible {
-	color: #632599;
+	color: var(--asde-primary);
 }
 .asde-modal__cuerpo {
 	overflow: auto;
@@ -1047,8 +1074,8 @@ dialog.asde-modal::backdrop {
 }
 .asde-ap .asde-copiar__texto {
 	padding: 6px 10px;
-	background: #f7f3fb;
-	border: 1px solid #e5dcef;
+	background: var(--asde-tint);
+	border: 1px solid var(--asde-tint-line);
 	border-radius: 4px;
 	word-break: break-all;
 }
@@ -1070,7 +1097,7 @@ dialog.asde-modal::backdrop {
 }
 .asde-ap .asde-rechazar summary {
 	cursor: pointer;
-	color: #a12622;
+	color: var(--asde-error-text);
 }
 .asde-ap .asde-pendientes {
 	display: flex;
@@ -1140,7 +1167,7 @@ dialog.asde-modal::backdrop {
 .asde-ap .asde-subnav__tabs a.is-active,
 .asde-ap .asde-subnav__tabs a:hover {
 	border-color: var(--asde-primary);
-	background: #f1e9f8;
+	background: var(--asde-tint-strong);
 }
 .asde-ap .asde-subnav__ronda {
 	display: flex;
@@ -1160,7 +1187,7 @@ dialog.asde-modal::backdrop {
 	height: 10px;
 	margin: 0 0 12px;
 	border-radius: 999px;
-	background: #eeeeee;
+	background: var(--asde-neutral-bg);
 	overflow: hidden;
 }
 .asde-ap .asde-progreso span {
@@ -1168,11 +1195,11 @@ dialog.asde-modal::backdrop {
 	height: 100%;
 	background: var(--asde-primary);
 }
-.asde-ap .asde-badge--pago-pagado { background: #e6f4d7; color: #2d4f06; }
-.asde-ap .asde-badge--pago-parcial { background: #e3eefc; color: #0b3a7a; }
-.asde-ap .asde-badge--pago-pendiente { background: #fff3cd; color: #664d03; }
-.asde-ap .asde-badge--pago-atrasado { background: #fdecea; color: #8a1c1c; }
-.asde-ap .asde-badge--pago-exento { background: #eeeeee; color: #555555; }
+.asde-ap .asde-badge--pago-pagado { background: var(--asde-ok-bg); color: var(--asde-ok-text); }
+.asde-ap .asde-badge--pago-parcial { background: var(--asde-info-bg); color: var(--asde-info-text); }
+.asde-ap .asde-badge--pago-pendiente { background: var(--asde-warn-bg); color: var(--asde-warn-text); }
+.asde-ap .asde-badge--pago-atrasado { background: var(--asde-error-bg); color: var(--asde-error-text); }
+.asde-ap .asde-badge--pago-exento { background: var(--asde-neutral-bg); color: var(--asde-muted); }
 .asde-ap .asde-grid-3 {
 	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -1238,7 +1265,7 @@ dialog.asde-modal::backdrop {
 	padding: 6px 12px;
 	border: 1px solid var(--asde-border);
 	border-radius: 999px;
-	background: #fafafa;
+	background: var(--asde-neutral-bg);
 }
 .asde-ap .asde-resumen a[aria-current] {
 	font-weight: 600;
@@ -1301,7 +1328,7 @@ dialog.asde-modal::backdrop {
 .asde-ap .asde-pasos li.is-hecho .asde-pasos__marca {
 	background: var(--asde-primary);
 	border-color: var(--asde-primary);
-	color: #fff;
+	color: var(--asde-on-primary);
 }
 .asde-ap .asde-pasos--gestion {
 	display: grid;
@@ -1361,7 +1388,7 @@ dialog.asde-modal::backdrop {
 	font-size: 1.1em;
 }
 .asde-ap .asde-check {
-	color: #2d4f06;
+	color: var(--asde-ok-text);
 	font-weight: 700;
 }
 .asde-ap .asde-fila--cancelada td {
@@ -1388,12 +1415,12 @@ dialog.asde-modal::backdrop {
 	border: 1px solid var(--asde-border);
 	border-radius: var(--asde-radius);
 }
-.asde-ap .asde-badge--uniforme-solicitado { background: #fff4d6; color: #6b4a00; }
-.asde-ap .asde-badge--uniforme-pagado { background: #e3eefc; color: #0b3a7a; }
-.asde-ap .asde-badge--uniforme-pedido { background: #efe4f8; color: #421866; }
-.asde-ap .asde-badge--uniforme-entregado { background: #e6f4d7; color: #2d4f06; }
-.asde-ap .asde-badge--uniforme-recibido { background: #d6efc0; color: #1f3a03; }
-.asde-ap .asde-badge--uniforme-cancelado { background: #eeeeee; color: #555555; }
+.asde-ap .asde-badge--uniforme-solicitado { background: var(--asde-warn-bg); color: var(--asde-warn-text); }
+.asde-ap .asde-badge--uniforme-pagado { background: var(--asde-info-bg); color: var(--asde-info-text); }
+.asde-ap .asde-badge--uniforme-pedido { background: var(--asde-tint-strong); color: var(--asde-primary-dark); }
+.asde-ap .asde-badge--uniforme-entregado { background: var(--asde-ok-bg); color: var(--asde-ok-text); }
+.asde-ap .asde-badge--uniforme-recibido { background: var(--asde-ok-strong); color: var(--asde-ok-text); }
+.asde-ap .asde-badge--uniforme-cancelado { background: var(--asde-neutral-bg); color: var(--asde-muted); }
 /* Texto solo para lectores de pantalla (por si el tema no lo define). */
 .asde-ap .screen-reader-text {
 	position: absolute !important;
@@ -1562,7 +1589,7 @@ dialog.asde-modal::backdrop {
 		display: grid;
 		grid-template-columns: 1fr 1fr;
 		gap: 8px;
-		background: #f4f1f7;
+		background: var(--asde-tint);
 	}
 	.asde-ap .asde-table.asde-table--usuarios .asde-filtros th {
 		display: block;
@@ -1625,8 +1652,8 @@ dialog.asde-modal::backdrop {
 	z-index: 100000;
 	width: 0;
 	height: 3px;
-	background: var(--asde-primary, #632599);
-	box-shadow: 0 0 6px var(--asde-primary, #632599);
+	background: var(--asde-primary);
+	box-shadow: 0 0 6px var(--asde-primary);
 	animation: asde-progreso 12s cubic-bezier(0.1, 0.6, 0.2, 1) forwards;
 }
 .asde-progreso[hidden] {
@@ -1668,9 +1695,9 @@ html.asde-cargando .asde-ap button {
 	max-width: 96vw;
 	max-height: 94vh;
 	padding: 0;
-	border: 1px solid var(--asde-border, #ddd);
+	border: 1px solid var(--asde-border);
 	border-radius: 10px;
-	background: #ffffff;
+	background: var(--asde-surface);
 	color: inherit;
 	overflow: hidden;
 }
@@ -1686,14 +1713,14 @@ html.asde-cargando .asde-ap button {
 	align-items: center;
 	gap: 14px;
 	padding: 10px 14px;
-	border-bottom: 1px solid var(--asde-border, #ddd);
-	background: #f6f3f9;
+	border-bottom: 1px solid var(--asde-border);
+	background: var(--asde-tint);
 }
 .asde-visor__titulo {
 	flex: 1;
 	min-width: 0;
 	font-weight: 600;
-	color: var(--asde-primary, #632599);
+	color: var(--asde-primary);
 }
 .asde-visor__abrir {
 	font-size: 13px;
@@ -1752,8 +1779,8 @@ html.asde-cargando .asde-ap button {
 	display: inline-block;
 	padding: 0 6px;
 	border-radius: 10px;
-	background: #fff3cd;
-	color: #7a5200;
+	background: var(--asde-warn-bg);
+	color: var(--asde-warn-text);
 	font-size: 0.85em;
 	font-weight: 600;
 	white-space: normal;

@@ -1,6 +1,7 @@
 <?php
 namespace AsdeBalears\AreaPrivada;
 
+use AsdeBalears\AreaPrivada\Admin\ColoresPage;
 use AsdeBalears\AreaPrivada\Admin\EntornoPage;
 use AsdeBalears\AreaPrivada\Admin\OrganizacionPage;
 use AsdeBalears\AreaPrivada\Admin\SettingsPage;
@@ -34,6 +35,7 @@ final class Plugin {
 		if ( is_admin() ) {
 			( new SettingsPage() )->register();
 			( new OrganizacionPage() )->register();
+			( new ColoresPage() )->register();
 			( new EntornoPage() )->register();
 		}
 	}
