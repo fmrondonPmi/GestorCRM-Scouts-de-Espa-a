@@ -1,7 +1,7 @@
 /*
  * Área privada · ASDE Scouts de Balears
- * Complementa al tema Enfold: hereda tipografía, formularios y botones, y solo
- * añade lo que el tema no tiene. Colores desde las variables de Enfold.
+ * Complementa al tema activo (está pensado para Enfold, pero no depende de él): hereda tipografía,
+ * formularios y botones, y solo añade lo que el tema no tiene. Colores: los de la pantalla «Colores» o, por defecto, los de Enfold.
  */
 
 .asde-ap {

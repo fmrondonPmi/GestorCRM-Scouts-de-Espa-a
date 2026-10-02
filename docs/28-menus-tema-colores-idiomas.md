@@ -6,7 +6,7 @@ Petición del usuario (2026-10-02). Cinco cambios; cada uno se cierra con sus pr
 |---|---|---|
 | 3 | Todo scouter pide su uniforme, no solo lo gestiona | ✅ |
 | 2 | Menús distintos para scouters (gestión) y familias | ✅ |
-| 4 | El plugin no depende del tema: se sugiere uno, no es obligatorio | ⏳ |
+| 4 | El plugin no depende del tema: se sugiere uno, no es obligatorio | ✅ |
 | 5 | Pantalla de gestión de colores | ⏳ |
 | 1 | Selector de idioma (castellano, catalán, euskera, gallego) y gestión de etiquetas | ⏳ |
 
@@ -46,3 +46,25 @@ Pruebas: `tests/uniformes.php` (pestañas del scouter, el formulario de pedido q
 - Un mismo menú en una sola fila que se desplaza en el móvil (como antes), con el rótulo del grupo dentro de la fila; no son dos menús desplegables.
 
 Pruebas: `tests/menus.php` (23 comprobaciones: familia, participante, scouter, Coordinación, scouter+tutor, administrador y lo que se pinta).
+
+---
+
+## 4 · El plugin no depende del tema
+
+**Qué había.** Casi nada estaba atado a Enfold, pero sí: los metadatos `layout` y `header_title_bar` que se escribían en las páginas, el botón «Ocultar cabecera morada» y la comprobación del entorno, que daba a entender que otro tema era «peor».
+
+**Qué hay ahora** (`Frontend\Tema`, un único sitio que sabe de temas):
+- El **área privada funciona con cualquier tema**: las páginas son páginas normales con un shortcode y el CSS y los textos son del plugin. Con un tema distinto de Enfold simplemente se omiten tres cosas: los ajustes de página de Enfold (ancho completo y sin barra de título), el botón de plegar la cabecera y los colores heredados de Enfold (se usan los de la pantalla «Colores»).
+- Los ajustes de página de Enfold solo se escriben si Enfold está activo; **al cambiar a Enfold** (`after_switch_theme`) se aplican solos.
+- El botón «Ocultar cabecera» (y el script que recuerda la cabecera plegada) solo salen con un tema cuya cabecera sabemos plegar. Otro tema con la cabecera en `#header` puede pedirlo con el filtro `asde_ap_cabecera_plegable`.
+- **Wp-admin → Instalación y entorno:** la fila «Tema» ya no es un aviso de error con otro tema, sino informativa, y hay una fila nueva, «Qué tema conviene», con la sugerencia.
+
+**Qué tema conviene** (texto que ve la administración):
+- **El ideal: Enfold** (el de baleares.scout.es), para el que está diseñada.
+- **Sirve** cualquier tema que permita páginas a **ancho completo, sin barra lateral y sin barra de título**, con el menú principal editable en Apariencia → Menús (por ejemplo Astra, Kadence o GeneratePress; no se han probado todos).
+- **Los temas de bloques** (como Twenty Twenty-Five) también funcionan: poner las páginas del área en una plantilla de ancho completo y añadir «Acceso socios» desde el Editor del sitio.
+- **Conviene evitar** los que obligan a una barra lateral o estrechan el contenido (los listados son tablas anchas).
+
+**Supuesto / límite.** En el Local solo está instalado Enfold, así que otro tema se ha comprobado **simulándolo** (filtro `asde_ap_tema_slug`) y no visualmente. Antes de usar otro tema en producción conviene revisar las pantallas con él (sobre todo el ancho de las tablas y el menú en el móvil).
+
+Pruebas: `tests/tema.php` (15 comprobaciones).

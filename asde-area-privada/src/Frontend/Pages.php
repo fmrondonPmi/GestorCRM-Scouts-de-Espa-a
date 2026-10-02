@@ -5,7 +5,8 @@ defined( 'ABSPATH' ) || exit;
 
 /**
  * Páginas del área privada: páginas normales de WordPress con un shortcode,
- * para que hereden cabecera, menú, migas y estilos del tema (Enfold).
+ * para que hereden cabecera, menú, migas y estilos del tema activo (están pensadas
+ * para Enfold, pero valen con cualquiera: ver Tema).
  * Cuelgan de /nuestro-grupo-scout/ si existe.
  */
 final class Pages {
@@ -83,18 +84,14 @@ final class Pages {
 			);
 			if ( ! is_wp_error( $id ) ) {
 				$ids[ $key ] = $id;
-				update_post_meta( $id, 'layout', 'fullsize' ); // Enfold: ancho completo, sin barra lateral.
 			}
 		}
 
 		update_option( self::OPTION, $ids, false );
 
-		// Enfold: sin barra de título ni migas de pan en las páginas del área (tienen su propio menú).
-		foreach ( $ids as $id ) {
-			if ( $id && 'hidden_title_bar' !== get_post_meta( $id, 'header_title_bar', true ) ) {
-				update_post_meta( $id, 'header_title_bar', 'hidden_title_bar' );
-			}
-		}
+		// Ancho completo y sin barra de título: ajustes que solo entiende Enfold (con otro tema
+		// no se toca nada; al cambiar a Enfold se aplican solos). Ver Frontend\Tema.
+		Tema::ajustar_paginas( array_values( $ids ) );
 	}
 
 	/**

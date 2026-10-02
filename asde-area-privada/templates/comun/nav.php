@@ -10,6 +10,7 @@
  */
 use AsdeBalears\AreaPrivada\Domain\Identidad;
 use AsdeBalears\AreaPrivada\Frontend\Pages;
+use AsdeBalears\AreaPrivada\Frontend\Tema;
 use AsdeBalears\AreaPrivada\Socios\Numeros;
 
 defined( 'ABSPATH' ) || exit;
@@ -46,10 +47,12 @@ defined( 'ABSPATH' ) || exit;
 				<?php $ver_local = Numeros::ver_local(); ?>
 				· <a href="<?php echo esc_url( add_query_arg( array( 'asde_ver_local' => $ver_local ? '0' : '1', '_wpnonce' => wp_create_nonce( 'asde_ver_local' ) ) ) ); ?>" title="El nº territorial sale junto al nº de Scouts de España en todas las pantallas. Si tiene algún problema, el aviso sale siempre."><?php echo $ver_local ? 'Ocultar nº territorial' : 'Mostrar nº territorial'; ?></a>
 			<?php endif; ?>
-			<button type="button" class="asde-nav__cabecera" aria-controls="header" aria-expanded="true" title="Ocultar o mostrar la cabecera morada para ganar espacio">
-				<span class="asde-nav__cabecera-icono" aria-hidden="true">▴</span>
-				<span class="asde-nav__cabecera-texto">Ocultar cabecera</span>
-			</button>
+			<?php if ( Tema::cabecera_plegable() ) : ?>
+				<button type="button" class="asde-nav__cabecera" aria-controls="header" aria-expanded="true" title="Ocultar o mostrar la cabecera del tema para ganar espacio">
+					<span class="asde-nav__cabecera-icono" aria-hidden="true">▴</span>
+					<span class="asde-nav__cabecera-texto">Ocultar cabecera</span>
+				</button>
+			<?php endif; ?>
 		</p>
 	<?php endif; ?>
 </nav>

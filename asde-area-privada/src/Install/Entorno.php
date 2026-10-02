@@ -7,6 +7,7 @@ use AsdeBalears\AreaPrivada\Domain\Grupos;
 use AsdeBalears\AreaPrivada\Domain\Organizacion;
 use AsdeBalears\AreaPrivada\Fichas\Cambios;
 use AsdeBalears\AreaPrivada\Frontend\Pages;
+use AsdeBalears\AreaPrivada\Frontend\Tema;
 use AsdeBalears\AreaPrivada\Frontend\Visibilidad;
 use AsdeBalears\AreaPrivada\Informes\InformesTable;
 use AsdeBalears\AreaPrivada\Integraciones\Wordfence;
@@ -211,10 +212,10 @@ final class Entorno {
 		}
 
 		// Tema.
-		$tema       = wp_get_theme();
-		$c['tema']  = 'enfold' === get_template()
-			? array( self::OK, 'Tema', 'Enfold: el área privada está diseñada para él (cabecera plegable, colores, menú).', array() )
-			: array( self::INFO, 'Tema', $tema->get( 'Name' ) . ( wp_is_block_theme() ? ' (de bloques)' : '' ) . '. El área privada funciona con cualquier tema, pero está diseñada para Enfold: algunos detalles (la cabecera plegable, el botón del menú) pueden verse distintos.', array() );
+		// No es obligatorio ningún tema (v0.15, doc 28): se sugiere el ideal y se explica qué sirve.
+		$tema            = Tema::resumen();
+		$c['tema']       = array( $tema['ideal'] ? self::OK : self::INFO, $tema['titulo'], $tema['estado'], array( 'Apariencia → Temas' => admin_url( 'themes.php' ) ) );
+		$c['tema_consejo'] = array( self::INFO, 'Qué tema conviene', $tema['consejo'], array() );
 
 		return $c;
 	}

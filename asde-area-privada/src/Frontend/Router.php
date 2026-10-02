@@ -83,6 +83,8 @@ final class Router {
 		add_filter( 'wp_robots', array( $this, 'robots' ) );
 		add_filter( 'body_class', array( $this, 'body_class' ) );
 		add_action( 'wp_head', array( $this, 'cabecera_guardada' ), 1 );
+		// Al pasar a Enfold, las páginas del área reciben sus ajustes (ancho completo, sin barra de título).
+		add_action( 'after_switch_theme', static fn() => Tema::ajustar_paginas( array_values( Pages::ids() ) ) );
 	}
 
 	public function body_class( array $clases ): array {
@@ -93,12 +95,13 @@ final class Router {
 	}
 
 	/**
-	 * Cabecera morada plegada: se aplica antes de pintar la página para que no se
-	 * vea abrirse y cerrarse (el estado se guarda en el navegador de cada persona).
+	 * Cabecera del tema plegada (solo con un tema cuya cabecera sabemos plegar, ver Tema): se
+	 * aplica antes de pintar la página para que no se vea abrirse y cerrarse (el estado se
+	 * guarda en el navegador de cada persona).
 	 */
 	public function cabecera_guardada(): void {
 		$key = Pages::current_key();
-		if ( null === $key || in_array( $key, Pages::PUBLICAS, true ) ) {
+		if ( null === $key || in_array( $key, Pages::PUBLICAS, true ) || ! Tema::cabecera_plegable() ) {
 			return;
 		}
 		echo "<script>try{if(localStorage.getItem('asde_cabecera_oculta')==='1'){document.documentElement.classList.add('asde-cabecera-oculta');}}catch(e){}</script>\n";
