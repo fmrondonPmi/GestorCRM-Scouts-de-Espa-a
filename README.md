@@ -4,7 +4,7 @@ Plugin de WordPress que da a los Grupos Scouts un **área privada** (fichas, usu
 
 - **Versión actual:** 0.14.1
 - **Requisitos:** WordPress 6.4 o superior y PHP 8.0 o superior (con libsodium).
-- **Licencia:** GPL-2.0-or-later (la declarada en la cabecera del plugin).
+- **Licencia:** GPL-2.0-or-later, la declarada en la cabecera del plugin (texto completo en [`LICENSE`](LICENSE)).
 
 ## Qué hay en este repositorio
 
@@ -12,6 +12,7 @@ Plugin de WordPress que da a los Grupos Scouts un **área privada** (fichas, usu
 | --- | --- |
 | `asde-area-privada/` | El plugin: `src/` (código, con *autoload* por espacio de nombres `AsdeBalears\AreaPrivada`), `templates/`, `assets/` (CSS y JS), `herramientas/` y `tests/`. |
 | `manual/` | Manual de uso en HTML (`index.html` + `capturas/`). Todas las capturas son de un grupo inventado («Grupo Scout Ejemplo, 999») con datos de mentira. |
+| `docs/` | Base de conocimiento del proyecto (en español): decisiones, módulos, roles, datos, integración con SinergiaCRM. Se entra por `docs/00-INDICE.md`. Mencionan scripts de desarrollo (pruebas, zip, capturas del manual) que **no** están en este repositorio. |
 
 ## Instalación
 
@@ -25,4 +26,4 @@ Las pruebas están en `asde-area-privada/tests/*.php` y se lanzan con WP-CLI den
 
 ## Datos personales
 
-El plugin no guarda en WordPress datos personales en claro (la salud y las dietas no se guardan nunca; lo demás, solo cifrado y por poco tiempo). Este repositorio no contiene datos reales: ni en el código, ni en las pruebas, ni en las capturas del manual.
+El plugin no guarda en WordPress datos personales en claro (la salud y las dietas no se guardan nunca; lo demás, solo cifrado y por poco tiempo). Este repositorio no contiene datos personales reales ni credenciales: ni en el código, ni en las pruebas, ni en los docs, ni en las capturas del manual.

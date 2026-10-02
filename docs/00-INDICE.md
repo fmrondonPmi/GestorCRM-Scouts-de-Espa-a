@@ -1,0 +1,201 @@
+# Área privada · Grupo Scout — Base de conocimiento
+
+Proyecto: área privada con gestión de usuarios para la sección **Grupo Scout** de https://baleares.scout.es/ (ASDE Scouts de Balears), empezando por el **Grupo Scout Myotragus 684**.
+
+- Los datos personales se leen del **CRM federal de ASDE** (SinergiaCRM, `scout.sinergiacrm.org`) y **no se guardan en WordPress**.
+- La web guarda solo números de socio, familias, configuración y pagos. Desde la v0.10, también el **email de cada cuenta, cifrado**, y lo escrito en las **solicitudes de acceso**, cifrado y durante 30 días (decisión del usuario, 2026-09-28). Desde la v0.12, las **autorizaciones de domiciliación SEPA** (titular, IBAN y dirección, **cifrados**) mientras estén vigentes y 14 meses después (doc 25).
+
+| Doc | Contenido |
+|---|---|
+| [01-contexto-y-alcance.md](01-contexto-y-alcance.md) | Organización, módulos, restricciones, consecuencias de "solo lectura" |
+| [02-roles-y-permisos.md](02-roles-y-permisos.md) | Roles, matriz de permisos, capabilities |
+| [03-arquitectura.md](03-arquitectura.md) | Plugin propio `asde-area-privada`: estructura y decisiones |
+| [04-integracion-sinergiacrm.md](04-integracion-sinergiacrm.md) | API y **modelo real del CRM de ASDE (§7)**: campos, membresías, tutores, salud y particularidades de la API |
+| [05-secciones-educativas.md](05-secciones-educativas.md) | Secciones de ASDE, estructura del grupo y de la federación |
+| [06-tema-y-estilos.md](06-tema-y-estilos.md) | Enfold 7.1.2, paleta, tipografía, integración visual |
+| [07-flujo-de-cambios.md](07-flujo-de-cambios.md) | Cola de cambios con aprobación (para la v2, con escritura en el CRM) |
+| [08-proteccion-de-datos-y-seguridad.md](08-proteccion-de-datos-y-seguridad.md) | RGPD, salud de menores, principios de seguridad |
+| [09-preguntas-abiertas.md](09-preguntas-abiertas.md) | **Lo que falta decidir** |
+| [10-entorno-local.md](10-entorno-local.md) | LocalWP (http://localhost:10011), WP-CLI, Mailpit, usuario y pruebas |
+| [11-alta-de-usuarios.md](11-alta-de-usuarios.md) | Módulo de alta de usuarios, invitaciones y listado |
+| [12-identidad-y-numeros-de-socio.md](12-identidad-y-numeros-de-socio.md) | **Usuario = nº de socio (o su email, v0.9)**, tabla de equivalencias, generación de números, qué guarda WP (desde la v0.10, el email cifrado), ámbito, mayoría de edad, doble factor |
+| [13-informes.md](13-informes.md) | **Generador de informes**: columnas, ámbito por sección, salud, CSV |
+| [14-tesoreria.md](14-tesoreria.md) | **Tesorería**: familias F684001, cuotas con descuento por hermanos, plazos, control de pagos, coste federativo (con otros conceptos, v0.9) y **banco** (por qué no sirve la PSD2 directa y qué hacer) |
+| [15-acceso-y-grupos.md](15-acceso-y-grupos.md) | **Acceso socios** (grupo + nº de socio **o email** + contraseña), **entrar y recuperar la contraseña con el email** (v0.9), **email guardado cifrado** (v0.10: clave del sitio + id del usuario), reglas de acceso, páginas privadas ocultas, **grupos dados de alta a mano** con sus credenciales del CRM, sin visibilidad entre grupos |
+| [16-banco-importacion.md](16-banco-importacion.md) | **Banco:** importar Norma 43 o CSV, sin duplicados, cifrado, y **conciliar** los ingresos con las familias |
+| [17-fichas-y-edicion-en-el-crm.md](17-fichas-y-edicion-en-el-crm.md) | **Ficha editable y escritura en el CRM:** quién edita qué, solo lectura, campos ocultos, apartados plegables, cola de cambios de las familias, números de socio corregidos en el CRM **en segundo plano** con monitor, y la primera escritura real |
+| [18-comprobar-el-hosting.md](18-comprobar-el-hosting.md) | **Comprobar el hosting** (producción en Hostinger/LiteSpeed): «Salud del sitio», diagnóstico del plugin o mini-plugin, regla `noabort` para el `.htaccess` y cron del servidor |
+| [19-instalar-en-un-wordpress-nuevo.md](19-instalar-en-un-wordpress-nuevo.md) | **Instalar en un WordPress nuevo:** el botón «Instalación y entorno» (qué hace siempre, qué ajustes ofrece, qué queda en tus manos), pasos, pruebas y límites |
+| [20-organizacion-federada.md](20-organizacion-federada.md) | **Organización federada** (v0.9): desplegable con las 17 de scout.es, nombre en los textos, **código del nº de socio configurable**, **coste federativo** por defecto con **otros conceptos**, migración y WordPress nuevos |
+| [21-manual-de-uso.md](21-manual-de-uso.md) | **Manual de uso en HTML** (versión 3 de la v0.14.1, en `manual/`, con 54 capturas; la 2, de la v0.11, es la publicada en baleares.scout.es), **cómo se rehacen las capturas** con los scripts `manual-*` (datos inventados, el Local con el CRM simulado y Chrome), trampas del entorno y arreglos que salieron |
+| [22-solicitudes-de-acceso.md](22-solicitudes-de-acceso.md) | **Solicitudes de acceso** (v0.10): enlace del grupo, comprobación con documento y fecha (o nombre, para menores de 14 sin DNI), quién aprueba, email nuevo al CRM, invitación con bienvenida, email de contacto, datos cifrados y borrado a 30 días |
+| [23-navegacion-y-ventanas.md](23-navegacion-y-ventanas.md) | **Navegación y ventanas emergentes** (v0.10): pestañas antes y después, «Dar acceso» desde *Personas*, fichas y altas en ventana, trampas con Enfold |
+| [24-uniformes-y-mis-pagos.md](24-uniformes-y-mis-pagos.md) | **Pedidos de uniforme** (v0.11): camisa (25 €) e insignias con sus imágenes, pago validado por Tesorería, pedido del grupo por Coordinación, entrega y confirmación del socio/a, resumen de tallas para el proveedor; y **«Mis pagos»** para los asociados |
+| [25-domiciliacion-sepa.md](25-domiciliacion-sepa.md) | **Domiciliación SEPA** (v0.12): la familia firma su autorización en «Mis pagos»; Tesorería genera el **fichero XML `pain.008`** para el banco, avisa a las familias y registra cobros y devoluciones. IBAN cifrado, secuencias FRST/RCUR y conservación de 14 meses |
+| [26-rendimiento.md](26-rendimiento.md) | **Rendimiento** (v0.12.3): estudio de la lentitud con la sesión de administrador en producción, tiempos de cada página y flujo, el CRM como cuello de botella (0,5–1,5 s por consulta y hasta 6 por página), la **instantánea cifrada de fichas**, la sesión del CRM que se renueva, el aviso de carga, lo que queda en la web (Enfold, WP Statistics, caché de objetos) y cómo comprobarlo |
+| [27-usuario-numero-asde.md](27-usuario-numero-asde.md) | **El usuario de acceso, configurable** (v0.14): nº de socio/a de Scouts de España o nº territorial; plan de acción, estado, **guion para cambiarlo en producción** y supuestos. Acceso con los dos números, migración de las cuentas existentes, nº territorial visible a petición y con advertencia siempre |
+
+## Estado (2026-10-02) · plugin v0.14.1 «ASDE Scouts de España - Gestor CRM para Grupos Scouts»
+- 📦 **Plugin, manual y docs en un repositorio git privado** (petición del usuario, 2026-10-02): `C:\Proyectos\GestorCRM` (remoto `fmrondonPmi/GestorCRM-Scouts-de-Espa-a`, rama `main`; ya subido) contiene `asde-area-privada/`, `manual/` y esta carpeta `docs/` (+ `README.md`, `LICENSE` GPL-2.0, `.gitignore`, `.gitattributes`). **No** están en el repo `herramientas-desarrollo/` (los scripts que aparecen en estos docs, `probar-todo.sh`, `construir-zip.ps1`, `manual-capturas.sh`…, viven en la carpeta antigua `C:\Claude\Scouts De Balears  - Area Privada`, que busca el repo con la variable `ASDE_REPO`), los zips ni `CLAUDE.md`. Para dejarlo limpio se sustituyó por ejemplos inventados el email real de un grupo (`Grupos.php`, `SettingsPage.php` y estos docs) y el usuario de la API del CRM (doc 04).
+- 📘 **Manual de uso actualizado a la v0.14.1, en local** (petición del usuario, 2026-10-02: «en este site (baleares.scout.es/temporal) había subido un manual, ¿puedes generar el mismo manual actualizado?»; y, al aclararlo, **«no en el mismo sitio sino en local»**: **no se ha publicado ni tocado nada en producción**) — **doc 21**:
+  - `manual/index.html` + `manual/capturas/` (54 capturas) y el paquete `manual-de-uso-0.14.1.zip`, para que el usuario los suba cuando quiera; copia para verlo en el Local: http://localhost:10011/temporal/index.html;
+  - mismo diseño que la versión publicada (v0.11) con lo nuevo: **usuario = nº de Scouts de España** (entrar, «Mostrar nº territorial», renombrar cuentas), **SEPA** (firmar en *Mis pagos*, Tesorería → Domiciliaciones), dos tutores / dos cuentas, usuarios sin recargar, solicitudes (aviso al rechazar, quien ya tiene cuenta), tabla de medidas de la camisa, rendimiento (*Actualizar ahora*), móvil y preguntas frecuentes;
+  - **capturas reproducibles** con datos inventados («Grupo Scout Ejemplo, 999»): `herramientas-desarrollo/manual-capturas.sh` (+ `manual-capturas.php`, `manual-envolver.php`, `manual-recortar.php`, `manual-recursos/`) vuelca las pantallas del Local con el CRM simulado, cambia lo que delataría el grupo real y las fotografía con Chrome; deja el Local como estaba;
+  - **pendiente del usuario:** revisar el manual y subirlo (sustituye al de la v0.11); tres capturas de administración (`23-grupos`, `23b-grupo-editar`, `25-diagnostico`) son de la versión anterior.
+- ✅ **v0.14.1 · revisión de todo el proyecto: 12 correcciones** (petición del usuario, 2026-10-02; revisión `/code-review` de todo el código y todas corregidas):
+  - **barra de carga fija** tras descargar el XML SEPA: los formularios que descargan un fichero llevan `data-asde-sin-carga`;
+  - **CSV**: un importe negativo (un ajuste de Tesorería) ya no sale con comilla delante; lo que parece fórmula sigue neutralizado;
+  - **migración de usuarios**: una cuenta familiar con nº base que no está en la tabla de equivalencias se lista como imposible (antes salía «ya migrada»); el plan se calcula con una sola lectura de la tabla y de los usuarios (antes, consultas por cuenta cada vez que se abría la configuración);
+  - **límite de intentos de acceso** por cuenta real: el nº de Scouts de España y el local ya no duplican los intentos;
+  - **instantánea de fichas**: cerrojo (al caducar, una sola petición lee el CRM y las demás esperan su resultado), índice por nº de Scouts de España (sin recorrer todo el grupo en cada consulta) y **«Actualizar» firmado** (nonce) y limitado a una lectura forzada cada 30 s en *Usuarios* y *Personas*;
+  - **listado de usuarios**: el aviso de que el CRM no responde ya no borra los demás avisos;
+  - **ficha de «Dar acceso»**: el aviso del nº territorial sale una sola vez;
+  - **importar el banco**: un fallo inesperado deshace la importación entera y no deja la transacción abierta;
+  - **pruebas**: las aserciones de acceso con los dos números dejan de ser tautologías y cada corrección tiene la suya; **692 comprobaciones en 12 ficheros**, todas OK (doc 10);
+  - **nuevo `CLAUDE.md`** en la raíz del proyecto (cómo se trabaja, reglas, trampas del entorno) y `herramientas-desarrollo/{probar-todo.sh,wp-local.sh,construir-zip.ps1}`; paquete `asde-area-privada-0.14.1.zip`.
+- ✅ **v0.14.0 · el usuario de acceso es el nº de Scouts de España (configurable)** (petición del usuario, 2026-10-02; **doc 27** con el plan, el estado y el guion para producción):
+  - **parámetro** en *Grupos Scouts → Organización federada → Usuario de acceso*: nº de Scouts de España o nº territorial (una instalación anterior sigue con el territorial hasta que se elija);
+  - **al entrar valen los dos números** (también al recuperar la contraseña); familias `nº del menor + T` / `+ T2`;
+  - **«Renombrar las cuentas existentes»**: vista previa de lo que cambia y de lo que no se puede, confirmación y auditoría; se cierran las sesiones de esas cuentas;
+  - **el nº territorial se sigue vigilando y corrigiendo** (analizar, asignar, pasar al CRM, corregir formato, resolver duplicados, tareas), con el parámetro que sea; con el nº de Scouts de España sus incidencias **avisan pero no bloquean** el alta;
+  - **visible en todas las pantallas** con «Mostrar nº territorial» (cabecera; por persona) y **la advertencia de un problema sale siempre**;
+  - **50 pruebas nuevas** (`tests/identidad.php`), **670 en 12 ficheros, todas OK** (doc 10); paquete `asde-area-privada-0.14.0.zip`.
+- ✅ **v0.12.5 · tablas de medidas de la camisa en el pedido de uniforme** (petición del usuario, 2026-10-01, con las imágenes de las dos tablas): al hacer el pedido, bajo «Modelo y talla», aparece **«Tabla de medidas: Camisa masculina · Camisa femenina»**; cada enlace abre la tabla **en una ventana encima del pedido** (sin salir de la página ni perder lo rellenado; se cierra con la ×, Esc o pulsando fuera; «Abrir en otra pestaña» para verla a pantalla completa). Las dos imágenes de ASDE **van dentro del plugin** (`assets/img/medidas-camisa-*.png`), así que se ven sin configurar nada; si Coordinación sube otra imagen en la configuración, esa manda. La talla elegida destaca el enlace de su modelo. «Dónde va cada insignia» usa la misma ventana. En el móvil la ventana ocupa toda la pantalla y la tabla se desplaza. Sin JavaScript, el enlace abre la imagen en otra pestaña. **7 pruebas nuevas** (`tests/uniformes.php`, 60), **620 en 11 ficheros, todas OK**; paquete `asde-area-privada-0.12.5.zip`.
+- ✅ **v0.12.4 · arreglo: solicitud que se quedaba pendiente** (aviso del usuario en producción, 2026-10-01, con capturas): una solicitud de un scouter que **ya tenía cuenta** (caso de Adriana Ramírez) seguía en *Pendientes* aunque se le diera el acceso desde «Revisar → Elegir roles y dar acceso». **Causa:** si la persona ya tiene cuenta, el formulario de «Dar acceso» no llevaba el número de la solicitud (solo lo llevaba al crear una cuenta nueva) y el servidor no tenía de qué cerrarla. **Ahora:** al guardar sus roles y secciones la solicitud queda **aprobada** (con su cuenta; el email de la cuenta y el de la ficha no se tocan), la pantalla avisa de que hay una solicitud pendiente, y un botón **«Ya tiene el acceso que pide: cerrar la solicitud sin cambiar nada»** la resuelve cuando no hay nada que cambiar. **5 pruebas nuevas** (`tests/solicitudes.php`), **613 en 11 ficheros, todas OK**; paquete `asde-area-privada-0.12.4.zip`. Las solicitudes que ya estén así en producción se resuelven con ese botón tras actualizar.
+- ✅ **v0.12.3 · rendimiento** (petición del usuario, 2026-09-30: «la página va lenta; estudia cada página y cada flujo con la sesión de administrador del Chrome y genera una solución»; **doc 26**):
+  - **estudio** en producción y en el CRM real: el suelo del sitio es ~0,5 s (WordPress + Enfold), pero Personas tardaba 3,8 s (hasta 6,4), Tesorería 3,8 s, Usuarios 2 s, Familias y Coste federativo 2,7 s, la ficha hasta 6,5 s y «Dar acceso» 3,6–4,6 s;
+  - **causa: el CRM**, no el plugin (PHP + base de datos: 10–70 ms por página). Cada consulta cuesta 0,4–1,5 s (el viaje de ida y vuelta; el tamaño casi no cuenta) y cada página hacía de **1 a 6 seguidas**, incluida una en **cada** página para saber quién eres;
+  - **solución:** una **instantánea cifrada** de las fichas del grupo (sin salud) que se lee una vez y se sirve de memoria 5 minutos, con refresco en segundo plano y al guardar desde la web: casi todas las páginas pasan a **0 consultas** al CRM; comprobada con los datos reales (mismas fichas que en vivo; 0,2 ms una ficha, 23 ms las 382);
+  - la **sesión del CRM** se renueva mientras se usa (ya no se pagan ~1 s de inicio de sesión cada 15 minutos); **aviso de carga** (barra arriba) al navegar; «Actualizar ahora» en *Personas* y *Usuarios*;
+  - **estimado tras subirla:** la mayoría de las páginas, de 1,2–3,9 s a ~0,6 s; se comprueba con el guion del apartado 6 del doc 26;
+  - **queda, en la web** (no es del plugin, nada se ha tocado): unir los 113 CSS/JS de Enfold (Performance), excluir el área de WP Statistics, caché de objetos persistente y revisar WP-Cron (doc 26, apartado 5);
+  - **cambia para el usuario:** lo que se edite en el CRM por otro lado llega a la web en unos minutos (una baja, igual); se desactiva con el filtro `asde_ap_instantanea_segundos` a 0;
+  - **35 pruebas nuevas** (`tests/rendimiento.php`), **608 en 11 ficheros, todas OK** (doc 10); paquete `asde-area-privada-0.12.3.zip`.
+- ✅ **v0.12.2 · listado de usuarios sin recargar** (petición del usuario, 2026-09-30): *Usuarios del área privada* ya no es una tabla larga de una pieza:
+  - **paginada** como las demás (25, 50, 75 o 100 por página; el tamaño elegido se recuerda y es el mismo en todos los listados);
+  - con **un filtro por cada columna**, encima de la tabla: usuario y persona (texto, sin distinguir mayúsculas ni tildes), y roles, ámbito y estado (desplegables); se pueden combinar y hay «Quitar filtros»; también se **ordena** pulsando cada columna;
+  - **sin recargar la pantalla entera**: la página llega con todos los usuarios y el navegador filtra, ordena y pagina **con esa información en memoria**; filtros, orden y página quedan en la dirección (se puede recargar o compartir);
+  - **precacheado**: los nombres y la membresía salen de la instantánea de fichas (v0.12.3, doc 26), así que abrir el listado ya no espera al CRM; «Actualizar» vuelve a leer la lista y el CRM sin recargar;
+  - **reenviar invitación y desactivar** se hacen sin salir de la página: la fila se actualiza sola y el aviso sale arriba; al cerrar la ventana «Gestionar acceso» se vuelve a pedir la lista en vez de recargar la página;
+  - en el **móvil** los filtros son una tarjeta encima de la lista y el orden se elige con dos desplegables; sin JavaScript se ve la lista entera, como antes;
+  - detalles técnicos en los docs 03 y 06; nuevas `assets/js/usuarios.js`, `Usuarios\Listado` y `templates/usuarios/fila.php`; **47 pruebas nuevas** (`tests/usuarios-listado.php`; y la v0.12.3 añade 35 más, **608 en 11 ficheros**, doc 10);
+  - paquete para instalar: `asde-area-privada-0.12.2.zip` (los anteriores siguen en la carpeta).
+- ✅ **v0.12.1 · vista en móvil** (petición del usuario, 2026-09-30, con una captura de *Informes* en el móvil): se revisaron las **36 pantallas a 390 px** y se arregló lo que se veía mal: las tablas en tarjetas partían el texto letra a letra, los menús ocupaban 4 filas (ahora, una fila que se desplaza), los resúmenes de importes, los formularios que ensanchaban la página y los botones de las cabeceras (doc 06, punto 11). Paquete `asde-area-privada-0.12.1.zip`; 526 pruebas OK.
+
+- ✅ **v0.12.0 · domiciliación SEPA, dos tutores por familia y aviso al rechazar** (petición del usuario, 2026-09-30):
+  - **Domiciliación SEPA** (doc 25):
+    - las **familias** (cuentas de madre, padre o tutor/a) y los **asociados mayores de edad** firman una **autorización de adeudo directo SEPA** en *Mis pagos*, con su email de confirmación; se puede ver, imprimir o anular; los menores no firman;
+    - **Tesorería → Domiciliaciones** (Secretaría, Coordinación, Tesorería): datos del acreedor (nombre, ICS, IBAN), **remesas** (todo lo pendiente o hasta un plazo, fecha de cobro laborable con 3 días hábiles de margen, vista previa de lo que se cobra a cada familia) y el **fichero XML `pain.008.001.02`** para el banco;
+    - **aviso previo** por email a las familias, «próximo cargo» en *Mis pagos*, **marcar como enviada** (FRST → RCUR) y **registrar los cobros y las devoluciones** (pagos de la familia con la forma «Domiciliación SEPA»);
+    - IBAN y titular **cifrados**, IBAN enmascarado en pantalla, IP solo como huella, conservación de 14 meses y **nunca dos remesas con los mismos adeudos sin cobrar**;
+    - 14 tablas y una página nueva (*Domiciliaciones SEPA*);
+    - pendiente: datos reales del acreedor y validar el fichero con Colonya (P-42), validez de la firma electrónica (P-43), qué más se cobra (P-44) y conciliar con la Norma 43 (P-45).
+  - **Dos tutores, dos cuentas** (P-35, docs 22, 12 y 15): el segundo tutor/a tiene su cuenta `nº + T2`, con su email y su contraseña, y ve a los mismos menores. Al aprobar una solicitud de una familia que ya tiene cuenta se elige entre «otro tutor/a» y «la misma persona con otro email»; también desde *Dar acceso*. Nunca se pisa en el CRM el email de la otra cuenta.
+  - **Aviso por email al rechazar una solicitud** (P-36, doc 22): texto genérico (sin el motivo) con el email de contacto del grupo, casilla marcada por defecto y anotado en el registro de emails.
+  - **El email de contacto es parte de la configuración del grupo** (P-37): *Solicitudes* e *Instalación y entorno* avisan si falta.
+  - paquete para instalar: `asde-area-privada-0.12.0.zip`;
+  - **526 pruebas automáticas** en 9 ficheros, todas OK (doc 10); las pantallas nuevas, revisadas en un navegador con datos inventados.
+
+## Estado anterior (2026-09-29) · plugin v0.11.1
+
+- ✅ **Manual de uso actualizado a la v0.11** (doc 21): mismo artefacto (versión 2), 41 capturas nuevas de un WordPress de demostración aparte (ya borrado), con las solicitudes de acceso, la ventana emergente, el menú nuevo, los uniformes y «Mis pagos».
+- ✅ **v0.11.1 · arreglos que salieron al rehacer las capturas** (doc 21): con Enfold, las tarjetas de insignias del formulario de uniforme se descolocaban; casillas y precio de la configuración de uniformes; títulos pegados; campos de fecha; un plural del resumen de pedidos; textos que aún nombraban «Alta de usuarios». Paquete `asde-area-privada-0.11.1.zip`. **415 pruebas**, todas OK.
+- ✅ **v0.11.0 · pedidos de uniforme y «Mis pagos»** (doc 24):
+  - los asociados (también los scouters) piden la **camisa scout** (25 €; modelos masculino y femenino con sus tallas y guías de medidas) y las **insignias** (con su imagen y dónde van), y siguen su pedido paso a paso;
+  - **Tesorería** valida el pago (efectivo o ingreso), **Coordinación** los incluye en el pedido del grupo (también varios a la vez), **el grupo** los entrega y **el socio/a o su familia** confirma que lo ha recibido;
+  - gestión con filtros, resumen de tallas e insignias para el proveedor, detalle en la ventana emergente y CSV;
+  - configuración por grupo (precio, tallas, insignias con imagen, guías, abierto o cerrado, cómo pagar). En local, el 684 ya está configurado con las imágenes del usuario;
+  - **«Mis pagos»**: la cuota de la ronda con sus plazos, los pagos registrados por Tesorería (sin sus notas internas) y los del uniforme;
+  - nuevas capabilities y pestañas «Mis pagos» y «Uniforme(s)»; 12 tablas;
+  - **415 pruebas automáticas** en 8 ficheros, todas OK (doc 10);
+  - pendiente: precios de las insignias (P-38), dónde va la insignia de grupo (P-39), talla especial (P-40), avisos por email y banco (P-41).
+- ✅ **v0.10.0 · solicitudes de acceso, email cifrado y navegación:**
+  - **solicitudes de acceso** (doc 22):
+    - un enlace por grupo para que las familias y los socios pidan la cuenta con el documento y la fecha de nacimiento del socio/a (o, para menores de 14 sin DNI, su nombre);
+    - las aprueba un scouter de la sección, o Secretaría o Coordinación;
+    - al aprobar, si el email no es el de la ficha, **se guarda en el CRM**, y llega la invitación con bienvenida;
+    - email de contacto configurable por grupo (en local, `grupo@example.invalid`);
+  - **email de las cuentas guardado cifrado** (doc 15): la clave es la del sitio más el id del usuario (el id solo no bastaría, doc 08). Se entra y se recupera la contraseña sin depender del CRM, y el CRM sigue mandando si cambia;
+  - **ventana emergente** para fichas, «Dar acceso» y solicitudes, y **navegación más corta** (doc 23):
+    - sin la pestaña *Alta de usuarios*: «Dar acceso» está en *Personas* y *Usuarios*;
+    - pestaña *Solicitudes (n)*, «Seguridad» junto al nombre y «Pendiente de revisar» en *Inicio*;
+    - *Personas* muestra la cuenta familiar de los menores;
+  - arreglado: la cabecera de la ficha podía decir «Sin número» si la caché de numeración no tenía esa ficha;
+  - incidente de pruebas del 2026-09-28 (cachés compartidas con una prueba en el navegador) resuelto, con sus lecciones (doc 10);
+  - el CRM real ya no tiene números en formato antiguo (P-21: quedan 4 no válidos);
+  - paquete para instalar: `asde-area-privada-0.10.0.zip`;
+  - **362 pruebas automáticas** en 7 ficheros, todas OK (doc 10), y prueba en el navegador con datos inventados;
+  - pendiente: P-35 (dos tutores con cuentas separadas), P-36 (avisar del rechazo), P-37 (email de contacto y enlace en producción) y rehacer las capturas del manual (doc 21).
+- ✅ **v0.9.0 · organización federada, coste federativo y acceso con email:**
+  - pantalla **Organización federada** (*Grupos Scouts → Organización federada*, doc 20): desplegable con las 17 organizaciones de scout.es; su nombre sale en los textos; el **código** del nº de socio local es configurable (P-34: falta saber de dónde sale el de cada una);
+  - **coste federativo configurable**: cuota, seguro (promedio o tabla con edad de corte) y **otros conceptos** por asociado, educando, adulto o grupo (con descuentos). Es el punto de partida de cada ronda de la Tesorería;
+  - la **hora** ya no la gestiona el plugin (es un ajuste de WordPress);
+  - **entrar con el nº de socio/a o con el email** asociado a ese nº en el CRM, y recuperar la contraseña también con el email (doc 15). El email se busca en el CRM al entrar: WordPress sigue sin guardarlo;
+  - esta instalación pasó sola a Scouts de Balears, código 7, con los importes de siempre;
+  - **manual de uso** en HTML (artefacto privado, https://claude.ai/artifact/1v6VRKoHMc7vyc1HEAGVPi) con 30 capturas de un WordPress de demostración con datos inventados (doc 21);
+  - arreglados de paso: botones cortados en columnas estrechas, el texto «Conciliar los 1…» del banco y el aviso de cambio de código de la organización;
+  - paquete para instalar: `asde-area-privada-0.9.0.zip`;
+  - **301 pruebas automáticas** en 6 ficheros, todas OK (doc 10).
+- ✅ **v0.8.0 · «Instalación y entorno»** (*Grupos Scouts → Instalación y entorno*, doc 19): un botón que deja **un WordPress nuevo** listo para el área privada.
+  - Crea o repara tablas, roles, páginas (también las que están en la papelera o sin su shortcode), «Acceso socios» en el menú, la tarea diaria y Wordfence.
+  - Si se marcan, aplica los ajustes del sitio que hagan falta: enlaces permanentes, zona horaria, registro, menú principal y «noabort».
+  - Lista lo que queda en manos de una persona.
+  - Probado en un WordPress nuevo de verdad.
+  - Paquete para instalar: `asde-area-privada-0.8.0.zip`.
+  - Arreglado de paso: con temas de bloques, las páginas del área salían en la lista de páginas de la cabecera.
+- ✅ **v0.7.3:**
+  - el **cargo** también se ve con membresía de **Voluntariado**;
+  - **diagnóstico del hosting** para las tareas en segundo plano (*Herramientas → Diagnóstico segundo plano*, doc 18): petición interna, corte de LiteSpeed sin `noabort` y WP-Cron;
+  - también como **mini-plugin independiente** (`asde-diagnostico-segundo-plano.zip`) para comprobar producción (Hostinger) sin instalar el plugin completo.
+- ✅ **v0.7.2 · correcciones masivas en segundo plano:**
+  - los botones de «todas» de Personas crean una tarea asíncrona (tandas de 10 s que se relanzan solas, con WP-Cron de respaldo);
+  - un **monitor** en todas las páginas del área dice cuántas fichas quedan, sin bloquear la página;
+  - se puede detener, y las fallidas se listan en Personas (doc 17).
+- ✅ **v0.7.1 · ficha:**
+  - apartados **plegables**;
+  - a los **menores** no se les muestran formación ni certificado de delitos sexuales;
+  - el **cargo**, solo con membresía de Scouter;
+  - **Salud** y **Alimentación** separadas;
+  - **tipo de régimen** con 4 dietas y su explicación al pasar el ratón (doc 17).
+- ✅ **Primera escritura real en el CRM** (2026-09-27, desde Personas, por el propio usuario): duplicados resueltos y 138 formatos corregidos. Un reinicio del sitio en Local cortó la corrección: quedan 106 formatos antiguos por corregir (P-21, doc 17).
+- ✅ **v0.7:**
+  - **ficha editable**: si el usuario del CRM puede editar, cada rol edita lo suyo, la familia propone y lo no editable sale en solo lectura;
+  - **cola de cambios**;
+  - **números corregidos en el CRM** (asignar, pasar los generados, formato antiguo, duplicados);
+  - **voluntario sin sección**;
+  - **cabecera plegable** con los menús fijos y **sin barra de título**;
+  - **desplegable predictivo** en Familias y en la conciliación.
+- ✅ **v0.6:**
+  - plugin renombrado;
+  - **grupos a mano** con credenciales propias y cifradas;
+  - **registro de emails**;
+  - **orden y paginación**;
+  - **banco** (Norma 43 y CSV) con conciliación.
+- ✅ **Pruebas (v0.8):** 238 automáticas (cuatro ficheros, doc 10), recorrido en el navegador y prueba en un WordPress nuevo.
+
+## Estado anterior · plugin v0.5.0
+
+- ✅ **Acceso socios (v0.5.0):**
+  - pantalla propia con desplegable de Grupo Scout, nº de socio, contraseña y código de doble factor;
+  - es el único elemento del área en el menú superior, y con sesión pasa a «Área privada»;
+  - el resto de páginas privadas sale del pie «Páginas», el buscador, los menús y los sitemaps;
+  - los socios ya no entran por `wp-login.php`;
+  - límite de intentos propio;
+  - base **multi-grupo** sin visibilidad entre grupos.
+- ⚠️ **El usuario de API del CRM no es global:** ve 1 grupo y 382 de 104.042 contactos (P-27).
+
+- ✅ Site en local (http://localhost:10011). Ultimate Member eliminado.
+- ✅ **Usuarios:**
+  - alta por nº de socio (se genera si falta);
+  - cuentas familiares nº + T;
+  - Secretaría, Coordinación y Tesorería como responsabilidades de scouter, con sugerencia por el cargo del CRM;
+  - invitación y recuperación de contraseña al email del CRM;
+  - **doble factor obligatorio** para el equipo;
+  - retirada automática de la familia a los 18.
+- ✅ **Personas:** activas e inactivas, con revisión de números: 52 activos con incidencias (formato antiguo, duplicados o sin número).
+- ✅ **Informes:** generador con 4 predefinidos, CSV e impresión.
+- ✅ **Tesorería:** familias con sugerencias, cuotas y plazos, control de pagos (pagos y ajustes manuales) y coste federativo.
+- ✅ **Pruebas:** 73 automáticas (`tests/alta-reglas.php`), pruebas HTTP del login y recorrido en el navegador.
+- 🔎 **Banco (Colonya):** investigado. La API PSD2 de Redsys exige ser proveedor de pagos certificado, así que **no es viable** para la asociación. Propuesta: importar Norma 43 o CSV y, más adelante, un agregador (P-23, P-28).
+- ⏳ Gastos de Tesorería. Ficha propia del socio y vista de sección. Cola de cambios (v2).
+- ⚠️ El usuario de API del CRM tiene permisos de escritura (P-12).
