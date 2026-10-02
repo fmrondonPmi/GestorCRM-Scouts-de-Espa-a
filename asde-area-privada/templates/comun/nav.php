@@ -15,13 +15,25 @@ use AsdeBalears\AreaPrivada\Socios\Numeros;
 defined( 'ABSPATH' ) || exit;
 ?>
 <nav class="asde-nav" aria-label="Área privada">
+	<?php
+	// v0.15: el menú va por grupos (lo personal/familiar y la gestión del grupo). Con un solo
+	// grupo no hace falta rotularlo. Un tema que sobrescriba esta plantilla puede seguir usando $items.
+	$grupos  = $grupos ?? array();
+	$rotulos = count( $grupos ) > 1;
+	$bloques = $grupos ? array_merge( array( array( 'titulo' => '', 'items' => array( 'area' => $items['area'] ?? 'Inicio' ) ) ), array_values( $grupos ) ) : array( array( 'titulo' => '', 'items' => $items ) );
+	?>
 	<ul class="asde-nav__tabs">
-		<?php foreach ( $items as $key => $label ) : ?>
-			<li>
-				<a href="<?php echo esc_url( Pages::url( $key ) ); ?>"<?php echo $key === $activo ? ' class="is-active" aria-current="page"' : ''; ?>>
-					<?php echo esc_html( $label ); ?>
-				</a>
-			</li>
+		<?php foreach ( $bloques as $i => $bloque ) : ?>
+			<?php if ( $rotulos && $i > 0 ) : ?>
+				<li class="asde-nav__grupo" role="presentation"><span><?php echo esc_html( $bloque['titulo'] ); ?></span></li>
+			<?php endif; ?>
+			<?php foreach ( $bloque['items'] as $key => $label ) : ?>
+				<li>
+					<a href="<?php echo esc_url( Pages::url( $key ) ); ?>"<?php echo $key === $activo ? ' class="is-active" aria-current="page"' : ''; ?>>
+						<?php echo esc_html( $label ); ?>
+					</a>
+				</li>
+			<?php endforeach; ?>
 		<?php endforeach; ?>
 	</ul>
 	<?php if ( $user->exists() ) : ?>

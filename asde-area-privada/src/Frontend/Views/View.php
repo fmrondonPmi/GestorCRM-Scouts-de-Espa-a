@@ -2,12 +2,11 @@
 namespace AsdeBalears\AreaPrivada\Frontend\Views;
 
 use AsdeBalears\AreaPrivada\Auth\Ambito;
+use AsdeBalears\AreaPrivada\Frontend\Menu;
 use AsdeBalears\AreaPrivada\Frontend\Notices;
 use AsdeBalears\AreaPrivada\Frontend\Pages;
 use AsdeBalears\AreaPrivada\Frontend\TemplateLoader;
 use AsdeBalears\AreaPrivada\Socios\TareaNumeracion;
-use AsdeBalears\AreaPrivada\Uniformes\Servicio;
-use AsdeBalears\AreaPrivada\Usuarios\Solicitudes;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -40,48 +39,7 @@ abstract class View {
 	 * @return array<string, string> clave de página => etiqueta
 	 */
 	public static function pestanas( ?Ambito $ambito ): array {
-		$items = array( 'area' => 'Inicio' );
-		if ( $ambito && ( $ambito->persona || $ambito->representados ) ) {
-			$items['ficha'] = $ambito->persona ? 'Mis datos' : 'Mi familia';
-			if ( current_user_can( MisPagosView::CAP ) ) {
-				$items['pagos'] = 'Mis pagos';
-			}
-		}
-		// Uniforme (v0.11; v0.15): pedir y gestionar son cosas distintas. Quien pide (también los
-		// scouters, que además gestionan) tiene «Mi uniforme»; quien gestiona, la gestión con lo pendiente.
-		if ( $ambito ) {
-			$p        = Servicio::pendientes( $ambito );
-			$pide     = current_user_can( Servicio::CAP_PEDIR ) && Servicio::para_quien( $ambito );
-			$gestiona = current_user_can( Servicio::CAP_GESTION );
-			if ( $pide ) {
-				$items['uniforme'] = ( $gestiona ? 'Mi uniforme' : 'Uniforme' ) . ( $p['confirmar'] ? ' (' . $p['confirmar'] . ')' : '' );
-			}
-			if ( $gestiona ) {
-				$n                  = $p['pago'] + $p['pedido'] + $p['entrega'];
-				$items['uniformes'] = 'Gestión de uniformes' . ( $n ? ' (' . $n . ')' : '' );
-			}
-		}
-		if ( current_user_can( 'asde_manage_users' ) ) {
-			$items['personas'] = 'Personas';
-		}
-		if ( $ambito && current_user_can( 'asde_aprobar_solicitudes' ) ) {
-			$solicitudes          = Solicitudes::contar_pendientes( $ambito );
-			$items['solicitudes'] = 'Solicitudes' . ( $solicitudes ? ' (' . $solicitudes . ')' : '' );
-		}
-		if ( current_user_can( 'asde_approve_changes' ) ) {
-			$pendientes       = $ambito && $ambito->vision_global() ? \AsdeBalears\AreaPrivada\Fichas\Cambios::contar_pendientes() : 0;
-			$items['cambios'] = 'Cambios' . ( $pendientes ? ' (' . $pendientes . ')' : '' );
-		}
-		if ( current_user_can( 'asde_reports' ) ) {
-			$items['informes'] = 'Informes';
-		}
-		if ( current_user_can( 'asde_tesoreria_acceso' ) ) {
-			$items['tesoreria'] = 'Tesorería';
-		}
-		if ( current_user_can( 'asde_manage_users' ) ) {
-			$items['usuarios'] = 'Usuarios';
-		}
-		return $items;
+		return Menu::plano( $ambito ); // v0.15: el menú se separa por tipo de usuario (Frontend\Menu).
 	}
 
 	/** Envoltorio común: menú del área privada + avisos + contenido. */
@@ -104,6 +62,7 @@ abstract class View {
 				'comun/nav',
 				array(
 					'items'  => $items,
+					'grupos' => Menu::grupos( $ambito ),
 					'activo' => $marcar,
 					'pagina' => $activo,
 					'user'   => $user,

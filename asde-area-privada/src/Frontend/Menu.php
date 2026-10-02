@@ -1,0 +1,104 @@
+<?php
+namespace AsdeBalears\AreaPrivada\Frontend;
+
+use AsdeBalears\AreaPrivada\Auth\Ambito;
+use AsdeBalears\AreaPrivada\Fichas\Cambios;
+use AsdeBalears\AreaPrivada\Frontend\Views\MisPagosView;
+use AsdeBalears\AreaPrivada\Uniformes\Servicio;
+use AsdeBalears\AreaPrivada\Usuarios\Solicitudes;
+
+defined( 'ABSPATH' ) || exit;
+
+/**
+ * Menú del área privada, separado por tipo de usuario (v0.15, doc 28).
+ *
+ * - **Personal** («Mi espacio» o «Mi familia»): lo que hace cada persona o familia
+ *   con lo suyo: su ficha, sus pagos y su uniforme.
+ * - **Gestión** («Gestión del grupo»): lo de scouters, Secretaría, Coordinación y
+ *   Tesorería: personas, usuarios, solicitudes, cambios, informes, tesorería y la
+ *   gestión de uniformes.
+ *
+ * No hay un «tipo de cuenta» aparte: cada entrada sale según las capabilities de
+ * siempre. Una familia solo ve el grupo personal; un scouter, los dos (sus cosas
+ * y las del grupo); alguien sin ficha (p. ej. un administrador), solo el de gestión.
+ */
+final class Menu {
+
+	public const PERSONAL = 'personal';
+	public const GESTION  = 'gestion';
+
+	/**
+	 * Entradas por grupo, sin contar «Inicio». Los grupos vacíos no salen.
+	 *
+	 * @return array<string, array{titulo:string, items:array<string, string>}> clave de grupo => datos
+	 */
+	public static function grupos( ?Ambito $ambito ): array {
+		$personal = array();
+		$gestion  = array();
+
+		// --- Lo personal / familiar ---
+		if ( $ambito && ( $ambito->persona || $ambito->representados ) ) {
+			$personal['ficha'] = $ambito->persona ? 'Mis datos' : 'Mi familia';
+			if ( current_user_can( MisPagosView::CAP ) ) {
+				$personal['pagos'] = 'Mis pagos';
+			}
+		}
+		$gestiona   = current_user_can( Servicio::CAP_GESTION );
+		$pide       = $ambito && current_user_can( Servicio::CAP_PEDIR ) && Servicio::para_quien( $ambito );
+		$pendientes = $ambito && ( $pide || $gestiona ) ? Servicio::pendientes( $ambito ) : array();
+		if ( $pide ) {
+			$n                    = (int) $pendientes['confirmar'];
+			$personal['uniforme'] = ( $gestiona ? 'Mi uniforme' : 'Uniforme' ) . ( $n ? ' (' . $n . ')' : '' );
+		}
+
+		// --- Gestión del grupo ---
+		if ( current_user_can( 'asde_manage_users' ) ) {
+			$gestion['personas'] = 'Personas';
+		}
+		if ( $ambito && current_user_can( 'asde_aprobar_solicitudes' ) ) {
+			$solicitudes          = Solicitudes::contar_pendientes( $ambito );
+			$gestion['solicitudes'] = 'Solicitudes' . ( $solicitudes ? ' (' . $solicitudes . ')' : '' );
+		}
+		if ( current_user_can( 'asde_approve_changes' ) ) {
+			$cambios            = $ambito && $ambito->vision_global() ? Cambios::contar_pendientes() : 0;
+			$gestion['cambios'] = 'Cambios' . ( $cambios ? ' (' . $cambios . ')' : '' );
+		}
+		if ( current_user_can( 'asde_reports' ) ) {
+			$gestion['informes'] = 'Informes';
+		}
+		if ( $ambito && $gestiona ) {
+			$n                    = (int) ( $pendientes['pago'] + $pendientes['pedido'] + $pendientes['entrega'] );
+			$gestion['uniformes'] = 'Gestión de uniformes' . ( $n ? ' (' . $n . ')' : '' );
+		}
+		if ( current_user_can( 'asde_tesoreria_acceso' ) ) {
+			$gestion['tesoreria'] = 'Tesorería';
+		}
+		if ( current_user_can( 'asde_manage_users' ) ) {
+			$gestion['usuarios'] = 'Usuarios';
+		}
+
+		$grupos = array();
+		if ( $personal ) {
+			$grupos[ self::PERSONAL ] = array(
+				'titulo' => $ambito && $ambito->persona ? 'Mi espacio' : 'Mi familia',
+				'items'  => $personal,
+			);
+		}
+		if ( $gestion ) {
+			$grupos[ self::GESTION ] = array(
+				'titulo' => 'Gestión del grupo',
+				'items'  => $gestion,
+			);
+		}
+		return $grupos;
+	}
+
+	/** Todas las pestañas en una sola lista (con «Inicio» delante): la que usaba el menú antes de separarlo. @return array<string, string> */
+	public static function plano( ?Ambito $ambito ): array {
+		$items = array( 'area' => 'Inicio' );
+		foreach ( self::grupos( $ambito ) as $grupo ) {
+			$items += $grupo['items'];
+		}
+		return $items;
+	}
+}

@@ -103,77 +103,70 @@ $user = $ambito->user;
 	</section>
 <?php endif; ?>
 
-<div class="asde-tiles">
-	<?php if ( $ambito->persona ) : ?>
-		<a class="asde-tile" href="<?php echo esc_url( $url( 'ficha' ) ); ?>">
-			<strong>Mis datos</strong>
-			Tu ficha del grupo: consulta tus datos y actualiza tu email y teléfono.
-		</a>
+<?php
+// v0.15: las pantallas de cada persona o familia y las de gestión del grupo van en bloques distintos.
+$tile = static fn( string $href, string $titulo, string $texto ): array => array( $href, $titulo, $texto );
+
+$mias = array();
+if ( $ambito->persona ) {
+	$mias[] = $tile( $url( 'ficha' ), 'Mis datos', 'Tu ficha del grupo: consulta tus datos y actualiza tu email y teléfono.' );
+}
+foreach ( $ambito->representados as $n => $p ) {
+	$mias[] = $tile( $url( 'ficha', array( 'socio' => $n ) ), 'Ficha de ' . $p->nombre, 'Consulta sus datos y propón cambios (los revisa el grupo).' );
+}
+if ( ( $ambito->persona || $ambito->representados ) && current_user_can( 'asde_mis_pagos' ) ) {
+	$mias[] = $tile( $url( 'pagos' ), 'Mis pagos', 'Lo que ha registrado Tesorería: la cuota del grupo, sus plazos y los pagos del uniforme.' );
+}
+if ( ! empty( $pide_uniforme ) ) {
+	$mias[] = $tile( $url( 'uniforme' ), ! empty( $gestiona_uniformes ) ? 'Mi uniforme' : 'Uniforme', 'Pide la camisa scout y las insignias, y sigue tu pedido.' );
+}
+
+$grupo_tiles = array();
+if ( ! empty( $gestiona_uniformes ) ) {
+	$grupo_tiles[] = $tile( $url( 'uniformes' ), 'Gestión de uniformes', 'Pagos, pedido al proveedor y entregas de las camisas del grupo.' );
+}
+if ( current_user_can( 'asde_aprobar_solicitudes' ) ) {
+	$grupo_tiles[] = $tile( $url( 'solicitudes' ), 'Solicitudes de acceso', 'Aprueba a las familias y socios que piden entrar con el enlace del grupo.' );
+}
+if ( current_user_can( 'asde_approve_changes' ) ) {
+	$grupo_tiles[] = $tile( $url( 'cambios' ), 'Cambios propuestos', 'Revisa los cambios que piden las familias en las fichas.' );
+}
+if ( current_user_can( 'asde_reports' ) ) {
+	$grupo_tiles[] = $tile( $url( 'informes' ), 'Informes', $ambito->vision_global() ? 'Listados de todo el grupo con las columnas que elijas.' : 'Listados de tu sección con las columnas que elijas.' );
+}
+if ( current_user_can( 'asde_tesoreria_acceso' ) ) {
+	$grupo_tiles[] = $tile( $url( 'tesoreria' ), 'Tesorería', 'Cuotas de las familias, pagos, familias y coste federativo.' );
+}
+if ( current_user_can( 'asde_manage_users' ) ) {
+	$grupo_tiles[] = $tile( $url( 'personas' ), 'Personas del grupo', 'Sus fichas, darles acceso y revisar los números de socio.' );
+	$grupo_tiles[] = $tile( $url( 'alta' ), 'Dar acceso', 'Busca a un socio y dale acceso a él o ella, o a su familia.' );
+	$grupo_tiles[] = $tile( $url( 'usuarios' ), 'Usuarios del área privada', 'Quién tiene acceso, invitaciones y bajas.' );
+}
+// La seguridad de la cuenta es de cada persona: va con lo suyo, o con lo de gestión si no tiene ficha.
+$cuenta = $tile( $url( 'seguridad' ), 'Seguridad de la cuenta', 'Verificación en dos pasos.' );
+if ( $mias || ! $grupo_tiles ) {
+	$mias[] = $cuenta;
+} else {
+	$grupo_tiles[] = $cuenta;
+}
+$con_titulos = $mias && $grupo_tiles;
+$pintar      = static function ( array $tiles ): void {
+	echo '<div class="asde-tiles">';
+	foreach ( $tiles as list( $href, $titulo, $texto ) ) {
+		echo '<a class="asde-tile" href="' . esc_url( $href ) . '"><strong>' . esc_html( $titulo ) . '</strong> ' . esc_html( $texto ) . '</a>';
+	}
+	echo '</div>';
+};
+?>
+<?php if ( $mias ) : ?>
+	<?php if ( $con_titulos ) : ?>
+		<h3 class="asde-tiles__titulo"><?php echo $ambito->persona ? 'Para ti' : 'Para tu familia'; ?></h3>
 	<?php endif; ?>
-	<?php foreach ( $ambito->representados as $n => $p ) : ?>
-		<a class="asde-tile" href="<?php echo esc_url( $url( 'ficha', array( 'socio' => $n ) ) ); ?>">
-			<strong>Ficha de <?php echo esc_html( $p->nombre ); ?></strong>
-			Consulta sus datos y propón cambios (los revisa el grupo).
-		</a>
-	<?php endforeach; ?>
-	<?php if ( ( $ambito->persona || $ambito->representados ) && current_user_can( 'asde_mis_pagos' ) ) : ?>
-		<a class="asde-tile" href="<?php echo esc_url( $url( 'pagos' ) ); ?>">
-			<strong>Mis pagos</strong>
-			Lo que ha registrado Tesorería: la cuota del grupo, sus plazos y los pagos del uniforme.
-		</a>
+	<?php $pintar( $mias ); ?>
+<?php endif; ?>
+<?php if ( $grupo_tiles ) : ?>
+	<?php if ( $con_titulos ) : ?>
+		<h3 class="asde-tiles__titulo">Gestión del grupo</h3>
 	<?php endif; ?>
-	<?php if ( ! empty( $pide_uniforme ) ) : ?>
-		<a class="asde-tile" href="<?php echo esc_url( $url( 'uniforme' ) ); ?>">
-			<strong>Uniforme</strong>
-			Pide la camisa scout y las insignias, y sigue tu pedido.
-		</a>
-	<?php endif; ?>
-	<?php if ( ! empty( $gestiona_uniformes ) ) : ?>
-		<a class="asde-tile" href="<?php echo esc_url( $url( 'uniformes' ) ); ?>">
-			<strong>Pedidos de uniforme</strong>
-			Pagos, pedido al proveedor y entregas de las camisas del grupo.
-		</a>
-	<?php endif; ?>
-	<?php if ( current_user_can( 'asde_aprobar_solicitudes' ) ) : ?>
-		<a class="asde-tile" href="<?php echo esc_url( $url( 'solicitudes' ) ); ?>">
-			<strong>Solicitudes de acceso</strong>
-			Aprueba a las familias y socios que piden entrar con el enlace del grupo.
-		</a>
-	<?php endif; ?>
-	<?php if ( current_user_can( 'asde_approve_changes' ) ) : ?>
-		<a class="asde-tile" href="<?php echo esc_url( $url( 'cambios' ) ); ?>">
-			<strong>Cambios propuestos</strong>
-			Revisa los cambios que piden las familias en las fichas.
-		</a>
-	<?php endif; ?>
-	<?php if ( current_user_can( 'asde_reports' ) ) : ?>
-		<a class="asde-tile" href="<?php echo esc_url( $url( 'informes' ) ); ?>">
-			<strong>Informes</strong>
-			<?php echo $ambito->vision_global() ? 'Listados de todo el grupo con las columnas que elijas.' : 'Listados de tu sección con las columnas que elijas.'; ?>
-		</a>
-	<?php endif; ?>
-	<?php if ( current_user_can( 'asde_tesoreria_acceso' ) ) : ?>
-		<a class="asde-tile" href="<?php echo esc_url( $url( 'tesoreria' ) ); ?>">
-			<strong>Tesorería</strong>
-			Cuotas de las familias, pagos, familias y coste federativo.
-		</a>
-	<?php endif; ?>
-	<?php if ( current_user_can( 'asde_manage_users' ) ) : ?>
-		<a class="asde-tile" href="<?php echo esc_url( $url( 'personas' ) ); ?>">
-			<strong>Personas del grupo</strong>
-			Sus fichas, darles acceso y revisar los números de socio.
-		</a>
-		<a class="asde-tile" href="<?php echo esc_url( $url( 'alta' ) ); ?>">
-			<strong>Dar acceso</strong>
-			Busca a un socio y dale acceso a él o ella, o a su familia.
-		</a>
-		<a class="asde-tile" href="<?php echo esc_url( $url( 'usuarios' ) ); ?>">
-			<strong>Usuarios del área privada</strong>
-			Quién tiene acceso, invitaciones y bajas.
-		</a>
-	<?php endif; ?>
-	<a class="asde-tile" href="<?php echo esc_url( $url( 'seguridad' ) ); ?>">
-		<strong>Seguridad de la cuenta</strong>
-		Verificación en dos pasos.
-	</a>
-</div>
+	<?php $pintar( $grupo_tiles ); ?>
+<?php endif; ?>
