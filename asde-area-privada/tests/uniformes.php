@@ -199,6 +199,12 @@ try {
 	$enviar( new UniformeView(), array( 'asde_action' => 'uniforme_pedir', 'socio' => '990024', 'con_camisa' => '1', 'camisa' => 'femenina|M' ), 'asde_uniforme_pedir' );
 	$p_eva = $ultimo();
 	$ok( $p_eva && $p_eva['adulto'], 'los scouters también piden la suya (Tesorería, adulta)' );
+	$como( $u_scouter );
+	$enviar( new UniformeView(), array( 'asde_action' => 'uniforme_pedir', 'socio' => '990025', 'con_camisa' => '1', 'camisa' => 'masculina|L' ), 'asde_uniforme_pedir' );
+	$p_tom = $ultimo();
+	$ok( $p_tom && '990025' === $p_tom['socio'] && $p_tom['adulto'], 'un scouter (solo scouter, de Lobatos) pide su camisa' );
+	$enviar( new UniformeView(), array( 'asde_action' => 'uniforme_pedir', 'socio' => '990021', 'con_camisa' => '1', 'camisa' => 'masculina|S' ), 'asde_uniforme_pedir' );
+	$ok( $ultimo()['id'] === $p_tom['id'], 'pero no pide por otra persona (aunque sea de su sección): lo suyo es lo suyo' );
 
 	$cerrado            = $cfg;
 	$cerrado['abierto'] = false;
@@ -222,7 +228,11 @@ try {
 	$pc = Servicio::pendientes( $como( $u_coord ) );
 	$ok( $pt['pago'] >= 4 && 0 === $pt['pedido'] && $pc['pedido'] >= 4 && 0 === $pc['pago'], 'pendientes: Tesorería, los de pago; Coordinación, los de incluir en el pedido' );
 	$tabs = View::pestanas( $como( $u_scouter ) );
-	$ok( isset( $tabs['uniformes'], $tabs['pagos'] ) && ! isset( $tabs['uniforme'] ), 'pestañas del scouter: «Uniformes» (la gestión) y «Mis pagos»' );
+	$ok( isset( $tabs['uniformes'], $tabs['uniforme'], $tabs['pagos'] ) && str_starts_with( $tabs['uniforme'], 'Mi uniforme' ) && str_starts_with( $tabs['uniformes'], 'Gestión de uniformes' ), 'pestañas del scouter: «Mi uniforme» (pedir), «Gestión de uniformes» y «Mis pagos»' );
+	$como( $u_scouter );
+	$h = ( new UniformeView() )->render();
+	$ok( str_contains( $h, 'name="asde_action" value="uniforme_pedir"' ) && ! str_contains( $h, 'Desde aquí se gestionan los pedidos del grupo' ), 'el scouter ve el formulario para pedir su uniforme (no solo la gestión)' );
+	$tabs = View::pestanas( $como( $u_scouter ) );
 	$tabs = View::pestanas( $como( $u_fam ) );
 	$ok( isset( $tabs['uniforme'], $tabs['pagos'] ) && ! isset( $tabs['uniformes'] ), 'pestañas de la familia: «Uniforme» y «Mis pagos»' );
 

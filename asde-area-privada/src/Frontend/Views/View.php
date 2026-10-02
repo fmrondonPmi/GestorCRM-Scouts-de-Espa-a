@@ -47,14 +47,19 @@ abstract class View {
 				$items['pagos'] = 'Mis pagos';
 			}
 		}
-		// Uniforme (v0.11): quien gestiona pedidos va a la gestión, con lo que tiene pendiente.
-		if ( $ambito && current_user_can( Servicio::CAP_GESTION ) ) {
-			$p                  = Servicio::pendientes( $ambito );
-			$n                  = $p['pago'] + $p['pedido'] + $p['entrega'] + $p['confirmar'];
-			$items['uniformes'] = 'Uniformes' . ( $n ? ' (' . $n . ')' : '' );
-		} elseif ( $ambito && current_user_can( Servicio::CAP_PEDIR ) && Servicio::para_quien( $ambito ) ) {
-			$n                 = Servicio::pendientes( $ambito )['confirmar'];
-			$items['uniforme'] = 'Uniforme' . ( $n ? ' (' . $n . ')' : '' );
+		// Uniforme (v0.11; v0.15): pedir y gestionar son cosas distintas. Quien pide (también los
+		// scouters, que además gestionan) tiene «Mi uniforme»; quien gestiona, la gestión con lo pendiente.
+		if ( $ambito ) {
+			$p        = Servicio::pendientes( $ambito );
+			$pide     = current_user_can( Servicio::CAP_PEDIR ) && Servicio::para_quien( $ambito );
+			$gestiona = current_user_can( Servicio::CAP_GESTION );
+			if ( $pide ) {
+				$items['uniforme'] = ( $gestiona ? 'Mi uniforme' : 'Uniforme' ) . ( $p['confirmar'] ? ' (' . $p['confirmar'] . ')' : '' );
+			}
+			if ( $gestiona ) {
+				$n                  = $p['pago'] + $p['pedido'] + $p['entrega'];
+				$items['uniformes'] = 'Gestión de uniformes' . ( $n ? ' (' . $n . ')' : '' );
+			}
 		}
 		if ( current_user_can( 'asde_manage_users' ) ) {
 			$items['personas'] = 'Personas';
@@ -91,7 +96,7 @@ abstract class View {
 		$marcar = array(
 			'alta'             => 'usuarios',
 			'emails'           => 'usuarios',
-			'uniforme'         => isset( $items['uniformes'] ) ? 'uniformes' : 'uniforme',
+			'uniforme'         => isset( $items['uniforme'] ) ? 'uniforme' : 'uniformes',
 			'uniformes_config' => 'uniformes',
 		)[ $activo ] ?? $activo;
 		return '<div class="asde-ap">'
