@@ -4,7 +4,7 @@ Plugin de WordPress que da a los Grupos Scouts un **área privada** (fichas, usu
 
 - **Versión actual:** 0.14.1
 - **Requisitos:** WordPress 6.4 o superior y PHP 8.0 o superior (con libsodium).
-- **Licencia:** GPL-2.0-or-later, la declarada en la cabecera del plugin (texto completo en [`LICENSE`](LICENSE)).
+- **Licencia:** [MIT](LICENSE), también la declarada en la cabecera del plugin. Es compatible con la GPL de WordPress.
 
 ## Qué hay en este repositorio
 

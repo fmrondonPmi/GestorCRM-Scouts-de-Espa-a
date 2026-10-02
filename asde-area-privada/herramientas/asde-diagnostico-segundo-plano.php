@@ -6,7 +6,7 @@
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Author:            ASDE Scouts de Balears
- * License:           GPL-2.0-or-later
+ * License:           MIT
  *
  * Este mismo fichero va dentro del plugin «ASDE Scouts de España - Gestor CRM
  * para Grupos Scouts» (carpeta herramientas/) y también se puede subir SOLO a
