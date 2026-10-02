@@ -3,6 +3,7 @@ namespace AsdeBalears\AreaPrivada;
 
 use AsdeBalears\AreaPrivada\Admin\ColoresPage;
 use AsdeBalears\AreaPrivada\Admin\EntornoPage;
+use AsdeBalears\AreaPrivada\Admin\IdiomasPage;
 use AsdeBalears\AreaPrivada\Admin\OrganizacionPage;
 use AsdeBalears\AreaPrivada\Admin\SettingsPage;
 use AsdeBalears\AreaPrivada\Auth\AccessHooks;
@@ -36,6 +37,7 @@ final class Plugin {
 			( new SettingsPage() )->register();
 			( new OrganizacionPage() )->register();
 			( new ColoresPage() )->register();
+			( new IdiomasPage() )->register();
 			( new EntornoPage() )->register();
 		}
 	}

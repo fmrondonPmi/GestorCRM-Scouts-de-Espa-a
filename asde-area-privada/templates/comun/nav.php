@@ -11,6 +11,7 @@
 use AsdeBalears\AreaPrivada\Domain\Identidad;
 use AsdeBalears\AreaPrivada\Frontend\Pages;
 use AsdeBalears\AreaPrivada\Frontend\Tema;
+use AsdeBalears\AreaPrivada\Frontend\TemplateLoader;
 use AsdeBalears\AreaPrivada\Socios\Numeros;
 
 defined( 'ABSPATH' ) || exit;
@@ -43,6 +44,10 @@ defined( 'ABSPATH' ) || exit;
 			<span class="asde-muted">(<?php echo esc_html( $user->user_login ); ?>)</span> ·
 			<a href="<?php echo esc_url( Pages::url( 'seguridad' ) ); ?>"<?php echo 'seguridad' === ( $pagina ?? '' ) ? ' aria-current="page" class="is-active"' : ''; ?>>Seguridad</a> ·
 			<a href="<?php echo esc_url( wp_logout_url( home_url( '/' ) ) ); ?>">Salir</a>
+			<?php $selector_idioma = trim( TemplateLoader::render( 'comun/idiomas' ) ); ?>
+			<?php if ( '' !== $selector_idioma ) : ?>
+				· <?php echo $selector_idioma; // phpcs:ignore WordPress.Security.EscapeOutput ?>
+			<?php endif; ?>
 			<?php if ( Identidad::es_asde() && ( current_user_can( 'asde_manage_users' ) || current_user_can( 'asde_tesoreria_acceso' ) || current_user_can( 'asde_reports' ) || current_user_can( 'asde_approve_changes' ) ) ) : ?>
 				<?php $ver_local = Numeros::ver_local(); ?>
 				· <a href="<?php echo esc_url( add_query_arg( array( 'asde_ver_local' => $ver_local ? '0' : '1', '_wpnonce' => wp_create_nonce( 'asde_ver_local' ) ) ) ); ?>" title="El nº territorial sale junto al nº de Scouts de España en todas las pantallas. Si tiene algún problema, el aviso sale siempre."><?php echo $ver_local ? 'Ocultar nº territorial' : 'Mostrar nº territorial'; ?></a>

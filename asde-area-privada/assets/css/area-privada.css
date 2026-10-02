@@ -1809,3 +1809,21 @@ html.asde-cargando .asde-ap button {
 	letter-spacing: 0.04em;
 	text-transform: uppercase;
 }
+
+/* Selector de idioma (v0.15) */
+.asde-ap .asde-idiomas {
+	font-size: 13px;
+}
+.asde-ap .asde-idiomas > * + *::before {
+	content: "·";
+	margin: 0 0.4em;
+	color: var(--asde-muted);
+	font-weight: 400;
+}
+.asde-ap .asde-idiomas strong {
+	color: var(--asde-text);
+}
+.asde-ap.asde-ap--idiomas {
+	margin-bottom: 8px;
+	text-align: right;
+}

@@ -29,6 +29,9 @@ spl_autoload_register(
 	}
 );
 
+// asde_t(), asde_h()…: los textos del área en el idioma de cada persona (v0.15, doc 28).
+require_once ASDE_AP_DIR . 'src/Idiomas/funciones.php';
+
 register_activation_hook( __FILE__, array( \AsdeBalears\AreaPrivada\Install\Installer::class, 'install' ) );
 register_deactivation_hook( __FILE__, array( \AsdeBalears\AreaPrivada\Install\Installer::class, 'deactivate' ) );
 add_action( 'plugins_loaded', array( \AsdeBalears\AreaPrivada\Plugin::class, 'boot' ) );

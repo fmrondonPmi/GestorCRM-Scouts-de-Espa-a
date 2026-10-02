@@ -27,6 +27,8 @@ use AsdeBalears\AreaPrivada\Frontend\Views\SolicitarView;
 use AsdeBalears\AreaPrivada\Frontend\Views\SolicitudesView;
 use AsdeBalears\AreaPrivada\Frontend\Views\UsuariosView;
 use AsdeBalears\AreaPrivada\Frontend\Views\View;
+use AsdeBalears\AreaPrivada\Idiomas\Idioma;
+use AsdeBalears\AreaPrivada\Idiomas\Traducciones;
 use AsdeBalears\AreaPrivada\Socios\TareaNumeracion;
 
 defined( 'ABSPATH' ) || exit;
@@ -82,11 +84,46 @@ final class Router {
 		add_action( 'wp_enqueue_scripts', array( $this, 'assets' ) );
 		add_filter( 'wp_robots', array( $this, 'robots' ) );
 		add_filter( 'body_class', array( $this, 'body_class' ) );
+		// Idioma de cada persona (v0.15): atributo lang del área y selector en las pantallas públicas.
+		add_filter( 'do_shortcode_tag', array( $this, 'marcar_idioma' ), 10, 2 );
+		add_filter( 'gettext', array( $this, 'traducir_gettext' ), 10, 3 );
 		add_action( 'wp_head', array( $this, 'cabecera_guardada' ), 1 );
 		// Al pasar a Enfold, las páginas del área reciben sus ajustes (ancho completo, sin barra de título).
 		add_action( 'after_switch_theme', static fn() => Tema::ajustar_paginas( array_values( Pages::ids() ) ) );
 	}
 
+	/**
+	 * Marca el idioma del área (`lang` en su contenedor, para lectores de pantalla y para el navegador)
+	 * y, en las pantallas públicas (acceso, activar cuenta, recuperar, solicitar), pone el selector de idioma.
+	 *
+	 * @param mixed $salida Lo que ha pintado el shortcode.
+	 */
+	public function marcar_idioma( $salida, string $etiqueta ) {
+		$shortcodes = array_column( self::VIEWS, 0 );
+		if ( ! is_string( $salida ) || ! in_array( $etiqueta, $shortcodes, true ) ) {
+			return $salida;
+		}
+		$salida = preg_replace( '/<div class="asde-ap/', '<div lang="' . esc_attr( Idioma::actual() ) . '" class="asde-ap', $salida, 1 ) ?? $salida;
+		$publica = array_map( static fn( string $k ) => self::VIEWS[ $k ][0], Pages::PUBLICAS );
+		if ( in_array( $etiqueta, $publica, true ) && Idioma::se_puede_elegir() ) {
+			$salida = '<div class="asde-ap asde-ap--idiomas" lang="' . esc_attr( Idioma::actual() ) . '">' . TemplateLoader::render( 'comun/idiomas' ) . '</div>' . $salida;
+		}
+		return $salida;
+	}
+
+	/**
+	 * Los textos del plugin que ya estaban marcados con __() (dominio asde-area-privada) también salen en el
+	 * idioma de la persona, salvo en las pantallas de wp-admin, que siguen en el idioma de WordPress.
+	 *
+	 * @param mixed $traduccion Lo que ha dado WordPress.
+	 */
+	public function traducir_gettext( $traduccion, string $original, string $dominio ) {
+		if ( 'asde-area-privada' !== $dominio || ( is_admin() && ! wp_doing_ajax() ) ) {
+			return $traduccion;
+		}
+		$t = Traducciones::t( $original );
+		return $t !== $original ? $t : $traduccion;
+	}
 	public function body_class( array $clases ): array {
 		if ( null !== Pages::current_key() ) {
 			$clases[] = 'asde-ap-pagina';
@@ -119,6 +156,12 @@ final class Router {
 		}
 		do_action( 'litespeed_control_set_nocache', 'asde-area-privada' );
 		nocache_headers();
+
+		// Cambio de idioma (?asde_lang=xx con nonce): se guarda y se vuelve a esta página sin el parámetro.
+		if ( Idioma::atender_peticion() ) {
+			wp_safe_redirect( remove_query_arg( array( Idioma::PARAM, '_wpnonce' ) ) );
+			exit;
+		}
 
 		// Con la sesión ya iniciada, "Acceso socios" lleva directamente al área.
 		if ( 'acceso' === $key && is_user_logged_in() ) {
