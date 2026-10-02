@@ -13,6 +13,7 @@ Plugin de WordPress que da a los Grupos Scouts un **área privada** (fichas, usu
 | `asde-area-privada/` | El plugin: `src/` (código, con *autoload* por espacio de nombres `AsdeBalears\AreaPrivada`), `templates/`, `assets/` (CSS y JS), `herramientas/` y `tests/`. |
 | `manual/` | Manual de uso en HTML (`index.html` + `capturas/`). Todas las capturas son de un grupo inventado («Grupo Scout Ejemplo, 999») con datos de mentira. |
 | `docs/` | Base de conocimiento del proyecto (en español): decisiones, módulos, roles, datos, integración con SinergiaCRM. Se entra por `docs/00-INDICE.md`. Mencionan scripts de desarrollo (pruebas, zip, capturas del manual) que **no** están en este repositorio. |
+| `CLAUDE.md` | Reglas de trabajo del proyecto (arquitectura, pruebas, entrega) para Claude Code. |
 
 ## Instalación
 
