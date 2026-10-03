@@ -5,7 +5,7 @@
  * Version:           0.14.1
  * Requires at least: 6.4
  * Requires PHP:      8.0
- * Author:            ASDE Scouts de Balears
+ * Author:            Francisco Meri - Zorro Sabio
  * License:           MIT
  * Text Domain:       asde-area-privada
  */
