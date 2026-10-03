@@ -4,6 +4,7 @@ namespace AsdeBalears\AreaPrivada\Frontend;
 use AsdeBalears\AreaPrivada\Auth\Ambito;
 use AsdeBalears\AreaPrivada\Frontend\Views\AccesoView;
 use AsdeBalears\AreaPrivada\Frontend\Views\ActivarCuentaView;
+use AsdeBalears\AreaPrivada\Frontend\Views\AltaScoutersView;
 use AsdeBalears\AreaPrivada\Frontend\Views\AltaUsuariosView;
 use AsdeBalears\AreaPrivada\Frontend\Views\AreaPrivadaView;
 use AsdeBalears\AreaPrivada\Frontend\Views\BancoView;
@@ -75,6 +76,7 @@ final class Router {
 		'uniformes'        => array( 'asde_uniformes', UniformesGestionView::class ),
 		'uniformes_config' => array( 'asde_uniformes_config', UniformesConfigView::class ),
 		'pagos'            => array( 'asde_mis_pagos', MisPagosView::class ),
+		'alta_scouters'    => array( 'asde_alta_scouters', AltaScoutersView::class ),
 	);
 
 	public function register(): void {

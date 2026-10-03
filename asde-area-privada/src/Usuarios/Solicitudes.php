@@ -37,6 +37,8 @@ final class Solicitudes {
 	/** Cómo se encontró la ficha: por documento + nacimiento, o (menores de 14 sin documento) por nacimiento + nombre. */
 	public const POR_DOCUMENTO = 'documento';
 	public const POR_NOMBRE    = 'nombre';
+	/** v0.16 (doc 31): alta de un scouter con el enlace para scouters, comprobada solo con el DNI. */
+	public const POR_ENLACE    = 'enlace';
 
 	/** Días que se guardan los datos escritos después de resolver la solicitud. */
 	public const DIAS_DATOS = 30;
@@ -88,7 +90,7 @@ final class Solicitudes {
 				'grupo'        => Grupo::numero(),
 				'estado'       => self::PENDIENTE,
 				'tipo'         => self::TUTOR === $tipo ? self::TUTOR : self::SOCIO,
-				'via'          => self::POR_NOMBRE === $via ? self::POR_NOMBRE : self::POR_DOCUMENTO,
+				'via'          => in_array( $via, array( self::POR_NOMBRE, self::POR_ENLACE ), true ) ? $via : self::POR_DOCUMENTO,
 				'socio'        => $p->num_socio_asde,
 				'datos_enc'    => Crypto::encrypt( (string) wp_json_encode( $datos ) ),
 				'email_huella' => EmailCuenta::huella( (string) ( $datos['email'] ?? '' ) ),

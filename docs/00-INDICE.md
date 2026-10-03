@@ -37,8 +37,11 @@ Proyecto: área privada con gestión de usuarios para la sección **Grupo Scout*
 | [28-menus-tema-colores-idiomas.md](28-menus-tema-colores-idiomas.md) | **v0.15:** los scouters también piden su uniforme, **menús separados** para lo personal y la gestión del grupo, el plugin **no depende del tema** (Enfold sugerido, no obligatorio), pantalla de **colores** e **idiomas** (castellano, catalán, euskera y gallego) con **gestión de etiquetas** |
 | [29-plan-tecnico-multigrupo.md](29-plan-tecnico-multigrupo.md) | **Plan (sin código): cuenta «Técnico/a»** que ve varios grupos en **solo lectura**: selector de grupo, bloqueo central de escrituras, usuario de API de solo lectura, qué ve, auditoría, pasos y preguntas P-49 a P-55 |
 | [30-plan-carpeta-drive.md](30-plan-carpeta-drive.md) | **Plan (sin código): ventana a la carpeta compartida de Google Drive** para scouters y voluntariado: quién la ve, configuración por grupo, vista incrustada o enlace, seguridad, pasos y preguntas P-56 a P-60 |
+| [31-enlace-alta-scouters.md](31-enlace-alta-scouters.md) | **Enlace de alta para scouters** (v0.16): uno por grupo y renovable, comprobación solo con el DNI, el scouter elige sus secciones (las responsabilidades las confirma coordinación), activación al email de su ficha, revisión si no hay email o es voluntario sin sección; seguridad y pruebas |
 
-## Estado (2026-10-03) · plugin v0.15.0 «ASDE Scouts de España - Gestor CRM para Grupos Scouts»
+## Estado (2026-10-03) · plugin v0.16.0 «ASDE Scouts de España - Gestor CRM para Grupos Scouts»
+- ✅ **v0.16.0 · enlace de alta para scouters** (petición del usuario, 2026-10-03; **doc 31**): en *Solicitudes*, Secretaría y Coordinación copian (y renuevan) el enlace del grupo; el scouter se da de alta con su DNI, elige sus secciones y la activación le llega al email de su ficha; las responsabilidades, las altas sin sección y las fichas sin email quedan para revisar.
+- ⏸️ **Planes aparcados** (2026-10-03, «dejamos esto para luego»): cuenta Técnico/a multigrupo en solo lectura (**doc 29**) y carpeta de Google Drive para scouters (**doc 30**), con sus preguntas P-49 a P-60.
 - ✅ **v0.15.0 · menús por rol, uniformes de scouters, tema libre, colores e idiomas** (petición del usuario, 2026-10-02; **doc 28**, un commit por cambio):
   - **Todo scouter pide su uniforme**: «Mi uniforme» (lo suyo) separado de «Gestión de uniformes».
   - **Menús distintos**: «Mi espacio» / «Mi familia» (lo personal) y «Gestión del grupo»; las familias solo ven lo suyo.

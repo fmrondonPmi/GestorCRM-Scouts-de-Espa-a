@@ -40,7 +40,7 @@ $adulto    = $s['adulto'] || ( $p && $p->es_adulto_voluntario() );
 		<span class="asde-badge asde-badge--estado-<?php echo esc_attr( $pendiente ? 'invitado' : ( Solicitudes::APROBADA === $s['estado'] ? 'activo' : 'desactivado' ) ); ?>"><?php echo esc_html( asde_t( Solicitudes::ESTADOS[ $s['estado'] ] ?? $s['estado'] ) ); ?></span>
 	</header>
 	<p class="asde-muted">
-		<?php asde_e( 'Recibida el' ); ?> <?php echo esc_html( wp_date( 'd/m/Y \a \l\a\s H:i', strtotime( $s['creada'] . ' UTC' ) ) ); ?>.
+		<?php asde_e( 'Recibida el' ); ?> <?php echo esc_html( wp_date( 'd/m/Y H:i', strtotime( $s['creada'] . ' UTC' ) ) ); ?>.
 		<?php echo $tutor ? asde_t( 'La pide su familia (madre, padre o tutor/a).' ) : asde_t( 'La pide el propio socio/a.' ); ?>
 		<?php if ( $revisor ) : ?>
 			<?php echo esc_html( sprintf( asde_t( '%s por %s el %s.' ), Solicitudes::APROBADA === $s['estado'] ? asde_t( 'Aprobada' ) : asde_t( 'Rechazada' ), $revisor->display_name, wp_date( 'd/m/Y', strtotime( $s['revisada_en'] . ' UTC' ) ) ) ); ?>
@@ -75,13 +75,31 @@ $adulto    = $s['adulto'] || ( $p && $p->es_adulto_voluntario() );
 				<tr>
 					<th scope="row"><?php asde_e( 'Comprobación' ); ?></th>
 					<td data-label="<?php echo asde_a( 'Escrito' ); ?>" colspan="2">
-						<?php if ( Solicitudes::POR_NOMBRE === $s['via'] ) : ?>
+						<?php if ( Solicitudes::POR_ENLACE === $s['via'] ) : ?>
+							<?php asde_e( 'Alta con el enlace para scouters: el DNI o NIE es el de esta ficha de Scouter o Voluntariado.' ); ?>
+						<?php elseif ( Solicitudes::POR_NOMBRE === $s['via'] ) : ?>
 							<?php echo $marca( (bool) $c['nacimiento'] ); // phpcs:ignore WordPress.Security.EscapeOutput ?> <?php asde_e( 'Fecha de nacimiento y nombre y apellidos (menor de 14 años sin documento en el CRM).' ); ?>
 						<?php else : ?>
 							<?php echo $marca( (bool) $c['nacimiento'] ); // phpcs:ignore WordPress.Security.EscapeOutput ?> <?php asde_e( 'El nº de documento y la fecha de nacimiento coinciden con la ficha.' ); ?>
 						<?php endif; ?>
 					</td>
 				</tr>
+				<?php if ( Solicitudes::POR_ENLACE === $s['via'] ) : ?>
+					<tr>
+						<th scope="row"><?php asde_e( 'Pide' ); ?></th>
+						<td data-label="<?php echo asde_a( 'Escrito' ); ?>" colspan="2">
+							<?php echo esc_html( implode( ', ', array_map( array( \AsdeBalears\AreaPrivada\Install\Roles::class, 'label' ), (array) ( $d['roles_pedidos'] ?? array() ) ) ) ?: '—' ); ?>
+							<?php foreach ( (array) ( $d['secciones_pedidas'] ?? array() ) as $sec ) : ?>
+								<?php echo Secciones::badge( (string) $sec ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+							<?php endforeach; ?>
+							<?php if ( ! empty( $d['cuenta_creada'] ) ) : ?>
+								<br><span class="asde-help"><?php asde_e( 'Su cuenta de scouter ya está creada (le llegó la activación al email de su ficha). Revisa sus secciones y confirma las responsabilidades que pide, o cierra la solicitud si no hay nada que cambiar.' ); ?></span>
+							<?php elseif ( ! empty( $d['error_alta'] ) ) : ?>
+								<br><span class="asde-help asde-help--warning"><?php echo esc_html( sprintf( asde_t( 'No se pudo crear la cuenta al momento: %s' ), (string) $d['error_alta'] ) ); ?></span>
+							<?php endif; ?>
+						</td>
+					</tr>
+				<?php endif; ?>
 				<tr>
 					<th scope="row"><?php asde_e( 'Quién pide' ); ?></th>
 					<td data-label="<?php echo asde_a( 'Escrito' ); ?>"><?php echo ( $tutor ? $marca( $c['tutor'] > 0 ) : '' ) . esc_html( $d['nombre'] ); // phpcs:ignore WordPress.Security.EscapeOutput ?></td>

@@ -49,6 +49,14 @@ if ( isset( AltaService::ROL_POR_CARGO[ $p->cargo ] ) ) {
 		$sugeridos[] = Roles::SCOUTER;
 	}
 }
+// Alta con el enlace para scouters (v0.16, doc 31): vienen marcados los roles y las secciones que pidió.
+if ( $solicitud && \AsdeBalears\AreaPrivada\Usuarios\Solicitudes::POR_ENLACE === $solicitud['via'] ) {
+	$sugeridos = array_merge( $sugeridos, array_values( array_intersect( AltaService::ROLES_PERSONA, (array) ( $solicitud['datos']['roles_pedidos'] ?? array() ) ) ) );
+	$pedidas   = array_values( array_intersect( array_merge( Secciones::EDUCATIVAS, array( Secciones::SIN_SECCION ) ), (array) ( $solicitud['datos']['secciones_pedidas'] ?? array() ) ) );
+	if ( $pedidas ) {
+		$secc_actual = array_values( array_unique( array_merge( $secc_actual, $pedidas ) ) );
+	}
+}
 ?>
 <p class="asde-back asde-solo-pagina"><a href="<?php echo esc_url( $url_volver ); ?>"><?php asde_e( '← Volver a la búsqueda' ); ?></a></p>
 

@@ -158,6 +158,7 @@ final class Extractor {
 			'templates/alta/'        => 'Dar acceso',
 			'templates/personas/'    => 'Personas',
 			'templates/solicitudes/' => 'Solicitudes de acceso',
+			'templates/alta-scouters/' => 'Alta de scouters',
 			'templates/fichas/'      => 'Fichas',
 			'templates/informes/'    => 'Informes',
 			'templates/acceso/'      => 'Acceso',

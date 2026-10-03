@@ -1,12 +1,15 @@
 <?php
 namespace AsdeBalears\AreaPrivada\Frontend\Views;
 
+use AsdeBalears\AreaPrivada\Audit\Logger;
 use AsdeBalears\AreaPrivada\Auth\Ambito;
 use AsdeBalears\AreaPrivada\Crm\CrmException;
 use AsdeBalears\AreaPrivada\Crm\Escritura;
+use AsdeBalears\AreaPrivada\Domain\Grupo;
 use AsdeBalears\AreaPrivada\Frontend\Notices;
 use AsdeBalears\AreaPrivada\Usuarios\Contacto;
 use AsdeBalears\AreaPrivada\Usuarios\EmailCuenta;
+use AsdeBalears\AreaPrivada\Usuarios\EnlaceScouters;
 use AsdeBalears\AreaPrivada\Usuarios\EmailRechazo;
 use AsdeBalears\AreaPrivada\Usuarios\SolicitudService;
 use AsdeBalears\AreaPrivada\Usuarios\Solicitudes;
@@ -58,6 +61,8 @@ final class SolicitudesView extends View {
 						'resueltas' => $resueltas,
 						'url'       => $this->url( 'solicitudes' ),
 						'enlace'    => $this->url( 'solicitar' ),
+						// v0.16: el enlace de alta de scouters, solo para quien da accesos (doc 31).
+						'enlace_scouters' => current_user_can( 'asde_manage_users' ) && Grupo::actual() ? EnlaceScouters::url( Grupo::actual() ) : '',
 						'contacto'  => EmailRechazo::contacto(),
 					)
 				)
@@ -107,6 +112,15 @@ final class SolicitudesView extends View {
 		}
 		$id     = (int) $this->post( 'solicitud' );
 		$accion = $this->post( 'asde_action' );
+		if ( 'renovar_enlace_scouters' === $accion ) {
+			check_admin_referer( 'asde_enlace_scouters' );
+			if ( current_user_can( 'asde_manage_users' ) && Grupo::actual() ) {
+				EnlaceScouters::renovar( Grupo::actual() );
+				Logger::log( 'enlace_scouters_renovado', 'grupo', Grupo::numero() );
+				Notices::add( 'success', asde_t( 'Enlace para scouters renovado: el anterior ya no sirve.' ) );
+			}
+			$this->redirect( $this->url( 'solicitudes' ) );
+		}
 		$volver = $this->url( 'solicitudes', array( 'solicitud' => (string) $id ) );
 		check_admin_referer( 'asde_solicitud_' . $id );
 

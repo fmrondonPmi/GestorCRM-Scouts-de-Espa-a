@@ -46,7 +46,7 @@ $manuales = array(
 		'titulo'   => 'Manual para scouters',
 		'perfil'   => 'Scouters y voluntariado con sección',
 		'entrada'  => 'Lo que hace un scouter con su sección en el área privada: las fichas de sus educandos, los cambios que proponen las familias, las solicitudes de acceso, los informes, los pagos y las familias, y los pedidos de uniforme. Y lo suyo: sus datos, sus pagos y su propio uniforme.',
-		'apartados' => array( 'scouters-perfil', 'entrar-socios', 'primera-vez', 'seguridad-obligatoria', 'scouters-inicio', 'ventana', 'scouters-fichas', 'cambios', 'scouters-solicitudes', 'informes', 'scouters-tesoreria', 'scouters-uniformes', 'idioma', 'preguntas-scouters' ),
+		'apartados' => array( 'scouters-perfil', 'scouters-alta', 'entrar-socios', 'primera-vez', 'seguridad-obligatoria', 'scouters-inicio', 'ventana', 'scouters-fichas', 'cambios', 'scouters-solicitudes', 'informes', 'scouters-tesoreria', 'scouters-uniformes', 'idioma', 'preguntas-scouters' ),
 	),
 	'coordinacion'  => array(
 		'titulo'   => 'Manual del equipo de coordinación',

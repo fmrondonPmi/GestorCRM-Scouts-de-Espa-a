@@ -1827,3 +1827,11 @@ html.asde-cargando .asde-ap button {
 	margin-bottom: 8px;
 	text-align: right;
 }
+
+/* v0.16 · Alta de scouters con el enlace del grupo (doc 31) */
+.asde-ap .asde-subopciones {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4px 16px;
+	margin: 2px 0 10px 28px;
+}

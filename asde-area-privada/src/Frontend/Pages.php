@@ -42,10 +42,12 @@ final class Pages {
 		'uniformes'        => array( 'gestion-pedidos', 'Gestión de pedidos de uniforme', '[asde_uniformes]', 'uniforme' ),
 		'uniformes_config' => array( 'configuracion', 'Configuración de uniformes', '[asde_uniformes_config]', 'uniforme' ),
 		'pagos'            => array( 'mis-pagos', 'Mis pagos', '[asde_mis_pagos]', 'area' ),
+		// v0.16: alta de scouters con el enlace del grupo (doc 31).
+		'alta_scouters'    => array( 'alta-scouters', 'Alta de scouters', '[asde_alta_scouters]', 'area' ),
 	);
 
 	/** Páginas accesibles sin iniciar sesión (no salen en listados ni menús: Visibilidad). */
-	public const PUBLICAS = array( 'acceso', 'activar', 'recuperar', 'solicitar' );
+	public const PUBLICAS = array( 'acceso', 'activar', 'recuperar', 'solicitar', 'alta_scouters' );
 
 	/** Páginas a las que se puede entrar aunque el CRM no dé acceso (para ver el motivo o gestionar la seguridad). */
 	public const SIN_AMBITO = array( 'area', 'seguridad' );

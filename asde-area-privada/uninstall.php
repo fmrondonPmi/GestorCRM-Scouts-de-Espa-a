@@ -45,7 +45,7 @@ foreach ( is_array( $asde_grupos ) ? $asde_grupos : array() as $asde_grupo ) {
 delete_transient( 'asde_ap_numeracion' );
 delete_transient( 'asde_ap_grupos_reintento' );
 
-foreach ( array( 'asde_ap_crm', 'asde_ap_crm_last_test', 'asde_ap_version', 'asde_ap_grupo', 'asde_ap_grupos', 'asde_ap_pages', 'asde_ap_menu_item', 'asde_ap_wordfence_config', 'asde_ap_tesoreria', 'asde_ap_banco_csv', 'asde_ap_colores', 'asde_ap_idioma', 'asde_ap_etiquetas' ) as $option ) {
+foreach ( array( 'asde_ap_crm', 'asde_ap_crm_last_test', 'asde_ap_version', 'asde_ap_grupo', 'asde_ap_grupos', 'asde_ap_pages', 'asde_ap_menu_item', 'asde_ap_wordfence_config', 'asde_ap_tesoreria', 'asde_ap_banco_csv', 'asde_ap_colores', 'asde_ap_idioma', 'asde_ap_etiquetas', 'asde_ap_enlace_scouters' ) as $option ) {
 	delete_option( $option );
 }
 delete_metadata( 'user', 0, 'asde_ap_idioma', '', true ); // Idioma elegido por cada persona (v0.15).
