@@ -2,7 +2,7 @@
 
 **Desde la v0.18.0 (2026-10-03) la app móvil es un plugin aparte, en su propio repo:**
 
-- Repo: `C:\Proyectos\GestorCRM-App` (git, rama `main`, por ahora sin remoto).
+- Repo: `C:\Proyectos\GestorCRM-App` (git, rama `main`; remoto privado `fmrondonPmi/GestorCRM-App`).
 - Plugin: `asde-area-privada-app` («ASDE Scouts de España - App móvil del Gestor CRM»), que necesita este plugin 0.18.0 o posterior.
 - Sus docs (estado, arquitectura, avisos push y **manual de publicación**) están en `docs/` de ese repo: empezar por `docs/README.md` y `docs/ESTADO.md`.
 
