@@ -1861,4 +1861,11 @@ return array(
 	'Último email:' => 'Último email:',
 	'← Registro de emails' => '← Rexistro de emails',
 	'← Usuarios' => '← Usuarios',
+
+	// App móvil
+	'Área privada del grupo scout: fichas, pagos y gestión del grupo.' => 'Área privada do grupo scout: fichas, pagamentos e xestión do grupo.',
+	'No hay internet en este momento, y el área privada la necesita para mostrarte los datos del grupo.' => 'Neste momento non hai internet, e a área privada necesítaa para amosarche os datos do grupo.',
+	'Por seguridad, las fichas, los pagos y los datos de los socios no se guardan en el móvil.' => 'Por seguridade, as fichas, os pagamentos e os datos dos socios non se gardan no móbil.',
+	'Reintentar' => 'Tentar de novo',
+	'Sin conexión' => 'Sen conexión',
 );

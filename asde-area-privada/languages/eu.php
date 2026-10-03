@@ -1861,4 +1861,11 @@ return array(
 	'Último email:' => 'Azken emaila:',
 	'← Registro de emails' => '← Emailen erregistroa',
 	'← Usuarios' => '← Erabiltzaileak',
+
+	// App móvil
+	'Área privada del grupo scout: fichas, pagos y gestión del grupo.' => 'Talde scoutaren eremu pribatua: fitxak, ordainketak eta taldearen kudeaketa.',
+	'No hay internet en este momento, y el área privada la necesita para mostrarte los datos del grupo.' => 'Une honetan ez dago internetik, eta eremu pribatuak behar du taldearen datuak erakusteko.',
+	'Por seguridad, las fichas, los pagos y los datos de los socios no se guardan en el móvil.' => 'Segurtasunagatik, fitxak, ordainketak eta bazkideen datuak ez dira mugikorrean gordetzen.',
+	'Reintentar' => 'Saiatu berriro',
+	'Sin conexión' => 'Konexiorik ez',
 );

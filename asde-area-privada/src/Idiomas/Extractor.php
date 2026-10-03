@@ -18,7 +18,7 @@ final class Extractor {
 	public const DOMINIO   = 'asde-area-privada';
 
 	/** Carpetas y ficheros que no se traducen (wp-admin, instalación, el propio idioma, pruebas). */
-	private const EXCLUIDOS = array( 'src/Admin/', 'src/Install/Entorno.php', 'src/Install/Installer.php', 'src/Idiomas/', 'tests/', 'herramientas/', 'languages/', 'src/Pwa/' );
+	private const EXCLUIDOS = array( 'src/Admin/', 'src/Install/Entorno.php', 'src/Install/Installer.php', 'src/Idiomas/', 'tests/', 'herramientas/', 'languages/' );
 
 	/**
 	 * Ficheros PHP de los que salen textos (rutas relativas al plugin, con «/»).
@@ -150,6 +150,8 @@ final class Extractor {
 	public static function grupo( string $rel ): string {
 		$grupos = array(
 			'templates/comun/'       => 'Menú y avisos',
+			'templates/pwa/'         => 'App móvil',
+			'src/Pwa/'               => 'App móvil',
 			'templates/area/'        => 'Inicio',
 			'templates/uniformes/'   => 'Uniformes',
 			'templates/tesoreria/'   => 'Tesorería',

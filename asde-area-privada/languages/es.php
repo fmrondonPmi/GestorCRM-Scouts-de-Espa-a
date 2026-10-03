@@ -88,6 +88,13 @@ return array(
 	'¿Cómo colaboras en el grupo?' => 'Alta de scouters',
 	'¿Ya tienes cuenta?' => 'Alta de scouters',
 
+	// App móvil
+	'No hay internet en este momento, y el área privada la necesita para mostrarte los datos del grupo.' => 'App móvil',
+	'Por seguridad, las fichas, los pagos y los datos de los socios no se guardan en el móvil.' => 'App móvil',
+	'Reintentar' => 'App móvil',
+	'Sin conexión' => 'App móvil',
+	'Área privada del grupo scout: fichas, pagos y gestión del grupo.' => 'App móvil',
+
 	// CRM
 	'%1$s respondió HTTP %2$d sin una respuesta válida de la API.' => 'CRM',
 	'API: REST v4_1' => 'CRM',

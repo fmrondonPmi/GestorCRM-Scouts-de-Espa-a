@@ -57,8 +57,18 @@ final class Pwa {
 	}
 
 	public function servir_ruta(): void {
-		if ( ! self::activa() || 'GET' !== ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
+		if ( 'GET' !== ( $_SERVER['REQUEST_METHOD'] ?? 'GET' ) ) {
 			return;
+		}
+		if ( ! self::activa() ) {
+			// PWA apagada: quien ya la tenía instalada recibe un service worker que se retira solo.
+			if ( self::es_ruta( ServiceWorker::RUTA ) ) {
+				$this->responder( 'text/javascript', ServiceWorker::contenido_apagado() );
+			}
+			return;
+		}
+		if ( self::es_ruta( ServiceWorker::RUTA_SIN_CONEXION ) ) {
+			$this->responder( 'text/html', ServiceWorker::pagina_sin_conexion() );
 		}
 		if ( self::es_ruta( self::RUTA_MANIFIESTO ) ) {
 			$this->responder( 'application/manifest+json', (string) wp_json_encode( Manifiesto::construir(), JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT ) );
@@ -89,7 +99,7 @@ final class Pwa {
 			return;
 		}
 		echo '<link rel="manifest" href="' . esc_url( self::url_manifiesto() ) . "\">\n";
-		echo '<meta name="theme-color" content="' . esc_attr( Manifiesto::COLOR_TEMA ) . "\">\n";
+		echo '<meta name="theme-color" content="' . esc_attr( Manifiesto::color_tema() ) . "\">\n";
 		echo "<meta name=\"mobile-web-app-capable\" content=\"yes\">\n";
 		echo "<meta name=\"apple-mobile-web-app-capable\" content=\"yes\">\n";
 		echo '<meta name="apple-mobile-web-app-title" content="' . esc_attr( Manifiesto::nombre_corto() ) . "\">\n";

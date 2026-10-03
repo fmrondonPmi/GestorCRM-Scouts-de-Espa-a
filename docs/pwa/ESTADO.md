@@ -1,7 +1,7 @@
 # PWA · estado
 
-**Plugin:** v0.12.3 en el código. La PWA saldrá como **v0.13.0** al cerrar la sección 6.
-**Última actualización:** 2026-09-30.
+**Plugin:** v0.17.0 (la PWA, secciones 1 y 2, entra en el plugin desde esta versión; antes se empaquetaba aparte). Ya **publicable** con lo de las secciones 1–2: ver `MANUAL-PUBLICACION.md`. Las secciones 3–5 son mejoras.
+**Última actualización:** 2026-10-03.
 
 > ⚠ **2026-10-02: el plugin y estos docs ya no están en la carpeta antigua del proyecto.** Viven en el repo git `C:\Proyectos\GestorCRM` (`asde-area-privada/`, `manual/`, `docs/`; ver `CLAUDE.md`): trabajar y commitear allí. Esta carpeta `docs/` (y `docs/pwa/`) sigue siendo común.
 
@@ -12,7 +12,8 @@
 | 3 | **Invitación a instalar** (Android: aviso del navegador; iPhone: guía «Añadir a pantalla de inicio») | ⏳ |
 | 4 | **Experiencia de app:** modo pantalla completa (ocultar cabecera del tema), zonas seguras, atrás, recarga | ⏳ |
 | 5 | **Ajustes en administración** (activar/desactivar, nombre, colores, icono), «Instalación y entorno» y «Comprobar el hosting» | ⏳ |
-| 6 | **Cierre:** pruebas en conjunto, docs del proyecto (00, 03, 06, 09, 10, 21), zip v0.13.0 | ⏳ |
+| 6 | **Cierre** de las secciones 3–5: pruebas en conjunto, docs del proyecto, manual de uso y zip (el manual de publicación ya está hecho) | ⏳ |
+| — | **Actualización a la v0.16/0.17** (2026-10-03): colores del grupo, idiomas, apagado limpio, manual de publicación | ✅ |
 | 7 | *(Opcional, más adelante)* Notificaciones push | — |
 
 ## Siguiente paso
@@ -23,3 +24,11 @@
 - 2026-09-30: **sección 1 hecha.** Ficheros: `src/Pwa/{Pwa,Manifiesto,Iconos}.php`, `assets/pwa/icono-{192,512,maskable-512,apple-180}.png` (generados con GD: tienda blanca sobre morado #632599), `tests/pwa.php` (55 comprobaciones, TODO OK; incluye un GET real al manifiesto), una línea `use` y otra `( new Pwa() )->register();` en `src/Plugin.php`. Comprobado con `curl`: el manifiesto se sirve con `application/manifest+json`, 200, `no-cache`; las etiquetas salen en la página pública *Acceso socios*. Filtros disponibles: `asde_ap_pwa_activa`, `asde_ap_pwa_nombre`, `asde_ap_pwa_nombre_corto`. Desplegado en Local (`localhost:10011`).
 - 2026-09-30: **sección 2 hecha.** Ficheros nuevos: `src/Pwa/ServiceWorker.php` (config + contenido), `assets/pwa/sw.js` (plantilla; PHP sustituye `__ASDE_CONFIG__`), `assets/pwa/sin-conexion.html` (estática, SVG en línea, sin recursos externos), `assets/pwa/registro.js`; cambios en `Pwa.php` (ruta `/asde-sw.js`, método común `responder()`, `registro()` que encola `registro.js` con `window.asdePwa={sw,alcance}` en las páginas del área). **Qué guarda el SW:** solo la página «sin conexión» (de antemano) y los estáticos de `plugins/asde-area-privada/assets/` (CSS/JS/iconos; respuestas 200 `basic`, «guardada y refresco por detrás»). **Nunca:** páginas navegadas (red siempre; solo si falla la red → «sin conexión»; un 500 se ve tal cual), POST, JSON/ventana emergente, `uploads/`, otros orígenes. Caché `asde-pwa-<versión>`: se borran las antiguas al activarse; al subir la versión del plugin el SW se actualiza solo (`skipWaiting` + `claim`). `tests/pwa.php` ahora tiene **88 comprobaciones, TODO OK** (incluye GET reales a `/asde-sw.js` y a la página sin conexión). Además se probó la **lógica del SW con simulaciones en el navegador** (17 casos: install, activate, POST, otro origen, JSON, uploads, navegación con/sin red, 500, estáticos guardados/no guardados, respuestas no 200 u opacas): todos OK. **Límite de la prueba:** el navegador integrado de la app de escritorio **no permite registrar ningún service worker** (falla hasta uno de prueba), así que el registro real y el modo sin conexión **aún no se han visto en un navegador de verdad**: pendiente de comprobar en Chrome (Claude in Chrome o el móvil del usuario) antes del cierre (sección 6).
 - 2026-09-30: **coordinación:** otra sesión («Scouts de Balears área privada») cierra la v0.12.3 en el mismo plugin (Instantanea, PersonaRepository, Escritura, area.js, area-privada.css, docs 00/03/04/08/26). Acuerdo: yo solo toco `src/Pwa/`, `assets/pwa/`, `tests/pwa.php`, `docs/pwa/` y las 2 líneas de `Plugin.php`; en CSS/JS/docs comunes solo añadiré bloques nuevos tras releer; versión propia v0.13.0 y zip propio; su zip 0.12.3 va sin Pwa. **Antes de tocar `Plugin.php`, `area-privada.css` o el índice 00, releerlos.**
+- 2026-10-03: **actualización a la última versión de la app (0.16.0 → 0.17.0) y manual de publicación.** El plugin se había movido al repo `C:\Proyectos\GestorCRM` (2026-10-02) con la PWA dentro; se adaptó la PWA a lo nuevo de la 0.15/0.16:
+  - **Colores** (doc 28, pendiente que dejó la otra sesión): `Manifiesto::colores()`/`color_tema()` leen `Colores::para_email()` (validados como `#rrggbb`, con el morado de siempre como respaldo); sirven para `theme-color`, el manifiesto y la página sin conexión.
+  - **Idiomas** (regla del `CLAUDE.md`): nombre corto, descripción y página sin conexión por `asde_t()`; `src/Pwa/` ya **no** está excluido del `Extractor` (grupo «App móvil»); 5 textos nuevos en `es.php` (regenerado) y en `ca/eu/gl` (primera versión, sin revisión nativa: misma situación que P-46/P-47). `lang` del manifiesto = idioma actual.
+  - **Página «sin conexión» ahora la genera PHP** (`/asde-sin-conexion`, plantilla `templates/pwa/sin-conexion.php`, sobreescribible desde el tema) en vez de un HTML estático; la `version` del service worker lleva una huella de esa página (`0.17.0-xxxxxxxx`): si cambian los colores o el idioma, el SW cambia y se vuelve a guardar. Se borró `assets/pwa/sin-conexion.html`.
+  - **Apagado limpio:** con `asde_ap_pwa_activa` a `false`, `/asde-sw.js` sirve `assets/pwa/sw-apagado.js` (borra cachés `asde-pwa-*` y se da de baja), para que las apps ya instaladas se retiren solas.
+  - `tests/pwa.php`: **108 comprobaciones** (antes 88), TODO OK; sin `|| true` ni condiciones vacías (regla del `CLAUDE.md`); los colores que cambia se restauran en un `finally`.
+  - **Manual de publicación** nuevo: `MANUAL-PUBLICACION.md` (requisitos, subida, caché LiteSpeed/CDN, `curl`, móviles, apagado, texto para familias, lo no probado).
+  - Sigue **sin verse el registro del service worker en un navegador real** (ver 2026-09-30) ni la instalación en móviles ni las cabeceras en Hostinger: está en el §13 del manual.

@@ -10,7 +10,9 @@
  */
 defined( 'ABSPATH' ) || exit;
 
+use AsdeBalears\AreaPrivada\Frontend\Colores;
 use AsdeBalears\AreaPrivada\Frontend\Pages;
+use AsdeBalears\AreaPrivada\Idiomas\Idioma;
 use AsdeBalears\AreaPrivada\Pwa\Iconos;
 use AsdeBalears\AreaPrivada\Pwa\Manifiesto;
 use AsdeBalears\AreaPrivada\Pwa\Pwa;
@@ -34,18 +36,44 @@ $ok( 'standalone' === $m['display'], 'se abre como aplicación (standalone)' );
 $ok( str_ends_with( $m['scope'], '/' ), 'el alcance termina en /' );
 $ok( str_starts_with( $m['start_url'], $m['scope'] ), 'la página de inicio está dentro del alcance' );
 $ok( $m['id'] === $m['scope'], 'el id es el alcance (estable aunque cambie la página de inicio)' );
-$ok( Pages::id( 'area' ) > 0 ? str_contains( $m['start_url'], 'area-privada' ) : true, 'el inicio es la página «Área privada»' );
+$ok( Pages::id( 'area' ) > 0, 'existe la página «Área privada» en este WordPress' );
+$ok( $m['start_url'] === Pages::url( 'area' ), 'el inicio es la página «Área privada»' );
 $ok( 1 === preg_match( '/^#[0-9a-f]{6}$/i', $m['theme_color'] ) && 1 === preg_match( '/^#[0-9a-f]{6}$/i', $m['background_color'] ), 'colores en hexadecimal' );
-$ok( '#632599' === $m['theme_color'], 'color del tema = morado del doc 06' );
+$ok( Colores::para_email()['primary'] === $m['theme_color'], 'el color del tema es el principal de la pantalla «Colores»' );
 $ok( 'Área privada' === $m['short_name'], 'nombre corto «Área privada»' );
 $ok( str_starts_with( $m['name'], 'Área privada' ), 'el nombre completo empieza por «Área privada»' );
+$ok( 'es' === $m['lang'], 'idioma del manifiesto: el del sitio (es)' );
+
+// ── Colores e idiomas (v0.15) ────────────────────────────────────────────────
+echo "\n── Colores del grupo e idioma\n";
+$colores_antes = Colores::guardados();
+try {
+	Colores::restablecer();
+	$ok( '#632599' === Manifiesto::color_tema(), 'sin colores elegidos: el morado de siempre' );
+	Colores::guardar( array( 'primary' => '#0a5c36' ) );
+	$ok( '#0a5c36' === Manifiesto::color_tema(), 'con el color principal elegido, el tema lo sigue' );
+	$ok( '#0a5c36' === Manifiesto::construir()['theme_color'], '…también en el manifiesto' );
+	$sw_verde = ServiceWorker::config()['version'];
+	Colores::restablecer();
+	$ok( $sw_verde !== ServiceWorker::config()['version'], 'al cambiar los colores cambia el service worker (se vuelve a guardar la página sin conexión)' );
+} finally {
+	Colores::restablecer();
+	if ( $colores_antes ) {
+		Colores::guardar( $colores_antes );
+	}
+}
+$ok( $colores_antes === Colores::guardados(), 'colores restaurados como estaban' );
+foreach ( array( 'ca' => 'Àrea privada', 'eu' => 'Eremu pribatua', 'gl' => 'Área privada' ) as $cod => $esperado ) {
+	$nombre = Idioma::en( $cod, static fn() => Manifiesto::nombre_corto() );
+	$ok( $esperado === $nombre, "nombre corto en «{$cod}»: {$esperado}" );
+}
+$ok( 'es' === Idioma::actual() && 'Área privada' === Manifiesto::nombre_corto(), 'tras las pruebas el idioma sigue siendo el del sitio' );
 $json = wp_json_encode( $m, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE );
 $ok( is_array( json_decode( (string) $json, true ) ), 'es JSON válido' );
 $ok( false === stripos( (string) $json, 'user' ) && false === stripos( (string) $json, '@' ), 'no lleva datos de personas ni emails' );
 
 // ── Iconos genéricos ─────────────────────────────────────────────────────────
 echo "\n── Iconos genéricos (sin icono del sitio)\n";
-$ok( ! Iconos::del_sitio() || true, 'comprobación de icono del sitio (depende de cada WordPress)' );
 add_filter( 'pre_option_site_icon', '__return_zero', 99 );
 $ic = Iconos::manifiesto();
 $ok( ! Iconos::del_sitio(), 'sin «Icono del sitio» se usan los del plugin' );
@@ -113,7 +141,7 @@ if ( $area_id ) {
 	$ok( 'area' === Pages::current_key(), 'preparada la página «Área privada»' );
 	$h = $head();
 	$ok( str_contains( $h, '<link rel="manifest" href="' . Pwa::url_manifiesto() . '">' ), 'enlaza el manifiesto' );
-	$ok( str_contains( $h, '<meta name="theme-color" content="#632599">' ), 'color del tema' );
+	$ok( str_contains( $h, '<meta name="theme-color" content="' . Manifiesto::color_tema() . '">' ), 'color del tema' );
 	$ok( str_contains( $h, 'apple-mobile-web-app-capable' ) && str_contains( $h, 'mobile-web-app-capable' ), 'modo aplicación (Apple y estándar)' );
 	$ok( str_contains( $h, 'apple-mobile-web-app-title" content="Área privada"' ), 'título bajo el icono en iPhone' );
 	$ok( str_contains( $h, 'rel="apple-touch-icon"' ), 'icono de iPhone' );
@@ -145,8 +173,8 @@ if ( is_wp_error( $r ) ) {
 // ═══ SECCIÓN 2 · service worker y página «sin conexión» ═══════════════════════
 echo "\n── Service worker: configuración y contenido\n";
 $cfg = ServiceWorker::config();
-$ok( ASDE_AP_VERSION === $cfg['version'], 'la versión del service worker es la del plugin (así se actualiza con el plugin)' );
-$ok( str_ends_with( $cfg['offline'], '/assets/pwa/sin-conexion.html' ), 'la página sin conexión es la del plugin' );
+$ok( 1 === preg_match( '/^' . preg_quote( ASDE_AP_VERSION, '/' ) . '-[0-9a-f]{8}$/', $cfg['version'] ), 'la versión del service worker lleva la del plugin y una huella de la página sin conexión (así se actualiza)' );
+$ok( home_url( '/asde-sin-conexion' ) === $cfg['offline'], 'la página sin conexión cuelga de la raíz del sitio' );
 $ok( array( $cfg['offline'] ) === $cfg['precache'], 'lo único que se guarda de antemano es la página sin conexión' );
 $ok( str_starts_with( $cfg['estaticos'], '/' ) && str_ends_with( $cfg['estaticos'], '/asde-area-privada/assets/' ), 'los estáticos son solo la carpeta assets/ del plugin' );
 $js = ServiceWorker::contenido();
@@ -161,13 +189,25 @@ $ok( ! str_contains( $js, 'application/json' ) && ! str_contains( $js, 'X-Asde' 
 $ok( str_contains( $js, 'self.skipWaiting()' ) && str_contains( $js, 'self.clients.claim()' ) && str_contains( $js, 'caches.delete' ), 'se activa al instalarse y borra las cachés de versiones antiguas' );
 
 echo "\n── Página «sin conexión»\n";
-$html = (string) file_get_contents( ASDE_AP_DIR . 'assets/pwa/sin-conexion.html' );
-$ok( '' !== $html && str_contains( $html, 'Sin conexión' ), 'existe y dice «Sin conexión»' );
-$ok( ! str_contains( $html, '<?php' ), 'es estática (sin PHP)' );
+$html = ServiceWorker::pagina_sin_conexion();
+$ok( str_contains( $html, '<h1>Sin conexión</h1>' ) && str_contains( $html, 'lang="es"' ), 'dice «Sin conexión», en el idioma del sitio' );
+$ok( ! str_contains( $html, '<?php' ), 'sale de la plantilla ya resuelta' );
 $ok( ! preg_match( '#(?:src|href)\s*=\s*["\']?(?:https?:)?//#i', $html ) && ! str_contains( $html, '<img' ) && ! str_contains( $html, '<link' ) && ! str_contains( $html, '<script src' ), 'no carga nada de fuera (funciona sin red)' );
 $ok( str_contains( $html, 'noindex' ), 'no se indexa' );
 $ok( str_contains( $html, 'location.reload' ) && str_contains( $html, "'online'" ), 'tiene «Reintentar» y se recarga sola al volver la red' );
 $ok( ! preg_match( '/\b(nombre|email|dni|iban|socio n)/i', wp_strip_all_tags( $html ) ), 'no contiene datos de personas' );
+$ok( str_contains( $html, 'content="' . Manifiesto::color_tema() . '"' ), 'usa el color del grupo' );
+foreach ( array( 'ca' => 'Sense connexió', 'eu' => 'Konexiorik ez', 'gl' => 'Sen conexión' ) as $cod => $titulo ) {
+	$tr = Idioma::en( $cod, static fn() => ServiceWorker::pagina_sin_conexion() );
+	$ok( str_contains( $tr, "<h1>{$titulo}</h1>" ) && str_contains( $tr, "lang=\"{$cod}\"" ), "la página sin conexión sale en «{$cod}»: {$titulo}" );
+}
+$ok( ServiceWorker::pagina_sin_conexion() === $html, 'tras traducirla, vuelve al idioma del sitio' );
+$ok( ! file_exists( ASDE_AP_DIR . 'assets/pwa/sin-conexion.html' ), 'ya no queda la página estática antigua' );
+
+echo "\n── PWA apagada: el service worker se retira solo\n";
+$off = ServiceWorker::contenido_apagado();
+$ok( str_contains( $off, 'self.registration.unregister()' ) && str_contains( $off, 'caches.delete' ) && str_contains( $off, 'self.skipWaiting()' ), 'el service worker de apagado borra las cachés de la PWA y se da de baja' );
+$ok( ! str_contains( $off, "addEventListener( 'fetch'" ) && ! str_contains( $off, '.put(' ), 'y no intercepta ni guarda nada' );
 
 echo "\n── Registro del service worker en el <head>/pie\n";
 if ( $area_id ) {
@@ -204,8 +244,10 @@ if ( is_wp_error( $r ) ) {
 	$ok( false !== stripos( (string) wp_remote_retrieve_header( $r, 'cache-control' ), 'no-cache' ), 'Cache-Control: no-cache (si no, no se actualizaría)' );
 	$ok( wp_remote_retrieve_body( $r ) === $js, 'lo servido es el service worker con su configuración' );
 	$ok( false !== stripos( (string) wp_remote_retrieve_header( $r, 'x-robots-tag' ), 'noindex' ), 'X-Robots-Tag: noindex' );
-	$off = wp_remote_get( $cfg['offline'], array( 'timeout' => 10, 'sslverify' => false ) );
-	$ok( ! is_wp_error( $off ) && 200 === wp_remote_retrieve_response_code( $off ), 'la página sin conexión se sirve (200)' );
+	$sin = wp_remote_get( $cfg['offline'], array( 'timeout' => 10, 'sslverify' => false ) );
+	$ok( ! is_wp_error( $sin ) && 200 === wp_remote_retrieve_response_code( $sin ), 'la página sin conexión se sirve (200)' );
+	$ok( ! is_wp_error( $sin ) && str_starts_with( (string) wp_remote_retrieve_header( $sin, 'content-type' ), 'text/html' ) && wp_remote_retrieve_body( $sin ) === $html, 'es HTML y es la página sin conexión' );
+	$ok( ! is_wp_error( $sin ) && false !== stripos( (string) wp_remote_retrieve_header( $sin, 'cache-control' ), 'no-cache' ), 'Cache-Control: no-cache en la página sin conexión' );
 }
 
-echo $fails ? "\n$fails FALLOS\n" : "\nTODO OK (nada tocado: solo lectura)\n";
+echo $fails ? "\n$fails FALLOS\n" : "\nTODO OK (los colores que se cambian en la prueba se restauran; lo demás es solo lectura)\n";

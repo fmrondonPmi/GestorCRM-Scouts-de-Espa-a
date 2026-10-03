@@ -18,7 +18,7 @@ Plugin de WordPress (`asde-area-privada/`, PHP ≥ 8.0, namespace `AsdeBalears\A
 - `Frontend/Views/*View` (extienden `View`) → un shortcode cada una, registrado en `Router::VIEWS`; las páginas se crean en `Pages::DEFINICIONES`. Plantillas en `templates/` (`TemplateLoader`, sobreescribibles desde el tema). Las acciones POST entran por `handle_post()` desde `Router::template_redirect`.
 - `Crm/` → cliente SinergiaCRM v4_1 (`SinergiaV41Client`), `PersonaRepository` (lectura de fichas), `Escritura` (**única puerta de escritura** en el CRM), `Instantanea` (caché cifrada de fichas), `Crypto` (libsodium), `Permisos`, `Metadatos`.
 - `Domain/` → `Grupo(s)` (cada grupo con sus credenciales; **sin visibilidad entre grupos**), `Persona`, `NumeroSocio`, `Identidad` (qué número es el usuario: nº de Scouts de España o territorial), `Organizacion`, `Secciones`.
-- `Usuarios/`, `Auth/`, `Socios/` (numeración), `Fichas/`, `Informes/`, `Tesoreria/`, `Uniformes/`, `Sepa/`, `Pwa/` (de otra sesión) → el resto de módulos.
+- `Usuarios/`, `Auth/`, `Socios/` (numeración), `Fichas/`, `Informes/`, `Tesoreria/`, `Uniformes/`, `Sepa/`, `Pwa/` (app móvil, desde la v0.17; `docs/pwa/`) → el resto de módulos.
 - Datos propios: tablas `{prefix}asde_*` y opciones `asde_ap_*`. **En WordPress no se guardan datos personales en claro**: lo que haga falta se guarda cifrado (`Crypto`) y caduca.
 
 ## Reglas que no se discuten
@@ -41,7 +41,7 @@ Plugin de WordPress (`asde-area-privada/`, PHP ≥ 8.0, namespace `AsdeBalears\A
 5. **Entrega**: subir `ASDE_AP_VERSION` y `Version:` en `asde-area-privada.php`; actualizar `docs/` (00, el del módulo, 10 con el recuento de pruebas, 09 si hay decisiones); generar el zip (ver abajo); dejar el resumen al usuario en español, con lo que tiene que decidir o hacer en producción.
 
 ### Zip
-`construir-zip.ps1` (PowerShell, con la herramienta PowerShell: `& 'ruta\construir-zip.ps1'`; sin `-Version` toma la de la cabecera del plugin) crea `asde-area-privada-<versión>.zip` **sin `tests/`** y con rutas `/`. **No sobrescribe** un zip que ya existe (los de versiones anteriores se conservan) salvo con `-Sobrescribir`: el 2026-10-03 la versión fija por defecto del script machacó el zip de la 0.12.0. Si hay trabajo ajeno a medias dentro del plugin (p. ej. la PWA), empaquetar desde una **copia** sin esa parte y apuntar el script a ella con la variable `ASDE_ZIP_SRC`.
+`construir-zip.ps1` (PowerShell, con la herramienta PowerShell: `& 'ruta\construir-zip.ps1'`; sin `-Version` toma la de la cabecera del plugin) crea `asde-area-privada-<versión>.zip` **sin `tests/`** y con rutas `/`. **No sobrescribe** un zip que ya existe (los de versiones anteriores se conservan) salvo con `-Sobrescribir`: el 2026-10-03 la versión fija por defecto del script machacó el zip de la 0.12.0. Desde la v0.17.0 la PWA **va en el zip** (`src/Pwa/`, `assets/pwa/`, `templates/pwa/`). Si algún día hay trabajo ajeno a medias dentro del plugin, empaquetar desde una **copia** sin esa parte y apuntar el script a ella con la variable `ASDE_ZIP_SRC`.
 
 ## Trampas del entorno (Windows + Local)
 
@@ -69,7 +69,7 @@ Cada consulta al CRM cuesta 0,5–1,5 s (el tamaño casi no importa) y el resto 
 
 ## Trabajo en paralelo con otra sesión
 
-Otra sesión de Claude (la de la **PWA**; ahora también debe trabajar en `C:\Proyectos\GestorCRM\asde-area-privada`, no en la carpeta antigua) edita el mismo plugin: solo toca `src/Pwa/`, `assets/pwa/`, `tests/pwa.php`, `docs/pwa/` y dos líneas de `src/Plugin.php`. **Releer** `Plugin.php`, el CSS y los docs comunes antes de editarlos, no reescribirlos enteros y usar versiones distintas (la PWA saldrá como 0.13.0). No pisar ni empaquetar su trabajo a medias.
+La **PWA** (carpeta `docs/pwa/`: leer `README.md` y `ESTADO.md` antes de tocarla) entró en el plugin en la **v0.17.0** y la mantiene la sesión «Conversión de sitio WordPress a app móvil»: solo toca `src/Pwa/`, `assets/pwa/`, `templates/pwa/`, `tests/pwa.php`, `docs/pwa/` y dos líneas de `src/Plugin.php`. Si dos sesiones trabajan a la vez: **releer** `Plugin.php`, el CSS y los docs comunes antes de editarlos y no reescribirlos enteros. La PWA usa colores e idiomas del plugin (`Colores`, `asde_t()`): al añadirle textos, seguir la regla de idiomas de arriba. **Publicar en producción** (lo hace el usuario): `docs/pwa/MANUAL-PUBLICACION.md`.
 
 ## Documentación: cuándo y dónde
 

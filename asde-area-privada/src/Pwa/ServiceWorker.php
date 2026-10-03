@@ -1,6 +1,9 @@
 <?php
 namespace AsdeBalears\AreaPrivada\Pwa;
 
+use AsdeBalears\AreaPrivada\Frontend\TemplateLoader;
+use AsdeBalears\AreaPrivada\Idiomas\Idioma;
+
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -9,11 +12,27 @@ defined( 'ABSPATH' ) || exit;
  */
 final class ServiceWorker {
 
-	public const RUTA = 'asde-sw.js';
+	public const RUTA              = 'asde-sw.js';
+	public const RUTA_SIN_CONEXION = 'asde-sin-conexion';
 
-	/** Página «sin conexión»: estática y sin datos de nadie. */
+	/** Dirección de la página «sin conexión» (la genera PHP: color del grupo e idioma de quien la pide). */
 	public static function url_sin_conexion(): string {
-		return plugins_url( 'assets/pwa/sin-conexion.html', ASDE_AP_FILE );
+		return home_url( '/' . self::RUTA_SIN_CONEXION );
+	}
+
+	/** HTML de la página «sin conexión»: sin datos de nadie y sin recursos externos. */
+	public static function pagina_sin_conexion(): string {
+		$c = Manifiesto::colores();
+		return TemplateLoader::render(
+			'pwa/sin-conexion',
+			array(
+				'lang'     => Idioma::actual(),
+				'primario' => $c['primary'],
+				'sobre'    => $c['on_primary'],
+				'texto'    => $c['texto'],
+				'atenuado' => $c['atenuado'],
+			)
+		);
 	}
 
 	/** Carpeta (ruta) de los ficheros estáticos del plugin: lo único que se guarda además de «sin conexión». */
@@ -21,10 +40,15 @@ final class ServiceWorker {
 		return (string) wp_parse_url( plugins_url( 'assets/', ASDE_AP_FILE ), PHP_URL_PATH );
 	}
 
-	/** @return array{version:string, offline:string, precache:string[], estaticos:string} */
+	/**
+	 * La versión lleva una huella de la página «sin conexión»: si cambian los colores o el idioma,
+	 * el service worker cambia, el navegador lo actualiza y vuelve a guardar la página nueva.
+	 *
+	 * @return array{version:string, offline:string, precache:string[], estaticos:string}
+	 */
 	public static function config(): array {
 		return array(
-			'version'   => ASDE_AP_VERSION,
+			'version'   => ASDE_AP_VERSION . '-' . substr( md5( self::pagina_sin_conexion() ), 0, 8 ),
 			'offline'   => self::url_sin_conexion(),
 			'precache'  => array( self::url_sin_conexion() ),
 			'estaticos' => self::ruta_estaticos(),
@@ -35,5 +59,10 @@ final class ServiceWorker {
 	public static function contenido(): string {
 		$js = (string) file_get_contents( ASDE_AP_DIR . 'assets/pwa/sw.js' );
 		return str_replace( '__ASDE_CONFIG__', (string) wp_json_encode( self::config(), JSON_UNESCAPED_SLASHES ), $js );
+	}
+
+	/** Con la PWA apagada: un service worker que borra sus cachés y se da de baja. */
+	public static function contenido_apagado(): string {
+		return (string) file_get_contents( ASDE_AP_DIR . 'assets/pwa/sw-apagado.js' );
 	}
 }
