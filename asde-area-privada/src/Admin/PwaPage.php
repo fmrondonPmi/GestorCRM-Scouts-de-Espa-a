@@ -8,7 +8,9 @@ use AsdeBalears\AreaPrivada\Pwa\Ajustes;
 use AsdeBalears\AreaPrivada\Pwa\Comprobacion;
 use AsdeBalears\AreaPrivada\Pwa\Iconos;
 use AsdeBalears\AreaPrivada\Pwa\Manifiesto;
+use AsdeBalears\AreaPrivada\Pwa\Push;
 use AsdeBalears\AreaPrivada\Pwa\Pwa;
+use AsdeBalears\AreaPrivada\Pwa\WebPush;
 use AsdeBalears\AreaPrivada\Pwa\ServiceWorker;
 use AsdeBalears\AreaPrivada\Pwa\Suscripciones;
 use AsdeBalears\AreaPrivada\Pwa\Vapid;
@@ -27,12 +29,14 @@ final class PwaPage {
 	private const CAPABILITY = 'manage_options';
 	private const ACCION     = 'asde_ap_pwa';
 	private const COMPROBAR  = 'asde_ap_pwa_comprobar';
+	private const PRUEBA     = 'asde_ap_pwa_prueba';
 	private const AVISO      = 'asde_ap_pwa_aviso_';
 
 	public function register(): void {
 		add_action( 'admin_menu', array( $this, 'add_menu' ), 12 );
 		add_action( 'admin_post_' . self::ACCION, array( $this, 'handle_guardar' ) );
 		add_action( 'admin_post_' . self::COMPROBAR, array( $this, 'handle_comprobar' ) );
+		add_action( 'admin_post_' . self::PRUEBA, array( $this, 'handle_prueba' ) );
 	}
 
 	public static function url(): string {
@@ -108,6 +112,42 @@ final class PwaPage {
 		exit;
 	}
 
+	/** «Enviar aviso de prueba a mi móvil»: manda ya un aviso genérico a los móviles de quien pulsa (sin cola, sin categorías). */
+	public function handle_prueba(): void {
+		if ( ! current_user_can( self::CAPABILITY ) ) {
+			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-area-privada' ), 403 );
+		}
+		check_admin_referer( self::PRUEBA );
+		$uid = get_current_user_id();
+		if ( ! Push::activo() ) {
+			$this->aviso( 'error', 'Los avisos push no están en marcha: enciéndelos (casilla «Avisos push») y guarda.' );
+		} elseif ( 0 === Suscripciones::cuantos( $uid ) ) {
+			$this->aviso( 'error', 'Tu cuenta no tiene ningún móvil con avisos activados. Abre el inicio del área en tu móvil (con la app instalada si es un iPhone), pulsa «Activar avisos» y acepta el permiso. Luego vuelve a probar.' );
+		} else {
+			$res    = Push::enviar_ahora( $uid );
+			$bien   = count( array_filter( $res, static fn( $r ) => WebPush::OK === $r['estado'] ) );
+			$muerto = count( array_filter( $res, static fn( $r ) => WebPush::MUERTA === $r['estado'] ) );
+			$codigos = implode( ', ', array_unique( array_map( static fn( $r ) => (string) $r['codigo'], $res ) ) );
+			Logger::log(
+				'push_prueba',
+				'cuenta',
+				(string) $uid,
+				array(
+					'moviles' => count( $res ),
+					'enviados' => $bien,
+					'muertos' => $muerto,
+				)
+			);
+			if ( $bien === count( $res ) ) {
+				$this->aviso( 'success', sprintf( 'Aviso de prueba enviado a %d móvil(es). Debería salir en unos segundos como «%s».', $bien, asde_t( 'Tienes una novedad en el área privada' ) ) );
+			} else {
+				$this->aviso( 'error', sprintf( 'Enviado a %1$d de %2$d móvil(es). %3$d ya no existían y se han quitado. Códigos del servicio de avisos: %4$s.', $bien, count( $res ), $muerto, $codigos ) );
+			}
+		}
+		wp_safe_redirect( self::url() . '#asde-pwa-push' );
+		exit;
+	}
+
 	/** @return array<string, string> estado => etiqueta */
 	private static function etiquetas(): array {
 		return array(
@@ -165,7 +205,7 @@ final class PwaPage {
 								<?php esc_html_e( 'Ofrecer a las personas activar avisos en el móvil (notificaciones push)', 'asde-area-privada' ); ?>
 							</label>
 							<p class="description">
-								<?php esc_html_e( 'Aparece una tarjeta «Avisos en este móvil» en el inicio del área. El aviso es siempre genérico («Tienes una novedad en el área privada»): no lleva nombres ni datos. Cada persona decide en su móvil y por categoría. En iPhone solo funciona con la app instalada (iOS 16.4 o posterior). Se suma al email, no lo sustituye. De momento solo se pueden activar y desactivar los avisos en cada móvil: el envío llega en la siguiente versión.', 'asde-area-privada' ); ?>
+								<?php esc_html_e( 'Aparece una tarjeta «Avisos en este móvil» en el inicio del área. El aviso es siempre genérico («Tienes una novedad en el área privada»): no lleva nombres ni datos. Cada persona decide en su móvil y por categoría. En iPhone solo funciona con la app instalada (iOS 16.4 o posterior). Se suma al email, no lo sustituye.', 'asde-area-privada' ); ?>
 							</p>
 							<p class="description">
 								<?php
@@ -246,6 +286,17 @@ final class PwaPage {
 					</tr>
 				</tbody>
 			</table>
+
+			<h2 id="asde-pwa-push"><?php esc_html_e( 'Aviso de prueba', 'asde-area-privada' ); ?></h2>
+			<p><?php esc_html_e( 'Manda ya un aviso a los móviles de tu cuenta, para comprobar que llega. No lleva datos: es el aviso genérico «Tienes una novedad en el área privada». Primero tienes que activar los avisos en tu móvil desde el inicio del área.', 'asde-area-privada' ); ?></p>
+			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+				<input type="hidden" name="action" value="<?php echo esc_attr( self::PRUEBA ); ?>">
+				<?php wp_nonce_field( self::PRUEBA ); ?>
+				<?php submit_button( __( 'Enviar aviso de prueba a mi móvil', 'asde-area-privada' ), 'secondary', 'submit', false, Push::activo() ? array() : array( 'disabled' => 'disabled' ) ); ?>
+				<?php if ( ! Push::activo() ) : ?>
+					<span class="description"><?php esc_html_e( 'Enciende los avisos push (casilla de arriba) y guarda para poder probar.', 'asde-area-privada' ); ?></span>
+				<?php endif; ?>
+			</form>
 
 			<h2 id="asde-pwa-servidor"><?php esc_html_e( 'Comprobar el servidor', 'asde-area-privada' ); ?></h2>
 			<p><?php esc_html_e( 'El sitio se pide a sí mismo las tres direcciones de la app y comprueba que responden bien y que ninguna caché (LiteSpeed Cache, un CDN…) las guarda ni las cambia. Si alguna sale cacheada, los móviles no se enterarían de las actualizaciones. No cambia nada del sitio.', 'asde-area-privada' ); ?></p>

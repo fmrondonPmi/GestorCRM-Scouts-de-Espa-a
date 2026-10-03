@@ -188,3 +188,24 @@ Para ser claros con lo que está probado y lo que no:
 - [ ] Texto para familias enviado (§11)
 
 Relacionado: doc 18 (comprobar el hosting y el `.htaccess`), doc 19 (Instalación y entorno), doc 10 (pruebas y entorno), `ARQUITECTURA.md` y `ESTADO.md` de esta carpeta.
+
+## 15. Avisos push (v0.17.5): activarlos y probarlos
+
+Los avisos push son opcionales y vienen **apagados**. Decisiones del grupo (docs `PUSH.md` §9): cuatro grupos de avisos (uniforme, pagos y cargos, cambios de ficha, avisos del equipo), **texto genérico** («Tienes una novedad en el área privada», sin nombres ni importes) y **se suman al email**. En la v0.17.5 ya funcionan **la activación en cada móvil y el envío de prueba**; conectar los sucesos reales (un pedido cambia de estado, etc.) es el paso siguiente (7c).
+
+**Requisitos en producción:**
+- HTTPS (como la app) y la app instalada si es un iPhone (iOS 16.4 o posterior): sin instalar, el iPhone no admite avisos.
+- El servidor debe poder **salir** a los servicios de avisos (Google `fcm.googleapis.com`, Mozilla, Apple `web.push.apple.com`…). Hostinger suele permitirlo; si un cortafuegos lo impide, el aviso de prueba lo dirá con el código.
+- **WP-Cron** funcionando (doc 18): los avisos reales salen por la cola del WP-Cron. El aviso de prueba sale al momento, sin cola.
+- OpenSSL de PHP con curvas elípticas (Hostinger lo trae): las claves del servidor se crean solas al encender los avisos.
+
+**Pasos:**
+1. *Grupos Scouts → App móvil* → marca **«Avisos push»** → *Guardar* (se crean las claves del servidor).
+2. **En el móvil** (con la app instalada si es iPhone): abre el inicio del área, en la tarjeta **«Avisos en este móvil»** pulsa **«Activar avisos»** y acepta el permiso. Elige las categorías que quieras.
+3. En *App móvil* pulsa **«Enviar aviso de prueba a mi móvil»**: debe llegar «Tienes una novedad en el área privada» y, al pulsarlo, abrir el área. La pantalla dice a cuántos móviles de tu cuenta se mandó y, si alguno ya no existía, lo quita.
+
+**Importante:** el aviso **no se manda a un número de teléfono**: el navegador del móvil se «suscribe» con la web y el servicio de avisos del navegador entrega el mensaje a ese dispositivo. Por eso **el móvil tiene que abrir la web real (HTTPS)** para suscribirse: un WordPress en el ordenador (Local, `localhost`) no es accesible desde el móvil.
+
+**Si no llega:** (a) ¿se aceptó el permiso? (Ajustes del navegador o del móvil → notificaciones de la web); (b) la pantalla da un código: `403` = el servicio de avisos rechaza las claves del servidor (volver a suscribirse en el móvil), `410`/`404` = el móvil se dio de baja (se quita solo), `5xx`/`429` = el servicio está saturado (probar luego); (c) en iPhone, ¿se abrió desde el icono de la pantalla de inicio? (d) modo «No molestar» o ahorro de batería del móvil.
+
+**Apagar:** quitar la marca de «Avisos push» y guardar: la cola se vacía sin enviar y no se ofrece la tarjeta. Los móviles ya suscritos se conservan (cifrados) por si se vuelven a encender; si se apaga **toda la app**, el service worker de apagado también los da de baja.

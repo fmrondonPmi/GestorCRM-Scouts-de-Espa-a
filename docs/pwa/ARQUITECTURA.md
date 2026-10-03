@@ -36,6 +36,9 @@
 | `assets/pwa/push.js` | 7a (0.17.4) | Tarjeta «Avisos en este móvil» en el inicio del área (el permiso se pide al pulsar) |
 | `assets/pwa/sw.js` (parte push) | 7a (0.17.4) | `push` (texto siempre genérico; el mensaje solo trae la ruta) y `notificationclick` |
 | `tests/pwa-push.php` | 7a (0.17.4) | 121 comprobaciones; entra en la suite |
+| `src/Pwa/WebPush.php` | 7b (0.17.5) | Cifrado RFC 8291, JWT VAPID RFC 8292, envío y clasificación de la respuesta; solo a servicios de avisos conocidos |
+| `src/Pwa/Push.php` (cola) | 7b (0.17.5) | `encolar()`, `procesar_cola()` (WP-Cron), `enviar_ahora()` (aviso de prueba) |
+| `tests/pwa-envio.php`, `tests/lib/Rfc8291.php` | 7b (0.17.5) | 90 comprobaciones con los vectores del RFC 8291 (extraídos del RFC por script) |
 | `tests/pwa.php` | 1… | Pruebas (198 en la 0.17.2; no entra en `probar-todo.sh` sin argumentos) |
 
 ## Trampas conocidas
@@ -55,3 +58,6 @@
 - **Push: SSRF.** El servidor hará peticiones a la dirección de cada suscripción; por eso solo se admiten los servicios de avisos conocidos (`Suscripciones::hosts_permitidos()`), https y puerto 443, sin usuario ni clave.
 - **Push y OpenSSL de Windows:** `openssl_pkey_new()` falla («No such process») si PHP no encuentra un `openssl.cnf`; `Vapid::generar()` reintenta con `src/Pwa/openssl-minimo.cnf` (con `default_bits`, si no, avisa de «384 bits»). En Linux/Hostinger funciona sin él. `openssl_pkey_derive`, `aes-128-gcm` y `hash_hkdf` están disponibles (comprobado en PHP 8.5/OpenSSL 3.5).
 - **El permiso de notificaciones no se puede automatizar** (ni con la extensión de Chrome): se pide con un toque de la persona y lo concede ella en el navegador. Las pruebas del flujo usan una ventana falsa; la suscripción real la hace el usuario.
+- **Web Push no usa números de teléfono.** El navegador del dispositivo se «suscribe» (dirección del servicio de avisos + 2 claves) y el servidor envía a esa dirección. El móvil tiene que abrir la web real por HTTPS para suscribirse; un WordPress local no es accesible desde el móvil. Nunca se guarda un teléfono para esto.
+- **`wp_json_encode` escapa `/` como `\/`:** para el mensaje push se usa `JSON_UNESCAPED_SLASHES` (más corto y comparable en pruebas; ambos son JSON válido).
+- **Probar la criptografía sin móvil:** `tests/lib/Rfc8291.php` tiene el apéndice A del RFC 8291; `WebPush::derivar()` y `cifrar()` aceptan el par efímero y la sal para reproducirlo (en producción siempre son nuevos). Si algún día falla, comparar paso a paso (ECDH → PRK_key → IKM → PRK → CEK/nonce → cabecera → cifrado).

@@ -21,6 +21,6 @@ Convertir el área privada (plugin `asde-area-privada`) en una **PWA**: la misma
 
 ## Dónde está todo (desde el 2026-10-02, en el repo `C:\Proyectos\GestorCRM`)
 - Código: `asde-area-privada/src/Pwa/` (clases), `asde-area-privada/assets/pwa/` (iconos, `sw.js`, `sw-apagado.js`, `registro.js`, `instalar.js`, `instalar.css`, `app.js`, `app.css`), `asde-area-privada/templates/pwa/sin-conexion.php`, `asde-area-privada/src/Admin/PwaPage.php` (pantalla «App móvil»), `src/Pwa/Push.php` y compañía (notificaciones push, `PUSH.md`).
-- Pruebas: `asde-area-privada/tests/pwa.php` (198 comprobaciones; los ajustes, en `tests/pwa-ajustes.php`: 74, y las notificaciones push, en `tests/pwa-push.php`: 121, que sí entran en la suite). **`pwa.php` no** entra en `probar-todo.sh` sin argumentos (se salta a propósito): se lanza con `herramientas-desarrollo/probar-todo.sh pwa`.
+- Pruebas: `asde-area-privada/tests/pwa.php` (198 comprobaciones; los ajustes, en `tests/pwa-ajustes.php`: 74, las notificaciones push, en `tests/pwa-push.php`: 121, y el envío, en `tests/pwa-envio.php`: 90, que sí entran en la suite). **`pwa.php` no** entra en `probar-todo.sh` sin argumentos (se salta a propósito): se lanza con `herramientas-desarrollo/probar-todo.sh pwa`.
 - Entorno: WordPress en Local `http://localhost:10011`; `herramientas-desarrollo/wp-local.sh` (carpeta antigua del proyecto, fuera del repo).
 - La PWA forma parte del plugin desde la **v0.17.0**; los zips anteriores (≤ 0.16.0) se construyeron sin ella.

@@ -19,8 +19,158 @@ final class Push {
 	/** Categorías de avisos (P-PUSH-1: los cuatro grupos). */
 	public const CLAVES = array( 'uniforme', 'pagos', 'fichas', 'equipo' );
 
+	public const COLA      = 'asde_ap_push_cola';
+	public const HOOK_COLA = 'asde_ap_push_cola';
+	private const COLA_MAX = 500;  // Tope de avisos esperando: si se llena, se descartan los nuevos (nunca crece sin límite).
+	private const LOTE     = 20;   // Envíos por pasada del WP-Cron.
+	private const INTENTOS = 3;
+
 	public function register(): void {
 		add_action( 'wp_ajax_' . self::AJAX, array( $this, 'ajax' ) );
+		add_action( self::HOOK_COLA, array( self::class, 'procesar_cola' ) );
+	}
+
+	/** Ruta de una dirección de la app (lo único que viaja en el mensaje). */
+	public static function ruta_de( string $url ): string {
+		return (string) wp_parse_url( $url, PHP_URL_PATH );
+	}
+
+	/**
+	 * Pone en cola un aviso para una cuenta: uno por cada móvil suscrito, si tiene activada la categoría. El
+	 * aviso es genérico: solo viaja la página a la que llevar. Devuelve cuántos móviles quedan en cola.
+	 */
+	public static function encolar( int $user_id, string $categoria, string $ruta = '' ): int {
+		if ( ! self::activo() || ! in_array( $categoria, self::CLAVES, true ) || ! Suscripciones::categoria_activa( $user_id, $categoria ) ) {
+			return 0;
+		}
+		$ruta  = '' !== $ruta ? $ruta : self::ruta_de( Manifiesto::inicio() );
+		$cola  = self::cola();
+		$nuevo = 0;
+		foreach ( Suscripciones::de_usuario( $user_id ) as $d ) {
+			if ( count( $cola ) >= self::COLA_MAX ) {
+				break;
+			}
+			$cola[] = array(
+				'u' => $user_id,
+				'h' => $d['huella'],
+				'c' => $categoria,
+				'r' => $ruta,
+				'n' => 0,
+				't' => time(),
+			);
+			++$nuevo;
+		}
+		if ( $nuevo ) {
+			update_option( self::COLA, $cola, false );
+			self::programar( time() + 5 );
+		}
+		return $nuevo;
+	}
+
+	/** @return array<int, array{u:int, h:string, c:string, r:string, n:int, t:int}> */
+	public static function cola(): array {
+		$c = get_option( self::COLA, array() );
+		return is_array( $c ) ? array_values( $c ) : array();
+	}
+
+	private static function programar( int $cuando ): void {
+		if ( ! wp_next_scheduled( self::HOOK_COLA ) ) {
+			wp_schedule_single_event( max( time() + 1, $cuando ), self::HOOK_COLA );
+		}
+	}
+
+	/**
+	 * Manda los avisos de la cola que ya tocan (hasta `$max`) y reprograma lo que quede. Lo ejecuta el WP-Cron.
+	 *
+	 * @return array{enviados:int, muertas:int, reintentos:int, fallos:int, pendientes:int}
+	 */
+	public static function procesar_cola( int $max = self::LOTE ): array {
+		$res = array(
+			'enviados'   => 0,
+			'muertas'    => 0,
+			'reintentos' => 0,
+			'fallos'     => 0,
+			'pendientes' => 0,
+		);
+		if ( get_transient( 'asde_ap_push_lock' ) ) {
+			return $res; // Ya hay una pasada en marcha.
+		}
+		set_transient( 'asde_ap_push_lock', 1, MINUTE_IN_SECONDS );
+		try {
+			$ahora   = time();
+			$restos  = array();
+			$hechos  = 0;
+			$activo  = self::activo();
+			foreach ( self::cola() as $job ) {
+				if ( ! $activo ) {
+					continue; // Con los avisos apagados, la cola se vacía sin enviar.
+				}
+				if ( $job['t'] > $ahora || $hechos >= $max ) {
+					$restos[] = $job;
+					continue;
+				}
+				++$hechos;
+				if ( ! Suscripciones::categoria_activa( (int) $job['u'], (string) $job['c'] ) ) {
+					continue; // La persona la desactivó mientras esperaba.
+				}
+				$disp = null;
+				foreach ( Suscripciones::de_usuario( (int) $job['u'] ) as $d ) {
+					if ( $d['huella'] === $job['h'] ) {
+						$disp = $d;
+					}
+				}
+				if ( ! $disp ) {
+					continue; // El móvil ya no está (baja o cuenta borrada).
+				}
+				$r = WebPush::enviar( $disp, (string) $job['r'] );
+				if ( WebPush::OK === $r['estado'] ) {
+					++$res['enviados'];
+				} elseif ( WebPush::MUERTA === $r['estado'] ) {
+					Suscripciones::quitar_huella( (int) $job['u'], (string) $job['h'] );
+					++$res['muertas'];
+				} elseif ( WebPush::REINTENTAR === $r['estado'] && (int) $job['n'] + 1 < self::INTENTOS ) {
+					$job['n'] = (int) $job['n'] + 1;
+					$job['t'] = $ahora + ( $r['espera'] ?: 300 * $job['n'] );
+					$restos[] = $job;
+					++$res['reintentos'];
+				} else {
+					++$res['fallos'];
+				}
+			}
+			$restos ? update_option( self::COLA, $restos, false ) : delete_option( self::COLA );
+			$res['pendientes'] = count( $restos );
+			if ( $restos ) {
+				self::programar( min( array_column( $restos, 't' ) ) );
+			}
+			if ( $res['enviados'] || $res['muertas'] || $res['reintentos'] || $res['fallos'] ) {
+				Logger::log( 'push_lote', 'sitio', '', $res );
+			}
+		} finally {
+			delete_transient( 'asde_ap_push_lock' );
+		}
+		return $res;
+	}
+
+	/**
+	 * Manda ya (sin cola) un aviso a todos los móviles de una cuenta, sin mirar las categorías: es el
+	 * «Enviar aviso de prueba a mi móvil» de la pantalla «App móvil».
+	 *
+	 * @return array<int, array{estado:string, codigo:int, espera:int}> Un resultado por móvil.
+	 */
+	public static function enviar_ahora( int $user_id, string $ruta = '' ): array {
+		$out = array();
+		if ( ! self::activo() ) {
+			return $out;
+		}
+		$ruta = '' !== $ruta ? $ruta : self::ruta_de( Manifiesto::inicio() );
+		foreach ( Suscripciones::de_usuario( $user_id ) as $d ) {
+			$r = WebPush::enviar( $d, $ruta );
+			if ( WebPush::MUERTA === $r['estado'] ) {
+				Suscripciones::quitar_huella( $user_id, $d['huella'] );
+			}
+			$out[] = $r;
+		}
+		return $out;
 	}
 
 	/** ¿Están las notificaciones push en marcha en este sitio? (App activa, push encendido y claves VAPID creadas.) */

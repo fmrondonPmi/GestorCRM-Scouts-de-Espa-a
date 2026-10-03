@@ -58,7 +58,7 @@ Consecuencias: (a) **no se puede garantizar** que todas las familias reciban pus
 | # | Paso | Contenido | Prueba |
 |---|---|---|---|
 | 7a ✅ (v0.17.4) | **Base:** claves VAPID, tabla, suscribir/desuscribir, botón «Activar avisos», manejador `push`/`notificationclick` en el SW (con aviso genérico), categorías y pantalla de la persona | Suscribirse de verdad desde el Chrome del usuario en Local (localhost vale) |
-| 7b | **Emisor:** cifrado Web Push + VAPID en PHP, envío, borrado de suscripciones muertas, cola con el WP-Cron | Vectores de los RFC + un aviso real a Chrome |
+| 7b ✅ (v0.17.5) | **Emisor:** cifrado Web Push + VAPID en PHP, envío, borrado de suscripciones muertas, cola con el WP-Cron | Vectores de los RFC + un aviso real a Chrome |
 | 7c | **Avisos:** conectar los sucesos elegidos (§5), preferencias por categoría, idiomas, filtro por grupo | Pruebas con CRM simulado; un caso por suceso |
 | 7d | **Administración y manual:** interruptor, aviso de prueba, comprobaciones en «App móvil» y «Instalación y entorno», apartado en los manuales, `MANUAL-PUBLICACION.md` | Pantalla real + iPhone/Android si hay móvil |
 
