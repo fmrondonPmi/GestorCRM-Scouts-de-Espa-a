@@ -17,9 +17,9 @@ final class Pwa {
 	/** Páginas donde sale la invitación a instalar: el acceso y el inicio del área. */
 	public const PAGINAS_INSTALAR = array( 'acceso', 'area' );
 
-	/** ¿Está activa la PWA? (La sección 5 lo convierte en un ajuste.) */
+	/** ¿Está activa la PWA? El ajuste de wp-admin → App móvil (activa por defecto); el filtro tiene la última palabra. */
 	public static function activa(): bool {
-		return (bool) apply_filters( 'asde_ap_pwa_activa', true );
+		return (bool) apply_filters( 'asde_ap_pwa_activa', Ajustes::activa() );
 	}
 
 	public static function url_manifiesto(): string {

@@ -110,3 +110,7 @@ La prueba deja el sitio como estaba y no toca el menú ni el `.htaccess`.
 - No da de alta los grupos: hacen falta el usuario y la contraseña del CRM.
 - No importa diseño ni contenido de la web. El área privada usa los estilos del tema; con Enfold se ve como en la web actual.
 - Hasta la v0.8 estaba hecho solo para Scouts de Balears. **Desde la v0.9 sirve para cualquier organización federada:** el nombre de los textos, el código del nº de socio local y el coste federativo se configuran en *Organización federada* (doc 20).
+
+## Pieza «App móvil (PWA)» (v0.17.3)
+
+«Instalación y entorno» comprueba también la app móvil (docs `pwa/`): apagada (info), sin HTTPS salvo en local (falla, porque sin HTTPS no se puede instalar), enlaces permanentes simples (aviso: la app abarcaría todo el sitio) y sin «Icono del sitio» (info: lleva el icono genérico, con enlace para ponerlo). No cambia nada: la app se enciende, se apaga y se comprueba en *Grupos Scouts → App móvil*.

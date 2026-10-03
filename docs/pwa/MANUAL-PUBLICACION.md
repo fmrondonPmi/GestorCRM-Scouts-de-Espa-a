@@ -1,16 +1,17 @@
 # Manual · Publicar la app (PWA) en producción
 
-> Para quien administra el sitio (https://baleares.scout.es, WordPress en Hostinger con LiteSpeed). **Claude no publica nada en producción**: este manual es lo que hace una persona. Versión del plugin con la PWA: **0.17.2**. Última revisión: 2026-10-03.
+> Para quien administra el sitio (https://baleares.scout.es, WordPress en Hostinger con LiteSpeed). **Claude no publica nada en producción**: este manual es lo que hace una persona. Versión del plugin con la PWA: **0.17.3**. Última revisión: 2026-10-03.
 
 ## 0. Qué se está publicando (y qué no)
 
 **Es una PWA, no una app de las tiendas.** La misma web del área privada, pero que se puede **instalar en el móvil** (Android e iPhone) con su icono, se abre **a pantalla completa** y, si no hay internet, enseña una pantalla «Sin conexión» en vez del error del navegador. No hay que publicar nada en Google Play ni en App Store.
 
-| Ya incluido (0.17.2) | Todavía no (sección 5 del plan, `ESTADO.md`) |
+| Ya incluido (0.17.3) | Todavía no (`ESTADO.md`, sección 6) |
 |---|---|
-| Manifiesto de la app (nombre, colores del grupo, icono, alcance) | Ajustes en administración (hoy se apaga con un fragmento de código, §9) |
-| Icono: el «Icono del sitio» de WordPress o uno genérico (tienda morada) | Comprobaciones de la PWA en «Instalación y entorno» y «Comprobar el hosting» |
-| Service worker: guarda solo CSS/JS del plugin y la página «Sin conexión» | Notificaciones push |
+| Manifiesto de la app (nombre, colores del grupo, icono, alcance) | Apartado «Instalar la app» en los manuales de uso (sección 6) |
+| Icono: el «Icono del sitio» de WordPress o uno genérico (tienda morada) | Notificaciones push |
+| Service worker: guarda solo CSS/JS del plugin y la página «Sin conexión» | |
+| **Pantalla *Grupos Scouts → App móvil*** (administradores): encender/apagar la app, nombre bajo el icono, cómo sale (icono, color, alcance) y **«Comprobar el servidor»** (las tres direcciones, sin cachés por medio); y una pieza «App móvil» en *Instalación y entorno* | |
 | **Modo app (pantalla completa):** sin cabecera ni pie del tema en las páginas privadas, zonas seguras del iPhone, y en móvil una **barra inferior «Atrás · Inicio · Recargar»**; «Salir» cierra la sesión sin salir de la app | |
 | Página «Sin conexión» en castellano, catalán, euskera o gallego, con el color del grupo | |
 | **Aviso «Instala la app en tu móvil»** al pie de «Acceso socios» y del inicio del área: botón «Instalar la app» en Android/Chrome y guía «Compartir → Añadir a pantalla de inicio» en iPhone/iPad; se puede cerrar («Ahora no») y no vuelve a salir en 30 días; no sale si la app ya está instalada | |
@@ -27,7 +28,7 @@
 | **HTTPS válido** (candado en el navegador). Sin HTTPS no hay service worker ni instalación | Abrir el sitio con `https://` sin avisos |
 | **Enlaces permanentes «bonitos»** (no `?p=123`) | *Ajustes → Enlaces permanentes*: ya es `/%year%/%monthnum%/%day%/%postname%/` |
 | WordPress ≥ 6.4 y PHP ≥ 8.0 | *Herramientas → Salud del sitio → Información* |
-| El plugin en la **0.17.2** (la PWA entró en la 0.17.0; la 0.16.x y anteriores no la llevan activa) | *Plugins* |
+| El plugin en la **0.17.3** (la PWA entró en la 0.17.0; la 0.16.x y anteriores no la llevan activa) | *Plugins* |
 | Un **«Icono del sitio»** cuadrado de **512 × 512 px** (PNG) para que la app lleve el logo del grupo | *Apariencia → Personalizar → Identidad del sitio*. Sin él se usa el icono genérico |
 
 ## 2. Antes de subir (en el ordenador)
@@ -38,7 +39,7 @@
 
 ## 3. El paquete
 
-El zip `asde-area-privada-0.17.2.zip` se construye en el ordenador con `herramientas-desarrollo/construir-zip.ps1` (sin tocar la versión). **Debe llevar** `src/Pwa/`, `assets/pwa/` (iconos, `sw.js`, `sw-apagado.js`, `registro.js`) y `templates/pwa/`, y **no** `tests/`. Para comprobarlo: abrir el zip y mirar que están esas tres carpetas y que `tests/` no está.
+El zip `asde-area-privada-0.17.3.zip` se construye en el ordenador con `herramientas-desarrollo/construir-zip.ps1` (sin tocar la versión). **Debe llevar** `src/Pwa/`, `assets/pwa/` (iconos, `sw.js`, `sw-apagado.js`, `registro.js`) y `templates/pwa/`, y **no** `tests/`. Para comprobarlo: abrir el zip y mirar que están esas tres carpetas y que `tests/` no está.
 
 ## 4. Subir y activar
 
@@ -52,7 +53,7 @@ El zip `asde-area-privada-0.17.2.zip` se construye en el ordenador con `herramie
 - **Icono del sitio** (§1): se aplica a la app instalada y al icono del iPhone.
 - **Colores** (*Grupos Scouts → Colores*): el color principal es el de la barra del móvil y el de la página «Sin conexión». Si se cambia, el service worker se actualiza solo y vuelve a guardar la página con el color nuevo.
 - **Idioma:** el nombre de la app y la página «Sin conexión» salen en el idioma de la persona (si el grupo permite elegir) o en el idioma por defecto.
-- **Nombre:** «Área privada · <nombre del sitio>» (el nombre del sitio está en *Ajustes → Generales*; la etiqueta «Área privada» se puede personalizar en *Idioma y etiquetas*).
+- **Nombre:** «Área privada · <nombre del sitio>» (el nombre del sitio está en *Ajustes → Generales*). El primer trozo, el que sale **bajo el icono**, se cambia en *Grupos Scouts → App móvil → «Nombre bajo el icono»* (máximo 12 caracteres; vacío = «Área privada» en el idioma de cada persona; solo afecta a las apps que se instalen después).
 
 ## 6. Caché y servidor: lo que más suele fallar
 
@@ -64,7 +65,7 @@ La app usa **tres direcciones virtuales** en la raíz del sitio (no son ficheros
 | `/asde-sw.js` | Service worker | `200`, `text/javascript`, `Cache-Control: no-cache` |
 | `/asde-sin-conexion` | Página «Sin conexión» | `200`, `text/html`, `Cache-Control: no-cache` |
 
-El plugin ya manda las señales de «no cachear» (`DONOTCACHEPAGE`, `litespeed_control_set_nocache` y la cabecera), pero **en Hostinger hay que comprobarlo** (§7) y, si alguna sale cacheada o modificada:
+El plugin ya manda las señales de «no cachear» (`DONOTCACHEPAGE`, `litespeed_control_set_nocache` y la cabecera), pero **en Hostinger hay que comprobarlo**. **La forma fácil:** *Grupos Scouts → App móvil → «Comprobar el servidor»*: el sitio se pide a sí mismo las tres direcciones y dice, una por una, si están bien, si responde una caché (LiteSpeed, Cloudflare, proxy, cabecera `Age`) o si el contenido que llega no es el que genera el plugin (minificado). Si no hay nada que revisar, **no hace falta la §7**; esta pantalla hace lo mismo que los `curl`. Si alguna sale cacheada o modificada:
 
 1. **LiteSpeed Cache** (plugin) → *Cache → Excludes → Do Not Cache URIs* (los nombres pueden salir traducidos, según el idioma del panel): añadir las tres rutas (`/asde-manifest.webmanifest`, `/asde-sw.js`, `/asde-sin-conexion`).
 2. LiteSpeed Cache → *Page Optimization → Tuning* (excluir JS de la minificación y la combinación): que `asde-sw.js` no se minifique ni se combine.
@@ -124,12 +125,13 @@ curl -s https://baleares.scout.es/nuestro-grupo-scout/area-privada/acceso/ | gre
 
 ## 9. Desactivar la app o volver atrás
 
-- **Apagarla sin perder nada** (hasta que haya un ajuste en administración): crear el fichero `wp-content/mu-plugins/asde-pwa-apagada.php` con
+- **Apagarla sin perder nada:** *Grupos Scouts → App móvil* → quitar la marca de **«Activa»** → *Guardar*. Con eso desaparecen las etiquetas, el manifiesto y la página «Sin conexión», y quien ya tenía la app recibe un service worker de apagado que **borra las cachés y se da de baja solo** (puede tardar hasta 24 h en llegar a cada móvil; el icono de la pantalla de inicio lo puede borrar cada persona). Para volver a encenderla, marcar la casilla otra vez.
+- **Apagarla desde el código** (por si no se puede entrar a la pantalla, o para que nadie la encienda): crear el fichero `wp-content/mu-plugins/asde-pwa-apagada.php` con
   ```php
   <?php
   add_filter( 'asde_ap_pwa_activa', '__return_false' );
   ```
-  Con eso desaparecen las etiquetas, el manifiesto y la página «Sin conexión», y quien ya tenía la app recibe un service worker de apagado que **borra las cachés y se da de baja solo** (puede tardar hasta 24 h en llegar a cada móvil; el icono de la pantalla de inicio lo puede borrar cada persona). Para volver a encenderla, borrar el fichero.
+  Queda apagada igual que desde la pantalla, y el fichero **manda sobre la casilla** (aunque «Activa» esté marcada, sigue apagada). Para volver a encenderla, borrar el fichero.
 - **Volver a la versión anterior:** *Plugins → Subir plugin* con el zip anterior y «Reemplazar el actual». Los zips de versiones anteriores se conservan en la carpeta del proyecto. Con una versión anterior a la 0.17.0 no hay PWA y las apps instaladas siguen abriendo como una web normal.
 
 ## 10. Actualizaciones futuras
@@ -164,9 +166,10 @@ Al subir una versión nueva del plugin, el service worker cambia (lleva la versi
 
 Para ser claros con lo que está probado y lo que no:
 
-- ✅ Probado en Local: manifiesto, rutas, etiquetas, colores, idiomas, página «Sin conexión», apagado, el aviso de instalación y 198 comprobaciones automáticas; la **lógica** del service worker con simulaciones (red, sin red, POST, JSON, estáticos).
+- ✅ Probado en Local: manifiesto, rutas, etiquetas, colores, idiomas, página «Sin conexión», apagado, el aviso de instalación y 198 + 74 comprobaciones automáticas; la **lógica** del service worker con simulaciones (red, sin red, POST, JSON, estáticos).
 - ✅ **Probado en Chrome de escritorio real (2026-10-03, contra Local):** el service worker se registra, se activa y controla la página con el alcance correcto; **se actualiza solo** de una versión antigua a la nueva (borra la caché vieja y guarda «Sin conexión» en la nueva); la página «Sin conexión» se muestra bien; Chrome **dispara el aviso de instalación** (es decir, la app cumple los requisitos de instalable) y nuestro aviso sale y se cierra.
 - ✅ **Modo app comprobado en una página privada real de Chrome (solo medidas, sin tocar datos):** al activar el modo app desaparecen cabecera y pie, el contenido sube pegado arriba, el menú queda fijo y los enlaces de «Salir» pasan a la dirección firmada; y, en el navegador integrado a 375 px, la barra inferior (botones de 44 px, sin desbordes, sin tapar el botón de cookies) y las variantes iPhone, escritorio y «Atrás» sin historial, con simulaciones. «Salir» se probó con PHP (usuario de prueba, nonce falso/ausente/válido), **no** pulsándolo en el navegador.
+- ✅ **Pantalla «App móvil» comprobada en el WordPress real de Local, con Chrome (2026-10-03):** se ve bien, y «Comprobar el servidor» da las tres direcciones en verde (200, tipo correcto, sin caché y contenido idéntico al que genera el plugin). Con ella se encontró que en un servidor con muy pocos procesos PHP (Local) la petición a uno mismo puede agotar el tiempo: ahora se repite una vez. Las pruebas automáticas cubren, con respuestas simuladas, los casos de caché (LiteSpeed, Cloudflare, proxy, `Age`), 404, contenido distinto y apagada; **lo que no se ha podido ver es esta pantalla en Hostinger**: es la primera comprobación que conviene hacer allí (§6).
 - ⚠️ **Sin ver todavía:** el modo avión de verdad (el «Sin conexión» cuando falla la red; solo probado con simulaciones y mirando la página guardada), la **instalación efectiva** en un Android e iPhone reales (en Chrome de escritorio no se pulsó «Instalar») y el aspecto con la app ya instalada. Es lo primero que hay que mirar en el móvil (§8).
 - ⚠️ **No probado en producción** (Hostinger/LiteSpeed): las cabeceras de §6 y la instalación real en iPhone y Android.
 - Fuera del alcance de la PWA: publicar en Google Play / App Store (haría falta envolverla con Capacitor, cuentas de desarrollador —Google 25 € una vez, Apple 99 €/año— y pasar la revisión de cada tienda; es un paso posterior que reutiliza todo esto).
@@ -174,7 +177,7 @@ Para ser claros con lo que está probado y lo que no:
 ## 14. Lista final (imprimible)
 
 - [ ] Copia de seguridad hecha
-- [ ] Zip `asde-area-privada-0.17.2.zip` con `src/Pwa`, `assets/pwa`, `templates/pwa` y sin `tests/`
+- [ ] Zip `asde-area-privada-0.17.3.zip` con `src/Pwa`, `assets/pwa`, `templates/pwa` y sin `tests/`
 - [ ] Plugin reemplazado y activo; *Instalación y entorno* en verde
 - [ ] «Icono del sitio» 512 × 512 puesto
 - [ ] Las tres rutas excluidas de LiteSpeed Cache y del CDN (§6)

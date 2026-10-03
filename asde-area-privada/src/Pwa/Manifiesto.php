@@ -45,7 +45,8 @@ final class Manifiesto {
 
 	/** Nombre corto (bajo el icono). */
 	public static function nombre_corto(): string {
-		return (string) apply_filters( 'asde_ap_pwa_nombre_corto', asde_t( 'Área privada' ) );
+		$propio = Ajustes::nombre_corto(); // El que ha puesto el grupo en wp-admin → App móvil; si no, el de siempre (traducido).
+		return (string) apply_filters( 'asde_ap_pwa_nombre_corto', '' !== $propio ? $propio : asde_t( 'Área privada' ) );
 	}
 
 	/** Nombre completo. */

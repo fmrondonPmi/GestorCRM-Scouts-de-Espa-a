@@ -92,3 +92,7 @@ Todo ✅ en 7 s:
 - WP-Cron, a los 2 s.
 
 Se probó de las dos maneras: dentro del plugin, y el zip instalado como plugin independiente, desinstalado después sin dejar rastro.
+
+## App móvil (PWA): comprobar el servidor (v0.17.3)
+
+La app móvil usa tres direcciones virtuales en la raíz del sitio (`/asde-manifest.webmanifest`, `/asde-sw.js` y `/asde-sin-conexion`) que **no pueden estar en ninguna caché** (LiteSpeed Cache, CDN, proxy), ni minificadas. En *Grupos Scouts → App móvil → «Comprobar el servidor»* el sitio se pide a sí mismo las tres y dice una por una si responden 200 con el tipo y el `Cache-Control: no-cache` correctos, si responde alguna caché y si el contenido que llega es idéntico al que genera el plugin. Es lo mismo que el apartado 6–7 del manual de publicación (`pwa/MANUAL-PUBLICACION.md`) hacía con `curl`. Con muy pocos procesos PHP (Local) la petición puede agotar el tiempo: se repite una vez.
