@@ -113,4 +113,4 @@ La prueba deja el sitio como estaba y no toca el menú ni el `.htaccess`.
 
 ## Pieza «App móvil (PWA)» (v0.17.3)
 
-«Instalación y entorno» comprueba también la app móvil (docs `pwa/`): apagada (info), sin HTTPS salvo en local (falla, porque sin HTTPS no se puede instalar), enlaces permanentes simples (aviso: la app abarcaría todo el sitio) y sin «Icono del sitio» (info: lleva el icono genérico, con enlace para ponerlo). No cambia nada: la app se enciende, se apaga y se comprueba en *Grupos Scouts → App móvil*.
+Con el plugin «App móvil» activo (`asde-area-privada-app`, aparte desde la 0.18; repo GestorCRM-App), «Instalación y entorno» comprueba también la app móvil: apagada (info), sin HTTPS salvo en local (falla, porque sin HTTPS no se puede instalar), enlaces permanentes simples (aviso: la app abarcaría todo el sitio) y sin «Icono del sitio» (info: lleva el icono genérico, con enlace para ponerlo). No cambia nada: la app se enciende, se apaga y se comprueba en *Grupos Scouts → App móvil*.

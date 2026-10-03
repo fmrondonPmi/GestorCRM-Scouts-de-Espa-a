@@ -150,8 +150,6 @@ final class Extractor {
 	public static function grupo( string $rel ): string {
 		$grupos = array(
 			'templates/comun/'       => 'Menú y avisos',
-			'templates/pwa/'         => 'App móvil',
-			'src/Pwa/'               => 'App móvil',
 			'templates/area/'        => 'Inicio',
 			'templates/uniformes/'   => 'Uniformes',
 			'templates/tesoreria/'   => 'Tesorería',

@@ -2,7 +2,8 @@
 
 Plugin de WordPress que da a los Grupos Scouts un **área privada** (fichas, usuarios, informes, tesorería, uniformes, domiciliaciones SEPA…) con datos leídos de **SinergiaCRM**. Pensado para el tema Enfold. Todo en español.
 
-- **Versión actual:** 0.16.0
+- **Versión actual:** 0.18.0
+- **App móvil (PWA):** desde la 0.18.0 es un plugin aparte, «ASDE Scouts de España - App móvil del Gestor CRM» (`asde-area-privada-app`), en su propio repositorio. Este plugin funciona igual sin ella.
 - **Requisitos:** WordPress 6.4 o superior y PHP 8.0 o superior (con libsodium).
 - **Licencia:** [MIT](LICENSE), también la declarada en la cabecera del plugin. Es compatible con la GPL de WordPress.
 

@@ -1,26 +1,16 @@
-# PWA del área privada · punto de entrada
+# App móvil (PWA) · se ha mudado
 
-> **Leer este fichero primero y después `ESTADO.md`.** Con eso basta para retomar el trabajo sin volver a explorar el código. `ARQUITECTURA.md` solo si se toca el diseño. Para **publicar en producción**: `MANUAL-PUBLICACION.md`.
+**Desde la v0.18.0 (2026-10-03) la app móvil es un plugin aparte, en su propio repo:**
 
-## Qué es
-Convertir el área privada (plugin `asde-area-privada`) en una **PWA**: la misma web, instalable en Android e iPhone con icono propio y pantalla completa, y con una pantalla «sin conexión». **No es una app nativa ni se publica en las tiendas** (eso sería el paso B, Capacitor, sobre este mismo trabajo). Decisión del usuario el 2026-09-30.
+- Repo: `C:\Proyectos\GestorCRM-App` (git, rama `main`, por ahora sin remoto).
+- Plugin: `asde-area-privada-app` («ASDE Scouts de España - App móvil del Gestor CRM»), que necesita este plugin 0.18.0 o posterior.
+- Sus docs (estado, arquitectura, avisos push y **manual de publicación**) están en `docs/` de ese repo: empezar por `docs/README.md` y `docs/ESTADO.md`.
 
-## Reglas de trabajo (del usuario, 2026-09-30)
-1. **Una sección cada vez.** No se empieza la siguiente hasta cerrar la anterior (código + pruebas + docs).
-2. **Sin paralelizar de más:** lo normal es trabajar directamente, sin agentes. Si hace falta, **2 como máximo, 3 en un caso excepcional**; el objetivo es **reducir** el consumo de tokens, no aumentarlo.
-3. **Documentar al cerrar cada sección** en esta carpeta (`ESTADO.md`, y `ARQUITECTURA.md` si cambia el diseño), para no tener que releer el código.
-4. Las normas generales del proyecto (`CLAUDE.md` de la raíz del repo) siguen igual: pruebas «TODO OK», docs del proyecto al día, zip nuevo sin `tests/`, y **el usuario decide qué sube a producción** (Claude no publica).
+Aquí, en el Gestor CRM, queda solo:
 
-## Ficheros de esta carpeta
-| Fichero | Para qué |
-|---|---|
-| [ESTADO.md](ESTADO.md) | Qué secciones están hechas, cuál toca y los ficheros tocados. **Se actualiza al cerrar cada sección.** |
-| [ARQUITECTURA.md](ARQUITECTURA.md) | Decisiones de diseño, rutas virtuales, alcance (*scope*), qué se cachea y qué **nunca**, trampas conocidas |
-| [MANUAL-PUBLICACION.md](MANUAL-PUBLICACION.md) | **Cómo publicar la app en producción:** requisitos, subida, caché de LiteSpeed/CDN, comprobaciones con `curl`, prueba en móviles, apagado y vuelta atrás, texto para familias |
-| [PUSH.md](PUSH.md) | **Notificaciones push** (sección 7): plan sin código, límites de iPhone/Android, privacidad, pasos y preguntas abiertas P-PUSH-1…6 |
+- los **enganches genéricos** que usa la app: filtros `asde_ap_plantilla` (`Frontend\TemplateLoader`), `asde_ap_entorno` (`Install\Entorno`), `asde_ap_catalogo` y `asde_ap_textos` (`Idiomas\Traducciones`);
+- **`Install\AppRetirada`**: si la app no está activa, `/asde-sw.js` sirve `assets/js/sw-retirada.js`, un service worker que borra las cachés de la app, da de baja los avisos y se da de baja (las apps ya instaladas no se quedan atascadas);
+- la prueba `tests/app-enganches.php`;
+- los apartados de la app en los **manuales de uso** (`manual/fuentes/instalar-app.html` y `admin-app.html`).
 
-## Dónde está todo (desde el 2026-10-02, en el repo `C:\Proyectos\GestorCRM`)
-- Código: `asde-area-privada/src/Pwa/` (clases), `asde-area-privada/assets/pwa/` (iconos, `sw.js`, `sw-apagado.js`, `registro.js`, `instalar.js`, `instalar.css`, `app.js`, `app.css`), `asde-area-privada/templates/pwa/sin-conexion.php`, `asde-area-privada/src/Admin/PwaPage.php` (pantalla «App móvil»), `src/Pwa/Push.php` y compañía (notificaciones push, `PUSH.md`).
-- Pruebas: `asde-area-privada/tests/pwa.php` (198 comprobaciones; los ajustes, en `tests/pwa-ajustes.php`: 74, las notificaciones push, en `tests/pwa-push.php`: 121, y el envío, en `tests/pwa-envio.php`: 90, que sí entran en la suite). **`pwa.php` no** entra en `probar-todo.sh` sin argumentos (se salta a propósito): se lanza con `herramientas-desarrollo/probar-todo.sh pwa`.
-- Entorno: WordPress en Local `http://localhost:10011`; `herramientas-desarrollo/wp-local.sh` (carpeta antigua del proyecto, fuera del repo).
-- La PWA forma parte del plugin desde la **v0.17.0**; los zips anteriores (≤ 0.16.0) se construyeron sin ella.
+La historia de la PWA dentro de este plugin (v0.17.0–0.17.5) está en los commits `e5242d0`…`88e76a4` y en el índice (`docs/00-INDICE.md`).

@@ -38,9 +38,12 @@ $cambios_contenido = (string) get_post_field( 'post_content', $cambios_id );
 
 echo "== Parte A · Estado del entorno ==\n";
 $e       = Entorno::comprobar();
-$claves  = array( 'requisitos', 'organizacion', 'tablas', 'roles', 'paginas', 'menu', 'cron', 'wordfence', 'enlaces', 'registro', 'idioma', 'https', 'email', 'clave', 'crm', 'grupos', 'contacto', 'pwa', 'segundo_plano', 'tema' );
+$claves  = array( 'requisitos', 'organizacion', 'tablas', 'roles', 'paginas', 'menu', 'cron', 'wordfence', 'enlaces', 'registro', 'idioma', 'https', 'email', 'clave', 'crm', 'grupos', 'contacto', 'segundo_plano', 'tema' );
+if ( defined( 'ASDE_APP_VERSION' ) ) {
+	$claves[] = 'pwa'; // La pieza de la app móvil, si su plugin está activo (filtro asde_ap_entorno).
+}
 $validos = array( Entorno::OK, Entorno::AVISO, Entorno::FALTA, Entorno::INFO );
-$ok( array() === array_diff( $claves, array_keys( $e ) ) && ! isset( $e['zona'] ) && ! array_filter( $e, static fn( $x ) => 4 !== count( $x ) || ! in_array( $x[0], $validos, true ) || '' === $x[1] || '' === $x[2] ), 'comprueba las 20 piezas (la hora no: es cosa de WordPress), cada una con estado, nombre y explicación' );
+$ok( array() === array_diff( $claves, array_keys( $e ) ) && ! isset( $e['zona'] ) && ! array_filter( $e, static fn( $x ) => 4 !== count( $x ) || ! in_array( $x[0], $validos, true ) || '' === $x[1] || '' === $x[2] ), 'comprueba las ' . count( $claves ) . ' piezas (la hora no: es cosa de WordPress), cada una con estado, nombre y explicación' );
 $ok( Entorno::OK === $e['organizacion'][0] && str_contains( $e['organizacion'][2], 'Scouts de Balears' ), 'organización federada configurada (Scouts de Balears, código 7)' );
 $ok( Entorno::OK === $e['tablas'][0] && 14 === count( Entorno::tablas() ), 'tablas: las 14 existen' );
 $ok( Entorno::OK === $e['roles'][0] && Entorno::OK === $e['paginas'][0] && Entorno::OK === $e['cron'][0], 'roles, páginas y tarea diaria en orden' );

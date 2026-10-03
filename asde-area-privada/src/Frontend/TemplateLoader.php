@@ -6,6 +6,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Plantillas sobreescribibles desde el tema:
  *   {tema-hijo}/asde-area-privada/{nombre}.php  →  {tema}/…  →  plugin/templates/{nombre}.php
+ * Otro plugin (la app móvil) puede poner sus plantillas con el filtro `asde_ap_plantilla`.
  */
 final class TemplateLoader {
 
@@ -14,7 +15,7 @@ final class TemplateLoader {
 			return '';
 		}
 		$theme = locate_template( 'asde-area-privada/' . $name . '.php' );
-		return $theme ?: ASDE_AP_DIR . 'templates/' . $name . '.php';
+		return $theme ?: (string) apply_filters( 'asde_ap_plantilla', ASDE_AP_DIR . 'templates/' . $name . '.php', $name );
 	}
 
 	/** @param array<string, mixed> $vars Variables disponibles en la plantilla. */

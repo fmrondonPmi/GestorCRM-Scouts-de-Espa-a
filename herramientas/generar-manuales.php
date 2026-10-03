@@ -19,7 +19,7 @@
 
 $raiz    = dirname( __DIR__ ) . '/manual';
 $fuentes = $raiz . '/fuentes';
-$version = '0.17';
+$version = '0.18';
 $fecha   = 'octubre de 2026';
 $errores = 0;
 

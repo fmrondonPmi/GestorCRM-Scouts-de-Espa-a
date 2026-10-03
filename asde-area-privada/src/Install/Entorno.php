@@ -199,8 +199,8 @@ final class Entorno {
 				: array( self::OK, 'Email de contacto del grupo', 'Puesto en todos los grupos.', array( 'Grupos' => $ajustes ) );
 		}
 
-		// App móvil (PWA, v0.17): HTTPS, icono y alcance; la comprobación de las cachés está en su pantalla.
-		$c['pwa'] = \AsdeBalears\AreaPrivada\Pwa\Comprobacion::entorno();
+		// Piezas de otros plugins (la app móvil añade «pwa»: HTTPS, icono y alcance).
+		$c = (array) apply_filters( 'asde_ap_entorno', $c );
 
 		// Tareas en segundo plano.
 		$diag = get_option( 'asde_diag_sp' );
