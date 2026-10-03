@@ -17,44 +17,44 @@ $fid = (int) $familia['id'];
 	<input type="hidden" name="familia" value="<?php echo $fid; ?>">
 
 	<fieldset>
-		<legend>Datos del deudor (titular de la cuenta)</legend>
+		<legend><?php asde_e( 'Datos del deudor (titular de la cuenta)' ); ?></legend>
 		<p>
-			<label for="asde-sepa-titular-<?php echo $fid; ?>">Nombre y apellidos del titular</label>
+			<label for="asde-sepa-titular-<?php echo $fid; ?>"><?php asde_e( 'Nombre y apellidos del titular' ); ?></label>
 			<input type="text" id="asde-sepa-titular-<?php echo $fid; ?>" name="titular" maxlength="70" required autocomplete="name" value="<?php echo esc_attr( $campo( 'titular' ) ); ?>">
 		</p>
 		<p>
-			<label for="asde-sepa-iban-<?php echo $fid; ?>">IBAN de la cuenta</label>
-			<input type="text" id="asde-sepa-iban-<?php echo $fid; ?>" name="iban" maxlength="40" required inputmode="text" autocapitalize="characters" spellcheck="false" placeholder="ES00 0000 0000 0000 0000 0000" value="<?php echo esc_attr( $campo( 'iban' ) ); ?>">
-			<span class="asde-help">Cuenta de una entidad de la zona SEPA. Se guarda cifrada y solo se enseña enmascarada.</span>
+			<label for="asde-sepa-iban-<?php echo $fid; ?>"><?php asde_e( 'IBAN de la cuenta' ); ?></label>
+			<input type="text" id="asde-sepa-iban-<?php echo $fid; ?>" name="iban" maxlength="40" required inputmode="text" autocapitalize="characters" spellcheck="false" placeholder="<?php echo asde_a( 'ES00 0000 0000 0000 0000 0000' ); ?>" value="<?php echo esc_attr( $campo( 'iban' ) ); ?>">
+			<span class="asde-help"><?php asde_e( 'Cuenta de una entidad de la zona SEPA. Se guarda cifrada y solo se enseña enmascarada.' ); ?></span>
 		</p>
 		<p>
-			<label for="asde-sepa-calle-<?php echo $fid; ?>">Dirección (calle y número)</label>
+			<label for="asde-sepa-calle-<?php echo $fid; ?>"><?php asde_e( 'Dirección (calle y número)' ); ?></label>
 			<input type="text" id="asde-sepa-calle-<?php echo $fid; ?>" name="calle" maxlength="70" required autocomplete="street-address" value="<?php echo esc_attr( $campo( 'calle' ) ); ?>">
 		</p>
 		<div class="asde-grid-2">
 			<p>
-				<label for="asde-sepa-cp-<?php echo $fid; ?>">Código postal</label>
+				<label for="asde-sepa-cp-<?php echo $fid; ?>"><?php asde_e( 'Código postal' ); ?></label>
 				<input type="text" id="asde-sepa-cp-<?php echo $fid; ?>" name="cp" maxlength="10" required autocomplete="postal-code" value="<?php echo esc_attr( $campo( 'cp' ) ); ?>">
 			</p>
 			<p>
-				<label for="asde-sepa-poblacion-<?php echo $fid; ?>">Población</label>
+				<label for="asde-sepa-poblacion-<?php echo $fid; ?>"><?php asde_e( 'Población' ); ?></label>
 				<input type="text" id="asde-sepa-poblacion-<?php echo $fid; ?>" name="poblacion" maxlength="50" required autocomplete="address-level2" value="<?php echo esc_attr( $campo( 'poblacion' ) ); ?>">
 			</p>
 			<p>
-				<label for="asde-sepa-provincia-<?php echo $fid; ?>">Provincia</label>
-				<input type="text" id="asde-sepa-provincia-<?php echo $fid; ?>" name="provincia" maxlength="40" autocomplete="address-level1" value="<?php echo esc_attr( $campo( 'provincia', 'Illes Balears' ) ); ?>">
+				<label for="asde-sepa-provincia-<?php echo $fid; ?>"><?php asde_e( 'Provincia' ); ?></label>
+				<input type="text" id="asde-sepa-provincia-<?php echo $fid; ?>" name="provincia" maxlength="40" autocomplete="address-level1" value="<?php echo esc_attr( $campo( 'provincia', asde_t( 'Illes Balears' ) ) ); ?>">
 			</p>
 			<p>
-				<label for="asde-sepa-pais-<?php echo $fid; ?>">País</label>
+				<label for="asde-sepa-pais-<?php echo $fid; ?>"><?php asde_e( 'País' ); ?></label>
 				<input type="text" id="asde-sepa-pais-<?php echo $fid; ?>" name="pais" maxlength="40" autocomplete="country-name" value="<?php echo esc_attr( $campo( 'pais', 'España' ) ); ?>">
 			</p>
 		</div>
 	</fieldset>
 
 	<fieldset>
-		<legend>Datos del acreedor</legend>
+		<legend><?php asde_e( 'Datos del acreedor' ); ?></legend>
 		<p class="asde-muted">
-			<strong><?php echo esc_html( $acreedor['nombre'] ); ?></strong> · Identificador del acreedor <?php echo esc_html( $acreedor['ics'] ); ?>
+			<strong><?php echo esc_html( $acreedor['nombre'] ); ?></strong> <?php asde_e( '· Identificador del acreedor' ); ?> <?php echo esc_html( $acreedor['ics'] ); ?>
 			<?php echo '' !== trim( $acreedor['calle'] . $acreedor['poblacion'] ) ? '<br>' . esc_html( trim( $acreedor['calle'] . ', ' . trim( $acreedor['cp'] . ' ' . $acreedor['poblacion'] ), ' ,' ) ) : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?>
 		</p>
 	</fieldset>
@@ -68,8 +68,8 @@ $fid = (int) $familia['id'];
 	<p>
 		<label class="asde-choice">
 			<input type="checkbox" name="acepto" value="1" required>
-			<span>Soy el titular de la cuenta (o estoy autorizado/a a firmar por él o ella) y <strong>firmo esta orden de domiciliación de adeudo directo SEPA</strong>. La firma electrónica queda registrada con la fecha y la hora.</span>
+			<span><?php asde_e( 'Soy el titular de la cuenta (o estoy autorizado/a a firmar por él o ella) y' ); ?> <strong><?php asde_e( 'firmo esta orden de domiciliación de adeudo directo SEPA' ); ?></strong><?php asde_e( '. La firma electrónica queda registrada con la fecha y la hora.' ); ?></span>
 		</label>
 	</p>
-	<p><button type="submit" class="button">Firmar la autorización</button></p>
+	<p><button type="submit" class="button"><?php asde_e( 'Firmar la autorización' ); ?></button></p>
 </form>

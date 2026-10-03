@@ -127,19 +127,19 @@ final class Grupos {
 	public static function guardar( string $numero, string $nombre, string $usuario, ?string $clave, bool $es_alta ) {
 		$num = self::normalizar_numero( $numero );
 		if ( null === $num ) {
-			return new \WP_Error( 'asde_grupo', 'El nº de grupo debe tener hasta 3 cifras (p. ej. 684).' );
+			return new \WP_Error( 'asde_grupo', asde_t( 'El nº de grupo debe tener hasta 3 cifras (p. ej. 684).' ) );
 		}
 		$nombre  = trim( sanitize_text_field( $nombre ) );
 		$usuario = trim( sanitize_text_field( $usuario ) );
 		if ( '' === $nombre ) {
-			return new \WP_Error( 'asde_grupo', 'Escribe el nombre del grupo.' );
+			return new \WP_Error( 'asde_grupo', asde_t( 'Escribe el nombre del grupo.' ) );
 		}
 		$raw = self::raw();
 		if ( $es_alta && isset( $raw[ $num ] ) ) {
-			return new \WP_Error( 'asde_grupo', sprintf( 'El grupo %s ya está dado de alta.', $num ) );
+			return new \WP_Error( 'asde_grupo', sprintf( asde_t( 'El grupo %s ya está dado de alta.' ), $num ) );
 		}
 		if ( ! $es_alta && ! isset( $raw[ $num ] ) ) {
-			return new \WP_Error( 'asde_grupo', 'Ese grupo no existe.' );
+			return new \WP_Error( 'asde_grupo', asde_t( 'Ese grupo no existe.' ) );
 		}
 		$g = $raw[ $num ] ?? self::vacio( $num );
 
@@ -153,7 +153,7 @@ final class Grupos {
 			$g['crm_id']  = '';
 			$g['filtrar'] = false;
 			$g['estado']  = self::SIN_PROBAR;
-			$g['mensaje'] = 'Credenciales nuevas: falta probar la conexión.';
+			$g['mensaje'] = asde_t( 'Credenciales nuevas: falta probar la conexión.' );
 		}
 		$raw[ $num ] = $g;
 		self::guardar_raw( $raw );
@@ -198,12 +198,12 @@ final class Grupos {
 	public static function verificar( string $numero ): ConnectionResult {
 		$raw = self::raw();
 		if ( ! isset( $raw[ $numero ] ) ) {
-			return ConnectionResult::fail( 'Ese grupo no existe.' );
+			return ConnectionResult::fail( asde_t( 'Ese grupo no existe.' ) );
 		}
 		$g      = $raw[ $numero ];
 		$client = ClientFactory::para_grupo( $numero );
 		if ( ! $client ) {
-			$res = ConnectionResult::fail( '' === Settings::url() ? 'Falta la URL del CRM.' : 'Faltan el usuario o la contraseña del CRM de este grupo (o no se puede descifrar la contraseña guardada).' );
+			$res = ConnectionResult::fail( '' === Settings::url() ? asde_t( 'Falta la URL del CRM.' ) : asde_t( 'Faltan el usuario o la contraseña del CRM de este grupo (o no se puede descifrar la contraseña guardada).' ) );
 		} else {
 			$res = $client->ping();
 			if ( $res->ok ) {
@@ -219,22 +219,22 @@ final class Grupos {
 					if ( $suyo ) {
 						$g['crm_id']    = (string) $suyo['id'];
 						$g['filtrar']   = count( $gs ) > 1;
-						$res->message   = sprintf( 'Conexión correcta. En el CRM, estas credenciales ven el grupo «%s».', (string) $suyo['fields']['name'] );
-						$res->details[] = sprintf( 'Grupos Scouts visibles con estas credenciales: %d', count( $gs ) );
+						$res->message   = sprintf( asde_t( 'Conexión correcta. En el CRM, estas credenciales ven el grupo «%s».' ), (string) $suyo['fields']['name'] );
+						$res->details[] = sprintf( asde_t( 'Grupos Scouts visibles con estas credenciales: %d' ), count( $gs ) );
 						if ( count( $gs ) > 1 ) {
-							$res->warnings[] = sprintf( 'Estas credenciales ven %d Grupos Scouts. La web filtra siempre por el grupo %s, pero lo ideal es un usuario del CRM que vea solo su grupo.', count( $gs ), $numero );
+							$res->warnings[] = sprintf( asde_t( 'Estas credenciales ven %d Grupos Scouts. La web filtra siempre por el grupo %s, pero lo ideal es un usuario del CRM que vea solo su grupo.' ), count( $gs ), $numero );
 						}
 					} else {
 						$g['crm_id']  = '';
 						$g['filtrar'] = false;
 						$visibles     = array_map( static fn( $f ) => (string) $f['fields']['name'], $gs );
 						$res          = ConnectionResult::fail(
-							sprintf( 'Las credenciales funcionan, pero no ven el Grupo Scout %s en el CRM. Revisa el nº de grupo o pide a ASDE permisos sobre ese grupo.', $numero ),
-							array_merge( $res->details, array( 'Grupos Scouts visibles: ' . ( $visibles ? implode( ', ', $visibles ) : 'ninguno' ) ) )
+							sprintf( asde_t( 'Las credenciales funcionan, pero no ven el Grupo Scout %s en el CRM. Revisa el nº de grupo o pide a ASDE permisos sobre ese grupo.' ), $numero ),
+							array_merge( $res->details, array( asde_t( 'Grupos Scouts visibles: ' ) . ( $visibles ? implode( ', ', $visibles ) : 'ninguno' ) ) )
 						);
 					}
 				} catch ( CrmException $e ) {
-					$res = ConnectionResult::fail( 'Conexión correcta, pero no se han podido leer los grupos del CRM: ' . $e->getMessage(), $res->details );
+					$res = ConnectionResult::fail( asde_t( 'Conexión correcta, pero no se han podido leer los grupos del CRM: ' ) . $e->getMessage(), $res->details );
 				}
 			}
 		}

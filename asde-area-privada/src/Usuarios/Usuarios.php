@@ -204,17 +204,17 @@ final class Usuarios {
 
 	public static function etiqueta_estado( string $estado ): string {
 		return array(
-			self::INVITADO    => 'Invitación pendiente',
-			self::ACTIVO      => 'Activo',
-			self::DESACTIVADO => 'Desactivado',
+			self::INVITADO    => asde_t( 'Invitación pendiente' ),
+			self::ACTIVO      => asde_t( 'Activo' ),
+			self::DESACTIVADO => asde_t( 'Desactivado' ),
 		)[ $estado ] ?? $estado;
 	}
 
 	public static function etiqueta_campo_email( string $campo ): string {
 		return array(
-			'email1'         => 'Email de la ficha',
-			'tutor1_email_c' => 'Email del Tutor/a 1',
-			'tutor2_email_c' => 'Email del Tutor/a 2',
+			'email1'         => asde_t( 'Email de la ficha' ),
+			'tutor1_email_c' => asde_t( 'Email del Tutor/a 1' ),
+			'tutor2_email_c' => asde_t( 'Email del Tutor/a 2' ),
 		)[ $campo ] ?? $campo;
 	}
 }

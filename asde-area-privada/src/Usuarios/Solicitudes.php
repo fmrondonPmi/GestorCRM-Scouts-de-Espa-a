@@ -5,6 +5,7 @@ use AsdeBalears\AreaPrivada\Auth\Ambito;
 use AsdeBalears\AreaPrivada\Crm\Crypto;
 use AsdeBalears\AreaPrivada\Domain\Grupo;
 use AsdeBalears\AreaPrivada\Domain\Persona;
+use AsdeBalears\AreaPrivada\Idiomas\Idioma;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -80,6 +81,7 @@ final class Solicitudes {
 	 */
 	public static function crear( string $tipo, string $via, Persona $p, array $datos ): int {
 		global $wpdb;
+		$datos['idioma'] ??= Idioma::actual(); // Para contestarle, y para su cuenta, en su idioma.
 		$wpdb->insert(
 			self::table(),
 			array(

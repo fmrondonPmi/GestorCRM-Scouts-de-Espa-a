@@ -40,18 +40,27 @@ final class InformesTable {
 		self::sembrar_predefinidos();
 	}
 
+	/**
+	 * Informes de ejemplo (nombre, descripción, columnas), en castellano: así se guardan; se traducen al mostrarlos.
+	 *
+	 * @return array<int, array{0: string, 1: string, 2: string[]}>
+	 */
+	public static function predefinidos(): array {
+		return array(
+			array( 'Listado de sección', 'Nombre, edad y contacto de los socios.', array( 'num_local', 'nombre', 'apellidos', 'edad', 'seccion', 'movil', 'email' ) ),
+			array( 'Contactos de las familias', 'Tutores y sus teléfonos y emails.', array( 'nombre', 'apellidos', 'seccion', 'tutor1', 'tutor1_movil', 'tutor1_email', 'tutor2', 'tutor2_movil', 'tutor2_email' ) ),
+			array( 'Alergias y alimentación', 'Para campamentos y actividades con comida.', array( 'nombre', 'apellidos', 'seccion', 'alergias', 'alim_alergia_que', 'alim_intol_que', 'alim_regimen_que', 'alerg_medic_cual', 'medicacion_cual' ) ),
+			array( 'Autorizaciones', 'Cesión de imagen y consentimiento de medicación.', array( 'nombre', 'apellidos', 'seccion', 'edad', 'cesion_imagen', 'consent_medic' ) ),
+		);
+	}
+
 	/** Informes de ejemplo, compartidos con todos (no se pueden borrar). */
 	private static function sembrar_predefinidos(): void {
 		global $wpdb;
 		if ( (int) $wpdb->get_var( 'SELECT COUNT(*) FROM ' . self::table() . ' WHERE sistema = 1' ) > 0 ) { // phpcs:ignore WordPress.DB
 			return;
 		}
-		$predefinidos = array(
-			array( 'Listado de sección', 'Nombre, edad y contacto de los socios.', array( 'num_local', 'nombre', 'apellidos', 'edad', 'seccion', 'movil', 'email' ) ),
-			array( 'Contactos de las familias', 'Tutores y sus teléfonos y emails.', array( 'nombre', 'apellidos', 'seccion', 'tutor1', 'tutor1_movil', 'tutor1_email', 'tutor2', 'tutor2_movil', 'tutor2_email' ) ),
-			array( 'Alergias y alimentación', 'Para campamentos y actividades con comida.', array( 'nombre', 'apellidos', 'seccion', 'alergias', 'alim_alergia_que', 'alim_intol_que', 'alim_regimen_que', 'alerg_medic_cual', 'medicacion_cual' ) ),
-			array( 'Autorizaciones', 'Cesión de imagen y consentimiento de medicación.', array( 'nombre', 'apellidos', 'seccion', 'edad', 'cesion_imagen', 'consent_medic' ) ),
-		);
+		$predefinidos = self::predefinidos();
 		foreach ( $predefinidos as list( $nombre, $desc, $cols ) ) {
 			self::guardar(
 				new Informe(

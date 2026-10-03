@@ -25,11 +25,11 @@ use AsdeBalears\AreaPrivada\Usuarios\Usuarios;
 defined( 'ABSPATH' ) || exit;
 
 $columnas = array(
-	'usuario' => 'Usuario',
-	'persona' => 'Persona',
-	'roles'   => 'Roles',
-	'ambito'  => 'Ámbito',
-	'estado'  => 'Estado',
+	'usuario' => asde_t( 'Usuario' ),
+	'persona' => asde_t( 'Persona' ),
+	'roles'   => asde_t( 'Roles' ),
+	'ambito'  => asde_t( 'Ámbito' ),
+	'estado'  => asde_t( 'Estado' ),
 );
 $ambitos  = array();
 foreach ( Secciones::all() as $slug => $seccion ) {
@@ -52,10 +52,10 @@ $estados = array(
 	data-nonce-refrescar="<?php echo esc_attr( $nonce_refrescar ); ?>"
 	data-rol="<?php echo esc_attr( $rol ); ?>">
 	<header class="asde-card__header asde-card__header--split">
-		<h2 class="asde-card__title">Usuarios del área privada</h2>
+		<h2 class="asde-card__title"><?php asde_e( 'Usuarios del área privada' ); ?></h2>
 		<span class="asde-actions">
-			<a href="<?php echo esc_url( $url_emails ); ?>">Registro de emails</a>
-			<a class="button" href="<?php echo esc_url( $url_alta ); ?>">+ Dar acceso</a>
+			<a href="<?php echo esc_url( $url_emails ); ?>"><?php asde_e( 'Registro de emails' ); ?></a>
+			<a class="button" href="<?php echo esc_url( $url_alta ); ?>"><?php asde_e( '+ Dar acceso' ); ?></a>
 		</span>
 	</header>
 
@@ -65,23 +65,23 @@ $estados = array(
 	<?php endif; ?>
 
 	<?php if ( ! $total ) : ?>
-		<p>Todavía no hay usuarios. Empieza por el <a href="<?php echo esc_url( $url_alta ); ?>">alta de usuarios</a>.</p>
+		<p><?php asde_e( 'Todavía no hay usuarios. Empieza por el' ); ?> <a href="<?php echo esc_url( $url_alta ); ?>"><?php asde_e( 'alta de usuarios' ); ?></a>.</p>
 	<?php else : ?>
 		<p class="asde-muted asde-usuarios__total">
-			<span data-asde-total aria-live="polite"><?php echo esc_html( sprintf( _n( '%d usuario', '%d usuarios', $total, 'asde-area-privada' ), $total ) ); ?></span>
-			<button type="button" class="asde-btn-link" data-asde-limpiar hidden>Quitar filtros</button>
-			<button type="button" class="asde-btn-link" data-asde-actualizar hidden title="Vuelve a leer la lista y los nombres del CRM, sin recargar la página">Actualizar</button>
+			<span data-asde-total aria-live="polite"><?php echo esc_html( sprintf( asde_n( '%d usuario', '%d usuarios', $total ), $total ) ); ?></span>
+			<button type="button" class="asde-btn-link" data-asde-limpiar hidden><?php asde_e( 'Quitar filtros' ); ?></button>
+			<button type="button" class="asde-btn-link" data-asde-actualizar hidden title="<?php echo asde_a( 'Vuelve a leer la lista y los nombres del CRM, sin recargar la página' ); ?>"><?php asde_e( 'Actualizar' ); ?></button>
 		</p>
 
 		<?php // En el móvil no se ven los encabezados de la tabla: se ordena desde aquí. ?>
 		<div class="asde-solo-movil asde-orden-movil" data-asde-orden-movil hidden>
-			<label for="asde-orden-usuarios">Ordenar por</label>
+			<label for="asde-orden-usuarios"><?php asde_e( 'Ordenar por' ); ?></label>
 			<select id="asde-orden-usuarios" data-orden-col>
 				<?php foreach ( $columnas as $col => $etiqueta ) : ?>
 					<option value="<?php echo esc_attr( $col ); ?>"><?php echo esc_html( $etiqueta ); ?></option>
 				<?php endforeach; ?>
 			</select>
-			<select data-orden-dir aria-label="Sentido">
+			<select data-orden-dir aria-label="<?php echo asde_a( 'Sentido' ); ?>">
 				<option value="asc">A → Z</option>
 				<option value="desc">Z → A</option>
 			</select>
@@ -93,34 +93,34 @@ $estados = array(
 					<?php foreach ( $columnas as $col => $etiqueta ) : ?>
 						<th scope="col" data-col="<?php echo esc_attr( $col ); ?>"><?php echo esc_html( $etiqueta ); ?></th>
 					<?php endforeach; ?>
-					<th scope="col"><span class="screen-reader-text">Acciones</span></th>
+					<th scope="col"><span class="screen-reader-text"><?php asde_e( 'Acciones' ); ?></span></th>
 				</tr>
 				<tr class="asde-filtros" hidden>
 					<th scope="col">
-						<input type="search" data-filtro="usuario" placeholder="Filtrar usuario…" aria-label="Filtrar por usuario" autocomplete="off">
+						<input type="search" data-filtro="usuario" placeholder="<?php echo asde_a( 'Filtrar usuario…' ); ?>" aria-label="<?php echo asde_a( 'Filtrar por usuario' ); ?>" autocomplete="off">
 					</th>
 					<th scope="col">
-						<input type="search" data-filtro="persona" placeholder="Filtrar nombre…" aria-label="Filtrar por persona" autocomplete="off">
+						<input type="search" data-filtro="persona" placeholder="<?php echo asde_a( 'Filtrar nombre…' ); ?>" aria-label="<?php echo asde_a( 'Filtrar por persona' ); ?>" autocomplete="off">
 					</th>
 					<th scope="col">
-						<select data-filtro="roles" aria-label="Filtrar por rol">
-							<option value="">Todos los roles</option>
+						<select data-filtro="roles" aria-label="<?php echo asde_a( 'Filtrar por rol' ); ?>">
+							<option value=""><?php asde_e( 'Todos los roles' ); ?></option>
 							<?php foreach ( Roles::ALL as $r ) : ?>
 								<option value="<?php echo esc_attr( $r ); ?>"><?php echo esc_html( Roles::label( $r ) ); ?></option>
 							<?php endforeach; ?>
 						</select>
 					</th>
 					<th scope="col">
-						<select data-filtro="ambito" aria-label="Filtrar por ámbito">
-							<option value="">Todos los ámbitos</option>
+						<select data-filtro="ambito" aria-label="<?php echo asde_a( 'Filtrar por ámbito' ); ?>">
+							<option value=""><?php asde_e( 'Todos los ámbitos' ); ?></option>
 							<?php foreach ( $ambitos as $slug => $nombre ) : ?>
 								<option value="<?php echo esc_attr( $slug ); ?>"><?php echo esc_html( $nombre ); ?></option>
 							<?php endforeach; ?>
 						</select>
 					</th>
 					<th scope="col">
-						<select data-filtro="estado" aria-label="Filtrar por estado">
-							<option value="">Todos los estados</option>
+						<select data-filtro="estado" aria-label="<?php echo asde_a( 'Filtrar por estado' ); ?>">
+							<option value=""><?php asde_e( 'Todos los estados' ); ?></option>
 							<?php foreach ( $estados as $slug => $nombre ) : ?>
 								<option value="<?php echo esc_attr( $slug ); ?>"><?php echo esc_html( $nombre ); ?></option>
 							<?php endforeach; ?>
@@ -133,7 +133,7 @@ $estados = array(
 				<?php echo $filas; // phpcs:ignore WordPress.Security.EscapeOutput ?>
 			</tbody>
 		</table>
-		<p class="asde-usuarios__vacio" data-asde-vacio hidden>Ningún usuario coincide con los filtros.</p>
+		<p class="asde-usuarios__vacio" data-asde-vacio hidden><?php asde_e( 'Ningún usuario coincide con los filtros.' ); ?></p>
 		<div data-asde-paginacion></div>
 	<?php endif; ?>
 </section>

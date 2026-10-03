@@ -137,7 +137,7 @@ final class SociosTable {
 			return $existente;
 		}
 		if ( '' === NumeroSocio::codigo() ) {
-			return new \WP_Error( 'asde_num_socio', 'Falta el código de la organización federada (wp-admin → Grupos Scouts → Organización federada): sin él no se pueden generar números de socio.' );
+			return new \WP_Error( 'asde_num_socio', asde_t( 'Falta el código de la organización federada (wp-admin → Grupos Scouts → Organización federada): sin él no se pueden generar números de socio.' ) );
 		}
 
 		$wpdb->query( "SELECT GET_LOCK('asde_num_socio', 10)" ); // Evita que dos personas reciban el mismo número.
@@ -163,7 +163,7 @@ final class SociosTable {
 		} finally {
 			$wpdb->query( "SELECT RELEASE_LOCK('asde_num_socio')" );
 		}
-		return new \WP_Error( 'asde_num_socio', 'No se ha podido asignar un número de socio. Inténtalo de nuevo.' );
+		return new \WP_Error( 'asde_num_socio', asde_t( 'No se ha podido asignar un número de socio. Inténtalo de nuevo.' ) );
 	}
 
 	/** Siguiente número libre: máximo entre CRM y esta tabla, + 1. */

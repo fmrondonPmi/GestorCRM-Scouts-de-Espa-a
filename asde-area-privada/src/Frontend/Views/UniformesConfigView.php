@@ -65,7 +65,7 @@ final class UniformesConfigView extends UniformesBaseView {
 			if ( $tallas ) {
 				$cfg['modelos'][ $id ]['tallas'] = $tallas;
 			} else {
-				$avisos[] = sprintf( '%s: sin tallas no se puede pedir; se mantienen las anteriores.', $cfg['modelos'][ $id ]['nombre'] );
+				$avisos[] = sprintf( asde_t( '%s: sin tallas no se puede pedir; se mantienen las anteriores.' ), $cfg['modelos'][ $id ]['nombre'] );
 			}
 			$cfg['modelos'][ $id ]['guia'] = $this->imagen( 'guia_' . $id, (int) $cfg['modelos'][ $id ]['guia'], $avisos );
 		}
@@ -107,7 +107,7 @@ final class UniformesConfigView extends UniformesBaseView {
 		foreach ( $avisos as $a ) {
 			Notices::add( 'warning', esc_html( $a ) );
 		}
-		Notices::add( 'success', 'Configuración guardada.' );
+		Notices::add( 'success', asde_t( 'Configuración guardada.' ) );
 		$this->redirect( $this->url( 'uniformes_config' ) );
 	}
 
@@ -124,7 +124,7 @@ final class UniformesConfigView extends UniformesBaseView {
 			return $actual;
 		}
 		if ( UPLOAD_ERR_OK !== (int) $f['error'] || (int) $f['size'] > self::MAX_IMAGEN ) {
-			$avisos[] = 'Una imagen no se ha podido subir: tiene que ser JPG, PNG, WebP o GIF de hasta 3 MB.';
+			$avisos[] = asde_t( 'Una imagen no se ha podido subir: tiene que ser JPG, PNG, WebP o GIF de hasta 3 MB.' );
 			return $actual;
 		}
 		require_once ABSPATH . 'wp-admin/includes/file.php';
@@ -140,7 +140,7 @@ final class UniformesConfigView extends UniformesBaseView {
 			)
 		);
 		if ( is_wp_error( $id ) ) {
-			$avisos[] = 'Una imagen no se ha podido subir: ' . $id->get_error_message();
+			$avisos[] = asde_t( 'Una imagen no se ha podido subir: ' ) . $id->get_error_message();
 			return $actual;
 		}
 		return (int) $id;

@@ -24,6 +24,16 @@ final class Informe {
 		'seccion'   => 'Sección',
 	);
 
+	/** Nombre para mostrar: los informes predefinidos se guardan en castellano y se traducen. */
+	public function titulo(): string {
+		return $this->sistema ? asde_t( $this->nombre ) : $this->nombre;
+	}
+
+	/** Descripción para mostrar (ver titulo()). */
+	public function resumen(): string {
+		return $this->sistema ? asde_t( $this->descripcion ) : $this->descripcion;
+	}
+
 	/** @param string[] $columnas */
 	public function __construct(
 		public int $id,

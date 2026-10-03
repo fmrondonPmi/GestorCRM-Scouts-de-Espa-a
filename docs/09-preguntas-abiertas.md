@@ -29,6 +29,9 @@ Hay que resolverlas antes de programar cada parte. Cuando se responde una, se ma
 | P-43 | **SEPA · validez de la firma:** la autorización se firma **electrónicamente** (queda registrado quién, cuándo y el texto aceptado). ¿La acepta Colonya como orden de domiciliación o quiere el papel firmado? También: quién custodia el mandato mientras esté vigente y los 14 meses siguientes (doc 25) | Tesorería · SEPA |
 | P-44 | **SEPA · qué se cobra:** hoy solo la **cuota de la ronda** (por plazos o todo lo pendiente). ¿También los pedidos de uniforme y el coste de actividades? ¿Se añade recargo a las devoluciones? (doc 25) | Tesorería · SEPA |
 | P-45 | **SEPA · conciliación con el banco:** los cobros se registran a mano en la remesa («cobrado» o «devuelto»). ¿Se concilian solos con la Norma 43 de Colonya (abono agrupado de la remesa y devoluciones)? Hace falta un fichero real (P-28) (doc 25) | Tesorería · SEPA, banco |
+| P-46 | **Idiomas · revisión de las traducciones:** el catalán, el euskera y el gallego son una primera versión sin revisión de hablantes nativos. ¿Quién las revisa? (se corrigen desde wp-admin → Grupos Scouts → Idioma y etiquetas, sin tocar el código; doc 28) | Idiomas |
+| P-47 | **Idiomas · nombres propios:** ¿cómo se llaman las secciones y los roles en cada idioma (Castors / Llobatons, Kastorrak / Otsokumeak…)? Se ha puesto una propuesta. ¿Se traducen también las pantallas de wp-admin del plugin (hoy, en castellano)? (doc 28) | Idiomas |
+| P-48 | **Menús por rol:** ¿basta con separar el menú (lo personal / la gestión del grupo) o se quieren también páginas distintas? ¿Un scouter debe poder pedir uniforme para otros de su sección? (doc 28) | Menús |
 
 ## Resueltas
 

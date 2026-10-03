@@ -139,20 +139,20 @@ final class FichaService {
 			return in_array( $valor, array( '1', 'on', 'true' ), true ) ? '1' : '0';
 		}
 		if ( '' === $valor ) {
-			return ! empty( $meta['requerido'] ) ? new \WP_Error( 'asde_ficha', 'es obligatorio.' ) : '';
+			return ! empty( $meta['requerido'] ) ? new \WP_Error( 'asde_ficha', asde_t( 'es obligatorio.' ) ) : '';
 		}
 		switch ( $tipo ) {
 			case 'date':
 				if ( ! preg_match( '/^(\d{4})-(\d{2})-(\d{2})$/', $valor, $m ) || ! checkdate( (int) $m[2], (int) $m[3], (int) $m[1] ) ) {
-					return new \WP_Error( 'asde_ficha', 'fecha no válida.' );
+					return new \WP_Error( 'asde_ficha', asde_t( 'fecha no válida.' ) );
 				}
 				return $valor;
 			case 'enum':
 			case 'dynamicenum':
 			case 'radioenum':
-				return array_key_exists( $valor, (array) ( $meta['opciones'] ?? array() ) ) ? $valor : new \WP_Error( 'asde_ficha', 'opción no válida.' );
+				return array_key_exists( $valor, (array) ( $meta['opciones'] ?? array() ) ) ? $valor : new \WP_Error( 'asde_ficha', asde_t( 'opción no válida.' ) );
 			case 'int':
-				return preg_match( '/^-?\d+$/', $valor ) ? $valor : new \WP_Error( 'asde_ficha', 'tiene que ser un número.' );
+				return preg_match( '/^-?\d+$/', $valor ) ? $valor : new \WP_Error( 'asde_ficha', asde_t( 'tiene que ser un número.' ) );
 			case 'text':
 				$v = sanitize_textarea_field( $valor );
 				break;
@@ -160,11 +160,11 @@ final class FichaService {
 				$v = sanitize_text_field( $valor );
 		}
 		if ( ( 'email1' === $campo || str_contains( $campo, 'email' ) ) && ! is_email( $v ) ) {
-			return new \WP_Error( 'asde_ficha', 'email no válido.' );
+			return new \WP_Error( 'asde_ficha', asde_t( 'email no válido.' ) );
 		}
 		if ( 'phone' === $tipo || str_contains( $campo, 'movil' ) ) {
 			if ( ! preg_match( '/^[0-9 +().\-]{6,20}$/', $v ) ) {
-				return new \WP_Error( 'asde_ficha', 'teléfono no válido.' );
+				return new \WP_Error( 'asde_ficha', asde_t( 'teléfono no válido.' ) );
 			}
 		}
 		$len = (int) ( $meta['len'] ?? 0 );
@@ -178,10 +178,10 @@ final class FichaService {
 	public static function mostrar( string $valor, array $meta ): string {
 		$tipo = (string) ( $meta['tipo'] ?? '' );
 		if ( '' === $valor ) {
-			return 'bool' === $tipo ? 'No' : '—';
+			return 'bool' === $tipo ? asde_t( 'No' ) : '—';
 		}
 		return match ( true ) {
-			'bool' === $tipo                                                 => Escritura::iguales( $valor, '1' ) ? 'Sí' : 'No',
+			'bool' === $tipo                                                 => Escritura::iguales( $valor, '1' ) ? asde_t( 'Sí' ) : asde_t( 'No' ),
 			'date' === $tipo && (bool) preg_match( '/^\d{4}-\d{2}-\d{2}$/', $valor ) => wp_date( 'd/m/Y', strtotime( $valor . ' 12:00' ) ),
 			'multienum' === $tipo                                            => implode( ', ', array_map( static fn( $v ) => $meta['opciones'][ $v ] ?? $v, array_filter( explode( ',', str_replace( '^', '', $valor ) ) ) ) ),
 			isset( $meta['opciones'][ $valor ] )                             => (string) $meta['opciones'][ $valor ],

@@ -35,7 +35,7 @@ final class TesoreriaView extends TesoreriaBaseView {
 		}
 		$repo = PersonaRepository::make();
 		if ( ! $repo ) {
-			return $this->error_crm( 'tesoreria', 'La conexión de tu grupo con el CRM no está configurada o no se ha podido comprobar. Un administrador puede revisarla en wp-admin → Grupos Scouts.' );
+			return $this->error_crm( 'tesoreria', asde_t( 'La conexión de tu grupo con el CRM no está configurada o no se ha podido comprobar. Un administrador puede revisarla en wp-admin → Grupos Scouts.' ) );
 		}
 		$ronda = $this->ronda();
 
@@ -43,7 +43,7 @@ final class TesoreriaView extends TesoreriaBaseView {
 			$familia = (int) $this->get( 'familia' );
 			$html    = $familia ? $this->detalle( $repo, $familia, $ronda ) : $this->control( $repo, $ronda );
 		} catch ( CrmException $e ) {
-			return $this->error_crm( 'tesoreria', 'No se ha podido consultar el CRM: ' . $e->getMessage() );
+			return $this->error_crm( 'tesoreria', asde_t( 'No se ha podido consultar el CRM: ' ) . $e->getMessage() );
 		}
 		return $this->layout( 'tesoreria', $this->subnav( 'tesoreria', $ronda ) . $html );
 	}
@@ -138,7 +138,7 @@ final class TesoreriaView extends TesoreriaBaseView {
 	private function detalle( PersonaRepository $repo, int $id, string $ronda ): string {
 		$f = FamiliasTable::obtener( $id );
 		if ( ! $f ) {
-			return $this->tpl( 'comun/avisos', array( 'avisos' => array( array( 'error', 'Esa familia no existe.' ) ) ) ) . $this->control( $repo, $ronda );
+			return $this->tpl( 'comun/avisos', array( 'avisos' => array( array( 'error', asde_t( 'Esa familia no existe.' ) ) ) ) ) . $this->control( $repo, $ronda );
 		}
 		$cfg      = Config::de( $ronda );
 		$personas = $repo->obtener_varias( $f['miembros'] );
@@ -190,12 +190,12 @@ final class TesoreriaView extends TesoreriaBaseView {
 		header( 'Content-Disposition: attachment; filename="control-pagos-' . $ronda . '-' . wp_date( 'Ymd' ) . '.csv"' );
 		$out = fopen( 'php://output', 'w' );
 		fwrite( $out, "\xEF\xBB\xBF" );
-		fputcsv( $out, array( 'Nº familia', 'Socios', 'Hijos que pagan', 'Cuota', 'Ajustes', 'A pagar', 'Pagado', 'Pendiente', 'Estado' ), ';' );
+		fputcsv( $out, array( asde_t( 'Nº familia' ), asde_t( 'Socios' ), asde_t( 'Hijos que pagan' ), asde_t( 'Cuota' ), asde_t( 'Ajustes' ), asde_t( 'A pagar' ), asde_t( 'Pagado' ), asde_t( 'Pendiente' ), asde_t( 'Estado' ) ), ';' );
 		$num = static fn( float $v ) => number_format( $v, 2, ',', '' );
 		foreach ( $filas as $f ) {
 			$c       = $f['calc'];
 			$nombres = array_map( static fn( $n ) => isset( $personas[ $n ] ) ? $personas[ $n ]->nombre_completo() : $n, $f['familia']['miembros'] );
-			fputcsv( $out, array_map( array( Generador::class, 'celda_segura' ), array( $f['familia']['numero'], implode( ', ', $nombres ), count( $c['pagan'] ), $num( $c['cuota']['total'] ), $num( $c['ajustes'] ), $num( $c['a_pagar'] ), $num( $c['pagado'] ), $num( $c['pendiente'] ), Calculadora::ETIQUETAS[ $c['estado'] ] ) ), ';' );
+			fputcsv( $out, array_map( array( Generador::class, 'celda_segura' ), array( $f['familia']['numero'], implode( ', ', $nombres ), count( $c['pagan'] ), $num( $c['cuota']['total'] ), $num( $c['ajustes'] ), $num( $c['a_pagar'] ), $num( $c['pagado'] ), $num( $c['pendiente'] ), asde_t( Calculadora::ETIQUETAS[ $c['estado'] ] ) ) ), ';' );
 		}
 		fclose( $out );
 		exit;
@@ -209,7 +209,7 @@ final class TesoreriaView extends TesoreriaBaseView {
 		$ronda   = Config::es_ronda( $this->post( 'ronda' ) ) ? $this->post( 'ronda' ) : Config::ronda_actual();
 		$volver  = $this->url( 'tesoreria', array( 'familia' => $familia, 'ronda' => $ronda ) );
 		if ( ! FamiliasTable::obtener( $familia ) ) {
-			Notices::add( 'error', 'Familia no válida.' );
+			Notices::add( 'error', asde_t( 'Familia no válida.' ) );
 			$this->redirect( $this->url( 'tesoreria' ) );
 		}
 		check_admin_referer( 'asde_mov_' . $familia );
@@ -218,20 +218,20 @@ final class TesoreriaView extends TesoreriaBaseView {
 		switch ( $this->post( 'asde_action' ) ) {
 			case 'registrar_pago':
 				$r = MovimientosTable::registrar( $familia, $ronda, MovimientosTable::PAGO, $this->post( 'fecha' ), $importe, sanitize_key( $this->post( 'metodo' ) ), $this->post( 'referencia' ), $this->post( 'nota' ) );
-				$ok = sprintf( 'Pago de %s registrado.', Calculadora::euros( $importe ) );
+				$ok = sprintf( asde_t( 'Pago de %s registrado.' ), Calculadora::euros( $importe ) );
 				break;
 			case 'registrar_ajuste':
 				$signo = 'descuento' === $this->post( 'sentido' ) ? -1 : 1;
 				$r     = MovimientosTable::registrar( $familia, $ronda, MovimientosTable::AJUSTE, $this->post( 'fecha' ), $signo * abs( $importe ), '', '', $this->post( 'nota' ) );
-				$ok    = sprintf( 'Ajuste de %s registrado.', Calculadora::euros( $signo * abs( $importe ) ) );
+				$ok    = sprintf( asde_t( 'Ajuste de %s registrado.' ), Calculadora::euros( $signo * abs( $importe ) ) );
 				break;
 			case 'anular':
 				$mov = MovimientosTable::obtener( (int) $this->post( 'movimiento' ) );
-				$r   = ( $mov && (int) $mov['familia_id'] === $familia && MovimientosTable::anular( (int) $mov['id'] ) ) ? (int) $mov['id'] : new \WP_Error( 'x', 'No se ha podido anular el movimiento.' );
-				$ok  = 'Movimiento anulado.';
+				$r   = ( $mov && (int) $mov['familia_id'] === $familia && MovimientosTable::anular( (int) $mov['id'] ) ) ? (int) $mov['id'] : new \WP_Error( 'x', asde_t( 'No se ha podido anular el movimiento.' ) );
+				$ok  = asde_t( 'Movimiento anulado.' );
 				break;
 			default:
-				$r = new \WP_Error( 'x', 'Acción desconocida.' );
+				$r = new \WP_Error( 'x', asde_t( 'Acción desconocida.' ) );
 				$ok = '';
 		}
 

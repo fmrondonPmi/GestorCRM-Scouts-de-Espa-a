@@ -12,13 +12,13 @@ abstract class UniformesBaseView extends View {
 	protected function subnav( string $activo ): string {
 		$items = array();
 		if ( current_user_can( Servicio::CAP_PEDIR ) && Servicio::para_quien( Ambito::actual() ) ) {
-			$items['uniforme'] = 'Mis pedidos';
+			$items['uniforme'] = asde_t( 'Mis pedidos' );
 		}
 		if ( current_user_can( Servicio::CAP_GESTION ) ) {
-			$items['uniformes'] = 'Gestión de pedidos';
+			$items['uniformes'] = asde_t( 'Gestión de pedidos' );
 		}
 		if ( current_user_can( Servicio::CAP_CONFIG ) ) {
-			$items['uniformes_config'] = 'Configuración';
+			$items['uniformes_config'] = asde_t( 'Configuración' );
 		}
 		return count( $items ) > 1 ? $this->tpl(
 			'uniformes/subnav',

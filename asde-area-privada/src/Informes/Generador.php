@@ -35,10 +35,10 @@ final class Generador {
 		$cols       = array_values( array_intersect( $informe->columnas, array_keys( $permitidas ) ) );
 		$avisos     = array();
 		if ( count( $cols ) < count( $informe->columnas ) ) {
-			$avisos[] = 'Algunas columnas no se muestran porque tu rol no tiene acceso a esos datos.';
+			$avisos[] = asde_t( 'Algunas columnas no se muestran porque tu rol no tiene acceso a esos datos.' );
 		}
 		if ( ! $cols ) {
-			throw new \InvalidArgumentException( 'Elige al menos una columna.' );
+			throw new \InvalidArgumentException( asde_t( 'Elige al menos una columna.' ) );
 		}
 
 		// Ámbito de secciones.
@@ -47,7 +47,7 @@ final class Generador {
 			$mias      = $ambito->secciones_scouter();
 			$secciones = $secciones ? array_values( array_intersect( $secciones, $mias ) ) : $mias;
 			if ( ! $secciones ) {
-				throw new \InvalidArgumentException( 'No tienes secciones asignadas (o no coinciden con las del informe). Pide a Secretaría que revise tu alta.' );
+				throw new \InvalidArgumentException( asde_t( 'No tienes secciones asignadas (o no coinciden con las del informe). Pide a Secretaría que revise tu alta.' ) );
 			}
 		}
 
@@ -70,7 +70,7 @@ final class Generador {
 		$filtro_salud = $informe->filtros['salud'];
 		if ( $filtro_salud && ! $ambito->user->has_cap( 'asde_view_health' ) ) {
 			$filtro_salud = false;
-			$avisos[]     = 'El filtro de datos de salud no se aplica porque tu rol no tiene acceso a esos datos.';
+			$avisos[]     = asde_t( 'El filtro de datos de salud no se aplica porque tu rol no tiene acceso a esos datos.' );
 		}
 
 		$campos = self::BASE;
@@ -133,7 +133,7 @@ final class Generador {
 					'no' => 'No',
 				)[ strtolower( $v ) ] ?? $v;
 			case 'enum':
-				return Catalogo::ENUMS[ $campos[0] ][ $v ] ?? $v;
+				return asde_t( Catalogo::ENUMS[ $campos[0] ][ $v ] ?? $v );
 			case 'seccion':
 				$nombres = array();
 				foreach ( explode( ',', $v ) as $raw ) {

@@ -18,14 +18,14 @@ abstract class TesoreriaBaseView extends View {
 
 	protected function subnav( string $activo, string $ronda ): string {
 		$items = array(
-			'tesoreria'  => 'Control de pagos',
-			'familias'   => 'Familias',
-			'cuotas'     => 'Cuotas y plazos',
-			'federacion' => 'Coste federativo',
+			'tesoreria'  => asde_t( 'Control de pagos' ),
+			'familias'   => asde_t( 'Familias' ),
+			'cuotas'     => asde_t( 'Cuotas y plazos' ),
+			'federacion' => asde_t( 'Coste federativo' ),
 		);
 		if ( current_user_can( self::CAP_CONFIG ) ) {
-			$items['banco'] = 'Banco';
-			$items['sepa']  = 'Domiciliaciones';
+			$items['banco'] = asde_t( 'Banco' );
+			$items['sepa']  = asde_t( 'Domiciliaciones' );
 		}
 		return $this->tpl(
 			'tesoreria/subnav',

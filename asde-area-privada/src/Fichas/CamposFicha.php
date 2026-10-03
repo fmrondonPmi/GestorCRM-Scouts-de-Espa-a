@@ -60,9 +60,10 @@ final class CamposFicha {
 
 	/** @return array<string, array{0:string, 1:string, 2:string}> campo CRM => [etiqueta, grupo, nivel] */
 	public static function todos(): array {
-		static $campos = null;
-		if ( null !== $campos ) {
-			return $campos;
+		static $por_idioma = array(); // Las etiquetas salen traducidas: una lista por idioma.
+		$idioma = \AsdeBalears\AreaPrivada\Idiomas\Idioma::actual();
+		if ( isset( $por_idioma[ $idioma ] ) ) {
+			return $por_idioma[ $idioma ];
 		}
 		$campos = array();
 		foreach ( Catalogo::columnas() as $col ) {
@@ -71,8 +72,8 @@ final class CamposFicha {
 				continue; // Se calcula de la fecha de nacimiento.
 			}
 			if ( 'nombre_tutor' === $tipo ) {
-				$campos[ $crm[0] ] = array( $etiqueta . ' · nombre', $grupo, $nivel );
-				$campos[ $crm[1] ] = array( $etiqueta . ' · apellidos', $grupo, $nivel );
+				$campos[ $crm[0] ] = array( sprintf( asde_t( '%s · nombre' ), $etiqueta ), $grupo, $nivel );
+				$campos[ $crm[1] ] = array( sprintf( asde_t( '%s · apellidos' ), $etiqueta ), $grupo, $nivel );
 				continue;
 			}
 			// En la ficha, la alimentación va en su propio apartado.
@@ -81,7 +82,7 @@ final class CamposFicha {
 			}
 			$campos[ $crm[0] ] = array( $etiqueta, $grupo, $nivel );
 		}
-		return $campos;
+		return $por_idioma[ $idioma ] = $campos;
 	}
 
 	/** @return string[] */

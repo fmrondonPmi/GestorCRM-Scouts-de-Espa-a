@@ -34,7 +34,7 @@ final class AltaUsuariosView extends View {
 		}
 		$alta = AltaService::make();
 		if ( ! $alta ) {
-			return $this->error_crm( 'alta', 'La conexión de tu grupo con el CRM no está configurada o no se ha podido comprobar. Un administrador puede revisarla en wp-admin → Grupos Scouts.' );
+			return $this->error_crm( 'alta', asde_t( 'La conexión de tu grupo con el CRM no está configurada o no se ha podido comprobar. Un administrador puede revisarla en wp-admin → Grupos Scouts.' ) );
 		}
 
 		try {
@@ -43,7 +43,7 @@ final class AltaUsuariosView extends View {
 				? $this->detalle( $alta, $socio )
 				: $this->buscar( $alta, $this->get( 'q' ) );
 		} catch ( CrmException $e ) {
-			return $this->error_crm( 'alta', 'No se ha podido consultar el CRM: ' . $e->getMessage() );
+			return $this->error_crm( 'alta', asde_t( 'No se ha podido consultar el CRM: ' ) . $e->getMessage() );
 		}
 
 		return $this->layout( 'alta', $html );
@@ -73,7 +73,7 @@ final class AltaUsuariosView extends View {
 		$p    = $repo->obtener( $socio );
 		if ( ! $p || ! $p->tiene_membresia_activa() ) {
 			// Se está pintando la página (cabeceras ya enviadas): aviso en línea, sin redirigir.
-			return $this->tpl( 'comun/avisos', array( 'avisos' => array( array( 'error', 'No hay ningún socio con membresía activa con ese número en el CRM del grupo.' ) ) ) )
+			return $this->tpl( 'comun/avisos', array( 'avisos' => array( array( 'error', asde_t( 'No hay ningún socio con membresía activa con ese número en el CRM del grupo.' ) ) ) ) )
 				. $this->buscar( $alta, '' );
 		}
 
@@ -141,7 +141,7 @@ final class AltaUsuariosView extends View {
 		$ok    = PersonaRepository::es_num_asde( $socio );
 		$volver = $ok ? $this->url( 'alta', array( 'socio' => $socio ) ) : $this->url( 'alta' );
 		if ( ! $alta || ! $ok ) {
-			Notices::add( 'error', 'Petición no válida.' );
+			Notices::add( 'error', asde_t( 'Petición no válida.' ) );
 			$this->redirect( $volver );
 		}
 
@@ -181,9 +181,9 @@ final class AltaUsuariosView extends View {
 					$cuenta = Usuarios::por_socio( $socio );
 					if ( $s && $cuenta ) {
 						$this->resolver_solicitud( $s, $cuenta->ID );
-						Notices::add( 'success', sprintf( 'Solicitud resuelta: el usuario <strong>%s</strong> ya tenía acceso.', esc_html( $cuenta->user_login ) ) );
+						Notices::add( 'success', sprintf( asde_t( 'Solicitud resuelta: el usuario <strong>%s</strong> ya tenía acceso.' ), esc_html( $cuenta->user_login ) ) );
 					} else {
-						Notices::add( 'error', 'Esa solicitud ya no está pendiente o la persona no tiene cuenta.' );
+						Notices::add( 'error', asde_t( 'Esa solicitud ya no está pendiente o la persona no tiene cuenta.' ) );
 					}
 					$this->redirect( $this->url( 'solicitudes' ) );
 					break;
@@ -194,10 +194,10 @@ final class AltaUsuariosView extends View {
 					break;
 
 				default:
-					$result = AltaResult::error( 'Acción desconocida.' );
+					$result = AltaResult::error( asde_t( 'Acción desconocida.' ) );
 			}
 		} catch ( CrmException $e ) {
-			$result = AltaResult::error( 'No se ha podido consultar el CRM: ' . $e->getMessage() );
+			$result = AltaResult::error( asde_t( 'No se ha podido consultar el CRM: ' ) . $e->getMessage() );
 		}
 
 		$this->avisar( $result );
@@ -223,24 +223,24 @@ final class AltaUsuariosView extends View {
 		$quien = sprintf( 'usuario <strong>%s</strong>', esc_html( $u->user_login ) );
 
 		$mensaje = AltaResult::CREADO === $r->accion
-			? sprintf( 'Acceso creado: %s. Roles: %s.', $quien, esc_html( $roles ) )
-			: sprintf( 'Acceso actualizado: %s. Roles: %s.', $quien, esc_html( $roles ) );
+			? sprintf( asde_t( 'Acceso creado: %s. Roles: %s.' ), $quien, esc_html( $roles ) )
+			: sprintf( asde_t( 'Acceso actualizado: %s. Roles: %s.' ), $quien, esc_html( $roles ) );
 
 		$email = RegistroEmails::ultimos( array( $u->ID ) )[ $u->ID ] ?? null;
-		$ver   = $email ? sprintf( ' <a href="%s">Ver el email</a>.', esc_url( add_query_arg( 'ver', (int) $email['id'], $this->url( 'emails' ) ) ) ) : '';
+		$ver   = $email ? sprintf( ' ' . asde_h( '<a href="%s">Ver el email</a>.' ), esc_url( add_query_arg( 'ver', (int) $email['id'], $this->url( 'emails' ) ) ) ) : '';
 		if ( $r->invitacion_enviada ) {
-			$mensaje .= sprintf( ' Se ha enviado la invitación a %s, el email del CRM (válida %d días).', esc_html( $email['destino'] ?? '' ), Invitacion::DIAS ) . $ver;
+			$mensaje .= sprintf( asde_t( ' Se ha enviado la invitación a %s, el email del CRM (válida %d días).' ), esc_html( $email['destino'] ?? '' ), Invitacion::DIAS ) . $ver;
 		} elseif ( Usuarios::ACTIVO === Usuarios::estado( $u ) ) {
-			$mensaje .= ' Su cuenta ya estaba activa, así que no se envía invitación.';
+			$mensaje .= asde_t( ' Su cuenta ya estaba activa, así que no se envía invitación.' );
 		} elseif ( AltaResult::CREADO === $r->accion ) {
-			Notices::add( 'error', 'No se ha podido enviar el email de invitación: ' . esc_html( $email['error'] ?? 'motivo desconocido' ) . '. Puedes reenviarlo desde el listado de usuarios.' . $ver );
+			Notices::add( 'error', sprintf( asde_t( 'No se ha podido enviar el email de invitación: %s. Puedes reenviarlo desde el listado de usuarios.' ), esc_html( $email['error'] ?? asde_t( 'motivo desconocido' ) ) ) . $ver );
 		}
 
 		// Número generado ahora: recordatorio para pasarlo al CRM.
 		$generados = \AsdeBalears\AreaPrivada\Socios\SociosTable::generados_pendientes();
 		$numero_usuario = NumeroSocio::socio_de_usuario_tutor( $u->user_login ) ?? $u->user_login;
 		if ( in_array( $numero_usuario, $generados, true ) ) {
-			$mensaje .= sprintf( ' <br>📌 El nº de socio/a <strong>%s</strong> se ha generado automáticamente: anótalo en el CRM (campo «Nº de socio/a local/territorial»).', esc_html( $numero_usuario ) );
+			$mensaje .= sprintf( asde_t( ' <br>📌 El nº de socio/a <strong>%s</strong> se ha generado automáticamente: anótalo en el CRM (campo «Nº de socio/a local/territorial»).' ), esc_html( $numero_usuario ) );
 		}
 		Notices::add( 'success', $mensaje );
 	}

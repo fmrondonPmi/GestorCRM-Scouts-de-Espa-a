@@ -50,7 +50,7 @@ if ( isset( AltaService::ROL_POR_CARGO[ $p->cargo ] ) ) {
 	}
 }
 ?>
-<p class="asde-back asde-solo-pagina"><a href="<?php echo esc_url( $url_volver ); ?>">← Volver a la búsqueda</a></p>
+<p class="asde-back asde-solo-pagina"><a href="<?php echo esc_url( $url_volver ); ?>"><?php asde_e( '← Volver a la búsqueda' ); ?></a></p>
 
 <section class="asde-card">
 	<header class="asde-card__header">
@@ -63,36 +63,36 @@ if ( isset( AltaService::ROL_POR_CARGO[ $p->cargo ] ) ) {
 	</header>
 	<dl class="asde-datos">
 		<div>
-			<dt><?php echo Identidad::es_asde() ? 'Nº socio/a Scouts de España (usuario)' : 'Nº socio/a local (usuario)'; ?></dt>
+			<dt><?php echo Identidad::es_asde() ? asde_t( 'Nº socio/a Scouts de España (usuario)' ) : asde_t( 'Nº socio/a local (usuario)' ); ?></dt>
 			<dd>
 				<?php echo Numeros::html( $p, $numero ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 				<?php // El aviso del problema ya lo da Numeros::html (⚠); aquí solo lo que se hace con él. ?>
 				<?php if ( Numeracion::FALTA === $numero['estado'] && ! Identidad::es_asde() ) : ?>
-					<br><span class="asde-help">Se generará al darle acceso.</span>
+					<br><span class="asde-help"><?php asde_e( 'Se generará al darle acceso.' ); ?></span>
 				<?php endif; ?>
 			</dd>
 		</div>
 		<div>
-			<dt>Edad</dt>
+			<dt><?php asde_e( 'Edad' ); ?></dt>
 			<dd><?php echo null === $edad ? '—' : esc_html( sprintf( '%d años (%s)', $edad, wp_date( 'd/m/Y', strtotime( $p->fecha_nacimiento . ' 12:00' ) ) ) ); ?></dd>
 		</div>
 		<div>
-			<dt>Email</dt>
+			<dt><?php asde_e( 'Email' ); ?></dt>
 			<dd><?php echo $p->email ? esc_html( $p->email ) : '—'; ?></dd>
 		</div>
 		<div>
-			<dt>Móvil</dt>
+			<dt><?php asde_e( 'Móvil' ); ?></dt>
 			<dd><?php echo $p->movil ? esc_html( $p->movil ) : '—'; ?></dd>
 		</div>
 		<?php if ( $p->cargo ) : ?>
 			<div>
-				<dt>Cargo en el CRM</dt>
-				<dd><?php echo esc_html( Catalogo::ENUMS['cargoeducativo_c'][ $p->cargo ] ?? $p->cargo ); ?></dd>
+				<dt><?php asde_e( 'Cargo en el CRM' ); ?></dt>
+				<dd><?php echo esc_html( asde_t( Catalogo::ENUMS['cargoeducativo_c'][ $p->cargo ] ?? $p )->cargo ); ?></dd>
 			</div>
 		<?php endif; ?>
 		<?php foreach ( $p->tutores as $n => $t ) : ?>
 			<div>
-				<dt>Tutor/a <?php echo (int) $n; ?></dt>
+				<dt><?php asde_e( 'Tutor/a' ); ?> <?php echo (int) $n; ?></dt>
 				<dd>
 					<?php echo esc_html( trim( $t['nombre'] . ' ' . $t['apellidos'] ) ?: '—' ); ?>
 					<?php if ( $t['email'] ) : ?>
@@ -102,54 +102,54 @@ if ( isset( AltaService::ROL_POR_CARGO[ $p->cargo ] ) ) {
 			</div>
 		<?php endforeach; ?>
 	</dl>
-	<p class="asde-muted">Datos del CRM, solo lectura: no se guardan en la web. Si algo es incorrecto, corrígelo en el CRM.</p>
+	<p class="asde-muted"><?php asde_e( 'Datos del CRM, solo lectura: no se guardan en la web. Si algo es incorrecto, corrígelo en el CRM.' ); ?></p>
 	<?php if ( $bloqueado ) : ?>
 		<div class="asde-notice asde-notice--warning" role="status">
-			El nº de socio/a local de esta ficha está <strong><?php echo esc_html( mb_strtolower( Numeracion::ETIQUETAS[ $numero['estado'] ] ) ); ?></strong>
-			y no se puede usar como usuario. Corrígelo en el CRM (campo «Nº de socio/a local/territorial»); puedes ver todas las incidencias en
-			<a href="<?php echo esc_url( add_query_arg( 'ver', 'incidencias', $url_personas ) ); ?>">Personas</a>.
+			<?php asde_e( 'El nº de socio/a local de esta ficha está' ); ?> <strong><?php echo esc_html( mb_strtolower( asde_t( Numeracion::ETIQUETAS[ $numero['estado'] ] ) ) ); ?></strong>
+			<?php asde_e( 'y no se puede usar como usuario. Corrígelo en el CRM (campo «Nº de socio/a local/territorial»); puedes ver todas las incidencias en' ); ?>
+			<a href="<?php echo esc_url( add_query_arg( 'ver', 'incidencias', $url_personas ) ); ?>"><?php asde_e( 'Personas' ); ?></a>.
 		</div>
 	<?php endif; ?>
 </section>
 
 <section class="asde-card">
-	<h3>Acceso web actual</h3>
+	<h3><?php asde_e( 'Acceso web actual' ); ?></h3>
 	<?php if ( $vinculado ) : ?>
 		<p>
-			Usuario <strong><?php echo esc_html( $vinculado->user_login ); ?></strong>
+			<?php asde_e( 'Usuario' ); ?> <strong><?php echo esc_html( $vinculado->user_login ); ?></strong>
 			<?php foreach ( Usuarios::roles_asde( $vinculado ) as $rol ) : ?>
 				<span class="asde-badge asde-badge--rol"><?php echo esc_html( Roles::label( $rol ) ); ?></span>
 			<?php endforeach; ?>
 			<span class="asde-badge asde-badge--estado-<?php echo esc_attr( Usuarios::estado( $vinculado ) ); ?>"><?php echo esc_html( Usuarios::etiqueta_estado( Usuarios::estado( $vinculado ) ) ); ?></span>
 		</p>
 	<?php else : ?>
-		<p>No tiene usuario propio.</p>
+		<p><?php asde_e( 'No tiene usuario propio.' ); ?></p>
 	<?php endif; ?>
 	<?php if ( $familia_tes ) : ?>
-		<p>Familia de Tesorería: <strong><?php echo esc_html( $familia_tes['numero'] ); ?></strong></p>
+		<p><?php asde_e( 'Familia de Tesorería:' ); ?> <strong><?php echo esc_html( $familia_tes['numero'] ); ?></strong></p>
 	<?php endif; ?>
 	<?php if ( $cuenta_familiar ) : ?>
 		<p>
-			Cuenta familiar: <strong><?php echo esc_html( $cuenta_familiar->user_login ); ?></strong>
+			<?php asde_e( 'Cuenta familiar:' ); ?> <strong><?php echo esc_html( $cuenta_familiar->user_login ); ?></strong>
 			<span class="asde-badge asde-badge--estado-<?php echo esc_attr( Usuarios::estado( $cuenta_familiar ) ); ?>"><?php echo esc_html( Usuarios::etiqueta_estado( Usuarios::estado( $cuenta_familiar ) ) ); ?></span>
 			<?php $en_cuenta = in_array( $p->num_socio_asde, Usuarios::representados( $cuenta_familiar->ID ), true ); ?>
-			<?php echo $en_cuenta ? '' : '<span class="asde-muted">(de un hermano/a; aún no incluye a esta persona)</span>'; ?>
+			<?php echo $en_cuenta ? '' : '<span class="asde-muted">' . esc_html( asde_t( '(de un hermano/a; aún no incluye a esta persona)' ) ) . '</span>'; ?>
 		</p>
 	<?php endif; ?>
-	<p class="asde-muted"><a href="<?php echo esc_url( $url_usuarios ); ?>">Ver todos los usuarios del área privada</a></p>
+	<p class="asde-muted"><a href="<?php echo esc_url( $url_usuarios ); ?>"><?php asde_e( 'Ver todos los usuarios del área privada' ); ?></a></p>
 </section>
 
 <section class="asde-card">
-	<h3>Dar acceso a esta persona</h3>
+	<h3><?php asde_e( 'Dar acceso a esta persona' ); ?></h3>
 	<?php if ( ! $alguno ) : ?>
-		<p>No se le puede dar acceso propio:</p>
+		<p><?php asde_e( 'No se le puede dar acceso propio:' ); ?></p>
 		<ul>
 			<?php foreach ( array_unique( array_filter( $eleg ) ) as $motivo ) : ?>
 				<li><?php echo esc_html( $motivo ); ?></li>
 			<?php endforeach; ?>
 		</ul>
 	<?php elseif ( $bloqueado ) : ?>
-		<p>Primero hay que corregir su nº de socio/a en el CRM.</p>
+		<p><?php asde_e( 'Primero hay que corregir su nº de socio/a en el CRM.' ); ?></p>
 	<?php else : ?>
 		<form method="post" class="asde-form" data-asde-alta-persona>
 			<?php wp_nonce_field( 'asde_alta_persona_' . $p->num_socio_asde ); ?>
@@ -157,7 +157,7 @@ if ( isset( AltaService::ROL_POR_CARGO[ $p->cargo ] ) ) {
 			<input type="hidden" name="socio" value="<?php echo esc_attr( $p->num_socio_asde ); ?>">
 
 			<fieldset>
-				<legend>Rol o roles</legend>
+				<legend><?php asde_e( 'Rol o roles' ); ?></legend>
 				<?php foreach ( $eleg as $rol => $motivo ) : ?>
 					<?php
 					$tiene    = $tiene_rol( $rol );
@@ -168,11 +168,11 @@ if ( isset( AltaService::ROL_POR_CARGO[ $p->cargo ] ) ) {
 						<span>
 							<?php echo esc_html( Roles::label( $rol ) ); ?>
 							<?php if ( $tiene ) : ?>
-								<span class="asde-help">Ya tiene este rol.</span>
+								<span class="asde-help"><?php asde_e( 'Ya tiene este rol.' ); ?></span>
 							<?php elseif ( null !== $motivo ) : ?>
 								<span class="asde-help"><?php echo esc_html( $motivo ); ?></span>
 							<?php elseif ( in_array( $rol, AltaService::ROLES_RESPONSABILIDAD, true ) ) : ?>
-								<span class="asde-help">Requiere también el rol de Scouter, o elegir «Voluntario sin sección».<?php echo $sugerido ? ' Sugerido por su cargo en el CRM.' : ''; ?></span>
+								<span class="asde-help"><?php asde_e( 'Requiere también el rol de Scouter, o elegir «Voluntario sin sección».' ); ?><?php echo $sugerido ? asde_t( ' Sugerido por su cargo en el CRM.' ) : ''; ?></span>
 							<?php endif; ?>
 						</span>
 					</label>
@@ -181,8 +181,8 @@ if ( isset( AltaService::ROL_POR_CARGO[ $p->cargo ] ) ) {
 
 			<?php if ( null === $eleg[ Roles::SCOUTER ] ) : ?>
 				<fieldset data-asde-secciones>
-					<legend>Secciones en las que colabora</legend>
-					<p class="asde-help">El CRM no guarda en qué sección colabora cada scouter: indícalo aquí. En los informes verá a los socios de estas secciones.</p>
+					<legend><?php asde_e( 'Secciones en las que colabora' ); ?></legend>
+					<p class="asde-help"><?php asde_e( 'El CRM no guarda en qué sección colabora cada scouter: indícalo aquí. En los informes verá a los socios de estas secciones.' ); ?></p>
 					<?php foreach ( Secciones::EDUCATIVAS as $slug ) : ?>
 						<label class="asde-choice">
 							<input type="checkbox" name="secciones[]" value="<?php echo esc_attr( $slug ); ?>" <?php checked( in_array( $slug, $secc_actual, true ) ); ?>>
@@ -193,7 +193,7 @@ if ( isset( AltaService::ROL_POR_CARGO[ $p->cargo ] ) ) {
 						<input type="checkbox" name="secciones[]" value="<?php echo esc_attr( Secciones::SIN_SECCION ); ?>" data-asde-sin-seccion <?php checked( in_array( Secciones::SIN_SECCION, $secc_actual, true ) ); ?>>
 						<span>
 							<?php echo Secciones::badge( Secciones::SIN_SECCION ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
-							<span class="asde-help">Colabora sin sección: solo se le puede dar acceso como Tesorería, Secretaría o Coordinación (sin el rol de Scouter).</span>
+							<span class="asde-help"><?php asde_e( 'Colabora sin sección: solo se le puede dar acceso como Tesorería, Secretaría o Coordinación (sin el rol de Scouter).' ); ?></span>
 						</span>
 					</label>
 				</fieldset>
@@ -202,21 +202,21 @@ if ( isset( AltaService::ROL_POR_CARGO[ $p->cargo ] ) ) {
 			<?php if ( $vinculado && $solicitud ) : ?>
 				<?php // Ya tiene cuenta y hay una solicitud suya pendiente (v0.12.3): al guardar, la solicitud queda resuelta; su email no cambia. ?>
 				<input type="hidden" name="solicitud" value="<?php echo (int) $solicitud['id']; ?>">
-				<p class="asde-help">Tiene una <strong>solicitud de acceso pendiente</strong> (<?php echo esc_html( $solicitud['datos']['email'] ); ?>). Al guardar los cambios la solicitud se da por resuelta; el email de su cuenta no cambia.</p>
+				<p class="asde-help"><?php asde_e( 'Tiene una' ); ?> <strong><?php asde_e( 'solicitud de acceso pendiente' ); ?></strong> (<?php echo esc_html( $solicitud['datos']['email'] ); ?><?php asde_e( '). Al guardar los cambios la solicitud se da por resuelta; el email de su cuenta no cambia.' ); ?></p>
 			<?php endif; ?>
 
 			<?php if ( ! $vinculado ) : ?>
 				<fieldset>
-					<legend>Email para la invitación (también sirve para entrar)</legend>
+					<legend><?php asde_e( 'Email para la invitación (también sirve para entrar)' ); ?></legend>
 					<?php if ( $solicitud ) : ?>
 						<input type="hidden" name="solicitud" value="<?php echo (int) $solicitud['id']; ?>">
 						<label class="asde-choice">
 							<input type="radio" name="campo_email" value="solicitud" checked>
-							<span><?php echo esc_html( $solicitud['datos']['email'] ); ?> <span class="asde-help">el de su solicitud de acceso<?php echo in_array( $solicitud['datos']['email'], $emails_persona, true ) ? '' : ': se guardará también en la ficha del CRM'; ?></span></span>
+							<span><?php echo esc_html( $solicitud['datos']['email'] ); ?> <span class="asde-help"><?php asde_e( 'el de su solicitud de acceso' ); ?><?php echo in_array( $solicitud['datos']['email'], $emails_persona, true ) ? '' : asde_t( ': se guardará también en la ficha del CRM' ); ?></span></span>
 						</label>
 					<?php endif; ?>
 					<?php if ( ! $emails_persona && ! $solicitud ) : ?>
-						<p class="asde-help asde-help--warning">⚠️ La ficha no tiene email en el CRM. Añádelo en el CRM y vuelve a esta página.</p>
+						<p class="asde-help asde-help--warning"><?php asde_e( '⚠️ La ficha no tiene email en el CRM. Añádelo en el CRM y vuelve a esta página.' ); ?></p>
 					<?php else : ?>
 						<?php foreach ( $emails_persona as $campo => $email ) : ?>
 							<?php if ( $solicitud && $email === $solicitud['datos']['email'] ) : ?>
@@ -224,18 +224,26 @@ if ( isset( AltaService::ROL_POR_CARGO[ $p->cargo ] ) ) {
 							<?php endif; ?>
 							<label class="asde-choice">
 								<input type="radio" name="campo_email" value="<?php echo esc_attr( $campo ); ?>" <?php checked( ! $solicitud ); ?>>
-								<span><?php echo esc_html( $email ); ?> <span class="asde-help"><?php echo esc_html( Usuarios::etiqueta_campo_email( $campo ) ); ?> en el CRM</span></span>
+								<span><?php echo esc_html( $email ); ?> <span class="asde-help"><?php echo esc_html( Usuarios::etiqueta_campo_email( $campo ) ); ?> <?php asde_e( 'en el CRM' ); ?></span></span>
 							</label>
 						<?php endforeach; ?>
 						<?php if ( $email_compartido > 1 ) : ?>
-							<p class="asde-help asde-help--warning">⚠️ Este email aparece en <?php echo (int) $email_compartido; ?> fichas del CRM: puede ser el de la familia. Para una cuenta personal conviene que en el CRM figure el email propio de la persona.</p>
+							<p class="asde-help asde-help--warning"><?php asde_e( '⚠️ Este email aparece en' ); ?> <?php echo (int) $email_compartido; ?> <?php asde_e( 'fichas del CRM: puede ser el de la familia. Para una cuenta personal conviene que en el CRM figure el email propio de la persona.' ); ?></p>
 						<?php endif; ?>
-						<p class="asde-help">El usuario será su nº de socio/a<?php echo Identidad::es_asde() ? ' de Scouts de España (<strong>' . esc_html( $p->num_socio_asde ) . '</strong>)' : ( $numero['numero'] ? ' (<strong>' . esc_html( $numero['numero'] ) . '</strong>)' : ', que se generará automáticamente' ); ?>; también podrá entrar con el email elegido, que se guarda cifrado en la web.</p>
+						<p class="asde-help"><?php
+						if ( Identidad::es_asde() ) {
+							echo sprintf( asde_h( 'El usuario será su nº de socio/a de Scouts de España (<strong>%s</strong>); también podrá entrar con el email elegido, que se guarda cifrado en la web.' ), esc_html( $p->num_socio_asde ) ); // phpcs:ignore WordPress.Security.EscapeOutput
+						} elseif ( $numero['numero'] ) {
+							echo sprintf( asde_h( 'El usuario será su nº de socio/a (<strong>%s</strong>); también podrá entrar con el email elegido, que se guarda cifrado en la web.' ), esc_html( $numero['numero'] ) ); // phpcs:ignore WordPress.Security.EscapeOutput
+						} else {
+							echo asde_h( 'El usuario será su nº de socio/a, que se generará automáticamente; también podrá entrar con el email elegido, que se guarda cifrado en la web.' ); // phpcs:ignore WordPress.Security.EscapeOutput
+						}
+						?></p>
 					<?php endif; ?>
 				</fieldset>
 			<?php endif; ?>
 
-			<p><button type="submit" class="button" <?php disabled( ! $vinculado && ! $emails_persona && ! $solicitud ); ?>><?php echo $vinculado ? 'Guardar cambios' : 'Dar acceso y enviar invitación'; ?></button></p>
+			<p><button type="submit" class="button" <?php disabled( ! $vinculado && ! $emails_persona && ! $solicitud ); ?>><?php echo $vinculado ? asde_t( 'Guardar cambios' ) : asde_t( 'Dar acceso y enviar invitación' ); ?></button></p>
 		</form>
 		<?php if ( $vinculado && $solicitud ) : ?>
 			<?php // Si ya tiene el acceso que pide, no hay nada que cambiar: basta cerrar la solicitud. ?>
@@ -244,22 +252,22 @@ if ( isset( AltaService::ROL_POR_CARGO[ $p->cargo ] ) ) {
 				<input type="hidden" name="asde_action" value="cerrar_solicitud">
 				<input type="hidden" name="socio" value="<?php echo esc_attr( $p->num_socio_asde ); ?>">
 				<input type="hidden" name="solicitud" value="<?php echo (int) $solicitud['id']; ?>">
-				<button type="submit" class="button">Ya tiene el acceso que pide: cerrar la solicitud sin cambiar nada</button>
+				<button type="submit" class="button"><?php asde_e( 'Ya tiene el acceso que pide: cerrar la solicitud sin cambiar nada' ); ?></button>
 			</form>
 		<?php endif; ?>
 	<?php endif; ?>
 </section>
 
 <section class="asde-card">
-	<h3>Cuenta familiar (tutores)</h3>
+	<h3><?php asde_e( 'Cuenta familiar (tutores)' ); ?></h3>
 	<?php if ( null !== $motivo_rep ) : ?>
 		<p><?php echo esc_html( $motivo_rep ); ?></p>
 	<?php elseif ( $bloqueado && ! $cuenta_familiar ) : ?>
-		<p>Primero hay que corregir su nº de socio/a en el CRM (la cuenta familiar usa ese número).</p>
+		<p><?php asde_e( 'Primero hay que corregir su nº de socio/a en el CRM (la cuenta familiar usa ese número).' ); ?></p>
 	<?php else : ?>
 		<p>
-			La familia entra con el usuario <strong><?php echo esc_html( $usuario_familiar ?: 'nº de socio/a del menor + T' ); ?></strong>
-			<?php echo $cuenta_familiar ? '(cuenta ya existente: se le añadirán los participantes marcados).' : '(nº de socio/a del menor + T) o con el email elegido. Si tiene hermanos en el grupo, una sola cuenta sirve para todos; el otro tutor/a puede tener la suya (nº + T2).'; ?>
+			<?php asde_e( 'La familia entra con el usuario' ); ?> <strong><?php echo esc_html( $usuario_familiar ?: asde_t( 'nº de socio/a del menor + T' ) ); ?></strong>
+			<?php echo $cuenta_familiar ? asde_t( '(cuenta ya existente: se le añadirán los participantes marcados).' ) : asde_t( '(nº de socio/a del menor + T) o con el email elegido. Si tiene hermanos en el grupo, una sola cuenta sirve para todos; el otro tutor/a puede tener la suya (nº + T2).' ); ?>
 		</p>
 		<form method="post" class="asde-form" data-asde-alta-tutor>
 			<?php wp_nonce_field( 'asde_alta_tutor_' . $p->num_socio_asde ); ?>
@@ -267,13 +275,13 @@ if ( isset( AltaService::ROL_POR_CARGO[ $p->cargo ] ) ) {
 			<input type="hidden" name="socio" value="<?php echo esc_attr( $p->num_socio_asde ); ?>">
 
 			<fieldset>
-				<legend>Participantes de la cuenta</legend>
+				<legend><?php asde_e( 'Participantes de la cuenta' ); ?></legend>
 				<label class="asde-choice">
 					<input type="checkbox" checked disabled>
 					<span><?php echo esc_html( $p->nombre_completo() ); ?> <?php echo $p->seccion_educativa() ? Secciones::badge( $p->seccion_educativa() ) : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?></span>
 				</label>
 				<?php if ( $familia ) : ?>
-					<p class="asde-help">Posibles hermanos/as (comparten un email en el CRM). Márcalos si son de la misma familia:</p>
+					<p class="asde-help"><?php asde_e( 'Posibles hermanos/as (comparten un email en el CRM). Márcalos si son de la misma familia:' ); ?></p>
 					<?php $ya_en_cuenta = $cuenta_familiar ? Usuarios::representados( $cuenta_familiar->ID ) : array(); ?>
 					<?php foreach ( $familia as $f ) : ?>
 						<?php $fijo = in_array( $f->num_socio_asde, $ya_en_cuenta, true ); ?>
@@ -286,7 +294,7 @@ if ( isset( AltaService::ROL_POR_CARGO[ $p->cargo ] ) ) {
 								<?php echo esc_html( $f->nombre_completo() ); ?>
 								<?php echo $f->seccion_educativa() ? Secciones::badge( $f->seccion_educativa() ) : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?>
 								<?php if ( null !== $f->edad() ) : ?>
-									<span class="asde-muted"><?php echo esc_html( $f->edad() . ' años' ); ?></span>
+									<span class="asde-muted"><?php echo esc_html( sprintf( asde_t( '%d años' ), $f->edad() ) ); ?></span>
 								<?php endif; ?>
 							</span>
 						</label>
@@ -296,9 +304,9 @@ if ( isset( AltaService::ROL_POR_CARGO[ $p->cargo ] ) ) {
 
 			<?php if ( ! $cuenta_familiar ) : ?>
 				<fieldset>
-					<legend>Email de la familia (para la invitación, para entrar y para recuperar la contraseña)</legend>
+					<legend><?php asde_e( 'Email de la familia (para la invitación, para entrar y para recuperar la contraseña)' ); ?></legend>
 					<?php if ( ! $emails_familia ) : ?>
-						<p class="asde-help asde-help--warning">⚠️ La ficha no tiene ningún email en el CRM (ni propio ni de tutores). Añádelo en el CRM y vuelve a esta página.</p>
+						<p class="asde-help asde-help--warning"><?php asde_e( '⚠️ La ficha no tiene ningún email en el CRM (ni propio ni de tutores). Añádelo en el CRM y vuelve a esta página.' ); ?></p>
 					<?php else : ?>
 						<?php $i = 0; ?>
 						<?php foreach ( $emails_familia as $campo => $email ) : ?>
@@ -306,7 +314,7 @@ if ( isset( AltaService::ROL_POR_CARGO[ $p->cargo ] ) ) {
 								<input type="radio" name="campo_email" value="<?php echo esc_attr( $campo ); ?>" <?php checked( 0 === $i++ ); ?>>
 								<span>
 									<?php echo esc_html( $email ); ?>
-									<span class="asde-help"><?php echo esc_html( Usuarios::etiqueta_campo_email( $campo ) ); ?> en el CRM
+									<span class="asde-help"><?php echo esc_html( Usuarios::etiqueta_campo_email( $campo ) ); ?> <?php asde_e( 'en el CRM' ); ?>
 									<?php
 									$n = (int) substr( $campo, 5, 1 );
 									echo ( str_starts_with( $campo, 'tutor' ) && ! empty( $p->tutores[ $n ]['nombre'] ) ) ? ' · ' . esc_html( trim( $p->tutores[ $n ]['nombre'] . ' ' . $p->tutores[ $n ]['apellidos'] ) ) : '';
@@ -321,22 +329,20 @@ if ( isset( AltaService::ROL_POR_CARGO[ $p->cargo ] ) ) {
 				<input type="hidden" name="campo_email" value="<?php echo esc_attr( Usuarios::email_origen( $cuenta_familiar->ID )['campo'] ?? 'email1' ); ?>">
 			<?php endif; ?>
 
-			<p><button type="submit" class="button" <?php disabled( ! $cuenta_familiar && ! $emails_familia ); ?>><?php echo $cuenta_familiar ? 'Añadir a la cuenta familiar' : 'Crear cuenta familiar y enviar invitación'; ?></button></p>
+			<p><button type="submit" class="button" <?php disabled( ! $cuenta_familiar && ! $emails_familia ); ?>><?php echo $cuenta_familiar ? asde_t( 'Añadir a la cuenta familiar' ) : asde_t( 'Crear cuenta familiar y enviar invitación' ); ?></button></p>
 		</form>
 
 		<?php if ( $cuenta_familiar ) : ?>
 			<hr>
-			<h4>Otro tutor/a con su propia cuenta</h4>
+			<h4><?php asde_e( 'Otro tutor/a con su propia cuenta' ); ?></h4>
 			<?php if ( count( $cuentas_familiares ) >= Usuarios::MAX_CUENTAS_FAMILIARES ) : ?>
-				<p>Esta familia ya tiene las dos cuentas de tutor/a: <?php echo implode( ' y ', array_map( static fn( $c ) => '<strong>' . esc_html( $c->user_login ) . '</strong>', $cuentas_familiares ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?>. Cada una entra con su propio email y ve a los mismos participantes.</p>
+				<p><?php asde_e( 'Esta familia ya tiene las dos cuentas de tutor/a:' ); ?> <?php echo implode( ' ' . asde_t( 'y' ) . ' ', array_map( static fn( $c ) => '<strong>' . esc_html( $c->user_login ) . '</strong>', $cuentas_familiares ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?><?php asde_e( '. Cada una entra con su propio email y ve a los mismos participantes.' ); ?></p>
 			<?php else : ?>
 				<p>
-					Si el otro tutor/a (madre, padre…) quiere entrar con su propio email y su propia contraseña, se le crea una segunda cuenta
-					(<strong><?php echo esc_html( \AsdeBalears\AreaPrivada\Domain\NumeroSocio::usuario_tutor( \AsdeBalears\AreaPrivada\Domain\Identidad::convertir( (string) \AsdeBalears\AreaPrivada\Domain\NumeroSocio::socio_de_usuario_tutor( $cuenta_familiar->user_login ) ), 2 ) ); ?></strong>)
-					que ve a los mismos participantes y comparte la familia de Tesorería.
+					<?php asde_e( 'Si el otro tutor/a (madre, padre…) quiere entrar con su propio email y su propia contraseña, se le crea una segunda cuenta (' ); ?><strong><?php echo esc_html( \AsdeBalears\AreaPrivada\Domain\NumeroSocio::usuario_tutor( \AsdeBalears\AreaPrivada\Domain\Identidad::convertir( (string) \AsdeBalears\AreaPrivada\Domain\NumeroSocio::socio_de_usuario_tutor( $cuenta_familiar->user_login ) ), 2 ) ); ?></strong><?php asde_e( ') que ve a los mismos participantes y comparte la familia de Tesorería.' ); ?>
 				</p>
 				<?php if ( ! $emails_otro ) : ?>
-					<p class="asde-help asde-help--warning">⚠️ La ficha no tiene ningún otro email en el CRM (ya está el de la primera cuenta). Añade el del otro tutor/a en el CRM y vuelve a esta página, o deja que lo pida desde «Solicitar acceso».</p>
+					<p class="asde-help asde-help--warning"><?php asde_e( '⚠️ La ficha no tiene ningún otro email en el CRM (ya está el de la primera cuenta). Añade el del otro tutor/a en el CRM y vuelve a esta página, o deja que lo pida desde «Solicitar acceso».' ); ?></p>
 				<?php else : ?>
 					<form method="post" class="asde-form">
 						<?php wp_nonce_field( 'asde_alta_tutor_' . $p->num_socio_asde ); ?>
@@ -344,16 +350,16 @@ if ( isset( AltaService::ROL_POR_CARGO[ $p->cargo ] ) ) {
 						<input type="hidden" name="socio" value="<?php echo esc_attr( $p->num_socio_asde ); ?>">
 						<input type="hidden" name="otro_tutor" value="1">
 						<fieldset>
-							<legend>Email del otro tutor/a</legend>
+							<legend><?php asde_e( 'Email del otro tutor/a' ); ?></legend>
 							<?php $i = 0; ?>
 							<?php foreach ( $emails_otro as $campo => $email ) : ?>
 								<label class="asde-choice">
 									<input type="radio" name="campo_email" value="<?php echo esc_attr( $campo ); ?>" <?php checked( 0 === $i++ ); ?>>
-									<span><?php echo esc_html( $email ); ?> <span class="asde-help"><?php echo esc_html( Usuarios::etiqueta_campo_email( $campo ) ); ?> en el CRM</span></span>
+									<span><?php echo esc_html( $email ); ?> <span class="asde-help"><?php echo esc_html( Usuarios::etiqueta_campo_email( $campo ) ); ?> <?php asde_e( 'en el CRM' ); ?></span></span>
 								</label>
 							<?php endforeach; ?>
 						</fieldset>
-						<p><button type="submit" class="button">Crear la cuenta del otro tutor/a y enviar invitación</button></p>
+						<p><button type="submit" class="button"><?php asde_e( 'Crear la cuenta del otro tutor/a y enviar invitación' ); ?></button></p>
 					</form>
 				<?php endif; ?>
 			<?php endif; ?>

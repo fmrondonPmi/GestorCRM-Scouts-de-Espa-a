@@ -32,7 +32,7 @@
 		}
 		var texto = boton.textContent;
 		var hecho = function () {
-			boton.textContent = 'Copiado';
+			boton.textContent = asdeT( 'Copiado' );
 			window.setTimeout( function () {
 				boton.textContent = texto;
 			}, 2000 );
@@ -58,7 +58,7 @@
 			barra = document.createElement( 'div' );
 			barra.className = 'asde-progreso';
 			barra.setAttribute( 'role', 'progressbar' );
-			barra.setAttribute( 'aria-label', 'Cargando la página' );
+			barra.setAttribute( 'aria-label', asdeT( 'Cargando la página' ) );
 			document.body.appendChild( barra );
 		}
 		document.documentElement.classList.toggle( 'asde-cargando', si );
@@ -115,8 +115,8 @@
 		dialogo.setAttribute( 'aria-labelledby', 'asde-modal-titulo' );
 		dialogo.innerHTML = '<div class="asde-modal__barra">'
 			+ '<span class="asde-modal__titulo" id="asde-modal-titulo"></span>'
-			+ '<a class="asde-modal__pagina" href="#">Abrir en su página</a>'
-			+ '<button type="button" class="asde-modal__cerrar" aria-label="Cerrar">×</button>'
+			+ '<a class="asde-modal__pagina" href="#">' + asdeT( 'Abrir en su página' ) + '</a>'
+			+ '<button type="button" class="asde-modal__cerrar" aria-label="' + asdeT( 'Cerrar' ) + '">×</button>'
 			+ '</div><div class="asde-modal__cuerpo" tabindex="-1"></div>';
 		// Junto al contenido del área (no al final de <body>): así hereda los colores y
 		// la tipografía del tema. Con showModal() se dibuja encima de todo igualmente.
@@ -192,7 +192,7 @@
 		if ( ! dialogo ) {
 			crear();
 		}
-		cuerpo.innerHTML = '<p class="asde-muted asde-modal__cargando">Cargando…</p>';
+		cuerpo.innerHTML = '<p class="asde-muted asde-modal__cargando">' + asdeT( 'Cargando…' ) + '</p>';
 		titulo.textContent = '';
 		if ( ! dialogo.open ) {
 			dialogo.showModal();

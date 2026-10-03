@@ -120,16 +120,16 @@ final class FamiliasTable {
 		global $wpdb;
 		$nums = array_values( array_unique( array_filter( array_map( 'strval', $nums ) ) ) );
 		if ( ! $nums ) {
-			return new \WP_Error( 'asde_familia', 'Elige al menos un socio.' );
+			return new \WP_Error( 'asde_familia', asde_t( 'Elige al menos un socio.' ) );
 		}
 		foreach ( $nums as $n ) {
 			if ( self::de_socio( $n ) ) {
-				return new \WP_Error( 'asde_familia', sprintf( 'El socio con nº Scouts de España %s ya pertenece a otra familia.', $n ) );
+				return new \WP_Error( 'asde_familia', sprintf( asde_t( 'El socio con nº Scouts de España %s ya pertenece a otra familia.' ), $n ) );
 			}
 		}
 		$grupo = Grupo::numero();
 		if ( '' === $grupo ) {
-			return new \WP_Error( 'asde_familia', 'No se sabe en qué Grupo Scout se está trabajando.' );
+			return new \WP_Error( 'asde_familia', asde_t( 'No se sabe en qué Grupo Scout se está trabajando.' ) );
 		}
 		$wpdb->query( "SELECT GET_LOCK('asde_num_familia', 10)" );
 		try {
@@ -153,7 +153,7 @@ final class FamiliasTable {
 			$wpdb->query( "SELECT RELEASE_LOCK('asde_num_familia')" );
 		}
 		if ( ! $id ) {
-			return new \WP_Error( 'asde_familia', 'No se ha podido crear la familia. Inténtalo de nuevo.' );
+			return new \WP_Error( 'asde_familia', asde_t( 'No se ha podido crear la familia. Inténtalo de nuevo.' ) );
 		}
 		foreach ( $nums as $n ) {
 			self::anadir( $id, $n );
@@ -166,7 +166,7 @@ final class FamiliasTable {
 		global $wpdb;
 		$actual = self::de_socio( $num_asde );
 		if ( $actual ) {
-			return $actual['id'] === $familia_id ? true : new \WP_Error( 'asde_familia', sprintf( 'Ese socio ya pertenece a la familia %s.', $actual['numero'] ) );
+			return $actual['id'] === $familia_id ? true : new \WP_Error( 'asde_familia', sprintf( asde_t( 'Ese socio ya pertenece a la familia %s.' ), $actual['numero'] ) );
 		}
 		$wpdb->insert(
 			self::table_miembros(),
@@ -197,13 +197,13 @@ final class FamiliasTable {
 		global $wpdb;
 		$f = self::obtener( $familia_id );
 		if ( ! $f ) {
-			return new \WP_Error( 'asde_familia', 'Esa familia no existe.' );
+			return new \WP_Error( 'asde_familia', asde_t( 'Esa familia no existe.' ) );
 		}
 		if ( $f['miembros'] ) {
-			return new \WP_Error( 'asde_familia', 'Solo se puede borrar una familia sin socios.' );
+			return new \WP_Error( 'asde_familia', asde_t( 'Solo se puede borrar una familia sin socios.' ) );
 		}
 		if ( MovimientosTable::hay_de_familia( $familia_id ) ) {
-			return new \WP_Error( 'asde_familia', 'La familia tiene pagos registrados: no se puede borrar.' );
+			return new \WP_Error( 'asde_familia', asde_t( 'La familia tiene pagos registrados: no se puede borrar.' ) );
 		}
 		$wpdb->delete( self::table(), array( 'id' => $familia_id ) );
 		return true;

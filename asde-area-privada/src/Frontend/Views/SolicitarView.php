@@ -61,7 +61,7 @@ final class SolicitarView extends View {
 			return;
 		}
 		if ( ! wp_verify_nonce( $this->post( '_wpnonce' ), 'asde_solicitar' ) ) {
-			self::$estado = array( 'errores' => array( 'La sesión del formulario ha caducado. Vuelve a intentarlo.' ) );
+			self::$estado = array( 'errores' => array( asde_t( 'La sesión del formulario ha caducado. Vuelve a intentarlo.' ) ) );
 			return;
 		}
 		// Campo trampa o enviado en menos de 3 segundos: un programa, no una persona.
@@ -81,17 +81,17 @@ final class SolicitarView extends View {
 		);
 		$errores = array();
 		if ( ! $grupo || '' === $grupo['crm_id'] ) {
-			$errores[] = 'Elige tu Grupo Scout.';
+			$errores[] = asde_t( 'Elige tu Grupo Scout.' );
 		}
 		$fecha = \DateTimeImmutable::createFromFormat( '!Y-m-d', $d['nacimiento'] );
 		if ( ! $fecha || $fecha->format( 'Y-m-d' ) !== $d['nacimiento'] || $fecha > new \DateTimeImmutable( 'today' ) || (int) $fecha->format( 'Y' ) < 1920 ) {
-			$errores[] = 'Escribe la fecha de nacimiento del socio/a.';
+			$errores[] = asde_t( 'Escribe la fecha de nacimiento del socio/a.' );
 		}
 		if ( ! is_email( $d['email'] ) ) {
-			$errores[] = 'Escribe un email válido: ahí te llegará la invitación.';
+			$errores[] = asde_t( 'Escribe un email válido: ahí te llegará la invitación.' );
 		}
 		if ( mb_strlen( $d['nombre'] ) < 3 ) {
-			$errores[] = 'Escribe tu nombre y apellidos.';
+			$errores[] = asde_t( 'Escribe tu nombre y apellidos.' );
 		}
 		if ( $errores ) {
 			self::$estado = array(

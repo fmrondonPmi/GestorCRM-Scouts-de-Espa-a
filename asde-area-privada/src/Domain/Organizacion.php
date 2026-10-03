@@ -134,14 +134,14 @@ final class Organizacion {
 	 */
 	public static function guardar( string $organizacion, string $codigo, array $federacion, ?string $identificador = null ) {
 		if ( ! isset( self::FEDERADAS[ $organizacion ] ) ) {
-			return new \WP_Error( 'asde_organizacion', 'Elige la organización federada de la lista.' );
+			return new \WP_Error( 'asde_organizacion', asde_t( 'Elige la organización federada de la lista.' ) );
 		}
 		$codigo = trim( $codigo );
 		if ( ! self::codigo_valido( $codigo ) ) {
-			return new \WP_Error( 'asde_organizacion', 'El código de la organización tiene que ser un número de 1 a 3 cifras que no empiece por 0.' );
+			return new \WP_Error( 'asde_organizacion', asde_t( 'El código de la organización tiene que ser un número de 1 a 3 cifras que no empiece por 0.' ) );
 		}
 		if ( null !== $identificador && ! in_array( $identificador, array( self::IDENTIFICADOR_ASDE, self::IDENTIFICADOR_LOCAL ), true ) ) {
-			return new \WP_Error( 'asde_organizacion', 'Elige qué número es el usuario de acceso.' );
+			return new \WP_Error( 'asde_organizacion', asde_t( 'Elige qué número es el usuario de acceso.' ) );
 		}
 		update_option(
 			self::OPTION,
@@ -242,9 +242,9 @@ final class Organizacion {
 	/** Categorías del seguro según la edad de corte (p. ej. «Menores de 14 años»). */
 	public static function categorias_seguro( int $edad_corte ): array {
 		return array(
-			'menores'  => sprintf( 'Menores de %d años', $edad_corte ),
-			'mayores'  => sprintf( 'Educandos de %d años o más', $edad_corte ),
-			'scouters' => 'Adultos (scouters y voluntariado)',
+			'menores'  => sprintf( asde_t( 'Menores de %d años' ), $edad_corte ),
+			'mayores'  => sprintf( asde_t( 'Educandos de %d años o más' ), $edad_corte ),
+			'scouters' => asde_t( 'Adultos (scouters y voluntariado)' ),
 		);
 	}
 }

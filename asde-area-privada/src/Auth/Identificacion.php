@@ -159,14 +159,14 @@ final class Identificacion {
 		}
 		$cuentas = self::cuentas_con_email( $identificador, $grupo );
 		if ( null === $cuentas ) {
-			return new \WP_Error( 'asde_email_crm', 'Ahora no se puede comprobar el email porque el CRM no responde. Entra con tu nº de socio/a o inténtalo más tarde.' );
+			return new \WP_Error( 'asde_email_crm', asde_t( 'Ahora no se puede comprobar el email porque el CRM no responde. Entra con tu nº de socio/a o inténtalo más tarde.' ) );
 		}
 		if ( ! $cuentas ) {
 			// Sin cuentas del área con ese email: solo queda un usuario de WordPress que
 			// lo tenga como propio. Si no hay, no se llama a wp_signon() con el email
 			// (se registraría el intento fallido con el email escrito).
 			$wp = is_email( $identificador ) ? get_user_by( 'email', $identificador ) : false;
-			return $wp && ! Usuarios::email_origen( $wp->ID ) ? $wp->user_login : new \WP_Error( 'invalid_email', 'Email desconocido.' );
+			return $wp && ! Usuarios::email_origen( $wp->ID ) ? $wp->user_login : new \WP_Error( 'invalid_email', asde_t( 'Email desconocido.' ) );
 		}
 		if ( 1 === count( $cuentas ) ) {
 			return $cuentas[0]->user_login;
@@ -176,7 +176,7 @@ final class Identificacion {
 			return new \WP_Error(
 				'asde_email_varias',
 				sprintf(
-					'Ese email es el de varias cuentas y la contraseña vale para todas. Escribe el nº de socio/a de la cuenta con la que quieres entrar: %s.',
+					asde_t( 'Ese email es el de varias cuentas y la contraseña vale para todas. Escribe el nº de socio/a de la cuenta con la que quieres entrar: %s.' ),
 					Contacto::lista( array_map( static fn( \WP_User $u ) => $u->user_login, $validas ), 'o' )
 				)
 			);

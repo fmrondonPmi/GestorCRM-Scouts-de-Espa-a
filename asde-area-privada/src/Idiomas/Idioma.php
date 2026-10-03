@@ -25,7 +25,8 @@ final class Idioma {
 	public const PARAM   = 'asde_lang';
 	public const NONCE   = 'asde_lang';
 
-	private static ?string $forzado = null;
+	private static ?string $forzado  = null;
+	private static ?string $sugerido = null;
 	private static ?string $cache   = null;
 
 	/**
@@ -187,6 +188,23 @@ final class Idioma {
 			return false;
 		}
 		return self::elegir( $codigo );
+	}
+
+	/**
+	 * Idioma de una persona que NO es quien está usando la web (el destinatario de un email): el que
+	 * eligió, o el sugerido (el de la solicitud que se está aprobando) o el del sitio.
+	 */
+	public static function de_usuario( int $user_id ): string {
+		$meta = $user_id ? get_user_meta( $user_id, self::META, true ) : '';
+		if ( self::es_valido( $meta ) ) {
+			return $meta;
+		}
+		return self::es_valido( self::$sugerido ) ? (string) self::$sugerido : self::por_defecto();
+	}
+
+	/** Idioma que se da a las cuentas que se creen ahora (null: ninguno): el de la solicitud de acceso que se aprueba. */
+	public static function sugerir( ?string $codigo ): void {
+		self::$sugerido = self::es_valido( $codigo ) ? $codigo : null;
 	}
 
 	/** Se reinicia lo calculado (cambio de usuario en una misma petición, pruebas). */

@@ -35,7 +35,7 @@ final class BancoView extends TesoreriaBaseView {
 
 	public function render( string $content = '' ): string {
 		if ( ! current_user_can( self::CAP_CONFIG ) ) {
-			return $this->denegado( 'El banco solo lo ven Secretaría, Coordinación y Tesorería.' );
+			return $this->denegado( asde_t( 'El banco solo lo ven Secretaría, Coordinación y Tesorería.' ) );
 		}
 		$ronda = $this->ronda();
 		$token = $this->get( 'previa' );
@@ -44,7 +44,7 @@ final class BancoView extends TesoreriaBaseView {
 			if ( $previa ) {
 				return $this->layout( 'tesoreria', $this->subnav( 'banco', $ronda ) . $this->render_previa( $token, $previa ) );
 			}
-			Notices::add( 'error', 'La vista previa ha caducado. Vuelve a subir el fichero.' );
+			Notices::add( 'error', asde_t( 'La vista previa ha caducado. Vuelve a subir el fichero.' ) );
 		}
 
 		$filtros = array(
@@ -64,7 +64,7 @@ final class BancoView extends TesoreriaBaseView {
 				'fecha'    => static fn( $m ) => $m['fecha'],
 				'concepto' => static fn( $m ) => trim( $m['ordenante'] . ' ' . $m['concepto'] ),
 				'importe'  => static fn( $m ) => (float) $m['importe'],
-				'estado'   => static fn( $m ) => BancoTable::ESTADOS[ $m['estado'] ] ?? $m['estado'],
+				'estado'   => static fn( $m ) => asde_t( BancoTable::ESTADOS[ $m['estado'] ] ?? $m['estado'] ),
 			),
 			'fecha',
 			'desc'
@@ -129,7 +129,7 @@ final class BancoView extends TesoreriaBaseView {
 				$r = Conciliacion::conciliar( $id, (int) $this->post( 'familia' ), $this->post( 'ronda_pago' ) );
 				is_wp_error( $r )
 					? Notices::add( 'error', esc_html( $r->get_error_message() ) )
-					: Notices::add( 'success', 'Ingreso conciliado: se ha registrado el pago en el control de pagos de la familia.' );
+					: Notices::add( 'success', asde_t( 'Ingreso conciliado: se ha registrado el pago en el control de pagos de la familia.' ) );
 				$this->redirect( $volver );
 				break;
 
@@ -143,7 +143,7 @@ final class BancoView extends TesoreriaBaseView {
 						++$hechas;
 					}
 				}
-				Notices::add( 'success', sprintf( '%d ingresos conciliados por su referencia de familia.', $hechas ) );
+				Notices::add( 'success', sprintf( asde_t( '%d ingresos conciliados por su referencia de familia.' ), $hechas ) );
 				$this->redirect( $volver );
 				break;
 
@@ -154,12 +154,12 @@ final class BancoView extends TesoreriaBaseView {
 				$r = 'ignorar' === $accion ? Conciliacion::ignorar( $id ) : Conciliacion::deshacer( $id );
 				is_wp_error( $r )
 					? Notices::add( 'error', esc_html( $r->get_error_message() ) )
-					: Notices::add( 'success', 'ignorar' === $accion ? 'Movimiento marcado como revisado.' : 'Movimiento de nuevo pendiente (si tenía un pago, se ha anulado).' );
+					: Notices::add( 'success', 'ignorar' === $accion ? asde_t( 'Movimiento marcado como revisado.' ) : asde_t( 'Movimiento de nuevo pendiente (si tenía un pago, se ha anulado).' ) );
 				$this->redirect( $volver );
 				break;
 
 			default:
-				Notices::add( 'error', 'Acción desconocida.' );
+				Notices::add( 'error', asde_t( 'Acción desconocida.' ) );
 				$this->redirect( $volver );
 		}
 	}
@@ -171,19 +171,19 @@ final class BancoView extends TesoreriaBaseView {
 	private function analizar(): void {
 		$f = $_FILES['fichero'] ?? null; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
 		if ( ! is_array( $f ) || UPLOAD_ERR_OK !== ( $f['error'] ?? UPLOAD_ERR_NO_FILE ) || ! is_uploaded_file( (string) $f['tmp_name'] ) ) {
-			$this->volver_con_error( UPLOAD_ERR_INI_SIZE === ( $f['error'] ?? 0 ) || UPLOAD_ERR_FORM_SIZE === ( $f['error'] ?? 0 ) ? 'El fichero es demasiado grande.' : 'Elige el fichero de movimientos del banco.' );
+			$this->volver_con_error( UPLOAD_ERR_INI_SIZE === ( $f['error'] ?? 0 ) || UPLOAD_ERR_FORM_SIZE === ( $f['error'] ?? 0 ) ? asde_t( 'El fichero es demasiado grande.' ) : asde_t( 'Elige el fichero de movimientos del banco.' ) );
 		}
 		$nombre = sanitize_file_name( wp_unslash( (string) $f['name'] ) );
 		$ext    = strtolower( pathinfo( $nombre, PATHINFO_EXTENSION ) );
 		if ( (int) $f['size'] > self::MAX_BYTES ) {
-			$this->volver_con_error( 'El fichero es demasiado grande (máximo 5 MB).' );
+			$this->volver_con_error( asde_t( 'El fichero es demasiado grande (máximo 5 MB).' ) );
 		}
 		if ( ! in_array( $ext, self::EXTENSIONES, true ) ) {
-			$this->volver_con_error( 'Formato no admitido: sube el fichero Norma 43 (.n43, .q43, .aeb, .txt) o un CSV.' );
+			$this->volver_con_error( asde_t( 'Formato no admitido: sube el fichero Norma 43 (.n43, .q43, .aeb, .txt) o un CSV.' ) );
 		}
 		$contenido = (string) file_get_contents( (string) $f['tmp_name'] ); // phpcs:ignore WordPress.WP.AlternativeFunctions
 		if ( Codificacion::es_binario( $contenido ) ) {
-			$this->volver_con_error( 'Parece un fichero Excel u otro formato binario. Descárgalo del banco como Norma 43 o como CSV.' );
+			$this->volver_con_error( asde_t( 'Parece un fichero Excel u otro formato binario. Descárgalo del banco como Norma 43 o como CSV.' ) );
 		}
 
 		$formato = in_array( $this->post( 'formato' ), array( 'n43', 'csv' ), true ) ? $this->post( 'formato' ) : ( Norma43::parece( $contenido ) ? 'n43' : 'csv' );
@@ -203,7 +203,7 @@ final class BancoView extends TesoreriaBaseView {
 		$token  = $this->token_valido( $this->post( 'token' ) );
 		$previa = $this->previa( $token );
 		if ( ! $previa ) {
-			$this->volver_con_error( 'La vista previa ha caducado. Vuelve a subir el fichero.' );
+			$this->volver_con_error( asde_t( 'La vista previa ha caducado. Vuelve a subir el fichero.' ) );
 		}
 		$mapeo = array();
 		foreach ( array_keys( CsvBanco::CAMPOS ) as $campo ) {
@@ -229,11 +229,11 @@ final class BancoView extends TesoreriaBaseView {
 		$token  = $this->token_valido( $this->post( 'token' ) );
 		$previa = $this->previa( $token );
 		if ( ! $previa ) {
-			$this->volver_con_error( 'La vista previa ha caducado. Vuelve a subir el fichero.' );
+			$this->volver_con_error( asde_t( 'La vista previa ha caducado. Vuelve a subir el fichero.' ) );
 		}
 		$lectura = $previa['lectura'];
 		if ( $lectura['errores'] || ! $lectura['movimientos'] ) {
-			$this->volver_con_error( 'Este fichero tiene errores y no se puede importar.' );
+			$this->volver_con_error( asde_t( 'Este fichero tiene errores y no se puede importar.' ) );
 		}
 		// Se vuelve a comprobar qué es nuevo: puede haberse importado algo mientras tanto.
 		$lectura['movimientos'] = BancoTable::clasificar( $lectura['movimientos'] );
@@ -253,7 +253,7 @@ final class BancoView extends TesoreriaBaseView {
 				'duplicados' => $r['duplicados'],
 			)
 		);
-		Notices::add( 'success', sprintf( 'Importados %d movimientos nuevos%s. El fichero no se ha guardado.', $r['nuevos'], $r['duplicados'] ? sprintf( ' (%d ya estaban importados y se han ignorado)', $r['duplicados'] ) : '' ) );
+		Notices::add( 'success', sprintf( asde_t( 'Importados %d movimientos nuevos%s. El fichero no se ha guardado.' ), $r['nuevos'], $r['duplicados'] ? sprintf( asde_t( ' (%d ya estaban importados y se han ignorado)' ), $r['duplicados'] ) : '' ) );
 		$this->redirect( $this->url( 'banco' ) );
 	}
 

@@ -39,12 +39,12 @@ final class Identidad {
 
 	/** «nº de socio/a de Scouts de España» o «nº de socio/a local», para los textos. */
 	public static function etiqueta(): string {
-		return self::es_asde() ? 'nº de socio/a de Scouts de España' : 'nº de socio/a local';
+		return self::es_asde() ? asde_t( 'nº de socio/a de Scouts de España' ) : asde_t( 'nº de socio/a local' );
 	}
 
 	/** Etiqueta del campo de la pantalla de acceso. */
 	public static function etiqueta_campo(): string {
-		return self::es_asde() ? 'Nº de socio/a (Scouts de España) o email' : 'Nº de socio/a o email';
+		return self::es_asde() ? asde_t( 'Nº de socio/a (Scouts de España) o email' ) : asde_t( 'Nº de socio/a o email' );
 	}
 
 	/** Usuario de ejemplo de una persona (p. ej. 118241 o 76840390). */

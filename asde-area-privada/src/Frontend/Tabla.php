@@ -121,7 +121,7 @@ final class Tabla {
 			'<a href="%s" class="asde-orden%s" title="%s">%s <span class="asde-orden__flecha" aria-hidden="true">%s</span></a>',
 			esc_url( $url ),
 			$activa ? ' is-active' : '',
-			esc_attr( sprintf( 'Ordenar por %s (%s)', mb_strtolower( $etiqueta ), 'asc' === $dir ? 'ascendente' : 'descendente' ) ),
+			esc_attr( sprintf( asde_t( 'Ordenar por %s (%s)' ), mb_strtolower( $etiqueta ), 'asc' === $dir ? asde_t( 'ascendente' ) : asde_t( 'descendente' ) ) ),
 			esc_html( $etiqueta ),
 			$flecha
 		);

@@ -58,7 +58,7 @@ final class Ambito {
 	private function cargar(): void {
 		$repo = PersonaRepository::make();
 		if ( ! $repo ) {
-			$this->error_crm = 'La conexión de tu grupo con el CRM no está configurada o no se ha podido comprobar. Un administrador puede revisarla en wp-admin → Grupos Scouts.';
+			$this->error_crm = asde_t( 'La conexión de tu grupo con el CRM no está configurada o no se ha podido comprobar. Un administrador puede revisarla en wp-admin → Grupos Scouts.' );
 			return;
 		}
 		try {
@@ -76,7 +76,7 @@ final class Ambito {
 				}
 			}
 		} catch ( CrmException $e ) {
-			$this->error_crm = 'No se ha podido consultar el CRM. Inténtalo de nuevo en unos minutos.';
+			$this->error_crm = asde_t( 'No se ha podido consultar el CRM. Inténtalo de nuevo en unos minutos.' );
 		}
 	}
 
@@ -110,18 +110,18 @@ final class Ambito {
 		}
 		$roles = Usuarios::roles_asde( $this->user );
 		if ( ! $roles ) {
-			return 'Tu usuario no tiene acceso al área privada. Si crees que es un error, contacta con la Secretaría del grupo.';
+			return asde_t( 'Tu usuario no tiene acceso al área privada. Si crees que es un error, contacta con la Secretaría del grupo.' );
 		}
 		if ( in_array( Roles::TUTOR, $roles, true ) && ! $this->representados && count( $roles ) === 1 ) {
-			return 'Tu cuenta familiar ya no tiene participantes a su cargo (han cumplido 18 años o ya no tienen membresía activa).';
+			return asde_t( 'Tu cuenta familiar ya no tiene participantes a su cargo (han cumplido 18 años o ya no tienen membresía activa).' );
 		}
 		if ( '' === Usuarios::socio( $this->user->ID ) ) {
-			return 'Tu usuario no está vinculado a ninguna ficha del CRM. Pide a la Secretaría del grupo que revise tu alta.';
+			return asde_t( 'Tu usuario no está vinculado a ninguna ficha del CRM. Pide a la Secretaría del grupo que revise tu alta.' );
 		}
 		if ( ! $this->persona ) {
-			return 'No se encuentra tu ficha en el CRM del grupo. Contacta con la Secretaría.';
+			return asde_t( 'No se encuentra tu ficha en el CRM del grupo. Contacta con la Secretaría.' );
 		}
-		return 'Tu membresía no está activa en el CRM del grupo. Contacta con la Secretaría.';
+		return asde_t( 'Tu membresía no está activa en el CRM del grupo. Contacta con la Secretaría.' );
 	}
 
 	/** Nombre para saludar. */
@@ -130,7 +130,7 @@ final class Ambito {
 			return $this->persona->nombre;
 		}
 		if ( $this->representados ) {
-			return 'familia de ' . Contacto::lista( array_map( static fn( Persona $p ) => $p->nombre, $this->representados ) );
+			return sprintf( asde_t( 'familia de %s' ), Contacto::lista( array_map( static fn( Persona $p ) => $p->nombre, $this->representados ) ) );
 		}
 		return $this->user->display_name;
 	}

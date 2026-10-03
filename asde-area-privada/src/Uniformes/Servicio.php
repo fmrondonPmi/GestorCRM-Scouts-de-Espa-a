@@ -47,7 +47,7 @@ final class Servicio {
 		if ( '' !== $modelo_talla ) {
 			list( $modelo, $talla ) = array_pad( explode( '|', $modelo_talla, 2 ), 2, '' );
 			if ( ! Config::talla_valida( $cfg, $modelo, $talla ) ) {
-				return new \WP_Error( 'asde_uniforme', 'Elige el modelo y la talla de la camisa.' );
+				return new \WP_Error( 'asde_uniforme', asde_t( 'Elige el modelo y la talla de la camisa.' ) );
 			}
 			$camisa = array(
 				'modelo'   => $modelo,
@@ -65,7 +65,7 @@ final class Servicio {
 				continue;
 			}
 			if ( ! isset( $activas[ $id ] ) || $cantidad > Config::MAX_INSIGNIAS ) {
-				return new \WP_Error( 'asde_uniforme', 'Revisa las insignias: alguna no está disponible o la cantidad no es válida (máximo ' . Config::MAX_INSIGNIAS . ').' );
+				return new \WP_Error( 'asde_uniforme', sprintf( asde_t( 'Revisa las insignias: alguna no está disponible o la cantidad no es válida (máximo %d).' ), Config::MAX_INSIGNIAS ) );
 			}
 			$insignias[] = array(
 				'id'       => (string) $id,
@@ -75,7 +75,7 @@ final class Servicio {
 			);
 		}
 		if ( ! $camisa && ! $insignias ) {
-			return new \WP_Error( 'asde_uniforme', 'Elige la camisa, alguna insignia o las dos cosas.' );
+			return new \WP_Error( 'asde_uniforme', asde_t( 'Elige la camisa, alguna insignia o las dos cosas.' ) );
 		}
 		return array(
 			'camisa'    => $camisa,
@@ -119,7 +119,7 @@ final class Servicio {
 	}
 
 	public static function importe( array $p ): string {
-		return Calculadora::euros( $p['total'] ) . ( $p['provisional'] ? ' + insignias (precio por confirmar)' : '' );
+		return Calculadora::euros( $p['total'] ) . ( $p['provisional'] ? asde_t( ' + insignias (precio por confirmar)' ) : '' );
 	}
 
 	// ---------------------------------------------------------------------
@@ -230,16 +230,16 @@ final class Servicio {
 	public static function pedir( Ambito $a, string $socio, array $lineas, string $nota ) {
 		$cfg = Config::de();
 		if ( ! $cfg['abierto'] ) {
-			return new \WP_Error( 'asde_uniforme', 'Ahora mismo no se aceptan pedidos de uniforme.' );
+			return new \WP_Error( 'asde_uniforme', asde_t( 'Ahora mismo no se aceptan pedidos de uniforme.' ) );
 		}
 		$p = self::para_quien( $a )[ $socio ] ?? null;
 		if ( ! $p ) {
-			return new \WP_Error( 'asde_uniforme', 'No puedes hacer un pedido para esa persona.' );
+			return new \WP_Error( 'asde_uniforme', asde_t( 'No puedes hacer un pedido para esa persona.' ) );
 		}
 		$t  = self::total( $lineas, $cfg );
 		$id = PedidosTable::crear( $p->num_socio_asde, $p->secciones, $p->es_adulto_voluntario(), $lineas, $t['total'], $t['provisional'], $nota );
 		if ( ! $id ) {
-			return new \WP_Error( 'asde_uniforme', 'No se ha podido guardar el pedido.' );
+			return new \WP_Error( 'asde_uniforme', asde_t( 'No se ha podido guardar el pedido.' ) );
 		}
 		Logger::log(
 			'uniforme_pedido',

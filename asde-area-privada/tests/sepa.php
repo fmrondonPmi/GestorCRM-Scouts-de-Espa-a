@@ -410,7 +410,9 @@ try {
 	$r = Remesas::obtener( (int) $id_r );
 	$ok( ! empty( $r['avisada_en'] ), 'la remesa recuerda que se ha avisado a las familias' );
 	$fila_sepa = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . RegistroEmails::table() . ' WHERE tipo = %s AND id > %d ORDER BY id DESC LIMIT 1', RegistroEmails::SEPA, $emails_antes ), ARRAY_A ); // phpcs:ignore WordPress.DB
-	$ok( $fila_sepa && ! str_contains( $fila_sepa['destino'] . $fila_sepa['datos'], '@example.invalid' ) && ! str_contains( $fila_sepa['datos'], '6621000418' ) && str_contains( RegistroEmails::vista_previa( $fila_sepa ), 'ES' ), 'los avisos quedan en el registro de emails (destino enmascarado, sin cuentas en claro) y se ven como eran' );
+	$ok( $fila_sepa && ! str_contains( $fila_sepa['destino'] . $fila_sepa['datos'], '@example.invalid' ), 'el registro de los avisos SEPA no guarda emails en claro (destino enmascarado)' );
+	$ok( $fila_sepa && ! str_contains( $fila_sepa['datos'], '6621000418' ), 'ni cuentas bancarias en claro' );
+	$ok( $fila_sepa && str_contains( RegistroEmails::vista_previa( $fila_sepa ), 'ES' ), 'y se ven como eran (la vista previa del email)' );
 	$ok( ! Remesas::marcar_enviada( 999999, 0 ) && Mandatos::secuencia( Mandatos::obtener( $m1['id'] ) ) === 'FRST', 'antes de enviarla, las autorizaciones siguen siendo FRST' );
 	$ok( Remesas::marcar_enviada( (int) $id_r, 0 ) && Remesas::ENVIADA === Remesas::obtener( (int) $id_r )['estado'] && 'RCUR' === Mandatos::secuencia( Mandatos::obtener( $m1['id'] ) ) && 'RCUR' === Mandatos::secuencia( Mandatos::obtener( $m3['id'] ) ), 'marcarla como enviada al banco: las autorizaciones estrenadas pasan a RCUR' );
 	$ok( ! Remesas::marcar_enviada( (int) $id_r, 0 ) && ! Remesas::anular( (int) $id_r, 0 ), 'una remesa enviada no se vuelve a enviar ni se anula' );

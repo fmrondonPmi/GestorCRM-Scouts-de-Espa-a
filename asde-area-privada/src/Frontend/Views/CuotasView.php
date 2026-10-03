@@ -52,9 +52,9 @@ final class CuotasView extends TesoreriaBaseView {
 		Logger::log( 'tesoreria_cuotas_guardadas', 'ronda', $ronda );
 
 		$suma = Config::suma_plazos( Config::de( $ronda ) );
-		Notices::add( 'success', sprintf( 'Cuotas de la ronda %s guardadas.', esc_html( $ronda ) ) );
+		Notices::add( 'success', sprintf( asde_t( 'Cuotas de la ronda %s guardadas.' ), esc_html( $ronda ) ) );
 		if ( abs( $suma - 100 ) > 0.01 ) {
-			Notices::add( 'warning', sprintf( 'Los plazos suman un %s %%: deberían sumar 100 %%.', esc_html( number_format_i18n( $suma, 2 ) ) ) );
+			Notices::add( 'warning', sprintf( asde_t( 'Los plazos suman un %s %%: deberían sumar 100 %%.' ), esc_html( number_format_i18n( $suma, 2 ) ) ) );
 		}
 		$this->redirect( $this->url( 'cuotas', array( 'ronda' => $ronda ) ) );
 	}

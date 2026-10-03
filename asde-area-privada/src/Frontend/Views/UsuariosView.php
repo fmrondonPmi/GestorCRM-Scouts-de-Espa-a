@@ -102,7 +102,7 @@ final class UsuariosView extends View {
 	/** Toda la lista otra vez, para actualizarla en el navegador sin recargar la página. */
 	public function json(): void {
 		if ( ! current_user_can( self::CAP ) ) {
-			wp_send_json_error( array( 'mensaje' => 'No tienes permiso para ver esto.' ), 403 );
+			wp_send_json_error( array( 'mensaje' => asde_t( 'No tienes permiso para ver esto.' ) ), 403 );
 		}
 		$d = $this->datos( $this->pide_refrescar() );
 		wp_send_json_success(
@@ -140,7 +140,7 @@ final class UsuariosView extends View {
 	public function handle_post(): void {
 		if ( ! current_user_can( self::CAP ) ) {
 			if ( Router::pide_json() ) {
-				wp_send_json_error( array( 'mensaje' => 'No tienes permiso para hacer esto.' ), 403 );
+				wp_send_json_error( array( 'mensaje' => asde_t( 'No tienes permiso para hacer esto.' ) ), 403 );
 			}
 			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-area-privada' ), 403 );
 		}
@@ -149,7 +149,7 @@ final class UsuariosView extends View {
 		$volver  = $this->url( 'usuarios' );
 
 		if ( ! $user || ( ! Usuarios::roles_asde( $user ) && Usuarios::DESACTIVADO !== Usuarios::estado( $user ) ) ) {
-			Notices::add( 'error', 'Usuario no válido.' );
+			Notices::add( 'error', asde_t( 'Usuario no válido.' ) );
 			$this->terminar( $volver );
 		}
 
@@ -157,24 +157,24 @@ final class UsuariosView extends View {
 			case 'reenviar':
 				check_admin_referer( 'asde_reenviar_' . $user_id );
 				if ( Usuarios::INVITADO !== Usuarios::estado( $user ) ) {
-					Notices::add( 'error', 'Ese usuario no tiene una invitación pendiente.' );
+					Notices::add( 'error', asde_t( 'Ese usuario no tiene una invitación pendiente.' ) );
 					break;
 				}
 				$ok    = Invitacion::enviar( $user );
 				$email = RegistroEmails::ultimos( array( $user_id ) )[ $user_id ] ?? null;
-				$ver   = $email ? sprintf( ' <a href="%s">Ver el email</a>.', esc_url( add_query_arg( 'ver', (int) $email['id'], $this->url( 'emails' ) ) ) ) : '';
+				$ver   = $email ? sprintf( ' ' . asde_h( '<a href="%s">Ver el email</a>.' ), esc_url( add_query_arg( 'ver', (int) $email['id'], $this->url( 'emails' ) ) ) ) : '';
 				if ( $ok ) {
 					Logger::log( 'invitacion_reenviada', 'user', (string) $user_id );
-					Notices::add( 'success', sprintf( 'Invitación reenviada al usuario %s: enviada a %s, el email del CRM.', esc_html( $user->user_login ), esc_html( $email['destino'] ?? '' ) ) . $ver );
+					Notices::add( 'success', sprintf( asde_t( 'Invitación reenviada al usuario %s: enviada a %s, el email del CRM.' ), esc_html( $user->user_login ), esc_html( $email['destino'] ?? '' ) ) . $ver );
 				} else {
-					Notices::add( 'error', 'No se ha podido enviar el email: ' . esc_html( $email['error'] ?? 'motivo desconocido' ) . $ver );
+					Notices::add( 'error', asde_t( 'No se ha podido enviar el email: ' ) . esc_html( $email['error'] ?? asde_t( 'motivo desconocido' ) ) . $ver );
 				}
 				break;
 
 			case 'desactivar':
 				check_admin_referer( 'asde_desactivar_' . $user_id );
 				if ( $user->has_cap( 'manage_options' ) || get_current_user_id() === $user_id ) {
-					Notices::add( 'error', 'No se puede desactivar a un administrador ni a ti mismo.' );
+					Notices::add( 'error', asde_t( 'No se puede desactivar a un administrador ni a ti mismo.' ) );
 					break;
 				}
 				$quitados = Usuarios::roles_asde( $user );
@@ -185,11 +185,11 @@ final class UsuariosView extends View {
 				Invitacion::consumir( $user_id );
 				\WP_Session_Tokens::get_instance( $user_id )->destroy_all();
 				Logger::log( 'usuario_desactivado', 'user', (string) $user_id, array( 'roles' => $quitados ) );
-				Notices::add( 'success', sprintf( 'Acceso desactivado para el usuario %s. Para devolvérselo, dale de alta de nuevo.', esc_html( $user->user_login ) ) );
+				Notices::add( 'success', sprintf( asde_t( 'Acceso desactivado para el usuario %s. Para devolvérselo, dale de alta de nuevo.' ), esc_html( $user->user_login ) ) );
 				break;
 
 			default:
-				Notices::add( 'error', 'Acción desconocida.' );
+				Notices::add( 'error', asde_t( 'Acción desconocida.' ) );
 		}
 
 		$this->terminar( $volver, $user_id );

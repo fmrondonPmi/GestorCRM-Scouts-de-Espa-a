@@ -111,17 +111,17 @@ final class PermisosFicha {
 	 */
 	public function accion( string $campo, array $meta ): array {
 		if ( isset( CamposFicha::SOLO_LECTURA[ $campo ] ) ) {
-			return array( self::VER, CamposFicha::SOLO_LECTURA[ $campo ] );
+			return array( self::VER, asde_t( CamposFicha::SOLO_LECTURA[ $campo ] ) );
 		}
 		$accion = $this->accion_rol( $campo );
 		if ( self::VER === $accion ) {
-			return array( self::VER, 'Tu rol no permite cambiar este dato.' );
+			return array( self::VER, asde_t( 'Tu rol no permite cambiar este dato.' ) );
 		}
 		if ( ! Escritura::disponible() ) {
-			return array( self::VER, 'El usuario del CRM del grupo no tiene permiso para editar fichas.' );
+			return array( self::VER, asde_t( 'El usuario del CRM del grupo no tiene permiso para editar fichas.' ) );
 		}
 		if ( ! $meta || ! empty( $meta['calculado'] ) || 'multienum' === ( $meta['tipo'] ?? '' ) || ! self::tipo_editable( (string) ( $meta['tipo'] ?? '' ) ) ) {
-			return array( self::VER, 'Este campo no se puede editar desde la web.' );
+			return array( self::VER, asde_t( 'Este campo no se puede editar desde la web.' ) );
 		}
 		return array( $accion, '' );
 	}

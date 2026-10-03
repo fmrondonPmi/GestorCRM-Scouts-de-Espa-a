@@ -4,6 +4,7 @@ namespace AsdeBalears\AreaPrivada\Usuarios;
 use AsdeBalears\AreaPrivada\Domain\Grupo;
 use AsdeBalears\AreaPrivada\Frontend\Pages;
 use AsdeBalears\AreaPrivada\Frontend\TemplateLoader;
+use AsdeBalears\AreaPrivada\Idiomas\Idioma;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -145,6 +146,19 @@ final class RegistroEmails {
 	 * el nombre leído ahora del CRM y el enlace personal sustituido.
 	 */
 	public static function vista_previa( array $fila ): string {
+		$datos = json_decode( (string) $fila['datos'], true );
+		$datos = is_array( $datos ) ? $datos : array();
+		$idioma = Idioma::por_defecto();
+		if ( self::RECHAZO === $fila['tipo'] ) {
+			$s = ! empty( $datos['solicitud'] ) ? Solicitudes::obtener( (int) $datos['solicitud'] ) : null;
+			$idioma = $s && Idioma::es_valido( $s['datos']['idioma'] ?? null ) ? (string) $s['datos']['idioma'] : $idioma;
+		} elseif ( ! empty( $fila['user_id'] ) ) {
+			$idioma = Idioma::de_usuario( (int) $fila['user_id'] );
+		}
+		return Idioma::en( $idioma, static fn() => self::componer_vista_previa( $fila ) );
+	}
+
+	private static function componer_vista_previa( array $fila ): string {
 		$datos = json_decode( (string) $fila['datos'], true );
 		$datos = is_array( $datos ) ? $datos : array();
 		if ( self::RECHAZO === $fila['tipo'] ) {

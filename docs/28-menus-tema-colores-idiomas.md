@@ -8,7 +8,7 @@ Petición del usuario (2026-10-02). Cinco cambios; cada uno se cierra con sus pr
 | 2 | Menús distintos para scouters (gestión) y familias | ✅ |
 | 4 | El plugin no depende del tema: se sugiere uno, no es obligatorio | ✅ |
 | 5 | Pantalla de gestión de colores | ✅ |
-| 1 | Selector de idioma (castellano, catalán, euskera, gallego) y gestión de etiquetas | ⏳ |
+| 1 | Selector de idioma (castellano, catalán, euskera, gallego) y gestión de etiquetas | ✅ |
 
 ---
 
@@ -96,3 +96,36 @@ Pruebas: `tests/tema.php` (15 comprobaciones).
 - La **PWA** (`theme_color` del manifiesto, de la otra sesión) **no** sigue aún el color principal: es de su sección 5 (ajustes de la PWA). Pendiente de que la otra sesión la enlace con `Colores::para_email()['primary']`.
 
 Pruebas: `tests/colores.php` (32 comprobaciones). Revisión visual con capturas de Chrome del área con los colores por defecto, verde y azul.
+
+---
+
+## 1 · Idiomas y gestión de etiquetas
+
+**Dónde.** wp-admin → Grupos Scouts → **Idioma y etiquetas** (`Admin\IdiomasPage`, solo administradores).
+
+**Idiomas:** castellano (`es`, el original), catalán (`ca`), euskera (`eu`) y gallego (`gl`).
+
+**Ajustes** (opción `asde_ap_idioma`):
+- **Idioma por defecto** del área privada.
+- **Dejar que cada persona elija su idioma.** Si está marcado, sale un selector junto a «Salir» en el menú y encima de las pantallas públicas (acceso, activar cuenta, recuperar contraseña, solicitar acceso). La elección se guarda en el usuario (`asde_ap_idioma`) y, sin sesión, en la cookie `asde_ap_lang`; el cambio va por `?asde_lang=xx` con nonce.
+- Qué idioma se usa (`Idioma::actual()`): el forzado por el código (emails) → el que eligió la persona, si se permite elegir → el idioma por defecto.
+
+**Gestión de etiquetas.** Hay una pestaña por idioma con la tabla de todos los textos: el original en castellano, la traducción del plugin y un campo para el **texto propio**. Se puede buscar (también en las traducciones), filtrar entre todas, personalizadas y sin traducir, y paginar.
+- Lo personalizado (opción `asde_ap_etiquetas`) **manda sobre el catálogo** del plugin y vale para cualquier idioma, también para el castellano. Así se puede cambiar un texto sin tocar el código.
+- Se comprueba que el texto propio conserva los mismos huecos (`%s`, `%d`, `%1$s`) que el original. El HTML que se permite es solo el básico: negrita, cursiva, código, saltos de línea y enlaces.
+- Se puede restablecer un idioma y **exportar e importar** lo personalizado en un `.json`, para pasarlo de un sitio a otro. Cada cambio queda en la auditoría.
+
+**Cómo está hecho** (`src/Idiomas/`).
+- El texto en castellano **es la clave**: `asde_t()` devuelve texto plano, `asde_h()` HTML limpio, `asde_e()` lo imprime, `asde_a()` lo devuelve para un atributo, `asde_js()` para un `confirm()` en un atributo, `asde_ta()` traduce las listas de etiquetas de las constantes y `asde_n()` elige entre singular y plural. Las partes que cambian van con `sprintf` y la frase entera es un solo texto, para que cada idioma pueda ordenarla a su manera.
+- **Catálogos:** `languages/es.php` es la lista de todos los textos, unos 1.780, con el grupo de pantallas de cada uno. No se edita a mano: se regenera con `herramientas/generar-es.php`, que junta lo que encuentra el `Extractor` con los textos de las constantes (`Textos::extras()`). `languages/ca.php`, `eu.php` y `gl.php` llevan la traducción de cada texto.
+- **JavaScript:** los JS piden sus textos con `asdeT( 'texto', arg… )`. El servidor les da el diccionario traducido (`window.asdeI18n`, script `asde-i18n`) con los textos de `TextosJs::LISTA`.
+- **Emails:** cada email sale en el idioma de quien lo recibe (`Idioma::en( Idioma::de_usuario() )`). La invitación tras una solicitud sale en el idioma en que se pidió el acceso.
+- Las llamadas `__()` que aún quedan con el dominio del plugin también se traducen en el área (filtro `gettext`, solo en la parte pública).
+
+**Decisiones / supuestos** (para confirmar).
+- **Las pantallas de wp-admin del plugin siguen en castellano** (en el idioma de WordPress): las usa la administración.
+- **Lo que se guarda no se traduce**: motivos de cancelación o de rechazo, conceptos de los movimientos, referencias SEPA, nombres de informes que crea cada uno, títulos de las páginas de WordPress y el catálogo de uniformes que configura el grupo (modelos e insignias). Se ve tal como se escribió. Los informes predefinidos sí se traducen: se guardan en castellano y se traducen al mostrarlos.
+- **Las traducciones del plugin son una primera versión**, hecha sin revisión de hablantes nativos. Por eso existe la gestión de etiquetas: conviene que alguien de cada idioma revise los textos más visibles (menú, inicio, acceso, emails). Los nombres de las secciones (Castors, Llobatons, Otsokumeak…) y de los roles son una propuesta.
+- Las palabras sueltas que vienen de trocear frases alrededor del HTML (por ejemplo «Si la has olvidado,» + enlace) se traducen trozo a trozo. En euskera el orden de alguna de esas frases puede quedar forzado; si molesta, se rehace la frase en el código como un solo texto.
+
+Pruebas: `tests/idiomas.php` (57 comprobaciones del motor y las pantallas) y `tests/idiomas-catalogos.php`. La segunda comprueba que `es.php` está al día con el código, que los tres catálogos traducen el 100 % con los mismos huecos y etiquetas, que los JS no tienen textos en castellano escritos a mano y que las pantallas salen traducidas. También se han generado todas las pantallas del área, con datos de prueba y cuatro tipos de usuario, con un idioma ficticio y en euskera: solo quedan en castellano datos y nombres propios.

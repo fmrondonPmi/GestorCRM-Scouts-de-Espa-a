@@ -137,7 +137,7 @@
 
 		vacio.hidden = 0 !== n;
 		botonLimpiar.hidden = ! hayFiltros();
-		total.textContent = ( hayFiltros() ? n + ' de ' + filas.length : filas.length ) + ( 1 === filas.length ? ' usuario' : ' usuarios' );
+		total.textContent = ( hayFiltros() ? asdeT( '%s de %s', n, filas.length ) : filas.length ) + ' ' + ( 1 === filas.length ? asdeT( 'usuario' ) : asdeT( 'usuarios' ) );
 		pintarPaginas( n, paginas, desde, pagina.length );
 		pintarCabeceras();
 		guardarEnDireccion();
@@ -160,7 +160,7 @@
 			}
 			enlace.className = 'asde-orden' + ( activa ? ' is-active' : '' );
 			enlace.lastChild.textContent = activa ? ( 'asc' === estado.dir ? '▲' : '▼' ) : '↕';
-			enlace.title = 'Ordenar por ' + enlace.firstChild.textContent.toLowerCase() + ' (' + ( activa && 'asc' === estado.dir ? 'descendente' : 'ascendente' ) + ')';
+			enlace.title = asdeT( 'Ordenar por %s (%s)', enlace.firstChild.textContent.toLowerCase(), activa && 'asc' === estado.dir ? asdeT( 'descendente' ) : asdeT( 'ascendente' ) );
 			if ( activa ) {
 				th.setAttribute( 'aria-sort', 'asc' === estado.dir ? 'ascending' : 'descending' );
 			} else {
@@ -192,31 +192,30 @@
 				? '<li><a href="#" data-pag="' + destino + '" aria-label="' + etiqueta + '">' + texto + '</a></li>'
 				: '<li><span class="is-disabled" aria-hidden="true">' + texto + '</span></li>';
 		};
-		var html = '<nav class="asde-paginacion" aria-label="Paginación"><p class="asde-paginacion__info">Mostrando '
-			+ ( desde + 1 ) + '–' + ( desde + enPagina ) + ' de ' + n + '</p>';
+		var html = '<nav class="asde-paginacion" aria-label="' + asdeT( 'Paginación' ) + '"><p class="asde-paginacion__info">' + asdeT( 'Mostrando %s–%s de %s', desde + 1, desde + enPagina, n ) + '</p>';
 		if ( paginas > 1 ) {
 			html += '<ul class="asde-paginacion__botones">'
-				+ boton( estado.pagina > 1, 1, '«', 'Primera página' )
-				+ boton( estado.pagina > 1, estado.pagina - 1, '‹', 'Página anterior' );
+				+ boton( estado.pagina > 1, 1, '«', asdeT( 'Primera página' ) )
+				+ boton( estado.pagina > 1, estado.pagina - 1, '‹', asdeT( 'Página anterior' ) );
 			lista.forEach( function ( q ) {
 				if ( '…' === q ) {
 					html += '<li><span class="asde-paginacion__hueco" aria-hidden="true">…</span></li>';
 				} else if ( q === estado.pagina ) {
 					html += '<li><span class="is-current" aria-current="page">' + q + '</span></li>';
 				} else {
-					html += '<li><a href="#" data-pag="' + q + '" aria-label="Página ' + q + '">' + q + '</a></li>';
+					html += '<li><a href="#" data-pag="' + q + '" aria-label="' + asdeT( 'Página %s', q ) + '">' + q + '</a></li>';
 				}
 			} );
-			html += boton( estado.pagina < paginas, estado.pagina + 1, '›', 'Página siguiente' )
-				+ boton( estado.pagina < paginas, paginas, '»', 'Última página' )
+			html += boton( estado.pagina < paginas, estado.pagina + 1, '›', asdeT( 'Página siguiente' ) )
+				+ boton( estado.pagina < paginas, paginas, '»', asdeT( 'Última página' ) )
 				+ '</ul>';
 		}
-		html += '<div class="asde-paginacion__tamano"><label for="asde-usuarios-por-pagina">Mostrar</label>'
+		html += '<div class="asde-paginacion__tamano"><label for="asde-usuarios-por-pagina">' + asdeT( 'Mostrar' ) + '</label>'
 			+ '<select id="asde-usuarios-por-pagina" data-tamano>'
 			+ opciones.map( function ( o ) {
 				return '<option value="' + o + '"' + ( o === estado.porPagina ? ' selected' : '' ) + '>' + o + '</option>';
 			} ).join( '' )
-			+ '</select><span>por página</span></div></nav>';
+			+ '</select><span>' + asdeT( 'por página' ) + '</span></div></nav>';
 		cajaPaginas.innerHTML = html;
 	}
 
@@ -401,7 +400,7 @@
 		var texto = boton ? boton.textContent : '';
 		if ( boton ) {
 			boton.disabled = true;
-			boton.textContent = 'Actualizando…';
+			boton.textContent = asdeT( 'Actualizando…' );
 		}
 		return pedir( url + ( desdeCrm ? ( -1 === url.indexOf( '?' ) ? '?' : '&' ) + 'refrescar=1&_wpnonce=' + encodeURIComponent( raiz.getAttribute( 'data-nonce-refrescar' ) || '' ) : '' ) ).then( function ( d ) {
 			cuerpo.innerHTML = d.filas;
@@ -412,7 +411,7 @@
 			}
 			pintar();
 		} ).catch( function () {
-			error( 'No se ha podido actualizar la lista. Recarga la página.' );
+			error( asdeT( 'No se ha podido actualizar la lista. Recarga la página.' ) );
 		} ).then( function () {
 			if ( boton ) {
 				boton.disabled = false;
@@ -445,7 +444,7 @@
 			Array.prototype.forEach.call( botones, function ( b ) {
 				b.disabled = false;
 			} );
-			error( 'No se ha podido completar la acción. Recarga la página para ver cómo ha quedado.' );
+			error( asdeT( 'No se ha podido completar la acción. Recarga la página para ver cómo ha quedado.' ) );
 		} );
 	} );
 

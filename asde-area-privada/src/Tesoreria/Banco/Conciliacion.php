@@ -42,7 +42,7 @@ final class Conciliacion {
 		if ( $ref && isset( $familias[ $ref ] ) ) {
 			return array(
 				'familia' => $familias[ $ref ],
-				'motivo'  => sprintf( 'Referencia %s en el concepto', $ref ),
+				'motivo'  => sprintf( asde_t( 'Referencia %s en el concepto' ), $ref ),
 				'fiable'  => true,
 			);
 		}
@@ -52,7 +52,7 @@ final class Conciliacion {
 				if ( $f['id'] === $id ) {
 					return array(
 						'familia' => $f,
-						'motivo'  => 'Mismo ordenante que un pago ya conciliado',
+						'motivo'  => asde_t( 'Mismo ordenante que un pago ya conciliado' ),
 						'fiable'  => false,
 					);
 				}
@@ -65,17 +65,17 @@ final class Conciliacion {
 	public static function conciliar( int $mov_id, int $familia_id, string $ronda = '' ) {
 		$m = BancoTable::obtener( $mov_id );
 		if ( ! $m ) {
-			return new \WP_Error( 'asde_banco', 'Ese movimiento no existe.' );
+			return new \WP_Error( 'asde_banco', asde_t( 'Ese movimiento no existe.' ) );
 		}
 		if ( BancoTable::PENDIENTE !== $m['estado'] ) {
-			return new \WP_Error( 'asde_banco', 'Ese movimiento ya está revisado.' );
+			return new \WP_Error( 'asde_banco', asde_t( 'Ese movimiento ya está revisado.' ) );
 		}
 		if ( $m['importe'] <= 0 ) {
-			return new \WP_Error( 'asde_banco', 'Solo se concilian ingresos con las familias.' );
+			return new \WP_Error( 'asde_banco', asde_t( 'Solo se concilian ingresos con las familias.' ) );
 		}
 		$f = FamiliasTable::obtener( $familia_id );
 		if ( ! $f ) {
-			return new \WP_Error( 'asde_banco', 'Esa familia no existe.' );
+			return new \WP_Error( 'asde_banco', asde_t( 'Esa familia no existe.' ) );
 		}
 		$ronda = Config::es_ronda( $ronda ) ? $ronda : Config::ronda_de_fecha( $m['fecha'] );
 		$pago  = MovimientosTable::registrar(
@@ -110,7 +110,7 @@ final class Conciliacion {
 	public static function ignorar( int $mov_id ) {
 		$m = BancoTable::obtener( $mov_id );
 		if ( ! $m || BancoTable::PENDIENTE !== $m['estado'] ) {
-			return new \WP_Error( 'asde_banco', 'Ese movimiento no está pendiente.' );
+			return new \WP_Error( 'asde_banco', asde_t( 'Ese movimiento no está pendiente.' ) );
 		}
 		BancoTable::marcar( $mov_id, BancoTable::IGNORADO );
 		Logger::log( 'banco_revisado', 'banco', (string) $mov_id );
@@ -121,7 +121,7 @@ final class Conciliacion {
 	public static function deshacer( int $mov_id ) {
 		$m = BancoTable::obtener( $mov_id );
 		if ( ! $m || BancoTable::PENDIENTE === $m['estado'] ) {
-			return new \WP_Error( 'asde_banco', 'Ese movimiento no está revisado.' );
+			return new \WP_Error( 'asde_banco', asde_t( 'Ese movimiento no está revisado.' ) );
 		}
 		if ( BancoTable::CONCILIADO === $m['estado'] && $m['pago_id'] ) {
 			MovimientosTable::anular( (int) $m['pago_id'] );

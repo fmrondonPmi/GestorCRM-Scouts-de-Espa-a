@@ -26,54 +26,54 @@ $fecha  = static fn( string $f ) => '' !== $f ? wp_date( 'd/m/Y', (int) strtotim
 ?>
 <section class="asde-card" id="sepa-<?php echo (int) $familia['id']; ?>">
 	<header class="asde-card__header asde-card__header--split">
-		<h3 class="asde-card__title">Domiciliación SEPA · familia <?php echo esc_html( $familia['numero'] ); ?></h3>
+		<h3 class="asde-card__title"><?php asde_e( 'Domiciliación SEPA · familia' ); ?> <?php echo esc_html( $familia['numero'] ); ?></h3>
 		<?php if ( $mandato ) : ?>
-			<span class="asde-badge asde-badge--pago-pagado">Autorizada</span>
+			<span class="asde-badge asde-badge--pago-pagado"><?php asde_e( 'Autorizada' ); ?></span>
 		<?php else : ?>
-			<span class="asde-badge asde-badge--pago-pendiente">Sin autorizar</span>
+			<span class="asde-badge asde-badge--pago-pendiente"><?php asde_e( 'Sin autorizar' ); ?></span>
 		<?php endif; ?>
 	</header>
 
 	<?php if ( $proximos ) : ?>
 		<div class="asde-notice asde-notice--info" role="status">
-			<strong>Próximo cargo:</strong>
+			<strong><?php asde_e( 'Próximo cargo:' ); ?></strong>
 			<?php foreach ( $proximos as $p ) : ?>
-				<br><?php echo esc_html( sprintf( '%s · %s en la cuenta %s (autorización %s)', $fecha( $p['fecha'] ), Calculadora::euros( $p['centimos'] / 100 ), '' !== $p['iban'] ? $p['iban'] : 'autorizada', $p['umr'] ) ); ?>
+				<br><?php echo esc_html( sprintf( asde_t( '%s · %s en la cuenta %s (autorización %s)' ), $fecha( $p['fecha'] ), Calculadora::euros( $p['centimos'] / 100 ), '' !== $p['iban'] ? $p['iban'] : 'autorizada', $p['umr'] ) ); ?>
 			<?php endforeach; ?>
 		</div>
 	<?php endif; ?>
 
 	<?php if ( $mandato ) : ?>
-		<p>Has autorizado a <strong><?php echo esc_html( $acreedor['nombre'] ?: 'el grupo' ); ?></strong> a cobrar los pagos del grupo por adeudo directo SEPA en la cuenta <strong><?php echo esc_html( $mandato['iban_mask'] ); ?></strong>.</p>
+		<p><?php asde_e( 'Has autorizado a' ); ?> <strong><?php echo esc_html( $acreedor['nombre'] ?: asde_t( 'el grupo' ) ); ?></strong> <?php asde_e( 'a cobrar los pagos del grupo por adeudo directo SEPA en la cuenta' ); ?> <strong><?php echo esc_html( $mandato['iban_mask'] ); ?></strong>.</p>
 		<ul class="asde-resumen">
-			<li>Referencia: <strong><?php echo esc_html( $mandato['referencia'] ); ?></strong></li>
-			<li>Firmada el <strong><?php echo esc_html( $fecha( $mandato['fecha_firma'] ) ); ?></strong></li>
+			<li><?php asde_e( 'Referencia:' ); ?> <strong><?php echo esc_html( $mandato['referencia'] ); ?></strong></li>
+			<li><?php asde_e( 'Firmada el' ); ?> <strong><?php echo esc_html( $fecha( $mandato['fecha_firma'] ) ); ?></strong></li>
 			<?php if ( '' !== $mandato['datos']['titular'] ) : ?>
-				<li>Titular: <strong><?php echo esc_html( $mandato['datos']['titular'] ); ?></strong></li>
+				<li><?php asde_e( 'Titular:' ); ?> <strong><?php echo esc_html( $mandato['datos']['titular'] ); ?></strong></li>
 			<?php endif; ?>
 		</ul>
 		<div class="asde-actions">
-			<a class="button" href="<?php echo esc_url( add_query_arg( 'autorizacion', (int) $mandato['id'], $url ) ); ?>">Ver e imprimir la autorización</a>
+			<a class="button" href="<?php echo esc_url( add_query_arg( 'autorizacion', (int) $mandato['id'], $url ) ); ?>"><?php asde_e( 'Ver e imprimir la autorización' ); ?></a>
 			<?php if ( true === $puede ) : ?>
-				<form method="post" onsubmit="return confirm('¿Anular la autorización? A partir de ahora no se cobrará nada por esta cuenta.');">
+				<form method="post" onsubmit="return confirm(<?php echo asde_js( '¿Anular la autorización? A partir de ahora no se cobrará nada por esta cuenta.' ); ?>);">
 					<?php wp_nonce_field( 'asde_sepa_anular_' . (int) $mandato['id'] ); ?>
 					<input type="hidden" name="asde_action" value="sepa_anular">
 					<input type="hidden" name="mandato" value="<?php echo (int) $mandato['id']; ?>">
-					<button type="submit" class="button asde-button-secundario">Anular la autorización</button>
+					<button type="submit" class="button asde-button-secundario"><?php asde_e( 'Anular la autorización' ); ?></button>
 				</form>
 			<?php endif; ?>
 		</div>
 		<?php if ( true === $puede && $lista ) : ?>
 			<details class="asde-rechazar" <?php echo $v ? 'open' : ''; ?>>
-				<summary>Cambiar de cuenta o de titular (firmar otra autorización)</summary>
+				<summary><?php asde_e( 'Cambiar de cuenta o de titular (firmar otra autorización)' ); ?></summary>
 				<?php include __DIR__ . '/sepa-formulario.php'; ?>
 			</details>
 		<?php endif; ?>
 	<?php else : ?>
-		<p>Si prefieres no pagar por transferencia, puedes <strong>autorizar el cobro por domiciliación bancaria (adeudo directo SEPA)</strong>: el grupo cobrará la cuota de esta familia en tu cuenta, siempre avisándote antes con la fecha y el importe. Puedes anularla cuando quieras.</p>
+		<p><?php asde_e( 'Si prefieres no pagar por transferencia, puedes' ); ?> <strong><?php asde_e( 'autorizar el cobro por domiciliación bancaria (adeudo directo SEPA)' ); ?></strong><?php asde_e( ': el grupo cobrará la cuota de esta familia en tu cuenta, siempre avisándote antes con la fecha y el importe. Puedes anularla cuando quieras.' ); ?></p>
 		<?php if ( true === $puede ) : ?>
 			<details class="asde-rechazar" <?php echo $v ? 'open' : ''; ?>>
-				<summary>Rellenar la autorización</summary>
+				<summary><?php asde_e( 'Rellenar la autorización' ); ?></summary>
 				<?php include __DIR__ . '/sepa-formulario.php'; ?>
 			</details>
 		<?php else : ?>

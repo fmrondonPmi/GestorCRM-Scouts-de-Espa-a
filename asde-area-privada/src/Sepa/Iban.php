@@ -31,20 +31,20 @@ final class Iban {
 	public static function error( string $iban ): string {
 		$i = self::normalizar( $iban );
 		if ( '' === $i ) {
-			return 'Escribe el IBAN.';
+			return asde_t( 'Escribe el IBAN.' );
 		}
 		if ( ! preg_match( '/^[A-Z]{2}\d{2}[A-Z0-9]+$/', $i ) ) {
-			return 'El IBAN debe empezar por dos letras del país y dos cifras de control (por ejemplo ES91…).';
+			return asde_t( 'El IBAN debe empezar por dos letras del país y dos cifras de control (por ejemplo ES91…).' );
 		}
 		$pais = substr( $i, 0, 2 );
 		if ( ! isset( self::LONGITUD[ $pais ] ) ) {
-			return 'El IBAN no es de un país de la zona SEPA.';
+			return asde_t( 'El IBAN no es de un país de la zona SEPA.' );
 		}
 		if ( strlen( $i ) !== self::LONGITUD[ $pais ] ) {
-			return sprintf( 'Un IBAN de %s tiene %d caracteres y este tiene %d.', $pais, self::LONGITUD[ $pais ], strlen( $i ) );
+			return sprintf( asde_t( 'Un IBAN de %s tiene %d caracteres y este tiene %d.' ), $pais, self::LONGITUD[ $pais ], strlen( $i ) );
 		}
 		if ( 1 !== self::resto97( substr( $i, 4 ) . substr( $i, 0, 4 ) ) ) {
-			return 'Los dígitos de control del IBAN no cuadran: revisa que esté bien escrito.';
+			return asde_t( 'Los dígitos de control del IBAN no cuadran: revisa que esté bien escrito.' );
 		}
 		return '';
 	}

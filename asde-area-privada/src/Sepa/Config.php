@@ -88,19 +88,19 @@ final class Config {
 	public static function errores( array $cfg ): array {
 		$e = array();
 		if ( '' === trim( Texto::limpiar( $cfg['nombre'] ) ) ) {
-			$e[] = 'Falta el nombre del acreedor (el del grupo o la asociación que cobra).';
+			$e[] = asde_t( 'Falta el nombre del acreedor (el del grupo o la asociación que cobra).' );
 		}
 		if ( '' === $cfg['ics'] ) {
-			$e[] = 'Falta el identificador del acreedor (ICS). Lo da el banco al contratar las domiciliaciones.';
+			$e[] = asde_t( 'Falta el identificador del acreedor (ICS). Lo da el banco al contratar las domiciliaciones.' );
 		} elseif ( ! self::ics_formato( $cfg['ics'] ) ) {
-			$e[] = 'El identificador del acreedor no tiene el formato correcto (en España, ES + 2 cifras de control + 3 caracteres + NIF: 16 caracteres, p. ej. ES12ZZZG12345678).';
+			$e[] = asde_t( 'El identificador del acreedor no tiene el formato correcto (en España, ES + 2 cifras de control + 3 caracteres + NIF: 16 caracteres, p. ej. ES12ZZZG12345678).' );
 		}
 		$err = Iban::error( $cfg['iban'] );
 		if ( '' !== $err ) {
-			$e[] = 'IBAN del acreedor: ' . $err;
+			$e[] = asde_t( 'IBAN del acreedor: ' ) . $err;
 		}
 		if ( '' !== $cfg['bic'] && ! preg_match( '/^[A-Z]{6}[A-Z0-9]{2}([A-Z0-9]{3})?$/', $cfg['bic'] ) ) {
-			$e[] = 'El BIC no es válido (8 u 11 caracteres). Puedes dejarlo vacío.';
+			$e[] = asde_t( 'El BIC no es válido (8 u 11 caracteres). Puedes dejarlo vacío.' );
 		}
 		return $e;
 	}

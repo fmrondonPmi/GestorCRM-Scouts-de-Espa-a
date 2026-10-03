@@ -94,10 +94,10 @@ final class Mandatos {
 	public static function texto( array $cfg ): array {
 		$acreedor = '' !== $cfg['nombre'] ? $cfg['nombre'] : Grupo::nombre();
 		return array(
-			sprintf( 'Mediante la firma de esta orden de domiciliación, el deudor autoriza (A) a %s a enviar instrucciones a la entidad del deudor para adeudar su cuenta y (B) a la entidad para efectuar los adeudos en su cuenta siguiendo las instrucciones de %s.', $acreedor, $acreedor ),
-			'Como parte de sus derechos, el deudor está legitimado al reembolso por su entidad en los términos y condiciones del contrato suscrito con la misma. La solicitud de reembolso deberá efectuarse dentro de las ocho semanas que siguen a la fecha de adeudo en cuenta. Puede obtener información adicional sobre sus derechos en su entidad financiera.',
-			sprintf( 'Esta autorización sirve para cobrar la cuota y otros pagos del grupo (por ejemplo, las cuotas de cada ronda). Tipo de pago: recurrente. %s comunicará al deudor la fecha y el importe de cada adeudo con al menos %d días de antelación (por email y en «Mis pagos»).', $acreedor, (int) $cfg['dias_aviso'] ),
-			'El deudor puede anular esta autorización cuando quiera desde «Mis pagos» o avisando a la Tesorería del grupo.',
+			sprintf( asde_t( 'Mediante la firma de esta orden de domiciliación, el deudor autoriza (A) a %s a enviar instrucciones a la entidad del deudor para adeudar su cuenta y (B) a la entidad para efectuar los adeudos en su cuenta siguiendo las instrucciones de %s.' ), $acreedor, $acreedor ),
+			asde_t( 'Como parte de sus derechos, el deudor está legitimado al reembolso por su entidad en los términos y condiciones del contrato suscrito con la misma. La solicitud de reembolso deberá efectuarse dentro de las ocho semanas que siguen a la fecha de adeudo en cuenta. Puede obtener información adicional sobre sus derechos en su entidad financiera.' ),
+			sprintf( asde_t( 'Esta autorización sirve para cobrar la cuota y otros pagos del grupo (por ejemplo, las cuotas de cada ronda). Tipo de pago: recurrente. %s comunicará al deudor la fecha y el importe de cada adeudo con al menos %d días de antelación (por email y en «Mis pagos»).' ), $acreedor, (int) $cfg['dias_aviso'] ),
+			asde_t( 'El deudor puede anular esta autorización cuando quiera desde «Mis pagos» o avisando a la Tesorería del grupo.' ),
 		);
 	}
 
@@ -112,16 +112,16 @@ final class Mandatos {
 	 */
 	public static function puede_firmar( Ambito $a, array $familia ) {
 		if ( ! user_can( $a->user, 'asde_sepa_autorizar' ) ) {
-			return 'Tu cuenta no puede firmar autorizaciones de domiciliación.';
+			return asde_t( 'Tu cuenta no puede firmar autorizaciones de domiciliación.' );
 		}
 		if ( array_intersect( $familia['miembros'], array_map( 'strval', array_keys( $a->representados ) ) ) ) {
 			return true; // Cuenta familiar: madre, padre o tutor/a de alguno de los menores de la familia.
 		}
 		$p = $a->persona;
 		if ( $p && in_array( $p->num_socio_asde, $familia['miembros'], true ) ) {
-			return null !== $p->edad() && $p->edad() >= 18 ? true : 'La autorización tiene que firmarla tu madre, padre o tutor/a desde su cuenta: por ser menor de edad no puedes firmarla tú.';
+			return null !== $p->edad() && $p->edad() >= 18 ? true : asde_t( 'La autorización tiene que firmarla tu madre, padre o tutor/a desde su cuenta: por ser menor de edad no puedes firmarla tú.' );
 		}
-		return 'Esa familia no es la tuya.';
+		return asde_t( 'Esa familia no es la tuya.' );
 	}
 
 	// ---------------------------------------------------------------------
@@ -147,14 +147,14 @@ final class Mandatos {
 			'lugar'     => $texto( $in['lugar'] ?? '', 50 ),
 		);
 		if ( mb_strlen( $d['titular'] ) < 3 || ! str_contains( $d['titular'], ' ' ) ) {
-			$err[] = 'Escribe el nombre y los apellidos del titular de la cuenta.';
+			$err[] = asde_t( 'Escribe el nombre y los apellidos del titular de la cuenta.' );
 		}
 		$e = Iban::error( $d['iban'] );
 		if ( '' !== $e ) {
 			$err[] = $e;
 		}
 		if ( '' === $d['calle'] || '' === $d['cp'] || '' === $d['poblacion'] ) {
-			$err[] = 'Escribe la dirección del titular (calle, código postal y población).';
+			$err[] = asde_t( 'Escribe la dirección del titular (calle, código postal y población).' );
 		}
 		if ( '' === $d['lugar'] ) {
 			$d['lugar'] = $d['poblacion'];
@@ -175,11 +175,11 @@ final class Mandatos {
 		global $wpdb;
 		$familia = FamiliasTable::obtener( $familia_id );
 		if ( ! $familia ) {
-			return new \WP_Error( 'asde_sepa', 'Esa familia no existe.' );
+			return new \WP_Error( 'asde_sepa', asde_t( 'Esa familia no existe.' ) );
 		}
 		$cfg = Config::de();
 		if ( ! Config::lista( $cfg ) ) {
-			return new \WP_Error( 'asde_sepa', 'El grupo aún no tiene activadas las domiciliaciones SEPA.' );
+			return new \WP_Error( 'asde_sepa', asde_t( 'El grupo aún no tiene activadas las domiciliaciones SEPA.' ) );
 		}
 		$ip  = (string) ( $_SERVER['REMOTE_ADDR'] ?? '' ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
 		$hoy = current_time( 'Y-m-d' );
@@ -200,7 +200,7 @@ final class Mandatos {
 		);
 		$id = (int) $wpdb->insert_id;
 		if ( ! $id ) {
-			return new \WP_Error( 'asde_sepa', 'No se ha podido guardar la autorización. Inténtalo de nuevo.' );
+			return new \WP_Error( 'asde_sepa', asde_t( 'No se ha podido guardar la autorización. Inténtalo de nuevo.' ) );
 		}
 		$wpdb->update(
 			self::table(),

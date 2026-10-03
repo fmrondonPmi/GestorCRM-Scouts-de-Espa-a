@@ -17,22 +17,22 @@ use AsdeBalears\AreaPrivada\Usuarios\RegistroEmails;
 defined( 'ABSPATH' ) || exit;
 
 $columnas = array(
-	'fecha'   => 'Fecha',
-	'usuario' => 'Usuario',
-	'tipo'    => 'Tipo',
-	'estado'  => 'Estado',
+	'fecha'   => asde_t( 'Fecha' ),
+	'usuario' => asde_t( 'Usuario' ),
+	'tipo'    => asde_t( 'Tipo' ),
+	'estado'  => asde_t( 'Estado' ),
 );
 ?>
 <section class="asde-card">
 	<header class="asde-card__header asde-card__header--split">
-		<h2 class="asde-card__title">Registro de emails</h2>
-		<a href="<?php echo esc_url( $url_usuarios ); ?>">← Usuarios</a>
+		<h2 class="asde-card__title"><?php asde_e( 'Registro de emails' ); ?></h2>
+		<a href="<?php echo esc_url( $url_usuarios ); ?>"><?php asde_e( '← Usuarios' ); ?></a>
 	</header>
-	<p>Cada invitación, recuperación de contraseña o aviso de solicitud rechazada que envía el área privada, con su resultado. <strong>Enviado</strong> quiere decir que el servidor de correo lo aceptó; si no llega, que revisen la carpeta de spam o que la Secretaría compruebe el email en el CRM.</p>
+	<p><?php asde_e( 'Cada invitación, recuperación de contraseña o aviso de solicitud rechazada que envía el área privada, con su resultado.' ); ?> <strong><?php asde_e( 'Enviado' ); ?></strong> <?php asde_e( 'quiere decir que el servidor de correo lo aceptó; si no llega, que revisen la carpeta de spam o que la Secretaría compruebe el email en el CRM.' ); ?></p>
 
 	<?php if ( $mailpit ) : ?>
 		<div class="asde-notice asde-notice--info" role="status">
-			<strong>Entorno local:</strong> los emails no salen a internet (así no llegan a familias reales). Se recogen en Mailpit: <a href="<?php echo esc_url( $mailpit ); ?>" target="_blank" rel="noopener"><?php echo esc_html( $mailpit ); ?></a>.
+			<strong><?php asde_e( 'Entorno local:' ); ?></strong> <?php asde_e( 'los emails no salen a internet (así no llegan a familias reales). Se recogen en Mailpit:' ); ?> <a href="<?php echo esc_url( $mailpit ); ?>" target="_blank" rel="noopener"><?php echo esc_html( $mailpit ); ?></a>.
 		</div>
 	<?php endif; ?>
 
@@ -40,21 +40,21 @@ $columnas = array(
 		<?php if ( $usuario ) : ?>
 			<input type="hidden" name="usuario" value="<?php echo (int) $usuario->ID; ?>">
 		<?php endif; ?>
-		<label for="asde-estado-email">Mostrar</label>
+		<label for="asde-estado-email"><?php asde_e( 'Mostrar' ); ?></label>
 		<select id="asde-estado-email" name="estado" onchange="this.form.submit()">
-			<option value="">Todos</option>
-			<?php foreach ( RegistroEmails::ESTADOS as $k => $label ) : ?>
+			<option value=""><?php asde_e( 'Todos' ); ?></option>
+			<?php foreach ( asde_ta( RegistroEmails::ESTADOS ) as $k => $label ) : ?>
 				<option value="<?php echo esc_attr( $k ); ?>" <?php selected( $estado, $k ); ?>><?php echo esc_html( $label ); ?></option>
 			<?php endforeach; ?>
 		</select>
-		<noscript><button type="submit" class="button">Filtrar</button></noscript>
+		<noscript><button type="submit" class="button"><?php asde_e( 'Filtrar' ); ?></button></noscript>
 		<?php if ( $usuario ) : ?>
-			<span class="asde-muted">Solo del usuario <strong><?php echo esc_html( $usuario->user_login ); ?></strong> · <a href="<?php echo esc_url( $url ); ?>">ver todos</a></span>
+			<span class="asde-muted"><?php asde_e( 'Solo del usuario' ); ?> <strong><?php echo esc_html( $usuario->user_login ); ?></strong> · <a href="<?php echo esc_url( $url ); ?>"><?php asde_e( 'ver todos' ); ?></a></span>
 		<?php endif; ?>
 	</form>
 
 	<?php if ( ! $filas ) : ?>
-		<p>No hay emails registrados<?php echo $estado || $usuario ? ' con este filtro' : ''; ?>.</p>
+		<p><?php asde_e( 'No hay emails registrados' ); ?><?php echo $estado || $usuario ? asde_t( ' con este filtro' ) : ''; ?>.</p>
 	<?php else : ?>
 		<table class="asde-table">
 			<thead>
@@ -62,29 +62,29 @@ $columnas = array(
 					<?php foreach ( $columnas as $col => $etiqueta ) : ?>
 						<th scope="col"<?php echo $tabla->aria_sort( $col ); // phpcs:ignore WordPress.Security.EscapeOutput ?>><?php echo $tabla->cabecera( $col, $etiqueta ); // phpcs:ignore WordPress.Security.EscapeOutput ?></th>
 					<?php endforeach; ?>
-					<th scope="col">Enviado a</th>
-					<th scope="col"><span class="screen-reader-text">Acciones</span></th>
+					<th scope="col"><?php asde_e( 'Enviado a' ); ?></th>
+					<th scope="col"><span class="screen-reader-text"><?php asde_e( 'Acciones' ); ?></span></th>
 				</tr>
 			</thead>
 			<tbody>
 				<?php foreach ( $filas as $f ) : ?>
 					<tr>
-						<td data-label="Fecha"><?php echo esc_html( wp_date( 'd/m/Y H:i', strtotime( $f['creado'] . ' UTC' ) ) ); ?></td>
-						<td data-label="Usuario">
+						<td data-label="<?php echo asde_a( 'Fecha' ); ?>"><?php echo esc_html( wp_date( 'd/m/Y H:i', strtotime( $f['creado'] . ' UTC' ) ) ); ?></td>
+						<td data-label="<?php echo asde_a( 'Usuario' ); ?>">
 							<strong><?php echo '' !== $f['login'] ? esc_html( $f['login'] ) : '—'; ?></strong>
 							<?php if ( isset( $nombres[ (int) $f['user_id'] ] ) ) : ?>
 								<br><span class="asde-muted"><?php echo esc_html( $nombres[ (int) $f['user_id'] ] ); ?></span>
 							<?php endif; ?>
 						</td>
-						<td data-label="Tipo"><?php echo esc_html( RegistroEmails::TIPOS[ $f['tipo'] ] ?? $f['tipo'] ); ?></td>
-						<td data-label="Estado">
-							<span class="asde-badge asde-badge--email-<?php echo esc_attr( $f['estado'] ); ?>"><?php echo esc_html( RegistroEmails::ESTADOS[ $f['estado'] ] ?? $f['estado'] ); ?></span>
+						<td data-label="<?php echo asde_a( 'Tipo' ); ?>"><?php echo esc_html( asde_t( RegistroEmails::TIPOS[ $f['tipo'] ] ?? $f['tipo'] ) ); ?></td>
+						<td data-label="<?php echo asde_a( 'Estado' ); ?>">
+							<span class="asde-badge asde-badge--email-<?php echo esc_attr( $f['estado'] ); ?>"><?php echo esc_html( asde_t( RegistroEmails::ESTADOS[ $f['estado'] ] ?? $f['estado'] ) ); ?></span>
 							<?php if ( '' !== $f['error'] ) : ?>
 								<br><span class="asde-help asde-help--warning"><?php echo esc_html( $f['error'] ); ?></span>
 							<?php endif; ?>
 						</td>
-						<td data-label="Enviado a"><?php echo '' !== $f['destino'] ? esc_html( $f['destino'] ) : '<span class="asde-muted">—</span>'; ?></td>
-						<td data-label=""><a href="<?php echo esc_url( add_query_arg( 'ver', (int) $f['id'], $url ) ); ?>">Ver email</a></td>
+						<td data-label="<?php echo asde_a( 'Enviado a' ); ?>"><?php echo '' !== $f['destino'] ? esc_html( $f['destino'] ) : '<span class="asde-muted">—</span>'; ?></td>
+						<td data-label=""><a href="<?php echo esc_url( add_query_arg( 'ver', (int) $f['id'], $url ) ); ?>"><?php asde_e( 'Ver email' ); ?></a></td>
 					</tr>
 				<?php endforeach; ?>
 			</tbody>

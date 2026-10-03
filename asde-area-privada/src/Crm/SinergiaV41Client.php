@@ -74,7 +74,7 @@ final class SinergiaV41Client implements CrmClientInterface, EscritorCrm {
 
 			$session  = (string) $login['id'];
 			$details  = array(
-				'API: REST v4_1',
+				asde_t( 'API: REST v4_1' ),
 				'Endpoint: ' . $endpoint,
 				'Usuario CRM: ' . (string) ( $login['name_value_list']['user_name']['value'] ?? $this->username ),
 			);

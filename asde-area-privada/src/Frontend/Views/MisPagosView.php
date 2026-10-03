@@ -64,7 +64,7 @@ final class MisPagosView extends View {
 		}
 		$repo = PersonaRepository::make();
 		if ( ! $repo ) {
-			return $this->error_crm( 'pagos', 'La conexión de tu grupo con el CRM no está configurada o no se ha podido comprobar.' );
+			return $this->error_crm( 'pagos', asde_t( 'La conexión de tu grupo con el CRM no está configurada o no se ha podido comprobar.' ) );
 		}
 		$nums     = $this->nums( $a );
 		$familias = $this->familias( $nums );
@@ -92,27 +92,27 @@ final class MisPagosView extends View {
 					}
 					$pagos[] = array(
 						'fecha'    => (string) $m['fecha'],
-						'concepto' => sprintf( 'Cuota del grupo %s · familia %s', $m['ronda'], $f['numero'] ),
-						'metodo'   => MovimientosTable::METODOS[ $m['metodo'] ] ?? ( 'banco' === $m['origen'] ? 'Transferencia' : '' ),
+						'concepto' => sprintf( asde_t( 'Cuota del grupo %s · familia %s' ), $m['ronda'], $f['numero'] ),
+						'metodo'   => asde_t( MovimientosTable::METODOS[ $m['metodo'] ] ?? ( 'banco' === $m['origen'] ? 'Transferencia' : '' ) ),
 						'importe'  => (float) $m['importe'],
 						'ref'      => (string) $m['referencia'],
 					);
 				}
 			}
 		} catch ( CrmException $e ) {
-			return $this->error_crm( 'pagos', 'No se ha podido consultar el CRM: ' . $e->getMessage() );
+			return $this->error_crm( 'pagos', asde_t( 'No se ha podido consultar el CRM: ' ) . $e->getMessage() );
 		}
 
 		$nombres    = array_map( static fn( $p ) => $p->nombre, $a->representados ) + ( $a->persona ? array( $a->persona->num_socio_asde => $a->persona->nombre ) : array() );
 		$uniformes  = array_filter( PedidosTable::de_socios( $nums ), static fn( $p ) => null === $p['cancelado_en'] );
 		$pendientes = array();
 		foreach ( $uniformes as $p ) {
-			$concepto = sprintf( 'Uniforme %s%s · %s', PedidosTable::numero( $p ), count( $nums ) > 1 && isset( $nombres[ $p['socio'] ] ) ? ' (' . $nombres[ $p['socio'] ] . ')' : '', Servicio::descripcion( $p['lineas'] ) );
+			$concepto = sprintf( asde_t( 'Uniforme %s%s · %s' ), PedidosTable::numero( $p ), count( $nums ) > 1 && isset( $nombres[ $p['socio'] ] ) ? ' (' . $nombres[ $p['socio'] ] . ')' : '', Servicio::descripcion( $p['lineas'] ) );
 			if ( null !== $p['pago_en'] ) {
 				$pagos[] = array(
 					'fecha'    => (string) $p['pago_fecha'],
 					'concepto' => $concepto,
-					'metodo'   => PedidosTable::METODOS[ $p['pago_metodo'] ] ?? '',
+					'metodo'   => asde_t( PedidosTable::METODOS[ $p['pago_metodo'] ] ?? '' ),
 					'importe'  => (float) $p['pago_importe'],
 					'ref'      => (string) $p['pago_ref'],
 				);
@@ -164,7 +164,7 @@ final class MisPagosView extends View {
 		$m       = Mandatos::obtener( $id );
 		$familia = $m ? ( $familias[ $m['familia_id'] ] ?? null ) : null;
 		if ( ! $m || ! $familia ) {
-			return $this->denegado( 'No tienes acceso a esa autorización.' );
+			return $this->denegado( asde_t( 'No tienes acceso a esa autorización.' ) );
 		}
 		return $this->layout(
 			'pagos',
@@ -196,13 +196,13 @@ final class MisPagosView extends View {
 				$fid = (int) $this->post( 'familia' );
 				check_admin_referer( 'asde_sepa_firmar_' . $fid );
 				$familia = $familias[ $fid ] ?? null;
-				$puede   = $familia ? Mandatos::puede_firmar( $a, $familia ) : 'Esa familia no es la tuya.';
+				$puede   = $familia ? Mandatos::puede_firmar( $a, $familia ) : asde_t( 'Esa familia no es la tuya.' );
 				if ( true !== $puede ) {
 					Notices::add( 'error', esc_html( (string) $puede ) );
 					$this->redirect( $volver );
 				}
 				if ( ! SepaConfig::lista( SepaConfig::de() ) ) {
-					Notices::add( 'error', 'El grupo aún no tiene activadas las domiciliaciones SEPA.' );
+					Notices::add( 'error', asde_t( 'El grupo aún no tiene activadas las domiciliaciones SEPA.' ) );
 					$this->redirect( $volver );
 				}
 				$v       = Mandatos::validar(
@@ -218,7 +218,7 @@ final class MisPagosView extends View {
 				);
 				$errores = $v['errores'];
 				if ( '1' !== $this->post( 'acepto' ) ) {
-					$errores[] = 'Marca la casilla para firmar la autorización.';
+					$errores[] = asde_t( 'Marca la casilla para firmar la autorización.' );
 				}
 				$id = $errores ? 0 : Mandatos::crear( $fid, $v['datos'], get_current_user_id() );
 				if ( is_wp_error( $id ) ) {
@@ -239,7 +239,7 @@ final class MisPagosView extends View {
 				if ( $mandato ) {
 					Avisos::autorizacion( $mandato, wp_get_current_user() );
 				}
-				Notices::add( 'success', sprintf( 'Autorización guardada: referencia <strong>%s</strong>. Te hemos enviado un email de confirmación y te avisaremos antes de cada cargo.', esc_html( $mandato['referencia'] ?? '' ) ) );
+				Notices::add( 'success', sprintf( asde_t( 'Autorización guardada: referencia <strong>%s</strong>. Te hemos enviado un email de confirmación y te avisaremos antes de cada cargo.' ), esc_html( $mandato['referencia'] ?? '' ) ) );
 				$this->redirect( $volver );
 				break;
 
@@ -249,17 +249,17 @@ final class MisPagosView extends View {
 				$m       = Mandatos::obtener( $mid );
 				$familia = $m ? ( $familias[ $m['familia_id'] ] ?? null ) : null;
 				if ( ! $m || ! $familia || true !== Mandatos::puede_firmar( $a, $familia ) ) {
-					Notices::add( 'error', 'No puedes anular esa autorización.' );
+					Notices::add( 'error', asde_t( 'No puedes anular esa autorización.' ) );
 				} elseif ( Mandatos::revocar( $mid, get_current_user_id(), 'Anulada por la familia' ) ) {
-					Notices::add( 'success', 'Autorización anulada. A partir de ahora no se cobrará nada por domiciliación en esa cuenta.' );
+					Notices::add( 'success', asde_t( 'Autorización anulada. A partir de ahora no se cobrará nada por domiciliación en esa cuenta.' ) );
 				} else {
-					Notices::add( 'error', 'Esa autorización ya estaba anulada.' );
+					Notices::add( 'error', asde_t( 'Esa autorización ya estaba anulada.' ) );
 				}
 				$this->redirect( $volver );
 				break;
 
 			default:
-				Notices::add( 'error', 'Petición no válida.' );
+				Notices::add( 'error', asde_t( 'Petición no válida.' ) );
 				$this->redirect( $volver );
 		}
 	}

@@ -82,12 +82,12 @@ final class Norma43 {
 				continue;
 			}
 			if ( $fin ) {
-				$res['errores'][] = sprintf( 'Línea %d: hay datos después del registro 88 (fin de fichero).', $n );
+				$res['errores'][] = sprintf( asde_t( 'Línea %d: hay datos después del registro 88 (fin de fichero).' ), $n );
 				break;
 			}
 			if ( strlen( $linea ) > 80 ) {
 				if ( '' !== trim( substr( $linea, 80 ) ) ) {
-					$res['errores'][] = sprintf( 'Línea %d: tiene más de 80 posiciones.', $n );
+					$res['errores'][] = sprintf( asde_t( 'Línea %d: tiene más de 80 posiciones.' ), $n );
 					continue;
 				}
 				$linea = substr( $linea, 0, 80 );
@@ -97,12 +97,12 @@ final class Norma43 {
 
 			if ( '88' === $tipo ) {
 				if ( $cuenta ) {
-					$res['errores'][] = sprintf( 'Línea %d: fin de fichero sin el registro 33 de la cuenta %s.', $n, $cuenta['cuenta'] );
+					$res['errores'][] = sprintf( asde_t( 'Línea %d: fin de fichero sin el registro 33 de la cuenta %s.' ), $n, $cuenta['cuenta'] );
 				}
 				$declarados = self::campo( $linea, 21, 26 );
 				// La norma no cuenta el propio 88; algunos bancos sí lo cuentan.
 				if ( ! ctype_digit( $declarados ) || ! in_array( (int) $declarados, array( $registros, $registros + 1 ), true ) ) {
-					$res['errores'][] = sprintf( 'El registro 88 indica %s registros y el fichero tiene %d: está incompleto o dañado.', ltrim( $declarados, '0' ) ?: '0', $registros );
+					$res['errores'][] = sprintf( asde_t( 'El registro 88 indica %s registros y el fichero tiene %d: está incompleto o dañado.' ), ltrim( $declarados, '0' ) ?: '0', $registros );
 				}
 				$fin = true;
 				continue;
@@ -112,17 +112,17 @@ final class Norma43 {
 			switch ( $tipo ) {
 				case '11':
 					if ( $cuenta ) {
-						$res['errores'][] = sprintf( 'Línea %d: empieza una cuenta nueva sin el registro 33 de la anterior.', $n );
+						$res['errores'][] = sprintf( asde_t( 'Línea %d: empieza una cuenta nueva sin el registro 33 de la anterior.' ), $n );
 					}
 					$cuenta = self::cabecera( $linea, $cod );
 					if ( null === $cuenta['saldo_inicial'] || null === $cuenta['desde'] || null === $cuenta['hasta'] ) {
-						$res['errores'][] = sprintf( 'Línea %d: cabecera de cuenta (11) con fechas o saldo no válidos.', $n );
+						$res['errores'][] = sprintf( asde_t( 'Línea %d: cabecera de cuenta (11) con fechas o saldo no válidos.' ), $n );
 					}
 					break;
 
 				case '22':
 					if ( ! $cuenta ) {
-						$res['errores'][] = sprintf( 'Línea %d: movimiento (22) fuera de una cuenta.', $n );
+						$res['errores'][] = sprintf( asde_t( 'Línea %d: movimiento (22) fuera de una cuenta.' ), $n );
 						break;
 					}
 					if ( $mov ) {
@@ -130,7 +130,7 @@ final class Norma43 {
 					}
 					$mov = self::movimiento( $linea, $n );
 					if ( null === $mov['fecha'] || null === $mov['importe'] || ! in_array( $mov['_signo'], array( '1', '2' ), true ) ) {
-						$res['errores'][] = sprintf( 'Línea %d: movimiento con fecha, importe o clave debe/haber no válidos.', $n );
+						$res['errores'][] = sprintf( asde_t( 'Línea %d: movimiento con fecha, importe o clave debe/haber no válidos.' ), $n );
 						$mov = null;
 						break;
 					}
@@ -145,7 +145,7 @@ final class Norma43 {
 
 				case '23':
 					if ( ! $mov ) {
-						$res['errores'][] = sprintf( 'Línea %d: complementario (23) sin movimiento.', $n );
+						$res['errores'][] = sprintf( asde_t( 'Línea %d: complementario (23) sin movimiento.' ), $n );
 						break;
 					}
 					$codigo = self::campo( $linea, 3, 4 );
@@ -161,7 +161,7 @@ final class Norma43 {
 
 				case '33':
 					if ( ! $cuenta ) {
-						$res['errores'][] = sprintf( 'Línea %d: final de cuenta (33) sin cabecera (11).', $n );
+						$res['errores'][] = sprintf( asde_t( 'Línea %d: final de cuenta (33) sin cabecera (11).' ), $n );
 						break;
 					}
 					if ( $mov ) {
@@ -175,22 +175,22 @@ final class Norma43 {
 					break;
 
 				default:
-					$res['errores'][] = sprintf( 'Línea %d: tipo de registro «%s» desconocido. ¿Es un fichero Norma 43?', $n, $tipo );
+					$res['errores'][] = sprintf( asde_t( 'Línea %d: tipo de registro «%s» desconocido. ¿Es un fichero Norma 43?' ), $n, $tipo );
 			}
 			if ( count( $res['errores'] ) > 20 ) {
-				$res['errores'][] = 'Demasiados errores: se deja de leer el fichero.';
+				$res['errores'][] = asde_t( 'Demasiados errores: se deja de leer el fichero.' );
 				break;
 			}
 		}
 
 		if ( $cuenta ) {
-			$res['errores'][] = sprintf( 'El fichero termina sin el registro 33 (final) de la cuenta %s.', $cuenta['cuenta'] );
+			$res['errores'][] = sprintf( asde_t( 'El fichero termina sin el registro 33 (final) de la cuenta %s.' ), $cuenta['cuenta'] );
 		}
 		if ( ! $fin && ! $res['errores'] ) {
-			$res['avisos'][] = 'Falta el registro 88 (fin de fichero); los totales de cada cuenta sí cuadran.';
+			$res['avisos'][] = asde_t( 'Falta el registro 88 (fin de fichero); los totales de cada cuenta sí cuadran.' );
 		}
 		if ( ! $res['cuentas'] && ! $res['errores'] ) {
-			$res['errores'][] = 'No se ha encontrado ninguna cuenta (registro 11).';
+			$res['errores'][] = asde_t( 'No se ha encontrado ninguna cuenta (registro 11).' );
 		}
 		return $res;
 	}
@@ -271,23 +271,23 @@ final class Norma43 {
 	private static function cuadrar( string $l, array $cuenta, int $n ): array {
 		$errores = array();
 		if ( self::campo( $l, 3, 20 ) !== $cuenta['entidad'] . $cuenta['oficina'] . $cuenta['numero'] ) {
-			$errores[] = sprintf( 'Línea %d: el registro 33 es de otra cuenta.', $n );
+			$errores[] = sprintf( asde_t( 'Línea %d: el registro 33 es de otra cuenta.' ), $n );
 		}
 		$debe_n  = (int) self::campo( $l, 21, 25 );
 		$debe    = (int) self::campo( $l, 26, 39 );
 		$haber_n = (int) self::campo( $l, 40, 44 );
 		$haber   = (int) self::campo( $l, 45, 58 );
 		if ( $debe_n !== $cuenta['debe_n'] || $debe !== $cuenta['debe_cent'] ) {
-			$errores[] = sprintf( 'Cuenta %s: el registro 33 indica %d cargos por %s € y se han leído %d por %s €.', $cuenta['cuenta'], $debe_n, self::euros( $debe ), $cuenta['debe_n'], self::euros( $cuenta['debe_cent'] ) );
+			$errores[] = sprintf( asde_t( 'Cuenta %s: el registro 33 indica %d cargos por %s € y se han leído %d por %s €.' ), $cuenta['cuenta'], $debe_n, self::euros( $debe ), $cuenta['debe_n'], self::euros( $cuenta['debe_cent'] ) );
 		}
 		if ( $haber_n !== $cuenta['haber_n'] || $haber !== $cuenta['haber_cent'] ) {
-			$errores[] = sprintf( 'Cuenta %s: el registro 33 indica %d abonos por %s € y se han leído %d por %s €.', $cuenta['cuenta'], $haber_n, self::euros( $haber ), $cuenta['haber_n'], self::euros( $cuenta['haber_cent'] ) );
+			$errores[] = sprintf( asde_t( 'Cuenta %s: el registro 33 indica %d abonos por %s € y se han leído %d por %s €.' ), $cuenta['cuenta'], $haber_n, self::euros( $haber ), $cuenta['haber_n'], self::euros( $cuenta['haber_cent'] ) );
 		}
 		$final = self::importe_con_signo( self::campo( $l, 59, 59 ), self::campo( $l, 60, 73 ) );
 		if ( null !== $final && null !== $cuenta['saldo_inicial'] ) {
 			$esperado = (int) round( $cuenta['saldo_inicial'] * 100 ) + $cuenta['haber_cent'] - $cuenta['debe_cent'];
 			if ( (int) round( $final * 100 ) !== $esperado ) {
-				$errores[] = sprintf( 'Cuenta %s: el saldo final (%s €) no es el saldo inicial más abonos menos cargos (%s €).', $cuenta['cuenta'], self::euros( (int) round( $final * 100 ) ), self::euros( $esperado ) );
+				$errores[] = sprintf( asde_t( 'Cuenta %s: el saldo final (%s €) no es el saldo inicial más abonos menos cargos (%s €).' ), $cuenta['cuenta'], self::euros( (int) round( $final * 100 ) ), self::euros( $esperado ) );
 			}
 		}
 		return $errores;

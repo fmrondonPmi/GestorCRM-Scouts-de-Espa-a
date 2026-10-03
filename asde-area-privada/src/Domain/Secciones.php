@@ -24,13 +24,13 @@ final class Secciones {
 	/** @return array<string, array{nombre:string, unidad:string, edad:string, color:string, texto:string, crm:string}> */
 	public static function all(): array {
 		return array(
-			'castores'     => array( 'nombre' => 'Castores', 'unidad' => 'Colonia', 'edad' => '6–8', 'color' => '#5bc0eb', 'texto' => '#1a1a1a', 'crm' => 'Castores' ),
-			'lobatos'      => array( 'nombre' => 'Lobatos', 'unidad' => 'Manada', 'edad' => '8–11', 'color' => '#f2c500', 'texto' => '#1a1a1a', 'crm' => 'Lobatos' ),
-			'scouts'       => array( 'nombre' => 'Scouts', 'unidad' => 'Sección Scout', 'edad' => '11–14', 'color' => '#23712f', 'texto' => '#ffffff', 'crm' => 'Scouts' ),
-			'escultas'     => array( 'nombre' => 'Escultas', 'unidad' => 'Unidad', 'edad' => '14–17', 'color' => '#7a4a26', 'texto' => '#ffffff', 'crm' => 'Escultas' ),
-			'rovers'       => array( 'nombre' => 'Rovers', 'unidad' => 'Clan', 'edad' => '17–21', 'color' => '#c62828', 'texto' => '#ffffff', 'crm' => 'Rovers' ),
-			'scouters'     => array( 'nombre' => 'Scouters', 'unidad' => 'Kraal', 'edad' => '+21', 'color' => '#632599', 'texto' => '#ffffff', 'crm' => 'Scouters' ),
-			'voluntariado' => array( 'nombre' => 'Voluntariado de apoyo', 'unidad' => '', 'edad' => '', 'color' => '#5f5f5f', 'texto' => '#ffffff', 'crm' => 'Voluntariado' ),
+			'castores'     => array( 'nombre' => asde_t( 'Castores' ), 'unidad' => asde_t( 'Colonia' ), 'edad' => '6–8', 'color' => '#5bc0eb', 'texto' => '#1a1a1a', 'crm' => 'Castores' ),
+			'lobatos'      => array( 'nombre' => asde_t( 'Lobatos' ), 'unidad' => asde_t( 'Manada' ), 'edad' => '8–11', 'color' => '#f2c500', 'texto' => '#1a1a1a', 'crm' => 'Lobatos' ),
+			'scouts'       => array( 'nombre' => asde_t( 'Scouts' ), 'unidad' => asde_t( 'Sección Scout' ), 'edad' => '11–14', 'color' => '#23712f', 'texto' => '#ffffff', 'crm' => 'Scouts' ),
+			'escultas'     => array( 'nombre' => asde_t( 'Escultas' ), 'unidad' => asde_t( 'Unidad' ), 'edad' => '14–17', 'color' => '#7a4a26', 'texto' => '#ffffff', 'crm' => 'Escultas' ),
+			'rovers'       => array( 'nombre' => asde_t( 'Rovers' ), 'unidad' => asde_t( 'Clan' ), 'edad' => '17–21', 'color' => '#c62828', 'texto' => '#ffffff', 'crm' => 'Rovers' ),
+			'scouters'     => array( 'nombre' => asde_t( 'Scouters' ), 'unidad' => asde_t( 'Kraal' ), 'edad' => '+21', 'color' => '#632599', 'texto' => '#ffffff', 'crm' => 'Scouters' ),
+			'voluntariado' => array( 'nombre' => asde_t( 'Voluntariado de apoyo' ), 'unidad' => '', 'edad' => '', 'color' => '#5f5f5f', 'texto' => '#ffffff', 'crm' => 'Voluntariado' ),
 		);
 	}
 
@@ -49,7 +49,7 @@ final class Secciones {
 
 	public static function nombre( string $slug ): string {
 		if ( self::SIN_SECCION === $slug ) {
-			return 'Voluntario sin sección';
+			return asde_t( 'Voluntario sin sección' );
 		}
 		return self::all()[ $slug ]['nombre'] ?? $slug;
 	}
@@ -65,7 +65,7 @@ final class Secciones {
 	/** Etiqueta de color de la sección (HTML escapado). */
 	public static function badge( string $slug ): string {
 		if ( self::SIN_SECCION === $slug ) {
-			return '<span class="asde-badge asde-badge--sin-seccion">Voluntario sin sección</span>';
+			return '<span class="asde-badge asde-badge--sin-seccion">' . esc_html( asde_t( 'Voluntario sin sección' ) ) . '</span>';
 		}
 		$s = self::all()[ $slug ] ?? null;
 		if ( ! $s ) {

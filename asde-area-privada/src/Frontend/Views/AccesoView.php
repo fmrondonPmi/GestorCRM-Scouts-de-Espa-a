@@ -59,19 +59,19 @@ final class AccesoView extends View {
 			return;
 		}
 		if ( ! wp_verify_nonce( $this->post( '_wpnonce' ), 'asde_acceso' ) ) {
-			self::$error = 'La sesión del formulario ha caducado. Vuelve a intentarlo.';
+			self::$error = asde_t( 'La sesión del formulario ha caducado. Vuelve a intentarlo.' );
 			return;
 		}
 		$grupo = $this->post( 'grupo' );
 		if ( ! Grupos::obtener( $grupo ) ) {
-			self::$error = 'Elige tu Grupo Scout.';
+			self::$error = asde_t( 'Elige tu Grupo Scout.' );
 			return;
 		}
 		$login = Identificacion::normalizar( $this->post( 'usuario' ) );
 		// El límite de intentos es por cuenta, no por lo escrito: el nº de Scouts de España y el local son la misma cuenta.
 		$cuenta = Identificacion::canonico( $login );
 		if ( Intentos::bloqueado( $cuenta ) ) {
-			self::$error = 'Demasiados intentos fallidos. Espera unos minutos antes de volver a intentarlo o recupera tu contraseña.';
+			self::$error = asde_t( 'Demasiados intentos fallidos. Espera unos minutos antes de volver a intentarlo o recupera tu contraseña.' );
 			return;
 		}
 		// Código de verificación: Wordfence lo lee de $_POST['wfls-token']. Si viene
@@ -88,7 +88,7 @@ final class AccesoView extends View {
 		$usuario = Identificacion::usuario_para( $login, Grupos::obtener( $grupo ), $clave );
 		if ( is_wp_error( $usuario ) ) {
 			$codigo      = $usuario->get_error_code();
-			self::$error = in_array( $codigo, self::ERRORES_CREDENCIALES, true ) ? self::MENSAJE_CREDENCIALES : $usuario->get_error_message();
+			self::$error = in_array( $codigo, self::ERRORES_CREDENCIALES, true ) ? asde_t( self::MENSAJE_CREDENCIALES ) : $usuario->get_error_message();
 			if ( 'asde_email_varias' !== $codigo ) { // En ese caso la contraseña era correcta.
 				Intentos::fallo( $cuenta );
 			}
@@ -111,17 +111,17 @@ final class AccesoView extends View {
 			$codigo = $user->get_error_code();
 			if ( 'wfls_twofactor_required' === $codigo ) {
 				self::$pedir_codigo = true;
-				self::$error        = 'Tienes activada la verificación en dos pasos: escribe el código de 6 cifras de tu app y vuelve a escribir la contraseña.';
+				self::$error        = asde_t( 'Tienes activada la verificación en dos pasos: escribe el código de 6 cifras de tu app y vuelve a escribir la contraseña.' );
 				return; // No es un fallo: la contraseña era correcta.
 			}
 			if ( 'wfls_twofactor_failed' === $codigo ) {
 				self::$pedir_codigo = true;
-				self::$error        = 'El código de verificación no es correcto o ha caducado. Vuelve a intentarlo.';
+				self::$error        = asde_t( 'El código de verificación no es correcto o ha caducado. Vuelve a intentarlo.' );
 			} elseif ( in_array( $codigo, self::ERRORES_CREDENCIALES, true ) ) {
-				self::$error = self::MENSAJE_CREDENCIALES;
+				self::$error = asde_t( self::MENSAJE_CREDENCIALES );
 			} else {
 				// Otros avisos (p. ej. de Wordfence): se muestra su texto, sin HTML.
-				self::$error = wp_strip_all_tags( $user->get_error_message() ) ?: 'No se ha podido iniciar sesión.';
+				self::$error = wp_strip_all_tags( $user->get_error_message() ) ?: asde_t( 'No se ha podido iniciar sesión.' );
 			}
 			Intentos::fallo( $cuenta );
 			return;

@@ -40,7 +40,8 @@ $u_ca = wp_insert_user( array( 'user_login' => 'prueba-idioma-ca', 'user_email' 
 $u_sin = wp_insert_user( array( 'user_login' => 'prueba-idioma-sin', 'user_email' => '', 'user_pass' => wp_generate_password( 24 ), 'role' => 'subscriber' ) );
 
 // Textos y catálogos de prueba (inyectados por filtro).
-$f_textos = static fn( array $t ) => $t + array(
+// Sustituyen a los reales (languages/): así la prueba no depende de lo que traigan los catálogos del plugin.
+$f_textos = static fn( array $t ) => array(
 	'Mis datos'                    => 'Menú',
 	'Pedido %s enviado: %s.'      => 'Uniformes',
 	'Tu <strong>pedido</strong>'  => 'Uniformes',
@@ -53,7 +54,7 @@ $f_cat    = static function ( array $c, string $idioma ) {
 		'eu' => array( 'Mis datos' => 'Nire datuak', 'Guardar' => 'Gorde' ),
 		'gl' => array( 'Mis datos' => 'Os meus datos', 'Guardar' => 'Gardar' ),
 	);
-	return ( $tr[ $idioma ] ?? array() ) + $c;
+	return $tr[ $idioma ] ?? array();
 };
 add_filter( 'asde_ap_textos', $f_textos );
 add_filter( 'asde_ap_catalogo', $f_cat, 10, 2 );

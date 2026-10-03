@@ -93,7 +93,7 @@ final class Listado {
 			}
 			return array( $out, '' );
 		} catch ( CrmException $e ) {
-			return array( array(), 'No se han podido leer los nombres del CRM: se muestran solo los números de socio.' );
+			return array( array(), asde_t( 'No se han podido leer los nombres del CRM: se muestran solo los números de socio.' ) );
 		}
 	}
 }

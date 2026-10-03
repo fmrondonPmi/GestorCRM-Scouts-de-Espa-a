@@ -21,24 +21,24 @@ $boton = static function ( bool $activo, int $p, string $texto, string $etiqueta
 		: sprintf( '<li><span class="is-disabled" aria-hidden="true">%s</span></li>', esc_html( $texto ) );
 };
 ?>
-<nav class="asde-paginacion" aria-label="Paginación">
-	<p class="asde-paginacion__info">Mostrando <?php echo (int) $desde; ?>–<?php echo (int) $hasta; ?> de <?php echo (int) $total; ?></p>
+<nav class="asde-paginacion" aria-label="<?php echo asde_a( 'Paginación' ); ?>">
+	<p class="asde-paginacion__info"><?php asde_e( 'Mostrando' ); ?> <?php echo (int) $desde; ?>–<?php echo (int) $hasta; ?> <?php asde_e( 'de' ); ?> <?php echo (int) $total; ?></p>
 	<?php if ( $paginas > 1 ) : ?>
 		<ul class="asde-paginacion__botones">
 			<?php
-			echo $boton( $pagina > 1, 1, '«', 'Primera página' ); // phpcs:ignore WordPress.Security.EscapeOutput
-			echo $boton( $pagina > 1, $pagina - 1, '‹', 'Página anterior' ); // phpcs:ignore WordPress.Security.EscapeOutput
+			echo $boton( $pagina > 1, 1, '«', asde_t( 'Primera página' ) ); // phpcs:ignore WordPress.Security.EscapeOutput
+			echo $boton( $pagina > 1, $pagina - 1, '‹', asde_t( 'Página anterior' ) ); // phpcs:ignore WordPress.Security.EscapeOutput
 			foreach ( $lista as $p ) {
 				if ( '…' === $p ) {
 					echo '<li><span class="asde-paginacion__hueco" aria-hidden="true">…</span></li>';
 				} elseif ( $p === $pagina ) {
 					echo '<li><span class="is-current" aria-current="page">' . (int) $p . '</span></li>';
 				} else {
-					echo '<li><a href="' . esc_url( $url( (int) $p ) ) . '" aria-label="' . esc_attr( 'Página ' . $p ) . '">' . (int) $p . '</a></li>';
+					echo '<li><a href="' . esc_url( $url( (int) $p ) ) . '" aria-label="' . esc_attr( sprintf( asde_t( 'Página %s' ), $p ) ) . '">' . (int) $p . '</a></li>';
 				}
 			}
-			echo $boton( $pagina < $paginas, $pagina + 1, '›', 'Página siguiente' ); // phpcs:ignore WordPress.Security.EscapeOutput
-			echo $boton( $pagina < $paginas, $paginas, '»', 'Última página' ); // phpcs:ignore WordPress.Security.EscapeOutput
+			echo $boton( $pagina < $paginas, $pagina + 1, '›', asde_t( 'Página siguiente' ) ); // phpcs:ignore WordPress.Security.EscapeOutput
+			echo $boton( $pagina < $paginas, $paginas, '»', asde_t( 'Última página' ) ); // phpcs:ignore WordPress.Security.EscapeOutput
 			?>
 		</ul>
 	<?php endif; ?>
@@ -46,13 +46,13 @@ $boton = static function ( bool $activo, int $p, string $texto, string $etiqueta
 		<?php foreach ( $ocultos as $k => $v ) : ?>
 			<input type="hidden" name="<?php echo esc_attr( $k ); ?>" value="<?php echo esc_attr( $v ); ?>">
 		<?php endforeach; ?>
-		<label for="asde-por-pagina">Mostrar</label>
+		<label for="asde-por-pagina"><?php asde_e( 'Mostrar' ); ?></label>
 		<select id="asde-por-pagina" name="por_pagina" onchange="this.form.submit()">
 			<?php foreach ( $opciones as $o ) : ?>
 				<option value="<?php echo (int) $o; ?>" <?php selected( $por_pagina, $o ); ?>><?php echo (int) $o; ?></option>
 			<?php endforeach; ?>
 		</select>
-		<span>por página</span>
-		<noscript><button type="submit" class="button">Aplicar</button></noscript>
+		<span><?php asde_e( 'por página' ); ?></span>
+		<noscript><button type="submit" class="button"><?php asde_e( 'Aplicar' ); ?></button></noscript>
 	</form>
 </nav>

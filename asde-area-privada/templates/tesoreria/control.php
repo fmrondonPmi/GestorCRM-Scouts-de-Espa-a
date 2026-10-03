@@ -24,33 +24,33 @@ $pct = $resumen['a_pagar'] > 0 ? round( 100 * $resumen['pagado'] / $resumen['a_p
 ?>
 <section class="asde-card">
 	<header class="asde-card__header asde-card__header--split">
-		<h2 class="asde-card__title">Control de pagos · <?php echo esc_html( $ronda ); ?></h2>
-		<a class="button asde-button-secundario" href="<?php echo esc_url( $url_csv ); ?>">Descargar CSV</a>
+		<h2 class="asde-card__title"><?php asde_e( 'Control de pagos ·' ); ?> <?php echo esc_html( $ronda ); ?></h2>
+		<a class="button asde-button-secundario" href="<?php echo esc_url( $url_csv ); ?>"><?php asde_e( 'Descargar CSV' ); ?></a>
 	</header>
 	<dl class="asde-datos">
-		<div><dt>Familias con cuota</dt><dd><strong><?php echo (int) $resumen['familias']; ?></strong></dd></div>
-		<div><dt>Hijos que pagan</dt><dd><?php echo (int) $resumen['hijos']; ?></dd></div>
-		<div><dt>Total a cobrar</dt><dd><strong><?php echo esc_html( Calculadora::euros( $resumen['a_pagar'] ) ); ?></strong></dd></div>
-		<div><dt>Cobrado</dt><dd><?php echo esc_html( Calculadora::euros( $resumen['pagado'] ) ); ?> <span class="asde-muted">(<?php echo (int) $pct; ?> %)</span></dd></div>
-		<div><dt>Pendiente</dt><dd><?php echo esc_html( Calculadora::euros( $resumen['pendiente'] ) ); ?></dd></div>
+		<div><dt><?php asde_e( 'Familias con cuota' ); ?></dt><dd><strong><?php echo (int) $resumen['familias']; ?></strong></dd></div>
+		<div><dt><?php asde_e( 'Hijos que pagan' ); ?></dt><dd><?php echo (int) $resumen['hijos']; ?></dd></div>
+		<div><dt><?php asde_e( 'Total a cobrar' ); ?></dt><dd><strong><?php echo esc_html( Calculadora::euros( $resumen['a_pagar'] ) ); ?></strong></dd></div>
+		<div><dt><?php asde_e( 'Cobrado' ); ?></dt><dd><?php echo esc_html( Calculadora::euros( $resumen['pagado'] ) ); ?> <span class="asde-muted">(<?php echo (int) $pct; ?> %)</span></dd></div>
+		<div><dt><?php asde_e( 'Pendiente' ); ?></dt><dd><?php echo esc_html( Calculadora::euros( $resumen['pendiente'] ) ); ?></dd></div>
 	</dl>
-	<div class="asde-progreso" role="img" aria-label="<?php echo esc_attr( $pct . ' % cobrado' ); ?>"><span style="width:<?php echo (int) min( 100, $pct ); ?>%"></span></div>
+	<div class="asde-progreso" role="img" aria-label="<?php echo esc_attr( sprintf( asde_t( '%d %% cobrado' ), $pct ) ); ?>"><span style="width:<?php echo (int) min( 100, $pct ); ?>%"></span></div>
 	<p class="asde-muted">
 		<?php foreach ( $resumen['estados'] as $e => $n ) : ?>
-			<span class="asde-badge asde-badge--pago-<?php echo esc_attr( $e ); ?>"><?php echo esc_html( Calculadora::ETIQUETAS[ $e ] . ': ' . $n ); ?></span>
+			<span class="asde-badge asde-badge--pago-<?php echo esc_attr( $e ); ?>"><?php echo esc_html( asde_t( Calculadora::ETIQUETAS[ $e ] ) . ': ' . $n ); ?></span>
 		<?php endforeach; ?>
 	</p>
 	<p class="asde-muted">
-		Plazos:
+		<?php asde_e( 'Plazos:' ); ?>
 		<?php foreach ( $cfg['plazos'] as $pl ) : ?>
-			<?php echo esc_html( $pl['nombre'] . ' (' . number_format_i18n( (float) $pl['porcentaje'] ) . ' %, hasta el ' . wp_date( 'd/m/Y', strtotime( $pl['fecha'] . ' 12:00' ) ) . ')' ); ?> ·
+			<?php echo esc_html( $pl['nombre'] . ' (' . sprintf( asde_t( '%s %%, hasta el %s' ), number_format_i18n( (float) $pl['porcentaje'] ), wp_date( 'd/m/Y', strtotime( $pl['fecha'] . ' 12:00' ) ) ) . ')' ); ?> ·
 		<?php endforeach; ?>
-		Referencia para transferencias: el nº de familia (p. ej. <?php echo esc_html( ( reset( $lista )['familia']['numero'] ?? 'F684001' ) ); ?>).
+		<?php asde_e( 'Referencia para transferencias: el nº de familia (p. ej.' ); ?> <?php echo esc_html( ( reset( $lista )['familia']['numero'] ?? 'F684001' ) ); ?>).
 	</p>
 	<?php if ( $sin_fam ) : ?>
 		<div class="asde-notice asde-notice--warning" role="status">
-			Hay <strong><?php echo (int) $sin_fam; ?></strong> educandos con membresía activa que no están en ninguna familia: no se les está calculando cuota.
-			<a href="<?php echo esc_url( $url_fam ); ?>">Asignarles familia</a>.
+			<?php asde_e( 'Hay' ); ?> <strong><?php echo (int) $sin_fam; ?></strong> <?php asde_e( 'educandos con membresía activa que no están en ninguna familia: no se les está calculando cuota.' ); ?>
+			<a href="<?php echo esc_url( $url_fam ); ?>"><?php asde_e( 'Asignarles familia' ); ?></a>.
 		</div>
 	<?php endif; ?>
 </section>
@@ -58,30 +58,30 @@ $pct = $resumen['a_pagar'] > 0 ? round( 100 * $resumen['pagado'] / $resumen['a_p
 <section class="asde-card">
 	<form method="get" action="<?php echo esc_url( $url ); ?>" class="asde-filter">
 		<input type="hidden" name="ronda" value="<?php echo esc_attr( $ronda ); ?>">
-		<label for="asde-estado">Mostrar</label>
+		<label for="asde-estado"><?php asde_e( 'Mostrar' ); ?></label>
 		<select id="asde-estado" name="estado" onchange="this.form.submit()">
-			<?php foreach ( TesoreriaView::FILTROS as $k => $label ) : ?>
+			<?php foreach ( asde_ta( TesoreriaView::FILTROS ) as $k => $label ) : ?>
 				<option value="<?php echo esc_attr( $k ); ?>" <?php selected( $estado, $k ); ?>><?php echo esc_html( $label ); ?></option>
 			<?php endforeach; ?>
 		</select>
-		<label for="asde-q-tes" class="screen-reader-text">Buscar</label>
-		<input type="search" id="asde-q-tes" name="q" value="<?php echo esc_attr( $q ); ?>" placeholder="Nº de familia o nombre">
-		<button type="submit" class="button">Filtrar</button>
+		<label for="asde-q-tes" class="screen-reader-text"><?php asde_e( 'Buscar' ); ?></label>
+		<input type="search" id="asde-q-tes" name="q" value="<?php echo esc_attr( $q ); ?>" placeholder="<?php echo asde_a( 'Nº de familia o nombre' ); ?>">
+		<button type="submit" class="button"><?php asde_e( 'Filtrar' ); ?></button>
 	</form>
 
 	<?php if ( ! $lista ) : ?>
-		<p>No hay familias<?php echo '' !== $estado || '' !== $q ? ' con estos filtros' : ''; ?>. <a href="<?php echo esc_url( $url_fam ); ?>">Gestionar familias</a></p>
+		<p><?php asde_e( 'No hay familias' ); ?><?php echo '' !== $estado || '' !== $q ? asde_t( ' con estos filtros' ) : ''; ?>. <a href="<?php echo esc_url( $url_fam ); ?>"><?php asde_e( 'Gestionar familias' ); ?></a></p>
 	<?php else : ?>
 		<table class="asde-table">
 			<thead>
 				<tr>
-					<th scope="col">Familia</th>
-					<th scope="col">Socios</th>
-					<th scope="col">Cuota</th>
-					<th scope="col">Pagado</th>
-					<th scope="col">Pendiente</th>
-					<th scope="col">Estado</th>
-					<th scope="col"><span class="screen-reader-text">Acciones</span></th>
+					<th scope="col"><?php asde_e( 'Familia' ); ?></th>
+					<th scope="col"><?php asde_e( 'Socios' ); ?></th>
+					<th scope="col"><?php asde_e( 'Cuota' ); ?></th>
+					<th scope="col"><?php asde_e( 'Pagado' ); ?></th>
+					<th scope="col"><?php asde_e( 'Pendiente' ); ?></th>
+					<th scope="col"><?php asde_e( 'Estado' ); ?></th>
+					<th scope="col"><span class="screen-reader-text"><?php asde_e( 'Acciones' ); ?></span></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -91,8 +91,8 @@ $pct = $resumen['a_pagar'] > 0 ? round( 100 * $resumen['pagado'] / $resumen['a_p
 					$c = $fila['calc'];
 					?>
 					<tr>
-						<td data-label="Familia"><strong><?php echo esc_html( $f['numero'] ); ?></strong></td>
-						<td data-label="Socios">
+						<td data-label="<?php echo asde_a( 'Familia' ); ?>"><strong><?php echo esc_html( $f['numero'] ); ?></strong></td>
+						<td data-label="<?php echo asde_a( 'Socios' ); ?>">
 							<?php foreach ( $f['miembros'] as $n ) : ?>
 								<?php $p = $personas[ $n ] ?? null; ?>
 								<span class="asde-miembro<?php echo in_array( $n, $c['fuera'], true ) ? ' asde-miembro--fuera' : ''; ?>">
@@ -101,14 +101,14 @@ $pct = $resumen['a_pagar'] > 0 ? round( 100 * $resumen['pagado'] / $resumen['a_p
 								</span>
 							<?php endforeach; ?>
 						</td>
-						<td data-label="Cuota">
+						<td data-label="<?php echo asde_a( 'Cuota' ); ?>">
 							<?php echo esc_html( Calculadora::euros( $c['a_pagar'] ) ); ?>
 							<br><span class="asde-muted"><?php echo esc_html( count( $c['pagan'] ) . ' hijo(s)' . ( $c['ajustes'] ? ' · ajuste ' . Calculadora::euros( $c['ajustes'] ) : '' ) ); ?></span>
 						</td>
-						<td data-label="Pagado"><?php echo esc_html( Calculadora::euros( $c['pagado'] ) ); ?></td>
-						<td data-label="Pendiente"><?php echo esc_html( Calculadora::euros( max( 0, $c['pendiente'] ) ) ); ?><?php echo $c['pendiente'] < 0 ? '<br><span class="asde-muted">Saldo a favor ' . esc_html( Calculadora::euros( -$c['pendiente'] ) ) . '</span>' : ''; ?></td>
-						<td data-label="Estado"><span class="asde-badge asde-badge--pago-<?php echo esc_attr( $c['estado'] ); ?>"><?php echo esc_html( Calculadora::ETIQUETAS[ $c['estado'] ] ); ?></span></td>
-						<td data-label=""><a class="button" href="<?php echo esc_url( add_query_arg( array( 'familia' => $id, 'ronda' => $ronda ), $url ) ); ?>">Ver / registrar pago</a></td>
+						<td data-label="<?php echo asde_a( 'Pagado' ); ?>"><?php echo esc_html( Calculadora::euros( $c['pagado'] ) ); ?></td>
+						<td data-label="<?php echo asde_a( 'Pendiente' ); ?>"><?php echo esc_html( Calculadora::euros( max( 0, $c['pendiente'] ) ) ); ?><?php echo $c['pendiente'] < 0 ? '<br><span class="asde-muted">' . esc_html( sprintf( asde_t( 'Saldo a favor %s' ), Calculadora::euros( -$c['pendiente'] ) ) ) . '</span>' : ''; ?></td>
+						<td data-label="<?php echo asde_a( 'Estado' ); ?>"><span class="asde-badge asde-badge--pago-<?php echo esc_attr( $c['estado'] ); ?>"><?php echo esc_html( asde_t( Calculadora::ETIQUETAS[ $c['estado'] ] ) ); ?></span></td>
+						<td data-label=""><a class="button" href="<?php echo esc_url( add_query_arg( array( 'familia' => $id, 'ronda' => $ronda ), $url ) ); ?>"><?php asde_e( 'Ver / registrar pago' ); ?></a></td>
 					</tr>
 				<?php endforeach; ?>
 			</tbody>

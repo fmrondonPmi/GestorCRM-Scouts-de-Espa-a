@@ -39,7 +39,7 @@ final class Config {
 			'secciones_pagan' => Secciones::EDUCATIVAS,
 			'plazos'          => array(
 				array(
-					'nombre'     => 'Cuota anual',
+					'nombre'     => asde_t( 'Cuota anual' ),
 					'fecha'      => $anio . '-10-31',
 					'porcentaje' => 100,
 				),

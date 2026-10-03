@@ -95,7 +95,7 @@ final class Numeros {
 			return ''; // Las advertencias son para quien gestiona; una familia no tiene nada que corregir.
 		}
 		$n ??= self::de( $p );
-		return Numeracion::OK === $n['estado'] ? '' : ( Numeracion::ETIQUETAS[ $n['estado'] ] ?? '' );
+		return Numeracion::OK === $n['estado'] ? '' : ( asde_t( Numeracion::ETIQUETAS[ $n['estado'] ] ?? '' ) );
 	}
 
 	/**
@@ -112,16 +112,16 @@ final class Numeros {
 		if ( Identidad::es_asde() ) {
 			$html = '<strong>' . esc_html( $p->num_socio_asde ) . '</strong>';
 			if ( $mostrar ) {
-				$html .= ' <span class="asde-muted" title="Nº de socio/a local/territorial">terr. ' . esc_html( '' !== $local ? $local : '—' ) . '</span>';
+				$html .= ' <span class="asde-muted" title="' . asde_a( 'Nº de socio/a local/territorial' ) . '">' . esc_html( asde_t( 'terr.' ) ) . ' ' . esc_html( '' !== $local ? $local : '—' ) . '</span>';
 			}
 		} else {
 			$html  = '<strong>' . esc_html( '' !== $local ? $local : '—' ) . '</strong>';
 			if ( ! $compacto ) {
-				$html .= ' <span class="asde-muted" title="Nº de socio/a de Scouts de España">ASDE ' . esc_html( $p->num_socio_asde ) . '</span>';
+				$html .= ' <span class="asde-muted" title="' . asde_a( 'Nº de socio/a de Scouts de España' ) . '">ASDE ' . esc_html( $p->num_socio_asde ) . '</span>';
 			}
 		}
 		if ( '' !== $aviso ) {
-			$html .= ' <span class="asde-numeros__aviso" title="' . esc_attr( $aviso ) . '">⚠ nº territorial: ' . esc_html( self::CORTO[ $n['estado'] ] ?? $aviso ) . '</span>';
+			$html .= ' <span class="asde-numeros__aviso" title="' . esc_attr( $aviso ) . '">⚠ nº territorial: ' . esc_html( asde_t( self::CORTO[ $n['estado'] ] ?? $aviso ) ) . '</span>';
 		}
 		return $html;
 	}

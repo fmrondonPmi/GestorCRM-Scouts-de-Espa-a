@@ -13,7 +13,7 @@ defined( 'ABSPATH' ) || exit;
  */
 final class Extractor {
 
-	public const FUNCIONES = array( 'asde_t', 'asde_h', 'asde_e', 'asde_a' );
+	public const FUNCIONES = array( 'asde_t', 'asde_h', 'asde_e', 'asde_a', 'asde_js', 'asde_ta', 'asde_n' );
 	public const GETTEXT   = array( '__', '_e', 'esc_html__', 'esc_html_e', 'esc_attr__', 'esc_attr_e' );
 	public const DOMINIO   = 'asde-area-privada';
 
@@ -120,6 +120,14 @@ final class Extractor {
 			}
 			if ( '' !== trim( $texto ) ) {
 				$out[ $texto ] = ( $out[ $texto ] ?? 0 ) + 1;
+			}
+			// asde_n( 'singular', 'plural', $n ): el plural también es un texto.
+			if ( 'asde_n' === $nombre && ',' === $tokens[ $m ] ) {
+				$p      = self::siguiente( $tokens, $m );
+				$plural = null !== $p && is_array( $tokens[ $p ] ) && T_CONSTANT_ENCAPSED_STRING === $tokens[ $p ][0] ? self::literal( $tokens[ $p ][1] ) : null;
+				if ( null !== $plural && '' !== trim( $plural ) ) {
+					$out[ $plural ] = ( $out[ $plural ] ?? 0 ) + 1;
+				}
 			}
 		}
 		return $out;

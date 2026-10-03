@@ -129,7 +129,9 @@ final class Roles {
 	}
 
 	public static function label( string $role ): string {
-		return self::definitions()[ $role ][0] ?? $role;
+		// La definición (con su etiqueta en castellano) es lo que se guarda en WordPress; aquí se traduce al mostrarla.
+		$etiqueta = self::definitions()[ $role ][0] ?? $role;
+		return asde_t( $etiqueta );
 	}
 
 	/** @return string[] Todas las capabilities asde_*. */

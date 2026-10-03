@@ -57,7 +57,7 @@ final class UniformeView extends UniformesBaseView {
 	}
 
 	private function redirigir_gestion(): string {
-		return $this->layout( 'uniforme', $this->subnav( 'uniforme' ) . '<section class="asde-card"><p>Desde aquí se gestionan los pedidos del grupo: <a href="' . esc_url( $this->url( 'uniformes' ) ) . '">Gestión de pedidos</a>.</p></section>' );
+		return $this->layout( 'uniforme', $this->subnav( 'uniforme' ) . '<section class="asde-card"><p>' . sprintf( asde_t( 'Desde aquí se gestionan los pedidos del grupo: %s.' ), '<a href="' . esc_url( $this->url( 'uniformes' ) ) . '">' . esc_html( asde_t( 'Gestión de pedidos' ) ) . '</a>' ) . '</p></section>' );
 	}
 
 	public function handle_post(): void {
@@ -80,7 +80,7 @@ final class UniformeView extends UniformesBaseView {
 				Notices::add( 'error', esc_html( $r->get_error_message() ) );
 			} else {
 				$p = PedidosTable::obtener( $r );
-				Notices::add( 'success', sprintf( 'Pedido <strong>%s</strong> enviado: %s. Ahora falta pagarlo; cuando Tesorería lo reciba, lo verás aquí como pagado.', esc_html( PedidosTable::numero( $p ) ), esc_html( Servicio::importe( $p ) ) ) );
+				Notices::add( 'success', sprintf( asde_t( 'Pedido <strong>%s</strong> enviado: %s. Ahora falta pagarlo; cuando Tesorería lo reciba, lo verás aquí como pagado.' ), esc_html( PedidosTable::numero( $p ) ), esc_html( Servicio::importe( $p ) ) ) );
 			}
 			$this->redirect( $volver );
 		}
@@ -88,28 +88,28 @@ final class UniformeView extends UniformesBaseView {
 		$p = PedidosTable::obtener( (int) $this->post( 'pedido' ) );
 		check_admin_referer( 'asde_uniforme_' . ( $p['id'] ?? 0 ) );
 		if ( ! $p || ! Servicio::es_propio( $p, $a ) ) {
-			Notices::add( 'error', 'No tienes acceso a ese pedido.' );
+			Notices::add( 'error', asde_t( 'No tienes acceso a ese pedido.' ) );
 			$this->redirect( $volver );
 		}
 		switch ( $this->post( 'asde_action' ) ) {
 			case 'uniforme_cancelar':
 				if ( Servicio::puede_cancelar_propio( $p, $a ) && PedidosTable::cancelar( $p['id'], 'Cancelado por el socio/a o su familia' ) ) {
 					Logger::log( 'uniforme_cancelado', 'uniforme', (string) $p['id'], array( 'por' => 'socio' ) );
-					Notices::add( 'success', 'Pedido cancelado.' );
+					Notices::add( 'success', asde_t( 'Pedido cancelado.' ) );
 				} else {
-					Notices::add( 'error', 'Ese pedido ya no se puede cancelar desde aquí: ya consta el pago o está en el pedido del grupo. Habla con el grupo.' );
+					Notices::add( 'error', asde_t( 'Ese pedido ya no se puede cancelar desde aquí: ya consta el pago o está en el pedido del grupo. Habla con el grupo.' ) );
 				}
 				break;
 			case 'uniforme_recibido':
 				if ( Servicio::puede_confirmar( $p, $a ) && PedidosTable::marcar_recibido( $p['id'] ) ) {
 					Logger::log( 'uniforme_recibido', 'uniforme', (string) $p['id'] );
-					Notices::add( 'success', '¡Gracias! Queda confirmado que lo has recibido.' );
+					Notices::add( 'success', asde_t( '¡Gracias! Queda confirmado que lo has recibido.' ) );
 				} else {
-					Notices::add( 'error', 'Ese pedido aún no consta como entregado.' );
+					Notices::add( 'error', asde_t( 'Ese pedido aún no consta como entregado.' ) );
 				}
 				break;
 			default:
-				Notices::add( 'error', 'Acción desconocida.' );
+				Notices::add( 'error', asde_t( 'Acción desconocida.' ) );
 		}
 		$this->redirect( $volver );
 	}

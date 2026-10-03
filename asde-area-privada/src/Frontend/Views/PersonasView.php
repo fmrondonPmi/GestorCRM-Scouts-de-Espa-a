@@ -40,7 +40,7 @@ final class PersonasView extends View {
 		}
 		$repo = PersonaRepository::make();
 		if ( ! $repo ) {
-			return $this->error_crm( 'personas', 'La conexión de tu grupo con el CRM no está configurada o no se ha podido comprobar. Un administrador puede revisarla en wp-admin → Grupos Scouts.' );
+			return $this->error_crm( 'personas', asde_t( 'La conexión de tu grupo con el CRM no está configurada o no se ha podido comprobar. Un administrador puede revisarla en wp-admin → Grupos Scouts.' ) );
 		}
 
 		$filtro = isset( self::FILTROS[ $this->get( 'ver' ) ] ) ? $this->get( 'ver' ) : 'activas';
@@ -56,7 +56,7 @@ final class PersonasView extends View {
 			$num      = new Numeracion( $repo );
 			$analisis = $num->analizar( $todas ); // Sincroniza la tabla de equivalencias.
 		} catch ( CrmException $e ) {
-			return $this->error_crm( 'personas', 'No se ha podido consultar el CRM: ' . $e->getMessage() );
+			return $this->error_crm( 'personas', asde_t( 'No se ha podido consultar el CRM: ' ) . $e->getMessage() );
 		}
 
 		$resumen = array(
@@ -165,7 +165,7 @@ final class PersonasView extends View {
 		$volver = wp_get_referer() ?: $this->url( 'personas' );
 		$repo   = PersonaRepository::make();
 		if ( ! $repo ) {
-			Notices::add( 'error', 'La conexión con el CRM no está disponible.' );
+			Notices::add( 'error', asde_t( 'La conexión con el CRM no está disponible.' ) );
 			$this->redirect( $volver );
 		}
 		$num = new Numeracion( $repo );
@@ -178,7 +178,7 @@ final class PersonasView extends View {
 
 		$socio = $this->post( 'socio' );
 		if ( ! in_array( $accion, self::ACCIONES_FICHA, true ) || ! PersonaRepository::es_num_asde( $socio ) ) {
-			Notices::add( 'error', 'Petición no válida.' );
+			Notices::add( 'error', asde_t( 'Petición no válida.' ) );
 			$this->redirect( $volver );
 		}
 		check_admin_referer( 'asde_numero_' . $accion . '_' . $socio );
@@ -186,7 +186,7 @@ final class PersonasView extends View {
 		try {
 			$p = $repo->obtener( $socio );
 			if ( ! $p ) {
-				Notices::add( 'error', 'No se encuentra esa persona en el CRM del grupo.' );
+				Notices::add( 'error', asde_t( 'No se encuentra esa persona en el CRM del grupo.' ) );
 				$this->redirect( $volver );
 			}
 			$nombre = esc_html( $p->nombre_completo() );
@@ -201,8 +201,8 @@ final class PersonasView extends View {
 					Notices::add(
 						$r['crm'] ? 'success' : 'warning',
 						$r['crm']
-							? sprintf( 'Nº de socio/a <strong>%s</strong> asignado a %s y guardado en el CRM.', esc_html( $r['numero'] ), $nombre )
-							: sprintf( 'Nº de socio/a <strong>%s</strong> asignado a %s, pero no se ha podido guardar en el CRM%s. 📌 Anótalo en el CRM (campo «Nº de socio/a local/territorial»).', esc_html( $r['numero'] ), $nombre, $r['error'] ? ': ' . esc_html( $r['error'] ) : ' (el usuario del CRM no puede editar fichas)' )
+							? sprintf( asde_t( 'Nº de socio/a <strong>%s</strong> asignado a %s y guardado en el CRM.' ), esc_html( $r['numero'] ), $nombre )
+							: sprintf( asde_t( 'Nº de socio/a <strong>%s</strong> asignado a %s, pero no se ha podido guardar en el CRM%s. 📌 Anótalo en el CRM (campo «Nº de socio/a local/territorial»).' ), esc_html( $r['numero'] ), $nombre, $r['error'] ? ': ' . esc_html( $r['error'] ) : asde_t( ' (el usuario del CRM no puede editar fichas)' ) )
 					);
 					break;
 
@@ -211,7 +211,7 @@ final class PersonasView extends View {
 					$r = 'pasar_crm' === $accion ? $num->pasar_al_crm( $p ) : $num->corregir_formato( $p );
 					is_wp_error( $r )
 						? Notices::add( 'error', esc_html( $r->get_error_message() ) )
-						: Notices::add( 'success', sprintf( 'Nº de socio/a de %s guardado en el CRM con el formato correcto.', $nombre ) );
+						: Notices::add( 'success', sprintf( asde_t( 'Nº de socio/a de %s guardado en el CRM con el formato correcto.' ), $nombre ) );
 					break;
 
 				case 'resolver_duplicado':
@@ -220,12 +220,12 @@ final class PersonasView extends View {
 						Notices::add( 'error', esc_html( $r->get_error_message() ) );
 					} else {
 						Logger::log( 'numero_duplicado_resuelto', 'socio', $socio, array( 'numero' => $r ) );
-						Notices::add( 'success', sprintf( '%s tiene ahora el nº de socio/a <strong>%s</strong> (guardado en el CRM). La otra ficha conserva el suyo.', $nombre, esc_html( $r ) ) );
+						Notices::add( 'success', sprintf( asde_t( '%s tiene ahora el nº de socio/a <strong>%s</strong> (guardado en el CRM). La otra ficha conserva el suyo.' ), $nombre, esc_html( $r ) ) );
 					}
 					break;
 			}
 		} catch ( CrmException $e ) {
-			Notices::add( 'error', esc_html( 'No se ha podido consultar el CRM: ' . $e->getMessage() ) );
+			Notices::add( 'error', esc_html( asde_t( 'No se ha podido consultar el CRM: ' ) . $e->getMessage() ) );
 		}
 		$this->redirect( $volver );
 	}
@@ -236,13 +236,13 @@ final class PersonasView extends View {
 	 */
 	private function iniciar_tarea( string $accion, Numeracion $num ): void {
 		if ( ! Escritura::disponible() ) {
-			Notices::add( 'error', 'Para corregir en el CRM hace falta que el usuario del CRM del grupo pueda editar fichas.' );
+			Notices::add( 'error', asde_t( 'Para corregir en el CRM hace falta que el usuario del CRM del grupo pueda editar fichas.' ) );
 			return;
 		}
 		try {
 			$analisis = $num->analizar_todo( true );
 		} catch ( CrmException $e ) {
-			Notices::add( 'error', esc_html( 'No se ha podido consultar el CRM: ' . $e->getMessage() ) );
+			Notices::add( 'error', esc_html( asde_t( 'No se ha podido consultar el CRM: ' ) . $e->getMessage() ) );
 			return;
 		}
 		$estado = array(
@@ -257,7 +257,7 @@ final class PersonasView extends View {
 			$total -= count( array_unique( array_map( 'strval', array_column( $afectadas, 'numero' ) ) ) );
 		}
 		if ( $total <= 0 ) {
-			Notices::add( 'info', 'No hay fichas con esa incidencia.' );
+			Notices::add( 'info', asde_t( 'No hay fichas con esa incidencia.' ) );
 			return;
 		}
 		$t = TareaNumeracion::crear( $accion, Grupo::numero(), get_current_user_id(), $total );
@@ -265,6 +265,6 @@ final class PersonasView extends View {
 			Notices::add( 'error', esc_html( $t->get_error_message() ) );
 			return;
 		}
-		Notices::add( 'success', sprintf( 'Corrección iniciada en segundo plano: %d fichas. Puedes seguir usando la web con normalidad; el avance se ve en el recuadro de arriba.', $total ) );
+		Notices::add( 'success', sprintf( asde_t( 'Corrección iniciada en segundo plano: %d fichas. Puedes seguir usando la web con normalidad; el avance se ve en el recuadro de arriba.' ), $total ) );
 	}
 }

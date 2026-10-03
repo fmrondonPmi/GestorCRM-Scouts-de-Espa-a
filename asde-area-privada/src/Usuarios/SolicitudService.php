@@ -7,6 +7,7 @@ use AsdeBalears\AreaPrivada\Crm\PersonaRepository;
 use AsdeBalears\AreaPrivada\Domain\Persona;
 use AsdeBalears\AreaPrivada\Install\Roles;
 use AsdeBalears\AreaPrivada\Socios\Numeracion;
+use AsdeBalears\AreaPrivada\Idiomas\Idioma;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -330,7 +331,7 @@ final class SolicitudService {
 			return array(
 				'guardado' => false,
 				'cambiado' => false,
-				'aviso'    => sprintf( 'El usuario del CRM del grupo no puede editar fichas: anota a mano el email nuevo en la ficha de %s (%s). La invitación se envía igualmente a ese email.', $p->nombre_completo(), $etiqueta ),
+				'aviso'    => sprintf( asde_t( 'El usuario del CRM del grupo no puede editar fichas: anota a mano el email nuevo en la ficha de %s (%s). La invitación se envía igualmente a ese email.' ), $p->nombre_completo(), $etiqueta ),
 			);
 		}
 		$r = Escritura::guardar( $p, array( $campo => $email ), 'solicitud_acceso' );
@@ -338,7 +339,7 @@ final class SolicitudService {
 			return array(
 				'guardado' => false,
 				'cambiado' => false,
-				'aviso'    => sprintf( 'El CRM no ha guardado el email nuevo en la ficha de %s (%s): anótalo a mano. La invitación se envía igualmente a ese email.', $p->nombre_completo(), $etiqueta ),
+				'aviso'    => sprintf( asde_t( 'El CRM no ha guardado el email nuevo en la ficha de %s (%s): anótalo a mano. La invitación se envía igualmente a ese email.' ), $p->nombre_completo(), $etiqueta ),
 			);
 		}
 		return array(
@@ -355,6 +356,21 @@ final class SolicitudService {
 	 * @return array{ok:bool, errores:string[], avisos:string[], usuario:?\WP_User, email_crm:bool}
 	 */
 	public function aprobar( array $s, int $revisor, array $opciones = array() ): array {
+		$idioma = isset( $s['datos']['idioma'] ) ? (string) $s['datos']['idioma'] : null;
+		Idioma::sugerir( $idioma ); // La invitación sale en el idioma en que pidió el acceso.
+		try {
+			$res = $this->aprobar_solicitud( $s, $revisor, $opciones );
+		} finally {
+			Idioma::sugerir( null );
+		}
+		if ( $res['usuario'] && Idioma::es_valido( $idioma ) ) {
+			Idioma::elegir( (string) $idioma, $res['usuario']->ID, false ); // Y su cuenta, en ese idioma.
+		}
+		return $res;
+	}
+
+	/** @return array{ok:bool, errores:string[], avisos:string[], usuario:?\WP_User, email_crm:bool} */
+	private function aprobar_solicitud( array $s, int $revisor, array $opciones ): array {
 		$res   = array(
 			'ok'        => false,
 			'errores'   => array(),
@@ -364,25 +380,25 @@ final class SolicitudService {
 		);
 		$email = EmailCuenta::normalizar( (string) $s['datos']['email'] );
 		if ( Solicitudes::PENDIENTE !== $s['estado'] ) {
-			$res['errores'][] = 'Esta solicitud ya está resuelta.';
+			$res['errores'][] = asde_t( 'Esta solicitud ya está resuelta.' );
 			return $res;
 		}
 		if ( ! is_email( $email ) ) {
-			$res['errores'][] = 'La solicitud no tiene un email válido.';
+			$res['errores'][] = asde_t( 'La solicitud no tiene un email válido.' );
 			return $res;
 		}
 		$p = $this->repo->obtener( (string) $s['socio'] );
 		if ( ! $p || ! $p->tiene_membresia_activa() ) {
-			$res['errores'][] = 'Esa ficha ya no está en el CRM del grupo o no tiene membresía activa.';
+			$res['errores'][] = asde_t( 'Esa ficha ya no está en el CRM del grupo o no tiene membresía activa.' );
 			return $res;
 		}
 		if ( $p->es_adulto_voluntario() ) {
-			$res['errores'][] = 'Es scouter o voluntario/a: dale acceso desde «Dar acceso», con sus roles y secciones.';
+			$res['errores'][] = asde_t( 'Es scouter o voluntario/a: dale acceso desde «Dar acceso», con sus roles y secciones.' );
 			return $res;
 		}
 		$tipo = $this->comprobar_tipo( $p, (string) $s['tipo'] );
 		if ( self::OK !== $tipo ) {
-			$res['errores'][] = self::ADULTO === $tipo ? 'Ya es mayor de edad: tiene que pedir el acceso la propia persona.' : 'Esa persona no puede tener ese tipo de cuenta.';
+			$res['errores'][] = self::ADULTO === $tipo ? asde_t( 'Ya es mayor de edad: tiene que pedir el acceso la propia persona.' ) : asde_t( 'Esa persona no puede tener ese tipo de cuenta.' );
 			return $res;
 		}
 		$hermanos = array_values( array_filter( array_map( 'strval', (array) ( $opciones['hermanos'] ?? array() ) ), array( PersonaRepository::class, 'es_num_asde' ) ) );
@@ -413,12 +429,12 @@ final class SolicitudService {
 				$existente ??= $existentes[0];
 			} elseif ( self::MODO_NUEVA === $modo ) {
 				if ( count( $existentes ) >= Usuarios::MAX_CUENTAS_FAMILIARES ) {
-					$res['errores'][] = sprintf( 'Esta familia ya tiene las dos cuentas de tutor/a (%s). Para cambiar el email de una, marca «Sustituir su email por el de la solicitud» y elige cuál.', implode( ' y ', array_map( static fn( \WP_User $c ) => $c->user_login, $existentes ) ) );
+					$res['errores'][] = sprintf( asde_t( 'Esta familia ya tiene las dos cuentas de tutor/a (%s). Para cambiar el email de una, marca «Sustituir su email por el de la solicitud» y elige cuál.' ), implode( ' y ', array_map( static fn( \WP_User $c ) => $c->user_login, $existentes ) ) );
 					return $res;
 				}
 				$crear_otra = true;
 			} else {
-				$res['errores'][] = sprintf( 'Ya existe la cuenta familiar %s. Elige si es otro tutor/a (se le crea su propia cuenta) o la misma persona con otro email («Sustituir su email por el de la solicitud»).', $existentes[0]->user_login );
+				$res['errores'][] = sprintf( asde_t( 'Ya existe la cuenta familiar %s. Elige si es otro tutor/a (se le crea su propia cuenta) o la misma persona con otro email («Sustituir su email por el de la solicitud»).' ), $existentes[0]->user_login );
 				return $res;
 			}
 		}
@@ -438,7 +454,7 @@ final class SolicitudService {
 				if ( '' === $elegido && $crear_otra && array_diff( self::CAMPOS[ Solicitudes::TUTOR ], $ajenos ) ) {
 					$campo = array_values( array_diff( self::CAMPOS[ Solicitudes::TUTOR ], $ajenos ) )[0];
 				} else {
-					$res['errores'][] = sprintf( 'El campo «%s» del CRM es el email de otra cuenta familiar de esta familia: elige el otro campo, o marca «Sustituir» y elige la cuenta cuyo email cambia.', Usuarios::etiqueta_campo_email( $campo ) );
+					$res['errores'][] = sprintf( asde_t( 'El campo «%s» del CRM es el email de otra cuenta familiar de esta familia: elige el otro campo, o marca «Sustituir» y elige la cuenta cuyo email cambia.' ), Usuarios::etiqueta_campo_email( $campo ) );
 					return $res;
 				}
 			}

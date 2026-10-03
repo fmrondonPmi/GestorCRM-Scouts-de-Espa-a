@@ -38,9 +38,9 @@ final class Menu {
 
 		// --- Lo personal / familiar ---
 		if ( $ambito && ( $ambito->persona || $ambito->representados ) ) {
-			$personal['ficha'] = $ambito->persona ? 'Mis datos' : 'Mi familia';
+			$personal['ficha'] = $ambito->persona ? asde_t( 'Mis datos' ) : asde_t( 'Mi familia' );
 			if ( current_user_can( MisPagosView::CAP ) ) {
-				$personal['pagos'] = 'Mis pagos';
+				$personal['pagos'] = asde_t( 'Mis pagos' );
 			}
 		}
 		$gestiona   = current_user_can( Servicio::CAP_GESTION );
@@ -48,45 +48,45 @@ final class Menu {
 		$pendientes = $ambito && ( $pide || $gestiona ) ? Servicio::pendientes( $ambito ) : array();
 		if ( $pide ) {
 			$n                    = (int) $pendientes['confirmar'];
-			$personal['uniforme'] = ( $gestiona ? 'Mi uniforme' : 'Uniforme' ) . ( $n ? ' (' . $n . ')' : '' );
+			$personal['uniforme'] = ( $gestiona ? asde_t( 'Mi uniforme' ) : asde_t( 'Uniforme' ) ) . ( $n ? ' (' . $n . ')' : '' );
 		}
 
 		// --- Gestión del grupo ---
 		if ( current_user_can( 'asde_manage_users' ) ) {
-			$gestion['personas'] = 'Personas';
+			$gestion['personas'] = asde_t( 'Personas' );
 		}
 		if ( $ambito && current_user_can( 'asde_aprobar_solicitudes' ) ) {
 			$solicitudes          = Solicitudes::contar_pendientes( $ambito );
-			$gestion['solicitudes'] = 'Solicitudes' . ( $solicitudes ? ' (' . $solicitudes . ')' : '' );
+			$gestion['solicitudes'] = asde_t( 'Solicitudes' ) . ( $solicitudes ? ' (' . $solicitudes . ')' : '' );
 		}
 		if ( current_user_can( 'asde_approve_changes' ) ) {
 			$cambios            = $ambito && $ambito->vision_global() ? Cambios::contar_pendientes() : 0;
-			$gestion['cambios'] = 'Cambios' . ( $cambios ? ' (' . $cambios . ')' : '' );
+			$gestion['cambios'] = asde_t( 'Cambios' ) . ( $cambios ? ' (' . $cambios . ')' : '' );
 		}
 		if ( current_user_can( 'asde_reports' ) ) {
-			$gestion['informes'] = 'Informes';
+			$gestion['informes'] = asde_t( 'Informes' );
 		}
 		if ( $ambito && $gestiona ) {
 			$n                    = (int) ( $pendientes['pago'] + $pendientes['pedido'] + $pendientes['entrega'] );
-			$gestion['uniformes'] = 'Gestión de uniformes' . ( $n ? ' (' . $n . ')' : '' );
+			$gestion['uniformes'] = asde_t( 'Gestión de uniformes' ) . ( $n ? ' (' . $n . ')' : '' );
 		}
 		if ( current_user_can( 'asde_tesoreria_acceso' ) ) {
-			$gestion['tesoreria'] = 'Tesorería';
+			$gestion['tesoreria'] = asde_t( 'Tesorería' );
 		}
 		if ( current_user_can( 'asde_manage_users' ) ) {
-			$gestion['usuarios'] = 'Usuarios';
+			$gestion['usuarios'] = asde_t( 'Usuarios' );
 		}
 
 		$grupos = array();
 		if ( $personal ) {
 			$grupos[ self::PERSONAL ] = array(
-				'titulo' => $ambito && $ambito->persona ? 'Mi espacio' : 'Mi familia',
+				'titulo' => $ambito && $ambito->persona ? asde_t( 'Mi espacio' ) : asde_t( 'Mi familia' ),
 				'items'  => $personal,
 			);
 		}
 		if ( $gestion ) {
 			$grupos[ self::GESTION ] = array(
-				'titulo' => 'Gestión del grupo',
+				'titulo' => asde_t( 'Gestión del grupo' ),
 				'items'  => $gestion,
 			);
 		}
@@ -95,7 +95,7 @@ final class Menu {
 
 	/** Todas las pestañas en una sola lista (con «Inicio» delante): la que usaba el menú antes de separarlo. @return array<string, string> */
 	public static function plano( ?Ambito $ambito ): array {
-		$items = array( 'area' => 'Inicio' );
+		$items = array( 'area' => asde_t( 'Inicio' ) );
 		foreach ( self::grupos( $ambito ) as $grupo ) {
 			$items += $grupo['items'];
 		}

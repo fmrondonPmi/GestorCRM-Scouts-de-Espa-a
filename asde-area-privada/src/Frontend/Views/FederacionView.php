@@ -35,7 +35,7 @@ final class FederacionView extends TesoreriaBaseView {
 				list( $filas ) = TesoreriaView::estados( $repo, $ronda );
 				$ingresos      = array_sum( array_map( static fn( $f ) => $f['calc']['a_pagar'], $filas ) );
 			} catch ( CrmException $e ) {
-				$error = 'No se ha podido consultar el CRM: ' . $e->getMessage();
+				$error = asde_t( 'No se ha podido consultar el CRM: ' ) . $e->getMessage();
 			}
 		}
 
@@ -64,7 +64,7 @@ final class FederacionView extends TesoreriaBaseView {
 		$ronda = $this->ronda();
 		Config::guardar( $ronda, array( 'federacion' => (array) ( wp_unslash( $_POST )['federacion'] ?? array() ) ) ); // phpcs:ignore WordPress.Security.NonceVerification
 		Logger::log( 'tesoreria_federacion_guardada', 'ronda', $ronda );
-		Notices::add( 'success', sprintf( 'Coste federativo de la ronda %s guardado.', esc_html( $ronda ) ) );
+		Notices::add( 'success', sprintf( asde_t( 'Coste federativo de la ronda %s guardado.' ), esc_html( $ronda ) ) );
 		$this->redirect( $this->url( 'federacion', array( 'ronda' => $ronda ) ) );
 	}
 }

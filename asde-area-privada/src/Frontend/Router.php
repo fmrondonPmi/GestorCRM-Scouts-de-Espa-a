@@ -28,6 +28,7 @@ use AsdeBalears\AreaPrivada\Frontend\Views\SolicitudesView;
 use AsdeBalears\AreaPrivada\Frontend\Views\UsuariosView;
 use AsdeBalears\AreaPrivada\Frontend\Views\View;
 use AsdeBalears\AreaPrivada\Idiomas\Idioma;
+use AsdeBalears\AreaPrivada\Idiomas\TextosJs;
 use AsdeBalears\AreaPrivada\Idiomas\Traducciones;
 use AsdeBalears\AreaPrivada\Socios\TareaNumeracion;
 
@@ -231,31 +232,34 @@ final class Router {
 		if ( '' !== $colores ) {
 			wp_add_inline_style( 'asde-area-privada', $colores );
 		}
+		// Textos de los JavaScript en el idioma de la persona (asdeT() y asdeI18n).
+		wp_register_script( 'asde-i18n', false, array(), ASDE_AP_VERSION, true );
+		wp_add_inline_script( 'asde-i18n', TextosJs::script() );
 		if ( 'informes' === $key ) {
-			wp_enqueue_script( 'asde-informes', plugins_url( 'assets/js/informes.js', ASDE_AP_FILE ), array(), ASDE_AP_VERSION, true );
+			wp_enqueue_script( 'asde-informes', plugins_url( 'assets/js/informes.js', ASDE_AP_FILE ), array( 'asde-i18n' ), ASDE_AP_VERSION, true );
 		}
 		if ( ! in_array( $key, Pages::PUBLICAS, true ) ) {
-			wp_enqueue_script( 'asde-cabecera', plugins_url( 'assets/js/cabecera.js', ASDE_AP_FILE ), array(), ASDE_AP_VERSION, true );
+			wp_enqueue_script( 'asde-cabecera', plugins_url( 'assets/js/cabecera.js', ASDE_AP_FILE ), array( 'asde-i18n' ), ASDE_AP_VERSION, true );
 			// En cualquier página se puede abrir una ficha o «Dar acceso» en la ventana emergente.
-			wp_enqueue_script( 'asde-ficha', plugins_url( 'assets/js/ficha.js', ASDE_AP_FILE ), array(), ASDE_AP_VERSION, true );
-			wp_enqueue_script( 'asde-alta', plugins_url( 'assets/js/alta.js', ASDE_AP_FILE ), array(), ASDE_AP_VERSION, true );
-			wp_enqueue_script( 'asde-area', plugins_url( 'assets/js/area.js', ASDE_AP_FILE ), array( 'asde-ficha', 'asde-alta' ), ASDE_AP_VERSION, true );
+			wp_enqueue_script( 'asde-ficha', plugins_url( 'assets/js/ficha.js', ASDE_AP_FILE ), array( 'asde-i18n' ), ASDE_AP_VERSION, true );
+			wp_enqueue_script( 'asde-alta', plugins_url( 'assets/js/alta.js', ASDE_AP_FILE ), array( 'asde-i18n' ), ASDE_AP_VERSION, true );
+			wp_enqueue_script( 'asde-area', plugins_url( 'assets/js/area.js', ASDE_AP_FILE ), array( 'asde-i18n', 'asde-ficha', 'asde-alta' ), ASDE_AP_VERSION, true );
 		}
 		if ( in_array( $key, array( 'familias', 'banco' ), true ) ) {
-			wp_enqueue_script( 'asde-combobox', plugins_url( 'assets/js/combobox.js', ASDE_AP_FILE ), array(), ASDE_AP_VERSION, true );
+			wp_enqueue_script( 'asde-combobox', plugins_url( 'assets/js/combobox.js', ASDE_AP_FILE ), array( 'asde-i18n' ), ASDE_AP_VERSION, true );
 		}
 		if ( 'usuarios' === $key ) {
-			wp_enqueue_script( 'asde-usuarios', plugins_url( 'assets/js/usuarios.js', ASDE_AP_FILE ), array(), ASDE_AP_VERSION, true );
+			wp_enqueue_script( 'asde-usuarios', plugins_url( 'assets/js/usuarios.js', ASDE_AP_FILE ), array( 'asde-i18n' ), ASDE_AP_VERSION, true );
 		}
 		if ( 'federacion' === $key ) {
-			wp_enqueue_script( 'asde-conceptos', plugins_url( 'assets/js/conceptos.js', ASDE_AP_FILE ), array(), ASDE_AP_VERSION, true );
+			wp_enqueue_script( 'asde-conceptos', plugins_url( 'assets/js/conceptos.js', ASDE_AP_FILE ), array( 'asde-i18n' ), ASDE_AP_VERSION, true );
 		}
 		if ( 'uniforme' === $key ) {
-			wp_enqueue_script( 'asde-uniforme', plugins_url( 'assets/js/uniforme.js', ASDE_AP_FILE ), array(), ASDE_AP_VERSION, true );
+			wp_enqueue_script( 'asde-uniforme', plugins_url( 'assets/js/uniforme.js', ASDE_AP_FILE ), array( 'asde-i18n' ), ASDE_AP_VERSION, true );
 		}
 		// Monitor de la corrección de números en segundo plano (si hay una tarea que ver).
 		if ( ! in_array( $key, Pages::PUBLICAS, true ) && TareaNumeracion::para_usuario() ) {
-			wp_enqueue_script( 'asde-tarea', plugins_url( 'assets/js/tarea.js', ASDE_AP_FILE ), array(), ASDE_AP_VERSION, true );
+			wp_enqueue_script( 'asde-tarea', plugins_url( 'assets/js/tarea.js', ASDE_AP_FILE ), array( 'asde-i18n' ), ASDE_AP_VERSION, true );
 		}
 	}
 

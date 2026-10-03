@@ -111,13 +111,13 @@ final class Remesas {
 	public static function error_fecha( string $fecha, ?\DateTimeImmutable $hoy = null ): string {
 		$d = \DateTimeImmutable::createFromFormat( '!Y-m-d', $fecha, wp_timezone() );
 		if ( ! $d || $d->format( 'Y-m-d' ) !== $fecha ) {
-			return 'Elige la fecha de cobro.';
+			return asde_t( 'Elige la fecha de cobro.' );
 		}
 		if ( (int) $d->format( 'N' ) >= 6 ) {
-			return 'La fecha de cobro tiene que ser un día laborable (de lunes a viernes).';
+			return asde_t( 'La fecha de cobro tiene que ser un día laborable (de lunes a viernes).' );
 		}
 		if ( $fecha < self::fecha_minima( $hoy ) ) {
-			return sprintf( 'La fecha de cobro tiene que ser, como pronto, el %s (%d días hábiles desde hoy): los bancos necesitan ese margen.', wp_date( 'd/m/Y', (int) strtotime( self::fecha_minima( $hoy ) ) ), self::DIAS_HABILES_MINIMOS );
+			return sprintf( asde_t( 'La fecha de cobro tiene que ser, como pronto, el %s (%d días hábiles desde hoy): los bancos necesitan ese margen.' ), wp_date( 'd/m/Y', (int) strtotime( self::fecha_minima( $hoy ) ) ), self::DIAS_HABILES_MINIMOS );
 		}
 		return '';
 	}
@@ -145,7 +145,7 @@ final class Remesas {
 		$mandatos = Mandatos::activos();
 		$en_curso = self::familias_sin_cobrar( $ronda );
 		$plazos   = array_values( $cfg['plazos'] );
-		$nombre   = '' !== $plazo && isset( $plazos[ (int) $plazo ] ) ? (string) $plazos[ (int) $plazo ]['nombre'] : 'Todo lo pendiente';
+		$nombre   = '' !== $plazo && isset( $plazos[ (int) $plazo ] ) ? (string) $plazos[ (int) $plazo ]['nombre'] : asde_t( 'Todo lo pendiente' );
 
 		$lineas   = array();
 		$omitidas = array();
@@ -163,11 +163,11 @@ final class Remesas {
 			}
 			$m = $mandatos[ $id ] ?? null;
 			if ( ! $m ) {
-				$omitidas[] = self::omitida( $f, $centimos, 'Sin autorización SEPA' );
+				$omitidas[] = self::omitida( $f, $centimos, asde_t( 'Sin autorización SEPA' ) );
 			} elseif ( isset( $en_curso[ $id ] ) ) {
-				$omitidas[] = self::omitida( $f, $centimos, sprintf( 'Ya está en la remesa %s (falta registrar su cobro)', $en_curso[ $id ] ) );
+				$omitidas[] = self::omitida( $f, $centimos, sprintf( asde_t( 'Ya está en la remesa %s (falta registrar su cobro)' ), $en_curso[ $id ] ) );
 			} elseif ( ! Iban::es_valido( $m['datos']['iban'] ) ) {
-				$omitidas[] = self::omitida( $f, $centimos, 'No se puede leer la autorización (pídele que la firme de nuevo)' );
+				$omitidas[] = self::omitida( $f, $centimos, asde_t( 'No se puede leer la autorización (pídele que la firme de nuevo)' ) );
 			} else {
 				$lineas[] = array(
 					'mandato'     => $m['id'],
@@ -224,14 +224,14 @@ final class Remesas {
 		global $wpdb;
 		$cfg = Config::de();
 		if ( ! Config::lista( $cfg ) ) {
-			return new \WP_Error( 'asde_sepa', 'Faltan datos del acreedor: complétalos en «Datos del acreedor».' );
+			return new \WP_Error( 'asde_sepa', asde_t( 'Faltan datos del acreedor: complétalos en «Datos del acreedor».' ) );
 		}
 		$fecha_error = self::error_fecha( $fecha_cobro );
 		if ( '' !== $fecha_error ) {
 			return new \WP_Error( 'asde_sepa', $fecha_error );
 		}
 		if ( ! $prep['lineas'] ) {
-			return new \WP_Error( 'asde_sepa', 'No hay ningún adeudo que incluir.' );
+			return new \WP_Error( 'asde_sepa', asde_t( 'No hay ningún adeudo que incluir.' ) );
 		}
 		$grupo = Grupo::numero();
 		$wpdb->query( "SELECT GET_LOCK('asde_num_remesa', 10)" );
@@ -240,7 +240,7 @@ final class Remesas {
 			$en_curso      = self::familias_sin_cobrar( $ronda );
 			$prep['lineas'] = array_values( array_filter( $prep['lineas'], static fn( $l ) => ! isset( $en_curso[ (int) $l['familia'] ] ) ) );
 			if ( ! $prep['lineas'] ) {
-				return new \WP_Error( 'asde_sepa', 'Todas esas familias ya están en otra remesa que aún no tiene registrados sus cobros.' );
+				return new \WP_Error( 'asde_sepa', asde_t( 'Todas esas familias ya están en otra remesa que aún no tiene registrados sus cobros.' ) );
 			}
 			$prep['total'] = array_sum( array_map( static fn( $l ) => (int) $l['centimos'], $prep['lineas'] ) );
 			$numero = self::siguiente_numero( $grupo );
@@ -276,7 +276,7 @@ final class Remesas {
 			$wpdb->query( "SELECT RELEASE_LOCK('asde_num_remesa')" );
 		}
 		if ( ! $ok || ! $id ) {
-			return new \WP_Error( 'asde_sepa', 'No se ha podido guardar la remesa. Inténtalo de nuevo.' );
+			return new \WP_Error( 'asde_sepa', asde_t( 'No se ha podido guardar la remesa. Inténtalo de nuevo.' ) );
 		}
 		$contenido = array(
 			'acreedor' => array_intersect_key( $cfg, array_flip( array( 'nombre', 'ics', 'iban', 'bic', 'calle', 'cp', 'poblacion' ) ) ),
@@ -339,7 +339,7 @@ final class Remesas {
 	public static function xml( array $remesa ) {
 		$c = self::contenido( $remesa );
 		if ( ! $c['lineas'] ) {
-			return new \WP_Error( 'asde_sepa', 'Los datos de esta remesa ya no se conservan.' );
+			return new \WP_Error( 'asde_sepa', asde_t( 'Los datos de esta remesa ya no se conservan.' ) );
 		}
 		$cfg = array_merge( Config::defaults(), $c['acreedor'] );
 		$err = Pain008::errores( $cfg, (string) $remesa['fecha_cobro'], $c['lineas'] );
@@ -449,11 +449,11 @@ final class Remesas {
 		);
 		$r   = self::obtener( $id );
 		if ( ! $r || self::ENVIADA !== $r['estado'] ) {
-			$res['errores'][] = 'Los cobros solo se registran de una remesa enviada al banco.';
+			$res['errores'][] = asde_t( 'Los cobros solo se registran de una remesa enviada al banco.' );
 			return $res;
 		}
 		if ( ! preg_match( '/^\d{4}-\d{2}-\d{2}$/', $fecha ) || $fecha > current_time( 'Y-m-d' ) ) {
-			$res['errores'][] = 'La fecha del cobro no es válida (no puede ser posterior a hoy).';
+			$res['errores'][] = asde_t( 'La fecha del cobro no es válida (no puede ser posterior a hoy).' );
 			return $res;
 		}
 		$cobradas  = array_map( 'intval', $cobradas );
@@ -467,7 +467,7 @@ final class Remesas {
 			if ( in_array( $familia, $cobradas, true ) && ! in_array( $familia, $devueltas, true ) ) {
 				$mov = MovimientosTable::registrar( $familia, $r['ronda'], MovimientosTable::PAGO, $fecha, $l['centimos'] / 100, 'domiciliacion', (string) $l['e2e'], 'Remesa SEPA ' . $r['numero'], 'sepa' );
 				if ( is_wp_error( $mov ) ) {
-					$res['errores'][] = sprintf( 'Familia %s: %s', $l['familia_n'], $mov->get_error_message() );
+					$res['errores'][] = sprintf( asde_t( 'Familia %s: %s' ), $l['familia_n'], $mov->get_error_message() );
 					continue;
 				}
 				$c['lineas'][ $i ]['estado']    = self::COBRADO;

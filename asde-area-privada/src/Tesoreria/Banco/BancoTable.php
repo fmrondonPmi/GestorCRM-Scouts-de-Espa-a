@@ -156,7 +156,7 @@ final class BancoTable {
 		} catch ( \Throwable $e ) {
 			// Un fallo inesperado (p. ej. al cifrar) no deja la transacción abierta ni el lote a medias.
 			$wpdb->query( 'ROLLBACK' );
-			return new \WP_Error( 'asde_banco', 'Error al guardar los movimientos: no se ha importado nada.' );
+			return new \WP_Error( 'asde_banco', asde_t( 'Error al guardar los movimientos: no se ha importado nada.' ) );
 		}
 	}
 
@@ -187,7 +187,7 @@ final class BancoTable {
 		$lote = (int) $wpdb->insert_id;
 		if ( ! $ok || ! $lote ) {
 			$wpdb->query( 'ROLLBACK' );
-			return new \WP_Error( 'asde_banco', 'No se ha podido guardar la importación.' );
+			return new \WP_Error( 'asde_banco', asde_t( 'No se ha podido guardar la importación.' ) );
 		}
 
 		$nuevos = 0;
@@ -228,7 +228,7 @@ final class BancoTable {
 			); // phpcs:ignore WordPress.DB
 			if ( false === $r ) {
 				$wpdb->query( 'ROLLBACK' );
-				return new \WP_Error( 'asde_banco', 'Error al guardar los movimientos: no se ha importado nada.' );
+				return new \WP_Error( 'asde_banco', asde_t( 'Error al guardar los movimientos: no se ha importado nada.' ) );
 			}
 			$nuevos += (int) $r;
 		}

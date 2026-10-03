@@ -101,11 +101,11 @@ final class TareaNumeracion {
 	 */
 	public static function crear( string $accion, string $grupo, int $usuario, int $total ) {
 		if ( ! isset( self::ACCIONES[ $accion ] ) || '' === $grupo ) {
-			return new \WP_Error( 'asde_tarea', 'Tarea no válida.' );
+			return new \WP_Error( 'asde_tarea', asde_t( 'Tarea no válida.' ) );
 		}
 		$previa = self::actual( $grupo, true );
 		if ( $previa && self::EN_CURSO === $previa['estado'] ) {
-			return new \WP_Error( 'asde_tarea', 'Ya hay una corrección en marcha en tu grupo: espera a que termine o detenla.' );
+			return new \WP_Error( 'asde_tarea', asde_t( 'Ya hay una corrección en marcha en tu grupo: espera a que termine o detenla.' ) );
 		}
 		$t = array(
 			'id'          => wp_generate_password( 12, false ),
@@ -250,7 +250,7 @@ final class TareaNumeracion {
 		$usuario = get_userdata( (int) $t['usuario'] );
 		if ( ! $datos || ! $usuario || ! user_can( $usuario, self::CAP ) ) {
 			$t['estado'] = self::ERROR;
-			$t['aviso']  = 'Quien inició la tarea ya no tiene permiso, o el grupo ya no existe.';
+			$t['aviso']  = asde_t( 'Quien inició la tarea ya no tiene permiso, o el grupo ya no existe.' );
 			return self::acabar( $t );
 		}
 		$antes = get_current_user_id();
@@ -266,7 +266,7 @@ final class TareaNumeracion {
 		$repo = PersonaRepository::make();
 		if ( ! $repo || ! Escritura::disponible() ) {
 			$t['estado'] = self::ERROR;
-			$t['aviso']  = 'El usuario del CRM del grupo ya no puede editar fichas.';
+			$t['aviso']  = asde_t( 'El usuario del CRM del grupo ya no puede editar fichas.' );
 			return self::acabar( $t );
 		}
 		$num = new Numeracion( $repo );
@@ -275,7 +275,7 @@ final class TareaNumeracion {
 			$num->analizar( $todas );
 		} catch ( CrmException $e ) {
 			++$t['fallos_crm'];
-			$t['aviso']       = 'No se ha podido leer el CRM: ' . $e->getMessage();
+			$t['aviso']       = asde_t( 'No se ha podido leer el CRM: ' ) . $e->getMessage();
 			$t['actualizada'] = time();
 			if ( $t['fallos_crm'] >= self::MAX_FALLOS_CRM ) {
 				$t['estado'] = self::ERROR;
@@ -447,33 +447,39 @@ final class TareaNumeracion {
 		$avance     = $total ? (int) floor( 100 * max( 0, min( $total, $total - $pendientes ) ) / $total ) : 100;
 		$hace       = max( 0, time() - (int) $t['actualizada'] );
 
-		$corregidas = self::n( $hechas, 'ficha corregida', 'fichas corregidas' );
+		$corregidas = 1 === $hechas ? sprintf( asde_t( '%d ficha corregida' ), $hechas ) : sprintf( asde_t( '%d fichas corregidas' ), $hechas );
 		switch ( $t['estado'] ) {
 			case self::EN_CURSO:
 				$texto = 0 === (int) $t['tandas']
-					? sprintf( 'Empezando… %s por corregir.', self::n( $pendientes, 'ficha', 'fichas' ) )
-					: sprintf( '%s %d de %d · %s', 1 === $pendientes ? 'Queda' : 'Quedan', $pendientes, $total, self::n( $hechas, 'corregida', 'corregidas' ) )
-						. ( $fallidas ? sprintf( ' · %d con error', $fallidas ) : '' )
-						. ( $hace > 20 ? sprintf( ' · última actividad hace %d s', $hace ) : '' );
+					? sprintf( asde_t( 'Empezando… %s por corregir.' ), 1 === $pendientes ? sprintf( asde_t( '%d ficha' ), $pendientes ) : sprintf( asde_t( '%d fichas' ), $pendientes ) )
+					: sprintf( 1 === $pendientes ? asde_t( 'Queda %1$d de %2$d · %3$s' ) : asde_t( 'Quedan %1$d de %2$d · %3$s' ), $pendientes, $total, 1 === $hechas ? sprintf( asde_t( '%d corregida' ), $hechas ) : sprintf( asde_t( '%d corregidas' ), $hechas ) )
+						. ( $fallidas ? sprintf( asde_t( ' · %d con error' ), $fallidas ) : '' )
+						. ( $hace > 20 ? sprintf( asde_t( ' · última actividad hace %d s' ), $hace ) : '' );
 				if ( '' !== (string) $t['aviso'] ) {
 					$texto .= ' · ⚠️ ' . $t['aviso'];
 				}
 				break;
 			case self::TERMINADA:
-				$texto  = 'Terminada: ' . $corregidas . ' en el CRM';
-				$texto .= $fallidas ? '; ' . ( 1 === $fallidas ? '1 no se pudo corregir' : $fallidas . ' no se pudieron corregir' ) . ' (el detalle, en Personas).' : '.';
+				$texto = $fallidas
+					? sprintf( asde_t( 'Terminada: %1$s en el CRM; %2$s (el detalle, en Personas).' ), $corregidas, 1 === $fallidas ? asde_t( '1 no se pudo corregir' ) : sprintf( asde_t( '%d no se pudieron corregir' ), $fallidas ) )
+					: sprintf( asde_t( 'Terminada: %s en el CRM.' ), $corregidas );
 				$avance = 100;
 				break;
 			case self::CANCELADA:
-				$texto = 'Detenida: ' . $corregidas . '; ' . ( 1 === $pendientes ? 'quedó 1 sin corregir.' : 'quedaron ' . $pendientes . ' sin corregir.' );
+				$texto = 1 === $pendientes
+					? sprintf( asde_t( 'Detenida: %s; quedó 1 sin corregir.' ), $corregidas )
+					: sprintf( asde_t( 'Detenida: %1$s; quedaron %2$d sin corregir.' ), $corregidas, $pendientes );
 				break;
 			default:
-				$texto = 'Detenida por un error: ' . rtrim( (string) $t['aviso'], '.' ) . '. ' . $corregidas . '; ' . ( 1 === $pendientes ? 'queda 1.' : 'quedan ' . $pendientes . '.' );
+				$error = rtrim( (string) $t['aviso'], '.' );
+				$texto = 1 === $pendientes
+					? sprintf( asde_t( 'Detenida por un error: %1$s. %2$s; queda 1.' ), $error, $corregidas )
+					: sprintf( asde_t( 'Detenida por un error: %1$s. %2$s; quedan %3$d.' ), $error, $corregidas, $pendientes );
 		}
 
 		return array(
 			'estado'     => (string) $t['estado'],
-			'accion'     => self::ACCIONES[ $t['accion'] ] ?? (string) $t['accion'],
+			'accion'     => asde_t( self::ACCIONES[ $t['accion'] ] ?? (string) $t['accion'] ),
 			'total'      => $total,
 			'hechas'     => $hechas,
 			'fallidas'   => $fallidas,

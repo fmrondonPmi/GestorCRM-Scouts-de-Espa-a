@@ -29,7 +29,7 @@ final class SolicitudesView extends View {
 		}
 		$servicio = SolicitudService::make();
 		if ( ! $servicio ) {
-			return $this->error_crm( 'solicitudes', 'La conexión de tu grupo con el CRM no está configurada o no se ha podido comprobar. Un administrador puede revisarla en wp-admin → Grupos Scouts.' );
+			return $this->error_crm( 'solicitudes', asde_t( 'La conexión de tu grupo con el CRM no está configurada o no se ha podido comprobar. Un administrador puede revisarla en wp-admin → Grupos Scouts.' ) );
 		}
 		$ambito = Ambito::actual();
 		try {
@@ -37,7 +37,7 @@ final class SolicitudesView extends View {
 			if ( $id ) {
 				$s = Solicitudes::obtener( $id );
 				if ( ! $s || ! Solicitudes::en_ambito( $s, $ambito ) ) {
-					return $this->denegado( 'No tienes acceso a esa solicitud.' );
+					return $this->denegado( asde_t( 'No tienes acceso a esa solicitud.' ) );
 				}
 				return $this->layout( 'solicitudes', $this->detalle( $servicio, $s ) );
 			}
@@ -63,7 +63,7 @@ final class SolicitudesView extends View {
 				)
 			);
 		} catch ( CrmException $e ) {
-			return $this->error_crm( 'solicitudes', 'No se ha podido consultar el CRM: ' . $e->getMessage() );
+			return $this->error_crm( 'solicitudes', asde_t( 'No se ha podido consultar el CRM: ' ) . $e->getMessage() );
 		}
 	}
 
@@ -112,12 +112,12 @@ final class SolicitudesView extends View {
 
 		$s = Solicitudes::obtener( $id );
 		if ( ! $s || ! Solicitudes::en_ambito( $s, Ambito::actual() ) ) {
-			Notices::add( 'error', 'No tienes acceso a esa solicitud.' );
+			Notices::add( 'error', asde_t( 'No tienes acceso a esa solicitud.' ) );
 			$this->redirect( $this->url( 'solicitudes' ) );
 		}
 		$servicio = SolicitudService::make();
 		if ( ! $servicio ) {
-			Notices::add( 'error', 'La conexión con el CRM no está disponible.' );
+			Notices::add( 'error', asde_t( 'La conexión con el CRM no está disponible.' ) );
 			$this->redirect( $volver );
 		}
 
@@ -127,20 +127,20 @@ final class SolicitudesView extends View {
 				if ( $servicio->rechazar( $s, get_current_user_id(), $this->post( 'motivo' ), $avisar ) ) {
 					$aviso = $servicio->aviso;
 					if ( EmailRechazo::ENVIADO === $aviso['estado'] ) {
-						Notices::add( 'success', sprintf( 'Solicitud rechazada. Se ha avisado por email a %s.', esc_html( $aviso['destino'] ) ) );
+						Notices::add( 'success', sprintf( asde_t( 'Solicitud rechazada. Se ha avisado por email a %s.' ), esc_html( $aviso['destino'] ) ) );
 					} else {
-						Notices::add( 'success', 'Solicitud rechazada.' . ( $avisar ? '' : ' No se ha enviado ningún aviso.' ) );
+						Notices::add( 'success', asde_t( 'Solicitud rechazada.' ) . ( $avisar ? '' : asde_t( ' No se ha enviado ningún aviso.' ) ) );
 						if ( $avisar ) {
-							Notices::add( 'warning', esc_html( 'No se ha podido avisar por email a quien la pidió: ' . $aviso['error'] ) );
+							Notices::add( 'warning', esc_html( asde_t( 'No se ha podido avisar por email a quien la pidió: ' ) . $aviso['error'] ) );
 						}
 					}
 				} else {
-					Notices::add( 'error', 'Esta solicitud ya estaba resuelta.' );
+					Notices::add( 'error', asde_t( 'Esta solicitud ya estaba resuelta.' ) );
 				}
 				$this->redirect( $this->url( 'solicitudes' ) );
 			}
 			if ( 'aprobar_solicitud' !== $accion ) {
-				Notices::add( 'error', 'Petición no válida.' );
+				Notices::add( 'error', asde_t( 'Petición no válida.' ) );
 				$this->redirect( $volver );
 			}
 			$r = $servicio->aprobar(
@@ -154,7 +154,7 @@ final class SolicitudesView extends View {
 				)
 			);
 		} catch ( CrmException $e ) {
-			Notices::add( 'error', esc_html( 'No se ha podido consultar el CRM: ' . $e->getMessage() ) );
+			Notices::add( 'error', esc_html( asde_t( 'No se ha podido consultar el CRM: ' ) . $e->getMessage() ) );
 			$this->redirect( $volver );
 		}
 
@@ -168,10 +168,10 @@ final class SolicitudesView extends View {
 			Notices::add(
 				'success',
 				sprintf(
-					'Solicitud aprobada: cuenta <strong>%s</strong>. Se ha enviado la invitación, con la bienvenida, a %s.%s',
+					asde_t( 'Solicitud aprobada: cuenta <strong>%s</strong>. Se ha enviado la invitación, con la bienvenida, a %s.%s' ),
 					esc_html( $r['usuario']->user_login ),
 					esc_html( Contacto::enmascarar( (string) $s['datos']['email'] ) ),
-					$r['email_crm'] ? ' El email nuevo ya está en la ficha del CRM.' : ''
+					$r['email_crm'] ? asde_t( ' El email nuevo ya está en la ficha del CRM.' ) : ''
 				)
 			);
 			$this->redirect( $this->url( 'solicitudes' ) );

@@ -52,7 +52,7 @@ final class InformesView extends View {
 		if ( '' !== $this->get( 'editar' ) ) {
 			$informe = $this->cargar( (int) $this->get( 'editar' ) );
 			if ( ! $informe || ! $informe->puede_editar( wp_get_current_user() ) ) {
-				return $this->aviso_error( 'No puedes editar ese informe.' ) . $this->lista();
+				return $this->aviso_error( asde_t( 'No puedes editar ese informe.' ) ) . $this->lista();
 			}
 		} elseif ( '' !== $this->get( 'desde' ) ) {
 			$base    = $this->cargar( (int) $this->get( 'desde' ) );
@@ -80,18 +80,18 @@ final class InformesView extends View {
 	private function resultado( Ambito $ambito ): string {
 		$informe = $this->informe_de_la_peticion();
 		if ( ! $informe ) {
-			return $this->aviso_error( 'Ese informe no existe o no está compartido contigo.' ) . $this->lista();
+			return $this->aviso_error( asde_t( 'Ese informe no existe o no está compartido contigo.' ) ) . $this->lista();
 		}
 		$crm = ClientFactory::reader();
 		if ( ! $crm ) {
-			return $this->aviso_error( 'La conexión de tu grupo con el CRM no está configurada o no se ha podido comprobar. Un administrador puede revisarla en wp-admin → Grupos Scouts.' );
+			return $this->aviso_error( asde_t( 'La conexión de tu grupo con el CRM no está configurada o no se ha podido comprobar. Un administrador puede revisarla en wp-admin → Grupos Scouts.' ) );
 		}
 		try {
 			$res = ( new Generador( $crm ) )->ejecutar( $informe, $ambito );
 		} catch ( \InvalidArgumentException $e ) {
 			return $this->aviso_error( $e->getMessage() ) . $this->editor_desde( $informe, $ambito );
 		} catch ( CrmException $e ) {
-			return $this->aviso_error( 'No se ha podido consultar el CRM: ' . $e->getMessage() );
+			return $this->aviso_error( asde_t( 'No se ha podido consultar el CRM: ' ) . $e->getMessage() );
 		}
 
 		Logger::log(
@@ -162,7 +162,7 @@ final class InformesView extends View {
 				$id      = (int) $this->post( 'id' );
 				$previo  = $id ? $this->cargar( $id ) : null;
 				if ( $id && ( ! $previo || ! $previo->puede_editar( $user ) ) ) {
-					Notices::add( 'error', 'No puedes editar ese informe.' );
+					Notices::add( 'error', asde_t( 'No puedes editar ese informe.' ) );
 					$this->redirect( $this->url( 'informes' ) );
 				}
 				$informe = new Informe(
@@ -175,12 +175,12 @@ final class InformesView extends View {
 					'1' === $this->post( 'compartido' )
 				);
 				if ( '' === $informe->nombre || ! $informe->columnas ) {
-					Notices::add( 'error', 'Para guardar el informe ponle un nombre y elige al menos una columna.' );
+					Notices::add( 'error', asde_t( 'Para guardar el informe ponle un nombre y elige al menos una columna.' ) );
 					$this->redirect( $this->url( 'informes', array_merge( array( 'nuevo' => 1 ), $this->args_de( $informe, false ) ) ) );
 				}
 				$nuevo_id = InformesTable::guardar( $informe );
 				Logger::log( $id ? 'informe_modificado' : 'informe_creado', 'informe', (string) $nuevo_id );
-				Notices::add( 'success', sprintf( 'Informe «%s» guardado.', esc_html( $informe->nombre ) ) );
+				Notices::add( 'success', sprintf( asde_t( 'Informe «%s» guardado.' ), esc_html( $informe->nombre ) ) );
 				$this->redirect( $this->url( 'informes', array( 'informe' => $nuevo_id ) ) );
 				break;
 
@@ -191,9 +191,9 @@ final class InformesView extends View {
 				if ( $informe && $informe->puede_editar( $user ) ) {
 					InformesTable::borrar( $id );
 					Logger::log( 'informe_borrado', 'informe', (string) $id );
-					Notices::add( 'success', sprintf( 'Informe «%s» borrado.', esc_html( $informe->nombre ) ) );
+					Notices::add( 'success', sprintf( asde_t( 'Informe «%s» borrado.' ), esc_html( $informe->nombre ) ) );
 				} else {
-					Notices::add( 'error', 'No puedes borrar ese informe.' );
+					Notices::add( 'error', asde_t( 'No puedes borrar ese informe.' ) );
 				}
 				$this->redirect( $this->url( 'informes' ) );
 				break;

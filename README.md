@@ -2,7 +2,7 @@
 
 Plugin de WordPress que da a los Grupos Scouts un **área privada** (fichas, usuarios, informes, tesorería, uniformes, domiciliaciones SEPA…) con datos leídos de **SinergiaCRM**. Pensado para el tema Enfold. Todo en español.
 
-- **Versión actual:** 0.14.1
+- **Versión actual:** 0.15.0
 - **Requisitos:** WordPress 6.4 o superior y PHP 8.0 o superior (con libsodium).
 - **Licencia:** [MIT](LICENSE), también la declarada en la cabecera del plugin. Es compatible con la GPL de WordPress.
 

@@ -32,49 +32,49 @@ $marca    = static fn( bool $si, string $detalle = '' ) => $si ? '<span class="a
 $entregar = array();
 // Resumen de arriba: «1 pendiente de entregar», «2 pendientes de entregar».
 $singular = array(
-	PedidosTable::SIN_PAGAR     => 'pendiente de pago',
-	PedidosTable::POR_PEDIR     => 'pendiente de incluir en el pedido',
-	PedidosTable::POR_ENTREGAR  => 'pendiente de entregar',
-	PedidosTable::POR_CONFIRMAR => 'entregado sin confirmar',
+	PedidosTable::SIN_PAGAR     => asde_t( 'pendiente de pago' ),
+	PedidosTable::POR_PEDIR     => asde_t( 'pendiente de incluir en el pedido' ),
+	PedidosTable::POR_ENTREGAR  => asde_t( 'pendiente de entregar' ),
+	PedidosTable::POR_CONFIRMAR => asde_t( 'entregado sin confirmar' ),
 );
 ?>
 <section class="asde-card">
 	<header class="asde-card__header asde-card__header--split">
-		<h2 class="asde-card__title">Pedidos de uniforme</h2>
-		<span class="asde-actions"><a href="<?php echo esc_url( $url_csv ); ?>">Descargar CSV</a></span>
+		<h2 class="asde-card__title"><?php asde_e( 'Pedidos de uniforme' ); ?></h2>
+		<span class="asde-actions"><a href="<?php echo esc_url( $url_csv ); ?>"><?php asde_e( 'Descargar CSV' ); ?></a></span>
 	</header>
 	<p class="asde-muted">
-		<?php echo $global ? 'Todos los pedidos del grupo.' : 'Los pedidos de los socios de tus secciones, y los tuyos.'; ?>
-		Tesorería valida el pago, Coordinación los incluye en el pedido al proveedor, el grupo los entrega y el socio/a o su familia confirma que lo ha recibido.
+		<?php echo $global ? asde_t( 'Todos los pedidos del grupo.' ) : asde_t( 'Los pedidos de los socios de tus secciones, y los tuyos.' ); ?>
+		<?php asde_e( 'Tesorería valida el pago, Coordinación los incluye en el pedido al proveedor, el grupo los entrega y el socio/a o su familia confirma que lo ha recibido.' ); ?>
 	</p>
 	<ul class="asde-resumen">
 		<?php foreach ( $singular as $f => $uno ) : ?>
-			<li><a href="<?php echo esc_url( add_query_arg( 'estado', $f, $url ) ); ?>"<?php echo $f === $filtro ? ' aria-current="true"' : ''; ?>><strong><?php echo (int) $cuentas[ $f ]; ?></strong> <?php echo esc_html( 1 === (int) $cuentas[ $f ] ? $uno : mb_strtolower( PedidosTable::FILTROS[ $f ] ) ); ?></a></li>
+			<li><a href="<?php echo esc_url( add_query_arg( 'estado', $f, $url ) ); ?>"<?php echo $f === $filtro ? ' aria-current="true"' : ''; ?>><strong><?php echo (int) $cuentas[ $f ]; ?></strong> <?php echo esc_html( 1 === (int) $cuentas[ $f ] ? $uno : mb_strtolower( asde_t( PedidosTable::FILTROS[ $f ] ) ) ); ?></a></li>
 		<?php endforeach; ?>
-		<li><strong><?php echo esc_html( Calculadora::euros( $cobrado ) ); ?></strong> cobrados · <strong><?php echo esc_html( Calculadora::euros( $pendiente ) ); ?></strong> por cobrar</li>
+		<li><strong><?php echo esc_html( Calculadora::euros( $cobrado ) ); ?></strong> <?php asde_e( 'cobrados ·' ); ?> <strong><?php echo esc_html( Calculadora::euros( $pendiente ) ); ?></strong> <?php asde_e( 'por cobrar' ); ?></li>
 	</ul>
 
 	<form method="get" action="<?php echo esc_url( $url ); ?>" class="asde-filter">
-		<label for="asde-uni-estado">Mostrar</label>
+		<label for="asde-uni-estado"><?php asde_e( 'Mostrar' ); ?></label>
 		<select id="asde-uni-estado" name="estado">
-			<?php foreach ( PedidosTable::FILTROS as $f => $etiqueta ) : ?>
+			<?php foreach ( asde_ta( PedidosTable::FILTROS ) as $f => $etiqueta ) : ?>
 				<option value="<?php echo esc_attr( $f ); ?>" <?php selected( $filtro, $f ); ?>><?php echo esc_html( $etiqueta . ' (' . $cuentas[ $f ] . ')' ); ?></option>
 			<?php endforeach; ?>
 		</select>
-		<label for="asde-uni-seccion">Sección</label>
+		<label for="asde-uni-seccion"><?php asde_e( 'Sección' ); ?></label>
 		<select id="asde-uni-seccion" name="seccion">
-			<option value="">Todas</option>
+			<option value=""><?php asde_e( 'Todas' ); ?></option>
 			<?php foreach ( Secciones::all() as $s => $def ) : ?>
 				<option value="<?php echo esc_attr( $s ); ?>" <?php selected( $seccion, $s ); ?>><?php echo esc_html( $def['nombre'] ); ?></option>
 			<?php endforeach; ?>
 		</select>
-		<label for="asde-uni-q" class="screen-reader-text">Buscar</label>
-		<input type="search" id="asde-uni-q" name="q" value="<?php echo esc_attr( $q ); ?>" placeholder="Nombre o nº de pedido">
-		<button type="submit" class="button">Ver</button>
+		<label for="asde-uni-q" class="screen-reader-text"><?php asde_e( 'Buscar' ); ?></label>
+		<input type="search" id="asde-uni-q" name="q" value="<?php echo esc_attr( $q ); ?>" placeholder="<?php echo asde_a( 'Nombre o nº de pedido' ); ?>">
+		<button type="submit" class="button"><?php asde_e( 'Ver' ); ?></button>
 	</form>
 
 	<?php if ( ! $lista ) : ?>
-		<p>No hay pedidos con estos filtros.</p>
+		<p><?php asde_e( 'No hay pedidos con estos filtros.' ); ?></p>
 	<?php else : ?>
 		<form method="post" id="asde-uni-lote">
 			<?php wp_nonce_field( 'asde_uniformes_lote' ); ?>
@@ -84,16 +84,16 @@ $singular = array(
 				<thead>
 					<tr>
 						<?php if ( $lote ) : ?>
-							<th scope="col"><span class="screen-reader-text">Incluir en el pedido</span></th>
+							<th scope="col"><span class="screen-reader-text"><?php asde_e( 'Incluir en el pedido' ); ?></span></th>
 						<?php endif; ?>
-						<th scope="col">Pedido</th>
-						<th scope="col">Socio/a</th>
-						<th scope="col">Qué</th>
-						<th scope="col">Importe</th>
-						<th scope="col">Pagado</th>
-						<th scope="col">En el pedido</th>
-						<th scope="col">Entregado</th>
-						<th scope="col">Recibido</th>
+						<th scope="col"><?php asde_e( 'Pedido' ); ?></th>
+						<th scope="col"><?php asde_e( 'Socio/a' ); ?></th>
+						<th scope="col"><?php asde_e( 'Qué' ); ?></th>
+						<th scope="col"><?php asde_e( 'Importe' ); ?></th>
+						<th scope="col"><?php asde_e( 'Pagado' ); ?></th>
+						<th scope="col"><?php asde_e( 'En el pedido' ); ?></th>
+						<th scope="col"><?php asde_e( 'Entregado' ); ?></th>
+						<th scope="col"><?php asde_e( 'Recibido' ); ?></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -108,14 +108,14 @@ $singular = array(
 						?>
 						<tr<?php echo $activo ? '' : ' class="asde-fila--cancelada"'; ?>>
 							<?php if ( $lote ) : ?>
-								<td data-label="Incluir">
+								<td data-label="<?php echo asde_a( 'Incluir' ); ?>">
 									<?php if ( $activo && null === $p['pedido_en'] && null === $p['entregado_en'] ) : ?>
-										<input type="checkbox" name="pedidos[]" value="<?php echo (int) $p['id']; ?>" aria-label="<?php echo esc_attr( 'Incluir ' . PedidosTable::numero( $p ) . ' en el pedido' ); ?>" <?php checked( null !== $p['pago_en'] ); ?>>
+										<input type="checkbox" name="pedidos[]" value="<?php echo (int) $p['id']; ?>" aria-label="<?php echo esc_attr( sprintf( asde_t( 'Incluir %s en el pedido' ), PedidosTable::numero( $p ) ) ); ?>" <?php checked( null !== $p['pago_en'] ); ?>>
 									<?php endif; ?>
 								</td>
 							<?php endif; ?>
-							<td data-label="Pedido"><a href="<?php echo esc_url( $detalle ); ?>" data-asde-modal><?php echo esc_html( PedidosTable::numero( $p ) ); ?></a><br><span class="asde-muted"><?php echo esc_html( $fecha( $p['creado'] ) ); ?></span></td>
-							<td data-label="Socio/a">
+							<td data-label="<?php echo asde_a( 'Pedido' ); ?>"><a href="<?php echo esc_url( $detalle ); ?>" data-asde-modal><?php echo esc_html( PedidosTable::numero( $p ) ); ?></a><br><span class="asde-muted"><?php echo esc_html( $fecha( $p['creado'] ) ); ?></span></td>
+							<td data-label="<?php echo asde_a( 'Socio/a' ); ?>">
 								<?php echo esc_html( $persona ? $persona->nombre_completo() : 'Nº ' . $p['socio'] ); ?><?php echo $persona ? \AsdeBalears\AreaPrivada\Socios\Numeros::compacto( $persona ) : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?>
 								<?php
 								foreach ( $p['secciones'] as $s ) {
@@ -123,23 +123,23 @@ $singular = array(
 								}
 								?>
 							</td>
-							<td data-label="Qué"><?php echo esc_html( Servicio::descripcion( $p['lineas'] ) ); ?><?php echo '' !== $p['nota'] ? '<br><span class="asde-muted">' . esc_html( $p['nota'] ) . '</span>' : ''; ?></td>
-							<td data-label="Importe"><?php echo esc_html( null !== $p['pago_importe'] ? Calculadora::euros( $p['pago_importe'] ) : Servicio::importe( $p ) ); ?></td>
+							<td data-label="<?php echo asde_a( 'Qué' ); ?>"><?php echo esc_html( Servicio::descripcion( $p['lineas'] ) ); ?><?php echo '' !== $p['nota'] ? '<br><span class="asde-muted">' . esc_html( $p['nota'] ) . '</span>' : ''; ?></td>
+							<td data-label="<?php echo asde_a( 'Importe' ); ?>"><?php echo esc_html( null !== $p['pago_importe'] ? Calculadora::euros( $p['pago_importe'] ) : Servicio::importe( $p ) ); ?></td>
 							<?php if ( ! $activo ) : ?>
-								<td data-label="Estado" colspan="4"><span class="asde-badge asde-badge--uniforme-cancelado">Cancelado</span> <span class="asde-muted"><?php echo esc_html( $p['cancelado_motivo'] ); ?></span></td>
+								<td data-label="<?php echo asde_a( 'Estado' ); ?>" colspan="4"><span class="asde-badge asde-badge--uniforme-cancelado"><?php asde_e( 'Cancelado' ); ?></span> <span class="asde-muted"><?php echo esc_html( $p['cancelado_motivo'] ); ?></span></td>
 							<?php else : ?>
-								<td data-label="Pagado"><?php echo $marca( null !== $p['pago_en'], null !== $p['pago_en'] ? ( PedidosTable::METODOS[ $p['pago_metodo'] ] ?? '' ) . ' ' . $fecha( $p['pago_fecha'] ) : '' ); // phpcs:ignore WordPress.Security.EscapeOutput ?><?php echo null === $p['pago_en'] && Servicio::puede_pagar( $p ) ? ' <a href="' . esc_url( $detalle ) . '" data-asde-modal>Validar</a>' : ''; ?></td>
-								<td data-label="En el pedido"><?php echo $marca( null !== $p['pedido_en'], null !== $p['pedido_en'] ? $p['pedido_ref'] : '' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></td>
-								<td data-label="Entregado">
+								<td data-label="<?php echo asde_a( 'Pagado' ); ?>"><?php echo $marca( null !== $p['pago_en'], null !== $p['pago_en'] ? ( asde_t( PedidosTable::METODOS[ $p['pago_metodo'] ] ?? '' ) ) . ' ' . $fecha( $p['pago_fecha'] ) : '' ); // phpcs:ignore WordPress.Security.EscapeOutput ?><?php echo null === $p['pago_en'] && Servicio::puede_pagar( $p ) ? ' <a href="' . esc_url( $detalle ) . '" data-asde-modal>Validar</a>' : ''; ?></td>
+								<td data-label="<?php echo asde_a( 'En el pedido' ); ?>"><?php echo $marca( null !== $p['pedido_en'], null !== $p['pedido_en'] ? $p['pedido_ref'] : '' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></td>
+								<td data-label="<?php echo asde_a( 'Entregado' ); ?>">
 									<?php if ( null !== $p['entregado_en'] ) : ?>
 										<?php echo $marca( true, $fecha( $p['entregado_en'] ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 									<?php elseif ( in_array( $p['id'], $entregar, true ) ) : ?>
-										<button type="submit" form="asde-uni-entregar-<?php echo (int) $p['id']; ?>" class="asde-btn-link">Marcar entregado</button>
+										<button type="submit" form="asde-uni-entregar-<?php echo (int) $p['id']; ?>" class="asde-btn-link"><?php asde_e( 'Marcar entregado' ); ?></button>
 									<?php else : ?>
 										<span class="asde-muted">—</span>
 									<?php endif; ?>
 								</td>
-								<td data-label="Recibido"><?php echo null !== $p['recibido_en'] ? $marca( true, $fecha( $p['recibido_en'] ) ) : ( null !== $p['entregado_en'] ? '<span class="asde-muted">Sin confirmar</span>' : '<span class="asde-muted">—</span>' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></td>
+								<td data-label="<?php echo asde_a( 'Recibido' ); ?>"><?php echo null !== $p['recibido_en'] ? $marca( true, $fecha( $p['recibido_en'] ) ) : ( null !== $p['entregado_en'] ? '<span class="asde-muted">Sin confirmar</span>' : '<span class="asde-muted">—</span>' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></td>
 							<?php endif; ?>
 						</tr>
 					<?php endforeach; ?>
@@ -147,10 +147,10 @@ $singular = array(
 			</table>
 			<?php if ( $lote ) : ?>
 				<p class="asde-form__fila">
-					<label>Nombre del pedido al proveedor <input type="text" name="referencia_pedido" maxlength="60" value="<?php echo esc_attr( 'Pedido ' . wp_date( 'd/m/Y' ) ); ?>"></label>
-					<button type="submit" class="button">Incluir los marcados en el pedido</button>
+					<label><?php asde_e( 'Nombre del pedido al proveedor' ); ?> <input type="text" name="referencia_pedido" maxlength="60" value="<?php echo esc_attr( sprintf( asde_t( 'Pedido %s' ), wp_date( 'd/m/Y' ) ) ); ?>"></label>
+					<button type="submit" class="button"><?php asde_e( 'Incluir los marcados en el pedido' ); ?></button>
 				</p>
-				<p class="asde-help">Vienen marcados los que ya están pagados.</p>
+				<p class="asde-help"><?php asde_e( 'Vienen marcados los que ya están pagados.' ); ?></p>
 			<?php endif; ?>
 		</form>
 		<?php foreach ( $entregar as $id ) : ?>
@@ -166,8 +166,8 @@ $singular = array(
 
 <?php if ( $global && ( $resumen['total_camisas'] || $resumen['insignias'] || $sin_pagar ) ) : ?>
 	<section class="asde-card">
-		<h3 class="asde-card__title">Para el próximo pedido al proveedor</h3>
-		<p class="asde-muted">Lo pagado que aún no está en ningún pedido.<?php echo $sin_pagar ? ' ' . esc_html( sprintf( _n( 'Además hay %d pedido sin pagar.', 'Además hay %d pedidos sin pagar.', $sin_pagar, 'asde-area-privada' ), $sin_pagar ) ) : ''; ?></p>
+		<h3 class="asde-card__title"><?php asde_e( 'Para el próximo pedido al proveedor' ); ?></h3>
+		<p class="asde-muted"><?php asde_e( 'Lo pagado que aún no está en ningún pedido.' ); ?><?php echo $sin_pagar ? ' ' . esc_html( sprintf( asde_n( 'Además hay %d pedido sin pagar.', 'Además hay %d pedidos sin pagar.', $sin_pagar ), $sin_pagar ) ) : ''; ?></p>
 		<?php foreach ( $resumen['camisas'] as $m ) : ?>
 			<?php $tallas = array_filter( $m['tallas'] ); ?>
 			<?php if ( $tallas ) : ?>
@@ -175,10 +175,10 @@ $singular = array(
 			<?php endif; ?>
 		<?php endforeach; ?>
 		<?php if ( $resumen['insignias'] ) : ?>
-			<p><strong>Insignias:</strong> <?php echo esc_html( implode( ' · ', array_map( static fn( $i ) => $i['nombre'] . ' × ' . $i['cantidad'], $resumen['insignias'] ) ) ); ?></p>
+			<p><strong><?php asde_e( 'Insignias:' ); ?></strong> <?php echo esc_html( implode( ' · ', array_map( static fn( $i ) => $i['nombre'] . ' × ' . $i['cantidad'], $resumen['insignias'] ) ) ); ?></p>
 		<?php endif; ?>
 		<?php if ( ! $resumen['total_camisas'] && ! $resumen['insignias'] ) : ?>
-			<p>Todavía no hay nada pagado pendiente de pedir.</p>
+			<p><?php asde_e( 'Todavía no hay nada pagado pendiente de pedir.' ); ?></p>
 		<?php endif; ?>
 	</section>
 <?php endif; ?>

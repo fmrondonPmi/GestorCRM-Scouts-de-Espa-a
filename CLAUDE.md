@@ -41,7 +41,7 @@ Plugin de WordPress (`asde-area-privada/`, PHP ≥ 8.0, namespace `AsdeBalears\A
 5. **Entrega**: subir `ASDE_AP_VERSION` y `Version:` en `asde-area-privada.php`; actualizar `docs/` (00, el del módulo, 10 con el recuento de pruebas, 09 si hay decisiones); generar el zip (ver abajo); dejar el resumen al usuario en español, con lo que tiene que decidir o hacer en producción.
 
 ### Zip
-`construir-zip.ps1` (PowerShell, con la herramienta PowerShell: `& 'ruta\construir-zip.ps1' -Version 0.x.y`) crea `asde-area-privada-<versión>.zip` **sin `tests/`** y con rutas `/`. Si hay trabajo ajeno a medias dentro del plugin (p. ej. la PWA), empaquetar desde una **copia** sin esa parte y apuntar el script a ella con la variable `ASDE_ZIP_SRC`.
+`construir-zip.ps1` (PowerShell, con la herramienta PowerShell: `& 'ruta\construir-zip.ps1'`; sin `-Version` toma la de la cabecera del plugin) crea `asde-area-privada-<versión>.zip` **sin `tests/`** y con rutas `/`. **No sobrescribe** un zip que ya existe (los de versiones anteriores se conservan) salvo con `-Sobrescribir`: el 2026-10-03 la versión fija por defecto del script machacó el zip de la 0.12.0. Si hay trabajo ajeno a medias dentro del plugin (p. ej. la PWA), empaquetar desde una **copia** sin esa parte y apuntar el script a ella con la variable `ASDE_ZIP_SRC`.
 
 ## Trampas del entorno (Windows + Local)
 
@@ -52,6 +52,8 @@ Plugin de WordPress (`asde-area-privada/`, PHP ≥ 8.0, namespace `AsdeBalears\A
 - Los tests de `wp eval-file` se lanzan con la **ruta relativa a `app/public`** (`wp-content/plugins/…`), no con `--path`.
 - Las cachés/transients de las pruebas van en memoria (`wp_using_ext_object_cache(true)`): la web real nunca ve la numeración, la sesión ni las fichas del CRM simulado (incidente del 2026-09-28, doc 10).
 - Local atiende PHP con pocos procesos: una petición larga bloquea a las demás; lo masivo va en segundo plano (`TareaNumeracion`, WP-Cron).
+- **No cortar nunca `probar-todo.sh` (ni una prueba) a medias**: cada prueba restaura el sitio en su `finally`; si se mata el proceso, la base de datos de Local queda con datos de prueba (el 2026-10-02, el email de contacto del grupo 684 quedó cambiado y `sepa.php` empezó a fallar). Si pasa, revisar a mano lo que tocaba esa prueba.
+- Los scripts de ayuda que escriben ficheros: comprobar que el resultado no es `null`/vacío antes de `file_put_contents` (un `preg_replace` que falla devuelve `null` y vacía el fichero) y no escribir barras invertidas dobles en un heredoc de la herramienta Bash (se quedan en una): usar `chr(92)` o la herramienta *Write*.
 
 ## Convenciones de interfaz
 
@@ -59,6 +61,7 @@ Plugin de WordPress (`asde-area-privada/`, PHP ≥ 8.0, namespace `AsdeBalears\A
 - Formularios que descargan un fichero llevan `data-asde-sin-carga` (si no, la barra de carga se queda puesta).
 - Móvil primero en lo nuevo: sin desbordes horizontales, tablas como tarjetas (`data-label`), pestañas en una fila que se desplaza.
 - El CSS nuevo se **añade al final** de `assets/css/area-privada.css` en un bloque comentado con la versión.
+- **Idiomas (v0.15, doc 28):** todo texto que vea una persona en el área se escribe en castellano dentro de `asde_t()` / `asde_h()` / `asde_e()` / `asde_a()` / `asde_js()` / `asde_n()` (frases enteras con `sprintf`, nunca trozos pegados); en las constantes, el valor se traduce al mostrarlo con `asde_ta()` y la constante se añade a `Textos::extras()`; en los JS, `asdeT( 'texto', arg )` y el texto en `TextosJs::LISTA`. Lo que **se guarda** (motivos, conceptos, referencias) va en castellano, sin traducir. Después: regenerar `languages/es.php` (`herramientas/generar-es.php`), añadir el texto a `ca.php`, `eu.php` y `gl.php` y pasar `tests/idiomas-catalogos.php`. Las pantallas de wp-admin siguen con `__()`.
 
 ## Rendimiento (doc 26)
 

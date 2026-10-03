@@ -15,41 +15,41 @@ defined( 'ABSPATH' ) || exit;
 
 $f = $informe->filtros;
 ?>
-<p class="asde-back asde-no-print"><a href="<?php echo esc_url( $url ); ?>">← Volver a informes</a></p>
+<p class="asde-back asde-no-print"><a href="<?php echo esc_url( $url ); ?>"><?php asde_e( '← Volver a informes' ); ?></a></p>
 
 <section class="asde-card">
 	<header class="asde-card__header asde-card__header--split">
-		<h2 class="asde-card__title"><?php echo esc_html( $informe->nombre ); ?></h2>
+		<h2 class="asde-card__title"><?php echo esc_html( $informe->titulo() ); ?></h2>
 		<p class="asde-actions asde-no-print">
-			<a class="button" href="<?php echo esc_url( $url_csv ); ?>">Descargar CSV</a>
-			<button type="button" class="button asde-button-secundario" onclick="window.print()">Imprimir</button>
-			<a class="button asde-button-secundario" href="<?php echo esc_url( $url_edit ); ?>"><?php echo $informe->id ? 'Editar' : 'Editar / guardar'; ?></a>
+			<a class="button" href="<?php echo esc_url( $url_csv ); ?>"><?php asde_e( 'Descargar CSV' ); ?></a>
+			<button type="button" class="button asde-button-secundario" onclick="window.print()"><?php asde_e( 'Imprimir' ); ?></button>
+			<a class="button asde-button-secundario" href="<?php echo esc_url( $url_edit ); ?>"><?php echo $informe->id ? asde_t( 'Editar' ) : asde_t( 'Editar / guardar' ); ?></a>
 		</p>
 	</header>
 	<p class="asde-muted">
-		<?php echo esc_html( sprintf( _n( '%d socio', '%d socios', count( $res['filas'] ), 'asde-area-privada' ), count( $res['filas'] ) ) ); ?>
-		con membresía activa ·
+		<?php echo esc_html( sprintf( asde_n( '%d socio', '%d socios', count( $res['filas'] ) ), count( $res['filas'] ) ) ); ?>
+		<?php asde_e( 'con membresía activa ·' ); ?>
 		<?php
 		if ( $res['secciones'] ) {
 			echo esc_html( implode( ', ', array_map( array( Secciones::class, 'nombre' ), $res['secciones'] ) ) );
 		} else {
-			echo 'todo el grupo';
+			echo asde_t( 'todo el grupo' );
 		}
 		?>
-		<?php echo null !== $f['edad_min'] ? esc_html( ' · desde ' . $f['edad_min'] . ' años' ) : ''; ?>
-		<?php echo null !== $f['edad_max'] ? esc_html( ' · hasta ' . $f['edad_max'] . ' años' ) : ''; ?>
-		<?php echo $f['salud'] ? ' · solo con datos de salud relevantes' : ''; ?>
+		<?php echo null !== $f['edad_min'] ? esc_html( ' · ' . sprintf( asde_t( 'desde %d años' ), $f['edad_min'] ) ) : ''; ?>
+		<?php echo null !== $f['edad_max'] ? esc_html( ' · ' . sprintf( asde_t( 'hasta %d años' ), $f['edad_max'] ) ) : ''; ?>
+		<?php echo $f['salud'] ? asde_t( ' · solo con datos de salud relevantes' ) : ''; ?>
 		· <?php echo esc_html( wp_date( 'd/m/Y H:i' ) ); ?>
 	</p>
 	<?php foreach ( $res['avisos'] as $aviso ) : ?>
 		<div class="asde-notice asde-notice--warning" role="status"><?php echo esc_html( $aviso ); ?></div>
 	<?php endforeach; ?>
 	<?php if ( $res['salud'] ) : ?>
-		<div class="asde-notice asde-notice--info asde-no-print" role="status">Este informe incluye <strong>datos de salud</strong>: úsalos solo para la actividad, no los reenvíes y destruye las copias impresas al terminar. Queda registrado quién lo consulta.</div>
+		<div class="asde-notice asde-notice--info asde-no-print" role="status"><?php asde_e( 'Este informe incluye' ); ?> <strong><?php asde_e( 'datos de salud' ); ?></strong><?php asde_e( ': úsalos solo para la actividad, no los reenvíes y destruye las copias impresas al terminar. Queda registrado quién lo consulta.' ); ?></div>
 	<?php endif; ?>
 
 	<?php if ( ! $res['filas'] ) : ?>
-		<p>No hay socios que cumplan estos filtros.</p>
+		<p><?php asde_e( 'No hay socios que cumplan estos filtros.' ); ?></p>
 	<?php else : ?>
 		<div class="asde-table-wrap">
 			<table class="asde-table asde-table--informe">

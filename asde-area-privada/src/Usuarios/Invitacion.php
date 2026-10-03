@@ -7,6 +7,7 @@ use AsdeBalears\AreaPrivada\Domain\Grupos;
 use AsdeBalears\AreaPrivada\Frontend\Pages;
 use AsdeBalears\AreaPrivada\Frontend\TemplateLoader;
 use AsdeBalears\AreaPrivada\Install\Roles;
+use AsdeBalears\AreaPrivada\Idiomas\Idioma;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -42,14 +43,15 @@ final class Invitacion {
 		if ( $grupo && $grupo['numero'] !== Grupo::numero() ) {
 			$repo = null; // El repositorio recibido lee el CRM con las credenciales de otro grupo.
 		}
-		return Grupo::con( $grupo, static fn() => self::componer_y_enviar( $user, $tipo, $repo, $bienvenida ) );
+		// El email sale en el idioma de quien lo recibe.
+		return Idioma::en( Idioma::de_usuario( $user->ID ), static fn() => Grupo::con( $grupo, static fn() => self::componer_y_enviar( $user, $tipo, $repo, $bienvenida ) ) );
 	}
 
 	private static function componer_y_enviar( \WP_User $user, string $tipo, ?PersonaRepository $repo, bool $bienvenida ): bool {
 		$dias   = self::RESET === $tipo ? self::DIAS_RESET : self::DIAS;
 		$asunto = self::RESET === $tipo
-			? sprintf( $bienvenida ? '[%s] Bienvenida al área privada: elige tu contraseña' : '[%s] Elige una contraseña nueva', Grupo::nombre() )
-			: sprintf( $bienvenida ? '[%s] Bienvenida al área privada: activa tu acceso' : '[%s] Activa tu acceso al área privada', Grupo::nombre() );
+			? sprintf( $bienvenida ? asde_t( '[%s] Bienvenida al área privada: elige tu contraseña' ) : asde_t( '[%s] Elige una contraseña nueva' ), Grupo::nombre() )
+			: sprintf( $bienvenida ? asde_t( '[%s] Bienvenida al área privada: activa tu acceso' ) : asde_t( '[%s] Activa tu acceso al área privada' ), Grupo::nombre() );
 		$autor  = wp_get_current_user();
 		$roles  = array_map( array( Roles::class, 'label' ), Usuarios::roles_asde( $user ) );
 		// Para el registro: lo necesario para reconstruir el email, sin datos personales ni el enlace.
@@ -71,8 +73,8 @@ final class Invitacion {
 				$asunto,
 				RegistroEmails::SIN_EMAIL,
 				$origen
-					? sprintf( 'La ficha del CRM no tiene email en el campo elegido (%s), o el CRM no ha respondido.', $origen['campo'] )
-					: 'El usuario no tiene un email del CRM asociado.',
+					? sprintf( asde_t( 'La ficha del CRM no tiene email en el campo elegido (%s), o el CRM no ha respondido.' ), $origen['campo'] )
+					: asde_t( 'El usuario no tiene un email del CRM asociado.' ),
 				$datos
 			);
 			return false;
@@ -107,13 +109,13 @@ final class Invitacion {
 		// El motivo de un fallo lo da PHPMailer a través de wp_mail_failed.
 		$error   = '';
 		$captura = static function ( $e ) use ( &$error ) {
-			$error = is_wp_error( $e ) ? $e->get_error_message() : 'Error desconocido';
+			$error = is_wp_error( $e ) ? $e->get_error_message() : asde_t( 'Error desconocido' );
 		};
 		add_action( 'wp_mail_failed', $captura );
 		$ok = wp_mail( $email, $asunto, $html, array( 'Content-Type: text/html; charset=UTF-8' ) );
 		remove_action( 'wp_mail_failed', $captura );
 
-		RegistroEmails::registrar( $user, $tipo, Contacto::enmascarar( $email ), $asunto, $ok ? RegistroEmails::ENVIADO : RegistroEmails::ERROR, $ok ? '' : ( $error ?: 'El servidor de correo no ha aceptado el email.' ), $datos );
+		RegistroEmails::registrar( $user, $tipo, Contacto::enmascarar( $email ), $asunto, $ok ? RegistroEmails::ENVIADO : RegistroEmails::ERROR, $ok ? '' : ( $error ?: asde_t( 'El servidor de correo no ha aceptado el email.' ) ), $datos );
 		return $ok;
 	}
 

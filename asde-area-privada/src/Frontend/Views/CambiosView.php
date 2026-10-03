@@ -28,7 +28,7 @@ final class CambiosView extends View {
 		}
 		$repo = PersonaRepository::make();
 		if ( ! $repo ) {
-			return $this->error_crm( 'cambios', 'La conexión de tu grupo con el CRM no está configurada o no se ha podido comprobar. Un administrador puede revisarla en wp-admin → Grupos Scouts.' );
+			return $this->error_crm( 'cambios', asde_t( 'La conexión de tu grupo con el CRM no está configurada o no se ha podido comprobar. Un administrador puede revisarla en wp-admin → Grupos Scouts.' ) );
 		}
 		$ver     = 'resueltos' === $this->get( 'ver' ) ? 'resueltos' : 'pendientes';
 		$cambios = 'pendientes' === $ver ? Cambios::listado( Cambios::PENDIENTE ) : array_filter( Cambios::listado( '' ), static fn( $c ) => Cambios::PENDIENTE !== $c['estado'] );
@@ -50,7 +50,7 @@ final class CambiosView extends View {
 				$filas[]      = $c;
 			}
 		} catch ( CrmException $e ) {
-			return $this->error_crm( 'cambios', 'No se ha podido consultar el CRM: ' . $e->getMessage() );
+			return $this->error_crm( 'cambios', asde_t( 'No se ha podido consultar el CRM: ' ) . $e->getMessage() );
 		}
 
 		return $this->layout(
@@ -84,25 +84,25 @@ final class CambiosView extends View {
 			$p = null;
 		}
 		if ( ! $c || ! $p || ! $this->puede_revisar( Ambito::actual(), $p ) || (int) $c['propuesto_por'] === get_current_user_id() ) {
-			Notices::add( 'error', 'No puedes revisar ese cambio.' );
+			Notices::add( 'error', asde_t( 'No puedes revisar ese cambio.' ) );
 			$this->redirect( $volver );
 		}
 
 		if ( 'rechazar' === $this->post( 'asde_action' ) ) {
 			$r = Cambios::rechazar( $id, $this->post( 'motivo' ) );
-			is_wp_error( $r ) ? Notices::add( 'error', esc_html( $r->get_error_message() ) ) : Notices::add( 'success', 'Cambio rechazado. Quien lo propuso verá el motivo en la ficha.' );
+			is_wp_error( $r ) ? Notices::add( 'error', esc_html( $r->get_error_message() ) ) : Notices::add( 'success', asde_t( 'Cambio rechazado. Quien lo propuso verá el motivo en la ficha.' ) );
 			$this->redirect( $volver );
 		}
 		try {
 			$actual = (string) ( $repo->valores( $p, array( $c['campo'] ) )[ $c['campo'] ] ?? '' );
 		} catch ( CrmException $e ) {
-			Notices::add( 'error', esc_html( 'No se ha podido consultar el CRM: ' . $e->getMessage() ) );
+			Notices::add( 'error', esc_html( asde_t( 'No se ha podido consultar el CRM: ' ) . $e->getMessage() ) );
 			$this->redirect( $volver );
 		}
 		$r = Cambios::aprobar( $id, $p, $actual, '1' === $this->post( 'forzar' ) );
 		is_wp_error( $r )
 			? Notices::add( 'asde_cambio_conflicto' === $r->get_error_code() ? 'warning' : 'error', esc_html( $r->get_error_message() ) )
-			: Notices::add( 'success', 'Cambio aprobado y guardado en el CRM.' );
+			: Notices::add( 'success', asde_t( 'Cambio aprobado y guardado en el CRM.' ) );
 		$this->redirect( $volver );
 	}
 

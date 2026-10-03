@@ -28,24 +28,24 @@ final class Pain008 {
 	public static function errores( array $cfg, string $fecha_cobro, array $lineas ): array {
 		$e = Config::errores( $cfg );
 		if ( ! preg_match( '/^\d{4}-\d{2}-\d{2}$/', $fecha_cobro ) ) {
-			$e[] = 'La fecha de cobro no es válida.';
+			$e[] = asde_t( 'La fecha de cobro no es válida.' );
 		}
 		if ( ! $lineas ) {
-			$e[] = 'No hay ningún adeudo que incluir.';
+			$e[] = asde_t( 'No hay ningún adeudo que incluir.' );
 		}
 		foreach ( $lineas as $l ) {
 			$ref = $l['familia_n'] ?? '?';
 			if ( (int) $l['centimos'] <= 0 ) {
-				$e[] = sprintf( 'Familia %s: el importe debe ser mayor que 0.', $ref );
+				$e[] = sprintf( asde_t( 'Familia %s: el importe debe ser mayor que 0.' ), $ref );
 			}
 			if ( ! Iban::es_valido( (string) $l['iban'] ) ) {
-				$e[] = sprintf( 'Familia %s: el IBAN de la autorización no es válido (o ya no se conserva).', $ref );
+				$e[] = sprintf( asde_t( 'Familia %s: el IBAN de la autorización no es válido (o ya no se conserva).' ), $ref );
 			}
 			if ( '' === Texto::limpiar( (string) $l['titular'], 70 ) ) {
-				$e[] = sprintf( 'Familia %s: falta el nombre del titular.', $ref );
+				$e[] = sprintf( asde_t( 'Familia %s: falta el nombre del titular.' ), $ref );
 			}
 			if ( ! in_array( $l['secuencia'], array( 'FRST', 'RCUR' ), true ) ) {
-				$e[] = sprintf( 'Familia %s: tipo de secuencia no válido.', $ref );
+				$e[] = sprintf( asde_t( 'Familia %s: tipo de secuencia no válido.' ), $ref );
 			}
 		}
 		return array_values( array_unique( $e ) );

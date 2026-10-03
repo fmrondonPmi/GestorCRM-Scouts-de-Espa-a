@@ -151,15 +151,15 @@ final class Cambios {
 	public static function aprobar( int $id, Persona $p, string $actual, bool $forzar = false ) {
 		$c = self::obtener( $id );
 		if ( ! $c || self::PENDIENTE !== $c['estado'] || $c['socio'] !== $p->num_socio_asde ) {
-			return new \WP_Error( 'asde_cambio', 'Ese cambio ya no está pendiente.' );
+			return new \WP_Error( 'asde_cambio', asde_t( 'Ese cambio ya no está pendiente.' ) );
 		}
 		if ( ! $forzar && ! Escritura::iguales( $actual, $c['anterior'] ) ) {
-			return new \WP_Error( 'asde_cambio_conflicto', 'El dato del CRM ha cambiado desde que se propuso. Revísalo y confirma si quieres aplicarlo igualmente.' );
+			return new \WP_Error( 'asde_cambio_conflicto', asde_t( 'El dato del CRM ha cambiado desde que se propuso. Revísalo y confirma si quieres aplicarlo igualmente.' ) );
 		}
 		$r = Escritura::guardar( $p, array( $c['campo'] => $c['nuevo'] ), 'cambio_aprobado_' . $id );
 		if ( is_wp_error( $r ) || ! in_array( $c['campo'], $r['guardados'], true ) ) {
-			self::marcar( $id, self::ERROR, is_wp_error( $r ) ? $r->get_error_message() : 'El CRM no ha aceptado el valor.' );
-			return is_wp_error( $r ) ? $r : new \WP_Error( 'asde_cambio', 'El CRM no ha aceptado el valor.' );
+			self::marcar( $id, self::ERROR, is_wp_error( $r ) ? $r->get_error_message() : asde_t( 'El CRM no ha aceptado el valor.' ) );
+			return is_wp_error( $r ) ? $r : new \WP_Error( 'asde_cambio', asde_t( 'El CRM no ha aceptado el valor.' ) );
 		}
 		self::marcar( $id, self::APLICADO );
 		do_action( 'asde_cambio_aprobado', $id, $p->num_socio_asde, $c['campo'] );
@@ -169,10 +169,10 @@ final class Cambios {
 	public static function rechazar( int $id, string $motivo ) {
 		$c = self::obtener( $id );
 		if ( ! $c || self::PENDIENTE !== $c['estado'] ) {
-			return new \WP_Error( 'asde_cambio', 'Ese cambio ya no está pendiente.' );
+			return new \WP_Error( 'asde_cambio', asde_t( 'Ese cambio ya no está pendiente.' ) );
 		}
 		if ( '' === trim( $motivo ) ) {
-			return new \WP_Error( 'asde_cambio', 'Indica el motivo del rechazo: se le mostrará a quien lo propuso.' );
+			return new \WP_Error( 'asde_cambio', asde_t( 'Indica el motivo del rechazo: se le mostrará a quien lo propuso.' ) );
 		}
 		self::marcar( $id, self::RECHAZADO, $motivo );
 		do_action( 'asde_cambio_rechazado', $id, $c['socio'], $c['campo'] );
@@ -183,7 +183,7 @@ final class Cambios {
 	public static function cancelar( int $id ) {
 		$c = self::obtener( $id );
 		if ( ! $c || self::PENDIENTE !== $c['estado'] || (int) $c['propuesto_por'] !== get_current_user_id() ) {
-			return new \WP_Error( 'asde_cambio', 'Ese cambio no se puede cancelar.' );
+			return new \WP_Error( 'asde_cambio', asde_t( 'Ese cambio no se puede cancelar.' ) );
 		}
 		self::marcar( $id, self::CANCELADO, 'Retirado por quien lo propuso.' );
 		return true;

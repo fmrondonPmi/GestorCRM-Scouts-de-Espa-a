@@ -54,14 +54,14 @@ final class Escritura {
 			);
 		}
 		if ( ! self::disponible() ) {
-			return new \WP_Error( 'asde_crm_escritura', 'El usuario del CRM de tu grupo no tiene permiso para editar fichas.' );
+			return new \WP_Error( 'asde_crm_escritura', asde_t( 'El usuario del CRM de tu grupo no tiene permiso para editar fichas.' ) );
 		}
 		if ( '' === $p->id ) {
-			return new \WP_Error( 'asde_crm_escritura', 'Ficha sin identificador del CRM.' );
+			return new \WP_Error( 'asde_crm_escritura', asde_t( 'Ficha sin identificador del CRM.' ) );
 		}
 		foreach ( array_keys( $valores ) as $campo ) {
 			if ( in_array( $campo, self::NO_EDITABLES, true ) || ( 'numsocioantiguo_enficha_c' === $campo && ! $interno ) || ! preg_match( '/^[a-z0-9_]+$/', $campo ) ) {
-				return new \WP_Error( 'asde_crm_escritura', sprintf( 'El campo %s no se puede editar desde la web.', $campo ) );
+				return new \WP_Error( 'asde_crm_escritura', sprintf( asde_t( 'El campo %s no se puede editar desde la web.' ), $campo ) );
 			}
 		}
 
@@ -71,7 +71,7 @@ final class Escritura {
 			$leido = $cliente->get_entry( self::MODULO, $p->id, array_keys( $valores ) );
 		} catch ( CrmException $e ) {
 			Logger::log( 'crm_escritura_error', 'socio', $p->num_socio_asde, array( 'campos' => array_keys( $valores ), 'motivo' => $motivo ) );
-			return new \WP_Error( 'asde_crm_escritura', 'El CRM no ha guardado los cambios: ' . $e->getMessage() );
+			return new \WP_Error( 'asde_crm_escritura', asde_t( 'El CRM no ha guardado los cambios: ' ) . $e->getMessage() );
 		}
 
 		$guardados  = array();

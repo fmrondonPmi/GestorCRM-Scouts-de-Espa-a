@@ -64,13 +64,13 @@ final class MovimientosTable {
 	public static function registrar( int $familia_id, string $ronda, string $tipo, string $fecha, float $importe, string $metodo = '', string $referencia = '', string $nota = '', string $origen = 'manual' ) {
 		global $wpdb;
 		if ( ! in_array( $tipo, array( self::PAGO, self::AJUSTE ), true ) || ! Config::es_ronda( $ronda ) || ! preg_match( '/^\d{4}-\d{2}-\d{2}$/', $fecha ) ) {
-			return new \WP_Error( 'asde_mov', 'Datos del movimiento no válidos.' );
+			return new \WP_Error( 'asde_mov', asde_t( 'Datos del movimiento no válidos.' ) );
 		}
 		if ( self::PAGO === $tipo && $importe <= 0 ) {
-			return new \WP_Error( 'asde_mov', 'El importe del pago debe ser mayor que 0.' );
+			return new \WP_Error( 'asde_mov', asde_t( 'El importe del pago debe ser mayor que 0.' ) );
 		}
 		if ( self::AJUSTE === $tipo && ( 0.0 === $importe || '' === trim( $nota ) ) ) {
-			return new \WP_Error( 'asde_mov', 'Un ajuste necesita un importe distinto de 0 y un motivo.' );
+			return new \WP_Error( 'asde_mov', asde_t( 'Un ajuste necesita un importe distinto de 0 y un motivo.' ) );
 		}
 		$wpdb->insert(
 			self::table(),
@@ -88,7 +88,7 @@ final class MovimientosTable {
 				'creado'         => current_time( 'mysql', true ),
 			)
 		);
-		return (int) $wpdb->insert_id ?: new \WP_Error( 'asde_mov', 'No se ha podido guardar el movimiento.' );
+		return (int) $wpdb->insert_id ?: new \WP_Error( 'asde_mov', asde_t( 'No se ha podido guardar el movimiento.' ) );
 	}
 
 	public static function obtener( int $id ): ?array {

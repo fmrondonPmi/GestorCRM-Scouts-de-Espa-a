@@ -12,6 +12,7 @@ use AsdeBalears\AreaPrivada\Usuarios\Contacto;
 use AsdeBalears\AreaPrivada\Usuarios\EmailRechazo;
 use AsdeBalears\AreaPrivada\Usuarios\RegistroEmails;
 use AsdeBalears\AreaPrivada\Usuarios\Usuarios;
+use AsdeBalears\AreaPrivada\Idiomas\Idioma;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -48,18 +49,21 @@ final class Avisos {
 
 	/** Confirmación de la autorización a quien la ha firmado. @return bool Si salió. */
 	public static function autorizacion( array $mandato, \WP_User $firmante ): bool {
-		return self::enviar(
-			$firmante,
-			'Hemos guardado tu autorización de domiciliación SEPA',
-			array(
-				'tipo'     => 'autorizacion',
-				'grupo'    => Grupo::nombre(),
-				'umr'      => $mandato['referencia'],
-				'iban'     => $mandato['iban_mask'],
-				'url'      => Pages::url( 'pagos' ),
-				'contacto' => EmailRechazo::contacto(),
-			),
-			null
+		return Idioma::en(
+			Idioma::de_usuario( $firmante->ID ),
+			static fn() => self::enviar(
+				$firmante,
+				asde_t( 'Hemos guardado tu autorización de domiciliación SEPA' ),
+				array(
+					'tipo'     => 'autorizacion',
+					'grupo'    => Grupo::nombre(),
+					'umr'      => $mandato['referencia'],
+					'iban'     => $mandato['iban_mask'],
+					'url'      => Pages::url( 'pagos' ),
+					'contacto' => EmailRechazo::contacto(),
+				),
+				null
+			)
 		);
 	}
 
@@ -103,7 +107,7 @@ final class Avisos {
 					continue;
 				}
 				$hechos[ $l['familia'] . '|' . strtolower( $email ) ] = true;
-				if ( self::enviar( $user, sprintf( '[%s] Aviso de cargo el %s', Grupo::nombre(), $datos['fecha'] ), $datos, $email ) ) {
+				if ( Idioma::en( Idioma::de_usuario( $user->ID ), static fn() => self::enviar( $user, sprintf( asde_t( '[%s] Aviso de cargo el %s' ), Grupo::nombre(), $datos['fecha'] ), $datos, $email ) ) ) {
 					++$res['enviados'];
 					$enviado = true;
 				}
@@ -154,18 +158,18 @@ final class Avisos {
 		$repo  = PersonaRepository::make();
 		$email = $email ?: Contacto::email( $user, $repo );
 		if ( ! $email ) {
-			RegistroEmails::registrar( $user, RegistroEmails::SEPA, '', $asunto, RegistroEmails::SIN_EMAIL, 'La cuenta no tiene un email al que escribir.', $datos );
+			RegistroEmails::registrar( $user, RegistroEmails::SEPA, '', $asunto, RegistroEmails::SIN_EMAIL, asde_t( 'La cuenta no tiene un email al que escribir.' ), $datos );
 			return false;
 		}
 		$html    = self::html( $datos, Contacto::saludo( $user, $repo ) );
 		$error   = '';
 		$captura = static function ( $e ) use ( &$error ) {
-			$error = is_wp_error( $e ) ? $e->get_error_message() : 'Error desconocido';
+			$error = is_wp_error( $e ) ? $e->get_error_message() : asde_t( 'Error desconocido' );
 		};
 		add_action( 'wp_mail_failed', $captura );
 		$ok = wp_mail( $email, $asunto, $html, array( 'Content-Type: text/html; charset=UTF-8' ) );
 		remove_action( 'wp_mail_failed', $captura );
-		RegistroEmails::registrar( $user, RegistroEmails::SEPA, Contacto::enmascarar( $email ), $asunto, $ok ? RegistroEmails::ENVIADO : RegistroEmails::ERROR, $ok ? '' : ( $error ?: 'El servidor de correo no ha aceptado el email.' ), $datos );
+		RegistroEmails::registrar( $user, RegistroEmails::SEPA, Contacto::enmascarar( $email ), $asunto, $ok ? RegistroEmails::ENVIADO : RegistroEmails::ERROR, $ok ? '' : ( $error ?: asde_t( 'El servidor de correo no ha aceptado el email.' ) ), $datos );
 		return $ok;
 	}
 }

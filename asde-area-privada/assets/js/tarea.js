@@ -87,7 +87,7 @@
 	}
 
 	botones.detener.addEventListener( 'click', function () {
-		if ( ! window.confirm( 'Se detendrá la corrección. Lo ya corregido se queda corregido. ¿Detener?' ) ) {
+		if ( ! window.confirm( asdeT( 'Se detendrá la corrección. Lo ya corregido se queda corregido. ¿Detener?' ) ) ) {
 			return;
 		}
 		botones.detener.disabled = true;

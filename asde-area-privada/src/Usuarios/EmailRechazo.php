@@ -4,6 +4,7 @@ namespace AsdeBalears\AreaPrivada\Usuarios;
 use AsdeBalears\AreaPrivada\Domain\Grupo;
 use AsdeBalears\AreaPrivada\Domain\Grupos;
 use AsdeBalears\AreaPrivada\Frontend\TemplateLoader;
+use AsdeBalears\AreaPrivada\Idiomas\Idioma;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -37,7 +38,7 @@ final class EmailRechazo {
 	}
 
 	public static function asunto(): string {
-		return sprintf( '[%s] Sobre tu solicitud de acceso al área privada', Grupo::nombre() );
+		return sprintf( asde_t( '[%s] Sobre tu solicitud de acceso al área privada' ), Grupo::nombre() );
 	}
 
 	/** @return string HTML del email (la vista previa del registro y el envío usan la misma plantilla). */
@@ -64,12 +65,12 @@ final class EmailRechazo {
 			return array(
 				'estado'  => self::SIN_EMAIL,
 				'destino' => '',
-				'error'   => 'La solicitud no tiene un email válido al que avisar.',
+				'error'   => asde_t( 'La solicitud no tiene un email válido al que avisar.' ),
 			);
 		}
 		$contacto = self::contacto();
-		$asunto   = self::asunto();
-		$html     = self::html( self::saludo( $solicitud ), Grupo::nombre(), $contacto );
+		$idioma   = Idioma::es_valido( $solicitud['datos']['idioma'] ?? null ) ? (string) $solicitud['datos']['idioma'] : Idioma::por_defecto();
+		list( $asunto, $html ) = Idioma::en( $idioma, static fn() => array( self::asunto(), self::html( self::saludo( $solicitud ), Grupo::nombre(), $contacto ) ) );
 		$headers  = array( 'Content-Type: text/html; charset=UTF-8' );
 		if ( '' !== $contacto ) {
 			$headers[] = 'Reply-To: ' . $contacto;
@@ -78,7 +79,7 @@ final class EmailRechazo {
 		// El motivo de un fallo lo da PHPMailer a través de wp_mail_failed.
 		$error   = '';
 		$captura = static function ( $e ) use ( &$error ) {
-			$error = is_wp_error( $e ) ? $e->get_error_message() : 'Error desconocido';
+			$error = is_wp_error( $e ) ? $e->get_error_message() : asde_t( 'Error desconocido' );
 		};
 		add_action( 'wp_mail_failed', $captura );
 		$ok = wp_mail( $email, $asunto, $html, $headers );
@@ -91,7 +92,7 @@ final class EmailRechazo {
 			$destino,
 			$asunto,
 			$ok ? RegistroEmails::ENVIADO : RegistroEmails::ERROR,
-			$ok ? '' : ( $error ?: 'El servidor de correo no ha aceptado el email.' ),
+			$ok ? '' : ( $error ?: asde_t( 'El servidor de correo no ha aceptado el email.' ) ),
 			array(
 				'solicitud' => (int) $solicitud['id'],
 				'grupo'     => Grupo::nombre(),
@@ -101,7 +102,7 @@ final class EmailRechazo {
 		return array(
 			'estado'  => $ok ? self::ENVIADO : self::ERROR,
 			'destino' => $destino,
-			'error'   => $ok ? '' : ( $error ?: 'El servidor de correo no ha aceptado el email.' ),
+			'error'   => $ok ? '' : ( $error ?: asde_t( 'El servidor de correo no ha aceptado el email.' ) ),
 		);
 	}
 }

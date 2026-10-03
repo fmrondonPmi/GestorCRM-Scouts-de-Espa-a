@@ -67,7 +67,7 @@ final class MigracionUsuario {
 				$out['imposibles'][] = array(
 					'id'     => (int) $u->ID,
 					'actual' => $actual,
-					'motivo' => sprintf( 'Ya existe otro usuario %s.', $nuevo ),
+					'motivo' => sprintf( asde_t( 'Ya existe otro usuario %s.' ), $nuevo ),
 				);
 				continue;
 			}
@@ -167,7 +167,7 @@ final class MigracionUsuario {
 	private static function nuevo_login( \WP_User $u, string $destino, array $mapas, ?string &$motivo ): ?string {
 		$partes = Identidad::partes( (string) $u->user_login );
 		if ( ! $partes ) {
-			$motivo = 'Su nombre de usuario no es un nº de socio/a: no se toca.';
+			$motivo = asde_t( 'Su nombre de usuario no es un nº de socio/a: no se toca.' );
 			return null;
 		}
 		list( $base, $sufijo ) = $partes;
@@ -215,13 +215,13 @@ final class MigracionUsuario {
 
 		if ( Organizacion::IDENTIFICADOR_ASDE === $destino ) {
 			if ( null === $base_asde ) {
-				$motivo = 'No se encuentra el nº de Scouts de España de su ficha (comprueba que está en Personas y vuelve a intentarlo).';
+				$motivo = asde_t( 'No se encuentra el nº de Scouts de España de su ficha (comprueba que está en Personas y vuelve a intentarlo).' );
 				return null;
 			}
 			return $base_asde . $sufijo;
 		}
 		if ( null === $base_local || ! $grupo || ! NumeroSocio::es_valido( $base_local, (string) $grupo['numero'] ) ) {
-			$motivo = 'Su ficha no tiene un nº local válido y único (corrígelo en Personas y vuelve a intentarlo).';
+			$motivo = asde_t( 'Su ficha no tiene un nº local válido y único (corrígelo en Personas y vuelve a intentarlo).' );
 			return null;
 		}
 		return $base_local . $sufijo;

@@ -32,7 +32,7 @@ final class SepaView extends TesoreriaBaseView {
 		}
 		$repo = PersonaRepository::make();
 		if ( ! $repo ) {
-			return $this->error_crm( 'tesoreria', 'La conexión de tu grupo con el CRM no está configurada o no se ha podido comprobar. Un administrador puede revisarla en wp-admin → Grupos Scouts.' );
+			return $this->error_crm( 'tesoreria', asde_t( 'La conexión de tu grupo con el CRM no está configurada o no se ha podido comprobar. Un administrador puede revisarla en wp-admin → Grupos Scouts.' ) );
 		}
 		$ronda = $this->ronda();
 		try {
@@ -42,7 +42,7 @@ final class SepaView extends TesoreriaBaseView {
 			}
 			$html = $id ? $this->remesa( $repo, $id, $ronda ) : $this->panel( $repo, $ronda );
 		} catch ( CrmException $e ) {
-			return $this->error_crm( 'tesoreria', 'No se ha podido consultar el CRM: ' . $e->getMessage() );
+			return $this->error_crm( 'tesoreria', asde_t( 'No se ha podido consultar el CRM: ' ) . $e->getMessage() );
 		}
 		return $this->layout( 'tesoreria', $this->subnav( 'sepa', $ronda ) . $html );
 	}
@@ -96,7 +96,7 @@ final class SepaView extends TesoreriaBaseView {
 	private function remesa( PersonaRepository $repo, int $id, string $ronda ): string {
 		$r = Remesas::obtener( $id );
 		if ( ! $r ) {
-			return $this->tpl( 'comun/avisos', array( 'avisos' => array( array( 'error', 'Esa remesa no existe.' ) ) ) ) . $this->panel( $repo, $ronda );
+			return $this->tpl( 'comun/avisos', array( 'avisos' => array( array( 'error', asde_t( 'Esa remesa no existe.' ) ) ) ) ) . $this->panel( $repo, $ronda );
 		}
 		$lineas   = Remesas::lineas( $r );
 		$familias = array();
@@ -143,13 +143,13 @@ final class SepaView extends TesoreriaBaseView {
 				check_admin_referer( 'asde_sepa_generar' );
 				$repo = PersonaRepository::make();
 				if ( ! $repo ) {
-					Notices::add( 'error', 'La conexión con el CRM no está disponible.' );
+					Notices::add( 'error', asde_t( 'La conexión con el CRM no está disponible.' ) );
 					$this->redirect( $volver );
 				}
 				try {
 					$prep = Remesas::preparar( $repo, $ronda, $this->post( 'plazo' ) );
 				} catch ( CrmException $e ) {
-					Notices::add( 'error', esc_html( 'No se ha podido consultar el CRM: ' . $e->getMessage() ) );
+					Notices::add( 'error', esc_html( asde_t( 'No se ha podido consultar el CRM: ' ) . $e->getMessage() ) );
 					$this->redirect( $volver );
 				}
 				$nueva = Remesas::crear( $prep, $ronda, $this->post( 'fecha' ), $this->post( 'concepto' ), get_current_user_id() );
@@ -158,7 +158,7 @@ final class SepaView extends TesoreriaBaseView {
 					$this->redirect( add_query_arg( array( 'preparar' => '1', 'plazo' => $this->post( 'plazo' ), 'fecha' => $this->post( 'fecha' ), 'concepto' => $this->post( 'concepto' ) ), $volver ) );
 				}
 				$r = Remesas::obtener( $nueva );
-				Notices::add( 'success', sprintf( 'Remesa <strong>%s</strong> creada: %s por %s. Descarga el fichero y súbelo al banco; después, márcala como enviada.', esc_html( $r['numero'] ), Remesas::adeudos( (int) $r['adeudos'] ), esc_html( Calculadora::euros( $r['total'] ) ) ) );
+				Notices::add( 'success', sprintf( asde_t( 'Remesa <strong>%s</strong> creada: %s por %s. Descarga el fichero y súbelo al banco; después, márcala como enviada.' ), esc_html( $r['numero'] ), Remesas::adeudos( (int) $r['adeudos'] ), esc_html( Calculadora::euros( $r['total'] ) ) ) );
 				$this->redirect( $this->url( 'sepa', array( 'ronda' => $ronda, 'remesa' => (string) $nueva ) ) );
 				break;
 
@@ -171,13 +171,13 @@ final class SepaView extends TesoreriaBaseView {
 				check_admin_referer( 'asde_sepa_remesa_' . $id );
 				$r = Remesas::obtener( $id );
 				if ( ! $r || Remesas::ANULADA === $r['estado'] ) {
-					Notices::add( 'error', 'Esa remesa no existe o está anulada.' );
+					Notices::add( 'error', asde_t( 'Esa remesa no existe o está anulada.' ) );
 				} else {
 					$a = Avisos::preaviso( $r );
 					Logger::log( 'sepa_preaviso_enviado', 'remesa', $r['numero'], $a );
-					Notices::add( 'success', sprintf( 'Aviso previo enviado: %d emails a %d familias.', (int) $a['enviados'], (int) $a['familias'] ) );
+					Notices::add( 'success', sprintf( asde_t( 'Aviso previo enviado: %d emails a %d familias.' ), (int) $a['enviados'], (int) $a['familias'] ) );
 					if ( $a['sin_email'] ) {
-						Notices::add( 'warning', sprintf( 'A %d familias no se ha podido avisar por email (sin email o sin cuenta): avísalas por otro medio.', (int) $a['sin_email'] ) );
+						Notices::add( 'warning', sprintf( asde_t( 'A %d familias no se ha podido avisar por email (sin email o sin cuenta): avísalas por otro medio.' ), (int) $a['sin_email'] ) );
 					}
 				}
 				$this->redirect( $this->url( 'sepa', array( 'ronda' => $ronda, 'remesa' => (string) $id ) ) );
@@ -186,16 +186,16 @@ final class SepaView extends TesoreriaBaseView {
 			case 'sepa_enviada':
 				check_admin_referer( 'asde_sepa_remesa_' . $id );
 				Remesas::marcar_enviada( $id, get_current_user_id() )
-					? Notices::add( 'success', 'Remesa marcada como enviada al banco. Las autorizaciones estrenadas pasan a «recurrentes» (RCUR) para la próxima. Cuando el banco cobre, registra los cobros aquí.' )
-					: Notices::add( 'error', 'Esa remesa no se puede marcar como enviada.' );
+					? Notices::add( 'success', asde_t( 'Remesa marcada como enviada al banco. Las autorizaciones estrenadas pasan a «recurrentes» (RCUR) para la próxima. Cuando el banco cobre, registra los cobros aquí.' ) )
+					: Notices::add( 'error', asde_t( 'Esa remesa no se puede marcar como enviada.' ) );
 				$this->redirect( $this->url( 'sepa', array( 'ronda' => $ronda, 'remesa' => (string) $id ) ) );
 				break;
 
 			case 'sepa_anular':
 				check_admin_referer( 'asde_sepa_remesa_' . $id );
 				Remesas::anular( $id, get_current_user_id() )
-					? Notices::add( 'success', 'Remesa anulada. Sus familias vuelven a poder incluirse en otra.' )
-					: Notices::add( 'error', 'Solo se puede anular una remesa que aún no se ha enviado al banco.' );
+					? Notices::add( 'success', asde_t( 'Remesa anulada. Sus familias vuelven a poder incluirse en otra.' ) )
+					: Notices::add( 'error', asde_t( 'Solo se puede anular una remesa que aún no se ha enviado al banco.' ) );
 				$this->redirect( $volver );
 				break;
 
@@ -206,7 +206,7 @@ final class SepaView extends TesoreriaBaseView {
 					Notices::add( 'error', esc_html( $e ) );
 				}
 				if ( $res['cobrados'] || $res['devueltos'] ) {
-					Notices::add( 'success', sprintf( 'Registrados %d cobros como pagos de las familias%s.', (int) $res['cobrados'], $res['devueltos'] ? sprintf( ' y %d devoluciones', (int) $res['devueltos'] ) : '' ) );
+					Notices::add( 'success', sprintf( asde_t( 'Registrados %d cobros como pagos de las familias%s.' ), (int) $res['cobrados'], $res['devueltos'] ? sprintf( asde_t( ' y %d devoluciones' ), (int) $res['devueltos'] ) : '' ) );
 				}
 				$this->redirect( $this->url( 'sepa', array( 'ronda' => $ronda, 'remesa' => (string) $id ) ) );
 				break;
@@ -215,15 +215,15 @@ final class SepaView extends TesoreriaBaseView {
 				check_admin_referer( 'asde_sepa_revocar' );
 				$m = Mandatos::obtener( (int) $this->post( 'mandato' ) );
 				if ( $m && Mandatos::revocar( $m['id'], get_current_user_id(), 'Anulada por Tesorería. ' . $this->post( 'motivo' ) ) ) {
-					Notices::add( 'success', sprintf( 'Autorización %s anulada.', esc_html( $m['referencia'] ) ) );
+					Notices::add( 'success', sprintf( asde_t( 'Autorización %s anulada.' ), esc_html( $m['referencia'] ) ) );
 				} else {
-					Notices::add( 'error', 'No se ha podido anular esa autorización.' );
+					Notices::add( 'error', asde_t( 'No se ha podido anular esa autorización.' ) );
 				}
 				$this->redirect( $volver );
 				break;
 
 			default:
-				Notices::add( 'error', 'Petición no válida.' );
+				Notices::add( 'error', asde_t( 'Petición no válida.' ) );
 				$this->redirect( $volver );
 		}
 	}
@@ -251,9 +251,9 @@ final class SepaView extends TesoreriaBaseView {
 		Logger::log( 'sepa_configurada', 'grupo', \AsdeBalears\AreaPrivada\Domain\Grupo::numero(), array( 'activo' => $nueva['activo'] ) );
 		$errores = SepaConfig::errores( SepaConfig::de() );
 		if ( $errores ) {
-			Notices::add( 'warning', 'Guardado, pero todavía falta algo para poder domiciliar: ' . esc_html( implode( ' ', $errores ) ) );
+			Notices::add( 'warning', asde_t( 'Guardado, pero todavía falta algo para poder domiciliar: ' ) . esc_html( implode( ' ', $errores ) ) );
 		} else {
-			Notices::add( 'success', $nueva['activo'] ? 'Datos del acreedor guardados. Las familias ya pueden firmar su autorización en «Mis pagos».' : 'Datos del acreedor guardados. Las familias aún no ven la opción: marca «Ofrecer la domiciliación a las familias» cuando quieras.' );
+			Notices::add( 'success', $nueva['activo'] ? asde_t( 'Datos del acreedor guardados. Las familias ya pueden firmar su autorización en «Mis pagos».' ) : asde_t( 'Datos del acreedor guardados. Las familias aún no ven la opción: marca «Ofrecer la domiciliación a las familias» cuando quieras.' ) );
 		}
 	}
 
@@ -261,7 +261,7 @@ final class SepaView extends TesoreriaBaseView {
 	private function descargar( int $id ): void {
 		$r = Remesas::obtener( $id );
 		if ( ! $r || Remesas::ANULADA === $r['estado'] ) {
-			Notices::add( 'error', 'Esa remesa no existe o está anulada.' );
+			Notices::add( 'error', asde_t( 'Esa remesa no existe o está anulada.' ) );
 			$this->redirect( $this->url( 'sepa' ) );
 		}
 		$xml = Remesas::xml( $r );

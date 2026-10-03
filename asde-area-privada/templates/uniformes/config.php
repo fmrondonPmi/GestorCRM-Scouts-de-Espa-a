@@ -12,7 +12,7 @@ defined( 'ABSPATH' ) || exit;
 $euros  = static fn( ?float $v ): string => null === $v ? '' : number_format( $v, 2, ',', '' );
 $imagen = static function ( string $campo, int $adjunto, string $alt ): string {
 	$url  = Config::imagen( $adjunto, 'thumbnail' );
-	$html = '' !== $url ? '<img class="asde-config-img" src="' . esc_url( $url ) . '" alt="' . esc_attr( $alt ) . '"> <label class="asde-choice asde-choice--inline"><input type="checkbox" name="' . esc_attr( $campo ) . '_quitar" value="1"><span>Quitar</span></label><br>' : '';
+	$html = '' !== $url ? '<img class="asde-config-img" src="' . esc_url( $url ) . '" alt="' . esc_attr( $alt ) . '"> <label class="asde-choice asde-choice--inline"><input type="checkbox" name="' . esc_attr( $campo ) . '_quitar" value="1"><span>' . esc_html( asde_t( 'Quitar' ) ) . '</span></label><br>' : '';
 	return $html . '<input type="file" name="' . esc_attr( $campo ) . '" accept="image/png,image/jpeg,image/webp,image/gif">';
 };
 ?>
@@ -21,69 +21,69 @@ $imagen = static function ( string $campo, int $adjunto, string $alt ): string {
 	<input type="hidden" name="asde_action" value="uniformes_config">
 
 	<section class="asde-card">
-		<h2 class="asde-card__title">Pedidos de uniforme · configuración</h2>
-		<label class="asde-choice"><input type="checkbox" name="abierto" value="1" <?php checked( $cfg['abierto'] ); ?>><span>Se aceptan pedidos (si no, las familias ven que están cerrados)</span></label>
+		<h2 class="asde-card__title"><?php asde_e( 'Pedidos de uniforme · configuración' ); ?></h2>
+		<label class="asde-choice"><input type="checkbox" name="abierto" value="1" <?php checked( $cfg['abierto'] ); ?>><span><?php asde_e( 'Se aceptan pedidos (si no, las familias ven que están cerrados)' ); ?></span></label>
 		<p>
-			<label for="asde-uc-precio">Precio de la camisa (€)</label>
+			<label for="asde-uc-precio"><?php asde_e( 'Precio de la camisa (€)' ); ?></label>
 			<input type="text" id="asde-uc-precio" name="precio_camisa" value="<?php echo esc_attr( $euros( $cfg['precio_camisa'] ) ); ?>" inputmode="decimal" size="8">
 		</p>
 		<p>
-			<label for="asde-uc-texto">Cómo pagar (lo ven las familias al pedir)</label>
-			<textarea id="asde-uc-texto" name="texto_pago" rows="3" maxlength="600" placeholder="Por ejemplo: en efectivo en el local los sábados, o por ingreso en la cuenta ES00 0000… indicando el nº de pedido."><?php echo esc_textarea( $cfg['texto_pago'] ); ?></textarea>
+			<label for="asde-uc-texto"><?php asde_e( 'Cómo pagar (lo ven las familias al pedir)' ); ?></label>
+			<textarea id="asde-uc-texto" name="texto_pago" rows="3" maxlength="600" placeholder="<?php echo asde_a( 'Por ejemplo: en efectivo en el local los sábados, o por ingreso en la cuenta ES00 0000… indicando el nº de pedido.' ); ?>"><?php echo esc_textarea( $cfg['texto_pago'] ); ?></textarea>
 		</p>
 	</section>
 
 	<section class="asde-card">
-		<h3 class="asde-card__title">Modelos y tallas</h3>
+		<h3 class="asde-card__title"><?php asde_e( 'Modelos y tallas' ); ?></h3>
 		<?php foreach ( $cfg['modelos'] as $id => $m ) : ?>
 			<fieldset>
 				<legend><?php echo esc_html( $m['nombre'] ); ?></legend>
 				<p>
-					<label>Nombre <input type="text" name="modelo_nombre_<?php echo esc_attr( $id ); ?>" value="<?php echo esc_attr( $m['nombre'] ); ?>" maxlength="60"></label>
+					<label><?php asde_e( 'Nombre' ); ?> <input type="text" name="modelo_nombre_<?php echo esc_attr( $id ); ?>" value="<?php echo esc_attr( $m['nombre'] ); ?>" maxlength="60"></label>
 				</p>
 				<p>
-					<label>Tallas, separadas por comas <input type="text" name="modelo_tallas_<?php echo esc_attr( $id ); ?>" value="<?php echo esc_attr( implode( ', ', $m['tallas'] ) ); ?>" size="50"></label>
+					<label><?php asde_e( 'Tallas, separadas por comas' ); ?> <input type="text" name="modelo_tallas_<?php echo esc_attr( $id ); ?>" value="<?php echo esc_attr( implode( ', ', $m['tallas'] ) ); ?>" size="50"></label>
 				</p>
-				<p>Guía de tallas (imagen con las medidas):<br><?php echo $imagen( 'guia_' . $id, $m['guia'], 'Guía de tallas: ' . $m['nombre'] ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+				<p><?php asde_e( 'Guía de tallas (imagen con las medidas):' ); ?><br><?php echo $imagen( 'guia_' . $id, $m['guia'], asde_t( 'Guía de tallas: ' ) . $m['nombre'] ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
 			</fieldset>
 		<?php endforeach; ?>
 		<p>
-			<label for="asde-uc-especiales">Tallas especiales (se marcan como tales al pedir)</label>
+			<label for="asde-uc-especiales"><?php asde_e( 'Tallas especiales (se marcan como tales al pedir)' ); ?></label>
 			<input type="text" id="asde-uc-especiales" name="tallas_especiales" value="<?php echo esc_attr( implode( ', ', $cfg['tallas_especiales'] ) ); ?>" size="20">
 		</p>
 	</section>
 
 	<section class="asde-card">
-		<h3 class="asde-card__title">Insignias</h3>
-		<p class="asde-muted">Si dejas el precio vacío, sale como «precio por confirmar»: se puede pedir, y al validar el pago Tesorería cobra el importe real.</p>
+		<h3 class="asde-card__title"><?php asde_e( 'Insignias' ); ?></h3>
+		<p class="asde-muted"><?php asde_e( 'Si dejas el precio vacío, sale como «precio por confirmar»: se puede pedir, y al validar el pago Tesorería cobra el importe real.' ); ?></p>
 		<?php foreach ( $cfg['insignias'] as $id => $i ) : ?>
 			<fieldset class="asde-insignia-config">
 				<legend><?php echo esc_html( $i['nombre'] ); ?></legend>
 				<p class="asde-form__fila">
-					<label>Nombre <input type="text" name="insignia_nombre_<?php echo esc_attr( $id ); ?>" value="<?php echo esc_attr( $i['nombre'] ); ?>" maxlength="80"></label>
-					<label>Dónde va <input type="text" name="insignia_lugar_<?php echo esc_attr( $id ); ?>" value="<?php echo esc_attr( $i['lugar'] ); ?>" maxlength="60" placeholder="p. ej. Brazo derecho"></label>
-					<label>Precio (€) <input type="text" name="insignia_precio_<?php echo esc_attr( $id ); ?>" value="<?php echo esc_attr( $euros( $i['precio'] ) ); ?>" inputmode="decimal" size="12" placeholder="por confirmar"></label>
+					<label><?php asde_e( 'Nombre' ); ?> <input type="text" name="insignia_nombre_<?php echo esc_attr( $id ); ?>" value="<?php echo esc_attr( $i['nombre'] ); ?>" maxlength="80"></label>
+					<label><?php asde_e( 'Dónde va' ); ?> <input type="text" name="insignia_lugar_<?php echo esc_attr( $id ); ?>" value="<?php echo esc_attr( $i['lugar'] ); ?>" maxlength="60" placeholder="<?php echo asde_a( 'p. ej. Brazo derecho' ); ?>"></label>
+					<label><?php asde_e( 'Precio (€)' ); ?> <input type="text" name="insignia_precio_<?php echo esc_attr( $id ); ?>" value="<?php echo esc_attr( $euros( $i['precio'] ) ); ?>" inputmode="decimal" size="12" placeholder="<?php echo asde_a( 'por confirmar' ); ?>"></label>
 				</p>
-				<p>Imagen:<br><?php echo $imagen( 'insignia_imagen_' . $id, $i['imagen'], $i['nombre'] ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+				<p><?php asde_e( 'Imagen:' ); ?><br><?php echo $imagen( 'insignia_imagen_' . $id, $i['imagen'], $i['nombre'] ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
 				<p>
-					<label class="asde-choice asde-choice--inline"><input type="checkbox" name="insignia_activa_<?php echo esc_attr( $id ); ?>" value="1" <?php checked( $i['activa'] ); ?>><span>Se puede pedir</span></label>
-					<label class="asde-choice asde-choice--inline"><input type="checkbox" name="insignia_quitar_<?php echo esc_attr( $id ); ?>" value="1"><span>Quitarla de la lista</span></label>
+					<label class="asde-choice asde-choice--inline"><input type="checkbox" name="insignia_activa_<?php echo esc_attr( $id ); ?>" value="1" <?php checked( $i['activa'] ); ?>><span><?php asde_e( 'Se puede pedir' ); ?></span></label>
+					<label class="asde-choice asde-choice--inline"><input type="checkbox" name="insignia_quitar_<?php echo esc_attr( $id ); ?>" value="1"><span><?php asde_e( 'Quitarla de la lista' ); ?></span></label>
 				</p>
 			</fieldset>
 		<?php endforeach; ?>
 		<?php for ( $n = 0; $n < 2; $n++ ) : ?>
 			<fieldset class="asde-insignia-config">
-				<legend>Nueva insignia</legend>
+				<legend><?php asde_e( 'Nueva insignia' ); ?></legend>
 				<p class="asde-form__fila">
-					<label>Nombre <input type="text" name="nueva_nombre_<?php echo (int) $n; ?>" maxlength="80"></label>
-					<label>Dónde va <input type="text" name="nueva_lugar_<?php echo (int) $n; ?>" maxlength="60"></label>
-					<label>Precio (€) <input type="text" name="nueva_precio_<?php echo (int) $n; ?>" inputmode="decimal" size="12" placeholder="por confirmar"></label>
+					<label><?php asde_e( 'Nombre' ); ?> <input type="text" name="nueva_nombre_<?php echo (int) $n; ?>" maxlength="80"></label>
+					<label><?php asde_e( 'Dónde va' ); ?> <input type="text" name="nueva_lugar_<?php echo (int) $n; ?>" maxlength="60"></label>
+					<label><?php asde_e( 'Precio (€)' ); ?> <input type="text" name="nueva_precio_<?php echo (int) $n; ?>" inputmode="decimal" size="12" placeholder="<?php echo asde_a( 'por confirmar' ); ?>"></label>
 				</p>
-				<p>Imagen:<br><input type="file" name="nueva_imagen_<?php echo (int) $n; ?>" accept="image/png,image/jpeg,image/webp,image/gif"></p>
+				<p><?php asde_e( 'Imagen:' ); ?><br><input type="file" name="nueva_imagen_<?php echo (int) $n; ?>" accept="image/png,image/jpeg,image/webp,image/gif"></p>
 			</fieldset>
 		<?php endfor; ?>
-		<p>Guía de colocación («dónde va cada insignia»):<br><?php echo $imagen( 'guia_insignias', $cfg['guia_insignias'], 'Guía de colocación de las insignias' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+		<p><?php asde_e( 'Guía de colocación («dónde va cada insignia»):' ); ?><br><?php echo $imagen( 'guia_insignias', $cfg['guia_insignias'], asde_t( 'Guía de colocación de las insignias' ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
 	</section>
 
-	<p><button type="submit" class="button">Guardar</button></p>
+	<p><button type="submit" class="button"><?php asde_e( 'Guardar' ); ?></button></p>
 </form>

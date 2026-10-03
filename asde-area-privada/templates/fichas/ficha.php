@@ -103,7 +103,7 @@ $control = static function ( string $campo, array $f ) use ( $pendientes ): stri
 };
 ?>
 <?php if ( count( $representados ) > 1 && $perm->es_representado() ) : ?>
-	<nav class="asde-subnav" aria-label="Menores a tu cargo">
+	<nav class="asde-subnav" aria-label="<?php echo asde_a( 'Menores a tu cargo' ); ?>">
 		<ul class="asde-subnav__tabs">
 			<?php foreach ( $representados as $n => $r ) : ?>
 				<li><a href="<?php echo esc_url( add_query_arg( 'socio', $n, $url ) ); ?>"<?php echo $n === $p->num_socio_asde ? ' class="is-active" aria-current="page"' : ''; ?>><?php echo esc_html( $r->nombre ); ?></a></li>
@@ -124,27 +124,27 @@ $control = static function ( string $campo, array $f ) use ( $pendientes ): stri
 		</div>
 		<?php if ( current_user_can( 'asde_manage_users' ) ) : ?>
 			<span class="asde-actions">
-				<a href="<?php echo esc_url( add_query_arg( 'socio', $p->num_socio_asde, $url_alta ) ); ?>" data-asde-modal>Acceso web</a>
-				<a class="asde-solo-pagina" href="<?php echo esc_url( $url_personas ); ?>">← Personas</a>
+				<a href="<?php echo esc_url( add_query_arg( 'socio', $p->num_socio_asde, $url_alta ) ); ?>" data-asde-modal><?php asde_e( 'Acceso web' ); ?></a>
+				<a class="asde-solo-pagina" href="<?php echo esc_url( $url_personas ); ?>"><?php asde_e( '← Personas' ); ?></a>
 			</span>
 		<?php endif; ?>
 	</header>
 	<dl class="asde-datos">
 		<div>
-			<dt><?php echo Identidad::es_asde() ? 'Nº socio/a Scouts de España' : 'Nº socio/a'; ?></dt>
+			<dt><?php echo Identidad::es_asde() ? asde_t( 'Nº socio/a Scouts de España' ) : asde_t( 'Nº socio/a' ); ?></dt>
 			<dd><?php echo Numeros::html( $p, $numero ); // phpcs:ignore WordPress.Security.EscapeOutput ?></dd>
 		</div>
-		<div><dt>Edad</dt><dd><?php echo null === $p->edad() ? '—' : (int) $p->edad() . ' años'; ?></dd></div>
+		<div><dt><?php asde_e( 'Edad' ); ?></dt><dd><?php echo null === $p->edad() ? '—' : sprintf( asde_t( '%d años' ), (int) $p->edad() ); ?></dd></div>
 	</dl>
 
 	<?php if ( ! $escritura ) : ?>
-		<div class="asde-notice asde-notice--info" role="status">El usuario del CRM de tu grupo no tiene permiso para editar fichas: todos los datos son de <strong>solo lectura</strong>.</div>
+		<div class="asde-notice asde-notice--info" role="status"><?php asde_e( 'El usuario del CRM de tu grupo no tiene permiso para editar fichas: todos los datos son de' ); ?> <strong><?php asde_e( 'solo lectura' ); ?></strong>.</div>
 	<?php elseif ( ! $editables ) : ?>
-		<p class="asde-muted">🔒 Todos los datos de esta ficha son de solo lectura para ti.</p>
+		<p class="asde-muted"><?php asde_e( '🔒 Todos los datos de esta ficha son de solo lectura para ti.' ); ?></p>
 	<?php elseif ( $propone ) : ?>
-		<div class="asde-notice asde-notice--info" role="status">Los cambios que hagas los revisará la Secretaría o un scouter de su sección antes de guardarse en el CRM.</div>
+		<div class="asde-notice asde-notice--info" role="status"><?php asde_e( 'Los cambios que hagas los revisará la Secretaría o un scouter de su sección antes de guardarse en el CRM.' ); ?></div>
 	<?php else : ?>
-		<p class="asde-muted">Los cambios se guardan directamente en el CRM. 🔒 = solo lectura (pasa el ratón por encima para ver el motivo).</p>
+		<p class="asde-muted"><?php asde_e( 'Los cambios se guardan directamente en el CRM. 🔒 = solo lectura (pasa el ratón por encima para ver el motivo).' ); ?></p>
 	<?php endif; ?>
 </section>
 
@@ -153,10 +153,10 @@ $control = static function ( string $campo, array $f ) use ( $pendientes ): stri
 	<input type="hidden" name="asde_action" value="guardar_ficha">
 	<input type="hidden" name="socio" value="<?php echo esc_attr( $p->num_socio_asde ); ?>">
 	<p class="asde-ficha__plegar" hidden>
-		<button type="button" class="asde-btn-link" data-asde-plegar="todo">Contraer todo</button>
-		<button type="button" class="asde-btn-link" data-asde-plegar="nada">Expandir todo</button>
+		<button type="button" class="asde-btn-link" data-asde-plegar="todo"><?php asde_e( 'Contraer todo' ); ?></button>
+		<button type="button" class="asde-btn-link" data-asde-plegar="nada"><?php asde_e( 'Expandir todo' ); ?></button>
 	</p>
-	<?php foreach ( CamposFicha::GRUPOS as $grupo => $titulo ) : ?>
+	<?php foreach ( asde_ta( CamposFicha::GRUPOS ) as $grupo => $titulo ) : ?>
 		<?php $del_grupo = array_filter( $campos, static fn( $f ) => $f['grupo'] === $grupo ); ?>
 		<?php if ( ! $del_grupo ) : ?>
 			<?php continue; ?>
@@ -164,7 +164,7 @@ $control = static function ( string $campo, array $f ) use ( $pendientes ): stri
 		<details class="asde-card asde-plegable" id="apartado-<?php echo esc_attr( $grupo ); ?>" data-grupo="<?php echo esc_attr( $grupo ); ?>" open>
 			<summary class="asde-plegable__titulo">
 				<h3><?php echo esc_html( $titulo ); ?></h3>
-				<span class="asde-plegable__resumen asde-muted"><?php echo esc_html( sprintf( _n( '%d dato', '%d datos', count( $del_grupo ), 'asde-area-privada' ), count( $del_grupo ) ) ); ?></span>
+				<span class="asde-plegable__resumen asde-muted"><?php echo esc_html( sprintf( asde_n( '%d dato', '%d datos', count( $del_grupo ) ), count( $del_grupo ) ) ); ?></span>
 			</summary>
 			<div class="asde-grid-2">
 				<?php foreach ( $del_grupo as $campo => $f ) : ?>
@@ -173,14 +173,14 @@ $control = static function ( string $campo, array $f ) use ( $pendientes ): stri
 							<?php echo esc_html( $f['etiqueta'] ); ?>
 							<?php if ( PermisosFicha::VER === $f['accion'] ) : ?>
 								<span class="asde-ro-icon" aria-hidden="true" title="<?php echo esc_attr( $f['motivo'] ); ?>">🔒</span>
-								<span class="screen-reader-text">(solo lectura: <?php echo esc_html( $f['motivo'] ); ?>)</span>
+								<span class="screen-reader-text"><?php asde_e( '(solo lectura:' ); ?> <?php echo esc_html( $f['motivo'] ); ?>)</span>
 							<?php elseif ( PermisosFicha::PROPONER === $f['accion'] ) : ?>
-								<span class="asde-help asde-help--inline">(se revisará)</span>
+								<span class="asde-help asde-help--inline"><?php asde_e( '(se revisará)' ); ?></span>
 							<?php endif; ?>
 						</label>
 						<?php echo $control( $campo, $f ); // phpcs:ignore WordPress.Security.EscapeOutput -- escapado en $control. ?>
 						<?php if ( isset( $pendientes[ $campo ] ) ) : ?>
-							<span class="asde-help asde-help--warning">Cambio pendiente de aprobación: «<?php echo esc_html( FichaService::mostrar( $pendientes[ $campo ]['nuevo'], $f['meta'] ) ); ?>»</span>
+							<span class="asde-help asde-help--warning"><?php asde_e( 'Cambio pendiente de aprobación: «' ); ?><?php echo esc_html( FichaService::mostrar( $pendientes[ $campo ]['nuevo'], $f['meta'] ) ); ?>»</span>
 						<?php endif; ?>
 					</p>
 				<?php endforeach; ?>
@@ -188,24 +188,24 @@ $control = static function ( string $campo, array $f ) use ( $pendientes ): stri
 		</details>
 	<?php endforeach; ?>
 	<?php if ( $editables ) : ?>
-		<p class="asde-ficha__guardar"><button type="submit" class="button"><?php echo $propone ? 'Enviar cambios para su aprobación' : 'Guardar cambios en el CRM'; ?></button></p>
+		<p class="asde-ficha__guardar"><button type="submit" class="button"><?php echo $propone ? asde_t( 'Enviar cambios para su aprobación' ) : asde_t( 'Guardar cambios en el CRM' ); ?></button></p>
 	<?php endif; ?>
 </form>
 
 <?php if ( $cambios ) : ?>
 	<section class="asde-card">
-		<h3>Cambios propuestos en esta ficha</h3>
+		<h3><?php asde_e( 'Cambios propuestos en esta ficha' ); ?></h3>
 		<table class="asde-table">
-			<thead><tr><th scope="col">Fecha</th><th scope="col">Dato</th><th scope="col">Nuevo valor</th><th scope="col">Estado</th><th scope="col"><span class="screen-reader-text">Acciones</span></th></tr></thead>
+			<thead><tr><th scope="col"><?php asde_e( 'Fecha' ); ?></th><th scope="col"><?php asde_e( 'Dato' ); ?></th><th scope="col"><?php asde_e( 'Nuevo valor' ); ?></th><th scope="col"><?php asde_e( 'Estado' ); ?></th><th scope="col"><span class="screen-reader-text"><?php asde_e( 'Acciones' ); ?></span></th></tr></thead>
 			<tbody>
 				<?php foreach ( array_slice( $cambios, 0, 20 ) as $c ) : ?>
 					<?php $f = $campos[ $c['campo'] ] ?? array( 'etiqueta' => $c['campo'], 'meta' => array() ); ?>
 					<tr>
-						<td data-label="Fecha"><?php echo esc_html( wp_date( 'd/m/Y H:i', strtotime( $c['propuesto_en'] . ' UTC' ) ) ); ?></td>
-						<td data-label="Dato"><?php echo esc_html( $f['etiqueta'] ); ?></td>
-						<td data-label="Nuevo valor"><?php echo esc_html( FichaService::mostrar( $c['nuevo'], $f['meta'] ) ); ?></td>
-						<td data-label="Estado">
-							<?php echo esc_html( Cambios::ESTADOS[ $c['estado'] ] ?? $c['estado'] ); ?>
+						<td data-label="<?php echo asde_a( 'Fecha' ); ?>"><?php echo esc_html( wp_date( 'd/m/Y H:i', strtotime( $c['propuesto_en'] . ' UTC' ) ) ); ?></td>
+						<td data-label="<?php echo asde_a( 'Dato' ); ?>"><?php echo esc_html( $f['etiqueta'] ); ?></td>
+						<td data-label="<?php echo asde_a( 'Nuevo valor' ); ?>"><?php echo esc_html( FichaService::mostrar( $c['nuevo'], $f['meta'] ) ); ?></td>
+						<td data-label="<?php echo asde_a( 'Estado' ); ?>">
+							<?php echo esc_html( asde_t( Cambios::ESTADOS[ $c['estado'] ] ?? $c['estado'] ) ); ?>
 							<?php if ( '' !== $c['motivo'] && in_array( $c['estado'], array( Cambios::RECHAZADO, Cambios::ERROR ), true ) ) : ?>
 								<br><span class="asde-help asde-help--warning"><?php echo esc_html( $c['motivo'] ); ?></span>
 							<?php endif; ?>
@@ -217,10 +217,10 @@ $control = static function ( string $campo, array $f ) use ( $pendientes ): stri
 									<input type="hidden" name="asde_action" value="cancelar_cambio">
 									<input type="hidden" name="cambio" value="<?php echo (int) $c['id']; ?>">
 									<input type="hidden" name="socio" value="<?php echo esc_attr( $p->num_socio_asde ); ?>">
-									<button type="submit" class="asde-btn-link">Retirar</button>
+									<button type="submit" class="asde-btn-link"><?php asde_e( 'Retirar' ); ?></button>
 								</form>
 							<?php elseif ( Cambios::PENDIENTE === $c['estado'] && current_user_can( 'asde_approve_changes' ) ) : ?>
-								<a href="<?php echo esc_url( $url_cambios ); ?>">Revisar</a>
+								<a href="<?php echo esc_url( $url_cambios ); ?>"><?php asde_e( 'Revisar' ); ?></a>
 							<?php endif; ?>
 						</td>
 					</tr>

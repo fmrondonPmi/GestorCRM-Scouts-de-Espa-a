@@ -11,24 +11,23 @@
 defined( 'ABSPATH' ) || exit;
 ?>
 <section class="asde-card">
-	<h2>Seguridad de la cuenta</h2>
+	<h2><?php asde_e( 'Seguridad de la cuenta' ); ?></h2>
 	<?php if ( ! $disponible ) : ?>
-		<p>La verificación en dos pasos no está disponible ahora mismo.</p>
+		<p><?php asde_e( 'La verificación en dos pasos no está disponible ahora mismo.' ); ?></p>
 	<?php else : ?>
 		<?php if ( $activo ) : ?>
-			<div class="asde-notice asde-notice--success" role="status">Tienes la verificación en dos pasos <strong>activada</strong>. ¡Bien hecho!</div>
+			<div class="asde-notice asde-notice--success" role="status"><?php asde_e( 'Tienes la verificación en dos pasos' ); ?> <strong><?php asde_e( 'activada' ); ?></strong><?php asde_e( '. ¡Bien hecho!' ); ?></div>
 		<?php elseif ( $pendiente ) : ?>
 			<div class="asde-notice asde-notice--warning" role="status">
-				Para tu rol la verificación en dos pasos es <strong>obligatoria</strong><?php echo $limite && $limite > time() ? esc_html( ' a partir del ' . wp_date( 'd/m/Y', $limite ) ) : ''; ?>.
-				Después de esa fecha no podrás entrar sin ella.
+				<?php asde_e( 'Para tu rol la verificación en dos pasos es' ); ?> <strong><?php asde_e( 'obligatoria' ); ?></strong><?php echo $limite && $limite > time() ? esc_html( ' ' . sprintf( asde_t( 'a partir del %s' ), wp_date( 'd/m/Y', $limite ) ) ) : ''; ?><?php asde_e( '. Después de esa fecha no podrás entrar sin ella.' ); ?>
 			</div>
 		<?php endif; ?>
-		<p>La verificación en dos pasos protege los datos del grupo: además de tu contraseña, al entrar te pedirá un código de 6 cifras de una app en tu móvil.</p>
+		<p><?php asde_e( 'La verificación en dos pasos protege los datos del grupo: además de tu contraseña, al entrar te pedirá un código de 6 cifras de una app en tu móvil.' ); ?></p>
 		<ol>
-			<li>Instala en tu móvil una app de autenticación (Google Authenticator, Microsoft Authenticator, Authy…).</li>
-			<li>Escanea con ella el código QR de abajo.</li>
-			<li>Escribe el código de 6 cifras que te muestra la app y pulsa «Activate».</li>
-			<li>Guarda los <strong>códigos de recuperación</strong> en un lugar seguro: te servirán si pierdes el móvil.</li>
+			<li><?php asde_e( 'Instala en tu móvil una app de autenticación (Google Authenticator, Microsoft Authenticator, Authy…).' ); ?></li>
+			<li><?php asde_e( 'Escanea con ella el código QR de abajo.' ); ?></li>
+			<li><?php asde_e( 'Escribe el código de 6 cifras que te muestra la app y pulsa «Activate».' ); ?></li>
+			<li><?php asde_e( 'Guarda los' ); ?> <strong><?php asde_e( 'códigos de recuperación' ); ?></strong> <?php asde_e( 'en un lugar seguro: te servirán si pierdes el móvil.' ); ?></li>
 		</ol>
 	<?php endif; ?>
 </section>

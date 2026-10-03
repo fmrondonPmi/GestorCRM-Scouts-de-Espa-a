@@ -20,16 +20,16 @@ defined( 'ABSPATH' ) || exit;
 		<?php endforeach; ?>
 	</ul>
 	<form method="get" class="asde-subnav__ronda">
-		<label for="asde-ronda">Ronda</label>
+		<label for="asde-ronda"><?php asde_e( 'Ronda' ); ?></label>
 		<select id="asde-ronda" name="ronda" onchange="this.form.submit()">
 			<?php foreach ( $rondas as $r ) : ?>
 				<option value="<?php echo esc_attr( $r ); ?>" <?php selected( $ronda, $r ); ?>><?php echo esc_html( $r ); ?></option>
 			<?php endforeach; ?>
 			<?php $siguiente = ( (int) substr( $rondas[0] ?? $ronda, 0, 4 ) + 1 ) . '-' . ( (int) substr( $rondas[0] ?? $ronda, 0, 4 ) + 2 ); ?>
 			<?php if ( ! in_array( $siguiente, $rondas, true ) ) : ?>
-				<option value="<?php echo esc_attr( $siguiente ); ?>" <?php selected( $ronda, $siguiente ); ?>><?php echo esc_html( $siguiente . ' (preparar)' ); ?></option>
+				<option value="<?php echo esc_attr( $siguiente ); ?>" <?php selected( $ronda, $siguiente ); ?>><?php echo esc_html( sprintf( asde_t( '%s (preparar)' ), $siguiente ) ); ?></option>
 			<?php endif; ?>
 		</select>
-		<noscript><button type="submit" class="button">Ver</button></noscript>
+		<noscript><button type="submit" class="button"><?php asde_e( 'Ver' ); ?></button></noscript>
 	</form>
 </div>

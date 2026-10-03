@@ -27,7 +27,7 @@ final class EmailsView extends View {
 		if ( $id ) {
 			$fila = RegistroEmails::obtener( $id );
 			if ( ! $fila ) {
-				return $this->denegado( 'Ese email no existe o es de otro grupo.' );
+				return $this->denegado( asde_t( 'Ese email no existe o es de otro grupo.' ) );
 			}
 			return $this->layout(
 				'usuarios',
@@ -51,8 +51,8 @@ final class EmailsView extends View {
 			array(
 				'fecha'   => static fn( $f ) => $f['creado'],
 				'usuario' => static fn( $f ) => $f['login'],
-				'tipo'    => static fn( $f ) => RegistroEmails::TIPOS[ $f['tipo'] ] ?? $f['tipo'],
-				'estado'  => static fn( $f ) => RegistroEmails::ESTADOS[ $f['estado'] ] ?? $f['estado'],
+				'tipo'    => static fn( $f ) => asde_t( RegistroEmails::TIPOS[ $f['tipo'] ] ?? $f['tipo'] ),
+				'estado'  => static fn( $f ) => asde_t( RegistroEmails::ESTADOS[ $f['estado'] ] ?? $f['estado'] ),
 			),
 			'fecha',
 			'desc'

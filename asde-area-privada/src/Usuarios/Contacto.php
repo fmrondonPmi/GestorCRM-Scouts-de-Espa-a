@@ -56,7 +56,7 @@ final class Contacto {
 			}
 			$nombres = array_map( static fn( $p ) => $p->nombre, $repo->obtener_varias( Usuarios::representados( $user->ID ) ) );
 			if ( $nombres ) {
-				return 'familia de ' . self::lista( $nombres );
+				return sprintf( asde_t( 'familia de %s' ), self::lista( $nombres ) );
 			}
 		} catch ( CrmException $e ) {
 			return '';

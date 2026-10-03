@@ -27,22 +27,22 @@ final class FichaView extends View {
 		$ambito = Ambito::actual();
 		$repo   = PersonaRepository::make();
 		if ( ! $repo ) {
-			return $this->error_crm( 'ficha', 'La conexión de tu grupo con el CRM no está configurada o no se ha podido comprobar. Un administrador puede revisarla en wp-admin → Grupos Scouts.' );
+			return $this->error_crm( 'ficha', asde_t( 'La conexión de tu grupo con el CRM no está configurada o no se ha podido comprobar. Un administrador puede revisarla en wp-admin → Grupos Scouts.' ) );
 		}
 		$socio = $this->socio( $ambito );
 		try {
 			$p = '' !== $socio ? $repo->obtener( $socio ) : null;
 			if ( ! $p ) {
-				return $this->denegado( 'No se encuentra esa ficha en el CRM del grupo.' );
+				return $this->denegado( asde_t( 'No se encuentra esa ficha en el CRM del grupo.' ) );
 			}
 			$perm = new PermisosFicha( $ambito, $p );
 			if ( ! $perm->puede_ver() ) {
-				return $this->denegado( 'No tienes acceso a esta ficha.' );
+				return $this->denegado( asde_t( 'No tienes acceso a esta ficha.' ) );
 			}
 			$campos = ( new FichaService( $repo ) )->cargar( $p, $perm );
 			$numero = ( new Numeracion( $repo ) )->de( $p );
 		} catch ( CrmException $e ) {
-			return $this->error_crm( 'ficha', 'No se ha podido consultar el CRM: ' . $e->getMessage() );
+			return $this->error_crm( 'ficha', asde_t( 'No se ha podido consultar el CRM: ' ) . $e->getMessage() );
 		}
 
 		return $this->layout(
@@ -76,11 +76,11 @@ final class FichaView extends View {
 			$id = (int) $this->post( 'cambio' );
 			check_admin_referer( 'asde_cancelar_cambio_' . $id );
 			$r = Cambios::cancelar( $id );
-			is_wp_error( $r ) ? Notices::add( 'error', esc_html( $r->get_error_message() ) ) : Notices::add( 'success', 'Propuesta retirada.' );
+			is_wp_error( $r ) ? Notices::add( 'error', esc_html( $r->get_error_message() ) ) : Notices::add( 'success', asde_t( 'Propuesta retirada.' ) );
 			$this->redirect( $volver );
 		}
 		if ( 'guardar_ficha' !== $this->post( 'asde_action' ) || ! PersonaRepository::es_num_asde( $socio ) ) {
-			Notices::add( 'error', 'Petición no válida.' );
+			Notices::add( 'error', asde_t( 'Petición no válida.' ) );
 			$this->redirect( $this->url( 'ficha' ) );
 		}
 		check_admin_referer( 'asde_ficha_' . $socio );
@@ -89,7 +89,7 @@ final class FichaView extends View {
 		try {
 			$p = $repo ? $repo->obtener( $socio ) : null;
 			if ( ! $p ) {
-				Notices::add( 'error', 'No se encuentra esa ficha en el CRM del grupo.' );
+				Notices::add( 'error', asde_t( 'No se encuentra esa ficha en el CRM del grupo.' ) );
 				$this->redirect( $this->url( 'ficha' ) );
 			}
 			$perm = new PermisosFicha( $ambito, $p );
@@ -106,28 +106,28 @@ final class FichaView extends View {
 			}
 			$r = ( new FichaService( $repo ) )->guardar( $p, $perm, $enviado, $huellas );
 		} catch ( CrmException $e ) {
-			Notices::add( 'error', esc_html( 'No se ha podido consultar el CRM: ' . $e->getMessage() ) );
+			Notices::add( 'error', esc_html( asde_t( 'No se ha podido consultar el CRM: ' ) . $e->getMessage() ) );
 			$this->redirect( $volver );
 		}
 
 		$lista = static fn( array $a ) => esc_html( implode( ', ', $a ) );
 		if ( $r['guardados'] ) {
-			Notices::add( 'success', 'Guardado en el CRM: ' . $lista( $r['guardados'] ) . '.' );
+			Notices::add( 'success', sprintf( asde_t( 'Guardado en el CRM: %s.' ), $lista( $r['guardados'] ) ) );
 		}
 		if ( $r['propuestos'] ) {
-			Notices::add( 'success', 'Cambios enviados para su aprobación: ' . $lista( $r['propuestos'] ) . '. Te avisaremos en esta ficha cuando se revisen.' );
+			Notices::add( 'success', sprintf( asde_t( 'Cambios enviados para su aprobación: %s. Te avisaremos en esta ficha cuando se revisen.' ), $lista( $r['propuestos'] ) ) );
 		}
 		if ( $r['rechazados'] ) {
-			Notices::add( 'error', 'El CRM no ha aceptado: ' . $lista( $r['rechazados'] ) . '. Puede que el usuario del CRM no tenga permiso sobre esos campos.' );
+			Notices::add( 'error', sprintf( asde_t( 'El CRM no ha aceptado: %s. Puede que el usuario del CRM no tenga permiso sobre esos campos.' ), $lista( $r['rechazados'] ) ) );
 		}
 		if ( $r['conflictos'] ) {
-			Notices::add( 'warning', 'No se ha cambiado ' . $lista( $r['conflictos'] ) . ' porque alguien lo modificó en el CRM mientras editabas. Revisa el valor actual y vuelve a intentarlo.' );
+			Notices::add( 'warning', sprintf( asde_t( 'No se ha cambiado %s porque alguien lo modificó en el CRM mientras editabas. Revisa el valor actual y vuelve a intentarlo.' ), $lista( $r['conflictos'] ) ) );
 		}
 		foreach ( $r['errores'] as $e ) {
 			Notices::add( 'error', esc_html( $e ) );
 		}
 		if ( ! array_filter( $r ) ) {
-			Notices::add( 'info', 'No había ningún cambio que guardar.' );
+			Notices::add( 'info', asde_t( 'No había ningún cambio que guardar.' ) );
 		}
 		$this->redirect( $volver );
 	}

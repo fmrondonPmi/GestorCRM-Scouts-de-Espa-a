@@ -156,11 +156,11 @@ final class Numeracion {
 	/** Asigna número a quien no tiene o lo tiene mal escrito (solo socios con membresía activa). @return string|\WP_Error */
 	public function asignar( Persona $p ) {
 		if ( ! $p->tiene_membresia_activa() ) {
-			return new \WP_Error( 'asde_num_socio', 'Solo se asigna número a personas con membresía activa.' );
+			return new \WP_Error( 'asde_num_socio', asde_t( 'Solo se asigna número a personas con membresía activa.' ) );
 		}
 		$actual = $this->de( $p );
 		if ( ! in_array( $actual['estado'], array( self::FALTA, self::GENERADO, self::INVALIDO ), true ) ) {
-			return new \WP_Error( 'asde_num_socio', 'Esta persona ya tiene número en el CRM (' . self::ETIQUETAS[ $actual['estado'] ] . ').' );
+			return new \WP_Error( 'asde_num_socio', sprintf( asde_t( 'Esta persona ya tiene número en el CRM (%s).' ), asde_t( self::ETIQUETAS[ $actual['estado'] ] ) ) );
 		}
 		if ( self::GENERADO === $actual['estado'] ) {
 			return (string) $actual['numero'];
@@ -187,7 +187,7 @@ final class Numeracion {
 			return $r;
 		}
 		if ( ! $r['guardados'] ) {
-			return new \WP_Error( 'asde_num_socio', 'El CRM no ha aceptado el número.' );
+			return new \WP_Error( 'asde_num_socio', asde_t( 'El CRM no ha aceptado el número.' ) );
 		}
 		SociosTable::fijar_crm( $p->num_socio_asde, $numero );
 		$this->analisis[ $p->num_socio_asde ] = array(
@@ -229,7 +229,7 @@ final class Numeracion {
 	public function corregir_formato( Persona $p ) {
 		$actual = $this->de( $p );
 		if ( self::CORREGIDO !== $actual['estado'] ) {
-			return new \WP_Error( 'asde_num_socio', 'El número de esta ficha no tiene formato antiguo.' );
+			return new \WP_Error( 'asde_num_socio', asde_t( 'El número de esta ficha no tiene formato antiguo.' ) );
 		}
 		return $this->escribir_en_crm( $p, (string) $actual['numero'] );
 	}
@@ -238,7 +238,7 @@ final class Numeracion {
 	public function pasar_al_crm( Persona $p ) {
 		$actual = $this->de( $p );
 		if ( self::GENERADO !== $actual['estado'] ) {
-			return new \WP_Error( 'asde_num_socio', 'Esta ficha no tiene un número pendiente de pasar al CRM.' );
+			return new \WP_Error( 'asde_num_socio', asde_t( 'Esta ficha no tiene un número pendiente de pasar al CRM.' ) );
 		}
 		return $this->escribir_en_crm( $p, (string) $actual['numero'] );
 	}
@@ -252,13 +252,13 @@ final class Numeracion {
 	public function resolver_duplicado( Persona $p ) {
 		$actual = $this->de( $p );
 		if ( self::DUPLICADO !== $actual['estado'] ) {
-			return new \WP_Error( 'asde_num_socio', 'El número de esta ficha no está duplicado.' );
+			return new \WP_Error( 'asde_num_socio', asde_t( 'El número de esta ficha no está duplicado.' ) );
 		}
 		if ( $this->usa_numero_en_la_web( $p, (string) $actual['numero'] ) ) {
-			return new \WP_Error( 'asde_num_socio', 'Esta persona (o su familia) entra en la web con ese número: dale el número nuevo a la otra ficha.' );
+			return new \WP_Error( 'asde_num_socio', asde_t( 'Esta persona (o su familia) entra en la web con ese número: dale el número nuevo a la otra ficha.' ) );
 		}
 		if ( ! Escritura::disponible() ) {
-			return new \WP_Error( 'asde_num_socio', 'Para resolver un duplicado hace falta que el usuario del CRM pueda editar fichas.' );
+			return new \WP_Error( 'asde_num_socio', asde_t( 'Para resolver un duplicado hace falta que el usuario del CRM pueda editar fichas.' ) );
 		}
 		if ( SociosTable::local_de( $p->num_socio_asde ) === $actual['numero'] ) {
 			SociosTable::liberar( $p->num_socio_asde ); // Reserva antigua con el número repetido.

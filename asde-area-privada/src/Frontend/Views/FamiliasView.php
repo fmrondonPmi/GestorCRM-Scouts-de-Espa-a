@@ -25,7 +25,7 @@ final class FamiliasView extends TesoreriaBaseView {
 		}
 		$repo = PersonaRepository::make();
 		if ( ! $repo ) {
-			return $this->error_crm( 'tesoreria', 'La conexión de tu grupo con el CRM no está configurada o no se ha podido comprobar. Un administrador puede revisarla en wp-admin → Grupos Scouts.' );
+			return $this->error_crm( 'tesoreria', asde_t( 'La conexión de tu grupo con el CRM no está configurada o no se ha podido comprobar. Un administrador puede revisarla en wp-admin → Grupos Scouts.' ) );
 		}
 		$ronda = $this->ronda();
 
@@ -46,7 +46,7 @@ final class FamiliasView extends TesoreriaBaseView {
 				}
 			}
 		} catch ( CrmException $e ) {
-			return $this->error_crm( 'tesoreria', 'No se ha podido consultar el CRM: ' . $e->getMessage() );
+			return $this->error_crm( 'tesoreria', asde_t( 'No se ha podido consultar el CRM: ' ) . $e->getMessage() );
 		}
 
 		$cfg     = Config::de( $ronda );
@@ -120,28 +120,28 @@ final class FamiliasView extends TesoreriaBaseView {
 		switch ( $this->post( 'asde_action' ) ) {
 			case 'crear':
 				$nums = $validar( $this->post_array( 'socios' ) );
-				$r    = $nums ? FamiliasTable::crear( array_map( 'strval', $nums ) ) : new \WP_Error( 'x', 'Elige al menos un socio con membresía activa.' );
+				$r    = $nums ? FamiliasTable::crear( array_map( 'strval', $nums ) ) : new \WP_Error( 'x', asde_t( 'Elige al menos un socio con membresía activa.' ) );
 				if ( ! is_wp_error( $r ) ) {
 					$f = FamiliasTable::obtener( $r );
 					Logger::log( 'familia_creada', 'familia', (string) $r, array( 'socios' => $nums ) );
-					Notices::add( 'success', sprintf( 'Familia <strong>%s</strong> creada con %d socio(s).', esc_html( $f['numero'] ), count( $nums ) ) );
+					Notices::add( 'success', sprintf( asde_t( 'Familia <strong>%s</strong> creada con %d socio(s).' ), esc_html( $f['numero'] ), count( $nums ) ) );
 					$volver = $this->url( 'familias', array( 'familia' => $r ) );
 				}
 				break;
 
 			case 'anadir':
 				$nums = $validar( array( $this->post( 'socio' ) ) );
-				$r    = $nums ? FamiliasTable::anadir( $familia, (string) $nums[0] ) : new \WP_Error( 'x', 'Ese socio no tiene membresía activa en el grupo.' );
+				$r    = $nums ? FamiliasTable::anadir( $familia, (string) $nums[0] ) : new \WP_Error( 'x', asde_t( 'Ese socio no tiene membresía activa en el grupo.' ) );
 				if ( ! is_wp_error( $r ) ) {
 					Logger::log( 'familia_socio_anadido', 'familia', (string) $familia, array( 'socio' => $nums[0] ) );
-					Notices::add( 'success', 'Socio añadido a la familia.' );
+					Notices::add( 'success', asde_t( 'Socio añadido a la familia.' ) );
 				}
 				break;
 
 			case 'quitar':
 				FamiliasTable::quitar( $familia, $this->post( 'socio' ) );
 				Logger::log( 'familia_socio_quitado', 'familia', (string) $familia, array( 'socio' => $this->post( 'socio' ) ) );
-				Notices::add( 'success', 'Socio quitado de la familia.' );
+				Notices::add( 'success', asde_t( 'Socio quitado de la familia.' ) );
 				$r = true;
 				break;
 
@@ -149,13 +149,13 @@ final class FamiliasView extends TesoreriaBaseView {
 				$r = FamiliasTable::borrar( $familia );
 				if ( ! is_wp_error( $r ) ) {
 					Logger::log( 'familia_borrada', 'familia', (string) $familia );
-					Notices::add( 'success', 'Familia borrada.' );
+					Notices::add( 'success', asde_t( 'Familia borrada.' ) );
 					$volver = $this->url( 'familias' );
 				}
 				break;
 
 			default:
-				$r = new \WP_Error( 'x', 'Acción desconocida.' );
+				$r = new \WP_Error( 'x', asde_t( 'Acción desconocida.' ) );
 		}
 
 		if ( is_wp_error( $r ) ) {
