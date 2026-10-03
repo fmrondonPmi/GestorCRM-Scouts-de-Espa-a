@@ -1,16 +1,17 @@
 # Manual · Publicar la app (PWA) en producción
 
-> Para quien administra el sitio (https://baleares.scout.es, WordPress en Hostinger con LiteSpeed). **Claude no publica nada en producción**: este manual es lo que hace una persona. Versión del plugin con la PWA: **0.17.1**. Última revisión: 2026-10-03.
+> Para quien administra el sitio (https://baleares.scout.es, WordPress en Hostinger con LiteSpeed). **Claude no publica nada en producción**: este manual es lo que hace una persona. Versión del plugin con la PWA: **0.17.2**. Última revisión: 2026-10-03.
 
 ## 0. Qué se está publicando (y qué no)
 
 **Es una PWA, no una app de las tiendas.** La misma web del área privada, pero que se puede **instalar en el móvil** (Android e iPhone) con su icono, se abre **a pantalla completa** y, si no hay internet, enseña una pantalla «Sin conexión» en vez del error del navegador. No hay que publicar nada en Google Play ni en App Store.
 
-| Ya incluido (0.17.1) | Todavía no (secciones 4–5 del plan, `ESTADO.md`) |
+| Ya incluido (0.17.2) | Todavía no (sección 5 del plan, `ESTADO.md`) |
 |---|---|
-| Manifiesto de la app (nombre, colores del grupo, icono, alcance) | Pulido del modo pantalla completa (ocultar la cabecera del tema, zonas seguras del iPhone) |
-| Icono: el «Icono del sitio» de WordPress o uno genérico (tienda morada) | Ajustes en administración (hoy se apaga con un fragmento de código, §9) |
+| Manifiesto de la app (nombre, colores del grupo, icono, alcance) | Ajustes en administración (hoy se apaga con un fragmento de código, §9) |
+| Icono: el «Icono del sitio» de WordPress o uno genérico (tienda morada) | Comprobaciones de la PWA en «Instalación y entorno» y «Comprobar el hosting» |
 | Service worker: guarda solo CSS/JS del plugin y la página «Sin conexión» | Notificaciones push |
+| **Modo app (pantalla completa):** sin cabecera ni pie del tema en las páginas privadas, zonas seguras del iPhone, y en móvil una **barra inferior «Atrás · Inicio · Recargar»**; «Salir» cierra la sesión sin salir de la app | |
 | Página «Sin conexión» en castellano, catalán, euskera o gallego, con el color del grupo | |
 | **Aviso «Instala la app en tu móvil»** al pie de «Acceso socios» y del inicio del área: botón «Instalar la app» en Android/Chrome y guía «Compartir → Añadir a pantalla de inicio» en iPhone/iPad; se puede cerrar («Ahora no») y no vuelve a salir en 30 días; no sale si la app ya está instalada | |
 | Apagado limpio: si se desactiva, las apps ya instaladas se dan de baja solas | |
@@ -26,7 +27,7 @@
 | **HTTPS válido** (candado en el navegador). Sin HTTPS no hay service worker ni instalación | Abrir el sitio con `https://` sin avisos |
 | **Enlaces permanentes «bonitos»** (no `?p=123`) | *Ajustes → Enlaces permanentes*: ya es `/%year%/%monthnum%/%day%/%postname%/` |
 | WordPress ≥ 6.4 y PHP ≥ 8.0 | *Herramientas → Salud del sitio → Información* |
-| El plugin en la **0.17.1** (la PWA entró en la 0.17.0; la 0.16.x y anteriores no la llevan activa) | *Plugins* |
+| El plugin en la **0.17.2** (la PWA entró en la 0.17.0; la 0.16.x y anteriores no la llevan activa) | *Plugins* |
 | Un **«Icono del sitio»** cuadrado de **512 × 512 px** (PNG) para que la app lleve el logo del grupo | *Apariencia → Personalizar → Identidad del sitio*. Sin él se usa el icono genérico |
 
 ## 2. Antes de subir (en el ordenador)
@@ -37,7 +38,7 @@
 
 ## 3. El paquete
 
-El zip `asde-area-privada-0.17.1.zip` se construye en el ordenador con `herramientas-desarrollo/construir-zip.ps1` (sin tocar la versión). **Debe llevar** `src/Pwa/`, `assets/pwa/` (iconos, `sw.js`, `sw-apagado.js`, `registro.js`) y `templates/pwa/`, y **no** `tests/`. Para comprobarlo: abrir el zip y mirar que están esas tres carpetas y que `tests/` no está.
+El zip `asde-area-privada-0.17.2.zip` se construye en el ordenador con `herramientas-desarrollo/construir-zip.ps1` (sin tocar la versión). **Debe llevar** `src/Pwa/`, `assets/pwa/` (iconos, `sw.js`, `sw-apagado.js`, `registro.js`) y `templates/pwa/`, y **no** `tests/`. Para comprobarlo: abrir el zip y mirar que están esas tres carpetas y que `tests/` no está.
 
 ## 4. Subir y activar
 
@@ -110,12 +111,13 @@ curl -s https://baleares.scout.es/nuestro-grupo-scout/area-privada/acceso/ | gre
 **Android (Chrome):**
 1. Abrir «Acceso socios» (HTTPS): al cabo de unos segundos sale al pie el aviso **«Instala la app en tu móvil»** → **Instalar la app**. Si no sale (lo cerraron hace menos de 30 días, o Chrome aún no la ofrece), menú ⋮ → **Instalar aplicación** (o «Añadir a pantalla de inicio»).
 2. Debe aparecer el icono en la pantalla de inicio. Abrirlo: **sin barra de direcciones**, con la barra superior del color del grupo.
-3. Entrar con un usuario de prueba (con doble factor si es del equipo), navegar por varias pantallas y **salir**. Comprobar que el acceso, la verificación en dos pasos y el cierre de sesión funcionan dentro de la app.
-4. Poner el **modo avión**, cerrar y volver a abrir la app o pulsar un enlace: debe salir **«Sin conexión»** con el botón *Reintentar*. Al quitar el modo avión, se recarga sola.
+3. Entrar con un usuario de prueba (con doble factor si es del equipo). Ya dentro: **sin cabecera ni pie de la web**, con el menú del área fijo arriba y, abajo, la **barra «‹ Atrás · Inicio · ↻ Recargar»** (sin el botón de cookies tapándola). Navegar por varias pantallas: «Atrás» debe volver; «Recargar» recarga la página.
+4. **Salir** (en el menú del área): debe volver a «Acceso socios» **dentro de la app**, sin saltar a la web pública ni abrir otra ventana. Probar también «Seguridad» (doble factor) y abrir una ficha en la ventana emergente.
+5. Poner el **modo avión**, cerrar y volver a abrir la app o pulsar un enlace: debe salir **«Sin conexión»** con el botón *Reintentar*. Al quitar el modo avión, se recarga sola.
 
 **iPhone (Safari):**
 1. Abrir «Acceso socios» en **Safari**: sale al pie el aviso con la **guía** (iOS no deja instalar con un botón). Seguirla: botón **Compartir** → **Añadir a pantalla de inicio** → *Añadir*. «Entendido» cierra el aviso.
-2. Abrirla desde el icono: pantalla completa. Probar entrar, navegar y salir como en Android.
+2. Abrirla desde el icono: pantalla completa. Probar entrar, la barra inferior, «Salir» y la ventana emergente como en Android. En iPhone no hay botón de atrás del sistema: la barra «‹ Atrás» es el único (además del gesto de deslizar desde el borde izquierdo). Mirar que la barra no queda tapada por la línea de inicio del iPhone (zona segura).
 3. Modo avión: debe salir «Sin conexión».
 
 **Qué anotar si algo falla:** modelo del móvil, navegador y versión, qué paso y una captura. Los fallos de instalación casi siempre son de §6 (rutas cacheadas) o de HTTPS.
@@ -154,13 +156,17 @@ Al subir una versión nueva del plugin, el service worker cambia (lleva la versi
 | El icono es el genérico (tienda morada) | No hay «Icono del sitio» | §1 y reinstalar la app (el icono se fija al instalar) |
 | En iPhone no sale «Instalar» | iOS no lo ofrece solo | *Compartir → Añadir a pantalla de inicio* en Safari |
 | La barra del móvil sigue morada tras cambiar los colores | El color se lee al abrir la app | Cerrar la app y abrirla de nuevo |
+| En la app sigue saliendo la cabecera de la web | La página es pública (acceso, activar, recuperar, solicitar: conservan el logo) o el CSS viejo está en el móvil | Comprobar que la versión es la 0.17.2 o posterior; cerrar la app y abrirla de nuevo |
+| «Salir» no cierra la sesión dentro de la app | El enlace firmado caducó (la página llevaba muchas horas abierta) | Recargar con «Recargar» y volver a pulsar «Salir» |
+| La barra inferior no sale | Es un ordenador (la ventana de la app ya trae atrás y recargar) o la web no se abrió como app (se abrió en el navegador) | Normal: solo sale en móviles y tablets con la app instalada |
 
 ## 13. Lo que **no** se ha podido comprobar todavía
 
 Para ser claros con lo que está probado y lo que no:
 
-- ✅ Probado en Local: manifiesto, rutas, etiquetas, colores, idiomas, página «Sin conexión», apagado, el aviso de instalación y 144 comprobaciones automáticas; la **lógica** del service worker con simulaciones (red, sin red, POST, JSON, estáticos).
+- ✅ Probado en Local: manifiesto, rutas, etiquetas, colores, idiomas, página «Sin conexión», apagado, el aviso de instalación y 198 comprobaciones automáticas; la **lógica** del service worker con simulaciones (red, sin red, POST, JSON, estáticos).
 - ✅ **Probado en Chrome de escritorio real (2026-10-03, contra Local):** el service worker se registra, se activa y controla la página con el alcance correcto; **se actualiza solo** de una versión antigua a la nueva (borra la caché vieja y guarda «Sin conexión» en la nueva); la página «Sin conexión» se muestra bien; Chrome **dispara el aviso de instalación** (es decir, la app cumple los requisitos de instalable) y nuestro aviso sale y se cierra.
+- ✅ **Modo app comprobado en una página privada real de Chrome (solo medidas, sin tocar datos):** al activar el modo app desaparecen cabecera y pie, el contenido sube pegado arriba, el menú queda fijo y los enlaces de «Salir» pasan a la dirección firmada; y, en el navegador integrado a 375 px, la barra inferior (botones de 44 px, sin desbordes, sin tapar el botón de cookies) y las variantes iPhone, escritorio y «Atrás» sin historial, con simulaciones. «Salir» se probó con PHP (usuario de prueba, nonce falso/ausente/válido), **no** pulsándolo en el navegador.
 - ⚠️ **Sin ver todavía:** el modo avión de verdad (el «Sin conexión» cuando falla la red; solo probado con simulaciones y mirando la página guardada), la **instalación efectiva** en un Android e iPhone reales (en Chrome de escritorio no se pulsó «Instalar») y el aspecto con la app ya instalada. Es lo primero que hay que mirar en el móvil (§8).
 - ⚠️ **No probado en producción** (Hostinger/LiteSpeed): las cabeceras de §6 y la instalación real en iPhone y Android.
 - Fuera del alcance de la PWA: publicar en Google Play / App Store (haría falta envolverla con Capacitor, cuentas de desarrollador —Google 25 € una vez, Apple 99 €/año— y pasar la revisión de cada tienda; es un paso posterior que reutiliza todo esto).
@@ -168,7 +174,7 @@ Para ser claros con lo que está probado y lo que no:
 ## 14. Lista final (imprimible)
 
 - [ ] Copia de seguridad hecha
-- [ ] Zip `asde-area-privada-0.17.1.zip` con `src/Pwa`, `assets/pwa`, `templates/pwa` y sin `tests/`
+- [ ] Zip `asde-area-privada-0.17.2.zip` con `src/Pwa`, `assets/pwa`, `templates/pwa` y sin `tests/`
 - [ ] Plugin reemplazado y activo; *Instalación y entorno* en verde
 - [ ] «Icono del sitio» 512 × 512 puesto
 - [ ] Las tres rutas excluidas de LiteSpeed Cache y del CDN (§6)

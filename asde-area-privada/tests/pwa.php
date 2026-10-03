@@ -216,6 +216,8 @@ if ( $area_id ) {
 	wp_deregister_script( 'asde-pwa' );
 	wp_dequeue_script( 'asde-pwa-instalar' );
 	wp_deregister_script( 'asde-pwa-instalar' );
+	wp_dequeue_script( 'asde-pwa-app' );
+	wp_deregister_script( 'asde-pwa-app' );
 	( new Pwa() )->registro();
 	$ok( wp_script_is( 'asde-pwa', 'enqueued' ), 'en una página del área se carga registro.js' );
 	$antes = implode( '', array_filter( (array) wp_scripts()->get_data( 'asde-pwa', 'before' ) ) );
@@ -224,6 +226,8 @@ if ( $area_id ) {
 	wp_deregister_script( 'asde-pwa' );
 	wp_dequeue_script( 'asde-pwa-instalar' );
 	wp_deregister_script( 'asde-pwa-instalar' );
+	wp_dequeue_script( 'asde-pwa-app' );
+	wp_deregister_script( 'asde-pwa-app' );
 	add_filter( 'asde_ap_pwa_activa', '__return_false' );
 	( new Pwa() )->registro();
 	$ok( ! wp_script_is( 'asde-pwa', 'enqueued' ), 'con la PWA desactivada no se registra' );
@@ -261,12 +265,14 @@ $pagina = static function ( string $clave ) use ( &$wp_query ) {
 	return $id ? new WP_Query( array( 'page_id' => $id ) ) : null;
 };
 $limpiar = static function () {
-	foreach ( array( 'asde-pwa', 'asde-pwa-instalar' ) as $h ) {
+	foreach ( array( 'asde-pwa', 'asde-pwa-instalar', 'asde-pwa-app' ) as $h ) {
 		wp_dequeue_script( $h );
 		wp_deregister_script( $h );
 	}
 	wp_dequeue_style( 'asde-pwa-instalar' );
 	wp_deregister_style( 'asde-pwa-instalar' );
+	wp_dequeue_style( 'asde-pwa-app' );
+	wp_deregister_style( 'asde-pwa-app' );
 };
 $datos_js = static function () {
 	return implode( '', array_filter( (array) wp_scripts()->get_data( 'asde-pwa', 'before' ) ) );
@@ -344,5 +350,186 @@ $css_inst = (string) file_get_contents( ASDE_AP_DIR . 'assets/pwa/instalar.css' 
 $ok( str_contains( $css_inst, 'env(safe-area-inset-bottom' ) && str_contains( $css_inst, 'min-height: 44px' ), 'CSS: respeta la zona segura del iPhone y los botones miden 44 px (táctil)' );
 $ok( str_contains( $css_inst, 'prefers-reduced-motion' ) && str_contains( $css_inst, 'focus-visible' ) && str_contains( $css_inst, '@media print' ), 'CSS: sin animación si se pide, foco visible y no se imprime' );
 $ok( str_contains( $css_inst, 'var(--asde-primary, #632599)' ), 'CSS: usa el color principal del grupo (con el morado de respaldo)' );
+
+// ═══ SECCIÓN 4 · la app instalada (pantalla completa) ══════════════════════════
+require_once ABSPATH . 'wp-admin/includes/user.php';
+echo "\n── App instalada: dónde se carga\n";
+foreach ( array( 'acceso', 'area', 'personas', 'recuperar', 'pagos' ) as $clave ) {
+	$q = $pagina( $clave );
+	if ( $q ) {
+		$wp_query = $q; // phpcs:ignore WordPress.WP.GlobalVariablesOverride
+		$limpiar();
+		( new Pwa() )->registro();
+		$ok( wp_script_is( 'asde-pwa-app', 'enqueued' ) && wp_style_is( 'asde-pwa-app', 'enqueued' ), "en «{$clave}» se cargan app.js y app.css" );
+		$ok( str_contains( $datos_js(), '"app":{"etiquetas":{' ) && str_contains( $datos_js(), '"inicio":' ) && str_contains( $datos_js(), '"salir":' ), "en «{$clave}» el JS recibe textos, inicio y dirección de salida" );
+	}
+}
+if ( $pagina( 'personas' ) ) {
+	$wp_query = $pagina( 'personas' ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride
+	$limpiar();
+	add_filter( 'asde_ap_pwa_activa', '__return_false' );
+	( new Pwa() )->registro();
+	$ok( ! wp_script_is( 'asde-pwa-app', 'enqueued' ) && ! wp_style_is( 'asde-pwa-app', 'enqueued' ), 'con la PWA apagada no se carga nada de la app' );
+	remove_filter( 'asde_ap_pwa_activa', '__return_false' );
+}
+$limpiar();
+$wp_query = new WP_Query( array( 'p' => 0 ) ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride
+( new Pwa() )->registro();
+$ok( ! wp_script_is( 'asde-pwa-app', 'enqueued' ), 'fuera del área no se carga' );
+$limpiar();
+$wp_query = $wp_query_antes; // phpcs:ignore WordPress.WP.GlobalVariablesOverride
+
+echo "\n── App instalada: clases y marca de <html>\n";
+$clase = static function ( string $clave ) use ( $pagina, &$wp_query ) {
+	$q = $pagina( $clave );
+	if ( ! $q ) {
+		return null;
+	}
+	$wp_query = $q; // phpcs:ignore WordPress.WP.GlobalVariablesOverride
+	return ( new Pwa() )->body_class( array( 'x' ) );
+};
+foreach ( array( 'area', 'personas', 'pagos', 'ficha' ) as $clave ) {
+	$c = $clase( $clave );
+	$ok( is_array( $c ) && in_array( 'asde-pwa-privada', $c, true ), "«{$clave}» (privada) lleva la clase asde-pwa-privada" );
+}
+foreach ( array( 'acceso', 'recuperar', 'activar', 'solicitar' ) as $clave ) {
+	$c = $clase( $clave );
+	$ok( is_array( $c ) && ! in_array( 'asde-pwa-privada', $c, true ) && in_array( 'x', $c, true ), "«{$clave}» (pública) no la lleva: conserva la cabecera con el logo" );
+}
+$wp_query = new WP_Query( array( 'p' => 0 ) ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride
+$ok( array( 'x' ) === ( new Pwa() )->body_class( array( 'x' ) ), 'fuera del área no cambia las clases' );
+$marca = static function () {
+	ob_start();
+	( new Pwa() )->cabecera_app();
+	return (string) ob_get_clean();
+};
+$ok( '' === $marca(), 'fuera del área no pinta nada en la cabecera' );
+if ( $pagina( 'area' ) ) {
+	$wp_query = $pagina( 'area' ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride
+	$m = $marca();
+	$ok( str_contains( $m, "(display-mode: standalone)" ) && str_contains( $m, 'navigator.standalone===true' ) && str_contains( $m, "classList.add('asde-app')" ), 'el script de la cabecera marca <html> con asde-app en Android y en iPhone' );
+	add_filter( 'asde_ap_pwa_activa', '__return_false' );
+	$ok( '' === $marca() && array( 'x' ) === ( new Pwa() )->body_class( array( 'x' ) ), 'con la PWA apagada, ni marca ni clase' );
+	remove_filter( 'asde_ap_pwa_activa', '__return_false' );
+}
+$wp_query = $wp_query_antes; // phpcs:ignore WordPress.WP.GlobalVariablesOverride
+
+echo "\n── App instalada: «Salir» sin salir de la app\n";
+$login   = 'prueba-pwa-' . wp_generate_password( 6, false );
+$uid     = wp_insert_user(
+	array(
+		'user_login' => $login,
+		'user_pass'  => wp_generate_password( 20 ),
+		'user_email' => $login . '@example.invalid',
+	)
+);
+$get_antes = $_GET;
+$anula     = static function ( $loc ) {
+	throw new RuntimeException( 'REDIR:' . $loc );
+};
+add_filter( 'send_auth_cookies', '__return_false' );
+try {
+	wp_set_current_user( 0 );
+	$ok( '' === Pwa::url_salir(), 'sin sesión no hay dirección de salida' );
+	wp_set_current_user( (int) $uid );
+	$url = Pwa::url_salir();
+	$ok( str_starts_with( $url, Pages::url( 'acceso' ) ) && str_contains( $url, 'asde_pwa_salir=1' ) && str_contains( $url, '_wpnonce=' ), 'con sesión, la dirección está dentro del alcance (Acceso socios) y va firmada' );
+	parse_str( (string) wp_parse_url( $url, PHP_URL_QUERY ), $q );
+	$ok( false !== wp_verify_nonce( $q['_wpnonce'] ?? '', 'asde_pwa_salir' ), 'el nonce es válido para esa acción' );
+	$ok( false === wp_verify_nonce( $q['_wpnonce'] ?? '', 'otra_accion' ), 'y no vale para otra' );
+
+	$wp_query = $pagina( 'acceso' ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride
+	$ok( 'acceso' === Pages::current_key(), 'preparada la página de acceso' );
+	add_filter( 'wp_redirect', $anula );
+	// Sin firma o con firma falsa: no se cierra la sesión.
+	$_GET = array( 'asde_pwa_salir' => '1' );
+	( new Pwa() )->salir();
+	$ok( is_user_logged_in() && (int) $uid === get_current_user_id(), 'sin nonce no cierra la sesión' );
+	$_GET = array( 'asde_pwa_salir' => '1', '_wpnonce' => 'falso123' );
+	( new Pwa() )->salir();
+	$ok( is_user_logged_in(), 'con un nonce falso no cierra la sesión' );
+	// Sin el parámetro: no hace nada.
+	$_GET = array();
+	( new Pwa() )->salir();
+	$ok( is_user_logged_in(), 'sin el parámetro no hace nada' );
+	// Firmada: cierra la sesión y vuelve al acceso.
+	$_GET = array( 'asde_pwa_salir' => '1', '_wpnonce' => $q['_wpnonce'] );
+	$destino = '';
+	try {
+		( new Pwa() )->salir();
+	} catch ( RuntimeException $e ) {
+		$destino = $e->getMessage();
+	}
+	$ok( 'REDIR:' . Pages::url( 'acceso' ) === $destino, 'firmada: redirige a Acceso socios (dentro de la app)' );
+	$ok( ! is_user_logged_in(), 'firmada: la sesión queda cerrada' );
+	// Fuera de la página de acceso, el parámetro no hace nada.
+	wp_set_current_user( (int) $uid );
+	$wp_query = $pagina( 'personas' ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride
+	$_GET     = array( 'asde_pwa_salir' => '1', '_wpnonce' => wp_create_nonce( 'asde_pwa_salir' ) );
+	( new Pwa() )->salir();
+	$ok( is_user_logged_in(), 'en otra página el parámetro no cierra la sesión' );
+	add_filter( 'asde_ap_pwa_activa', '__return_false' );
+	$wp_query = $pagina( 'acceso' ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride
+	( new Pwa() )->salir();
+	$ok( is_user_logged_in(), 'con la PWA apagada tampoco' );
+	remove_filter( 'asde_ap_pwa_activa', '__return_false' );
+} finally {
+	remove_filter( 'wp_redirect', $anula );
+	remove_filter( 'send_auth_cookies', '__return_false' );
+	$_GET     = $get_antes;
+	$wp_query = $wp_query_antes; // phpcs:ignore WordPress.WP.GlobalVariablesOverride
+	wp_set_current_user( 0 );
+	if ( is_int( $uid ) ) {
+		wp_delete_user( $uid );
+	}
+}
+global $wpdb;
+$ok( 0 === (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->users} WHERE user_login = %s", $login ) ), 'limpieza: el usuario de la prueba está borrado' ); // phpcs:ignore WordPress.DB
+
+echo "\n── App instalada: textos\n";
+$ta = Pwa::textos_app();
+$ok( 4 === count( $ta ) && 4 === count( array_filter( $ta ) ), 'cuatro textos, ninguno vacío' );
+$js_app = (string) file_get_contents( ASDE_AP_DIR . 'assets/pwa/app.js' );
+preg_match_all( '/\bT\.([a-z0-9_]+)/', $js_app, $u2 );
+$u2 = array_values( array_unique( $u2[1] ) );
+sort( $u2 );
+$d2 = array_keys( $ta );
+sort( $d2 );
+$ok( $u2 === $d2, 'el JS usa exactamente los textos que le manda PHP (' . implode( ', ', $u2 ) . ')' );
+foreach ( array( 'ca' => array( 'atras' => 'Enrere', 'recargar' => 'Torna a carregar' ), 'eu' => array( 'atras' => 'Atzera', 'recargar' => 'Birkargatu' ), 'gl' => array( 'barra' => 'Navegación da app', 'inicio' => 'Inicio' ) ) as $cod => $esp ) {
+	$tr   = Idioma::en( $cod, static fn() => Pwa::textos_app() );
+	$bien = true;
+	foreach ( $esp as $k => $v ) {
+		$bien = $bien && $tr[ $k ] === $v;
+	}
+	$ok( $bien, "la barra de la app sale en «{$cod}»" );
+}
+$ok( Pwa::textos_app() === $ta, 'tras traducirla vuelve al idioma del sitio' );
+
+echo "\n── App instalada: el JS y el CSS\n";
+$ok( str_contains( $js_app, '(display-mode: standalone)' ) && str_contains( $js_app, 'navigator.standalone' ) && str_contains( $js_app, "classList.add( 'asde-app' )" ), 'solo actúa si la web se abre como app (Android e iPhone)' );
+$ok( str_contains( $js_app, 'viewport-fit' ) && str_contains( $js_app, '(pointer: coarse)' ), 'viewport-fit=cover y la barra solo en pantallas táctiles' );
+$ok( str_contains( $js_app, 'history.back()' ) && str_contains( $js_app, 'location.reload()' ) && str_contains( $js_app, 'history.length > 1' ), 'la barra tiene «Atrás» (desactivado sin historial) y «Recargar»' );
+$ok( str_contains( $js_app, 'action=logout' ) && str_contains( $js_app, 'cfg.salir' ), '«Salir» se redirige a la dirección firmada del plugin' );
+$ok( ! str_contains( $js_app, 'innerHTML' ) && ! preg_match( '/\b(fetch|XMLHttpRequest|sendBeacon|localStorage|sessionStorage)\b/', $js_app ), 'sin innerHTML, sin peticiones y sin guardar nada en el navegador' );
+$sin_com = (string) preg_replace( array( '#/\*.*?\*/#s', '#^\s*//.*$#m' ), '', $js_app );
+$ok( '' !== $sin_com && ! preg_match( '/[áéíóúñ¿¡«»]/u', $sin_com ), 'sin textos en castellano escritos a mano (fuera de los comentarios)' );
+$css_app = (string) file_get_contents( ASDE_AP_DIR . 'assets/pwa/app.css' );
+$css_sin = (string) preg_replace( '#/\*.*?\*/#s', '', $css_app );
+preg_match_all( '/([^{}@][^{}]*)\{/', $css_sin, $selectores );
+$fuera   = array();
+foreach ( $selectores[1] as $lista ) {
+	foreach ( explode( ',', $lista ) as $s ) {
+		$s = trim( $s );
+		if ( '' !== $s && ! str_starts_with( $s, '@media' ) && ! str_starts_with( $s, 'html.asde-app' ) && ! str_starts_with( $s, '.asde-app-barra' ) ) {
+			$fuera[] = $s;
+		}
+	}
+}
+$ok( ! $fuera, 'CSS: todo cuelga de html.asde-app o de la barra: en el navegador normal no cambia nada' . ( $fuera ? ' (' . implode( ' | ', $fuera ) . ')' : '' ) );
+$ok( 1 === preg_match( '/\.asde-app-barra\s*\{\s*display:\s*none;/', $css_sin ), 'CSS: la barra está oculta salvo en la app' );
+$ok( str_contains( $css_app, 'safe-area-inset-bottom' ) && str_contains( $css_app, 'safe-area-inset-left' ) && str_contains( $css_app, 'safe-area-inset-right' ), 'CSS: respeta las zonas seguras (abajo, izquierda y derecha)' );
+$ok( str_contains( $css_app, 'min-height: 44px' ) && str_contains( $css_app, 'focus-visible' ) && str_contains( $css_app, '@media print' ), 'CSS: botones táctiles de 44 px, foco visible y no se imprime' );
+$ok( str_contains( $css_app, 'body.asde-pwa-privada #header' ) && str_contains( $css_app, '#top.asde-pwa-privada #main' ) && str_contains( $css_app, '#footer' ), 'CSS: oculta cabecera y pie del tema (cabecera solo en las privadas)' );
 
 echo $fails ? "\n$fails FALLOS\n" : "\nTODO OK (los colores que se cambian en la prueba se restauran; lo demás es solo lectura)\n";

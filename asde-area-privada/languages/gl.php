@@ -1876,4 +1876,7 @@ return array(
 	'Pulsa el botón Compartir de Safari (el cuadrado con la flecha hacia arriba).' => 'Preme o botón Compartir de Safari (o cadrado coa frecha cara arriba).',
 	'Elige «Añadir a pantalla de inicio» y pulsa «Añadir».' => 'Escolle «Engadir á pantalla de inicio» e preme «Engadir».',
 	'Entendido' => 'Entendido',
+	'Atrás' => 'Atrás',
+	'Recargar' => 'Recargar',
+	'Navegación de la app' => 'Navegación da app',
 );

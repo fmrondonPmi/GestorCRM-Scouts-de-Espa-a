@@ -1876,4 +1876,7 @@ return array(
 	'Pulsa el botón Compartir de Safari (el cuadrado con la flecha hacia arriba).' => 'Prem el botó Comparteix de Safari (el quadrat amb la fletxa cap amunt).',
 	'Elige «Añadir a pantalla de inicio» y pulsa «Añadir».' => 'Tria «Afegeix a la pantalla d\'inici» i prem «Afegeix».',
 	'Entendido' => 'Entesos',
+	'Atrás' => 'Enrere',
+	'Recargar' => 'Torna a carregar',
+	'Navegación de la app' => 'Navegació de l\'app',
 );

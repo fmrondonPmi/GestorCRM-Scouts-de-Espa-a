@@ -30,6 +30,71 @@ final class Pwa {
 		add_action( 'init', array( $this, 'servir_ruta' ), 1 );
 		add_action( 'wp_head', array( $this, 'etiquetas' ), 2 );
 		add_action( 'wp_enqueue_scripts', array( $this, 'registro' ) );
+		// La app instalada (sección 4).
+		add_action( 'wp_head', array( $this, 'cabecera_app' ), 99 );
+		add_filter( 'body_class', array( $this, 'body_class' ) );
+		add_action( 'template_redirect', array( $this, 'salir' ), 1 );
+	}
+
+	/** Marca <html> con asde-app antes de pintar, si la web se abre como app (sin parpadeo de la cabecera). */
+	public function cabecera_app(): void {
+		if ( ! self::activa() || null === Pages::current_key() ) {
+			return;
+		}
+		echo "<script>try{if(matchMedia('(display-mode: standalone)').matches||navigator.standalone===true){document.documentElement.classList.add('asde-app');}}catch(e){}</script>\n";
+	}
+
+	/** Las páginas privadas del área llevan una clase propia (las públicas conservan la cabecera con el logo en la app). */
+	public function body_class( array $clases ): array {
+		$key = Pages::current_key();
+		if ( self::activa() && null !== $key && ! in_array( $key, Pages::PUBLICAS, true ) ) {
+			$clases[] = 'asde-pwa-privada';
+		}
+		return $clases;
+	}
+
+	/**
+	 * Dirección que cierra la sesión sin salir del alcance de la app (el «Salir» normal pasa por
+	 * wp-login.php, fuera de ella). Firmada con un nonce: ninguna acción sin firmar (CLAUDE.md, regla 4).
+	 */
+	public static function url_salir(): string {
+		if ( ! is_user_logged_in() ) {
+			return '';
+		}
+		return add_query_arg(
+			array(
+				'asde_pwa_salir' => '1',
+				'_wpnonce'       => wp_create_nonce( 'asde_pwa_salir' ),
+			),
+			Pages::url( 'acceso' )
+		);
+	}
+
+	/** Cierra la sesión si llega la dirección firmada de url_salir() y vuelve a «Acceso socios». */
+	public function salir(): void {
+		if ( ! isset( $_GET['asde_pwa_salir'] ) || ! self::activa() || ! is_user_logged_in() || 'acceso' !== Pages::current_key() ) { // phpcs:ignore WordPress.Security.NonceVerification
+			return;
+		}
+		if ( ! wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ?? '' ) ), 'asde_pwa_salir' ) ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
+			return;
+		}
+		wp_logout();
+		wp_safe_redirect( Pages::url( 'acceso' ) );
+		exit;
+	}
+
+	/**
+	 * Textos de la barra de la app, ya en el idioma de la persona.
+	 *
+	 * @return array<string, string>
+	 */
+	public static function textos_app(): array {
+		return array(
+			'barra'    => asde_t( 'Navegación de la app' ),
+			'atras'    => asde_t( 'Atrás' ),
+			'inicio'   => asde_t( 'Inicio' ),
+			'recargar' => asde_t( 'Recargar' ),
+		);
 	}
 
 	/** Script que registra el service worker, en las páginas del área (D3). */
@@ -41,6 +106,14 @@ final class Pwa {
 		$datos = array(
 			'sw'      => home_url( '/' . ServiceWorker::RUTA ),
 			'alcance' => Manifiesto::alcance(),
+		);
+		// La app instalada (sección 4): en todas las páginas del área; solo actúa si se abre como app.
+		wp_enqueue_style( 'asde-pwa-app', plugins_url( 'assets/pwa/app.css', ASDE_AP_FILE ), array(), ASDE_AP_VERSION );
+		wp_enqueue_script( 'asde-pwa-app', plugins_url( 'assets/pwa/app.js', ASDE_AP_FILE ), array( 'asde-pwa' ), ASDE_AP_VERSION, true );
+		$datos['app'] = array(
+			'etiquetas' => self::textos_app(),
+			'inicio'    => Manifiesto::inicio(),
+			'salir'     => self::url_salir(),
 		);
 		// Invitación a instalar (sección 3): solo en el acceso y en el inicio del área.
 		if ( in_array( Pages::current_key(), self::PAGINAS_INSTALAR, true ) ) {

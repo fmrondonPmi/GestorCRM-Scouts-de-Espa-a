@@ -90,15 +90,18 @@ return array(
 
 	// App móvil
 	'Ahora no' => 'App móvil',
+	'Atrás' => 'App móvil',
 	'Añade el área privada a tu pantalla de inicio' => 'App móvil',
 	'Elige «Añadir a pantalla de inicio» y pulsa «Añadir».' => 'App móvil',
 	'Entendido' => 'App móvil',
 	'Entra con un toque desde la pantalla de inicio, sin escribir la dirección.' => 'App móvil',
 	'Instala la app en tu móvil' => 'App móvil',
 	'Instalar la app' => 'App móvil',
+	'Navegación de la app' => 'App móvil',
 	'No hay internet en este momento, y el área privada la necesita para mostrarte los datos del grupo.' => 'App móvil',
 	'Por seguridad, las fichas, los pagos y los datos de los socios no se guardan en el móvil.' => 'App móvil',
 	'Pulsa el botón Compartir de Safari (el cuadrado con la flecha hacia arriba).' => 'App móvil',
+	'Recargar' => 'App móvil',
 	'Reintentar' => 'App móvil',
 	'Sin conexión' => 'App móvil',
 	'Área privada del grupo scout: fichas, pagos y gestión del grupo.' => 'App móvil',

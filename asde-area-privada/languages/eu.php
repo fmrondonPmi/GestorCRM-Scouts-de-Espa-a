@@ -1876,4 +1876,7 @@ return array(
 	'Pulsa el botón Compartir de Safari (el cuadrado con la flecha hacia arriba).' => 'Sakatu Safariren Partekatu botoia (gezi gorantz duen laukia).',
 	'Elige «Añadir a pantalla de inicio» y pulsa «Añadir».' => 'Aukeratu «Gehitu hasierako pantailara» eta sakatu «Gehitu».',
 	'Entendido' => 'Ulertu dut',
+	'Atrás' => 'Atzera',
+	'Recargar' => 'Birkargatu',
+	'Navegación de la app' => 'Aplikazioaren nabigazioa',
 );
