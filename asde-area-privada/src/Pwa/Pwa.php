@@ -1,6 +1,7 @@
 <?php
 namespace AsdeBalears\AreaPrivada\Pwa;
 
+use AsdeBalears\AreaPrivada\Auth\Ambito;
 use AsdeBalears\AreaPrivada\Frontend\Pages;
 
 defined( 'ABSPATH' ) || exit;
@@ -34,6 +35,7 @@ final class Pwa {
 		add_action( 'wp_head', array( $this, 'cabecera_app' ), 99 );
 		add_filter( 'body_class', array( $this, 'body_class' ) );
 		add_action( 'template_redirect', array( $this, 'salir' ), 1 );
+		( new Push() )->register();
 	}
 
 	/** Marca <html> con asde-app antes de pintar, si la web se abre como app (sin parpadeo de la cabecera). */
@@ -115,6 +117,14 @@ final class Pwa {
 			'inicio'    => Manifiesto::inicio(),
 			'salir'     => self::url_salir(),
 		);
+		// Notificaciones push (sección 7): la tarjeta «Avisos en este móvil», solo en el inicio del área y con sesión.
+		if ( 'area' === Pages::current_key() ) {
+			$push = Push::datos_js( get_current_user_id() );
+			if ( $push && Ambito::actual()->puede_acceder() ) {
+				$datos['push'] = $push;
+				wp_enqueue_script( 'asde-pwa-push', plugins_url( 'assets/pwa/push.js', ASDE_AP_FILE ), array( 'asde-pwa' ), ASDE_AP_VERSION, true );
+			}
+		}
 		// Invitación a instalar (sección 3): solo en el acceso y en el inicio del área.
 		if ( in_array( Pages::current_key(), self::PAGINAS_INSTALAR, true ) ) {
 			$datos['textos'] = self::textos_instalar();

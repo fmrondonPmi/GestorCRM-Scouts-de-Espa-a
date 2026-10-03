@@ -86,3 +86,57 @@ self.addEventListener( 'fetch', function ( evento ) {
 	}
 	// Todo lo demás (JSON, la ventana emergente, descargas…) no pasa por aquí.
 } );
+
+/*
+ * Avisos push (docs/pwa/PUSH.md). El texto del aviso sale SIEMPRE de CONFIG.push (genérico: la pantalla de
+ * bloqueo la puede ver cualquiera); el mensaje solo puede traer la página a la que llevar (`u`), y solo
+ * si está dentro del alcance de la app. Chrome exige enseñar un aviso por cada push recibido.
+ */
+function destinoPush( ruta ) {
+	const P = CONFIG.push;
+	try {
+		const url = new URL( ruta, self.location.origin );
+		if ( url.origin === self.location.origin && 0 === url.href.indexOf( P.alcance ) ) {
+			return url.href;
+		}
+	} catch ( e ) { /* ruta inválida: al inicio */ }
+	return P.inicio;
+}
+
+self.addEventListener( 'push', function ( evento ) {
+	let datos = {};
+	try {
+		datos = evento.data ? evento.data.json() : {};
+	} catch ( e ) {
+		datos = {};
+	}
+	const P = CONFIG.push;
+	evento.waitUntil(
+		self.registration.showNotification( P.titulo, {
+			body: P.texto,
+			icon: P.icono,
+			badge: P.icono,
+			tag: 'asde-novedad',
+			renotify: true,
+			data: { url: destinoPush( datos && datos.u ? String( datos.u ) : '' ) }
+		} )
+	);
+} );
+
+self.addEventListener( 'notificationclick', function ( evento ) {
+	evento.notification.close();
+	const P = CONFIG.push;
+	const destino = ( evento.notification.data && evento.notification.data.url ) || P.inicio;
+	evento.waitUntil(
+		self.clients.matchAll( { type: 'window', includeUncontrolled: true } ).then( function ( ventanas ) {
+			for ( let i = 0; i < ventanas.length; i++ ) {
+				if ( 0 === ventanas[ i ].url.indexOf( P.alcance ) && 'focus' in ventanas[ i ] ) {
+					return ventanas[ i ].focus().then( function ( ventana ) {
+						return ventana && 'navigate' in ventana ? ventana.navigate( destino ) : ventana;
+					} );
+				}
+			}
+			return self.clients.openWindow( destino );
+		} )
+	);
+} );

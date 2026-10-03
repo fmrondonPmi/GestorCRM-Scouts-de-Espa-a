@@ -20,6 +20,13 @@ self.addEventListener( 'activate', function ( evento ) {
 						.map( function ( clave ) { return caches.delete( clave ); } )
 				);
 			} )
+			.then( function () {
+				// Si había avisos push activados, se dan de baja con la app.
+				return self.registration.pushManager
+					? self.registration.pushManager.getSubscription().then( function ( suscripcion ) { return suscripcion ? suscripcion.unsubscribe() : null; } )
+					: null;
+			} )
+			.catch( function () { /* sin push o sin permiso: se sigue */ } )
 			.then( function () { return self.registration.unregister(); } )
 	);
 } );

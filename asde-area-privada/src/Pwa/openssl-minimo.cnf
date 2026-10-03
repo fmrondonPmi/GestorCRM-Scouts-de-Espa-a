@@ -1,0 +1,6 @@
+# Configuración mínima de OpenSSL: en Windows (Local) PHP no encuentra un openssl.cnf y no puede generar claves.
+# Solo se usa para crear las claves VAPID de las notificaciones push (docs/pwa/PUSH.md).
+[req]
+default_bits = 2048
+distinguished_name = req_distinguished_name
+[req_distinguished_name]

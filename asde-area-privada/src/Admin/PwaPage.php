@@ -10,6 +10,8 @@ use AsdeBalears\AreaPrivada\Pwa\Iconos;
 use AsdeBalears\AreaPrivada\Pwa\Manifiesto;
 use AsdeBalears\AreaPrivada\Pwa\Pwa;
 use AsdeBalears\AreaPrivada\Pwa\ServiceWorker;
+use AsdeBalears\AreaPrivada\Pwa\Suscripciones;
+use AsdeBalears\AreaPrivada\Pwa\Vapid;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -61,7 +63,12 @@ final class PwaPage {
 		$antes  = Ajustes::datos();
 		$activa = ! empty( $post['activa'] );
 		$nombre = Ajustes::limpiar_nombre( (string) ( $post['nombre_corto'] ?? '' ) );
-		Ajustes::guardar( $activa, $nombre );
+		$push   = ! empty( $post['push'] );
+		Ajustes::guardar( $activa, $nombre, $push );
+		$claves = true;
+		if ( $push ) {
+			$claves = Vapid::asegurar(); // Las claves del servidor se crean la primera vez que se encienden los avisos.
+		}
 		Logger::log(
 			'pwa_guardada',
 			'sitio',
@@ -71,15 +78,22 @@ final class PwaPage {
 				'activa_antes'      => $antes['activa'],
 				'nombre_propio'     => '' !== $nombre,
 				'nombre_propio_antes' => '' !== $antes['nombre_corto'],
+				'push'              => $push,
+				'push_antes'        => $antes['push'],
 			)
 		);
 		delete_transient( Comprobacion::RESULTADO ); // Lo comprobado ya no vale.
-		$this->aviso(
-			'success',
-			$activa
-				? 'Guardado: la app móvil está activa.'
-				: 'Guardado: la app móvil está apagada. Quien ya la tenía instalada la verá retirarse sola en su próxima visita.'
-		);
+		if ( $push && ! $claves ) {
+			$this->aviso( 'error', 'Guardado, pero el servidor no ha podido crear las claves de los avisos push (falta OpenSSL con curvas elípticas). Los avisos no se ofrecerán hasta que se puedan crear: consulta con el hosting.' );
+		} else {
+			$this->aviso(
+				'success',
+				( $activa
+					? 'Guardado: la app móvil está activa.'
+					: 'Guardado: la app móvil está apagada. Quien ya la tenía instalada la verá retirarse sola en su próxima visita.' )
+				. ( $push && $activa ? ' Los avisos push están encendidos.' : '' )
+			);
+		}
 		wp_safe_redirect( self::url() );
 		exit;
 	}
@@ -111,6 +125,11 @@ final class PwaPage {
 		$aviso = get_transient( self::AVISO . get_current_user_id() );
 		delete_transient( self::AVISO . get_current_user_id() );
 		$d        = Ajustes::datos();
+		$ids      = Suscripciones::usuarios_con_suscripcion();
+		$suscritos = array(
+			'cuentas'      => count( $ids ),
+			'dispositivos' => array_sum( array_map( array( Suscripciones::class, 'cuantos' ), $ids ) ),
+		);
 		$colores  = Manifiesto::colores();
 		$ultimo   = Comprobacion::ultimo();
 		$etiqueta = self::etiquetas();
@@ -136,6 +155,31 @@ final class PwaPage {
 								<?php esc_html_e( 'Activa (se ofrece instalarla y funciona sin conexión la pantalla «Sin conexión»)', 'asde-area-privada' ); ?>
 							</label>
 							<p class="description"><?php esc_html_e( 'Si la apagas, desaparecen el manifiesto y los avisos, y las apps ya instaladas se retiran solas en su próxima visita (puede tardar hasta 24 horas). Las personas conservan el icono de su pantalla de inicio hasta que lo borren.', 'asde-area-privada' ); ?></p>
+						</td>
+					</tr>
+					<tr>
+						<th scope="row"><?php esc_html_e( 'Avisos push', 'asde-area-privada' ); ?></th>
+						<td>
+							<label>
+								<input type="checkbox" name="push" value="1" <?php checked( $d['push'] ); ?>>
+								<?php esc_html_e( 'Ofrecer a las personas activar avisos en el móvil (notificaciones push)', 'asde-area-privada' ); ?>
+							</label>
+							<p class="description">
+								<?php esc_html_e( 'Aparece una tarjeta «Avisos en este móvil» en el inicio del área. El aviso es siempre genérico («Tienes una novedad en el área privada»): no lleva nombres ni datos. Cada persona decide en su móvil y por categoría. En iPhone solo funciona con la app instalada (iOS 16.4 o posterior). Se suma al email, no lo sustituye. De momento solo se pueden activar y desactivar los avisos en cada móvil: el envío llega en la siguiente versión.', 'asde-area-privada' ); ?>
+							</p>
+							<p class="description">
+								<?php
+								echo esc_html(
+									sprintf(
+										/* translators: 1: móviles suscritos, 2: cuentas */
+										__( 'Ahora: %1$d móviles suscritos en %2$d cuentas. Claves del servidor: %3$s.', 'asde-area-privada' ),
+										$suscritos['dispositivos'],
+										$suscritos['cuentas'],
+										Vapid::existe() ? __( 'creadas', 'asde-area-privada' ) : __( 'sin crear (se crean al guardar con los avisos encendidos)', 'asde-area-privada' )
+									)
+								);
+								?>
+							</p>
 						</td>
 					</tr>
 					<tr>

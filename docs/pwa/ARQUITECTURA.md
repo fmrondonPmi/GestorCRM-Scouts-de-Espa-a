@@ -32,6 +32,10 @@
 | `src/Pwa/Comprobacion.php` | 5 (0.17.3) | «Comprobar el servidor» (pide las 3 rutas a sí mismo y juzga estado, tipo, `Cache-Control`, cachés y contenido idéntico) y la pieza «App móvil» de *Instalación y entorno* |
 | `src/Admin/PwaPage.php` | 5 (0.17.3) | *Grupos Scouts → App móvil*: ajustes, cómo sale la app y comprobación; auditoría `pwa_guardada` |
 | `tests/pwa-ajustes.php` | 5 (0.17.3) | 74 comprobaciones; **sí** entra en `probar-todo.sh` |
+| `src/Pwa/Vapid.php`, `Suscripciones.php`, `Push.php` | 7a (0.17.4) | Claves VAPID, suscripciones cifradas por cuenta (usermeta) y categorías, operaciones AJAX de la tarjeta y sus datos; `openssl-minimo.cnf` para generar claves en Windows |
+| `assets/pwa/push.js` | 7a (0.17.4) | Tarjeta «Avisos en este móvil» en el inicio del área (el permiso se pide al pulsar) |
+| `assets/pwa/sw.js` (parte push) | 7a (0.17.4) | `push` (texto siempre genérico; el mensaje solo trae la ruta) y `notificationclick` |
+| `tests/pwa-push.php` | 7a (0.17.4) | 121 comprobaciones; entra en la suite |
 | `tests/pwa.php` | 1… | Pruebas (198 en la 0.17.2; no entra en `probar-todo.sh` sin argumentos) |
 
 ## Trampas conocidas
@@ -47,3 +51,7 @@
 - **En el Chrome del usuario** (extensión): solo lectura y medidas; no pulsar «Instalar» ni «Salir» (instala la app o cierra su sesión); limpiar `localStorage` y cerrar la pestaña al terminar.
 - **Pocos procesos PHP (Local: 2):** una petición a uno mismo desde una pantalla de administración puede caer en el proceso ocupado por esa misma pantalla y agotar el tiempo. `Comprobacion::ejecutar()` repite una vez, y solo, si el error es de «timed out». En producción no suele pasar.
 - **Formularios de WordPress:** `form.submit()` falla porque el botón de enviar se llama `submit`; en pruebas con el navegador usar `HTMLFormElement.prototype.submit.call(form)`.
+- **Push: el texto del aviso nunca viene del mensaje.** El `push` del service worker saca título y texto de su configuración (genérico, en el idioma de la persona) y del mensaje solo toma `u` (una ruta), que se valida contra el alcance de la app. Así, aunque alguien consiguiera mandar un mensaje, no puede poner nombres, importes ni DNI en la pantalla de bloqueo. El test lo comprueba con el código fuente del SW.
+- **Push: SSRF.** El servidor hará peticiones a la dirección de cada suscripción; por eso solo se admiten los servicios de avisos conocidos (`Suscripciones::hosts_permitidos()`), https y puerto 443, sin usuario ni clave.
+- **Push y OpenSSL de Windows:** `openssl_pkey_new()` falla («No such process») si PHP no encuentra un `openssl.cnf`; `Vapid::generar()` reintenta con `src/Pwa/openssl-minimo.cnf` (con `default_bits`, si no, avisa de «384 bits»). En Linux/Hostinger funciona sin él. `openssl_pkey_derive`, `aes-128-gcm` y `hash_hkdf` están disponibles (comprobado en PHP 8.5/OpenSSL 3.5).
+- **El permiso de notificaciones no se puede automatizar** (ni con la extensión de Chrome): se pide con un toque de la persona y lo concede ella en el navegador. Las pruebas del flujo usan una ventana falsa; la suscripción real la hace el usuario.

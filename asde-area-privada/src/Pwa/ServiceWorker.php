@@ -44,7 +44,7 @@ final class ServiceWorker {
 	 * La versión lleva una huella de la página «sin conexión»: si cambian los colores o el idioma,
 	 * el service worker cambia, el navegador lo actualiza y vuelve a guardar la página nueva.
 	 *
-	 * @return array{version:string, offline:string, precache:string[], estaticos:string}
+	 * @return array{version:string, offline:string, precache:string[], estaticos:string, push:array<string, string>}
 	 */
 	public static function config(): array {
 		return array(
@@ -52,6 +52,14 @@ final class ServiceWorker {
 			'offline'   => self::url_sin_conexion(),
 			'precache'  => array( self::url_sin_conexion() ),
 			'estaticos' => self::ruta_estaticos(),
+			// Avisos push: el texto sale siempre de aquí (genérico, P-PUSH-2); el mensaje solo puede traer la página de destino.
+			'push'      => array(
+				'titulo'  => Manifiesto::nombre_corto(),
+				'texto'   => asde_t( 'Tienes una novedad en el área privada' ),
+				'icono'   => Iconos::manifiesto()[0]['src'],
+				'alcance' => Manifiesto::alcance(),
+				'inicio'  => Manifiesto::inicio(),
+			),
 		);
 	}
 

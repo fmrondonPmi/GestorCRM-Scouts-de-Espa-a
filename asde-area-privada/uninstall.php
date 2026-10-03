@@ -62,3 +62,9 @@ if ( $admin ) {
 		}
 	}
 }
+
+// App móvil (PWA, v0.17): ajustes, claves VAPID de los avisos push y las suscripciones de cada cuenta (cifradas).
+delete_option( 'asde_ap_pwa' );
+delete_option( 'asde_ap_push_vapid' );
+delete_metadata( 'user', 0, 'asde_ap_push', '', true );
+delete_metadata( 'user', 0, 'asde_ap_push_cats', '', true );

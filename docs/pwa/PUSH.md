@@ -25,7 +25,7 @@ Consecuencias: (a) **no se puede garantizar** que todas las familias reciban pus
 ## 3. Piezas técnicas (propuesta)
 
 - **Claves VAPID**: se generan una vez (curva P-256 con OpenSSL de PHP, ya disponible) y se guardan cifradas (`Crypto`, como las contraseñas del CRM). La clave pública va al navegador.
-- **Tabla `{prefix}asde_push`**: `id`, `user_id`, huella del *endpoint* (para no duplicar), *endpoint* **cifrado**, `p256dh` y `auth` cifrados, idioma, preferencias, creado, último envío, fallos. Se **borra** la suscripción cuando el servicio de avisos contesta 404/410 (el móvil la dio de baja) y al borrar o desactivar la cuenta. Es un dato personal (identifica un dispositivo): cifrado, mínimo y con caducidad (doc 08).
+- **(Cambiado en 7a: usermeta, ver §10.) Tabla `{prefix}asde_push`**: `id`, `user_id`, huella del *endpoint* (para no duplicar), *endpoint* **cifrado**, `p256dh` y `auth` cifrados, idioma, preferencias, creado, último envío, fallos. Se **borra** la suscripción cuando el servicio de avisos contesta 404/410 (el móvil la dio de baja) y al borrar o desactivar la cuenta. Es un dato personal (identifica un dispositivo): cifrado, mínimo y con caducidad (doc 08).
 - **Emisor en PHP sin librerías externas** (el plugin no usa Composer): ECDH P-256 (`openssl_pkey_derive`), HKDF (`hash_hkdf`), AES-128-GCM (`openssl_encrypt`), firma ES256 del VAPID (`openssl_sign` + conversión DER → R‖S). Se prueba con los **vectores de prueba de los RFC** (así se sabe que el cifrado es correcto sin necesitar un móvil). Alternativa: incluir la librería `minishlink/web-push` (más código externo que mantener y revisar).
 - **Cola de envío**: los avisos no se mandan en la petición de la persona (tardaría y puede fallar): se encolan y salen por el WP-Cron en tandas (como ya hace la corrección de números en segundo plano, doc 17), con reintentos y límite.
 - **Service worker** (`sw.js`): dos manejadores nuevos, `push` (muestra el aviso con título, texto, icono de la app y destino) y `notificationclick` (abre o enfoca la página dentro del alcance). Sigue sin guardar nada personal en el móvil (D6).
@@ -57,7 +57,7 @@ Consecuencias: (a) **no se puede garantizar** que todas las familias reciban pus
 
 | # | Paso | Contenido | Prueba |
 |---|---|---|---|
-| 7a | **Base:** claves VAPID, tabla, suscribir/desuscribir, botón «Activar avisos», manejador `push`/`notificationclick` en el SW (con aviso genérico), categorías y pantalla de la persona | Suscribirse de verdad desde el Chrome del usuario en Local (localhost vale) |
+| 7a ✅ (v0.17.4) | **Base:** claves VAPID, tabla, suscribir/desuscribir, botón «Activar avisos», manejador `push`/`notificationclick` en el SW (con aviso genérico), categorías y pantalla de la persona | Suscribirse de verdad desde el Chrome del usuario en Local (localhost vale) |
 | 7b | **Emisor:** cifrado Web Push + VAPID en PHP, envío, borrado de suscripciones muertas, cola con el WP-Cron | Vectores de los RFC + un aviso real a Chrome |
 | 7c | **Avisos:** conectar los sucesos elegidos (§5), preferencias por categoría, idiomas, filtro por grupo | Pruebas con CRM simulado; un caso por suceso |
 | 7d | **Administración y manual:** interruptor, aviso de prueba, comprobaciones en «App móvil» y «Instalación y entorno», apartado en los manuales, `MANUAL-PUBLICACION.md` | Pantalla real + iPhone/Android si hay móvil |
@@ -79,3 +79,20 @@ Cada paso termina con pruebas («TODO OK»), docs (`ESTADO.md`, doc 00, doc 21 y
 
 - **Esfuerzo:** cuatro pasos (7a–7d), parecidos en tamaño a las secciones 3–5 (cada uno, una versión del plugin). El emisor (7b) es lo más delicado por la criptografía; se cubre con los vectores de los RFC.
 - **Riesgos:** (1) iPhone: solo si instalan la app y aceptan; (2) hosting: la web debe poder **salir** a los servicios de avisos (Google/Apple/Mozilla) y tener el WP-Cron funcionando (doc 18); (3) contenido personal en la pantalla de bloqueo (se evita con avisos genéricos); (4) expectativas: push no garantiza entrega inmediata.
+
+## 9. Decisiones del usuario (2026-10-03)
+
+| # | Decisión |
+|---|---|
+| P-PUSH-1 | **Los cuatro grupos de avisos**: uniforme, pagos y cargos SEPA, cambios de ficha y avisos del equipo (solicitudes pendientes, cambios por aprobar, fin de tareas en segundo plano) |
+| P-PUSH-2 | **Texto genérico** en la pantalla de bloqueo («Tienes una novedad en el área privada») |
+| P-PUSH-3 | **Se suman al email** (el email no se toca) |
+| P-PUSH-4 a 6 | Se toma la **propuesta por defecto** (cada persona por categoría + interruptor general; cuentas de 14–17 incluidas con su propio consentimiento; sin aviso manual al principio). Se pueden cambiar cuando se quiera |
+
+## 10. Decisiones de diseño tomadas al empezar (7a, v0.17.4)
+
+- **Suscripciones en `usermeta`, no en una tabla nueva** (cambia lo propuesto en §3): clave `asde_ap_push`, lista de dispositivos de la cuenta (máx. 5), cada uno **cifrado** con `Crypto::encrypt_contexto( …, 'push|<id>' )` (endpoint + claves). Así no hay migración de esquema, y al borrar el usuario WordPress borra sus suscripciones. Las preferencias por categoría, en `asde_ap_push_cats`.
+- **Apagado por defecto** (regla 5 del `CLAUDE.md`): la opción `asde_ap_pwa` gana el campo `push` (falso si no está). Solo el administrador lo enciende (*App móvil*).
+- **Solo endpoints de servicios de avisos conocidos** (Google, Mozilla, Apple, Microsoft; ampliable con el filtro `asde_ap_push_hosts`): el servidor luego hace una petición a esa dirección, y sin lista cerrada cualquier cuenta podría apuntarla a una dirección interna (SSRF).
+- **Claves VAPID** en la opción `asde_ap_push_vapid` (la privada, cifrada). OpenSSL de PHP en Windows (Local) **no genera claves sin un `openssl.cnf`**: se reintenta con `src/Pwa/openssl-minimo.cnf` (probado con OpenSSL 3.5/PHP 8.5; en Linux/Hostinger funciona sin él).
+- **Dónde se activa**: una tarjeta «Avisos en este móvil» en el **inicio del área** (la pone `assets/pwa/push.js`; usa las clases de tarjeta del plugin), con botón «Activar avisos» (el permiso se pide tras el toque) y las categorías.
