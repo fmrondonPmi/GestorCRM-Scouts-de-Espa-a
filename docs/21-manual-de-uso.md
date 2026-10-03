@@ -1,4 +1,4 @@
-# 21 · Manual de uso en HTML (v0.14.1)
+# 21 · Manuales de uso en HTML (v0.15: cinco manuales por perfil)
 
 ## Peticiones del usuario
 
@@ -6,7 +6,27 @@
 - **2026-09-29:** «Actualiza el artefacto.» → versión 2, con la v0.11 (solicitudes de acceso, ventana emergente, menú nuevo, uniformes y «Mis pagos»). Todas las capturas se rehicieron. El usuario la subió a https://baleares.scout.es/temporal/index.html.
 - **2026-10-02:** «En este site (…/temporal/index.html) había subido un manual, ¿puedes generar el mismo manual actualizado?» y, al aclararlo, **«no en el mismo sitio sino en local»** → versión 3, con la v0.14.1, **solo en local**: Claude no toca el sitio publicado; el usuario sube lo que quiera.
 
-## El manual
+- **2026-10-03:** «Separemos los manuales: 1. de gestión del CRM, 2. para los usuarios familias / tutores, 3. uno para asociados menores de edad, 4. uno para scouters solo con sección asociada, 5. uno para el equipo de coordinación (Tesorería, Secretaría y Coordinación)» → **versión 4**, con la v0.15.
+
+## Versión 4 · cinco manuales por perfil (v0.15, 2026-10-03)
+
+| Manual | Fichero | Para quién | Apartados |
+|---|---|---|---|
+| Gestión del CRM y de la web | `manual/administracion.html` | Administración de WordPress | cómo trabaja la web con SinergiaCRM (qué lee, qué escribe, el usuario de API), grupos y conexión, organización federada y usuario de acceso, instalación, tema, colores, idioma y etiquetas, qué datos guarda la web, diagnóstico, preguntas |
+| Familias | `manual/familias.html` | Madres, padres y tutores (cuenta familiar) | para quién, entrar (`nº + T`/`T2`), pedir el acceso, primera vez, inicio, fichas de los hijos y proponer cambios, Mis pagos, firmar la domiciliación SEPA, uniforme, idioma, seguridad (opcional), preguntas |
+| Asociados menores de edad | `manual/participantes.html` | Educandos de 14 a 17 años con cuenta propia | para quién, entrar, pedir el acceso, primera vez, inicio, Mis datos (cambia su email y sus teléfonos; no ve salud), Mis pagos (la domiciliación la firma la familia), uniforme, idioma, seguridad, preguntas |
+| Scouters | `manual/scouters.html` | Scouters y voluntariado con sección | para quién, entrar, primera vez, seguridad (obligatoria), inicio (Mi espacio / Gestión del grupo), ventana emergente, fichas de su sección, cambios, solicitudes de su sección, informes, Tesorería (pagos y familias), Mi uniforme y gestión de los de su sección, idioma, preguntas |
+| Equipo de coordinación | `manual/coordinacion.html` | Tesorería, Secretaría y Coordinación | para quién (tabla de quién hace qué), entrar, primera vez, seguridad, inicio, ventana, personas y números de socio, dar acceso, solicitudes, usuarios y emails, fichas, cambios, informes, Tesorería completa (con banco y SEPA), uniformes (pago, pedido, entrega y configuración), idioma, preguntas |
+
+- **Dónde:** `manual/index.html` es ahora la **portada** con los cinco manuales (en el orden pedido); `manual.css` y `manual.js` son comunes; `capturas/` (65 capturas). Cada manual enlaza con los demás («Los otros manuales»).
+- **Cómo se generan:** los apartados están en `manual/fuentes/*.html` (los comunes, como entrar, contraseña, idioma o seguridad, se escriben una vez) y `php herramientas/generar-manuales.php` monta los cinco HTML y la portada: índice lateral a partir de los `<h2>` y los `<h3 id>`, atajo `<captura src="…" url="…" alt="…" larga|movil>pie</captura>` y comprobación de capturas que existen, `id` repetidos y enlaces rotos (también entre manuales). **No se editan a mano los `.html` generados.** `fuentes/` no hace falta para publicar.
+- **Supuesto:** «manual de gestión del CRM» se ha entendido como el de **quien administra la web y su conexión con SinergiaCRM** (no un manual de uso del propio CRM).
+- **Capturas:** todas rehechas con la v0.15 (menús «Mi espacio» / «Gestión del grupo», «Mi uniforme», selector de idioma, que sale porque por defecto se deja elegir). Nuevas: `51`–`65` y `54b` (inicio del scouter, de la familia y del participante, ficha y contacto del participante, Mi uniforme y gestión de uniformes del scouter, sus solicitudes y su Tesorería, Mis pagos del participante, acceso con el selector de idioma, inicio en catalán, pantallas **Colores** e **Idioma y etiquetas**, inicio de la familia en el móvil).
+- **CRM simulado:** tiene `metadatos` (apagado por defecto) para responder a `get_module_fields`; sin metadatos, la ficha propia del participante salía entera en solo lectura (en el sitio real los da el CRM). `manual-capturas.php` lo enciende solo para esa captura.
+- **Siguen siendo de la versión 2** `23-grupos`, `23b-grupo-editar` y `25-diagnostico` (la pantalla de grupos del Local enseñaría el usuario real del CRM).
+- **No se ha publicado nada**: subir los manuales a la web es cosa del usuario (zip `manual-de-uso-0.15.0.zip` en la carpeta antigua, sin `fuentes/`).
+
+## El manual (versión 3, v0.14.1; sustituido por la versión 4)
 
 - **Dónde (versión 3):** `manual/index.html` + `manual/capturas/*.png` en el **repo git** (`C:\Proyectos\GestorCRM\manual`, desde el 2026-10-02; antes estaban en la raíz de este proyecto) (una sola página con sus imágenes; se abre con doble clic o se sube la carpeta entera) y el paquete **`manual-de-uso-0.14.1.zip`** (lo mismo, con rutas `/`, para subirlo de una vez al hosting y descomprimirlo). Para verlo en el Local: `http://localhost:10011/temporal/index.html` (copia en `app/public/temporal/`, que antes no existía). **El publicado en baleares.scout.es sigue siendo la versión 2 (v0.11)** hasta que el usuario suba la nueva.
 - **Para quién:** socios, familias, scouters, Secretaría, Coordinación, Tesorería y administradores.

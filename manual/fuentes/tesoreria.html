@@ -1,0 +1,62 @@
+<section id="tesoreria">
+	<h2><span class="quien">Scouters y Tesorería</span>Tesorería</h2>
+	<p class="resumen">Cuotas de las familias, pagos, banco, domiciliaciones SEPA y coste federativo, por ronda (curso scout). Todos los scouters ven pagos y familias; la configuración es de Tesorería, Secretaría y Coordinación.</p>
+	<h3 id="control">Control de pagos</h3>
+	<captura src="15-tesoreria" url="/area-privada/tesoreria/" alt="Control de pagos de la ronda con totales, estados y la lista de familias" larga>Resumen de la ronda y una fila por familia. Avisa de los educandos que no están en ninguna familia, a los que no se está cobrando.</captura>
+	<ul>
+		<li>Las familias tienen un nº propio, <code>F</code> + grupo + correlativo (<code>F999001</code>): es la referencia que deben poner en las transferencias.</li>
+		<li><strong>Estados:</strong> «Pagado», «Pago parcial», «Pendiente» y «Con plazos vencidos».</li>
+		<li>Pagan los educandos de Castores a Rovers; scouters y voluntariado no.</li>
+		<li>Lo que se registra aquí es lo que cada familia ve en <a href="familias.html#mis-pagos">Mis pagos</a>. Los pagos del uniforme van aparte (ver <a href="#uniformes-gestion">Gestión de pedidos</a>).</li>
+	</ul>
+	<h3 id="familia">Ficha de una familia</h3>
+	<captura src="16-tesoreria-familia" url="/area-privada/tesoreria/?familia=1" alt="Ficha de una familia de Tesorería con el desglose de la cuota, los plazos y los movimientos" larga>Quién paga, desglose de la cuota, plazos, registrar un pago o un ajuste, y los movimientos.</captura>
+	<ul>
+		<li><strong>Registrar pago:</strong> fecha, importe, forma (efectivo, transferencia, bizum…), referencia y nota. La nota es interna: la familia no la ve.</li>
+		<li><strong>Ajuste:</strong> un descuento o beca (en negativo) o un recargo, siempre con su motivo.</li>
+		<li>Un movimiento equivocado se <strong>anula</strong>; no se borra.</li>
+	</ul>
+	<h3 id="familias">Familias</h3>
+	<captura src="17-familias" url="/area-privada/tesoreria/familias/" alt="Página Familias con sugerencias de hermanos y la lista de familias" larga>Las familias del grupo y, debajo, los educandos que aún no están en ninguna: se marcan y se crea su familia. Si varios comparten email, la web sugiere juntarlos (suelen ser hermanos). Una familia puede incluir a la madre o al padre scouter.</captura>
+	<h3 id="cuotas">Cuotas y plazos</h3>
+	<captura src="18-cuotas" url="/area-privada/tesoreria/cuotas/" alt="Configuración de cuotas: inscripción, seguro, anualidad por tramos, plazos y tabla de resultados" larga>Inscripción y seguro por hijo, anualidad según el número de hijos con un máximo, secciones que pagan y plazos. La tabla final enseña lo que paga una familia de 1 a 5 hijos.</captura>
+	<p>Los plazos deben sumar el 100 %; si no, la página lo avisa.</p>
+
+	<h3 id="coste-federativo">Coste federativo</h3>
+	<p>Lo que el grupo paga a su organización federada por <strong>todos</strong> sus asociados activos: cuota asociativa, seguro y, si los hay, otros conceptos. Se calcula con los socios activos del CRM de hoy.</p>
+	<captura src="19-coste-federativo" url="/area-privada/tesoreria/coste-federativo/" alt="Coste federativo: seguro por categorías, otros conceptos, totales y configuración" larga>Arriba el cálculo; abajo, la configuración de la ronda.</captura>
+	<ul>
+		<li><strong>Seguro:</strong> una prima por categoría: menores de la edad de corte (14 en Scouts de Balears), educandos de esa edad o más, y adultos. Como alternativa, un seguro promedio por asociado.</li>
+		<li><strong>Otros conceptos:</strong> cualquier importe más que cobre la organización, por cada asociado, cada educando, cada adulto o una vez por grupo. Un importe negativo es un descuento. Para quitar uno, deja su nombre vacío.</li>
+		<li><strong>Totales:</strong> con la tabla de primas y con el seguro promedio, y la diferencia con lo que se espera cobrar a las familias.</li>
+		<li>Cada ronda empieza con los importes de la organización federada (ver <a href="administracion.html#organizacion">Administración</a>) y el grupo los puede ajustar.</li>
+	</ul>
+
+	<h3 id="banco">Banco</h3>
+	<captura src="20-banco" url="/area-privada/tesoreria/banco/" alt="Página Banco con la última importación y los movimientos pendientes de conciliar" larga>Movimientos importados del extracto y su conciliación con las familias.</captura>
+	<ol class="pasos">
+		<li><div>En la banca online del grupo, descarga el extracto en <strong>Norma 43</strong> (también llamado «Cuaderno 43» o AEB 43) o en CSV.</div></li>
+		<li><div><strong>«Importar movimientos»</strong> y elige el fichero. La web enseña una vista previa y no duplica lo que ya estaba importado.</div></li>
+		<li><div>Para cada ingreso, elige la familia y pulsa <strong>«Conciliar»</strong>: se registra como pago de esa familia. Si el concepto lleva el nº de familia (<code>F999003</code>), la web ya la sugiere; si no, búscala por su nº o por un apellido.</div></li>
+		<li><div>Lo que no es una cuota se marca con <strong>«No es una cuota»</strong>, y los gastos, con <strong>«Marcar revisado»</strong>. Los ingresos de los uniformes se validan en su pedido.</div></li>
+	</ol>
+	<p>Con varios ingresos que llevan la referencia de su familia, un botón los concilia todos de una vez.</p>
+
+	<h3 id="sepa">Domiciliaciones SEPA</h3>
+	<p class="quien-sub">Secretaría, Coordinación y Tesorería</p>
+	<p>Las familias autorizan en <a href="familias.html#sepa">«Mis pagos»</a> que se les cobre la cuota por <strong>adeudo directo SEPA</strong>. Aquí se generan los ficheros para el banco (formato XML <span class="mono">pain.008</span>, el «Cuaderno 19.14»), se avisa a las familias de cada cargo y se registran los cobros.</p>
+		<captura src="45-sepa" url="/area-privada/tesoreria/domiciliaciones/" alt="Pantalla Domiciliaciones SEPA con los datos del acreedor, el formulario de nueva remesa, la lista de remesas y las autorizaciones de las familias" larga>Los pasos, los datos del acreedor, una nueva remesa, las remesas hechas y, abajo, qué familias han firmado su autorización.</captura>
+	<ol class="pasos">
+		<li><div><strong>Datos del acreedor</strong> (el grupo): nombre, identificador del acreedor (ICS) e IBAN, que da el banco al contratar las domiciliaciones. El IBAN se guarda cifrado. Con «Ofrecer la domiciliación a las familias» marcado, aparece en «Mis pagos».</div></li>
+		<li><div><strong>Las familias firman</strong> su autorización. Abajo, «Autorizaciones de las familias» dice quién la tiene (referencia, IBAN enmascarado y fecha) y permite anularla con un motivo.</div></li>
+		<li><div><strong>Nueva remesa:</strong> elige qué se cobra (todo lo pendiente de la ronda o hasta un plazo), la fecha de cobro (siempre un día laborable, con unos días hábiles de margen) y el concepto. «Ver qué se cobraría» enseña lo que se cobraría a cada familia antes de crearla.</div></li>
+		<li><div><strong>Descarga el fichero XML</strong> y súbelo al banco (por ejemplo, en Colonya Directa, «Remesas de adeudos»). Márcala como <strong>enviada</strong> y <strong>avisa a las familias</strong> por email, con los días de antelación que hayas puesto en los datos del acreedor.</div></li>
+		<li><div>Cuando el banco cobre, <strong>registra los cobros</strong>: pasan a ser pagos de la familia en Tesorería. Marca los <strong>devueltos</strong>; los que no marques siguen pendientes.</div></li>
+	</ol>
+		<captura src="46-sepa-remesa" url="/area-privada/tesoreria/domiciliaciones/?remesa=1" alt="Detalle de una remesa SEPA: sus datos, el fichero XML, el aviso a las familias y los adeudos con las casillas de cobrado y devuelto">Una remesa enviada al banco: el fichero, el aviso a las familias y, por cada adeudo, si se ha cobrado o devuelto.</captura>
+	<ul>
+		<li>La primera remesa de una familia lleva la secuencia <strong>FRST</strong>; las siguientes, <strong>RCUR</strong> (la web lo cambia al marcarla como enviada).</li>
+		<li>La web no deja crear dos remesas con los mismos adeudos sin cobrar.</li>
+		<li>El IBAN y el titular se guardan cifrados, la autorización se conserva mientras esté vigente y 14 meses después de anularla, como pide la norma SEPA.</li>
+	</ul>
+</section>

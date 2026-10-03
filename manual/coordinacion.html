@@ -1,0 +1,529 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Manual del equipo de coordinación · Área privada de los Grupos Scouts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@600;700&family=JetBrains+Mono:wght@500&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap">
+<link rel="stylesheet" href="manual.css">
+</head>
+<body>
+<header class="portada">
+	<div class="portada__dentro">
+		<p class="antetitulo">Manual de uso · versión 0.15 · octubre de 2026 · <a class="portada__volver" href="index.html">Todos los manuales</a></p>
+		<h1>Manual del equipo de coordinación</h1>
+		<p class="portada__perfil">Tesorería, Secretaría y Coordinación</p>
+		<p class="entrada">Todo lo que lleva el equipo del grupo: personas y números de socio, dar acceso, solicitudes, usuarios y emails, fichas y cambios, informes, la Tesorería completa (cuotas, coste federativo, banco y domiciliaciones SEPA) y los uniformes, del pago a la entrega.</p>
+		<p class="demo"><strong>Todas las capturas son de un WordPress de demostración con un CRM simulado y datos inventados:</strong> el «Grupo Scout Ejemplo» (grupo 999), personas que no existen y emails <span class="mono">@example.invalid</span>. En tu grupo verás tus datos del CRM.</p>
+	</div>
+	<div class="secciones-franja" aria-hidden="true">
+		<span style="background: var(--castores)"></span><span style="background: var(--lobatos)"></span><span style="background: var(--scouts)"></span><span style="background: var(--escultas)"></span><span style="background: var(--rovers)"></span>
+	</div>
+</header>
+
+<div class="cuerpo">
+	<nav class="indice" aria-label="Índice">
+		<h2>En este manual</h2>
+		<ol>
+<li><a href="#para-quien">Para quién es este manual</a></li>
+<li><a href="#entrar">Entrar</a></li>
+<li><a href="#primera-vez">Primera vez y contraseña olvidada</a></li>
+<li class="sub"><a href="#activar">Activar la cuenta</a></li>
+<li class="sub"><a href="#olvidada">¿Has olvidado tu contraseña?</a></li>
+<li><a href="#seguridad">Seguridad de la cuenta</a></li>
+<li><a href="#inicio">El inicio y el menú</a></li>
+<li><a href="#ventana">La ventana emergente</a></li>
+<li><a href="#personas">Personas del grupo y números de socio</a></li>
+<li class="sub"><a href="#numero-territorial">El nº territorial: verlo y corregirlo</a></li>
+<li><a href="#alta">Dar acceso a un socio o a su familia</a></li>
+<li><a href="#solicitudes">Solicitudes de acceso</a></li>
+<li><a href="#usuarios">Usuarios y registro de emails</a></li>
+<li><a href="#fichas">Fichas</a></li>
+<li class="sub"><a href="#salud">Salud y alimentación</a></li>
+<li><a href="#cambios">Cambios propuestos por las familias</a></li>
+<li><a href="#informes">Informes</a></li>
+<li><a href="#tesoreria">Tesorería</a></li>
+<li class="sub"><a href="#control">Control de pagos</a></li>
+<li class="sub"><a href="#familia">Ficha de una familia</a></li>
+<li class="sub"><a href="#familias">Familias</a></li>
+<li class="sub"><a href="#cuotas">Cuotas y plazos</a></li>
+<li class="sub"><a href="#coste-federativo">Coste federativo</a></li>
+<li class="sub"><a href="#banco">Banco</a></li>
+<li class="sub"><a href="#sepa">Domiciliaciones SEPA</a></li>
+<li><a href="#uniformes">Uniformes: pagos, pedido al proveedor y entregas</a></li>
+<li class="sub"><a href="#uniformes-gestion">Gestión de pedidos</a></li>
+<li class="sub"><a href="#uniformes-config">Configuración</a></li>
+<li><a href="#idioma">El idioma de la web</a></li>
+<li><a href="#preguntas">Preguntas frecuentes</a></li>
+		</ol>
+	</nav>
+
+	<main>
+		<details class="indice-movil">
+			<summary>Índice del manual</summary>
+			<ol>
+<li><a href="#para-quien">Para quién es este manual</a></li>
+<li><a href="#entrar">Entrar</a></li>
+<li><a href="#primera-vez">Primera vez y contraseña olvidada</a></li>
+<li><a href="#seguridad">Seguridad de la cuenta</a></li>
+<li><a href="#inicio">El inicio y el menú</a></li>
+<li><a href="#ventana">La ventana emergente</a></li>
+<li><a href="#personas">Personas del grupo y números de socio</a></li>
+<li><a href="#alta">Dar acceso a un socio o a su familia</a></li>
+<li><a href="#solicitudes">Solicitudes de acceso</a></li>
+<li><a href="#usuarios">Usuarios y registro de emails</a></li>
+<li><a href="#fichas">Fichas</a></li>
+<li><a href="#cambios">Cambios propuestos por las familias</a></li>
+<li><a href="#informes">Informes</a></li>
+<li><a href="#tesoreria">Tesorería</a></li>
+<li><a href="#uniformes">Uniformes: pagos, pedido al proveedor y entregas</a></li>
+<li><a href="#idioma">El idioma de la web</a></li>
+<li><a href="#preguntas">Preguntas frecuentes</a></li>
+			</ol>
+		</details>
+
+<section id="para-quien">
+	<h2>Para quién es este manual</h2>
+	<p class="resumen">Para el equipo que lleva el grupo: <strong>Secretaría</strong>, <strong>Coordinación</strong> y <strong>Tesorería</strong>. Son responsabilidades de un scouter (se dan junto al rol de Scouter) o de un voluntario sin sección. Lo que haces con tu propia sección está en el <a href="scouters.html">manual para scouters</a>.</p>
+	<div class="tabla">
+		<table>
+			<thead><tr><th scope="col">Qué</th><th scope="col">Secretaría</th><th scope="col">Coordinación</th><th scope="col">Tesorería</th></tr></thead>
+			<tbody>
+				<tr><td><a href="#personas">Personas y números de socio</a></td><td>Sí</td><td>Sí</td><td>—</td></tr>
+				<tr><td><a href="#alta">Dar acceso</a> y <a href="#usuarios">usuarios</a></td><td>Sí</td><td>Sí</td><td>—</td></tr>
+				<tr><td><a href="#solicitudes">Solicitudes de acceso</a></td><td>Todas</td><td>Todas</td><td>—</td></tr>
+				<tr><td><a href="#fichas">Fichas</a></td><td>Edita todo</td><td>Ve todo; anota en salud y alimentación</td><td>—</td></tr>
+				<tr><td><a href="#cambios">Cambios de las familias</a></td><td>Todos</td><td>Todos</td><td>—</td></tr>
+				<tr><td><a href="#informes">Informes</a></td><td>Todo el grupo</td><td>Todo el grupo</td><td>—</td></tr>
+				<tr><td><a href="#tesoreria">Tesorería</a></td><td>Todo, con la configuración</td><td>Todo, con la configuración</td><td>Todo, con la configuración</td></tr>
+				<tr><td><a href="#uniformes">Uniformes</a></td><td>Ve todos y entrega</td><td>Los incluye en el pedido al proveedor, entrega y configura</td><td>Valida los pagos, entrega y configura</td></tr>
+			</tbody>
+		</table>
+	</div>
+	<p>Si tienes además el rol de Scouter, también tienes lo de tus secciones. Las cuentas de Secretaría y Coordinación ven a todo el grupo; nadie ve datos de otros grupos.</p>
+</section>
+
+<section id="entrar">
+	<h2>Entrar</h2>
+	<p class="resumen">Se entra desde <strong>«Acceso socios»</strong>, en el menú de la web del grupo. Con la sesión iniciada, ese botón pasa a llamarse «Área privada».</p>
+	<figure class="captura"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/acceso/</span></div><div class="navegador__vista" data-ampliar><img src="capturas/01-acceso.png" width="1280" height="1095" alt="Pantalla Acceso socios con los campos Grupo Scout, Nº de socio/a o email, Contraseña y Código de verificación" loading="lazy"></div></div><figcaption><span>La pantalla de acceso. El grupo viene elegido si en la web solo hay uno. Debajo, «¿Aún no tienes cuenta? Solicita el acceso».</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<ol class="pasos">
+		<li><div><strong>Grupo Scout.</strong> Elige tu grupo. Solo puedes entrar en el tuyo.</div></li>
+		<li><div><strong>Nº de socio/a o email.</strong> Cualquiera de los tres:
+			<ul>
+				<li><strong>Tu nº de socio/a de Scouts de España,</strong> el de tu ficha del CRM (por ejemplo <code>118241</code>).</li>
+				<li><strong>Tu nº de socio/a territorial,</strong> el de siempre: el código de la organización, el nº del grupo y 4 cifras (en Scouts de Balears, por ejemplo <code>79990390</code>).</li>
+				<li><strong>Tu email:</strong> el de tu cuenta, aquel al que te llegó la invitación.</li>
+			</ul>
+		</div></li>
+		<li><div><strong>Contraseña.</strong> La que elegiste al activar la cuenta.</div></li>
+		<li><div><strong>Código de verificación.</strong> Solo si tienes activada la verificación en dos pasos: las 6 cifras de tu app o uno de tus códigos de recuperación. Si lo olvidas, la pantalla te lo pide y vuelves a escribir la contraseña.</div></li>
+	</ol>
+	<div class="nota"><p><strong>¿Cuál es mi usuario?</strong> El número que el grupo ha elegido como usuario: el de Scouts de España o el territorial. Es el que ves junto a tu nombre al entrar. Puedes entrar con cualquiera de los dos o con el email.</p></div>
+	<div class="nota"><p><strong>El mismo email en dos cuentas.</strong> Si eres scouter y además madre o padre de un educando, tu email puede ser el de tu cuenta y el de la cuenta familiar. Al entrar con el email se abre la cuenta cuya contraseña escribas. Si las dos tienen la misma contraseña, la pantalla te pide el nº de socio/a de la que quieres usar.</p></div>
+	<div class="moviles">
+		<figure class="captura movil"><div class="navegador"><div class="navegador__vista" data-ampliar><img src="capturas/26-movil-acceso.png" width="780" height="2342" alt="La pantalla de acceso en un móvil" loading="lazy"></div></div><figcaption><span>En el móvil, igual.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+		<div>
+			<h3>Si no te deja entrar</h3>
+			<ul>
+				<li><strong>«Nº de socio/a o email, contraseña o grupo incorrectos.»</strong> Revisa los tres datos. El mensaje no dice cuál falla, a propósito.</li>
+				<li><strong>«Demasiados intentos fallidos…»</strong> Tras 5 fallos seguidos hay que esperar 15 minutos, o pedir una contraseña nueva. Los intentos se cuentan por cuenta: da igual el número con el que pruebes.</li>
+				<li><strong>«…el CRM no responde.»</strong> Solo puede pasar con el email en cuentas antiguas que aún no han entrado nunca con él. Entra con tu nº de socio/a.</li>
+				<li>La página <span class="mono">wp-login.php</span> de WordPress es solo para quien edita la web: se entra siempre por «Acceso socios».</li>
+			</ul>
+		</div>
+	</div>
+</section>
+
+<section id="primera-vez">
+	<h2>Primera vez y contraseña olvidada</h2>
+	<h3 id="activar">Activar la cuenta</h3>
+	<ol class="pasos">
+		<li><div>Cuando el grupo te da acceso, o aprueba tu solicitud, te llega un email con tu usuario: «Activa tu acceso al área privada» o, si lo pediste tú, «Bienvenida al área privada: activa tu acceso».</div></li>
+		<li><div>Pulsa <strong>«Activar mi cuenta»</strong>. El enlace es personal, de un solo uso, y dura 7 días.</div></li>
+		<li><div>Elige una contraseña de al menos 10 caracteres. Mejor una frase fácil de recordar para ti y difícil de adivinar.</div></li>
+		<li><div>Entra por «Acceso socios» con tu usuario (el email de la invitación dice cuál es) o con el email en el que recibiste la invitación.</div></li>
+	</ol>
+	<h3 id="olvidada">¿Has olvidado tu contraseña?</h3>
+	<figure class="captura"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/recuperar-contrasena/</span></div><div class="navegador__vista" data-ampliar><img src="capturas/02-recuperar.png" width="1280" height="667" alt="Pantalla Recuperar contraseña con el campo Nº de socio/a o email" loading="lazy"></div></div><figcaption><span>Desde el enlace «¿Has olvidado tu contraseña?» de la pantalla de acceso.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<ul>
+		<li>Escribe tu usuario (vale el de Scouts de España o el territorial, con la T si es una cuenta familiar) o tu email.</li>
+		<li>Recibirás un enlace para elegir contraseña nueva, válido 24 horas, en el email de tu cuenta.</li>
+		<li>Si ese email es el de varias cuentas (la tuya y la de tu familia, por ejemplo), te llega un enlace para cada una. Cada email dice de qué usuario es.</li>
+		<li>La respuesta en pantalla es siempre la misma, exista o no el usuario. Si no llega nada, mira en la carpeta de spam; si el email está mal, pide a Secretaría que lo corrija en el CRM.</li>
+	</ul>
+</section>
+
+<section id="seguridad">
+	<h2>Seguridad de la cuenta</h2>
+	<p class="resumen">La verificación en dos pasos pide, además de la contraseña, un código de 6 cifras de una app del móvil. Para Scouter, Secretaría, Coordinación y Tesorería es <strong>obligatoria</strong>: ves datos de muchas personas, también de salud.</p>
+	<ul>
+		<li>Hay <strong>10 días de margen</strong> desde el alta: hasta entonces, el inicio te avisa de la fecha límite. Después no podrás entrar sin ella.</li>
+		<li>Se activa en <strong>«Seguridad»</strong>, junto a tu nombre: instala una app de autenticación (Google Authenticator, Microsoft Authenticator, Authy…), escanea el código QR, escribe el código de 6 cifras que te enseña y guarda los <strong>códigos de recuperación</strong>, que sirven si pierdes el móvil.</li>
+		<li>Al entrar, el código va en el campo «Código de verificación» de «Acceso socios».</li>
+		<li>Si pierdes el móvil y los códigos, pide a la administración de la web que te la quite para volver a activarla.</li>
+	</ul>
+</section>
+
+<section id="inicio">
+	<h2>El inicio y el menú</h2>
+	<p class="resumen">Al entrar ves tu saludo, tu usuario y tus roles, lo que tienes pendiente y dos bloques de tarjetas: <strong>«Para ti»</strong> y <strong>«Gestión del grupo»</strong>.</p>
+	<figure class="captura captura--larga"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/</span></div><div class="navegador__vista" data-ampliar tabindex="0"><img src="capturas/03-inicio.png" width="1280" height="1395" alt="Inicio del área privada de una persona de Secretaría y Coordinación, con el menú, el recuadro Pendiente de revisar y las tarjetas" loading="lazy"></div></div><figcaption><span>El inicio de Marta, de Secretaría y Coordinación: tiene solicitudes de acceso, cambios propuestos y pedidos de uniforme pendientes.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<div class="tabla">
+		<table>
+			<thead><tr><th scope="col">Parte del menú</th><th scope="col">Entradas</th></tr></thead>
+			<tbody>
+				<tr><td>Mi espacio</td><td>Mis datos · Mis pagos · Mi uniforme (si tienes ficha en el grupo)</td></tr>
+				<tr><td>Gestión del grupo</td><td>Personas · Solicitudes · Cambios · Informes · Gestión de uniformes · Tesorería · Usuarios (cada una, según tus roles)</td></tr>
+			</tbody>
+		</table>
+	</div>
+	<ul>
+		<li>El número entre paréntesis es lo que tienes pendiente: «Solicitudes (5)», «Cambios (2)».</li>
+		<li><strong>Pendiente de revisar</strong> reúne las solicitudes de acceso, los cambios propuestos y los pedidos de uniforme que te tocan, cada uno con el enlace a su lista.</li>
+		<li><strong>Junto a tu nombre:</strong> «Seguridad», el idioma si el grupo deja elegirlo, «Salir», «Mostrar nº territorial» (ver <a href="#numero-territorial">Nº territorial</a>) y «Ocultar cabecera».</li>
+		<li>Las listas largas (Usuarios, Personas) se filtran y ordenan sin recargar la pantalla.</li>
+	</ul>
+	<div class="moviles">
+		<figure class="captura movil"><div class="navegador"><div class="navegador__vista" data-ampliar><img src="capturas/27-movil-inicio.png" width="780" height="5289" alt="Inicio del área privada en el móvil" loading="lazy"></div></div><figcaption><span>El inicio en el móvil: el menú es una fila que se desplaza hacia los lados y las tarjetas van una debajo de otra.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+		<div>
+			<h3>Un administrador de la web</h3>
+			<p>Quien administra WordPress y no tiene ficha en el grupo ve solo la «Gestión del grupo», con todo. La configuración de la web está en el <a href="administracion.html">manual de gestión del CRM y de la web</a>.</p>
+		</div>
+	</div>
+</section>
+
+<section id="ventana">
+	<h2>La ventana emergente</h2>
+	<p class="resumen">Las fichas, «Dar acceso», las solicitudes y los pedidos de uniforme se abren en una ventana encima de la lista, sin salir de ella.</p>
+	<ul>
+		<li>Se cierra con la <strong>×</strong>, con la tecla <strong>Esc</strong> o pulsando fuera de ella. Si has guardado algo, la lista de detrás se actualiza al cerrarla.</li>
+		<li><strong>«Abrir en su página»</strong> la abre como página normal, por ejemplo para tenerla en otra pestaña.</li>
+		<li>En el móvil ocupa toda la pantalla.</li>
+		<li>Al pasar de una pantalla a otra, una <strong>barra fina arriba</strong> indica que se está cargando.</li>
+	</ul>
+</section>
+
+<section id="personas">
+	<h2><span class="quien">Secretaría y Coordinación</span>Personas del grupo y números de socio</h2>
+	<p class="resumen">Por aquí se empieza casi todo: las fichas, dar acceso y los números de socio. Es la única página donde aparecen también las personas sin membresía activa.</p>
+		<figure class="captura captura--larga"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/personas/</span></div><div class="navegador__vista" data-ampliar tabindex="0"><img src="capturas/04-personas.png" width="1280" height="2931" alt="Listado de Personas del grupo con el resumen de incidencias de números de socio y la tabla de personas con su nº territorial, su nº de Scouts de España y su acceso web" loading="lazy"></div></div><figcaption><span>Arriba, el resumen y las incidencias; debajo, la lista. Se puede desplazar dentro de la captura.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+		<ul>
+			<li>El <strong>nombre</strong> y «Ver ficha» abren la ficha en la ventana.</li>
+			<li>Las dos columnas de números: <strong>Nº territorial</strong>, el que se genera en el grupo y puede tener incidencias, y <strong>Nº Scouts de España (usuario)</strong>, el del CRM, que es con el que entra la persona cuando el grupo ha elegido ese como usuario.</li>
+			<li><strong>Acceso web:</strong> el usuario y su estado si tiene cuenta propia; la cuenta familiar si la tiene su familia («900031T · Cuenta familiar · Activo»); y si no tiene ninguna, el botón <strong>«Dar acceso»</strong>.</li>
+			<li>Se puede ordenar por cualquier columna y filtrar por nombre o nº de socio.</li>
+			<li>Las fichas se leen del CRM cada pocos minutos para que las páginas vayan rápido: el aviso de arriba dice cuándo fue la última lectura. Si acabas de cambiar algo directamente en el CRM, «Actualizar ahora» lo vuelve a leer.</li>
+		</ul>
+		<p>Colores de las secciones, los mismos en toda el área:</p>
+		<ul class="leyenda">
+			<li><i style="background: var(--castores)"></i>Castores</li>
+			<li><i style="background: var(--lobatos)"></i>Lobatos</li>
+			<li><i style="background: var(--scouts)"></i>Scouts</li>
+			<li><i style="background: var(--escultas)"></i>Escultas</li>
+			<li><i style="background: var(--rovers)"></i>Rovers</li>
+		</ul>
+		<h3 id="numero-territorial">El nº territorial: verlo y corregirlo</h3>
+		<p>El grupo puede dejar de usar el número territorial como usuario, pero ese número <strong>se sigue vigilando</strong> y se puede corregir como siempre: es el que identifica a la persona en la organización y en el CRM.</p>
+		<ul>
+			<li><strong>«Mostrar nº territorial»</strong>, junto a tu nombre, hace que cada pantalla (listas, fichas, solicitudes, «Dar acceso») enseñe el territorial al lado del de Scouts de España. Es una preferencia tuya: el resto de personas no la ven cambiada, y se puede apagar igual.</li>
+			<li><strong>La advertencia sale siempre,</strong> con la preferencia que sea: si el número territorial de alguien tiene un problema (formato antiguo, duplicado, no válido o sin número), la ficha, «Dar acceso» y las solicitudes lo avisan.</li>
+			<li>Con el nº de Scouts de España como usuario, esas incidencias <strong>avisan pero no impiden</strong> dar acceso. Si el usuario es el territorial, el alta espera a que se corrija.</li>
+		</ul>				<figure class="captura"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/personas/</span></div><div class="navegador__vista" data-ampliar><img src="capturas/48-ficha-territorial.png" width="1280" height="900" alt="Ficha de Paula abierta en la ventana, con su nº de Scouts de España, su nº territorial y el aviso de que no es válido" loading="lazy"></div></div><figcaption><span>Con «Mostrar nº territorial», la ficha enseña el territorial («terr.») junto al de Scouts de España. El aviso de que Paula tiene un número no válido saldría igual con la preferencia apagada.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+		<h3>Incidencias de números de socio</h3>
+		<div class="tabla">
+			<table>
+				<thead><tr><th scope="col">Incidencia</th><th scope="col">Ejemplo</th><th scope="col">Qué hacer</th></tr></thead>
+				<tbody>
+					<tr><td>Formato antiguo</td><td><code>079990040</code> o <code>9990041</code></td><td>«Corregir en el CRM» lo deja como <code>79990040</code>. Mientras, la web ya lo entiende.</td></tr>
+					<tr><td>Duplicado</td><td>Dos personas con <code>79990043</code></td><td>«Dar nº nuevo» a una de ellas. Con el territorial como usuario, ninguna de las dos puede recibir acceso hasta entonces; con el nº de Scouts de España, solo avisa.</td></tr>
+					<tr><td>No válido</td><td><code>X-12</code></td><td>Revisarlo en el CRM, o «Asignar nº» para darle el siguiente libre.</td></tr>
+					<tr><td>Sin número</td><td>—</td><td>«Asignar nº». Con el territorial como usuario, al darle acceso también se genera solo.</td></tr>
+				</tbody>
+			</table>
+		</div>
+		<figure class="captura"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/personas/</span></div><div class="navegador__vista" data-ampliar><img src="capturas/47-alta-aviso-territorial.png" width="1280" height="900" alt="«Dar acceso» a Paula, con el aviso de que su nº territorial no es válido" loading="lazy"></div></div><figcaption><span>«Dar acceso» a Paula, cuyo nº territorial no es válido (<code>X-12</code>): el aviso sale arriba, pero con el nº de Scouts de España como usuario se le puede dar acceso igual.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+		<h3>Correcciones de todas las fichas en segundo plano</h3>
+		<p>Los botones de arriba («Corregir en el CRM los formatos antiguos», «Resolver los duplicados») lanzan una tarea que sigue sola en el servidor. Puedes seguir usando la web, e incluso cerrar la página: un recuadro en todas las páginas del área dice cuántas fichas quedan.</p>
+		<figure class="captura"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/personas/</span></div><div class="navegador__vista" data-ampliar><img src="capturas/21-monitor.png" width="1280" height="760" alt="Recuadro de progreso de una corrección en segundo plano: quedan 68 de 106" loading="lazy"></div></div><figcaption><span>«Quedan 68 de 106 · 38 corregidas». «Detener» la para; lo ya corregido se queda. Al acabar, las que hayan fallado aparecen en Personas con su motivo.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+</section>
+
+<section id="alta">
+	<h2><span class="quien">Secretaría y Coordinación</span>Dar acceso a un socio o a su familia</h2>
+	<p class="resumen">En <em>Personas</em>, <strong>«Dar acceso»</strong> en la fila de la persona abre la ventana para darle una cuenta a ella o a su familia. Le llega un email para activarla. También se llega desde <em>Usuarios</em> («+ Dar acceso»), desde el inicio y al aprobar una solicitud.</p>
+	<figure class="captura"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/personas/</span></div><div class="navegador__vista" data-ampliar><img src="capturas/07-dar-acceso-ventana.png" width="1280" height="900" alt="Ventana Dar acceso de un castor de 8 años, abierta encima de Personas" loading="lazy"></div></div><figcaption><span>«Dar acceso» sin salir de la lista. Martí tiene 8 años: no puede tener cuenta propia, así que se ofrece la cuenta familiar.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<figure class="captura captura--larga"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/alta-usuarios/?socio=900038</span></div><div class="navegador__vista" data-ampliar tabindex="0"><img src="capturas/08-alta-detalle.png" width="1280" height="1745" alt="Página Dar acceso completa: datos del CRM, acceso actual y el formulario de la cuenta familiar" loading="lazy"></div></div><figcaption><span>La misma pantalla entera («Abrir en su página»): datos del CRM, su acceso actual y el formulario de la cuenta familiar <code>900038T</code>.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<h3>Cuenta de la propia persona</h3>
+	<ul>
+		<li><strong>Participante:</strong> educandos con membresía activa y 14 años o más.</li>
+		<li><strong>Scouter:</strong> membresía activa de Scouter o de Voluntariado. Marca sus secciones (Castores a Rovers): el CRM no guarda con qué sección colabora cada scouter.</li>
+		<li><strong>Secretaría, Coordinación y Tesorería</strong> son responsabilidades de un scouter: se marcan junto al rol de Scouter. Para alguien que ayuda sin sección, «Voluntario sin sección» permite Tesorería, Secretaría o Coordinación sin ser Scouter.</li>
+		<li>El usuario será su nº de socio/a de Scouts de España (o el territorial, si el grupo usa ese: entonces, si no lo tiene, se genera el siguiente libre). También podrá entrar con el email elegido para la invitación y con el otro número.</li>
+	</ul>
+					<figure class="captura"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/personas/</span></div><div class="navegador__vista" data-ampliar><img src="capturas/49-dar-acceso-adulto.png" width="1280" height="900" alt="Ventana Dar acceso de Andreu, un scouter, con sus roles y secciones" loading="lazy"></div></div><figcaption><span>Dar acceso a un scouter: los roles y las secciones. El nº territorial de Andreu está en formato antiguo: la ventana lo avisa y se puede corregir allí mismo.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+
+		<h3>Cuenta familiar</h3>
+	<ul>
+		<li>Para los tutores de un menor. Usuario: el nº del menor + T (<code>900038T</code>).</li>
+		<li><strong>Dos tutores, dos cuentas:</strong> el segundo tutor/a tiene la suya, con usuario <code>900038T2</code>, su propio email y su contraseña; ve a los mismos menores. Al dar acceso, o al aprobar una solicitud de una familia que ya tiene cuenta, se elige entre «Otro tutor/a» (cuenta nueva) y «La misma persona con otro email» (se sustituye el de la cuenta). Nunca se pisa el email de la otra cuenta.</li>
+		<li>Se marcan también sus hermanos del grupo: una sola cuenta sirve para todos.</li>
+		<li>Se elige el email de la familia entre los de la ficha (tutor/a 1, tutor/a 2 o el email de la ficha). Es a donde llegan la invitación y la recuperación de contraseña, y con el que la familia puede entrar.</li>
+		<li>Al crearla, la familia queda también en Tesorería.</li>
+	</ul>
+	<div class="nota"><p><strong>El email de la cuenta sigue al CRM.</strong> Se guarda cifrado en la web para poder entrar con él, pero manda el CRM: si cambia en la ficha, cambia también el de la cuenta.</p></div>
+	<div class="ojo"><p><strong>Emails compartidos.</strong> Si el email elegido aparece en varias fichas, la pantalla lo avisa: para una cuenta personal conviene que en el CRM figure el email propio de la persona.</p></div>
+</section>
+
+<section id="solicitudes">
+	<h2><span class="quien">Scouters, Secretaría y Coordinación</span>Solicitudes de acceso</h2>
+	<p class="resumen">Las solicitudes que llegan por el enlace del grupo, ya comprobadas con la ficha del CRM. En el menú, «Solicitudes» lleva entre paréntesis las pendientes.</p>
+	<figure class="captura"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/solicitudes/</span></div><div class="navegador__vista" data-ampliar><img src="capturas/32-solicitudes.png" width="1280" height="1329" alt="Lista de solicitudes de acceso pendientes con el enlace del grupo y el botón Copiar el enlace" loading="lazy"></div></div><figcaption><span>Arriba, el enlace del grupo con «Copiar el enlace», para pasarlo por WhatsApp, por email o ponerlo en la web. Cada solicitud dice cómo se comprobó.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<ul>
+		<li><strong>Quién ve cada una:</strong> Secretaría y Coordinación, todas; cada scouter, las de los socios de sus secciones. Las de scouters y voluntariado (adultos), solo Secretaría y Coordinación, porque hay que elegir sus roles.</li>
+		<li><strong>«Revisar»</strong> abre la solicitud en la ventana.</li>
+	</ul>
+	<figure class="captura"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/solicitudes/</span></div><div class="navegador__vista" data-ampliar><img src="capturas/33-solicitud-ventana.png" width="1280" height="1000" alt="Detalle de una solicitud en la ventana: lo escrito junto a lo que hay en el CRM, y el formulario para aprobarla" loading="lazy"></div></div><figcaption><span>Lo escrito en la solicitud junto a lo que hay en el CRM. Quien pide coincide con el tutor/a 1, pero su email no está en la ficha: al aprobar se guardará. Si el nº territorial del socio/a tuviera un problema, saldría aquí el aviso.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<ol class="pasos">
+		<li><div><strong>Comprueba quién pide.</strong> Si su nombre es el de un tutor/a de la ficha, sale «coincide». Si no coincide ninguno, confirma con la familia antes de aprobar.</div></li>
+		<li><div><strong>Elige dónde se guarda el email</strong> en la ficha del CRM (viene propuesto) y, si tiene hermanos en el grupo, márcalos para la misma cuenta familiar.</div></li>
+		<li><div><strong>«Aprobar y enviar la invitación».</strong> Si el email no estaba en la ficha, se guarda en el CRM; se crea la cuenta y le llega la invitación con la bienvenida.</div></li>
+	</ol>
+	<ul>
+		<li><strong>Si la familia ya tenía cuenta,</strong> se elige entre «Otro tutor/a» (se crea su propia cuenta, <code>nº + T2</code>, con su email y su contraseña) y «La misma persona con otro email» (entra con el email nuevo y elige contraseña nueva; la anterior deja de valer). La otra cuenta no cambia.</li>
+		<li><strong>Adultos:</strong> «Elegir roles y dar acceso» abre <em>Dar acceso</em> en la misma ventana, con el email de la solicitud ya elegido.</li>
+		<li><strong>Rechazar</strong> pide un motivo, que solo ve el grupo. Hay una casilla, marcada por defecto, para <strong>avisar por email</strong> a quien la pidió: el texto es genérico (no lleva el motivo) y le dice que escriba al email de contacto del grupo. El aviso queda anotado en el registro de emails.</li>
+		<li>«Resueltas» guarda las aprobadas y las rechazadas, con quién y cuándo.</li>
+	</ul>
+	<h3>Cuando la persona ya tiene cuenta</h3>
+	<p>Puede pasar que, mientras la solicitud esperaba, ya se haya dado acceso a esa persona por otro lado. La solicitud no se queda pendiente para siempre:</p>
+		<figure class="captura"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/solicitudes/</span></div><div class="navegador__vista" data-ampliar><img src="capturas/33b-solicitud-ya-existe.png" width="1280" height="760" alt="Solicitud de una familia que ya tiene una cuenta, con las opciones Otro tutor/a y La misma persona con otro email" loading="lazy"></div></div><figcaption><span>La familia de Joan ya tiene la cuenta <code>900044T</code>: se elige entre crear la cuenta de otro tutor/a o sustituir el email de la misma persona.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+		<figure class="captura"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/solicitudes/</span></div><div class="navegador__vista" data-ampliar><img src="capturas/33c-alta-solicitud-cierre.png" width="1280" height="900" alt="Dar acceso a Laura, que ya tiene cuenta, con el aviso de la solicitud pendiente y el botón para cerrarla" loading="lazy"></div></div><figcaption><span>Laura (scouter) ya tiene cuenta. Al guardar sus roles y secciones la solicitud queda aprobada; si no hay nada que cambiar, «Ya tiene el acceso que pide: cerrar la solicitud sin cambiar nada» la resuelve.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+
+</section>
+
+<section id="usuarios">
+	<h2><span class="quien">Secretaría y Coordinación</span>Usuarios y registro de emails</h2>
+	<p class="resumen">Quién tiene acceso al área privada, con qué roles y en qué estado. La lista llega entera y el navegador la filtra, ordena y pagina sin recargar la pantalla.</p>
+		<figure class="captura captura--larga"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/usuarios/</span></div><div class="navegador__vista" data-ampliar tabindex="0"><img src="capturas/09-usuarios.png" width="1280" height="1599" alt="Lista de usuarios del área privada con un filtro por columna, su email en parte oculto, roles, ámbito, estado y acciones" loading="lazy"></div></div><figcaption><span>Un filtro por cada columna, encima de la tabla. Debajo de cada usuario, su email, en parte oculto. El usuario es el nº de Scouts de España; las cuentas familiares llevan T o T2.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+		<ul>
+			<li><strong>Filtros:</strong> por usuario y por persona se escribe (da igual mayúsculas y tildes); por roles, ámbito y estado se elige de la lista. Se pueden combinar y «Quitar filtros» los borra. También se ordena pulsando el título de cada columna.</li>
+			<li><strong>Páginas:</strong> de 25, 50, 75 o 100 usuarios; el tamaño que elijas se recuerda y es el mismo en todas las listas.</li>
+			<li><strong>«Actualizar»</strong> vuelve a leer la lista y el CRM, también sin recargar. Los filtros, el orden y la página quedan en la dirección: puedes recargar o compartir el enlace.</li>
+			<li><strong>Estados:</strong> «Activo», «Invitación pendiente» (con su fecha de caducidad) y «Desactivado».</li>
+			<li><strong>«Gestionar acceso»</strong> abre la ventana para cambiar sus roles, sus secciones o, en una cuenta familiar, los hermanos y el email.</li>
+			<li><strong>Reenviar invitación</strong> manda un enlace nuevo; el anterior deja de valer. <strong>Desactivar</strong> quita los roles y cierra sus sesiones; se puede volver a dar acceso más adelante. Las dos cosas se hacen sin salir de la página: la fila se actualiza sola y el aviso sale arriba.</li>
+		</ul>
+		<figure class="captura"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/usuarios/</span></div><div class="navegador__vista" data-ampliar><img src="capturas/41-usuarios-filtro.png" width="1280" height="984" alt="Lista de usuarios filtrada por el texto «mar» en la columna Persona" loading="lazy"></div></div><figcaption><span>Con un filtro puesto («mar» en Persona): «3 de 9 usuarios». No hace falta pulsar nada: la lista se reduce al escribir.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+		<div class="moviles">					<figure class="captura movil"><div class="navegador"><div class="navegador__vista" data-ampliar><img src="capturas/50-movil-usuarios.png" width="780" height="6511" alt="La lista de usuarios en el móvil: los filtros en una tarjeta y cada usuario en su propia tarjeta" loading="lazy"></div></div><figcaption><span>En el móvil, los filtros son una tarjeta encima de la lista y el orden se elige con dos desplegables.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+			<div>
+				<h3>Con el nº territorial a la vista</h3>
+				<p>Con <strong>«Mostrar nº territorial»</strong> (junto a tu nombre) la columna de la persona enseña, además del nº de Scouts de España, el territorial; y si alguien lo tiene mal, el aviso sale con la preferencia que sea.</p>
+				<p>Si el CRM no responde, la lista se ve igual, con lo que tiene la web, y un aviso lo dice.</p>
+			</div>
+		</div>
+		<figure class="captura"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/usuarios/</span></div><div class="navegador__vista" data-ampliar><img src="capturas/42-usuarios-territorial.png" width="1280" height="1649" alt="Lista de usuarios con «Mostrar nº territorial» activado: la columna Persona enseña también el nº territorial" loading="lazy"></div></div><figcaption><span>Con «Mostrar nº territorial» activado, la columna Persona enseña también el territorial («terr. 79990035»); el enlace de arriba pasa a «Ocultar nº territorial».</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+		<figure class="captura"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/usuarios/emails/</span></div><div class="navegador__vista" data-ampliar><img src="capturas/10-emails.png" width="1280" height="1079" alt="Registro de emails enviados con su estado" loading="lazy"></div></div><figcaption><span>Cada invitación o recuperación queda registrada: «Enviado», «Error al enviar» (con el motivo) o «Sin email en el CRM». «Ver» enseña el email tal cual, sin el enlace personal.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+</section>
+
+<section id="fichas">
+	<h2><span class="quien">Secretaría y Coordinación</span>Fichas</h2>
+	<p class="resumen">La ficha muestra los datos del CRM de una persona, ordenados en apartados. Se abre desde Personas, Usuarios, las solicitudes, los cambios, los informes o los pedidos de uniforme.</p>
+	<figure class="captura"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/personas/</span></div><div class="navegador__vista" data-ampliar><img src="capturas/05d-ficha-ventana.png" width="1280" height="900" alt="Ficha de una scout abierta en la ventana emergente encima de la lista de Personas" loading="lazy"></div></div><figcaption><span>Ficha de Aina (inventada), abierta desde Personas por Secretaría. El candado marca los datos que no se pueden cambiar; al pasar el ratón por encima se ve el motivo. Con «Mostrar nº territorial» se ve también el territorial.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<ul>
+		<li><strong>Quién edita qué:</strong> Secretaría, todo; Coordinación anota en los campos de texto de salud y alimentación; cada scouter, el contacto y los tutores de sus secciones; cada participante, su email y sus teléfonos; las familias proponen cambios, que se aprueban en <a href="#cambios">Cambios</a>.</li>
+		<li><strong>Apartados plegables:</strong> datos personales, membresía, contacto, familia y tutores, autorizaciones y formación, salud y alimentación. «Contraer todo» y «Expandir todo» los pliegan de una vez.</li>
+		<li>A los <strong>menores</strong> no se les muestran la formación ni el certificado de delitos sexuales. El <strong>cargo</strong> solo aparece con membresía de Scouter o de Voluntariado.</li>
+		<li>Pulsa <strong>«Guardar cambios en el CRM»</strong>: se guarda al momento. Si el usuario del CRM del grupo no tiene permiso de edición, toda la ficha sale en solo lectura.</li>
+		<li><strong>«Acceso web»</strong>, arriba a la derecha, abre su acceso (ver <a href="#alta">Dar acceso</a>).</li>
+	</ul>
+	<h3 id="salud">Salud y alimentación</h3>
+	<p>Son datos especialmente protegidos. Los ven Secretaría, Coordinación, los scouters de la sección (sin poder cambiarlos) y la familia. El participante no los ve en su propia cuenta.</p>
+	<figure class="captura"><div class="navegador"><div class="navegador__vista" data-ampliar><img src="capturas/05b-ficha-salud.png" width="1180" height="680" alt="Apartado Salud de la ficha" loading="lazy"></div></div><figcaption><span>Apartado «Salud».</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<figure class="captura"><div class="navegador"><div class="navegador__vista" data-ampliar><img src="capturas/05c-ficha-alimentacion.png" width="1180" height="570" alt="Apartado Alimentación de la ficha con el tipo de régimen y su explicación" loading="lazy"></div></div><figcaption><span>«Alimentación»: el tipo de régimen (vegetariana, vegana, sin cerdo…) lleva debajo su explicación.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+</section>
+
+<section id="cambios">
+	<h2>Cambios propuestos por las familias</h2>
+	<p class="resumen">Lo que las familias corrigen en las fichas de sus hijos no se guarda hasta que alguien del grupo lo aprueba. En el menú, «Cambios» lleva entre paréntesis cuántos hay pendientes.</p>
+	<figure class="captura"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/cambios-pendientes/</span></div><div class="navegador__vista" data-ampliar><img src="capturas/06-cambios.png" width="1280" height="1039" alt="Tabla de cambios propuestos con el valor actual del CRM, el nuevo valor y los botones Aprobar y Rechazar" loading="lazy"></div></div><figcaption><span>Cada propuesta enseña lo que hay ahora en el CRM y el valor nuevo. El nombre de la persona abre su ficha en la ventana.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<ul>
+		<li><strong>Aprobar</strong> guarda el valor nuevo en el CRM. Si el dato del CRM ha cambiado desde que se propuso, la pantalla avisa antes de sobrescribirlo.</li>
+		<li><strong>Rechazar</strong> pide un motivo, que ve la familia en la ficha.</li>
+		<li>Nadie puede aprobar sus propias propuestas. Un scouter ve solo las de sus secciones; Secretaría y Coordinación, todas.</li>
+		<li>«Resueltos» guarda el historial.</li>
+	</ul>
+</section>
+
+<section id="informes">
+	<h2>Informes</h2>
+	<p class="resumen">Listados con las columnas que elijas, para campamentos, salidas o comunicaciones. Cada uno ve solo su ámbito: un scouter, sus secciones; Secretaría y Coordinación, todo el grupo.</p>
+	<figure class="captura"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/informes/</span></div><div class="navegador__vista" data-ampliar><img src="capturas/11-informes.png" width="1280" height="1057" alt="Lista de informes predefinidos y guardados" loading="lazy"></div></div><figcaption><span>Los informes predefinidos (listado de sección, contactos de las familias, alergias y alimentación, autorizaciones) y los guardados.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<figure class="captura captura--larga"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/informes/?informe=5</span></div><div class="navegador__vista" data-ampliar tabindex="0"><img src="capturas/12-informe-resultado.png" width="1280" height="2310" alt="Resultado del informe Alergias y alimentación, con el aviso de datos de salud" loading="lazy"></div></div><figcaption><span>Un informe con datos de salud avisa de cómo tratarlos y deja constancia de quién lo consulta.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<ol class="pasos">
+		<li><div><strong>«+ Nuevo informe»:</strong> marca las columnas (datos personales, contacto, tutores, autorizaciones, salud, alimentación…). Aparecerán en ese orden.</div></li>
+		<li><div><strong>¿De quién?</strong> Las secciones, la edad y, si hace falta, solo quien tenga datos de salud relevantes.</div></li>
+		<li><div><strong>Ver o guardar:</strong> se puede guardar para ti o compartirlo con el resto del equipo.</div></li>
+	</ol>
+	<ul>
+		<li><strong>«Descargar CSV»</strong> para abrirlo en una hoja de cálculo; «Imprimir» para llevarlo en papel. Destruye las copias impresas al terminar la actividad.</li>
+		<li>Solo cuentan los socios con membresía activa. Los datos se leen del CRM en el momento.</li>
+		<li>Si tu rol no ve alguna columna (salud, por ejemplo), el informe lo avisa y no la enseña.</li>
+	</ul>
+</section>
+
+<section id="tesoreria">
+	<h2><span class="quien">Scouters y Tesorería</span>Tesorería</h2>
+	<p class="resumen">Cuotas de las familias, pagos, banco, domiciliaciones SEPA y coste federativo, por ronda (curso scout). Todos los scouters ven pagos y familias; la configuración es de Tesorería, Secretaría y Coordinación.</p>
+	<h3 id="control">Control de pagos</h3>
+	<figure class="captura captura--larga"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/tesoreria/</span></div><div class="navegador__vista" data-ampliar tabindex="0"><img src="capturas/15-tesoreria.png" width="1280" height="1755" alt="Control de pagos de la ronda con totales, estados y la lista de familias" loading="lazy"></div></div><figcaption><span>Resumen de la ronda y una fila por familia. Avisa de los educandos que no están en ninguna familia, a los que no se está cobrando.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<ul>
+		<li>Las familias tienen un nº propio, <code>F</code> + grupo + correlativo (<code>F999001</code>): es la referencia que deben poner en las transferencias.</li>
+		<li><strong>Estados:</strong> «Pagado», «Pago parcial», «Pendiente» y «Con plazos vencidos».</li>
+		<li>Pagan los educandos de Castores a Rovers; scouters y voluntariado no.</li>
+		<li>Lo que se registra aquí es lo que cada familia ve en <a href="familias.html#mis-pagos">Mis pagos</a>. Los pagos del uniforme van aparte (ver <a href="#uniformes-gestion">Gestión de pedidos</a>).</li>
+	</ul>
+	<h3 id="familia">Ficha de una familia</h3>
+	<figure class="captura captura--larga"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/tesoreria/?familia=1</span></div><div class="navegador__vista" data-ampliar tabindex="0"><img src="capturas/16-tesoreria-familia.png" width="1280" height="2076" alt="Ficha de una familia de Tesorería con el desglose de la cuota, los plazos y los movimientos" loading="lazy"></div></div><figcaption><span>Quién paga, desglose de la cuota, plazos, registrar un pago o un ajuste, y los movimientos.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<ul>
+		<li><strong>Registrar pago:</strong> fecha, importe, forma (efectivo, transferencia, bizum…), referencia y nota. La nota es interna: la familia no la ve.</li>
+		<li><strong>Ajuste:</strong> un descuento o beca (en negativo) o un recargo, siempre con su motivo.</li>
+		<li>Un movimiento equivocado se <strong>anula</strong>; no se borra.</li>
+	</ul>
+	<h3 id="familias">Familias</h3>
+	<figure class="captura captura--larga"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/tesoreria/familias/</span></div><div class="navegador__vista" data-ampliar tabindex="0"><img src="capturas/17-familias.png" width="1280" height="1680" alt="Página Familias con sugerencias de hermanos y la lista de familias" loading="lazy"></div></div><figcaption><span>Las familias del grupo y, debajo, los educandos que aún no están en ninguna: se marcan y se crea su familia. Si varios comparten email, la web sugiere juntarlos (suelen ser hermanos). Una familia puede incluir a la madre o al padre scouter.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<h3 id="cuotas">Cuotas y plazos</h3>
+	<figure class="captura captura--larga"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/tesoreria/cuotas/</span></div><div class="navegador__vista" data-ampliar tabindex="0"><img src="capturas/18-cuotas.png" width="1280" height="2346" alt="Configuración de cuotas: inscripción, seguro, anualidad por tramos, plazos y tabla de resultados" loading="lazy"></div></div><figcaption><span>Inscripción y seguro por hijo, anualidad según el número de hijos con un máximo, secciones que pagan y plazos. La tabla final enseña lo que paga una familia de 1 a 5 hijos.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<p>Los plazos deben sumar el 100 %; si no, la página lo avisa.</p>
+
+	<h3 id="coste-federativo">Coste federativo</h3>
+	<p>Lo que el grupo paga a su organización federada por <strong>todos</strong> sus asociados activos: cuota asociativa, seguro y, si los hay, otros conceptos. Se calcula con los socios activos del CRM de hoy.</p>
+	<figure class="captura captura--larga"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/tesoreria/coste-federativo/</span></div><div class="navegador__vista" data-ampliar tabindex="0"><img src="capturas/19-coste-federativo.png" width="1280" height="2360" alt="Coste federativo: seguro por categorías, otros conceptos, totales y configuración" loading="lazy"></div></div><figcaption><span>Arriba el cálculo; abajo, la configuración de la ronda.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<ul>
+		<li><strong>Seguro:</strong> una prima por categoría: menores de la edad de corte (14 en Scouts de Balears), educandos de esa edad o más, y adultos. Como alternativa, un seguro promedio por asociado.</li>
+		<li><strong>Otros conceptos:</strong> cualquier importe más que cobre la organización, por cada asociado, cada educando, cada adulto o una vez por grupo. Un importe negativo es un descuento. Para quitar uno, deja su nombre vacío.</li>
+		<li><strong>Totales:</strong> con la tabla de primas y con el seguro promedio, y la diferencia con lo que se espera cobrar a las familias.</li>
+		<li>Cada ronda empieza con los importes de la organización federada (ver <a href="administracion.html#organizacion">Administración</a>) y el grupo los puede ajustar.</li>
+	</ul>
+
+	<h3 id="banco">Banco</h3>
+	<figure class="captura captura--larga"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/tesoreria/banco/</span></div><div class="navegador__vista" data-ampliar tabindex="0"><img src="capturas/20-banco.png" width="1280" height="2550" alt="Página Banco con la última importación y los movimientos pendientes de conciliar" loading="lazy"></div></div><figcaption><span>Movimientos importados del extracto y su conciliación con las familias.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<ol class="pasos">
+		<li><div>En la banca online del grupo, descarga el extracto en <strong>Norma 43</strong> (también llamado «Cuaderno 43» o AEB 43) o en CSV.</div></li>
+		<li><div><strong>«Importar movimientos»</strong> y elige el fichero. La web enseña una vista previa y no duplica lo que ya estaba importado.</div></li>
+		<li><div>Para cada ingreso, elige la familia y pulsa <strong>«Conciliar»</strong>: se registra como pago de esa familia. Si el concepto lleva el nº de familia (<code>F999003</code>), la web ya la sugiere; si no, búscala por su nº o por un apellido.</div></li>
+		<li><div>Lo que no es una cuota se marca con <strong>«No es una cuota»</strong>, y los gastos, con <strong>«Marcar revisado»</strong>. Los ingresos de los uniformes se validan en su pedido.</div></li>
+	</ol>
+	<p>Con varios ingresos que llevan la referencia de su familia, un botón los concilia todos de una vez.</p>
+
+	<h3 id="sepa">Domiciliaciones SEPA</h3>
+	<p class="quien-sub">Secretaría, Coordinación y Tesorería</p>
+	<p>Las familias autorizan en <a href="familias.html#sepa">«Mis pagos»</a> que se les cobre la cuota por <strong>adeudo directo SEPA</strong>. Aquí se generan los ficheros para el banco (formato XML <span class="mono">pain.008</span>, el «Cuaderno 19.14»), se avisa a las familias de cada cargo y se registran los cobros.</p>
+		<figure class="captura captura--larga"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/tesoreria/domiciliaciones/</span></div><div class="navegador__vista" data-ampliar tabindex="0"><img src="capturas/45-sepa.png" width="1280" height="2953" alt="Pantalla Domiciliaciones SEPA con los datos del acreedor, el formulario de nueva remesa, la lista de remesas y las autorizaciones de las familias" loading="lazy"></div></div><figcaption><span>Los pasos, los datos del acreedor, una nueva remesa, las remesas hechas y, abajo, qué familias han firmado su autorización.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<ol class="pasos">
+		<li><div><strong>Datos del acreedor</strong> (el grupo): nombre, identificador del acreedor (ICS) e IBAN, que da el banco al contratar las domiciliaciones. El IBAN se guarda cifrado. Con «Ofrecer la domiciliación a las familias» marcado, aparece en «Mis pagos».</div></li>
+		<li><div><strong>Las familias firman</strong> su autorización. Abajo, «Autorizaciones de las familias» dice quién la tiene (referencia, IBAN enmascarado y fecha) y permite anularla con un motivo.</div></li>
+		<li><div><strong>Nueva remesa:</strong> elige qué se cobra (todo lo pendiente de la ronda o hasta un plazo), la fecha de cobro (siempre un día laborable, con unos días hábiles de margen) y el concepto. «Ver qué se cobraría» enseña lo que se cobraría a cada familia antes de crearla.</div></li>
+		<li><div><strong>Descarga el fichero XML</strong> y súbelo al banco (por ejemplo, en Colonya Directa, «Remesas de adeudos»). Márcala como <strong>enviada</strong> y <strong>avisa a las familias</strong> por email, con los días de antelación que hayas puesto en los datos del acreedor.</div></li>
+		<li><div>Cuando el banco cobre, <strong>registra los cobros</strong>: pasan a ser pagos de la familia en Tesorería. Marca los <strong>devueltos</strong>; los que no marques siguen pendientes.</div></li>
+	</ol>
+		<figure class="captura"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/tesoreria/domiciliaciones/?remesa=1</span></div><div class="navegador__vista" data-ampliar><img src="capturas/46-sepa-remesa.png" width="1280" height="1269" alt="Detalle de una remesa SEPA: sus datos, el fichero XML, el aviso a las familias y los adeudos con las casillas de cobrado y devuelto" loading="lazy"></div></div><figcaption><span>Una remesa enviada al banco: el fichero, el aviso a las familias y, por cada adeudo, si se ha cobrado o devuelto.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<ul>
+		<li>La primera remesa de una familia lleva la secuencia <strong>FRST</strong>; las siguientes, <strong>RCUR</strong> (la web lo cambia al marcarla como enviada).</li>
+		<li>La web no deja crear dos remesas con los mismos adeudos sin cobrar.</li>
+		<li>El IBAN y el titular se guardan cifrados, la autorización se conserva mientras esté vigente y 14 meses después de anularla, como pide la norma SEPA.</li>
+	</ul>
+</section>
+
+<section id="uniformes">
+	<h2><span class="quien">Tesorería, Coordinación y Secretaría</span>Uniformes: pagos, pedido al proveedor y entregas</h2>
+	<h3 id="uniformes-gestion">Gestión de pedidos</h3>
+	<p class="quien-sub">Scouters, Secretaría, Coordinación y Tesorería</p>
+	<p>En el menú, <strong>«Gestión de uniformes»</strong> lleva entre paréntesis lo que te toca hacer. Tu propio uniforme se pide en «Mi uniforme», como cualquier socio (ver el <a href="scouters.html#mi-uniforme">manual para scouters</a>). Cada pedido pasa por cuatro comprobaciones, y cada una guarda quién la hizo y cuándo:</p>
+	<div class="tabla">
+		<table>
+			<thead><tr><th scope="col">Comprobación</th><th scope="col">Quién</th><th scope="col">Cómo</th></tr></thead>
+			<tbody>
+				<tr><td>Pago</td><td>Tesorería</td><td>«Validar»: efectivo o ingreso en cuenta, fecha, importe (propone el total) y referencia.</td></tr>
+				<tr><td>En el pedido del grupo</td><td>Coordinación</td><td>Uno a uno o varios a la vez, con el nombre del pedido al proveedor.</td></tr>
+				<tr><td>Entregado</td><td>El grupo: el scouter de la sección, Tesorería, Coordinación o Secretaría</td><td>«Marcar entregado» en la lista o en el detalle.</td></tr>
+				<tr><td>Recibido</td><td>El socio/a o su familia</td><td>«Lo he recibido», en su pestaña Uniforme. Nadie más lo puede marcar.</td></tr>
+			</tbody>
+		</table>
+	</div>
+	<figure class="captura captura--larga"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/uniforme/gestion-pedidos/</span></div><div class="navegador__vista" data-ampliar tabindex="0"><img src="capturas/36b-uniformes-coordinacion.png" width="1280" height="1771" alt="Gestión de pedidos de uniforme vista por Coordinación: resumen, filtros, lista con casillas para incluirlos en el pedido y resumen para el proveedor" loading="lazy"></div></div><figcaption><span>La gestión vista por Coordinación: marca los pedidos pagados y los incluye en el pedido al proveedor. Abajo, lo que hay que pedir.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<ul>
+		<li><strong>Quién ve qué:</strong> Tesorería, Coordinación y Secretaría, todos los pedidos del grupo; cada scouter, los de sus secciones y los suyos.</li>
+		<li><strong>Resumen:</strong> pendientes de pago, de incluir en el pedido, de entregar y entregados sin confirmar (cada uno lleva a su lista), y lo cobrado y por cobrar.</li>
+		<li><strong>Filtros:</strong> por estado (en curso, cada pendiente, recibidos, cancelados o todos), sección, nombre o nº de pedido.</li>
+		<li><strong>Pedido en lote</strong> (Coordinación): marca los pedidos (vienen marcados los pagados), escribe el nombre del pedido al proveedor y pulsa «Incluir los marcados en el pedido».</li>
+		<li><strong>Para el próximo pedido al proveedor:</strong> lo pagado que aún no se ha pedido, por modelo y talla, y las insignias.</li>
+		<li><strong>Descargar CSV</strong> con la lista filtrada, para una hoja de cálculo.</li>
+	</ul>
+	<figure class="captura"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/uniforme/gestion-pedidos/</span></div><div class="navegador__vista" data-ampliar><img src="capturas/37-uniforme-detalle-ventana.png" width="1280" height="1000" alt="Detalle de un pedido de uniforme en la ventana, con el formulario para validar el pago" loading="lazy"></div></div><figcaption><span>El detalle de un pedido, en la ventana, visto por Tesorería: para validar el pago, la forma de pago, la fecha, el importe y una referencia.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<ul>
+		<li>Cada comprobación se puede <strong>deshacer</strong> si hubo un error. Deshacer la entrega borra también la confirmación.</li>
+		<li>Si se entrega un pedido que no consta en ningún pedido del grupo, la pantalla avisa.</li>
+		<li><strong>Cancelar:</strong> el socio/a o su familia, mientras nadie lo ha validado; Tesorería o Coordinación, con un motivo, hasta que se entrega. Los cancelados no se borran.</li>
+	</ul>
+
+	<h3 id="uniformes-config">Configuración</h3>
+	<p class="quien-sub">Tesorería y Coordinación</p>
+	<figure class="captura captura--larga"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/uniforme/configuracion/</span></div><div class="navegador__vista" data-ampliar tabindex="0"><img src="capturas/38-uniformes-config.png" width="1280" height="3386" alt="Configuración de los uniformes: pedidos abiertos, precio de la camisa, cómo pagar, modelos y tallas con su guía, insignias con precio e imagen y guía de colocación" loading="lazy"></div></div><figcaption><span>En «Uniformes → Configuración». La insignia mundial no tiene precio: sale «por confirmar».</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<ul>
+		<li><strong>Se aceptan pedidos</strong> (sí o no), el <strong>precio de la camisa</strong> y <strong>cómo pagar</strong>, el texto que ven las familias al pedir.</li>
+		<li><strong>Modelos y tallas:</strong> el nombre de cada modelo, sus tallas separadas por comas y la imagen de su guía de tallas; y qué tallas son especiales.</li>
+		<li><strong>Insignias:</strong> nombre, dónde va, precio (vacío = por confirmar), imagen y si se puede pedir. Se quitan con «Quitarla de la lista» y hay sitio para dos nuevas cada vez.</li>
+		<li><strong>Guía de colocación:</strong> la imagen de dónde va cada insignia.</li>
+		<li>Las imágenes pueden ser JPG, PNG, WebP o GIF de hasta 3 MB, y se guardan en la biblioteca de medios de la web. No se admite SVG, por seguridad.</li>
+		<li>Cada grupo tiene su propia configuración, porque cada uno tiene su insignia.</li>
+	</ul>
+</section>
+
+<section id="idioma">
+	<h2>El idioma de la web</h2>
+	<p class="resumen">El área privada está en castellano, catalán, euskera y gallego. La administración de la web elige el idioma del grupo y si cada persona puede cambiarlo.</p>
+	<figure class="captura"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/acceso/</span></div><div class="navegador__vista" data-ampliar><img src="capturas/61-acceso-idiomas.png" width="1280" height="760" alt="La pantalla de acceso con el selector de idioma encima: Castellano, Català, Euskara, Galego" loading="lazy"></div></div><figcaption><span>Si se deja elegir, el selector sale encima de las pantallas de entrar, activar la cuenta, recuperar la contraseña y pedir el acceso, y dentro del área junto a «Salir».</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<ul>
+		<li>Pulsa tu idioma. Con la sesión iniciada, la elección se guarda en tu cuenta y la próxima vez entrarás directamente en él, desde cualquier dispositivo.</li>
+		<li>Los <strong>emails</strong> que te mande el área privada (invitación, contraseña nueva, avisos de cargo de la domiciliación) te llegan en tu idioma.</li>
+		<li>Lo que escribe la gente (motivos, notas, el nombre de un informe o de una insignia) se ve tal como se escribió, en el idioma en que se escribió.</li>
+		<li>Si ves una traducción que no suena bien, díselo al grupo: la administración de la web puede cambiar cualquier texto sin tocar nada más.</li>
+	</ul>
+</section>
+
+<section id="preguntas">
+	<h2>Preguntas frecuentes</h2>
+	<details class="pregunta"><summary>Una familia dice que no le llega la invitación.</summary><div><p>En «Usuarios → Registro de emails» se ve si se envió, a qué dirección (en parte oculta) y si hubo un error. Si el email del CRM está mal, corrígelo en la ficha y pulsa «Reenviar invitación» en Usuarios: el enlace anterior deja de valer.</p></div></details>
+	<details class="pregunta"><summary>Un scouter no ve a los educandos de su sección.</summary><div><p>El CRM no guarda con qué sección colabora cada scouter: se marca al darle el acceso. En «Usuarios», «Gestionar acceso» de su fila y marca sus secciones.</p></div></details>
+	<details class="pregunta"><summary>¿Quién debe tener Secretaría, Coordinación o Tesorería?</summary><div><p>Son responsabilidades de un scouter: se marcan junto al rol de Scouter. Para alguien que ayuda sin sección (por ejemplo, una madre que lleva la tesorería), elige «Voluntario sin sección» y la responsabilidad.</p></div></details>
+	<details class="pregunta"><summary>Una persona tiene un número territorial con incidencia.</summary><div><p>Se ve en Personas, con lo que hay que hacer en cada caso: «Corregir en el CRM» (formato antiguo), «Dar nº nuevo» (duplicado) o «Asignar nº» (sin número o no válido). Con el nº de Scouts de España como usuario, la incidencia avisa pero no impide darle acceso.</p></div></details>
+	<details class="pregunta"><summary>He cambiado algo en el CRM y no lo veo en la web.</summary><div><p>Las fichas se leen del CRM cada pocos minutos para que las páginas vayan rápido. En Personas y en Usuarios, «Actualizar ahora» las lee en el momento. Lo que se guarda desde la web se ve al instante.</p></div></details>
+	<details class="pregunta"><summary>Una familia ha pagado la cuota por transferencia sin la referencia.</summary><div><p>Importa el extracto en «Banco» y concilia el ingreso eligiendo la familia (búscala por un apellido). Si lo prefieres, regístralo a mano en la ficha de la familia.</p></div></details>
+	<details class="pregunta"><summary>Un cargo de la remesa SEPA ha sido devuelto.</summary><div><p>En la remesa, al registrar los cobros, márcalo como «Devuelto»: no se registra como pago y la familia lo sigue debiendo. Habla con ella para cobrarlo de otra forma.</p></div></details>
+	<details class="pregunta"><summary>Alguien se ha equivocado de talla y el pedido ya está pagado.</summary><div><p>Tesorería o Coordinación pueden cancelarlo, con un motivo, hasta que se entrega. El pago se resuelve aparte (devolverlo o pasarlo a un pedido nuevo).</p></div></details>
+	<details class="pregunta"><summary>¿Quién configura los textos, los colores o el idioma de la web?</summary><div><p>La administración de WordPress: está en el <a href="administracion.html">manual de gestión del CRM y de la web</a>. Si ves un texto que conviene cambiar en algún idioma, pásaselo.</p></div></details>
+</section>
+
+		<section id="otros-manuales" class="otros">
+			<h2>Los otros manuales</h2>
+			<ul>
+<li><a href="administracion.html">Manual de gestión del CRM y de la web</a> <span class="otros__para">· Administración de WordPress</span></li>
+<li><a href="familias.html">Manual para familias</a> <span class="otros__para">· Madres, padres y tutores</span></li>
+<li><a href="participantes.html">Manual para asociados menores de edad</a> <span class="otros__para">· Educandos de 14 a 17 años con cuenta propia</span></li>
+<li><a href="scouters.html">Manual para scouters</a> <span class="otros__para">· Scouters y voluntariado con sección</span></li>
+			</ul>
+		</section>
+
+		<p class="pie">Manual del equipo de coordinación del plugin «ASDE Scouts de España – Gestor CRM para Grupos Scouts», versión 0.15 (octubre de 2026). Capturas hechas en un WordPress de demostración con un CRM simulado y datos inventados.</p>
+	</main>
+</div>
+
+<dialog id="visor" aria-label="Captura ampliada">
+	<div class="visor__barra"><span id="visor-titulo">Captura</span><button type="button" id="visor-cerrar">Cerrar</button></div>
+	<div class="visor__imagen"><img id="visor-img" alt=""></div>
+</dialog>
+<script src="manual.js"></script>
+</body>
+</html>

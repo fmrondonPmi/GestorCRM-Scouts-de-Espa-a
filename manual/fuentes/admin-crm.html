@@ -1,0 +1,29 @@
+<section id="crm">
+	<h2>Cómo trabaja la web con el CRM</h2>
+	<p class="resumen">Las fichas de las personas viven en <strong>SinergiaCRM</strong>, el CRM de Scouts de España. La web no las copia: las <strong>lee en el momento</strong> con el usuario de API de cada grupo y, si ese usuario tiene permiso, <strong>escribe</strong> en ellas los cambios que se hacen desde el área privada.</p>
+	<h3 id="crm-lee">Qué lee</h3>
+	<ul>
+		<li>Las fichas de los socios del grupo (contactos), sus membresías e inscripciones, y sus tutores. Solo las del grupo: cada consulta se limita al grupo que se comprobó al dar de alta la conexión.</li>
+		<li>Los metadatos de los campos (qué tipo son, sus opciones), para pintar la ficha.</li>
+		<li>Para que las páginas vayan rápido, guarda durante unos minutos una <strong>copia cifrada</strong> de las fichas del grupo, sin los datos de salud. «Actualizar ahora» (en Personas y Usuarios) la vuelve a leer. Las búsquedas, los informes y la salud se leen siempre en vivo.</li>
+	</ul>
+	<h3 id="crm-escribe">Qué escribe</h3>
+	<div class="tabla">
+		<table>
+			<thead><tr><th scope="col">Qué</th><th scope="col">Quién lo hace desde la web</th></tr></thead>
+			<tbody>
+				<tr><td>Cambios en las fichas</td><td>Secretaría, Coordinación (salud y alimentación), los scouters (contacto y tutores de su sección) y cada persona (su email y sus teléfonos). Los de las familias, cuando se aprueban.</td></tr>
+				<tr><td>El email de quien pide el acceso</td><td>Al aprobar una solicitud, si no estaba en la ficha.</td></tr>
+				<tr><td>Números de socio territoriales</td><td>Secretaría y Coordinación, al asignarlos o corregirlos (también en segundo plano, para todo el grupo).</td></tr>
+			</tbody>
+		</table>
+	</div>
+	<h3 id="usuario-api">El usuario de API de cada grupo</h3>
+	<ul>
+		<li><strong>Con permiso de lectura</strong> basta para usar el área: la ficha sale en solo lectura para todo el mundo y la pantalla lo avisa.</li>
+		<li><strong>Con permiso de edición</strong> en contactos, relaciones e inscripciones, la web puede guardar los cambios. «Probar conexión» dice en qué módulos tiene permiso de escritura.</li>
+		<li><strong>No uses un administrador del CRM:</strong> la prueba de conexión lo avisa. Lo ideal es un usuario dedicado que vea solo su grupo, con los permisos justos.</li>
+		<li>La contraseña se guarda <strong>cifrada</strong> y no se vuelve a mostrar. Si se cambia en el CRM, hay que cambiarla también aquí.</li>
+	</ul>
+	<div class="nota"><p><strong>Si el CRM no responde,</strong> se puede seguir entrando (con el nº de socio o con el email guardado en la web) y las listas enseñan lo que tiene la web con un aviso. Lo que necesita leer o guardar en el CRM espera a que vuelva.</p></div>
+</section>

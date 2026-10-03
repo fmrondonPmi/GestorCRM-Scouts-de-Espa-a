@@ -1,0 +1,285 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Manual de gestión del CRM y de la web · Área privada de los Grupos Scouts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@600;700&family=JetBrains+Mono:wght@500&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap">
+<link rel="stylesheet" href="manual.css">
+</head>
+<body>
+<header class="portada">
+	<div class="portada__dentro">
+		<p class="antetitulo">Manual de uso · versión 0.15 · octubre de 2026 · <a class="portada__volver" href="index.html">Todos los manuales</a></p>
+		<h1>Manual de gestión del CRM y de la web</h1>
+		<p class="portada__perfil">Administración de WordPress</p>
+		<p class="entrada">Para quien instala y mantiene la web: la conexión de cada grupo con SinergiaCRM, la organización federada y el usuario de acceso, la instalación, el tema, los colores, los idiomas y las etiquetas, y qué datos se leen del CRM y cuáles guarda la web.</p>
+		<p class="demo"><strong>Todas las capturas son de un WordPress de demostración con un CRM simulado y datos inventados:</strong> el «Grupo Scout Ejemplo» (grupo 999), personas que no existen y emails <span class="mono">@example.invalid</span>. En tu grupo verás tus datos del CRM.</p>
+	</div>
+	<div class="secciones-franja" aria-hidden="true">
+		<span style="background: var(--castores)"></span><span style="background: var(--lobatos)"></span><span style="background: var(--scouts)"></span><span style="background: var(--escultas)"></span><span style="background: var(--rovers)"></span>
+	</div>
+</header>
+
+<div class="cuerpo">
+	<nav class="indice" aria-label="Índice">
+		<h2>En este manual</h2>
+		<ol>
+<li><a href="#para-quien">Para quién es este manual</a></li>
+<li><a href="#crm">Cómo trabaja la web con el CRM</a></li>
+<li class="sub"><a href="#crm-lee">Qué lee</a></li>
+<li class="sub"><a href="#crm-escribe">Qué escribe</a></li>
+<li class="sub"><a href="#usuario-api">El usuario de API de cada grupo</a></li>
+<li><a href="#grupos">Grupos y conexión con el CRM</a></li>
+<li><a href="#organizacion">Organización federada y usuario de acceso</a></li>
+<li><a href="#entorno">Instalación y entorno</a></li>
+<li><a href="#tema">El tema de la web</a></li>
+<li><a href="#colores">Colores</a></li>
+<li><a href="#idiomas">Idioma y etiquetas</a></li>
+<li class="sub"><a href="#idiomas-ajustes">Ajustes</a></li>
+<li class="sub"><a href="#etiquetas">Personalizar los textos (etiquetas)</a></li>
+<li><a href="#datos">Qué datos guarda la web</a></li>
+<li><a href="#diagnostico">Diagnóstico de tareas en segundo plano</a></li>
+<li><a href="#preguntas">Preguntas frecuentes</a></li>
+		</ol>
+	</nav>
+
+	<main>
+		<details class="indice-movil">
+			<summary>Índice del manual</summary>
+			<ol>
+<li><a href="#para-quien">Para quién es este manual</a></li>
+<li><a href="#crm">Cómo trabaja la web con el CRM</a></li>
+<li><a href="#grupos">Grupos y conexión con el CRM</a></li>
+<li><a href="#organizacion">Organización federada y usuario de acceso</a></li>
+<li><a href="#entorno">Instalación y entorno</a></li>
+<li><a href="#tema">El tema de la web</a></li>
+<li><a href="#colores">Colores</a></li>
+<li><a href="#idiomas">Idioma y etiquetas</a></li>
+<li><a href="#datos">Qué datos guarda la web</a></li>
+<li><a href="#diagnostico">Diagnóstico de tareas en segundo plano</a></li>
+<li><a href="#preguntas">Preguntas frecuentes</a></li>
+			</ol>
+		</details>
+
+<section id="para-quien">
+	<h2>Para quién es este manual</h2>
+	<p class="resumen">Para quien instala y mantiene la web de la organización o del grupo: el administrador de WordPress. Todo está en el escritorio de WordPress, menú <strong>«Grupos Scouts»</strong>.</p>
+	<div class="tabla">
+		<table>
+			<thead><tr><th scope="col">Pantalla de «Grupos Scouts»</th><th scope="col">Para qué</th></tr></thead>
+			<tbody>
+				<tr><td><a href="#grupos">Grupos y conexión CRM</a></td><td>Dar de alta cada grupo con su usuario de SinergiaCRM y comprobar la conexión.</td></tr>
+				<tr><td><a href="#organizacion">Organización federada</a></td><td>La organización, el código del nº de socio, qué número es el usuario de acceso y el coste federativo por defecto.</td></tr>
+				<tr><td><a href="#entorno">Instalación y entorno</a></td><td>Comprobar y reparar todo lo que necesita el área (tablas, páginas, menú…) y el tema.</td></tr>
+				<tr><td><a href="#colores">Colores</a></td><td>Los colores del área privada y de sus emails.</td></tr>
+				<tr><td><a href="#idiomas">Idioma y etiquetas</a></td><td>El idioma del área, si cada persona puede elegirlo y los textos personalizados.</td></tr>
+			</tbody>
+		</table>
+	</div>
+	<ul>
+		<li>El administrador de WordPress también entra en el área privada: ve la «Gestión del grupo» completa. El trabajo diario del grupo está en el <a href="coordinacion.html">manual del equipo de coordinación</a>.</li>
+		<li>Nada de esto lo ven los socios ni las familias.</li>
+	</ul>
+</section>
+
+<section id="crm">
+	<h2>Cómo trabaja la web con el CRM</h2>
+	<p class="resumen">Las fichas de las personas viven en <strong>SinergiaCRM</strong>, el CRM de Scouts de España. La web no las copia: las <strong>lee en el momento</strong> con el usuario de API de cada grupo y, si ese usuario tiene permiso, <strong>escribe</strong> en ellas los cambios que se hacen desde el área privada.</p>
+	<h3 id="crm-lee">Qué lee</h3>
+	<ul>
+		<li>Las fichas de los socios del grupo (contactos), sus membresías e inscripciones, y sus tutores. Solo las del grupo: cada consulta se limita al grupo que se comprobó al dar de alta la conexión.</li>
+		<li>Los metadatos de los campos (qué tipo son, sus opciones), para pintar la ficha.</li>
+		<li>Para que las páginas vayan rápido, guarda durante unos minutos una <strong>copia cifrada</strong> de las fichas del grupo, sin los datos de salud. «Actualizar ahora» (en Personas y Usuarios) la vuelve a leer. Las búsquedas, los informes y la salud se leen siempre en vivo.</li>
+	</ul>
+	<h3 id="crm-escribe">Qué escribe</h3>
+	<div class="tabla">
+		<table>
+			<thead><tr><th scope="col">Qué</th><th scope="col">Quién lo hace desde la web</th></tr></thead>
+			<tbody>
+				<tr><td>Cambios en las fichas</td><td>Secretaría, Coordinación (salud y alimentación), los scouters (contacto y tutores de su sección) y cada persona (su email y sus teléfonos). Los de las familias, cuando se aprueban.</td></tr>
+				<tr><td>El email de quien pide el acceso</td><td>Al aprobar una solicitud, si no estaba en la ficha.</td></tr>
+				<tr><td>Números de socio territoriales</td><td>Secretaría y Coordinación, al asignarlos o corregirlos (también en segundo plano, para todo el grupo).</td></tr>
+			</tbody>
+		</table>
+	</div>
+	<h3 id="usuario-api">El usuario de API de cada grupo</h3>
+	<ul>
+		<li><strong>Con permiso de lectura</strong> basta para usar el área: la ficha sale en solo lectura para todo el mundo y la pantalla lo avisa.</li>
+		<li><strong>Con permiso de edición</strong> en contactos, relaciones e inscripciones, la web puede guardar los cambios. «Probar conexión» dice en qué módulos tiene permiso de escritura.</li>
+		<li><strong>No uses un administrador del CRM:</strong> la prueba de conexión lo avisa. Lo ideal es un usuario dedicado que vea solo su grupo, con los permisos justos.</li>
+		<li>La contraseña se guarda <strong>cifrada</strong> y no se vuelve a mostrar. Si se cambia en el CRM, hay que cambiarla también aquí.</li>
+	</ul>
+	<div class="nota"><p><strong>Si el CRM no responde,</strong> se puede seguir entrando (con el nº de socio o con el email guardado en la web) y las listas enseñan lo que tiene la web con un aviso. Lo que necesita leer o guardar en el CRM espera a que vuelva.</p></div>
+</section>
+
+<section id="grupos">
+	<h2>Grupos y conexión con el CRM</h2>
+	<p class="resumen">Cada grupo se da de alta con su número, su nombre y su usuario de API del CRM. Una web puede llevar varios grupos: cada socio pertenece a uno solo y nunca ve datos de otro.</p>
+	<figure class="captura"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/wp-admin/admin.php?page=asde-area-privada</span></div><div class="navegador__vista" data-ampliar><img src="capturas/23-grupos.png" width="1280" height="900" alt="Pantalla Grupos y conexión CRM con un grupo dado de alta y la conexión comprobada" loading="lazy"></div></div><figcaption><span>Cada grupo con su nº, su nombre y su usuario del CRM. La contraseña se guarda cifrada y no se vuelve a mostrar.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<ol class="pasos">
+		<li><div>Arriba, la <strong>URL del CRM</strong>, común a todos los grupos: la dirección base, por ejemplo <span class="mono">https://entidad.sinergiacrm.org</span>.</div></li>
+		<li><div>Para cada grupo, su <strong>nº</strong> (hasta 3 cifras, por ejemplo <code>684</code>), su <strong>nombre</strong>, su <strong>email de contacto</strong> y el <strong>usuario y la contraseña</strong> de API de ese grupo.</div></li>
+		<li><div><strong>«Probar conexión»</strong> comprueba las credenciales y busca el grupo en el CRM. Sin esa comprobación el grupo no lee ningún dato; con ella, cada consulta se limita a las fichas de ese grupo.</div></li>
+		<li><div>Lee los avisos de la prueba: si el usuario ve varios grupos, si es administrador del CRM o en qué módulos puede escribir.</div></li>
+	</ol>
+	<figure class="captura captura--larga"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/wp-admin/admin.php?page=asde-area-privada&amp;editar=999</span></div><div class="navegador__vista" data-ampliar tabindex="0"><img src="capturas/23b-grupo-editar.png" width="1280" height="1479" alt="Formulario para editar un grupo con el campo Email de contacto del grupo" loading="lazy"></div></div><figcaption><span>«Editar» un grupo. El <strong>email de contacto del grupo</strong> es el que ve en «Solicitar acceso» quien no ha podido comprobar sus datos, y el que lleva el aviso de una solicitud rechazada. Hay que ponerlo a mano en cada grupo.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+</section>
+
+<section id="organizacion">
+	<h2>Organización federada y usuario de acceso</h2>
+	<figure class="captura captura--larga"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/wp-admin/admin.php?page=asde-area-privada-organizacion</span></div><div class="navegador__vista" data-ampliar tabindex="0"><img src="capturas/22-organizacion.png" width="1280" height="1925" alt="Pantalla Organización federada con el desplegable de organizaciones, el código, el usuario de acceso, el coste federativo por defecto y el apartado para renombrar las cuentas" loading="lazy"></div></div><figcaption><span>Todo lo que depende de la organización que usa la web.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<ul>
+		<li><strong>Organización federada:</strong> una de las 17 de Scouts de España. Su nombre sale en los textos, como «Área privada de los grupos de Scouts de Balears».</li>
+		<li><strong>Código en el nº de socio local:</strong> la primera parte del número territorial (7 en Scouts de Balears). Si ya hay grupos, cambiarlo pide una confirmación: los números del CRM con el código anterior dejarían de reconocerse como del grupo.</li>
+		<li id="usuario-acceso"><strong>Usuario de acceso:</strong> qué número es el usuario de las personas: el <strong>nº de socio/a de Scouts de España</strong> (recomendado: siempre existe y es único; en las familias, <code>118241T</code> y <code>118241T2</code>) o el <strong>nº territorial</strong> de siempre. Al entrar valen los dos. Cambiarlo solo afecta a las cuentas que se creen a partir de entonces; una instalación que no lo haya elegido sigue con el territorial.</li>
+		<li><strong>Renombrar las cuentas existentes:</strong> debajo del formulario, la web enseña cuántas cuentas ya usan el usuario elegido, cuáles cambiarían y cuáles no se pueden cambiar (y por qué), y pide confirmación. Al renombrar se cierran las sesiones de esas cuentas: tendrán que entrar de nuevo. Queda anotado en el registro de auditoría.</li>
+		<li><strong>Coste federativo por defecto:</strong> cuota, seguro, edad de corte, primas y otros conceptos con los que empieza cada ronda de la Tesorería de los grupos.</li>
+	</ul>
+</section>
+
+<section id="entorno">
+	<h2>Instalación y entorno</h2>
+	<p class="resumen">El plugin se instala como cualquier otro: <em>Plugins → Añadir nuevo → Subir plugin</em>, con el zip de la versión. Después, esta pantalla deja la web lista.</p>
+	<figure class="captura captura--larga"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/wp-admin/admin.php?page=asde-area-privada-entorno</span></div><div class="navegador__vista" data-ampliar tabindex="0"><img src="capturas/24-entorno.png" width="1280" height="1503" alt="Pantalla Instalación y entorno con el estado de cada pieza y los siguientes pasos" loading="lazy"></div></div><figcaption><span>El estado de cada pieza que necesita el área (las tablas, las páginas, el menú, el tema…) y, debajo, lo que queda por hacer a mano.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<ul>
+		<li><strong>«Generar / reparar el entorno»</strong> deja un WordPress nuevo listo (tablas, roles, páginas del área, «Acceso socios» en el menú, tarea diaria) y repara lo que falte. Se puede pulsar las veces que haga falta: nunca borra nada.</li>
+		<li>La <strong>zona horaria</strong> no la toca: es un ajuste de WordPress (Ajustes → Generales) y conviene que sea la del grupo.</li>
+		<li>Al <strong>actualizar</strong> el plugin, lo nuevo (tablas, páginas) se crea solo; si algo falta, esta pantalla lo dice.</li>
+		<li>La página <span class="mono">wp-login.php</span> sigue siendo solo para quien edita la web: los socios entran por «Acceso socios».</li>
+	</ul>
+</section>
+
+<section id="tema">
+	<h2>El tema de la web</h2>
+	<p class="resumen">El área privada funciona con <strong>cualquier tema</strong> de WordPress: sus páginas son páginas normales con un shortcode, y el diseño y los textos son del plugin. Está pensada para <strong>Enfold</strong>, el tema de baleares.scout.es, pero no es obligatorio.</p>
+	<div class="tabla">
+		<table>
+			<thead><tr><th scope="col">Tema</th><th scope="col">Qué tal</th></tr></thead>
+			<tbody>
+				<tr><td>Enfold</td><td><strong>El ideal.</strong> Se aprovechan sus colores, el ancho completo de las páginas y la cabecera plegable («Ocultar cabecera»). Al activarlo, las páginas del área reciben solas sus ajustes.</td></tr>
+				<tr><td>Temas clásicos con ancho completo</td><td><strong>Sirven</strong> los que permiten páginas a ancho completo, sin barra lateral y sin barra de título, con el menú principal editable en Apariencia → Menús (por ejemplo Astra, Kadence o GeneratePress; no se han probado todos).</td></tr>
+				<tr><td>Temas de bloques</td><td><strong>También funcionan</strong> (como Twenty Twenty-Five): pon las páginas del área en una plantilla de ancho completo y añade «Acceso socios» desde el Editor del sitio.</td></tr>
+				<tr><td>Con barra lateral obligatoria</td><td><strong>Mejor evitarlos:</strong> los listados son tablas anchas y quedarían estrechas.</td></tr>
+			</tbody>
+		</table>
+	</div>
+	<ul>
+		<li>Con un tema distinto de Enfold no salen la cabecera plegable ni los ajustes de página de Enfold, y los colores son los de la pantalla <a href="#colores">Colores</a>.</li>
+		<li><em>Instalación y entorno</em> dice qué tema hay y, en la fila «Qué tema conviene», esta misma recomendación.</li>
+		<li>Antes de cambiar de tema en una web en uso, revisa las pantallas del área con él, sobre todo el ancho de las tablas y el menú en el móvil.</li>
+	</ul>
+</section>
+
+<section id="colores">
+	<h2>Colores</h2>
+	<p class="resumen">En <strong>Grupos Scouts → Colores</strong> se eligen los colores del área privada y de sus emails. Con el color principal basta: de él salen los fondos suaves, los bordes y el color del texto que va encima.</p>
+	<figure class="captura captura--larga"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/wp-admin/admin.php?page=asde-area-privada-colores</span></div><div class="navegador__vista" data-ampliar tabindex="0"><img src="capturas/63-colores.png" width="1280" height="1904" alt="Pantalla Colores del área privada: modelos de partida, los doce colores con su explicación y la vista previa" loading="lazy"></div></div><figcaption><span>Los modelos de partida, los doce colores y, a la derecha, la vista previa con el menú, las etiquetas, los avisos, una tabla y un botón.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<ul>
+		<li><strong>Modelos de partida:</strong> morado de siempre, verde scout, azul, naranja, rojo y gris azulado. Cada uno fija solo el color principal.</li>
+		<li><strong>Doce colores</strong> en tres grupos: de marca (principal, principal oscuro, acento y fondo suave), texto y fondos (texto, texto atenuado, bordes y fondo de las tarjetas) y estados (correcto, aviso, error e información).</li>
+		<li><strong>Lo que eliges manda; lo demás se calcula:</strong> si solo cambias el principal, salen solos su tono oscuro, el acento, los fondos y el color del texto que va encima (blanco o casi negro, el que se lea mejor).</li>
+		<li><strong>Vista previa en vivo:</strong> lo que se ve es lo que se guardará.</li>
+		<li><strong>Avisos de contraste:</strong> si un texto se va a leer mal sobre su fondo (menos de 4,5:1), la pantalla lo dice.</li>
+		<li>Los <strong>emails</strong> (invitación, domiciliación, solicitud rechazada) también llevan los colores elegidos.</li>
+		<li><strong>«Restablecer»</strong> vuelve a los de siempre. Los colores valen para toda la web (todos los grupos) y cada cambio queda en la auditoría.</li>
+	</ul>
+	<div class="nota"><p><strong>Sin tocar nada,</strong> el área usa el color principal del tema Enfold (o el morado de siempre con otro tema).</p></div>
+</section>
+
+<section id="idiomas">
+	<h2>Idioma y etiquetas</h2>
+	<p class="resumen">El área privada está en <strong>castellano, catalán, euskera y gallego</strong>. En <strong>Grupos Scouts → Idioma y etiquetas</strong> se elige el idioma, si cada persona puede cambiarlo y se puede <strong>personalizar cualquier texto</strong> en cualquier idioma.</p>
+	<figure class="captura captura--larga"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/wp-admin/admin.php?page=asde-area-privada-idiomas&amp;idioma=ca</span></div><div class="navegador__vista" data-ampliar tabindex="0"><img src="capturas/64-idiomas.png" width="1280" height="1800" alt="Pantalla Idioma y etiquetas: el idioma por defecto, la casilla para dejar elegir y la tabla de textos en catalán con su traducción y el campo para el texto propio" loading="lazy"></div></div><figcaption><span>Arriba, los ajustes; debajo, una pestaña por idioma con la tabla de textos: el original en castellano, la traducción del plugin y el texto propio.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<h3 id="idiomas-ajustes">Ajustes</h3>
+	<ul>
+		<li><strong>Idioma por defecto</strong> del área: el que ve quien no ha elegido otro.</li>
+		<li><strong>Dejar que cada persona elija su idioma</strong> (marcado al instalar): sale un selector junto a «Salir» y encima de las pantallas de entrar, activar la cuenta, recuperar la contraseña y pedir el acceso. La elección se guarda en la cuenta de cada uno; sin sesión, en el navegador.</li>
+		<li>Los <strong>emails</strong> salen en el idioma de quien los recibe. La invitación tras una solicitud, en el idioma en que se pidió.</li>
+	</ul>
+	<figure class="captura"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/</span></div><div class="navegador__vista" data-ampliar><img src="capturas/62-inicio-catalan.png" width="1280" height="1356" alt="Inicio del área privada de un scouter en catalán" loading="lazy"></div></div><figcaption><span>El inicio de un scouter en catalán.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<h3 id="etiquetas">Personalizar los textos (etiquetas)</h3>
+	<p>Ninguna traducción es perfecta, y cada grupo tiene su forma de llamar a las cosas. Por eso cualquier texto se puede cambiar:</p>
+	<ol class="pasos">
+		<li><div>Elige la pestaña del idioma. Busca el texto (también busca en las traducciones) o filtra entre <em>todos</em>, <em>personalizados</em> y <em>sin traducir</em>.</div></li>
+		<li><div>Escribe el <strong>texto propio</strong> y guarda. Desde ese momento manda sobre la traducción del plugin.</div></li>
+		<li><div>Para volver al del plugin, deja el campo vacío. «Restablecer» borra todos los textos propios de un idioma.</div></li>
+	</ol>
+	<ul>
+		<li>Se puede personalizar también el <strong>castellano</strong> (por ejemplo, «Tutor / Padre / Madre» por «Familia»).</li>
+		<li>Los huecos de los datos (<code>%s</code>, <code>%d</code>, <code>%1$s</code>) tienen que seguir en el texto: si falta alguno, ese texto no se guarda. Se admite solo HTML básico: negrita, cursiva, código, saltos de línea y enlaces.</li>
+		<li><strong>«Descargar mis etiquetas (.json)»</strong> y la importación permiten pasar los textos propios de una web a otra. Cada cambio queda en la auditoría.</li>
+		<li>Lo que escribe la gente (motivos, conceptos, nombres de informes, el catálogo de uniformes) no se traduce: se ve tal como se escribió. Las pantallas de wp-admin del plugin siguen en castellano.</li>
+	</ul>
+	<div class="ojo"><p><strong>Revisa las traducciones.</strong> El catalán, el euskera y el gallego del plugin son una primera versión. Conviene que alguien de cada idioma revise lo más visible (el menú, el inicio, la pantalla de acceso y los emails) y lo corrija aquí.</p></div>
+</section>
+
+<section id="datos">
+	<h2>Qué datos guarda la web</h2>
+	<p class="resumen">Los datos personales viven en el CRM. La web guarda lo justo para funcionar, y lo sensible, cifrado con la clave del sitio.</p>
+	<div class="tabla">
+		<table>
+			<thead><tr><th scope="col">Qué</th><th scope="col">Cómo y cuánto tiempo</th></tr></thead>
+			<tbody>
+				<tr><td>El email de cada cuenta</td><td>Cifrado, para poder entrar con él aunque el CRM no responda. Sigue al CRM: si cambia en la ficha, cambia aquí.</td></tr>
+				<tr><td>Lo escrito al pedir el acceso</td><td>Cifrado; se borra 30 días después de resolver la solicitud.</td></tr>
+				<tr><td>Copia de las fichas del grupo</td><td>Cifrada y sin datos de salud, durante unos minutos, para que las páginas vayan rápido.</td></tr>
+				<tr><td>Autorizaciones de domiciliación SEPA</td><td>Titular, IBAN y dirección cifrados, mientras esté vigente y 14 meses después de anularla (lo pide la norma SEPA).</td></tr>
+				<tr><td>Tesorería</td><td>Familias (con los nº de socio), pagos y ajustes, remesas y movimientos del banco.</td></tr>
+				<tr><td>Uniformes</td><td>Los pedidos, con el nº de socio y sin nombres.</td></tr>
+				<tr><td>Números de socio</td><td>La numeración territorial y sus incidencias.</td></tr>
+				<tr><td>Registro</td><td>Quién hace qué (auditoría) y qué emails se enviaron, sin el enlace personal.</td></tr>
+			</tbody>
+		</table>
+	</div>
+	<ul>
+		<li>Al <strong>desinstalar</strong> el plugin se borran sus ajustes (también los colores, el idioma y las etiquetas).</li>
+		<li>Lo cifrado se protege con la clave <span class="mono">ASDE_AP_ENCRYPTION_KEY</span> de <span class="mono">wp-config.php</span> o, si no está, con las claves de WordPress del mismo fichero. Si se cambian, lo cifrado deja de poder leerse: guárdalas bien.</li>
+	</ul>
+</section>
+
+<section id="diagnostico">
+	<h2>Diagnóstico de tareas en segundo plano</h2>
+	<p class="resumen">Algunas tareas largas (corregir los números de socio de todo el grupo en el CRM) siguen solas en el servidor. Este diagnóstico dice si el hosting las deja terminar.</p>
+	<figure class="captura"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/wp-admin/tools.php?page=asde-diagnostico-segundo-plano</span></div><div class="navegador__vista" data-ampliar><img src="capturas/25-diagnostico.png" width="1280" height="900" alt="Pantalla del diagnóstico de tareas en segundo plano con el botón Comprobar ahora" loading="lazy"></div></div><figcaption><span>En Herramientas. «Comprobar ahora» lanza una tarea de prueba y dice qué ajustar si no termina.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<ul>
+		<li>Si el hosting corta las tareas largas, lo habitual es ajustar el tiempo máximo de ejecución o el WP-Cron; la pantalla lo explica.</li>
+		<li>Mientras una tarea está en marcha, el equipo ve un recuadro con su avance en todas las páginas del área y la puede detener.</li>
+	</ul>
+</section>
+
+<section id="preguntas">
+	<h2>Preguntas frecuentes</h2>
+	<details class="pregunta"><summary>«Probar conexión» falla.</summary><div><p>Revisa la URL (la dirección base del CRM, sin rutas), el usuario y la contraseña. Si el mensaje dice que el usuario no ve el grupo, pide a ASDE permisos sobre ese grupo. La contraseña no se vuelve a mostrar: si dudas, escríbela de nuevo.</p></div></details>
+	<details class="pregunta"><summary>Las fichas salen todas en solo lectura.</summary><div><p>El usuario de API del grupo no tiene permiso de edición en el CRM. Con permiso de lectura el área funciona, pero no se puede guardar nada. «Probar conexión» dice en qué módulos puede escribir.</p></div></details>
+	<details class="pregunta"><summary>¿Puedo usar otro tema que no sea Enfold?</summary><div><p>Sí. Elige uno que permita páginas a ancho completo, sin barra lateral ni barra de título, y revisa las pantallas del área antes de cambiarlo en una web en uso.</p></div></details>
+	<details class="pregunta"><summary>Una traducción no suena bien.</summary><div><p>Cámbiala en «Idioma y etiquetas», en la pestaña de ese idioma: tu texto manda sobre el del plugin y se conserva al actualizar.</p></div></details>
+	<details class="pregunta"><summary>Queremos que todo salga en catalán.</summary><div><p>Elige el catalán como idioma por defecto. Si además no quieres que cada persona pueda cambiarlo, desmarca «Dejar que cada persona elija su idioma».</p></div></details>
+	<details class="pregunta"><summary>¿Los colores se pueden poner por grupo?</summary><div><p>No: valen para toda la web. Si la web lleva varios grupos, todos comparten los colores.</p></div></details>
+	<details class="pregunta"><summary>Quiero pasar a usar el nº de Scouts de España como usuario.</summary><div><p>En «Organización federada», elige ese usuario de acceso y, debajo, revisa y confirma el renombrado de las cuentas existentes. Las personas pueden seguir entrando con el número de siempre.</p></div></details>
+	<details class="pregunta"><summary>¿Cómo instalo una versión nueva?</summary><div><p>En Plugins, sube el zip de la versión nueva («Subir plugin» y «Reemplazar el actual»). Después mira «Instalación y entorno»: lo nuevo se crea solo y la pantalla avisa si falta algo.</p></div></details>
+</section>
+
+		<section id="otros-manuales" class="otros">
+			<h2>Los otros manuales</h2>
+			<ul>
+<li><a href="familias.html">Manual para familias</a> <span class="otros__para">· Madres, padres y tutores</span></li>
+<li><a href="participantes.html">Manual para asociados menores de edad</a> <span class="otros__para">· Educandos de 14 a 17 años con cuenta propia</span></li>
+<li><a href="scouters.html">Manual para scouters</a> <span class="otros__para">· Scouters y voluntariado con sección</span></li>
+<li><a href="coordinacion.html">Manual del equipo de coordinación</a> <span class="otros__para">· Tesorería, Secretaría y Coordinación</span></li>
+			</ul>
+		</section>
+
+		<p class="pie">Manual de gestión del CRM y de la web del plugin «ASDE Scouts de España – Gestor CRM para Grupos Scouts», versión 0.15 (octubre de 2026). Capturas hechas en un WordPress de demostración con un CRM simulado y datos inventados.</p>
+	</main>
+</div>
+
+<dialog id="visor" aria-label="Captura ampliada">
+	<div class="visor__barra"><span id="visor-titulo">Captura</span><button type="button" id="visor-cerrar">Cerrar</button></div>
+	<div class="visor__imagen"><img id="visor-img" alt=""></div>
+</dialog>
+<script src="manual.js"></script>
+</body>
+</html>

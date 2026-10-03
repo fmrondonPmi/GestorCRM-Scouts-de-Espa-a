@@ -1,0 +1,12 @@
+<section id="grupos">
+	<h2>Grupos y conexión con el CRM</h2>
+	<p class="resumen">Cada grupo se da de alta con su número, su nombre y su usuario de API del CRM. Una web puede llevar varios grupos: cada socio pertenece a uno solo y nunca ve datos de otro.</p>
+	<captura src="23-grupos" url="/wp-admin/admin.php?page=asde-area-privada" alt="Pantalla Grupos y conexión CRM con un grupo dado de alta y la conexión comprobada">Cada grupo con su nº, su nombre y su usuario del CRM. La contraseña se guarda cifrada y no se vuelve a mostrar.</captura>
+	<ol class="pasos">
+		<li><div>Arriba, la <strong>URL del CRM</strong>, común a todos los grupos: la dirección base, por ejemplo <span class="mono">https://entidad.sinergiacrm.org</span>.</div></li>
+		<li><div>Para cada grupo, su <strong>nº</strong> (hasta 3 cifras, por ejemplo <code>684</code>), su <strong>nombre</strong>, su <strong>email de contacto</strong> y el <strong>usuario y la contraseña</strong> de API de ese grupo.</div></li>
+		<li><div><strong>«Probar conexión»</strong> comprueba las credenciales y busca el grupo en el CRM. Sin esa comprobación el grupo no lee ningún dato; con ella, cada consulta se limita a las fichas de ese grupo.</div></li>
+		<li><div>Lee los avisos de la prueba: si el usuario ve varios grupos, si es administrador del CRM o en qué módulos puede escribir.</div></li>
+	</ol>
+	<captura src="23b-grupo-editar" url="/wp-admin/admin.php?page=asde-area-privada&editar=999" alt="Formulario para editar un grupo con el campo Email de contacto del grupo" larga>«Editar» un grupo. El <strong>email de contacto del grupo</strong> es el que ve en «Solicitar acceso» quien no ha podido comprobar sus datos, y el que lleva el aviso de una solicitud rechazada. Hay que ponerlo a mano en cada grupo.</captura>
+</section>

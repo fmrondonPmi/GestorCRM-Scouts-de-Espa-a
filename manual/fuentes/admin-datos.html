@@ -1,0 +1,23 @@
+<section id="datos">
+	<h2>Qué datos guarda la web</h2>
+	<p class="resumen">Los datos personales viven en el CRM. La web guarda lo justo para funcionar, y lo sensible, cifrado con la clave del sitio.</p>
+	<div class="tabla">
+		<table>
+			<thead><tr><th scope="col">Qué</th><th scope="col">Cómo y cuánto tiempo</th></tr></thead>
+			<tbody>
+				<tr><td>El email de cada cuenta</td><td>Cifrado, para poder entrar con él aunque el CRM no responda. Sigue al CRM: si cambia en la ficha, cambia aquí.</td></tr>
+				<tr><td>Lo escrito al pedir el acceso</td><td>Cifrado; se borra 30 días después de resolver la solicitud.</td></tr>
+				<tr><td>Copia de las fichas del grupo</td><td>Cifrada y sin datos de salud, durante unos minutos, para que las páginas vayan rápido.</td></tr>
+				<tr><td>Autorizaciones de domiciliación SEPA</td><td>Titular, IBAN y dirección cifrados, mientras esté vigente y 14 meses después de anularla (lo pide la norma SEPA).</td></tr>
+				<tr><td>Tesorería</td><td>Familias (con los nº de socio), pagos y ajustes, remesas y movimientos del banco.</td></tr>
+				<tr><td>Uniformes</td><td>Los pedidos, con el nº de socio y sin nombres.</td></tr>
+				<tr><td>Números de socio</td><td>La numeración territorial y sus incidencias.</td></tr>
+				<tr><td>Registro</td><td>Quién hace qué (auditoría) y qué emails se enviaron, sin el enlace personal.</td></tr>
+			</tbody>
+		</table>
+	</div>
+	<ul>
+		<li>Al <strong>desinstalar</strong> el plugin se borran sus ajustes (también los colores, el idioma y las etiquetas).</li>
+		<li>Lo cifrado se protege con la clave <span class="mono">ASDE_AP_ENCRYPTION_KEY</span> de <span class="mono">wp-config.php</span> o, si no está, con las claves de WordPress del mismo fichero. Si se cambian, lo cifrado deja de poder leerse: guárdalas bien.</li>
+	</ul>
+</section>

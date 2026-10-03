@@ -33,6 +33,9 @@ final class Asde_Prueba_Crm implements EscritorCrm {
 	/** @var string[] Campos que el CRM «no acepta» al escribir. */
 	public array $rechazar = array();
 
+	/** Responde también a get_module_fields con tipos básicos (por defecto no: las pruebas no lo necesitan). */
+	public bool $metadatos = false;
+
 	private string $grupo_sg;
 	private string $base;
 	/** @var callable|null */
@@ -145,6 +148,17 @@ final class Asde_Prueba_Crm implements EscritorCrm {
 					}
 				}
 				return array( 'id' => $this->set_entry( 'Contacts', $id, $valores ) );
+			case 'get_module_fields':
+				if ( ! $this->metadatos ) {
+					return array( 'number' => 20, 'name' => 'Module Does Not Exist', 'description' => 'Método no simulado: ' . $metodo );
+				}
+				$campos = array();
+				foreach ( (array) ( $d['fields'] ?? array() ) as $c ) {
+					$c = (string) $c;
+					$tipo = str_starts_with( $c, 'email' ) || str_ends_with( $c, '_email_c' ) ? 'email' : ( str_starts_with( $c, 'phone' ) || str_contains( $c, 'movil' ) || str_contains( $c, 'telefono' ) ? 'phone' : ( str_contains( $c, 'fecha' ) || 'birthdate' === $c ? 'date' : 'varchar' ) );
+					$campos[ $c ] = array( 'name' => $c, 'type' => $tipo, 'label' => $c, 'len' => 100 );
+				}
+				return array( 'module_fields' => $campos );
 			default:
 				return array(
 					'number'      => 20,

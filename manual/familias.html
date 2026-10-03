@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Manual para familias · Área privada de los Grupos Scouts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@600;700&family=JetBrains+Mono:wght@500&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap">
+<link rel="stylesheet" href="manual.css">
+</head>
+<body>
+<header class="portada">
+	<div class="portada__dentro">
+		<p class="antetitulo">Manual de uso · versión 0.15 · octubre de 2026 · <a class="portada__volver" href="index.html">Todos los manuales</a></p>
+		<h1>Manual para familias</h1>
+		<p class="portada__perfil">Madres, padres y tutores</p>
+		<p class="entrada">Cómo entrar en el área privada del grupo con la cuenta familiar, ver y corregir las fichas de tus hijos, consultar los pagos, firmar la domiciliación SEPA y pedir el uniforme.</p>
+		<p class="demo"><strong>Todas las capturas son de un WordPress de demostración con un CRM simulado y datos inventados:</strong> el «Grupo Scout Ejemplo» (grupo 999), personas que no existen y emails <span class="mono">@example.invalid</span>. En tu grupo verás tus datos del CRM.</p>
+	</div>
+	<div class="secciones-franja" aria-hidden="true">
+		<span style="background: var(--castores)"></span><span style="background: var(--lobatos)"></span><span style="background: var(--scouts)"></span><span style="background: var(--escultas)"></span><span style="background: var(--rovers)"></span>
+	</div>
+</header>
+
+<div class="cuerpo">
+	<nav class="indice" aria-label="Índice">
+		<h2>En este manual</h2>
+		<ol>
+<li><a href="#para-quien">Para quién es este manual</a></li>
+<li><a href="#entrar">Entrar</a></li>
+<li><a href="#solicitar">Pedir el acceso</a></li>
+<li><a href="#primera-vez">Primera vez y contraseña olvidada</a></li>
+<li class="sub"><a href="#activar">Activar la cuenta</a></li>
+<li class="sub"><a href="#olvidada">¿Has olvidado tu contraseña?</a></li>
+<li><a href="#inicio">El inicio y el menú</a></li>
+<li><a href="#fichas">Las fichas de tus hijos</a></li>
+<li class="sub"><a href="#proponer">Proponer un cambio</a></li>
+<li class="sub"><a href="#salud">Salud y alimentación</a></li>
+<li><a href="#mis-pagos">Mis pagos</a></li>
+<li><a href="#sepa">Firmar la domiciliación SEPA</a></li>
+<li><a href="#uniforme">Pedir el uniforme</a></li>
+<li class="sub"><a href="#seguir-pedido">Seguir el pedido</a></li>
+<li><a href="#idioma">El idioma de la web</a></li>
+<li><a href="#seguridad">Seguridad de la cuenta</a></li>
+<li><a href="#preguntas">Preguntas frecuentes</a></li>
+		</ol>
+	</nav>
+
+	<main>
+		<details class="indice-movil">
+			<summary>Índice del manual</summary>
+			<ol>
+<li><a href="#para-quien">Para quién es este manual</a></li>
+<li><a href="#entrar">Entrar</a></li>
+<li><a href="#solicitar">Pedir el acceso</a></li>
+<li><a href="#primera-vez">Primera vez y contraseña olvidada</a></li>
+<li><a href="#inicio">El inicio y el menú</a></li>
+<li><a href="#fichas">Las fichas de tus hijos</a></li>
+<li><a href="#mis-pagos">Mis pagos</a></li>
+<li><a href="#sepa">Firmar la domiciliación SEPA</a></li>
+<li><a href="#uniforme">Pedir el uniforme</a></li>
+<li><a href="#idioma">El idioma de la web</a></li>
+<li><a href="#seguridad">Seguridad de la cuenta</a></li>
+<li><a href="#preguntas">Preguntas frecuentes</a></li>
+			</ol>
+		</details>
+
+<section id="para-quien">
+	<h2>Para quién es este manual</h2>
+	<p class="resumen">Para las madres, los padres y los tutores de los socios menores de edad del grupo. Con la <strong>cuenta familiar</strong> veis a todos vuestros hijos del grupo con una sola cuenta.</p>
+	<div class="tabla tabla--texto">
+		<table>
+			<thead><tr><th scope="col">Con la cuenta familiar puedes</th><th scope="col">Dónde</th></tr></thead>
+			<tbody>
+				<tr><td>Ver las fichas de tus hijos y proponer cambios (los revisa el grupo)</td><td><a href="#fichas">Mi familia</a></td></tr>
+				<tr><td>Consultar la cuota del grupo, sus plazos y lo que habéis pagado</td><td><a href="#mis-pagos">Mis pagos</a></td></tr>
+				<tr><td>Firmar la domiciliación SEPA para que el grupo os cobre la cuota en vuestra cuenta</td><td><a href="#sepa">Mis pagos</a></td></tr>
+				<tr><td>Pedir el uniforme de cada hijo y seguir el pedido hasta recibirlo</td><td><a href="#uniforme">Uniforme</a></td></tr>
+			</tbody>
+		</table>
+	</div>
+	<ul>
+		<li>Los datos personales se leen en el momento del CRM de ASDE (SinergiaCRM), que es donde los guarda el grupo; la web no los guarda.</li>
+		<li>Cuando un hijo cumple <strong>18 años</strong>, la cuenta familiar deja de verlo: desde entonces accede él o ella con su propia cuenta.</li>
+		<li>Los socios de <strong>14 a 17 años</strong> pueden tener, además, su propia cuenta (ver el <a href="participantes.html">manual para asociados menores de edad</a>).</li>
+	</ul>
+</section>
+
+<section id="entrar">
+	<h2>Entrar</h2>
+	<p class="resumen">Se entra desde <strong>«Acceso socios»</strong>, en el menú de la web del grupo. Con la sesión iniciada, ese botón pasa a llamarse «Área privada».</p>
+	<figure class="captura"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/acceso/</span></div><div class="navegador__vista" data-ampliar><img src="capturas/01-acceso.png" width="1280" height="1095" alt="Pantalla Acceso socios con los campos Grupo Scout, Nº de socio/a o email, Contraseña y Código de verificación" loading="lazy"></div></div><figcaption><span>La pantalla de acceso. El grupo viene elegido si en la web solo hay uno. Debajo, «¿Aún no tienes cuenta? Solicita el acceso».</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<ol class="pasos">
+		<li><div><strong>Grupo Scout.</strong> Elige el grupo de tus hijos.</div></li>
+		<li><div><strong>Usuario: el nº de socio/a de tu hijo o hija seguido de una T</strong>, por ejemplo <code>118241T</code>. Si sois dos tutores con cuentas separadas, el segundo tutor/a usa <code>T2</code>: <code>118241T2</code>. Da igual si pones espacios o la t en minúscula. Con varios hijos en el grupo, vale el número de cualquiera de ellos: es la misma cuenta.
+			<ul>
+				<li>El número es el de Scouts de España (el de la ficha del CRM) o el territorial de siempre (en Scouts de Balears, por ejemplo <code>79990390T</code>): valen los dos.</li>
+				<li>También puedes entrar con el <strong>email de tu cuenta</strong>, el mismo al que te llegó la invitación.</li>
+			</ul>
+		</div></li>
+		<li><div><strong>Contraseña.</strong> La que elegiste al activar la cuenta.</div></li>
+		<li><div><strong>Código de verificación.</strong> Solo si has activado la verificación en dos pasos (es opcional para las familias, ver <a href="#seguridad">Seguridad</a>).</div></li>
+	</ol>
+	<div class="nota"><p><strong>Dos tutores, dos cuentas.</strong> Cada tutor/a puede tener la suya, con su email y su contraseña, y los dos veis a los mismos hijos. La primera cuenta es <code>nº + T</code> y la segunda, <code>nº + T2</code>. La segunda se pide con el enlace del grupo o la da Secretaría.</p></div>
+	<div class="nota"><p><strong>¿Eres también scouter?</strong> Tu cuenta de scouter y la familiar son distintas, aunque tengan el mismo email. Al entrar con el email se abre la cuenta cuya contraseña escribas; si las dos tienen la misma, la pantalla te pide el nº de socio/a de la que quieres usar (el tuyo, o el de tu hijo o hija con la T).</p></div>
+	<h3>Si no te deja entrar</h3>
+	<ul>
+		<li><strong>«Nº de socio/a o email, contraseña o grupo incorrectos.»</strong> Revisa los tres datos. El mensaje no dice cuál falla, a propósito.</li>
+		<li><strong>«Demasiados intentos fallidos…»</strong> Tras 5 fallos seguidos hay que esperar 15 minutos, o pedir una contraseña nueva.</li>
+		<li><strong>¿Aún no tienes cuenta?</strong> Pídela desde el enlace de la pantalla (ver <a href="#solicitar">Pedir el acceso</a>).</li>
+	</ul>
+</section>
+
+<section id="solicitar">
+	<h2>Pedir el acceso</h2>
+	<p class="resumen">Si aún no tienes cuenta, pídela con el enlace que te pase el grupo o desde «Acceso socios» → «Solicita el acceso». La web comprueba los datos con la ficha del grupo y un scouter aprueba la solicitud.</p>
+	<figure class="captura captura--larga"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/solicitar-acceso/?grupo=999</span></div><div class="navegador__vista" data-ampliar tabindex="0"><img src="capturas/30-solicitar.png" width="1280" height="1523" alt="Formulario Solicitar acceso: grupo, quién pide el acceso, documento y fecha de nacimiento del socio/a, nombre y email de quien lo pide" loading="lazy"></div></div><figcaption><span>El formulario. Con el enlace del grupo, el grupo ya viene elegido.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<ol class="pasos">
+		<li><div><strong>¿Quién pide el acceso?</strong> «Soy su madre, padre o tutor/a» para los socios menores de edad (es la cuenta familiar); «Soy el socio/a» desde los 14 años, para tener tu propia cuenta. Si eliges la que no toca, la pantalla te lo explica y marca la otra.</div></li>
+		<li><div><strong>Datos del socio/a:</strong> su nº de documento (DNI o NIE) y su fecha de nacimiento. Da igual si escribes puntos, guiones o espacios. Si es menor y no tiene DNI, deja el documento en blanco.</div></li>
+		<li><div><strong>Tus datos:</strong> tu nombre y apellidos y tu email. A ese email llegará la invitación y con él podrás entrar.</div></li>
+		<li><div><strong>«Enviar solicitud».</strong> Si los datos cuadran, verás que se ha enviado. Cuando el grupo la apruebe, te llegará el email para activar la cuenta.</div></li>
+	</ol>
+	<figure class="captura captura--larga"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/solicitar-acceso/</span></div><div class="navegador__vista" data-ampliar tabindex="0"><img src="capturas/31-solicitar-nombre.png" width="1280" height="1759" alt="El formulario pide el nombre y apellidos del socio/a porque no se escribió documento y la fecha es la de un menor de 14 años" loading="lazy"></div></div><figcaption><span>Sin documento y con la fecha de un menor de 14 años, la pantalla pide su nombre y apellidos tal como constan en el grupo.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<ul>
+		<li><strong>Si no se pueden comprobar los datos</strong>, la pantalla da el email de contacto del grupo para pedir el acceso por email, con el nombre del socio/a y tu relación con él o ella. El mensaje es el mismo si el documento no está o si la fecha no coincide: así nadie puede averiguar quién está en el grupo.</li>
+		<li><strong>Si ya tienes cuenta</strong>, te lo dice y te lleva a recuperar la contraseña.</li>
+		<li>La pantalla nunca enseña datos del CRM. Lo que escribes se guarda cifrado y se borra 30 días después de resolver la solicitud.</li>
+		<li>Como mucho, 8 intentos por hora desde el mismo dispositivo.</li>
+	</ul>
+</section>
+
+<section id="primera-vez">
+	<h2>Primera vez y contraseña olvidada</h2>
+	<h3 id="activar">Activar la cuenta</h3>
+	<ol class="pasos">
+		<li><div>Cuando el grupo te da acceso, o aprueba tu solicitud, te llega un email con tu usuario: «Activa tu acceso al área privada» o, si lo pediste tú, «Bienvenida al área privada: activa tu acceso».</div></li>
+		<li><div>Pulsa <strong>«Activar mi cuenta»</strong>. El enlace es personal, de un solo uso, y dura 7 días.</div></li>
+		<li><div>Elige una contraseña de al menos 10 caracteres. Mejor una frase fácil de recordar para ti y difícil de adivinar.</div></li>
+		<li><div>Entra por «Acceso socios» con tu usuario (el email de la invitación dice cuál es) o con el email en el que recibiste la invitación.</div></li>
+	</ol>
+	<h3 id="olvidada">¿Has olvidado tu contraseña?</h3>
+	<figure class="captura"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/recuperar-contrasena/</span></div><div class="navegador__vista" data-ampliar><img src="capturas/02-recuperar.png" width="1280" height="667" alt="Pantalla Recuperar contraseña con el campo Nº de socio/a o email" loading="lazy"></div></div><figcaption><span>Desde el enlace «¿Has olvidado tu contraseña?» de la pantalla de acceso.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<ul>
+		<li>Escribe tu usuario (vale el de Scouts de España o el territorial, con la T si es una cuenta familiar) o tu email.</li>
+		<li>Recibirás un enlace para elegir contraseña nueva, válido 24 horas, en el email de tu cuenta.</li>
+		<li>Si ese email es el de varias cuentas (la tuya y la de tu familia, por ejemplo), te llega un enlace para cada una. Cada email dice de qué usuario es.</li>
+		<li>La respuesta en pantalla es siempre la misma, exista o no el usuario. Si no llega nada, mira en la carpeta de spam; si el email está mal, pide a Secretaría que lo corrija en el CRM.</li>
+	</ul>
+</section>
+
+<section id="inicio">
+	<h2>El inicio y el menú</h2>
+	<p class="resumen">Al entrar ves el saludo con el nombre de tus hijos, vuestro usuario y una tarjeta por cada cosa que podéis hacer.</p>
+	<figure class="captura captura--larga"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/</span></div><div class="navegador__vista" data-ampliar tabindex="0"><img src="capturas/52-inicio-familia.png" width="1280" height="1030" alt="Inicio del área privada de una familia: el menú Mi familia, Mis pagos y Uniforme, y las tarjetas de cada hijo" loading="lazy"></div></div><figcaption><span>El inicio de la familia de Hugo y Lucía: una tarjeta con la ficha de cada uno, Mis pagos y Uniforme.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<ul>
+		<li><strong>Menú:</strong> Inicio, <strong>Mi familia</strong> (la ficha de cada hijo), <strong>Mis pagos</strong> y <strong>Uniforme</strong>. Solo eso: las familias no ven nada de la gestión del grupo.</li>
+		<li><strong>Junto a vuestro nombre:</strong> «Seguridad» (la verificación en dos pasos), el idioma si el grupo deja elegirlo y «Salir».</li>
+		<li>Cuando el grupo os entrega un uniforme, el inicio os pide que <strong>confirméis que lo habéis recibido</strong>.</li>
+	</ul>
+	<div class="moviles">
+		<figure class="captura movil"><div class="navegador"><div class="navegador__vista" data-ampliar><img src="capturas/65-movil-inicio-familia.png" width="780" height="2983" alt="Inicio de la familia en el móvil" loading="lazy"></div></div><figcaption><span>En el móvil, el menú es una fila que se desplaza hacia los lados y las tarjetas van una debajo de otra.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+		<div>
+			<h3>Al pasar de una pantalla a otra</h3>
+			<p>Una barra fina arriba indica que se está cargando. Algunas cosas (la tabla de medidas del uniforme, por ejemplo) se abren en una ventana encima de la página: se cierra con la ×, con Esc o pulsando fuera.</p>
+		</div>
+	</div>
+</section>
+
+<section id="fichas">
+	<h2>Las fichas de tus hijos</h2>
+	<p class="resumen">En «Mi familia» ves la ficha completa de cada hijo, tal como la tiene el grupo en el CRM. Lo que corrijas no se guarda directamente: queda <strong>pendiente de aprobación</strong> hasta que lo revisa Secretaría o un scouter de su sección.</p>
+	<figure class="captura"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/ficha/?socio=900031</span></div><div class="navegador__vista" data-ampliar><img src="capturas/14a-familia-ficha.png" width="1280" height="700" alt="Ficha de un lobato vista por su familia, con el aviso de que los cambios se revisarán" loading="lazy"></div></div><figcaption><span>Cada campo que se puede proponer lleva «(se revisará)». Con varios hijos, los botones de arriba cambian de ficha.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<ul>
+		<li><strong>Apartados plegables:</strong> datos personales, membresía, contacto, familia y tutores, autorizaciones, salud y alimentación. «Contraer todo» y «Expandir todo» los pliegan de una vez.</li>
+		<li>Los datos con <strong>candado</strong> no se pueden cambiar desde la web (el nº de socio, por ejemplo): pasa el ratón por encima para ver el motivo y, si está mal, díselo al grupo.</li>
+	</ul>
+	<h3 id="proponer">Proponer un cambio</h3>
+	<ol class="pasos">
+		<li><div>Corrige lo que haga falta (un teléfono, la dirección, una alergia…) y pulsa <strong>«Enviar cambios para su aprobación»</strong>.</div></li>
+		<li><div>Debajo del campo aparece «Cambio pendiente de aprobación», y al final de la ficha, la lista de vuestras propuestas, que podéis <strong>retirar</strong> mientras sigan pendientes.</div></li>
+		<li><div>El grupo la aprueba (se guarda en el CRM) o la rechaza con un motivo, que veréis en la misma lista.</div></li>
+	</ol>
+	<figure class="captura"><div class="navegador"><div class="navegador__vista" data-ampliar><img src="capturas/14c-familia-propuestas.png" width="1180" height="404" alt="Tabla Cambios propuestos en esta ficha con una propuesta pendiente" loading="lazy"></div></div><figcaption><span>Vuestras propuestas (aquí, el teléfono móvil y la población), con su estado.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<h3 id="salud">Salud y alimentación</h3>
+	<p>Son datos especialmente protegidos. Los ve vuestra familia, Secretaría, Coordinación y los scouters de la sección (estos, sin poder cambiarlos). También aquí podéis proponer cambios: mantenedlos al día antes de campamentos y salidas.</p>
+	<figure class="captura"><div class="navegador"><div class="navegador__vista" data-ampliar><img src="capturas/14b-familia-salud.png" width="1180" height="680" alt="Apartado Salud visto por la familia" loading="lazy"></div></div><figcaption><span>El apartado «Salud» de la ficha.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+</section>
+
+<section id="mis-pagos">
+	<h2>Mis pagos</h2>
+	<p class="resumen">Lo que ha registrado Tesorería, solo para consultar: la cuota del grupo de este año, los pagos hechos y lo que queda por pagar.</p>
+	<figure class="captura captura--larga"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/mis-pagos/</span></div><div class="navegador__vista" data-ampliar tabindex="0"><img src="capturas/39-mis-pagos.png" width="1280" height="1800" alt="Página Mis pagos de una familia: cuota de la ronda con sus plazos, la domiciliación SEPA autorizada, pagos registrados y un uniforme pendiente de pago" loading="lazy"></div></div><figcaption><span>La familia de Lucía y Hugo ha pagado parte de la cuota y un uniforme, tiene otro pendiente y ha firmado la domiciliación SEPA.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<ul>
+		<li><strong>Cuota del grupo:</strong> a pagar, pagado y pendiente, con su estado; los plazos, con la fecha y el importe de cada uno; y la <strong>referencia de la familia</strong> (por ejemplo <code>F999001</code>), que tenéis que poner en el concepto de las transferencias.</li>
+		<li><strong>Domiciliación SEPA:</strong> si la habéis firmado, su estado, el próximo cargo y la cuenta (con el IBAN en parte oculto); si no, podéis firmarla (siguiente apartado).</li>
+		<li><strong>Pagos registrados:</strong> los de la cuota, de todos los años, y los del uniforme, con su fecha, forma de pago, referencia e importe.</li>
+		<li><strong>Pendiente de pago:</strong> los pedidos de uniforme que aún no se han pagado.</li>
+		<li>No aparecen las notas internas de Tesorería ni el detalle de descuentos y becas (sí se tienen en cuenta en «a pagar»). Si echáis en falta algún pago, hablad con Tesorería.</li>
+	</ul>
+</section>
+
+<section id="sepa">
+	<h2>Firmar la domiciliación SEPA</h2>
+	<p class="resumen">Si el grupo ofrece la domiciliación, la familia autoriza al grupo a cobrar la cuota por <strong>adeudo directo</strong> en una cuenta suya, siempre avisando antes con la fecha y el importe. La firman la madre, el padre o el tutor/a desde la cuenta familiar.</p>
+	<figure class="captura"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/mis-pagos/</span></div><div class="navegador__vista" data-ampliar><img src="capturas/43b-mis-pagos-firmar.png" width="1180" height="1592" alt="Tarjeta Domiciliación SEPA de Mis pagos con el formulario para firmar una autorización" loading="lazy"></div></div><figcaption><span>La tarjeta «Domiciliación SEPA» de «Mis pagos». La primera vez el formulario sale directamente; después, «Cambiar de cuenta o de titular» abre uno nuevo.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<ol class="pasos">
+		<li><div>Escribe el <strong>titular</strong> de la cuenta, su <strong>IBAN</strong> y su dirección (calle, código postal, población, provincia y país). Debajo salen los datos del acreedor (el grupo) y el texto de la orden de domiciliación.</div></li>
+		<li><div>Marca la casilla «Soy el titular de la cuenta (o estoy autorizado/a a firmar por él o ella) y firmo esta orden…» y pulsa <strong>«Firmar la autorización»</strong>. La firma queda registrada con la fecha y la hora, y os llega un email de confirmación.</div></li>
+		<li><div>La web guarda el titular y el IBAN <strong>cifrados</strong> y solo enseña el IBAN con asteriscos.</div></li>
+	</ol>
+	<ul>
+		<li>Antes de cada cargo os llega un <strong>aviso por email</strong> con la fecha y el importe. Si no estáis de acuerdo, avisad al grupo antes de esa fecha.</li>
+		<li>Podéis <strong>ver e imprimir</strong> la autorización, y <strong>anularla</strong> cuando queráis desde «Mis pagos»: desde entonces no se cobra nada por esa cuenta.</li>
+		<li>Como en cualquier recibo domiciliado, el banco os devuelve un cargo si lo pedís dentro de las ocho semanas siguientes.</li>
+	</ul>
+	<figure class="captura"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/mis-pagos/?autorizacion=1</span></div><div class="navegador__vista" data-ampliar><img src="capturas/43-mis-pagos-autorizacion.png" width="1280" height="1280" alt="Autorización de adeudo directo SEPA lista para imprimir" loading="lazy"></div></div><figcaption><span>La autorización, lista para imprimir o guardar en PDF desde el navegador.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+</section>
+
+<section id="uniforme">
+	<h2>Pedir el uniforme</h2>
+	<p class="resumen">En «Uniforme» se pide la camisa scout y las insignias, y se sigue el pedido hasta tenerlo.</p>
+	<figure class="captura captura--larga"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/uniforme/</span></div><div class="navegador__vista" data-ampliar tabindex="0"><img src="capturas/35-uniforme-familia.png" width="1280" height="1966" alt="Página Uniforme de una familia: cómo pagar, sus dos pedidos con los pasos y el formulario de un pedido nuevo" loading="lazy"></div></div><figcaption><span>Arriba, cómo pagar; después, los pedidos hechos con cada paso; abajo, el formulario para uno nuevo.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<ol class="pasos">
+		<li><div><strong>¿Para quién?</strong> En una cuenta familiar, para cada hijo o hija; en una cuenta propia, para ti. Cada pedido es para una persona.</div></li>
+		<li><div><strong>Camisa scout:</strong> marca «Quiero la camisa» y elige modelo y talla. La masculina va de la 6 a la 3XL y la femenina, de la 12 a la 3XL. <strong>«Tabla de medidas»</strong> (bajo «Modelo y talla») abre la tabla del modelo en una ventana encima del pedido, sin perder lo que llevas rellenado. La 3XL es talla especial.</div></li>
+		<li><div><strong>Insignias:</strong> cuántas quieres de cada una. «Dónde va cada insignia» enseña dónde se cosen. Si una insignia aún no tiene precio, sale «precio por confirmar»: se puede pedir igual y Tesorería cobra el importe real.</div></li>
+		<li><div><strong>«Enviar el pedido».</strong> Te da el nº de pedido (por ejemplo <code>U9990167</code>) y el total.</div></li>
+		<li><div><strong>Págalo</strong> en efectivo o con un ingreso en la cuenta del grupo, con el nº de pedido en el concepto. El recuadro de arriba dice dónde y cómo.</div></li>
+	</ol>
+	<figure class="captura"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/uniforme/</span></div><div class="navegador__vista" data-ampliar><img src="capturas/44-uniforme-medidas.png" width="1280" height="900" alt="La tabla de medidas de la camisa masculina abierta en una ventana encima del pedido de uniforme" loading="lazy"></div></div><figcaption><span>La tabla de medidas, en una ventana encima del pedido. «Abrir en otra pestaña» la enseña a pantalla completa.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<h3 id="seguir-pedido">Seguir el pedido</h3>
+	<ol class="pasos-pedido">
+		<li>Solicitado</li><li>Pagado</li><li>En el pedido del grupo</li><li>Entregado</li><li>Recibido</li>
+	</ol>
+	<ul>
+		<li>Cada paso sale con su fecha: Tesorería valida el pago, el grupo lo incluye en su pedido al proveedor y te lo entrega.</li>
+		<li><strong>«Cancelar el pedido»</strong> se puede mientras nadie haya validado el pago. Si después ves que la talla no es, habla con Tesorería.</li>
+		<li>Cuando te lo entreguen, pulsa <strong>«Lo he recibido»</strong>. El inicio te lo recuerda. Nadie más lo puede marcar por ti.</li>
+		<li>Lo pagado también se ve en «Mis pagos». Para dos camisas, o para dos hermanos, se hacen dos pedidos.</li>
+		<li>Si el grupo ha cerrado los pedidos, el formulario dice que ahora no se aceptan.</li>
+	</ul>
+	<div class="moviles">
+		<figure class="captura movil"><div class="navegador"><div class="navegador__vista" data-ampliar><img src="capturas/40-movil-uniforme.png" width="780" height="5388" alt="La página Uniforme en un móvil" loading="lazy"></div></div><figcaption><span>En el móvil.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+		<div>
+			<h3>El total</h3>
+			<p>El total se calcula mientras eliges. Con una insignia sin precio sale, por ejemplo, «25,00 € + insignias (precio por confirmar)».</p>
+		</div>
+	</div>
+</section>
+
+<section id="idioma">
+	<h2>El idioma de la web</h2>
+	<p class="resumen">El área privada está en castellano, catalán, euskera y gallego. La administración de la web elige el idioma del grupo y si cada persona puede cambiarlo.</p>
+	<figure class="captura"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/acceso/</span></div><div class="navegador__vista" data-ampliar><img src="capturas/61-acceso-idiomas.png" width="1280" height="760" alt="La pantalla de acceso con el selector de idioma encima: Castellano, Català, Euskara, Galego" loading="lazy"></div></div><figcaption><span>Si se deja elegir, el selector sale encima de las pantallas de entrar, activar la cuenta, recuperar la contraseña y pedir el acceso, y dentro del área junto a «Salir».</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<ul>
+		<li>Pulsa tu idioma. Con la sesión iniciada, la elección se guarda en tu cuenta y la próxima vez entrarás directamente en él, desde cualquier dispositivo.</li>
+		<li>Los <strong>emails</strong> que te mande el área privada (invitación, contraseña nueva, avisos de cargo de la domiciliación) te llegan en tu idioma.</li>
+		<li>Lo que escribe la gente (motivos, notas, el nombre de un informe o de una insignia) se ve tal como se escribió, en el idioma en que se escribió.</li>
+		<li>Si ves una traducción que no suena bien, díselo al grupo: la administración de la web puede cambiar cualquier texto sin tocar nada más.</li>
+	</ul>
+</section>
+
+<section id="seguridad">
+	<h2>Seguridad de la cuenta</h2>
+	<p class="resumen">La verificación en dos pasos pide, además de la contraseña, un código de 6 cifras de una app del móvil (Google Authenticator, Microsoft Authenticator o similar). Para tu cuenta es <strong>opcional</strong>, pero protege mejor los datos.</p>
+	<ol class="pasos">
+		<li><div>Pulsa <strong>«Seguridad»</strong>, junto a tu nombre, arriba del área.</div></li>
+		<li><div>Instala en tu móvil una app de autenticación y escanea con ella el código QR.</div></li>
+		<li><div>Escribe el código de 6 cifras que te muestra la app y guarda los <strong>códigos de recuperación</strong> en un lugar seguro: te servirán si pierdes el móvil.</div></li>
+	</ol>
+	<p>Desde entonces, al entrar, el código va en el campo «Código de verificación» de «Acceso socios».</p>
+</section>
+
+<section id="preguntas">
+	<h2>Preguntas frecuentes</h2>
+	<details class="pregunta"><summary>No tengo cuenta. ¿Cómo la pido?</summary><div><p>Con el enlace que os pase el grupo, o desde «Acceso socios» → «Solicita el acceso». Elige «Soy su madre, padre o tutor/a» y escribe el documento y la fecha de nacimiento de tu hijo o hija, tu nombre y tu email. Cuando un scouter la apruebe, te llegará el email para activar la cuenta.</p></div></details>
+	<details class="pregunta"><summary>Mi hijo no tiene DNI. ¿Puedo pedir el acceso?</summary><div><p>Sí. Deja el documento en blanco y escribe su fecha de nacimiento: si tiene menos de 14 años, la pantalla te pedirá su nombre y apellidos tal como constan en el grupo.</p></div></details>
+	<details class="pregunta"><summary>Tengo varios hijos en el grupo. ¿Necesito una cuenta para cada uno?</summary><div><p>No: una sola cuenta familiar sirve para todos. Si al pedir el acceso solo aparece uno, díselo al grupo y lo añaden.</p></div></details>
+	<details class="pregunta"><summary>Mi pareja también es tutora. ¿Puede tener su cuenta?</summary><div><p>Sí: cada tutor/a tiene la suya, con su email y su contraseña, y veis a los mismos hijos. Tu usuario es el nº del menor con una T; el de tu pareja, con T2. La puede pedir con el enlace del grupo o se la da Secretaría.</p></div></details>
+	<details class="pregunta"><summary>¿Con qué número entro?</summary><div><p>Con el nº de socio/a de tu hijo o hija seguido de una T (o T2 el segundo tutor/a). Vale el de Scouts de España o el territorial. También puedes entrar con el email de tu cuenta.</p></div></details>
+	<details class="pregunta"><summary>Me dice «No hemos podido comprobar tus datos».</summary><div><p>Revisa el documento y la fecha de nacimiento. Si están bien, pide el acceso por email a la dirección de contacto que te da la pantalla: puede que la ficha del grupo tenga un dato distinto.</p></div></details>
+	<details class="pregunta"><summary>No me llega el email de invitación o de recuperación.</summary><div><p>Mira en la carpeta de spam. Si sigue sin llegar, pide a Secretaría que compruebe vuestro email en el CRM.</p></div></details>
+	<details class="pregunta"><summary>He cambiado de email.</summary><div><p>Pide a Secretaría que lo cambie en la ficha del CRM. La web sigue al CRM: desde entonces entráis con el nuevo y los emails llegan ahí.</p></div></details>
+	<details class="pregunta"><summary>He propuesto un cambio y no se ve en la ficha.</summary><div><p>Los cambios de las familias los revisa el grupo antes de guardarlos en el CRM. Mientras tanto salen como «Cambio pendiente de aprobación»; al final de la ficha veis su estado.</p></div></details>
+	<details class="pregunta"><summary>Mi hija ha cumplido 18 años y ya no aparece.</summary><div><p>Es lo previsto: a partir de los 18 años solo accede la propia persona. Puede pedir su propia cuenta con el enlace del grupo.</p></div></details>
+	<details class="pregunta"><summary>¿Cómo pago el uniforme?</summary><div><p>En efectivo o con un ingreso en la cuenta del grupo, con el nº de pedido (por ejemplo <code>U9990167</code>) en el concepto. Cuando Tesorería lo recibe, el pedido sale como pagado.</p></div></details>
+	<details class="pregunta"><summary>He pedido una talla que no es.</summary><div><p>Mientras nadie haya validado el pago, cancela el pedido y haz otro. Si ya está pagado, habla con Tesorería.</p></div></details>
+	<details class="pregunta"><summary>¿Es seguro dar el IBAN para la domiciliación?</summary><div><p>La web lo guarda cifrado, solo lo enseña con asteriscos y lo usa únicamente para el fichero que el grupo sube a su banco. Os avisamos antes de cada cargo, podéis anular la autorización cuando queráis y el banco os devuelve un cargo si lo pedís en las ocho semanas siguientes.</p></div></details>
+	<details class="pregunta"><summary>¿Se guardan nuestros datos en la web?</summary><div><p>Los datos personales (nombres, teléfonos, salud) se leen del CRM del grupo en el momento y no se guardan en la web. La web guarda, cifrado, el email de la cuenta para poder entrar con él, la autorización SEPA (titular e IBAN cifrados), los pagos que registra Tesorería y los pedidos de uniforme (con el nº de socio, sin nombres).</p></div></details>
+</section>
+
+		<section id="otros-manuales" class="otros">
+			<h2>Los otros manuales</h2>
+			<ul>
+<li><a href="administracion.html">Manual de gestión del CRM y de la web</a> <span class="otros__para">· Administración de WordPress</span></li>
+<li><a href="participantes.html">Manual para asociados menores de edad</a> <span class="otros__para">· Educandos de 14 a 17 años con cuenta propia</span></li>
+<li><a href="scouters.html">Manual para scouters</a> <span class="otros__para">· Scouters y voluntariado con sección</span></li>
+<li><a href="coordinacion.html">Manual del equipo de coordinación</a> <span class="otros__para">· Tesorería, Secretaría y Coordinación</span></li>
+			</ul>
+		</section>
+
+		<p class="pie">Manual para familias del plugin «ASDE Scouts de España – Gestor CRM para Grupos Scouts», versión 0.15 (octubre de 2026). Capturas hechas en un WordPress de demostración con un CRM simulado y datos inventados.</p>
+	</main>
+</div>
+
+<dialog id="visor" aria-label="Captura ampliada">
+	<div class="visor__barra"><span id="visor-titulo">Captura</span><button type="button" id="visor-cerrar">Cerrar</button></div>
+	<div class="visor__imagen"><img id="visor-img" alt=""></div>
+</dialog>
+<script src="manual.js"></script>
+</body>
+</html>
