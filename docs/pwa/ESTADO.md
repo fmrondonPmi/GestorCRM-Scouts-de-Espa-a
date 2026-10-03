@@ -1,6 +1,6 @@
 # PWA · estado
 
-**Plugin:** v0.17.0 (la PWA, secciones 1 y 2, entra en el plugin desde esta versión; antes se empaquetaba aparte). Ya **publicable** con lo de las secciones 1–2: ver `MANUAL-PUBLICACION.md`. Las secciones 3–5 son mejoras.
+**Plugin:** v0.17.1 (la PWA entró en el plugin en la 0.17.0; la sección 3 sale en la 0.17.1). Ya **publicable** con lo de las secciones 1–2: ver `MANUAL-PUBLICACION.md`. Las secciones 3–5 son mejoras.
 **Última actualización:** 2026-10-03.
 
 > ⚠ **2026-10-02: el plugin y estos docs ya no están en la carpeta antigua del proyecto.** Viven en el repo git `C:\Proyectos\GestorCRM` (`asde-area-privada/`, `manual/`, `docs/`; ver `CLAUDE.md`): trabajar y commitear allí. Esta carpeta `docs/` (y `docs/pwa/`) sigue siendo común.
@@ -9,7 +9,7 @@
 |---|---|---|
 | 1 | **Base instalable:** manifiesto, iconos, etiquetas del `<head>` | ✅ hecha (2026-09-30) |
 | 2 | **Service worker y página sin conexión** (solo estáticos; nunca datos personales) | ✅ hecha (2026-09-30) |
-| 3 | **Invitación a instalar** (Android: aviso del navegador; iPhone: guía «Añadir a pantalla de inicio») | ⏳ |
+| 3 | **Invitación a instalar** (Android: aviso del navegador; iPhone: guía «Añadir a pantalla de inicio») | ✅ hecha (2026-10-03, v0.17.1) |
 | 4 | **Experiencia de app:** modo pantalla completa (ocultar cabecera del tema), zonas seguras, atrás, recarga | ⏳ |
 | 5 | **Ajustes en administración** (activar/desactivar, nombre, colores, icono), «Instalación y entorno» y «Comprobar el hosting» | ⏳ |
 | 6 | **Cierre** de las secciones 3–5: pruebas en conjunto, docs del proyecto, manual de uso y zip (el manual de publicación ya está hecho) | ⏳ |
@@ -17,7 +17,7 @@
 | 7 | *(Opcional, más adelante)* Notificaciones push | — |
 
 ## Siguiente paso
-**Sección 3: invitación a instalar.** Nuevo `assets/pwa/instalar.js` (+ un bloque nuevo al final de `area-privada.css`, releyéndolo antes) encolado desde `Pwa::registro()`/un método nuevo en `Pwa.php`: en Android/Chrome capturar `beforeinstallprompt` y mostrar un botón «Instalar la app»; en iPhone (Safari, no `navigator.standalone`) mostrar una guía corta «Compartir → Añadir a pantalla de inicio»; no mostrar si ya está instalada (`display-mode: standalone`) ni si la persona la ha cerrado (recordarlo en `localStorage`, con try/catch). Sitios: pantalla de acceso y cabecera/inicio del área. Pruebas: texto y condiciones en PHP (`tests/pwa.php`); la lógica del JS, con simulaciones en la consola del navegador.
+**Sección 4: experiencia de app (modo pantalla completa).** Con la app instalada no hay barra del navegador ni botón «atrás» (en iPhone, nunca): hay que resolverlo dentro de la web. Plan: (a) CSS bajo `@media (all and (display-mode: standalone))` (fichero propio `assets/pwa/app.css`, encolado solo si la PWA está activa) para ocultar la cabecera y el pie del tema (Enfold) y dejar solo el menú del área; (b) zonas seguras del iPhone: `viewport-fit=cover` (el `<meta viewport>` lo pone el tema: añadirlo con un script o filtro, sin duplicar) y `env(safe-area-inset-*)`; (c) botón «Atrás» y «Recargar» propios dentro de la app (visibles solo en `standalone`), con textos por `asde_t()`; (d) qué pasa con enlaces que salen del alcance (p. ej. `wp-login.php`, enlaces externos): comprobarlo y, si hace falta, abrirlos fuera; (e) probar el flujo de acceso con doble factor y el cierre de sesión dentro de la app. Para probar `standalone` sin instalar: forzar la media query en las simulaciones (o `?asde_app=1` solo en pruebas) y revisar a 390 px. Pruebas en `tests/pwa.php` + simulaciones en el navegador; textos nuevos: regla de idiomas y regenerar `es.php`.
 
 ## Registro
 - 2026-09-30: creada esta carpeta; el usuario pide ir por secciones, pocos agentes y documentar para ahorrar tokens.
@@ -32,3 +32,8 @@
   - `tests/pwa.php`: **108 comprobaciones** (antes 88), TODO OK; sin `|| true` ni condiciones vacías (regla del `CLAUDE.md`); los colores que cambia se restauran en un `finally`.
   - **Manual de publicación** nuevo: `MANUAL-PUBLICACION.md` (requisitos, subida, caché LiteSpeed/CDN, `curl`, móviles, apagado, texto para familias, lo no probado).
   - Sigue **sin verse el registro del service worker en un navegador real** (ver 2026-09-30) ni la instalación en móviles ni las cabeceras en Hostinger: está en el §13 del manual.
+- 2026-10-03: **sección 3 hecha (v0.17.1) y pruebas en Chrome real.**
+  - **Qué hay:** `assets/pwa/instalar.js` + `instalar.css` (aviso al pie, solo en `acceso` y `area`, constante `Pwa::PAGINAS_INSTALAR`); `Pwa::registro()` los encola y manda `window.asdePwa.textos` ya traducidos (`Pwa::textos_instalar()`, 8 textos por `asde_t()`, traducidos a ca/eu/gl; el JS no lleva textos propios). Android/Chrome: captura `beforeinstallprompt` (con `preventDefault`) y muestra «Instalar la app» / «Ahora no»; iPhone/iPad (también iPadOS que se presenta como Mac): guía de 2 pasos + «Entendido»; no sale si ya está instalada (`display-mode: standalone` o `navigator.standalone`) ni si se cerró hace < 30 días (`localStorage` con try/catch, clave `asde_pwa_instalar_cerrado`); pinta con `textContent`; sin peticiones de red. CSS: respeta la zona segura, botones de 44 px, sin animación si se pide, foco visible, no se imprime y **en móvil deja libre la esquina inferior izquierda** (el botón flotante de cookies del sitio tapaba «Instalar»; se vio en una captura a 375 px).
+  - **Pruebas:** `tests/pwa.php` **144 comprobaciones** (antes 108), TODO OK; idiomas y catálogos OK. Lógica del JS con una ventana falsa en el navegador: 22 casos OK (iPhone, iPad, instalada, cerrada hace 5/31 días, sin `localStorage`, sin textos, flujo Android completo con `prompt()` aceptado/rechazado, `appinstalled`, no duplica el aviso, textos con HTML no se interpretan).
+  - **Chrome real (extensión, 2026-10-03, contra Local):** el service worker (versión antigua `0.12.5` ya instalada en ese Chrome) pasó a la nueva solo con `registration.update()`: caché antigua borrada, `asde-pwa-0.17.0-xxxx` con «Sin conexión»; scope correcto, `updateViaCache: none`, controla la página; Chrome **dispara `beforeinstallprompt`** (app instalable) y el aviso salió y se cerró bien. **No se pulsó «Instalar»** (habría instalado la app en el Chrome del usuario) ni se pudo forzar el modo avión.
+  - Se limpió lo que se tocó en el Chrome del usuario (clave de `localStorage` borrada, pestaña cerrada).

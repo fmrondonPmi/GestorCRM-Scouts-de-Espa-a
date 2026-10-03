@@ -122,4 +122,4 @@ php -d display_startup_errors=0 "C:/Users/fmron/AppData/Local/Programs/Local/res
   3. `wp config create`, `wp core install` y `wp server --config=<php.ini sin auto_prepend_file>`: el `local-bootstrap.php` de Local, cargado dos veces por el servidor de PHP, da un error fatal en wp-admin;
   4. al acabar, borrar la base de datos y la carpeta.
 
-- **Lanzar todas las pruebas** (desde v0.14.1): `herramientas-desarrollo/probar-todo.sh` despliega el plugin en Local y corre cada `tests/*.php` (menos `pwa.php`, que se lanza aparte: `probar-todo.sh pwa`; **108 comprobaciones** en la v0.17.0, doc `pwa/`); acepta nombres para lanzar solo algunas. Las trampas del entorno y las reglas de trabajo están en el `CLAUDE.md` de la raíz.
+- **Lanzar todas las pruebas** (desde v0.14.1): `herramientas-desarrollo/probar-todo.sh` despliega el plugin en Local y corre cada `tests/*.php` (menos `pwa.php`, que se lanza aparte: `probar-todo.sh pwa`; **144 comprobaciones** en la v0.17.1, doc `pwa/`); acepta nombres para lanzar solo algunas. Las trampas del entorno y las reglas de trabajo están en el `CLAUDE.md` de la raíz.

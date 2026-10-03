@@ -1868,4 +1868,12 @@ return array(
 	'Por seguridad, las fichas, los pagos y los datos de los socios no se guardan en el móvil.' => 'Per seguretat, les fitxes, els pagaments i les dades dels socis no es guarden al mòbil.',
 	'Reintentar' => 'Torna-ho a provar',
 	'Sin conexión' => 'Sense connexió',
+	'Instala la app en tu móvil' => 'Instal·la l\'app al mòbil',
+	'Entra con un toque desde la pantalla de inicio, sin escribir la dirección.' => 'Entra amb un toc des de la pantalla d\'inici, sense escriure l\'adreça.',
+	'Instalar la app' => 'Instal·la l\'app',
+	'Ahora no' => 'Ara no',
+	'Añade el área privada a tu pantalla de inicio' => 'Afegeix l\'àrea privada a la pantalla d\'inici',
+	'Pulsa el botón Compartir de Safari (el cuadrado con la flecha hacia arriba).' => 'Prem el botó Comparteix de Safari (el quadrat amb la fletxa cap amunt).',
+	'Elige «Añadir a pantalla de inicio» y pulsa «Añadir».' => 'Tria «Afegeix a la pantalla d\'inici» i prem «Afegeix».',
+	'Entendido' => 'Entesos',
 );

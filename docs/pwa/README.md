@@ -19,7 +19,7 @@ Convertir el área privada (plugin `asde-area-privada`) en una **PWA**: la misma
 | [MANUAL-PUBLICACION.md](MANUAL-PUBLICACION.md) | **Cómo publicar la app en producción:** requisitos, subida, caché de LiteSpeed/CDN, comprobaciones con `curl`, prueba en móviles, apagado y vuelta atrás, texto para familias |
 
 ## Dónde está todo (desde el 2026-10-02, en el repo `C:\Proyectos\GestorCRM`)
-- Código: `asde-area-privada/src/Pwa/` (clases), `asde-area-privada/assets/pwa/` (iconos, `sw.js`, `sw-apagado.js`, `registro.js`), `asde-area-privada/templates/pwa/sin-conexion.php`.
-- Pruebas: `asde-area-privada/tests/pwa.php` (108 comprobaciones). **No** entra en `probar-todo.sh` sin argumentos (se salta a propósito): se lanza con `herramientas-desarrollo/probar-todo.sh pwa`.
+- Código: `asde-area-privada/src/Pwa/` (clases), `asde-area-privada/assets/pwa/` (iconos, `sw.js`, `sw-apagado.js`, `registro.js`, `instalar.js`, `instalar.css`), `asde-area-privada/templates/pwa/sin-conexion.php`.
+- Pruebas: `asde-area-privada/tests/pwa.php` (144 comprobaciones). **No** entra en `probar-todo.sh` sin argumentos (se salta a propósito): se lanza con `herramientas-desarrollo/probar-todo.sh pwa`.
 - Entorno: WordPress en Local `http://localhost:10011`; `herramientas-desarrollo/wp-local.sh` (carpeta antigua del proyecto, fuera del repo).
 - La PWA forma parte del plugin desde la **v0.17.0**; los zips anteriores (≤ 0.16.0) se construyeron sin ella.

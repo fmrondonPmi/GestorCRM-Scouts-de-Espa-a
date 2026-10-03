@@ -214,12 +214,16 @@ if ( $area_id ) {
 	$wp_query = new WP_Query( array( 'page_id' => $area_id ) ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride
 	wp_dequeue_script( 'asde-pwa' );
 	wp_deregister_script( 'asde-pwa' );
+	wp_dequeue_script( 'asde-pwa-instalar' );
+	wp_deregister_script( 'asde-pwa-instalar' );
 	( new Pwa() )->registro();
 	$ok( wp_script_is( 'asde-pwa', 'enqueued' ), 'en una página del área se carga registro.js' );
 	$antes = implode( '', array_filter( (array) wp_scripts()->get_data( 'asde-pwa', 'before' ) ) );
 	$ok( str_contains( $antes, 'window.asdePwa=' ) && str_contains( $antes, '/asde-sw.js' ) && str_contains( $antes, wp_json_encode( Manifiesto::alcance(), JSON_UNESCAPED_SLASHES ) ), 'le pasa la dirección del service worker y el alcance' );
 	wp_dequeue_script( 'asde-pwa' );
 	wp_deregister_script( 'asde-pwa' );
+	wp_dequeue_script( 'asde-pwa-instalar' );
+	wp_deregister_script( 'asde-pwa-instalar' );
 	add_filter( 'asde_ap_pwa_activa', '__return_false' );
 	( new Pwa() )->registro();
 	$ok( ! wp_script_is( 'asde-pwa', 'enqueued' ), 'con la PWA desactivada no se registra' );
@@ -249,5 +253,96 @@ if ( is_wp_error( $r ) ) {
 	$ok( ! is_wp_error( $sin ) && str_starts_with( (string) wp_remote_retrieve_header( $sin, 'content-type' ), 'text/html' ) && wp_remote_retrieve_body( $sin ) === $html, 'es HTML y es la página sin conexión' );
 	$ok( ! is_wp_error( $sin ) && false !== stripos( (string) wp_remote_retrieve_header( $sin, 'cache-control' ), 'no-cache' ), 'Cache-Control: no-cache en la página sin conexión' );
 }
+
+// ═══ SECCIÓN 3 · invitación a instalar ═════════════════════════════════════════
+echo "\n── Invitación a instalar: dónde sale\n";
+$pagina = static function ( string $clave ) use ( &$wp_query ) {
+	$id = Pages::id( $clave );
+	return $id ? new WP_Query( array( 'page_id' => $id ) ) : null;
+};
+$limpiar = static function () {
+	foreach ( array( 'asde-pwa', 'asde-pwa-instalar' ) as $h ) {
+		wp_dequeue_script( $h );
+		wp_deregister_script( $h );
+	}
+	wp_dequeue_style( 'asde-pwa-instalar' );
+	wp_deregister_style( 'asde-pwa-instalar' );
+};
+$datos_js = static function () {
+	return implode( '', array_filter( (array) wp_scripts()->get_data( 'asde-pwa', 'before' ) ) );
+};
+foreach ( array( 'acceso', 'area' ) as $clave ) {
+	$q = $pagina( $clave );
+	$ok( null !== $q, "existe la página «{$clave}»" );
+	if ( $q ) {
+		$wp_query = $q; // phpcs:ignore WordPress.WP.GlobalVariablesOverride
+		$limpiar();
+		( new Pwa() )->registro();
+		$ok( wp_script_is( 'asde-pwa-instalar', 'enqueued' ) && wp_style_is( 'asde-pwa-instalar', 'enqueued' ), "en «{$clave}» sale la invitación (JS y CSS)" );
+		$ok( str_contains( $datos_js(), '"textos":{' ), "en «{$clave}» el JS recibe los textos ya traducidos" );
+	}
+}
+foreach ( array( 'personas', 'ficha', 'recuperar', 'activar', 'pagos' ) as $clave ) {
+	$q = $pagina( $clave );
+	if ( $q ) {
+		$wp_query = $q; // phpcs:ignore WordPress.WP.GlobalVariablesOverride
+		$limpiar();
+		( new Pwa() )->registro();
+		$ok( wp_script_is( 'asde-pwa', 'enqueued' ) && ! wp_script_is( 'asde-pwa-instalar', 'enqueued' ) && ! wp_style_is( 'asde-pwa-instalar', 'enqueued' ), "en «{$clave}» no molesta (solo se registra el service worker)" );
+		$ok( ! str_contains( $datos_js(), 'textos' ), "en «{$clave}» no se mandan textos" );
+	}
+}
+if ( $pagina( 'acceso' ) ) {
+	$wp_query = $pagina( 'acceso' ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride
+	$limpiar();
+	add_filter( 'asde_ap_pwa_activa', '__return_false' );
+	( new Pwa() )->registro();
+	$ok( ! wp_script_is( 'asde-pwa-instalar', 'enqueued' ) && ! wp_script_is( 'asde-pwa', 'enqueued' ), 'con la PWA apagada no sale la invitación' );
+	remove_filter( 'asde_ap_pwa_activa', '__return_false' );
+}
+$limpiar();
+$wp_query = $wp_query_antes; // phpcs:ignore WordPress.WP.GlobalVariablesOverride
+$ok( array( 'acceso', 'area' ) === Pwa::PAGINAS_INSTALAR, 'la invitación solo está prevista en el acceso y el inicio' );
+
+echo "\n── Invitación a instalar: textos\n";
+$tx = Pwa::textos_instalar();
+$ok( 8 === count( $tx ) && 8 === count( array_filter( $tx ) ), 'ocho textos, ninguno vacío' );
+$js_inst = (string) file_get_contents( ASDE_AP_DIR . 'assets/pwa/instalar.js' );
+preg_match_all( '/\bT\.([a-z0-9_]+)/', $js_inst, $usados );
+$usados = array_values( array_unique( $usados[1] ) );
+sort( $usados );
+$dados = array_keys( $tx );
+sort( $dados );
+$ok( $usados === $dados, 'el JS usa exactamente los textos que le manda PHP (' . implode( ', ', $usados ) . ')' );
+$esperado = array(
+	'ca' => array( 'titulo' => 'Instal·la l\'app al mòbil', 'ahora_no' => 'Ara no', 'entendido' => 'Entesos' ),
+	'eu' => array( 'titulo' => 'Instalatu aplikazioa zure mugikorrean', 'ahora_no' => 'Orain ez', 'entendido' => 'Ulertu dut' ),
+	'gl' => array( 'titulo' => 'Instala a app no teu móbil', 'ahora_no' => 'Agora non', 'entendido' => 'Entendido' ),
+);
+foreach ( $esperado as $cod => $textos ) {
+	$tr = Idioma::en( $cod, static fn() => Pwa::textos_instalar() );
+	$bien = true;
+	foreach ( $textos as $k => $v ) {
+		$bien = $bien && $tr[ $k ] === $v;
+	}
+	$ok( $bien && 8 === count( array_filter( $tr ) ), "la invitación sale en «{$cod}»" );
+}
+$ok( Pwa::textos_instalar() === $tx, 'tras las traducciones vuelve al idioma del sitio' );
+$ok( $tx['instalar'] !== $tx['ahora_no'] && str_contains( $tx['ios_paso1'], 'Compartir' ) && str_contains( $tx['ios_paso2'], 'Añadir a pantalla de inicio' ), 'la guía de iPhone nombra los botones de Safari' );
+
+echo "\n── Invitación a instalar: el JS\n";
+$ok( str_contains( $js_inst, 'beforeinstallprompt' ) && str_contains( $js_inst, 'e.preventDefault()' ), 'recoge el aviso de instalación del navegador (Android/Chrome)' );
+$ok( str_contains( $js_inst, 'appinstalled' ), 'se quita cuando la app se instala' );
+$ok( str_contains( $js_inst, "(display-mode: standalone)" ) && str_contains( $js_inst, 'navigator.standalone' ), 'no sale si la app ya está instalada (Android e iPhone)' );
+$ok( str_contains( $js_inst, 'try {' ) && substr_count( $js_inst, 'w.localStorage' ) === 2, 'solo toca localStorage para recordar que se cerró (con try/catch)' );
+$ok( ! str_contains( $js_inst, 'innerHTML' ) && ! str_contains( $js_inst, 'insertAdjacentHTML' ) && ! str_contains( $js_inst, 'document.write' ), 'pinta con textContent: ningún texto se interpreta como HTML' );
+$ok( ! preg_match( '/\b(fetch|XMLHttpRequest|sendBeacon|WebSocket)\b/', $js_inst ), 'no hace ninguna petición de red' );
+$js_sin_comentarios = (string) preg_replace( array( '#/\*.*?\*/#s', '#^\s*//.*$#m' ), '', $js_inst );
+$ok( '' !== $js_sin_comentarios && ! preg_match( '/[áéíóúñ¿¡«»]/u', $js_sin_comentarios ), 'no lleva textos en castellano escritos a mano (fuera de los comentarios)' );
+$ok( 1 === preg_match( '/DIAS\s*=\s*30\b/', $js_inst ), 'se vuelve a ofrecer a los 30 días de cerrarlo' );
+$css_inst = (string) file_get_contents( ASDE_AP_DIR . 'assets/pwa/instalar.css' );
+$ok( str_contains( $css_inst, 'env(safe-area-inset-bottom' ) && str_contains( $css_inst, 'min-height: 44px' ), 'CSS: respeta la zona segura del iPhone y los botones miden 44 px (táctil)' );
+$ok( str_contains( $css_inst, 'prefers-reduced-motion' ) && str_contains( $css_inst, 'focus-visible' ) && str_contains( $css_inst, '@media print' ), 'CSS: sin animación si se pide, foco visible y no se imprime' );
+$ok( str_contains( $css_inst, 'var(--asde-primary, #632599)' ), 'CSS: usa el color principal del grupo (con el morado de respaldo)' );
 
 echo $fails ? "\n$fails FALLOS\n" : "\nTODO OK (los colores que se cambian en la prueba se restauran; lo demás es solo lectura)\n";

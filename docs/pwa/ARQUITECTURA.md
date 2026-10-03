@@ -24,11 +24,13 @@
 | `templates/pwa/sin-conexion.php` | 2 (0.17) | Página «sin conexión», generada por PHP en `/asde-sin-conexion`: color del grupo, idioma de quien la pide, sin recursos externos ni datos (antes `assets/pwa/sin-conexion.html`, estática) |
 | `assets/pwa/sw-apagado.js` | 2 (0.17) | SW de «PWA apagada»: borra las cachés `asde-pwa-*` y se da de baja |
 | `assets/pwa/registro.js` | 2 | Registra el SW (`window.asdePwa` lo pone `Pwa::registro()`) |
-| `tests/pwa.php` | 1… | Pruebas (108 en la 0.17.0; no entra en `probar-todo.sh` sin argumentos) |
+| `assets/pwa/instalar.js`, `instalar.css` | 3 (0.17.1) | Aviso «Instala la app» al pie de acceso e inicio: botón en Android/Chrome (`beforeinstallprompt`), guía en iPhone/iPad; recuerda el cierre 30 días en `localStorage`; los textos llegan de PHP (`Pwa::textos_instalar()`) |
+| `tests/pwa.php` | 1… | Pruebas (144 en la 0.17.1; no entra en `probar-todo.sh` sin argumentos) |
 
 ## Trampas conocidas
 - Un manifiesto solo es válido si se sirve con `Content-Type: application/manifest+json` y **sin** redirecciones; los avisos de LiteSpeed Cache no deben tocarlo (se manda `nocache` y `DONOTCACHEPAGE` como en el resto del área).
-- iPhone: solo permite instalar desde **Safari** («Compartir → Añadir a pantalla de inicio»); no hay aviso automático (sección 3 lo explica con una guía).
+- iPhone: no hay botón de instalar por código; el aviso (sección 3) enseña la guía «Compartir → Añadir a pantalla de inicio». En Chrome para iOS (16.4+) también se puede añadir, pero la guía nombra Safari.
+- **Botones flotantes de otros plugins** (cookies, chat) suelen ir abajo a la izquierda: el aviso de instalación deja libre esa esquina en móvil. Si aparece otro, revisar `instalar.css` (`@media (max-width: 480px)`).
 - El Enfold pinta su propio `<link rel="icon">`; el `apple-touch-icon` del tema, si existe, puede convivir con el nuestro: iOS usa el último.
 - **Service worker:** se registra con `scope` = carpeta del área (más estrecho que su ubicación `/asde-sw.js`, permitido sin la cabecera `Service-Worker-Allowed`). Debe llegar con `Cache-Control: no-cache`: **en producción (Hostinger/LiteSpeed) hay que comprobar que ninguna regla de caché del navegador por extensión `.js` se lo pone** (la sección 5 lo añade a «Comprobar el hosting»). Solo funciona en HTTPS (o `localhost`).
 - El navegador integrado de la app de escritorio de Claude **no registra service workers**; para probar el registro real y el modo sin conexión hay que usar Chrome (extensión) o un móvil. La lógica del SW se prueba con simulaciones (`self`, `caches`, `fetch` falsos) en la consola: para repetirlas, cargar `/asde-sw.js`, sacar `CONFIG` con una expresión regular y ejecutarlo con `new Function('self','caches','fetch','Response','URL', src)`; ojo: una `Response` creada a mano tiene `type:'default'`, hay que forzar `'basic'` para simular una respuesta real.

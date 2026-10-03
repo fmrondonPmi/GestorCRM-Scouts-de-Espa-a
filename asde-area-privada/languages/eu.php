@@ -1868,4 +1868,12 @@ return array(
 	'Por seguridad, las fichas, los pagos y los datos de los socios no se guardan en el móvil.' => 'Segurtasunagatik, fitxak, ordainketak eta bazkideen datuak ez dira mugikorrean gordetzen.',
 	'Reintentar' => 'Saiatu berriro',
 	'Sin conexión' => 'Konexiorik ez',
+	'Instala la app en tu móvil' => 'Instalatu aplikazioa zure mugikorrean',
+	'Entra con un toque desde la pantalla de inicio, sin escribir la dirección.' => 'Sartu ukitu batekin hasierako pantailatik, helbidea idatzi gabe.',
+	'Instalar la app' => 'Instalatu aplikazioa',
+	'Ahora no' => 'Orain ez',
+	'Añade el área privada a tu pantalla de inicio' => 'Gehitu eremu pribatua zure hasierako pantailara',
+	'Pulsa el botón Compartir de Safari (el cuadrado con la flecha hacia arriba).' => 'Sakatu Safariren Partekatu botoia (gezi gorantz duen laukia).',
+	'Elige «Añadir a pantalla de inicio» y pulsa «Añadir».' => 'Aukeratu «Gehitu hasierako pantailara» eta sakatu «Gehitu».',
+	'Entendido' => 'Ulertu dut',
 );

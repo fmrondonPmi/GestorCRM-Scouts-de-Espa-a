@@ -14,6 +14,9 @@ final class Pwa {
 
 	public const RUTA_MANIFIESTO = 'asde-manifest.webmanifest';
 
+	/** Páginas donde sale la invitación a instalar: el acceso y el inicio del área. */
+	public const PAGINAS_INSTALAR = array( 'acceso', 'area' );
+
 	/** ¿Está activa la PWA? (La sección 5 lo convierte en un ajuste.) */
 	public static function activa(): bool {
 		return (bool) apply_filters( 'asde_ap_pwa_activa', true );
@@ -35,16 +38,34 @@ final class Pwa {
 			return;
 		}
 		wp_enqueue_script( 'asde-pwa', plugins_url( 'assets/pwa/registro.js', ASDE_AP_FILE ), array(), ASDE_AP_VERSION, true );
-		wp_add_inline_script(
-			'asde-pwa',
-			'window.asdePwa=' . wp_json_encode(
-				array(
-					'sw'      => home_url( '/' . ServiceWorker::RUTA ),
-					'alcance' => Manifiesto::alcance(),
-				),
-				JSON_UNESCAPED_SLASHES
-			) . ';',
-			'before'
+		$datos = array(
+			'sw'      => home_url( '/' . ServiceWorker::RUTA ),
+			'alcance' => Manifiesto::alcance(),
+		);
+		// Invitación a instalar (sección 3): solo en el acceso y en el inicio del área.
+		if ( in_array( Pages::current_key(), self::PAGINAS_INSTALAR, true ) ) {
+			$datos['textos'] = self::textos_instalar();
+			wp_enqueue_style( 'asde-pwa-instalar', plugins_url( 'assets/pwa/instalar.css', ASDE_AP_FILE ), array(), ASDE_AP_VERSION );
+			wp_enqueue_script( 'asde-pwa-instalar', plugins_url( 'assets/pwa/instalar.js', ASDE_AP_FILE ), array( 'asde-pwa' ), ASDE_AP_VERSION, true );
+		}
+		wp_add_inline_script( 'asde-pwa', 'window.asdePwa=' . wp_json_encode( $datos, JSON_UNESCAPED_SLASHES ) . ';', 'before' );
+	}
+
+	/**
+	 * Textos del aviso de instalación, ya en el idioma de la persona (el JS no lleva textos propios).
+	 *
+	 * @return array<string, string>
+	 */
+	public static function textos_instalar(): array {
+		return array(
+			'titulo'     => asde_t( 'Instala la app en tu móvil' ),
+			'texto'      => asde_t( 'Entra con un toque desde la pantalla de inicio, sin escribir la dirección.' ),
+			'instalar'   => asde_t( 'Instalar la app' ),
+			'ahora_no'   => asde_t( 'Ahora no' ),
+			'ios_titulo' => asde_t( 'Añade el área privada a tu pantalla de inicio' ),
+			'ios_paso1'  => asde_t( 'Pulsa el botón Compartir de Safari (el cuadrado con la flecha hacia arriba).' ),
+			'ios_paso2'  => asde_t( 'Elige «Añadir a pantalla de inicio» y pulsa «Añadir».' ),
+			'entendido'  => asde_t( 'Entendido' ),
 		);
 	}
 
