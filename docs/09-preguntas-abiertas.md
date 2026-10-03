@@ -32,6 +32,18 @@ Hay que resolverlas antes de programar cada parte. Cuando se responde una, se ma
 | P-46 | **Idiomas · revisión de las traducciones:** el catalán, el euskera y el gallego son una primera versión sin revisión de hablantes nativos. ¿Quién las revisa? (se corrigen desde wp-admin → Grupos Scouts → Idioma y etiquetas, sin tocar el código; doc 28) | Idiomas |
 | P-47 | **Idiomas · nombres propios:** ¿cómo se llaman las secciones y los roles en cada idioma (Castors / Llobatons, Kastorrak / Otsokumeak…)? Se ha puesto una propuesta. ¿Se traducen también las pantallas de wp-admin del plugin (hoy, en castellano)? (doc 28) | Idiomas |
 | P-48 | **Menús por rol:** ¿basta con separar el menú (lo personal / la gestión del grupo) o se quieren también páginas distintas? ¿Un scouter debe poder pedir uniforme para otros de su sección? (doc 28) | Menús |
+| P-49 | **Técnico/a · base legal:** ¿quién autoriza que personal de la federación vea los datos de los socios de varios grupos, y con qué base (responsable o encargado del tratamiento)? (doc 29) | Técnico |
+| P-50 | **Técnico/a · quién es:** ¿es socio (con ficha en el CRM de la federación o de un grupo)? ¿Entra con su email o con un número? (doc 29) | Técnico |
+| P-51 | **Técnico/a · usuario de API:** ¿puede ASDE dar un usuario de API de la federación **de solo lectura** que vea todos los grupos? Es la opción recomendada (doc 29, opción B) | Técnico |
+| P-52 | **Técnico/a · qué ve:** ¿salud y alimentación? ¿descarga CSV? ¿Tesorería, banco y SEPA, solicitudes, usuarios y emails? Propuesta: todo en lectura salvo salud, banco y SEPA (doc 29) | Técnico |
+| P-53 | **Técnico/a · panel multigrupo:** ¿hace falta un resumen con una fila por grupo (socios, incidencias, solicitudes, cuota cobrada, uniformes)? (doc 29, fase 2) | Técnico |
+| P-54 | **Técnico/a · qué grupos:** ¿una lista de grupos por técnico o siempre todos los de la web? (doc 29) | Técnico |
+| P-55 | **Técnico/a · alta:** ¿solo el administrador de WordPress da de alta a los técnicos? (doc 29) | Técnico |
+| P-56 | **Carpeta de Drive · cómo se ve:** ¿incrustada dentro de la web o basta con el enlace a Google Drive? (doc 30) | Drive |
+| P-57 | **Carpeta de Drive · quién la configura:** ¿el administrador de la web o también Secretaría/Coordinación desde el área? (doc 30) | Drive |
+| P-58 | **Carpeta de Drive · dónde:** ¿tarjeta en el inicio, entrada en el menú o las dos? ¿En «Para ti» o en «Gestión del grupo»? (doc 30) | Drive |
+| P-59 | **Carpeta de Drive · cuántas:** ¿una por grupo o también una por sección? (doc 30) | Drive |
+| P-60 | **Carpeta de Drive · cómo se comparte:** ¿restringida a las cuentas de Google de los scouters (recomendado) o «cualquiera con el enlace»? (doc 30) | Drive |
 
 ## Resueltas
 
