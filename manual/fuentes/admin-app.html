@@ -1,0 +1,15 @@
+<section id="admin-app">
+	<h2>La app móvil</h2>
+	<p class="resumen">El área privada se puede instalar en el móvil (Android e iPhone) como una app: con su icono, a pantalla completa y con una pantalla «Sin conexión». No se publica en las tiendas, no guarda datos de las personas en el móvil y viene <strong>activa</strong> desde la versión 0.17. Se gestiona en <strong>Grupos Scouts → App móvil</strong>.</p>
+	<ul>
+		<li><strong>Activa:</strong> la casilla enciende o apaga la app. Apagada, desaparecen el manifiesto y el aviso de instalación, y las apps ya instaladas se retiran solas en su próxima visita (puede tardar hasta 24 horas). Cada persona conserva el icono de su pantalla de inicio hasta que lo borre.</li>
+		<li><strong>Nombre bajo el icono:</strong> hasta 12 caracteres; vacío, «Área privada» en el idioma de cada persona. Solo afecta a las apps que se instalen después.</li>
+		<li><strong>Icono:</strong> la app usa el «Icono del sitio» de WordPress (<em>Apariencia → Personalizar → Identidad del sitio</em>, imagen cuadrada de <strong>512 × 512 px</strong>). Sin él, lleva un icono genérico (una tienda de campaña morada).</li>
+		<li><strong>Color:</strong> el de la barra del móvil y la pantalla «Sin conexión» es el color principal de la pantalla «Colores».</li>
+		<li><strong>Textos:</strong> el aviso de instalación, la barra inferior y «Sin conexión» están en los cuatro idiomas y se pueden cambiar en «Idioma y etiquetas» (grupo «App móvil»).</li>
+	</ul>
+	<h3 id="admin-app-servidor">Comprobar el servidor</h3>
+	<p>El botón <strong>«Comprobar el servidor»</strong> hace que el sitio se pida a sí mismo las tres direcciones de la app y dice, una por una, si están bien. Avisa si responde una caché (LiteSpeed Cache, un CDN, un proxy…), si el tipo de contenido o la cabecera <code>Cache-Control: no-cache</code> no son los correctos, o si el contenido llega distinto del que genera el plugin (por ejemplo, minificado). Si alguna sale cacheada, los móviles no se enterarían de las actualizaciones: hay que excluir esa dirección de la caché. No cambia nada del sitio.</p>
+	<p>«Instalación y entorno» tiene además una pieza «App móvil (PWA)»: avisa si la web no usa HTTPS (sin HTTPS no se puede instalar), si los enlaces permanentes son simples o si no hay «Icono del sitio».</p>
+	<div class="nota"><p><strong>Al publicar en producción</strong> (Hostinger, LiteSpeed), lo primero es pulsar «Comprobar el servidor». Los pasos completos, con las exclusiones de caché, están en el manual de publicación de la app (<code>docs/pwa/MANUAL-PUBLICACION.md</code> del proyecto).</p></div>
+</section>

@@ -17,6 +17,7 @@ Convertir el área privada (plugin `asde-area-privada`) en una **PWA**: la misma
 | [ESTADO.md](ESTADO.md) | Qué secciones están hechas, cuál toca y los ficheros tocados. **Se actualiza al cerrar cada sección.** |
 | [ARQUITECTURA.md](ARQUITECTURA.md) | Decisiones de diseño, rutas virtuales, alcance (*scope*), qué se cachea y qué **nunca**, trampas conocidas |
 | [MANUAL-PUBLICACION.md](MANUAL-PUBLICACION.md) | **Cómo publicar la app en producción:** requisitos, subida, caché de LiteSpeed/CDN, comprobaciones con `curl`, prueba en móviles, apagado y vuelta atrás, texto para familias |
+| [PUSH.md](PUSH.md) | **Notificaciones push** (sección 7): plan sin código, límites de iPhone/Android, privacidad, pasos y preguntas abiertas P-PUSH-1…6 |
 
 ## Dónde está todo (desde el 2026-10-02, en el repo `C:\Proyectos\GestorCRM`)
 - Código: `asde-area-privada/src/Pwa/` (clases), `asde-area-privada/assets/pwa/` (iconos, `sw.js`, `sw-apagado.js`, `registro.js`, `instalar.js`, `instalar.css`, `app.js`, `app.css`), `asde-area-privada/templates/pwa/sin-conexion.php`, `asde-area-privada/src/Admin/PwaPage.php` (pantalla «App móvil»).

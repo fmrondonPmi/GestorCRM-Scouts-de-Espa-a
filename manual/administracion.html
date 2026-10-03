@@ -12,7 +12,7 @@
 <body>
 <header class="portada">
 	<div class="portada__dentro">
-		<p class="antetitulo">Manual de uso · versión 0.15 · octubre de 2026 · <a class="portada__volver" href="index.html">Todos los manuales</a></p>
+		<p class="antetitulo">Manual de uso · versión 0.17 · octubre de 2026 · <a class="portada__volver" href="index.html">Todos los manuales</a></p>
 		<h1>Manual de gestión del CRM y de la web</h1>
 		<p class="portada__perfil">Administración de WordPress</p>
 		<p class="entrada">Para quien instala y mantiene la web: la conexión de cada grupo con SinergiaCRM, la organización federada y el usuario de acceso, la instalación, el tema, los colores, los idiomas y las etiquetas, y qué datos se leen del CRM y cuáles guarda la web.</p>
@@ -35,6 +35,8 @@
 <li><a href="#grupos">Grupos y conexión con el CRM</a></li>
 <li><a href="#organizacion">Organización federada y usuario de acceso</a></li>
 <li><a href="#entorno">Instalación y entorno</a></li>
+<li><a href="#admin-app">La app móvil</a></li>
+<li class="sub"><a href="#admin-app-servidor">Comprobar el servidor</a></li>
 <li><a href="#tema">El tema de la web</a></li>
 <li><a href="#colores">Colores</a></li>
 <li><a href="#idiomas">Idioma y etiquetas</a></li>
@@ -55,6 +57,7 @@
 <li><a href="#grupos">Grupos y conexión con el CRM</a></li>
 <li><a href="#organizacion">Organización federada y usuario de acceso</a></li>
 <li><a href="#entorno">Instalación y entorno</a></li>
+<li><a href="#admin-app">La app móvil</a></li>
 <li><a href="#tema">El tema de la web</a></li>
 <li><a href="#colores">Colores</a></li>
 <li><a href="#idiomas">Idioma y etiquetas</a></li>
@@ -150,6 +153,22 @@
 		<li>Al <strong>actualizar</strong> el plugin, lo nuevo (tablas, páginas) se crea solo; si algo falta, esta pantalla lo dice.</li>
 		<li>La página <span class="mono">wp-login.php</span> sigue siendo solo para quien edita la web: los socios entran por «Acceso socios».</li>
 	</ul>
+</section>
+
+<section id="admin-app">
+	<h2>La app móvil</h2>
+	<p class="resumen">El área privada se puede instalar en el móvil (Android e iPhone) como una app: con su icono, a pantalla completa y con una pantalla «Sin conexión». No se publica en las tiendas, no guarda datos de las personas en el móvil y viene <strong>activa</strong> desde la versión 0.17. Se gestiona en <strong>Grupos Scouts → App móvil</strong>.</p>
+	<ul>
+		<li><strong>Activa:</strong> la casilla enciende o apaga la app. Apagada, desaparecen el manifiesto y el aviso de instalación, y las apps ya instaladas se retiran solas en su próxima visita (puede tardar hasta 24 horas). Cada persona conserva el icono de su pantalla de inicio hasta que lo borre.</li>
+		<li><strong>Nombre bajo el icono:</strong> hasta 12 caracteres; vacío, «Área privada» en el idioma de cada persona. Solo afecta a las apps que se instalen después.</li>
+		<li><strong>Icono:</strong> la app usa el «Icono del sitio» de WordPress (<em>Apariencia → Personalizar → Identidad del sitio</em>, imagen cuadrada de <strong>512 × 512 px</strong>). Sin él, lleva un icono genérico (una tienda de campaña morada).</li>
+		<li><strong>Color:</strong> el de la barra del móvil y la pantalla «Sin conexión» es el color principal de la pantalla «Colores».</li>
+		<li><strong>Textos:</strong> el aviso de instalación, la barra inferior y «Sin conexión» están en los cuatro idiomas y se pueden cambiar en «Idioma y etiquetas» (grupo «App móvil»).</li>
+	</ul>
+	<h3 id="admin-app-servidor">Comprobar el servidor</h3>
+	<p>El botón <strong>«Comprobar el servidor»</strong> hace que el sitio se pida a sí mismo las tres direcciones de la app y dice, una por una, si están bien. Avisa si responde una caché (LiteSpeed Cache, un CDN, un proxy…), si el tipo de contenido o la cabecera <code>Cache-Control: no-cache</code> no son los correctos, o si el contenido llega distinto del que genera el plugin (por ejemplo, minificado). Si alguna sale cacheada, los móviles no se enterarían de las actualizaciones: hay que excluir esa dirección de la caché. No cambia nada del sitio.</p>
+	<p>«Instalación y entorno» tiene además una pieza «App móvil (PWA)»: avisa si la web no usa HTTPS (sin HTTPS no se puede instalar), si los enlaces permanentes son simples o si no hay «Icono del sitio».</p>
+	<div class="nota"><p><strong>Al publicar en producción</strong> (Hostinger, LiteSpeed), lo primero es pulsar «Comprobar el servidor». Los pasos completos, con las exclusiones de caché, están en el manual de publicación de la app (<code>docs/pwa/MANUAL-PUBLICACION.md</code> del proyecto).</p></div>
 </section>
 
 <section id="tema">
@@ -260,6 +279,9 @@
 	<details class="pregunta"><summary>¿Los colores se pueden poner por grupo?</summary><div><p>No: valen para toda la web. Si la web lleva varios grupos, todos comparten los colores.</p></div></details>
 	<details class="pregunta"><summary>Quiero pasar a usar el nº de Scouts de España como usuario.</summary><div><p>En «Organización federada», elige ese usuario de acceso y, debajo, revisa y confirma el renombrado de las cuentas existentes. Las personas pueden seguir entrando con el número de siempre.</p></div></details>
 	<details class="pregunta"><summary>¿Cómo instalo una versión nueva?</summary><div><p>En Plugins, sube el zip de la versión nueva («Subir plugin» y «Reemplazar el actual»). Después mira «Instalación y entorno»: lo nuevo se crea solo y la pantalla avisa si falta algo.</p></div></details>
+	<details class="pregunta"><summary>No queremos la app móvil.</summary><div><p>En «App móvil», quita la marca de «Activa» y guarda. Desaparecen el aviso y el manifiesto, y las apps ya instaladas se retiran solas en su próxima visita (hasta 24 horas).</p></div></details>
+	<details class="pregunta"><summary>«Comprobar el servidor» dice que una dirección está cacheada.</summary><div><p>Excluye esa dirección (<code>/asde-manifest.webmanifest</code>, <code>/asde-sw.js</code> o <code>/asde-sin-conexion</code>) de la caché del plugin de caché y del CDN, y de la minificación, y vuelve a pulsar el botón. Si no, los móviles no verían las actualizaciones de la app.</p></div></details>
+	<details class="pregunta"><summary>La app lleva un icono genérico en vez del logo del grupo.</summary><div><p>Pon el «Icono del sitio» (imagen cuadrada de 512 × 512 px) en Apariencia → Personalizar → Identidad del sitio. El icono se fija al instalar: quien ya la tenga debe quitarla y volver a instalarla.</p></div></details>
 </section>
 
 		<section id="otros-manuales" class="otros">
@@ -272,7 +294,7 @@
 			</ul>
 		</section>
 
-		<p class="pie">Manual de gestión del CRM y de la web del plugin «ASDE Scouts de España – Gestor CRM para Grupos Scouts», versión 0.15 (octubre de 2026). Capturas hechas en un WordPress de demostración con un CRM simulado y datos inventados.</p>
+		<p class="pie">Manual de gestión del CRM y de la web del plugin «ASDE Scouts de España – Gestor CRM para Grupos Scouts», versión 0.17 (octubre de 2026). Capturas hechas en un WordPress de demostración con un CRM simulado y datos inventados.</p>
 	</main>
 </div>
 

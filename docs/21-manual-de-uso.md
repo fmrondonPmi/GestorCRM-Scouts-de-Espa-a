@@ -106,3 +106,9 @@ Un **WordPress de demostración aparte** (Local, Enfold, plugin, mu-plugin con C
 - Versión **0.11.1** para que los navegadores no sigan con la hoja de estilos antigua en caché (va con `?ver=`). Paquete `asde-area-privada-0.11.1.zip`. Las 415 pruebas, OK.
 
 **v0.14.1 (2026-10-02) — al rehacer las capturas:** no salió ningún fallo del plugin. Una observación que queda anotada, sin tocar: la ficha enseña `^Scouts^` cuando el CRM no manda los metadatos de la lista (solo ocurre con el CRM simulado).
+
+## Versión 4.1 · la app móvil en los manuales (v0.17, 2026-10-03)
+
+- Nuevo apartado **«Instalar el área privada en el móvil»** (`manual/fuentes/instalar-app.html`) en los manuales de familias, asociados menores, scouters y coordinación, y **«La app móvil»** (`admin-app.html`) en el de administración (activar/apagar, nombre, icono, color, «Comprobar el servidor»). Dos preguntas frecuentes nuevas por manual de usuario y tres en el de administración. Solo texto (sin capturas nuevas).
+- El generador pasa a la versión 0.17. Paquete **`manual-de-uso-0.17.0.zip`** (carpeta antigua) y copia en `app/public/temporal/` de Local. **No se ha publicado nada**: lo sube el usuario.
+- Pendiente: capturas del aviso «Instala la app» (en el móvil) y de la pantalla «App móvil» si se quieren; hay que hacerlas con `manual-capturas.sh` y el CRM simulado.

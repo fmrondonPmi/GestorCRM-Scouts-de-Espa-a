@@ -19,7 +19,7 @@
 
 $raiz    = dirname( __DIR__ ) . '/manual';
 $fuentes = $raiz . '/fuentes';
-$version = '0.15';
+$version = '0.17';
 $fecha   = 'octubre de 2026';
 $errores = 0;
 
@@ -28,31 +28,31 @@ $manuales = array(
 		'titulo'   => 'Manual de gestión del CRM y de la web',
 		'perfil'   => 'Administración de WordPress',
 		'entrada'  => 'Para quien instala y mantiene la web: la conexión de cada grupo con SinergiaCRM, la organización federada y el usuario de acceso, la instalación, el tema, los colores, los idiomas y las etiquetas, y qué datos se leen del CRM y cuáles guarda la web.',
-		'apartados' => array( 'admin-perfil', 'admin-crm', 'admin-grupos', 'admin-organizacion', 'admin-entorno', 'admin-tema', 'admin-colores', 'admin-idiomas', 'admin-datos', 'admin-diagnostico', 'preguntas-admin' ),
+		'apartados' => array( 'admin-perfil', 'admin-crm', 'admin-grupos', 'admin-organizacion', 'admin-entorno', 'admin-app', 'admin-tema', 'admin-colores', 'admin-idiomas', 'admin-datos', 'admin-diagnostico', 'preguntas-admin' ),
 	),
 	'familias'      => array(
 		'titulo'   => 'Manual para familias',
 		'perfil'   => 'Madres, padres y tutores',
 		'entrada'  => 'Cómo entrar en el área privada del grupo con la cuenta familiar, ver y corregir las fichas de tus hijos, consultar los pagos, firmar la domiciliación SEPA y pedir el uniforme.',
-		'apartados' => array( 'familias-perfil', 'entrar-familias', 'solicitar', 'primera-vez', 'familias-inicio', 'familias-fichas', 'mis-pagos', 'mis-pagos-sepa', 'uniforme-pedir', 'idioma', 'seguridad-opcional', 'preguntas-familias' ),
+		'apartados' => array( 'familias-perfil', 'entrar-familias', 'solicitar', 'primera-vez', 'instalar-app', 'familias-inicio', 'familias-fichas', 'mis-pagos', 'mis-pagos-sepa', 'uniforme-pedir', 'idioma', 'seguridad-opcional', 'preguntas-familias' ),
 	),
 	'participantes' => array(
 		'titulo'   => 'Manual para asociados menores de edad',
 		'perfil'   => 'Educandos de 14 a 17 años con cuenta propia',
 		'entrada'  => 'Si tienes entre 14 y 17 años y eres socio/a del grupo, puedes tener tu propia cuenta: consultar tu ficha, tener al día tu email y tus teléfonos, ver tus pagos y pedir tu uniforme.',
-		'apartados' => array( 'participantes-perfil', 'entrar-socios', 'solicitar', 'primera-vez', 'participantes-inicio', 'participantes-ficha', 'participantes-pagos', 'uniforme-pedir', 'idioma', 'seguridad-opcional', 'preguntas-participantes' ),
+		'apartados' => array( 'participantes-perfil', 'entrar-socios', 'solicitar', 'primera-vez', 'instalar-app', 'participantes-inicio', 'participantes-ficha', 'participantes-pagos', 'uniforme-pedir', 'idioma', 'seguridad-opcional', 'preguntas-participantes' ),
 	),
 	'scouters'      => array(
 		'titulo'   => 'Manual para scouters',
 		'perfil'   => 'Scouters y voluntariado con sección',
 		'entrada'  => 'Lo que hace un scouter con su sección en el área privada: las fichas de sus educandos, los cambios que proponen las familias, las solicitudes de acceso, los informes, los pagos y las familias, y los pedidos de uniforme. Y lo suyo: sus datos, sus pagos y su propio uniforme.',
-		'apartados' => array( 'scouters-perfil', 'scouters-alta', 'entrar-socios', 'primera-vez', 'seguridad-obligatoria', 'scouters-inicio', 'ventana', 'scouters-fichas', 'cambios', 'scouters-solicitudes', 'informes', 'scouters-tesoreria', 'scouters-uniformes', 'idioma', 'preguntas-scouters' ),
+		'apartados' => array( 'scouters-perfil', 'scouters-alta', 'entrar-socios', 'primera-vez', 'instalar-app', 'seguridad-obligatoria', 'scouters-inicio', 'ventana', 'scouters-fichas', 'cambios', 'scouters-solicitudes', 'informes', 'scouters-tesoreria', 'scouters-uniformes', 'idioma', 'preguntas-scouters' ),
 	),
 	'coordinacion'  => array(
 		'titulo'   => 'Manual del equipo de coordinación',
 		'perfil'   => 'Tesorería, Secretaría y Coordinación',
 		'entrada'  => 'Todo lo que lleva el equipo del grupo: personas y números de socio, dar acceso, solicitudes, usuarios y emails, fichas y cambios, informes, la Tesorería completa (cuotas, coste federativo, banco y domiciliaciones SEPA) y los uniformes, del pago a la entrega.',
-		'apartados' => array( 'coordinacion-perfil', 'entrar-socios', 'primera-vez', 'seguridad-obligatoria', 'coordinacion-inicio', 'ventana', 'personas', 'alta', 'solicitudes', 'usuarios', 'coordinacion-fichas', 'cambios', 'informes', 'tesoreria', 'uniformes-gestion', 'idioma', 'preguntas-coordinacion' ),
+		'apartados' => array( 'coordinacion-perfil', 'entrar-socios', 'primera-vez', 'instalar-app', 'seguridad-obligatoria', 'coordinacion-inicio', 'ventana', 'personas', 'alta', 'solicitudes', 'usuarios', 'coordinacion-fichas', 'cambios', 'informes', 'tesoreria', 'uniformes-gestion', 'idioma', 'preguntas-coordinacion' ),
 	),
 );
 
