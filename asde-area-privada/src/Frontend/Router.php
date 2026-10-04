@@ -155,9 +155,9 @@ final class Router {
 
 		// El área privada nunca se cachea (LiteSpeed Cache en producción).
 		if ( ! defined( 'DONOTCACHEPAGE' ) ) {
-			define( 'DONOTCACHEPAGE', true );
+			define( 'DONOTCACHEPAGE', true ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound -- constante que usan los plugins de caché para no guardar la página
 		}
-		do_action( 'litespeed_control_set_nocache', 'asde-area-privada' );
+		do_action( 'litespeed_control_set_nocache', 'asde-area-privada' ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- gancho de LiteSpeed Cache: pide no guardar esta página
 		nocache_headers();
 
 		// Cambio de idioma (?asde_lang=xx con nonce): se guarda y se vuelve a esta página sin el parámetro.

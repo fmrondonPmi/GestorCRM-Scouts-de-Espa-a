@@ -388,7 +388,7 @@ final class Entorno {
 			home_url( '/' ),
 			array(
 				'timeout'   => 15,
-				'sslverify' => apply_filters( 'https_local_ssl_verify', false ),
+				'sslverify' => apply_filters( 'https_local_ssl_verify', false ), // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- gancho del núcleo de WordPress
 			)
 		);
 		if ( ! is_wp_error( $r ) && (int) wp_remote_retrieve_response_code( $r ) >= 500 ) {

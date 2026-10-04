@@ -40,9 +40,9 @@ final class AppRetirada {
 			return;
 		}
 		if ( ! defined( 'DONOTCACHEPAGE' ) ) {
-			define( 'DONOTCACHEPAGE', true );
+			define( 'DONOTCACHEPAGE', true ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound -- constante que usan los plugins de caché para no guardar la página
 		}
-		do_action( 'litespeed_control_set_nocache', 'asde-area-privada' );
+		do_action( 'litespeed_control_set_nocache', 'asde-area-privada' ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- gancho de LiteSpeed Cache: pide no guardar esta página
 		status_header( 200 );
 		header( 'Content-Type: text/javascript; charset=utf-8' );
 		header( 'Cache-Control: no-cache' );

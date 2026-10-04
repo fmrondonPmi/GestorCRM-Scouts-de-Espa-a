@@ -216,7 +216,7 @@ final class TareaNumeracion {
 			array(
 				'timeout'   => 0.01,
 				'blocking'  => false,
-				'sslverify' => apply_filters( 'https_local_ssl_verify', false ),
+				'sslverify' => apply_filters( 'https_local_ssl_verify', false ), // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- gancho del núcleo de WordPress
 				'body'      => array(
 					'grupo' => $grupo,
 					'token' => $t['token'],

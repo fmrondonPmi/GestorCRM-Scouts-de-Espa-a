@@ -90,7 +90,7 @@ if ( ! class_exists( 'Asde_Diagnostico_Segundo_Plano', false ) ) :
 			);
 			update_option( self::OPCION, $d, false );
 
-			$ssl = apply_filters( 'https_local_ssl_verify', false );
+			$ssl = apply_filters( 'https_local_ssl_verify', false ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- gancho del núcleo de WordPress
 
 			// 1. Esperando la respuesta: si no llega, dice por qué.
 			$t0           = microtime( true );
