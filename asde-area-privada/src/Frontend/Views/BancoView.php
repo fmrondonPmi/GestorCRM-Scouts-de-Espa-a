@@ -169,7 +169,7 @@ final class BancoView extends TesoreriaBaseView {
 	// ---------------------------------------------------------------------
 
 	private function analizar(): void {
-		$f = $_FILES['fichero'] ?? null; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
+		$f = $_FILES['fichero'] ?? null; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.NonceVerification.Missing -- el nonce se comprueba antes (check_admin_referer en handle_post); del fichero solo se usan datos validados con is_uploaded_file()
 		if ( ! is_array( $f ) || UPLOAD_ERR_OK !== ( $f['error'] ?? UPLOAD_ERR_NO_FILE ) || ! is_uploaded_file( (string) $f['tmp_name'] ) ) {
 			$this->volver_con_error( UPLOAD_ERR_INI_SIZE === ( $f['error'] ?? 0 ) || UPLOAD_ERR_FORM_SIZE === ( $f['error'] ?? 0 ) ? asde_t( 'El fichero es demasiado grande.' ) : asde_t( 'Elige el fichero de movimientos del banco.' ) );
 		}

@@ -65,12 +65,12 @@ $pct = $resumen['a_pagar'] > 0 ? round( 100 * $resumen['pagado'] / $resumen['a_p
 			<?php endforeach; ?>
 		</select>
 		<label for="asde-q-tes" class="screen-reader-text"><?php asde_e( 'Buscar' ); ?></label>
-		<input type="search" id="asde-q-tes" name="q" value="<?php echo esc_attr( $q ); ?>" placeholder="<?php echo asde_a( 'Nº de familia o nombre' ); ?>">
+		<input type="search" id="asde-q-tes" name="q" value="<?php echo esc_attr( $q ); ?>" placeholder="<?php echo esc_attr( asde_a( 'Nº de familia o nombre' ) ); ?>">
 		<button type="submit" class="button"><?php asde_e( 'Filtrar' ); ?></button>
 	</form>
 
 	<?php if ( ! $lista ) : ?>
-		<p><?php asde_e( 'No hay familias' ); ?><?php echo '' !== $estado || '' !== $q ? asde_t( ' con estos filtros' ) : ''; ?>. <a href="<?php echo esc_url( $url_fam ); ?>"><?php asde_e( 'Gestionar familias' ); ?></a></p>
+		<p><?php asde_e( 'No hay familias' ); ?><?php echo '' !== $estado || '' !== $q ? esc_html( asde_t( ' con estos filtros' ) ) : ''; ?>. <a href="<?php echo esc_url( $url_fam ); ?>"><?php asde_e( 'Gestionar familias' ); ?></a></p>
 	<?php else : ?>
 		<table class="asde-table">
 			<thead>
@@ -91,8 +91,8 @@ $pct = $resumen['a_pagar'] > 0 ? round( 100 * $resumen['pagado'] / $resumen['a_p
 					$c = $fila['calc'];
 					?>
 					<tr>
-						<td data-label="<?php echo asde_a( 'Familia' ); ?>"><strong><?php echo esc_html( $f['numero'] ); ?></strong></td>
-						<td data-label="<?php echo asde_a( 'Socios' ); ?>">
+						<td data-label="<?php echo esc_attr( asde_a( 'Familia' ) ); ?>"><strong><?php echo esc_html( $f['numero'] ); ?></strong></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Socios' ) ); ?>">
 							<?php foreach ( $f['miembros'] as $n ) : ?>
 								<?php $p = $personas[ $n ] ?? null; ?>
 								<span class="asde-miembro<?php echo in_array( $n, $c['fuera'], true ) ? ' asde-miembro--fuera' : ''; ?>">
@@ -101,13 +101,13 @@ $pct = $resumen['a_pagar'] > 0 ? round( 100 * $resumen['pagado'] / $resumen['a_p
 								</span>
 							<?php endforeach; ?>
 						</td>
-						<td data-label="<?php echo asde_a( 'Cuota' ); ?>">
+						<td data-label="<?php echo esc_attr( asde_a( 'Cuota' ) ); ?>">
 							<?php echo esc_html( Calculadora::euros( $c['a_pagar'] ) ); ?>
 							<br><span class="asde-muted"><?php echo esc_html( count( $c['pagan'] ) . ' hijo(s)' . ( $c['ajustes'] ? ' · ajuste ' . Calculadora::euros( $c['ajustes'] ) : '' ) ); ?></span>
 						</td>
-						<td data-label="<?php echo asde_a( 'Pagado' ); ?>"><?php echo esc_html( Calculadora::euros( $c['pagado'] ) ); ?></td>
-						<td data-label="<?php echo asde_a( 'Pendiente' ); ?>"><?php echo esc_html( Calculadora::euros( max( 0, $c['pendiente'] ) ) ); ?><?php echo $c['pendiente'] < 0 ? '<br><span class="asde-muted">' . esc_html( sprintf( asde_t( 'Saldo a favor %s' ), Calculadora::euros( -$c['pendiente'] ) ) ) . '</span>' : ''; ?></td>
-						<td data-label="<?php echo asde_a( 'Estado' ); ?>"><span class="asde-badge asde-badge--pago-<?php echo esc_attr( $c['estado'] ); ?>"><?php echo esc_html( asde_t( Calculadora::ETIQUETAS[ $c['estado'] ] ) ); ?></span></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Pagado' ) ); ?>"><?php echo esc_html( Calculadora::euros( $c['pagado'] ) ); ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Pendiente' ) ); ?>"><?php echo esc_html( Calculadora::euros( max( 0, $c['pendiente'] ) ) ); ?><?php echo $c['pendiente'] < 0 ? '<br><span class="asde-muted">' . esc_html( sprintf( asde_t( 'Saldo a favor %s' ), Calculadora::euros( -$c['pendiente'] ) ) ) . '</span>' : ''; ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Estado' ) ); ?>"><span class="asde-badge asde-badge--pago-<?php echo esc_attr( $c['estado'] ); ?>"><?php echo esc_html( asde_t( Calculadora::ETIQUETAS[ $c['estado'] ] ) ); ?></span></td>
 						<td data-label=""><a class="button" href="<?php echo esc_url( add_query_arg( array( 'familia' => $id, 'ronda' => $ronda ), $url ) ); ?>"><?php asde_e( 'Ver / registrar pago' ); ?></a></td>
 					</tr>
 				<?php endforeach; ?>

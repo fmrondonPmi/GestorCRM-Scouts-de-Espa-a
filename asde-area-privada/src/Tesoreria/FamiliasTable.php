@@ -5,6 +5,8 @@ use AsdeBalears\AreaPrivada\Domain\Grupo;
 
 defined( 'ABSPATH' ) || exit;
 
+// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- tablas propias del plugin ({prefix}asde_*): no hay función de WordPress para ellas y los datos cambian en cada petición, no se cachean.
+
 /**
  * Familias: agrupan socios (por nº de socio Scouts de España) y tienen un nº de
  * gestión propio "F + grupo + correlativo" (F684001), pensado para ponerlo en el

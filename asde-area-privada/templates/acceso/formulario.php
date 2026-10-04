@@ -51,7 +51,7 @@ $ejemplo = \AsdeBalears\AreaPrivada\Domain\NumeroSocio::ejemplo_tutor();
 			<p>
 				<label for="asde-acc-usuario"><?php echo esc_html( Identidad::etiqueta_campo() ); ?></label>
 				<input type="text" id="asde-acc-usuario" name="usuario" value="<?php echo esc_attr( $usuario ); ?>" autocomplete="username" autocapitalize="none" autocorrect="off" spellcheck="false" required>
-				<span class="asde-help"><?php asde_e( 'Las familias: nº de socio/a del menor seguido de una' ); ?> <strong>T</strong><?php echo '' !== $ejemplo ? ' (p. ej. ' . esc_html( $ejemplo ) . ')' : ''; ?><?php asde_e( '. También sirve el email al que te llegó la invitación' ); ?><?php echo Identidad::es_asde() ? asde_t( ", o tu nº de socio/a local de siempre" ) : asde_t( ", o tu nº de socio/a de Scouts de España" ); ?>.</span>
+				<span class="asde-help"><?php asde_e( 'Las familias: nº de socio/a del menor seguido de una' ); ?> <strong>T</strong><?php echo '' !== $ejemplo ? ' (p. ej. ' . esc_html( $ejemplo ) . ')' : ''; ?><?php asde_e( '. También sirve el email al que te llegó la invitación' ); ?><?php echo Identidad::es_asde() ? esc_html( asde_t( ", o tu nº de socio/a local de siempre" ) ) : esc_html( asde_t( ", o tu nº de socio/a de Scouts de España" ) ); ?>.</span>
 			</p>
 			<p>
 				<label for="asde-acc-clave"><?php asde_e( 'Contraseña' ); ?></label>

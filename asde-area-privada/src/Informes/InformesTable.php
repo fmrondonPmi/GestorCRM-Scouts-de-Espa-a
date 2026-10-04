@@ -5,6 +5,8 @@ use AsdeBalears\AreaPrivada\Domain\Grupo;
 
 defined( 'ABSPATH' ) || exit;
 
+// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- tablas propias del plugin ({prefix}asde_*): no hay función de WordPress para ellas y los datos cambian en cada petición, no se cachean.
+
 /**
  * Definiciones de informes guardados ({prefix}asde_informes). Solo guarda la
  * definición (columnas y filtros), nunca resultados ni datos personales.

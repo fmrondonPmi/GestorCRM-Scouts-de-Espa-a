@@ -38,28 +38,28 @@ final class Visibilidad {
 
 	public static function widget_paginas( $args ): array {
 		$args            = (array) $args;
-		$args['exclude'] = implode( ',', array_unique( array_merge( wp_parse_id_list( $args['exclude'] ?? '' ), self::ids() ) ) );
+		$args['exclude'] = implode( ',', array_unique( array_merge( wp_parse_id_list( $args['exclude'] ?? '' ), self::ids() ) ) ); // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude -- se ocultan solo las páginas privadas del plugin (unas decenas de ids)
 		return $args;
 	}
 
 	/** Búsquedas de la web (incluida la AJAX del tema, que pasa por admin-ajax.php). */
 	public static function busqueda( \WP_Query $q ): void {
 		if ( $q->is_search() && ( ! is_admin() || wp_doing_ajax() ) ) {
-			$q->set( 'post__not_in', array_merge( (array) $q->get( 'post__not_in' ), self::ids() ) );
+			$q->set( 'post__not_in', array_merge( (array) $q->get( 'post__not_in' ), self::ids() ) ); // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_post__not_in -- solo las páginas privadas del plugin (unas decenas de ids)
 		}
 	}
 
 	/** /wp-json/wp/v2/pages: los editores las siguen viendo (editor de bloques). */
 	public static function rest( $args ): array {
 		if ( ! current_user_can( 'edit_pages' ) ) {
-			$args['post__not_in'] = array_merge( (array) ( $args['post__not_in'] ?? array() ), self::ids() );
+			$args['post__not_in'] = array_merge( (array) ( $args['post__not_in'] ?? array() ), self::ids() ); // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_post__not_in -- solo las páginas privadas del plugin (unas decenas de ids)
 		}
 		return $args;
 	}
 
 	public static function sitemap( $args, $post_type ): array {
 		if ( 'page' === $post_type ) {
-			$args['post__not_in'] = array_merge( (array) ( $args['post__not_in'] ?? array() ), self::ids() );
+			$args['post__not_in'] = array_merge( (array) ( $args['post__not_in'] ?? array() ), self::ids() ); // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_post__not_in -- solo las páginas privadas del plugin (unas decenas de ids)
 		}
 		return $args;
 	}

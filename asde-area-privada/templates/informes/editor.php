@@ -26,11 +26,11 @@ $secciones = $global ? array_keys( Secciones::all() ) : $mis_secc;
 	<input type="hidden" name="id" value="<?php echo (int) $informe->id; ?>">
 
 	<section class="asde-card">
-		<h2><?php echo $informe->id ? asde_t( 'Editar informe' ) : asde_t( 'Nuevo informe' ); ?></h2>
+		<h2><?php echo $informe->id ? esc_html( asde_t( 'Editar informe' ) ) : esc_html( asde_t( 'Nuevo informe' ) ); ?></h2>
 		<div class="asde-grid-2">
 			<p>
 				<label for="asde-inf-nombre"><?php asde_e( 'Nombre' ); ?></label>
-				<input type="text" id="asde-inf-nombre" name="nombre" value="<?php echo esc_attr( $informe->nombre ); ?>" maxlength="120" placeholder="<?php echo asde_a( 'Ej.: Autorizaciones campamento de verano' ); ?>">
+				<input type="text" id="asde-inf-nombre" name="nombre" value="<?php echo esc_attr( $informe->nombre ); ?>" maxlength="120" placeholder="<?php echo esc_attr( asde_a( 'Ej.: Autorizaciones campamento de verano' ) ); ?>">
 			</p>
 			<p>
 				<label for="asde-inf-desc"><?php asde_e( 'Descripción (opcional)' ); ?></label>
@@ -81,7 +81,7 @@ $secciones = $global ? array_keys( Secciones::all() ) : $mis_secc;
 					<span><?php echo Secciones::badge( $slug ); // phpcs:ignore WordPress.Security.EscapeOutput ?></span>
 				</label>
 			<?php endforeach; ?>
-			<p class="asde-help"><?php asde_e( 'Si no marcas ninguna:' ); ?> <?php echo $global ? asde_t( 'todo el grupo' ) : asde_t( 'todas tus secciones' ); ?>.</p>
+			<p class="asde-help"><?php asde_e( 'Si no marcas ninguna:' ); ?> <?php echo $global ? esc_html( asde_t( 'todo el grupo' ) ) : esc_html( asde_t( 'todas tus secciones' ) ); ?>.</p>
 		</fieldset>
 		<div class="asde-grid-2">
 			<p>

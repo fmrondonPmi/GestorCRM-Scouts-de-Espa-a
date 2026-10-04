@@ -32,7 +32,7 @@ defined( 'ABSPATH' ) || exit;
 				<?php foreach ( $familia['miembros'] as $n ) : ?>
 					<?php $p = $personas[ $n ] ?? null; ?>
 					<tr>
-						<td data-label="<?php echo asde_a( 'Socio' ); ?>">
+						<td data-label="<?php echo esc_attr( asde_a( 'Socio' ) ); ?>">
 							<?php echo esc_html( $p ? $p->nombre_completo() : asde_t( 'Nº Scouts de España ' ) . $n ); ?><?php echo $p ? \AsdeBalears\AreaPrivada\Socios\Numeros::compacto( $p ) : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?>
 							<?php
 							if ( $p ) {
@@ -44,7 +44,7 @@ defined( 'ABSPATH' ) || exit;
 							<?php echo ( ! $p || ! $p->tiene_membresia_activa() ) ? '<br><span class="asde-help asde-help--warning">' . esc_html( asde_t( 'Sin membresía activa: no cuenta para la cuota' ) ) . '</span>' : ''; ?>
 						</td>
 						<td data-label="">
-							<form method="post" onsubmit="return confirm(<?php echo asde_js( '¿Quitar a este socio de la familia?' ); ?>);">
+							<form method="post" onsubmit="return confirm(<?php echo esc_attr( asde_js( '¿Quitar a este socio de la familia?' ) ); ?>);">
 								<?php wp_nonce_field( 'asde_familias' ); ?>
 								<input type="hidden" name="asde_action" value="quitar">
 								<input type="hidden" name="familia" value="<?php echo (int) $familia['id']; ?>">
@@ -69,7 +69,7 @@ defined( 'ABSPATH' ) || exit;
 			<input type="hidden" name="asde_action" value="anadir">
 			<input type="hidden" name="familia" value="<?php echo (int) $familia['id']; ?>">
 			<label for="asde-socio-anadir" class="screen-reader-text"><?php asde_e( 'Socio' ); ?></label>
-			<select id="asde-socio-anadir" name="socio" required class="asde-combobox" data-min="3" data-placeholder="<?php echo asde_a( 'Busca por nombre o apellidos (a partir de 3 letras)…' ); ?>">
+			<select id="asde-socio-anadir" name="socio" required class="asde-combobox" data-min="3" data-placeholder="<?php echo esc_attr( asde_a( 'Busca por nombre o apellidos (a partir de 3 letras)…' ) ); ?>">
 				<option value=""><?php asde_e( 'Elige un socio sin familia…' ); ?></option>
 				<?php foreach ( $sin_fam as $p ) : ?>
 					<option value="<?php echo esc_attr( $p->num_socio_asde ); ?>"><?php echo esc_html( $p->apellidos . ', ' . $p->nombre . ( $p->secciones ? ' · ' . Secciones::nombre( $p->secciones[0] ) : '' ) ); ?></option>
@@ -82,7 +82,7 @@ defined( 'ABSPATH' ) || exit;
 
 <?php if ( ! $familia['miembros'] ) : ?>
 	<section class="asde-card">
-		<form method="post" onsubmit="return confirm(<?php echo asde_js( '¿Borrar la familia %s?', $familia['numero'] ); ?>);">
+		<form method="post" onsubmit="return confirm(<?php echo esc_attr( asde_js( '¿Borrar la familia %s?', $familia['numero'] ) ); ?>);">
 			<?php wp_nonce_field( 'asde_familias' ); ?>
 			<input type="hidden" name="asde_action" value="borrar">
 			<input type="hidden" name="familia" value="<?php echo (int) $familia['id']; ?>">

@@ -22,7 +22,7 @@ $publico = add_query_arg( 'grupo', Grupo::numero(), $enlace );
 <section class="asde-card">
 	<header class="asde-card__header asde-card__header--split">
 		<h2 class="asde-card__title"><?php asde_e( 'Solicitudes de acceso' ); ?></h2>
-		<nav class="asde-subnav" aria-label="<?php echo asde_a( 'Estado' ); ?>">
+		<nav class="asde-subnav" aria-label="<?php echo esc_attr( asde_a( 'Estado' ) ); ?>">
 			<ul class="asde-subnav__tabs">
 				<li><a href="<?php echo esc_url( $url ); ?>"<?php echo $resueltas ? '' : ' class="is-active" aria-current="page"'; ?>><?php asde_e( 'Pendientes' ); ?></a></li>
 				<li><a href="<?php echo esc_url( add_query_arg( 'ver', 'resueltas', $url ) ); ?>"<?php echo $resueltas ? ' class="is-active" aria-current="page"' : ''; ?>><?php asde_e( 'Resueltas' ); ?></a></li>
@@ -47,7 +47,7 @@ $publico = add_query_arg( 'grupo', Grupo::numero(), $enlace );
 			<code class="asde-copiar__texto" id="asde-enlace-scouters"><?php echo esc_html( $enlace_scouters ); ?></code>
 			<button type="button" class="asde-btn-link" data-asde-copiar="asde-enlace-scouters"><?php asde_e( 'Copiar el enlace' ); ?></button>
 		</p>
-		<form method="post" onsubmit="return confirm(<?php echo asde_js( '¿Generar un enlace nuevo? El que ya has pasado dejará de servir.' ); ?>);">
+		<form method="post" onsubmit="return confirm(<?php echo esc_attr( asde_js( '¿Generar un enlace nuevo? El que ya has pasado dejará de servir.' ) ); ?>);">
 			<?php wp_nonce_field( 'asde_enlace_scouters' ); ?>
 			<input type="hidden" name="asde_action" value="renovar_enlace_scouters">
 			<button type="submit" class="asde-btn-link"><?php asde_e( 'Generar enlace nuevo' ); ?></button>
@@ -58,7 +58,7 @@ $publico = add_query_arg( 'grupo', Grupo::numero(), $enlace );
 
 <section class="asde-card">
 	<?php if ( ! $lista ) : ?>
-		<p class="asde-muted"><?php echo $resueltas ? asde_t( 'Todavía no hay solicitudes resueltas.' ) : asde_t( 'No hay solicitudes pendientes.' ); ?></p>
+		<p class="asde-muted"><?php echo $resueltas ? esc_html( asde_t( 'Todavía no hay solicitudes resueltas.' ) ) : esc_html( asde_t( 'No hay solicitudes pendientes.' ) ); ?></p>
 	<?php else : ?>
 		<table class="asde-table">
 			<thead>
@@ -74,8 +74,8 @@ $publico = add_query_arg( 'grupo', Grupo::numero(), $enlace );
 				<?php foreach ( $lista as $s ) : ?>
 					<?php $p = $personas[ $s['socio'] ] ?? null; ?>
 					<tr>
-						<td data-label="<?php echo asde_a( 'Fecha' ); ?>"><?php echo esc_html( wp_date( 'd/m/Y H:i', strtotime( $s['creada'] . ' UTC' ) ) ); ?></td>
-						<td data-label="<?php echo asde_a( 'Socio/a' ); ?>">
+						<td data-label="<?php echo esc_attr( asde_a( 'Fecha' ) ); ?>"><?php echo esc_html( wp_date( 'd/m/Y H:i', strtotime( $s['creada'] . ' UTC' ) ) ); ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Socio/a' ) ); ?>">
 							<?php if ( $p ) : ?>
 								<?php echo esc_html( $p->nombre_completo() ); ?><?php echo \AsdeBalears\AreaPrivada\Socios\Numeros::compacto( $p ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 								<?php
@@ -86,13 +86,13 @@ $publico = add_query_arg( 'grupo', Grupo::numero(), $enlace );
 							<?php else : ?>
 								<span class="asde-muted"><?php asde_e( 'Ficha no encontrada (' ); ?><?php echo esc_html( $s['socio'] ); ?>)</span>
 							<?php endif; ?>
-							<br><span class="asde-help"><?php echo Solicitudes::POR_ENLACE === $s['via'] ? asde_t( 'Alta con el enlace para scouters (comprobada con el DNI)' ) : ( Solicitudes::POR_NOMBRE === $s['via'] ? asde_t( 'Comprobado con la fecha de nacimiento y el nombre (sin documento)' ) : asde_t( 'Comprobado con el documento y la fecha de nacimiento' ) ); ?></span>
+							<br><span class="asde-help"><?php echo Solicitudes::POR_ENLACE === $s['via'] ? esc_html( asde_t( 'Alta con el enlace para scouters (comprobada con el DNI)' ) ) : ( Solicitudes::POR_NOMBRE === $s['via'] ? esc_html( asde_t( 'Comprobado con la fecha de nacimiento y el nombre (sin documento)' ) ) : esc_html( asde_t( 'Comprobado con el documento y la fecha de nacimiento' ) ) ); ?></span>
 								<?php if ( Solicitudes::POR_ENLACE === $s['via'] ) : ?>
 									<br><span class="asde-help"><?php echo esc_html( sprintf( asde_t( 'Pide: %s' ), implode( ', ', array_map( array( Roles::class, 'label' ), (array) ( $s['datos']['roles_pedidos'] ?? array() ) ) ) ?: '—' ) ); ?><?php echo ! empty( $s['datos']['cuenta_creada'] ) ? ' · ' . esc_html( asde_t( 'cuenta ya creada' ) ) : ''; ?></span>
 								<?php endif; ?>
 						</td>
-						<td data-label="<?php echo asde_a( 'Quién pide' ); ?>"><?php echo esc_html( '' !== $s['datos']['nombre'] ? $s['datos']['nombre'] : '—' ); ?><br><span class="asde-help"><?php echo Solicitudes::TUTOR === $s['tipo'] ? asde_t( 'Su familia (madre, padre o tutor/a)' ) : asde_t( 'El propio socio/a' ); ?></span></td>
-						<td data-label="<?php echo asde_a( 'Email' ); ?>"><?php echo esc_html( '' !== $s['datos']['email'] ? $s['datos']['email'] : '—' ); ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Quién pide' ) ); ?>"><?php echo esc_html( '' !== $s['datos']['nombre'] ? $s['datos']['nombre'] : '—' ); ?><br><span class="asde-help"><?php echo Solicitudes::TUTOR === $s['tipo'] ? esc_html( asde_t( 'Su familia (madre, padre o tutor/a)' ) ) : esc_html( asde_t( 'El propio socio/a' ) ); ?></span></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Email' ) ); ?>"><?php echo esc_html( '' !== $s['datos']['email'] ? $s['datos']['email'] : '—' ); ?></td>
 						<td data-label="">
 							<?php if ( $resueltas ) : ?>
 								<span class="asde-badge asde-badge--estado-<?php echo esc_attr( Solicitudes::APROBADA === $s['estado'] ? 'activo' : 'desactivado' ); ?>"><?php echo esc_html( asde_t( Solicitudes::ESTADOS[ $s['estado'] ] ?? $s['estado'] ) ); ?></span>

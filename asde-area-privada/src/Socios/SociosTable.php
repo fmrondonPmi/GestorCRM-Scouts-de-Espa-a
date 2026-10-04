@@ -5,6 +5,8 @@ use AsdeBalears\AreaPrivada\Domain\NumeroSocio;
 
 defined( 'ABSPATH' ) || exit;
 
+// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- tablas propias del plugin ({prefix}asde_*): no hay función de WordPress para ellas y los datos cambian en cada petición, no se cachean.
+
 /**
  * Tabla de equivalencias {prefix}asde_socios: lo ÚNICO de cada asociado que se
  * guarda en WordPress. Los datos personales se quedan en el CRM.
@@ -99,8 +101,9 @@ final class SociosTable {
 			$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . self::table() . ' WHERE num_socio_local = %s AND num_socio_asde <> %s', $local, $asde ) ); // phpcs:ignore WordPress.DB
 			$wpdb->query( // phpcs:ignore WordPress.DB
 				$wpdb->prepare(
-					'INSERT INTO ' . self::table() . ' (num_socio_asde, num_socio_local, origen, creado, actualizado) VALUES (%s, %s, %s, %s, %s)
+					'INSERT INTO %i (num_socio_asde, num_socio_local, origen, creado, actualizado) VALUES (%s, %s, %s, %s, %s)
 					ON DUPLICATE KEY UPDATE num_socio_local = VALUES(num_socio_local), origen = VALUES(origen), actualizado = VALUES(actualizado)',
+					self::table(),
 					$asde,
 					$local,
 					self::CRM,

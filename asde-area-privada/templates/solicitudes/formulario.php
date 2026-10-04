@@ -33,7 +33,7 @@ $con_nombre = S::PEDIR_NOMBRE === $resultado || '' !== $valores['nombre_menor'];
 
 	<?php if ( S::OK === $resultado || S::YA_PEDIDA === $resultado ) : ?>
 		<div class="asde-notice asde-notice--success" role="status">
-			<strong><?php echo S::OK === $resultado ? asde_t( 'Solicitud enviada.' ) : asde_t( 'Ya teníamos tu solicitud.' ); ?></strong>
+			<strong><?php echo S::OK === $resultado ? esc_html( asde_t( 'Solicitud enviada.' ) ) : esc_html( asde_t( 'Ya teníamos tu solicitud.' ) ); ?></strong>
 			<?php asde_e( 'Un scouter del grupo la revisará y, cuando la apruebe, te llegará un email a' ); ?> <strong><?php echo esc_html( $valores['email'] ); ?></strong> <?php asde_e( 'para activar tu cuenta.' ); ?>
 		</div>
 		<p><a href="<?php echo esc_url( $url_login ); ?>"><?php asde_e( 'Volver a Acceso socios' ); ?></a></p>
@@ -59,7 +59,7 @@ $con_nombre = S::PEDIR_NOMBRE === $resultado || '' !== $valores['nombre_menor'];
 			</div>
 		<?php elseif ( S::PEDIR_NOMBRE === $resultado ) : ?>
 			<div class="asde-notice asde-notice--info" role="status">
-				<?php echo '' === trim( $valores['documento'] ) ? asde_t( 'Sin nº de documento, lo comprobamos con su nombre.' ) : asde_t( 'No hay ningún socio/a con ese nº de documento.' ); ?>
+				<?php echo '' === trim( $valores['documento'] ) ? esc_html( asde_t( 'Sin nº de documento, lo comprobamos con su nombre.' ) ) : esc_html( asde_t( 'No hay ningún socio/a con ese nº de documento.' ) ); ?>
 				<?php asde_e( 'Si es' ); ?> <strong><?php asde_e( 'menor de 14 años' ); ?></strong> <?php asde_e( 'y no tiene DNI, escribe su nombre y apellidos tal como constan en el grupo.' ); ?>
 			</div>
 		<?php elseif ( S::MENOR_14 === $resultado ) : ?>

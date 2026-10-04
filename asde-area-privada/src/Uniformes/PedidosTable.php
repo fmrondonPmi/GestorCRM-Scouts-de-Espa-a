@@ -5,6 +5,8 @@ use AsdeBalears\AreaPrivada\Domain\Grupo;
 
 defined( 'ABSPATH' ) || exit;
 
+// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- tablas propias del plugin ({prefix}asde_*): no hay función de WordPress para ellas y los datos cambian en cada petición, no se cachean.
+
 /**
  * Pedidos de uniforme ({prefix}asde_uniformes): una camisa (y/o insignias) para
  * un socio/a, con sus cuatro comprobaciones, cada una con quién y cuándo:

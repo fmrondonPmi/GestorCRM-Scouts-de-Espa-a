@@ -58,20 +58,20 @@ $pendientes = array_filter( $lineas, static fn( $l ) => Remesas::PENDIENTE === $
 				<input type="hidden" name="remesa" value="<?php echo (int) $r['id']; ?>">
 				<button type="submit" class="button"><?php asde_e( 'Descargar el fichero XML' ); ?></button>
 			</form>
-			<form method="post" onsubmit="return confirm(<?php echo asde_js( 'Se enviará un email a las cuentas de cada familia con la fecha y el importe del cargo. ¿Continuar?' ); ?>);">
+			<form method="post" onsubmit="return confirm(<?php echo esc_attr( asde_js( 'Se enviará un email a las cuentas de cada familia con la fecha y el importe del cargo. ¿Continuar?' ) ); ?>);">
 				<?php wp_nonce_field( 'asde_sepa_remesa_' . (int) $r['id'] ); ?>
 				<input type="hidden" name="asde_action" value="sepa_avisar">
 				<input type="hidden" name="remesa" value="<?php echo (int) $r['id']; ?>">
-				<button type="submit" class="button asde-button-secundario"><?php echo $r['avisada_en'] ? asde_t( 'Volver a avisar a las familias' ) : asde_t( 'Avisar a las familias por email' ); ?></button>
+				<button type="submit" class="button asde-button-secundario"><?php echo $r['avisada_en'] ? esc_html( asde_t( 'Volver a avisar a las familias' ) ) : esc_html( asde_t( 'Avisar a las familias por email' ) ); ?></button>
 			</form>
 			<?php if ( Remesas::GENERADA === $r['estado'] ) : ?>
-				<form method="post" onsubmit="return confirm(<?php echo asde_js( '¿Confirmas que has subido el fichero al banco?' ); ?>);">
+				<form method="post" onsubmit="return confirm(<?php echo esc_attr( asde_js( '¿Confirmas que has subido el fichero al banco?' ) ); ?>);">
 					<?php wp_nonce_field( 'asde_sepa_remesa_' . (int) $r['id'] ); ?>
 					<input type="hidden" name="asde_action" value="sepa_enviada">
 					<input type="hidden" name="remesa" value="<?php echo (int) $r['id']; ?>">
 					<button type="submit" class="button asde-button-secundario"><?php asde_e( 'Marcar como enviada al banco' ); ?></button>
 				</form>
-				<form method="post" onsubmit="return confirm(<?php echo asde_js( '¿Anular la remesa? Se borrarán sus datos.' ); ?>);">
+				<form method="post" onsubmit="return confirm(<?php echo esc_attr( asde_js( '¿Anular la remesa? Se borrarán sus datos.' ) ); ?>);">
 					<?php wp_nonce_field( 'asde_sepa_remesa_' . (int) $r['id'] ); ?>
 					<input type="hidden" name="asde_action" value="sepa_anular">
 					<input type="hidden" name="remesa" value="<?php echo (int) $r['id']; ?>">
@@ -112,16 +112,16 @@ $pendientes = array_filter( $lineas, static fn( $l ) => Remesas::PENDIENTE === $
 			<tbody>
 				<?php foreach ( $lineas as $l ) : ?>
 					<tr>
-						<td data-label="<?php echo asde_a( 'Familia' ); ?>"><a href="<?php echo esc_url( add_query_arg( array( 'familia' => (int) $l['familia'], 'ronda' => $r['ronda'] ), $url_fam ) ); ?>"><?php echo esc_html( $l['familia_n'] ); ?></a></td>
-						<td data-label="<?php echo asde_a( 'Socios' ); ?>"><?php echo esc_html( $nombres( (int) $l['familia'] ) ); ?></td>
-						<td data-label="<?php echo asde_a( 'Titular' ); ?>"><?php echo esc_html( $l['titular'] . ' · ' . ( $l['iban_mask'] ?? '' ) ); ?></td>
-						<td data-label="<?php echo asde_a( 'Secuencia' ); ?>"><?php echo esc_html( $l['secuencia'] ); ?></td>
-						<td data-label="<?php echo asde_a( 'Importe' ); ?>"><?php echo esc_html( Calculadora::euros( $l['centimos'] / 100 ) ); ?></td>
-						<td data-label="<?php echo asde_a( 'Estado' ); ?>"><?php echo esc_html( $estado_l[ $l['estado'] ] ?? $l['estado'] ); ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Familia' ) ); ?>"><a href="<?php echo esc_url( add_query_arg( array( 'familia' => (int) $l['familia'], 'ronda' => $r['ronda'] ), $url_fam ) ); ?>"><?php echo esc_html( $l['familia_n'] ); ?></a></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Socios' ) ); ?>"><?php echo esc_html( $nombres( (int) $l['familia'] ) ); ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Titular' ) ); ?>"><?php echo esc_html( $l['titular'] . ' · ' . ( $l['iban_mask'] ?? '' ) ); ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Secuencia' ) ); ?>"><?php echo esc_html( $l['secuencia'] ); ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Importe' ) ); ?>"><?php echo esc_html( Calculadora::euros( $l['centimos'] / 100 ) ); ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Estado' ) ); ?>"><?php echo esc_html( $estado_l[ $l['estado'] ] ?? $l['estado'] ); ?></td>
 						<?php if ( $puede_cobros ) : ?>
 							<?php if ( Remesas::PENDIENTE === $l['estado'] ) : ?>
-								<td data-label="<?php echo asde_a( 'Cobrado' ); ?>"><input type="checkbox" name="cobrada[]" value="<?php echo (int) $l['familia']; ?>" checked aria-label="Cobrado a <?php echo esc_attr( $l['familia_n'] ); ?>"></td>
-								<td data-label="<?php echo asde_a( 'Devuelto' ); ?>"><input type="checkbox" name="devuelta[]" value="<?php echo (int) $l['familia']; ?>" aria-label="Devuelto a <?php echo esc_attr( $l['familia_n'] ); ?>"></td>
+								<td data-label="<?php echo esc_attr( asde_a( 'Cobrado' ) ); ?>"><input type="checkbox" name="cobrada[]" value="<?php echo (int) $l['familia']; ?>" checked aria-label="Cobrado a <?php echo esc_attr( $l['familia_n'] ); ?>"></td>
+								<td data-label="<?php echo esc_attr( asde_a( 'Devuelto' ) ); ?>"><input type="checkbox" name="devuelta[]" value="<?php echo (int) $l['familia']; ?>" aria-label="Devuelto a <?php echo esc_attr( $l['familia_n'] ); ?>"></td>
 							<?php else : ?>
 								<td></td><td></td>
 							<?php endif; ?>

@@ -21,13 +21,13 @@ $boton = static function ( bool $activo, int $p, string $texto, string $etiqueta
 		: sprintf( '<li><span class="is-disabled" aria-hidden="true">%s</span></li>', esc_html( $texto ) );
 };
 ?>
-<nav class="asde-paginacion" aria-label="<?php echo asde_a( 'Paginación' ); ?>">
+<nav class="asde-paginacion" aria-label="<?php echo esc_attr( asde_a( 'Paginación' ) ); ?>">
 	<p class="asde-paginacion__info"><?php asde_e( 'Mostrando' ); ?> <?php echo (int) $desde; ?>–<?php echo (int) $hasta; ?> <?php asde_e( 'de' ); ?> <?php echo (int) $total; ?></p>
 	<?php if ( $paginas > 1 ) : ?>
 		<ul class="asde-paginacion__botones">
 			<?php
-			echo $boton( $pagina > 1, 1, '«', asde_t( 'Primera página' ) ); // phpcs:ignore WordPress.Security.EscapeOutput
-			echo $boton( $pagina > 1, $pagina - 1, '‹', asde_t( 'Página anterior' ) ); // phpcs:ignore WordPress.Security.EscapeOutput
+			echo $boton( $pagina > 1, 1, '«', esc_html( asde_t( 'Primera página' ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput
+			echo $boton( $pagina > 1, $pagina - 1, '‹', esc_html( asde_t( 'Página anterior' ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput
 			foreach ( $lista as $p ) {
 				if ( '…' === $p ) {
 					echo '<li><span class="asde-paginacion__hueco" aria-hidden="true">…</span></li>';
@@ -37,8 +37,8 @@ $boton = static function ( bool $activo, int $p, string $texto, string $etiqueta
 					echo '<li><a href="' . esc_url( $url( (int) $p ) ) . '" aria-label="' . esc_attr( sprintf( asde_t( 'Página %s' ), $p ) ) . '">' . (int) $p . '</a></li>';
 				}
 			}
-			echo $boton( $pagina < $paginas, $pagina + 1, '›', asde_t( 'Página siguiente' ) ); // phpcs:ignore WordPress.Security.EscapeOutput
-			echo $boton( $pagina < $paginas, $paginas, '»', asde_t( 'Última página' ) ); // phpcs:ignore WordPress.Security.EscapeOutput
+			echo $boton( $pagina < $paginas, $pagina + 1, '›', esc_html( asde_t( 'Página siguiente' ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput
+			echo $boton( $pagina < $paginas, $paginas, '»', esc_html( asde_t( 'Última página' ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput
 			?>
 		</ul>
 	<?php endif; ?>

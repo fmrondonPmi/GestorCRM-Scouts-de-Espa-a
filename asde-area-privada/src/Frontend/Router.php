@@ -190,13 +190,13 @@ final class Router {
 			exit;
 		}
 
-		if ( 'POST' === ( $_SERVER['REQUEST_METHOD'] ?? '' ) && isset( $_POST['asde_action'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+		if ( 'POST' === strtoupper( sanitize_text_field( wp_unslash( $_SERVER['REQUEST_METHOD'] ?? '' ) ) ) && isset( $_POST['asde_action'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
 			$class = self::VIEWS[ $key ][1];
 			( new $class() )->handle_post();
 		}
 
 		// Listado de usuarios: la lista entera en JSON, para actualizarla en el navegador.
-		if ( 'usuarios' === $key && self::pide_json() && 'GET' === ( $_SERVER['REQUEST_METHOD'] ?? '' ) ) {
+		if ( 'usuarios' === $key && self::pide_json() && 'GET' === strtoupper( sanitize_text_field( wp_unslash( $_SERVER['REQUEST_METHOD'] ?? '' ) ) ) ) {
 			( new UsuariosView() )->json();
 		}
 
@@ -212,7 +212,7 @@ final class Router {
 		}
 
 		// Descargas CSV (antes de enviar nada al navegador).
-		if ( 'csv' === ( $_GET['formato'] ?? '' ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+		if ( 'csv' === sanitize_key( wp_unslash( $_GET['formato'] ?? '' ) ) ) { // phpcs:ignore WordPress.Security.NonceVerification
 			if ( 'informes' === $key ) {
 				( new InformesView() )->exportar();
 			} elseif ( 'tesoreria' === $key ) {

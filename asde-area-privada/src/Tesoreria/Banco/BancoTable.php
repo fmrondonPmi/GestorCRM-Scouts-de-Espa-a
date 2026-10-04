@@ -6,6 +6,8 @@ use AsdeBalears\AreaPrivada\Domain\Grupo;
 
 defined( 'ABSPATH' ) || exit;
 
+// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.PreparedSQLPlaceholders.ReplacementsWrongNumber -- tablas propias del plugin ({prefix}asde_*): no hay función de WordPress para ellas y los datos cambian en cada petición, no se cachean.
+
 /**
  * Movimientos del banco importados de ficheros (Norma 43 o CSV), por grupo:
  *   {prefix}asde_banco_lotes        una fila por fichero importado
@@ -198,9 +200,11 @@ final class BancoTable {
 			$ordenante = trim( $m['ordenante'] );
 			$r         = $wpdb->query(
 				$wpdb->prepare(
-					'INSERT IGNORE INTO ' . self::table() . ' (grupo, lote_id, cuenta, fecha, fecha_valor, importe, concepto_comun, concepto_propio, documento, referencia1, referencia2, concepto_enc, ordenante_enc, ordenante_hmac, huella, estado, creado)'
+					'INSERT IGNORE INTO %i (grupo, lote_id, cuenta, fecha, fecha_valor, importe, concepto_comun, concepto_propio, documento, referencia1, referencia2, concepto_enc, ordenante_enc, ordenante_hmac, huella, estado, creado)'
 					. ' VALUES (%s, %d, %s, %s, ' . ( $m['fecha_valor'] ? '%s' : 'NULL' ) . ', %f, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)',
-					array_values(
+					array_merge(
+						array( self::table() ),
+						array_values(
 						array_filter(
 							array(
 								Grupo::numero(),
@@ -222,6 +226,7 @@ final class BancoTable {
 								$ahora,
 							),
 							static fn( $v ) => false !== $v
+						)
 						)
 					)
 				)

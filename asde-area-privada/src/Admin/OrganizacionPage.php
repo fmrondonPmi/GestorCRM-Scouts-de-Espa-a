@@ -234,7 +234,8 @@ final class OrganizacionPage {
 						<td>
 							<p class="description"><?php esc_html_e( 'Cualquier otro importe que cobre la organización: por asociado, por educando, por adulto o una vez por grupo.', 'asde-area-privada' ); ?></p>
 							<?php
-							echo TemplateLoader::render( // phpcs:ignore WordPress.Security.EscapeOutput
+							// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- plantilla propia del plugin: cada valor se escapa dentro de ella.
+							echo TemplateLoader::render(
 								'comun/conceptos',
 								array(
 									'conceptos' => $fed['conceptos'],
@@ -242,6 +243,7 @@ final class OrganizacionPage {
 									'editable'  => true,
 								)
 							);
+							// phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
 							?>
 						</td>
 					</tr>

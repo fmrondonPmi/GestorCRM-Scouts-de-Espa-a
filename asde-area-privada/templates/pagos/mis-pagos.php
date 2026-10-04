@@ -19,7 +19,7 @@ $fecha = static fn( string $f ) => '' !== $f ? wp_date( 'd/m/Y', strtotime( $f )
 ?>
 <section class="asde-card">
 	<h2 class="asde-card__title"><?php asde_e( 'Mis pagos' ); ?></h2>
-	<p><?php asde_e( 'Aquí ves los pagos que ha registrado Tesorería' ); ?><?php echo $cuotas ? asde_t( ' y cómo va la cuota del grupo de este año' ) : ''; ?><?php asde_e( '. Si echas en falta alguno, habla con Tesorería.' ); ?></p>
+	<p><?php asde_e( 'Aquí ves los pagos que ha registrado Tesorería' ); ?><?php echo $cuotas ? esc_html( asde_t( ' y cómo va la cuota del grupo de este año' ) ) : ''; ?><?php asde_e( '. Si echas en falta alguno, habla con Tesorería.' ); ?></p>
 </section>
 
 <?php foreach ( $cuotas as $c ) : ?>
@@ -52,9 +52,9 @@ $fecha = static fn( string $f ) => '' !== $f ? wp_date( 'd/m/Y', strtotime( $f )
 					<tbody>
 						<?php foreach ( $calc['plazos'] as $pl ) : ?>
 							<tr>
-								<td data-label="<?php echo asde_a( 'Plazo' ); ?>"><?php echo esc_html( sprintf( asde_t( 'Hasta el %s' ), $fecha( $pl['fecha'] ) ) ); ?></td>
-								<td data-label="<?php echo asde_a( 'Importe' ); ?>"><?php echo esc_html( Calculadora::euros( $pl['importe'] ) ); ?></td>
-								<td data-label="<?php echo asde_a( 'Estado' ); ?>"><?php echo $pl['cubierto'] ? '✓ ' . esc_html( asde_t( 'Pagado' ) ) : ( $pl['vencido'] ? '<span class="asde-help asde-help--warning">' . esc_html( asde_t( 'Vencido' ) ) . '</span>' : esc_html( asde_t( 'Pendiente' ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></td>
+								<td data-label="<?php echo esc_attr( asde_a( 'Plazo' ) ); ?>"><?php echo esc_html( sprintf( asde_t( 'Hasta el %s' ), $fecha( $pl['fecha'] ) ) ); ?></td>
+								<td data-label="<?php echo esc_attr( asde_a( 'Importe' ) ); ?>"><?php echo esc_html( Calculadora::euros( $pl['importe'] ) ); ?></td>
+								<td data-label="<?php echo esc_attr( asde_a( 'Estado' ) ); ?>"><?php echo $pl['cubierto'] ? '✓ ' . esc_html( asde_t( 'Pagado' ) ) : ( $pl['vencido'] ? '<span class="asde-help asde-help--warning">' . esc_html( asde_t( 'Vencido' ) ) . '</span>' : esc_html( asde_t( 'Pendiente' ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></td>
 							</tr>
 						<?php endforeach; ?>
 					</tbody>
@@ -66,7 +66,8 @@ $fecha = static fn( string $f ) => '' !== $f ? wp_date( 'd/m/Y', strtotime( $f )
 	<?php $s = $sepa['familias'][ $c['familia']['id'] ] ?? null; ?>
 	<?php if ( $s ) : ?>
 		<?php
-		echo TemplateLoader::render( // phpcs:ignore WordPress.Security.EscapeOutput
+		// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- plantilla propia del plugin: cada valor se escapa dentro de ella.
+		echo TemplateLoader::render(
 			'pagos/sepa',
 			array(
 				'familia'  => $c['familia'],
@@ -80,6 +81,7 @@ $fecha = static fn( string $f ) => '' !== $f ? wp_date( 'd/m/Y', strtotime( $f )
 				'url'      => $url,
 			)
 		);
+		// phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
 		?>
 	<?php endif; ?>
 <?php endforeach; ?>
@@ -101,10 +103,10 @@ $fecha = static fn( string $f ) => '' !== $f ? wp_date( 'd/m/Y', strtotime( $f )
 			<tbody>
 				<?php foreach ( $pagos as $p ) : ?>
 					<tr>
-						<td data-label="<?php echo asde_a( 'Fecha' ); ?>"><?php echo esc_html( $fecha( $p['fecha'] ) ); ?></td>
-						<td data-label="<?php echo asde_a( 'Concepto' ); ?>"><?php echo esc_html( $p['concepto'] ); ?><?php echo '' !== $p['ref'] ? '<br><span class="asde-muted">' . esc_html( sprintf( asde_t( 'Referencia: %s' ), $p['ref'] ) ) . '</span>' : ''; ?></td>
-						<td data-label="<?php echo asde_a( 'Forma de pago' ); ?>"><?php echo esc_html( $p['metodo'] ); ?></td>
-						<td data-label="<?php echo asde_a( 'Importe' ); ?>"><?php echo esc_html( Calculadora::euros( $p['importe'] ) ); ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Fecha' ) ); ?>"><?php echo esc_html( $fecha( $p['fecha'] ) ); ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Concepto' ) ); ?>"><?php echo esc_html( $p['concepto'] ); ?><?php echo '' !== $p['ref'] ? '<br><span class="asde-muted">' . esc_html( sprintf( asde_t( 'Referencia: %s' ), $p['ref'] ) ) . '</span>' : ''; ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Forma de pago' ) ); ?>"><?php echo esc_html( $p['metodo'] ); ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Importe' ) ); ?>"><?php echo esc_html( Calculadora::euros( $p['importe'] ) ); ?></td>
 					</tr>
 				<?php endforeach; ?>
 			</tbody>

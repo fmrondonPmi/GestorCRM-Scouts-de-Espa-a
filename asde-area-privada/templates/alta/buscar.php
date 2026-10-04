@@ -19,7 +19,7 @@ defined( 'ABSPATH' ) || exit;
 	<p><?php asde_e( 'Busca al socio en el CRM del grupo (solo aparecen socios con membresía activa). Desde su ficha podrás darle acceso a él o ella, o a su familia.' ); ?></p>
 	<form method="get" action="<?php echo esc_url( $url ); ?>" class="asde-search" role="search">
 		<label for="asde-q" class="screen-reader-text"><?php asde_e( 'Buscar socio' ); ?></label>
-		<input type="search" id="asde-q" name="q" value="<?php echo esc_attr( $q ); ?>" placeholder="<?php echo asde_a( 'Nombre y apellidos, nº de socio, email o DNI' ); ?>" minlength="3" required>
+		<input type="search" id="asde-q" name="q" value="<?php echo esc_attr( $q ); ?>" placeholder="<?php echo esc_attr( asde_a( 'Nombre y apellidos, nº de socio, email o DNI' ) ); ?>" minlength="3" required>
 		<button type="submit" class="button"><?php asde_e( 'Buscar' ); ?></button>
 	</form>
 </section>
@@ -33,7 +33,7 @@ defined( 'ABSPATH' ) || exit;
 		<?php else : ?>
 			<p class="asde-muted">
 				<?php echo esc_html( sprintf( asde_n( '%d socio encontrado', '%d socios encontrados', count( $resultados ) ), count( $resultados ) ) ); ?>
-				<?php echo count( $resultados ) >= 30 ? asde_t( ' (se muestran los 30 primeros: afina la búsqueda)' ) : ''; ?>
+				<?php echo count( $resultados ) >= 30 ? esc_html( asde_t( ' (se muestran los 30 primeros: afina la búsqueda)' ) ) : ''; ?>
 			</p>
 			<table class="asde-table">
 				<thead>
@@ -53,17 +53,17 @@ defined( 'ABSPATH' ) || exit;
 						$n = $numeros[ $p->num_socio_asde ] ?? array( 'numero' => null, 'estado' => 'falta' );
 						?>
 						<tr>
-							<td data-label="<?php echo asde_a( 'Nombre' ); ?>"><strong><?php echo esc_html( $p->nombre_completo() ); ?></strong></td>
-							<td data-label="<?php echo asde_a( 'Nº socio/a' ); ?>"><?php echo \AsdeBalears\AreaPrivada\Socios\Numeros::html( $p, $n ); // phpcs:ignore WordPress.Security.EscapeOutput ?></td>
-							<td data-label="<?php echo asde_a( 'Sección' ); ?>">
+							<td data-label="<?php echo esc_attr( asde_a( 'Nombre' ) ); ?>"><strong><?php echo esc_html( $p->nombre_completo() ); ?></strong></td>
+							<td data-label="<?php echo esc_attr( asde_a( 'Nº socio/a' ) ); ?>"><?php echo \AsdeBalears\AreaPrivada\Socios\Numeros::html( $p, $n ); // phpcs:ignore WordPress.Security.EscapeOutput ?></td>
+							<td data-label="<?php echo esc_attr( asde_a( 'Sección' ) ); ?>">
 								<?php
 								foreach ( $p->secciones as $s ) {
 									echo Secciones::badge( $s ); // phpcs:ignore WordPress.Security.EscapeOutput -- HTML escapado en badge().
 								}
 								?>
 							</td>
-							<td data-label="<?php echo asde_a( 'Edad' ); ?>"><?php echo null === $p->edad() ? '—' : esc_html( sprintf( asde_t( '%d años' ), $p->edad() ) ); ?></td>
-							<td data-label="<?php echo asde_a( 'Acceso web' ); ?>">
+							<td data-label="<?php echo esc_attr( asde_a( 'Edad' ) ); ?>"><?php echo null === $p->edad() ? '—' : esc_html( sprintf( asde_t( '%d años' ), $p->edad() ) ); ?></td>
+							<td data-label="<?php echo esc_attr( asde_a( 'Acceso web' ) ); ?>">
 								<?php if ( $u ) : ?>
 									<?php foreach ( Usuarios::roles_asde( $u ) as $rol ) : ?>
 										<span class="asde-badge asde-badge--rol"><?php echo esc_html( Roles::label( $rol ) ); ?></span>
@@ -77,7 +77,7 @@ defined( 'ABSPATH' ) || exit;
 								<?php endif; ?>
 							</td>
 							<td data-label="">
-								<a class="button" href="<?php echo esc_url( add_query_arg( 'socio', $p->num_socio_asde, $url ) ); ?>" data-asde-modal><?php echo $u ? asde_t( 'Gestionar acceso' ) : asde_t( 'Dar acceso' ); ?></a>
+								<a class="button" href="<?php echo esc_url( add_query_arg( 'socio', $p->num_socio_asde, $url ) ); ?>" data-asde-modal><?php echo $u ? esc_html( asde_t( 'Gestionar acceso' ) ) : esc_html( asde_t( 'Dar acceso' ) ); ?></a>
 							</td>
 						</tr>
 					<?php endforeach; ?>

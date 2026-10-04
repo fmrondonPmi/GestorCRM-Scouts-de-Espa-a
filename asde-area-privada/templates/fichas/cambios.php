@@ -32,7 +32,7 @@ $campos = CamposFicha::todos();
 	<?php endif; ?>
 
 	<?php if ( ! $filas ) : ?>
-		<p><?php echo 'pendientes' === $ver ? asde_t( 'No hay cambios pendientes de revisar. 🎉' ) : asde_t( 'Todavía no hay cambios resueltos.' ); ?></p>
+		<p><?php echo 'pendientes' === $ver ? esc_html( asde_t( 'No hay cambios pendientes de revisar. 🎉' ) ) : esc_html( asde_t( 'Todavía no hay cambios resueltos.' ) ); ?></p>
 	<?php else : ?>
 		<table class="asde-table">
 			<thead>
@@ -44,7 +44,7 @@ $campos = CamposFicha::todos();
 						<th scope="col"><?php asde_e( 'Ahora en el CRM' ); ?></th>
 					<?php endif; ?>
 					<th scope="col"><?php asde_e( 'Nuevo valor' ); ?></th>
-					<th scope="col"><?php echo 'pendientes' === $ver ? asde_t( 'Revisar' ) : asde_t( 'Resultado' ); ?></th>
+					<th scope="col"><?php echo 'pendientes' === $ver ? esc_html( asde_t( 'Revisar' ) ) : esc_html( asde_t( 'Resultado' ) ); ?></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -55,18 +55,18 @@ $campos = CamposFicha::todos();
 					$conflicto = 'pendientes' === $ver && ! Escritura::iguales( $c['actual'], $c['anterior'] );
 					?>
 					<tr>
-						<td data-label="<?php echo asde_a( 'Propuesto' ); ?>"><?php echo esc_html( wp_date( 'd/m/Y H:i', strtotime( $c['propuesto_en'] . ' UTC' ) ) ); ?><br><span class="asde-muted"><?php echo $autor ? esc_html( $autor->user_login ) : '—'; ?></span></td>
-						<td data-label="<?php echo asde_a( 'Persona' ); ?>"><a href="<?php echo esc_url( add_query_arg( 'socio', $c['socio'], $url_ficha ) ); ?>" data-asde-modal><?php echo esc_html( $c['persona']->nombre_completo() ); ?></a><?php echo \AsdeBalears\AreaPrivada\Socios\Numeros::compacto( $c['persona'] ); // phpcs:ignore WordPress.Security.EscapeOutput ?></td>
-						<td data-label="<?php echo asde_a( 'Dato' ); ?>"><?php echo esc_html( $campos[ $c['campo'] ][0] ?? $c['campo'] ); ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Propuesto' ) ); ?>"><?php echo esc_html( wp_date( 'd/m/Y H:i', strtotime( $c['propuesto_en'] . ' UTC' ) ) ); ?><br><span class="asde-muted"><?php echo $autor ? esc_html( $autor->user_login ) : '—'; ?></span></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Persona' ) ); ?>"><a href="<?php echo esc_url( add_query_arg( 'socio', $c['socio'], $url_ficha ) ); ?>" data-asde-modal><?php echo esc_html( $c['persona']->nombre_completo() ); ?></a><?php echo \AsdeBalears\AreaPrivada\Socios\Numeros::compacto( $c['persona'] ); // phpcs:ignore WordPress.Security.EscapeOutput ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Dato' ) ); ?>"><?php echo esc_html( $campos[ $c['campo'] ][0] ?? $c['campo'] ); ?></td>
 						<?php if ( 'pendientes' === $ver ) : ?>
-							<td data-label="<?php echo asde_a( 'Ahora en el CRM' ); ?>">
+							<td data-label="<?php echo esc_attr( asde_a( 'Ahora en el CRM' ) ); ?>">
 								<?php echo esc_html( FichaService::mostrar( $c['actual'], $m ) ); ?>
 								<?php if ( $conflicto ) : ?>
 									<br><span class="asde-help asde-help--warning"><?php asde_e( '⚠️ Ha cambiado desde la propuesta (entonces era «' ); ?><?php echo esc_html( FichaService::mostrar( $c['anterior'], $m ) ); ?>»).</span>
 								<?php endif; ?>
 							</td>
 						<?php endif; ?>
-						<td data-label="<?php echo asde_a( 'Nuevo valor' ); ?>"><strong><?php echo esc_html( FichaService::mostrar( $c['nuevo'], $m ) ); ?></strong></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Nuevo valor' ) ); ?>"><strong><?php echo esc_html( FichaService::mostrar( $c['nuevo'], $m ) ); ?></strong></td>
 						<td data-label="">
 							<?php if ( 'pendientes' !== $ver ) : ?>
 								<?php echo esc_html( asde_t( Cambios::ESTADOS[ $c['estado'] ] ?? $c['estado'] ) ); ?>
@@ -84,7 +84,7 @@ $campos = CamposFicha::todos();
 									<?php endif; ?>
 									<button type="submit" name="asde_action" value="aprobar" class="button" <?php disabled( ! $escritura ); ?>><?php asde_e( 'Aprobar' ); ?></button>
 									<label class="screen-reader-text" for="asde-motivo-<?php echo (int) $c['id']; ?>"><?php asde_e( 'Motivo del rechazo' ); ?></label>
-									<input type="text" id="asde-motivo-<?php echo (int) $c['id']; ?>" name="motivo" placeholder="<?php echo asde_a( 'Motivo (si lo rechazas)' ); ?>" maxlength="255">
+									<input type="text" id="asde-motivo-<?php echo (int) $c['id']; ?>" name="motivo" placeholder="<?php echo esc_attr( asde_a( 'Motivo (si lo rechazas)' ) ); ?>" maxlength="255">
 									<button type="submit" name="asde_action" value="rechazar" class="asde-btn-link asde-btn-danger"><?php asde_e( 'Rechazar' ); ?></button>
 								</form>
 							<?php endif; ?>

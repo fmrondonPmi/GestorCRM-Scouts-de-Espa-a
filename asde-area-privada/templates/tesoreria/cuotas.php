@@ -67,11 +67,11 @@ $ro     = $editable ? '' : ' disabled';
 				<?php for ( $h = 1; $h <= 5; $h++ ) : ?>
 					<?php $c = Config::cuota( $cfg, $h ); ?>
 					<tr>
-						<td data-label="<?php echo asde_a( 'Hijos' ); ?>"><?php echo (int) $h; ?></td>
-						<td data-label="<?php echo asde_a( 'Inscripción' ); ?>"><?php echo esc_html( Calculadora::euros( $c['inscripcion'] ) ); ?></td>
-						<td data-label="<?php echo asde_a( 'Seguro' ); ?>"><?php echo esc_html( Calculadora::euros( $c['seguro'] ) ); ?></td>
-						<td data-label="<?php echo asde_a( 'Anualidad' ); ?>"><?php echo esc_html( Calculadora::euros( $c['anualidad'] ) ); ?></td>
-						<td data-label="<?php echo asde_a( 'Total' ); ?>"><strong><?php echo esc_html( Calculadora::euros( $c['total'] ) ); ?></strong></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Hijos' ) ); ?>"><?php echo (int) $h; ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Inscripción' ) ); ?>"><?php echo esc_html( Calculadora::euros( $c['inscripcion'] ) ); ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Seguro' ) ); ?>"><?php echo esc_html( Calculadora::euros( $c['seguro'] ) ); ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Anualidad' ) ); ?>"><?php echo esc_html( Calculadora::euros( $c['anualidad'] ) ); ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Total' ) ); ?>"><strong><?php echo esc_html( Calculadora::euros( $c['total'] ) ); ?></strong></td>
 					</tr>
 				<?php endfor; ?>
 			</tbody>
@@ -85,7 +85,7 @@ $ro     = $editable ? '' : ' disabled';
 			<?php for ( $i = 0; $i < max( 4, count( $plazos ) + 1 ); $i++ ) : ?>
 				<?php $pl = $plazos[ $i ] ?? array( 'nombre' => '', 'fecha' => '', 'porcentaje' => '' ); ?>
 				<div class="asde-grid-3">
-					<p><label for="asde-pl-n-<?php echo (int) $i; ?>"><?php asde_e( 'Plazo' ); ?> <?php echo (int) ( $i + 1 ); ?></label><input type="text" id="asde-pl-n-<?php echo (int) $i; ?>" name="plazos[<?php echo (int) $i; ?>][nombre]" value="<?php echo esc_attr( $pl['nombre'] ); ?>" placeholder="<?php echo asde_a( 'p. ej. Primer plazo' ); ?>"<?php echo $ro; // phpcs:ignore WordPress.Security.EscapeOutput ?>></p>
+					<p><label for="asde-pl-n-<?php echo (int) $i; ?>"><?php asde_e( 'Plazo' ); ?> <?php echo (int) ( $i + 1 ); ?></label><input type="text" id="asde-pl-n-<?php echo (int) $i; ?>" name="plazos[<?php echo (int) $i; ?>][nombre]" value="<?php echo esc_attr( $pl['nombre'] ); ?>" placeholder="<?php echo esc_attr( asde_a( 'p. ej. Primer plazo' ) ); ?>"<?php echo $ro; // phpcs:ignore WordPress.Security.EscapeOutput ?>></p>
 					<p><label for="asde-pl-f-<?php echo (int) $i; ?>"><?php asde_e( 'Fecha límite' ); ?></label><input type="date" id="asde-pl-f-<?php echo (int) $i; ?>" name="plazos[<?php echo (int) $i; ?>][fecha]" value="<?php echo esc_attr( $pl['fecha'] ); ?>"<?php echo $ro; // phpcs:ignore WordPress.Security.EscapeOutput ?>></p>
 					<p><label for="asde-pl-p-<?php echo (int) $i; ?>"><?php asde_e( '% de la cuota' ); ?></label><input type="number" id="asde-pl-p-<?php echo (int) $i; ?>" name="plazos[<?php echo (int) $i; ?>][porcentaje]" step="0.01" min="0" max="100" value="<?php echo esc_attr( $pl['porcentaje'] ); ?>"<?php echo $ro; // phpcs:ignore WordPress.Security.EscapeOutput ?>></p>
 				</div>

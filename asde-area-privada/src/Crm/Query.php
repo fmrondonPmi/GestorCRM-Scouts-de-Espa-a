@@ -40,7 +40,7 @@ final class Query {
 
 	public static function id( string $id ): string {
 		if ( ! self::is_id( $id ) ) {
-			throw new \InvalidArgumentException( asde_t( 'Identificador de CRM no válido.' ) );
+			throw new \InvalidArgumentException( esc_html( asde_t( 'Identificador de CRM no válido.' ) ) );
 		}
 		return "'" . strtolower( $id ) . "'";
 	}
@@ -48,7 +48,7 @@ final class Query {
 	/** @param string[] $ids */
 	public static function ids( array $ids ): string {
 		if ( ! $ids ) {
-			throw new \InvalidArgumentException( asde_t( 'Lista de identificadores vacía.' ) );
+			throw new \InvalidArgumentException( esc_html( asde_t( 'Lista de identificadores vacía.' ) ) );
 		}
 		return '(' . implode( ',', array_map( array( self::class, 'id' ), array_values( array_unique( $ids ) ) ) ) . ')';
 	}
@@ -62,7 +62,7 @@ final class Query {
 	public static function enum_in( array $values, array $allowed ): string {
 		$values = array_values( array_intersect( $values, $allowed ) );
 		if ( ! $values ) {
-			throw new \InvalidArgumentException( asde_t( 'Ningún valor permitido.' ) );
+			throw new \InvalidArgumentException( esc_html( asde_t( 'Ningún valor permitido.' ) ) );
 		}
 		return '(' . implode( ',', array_map( array( self::class, 'str' ), $values ) ) . ')';
 	}

@@ -29,7 +29,7 @@ $imagen = static function ( string $campo, int $adjunto, string $alt ): string {
 		</p>
 		<p>
 			<label for="asde-uc-texto"><?php asde_e( 'Cómo pagar (lo ven las familias al pedir)' ); ?></label>
-			<textarea id="asde-uc-texto" name="texto_pago" rows="3" maxlength="600" placeholder="<?php echo asde_a( 'Por ejemplo: en efectivo en el local los sábados, o por ingreso en la cuenta ES00 0000… indicando el nº de pedido.' ); ?>"><?php echo esc_textarea( $cfg['texto_pago'] ); ?></textarea>
+			<textarea id="asde-uc-texto" name="texto_pago" rows="3" maxlength="600" placeholder="<?php echo esc_attr( asde_a( 'Por ejemplo: en efectivo en el local los sábados, o por ingreso en la cuenta ES00 0000… indicando el nº de pedido.' ) ); ?>"><?php echo esc_textarea( $cfg['texto_pago'] ); ?></textarea>
 		</p>
 	</section>
 
@@ -44,7 +44,7 @@ $imagen = static function ( string $campo, int $adjunto, string $alt ): string {
 				<p>
 					<label><?php asde_e( 'Tallas, separadas por comas' ); ?> <input type="text" name="modelo_tallas_<?php echo esc_attr( $id ); ?>" value="<?php echo esc_attr( implode( ', ', $m['tallas'] ) ); ?>" size="50"></label>
 				</p>
-				<p><?php asde_e( 'Guía de tallas (imagen con las medidas):' ); ?><br><?php echo $imagen( 'guia_' . $id, $m['guia'], asde_t( 'Guía de tallas: ' ) . $m['nombre'] ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+				<p><?php asde_e( 'Guía de tallas (imagen con las medidas):' ); ?><br><?php echo $imagen( 'guia_' . $id, $m['guia'], esc_html( asde_t( 'Guía de tallas: ' ) ) . $m['nombre'] ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
 			</fieldset>
 		<?php endforeach; ?>
 		<p>
@@ -61,8 +61,8 @@ $imagen = static function ( string $campo, int $adjunto, string $alt ): string {
 				<legend><?php echo esc_html( $i['nombre'] ); ?></legend>
 				<p class="asde-form__fila">
 					<label><?php asde_e( 'Nombre' ); ?> <input type="text" name="insignia_nombre_<?php echo esc_attr( $id ); ?>" value="<?php echo esc_attr( $i['nombre'] ); ?>" maxlength="80"></label>
-					<label><?php asde_e( 'Dónde va' ); ?> <input type="text" name="insignia_lugar_<?php echo esc_attr( $id ); ?>" value="<?php echo esc_attr( $i['lugar'] ); ?>" maxlength="60" placeholder="<?php echo asde_a( 'p. ej. Brazo derecho' ); ?>"></label>
-					<label><?php asde_e( 'Precio (€)' ); ?> <input type="text" name="insignia_precio_<?php echo esc_attr( $id ); ?>" value="<?php echo esc_attr( $euros( $i['precio'] ) ); ?>" inputmode="decimal" size="12" placeholder="<?php echo asde_a( 'por confirmar' ); ?>"></label>
+					<label><?php asde_e( 'Dónde va' ); ?> <input type="text" name="insignia_lugar_<?php echo esc_attr( $id ); ?>" value="<?php echo esc_attr( $i['lugar'] ); ?>" maxlength="60" placeholder="<?php echo esc_attr( asde_a( 'p. ej. Brazo derecho' ) ); ?>"></label>
+					<label><?php asde_e( 'Precio (€)' ); ?> <input type="text" name="insignia_precio_<?php echo esc_attr( $id ); ?>" value="<?php echo esc_attr( $euros( $i['precio'] ) ); ?>" inputmode="decimal" size="12" placeholder="<?php echo esc_attr( asde_a( 'por confirmar' ) ); ?>"></label>
 				</p>
 				<p><?php asde_e( 'Imagen:' ); ?><br><?php echo $imagen( 'insignia_imagen_' . $id, $i['imagen'], $i['nombre'] ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
 				<p>
@@ -77,12 +77,12 @@ $imagen = static function ( string $campo, int $adjunto, string $alt ): string {
 				<p class="asde-form__fila">
 					<label><?php asde_e( 'Nombre' ); ?> <input type="text" name="nueva_nombre_<?php echo (int) $n; ?>" maxlength="80"></label>
 					<label><?php asde_e( 'Dónde va' ); ?> <input type="text" name="nueva_lugar_<?php echo (int) $n; ?>" maxlength="60"></label>
-					<label><?php asde_e( 'Precio (€)' ); ?> <input type="text" name="nueva_precio_<?php echo (int) $n; ?>" inputmode="decimal" size="12" placeholder="<?php echo asde_a( 'por confirmar' ); ?>"></label>
+					<label><?php asde_e( 'Precio (€)' ); ?> <input type="text" name="nueva_precio_<?php echo (int) $n; ?>" inputmode="decimal" size="12" placeholder="<?php echo esc_attr( asde_a( 'por confirmar' ) ); ?>"></label>
 				</p>
 				<p><?php asde_e( 'Imagen:' ); ?><br><input type="file" name="nueva_imagen_<?php echo (int) $n; ?>" accept="image/png,image/jpeg,image/webp,image/gif"></p>
 			</fieldset>
 		<?php endfor; ?>
-		<p><?php asde_e( 'Guía de colocación («dónde va cada insignia»):' ); ?><br><?php echo $imagen( 'guia_insignias', $cfg['guia_insignias'], asde_t( 'Guía de colocación de las insignias' ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+		<p><?php asde_e( 'Guía de colocación («dónde va cada insignia»):' ); ?><br><?php echo $imagen( 'guia_insignias', $cfg['guia_insignias'], esc_html( asde_t( 'Guía de colocación de las insignias' ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
 	</section>
 
 	<p><button type="submit" class="button"><?php asde_e( 'Guardar' ); ?></button></p>

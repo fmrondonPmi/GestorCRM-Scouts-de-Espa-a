@@ -54,7 +54,7 @@ $columnas = array(
 	</form>
 
 	<?php if ( ! $filas ) : ?>
-		<p><?php asde_e( 'No hay emails registrados' ); ?><?php echo $estado || $usuario ? asde_t( ' con este filtro' ) : ''; ?>.</p>
+		<p><?php asde_e( 'No hay emails registrados' ); ?><?php echo $estado || $usuario ? esc_html( asde_t( ' con este filtro' ) ) : ''; ?>.</p>
 	<?php else : ?>
 		<table class="asde-table">
 			<thead>
@@ -69,21 +69,21 @@ $columnas = array(
 			<tbody>
 				<?php foreach ( $filas as $f ) : ?>
 					<tr>
-						<td data-label="<?php echo asde_a( 'Fecha' ); ?>"><?php echo esc_html( wp_date( 'd/m/Y H:i', strtotime( $f['creado'] . ' UTC' ) ) ); ?></td>
-						<td data-label="<?php echo asde_a( 'Usuario' ); ?>">
+						<td data-label="<?php echo esc_attr( asde_a( 'Fecha' ) ); ?>"><?php echo esc_html( wp_date( 'd/m/Y H:i', strtotime( $f['creado'] . ' UTC' ) ) ); ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Usuario' ) ); ?>">
 							<strong><?php echo '' !== $f['login'] ? esc_html( $f['login'] ) : '—'; ?></strong>
 							<?php if ( isset( $nombres[ (int) $f['user_id'] ] ) ) : ?>
 								<br><span class="asde-muted"><?php echo esc_html( $nombres[ (int) $f['user_id'] ] ); ?></span>
 							<?php endif; ?>
 						</td>
-						<td data-label="<?php echo asde_a( 'Tipo' ); ?>"><?php echo esc_html( asde_t( RegistroEmails::TIPOS[ $f['tipo'] ] ?? $f['tipo'] ) ); ?></td>
-						<td data-label="<?php echo asde_a( 'Estado' ); ?>">
+						<td data-label="<?php echo esc_attr( asde_a( 'Tipo' ) ); ?>"><?php echo esc_html( asde_t( RegistroEmails::TIPOS[ $f['tipo'] ] ?? $f['tipo'] ) ); ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Estado' ) ); ?>">
 							<span class="asde-badge asde-badge--email-<?php echo esc_attr( $f['estado'] ); ?>"><?php echo esc_html( asde_t( RegistroEmails::ESTADOS[ $f['estado'] ] ?? $f['estado'] ) ); ?></span>
 							<?php if ( '' !== $f['error'] ) : ?>
 								<br><span class="asde-help asde-help--warning"><?php echo esc_html( $f['error'] ); ?></span>
 							<?php endif; ?>
 						</td>
-						<td data-label="<?php echo asde_a( 'Enviado a' ); ?>"><?php echo '' !== $f['destino'] ? esc_html( $f['destino'] ) : '<span class="asde-muted">—</span>'; ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Enviado a' ) ); ?>"><?php echo '' !== $f['destino'] ? esc_html( $f['destino'] ) : '<span class="asde-muted">—</span>'; ?></td>
 						<td data-label=""><a href="<?php echo esc_url( add_query_arg( 'ver', (int) $f['id'], $url ) ); ?>"><?php asde_e( 'Ver email' ); ?></a></td>
 					</tr>
 				<?php endforeach; ?>

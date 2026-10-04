@@ -77,12 +77,12 @@ $columnas = array(
 				<?php foreach ( $lotes as $l ) : ?>
 					<?php $autor = get_userdata( (int) $l['importado_por'] ); ?>
 					<tr>
-						<td data-label="<?php echo asde_a( 'Fecha' ); ?>"><?php echo esc_html( wp_date( 'd/m/Y H:i', strtotime( $l['creado'] . ' UTC' ) ) ); ?></td>
-						<td data-label="<?php echo asde_a( 'Fichero' ); ?>"><?php echo esc_html( $l['fichero'] ); ?> <span class="asde-muted">(<?php echo 'n43' === $l['origen'] ? 'Norma 43' : 'CSV'; ?>)</span></td>
-						<td data-label="<?php echo asde_a( 'Cuenta' ); ?>"><?php echo esc_html( $l['cuentas'] ); ?></td>
-						<td data-label="<?php echo asde_a( 'Periodo' ); ?>"><?php echo $l['desde'] ? esc_html( wp_date( 'd/m/Y', strtotime( $l['desde'] . ' 12:00' ) ) . ' – ' . wp_date( 'd/m/Y', strtotime( $l['hasta'] . ' 12:00' ) ) ) : '—'; ?></td>
-						<td data-label="<?php echo asde_a( 'Movimientos' ); ?>"><?php echo (int) $l['nuevos']; ?> <?php asde_e( 'nuevos' ); ?><?php echo (int) $l['duplicados'] ? ' · ' . esc_html( sprintf( asde_t( '%d ya importados' ), (int) $l['duplicados'] ) ) : ''; ?></td>
-						<td data-label="<?php echo asde_a( 'Por' ); ?>"><?php echo $autor ? esc_html( $autor->user_login ) : '—'; ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Fecha' ) ); ?>"><?php echo esc_html( wp_date( 'd/m/Y H:i', strtotime( $l['creado'] . ' UTC' ) ) ); ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Fichero' ) ); ?>"><?php echo esc_html( $l['fichero'] ); ?> <span class="asde-muted">(<?php echo 'n43' === $l['origen'] ? 'Norma 43' : 'CSV'; ?>)</span></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Cuenta' ) ); ?>"><?php echo esc_html( $l['cuentas'] ); ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Periodo' ) ); ?>"><?php echo $l['desde'] ? esc_html( wp_date( 'd/m/Y', strtotime( $l['desde'] . ' 12:00' ) ) . ' – ' . wp_date( 'd/m/Y', strtotime( $l['hasta'] . ' 12:00' ) ) ) : '—'; ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Movimientos' ) ); ?>"><?php echo (int) $l['nuevos']; ?> <?php asde_e( 'nuevos' ); ?><?php echo (int) $l['duplicados'] ? ' · ' . esc_html( sprintf( asde_t( '%d ya importados' ), (int) $l['duplicados'] ) ) : ''; ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Por' ) ); ?>"><?php echo $autor ? esc_html( $autor->user_login ) : '—'; ?></td>
 					</tr>
 				<?php endforeach; ?>
 			</tbody>
@@ -111,18 +111,18 @@ $columnas = array(
 				<option value="<?php echo esc_attr( $k ); ?>" <?php selected( $filtros['estado'], $k ); ?>><?php echo esc_html( $label ); ?></option>
 			<?php endforeach; ?>
 		</select>
-		<select name="tipo" aria-label="<?php echo asde_a( 'Tipo' ); ?>" onchange="this.form.submit()">
+		<select name="tipo" aria-label="<?php echo esc_attr( asde_a( 'Tipo' ) ); ?>" onchange="this.form.submit()">
 			<option value=""><?php asde_e( 'Ingresos y gastos' ); ?></option>
 			<option value="ingresos" <?php selected( $filtros['tipo'], 'ingresos' ); ?>><?php asde_e( 'Solo ingresos' ); ?></option>
 			<option value="gastos" <?php selected( $filtros['tipo'], 'gastos' ); ?>><?php asde_e( 'Solo gastos' ); ?></option>
 		</select>
 		<label for="asde-banco-q" class="screen-reader-text"><?php asde_e( 'Buscar' ); ?></label>
-		<input type="search" id="asde-banco-q" name="q" value="<?php echo esc_attr( $filtros['q'] ); ?>" placeholder="<?php echo asde_a( 'Concepto, ordenante o referencia' ); ?>">
+		<input type="search" id="asde-banco-q" name="q" value="<?php echo esc_attr( $filtros['q'] ); ?>" placeholder="<?php echo esc_attr( asde_a( 'Concepto, ordenante o referencia' ) ); ?>">
 		<button type="submit" class="button"><?php asde_e( 'Filtrar' ); ?></button>
 	</form>
 
 	<?php if ( ! $movs ) : ?>
-		<p><?php echo $filtros['estado'] || $filtros['tipo'] || $filtros['q'] ? asde_t( 'No hay movimientos con este filtro.' ) : asde_t( 'Todavía no hay movimientos: importa el primer fichero del banco.' ); ?></p>
+		<p><?php echo $filtros['estado'] || $filtros['tipo'] || $filtros['q'] ? esc_html( asde_t( 'No hay movimientos con este filtro.' ) ) : esc_html( asde_t( 'Todavía no hay movimientos: importa el primer fichero del banco.' ) ); ?></p>
 	<?php else : ?>
 		<p class="asde-muted"><?php echo esc_html( sprintf( asde_n( '%d movimiento', '%d movimientos', $total ), $total ) ); ?></p>
 		<table class="asde-table asde-table--banco">
@@ -141,8 +141,8 @@ $columnas = array(
 					$sug     = $m['sugerencia'];
 					?>
 					<tr>
-						<td data-label="<?php echo asde_a( 'Fecha' ); ?>"><?php echo esc_html( wp_date( 'd/m/Y', strtotime( $m['fecha'] . ' 12:00' ) ) ); ?></td>
-						<td data-label="<?php echo asde_a( 'Concepto' ); ?>">
+						<td data-label="<?php echo esc_attr( asde_a( 'Fecha' ) ); ?>"><?php echo esc_html( wp_date( 'd/m/Y', strtotime( $m['fecha'] . ' 12:00' ) ) ); ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Concepto' ) ); ?>">
 							<?php if ( '' !== $m['ordenante'] ) : ?>
 								<strong><?php echo esc_html( $m['ordenante'] ); ?></strong><br>
 							<?php endif; ?>
@@ -151,11 +151,11 @@ $columnas = array(
 								<br><span class="asde-muted"><?php asde_e( 'Ref.:' ); ?> <?php echo esc_html( trim( $m['referencia1'] . ' ' . $m['referencia2'] ) ); ?></span>
 							<?php endif; ?>
 						</td>
-						<td data-label="<?php echo asde_a( 'Importe' ); ?>" class="asde-importe <?php echo $ingreso ? 'asde-importe--ingreso' : 'asde-importe--gasto'; ?>"><?php echo esc_html( ( $ingreso ? '+' : '' ) . Calculadora::euros( $m['importe'] ) ); ?></td>
-						<td data-label="<?php echo asde_a( 'Estado' ); ?>">
+						<td data-label="<?php echo esc_attr( asde_a( 'Importe' ) ); ?>" class="asde-importe <?php echo $ingreso ? 'asde-importe--ingreso' : 'asde-importe--gasto'; ?>"><?php echo esc_html( ( $ingreso ? '+' : '' ) . Calculadora::euros( $m['importe'] ) ); ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Estado' ) ); ?>">
 							<span class="asde-badge asde-badge--banco-<?php echo esc_attr( $m['estado'] ); ?>"><?php echo esc_html( asde_t( BancoTable::ESTADOS[ $m['estado'] ] ?? $m['estado'] ) ); ?></span>
 						</td>
-						<td data-label="<?php echo asde_a( 'Familia' ); ?>">
+						<td data-label="<?php echo esc_attr( asde_a( 'Familia' ) ); ?>">
 							<?php if ( BancoTable::CONCILIADO === $m['estado'] ) : ?>
 								<?php echo esc_html( $familias['etiquetas'][ (int) $m['familia_id'] ] ?? '—' ); ?>
 							<?php elseif ( BancoTable::PENDIENTE === $m['estado'] && $ingreso ) : ?>
@@ -168,7 +168,7 @@ $columnas = array(
 										<input type="hidden" name="asde_action" value="conciliar">
 										<input type="hidden" name="mov" value="<?php echo (int) $m['id']; ?>">
 										<label class="screen-reader-text" for="asde-fam-<?php echo (int) $m['id']; ?>"><?php asde_e( 'Familia' ); ?></label>
-										<select id="asde-fam-<?php echo (int) $m['id']; ?>" name="familia" required class="asde-combobox" data-min="3" data-placeholder="<?php echo asde_a( 'Familia: nº o apellido (3 letras)…' ); ?>">
+										<select id="asde-fam-<?php echo (int) $m['id']; ?>" name="familia" required class="asde-combobox" data-min="3" data-placeholder="<?php echo esc_attr( asde_a( 'Familia: nº o apellido (3 letras)…' ) ); ?>">
 											<option value=""><?php asde_e( 'Elige la familia…' ); ?></option>
 											<?php foreach ( $familias['etiquetas'] as $fid => $etiqueta ) : ?>
 												<option value="<?php echo (int) $fid; ?>" <?php selected( $sug ? (int) $sug['familia']['id'] : 0, (int) $fid ); ?>><?php echo esc_html( $etiqueta ); ?></option>
@@ -193,7 +193,7 @@ $columnas = array(
 										<?php wp_nonce_field( 'asde_banco_mov_' . (int) $m['id'] ); ?>
 										<input type="hidden" name="asde_action" value="ignorar">
 										<input type="hidden" name="mov" value="<?php echo (int) $m['id']; ?>">
-										<button type="submit" class="asde-btn-link"><?php echo $ingreso ? asde_t( 'No es una cuota' ) : asde_t( 'Marcar revisado' ); ?></button>
+										<button type="submit" class="asde-btn-link"><?php echo $ingreso ? esc_html( asde_t( 'No es una cuota' ) ) : esc_html( asde_t( 'Marcar revisado' ) ); ?></button>
 									</form>
 								<?php else : ?>
 									<form method="post" onsubmit="return confirm(<?php echo esc_attr( (string) wp_json_encode( asde_t( '¿Deshacer?' ) . ( BancoTable::CONCILIADO === $m['estado'] ? ' ' . asde_t( 'Se anulará el pago que se registró en la familia.' ) : '' ) ) ); ?>);">

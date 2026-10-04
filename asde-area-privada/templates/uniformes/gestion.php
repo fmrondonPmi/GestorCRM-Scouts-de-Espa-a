@@ -44,7 +44,7 @@ $singular = array(
 		<span class="asde-actions"><a href="<?php echo esc_url( $url_csv ); ?>"><?php asde_e( 'Descargar CSV' ); ?></a></span>
 	</header>
 	<p class="asde-muted">
-		<?php echo $global ? asde_t( 'Todos los pedidos del grupo.' ) : asde_t( 'Los pedidos de los socios de tus secciones, y los tuyos.' ); ?>
+		<?php echo $global ? esc_html( asde_t( 'Todos los pedidos del grupo.' ) ) : esc_html( asde_t( 'Los pedidos de los socios de tus secciones, y los tuyos.' ) ); ?>
 		<?php asde_e( 'Tesorería valida el pago, Coordinación los incluye en el pedido al proveedor, el grupo los entrega y el socio/a o su familia confirma que lo ha recibido.' ); ?>
 	</p>
 	<ul class="asde-resumen">
@@ -69,7 +69,7 @@ $singular = array(
 			<?php endforeach; ?>
 		</select>
 		<label for="asde-uni-q" class="screen-reader-text"><?php asde_e( 'Buscar' ); ?></label>
-		<input type="search" id="asde-uni-q" name="q" value="<?php echo esc_attr( $q ); ?>" placeholder="<?php echo asde_a( 'Nombre o nº de pedido' ); ?>">
+		<input type="search" id="asde-uni-q" name="q" value="<?php echo esc_attr( $q ); ?>" placeholder="<?php echo esc_attr( asde_a( 'Nombre o nº de pedido' ) ); ?>">
 		<button type="submit" class="button"><?php asde_e( 'Ver' ); ?></button>
 	</form>
 
@@ -108,14 +108,14 @@ $singular = array(
 						?>
 						<tr<?php echo $activo ? '' : ' class="asde-fila--cancelada"'; ?>>
 							<?php if ( $lote ) : ?>
-								<td data-label="<?php echo asde_a( 'Incluir' ); ?>">
+								<td data-label="<?php echo esc_attr( asde_a( 'Incluir' ) ); ?>">
 									<?php if ( $activo && null === $p['pedido_en'] && null === $p['entregado_en'] ) : ?>
 										<input type="checkbox" name="pedidos[]" value="<?php echo (int) $p['id']; ?>" aria-label="<?php echo esc_attr( sprintf( asde_t( 'Incluir %s en el pedido' ), PedidosTable::numero( $p ) ) ); ?>" <?php checked( null !== $p['pago_en'] ); ?>>
 									<?php endif; ?>
 								</td>
 							<?php endif; ?>
-							<td data-label="<?php echo asde_a( 'Pedido' ); ?>"><a href="<?php echo esc_url( $detalle ); ?>" data-asde-modal><?php echo esc_html( PedidosTable::numero( $p ) ); ?></a><br><span class="asde-muted"><?php echo esc_html( $fecha( $p['creado'] ) ); ?></span></td>
-							<td data-label="<?php echo asde_a( 'Socio/a' ); ?>">
+							<td data-label="<?php echo esc_attr( asde_a( 'Pedido' ) ); ?>"><a href="<?php echo esc_url( $detalle ); ?>" data-asde-modal><?php echo esc_html( PedidosTable::numero( $p ) ); ?></a><br><span class="asde-muted"><?php echo esc_html( $fecha( $p['creado'] ) ); ?></span></td>
+							<td data-label="<?php echo esc_attr( asde_a( 'Socio/a' ) ); ?>">
 								<?php echo esc_html( $persona ? $persona->nombre_completo() : 'Nº ' . $p['socio'] ); ?><?php echo $persona ? \AsdeBalears\AreaPrivada\Socios\Numeros::compacto( $persona ) : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?>
 								<?php
 								foreach ( $p['secciones'] as $s ) {
@@ -123,14 +123,14 @@ $singular = array(
 								}
 								?>
 							</td>
-							<td data-label="<?php echo asde_a( 'Qué' ); ?>"><?php echo esc_html( Servicio::descripcion( $p['lineas'] ) ); ?><?php echo '' !== $p['nota'] ? '<br><span class="asde-muted">' . esc_html( $p['nota'] ) . '</span>' : ''; ?></td>
-							<td data-label="<?php echo asde_a( 'Importe' ); ?>"><?php echo esc_html( null !== $p['pago_importe'] ? Calculadora::euros( $p['pago_importe'] ) : Servicio::importe( $p ) ); ?></td>
+							<td data-label="<?php echo esc_attr( asde_a( 'Qué' ) ); ?>"><?php echo esc_html( Servicio::descripcion( $p['lineas'] ) ); ?><?php echo '' !== $p['nota'] ? '<br><span class="asde-muted">' . esc_html( $p['nota'] ) . '</span>' : ''; ?></td>
+							<td data-label="<?php echo esc_attr( asde_a( 'Importe' ) ); ?>"><?php echo esc_html( null !== $p['pago_importe'] ? Calculadora::euros( $p['pago_importe'] ) : Servicio::importe( $p ) ); ?></td>
 							<?php if ( ! $activo ) : ?>
-								<td data-label="<?php echo asde_a( 'Estado' ); ?>" colspan="4"><span class="asde-badge asde-badge--uniforme-cancelado"><?php asde_e( 'Cancelado' ); ?></span> <span class="asde-muted"><?php echo esc_html( $p['cancelado_motivo'] ); ?></span></td>
+								<td data-label="<?php echo esc_attr( asde_a( 'Estado' ) ); ?>" colspan="4"><span class="asde-badge asde-badge--uniforme-cancelado"><?php asde_e( 'Cancelado' ); ?></span> <span class="asde-muted"><?php echo esc_html( $p['cancelado_motivo'] ); ?></span></td>
 							<?php else : ?>
-								<td data-label="<?php echo asde_a( 'Pagado' ); ?>"><?php echo $marca( null !== $p['pago_en'], null !== $p['pago_en'] ? ( asde_t( PedidosTable::METODOS[ $p['pago_metodo'] ] ?? '' ) ) . ' ' . $fecha( $p['pago_fecha'] ) : '' ); // phpcs:ignore WordPress.Security.EscapeOutput ?><?php echo null === $p['pago_en'] && Servicio::puede_pagar( $p ) ? ' <a href="' . esc_url( $detalle ) . '" data-asde-modal>Validar</a>' : ''; ?></td>
-								<td data-label="<?php echo asde_a( 'En el pedido' ); ?>"><?php echo $marca( null !== $p['pedido_en'], null !== $p['pedido_en'] ? $p['pedido_ref'] : '' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></td>
-								<td data-label="<?php echo asde_a( 'Entregado' ); ?>">
+								<td data-label="<?php echo esc_attr( asde_a( 'Pagado' ) ); ?>"><?php echo $marca( null !== $p['pago_en'], null !== $p['pago_en'] ? ( esc_html( asde_t( PedidosTable::METODOS[ $p['pago_metodo'] ] ?? '' ) ) ) . ' ' . $fecha( $p['pago_fecha'] ) : '' ); // phpcs:ignore WordPress.Security.EscapeOutput ?><?php echo null === $p['pago_en'] && Servicio::puede_pagar( $p ) ? ' <a href="' . esc_url( $detalle ) . '" data-asde-modal>Validar</a>' : ''; ?></td>
+								<td data-label="<?php echo esc_attr( asde_a( 'En el pedido' ) ); ?>"><?php echo $marca( null !== $p['pedido_en'], null !== $p['pedido_en'] ? $p['pedido_ref'] : '' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></td>
+								<td data-label="<?php echo esc_attr( asde_a( 'Entregado' ) ); ?>">
 									<?php if ( null !== $p['entregado_en'] ) : ?>
 										<?php echo $marca( true, $fecha( $p['entregado_en'] ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 									<?php elseif ( in_array( $p['id'], $entregar, true ) ) : ?>
@@ -139,7 +139,7 @@ $singular = array(
 										<span class="asde-muted">—</span>
 									<?php endif; ?>
 								</td>
-								<td data-label="<?php echo asde_a( 'Recibido' ); ?>"><?php echo null !== $p['recibido_en'] ? $marca( true, $fecha( $p['recibido_en'] ) ) : ( null !== $p['entregado_en'] ? '<span class="asde-muted">Sin confirmar</span>' : '<span class="asde-muted">—</span>' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></td>
+								<td data-label="<?php echo esc_attr( asde_a( 'Recibido' ) ); ?>"><?php echo null !== $p['recibido_en'] ? $marca( true, $fecha( $p['recibido_en'] ) ) : ( null !== $p['entregado_en'] ? '<span class="asde-muted">Sin confirmar</span>' : '<span class="asde-muted">—</span>' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></td>
 							<?php endif; ?>
 						</tr>
 					<?php endforeach; ?>

@@ -55,7 +55,7 @@ $fecha  = static fn( string $f ) => '' !== $f ? wp_date( 'd/m/Y', (int) strtotim
 		<div class="asde-actions">
 			<a class="button" href="<?php echo esc_url( add_query_arg( 'autorizacion', (int) $mandato['id'], $url ) ); ?>"><?php asde_e( 'Ver e imprimir la autorización' ); ?></a>
 			<?php if ( true === $puede ) : ?>
-				<form method="post" onsubmit="return confirm(<?php echo asde_js( '¿Anular la autorización? A partir de ahora no se cobrará nada por esta cuenta.' ); ?>);">
+				<form method="post" onsubmit="return confirm(<?php echo esc_attr( asde_js( '¿Anular la autorización? A partir de ahora no se cobrará nada por esta cuenta.' ) ); ?>);">
 					<?php wp_nonce_field( 'asde_sepa_anular_' . (int) $mandato['id'] ); ?>
 					<input type="hidden" name="asde_action" value="sepa_anular">
 					<input type="hidden" name="mandato" value="<?php echo (int) $mandato['id']; ?>">

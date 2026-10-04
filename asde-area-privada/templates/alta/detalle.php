@@ -71,7 +71,7 @@ if ( $solicitud && \AsdeBalears\AreaPrivada\Usuarios\Solicitudes::POR_ENLACE ===
 	</header>
 	<dl class="asde-datos">
 		<div>
-			<dt><?php echo Identidad::es_asde() ? asde_t( 'Nº socio/a Scouts de España (usuario)' ) : asde_t( 'Nº socio/a local (usuario)' ); ?></dt>
+			<dt><?php echo Identidad::es_asde() ? esc_html( asde_t( 'Nº socio/a Scouts de España (usuario)' ) ) : esc_html( asde_t( 'Nº socio/a local (usuario)' ) ); ?></dt>
 			<dd>
 				<?php echo Numeros::html( $p, $numero ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 				<?php // El aviso del problema ya lo da Numeros::html (⚠); aquí solo lo que se hace con él. ?>
@@ -180,7 +180,7 @@ if ( $solicitud && \AsdeBalears\AreaPrivada\Usuarios\Solicitudes::POR_ENLACE ===
 							<?php elseif ( null !== $motivo ) : ?>
 								<span class="asde-help"><?php echo esc_html( $motivo ); ?></span>
 							<?php elseif ( in_array( $rol, AltaService::ROLES_RESPONSABILIDAD, true ) ) : ?>
-								<span class="asde-help"><?php asde_e( 'Requiere también el rol de Scouter, o elegir «Voluntario sin sección».' ); ?><?php echo $sugerido ? asde_t( ' Sugerido por su cargo en el CRM.' ) : ''; ?></span>
+								<span class="asde-help"><?php asde_e( 'Requiere también el rol de Scouter, o elegir «Voluntario sin sección».' ); ?><?php echo $sugerido ? esc_html( asde_t( ' Sugerido por su cargo en el CRM.' ) ) : ''; ?></span>
 							<?php endif; ?>
 						</span>
 					</label>
@@ -220,7 +220,7 @@ if ( $solicitud && \AsdeBalears\AreaPrivada\Usuarios\Solicitudes::POR_ENLACE ===
 						<input type="hidden" name="solicitud" value="<?php echo (int) $solicitud['id']; ?>">
 						<label class="asde-choice">
 							<input type="radio" name="campo_email" value="solicitud" checked>
-							<span><?php echo esc_html( $solicitud['datos']['email'] ); ?> <span class="asde-help"><?php asde_e( 'el de su solicitud de acceso' ); ?><?php echo in_array( $solicitud['datos']['email'], $emails_persona, true ) ? '' : asde_t( ': se guardará también en la ficha del CRM' ); ?></span></span>
+							<span><?php echo esc_html( $solicitud['datos']['email'] ); ?> <span class="asde-help"><?php asde_e( 'el de su solicitud de acceso' ); ?><?php echo in_array( $solicitud['datos']['email'], $emails_persona, true ) ? '' : esc_html( asde_t( ': se guardará también en la ficha del CRM' ) ); ?></span></span>
 						</label>
 					<?php endif; ?>
 					<?php if ( ! $emails_persona && ! $solicitud ) : ?>
@@ -240,18 +240,18 @@ if ( $solicitud && \AsdeBalears\AreaPrivada\Usuarios\Solicitudes::POR_ENLACE ===
 						<?php endif; ?>
 						<p class="asde-help"><?php
 						if ( Identidad::es_asde() ) {
-							echo sprintf( asde_h( 'El usuario será su nº de socio/a de Scouts de España (<strong>%s</strong>); también podrá entrar con el email elegido, que se guarda cifrado en la web.' ), esc_html( $p->num_socio_asde ) ); // phpcs:ignore WordPress.Security.EscapeOutput
+							echo sprintf( wp_kses_post( asde_h( 'El usuario será su nº de socio/a de Scouts de España (<strong>%s</strong>); también podrá entrar con el email elegido, que se guarda cifrado en la web.' ) ), esc_html( $p->num_socio_asde ) ); // phpcs:ignore WordPress.Security.EscapeOutput
 						} elseif ( $numero['numero'] ) {
-							echo sprintf( asde_h( 'El usuario será su nº de socio/a (<strong>%s</strong>); también podrá entrar con el email elegido, que se guarda cifrado en la web.' ), esc_html( $numero['numero'] ) ); // phpcs:ignore WordPress.Security.EscapeOutput
+							echo sprintf( wp_kses_post( asde_h( 'El usuario será su nº de socio/a (<strong>%s</strong>); también podrá entrar con el email elegido, que se guarda cifrado en la web.' ) ), esc_html( $numero['numero'] ) ); // phpcs:ignore WordPress.Security.EscapeOutput
 						} else {
-							echo asde_h( 'El usuario será su nº de socio/a, que se generará automáticamente; también podrá entrar con el email elegido, que se guarda cifrado en la web.' ); // phpcs:ignore WordPress.Security.EscapeOutput
+							echo wp_kses_post( asde_h( 'El usuario será su nº de socio/a, que se generará automáticamente; también podrá entrar con el email elegido, que se guarda cifrado en la web.' ) ); // phpcs:ignore WordPress.Security.EscapeOutput
 						}
 						?></p>
 					<?php endif; ?>
 				</fieldset>
 			<?php endif; ?>
 
-			<p><button type="submit" class="button" <?php disabled( ! $vinculado && ! $emails_persona && ! $solicitud ); ?>><?php echo $vinculado ? asde_t( 'Guardar cambios' ) : asde_t( 'Dar acceso y enviar invitación' ); ?></button></p>
+			<p><button type="submit" class="button" <?php disabled( ! $vinculado && ! $emails_persona && ! $solicitud ); ?>><?php echo $vinculado ? esc_html( asde_t( 'Guardar cambios' ) ) : esc_html( asde_t( 'Dar acceso y enviar invitación' ) ); ?></button></p>
 		</form>
 		<?php if ( $vinculado && $solicitud ) : ?>
 			<?php // Si ya tiene el acceso que pide, no hay nada que cambiar: basta cerrar la solicitud. ?>
@@ -275,7 +275,7 @@ if ( $solicitud && \AsdeBalears\AreaPrivada\Usuarios\Solicitudes::POR_ENLACE ===
 	<?php else : ?>
 		<p>
 			<?php asde_e( 'La familia entra con el usuario' ); ?> <strong><?php echo esc_html( $usuario_familiar ?: asde_t( 'nº de socio/a del menor + T' ) ); ?></strong>
-			<?php echo $cuenta_familiar ? asde_t( '(cuenta ya existente: se le añadirán los participantes marcados).' ) : asde_t( '(nº de socio/a del menor + T) o con el email elegido. Si tiene hermanos en el grupo, una sola cuenta sirve para todos; el otro tutor/a puede tener la suya (nº + T2).' ); ?>
+			<?php echo $cuenta_familiar ? esc_html( asde_t( '(cuenta ya existente: se le añadirán los participantes marcados).' ) ) : esc_html( asde_t( '(nº de socio/a del menor + T) o con el email elegido. Si tiene hermanos en el grupo, una sola cuenta sirve para todos; el otro tutor/a puede tener la suya (nº + T2).' ) ); ?>
 		</p>
 		<form method="post" class="asde-form" data-asde-alta-tutor>
 			<?php wp_nonce_field( 'asde_alta_tutor_' . $p->num_socio_asde ); ?>
@@ -337,14 +337,14 @@ if ( $solicitud && \AsdeBalears\AreaPrivada\Usuarios\Solicitudes::POR_ENLACE ===
 				<input type="hidden" name="campo_email" value="<?php echo esc_attr( Usuarios::email_origen( $cuenta_familiar->ID )['campo'] ?? 'email1' ); ?>">
 			<?php endif; ?>
 
-			<p><button type="submit" class="button" <?php disabled( ! $cuenta_familiar && ! $emails_familia ); ?>><?php echo $cuenta_familiar ? asde_t( 'Añadir a la cuenta familiar' ) : asde_t( 'Crear cuenta familiar y enviar invitación' ); ?></button></p>
+			<p><button type="submit" class="button" <?php disabled( ! $cuenta_familiar && ! $emails_familia ); ?>><?php echo $cuenta_familiar ? esc_html( asde_t( 'Añadir a la cuenta familiar' ) ) : esc_html( asde_t( 'Crear cuenta familiar y enviar invitación' ) ); ?></button></p>
 		</form>
 
 		<?php if ( $cuenta_familiar ) : ?>
 			<hr>
 			<h4><?php asde_e( 'Otro tutor/a con su propia cuenta' ); ?></h4>
 			<?php if ( count( $cuentas_familiares ) >= Usuarios::MAX_CUENTAS_FAMILIARES ) : ?>
-				<p><?php asde_e( 'Esta familia ya tiene las dos cuentas de tutor/a:' ); ?> <?php echo implode( ' ' . asde_t( 'y' ) . ' ', array_map( static fn( $c ) => '<strong>' . esc_html( $c->user_login ) . '</strong>', $cuentas_familiares ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?><?php asde_e( '. Cada una entra con su propio email y ve a los mismos participantes.' ); ?></p>
+				<p><?php asde_e( 'Esta familia ya tiene las dos cuentas de tutor/a:' ); ?> <?php echo implode( ' ' . esc_html( asde_t( 'y' ) ) . ' ', array_map( static fn( $c ) => '<strong>' . esc_html( $c->user_login ) . '</strong>', $cuentas_familiares ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?><?php asde_e( '. Cada una entra con su propio email y ve a los mismos participantes.' ); ?></p>
 			<?php else : ?>
 				<p>
 					<?php asde_e( 'Si el otro tutor/a (madre, padre…) quiere entrar con su propio email y su propia contraseña, se le crea una segunda cuenta (' ); ?><strong><?php echo esc_html( \AsdeBalears\AreaPrivada\Domain\NumeroSocio::usuario_tutor( \AsdeBalears\AreaPrivada\Domain\Identidad::convertir( (string) \AsdeBalears\AreaPrivada\Domain\NumeroSocio::socio_de_usuario_tutor( $cuenta_familiar->user_login ) ), 2 ) ); ?></strong><?php asde_e( ') que ve a los mismos participantes y comparte la familia de Tesorería.' ); ?>

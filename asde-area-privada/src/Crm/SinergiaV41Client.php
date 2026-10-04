@@ -67,6 +67,7 @@ final class SinergiaV41Client implements CrmClientInterface, EscritorCrm {
 
 			if ( empty( $login['id'] ) ) {
 				return ConnectionResult::fail(
+					/* translators: %s: motivo que da el CRM al rechazar el inicio de sesión */
 					sprintf( __( 'El CRM ha rechazado el inicio de sesión: %s', 'asde-area-privada' ), $this->error_text( $login ) ),
 					array( 'Endpoint: ' . $endpoint )
 				);
@@ -278,7 +279,7 @@ final class SinergiaV41Client implements CrmClientInterface, EscritorCrm {
 			)
 		);
 		if ( ( $data['id'] ?? '' ) !== $id ) {
-			throw new CrmException( __( 'El CRM no ha confirmado el cambio.', 'asde-area-privada' ) );
+			throw new CrmException( esc_html( __( 'El CRM no ha confirmado el cambio.', 'asde-area-privada' ) ) );
 		}
 		return $id;
 	}
@@ -297,7 +298,7 @@ final class SinergiaV41Client implements CrmClientInterface, EscritorCrm {
 		$data    = $this->post( (string) $this->endpoint, $method, array( 'session' => $session ) + $args );
 
 		if ( is_wp_error( $data ) ) {
-			throw new CrmException( $data->get_error_message() );
+			throw new CrmException( esc_html( $data->get_error_message() ) );
 		}
 
 		if ( isset( $data['number'], $data['name'] ) && ! isset( $data['entry_list'] ) ) {
@@ -305,7 +306,7 @@ final class SinergiaV41Client implements CrmClientInterface, EscritorCrm {
 				$this->forget_session();
 				return $this->call( $method, $args, false );
 			}
-			throw new CrmException( sprintf( 'CRM (%s): %s', $method, $this->error_text( $data ) ) );
+			throw new CrmException( esc_html( sprintf( 'CRM (%s): %s', $method, $this->error_text( $data ) ) ) );
 		}
 
 		$this->renovar_sesion();
@@ -335,10 +336,11 @@ final class SinergiaV41Client implements CrmClientInterface, EscritorCrm {
 				if ( 'asde_crm_not_api' === $login->get_error_code() ) {
 					continue;
 				}
-				throw new CrmException( $login->get_error_message() );
+				throw new CrmException( esc_html( $login->get_error_message() ) );
 			}
 			if ( empty( $login['id'] ) ) {
-				throw new CrmException( sprintf( __( 'El CRM ha rechazado el inicio de sesión: %s', 'asde-area-privada' ), $this->error_text( $login ) ) );
+				/* translators: %s: motivo que da el CRM al rechazar el inicio de sesión */
+				throw new CrmException( esc_html( sprintf( __( 'El CRM ha rechazado el inicio de sesión: %s', 'asde-area-privada' ), $this->error_text( $login ) ) ) );
 			}
 			$this->session  = (string) $login['id'];
 			$this->endpoint = $endpoint;
@@ -346,7 +348,7 @@ final class SinergiaV41Client implements CrmClientInterface, EscritorCrm {
 			return $this->session;
 		}
 
-		throw new CrmException( __( 'No se ha encontrado la API de SinergiaCRM en la URL configurada.', 'asde-area-privada' ) );
+		throw new CrmException( esc_html( __( 'No se ha encontrado la API de SinergiaCRM en la URL configurada.', 'asde-area-privada' ) ) );
 	}
 
 	/** La sesión da acceso al CRM: se cachea cifrada y por poco tiempo. */
@@ -442,6 +444,7 @@ final class SinergiaV41Client implements CrmClientInterface, EscritorCrm {
 		);
 
 		if ( is_wp_error( $response ) ) {
+			/* translators: %s: mensaje de error de la conexión HTTP */
 			return new \WP_Error( 'asde_crm_http', sprintf( __( 'No se puede conectar con el CRM: %s', 'asde-area-privada' ), $response->get_error_message() ) );
 		}
 
@@ -450,6 +453,7 @@ final class SinergiaV41Client implements CrmClientInterface, EscritorCrm {
 
 		// No se registra el cuerpo de la respuesta: podría contener datos personales.
 		if ( 200 !== $code || ! is_array( $data ) ) {
+			/* translators: 1: dirección de la API del CRM, 2: código HTTP de la respuesta */
 			return new \WP_Error( 'asde_crm_not_api', sprintf( __( '%1$s respondió HTTP %2$d sin una respuesta válida de la API.', 'asde-area-privada' ), $endpoint, $code ) );
 		}
 		return $data;

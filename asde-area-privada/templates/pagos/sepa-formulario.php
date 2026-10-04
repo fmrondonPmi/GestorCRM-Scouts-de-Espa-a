@@ -14,39 +14,39 @@ $fid = (int) $familia['id'];
 <form method="post" class="asde-form" autocomplete="on">
 	<?php wp_nonce_field( 'asde_sepa_firmar_' . $fid ); ?>
 	<input type="hidden" name="asde_action" value="sepa_firmar">
-	<input type="hidden" name="familia" value="<?php echo $fid; ?>">
+	<input type="hidden" name="familia" value="<?php echo absint( $fid ); ?>">
 
 	<fieldset>
 		<legend><?php asde_e( 'Datos del deudor (titular de la cuenta)' ); ?></legend>
 		<p>
-			<label for="asde-sepa-titular-<?php echo $fid; ?>"><?php asde_e( 'Nombre y apellidos del titular' ); ?></label>
-			<input type="text" id="asde-sepa-titular-<?php echo $fid; ?>" name="titular" maxlength="70" required autocomplete="name" value="<?php echo esc_attr( $campo( 'titular' ) ); ?>">
+			<label for="asde-sepa-titular-<?php echo absint( $fid ); ?>"><?php asde_e( 'Nombre y apellidos del titular' ); ?></label>
+			<input type="text" id="asde-sepa-titular-<?php echo absint( $fid ); ?>" name="titular" maxlength="70" required autocomplete="name" value="<?php echo esc_attr( $campo( 'titular' ) ); ?>">
 		</p>
 		<p>
-			<label for="asde-sepa-iban-<?php echo $fid; ?>"><?php asde_e( 'IBAN de la cuenta' ); ?></label>
-			<input type="text" id="asde-sepa-iban-<?php echo $fid; ?>" name="iban" maxlength="40" required inputmode="text" autocapitalize="characters" spellcheck="false" placeholder="<?php echo asde_a( 'ES00 0000 0000 0000 0000 0000' ); ?>" value="<?php echo esc_attr( $campo( 'iban' ) ); ?>">
+			<label for="asde-sepa-iban-<?php echo absint( $fid ); ?>"><?php asde_e( 'IBAN de la cuenta' ); ?></label>
+			<input type="text" id="asde-sepa-iban-<?php echo absint( $fid ); ?>" name="iban" maxlength="40" required inputmode="text" autocapitalize="characters" spellcheck="false" placeholder="<?php echo esc_attr( asde_a( 'ES00 0000 0000 0000 0000 0000' ) ); ?>" value="<?php echo esc_attr( $campo( 'iban' ) ); ?>">
 			<span class="asde-help"><?php asde_e( 'Cuenta de una entidad de la zona SEPA. Se guarda cifrada y solo se enseña enmascarada.' ); ?></span>
 		</p>
 		<p>
-			<label for="asde-sepa-calle-<?php echo $fid; ?>"><?php asde_e( 'Dirección (calle y número)' ); ?></label>
-			<input type="text" id="asde-sepa-calle-<?php echo $fid; ?>" name="calle" maxlength="70" required autocomplete="street-address" value="<?php echo esc_attr( $campo( 'calle' ) ); ?>">
+			<label for="asde-sepa-calle-<?php echo absint( $fid ); ?>"><?php asde_e( 'Dirección (calle y número)' ); ?></label>
+			<input type="text" id="asde-sepa-calle-<?php echo absint( $fid ); ?>" name="calle" maxlength="70" required autocomplete="street-address" value="<?php echo esc_attr( $campo( 'calle' ) ); ?>">
 		</p>
 		<div class="asde-grid-2">
 			<p>
-				<label for="asde-sepa-cp-<?php echo $fid; ?>"><?php asde_e( 'Código postal' ); ?></label>
-				<input type="text" id="asde-sepa-cp-<?php echo $fid; ?>" name="cp" maxlength="10" required autocomplete="postal-code" value="<?php echo esc_attr( $campo( 'cp' ) ); ?>">
+				<label for="asde-sepa-cp-<?php echo absint( $fid ); ?>"><?php asde_e( 'Código postal' ); ?></label>
+				<input type="text" id="asde-sepa-cp-<?php echo absint( $fid ); ?>" name="cp" maxlength="10" required autocomplete="postal-code" value="<?php echo esc_attr( $campo( 'cp' ) ); ?>">
 			</p>
 			<p>
-				<label for="asde-sepa-poblacion-<?php echo $fid; ?>"><?php asde_e( 'Población' ); ?></label>
-				<input type="text" id="asde-sepa-poblacion-<?php echo $fid; ?>" name="poblacion" maxlength="50" required autocomplete="address-level2" value="<?php echo esc_attr( $campo( 'poblacion' ) ); ?>">
+				<label for="asde-sepa-poblacion-<?php echo absint( $fid ); ?>"><?php asde_e( 'Población' ); ?></label>
+				<input type="text" id="asde-sepa-poblacion-<?php echo absint( $fid ); ?>" name="poblacion" maxlength="50" required autocomplete="address-level2" value="<?php echo esc_attr( $campo( 'poblacion' ) ); ?>">
 			</p>
 			<p>
-				<label for="asde-sepa-provincia-<?php echo $fid; ?>"><?php asde_e( 'Provincia' ); ?></label>
-				<input type="text" id="asde-sepa-provincia-<?php echo $fid; ?>" name="provincia" maxlength="40" autocomplete="address-level1" value="<?php echo esc_attr( $campo( 'provincia', asde_t( 'Illes Balears' ) ) ); ?>">
+				<label for="asde-sepa-provincia-<?php echo absint( $fid ); ?>"><?php asde_e( 'Provincia' ); ?></label>
+				<input type="text" id="asde-sepa-provincia-<?php echo absint( $fid ); ?>" name="provincia" maxlength="40" autocomplete="address-level1" value="<?php echo esc_attr( $campo( 'provincia', asde_t( 'Illes Balears' ) ) ); ?>">
 			</p>
 			<p>
-				<label for="asde-sepa-pais-<?php echo $fid; ?>"><?php asde_e( 'País' ); ?></label>
-				<input type="text" id="asde-sepa-pais-<?php echo $fid; ?>" name="pais" maxlength="40" autocomplete="country-name" value="<?php echo esc_attr( $campo( 'pais', 'España' ) ); ?>">
+				<label for="asde-sepa-pais-<?php echo absint( $fid ); ?>"><?php asde_e( 'País' ); ?></label>
+				<input type="text" id="asde-sepa-pais-<?php echo absint( $fid ); ?>" name="pais" maxlength="40" autocomplete="country-name" value="<?php echo esc_attr( $campo( 'pais', 'España' ) ); ?>">
 			</p>
 		</div>
 	</fieldset>

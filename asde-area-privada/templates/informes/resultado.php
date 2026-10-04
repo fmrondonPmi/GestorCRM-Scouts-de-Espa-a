@@ -23,7 +23,7 @@ $f = $informe->filtros;
 		<p class="asde-actions asde-no-print">
 			<a class="button" href="<?php echo esc_url( $url_csv ); ?>"><?php asde_e( 'Descargar CSV' ); ?></a>
 			<button type="button" class="button asde-button-secundario" onclick="window.print()"><?php asde_e( 'Imprimir' ); ?></button>
-			<a class="button asde-button-secundario" href="<?php echo esc_url( $url_edit ); ?>"><?php echo $informe->id ? asde_t( 'Editar' ) : asde_t( 'Editar / guardar' ); ?></a>
+			<a class="button asde-button-secundario" href="<?php echo esc_url( $url_edit ); ?>"><?php echo $informe->id ? esc_html( asde_t( 'Editar' ) ) : esc_html( asde_t( 'Editar / guardar' ) ); ?></a>
 		</p>
 	</header>
 	<p class="asde-muted">
@@ -33,12 +33,12 @@ $f = $informe->filtros;
 		if ( $res['secciones'] ) {
 			echo esc_html( implode( ', ', array_map( array( Secciones::class, 'nombre' ), $res['secciones'] ) ) );
 		} else {
-			echo asde_t( 'todo el grupo' );
+			echo esc_html( asde_t( 'todo el grupo' ) );
 		}
 		?>
 		<?php echo null !== $f['edad_min'] ? esc_html( ' · ' . sprintf( asde_t( 'desde %d años' ), $f['edad_min'] ) ) : ''; ?>
 		<?php echo null !== $f['edad_max'] ? esc_html( ' · ' . sprintf( asde_t( 'hasta %d años' ), $f['edad_max'] ) ) : ''; ?>
-		<?php echo $f['salud'] ? asde_t( ' · solo con datos de salud relevantes' ) : ''; ?>
+		<?php echo $f['salud'] ? esc_html( asde_t( ' · solo con datos de salud relevantes' ) ) : ''; ?>
 		· <?php echo esc_html( wp_date( 'd/m/Y H:i' ) ); ?>
 	</p>
 	<?php foreach ( $res['avisos'] as $aviso ) : ?>

@@ -28,7 +28,7 @@ $org        = Organizacion::nombre();
 <section class="asde-card">
 	<h2><?php asde_e( 'Coste federativo ·' ); ?> <?php echo esc_html( $ronda ); ?></h2>
 	<p>
-		<?php asde_e( 'Lo que el grupo paga a' ); ?> <?php echo esc_html( '' !== $org ? $org : asde_t( 'su organización federada' ) ); ?> <?php asde_e( 'por' ); ?> <strong><?php asde_e( 'todos' ); ?></strong> <?php asde_e( 'sus asociados activos (niños, jóvenes, scouters y voluntariado): cuota asociativa + seguro' ); ?><?php echo $fed['conceptos'] ? asde_t( ' + otros conceptos' ) : ''; ?><?php asde_e( '. Cada ronda empieza con los importes de la organización; aquí se pueden ajustar para el grupo.' ); ?>
+		<?php asde_e( 'Lo que el grupo paga a' ); ?> <?php echo esc_html( '' !== $org ? $org : asde_t( 'su organización federada' ) ); ?> <?php asde_e( 'por' ); ?> <strong><?php asde_e( 'todos' ); ?></strong> <?php asde_e( 'sus asociados activos (niños, jóvenes, scouters y voluntariado): cuota asociativa + seguro' ); ?><?php echo $fed['conceptos'] ? esc_html( asde_t( ' + otros conceptos' ) ) : ''; ?><?php asde_e( '. Cada ronda empieza con los importes de la organización; aquí se pueden ajustar para el grupo.' ); ?>
 	</p>
 	<?php if ( $error ) : ?>
 		<div class="asde-notice asde-notice--error" role="alert"><?php echo esc_html( $error ); ?></div>
@@ -44,10 +44,10 @@ $org        = Organizacion::nombre();
 				<?php foreach ( $categorias as $cat => $label ) : ?>
 					<?php $c = $coste['categorias'][ $cat ]; ?>
 					<tr>
-						<td data-label="<?php echo asde_a( 'Categoría' ); ?>"><?php echo esc_html( $label ); ?></td>
-						<td data-label="<?php echo asde_a( 'Asociados' ); ?>"><?php echo (int) $c['n']; ?></td>
-						<td data-label="<?php echo asde_a( 'Prima' ); ?>"><?php echo esc_html( $n( $c['prima'] ) ); ?></td>
-						<td data-label="<?php echo asde_a( 'Importe' ); ?>"><?php echo esc_html( $e( $c['importe'] ) ); ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Categoría' ) ); ?>"><?php echo esc_html( $label ); ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Asociados' ) ); ?>"><?php echo (int) $c['n']; ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Prima' ) ); ?>"><?php echo esc_html( $n( $c['prima'] ) ); ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Importe' ) ); ?>"><?php echo esc_html( $e( $c['importe'] ) ); ?></td>
 					</tr>
 				<?php endforeach; ?>
 				<tr class="asde-total"><th scope="row"><?php asde_e( 'Seguro según tabla' ); ?></th><td><?php echo (int) $coste['total_socios']; ?></td><td></td><td><?php echo esc_html( $e( $coste['seguro_tabla'] ) ); ?></td></tr>
@@ -60,9 +60,9 @@ $org        = Organizacion::nombre();
 				<tbody>
 					<?php foreach ( $coste['conceptos'] as $c ) : ?>
 						<tr>
-							<td data-label="<?php echo asde_a( 'Concepto' ); ?>"><?php echo esc_html( $c['nombre'] ); ?></td>
-							<td data-label="<?php echo asde_a( 'Se aplica a' ); ?>"><?php echo esc_html( 'grupo' === $c['aplica'] ? asde_t( 'Una vez por grupo' ) : sprintf( '%s × %d', $n( $c['unidad'] ), $c['n'] ) . ' (' . mb_strtolower( Organizacion::APLICA[ $c['aplica'] ] ?? '' ) . ')' ); ?></td>
-							<td data-label="<?php echo asde_a( 'Importe' ); ?>"><?php echo esc_html( $e( $c['importe'] ) ); ?></td>
+							<td data-label="<?php echo esc_attr( asde_a( 'Concepto' ) ); ?>"><?php echo esc_html( $c['nombre'] ); ?></td>
+							<td data-label="<?php echo esc_attr( asde_a( 'Se aplica a' ) ); ?>"><?php echo esc_html( 'grupo' === $c['aplica'] ? asde_t( 'Una vez por grupo' ) : sprintf( '%s × %d', $n( $c['unidad'] ), $c['n'] ) . ' (' . mb_strtolower( Organizacion::APLICA[ $c['aplica'] ] ?? '' ) . ')' ); ?></td>
+							<td data-label="<?php echo esc_attr( asde_a( 'Importe' ) ); ?>"><?php echo esc_html( $e( $c['importe'] ) ); ?></td>
 						</tr>
 					<?php endforeach; ?>
 					<tr class="asde-total"><th scope="row" colspan="2"><?php asde_e( 'Total de otros conceptos' ); ?></th><td><?php echo esc_html( $e( $coste['total_conceptos'] ) ); ?></td></tr>
@@ -119,7 +119,8 @@ $org        = Organizacion::nombre();
 			<legend><?php asde_e( 'Otros conceptos' ); ?></legend>
 			<p class="asde-help"><?php asde_e( 'Cualquier otro importe que cobre la organización: por asociado, por educando, por adulto o fijo por grupo (p. ej. una cuota de actividades federales o una aportación del grupo).' ); ?></p>
 			<?php
-			echo TemplateLoader::render( // phpcs:ignore WordPress.Security.EscapeOutput
+			// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- plantilla propia del plugin: cada valor se escapa dentro de ella.
+			echo TemplateLoader::render(
 				'comun/conceptos',
 				array(
 					'conceptos' => $fed['conceptos'],
@@ -127,6 +128,7 @@ $org        = Organizacion::nombre();
 					'editable'  => $editable,
 				)
 			);
+			// phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
 			?>
 		</fieldset>
 		<?php if ( $editable ) : ?>

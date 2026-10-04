@@ -32,7 +32,7 @@ $columnas = array(
 	<p class="asde-muted">
 		<?php asde_e( 'Formato:' ); ?> <strong><?php echo $es_csv ? 'CSV' : 'Norma 43'; ?></strong> <?php asde_e( '· Juego de caracteres:' ); ?> <?php echo esc_html( $lectura['codificacion'] ); ?>
 		<?php if ( ! $es_csv && ! empty( $lectura['cuentas'][0]['modalidad'] ) ) : ?>
-			<?php asde_e( '· Modalidad' ); ?> <?php echo esc_html( $lectura['cuentas'][0]['modalidad'] ); ?><?php echo '3' === $lectura['cuentas'][0]['modalidad'] ? asde_t( ' (con ordenante y concepto SEPA)' ) : ''; ?>
+			<?php asde_e( '· Modalidad' ); ?> <?php echo esc_html( $lectura['cuentas'][0]['modalidad'] ); ?><?php echo '3' === $lectura['cuentas'][0]['modalidad'] ? esc_html( asde_t( ' (con ordenante y concepto SEPA)' ) ) : ''; ?>
 		<?php endif; ?>
 	</p>
 
@@ -55,13 +55,13 @@ $columnas = array(
 			<tbody>
 				<?php foreach ( $lectura['cuentas'] as $c ) : ?>
 					<tr>
-						<td data-label="<?php echo asde_a( 'Cuenta' ); ?>"><?php echo esc_html( $c['cuenta'] ); ?></td>
-						<td data-label="<?php echo asde_a( 'Periodo' ); ?>"><?php echo esc_html( $fecha( $c['desde'] ) . ' – ' . $fecha( $c['hasta'] ) ); ?></td>
-						<td data-label="<?php echo asde_a( 'Saldo inicial' ); ?>"><?php echo null !== $c['saldo_inicial'] ? esc_html( Calculadora::euros( $c['saldo_inicial'] ) ) : '—'; ?></td>
-						<td data-label="<?php echo asde_a( 'Abonos' ); ?>">+<?php echo esc_html( Calculadora::euros( $c['abonos'] ) ); ?></td>
-						<td data-label="<?php echo asde_a( 'Cargos' ); ?>">−<?php echo esc_html( Calculadora::euros( $c['cargos'] ) ); ?></td>
-						<td data-label="<?php echo asde_a( 'Saldo final' ); ?>"><?php echo null !== $c['saldo_final'] ? esc_html( Calculadora::euros( $c['saldo_final'] ) ) : '—'; ?></td>
-						<td data-label="<?php echo asde_a( 'Movimientos' ); ?>"><?php echo (int) $c['movimientos']; ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Cuenta' ) ); ?>"><?php echo esc_html( $c['cuenta'] ); ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Periodo' ) ); ?>"><?php echo esc_html( $fecha( $c['desde'] ) . ' – ' . $fecha( $c['hasta'] ) ); ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Saldo inicial' ) ); ?>"><?php echo null !== $c['saldo_inicial'] ? esc_html( Calculadora::euros( $c['saldo_inicial'] ) ) : '—'; ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Abonos' ) ); ?>">+<?php echo esc_html( Calculadora::euros( $c['abonos'] ) ); ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Cargos' ) ); ?>">−<?php echo esc_html( Calculadora::euros( $c['cargos'] ) ); ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Saldo final' ) ); ?>"><?php echo null !== $c['saldo_final'] ? esc_html( Calculadora::euros( $c['saldo_final'] ) ) : '—'; ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Movimientos' ) ); ?>"><?php echo (int) $c['movimientos']; ?></td>
 					</tr>
 				<?php endforeach; ?>
 			</tbody>
@@ -75,7 +75,7 @@ $columnas = array(
 <?php if ( $es_csv && $lectura['columnas'] ) : ?>
 	<section class="asde-card">
 		<details <?php echo $lectura['necesita_mapeo'] ? 'open' : ''; ?>>
-			<summary><strong><?php asde_e( 'Columnas del CSV' ); ?></strong> <?php echo $lectura['necesita_mapeo'] ? asde_t( '(elige a qué corresponde cada una)' ) : asde_t( '(reconocidas automáticamente; puedes cambiarlas)' ); ?></summary>
+			<summary><strong><?php asde_e( 'Columnas del CSV' ); ?></strong> <?php echo $lectura['necesita_mapeo'] ? esc_html( asde_t( '(elige a qué corresponde cada una)' ) ) : esc_html( asde_t( '(reconocidas automáticamente; puedes cambiarlas)' ) ); ?></summary>
 			<form method="post" class="asde-form">
 				<?php wp_nonce_field( 'asde_banco_previa' ); ?>
 				<input type="hidden" name="asde_action" value="mapear">
@@ -117,15 +117,15 @@ $columnas = array(
 			<tbody>
 				<?php foreach ( $movs as $m ) : ?>
 					<tr>
-						<td data-label="<?php echo asde_a( 'Fecha' ); ?>"><?php echo esc_html( $fecha( $m['fecha'] ) ); ?></td>
-						<td data-label="<?php echo asde_a( 'Concepto' ); ?>">
+						<td data-label="<?php echo esc_attr( asde_a( 'Fecha' ) ); ?>"><?php echo esc_html( $fecha( $m['fecha'] ) ); ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Concepto' ) ); ?>">
 							<?php if ( '' !== $m['ordenante'] ) : ?>
 								<strong><?php echo esc_html( $m['ordenante'] ); ?></strong><br>
 							<?php endif; ?>
 							<?php echo esc_html( '' !== $m['concepto'] ? $m['concepto'] : ( asde_t( Norma43::CONCEPTOS[ $m['concepto_comun'] ] ?? '—' ) ) ); ?>
 						</td>
-						<td data-label="<?php echo asde_a( 'Importe' ); ?>" class="asde-importe <?php echo $m['importe'] > 0 ? 'asde-importe--ingreso' : 'asde-importe--gasto'; ?>"><?php echo esc_html( ( $m['importe'] > 0 ? '+' : '' ) . Calculadora::euros( $m['importe'] ) ); ?></td>
-						<td data-label="<?php echo asde_a( 'En la web' ); ?>">
+						<td data-label="<?php echo esc_attr( asde_a( 'Importe' ) ); ?>" class="asde-importe <?php echo $m['importe'] > 0 ? 'asde-importe--ingreso' : 'asde-importe--gasto'; ?>"><?php echo esc_html( ( $m['importe'] > 0 ? '+' : '' ) . Calculadora::euros( $m['importe'] ) ); ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'En la web' ) ); ?>">
 							<?php if ( $m['duplicado'] ) : ?>
 								<span class="asde-muted"><?php asde_e( 'Ya importado' ); ?></span>
 							<?php elseif ( $m['posible_duplicado'] ) : ?>

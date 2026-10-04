@@ -179,7 +179,7 @@ final class EntornoPage {
 			<h2><?php esc_html_e( 'Siguientes pasos', 'asde-area-privada' ); ?></h2>
 			<ol class="asde-entorno__pasos">
 				<?php if ( ! \AsdeBalears\AreaPrivada\Domain\Organizacion::configurada() ) : ?>
-					<li><?php echo wp_kses_post( sprintf( __( '<a href="%s">Elige tu organización federada</a> y su código en el nº de socio local (y revisa el coste federativo por defecto).', 'asde-area-privada' ), esc_url( OrganizacionPage::url() ) ) ); ?></li>
+					<li><?php /* translators: %s: dirección de la pantalla Organización federada */ echo wp_kses_post( sprintf( __( '<a href="%s">Elige tu organización federada</a> y su código en el nº de socio local (y revisa el coste federativo por defecto).', 'asde-area-privada' ), esc_url( OrganizacionPage::url() ) ) ); ?></li>
 				<?php endif; ?>
 				<?php if ( ! defined( 'ASDE_AP_ENCRYPTION_KEY' ) ) : ?>
 					<li>
@@ -193,14 +193,14 @@ final class EntornoPage {
 						<pre class="asde-entorno__clave">define( 'ASDE_AP_ENCRYPTION_KEY', '<?php echo esc_html( rtrim( strtr( base64_encode( random_bytes( 36 ) ), '+/', '-_' ), '=' ) ); ?>' );</pre>
 					</li>
 				<?php endif; ?>
-				<li><?php echo wp_kses_post( sprintf( __( '<a href="%s">Da de alta tu Grupo Scout</a> con su nº, su nombre y el usuario y la contraseña del CRM, y pulsa «Probar conexión».', 'asde-area-privada' ), esc_url( add_query_arg( 'nuevo', '1', admin_url( 'admin.php?page=asde-area-privada' ) ) ) ) ); ?></li>
-				<li><?php echo wp_kses_post( sprintf( __( 'Pasa el <a href="%s">diagnóstico de tareas en segundo plano</a> (en LiteSpeed/Hostinger suele hacer falta «noabort»).', 'asde-area-privada' ), esc_url( class_exists( '\Asde_Diagnostico_Segundo_Plano', false ) ? \Asde_Diagnostico_Segundo_Plano::url() : admin_url( 'tools.php' ) ) ) ); ?></li>
+				<li><?php /* translators: %s: dirección de la pantalla Grupos y conexión CRM */ echo wp_kses_post( sprintf( __( '<a href="%s">Da de alta tu Grupo Scout</a> con su nº, su nombre y el usuario y la contraseña del CRM, y pulsa «Probar conexión».', 'asde-area-privada' ), esc_url( add_query_arg( 'nuevo', '1', admin_url( 'admin.php?page=asde-area-privada' ) ) ) ) ); ?></li>
+				<li><?php /* translators: %s: dirección del diagnóstico de tareas en segundo plano */ echo wp_kses_post( sprintf( __( 'Pasa el <a href="%s">diagnóstico de tareas en segundo plano</a> (en LiteSpeed/Hostinger suele hacer falta «noabort»).', 'asde-area-privada' ), esc_url( class_exists( '\Asde_Diagnostico_Segundo_Plano', false ) ? \Asde_Diagnostico_Segundo_Plano::url() : admin_url( 'tools.php' ) ) ) ); ?></li>
 				<li>
 					<?php esc_html_e( 'Comprueba que los emails llegan:', 'asde-area-privada' ); ?>
 					<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" class="asde-entorno__email">
 						<input type="hidden" name="action" value="<?php echo esc_attr( self::ACCION_EMAIL ); ?>">
 						<?php wp_nonce_field( self::ACCION_EMAIL ); ?>
-						<button type="submit" class="button"><?php echo esc_html( sprintf( __( 'Enviarme un email de prueba (%s)', 'asde-area-privada' ), wp_get_current_user()->user_email ) ); ?></button>
+						<button type="submit" class="button"><?php /* translators: %s: email de la cuenta que lo pide */ echo esc_html( sprintf( __( 'Enviarme un email de prueba (%s)', 'asde-area-privada' ), wp_get_current_user()->user_email ) ); ?></button>
 					</form>
 				</li>
 				<li><?php esc_html_e( 'Desde el área privada, da acceso a Secretaría y Coordinación (Personas → Dar acceso); a partir de ahí, ellos dan acceso al resto y aprueban las solicitudes de acceso.', 'asde-area-privada' ); ?></li>

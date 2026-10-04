@@ -66,8 +66,8 @@ $fila_persona = static function ( $p ) {
 			<tbody>
 				<?php foreach ( $familias as $id => $f ) : ?>
 					<tr>
-						<td data-label="<?php echo asde_a( 'Nº familia' ); ?>"><strong><?php echo esc_html( $f['numero'] ); ?></strong></td>
-						<td data-label="<?php echo asde_a( 'Socios' ); ?>">
+						<td data-label="<?php echo esc_attr( asde_a( 'Nº familia' ) ); ?>"><strong><?php echo esc_html( $f['numero'] ); ?></strong></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Socios' ) ); ?>">
 							<?php if ( ! $f['miembros'] ) : ?>
 								<span class="asde-muted"><?php asde_e( 'Sin socios' ); ?></span>
 							<?php endif; ?>
@@ -76,7 +76,7 @@ $fila_persona = static function ( $p ) {
 								<span class="asde-miembro<?php echo ( ! $p || ! $p->tiene_membresia_activa() ) ? ' asde-miembro--fuera' : ''; ?>"><?php echo $p ? $fila_persona( $p ) : esc_html( 'Nº ' . $n ); // phpcs:ignore WordPress.Security.EscapeOutput ?></span>
 							<?php endforeach; ?>
 						</td>
-						<td data-label="<?php echo asde_a( 'Cuenta familiar' ); ?>"><?php echo $cuentas[ $id ] ? esc_html( $cuentas[ $id ] ) : '<span class="asde-muted">—</span>'; ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Cuenta familiar' ) ); ?>"><?php echo $cuentas[ $id ] ? esc_html( $cuentas[ $id ] ) : '<span class="asde-muted">—</span>'; ?></td>
 						<td data-label=""><a class="button" href="<?php echo esc_url( add_query_arg( 'familia', $id, $url ) ); ?>"><?php asde_e( 'Editar' ); ?></a></td>
 					</tr>
 				<?php endforeach; ?>

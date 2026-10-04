@@ -70,7 +70,7 @@ $estados = array(
 		<p class="asde-muted asde-usuarios__total">
 			<span data-asde-total aria-live="polite"><?php echo esc_html( sprintf( asde_n( '%d usuario', '%d usuarios', $total ), $total ) ); ?></span>
 			<button type="button" class="asde-btn-link" data-asde-limpiar hidden><?php asde_e( 'Quitar filtros' ); ?></button>
-			<button type="button" class="asde-btn-link" data-asde-actualizar hidden title="<?php echo asde_a( 'Vuelve a leer la lista y los nombres del CRM, sin recargar la página' ); ?>"><?php asde_e( 'Actualizar' ); ?></button>
+			<button type="button" class="asde-btn-link" data-asde-actualizar hidden title="<?php echo esc_attr( asde_a( 'Vuelve a leer la lista y los nombres del CRM, sin recargar la página' ) ); ?>"><?php asde_e( 'Actualizar' ); ?></button>
 		</p>
 
 		<?php // En el móvil no se ven los encabezados de la tabla: se ordena desde aquí. ?>
@@ -81,7 +81,7 @@ $estados = array(
 					<option value="<?php echo esc_attr( $col ); ?>"><?php echo esc_html( $etiqueta ); ?></option>
 				<?php endforeach; ?>
 			</select>
-			<select data-orden-dir aria-label="<?php echo asde_a( 'Sentido' ); ?>">
+			<select data-orden-dir aria-label="<?php echo esc_attr( asde_a( 'Sentido' ) ); ?>">
 				<option value="asc">A → Z</option>
 				<option value="desc">Z → A</option>
 			</select>
@@ -97,13 +97,13 @@ $estados = array(
 				</tr>
 				<tr class="asde-filtros" hidden>
 					<th scope="col">
-						<input type="search" data-filtro="usuario" placeholder="<?php echo asde_a( 'Filtrar usuario…' ); ?>" aria-label="<?php echo asde_a( 'Filtrar por usuario' ); ?>" autocomplete="off">
+						<input type="search" data-filtro="usuario" placeholder="<?php echo esc_attr( asde_a( 'Filtrar usuario…' ) ); ?>" aria-label="<?php echo esc_attr( asde_a( 'Filtrar por usuario' ) ); ?>" autocomplete="off">
 					</th>
 					<th scope="col">
-						<input type="search" data-filtro="persona" placeholder="<?php echo asde_a( 'Filtrar nombre…' ); ?>" aria-label="<?php echo asde_a( 'Filtrar por persona' ); ?>" autocomplete="off">
+						<input type="search" data-filtro="persona" placeholder="<?php echo esc_attr( asde_a( 'Filtrar nombre…' ) ); ?>" aria-label="<?php echo esc_attr( asde_a( 'Filtrar por persona' ) ); ?>" autocomplete="off">
 					</th>
 					<th scope="col">
-						<select data-filtro="roles" aria-label="<?php echo asde_a( 'Filtrar por rol' ); ?>">
+						<select data-filtro="roles" aria-label="<?php echo esc_attr( asde_a( 'Filtrar por rol' ) ); ?>">
 							<option value=""><?php asde_e( 'Todos los roles' ); ?></option>
 							<?php foreach ( Roles::ALL as $r ) : ?>
 								<option value="<?php echo esc_attr( $r ); ?>"><?php echo esc_html( Roles::label( $r ) ); ?></option>
@@ -111,7 +111,7 @@ $estados = array(
 						</select>
 					</th>
 					<th scope="col">
-						<select data-filtro="ambito" aria-label="<?php echo asde_a( 'Filtrar por ámbito' ); ?>">
+						<select data-filtro="ambito" aria-label="<?php echo esc_attr( asde_a( 'Filtrar por ámbito' ) ); ?>">
 							<option value=""><?php asde_e( 'Todos los ámbitos' ); ?></option>
 							<?php foreach ( $ambitos as $slug => $nombre ) : ?>
 								<option value="<?php echo esc_attr( $slug ); ?>"><?php echo esc_html( $nombre ); ?></option>
@@ -119,7 +119,7 @@ $estados = array(
 						</select>
 					</th>
 					<th scope="col">
-						<select data-filtro="estado" aria-label="<?php echo asde_a( 'Filtrar por estado' ); ?>">
+						<select data-filtro="estado" aria-label="<?php echo esc_attr( asde_a( 'Filtrar por estado' ) ); ?>">
 							<option value=""><?php asde_e( 'Todos los estados' ); ?></option>
 							<?php foreach ( $estados as $slug => $nombre ) : ?>
 								<option value="<?php echo esc_attr( $slug ); ?>"><?php echo esc_html( $nombre ); ?></option>

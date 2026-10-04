@@ -8,6 +8,8 @@ use AsdeBalears\AreaPrivada\Idiomas\Idioma;
 
 defined( 'ABSPATH' ) || exit;
 
+// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- tablas propias del plugin ({prefix}asde_*): no hay función de WordPress para ellas y los datos cambian en cada petición, no se cachean.
+
 /**
  * Registro de los emails que envía el área privada ({prefix}asde_emails): cuándo,
  * a qué usuario, de qué tipo y si salió o no (con el error del servidor de correo).

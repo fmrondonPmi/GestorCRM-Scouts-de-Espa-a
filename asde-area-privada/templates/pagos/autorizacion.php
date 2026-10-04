@@ -26,7 +26,7 @@ $dir_deu = trim( implode( ', ', array_filter( array( $d['calle'], trim( $d['cp']
 <section class="asde-card asde-autorizacion">
 	<header class="asde-card__header asde-card__header--split">
 		<h2 class="asde-card__title"><?php asde_e( 'Orden de domiciliación de adeudo directo SEPA' ); ?></h2>
-		<span class="asde-badge asde-badge--<?php echo $activo ? 'estado-activo' : 'estado-desactivado'; ?>"><?php echo $activo ? asde_t( 'Vigente' ) : asde_t( 'Anulada' ); ?></span>
+		<span class="asde-badge asde-badge--<?php echo $activo ? 'estado-activo' : 'estado-desactivado'; ?>"><?php echo $activo ? esc_html( asde_t( 'Vigente' ) ) : esc_html( asde_t( 'Anulada' ) ); ?></span>
 	</header>
 
 	<dl class="asde-datos">

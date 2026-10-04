@@ -9,6 +9,8 @@ use AsdeBalears\AreaPrivada\Domain\Persona;
 
 defined( 'ABSPATH' ) || exit;
 
+// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- tablas propias del plugin ({prefix}asde_*): no hay función de WordPress para ellas y los datos cambian en cada petición, no se cachean.
+
 /**
  * Cola de cambios propuestos ({prefix}asde_cambios, docs/07): los cambios que
  * pide una cuenta familiar en la ficha de sus menores los aprueba la Secretaría,

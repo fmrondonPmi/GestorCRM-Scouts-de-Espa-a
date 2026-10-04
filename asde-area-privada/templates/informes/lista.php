@@ -15,7 +15,7 @@ defined( 'ABSPATH' ) || exit;
 		<h2 class="asde-card__title"><?php asde_e( 'Informes' ); ?></h2>
 		<a class="button" href="<?php echo esc_url( add_query_arg( 'nuevo', 1, $url ) ); ?>"><?php asde_e( '+ Nuevo informe' ); ?></a>
 	</header>
-	<p><?php asde_e( 'Elige un informe o crea uno nuevo seleccionando las columnas que necesitas. Los datos se leen del CRM en el momento y solo incluyen socios con membresía activa' ); ?><?php echo current_user_can( 'asde_manage_users' ) ? '' : asde_t( ' de tu sección' ); ?>.</p>
+	<p><?php asde_e( 'Elige un informe o crea uno nuevo seleccionando las columnas que necesitas. Los datos se leen del CRM en el momento y solo incluyen socios con membresía activa' ); ?><?php echo current_user_can( 'asde_manage_users' ) ? '' : esc_html( asde_t( ' de tu sección' ) ); ?>.</p>
 
 	<?php if ( ! $informes ) : ?>
 		<p><?php asde_e( 'Todavía no hay informes guardados.' ); ?></p>
@@ -32,7 +32,7 @@ defined( 'ABSPATH' ) || exit;
 			<tbody>
 				<?php foreach ( $informes as $i ) : ?>
 					<tr>
-						<td data-label="<?php echo asde_a( 'Informe' ); ?>">
+						<td data-label="<?php echo esc_attr( asde_a( 'Informe' ) ); ?>">
 							<a href="<?php echo esc_url( add_query_arg( 'informe', $i->id, $url ) ); ?>"><strong><?php echo esc_html( $i->titulo() ); ?></strong></a>
 							<?php if ( $i->descripcion ) : ?>
 								<br><span class="asde-muted"><?php echo esc_html( $i->resumen() ); ?></span>
@@ -41,8 +41,8 @@ defined( 'ABSPATH' ) || exit;
 								<br><span class="asde-badge asde-badge--salud"><?php asde_e( 'Incluye datos de salud' ); ?></span>
 							<?php endif; ?>
 						</td>
-						<td data-label="<?php echo asde_a( 'Columnas' ); ?>"><?php echo (int) count( $i->columnas ); ?></td>
-						<td data-label="<?php echo asde_a( 'Tipo' ); ?>">
+						<td data-label="<?php echo esc_attr( asde_a( 'Columnas' ) ); ?>"><?php echo (int) count( $i->columnas ); ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Tipo' ) ); ?>">
 							<?php
 							if ( $i->sistema ) {
 								echo esc_html( asde_t( 'Predefinido' ) );
@@ -59,7 +59,7 @@ defined( 'ABSPATH' ) || exit;
 								<a href="<?php echo esc_url( add_query_arg( array( 'nuevo' => 1, 'desde' => $i->id ), $url ) ); ?>"><?php asde_e( 'Duplicar' ); ?></a>
 								<?php if ( $i->puede_editar( $user ) ) : ?>
 									<a href="<?php echo esc_url( add_query_arg( 'editar', $i->id, $url ) ); ?>"><?php asde_e( 'Editar' ); ?></a>
-									<form method="post" onsubmit="return confirm(<?php echo asde_js( '¿Borrar el informe «%s»?', $i->nombre ); ?>);">
+									<form method="post" onsubmit="return confirm(<?php echo esc_attr( asde_js( '¿Borrar el informe «%s»?', $i->nombre ) ); ?>);">
 										<?php wp_nonce_field( 'asde_informe_borrar_' . $i->id ); ?>
 										<input type="hidden" name="asde_action" value="borrar">
 										<input type="hidden" name="id" value="<?php echo (int) $i->id; ?>">

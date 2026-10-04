@@ -14,7 +14,7 @@ defined( 'ABSPATH' ) || exit;
 $reset = 'reset' === $tipo;
 ?>
 <section class="asde-card asde-card--narrow">
-	<h2><?php echo $reset ? asde_t( 'Elige una contraseña nueva' ) : asde_t( 'Activa tu cuenta' ); ?></h2>
+	<h2><?php echo $reset ? esc_html( asde_t( 'Elige una contraseña nueva' ) ) : esc_html( asde_t( 'Activa tu cuenta' ) ); ?></h2>
 	<p>
 		<?php asde_e( 'Tu usuario es:' ); ?> <strong><?php echo esc_html( $user->user_login ); ?></strong>
 		<?php if ( \AsdeBalears\AreaPrivada\Usuarios\Usuarios::email_origen( $user->ID ) ) : ?>
@@ -44,6 +44,6 @@ $reset = 'reset' === $tipo;
 			<label for="asde-pass2"><?php asde_e( 'Repite la contraseña' ); ?></label>
 			<input type="password" id="asde-pass2" name="pass2" minlength="<?php echo (int) $longitud; ?>" autocomplete="new-password" required>
 		</p>
-		<p><button type="submit" class="button"><?php echo $reset ? asde_t( 'Guardar contraseña' ) : asde_t( 'Activar mi cuenta' ); ?></button></p>
+		<p><button type="submit" class="button"><?php echo $reset ? esc_html( asde_t( 'Guardar contraseña' ) ) : esc_html( asde_t( 'Activar mi cuenta' ) ); ?></button></p>
 	</form>
 </section>

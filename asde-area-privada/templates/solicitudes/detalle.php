@@ -41,7 +41,7 @@ $adulto    = $s['adulto'] || ( $p && $p->es_adulto_voluntario() );
 	</header>
 	<p class="asde-muted">
 		<?php asde_e( 'Recibida el' ); ?> <?php echo esc_html( wp_date( 'd/m/Y H:i', strtotime( $s['creada'] . ' UTC' ) ) ); ?>.
-		<?php echo $tutor ? asde_t( 'La pide su familia (madre, padre o tutor/a).' ) : asde_t( 'La pide el propio socio/a.' ); ?>
+		<?php echo $tutor ? esc_html( asde_t( 'La pide su familia (madre, padre o tutor/a).' ) ) : esc_html( asde_t( 'La pide el propio socio/a.' ) ); ?>
 		<?php if ( $revisor ) : ?>
 			<?php echo esc_html( sprintf( asde_t( '%s por %s el %s.' ), Solicitudes::APROBADA === $s['estado'] ? asde_t( 'Aprobada' ) : asde_t( 'Rechazada' ), $revisor->display_name, wp_date( 'd/m/Y', strtotime( $s['revisada_en'] . ' UTC' ) ) ) ); ?>
 			<?php echo '' !== $s['motivo'] ? esc_html( sprintf( asde_t( 'Motivo: %s' ), $s['motivo'] ) ) : ''; ?>
@@ -56,25 +56,25 @@ $adulto    = $s['adulto'] || ( $p && $p->es_adulto_voluntario() );
 			<tbody>
 				<tr>
 					<th scope="row"><?php asde_e( 'Socio/a' ); ?></th>
-					<td data-label="<?php echo asde_a( 'Escrito' ); ?>">
+					<td data-label="<?php echo esc_attr( asde_a( 'Escrito' ) ); ?>">
 						<?php
 						$escrito = Solicitudes::POR_NOMBRE === $s['via'] ? $d['nombre_menor'] : ( $tutor ? '' : $d['nombre'] );
 						echo '' !== $escrito ? $marca( $c['nombre_socio'] ) . esc_html( $escrito ) : '<span class="asde-muted">—</span>'; // phpcs:ignore WordPress.Security.EscapeOutput
 						?>
 					</td>
-					<td data-label="<?php echo asde_a( 'CRM' ); ?>">
+					<td data-label="<?php echo esc_attr( asde_a( 'CRM' ) ); ?>">
 						<a href="<?php echo esc_url( $url_ficha ); ?>" data-asde-modal><?php echo esc_html( $p->nombre_completo() ); ?></a><?php echo \AsdeBalears\AreaPrivada\Socios\Numeros::compacto( $p ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 						<?php
 						foreach ( $p->secciones as $sec ) {
 							echo Secciones::badge( $sec ); // phpcs:ignore WordPress.Security.EscapeOutput
 						}
 						?>
-						<br><span class="asde-help"><?php echo null === $p->edad() ? '' : sprintf( asde_t( '%d años' ), (int) $p->edad() ); ?></span>
+						<br><span class="asde-help"><?php echo null === $p->edad() ? '' : sprintf( esc_html( asde_t( '%d años' ) ), (int) $p->edad() ); ?></span>
 					</td>
 				</tr>
 				<tr>
 					<th scope="row"><?php asde_e( 'Comprobación' ); ?></th>
-					<td data-label="<?php echo asde_a( 'Escrito' ); ?>" colspan="2">
+					<td data-label="<?php echo esc_attr( asde_a( 'Escrito' ) ); ?>" colspan="2">
 						<?php if ( Solicitudes::POR_ENLACE === $s['via'] ) : ?>
 							<?php asde_e( 'Alta con el enlace para scouters: el DNI o NIE es el de esta ficha de Scouter o Voluntariado.' ); ?>
 						<?php elseif ( Solicitudes::POR_NOMBRE === $s['via'] ) : ?>
@@ -87,7 +87,7 @@ $adulto    = $s['adulto'] || ( $p && $p->es_adulto_voluntario() );
 				<?php if ( Solicitudes::POR_ENLACE === $s['via'] ) : ?>
 					<tr>
 						<th scope="row"><?php asde_e( 'Pide' ); ?></th>
-						<td data-label="<?php echo asde_a( 'Escrito' ); ?>" colspan="2">
+						<td data-label="<?php echo esc_attr( asde_a( 'Escrito' ) ); ?>" colspan="2">
 							<?php echo esc_html( implode( ', ', array_map( array( \AsdeBalears\AreaPrivada\Install\Roles::class, 'label' ), (array) ( $d['roles_pedidos'] ?? array() ) ) ) ?: '—' ); ?>
 							<?php foreach ( (array) ( $d['secciones_pedidas'] ?? array() ) as $sec ) : ?>
 								<?php echo Secciones::badge( (string) $sec ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
@@ -102,8 +102,8 @@ $adulto    = $s['adulto'] || ( $p && $p->es_adulto_voluntario() );
 				<?php endif; ?>
 				<tr>
 					<th scope="row"><?php asde_e( 'Quién pide' ); ?></th>
-					<td data-label="<?php echo asde_a( 'Escrito' ); ?>"><?php echo ( $tutor ? $marca( $c['tutor'] > 0 ) : '' ) . esc_html( $d['nombre'] ); // phpcs:ignore WordPress.Security.EscapeOutput ?></td>
-					<td data-label="<?php echo asde_a( 'CRM' ); ?>">
+					<td data-label="<?php echo esc_attr( asde_a( 'Escrito' ) ); ?>"><?php echo ( $tutor ? $marca( $c['tutor'] > 0 ) : '' ) . esc_html( $d['nombre'] ); // phpcs:ignore WordPress.Security.EscapeOutput ?></td>
+					<td data-label="<?php echo esc_attr( asde_a( 'CRM' ) ); ?>">
 						<?php if ( $tutor ) : ?>
 							<?php foreach ( array( 1, 2 ) as $n ) : ?>
 								<?php $t = $p->tutores[ $n ] ?? null; ?>
@@ -121,8 +121,8 @@ $adulto    = $s['adulto'] || ( $p && $p->es_adulto_voluntario() );
 				</tr>
 				<tr>
 					<th scope="row"><?php asde_e( 'Email' ); ?></th>
-					<td data-label="<?php echo asde_a( 'Escrito' ); ?>"><?php echo ( null !== $c['email_en'] ? $marca( true ) : '' ) . esc_html( $d['email'] ); // phpcs:ignore WordPress.Security.EscapeOutput ?></td>
-					<td data-label="<?php echo asde_a( 'CRM' ); ?>">
+					<td data-label="<?php echo esc_attr( asde_a( 'Escrito' ) ); ?>"><?php echo ( null !== $c['email_en'] ? $marca( true ) : '' ) . esc_html( $d['email'] ); // phpcs:ignore WordPress.Security.EscapeOutput ?></td>
+					<td data-label="<?php echo esc_attr( asde_a( 'CRM' ) ); ?>">
 						<?php if ( null !== $c['email_en'] ) : ?>
 							<?php asde_e( 'Ya está en la ficha:' ); ?> <?php echo esc_html( Usuarios::etiqueta_campo_email( $c['email_en'] ) ); ?>.
 						<?php else : ?>
@@ -175,7 +175,7 @@ $adulto    = $s['adulto'] || ( $p && $p->es_adulto_voluntario() );
 							<li>
 								<fieldset>
 										<legend><?php asde_e( '¿Quién pide el acceso?' ); ?></legend>
-									<p class="asde-muted"><?php asde_e( 'Esta familia ya tiene' ); ?> <?php echo 1 === count( $familiares ) ? asde_t( "una cuenta" ) : asde_t( "dos cuentas" ); ?>: <?php echo implode( ' y ', array_map( static fn( $f ) => '<strong>' . esc_html( $f->user_login ) . '</strong>' . ( '' !== ( $emails_familiares[ $f->user_login ] ?? '' ) ? ' (' . esc_html( $emails_familiares[ $f->user_login ] ) . ')' : '' ), $familiares ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?>.</p>
+									<p class="asde-muted"><?php asde_e( 'Esta familia ya tiene' ); ?> <?php echo 1 === count( $familiares ) ? esc_html( asde_t( "una cuenta" ) ) : esc_html( asde_t( "dos cuentas" ) ); ?>: <?php echo implode( ' y ', array_map( static fn( $f ) => '<strong>' . esc_html( $f->user_login ) . '</strong>' . ( '' !== ( $emails_familiares[ $f->user_login ] ?? '' ) ? ' (' . esc_html( $emails_familiares[ $f->user_login ] ) . ')' : '' ), $familiares ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?>.</p>
 										<?php if ( $propuesta['puede_nueva'] ) : ?>
 											<label class="asde-choice">
 												<input type="radio" name="modo" value="<?php echo esc_attr( SolicitudService::MODO_NUEVA ); ?>" <?php checked( SolicitudService::MODO_NUEVA, $propuesta['modo'] ); ?>>
@@ -187,7 +187,7 @@ $adulto    = $s['adulto'] || ( $p && $p->es_adulto_voluntario() );
 											<span>
 												<strong><?php asde_e( 'La misma persona con otro email' ); ?></strong><?php asde_e( ': sustituir el email de la cuenta' ); ?>
 												<?php if ( count( $familiares ) > 1 ) : ?>
-													<select name="cuenta" aria-label="<?php echo asde_a( 'Cuenta cuyo email se sustituye' ); ?>">
+													<select name="cuenta" aria-label="<?php echo esc_attr( asde_a( 'Cuenta cuyo email se sustituye' ) ); ?>">
 														<?php foreach ( $familiares as $f ) : ?>
 															<option value="<?php echo esc_attr( $f->user_login ); ?>" <?php selected( $propuesta['cuenta'], $f->user_login ); ?>><?php echo esc_html( $f->user_login ); ?></option>
 														<?php endforeach; ?>
@@ -238,8 +238,8 @@ $adulto    = $s['adulto'] || ( $p && $p->es_adulto_voluntario() );
 						<input type="checkbox" name="avisar" value="1" checked>
 						<span><?php
 							echo '' !== $contacto
-								? sprintf( asde_h( 'Avisar por email a quien la pidió (%1$s). El texto es genérico: no lleva el motivo y le dice que escriba a %2$s.' ), esc_html( Contacto::enmascarar( (string) $d['email'] ) ), esc_html( $contacto ) ) // phpcs:ignore WordPress.Security.EscapeOutput
-								: sprintf( asde_h( 'Avisar por email a quien la pidió (%s). El texto es genérico: no lleva el motivo.' ), esc_html( Contacto::enmascarar( (string) $d['email'] ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput
+								? sprintf( wp_kses_post( asde_h( 'Avisar por email a quien la pidió (%1$s). El texto es genérico: no lleva el motivo y le dice que escriba a %2$s.' ) ), esc_html( Contacto::enmascarar( (string) $d['email'] ) ), esc_html( $contacto ) ) // phpcs:ignore WordPress.Security.EscapeOutput
+								: sprintf( wp_kses_post( asde_h( 'Avisar por email a quien la pidió (%s). El texto es genérico: no lleva el motivo.' ) ), esc_html( Contacto::enmascarar( (string) $d['email'] ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput
 							?></span>
 					</label>
 					<?php if ( '' === $contacto ) : ?>

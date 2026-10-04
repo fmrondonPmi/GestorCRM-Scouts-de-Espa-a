@@ -106,7 +106,7 @@ final class IdiomasPage {
 				break;
 
 			case 'importar':
-				$fichero = $_FILES['fichero'] ?? null; // phpcs:ignore WordPress.Security.NonceVerification
+				$fichero = $_FILES['fichero'] ?? null; // phpcs:ignore WordPress.Security.NonceVerification,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- el nonce se comprueba al principio de handle_guardar(); del fichero solo se usan datos validados con is_uploaded_file()
 				if ( ! is_array( $fichero ) || empty( $fichero['tmp_name'] ) || UPLOAD_ERR_OK !== (int) ( $fichero['error'] ?? 1 ) || ! is_uploaded_file( (string) $fichero['tmp_name'] ) ) {
 					$this->aviso( 'error', 'No se ha importado nada: elige el fichero .json que descargaste.' );
 					break;
@@ -195,10 +195,12 @@ final class IdiomasPage {
 
 		$ajustes = Idioma::ajustes();
 		// phpcs:disable WordPress.Security.NonceVerification
-		$idioma = Idioma::es_valido( $_GET['idioma'] ?? null ) ? (string) $_GET['idioma'] : ( Idioma::DEFECTO === $ajustes['por_defecto'] ? 'ca' : $ajustes['por_defecto'] );
+		$idioma_get = isset( $_GET['idioma'] ) ? sanitize_key( wp_unslash( (string) $_GET['idioma'] ) ) : '';
+		$idioma     = Idioma::es_valido( $idioma_get ) ? $idioma_get : ( Idioma::DEFECTO === $ajustes['por_defecto'] ? 'ca' : $ajustes['por_defecto'] );
 		$buscar = sanitize_text_field( wp_unslash( (string) ( $_GET['s'] ?? '' ) ) );
-		$filtro = in_array( $_GET['ver'] ?? '', array( 'personalizadas', 'sin_traducir' ), true ) ? (string) $_GET['ver'] : 'todas';
-		$pagina = max( 1, (int) ( $_GET['pagina'] ?? 1 ) );
+		$ver_get = isset( $_GET['ver'] ) ? sanitize_key( wp_unslash( (string) $_GET['ver'] ) ) : '';
+		$filtro  = in_array( $ver_get, array( 'personalizadas', 'sin_traducir' ), true ) ? $ver_get : 'todas';
+		$pagina = max( 1, absint( wp_unslash( $_GET['pagina'] ?? 1 ) ) );
 		// phpcs:enable
 		$l       = self::listado( $idioma, $buscar, $filtro, $pagina );
 		$total   = count( Traducciones::textos() );
@@ -242,7 +244,7 @@ final class IdiomasPage {
 			</form>
 
 			<h2><?php esc_html_e( 'Etiquetas', 'asde-area-privada' ); ?></h2>
-			<p><?php esc_html_e( 'Ninguna traducción es perfecta: aquí puedes cambiar cualquier texto del área privada, en cualquier idioma (también el castellano). Lo que escribas manda sobre la traducción que trae el plugin; si lo dejas vacío, vuelve a la del plugin. Los marcadores como %s o %d son huecos que rellena el sistema (un nombre, un número…): tienen que estar todos, aunque puedes cambiarlos de sitio. Se admiten <strong>, <em> y <code>.', 'asde-area-privada' ); ?></p>
+			<p><?php /* translators: 1: ejemplo de marcador de texto, 2: ejemplo de marcador de número */ echo esc_html( sprintf( __( 'Ninguna traducción es perfecta: aquí puedes cambiar cualquier texto del área privada, en cualquier idioma (también el castellano). Lo que escribas manda sobre la traducción que trae el plugin; si lo dejas vacío, vuelve a la del plugin. Los marcadores como %1$s o %2$s son huecos que rellena el sistema (un nombre, un número…): tienen que estar todos, aunque puedes cambiarlos de sitio. Se admiten <strong>, <em> y <code>.', 'asde-area-privada' ), '%s', '%d' ) ); ?></p>
 
 			<h3 class="nav-tab-wrapper">
 				<?php foreach ( Idioma::disponibles() as $codigo => $nombre ) : ?>

@@ -146,7 +146,7 @@ final class SettingsPage {
 							<input type="url" id="asde-url" name="<?php echo esc_attr( Settings::OPTION ); ?>[url]" value="<?php echo esc_attr( Settings::url() ); ?>" class="regular-text" placeholder="https://entidad.sinergiacrm.org" <?php echo Settings::url_from_constant() ? 'readonly' : ''; ?>>
 							<p class="description"><?php esc_html_e( 'Dirección base del CRM, sin rutas. Si pegas la URL completa de rest.php se recorta automáticamente.', 'asde-area-privada' ); ?></p>
 							<?php if ( Settings::url_from_constant() ) : ?>
-								<p class="description"><?php echo wp_kses_post( sprintf( __( 'Definida en wp-config.php (%s); no se puede cambiar aquí.', 'asde-area-privada' ), '<code>' . Settings::CONSTANT_URL . '</code>' ) ); ?></p>
+								<p class="description"><?php /* translators: %s: nombre de la constante definida en wp-config.php */ echo wp_kses_post( sprintf( __( 'Definida en wp-config.php (%s); no se puede cambiar aquí.', 'asde-area-privada' ), '<code>' . Settings::CONSTANT_URL . '</code>' ) ); ?></p>
 							<?php endif; ?>
 							<?php if ( str_starts_with( Settings::url(), 'http://' ) ) : ?>
 								<p class="description" style="color:#b32d2e;"><?php esc_html_e( 'Atención: la URL no usa HTTPS. Las credenciales viajarían sin cifrar.', 'asde-area-privada' ); ?></p>
@@ -192,7 +192,7 @@ final class SettingsPage {
 										<?php wp_nonce_field( self::ACCION_PROBAR ); ?>
 										<button type="submit" class="button button-small"><?php esc_html_e( 'Probar conexión', 'asde-area-privada' ); ?></button>
 									</form>
-									<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="display:inline" onsubmit="return confirm('<?php echo esc_js( sprintf( __( '¿Dar de baja el grupo %s? Sus usuarios dejarán de poder entrar. Sus datos se conservan.', 'asde-area-privada' ), Grupos::etiqueta( $g ) ) ); ?>');">
+									<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="display:inline" onsubmit="return confirm('<?php /* translators: %s: nombre del grupo */ echo esc_js( sprintf( __( '¿Dar de baja el grupo %s? Sus usuarios dejarán de poder entrar. Sus datos se conservan.', 'asde-area-privada' ), Grupos::etiqueta( $g ) ) ); ?>');">
 										<input type="hidden" name="action" value="<?php echo esc_attr( self::ACCION_BORRAR ); ?>">
 										<input type="hidden" name="numero" value="<?php echo esc_attr( $g['numero'] ); ?>">
 										<?php wp_nonce_field( self::ACCION_BORRAR ); ?>
@@ -237,7 +237,7 @@ define( 'ASDE_AP_ENCRYPTION_KEY', '...' ); // clave propia para cifrar las contr
 		$alta = null === $g;
 		?>
 		<div class="card" style="max-width:720px;margin-top:20px;">
-			<h2><?php echo $alta ? esc_html__( 'Añadir grupo', 'asde-area-privada' ) : esc_html( sprintf( __( 'Editar el grupo %s', 'asde-area-privada' ), $g['numero'] ) ); ?></h2>
+			<h2><?php /* translators: %s: número del grupo */ echo $alta ? esc_html__( 'Añadir grupo', 'asde-area-privada' ) : esc_html( sprintf( __( 'Editar el grupo %s', 'asde-area-privada' ), $g['numero'] ) ); ?></h2>
 			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" autocomplete="off">
 				<input type="hidden" name="action" value="<?php echo esc_attr( self::ACCION_GUARDAR ); ?>">
 				<input type="hidden" name="alta" value="<?php echo $alta ? '1' : '0'; ?>">
@@ -297,6 +297,7 @@ define( 'ASDE_AP_ENCRYPTION_KEY', '...' ); // clave propia para cifrar las contr
 			echo '<br><span class="description">⚠️ ' . esc_html( $aviso ) . '</span>';
 		}
 		if ( $g['probado'] ) {
+			/* translators: %s: fecha y hora de la última prueba de conexión */
 			echo '<br><span class="description">' . esc_html( sprintf( __( 'Probado el %s', 'asde-area-privada' ), wp_date( 'd/m/Y H:i', (int) $g['probado'] ) ) ) . '</span>';
 		}
 	}

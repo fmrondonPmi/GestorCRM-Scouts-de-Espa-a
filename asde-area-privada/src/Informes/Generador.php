@@ -38,7 +38,7 @@ final class Generador {
 			$avisos[] = asde_t( 'Algunas columnas no se muestran porque tu rol no tiene acceso a esos datos.' );
 		}
 		if ( ! $cols ) {
-			throw new \InvalidArgumentException( asde_t( 'Elige al menos una columna.' ) );
+			throw new \InvalidArgumentException( esc_html( asde_t( 'Elige al menos una columna.' ) ) );
 		}
 
 		// Ámbito de secciones.
@@ -47,7 +47,7 @@ final class Generador {
 			$mias      = $ambito->secciones_scouter();
 			$secciones = $secciones ? array_values( array_intersect( $secciones, $mias ) ) : $mias;
 			if ( ! $secciones ) {
-				throw new \InvalidArgumentException( asde_t( 'No tienes secciones asignadas (o no coinciden con las del informe). Pide a Secretaría que revise tu alta.' ) );
+				throw new \InvalidArgumentException( esc_html( asde_t( 'No tienes secciones asignadas (o no coinciden con las del informe). Pide a Secretaría que revise tu alta.' ) ) );
 			}
 		}
 
@@ -187,12 +187,12 @@ final class Generador {
 		header( 'Content-Type: text/csv; charset=UTF-8' );
 		header( 'Content-Disposition: attachment; filename="' . $archivo . '"' );
 		$out = fopen( 'php://output', 'w' );
-		fwrite( $out, "\xEF\xBB\xBF" );
+		fwrite( $out, "\xEF\xBB\xBF" ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fwrite -- php://output (descarga), no es el sistema de ficheros
 		fputcsv( $out, array_values( $resultado['columnas'] ), ';' );
 		foreach ( $resultado['filas'] as $fila ) {
 			fputcsv( $out, array_map( array( self::class, 'celda_segura' ), array_values( $fila ) ), ';' );
 		}
-		fclose( $out );
+		fclose( $out ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- php://output (descarga)
 	}
 
 	/**

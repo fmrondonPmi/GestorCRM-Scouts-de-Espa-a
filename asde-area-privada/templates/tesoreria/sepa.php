@@ -60,8 +60,8 @@ $nombres   = static function ( array $f ) use ( $personas ): string {
 		<input type="hidden" name="asde_action" value="sepa_config">
 		<input type="hidden" name="ronda" value="<?php echo esc_attr( $ronda ); ?>">
 		<div class="asde-grid-2">
-			<p><label for="asde-sepa-nombre"><?php asde_e( 'Nombre del acreedor' ); ?></label><input type="text" id="asde-sepa-nombre" name="nombre" maxlength="70" value="<?php echo esc_attr( $cfg['nombre'] ); ?>" placeholder="<?php echo asde_a( 'p. ej. Grupo Scout Myotragus 684' ); ?>"><span class="asde-help"><?php asde_e( 'Como aparecerá en el banco de las familias (sin tildes).' ); ?></span></p>
-			<p><label for="asde-sepa-ics"><?php asde_e( 'Identificador del acreedor (ICS)' ); ?></label><input type="text" id="asde-sepa-ics" name="ics" maxlength="35" value="<?php echo esc_attr( $cfg['ics'] ); ?>" placeholder="<?php echo asde_a( 'ES00ZZZG00000000' ); ?>"><span class="asde-help"><?php asde_e( 'Empieza por ES y son 16 caracteres.' ); ?></span></p>
+			<p><label for="asde-sepa-nombre"><?php asde_e( 'Nombre del acreedor' ); ?></label><input type="text" id="asde-sepa-nombre" name="nombre" maxlength="70" value="<?php echo esc_attr( $cfg['nombre'] ); ?>" placeholder="<?php echo esc_attr( asde_a( 'p. ej. Grupo Scout Myotragus 684' ) ); ?>"><span class="asde-help"><?php asde_e( 'Como aparecerá en el banco de las familias (sin tildes).' ); ?></span></p>
+			<p><label for="asde-sepa-ics"><?php asde_e( 'Identificador del acreedor (ICS)' ); ?></label><input type="text" id="asde-sepa-ics" name="ics" maxlength="35" value="<?php echo esc_attr( $cfg['ics'] ); ?>" placeholder="<?php echo esc_attr( asde_a( 'ES00ZZZG00000000' ) ); ?>"><span class="asde-help"><?php asde_e( 'Empieza por ES y son 16 caracteres.' ); ?></span></p>
 			<p><label for="asde-sepa-iban"><?php asde_e( 'IBAN del acreedor' ); ?></label><input type="text" id="asde-sepa-iban" name="iban" maxlength="40" value="" placeholder="<?php echo '' !== $cfg['iban'] ? esc_attr( \AsdeBalears\AreaPrivada\Sepa\Iban::enmascarar( $cfg['iban'] ) . asde_t( ' (guardado; déjalo vacío para conservarlo)' ) ) : 'ES00 0000 0000 0000 0000 0000'; ?>" autocomplete="off"><span class="asde-help"><?php asde_e( 'La cuenta donde el banco ingresa lo cobrado. Se guarda cifrado.' ); ?></span></p>
 			<p><label for="asde-sepa-bic"><?php asde_e( 'BIC (opcional)' ); ?></label><input type="text" id="asde-sepa-bic" name="bic" maxlength="11" value="<?php echo esc_attr( $cfg['bic'] ); ?>"></p>
 			<p><label for="asde-sepa-calle"><?php asde_e( 'Dirección (calle y número)' ); ?></label><input type="text" id="asde-sepa-calle" name="calle" maxlength="70" value="<?php echo esc_attr( $cfg['calle'] ); ?>"></p>
@@ -115,18 +115,18 @@ $nombres   = static function ( array $f ) use ( $personas ): string {
 				<div class="asde-notice asde-notice--error" role="alert"><?php echo esc_html( $e ); ?></div>
 			<?php endforeach; ?>
 			<?php if ( ! $prep['lineas'] ) : ?>
-				<p><?php asde_e( 'No hay ningún adeudo que incluir: ninguna familia con autorización tiene algo pendiente' ); ?> <?php echo '' !== $plazo ? asde_t( 'hasta ese plazo' ) : ''; ?>.</p>
+				<p><?php asde_e( 'No hay ningún adeudo que incluir: ninguna familia con autorización tiene algo pendiente' ); ?> <?php echo '' !== $plazo ? esc_html( asde_t( 'hasta ese plazo' ) ) : ''; ?>.</p>
 			<?php else : ?>
 				<table class="asde-table">
 					<thead><tr><th scope="col"><?php asde_e( 'Familia' ); ?></th><th scope="col"><?php asde_e( 'Socios' ); ?></th><th scope="col"><?php asde_e( 'Titular · cuenta' ); ?></th><th scope="col"><?php asde_e( 'Secuencia' ); ?></th><th scope="col"><?php asde_e( 'Importe' ); ?></th></tr></thead>
 					<tbody>
 						<?php foreach ( $prep['lineas'] as $l ) : ?>
 							<tr>
-								<td data-label="<?php echo asde_a( 'Familia' ); ?>"><?php echo esc_html( $l['familia_n'] ); ?></td>
-								<td data-label="<?php echo asde_a( 'Socios' ); ?>"><?php echo esc_html( $nombres( $familias[ $l['familia'] ] ?? array( 'miembros' => array() ) ) ); ?></td>
-								<td data-label="<?php echo asde_a( 'Titular' ); ?>"><?php echo esc_html( $l['titular'] . ' · ' . $l['iban_mask'] ); ?></td>
-								<td data-label="<?php echo asde_a( 'Secuencia' ); ?>"><?php echo esc_html( 'FRST' === $l['secuencia'] ? asde_t( 'Primer cobro (FRST)' ) : asde_t( 'Recurrente (RCUR)' ) ); ?></td>
-								<td data-label="<?php echo asde_a( 'Importe' ); ?>"><?php echo esc_html( Calculadora::euros( $l['centimos'] / 100 ) ); ?></td>
+								<td data-label="<?php echo esc_attr( asde_a( 'Familia' ) ); ?>"><?php echo esc_html( $l['familia_n'] ); ?></td>
+								<td data-label="<?php echo esc_attr( asde_a( 'Socios' ) ); ?>"><?php echo esc_html( $nombres( $familias[ $l['familia'] ] ?? array( 'miembros' => array() ) ) ); ?></td>
+								<td data-label="<?php echo esc_attr( asde_a( 'Titular' ) ); ?>"><?php echo esc_html( $l['titular'] . ' · ' . $l['iban_mask'] ); ?></td>
+								<td data-label="<?php echo esc_attr( asde_a( 'Secuencia' ) ); ?>"><?php echo esc_html( 'FRST' === $l['secuencia'] ? asde_t( 'Primer cobro (FRST)' ) : asde_t( 'Recurrente (RCUR)' ) ); ?></td>
+								<td data-label="<?php echo esc_attr( asde_a( 'Importe' ) ); ?>"><?php echo esc_html( Calculadora::euros( $l['centimos'] / 100 ) ); ?></td>
 							</tr>
 						<?php endforeach; ?>
 					</tbody>
@@ -166,12 +166,12 @@ $nombres   = static function ( array $f ) use ( $personas ): string {
 			<tbody>
 				<?php foreach ( $remesas as $r ) : ?>
 					<tr>
-						<td data-label="<?php echo asde_a( 'Remesa' ); ?>"><a href="<?php echo esc_url( add_query_arg( array( 'ronda' => $r['ronda'], 'remesa' => $r['id'] ), $url ) ); ?>"><?php echo esc_html( $r['numero'] ); ?></a></td>
-						<td data-label="<?php echo asde_a( 'Ronda' ); ?>"><?php echo esc_html( $r['ronda'] . ' · ' . $r['plazo'] ); ?></td>
-						<td data-label="<?php echo asde_a( 'Cobro' ); ?>"><?php echo esc_html( $fmt_fecha( $r['fecha_cobro'] ) ); ?></td>
-						<td data-label="<?php echo asde_a( 'Adeudos' ); ?>"><?php echo (int) $r['adeudos']; ?></td>
-						<td data-label="<?php echo asde_a( 'Total' ); ?>"><?php echo esc_html( Calculadora::euros( $r['total'] ) ); ?></td>
-						<td data-label="<?php echo asde_a( 'Estado' ); ?>"><?php echo esc_html( asde_t( Remesas::ESTADOS[ $r['estado'] ] ?? $r['estado'] ) ); ?><?php echo Remesas::ENVIADA === $r['estado'] && $r['cobros_en'] ? ' · cobrada' : ''; ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Remesa' ) ); ?>"><a href="<?php echo esc_url( add_query_arg( array( 'ronda' => $r['ronda'], 'remesa' => $r['id'] ), $url ) ); ?>"><?php echo esc_html( $r['numero'] ); ?></a></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Ronda' ) ); ?>"><?php echo esc_html( $r['ronda'] . ' · ' . $r['plazo'] ); ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Cobro' ) ); ?>"><?php echo esc_html( $fmt_fecha( $r['fecha_cobro'] ) ); ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Adeudos' ) ); ?>"><?php echo (int) $r['adeudos']; ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Total' ) ); ?>"><?php echo esc_html( Calculadora::euros( $r['total'] ) ); ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Estado' ) ); ?>"><?php echo esc_html( asde_t( Remesas::ESTADOS[ $r['estado'] ] ?? $r['estado'] ) ); ?><?php echo Remesas::ENVIADA === $r['estado'] && $r['cobros_en'] ? ' · cobrada' : ''; ?></td>
 					</tr>
 				<?php endforeach; ?>
 			</tbody>
@@ -195,9 +195,9 @@ $nombres   = static function ( array $f ) use ( $personas ): string {
 				<?php foreach ( $familias as $id => $f ) : ?>
 					<?php $m = $mandatos[ $id ] ?? null; ?>
 					<tr>
-						<td data-label="<?php echo asde_a( 'Familia' ); ?>"><?php echo esc_html( $f['numero'] ); ?></td>
-						<td data-label="<?php echo asde_a( 'Socios' ); ?>"><?php echo esc_html( $nombres( $f ) ); ?></td>
-						<td data-label="<?php echo asde_a( 'Autorización' ); ?>">
+						<td data-label="<?php echo esc_attr( asde_a( 'Familia' ) ); ?>"><?php echo esc_html( $f['numero'] ); ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Socios' ) ); ?>"><?php echo esc_html( $nombres( $f ) ); ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Autorización' ) ); ?>">
 							<?php if ( $m ) : ?>
 								<?php echo esc_html( sprintf( asde_t( '%s · %s · firmada el %s' ), $m['referencia'], $m['iban_mask'], $fmt_fecha( $m['fecha_firma'] ) ) ); ?>
 								<?php echo '' !== $m['datos']['titular'] ? '<br><span class="asde-muted">Titular: ' . esc_html( $m['datos']['titular'] ) . '</span>' : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?>
@@ -208,12 +208,12 @@ $nombres   = static function ( array $f ) use ( $personas ): string {
 						</td>
 						<td data-label="">
 							<?php if ( $m ) : ?>
-								<form method="post" class="asde-actions" onsubmit="return confirm(<?php echo asde_js( '¿Anular esta autorización?' ); ?>);">
+								<form method="post" class="asde-actions" onsubmit="return confirm(<?php echo esc_attr( asde_js( '¿Anular esta autorización?' ) ); ?>);">
 									<?php wp_nonce_field( 'asde_sepa_revocar' ); ?>
 									<input type="hidden" name="asde_action" value="sepa_revocar">
 									<input type="hidden" name="ronda" value="<?php echo esc_attr( $ronda ); ?>">
 									<input type="hidden" name="mandato" value="<?php echo (int) $m['id']; ?>">
-									<input type="text" name="motivo" maxlength="80" placeholder="<?php echo asde_a( 'Motivo' ); ?>" aria-label="<?php echo asde_a( 'Motivo de la anulación' ); ?>">
+									<input type="text" name="motivo" maxlength="80" placeholder="<?php echo esc_attr( asde_a( 'Motivo' ) ); ?>" aria-label="<?php echo esc_attr( asde_a( 'Motivo de la anulación' ) ); ?>">
 									<button type="submit" class="asde-btn-link"><?php asde_e( 'Anular' ); ?></button>
 								</form>
 							<?php endif; ?>

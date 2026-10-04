@@ -152,7 +152,7 @@ final class UniformesGestionView extends UniformesBaseView {
 		header( 'Content-Type: text/csv; charset=UTF-8' );
 		header( 'Content-Disposition: attachment; filename="pedidos-uniforme-' . wp_date( 'Ymd' ) . '.csv"' );
 		$out = fopen( 'php://output', 'w' );
-		fwrite( $out, "\xEF\xBB\xBF" );
+		fwrite( $out, "\xEF\xBB\xBF" ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fwrite -- php://output (descarga), no es el sistema de ficheros
 		fputcsv( $out, array( asde_t( 'Nº pedido' ), asde_t( 'Socio/a' ), asde_t( 'Sección' ), asde_t( 'Modelo' ), asde_t( 'Talla' ), asde_t( 'Insignias' ), asde_t( 'Importe' ), asde_t( 'Pagado' ), asde_t( 'Método' ), asde_t( 'Pedido del grupo' ), asde_t( 'Entregado' ), asde_t( 'Recibido' ), asde_t( 'Estado' ) ), ';' );
 		$num   = static fn( ?float $v ) => null === $v ? '' : number_format( $v, 2, ',', '' );
 		$fecha = static fn( ?string $f ) => $f ? wp_date( 'd/m/Y', strtotime( $f . ( strlen( $f ) > 10 ? ' UTC' : '' ) ) ) : '';
@@ -177,7 +177,7 @@ final class UniformesGestionView extends UniformesBaseView {
 			);
 			fputcsv( $out, array_map( array( Generador::class, 'celda_segura' ), $fila ), ';' );
 		}
-		fclose( $out );
+		fclose( $out ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- php://output (descarga)
 		exit;
 	}
 

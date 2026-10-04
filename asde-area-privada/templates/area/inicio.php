@@ -85,19 +85,19 @@ $user = $ambito->user;
 		<h3 class="asde-card__title"><?php asde_e( 'Pendiente de revisar' ); ?></h3>
 		<ul class="asde-pendientes">
 			<?php if ( $por_revisar['solicitudes'] ) : ?>
-				<li><a href="<?php echo esc_url( $url( 'solicitudes' ) ); ?>"><strong><?php echo (int) $por_revisar['solicitudes']; ?></strong> <?php echo 1 === (int) $por_revisar['solicitudes'] ? asde_t( 'solicitud de acceso' ) : asde_t( 'solicitudes de acceso' ); ?></a></li>
+				<li><a href="<?php echo esc_url( $url( 'solicitudes' ) ); ?>"><strong><?php echo (int) $por_revisar['solicitudes']; ?></strong> <?php echo 1 === (int) $por_revisar['solicitudes'] ? esc_html( asde_t( 'solicitud de acceso' ) ) : esc_html( asde_t( 'solicitudes de acceso' ) ); ?></a></li>
 			<?php endif; ?>
 			<?php if ( $por_revisar['cambios'] ) : ?>
-				<li><a href="<?php echo esc_url( $url( 'cambios' ) ); ?>"><strong><?php echo (int) $por_revisar['cambios']; ?></strong> <?php echo 1 === (int) $por_revisar['cambios'] ? asde_t( 'cambio propuesto por una familia' ) : asde_t( 'cambios propuestos por las familias' ); ?></a></li>
+				<li><a href="<?php echo esc_url( $url( 'cambios' ) ); ?>"><strong><?php echo (int) $por_revisar['cambios']; ?></strong> <?php echo 1 === (int) $por_revisar['cambios'] ? esc_html( asde_t( 'cambio propuesto por una familia' ) ) : esc_html( asde_t( 'cambios propuestos por las familias' ) ); ?></a></li>
 			<?php endif; ?>
 			<?php if ( ! empty( $por_revisar['uniforme_pago'] ) ) : ?>
-				<li><a href="<?php echo esc_url( $uni( 'sin_pagar' ) ); ?>"><?php echo $num( (int) $por_revisar['uniforme_pago'], asde_t( 'pedido de uniforme pendiente de pago' ), asde_t( 'pedidos de uniforme pendientes de pago' ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></a></li>
+				<li><a href="<?php echo esc_url( $uni( 'sin_pagar' ) ); ?>"><?php echo $num( (int) $por_revisar['uniforme_pago'], esc_html( asde_t( 'pedido de uniforme pendiente de pago' ) ), esc_html( asde_t( 'pedidos de uniforme pendientes de pago' ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></a></li>
 			<?php endif; ?>
 			<?php if ( ! empty( $por_revisar['uniforme_pedido'] ) ) : ?>
-				<li><a href="<?php echo esc_url( $uni( 'por_pedir' ) ); ?>"><?php echo $num( (int) $por_revisar['uniforme_pedido'], asde_t( 'pedido de uniforme por incluir en el pedido al proveedor' ), asde_t( 'pedidos de uniforme por incluir en el pedido al proveedor' ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></a></li>
+				<li><a href="<?php echo esc_url( $uni( 'por_pedir' ) ); ?>"><?php echo $num( (int) $por_revisar['uniforme_pedido'], esc_html( asde_t( 'pedido de uniforme por incluir en el pedido al proveedor' ) ), esc_html( asde_t( 'pedidos de uniforme por incluir en el pedido al proveedor' ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></a></li>
 			<?php endif; ?>
 			<?php if ( ! empty( $por_revisar['uniforme_entrega'] ) ) : ?>
-				<li><a href="<?php echo esc_url( $uni( 'por_entregar' ) ); ?>"><?php echo $num( (int) $por_revisar['uniforme_entrega'], asde_t( 'uniforme pedido al proveedor por entregar' ), asde_t( 'uniformes pedidos al proveedor por entregar' ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></a></li>
+				<li><a href="<?php echo esc_url( $uni( 'por_entregar' ) ); ?>"><?php echo $num( (int) $por_revisar['uniforme_entrega'], esc_html( asde_t( 'uniforme pedido al proveedor por entregar' ) ), esc_html( asde_t( 'uniformes pedidos al proveedor por entregar' ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></a></li>
 			<?php endif; ?>
 		</ul>
 	</section>
@@ -160,7 +160,7 @@ $pintar      = static function ( array $tiles ): void {
 ?>
 <?php if ( $mias ) : ?>
 	<?php if ( $con_titulos ) : ?>
-		<h3 class="asde-tiles__titulo"><?php echo $ambito->persona ? asde_t( 'Para ti' ) : asde_t( 'Para tu familia' ); ?></h3>
+		<h3 class="asde-tiles__titulo"><?php echo $ambito->persona ? esc_html( asde_t( 'Para ti' ) ) : esc_html( asde_t( 'Para tu familia' ) ); ?></h3>
 	<?php endif; ?>
 	<?php $pintar( $mias ); ?>
 <?php endif; ?>

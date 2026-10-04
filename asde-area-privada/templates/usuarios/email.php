@@ -35,7 +35,7 @@ defined( 'ABSPATH' ) || exit;
 				<?php endif; ?>
 			</dd>
 		</div>
-		<div><dt><?php asde_e( 'Enviado por' ); ?></dt><dd><?php echo $autor ? esc_html( $autor->user_login ) : asde_t( 'La propia persona (desde «¿Has olvidado tu contraseña?»)' ); ?></dd></div>
+		<div><dt><?php asde_e( 'Enviado por' ); ?></dt><dd><?php echo $autor ? esc_html( $autor->user_login ) : esc_html( asde_t( 'La propia persona (desde «¿Has olvidado tu contraseña?»)' ) ); ?></dd></div>
 	</dl>
 	<?php if ( $mailpit && RegistroEmails::ENVIADO === $fila['estado'] ) : ?>
 		<div class="asde-notice asde-notice--info" role="status"><strong><?php asde_e( 'Entorno local:' ); ?></strong> <?php asde_e( 'el email real, con su enlace, está en Mailpit:' ); ?> <a href="<?php echo esc_url( $mailpit ); ?>" target="_blank" rel="noopener"><?php echo esc_html( $mailpit ); ?></a>.</div>
@@ -51,5 +51,5 @@ defined( 'ABSPATH' ) || exit;
 	<?php if ( RegistroEmails::SIN_EMAIL === $fila['estado'] ) : ?>
 		<p><strong><?php asde_e( 'Este email no llegó a enviarse' ); ?></strong> <?php asde_e( 'porque no había dirección de destino en el CRM.' ); ?></p>
 	<?php endif; ?>
-	<iframe class="asde-email-preview" title="<?php echo asde_a( 'Vista del email' ); ?>" sandbox="" srcdoc="<?php echo esc_attr( $html ); ?>"></iframe>
+	<iframe class="asde-email-preview" title="<?php echo esc_attr( asde_a( 'Vista del email' ) ); ?>" sandbox="" srcdoc="<?php echo esc_attr( $html ); ?>"></iframe>
 </section>

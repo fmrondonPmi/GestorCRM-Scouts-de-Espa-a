@@ -12,6 +12,8 @@ use AsdeBalears\AreaPrivada\Tesoreria\MovimientosTable;
 
 defined( 'ABSPATH' ) || exit;
 
+// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- tablas propias del plugin ({prefix}asde_*): no hay función de WordPress para ellas y los datos cambian en cada petición, no se cachean.
+
 /**
  * Remesas de adeudos SEPA ({prefix}asde_sepa_remesas): el fichero que Tesorería
  * envía al banco para cobrar la cuota a las familias que han firmado su

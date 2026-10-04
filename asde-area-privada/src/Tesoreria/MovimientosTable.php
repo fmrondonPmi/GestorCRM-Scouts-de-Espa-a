@@ -3,6 +3,8 @@ namespace AsdeBalears\AreaPrivada\Tesoreria;
 
 defined( 'ABSPATH' ) || exit;
 
+// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- tablas propias del plugin ({prefix}asde_*): no hay función de WordPress para ellas y los datos cambian en cada petición, no se cachean.
+
 /**
  * Movimientos de Tesorería por familia y ronda ({prefix}asde_movimientos):
  *   pago    Dinero recibido (reduce lo pendiente).

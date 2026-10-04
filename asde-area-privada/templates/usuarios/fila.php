@@ -56,14 +56,14 @@ if ( $u->has_cap( 'manage_options' ) ) {
 	data-roles-texto="<?php echo esc_attr( implode( ', ', $txt_roles ) ); ?>"
 	data-ambito="|<?php echo esc_attr( implode( '|', $secc_u ) ); ?>|"
 	data-estado="<?php echo esc_attr( $estado ); ?>">
-	<td data-label="<?php echo asde_a( 'Usuario' ); ?>">
+	<td data-label="<?php echo esc_attr( asde_a( 'Usuario' ) ); ?>">
 		<strong><?php echo esc_html( $u->user_login ); ?></strong>
 		<?php $email_cuenta = EmailCuenta::leer( $u->ID ); ?>
 		<?php if ( $email_cuenta ) : ?>
-			<br><span class="asde-help" title="<?php echo asde_a( 'Email de la cuenta (guardado cifrado)' ); ?>"><?php echo esc_html( Contacto::enmascarar( $email_cuenta ) ); ?></span>
+			<br><span class="asde-help" title="<?php echo esc_attr( asde_a( 'Email de la cuenta (guardado cifrado)' ) ); ?>"><?php echo esc_html( Contacto::enmascarar( $email_cuenta ) ); ?></span>
 		<?php endif; ?>
 	</td>
-	<td data-label="<?php echo asde_a( 'Persona' ); ?>">
+	<td data-label="<?php echo esc_attr( asde_a( 'Persona' ) ); ?>">
 		<?php if ( $persona ) : ?>
 			<?php echo esc_html( $persona['nombre'] ); ?><?php echo Numeros::compacto_asde( $socio ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 			<?php echo $persona['activa'] ? '' : '<br><span class="asde-help asde-help--warning">' . esc_html( asde_t( 'Sin membresía activa: no puede entrar' ) ) . '</span>'; ?>
@@ -75,13 +75,13 @@ if ( $u->has_cap( 'manage_options' ) ) {
 			<span class="asde-muted"><?php echo esc_html( $u->display_name ); ?></span>
 		<?php endif; ?>
 	</td>
-	<td data-label="<?php echo asde_a( 'Roles' ); ?>">
+	<td data-label="<?php echo esc_attr( asde_a( 'Roles' ) ); ?>">
 		<?php foreach ( $roles_u as $r ) : ?>
 			<span class="asde-badge asde-badge--rol"><?php echo esc_html( Roles::label( $r ) ); ?></span>
 		<?php endforeach; ?>
 		<?php echo $u->has_cap( 'manage_options' ) ? '<span class="asde-muted">Administrador/a WP</span>' : ''; ?>
 	</td>
-	<td data-label="<?php echo asde_a( 'Ámbito' ); ?>">
+	<td data-label="<?php echo esc_attr( asde_a( 'Ámbito' ) ); ?>">
 		<?php
 		foreach ( $secc_u as $s ) {
 			echo Secciones::badge( $s ); // phpcs:ignore WordPress.Security.EscapeOutput
@@ -94,10 +94,10 @@ if ( $u->has_cap( 'manage_options' ) ) {
 			<br><a href="<?php echo esc_url( add_query_arg( 'socio', $socio, $url_alta ) ); ?>" data-asde-modal><?php asde_e( 'Gestionar acceso' ); ?></a>
 		<?php endif; ?>
 	</td>
-	<td data-label="<?php echo asde_a( 'Estado' ); ?>">
+	<td data-label="<?php echo esc_attr( asde_a( 'Estado' ) ); ?>">
 		<span class="asde-badge asde-badge--estado-<?php echo esc_attr( $estado ); ?>"><?php echo esc_html( Usuarios::etiqueta_estado( $estado ) ); ?></span>
 		<?php if ( Usuarios::INVITADO === $estado && $expira ) : ?>
-			<br><span class="asde-muted"><?php echo $expira < time() ? asde_t( 'Invitación caducada' ) : esc_html( sprintf( asde_t( 'Caduca el %s' ), wp_date( 'd/m/Y', $expira ) ) ); ?></span>
+			<br><span class="asde-muted"><?php echo $expira < time() ? esc_html( asde_t( 'Invitación caducada' ) ) : esc_html( sprintf( asde_t( 'Caduca el %s' ), wp_date( 'd/m/Y', $expira ) ) ); ?></span>
 		<?php endif; ?>
 		<?php if ( $alta_en ) : ?>
 			<br><span class="asde-muted"><?php asde_e( 'Alta:' ); ?> <?php echo esc_html( wp_date( 'd/m/Y', strtotime( $alta_en . ' UTC' ) ) ); ?></span>
@@ -120,7 +120,7 @@ if ( $u->has_cap( 'manage_options' ) ) {
 				</form>
 			<?php endif; ?>
 			<?php if ( $roles_u && ! $u->has_cap( 'manage_options' ) && get_current_user_id() !== $u->ID ) : ?>
-				<form method="post" onsubmit="return confirm(<?php echo asde_js( '¿Desactivar el acceso del usuario %s? Se le quitarán todos los roles del área privada.', $u->user_login ); ?>);">
+				<form method="post" onsubmit="return confirm(<?php echo esc_attr( asde_js( '¿Desactivar el acceso del usuario %s? Se le quitarán todos los roles del área privada.', $u->user_login ) ); ?>);">
 					<?php wp_nonce_field( 'asde_desactivar_' . $u->ID ); ?>
 					<input type="hidden" name="asde_action" value="desactivar">
 					<input type="hidden" name="user_id" value="<?php echo (int) $u->ID; ?>">

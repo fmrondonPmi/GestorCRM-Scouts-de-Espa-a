@@ -189,7 +189,7 @@ final class TesoreriaView extends TesoreriaBaseView {
 		header( 'Content-Type: text/csv; charset=UTF-8' );
 		header( 'Content-Disposition: attachment; filename="control-pagos-' . $ronda . '-' . wp_date( 'Ymd' ) . '.csv"' );
 		$out = fopen( 'php://output', 'w' );
-		fwrite( $out, "\xEF\xBB\xBF" );
+		fwrite( $out, "\xEF\xBB\xBF" ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fwrite -- php://output (descarga), no es el sistema de ficheros
 		fputcsv( $out, array( asde_t( 'Nº familia' ), asde_t( 'Socios' ), asde_t( 'Hijos que pagan' ), asde_t( 'Cuota' ), asde_t( 'Ajustes' ), asde_t( 'A pagar' ), asde_t( 'Pagado' ), asde_t( 'Pendiente' ), asde_t( 'Estado' ) ), ';' );
 		$num = static fn( float $v ) => number_format( $v, 2, ',', '' );
 		foreach ( $filas as $f ) {
@@ -197,7 +197,7 @@ final class TesoreriaView extends TesoreriaBaseView {
 			$nombres = array_map( static fn( $n ) => isset( $personas[ $n ] ) ? $personas[ $n ]->nombre_completo() : $n, $f['familia']['miembros'] );
 			fputcsv( $out, array_map( array( Generador::class, 'celda_segura' ), array( $f['familia']['numero'], implode( ', ', $nombres ), count( $c['pagan'] ), $num( $c['cuota']['total'] ), $num( $c['ajustes'] ), $num( $c['a_pagar'] ), $num( $c['pagado'] ), $num( $c['pendiente'] ), asde_t( Calculadora::ETIQUETAS[ $c['estado'] ] ) ) ), ';' );
 		}
-		fclose( $out );
+		fclose( $out ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- php://output (descarga)
 		exit;
 	}
 

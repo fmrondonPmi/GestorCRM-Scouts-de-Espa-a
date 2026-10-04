@@ -103,7 +103,7 @@ $control = static function ( string $campo, array $f ) use ( $pendientes ): stri
 };
 ?>
 <?php if ( count( $representados ) > 1 && $perm->es_representado() ) : ?>
-	<nav class="asde-subnav" aria-label="<?php echo asde_a( 'Menores a tu cargo' ); ?>">
+	<nav class="asde-subnav" aria-label="<?php echo esc_attr( asde_a( 'Menores a tu cargo' ) ); ?>">
 		<ul class="asde-subnav__tabs">
 			<?php foreach ( $representados as $n => $r ) : ?>
 				<li><a href="<?php echo esc_url( add_query_arg( 'socio', $n, $url ) ); ?>"<?php echo $n === $p->num_socio_asde ? ' class="is-active" aria-current="page"' : ''; ?>><?php echo esc_html( $r->nombre ); ?></a></li>
@@ -131,10 +131,10 @@ $control = static function ( string $campo, array $f ) use ( $pendientes ): stri
 	</header>
 	<dl class="asde-datos">
 		<div>
-			<dt><?php echo Identidad::es_asde() ? asde_t( 'Nº socio/a Scouts de España' ) : asde_t( 'Nº socio/a' ); ?></dt>
+			<dt><?php echo Identidad::es_asde() ? esc_html( asde_t( 'Nº socio/a Scouts de España' ) ) : esc_html( asde_t( 'Nº socio/a' ) ); ?></dt>
 			<dd><?php echo Numeros::html( $p, $numero ); // phpcs:ignore WordPress.Security.EscapeOutput ?></dd>
 		</div>
-		<div><dt><?php asde_e( 'Edad' ); ?></dt><dd><?php echo null === $p->edad() ? '—' : sprintf( asde_t( '%d años' ), (int) $p->edad() ); ?></dd></div>
+		<div><dt><?php asde_e( 'Edad' ); ?></dt><dd><?php echo null === $p->edad() ? '—' : sprintf( esc_html( asde_t( '%d años' ) ), (int) $p->edad() ); ?></dd></div>
 	</dl>
 
 	<?php if ( ! $escritura ) : ?>
@@ -188,7 +188,7 @@ $control = static function ( string $campo, array $f ) use ( $pendientes ): stri
 		</details>
 	<?php endforeach; ?>
 	<?php if ( $editables ) : ?>
-		<p class="asde-ficha__guardar"><button type="submit" class="button"><?php echo $propone ? asde_t( 'Enviar cambios para su aprobación' ) : asde_t( 'Guardar cambios en el CRM' ); ?></button></p>
+		<p class="asde-ficha__guardar"><button type="submit" class="button"><?php echo $propone ? esc_html( asde_t( 'Enviar cambios para su aprobación' ) ) : esc_html( asde_t( 'Guardar cambios en el CRM' ) ); ?></button></p>
 	<?php endif; ?>
 </form>
 
@@ -201,10 +201,10 @@ $control = static function ( string $campo, array $f ) use ( $pendientes ): stri
 				<?php foreach ( array_slice( $cambios, 0, 20 ) as $c ) : ?>
 					<?php $f = $campos[ $c['campo'] ] ?? array( 'etiqueta' => $c['campo'], 'meta' => array() ); ?>
 					<tr>
-						<td data-label="<?php echo asde_a( 'Fecha' ); ?>"><?php echo esc_html( wp_date( 'd/m/Y H:i', strtotime( $c['propuesto_en'] . ' UTC' ) ) ); ?></td>
-						<td data-label="<?php echo asde_a( 'Dato' ); ?>"><?php echo esc_html( $f['etiqueta'] ); ?></td>
-						<td data-label="<?php echo asde_a( 'Nuevo valor' ); ?>"><?php echo esc_html( FichaService::mostrar( $c['nuevo'], $f['meta'] ) ); ?></td>
-						<td data-label="<?php echo asde_a( 'Estado' ); ?>">
+						<td data-label="<?php echo esc_attr( asde_a( 'Fecha' ) ); ?>"><?php echo esc_html( wp_date( 'd/m/Y H:i', strtotime( $c['propuesto_en'] . ' UTC' ) ) ); ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Dato' ) ); ?>"><?php echo esc_html( $f['etiqueta'] ); ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Nuevo valor' ) ); ?>"><?php echo esc_html( FichaService::mostrar( $c['nuevo'], $f['meta'] ) ); ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Estado' ) ); ?>">
 							<?php echo esc_html( asde_t( Cambios::ESTADOS[ $c['estado'] ] ?? $c['estado'] ) ); ?>
 							<?php if ( '' !== $c['motivo'] && in_array( $c['estado'], array( Cambios::RECHAZADO, Cambios::ERROR ), true ) ) : ?>
 								<br><span class="asde-help asde-help--warning"><?php echo esc_html( $c['motivo'] ); ?></span>

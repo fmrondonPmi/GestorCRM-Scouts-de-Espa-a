@@ -16,7 +16,7 @@ use AsdeBalears\AreaPrivada\Socios\Numeros;
 
 defined( 'ABSPATH' ) || exit;
 ?>
-<nav class="asde-nav" aria-label="<?php echo asde_a( 'Área privada' ); ?>">
+<nav class="asde-nav" aria-label="<?php echo esc_attr( asde_a( 'Área privada' ) ); ?>">
 	<?php
 	// v0.15: el menú va por grupos (lo personal/familiar y la gestión del grupo). Con un solo
 	// grupo no hace falta rotularlo. Un tema que sobrescriba esta plantilla puede seguir usando $items.
@@ -50,10 +50,10 @@ defined( 'ABSPATH' ) || exit;
 			<?php endif; ?>
 			<?php if ( Identidad::es_asde() && ( current_user_can( 'asde_manage_users' ) || current_user_can( 'asde_tesoreria_acceso' ) || current_user_can( 'asde_reports' ) || current_user_can( 'asde_approve_changes' ) ) ) : ?>
 				<?php $ver_local = Numeros::ver_local(); ?>
-				· <a href="<?php echo esc_url( add_query_arg( array( 'asde_ver_local' => $ver_local ? '0' : '1', '_wpnonce' => wp_create_nonce( 'asde_ver_local' ) ) ) ); ?>" title="<?php echo asde_a( 'El nº territorial sale junto al nº de Scouts de España en todas las pantallas. Si tiene algún problema, el aviso sale siempre.' ); ?>"><?php echo $ver_local ? asde_t( 'Ocultar nº territorial' ) : asde_t( 'Mostrar nº territorial' ); ?></a>
+				· <a href="<?php echo esc_url( add_query_arg( array( 'asde_ver_local' => $ver_local ? '0' : '1', '_wpnonce' => wp_create_nonce( 'asde_ver_local' ) ) ) ); ?>" title="<?php echo esc_attr( asde_a( 'El nº territorial sale junto al nº de Scouts de España en todas las pantallas. Si tiene algún problema, el aviso sale siempre.' ) ); ?>"><?php echo $ver_local ? esc_html( asde_t( 'Ocultar nº territorial' ) ) : esc_html( asde_t( 'Mostrar nº territorial' ) ); ?></a>
 			<?php endif; ?>
 			<?php if ( Tema::cabecera_plegable() ) : ?>
-				<button type="button" class="asde-nav__cabecera" aria-controls="header" aria-expanded="true" title="<?php echo asde_a( 'Ocultar o mostrar la cabecera del tema para ganar espacio' ); ?>">
+				<button type="button" class="asde-nav__cabecera" aria-controls="header" aria-expanded="true" title="<?php echo esc_attr( asde_a( 'Ocultar o mostrar la cabecera del tema para ganar espacio' ) ); ?>">
 					<span class="asde-nav__cabecera-icono" aria-hidden="true">▴</span>
 					<span class="asde-nav__cabecera-texto"><?php asde_e( 'Ocultar cabecera' ); ?></span>
 				</button>

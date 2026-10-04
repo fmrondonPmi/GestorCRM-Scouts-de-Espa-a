@@ -69,7 +69,7 @@ $user = static fn( $id ) => ( $u = get_userdata( (int) $id ) ) ? $u->user_login 
 			<?php endif; ?>
 			<tr class="asde-total"><th scope="row"><?php asde_e( 'A pagar' ); ?></th><td><?php echo esc_html( Calculadora::euros( $c['a_pagar'] ) ); ?></td></tr>
 			<tr><th scope="row"><?php asde_e( 'Pagado' ); ?></th><td><?php echo esc_html( Calculadora::euros( $c['pagado'] ) ); ?></td></tr>
-			<tr class="asde-total"><th scope="row"><?php echo $c['pendiente'] < 0 ? asde_t( 'Saldo a favor' ) : asde_t( 'Pendiente' ); ?></th><td><?php echo esc_html( Calculadora::euros( abs( $c['pendiente'] ) ) ); ?></td></tr>
+			<tr class="asde-total"><th scope="row"><?php echo $c['pendiente'] < 0 ? esc_html( asde_t( 'Saldo a favor' ) ) : esc_html( asde_t( 'Pendiente' ) ); ?></th><td><?php echo esc_html( Calculadora::euros( abs( $c['pendiente'] ) ) ); ?></td></tr>
 		</tbody>
 	</table>
 	<?php if ( count( $c['plazos'] ) > 1 || ! empty( $c['plazos'][0]['vencido'] ) ) : ?>
@@ -150,14 +150,14 @@ $user = static fn( $id ) => ( $u = get_userdata( (int) $id ) ) ? $u->user_login 
 				<?php foreach ( $movimientos as $m ) : ?>
 					<?php $anulado = ! empty( $m['anulado_en'] ); ?>
 					<tr class="<?php echo $anulado ? 'asde-anulado' : ''; ?>">
-						<td data-label="<?php echo asde_a( 'Fecha' ); ?>"><?php echo esc_html( wp_date( 'd/m/Y', strtotime( $m['fecha'] . ' 12:00' ) ) ); ?></td>
-						<td data-label="<?php echo asde_a( 'Tipo' ); ?>"><?php echo esc_html( MovimientosTable::PAGO === $m['tipo'] ? asde_t( 'Pago' ) . ( $m['metodo'] ? ' · ' . ( asde_t( MovimientosTable::METODOS[ $m['metodo'] ] ?? $m['metodo'] ) ) : '' ) : asde_t( 'Ajuste' ) ); ?></td>
-						<td data-label="<?php echo asde_a( 'Importe' ); ?>"><?php echo esc_html( Calculadora::euros( (float) $m['importe'] ) ); ?></td>
-						<td data-label="<?php echo asde_a( 'Detalle' ); ?>"><?php echo esc_html( trim( $m['referencia'] . ( $m['referencia'] && $m['nota'] ? ' · ' : '' ) . $m['nota'] ) ); ?><?php echo $anulado ? '<br><span class="asde-help">' . esc_html( sprintf( asde_t( 'Anulado el %s por %s' ), wp_date( 'd/m/Y', strtotime( $m['anulado_en'] . ' UTC' ) ), $user( $m['anulado_por'] ) ) ) . '</span>' : ''; ?></td>
-						<td data-label="<?php echo asde_a( 'Registrado por' ); ?>"><?php echo esc_html( $user( $m['registrado_por'] ) ); ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Fecha' ) ); ?>"><?php echo esc_html( wp_date( 'd/m/Y', strtotime( $m['fecha'] . ' 12:00' ) ) ); ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Tipo' ) ); ?>"><?php echo esc_html( MovimientosTable::PAGO === $m['tipo'] ? asde_t( 'Pago' ) . ( $m['metodo'] ? ' · ' . ( asde_t( MovimientosTable::METODOS[ $m['metodo'] ] ?? $m['metodo'] ) ) : '' ) : asde_t( 'Ajuste' ) ); ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Importe' ) ); ?>"><?php echo esc_html( Calculadora::euros( (float) $m['importe'] ) ); ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Detalle' ) ); ?>"><?php echo esc_html( trim( $m['referencia'] . ( $m['referencia'] && $m['nota'] ? ' · ' : '' ) . $m['nota'] ) ); ?><?php echo $anulado ? '<br><span class="asde-help">' . esc_html( sprintf( asde_t( 'Anulado el %s por %s' ), wp_date( 'd/m/Y', strtotime( $m['anulado_en'] . ' UTC' ) ), $user( $m['anulado_por'] ) ) ) . '</span>' : ''; ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Registrado por' ) ); ?>"><?php echo esc_html( $user( $m['registrado_por'] ) ); ?></td>
 						<td data-label="">
 							<?php if ( ! $anulado ) : ?>
-								<form method="post" onsubmit="return confirm(<?php echo asde_js( '¿Anular este movimiento? Quedará registrado como anulado.' ); ?>);">
+								<form method="post" onsubmit="return confirm(<?php echo esc_attr( asde_js( '¿Anular este movimiento? Quedará registrado como anulado.' ) ); ?>);">
 									<?php wp_nonce_field( 'asde_mov_' . $familia['id'] ); ?>
 									<input type="hidden" name="asde_action" value="anular">
 									<input type="hidden" name="familia" value="<?php echo (int) $familia['id']; ?>">
