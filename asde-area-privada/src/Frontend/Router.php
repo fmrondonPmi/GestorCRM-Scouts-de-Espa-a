@@ -41,7 +41,7 @@ defined( 'ABSPATH' ) || exit;
 final class Router {
 
 	/** Páginas que se pueden abrir en la ventana emergente. */
-	public const MODALES = array( 'ficha', 'alta', 'solicitudes', 'uniformes', 'inventario_tipos', 'inventario_compras' );
+	public const MODALES = array( 'ficha', 'alta', 'solicitudes', 'uniformes', 'inventario', 'inventario_tipos', 'inventario_compras' );
 
 	/** La pide la ventana emergente del área (assets/js/area.js). */
 	public static function pide_modal(): bool {
@@ -230,6 +230,15 @@ final class Router {
 				( new TesoreriaView() )->exportar();
 			} elseif ( 'uniformes' === $key ) {
 				( new UniformesGestionView() )->exportar();
+			}
+		}
+		// Importar material: el CSV de ejemplo y las filas que no se importaron.
+		if ( 'inventario' === $key ) {
+			$formato = sanitize_key( wp_unslash( $_GET['formato'] ?? '' ) ); // phpcs:ignore WordPress.Security.NonceVerification -- el de las filas con error comprueba su nonce; el ejemplo no tiene datos
+			if ( 'csv-ejemplo' === $formato ) {
+				( new InventarioView() )->ejemplo();
+			} elseif ( 'csv-errores' === $formato ) {
+				( new InventarioView() )->errores_csv();
 			}
 		}
 		// PDF de una lista de compra (solo con el visto bueno de Tesorería).

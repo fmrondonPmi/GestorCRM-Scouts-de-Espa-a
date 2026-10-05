@@ -3,6 +3,7 @@ namespace AsdeBalears\AreaPrivada\Frontend\Views;
 
 use AsdeBalears\AreaPrivada\Audit\Logger;
 use AsdeBalears\AreaPrivada\Frontend\Notices;
+use AsdeBalears\AreaPrivada\Inventario\Importador;
 use AsdeBalears\AreaPrivada\Inventario\MaterialesTable;
 use AsdeBalears\AreaPrivada\Inventario\Servicio;
 use AsdeBalears\AreaPrivada\Inventario\TiposTable;
@@ -19,6 +20,10 @@ final class InventarioView extends InventarioBaseView {
 	public function render( string $content = '' ): string {
 		if ( ! current_user_can( Servicio::CAP ) ) {
 			return $this->denegado();
+		}
+		if ( '1' === $this->get( 'importar' ) ) {
+			// Importar desde CSV: se abre en la ventana emergente (sin las pestañas) o en su página.
+			return $this->layout( 'inventario', ( self::es_modal() ? '' : $this->subnav( 'inventario' ) ) . $this->importacion() );
 		}
 		$id = (int) $this->get( 'material' );
 		if ( $id || '1' === $this->get( 'nuevo' ) ) {
@@ -69,6 +74,118 @@ final class InventarioView extends InventarioBaseView {
 		);
 	}
 
+	/** Formulario para importar un CSV o, después de importarlo, el informe (?resultado=clave). */
+	private function importacion(): string {
+		$clave     = sanitize_key( $this->get( 'resultado' ) );
+		$resultado = '' !== $clave ? get_transient( self::clave_importacion( $clave ) ) : false;
+		return $this->tpl(
+			'inventario/importar',
+			array(
+				'resultado'   => is_array( $resultado ) ? $resultado : null,
+				'caducado'    => '' !== $clave && ! is_array( $resultado ),
+				'url'         => $this->url( 'inventario', array( 'importar' => '1' ) ),
+				'url_lista'   => $this->url( 'inventario' ),
+				'url_ejemplo' => $this->url( 'inventario', array( 'formato' => 'csv-ejemplo' ) ),
+				'url_errores' => is_array( $resultado ) && $resultado['errores'] ? $this->url(
+					'inventario',
+					array(
+						'formato'   => 'csv-errores',
+						'resultado' => $clave,
+						'_wpnonce'  => wp_create_nonce( 'asde_inventario_errores' ),
+					)
+				) : '',
+			)
+		);
+	}
+
+	/** El informe de una importación se guarda una hora, solo para quien la hizo. */
+	private static function clave_importacion( string $clave ): string {
+		return 'asde_ap_inv_import_' . get_current_user_id() . '_' . $clave;
+	}
+
+	/** CSV de ejemplo para importar (se llama antes de pintar la página). */
+	public function ejemplo(): void {
+		if ( ! current_user_can( Servicio::CAP ) ) {
+			wp_die( esc_html__( 'No tienes permiso para ver esto.', 'asde-area-privada' ), 403 );
+		}
+		$this->descargar( 'ejemplo-inventario.csv', Importador::ejemplo() );
+	}
+
+	/** Las filas que no se importaron, con su motivo, para corregirlas y volver a importarlas. */
+	public function errores_csv(): void {
+		$resultado = get_transient( self::clave_importacion( sanitize_key( $this->get( 'resultado' ) ) ) );
+		if ( ! current_user_can( Servicio::CAP ) || ! wp_verify_nonce( $this->get( '_wpnonce' ), 'asde_inventario_errores' ) || ! is_array( $resultado ) ) {
+			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-area-privada' ), 403 );
+		}
+		$filas = array( array_merge( array( asde_t( 'Fila' ) ), array_map( static fn( $c ) => asde_t( $c[0] ), Importador::COLUMNAS ), array( asde_t( 'Motivo del error' ) ) ) );
+		foreach ( $resultado['errores'] as $e ) {
+			$datos = array();
+			foreach ( array_keys( Importador::COLUMNAS ) as $col ) {
+				$datos[] = (string) ( $e['datos'][ $col ] ?? '' );
+			}
+			$filas[] = array_merge( array( (string) $e['fila'] ), $datos, array( $e['motivo'] ) );
+		}
+		$this->descargar( 'inventario-filas-con-error.csv', "\xEF\xBB\xBF" . Importador::a_csv( $filas ) );
+	}
+
+	/** @return never */
+	private function descargar( string $nombre, string $csv ): void {
+		nocache_headers();
+		header( 'Content-Type: text/csv; charset=UTF-8' );
+		header( 'Content-Disposition: attachment; filename="' . sanitize_file_name( $nombre ) . '"' );
+		echo $csv; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- es un fichero CSV, no HTML (las celdas van a salvo de fórmulas: Generador::celda_segura)
+		exit;
+	}
+
+	/** Importa el CSV subido: primero el fichero entero; si vale, las filas correctas, y guarda el informe. */
+	private function importar(): void {
+		check_admin_referer( 'asde_inventario_importar' );
+		$aqui = $this->url( 'inventario', array( 'importar' => '1' ) );
+		$f    = $_FILES['fichero'] ?? null; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.NonceVerification.Missing -- el nonce se comprueba arriba; del fichero solo se usa su ruta temporal, comprobada con is_uploaded_file()
+		$err  = is_array( $f ) ? (int) ( $f['error'] ?? UPLOAD_ERR_NO_FILE ) : UPLOAD_ERR_NO_FILE;
+		if ( UPLOAD_ERR_NO_FILE === $err ) {
+			Notices::add( 'error', asde_t( 'Elige el fichero CSV que quieres importar.' ) );
+			$this->redirect( $aqui );
+		}
+		$nombre = sanitize_file_name( (string) ( $f['name'] ?? '' ) );
+		if ( UPLOAD_ERR_OK !== $err || ! is_uploaded_file( (string) $f['tmp_name'] ) || (int) $f['size'] > Importador::MAX_BYTES ) {
+			/* translators: %d: tamaño máximo en MB */
+			Notices::add( 'error', esc_html( sprintf( asde_t( 'El fichero no se ha podido subir. Tiene que ser un CSV de hasta %d MB.' ), (int) ( Importador::MAX_BYTES / MB_IN_BYTES ) ) ) );
+			$this->redirect( $aqui );
+		}
+		if ( ! preg_match( '/\.(csv|txt)$/i', $nombre ) ) {
+			Notices::add( 'error', asde_t( 'El fichero tiene que ser un CSV (.csv). Desde Excel: «Guardar como» → «CSV (delimitado por punto y coma)».' ) );
+			$this->redirect( $aqui );
+		}
+		$leido = Importador::leer( (string) $f['tmp_name'] );
+		if ( is_wp_error( $leido ) ) {
+			Notices::add( 'error', esc_html( $leido->get_error_message() . ' ' . asde_t( 'No se ha importado nada.' ) ) );
+			$this->redirect( $aqui );
+		}
+		$res = Importador::importar( $leido['filas'], '1' === $this->post( 'crear_tipos' ) );
+		Logger::log(
+			'inventario_importado',
+			'inventario',
+			'',
+			array(
+				'filas'         => count( $leido['filas'] ),
+				'importados'    => $res['importados'],
+				'errores'       => count( $res['errores'] ),
+				'tipos_creados' => count( $res['tipos_creados'] ),
+			)
+		);
+		$clave = strtolower( wp_generate_password( 12, false ) );
+		set_transient(
+			self::clave_importacion( $clave ),
+			$res + array(
+				'fichero' => $nombre,
+				'filas'   => count( $leido['filas'] ),
+			),
+			HOUR_IN_SECONDS
+		);
+		$this->redirect( add_query_arg( 'resultado', $clave, $aqui ) );
+	}
+
 	/** Lo escrito en el formulario cuando no se pudo guardar (para no tener que repetirlo). */
 	private function borrador(): array {
 		$clave = 'asde_ap_inv_material_' . get_current_user_id();
@@ -80,6 +197,9 @@ final class InventarioView extends InventarioBaseView {
 	public function handle_post(): void {
 		$this->denegar_post();
 		$accion = $this->post( 'asde_action' );
+		if ( 'material_importar' === $accion ) {
+			$this->importar();
+		}
 		$id     = (int) $this->post( 'material' );
 		check_admin_referer( 'asde_inventario_material_' . $id );
 		$lista = $this->url( 'inventario' );

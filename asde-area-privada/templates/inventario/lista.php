@@ -27,7 +27,10 @@ $buscar = $normal( trim( $q ) );
 <section class="asde-card">
 	<header class="asde-card__header asde-card__header--split">
 		<h2 class="asde-card__title"><?php asde_e( 'Inventario de material' ); ?></h2>
-		<span class="asde-actions"><a class="button" href="<?php echo esc_url( add_query_arg( 'nuevo', '1', $url ) ); ?>"><?php asde_e( 'Añadir material' ); ?></a></span>
+		<span class="asde-actions asde-actions--botones">
+			<a class="button" href="<?php echo esc_url( add_query_arg( 'nuevo', '1', $url ) ); ?>"><?php asde_e( 'Añadir material' ); ?></a>
+			<a class="button asde-button-secundario" href="<?php echo esc_url( add_query_arg( 'importar', '1', $url ) ); ?>" data-asde-modal><?php asde_e( 'Importar desde CSV' ); ?></a>
+		</span>
 	</header>
 	<p class="asde-muted">
 		<?php
@@ -55,7 +58,7 @@ $buscar = $normal( trim( $q ) );
 	</form>
 
 	<?php if ( ! $materiales ) : ?>
-		<p><?php asde_e( 'Todavía no hay material en el inventario. Empieza con «Añadir material».' ); ?></p>
+		<p><?php asde_e( 'Todavía no hay material en el inventario. Empieza con «Añadir material» o, si ya lo tienes en una hoja de cálculo, con «Importar desde CSV».' ); ?></p>
 	<?php else : ?>
 		<form method="get" action="<?php echo esc_url( $url_compra ); ?>" data-asde-inv-compra data-umbral="<?php echo (int) $umbral; ?>">
 			<input type="hidden" name="nueva" value="1">

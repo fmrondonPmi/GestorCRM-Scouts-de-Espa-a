@@ -1936,3 +1936,18 @@ html.asde-cargando .asde-ap button {
 		font-weight: 600;
 	}
 }
+/* v0.19 · Importar material desde CSV (ventana emergente) */
+.asde-ap .asde-inv-columnas {
+	margin-top: 16px;
+	padding: 8px 12px;
+	border: 1px solid var(--asde-border);
+	border-radius: var(--asde-radius);
+	background: var(--asde-tint);
+}
+.asde-ap .asde-inv-columnas summary {
+	cursor: pointer;
+	font-weight: 600;
+}
+.asde-ap .asde-inv-columnas ul {
+	margin: 8px 0 0;
+}

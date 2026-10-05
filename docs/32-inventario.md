@@ -1,4 +1,4 @@
-# 32 · Inventario de material y listas de compra (v0.19.0)
+# 32 · Inventario de material, listas de compra e importación (v0.19.0–v0.19.1)
 
 ## Petición del usuario (2026-10-05)
 
@@ -43,6 +43,16 @@ Todo filtra por el nº de grupo: un grupo no ve el inventario de otro.
    - Quien la creó puede **cancelarla** mientras está pendiente; Tesorería, mientras no se haya impreso.
 5. En **Inicio**, Tesorería ve en «Pendiente de revisar» las listas que esperan su visto bueno, y la pestaña lleva el número: «Inventario (2)».
 
+### Importar material desde un CSV (v0.19.0, segunda petición del 2026-10-05)
+
+- **Botón «Importar desde CSV»** junto a «Añadir material»: abre en la **ventana emergente** (sin JavaScript, en su página: `inventario/?importar=1`) un formulario con el fichero, la casilla **«Crear los tipos de material que todavía no existan»** (marcada) y el enlace **«Descargar un fichero de ejemplo»** (`?formato=csv-ejemplo`: cabecera y tres filas de ejemplo, con BOM y «;» para que Excel lo abra bien). Debajo, plegado, «Cómo tiene que ser el fichero».
+- **Columnas** (en cualquier orden; las que no se usen se pueden quitar): Descripción, Tipo, Cantidad, Precio por unidad, Año de compra, Nº de serie, Notas. **Obligatorias en la cabecera: Descripción y Cantidad.** La cabecera se reconoce sin mayúsculas ni acentos y con otros nombres habituales (Material, Unidades, Precio, Año, Serie, Observaciones…) y también en el idioma de la persona.
+- **Paso 1, el fichero entero** (`Inventario\Importador::leer`): que se pueda leer y no esté vacío, que no sea un Excel binario (se explica cómo guardarlo como CSV), hasta **2 MB y 2.000 filas**, extensión .csv o .txt, y la cabecera con las obligatorias. Separador «;», «,» o tabulador (el que más aparece en la cabecera); UTF-8 con o sin BOM o Windows-1252 (ANSI, lo que guarda Excel). Si algo falla, **no se importa nada** y se dice por qué.
+- **Paso 2, fila a fila** (`Importador::importar`): las mismas reglas que el formulario (`MaterialesTable::validar`), el tipo por su nombre (si no existe, se crea o la fila falla, según la casilla; una fila con error no deja creado su tipo) y el **nº de serie** no puede estar ya en el inventario ni repetido en el fichero. Las correctas se importan; las filas vacías se saltan.
+- **Informe en la misma ventana**: cuántas filas se leyeron, cuántos materiales se importaron, cuántas filas no y los tipos nuevos; tabla con el **nº de fila** (el de la hoja de cálculo: la cabecera es la 1), la descripción y el **motivo**; y **«Descargar las filas con error (CSV)»** con las mismas columnas más «Fila» y «Motivo del error» (que se ignoran al volver a importar), para corregirlas y reimportarlas. El informe se guarda una hora y solo lo ve quien importó. Al cerrar la ventana, el inventario se recarga con lo nuevo.
+- Auditoría: `inventario_importado` (filas, importados, errores y tipos creados; sin contenido). Las celdas que se descargan van a salvo de fórmulas (`Generador::celda_segura`).
+- **Supuestos** (a confirmar, P-67 y P-68): un nº de serie repetido es un error (sin nº de serie, se pueden repetir descripciones); los tipos que no existen se crean por defecto.
+
 ### El PDF
 
 Lo genera el propio plugin (`Inventario\Pdf`, sin librerías externas: PDF 1.4 con la fuente Helvetica estándar y codificación WinAnsi, así que salen bien los acentos, la ñ y el €). A4 vertical: nombre del grupo, «Lista de compra de material», nº, fecha, quién la pidió, visto bueno de Tesorería (quién y cuándo), tabla (material, tipo, nº de serie, en inventario, a comprar, precio, importe), total estimado, nota y «Página X de Y». Se abre en una pestaña nueva para imprimirlo o guardarlo.
@@ -64,7 +74,7 @@ Lo genera el propio plugin (`Inventario\Pdf`, sin librerías externas: PDF 1.4 c
 
 `tests/inventario.php` (CRM simulado): quién entra (y quién no), tipos (duplicados, en uso, renombrar), validaciones del material, baja y recuperación, separación entre grupos, aviso de pocas unidades, lista nueva, email a Tesorería (destinatarios), sin visto bueno no hay PDF, solo Tesorería aprueba, rechazo con motivo, PDF válido (cabecera, tabla de referencias cruzadas con los desplazamientos correctos, texto), cancelar, JSON de tipos para el desplegable, menú e inicio.
 
-**76 comprobaciones, todas OK** (2026-10-05); suite completa: 1297 OK, 0 fallos. Además, el cerrojo del instalador (ver abajo) y que las tres páginas no estén repetidas.
+**97 comprobaciones, todas OK** (v0.19.1, 2026-10-05; 76 en la v0.19.0, más 21 de la importación: el fichero entero —vacío, Excel binario, sin la columna obligatoria, solo cabecera, demasiadas filas—, ANSI con «;» y UTF-8 con BOM y «,», cada motivo de error por fila con su nº, crear o no los tipos, una fila mala no deja su tipo, el ejemplo se importa tal cual, celdas a salvo de fórmulas, el botón y la ventana, el informe y que solo lo ve quien importó; y el nombre de quien pide la lista). Además, el cerrojo del instalador (ver abajo) y que las tres páginas no estén repetidas.
 
 **Revisado a mano** (HTML volcado con datos inventados + CSS de Enfold, servidor estático): las 11 pantallas en escritorio y a 390 px (sin desbordes: la tabla pasa a tarjetas); en el navegador, el aviso «¿seguro?» (cancelar desmarca, aceptar deja marcado, con 5 o más no pregunta), los filtros sin recargar, el total en vivo de la lista nueva y el refresco del desplegable al cerrar la ventana de tipos (no recarga, no se pierde lo escrito y queda elegido el tipo nuevo). El PDF, generado y abierto (acentos, «», €, tabla de 53 líneas en dos páginas).
 
@@ -75,4 +85,4 @@ Al arrancar Local después de copiar la 0.19.0, **tres peticiones a la vez** vie
 - `Installer::maybe_upgrade()` toma ahora un **cerrojo** (`asde_ap_instalando`) con un `INSERT IGNORE` sobre la clave única de `wp_options`, que es atómico. `add_option()` **no** sirve: hace `INSERT … ON DUPLICATE KEY UPDATE` y, con dos peticiones a la vez, devuelve «hecho» a las dos.
 - Las demás peticiones no esperan: siguen sin instalar (la siguiente que llegue ya ve la versión nueva). Un cerrojo de más de 5 minutos se da por abandonado.
 - Las copias que se crearon en Local se borraron (las no registradas, con el shortcode del inventario).
-- Pendiente aparte: `Crm\Instantanea::tomar_cerrojo()` usa `add_option()` y tiene la misma debilidad (lo peor que pasa es que dos peticiones lean el CRM a la vez).
+- ~~Pendiente aparte~~ **Hecho el 2026-10-05:** `Crm\Instantanea::tomar_cerrojo()` usaba `add_option()` y tenía la misma debilidad (dos peticiones podían leer el CRM a la vez); ahora usa el mismo patrón (doc 26, «Cerrojo atómico»).

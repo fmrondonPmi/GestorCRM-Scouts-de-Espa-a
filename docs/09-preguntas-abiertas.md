@@ -50,6 +50,8 @@ Hay que resolverlas antes de programar cada parte. Cuando se responde una, se ma
 | P-64 | **Inventario · visto bueno propio:** hecho así: alguien de Tesorería puede aprobar una lista que ha creado él o ella (el email va al resto de Tesorería). ¿Se prohíbe cuando hay más de una persona en Tesorería? (doc 32, S-4) | Inventario |
 | P-65 | **Inventario · avisos de vuelta:** hecho así: aprobar o rechazar **no envía email** a quien pidió la lista (lo ve en el listado). ¿Se le avisa por email? (doc 32, S-5) | Inventario |
 | P-66 | **Inventario · después de comprar:** hecho así: el visto bueno no cambia las cantidades del inventario. ¿Se añade «Marcar como comprada» que sume lo comprado? (doc 32, S-6) | Inventario |
+| P-67 | **Importar material · repetidos:** hecho así: una fila con un nº de serie que ya está en el inventario (o repetido en el fichero) no se importa; sin nº de serie no se comprueba nada (puede duplicarse una descripción). ¿Hay que avisar también de descripciones repetidas o sumar la cantidad al material que ya existe? (doc 32) | Inventario |
+| P-68 | **Importar material · tipos:** hecho así: los tipos que no existen se crean (casilla marcada por defecto; desmarcada, esas filas fallan). ¿Vale, o preferís que por defecto fallen para evitar tipos con erratas? (doc 32) | Inventario |
 
 ## Resueltas
 

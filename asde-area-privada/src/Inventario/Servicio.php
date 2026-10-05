@@ -111,9 +111,33 @@ final class Servicio {
 		return current_user_can( self::CAP ) && ComprasTable::APROBADA === $l['estado'];
 	}
 
-	/** Nombre de quien hizo algo (o '' si la cuenta ya no existe). */
+	/** @var array<int, string> Nombres ya buscados en esta petición. */
+	private static array $nombres = array();
+
+	/**
+	 * Nombre de quien hizo algo: el de su ficha del CRM (la cuenta solo guarda el nº de
+	 * socio como nombre) o, si no tiene ficha o el CRM no responde, su usuario. '' si la
+	 * cuenta ya no existe. La ficha sale de la instantánea (doc 26): no añade consultas.
+	 */
 	public static function usuario( int $id ): string {
+		if ( isset( self::$nombres[ $id ] ) ) {
+			return self::$nombres[ $id ];
+		}
 		$u = $id ? get_userdata( $id ) : false;
-		return $u ? (string) $u->display_name : '';
+		if ( ! $u ) {
+			return self::$nombres[ $id ] = '';
+		}
+		$nombre = (string) $u->display_name;
+		$socio  = \AsdeBalears\AreaPrivada\Usuarios\Usuarios::socio( $u->ID );
+		$repo   = '' !== $socio ? \AsdeBalears\AreaPrivada\Crm\PersonaRepository::make() : null;
+		if ( $repo ) {
+			try {
+				$p      = $repo->obtener( $socio );
+				$nombre = $p ? $p->nombre_completo() : $nombre;
+			} catch ( \AsdeBalears\AreaPrivada\Crm\CrmException $e ) {
+				// CRM caído: se queda con el usuario.
+			}
+		}
+		return self::$nombres[ $id ] = $nombre;
 	}
 }

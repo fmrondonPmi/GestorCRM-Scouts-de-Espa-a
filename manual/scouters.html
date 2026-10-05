@@ -12,7 +12,7 @@
 <body>
 <header class="portada">
 	<div class="portada__dentro">
-		<p class="antetitulo">Manual de uso · versión 0.18 · octubre de 2026 · <a class="portada__volver" href="index.html">Todos los manuales</a></p>
+		<p class="antetitulo">Manual de uso · versión 0.19 · octubre de 2026 · <a class="portada__volver" href="index.html">Todos los manuales</a></p>
 		<h1>Manual para scouters</h1>
 		<p class="portada__perfil">Scouters y voluntariado con sección</p>
 		<p class="entrada">Lo que hace un scouter con su sección en el área privada: las fichas de sus educandos, los cambios que proponen las familias, las solicitudes de acceso, los informes, los pagos y las familias, y los pedidos de uniforme. Y lo suyo: sus datos, sus pagos y su propio uniforme.</p>
@@ -51,6 +51,13 @@
 <li><a href="#uniformes">Uniformes: el tuyo y los de tu sección</a></li>
 <li class="sub"><a href="#mi-uniforme">Mi uniforme</a></li>
 <li class="sub"><a href="#gestion-uniformes">Gestión de uniformes</a></li>
+<li><a href="#inventario">Inventario de material</a></li>
+<li class="sub"><a href="#inventario-material">El material</a></li>
+<li class="sub"><a href="#inventario-tipos">Tipos de material</a></li>
+<li class="sub"><a href="#inventario-importar">Importar el material desde una hoja de cálculo</a></li>
+<li class="sub"><a href="#inventario-lista-compra">Preparar una lista de compra</a></li>
+<li class="sub"><a href="#inventario-visto-bueno">El visto bueno de Tesorería</a></li>
+<li class="sub"><a href="#inventario-pdf">Imprimir la lista</a></li>
 <li><a href="#idioma">El idioma de la web</a></li>
 <li><a href="#preguntas">Preguntas frecuentes</a></li>
 		</ol>
@@ -74,6 +81,7 @@
 <li><a href="#informes">Informes</a></li>
 <li><a href="#tesoreria">Tesorería: pagos y familias</a></li>
 <li><a href="#uniformes">Uniformes: el tuyo y los de tu sección</a></li>
+<li><a href="#inventario">Inventario de material</a></li>
 <li><a href="#idioma">El idioma de la web</a></li>
 <li><a href="#preguntas">Preguntas frecuentes</a></li>
 			</ol>
@@ -92,6 +100,7 @@
 				<tr><td><a href="#informes">Informes</a></td><td>Listados de tus secciones, con las columnas que elijas.</td></tr>
 				<tr><td><a href="#tesoreria">Tesorería</a></td><td>El control de pagos y las familias de todo el grupo: consultas y registras pagos. La configuración no.</td></tr>
 				<tr><td><a href="#uniformes">Uniformes</a></td><td>Pides el tuyo y entregas los pedidos de tus secciones.</td></tr>
+				<tr><td><a href="#inventario">Inventario</a></td><td>El material del grupo: lo mantienes, lo importas desde una hoja de cálculo y preparas listas de compra (las aprueba Tesorería).</td></tr>
 			</tbody>
 		</table>
 	</div>
@@ -228,7 +237,7 @@
 			<thead><tr><th scope="col">Parte del menú</th><th scope="col">Entradas</th></tr></thead>
 			<tbody>
 				<tr><td>Mi espacio</td><td>Mis datos · Mis pagos · Mi uniforme</td></tr>
-				<tr><td>Gestión del grupo</td><td>Solicitudes · Cambios · Informes · Gestión de uniformes · Tesorería</td></tr>
+				<tr><td>Gestión del grupo</td><td>Solicitudes · Cambios · Informes · Gestión de uniformes · Inventario · Tesorería</td></tr>
 			</tbody>
 		</table>
 	</div>
@@ -359,6 +368,74 @@
 	</ul>
 </section>
 
+<section id="inventario">
+	<h2>Inventario de material</h2>
+	<p class="resumen">En «Gestión del grupo → <strong>Inventario</strong>» está todo el material y el equipamiento del grupo: tiendas, cocina, herramientas, botiquines… Lo ven y lo mantienen los scouters (con o sin sección), Secretaría, Coordinación y Tesorería. Desde aquí también se preparan las <strong>listas de compra</strong>, que Tesorería tiene que aprobar antes de imprimirlas.</p>
+	<p>Arriba hay tres pestañas: <strong>Material</strong>, <strong>Tipos de material</strong> y <strong>Listas de compra</strong>.</p>
+
+	<h3 id="inventario-material">El material</h3>
+	<figure class="captura captura--larga"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/inventario/</span></div><div class="navegador__vista" data-ampliar tabindex="0"><img src="capturas/67-inventario.png" width="1280" height="1633" alt="Lista del inventario con el material, su tipo, cantidad, precio, año de compra y nº de serie" loading="lazy"></div></div><figcaption><span>La lista del material. Arriba, cuántos materiales y unidades hay y su valor estimado (cantidad × precio). Las cantidades por debajo de 5 salen marcadas en amarillo.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<ul>
+		<li><strong>Buscar y filtrar:</strong> escribe parte de la descripción o del nº de serie, o elige un tipo: la lista se filtra al momento, sin recargar.</li>
+		<li><strong>«Ver también los dados de baja»</strong> enseña el material que ya no está, por si hay que recuperarlo.</li>
+		<li>Pulsa la descripción de un material para verlo o cambiarlo.</li>
+	</ul>
+	<figure class="captura"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/inventario/?material=…</span></div><div class="navegador__vista" data-ampliar><img src="capturas/68-inventario-material.png" width="1280" height="1100" alt="Formulario de un material del inventario: descripción, tipo con el botón +, cantidad, precio, año de compra, nº de serie y notas" loading="lazy"></div></div><figcaption><span>«Añadir material» (o un material de la lista) abre su ficha. Obligatorios: la descripción y la cantidad (0 o más). El año de compra es opcional; el precio es por unidad.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<ul>
+		<li><strong>«Añadir y crear otro»</strong> guarda y deja el formulario vacío para el siguiente.</li>
+		<li><strong>Dar de baja</strong> (abajo, con un motivo opcional) es para lo que se ha roto, perdido o regalado: no se borra, deja de salir en la lista y se puede recuperar.</li>
+		<li>Abajo se ve quién lo creó y quién lo cambió por última vez.</li>
+	</ul>
+
+	<h3 id="inventario-tipos">Tipos de material</h3>
+	<figure class="captura"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/inventario/tipos-de-material/</span></div><div class="navegador__vista" data-ampliar><img src="capturas/69-inventario-tipos-ventana.png" width="1280" height="820" alt="Ventana emergente con los tipos de material sobre el formulario de un material" loading="lazy"></div></div><figcaption><span>El botón <strong>«+»</strong> junto al tipo abre los tipos en una ventana encima del formulario: crea el que falte, ciérrala y el desplegable ya lo tiene elegido. Lo que hubieras escrito en el formulario no se pierde.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<ul>
+		<li>Los tipos también tienen su pestaña. Se les puede <strong>cambiar el nombre</strong> en cualquier momento.</li>
+		<li>Un tipo que usa algún material <strong>no se puede borrar</strong>: cambia antes el tipo de ese material.</li>
+	</ul>
+
+	<h3 id="inventario-importar">Importar el material desde una hoja de cálculo</h3>
+	<p>Si ya tenéis el inventario en Excel o en LibreOffice, no hace falta escribirlo otra vez: pulsa <strong>«Importar desde CSV»</strong>.</p>
+	<figure class="captura"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/inventario/?importar=1</span></div><div class="navegador__vista" data-ampliar><img src="capturas/70-inventario-importar-ventana.png" width="1280" height="960" alt="Ventana para importar material: selector de fichero CSV, enlace para descargar un ejemplo y explicación de las columnas" loading="lazy"></div></div><figcaption><span>En la ventana: <strong>«Descargar un fichero de ejemplo»</strong>, el fichero que vas a subir y la casilla para crear los tipos que todavía no existan. Debajo, cómo tiene que ser el fichero.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<ol>
+		<li>Descarga el ejemplo y ábrelo con Excel o LibreOffice. La primera fila son los nombres de las columnas: <em>Descripción, Tipo, Cantidad, Precio por unidad, Año de compra, Nº de serie y Notas</em>. Solo son obligatorias <strong>Descripción</strong> y <strong>Cantidad</strong>; las demás se pueden dejar en blanco o quitar.</li>
+		<li>Cambia las filas de ejemplo por vuestro material (una fila por material) y guárdalo como <strong>CSV</strong>: en Excel, «Guardar como» → «CSV (delimitado por punto y coma)».</li>
+		<li>Elige el fichero y pulsa <strong>«Importar»</strong>.</li>
+	</ol>
+	<p>Primero se comprueba el fichero entero (que sea un CSV, que tenga la cabecera, que no pase de 2 MB ni de 2.000 filas). Si algo falla ahí, no se importa nada y se dice por qué. Si está bien, se importan todas las filas correctas y, en la misma ventana, sale el informe:</p>
+	<figure class="captura"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/inventario/?importar=1&amp;amp;resultado=…</span></div><div class="navegador__vista" data-ampliar><img src="capturas/71-inventario-importar-informe.png" width="1280" height="820" alt="Informe de la importación: materiales importados, filas no importadas con su número y el motivo, y botón para descargarlas" loading="lazy"></div></div><figcaption><span>Cuántos materiales se han importado y qué filas no, con su <strong>nº de fila</strong> (el de la hoja de cálculo) y el <strong>motivo</strong>. «Descargar las filas con error» te da solo esas filas en un CSV: corrígelas y vuelve a importarlo (las demás ya están dentro).</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<ul>
+		<li>Motivos habituales: una cantidad que no es un número entero, un precio mal escrito, un año que no es de cuatro cifras, una fila sin descripción, un tipo que no existe (si desmarcaste la casilla) o un <strong>nº de serie que ya está</strong> en el inventario o repetido en el fichero.</li>
+		<li>Al cerrar la ventana, la lista ya enseña el material nuevo.</li>
+	</ul>
+
+	<h3 id="inventario-lista-compra">Preparar una lista de compra</h3>
+	<ol>
+		<li>En la lista del material, <strong>marca la casilla</strong> de lo que hay que comprar. Si de un material quedan <strong>menos de 5 unidades</strong>, te pregunta «En el inventario solo hay N unidades… ¿Seguro que quieres añadirlo a la lista de compra?»: es un aviso, puedes seguir.</li>
+		<li>Pulsa <strong>«Crear una lista de compra con los marcados»</strong>.</li>
+		<li>Indica cuántas unidades comprar de cada uno (0 para quitarlo) y el precio estimado (viene el del inventario). El total se calcula mientras escribes. Añade una nota para Tesorería si hace falta.</li>
+		<li><strong>«Guardar y enviar a Tesorería»</strong>: a las personas de Tesorería les llega un email para que la revisen.</li>
+	</ol>
+	<figure class="captura captura--larga"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/inventario/listas-de-compra/?nueva=1</span></div><div class="navegador__vista" data-ampliar tabindex="0"><img src="capturas/72-inventario-nueva-lista.png" width="1280" height="1515" alt="Nueva lista de compra con la cantidad y el precio de cada material, avisos de pocas unidades y el total estimado" loading="lazy"></div></div><figcaption><span>La lista nueva, con el aviso en los materiales de los que quedan pocas unidades.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+
+	<h3 id="inventario-visto-bueno">El visto bueno de Tesorería</h3>
+	<figure class="captura"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/inventario/listas-de-compra/</span></div><div class="navegador__vista" data-ampliar><img src="capturas/73-inventario-compras.png" width="1280" height="1171" alt="Listas de compra con su número, quién la pidió, el total y el estado" loading="lazy"></div></div><figcaption><span>La pestaña «Listas de compra»: cada lista con su número (LC…), quién la pidió, el total estimado y su estado: <em>Pendiente del visto bueno</em>, <em>Con el visto bueno</em>, <em>Rechazada</em> o <em>Cancelada</em>. A Tesorería le sale además en el inicio y en el menú cuántas esperan su visto bueno.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<figure class="captura"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/inventario/listas-de-compra/?lista=…</span></div><div class="navegador__vista" data-ampliar><img src="capturas/74-inventario-compra-ventana.png" width="1280" height="1000" alt="Detalle de una lista de compra pendiente con los botones Dar el visto bueno y Rechazar" loading="lazy"></div></div><figcaption><span>Tesorería abre la lista (en una ventana) y pulsa <strong>«Dar el visto bueno»</strong> o la <strong>rechaza</strong> con un motivo, que verá quien la pidió.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<ul>
+		<li>Solo Tesorería da el visto bueno. Se puede deshacer mientras nadie haya descargado el PDF.</li>
+		<li>Quien la pidió la puede <strong>cancelar</strong> mientras está pendiente. Una lista no se cambia: si hace falta, se cancela y se prepara otra.</li>
+	</ul>
+
+	<h3 id="inventario-pdf">Imprimir la lista</h3>
+	<figure class="captura"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/inventario/listas-de-compra/?lista=…</span></div><div class="navegador__vista" data-ampliar><img src="capturas/75-inventario-compra-aprobada.png" width="1280" height="820" alt="Lista de compra con el visto bueno de Tesorería y el botón Descargar PDF para imprimir" loading="lazy"></div></div><figcaption><span>Con el visto bueno aparece <strong>«Descargar PDF para imprimir»</strong> (también en la lista de listas). Se abre en otra pestaña para imprimirlo o guardarlo.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<ul>
+		<li>El PDF lleva el nombre del grupo, el nº de la lista, quién la pidió, quién le dio el visto bueno y cuándo, la tabla del material (con lo que hay en el inventario y lo que hay que comprar), el total estimado y la nota.</li>
+		<li><strong>Sin el visto bueno no se puede imprimir:</strong> no sale el botón y, si se intenta imprimir la página, solo sale el aviso «Pendiente del visto bueno de Tesorería».</li>
+		<li>El visto bueno no cambia las cantidades del inventario: cuando llegue lo comprado, actualízalas en cada material.</li>
+	</ul>
+	<figure class="captura movil"><div class="navegador"><div class="navegador__vista" data-ampliar><img src="capturas/76-movil-inventario.png" width="780" height="4911" alt="El inventario en el móvil, con cada material en una tarjeta" loading="lazy"></div></div><figcaption><span>En el móvil, cada material sale en una tarjeta.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+</section>
+
 <section id="idioma">
 	<h2>El idioma de la web</h2>
 	<p class="resumen">El área privada está en castellano, catalán, euskera y gallego. La administración de la web elige el idioma del grupo y si cada persona puede cambiarlo.</p>
@@ -380,6 +457,8 @@
 	<details class="pregunta"><summary>Me llega una solicitud de alguien que no conozco.</summary><div><p>La web ya ha comprobado el documento y la fecha de nacimiento con la ficha, pero si quien pide no coincide con ningún tutor/a, confirma con la familia antes de aprobar. Si no cuadra, recházala: el aviso que le llega es genérico.</p></div></details>
 	<details class="pregunta"><summary>Una familia me ha pagado la cuota en mano.</summary><div><p>Regístralo en Tesorería, en la ficha de su familia (efectivo, la fecha y el importe) y entrega el dinero a Tesorería.</p></div></details>
 	<details class="pregunta"><summary>He cambiado algo en el CRM y no lo veo en la web.</summary><div><p>Las fichas se leen del CRM cada pocos minutos para que las páginas vayan rápido: lo que cambies allí llega en unos minutos. Lo que se guarda desde la web se ve al instante.</p></div></details>
+	<details class="pregunta"><summary>¿Por qué no puedo imprimir la lista de compra que he preparado?</summary><div><p>Porque todavía no tiene el visto bueno de Tesorería. Al guardarla les llegó un email; cuando la aprueben, en la lista saldrá «Descargar PDF para imprimir». Si la rechazan, verás el motivo.</p></div></details>
+	<details class="pregunta"><summary>Al importar el inventario, algunas filas no han entrado.</summary><div><p>En el informe de la importación sale cada fila con el motivo. Descarga «las filas con error», corrígelas en la hoja de cálculo y vuelve a importar ese fichero: las demás ya estaban dentro y no se duplican.</p></div></details>
 	<details class="pregunta"><summary>¿Puedo pedir el uniforme de un educando?</summary><div><p>No: lo pide su familia (o él o ella, desde los 14 años, con su cuenta). Tú pides el tuyo y entregas los de tu sección.</p></div></details>
 	<details class="pregunta"><summary>¿Puedo tener el área privada como una app en el móvil?</summary><div><p>Sí: mira «Instalar el área privada en el móvil». En Android sale un aviso con el botón «Instalar la app»; en iPhone, con Safari, «Compartir» y «Añadir a pantalla de inicio». No hay que bajar nada de las tiendas.</p></div></details>
 	<details class="pregunta"><summary>He instalado la app: ¿se guardan mis datos en el móvil?</summary><div><p>No. La app solo guarda su diseño y una pantalla de «Sin conexión». Las fichas, los pagos y los datos de los socios se piden a la web cada vez, y por eso hace falta internet.</p></div></details>
@@ -395,7 +474,7 @@
 			</ul>
 		</section>
 
-		<p class="pie">Manual para scouters del plugin «ASDE Scouts de España – Gestor CRM para Grupos Scouts», versión 0.18 (octubre de 2026). Capturas hechas en un WordPress de demostración con un CRM simulado y datos inventados.</p>
+		<p class="pie">Manual para scouters del plugin «ASDE Scouts de España – Gestor CRM para Grupos Scouts», versión 0.19 (octubre de 2026). Capturas hechas en un WordPress de demostración con un CRM simulado y datos inventados.</p>
 	</main>
 </div>
 

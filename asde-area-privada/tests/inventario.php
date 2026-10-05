@@ -15,6 +15,7 @@ defined( 'ABSPATH' ) || exit;
 
 require_once __DIR__ . '/lib/CrmSimulado.php';
 require_once ABSPATH . 'wp-admin/includes/user.php';
+require_once ABSPATH . 'wp-admin/includes/file.php';
 
 use AsdeBalears\AreaPrivada\Audit\Logger;
 use AsdeBalears\AreaPrivada\Auth\Ambito;
@@ -32,6 +33,7 @@ use AsdeBalears\AreaPrivada\Frontend\Views\View;
 use AsdeBalears\AreaPrivada\Install\Installer;
 use AsdeBalears\AreaPrivada\Install\Roles;
 use AsdeBalears\AreaPrivada\Inventario\ComprasTable;
+use AsdeBalears\AreaPrivada\Inventario\Importador;
 use AsdeBalears\AreaPrivada\Inventario\ListaPdf;
 use AsdeBalears\AreaPrivada\Inventario\MaterialesTable;
 use AsdeBalears\AreaPrivada\Inventario\Pdf;
@@ -334,6 +336,7 @@ try {
 	$cuerpo = (string) ( $correos[0]['message'] ?? '' );
 	$ok( str_contains( (string) $correos[0]['subject'], ComprasTable::numero( $l1 ) ) && str_contains( $cuerpo, 'visto bueno' ) && str_contains( $cuerpo, 'Hornillo de gas' ) && str_contains( $cuerpo, 'lista=' . $l1['id'] ), 'el email dice el nº, el material y lleva el enlace para revisarla' );
 	$ok( str_contains( $h, 'enviada a 2 personas de Tesorería' ), 'quien la crea ve a cuántas personas se ha enviado' );
+	$ok( 'Sara Inventario Mir' === Servicio::usuario( $u_scouter ) && str_contains( $cuerpo, 'Sara Inventario Mir ha preparado' ) && ! str_contains( $cuerpo, 'prueba-inv-scouter' ), 'quién la pide sale con el nombre de su ficha, no con su usuario (que en el área es el nº de socio)' );
 	$reg = (array) $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM %i WHERE id > %d AND tipo = %s', RegistroEmails::table(), $ema_antes, RegistroEmails::COMPRA ), ARRAY_A ); // phpcs:ignore WordPress.DB
 	$ok( 2 === count( $reg ) && ! str_contains( (string) $reg[0]['destino'], 'teso-inv@' ) && str_contains( RegistroEmails::vista_previa( $reg[0] ), ComprasTable::numero( $l1 ) ), 'queda en el registro de emails con el destino enmascarado, y se puede ver cómo era' );
 
@@ -433,6 +436,85 @@ try {
 
 	$acciones = $wpdb->get_col( $wpdb->prepare( "SELECT DISTINCT accion FROM %i WHERE id > %d AND accion LIKE 'inventario\\_%%'", Logger::table(), $log_antes ) ); // phpcs:ignore WordPress.DB
 	$ok( ! array_diff( array( 'inventario_tipo_creado', 'inventario_tipo_renombrado', 'inventario_tipo_borrado', 'inventario_material_creado', 'inventario_material_modificado', 'inventario_material_baja', 'inventario_material_recuperado', 'inventario_compra_creada', 'inventario_compra_aprobada', 'inventario_compra_rechazada', 'inventario_compra_cancelada' ), $acciones ), 'todo queda en la auditoría' );
+	echo "\n== Parte H · Importar material desde CSV ==\n";
+	$como( $u_scouter );
+	$temporales = array();
+	$fichero    = static function ( string $contenido ) use ( &$temporales ): string {
+		$ruta         = wp_tempnam( 'asde-inv-prueba.csv' );
+		$temporales[] = $ruta;
+		file_put_contents( $ruta, $contenido ); // phpcs:ignore WordPress.WP.AlternativeFunctions
+		return $ruta;
+	};
+	$error_de = static fn( $r ): string => is_wp_error( $r ) ? $r->get_error_message() : '';
+
+	echo "-- Paso 1: el fichero entero\n";
+	$ok( str_contains( $error_de( Importador::leer( $fichero( '' ) ) ), 'vacío' ), 'un fichero vacío no se importa' );
+	$ok( str_contains( $error_de( Importador::leer( $fichero( "PK\x03\x04\x14\x00\x06\x00\x08\x00\x00\x00!\x00" . str_repeat( "\0", 40 ) ) ) ), 'no es un CSV' ), 'una hoja de Excel (.xlsx) se rechaza explicando cómo guardarla como CSV' );
+	$e = $error_de( Importador::leer( $fichero( "Material;Tipo;Precio\nTienda;Tiendas;3\n" ) ) );
+	$ok( str_contains( $e, '«Cantidad»' ) && ! str_contains( $e, '«Descripción»' ), 'sin la columna obligatoria «Cantidad» en la cabecera, no se importa nada (y dice cuál falta)' );
+	$ok( str_contains( $error_de( Importador::leer( $fichero( "Descripción;Cantidad\n;\n\n" ) ) ), 'solo tiene la cabecera' ), 'solo la cabecera (y filas vacías): nada que importar' );
+	$ok( str_contains( $error_de( Importador::leer( $fichero( "Descripción;Cantidad\n" . str_repeat( "Piqueta;1\n", Importador::MAX_FILAS + 1 ) ) ) ), 'demasiadas filas' ), 'más de ' . Importador::MAX_FILAS . ' filas: no se importa nada' );
+	$ansi = mb_convert_encoding( "Descripción;Tipo;Cantidad;Precio;Año;Nº de serie;Notas\r\nMochila «azul»;Tiendas;2;12,50;2020;MO-1;Ñandú\r\n", 'Windows-1252', 'UTF-8' );
+	$l    = Importador::leer( $fichero( $ansi ) );
+	$ok( ! is_wp_error( $l ) && 'Mochila «azul»' === $l['filas'][2]['descripcion'] && '2020' === $l['filas'][2]['anio'] && 'MO-1' === $l['filas'][2]['num_serie'] && 'Ñandú' === $l['filas'][2]['notas'] && 7 === count( $l['columnas'] ), 'un CSV de Excel en ANSI con «;» se lee bien (acentos, ñ, «», y la cabecera «Año» y «Nº de serie»)' );
+	$l = Importador::leer( $fichero( "\xEF\xBB\xBFCANTIDAD,material,Observaciones\n5,\"Cuerda, 20 m\",Nueva\n" ) );
+	$ok( ! is_wp_error( $l ) && 'Cuerda, 20 m' === $l['filas'][2]['descripcion'] && '5' === $l['filas'][2]['cantidad'] && 'Nueva' === $l['filas'][2]['notas'], 'y uno en UTF-8 con BOM, separado por comas, columnas en otro orden y con otros nombres' );
+
+	echo "-- Paso 2: fila a fila\n";
+	$csv = "Descripción;Tipo;Cantidad;Precio por unidad;Año de compra;Nº de serie;Notas\n"
+		. "Lona 4x4;Tiendas;2;45,00;2021;LO-1;\n"           // 2: bien (tipo que existe)
+		. "Martillo;Herramientas nuevas;1;;;;\n"           // 3: tipo que no existe
+		. ";Tiendas;1;;;;\n"                                // 4: sin descripción
+		. "Linterna;;muchas;;;;\n"                          // 5: cantidad mal
+		. "Brújula;;1;doce;;;\n"                            // 6: precio mal
+		. "Mapa;;1;;1890;;\n"                               // 7: año mal
+		. "Tienda repetida;Tiendas;1;;;TC-0001;\n"          // 8: nº de serie que ya está en el inventario
+		. "Lona 4x4 (otra);Tiendas;1;;;lo-1;\n"             // 9: nº de serie repetido en el fichero
+		. "\n"                                              // 10: vacía (se salta)
+		. "Silbato;Señales;12;0,80;;;\n";                   // 11: tipo nuevo
+	$l   = Importador::leer( $fichero( $csv ) );
+	$sin = Importador::importar( $l['filas'], false );
+	$motivos = array_column( $sin['errores'], 'motivo', 'fila' );
+	$ok( 1 === $sin['importados'] && array( 3, 4, 5, 6, 7, 8, 9, 11 ) === array_keys( $motivos ), 'sin crear tipos: se importa la fila correcta y las demás vuelven con su nº de fila (la de la hoja de cálculo; la vacía no cuenta como error)' );
+	$ok( str_contains( $motivos[3], 'no existe' ) && str_contains( $motivos[4], 'descripción' ) && str_contains( $motivos[5], 'número entero' ) && str_contains( $motivos[6], 'precio' ) && str_contains( $motivos[7], 'año de compra' ) && str_contains( $motivos[8], 'Ya hay un material con el nº de serie «TC-0001»' ) && str_contains( $motivos[9], 'fila 2' ), 'cada error dice por qué: tipo, descripción, cantidad, precio, año, nº de serie en el inventario o repetido en el fichero' );
+	$lona = $por_desc( 'Lona 4x4' );
+	$ok( $lona && 2 === $lona['cantidad'] && 45.0 === $lona['precio'] && 2021 === $lona['anio'] && $t_tiendas === $lona['tipo'] && $u_scouter === $lona['creado_por'], 'la fila importada queda como si se hubiera añadido a mano (con su tipo)' );
+	$ok( ! TiposTable::por_nombre( 'Herramientas nuevas' ) && ! TiposTable::por_nombre( 'Señales' ), 'y sin la casilla no se crea ningún tipo' );
+	MaterialesTable::dar_baja( $lona['id'], '' );
+	$wpdb->delete( MaterialesTable::table(), array( 'id' => $lona['id'] ) );
+	$con     = Importador::importar( $l['filas'], true );
+	$motivos = array_column( $con['errores'], 'motivo', 'fila' );
+	$ok( 3 === $con['importados'] && array( 4, 5, 6, 7, 8, 9 ) === array_keys( $motivos ) && array( 'Herramientas nuevas', 'Señales' ) === $con['tipos_creados'] && TiposTable::por_nombre( 'señales' ), 'con «Crear los tipos que no existan»: entran también esas filas y se crean sus tipos' );
+	$antes_tipos = count( TiposTable::todos() );
+	$mal_tipo    = Importador::importar( array( 2 => array( 'descripcion' => '', 'tipo' => 'Tipo de una fila mala', 'cantidad' => '1' ) ), true );
+	$ok( 0 === $mal_tipo['importados'] && count( TiposTable::todos() ) === $antes_tipos, 'una fila con error no deja creado su tipo' );
+
+	echo "-- El ejemplo y la pantalla\n";
+	$ej = Importador::leer( $fichero( Importador::ejemplo() ) );
+	$ok( ! is_wp_error( $ej ) && 3 === count( $ej['filas'] ) && 7 === count( $ej['columnas'] ) && str_starts_with( Importador::ejemplo(), "\xEF\xBB\xBFDescripción;Tipo;Cantidad" ), 'el CSV de ejemplo (con BOM y «;») se puede importar tal cual: 3 filas y todas las columnas' );
+	$ok( "'=HIPERVINCULO(\"x\")" === str_getcsv( trim( Importador::a_csv( array( array( '=HIPERVINCULO("x")' ) ) ) ), ';' )[0], 'las celdas que se descargan van a salvo de fórmulas' );
+	$h = $ver( new InventarioView() );
+	$ok( 1 === preg_match( '/href="[^"]*importar=1"[^>]*data-asde-modal/', $h ), 'el inventario tiene el botón «Importar desde CSV», que abre la ventana emergente' );
+	View::en_modal( true );
+	$h = $ver( new InventarioView(), array( 'importar' => '1' ) );
+	View::en_modal( false );
+	$ok( str_contains( $h, 'asde-ap--modal' ) && ! str_contains( $h, 'asde-subnav' ) && str_contains( $h, 'enctype="multipart/form-data"' ) && str_contains( $h, 'name="fichero"' ) && str_contains( $h, 'formato=csv-ejemplo' ) && str_contains( $h, 'Descargar un fichero de ejemplo' ), 'en la ventana: el selector de fichero y el enlace para descargar el ejemplo' );
+	$h = $enviar( new InventarioView(), array( 'asde_action' => 'material_importar' ), 'asde_inventario_importar' );
+	$ok( str_contains( $h, 'Elige el fichero CSV' ), 'sin fichero, se pide' );
+	$clave = 'pruebainforme';
+	set_transient( 'asde_ap_inv_import_' . $u_scouter . '_' . $clave, $con + array( 'fichero' => 'material.csv', 'filas' => 10 ), 60 );
+	View::en_modal( true );
+	$h = $ver( new InventarioView(), array( 'importar' => '1', 'resultado' => $clave ) );
+	View::en_modal( false );
+	$ok( str_contains( $h, 'Resultado de la importación' ) && str_contains( $h, '<strong>3</strong> materiales importados' ) && str_contains( $h, '<strong>6</strong> filas no importadas' ) && str_contains( $h, 'Brújula' ) && str_contains( $h, 'formato=csv-errores' ) && str_contains( $h, 'Herramientas nuevas, Señales' ), 'el informe, en la misma ventana: cuántos entraron, las filas que no (con su motivo), los tipos nuevos y la descarga de las filas con error' );
+	$como( $u_secre );
+	$ok( ! str_contains( $ver( new InventarioView(), array( 'importar' => '1', 'resultado' => $clave ) ), 'Brújula' ), 'el informe solo lo ve quien hizo la importación' );
+	$como( $u_scouter );
+	delete_transient( 'asde_ap_inv_import_' . $u_scouter . '_' . $clave );
+	foreach ( $temporales as $ruta ) {
+		wp_delete_file( $ruta );
+	}
+
 	echo "\n== Parte G · Instalación de la versión (páginas nuevas) ==\n";
 	$cerrojo_antes = get_option( Installer::OPTION_CERROJO, null );
 	delete_option( Installer::OPTION_CERROJO );

@@ -62,6 +62,7 @@ final class Textos {
 		$add( PedidosTable::FILTROS, 'Uniformes' );
 		$add( PedidosTable::ESTADOS, 'Uniformes' );
 		$add( \AsdeBalears\AreaPrivada\Inventario\ComprasTable::ESTADOS, 'Inventario' );
+		$add( array_column( \AsdeBalears\AreaPrivada\Inventario\Importador::COLUMNAS, 0 ), 'Inventario' );
 		$add( Remesas::ESTADOS, 'Domiciliaciones SEPA' );
 		$add( BancoTable::ESTADOS, 'Tesorería' );
 		$add( CsvBanco::CAMPOS, 'Tesorería' );
