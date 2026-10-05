@@ -44,6 +44,12 @@ Hay que resolverlas antes de programar cada parte. Cuando se responde una, se ma
 | P-58 | **Carpeta de Drive · dónde:** ¿tarjeta en el inicio, entrada en el menú o las dos? ¿En «Para ti» o en «Gestión del grupo»? (doc 30) | Drive |
 | P-59 | **Carpeta de Drive · cuántas:** ¿una por grupo o también una por sección? (doc 30) | Drive |
 | P-60 | **Carpeta de Drive · cómo se comparte:** ¿restringida a las cuentas de Google de los scouters (recomendado) o «cualquiera con el enlace»? (doc 30) | Drive |
+| P-61 | **Inventario · quién edita:** hecho así: todos los que entran (scouters, Secretaría, Coordinación, Tesorería) añaden, cambian y dan de baja material y gestionan los tipos. ¿Hace falta un perfil solo de lectura? (doc 32, S-1) | Inventario |
+| P-62 | **Inventario · aviso de pocas unidades:** hecho así: sale al añadir a la lista un material con **menos de 5** en el inventario (se puede cambiar con un filtro). ¿Es esa la idea, o el aviso debería ser al revés (ya hay bastantes)? ¿Umbral único o por material? (doc 32, S-2) | Inventario |
+| P-63 | **Inventario · material nuevo:** hecho así: en una lista solo entra material del inventario; lo nuevo se da de alta antes con cantidad 0. ¿Vale? (doc 32, S-3) | Inventario |
+| P-64 | **Inventario · visto bueno propio:** hecho así: alguien de Tesorería puede aprobar una lista que ha creado él o ella (el email va al resto de Tesorería). ¿Se prohíbe cuando hay más de una persona en Tesorería? (doc 32, S-4) | Inventario |
+| P-65 | **Inventario · avisos de vuelta:** hecho así: aprobar o rechazar **no envía email** a quien pidió la lista (lo ve en el listado). ¿Se le avisa por email? (doc 32, S-5) | Inventario |
+| P-66 | **Inventario · después de comprar:** hecho así: el visto bueno no cambia las cantidades del inventario. ¿Se añade «Marcar como comprada» que sume lo comprado? (doc 32, S-6) | Inventario |
 
 ## Resueltas
 

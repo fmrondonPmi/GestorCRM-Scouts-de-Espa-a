@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.18.2
+Stable tag: 0.19.0
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -53,6 +53,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
 
+= 0.19.0 =
+* New "Inventory" module: the group's material and equipment (quantity, description, price, type, purchase year, serial number), material types managed in a pop-up window, and purchase lists that Treasury must approve (by email notice) before they can be printed as PDF.
+
 = 0.18.2 =
 * The readme is now in English and "Tested up to" is updated; code comments explain the use of core and cache-plugin hooks.
 
@@ -66,6 +69,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * First version with the mobile app (PWA).
 
 == Upgrade Notice ==
+
+= 0.19.0 =
+New Inventory module for scouters, Secretary, Coordination and Treasury. Three new tables are created on update.
 
 = 0.18.2 =
 No change in use: readme and code comments only.

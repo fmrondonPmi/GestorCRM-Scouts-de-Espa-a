@@ -1835,3 +1835,104 @@ html.asde-cargando .asde-ap button {
 	gap: 4px 16px;
 	margin: 2px 0 10px 28px;
 }
+
+/* v0.19 · Inventario de material y listas de compra (doc 32) */
+.asde-ap .asde-num,
+.asde-ap .asde-table th.asde-num,
+.asde-ap .asde-table td.asde-num {
+	text-align: right;
+	white-space: nowrap;
+}
+.asde-ap .asde-obligatorio {
+	color: var(--asde-error-text);
+}
+.asde-ap .asde-form__columnas {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+	gap: 0 16px;
+}
+.asde-ap .asde-form__acciones {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+}
+.asde-ap .asde-inv-tipo {
+	display: flex;
+	gap: 6px;
+	align-items: stretch;
+	max-width: 420px;
+	margin-bottom: 20px;
+}
+/* El tema pone margen debajo de cada campo: aquí lo lleva el conjunto, para que el «+» mida lo mismo que el desplegable. */
+.asde-ap .asde-inv-tipo select,
+.asde-ap .asde-inv-tipo .asde-inv-mas,
+#top .asde-ap .asde-inv-tipo select {
+	margin: 0;
+}
+.asde-ap .asde-inv-tipo select {
+	flex: 1 1 auto;
+	min-width: 0;
+}
+.asde-ap a.asde-inv-mas {
+	flex: 0 0 auto;
+	min-width: 2.6em;
+	padding: 0 10px;
+	border-radius: var(--asde-radius);
+	font-size: 1.2em;
+	font-weight: 700;
+	line-height: 1;
+	text-align: center;
+	text-decoration: none;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+}
+.asde-ap .asde-badge--inv-pocas {
+	background: var(--asde-warn-bg);
+	color: var(--asde-warn-text);
+}
+.asde-ap .asde-inv-aviso {
+	display: inline-block;
+	margin-top: 4px;
+	padding: 2px 6px;
+	border-radius: var(--asde-radius);
+	background: var(--asde-warn-bg);
+	color: var(--asde-warn-text);
+	font-size: 13px;
+}
+.asde-ap .asde-inv-num {
+	width: 7em;
+	max-width: 100%;
+}
+.asde-ap .asde-inv-datos {
+	margin: 0 0 12px;
+	padding-left: 1.2em;
+}
+.asde-ap .asde-badge--compra-pendiente { background: var(--asde-warn-bg); color: var(--asde-warn-text); }
+.asde-ap .asde-badge--compra-aprobada { background: var(--asde-ok-bg); color: var(--asde-ok-text); }
+.asde-ap .asde-badge--compra-rechazada { background: var(--asde-neutral-bg); color: var(--asde-error-text); }
+.asde-ap .asde-badge--compra-cancelada { background: var(--asde-neutral-bg); color: var(--asde-muted); }
+.asde-ap .asde-table--inv-tipos .asde-form__fila input[type="text"] {
+	flex: 1 1 12em;
+	min-width: 0;
+}
+@media (max-width: 767px) {
+	.asde-ap .asde-table:not(.asde-table--informe) td.asde-num {
+		text-align: left;
+	}
+	.asde-ap .asde-table tfoot th[colspan] {
+		display: none;
+	}
+}
+/* Sin el visto bueno de Tesorería la lista no se imprime: al imprimir solo sale el aviso. */
+@media print {
+	.asde-ap .asde-inv-compra--sin-visto-bueno > :not(.asde-inv-sin-imprimir),
+	.asde-ap .asde-inv-compra--sin-visto-bueno ~ .asde-card {
+		display: none !important;
+	}
+	.asde-ap .asde-inv-compra--sin-visto-bueno .asde-inv-sin-imprimir {
+		display: block !important;
+		font-size: 16px;
+		font-weight: 600;
+	}
+}

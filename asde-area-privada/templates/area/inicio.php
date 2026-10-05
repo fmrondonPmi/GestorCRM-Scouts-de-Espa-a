@@ -99,6 +99,9 @@ $user = $ambito->user;
 			<?php if ( ! empty( $por_revisar['uniforme_entrega'] ) ) : ?>
 				<li><a href="<?php echo esc_url( $uni( 'por_entregar' ) ); ?>"><?php echo $num( (int) $por_revisar['uniforme_entrega'], esc_html( asde_t( 'uniforme pedido al proveedor por entregar' ) ), esc_html( asde_t( 'uniformes pedidos al proveedor por entregar' ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></a></li>
 			<?php endif; ?>
+			<?php if ( ! empty( $por_revisar['compras'] ) ) : ?>
+				<li><a href="<?php echo esc_url( $url( 'inventario_compras', array( 'estado' => 'pendiente' ) ) ); ?>"><?php echo $num( (int) $por_revisar['compras'], esc_html( asde_t( 'lista de compra de material pendiente de tu visto bueno' ) ), esc_html( asde_t( 'listas de compra de material pendientes de tu visto bueno' ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></a></li>
+			<?php endif; ?>
 		</ul>
 	</section>
 <?php endif; ?>
@@ -133,6 +136,9 @@ if ( current_user_can( 'asde_approve_changes' ) ) {
 }
 if ( current_user_can( 'asde_reports' ) ) {
 	$grupo_tiles[] = $tile( $url( 'informes' ), asde_t( 'Informes' ), $ambito->vision_global() ? asde_t( 'Listados de todo el grupo con las columnas que elijas.' ) : asde_t( 'Listados de tu sección con las columnas que elijas.' ) );
+}
+if ( current_user_can( \AsdeBalears\AreaPrivada\Inventario\Servicio::CAP ) ) {
+	$grupo_tiles[] = $tile( $url( 'inventario' ), asde_t( 'Inventario' ), asde_t( 'El material y el equipamiento del grupo, y las listas de compra.' ) );
 }
 if ( current_user_can( 'asde_tesoreria_acceso' ) ) {
 	$grupo_tiles[] = $tile( $url( 'tesoreria' ), asde_t( 'Tesorería' ), asde_t( 'Cuotas de las familias, pagos, familias y coste federativo.' ) );

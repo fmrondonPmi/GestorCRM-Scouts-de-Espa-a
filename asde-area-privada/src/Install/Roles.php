@@ -45,6 +45,7 @@ final class Roles {
 					'asde_uniformes_gestion' => true,
 					'asde_uniformes_entrega' => true,
 					'asde_mis_pagos'         => true,
+					'asde_inventario'        => true, // Inventario de material (v0.19, doc 32).
 				),
 			),
 			self::SECRETARIA   => array(
@@ -64,6 +65,7 @@ final class Roles {
 					'asde_uniformes_gestion' => true,
 					'asde_uniformes_entrega' => true,
 					'asde_mis_pagos'         => true,
+					'asde_inventario'        => true,
 				),
 			),
 			self::COORDINACION => array(
@@ -87,6 +89,7 @@ final class Roles {
 					'asde_uniformes_pedido'  => true,
 					'asde_uniformes_config'  => true,
 					'asde_mis_pagos'         => true,
+					'asde_inventario'        => true,
 				),
 			),
 			self::TESORERIA    => array(
@@ -102,6 +105,9 @@ final class Roles {
 					'asde_uniformes_pago'    => true,
 					'asde_uniformes_config'  => true,
 					'asde_mis_pagos'         => true,
+					// Inventario: Tesorería da el visto bueno a las listas de compra (sin él no se imprimen).
+					'asde_inventario'         => true,
+					'asde_inventario_aprobar' => true,
 				),
 			),
 			self::TUTOR        => array(

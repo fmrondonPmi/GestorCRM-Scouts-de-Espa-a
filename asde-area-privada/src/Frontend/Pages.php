@@ -44,6 +44,10 @@ final class Pages {
 		'pagos'            => array( 'mis-pagos', 'Mis pagos', '[asde_mis_pagos]', 'area' ),
 		// v0.16: alta de scouters con el enlace del grupo (doc 31).
 		'alta_scouters'    => array( 'alta-scouters', 'Alta de scouters', '[asde_alta_scouters]', 'area' ),
+		// v0.19: inventario de material y listas de compra (doc 32).
+		'inventario'         => array( 'inventario', 'Inventario de material', '[asde_inventario]', 'area' ),
+		'inventario_tipos'   => array( 'tipos-de-material', 'Tipos de material', '[asde_inventario_tipos]', 'inventario' ),
+		'inventario_compras' => array( 'listas-de-compra', 'Listas de compra de material', '[asde_inventario_compras]', 'inventario' ),
 	);
 
 	/** Páginas accesibles sin iniciar sesión (no salen en listados ni menús: Visibilidad). */

@@ -135,3 +135,13 @@ asde_manage_users                 # alta/baja/vinculación de usuarios
 | `asde_tesoreria_config` (ya existía) | Secretaría, Coordinación, Tesorería | Además, la pestaña **Domiciliaciones**: datos del acreedor, remesas, fichero, aviso a las familias, cobros y anular autorizaciones |
 
 - Las dos cuentas de tutor/a de una familia (`nº + T` y `nº + T2`) tienen el mismo rol y los mismos permisos (doc 12).
+
+## Actualización v0.19.0 (2026-10-05): inventario de material
+
+| Capability | Roles | Qué permite |
+|---|---|---|
+| `asde_inventario` | Scouter, Secretaría, Coordinación, Tesorería (y administradores) | Entrar en **Inventario** (doc 32): ver y editar el material (añadir, cambiar, dar de baja y recuperar), gestionar los tipos de material y preparar listas de compra. Un **voluntario sin sección** entra igual, porque tiene Secretaría, Coordinación o Tesorería |
+| `asde_inventario_aprobar` | **Tesorería** (y administradores) | Dar o negar el **visto bueno** a una lista de compra (sin él no se puede imprimir) y deshacerlo mientras nadie haya descargado el PDF |
+
+- Familias y participantes no ven el inventario.
+- Cancelar una lista: quien la creó, mientras está pendiente; Tesorería, mientras no se haya descargado el PDF.

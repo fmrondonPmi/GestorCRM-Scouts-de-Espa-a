@@ -70,6 +70,11 @@ final class Menu {
 			$n                    = (int) ( $pendientes['pago'] + $pendientes['pedido'] + $pendientes['entrega'] );
 			$gestion['uniformes'] = asde_t( 'Gestión de uniformes' ) . ( $n ? ' (' . $n . ')' : '' );
 		}
+		if ( current_user_can( \AsdeBalears\AreaPrivada\Inventario\Servicio::CAP ) ) {
+			// v0.19 (doc 32): a Tesorería se le cuentan las listas de compra que esperan su visto bueno.
+			$n                     = current_user_can( \AsdeBalears\AreaPrivada\Inventario\Servicio::CAP_APROBAR ) ? \AsdeBalears\AreaPrivada\Inventario\ComprasTable::contar_pendientes() : 0;
+			$gestion['inventario'] = asde_t( 'Inventario' ) . ( $n ? ' (' . $n . ')' : '' );
+		}
 		if ( current_user_can( 'asde_tesoreria_acceso' ) ) {
 			$gestion['tesoreria'] = asde_t( 'Tesorería' );
 		}

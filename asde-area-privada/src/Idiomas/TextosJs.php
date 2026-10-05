@@ -42,6 +42,14 @@ final class TextosJs {
 		'Actualizando…',
 		'No se ha podido actualizar la lista. Recarga la página.',
 		'No se ha podido completar la acción. Recarga la página para ver cómo ha quedado.',
+		// Inventario (v0.19, inventario.js).
+		'1 material marcado',
+		'%s materiales marcados',
+		'No queda ninguna unidad de «%s» en el inventario. ¿Seguro que quieres añadirlo a la lista de compra?',
+		'En el inventario solo hay 1 unidad de «%s». ¿Seguro que quieres añadirlo a la lista de compra?',
+		'En el inventario solo hay %s unidades de «%s». ¿Seguro que quieres añadirlo a la lista de compra?',
+		'Marca el material que hay que comprar.',
+		'+ sin precio',
 	);
 
 	/** Texto en castellano => texto en el idioma actual. */

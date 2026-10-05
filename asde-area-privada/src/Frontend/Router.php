@@ -15,6 +15,9 @@ use AsdeBalears\AreaPrivada\Frontend\Views\EmailsView;
 use AsdeBalears\AreaPrivada\Frontend\Views\FamiliasView;
 use AsdeBalears\AreaPrivada\Frontend\Views\FederacionView;
 use AsdeBalears\AreaPrivada\Frontend\Views\InformesView;
+use AsdeBalears\AreaPrivada\Frontend\Views\InventarioComprasView;
+use AsdeBalears\AreaPrivada\Frontend\Views\InventarioTiposView;
+use AsdeBalears\AreaPrivada\Frontend\Views\InventarioView;
 use AsdeBalears\AreaPrivada\Frontend\Views\MisPagosView;
 use AsdeBalears\AreaPrivada\Frontend\Views\TesoreriaView;
 use AsdeBalears\AreaPrivada\Frontend\Views\UniformeView;
@@ -38,7 +41,7 @@ defined( 'ABSPATH' ) || exit;
 final class Router {
 
 	/** Páginas que se pueden abrir en la ventana emergente. */
-	public const MODALES = array( 'ficha', 'alta', 'solicitudes', 'uniformes' );
+	public const MODALES = array( 'ficha', 'alta', 'solicitudes', 'uniformes', 'inventario_tipos', 'inventario_compras' );
 
 	/** La pide la ventana emergente del área (assets/js/area.js). */
 	public static function pide_modal(): bool {
@@ -77,6 +80,10 @@ final class Router {
 		'uniformes_config' => array( 'asde_uniformes_config', UniformesConfigView::class ),
 		'pagos'            => array( 'asde_mis_pagos', MisPagosView::class ),
 		'alta_scouters'    => array( 'asde_alta_scouters', AltaScoutersView::class ),
+		// v0.19: inventario de material y listas de compra (doc 32).
+		'inventario'         => array( 'asde_inventario', InventarioView::class ),
+		'inventario_tipos'   => array( 'asde_inventario_tipos', InventarioTiposView::class ),
+		'inventario_compras' => array( 'asde_inventario_compras', InventarioComprasView::class ),
 	);
 
 	public function register(): void {
@@ -199,6 +206,10 @@ final class Router {
 		if ( 'usuarios' === $key && self::pide_json() && 'GET' === strtoupper( sanitize_text_field( wp_unslash( $_SERVER['REQUEST_METHOD'] ?? '' ) ) ) ) {
 			( new UsuariosView() )->json();
 		}
+		// Tipos de material: la lista en JSON, para refrescar el desplegable del formulario sin recargar.
+		if ( 'inventario_tipos' === $key && self::pide_json() && 'GET' === strtoupper( sanitize_text_field( wp_unslash( $_SERVER['REQUEST_METHOD'] ?? '' ) ) ) ) {
+			( new InventarioTiposView() )->json();
+		}
 
 		// Ventana emergente (v0.10): fichas, dar acceso y solicitudes se abren sobre la
 		// página en la que se está. Se devuelve solo su contenido, sin el tema.
@@ -220,6 +231,10 @@ final class Router {
 			} elseif ( 'uniformes' === $key ) {
 				( new UniformesGestionView() )->exportar();
 			}
+		}
+		// PDF de una lista de compra (solo con el visto bueno de Tesorería).
+		if ( 'inventario_compras' === $key && 'pdf' === sanitize_key( wp_unslash( $_GET['formato'] ?? '' ) ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+			( new InventarioComprasView() )->pdf();
 		}
 	}
 
@@ -258,6 +273,9 @@ final class Router {
 		}
 		if ( 'uniforme' === $key ) {
 			wp_enqueue_script( 'asde-uniforme', plugins_url( 'assets/js/uniforme.js', ASDE_AP_FILE ), array( 'asde-i18n' ), ASDE_AP_VERSION, true );
+		}
+		if ( in_array( $key, array( 'inventario', 'inventario_compras' ), true ) ) {
+			wp_enqueue_script( 'asde-inventario', plugins_url( 'assets/js/inventario.js', ASDE_AP_FILE ), array( 'asde-i18n', 'asde-area' ), ASDE_AP_VERSION, true );
 		}
 		// Monitor de la corrección de números en segundo plano (si hay una tarea que ver).
 		if ( ! in_array( $key, Pages::PUBLICAS, true ) && TareaNumeracion::para_usuario() ) {

@@ -40,11 +40,15 @@ final class RegistroEmails {
 	/** Confirmación de una autorización SEPA o aviso previo de un cargo. */
 	public const SEPA = 'sepa';
 
+	/** Aviso a Tesorería de una lista de compra de material pendiente de su visto bueno (v0.19, doc 32). */
+	public const COMPRA = 'compra';
+
 	public const TIPOS = array(
 		Invitacion::ALTA  => 'Invitación',
 		Invitacion::RESET => 'Recuperar contraseña',
 		self::RECHAZO     => 'Solicitud rechazada',
 		self::SEPA        => 'Domiciliación SEPA',
+		self::COMPRA      => 'Lista de compra de material',
 	);
 
 	public static function table(): string {
@@ -169,6 +173,10 @@ final class RegistroEmails {
 			return EmailRechazo::html( $s ? EmailRechazo::saludo( $s ) : '', (string) ( $datos['grupo'] ?? '' ), (string) ( $datos['contacto'] ?? '' ) );
 		}
 		$user  = get_userdata( (int) $fila['user_id'] );
+		if ( self::COMPRA === $fila['tipo'] ) {
+			$lista = \AsdeBalears\AreaPrivada\Inventario\ComprasTable::obtener( (int) ( $datos['lista'] ?? 0 ) );
+			return $lista ? \AsdeBalears\AreaPrivada\Inventario\AvisoTesoreria::html( $lista, $user ? Contacto::saludo( $user ) : '' ) : '';
+		}
 		if ( self::SEPA === $fila['tipo'] ) {
 			return \AsdeBalears\AreaPrivada\Sepa\Avisos::html( $datos, $user ? Contacto::saludo( $user ) : '' );
 		}

@@ -20,11 +20,60 @@ final class Installer {
 
 	private const OPTION_VERSION = 'asde_ap_version';
 
+	/** Cerrojo de la instalación (v0.19): mientras existe, otra petición no instala. */
+	public const OPTION_CERROJO = 'asde_ap_instalando';
+
+	/** Un cerrojo más antiguo se da por abandonado (la petición que instalaba murió a medias). */
+	private const CERROJO_SEGUNDOS = 300;
+
 	/** Se ejecuta en `init`: aplica la instalación cuando cambia la versión del plugin. */
 	public static function maybe_upgrade(): void {
-		if ( get_option( self::OPTION_VERSION ) !== ASDE_AP_VERSION ) {
-			self::install();
+		if ( get_option( self::OPTION_VERSION ) === ASDE_AP_VERSION ) {
+			return;
 		}
+		// Justo después de actualizar llegan varias peticiones a la vez (visitas, cron, el
+		// propio navegador): sin cerrojo instalaban todas y las páginas nuevas salían
+		// repetidas (pasó en Local con las del inventario, 2026-10-05). Las demás siguen sin esperar.
+		if ( ! self::tomar_cerrojo() ) {
+			return;
+		}
+		try {
+			wp_cache_delete( self::OPTION_VERSION, 'options' );
+			wp_cache_delete( 'alloptions', 'options' );
+			if ( get_option( self::OPTION_VERSION ) !== ASDE_AP_VERSION ) {
+				self::install(); // Otra petición pudo terminar entre la primera comprobación y el cerrojo.
+			}
+		} finally {
+			self::soltar_cerrojo();
+		}
+	}
+
+	/**
+	 * Toma el cerrojo con un INSERT IGNORE sobre la clave única de wp_options, que es
+	 * atómico (add_option() no lo es: hace INSERT … ON DUPLICATE KEY UPDATE y, con dos
+	 * peticiones a la vez, devuelve «hecho» a las dos).
+	 */
+	public static function tomar_cerrojo(): bool {
+		global $wpdb;
+		$ahora = time();
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- tiene que ser una sola sentencia atómica; no hay función de WordPress que lo haga
+		$tomado = (int) $wpdb->query( $wpdb->prepare( "INSERT IGNORE INTO %i (option_name, option_value, autoload) VALUES (%s, %s, 'off')", $wpdb->options, self::OPTION_CERROJO, (string) $ahora ) );
+		if ( ! $tomado ) {
+			// Abandonado: se toma solo si sigue teniendo el valor viejo (dos peticiones no lo toman a la vez).
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- lectura sin caché: el valor lo acaba de escribir otra petición
+			$desde = (int) $wpdb->get_var( $wpdb->prepare( "SELECT option_value FROM %i WHERE option_name = %s", $wpdb->options, self::OPTION_CERROJO ) );
+			if ( $ahora - $desde > self::CERROJO_SEGUNDOS ) {
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- comparar y cambiar en una sola sentencia
+				$tomado = (int) $wpdb->query( $wpdb->prepare( "UPDATE %i SET option_value = %s WHERE option_name = %s AND option_value = %s", $wpdb->options, (string) $ahora, self::OPTION_CERROJO, (string) $desde ) );
+			}
+		}
+		wp_cache_delete( self::OPTION_CERROJO, 'options' );
+		wp_cache_delete( 'notoptions', 'options' );
+		return $tomado > 0;
+	}
+
+	public static function soltar_cerrojo(): void {
+		delete_option( self::OPTION_CERROJO );
 	}
 
 	public static function install(): void {
@@ -41,6 +90,9 @@ final class Installer {
 		\AsdeBalears\AreaPrivada\Uniformes\PedidosTable::install_table();
 		\AsdeBalears\AreaPrivada\Sepa\Mandatos::install_table();
 		\AsdeBalears\AreaPrivada\Sepa\Remesas::install_table();
+		\AsdeBalears\AreaPrivada\Inventario\TiposTable::install_table();
+		\AsdeBalears\AreaPrivada\Inventario\MaterialesTable::install_table();
+		\AsdeBalears\AreaPrivada\Inventario\ComprasTable::install_table();
 		Grupos::migrar();
 		\AsdeBalears\AreaPrivada\Domain\Organizacion::migrar(); // Instalaciones anteriores: Scouts de Balears, código 7.
 		Pages::install();
