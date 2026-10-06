@@ -9,7 +9,7 @@
  * @var string   $ronda
  * @var array[]  $movimientos
  * @var ?WP_User $cuenta
- * @var array[]|null $banco Ingresos del banco por conciliar (con 'sugerido'), o null si no ve el banco (v0.20)
+ * @var array|null $banco Para asociar un ingreso del banco (TesoreriaView::banco_para), o null si no ve el banco (v0.20.1)
  * @var string   $url
  * @var string   $url_editar
  */
@@ -100,44 +100,52 @@ $user = static fn( $id ) => ( $u = get_userdata( (int) $id ) ) ? $u->user_login 
 			<input type="hidden" name="asde_action" value="registrar_pago">
 			<input type="hidden" name="familia" value="<?php echo (int) $familia['id']; ?>">
 			<input type="hidden" name="ronda" value="<?php echo esc_attr( $ronda ); ?>">
-			<?php if ( $banco ) : ?>
-				<?php
-				$opcion = static function ( array $m ): string {
-					$texto = wp_date( 'd/m/Y', strtotime( $m['fecha'] . ' 12:00' ) ) . ' · +' . Calculadora::euros( $m['importe'] ) . ' · ' . mb_strimwidth( trim( $m['ordenante'] . ' ' . $m['concepto'] ), 0, 70, '…' );
-					return '<option value="' . (int) $m['id'] . '" data-fecha="' . esc_attr( $m['fecha'] ) . '" data-importe="' . esc_attr( number_format( $m['importe'], 2, '.', '' ) ) . '" data-ref="' . esc_attr( $m['documento'] ) . '">' . esc_html( $texto ) . '</option>';
-				};
-				$sugeridos = array_filter( $banco, static fn( $m ) => $m['sugerido'] );
-				$otros     = array_filter( $banco, static fn( $m ) => ! $m['sugerido'] );
-				?>
-				<p>
-					<label for="asde-pago-banco"><?php asde_e( 'Ingreso del banco (opcional)' ); ?></label>
-					<select id="asde-pago-banco" name="banco" data-asde-pago-banco>
-						<option value=""><?php asde_e( 'Ninguno: escribo el pago a mano' ); ?></option>
-						<?php if ( $sugeridos ) : ?>
-							<optgroup label="<?php echo esc_attr( asde_a( 'Sugeridos para esta familia' ) ); ?>">
-								<?php echo implode( '', array_map( $opcion, $sugeridos ) ); // phpcs:ignore WordPress.Security.EscapeOutput -- construido arriba con esc_* ?>
-							</optgroup>
+			<?php
+			// Lo que se escribe a mano; con un ingreso del banco elegido, lo suyo (y no se puede cambiar).
+			$a_mano = array(
+				'fecha'   => $hoy,
+				'importe' => $c['pendiente'] > 0 ? number_format( $c['pendiente'], 2, '.', '' ) : '',
+				'ref'     => $familia['numero'],
+			);
+			$el     = $banco['elegido'] ?? null;
+			$campos = $el ? array(
+				'fecha'   => $el['fecha'],
+				'importe' => number_format( $el['importe'], 2, '.', '' ),
+				'ref'     => '' !== $el['documento'] ? $el['documento'] : $familia['numero'],
+			) : $a_mano;
+			?>
+			<?php if ( $banco && ( $banco['pendientes'] || $el ) ) : ?>
+				<div class="asde-pago-banco" data-asde-pago-banco data-fecha="<?php echo esc_attr( $a_mano['fecha'] ); ?>" data-importe="<?php echo esc_attr( $a_mano['importe'] ); ?>" data-ref="<?php echo esc_attr( $a_mano['ref'] ); ?>">
+					<input type="hidden" name="banco" value="<?php echo $el ? (int) $el['id'] : ''; ?>" data-asde-pago-banco-id>
+					<p class="asde-pago-banco__titulo"><?php asde_e( 'Ingreso del banco (opcional)' ); ?></p>
+					<p class="asde-pago-banco__elegido" aria-live="polite">
+						<span data-asde-pago-banco-elegido<?php echo $el ? '' : ' hidden'; ?>><?php echo $el ? esc_html( wp_date( 'd/m/Y', strtotime( $el['fecha'] . ' 12:00' ) ) . ' · +' . Calculadora::euros( $el['importe'] ) . ' · ' . mb_strimwidth( trim( $el['ordenante'] . ' ' . $el['concepto'] ), 0, 90, '…' ) ) : ''; ?></span>
+						<span class="asde-muted" data-asde-pago-banco-ninguno<?php echo $el ? ' hidden' : ''; ?>><?php asde_e( 'Ninguno: escribo el pago a mano' ); ?></span>
+					</p>
+					<p class="asde-pago-banco__acciones">
+						<a class="button asde-button-secundario" href="<?php echo esc_url( $banco['url'] ); ?>" data-asde-modal><?php asde_e( 'Buscar en el banco…' ); ?></a>
+						<a class="asde-btn-link" href="<?php echo esc_url( $banco['url_quitar'] ); ?>" data-asde-pago-banco-quitar<?php echo $el ? '' : ' hidden'; ?>><?php asde_e( 'Quitar el ingreso' ); ?></a>
+						<?php if ( $banco['pendientes'] ) : ?>
+							<span class="asde-muted">
+								<?php echo esc_html( sprintf( asde_n( '%d ingreso por conciliar', '%d ingresos por conciliar', $banco['pendientes'] ), $banco['pendientes'] ) ); ?>
+								<?php echo $banco['sugeridos'] ? ' · <strong>' . esc_html( sprintf( asde_n( '%d sugerido para esta familia', '%d sugeridos para esta familia', $banco['sugeridos'] ), $banco['sugeridos'] ) ) . '</strong>' : ''; ?>
+							</span>
 						<?php endif; ?>
-						<?php if ( $otros ) : ?>
-							<optgroup label="<?php echo esc_attr( asde_a( 'Otros ingresos por conciliar' ) ); ?>">
-								<?php echo implode( '', array_map( $opcion, $otros ) ); // phpcs:ignore WordPress.Security.EscapeOutput -- construido arriba con esc_* ?>
-							</optgroup>
-						<?php endif; ?>
-					</select>
-					<span class="asde-help"><?php asde_e( 'Los ingresos importados del banco que aún no están conciliados. Si eliges uno, el pago se registra con su fecha y su importe y el movimiento queda conciliado con esta familia.' ); ?></span>
-				</p>
+					</p>
+					<p class="asde-help"><?php asde_e( 'Busca el ingreso por el nombre del tutor o del socio, el concepto o el importe. Si eliges uno, el pago se registra con su fecha y su importe y el movimiento queda conciliado con esta familia.' ); ?></p>
+				</div>
 			<?php endif; ?>
-			<p><label for="asde-pago-fecha"><?php asde_e( 'Fecha' ); ?></label><input type="date" id="asde-pago-fecha" name="fecha" value="<?php echo esc_attr( $hoy ); ?>" required></p>
-			<p><label for="asde-pago-importe"><?php asde_e( 'Importe (€)' ); ?></label><input type="number" id="asde-pago-importe" name="importe" step="0.01" min="0.01" value="<?php echo esc_attr( $c['pendiente'] > 0 ? number_format( $c['pendiente'], 2, '.', '' ) : '' ); ?>" required></p>
+			<p><label for="asde-pago-fecha"><?php asde_e( 'Fecha' ); ?></label><input type="date" id="asde-pago-fecha" name="fecha" value="<?php echo esc_attr( $campos['fecha'] ); ?>" required<?php echo $el ? ' readonly' : ''; ?>></p>
+			<p><label for="asde-pago-importe"><?php asde_e( 'Importe (€)' ); ?></label><input type="number" id="asde-pago-importe" name="importe" step="0.01" min="0.01" value="<?php echo esc_attr( $campos['importe'] ); ?>" required<?php echo $el ? ' readonly' : ''; ?>></p>
 			<p>
 				<label for="asde-pago-metodo"><?php asde_e( 'Forma de pago' ); ?></label>
-				<select id="asde-pago-metodo" name="metodo">
+				<select id="asde-pago-metodo" name="metodo"<?php echo $el ? ' disabled' : ''; ?>>
 					<?php foreach ( asde_ta( MovimientosTable::METODOS ) as $k => $label ) : ?>
-						<option value="<?php echo esc_attr( $k ); ?>"><?php echo esc_html( $label ); ?></option>
+						<option value="<?php echo esc_attr( $k ); ?>"<?php selected( $el ? 'transferencia' : '', $k ); ?>><?php echo esc_html( $label ); ?></option>
 					<?php endforeach; ?>
 				</select>
 			</p>
-			<p><label for="asde-pago-ref"><?php asde_e( 'Referencia' ); ?></label><input type="text" id="asde-pago-ref" name="referencia" value="<?php echo esc_attr( $familia['numero'] ); ?>" maxlength="120"><span class="asde-help"><?php asde_e( 'Concepto de la transferencia o nº de recibo. Sin datos personales.' ); ?></span></p>
+			<p><label for="asde-pago-ref"><?php asde_e( 'Referencia' ); ?></label><input type="text" id="asde-pago-ref" name="referencia" value="<?php echo esc_attr( $campos['ref'] ); ?>" maxlength="120"><span class="asde-help"><?php asde_e( 'Concepto de la transferencia o nº de recibo. Sin datos personales.' ); ?></span></p>
 			<p><label for="asde-pago-nota"><?php asde_e( 'Nota (opcional)' ); ?></label><input type="text" id="asde-pago-nota" name="nota" maxlength="255"></p>
 			<p><button type="submit" class="button"><?php asde_e( 'Registrar pago' ); ?></button></p>
 		</form>

@@ -3,6 +3,8 @@ namespace AsdeBalears\AreaPrivada\Tesoreria\Banco;
 
 use AsdeBalears\AreaPrivada\Audit\Logger;
 use AsdeBalears\AreaPrivada\Domain\Grupo;
+use AsdeBalears\AreaPrivada\Domain\Persona;
+use AsdeBalears\AreaPrivada\Tesoreria\Calculadora;
 use AsdeBalears\AreaPrivada\Tesoreria\Config;
 use AsdeBalears\AreaPrivada\Tesoreria\FamiliasTable;
 use AsdeBalears\AreaPrivada\Tesoreria\MovimientosTable;
@@ -63,12 +65,15 @@ final class Conciliacion {
 
 	/**
 	 * Ingresos del banco por conciliar, para elegir uno al registrar el pago de una
-	 * familia (v0.20): primero los sugeridos para ella (su referencia en el concepto o
-	 * el mismo ordenante que otro pago suyo) y después los demás, los más recientes antes.
+	 * familia (v0.20): primero los sugeridos para ella (su referencia en el concepto,
+	 * el mismo ordenante que otro pago suyo o, desde la v0.20.1, el nombre de uno de
+	 * sus socios o tutores) y después los demás, los más recientes antes.
 	 *
-	 * @return array[] Cada movimiento con 'sugerido' (bool).
+	 * @param string[] $claves Nombres de los socios y tutores de la familia (claves())
+	 * @return array[] Cada movimiento con 'sugerido' (bool), 'motivo' (por qué, o '')
+	 *                 y 'texto' (normalizado, para el buscador: coincide()).
 	 */
-	public static function pendientes_para( array $familia, int $limite = 200 ): array {
+	public static function pendientes_para( array $familia, array $claves = array() ): array {
 		$movs = BancoTable::movimientos(
 			array(
 				'estado' => BancoTable::PENDIENTE,
@@ -76,11 +81,69 @@ final class Conciliacion {
 			)
 		);
 		foreach ( $movs as &$m ) {
-			$m['sugerido'] = null !== self::sugerencia( $m, array( $familia['numero'] => $familia ) );
+			$m['texto']    = self::normalizar( implode( ' ', array( wp_date( 'd/m/Y', strtotime( $m['fecha'] . ' 12:00' ) ), Calculadora::euros( $m['importe'] ), $m['ordenante'], $m['concepto'], $m['referencia1'], $m['referencia2'], $m['documento'] ) ) );
+			$sug           = self::sugerencia( $m, array( $familia['numero'] => $familia ) );
+			$m['motivo']   = $sug ? $sug['motivo'] : '';
+			foreach ( $sug ? array() : $claves as $clave ) {
+				// Todas las palabras de la clave (nombre y primer apellido), enteras.
+				if ( ! array_diff( explode( ' ', self::normalizar( $clave ) ), explode( ' ', $m['texto'] ) ) ) {
+					/* translators: %s: nombre y apellido */
+					$m['motivo'] = sprintf( asde_t( 'Lleva el nombre «%s»' ), $clave );
+					break;
+				}
+			}
+			$m['sugerido'] = '' !== $m['motivo'];
 		}
 		unset( $m );
 		usort( $movs, static fn( $a, $b ) => array( (int) $b['sugerido'], $b['fecha'], (int) $b['id'] ) <=> array( (int) $a['sugerido'], $a['fecha'], (int) $a['id'] ) );
-		return array_slice( $movs, 0, $limite );
+		return $movs;
+	}
+
+	/**
+	 * Nombre y primer apellido de los socios de la familia y de sus tutores (los de la
+	 * ficha), sin repetir: el ordenante de una transferencia suele ser un tutor y el
+	 * concepto suele llevar el nombre del socio (v0.20.1).
+	 *
+	 * @param Persona[] $personas
+	 * @return string[]
+	 */
+	public static function claves( array $personas ): array {
+		$claves = array();
+		foreach ( $personas as $p ) {
+			$gente = array_merge( array( array( 'nombre' => $p->nombre, 'apellidos' => $p->apellidos ) ), array_values( $p->tutores ) );
+			foreach ( $gente as $g ) {
+				$clave = trim( self::primera_palabra( (string) ( $g['nombre'] ?? '' ) ) . ' ' . self::primera_palabra( (string) ( $g['apellidos'] ?? '' ) ) );
+				if ( str_contains( $clave, ' ' ) ) {
+					$claves[ self::normalizar( $clave ) ] = $clave;
+				}
+			}
+		}
+		return array_values( $claves );
+	}
+
+	/** La primera palabra que cuenta de un nombre o unos apellidos («de la Fuente» → «Fuente»), con mayúscula inicial. */
+	private static function primera_palabra( string $texto ): string {
+		foreach ( preg_split( '/[\s\-]+/u', trim( $texto ) ) as $palabra ) {
+			if ( mb_strlen( $palabra ) > 1 && ! in_array( self::normalizar( $palabra ), array( 'de', 'del', 'la', 'las', 'los', 'el', 'y', 'i', 'da', 'das', 'do', 'dos', 'san', 'santa' ), true ) ) {
+				return mb_convert_case( mb_strtolower( $palabra ), MB_CASE_TITLE );
+			}
+		}
+		return '';
+	}
+
+	/** Texto para buscar: minúsculas, sin acentos y solo letras y cifras separadas por un espacio. */
+	public static function normalizar( string $texto ): string {
+		return trim( (string) preg_replace( '/[^a-z0-9]+/', ' ', strtolower( remove_accents( $texto ) ) ) );
+	}
+
+	/** ¿Está cada palabra buscada (o un trozo de ella) en el texto normalizado? Sin búsqueda, sí. */
+	public static function coincide( string $texto, string $busqueda ): bool {
+		foreach ( array_filter( explode( ' ', self::normalizar( $busqueda ) ), 'strlen' ) as $palabra ) {
+			if ( ! str_contains( $texto, $palabra ) ) {
+				return false;
+			}
+		}
+		return true;
 	}
 
 	/** @return int|\WP_Error Id del pago creado en Tesorería. */

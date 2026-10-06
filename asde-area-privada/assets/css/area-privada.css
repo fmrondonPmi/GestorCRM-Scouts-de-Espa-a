@@ -2014,7 +2014,8 @@ html.asde-cargando .asde-ap button {
 	flex-wrap: nowrap;
 	align-items: center;
 }
-.asde-ap .asde-form__fila--compacta > input[type="text"] {
+.asde-ap .asde-form__fila--compacta > input[type="text"],
+.asde-ap .asde-form__fila--compacta > input[type="search"] {
 	flex: 1 1 12em;
 	min-width: 0;
 }
@@ -2032,5 +2033,70 @@ html.asde-cargando .asde-ap button {
 @media (max-width: 767px) {
 	.asde-ap .asde-form__fila--compacta {
 		flex-wrap: wrap;
+	}
+}
+
+/* v0.20.1 · «Registrar pago» con un ingreso del banco: el elegido y la ventana para buscarlo */
+.asde-ap .asde-pago-banco {
+	margin: 0 0 1em;
+	padding: .75em 1em;
+	border: 1px solid var(--asde-border);
+	border-radius: var(--asde-radius);
+	background: var(--asde-tint);
+}
+.asde-ap .asde-pago-banco p {
+	margin: 0 0 .5em;
+}
+.asde-ap .asde-pago-banco .asde-help {
+	margin: 0;
+}
+.asde-ap .asde-pago-banco__titulo {
+	font-weight: 600;
+}
+.asde-ap .asde-pago-banco__elegido [data-asde-pago-banco-elegido] {
+	font-weight: 600;
+	overflow-wrap: anywhere;
+}
+.asde-ap .asde-pago-banco__acciones {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: .5em 1em;
+}
+.asde-ap .asde-banco-elegir__atajos {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: .4em;
+	margin: .5em 0 1em;
+}
+.asde-ap .asde-banco-elegir__atajo {
+	padding: .15em .7em;
+	border: 1px solid var(--asde-border);
+	border-radius: 999px;
+	background: var(--asde-surface);
+	text-decoration: none;
+	font-size: 13px;
+}
+.asde-ap .asde-banco-elegir__atajo:hover,
+.asde-ap .asde-banco-elegir__atajo:focus {
+	border-color: var(--asde-primary);
+}
+.asde-ap .asde-banco-elegir__atajo--todos {
+	color: var(--asde-muted);
+}
+.asde-ap .asde-banco-elegir__grupo h3 {
+	margin: 1em 0 .4em;
+}
+.asde-ap .asde-table--banco-elegir td {
+	vertical-align: top;
+}
+.asde-ap .asde-table--banco-elegir td:last-child {
+	text-align: right;
+	white-space: nowrap;
+}
+@media (max-width: 767px) {
+	.asde-ap .asde-banco-elegir .asde-form__fila--compacta > input[type="search"] {
+		flex-basis: 100%;
 	}
 }

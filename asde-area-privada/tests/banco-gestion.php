@@ -17,6 +17,7 @@ require_once ABSPATH . 'wp-admin/includes/user.php';
 use AsdeBalears\AreaPrivada\Audit\Logger;
 use AsdeBalears\AreaPrivada\Auth\Ambito;
 use AsdeBalears\AreaPrivada\Domain\Grupo;
+use AsdeBalears\AreaPrivada\Domain\Persona;
 use AsdeBalears\AreaPrivada\Frontend\Notices;
 use AsdeBalears\AreaPrivada\Frontend\Router;
 use AsdeBalears\AreaPrivada\Frontend\Views\BancoView;
@@ -301,16 +302,93 @@ try {
 		'cfg'         => $cfg,
 		'ronda'       => '2026-2027',
 		'movimientos' => array(),
-		'banco'       => Conciliacion::pendientes_para( $fam2 ),
+		'banco'       => null,
 		'cuenta'      => null,
 		'url'         => home_url( '/' ),
 		'url_editar'  => home_url( '/' ),
 	);
 	$h = \AsdeBalears\AreaPrivada\Frontend\TemplateLoader::render( 'tesoreria/familia', $vars );
 	$ok( str_contains( $h, '<details class="asde-plegable" open data-asde-recordar="tesoreria-cuota-ronda">' ) && str_contains( $h, 'asde-plegable__resumen asde-plegable__resumen--cerrado' ), '«Cuota de la ronda» se puede plegar (abierto de entrada; plegado enseña el resumen)' );
-	$ok( str_contains( $h, 'name="banco"' ) && str_contains( $h, 'PRUEBA-BG ingreso sin referencia' ) && str_contains( $h, 'data-importe="55.00"' ), 'en «Registrar pago», el desplegable con los ingresos por conciliar (con su fecha e importe para rellenar el formulario)' );
+
+	echo "\n== Parte E · Buscar el ingreso del banco en una ventana (v0.20.1) ==\n";
+	$importar(
+		array(
+			array( 'fecha' => '2026-10-11', 'importe' => 60.0, 'concepto' => 'PRUEBA-BG cuota octubre', 'ordenante' => 'GARCIA LOPEZ MARIA' ),
+			array( 'fecha' => '2026-10-12', 'importe' => 30.0, 'concepto' => 'PRUEBA-BG campamento Pablo García' ),
+			array( 'fecha' => '2026-10-13', 'importe' => 45.0, 'concepto' => 'PRUEBA-BG aportacion', 'ordenante' => 'MARIANO GARCIAS PONS' ),
+		)
+	);
+	$por_tutor = $mov( 'cuota octubre' );
+	$por_socio = $mov( 'campamento Pablo' );
+	$parecido  = $mov( 'aportacion' );
+	$personas  = array(
+		new Persona( 'p-bg', '999902', '', 'PABLO', 'García López', '2014-01-01', '', '', array(), '', array( 1 => array( 'nombre' => 'María José', 'apellidos' => 'García López', 'email' => '' ), 2 => array( 'nombre' => 'Juan', 'apellidos' => 'de la Fuente Ruiz', 'email' => '' ) ) ),
+	);
+	$claves = Conciliacion::claves( $personas );
+	$ok( array( 'Pablo García', 'María García', 'Juan Fuente' ) === $claves, 'los nombres para buscar: nombre y primer apellido del socio y de sus tutores, sin partículas («de la»)' );
+	$lista  = Conciliacion::pendientes_para( $fam2, $claves );
+	$por_id = array_column( $lista, null, 'id' );
+	$ok( $por_id[ $por_tutor['id'] ]['sugerido'] && str_contains( $por_id[ $por_tutor['id'] ]['motivo'], 'María García' ), 'sugiere el ingreso cuyo ordenante es un tutor (apellidos delante, en mayúsculas y sin acentos)' );
+	$ok( $por_id[ $por_socio['id'] ]['sugerido'] && str_contains( $por_id[ $por_socio['id'] ]['motivo'], 'Pablo García' ), 'y el que lleva el nombre del socio en el concepto' );
+	$ok( ! $por_id[ $parecido['id'] ]['sugerido'] && ! $por_id[ $sin_ref['id'] ]['sugerido'], 'pero no uno con palabras parecidas («Mariano Garcías») ni uno sin nombre' );
+	$sug = array_column( $lista, 'sugerido' );
+	$ok( array_values( array_merge( array_filter( $sug ), array_filter( $sug, static fn( $s ) => ! $s ) ) ) === $sug, 'los sugeridos salen primero' );
+	$t = $por_id[ $por_tutor['id'] ]['texto'];
+	$ok( Conciliacion::coincide( $t, 'maría garcía' ) && Conciliacion::coincide( $t, 'Garcia MARIA' ) && Conciliacion::coincide( $t, 'garc' ) && Conciliacion::coincide( $t, '60,00' ) && Conciliacion::coincide( $t, '11/10/2026' ) && Conciliacion::coincide( $t, '' ), 'el buscador encuentra por nombre (en cualquier orden, sin acentos ni mayúsculas, o un trozo), por importe y por fecha' );
+	$ok( ! Conciliacion::coincide( $t, 'maria pablo' ), 'y tienen que estar todas las palabras' );
+
+	// La ficha: un botón que abre la ventana, y el ingreso elegido.
+	$vista      = new \AsdeBalears\AreaPrivada\Frontend\Views\TesoreriaView();
+	$banco_para = new ReflectionMethod( $vista, 'banco_para' );
+	$_GET       = array( 'banco' => (string) $por_tutor['id'] );
+	$b          = $banco_para->invoke( $vista, $fam2, $personas, '2026-2027' );
+	$_GET       = array( 'banco' => (string) $con_ref['id'] );
+	$b_conc     = $banco_para->invoke( $vista, $fam2, $personas, '2026-2027' );
+	$_GET       = array();
+	$ok( $b['elegido'] && (int) $por_tutor['id'] === (int) $b['elegido']['id'] && null === $b_conc['elegido'] && $b['sugeridos'] >= 2 && $b['pendientes'] >= 4 && str_contains( $b['url'], 'elegir_banco=1' ), 'la ficha sabe cuántos ingresos hay y cuántos se sugieren, y trae el elegido con ?banco= (si sigue pendiente)' );
+	$vars['banco'] = array(
+		'pendientes' => 4,
+		'sugeridos'  => 2,
+		'elegido'    => null,
+		'url'        => home_url( '/?familia=1&elegir_banco=1' ),
+		'url_quitar' => home_url( '/?familia=1' ),
+	);
+	$h = \AsdeBalears\AreaPrivada\Frontend\TemplateLoader::render( 'tesoreria/familia', $vars );
+	$ok( 1 === preg_match( '/<a class="button asde-button-secundario" href="[^"]*elegir_banco=1[^"]*" data-asde-modal>/', $h ) && str_contains( $h, 'Buscar en el banco…' ) && str_contains( $h, '<input type="hidden" name="banco" value=""' ) && ! str_contains( $h, '<select id="asde-pago-banco"' ), 'en «Registrar pago», un botón que abre la ventana para buscar el ingreso (ya no un desplegable)' );
+	$ok( str_contains( $h, '4 ingresos por conciliar' ) && str_contains( $h, '2 sugeridos para esta familia' ), 'con cuántos hay por conciliar y cuántos se sugieren para la familia' );
+	$vars['banco']['elegido'] = BancoTable::obtener( (int) $por_tutor['id'] );
+	$h = \AsdeBalears\AreaPrivada\Frontend\TemplateLoader::render( 'tesoreria/familia', $vars );
+	$ok( str_contains( $h, 'name="banco" value="' . $por_tutor['id'] . '"' ) && 1 === preg_match( '/name="fecha" value="2026-10-11" required readonly>/', $h ) && 1 === preg_match( '/name="importe"[^>]*value="60.00" required readonly>/', $h ) && 1 === preg_match( '/name="metodo" disabled>/', $h ) && str_contains( $h, 'GARCIA LOPEZ MARIA' ), 'sin JavaScript, al volver de la ventana con un ingreso, la ficha lo trae puesto (fecha e importe fijos, transferencia)' );
 	$vars['banco'] = null;
-	$ok( ! str_contains( \AsdeBalears\AreaPrivada\Frontend\TemplateLoader::render( 'tesoreria/familia', $vars ), 'name="banco"' ), 'quien no ve el banco no tiene el desplegable' );
+	$ok( ! str_contains( \AsdeBalears\AreaPrivada\Frontend\TemplateLoader::render( 'tesoreria/familia', $vars ), 'name="banco"' ), 'quien no ve el banco no tiene el botón' );
+
+	// La ventana: buscador, atajos con los nombres, sugeridos primero y «Elegir».
+	$tv = array(
+		'familia' => $fam2,
+		'ronda'   => '2026-2027',
+		'movs'    => $lista,
+		'claves'  => $claves,
+		'q'       => '',
+		'url'     => home_url( '/' ),
+		'volver'  => home_url( '/?familia=' . $fam2['id'] ),
+	);
+	$h = \AsdeBalears\AreaPrivada\Frontend\TemplateLoader::render( 'tesoreria/familia-banco', $tv );
+	$ok( str_contains( $h, 'data-asde-banco-q' ) && str_contains( $h, 'name="elegir_banco" value="1"' ) && str_contains( $h, 'data-asde-banco-atajo="María García"' ) && str_contains( $h, 'data-asde-banco-atajo="Pablo García"' ), 'la ventana tiene el buscador y un atajo con el nombre de cada socio y tutor' );
+	$ok( 1 === preg_match( '/Sugeridos para esta familia.*GARCIA LOPEZ MARIA.*Otros ingresos por conciliar.*ingreso sin referencia/s', $h ) && str_contains( $h, 'banco=' . $por_tutor['id'] ) && ! preg_match( '/<tr data-asde-banco-fila[^>]* hidden>/', $h ), 'primero los sugeridos y después los demás, todos a la vista, y «Elegir» vuelve a la ficha con el ingreso' );
+	$tv['q'] = 'pablo';
+	$h       = \AsdeBalears\AreaPrivada\Frontend\TemplateLoader::render( 'tesoreria/familia-banco', $tv );
+	preg_match_all( '/<tr data-asde-banco-fila[^>]*>/', $h, $filas );
+	$vistas = array_filter( $filas[0], static fn( $f ) => ! str_ends_with( $f, ' hidden>' ) );
+	$ok( 1 === count( $vistas ) && str_contains( (string) current( $vistas ), 'pablo' ) && str_contains( $h, 'data-asde-banco-grupo hidden' ) && str_contains( $h, '<p data-asde-banco-vacio hidden>' ), 'sin JavaScript, buscar «pablo» deja a la vista solo ese ingreso (los demás y su grupo, ocultos)' );
+	$tv['q'] = 'zzzz';
+	$h       = \AsdeBalears\AreaPrivada\Frontend\TemplateLoader::render( 'tesoreria/familia-banco', $tv );
+	$ok( str_contains( $h, 'Ningún ingreso coincide con la búsqueda.' ) && ! str_contains( $h, '<p data-asde-banco-vacio hidden>' ), 'si nada coincide, lo dice' );
+	$ok( in_array( 'tesoreria', Router::MODALES, true ), 'el control de pagos se puede abrir en la ventana emergente (para elegir el ingreso)' );
+	$ve_banco = new ReflectionMethod( $vista, 've_banco' );
+	$como( $u_scouter );
+	$no_ve = ! $ve_banco->invoke( null );
+	$como( $u_teso );
+	$ok( $no_ve && $ve_banco->invoke( null ), 'la ventana solo la abre quien ve el banco (Tesorería sí, un scouter no)' );
 
 	$ok( 0 === $cortadas, 'ninguna petición ha salido hacia un CRM' );
 } finally {

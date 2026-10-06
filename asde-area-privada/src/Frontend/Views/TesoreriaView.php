@@ -4,8 +4,11 @@ namespace AsdeBalears\AreaPrivada\Frontend\Views;
 use AsdeBalears\AreaPrivada\Audit\Logger;
 use AsdeBalears\AreaPrivada\Crm\CrmException;
 use AsdeBalears\AreaPrivada\Crm\PersonaRepository;
+use AsdeBalears\AreaPrivada\Domain\Modulos;
 use AsdeBalears\AreaPrivada\Frontend\Notices;
 use AsdeBalears\AreaPrivada\Informes\Generador;
+use AsdeBalears\AreaPrivada\Tesoreria\Banco\BancoTable;
+use AsdeBalears\AreaPrivada\Tesoreria\Banco\Conciliacion;
 use AsdeBalears\AreaPrivada\Tesoreria\Calculadora;
 use AsdeBalears\AreaPrivada\Tesoreria\Config;
 use AsdeBalears\AreaPrivada\Tesoreria\FamiliasTable;
@@ -41,11 +44,45 @@ final class TesoreriaView extends TesoreriaBaseView {
 
 		try {
 			$familia = (int) $this->get( 'familia' );
-			$html    = $familia ? $this->detalle( $repo, $familia, $ronda ) : $this->control( $repo, $ronda );
+			if ( $familia && '' !== $this->get( 'elegir_banco' ) ) {
+				$html = $this->elegir_banco( $repo, $familia, $ronda );
+			} else {
+				$html = $familia ? $this->detalle( $repo, $familia, $ronda ) : $this->control( $repo, $ronda );
+			}
 		} catch ( CrmException $e ) {
 			return $this->error_crm( 'tesoreria', asde_t( 'No se ha podido consultar el CRM: ' ) . $e->getMessage() );
 		}
-		return $this->layout( 'tesoreria', $this->subnav( 'tesoreria', $ronda ) . $html );
+		return $this->layout( 'tesoreria', ( self::es_modal() ? '' : $this->subnav( 'tesoreria', $ronda ) ) . $html );
+	}
+
+	/** Los movimientos del banco solo los usan Secretaría, Coordinación y Tesorería, y si el grupo usa el banco. */
+	private static function ve_banco(): bool {
+		return current_user_can( self::CAP_CONFIG ) && Modulos::activo( Modulos::BANCO );
+	}
+
+	/**
+	 * Ingresos del banco por conciliar para elegir con cuál paga una familia, con un
+	 * buscador (v0.20.1). Se abre en la ventana emergente desde «Registrar pago»; sin
+	 * JavaScript, en su página, y «Elegir» vuelve a la ficha con el ingreso puesto.
+	 */
+	private function elegir_banco( PersonaRepository $repo, int $id, string $ronda ): string {
+		$f = FamiliasTable::obtener( $id );
+		if ( ! $f || ! self::ve_banco() ) {
+			return $this->tpl( 'comun/avisos', array( 'avisos' => array( array( 'error', $f ? asde_t( 'Los movimientos del banco solo los usan Secretaría, Coordinación y Tesorería.' ) : asde_t( 'Esa familia no existe.' ) ) ) ) );
+		}
+		$claves = Conciliacion::claves( $repo->obtener_varias( $f['miembros'] ) );
+		return $this->tpl(
+			'tesoreria/familia-banco',
+			array(
+				'familia' => $f,
+				'ronda'   => $ronda,
+				'movs'    => Conciliacion::pendientes_para( $f, $claves ),
+				'claves'  => $claves,
+				'q'       => $this->get( 'q' ),
+				'url'     => $this->url( 'tesoreria' ),
+				'volver'  => $this->url( 'tesoreria', array( 'familia' => $id, 'ronda' => $ronda ) ),
+			)
+		);
 	}
 
 	/** Todas las familias con su estado en la ronda. @return array{0: array, 1: array} [filas, personas] */
@@ -161,12 +198,35 @@ final class TesoreriaView extends TesoreriaBaseView {
 				'cfg'         => $cfg,
 				'ronda'       => $ronda,
 				'movimientos' => MovimientosTable::de_familia( $id, $ronda ),
-				// v0.20: ingresos del banco por conciliar, para asociar uno al registrar el pago (solo quien ve el banco).
-				'banco'       => current_user_can( self::CAP_CONFIG ) && \AsdeBalears\AreaPrivada\Domain\Modulos::activo( \AsdeBalears\AreaPrivada\Domain\Modulos::BANCO ) ? \AsdeBalears\AreaPrivada\Tesoreria\Banco\Conciliacion::pendientes_para( $f ) : null,
+				// v0.20: asociar un ingreso del banco al registrar el pago (solo quien ve el banco); se elige en una ventana con buscador (v0.20.1).
+				'banco'       => self::ve_banco() ? $this->banco_para( $f, $personas, $ronda ) : null,
 				'cuenta'      => $cuenta,
 				'url'         => $this->url( 'tesoreria', array( 'ronda' => $ronda ) ),
 				'url_editar'  => $this->url( 'familias', array( 'familia' => $id ) ),
 			)
+		);
+	}
+
+	/**
+	 * Lo que necesita «Registrar pago» para el ingreso del banco: cuántos hay por
+	 * conciliar (y sugeridos para la familia), el elegido si se vuelve de su página
+	 * con ?banco= (sin JavaScript) y las direcciones de la ventana y de «Quitar».
+	 *
+	 * @return array{pendientes:int, sugeridos:int, elegido:?array, url:string, url_quitar:string}
+	 */
+	private function banco_para( array $f, array $personas, string $ronda ): array {
+		$pend    = Conciliacion::pendientes_para( $f, Conciliacion::claves( $personas ) );
+		$elegido = (int) $this->get( 'banco' ) ? BancoTable::obtener( (int) $this->get( 'banco' ) ) : null;
+		$aqui    = array(
+			'familia' => (int) $f['id'],
+			'ronda'   => $ronda,
+		);
+		return array(
+			'pendientes' => count( $pend ),
+			'sugeridos'  => count( array_filter( $pend, static fn( $m ) => $m['sugerido'] ) ),
+			'elegido'    => $elegido && BancoTable::PENDIENTE === $elegido['estado'] && $elegido['importe'] > 0 ? $elegido : null,
+			'url'        => $this->url( 'tesoreria', $aqui + array( 'elegir_banco' => '1' ) ),
+			'url_quitar' => $this->url( 'tesoreria', $aqui ),
 		);
 	}
 
@@ -222,11 +282,11 @@ final class TesoreriaView extends TesoreriaBaseView {
 				$banco = (int) $this->post( 'banco' );
 				if ( $banco ) {
 					// Con un movimiento del banco (v0.20): el pago lleva su fecha y su importe y el movimiento queda conciliado.
-					$mb = \AsdeBalears\AreaPrivada\Tesoreria\Banco\BancoTable::obtener( $banco );
-					if ( ! current_user_can( self::CAP_CONFIG ) || ! \AsdeBalears\AreaPrivada\Domain\Modulos::activo( \AsdeBalears\AreaPrivada\Domain\Modulos::BANCO ) ) {
+					$mb = BancoTable::obtener( $banco );
+					if ( ! self::ve_banco() ) {
 						$r = new \WP_Error( 'x', asde_t( 'Los movimientos del banco solo los usan Secretaría, Coordinación y Tesorería.' ) );
 					} else {
-						$r = \AsdeBalears\AreaPrivada\Tesoreria\Banco\Conciliacion::conciliar( $banco, $familia, $ronda );
+						$r = Conciliacion::conciliar( $banco, $familia, $ronda );
 					}
 					/* translators: 1: importe, 2: fecha */
 					$ok = $mb ? sprintf( asde_t( 'Pago de %1$s registrado con el ingreso del banco del %2$s, que queda conciliado con esta familia.' ), Calculadora::euros( $mb['importe'] ), wp_date( 'd/m/Y', strtotime( $mb['fecha'] . ' 12:00' ) ) ) : '';

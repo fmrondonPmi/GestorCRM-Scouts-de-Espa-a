@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.20.0
+Stable tag: 0.20.1
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -53,6 +53,10 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
 
+= 0.20.1 =
+* Payment control: the bank income for "Register payment" is chosen in a pop-up window with a search box (tutor's or member's name, concept, amount or date) and one-click searches with the family's names; incomes that carry a tutor's or member's name are suggested for the family. Without JavaScript the window is a page and works the same.
+* The one-line forms of the bank and inventory types no longer stack their fields with the Enfold theme.
+
 = 0.20.0 =
 * Bank: the movements list updates without reloading the page (pages, sorting, filters, reconciling); expense and income types with their own screen; "reviewed" movements get a type and a note in a pop-up window; multiple selection to mark several as reviewed.
 * Payment control: the "fee of the round" box can be collapsed; "Register payment" can use a pending bank income, which is reconciled with the family.
@@ -77,6 +81,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * First version with the mobile app (PWA).
 
 == Upgrade Notice ==
+
+= 0.20.1 =
+Search the bank income in a window when registering a payment. No database changes.
 
 = 0.20.0 =
 Treasury and bank improvements and modules per group. Adds a table and two columns to the bank movements; all modules stay on.

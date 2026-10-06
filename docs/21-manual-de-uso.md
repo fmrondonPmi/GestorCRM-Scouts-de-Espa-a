@@ -128,3 +128,9 @@ Un **WordPress de demostración aparte** (Local, Enfold, plugin, mu-plugin con C
 - **Capturas nuevas** `77-banco-tipos`, `78-banco-revisar-ventana`, `79-familia-pago-banco` (la cuota plegada y un ingreso del banco elegido) y `80-modulos`; **rehechas** `16`, `20`, `22`, `24`, `63`, `64` y `69`. `manual-capturas.php` aparta los tipos del banco que ya hubiera en el grupo mientras fotografía (como el inventario) y los devuelve al acabar.
 - Al hacer las capturas salió que los formularios de una línea (tipos del banco y del inventario) se apilaban con Enfold (`#top input/select { width:100% }`): arreglado con `.asde-form__fila--compacta` (doc 16).
 - El generador pasa a la versión 0.20. Paquete **`manual-de-uso-0.20.0.zip`** (carpeta antigua) y copia en `app/public/temporal/` de Local. **No se ha publicado nada**: lo sube el usuario.
+
+## Versión 4.4 · el ingreso del banco con buscador (v0.20.1, 2026-10-06)
+
+- **Coordinación** (`tesoreria.html`, `#pago-banco`): «Registrar un pago con un ingreso del banco» pasa a ser una lista de pasos (Buscar en el banco… → buscar por el nombre del tutor o del socio, o con los botones «Buscar por» → Elegir → Registrar pago), con qué se sugiere y por qué conviene mirar antes de elegir. Retocada la pregunta «Una familia ha pagado la cuota por transferencia sin la referencia».
+- **Capturas**: nueva `81-familia-banco-ventana` (la ventana con el buscador, los nombres de la familia, los sugeridos y los demás); **rehechas** `79-familia-pago-banco` (ahora con el ingreso elegido desde la ventana: `?banco=` en la ficha) y `16-tesoreria-familia` (el recuadro nuevo en «Registrar pago»). `manual-capturas.php` vuelca dos pantallas más (`tesoreria-familia-elegido` y `tesoreria-familia-banco`).
+- El generador sigue en la versión 0.20. Paquete **`manual-de-uso-0.20.1.zip`** (carpeta antigua) y copia en `app/public/temporal/` de Local. **No se ha publicado nada**: lo sube el usuario.

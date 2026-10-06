@@ -60,6 +60,7 @@ Hay que resolverlas antes de programar cada parte. Cuando se responde una, se ma
 | P-74 | **Altas en el CRM · secciones actuales:** ¿«Secciones actuales» se recalcula solo al guardar una membresía? (doc 33) | CRM |
 | P-75 | **Altas en el CRM · datos obligatorios:** ¿qué datos son obligatorios en un alta, para menores y para adultos? (doc 33) | CRM |
 | P-76 | **Banco · tipos de partida:** se crean 15 tipos de gasto e ingreso la primera vez (material, actividades, transporte, seguros, comisiones, donativos, subvenciones…). ¿Son los que usáis o preferís otra lista? (doc 16) | Tesorería |
+| P-77 | **Pago con un ingreso del banco · sugerencias por nombre (v0.20.1):** en la ventana para elegir el ingreso se sugieren los que llevan el nombre y el primer apellido de un socio o tutor de la familia (palabras enteras, sin acentos). ¿Os sirve, o con apellidos muy comunes sugiere ingresos que no son de la familia? (doc 14) | Tesorería |
 
 ## Resueltas
 
