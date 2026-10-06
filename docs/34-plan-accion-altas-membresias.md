@@ -17,7 +17,7 @@ Leyendo el código público de SinergiaCRM y de SuiteCRM (la base de SinergiaCRM
 | P-74 · ¿«Secciones actuales» se recalcula sola al guardar una membresía? | **Sí, también por la API.** Antes de guardar la membresía se calcula `active` a partir de las fechas; después se recalcula `stic_relationship_type_c` de la persona (`setRelationshipType`), igual que al enlazar o desenlazar una membresía. El plugin **no** tiene que escribir «Secciones actuales» | `modules/stic_Contacts_Relationships/LogicHooksCode.php` |
 | P-73 · ¿La persona nueva entra sola en el grupo de seguridad del grupo? | **Depende de la configuración de la instancia**: SuiteCRM añade un registro **nuevo** a los grupos de seguridad de quien lo crea si `securitysuite_inherit_creator` está activo (y al de la persona asignada o al del registro padre con `securitysuite_inherit_assigned` / `securitysuite_inherit_parent`). Si el usuario de API solo está en el grupo de seguridad del grupo scout, la ficha quedaría en ese grupo. Si no, hay que enlazarla con `set_relationship` (`Contacts` → `SecurityGroups`). El plugin lo **comprueba después de crear** (fase 2) | `modules/SecurityGroups/SecurityGroup.php` (SuiteCRM) |
 | ¿El grupo ve a las personas de otros grupos? | No: `get_entry_list` solo devuelve las del grupo de seguridad. Pero **`get_entries_count` cuenta en todo el CRM federal** (doc 04, §7.6): dice **cuántas** fichas cumplen una condición sin devolver ningún dato. ASDE acepta que se use para esto (P-78) | Doc 04 |
-| ¿Se puede saber en qué grupo y OF está la otra ficha? | Sin leerla, solo **deduciéndolo con recuentos** sobre los grupos de seguridad (`SecurityGroups`, por `tipoasociacion_c`, `organizacionfederada_c` y `numgrupo_c` cifra a cifra), si el CRM acepta la subconsulta sobre `securitygroups_records`. Son unas 20–50 consultas (hasta un minuto). **Se confirma con el script del §2** | — |
+| ¿Se puede saber en qué grupo y OF está la otra ficha? | **No.** El CRM niega el acceso a los grupos de seguridad («You do not have access») y los únicos campos con grupo y OF son los de la importación de julio de 2024, que no se mantienen (§2). Por eso el aviso es **genérico** (P-84) | Diagnósticos del §2 |
 
 ## 2. Decisiones del usuario (2026-10-06, fase 0)
 
@@ -25,7 +25,8 @@ Leyendo el código público de SinergiaCRM y de SuiteCRM (la base de SinergiaCRM
 |---|---|
 | **P-70** Permiso | **Sí**: el grupo crea personas y da altas y bajas desde la web |
 | **P-78** Recuento federal | **Sí**: el plugin puede usar `get_entries_count` para saber si un documento ya existe en otro grupo |
-| **P-71** Si está en otro grupo | **Se puede continuar** creando la persona para asociarla al grupo. Sale una **advertencia** de que ya está dada de alta en otro grupo, con **el grupo y la OF** a los que pertenece |
+| **P-71** Si está en otro grupo | **Se puede continuar** creando la persona para asociarla al grupo. Sale una **advertencia** de que ya está dada de alta en otro grupo (se pidió también el grupo y la OF, pero no se pueden saber: P-84) |
+| **P-84** Qué dice esa advertencia | **Genérica** (opción a): «Esta persona ya está dada de alta en otro grupo u organización de Scouts de España». Si algún día ASDE da un dato oficial del grupo actual, o el visto bueno a usar los de la importación de julio de 2024, se añade a la advertencia |
 | **P-81** Regla de DNI único en el CRM | **No**: una persona puede estar en dos grupos o en dos asociaciones. No es una restricción: **se informa siempre** al usuario del duplicado durante el alta |
 | **P-79** Quien vuelve | Si ya tiene ficha en el grupo, **solo necesita una membresía nueva** en esa ficha |
 | **P-80** Menores sin documento | No se valida nada al darlos de alta sin documento. Se valida **cuando se le asigne un nº de documento**: antes de guardarlo en la ficha se comprueba si ya existe y se avisa del duplicado |
@@ -39,7 +40,7 @@ Leyendo el código público de SinergiaCRM y de SuiteCRM (la base de SinergiaCRM
 
 - El usuario facilitó un DNI que existe en el CRM (no se anota aquí: regla 1). El formato es válido (la letra cuadra).
 - **No se ha dado de alta de verdad**: sería escribir en el CRM real (regla 2) y crearía otra ficha en el CRM federal.
-- **Script de solo lectura**: `herramientas-desarrollo/crm-dni-existe.php` (fuera del repo), con las escrituras cortadas: (0) comprueba que el recuento sigue siendo federal; (1) cuenta en todo el CRM las fichas con ese documento escrito de varias formas; (2) busca en el grupo las fichas con ese documento y si tienen membresía activa; (3) dice qué haría el alta; (4) deduce con recuentos el grupo y la OF de las fichas de otros grupos; (5) lee qué campos marca el CRM como obligatorios y las opciones de género (solo metadatos). No imprime nombres, ids ni el documento; el DNI va solo en una variable de entorno. Se probó entero con un arnés que contesta con datos inventados (ninguna petición a la red): los cuatro casos (en otro grupo, en el grupo, en ninguno y recuento filtrado) dan la decisión esperada.
+- **Script de solo lectura**: `herramientas-desarrollo/crm-dni-existe.php` (fuera del repo), con las escrituras cortadas: (0) comprueba que el recuento sigue siendo federal; (1) cuenta en todo el CRM las fichas con ese documento escrito de varias formas; (2) busca en el grupo las fichas con ese documento y si tienen membresía activa; (3) dice qué haría el alta; (4) intentaba deducir el grupo y la OF de las fichas de otros grupos (quitado: el CRM no lo permite, P-84); (5) lee qué campos marca el CRM como obligatorios y las opciones de género (solo metadatos). No imprime nombres, ids ni el documento; el DNI va solo en una variable de entorno. Se probó entero con un arnés que contesta con datos inventados (ninguna petición a la red): los cuatro casos (en otro grupo, en el grupo, en ninguno y recuento filtrado) dan la decisión esperada.
 - **Lo lanza el usuario** (el entorno de Claude no tiene permiso para leer el CRM real). Desde PowerShell, con Local arrancado (la orden de Git Bash está en la cabecera del script):
 
   ```powershell
@@ -66,9 +67,8 @@ Estar en otro grupo **no impide** el alta (P-71, P-81): lo que no puede pasar es
 
 1. **Documento normalizado y válido.** Mayúsculas, sin espacios, puntos ni guiones (`PersonaRepository::normalizar_documento`, ya existe), y comprobación de la letra del DNI o del NIE (módulo 23). Si no es válido, no se sigue. Al CRM se escribe **siempre** normalizado.
 2. **¿Está en el grupo?** Con `get_entry_list`, en **todas** las fichas del grupo, con membresía activa o sin ella (no como `por_documento`, que hoy solo mira las activas): por las cifras del documento con `LIKE` y comparando en memoria el documento normalizado. Si está, **no se crea otra ficha**: si no tiene membresía activa, el alta es una **membresía nueva en su ficha** (P-79); si la tiene, no hay nada que dar de alta. Si hubiera varias fichas del grupo con ese documento, se avisa para que se unifiquen.
-3. **¿Está en otro grupo u organización?** Con `get_entries_count` en todo el CRM, por el documento (normalizado y con las cifras, por si en el CRM está escrito de otra forma). Si cuenta alguna ficha que el grupo no ve, sale la **advertencia**: «Esta persona ya está dada de alta en el grupo N de la OF X», y se puede **continuar** (P-71). El grupo y la OF se deducen con recuentos (§1); si el CRM no lo permitiera, la advertencia dice solo que está en otro grupo.
+3. **¿Está en otro grupo u organización?** Con `get_entries_count` en todo el CRM, por el documento (normalizado y con las cifras, por si en el CRM está escrito de otra forma). Si cuenta alguna ficha que el grupo no ve, sale la **advertencia** «Esta persona ya está dada de alta en otro grupo u organización de Scouts de España» y se puede **continuar** (P-71, P-84). Es una sola consulta y no se lee nada de la otra ficha.
    - **Canario:** antes de fiarse del recuento, el plugin compara cuántas fichas cuenta `get_entries_count` en total con cuántas ve el grupo. Si fueran las mismas, el recuento habría dejado de ser federal: la advertencia dice que **no se ha podido comprobar** si está en otros grupos y se deja continuar (P-83), y wp-admin avisa a quien administra la web.
-   - Como deducir el grupo y la OF puede tardar hasta un minuto, se hace **mientras se rellena el resto del formulario** (petición en segundo plano) y el resultado se guarda unos minutos, **cifrado y sin el documento** (regla 1).
 4. **Menores sin documento (P-80).** Se dan de alta sin él. Cuando más adelante se le pone un documento en su ficha, **antes de guardarlo** se hacen las comprobaciones 1 a 3: si ya existe en el grupo, se avisa y no se guarda (sería la misma persona dos veces); si existe en otro grupo, se avisa y se puede guardar.
 5. **Sin carreras dentro de la web.** Un cerrojo por documento (fila en una tabla con clave única e `INSERT IGNORE`, como el de la instantánea y el del instalador) mientras dura el alta, para que dos clics o dos personas a la vez no creen dos fichas en el grupo. Justo antes del `set_entry` se repite la comprobación 2.
 6. **Reintentos sin duplicar.** El alta son varios pasos (persona → grupo de seguridad → membresía → leer el nº de socio). Cada paso hecho se apunta en una tabla de operaciones (ids del CRM y estado, **sin datos personales**). Si un paso falla, el reintento sigue desde ese paso y **no vuelve a crear la persona**.
@@ -83,14 +83,14 @@ Cada fase se entrega como una versión, con sus pruebas (CRM simulado) y sus doc
 - ✅ Respuestas a P-69, P-70, P-71, P-72, P-75, P-78, P-79, P-80 y P-81 (§2). P-73 y P-74, encaminadas (§1).
 - ✅ El usuario lanzó `crm-dni-existe.php` con el DNI que facilitó (resultado en el §2).
 - ✅ Diagnóstico del grupo y la OF (`crm-grupo-of.php` y `crm-campos-importacion.php`, §2): el grupo y la OF actuales no se pueden saber desde el plugin.
-- ⏳ **P-84**: qué dice el aviso de P-71.
+- ✅ **P-84**: el aviso de P-71 es genérico.
 - ✅ P-82 y P-83 confirmadas.
 
 ### Fase 1 · Comprobación previa (solo lectura)
 
-- **Qué:** `Crm\Duplicados` con las comprobaciones 1 a 3 del §3 (documento, grupo, recuento federal con canario, grupo y OF por recuentos). En Personas, **«¿Está ya en el CRM?»** (Secretaría y Coordinación): con un documento dice si está en el grupo (con o sin membresía activa) y si está en otros grupos (cuáles y de qué OF).
+- **Qué:** `Crm\Duplicados` con las comprobaciones 1 a 3 del §3 (documento, grupo y recuento federal con canario). En Personas, **«¿Está ya en el CRM?»** (Secretaría y Coordinación): con un documento dice si está en el grupo (con o sin membresía activa) y si está dada de alta en otro grupo u organización.
 - **Por qué primero:** no escribe nada y es la pieza en la que se apoyan el alta (fase 3) y el documento de un menor (§3.4).
-- **Pruebas:** el CRM simulado aprende `get_entries_count` federal (fichas de «otros grupos» que `get_entry_list` no devuelve), los recuentos sobre `SecurityGroups` y el caso del canario.
+- **Pruebas:** el CRM simulado aprende `get_entries_count` federal (fichas de «otros grupos» que `get_entry_list` no devuelve) y el caso del canario; y que la consulta no usa subconsultas (el CRM solo las acepta sobre las tablas de emails: doc 04, §7.7).
 - **Hecho cuando:** los resultados salen bien con datos inventados, no se lee ninguna ficha de otro grupo y la auditoría guarda que se hizo una comprobación, sin el documento.
 
 ### Fase 2 · Escritura en el CRM simulado y servidor de la API simulado (P-69)
@@ -110,7 +110,7 @@ Cada fase se entrega como una versión, con sus pruebas (CRM simulado) y sus doc
 
 ### Fase 4 · Prueba completa con el servidor simulado
 
-En lugar de un CRM de pruebas (P-69), con el servidor de la fase 2 y un grupo de pruebas del Local, en el navegador: crear una persona (nº de socio devuelto), darle membresía, baja, cambio de sección, alta de alguien que está en otro grupo (advertencia con grupo y OF), alta de alguien que vuelve (membresía nueva en su ficha) y documento puesto a un menor. Se anota lo que se ve en el doc 04, §7.
+En lugar de un CRM de pruebas (P-69), con el servidor de la fase 2 y un grupo de pruebas del Local, en el navegador: crear una persona (nº de socio devuelto), darle membresía, baja, cambio de sección, alta de alguien que está en otro grupo (advertencia), alta de alguien que vuelve (membresía nueva en su ficha) y documento puesto a un menor. Se anota lo que se ve en el doc 04, §7.
 
 Lo que el simulado no puede confirmar (P-73 y P-74 en la instancia real) se mira en la **primera alta real** del grupo piloto (fase 5), leyendo la ficha creada.
 
