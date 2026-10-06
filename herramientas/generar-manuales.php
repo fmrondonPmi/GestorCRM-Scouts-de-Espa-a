@@ -19,7 +19,7 @@
 
 $raiz    = dirname( __DIR__ ) . '/manual';
 $fuentes = $raiz . '/fuentes';
-$version = '0.19';
+$version = '0.20';
 $fecha   = 'octubre de 2026';
 $errores = 0;
 
@@ -27,8 +27,8 @@ $manuales = array(
 	'administracion' => array(
 		'titulo'   => 'Manual de gestión del CRM y de la web',
 		'perfil'   => 'Administración de WordPress',
-		'entrada'  => 'Para quien instala y mantiene la web: la conexión de cada grupo con SinergiaCRM, la organización federada y el usuario de acceso, la instalación, el tema, los colores, los idiomas y las etiquetas, y qué datos se leen del CRM y cuáles guarda la web.',
-		'apartados' => array( 'admin-perfil', 'admin-crm', 'admin-grupos', 'admin-organizacion', 'admin-entorno', 'admin-app', 'admin-tema', 'admin-colores', 'admin-idiomas', 'admin-datos', 'admin-diagnostico', 'preguntas-admin' ),
+		'entrada'  => 'Para quien instala y mantiene la web: la conexión de cada grupo con SinergiaCRM, la organización federada y el usuario de acceso, la instalación, los módulos de cada grupo, el tema, los colores, los idiomas y las etiquetas, y qué datos se leen del CRM y cuáles guarda la web.',
+		'apartados' => array( 'admin-perfil', 'admin-crm', 'admin-grupos', 'admin-modulos', 'admin-organizacion', 'admin-entorno', 'admin-app', 'admin-tema', 'admin-colores', 'admin-idiomas', 'admin-datos', 'admin-diagnostico', 'preguntas-admin' ),
 	),
 	'familias'      => array(
 		'titulo'   => 'Manual para familias',

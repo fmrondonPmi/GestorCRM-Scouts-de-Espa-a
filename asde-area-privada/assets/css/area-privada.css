@@ -2008,3 +2008,29 @@ html.asde-cargando .asde-ap button {
 	color: var(--asde-muted);
 	font-size: 14px;
 }
+/* v0.20 · Filas compactas (nombre + clase + botón en una línea; p. ej. los tipos del banco y del inventario).
+   Enfold pone width:100% y margen inferior a los campos con #top: aquí no, para que quepan en la fila. */
+.asde-ap .asde-form__fila--compacta {
+	flex-wrap: nowrap;
+	align-items: center;
+}
+.asde-ap .asde-form__fila--compacta > input[type="text"] {
+	flex: 1 1 12em;
+	min-width: 0;
+}
+.asde-ap .asde-form__fila--compacta > input,
+.asde-ap .asde-form__fila--compacta > select,
+#top .asde-ap .asde-form__fila--compacta > input,
+#top .asde-ap .asde-form__fila--compacta > select {
+	width: auto;
+	margin: 0;
+}
+.asde-ap .asde-form__fila--compacta > button {
+	flex: 0 0 auto;
+	white-space: nowrap;
+}
+@media (max-width: 767px) {
+	.asde-ap .asde-form__fila--compacta {
+		flex-wrap: wrap;
+	}
+}

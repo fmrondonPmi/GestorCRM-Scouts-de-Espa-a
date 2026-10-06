@@ -26,7 +26,7 @@ $naturaleza = static function ( string $nombre, string $actual, string $id ): st
 	<h2 class="asde-card__title"><?php asde_e( 'Tipos de gasto e ingreso' ); ?></h2>
 	<p class="asde-muted"><?php asde_e( 'Para clasificar los movimientos del banco que no son cuotas de las familias. Cada tipo es de gasto, de ingreso o de las dos cosas (por ejemplo, devoluciones). Un tipo que usa algún movimiento no se puede borrar, pero sí cambiarle el nombre.' ); ?></p>
 
-	<form method="post" action="<?php echo esc_url( $aqui ); ?>" class="asde-form__fila">
+	<form method="post" action="<?php echo esc_url( $aqui ); ?>" class="asde-form__fila asde-form__fila--compacta">
 		<?php wp_nonce_field( 'asde_banco_tipos' ); ?>
 		<input type="hidden" name="asde_action" value="tipo_crear">
 		<label for="asde-bt-nuevo" class="screen-reader-text"><?php asde_e( 'Nombre del tipo nuevo' ); ?></label>
@@ -60,7 +60,7 @@ $naturaleza = static function ( string $nombre, string $actual, string $id ): st
 					?>
 					<tr>
 						<td data-label="<?php echo esc_attr( asde_a( 'Nombre y clase' ) ); ?>">
-							<form method="post" action="<?php echo esc_url( $aqui ); ?>" class="asde-form__fila">
+							<form method="post" action="<?php echo esc_url( $aqui ); ?>" class="asde-form__fila asde-form__fila--compacta">
 								<?php wp_nonce_field( 'asde_banco_tipos' ); ?>
 								<input type="hidden" name="asde_action" value="tipo_cambiar">
 								<input type="hidden" name="tipo" value="<?php echo (int) $t['id']; ?>">

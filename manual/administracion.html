@@ -12,10 +12,10 @@
 <body>
 <header class="portada">
 	<div class="portada__dentro">
-		<p class="antetitulo">Manual de uso · versión 0.19 · octubre de 2026 · <a class="portada__volver" href="index.html">Todos los manuales</a></p>
+		<p class="antetitulo">Manual de uso · versión 0.20 · octubre de 2026 · <a class="portada__volver" href="index.html">Todos los manuales</a></p>
 		<h1>Manual de gestión del CRM y de la web</h1>
 		<p class="portada__perfil">Administración de WordPress</p>
-		<p class="entrada">Para quien instala y mantiene la web: la conexión de cada grupo con SinergiaCRM, la organización federada y el usuario de acceso, la instalación, el tema, los colores, los idiomas y las etiquetas, y qué datos se leen del CRM y cuáles guarda la web.</p>
+		<p class="entrada">Para quien instala y mantiene la web: la conexión de cada grupo con SinergiaCRM, la organización federada y el usuario de acceso, la instalación, los módulos de cada grupo, el tema, los colores, los idiomas y las etiquetas, y qué datos se leen del CRM y cuáles guarda la web.</p>
 		<p class="demo"><strong>Todas las capturas son de un WordPress de demostración con un CRM simulado y datos inventados:</strong> el «Grupo Scout Ejemplo» (grupo 999), personas que no existen y emails <span class="mono">@example.invalid</span>. En tu grupo verás tus datos del CRM.</p>
 	</div>
 	<div class="secciones-franja" aria-hidden="true">
@@ -33,6 +33,7 @@
 <li class="sub"><a href="#crm-escribe">Qué escribe</a></li>
 <li class="sub"><a href="#usuario-api">El usuario de API de cada grupo</a></li>
 <li><a href="#grupos">Grupos y conexión con el CRM</a></li>
+<li><a href="#modulos">Módulos de cada grupo</a></li>
 <li><a href="#organizacion">Organización federada y usuario de acceso</a></li>
 <li><a href="#entorno">Instalación y entorno</a></li>
 <li><a href="#admin-app">La app móvil</a></li>
@@ -55,6 +56,7 @@
 <li><a href="#para-quien">Para quién es este manual</a></li>
 <li><a href="#crm">Cómo trabaja la web con el CRM</a></li>
 <li><a href="#grupos">Grupos y conexión con el CRM</a></li>
+<li><a href="#modulos">Módulos de cada grupo</a></li>
 <li><a href="#organizacion">Organización federada y usuario de acceso</a></li>
 <li><a href="#entorno">Instalación y entorno</a></li>
 <li><a href="#admin-app">La app móvil</a></li>
@@ -75,6 +77,7 @@
 			<thead><tr><th scope="col">Pantalla de «Grupos Scouts»</th><th scope="col">Para qué</th></tr></thead>
 			<tbody>
 				<tr><td><a href="#grupos">Grupos y conexión CRM</a></td><td>Dar de alta cada grupo con su usuario de SinergiaCRM y comprobar la conexión.</td></tr>
+				<tr><td><a href="#modulos">Módulos</a></td><td>Qué partes del área privada usa cada grupo (tesorería, banco, uniformes, inventario…).</td></tr>
 				<tr><td><a href="#organizacion">Organización federada</a></td><td>La organización, el código del nº de socio, qué número es el usuario de acceso y el coste federativo por defecto.</td></tr>
 				<tr><td><a href="#entorno">Instalación y entorno</a></td><td>Comprobar y reparar todo lo que necesita el área (tablas, páginas, menú…) y el tema.</td></tr>
 				<tr><td><a href="#colores">Colores</a></td><td>Los colores del área privada y de sus emails.</td></tr>
@@ -129,6 +132,32 @@
 		<li><div>Lee los avisos de la prueba: si el usuario ve varios grupos, si es administrador del CRM o en qué módulos puede escribir.</div></li>
 	</ol>
 	<figure class="captura captura--larga"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/wp-admin/admin.php?page=asde-area-privada&amp;editar=999</span></div><div class="navegador__vista" data-ampliar tabindex="0"><img src="capturas/23b-grupo-editar.png" width="1280" height="1479" alt="Formulario para editar un grupo con el campo Email de contacto del grupo" loading="lazy"></div></div><figcaption><span>«Editar» un grupo. El <strong>email de contacto del grupo</strong> es el que ve en «Solicitar acceso» quien no ha podido comprobar sus datos, y el que lleva el aviso de una solicitud rechazada. Hay que ponerlo a mano en cada grupo.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+</section>
+
+<section id="modulos">
+	<h2>Módulos de cada grupo</h2>
+	<p class="resumen">En <strong>wp-admin → Grupos Scouts → Módulos</strong> eliges qué partes del área privada usa cada grupo. Por defecto están todas activas.</p>
+	<figure class="captura"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/wp-admin/admin.php?page=asde-area-privada-modulos</span></div><div class="navegador__vista" data-ampliar><img src="capturas/80-modulos.png" width="1280" height="470" alt="Pantalla Módulos de wp-admin con una fila por grupo y una casilla por módulo" loading="lazy"></div></div><figcaption><span>Una fila por grupo y una casilla por módulo. Desmarca lo que el grupo no use y pulsa «Guardar los módulos».</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<div class="tabla">
+		<table>
+			<thead><tr><th scope="col">Módulo</th><th scope="col">Qué desaparece si se desactiva</th></tr></thead>
+			<tbody>
+				<tr><td>Tesorería</td><td>Control de pagos, familias, cuotas, coste federativo y, con ellos, el banco y las domiciliaciones.</td></tr>
+				<tr><td>Banco</td><td>La pestaña Banco (importar el extracto, conciliar y los tipos de gasto) y el ingreso del banco en «Registrar pago».</td></tr>
+				<tr><td>Domiciliaciones SEPA</td><td>La pestaña Domiciliaciones y la firma de la autorización en «Mis pagos».</td></tr>
+				<tr><td>Uniformes</td><td>El pedido de uniforme de familias y socios y la gestión de los pedidos.</td></tr>
+				<tr><td>Inventario</td><td>El material del grupo, sus tipos y las listas de compra.</td></tr>
+				<tr><td>Informes</td><td>Los listados con columnas a elegir.</td></tr>
+				<tr><td>Solicitudes de acceso</td><td>El enlace del grupo para pedir el acceso (el grupo deja de salir en «Solicitar acceso») y la pestaña Solicitudes.</td></tr>
+				<tr><td>Alta de scouters</td><td>El enlace para que los scouters se den de alta: deja de servir.</td></tr>
+			</tbody>
+		</table>
+	</div>
+	<ul>
+		<li>Lo desactivado deja de salir en el menú, en el inicio y en sus pantallas para <strong>todas las cuentas de ese grupo</strong>, también para un administrador mientras trabaja en él (wp-admin no cambia).</li>
+		<li><strong>No se borra nada:</strong> al activarlo de nuevo, todo está como estaba.</li>
+		<li>Banco y Domiciliaciones van dentro de Tesorería: si se desactiva Tesorería, tampoco se ven. «Mis pagos» se queda mientras el grupo use Tesorería o Uniformes.</li>
+	</ul>
 </section>
 
 <section id="organizacion">
@@ -282,6 +311,7 @@
 	<details class="pregunta"><summary>¿Cómo instalo una versión nueva?</summary><div><p>En Plugins, sube el zip de la versión nueva («Subir plugin» y «Reemplazar el actual»). Después mira «Instalación y entorno»: lo nuevo se crea solo y la pantalla avisa si falta algo.</p></div></details>
 	<details class="pregunta"><summary>No queremos la app móvil.</summary><div><p>En «App móvil», quita la marca de «Activa» y guarda. Desaparecen el aviso y el manifiesto, y las apps ya instaladas se retiran solas en su próxima visita (hasta 24 horas).</p></div></details>
 	<details class="pregunta"><summary>«Comprobar el servidor» dice que una dirección está cacheada.</summary><div><p>Excluye esa dirección (<code>/asde-manifest.webmanifest</code>, <code>/asde-sw.js</code> o <code>/asde-sin-conexion</code>) de la caché del plugin de caché y del CDN, y de la minificación, y vuelve a pulsar el botón. Si no, los móviles no verían las actualizaciones de la app.</p></div></details>
+	<details class="pregunta"><summary>Un grupo no usa el inventario (o el banco, o los uniformes).</summary><div><p>Desactívalo en «Grupos Scouts → Módulos», en la fila de ese grupo. Deja de salir para todas sus cuentas y no se borra nada: si un día lo quieren, se vuelve a marcar y todo está como estaba.</p></div></details>
 	<details class="pregunta"><summary>La app lleva un icono genérico en vez del logo del grupo.</summary><div><p>Pon el «Icono del sitio» (imagen cuadrada de 512 × 512 px) en Apariencia → Personalizar → Identidad del sitio. El icono se fija al instalar: quien ya la tenga debe quitarla y volver a instalarla.</p></div></details>
 </section>
 
@@ -295,7 +325,7 @@
 			</ul>
 		</section>
 
-		<p class="pie">Manual de gestión del CRM y de la web del plugin «ASDE Scouts de España – Gestor CRM para Grupos Scouts», versión 0.19 (octubre de 2026). Capturas hechas en un WordPress de demostración con un CRM simulado y datos inventados.</p>
+		<p class="pie">Manual de gestión del CRM y de la web del plugin «ASDE Scouts de España – Gestor CRM para Grupos Scouts», versión 0.20 (octubre de 2026). Capturas hechas en un WordPress de demostración con un CRM simulado y datos inventados.</p>
 	</main>
 </div>
 

@@ -12,7 +12,7 @@
 <body>
 <header class="portada">
 	<div class="portada__dentro">
-		<p class="antetitulo">Manual de uso · versión 0.19 · octubre de 2026 · <a class="portada__volver" href="index.html">Todos los manuales</a></p>
+		<p class="antetitulo">Manual de uso · versión 0.20 · octubre de 2026 · <a class="portada__volver" href="index.html">Todos los manuales</a></p>
 		<h1>Manual del equipo de coordinación</h1>
 		<p class="portada__perfil">Tesorería, Secretaría y Coordinación</p>
 		<p class="entrada">Todo lo que lleva el equipo del grupo: personas y números de socio, dar acceso, solicitudes, usuarios y emails, fichas y cambios, informes, la Tesorería completa (cuotas, coste federativo, banco y domiciliaciones SEPA) y los uniformes, del pago a la entrega.</p>
@@ -457,11 +457,19 @@
 		<li>Lo que se registra aquí es lo que cada familia ve en <a href="familias.html#mis-pagos">Mis pagos</a>. Los pagos del uniforme van aparte (ver <a href="#uniformes-gestion">Gestión de pedidos</a>).</li>
 	</ul>
 	<h3 id="familia">Ficha de una familia</h3>
-	<figure class="captura captura--larga"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/tesoreria/?familia=1</span></div><div class="navegador__vista" data-ampliar tabindex="0"><img src="capturas/16-tesoreria-familia.png" width="1280" height="2076" alt="Ficha de una familia de Tesorería con el desglose de la cuota, los plazos y los movimientos" loading="lazy"></div></div><figcaption><span>Quién paga, desglose de la cuota, plazos, registrar un pago o un ajuste, y los movimientos.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<figure class="captura captura--larga"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/tesoreria/?familia=1</span></div><div class="navegador__vista" data-ampliar tabindex="0"><img src="capturas/16-tesoreria-familia.png" width="1280" height="2260" alt="Ficha de una familia de Tesorería con el desglose de la cuota, los plazos y los movimientos" loading="lazy"></div></div><figcaption><span>Quién paga, desglose de la cuota, plazos, registrar un pago o un ajuste, y los movimientos.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
 	<ul>
+		<li><strong>«Cuota de la ronda» se puede plegar</strong> pulsando su título: plegada queda una línea con lo que hay que pagar, lo pagado y lo pendiente. El navegador recuerda cómo la dejaste.</li>
 		<li><strong>Registrar pago:</strong> fecha, importe, forma (efectivo, transferencia, bizum…), referencia y nota. La nota es interna: la familia no la ve.</li>
 		<li><strong>Ajuste:</strong> un descuento o beca (en negativo) o un recargo, siempre con su motivo.</li>
 		<li>Un movimiento equivocado se <strong>anula</strong>; no se borra.</li>
+	</ul>
+	<h4>Registrar un pago con un ingreso del banco</h4>
+	<figure class="captura"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/tesoreria/?familia=1</span></div><div class="navegador__vista" data-ampliar><img src="capturas/79-familia-pago-banco.png" width="1280" height="1250" alt="Ficha de una familia con la cuota plegada y, en Registrar pago, un ingreso del banco elegido que rellena la fecha y el importe" loading="lazy"></div></div><figcaption><span>Con «Cuota de la ronda» plegada y, en «Registrar pago», un ingreso del banco elegido: la fecha y el importe salen del banco.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<ul>
+		<li>Si ya has importado el extracto, en «Registrar pago» sale <strong>«Ingreso del banco (opcional)»</strong> con los ingresos <strong>por conciliar</strong>. Primero salen los <strong>sugeridos para esta familia</strong>: los que llevan su nº en el concepto o vienen de la misma persona que otro pago suyo.</li>
+		<li>Al elegir uno, se rellenan la fecha, el importe y «transferencia», que no se pueden cambiar. Al registrarlo, el pago queda hecho y el movimiento queda <strong>conciliado</strong> con la familia, igual que si lo hubieras conciliado desde el banco (y se deshace desde allí).</li>
+		<li>Solo lo ven Tesorería, Secretaría y Coordinación (los scouters registran los pagos a mano).</li>
 	</ul>
 	<h3 id="familias">Familias</h3>
 	<figure class="captura captura--larga"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/tesoreria/familias/</span></div><div class="navegador__vista" data-ampliar tabindex="0"><img src="capturas/17-familias.png" width="1280" height="1680" alt="Página Familias con sugerencias de hermanos y la lista de familias" loading="lazy"></div></div><figcaption><span>Las familias del grupo y, debajo, los educandos que aún no están en ninguna: se marcan y se crea su familia. Si varios comparten email, la web sugiere juntarlos (suelen ser hermanos). Una familia puede incluir a la madre o al padre scouter.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
@@ -480,14 +488,29 @@
 	</ul>
 
 	<h3 id="banco">Banco</h3>
-	<figure class="captura captura--larga"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/tesoreria/banco/</span></div><div class="navegador__vista" data-ampliar tabindex="0"><img src="capturas/20-banco.png" width="1280" height="2550" alt="Página Banco con la última importación y los movimientos pendientes de conciliar" loading="lazy"></div></div><figcaption><span>Movimientos importados del extracto y su conciliación con las familias.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<figure class="captura captura--larga"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/tesoreria/banco/</span></div><div class="navegador__vista" data-ampliar tabindex="0"><img src="capturas/20-banco.png" width="1280" height="2910" alt="Página Banco con la última importación y los movimientos, con casillas para elegir varios, el tipo de los revisados y el paginador" loading="lazy"></div></div><figcaption><span>Movimientos importados del extracto: los ingresos se concilian con las familias y lo que no es cuota se marca como revisado con su tipo. Cambiar de página, ordenar, filtrar o conciliar no recarga la pantalla.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
 	<ol class="pasos">
 		<li><div>En la banca online del grupo, descarga el extracto en <strong>Norma 43</strong> (también llamado «Cuaderno 43» o AEB 43) o en CSV.</div></li>
 		<li><div><strong>«Importar movimientos»</strong> y elige el fichero. La web enseña una vista previa y no duplica lo que ya estaba importado.</div></li>
-		<li><div>Para cada ingreso, elige la familia y pulsa <strong>«Conciliar»</strong>: se registra como pago de esa familia. Si el concepto lleva el nº de familia (<code>F999003</code>), la web ya la sugiere; si no, búscala por su nº o por un apellido.</div></li>
-		<li><div>Lo que no es una cuota se marca con <strong>«No es una cuota»</strong>, y los gastos, con <strong>«Marcar revisado»</strong>. Los ingresos de los uniformes se validan en su pedido.</div></li>
+		<li><div>Para cada ingreso, elige la familia y pulsa <strong>«Conciliar»</strong>: se registra como pago de esa familia. Si el concepto lleva el nº de familia (<code>F999003</code>), la web ya la sugiere; si no, búscala por su nº o por un apellido. La lista se actualiza al momento, sin recargar, y el aviso sale abajo a la derecha.</div></li>
+		<li><div>Lo que no es una cuota (gastos, donativos, subvenciones…) se marca como <strong>revisado</strong> con su <strong>tipo</strong>: «No es una cuota…» en un ingreso o «Marcar revisado…» en un gasto abren una ventana para elegirlo. Los ingresos de los uniformes se validan en su pedido.</div></li>
 	</ol>
 	<p>Con varios ingresos que llevan la referencia de su familia, un botón los concilia todos de una vez.</p>
+	<h4 id="banco-revisar">Marcar varios como revisados</h4>
+	<figure class="captura"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/tesoreria/banco/?revisar=1</span></div><div class="navegador__vista" data-ampliar><img src="capturas/78-banco-revisar-ventana.png" width="1280" height="900" alt="Ventana Marcar como revisados con dos gastos, el desplegable El mismo tipo para todos, el tipo de cada uno y una nota" loading="lazy"></div></div><figcaption><span>Marca las casillas de los pendientes (o la de arriba, para todos los de la página) y pulsa «Marcar como revisados…»: se abre esta ventana con todos ellos.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<ul>
+		<li><strong>«El mismo tipo para todos»</strong> lo pone en los que encaje (un tipo de gasto, solo en los gastos). Después puedes cambiar el de cada uno.</li>
+		<li>La <strong>nota</strong> es opcional (por ejemplo, el nº de factura) y se ve en el listado; también se puede buscar por ella.</li>
+		<li>Al cerrar la ventana, el listado ya sale actualizado. Si alguno no encajaba, se queda pendiente y el aviso dice cuál.</li>
+		<li>A un movimiento ya revisado se le puede <strong>«Cambiar el tipo»</strong>; «Deshacer» lo devuelve a pendiente. El filtro «Tipo» del listado enseña solo los de un tipo.</li>
+	</ul>
+	<h4 id="banco-tipos">Tipos de gasto e ingreso</h4>
+	<figure class="captura captura--larga"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/tesoreria/banco/?tipos=1</span></div><div class="navegador__vista" data-ampliar tabindex="0"><img src="capturas/77-banco-tipos.png" width="1280" height="1500" alt="Pantalla Tipos de gasto e ingreso con el formulario para crear uno y la lista de tipos con su clase, sus movimientos y lo que suman" loading="lazy"></div></div><figcaption><span>«Tipos de gasto e ingreso», desde el listado del banco: crear, renombrar y borrar tipos, y cuánto suma cada uno.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<ul>
+		<li>La primera vez se crean unos de partida (material y equipamiento, actividades y campamentos, alimentación, transporte, local, seguros, cuotas federativas, uniformes, comisiones bancarias, donativos, subvenciones, lotería, devoluciones…). Cámbialos a tu gusto.</li>
+		<li>Cada tipo es de <strong>gasto</strong>, de <strong>ingreso</strong> o de <strong>las dos cosas</strong>. Un tipo que ya usa algún movimiento no se puede borrar.</li>
+		<li>La columna «Suma» es un resumen rápido de en qué se gasta y de dónde entra el dinero; su número lleva a esos movimientos.</li>
+	</ul>
 
 	<h3 id="sepa">Domiciliaciones SEPA</h3>
 	<p class="quien-sub">Secretaría, Coordinación y Tesorería</p>
@@ -644,6 +667,8 @@
 	<details class="pregunta"><summary>Un cargo de la remesa SEPA ha sido devuelto.</summary><div><p>En la remesa, al registrar los cobros, márcalo como «Devuelto»: no se registra como pago y la familia lo sigue debiendo. Habla con ella para cobrarlo de otra forma.</p></div></details>
 	<details class="pregunta"><summary>Alguien se ha equivocado de talla y el pedido ya está pagado.</summary><div><p>Tesorería o Coordinación pueden cancelarlo, con un motivo, hasta que se entrega. El pago se resuelve aparte (devolverlo o pasarlo a un pedido nuevo).</p></div></details>
 	<details class="pregunta"><summary>Soy de Tesorería: ¿cómo me entero de que hay una lista de compra que aprobar?</summary><div><p>Te llega un email con el material y el total, con el enlace a la lista. Además, en el inicio («Pendiente de revisar») y en el menú («Inventario (1)») sale cuántas esperan tu visto bueno.</p></div></details>
+	<details class="pregunta"><summary>¿Cuánto nos gastamos en material, o en transporte?</summary><div><p>Marca los gastos del banco como revisados con su tipo (de uno en uno o varios a la vez, con las casillas). En «Banco → Tipos de gasto e ingreso», la columna «Suma» dice lo que suma cada tipo, y su número lleva a esos movimientos.</p></div></details>
+	<details class="pregunta"><summary>No veo la pestaña Banco (o Inventario, o Uniformes).</summary><div><p>Puede que tu grupo no use ese módulo: lo decide quien administra la web, en «Módulos» de wp-admin. Si lo necesitáis, pídele que lo active; no se había borrado nada.</p></div></details>
 	<details class="pregunta"><summary>Ya tenemos el inventario en una hoja de Excel.</summary><div><p>Impórtalo: «Inventario → Importar desde CSV». Descarga el ejemplo para ver las columnas, copia vuestro material, guárdalo como «CSV (delimitado por punto y coma)» y súbelo. Los tipos que no existan se crean solos (si dejas la casilla marcada).</p></div></details>
 	<details class="pregunta"><summary>¿Quién configura los textos, los colores o el idioma de la web?</summary><div><p>La administración de WordPress: está en el <a href="administracion.html">manual de gestión del CRM y de la web</a>. Si ves un texto que conviene cambiar en algún idioma, pásaselo.</p></div></details>
 	<details class="pregunta"><summary>¿Puedo tener el área privada como una app en el móvil?</summary><div><p>Sí: mira «Instalar el área privada en el móvil». En Android sale un aviso con el botón «Instalar la app»; en iPhone, con Safari, «Compartir» y «Añadir a pantalla de inicio». No hay que bajar nada de las tiendas.</p></div></details>
@@ -660,7 +685,7 @@
 			</ul>
 		</section>
 
-		<p class="pie">Manual del equipo de coordinación del plugin «ASDE Scouts de España – Gestor CRM para Grupos Scouts», versión 0.19 (octubre de 2026). Capturas hechas en un WordPress de demostración con un CRM simulado y datos inventados.</p>
+		<p class="pie">Manual del equipo de coordinación del plugin «ASDE Scouts de España – Gestor CRM para Grupos Scouts», versión 0.20 (octubre de 2026). Capturas hechas en un WordPress de demostración con un CRM simulado y datos inventados.</p>
 	</main>
 </div>
 

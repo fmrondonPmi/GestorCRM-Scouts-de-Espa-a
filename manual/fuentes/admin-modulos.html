@@ -1,0 +1,25 @@
+<section id="modulos">
+	<h2>Módulos de cada grupo</h2>
+	<p class="resumen">En <strong>wp-admin → Grupos Scouts → Módulos</strong> eliges qué partes del área privada usa cada grupo. Por defecto están todas activas.</p>
+	<captura src="80-modulos" url="/wp-admin/admin.php?page=asde-area-privada-modulos" alt="Pantalla Módulos de wp-admin con una fila por grupo y una casilla por módulo">Una fila por grupo y una casilla por módulo. Desmarca lo que el grupo no use y pulsa «Guardar los módulos».</captura>
+	<div class="tabla">
+		<table>
+			<thead><tr><th scope="col">Módulo</th><th scope="col">Qué desaparece si se desactiva</th></tr></thead>
+			<tbody>
+				<tr><td>Tesorería</td><td>Control de pagos, familias, cuotas, coste federativo y, con ellos, el banco y las domiciliaciones.</td></tr>
+				<tr><td>Banco</td><td>La pestaña Banco (importar el extracto, conciliar y los tipos de gasto) y el ingreso del banco en «Registrar pago».</td></tr>
+				<tr><td>Domiciliaciones SEPA</td><td>La pestaña Domiciliaciones y la firma de la autorización en «Mis pagos».</td></tr>
+				<tr><td>Uniformes</td><td>El pedido de uniforme de familias y socios y la gestión de los pedidos.</td></tr>
+				<tr><td>Inventario</td><td>El material del grupo, sus tipos y las listas de compra.</td></tr>
+				<tr><td>Informes</td><td>Los listados con columnas a elegir.</td></tr>
+				<tr><td>Solicitudes de acceso</td><td>El enlace del grupo para pedir el acceso (el grupo deja de salir en «Solicitar acceso») y la pestaña Solicitudes.</td></tr>
+				<tr><td>Alta de scouters</td><td>El enlace para que los scouters se den de alta: deja de servir.</td></tr>
+			</tbody>
+		</table>
+	</div>
+	<ul>
+		<li>Lo desactivado deja de salir en el menú, en el inicio y en sus pantallas para <strong>todas las cuentas de ese grupo</strong>, también para un administrador mientras trabaja en él (wp-admin no cambia).</li>
+		<li><strong>No se borra nada:</strong> al activarlo de nuevo, todo está como estaba.</li>
+		<li>Banco y Domiciliaciones van dentro de Tesorería: si se desactiva Tesorería, tampoco se ven. «Mis pagos» se queda mientras el grupo use Tesorería o Uniformes.</li>
+	</ul>
+</section>

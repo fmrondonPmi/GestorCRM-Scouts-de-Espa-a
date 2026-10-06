@@ -16,7 +16,7 @@ defined( 'ABSPATH' ) || exit;
 	<h2 class="asde-card__title"><?php asde_e( 'Tipos de material' ); ?></h2>
 	<p class="asde-muted"><?php asde_e( 'Sirven para ordenar y filtrar el inventario (tiendas, cocina, herramientas…). Un tipo que usa algún material no se puede borrar, pero sí cambiarle el nombre.' ); ?></p>
 
-	<form method="post" action="<?php echo esc_url( $url ); ?>" class="asde-form__fila">
+	<form method="post" action="<?php echo esc_url( $url ); ?>" class="asde-form__fila asde-form__fila--compacta">
 		<?php wp_nonce_field( 'asde_inventario_tipos' ); ?>
 		<input type="hidden" name="asde_action" value="tipo_crear">
 		<input type="hidden" name="volver" value="<?php echo esc_url( $volver ); ?>">
@@ -41,7 +41,7 @@ defined( 'ABSPATH' ) || exit;
 					<?php $n = (int) ( $usos[ $t['id'] ] ?? 0 ); ?>
 					<tr>
 						<td data-label="<?php echo esc_attr( asde_a( 'Nombre' ) ); ?>">
-							<form method="post" action="<?php echo esc_url( $url ); ?>" class="asde-form__fila">
+							<form method="post" action="<?php echo esc_url( $url ); ?>" class="asde-form__fila asde-form__fila--compacta">
 								<?php wp_nonce_field( 'asde_inventario_tipos' ); ?>
 								<input type="hidden" name="asde_action" value="tipo_renombrar">
 								<input type="hidden" name="tipo" value="<?php echo (int) $t['id']; ?>">
