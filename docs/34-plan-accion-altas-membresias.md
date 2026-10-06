@@ -32,11 +32,8 @@ Leyendo el código público de SinergiaCRM y de SuiteCRM (la base de SinergiaCRM
 | **P-72** Nº de socio | **Lo devuelve el CRM** al crear la persona: el nº de Scouts de España es automático |
 | **P-75** Datos obligatorios | **Nombre, apellidos, fecha de nacimiento, DNI o nº de documento y género** (`stic_gender_c`) |
 | **P-69** Entorno de pruebas | **No hay CRM de pruebas**: se hace un **servidor de la API simulado** que conteste lo que se espera en cada acción |
-
-Supuestos que salen de las respuestas (doc 09, para confirmar):
-
-- **P-82** El documento es obligatorio en el alta (P-75) salvo en **menores que todavía no lo tienen** (P-80): para ellos se puede dejar vacío.
-- **P-83** Si el recuento deja de ser federal (canario, §3), no se puede saber si está en otro grupo: **se avisa de que no se ha podido comprobar y se deja continuar**, porque estar en otro grupo tampoco bloquea.
+| **P-82** Documento de menores | El documento es obligatorio en el alta (P-75) salvo en **menores que todavía no lo tienen** (P-80): para ellos se puede dejar vacío |
+| **P-83** Si no se puede comprobar | Si el recuento deja de ser federal (canario, §3), no se puede saber si está en otro grupo: **se avisa de que no se ha podido comprobar y se deja continuar**, porque estar en otro grupo tampoco bloquea |
 
 ### La prueba con un DNI real que ya existe
 
@@ -80,7 +77,7 @@ Cada fase se entrega como una versión, con sus pruebas (CRM simulado) y sus doc
 
 - ✅ Respuestas a P-69, P-70, P-71, P-72, P-75, P-78, P-79, P-80 y P-81 (§2). P-73 y P-74, encaminadas (§1).
 - ⏳ El usuario lanza `crm-dni-existe.php` con el DNI que facilitó y se anota el resultado en el §2.
-- ⏳ Confirmar los supuestos P-82 y P-83.
+- ✅ P-82 y P-83 confirmadas.
 
 ### Fase 1 · Comprobación previa (solo lectura)
 
