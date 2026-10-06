@@ -206,4 +206,4 @@ El desplegable de la v0.20 no dejaba buscar tecleando. Ahora:
 - **Elegir**: con JavaScript, rellena el campo oculto `banco`, la fecha, el importe y «transferencia» (fijos), enseña el ingreso elegido y «Quitar el ingreso», y cierra la ventana **sin recargar** la ficha. Sin JavaScript, «Elegir» vuelve a la ficha con `?banco=ID` y `TesoreriaView::banco_para()` lo pone (si sigue pendiente y es un ingreso). El servidor lo procesa igual que en la v0.20.
 - `Conciliacion::pendientes_para()` ya no corta en 200: la ventana trae todos los ingresos por conciliar y el buscador los filtra.
 - Pruebas en `tests/banco-gestion.php`, parte E (claves, sugerencias por nombre, buscador, la ficha con y sin ingreso elegido, la ventana con y sin búsqueda, quién la abre). El JavaScript se comprobó con una simulación (ficha y ventana volcadas con datos inventados y un servidor de PHP): abrir, teclear sin acentos, Enter, atajo, elegir, quitar, enviar y la vista de móvil.
-- Supuesto **P-77** (doc 09): las sugerencias por nombre.
+- **P-77** (doc 09), resuelta: el usuario deja las sugerencias por nombre como están (2026-10-06).
