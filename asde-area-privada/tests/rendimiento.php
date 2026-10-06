@@ -277,7 +277,57 @@ try {
 	$ok( Instantanea::puede_forzar( $num_grupo ), 'pasado el tiempo mínimo, sí' );
 	Instantanea::olvidar( $num_grupo );
 	$ok( Instantanea::puede_forzar( $num_grupo ), 'y sin instantánea también (hay que leerla)' );
+
+	echo "\n== Parte G · El cerrojo es atómico (como el del instalador) ==\n";
+	// Con add_option(), dos peticiones a la vez podían recibir «hecho» las dos y leer las dos el CRM.
+	$cerrojo       = 'asde_ap_snaplock_' . $num_grupo;
+	$fila          = static fn() => $wpdb->get_row( $wpdb->prepare( 'SELECT option_value, autoload FROM %i WHERE option_name = %s', $wpdb->options, $cerrojo ), ARRAY_A ); // phpcs:ignore WordPress.DB
+	$poner         = static fn( int $desde ) => $wpdb->query( $wpdb->prepare( 'UPDATE %i SET option_value = %s WHERE option_name = %s', $wpdb->options, (string) $desde, $cerrojo ) ); // phpcs:ignore WordPress.DB
+	$creerlo_libre = static function () use ( $cerrojo ) {
+		// Lo que veía la otra petición: su caché de opciones decía que el cerrojo no existía.
+		$no             = wp_cache_get( 'notoptions', 'options' );
+		$no             = is_array( $no ) ? $no : array();
+		$no[ $cerrojo ] = true;
+		wp_cache_set( 'notoptions', $no, 'options' );
+	};
+	delete_option( $cerrojo );
+	$primero = Instantanea::tomar_cerrojo( $num_grupo );
+	$f       = $fila();
+	$ok( $primero && $f && abs( time() - (int) $f['option_value'] ) <= 2 && 'off' === $f['autoload'], 'libre: se toma, guarda la hora y no se carga en cada página (autoload off)' );
+	$ok( ! Instantanea::tomar_cerrojo( $num_grupo ), 'un segundo intento mientras está puesto devuelve false' );
+	$hace5 = time() - 5;
+	$poner( $hace5 );
+	$creerlo_libre();
+	$ok( ! Instantanea::tomar_cerrojo( $num_grupo ) && (string) $hace5 === $fila()['option_value'], 'aunque la caché de esa petición diga que no existe (donde add_option() daba «hecho» a las dos), devuelve false y no pisa la hora de quien lo tiene' );
+	Instantanea::soltar_cerrojo( $num_grupo );
+	$ok( null === $fila() && Instantanea::tomar_cerrojo( $num_grupo ), 'soltarlo lo borra y después se vuelve a tomar (true)' );
+	$poner( time() - 30 );
+	$ok( ! Instantanea::tomar_cerrojo( $num_grupo ), 'uno de hace 30 s sigue valiendo (la otra petición aún puede estar leyendo el CRM)' );
+	$poner( time() - 120 );
+	$recuperado = Instantanea::tomar_cerrojo( $num_grupo );
+	$ok( $recuperado && abs( time() - (int) $fila()['option_value'] ) <= 2 && ! Instantanea::tomar_cerrojo( $num_grupo ), 'uno abandonado (más de 60 s) se recupera con la hora nueva y vuelve a bloquear a las demás' );
+	// Dos peticiones van a por el mismo abandonado y la otra se cuela entre la lectura y el cambio.
+	$poner( time() - 120 );
+	$colado  = false;
+	$colarse = static function ( $sql ) use ( $poner, $cerrojo, &$colado ) {
+		if ( ! $colado && str_starts_with( $sql, 'UPDATE' ) && str_contains( $sql, $cerrojo ) && str_contains( $sql, 'AND option_value' ) ) {
+			$colado = true;
+			$poner( time() );
+		}
+		return $sql;
+	};
+	add_filter( 'query', $colarse );
+	$tomado = Instantanea::tomar_cerrojo( $num_grupo );
+	remove_filter( 'query', $colarse );
+	$ok( $colado && ! $tomado, 'si otra petición recupera el abandonado justo antes, este intento devuelve false (comparar y cambiar en una sola sentencia)' );
+	Instantanea::soltar_cerrojo( $num_grupo );
+	$creerlo_libre();
+	$ok( Instantanea::tomar_cerrojo( $num_grupo ) && false !== get_option( $cerrojo ), 'después de tomarlo, get_option() lo ve (se limpian las cachés de opciones)' );
+	Instantanea::soltar_cerrojo( $num_grupo );
 } finally {
+	if ( isset( $colarse ) ) {
+		remove_filter( 'query', $colarse );
+	}
 	remove_filter( 'asde_ap_instantanea_en_pruebas', $con_instantanea );
 	delete_option( 'asde_ap_snaplock_' . $num_grupo );
 	Instantanea::olvidar( $num_grupo );

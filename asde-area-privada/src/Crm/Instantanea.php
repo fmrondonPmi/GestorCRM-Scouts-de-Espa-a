@@ -38,6 +38,9 @@ final class Instantanea {
 
 	private const CERROJO = 'asde_ap_snaplock_';
 
+	/** Un cerrojo más antiguo se da por perdido (la petición que leía el CRM murió). */
+	private const CERROJO_SEGUNDOS = 60;
+
 	/** @var array<string, array{t:int, entries:list<array>}> Lo ya descifrado en esta petición. */
 	private static array $memoria = array();
 
@@ -149,18 +152,30 @@ final class Instantanea {
 	 * Cerrojo para que, al caducar la instantánea, UNA sola petición lea el CRM y las demás
 	 * esperen su resultado (sin él, todas las que llegan a la vez lo leen). Un cerrojo
 	 * olvidado (la petición murió) se da por perdido a los 60 s.
+	 *
+	 * Se toma como el del instalador (Installer::tomar_cerrojo): con un INSERT IGNORE sobre la
+	 * clave única de wp_options, que es atómico. add_option() no lo es (hace INSERT … ON
+	 * DUPLICATE KEY UPDATE y, con dos peticiones a la vez, devuelve «hecho» a las dos, que
+	 * leían el CRM las dos).
 	 */
 	public static function tomar_cerrojo( string $grupo ): bool {
+		global $wpdb;
 		$nombre = self::CERROJO . $grupo;
-		if ( add_option( $nombre, time(), '', 'no' ) ) {
-			return true;
+		$ahora  = time();
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- tiene que ser una sola sentencia atómica; no hay función de WordPress que lo haga
+		$tomado = (int) $wpdb->query( $wpdb->prepare( "INSERT IGNORE INTO %i (option_name, option_value, autoload) VALUES (%s, %s, 'off')", $wpdb->options, $nombre, (string) $ahora ) );
+		if ( ! $tomado ) {
+			// Olvidado: se toma solo si sigue teniendo el valor leído (dos peticiones no lo toman a la vez).
+			// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- lectura sin caché: el valor lo acaba de escribir otra petición
+			$valor = $wpdb->get_var( $wpdb->prepare( 'SELECT option_value FROM %i WHERE option_name = %s', $wpdb->options, $nombre ) );
+			if ( null !== $valor && $ahora - (int) $valor > self::CERROJO_SEGUNDOS ) {
+				// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- comparar y cambiar en una sola sentencia
+				$tomado = (int) $wpdb->query( $wpdb->prepare( 'UPDATE %i SET option_value = %s WHERE option_name = %s AND option_value = %s', $wpdb->options, (string) $ahora, $nombre, $valor ) );
+			}
 		}
 		wp_cache_delete( $nombre, 'options' );
-		if ( time() - (int) get_option( $nombre, 0 ) > 60 ) {
-			update_option( $nombre, time(), false );
-			return true;
-		}
-		return false;
+		wp_cache_delete( 'notoptions', 'options' );
+		return $tomado > 0;
 	}
 
 	public static function soltar_cerrojo( string $grupo ): void {
