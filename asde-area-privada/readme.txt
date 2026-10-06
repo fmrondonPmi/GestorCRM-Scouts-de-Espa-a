@@ -53,6 +53,11 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
 
+= 0.20.0 =
+* Bank: the movements list updates without reloading the page (pages, sorting, filters, reconciling); expense and income types with their own screen; "reviewed" movements get a type and a note in a pop-up window; multiple selection to mark several as reviewed.
+* Payment control: the "fee of the round" box can be collapsed; "Register payment" can use a pending bank income, which is reconciled with the family.
+* New wp-admin screen "Modules": turn each module on or off per group.
+
 = 0.19.1 =
 * Inventory: import materials from a CSV file (button and pop-up window, downloadable example, file check first, then the valid rows are imported and a report lists the rows that failed, which can be downloaded to fix them). The person who prepares a purchase list is shown by name.
 
@@ -72,6 +77,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * First version with the mobile app (PWA).
 
 == Upgrade Notice ==
+
+= 0.20.0 =
+Treasury and bank improvements and modules per group. Adds a table and two columns to the bank movements; all modules stay on.
 
 = 0.19.1 =
 Adds CSV import to the Inventory module. No database changes.

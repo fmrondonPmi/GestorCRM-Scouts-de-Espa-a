@@ -220,6 +220,8 @@ La alternativa v4_1 (login con MD5 y `get_entry_list` con `link_name_to_fields_a
 
 ---
 
+> **v0.20 (2026-10-06):** estudio de cómo **crear personas y dar altas y bajas** con la API (ejemplos oficiales de SinergiaTIC), con propuesta y preguntas: **doc 33**. Sin código todavía.
+
 ## 6. Pendiente de confirmar en la instancia real
 
 | # | Qué | Cómo |

@@ -52,6 +52,14 @@ Hay que resolverlas antes de programar cada parte. Cuando se responde una, se ma
 | P-66 | **Inventario · después de comprar:** hecho así: el visto bueno no cambia las cantidades del inventario. ¿Se añade «Marcar como comprada» que sume lo comprado? (doc 32, S-6) | Inventario |
 | P-67 | **Importar material · repetidos:** hecho así: una fila con un nº de serie que ya está en el inventario (o repetido en el fichero) no se importa; sin nº de serie no se comprueba nada (puede duplicarse una descripción). ¿Hay que avisar también de descripciones repetidas o sumar la cantidad al material que ya existe? (doc 32) | Inventario |
 | P-68 | **Importar material · tipos:** hecho así: los tipos que no existen se crean (casilla marcada por defecto; desmarcada, esas filas fallan). ¿Vale, o preferís que por defecto fallen para evitar tipos con erratas? (doc 32) | Inventario |
+| P-69 | **Altas en el CRM · pruebas:** ¿hay un CRM de pruebas de SinergiaCRM para ASDE, o se acuerda una ficha de prueba en el real? (doc 33) | CRM |
+| P-70 | **Altas en el CRM · permiso:** ¿ASDE y la OF autorizan que el grupo cree personas y dé altas y bajas desde la web, o solo lo hacen ellos? (doc 33) | CRM |
+| P-71 | **Altas en el CRM · traslados:** personas que ya están en el CRM federal en otro grupo: ¿cómo se trasladan sin duplicarlas? (doc 33) | CRM |
+| P-72 | **Altas en el CRM · nº de socio:** ¿quién asigna el nº de Scouts de España a una persona nueva? (doc 33) | CRM |
+| P-73 | **Altas en el CRM · grupo de seguridad:** ¿la persona nueva entra sola en el grupo de seguridad del grupo o hay que enlazarla? (doc 33) | CRM |
+| P-74 | **Altas en el CRM · secciones actuales:** ¿«Secciones actuales» se recalcula solo al guardar una membresía? (doc 33) | CRM |
+| P-75 | **Altas en el CRM · datos obligatorios:** ¿qué datos son obligatorios en un alta, para menores y para adultos? (doc 33) | CRM |
+| P-76 | **Banco · tipos de partida:** se crean 15 tipos de gasto e ingreso la primera vez (material, actividades, transporte, seguros, comisiones, donativos, subvenciones…). ¿Son los que usáis o preferís otra lista? (doc 16) | Tesorería |
 
 ## Resueltas
 
