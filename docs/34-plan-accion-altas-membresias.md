@@ -46,14 +46,19 @@ Leyendo el código público de SinergiaCRM y de SuiteCRM (la base de SinergiaCRM
   $env:ASDE_DNI = '…'; & 'C:\Program Files\Git\bin\bash.exe' 'C:/Claude/Scouts De Balears  - Area Privada/herramientas-desarrollo/wp-local.sh' eval-file 'C:/Claude/Scouts De Balears  - Area Privada/herramientas-desarrollo/crm-dni-existe.php'; Remove-Item Env:ASDE_DNI
   ```
 
+Resultado (lanzado por el usuario el 2026-10-06):
+
 | Comprobación | Resultado |
 |---|---|
-| ¿El recuento es federal? | (pendiente) |
-| Fichas con ese documento en todo el CRM | (pendiente) |
-| … en el grupo, y con membresía activa | (pendiente) |
-| Lo que haría el alta | (pendiente) |
-| ¿Se deducen el grupo y la OF? ¿Cuánto tarda? | (pendiente) |
-| Obligatorios según el CRM y opciones de género | (pendiente) |
+| ¿El recuento es federal? | Sí (si no, la decisión habría sido «no se ha podido comprobar») |
+| Fichas con ese documento en todo el CRM | **1**. La encuentran el documento exacto, en minúsculas y la búsqueda por las cifras; **no** con guion, con espacio ni solo las cifras: el CRM lo guarda **sin separadores** y compara sin distinguir mayúsculas. Por eso se busca por las cifras con `LIKE` y se compara el documento normalizado |
+| … en el grupo, y con membresía activa | **0**: no está en el grupo 684 |
+| Lo que haría el alta | Está en otro grupo u organización: advertencia y se puede continuar (P-71) |
+| ¿Se deducen el grupo y la OF? | **No con `SecurityGroups`**: el CRM rechaza el recuento con la subconsulta. Diagnóstico pendiente (abajo) |
+| Obligatorios según el CRM | `Contacts`: `first_name`, `last_name`, `birthdate`, `stic_gender_c` (el documento no: encaja con P-82). `stic_Contacts_Relationships`: `start_date`, `relationship_type`, la persona (`stic_contacts_relationships_contacts_name`) y `estado_c` |
+| Opciones de género (`stic_gender_c`) | `masculino`, `femenino`, `nobinario` (y vacío) |
+
+**Diagnóstico del grupo y la OF** (pendiente de que lo lance el usuario): `herramientas-desarrollo/crm-grupo-of.php` prueba qué recuentos acepta el CRM (sobre `SecurityGroups`, sobre `Contacts` con subconsultas a `securitygroups_records` y `securitygroups_cstm`, sobre membresías), busca en los metadatos de las fichas y de las membresías algún campo de grupo u OF y, con lo que se acepte, deduce el grupo y la OF (como mucho 120 consultas). Enseña el motivo del rechazo que da el CRM, sin el documento. Si nada funciona, la advertencia dirá solo «ya está dada de alta en otro grupo u organización» y habría que pedir a ASDE una forma de saber cuál.
 
 ## 3. Duplicados: qué se comprueba y qué se hace
 
@@ -76,7 +81,8 @@ Cada fase se entrega como una versión, con sus pruebas (CRM simulado) y sus doc
 ### Fase 0 · Decisiones (hecha, salvo la prueba con el DNI)
 
 - ✅ Respuestas a P-69, P-70, P-71, P-72, P-75, P-78, P-79, P-80 y P-81 (§2). P-73 y P-74, encaminadas (§1).
-- ⏳ El usuario lanza `crm-dni-existe.php` con el DNI que facilitó y se anota el resultado en el §2.
+- ✅ El usuario lanzó `crm-dni-existe.php` con el DNI que facilitó (resultado en el §2).
+- ⏳ Diagnóstico del grupo y la OF (`crm-grupo-of.php`, §2).
 - ✅ P-82 y P-83 confirmadas.
 
 ### Fase 1 · Comprobación previa (solo lectura)

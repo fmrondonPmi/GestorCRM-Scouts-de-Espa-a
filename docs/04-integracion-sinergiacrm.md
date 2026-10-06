@@ -309,3 +309,15 @@ Recuento a 26-09-2026: 442 membresías, 107 activas (Scouters 23, Escultas 22, S
 | Los argumentos de `rest_data` son **posicionales** | Se respeta el orden exacto de la firma de cada método |
 | Los valores llegan con entidades HTML | Se decodifican (`html_entity_decode`) |
 | La sesión caduca con el error 11 (Invalid Session ID) | Se vuelve a iniciar sesión y se reintenta una vez. La sesión se cachea **cifrada** en un transient de 15 minutos **que se alarga mientras se usa** (v0.12.3: antes caducaba a los 15 minutos aunque se usara y cada 15 minutos alguien esperaba ~1 s de inicio de sesión) |
+
+### 7.7 Comprobado al preparar las altas (2026-10-06, doc 34)
+
+Con un script de solo lectura lanzado por el usuario (`herramientas-desarrollo/crm-dni-existe.php`; no imprime datos):
+
+| Hecho | Consecuencia |
+|---|---|
+| El documento (`stic_identification_number_c`) se guarda **sin separadores** (`12345678Z`) y se compara sin distinguir mayúsculas: lo encuentran el exacto, en minúsculas y `LIKE` con las cifras; no con guion, espacio ni solo las cifras | Buscar por las cifras con `LIKE` y comparar el documento normalizado (como `PersonaRepository::por_documento`). Escribir siempre normalizado |
+| `get_entries_count` sigue contando en todo el CRM federal (§7.6) | Sirve para saber si un documento existe en otro grupo (P-78), con el canario del doc 34 |
+| El CRM **rechaza** `get_entries_count` sobre `SecurityGroups` con una subconsulta a `securitygroups_records` | Para saber el grupo y la OF de una ficha de otro grupo hay que buscar otra vía (`crm-grupo-of.php`, doc 34) |
+| Obligatorios en `Contacts`: `first_name`, `last_name`, `birthdate`, `stic_gender_c` (el documento no). En `stic_Contacts_Relationships`: `start_date`, `relationship_type`, la persona y `estado_c` | Formulario del alta (P-75, P-82) |
+| `stic_gender_c`: `masculino`, `femenino`, `nobinario` (y vacío) | Opciones del alta |
