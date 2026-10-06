@@ -4,6 +4,8 @@
 
 > «Revisar la API de Sinergia (https://github.com/SinergiaTIC/SinergiaCRM-API-Examples) para ver altas y bajas y creación de personas.»
 
+> **Plan de acción:** doc 34 (orden de trabajo, cómo evitar duplicados y lo que se averiguó después en el código de SinergiaCRM: P-73 y P-74).
+
 Estudio de los ejemplos oficiales de SinergiaTIC, contrastado con lo que ya sabemos del CRM de ASDE (doc 04, §7) y con el cliente del plugin. **No se ha escrito nada en el CRM** (regla 2 del `CLAUDE.md`): esto es un plan para decidir.
 
 ## 1. Qué hay en el repositorio de ejemplos

@@ -56,10 +56,14 @@ Hay que resolverlas antes de programar cada parte. Cuando se responde una, se ma
 | P-70 | **Altas en el CRM · permiso:** ¿ASDE y la OF autorizan que el grupo cree personas y dé altas y bajas desde la web, o solo lo hacen ellos? (doc 33) | CRM |
 | P-71 | **Altas en el CRM · traslados:** personas que ya están en el CRM federal en otro grupo: ¿cómo se trasladan sin duplicarlas? (doc 33) | CRM |
 | P-72 | **Altas en el CRM · nº de socio:** ¿quién asigna el nº de Scouts de España a una persona nueva? (doc 33) | CRM |
-| P-73 | **Altas en el CRM · grupo de seguridad:** ¿la persona nueva entra sola en el grupo de seguridad del grupo o hay que enlazarla? (doc 33) | CRM |
-| P-74 | **Altas en el CRM · secciones actuales:** ¿«Secciones actuales» se recalcula solo al guardar una membresía? (doc 33) | CRM |
+| P-73 | **Altas en el CRM · grupo de seguridad:** ¿la persona nueva entra sola en el grupo de seguridad del grupo o hay que enlazarla? (doc 33). *Avance 2026-10-06 (doc 34): depende de un ajuste de la instancia (`securitysuite_inherit_creator`); el plugin lo comprobará después de crear y, si hace falta, la enlazará. Falta confirmarlo en la prueba (fase 4)* | CRM |
+| P-74 | **Altas en el CRM · secciones actuales:** ¿«Secciones actuales» se recalcula solo al guardar una membresía? (doc 33). *Avance 2026-10-06 (doc 34): en el código de SinergiaCRM, sí, también por la API (y `active` se calcula con las fechas). Falta confirmarlo en la prueba (fase 4)* | CRM |
 | P-75 | **Altas en el CRM · datos obligatorios:** ¿qué datos son obligatorios en un alta, para menores y para adultos? (doc 33) | CRM |
 | P-76 | **Banco · tipos de partida:** se crean 15 tipos de gasto e ingreso la primera vez (material, actividades, transporte, seguros, comisiones, donativos, subvenciones…). ¿Son los que usáis o preferís otra lista? (doc 16) | Tesorería |
+| P-78 | **Altas en el CRM · duplicados con otros grupos:** ¿ASDE acepta que el plugin use el recuento federal (`get_entries_count`, que solo devuelve un número) para saber si un DNI ya existe en otro grupo antes de un alta, o prefiere darnos otro mecanismo? (doc 34) | CRM |
+| P-79 | **Altas en el CRM · quien vuelve:** si ya tiene ficha en el grupo sin membresía activa, ¿se le da una membresía nueva en la misma ficha? (doc 34) | CRM |
+| P-80 | **Altas en el CRM · menores sin DNI:** ¿qué se considera la misma persona (nombre, apellidos y fecha de nacimiento) y, si coincide en otro grupo, se avisa o se bloquea? (doc 34) | CRM |
+| P-81 | **Altas en el CRM · regla en el CRM:** ¿puede ASDE poner en el CRM una regla de DNI único (o un aviso) para que tampoco se dupliquen las altas hechas por otros caminos? (doc 34) | CRM |
 
 ## Resueltas
 
