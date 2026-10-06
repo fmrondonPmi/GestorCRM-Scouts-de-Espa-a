@@ -145,3 +145,22 @@ asde_manage_users                 # alta/baja/vinculación de usuarios
 
 - Familias y participantes no ven el inventario.
 - Cancelar una lista: quien la creó, mientras está pendiente; Tesorería, mientras no se haya descargado el PDF.
+
+## Actualización v0.20.0 (2026-10-06): módulos por grupo
+
+**wp-admin → Grupos Scouts → Módulos** (`Admin\ModulosPage`, solo administradores): una fila por grupo y una casilla por módulo. Lo que se apaga deja de existir para **todas las cuentas de ese grupo**, también para un administrador mientras trabaja en él (wp-admin no cambia). **No se borra nada**: al activarlo de nuevo todo está como estaba. Por defecto todo activo (las instalaciones anteriores no cambian); solo se guarda lo apagado (opción `asde_ap_modulos`).
+
+| Módulo | Capabilities que se quitan | Además |
+|---|---|---|
+| Tesorería | `asde_tesoreria_acceso`, `asde_tesoreria_config`, `asde_sepa_autorizar` | Apaga también Banco y Domiciliaciones |
+| Banco (dentro de Tesorería) | — | Sin pestaña ni pantalla; sin el desplegable de ingresos en «Registrar pago» |
+| Domiciliaciones SEPA (dentro de Tesorería) | `asde_sepa_autorizar` | Sin pestaña ni pantalla; «Mis pagos» no ofrece firmar |
+| Uniformes | `asde_uniformes_*` | |
+| Inventario | `asde_inventario`, `asde_inventario_aprobar` | |
+| Informes | `asde_reports` | |
+| Solicitudes de acceso | `asde_aprobar_solicitudes` | El grupo no sale en «Solicitar acceso» y el servidor no acepta solicitudes suyas |
+| Alta de scouters | — | El enlace del grupo deja de servir y no se ofrece en *Solicitudes* |
+| («Mis pagos») | `asde_mis_pagos` | Solo si se apagan **Tesorería y Uniformes** |
+
+- **Cómo:** `Domain\Modulos` quita las capabilities de los módulos apagados con el filtro `user_has_cap` (en el grupo de esa persona; para quien está conectado, el grupo en el que trabaja). Con ellas desaparecen el menú, las tarjetas del inicio, los avisos de «Pendiente de revisar», las pantallas y las acciones, sin tocar cada vista. Banco y Domiciliaciones (que comparten la capability de configurar Tesorería) y los formularios públicos preguntan a `Modulos::activo()`.
+- Prueba: `tests/modulos.php`.

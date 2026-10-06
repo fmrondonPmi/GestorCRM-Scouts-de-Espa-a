@@ -33,6 +33,7 @@ final class Plugin {
 		TareaNumeracion::register();
 		Tabla::register();
 		Instantanea::register();
+		\AsdeBalears\AreaPrivada\Domain\Modulos::register(); // v0.20: módulos que se activan o desactivan por grupo.
 
 		if ( is_admin() ) {
 			( new SettingsPage() )->register();
@@ -40,6 +41,7 @@ final class Plugin {
 			( new ColoresPage() )->register();
 			( new IdiomasPage() )->register();
 			( new EntornoPage() )->register();
+			( new \AsdeBalears\AreaPrivada\Admin\ModulosPage() )->register();
 		}
 	}
 }

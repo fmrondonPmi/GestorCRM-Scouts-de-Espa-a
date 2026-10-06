@@ -30,6 +30,9 @@ final class SepaView extends TesoreriaBaseView {
 		if ( ! current_user_can( self::CAP_CONFIG ) ) {
 			return $this->denegado();
 		}
+		if ( ! \AsdeBalears\AreaPrivada\Domain\Modulos::activo( \AsdeBalears\AreaPrivada\Domain\Modulos::SEPA ) ) {
+			return $this->denegado( asde_t( 'Las domiciliaciones SEPA no están activas en tu grupo.' ) );
+		}
 		$repo = PersonaRepository::make();
 		if ( ! $repo ) {
 			return $this->error_crm( 'tesoreria', asde_t( 'La conexión de tu grupo con el CRM no está configurada o no se ha podido comprobar. Un administrador puede revisarla en wp-admin → Grupos Scouts.' ) );
@@ -124,7 +127,7 @@ final class SepaView extends TesoreriaBaseView {
 	}
 
 	public function handle_post(): void {
-		if ( ! current_user_can( self::CAP_CONFIG ) ) {
+		if ( ! current_user_can( self::CAP_CONFIG ) || ! \AsdeBalears\AreaPrivada\Domain\Modulos::activo( \AsdeBalears\AreaPrivada\Domain\Modulos::SEPA ) ) {
 			wp_die( esc_html__( 'No tienes permiso para cambiar las domiciliaciones.', 'asde-area-privada' ), 403 );
 		}
 		$ronda  = Config::es_ronda( $this->post( 'ronda' ) ) ? $this->post( 'ronda' ) : Config::ronda_actual();

@@ -2147,4 +2147,17 @@ return array(
 	'Ninguno: escribo el pago a mano' => 'Ningún: escribo o pagamento á man',
 	'Otros ingresos por conciliar' => 'Outros ingresos por conciliar',
 	'Sugeridos para esta familia' => 'Suxeridos para esta familia',
+
+	// Módulos por grupo (v0.20)
+	'Autorizaciones de las familias y ficheros de adeudos para el banco.' => 'Autorizacións das familias e ficheiros de adebedos para o banco.',
+	'Control de pagos, familias, cuotas y coste federativo.' => 'Control de pagamentos, familias, cotas e custo federativo.',
+	'El enlace del grupo para pedir el acceso y su revisión.' => 'A ligazón do grupo para pedir o acceso e a súa revisión.',
+	'El enlace para que los scouters se den de alta.' => 'A ligazón para que os scouters se dean de alta.',
+	'Importar los movimientos de la cuenta, conciliarlos y tipificar los gastos.' => 'Importar os movementos da conta, concilialos e clasificar os gastos.',
+	'Listados con las columnas que se elijan.' => 'Listaxes coas columnas que se escollan.',
+	'Material del grupo, tipos y listas de compra.' => 'Material do grupo, tipos e listas da compra.',
+	'Pedidos de la camisa y las insignias, su pago y su entrega.' => 'Pedidos da camisa e as insignias, o seu pagamento e a súa entrega.',
+	'Uniformes' => 'Uniformes',
+	'El banco no está activo en tu grupo.' => 'O banco non está activo no teu grupo.',
+	'Las domiciliaciones SEPA no están activas en tu grupo.' => 'As domiciliacións SEPA non están activas no teu grupo.',
 );

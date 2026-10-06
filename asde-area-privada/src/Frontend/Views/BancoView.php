@@ -40,6 +40,9 @@ final class BancoView extends TesoreriaBaseView {
 		if ( ! current_user_can( self::CAP_CONFIG ) ) {
 			return $this->denegado( asde_t( 'El banco solo lo ven Secretaría, Coordinación y Tesorería.' ) );
 		}
+		if ( ! \AsdeBalears\AreaPrivada\Domain\Modulos::activo( \AsdeBalears\AreaPrivada\Domain\Modulos::BANCO ) ) {
+			return $this->denegado( asde_t( 'El banco no está activo en tu grupo.' ) );
+		}
 		$ronda = $this->ronda();
 		TiposMovimiento::sembrar();
 		if ( '1' === $this->get( 'tipos' ) ) {
@@ -142,7 +145,7 @@ final class BancoView extends TesoreriaBaseView {
 	}
 
 	public function handle_post(): void {
-		if ( ! current_user_can( self::CAP_CONFIG ) ) {
+		if ( ! current_user_can( self::CAP_CONFIG ) || ! \AsdeBalears\AreaPrivada\Domain\Modulos::activo( \AsdeBalears\AreaPrivada\Domain\Modulos::BANCO ) ) {
 			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-area-privada' ), 403 );
 		}
 		$accion = $this->post( 'asde_action' );

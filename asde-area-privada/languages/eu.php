@@ -2147,4 +2147,17 @@ return array(
 	'Ninguno: escribo el pago a mano' => 'Bat ere ez: ordainketa eskuz idazten dut',
 	'Otros ingresos por conciliar' => 'Bateratzeko dauden beste diru-sarrera batzuk',
 	'Sugeridos para esta familia' => 'Familia honetarako iradokiak',
+
+	// Módulos por grupo (v0.20)
+	'Autorizaciones de las familias y ficheros de adeudos para el banco.' => 'Familien baimenak eta bankurako zordunketa-fitxategiak.',
+	'Control de pagos, familias, cuotas y coste federativo.' => 'Ordainketen kontrola, familiak, kuotak eta federazio-kostua.',
+	'El enlace del grupo para pedir el acceso y su revisión.' => 'Sarbidea eskatzeko taldearen esteka eta haren berrikuspena.',
+	'El enlace para que los scouters se den de alta.' => 'Scouterrek alta emateko esteka.',
+	'Importar los movimientos de la cuenta, conciliarlos y tipificar los gastos.' => 'Kontuko mugimenduak inportatu, bateratu eta gastuak sailkatu.',
+	'Listados con las columnas que se elijan.' => 'Aukeratutako zutabeekin egindako zerrendak.',
+	'Material del grupo, tipos y listas de compra.' => 'Taldearen materiala, motak eta erosketa-zerrendak.',
+	'Pedidos de la camisa y las insignias, su pago y su entrega.' => 'Alkandoraren eta insignien eskaerak, ordainketa eta entrega.',
+	'Uniformes' => 'Uniformeak',
+	'El banco no está activo en tu grupo.' => 'Bankua ez dago aktibo zure taldean.',
+	'Las domiciliaciones SEPA no están activas en tu grupo.' => 'SEPA helbideratzeak ez daude aktibo zure taldean.',
 );

@@ -29,7 +29,8 @@ final class SolicitarView extends View {
 		if ( is_user_logged_in() ) {
 			return '<div class="asde-ap">' . $this->tpl( 'activar/con-sesion', array( 'url_area' => $this->url( 'area' ) ) ) . '</div>';
 		}
-		$grupos = array_filter( Grupos::todos(), static fn( array $g ) => '' !== $g['crm_id'] );
+		// v0.20: solo los grupos con conexión al CRM que usan las solicitudes de acceso.
+		$grupos = array_filter( Grupos::todos(), static fn( array $g ) => '' !== $g['crm_id'] && \AsdeBalears\AreaPrivada\Domain\Modulos::activo( \AsdeBalears\AreaPrivada\Domain\Modulos::SOLICITUDES, (string) $g['numero'] ) );
 		$pedido = $this->post( 'grupo' ) ?: $this->get( 'grupo' );
 		$grupo  = isset( $grupos[ $pedido ] ) ? $pedido : ( 1 === count( $grupos ) ? (string) array_key_first( $grupos ) : '' );
 		$e      = self::$estado;
@@ -80,7 +81,7 @@ final class SolicitarView extends View {
 			'nombre_menor' => mb_substr( sanitize_text_field( $this->post( 'nombre_menor' ) ), 0, 120 ),
 		);
 		$errores = array();
-		if ( ! $grupo || '' === $grupo['crm_id'] ) {
+		if ( ! $grupo || '' === $grupo['crm_id'] || ! \AsdeBalears\AreaPrivada\Domain\Modulos::activo( \AsdeBalears\AreaPrivada\Domain\Modulos::SOLICITUDES, (string) $grupo['numero'] ) ) {
 			$errores[] = asde_t( 'Elige tu Grupo Scout.' );
 		}
 		$fecha = \DateTimeImmutable::createFromFormat( '!Y-m-d', $d['nacimiento'] );

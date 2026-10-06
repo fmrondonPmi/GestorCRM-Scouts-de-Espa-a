@@ -62,7 +62,7 @@ final class SolicitudesView extends View {
 						'url'       => $this->url( 'solicitudes' ),
 						'enlace'    => $this->url( 'solicitar' ),
 						// v0.16: el enlace de alta de scouters, solo para quien da accesos (doc 31).
-						'enlace_scouters' => current_user_can( 'asde_manage_users' ) && Grupo::actual() ? EnlaceScouters::url( Grupo::actual() ) : '',
+						'enlace_scouters' => current_user_can( 'asde_manage_users' ) && Grupo::actual() && \AsdeBalears\AreaPrivada\Domain\Modulos::activo( \AsdeBalears\AreaPrivada\Domain\Modulos::ALTA_SCOUTERS ) ? EnlaceScouters::url( Grupo::actual() ) : '',
 						'contacto'  => EmailRechazo::contacto(),
 					)
 				)

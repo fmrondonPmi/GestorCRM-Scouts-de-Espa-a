@@ -1,6 +1,7 @@
 <?php
 namespace AsdeBalears\AreaPrivada\Frontend\Views;
 
+use AsdeBalears\AreaPrivada\Domain\Modulos;
 use AsdeBalears\AreaPrivada\Tesoreria\Config;
 
 defined( 'ABSPATH' ) || exit;
@@ -24,8 +25,13 @@ abstract class TesoreriaBaseView extends View {
 			'federacion' => asde_t( 'Coste federativo' ),
 		);
 		if ( current_user_can( self::CAP_CONFIG ) ) {
-			$items['banco'] = asde_t( 'Banco' );
-			$items['sepa']  = asde_t( 'Domiciliaciones' );
+			// v0.20: Banco y Domiciliaciones se pueden desactivar por grupo (wp-admin → Grupos Scouts → Módulos).
+			if ( Modulos::activo( Modulos::BANCO ) ) {
+				$items['banco'] = asde_t( 'Banco' );
+			}
+			if ( Modulos::activo( Modulos::SEPA ) ) {
+				$items['sepa'] = asde_t( 'Domiciliaciones' );
+			}
 		}
 		return $this->tpl(
 			'tesoreria/subnav',

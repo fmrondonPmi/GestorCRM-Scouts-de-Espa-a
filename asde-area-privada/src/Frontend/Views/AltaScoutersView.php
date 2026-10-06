@@ -28,7 +28,7 @@ final class AltaScoutersView extends View {
 	private function grupo_del_enlace(): ?array {
 		$grupo = Grupos::obtener( $this->post( 'grupo' ) ?: $this->get( 'grupo' ) );
 		$clave = $this->post( 'clave' ) ?: $this->get( 'clave' );
-		return $grupo && '' !== $grupo['crm_id'] && EnlaceScouters::valida( $grupo, $clave ) ? $grupo : null;
+		return $grupo && '' !== $grupo['crm_id'] && EnlaceScouters::valida( $grupo, $clave ) && \AsdeBalears\AreaPrivada\Domain\Modulos::activo( \AsdeBalears\AreaPrivada\Domain\Modulos::ALTA_SCOUTERS, (string) $grupo['numero'] ) ? $grupo : null;
 	}
 
 	public function render( string $content = '' ): string {

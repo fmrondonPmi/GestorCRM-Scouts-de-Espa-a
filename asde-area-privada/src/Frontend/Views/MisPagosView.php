@@ -128,7 +128,7 @@ final class MisPagosView extends View {
 		// Domiciliación SEPA de cada familia.
 		$sepa_cfg = SepaConfig::de();
 		$sepa     = array(
-			'lista'    => SepaConfig::lista( $sepa_cfg ),
+			'lista'    => SepaConfig::lista( $sepa_cfg ) && \AsdeBalears\AreaPrivada\Domain\Modulos::activo( \AsdeBalears\AreaPrivada\Domain\Modulos::SEPA ),
 			'acreedor' => $sepa_cfg,
 			'texto'    => Mandatos::texto( $sepa_cfg ),
 			'familias' => array(),

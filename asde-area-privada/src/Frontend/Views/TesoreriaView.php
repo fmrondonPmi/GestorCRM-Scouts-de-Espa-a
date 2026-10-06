@@ -162,7 +162,7 @@ final class TesoreriaView extends TesoreriaBaseView {
 				'ronda'       => $ronda,
 				'movimientos' => MovimientosTable::de_familia( $id, $ronda ),
 				// v0.20: ingresos del banco por conciliar, para asociar uno al registrar el pago (solo quien ve el banco).
-				'banco'       => current_user_can( self::CAP_CONFIG ) ? \AsdeBalears\AreaPrivada\Tesoreria\Banco\Conciliacion::pendientes_para( $f ) : null,
+				'banco'       => current_user_can( self::CAP_CONFIG ) && \AsdeBalears\AreaPrivada\Domain\Modulos::activo( \AsdeBalears\AreaPrivada\Domain\Modulos::BANCO ) ? \AsdeBalears\AreaPrivada\Tesoreria\Banco\Conciliacion::pendientes_para( $f ) : null,
 				'cuenta'      => $cuenta,
 				'url'         => $this->url( 'tesoreria', array( 'ronda' => $ronda ) ),
 				'url_editar'  => $this->url( 'familias', array( 'familia' => $id ) ),
@@ -223,7 +223,7 @@ final class TesoreriaView extends TesoreriaBaseView {
 				if ( $banco ) {
 					// Con un movimiento del banco (v0.20): el pago lleva su fecha y su importe y el movimiento queda conciliado.
 					$mb = \AsdeBalears\AreaPrivada\Tesoreria\Banco\BancoTable::obtener( $banco );
-					if ( ! current_user_can( self::CAP_CONFIG ) ) {
+					if ( ! current_user_can( self::CAP_CONFIG ) || ! \AsdeBalears\AreaPrivada\Domain\Modulos::activo( \AsdeBalears\AreaPrivada\Domain\Modulos::BANCO ) ) {
 						$r = new \WP_Error( 'x', asde_t( 'Los movimientos del banco solo los usan Secretaría, Coordinación y Tesorería.' ) );
 					} else {
 						$r = \AsdeBalears\AreaPrivada\Tesoreria\Banco\Conciliacion::conciliar( $banco, $familia, $ronda );
