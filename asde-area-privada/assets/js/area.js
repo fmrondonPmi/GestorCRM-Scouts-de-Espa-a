@@ -96,6 +96,28 @@
 	} );
 
 	// ---------------------------------------------------------------------
+	// 4. Cuadros plegables que se recuerdan (v0.20): <details data-asde-recordar="clave">
+	// se queda abierto o cerrado como lo dejó la persona, en este navegador.
+	// ---------------------------------------------------------------------
+	function recordar( raiz ) {
+		Array.prototype.forEach.call( ( raiz || document ).querySelectorAll( 'details[data-asde-recordar]' ), function ( d ) {
+			var clave = 'asde_plegado_' + d.getAttribute( 'data-asde-recordar' );
+			try {
+				var guardado = window.localStorage.getItem( clave );
+				if ( null !== guardado ) {
+					d.open = '1' === guardado;
+				}
+			} catch ( e ) {}
+			d.addEventListener( 'toggle', function () {
+				try {
+					window.localStorage.setItem( clave, d.open ? '1' : '0' );
+				} catch ( e ) {}
+			} );
+		} );
+	}
+	recordar( document );
+
+	// ---------------------------------------------------------------------
 	// 1. Ventana emergente
 	// ---------------------------------------------------------------------
 	if ( 'function' !== typeof window.HTMLDialogElement || ! window.fetch || ! window.FormData ) {

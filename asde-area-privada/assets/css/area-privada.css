@@ -2000,3 +2000,11 @@ html.asde-cargando .asde-ap button {
 .asde-ap .asde-table--banco-revisar select {
 	max-width: 100%;
 }
+/* v0.20 · «Cuota de la ronda» plegable (usa los apartados plegables de la ficha): el resumen, solo plegado */
+.asde-ap details.asde-plegable[open] .asde-plegable__resumen--cerrado {
+	display: none;
+}
+.asde-ap .asde-plegable__resumen--cerrado {
+	color: var(--asde-muted);
+	font-size: 14px;
+}

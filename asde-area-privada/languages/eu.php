@@ -2137,4 +2137,14 @@ return array(
 	'«%s» es un tipo de gasto y este movimiento es un ingreso.' => '«%s» gastu mota bat da eta mugimendu hau diru-sarrera bat da.',
 	'«%s» es un tipo de ingreso y este movimiento es un gasto.' => '«%s» diru-sarrera mota bat da eta mugimendu hau gastu bat da.',
 	'← Banco' => '← Bankua',
+
+	// Tesorería: control de pagos (v0.20)
+	'Los movimientos del banco solo los usan Secretaría, Coordinación y Tesorería.' => 'Bankuko mugimenduak Idazkaritzak, Koordinazioak eta Diruzaintzak bakarrik erabiltzen dituzte.',
+	'Pago de %1$s registrado con el ingreso del banco del %2$s, que queda conciliado con esta familia.' => '%1$s(e)ko ordainketa erregistratu da %2$s(e)ko bankuko diru-sarrerarekin, eta familia honekin bateratuta geratzen da.',
+	'A pagar %1$s · pagado %2$s · %3$s %4$s' => 'Ordaintzeko %1$s · ordainduta %2$s · %3$s %4$s',
+	'Ingreso del banco (opcional)' => 'Bankuko diru-sarrera (aukerakoa)',
+	'Los ingresos importados del banco que aún no están conciliados. Si eliges uno, el pago se registra con su fecha y su importe y el movimiento queda conciliado con esta familia.' => 'Bankutik inportatutako eta oraindik bateratu gabeko diru-sarrerak. Bat aukeratzen baduzu, ordainketa haren data eta zenbatekoarekin erregistratzen da eta mugimendua familia honekin bateratuta geratzen da.',
+	'Ninguno: escribo el pago a mano' => 'Bat ere ez: ordainketa eskuz idazten dut',
+	'Otros ingresos por conciliar' => 'Bateratzeko dauden beste diru-sarrera batzuk',
+	'Sugeridos para esta familia' => 'Familia honetarako iradokiak',
 );

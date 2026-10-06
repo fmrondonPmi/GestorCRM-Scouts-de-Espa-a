@@ -161,6 +161,8 @@ final class TesoreriaView extends TesoreriaBaseView {
 				'cfg'         => $cfg,
 				'ronda'       => $ronda,
 				'movimientos' => MovimientosTable::de_familia( $id, $ronda ),
+				// v0.20: ingresos del banco por conciliar, para asociar uno al registrar el pago (solo quien ve el banco).
+				'banco'       => current_user_can( self::CAP_CONFIG ) ? \AsdeBalears\AreaPrivada\Tesoreria\Banco\Conciliacion::pendientes_para( $f ) : null,
 				'cuenta'      => $cuenta,
 				'url'         => $this->url( 'tesoreria', array( 'ronda' => $ronda ) ),
 				'url_editar'  => $this->url( 'familias', array( 'familia' => $id ) ),
@@ -217,6 +219,19 @@ final class TesoreriaView extends TesoreriaBaseView {
 
 		switch ( $this->post( 'asde_action' ) ) {
 			case 'registrar_pago':
+				$banco = (int) $this->post( 'banco' );
+				if ( $banco ) {
+					// Con un movimiento del banco (v0.20): el pago lleva su fecha y su importe y el movimiento queda conciliado.
+					$mb = \AsdeBalears\AreaPrivada\Tesoreria\Banco\BancoTable::obtener( $banco );
+					if ( ! current_user_can( self::CAP_CONFIG ) ) {
+						$r = new \WP_Error( 'x', asde_t( 'Los movimientos del banco solo los usan Secretaría, Coordinación y Tesorería.' ) );
+					} else {
+						$r = \AsdeBalears\AreaPrivada\Tesoreria\Banco\Conciliacion::conciliar( $banco, $familia, $ronda );
+					}
+					/* translators: 1: importe, 2: fecha */
+					$ok = $mb ? sprintf( asde_t( 'Pago de %1$s registrado con el ingreso del banco del %2$s, que queda conciliado con esta familia.' ), Calculadora::euros( $mb['importe'] ), wp_date( 'd/m/Y', strtotime( $mb['fecha'] . ' 12:00' ) ) ) : '';
+					break;
+				}
 				$r = MovimientosTable::registrar( $familia, $ronda, MovimientosTable::PAGO, $this->post( 'fecha' ), $importe, sanitize_key( $this->post( 'metodo' ) ), $this->post( 'referencia' ), $this->post( 'nota' ) );
 				$ok = sprintf( asde_t( 'Pago de %s registrado.' ), Calculadora::euros( $importe ) );
 				break;

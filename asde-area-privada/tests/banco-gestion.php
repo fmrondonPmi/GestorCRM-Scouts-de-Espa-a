@@ -263,6 +263,55 @@ try {
 	$ok( str_contains( $h, 'Tipos de gasto e ingreso' ) && str_contains( $h, 'Crear tipo' ) && 1 === preg_match( '/-57,50/', $h ), 'la pantalla de tipos, con lo que suma cada uno' );
 	list( $avisos ) = $enviar( new BancoView(), array( 'asde_action' => 'tipo_crear', 'nombre' => 'Lotería', 'naturaleza' => 'ingreso' ), 'asde_banco_tipos' );
 	$ok( str_contains( $avisos, 'Tipo creado' ) && isset( array_column( TiposMovimiento::todos(), 'id', 'nombre' )['Lotería'] ), 'se crean tipos desde su pantalla' );
+	echo "\n== Parte D · Control de pagos: registrar un pago con un ingreso del banco ==\n";
+	$fam2 = FamiliasTable::obtener( (int) FamiliasTable::crear( array( '999902' ) ) );
+	$importar(
+		array(
+			array( 'fecha' => '2026-10-07', 'importe' => 120.0, 'concepto' => 'PRUEBA-BG transferencia cuota ' . $fam2['numero'] ),
+			array( 'fecha' => '2026-10-08', 'importe' => 55.0, 'concepto' => 'PRUEBA-BG ingreso sin referencia' ),
+			array( 'fecha' => '2026-10-09', 'importe' => -8.0, 'concepto' => 'PRUEBA-BG otro gasto' ),
+		)
+	);
+	$con_ref = $mov( 'transferencia cuota' );
+	$sin_ref = $mov( 'ingreso sin referencia' );
+	$lista   = Conciliacion::pendientes_para( $fam2 );
+	$ids_l   = array_map( 'intval', array_column( $lista, 'id' ) );
+	$ok( $ids_l && (int) $con_ref['id'] === $ids_l[0] && $lista[0]['sugerido'] && in_array( (int) $sin_ref['id'], $ids_l, true ), 'la lista de ingresos por conciliar pone primero el que lleva la referencia de la familia (sugerido)' );
+	$ok( ! array_filter( $lista, static fn( $m ) => $m['importe'] < 0 || BancoTable::PENDIENTE !== $m['estado'] ), 'solo ingresos pendientes: ni gastos ni conciliados' );
+
+	$como( $u_scouter );
+	list( $avisos ) = $enviar( new \AsdeBalears\AreaPrivada\Frontend\Views\TesoreriaView(), array( 'asde_action' => 'registrar_pago', 'familia' => (string) $fam2['id'], 'ronda' => '2026-2027', 'banco' => (string) $con_ref['id'], 'fecha' => '2026-10-07', 'importe' => '120' ), 'asde_mov_' . $fam2['id'] );
+	$ok( str_contains( $avisos, 'solo los usan Secretaría, Coordinación y Tesorería' ) && BancoTable::PENDIENTE === BancoTable::obtener( (int) $con_ref['id'] )['estado'] && ! MovimientosTable::de_familia( (int) $fam2['id'], '2026-2027' ), 'un scouter (que registra pagos pero no ve el banco) no puede usar un movimiento del banco' );
+	$como( $u_teso );
+	list( $avisos ) = $enviar( new \AsdeBalears\AreaPrivada\Frontend\Views\TesoreriaView(), array( 'asde_action' => 'registrar_pago', 'familia' => (string) $fam2['id'], 'ronda' => '2026-2027', 'banco' => (string) $con_ref['id'], 'fecha' => '2026-01-01', 'importe' => '1', 'metodo' => 'efectivo' ), 'asde_mov_' . $fam2['id'] );
+	$pagos = MovimientosTable::de_familia( (int) $fam2['id'], '2026-2027' );
+	$mb    = BancoTable::obtener( (int) $con_ref['id'] );
+	$ok( 1 === count( $pagos ) && 120.0 === (float) $pagos[0]['importe'] && '2026-10-07' === $pagos[0]['fecha'] && 'banco' === $pagos[0]['origen'], 'Tesorería registra el pago con el ingreso del banco: con su fecha y su importe (no los escritos a mano)' );
+	$ok( BancoTable::CONCILIADO === $mb['estado'] && (int) $fam2['id'] === (int) $mb['familia_id'] && (int) $pagos[0]['id'] === (int) $mb['pago_id'] && str_contains( $avisos, 'queda conciliado con esta familia' ), 'y el movimiento queda conciliado con la familia y enlazado al pago' );
+	list( $avisos ) = $enviar( new \AsdeBalears\AreaPrivada\Frontend\Views\TesoreriaView(), array( 'asde_action' => 'registrar_pago', 'familia' => (string) $fam2['id'], 'ronda' => '2026-2027', 'banco' => (string) $con_ref['id'], 'fecha' => '2026-10-07', 'importe' => '120' ), 'asde_mov_' . $fam2['id'] );
+	$ok( str_contains( $avisos, 'ya está revisado' ) && 1 === count( MovimientosTable::de_familia( (int) $fam2['id'], '2026-2027' ) ), 'el mismo ingreso no se puede usar dos veces' );
+	list( $avisos ) = $enviar( new \AsdeBalears\AreaPrivada\Frontend\Views\TesoreriaView(), array( 'asde_action' => 'registrar_pago', 'familia' => (string) $fam2['id'], 'ronda' => '2026-2027', 'banco' => '', 'fecha' => '2026-10-10', 'importe' => '15,50', 'metodo' => 'efectivo' ), 'asde_mov_' . $fam2['id'] );
+	$ok( 2 === count( MovimientosTable::de_familia( (int) $fam2['id'], '2026-2027' ) ) && str_contains( $avisos, '15,50' ), 'sin elegir movimiento, el pago a mano sigue como siempre' );
+
+	$cfg  = \AsdeBalears\AreaPrivada\Tesoreria\Config::de( '2026-2027' );
+	$vars = array(
+		'familia'     => $fam2,
+		'personas'    => array(),
+		'calc'        => \AsdeBalears\AreaPrivada\Tesoreria\Calculadora::familia( $fam2, array(), $cfg, MovimientosTable::totales( '2026-2027' )[ $fam2['id'] ] ?? array() ),
+		'cfg'         => $cfg,
+		'ronda'       => '2026-2027',
+		'movimientos' => array(),
+		'banco'       => Conciliacion::pendientes_para( $fam2 ),
+		'cuenta'      => null,
+		'url'         => home_url( '/' ),
+		'url_editar'  => home_url( '/' ),
+	);
+	$h = \AsdeBalears\AreaPrivada\Frontend\TemplateLoader::render( 'tesoreria/familia', $vars );
+	$ok( str_contains( $h, '<details class="asde-plegable" open data-asde-recordar="tesoreria-cuota-ronda">' ) && str_contains( $h, 'asde-plegable__resumen asde-plegable__resumen--cerrado' ), '«Cuota de la ronda» se puede plegar (abierto de entrada; plegado enseña el resumen)' );
+	$ok( str_contains( $h, 'name="banco"' ) && str_contains( $h, 'PRUEBA-BG ingreso sin referencia' ) && str_contains( $h, 'data-importe="55.00"' ), 'en «Registrar pago», el desplegable con los ingresos por conciliar (con su fecha e importe para rellenar el formulario)' );
+	$vars['banco'] = null;
+	$ok( ! str_contains( \AsdeBalears\AreaPrivada\Frontend\TemplateLoader::render( 'tesoreria/familia', $vars ), 'name="banco"' ), 'quien no ve el banco no tiene el desplegable' );
+
 	$ok( 0 === $cortadas, 'ninguna petición ha salido hacia un CRM' );
 } finally {
 	remove_filter( 'wp_redirect', $redirigir, 1 );

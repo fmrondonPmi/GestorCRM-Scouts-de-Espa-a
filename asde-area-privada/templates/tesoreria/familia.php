@@ -9,6 +9,7 @@
  * @var string   $ronda
  * @var array[]  $movimientos
  * @var ?WP_User $cuenta
+ * @var array[]|null $banco Ingresos del banco por conciliar (con 'sugerido'), o null si no ve el banco (v0.20)
  * @var string   $url
  * @var string   $url_editar
  */
@@ -58,7 +59,12 @@ $user = static fn( $id ) => ( $u = get_userdata( (int) $id ) ) ? $u->user_login 
 </section>
 
 <section class="asde-card">
-	<h3><?php asde_e( 'Cuota de la ronda' ); ?></h3>
+	<?php /* v0.20: se puede plegar; plegado enseña lo esencial. El navegador recuerda cómo se dejó (area.js, data-asde-recordar). */ ?>
+	<details class="asde-plegable" open data-asde-recordar="tesoreria-cuota-ronda">
+	<summary>
+		<h3><?php asde_e( 'Cuota de la ronda' ); ?></h3>
+		<span class="asde-plegable__resumen asde-plegable__resumen--cerrado"><?php echo esc_html( sprintf( asde_t( 'A pagar %1$s · pagado %2$s · %3$s %4$s' ), Calculadora::euros( $c['a_pagar'] ), Calculadora::euros( $c['pagado'] ), $c['pendiente'] < 0 ? mb_strtolower( asde_t( 'Saldo a favor' ) ) : mb_strtolower( asde_t( 'Pendiente' ) ), Calculadora::euros( abs( $c['pendiente'] ) ) ) ); ?></span>
+	</summary>
 	<table class="asde-table asde-table--resumen">
 		<tbody>
 			<tr><th scope="row"><?php asde_e( 'Inscripción (' ); ?><?php echo (int) count( $c['pagan'] ); ?> × <?php echo esc_html( Calculadora::euros( (float) $cfg['cuotas']['inscripcion'] ) ); ?>)</th><td><?php echo esc_html( Calculadora::euros( $c['cuota']['inscripcion'] ) ); ?></td></tr>
@@ -83,6 +89,7 @@ $user = static fn( $id ) => ( $u = get_userdata( (int) $id ) ) ? $u->user_login 
 			<?php endforeach; ?>
 		</ul>
 	<?php endif; ?>
+	</details>
 </section>
 
 <div class="asde-grid-2 asde-grid-2--top">
@@ -93,6 +100,33 @@ $user = static fn( $id ) => ( $u = get_userdata( (int) $id ) ) ? $u->user_login 
 			<input type="hidden" name="asde_action" value="registrar_pago">
 			<input type="hidden" name="familia" value="<?php echo (int) $familia['id']; ?>">
 			<input type="hidden" name="ronda" value="<?php echo esc_attr( $ronda ); ?>">
+			<?php if ( $banco ) : ?>
+				<?php
+				$opcion = static function ( array $m ): string {
+					$texto = wp_date( 'd/m/Y', strtotime( $m['fecha'] . ' 12:00' ) ) . ' · +' . Calculadora::euros( $m['importe'] ) . ' · ' . mb_strimwidth( trim( $m['ordenante'] . ' ' . $m['concepto'] ), 0, 70, '…' );
+					return '<option value="' . (int) $m['id'] . '" data-fecha="' . esc_attr( $m['fecha'] ) . '" data-importe="' . esc_attr( number_format( $m['importe'], 2, '.', '' ) ) . '" data-ref="' . esc_attr( $m['documento'] ) . '">' . esc_html( $texto ) . '</option>';
+				};
+				$sugeridos = array_filter( $banco, static fn( $m ) => $m['sugerido'] );
+				$otros     = array_filter( $banco, static fn( $m ) => ! $m['sugerido'] );
+				?>
+				<p>
+					<label for="asde-pago-banco"><?php asde_e( 'Ingreso del banco (opcional)' ); ?></label>
+					<select id="asde-pago-banco" name="banco" data-asde-pago-banco>
+						<option value=""><?php asde_e( 'Ninguno: escribo el pago a mano' ); ?></option>
+						<?php if ( $sugeridos ) : ?>
+							<optgroup label="<?php echo esc_attr( asde_a( 'Sugeridos para esta familia' ) ); ?>">
+								<?php echo implode( '', array_map( $opcion, $sugeridos ) ); // phpcs:ignore WordPress.Security.EscapeOutput -- construido arriba con esc_* ?>
+							</optgroup>
+						<?php endif; ?>
+						<?php if ( $otros ) : ?>
+							<optgroup label="<?php echo esc_attr( asde_a( 'Otros ingresos por conciliar' ) ); ?>">
+								<?php echo implode( '', array_map( $opcion, $otros ) ); // phpcs:ignore WordPress.Security.EscapeOutput -- construido arriba con esc_* ?>
+							</optgroup>
+						<?php endif; ?>
+					</select>
+					<span class="asde-help"><?php asde_e( 'Los ingresos importados del banco que aún no están conciliados. Si eliges uno, el pago se registra con su fecha y su importe y el movimiento queda conciliado con esta familia.' ); ?></span>
+				</p>
+			<?php endif; ?>
 			<p><label for="asde-pago-fecha"><?php asde_e( 'Fecha' ); ?></label><input type="date" id="asde-pago-fecha" name="fecha" value="<?php echo esc_attr( $hoy ); ?>" required></p>
 			<p><label for="asde-pago-importe"><?php asde_e( 'Importe (€)' ); ?></label><input type="number" id="asde-pago-importe" name="importe" step="0.01" min="0.01" value="<?php echo esc_attr( $c['pendiente'] > 0 ? number_format( $c['pendiente'], 2, '.', '' ) : '' ); ?>" required></p>
 			<p>

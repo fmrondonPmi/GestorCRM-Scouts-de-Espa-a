@@ -2137,4 +2137,14 @@ return array(
 	'«%s» es un tipo de gasto y este movimiento es un ingreso.' => '«%s» é un tipo de gasto e este movemento é un ingreso.',
 	'«%s» es un tipo de ingreso y este movimiento es un gasto.' => '«%s» é un tipo de ingreso e este movemento é un gasto.',
 	'← Banco' => '← Banco',
+
+	// Tesorería: control de pagos (v0.20)
+	'Los movimientos del banco solo los usan Secretaría, Coordinación y Tesorería.' => 'Os movementos do banco só os usan Secretaría, Coordinación e Tesouraría.',
+	'Pago de %1$s registrado con el ingreso del banco del %2$s, que queda conciliado con esta familia.' => 'Pagamento de %1$s rexistrado co ingreso do banco do %2$s, que queda conciliado con esta familia.',
+	'A pagar %1$s · pagado %2$s · %3$s %4$s' => 'A pagar %1$s · pagado %2$s · %3$s %4$s',
+	'Ingreso del banco (opcional)' => 'Ingreso do banco (opcional)',
+	'Los ingresos importados del banco que aún no están conciliados. Si eliges uno, el pago se registra con su fecha y su importe y el movimiento queda conciliado con esta familia.' => 'Os ingresos importados do banco que aínda non están conciliados. Se escolles un, o pagamento rexístrase coa súa data e o seu importe e o movemento queda conciliado con esta familia.',
+	'Ninguno: escribo el pago a mano' => 'Ningún: escribo o pagamento á man',
+	'Otros ingresos por conciliar' => 'Outros ingresos por conciliar',
+	'Sugeridos para esta familia' => 'Suxeridos para esta familia',
 );

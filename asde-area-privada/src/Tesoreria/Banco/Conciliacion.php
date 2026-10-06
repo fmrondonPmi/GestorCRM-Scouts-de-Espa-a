@@ -61,6 +61,28 @@ final class Conciliacion {
 		return null;
 	}
 
+	/**
+	 * Ingresos del banco por conciliar, para elegir uno al registrar el pago de una
+	 * familia (v0.20): primero los sugeridos para ella (su referencia en el concepto o
+	 * el mismo ordenante que otro pago suyo) y después los demás, los más recientes antes.
+	 *
+	 * @return array[] Cada movimiento con 'sugerido' (bool).
+	 */
+	public static function pendientes_para( array $familia, int $limite = 200 ): array {
+		$movs = BancoTable::movimientos(
+			array(
+				'estado' => BancoTable::PENDIENTE,
+				'tipo'   => 'ingresos',
+			)
+		);
+		foreach ( $movs as &$m ) {
+			$m['sugerido'] = null !== self::sugerencia( $m, array( $familia['numero'] => $familia ) );
+		}
+		unset( $m );
+		usort( $movs, static fn( $a, $b ) => array( (int) $b['sugerido'], $b['fecha'], (int) $b['id'] ) <=> array( (int) $a['sugerido'], $a['fecha'], (int) $a['id'] ) );
+		return array_slice( $movs, 0, $limite );
+	}
+
 	/** @return int|\WP_Error Id del pago creado en Tesorería. */
 	public static function conciliar( int $mov_id, int $familia_id, string $ronda = '' ) {
 		$m = BancoTable::obtener( $mov_id );
