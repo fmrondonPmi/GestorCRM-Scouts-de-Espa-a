@@ -85,6 +85,15 @@ Cuaderno 43 de AEB, CECA y UNACC (junio de 2012): registros de 80 posiciones.
 - **Deshacer:** vuelve a *Pendiente*; si estaba conciliado, **anula** el pago creado (no se borra: queda constancia).
 - Auditoría: `banco_importado` (con la huella del fichero), `banco_conciliado`, `banco_revisado` y `banco_deshecho`.
 
+## v0.20 · gestión del banco (petición del usuario, 2026-10-06)
+
+- **Sin recargar la pantalla** (`assets/js/parcial.js`): el listado de movimientos y el resumen son zonas (`data-asde-parcial`) que se actualizan en el sitio al **cambiar de página** (el paginador ya existía: 25, 50, 75 o 100 por página, pero recargaba), ordenar, filtrar, **conciliar**, deshacer o conciliar los sugeridos. El script pide la misma página de siempre y cambia solo esas zonas; los avisos salen flotando abajo a la derecha (los de éxito se van solos). Sin JavaScript, o si algo falla, todo funciona como antes. Lo que sube un fichero (`data-asde-recarga`) va por el camino de siempre. El desplegable predictivo de familias se puede reactivar (`window.asdeCombobox.iniciar`) y limpia las listas de lo que se sustituye.
+- **Tipos de gasto e ingreso** (`Tesoreria\Banco\TiposMovimiento`, tabla `{prefix}asde_banco_tipos`): cada grupo tiene los suyos, de **gasto**, de **ingreso** o de **las dos cosas**. La primera vez que se entra en el banco se crean 15 de partida (material y equipamiento, actividades y campamentos, alimentación, transporte, local, seguros, cuotas federativas, uniformes, comisiones bancarias, otros gastos; donativos, subvenciones, lotería y rifas, otros ingresos; devoluciones), que se pueden renombrar o borrar (si se borran todos, no vuelven). Pantalla **«Tipos de gasto e ingreso»** (`banco/?tipos=1`, enlace en el listado) con lo que **suma** cada tipo y su nº de movimientos (enlace al listado filtrado). Un tipo en uso no se borra ni cambia de clase si dejaría de encajar.
+- **«Revisado (no es cuota)» lleva tipo** (columnas `tipo_id` y `nota` en `{prefix}asde_banco_movimientos`): «Marcar revisado…» / «No es una cuota…» abre una **ventana emergente** (`banco/?revisar=1&m[]=…`) con el tipo (el desplegable solo tiene los que encajan: un gasto, tipos de gasto o «gasto o ingreso») y una nota opcional. Sin tipo no se marca. «Cambiar el tipo» en los revisados; «Deshacer» le quita el tipo y la nota. Un movimiento conciliado con una familia no se puede marcar (hay que deshacer antes). El listado enseña el tipo y la nota, se filtra por tipo («Revisados sin tipo» para los de antes de la v0.20) y la búsqueda mira también la nota.
+- **Selección múltiple**: una casilla en cada **pendiente** (y una para marcar todos los de la página) y el botón **«Marcar como revisados…»**, que es lo único que hace con los marcados: abre la misma ventana con todos ellos, con «El mismo tipo para todos» (se pone en los que encaje) y el tipo de cada uno. Los que no encajan se quedan pendientes y el aviso dice cuál y por qué. Al cerrar la ventana, el listado se actualiza sin recargar. Sin JavaScript, el botón lleva a la página de la ventana con los marcados.
+- Auditoría nueva: `banco_tipo_cambiado`, `banco_tipo_crear`, `banco_tipo_cambiar` y `banco_tipo_borrar` (`banco_revisado` lleva ahora el tipo).
+- Prueba nueva `tests/banco-gestion.php` (grupo ficticio 999). El JavaScript se comprobó con una **simulación** (pantallas volcadas en varios estados y un servidor de PHP que redirige como WordPress): paginar, conciliar, la ventana con dos marcados, «el mismo tipo para todos», guardar y cerrar, **sin ninguna recarga** (comprobado en el registro de peticiones), y en el móvil (390 px, sin desbordes).
+
 ## Pruebas
 
 En `tests/grupos-emails-banco.php`, partes D, E y F. Usan ficheros sintéticos con datos inventados y un grupo ficticio (999) que se borra al terminar:
@@ -102,5 +111,5 @@ En `tests/grupos-emails-banco.php`, partes D, E y F. Usan ficheros sintéticos c
 ## Pendiente
 
 - Probarlo con un **fichero real de Colonya** (Norma 43 y CSV) para confirmar la modalidad y las columnas.
-- Módulo de **gastos**: justificantes y categorías (P-24). Los cargos del banco se podrán enlazar con ellos.
+- Módulo de **gastos**: justificantes (P-24). Desde la v0.20 los cargos ya tienen **tipo** (categoría).
 - Sugerencia por **importe**, cuando cuadre con la cuota o el plazo pendiente de una familia.

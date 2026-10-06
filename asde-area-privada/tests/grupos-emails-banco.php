@@ -59,6 +59,7 @@ $limpiar_999 = static function () use ( $wpdb ) {
 	}
 	$wpdb->query( 'DELETE FROM ' . BancoTable::table() . " WHERE grupo = '999'" ); // phpcs:ignore WordPress.DB
 	$wpdb->query( 'DELETE FROM ' . BancoTable::table_lotes() . " WHERE grupo = '999'" ); // phpcs:ignore WordPress.DB
+	$wpdb->query( 'DELETE FROM ' . \AsdeBalears\AreaPrivada\Tesoreria\Banco\TiposMovimiento::table() . " WHERE grupo = '999'" ); // phpcs:ignore WordPress.DB
 };
 $limpiar_999();
 foreach ( array( '76849998', '76849997' ) as $login ) {
@@ -368,7 +369,8 @@ $s = $m35 ? Conciliacion::sugerencia( BancoTable::obtener( (int) $m35['id'] ), $
 $ok( $s && ! $s['fiable'] && $fam_id === $s['familia']['id'], 'otro ingreso del mismo ordenante, sin referencia → sugerido por el ordenante' );
 $ok( is_wp_error( Conciliacion::conciliar( (int) $cargo['id'], $fam_id ) ), 'un gasto no se concilia con una familia' );
 $ok( true === Conciliacion::deshacer( (int) $m70['id'] ) && null !== MovimientosTable::obtener( $pago )['anulado_en'] && BancoTable::PENDIENTE === BancoTable::obtener( (int) $m70['id'] )['estado'], 'deshacer: el pago se anula y el movimiento vuelve a pendiente' );
-$ok( true === Conciliacion::ignorar( (int) $cargo['id'] ) && BancoTable::IGNORADO === BancoTable::obtener( (int) $cargo['id'] )['estado'], '«revisado»: un movimiento que no es cuota' );
+$tipo_gasto = \AsdeBalears\AreaPrivada\Tesoreria\Banco\TiposMovimiento::crear( 'Comisiones de prueba', 'gasto' );
+$ok( true === Conciliacion::ignorar( (int) $cargo['id'], (int) $tipo_gasto ) && BancoTable::IGNORADO === BancoTable::obtener( (int) $cargo['id'] )['estado'], '«revisado»: un movimiento que no es cuota (con su tipo de gasto, v0.20)' );
 $ok( 3 === count( BancoTable::movimientos( array( 'estado' => BancoTable::PENDIENTE ) ) ) && 1 === count( BancoTable::movimientos( array( 'q' => 'segundo plazo' ) ) ), 'filtros por estado y búsqueda en el concepto (descifrado)' );
 Grupo::forzar( $real );
 $ok( ! array_filter( BancoTable::movimientos(), static fn( $m ) => '999' === $m['grupo'] ), 'el grupo 684 no ve los movimientos del grupo 999' );

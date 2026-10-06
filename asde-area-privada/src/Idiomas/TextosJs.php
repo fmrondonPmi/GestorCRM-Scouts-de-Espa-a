@@ -50,6 +50,10 @@ final class TextosJs {
 		'En el inventario solo hay %s unidades de «%s». ¿Seguro que quieres añadirlo a la lista de compra?',
 		'Marca el material que hay que comprar.',
 		'+ sin precio',
+		// Banco (v0.20, banco.js).
+		'1 movimiento marcado',
+		'%s movimientos marcados',
+		'Marca en la lista los movimientos que no son cuotas.',
 	);
 
 	/** Texto en castellano => texto en el idioma actual. */

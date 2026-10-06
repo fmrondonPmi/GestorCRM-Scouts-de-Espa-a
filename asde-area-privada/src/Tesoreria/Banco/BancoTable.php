@@ -90,6 +90,8 @@ final class BancoTable {
 				estado varchar(12) NOT NULL DEFAULT 'pendiente',
 				familia_id bigint(20) unsigned NULL,
 				pago_id bigint(20) unsigned NULL,
+				tipo_id bigint(20) unsigned NULL,
+				nota varchar(255) NOT NULL DEFAULT '',
 				revisado_por bigint(20) unsigned NOT NULL DEFAULT 0,
 				revisado_en datetime NULL,
 				creado datetime NOT NULL,
@@ -97,6 +99,7 @@ final class BancoTable {
 				UNIQUE KEY grupo_huella (grupo, huella),
 				KEY grupo_fecha (grupo, fecha),
 				KEY grupo_estado (grupo, estado),
+				KEY grupo_tipo (grupo, tipo_id),
 				KEY ordenante_hmac (ordenante_hmac)
 			) $charset;"
 		);
@@ -278,7 +281,8 @@ final class BancoTable {
 	/**
 	 * Movimientos del grupo, con el concepto y el ordenante descifrados.
 	 *
-	 * @param array{estado?:string, tipo?:string, q?:string} $filtros tipo: ingresos | gastos
+	 * @param array{estado?:string, tipo?:string, q?:string, clase?:string, ids?:int[]} $filtros
+	 *        tipo: ingresos | gastos; clase: id de un tipo de movimiento (TiposMovimiento) o «sin» (revisados sin tipo); ids: solo esos.
 	 * @return array[]
 	 */
 	public static function movimientos( array $filtros = array() ): array {
@@ -288,6 +292,21 @@ final class BancoTable {
 		if ( isset( self::ESTADOS[ $filtros['estado'] ?? '' ] ) ) {
 			$sql   .= ' AND estado = %s';
 			$args[] = $filtros['estado'];
+		}
+		$clase = (string) ( $filtros['clase'] ?? '' );
+		if ( 'sin' === $clase ) {
+			$sql   .= ' AND estado = %s AND tipo_id IS NULL';
+			$args[] = self::IGNORADO;
+		} elseif ( ctype_digit( $clase ) && (int) $clase > 0 ) {
+			$sql   .= ' AND tipo_id = %d';
+			$args[] = (int) $clase;
+		}
+		if ( isset( $filtros['ids'] ) ) {
+			$ids = array_values( array_filter( array_map( 'intval', (array) $filtros['ids'] ) ) );
+			if ( ! $ids ) {
+				return array();
+			}
+			$sql .= ' AND id IN (' . implode( ',', $ids ) . ')';
 		}
 		if ( 'ingresos' === ( $filtros['tipo'] ?? '' ) ) {
 			$sql .= ' AND importe > 0';
@@ -301,7 +320,7 @@ final class BancoTable {
 			$filas = array_values(
 				array_filter(
 					$filas,
-					static fn( $f ) => str_contains( mb_strtolower( remove_accents( $f['concepto'] . ' ' . $f['ordenante'] . ' ' . $f['referencia1'] . ' ' . $f['referencia2'] . ' ' . $f['documento'] ) ), $q )
+					static fn( $f ) => str_contains( mb_strtolower( remove_accents( $f['concepto'] . ' ' . $f['ordenante'] . ' ' . $f['referencia1'] . ' ' . $f['referencia2'] . ' ' . $f['documento'] . ' ' . $f['nota'] ) ), $q )
 				)
 			);
 		}
@@ -314,6 +333,7 @@ final class BancoTable {
 		return $r ? self::descifrar( $r ) : null;
 	}
 
+	/** Cambia el estado. El tipo y la nota (de los revisados) se quitan: para ponerlos, revisar(). */
 	public static function marcar( int $id, string $estado, ?int $familia_id = null, ?int $pago_id = null ): bool {
 		global $wpdb;
 		return false !== $wpdb->update(
@@ -322,8 +342,31 @@ final class BancoTable {
 				'estado'       => $estado,
 				'familia_id'   => $familia_id,
 				'pago_id'      => $pago_id,
+				'tipo_id'      => null,
+				'nota'         => '',
 				'revisado_por' => self::PENDIENTE === $estado ? 0 : get_current_user_id(),
 				'revisado_en'  => self::PENDIENTE === $estado ? null : current_time( 'mysql', true ),
+			),
+			array(
+				'id'    => $id,
+				'grupo' => Grupo::numero(),
+			)
+		);
+	}
+
+	/** Revisado (no es cuota) con su tipo y una nota; también para cambiar el tipo de uno ya revisado. */
+	public static function revisar( int $id, int $tipo_id, string $nota ): bool {
+		global $wpdb;
+		return false !== $wpdb->update(
+			self::table(),
+			array(
+				'estado'       => self::IGNORADO,
+				'familia_id'   => null,
+				'pago_id'      => null,
+				'tipo_id'      => $tipo_id ?: null,
+				'nota'         => mb_substr( sanitize_text_field( $nota ), 0, 255 ),
+				'revisado_por' => get_current_user_id(),
+				'revisado_en'  => current_time( 'mysql', true ),
 			),
 			array(
 				'id'    => $id,
@@ -360,6 +403,8 @@ final class BancoTable {
 		$r['ordenante'] = '' !== (string) $r['ordenante_enc'] ? (string) Crypto::decrypt( (string) $r['ordenante_enc'] ) : '';
 		unset( $r['concepto_enc'], $r['ordenante_enc'] );
 		$r['importe'] = (float) $r['importe'];
+		$r['tipo_id'] = null === ( $r['tipo_id'] ?? null ) ? null : (int) $r['tipo_id'];
+		$r['nota']    = (string) ( $r['nota'] ?? '' );
 		return $r;
 	}
 }

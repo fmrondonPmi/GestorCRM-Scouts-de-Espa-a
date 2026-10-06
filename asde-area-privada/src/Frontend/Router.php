@@ -41,7 +41,7 @@ defined( 'ABSPATH' ) || exit;
 final class Router {
 
 	/** Páginas que se pueden abrir en la ventana emergente. */
-	public const MODALES = array( 'ficha', 'alta', 'solicitudes', 'uniformes', 'inventario', 'inventario_tipos', 'inventario_compras' );
+	public const MODALES = array( 'ficha', 'alta', 'solicitudes', 'uniformes', 'inventario', 'inventario_tipos', 'inventario_compras', 'banco' );
 
 	/** La pide la ventana emergente del área (assets/js/area.js). */
 	public static function pide_modal(): bool {
@@ -273,6 +273,11 @@ final class Router {
 		}
 		if ( in_array( $key, array( 'familias', 'banco' ), true ) ) {
 			wp_enqueue_script( 'asde-combobox', plugins_url( 'assets/js/combobox.js', ASDE_AP_FILE ), array( 'asde-i18n' ), ASDE_AP_VERSION, true );
+		}
+		// v0.20: zonas que se actualizan sin recargar (listado del banco).
+		if ( 'banco' === $key ) {
+			wp_enqueue_script( 'asde-parcial', plugins_url( 'assets/js/parcial.js', ASDE_AP_FILE ), array( 'asde-i18n', 'asde-combobox', 'asde-area' ), ASDE_AP_VERSION, true );
+			wp_enqueue_script( 'asde-banco', plugins_url( 'assets/js/banco.js', ASDE_AP_FILE ), array( 'asde-i18n', 'asde-area' ), ASDE_AP_VERSION, true );
 		}
 		if ( 'usuarios' === $key ) {
 			wp_enqueue_script( 'asde-usuarios', plugins_url( 'assets/js/usuarios.js', ASDE_AP_FILE ), array( 'asde-i18n' ), ASDE_AP_VERSION, true );

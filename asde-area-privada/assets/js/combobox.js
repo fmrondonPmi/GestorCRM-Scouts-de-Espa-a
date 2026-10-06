@@ -6,17 +6,35 @@
  * Mejora progresiva: sin JavaScript sigue funcionando el <select>. Accesible
  * (patrón combobox de WAI-ARIA): flechas para moverse, Intro para elegir,
  * Esc para cerrar.
+ *
+ * window.asdeCombobox.iniciar( raiz ) prepara los que lleguen después (p. ej. el
+ * listado del banco, que se actualiza sin recargar la página).
  */
 ( function () {
 	'use strict';
 
 	var MAX = 50;
+	var contador = 0;
+	var abiertos = []; // { lista, caja }: para quitar las listas de lo que ya no está en la página.
 
 	function normalizar( s ) {
 		return s.toLowerCase().normalize( 'NFD' ).replace( /[̀-ͯ]/g, '' );
 	}
 
-	document.querySelectorAll( 'select.asde-combobox' ).forEach( function ( select, n ) {
+	function iniciar( raiz ) {
+		abiertos = abiertos.filter( function ( a ) {
+			if ( a.caja.isConnected ) {
+				return true;
+			}
+			a.lista.remove();
+			return false;
+		} );
+		( raiz || document ).querySelectorAll( 'select.asde-combobox:not([data-asde-combo])' ).forEach( preparar );
+	}
+
+	function preparar( select ) {
+		var n = contador++;
+		select.setAttribute( 'data-asde-combo', '1' );
 		var min = parseInt( select.getAttribute( 'data-min' ) || '3', 10 );
 		var opciones = Array.prototype.filter.call( select.options, function ( o ) {
 			return '' !== o.value;
@@ -57,6 +75,7 @@
 		// La lista cuelga del <body> para quedar siempre por encima (el tema crea
 		// capas que taparían una lista dentro del contenido, p. ej. el pie).
 		document.body.appendChild( lista );
+		abiertos.push( { lista: lista, caja: caja } );
 
 		var activa = -1;
 		var resultados = [];
@@ -199,5 +218,8 @@
 				input.setCustomValidity( '' );
 			} );
 		}
-	} );
+	}
+
+	window.asdeCombobox = { iniciar: iniciar };
+	iniciar( document );
 } )();

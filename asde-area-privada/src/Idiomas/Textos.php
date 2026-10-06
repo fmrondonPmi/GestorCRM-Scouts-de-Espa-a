@@ -63,6 +63,8 @@ final class Textos {
 		$add( PedidosTable::ESTADOS, 'Uniformes' );
 		$add( \AsdeBalears\AreaPrivada\Inventario\ComprasTable::ESTADOS, 'Inventario' );
 		$add( array_column( \AsdeBalears\AreaPrivada\Inventario\Importador::COLUMNAS, 0 ), 'Inventario' );
+		$add( \AsdeBalears\AreaPrivada\Tesoreria\Banco\TiposMovimiento::NATURALEZAS, 'Tesorería' );
+		$add( array_column( \AsdeBalears\AreaPrivada\Tesoreria\Banco\TiposMovimiento::INICIALES, 0 ), 'Tesorería' );
 		$add( Remesas::ESTADOS, 'Domiciliaciones SEPA' );
 		$add( BancoTable::ESTADOS, 'Tesorería' );
 		$add( CsvBanco::CAMPOS, 'Tesorería' );

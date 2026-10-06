@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.19.1
+Stable tag: 0.20.0
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 

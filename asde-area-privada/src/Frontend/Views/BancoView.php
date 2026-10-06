@@ -13,6 +13,9 @@ use AsdeBalears\AreaPrivada\Tesoreria\Banco\Codificacion;
 use AsdeBalears\AreaPrivada\Tesoreria\Banco\Conciliacion;
 use AsdeBalears\AreaPrivada\Tesoreria\Banco\CsvBanco;
 use AsdeBalears\AreaPrivada\Tesoreria\Banco\Norma43;
+use AsdeBalears\AreaPrivada\Tesoreria\Banco\TiposMovimiento;
+use AsdeBalears\AreaPrivada\Frontend\Router;
+use AsdeBalears\AreaPrivada\Tesoreria\Calculadora;
 use AsdeBalears\AreaPrivada\Tesoreria\Config;
 use AsdeBalears\AreaPrivada\Tesoreria\FamiliasTable;
 
@@ -38,6 +41,18 @@ final class BancoView extends TesoreriaBaseView {
 			return $this->denegado( asde_t( 'El banco solo lo ven Secretaría, Coordinación y Tesorería.' ) );
 		}
 		$ronda = $this->ronda();
+		TiposMovimiento::sembrar();
+		if ( '1' === $this->get( 'tipos' ) ) {
+			return $this->layout( 'tesoreria', $this->subnav( 'banco', $ronda ) . $this->tpl( 'tesoreria/banco-tipos', array( 'tipos' => TiposMovimiento::todos(), 'usos' => TiposMovimiento::usos(), 'url' => $this->url( 'banco' ) ) ) );
+		}
+		// Marcar como revisado (uno o varios) con su tipo: también se abre en la ventana emergente.
+		$revisar = $this->get( 'revisar' );
+		if ( '' !== $revisar ) {
+			$cuerpo = 'hecho' === $revisar
+				? $this->tpl( 'tesoreria/banco-revisado', array( 'url' => $this->url( 'banco' ) ) )
+				: $this->revisar();
+			return $this->layout( 'tesoreria', ( self::es_modal() ? '' : $this->subnav( 'banco', $ronda ) ) . $cuerpo );
+		}
 		$token = $this->get( 'previa' );
 		if ( $token ) {
 			$previa = $this->previa( $token );
@@ -51,6 +66,7 @@ final class BancoView extends TesoreriaBaseView {
 			'estado' => isset( BancoTable::ESTADOS[ $this->get( 'estado' ) ] ) ? $this->get( 'estado' ) : ( '' === $this->get( 'estado' ) && ! isset( $_GET['estado'] ) ? BancoTable::PENDIENTE : '' ), // phpcs:ignore WordPress.Security.NonceVerification
 			'tipo'   => in_array( $this->get( 'tipo' ), array( 'ingresos', 'gastos' ), true ) ? $this->get( 'tipo' ) : '',
 			'q'      => $this->get( 'q' ),
+			'clase'  => 'sin' === $this->get( 'clase' ) || ctype_digit( $this->get( 'clase' ) ) ? $this->get( 'clase' ) : '',
 		);
 		$movs     = BancoTable::movimientos( $filtros );
 		$familias = $this->familias();
@@ -87,11 +103,42 @@ final class BancoView extends TesoreriaBaseView {
 					'resumen'    => BancoTable::resumen(),
 					'lotes'      => BancoTable::lotes( 5 ),
 					'rondas'     => Config::rondas(),
+					'tipos'      => TiposMovimiento::todos(),
 					'url'        => $this->url( 'banco' ),
 					'url_fam'    => $this->url( 'familias' ),
 				)
 			)
 		);
+	}
+
+	/** Ventana «Marcar como revisado»: los movimientos elegidos (?m[]=id), cada uno con su tipo. */
+	private function revisar(): string {
+		$ids  = isset( $_GET['m'] ) && is_array( $_GET['m'] ) ? array_map( 'absint', wp_unslash( $_GET['m'] ) ) : array(); // phpcs:ignore WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- solo números (absint) para pintar un formulario
+		$movs = array_values( array_filter( BancoTable::movimientos( array( 'ids' => $ids ) ), static fn( $m ) => BancoTable::CONCILIADO !== $m['estado'] ) );
+		$url  = $this->url( 'banco' );
+		return $this->tpl(
+			'tesoreria/banco-revisar',
+			array(
+				'movs'   => $movs,
+				'tipos'  => TiposMovimiento::todos(),
+				'url'    => add_query_arg( 'revisar', '1', $url ),
+				'volver' => wp_validate_redirect( esc_url_raw( $this->get( 'volver' ) ), $url ) ?: $url,
+				'conciliados' => count( $ids ) - count( $movs ),
+				'url_tipos'   => add_query_arg( 'tipos', '1', $url ),
+			)
+		);
+	}
+
+	/** @return array<int, string> Campo del formulario con forma campo[id] => valor. */
+	private function post_mapa( string $campo ): array {
+		$v   = isset( $_POST[ $campo ] ) && is_array( $_POST[ $campo ] ) ? wp_unslash( $_POST[ $campo ] ) : array(); // phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- el nonce se comprueba antes; cada valor se valida al usarlo
+		$out = array();
+		foreach ( (array) $v as $id => $valor ) {
+			if ( absint( $id ) && is_scalar( $valor ) ) {
+				$out[ absint( $id ) ] = sanitize_text_field( (string) $valor );
+			}
+		}
+		return $out;
 	}
 
 	public function handle_post(): void {
@@ -147,15 +194,60 @@ final class BancoView extends TesoreriaBaseView {
 				$this->redirect( $volver );
 				break;
 
-			case 'ignorar':
 			case 'deshacer':
 				$id = (int) $this->post( 'mov' );
 				check_admin_referer( 'asde_banco_mov_' . $id );
-				$r = 'ignorar' === $accion ? Conciliacion::ignorar( $id ) : Conciliacion::deshacer( $id );
+				$r = Conciliacion::deshacer( $id );
 				is_wp_error( $r )
 					? Notices::add( 'error', esc_html( $r->get_error_message() ) )
-					: Notices::add( 'success', 'ignorar' === $accion ? asde_t( 'Movimiento marcado como revisado.' ) : asde_t( 'Movimiento de nuevo pendiente (si tenía un pago, se ha anulado).' ) );
+					: Notices::add( 'success', asde_t( 'Movimiento de nuevo pendiente (si tenía un pago, se ha anulado).' ) );
 				$this->redirect( $volver );
+				break;
+
+			case 'revisar':
+				// Uno o varios movimientos: revisados (no son cuota) con su tipo (v0.20).
+				check_admin_referer( 'asde_banco_revisar' );
+				$tipos   = $this->post_mapa( 'tipo' );
+				$nota    = $this->post( 'nota' );
+				$hechos  = 0;
+				$errores = array();
+				foreach ( $tipos as $id => $tipo ) {
+					$r = Conciliacion::ignorar( $id, (int) $tipo, $nota );
+					if ( is_wp_error( $r ) ) {
+						$m         = BancoTable::obtener( $id );
+						$errores[] = ( $m ? wp_date( 'd/m/Y', strtotime( $m['fecha'] . ' 12:00' ) ) . ' · ' . Calculadora::euros( $m['importe'] ) . ': ' : '' ) . $r->get_error_message();
+					} else {
+						++$hechos;
+					}
+				}
+				if ( $hechos ) {
+					Notices::add( 'success', esc_html( sprintf( asde_n( '%d movimiento marcado como revisado.', '%d movimientos marcados como revisados.', $hechos ), $hechos ) ) );
+				}
+				foreach ( $errores as $e ) {
+					Notices::add( 'error', esc_html( $e ) );
+				}
+				if ( ! $tipos ) {
+					Notices::add( 'error', asde_t( 'No has elegido ningún movimiento.' ) );
+				}
+				$lista = wp_validate_redirect( esc_url_raw( $this->post( 'volver' ) ), $this->url( 'banco' ) );
+				$this->redirect( Router::pide_modal() ? $this->url( 'banco', array( 'revisar' => 'hecho' ) ) : $lista );
+				break;
+
+			case 'tipo_crear':
+			case 'tipo_cambiar':
+			case 'tipo_borrar':
+				check_admin_referer( 'asde_banco_tipos' );
+				$id = (int) $this->post( 'tipo' );
+				$r  = 'tipo_crear' === $accion
+					? TiposMovimiento::crear( $this->post( 'nombre' ), $this->post( 'naturaleza' ) )
+					: ( 'tipo_cambiar' === $accion ? TiposMovimiento::cambiar( $id, $this->post( 'nombre' ), $this->post( 'naturaleza' ) ) : TiposMovimiento::borrar( $id ) );
+				if ( is_wp_error( $r ) ) {
+					Notices::add( 'error', esc_html( $r->get_error_message() ) );
+				} else {
+					Logger::log( 'banco_' . $accion, 'banco_tipo', (string) ( 'tipo_crear' === $accion ? $r : $id ) );
+					Notices::add( 'success', 'tipo_crear' === $accion ? asde_t( 'Tipo creado.' ) : ( 'tipo_cambiar' === $accion ? asde_t( 'Tipo guardado.' ) : asde_t( 'Tipo borrado.' ) ) );
+				}
+				$this->redirect( $this->url( 'banco', array( 'tipos' => '1' ) ) );
 				break;
 
 			default:

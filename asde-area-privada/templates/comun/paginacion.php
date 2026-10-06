@@ -47,7 +47,7 @@ $boton = static function ( bool $activo, int $p, string $texto, string $etiqueta
 			<input type="hidden" name="<?php echo esc_attr( $k ); ?>" value="<?php echo esc_attr( $v ); ?>">
 		<?php endforeach; ?>
 		<label for="asde-por-pagina"><?php asde_e( 'Mostrar' ); ?></label>
-		<select id="asde-por-pagina" name="por_pagina" onchange="this.form.submit()">
+		<select id="asde-por-pagina" name="por_pagina" onchange="this.form.requestSubmit ? this.form.requestSubmit() : this.form.submit()">
 			<?php foreach ( $opciones as $o ) : ?>
 				<option value="<?php echo (int) $o; ?>" <?php selected( $por_pagina, $o ); ?>><?php echo (int) $o; ?></option>
 			<?php endforeach; ?>

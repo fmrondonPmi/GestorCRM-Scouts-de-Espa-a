@@ -106,14 +106,39 @@ final class Conciliacion {
 		return $pago;
 	}
 
-	/** No es una cuota (donación, subvención, gasto…): queda revisado sin familia. */
-	public static function ignorar( int $mov_id ) {
+	/**
+	 * No es una cuota (gasto, donativo, subvención…): queda revisado, sin familia, con
+	 * su tipo (v0.20) y una nota. También cambia el tipo de uno ya revisado.
+	 *
+	 * @return true|\WP_Error
+	 */
+	public static function ignorar( int $mov_id, int $tipo_id, string $nota = '' ) {
 		$m = BancoTable::obtener( $mov_id );
-		if ( ! $m || BancoTable::PENDIENTE !== $m['estado'] ) {
-			return new \WP_Error( 'asde_banco', asde_t( 'Ese movimiento no está pendiente.' ) );
+		if ( ! $m || ! in_array( $m['estado'], array( BancoTable::PENDIENTE, BancoTable::IGNORADO ), true ) ) {
+			return new \WP_Error( 'asde_banco', asde_t( 'Ese movimiento no se puede marcar como revisado (puede que ya esté conciliado con una familia).' ) );
 		}
-		BancoTable::marcar( $mov_id, BancoTable::IGNORADO );
-		Logger::log( 'banco_revisado', 'banco', (string) $mov_id );
+		$tipo = TiposMovimiento::obtener( $tipo_id );
+		if ( ! $tipo ) {
+			return new \WP_Error( 'asde_banco', asde_t( 'Elige el tipo de gasto o de ingreso.' ) );
+		}
+		if ( ! TiposMovimiento::encaja( $tipo, $m['importe'] ) ) {
+			return new \WP_Error(
+				'asde_banco',
+				$m['importe'] < 0
+					/* translators: %s: nombre del tipo */
+					? sprintf( asde_t( '«%s» es un tipo de ingreso y este movimiento es un gasto.' ), $tipo['nombre'] )
+					/* translators: %s: nombre del tipo */
+					: sprintf( asde_t( '«%s» es un tipo de gasto y este movimiento es un ingreso.' ), $tipo['nombre'] )
+			);
+		}
+		$antes = $m['estado'];
+		BancoTable::revisar( $mov_id, $tipo_id, $nota );
+		Logger::log(
+			BancoTable::IGNORADO === $antes ? 'banco_tipo_cambiado' : 'banco_revisado',
+			'banco',
+			(string) $mov_id,
+			array( 'tipo' => $tipo_id )
+		);
 		return true;
 	}
 
