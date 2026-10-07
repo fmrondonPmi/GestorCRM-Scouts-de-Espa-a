@@ -249,7 +249,7 @@ Obtenido con el usuario de API del grupo, a partir de metadatos (`get_module_fie
 |---|---|
 | URL | `https://scout.sinergiacrm.org`. Es el **CRM federal** de ASDE Scouts de España, compartido por todas las organizaciones federadas y grupos |
 | API | REST **v4_1**, endpoint `/custom/service/v4_1_SticCustom/rest.php`. En la web está configurada con usuario y contraseña |
-| Usuario de API | `usuario-api@example.invalid` (ejemplo: el usuario real no se documenta aquí). ⚠️ **Tiene permisos de escritura** en Contacts, Relaciones e Inscripciones. El plugin nunca escribe, pero conviene que quien administra el CRM le asigne un rol de solo lectura |
+| Usuario de API | `usuario-api@example.invalid` (ejemplo: el usuario real no se documenta aquí). ⚠️ **Tiene permisos de escritura** en Contacts, Relaciones e Inscripciones. El plugin escribe solo a través de `Crmscritura`: edita fichas (doc 17) y, desde la v0.22 y solo si se activa para el grupo, crea personas y membresías, cierra membresías y las enlaza (doc 34). Para eso necesita permiso de edición en `Contacts` y en `stic_Contacts_Relationships` |
 | Visibilidad | Solo ve su grupo: 1 grupo de seguridad (*Grupo Scout Myotragus, 684*), unas 382 fichas de un total de 104.042 en el CRM |
 | Módulos **no** accesibles | `Project`, `stic_Personal_Environment`, `Accounts` |
 

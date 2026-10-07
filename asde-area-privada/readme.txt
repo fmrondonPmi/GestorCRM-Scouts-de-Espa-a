@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.21.0
+Stable tag: 0.22.0
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -53,6 +53,10 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
 
+= 0.22.0 =
+* CRM registrations, internal part (no screens yet; off by default, enabled per group): create a new person with their first membership (name, surnames, birth date, gender, and the ID document from age 14), a new membership for someone who returns, leaving (end date and reason; nothing is deleted), section change and adding an ID document to a minor. Checks before writing (already in the group: no second record; in another group: must be confirmed), a lock so two clicks never create two records, and retries that continue where a failed registration stopped. New table for these operations (no personal data).
+* Development: a simulated SinergiaCRM API server for testing registrations without the real CRM (not included in the package).
+
 = 0.21.0 =
 * People: new "Is this person already in the CRM?" check (Secretary and Coordination), before registering someone. With an ID document (DNI, NIE or other) it says whether the person already has a record in the group (with or without an active membership) and whether they are already registered in another group or organisation of Scouts de España (a count only: nothing of that record is read). The document is validated (DNI/NIE letter) and never stored.
 
@@ -84,6 +88,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * First version with the mobile app (PWA).
 
 == Upgrade Notice ==
+
+= 0.22.0 =
+CRM registrations (internal, off by default). Adds one table. No visible changes yet.
 
 = 0.21.0 =
 Adds the "already in the CRM?" check in People. Read-only: nothing is written to the CRM. No database changes.

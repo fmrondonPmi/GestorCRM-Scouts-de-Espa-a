@@ -284,6 +284,59 @@ final class SinergiaV41Client implements CrmClientInterface, EscritorCrm {
 		return $id;
 	}
 
+	/**
+	 * Crea un registro NUEVO (set_entry sin id) y devuelve su id (v0.22, doc 34). Solo
+	 * se usa desde Crm\Escritura::crear (permisos, módulos permitidos y auditoría).
+	 */
+	public function create_entry( string $module, array $values ): string {
+		$nvl = array();
+		foreach ( $values as $name => $value ) {
+			if ( 'id' !== $name ) {
+				$nvl[] = array(
+					'name'  => (string) $name,
+					'value' => (string) $value,
+				);
+			}
+		}
+		$data = $this->call(
+			'set_entry',
+			array(
+				'module_name'     => $module,
+				'name_value_list' => $nvl,
+			)
+		);
+		$id = (string) ( $data['id'] ?? '' );
+		if ( ! Query::is_id( $id ) ) {
+			throw new CrmException( esc_html( __( 'El CRM no ha confirmado la creación del registro.', 'asde-area-privada' ) ) );
+		}
+		return $id;
+	}
+
+	/**
+	 * Enlaza un registro con otros (set_relationship, v0.22, doc 34): p. ej. una persona
+	 * con el grupo de seguridad de su grupo o con una membresía. Solo desde Crm\Escritura.
+	 *
+	 * @param string[] $related_ids
+	 */
+	public function set_relationship( string $module, string $id, string $link, array $related_ids ): bool {
+		Query::id( $id ); // valida
+		foreach ( $related_ids as $r ) {
+			Query::id( (string) $r );
+		}
+		$data = $this->call(
+			'set_relationship',
+			array(
+				'module_name'     => $module,
+				'module_id'       => $id,
+				'link_field_name' => $link,
+				'related_ids'     => array_values( array_map( 'strval', $related_ids ) ),
+				'name_value_list' => array(),
+				'delete'          => 0,
+			)
+		);
+		return (int) ( $data['created'] ?? 0 ) > 0 && 0 === (int) ( $data['failed'] ?? 0 );
+	}
+
 	// ---------------------------------------------------------------------
 	// Sesión y transporte
 	// ---------------------------------------------------------------------

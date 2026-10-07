@@ -94,6 +94,7 @@ final class Installer {
 		\AsdeBalears\AreaPrivada\Inventario\MaterialesTable::install_table();
 		\AsdeBalears\AreaPrivada\Inventario\ComprasTable::install_table();
 		\AsdeBalears\AreaPrivada\Tesoreria\Banco\TiposMovimiento::install_table();
+		\AsdeBalears\AreaPrivada\Crm\Operaciones::install_table();
 		Grupos::migrar();
 		\AsdeBalears\AreaPrivada\Domain\Organizacion::migrar(); // Instalaciones anteriores: Scouts de Balears, código 7.
 		Pages::install();

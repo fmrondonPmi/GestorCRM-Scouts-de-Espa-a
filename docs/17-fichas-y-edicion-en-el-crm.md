@@ -45,7 +45,7 @@
 
 - comprueba el permiso del usuario del CRM;
 - escribe solo fichas del grupo (la persona viene de `PersonaRepository`, filtrada por grupo de seguridad);
-- nunca crea ni borra registros;
+- nunca borra registros; hasta la v0.21 tampoco creaba ninguno. Desde la v0.22 (doc 34), y solo si las altas están activadas para el grupo, `crear()` crea personas y membresías, `actualizar_membresia()` cierra membresías de una persona del grupo y `relacionar()` enlaza la persona con el grupo de seguridad **propio** o con una membresía (lo orquesta `CrmAltas`);
 - nunca toca `numerosocio_c`, `stic_relationship_type_c` ni campos de sistema;
 - el nº local (`numsocioantiguo_enficha_c`) solo lo escribe la numeración;
 - relee para verificar lo guardado;
