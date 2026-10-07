@@ -88,6 +88,8 @@ Cada fase se entrega como una versión, con sus pruebas (CRM simulado) y sus doc
 
 ### Fase 1 · Comprobación previa (solo lectura) ✅ v0.21.0 (2026-10-07)
 
+> **v0.23.1 (decisión del usuario, P-91):** la comprobación **solo está dentro del alta** de un asociado nuevo (primer paso de «Alta de socio/a»). El botón y la pantalla sueltos «¿Está ya en el CRM?» que se describen abajo **se han quitado**; `Crm\Duplicados`, el límite por hora y la auditoría siguen igual.
+
 **Hecho:**
 
 - `Crm\Duplicados`: `validar()` normaliza el documento y comprueba la letra del DNI y del NIE (un DNI de siete cifras se completa con un cero; otros documentos, como el pasaporte, se aceptan tal cual con 5 a 20 caracteres); `documento_obligatorio()` (14 años); `formas()` (cómo puede estar escrito en el CRM: con guion, con espacio, sin el cero); `comprobar()`: en el grupo con `get_entry_list` (fichas con o sin membresía activa, por las cifras con `LIKE` y comparando el documento normalizado) y en otros grupos con un solo `get_entries_count` (sin subconsultas), sin contar dos veces las del grupo. El **canario** (lo que cuenta `get_entries_count` sin condición frente a lo que ve el grupo) se guarda 12 horas si está bien y 15 minutos si no; si no está bien, «no se ha podido comprobar» y queda en la auditoría (`crm_recuento_no_federal`).
@@ -136,6 +138,14 @@ Cada fase se entrega como una versión, con sus pruebas (CRM simulado) y sus doc
 - Textos nuevos en castellano, catalán, euskera y gallego (81; primera versión sin revisión nativa, como el resto: P-46/P-47); los géneros y los motivos de baja se traducen al mostrarlos (`Textos::extras`).
 - **Pruebas:** `tests/altas-crm-pantallas.php` (47): apagado y sin permiso no sale nada ni se escribe aunque se envíen los formularios a mano; un scouter no puede; wp-admin enciende y apaga por grupo; el alta paso a paso (documento en el grupo con y sin membresía activa, mal escrito, nuevo, en otro grupo; datos que faltan, documento desde los 14, fecha futura; revisar; corregir; crear con el nº de socio; nada guardado en WordPress; reenviar sin duplicar; confirmar lo de otro grupo aunque se quite el aviso; menor sin documento); la ficha (botones según tenga o no membresía activa; nueva membresía, cambio de sección con fecha anterior y bien, baja con motivo inventado, con fecha futura y bien con su aviso, documento ya puesto, de otra ficha del grupo, de otro grupo con confirmación); y el aviso de Tesorería (solo las bajas del grupo). Revisadas en el navegador con datos inventados (en su página, en la ventana emergente y a 375 px, sin desbordes).
 - **Manual:** sin actualizar todavía, por petición del usuario (se hace al terminar todas las fases).
+
+**v0.23.1 (2026-10-07), con las respuestas del usuario a P-87 a P-90:**
+
+- **Fechas (P-87):** se quedan así; no hace falta dar altas con fecha futura.
+- **Tutores (P-88, P-93):** con menos de 18 años, el alta exige el **tutor/a 1 con nombre, apellidos y email** (`Altas::EDAD_ADULTA`, `Altas::tutores_obligatorios()`); el móvil y el tutor/a 2 siguen siendo opcionales. La pantalla lo dice en el bloque de tutores.
+- **Avisos de una baja por email (P-90, P-92):** `Usuarios\AvisoBaja` y la plantilla `email/baja.php`. A **Tesorería** (cada cuenta con ese rol menos quien da la baja, en su idioma; si no hay ninguna con email, el email de contacto del grupo): nombre, nº de socio/a, fecha, motivo y su familia. A la **familia** (si es menor: sus cuentas familiares o, si no tiene, los emails de sus tutores en la ficha; si es mayor de edad: la propia persona): la confirmación sin el motivo, con el email de contacto del grupo como «Responder a». Con el motivo **«Fallecimiento» no se escribe a la familia**. Quedan en el registro de emails (tipo «Aviso de baja») con el destino enmascarado; el asunto no lleva el nombre y la vista previa lo vuelve a leer del CRM. El aviso de la pantalla dice cuántos emails han salido.
+- **La comprobación del DNI, solo dentro del alta (P-91):** fuera el botón y la pantalla sueltos de Personas (`templates/personas/comprobar.php`).
+- **Pruebas:** `altas-crm.php` (35: su parte C prueba ahora la comprobación dentro del alta y que ya no hay pantalla suelta), `altas-crm-escritura.php` (40: tutores de los menores) y `altas-crm-pantallas.php` (53: tutores, emails a Tesorería y a la familia, fallecimiento, tutor de la ficha cuando no hay cuenta familiar, registro de emails sin datos personales). El recorrido por HTTP contra el servidor simulado sigue saliendo entero.
 
 **Lo que se planeó:**
 

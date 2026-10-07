@@ -110,10 +110,13 @@ $hoy      = wp_date( 'Y-m-d' );
 $hace     = static fn( int $anios ): string => wp_date( 'Y-m-d', strtotime( "-$anios years" ) );
 $persona  = static function ( array $extra = array() ) use ( $hace ): array {
 	return $extra + array(
-		'first_name'    => 'Laia',
-		'last_name'     => 'Nueva Prueba',
-		'birthdate'     => $hace( 15 ),
-		'stic_gender_c' => 'femenino',
+		'first_name'         => 'Laia',
+		'last_name'          => 'Nueva Prueba',
+		'birthdate'          => $hace( 15 ),
+		'stic_gender_c'      => 'femenino',
+		'tutor1_nombre_c'    => 'Rosa', // Menores de 18: el tutor/a 1 es obligatorio (P-88).
+		'tutor1_apellidos_c' => 'Nueva Prueba',
+		'tutor1_email_c'     => 'rosa.prueba@example.invalid',
 	);
 };
 $ficha    = static function ( string $id ) use ( $crm ): ?array {
@@ -145,6 +148,8 @@ try {
 
 	$err = static fn( array $d ) => is_wp_error( $r = Altas::limpiar_persona( $d ) ) ? $r->get_error_message() : '';
 	$ok( str_contains( $err( array_diff_key( $persona( $doc( '22222222J' ) ), array( 'first_name' => 1 ) ) ), 'Falta el nombre' ) && str_contains( $err( $persona( $doc( '22222222J' ) + array( 'stic_gender_c' => 'otro' ) ) ), 'género' ) && str_contains( $err( $persona( $doc( '22222222J' ) + array( 'birthdate' => '2999-01-01' ) ) ), 'fecha de nacimiento' ), 'obligatorios: nombre, apellidos, nacimiento (válido) y género (masculino, femenino o no binario)' );
+	$sin_tutor = array_diff_key( $persona( $doc( '22222222J' ) ), array( 'tutor1_email_c' => 1 ) );
+	$ok( str_contains( $err( $sin_tutor ), 'tutor/a 1' ) && '' === $err( array( 'birthdate' => $hace( 20 ) ) + $sin_tutor ) && '' === $err( array_diff_key( $persona( array( 'birthdate' => $hace( 30 ) ) + $doc( '22222222J' ) ), array( 'tutor1_nombre_c' => 1, 'tutor1_apellidos_c' => 1, 'tutor1_email_c' => 1 ) ) ), 'menores de 18: hace falta el tutor/a 1 con nombre, apellidos y email; a un adulto no se le pide (P-88)' );
 	$ok( str_contains( $err( $persona() ), 'a partir de los 14 años' ) && ! is_wp_error( Altas::limpiar_persona( $persona( array( 'birthdate' => $hace( 13 ) ) ) ) ), 'el documento es obligatorio desde los 14 años; a los 13 se puede dar de alta sin él' );
 	$limpios = Altas::limpiar_persona( $persona( $doc( ' 22.222.222-j ' ) + array( 'numerosocio_c' => '1', 'email1' => '' ) ) );
 	$ok( '22222222J' === $limpios['stic_identification_number_c'] && ! isset( $limpios['numerosocio_c'] ) && ! isset( $limpios['email1'] ), 'el documento se guarda normalizado, se quitan los campos vacíos y los que no son de un alta (el nº de socio lo pone el CRM)' );

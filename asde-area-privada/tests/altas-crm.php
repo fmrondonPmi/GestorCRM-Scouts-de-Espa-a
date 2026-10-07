@@ -1,7 +1,8 @@
 <?php
 /**
  * Pruebas de la v0.21 (entorno LOCAL): altas en el CRM, fase 1 (doc 34):
- * «¿Está ya en el CRM?», la comprobación previa de solo lectura.
+ * la comprobación previa de solo lectura («¿Está ya en el CRM?»). Desde la v0.23.1
+ * solo está dentro de «Alta de socio/a» (decisión del usuario): la parte C lo comprueba.
  * Ejecutar desde app/public del site Local:
  *
  *   wp eval-file <ruta completa>/wp-content/plugins/asde-area-privada/tests/altas-crm.php
@@ -18,7 +19,9 @@ require_once ABSPATH . 'wp-admin/includes/user.php';
 
 use AsdeBalears\AreaPrivada\Audit\Logger;
 use AsdeBalears\AreaPrivada\Auth\Ambito;
+use AsdeBalears\AreaPrivada\Crm\Altas;
 use AsdeBalears\AreaPrivada\Crm\Duplicados;
+use AsdeBalears\AreaPrivada\Crm\Permisos;
 use AsdeBalears\AreaPrivada\Domain\Grupo;
 use AsdeBalears\AreaPrivada\Domain\Grupos;
 use AsdeBalears\AreaPrivada\Frontend\Router;
@@ -49,6 +52,7 @@ wp_set_current_user( 0 );
 
 $log_antes    = (int) $wpdb->get_var( 'SELECT COALESCE(MAX(id), 0) FROM ' . Logger::table() ); // phpcs:ignore WordPress.DB
 $socios_antes = array_column( (array) $wpdb->get_results( 'SELECT * FROM ' . SociosTable::table(), ARRAY_A ), null, 'num_socio_asde' ); // phpcs:ignore WordPress.DB
+$altas_antes  = get_option( Altas::OPCION, null );
 
 $cache_externa = wp_using_ext_object_cache( true );
 $cortadas      = 0;
@@ -116,17 +120,17 @@ $ver = static function ( array $get, bool $ventana = true ): string {
 		View::en_modal( false );
 	}
 };
-/** Envía «Comprobar» como lo hace el formulario y pinta la respuesta (la misma petición). */
+/** Envía el primer paso de «Alta de socio/a» (el documento) y pinta la respuesta (la misma petición). */
 $comprobar = static function ( string $documento ) use ( $ver ): string {
 	$_POST    = array(
-		'asde_action' => 'comprobar_documento',
+		'asde_action' => 'alta_documento',
 		'documento'   => $documento,
-		'_wpnonce'    => wp_create_nonce( 'asde_comprobar_documento' ),
+		'_wpnonce'    => wp_create_nonce( 'asde_alta_socio' ),
 	);
 	$_REQUEST = $_POST;
 	try {
 		( new PersonasView() )->handle_post();
-		return $ver( array( 'comprobar' => '1' ) );
+		return $ver( array( 'alta' => '1' ) );
 	} finally {
 		$_POST    = array();
 		$_REQUEST = array();
@@ -177,25 +181,32 @@ try {
 	$crm->recuento_por_grupo = false;
 	delete_transient( $canario );
 
-	echo "\n== Parte C · La pantalla ==\n";
+	echo "\n== Parte C · La comprobación, solo dentro del alta (v0.23.1) ==\n";
 	$ok( in_array( 'personas', Router::MODALES, true ), 'Personas se puede abrir en la ventana emergente' );
-	$como( $u_sco );
-	$h = $ver( array( 'comprobar' => '1' ) );
-	$ok( ! str_contains( $h, 'comprobar_documento' ), 'un scouter (sin Personas) no tiene la comprobación' );
+	Altas::activar( $grupo['numero'], true );
+	Permisos::olvidar( $grupo['numero'] );
 	$como( $u_sec );
+	$h = $ver( array(), false );
+	$ok( ! str_contains( $h, '¿Está ya en el CRM?' ) && ! str_contains( $h, 'comprobar=1' ) && str_contains( $h, 'Alta de socio/a' ), 'Personas ya no tiene el botón suelto «¿Está ya en el CRM?»: la comprobación va en «Alta de socio/a»' );
 	$h = $ver( array( 'comprobar' => '1' ) );
-	$ok( str_contains( $h, 'asde-ap--modal' ) && str_contains( $h, 'name="asde_action" value="comprobar_documento"' ) && str_contains( $h, 'data-asde-solo-consulta' ) && str_contains( $h, 'name="_wpnonce"' ) && ! str_contains( $h, 'asde-comprobar-crm__resultado' ), 'Secretaría la abre en la ventana: el formulario (firmado y de solo consulta), sin resultado todavía' );
+	$ok( ! str_contains( $h, 'name="documento"' ) && ! str_contains( $h, 'comprobar_documento' ), 'ni la pantalla suelta de la comprobación' );
+	$como( $u_sco );
+	$h = $ver( array( 'alta' => '1' ) );
+	$ok( ! str_contains( $h, 'alta_documento' ), 'un scouter (sin Personas) no tiene el alta ni la comprobación' );
+	$como( $u_sec );
+	$h = $ver( array( 'alta' => '1' ) );
+	$ok( str_contains( $h, 'asde-ap--modal' ) && str_contains( $h, 'name="asde_action" value="alta_documento"' ) && str_contains( $h, 'data-asde-solo-consulta' ) && str_contains( $h, 'name="_wpnonce"' ), 'Secretaría abre el alta en la ventana: el primer paso es el documento (firmado y de solo consulta)' );
 	$ok( str_contains( $h, 'a partir de los 14 años' ), 'recuerda que el documento es obligatorio a partir de los 14 años' );
 
 	$h = $comprobar( '12345678-Z' );
-	$ok( str_contains( $h, 'Ya tiene ficha en tu grupo' ) && str_contains( $h, 'Lia Altas Roig' ) && str_contains( $h, 'membresía activa: Scouts' ) && str_contains( $h, 'ya está dada de alta en otro grupo u organización' ) && str_contains( $h, 'no hay que crear otra ficha ni otra membresía' ) && ! str_contains( $h, 'solo necesita una membresía nueva' ), 'resultado: la ficha del grupo (enlazada), que ya está de alta, y el aviso genérico de que también está en otro grupo' );
-	$ok( str_contains( $h, 'value="12345678-Z"' ) && str_contains( $h, 'Documento comprobado: 12345678Z' ), 'el documento se ve en la respuesta (tal como se escribió y normalizado)' );
+	$ok( str_contains( $h, 'Ya tiene ficha en tu grupo: no se crea otra.' ) && str_contains( $h, 'Lia Altas Roig' ) && str_contains( $h, 'membresía activa: Scouts' ) && str_contains( $h, 'no hay que crear otra ficha ni otra membresía' ) && ! str_contains( $h, 'alta_revisar' ), 'con el documento de alguien del grupo con membresía activa: el alta se para y enseña su ficha (enlazada)' );
+	$ok( str_contains( $h, 'socio=990051' ), 'y lleva a su ficha' );
 	$h = $comprobar( '87654321x' );
-	$ok( str_contains( $h, 'Marc Altas Pons' ) && str_contains( $h, 'sin membresía activa' ) && str_contains( $h, 'solo necesita una membresía nueva' ) && ! str_contains( $h, 'ya está dada de alta en otro grupo' ), 'quien vuelve: su ficha sin membresía activa y que no hay que crear otra' );
+	$ok( str_contains( $h, 'Marc Altas Pons' ) && str_contains( $h, 'sin membresía activa' ) && str_contains( $h, 'Darle una membresía nueva' ) && str_contains( $h, 'solo necesita una membresía nueva' ), 'quien vuelve: su ficha sin membresía activa y «Darle una membresía nueva»' );
 	$h = $comprobar( '11111111H' );
-	$ok( str_contains( $h, 'ya está dada de alta en otro grupo u organización' ) && str_contains( $h, 'se puede dar de alta también en tu grupo' ) && ! str_contains( $h, 'Ya tiene ficha en tu grupo' ), 'solo en otro grupo: el aviso y que se puede dar de alta igualmente' );
+	$ok( str_contains( $h, 'ya está dada de alta en otro grupo u organización' ) && str_contains( $h, 'se puede dar de alta también en tu grupo' ) && str_contains( $h, 'value="alta_revisar"' ), 'solo en otro grupo: el aviso, y el alta sigue con los datos' );
 	$h = $comprobar( '22222222J' );
-	$ok( str_contains( $h, 'No hay ninguna ficha con este documento' ), 'en ningún sitio: se puede dar de alta como persona nueva' );
+	$ok( str_contains( $h, 'value="alta_revisar"' ) && str_contains( $h, 'value="22222222J"' ) && ! str_contains( $h, 'otro grupo u organización de Scouts de España.' ), 'en ningún sitio: el alta sigue con los datos, sin aviso' );
 	$h = $comprobar( '12345678A' );
 	$ok( str_contains( $h, 'asde-notice--error' ) && str_contains( $h, 'letra del DNI' ), 'un documento mal escrito: el error, sin buscar' );
 	$ok( 0 === (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->options} WHERE option_value LIKE '%12345678Z%' OR option_value LIKE '%11111111H%'" ), 'el documento no se guarda en ninguna opción ni transient' ); // phpcs:ignore WordPress.DB
@@ -205,9 +216,6 @@ try {
 	$h     = $comprobar( '22222222J' );
 	$ok( str_contains( $h, 'muchas comprobaciones seguidas' ) && $antes === $crm->llamadas, 'con muchas comprobaciones en una hora se para (y no se pregunta al CRM)' );
 	delete_transient( 'asde_ap_comprobaciones_' . $u_sec );
-
-	$h = $ver( array(), false );
-	$ok( 1 === preg_match( '/href="[^"]*comprobar=1[^"]*" data-asde-modal>¿Está ya en el CRM\?<\/a>/u', $h ), 'en Personas, el botón «¿Está ya en el CRM?» abre la comprobación en la ventana' );
 
 	$ok( ! $crm->escrituras, 'nada escrito en el CRM (simulado)' );
 	$ok( 0 === $cortadas, 'ninguna petición ha salido hacia un CRM real' );
@@ -220,6 +228,11 @@ try {
 	delete_transient( $canario );
 	$crm->desactivar();
 	remove_filter( 'pre_http_request', $cortar_crm, 2 );
+	null === $altas_antes ? delete_option( Altas::OPCION ) : update_option( Altas::OPCION, $altas_antes, false );
+	Permisos::olvidar( $grupo['numero'] );
+	foreach ( $ids as $uid ) {
+		delete_transient( 'asde_ap_comprobaciones_' . $uid );
+	}
 	wp_using_ext_object_cache( $cache_externa );
 	wp_set_current_user( 0 );
 

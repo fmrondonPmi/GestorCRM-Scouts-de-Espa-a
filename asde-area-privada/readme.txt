@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.23.0
+Stable tag: 0.23.1
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -53,6 +53,11 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
 
+= 0.23.1 =
+* Register a member: under 18, guardian 1 (name, surnames and email) is required.
+* A leaving done from the web is emailed to Treasury and to the family (or to the person if adult); with the reason "Decease" nothing is sent to the family. The emails appear in Users → Emails.
+* The ID document check now only exists as the first step of "Register a member": the separate "Is this person already in the CRM?" button in People is gone.
+
 = 0.23.0 =
 * CRM registrations, screens (off by default; enabled per group in wp-admin → Modules, "CRM registrations" column): People → "Register a member" in steps (ID document → details and membership → review → done, with the member number returned by the CRM and links to the record and to "Give access"). The document is checked first: already in the group, the registration stops and leads to that record (a new membership for someone who returns); in another group or organisation, it must be confirmed. What is typed travels in the form and is never stored in WordPress.
 * Record → "Membership in the CRM" (Secretary and Coordination): new membership, leaving (date and reason, with what changes: the person's account, the family accounts and the family fee), section change and adding the ID document to someone who has none (checked first). Dates cannot be in the future, nor before the current membership started.
@@ -93,6 +98,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * First version with the mobile app (PWA).
 
 == Upgrade Notice ==
+
+= 0.23.1 =
+Guardian required for minors, leaving emails to Treasury and the family, document check only inside the registration. No database changes.
 
 = 0.23.0 =
 Screens for CRM registrations, leavings and section changes. Off until enabled per group in wp-admin → Modules. No database changes.

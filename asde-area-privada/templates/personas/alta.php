@@ -177,6 +177,7 @@ $edad  = static function ( string $f ) use ( $hoy ): ?int {
 				</fieldset>
 				<details class="asde-plegable asde-alta-socio__tutores"<?php echo $tutores ? ' open' : ''; ?>>
 					<summary class="asde-plegable__titulo"><h3><?php asde_e( 'Tutores legales (si es menor de edad)' ); ?></h3></summary>
+					<p class="asde-help"><?php /* translators: %d: edad */ echo esc_html( sprintf( asde_t( 'Por debajo de %d años hace falta el tutor/a 1: nombre, apellidos y email.' ), Altas::EDAD_ADULTA ) ); ?></p>
 					<?php foreach ( array( 1, 2 ) as $n ) : ?>
 						<fieldset>
 							<legend><?php /* translators: %d: 1 o 2 */ echo esc_html( sprintf( asde_t( 'Tutor/a %d' ), $n ) ); ?></legend>

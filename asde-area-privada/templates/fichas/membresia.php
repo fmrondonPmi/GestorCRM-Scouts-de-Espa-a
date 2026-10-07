@@ -105,6 +105,7 @@ $desde   = static fn( array $m ): string => sprintf( asde_t( '%1$s, desde el %2$
 						<?php if ( '' !== $familia ) : ?>
 							<li><?php /* translators: %s: nº de familia */ echo esc_html( sprintf( asde_t( 'Deja de contar en la cuota de su familia (nº %s). Tesorería lo verá en «Bajas recientes».' ), $familia ) ); ?></li>
 						<?php endif; ?>
+						<li><?php asde_e( 'Se avisa por email a Tesorería y a la familia (o a la propia persona, si es mayor de edad). Con el motivo «Fallecimiento» no se escribe a la familia.' ); ?></li>
 						<li><?php asde_e( 'No se borra nada: la ficha y sus membresías anteriores se quedan en el CRM. Si vuelve, se le da una membresía nueva.' ); ?></li>
 					</ul>
 				</div>

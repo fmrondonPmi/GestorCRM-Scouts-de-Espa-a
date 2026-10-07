@@ -30,10 +30,11 @@ final class PersonasView extends View {
 
 	private const CAP = 'asde_manage_users';
 
-	/** Resultado de «¿Está ya en el CRM?» de esta petición (POST sin redirección: el documento no se guarda). */
-	private static ?array $comprobacion = null;
-
-	/** Paso del «Alta de socio/a» de esta petición (POST sin redirección: lo escrito no se guarda). */
+	/**
+	 * Paso del «Alta de socio/a» de esta petición (POST sin redirección: lo escrito no se guarda).
+	 * La comprobación del documento solo está dentro del alta (v0.23.1, decisión del usuario):
+	 * la pantalla suelta «¿Está ya en el CRM?» de la v0.21 se ha quitado.
+	 */
 	private static ?array $alta = null;
 
 	public const FILTROS = array(
@@ -55,22 +56,6 @@ final class PersonasView extends View {
 		// «Alta de socio/a» (doc 34, fase 3): en la ventana emergente o en su página.
 		if ( '' !== $this->get( 'alta' ) ) {
 			return $this->layout( 'personas', $this->pantalla_alta() );
-		}
-
-		// «¿Está ya en el CRM?» (doc 34, fase 1): en la ventana emergente o en su página.
-		if ( '' !== $this->get( 'comprobar' ) ) {
-			return $this->layout(
-				'personas',
-				$this->tpl(
-					'personas/comprobar',
-					array(
-						'resultado' => self::$comprobacion,
-						'url'       => $this->url( 'personas', array( 'comprobar' => '1' ) ),
-						'url_ficha' => $this->url( 'ficha' ),
-						'volver'    => $this->url( 'personas' ),
-					)
-				)
-			);
 		}
 
 		$filtro = isset( self::FILTROS[ $this->get( 'ver' ) ] ) ? $this->get( 'ver' ) : 'activas';
@@ -193,16 +178,10 @@ final class PersonasView extends View {
 			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-area-privada' ), 403 );
 		}
 		$accion = $this->post( 'asde_action' );
-		if ( 'comprobar_documento' === $accion ) {
-			check_admin_referer( 'asde_comprobar_documento' );
-			// Sin redirigir: esta misma petición pinta el resultado, así el documento no
-			// tiene que guardarse en ningún sitio para enseñarlo después.
-			self::$comprobacion = $this->comprobar( $this->post( 'documento' ) );
-			return;
-		}
 		if ( in_array( $accion, AltaSocio::ACCIONES, true ) ) {
 			check_admin_referer( 'asde_alta_socio' );
-			// Igual: cada paso se pinta en esta misma petición y lo escrito va en el formulario.
+			// Sin redirigir: cada paso se pinta en esta misma petición y lo escrito va en el
+			// formulario, así no tiene que guardarse en ningún sitio para enseñarlo después.
 			if ( Altas::disponible() ) {
 				self::$alta = AltaSocio::atender( $accion, $this->campos_alta(), fn( string $d ) => $this->comprobar( $d ), Altas::make() );
 			}

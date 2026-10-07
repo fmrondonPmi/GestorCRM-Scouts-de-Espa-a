@@ -14,6 +14,7 @@ use AsdeBalears\AreaPrivada\Fichas\PermisosFicha;
 use AsdeBalears\AreaPrivada\Frontend\Notices;
 use AsdeBalears\AreaPrivada\Socios\Numeracion;
 use AsdeBalears\AreaPrivada\Tesoreria\FamiliasTable;
+use AsdeBalears\AreaPrivada\Usuarios\AvisoBaja;
 use AsdeBalears\AreaPrivada\Usuarios\Usuarios;
 
 defined( 'ABSPATH' ) || exit;
@@ -286,6 +287,21 @@ final class FichaView extends View {
 				if ( '' !== $familia ) {
 					/* translators: %s: nº de familia */
 					$ok .= ' ' . sprintf( asde_t( 'Deja de contar en la cuota de la familia nº %s: Tesorería lo verá en «Bajas recientes».' ), esc_html( $familia ) );
+				}
+				if ( is_array( $r ) ) {
+					// P-90: aviso por email a Tesorería y a la familia (nunca bloquea la baja ya hecha).
+					$av  = AvisoBaja::enviar( $p, '' !== $valores['fecha'] ? $valores['fecha'] : wp_date( 'Y-m-d' ), $valores['motivo'], $familia );
+					/* translators: 1: emails a Tesorería, 2: emails a la familia */
+					$ok .= ' ' . sprintf( asde_t( 'Avisos por email: %1$d a Tesorería y %2$d a la familia.' ), $av['tesoreria'], $av['familia'] );
+					if ( $av['familia_omitida'] ) {
+						$ok .= ' ' . asde_t( 'Por el motivo de la baja, a la familia no se le ha escrito.' );
+					} elseif ( $av['sin_email_familia'] ) {
+						$ok .= ' ' . asde_t( 'No hay ningún email de la familia al que avisar.' );
+					}
+					if ( $av['errores'] ) {
+						/* translators: %d: emails que no han salido */
+						$ok .= ' ' . sprintf( asde_t( '%d no se han podido enviar (mira Usuarios → Emails).' ), $av['errores'] );
+					}
 				}
 				break;
 			case 'membresia_seccion':

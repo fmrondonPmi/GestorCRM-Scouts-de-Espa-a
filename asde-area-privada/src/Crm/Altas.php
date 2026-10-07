@@ -29,6 +29,9 @@ final class Altas {
 	/** Grupos con las altas en el CRM activadas (nacen apagadas). */
 	public const OPCION = 'asde_ap_altas_crm';
 
+	/** Edad desde la que no hacen falta tutores (P-88). */
+	public const EDAD_ADULTA = 18;
+
 	/** Valores de `stic_gender_c` en el CRM de ASDE (doc 04, §7.7). */
 	public const GENEROS = array(
 		'masculino' => 'Masculino',
@@ -530,7 +533,19 @@ final class Altas {
 				return new \WP_Error( 'asde_alta_datos', asde_t( 'Hay un email que no es válido.' ) );
 			}
 		}
+		// Menores de 18 (decisión del usuario, P-88): el tutor/a 1 es obligatorio, con su email
+		// (la cuenta familiar y los avisos, como el de una baja, van a ese email).
+		if ( self::tutores_obligatorios( $nacimiento ) && ( ! isset( $d['tutor1_nombre_c'], $d['tutor1_apellidos_c'], $d['tutor1_email_c'] ) ) ) {
+			/* translators: %d: edad */
+			return new \WP_Error( 'asde_alta_datos', sprintf( asde_t( 'Por debajo de %d años hace falta el tutor/a 1: nombre, apellidos y email.' ), self::EDAD_ADULTA ) );
+		}
 		return $d;
+	}
+
+	/** ¿Es menor de 18 años en esa fecha de nacimiento (AAAA-MM-DD)? Entonces el tutor/a 1 es obligatorio. */
+	public static function tutores_obligatorios( string $nacimiento ): bool {
+		$f = \DateTime::createFromFormat( '!Y-m-d', $nacimiento, wp_timezone() );
+		return $f && $f->diff( new \DateTime( 'today', wp_timezone() ) )->y < self::EDAD_ADULTA;
 	}
 
 	/** Fecha AAAA-MM-DD válida (o hoy si viene vacía); '' si no es válida. */

@@ -43,12 +43,16 @@ final class RegistroEmails {
 	/** Aviso a Tesorería de una lista de compra de material pendiente de su visto bueno (v0.19, doc 32). */
 	public const COMPRA = 'compra';
 
+	/** Aviso de una baja dada desde la web, a Tesorería y a la familia (v0.23.1, doc 34). */
+	public const BAJA = 'baja';
+
 	public const TIPOS = array(
 		Invitacion::ALTA  => 'Invitación',
 		Invitacion::RESET => 'Recuperar contraseña',
 		self::RECHAZO     => 'Solicitud rechazada',
 		self::SEPA        => 'Domiciliación SEPA',
 		self::COMPRA      => 'Lista de compra de material',
+		self::BAJA        => 'Aviso de baja',
 	);
 
 	public static function table(): string {
@@ -176,6 +180,9 @@ final class RegistroEmails {
 		if ( self::COMPRA === $fila['tipo'] ) {
 			$lista = \AsdeBalears\AreaPrivada\Inventario\ComprasTable::obtener( (int) ( $datos['lista'] ?? 0 ) );
 			return $lista ? \AsdeBalears\AreaPrivada\Inventario\AvisoTesoreria::html( $lista, $user ? Contacto::saludo( $user ) : '' ) : '';
+		}
+		if ( self::BAJA === $fila['tipo'] ) {
+			return AvisoBaja::vista_previa( $datos, $user ? Contacto::saludo( $user ) : '' );
 		}
 		if ( self::SEPA === $fila['tipo'] ) {
 			return \AsdeBalears\AreaPrivada\Sepa\Avisos::html( $datos, $user ? Contacto::saludo( $user ) : '' );

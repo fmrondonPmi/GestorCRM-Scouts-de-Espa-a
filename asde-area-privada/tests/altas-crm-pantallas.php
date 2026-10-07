@@ -33,6 +33,8 @@ use AsdeBalears\AreaPrivada\Frontend\Views\View;
 use AsdeBalears\AreaPrivada\Install\Roles;
 use AsdeBalears\AreaPrivada\Socios\SociosTable;
 use AsdeBalears\AreaPrivada\Tesoreria\FamiliasTable;
+use AsdeBalears\AreaPrivada\Usuarios\EmailCuenta;
+use AsdeBalears\AreaPrivada\Usuarios\RegistroEmails;
 use AsdeBalears\AreaPrivada\Usuarios\Usuarios;
 
 global $wpdb;
@@ -58,6 +60,7 @@ Operaciones::install_table();
 $max_id        = static fn( string $t ) => (int) $wpdb->get_var( "SELECT COALESCE(MAX(id), 0) FROM $t" ); // phpcs:ignore WordPress.DB
 $log_antes     = $max_id( Logger::table() );
 $ops_antes     = $max_id( Operaciones::table() );
+$ema_antes     = $max_id( RegistroEmails::table() );
 $opcion_antes  = get_option( Altas::OPCION, null );
 $modulos_antes = get_option( 'asde_ap_modulos', null );
 $socios_antes  = array_column( (array) $wpdb->get_results( 'SELECT * FROM ' . SociosTable::table(), ARRAY_A ), null, 'num_socio_asde' ); // phpcs:ignore WordPress.DB
@@ -83,16 +86,26 @@ $morir = static fn() => static function ( $mensaje ) {
 	throw new RuntimeException( 'asde-die:' . ( is_wp_error( $mensaje ) ? $mensaje->get_error_message() : (string) $mensaje ) );
 };
 add_filter( 'wp_die_handler', $morir, PHP_INT_MAX );
+// Ningún email sale: se guardan aquí (los avisos de baja, P-90).
+$correos  = array();
+$capturar = static function ( $pre, $atts ) use ( &$correos ) {
+	$correos[] = $atts;
+	return true;
+};
+add_filter( 'pre_wp_mail', $capturar, 10, 2 );
+$para = static function ( string $email ) use ( &$correos ): array {
+	return array_values( array_filter( $correos, static fn( $c ) => $email === ( is_array( $c['to'] ) ? implode( ',', $c['to'] ) : (string) $c['to'] ) ) );
+};
 
 // Documentos inventados con la letra bien calculada.
 $P   = array( 'Asde_Prueba_Crm', 'persona' );
 $doc = static fn( string $d ): array => array( 'stic_identification_number_c' => $d );
 $crm = new Asde_Prueba_Crm(
 	array(
-		$P( 71, 'Nuria', 'Pantalla Uno', '2012-03-03', 'Scouts', $doc( '12345678Z' ) ),
+		$P( 71, 'Nuria', 'Pantalla Uno', '2012-03-03', 'Scouts', $doc( '12345678Z' ) + array( 'tutor1_nombre_c' => 'Carme', 'tutor1_email_c' => 'carme.pantalla@example.invalid' ) ),
 		$P( 72, 'Pep', 'Pantalla Dos', '2000-01-01', '', $doc( '87654321X' ) ),
 		$P( 73, 'Mia', 'Pantalla Tres', '2016-06-06', 'Lobatos' ),
-		$P( 74, 'Teo', 'Pantalla Cuatro', '2017-07-07', 'Lobatos' ),
+		$P( 74, 'Teo', 'Pantalla Cuatro', '2017-07-07', 'Lobatos', array( 'tutor1_nombre_c' => 'Lluís', 'tutor1_email_c' => 'lluis.pantalla@example.invalid' ) ),
 		$P( 75, 'Sara', 'Pantalla Secretaria', '1990-01-01', 'Scouters', $doc( '33333333P' ) ), // La cuenta de Secretaría de la prueba.
 	),
 	$grupo['crm_id']
@@ -138,6 +151,9 @@ $u_sco = $crear( 'prueba-pantalta-sco', Roles::SCOUTER, array( Usuarios::META_SO
 $u_mia = $crear( 'prueba-pantalta-mia', Roles::PARTICIPANTE, array( Usuarios::META_SOCIO => '990073' ) );
 $u_fam = $crear( 'prueba-pantalta-fam', Roles::TUTOR, array( Usuarios::META_REPRESENTADO => array( '990073' ) ) );
 $u_adm = $crear( 'prueba-pantalta-adm', 'administrator' );
+$u_tes = $crear( 'prueba-pantalta-teso', Roles::TESORERIA );
+EmailCuenta::guardar( $u_tes, 'teso.pantalla@example.invalid' );
+EmailCuenta::guardar( $u_fam, 'fam.pantalla@example.invalid' );
 $como  = static function ( int $uid ): void {
 	wp_set_current_user( $uid );
 	Ambito::olvidar( $uid );
@@ -149,7 +165,7 @@ $como  = static function ( int $uid ): void {
  * todas van en el mismo proceso, así que se vacía antes de cada una.
  */
 $reset = static function (): void {
-	foreach ( array( array( PersonasView::class, 'alta' ), array( PersonasView::class, 'comprobacion' ), array( FichaView::class, 'membresia' ) ) as list( $clase, $prop ) ) {
+	foreach ( array( array( PersonasView::class, 'alta' ), array( FichaView::class, 'membresia' ) ) as list( $clase, $prop ) ) {
 		( new ReflectionProperty( $clase, $prop ) )->setValue( null, null );
 	}
 };
@@ -227,10 +243,13 @@ $hace     = static fn( int $anios ): string => wp_date( 'Y-m-d', strtotime( "-$a
 $datos    = static function ( array $extra = array() ) use ( $hace ): array {
 	return array_replace(
 		array(
-			'first_name'    => 'Aina',
-			'last_name'     => 'Pantalla Nueva',
-			'birthdate'     => $hace( 15 ),
-			'stic_gender_c' => 'femenino',
+			'first_name'         => 'Aina',
+			'last_name'          => 'Pantalla Nueva',
+			'birthdate'          => $hace( 15 ),
+			'stic_gender_c'      => 'femenino',
+			'tutor1_nombre_c'    => 'Rosa', // Menores de 18: el tutor/a 1 es obligatorio (P-88).
+			'tutor1_apellidos_c' => 'Pantalla Nueva',
+			'tutor1_email_c'     => 'rosa.pantalla@example.invalid',
 		),
 		$extra
 	);
@@ -241,7 +260,7 @@ try {
 	Altas::activar( $grupo['numero'], false );
 	$como( $u_sec );
 	$h = $ver( new PersonasView() );
-	$ok( str_contains( $h, '¿Está ya en el CRM?' ) && ! str_contains( $h, 'Alta de socio/a' ), 'apagado: Personas no enseña «Alta de socio/a» (sí «¿Está ya en el CRM?»)' );
+	$ok( ! str_contains( $h, '¿Está ya en el CRM?' ) && ! str_contains( $h, 'Alta de socio/a' ), 'apagado: Personas no enseña «Alta de socio/a» (ni una comprobación suelta del documento: solo está dentro del alta)' );
 	$ok( str_contains( $ver( new PersonasView(), array( 'alta' => '1' ) ), 'no están activadas para tu grupo' ), 'y la pantalla del alta explica que no están activadas' );
 	$h = $ver( new FichaView(), array( 'socio' => '990071' ) );
 	$ok( ! str_contains( $h, 'Membresía en el CRM' ) && str_contains( $ver( new FichaView(), array( 'socio' => '990071', 'membresia' => 'baja' ) ), 'no están activadas para tu grupo' ), 'la ficha tampoco enseña la membresía en el CRM' );
@@ -326,6 +345,8 @@ try {
 	$ok( str_contains( $h, 'El documento es obligatorio a partir de los 14 años.' ), 'con 15 años y sin documento: el documento es obligatorio' );
 	list( , , $h ) = $alta( $paso2( $datos( $doc( '22222222J' ) ), array( 'inicio' => $manana ) ) );
 	$ok( str_contains( $h, 'La fecha de alta no puede ser posterior a hoy.' ), 'la fecha de alta no puede ser futura (P-87)' );
+	list( , , $h ) = $alta( $paso2( array_diff_key( $datos( $doc( '22222222J' ) ), array( 'tutor1_email_c' => 1 ) ) ) );
+	$ok( str_contains( $h, 'hace falta el tutor/a 1: nombre, apellidos y email.' ) && str_contains( $h, 'value="alta_revisar"' ), 'con menos de 18 años y sin el email del tutor/a 1: se queda en los datos con el error (P-88)' );
 
 	$antes = $escritas();
 	list( , , $h ) = $alta( $paso2( $datos( $doc( '22222222J' ) + array( 'email1' => 'aina.pantalla@example.invalid', 'tutor1_nombre_c' => 'Marta' ) ) ) );
@@ -391,6 +412,12 @@ try {
 	list( $avisos, $destino ) = $memb( '990073', 'membresia_baja', array( 'fecha' => $hoy, 'motivo' => 'personal' ) );
 	$mm = $de( $id_de( 73 ) )[0];
 	$ok( str_contains( $destino, 'socio=990073' ) && 'baja' === $mm['estado_c'] && $hoy === $mm['end_date'] && 'personal' === $mm['end_reason'] && str_contains( $avisos, 'ha quedado de baja en el CRM' ) && str_contains( $avisos, 'Su cuenta de acceso a la web ya no puede entrar.' ) && str_contains( $avisos, 'familia nº ' . $num_fam ), 'baja: se cierra en el CRM y el aviso dice qué cambia (cuenta, familias y cuota)' );
+	$a_teso = $para( 'teso.pantalla@example.invalid' );
+	$a_fam  = $para( 'fam.pantalla@example.invalid' );
+	$ok( 1 === count( $a_teso ) && str_contains( (string) $a_teso[0]['message'], 'Mia Pantalla Tres' ) && str_contains( (string) $a_teso[0]['message'], $num_fam ) && str_contains( (string) $a_teso[0]['message'], 'Motivos personales' ) && ! str_contains( (string) $a_teso[0]['subject'], 'Mia' ), 'la baja avisa por email a Tesorería: quién, su familia y el motivo (el asunto va sin el nombre)' );
+	$ok( 1 === count( $a_fam ) && str_contains( (string) $a_fam[0]['message'], 'Mia Pantalla Tres' ) && ! str_contains( (string) $a_fam[0]['message'], 'Motivos personales' ) && 1 === preg_match( '/Avisos por email: \d+ a Tesorería y 1 a la familia/', $avisos ), 'y a la familia (su cuenta familiar), sin el motivo; el aviso de la pantalla lo cuenta' );
+	$reg = (array) $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM %i WHERE id > %d AND tipo = %s', RegistroEmails::table(), $ema_antes, RegistroEmails::BAJA ), ARRAY_A ); // phpcs:ignore WordPress.DB
+	$ok( count( $reg ) >= 2 && ! array_filter( $reg, static fn( $r ) => str_contains( $r['asunto'] . $r['datos'] . $r['destino'], 'Mia' ) || str_contains( $r['destino'], 'fam.pantalla@' ) ) && str_contains( RegistroEmails::vista_previa( $reg[0] ), 'Mia Pantalla Tres' ), 'quedan en el registro de emails sin el nombre ni el email entero; la vista previa vuelve a leer el nombre del CRM' );
 
 	$h = $ver( new FichaView(), array( 'socio' => '990071', 'membresia' => 'documento' ) );
 	$ok( str_contains( $h, 'Esta ficha ya tiene un documento' ) && ! str_contains( $h, 'value="poner_documento"' ), 'poner el documento: a quien ya lo tiene no se le pide' );
@@ -400,12 +427,18 @@ try {
 	$ok( '' === $destino && str_contains( $h, 'Confirma que es la misma persona' ) && str_contains( $h, 'name="confirmo"' ) && str_contains( $h, 'value="66666666q"' ) && '' === (string) $ficha( $id_de( 74 ) )['stic_identification_number_c'], 'si está en otro grupo: pide confirmarlo con una casilla y aún no lo guarda' );
 	list( $avisos, $destino ) = $memb( '990074', 'poner_documento', array( 'documento' => '66666666q', 'confirmo' => '1' ) );
 	$ok( str_contains( $destino, 'socio=990074' ) && '66666666Q' === $ficha( $id_de( 74 ) )['stic_identification_number_c'] && str_contains( $avisos, 'Documento guardado' ) && str_contains( $avisos, 'también está dado de alta en otro grupo' ), 'confirmado: se guarda normalizado y el aviso lo recuerda' );
+	$correos = array();
+	list( $avisos ) = $memb( '990074', 'membresia_baja', array( 'fecha' => $hoy, 'motivo' => 'decease' ) );
+	$ok( ! $para( 'lluis.pantalla@example.invalid' ) && 1 === count( $para( 'teso.pantalla@example.invalid' ) ) && str_contains( $avisos, 'a la familia no se le ha escrito' ), 'con el motivo «fallecimiento» se avisa a Tesorería, pero a la familia no se le escribe nada automático' );
+	$correos = array();
+	list( $avisos ) = $memb( '990071', 'membresia_baja', array( 'fecha' => $hoy, 'motivo' => 'other' ) );
+	$ok( 1 === count( $para( 'carme.pantalla@example.invalid' ) ) && 1 === preg_match( '/y 1 a la familia/', $avisos ), 'una menor sin cuenta familiar: el aviso va al email de su tutor/a en la ficha del CRM' );
 
 	echo "\n== Parte D · Aviso en Tesorería ==\n";
 	Modulos::guardar( (string) $grupo['numero'], array_keys( Modulos::LISTA ) );
-	Logger::log( 'crm_baja', 'socio', '990074', array( 'grupo' => 'otro', 'fin' => $hoy, 'motivo' => 'personal' ) );
+	Logger::log( 'crm_baja', 'socio', '990099', array( 'grupo' => 'otro', 'fin' => $hoy, 'motivo' => 'personal' ) );
 	$recientes = array_column( Altas::bajas_recientes(), 'socio' );
-	$ok( in_array( '990073', $recientes, true ) && ! in_array( '990074', $recientes, true ), 'las bajas recientes son solo las del grupo en el que se trabaja' );
+	$ok( in_array( '990073', $recientes, true ) && ! in_array( '990099', $recientes, true ), 'las bajas recientes son solo las del grupo en el que se trabaja' );
 	$como( $u_sec );
 	$h = $ver( new TesoreriaView() );
 	$ok( str_contains( $h, 'Bajas recientes' ) && str_contains( $h, 'Mia Pantalla Tres' ) && str_contains( $h, 'familia nº ' . $num_fam ) && str_contains( $h, 'familia=' . (int) $f_mia ), 'Tesorería → Control de pagos avisa de la baja, con su familia (enlazada)' );
@@ -419,6 +452,8 @@ try {
 	remove_filter( 'send_auth_cookies', '__return_false' );
 	remove_filter( 'wp_redirect', $redirigir, 1 );
 	remove_filter( 'wp_die_handler', $morir, PHP_INT_MAX );
+	remove_filter( 'pre_wp_mail', $capturar, 10 );
+	$wpdb->query( $wpdb->prepare( 'DELETE FROM %i WHERE id > %d', RegistroEmails::table(), $ema_antes ) );
 	$_GET  = array();
 	$_POST = array();
 	View::en_modal( false );
