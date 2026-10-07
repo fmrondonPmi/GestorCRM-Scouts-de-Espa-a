@@ -2100,3 +2100,14 @@ html.asde-cargando .asde-ap button {
 		flex-basis: 100%;
 	}
 }
+
+/* v0.21.0 · Personas → «¿Está ya en el CRM?» (doc 34, fase 1) */
+.asde-ap .asde-comprobar-crm__resultado {
+	margin-top: 1em;
+}
+.asde-ap .asde-comprobar-crm__fichas {
+	margin: .4em 0 .6em 1.2em;
+}
+.asde-ap .asde-comprobar-crm__fichas li {
+	overflow-wrap: anywhere;
+}

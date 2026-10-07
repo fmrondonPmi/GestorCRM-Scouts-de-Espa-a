@@ -33,6 +33,18 @@ final class Asde_Prueba_Crm implements EscritorCrm {
 	/** @var string[] Campos que el CRM «no acepta» al escribir. */
 	public array $rechazar = array();
 
+	/**
+	 * Fichas de OTROS grupos u organizaciones (doc 34): get_entry_list no las devuelve
+	 * (el CRM solo da las del grupo), pero get_entries_count las cuenta, como en el CRM
+	 * de ASDE, que cuenta en todo el CRM federal (doc 04, §7.6).
+	 *
+	 * @var array<int, array<string, string>>
+	 */
+	public array $otros_grupos = array();
+
+	/** Simula que get_entries_count deja de ser federal y solo cuenta lo del grupo (el canario del doc 34). */
+	public bool $recuento_por_grupo = false;
+
 	/** Responde también a get_module_fields con tipos básicos (por defecto no: las pruebas no lo necesitan). */
 	public bool $metadatos = false;
 
@@ -135,6 +147,14 @@ final class Asde_Prueba_Crm implements EscritorCrm {
 				);
 			case 'logout':
 				return array();
+			case 'get_entries_count':
+				$filas = 'Contacts' === ( $d['module_name'] ?? '' ) ? array_merge( $this->personas, $this->recuento_por_grupo ? array() : $this->otros_grupos ) : array();
+				$query = (string) ( $d['query'] ?? '' );
+				if ( '' !== trim( $query ) ) {
+					$ast   = Asde_Prueba_Consulta::analizar( $query );
+					$filas = array_filter( $filas, static fn( $r ) => Asde_Prueba_Consulta::cumple( $ast, $r ) );
+				}
+				return array( 'result_count' => (string) count( $filas ) );
 			case 'get_entry_list':
 				return $this->lista( (string) ( $d['module_name'] ?? '' ), (string) ( $d['query'] ?? '' ), (array) ( $d['select_fields'] ?? array() ), (array) ( $d['link_name_to_fields_array'] ?? array() ), (int) ( $d['offset'] ?? 0 ), (int) ( $d['max_results'] ?? 100 ) );
 			case 'set_entry':

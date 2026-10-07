@@ -41,7 +41,7 @@ defined( 'ABSPATH' ) || exit;
 final class Router {
 
 	/** Páginas que se pueden abrir en la ventana emergente. */
-	public const MODALES = array( 'ficha', 'alta', 'solicitudes', 'uniformes', 'inventario', 'inventario_tipos', 'inventario_compras', 'banco', 'tesoreria' );
+	public const MODALES = array( 'ficha', 'alta', 'solicitudes', 'uniformes', 'inventario', 'inventario_tipos', 'inventario_compras', 'banco', 'tesoreria', 'personas' );
 
 	/** La pide la ventana emergente del área (assets/js/area.js). */
 	public static function pide_modal(): bool {

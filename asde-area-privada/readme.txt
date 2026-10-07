@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.20.1
+Stable tag: 0.21.0
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -53,6 +53,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
 
+= 0.21.0 =
+* People: new "Is this person already in the CRM?" check (Secretary and Coordination), before registering someone. With an ID document (DNI, NIE or other) it says whether the person already has a record in the group (with or without an active membership) and whether they are already registered in another group or organisation of Scouts de España (a count only: nothing of that record is read). The document is validated (DNI/NIE letter) and never stored.
+
 = 0.20.1 =
 * Payment control: the bank income for "Register payment" is chosen in a pop-up window with a search box (tutor's or member's name, concept, amount or date) and one-click searches with the family's names; incomes that carry a tutor's or member's name are suggested for the family. Without JavaScript the window is a page and works the same.
 * The one-line forms of the bank and inventory types no longer stack their fields with the Enfold theme.
@@ -81,6 +84,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * First version with the mobile app (PWA).
 
 == Upgrade Notice ==
+
+= 0.21.0 =
+Adds the "already in the CRM?" check in People. Read-only: nothing is written to the CRM. No database changes.
 
 = 0.20.1 =
 Search the bank income in a window when registering a payment. No database changes.

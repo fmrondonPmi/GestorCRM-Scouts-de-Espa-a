@@ -3,6 +3,7 @@ namespace AsdeBalears\AreaPrivada\Frontend\Views;
 
 use AsdeBalears\AreaPrivada\Audit\Logger;
 use AsdeBalears\AreaPrivada\Crm\CrmException;
+use AsdeBalears\AreaPrivada\Crm\Duplicados;
 use AsdeBalears\AreaPrivada\Crm\Escritura;
 use AsdeBalears\AreaPrivada\Crm\Instantanea;
 use AsdeBalears\AreaPrivada\Crm\PersonaRepository;
@@ -27,6 +28,9 @@ final class PersonasView extends View {
 
 	private const CAP = 'asde_manage_users';
 
+	/** Resultado de «¿Está ya en el CRM?» de esta petición (POST sin redirección: el documento no se guarda). */
+	private static ?array $comprobacion = null;
+
 	public const FILTROS = array(
 		'activas'     => 'Con membresía activa',
 		'inactivas'   => 'Sin membresía activa',
@@ -41,6 +45,22 @@ final class PersonasView extends View {
 		$repo = PersonaRepository::make();
 		if ( ! $repo ) {
 			return $this->error_crm( 'personas', asde_t( 'La conexión de tu grupo con el CRM no está configurada o no se ha podido comprobar. Un administrador puede revisarla en wp-admin → Grupos Scouts.' ) );
+		}
+
+		// «¿Está ya en el CRM?» (doc 34, fase 1): en la ventana emergente o en su página.
+		if ( '' !== $this->get( 'comprobar' ) ) {
+			return $this->layout(
+				'personas',
+				$this->tpl(
+					'personas/comprobar',
+					array(
+						'resultado' => self::$comprobacion,
+						'url'       => $this->url( 'personas', array( 'comprobar' => '1' ) ),
+						'url_ficha' => $this->url( 'ficha' ),
+						'volver'    => $this->url( 'personas' ),
+					)
+				)
+			);
 		}
 
 		$filtro = isset( self::FILTROS[ $this->get( 'ver' ) ] ) ? $this->get( 'ver' ) : 'activas';
@@ -162,6 +182,13 @@ final class PersonasView extends View {
 			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-area-privada' ), 403 );
 		}
 		$accion = $this->post( 'asde_action' );
+		if ( 'comprobar_documento' === $accion ) {
+			check_admin_referer( 'asde_comprobar_documento' );
+			// Sin redirigir: esta misma petición pinta el resultado, así el documento no
+			// tiene que guardarse en ningún sitio para enseñarlo después.
+			self::$comprobacion = $this->comprobar( $this->post( 'documento' ) );
+			return;
+		}
 		$volver = wp_get_referer() ?: $this->url( 'personas' );
 		$repo   = PersonaRepository::make();
 		if ( ! $repo ) {
@@ -228,6 +255,40 @@ final class PersonasView extends View {
 			Notices::add( 'error', esc_html( asde_t( 'No se ha podido consultar el CRM: ' ) . $e->getMessage() ) );
 		}
 		$this->redirect( $volver );
+	}
+
+	/**
+	 * ¿Tiene ya ficha la persona con este documento? Con un límite por persona y hora:
+	 * el recuento federal no debe servir para recorrer documentos.
+	 *
+	 * @return array Duplicados::comprobar() + 'escrito'
+	 */
+	private function comprobar( string $documento ): array {
+		$error = static fn( string $texto ): array => array(
+			'ok'       => false,
+			'error'    => $texto,
+			'escrito'  => $documento,
+			'en_grupo' => array(),
+			'otros'    => null,
+		);
+		$clave = 'asde_ap_comprobaciones_' . get_current_user_id();
+		$hechas = (int) get_transient( $clave );
+		if ( $hechas >= Duplicados::MAX_POR_HORA ) {
+			return $error( asde_t( 'Has hecho muchas comprobaciones seguidas. Espera un rato y vuelve a intentarlo.' ) );
+		}
+		$dup = Duplicados::make();
+		if ( ! $dup ) {
+			return $error( asde_t( 'La conexión con el CRM no está disponible.' ) );
+		}
+		try {
+			$r = $dup->comprobar( $documento );
+		} catch ( CrmException $e ) {
+			return $error( asde_t( 'No se ha podido consultar el CRM: ' ) . $e->getMessage() );
+		}
+		if ( $r['ok'] ) {
+			set_transient( $clave, $hechas + 1, HOUR_IN_SECONDS );
+		}
+		return $r + array( 'escrito' => $documento );
 	}
 
 	/**

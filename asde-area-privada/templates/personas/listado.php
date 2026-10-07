@@ -51,7 +51,11 @@ $columnas = array(
 );
 ?>
 <section class="asde-card">
-	<h2><?php asde_e( 'Personas del grupo' ); ?></h2>
+	<header class="asde-card__header asde-card__header--split">
+		<h2><?php asde_e( 'Personas del grupo' ); ?></h2>
+		<?php /* Doc 34, fase 1: antes de un alta, ¿tiene ya ficha (aquí o en otro grupo)? */ ?>
+		<a class="button asde-button-secundario" href="<?php echo esc_url( add_query_arg( 'comprobar', '1', $url ) ); ?>" data-asde-modal><?php asde_e( '¿Está ya en el CRM?' ); ?></a>
+	</header>
 	<p><?php asde_e( 'Única página del área privada donde aparecen también las personas' ); ?> <strong><?php asde_e( 'sin membresía activa' ); ?></strong><?php asde_e( '. En el resto (alta, informes…) solo se ven los socios activos.' ); ?></p>
 	<?php if ( null !== $edad_datos ) : ?>
 		<p class="asde-help">

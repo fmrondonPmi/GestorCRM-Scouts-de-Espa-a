@@ -33,7 +33,7 @@ Leyendo el código público de SinergiaCRM y de SuiteCRM (la base de SinergiaCRM
 | **P-72** Nº de socio | **Lo devuelve el CRM** al crear la persona: el nº de Scouts de España es automático |
 | **P-75** Datos obligatorios | **Nombre, apellidos, fecha de nacimiento, DNI o nº de documento y género** (`stic_gender_c`) |
 | **P-69** Entorno de pruebas | **No hay CRM de pruebas**: se hace un **servidor de la API simulado** que conteste lo que se espera en cada acción |
-| **P-82** Documento de menores | El documento es obligatorio en el alta (P-75) salvo en **menores que todavía no lo tienen** (P-80): para ellos se puede dejar vacío |
+| **P-82** Documento obligatorio | **A partir de los 14 años** (ajuste del usuario, 2026-10-07): todo asociado de 14 años o más tiene que tener su documento. Por debajo de 14 se puede dar de alta sin él (y se comprueba cuando se le pone, P-80). En el código: `Duplicados::EDAD_DOCUMENTO` y `Duplicados::documento_obligatorio()` |
 | **P-83** Si no se puede comprobar | Si el recuento deja de ser federal (canario, §3), no se puede saber si está en otro grupo: **se avisa de que no se ha podido comprobar y se deja continuar**, porque estar en otro grupo tampoco bloquea |
 
 ### La prueba con un DNI real que ya existe
@@ -69,7 +69,7 @@ Estar en otro grupo **no impide** el alta (P-71, P-81): lo que no puede pasar es
 2. **¿Está en el grupo?** Con `get_entry_list`, en **todas** las fichas del grupo, con membresía activa o sin ella (no como `por_documento`, que hoy solo mira las activas): por las cifras del documento con `LIKE` y comparando en memoria el documento normalizado. Si está, **no se crea otra ficha**: si no tiene membresía activa, el alta es una **membresía nueva en su ficha** (P-79); si la tiene, no hay nada que dar de alta. Si hubiera varias fichas del grupo con ese documento, se avisa para que se unifiquen.
 3. **¿Está en otro grupo u organización?** Con `get_entries_count` en todo el CRM, por el documento (normalizado y con las cifras, por si en el CRM está escrito de otra forma). Si cuenta alguna ficha que el grupo no ve, sale la **advertencia** «Esta persona ya está dada de alta en otro grupo u organización de Scouts de España» y se puede **continuar** (P-71, P-84). Es una sola consulta y no se lee nada de la otra ficha.
    - **Canario:** antes de fiarse del recuento, el plugin compara cuántas fichas cuenta `get_entries_count` en total con cuántas ve el grupo. Si fueran las mismas, el recuento habría dejado de ser federal: la advertencia dice que **no se ha podido comprobar** si está en otros grupos y se deja continuar (P-83), y wp-admin avisa a quien administra la web.
-4. **Menores sin documento (P-80).** Se dan de alta sin él. Cuando más adelante se le pone un documento en su ficha, **antes de guardarlo** se hacen las comprobaciones 1 a 3: si ya existe en el grupo, se avisa y no se guarda (sería la misma persona dos veces); si existe en otro grupo, se avisa y se puede guardar.
+4. **Menores de 14 años sin documento (P-80, P-82).** Se dan de alta sin él. Cuando más adelante se le pone un documento en su ficha, **antes de guardarlo** se hacen las comprobaciones 1 a 3: si ya existe en el grupo, se avisa y no se guarda (sería la misma persona dos veces); si existe en otro grupo, se avisa y se puede guardar.
 5. **Sin carreras dentro de la web.** Un cerrojo por documento (fila en una tabla con clave única e `INSERT IGNORE`, como el de la instantánea y el del instalador) mientras dura el alta, para que dos clics o dos personas a la vez no creen dos fichas en el grupo. Justo antes del `set_entry` se repite la comprobación 2.
 6. **Reintentos sin duplicar.** El alta son varios pasos (persona → grupo de seguridad → membresía → leer el nº de socio). Cada paso hecho se apunta en una tabla de operaciones (ids del CRM y estado, **sin datos personales**). Si un paso falla, el reintento sigue desde ese paso y **no vuelve a crear la persona**.
 7. **Informe en wp-admin** (solo lectura): fichas del grupo con el mismo documento normalizado, por si ya hubiera duplicados de antes.
@@ -86,7 +86,17 @@ Cada fase se entrega como una versión, con sus pruebas (CRM simulado) y sus doc
 - ✅ **P-84**: el aviso de P-71 es genérico.
 - ✅ P-82 y P-83 confirmadas.
 
-### Fase 1 · Comprobación previa (solo lectura)
+### Fase 1 · Comprobación previa (solo lectura) ✅ v0.21.0 (2026-10-07)
+
+**Hecho:**
+
+- `Crm\Duplicados`: `validar()` normaliza el documento y comprueba la letra del DNI y del NIE (un DNI de siete cifras se completa con un cero; otros documentos, como el pasaporte, se aceptan tal cual con 5 a 20 caracteres); `documento_obligatorio()` (14 años); `formas()` (cómo puede estar escrito en el CRM: con guion, con espacio, sin el cero); `comprobar()`: en el grupo con `get_entry_list` (fichas con o sin membresía activa, por las cifras con `LIKE` y comparando el documento normalizado) y en otros grupos con un solo `get_entries_count` (sin subconsultas), sin contar dos veces las del grupo. El **canario** (lo que cuenta `get_entries_count` sin condición frente a lo que ve el grupo) se guarda 12 horas si está bien y 15 minutos si no; si no está bien, «no se ha podido comprobar» y queda en la auditoría (`crm_recuento_no_federal`).
+- **Personas → «¿Está ya en el CRM?»** (botón arriba; `personas/?comprobar=1`, en la ventana emergente o en su página; plantilla `personas/comprobar.php`), para quien tiene Personas (Secretaría, Coordinación). El formulario va por **POST** y se contesta **en la misma petición** (sin redirigir), así el documento **no se guarda en ningún sitio** ni va en la dirección. Resultados: ya tiene ficha en el grupo (enlazada, con su membresía activa o «sin membresía activa: solo necesita una membresía nueva»), varias fichas en el grupo (habría que unificarlas), el aviso genérico de que está en otro grupo u organización (P-84), «no se ha podido comprobar» o que no existe.
+- Como mucho **60 comprobaciones por persona y hora** (el recuento federal no debe servir para recorrer documentos); las de documentos mal escritos no cuentan. Auditoría `crm_documento_comprobado` con cuántas fichas hay en el grupo y en otros, **sin el documento**.
+- `area.js`: un formulario con `data-asde-solo-consulta` dentro de la ventana no marca la página como cambiada: al cerrar la ventana no se recarga.
+- CRM simulado: `get_entries_count` con fichas de «otros grupos» (`$otros_grupos`) que `get_entry_list` no devuelve, y `$recuento_por_grupo` para el canario. Prueba nueva `tests/altas-crm.php`. Revisada en el navegador (ventana, escritorio y 390 px) con fichas inventadas.
+
+**Lo que se planeó:**
 
 - **Qué:** `Crm\Duplicados` con las comprobaciones 1 a 3 del §3 (documento, grupo y recuento federal con canario). En Personas, **«¿Está ya en el CRM?»** (Secretaría y Coordinación): con un documento dice si está en el grupo (con o sin membresía activa) y si está dada de alta en otro grupo u organización.
 - **Por qué primero:** no escribe nada y es la pieza en la que se apoyan el alta (fase 3) y el documento de un menor (§3.4).
@@ -103,7 +113,7 @@ Cada fase se entrega como una versión, con sus pruebas (CRM simulado) y sus doc
 
 ### Fase 3 · Pantallas y avisos
 
-- **Personas → «Alta de socio/a»**, en pasos: documento (fase 1, con la advertencia si está en otro grupo) → datos obligatorios (P-75; el documento puede faltar en un menor) → sección y fecha → vista previa → confirmar → nº de socio. Al final, «Dar acceso» (doc 11).
+- **Personas → «Alta de socio/a»**, en pasos: documento (fase 1, con la advertencia si está en otro grupo) → datos obligatorios (P-75; el documento, desde los 14 años: P-82) → sección y fecha → vista previa → confirmar → nº de socio. Al final, «Dar acceso» (doc 11).
 - **Ficha → «Nueva membresía»** (si no tiene ninguna activa), **«Dar de baja»**, **«Cambiar de sección»** y **poner el documento** a quien no lo tiene.
 - Una baja avisa en Tesorería (la familia deja de pagar por esa persona) y en Usuarios (la cuenta pierde el acceso al no tener membresía activa).
 - Nada se guarda en WordPress en claro (regla 1): lo escrito va directo al CRM. Textos en ca/eu/gl, manual y capturas.

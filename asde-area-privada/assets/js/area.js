@@ -255,7 +255,11 @@
 		if ( e.submitter && e.submitter.name ) {
 			datos.append( e.submitter.name, e.submitter.value );
 		}
-		cambiado = true;
+		// Un formulario que solo consulta (data-asde-solo-consulta, p. ej. «¿Está ya en el
+		// CRM?») no cambia nada: al cerrar la ventana no hace falta recargar la página.
+		if ( ! form.hasAttribute( 'data-asde-solo-consulta' ) ) {
+			cambiado = true;
+		}
 		cuerpo.setAttribute( 'aria-busy', 'true' );
 		Array.prototype.forEach.call( form.querySelectorAll( 'button, input[type="submit"]' ), function ( b ) {
 			b.disabled = true;
