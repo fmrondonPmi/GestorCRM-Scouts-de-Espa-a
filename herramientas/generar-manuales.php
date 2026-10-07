@@ -19,7 +19,7 @@
 
 $raiz    = dirname( __DIR__ ) . '/manual';
 $fuentes = $raiz . '/fuentes';
-$version = '0.20';
+$version = '0.24';
 $fecha   = 'octubre de 2026';
 $errores = 0;
 
@@ -27,8 +27,8 @@ $manuales = array(
 	'administracion' => array(
 		'titulo'   => 'Manual de gestión del CRM y de la web',
 		'perfil'   => 'Administración de WordPress',
-		'entrada'  => 'Para quien instala y mantiene la web: la conexión de cada grupo con SinergiaCRM, la organización federada y el usuario de acceso, la instalación, los módulos de cada grupo, el tema, los colores, los idiomas y las etiquetas, y qué datos se leen del CRM y cuáles guarda la web.',
-		'apartados' => array( 'admin-perfil', 'admin-crm', 'admin-grupos', 'admin-modulos', 'admin-organizacion', 'admin-entorno', 'admin-app', 'admin-tema', 'admin-colores', 'admin-idiomas', 'admin-datos', 'admin-diagnostico', 'preguntas-admin' ),
+		'entrada'  => 'Para quien instala y mantiene la web: la conexión de cada grupo con SinergiaCRM, la organización federada y el usuario de acceso, la instalación, los módulos de cada grupo (y las altas en el CRM), los documentos repetidos, el tema, los colores, los idiomas y las etiquetas, y qué datos se leen del CRM y cuáles guarda la web.',
+		'apartados' => array( 'admin-perfil', 'admin-crm', 'admin-grupos', 'admin-modulos', 'admin-duplicados', 'admin-organizacion', 'admin-entorno', 'admin-app', 'admin-tema', 'admin-colores', 'admin-idiomas', 'admin-datos', 'admin-diagnostico', 'preguntas-admin' ),
 	),
 	'familias'      => array(
 		'titulo'   => 'Manual para familias',
@@ -51,8 +51,8 @@ $manuales = array(
 	'coordinacion'  => array(
 		'titulo'   => 'Manual del equipo de coordinación',
 		'perfil'   => 'Tesorería, Secretaría y Coordinación',
-		'entrada'  => 'Todo lo que lleva el equipo del grupo: personas y números de socio, dar acceso, solicitudes, usuarios y emails, fichas y cambios, informes, la Tesorería completa (cuotas, coste federativo, banco y domiciliaciones SEPA) y los uniformes, del pago a la entrega.',
-		'apartados' => array( 'coordinacion-perfil', 'entrar-socios', 'primera-vez', 'instalar-app', 'seguridad-obligatoria', 'coordinacion-inicio', 'ventana', 'personas', 'alta', 'solicitudes', 'usuarios', 'coordinacion-fichas', 'cambios', 'informes', 'tesoreria', 'uniformes-gestion', 'inventario', 'idioma', 'preguntas-coordinacion' ),
+		'entrada'  => 'Todo lo que lleva el equipo del grupo: personas y números de socio, altas, bajas y cambios de sección en el CRM, dar acceso, solicitudes, usuarios y emails, fichas y cambios, informes, la Tesorería completa (cuotas, coste federativo, banco y domiciliaciones SEPA) y los uniformes, del pago a la entrega.',
+		'apartados' => array( 'coordinacion-perfil', 'entrar-socios', 'primera-vez', 'instalar-app', 'seguridad-obligatoria', 'coordinacion-inicio', 'ventana', 'personas', 'altas-crm', 'alta', 'solicitudes', 'usuarios', 'coordinacion-fichas', 'cambios', 'informes', 'tesoreria', 'uniformes-gestion', 'inventario', 'idioma', 'preguntas-coordinacion' ),
 	),
 );
 

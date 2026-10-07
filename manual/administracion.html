@@ -12,10 +12,10 @@
 <body>
 <header class="portada">
 	<div class="portada__dentro">
-		<p class="antetitulo">Manual de uso · versión 0.20 · octubre de 2026 · <a class="portada__volver" href="index.html">Todos los manuales</a></p>
+		<p class="antetitulo">Manual de uso · versión 0.24 · octubre de 2026 · <a class="portada__volver" href="index.html">Todos los manuales</a></p>
 		<h1>Manual de gestión del CRM y de la web</h1>
 		<p class="portada__perfil">Administración de WordPress</p>
-		<p class="entrada">Para quien instala y mantiene la web: la conexión de cada grupo con SinergiaCRM, la organización federada y el usuario de acceso, la instalación, los módulos de cada grupo, el tema, los colores, los idiomas y las etiquetas, y qué datos se leen del CRM y cuáles guarda la web.</p>
+		<p class="entrada">Para quien instala y mantiene la web: la conexión de cada grupo con SinergiaCRM, la organización federada y el usuario de acceso, la instalación, los módulos de cada grupo (y las altas en el CRM), los documentos repetidos, el tema, los colores, los idiomas y las etiquetas, y qué datos se leen del CRM y cuáles guarda la web.</p>
 		<p class="demo"><strong>Todas las capturas son de un WordPress de demostración con un CRM simulado y datos inventados:</strong> el «Grupo Scout Ejemplo» (grupo 999), personas que no existen y emails <span class="mono">@example.invalid</span>. En tu grupo verás tus datos del CRM.</p>
 	</div>
 	<div class="secciones-franja" aria-hidden="true">
@@ -34,6 +34,8 @@
 <li class="sub"><a href="#usuario-api">El usuario de API de cada grupo</a></li>
 <li><a href="#grupos">Grupos y conexión con el CRM</a></li>
 <li><a href="#modulos">Módulos de cada grupo</a></li>
+<li class="sub"><a href="#altas-crm-activar">Altas en el CRM</a></li>
+<li><a href="#duplicados">Documentos repetidos en el CRM</a></li>
 <li><a href="#organizacion">Organización federada y usuario de acceso</a></li>
 <li><a href="#entorno">Instalación y entorno</a></li>
 <li><a href="#admin-app">La app móvil</a></li>
@@ -57,6 +59,7 @@
 <li><a href="#crm">Cómo trabaja la web con el CRM</a></li>
 <li><a href="#grupos">Grupos y conexión con el CRM</a></li>
 <li><a href="#modulos">Módulos de cada grupo</a></li>
+<li><a href="#duplicados">Documentos repetidos en el CRM</a></li>
 <li><a href="#organizacion">Organización federada y usuario de acceso</a></li>
 <li><a href="#entorno">Instalación y entorno</a></li>
 <li><a href="#admin-app">La app móvil</a></li>
@@ -137,7 +140,7 @@
 <section id="modulos">
 	<h2>Módulos de cada grupo</h2>
 	<p class="resumen">En <strong>wp-admin → Grupos Scouts → Módulos</strong> eliges qué partes del área privada usa cada grupo. Por defecto están todas activas.</p>
-	<figure class="captura"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/wp-admin/admin.php?page=asde-area-privada-modulos</span></div><div class="navegador__vista" data-ampliar><img src="capturas/80-modulos.png" width="1280" height="470" alt="Pantalla Módulos de wp-admin con una fila por grupo y una casilla por módulo" loading="lazy"></div></div><figcaption><span>Una fila por grupo y una casilla por módulo. Desmarca lo que el grupo no use y pulsa «Guardar los módulos».</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<figure class="captura"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/wp-admin/admin.php?page=asde-area-privada-modulos</span></div><div class="navegador__vista" data-ampliar><img src="capturas/80-modulos.png" width="1280" height="560" alt="Pantalla Módulos de wp-admin con una fila por grupo, una casilla por módulo y la columna Altas en el CRM" loading="lazy"></div></div><figcaption><span>Una fila por grupo y una casilla por módulo. Desmarca lo que el grupo no use y pulsa «Guardar los módulos». La última columna, «Altas en el CRM», va aparte (abajo).</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
 	<div class="tabla">
 		<table>
 			<thead><tr><th scope="col">Módulo</th><th scope="col">Qué desaparece si se desactiva</th></tr></thead>
@@ -157,6 +160,24 @@
 		<li>Lo desactivado deja de salir en el menú, en el inicio y en sus pantallas para <strong>todas las cuentas de ese grupo</strong>, también para un administrador mientras trabaja en él (wp-admin no cambia).</li>
 		<li><strong>No se borra nada:</strong> al activarlo de nuevo, todo está como estaba.</li>
 		<li>Banco y Domiciliaciones van dentro de Tesorería: si se desactiva Tesorería, tampoco se ven. «Mis pagos» se queda mientras el grupo use Tesorería o Uniformes.</li>
+	</ul>
+	<h3 id="altas-crm-activar">Altas en el CRM</h3>
+	<p>La columna <strong>«Altas en el CRM»</strong> está <strong>apagada</strong> en todos los grupos hasta que la marques. Con ella, Secretaría y Coordinación del grupo dan de alta a personas nuevas con su membresía, dan membresías nuevas a quien vuelve, bajas y cambios de sección, y ponen el documento a quien no lo tiene: <strong>todo se escribe en el CRM de Scouts de España</strong> (en el manual del equipo de coordinación, «Altas, bajas y cambios de sección en el CRM»).</p>
+	<ul>
+		<li>Necesita que el usuario del CRM del grupo pueda <strong>crear</strong> personas y membresías. Si no puede, las pantallas no salen aunque la casilla esté marcada.</li>
+		<li>Conviene empezar por un grupo piloto y, antes, mirar sus <a href="#duplicados">documentos repetidos</a>.</li>
+	</ul>
+</section>
+
+<section id="duplicados">
+	<h2>Documentos repetidos en el CRM</h2>
+	<p class="resumen">En <strong>wp-admin → Grupos Scouts → Documentos repetidos</strong> buscas, en las fichas de un grupo, las que tienen el mismo DNI, NIE u otro documento: suelen ser la misma persona dada de alta dos veces. Solo lee; no cambia nada.</p>
+	<figure class="captura"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/wp-admin/admin.php?page=asde-area-privada-duplicados</span></div><div class="navegador__vista" data-ampliar><img src="capturas/89-documentos-repetidos.png" width="1280" height="560" alt="Pantalla Documentos repetidos de wp-admin con el grupo elegido y una fila con el documento oculto en parte y las dos fichas de Laura" loading="lazy"></div></div><figcaption><span>Laura tiene dos fichas con el mismo documento (escrito de dos formas): una con membresía activa y otra sin ella.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<ul>
+		<li>Eliges el grupo y pulsas <strong>«Buscar documentos repetidos»</strong>: se leen en ese momento todas las fichas del grupo con documento (puede tardar unos segundos).</li>
+		<li>El documento se compara escrito de cualquier forma (con guion, con espacios, en minúsculas) y se enseña <strong>oculto en parte</strong>. De cada ficha: el nombre, el nº de Scouts de España y si tiene membresía activa.</li>
+		<li>Las fichas repetidas <strong>se unifican en el CRM</strong> (o se pide a ASDE). La web no lo hace.</li>
+		<li>Mira esta pantalla antes de activar las <a href="#altas-crm-activar">altas en el CRM</a> en un grupo: las altas desde la web ya no crean fichas repetidas, pero las de antes siguen ahí.</li>
 	</ul>
 </section>
 
@@ -325,7 +346,7 @@
 			</ul>
 		</section>
 
-		<p class="pie">Manual de gestión del CRM y de la web del plugin «ASDE Scouts de España – Gestor CRM para Grupos Scouts», versión 0.20 (octubre de 2026). Capturas hechas en un WordPress de demostración con un CRM simulado y datos inventados.</p>
+		<p class="pie">Manual de gestión del CRM y de la web del plugin «ASDE Scouts de España – Gestor CRM para Grupos Scouts», versión 0.24 (octubre de 2026). Capturas hechas en un WordPress de demostración con un CRM simulado y datos inventados.</p>
 	</main>
 </div>
 

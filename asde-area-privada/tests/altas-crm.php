@@ -18,6 +18,7 @@ require_once __DIR__ . '/lib/CrmSimulado.php';
 require_once ABSPATH . 'wp-admin/includes/user.php';
 
 use AsdeBalears\AreaPrivada\Audit\Logger;
+use AsdeBalears\AreaPrivada\Admin\DuplicadosPage;
 use AsdeBalears\AreaPrivada\Auth\Ambito;
 use AsdeBalears\AreaPrivada\Crm\Altas;
 use AsdeBalears\AreaPrivada\Crm\Duplicados;
@@ -105,6 +106,7 @@ $crear = static function ( string $login, string $rol ) use ( &$ids, $grupo ): i
 };
 $u_sec = $crear( 'prueba-altas-sec', Roles::SECRETARIA );
 $u_sco = $crear( 'prueba-altas-sco', Roles::SCOUTER );
+$u_adm = $crear( 'prueba-altas-adm', 'administrator' );
 $como  = static function ( int $uid ): void {
 	wp_set_current_user( $uid );
 	Ambito::olvidar( $uid );
@@ -217,6 +219,35 @@ try {
 	$ok( str_contains( $h, 'muchas comprobaciones seguidas' ) && $antes === $crm->llamadas, 'con muchas comprobaciones en una hora se para (y no se pregunta al CRM)' );
 	delete_transient( 'asde_ap_comprobaciones_' . $u_sec );
 
+	echo "\n== Parte D · Documentos repetidos en el grupo (wp-admin, doc 34 §3.7, v0.24) ==\n";
+	$crm->personas[] = $P( 54, 'Lia', 'Altas Duplicada', '2010-02-02', '', $doc( '12345678-z' ) ); // La misma que la 51, escrita de otra forma.
+	$crm->personas[] = $P( 55, 'Pau', 'Altas Sin Doc', '2015-01-01', 'Lobatos' );
+	$rep = Duplicados::make()->repetidos();
+	$ok( 1 === count( $rep ) && '12345678Z' === $rep[0]['documento'] && 2 === count( $rep[0]['fichas'] ) && in_array( '990054', array_column( $rep[0]['fichas'], 'socio' ), true ), 'encuentra las fichas del grupo con el mismo documento, aunque esté escrito de otra forma' );
+	$ok( ! in_array( '87654321X', array_column( $rep, 'documento' ), true ) && ! in_array( '11111111H', array_column( $rep, 'documento' ), true ), 'no salen los documentos de una sola ficha ni las fichas de otros grupos' );
+	$como( $u_adm );
+	$admin = static function ( string $nonce ) use ( $grupo ): string {
+		$_GET = array(
+			'page'     => DuplicadosPage::SLUG,
+			'grupo'    => (string) $grupo['numero'],
+			'_wpnonce' => $nonce,
+		);
+		ob_start();
+		try {
+			( new DuplicadosPage() )->render();
+		} finally {
+			$_GET = array();
+		}
+		return (string) ob_get_clean();
+	};
+	$h = $admin( wp_create_nonce( 'asde_ap_duplicados' ) );
+	$ok( str_contains( $h, '•••••678Z' ) && ! str_contains( $h, '12345678Z' ) && str_contains( $h, 'Lia Altas Duplicada' ) && str_contains( $h, 'Lia Altas Roig' ) && str_contains( $h, 'sin membresía activa' ), 'wp-admin → Documentos repetidos: el documento enmascarado y sus fichas, con o sin membresía activa' );
+	$antes = $crm->llamadas;
+	$h     = $admin( 'no-vale' );
+	$ok( ! str_contains( $h, 'Lia Altas Duplicada' ) && $antes === $crm->llamadas, 'sin un nonce válido no se consulta el CRM' );
+	$como( $u_sec );
+	$ok( ! current_user_can( 'manage_options' ), 'la pantalla es solo para administradores de la web' );
+
 	$ok( ! $crm->escrituras, 'nada escrito en el CRM (simulado)' );
 	$ok( 0 === $cortadas, 'ninguna petición ha salido hacia un CRM real' );
 } finally {
@@ -237,7 +268,7 @@ try {
 	wp_set_current_user( 0 );
 
 	$lista = implode( ',', array_map( 'intval', $ids ) ) ?: '0';
-	$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . Logger::table() . " WHERE id > %d AND ( user_id IN ($lista) OR accion IN ('crm_documento_comprobado', 'crm_recuento_no_federal') )", $log_antes ) ); // phpcs:ignore WordPress.DB
+	$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . Logger::table() . " WHERE id > %d AND ( user_id IN ($lista) OR accion IN ('crm_documento_comprobado', 'crm_recuento_no_federal', 'crm_documentos_repetidos') )", $log_antes ) ); // phpcs:ignore WordPress.DB
 	foreach ( $ids as $uid ) {
 		Ambito::olvidar( (int) $uid );
 		wp_delete_user( (int) $uid );

@@ -42,6 +42,7 @@ final class Plugin {
 			( new IdiomasPage() )->register();
 			( new EntornoPage() )->register();
 			( new \AsdeBalears\AreaPrivada\Admin\ModulosPage() )->register();
+			( new \AsdeBalears\AreaPrivada\Admin\DuplicadosPage() )->register(); // v0.24: documentos repetidos en el CRM (doc 34, §3.7).
 		}
 	}
 }

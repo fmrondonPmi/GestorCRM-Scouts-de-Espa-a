@@ -325,3 +325,8 @@ Con un script de solo lectura lanzado por el usuario (`herramientas-desarrollo/c
 | El usuario de API solo ve **su** grupo de seguridad al listar `SecurityGroups` (aunque el recuento dé 352) | No hay forma de traducir un nº de grupo a su nombre u OF desde el plugin |
 | Obligatorios en `Contacts`: `first_name`, `last_name`, `birthdate`, `stic_gender_c` (el documento no). En `stic_Contacts_Relationships`: `start_date`, `relationship_type`, la persona y `estado_c` | Formulario del alta (P-75, P-82) |
 | `stic_gender_c`: `masculino`, `femenino`, `nobinario` (y vacío) | Opciones del alta |
+
+### 7.8 Prueba completa con el servidor de la API simulado (2026-10-07, doc 34, fase 4)
+
+Sin CRM de pruebas (P-69), el recorrido entero se probó en el navegador en un **WordPress aparte y temporal** cuyo CRM era el servidor simulado (`tests/servidor-crm`): alta de una persona nueva (nº de socio devuelto), alta de alguien de otro grupo (aviso y confirmación), quien vuelve (membresía nueva en su ficha), cambio de sección, baja (con los avisos por email) y documento puesto a un menor. Todo bien (detalle en el doc 34, fase 4). Lo que **solo** se puede confirmar en la instancia real queda para la primera alta real (fase 5): que la ficha nueva entre sola en el grupo de seguridad (P-73), que «Secciones actuales» se recalcule (P-74), qué hace el CRM con la fecha de baja (P-85) y si la membresía lleva todos los campos que espera ASDE (P-86). Para revisarlo sin escribir nada: `herramientas-desarrollo/crm-revisar-alta.php` (solo lectura, lo lanza el usuario).
+

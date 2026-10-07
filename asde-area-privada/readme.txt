@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.23.1
+Stable tag: 0.24.0
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -53,6 +53,10 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
 
+= 0.24.0 =
+* wp-admin → Scout Groups → "Repeated documents": for a group, the CRM records that share the same ID document (written in any form), to merge them in the CRM. Read-only; the document is shown masked.
+* CRM registrations tested end to end in a browser against the simulated SinergiaCRM API (development only).
+
 = 0.23.1 =
 * Register a member: under 18, guardian 1 (name, surnames and email) is required.
 * A leaving done from the web is emailed to Treasury and to the family (or to the person if adult); with the reason "Decease" nothing is sent to the family. The emails appear in Users → Emails.
@@ -98,6 +102,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * First version with the mobile app (PWA).
 
 == Upgrade Notice ==
+
+= 0.24.0 =
+New read-only report of repeated ID documents in wp-admin. No database changes.
 
 = 0.23.1 =
 Guardian required for minors, leaving emails to Treasury and the family, document check only inside the registration. No database changes.

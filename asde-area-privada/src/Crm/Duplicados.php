@@ -169,6 +169,47 @@ final class Duplicados {
 	}
 
 	/**
+	 * Fichas del grupo que comparten el mismo documento (doc 34, §3.7; informe de wp-admin):
+	 * duplicados que ya hubiera de antes, para unificarlos en el CRM. Solo lectura; lee las
+	 * fichas del grupo con documento y compara el documento normalizado en memoria.
+	 *
+	 * @return list<array{documento:string, fichas:list<array{nombre:string, socio:string, activa:bool}>}>
+	 * @throws CrmException
+	 */
+	public function repetidos(): array {
+		$campo    = 'contacts_cstm.stic_identification_number_c';
+		$entradas = PersonaRepository::filtrar_grupo(
+			$this->crm->list_all( 'Contacts', "$campo IS NOT NULL AND $campo <> ''", array_merge( PersonaRepository::CAMPOS, array( 'stic_identification_number_c' ) ), PersonaRepository::links_grupo() )
+		);
+		$por_doc  = array();
+		foreach ( $entradas as $e ) {
+			$crudo = (string) ( $e['fields']['stic_identification_number_c'] ?? '' );
+			$v     = self::validar( $crudo );
+			$doc   = $v['ok'] ? $v['documento'] : PersonaRepository::normalizar_documento( $crudo );
+			if ( '' === $doc ) {
+				continue;
+			}
+			$p                = Persona::from_crm( $e );
+			$por_doc[ $doc ][] = array(
+				'nombre' => $p->nombre_completo(),
+				'socio'  => $p->num_socio_asde,
+				'activa' => $p->tiene_membresia_activa(),
+			);
+		}
+		$out = array();
+		foreach ( $por_doc as $doc => $fichas ) {
+			if ( count( $fichas ) > 1 ) {
+				$out[] = array(
+					'documento' => (string) $doc,
+					'fichas'    => $fichas,
+				);
+			}
+		}
+		Logger::log( 'crm_documentos_repetidos', 'grupo', Grupo::numero(), array( 'fichas' => count( $entradas ), 'repetidos' => count( $out ) ) );
+		return $out;
+	}
+
+	/**
 	 * Canario: ¿sigue contando get_entries_count en todo el CRM? Se compara lo que
 	 * cuenta sin condición con lo que ve el grupo. Se guarda un rato para no repetirlo
 	 * en cada comprobación (más tiempo si está bien que si está mal).

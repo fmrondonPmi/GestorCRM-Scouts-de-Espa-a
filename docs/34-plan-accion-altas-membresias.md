@@ -153,15 +153,52 @@ Cada fase se entrega como una versión, con sus pruebas (CRM simulado) y sus doc
 - **Ficha → «Nueva membresía»** (si no tiene ninguna activa), **«Dar de baja»**, **«Cambiar de sección»** y **poner el documento** a quien no lo tiene.
 - Una baja avisa en Tesorería (la familia deja de pagar por esa persona) y en Usuarios (la cuenta pierde el acceso al no tener membresía activa).
 - Nada se guarda en WordPress en claro (regla 1): lo escrito va directo al CRM. Textos en ca/eu/gl, manual y capturas.
-- Pendiente para antes de la fase 5: el **informe en wp-admin del §3.7** (fichas del grupo con el mismo documento normalizado), que no se ha hecho en esta fase.
+- ✅ El **informe en wp-admin del §3.7** se hizo en la v0.24.0: wp-admin → Grupos Scouts → **Documentos repetidos** (`Admin\DuplicadosPage`, `Duplicados::repetidos()`): eliges el grupo y, al pulsar el botón (con nonce), lee las fichas del grupo con documento y lista las que comparten el mismo documento normalizado (escrito de cualquier forma), con el documento **enmascarado** (`•••••678Z`), el nombre, el nº de Scouts de España y si tiene membresía activa. Solo lectura; no guarda nada; queda en la auditoría cuántas fichas y cuántos repetidos (`crm_documentos_repetidos`). Prueba en `tests/altas-crm.php` (parte D).
 
-### Fase 4 · Prueba completa con el servidor simulado
+### Fase 4 · Prueba completa con el servidor simulado ✅ (2026-10-07, con la v0.23.1)
+
+**Hecho.** No en el Local que se usa (regla del doc 10 desde el 2026-09-28: las pruebas en el navegador con datos inventados van en un **WordPress aparte**), sino en uno **temporal**: copia de WordPress y Enfold del Local, base de datos propia (`asde_fase4`) en el MySQL de Local, el plugin del repo, el grupo 999 con la URL del CRM apuntando al **servidor de la API simulado** (`tests/servidor-crm`, 127.0.0.1:8790) y un mu-plugin que corta cualquier petición que no vaya a ese servidor y guarda los emails en un fichero en vez de enviarlos. Se monta y desmonta con `herramientas-desarrollo/wp-aparte/montar.sh` y `desmontar.sh` (fuera del repo); al acabar se borraron la base de datos y la carpeta. Con la cuenta de Secretaría de prueba (ficha inventada de Clara), por «Acceso socios» y en el navegador:
+
+| Recorrido | Resultado |
+|---|---|
+| La conexión del grupo con el CRM | «Conexión correcta» (el servidor simulado contesta el login, el ping y el grupo de seguridad del grupo 999) |
+| 1. Alta de una persona nueva (16 años, con tutora), en la ventana emergente | Documento comprobado y normalizado → datos → revisar → **nº de socio 995001** devuelto por el CRM; su ficha sale con la sección (Escultas, recalculada por el CRM) y la tarjeta «Membresía en el CRM» |
+| 2. Alta de alguien que está en otro grupo (adulto) | Aviso genérico en los datos y en revisar; **sin marcar la casilla no se crea nada**; marcándola, nº 995002 |
+| 3. Alta de alguien que vuelve | El alta se para, enseña su ficha «sin membresía activa» y «Darle una membresía nueva»; en su ficha, membresía nueva (Scouters) con su mismo nº |
+| 4. Cambio de sección | Enseña la actual (Escultas desde el 01/09/2023); pasa a Rovers y la anterior queda cerrada con «cambio de sección» |
+| 5. Baja (menor con cuenta familiar) | El formulario dice qué cambia (cuenta familiar, avisos por email); tras confirmar, «Avisos por email: 1 a Tesorería y 1 a la familia» y la ficha queda «Sin membresía activa». Los dos emails, bien: a Tesorería con el motivo, a la familia sin él y con el email de contacto del grupo |
+| 6. Documento a un menor | Con el documento de otra ficha del grupo, no se guarda («sería la misma persona dos veces»); con uno nuevo, se guarda |
+| Lo escrito en el CRM simulado | 7 fichas (2 altas) y 9 membresías (2 altas, quien vuelve y el cambio de sección); ningún error de PHP |
+
+**Lo que se ha visto** (anotado en el doc 04, §7.8):
+
+- En el modo de usuario `local` (el de siempre), una persona recién dada de alta **todavía no tiene nº territorial**: se le asigna en Personas como a cualquier otra («Siguiente nº de socio/a libre»). Con el modo `asde`, el usuario es directamente el nº de Scouts de España (doc 27).
+- Los socios no entran por `wp-login.php` (lo impide el plugin a propósito): por «Acceso socios».
+- Trampa del entorno (doc 10): el servidor integrado de PHP con **opcache** activado dio un error fatal dentro de WordPress (`Requests\Cookie\Jar cannot implement CurlHandle`); sin opcache, todo bien. `montar.sh` ya lo apaga.
+
+**Lo que se planeó:**
 
 En lugar de un CRM de pruebas (P-69), con el servidor de la fase 2 y un grupo de pruebas del Local, en el navegador: crear una persona (nº de socio devuelto), darle membresía, baja, cambio de sección, alta de alguien que está en otro grupo (advertencia), alta de alguien que vuelve (membresía nueva en su ficha) y documento puesto a un menor. Se anota lo que se ve en el doc 04, §7.
 
 Lo que el simulado no puede confirmar (P-73 y P-74 en la instancia real) se mira en la **primera alta real** del grupo piloto (fase 5), leyendo la ficha creada.
 
 ### Fase 5 · Puesta en marcha
+
+**Preparado (2026-10-07); lo hace el usuario en producción:**
+
+1. Subir el plugin (zip 0.24.0) y, en wp-admin → Grupos Scouts → **Módulos**, marcar «Altas en el CRM» **solo en el grupo piloto**.
+2. Antes de la primera alta, wp-admin → Grupos Scouts → **Documentos repetidos** del grupo piloto: si salen fichas repetidas, unificarlas en el CRM (o pedírselo a ASDE).
+3. **Primera alta real** desde Personas → «Alta de socio/a» (mejor una persona que de verdad se vaya a dar de alta). Anotar el nº de socio que devuelve.
+4. Con ese nº, lanzar el script de **solo lectura** `herramientas-desarrollo/crm-revisar-alta.php` (no imprime nombres, documentos ni ids; lo lanza el usuario porque desde la sesión de Claude no se puede leer el CRM real). Comprueba P-72 (nº puesto), **P-73** (el grupo ve la ficha), **P-74** («Secciones actuales» = membresías activas), **P-85** (si después se da una baja: `active` y «Secciones actuales») y **P-86** (campos que tienen las membresías de ASDE y no la nueva). Desde PowerShell:
+
+   ```powershell
+   $env:ASDE_SOCIO = 'nº de socio'; & 'C:\Program Files\Git\bin\bash.exe' 'C:/Claude/Scouts De Balears  - Area Privada/herramientas-desarrollo/wp-local.sh' eval-file 'C:/Claude/Scouts De Balears  - Area Privada/herramientas-desarrollo/crm-revisar-alta.php'; Remove-Item Env:ASDE_SOCIO
+   ```
+
+   (El Local tiene que tener la conexión del grupo piloto con el CRM real, como para `crm-dni-existe.php`; `ASDE_GRUPO` si no es el 684.) Se probó contra el servidor simulado con un arnés (alta, baja y membresía nueva): lee bien las fichas y las membresías y, sin metadatos de campos, avisa en vez de cortarse.
+5. Con el resultado se cierran P-73, P-74, P-85 y P-86 (doc 09) y, si va bien, se activan más grupos.
+
+**Lo que se planeó:**
 
 - Se activa para un grupo piloto. La primera alta real se revisa entera: que el grupo vea la ficha, que «Secciones actuales» y el nº de socio estén bien.
 - Se revisan la auditoría y el informe del §3.7 durante las primeras altas y, si va bien, se abre al resto de grupos.
