@@ -2,6 +2,7 @@
 namespace AsdeBalears\AreaPrivada\Frontend\Views;
 
 use AsdeBalears\AreaPrivada\Audit\Logger;
+use AsdeBalears\AreaPrivada\Crm\Altas;
 use AsdeBalears\AreaPrivada\Crm\CrmException;
 use AsdeBalears\AreaPrivada\Crm\Duplicados;
 use AsdeBalears\AreaPrivada\Crm\Escritura;
@@ -10,6 +11,7 @@ use AsdeBalears\AreaPrivada\Crm\PersonaRepository;
 use AsdeBalears\AreaPrivada\Domain\Grupo;
 use AsdeBalears\AreaPrivada\Domain\Persona;
 use AsdeBalears\AreaPrivada\Domain\Secciones;
+use AsdeBalears\AreaPrivada\Frontend\AltaSocio;
 use AsdeBalears\AreaPrivada\Frontend\Notices;
 use AsdeBalears\AreaPrivada\Frontend\Tabla;
 use AsdeBalears\AreaPrivada\Socios\Numeracion;
@@ -31,6 +33,9 @@ final class PersonasView extends View {
 	/** Resultado de «¿Está ya en el CRM?» de esta petición (POST sin redirección: el documento no se guarda). */
 	private static ?array $comprobacion = null;
 
+	/** Paso del «Alta de socio/a» de esta petición (POST sin redirección: lo escrito no se guarda). */
+	private static ?array $alta = null;
+
 	public const FILTROS = array(
 		'activas'     => 'Con membresía activa',
 		'inactivas'   => 'Sin membresía activa',
@@ -45,6 +50,11 @@ final class PersonasView extends View {
 		$repo = PersonaRepository::make();
 		if ( ! $repo ) {
 			return $this->error_crm( 'personas', asde_t( 'La conexión de tu grupo con el CRM no está configurada o no se ha podido comprobar. Un administrador puede revisarla en wp-admin → Grupos Scouts.' ) );
+		}
+
+		// «Alta de socio/a» (doc 34, fase 3): en la ventana emergente o en su página.
+		if ( '' !== $this->get( 'alta' ) ) {
+			return $this->layout( 'personas', $this->pantalla_alta() );
 		}
 
 		// «¿Está ya en el CRM?» (doc 34, fase 1): en la ventana emergente o en su página.
@@ -160,6 +170,7 @@ final class PersonasView extends View {
 					'usuarios'   => $usuarios,
 					'familiares' => $familiares,
 					'escritura'  => Escritura::disponible(),
+					'altas'      => Altas::disponible(),
 					'en_marcha'  => $tarea && TareaNumeracion::EN_CURSO === $tarea['estado'],
 					'fallidas'   => $fallidas,
 					'url'        => $this->url( 'personas' ),
@@ -187,6 +198,14 @@ final class PersonasView extends View {
 			// Sin redirigir: esta misma petición pinta el resultado, así el documento no
 			// tiene que guardarse en ningún sitio para enseñarlo después.
 			self::$comprobacion = $this->comprobar( $this->post( 'documento' ) );
+			return;
+		}
+		if ( in_array( $accion, AltaSocio::ACCIONES, true ) ) {
+			check_admin_referer( 'asde_alta_socio' );
+			// Igual: cada paso se pinta en esta misma petición y lo escrito va en el formulario.
+			if ( Altas::disponible() ) {
+				self::$alta = AltaSocio::atender( $accion, $this->campos_alta(), fn( string $d ) => $this->comprobar( $d ), Altas::make() );
+			}
 			return;
 		}
 		$volver = wp_get_referer() ?: $this->url( 'personas' );
@@ -255,6 +274,31 @@ final class PersonasView extends View {
 			Notices::add( 'error', esc_html( asde_t( 'No se ha podido consultar el CRM: ' ) . $e->getMessage() ) );
 		}
 		$this->redirect( $volver );
+	}
+
+	/** «Alta de socio/a»: el paso que toca (o por qué no se puede). */
+	private function pantalla_alta(): string {
+		$disponible = Altas::disponible();
+		return $this->tpl(
+			'personas/alta',
+			array(
+				's'          => $disponible ? ( self::$alta ?? AltaSocio::inicio() ) : null,
+				'motivo'     => Altas::activo() ? asde_t( 'El usuario del CRM de tu grupo no tiene permiso para crear personas y membresías. Un administrador puede revisarlo en wp-admin → Grupos Scouts.' ) : asde_t( 'Las altas en el CRM no están activadas para tu grupo.' ),
+				'url'        => $this->url( 'personas', array( 'alta' => '1' ) ),
+				'url_ficha'  => $this->url( 'ficha' ),
+				'url_acceso' => $this->url( 'alta' ),
+				'volver'     => $this->url( 'personas' ),
+			)
+		);
+	}
+
+	/** Campos que envían los pasos del alta. */
+	private function campos_alta(): array {
+		$out = array( 'd' => $this->post_array( 'd' ) );
+		foreach ( array( 'documento', 'sin_documento', 'sin_doc', 'seccion', 'inicio', 'comprobado', 'otros', 'confirmo', 'corregir' ) as $c ) {
+			$out[ $c ] = $this->post( $c );
+		}
+		return $out;
 	}
 
 	/**

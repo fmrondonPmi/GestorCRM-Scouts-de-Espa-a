@@ -70,6 +70,39 @@ final class Altas {
 		update_option( self::OPCION, $grupos, false );
 	}
 
+	/** ¿Se enseñan las pantallas de altas? Activadas en el grupo y con permiso del usuario del CRM para crear. */
+	public static function disponible(): bool {
+		return self::activo() && Escritura::puede_crear();
+	}
+
+	/**
+	 * Bajas dadas desde la web en los últimos días, en el grupo actual (para avisar en
+	 * Tesorería: la familia deja de pagar por esa persona). Sale de la auditoría, que
+	 * solo guarda el nº de socio, la fecha y el motivo.
+	 *
+	 * @return list<array{socio:string, fin:string, motivo:string}> La más reciente primero.
+	 */
+	public static function bajas_recientes( int $dias = 30 ): array {
+		global $wpdb;
+		$filas = (array) $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery -- tabla propia de auditoría, cambia en cada petición
+			$wpdb->prepare( 'SELECT objeto_id, detalles FROM %i WHERE accion = %s AND creado >= %s ORDER BY id DESC LIMIT 200', Logger::table(), 'crm_baja', gmdate( 'Y-m-d H:i:s', time() - $dias * DAY_IN_SECONDS ) ),
+			ARRAY_A
+		);
+		$out = array();
+		foreach ( $filas as $f ) {
+			$d = json_decode( (string) $f['detalles'], true );
+			if ( ! is_array( $d ) || (string) ( $d['grupo'] ?? '' ) !== Grupo::numero() || isset( $out[ $f['objeto_id'] ] ) ) {
+				continue;
+			}
+			$out[ (string) $f['objeto_id'] ] = array(
+				'socio'  => (string) $f['objeto_id'],
+				'fin'    => (string) ( $d['fin'] ?? '' ),
+				'motivo' => (string) ( $d['motivo'] ?? '' ),
+			);
+		}
+		return array_values( $out );
+	}
+
 	// ---------------------------------------------------------------------
 	// Persona nueva
 	// ---------------------------------------------------------------------
@@ -94,6 +127,9 @@ final class Altas {
 		$inicio = self::fecha( $inicio );
 		if ( ! self::seccion_valida( $seccion ) || '' === $inicio ) {
 			return new \WP_Error( 'asde_alta', asde_t( 'Elige la sección y la fecha de alta.' ) );
+		}
+		if ( self::futura( $inicio ) ) {
+			return new \WP_Error( 'asde_alta', asde_t( 'La fecha de alta no puede ser posterior a hoy.' ) );
 		}
 		$doc   = (string) ( $datos['stic_identification_number_c'] ?? '' );
 		$clave = '' !== $doc ? 'doc:' . $doc : 'nombre:' . strtoupper( (string) preg_replace( '/[^0-9A-Za-z]/', '', remove_accents( $datos['first_name'] . $datos['last_name'] ) ) ) . ':' . $datos['birthdate'];
@@ -154,6 +190,7 @@ final class Altas {
 			'persona',
 			$d['persona_id'],
 			array(
+				'grupo'     => Grupo::numero(),
 				'membresia' => $d['membresia_id'],
 				'seccion'   => $seccion,
 				'otros'     => $otros,
@@ -188,6 +225,9 @@ final class Altas {
 		if ( ! self::seccion_valida( $seccion ) || '' === $inicio ) {
 			return new \WP_Error( 'asde_alta', asde_t( 'Elige la sección y la fecha de alta.' ) );
 		}
+		if ( self::futura( $inicio ) ) {
+			return new \WP_Error( 'asde_alta', asde_t( 'La fecha de alta no puede ser posterior a hoy.' ) );
+		}
 		try {
 			$ficha = $this->ficha( $p->id );
 			if ( ! $ficha ) {
@@ -214,7 +254,7 @@ final class Altas {
 		}
 		Instantanea::olvidar( Grupo::numero() );
 		Operaciones::terminar( $op['id'], $d );
-		Logger::log( 'crm_membresia_nueva', 'socio', $p->num_socio_asde, array( 'membresia' => $d['membresia_id'], 'seccion' => $seccion ) );
+		Logger::log( 'crm_membresia_nueva', 'socio', $p->num_socio_asde, array( 'grupo' => Grupo::numero(), 'membresia' => $d['membresia_id'], 'seccion' => $seccion ) );
 		return array( 'membresia_id' => $d['membresia_id'] );
 	}
 
@@ -232,6 +272,9 @@ final class Altas {
 		if ( ! isset( self::MOTIVOS_BAJA[ $motivo ] ) || '' === $fin ) {
 			return new \WP_Error( 'asde_baja', asde_t( 'Elige la fecha y el motivo de la baja.' ) );
 		}
+		if ( self::futura( $fin ) ) {
+			return new \WP_Error( 'asde_baja', asde_t( 'La fecha de baja no puede ser posterior a hoy.' ) );
+		}
 		try {
 			$activas = $this->activas( $p->id );
 		} catch ( CrmException | \InvalidArgumentException $e ) {
@@ -239,6 +282,11 @@ final class Altas {
 		}
 		if ( ! $activas ) {
 			return new \WP_Error( 'asde_baja', asde_t( 'No tiene ninguna membresía activa.' ) );
+		}
+		$alta = max( array_map( static fn( $m ) => (string) $m['start_date'], $activas ) );
+		if ( $fin < $alta ) {
+			/* translators: %s: fecha de alta */
+			return new \WP_Error( 'asde_baja', sprintf( asde_t( 'La fecha de baja no puede ser anterior a la de alta (%s).' ), self::dma( $alta ) ) );
 		}
 		$op = Operaciones::tomar( 'baja', 'p:' . $p->id );
 		if ( is_wp_error( $op ) ) {
@@ -255,7 +303,17 @@ final class Altas {
 		}
 		Instantanea::olvidar( Grupo::numero() );
 		Operaciones::terminar( $op['id'], $d );
-		Logger::log( 'crm_baja', 'socio', $p->num_socio_asde, array( 'membresias' => $d['cerradas'], 'motivo' => $motivo ) );
+		Logger::log(
+			'crm_baja',
+			'socio',
+			$p->num_socio_asde,
+			array(
+				'grupo'      => Grupo::numero(),
+				'membresias' => $d['cerradas'],
+				'fin'        => $fin,
+				'motivo'     => $motivo,
+			)
+		);
 		return array( 'membresias' => $d['cerradas'] );
 	}
 
@@ -274,6 +332,9 @@ final class Altas {
 		if ( ! self::seccion_valida( $seccion ) || '' === $fecha ) {
 			return new \WP_Error( 'asde_cambio', asde_t( 'Elige la sección nueva y la fecha.' ) );
 		}
+		if ( self::futura( $fecha ) ) {
+			return new \WP_Error( 'asde_cambio', asde_t( 'La fecha del cambio no puede ser posterior a hoy.' ) );
+		}
 		$op = Operaciones::tomar( 'cambio_seccion', 'p:' . $p->id );
 		if ( is_wp_error( $op ) ) {
 			return $op;
@@ -285,6 +346,11 @@ final class Altas {
 				if ( 1 !== count( $activas ) || 0 === strcasecmp( (string) $activas[0]['relationship_type'], Secciones::all()[ $seccion ]['crm'] ) ) {
 					Operaciones::descartar( $op['id'] );
 					return new \WP_Error( 'asde_cambio', 1 !== count( $activas ) ? asde_t( 'Para cambiar de sección tiene que tener una membresía activa (y solo una).' ) : asde_t( 'Ya está en esa sección.' ) );
+				}
+				if ( $fecha < (string) $activas[0]['start_date'] ) {
+					Operaciones::descartar( $op['id'] );
+					/* translators: %s: fecha de alta */
+					return new \WP_Error( 'asde_cambio', sprintf( asde_t( 'La fecha del cambio no puede ser anterior a la de alta en la sección actual (%s).' ), self::dma( (string) $activas[0]['start_date'] ) ) );
 				}
 				$r = Escritura::actualizar_membresia( $p, $activas[0]['id'], self::cierre( $fecha, 'cambioseccion' ), 'cambio de sección' );
 				if ( is_wp_error( $r ) ) {
@@ -302,7 +368,7 @@ final class Altas {
 		}
 		Instantanea::olvidar( Grupo::numero() );
 		Operaciones::terminar( $op['id'], $d );
-		Logger::log( 'crm_cambio_seccion', 'socio', $p->num_socio_asde, array( 'cerrada' => $d['cerrada'], 'membresia' => $d['membresia_id'], 'seccion' => $seccion ) );
+		Logger::log( 'crm_cambio_seccion', 'socio', $p->num_socio_asde, array( 'grupo' => Grupo::numero(), 'cerrada' => $d['cerrada'], 'membresia' => $d['membresia_id'], 'seccion' => $seccion ) );
 		return array(
 			'cerrada'      => $d['cerrada'],
 			'membresia_id' => $d['membresia_id'],
@@ -378,6 +444,17 @@ final class Altas {
 			static fn( $e ) => array( 'id' => $e['id'] ) + array_map( 'strval', $e['fields'] ),
 			$this->crm->related( Escritura::MODULO, $persona_id, Escritura::ENLACE_MEMBRESIAS, '', self::CAMPOS_MEMBRESIA )
 		);
+	}
+
+	/**
+	 * ¿Tiene ya documento la ficha? (para «Poner el documento»; la ficha de la web no lo enseña)
+	 *
+	 * @return bool|null null si el grupo no ve esa ficha.
+	 * @throws CrmException
+	 */
+	public function tiene_documento( string $persona_id ): ?bool {
+		$ficha = $this->ficha( $persona_id );
+		return null === $ficha ? null : '' !== trim( (string) ( $ficha['stic_identification_number_c'] ?? '' ) );
 	}
 
 	/** @return list<array<string, string>> Las membresías activas (estado «activo» y sin fecha de baja pasada). */
@@ -467,6 +544,16 @@ final class Altas {
 
 	private static function seccion_valida( string $seccion ): bool {
 		return Secciones::exists( $seccion );
+	}
+
+	/** Las altas, bajas y cambios no se programan: como mucho, con fecha de hoy (P-87). */
+	private static function futura( string $fecha ): bool {
+		return $fecha > wp_date( 'Y-m-d' );
+	}
+
+	private static function dma( string $fecha ): string {
+		$f = \DateTime::createFromFormat( '!Y-m-d', $fecha );
+		return $f ? $f->format( 'd/m/Y' ) : $fecha;
 	}
 
 	/** Campos que cierran una membresía. */

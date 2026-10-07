@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.22.0
+Stable tag: 0.23.0
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -53,6 +53,11 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
 
+= 0.23.0 =
+* CRM registrations, screens (off by default; enabled per group in wp-admin → Modules, "CRM registrations" column): People → "Register a member" in steps (ID document → details and membership → review → done, with the member number returned by the CRM and links to the record and to "Give access"). The document is checked first: already in the group, the registration stops and leads to that record (a new membership for someone who returns); in another group or organisation, it must be confirmed. What is typed travels in the form and is never stored in WordPress.
+* Record → "Membership in the CRM" (Secretary and Coordination): new membership, leaving (date and reason, with what changes: the person's account, the family accounts and the family fee), section change and adding the ID document to someone who has none (checked first). Dates cannot be in the future, nor before the current membership started.
+* Treasury → Payment control lists the recent leavings done from the web of people in a family (last 30 days): they no longer count in their family fee.
+
 = 0.22.0 =
 * CRM registrations, internal part (no screens yet; off by default, enabled per group): create a new person with their first membership (name, surnames, birth date, gender, and the ID document from age 14), a new membership for someone who returns, leaving (end date and reason; nothing is deleted), section change and adding an ID document to a minor. Checks before writing (already in the group: no second record; in another group: must be confirmed), a lock so two clicks never create two records, and retries that continue where a failed registration stopped. New table for these operations (no personal data).
 * Development: a simulated SinergiaCRM API server for testing registrations without the real CRM (not included in the package).
@@ -88,6 +93,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * First version with the mobile app (PWA).
 
 == Upgrade Notice ==
+
+= 0.23.0 =
+Screens for CRM registrations, leavings and section changes. Off until enabled per group in wp-admin → Modules. No database changes.
 
 = 0.22.0 =
 CRM registrations (internal, off by default). Adds one table. No visible changes yet.

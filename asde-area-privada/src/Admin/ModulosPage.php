@@ -2,6 +2,7 @@
 namespace AsdeBalears\AreaPrivada\Admin;
 
 use AsdeBalears\AreaPrivada\Audit\Logger;
+use AsdeBalears\AreaPrivada\Crm\Altas;
 use AsdeBalears\AreaPrivada\Domain\Grupos;
 use AsdeBalears\AreaPrivada\Domain\Modulos;
 
@@ -10,6 +11,9 @@ defined( 'ABSPATH' ) || exit;
 /**
  * wp-admin → Grupos Scouts → Módulos (v0.20): qué módulos del área privada usa cada
  * grupo. Una fila por grupo y una casilla por módulo. Ver Domain\Modulos.
+ *
+ * v0.23: la última columna activa las altas en el CRM del grupo (doc 34, Crm\Altas):
+ * nacen apagadas y se encienden grupo a grupo.
  */
 final class ModulosPage {
 
@@ -45,15 +49,32 @@ final class ModulosPage {
 		}
 		check_admin_referer( self::ACCION );
 		$pedidos = isset( $_POST['activos'] ) && is_array( $_POST['activos'] ) ? wp_unslash( $_POST['activos'] ) : array(); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- se sanea abajo: solo números de grupo y claves de módulo conocidos
+		$altas    = isset( $_POST['altas'] ) && is_array( $_POST['altas'] ) ? array_map( 'strval', array_keys( wp_unslash( $_POST['altas'] ) ) ) : array(); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- solo se usan las claves, comparadas con los números de grupo
 		$apagados = array();
+		$con      = array();
 		foreach ( Grupos::todos() as $g ) {
+			$si = in_array( (string) $g['numero'], $altas, true );
+			if ( $si !== Altas::activo( (string) $g['numero'] ) ) {
+				Altas::activar( (string) $g['numero'], $si );
+			}
+			if ( $si ) {
+				$con[] = (string) $g['numero'];
+			}
 			$activos = array_values( array_intersect( array_keys( Modulos::LISTA ), array_map( 'sanitize_key', (array) ( $pedidos[ $g['numero'] ] ?? array() ) ) ) );
 			$off     = Modulos::guardar( (string) $g['numero'], $activos );
 			if ( $off ) {
 				$apagados[ $g['numero'] ] = $off;
 			}
 		}
-		Logger::log( 'modulos_guardados', 'sitio', '', array( 'apagados' => $apagados ) );
+		Logger::log(
+			'modulos_guardados',
+			'sitio',
+			'',
+			array(
+				'apagados'  => $apagados,
+				'altas_crm' => $con,
+			)
+		);
 		set_transient( self::AVISO . get_current_user_id(), __( 'Módulos guardados.', 'asde-area-privada' ), 5 * MINUTE_IN_SECONDS );
 		wp_safe_redirect( self::url() );
 		exit;
@@ -91,6 +112,10 @@ final class ModulosPage {
 										<?php endif; ?>
 									</th>
 								<?php endforeach; ?>
+								<th scope="col" title="<?php esc_attr_e( 'Secretaría y Coordinación dan de alta personas y membresías, bajas y cambios de sección desde la web, escribiendo en el CRM.', 'asde-area-privada' ); ?>">
+									<?php esc_html_e( 'Altas en el CRM', 'asde-area-privada' ); ?>
+									<br><span class="description"><?php esc_html_e( '(escribe en el CRM)', 'asde-area-privada' ); ?></span>
+								</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -104,11 +129,17 @@ final class ModulosPage {
 											<input type="checkbox" id="<?php echo esc_attr( $id ); ?>" name="activos[<?php echo esc_attr( $g['numero'] ); ?>][]" value="<?php echo esc_attr( $m ); ?>" <?php checked( $this->marcado( $m, (string) $g['numero'] ) ); ?>>
 										</td>
 									<?php endforeach; ?>
+									<?php $id = 'asde-altas-' . $g['numero']; ?>
+									<td>
+										<label for="<?php echo esc_attr( $id ); ?>" class="screen-reader-text"><?php echo esc_html( Grupos::etiqueta( $g ) . ' · ' . __( 'Altas en el CRM', 'asde-area-privada' ) ); ?></label>
+										<input type="checkbox" id="<?php echo esc_attr( $id ); ?>" name="altas[<?php echo esc_attr( $g['numero'] ); ?>]" value="1" <?php checked( Altas::activo( (string) $g['numero'] ) ); ?>>
+									</td>
 								</tr>
 							<?php endforeach; ?>
 						</tbody>
 					</table>
 					<p class="description"><?php esc_html_e( 'Banco y Domiciliaciones SEPA van dentro de Tesorería: si se desactiva Tesorería, tampoco se ven. «Mis pagos» se queda mientras el grupo use Tesorería o Uniformes.', 'asde-area-privada' ); ?></p>
+					<p class="description"><?php esc_html_e( '«Altas en el CRM» (doc 34) nace apagada. Con ella, Secretaría y Coordinación dan de alta a personas nuevas con su membresía, dan membresías nuevas a quien vuelve, bajas y cambios de sección, y ponen el documento a quien no lo tiene: todo se escribe en el CRM de Scouts de España. Necesita que el usuario del CRM del grupo pueda crear personas y membresías; si no puede, las pantallas no salen.', 'asde-area-privada' ); ?></p>
 					<?php submit_button( __( 'Guardar los módulos', 'asde-area-privada' ) ); ?>
 				</form>
 			<?php endif; ?>

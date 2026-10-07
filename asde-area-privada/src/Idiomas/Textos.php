@@ -57,6 +57,8 @@ final class Textos {
 		$add( CamposFicha::SOLO_LECTURA, 'Fichas' );
 		$add( CamposFicha::OPCIONES, 'Fichas' );
 		$add( PersonasView::FILTROS, 'Personas' );
+		$add( \AsdeBalears\AreaPrivada\Crm\Altas::GENEROS, 'Personas' );
+		$add( \AsdeBalears\AreaPrivada\Crm\Altas::MOTIVOS_BAJA, 'Personas' );
 		$add( TesoreriaView::FILTROS, 'Tesorería' );
 		$add( PedidosTable::METODOS, 'Uniformes' );
 		$add( PedidosTable::FILTROS, 'Uniformes' );

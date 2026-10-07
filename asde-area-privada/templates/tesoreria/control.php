@@ -8,6 +8,7 @@
  * @var array<string, AsdeBalears\AreaPrivada\Domain\Persona> $personas
  * @var array  $resumen
  * @var int    $sin_fam   Educandos activos sin familia (no se les cobra)
+ * @var list<array{socio:string, fin:string, motivo:string, familia:int, numero:string, nombre:string}> $bajas Bajas recientes desde la web de personas de alguna familia (doc 34)
  * @var string $estado
  * @var string $q
  * @var string $url
@@ -51,6 +52,23 @@ $pct = $resumen['a_pagar'] > 0 ? round( 100 * $resumen['pagado'] / $resumen['a_p
 		<div class="asde-notice asde-notice--warning" role="status">
 			<?php asde_e( 'Hay' ); ?> <strong><?php echo (int) $sin_fam; ?></strong> <?php asde_e( 'educandos con membresía activa que no están en ninguna familia: no se les está calculando cuota.' ); ?>
 			<a href="<?php echo esc_url( $url_fam ); ?>"><?php asde_e( 'Asignarles familia' ); ?></a>.
+		</div>
+	<?php endif; ?>
+	<?php if ( $bajas ) : ?>
+		<div class="asde-notice asde-notice--info asde-bajas-recientes" role="status">
+			<p><strong><?php asde_e( 'Bajas recientes' ); ?></strong> · <?php asde_e( 'Personas de alguna familia dadas de baja en el CRM desde la web en los últimos 30 días: ya no cuentan en la cuota de su familia.' ); ?></p>
+			<ul>
+				<?php foreach ( $bajas as $b ) : ?>
+					<?php $fin = DateTime::createFromFormat( '!Y-m-d', $b['fin'] ); ?>
+					<li>
+						<a href="<?php echo esc_url( add_query_arg( array( 'familia' => $b['familia'], 'ronda' => $ronda ), $url ) ); ?>"><?php echo esc_html( $b['nombre'] ); ?></a>
+						· <?php /* translators: %s: nº de familia */ echo esc_html( sprintf( asde_t( 'familia nº %s' ), $b['numero'] ) ); ?>
+						<?php if ( $fin ) : ?>
+							· <?php /* translators: %s: fecha */ echo esc_html( sprintf( asde_t( 'baja el %s' ), $fin->format( 'd/m/Y' ) ) ); ?>
+						<?php endif; ?>
+					</li>
+				<?php endforeach; ?>
+			</ul>
 		</div>
 	<?php endif; ?>
 </section>

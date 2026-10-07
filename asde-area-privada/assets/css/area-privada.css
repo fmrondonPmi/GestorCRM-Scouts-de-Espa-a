@@ -2111,3 +2111,42 @@ html.asde-cargando .asde-ap button {
 .asde-ap .asde-comprobar-crm__fichas li {
 	overflow-wrap: anywhere;
 }
+
+/* v0.23.0 · Altas en el CRM: «Alta de socio/a» en pasos y membresía en la ficha (doc 34, fase 3) */
+.asde-ap .asde-pasos--alta {
+	margin: 4px 0 14px;
+}
+.asde-ap .asde-pasos li.is-actual {
+	color: var(--asde-text);
+	font-weight: 600;
+}
+.asde-ap .asde-pasos li.is-actual .asde-pasos__marca {
+	border-color: var(--asde-primary);
+	color: var(--asde-primary);
+}
+.asde-ap .asde-alta-socio fieldset + fieldset,
+.asde-ap .asde-alta-socio .asde-alta-socio__tutores {
+	margin-top: 12px;
+}
+.asde-ap .asde-alta-socio__tutores fieldset {
+	margin-top: 8px;
+}
+.asde-ap .asde-alta-socio__resumen dd {
+	overflow-wrap: anywhere;
+}
+.asde-ap .asde-alta-socio__numero {
+	font-size: 1.4em;
+	letter-spacing: .03em;
+}
+.asde-ap .asde-alta-socio .asde-actions,
+.asde-ap .asde-membresia-crm__acciones {
+	align-items: center;
+	gap: 8px 12px;
+}
+.asde-ap .asde-membresia-crm .asde-notice ul,
+.asde-ap .asde-bajas-recientes ul {
+	margin: .4em 0 0 1.2em;
+}
+.asde-ap .asde-bajas-recientes li {
+	overflow-wrap: anywhere;
+}

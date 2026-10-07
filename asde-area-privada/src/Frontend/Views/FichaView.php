@@ -2,14 +2,19 @@
 namespace AsdeBalears\AreaPrivada\Frontend\Views;
 
 use AsdeBalears\AreaPrivada\Auth\Ambito;
+use AsdeBalears\AreaPrivada\Crm\Altas;
 use AsdeBalears\AreaPrivada\Crm\CrmException;
 use AsdeBalears\AreaPrivada\Crm\Escritura;
 use AsdeBalears\AreaPrivada\Crm\PersonaRepository;
+use AsdeBalears\AreaPrivada\Domain\Persona;
+use AsdeBalears\AreaPrivada\Domain\Secciones;
 use AsdeBalears\AreaPrivada\Fichas\Cambios;
 use AsdeBalears\AreaPrivada\Fichas\FichaService;
 use AsdeBalears\AreaPrivada\Fichas\PermisosFicha;
 use AsdeBalears\AreaPrivada\Frontend\Notices;
 use AsdeBalears\AreaPrivada\Socios\Numeracion;
+use AsdeBalears\AreaPrivada\Tesoreria\FamiliasTable;
+use AsdeBalears\AreaPrivada\Usuarios\Usuarios;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -20,8 +25,26 @@ defined( 'ABSPATH' ) || exit;
  *
  * ?socio=NNN (nº Scouts de España). Sin él: la ficha propia o la del primer
  * menor de la cuenta familiar.
+ *
+ * v0.23 (doc 34, fase 3): con las altas en el CRM activadas, Secretaría y
+ * Coordinación dan desde aquí una membresía nueva, la baja, el cambio de sección y el
+ * documento a quien no lo tiene (?membresia=nueva|baja|seccion|documento).
  */
 final class FichaView extends View {
+
+	/** Formularios de la membresía en el CRM (?membresia=…). */
+	private const MEMBRESIA = array( 'nueva', 'baja', 'seccion', 'documento' );
+
+	/** asde_action => formulario. */
+	private const ACCIONES_MEMBRESIA = array(
+		'membresia_nueva'   => 'nueva',
+		'membresia_baja'    => 'baja',
+		'membresia_seccion' => 'seccion',
+		'poner_documento'   => 'documento',
+	);
+
+	/** Formulario de la membresía que no se ha podido hacer en esta petición: se vuelve a pintar con lo escrito. */
+	private static ?array $membresia = null;
 
 	public function render( string $content = '' ): string {
 		$ambito = Ambito::actual();
@@ -38,6 +61,10 @@ final class FichaView extends View {
 			$perm = new PermisosFicha( $ambito, $p );
 			if ( ! $perm->puede_ver() ) {
 				return $this->denegado( asde_t( 'No tienes acceso a esta ficha.' ) );
+			}
+			$accion = $this->get( 'membresia' );
+			if ( in_array( $accion, self::MEMBRESIA, true ) ) {
+				return current_user_can( 'asde_manage_users' ) ? $this->layout( 'personas', $this->membresia( $p, $accion ) ) : $this->denegado();
 			}
 			$campos = ( new FichaService( $repo ) )->cargar( $p, $perm );
 			$numero = ( new Numeracion( $repo ) )->de( $p );
@@ -56,6 +83,7 @@ final class FichaView extends View {
 					'numero'        => $numero,
 					'cambios'       => Cambios::listado( '', $p->num_socio_asde ),
 					'escritura'     => Escritura::disponible(),
+					'altas'         => current_user_can( 'asde_manage_users' ) && Altas::disponible(),
 					'representados' => $ambito->representados,
 					'ambito'        => $ambito,
 					'url'           => $this->url( 'ficha' ),
@@ -72,6 +100,10 @@ final class FichaView extends View {
 		$socio  = $this->post( 'socio' );
 		$volver = $this->url( 'ficha', array( 'socio' => $socio ) );
 
+		if ( isset( self::ACCIONES_MEMBRESIA[ $this->post( 'asde_action' ) ] ) ) {
+			$this->membresia_post( $this->post( 'asde_action' ), $socio );
+			return;
+		}
 		if ( 'cancelar_cambio' === $this->post( 'asde_action' ) ) {
 			$id = (int) $this->post( 'cambio' );
 			check_admin_referer( 'asde_cancelar_cambio_' . $id );
@@ -130,6 +162,156 @@ final class FichaView extends View {
 			Notices::add( 'info', asde_t( 'No había ningún cambio que guardar.' ) );
 		}
 		$this->redirect( $volver );
+	}
+
+	/**
+	 * Formulario de la membresía en el CRM. Lee del CRM lo que hace falta enseñar: las
+	 * membresías activas (baja y cambio de sección) o si ya tiene documento.
+	 *
+	 * @throws CrmException
+	 */
+	private function membresia( Persona $p, string $accion ): string {
+		$altas = Altas::disponible() ? Altas::make() : null;
+		$vars  = array(
+			'p'         => $p,
+			'accion'    => $accion,
+			'altas'     => null !== $altas,
+			'motivo'    => Altas::activo() ? asde_t( 'El usuario del CRM de tu grupo no tiene permiso para crear personas y membresías. Un administrador puede revisarlo en wp-admin → Grupos Scouts.' ) : asde_t( 'Las altas en el CRM no están activadas para tu grupo.' ),
+			'estado'    => self::$membresia ?? array(
+				'error'     => '',
+				'valores'   => array(),
+				'confirmar' => false,
+				'otros'     => 0,
+			),
+			'activas'   => array(),
+			'documento' => null,
+			'cuenta'    => '',
+			'familias'  => array(),
+			'familia'   => '',
+			'url'       => $this->url(
+				'ficha',
+				array(
+					'socio'     => $p->num_socio_asde,
+					'membresia' => $accion,
+				)
+			),
+			'url_ficha' => $this->url( 'ficha', array( 'socio' => $p->num_socio_asde ) ),
+		);
+		if ( ! $altas ) {
+			return $this->tpl( 'fichas/membresia', $vars );
+		}
+		if ( in_array( $accion, array( 'baja', 'seccion' ), true ) ) {
+			$vars['activas'] = $altas->activas( $p->id );
+		}
+		if ( 'baja' === $accion ) {
+			// Lo que cambia con la baja: las cuentas de acceso y la cuota de su familia.
+			$vars['cuenta']   = Usuarios::por_socio( $p->num_socio_asde )?->user_login ?? '';
+			$vars['familias'] = array_map( static fn( \WP_User $u ) => $u->user_login, Usuarios::tutores_de( $p->num_socio_asde ) );
+			$vars['familia']  = self::familia( $p );
+		}
+		if ( 'documento' === $accion ) {
+			$vars['documento'] = $altas->tiene_documento( $p->id );
+		}
+		return $this->tpl( 'fichas/membresia', $vars );
+	}
+
+	/** Nº de la familia de Tesorería en la que está la persona ('' si no está en ninguna). */
+	private static function familia( Persona $p ): string {
+		$id = FamiliasTable::mapa_socios()[ $p->num_socio_asde ] ?? 0;
+		$f  = $id ? FamiliasTable::obtener( $id ) : null;
+		return $f ? (string) $f['numero'] : '';
+	}
+
+	/** Una acción sobre la membresía: si sale bien, vuelve a la ficha con el aviso; si no, se vuelve a pintar el formulario. */
+	private function membresia_post( string $accion, string $socio ): void {
+		if ( ! current_user_can( 'asde_manage_users' ) ) {
+			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-area-privada' ), 403 );
+		}
+		if ( ! PersonaRepository::es_num_asde( $socio ) ) {
+			Notices::add( 'error', asde_t( 'Petición no válida.' ) );
+			$this->redirect( $this->url( 'personas' ) );
+		}
+		check_admin_referer( 'asde_membresia_' . $socio );
+		$valores = array(
+			'seccion'   => sanitize_key( $this->post( 'seccion' ) ),
+			'fecha'     => $this->post( 'fecha' ),
+			'motivo'    => sanitize_key( $this->post( 'motivo' ) ),
+			'documento' => sanitize_text_field( $this->post( 'documento' ) ),
+		);
+		$fallo   = static function ( string $error, string $codigo = '', $datos = null ) use ( $valores ): void {
+			self::$membresia = array(
+				'error'     => $error,
+				'valores'   => $valores,
+				'confirmar' => 'asde_documento_confirmar' === $codigo,
+				'otros'     => is_array( $datos ) && array_key_exists( 'otros', $datos ) ? $datos['otros'] : 0,
+			);
+		};
+		$repo  = PersonaRepository::make();
+		$altas = Altas::disponible() ? Altas::make() : null;
+		if ( ! $repo || ! $altas ) {
+			$fallo( Altas::activo() ? asde_t( 'La conexión con el CRM no está disponible.' ) : asde_t( 'Las altas en el CRM no están activadas para tu grupo.' ) );
+			return;
+		}
+		try {
+			$p = $repo->obtener( $socio );
+		} catch ( CrmException $e ) {
+			$fallo( asde_t( 'No se ha podido consultar el CRM: ' ) . $e->getMessage() );
+			return;
+		}
+		if ( ! $p ) {
+			Notices::add( 'error', asde_t( 'No se encuentra esa ficha en el CRM del grupo.' ) );
+			$this->redirect( $this->url( 'personas' ) );
+		}
+		$nombre = esc_html( $p->nombre_completo() );
+		$fecha  = esc_html( self::dma( '' !== $valores['fecha'] ? $valores['fecha'] : wp_date( 'Y-m-d' ) ) );
+		switch ( $accion ) {
+			case 'membresia_nueva':
+				$r = $altas->nueva_membresia( $p, $valores['seccion'], $valores['fecha'] );
+				/* translators: 1: nombre, 2: sección, 3: fecha */
+				$ok = sprintf( asde_t( 'Membresía nueva en el CRM: %1$s, en %2$s desde el %3$s.' ), $nombre, esc_html( Secciones::nombre( $valores['seccion'] ) ), $fecha );
+				break;
+			case 'membresia_baja':
+				$familia = self::familia( $p );
+				$cuenta  = null !== Usuarios::por_socio( $p->num_socio_asde );
+				$tutores = (bool) Usuarios::tutores_de( $p->num_socio_asde );
+				$r       = $altas->baja( $p, $valores['fecha'], $valores['motivo'] );
+				/* translators: 1: nombre, 2: fecha */
+				$ok = sprintf( asde_t( '%1$s ha quedado de baja en el CRM desde el %2$s.' ), $nombre, $fecha );
+				if ( $cuenta ) {
+					$ok .= ' ' . asde_t( 'Su cuenta de acceso a la web ya no puede entrar.' );
+				}
+				if ( $tutores ) {
+					$ok .= ' ' . asde_t( 'Las cuentas familiares que la representan ya no la ven; si no representan a nadie más con membresía activa, tampoco pueden entrar.' );
+				}
+				if ( '' !== $familia ) {
+					/* translators: %s: nº de familia */
+					$ok .= ' ' . sprintf( asde_t( 'Deja de contar en la cuota de la familia nº %s: Tesorería lo verá en «Bajas recientes».' ), esc_html( $familia ) );
+				}
+				break;
+			case 'membresia_seccion':
+				$r = $altas->cambio_seccion( $p, $valores['seccion'], $valores['fecha'] );
+				/* translators: 1: nombre, 2: sección nueva, 3: fecha */
+				$ok = sprintf( asde_t( '%1$s pasa a %2$s desde el %3$s. La membresía anterior queda cerrada con el motivo «cambio de sección».' ), $nombre, esc_html( Secciones::nombre( $valores['seccion'] ) ), $fecha );
+				break;
+			default: // poner_documento
+				$r = $altas->poner_documento( $p, $valores['documento'], '1' === $this->post( 'confirmo' ) );
+				/* translators: %s: nombre */
+				$ok = sprintf( asde_t( 'Documento guardado en la ficha de %s.' ), $nombre );
+				if ( is_array( $r ) && ( null === $r['otros'] || $r['otros'] > 0 ) ) {
+					$ok .= ' ' . asde_t( 'Ese documento también está dado de alta en otro grupo u organización de Scouts de España.' );
+				}
+		}
+		if ( is_wp_error( $r ) ) {
+			$fallo( $r->get_error_message(), (string) $r->get_error_code(), $r->get_error_data() );
+			return;
+		}
+		Notices::add( 'success', $ok );
+		$this->redirect( $this->url( 'ficha', array( 'socio' => $socio ) ) );
+	}
+
+	private static function dma( string $fecha ): string {
+		$f = \DateTime::createFromFormat( '!Y-m-d', $fecha );
+		return $f ? $f->format( 'd/m/Y' ) : $fecha;
 	}
 
 	/** Ficha pedida, o por defecto la propia o la del primer menor a cargo. */

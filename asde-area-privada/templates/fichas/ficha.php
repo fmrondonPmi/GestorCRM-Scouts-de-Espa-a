@@ -8,6 +8,7 @@
  * @var array{numero:?string, estado:string}         $numero
  * @var array[]                                      $cambios Cambios propuestos de esta ficha (todos los estados)
  * @var bool                                         $escritura El usuario del CRM puede editar fichas
+ * @var bool                                         $altas     Puede dar membresías, bajas y cambios en el CRM (doc 34, fase 3)
  * @var array<string, AsdeBalears\AreaPrivada\Domain\Persona> $representados
  * @var AsdeBalears\AreaPrivada\Auth\Ambito          $ambito
  * @var string                                       $url
@@ -147,6 +148,34 @@ $control = static function ( string $campo, array $f ) use ( $pendientes ): stri
 		<p class="asde-muted"><?php asde_e( 'Los cambios se guardan directamente en el CRM. 🔒 = solo lectura (pasa el ratón por encima para ver el motivo).' ); ?></p>
 	<?php endif; ?>
 </section>
+
+<?php if ( $altas ) : ?>
+	<?php $membresia = static fn( string $accion ): string => add_query_arg( array( 'socio' => $p->num_socio_asde, 'membresia' => $accion ), $url ); ?>
+	<section class="asde-card asde-membresia-crm">
+		<h3><?php asde_e( 'Membresía en el CRM' ); ?></h3>
+		<p>
+			<?php if ( $p->tiene_membresia_activa() ) : ?>
+				<?php asde_e( 'Membresía activa:' ); ?>
+				<?php
+				foreach ( $p->secciones as $s ) {
+					echo Secciones::badge( $s ); // phpcs:ignore WordPress.Security.EscapeOutput
+				}
+				?>
+			<?php else : ?>
+				<strong><?php asde_e( 'Sin membresía activa' ); ?></strong> · <?php asde_e( 'no puede entrar en la web ni cuenta en las cuotas.' ); ?>
+			<?php endif; ?>
+		</p>
+		<p class="asde-actions asde-membresia-crm__acciones">
+			<?php if ( $p->tiene_membresia_activa() ) : ?>
+				<a class="button asde-button-secundario" href="<?php echo esc_url( $membresia( 'seccion' ) ); ?>" data-asde-modal><?php asde_e( 'Cambiar de sección' ); ?></a>
+				<a class="button asde-button-secundario" href="<?php echo esc_url( $membresia( 'baja' ) ); ?>" data-asde-modal><?php asde_e( 'Dar de baja' ); ?></a>
+			<?php else : ?>
+				<a class="button" href="<?php echo esc_url( $membresia( 'nueva' ) ); ?>" data-asde-modal><?php asde_e( 'Nueva membresía' ); ?></a>
+			<?php endif; ?>
+			<a href="<?php echo esc_url( $membresia( 'documento' ) ); ?>" data-asde-modal><?php asde_e( 'Poner el documento' ); ?></a>
+		</p>
+	</section>
+<?php endif; ?>
 
 <form method="post" class="asde-form asde-ficha">
 	<?php wp_nonce_field( 'asde_ficha_' . $p->num_socio_asde ); ?>

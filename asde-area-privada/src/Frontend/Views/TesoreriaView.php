@@ -2,6 +2,7 @@
 namespace AsdeBalears\AreaPrivada\Frontend\Views;
 
 use AsdeBalears\AreaPrivada\Audit\Logger;
+use AsdeBalears\AreaPrivada\Crm\Altas;
 use AsdeBalears\AreaPrivada\Crm\CrmException;
 use AsdeBalears\AreaPrivada\Crm\PersonaRepository;
 use AsdeBalears\AreaPrivada\Domain\Modulos;
@@ -134,6 +135,19 @@ final class TesoreriaView extends TesoreriaBaseView {
 		$mapa      = FamiliasTable::mapa_socios();
 		$sin_fam   = array_filter( $repo->todas( true ), static fn( $p ) => ! isset( $mapa[ $p->num_socio_asde ] ) && array_intersect( $p->secciones, $cfg['secciones_pagan'] ) );
 
+		// Bajas dadas desde la web (doc 34, fase 3) de personas de alguna familia: dejan de contar en su cuota.
+		$bajas = array();
+		foreach ( Altas::bajas_recientes() as $b ) {
+			$id = $mapa[ $b['socio'] ] ?? 0;
+			if ( $id && isset( $filas[ $id ] ) ) {
+				$bajas[] = $b + array(
+					'familia' => $id,
+					'numero'  => (string) $filas[ $id ]['familia']['numero'],
+					'nombre'  => isset( $personas[ $b['socio'] ] ) ? $personas[ $b['socio'] ]->nombre_completo() : $b['socio'],
+				);
+			}
+		}
+
 		// Filtros.
 		$estado = isset( self::FILTROS[ $this->get( 'estado' ) ] ) ? $this->get( 'estado' ) : '';
 		$q      = mb_strtolower( remove_accents( $this->get( 'q' ) ) );
@@ -163,6 +177,7 @@ final class TesoreriaView extends TesoreriaBaseView {
 				'personas'  => $personas,
 				'resumen'   => $resumen,
 				'sin_fam'   => count( $sin_fam ),
+				'bajas'     => $bajas,
 				'estado'    => $estado,
 				'q'         => $this->get( 'q' ),
 				'url'       => $this->url( 'tesoreria' ),

@@ -15,6 +15,7 @@ require_once ABSPATH . 'wp-admin/includes/user.php';
 
 use AsdeBalears\AreaPrivada\Admin\ModulosPage;
 use AsdeBalears\AreaPrivada\Auth\Ambito;
+use AsdeBalears\AreaPrivada\Crm\Altas;
 use AsdeBalears\AreaPrivada\Domain\Grupo;
 use AsdeBalears\AreaPrivada\Domain\Grupos;
 use AsdeBalears\AreaPrivada\Domain\Modulos;
@@ -48,6 +49,7 @@ if ( ! $real || '' === $real['crm_id'] ) {
 
 $opcion_antes = get_option( 'asde_ap_modulos', null );
 $enlace_antes = get_option( EnlaceScouters::OPCION, null );
+$altas_antes  = get_option( Altas::OPCION, null ); // El formulario de wp-admin también guarda las altas en el CRM (v0.23).
 $cache        = wp_using_ext_object_cache( true );
 $cortadas     = 0;
 $cortar_red   = static function ( $pre, $args, $url ) use ( &$cortadas ) {
@@ -188,6 +190,7 @@ try {
 	$_POST = array();
 	null === $opcion_antes ? delete_option( 'asde_ap_modulos' ) : update_option( 'asde_ap_modulos', $opcion_antes, false );
 	null === $enlace_antes ? delete_option( EnlaceScouters::OPCION ) : update_option( EnlaceScouters::OPCION, $enlace_antes, false );
+	null === $altas_antes ? delete_option( Altas::OPCION ) : update_option( Altas::OPCION, $altas_antes, false );
 	Modulos::olvidar();
 	wp_using_ext_object_cache( $cache );
 	wp_set_current_user( 0 );

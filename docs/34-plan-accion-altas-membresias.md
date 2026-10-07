@@ -4,7 +4,7 @@
 
 > «Se hizo el estudio de cómo crear y asociar membresías: genera el plan de acción para esto. Con respecto a la pregunta de qué sucede si el DNI ya existe, deberás probarlo […] con un DNI que existe […] y cómo se puede asegurar que nuestro sistema no genere duplicados con otros grupos.»
 
-Parte del estudio del doc 33 (qué permite la API y cómo encaja con el modelo de ASDE). Este doc dice **qué se hace, en qué orden y con qué garantías**. Todavía **no hay código** de escritura y **no se ha escrito nada en el CRM** (regla 2 del `CLAUDE.md`).
+Parte del estudio del doc 33 (qué permite la API y cómo encaja con el modelo de ASDE). Este doc dice **qué se hace, en qué orden y con qué garantías**. Desde la v0.22 hay código de escritura (fases 2 y 3), probado solo con el CRM simulado y el servidor de la API simulado: **no se ha escrito nada en el CRM real** (regla 2 del `CLAUDE.md`).
 
 ## 1. Lo que se ha averiguado (2026-10-06)
 
@@ -124,12 +124,26 @@ Cada fase se entrega como una versión, con sus pruebas (CRM simulado) y sus doc
 - **Pruebas:** una por operación, comprobando lo que se envía al CRM; un alta con un documento que ya está en el grupo, otro que está en otro grupo, dos altas a la vez, un fallo a mitad con su reintento y un documento puesto después a un menor.
 - **Hecho cuando:** ninguna prueba crea dos fichas en el mismo grupo y todas las altas acaban con su nº de socio.
 
-### Fase 3 · Pantallas y avisos
+### Fase 3 · Pantallas y avisos ✅ v0.23.0 (2026-10-07)
+
+**Hecho** (sigue **apagado** hasta que se activa por grupo; quien lo usa: Secretaría y Coordinación, los que ven Personas):
+
+- **Interruptor por grupo:** wp-admin → Grupos Scouts → **Módulos**, columna nueva «Altas en el CRM» (opción `asde_ap_altas_crm`). Con el grupo activado y el usuario del CRM con permiso para crear personas y membresías (`Altas::disponible()`) salen las pantallas; si falta el permiso, la pantalla lo explica.
+- **Personas → «Alta de socio/a»** (botón junto a «¿Está ya en el CRM?», en la ventana emergente; `personas/?alta=1`; `Frontend\AltaSocio` y `templates/personas/alta.php`), en **cuatro pasos** (P-88): **Documento** (o «Es menor de 14 años y no tiene documento») → **Datos** (persona: nombre, apellidos, nacimiento, género, documento, email y móvil; tutores 1 y 2; membresía: sección y fecha de alta) → **Revisar** (resumen; si está en otro grupo u organización, una casilla para confirmarlo) → **Hecho** (nº de socio/a que devuelve el CRM, «Ver su ficha», «Dar acceso a la web» y «Dar de alta a otra persona»). Si el documento ya tiene ficha en el grupo, el alta se para y lleva a su ficha (con «Darle una membresía nueva» si no tiene ninguna activa). Cada paso va por POST y se contesta en la misma petición: **lo escrito viaja en el formulario y no se guarda en WordPress** (la prueba lo comprueba en las opciones y en las operaciones). Los campos ocultos no se creen: `Crm\Altas` vuelve a comprobar todo al crear (si se quita el aviso de otro grupo a mano, pide confirmarlo igual; si se reenvía el último paso, no crea otra ficha).
+- **Ficha → «Membresía en el CRM»** (tarjeta debajo de la cabecera; formularios en la ventana emergente, `ficha/?socio=…&membresia=nueva|baja|seccion|documento`, `templates/fichas/membresia.php`): **Nueva membresía** (solo sin ninguna activa), **Dar de baja** (fecha y motivo de la lista; enseña la membresía que se cierra y **qué cambia**: la cuenta de acceso de la persona, las cuentas familiares que la representan y la cuota de su familia; pide confirmación), **Cambiar de sección** (enseña la actual, leída del CRM) y **Poner el documento** (a quien no lo tiene; si otra ficha del grupo lo tiene, no; si está en otro grupo, casilla para confirmarlo). Si sale bien, vuelve a la ficha con un aviso; si no, el formulario se vuelve a pintar con el error y lo elegido.
+- **Fechas** (P-87): el alta, la baja y el cambio de sección como mucho con **fecha de hoy** (no se programan) y nunca anteriores al alta de la membresía que se cierra. Lo comprueban las pantallas y `Crm\Altas`.
+- **Avisos** (P-90): al dar la baja, el aviso dice qué cambia; **Tesorería → Control de pagos** lista las **«Bajas recientes»** (últimos 30 días, dadas desde la web, de personas que están en alguna familia, enlazadas a su familia: ya no cuentan en su cuota), sacadas de la auditoría (`Altas::bajas_recientes()`; la auditoría de altas y bajas guarda ahora el grupo y la fecha de baja). En **Usuarios** cada cuenta ya avisa «Sin membresía activa: no puede entrar»: no se ha añadido nada más.
+- Textos nuevos en castellano, catalán, euskera y gallego (81; primera versión sin revisión nativa, como el resto: P-46/P-47); los géneros y los motivos de baja se traducen al mostrarlos (`Textos::extras`).
+- **Pruebas:** `tests/altas-crm-pantallas.php` (47): apagado y sin permiso no sale nada ni se escribe aunque se envíen los formularios a mano; un scouter no puede; wp-admin enciende y apaga por grupo; el alta paso a paso (documento en el grupo con y sin membresía activa, mal escrito, nuevo, en otro grupo; datos que faltan, documento desde los 14, fecha futura; revisar; corregir; crear con el nº de socio; nada guardado en WordPress; reenviar sin duplicar; confirmar lo de otro grupo aunque se quite el aviso; menor sin documento); la ficha (botones según tenga o no membresía activa; nueva membresía, cambio de sección con fecha anterior y bien, baja con motivo inventado, con fecha futura y bien con su aviso, documento ya puesto, de otra ficha del grupo, de otro grupo con confirmación); y el aviso de Tesorería (solo las bajas del grupo). Revisadas en el navegador con datos inventados (en su página, en la ventana emergente y a 375 px, sin desbordes).
+- **Manual:** sin actualizar todavía, por petición del usuario (se hace al terminar todas las fases).
+
+**Lo que se planeó:**
 
 - **Personas → «Alta de socio/a»**, en pasos: documento (fase 1, con la advertencia si está en otro grupo) → datos obligatorios (P-75; el documento, desde los 14 años: P-82) → sección y fecha → vista previa → confirmar → nº de socio. Al final, «Dar acceso» (doc 11).
 - **Ficha → «Nueva membresía»** (si no tiene ninguna activa), **«Dar de baja»**, **«Cambiar de sección»** y **poner el documento** a quien no lo tiene.
 - Una baja avisa en Tesorería (la familia deja de pagar por esa persona) y en Usuarios (la cuenta pierde el acceso al no tener membresía activa).
 - Nada se guarda en WordPress en claro (regla 1): lo escrito va directo al CRM. Textos en ca/eu/gl, manual y capturas.
+- Pendiente para antes de la fase 5: el **informe en wp-admin del §3.7** (fichas del grupo con el mismo documento normalizado), que no se ha hecho en esta fase.
 
 ### Fase 4 · Prueba completa con el servidor simulado
 
