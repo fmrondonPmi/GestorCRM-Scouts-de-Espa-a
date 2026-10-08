@@ -42,6 +42,43 @@ abstract class View {
 		return Menu::plano( $ambito ); // v0.15: el menú se separa por tipo de usuario (Frontend\Menu).
 	}
 
+	/**
+	 * Hojas de la sección «Usuarios» (v0.25): página => nombre de la hoja. Las tres
+	 * páginas son hojas de un mismo libro, como en una hoja de cálculo.
+	 */
+	public const HOJAS_USUARIOS = array(
+		'usuarios' => 'Usuarios',
+		'alta'     => 'Dar acceso',
+		'emails'   => 'Registro de emails',
+	);
+
+	/**
+	 * Pone la barra de hojas de «Usuarios» encima del contenido de una de sus páginas.
+	 * Con JavaScript (assets/js/hojas.js) se cambia de hoja sin recargar la página y
+	 * cada hoja conserva lo que tenía (filtros, búsqueda); sin él, son enlaces. En la
+	 * ventana emergente («Dar acceso» desde otra página) no hay hojas.
+	 */
+	protected function libro_usuarios( string $hoja, string $contenido ): string {
+		if ( self::$modal ) {
+			return $contenido;
+		}
+		$hojas = array();
+		foreach ( self::HOJAS_USUARIOS as $clave => $nombre ) {
+			$hojas[ $clave ] = array(
+				'nombre' => asde_t( $nombre ),
+				'url'    => $this->url( $clave ),
+			);
+		}
+		return $this->tpl(
+			'usuarios/hojas',
+			array(
+				'hojas'     => $hojas,
+				'activa'    => $hoja,
+				'contenido' => $contenido,
+			)
+		);
+	}
+
 	/** Envoltorio común: menú del área privada + avisos + contenido. */
 	protected function layout( string $activo, string $contenido ): string {
 		if ( self::$modal ) {

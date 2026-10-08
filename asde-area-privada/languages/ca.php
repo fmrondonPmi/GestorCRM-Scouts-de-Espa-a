@@ -553,7 +553,6 @@ return array(
 	'(o el email al que te llegó la invitación)' => '(o l\'email al qual et va arribar la invitació)',
 	'Activa la verificación en dos pasos.' => 'Activa la verificació en dos passos.',
 	'Aprueba a las familias y socios que piden entrar con el enlace del grupo.' => 'Aprova les famílies i els socis que demanen entrar amb l\'enllaç del grup.',
-	'Busca a un socio y dale acceso a él o ella, o a su familia.' => 'Cerca un soci i dona-li accés a ell o ella, o a la seva família.',
 	'Cambios propuestos' => 'Canvis proposats',
 	'Configurarla ahora' => 'Configura-ho ara',
 	'Confirma que lo has recibido' => 'Confirma que l\'has rebut',
@@ -573,7 +572,6 @@ return array(
 	'Pendiente de revisar' => 'Pendent de revisar',
 	'Personas del grupo' => 'Persones del grup',
 	'Pide la camisa scout y las insignias, y sigue tu pedido.' => 'Demana la camisa escolta i les insígnies, i segueix la teva comanda.',
-	'Quién tiene acceso, invitaciones y bajas.' => 'Qui té accés, invitacions i baixes.',
 	'Revisa los cambios que piden las familias en las fichas.' => 'Revisa els canvis que demanen les famílies a les fitxes.',
 	'Seguridad de la cuenta' => 'Seguretat del compte',
 	'Solicitudes de acceso' => 'Sol·licituds d\'accés',
@@ -1732,7 +1730,6 @@ return array(
 	'(a quien la pidió; aún no tiene cuenta)' => '(a qui la va demanar; encara no té compte)',
 	'(cuenta del 2.º tutor/a)' => '(compte del 2n tutor/a)',
 	'(no encontrado en el CRM)' => '(no trobat al CRM)',
-	'+ Dar acceso' => '+ Dona accés',
 	': aquí aparece sustituido.' => ': aquí apareix substituït.',
 	'A un voluntario sin sección solo se le puede dar acceso como Tesorería, Secretaría o Coordinación: marca al menos una.' => 'A un voluntari sense secció només se li pot donar accés com a Tresoreria, Secretaria o Coordinació: marca\'n almenys una.',
 	'Activo' => 'Actiu',
@@ -1852,7 +1849,6 @@ return array(
 	'Ámbito' => 'Àmbit',
 	'Último email:' => 'Últim email:',
 	'← Registro de emails' => '← Registre d\'emails',
-	'← Usuarios' => '← Usuaris',
 	// Inventario (v0.19, doc 32)
 	'%1$s: %2$d fila leída.' => '%1$s: %2$d fila llegida.',
 	'%1$s: %2$d filas leídas.' => '%1$s: %2$d files llegides.',
@@ -2383,4 +2379,8 @@ return array(
 	'Según lo pagado' => 'Segons el que s\'ha pagat',
 	'Sin familia en Tesorería' => 'Sense família a Tresoreria',
 	'Vencido sin pagar' => 'Vençut sense pagar',
+
+	// v0.25.0: sección Usuarios con hojas
+	'Quién tiene acceso, dar acceso a un socio o a su familia, invitaciones, bajas y el registro de emails.' => 'Qui hi té accés, donar accés a un soci/sòcia o a la seva família, invitacions, baixes i el registre d\'emails.',
+	'Hojas de Usuarios' => 'Fulls d\'Usuaris',
 );

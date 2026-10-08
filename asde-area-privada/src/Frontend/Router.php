@@ -284,8 +284,11 @@ final class Router {
 			wp_enqueue_script( 'asde-parcial', plugins_url( 'assets/js/parcial.js', ASDE_AP_FILE ), array( 'asde-i18n', 'asde-combobox', 'asde-area' ), ASDE_AP_VERSION, true );
 			wp_enqueue_script( 'asde-banco', plugins_url( 'assets/js/banco.js', ASDE_AP_FILE ), array( 'asde-i18n', 'asde-area' ), ASDE_AP_VERSION, true );
 		}
-		if ( 'usuarios' === $key ) {
+		// v0.25: Usuarios, Dar acceso y Registro de emails son hojas de la sección «Usuarios»:
+		// desde cualquiera se abren las otras sin recargar (también el listado de usuarios).
+		if ( isset( View::HOJAS_USUARIOS[ $key ] ) ) {
 			wp_enqueue_script( 'asde-usuarios', plugins_url( 'assets/js/usuarios.js', ASDE_AP_FILE ), array( 'asde-i18n' ), ASDE_AP_VERSION, true );
+			wp_enqueue_script( 'asde-hojas', plugins_url( 'assets/js/hojas.js', ASDE_AP_FILE ), array( 'asde-i18n', 'asde-area', 'asde-usuarios' ), ASDE_AP_VERSION, true );
 		}
 		if ( 'federacion' === $key ) {
 			wp_enqueue_script( 'asde-conceptos', plugins_url( 'assets/js/conceptos.js', ASDE_AP_FILE ), array( 'asde-i18n' ), ASDE_AP_VERSION, true );

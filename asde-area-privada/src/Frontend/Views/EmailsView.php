@@ -31,14 +31,17 @@ final class EmailsView extends View {
 			}
 			return $this->layout(
 				'usuarios',
-				$this->tpl(
-					'usuarios/email',
-					array(
-						'fila'    => $fila,
-						'html'    => RegistroEmails::vista_previa( $fila ),
-						'autor'   => $fila['autor_id'] ? get_userdata( (int) $fila['autor_id'] ) : null,
-						'url'     => $this->url( 'emails' ),
-						'mailpit' => $mailpit,
+				$this->libro_usuarios(
+					'emails',
+					$this->tpl(
+						'usuarios/email',
+						array(
+							'fila'    => $fila,
+							'html'    => RegistroEmails::vista_previa( $fila ),
+							'autor'   => $fila['autor_id'] ? get_userdata( (int) $fila['autor_id'] ) : null,
+							'url'     => $this->url( 'emails' ),
+							'mailpit' => $mailpit,
+						)
 					)
 				)
 			);
@@ -85,18 +88,20 @@ final class EmailsView extends View {
 
 		return $this->layout(
 			'usuarios',
-			$this->tpl(
-				'usuarios/emails',
-				array(
-					'filas'    => $pagina,
-					'total'    => $total,
-					'tabla'    => $tabla,
-					'nombres'  => $nombres,
-					'estado'   => isset( RegistroEmails::ESTADOS[ $estado ] ) ? $estado : '',
-					'usuario'  => $user_id ? get_userdata( $user_id ) : null,
-					'url'      => $this->url( 'emails' ),
-					'url_usuarios' => $this->url( 'usuarios' ),
-					'mailpit'  => $mailpit,
+			$this->libro_usuarios(
+				'emails',
+				$this->tpl(
+					'usuarios/emails',
+					array(
+						'filas'   => $pagina,
+						'total'   => $total,
+						'tabla'   => $tabla,
+						'nombres' => $nombres,
+						'estado'  => isset( RegistroEmails::ESTADOS[ $estado ] ) ? $estado : '',
+						'usuario' => $user_id ? get_userdata( $user_id ) : null,
+						'url'     => $this->url( 'emails' ),
+						'mailpit' => $mailpit,
+					)
 				)
 			)
 		);

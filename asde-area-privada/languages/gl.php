@@ -553,7 +553,6 @@ return array(
 	'(o el email al que te llegó la invitación)' => '(ou o email ao que che chegou a invitación)',
 	'Activa la verificación en dos pasos.' => 'Activa a verificación en dous pasos.',
 	'Aprueba a las familias y socios que piden entrar con el enlace del grupo.' => 'Aproba as familias e os socios que piden entrar coa ligazón do grupo.',
-	'Busca a un socio y dale acceso a él o ella, o a su familia.' => 'Busca un socio e dálle acceso a el ou a ela, ou á súa familia.',
 	'Cambios propuestos' => 'Cambios propostos',
 	'Configurarla ahora' => 'Configurala agora',
 	'Confirma que lo has recibido' => 'Confirma que o recibiches',
@@ -573,7 +572,6 @@ return array(
 	'Pendiente de revisar' => 'Pendente de revisar',
 	'Personas del grupo' => 'Persoas do grupo',
 	'Pide la camisa scout y las insignias, y sigue tu pedido.' => 'Pide a camisa scout e as insignias, e segue o teu pedido.',
-	'Quién tiene acceso, invitaciones y bajas.' => 'Quen ten acceso, invitacións e baixas.',
 	'Revisa los cambios que piden las familias en las fichas.' => 'Revisa os cambios que piden as familias nas fichas.',
 	'Seguridad de la cuenta' => 'Seguridade da conta',
 	'Solicitudes de acceso' => 'Solicitudes de acceso',
@@ -1732,7 +1730,6 @@ return array(
 	'(a quien la pidió; aún no tiene cuenta)' => '(a quen a pediu; aínda non ten conta)',
 	'(cuenta del 2.º tutor/a)' => '(conta do 2.º titor/a)',
 	'(no encontrado en el CRM)' => '(non atopado no CRM)',
-	'+ Dar acceso' => '+ Dar acceso',
 	': aquí aparece sustituido.' => ': aquí aparece substituído.',
 	'A un voluntario sin sección solo se le puede dar acceso como Tesorería, Secretaría o Coordinación: marca al menos una.' => 'A un voluntario sen sección só se lle pode dar acceso como Tesouraría, Secretaría ou Coordinación: marca polo menos unha.',
 	'Activo' => 'Activo',
@@ -1852,7 +1849,6 @@ return array(
 	'Ámbito' => 'Ámbito',
 	'Último email:' => 'Último email:',
 	'← Registro de emails' => '← Rexistro de emails',
-	'← Usuarios' => '← Usuarios',
 	// Inventario (v0.19, doc 32)
 	'%1$s: %2$d fila leída.' => '%1$s: %2$d fila lida.',
 	'%1$s: %2$d filas leídas.' => '%1$s: %2$d filas lidas.',
@@ -2383,4 +2379,8 @@ return array(
 	'Según lo pagado' => 'Segundo o pagado',
 	'Sin familia en Tesorería' => 'Sen familia en Tesouraría',
 	'Vencido sin pagar' => 'Vencido sen pagar',
+
+	// v0.25.0: sección Usuarios con hojas
+	'Quién tiene acceso, dar acceso a un socio o a su familia, invitaciones, bajas y el registro de emails.' => 'Quen ten acceso, dar acceso a un socio/a ou á súa familia, invitacións, baixas e o rexistro de emails.',
+	'Hojas de Usuarios' => 'Follas de Usuarios',
 );

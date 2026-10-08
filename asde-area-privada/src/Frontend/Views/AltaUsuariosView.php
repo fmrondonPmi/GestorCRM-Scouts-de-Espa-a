@@ -46,7 +46,7 @@ final class AltaUsuariosView extends View {
 			return $this->error_crm( 'alta', asde_t( 'No se ha podido consultar el CRM: ' ) . $e->getMessage() );
 		}
 
-		return $this->layout( 'alta', $html );
+		return $this->layout( 'alta', $this->libro_usuarios( 'alta', $html ) );
 	}
 
 	private function repo(): PersonaRepository {

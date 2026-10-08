@@ -154,7 +154,7 @@ try {
 	$ok( false !== $posicion_nav && false !== $p_datos && false !== $p_gestion && false !== $p_informes && $p_datos < $p_gestion && $p_gestion < $p_informes, 'en el menú, lo personal va antes que la gestión' );
 	$como( $u_admin );
 	$h = ( new AreaPrivadaView() )->render();
-	$ok( str_contains( $h, 'Usuarios del área privada' ) || str_contains( $h, 'Dar acceso' ), 'el administrador ve las pantallas de gestión en su inicio' );
+	$ok( str_contains( $h, 'dar acceso a un socio o a su familia, invitaciones' ) && ! str_contains( $h, 'Busca a un socio y dale acceso' ), 'el administrador ve las pantallas de gestión en su inicio («Usuarios», con «Dar acceso» dentro: v0.25)' );
 	$ok( ! str_contains( $h, 'asde-nav__grupo' ) && ! str_contains( $h, 'asde-tiles__titulo' ), 'y, al tener un solo grupo, tampoco rótulos' );
 
 	echo "\n== Parte E · Las páginas no cambian de permisos ==\n";

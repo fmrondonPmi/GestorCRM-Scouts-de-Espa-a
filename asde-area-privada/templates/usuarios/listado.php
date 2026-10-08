@@ -12,7 +12,6 @@
  * @var int      $por_pagina
  * @var string   $url
  * @var string   $url_alta
- * @var string   $url_emails
  * @var string   $ajax
  * @var string   $nonce_pagina
  * @var string   $nonce_refrescar
@@ -51,12 +50,9 @@ $estados = array(
 	data-nonce="<?php echo esc_attr( $nonce_pagina ); ?>"
 	data-nonce-refrescar="<?php echo esc_attr( $nonce_refrescar ); ?>"
 	data-rol="<?php echo esc_attr( $rol ); ?>">
-	<header class="asde-card__header asde-card__header--split">
+	<?php /* v0.25: «Dar acceso» y «Registro de emails» son hojas de la sección (templates/usuarios/hojas.php). */ ?>
+	<header class="asde-card__header">
 		<h2 class="asde-card__title"><?php asde_e( 'Usuarios del área privada' ); ?></h2>
-		<span class="asde-actions">
-			<a href="<?php echo esc_url( $url_emails ); ?>"><?php asde_e( 'Registro de emails' ); ?></a>
-			<a class="button" href="<?php echo esc_url( $url_alta ); ?>"><?php asde_e( '+ Dar acceso' ); ?></a>
-		</span>
 	</header>
 
 	<div data-asde-avisos aria-live="polite"></div>

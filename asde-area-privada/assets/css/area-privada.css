@@ -2178,3 +2178,65 @@ html.asde-cargando .asde-ap button {
 .asde-ap .asde-historial td {
 	overflow-wrap: anywhere;
 }
+
+/* v0.25.0 · Usuarios: sus páginas son hojas de un libro, como en una hoja de cálculo */
+.asde-ap .asde-libro {
+	margin-top: -8px;
+}
+.asde-ap .asde-hojas {
+	margin: 0 0 16px;
+	overflow-x: auto;
+	box-shadow: inset 0 -2px 0 var(--asde-primary);
+	scrollbar-width: thin;
+}
+.asde-ap .asde-hojas__lista {
+	display: flex;
+	align-items: flex-end;
+	gap: 2px;
+	margin: 0;
+	padding: 0 4px;
+	list-style: none;
+}
+.asde-ap .asde-hojas__item {
+	flex: 0 0 auto;
+	margin: 0;
+	list-style: none;
+}
+.asde-ap .asde-hojas__pestana {
+	display: block;
+	margin-bottom: 2px;
+	padding: 8px 16px;
+	border: 1px solid var(--asde-border);
+	border-bottom: 0;
+	border-radius: 6px 6px 0 0;
+	background: var(--asde-neutral-bg);
+	color: var(--asde-text);
+	font-size: 14px;
+	text-decoration: none;
+	white-space: nowrap;
+}
+.asde-ap .asde-hojas__pestana:hover {
+	background: var(--asde-tint);
+	color: var(--asde-primary);
+}
+/* La hoja que se ve, unida a su contenido (tapa la raya de abajo). */
+.asde-ap .asde-hojas__pestana.is-active {
+	margin-bottom: 0;
+	padding-bottom: 10px;
+	border-color: var(--asde-primary);
+	border-top-width: 3px;
+	background: var(--asde-surface);
+	color: var(--asde-primary);
+	font-weight: 600;
+}
+.asde-ap .asde-hojas__pestana:focus-visible {
+	outline: 2px solid var(--asde-primary);
+	outline-offset: -2px;
+}
+.asde-ap .asde-libro--cargando .asde-hoja:not([hidden]) {
+	opacity: 0.55;
+	transition: opacity 0.15s;
+}
+.asde-ap .asde-libro__avisos:empty {
+	display: none;
+}

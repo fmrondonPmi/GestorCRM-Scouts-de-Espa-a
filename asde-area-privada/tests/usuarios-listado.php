@@ -162,6 +162,16 @@ try {
 	$_GET = array();
 	$html = ( new UsuariosView() )->render();
 	$ok( str_contains( $html, 'data-asde-usuarios' ) && str_contains( $html, 'data-asde-tabla' ), 'la página lleva el listado con sus datos para el navegador' );
+	$pestana = static fn( string $hoja, string $nombre, bool $activa ) => 'class="asde-hojas__pestana' . ( $activa ? ' is-active' : '' ) . '" href="' . esc_url( \AsdeBalears\AreaPrivada\Frontend\Pages::url( $hoja ) ) . '" data-asde-hoja-ir="' . $hoja . '"' . ( $activa ? ' aria-current="page"' : '' ) . '>' . $nombre . '</a>';
+	$ok( str_contains( $html, '<div class="asde-libro" data-asde-libro>' ) && str_contains( $html, '<div class="asde-hoja" data-asde-hoja="usuarios">' ) && str_contains( $html, $pestana( 'usuarios', 'Usuarios', true ) ) && str_contains( $html, $pestana( 'alta', 'Dar acceso', false ) ) && str_contains( $html, $pestana( 'emails', 'Registro de emails', false ) ), 'la sección «Usuarios» es un libro con tres hojas (Usuarios, Dar acceso y Registro de emails), con la de Usuarios a la vista (v0.25)' );
+	$ok( ! str_contains( $html, '+ Dar acceso' ) && substr_count( $html, 'href="' . esc_url( \AsdeBalears\AreaPrivada\Frontend\Pages::url( 'emails' ) ) . '"' ) === 1, 'ya sin los enlaces sueltos a «Dar acceso» y al registro de emails: son hojas' );
+	$alta_h = ( new \AsdeBalears\AreaPrivada\Frontend\Views\AltaUsuariosView() )->render();
+	$mail_h = ( new \AsdeBalears\AreaPrivada\Frontend\Views\EmailsView() )->render();
+	\AsdeBalears\AreaPrivada\Frontend\Views\View::en_modal();
+	$alta_m = ( new \AsdeBalears\AreaPrivada\Frontend\Views\AltaUsuariosView() )->render();
+	\AsdeBalears\AreaPrivada\Frontend\Views\View::en_modal( false );
+	$ok( str_contains( $alta_h, '<div class="asde-hoja" data-asde-hoja="alta">' ) && str_contains( $alta_h, $pestana( 'alta', 'Dar acceso', true ) ) && str_contains( $alta_h, 'Busca al socio en el CRM' ) && str_contains( $mail_h, '<div class="asde-hoja" data-asde-hoja="emails">' ) && str_contains( $mail_h, $pestana( 'emails', 'Registro de emails', true ) ), '«Dar acceso» y «Registro de emails» son las otras hojas del libro, cada una a la vista en su página' );
+	$ok( str_contains( $alta_m, 'Busca al socio en el CRM' ) && ! str_contains( $alta_m, 'data-asde-libro' ), '«Dar acceso» en la ventana emergente (desde otras páginas) va sin hojas' );
 	$ok( substr_count( $html, 'data-asde-fila="' ) >= 5 && str_contains( $html, 'data-usuario="prueba-lis-a"' ) && str_contains( $html, 'data-asde-fila="' . $u_baja . '"' ), 'una fila por usuario (con roles, invitados y desactivados)' );
 	$ok( ! str_contains( $html, 'data-asde-fila="' . $u_otro . '"' ), 'y ninguna de otro grupo' );
 	$ok( str_contains( $html, 'data-roles="|' . Roles::SCOUTER . '|"' ) && str_contains( $html, 'data-ambito="|lobatos|"' ) && str_contains( $html, 'data-estado="invitado"' ) && str_contains( $html, 'data-estado="desactivado"' ), 'cada fila lleva rol, ámbito y estado para filtrar' );
@@ -287,7 +297,17 @@ try {
 		$_POST = $_REQUEST = array();
 		$router->assets();
 		$ok( wp_script_is( 'asde-usuarios', 'enqueued' ) && wp_script_is( 'asde-area', 'enqueued' ), 'la página carga usuarios.js (y area.js, que avisa al cerrar la ventana emergente)' );
+		$ok( wp_script_is( 'asde-hojas', 'enqueued' ), 'y hojas.js: las hojas de la sección se abren sin recargar la página (v0.25)' );
 		wp_dequeue_script( 'asde-usuarios' );
+		wp_dequeue_script( 'asde-hojas' );
+		$pagina_alta = \AsdeBalears\AreaPrivada\Frontend\Pages::id( 'alta' );
+		if ( $pagina_alta ) {
+			$wp_query->query( array( 'page_id' => $pagina_alta ) );
+			$router->assets();
+			$ok( wp_script_is( 'asde-hojas', 'enqueued' ) && wp_script_is( 'asde-usuarios', 'enqueued' ), '«Dar acceso» también carga las hojas y el listado de usuarios (para abrir su hoja sin recargar)' );
+			wp_dequeue_script( 'asde-usuarios' );
+			wp_dequeue_script( 'asde-hojas' );
+		}
 		$wp_query->init();
 	} else {
 		echo "OMITIDO  La página «Usuarios» no existe en este sitio.\n";

@@ -41,20 +41,22 @@ final class UsuariosView extends View {
 
 		return $this->layout(
 			'usuarios',
-			$this->tpl(
-				'usuarios/listado',
-				array(
-					'total'        => count( $d['users'] ),
-					'filas'        => $d['filas'],
-					'aviso'        => $d['aviso'],
-					'rol'          => in_array( $rol, Roles::ALL, true ) ? $rol : '',
-					'por_pagina'   => Tabla::por_pagina_guardada(),
-					'url'          => $this->url( 'usuarios' ),
-					'url_alta'     => $this->url( 'alta' ),
-					'url_emails'   => $this->url( 'emails' ),
-					'ajax'         => admin_url( 'admin-ajax.php' ),
-					'nonce_refrescar' => wp_create_nonce( self::NONCE_REFRESCAR ),
-					'nonce_pagina' => wp_create_nonce( 'asde_ap_por_pagina' ),
+			$this->libro_usuarios(
+				'usuarios',
+				$this->tpl(
+					'usuarios/listado',
+					array(
+						'total'           => count( $d['users'] ),
+						'filas'           => $d['filas'],
+						'aviso'           => $d['aviso'],
+						'rol'             => in_array( $rol, Roles::ALL, true ) ? $rol : '',
+						'por_pagina'      => Tabla::por_pagina_guardada(),
+						'url'             => $this->url( 'usuarios' ),
+						'url_alta'        => $this->url( 'alta' ),
+						'ajax'            => admin_url( 'admin-ajax.php' ),
+						'nonce_refrescar' => wp_create_nonce( self::NONCE_REFRESCAR ),
+						'nonce_pagina'    => wp_create_nonce( 'asde_ap_por_pagina' ),
+					)
 				)
 			)
 		);

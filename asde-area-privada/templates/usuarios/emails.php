@@ -9,7 +9,6 @@
  * @var string                                 $estado  Filtro ('' = todos)
  * @var WP_User|null                           $usuario Filtro por usuario
  * @var string                                 $url
- * @var string                                 $url_usuarios
  * @var string                                 $mailpit URL de Mailpit (solo en local)
  */
 use AsdeBalears\AreaPrivada\Usuarios\RegistroEmails;
@@ -24,9 +23,8 @@ $columnas = array(
 );
 ?>
 <section class="asde-card">
-	<header class="asde-card__header asde-card__header--split">
+	<header class="asde-card__header">
 		<h2 class="asde-card__title"><?php asde_e( 'Registro de emails' ); ?></h2>
-		<a href="<?php echo esc_url( $url_usuarios ); ?>"><?php asde_e( '← Usuarios' ); ?></a>
 	</header>
 	<p><?php asde_e( 'Cada invitación, recuperación de contraseña o aviso de solicitud rechazada que envía el área privada, con su resultado.' ); ?> <strong><?php asde_e( 'Enviado' ); ?></strong> <?php asde_e( 'quiere decir que el servidor de correo lo aceptó; si no llega, que revisen la carpeta de spam o que la Secretaría compruebe el email en el CRM.' ); ?></p>
 

@@ -553,7 +553,6 @@ return array(
 	'(o el email al que te llegó la invitación)' => '(edo gonbidapena iritsi zitzaizun emaila)',
 	'Activa la verificación en dos pasos.' => 'Aktibatu bi urratseko egiaztapena.',
 	'Aprueba a las familias y socios que piden entrar con el enlace del grupo.' => 'Onartu taldearen estekarekin sartzea eskatzen duten familiak eta bazkideak.',
-	'Busca a un socio y dale acceso a él o ella, o a su familia.' => 'Bilatu bazkide bat eta eman sarbidea berari edo bere familiari.',
 	'Cambios propuestos' => 'Proposatutako aldaketak',
 	'Configurarla ahora' => 'Konfiguratu orain',
 	'Confirma que lo has recibido' => 'Berretsi jaso duzula',
@@ -573,7 +572,6 @@ return array(
 	'Pendiente de revisar' => 'Berrikusteko zain',
 	'Personas del grupo' => 'Taldeko pertsonak',
 	'Pide la camisa scout y las insignias, y sigue tu pedido.' => 'Eskatu eskaut alkandora eta insigniak, eta jarraitu zure eskaerari.',
-	'Quién tiene acceso, invitaciones y bajas.' => 'Nork duen sarbidea, gonbidapenak eta baja-emateak.',
 	'Revisa los cambios que piden las familias en las fichas.' => 'Berrikusi familiek fitxetan eskatzen dituzten aldaketak.',
 	'Seguridad de la cuenta' => 'Kontuaren segurtasuna',
 	'Solicitudes de acceso' => 'Sarbide-eskaerak',
@@ -1732,7 +1730,6 @@ return array(
 	'(a quien la pidió; aún no tiene cuenta)' => '(eskatu zuenari; oraindik ez du konturik)',
 	'(cuenta del 2.º tutor/a)' => '(2. tutorearen kontua)',
 	'(no encontrado en el CRM)' => '(ez da CRMan aurkitu)',
-	'+ Dar acceso' => '+ Eman sarbidea',
 	': aquí aparece sustituido.' => ': hemen ordezkatuta agertzen da.',
 	'A un voluntario sin sección solo se le puede dar acceso como Tesorería, Secretaría o Coordinación: marca al menos una.' => 'Atalik gabeko boluntario bati Diruzaintza, Idazkaritza edo Koordinazio gisa soilik eman dakioke sarbidea: markatu gutxienez bat.',
 	'Activo' => 'Aktiboa',
@@ -1852,7 +1849,6 @@ return array(
 	'Ámbito' => 'Eremua',
 	'Último email:' => 'Azken emaila:',
 	'← Registro de emails' => '← Emailen erregistroa',
-	'← Usuarios' => '← Erabiltzaileak',
 	// Inventario (v0.19, doc 32)
 	'%1$s: %2$d fila leída.' => '%1$s: %2$d errenkada irakurrita.',
 	'%1$s: %2$d filas leídas.' => '%1$s: %2$d errenkada irakurrita.',
@@ -2383,4 +2379,8 @@ return array(
 	'Según lo pagado' => 'Ordaindutakoaren arabera',
 	'Sin familia en Tesorería' => 'Diruzaintzan familiarik gabe',
 	'Vencido sin pagar' => 'Iraungita ordaindu gabe',
+
+	// v0.25.0: sección Usuarios con hojas
+	'Quién tiene acceso, dar acceso a un socio o a su familia, invitaciones, bajas y el registro de emails.' => 'Nork duen sarbidea, bazkide bati edo bere familiari sarbidea ematea, gonbidapenak, bajak eta emailen erregistroa.',
+	'Hojas de Usuarios' => 'Erabiltzaileen orriak',
 );
