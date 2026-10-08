@@ -95,7 +95,8 @@ if ( $solicitud && \AsdeBalears\AreaPrivada\Usuarios\Solicitudes::POR_ENLACE ===
 		<?php if ( $p->cargo ) : ?>
 			<div>
 				<dt><?php asde_e( 'Cargo en el CRM' ); ?></dt>
-				<dd><?php echo esc_html( asde_t( Catalogo::ENUMS['cargoeducativo_c'][ $p->cargo ] ?? $p )->cargo ); ?></dd>
+				<?php /* v0.25.1: un cargo que no está en la lista se enseña tal cual (antes, error 500). */ ?>
+				<dd><?php echo esc_html( asde_t( Catalogo::ENUMS['cargoeducativo_c'][ $p->cargo ] ?? $p->cargo ) ); ?></dd>
 			</div>
 		<?php endif; ?>
 		<?php foreach ( $p->tutores as $n => $t ) : ?>

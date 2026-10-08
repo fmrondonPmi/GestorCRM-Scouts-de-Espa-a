@@ -84,7 +84,7 @@ try {
 	$css = Colores::css( array( 'primary' => '#2e7d32' ) );
 	$ok( str_starts_with( $css, ':root,.asde-ap{' ) && str_contains( $css, '--asde-primary:#2e7d32;' ) && str_contains( $css, '.asde-ap .button' ), 'sobrescribe las variables en :root y .asde-ap, y recolorea los botones del área con el principal' );
 	$ok( ! str_contains( Colores::css( array( 'text' => '#222222' ) ), '.button' ) && ! str_contains( $css, '<' ) && ! str_contains( $css, 'url(' ), 'sin color principal no toca los botones; el CSS no lleva nada raro' );
-	$def_css = (string) file_get_contents( ASDE_AP_DIR . 'assets/css/area-privada.css' );
+	$def_css = str_replace( "\r\n", "\n", (string) file_get_contents( ASDE_AP_DIR . 'assets/css/area-privada.css' ) ); // Con finales de línea de Windows (git en Windows) también.
 	$vars_css = array();
 	preg_match_all( '/--(asde-[a-z-]+):/', substr( $def_css, 0, (int) strpos( $def_css, "\n}\n" ) ), $vars_css );
 	$conocidas = array_unique( $vars_css[1] );

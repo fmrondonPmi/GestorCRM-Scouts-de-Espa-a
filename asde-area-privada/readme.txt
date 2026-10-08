@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.25.0
+Stable tag: 0.25.1
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -52,6 +52,9 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.25.1 =
+* Fix: "Dar acceso" (opened as a page or in the pop-up window) failed with an error 500 when the person's role in the CRM ("Cargo en el CRM") was not one of the known ones; it now shows the role as the CRM has it. Known roles show their name again (they were blank). The bug came from v0.15.0.
 
 = 0.25.0 =
 * Treasury: the family record updates in place (registering a payment, also with a bank income, an adjustment or deleting one) without reloading the whole page. The bank list keeps its filters after conciliating or undoing.
@@ -108,6 +111,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * First version with the mobile app (PWA).
 
 == Upgrade Notice ==
+
+= 0.25.1 =
+Fixes an error 500 in "Dar acceso" for people with an unknown role in the CRM. No database changes.
 
 = 0.25.0 =
 Treasury without full reloads, payment deletion with history, payments report per member, Users section with sheets. Adds one column to the payments table and one predefined report.

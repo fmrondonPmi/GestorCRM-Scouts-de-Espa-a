@@ -68,6 +68,9 @@ $crm = new Asde_Prueba_Crm(
 		$P( 3, 'Pol', 'Prueba Mas', '2011-03-03', 'Escultas' ),
 		$P( 4, 'Eva', 'Prueba Gil', '1990-01-01', 'Scouters' ),
 		$P( 5, 'Iris', 'Prueba Roca', '2012-07-07', 'Scouts' ),
+		// v0.25.1: un cargo del CRM que no está en la lista (daba error 500 en «Dar acceso») y uno que sí.
+		$P( 6, 'Tomás', 'Prueba Cargo', '1985-04-04', 'Scouters', array( 'cargoeducativo_c' => 'cargoinventadoGS' ) ),
+		$P( 7, 'Clara', 'Prueba Cargo', '1986-06-06', 'Scouters', array( 'cargoeducativo_c' => 'secretariogrupoGS' ) ),
 	),
 	$grupo['crm_id']
 );
@@ -172,6 +175,15 @@ try {
 	\AsdeBalears\AreaPrivada\Frontend\Views\View::en_modal( false );
 	$ok( str_contains( $alta_h, '<div class="asde-hoja" data-asde-hoja="alta">' ) && str_contains( $alta_h, $pestana( 'alta', 'Dar acceso', true ) ) && str_contains( $alta_h, 'Busca al socio en el CRM' ) && str_contains( $mail_h, '<div class="asde-hoja" data-asde-hoja="emails">' ) && str_contains( $mail_h, $pestana( 'emails', 'Registro de emails', true ) ), '«Dar acceso» y «Registro de emails» son las otras hojas del libro, cada una a la vista en su página' );
 	$ok( str_contains( $alta_m, 'Busca al socio en el CRM' ) && ! str_contains( $alta_m, 'data-asde-libro' ), '«Dar acceso» en la ventana emergente (desde otras páginas) va sin hojas' );
+	$_GET   = array( 'socio' => '990006' );
+	$raro_p = ( new \AsdeBalears\AreaPrivada\Frontend\Views\AltaUsuariosView() )->render();
+	\AsdeBalears\AreaPrivada\Frontend\Views\View::en_modal();
+	$raro_v = ( new \AsdeBalears\AreaPrivada\Frontend\Views\AltaUsuariosView() )->render();
+	\AsdeBalears\AreaPrivada\Frontend\Views\View::en_modal( false );
+	$_GET     = array( 'socio' => '990007' );
+	$conocido = ( new \AsdeBalears\AreaPrivada\Frontend\Views\AltaUsuariosView() )->render();
+	$_GET     = array();
+	$ok( str_contains( $raro_p, 'Cargo en el CRM' ) && str_contains( $raro_p, '<dd>cargoinventadoGS</dd>' ) && str_contains( $raro_v, '<dd>cargoinventadoGS</dd>' ) && str_contains( $conocido, '<dd>Secretario/a de Grupo</dd>' ), '«Dar acceso» de alguien con un cargo del CRM que no está en la lista lo enseña tal cual (antes, error 500); uno de la lista, con su nombre (v0.25.1)' );
 	$ok( substr_count( $html, 'data-asde-fila="' ) >= 5 && str_contains( $html, 'data-usuario="prueba-lis-a"' ) && str_contains( $html, 'data-asde-fila="' . $u_baja . '"' ), 'una fila por usuario (con roles, invitados y desactivados)' );
 	$ok( ! str_contains( $html, 'data-asde-fila="' . $u_otro . '"' ), 'y ninguna de otro grupo' );
 	$ok( str_contains( $html, 'data-roles="|' . Roles::SCOUTER . '|"' ) && str_contains( $html, 'data-ambito="|lobatos|"' ) && str_contains( $html, 'data-estado="invitado"' ) && str_contains( $html, 'data-estado="desactivado"' ), 'cada fila lleva rol, ámbito y estado para filtrar' );
