@@ -413,6 +413,38 @@ try {
 	$como( $u_teso );
 	$ok( $no_ve && $ve_banco->invoke( null ), 'la ventana solo la abre quien ve el banco (Tesorería sí, un scouter no)' );
 
+	echo "\n== Parte F · Eliminar un pago con su motivo y el historial (v0.25) ==\n";
+	$pago_banco = (int) BancoTable::obtener( (int) $con_ref['id'] )['pago_id'];
+	$pagado     = static fn() => (float) ( MovimientosTable::totales( '2026-2027' )[ $fam2['id'] ]['pagado'] ?? 0 );
+	$antes      = $pagado();
+	list( $avisos ) = $enviar( new \AsdeBalears\AreaPrivada\Frontend\Views\TesoreriaView(), array( 'asde_action' => 'eliminar', 'familia' => (string) $fam2['id'], 'ronda' => '2026-2027', 'movimiento' => (string) $pago_banco, 'motivo' => '   ' ), 'asde_mov_' . $fam2['id'] );
+	$ok( str_contains( $avisos, 'Escribe el motivo' ) && empty( MovimientosTable::obtener( $pago_banco )['anulado_en'] ), 'sin motivo no se elimina' );
+	$ajena = \AsdeBalears\AreaPrivada\Tesoreria\Pagos::eliminar( $pago_banco, (int) $fam2['id'] + 100000, 'Prueba' );
+	$ok( is_wp_error( $ajena ) && str_contains( $ajena->get_error_message(), 'no es de esta familia' ) && empty( MovimientosTable::obtener( $pago_banco )['anulado_en'] ), 'ni desde la ficha de otra familia' );
+	list( $avisos ) = $enviar( new \AsdeBalears\AreaPrivada\Frontend\Views\TesoreriaView(), array( 'asde_action' => 'eliminar', 'familia' => (string) $fam2['id'], 'ronda' => '2026-2027', 'movimiento' => (string) $pago_banco, 'motivo' => 'Prueba: registrado dos veces' ), 'asde_mov_' . $fam2['id'] );
+	$elim = MovimientosTable::obtener( $pago_banco );
+	$mb   = BancoTable::obtener( (int) $con_ref['id'] );
+	$ok( ! empty( $elim['anulado_en'] ) && 'Prueba: registrado dos veces' === $elim['anulado_motivo'] && $u_teso === (int) $elim['anulado_por'], 'Tesorería elimina el pago: no se borra, queda anulado con quién, cuándo y el motivo' );
+	$ok( abs( $antes - 120.0 - $pagado() ) < 0.001, 'y deja de contar en lo pagado por la familia' );
+	$ok( BancoTable::PENDIENTE === $mb['estado'] && empty( $mb['pago_id'] ) && empty( $mb['familia_id'] ) && str_contains( $avisos, 'eliminado. Queda en el historial de la familia.' ) && str_contains( $avisos, 'El ingreso del banco del 07/10/2026 vuelve a estar por conciliar.' ), 'el ingreso del banco con el que se registró vuelve a estar por conciliar (y el aviso lo dice)' );
+	$ok( (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM %i WHERE id > %d AND accion = 'tesoreria_pago_eliminado' AND objeto_id = %s", Logger::table(), $log_antes, (string) $fam2['id'] ) ) >= 1, 'queda en el registro de actividad' );
+	list( $avisos ) = $enviar( new \AsdeBalears\AreaPrivada\Frontend\Views\TesoreriaView(), array( 'asde_action' => 'eliminar', 'familia' => (string) $fam2['id'], 'ronda' => '2026-2027', 'movimiento' => (string) $pago_banco, 'motivo' => 'otra vez' ), 'asde_mov_' . $fam2['id'] );
+	$ok( str_contains( $avisos, 'ya estaba eliminado' ) && 'Prueba: registrado dos veces' === MovimientosTable::obtener( $pago_banco )['anulado_motivo'], 'eliminarlo otra vez no cambia nada' );
+	$sepa = (int) MovimientosTable::registrar( (int) $fam2['id'], '2026-2027', MovimientosTable::PAGO, '2026-10-20', 30.0, 'transferencia', 'PRUEBA-BG remesa', '', 'sepa' );
+	list( $avisos ) = $enviar( new \AsdeBalears\AreaPrivada\Frontend\Views\TesoreriaView(), array( 'asde_action' => 'eliminar', 'familia' => (string) $fam2['id'], 'ronda' => '2026-2027', 'movimiento' => (string) $sepa, 'motivo' => 'Prueba: devuelto' ), 'asde_mov_' . $fam2['id'] );
+	$ok( ! empty( MovimientosTable::obtener( $sepa )['anulado_en'] ) && str_contains( $avisos, 'Venía del cobro de una remesa SEPA' ) && ! str_contains( $avisos, 'vuelve a estar por conciliar' ), 'un pago del cobro de una remesa SEPA se elimina con un aviso (la remesa lo sigue dando por cobrado)' );
+
+	$movs = MovimientosTable::de_familia( (int) $fam2['id'], '2026-2027' );
+	$hist = \AsdeBalears\AreaPrivada\Tesoreria\Pagos::historial( $movs );
+	$n_hist = static fn( string $accion ) => count( array_filter( $hist, static fn( $x ) => $accion === $x['accion'] ) );
+	$ok( 5 === count( $hist ) && 'eliminado' === $hist[0]['accion'] && 3 === $n_hist( 'registrado' ) && 2 === $n_hist( 'eliminado' ) && $hist === array_values( wp_list_sort( $hist, 'cuando', 'DESC', true ) ), 'el historial: cada registro y cada eliminación, lo más reciente primero' );
+	$vars['movimientos'] = $movs;
+	$vars['historial']   = $hist;
+	$h                   = \AsdeBalears\AreaPrivada\Frontend\TemplateLoader::render( 'tesoreria/familia', $vars );
+	$vivo                = (int) current( wp_list_filter( $movs, array( 'anulado_en' => null ) ) )['id'];
+	$ok( 1 === preg_match( '/name="movimiento" value="' . $vivo . '">.*name="motivo" maxlength="255" required/s', $h ) && ! str_contains( $h, 'name="movimiento" value="' . $pago_banco . '"' ) && ! str_contains( $h, 'name="movimiento" value="' . $sepa . '"' ), 'en la ficha, «Eliminar…» pide el motivo, y los eliminados ya no están entre los movimientos' );
+	$ok( str_contains( $h, 'Historial de la ronda' ) && str_contains( $h, '5 anotaciones · 2 eliminados' ) && str_contains( $h, 'Pago de 120,00 € eliminado' ) && str_contains( $h, 'Motivo: Prueba: registrado dos veces' ) && str_contains( $h, 'con un ingreso del banco' ) && str_contains( $h, 'con el cobro de una remesa SEPA' ), 'y el historial de la ronda cuenta qué se registró y qué se eliminó, con el motivo' );
+
 	$ok( 0 === $cortadas, 'ninguna petición ha salido hacia un CRM' );
 } finally {
 	remove_filter( 'wp_redirect', $redirigir, 1 );

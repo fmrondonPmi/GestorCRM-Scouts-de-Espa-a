@@ -2150,3 +2150,31 @@ html.asde-cargando .asde-ap button {
 .asde-ap .asde-bajas-recientes li {
 	overflow-wrap: anywhere;
 }
+
+/* v0.25.0 · Tesorería: eliminar un pago con su motivo y el historial de la familia */
+.asde-ap .asde-eliminar-mov summary {
+	list-style: none;
+	cursor: pointer;
+	display: inline;
+}
+.asde-ap .asde-eliminar-mov summary::-webkit-details-marker {
+	display: none;
+}
+.asde-ap .asde-eliminar-mov[open] summary {
+	margin-bottom: 6px;
+	display: block;
+}
+.asde-ap .asde-eliminar-mov__form {
+	display: grid;
+	gap: 6px;
+	min-width: min(100%, 240px);
+}
+.asde-ap .asde-eliminar-mov__form .button {
+	justify-self: start;
+}
+.asde-ap .asde-historial__eliminado td {
+	color: var(--asde-muted);
+}
+.asde-ap .asde-historial td {
+	overflow-wrap: anywhere;
+}

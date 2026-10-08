@@ -7,7 +7,8 @@
  * @var array    $calc
  * @var array    $cfg
  * @var string   $ronda
- * @var array[]  $movimientos
+ * @var array[]  $movimientos  Con los eliminados (anulados)
+ * @var array[]  $historial    Pagos::historial() de Tesorería (v0.25)
  * @var ?WP_User $cuenta
  * @var array|null $banco Para asociar un ingreso del banco (TesoreriaView::banco_para), o null si no ve el banco (v0.20.1)
  * @var string   $url
@@ -20,6 +21,7 @@ use AsdeBalears\AreaPrivada\Tesoreria\MovimientosTable;
 defined( 'ABSPATH' ) || exit;
 
 $c    = $calc;
+$historial = $historial ?? array(); // Quien pinta la ficha sin él (p. ej. las pruebas) no tiene historial.
 $hoy  = wp_date( 'Y-m-d' );
 $user = static fn( $id ) => ( $u = get_userdata( (int) $id ) ) ? $u->user_login : '—';
 ?>
@@ -176,8 +178,9 @@ $user = static fn( $id ) => ( $u = get_userdata( (int) $id ) ) ? $u->user_login 
 
 <section class="asde-card">
 	<h3><?php asde_e( 'Movimientos de la ronda' ); ?></h3>
-	<?php if ( ! $movimientos ) : ?>
-		<p><?php asde_e( 'Todavía no hay movimientos.' ); ?></p>
+	<?php $vigentes = array_values( array_filter( $movimientos, static fn( $m ) => empty( $m['anulado_en'] ) ) ); ?>
+	<?php if ( ! $vigentes ) : ?>
+		<p><?php echo $movimientos ? esc_html( asde_t( 'No queda ningún movimiento: los eliminados están en el historial.' ) ) : esc_html( asde_t( 'Todavía no hay movimientos.' ) ); ?></p>
 	<?php else : ?>
 		<table class="asde-table">
 			<thead>
@@ -191,25 +194,33 @@ $user = static fn( $id ) => ( $u = get_userdata( (int) $id ) ) ? $u->user_login 
 				</tr>
 			</thead>
 			<tbody>
-				<?php foreach ( $movimientos as $m ) : ?>
-					<?php $anulado = ! empty( $m['anulado_en'] ); ?>
-					<tr class="<?php echo $anulado ? 'asde-anulado' : ''; ?>">
+				<?php foreach ( $vigentes as $m ) : ?>
+					<tr>
 						<td data-label="<?php echo esc_attr( asde_a( 'Fecha' ) ); ?>"><?php echo esc_html( wp_date( 'd/m/Y', strtotime( $m['fecha'] . ' 12:00' ) ) ); ?></td>
 						<td data-label="<?php echo esc_attr( asde_a( 'Tipo' ) ); ?>"><?php echo esc_html( MovimientosTable::PAGO === $m['tipo'] ? asde_t( 'Pago' ) . ( $m['metodo'] ? ' · ' . ( asde_t( MovimientosTable::METODOS[ $m['metodo'] ] ?? $m['metodo'] ) ) : '' ) : asde_t( 'Ajuste' ) ); ?></td>
 						<td data-label="<?php echo esc_attr( asde_a( 'Importe' ) ); ?>"><?php echo esc_html( Calculadora::euros( (float) $m['importe'] ) ); ?></td>
-						<td data-label="<?php echo esc_attr( asde_a( 'Detalle' ) ); ?>"><?php echo esc_html( trim( $m['referencia'] . ( $m['referencia'] && $m['nota'] ? ' · ' : '' ) . $m['nota'] ) ); ?><?php echo $anulado ? '<br><span class="asde-help">' . esc_html( sprintf( asde_t( 'Anulado el %s por %s' ), wp_date( 'd/m/Y', strtotime( $m['anulado_en'] . ' UTC' ) ), $user( $m['anulado_por'] ) ) ) . '</span>' : ''; ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Detalle' ) ); ?>"><?php echo esc_html( trim( $m['referencia'] . ( $m['referencia'] && $m['nota'] ? ' · ' : '' ) . $m['nota'] ) ); ?></td>
 						<td data-label="<?php echo esc_attr( asde_a( 'Registrado por' ) ); ?>"><?php echo esc_html( $user( $m['registrado_por'] ) ); ?></td>
 						<td data-label="">
-							<?php if ( ! $anulado ) : ?>
-								<form method="post" onsubmit="return confirm(<?php echo esc_attr( asde_js( '¿Anular este movimiento? Quedará registrado como anulado.' ) ); ?>);">
+							<?php /* v0.25: «Eliminar» pide el motivo; el movimiento no se borra: pasa al historial. */ ?>
+							<details class="asde-eliminar-mov">
+								<summary class="asde-btn-link asde-btn-danger"><?php asde_e( 'Eliminar…' ); ?></summary>
+								<form method="post" class="asde-form asde-eliminar-mov__form">
 									<?php wp_nonce_field( 'asde_mov_' . $familia['id'] ); ?>
-									<input type="hidden" name="asde_action" value="anular">
+									<input type="hidden" name="asde_action" value="eliminar">
 									<input type="hidden" name="familia" value="<?php echo (int) $familia['id']; ?>">
 									<input type="hidden" name="ronda" value="<?php echo esc_attr( $ronda ); ?>">
 									<input type="hidden" name="movimiento" value="<?php echo (int) $m['id']; ?>">
-									<button type="submit" class="asde-btn-link asde-btn-danger"><?php asde_e( 'Anular' ); ?></button>
+									<label for="asde-eliminar-<?php echo (int) $m['id']; ?>"><?php asde_e( 'Motivo' ); ?></label>
+									<input type="text" id="asde-eliminar-<?php echo (int) $m['id']; ?>" name="motivo" maxlength="255" required placeholder="<?php echo esc_attr( asde_a( 'Por ejemplo: registrado dos veces' ) ); ?>">
+									<?php if ( 'banco' === $m['origen'] ) : ?>
+										<span class="asde-help"><?php asde_e( 'Viene de un ingreso del banco: el ingreso volverá a estar por conciliar.' ); ?></span>
+									<?php elseif ( 'sepa' === $m['origen'] ) : ?>
+										<span class="asde-help asde-help--warning"><?php asde_e( 'Viene del cobro de una remesa SEPA: la remesa lo seguirá dando por cobrado.' ); ?></span>
+									<?php endif; ?>
+									<button type="submit" class="button asde-button-secundario"><?php echo MovimientosTable::PAGO === $m['tipo'] ? esc_html( asde_t( 'Eliminar el pago' ) ) : esc_html( asde_t( 'Eliminar el ajuste' ) ); ?></button>
 								</form>
-							<?php endif; ?>
+							</details>
 						</td>
 					</tr>
 				<?php endforeach; ?>
@@ -217,4 +228,65 @@ $user = static fn( $id ) => ( $u = get_userdata( (int) $id ) ) ? $u->user_login 
 		</table>
 	<?php endif; ?>
 </section>
+
+<?php if ( $historial ) : ?>
+	<section class="asde-card">
+		<details class="asde-plegable" data-asde-recordar="tesoreria-historial">
+			<summary>
+				<h3><?php asde_e( 'Historial de la ronda' ); ?></h3>
+				<span class="asde-plegable__resumen asde-muted">
+					<?php
+					$eliminados = count( array_filter( $historial, static fn( $h ) => 'eliminado' === $h['accion'] ) );
+					/* translators: %d: anotaciones del historial */
+					echo esc_html( sprintf( asde_n( '%d anotación', '%d anotaciones', count( $historial ) ), count( $historial ) ) );
+					if ( $eliminados ) {
+						/* translators: %d: movimientos eliminados */
+						echo ' · ' . esc_html( sprintf( asde_n( '%d eliminado', '%d eliminados', $eliminados ), $eliminados ) );
+					}
+					?>
+				</span>
+			</summary>
+			<p class="asde-help"><?php asde_e( 'Todo lo que se ha registrado y eliminado en la ficha de esta familia, con quién y cuándo. Lo eliminado no cuenta en la cuota.' ); ?></p>
+			<table class="asde-table asde-historial">
+				<thead>
+					<tr>
+						<th scope="col"><?php asde_e( 'Cuándo' ); ?></th>
+						<th scope="col"><?php asde_e( 'Qué' ); ?></th>
+						<th scope="col"><?php asde_e( 'Quién' ); ?></th>
+						<th scope="col"><?php asde_e( 'Detalle' ); ?></th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php foreach ( $historial as $h ) : ?>
+						<?php
+						$m      = $h['mov'];
+						$quien  = 'eliminado' === $h['accion'] ? $m['anulado_por'] : $m['registrado_por'];
+						$origen = array(
+							'banco' => asde_t( 'con un ingreso del banco' ),
+							'sepa'  => asde_t( 'con el cobro de una remesa SEPA' ),
+						)[ $m['origen'] ] ?? '';
+						$que    = MovimientosTable::PAGO === $m['tipo']
+							/* translators: %s: importe */
+							? ( 'eliminado' === $h['accion'] ? sprintf( asde_t( 'Pago de %s eliminado' ), Calculadora::euros( (float) $m['importe'] ) ) : sprintf( asde_t( 'Pago de %s registrado' ), Calculadora::euros( (float) $m['importe'] ) ) )
+							/* translators: %s: importe */
+							: ( 'eliminado' === $h['accion'] ? sprintf( asde_t( 'Ajuste de %s eliminado' ), Calculadora::euros( (float) $m['importe'] ) ) : sprintf( asde_t( 'Ajuste de %s registrado' ), Calculadora::euros( (float) $m['importe'] ) ) );
+						?>
+						<tr class="<?php echo 'eliminado' === $h['accion'] ? 'asde-historial__eliminado' : ''; ?>">
+							<td data-label="<?php echo esc_attr( asde_a( 'Cuándo' ) ); ?>"><?php echo esc_html( wp_date( 'd/m/Y H:i', strtotime( $h['cuando'] . ' UTC' ) ) ); ?></td>
+							<td data-label="<?php echo esc_attr( asde_a( 'Qué' ) ); ?>"><strong><?php echo esc_html( $que ); ?></strong><?php echo 'registrado' === $h['accion'] && '' !== $origen ? ' <span class="asde-muted">' . esc_html( $origen ) . '</span>' : ''; ?></td>
+							<td data-label="<?php echo esc_attr( asde_a( 'Quién' ) ); ?>"><?php echo esc_html( $user( $quien ) ); ?></td>
+							<td data-label="<?php echo esc_attr( asde_a( 'Detalle' ) ); ?>">
+								<?php if ( 'eliminado' === $h['accion'] ) : ?>
+									<?php echo '' !== (string) ( $m['anulado_motivo'] ?? '' ) ? esc_html( sprintf( asde_t( 'Motivo: %s' ), $m['anulado_motivo'] ) ) : '—'; ?>
+								<?php else : ?>
+									<?php echo esc_html( wp_date( 'd/m/Y', strtotime( $m['fecha'] . ' 12:00' ) ) . ( '' !== trim( $m['referencia'] . $m['nota'] ) ? ' · ' . trim( $m['referencia'] . ( $m['referencia'] && $m['nota'] ? ' · ' : '' ) . $m['nota'] ) : '' ) ); ?>
+								<?php endif; ?>
+							</td>
+						</tr>
+					<?php endforeach; ?>
+				</tbody>
+			</table>
+		</details>
+	</section>
+<?php endif; ?>
 </div>

@@ -234,7 +234,7 @@ final class Conciliacion {
 			return new \WP_Error( 'asde_banco', asde_t( 'Ese movimiento no está revisado.' ) );
 		}
 		if ( BancoTable::CONCILIADO === $m['estado'] && $m['pago_id'] ) {
-			MovimientosTable::anular( (int) $m['pago_id'] );
+			MovimientosTable::anular( (int) $m['pago_id'], 'Se deshizo la conciliación con el banco.' ); // Lo que se guarda va en castellano.
 		}
 		BancoTable::marcar( $mov_id, BancoTable::PENDIENTE );
 		Logger::log( 'banco_deshecho', 'banco', (string) $mov_id, array( 'pago_anulado' => (int) $m['pago_id'] ) );

@@ -333,6 +333,13 @@ final class BancoTable {
 		return $r ? self::descifrar( $r ) : null;
 	}
 
+	/** El movimiento del banco con el que se registró un pago (al conciliarlo), o null (v0.25). */
+	public static function por_pago( int $pago_id ): ?array {
+		global $wpdb;
+		$r = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . self::table() . ' WHERE pago_id = %d AND grupo = %s ORDER BY id DESC LIMIT 1', $pago_id, Grupo::numero() ), ARRAY_A ); // phpcs:ignore WordPress.DB
+		return $r ? self::descifrar( $r ) : null;
+	}
+
 	/** Cambia el estado. El tipo y la nota (de los revisados) se quitan: para ponerlos, revisar(). */
 	public static function marcar( int $id, string $estado, ?int $familia_id = null, ?int $pago_id = null ): bool {
 		global $wpdb;

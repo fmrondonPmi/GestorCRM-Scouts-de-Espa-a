@@ -10,7 +10,8 @@ defined( 'ABSPATH' ) || exit;
  *   pago    Dinero recibido (reduce lo pendiente).
  *   ajuste  Cambia lo que debe pagar la familia (negativo = descuento o beca;
  *           positivo = recargo). Siempre con motivo.
- * Nunca se borran: se anulan (queda constancia de quién y cuándo).
+ * Nunca se borran: se anulan (queda constancia de quién, cuándo y, desde la v0.25,
+ * por qué: «Eliminar» en la ficha de la familia pide el motivo, ver Tesoreria\Pagos).
  * Se registran a mano (origen = manual), al conciliar un ingreso del banco
  * (origen = banco, ver Tesoreria\Banco) o al registrar el cobro de una remesa de
  * adeudos SEPA (origen = sepa, ver Sepa\Remesas).
@@ -55,6 +56,7 @@ final class MovimientosTable {
 				creado datetime NOT NULL,
 				anulado_por bigint(20) unsigned NOT NULL DEFAULT 0,
 				anulado_en datetime NULL,
+				anulado_motivo varchar(255) NOT NULL DEFAULT '',
 				PRIMARY KEY  (id),
 				KEY familia_ronda (familia_id, ronda),
 				KEY ronda (ronda)
@@ -99,13 +101,14 @@ final class MovimientosTable {
 		return $r ?: null;
 	}
 
-	public static function anular( int $id ): bool {
+	public static function anular( int $id, string $motivo = '' ): bool {
 		global $wpdb;
 		return (bool) $wpdb->update(
 			self::table(),
 			array(
-				'anulado_por' => get_current_user_id(),
-				'anulado_en'  => current_time( 'mysql', true ),
+				'anulado_por'    => get_current_user_id(),
+				'anulado_en'     => current_time( 'mysql', true ),
+				'anulado_motivo' => mb_substr( sanitize_text_field( $motivo ), 0, 255 ),
 			),
 			array(
 				'id'         => $id,

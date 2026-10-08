@@ -14,6 +14,7 @@ use AsdeBalears\AreaPrivada\Tesoreria\Calculadora;
 use AsdeBalears\AreaPrivada\Tesoreria\Config;
 use AsdeBalears\AreaPrivada\Tesoreria\FamiliasTable;
 use AsdeBalears\AreaPrivada\Tesoreria\MovimientosTable;
+use AsdeBalears\AreaPrivada\Tesoreria\Pagos;
 use AsdeBalears\AreaPrivada\Usuarios\Usuarios;
 
 defined( 'ABSPATH' ) || exit;
@@ -204,6 +205,7 @@ final class TesoreriaView extends TesoreriaBaseView {
 			}
 		}
 
+		$movs = MovimientosTable::de_familia( $id, $ronda );
 		return $this->tpl(
 			'tesoreria/familia',
 			array(
@@ -212,7 +214,9 @@ final class TesoreriaView extends TesoreriaBaseView {
 				'calc'        => $calc,
 				'cfg'         => $cfg,
 				'ronda'       => $ronda,
-				'movimientos' => MovimientosTable::de_familia( $id, $ronda ),
+				'movimientos' => $movs,
+				// v0.25: cuándo se registró y se eliminó cada movimiento, quién y por qué.
+				'historial'   => Pagos::historial( $movs ),
 				// v0.20: asociar un ingreso del banco al registrar el pago (solo quien ve el banco); se elige en una ventana con buscador (v0.20.1).
 				'banco'       => self::ve_banco() ? $this->banco_para( $f, $personas, $ronda ) : null,
 				'cuenta'      => $cuenta,
@@ -315,10 +319,28 @@ final class TesoreriaView extends TesoreriaBaseView {
 				$r     = MovimientosTable::registrar( $familia, $ronda, MovimientosTable::AJUSTE, $this->post( 'fecha' ), $signo * abs( $importe ), '', '', $this->post( 'nota' ) );
 				$ok    = sprintf( asde_t( 'Ajuste de %s registrado.' ), Calculadora::euros( $signo * abs( $importe ) ) );
 				break;
-			case 'anular':
-				$mov = MovimientosTable::obtener( (int) $this->post( 'movimiento' ) );
-				$r   = ( $mov && (int) $mov['familia_id'] === $familia && MovimientosTable::anular( (int) $mov['id'] ) ) ? (int) $mov['id'] : new \WP_Error( 'x', asde_t( 'No se ha podido anular el movimiento.' ) );
-				$ok  = asde_t( 'Movimiento anulado.' );
+			case 'anular': // Hasta la v0.24 se llamaba así.
+			case 'eliminar':
+				// v0.25: con motivo y en el historial; si vino del banco, el ingreso vuelve a quedar por conciliar.
+				$res = Pagos::eliminar( (int) $this->post( 'movimiento' ), $familia, $this->post( 'motivo' ) );
+				if ( is_wp_error( $res ) ) {
+					$r  = $res;
+					$ok = '';
+					break;
+				}
+				$r  = (int) $res['mov']['id'];
+				$ok = MovimientosTable::PAGO === $res['mov']['tipo']
+					/* translators: %s: importe */
+					? sprintf( asde_t( 'Pago de %s eliminado. Queda en el historial de la familia.' ), Calculadora::euros( (float) $res['mov']['importe'] ) )
+					/* translators: %s: importe */
+					: sprintf( asde_t( 'Ajuste de %s eliminado. Queda en el historial de la familia.' ), Calculadora::euros( (float) $res['mov']['importe'] ) );
+				if ( $res['banco'] ) {
+					/* translators: %s: fecha */
+					$ok .= ' ' . sprintf( asde_t( 'El ingreso del banco del %s vuelve a estar por conciliar.' ), wp_date( 'd/m/Y', strtotime( $res['banco']['fecha'] . ' 12:00' ) ) );
+				}
+				if ( 'sepa' === $res['mov']['origen'] ) {
+					$ok .= ' ' . asde_t( 'Venía del cobro de una remesa SEPA: la remesa lo sigue dando por cobrado.' );
+				}
 				break;
 			default:
 				$r = new \WP_Error( 'x', asde_t( 'Acción desconocida.' ) );

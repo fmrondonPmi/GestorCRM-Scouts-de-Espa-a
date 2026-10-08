@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.24.0
+Stable tag: 0.25.0
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -52,6 +52,10 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.25.0 =
+* Treasury: the family record updates in place (registering a payment, also with a bank income, an adjustment or deleting one) without reloading the whole page. The bank list keeps its filters after conciliating or undoing.
+* Treasury: "Delete…" a payment or an adjustment with a reason; it stops counting and goes to the family's history (who registered and deleted it, when and why). A payment that came from a bank income leaves that income pending again.
 
 = 0.24.0 =
 * wp-admin → Scout Groups → "Repeated documents": for a group, the CRM records that share the same ID document (written in any form), to merge them in the CRM. Read-only; the document is shown masked.
@@ -102,6 +106,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * First version with the mobile app (PWA).
 
 == Upgrade Notice ==
+
+= 0.25.0 =
+Treasury without full reloads, payment deletion with history. Adds one column to the payments table.
 
 = 0.24.0 =
 New read-only report of repeated ID documents in wp-admin. No database changes.
