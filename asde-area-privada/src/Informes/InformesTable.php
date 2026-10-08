@@ -65,7 +65,7 @@ final class InformesTable {
 	 */
 	private static function sembrar_predefinidos(): void {
 		global $wpdb;
-		$hay = array_map( 'strval', (array) $wpdb->get_col( 'SELECT nombre FROM ' . self::table() . ' WHERE sistema = 1' ) ); // phpcs:ignore WordPress.DB
+		$hay = array_map( 'strval', (array) $wpdb->get_col( $wpdb->prepare( 'SELECT nombre FROM %i WHERE sistema = 1', self::table() ) ) ); // phpcs:ignore WordPress.DB
 		foreach ( self::predefinidos() as $p ) {
 			list( $nombre, $desc, $cols ) = $p;
 			if ( in_array( $nombre, $hay, true ) ) {
@@ -89,14 +89,14 @@ final class InformesTable {
 	public static function obtener( int $id ): ?Informe {
 		global $wpdb;
 		// Predefinidos (comunes) o del grupo en el que se trabaja.
-		$row = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . self::table() . ' WHERE id = %d AND ( sistema = 1 OR grupo = %s )', $id, Grupo::numero() ), ARRAY_A ); // phpcs:ignore WordPress.DB
+		$row = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM %i WHERE id = %d AND ( sistema = 1 OR grupo = %s )', self::table(), $id, Grupo::numero() ), ARRAY_A ); // phpcs:ignore WordPress.DB
 		return $row ? Informe::from_row( $row ) : null;
 	}
 
 	/** Informes visibles para un usuario: predefinidos, compartidos y los suyos. @return Informe[] */
 	public static function visibles( int $user_id ): array {
 		global $wpdb;
-		$rows = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . self::table() . ' WHERE sistema = 1 OR ( grupo = %s AND ( compartido = 1 OR autor_id = %d ) ) ORDER BY sistema DESC, nombre ASC', Grupo::numero(), $user_id ), ARRAY_A ); // phpcs:ignore WordPress.DB
+		$rows = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM %i WHERE sistema = 1 OR ( grupo = %s AND ( compartido = 1 OR autor_id = %d ) ) ORDER BY sistema DESC, nombre ASC', self::table(), Grupo::numero(), $user_id ), ARRAY_A ); // phpcs:ignore WordPress.DB
 		return array_map( array( Informe::class, 'from_row' ), (array) $rows );
 	}
 

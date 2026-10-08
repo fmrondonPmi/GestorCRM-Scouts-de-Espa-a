@@ -12,6 +12,7 @@
  * @var string     $url_acceso «Dar acceso» (doc 11)
  * @var string     $volver     Personas
  */
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
 use AsdeBalears\AreaPrivada\Crm\Altas;
 use AsdeBalears\AreaPrivada\Crm\Duplicados;
 use AsdeBalears\AreaPrivada\Domain\Secciones;
@@ -244,7 +245,12 @@ $edad  = static function ( string $f ) use ( $hoy ): ?int {
 			<form method="post" action="<?php echo esc_url( $url ); ?>" class="asde-form">
 				<?php wp_nonce_field( 'asde_alta_socio' ); ?>
 				<input type="hidden" name="asde_action" value="alta_crear">
-				<?php echo AltaSocio::ocultos( $s ); // phpcs:ignore WordPress.Security.EscapeOutput -- escapado en AltaSocio::ocultos(). ?>
+				<?php
+				// Par disable/enable y no phpcs:ignore: tras los phpcs:enable de arriba, PHPCS ya no respeta aquí un ignore.
+				// phpcs:disable WordPress.Security.EscapeOutput -- escapado en AltaSocio::ocultos().
+				echo AltaSocio::ocultos( $s );
+				// phpcs:enable WordPress.Security.EscapeOutput
+				?>
 				<?php if ( 0 !== $otros ) : ?>
 					<p>
 						<label class="asde-choice">

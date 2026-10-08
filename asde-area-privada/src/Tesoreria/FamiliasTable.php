@@ -59,27 +59,27 @@ final class FamiliasTable {
 	public static function obtener( int $id ): ?array {
 		global $wpdb;
 		// Solo familias del grupo en el que se trabaja (sin visibilidad entre grupos).
-		$row = $wpdb->get_row( $wpdb->prepare( 'SELECT id, numero FROM ' . self::table() . ' WHERE id = %d AND grupo = %s', $id, Grupo::numero() ), ARRAY_A ); // phpcs:ignore WordPress.DB
+		$row = $wpdb->get_row( $wpdb->prepare( 'SELECT id, numero FROM %i WHERE id = %d AND grupo = %s', self::table(), $id, Grupo::numero() ), ARRAY_A ); // phpcs:ignore WordPress.DB
 		if ( ! $row ) {
 			return null;
 		}
 		return array(
 			'id'       => (int) $row['id'],
 			'numero'   => (string) $row['numero'],
-			'miembros' => array_map( 'strval', (array) $wpdb->get_col( $wpdb->prepare( 'SELECT num_socio_asde FROM ' . self::table_miembros() . ' WHERE familia_id = %d ORDER BY creado', $id ) ) ), // phpcs:ignore WordPress.DB
+			'miembros' => array_map( 'strval', (array) $wpdb->get_col( $wpdb->prepare( 'SELECT num_socio_asde FROM %i WHERE familia_id = %d ORDER BY creado', self::table_miembros(), $id ) ) ), // phpcs:ignore WordPress.DB
 		);
 	}
 
 	public static function por_numero( string $numero ): ?array {
 		global $wpdb;
-		$id = (int) $wpdb->get_var( $wpdb->prepare( 'SELECT id FROM ' . self::table() . ' WHERE numero = %s AND grupo = %s', strtoupper( trim( $numero ) ), Grupo::numero() ) ); // phpcs:ignore WordPress.DB
+		$id = (int) $wpdb->get_var( $wpdb->prepare( 'SELECT id FROM %i WHERE numero = %s AND grupo = %s', self::table(), strtoupper( trim( $numero ) ), Grupo::numero() ) ); // phpcs:ignore WordPress.DB
 		return $id ? self::obtener( $id ) : null;
 	}
 
 	/** Familia a la que pertenece un socio, o null. */
 	public static function de_socio( string $num_asde ): ?array {
 		global $wpdb;
-		$id = (int) $wpdb->get_var( $wpdb->prepare( 'SELECT familia_id FROM ' . self::table_miembros() . ' WHERE num_socio_asde = %s', $num_asde ) ); // phpcs:ignore WordPress.DB
+		$id = (int) $wpdb->get_var( $wpdb->prepare( 'SELECT familia_id FROM %i WHERE num_socio_asde = %s', self::table_miembros(), $num_asde ) ); // phpcs:ignore WordPress.DB
 		return $id ? self::obtener( $id ) : null;
 	}
 
@@ -87,14 +87,14 @@ final class FamiliasTable {
 	public static function todas(): array {
 		global $wpdb;
 		$familias = array();
-		foreach ( (array) $wpdb->get_results( $wpdb->prepare( 'SELECT id, numero FROM ' . self::table() . ' WHERE grupo = %s ORDER BY numero', Grupo::numero() ), ARRAY_A ) as $r ) { // phpcs:ignore WordPress.DB
+		foreach ( (array) $wpdb->get_results( $wpdb->prepare( 'SELECT id, numero FROM %i WHERE grupo = %s ORDER BY numero', self::table(), Grupo::numero() ), ARRAY_A ) as $r ) { // phpcs:ignore WordPress.DB
 			$familias[ (int) $r['id'] ] = array(
 				'id'       => (int) $r['id'],
 				'numero'   => (string) $r['numero'],
 				'miembros' => array(),
 			);
 		}
-		foreach ( (array) $wpdb->get_results( 'SELECT familia_id, num_socio_asde FROM ' . self::table_miembros() . ' ORDER BY creado', ARRAY_A ) as $r ) { // phpcs:ignore WordPress.DB
+		foreach ( (array) $wpdb->get_results( $wpdb->prepare( 'SELECT familia_id, num_socio_asde FROM %i ORDER BY creado', self::table_miembros() ), ARRAY_A ) as $r ) { // phpcs:ignore WordPress.DB
 			if ( isset( $familias[ (int) $r['familia_id'] ] ) ) {
 				$familias[ (int) $r['familia_id'] ]['miembros'][] = (string) $r['num_socio_asde'];
 			}
@@ -106,7 +106,7 @@ final class FamiliasTable {
 	public static function mapa_socios(): array {
 		global $wpdb;
 		$out = array();
-		foreach ( (array) $wpdb->get_results( $wpdb->prepare( 'SELECT m.num_socio_asde, m.familia_id FROM ' . self::table_miembros() . ' m INNER JOIN ' . self::table() . ' f ON f.id = m.familia_id WHERE f.grupo = %s', Grupo::numero() ), ARRAY_A ) as $r ) { // phpcs:ignore WordPress.DB
+		foreach ( (array) $wpdb->get_results( $wpdb->prepare( 'SELECT m.num_socio_asde, m.familia_id FROM %i m INNER JOIN %i f ON f.id = m.familia_id WHERE f.grupo = %s', self::table_miembros(), self::table(), Grupo::numero() ), ARRAY_A ) as $r ) { // phpcs:ignore WordPress.DB
 			$out[ (string) $r['num_socio_asde'] ] = (int) $r['familia_id'];
 		}
 		return $out;
@@ -237,7 +237,7 @@ final class FamiliasTable {
 	public static function siguiente_numero( string $grupo ): string {
 		global $wpdb;
 		$prefijo = 'F' . $grupo;
-		$max     = (int) $wpdb->get_var( $wpdb->prepare( 'SELECT MAX(CAST(SUBSTRING(numero, %d) AS UNSIGNED)) FROM ' . self::table() . ' WHERE numero LIKE %s', strlen( $prefijo ) + 1, $wpdb->esc_like( $prefijo ) . '%' ) ); // phpcs:ignore WordPress.DB
+		$max     = (int) $wpdb->get_var( $wpdb->prepare( 'SELECT MAX(CAST(SUBSTRING(numero, %d) AS UNSIGNED)) FROM %i WHERE numero LIKE %s', strlen( $prefijo ) + 1, self::table(), $wpdb->esc_like( $prefijo ) . '%' ) ); // phpcs:ignore WordPress.DB
 		return $prefijo . str_pad( (string) ( $max + 1 ), 3, '0', STR_PAD_LEFT );
 	}
 

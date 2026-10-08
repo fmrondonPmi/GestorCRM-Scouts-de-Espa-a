@@ -7,6 +7,7 @@
  * @var string[] $texto
  * @var callable $campo    Valor escrito en el intento anterior, o el de por defecto
  */
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
 defined( 'ABSPATH' ) || exit;
 
 $fid = (int) $familia['id'];

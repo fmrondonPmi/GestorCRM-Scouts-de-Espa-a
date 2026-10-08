@@ -9,6 +9,7 @@
  * @var string  $url       Domiciliaciones de la ronda
  * @var string  $url_fam   Control de pagos
  */
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
 use AsdeBalears\AreaPrivada\Sepa\Remesas;
 use AsdeBalears\AreaPrivada\Tesoreria\Calculadora;
 

@@ -8,6 +8,7 @@
  * @var WP_User               $user
  * @var string                $nombre Nombre leído del CRM (no se guarda en WordPress)
  */
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
 use AsdeBalears\AreaPrivada\Domain\Identidad;
 use AsdeBalears\AreaPrivada\Frontend\Ayuda;
 use AsdeBalears\AreaPrivada\Frontend\Pages;

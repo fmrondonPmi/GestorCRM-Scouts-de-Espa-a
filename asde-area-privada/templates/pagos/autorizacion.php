@@ -10,6 +10,7 @@
  * @var WP_User|null $firmante
  * @var string      $url       Mis pagos
  */
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
 use AsdeBalears\AreaPrivada\Sepa\Iban;
 use AsdeBalears\AreaPrivada\Sepa\Mandatos;
 

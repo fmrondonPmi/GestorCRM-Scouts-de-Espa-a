@@ -9,6 +9,7 @@
  * @var string   $url_list
  * @var string   $url_pdf  '' si todavía no se puede imprimir
  */
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
 use AsdeBalears\AreaPrivada\Inventario\ComprasTable;
 use AsdeBalears\AreaPrivada\Inventario\Servicio;
 use AsdeBalears\AreaPrivada\Tesoreria\Calculadora;

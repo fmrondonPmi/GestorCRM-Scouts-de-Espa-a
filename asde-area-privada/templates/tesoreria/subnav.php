@@ -7,6 +7,7 @@
  * @var string                $ronda
  * @var string[]              $rondas
  */
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
 use AsdeBalears\AreaPrivada\Frontend\Pages;
 
 defined( 'ABSPATH' ) || exit;

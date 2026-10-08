@@ -9,6 +9,7 @@
  * @var string $autor  Quién la ha pedido
  * @var string $url    Página de la lista en el área privada
  */
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
 use AsdeBalears\AreaPrivada\Frontend\Colores;
 use AsdeBalears\AreaPrivada\Idiomas\Idioma;
 use AsdeBalears\AreaPrivada\Inventario\ComprasTable;

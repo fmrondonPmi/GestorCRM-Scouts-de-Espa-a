@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.26.1
+Stable tag: 0.26.2
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -52,6 +52,9 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.26.2 =
+* Code quality: fixes all 589 findings of the WordPress Plugin Check report (5 errors and 584 warnings). Database queries pass table names with the %i placeholder and no longer build SQL by concatenation: optional filters go as prepared values (bank movements, change proposals, email log, access requests, inventory). A bank movement without a value date is stored as NULL with NULLIF instead of a conditional in the query. In-memory CSV streams (php://temp) are documented as such. Templates declare why their variables are not globals (they are included inside a function), and uninstall.php prefixes its global variables. No visible changes.
 
 = 0.26.1 =
 * Security: deactivating a user (Usuarios → "Desactivar", or automatically when a family account no longer represents anyone) now also deletes what let them log in: the password (replaced by a random one nobody knows), WordPress application passwords and, with Wordfence Login Security, the two-step verification (secret and recovery codes) and passkeys. It also forgets that the account was activated, so giving access again sends a new invitation to choose a password. The activity log records what was removed.
@@ -118,6 +121,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * First version with the mobile app (PWA).
 
 == Upgrade Notice ==
+
+= 0.26.2 =
+Code quality fixes from WordPress Plugin Check. No visible changes and no database changes.
 
 = 0.26.1 =
 Deactivating a user also deletes their password and their two-step verification. No database changes.

@@ -213,7 +213,7 @@ final class Mandatos {
 			array( 'id' => $id )
 		);
 		// Una sola vigente por familia: la anterior queda sustituida.
-		$wpdb->query( $wpdb->prepare( 'UPDATE ' . self::table() . ' SET estado = %s, revocado_por = %d, revocado_en = %s, motivo = %s WHERE familia_id = %d AND estado = %s AND id <> %d', self::REVOCADO, $user_id, current_time( 'mysql', true ), 'Sustituida por una autorización nueva', $familia_id, self::ACTIVO, $id ) ); // phpcs:ignore WordPress.DB
+		$wpdb->query( $wpdb->prepare( 'UPDATE %i SET estado = %s, revocado_por = %d, revocado_en = %s, motivo = %s WHERE familia_id = %d AND estado = %s AND id <> %d', self::table(), self::REVOCADO, $user_id, current_time( 'mysql', true ), 'Sustituida por una autorización nueva', $familia_id, self::ACTIVO, $id ) ); // phpcs:ignore WordPress.DB
 		Logger::log( 'sepa_mandato_firmado', 'familia', (string) $familia_id, array( 'mandato' => $id ) );
 		return $id;
 	}
@@ -221,14 +221,14 @@ final class Mandatos {
 	/** Del grupo actual. */
 	public static function obtener( int $id ): ?array {
 		global $wpdb;
-		$r = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . self::table() . ' WHERE id = %d AND grupo = %s', $id, Grupo::numero() ), ARRAY_A ); // phpcs:ignore WordPress.DB
+		$r = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM %i WHERE id = %d AND grupo = %s', self::table(), $id, Grupo::numero() ), ARRAY_A ); // phpcs:ignore WordPress.DB
 		return $r ? self::preparar( $r ) : null;
 	}
 
 	/** La autorización vigente de una familia, o null. */
 	public static function activo_de_familia( int $familia_id ): ?array {
 		global $wpdb;
-		$r = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . self::table() . ' WHERE familia_id = %d AND grupo = %s AND estado = %s ORDER BY id DESC LIMIT 1', $familia_id, Grupo::numero(), self::ACTIVO ), ARRAY_A ); // phpcs:ignore WordPress.DB
+		$r = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM %i WHERE familia_id = %d AND grupo = %s AND estado = %s ORDER BY id DESC LIMIT 1', self::table(), $familia_id, Grupo::numero(), self::ACTIVO ), ARRAY_A ); // phpcs:ignore WordPress.DB
 		return $r ? self::preparar( $r ) : null;
 	}
 
@@ -236,7 +236,7 @@ final class Mandatos {
 	public static function activos(): array {
 		global $wpdb;
 		$out = array();
-		foreach ( (array) $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . self::table() . ' WHERE grupo = %s AND estado = %s ORDER BY id', Grupo::numero(), self::ACTIVO ), ARRAY_A ) as $r ) { // phpcs:ignore WordPress.DB
+		foreach ( (array) $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM %i WHERE grupo = %s AND estado = %s ORDER BY id', self::table(), Grupo::numero(), self::ACTIVO ), ARRAY_A ) as $r ) { // phpcs:ignore WordPress.DB
 			$out[ (int) $r['familia_id'] ] = self::preparar( $r );
 		}
 		return $out;
@@ -245,7 +245,7 @@ final class Mandatos {
 	/** @return array[] Todas las de una familia, las más recientes primero (para el historial; con los datos descifrados si aún se conservan). */
 	public static function de_familia( int $familia_id ): array {
 		global $wpdb;
-		return array_map( array( self::class, 'preparar' ), (array) $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . self::table() . ' WHERE familia_id = %d AND grupo = %s ORDER BY id DESC', $familia_id, Grupo::numero() ), ARRAY_A ) ); // phpcs:ignore WordPress.DB
+		return array_map( array( self::class, 'preparar' ), (array) $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM %i WHERE familia_id = %d AND grupo = %s ORDER BY id DESC', self::table(), $familia_id, Grupo::numero() ), ARRAY_A ) ); // phpcs:ignore WordPress.DB
 	}
 
 	public static function revocar( int $id, int $user_id, string $motivo ): bool {
@@ -273,9 +273,10 @@ final class Mandatos {
 	/** La primera remesa enviada con estos mandatos los deja «usados»: desde entonces son RCUR. @param int[] $ids */
 	public static function marcar_usados( array $ids ): void {
 		global $wpdb;
-		$ids = array_values( array_filter( array_map( 'intval', $ids ) ) );
+		$ids = array_values( array_filter( wp_parse_id_list( $ids ) ) );
 		if ( $ids ) {
-			$wpdb->query( 'UPDATE ' . self::table() . ' SET usado_en = ' . "'" . esc_sql( current_time( 'mysql', true ) ) . "'" . ' WHERE usado_en IS NULL AND id IN (' . implode( ',', $ids ) . ')' ); // phpcs:ignore WordPress.DB
+			$in = implode( ',', array_fill( 0, count( $ids ), '%d' ) );
+			$wpdb->query( $wpdb->prepare( "UPDATE %i SET usado_en = %s WHERE usado_en IS NULL AND id IN ($in)", array_merge( array( self::table(), current_time( 'mysql', true ) ), $ids ) ) ); // phpcs:ignore WordPress.DB
 		}
 	}
 
@@ -288,7 +289,7 @@ final class Mandatos {
 	public static function purgar(): int {
 		global $wpdb;
 		$limite = gmdate( 'Y-m-d H:i:s', strtotime( '-' . self::MESES_CONSERVACION . ' months' ) );
-		return (int) $wpdb->query( $wpdb->prepare( 'UPDATE ' . self::table() . ' SET datos_enc = NULL WHERE estado = %s AND datos_enc IS NOT NULL AND revocado_en < %s', self::REVOCADO, $limite ) ); // phpcs:ignore WordPress.DB
+		return (int) $wpdb->query( $wpdb->prepare( 'UPDATE %i SET datos_enc = NULL WHERE estado = %s AND datos_enc IS NOT NULL AND revocado_en < %s', self::table(), self::REVOCADO, $limite ) ); // phpcs:ignore WordPress.DB
 	}
 
 	// ---------------------------------------------------------------------

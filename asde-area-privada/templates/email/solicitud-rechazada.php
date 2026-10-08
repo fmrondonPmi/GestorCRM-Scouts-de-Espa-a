@@ -7,6 +7,7 @@
  * @var string $grupo    Nombre del grupo
  * @var string $contacto Email de contacto del grupo ('' si no hay)
  */
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
 use AsdeBalears\AreaPrivada\Frontend\Colores;
 use AsdeBalears\AreaPrivada\Idiomas\Idioma;
 

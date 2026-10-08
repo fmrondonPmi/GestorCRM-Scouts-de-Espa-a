@@ -189,7 +189,7 @@ try {
 			array( 'fecha' => '2026-10-01', 'importe' => -45.5, 'concepto' => 'PRUEBA-BG compra de cuerdas' ),
 			array( 'fecha' => '2026-10-02', 'importe' => -3.0, 'concepto' => 'PRUEBA-BG comisión mantenimiento' ),
 			array( 'fecha' => '2026-10-03', 'importe' => 200.0, 'concepto' => 'PRUEBA-BG donativo de una empresa' ),
-			array( 'fecha' => '2026-10-04', 'importe' => -12.0, 'concepto' => 'PRUEBA-BG gasolina furgoneta' ),
+			array( 'fecha' => '2026-10-04', 'importe' => -12.0, 'concepto' => 'PRUEBA-BG gasolina furgoneta', 'fecha_valor' => '2026-10-06' ),
 			array( 'fecha' => '2026-10-05', 'importe' => 70.0, 'concepto' => 'PRUEBA-BG cuota primer plazo', 'ordenante' => 'Familia Inventada' ),
 		)
 	);
@@ -198,6 +198,7 @@ try {
 	$comision = $mov( 'comisión' );
 	$donativo = $mov( 'donativo' );
 	$gasolina = $mov( 'gasolina' );
+	$ok( null === $cuerdas['fecha_valor'] && '2026-10-06' === $gasolina['fecha_valor'], 'la fecha valor se guarda, y sin ella queda vacía (NULL) (v0.26.2: NULLIF en la consulta)' );
 	$cuota    = $mov( 'primer plazo' );
 
 	$e = Conciliacion::ignorar( (int) $cuerdas['id'], (int) $t_por['Donativos'] );

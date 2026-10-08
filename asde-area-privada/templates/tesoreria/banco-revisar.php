@@ -11,6 +11,7 @@
  * @var int               $conciliados Elegidos que no se pueden revisar (conciliados con una familia)
  * @var string            $url_tipos
  */
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
 use AsdeBalears\AreaPrivada\Tesoreria\Banco\BancoTable;
 use AsdeBalears\AreaPrivada\Tesoreria\Banco\TiposMovimiento;
 use AsdeBalears\AreaPrivada\Tesoreria\Calculadora;

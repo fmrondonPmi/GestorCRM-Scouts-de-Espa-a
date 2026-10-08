@@ -119,27 +119,34 @@ final class Cambios {
 	/** @return array[] Cambios del grupo (descifrados), más recientes primero. */
 	public static function listado( string $estado = self::PENDIENTE, string $socio = '' ): array {
 		global $wpdb;
-		$sql  = 'SELECT * FROM ' . self::table() . ' WHERE grupo = %s';
-		$args = array( Grupo::numero() );
-		if ( isset( self::ESTADOS[ $estado ] ) ) {
-			$sql   .= ' AND estado = %s';
-			$args[] = $estado;
-		}
-		if ( '' !== $socio ) {
-			$sql   .= ' AND socio = %s';
-			$args[] = $socio;
-		}
-		return array_map( array( self::class, 'descifrar' ), (array) $wpdb->get_results( $wpdb->prepare( $sql . ' ORDER BY id DESC LIMIT 1000', $args ), ARRAY_A ) ); // phpcs:ignore WordPress.DB
+		// Consulta fija: cada filtro opcional va como valor («'' = ''» lo deja sin efecto), sin montar SQL (v0.26.2, Plugin Check).
+		$e     = isset( self::ESTADOS[ $estado ] ) ? $estado : '';
+		$filas = $wpdb->get_results( // phpcs:ignore WordPress.DB
+			$wpdb->prepare(
+				'SELECT * FROM %i WHERE grupo = %s'
+				. " AND ( %s = '' OR estado = %s )"
+				. " AND ( %s = '' OR socio = %s )"
+				. ' ORDER BY id DESC LIMIT 1000',
+				self::table(),
+				Grupo::numero(),
+				$e,
+				$e,
+				$socio,
+				$socio
+			),
+			ARRAY_A
+		);
+		return array_map( array( self::class, 'descifrar' ), (array) $filas );
 	}
 
 	public static function contar_pendientes(): int {
 		global $wpdb;
-		return (int) $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(*) FROM ' . self::table() . ' WHERE grupo = %s AND estado = %s', Grupo::numero(), self::PENDIENTE ) ); // phpcs:ignore WordPress.DB
+		return (int) $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(*) FROM %i WHERE grupo = %s AND estado = %s', self::table(), Grupo::numero(), self::PENDIENTE ) ); // phpcs:ignore WordPress.DB
 	}
 
 	public static function obtener( int $id ): ?array {
 		global $wpdb;
-		$r = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . self::table() . ' WHERE id = %d AND grupo = %s', $id, Grupo::numero() ), ARRAY_A ); // phpcs:ignore WordPress.DB
+		$r = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM %i WHERE id = %d AND grupo = %s', self::table(), $id, Grupo::numero() ), ARRAY_A ); // phpcs:ignore WordPress.DB
 		return $r ? self::descifrar( $r ) : null;
 	}
 

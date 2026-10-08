@@ -114,22 +114,22 @@ final class RegistroEmails {
 	/** Del grupo en el que se trabaja. */
 	public static function obtener( int $id ): ?array {
 		global $wpdb;
-		$r = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . self::table() . ' WHERE id = %d AND grupo = %s', $id, Grupo::numero() ), ARRAY_A ); // phpcs:ignore WordPress.DB
+		$r = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM %i WHERE id = %d AND grupo = %s', self::table(), $id, Grupo::numero() ), ARRAY_A ); // phpcs:ignore WordPress.DB
 		return $r ?: null;
 	}
 
 	/** @return array<int, array> user_id => último email de cada usuario (del grupo). */
 	public static function ultimos( array $user_ids ): array {
 		global $wpdb;
-		$ids = array_values( array_filter( array_map( 'intval', $user_ids ) ) );
+		$ids = array_values( array_filter( wp_parse_id_list( $user_ids ) ) );
 		if ( ! $ids ) {
 			return array();
 		}
-		$in  = implode( ',', $ids );
-		$sql = 'SELECT e.* FROM ' . self::table() . ' e INNER JOIN (SELECT user_id, MAX(id) AS id FROM ' . self::table()
+		$in  = implode( ',', array_fill( 0, count( $ids ), '%d' ) );
+		$sql = 'SELECT e.* FROM %i e INNER JOIN (SELECT user_id, MAX(id) AS id FROM %i'
 			. " WHERE grupo = %s AND user_id IN ($in) GROUP BY user_id) u ON u.id = e.id";
 		$out = array();
-		foreach ( (array) $wpdb->get_results( $wpdb->prepare( $sql, Grupo::numero() ), ARRAY_A ) as $r ) { // phpcs:ignore WordPress.DB
+		foreach ( (array) $wpdb->get_results( $wpdb->prepare( $sql, array_merge( array( self::table(), self::table(), Grupo::numero() ), $ids ) ), ARRAY_A ) as $r ) { // phpcs:ignore WordPress.DB
 			$out[ (int) $r['user_id'] ] = $r;
 		}
 		return $out;
@@ -138,17 +138,23 @@ final class RegistroEmails {
 	/** @return array[] Todos los del grupo (más recientes primero), opcionalmente de un usuario o un estado. */
 	public static function listado( int $user_id = 0, string $estado = '' ): array {
 		global $wpdb;
-		$sql  = 'SELECT * FROM ' . self::table() . ' WHERE grupo = %s';
-		$args = array( Grupo::numero() );
-		if ( $user_id ) {
-			$sql   .= ' AND user_id = %d';
-			$args[] = $user_id;
-		}
-		if ( isset( self::ESTADOS[ $estado ] ) ) {
-			$sql   .= ' AND estado = %s';
-			$args[] = $estado;
-		}
-		return (array) $wpdb->get_results( $wpdb->prepare( $sql . ' ORDER BY id DESC LIMIT 2000', $args ), ARRAY_A ); // phpcs:ignore WordPress.DB
+		// Consulta fija: cada filtro opcional va como valor (0 o '' lo dejan sin efecto) (v0.26.2, Plugin Check).
+		$e = isset( self::ESTADOS[ $estado ] ) ? $estado : '';
+		return (array) $wpdb->get_results( // phpcs:ignore WordPress.DB
+			$wpdb->prepare(
+				'SELECT * FROM %i WHERE grupo = %s'
+				. ' AND ( %d = 0 OR user_id = %d )'
+				. " AND ( %s = '' OR estado = %s )"
+				. ' ORDER BY id DESC LIMIT 2000',
+				self::table(),
+				Grupo::numero(),
+				$user_id,
+				$user_id,
+				$e,
+				$e
+			),
+			ARRAY_A
+		);
 	}
 
 	/**

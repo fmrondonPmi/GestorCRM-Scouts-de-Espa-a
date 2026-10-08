@@ -173,8 +173,8 @@ final class MaterialesTable {
 	/** @return array<int, array> id => material del grupo actual (los dados de baja, solo si se piden), por descripción. */
 	public static function todos( bool $con_bajas = false ): array {
 		global $wpdb;
-		$sql   = 'SELECT * FROM %i WHERE grupo = %s' . ( $con_bajas ? '' : ' AND baja_en IS NULL' ) . ' ORDER BY descripcion ASC, id ASC';
-		$filas = (array) $wpdb->get_results( $wpdb->prepare( $sql, self::table(), Grupo::numero() ), ARRAY_A ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- $sql solo cambia por una condición fija
+		// Consulta fija: «con bajas» va como valor (v0.26.2, Plugin Check).
+		$filas = (array) $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM %i WHERE grupo = %s AND ( %d = 1 OR baja_en IS NULL ) ORDER BY descripcion ASC, id ASC', self::table(), Grupo::numero(), (int) $con_bajas ), ARRAY_A ); // phpcs:ignore WordPress.DB
 		$out   = array();
 		foreach ( $filas as $f ) {
 			$m               = self::preparar( $f );

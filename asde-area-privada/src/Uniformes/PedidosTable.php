@@ -124,14 +124,14 @@ final class PedidosTable {
 	/** Pedido del grupo actual, o null. */
 	public static function obtener( int $id ): ?array {
 		global $wpdb;
-		$fila = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . self::table() . ' WHERE id = %d AND grupo = %s', $id, Grupo::numero() ), ARRAY_A ); // phpcs:ignore WordPress.DB
+		$fila = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM %i WHERE id = %d AND grupo = %s', self::table(), $id, Grupo::numero() ), ARRAY_A ); // phpcs:ignore WordPress.DB
 		return $fila ? self::preparar( $fila ) : null;
 	}
 
 	/** @return array[] Todos los del grupo actual, los más recientes primero. */
 	public static function todos(): array {
 		global $wpdb;
-		$filas = (array) $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . self::table() . ' WHERE grupo = %s ORDER BY creado DESC, id DESC', Grupo::numero() ), ARRAY_A ); // phpcs:ignore WordPress.DB
+		$filas = (array) $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM %i WHERE grupo = %s ORDER BY creado DESC, id DESC', self::table(), Grupo::numero() ), ARRAY_A ); // phpcs:ignore WordPress.DB
 		return array_map( array( self::class, 'preparar' ), $filas );
 	}
 
@@ -146,7 +146,7 @@ final class PedidosTable {
 			return array();
 		}
 		$marcas = implode( ',', array_fill( 0, count( $socios ), '%s' ) );
-		$filas  = (array) $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . self::table() . " WHERE grupo = %s AND socio IN ($marcas) ORDER BY creado DESC, id DESC", array_merge( array( Grupo::numero() ), $socios ) ), ARRAY_A ); // phpcs:ignore WordPress.DB
+		$filas  = (array) $wpdb->get_results( $wpdb->prepare( "SELECT * FROM %i WHERE grupo = %s AND socio IN ($marcas) ORDER BY creado DESC, id DESC", array_merge( array( self::table(), Grupo::numero() ), $socios ) ), ARRAY_A ); // phpcs:ignore WordPress.DB
 		return array_map( array( self::class, 'preparar' ), $filas );
 	}
 

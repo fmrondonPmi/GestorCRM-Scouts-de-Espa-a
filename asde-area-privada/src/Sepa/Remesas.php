@@ -301,21 +301,21 @@ final class Remesas {
 	private static function siguiente_numero( string $grupo ): string {
 		global $wpdb;
 		$prefijo = 'R' . $grupo . '-';
-		$max     = (int) $wpdb->get_var( $wpdb->prepare( 'SELECT MAX(CAST(SUBSTRING(numero, %d) AS UNSIGNED)) FROM ' . self::table() . ' WHERE numero LIKE %s', strlen( $prefijo ) + 1, $wpdb->esc_like( $prefijo ) . '%' ) ); // phpcs:ignore WordPress.DB
+		$max     = (int) $wpdb->get_var( $wpdb->prepare( 'SELECT MAX(CAST(SUBSTRING(numero, %d) AS UNSIGNED)) FROM %i WHERE numero LIKE %s', strlen( $prefijo ) + 1, self::table(), $wpdb->esc_like( $prefijo ) . '%' ) ); // phpcs:ignore WordPress.DB
 		return $prefijo . str_pad( (string) ( $max + 1 ), 4, '0', STR_PAD_LEFT );
 	}
 
 	/** Del grupo actual. */
 	public static function obtener( int $id ): ?array {
 		global $wpdb;
-		$r = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . self::table() . ' WHERE id = %d AND grupo = %s', $id, Grupo::numero() ), ARRAY_A ); // phpcs:ignore WordPress.DB
+		$r = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM %i WHERE id = %d AND grupo = %s', self::table(), $id, Grupo::numero() ), ARRAY_A ); // phpcs:ignore WordPress.DB
 		return $r ? self::preparar_fila( $r ) : null;
 	}
 
 	/** @return array[] Del grupo actual, las más recientes primero (sin descifrar los adeudos). */
 	public static function listado(): array {
 		global $wpdb;
-		return array_map( array( self::class, 'preparar_fila' ), (array) $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . self::table() . ' WHERE grupo = %s ORDER BY id DESC', Grupo::numero() ), ARRAY_A ) ); // phpcs:ignore WordPress.DB
+		return array_map( array( self::class, 'preparar_fila' ), (array) $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM %i WHERE grupo = %s ORDER BY id DESC', self::table(), Grupo::numero() ), ARRAY_A ) ); // phpcs:ignore WordPress.DB
 	}
 
 	/** @return array[] Los adeudos de la remesa (vacío si ya se borraron). */
@@ -372,7 +372,7 @@ final class Remesas {
 
 	public static function contar_descarga( int $id ): void {
 		global $wpdb;
-		$wpdb->query( $wpdb->prepare( 'UPDATE ' . self::table() . ' SET descargas = descargas + 1 WHERE id = %d', $id ) ); // phpcs:ignore WordPress.DB
+		$wpdb->query( $wpdb->prepare( 'UPDATE %i SET descargas = descargas + 1 WHERE id = %d', self::table(), $id ) ); // phpcs:ignore WordPress.DB
 	}
 
 	/** Tesorería confirma que la ha enviado al banco: las autorizaciones estrenadas pasan a RCUR. */
@@ -533,7 +533,7 @@ final class Remesas {
 	public static function purgar(): int {
 		global $wpdb;
 		$limite = gmdate( 'Y-m-d', strtotime( '-' . Mandatos::MESES_CONSERVACION . ' months' ) );
-		return (int) $wpdb->query( $wpdb->prepare( 'UPDATE ' . self::table() . ' SET lineas_enc = NULL WHERE lineas_enc IS NOT NULL AND fecha_cobro < %s', $limite ) ); // phpcs:ignore WordPress.DB
+		return (int) $wpdb->query( $wpdb->prepare( 'UPDATE %i SET lineas_enc = NULL WHERE lineas_enc IS NOT NULL AND fecha_cobro < %s', self::table(), $limite ) ); // phpcs:ignore WordPress.DB
 	}
 
 	// ---------------------------------------------------------------------

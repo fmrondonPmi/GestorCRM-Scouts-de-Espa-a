@@ -12,6 +12,7 @@
  * @var int      $dias
  * @var bool     $bienvenida Viene de una solicitud de acceso aprobada
  */
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
 use AsdeBalears\AreaPrivada\Frontend\Colores;
 use AsdeBalears\AreaPrivada\Idiomas\Idioma;
 

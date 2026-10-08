@@ -188,7 +188,7 @@ final class Importador {
 
 	/** CSV con «;» de estas filas (las celdas, a salvo de fórmulas al abrirlo en una hoja de cálculo). */
 	public static function a_csv( array $filas ): string {
-		$h = fopen( 'php://temp', 'r+' );
+		$h = fopen( 'php://temp', 'r+' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen -- php://temp, en memoria
 		foreach ( $filas as $f ) {
 			fputcsv( $h, array_map( array( \AsdeBalears\AreaPrivada\Informes\Generador::class, 'celda_segura' ), array_values( $f ) ), ';', '"', '' );
 		}
@@ -220,7 +220,7 @@ final class Importador {
 				$sep = $s;
 			}
 		}
-		$h = fopen( 'php://temp', 'r+' );
+		$h = fopen( 'php://temp', 'r+' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen -- php://temp, en memoria
 		fwrite( $h, $texto ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fwrite -- php://temp, en memoria
 		rewind( $h );
 		$filas = array();

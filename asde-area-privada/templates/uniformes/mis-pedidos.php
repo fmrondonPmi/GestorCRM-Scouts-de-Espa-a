@@ -11,6 +11,7 @@
  * @var string                                             $url
  * @var string                                             $url_pagos
  */
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
 use AsdeBalears\AreaPrivada\Tesoreria\Calculadora;
 use AsdeBalears\AreaPrivada\Uniformes\Config;
 use AsdeBalears\AreaPrivada\Uniformes\PedidosTable;

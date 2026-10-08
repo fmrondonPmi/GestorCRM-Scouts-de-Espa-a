@@ -9,6 +9,7 @@
  * @var string  $error
  * @var int     $longitud
  */
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
 defined( 'ABSPATH' ) || exit;
 
 $reset = 'reset' === $tipo;

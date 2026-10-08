@@ -4,6 +4,7 @@
  * Solo sale si la administración deja que cada persona elija (wp-admin → Idioma y etiquetas).
  * Cada enlace cambia el idioma con un nonce y vuelve a esta misma página.
  */
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
 use AsdeBalears\AreaPrivada\Idiomas\Idioma;
 
 defined( 'ABSPATH' ) || exit;

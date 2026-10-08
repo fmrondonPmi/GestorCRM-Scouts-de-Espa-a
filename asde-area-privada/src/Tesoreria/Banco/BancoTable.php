@@ -127,14 +127,14 @@ final class BancoTable {
 		$existentes = array();
 		foreach ( array_chunk( array_column( $movs, 'huella' ), 200 ) as $lote ) {
 			$in         = implode( ',', array_fill( 0, count( $lote ), '%s' ) );
-			$existentes = array_merge( $existentes, (array) $wpdb->get_col( $wpdb->prepare( 'SELECT huella FROM ' . self::table() . " WHERE grupo = %s AND huella IN ($in)", array_merge( array( Grupo::numero() ), $lote ) ) ) ); // phpcs:ignore WordPress.DB
+			$existentes = array_merge( $existentes, (array) $wpdb->get_col( $wpdb->prepare( "SELECT huella FROM %i WHERE grupo = %s AND huella IN ($in)", array_merge( array( self::table(), Grupo::numero() ), $lote ) ) ) ); // phpcs:ignore WordPress.DB
 		}
 		$existentes = array_flip( $existentes );
 
 		$similares = array();
 		if ( $movs ) {
 			$fechas = array_column( $movs, 'fecha' );
-			$filas  = (array) $wpdb->get_results( $wpdb->prepare( 'SELECT cuenta, fecha, importe, huella FROM ' . self::table() . ' WHERE grupo = %s AND fecha BETWEEN %s AND %s', Grupo::numero(), min( $fechas ), max( $fechas ) ), ARRAY_A ); // phpcs:ignore WordPress.DB
+			$filas  = (array) $wpdb->get_results( $wpdb->prepare( 'SELECT cuenta, fecha, importe, huella FROM %i WHERE grupo = %s AND fecha BETWEEN %s AND %s', self::table(), Grupo::numero(), min( $fechas ), max( $fechas ) ), ARRAY_A ); // phpcs:ignore WordPress.DB
 			foreach ( $filas as $f ) {
 				$similares[ $f['cuenta'] . '|' . $f['fecha'] . '|' . (int) round( (float) $f['importe'] * 100 ) ] = true;
 			}
@@ -201,39 +201,31 @@ final class BancoTable {
 				continue;
 			}
 			$ordenante = trim( $m['ordenante'] );
-			$r         = $wpdb->query(
+			// Sin fecha valor, NULLIF la guarda como NULL (v0.26.2: antes, un ternario dentro de la consulta).
+			$r = $wpdb->query( // phpcs:ignore WordPress.DB
 				$wpdb->prepare(
 					'INSERT IGNORE INTO %i (grupo, lote_id, cuenta, fecha, fecha_valor, importe, concepto_comun, concepto_propio, documento, referencia1, referencia2, concepto_enc, ordenante_enc, ordenante_hmac, huella, estado, creado)'
-					. ' VALUES (%s, %d, %s, %s, ' . ( $m['fecha_valor'] ? '%s' : 'NULL' ) . ', %f, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)',
-					array_merge(
-						array( self::table() ),
-						array_values(
-						array_filter(
-							array(
-								Grupo::numero(),
-								$lote,
-								mb_substr( $m['cuenta'], 0, 40 ),
-								$m['fecha'],
-								$m['fecha_valor'] ?: false,
-								round( (float) $m['importe'], 2 ),
-								mb_substr( $m['concepto_comun'], 0, 2 ),
-								mb_substr( $m['concepto_propio'], 0, 3 ),
-								mb_substr( $m['documento'], 0, 20 ),
-								mb_substr( $m['referencia1'], 0, 20 ),
-								mb_substr( $m['referencia2'], 0, 20 ),
-								'' !== $m['concepto'] ? Crypto::encrypt( $m['concepto'] ) : '',
-								'' !== $ordenante ? Crypto::encrypt( $ordenante ) : '',
-								'' !== $ordenante ? self::hmac_ordenante( $ordenante ) : '',
-								$m['huella'],
-								self::PENDIENTE,
-								$ahora,
-							),
-							static fn( $v ) => false !== $v
-						)
-						)
-					)
+					. " VALUES (%s, %d, %s, %s, NULLIF(%s, ''), %f, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)",
+					self::table(),
+					Grupo::numero(),
+					$lote,
+					mb_substr( $m['cuenta'], 0, 40 ),
+					$m['fecha'],
+					(string) ( $m['fecha_valor'] ?? '' ),
+					round( (float) $m['importe'], 2 ),
+					mb_substr( $m['concepto_comun'], 0, 2 ),
+					mb_substr( $m['concepto_propio'], 0, 3 ),
+					mb_substr( $m['documento'], 0, 20 ),
+					mb_substr( $m['referencia1'], 0, 20 ),
+					mb_substr( $m['referencia2'], 0, 20 ),
+					'' !== $m['concepto'] ? Crypto::encrypt( $m['concepto'] ) : '',
+					'' !== $ordenante ? Crypto::encrypt( $ordenante ) : '',
+					'' !== $ordenante ? self::hmac_ordenante( $ordenante ) : '',
+					$m['huella'],
+					self::PENDIENTE,
+					$ahora
 				)
-			); // phpcs:ignore WordPress.DB
+			);
 			if ( false === $r ) {
 				$wpdb->query( 'ROLLBACK' );
 				return new \WP_Error( 'asde_banco', asde_t( 'Error al guardar los movimientos: no se ha importado nada.' ) );
@@ -264,14 +256,14 @@ final class BancoTable {
 	/** Importación anterior del mismo fichero (mismo contenido), si la hay. */
 	public static function lote_por_hash( string $hash ): ?array {
 		global $wpdb;
-		$r = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . self::table_lotes() . ' WHERE grupo = %s AND fichero_hash = %s ORDER BY id DESC LIMIT 1', Grupo::numero(), $hash ), ARRAY_A ); // phpcs:ignore WordPress.DB
+		$r = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM %i WHERE grupo = %s AND fichero_hash = %s ORDER BY id DESC LIMIT 1', self::table_lotes(), Grupo::numero(), $hash ), ARRAY_A ); // phpcs:ignore WordPress.DB
 		return $r ?: null;
 	}
 
 	/** @return array[] Últimas importaciones del grupo. */
 	public static function lotes( int $limite = 10 ): array {
 		global $wpdb;
-		return (array) $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . self::table_lotes() . ' WHERE grupo = %s ORDER BY id DESC LIMIT %d', Grupo::numero(), $limite ), ARRAY_A ); // phpcs:ignore WordPress.DB
+		return (array) $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM %i WHERE grupo = %s ORDER BY id DESC LIMIT %d', self::table_lotes(), Grupo::numero(), $limite ), ARRAY_A ); // phpcs:ignore WordPress.DB
 	}
 
 	// ---------------------------------------------------------------------
@@ -287,33 +279,45 @@ final class BancoTable {
 	 */
 	public static function movimientos( array $filtros = array() ): array {
 		global $wpdb;
-		$sql  = 'SELECT * FROM ' . self::table() . ' WHERE grupo = %s';
-		$args = array( Grupo::numero() );
-		if ( isset( self::ESTADOS[ $filtros['estado'] ?? '' ] ) ) {
-			$sql   .= ' AND estado = %s';
-			$args[] = $filtros['estado'];
-		}
-		$clase = (string) ( $filtros['clase'] ?? '' );
-		if ( 'sin' === $clase ) {
-			$sql   .= ' AND estado = %s AND tipo_id IS NULL';
-			$args[] = self::IGNORADO;
-		} elseif ( ctype_digit( $clase ) && (int) $clase > 0 ) {
-			$sql   .= ' AND tipo_id = %d';
-			$args[] = (int) $clase;
-		}
+		// Consulta fija: cada filtro opcional va como valor ('' o 0 lo dejan sin efecto), sin montar SQL (v0.26.2, Plugin Check).
+		$estado = isset( self::ESTADOS[ $filtros['estado'] ?? '' ] ) ? (string) $filtros['estado'] : '';
+		$clase  = (string) ( $filtros['clase'] ?? '' );
+		$sin    = 'sin' === $clase ? 1 : 0;
+		$tipo   = ctype_digit( $clase ) ? (int) $clase : 0;
+		$ids    = '';
 		if ( isset( $filtros['ids'] ) ) {
-			$ids = array_values( array_filter( array_map( 'intval', (array) $filtros['ids'] ) ) );
-			if ( ! $ids ) {
+			$ids = implode( ',', array_filter( wp_parse_id_list( (array) $filtros['ids'] ) ) );
+			if ( '' === $ids ) {
 				return array();
 			}
-			$sql .= ' AND id IN (' . implode( ',', $ids ) . ')';
 		}
-		if ( 'ingresos' === ( $filtros['tipo'] ?? '' ) ) {
-			$sql .= ' AND importe > 0';
-		} elseif ( 'gastos' === ( $filtros['tipo'] ?? '' ) ) {
-			$sql .= ' AND importe < 0';
-		}
-		$filas = array_map( array( self::class, 'descifrar' ), (array) $wpdb->get_results( $wpdb->prepare( $sql . ' ORDER BY fecha DESC, id DESC LIMIT 10000', $args ), ARRAY_A ) ); // phpcs:ignore WordPress.DB
+		$signo = (string) ( $filtros['tipo'] ?? '' );
+		$filas = $wpdb->get_results( // phpcs:ignore WordPress.DB
+			$wpdb->prepare(
+				'SELECT * FROM %i WHERE grupo = %s'
+				. " AND ( %s = '' OR estado = %s )"
+				. ' AND ( %d = 0 OR ( estado = %s AND tipo_id IS NULL ) )'
+				. ' AND ( %d = 0 OR tipo_id = %d )'
+				. " AND ( %s = '' OR FIND_IN_SET( id, %s ) > 0 )"
+				. " AND ( %s <> 'ingresos' OR importe > 0 )"
+				. " AND ( %s <> 'gastos' OR importe < 0 )"
+				. ' ORDER BY fecha DESC, id DESC LIMIT 10000',
+				self::table(),
+				Grupo::numero(),
+				$estado,
+				$estado,
+				$sin,
+				self::IGNORADO,
+				$tipo,
+				$tipo,
+				$ids,
+				$ids,
+				$signo,
+				$signo
+			),
+			ARRAY_A
+		);
+		$filas = array_map( array( self::class, 'descifrar' ), (array) $filas );
 
 		$q = mb_strtolower( remove_accents( trim( (string) ( $filtros['q'] ?? '' ) ) ) );
 		if ( '' !== $q ) {
@@ -329,14 +333,14 @@ final class BancoTable {
 
 	public static function obtener( int $id ): ?array {
 		global $wpdb;
-		$r = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . self::table() . ' WHERE id = %d AND grupo = %s', $id, Grupo::numero() ), ARRAY_A ); // phpcs:ignore WordPress.DB
+		$r = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM %i WHERE id = %d AND grupo = %s', self::table(), $id, Grupo::numero() ), ARRAY_A ); // phpcs:ignore WordPress.DB
 		return $r ? self::descifrar( $r ) : null;
 	}
 
 	/** El movimiento del banco con el que se registró un pago (al conciliarlo), o null (v0.25). */
 	public static function por_pago( int $pago_id ): ?array {
 		global $wpdb;
-		$r = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . self::table() . ' WHERE pago_id = %d AND grupo = %s ORDER BY id DESC LIMIT 1', $pago_id, Grupo::numero() ), ARRAY_A ); // phpcs:ignore WordPress.DB
+		$r = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM %i WHERE pago_id = %d AND grupo = %s ORDER BY id DESC LIMIT 1', self::table(), $pago_id, Grupo::numero() ), ARRAY_A ); // phpcs:ignore WordPress.DB
 		return $r ? self::descifrar( $r ) : null;
 	}
 
@@ -388,15 +392,15 @@ final class BancoTable {
 		if ( '' === $hmac ) {
 			return null;
 		}
-		$id = (int) $wpdb->get_var( $wpdb->prepare( 'SELECT familia_id FROM ' . self::table() . ' WHERE grupo = %s AND ordenante_hmac = %s AND estado = %s AND familia_id IS NOT NULL ORDER BY revisado_en DESC LIMIT 1', Grupo::numero(), $hmac, self::CONCILIADO ) ); // phpcs:ignore WordPress.DB
+		$id = (int) $wpdb->get_var( $wpdb->prepare( 'SELECT familia_id FROM %i WHERE grupo = %s AND ordenante_hmac = %s AND estado = %s AND familia_id IS NOT NULL ORDER BY revisado_en DESC LIMIT 1', self::table(), Grupo::numero(), $hmac, self::CONCILIADO ) ); // phpcs:ignore WordPress.DB
 		return $id ?: null;
 	}
 
 	/** @return array{pendientes:int, pendientes_importe:float, saldo:?float, saldo_fecha:?string} */
 	public static function resumen(): array {
 		global $wpdb;
-		$p     = $wpdb->get_row( $wpdb->prepare( 'SELECT COUNT(*) AS n, COALESCE(SUM(importe), 0) AS total FROM ' . self::table() . ' WHERE grupo = %s AND estado = %s AND importe > 0', Grupo::numero(), self::PENDIENTE ), ARRAY_A ); // phpcs:ignore WordPress.DB
-		$saldo = $wpdb->get_row( $wpdb->prepare( 'SELECT saldo_final, hasta FROM ' . self::table_lotes() . ' WHERE grupo = %s AND saldo_final IS NOT NULL ORDER BY hasta DESC, id DESC LIMIT 1', Grupo::numero() ), ARRAY_A ); // phpcs:ignore WordPress.DB
+		$p     = $wpdb->get_row( $wpdb->prepare( 'SELECT COUNT(*) AS n, COALESCE(SUM(importe), 0) AS total FROM %i WHERE grupo = %s AND estado = %s AND importe > 0', self::table(), Grupo::numero(), self::PENDIENTE ), ARRAY_A ); // phpcs:ignore WordPress.DB
+		$saldo = $wpdb->get_row( $wpdb->prepare( 'SELECT saldo_final, hasta FROM %i WHERE grupo = %s AND saldo_final IS NOT NULL ORDER BY hasta DESC, id DESC LIMIT 1', self::table_lotes(), Grupo::numero() ), ARRAY_A ); // phpcs:ignore WordPress.DB
 		return array(
 			'pendientes'         => (int) ( $p['n'] ?? 0 ),
 			'pendientes_importe' => (float) ( $p['total'] ?? 0 ),

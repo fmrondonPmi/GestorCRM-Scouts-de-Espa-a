@@ -97,7 +97,7 @@ final class MovimientosTable {
 
 	public static function obtener( int $id ): ?array {
 		global $wpdb;
-		$r = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . self::table() . ' WHERE id = %d', $id ), ARRAY_A ); // phpcs:ignore WordPress.DB
+		$r = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM %i WHERE id = %d', self::table(), $id ), ARRAY_A ); // phpcs:ignore WordPress.DB
 		return $r ?: null;
 	}
 
@@ -120,13 +120,13 @@ final class MovimientosTable {
 	/** @return array[] Movimientos de una familia en una ronda (incluidos anulados), más recientes primero. */
 	public static function de_familia( int $familia_id, string $ronda ): array {
 		global $wpdb;
-		return (array) $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . self::table() . ' WHERE familia_id = %d AND ronda = %s ORDER BY fecha DESC, id DESC', $familia_id, $ronda ), ARRAY_A ); // phpcs:ignore WordPress.DB
+		return (array) $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM %i WHERE familia_id = %d AND ronda = %s ORDER BY fecha DESC, id DESC', self::table(), $familia_id, $ronda ), ARRAY_A ); // phpcs:ignore WordPress.DB
 	}
 
 	/** @return array[] Movimientos vigentes (sin anulados) de una familia en todas las rondas, más recientes primero. */
 	public static function de_familia_todas( int $familia_id ): array {
 		global $wpdb;
-		return (array) $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . self::table() . ' WHERE familia_id = %d AND anulado_en IS NULL ORDER BY fecha DESC, id DESC', $familia_id ), ARRAY_A ); // phpcs:ignore WordPress.DB
+		return (array) $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM %i WHERE familia_id = %d AND anulado_en IS NULL ORDER BY fecha DESC, id DESC', self::table(), $familia_id ), ARRAY_A ); // phpcs:ignore WordPress.DB
 	}
 
 	/**
@@ -138,9 +138,19 @@ final class MovimientosTable {
 	public static function pagos_de_ronda( string $ronda ): array {
 		global $wpdb;
 		$out = array();
-		$sql = 'SELECT m.* FROM ' . self::table() . ' m INNER JOIN ' . FamiliasTable::table() . ' f ON f.id = m.familia_id'
-			. ' WHERE m.ronda = %s AND m.tipo = %s AND m.anulado_en IS NULL AND f.grupo = %s ORDER BY m.fecha, m.id';
-		foreach ( (array) $wpdb->get_results( $wpdb->prepare( $sql, $ronda, self::PAGO, \AsdeBalears\AreaPrivada\Domain\Grupo::numero() ), ARRAY_A ) as $m ) { // phpcs:ignore WordPress.DB
+		$filas = $wpdb->get_results( // phpcs:ignore WordPress.DB
+			$wpdb->prepare(
+				'SELECT m.* FROM %i m INNER JOIN %i f ON f.id = m.familia_id'
+				. ' WHERE m.ronda = %s AND m.tipo = %s AND m.anulado_en IS NULL AND f.grupo = %s ORDER BY m.fecha, m.id',
+				self::table(),
+				FamiliasTable::table(),
+				$ronda,
+				self::PAGO,
+				\AsdeBalears\AreaPrivada\Domain\Grupo::numero()
+			),
+			ARRAY_A
+		);
+		foreach ( (array) $filas as $m ) {
 			$out[ (int) $m['familia_id'] ][] = $m;
 		}
 		return $out;
@@ -148,7 +158,7 @@ final class MovimientosTable {
 
 	public static function hay_de_familia( int $familia_id ): bool {
 		global $wpdb;
-		return (bool) $wpdb->get_var( $wpdb->prepare( 'SELECT 1 FROM ' . self::table() . ' WHERE familia_id = %d LIMIT 1', $familia_id ) ); // phpcs:ignore WordPress.DB
+		return (bool) $wpdb->get_var( $wpdb->prepare( 'SELECT 1 FROM %i WHERE familia_id = %d LIMIT 1', self::table(), $familia_id ) ); // phpcs:ignore WordPress.DB
 	}
 
 	/** @return array<int, array{pagado:float, ajustes:float}> familia_id => totales (sin anulados). */
@@ -156,9 +166,18 @@ final class MovimientosTable {
 		global $wpdb;
 		$out = array();
 		// Solo familias del grupo en el que se trabaja.
-		$sql = 'SELECT m.familia_id, m.tipo, SUM(m.importe) AS total FROM ' . self::table() . ' m INNER JOIN ' . FamiliasTable::table() . ' f ON f.id = m.familia_id'
-			. ' WHERE m.ronda = %s AND m.anulado_en IS NULL AND f.grupo = %s GROUP BY m.familia_id, m.tipo';
-		foreach ( (array) $wpdb->get_results( $wpdb->prepare( $sql, $ronda, \AsdeBalears\AreaPrivada\Domain\Grupo::numero() ), ARRAY_A ) as $r ) { // phpcs:ignore WordPress.DB
+		$filas = $wpdb->get_results( // phpcs:ignore WordPress.DB
+			$wpdb->prepare(
+				'SELECT m.familia_id, m.tipo, SUM(m.importe) AS total FROM %i m INNER JOIN %i f ON f.id = m.familia_id'
+				. ' WHERE m.ronda = %s AND m.anulado_en IS NULL AND f.grupo = %s GROUP BY m.familia_id, m.tipo',
+				self::table(),
+				FamiliasTable::table(),
+				$ronda,
+				\AsdeBalears\AreaPrivada\Domain\Grupo::numero()
+			),
+			ARRAY_A
+		);
+		foreach ( (array) $filas as $r ) {
 			$id         = (int) $r['familia_id'];
 			$out[ $id ] = $out[ $id ] ?? array(
 				'pagado'  => 0.0,

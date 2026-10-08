@@ -6,6 +6,7 @@
  * @var WP_User                                    $user
  * @var string                                     $url
  */
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
 use AsdeBalears\AreaPrivada\Informes\Catalogo;
 
 defined( 'ABSPATH' ) || exit;

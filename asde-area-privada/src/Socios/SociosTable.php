@@ -45,13 +45,13 @@ final class SociosTable {
 
 	public static function local_de( string $asde ): ?string {
 		global $wpdb;
-		$v = $wpdb->get_var( $wpdb->prepare( 'SELECT num_socio_local FROM ' . self::table() . ' WHERE num_socio_asde = %s', $asde ) ); // phpcs:ignore WordPress.DB
+		$v = $wpdb->get_var( $wpdb->prepare( 'SELECT num_socio_local FROM %i WHERE num_socio_asde = %s', self::table(), $asde ) ); // phpcs:ignore WordPress.DB
 		return null === $v ? null : (string) $v;
 	}
 
 	public static function asde_de( string $local ): ?string {
 		global $wpdb;
-		$v = $wpdb->get_var( $wpdb->prepare( 'SELECT num_socio_asde FROM ' . self::table() . ' WHERE num_socio_local = %s', $local ) ); // phpcs:ignore WordPress.DB
+		$v = $wpdb->get_var( $wpdb->prepare( 'SELECT num_socio_asde FROM %i WHERE num_socio_local = %s', self::table(), $local ) ); // phpcs:ignore WordPress.DB
 		return null === $v ? null : (string) $v;
 	}
 
@@ -59,7 +59,7 @@ final class SociosTable {
 	public static function todas(): array {
 		global $wpdb;
 		$out = array();
-		foreach ( (array) $wpdb->get_results( 'SELECT num_socio_asde, num_socio_local, origen FROM ' . self::table(), ARRAY_A ) as $r ) { // phpcs:ignore WordPress.DB
+		foreach ( (array) $wpdb->get_results( $wpdb->prepare( 'SELECT num_socio_asde, num_socio_local, origen FROM %i', self::table() ), ARRAY_A ) as $r ) { // phpcs:ignore WordPress.DB
 			$out[ $r['num_socio_asde'] ] = array(
 				'local'  => $r['num_socio_local'],
 				'origen' => $r['origen'],
@@ -72,7 +72,7 @@ final class SociosTable {
 	public static function generados_pendientes(): array {
 		global $wpdb;
 		$out = array();
-		foreach ( (array) $wpdb->get_results( $wpdb->prepare( 'SELECT num_socio_asde, num_socio_local FROM ' . self::table() . ' WHERE origen = %s ORDER BY num_socio_local', self::GENERADO ), ARRAY_A ) as $r ) { // phpcs:ignore WordPress.DB
+		foreach ( (array) $wpdb->get_results( $wpdb->prepare( 'SELECT num_socio_asde, num_socio_local FROM %i WHERE origen = %s ORDER BY num_socio_local', self::table(), self::GENERADO ), ARRAY_A ) as $r ) { // phpcs:ignore WordPress.DB
 			$out[ $r['num_socio_asde'] ] = $r['num_socio_local'];
 		}
 		return $out;
@@ -98,7 +98,7 @@ final class SociosTable {
 				continue;
 			}
 			// Si otro socio tenía reservado ese número aquí, el CRM prevalece: se libera.
-			$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . self::table() . ' WHERE num_socio_local = %s AND num_socio_asde <> %s', $local, $asde ) ); // phpcs:ignore WordPress.DB
+			$wpdb->query( $wpdb->prepare( 'DELETE FROM %i WHERE num_socio_local = %s AND num_socio_asde <> %s', self::table(), $local, $asde ) ); // phpcs:ignore WordPress.DB
 			$wpdb->query( // phpcs:ignore WordPress.DB
 				$wpdb->prepare(
 					'INSERT INTO %i (num_socio_asde, num_socio_local, origen, creado, actualizado) VALUES (%s, %s, %s, %s, %s)
@@ -173,7 +173,7 @@ final class SociosTable {
 	public static function siguiente( string $grupo, array $numeros_crm ): string {
 		global $wpdb;
 		$prefijo = NumeroSocio::prefijo( $grupo );
-		$locales = (array) $wpdb->get_col( $wpdb->prepare( 'SELECT num_socio_local FROM ' . self::table() . ' WHERE num_socio_local LIKE %s', $wpdb->esc_like( $prefijo ) . '%' ) ); // phpcs:ignore WordPress.DB
+		$locales = (array) $wpdb->get_col( $wpdb->prepare( 'SELECT num_socio_local FROM %i WHERE num_socio_local LIKE %s', self::table(), $wpdb->esc_like( $prefijo ) . '%' ) ); // phpcs:ignore WordPress.DB
 		$max     = 0;
 		foreach ( array_merge( $numeros_crm, $locales ) as $n ) {
 			if ( str_starts_with( (string) $n, $prefijo ) && strlen( $prefijo ) + 4 === strlen( (string) $n ) ) {

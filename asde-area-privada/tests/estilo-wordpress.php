@@ -233,4 +233,74 @@ foreach ( $todos as $fichero ) {
 }
 $ok( ! $mixtos, 'ningún fichero mezcla CRLF y LF' . ( $mixtos ? ': ' . implode( ', ', array_slice( $mixtos, 0, 8 ) ) : '' ) );
 
+// ── E. Plugin Check (v0.26.2): consultas, plantillas y uninstall.php ─────────
+// Lo que corrigió la v0.26.2 a partir del informe de Plugin Check (skill plugin-check-area-privada).
+echo "\n── E. Plugin Check: consultas, plantillas y uninstall.php\n";
+$concatenadas = array();
+$montadas     = array();
+foreach ( $todos as $fichero ) {
+	$s = (string) file_get_contents( $fichero );
+	if ( preg_match_all( '/\b(?:FROM|JOIN|INTO|UPDATE)\s*[\'"]\s*\.\s*(?:self|static|[A-Z]\w*)::table\w*\s*\(/i', $s, $m, PREG_OFFSET_CAPTURE ) ) {
+		foreach ( $m[0] as $hit ) {
+			$concatenadas[] = $rel( $fichero ) . ':' . ( 1 + substr_count( substr( $s, 0, $hit[1] ), "\n" ) );
+		}
+	}
+	if ( preg_match_all( '/\$sql\s*\.=/', $s, $m, PREG_OFFSET_CAPTURE ) ) {
+		foreach ( $m[0] as $hit ) {
+			$montadas[] = $rel( $fichero ) . ':' . ( 1 + substr_count( substr( $s, 0, $hit[1] ), "\n" ) );
+		}
+	}
+}
+$ok( ! $concatenadas, 'ninguna tabla propia se concatena en el SQL (va con %i en $wpdb->prepare())' . ( $concatenadas ? ': ' . implode( ', ', array_slice( $concatenadas, 0, 8 ) ) : '' ) );
+$ok( ! $montadas, 'ninguna consulta se monta con «$sql .=» (filtros opcionales como valores en una consulta fija)' . ( $montadas ? ': ' . implode( ', ', array_slice( $montadas, 0, 8 ) ) : '' ) );
+
+/** Variables asignadas fuera de funciones (nivel superior del fichero): nombre => línea. */
+$globales = static function ( string $fichero ) use ( $sig ): array {
+	$tk      = token_get_all( (string) file_get_contents( $fichero ) );
+	$out     = array();
+	$prof    = 0;     // Profundidad de llaves.
+	$dentro  = array(); // Profundidades en las que empieza el cuerpo de una función.
+	$espera  = false;   // Se ha visto «function» y falta su «{».
+	foreach ( $tk as $i => $t ) {
+		if ( is_array( $t ) && T_FUNCTION === $t[0] ) {
+			$espera = true;
+		} elseif ( '{' === $t || ( is_array( $t ) && in_array( $t[0], array( T_CURLY_OPEN, T_DOLLAR_OPEN_CURLY_BRACES ), true ) ) ) {
+			++$prof;
+			if ( $espera ) {
+				$dentro[] = $prof;
+				$espera   = false;
+			}
+		} elseif ( '}' === $t ) {
+			if ( $dentro && end( $dentro ) === $prof ) {
+				array_pop( $dentro );
+			}
+			--$prof;
+		} elseif ( ! $dentro && ! $espera && is_array( $t ) && T_VARIABLE === $t[0] && '$this' !== $t[1] ) {
+			$q = $sig( $tk, $i, 1 );
+			$p = $sig( $tk, $i, -1 );
+			$asigna = $q >= 0 && '=' === $tk[ $q ];
+			$bucle  = $p >= 0 && is_array( $tk[ $p ] ) && T_AS === $tk[ $p ][0];
+			$clave  = $q >= 0 && is_array( $tk[ $q ] ) && T_DOUBLE_ARROW === $tk[ $q ][0] && $p >= 0 && is_array( $tk[ $p ] ) && T_AS === $tk[ $p ][0];
+			if ( $asigna || $bucle || $clave ) {
+				$out[ $t[1] ] ??= (int) $t[2];
+			}
+		}
+	}
+	return $out;
+};
+$sin_linea = array();
+$plantillas = 0;
+foreach ( $todos as $fichero ) {
+	if ( ! str_contains( $fichero, '/templates/' ) ) {
+		continue;
+	}
+	++$plantillas;
+	if ( $globales( $fichero ) && ! str_contains( (string) file_get_contents( $fichero ), 'phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Plantilla' ) ) {
+		$sin_linea[] = $rel( $fichero );
+	}
+}
+$ok( $plantillas > 60 && ! $sin_linea, 'las plantillas con variables propias llevan la línea «phpcs:disable … PrefixAllGlobals» con su motivo (' . $plantillas . ' plantillas)' . ( $sin_linea ? ': ' . implode( ', ', array_slice( $sin_linea, 0, 8 ) ) : '' ) );
+$sin_prefijo = array_filter( array_keys( $globales( ASDE_AP_DIR . 'uninstall.php' ) ), static fn( $v ) => ! str_starts_with( $v, '$asde_' ) && '$wpdb' !== $v );
+$ok( ! $sin_prefijo, 'uninstall.php (ámbito global) solo usa variables con el prefijo $asde_' . ( $sin_prefijo ? ': ' . implode( ', ', $sin_prefijo ) : '' ) );
+
 echo $fails ? "\n$fails FALLOS\n" : "\nTODO OK (solo lectura de ficheros)\n";

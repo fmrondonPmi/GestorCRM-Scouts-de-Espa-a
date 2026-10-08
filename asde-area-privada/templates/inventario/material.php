@@ -13,6 +13,7 @@
  * @var string            $url_tipos
  * @var callable          $usuario   id => nombre
  */
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
 use AsdeBalears\AreaPrivada\Inventario\MaterialesTable;
 
 defined( 'ABSPATH' ) || exit;

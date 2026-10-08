@@ -6,6 +6,7 @@
  * @var string $login     URL del login
  * @var string $solicitar URL de «Solicitar acceso»
  */
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
 use AsdeBalears\AreaPrivada\Domain\Identidad;
 
 defined( 'ABSPATH' ) || exit;

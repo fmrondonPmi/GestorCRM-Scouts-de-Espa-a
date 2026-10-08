@@ -2,6 +2,7 @@
 /**
  * @var array<int, array{0:string, 1:string}> $avisos [tipo, mensaje HTML ya escapado]
  */
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
 defined( 'ABSPATH' ) || exit;
 
 foreach ( $avisos as list( $tipo, $mensaje ) ) :

@@ -107,7 +107,7 @@ final class Solicitudes {
 	/** Pendientes del grupo que puede revisar este ámbito (sin consultar el CRM: con las secciones guardadas en la solicitud). */
 	public static function contar_pendientes( Ambito $a ): int {
 		global $wpdb;
-		$filas = (array) $wpdb->get_results( $wpdb->prepare( 'SELECT secciones, adulto FROM ' . self::table() . ' WHERE grupo = %s AND estado = %s', Grupo::numero(), self::PENDIENTE ), ARRAY_A ); // phpcs:ignore WordPress.DB
+		$filas = (array) $wpdb->get_results( $wpdb->prepare( 'SELECT secciones, adulto FROM %i WHERE grupo = %s AND estado = %s', self::table(), Grupo::numero(), self::PENDIENTE ), ARRAY_A ); // phpcs:ignore WordPress.DB
 		return count( array_filter( $filas, static fn( array $s ) => self::en_ambito( $s, $a ) ) );
 	}
 
@@ -132,22 +132,21 @@ final class Solicitudes {
 	/** ¿Hay ya una solicitud pendiente de esta persona, de este tipo y con este email? */
 	public static function hay_pendiente( string $socio, string $tipo, string $email ): bool {
 		global $wpdb;
-		return (bool) $wpdb->get_var( $wpdb->prepare( 'SELECT id FROM ' . self::table() . ' WHERE grupo = %s AND estado = %s AND socio = %s AND tipo = %s AND email_huella = %s LIMIT 1', Grupo::numero(), self::PENDIENTE, $socio, $tipo, EmailCuenta::huella( $email ) ) ); // phpcs:ignore WordPress.DB
+		return (bool) $wpdb->get_var( $wpdb->prepare( 'SELECT id FROM %i WHERE grupo = %s AND estado = %s AND socio = %s AND tipo = %s AND email_huella = %s LIMIT 1', self::table(), Grupo::numero(), self::PENDIENTE, $socio, $tipo, EmailCuenta::huella( $email ) ) ); // phpcs:ignore WordPress.DB
 	}
 
 	/** Solicitud del grupo actual, con los datos escritos descifrados (vacíos si ya se borraron). */
 	public static function obtener( int $id ): ?array {
 		global $wpdb;
-		$fila = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . self::table() . ' WHERE id = %d AND grupo = %s', $id, Grupo::numero() ), ARRAY_A ); // phpcs:ignore WordPress.DB
+		$fila = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM %i WHERE id = %d AND grupo = %s', self::table(), $id, Grupo::numero() ), ARRAY_A ); // phpcs:ignore WordPress.DB
 		return $fila ? self::preparar( $fila ) : null;
 	}
 
 	/** @return array[] Del grupo actual, las más recientes primero. */
 	public static function listado( string $estado = self::PENDIENTE, int $limite = 200 ): array {
 		global $wpdb;
-		$sql   = 'SELECT * FROM ' . self::table() . ' WHERE grupo = %s' . ( '' !== $estado ? ' AND estado = %s' : '' ) . ' ORDER BY creada DESC, id DESC LIMIT %d';
-		$args  = '' !== $estado ? array( Grupo::numero(), $estado, $limite ) : array( Grupo::numero(), $limite );
-		$filas = (array) $wpdb->get_results( $wpdb->prepare( $sql, $args ), ARRAY_A ); // phpcs:ignore WordPress.DB
+		// Consulta fija: el estado va como valor («'' = ''» lo deja sin efecto) (v0.26.2, Plugin Check).
+		$filas = (array) $wpdb->get_results( $wpdb->prepare( "SELECT * FROM %i WHERE grupo = %s AND ( %s = '' OR estado = %s ) ORDER BY creada DESC, id DESC LIMIT %d", self::table(), Grupo::numero(), $estado, $estado, $limite ), ARRAY_A ); // phpcs:ignore WordPress.DB
 		return array_map( array( self::class, 'preparar' ), $filas );
 	}
 
@@ -177,7 +176,7 @@ final class Solicitudes {
 	public static function purgar(): int {
 		global $wpdb;
 		$limite = gmdate( 'Y-m-d H:i:s', time() - self::DIAS_DATOS * DAY_IN_SECONDS );
-		return (int) $wpdb->query( $wpdb->prepare( 'UPDATE ' . self::table() . " SET datos_enc = NULL WHERE estado <> %s AND datos_enc IS NOT NULL AND revisada_en < %s", self::PENDIENTE, $limite ) ); // phpcs:ignore WordPress.DB
+		return (int) $wpdb->query( $wpdb->prepare( "UPDATE %i SET datos_enc = NULL WHERE estado <> %s AND datos_enc IS NOT NULL AND revisada_en < %s", self::table(), self::PENDIENTE, $limite ) ); // phpcs:ignore WordPress.DB
 	}
 
 	private static function preparar( array $fila ): array {
