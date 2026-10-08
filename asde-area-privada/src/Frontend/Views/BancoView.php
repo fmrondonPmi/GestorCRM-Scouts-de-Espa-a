@@ -149,7 +149,7 @@ final class BancoView extends TesoreriaBaseView {
 			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-area-privada' ), 403 );
 		}
 		$accion = $this->post( 'asde_action' );
-		$volver = wp_get_referer() ?: $this->url( 'banco' );
+		$volver = $this->url_actual( $this->url( 'banco' ) ); // La misma vista (filtros y página) tras conciliar o deshacer.
 
 		switch ( $accion ) {
 			case 'analizar':

@@ -24,6 +24,8 @@ $hoy  = wp_date( 'Y-m-d' );
 $user = static fn( $id ) => ( $u = get_userdata( (int) $id ) ) ? $u->user_login : '—';
 ?>
 <p class="asde-back"><a href="<?php echo esc_url( $url ); ?>"><?php asde_e( '← Volver al control de pagos' ); ?></a></p>
+<?php /* v0.25: la ficha entera es una zona que se actualiza sin recargar la página (assets/js/parcial.js): registrar, conciliar o eliminar un pago solo cambia esto. */ ?>
+<div data-asde-parcial="familia">
 
 <section class="asde-card">
 	<header class="asde-card__header asde-card__header--split">
@@ -215,3 +217,4 @@ $user = static fn( $id ) => ( $u = get_userdata( (int) $id ) ) ? $u->user_login 
 		</table>
 	<?php endif; ?>
 </section>
+</div>

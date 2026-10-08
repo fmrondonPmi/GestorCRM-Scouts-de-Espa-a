@@ -100,8 +100,9 @@
 	// se queda abierto o cerrado como lo dejó la persona, en este navegador.
 	// ---------------------------------------------------------------------
 	function recordar( raiz ) {
-		Array.prototype.forEach.call( ( raiz || document ).querySelectorAll( 'details[data-asde-recordar]' ), function ( d ) {
+		Array.prototype.forEach.call( ( raiz || document ).querySelectorAll( 'details[data-asde-recordar]:not([data-asde-recordado])' ), function ( d ) {
 			var clave = 'asde_plegado_' + d.getAttribute( 'data-asde-recordar' );
+			d.setAttribute( 'data-asde-recordado', '' );
 			try {
 				var guardado = window.localStorage.getItem( clave );
 				if ( null !== guardado ) {
@@ -116,6 +117,10 @@
 		} );
 	}
 	recordar( document );
+	// Lo que llega al actualizar una zona sin recargar (parcial.js, v0.25) también se recuerda.
+	document.addEventListener( 'asde:parcial', function () {
+		recordar( document );
+	} );
 
 	// ---------------------------------------------------------------------
 	// 1. Ventana emergente

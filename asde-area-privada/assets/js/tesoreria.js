@@ -73,8 +73,6 @@
 	// ---------------------------------------------------------------------
 	// 2. Atajos (los nombres de la familia) y «Elegir»
 	// ---------------------------------------------------------------------
-	var pago = document.querySelector( '[data-asde-pago-banco]' );
-
 	document.addEventListener( 'click', function ( e ) {
 		if ( ! e.target.closest || ! normal( e ) ) {
 			return;
@@ -96,7 +94,7 @@
 		if ( dialogo && pago ) {
 			e.preventDefault();
 			e.stopPropagation();
-			elegir( usar );
+			pago.elegir( usar );
 			var cerrar = dialogo.querySelector( '.asde-modal__cerrar' );
 			if ( cerrar ) {
 				cerrar.click(); // Sin nada guardado: la ficha no se recarga.
@@ -105,69 +103,81 @@
 	}, true );
 
 	// ---------------------------------------------------------------------
-	// 3. «Registrar pago» en la ficha de la familia
+	// 3. «Registrar pago» en la ficha de la familia. Desde la v0.25 la ficha se
+	// actualiza sin recargar la página (parcial.js): al cambiar, se vuelve a preparar.
 	// ---------------------------------------------------------------------
-	if ( ! pago ) {
-		return;
-	}
-	var form = pago.closest( 'form' );
-	var id = pago.querySelector( '[data-asde-pago-banco-id]' );
-	var elegido = pago.querySelector( '[data-asde-pago-banco-elegido]' );
-	var ninguno = pago.querySelector( '[data-asde-pago-banco-ninguno]' );
-	var quitar = pago.querySelector( '[data-asde-pago-banco-quitar]' );
-	var campos = {
-		fecha: form.querySelector( '[name="fecha"]' ),
-		importe: form.querySelector( '[name="importe"]' ),
-		metodo: form.querySelector( '[name="metodo"]' ),
-		referencia: form.querySelector( '[name="referencia"]' )
-	};
-	var metodoAMano = campos.metodo && ! campos.metodo.disabled ? campos.metodo.value : '';
-	// Si la ficha ya viene con un ingreso elegido (desde su página, sin JavaScript),
-	// «Quitar» sigue siendo un enlace: la ficha vuelve sin él.
-	var enJs = false;
+	var pago = null;
 
-	/** Pone en el formulario el ingreso del banco elegido, o null para volver a escribirlo a mano. */
-	function poner( m ) {
-		var con = null !== m;
-		id.value = con ? m.id : '';
-		campos.fecha.value = con ? m.fecha : pago.getAttribute( 'data-fecha' );
-		campos.importe.value = con ? m.importe : pago.getAttribute( 'data-importe' );
-		if ( campos.referencia ) {
-			campos.referencia.value = con && m.ref ? m.ref : pago.getAttribute( 'data-ref' );
+	function preparar() {
+		var caja = document.querySelector( '[data-asde-pago-banco]' );
+		pago = null;
+		if ( ! caja ) {
+			return;
 		}
-		if ( campos.metodo ) {
-			if ( con && campos.metodo.querySelector( 'option[value="transferencia"]' ) ) {
-				campos.metodo.value = 'transferencia';
-			} else if ( ! con && metodoAMano ) {
-				campos.metodo.value = metodoAMano;
+		var form = caja.closest( 'form' );
+		var id = caja.querySelector( '[data-asde-pago-banco-id]' );
+		var elegido = caja.querySelector( '[data-asde-pago-banco-elegido]' );
+		var ninguno = caja.querySelector( '[data-asde-pago-banco-ninguno]' );
+		var quitar = caja.querySelector( '[data-asde-pago-banco-quitar]' );
+		var campos = {
+			fecha: form.querySelector( '[name="fecha"]' ),
+			importe: form.querySelector( '[name="importe"]' ),
+			metodo: form.querySelector( '[name="metodo"]' ),
+			referencia: form.querySelector( '[name="referencia"]' )
+		};
+		var metodoAMano = campos.metodo && ! campos.metodo.disabled ? campos.metodo.value : '';
+		// Si la ficha ya viene con un ingreso elegido (desde su página, sin JavaScript),
+		// «Quitar» sigue siendo un enlace: la ficha vuelve sin él.
+		var enJs = false;
+
+		/** Pone en el formulario el ingreso del banco elegido, o null para volver a escribirlo a mano. */
+		function poner( m ) {
+			var con = null !== m;
+			id.value = con ? m.id : '';
+			campos.fecha.value = con ? m.fecha : caja.getAttribute( 'data-fecha' );
+			campos.importe.value = con ? m.importe : caja.getAttribute( 'data-importe' );
+			if ( campos.referencia ) {
+				campos.referencia.value = con && m.ref ? m.ref : caja.getAttribute( 'data-ref' );
 			}
-			campos.metodo.disabled = con; // Se registra como transferencia.
+			if ( campos.metodo ) {
+				if ( con && campos.metodo.querySelector( 'option[value="transferencia"]' ) ) {
+					campos.metodo.value = 'transferencia';
+				} else if ( ! con && metodoAMano ) {
+					campos.metodo.value = metodoAMano;
+				}
+				campos.metodo.disabled = con; // Se registra como transferencia.
+			}
+			// Con un movimiento del banco, la fecha y el importe son los suyos: no se pueden cambiar.
+			campos.fecha.readOnly = con;
+			campos.importe.readOnly = con;
+			elegido.textContent = con ? m.resumen : '';
+			elegido.hidden = ! con;
+			ninguno.hidden = con;
+			quitar.hidden = ! con;
 		}
-		// Con un movimiento del banco, la fecha y el importe son los suyos: no se pueden cambiar.
-		campos.fecha.readOnly = con;
-		campos.importe.readOnly = con;
-		elegido.textContent = con ? m.resumen : '';
-		elegido.hidden = ! con;
-		ninguno.hidden = con;
-		quitar.hidden = ! con;
-	}
 
-	function elegir( a ) {
-		enJs = true;
-		poner( {
-			id: a.getAttribute( 'data-asde-banco-usar' ),
-			fecha: a.getAttribute( 'data-fecha' ),
-			importe: a.getAttribute( 'data-importe' ),
-			ref: a.getAttribute( 'data-ref' ),
-			resumen: a.getAttribute( 'data-resumen' )
+		quitar.addEventListener( 'click', function ( e ) {
+			if ( enJs && normal( e ) ) {
+				e.preventDefault();
+				e.stopPropagation();
+				poner( null );
+			}
 		} );
+
+		pago = {
+			elegir: function ( a ) {
+				enJs = true;
+				poner( {
+					id: a.getAttribute( 'data-asde-banco-usar' ),
+					fecha: a.getAttribute( 'data-fecha' ),
+					importe: a.getAttribute( 'data-importe' ),
+					ref: a.getAttribute( 'data-ref' ),
+					resumen: a.getAttribute( 'data-resumen' )
+				} );
+			}
+		};
 	}
 
-	quitar.addEventListener( 'click', function ( e ) {
-		if ( enJs && normal( e ) ) {
-			e.preventDefault();
-			e.stopPropagation();
-			poner( null );
-		}
-	} );
+	preparar();
+	document.addEventListener( 'asde:parcial', preparar );
 } )();

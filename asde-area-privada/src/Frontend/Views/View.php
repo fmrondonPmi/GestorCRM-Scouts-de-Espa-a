@@ -125,4 +125,20 @@ abstract class View {
 	protected function url( string $key, array $args = array() ): string {
 		return Pages::url( $key, $args );
 	}
+
+	/**
+	 * La dirección de esta misma petición, con sus filtros y su página (v0.25): adonde se
+	 * vuelve después de un POST enviado desde la propia pantalla. El formulario se envía
+	 * a la dirección que se está viendo (también cuando lo envía parcial.js), así que se
+	 * vuelve a la misma vista. wp_get_referer() no sirve aquí: si coincide con la propia
+	 * petición devuelve false y se perdían los filtros.
+	 */
+	protected function url_actual( string $defecto ): string {
+		$uri  = isset( $_SERVER['REQUEST_URI'] ) ? (string) wp_unslash( $_SERVER['REQUEST_URI'] ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- se valida abajo con wp_validate_redirect
+		$host = isset( $_SERVER['HTTP_HOST'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_HOST'] ) ) : '';
+		if ( '' === $uri || '' === $host || '/' !== $uri[0] ) {
+			return $defecto;
+		}
+		return wp_validate_redirect( esc_url_raw( set_url_scheme( 'http://' . $host . $uri ) ), $defecto );
+	}
 }

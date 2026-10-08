@@ -23,6 +23,7 @@ use AsdeBalears\AreaPrivada\Frontend\Router;
 use AsdeBalears\AreaPrivada\Frontend\Views\BancoView;
 use AsdeBalears\AreaPrivada\Frontend\Views\View;
 use AsdeBalears\AreaPrivada\Install\Roles;
+use AsdeBalears\AreaPrivada\Frontend\Pages;
 use AsdeBalears\AreaPrivada\Tesoreria\Banco\BancoTable;
 use AsdeBalears\AreaPrivada\Tesoreria\Banco\Conciliacion;
 use AsdeBalears\AreaPrivada\Tesoreria\Banco\TiposMovimiento;
@@ -264,6 +265,27 @@ try {
 	$ok( str_contains( $h, 'Tipos de gasto e ingreso' ) && str_contains( $h, 'Crear tipo' ) && 1 === preg_match( '/-57,50/', $h ), 'la pantalla de tipos, con lo que suma cada uno' );
 	list( $avisos ) = $enviar( new BancoView(), array( 'asde_action' => 'tipo_crear', 'nombre' => 'Lotería', 'naturaleza' => 'ingreso' ), 'asde_banco_tipos' );
 	$ok( str_contains( $avisos, 'Tipo creado' ) && isset( array_column( TiposMovimiento::todos(), 'id', 'nombre' )['Lotería'] ), 'se crean tipos desde su pantalla' );
+	// v0.25: después de deshacer o conciliar se vuelve a la misma vista (filtros y página), no a la del principio.
+	$filtrada    = Pages::url( 'banco', array( 'estado' => 'todos', 'q' => 'PRUEBA-BG', 'pag' => '1' ) );
+	$partes      = wp_parse_url( $filtrada );
+	$uri_antes   = $_SERVER['REQUEST_URI'] ?? null;
+	$host_antes  = $_SERVER['HTTP_HOST'] ?? null;
+	$_SERVER['REQUEST_URI'] = ( $partes['path'] ?? '/' ) . '?' . ( $partes['query'] ?? '' );
+	$_SERVER['HTTP_HOST']   = $partes['host'] . ( isset( $partes['port'] ) ? ':' . $partes['port'] : '' );
+	$fam_cuota   = (int) BancoTable::obtener( (int) $cuota['id'] )['familia_id'];
+	list( , $destino ) = $enviar( new BancoView(), array( 'asde_action' => 'deshacer', 'mov' => (string) $cuota['id'] ), 'asde_banco_mov_' . $cuota['id'] );
+	list( , $destino2 ) = $enviar( new BancoView(), array( 'asde_action' => 'conciliar', 'mov' => (string) $cuota['id'], 'familia' => (string) $fam_cuota, 'ronda_pago' => '2026-2027' ), 'asde_banco_mov_' . $cuota['id'] );
+	if ( null === $uri_antes ) {
+		unset( $_SERVER['REQUEST_URI'] );
+	} else {
+		$_SERVER['REQUEST_URI'] = $uri_antes;
+	}
+	if ( null === $host_antes ) {
+		unset( $_SERVER['HTTP_HOST'] );
+	} else {
+		$_SERVER['HTTP_HOST'] = $host_antes;
+	}
+	$ok( str_contains( $destino, 'estado=todos' ) && str_contains( $destino, 'q=PRUEBA-BG' ) && str_contains( $destino2, 'estado=todos' ) && BancoTable::CONCILIADO === BancoTable::obtener( (int) $cuota['id'] )['estado'], 'deshacer y conciliar vuelven a la misma vista filtrada (v0.25)' );
 	echo "\n== Parte D · Control de pagos: registrar un pago con un ingreso del banco ==\n";
 	$fam2 = FamiliasTable::obtener( (int) FamiliasTable::crear( array( '999902' ) ) );
 	$importar(
@@ -356,6 +378,7 @@ try {
 	$h = \AsdeBalears\AreaPrivada\Frontend\TemplateLoader::render( 'tesoreria/familia', $vars );
 	$ok( 1 === preg_match( '/<a class="button asde-button-secundario" href="[^"]*elegir_banco=1[^"]*" data-asde-modal>/', $h ) && str_contains( $h, 'Buscar en el banco…' ) && str_contains( $h, '<input type="hidden" name="banco" value=""' ) && ! str_contains( $h, '<select id="asde-pago-banco"' ), 'en «Registrar pago», un botón que abre la ventana para buscar el ingreso (ya no un desplegable)' );
 	$ok( str_contains( $h, '4 ingresos por conciliar' ) && str_contains( $h, '2 sugeridos para esta familia' ), 'con cuántos hay por conciliar y cuántos se sugieren para la familia' );
+	$ok( str_contains( $h, '<div data-asde-parcial="familia">' ), 'la ficha de la familia es una zona que se actualiza sin recargar la página: registrar o conciliar un pago solo la cambia a ella (v0.25)' );
 	$vars['banco']['elegido'] = BancoTable::obtener( (int) $por_tutor['id'] );
 	$h = \AsdeBalears\AreaPrivada\Frontend\TemplateLoader::render( 'tesoreria/familia', $vars );
 	$ok( str_contains( $h, 'name="banco" value="' . $por_tutor['id'] . '"' ) && 1 === preg_match( '/name="fecha" value="2026-10-11" required readonly>/', $h ) && 1 === preg_match( '/name="importe"[^>]*value="60.00" required readonly>/', $h ) && 1 === preg_match( '/name="metodo" disabled>/', $h ) && str_contains( $h, 'GARCIA LOPEZ MARIA' ), 'sin JavaScript, al volver de la ventana con un ingreso, la ficha lo trae puesto (fecha e importe fijos, transferencia)' );

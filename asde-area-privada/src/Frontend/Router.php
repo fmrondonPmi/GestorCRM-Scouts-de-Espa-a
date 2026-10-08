@@ -276,6 +276,8 @@ final class Router {
 		}
 		if ( 'tesoreria' === $key ) {
 			wp_enqueue_script( 'asde-tesoreria', plugins_url( 'assets/js/tesoreria.js', ASDE_AP_FILE ), array( 'asde-i18n' ), ASDE_AP_VERSION, true );
+			// v0.25: la ficha de una familia se actualiza sin recargar la página (pagos, conciliar, eliminar).
+			wp_enqueue_script( 'asde-parcial', plugins_url( 'assets/js/parcial.js', ASDE_AP_FILE ), array( 'asde-i18n', 'asde-area', 'asde-tesoreria' ), ASDE_AP_VERSION, true );
 		}
 		// v0.20: zonas que se actualizan sin recargar (listado del banco).
 		if ( 'banco' === $key ) {
