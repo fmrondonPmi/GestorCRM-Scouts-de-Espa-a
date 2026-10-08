@@ -2240,3 +2240,16 @@ html.asde-cargando .asde-ap button {
 .asde-ap .asde-libro__avisos:empty {
 	display: none;
 }
+/* En el móvil, las tres hojas caben en la pantalla (a 390 px, sin desplazarse). */
+@media (max-width: 600px) {
+	.asde-ap .asde-hojas__lista {
+		padding: 0;
+	}
+	.asde-ap .asde-hojas__pestana {
+		padding: 8px 10px;
+		font-size: 13px;
+	}
+	.asde-ap .asde-hojas__pestana.is-active {
+		padding-bottom: 10px;
+	}
+}
