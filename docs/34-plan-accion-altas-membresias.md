@@ -203,8 +203,8 @@ Lo que el simulado no puede confirmar (P-73 y P-74 en la instancia real) se mira
 - Una sola ficha con ese nº en todo el CRM, **con el nº de Scouts de España puesto** (P-72) y **visible para el grupo** (está en su grupo de seguridad: P-73 ✅).
 - Su membresía: Castores, alta de ese día, `estado_c` activo, `active=1` y el nº en la membresía. **«Secciones actuales» = Castores**, igual que las membresías activas (P-74 ✅).
 - Frente a cinco membresías hechas por ASDE en el grupo, solo falta `assigned_user_name` (el nombre del usuario asignado, que SuiteCRM saca de `assigned_user_id`; la nueva tiene usuario asignado, el de la API): **ningún campo que deba poner la web** (P-86 ✅).
-- **P-85 sigue abierta:** hace falta la **primera baja real** desde la web para ver qué hace el CRM con la fecha (`active` y «Secciones actuales»). Se mira con el mismo script y el nº de esa persona.
-- Siguiente paso, cuando el usuario quiera: seguir con el piloto y, tras la primera baja, activar más grupos.
+- **Primera baja real** (el mismo día, de la misma persona; revisada con el mismo script): la membresía queda con `end_date` de ese día, motivo `other` («Otro motivo»), `estado_c` baja y **`active=0`**, y **«Secciones actuales» queda vacío**: el CRM la da por terminada el mismo día, como la web (**P-85 ✅**). En P-86, `active` sale ahora como «vacío» porque vale 0: no es un campo que falte.
+- **Fase 5 revisada entera:** alta y baja reales coinciden con lo que hace la web. Siguiente paso, cuando el usuario quiera: activar «Altas en el CRM» en más grupos (wp-admin → Grupos Scouts → Módulos), mirando «Documentos repetidos» de cada uno antes.
 
 **Lo que se planeó:**
 
