@@ -19,7 +19,7 @@
 
 $raiz    = dirname( __DIR__ ) . '/manual';
 $fuentes = $raiz . '/fuentes';
-$version = '0.24';
+$version = '0.25';
 $fecha   = 'octubre de 2026';
 $errores = 0;
 
@@ -45,13 +45,13 @@ $manuales = array(
 	'scouters'      => array(
 		'titulo'   => 'Manual para scouters',
 		'perfil'   => 'Scouters y voluntariado con sección',
-		'entrada'  => 'Lo que hace un scouter con su sección en el área privada: las fichas de sus educandos, los cambios que proponen las familias, las solicitudes de acceso, los informes, los pagos y las familias, y los pedidos de uniforme. Y lo suyo: sus datos, sus pagos y su propio uniforme.',
+		'entrada'  => 'Lo que hace un scouter con su sección en el área privada: las fichas de sus educandos, los cambios que proponen las familias, las solicitudes de acceso, los informes (también quién ha pagado la cuota), los pagos y las familias, y los pedidos de uniforme. Y lo suyo: sus datos, sus pagos y su propio uniforme.',
 		'apartados' => array( 'scouters-perfil', 'scouters-alta', 'entrar-socios', 'primera-vez', 'instalar-app', 'seguridad-obligatoria', 'scouters-inicio', 'ventana', 'scouters-fichas', 'cambios', 'scouters-solicitudes', 'informes', 'scouters-tesoreria', 'scouters-uniformes', 'inventario', 'idioma', 'preguntas-scouters' ),
 	),
 	'coordinacion'  => array(
 		'titulo'   => 'Manual del equipo de coordinación',
 		'perfil'   => 'Tesorería, Secretaría y Coordinación',
-		'entrada'  => 'Todo lo que lleva el equipo del grupo: personas y números de socio, altas, bajas y cambios de sección en el CRM, dar acceso, solicitudes, usuarios y emails, fichas y cambios, informes, la Tesorería completa (cuotas, coste federativo, banco y domiciliaciones SEPA) y los uniformes, del pago a la entrega.',
+		'entrada'  => 'Todo lo que lleva el equipo del grupo: personas y números de socio, altas, bajas y cambios de sección en el CRM, dar acceso, solicitudes, los usuarios (con sus hojas: usuarios, dar acceso y registro de emails), fichas y cambios, informes, la Tesorería completa (cuotas, coste federativo, banco y domiciliaciones SEPA) y los uniformes, del pago a la entrega.',
 		'apartados' => array( 'coordinacion-perfil', 'entrar-socios', 'primera-vez', 'instalar-app', 'seguridad-obligatoria', 'coordinacion-inicio', 'ventana', 'personas', 'altas-crm', 'alta', 'solicitudes', 'usuarios', 'coordinacion-fichas', 'cambios', 'informes', 'tesoreria', 'uniformes-gestion', 'inventario', 'idioma', 'preguntas-coordinacion' ),
 	),
 );
