@@ -1155,7 +1155,7 @@ return array(
 	'A pagar' => 'Pantallas',
 	'Acceso actualizado: %s. Roles: %s.' => 'Pantallas',
 	'Acceso creado: %s. Roles: %s.' => 'Pantallas',
-	'Acceso desactivado para el usuario %s. Para devolvérselo, dale de alta de nuevo.' => 'Pantallas',
+	'Acceso desactivado para el usuario %s: se han borrado su contraseña y su verificación en dos pasos. Para devolvérselo, dale de alta de nuevo: le llegará una invitación para elegir otra contraseña.' => 'Pantallas',
 	'Acción desconocida.' => 'Pantallas',
 	'Ajuste de %s eliminado. Queda en el historial de la familia.' => 'Pantallas',
 	'Ajuste de %s registrado.' => 'Pantallas',

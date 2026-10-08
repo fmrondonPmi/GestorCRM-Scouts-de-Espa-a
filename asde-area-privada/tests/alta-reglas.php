@@ -249,6 +249,28 @@ if ( $r->ok ) {
 		$ok( ! isset( $amb->representados[ $adulto->num_socio_asde ] ) && in_array( $adulto->num_socio_asde, $amb->retirados, true ), 'ámbito: un mayor de edad no cuenta como representado' );
 		$retiradas = Mantenimiento::revisar_tutelas( $repo );
 		$ok( $retiradas >= 1 && ! in_array( $adulto->num_socio_asde, Usuarios::representados( $fam->ID ), true ), 'mantenimiento: retira al mayor de edad de la cuenta familiar' );
+
+		// v0.26.1: una cuenta familiar que se queda sin nadie a quien representar se desactiva como a mano: sin contraseña.
+		$clave_sola = wp_generate_password( 24 );
+		$solo_id    = wp_insert_user(
+			array(
+				'user_login' => 'prueba-reglas-solo-adulto',
+				'user_email' => '',
+				'user_pass'  => $clave_sola,
+				'role'       => Roles::TUTOR,
+			)
+		);
+		if ( ! is_wp_error( $solo_id ) ) {
+			$creados[] = $solo_id;
+			add_user_meta( $solo_id, Usuarios::META_REPRESENTADO, $adulto->num_socio_asde );
+			update_user_meta( $solo_id, Usuarios::META_GRUPO, Grupo::id() );
+			update_user_meta( $solo_id, Usuarios::META_ESTADO, Usuarios::ACTIVO );
+			update_user_meta( $solo_id, Usuarios::META_ACTIVADA_EN, (string) time() );
+			Mantenimiento::revisar_tutelas( $repo );
+			clean_user_cache( $solo_id );
+			$solo = get_userdata( $solo_id );
+			$ok( Usuarios::DESACTIVADO === Usuarios::estado( $solo ) && array() === Usuarios::roles_asde( $solo ) && ! wp_check_password( $clave_sola, $solo->user_pass, $solo_id ) && ! Usuarios::ha_activado( $solo ), 'mantenimiento: la cuenta familiar sin menores queda desactivada y sin su contraseña (v0.26.1)' );
+		}
 	}
 }
 $r = $alta->alta_tutor( $teen->num_socio_asde, array( $scouter->num_socio_asde ), 'email1' );

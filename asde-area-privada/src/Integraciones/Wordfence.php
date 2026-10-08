@@ -70,4 +70,40 @@ final class Wordfence {
 	public static function activo( \WP_User $user ): bool {
 		return self::disponible() && \WordfenceLS\Controller_Users::shared()->has_2fa_active( $user );
 	}
+
+	/**
+	 * Quita a una cuenta todo lo que Wordfence guarda para entrar con ella: la verificación en
+	 * dos pasos (el secreto de la app y los códigos de recuperación) y las llaves de acceso
+	 * (passkeys, que dejan entrar sin contraseña). Al desactivar la cuenta (v0.26.1). Sin
+	 * Wordfence, o si algo falla en él, no se corta la desactivación.
+	 *
+	 * @return array{dos_pasos:bool, llaves:int} Si tenía la verificación en dos pasos y cuántas llaves se han quitado.
+	 */
+	public static function quitar_acceso( \WP_User $user ): array {
+		$out = array(
+			'dos_pasos' => false,
+			'llaves'    => 0,
+		);
+		if ( ! self::disponible() ) {
+			return $out;
+		}
+		try {
+			$users            = \WordfenceLS\Controller_Users::shared();
+			$out['dos_pasos'] = method_exists( $users, 'has_2fa_enrollment' ) ? (bool) $users->has_2fa_enrollment( $user ) : (bool) $users->has_2fa_active( $user );
+			$users->deactivate_2fa( $user ); // Borra el secreto y los códigos de recuperación.
+			if ( class_exists( '\WordfenceLS\Controller_Passkey' ) && method_exists( '\WordfenceLS\Controller_Passkey', 'shared' ) ) {
+				$llaves = \WordfenceLS\Controller_Passkey::shared();
+				if ( method_exists( $llaves, 'get_passkeys' ) && method_exists( $llaves, 'remove_passkey' ) ) {
+					foreach ( (array) $llaves->get_passkeys( $user ) as $p ) {
+						if ( true === $llaves->remove_passkey( $user, (int) $p['id'] ) ) {
+							++$out['llaves'];
+						}
+					}
+				}
+			}
+		} catch ( \Throwable $e ) {
+			\AsdeBalears\AreaPrivada\Audit\Logger::log( 'wordfence_quitar_acceso_error', 'user', (string) $user->ID, array( 'error' => $e->getMessage() ) );
+		}
+		return $out;
+	}
 }

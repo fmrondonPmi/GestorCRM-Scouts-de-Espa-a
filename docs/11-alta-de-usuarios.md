@@ -90,7 +90,7 @@ Todas se sirven con `noindex`, `no-store`, `DONOTCACHEPAGE` y `litespeed_control
    - Se sugieren posibles hermanos/as, es decir, participantes que comparten algún email con la ficha.
    - Si el email ya tiene usuario (por ejemplo, un scouter que también es padre), se le añaden el rol y los representados.
 5. **Invitación** por email (enlace personal, de un solo uso, válido 7 días) → la persona elige su contraseña en *Activar cuenta* → entra por **Acceso socios** (menú superior; desde v0.5.0, doc 15).
-6. **Usuarios**: listado con roles, ámbito, estado (*Invitación pendiente* con fecha de caducidad, *Activo*, *Desactivado*) y quién dio el alta. Tiene acciones para **reenviar la invitación** y **desactivar** el acceso: se quitan los roles y se cierran las sesiones.
+6. **Usuarios**: listado con roles, ámbito, estado (*Invitación pendiente* con fecha de caducidad, *Activo*, *Desactivado*) y quién dio el alta. Tiene acciones para **reenviar la invitación** y **desactivar** el acceso: se quitan los roles y se cierran las sesiones. Desde la **v0.26.1** (petición del usuario, 2026-10-08) desactivar borra también **lo que servía para entrar** (`Usuarios::desactivar`): la contraseña (se cambia por una aleatoria de 64 caracteres que nadie conoce), las contraseñas de aplicación de WordPress, la invitación pendiente y, con Wordfence Login Security, la **verificación en dos pasos** (secreto y códigos de recuperación, `deactivate_2fa`) y las **llaves de acceso** (passkeys) (`Integraciones\Wordfence::quitar_acceso`; si Wordfence falla, se anota `wordfence_quitar_acceso_error` y la desactivación sigue). También borra `asde_activada_en`: al dar acceso otra vez llega una **invitación nueva** para elegir contraseña. Lo mismo hace el mantenimiento diario con una cuenta familiar que se queda sin nadie a quien representar.
 
 ## Cuándo se envía (o no) la invitación
 
@@ -114,7 +114,7 @@ Todas se sirven con `noindex`, `no-store`, `DONOTCACHEPAGE` y `litespeed_control
 | `asde_alta_por`, `asde_alta_en`, `asde_activada_en` | Trazabilidad |
 | `asde_invitacion_hash`, `asde_invitacion_expira` | HMAC del token de invitación (el token en claro solo va en el email) |
 
-Al desactivar un usuario se conservan `asde_seccion` y `asde_representado`, para que un nuevo alta lo restaure. **Todo control de acceso futuro debe exigir el rol, además del meta.**
+Al desactivar un usuario se conservan `asde_seccion` y `asde_representado`, para que un nuevo alta lo restaure (la contraseña y la verificación en dos pasos no: v0.26.1). **Todo control de acceso futuro debe exigir el rol, además del meta.**
 
 ## Seguridad aplicada
 
@@ -123,7 +123,7 @@ Al desactivar un usuario se conservan `asde_seccion` y `asde_representado`, para
 - Las fichas se leen por **listado filtrado** (`get_entry_list` con `contacts.id = '…'`), no con `get_entry`. Así solo se accede a fichas del grupo aunque alguien manipule la URL. Ver doc 04, §7.
 - Solo se pueden asignar roles `asde_*`, nunca de administrador. No se puede desactivar a administradores ni a uno mismo.
 - Los usuarios que solo tienen roles del área privada no ven `wp-admin` ni la barra de administración, y al iniciar sesión van al área privada. Así tampoco pueden cambiar su email desde el perfil.
-- **Auditoría** en `{prefix}asde_auditoria`: `alta_usuario`, `usuario_actualizado`, `invitacion_reenviada`, `usuario_desactivado` y `cuenta_activada`. Solo guarda IDs.
+- **Auditoría** en `{prefix}asde_auditoria`: `alta_usuario`, `usuario_actualizado`, `invitacion_reenviada`, `usuario_desactivado` y `cuenta_activada`. Solo guarda IDs (`usuario_desactivado` anota además los roles quitados, `contrasena_borrada`, si tenía verificación en dos pasos y cuántas llaves se quitaron).
 - Activación: el token son 192 bits, se guarda como HMAC-SHA256 y se comprueba con `hash_equals`. Caduca a los 7 días y solo sirve una vez. La contraseña debe tener 10 caracteres o más y no contener el email.
 
 ## Pruebas realizadas (local, 2026-09-26)

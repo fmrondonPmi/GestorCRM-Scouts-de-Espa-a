@@ -179,15 +179,20 @@ final class UsuariosView extends View {
 					Notices::add( 'error', asde_t( 'No se puede desactivar a un administrador ni a ti mismo.' ) );
 					break;
 				}
-				$quitados = Usuarios::roles_asde( $user );
-				foreach ( $quitados as $r ) {
-					$user->remove_role( $r );
-				}
-				update_user_meta( $user_id, Usuarios::META_ESTADO, Usuarios::DESACTIVADO );
-				Invitacion::consumir( $user_id );
-				\WP_Session_Tokens::get_instance( $user_id )->destroy_all();
-				Logger::log( 'usuario_desactivado', 'user', (string) $user_id, array( 'roles' => $quitados ) );
-				Notices::add( 'success', sprintf( asde_t( 'Acceso desactivado para el usuario %s. Para devolvérselo, dale de alta de nuevo.' ), esc_html( $user->user_login ) ) );
+				// v0.26.1: también se borran su contraseña y su verificación en dos pasos (Usuarios::desactivar).
+				$quitado = Usuarios::desactivar( $user );
+				Logger::log(
+					'usuario_desactivado',
+					'user',
+					(string) $user_id,
+					array(
+						'roles'              => $quitado['roles'],
+						'contrasena_borrada' => true,
+						'dos_pasos'          => $quitado['dos_pasos'],
+						'llaves'             => $quitado['llaves'],
+					)
+				);
+				Notices::add( 'success', sprintf( asde_t( 'Acceso desactivado para el usuario %s: se han borrado su contraseña y su verificación en dos pasos. Para devolvérselo, dale de alta de nuevo: le llegará una invitación para elegir otra contraseña.' ), esc_html( $user->user_login ) ) );
 				break;
 
 			default:

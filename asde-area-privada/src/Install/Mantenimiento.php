@@ -169,8 +169,8 @@ final class Mantenimiento {
 			if ( ! Usuarios::representados( $user->ID ) && in_array( Roles::TUTOR, (array) $user->roles, true ) ) {
 				$user->remove_role( Roles::TUTOR );
 				if ( ! Usuarios::roles_asde( $user ) ) {
-					update_user_meta( $user->ID, Usuarios::META_ESTADO, Usuarios::DESACTIVADO );
-					\WP_Session_Tokens::get_instance( $user->ID )->destroy_all();
+					// v0.26.1: como al desactivar a mano, se borran su contraseña y su verificación en dos pasos.
+					Usuarios::desactivar( $user );
 				}
 				Logger::log( 'cuenta_familiar_sin_representados', 'user', (string) $user->ID );
 			}

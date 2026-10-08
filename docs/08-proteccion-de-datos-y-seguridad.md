@@ -20,6 +20,7 @@
    - 2FA obligatorio para Secretaría, Coordinación y Scouters, por ejemplo con el plugin *Two Factor*.
    - Límite de intentos de login.
    - Tutores y participantes nunca ven `wp-admin` ni la barra de administración.
+   - **Desactivar una cuenta borra con qué se entraba (v0.26.1, petición del usuario):** contraseña (sustituida por una aleatoria), contraseñas de aplicación, invitación pendiente, verificación en dos pasos y llaves de acceso de Wordfence, y sesiones. Para volver, una invitación nueva (doc 11).
    - **Entrar con el email (v0.9):** la auditoría anota «entró con el email», sin el email. Si el email no es de nadie, no se pasa a `wp_signon()`, para que no quede en el historial de intentos de Wordfence (doc 15).
    - **Email de las cuentas guardado cifrado (v0.10, decisión del usuario del 2026-09-28):**
      - Se cifra con una clave derivada de la **clave del sitio** (en `wp-config.php`, fuera de la base de datos) y del **id del usuario**: lo de un usuario no se descifra con el id de otro, y una copia de la base de datos sola no sirve para descifrar nada.

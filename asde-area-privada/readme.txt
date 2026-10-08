@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.26.0
+Stable tag: 0.26.1
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -52,6 +52,9 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.26.1 =
+* Security: deactivating a user (Usuarios → "Desactivar", or automatically when a family account no longer represents anyone) now also deletes what let them log in: the password (replaced by a random one nobody knows), WordPress application passwords and, with Wordfence Login Security, the two-step verification (secret and recovery codes) and passkeys. It also forgets that the account was activated, so giving access again sends a new invitation to choose a password. The activity log records what was removed.
 
 = 0.26.0 =
 * Help on every page: "Ayuda", next to the person's name, opens in the pop-up window the section of the user manual for that page and for the role of whoever is logged in (families, members aged 14-17, scouters or the coordination team), and at the end a link to their full manual. The help is generated from the manual sources (data-paginas) into the plugin's ayuda/ folder; its screenshots and links point to the published manual.
@@ -115,6 +118,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * First version with the mobile app (PWA).
 
 == Upgrade Notice ==
+
+= 0.26.1 =
+Deactivating a user also deletes their password and their two-step verification. No database changes.
 
 = 0.26.0 =
 Contextual help on every page by role and a link to the full manual. No database changes.

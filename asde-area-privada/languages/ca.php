@@ -806,7 +806,6 @@ return array(
 	'A pagar' => 'A pagar',
 	'Acceso actualizado: %s. Roles: %s.' => 'Accés actualitzat: %s. Rols: %s.',
 	'Acceso creado: %s. Roles: %s.' => 'Accés creat: %s. Rols: %s.',
-	'Acceso desactivado para el usuario %s. Para devolvérselo, dale de alta de nuevo.' => 'Accés desactivat per a l\'usuari %s. Per tornar-l\'hi, dona\'l d\'alta de nou.',
 	'Acción desconocida.' => 'Acció desconeguda.',
 	'Ajuste de %s registrado.' => 'Ajust de %s registrat.',
 	'Ajustes' => 'Ajustos',
@@ -2392,4 +2391,7 @@ return array(
 	'Se abre en otra pestaña, con todo lo que puedes hacer en el área privada.' => 'S\'obre en una altra pestanya, amb tot el que pots fer a l\'àrea privada.',
 	'Ver el manual completo' => 'Veure el manual complet',
 	'← Volver a la página' => '← Torna a la pàgina',
+
+	// v0.26.1: desactivar borra la contraseña y la verificación en dos pasos
+	'Acceso desactivado para el usuario %s: se han borrado su contraseña y su verificación en dos pasos. Para devolvérselo, dale de alta de nuevo: le llegará una invitación para elegir otra contraseña.' => 'Accés desactivat per a l\'usuari %s: s\'han esborrat la seva contrasenya i la seva verificació en dos passos. Per tornar-l\'hi, dona\'l d\'alta de nou: li arribarà una invitació per triar una altra contrasenya.',
 );

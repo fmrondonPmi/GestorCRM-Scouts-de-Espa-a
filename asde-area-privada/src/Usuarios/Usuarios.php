@@ -2,6 +2,7 @@
 namespace AsdeBalears\AreaPrivada\Usuarios;
 
 use AsdeBalears\AreaPrivada\Install\Roles;
+use AsdeBalears\AreaPrivada\Integraciones\Wordfence;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -200,6 +201,33 @@ final class Usuarios {
 	/** ¿Ha activado alguna vez su cuenta (tiene contraseña propia)? */
 	public static function ha_activado( \WP_User $user ): bool {
 		return '' !== (string) get_user_meta( $user->ID, self::META_ACTIVADA_EN, true );
+	}
+
+	/**
+	 * Desactiva una cuenta: le quita los roles del área, la deja «desactivada», invalida la
+	 * invitación pendiente y cierra sus sesiones. Desde la v0.26.1 (petición del usuario) borra
+	 * además lo que servía para entrar: la contraseña (se cambia por una aleatoria que nadie
+	 * conoce), las contraseñas de aplicación de WordPress y la verificación en dos pasos y las
+	 * llaves de acceso de Wordfence. También olvida que la activó: si vuelve, al darle acceso de
+	 * nuevo le llega una invitación para elegir otra contraseña (AltaService).
+	 *
+	 * @return array{roles:string[], dos_pasos:bool, llaves:int} Roles quitados y lo quitado de Wordfence.
+	 */
+	public static function desactivar( \WP_User $user ): array {
+		$roles = self::roles_asde( $user );
+		foreach ( $roles as $r ) {
+			$user->remove_role( $r );
+		}
+		update_user_meta( $user->ID, self::META_ESTADO, self::DESACTIVADO );
+		delete_user_meta( $user->ID, self::META_ACTIVADA_EN );
+		Invitacion::consumir( $user->ID );
+		wp_set_password( wp_generate_password( 64, true, true ), $user->ID );
+		if ( class_exists( '\WP_Application_Passwords' ) ) {
+			\WP_Application_Passwords::delete_all_application_passwords( $user->ID );
+		}
+		$wordfence = Wordfence::quitar_acceso( $user );
+		\WP_Session_Tokens::get_instance( $user->ID )->destroy_all();
+		return array( 'roles' => $roles ) + $wordfence;
 	}
 
 	public static function etiqueta_estado( string $estado ): string {

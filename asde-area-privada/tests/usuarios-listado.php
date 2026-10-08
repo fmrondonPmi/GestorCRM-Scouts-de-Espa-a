@@ -226,12 +226,47 @@ try {
 	$d = $json( static fn() => ( new UsuariosView() )->handle_post() );
 	$ok( $d && true === $d['success'] && str_contains( $d['data']['avisos'], 'no tiene una invitación pendiente' ), 'reenviar a quien no tiene invitación pendiente: aviso de error' );
 
-	// Desactivar.
+	// Desactivar. Antes, la cuenta tiene con qué entrar: contraseña propia, una invitación sin usar,
+	// una sesión abierta, una contraseña de aplicación y (con Wordfence) verificación en dos pasos y una llave.
+	$clave_vieja = wp_generate_password( 24 );
+	wp_set_password( $clave_vieja, $u_scout );
+	update_user_meta( $u_scout, Usuarios::META_ACTIVADA_EN, (string) time() );
+	update_user_meta( $u_scout, 'asde_invitacion_hash', 'prueba' );
+	WP_Session_Tokens::get_instance( $u_scout )->create( time() + HOUR_IN_SECONDS );
+	$con_app = class_exists( 'WP_Application_Passwords' );
+	if ( $con_app ) {
+		WP_Application_Passwords::create_new_application_password( $u_scout, array( 'name' => 'prueba-lis' ) );
+	}
+	$con_wf = class_exists( '\WordfenceLS\Controller_TOTP' ) && class_exists( '\WordfenceLS\Controller_Passkey' ) && class_exists( '\WordfenceLS\Controller_DB' );
+	if ( $con_wf ) {
+		$wf_u      = get_userdata( $u_scout );
+		$wf_ajuste = \WordfenceLS\Controller_Settings::shared()->get( \WordfenceLS\Controller_Settings::OPTION_LAST_PASSKEY_RP, '' );
+		\WordfenceLS\Controller_TOTP::shared()->activate_2fa( $wf_u, bin2hex( random_bytes( 20 ) ), array( bin2hex( random_bytes( 8 ) ) ), time() );
+		\WordfenceLS\Controller_Passkey::shared()->get_passkeys( $wf_u ); // Crea la tabla si aún no existe.
+		$tabla_llaves = \WordfenceLS\Controller_DB::shared()->passkeys;
+		$credencial   = random_bytes( 16 );
+		$wpdb->query( $wpdb->prepare( "INSERT INTO `{$tabla_llaves}` (user_id, credential_id, credential_id_hash, public_key, sign_count, label, ctime, mtime) VALUES (%d, UNHEX(%s), UNHEX(%s), %s, 0, 'prueba-lis', %d, %d)", $u_scout, bin2hex( $credencial ), hash( 'sha256', $credencial ), 'prueba', time(), time() ) ); // phpcs:ignore WordPress.DB
+		$ok( \WordfenceLS\Controller_Users::shared()->has_2fa_active( $wf_u ) && 1 === count( \WordfenceLS\Controller_Passkey::shared()->get_passkeys( $wf_u ) ), 'antes de desactivar: verificación en dos pasos y una llave de acceso de Wordfence' );
+	}
 	$peticion( 'desactivar', $u_scout );
 	$d = $json( static fn() => ( new UsuariosView() )->handle_post() );
+	clean_user_cache( $u_scout );
 	$u = get_userdata( $u_scout );
 	$ok( $d && true === $d['success'] && Usuarios::DESACTIVADO === Usuarios::estado( $u ) && array() === Usuarios::roles_asde( $u ), 'desactivar: el usuario pierde los roles' );
 	$ok( str_contains( $d['data']['fila'], 'data-estado="desactivado"' ) && ! str_contains( $d['data']['fila'], 'Desactivar</button>' ) && str_contains( $d['data']['avisos'], 'Acceso desactivado' ), 'y la fila llega ya como desactivada, sin el botón, con su aviso' );
+	$ok( ! wp_check_password( $clave_vieja, $u->user_pass, $u_scout ) && '' !== $u->user_pass, 'desactivar borra su contraseña: la que tenía ya no sirve (v0.26.1)' );
+	$ok( ! Usuarios::ha_activado( $u ) && '' === (string) get_user_meta( $u_scout, 'asde_invitacion_hash', true ), 'y olvida que activó la cuenta (al darle acceso otra vez le llegará una invitación) y anula la invitación pendiente' );
+	$ok( array() === WP_Session_Tokens::get_instance( $u_scout )->get_all() && ( ! $con_app || array() === WP_Application_Passwords::get_user_application_passwords( $u_scout ) ), 'cierra sus sesiones y borra sus contraseñas de aplicación' );
+	$ok( str_contains( $d['data']['avisos'], 'se han borrado su contraseña y su verificación en dos pasos' ), 'el aviso dice qué se ha borrado' );
+	if ( $con_wf ) {
+		$quedan_llaves = (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM `{$tabla_llaves}` WHERE user_id = %d", $u_scout ) ); // phpcs:ignore WordPress.DB
+		$ok( ! \WordfenceLS\Controller_Users::shared()->has_2fa_active( $u ) && 0 === $quedan_llaves, 'y su verificación en dos pasos (secreto y códigos de recuperación) y sus llaves de acceso de Wordfence' );
+		$ultimo = $wpdb->get_var( $wpdb->prepare( 'SELECT detalles FROM ' . Logger::table() . " WHERE accion = 'usuario_desactivado' AND objeto_id = %s ORDER BY id DESC LIMIT 1", (string) $u_scout ) ); // phpcs:ignore WordPress.DB
+		$ok( is_string( $ultimo ) && str_contains( $ultimo, '"dos_pasos":true' ) && str_contains( $ultimo, '"llaves":1' ), 'el registro de actividad apunta lo que se ha quitado' );
+		\WordfenceLS\Controller_Settings::shared()->set( \WordfenceLS\Controller_Settings::OPTION_LAST_PASSKEY_RP, $wf_ajuste );
+	} else {
+		echo "  (sin Wordfence en este WordPress: no se prueba la parte de la verificación en dos pasos)\n";
+	}
 	$peticion( 'desactivar', $u_secre );
 	$d = $json( static fn() => ( new UsuariosView() )->handle_post() );
 	$ok( $d && str_contains( $d['data']['avisos'], 'ni a ti mismo' ) && Usuarios::ACTIVO === Usuarios::estado( get_userdata( $u_secre ) ), 'no se puede desactivar a uno mismo' );

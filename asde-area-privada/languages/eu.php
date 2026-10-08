@@ -806,7 +806,6 @@ return array(
 	'A pagar' => 'Ordaintzeko',
 	'Acceso actualizado: %s. Roles: %s.' => 'Sarbidea eguneratu da: %s. Rolak: %s.',
 	'Acceso creado: %s. Roles: %s.' => 'Sarbidea sortu da: %s. Rolak: %s.',
-	'Acceso desactivado para el usuario %s. Para devolvérselo, dale de alta de nuevo.' => '%s erabiltzailearen sarbidea desaktibatu da. Berriro emateko, eman alta berriro.',
 	'Acción desconocida.' => 'Ekintza ezezaguna.',
 	'Ajuste de %s registrado.' => '%s(r)en doikuntza erregistratu da.',
 	'Ajustes' => 'Doikuntzak',
@@ -2392,4 +2391,7 @@ return array(
 	'Se abre en otra pestaña, con todo lo que puedes hacer en el área privada.' => 'Beste fitxa batean irekitzen da, eremu pribatuan egin dezakezun guztiarekin.',
 	'Ver el manual completo' => 'Ikusi eskuliburu osoa',
 	'← Volver a la página' => '← Itzuli orrira',
+
+	// v0.26.1: desactivar borra la contraseña y la verificación en dos pasos
+	'Acceso desactivado para el usuario %s: se han borrado su contraseña y su verificación en dos pasos. Para devolvérselo, dale de alta de nuevo: le llegará una invitación para elegir otra contraseña.' => '%s erabiltzailearen sarbidea desaktibatu da: haren pasahitza eta bi urratseko egiaztapena ezabatu dira. Berriro emateko, eman alta berriro: beste pasahitz bat aukeratzeko gonbidapena jasoko du.',
 );
