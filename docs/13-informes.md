@@ -59,3 +59,14 @@
 - *Listado de sección*: 107 activos. *Alergias y alimentación*: 36 con datos relevantes.
 - Informe improvisado de Lobatos: 20. «Editar / guardar» conserva columnas y filtros, y guarda correctamente.
 - CSV: 108 líneas (cabecera + 107).
+
+## v0.25.0 · cuota y pagos de cada socio (petición del usuario, 2026-10-08)
+
+«Que se pueda generar uno con el resumen de los pagos hechos y pendientes de cada asociado, para que cada scouter sepa rápido quién de su sección ha pagado y quién no».
+
+- **Grupo de columnas «Cuota y pagos»** (nivel `pagos` del catálogo: quien entra en Tesorería, `asde_tesoreria_acceso`, si el grupo usa Tesorería): **Familia**, **Estado de la cuota** (pagado, pago parcial, pendiente, con plazos vencidos, sin cuota), **Cuota a pagar**, **Pagado**, **Pendiente**, **Vencido sin pagar** (lo de los plazos ya vencidos que falta) y **Pagos hechos** (fecha e importe de cada uno, sin los eliminados).
+- Los datos son de **Tesorería** (no del CRM) y **de la familia de cada socio**: la cuota se calcula como en el control de pagos, con todos sus miembros aunque sean de otras secciones (`Generador::pagos()`). Quien no está en ninguna familia sale «Sin familia en Tesorería».
+- **Filtros nuevos** en «¿De quién?»: **Según lo pagado** (todos, han pagado toda la cuota, les falta algo por pagar, con plazos vencidos sin pagar, sin familia en Tesorería) y **Ronda de la cuota** (la actual por defecto). Sin acceso a Tesorería, ni columnas ni filtro (con aviso).
+- **Informe predefinido «Pagos de la cuota»**: nº de socio/a, nombre, apellidos, sección, familia, estado, cuota, pagado, pendiente y vencido, ordenado por sección. Se añade **también al actualizar** el plugin (`InformesTable::sembrar_predefinidos()` añade los que falten por nombre). Los predefinidos con columnas que el rol no ve no salen en la lista.
+- Un scouter lo ve **solo de sus secciones** (como todos los informes). El resultado dice de qué ronda es la cuota y el filtro aplicado; el CSV lleva lo mismo.
+- Supuesto **P-95** (doc 09). Pruebas en `tests/sepa.php` (su CRM simulado ya tiene familias con pagos hechos y pendientes): parte «Informe de pagos por socio».

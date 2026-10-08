@@ -156,3 +156,13 @@ Al desactivar un usuario se conservan `asde_seccion` y `asde_representado`, para
 - **Activar el 2FA de Wordfence** para los roles Secretaría, Coordinación y Scouter. Los roles ya aparecen en *Wordfence → Login Security → Settings*.
 - Edad mínima y días de validez de la invitación configurables desde la página de ajustes.
 - Revisar periódicamente las membresías (baja en el CRM → quitar el acceso automáticamente). Irá con el índice local del doc 04.
+
+## v0.25.0 · la sección «Usuarios», con hojas (petición del usuario, 2026-10-08)
+
+«Dar acceso y usuarios del área privada deberían estar unificados en una sección llamada Usuarios, como en Excel, donde puedes tener más de una pestaña».
+
+- **Usuarios**, **Dar acceso** y **Registro de emails** son **hojas** de la sección «Usuarios», con su barra de pestañas encima (`View::libro_usuarios()`, plantilla `usuarios/hojas.php`). En el menú ya era una sola entrada; en el inicio, los dos accesos («Dar acceso» y «Usuarios del área privada») pasan a ser uno, **«Usuarios»**. Fuera los enlaces sueltos «+ Dar acceso», «Registro de emails» y «← Usuarios».
+- Con JavaScript (`assets/js/hojas.js`) se **cambia de hoja sin recargar la página**: la hoja que se abre por primera vez se pide al servidor y de su página se toma la hoja; las ya abiertas se conservan **como se dejaron** (los filtros del listado, la búsqueda de «Dar acceso»). Las búsquedas y los enlaces de una hoja que llevan a una página de la sección se cargan en su hoja; la dirección y el título cambian con cada hoja, y **atrás/adelante** cambian de hoja. Guardar, la ventana emergente y las descargas van como siempre; al cerrar la ventana después de dar acceso, la hoja que se ve se actualiza sola. Sin JavaScript, cada hoja es un enlace a su página (las direcciones no cambian).
+- `usuarios.js` arranca también en una hoja traída sin recargar (`window.asdeUsuarios.iniciar()`) y no toca la dirección mientras su hoja está oculta. Los dos scripts se cargan en las tres páginas.
+- «Dar acceso» desde *Personas*, desde un usuario o desde una solicitud sigue abriéndose en la **ventana emergente**, sin hojas.
+- Supuesto **P-96** (doc 09). Pruebas en `tests/usuarios-listado.php` (las hojas de cada página, sin hojas en la ventana, los scripts) y `tests/menus.php` (el acceso del inicio). Comprobado en el navegador en un WordPress aparte: cambiar de hoja sin recargar, buscar dentro de «Dar acceso», volver a «Usuarios» con el filtro puesto y «atrás».
