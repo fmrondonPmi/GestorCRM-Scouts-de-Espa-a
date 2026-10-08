@@ -15,11 +15,20 @@
  *
  * Comprueba que las capturas existen y que los enlaces internos (#id) apuntan a algo del mismo manual.
  * No necesita WordPress.
+ *
+ * Ayuda de cada página (v0.26): un <section> o un <h3> con data-paginas="tesoreria banco" dice qué
+ * páginas del área privada (claves de Frontend\Pages) documenta. Con eso se escriben, en el plugin,
+ * los trozos asde-area-privada/ayuda/<manual>/<página>.html que salen en la ventana «Ayuda» de cada
+ * página según el rol de quien entra (Frontend\Ayuda). Un <h3> con data-paginas lleva su parte (hasta
+ * el siguiente <h3>) y la entrada del apartado; un <section>, el apartado entero. Las capturas y los
+ * enlaces de los trozos apuntan al manual publicado ({{capturas}}, {{manual}} y {{base}}, que pone
+ * el plugin). Al cambiar los trozos cambia el plugin: hay que rehacer su zip.
  */
 
 $raiz    = dirname( __DIR__ ) . '/manual';
 $fuentes = $raiz . '/fuentes';
-$version = '0.25';
+$plugin  = dirname( __DIR__ ) . '/asde-area-privada';
+$version = '0.26';
 $fecha   = 'octubre de 2026';
 $errores = 0;
 
@@ -110,6 +119,7 @@ foreach ( $manuales as $slug => $m ) {
 		$cuerpo .= "\n" . trim( (string) file_get_contents( $f ) ) . "\n";
 	}
 	$cuerpo = str_replace( array( '{{version}}', '{{fecha}}' ), array( $version, $fecha ), $cuerpo );
+	$cuerpo = preg_replace( '~\sdata-paginas="[^"]*"~', '', $cuerpo ); // Solo sirve para la ayuda de cada página.
 	$cuerpo = preg_replace( '~<moviles>~', '<div class="moviles">', $cuerpo );
 	$cuerpo = preg_replace( '~</moviles>~', '</div>', $cuerpo );
 	$cuerpo = capturas( $cuerpo, $raiz, $errores, $slug );
@@ -253,5 +263,88 @@ $portada = '<!doctype html>
 ';
 file_put_contents( "$raiz/index.html", $portada );
 echo "index.html: portada\n";
+
+// --- Ayuda de cada página del área privada (v0.26) ------------------------------------------
+/** Un trozo para la ventana «Ayuda»: capturas y enlaces al manual publicado, sin ids ni «quién». */
+function para_ayuda( string $h, string $raiz ): string {
+	$h = preg_replace( '~<span class="quien">.*?</span>~s', '', $h );
+	$h = str_replace( array( '<moviles>', '</moviles>' ), array( '<div class="asde-ayuda__moviles">', '</div>' ), $h );
+	$h = preg_replace_callback(
+		'~<captura\s+([^>]*)>(.*?)</captura>~s',
+		static function ( $m ) use ( $raiz ) {
+			preg_match_all( '~(\w+)(?:="([^"]*)")?~', $m[1], $at, PREG_SET_ORDER );
+			$a = array();
+			foreach ( $at as $x ) {
+				$a[ $x[1] ] = $x[2] ?? true;
+			}
+			$src            = (string) ( $a['src'] ?? '' );
+			list( $w, $hh ) = tamano( $raiz, $src );
+			$img            = '{{capturas}}' . $src . '.png';
+			return '<figure class="asde-ayuda__captura' . ( isset( $a['movil'] ) ? ' asde-ayuda__captura--movil' : '' ) . '"><a href="' . $img . '" target="_blank" rel="noopener"><img src="' . $img . '" width="' . $w . '" height="' . $hh . '" alt="' . htmlspecialchars( (string) ( $a['alt'] ?? '' ), ENT_QUOTES ) . '" loading="lazy"></a><figcaption>' . trim( $m[2] ) . '</figcaption></figure>';
+		},
+		$h
+	);
+	$h = preg_replace( '~href="#([^"]+)"~', 'href="{{manual}}#$1" target="_blank" rel="noopener"', $h );
+	$h = preg_replace( '~href="([a-z-]+\.html(?:#[^"]*)?)"~', 'href="{{base}}$1" target="_blank" rel="noopener"', $h );
+	return preg_replace( '~\s(?:id|data-paginas)="[^"]*"~', '', $h ); // Los id chocarían con los de la página.
+}
+
+preg_match_all( "~^\s*'([a-z_]+)'\s*=>\s*array\(~m", (string) file_get_contents( "$plugin/src/Frontend/Pages.php" ), $pk );
+$paginas_validas = $pk[1];
+$ayuda           = array(); // manual => página => [ [html, ancla], … ]
+foreach ( $manuales as $slug => $m ) {
+	if ( 'administracion' === $slug ) {
+		continue; // Su manual es de wp-admin: en el área privada, un administrador ve la ayuda de coordinación.
+	}
+	foreach ( $m['apartados'] as $ap ) {
+		$texto = str_replace( array( '{{version}}', '{{fecha}}' ), array( $version, $fecha ), (string) @file_get_contents( "$fuentes/$ap.html" ) );
+		preg_match_all( '~<section id="([^"]+)"([^>]*)>(.*?)</section>~s', $texto, $secciones, PREG_SET_ORDER );
+		foreach ( $secciones as list( , $sec_id, $sec_attrs, $dentro ) ) {
+			$de_seccion = preg_match( '~data-paginas="([^"]*)"~', $sec_attrs, $dp ) ? preg_split( '~\s+~', trim( $dp[1] ) ) : array();
+			$partes     = preg_split( '~(?=<h3\b)~', $dentro );
+			$entrada    = array_shift( $partes );
+			$por_pagina = array();
+			foreach ( $de_seccion as $p ) {
+				$por_pagina[ $p ] = array( $dentro, $sec_id );
+			}
+			foreach ( $partes as $parte ) {
+				if ( ! preg_match( '~^<h3\b([^>]*)>~', $parte, $h3 ) || ! preg_match( '~data-paginas="([^"]*)"~', $h3[1], $dp ) ) {
+					continue;
+				}
+				preg_match( '~id="([^"]+)"~', $h3[1], $hid );
+				foreach ( preg_split( '~\s+~', trim( $dp[1] ) ) as $p ) {
+					if ( in_array( $p, $de_seccion, true ) ) {
+						continue; // Ya va el apartado entero.
+					}
+					$por_pagina[ $p ] = isset( $por_pagina[ $p ] ) ? array( $por_pagina[ $p ][0] . $parte, $por_pagina[ $p ][1] ) : array( $entrada . $parte, $hid[1] ?? $sec_id );
+				}
+			}
+			foreach ( $por_pagina as $p => list( $html, $ancla ) ) {
+				if ( ! in_array( $p, $paginas_validas, true ) ) {
+					fwrite( STDERR, "[$ap] data-paginas con una página que no existe: $p\n" );
+					++$errores;
+					continue;
+				}
+				$ayuda[ $slug ][ $p ][] = array( para_ayuda( $html, $raiz ), $ancla );
+			}
+		}
+	}
+}
+foreach ( (array) glob( "$plugin/ayuda/*/*.html" ) as $viejo ) {
+	unlink( $viejo ); // Lo que ya no tiene ayuda no se queda con la anterior.
+}
+foreach ( $ayuda as $slug => $paginas ) {
+	@mkdir( "$plugin/ayuda/$slug", 0777, true );
+	ksort( $paginas );
+	foreach ( $paginas as $p => $trozos ) {
+		$html  = '<!-- Generado por herramientas/generar-manuales.php (manual «' . $slug . '», versión ' . $version . ') a partir de manual/fuentes: no se edita a mano. -->' . "\n";
+		$html .= '<div class="asde-ayuda__texto" data-manual="' . $slug . '" data-ancla="' . $trozos[0][1] . '">' . "\n";
+		foreach ( $trozos as list( $t ) ) {
+			$html .= '<div class="asde-ayuda__apartado">' . trim( $t ) . "</div>\n";
+		}
+		file_put_contents( "$plugin/ayuda/$slug/$p.html", $html . "</div>\n" );
+	}
+	echo "ayuda/$slug: ", implode( ', ', array_keys( $paginas ) ), "\n";
+}
 echo $errores ? "$errores ERRORES\n" : "Sin errores\n";
 exit( $errores ? 1 : 0 );

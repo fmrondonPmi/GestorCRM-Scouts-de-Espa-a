@@ -1,0 +1,46 @@
+<!-- Generado por herramientas/generar-manuales.php (manual «coordinacion», versión 0.26) a partir de manual/fuentes: no se edita a mano. -->
+<div class="asde-ayuda__texto" data-manual="coordinacion" data-ancla="control">
+<div class="asde-ayuda__apartado"><h2>Tesorería</h2>
+	<p class="resumen">Cuotas de las familias, pagos, banco, domiciliaciones SEPA y coste federativo, por ronda (curso scout). Todos los scouters ven pagos y familias; la configuración es de Tesorería, Secretaría y Coordinación.</p>
+	<h3>Control de pagos</h3>
+	<figure class="asde-ayuda__captura"><a href="{{capturas}}15-tesoreria.png" target="_blank" rel="noopener"><img src="{{capturas}}15-tesoreria.png" width="1280" height="1755" alt="Control de pagos de la ronda con totales, estados y la lista de familias" loading="lazy"></a><figcaption>Resumen de la ronda y una fila por familia. Avisa de los educandos que no están en ninguna familia, a los que no se está cobrando.</figcaption></figure>
+	<ul>
+		<li>Las familias tienen un nº propio, <code>F</code> + grupo + correlativo (<code>F999001</code>): es la referencia que deben poner en las transferencias.</li>
+		<li><strong>Estados:</strong> «Pagado», «Pago parcial», «Pendiente» y «Con plazos vencidos».</li>
+		<li>Pagan los educandos de Castores a Rovers; scouters y voluntariado no.</li>
+		<li>Lo que se registra aquí es lo que cada familia ve en <a href="{{base}}familias.html#mis-pagos" target="_blank" rel="noopener">Mis pagos</a>. Los pagos del uniforme van aparte (ver <a href="{{manual}}#uniformes-gestion" target="_blank" rel="noopener">Gestión de pedidos</a>).</li>
+		<li>Si tu grupo da las bajas desde la web, arriba salen las <strong>bajas recientes</strong> (30 días) de personas que están en alguna familia: ya no cuentan en su cuota. Además, a Tesorería le llega un email con cada baja (ver <a href="{{manual}}#avisos-baja" target="_blank" rel="noopener">Quién se entera de una baja</a>).</li>
+	</ul>
+	<h3>Ficha de una familia</h3>
+	<figure class="asde-ayuda__captura"><a href="{{capturas}}16-tesoreria-familia.png" target="_blank" rel="noopener"><img src="{{capturas}}16-tesoreria-familia.png" width="1280" height="2419" alt="Ficha de una familia de Tesorería con el desglose de la cuota, los plazos y los movimientos" loading="lazy"></a><figcaption>Quién paga, desglose de la cuota, plazos, registrar un pago o un ajuste, los movimientos y el historial de la ronda.</figcaption></figure>
+	<ul>
+		<li><strong>«Cuota de la ronda» se puede plegar</strong> pulsando su título: plegada queda una línea con lo que hay que pagar, lo pagado y lo pendiente. El navegador recuerda cómo la dejaste.</li>
+		<li><strong>Registrar pago:</strong> fecha, importe, forma (efectivo, transferencia, bizum…), referencia y nota. La nota es interna: la familia no la ve.</li>
+		<li><strong>Ajuste:</strong> un descuento o beca (en negativo) o un recargo, siempre con su motivo.</li>
+		<li>Registrar un pago o un ajuste, o eliminarlo, cambia <strong>solo la ficha</strong>: la página no se recarga y el aviso sale abajo a la derecha.</li>
+	</ul>
+	<h4>Eliminar un pago o un ajuste</h4>
+	<p>Si un pago o un ajuste está mal (registrado dos veces, en la familia equivocada…), pulsa <strong>«Eliminar…»</strong> en su fila, escribe el <strong>motivo</strong> (es obligatorio) y pulsa <strong>«Eliminar el pago»</strong>.</p>
+	<figure class="asde-ayuda__captura"><a href="{{capturas}}92-familia-eliminar-historial.png" target="_blank" rel="noopener"><img src="{{capturas}}92-familia-eliminar-historial.png" width="1180" height="825" alt="Movimientos de la ronda de una familia con Eliminar abierto en un pago, pidiendo el motivo, y debajo el Historial de la ronda con un pago registrado, el mismo registrado otra vez y eliminado con el motivo Registrado dos veces" loading="lazy"></a><figcaption>«Eliminar…» pide el motivo. Debajo, el <strong>«Historial de la ronda»</strong>: el primer plazo se registró dos veces y el repetido se eliminó, con quién lo hizo y por qué.</figcaption></figure>
+	<ul>
+		<li><strong>No se borra nada:</strong> el pago deja de contar en la cuota y desaparece de los movimientos y de «Mis pagos» de la familia, pero queda en el <strong>«Historial de la ronda»</strong> de la ficha, con quién lo registró, quién lo eliminó, cuándo y el motivo.</li>
+		<li>Si el pago se registró con un <strong>ingreso del banco</strong>, ese ingreso <strong>vuelve a estar por conciliar</strong> en el banco, para que lo concilies con la familia correcta. El aviso lo dice.</li>
+		<li>Si vino del <strong>cobro de una remesa SEPA</strong>, la remesa lo sigue dando por cobrado (es lo que dijo el banco): la ficha lo avisa antes de eliminarlo.</li>
+		<li>«Deshacer» una conciliación en el banco también elimina el pago, con el motivo «Se deshizo la conciliación con el banco.».</li>
+	</ul>
+	<h4>Registrar un pago con un ingreso del banco</h4>
+	<p>Si ya has importado el extracto, en «Registrar pago» sale el recuadro <strong>«Ingreso del banco (opcional)»</strong> con cuántos ingresos hay <strong>por conciliar</strong> y cuántos se sugieren para esta familia.</p>
+	<ol class="pasos">
+		<li><div>Pulsa <strong>«Buscar en el banco…»</strong>: se abre una ventana con los ingresos por conciliar.</div></li>
+		<li><div>Busca el de la familia escribiendo en el buscador: el <strong>nombre del tutor</strong> (el que hizo la transferencia), el <strong>nombre del socio</strong>, una palabra del concepto, el importe o la fecha. La lista se filtra mientras escribes, sin acentos ni mayúsculas y en cualquier orden. Los botones de <strong>«Buscar por»</strong> buscan con un clic el nombre de cada socio y tutor de la familia.</div></li>
+		<li><div>Pulsa <strong>«Elegir»</strong> en el ingreso: la ventana se cierra y el formulario se rellena con su fecha, su importe y «transferencia», que no se pueden cambiar.</div></li>
+		<li><div>Pulsa <strong>«Registrar pago»</strong>: el pago queda hecho y el movimiento queda <strong>conciliado</strong> con la familia, igual que si lo hubieras conciliado desde el banco (y se deshace desde allí).</div></li>
+	</ol>
+	<figure class="asde-ayuda__captura"><a href="{{capturas}}81-familia-banco-ventana.png" target="_blank" rel="noopener"><img src="{{capturas}}81-familia-banco-ventana.png" width="1280" height="1000" alt="Ventana Ingresos del banco para la familia con el buscador, los botones Buscar por con los nombres de la familia, los ingresos sugeridos y los demás, cada uno con su botón Elegir" loading="lazy"></a><figcaption>La ventana: el buscador, los nombres de la familia para buscar con un clic, los <strong>sugeridos</strong> primero (con el porqué) y después los demás.</figcaption></figure>
+	<figure class="asde-ayuda__captura"><a href="{{capturas}}79-familia-pago-banco.png" target="_blank" rel="noopener"><img src="{{capturas}}79-familia-pago-banco.png" width="1280" height="1560" alt="Ficha de una familia con la cuota plegada y, en Registrar pago, el ingreso del banco elegido con la fecha, el importe y la forma de pago ya rellenos" loading="lazy"></a><figcaption>Con el ingreso elegido: la fecha, el importe y la forma de pago salen del banco. «Quitar el ingreso» vuelve a dejarlo para escribirlo a mano.</figcaption></figure>
+	<ul>
+		<li>Se <strong>sugieren</strong> los que llevan el nº de la familia en el concepto, los que vienen de la misma persona que otro pago suyo y los que llevan el <strong>nombre y el primer apellido</strong> de un socio o un tutor de la familia (por ejemplo, «NURIA FERRER MAS»).</li>
+		<li>Para no equivocarse de familia, mira el nombre, el concepto y el importe antes de elegir: la sugerencia es una ayuda, no una garantía.</li>
+		<li>Solo lo ven Tesorería, Secretaría y Coordinación (los scouters registran los pagos a mano).</li>
+	</ul></div>
+</div>

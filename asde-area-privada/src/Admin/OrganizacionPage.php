@@ -89,6 +89,9 @@ final class OrganizacionPage {
 			$identificador = isset( $post['identificador'] ) ? sanitize_key( (string) $post['identificador'] ) : null;
 			$cambia_ident  = null !== $identificador && $identificador !== Organizacion::identificador();
 			$r             = Organizacion::guardar( $organizacion, $codigo, (array) ( $post['federacion'] ?? array() ), $identificador );
+			if ( ! is_wp_error( $r ) && isset( $post['manual'] ) ) {
+				$r = Organizacion::guardar_manual( (string) $post['manual'] ); // v0.26: el manual publicado (ayuda de cada página).
+			}
 			if ( is_wp_error( $r ) ) {
 				$this->aviso( 'error', $r->get_error_message() );
 			} else {
@@ -189,6 +192,17 @@ final class OrganizacionPage {
 									<label><input type="checkbox" name="confirmar_codigo" value="1"> <?php esc_html_e( 'Si cambio el código, entiendo que los números de socio del CRM con el código anterior dejarán de reconocerse como del grupo (habrá que corregirlos en el CRM y, mientras, esas personas no se pueden dar de alta). Los usuarios ya creados siguen entrando con su usuario de siempre o con su email.', 'asde-area-privada' ); ?></label>
 								</p>
 							<?php endif; ?>
+						</td>
+					</tr>
+				</table>
+
+				<h2><?php esc_html_e( 'Manual de uso', 'asde-area-privada' ); ?></h2>
+				<table class="form-table" role="presentation">
+					<tr>
+						<th scope="row"><label for="asde-manual"><?php esc_html_e( 'Dirección del manual publicado', 'asde-area-privada' ); ?></label></th>
+						<td>
+							<input type="url" id="asde-manual" name="manual" value="<?php echo esc_attr( Organizacion::manual() ); ?>" class="regular-text code" placeholder="https://…/manual/">
+							<p class="description"><?php esc_html_e( 'La carpeta (o la portada, …/manual/index.html) donde está publicado el manual de uso. En cada página del área privada, «Ayuda» enseña el apartado del manual del rol de quien entra, con sus capturas sacadas de aquí, y al final enlaza a su manual completo. Vacía: la ayuda sale sin capturas ni enlaces.', 'asde-area-privada' ); ?></p>
 						</td>
 					</tr>
 				</table>

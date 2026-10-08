@@ -2383,4 +2383,13 @@ return array(
 	// v0.25.0: sección Usuarios con hojas
 	'Quién tiene acceso, dar acceso a un socio o a su familia, invitaciones, bajas y el registro de emails.' => 'Qui hi té accés, donar accés a un soci/sòcia o a la seva família, invitacions, baixes i el registre d\'emails.',
 	'Hojas de Usuarios' => 'Fulls d\'Usuaris',
+
+	// v0.26.0: ayuda de cada página
+	'La dirección del manual no es válida: escribe una dirección web completa (https://…).' => 'L\'adreça del manual no és vàlida: escriu una adreça web completa (https://…).',
+	'Ayuda' => 'Ajuda',
+	'Esta página todavía no tiene una ayuda propia.' => 'Aquesta pàgina encara no té una ajuda pròpia.',
+	'La ayuda y el manual están en castellano.' => 'L\'ajuda i el manual són en castellà.',
+	'Se abre en otra pestaña, con todo lo que puedes hacer en el área privada.' => 'S\'obre en una altra pestanya, amb tot el que pots fer a l\'àrea privada.',
+	'Ver el manual completo' => 'Veure el manual complet',
+	'← Volver a la página' => '← Torna a la pàgina',
 );

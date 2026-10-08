@@ -2383,4 +2383,13 @@ return array(
 	// v0.25.0: sección Usuarios con hojas
 	'Quién tiene acceso, dar acceso a un socio o a su familia, invitaciones, bajas y el registro de emails.' => 'Nork duen sarbidea, bazkide bati edo bere familiari sarbidea ematea, gonbidapenak, bajak eta emailen erregistroa.',
 	'Hojas de Usuarios' => 'Erabiltzaileen orriak',
+
+	// v0.26.0: ayuda de cada página
+	'La dirección del manual no es válida: escribe una dirección web completa (https://…).' => 'Eskuliburuaren helbidea ez da baliozkoa: idatzi web-helbide osoa (https://…).',
+	'Ayuda' => 'Laguntza',
+	'Esta página todavía no tiene una ayuda propia.' => 'Orri honek ez du oraindik bere laguntzarik.',
+	'La ayuda y el manual están en castellano.' => 'Laguntza eta eskuliburua gaztelaniaz daude.',
+	'Se abre en otra pestaña, con todo lo que puedes hacer en el área privada.' => 'Beste fitxa batean irekitzen da, eremu pribatuan egin dezakezun guztiarekin.',
+	'Ver el manual completo' => 'Ikusi eskuliburu osoa',
+	'← Volver a la página' => '← Itzuli orrira',
 );

@@ -9,6 +9,7 @@
  * @var string                $nombre Nombre leído del CRM (no se guarda en WordPress)
  */
 use AsdeBalears\AreaPrivada\Domain\Identidad;
+use AsdeBalears\AreaPrivada\Frontend\Ayuda;
 use AsdeBalears\AreaPrivada\Frontend\Pages;
 use AsdeBalears\AreaPrivada\Frontend\Tema;
 use AsdeBalears\AreaPrivada\Frontend\TemplateLoader;
@@ -42,6 +43,8 @@ defined( 'ABSPATH' ) || exit;
 		<p class="asde-nav__user">
 			<?php echo esc_html( $nombre ?: $user->display_name ); ?>
 			<span class="asde-muted">(<?php echo esc_html( $user->user_login ); ?>)</span> ·
+			<?php /* v0.26: la ayuda de esta página (el apartado del manual de su rol), en la ventana emergente. */ ?>
+			<a class="asde-nav__ayuda" href="<?php echo esc_url( Ayuda::url( Pages::current_key() ?? ( '' !== (string) ( $pagina ?? '' ) ? (string) $pagina : 'area' ) ) ); ?>" data-asde-modal><?php asde_e( 'Ayuda' ); ?></a> ·
 			<a href="<?php echo esc_url( Pages::url( 'seguridad' ) ); ?>"<?php echo 'seguridad' === ( $pagina ?? '' ) ? ' aria-current="page" class="is-active"' : ''; ?>><?php asde_e( 'Seguridad' ); ?></a> ·
 			<a href="<?php echo esc_url( wp_logout_url( home_url( '/' ) ) ); ?>"><?php asde_e( 'Salir' ); ?></a>
 			<?php $selector_idioma = trim( TemplateLoader::render( 'comun/idiomas' ) ); ?>

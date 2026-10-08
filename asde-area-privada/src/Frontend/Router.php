@@ -7,6 +7,7 @@ use AsdeBalears\AreaPrivada\Frontend\Views\ActivarCuentaView;
 use AsdeBalears\AreaPrivada\Frontend\Views\AltaScoutersView;
 use AsdeBalears\AreaPrivada\Frontend\Views\AltaUsuariosView;
 use AsdeBalears\AreaPrivada\Frontend\Views\AreaPrivadaView;
+use AsdeBalears\AreaPrivada\Frontend\Views\AyudaView;
 use AsdeBalears\AreaPrivada\Frontend\Views\BancoView;
 use AsdeBalears\AreaPrivada\Frontend\Views\CambiosView;
 use AsdeBalears\AreaPrivada\Frontend\Views\FichaView;
@@ -53,6 +54,11 @@ final class Router {
 		return '1' === ( $_SERVER['HTTP_X_ASDE_JSON'] ?? '' ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
 	}
 
+	/** La vista de una página o, si se pide y se ha entrado (v0.26), su ayuda. */
+	private static function vista( string $key, string $class ): View {
+		return Ayuda::pedida() && is_user_logged_in() && ! in_array( $key, Pages::PUBLICAS, true ) ? new AyudaView( $key ) : new $class();
+	}
+
 	/** clave de página => [shortcode, vista] */
 	private const VIEWS = array(
 		'area'      => array( 'asde_area_privada', AreaPrivadaView::class ),
@@ -87,8 +93,8 @@ final class Router {
 	);
 
 	public function register(): void {
-		foreach ( self::VIEWS as list( $shortcode, $class ) ) {
-			add_shortcode( $shortcode, static fn( $atts = array(), $content = '' ) => ( new $class() )->render( (string) $content ) );
+		foreach ( self::VIEWS as $key => list( $shortcode, $class ) ) {
+			add_shortcode( $shortcode, static fn( $atts = array(), $content = '' ) => self::vista( (string) $key, $class )->render( (string) $content ) );
 		}
 		add_action( 'template_redirect', array( $this, 'template_redirect' ), 5 );
 		add_action( 'wp_enqueue_scripts', array( $this, 'assets' ) );
@@ -209,6 +215,15 @@ final class Router {
 		// Tipos de material: la lista en JSON, para refrescar el desplegable del formulario sin recargar.
 		if ( 'inventario_tipos' === $key && self::pide_json() && 'GET' === strtoupper( sanitize_text_field( wp_unslash( $_SERVER['REQUEST_METHOD'] ?? '' ) ) ) ) {
 			( new InventarioTiposView() )->json();
+		}
+
+		// Ayuda de la página (v0.26): el apartado del manual del rol, en la ventana emergente.
+		if ( self::pide_modal() && Ayuda::pedida() && ! in_array( $key, Pages::PUBLICAS, true ) ) {
+			View::en_modal();
+			header( 'Content-Type: text/html; charset=utf-8' );
+			header( 'X-Robots-Tag: noindex, nofollow' );
+			echo ( new AyudaView( $key ) )->render(); // phpcs:ignore WordPress.Security.EscapeOutput
+			exit;
 		}
 
 		// Ventana emergente (v0.10): fichas, dar acceso y solicitudes se abren sobre la

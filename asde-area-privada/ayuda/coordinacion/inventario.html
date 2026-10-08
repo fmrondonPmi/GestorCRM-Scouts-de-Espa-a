@@ -1,0 +1,44 @@
+<!-- Generado por herramientas/generar-manuales.php (manual «coordinacion», versión 0.26) a partir de manual/fuentes: no se edita a mano. -->
+<div class="asde-ayuda__texto" data-manual="coordinacion" data-ancla="inventario-material">
+<div class="asde-ayuda__apartado"><h2>Inventario de material</h2>
+	<p class="resumen">En «Gestión del grupo → <strong>Inventario</strong>» está todo el material y el equipamiento del grupo: tiendas, cocina, herramientas, botiquines… Lo ven y lo mantienen los scouters (con o sin sección), Secretaría, Coordinación y Tesorería. Desde aquí también se preparan las <strong>listas de compra</strong>, que Tesorería tiene que aprobar antes de imprimirlas.</p>
+	<p>Arriba hay tres pestañas: <strong>Material</strong>, <strong>Tipos de material</strong> y <strong>Listas de compra</strong>.</p>
+
+	<h3>El material</h3>
+	<figure class="asde-ayuda__captura"><a href="{{capturas}}67-inventario.png" target="_blank" rel="noopener"><img src="{{capturas}}67-inventario.png" width="1280" height="1633" alt="Lista del inventario con el material, su tipo, cantidad, precio, año de compra y nº de serie" loading="lazy"></a><figcaption>La lista del material. Arriba, cuántos materiales y unidades hay y su valor estimado (cantidad × precio). Las cantidades por debajo de 5 salen marcadas en amarillo.</figcaption></figure>
+	<ul>
+		<li><strong>Buscar y filtrar:</strong> escribe parte de la descripción o del nº de serie, o elige un tipo: la lista se filtra al momento, sin recargar.</li>
+		<li><strong>«Ver también los dados de baja»</strong> enseña el material que ya no está, por si hay que recuperarlo.</li>
+		<li>Pulsa la descripción de un material para verlo o cambiarlo.</li>
+	</ul>
+	<figure class="asde-ayuda__captura"><a href="{{capturas}}68-inventario-material.png" target="_blank" rel="noopener"><img src="{{capturas}}68-inventario-material.png" width="1280" height="1100" alt="Formulario de un material del inventario: descripción, tipo con el botón +, cantidad, precio, año de compra, nº de serie y notas" loading="lazy"></a><figcaption>«Añadir material» (o un material de la lista) abre su ficha. Obligatorios: la descripción y la cantidad (0 o más). El año de compra es opcional; el precio es por unidad.</figcaption></figure>
+	<ul>
+		<li><strong>«Añadir y crear otro»</strong> guarda y deja el formulario vacío para el siguiente.</li>
+		<li><strong>Dar de baja</strong> (abajo, con un motivo opcional) es para lo que se ha roto, perdido o regalado: no se borra, deja de salir en la lista y se puede recuperar.</li>
+		<li>Abajo se ve quién lo creó y quién lo cambió por última vez.</li>
+	</ul>
+
+	<h3>Importar el material desde una hoja de cálculo</h3>
+	<p>Si ya tenéis el inventario en Excel o en LibreOffice, no hace falta escribirlo otra vez: pulsa <strong>«Importar desde CSV»</strong>.</p>
+	<figure class="asde-ayuda__captura"><a href="{{capturas}}70-inventario-importar-ventana.png" target="_blank" rel="noopener"><img src="{{capturas}}70-inventario-importar-ventana.png" width="1280" height="960" alt="Ventana para importar material: selector de fichero CSV, enlace para descargar un ejemplo y explicación de las columnas" loading="lazy"></a><figcaption>En la ventana: <strong>«Descargar un fichero de ejemplo»</strong>, el fichero que vas a subir y la casilla para crear los tipos que todavía no existan. Debajo, cómo tiene que ser el fichero.</figcaption></figure>
+	<ol>
+		<li>Descarga el ejemplo y ábrelo con Excel o LibreOffice. La primera fila son los nombres de las columnas: <em>Descripción, Tipo, Cantidad, Precio por unidad, Año de compra, Nº de serie y Notas</em>. Solo son obligatorias <strong>Descripción</strong> y <strong>Cantidad</strong>; las demás se pueden dejar en blanco o quitar.</li>
+		<li>Cambia las filas de ejemplo por vuestro material (una fila por material) y guárdalo como <strong>CSV</strong>: en Excel, «Guardar como» → «CSV (delimitado por punto y coma)».</li>
+		<li>Elige el fichero y pulsa <strong>«Importar»</strong>.</li>
+	</ol>
+	<p>Primero se comprueba el fichero entero (que sea un CSV, que tenga la cabecera, que no pase de 2 MB ni de 2.000 filas). Si algo falla ahí, no se importa nada y se dice por qué. Si está bien, se importan todas las filas correctas y, en la misma ventana, sale el informe:</p>
+	<figure class="asde-ayuda__captura"><a href="{{capturas}}71-inventario-importar-informe.png" target="_blank" rel="noopener"><img src="{{capturas}}71-inventario-importar-informe.png" width="1280" height="820" alt="Informe de la importación: materiales importados, filas no importadas con su número y el motivo, y botón para descargarlas" loading="lazy"></a><figcaption>Cuántos materiales se han importado y qué filas no, con su <strong>nº de fila</strong> (el de la hoja de cálculo) y el <strong>motivo</strong>. «Descargar las filas con error» te da solo esas filas en un CSV: corrígelas y vuelve a importarlo (las demás ya están dentro).</figcaption></figure>
+	<ul>
+		<li>Motivos habituales: una cantidad que no es un número entero, un precio mal escrito, un año que no es de cuatro cifras, una fila sin descripción, un tipo que no existe (si desmarcaste la casilla) o un <strong>nº de serie que ya está</strong> en el inventario o repetido en el fichero.</li>
+		<li>Al cerrar la ventana, la lista ya enseña el material nuevo.</li>
+	</ul>
+
+	<h3>Preparar una lista de compra</h3>
+	<ol>
+		<li>En la lista del material, <strong>marca la casilla</strong> de lo que hay que comprar. Si de un material quedan <strong>menos de 5 unidades</strong>, te pregunta «En el inventario solo hay N unidades… ¿Seguro que quieres añadirlo a la lista de compra?»: es un aviso, puedes seguir.</li>
+		<li>Pulsa <strong>«Crear una lista de compra con los marcados»</strong>.</li>
+		<li>Indica cuántas unidades comprar de cada uno (0 para quitarlo) y el precio estimado (viene el del inventario). El total se calcula mientras escribes. Añade una nota para Tesorería si hace falta.</li>
+		<li><strong>«Guardar y enviar a Tesorería»</strong>: a las personas de Tesorería les llega un email para que la revisen.</li>
+	</ol>
+	<figure class="asde-ayuda__captura"><a href="{{capturas}}72-inventario-nueva-lista.png" target="_blank" rel="noopener"><img src="{{capturas}}72-inventario-nueva-lista.png" width="1280" height="1515" alt="Nueva lista de compra con la cantidad y el precio de cada material, avisos de pocas unidades y el total estimado" loading="lazy"></a><figcaption>La lista nueva, con el aviso en los materiales de los que quedan pocas unidades.</figcaption></figure></div>
+</div>

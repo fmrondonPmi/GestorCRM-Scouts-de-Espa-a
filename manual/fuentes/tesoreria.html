@@ -1,7 +1,7 @@
 <section id="tesoreria">
 	<h2><span class="quien">Scouters y Tesorería</span>Tesorería</h2>
 	<p class="resumen">Cuotas de las familias, pagos, banco, domiciliaciones SEPA y coste federativo, por ronda (curso scout). Todos los scouters ven pagos y familias; la configuración es de Tesorería, Secretaría y Coordinación.</p>
-	<h3 id="control">Control de pagos</h3>
+	<h3 id="control" data-paginas="tesoreria">Control de pagos</h3>
 	<captura src="15-tesoreria" url="/area-privada/tesoreria/" alt="Control de pagos de la ronda con totales, estados y la lista de familias" larga>Resumen de la ronda y una fila por familia. Avisa de los educandos que no están en ninguna familia, a los que no se está cobrando.</captura>
 	<ul>
 		<li>Las familias tienen un nº propio, <code>F</code> + grupo + correlativo (<code>F999001</code>): es la referencia que deben poner en las transferencias.</li>
@@ -10,7 +10,7 @@
 		<li>Lo que se registra aquí es lo que cada familia ve en <a href="familias.html#mis-pagos">Mis pagos</a>. Los pagos del uniforme van aparte (ver <a href="#uniformes-gestion">Gestión de pedidos</a>).</li>
 		<li>Si tu grupo da las bajas desde la web, arriba salen las <strong>bajas recientes</strong> (30 días) de personas que están en alguna familia: ya no cuentan en su cuota. Además, a Tesorería le llega un email con cada baja (ver <a href="#avisos-baja">Quién se entera de una baja</a>).</li>
 	</ul>
-	<h3 id="familia">Ficha de una familia</h3>
+	<h3 id="familia" data-paginas="tesoreria">Ficha de una familia</h3>
 	<captura src="16-tesoreria-familia" url="/area-privada/tesoreria/?familia=1" alt="Ficha de una familia de Tesorería con el desglose de la cuota, los plazos y los movimientos" larga>Quién paga, desglose de la cuota, plazos, registrar un pago o un ajuste, los movimientos y el historial de la ronda.</captura>
 	<ul>
 		<li><strong>«Cuota de la ronda» se puede plegar</strong> pulsando su título: plegada queda una línea con lo que hay que pagar, lo pagado y lo pendiente. El navegador recuerda cómo la dejaste.</li>
@@ -42,13 +42,13 @@
 		<li>Para no equivocarse de familia, mira el nombre, el concepto y el importe antes de elegir: la sugerencia es una ayuda, no una garantía.</li>
 		<li>Solo lo ven Tesorería, Secretaría y Coordinación (los scouters registran los pagos a mano).</li>
 	</ul>
-	<h3 id="familias">Familias</h3>
+	<h3 id="familias" data-paginas="familias">Familias</h3>
 	<captura src="17-familias" url="/area-privada/tesoreria/familias/" alt="Página Familias con sugerencias de hermanos y la lista de familias" larga>Las familias del grupo y, debajo, los educandos que aún no están en ninguna: se marcan y se crea su familia. Si varios comparten email, la web sugiere juntarlos (suelen ser hermanos). Una familia puede incluir a la madre o al padre scouter.</captura>
-	<h3 id="cuotas">Cuotas y plazos</h3>
+	<h3 id="cuotas" data-paginas="cuotas">Cuotas y plazos</h3>
 	<captura src="18-cuotas" url="/area-privada/tesoreria/cuotas/" alt="Configuración de cuotas: inscripción, seguro, anualidad por tramos, plazos y tabla de resultados" larga>Inscripción y seguro por hijo, anualidad según el número de hijos con un máximo, secciones que pagan y plazos. La tabla final enseña lo que paga una familia de 1 a 5 hijos.</captura>
 	<p>Los plazos deben sumar el 100 %; si no, la página lo avisa.</p>
 
-	<h3 id="coste-federativo">Coste federativo</h3>
+	<h3 id="coste-federativo" data-paginas="federacion">Coste federativo</h3>
 	<p>Lo que el grupo paga a su organización federada por <strong>todos</strong> sus asociados activos: cuota asociativa, seguro y, si los hay, otros conceptos. Se calcula con los socios activos del CRM de hoy.</p>
 	<captura src="19-coste-federativo" url="/area-privada/tesoreria/coste-federativo/" alt="Coste federativo: seguro por categorías, otros conceptos, totales y configuración" larga>Arriba el cálculo; abajo, la configuración de la ronda.</captura>
 	<ul>
@@ -58,7 +58,7 @@
 		<li>Cada ronda empieza con los importes de la organización federada (ver <a href="administracion.html#organizacion">Administración</a>) y el grupo los puede ajustar.</li>
 	</ul>
 
-	<h3 id="banco">Banco</h3>
+	<h3 id="banco" data-paginas="banco">Banco</h3>
 	<captura src="20-banco" url="/area-privada/tesoreria/banco/" alt="Página Banco con la última importación y los movimientos, con casillas para elegir varios, el tipo de los revisados y el paginador" larga>Movimientos importados del extracto: los ingresos se concilian con las familias y lo que no es cuota se marca como revisado con su tipo. Cambiar de página, ordenar, filtrar o conciliar no recarga la pantalla.</captura>
 	<ol class="pasos">
 		<li><div>En la banca online del grupo, descarga el extracto en <strong>Norma 43</strong> (también llamado «Cuaderno 43» o AEB 43) o en CSV.</div></li>
@@ -83,7 +83,7 @@
 		<li>La columna «Suma» es un resumen rápido de en qué se gasta y de dónde entra el dinero; su número lleva a esos movimientos.</li>
 	</ul>
 
-	<h3 id="sepa">Domiciliaciones SEPA</h3>
+	<h3 id="sepa" data-paginas="sepa">Domiciliaciones SEPA</h3>
 	<p class="quien-sub">Secretaría, Coordinación y Tesorería</p>
 	<p>Las familias autorizan en <a href="familias.html#sepa">«Mis pagos»</a> que se les cobre la cuota por <strong>adeudo directo SEPA</strong>. Aquí se generan los ficheros para el banco (formato XML <span class="mono">pain.008</span>, el «Cuaderno 19.14»), se avisa a las familias de cada cargo y se registran los cobros.</p>
 		<captura src="45-sepa" url="/area-privada/tesoreria/domiciliaciones/" alt="Pantalla Domiciliaciones SEPA con los datos del acreedor, el formulario de nueva remesa, la lista de remesas y las autorizaciones de las familias" larga>Los pasos, los datos del acreedor, una nueva remesa, las remesas hechas y, abajo, qué familias han firmado su autorización.</captura>

@@ -2383,4 +2383,13 @@ return array(
 	// v0.25.0: sección Usuarios con hojas
 	'Quién tiene acceso, dar acceso a un socio o a su familia, invitaciones, bajas y el registro de emails.' => 'Quen ten acceso, dar acceso a un socio/a ou á súa familia, invitacións, baixas e o rexistro de emails.',
 	'Hojas de Usuarios' => 'Follas de Usuarios',
+
+	// v0.26.0: ayuda de cada página
+	'La dirección del manual no es válida: escribe una dirección web completa (https://…).' => 'O enderezo do manual non é válido: escribe un enderezo web completo (https://…).',
+	'Ayuda' => 'Axuda',
+	'Esta página todavía no tiene una ayuda propia.' => 'Esta páxina aínda non ten unha axuda propia.',
+	'La ayuda y el manual están en castellano.' => 'A axuda e o manual están en castelán.',
+	'Se abre en otra pestaña, con todo lo que puedes hacer en el área privada.' => 'Ábrese noutra lapela, con todo o que podes facer na área privada.',
+	'Ver el manual completo' => 'Ver o manual completo',
+	'← Volver a la página' => '← Volver á páxina',
 );

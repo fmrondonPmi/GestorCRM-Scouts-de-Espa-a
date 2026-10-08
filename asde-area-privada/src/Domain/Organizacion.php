@@ -110,6 +110,49 @@ final class Organizacion {
 		return self::FEDERADAS[ self::clave() ][2] ?? '';
 	}
 
+	/**
+	 * Dónde está publicado el manual de uso de cada organización, si se sabe (v0.26). Es el
+	 * valor por defecto de manual(): la administración lo puede cambiar o quitar.
+	 */
+	public const MANUALES_PUBLICADOS = array(
+		'balears' => 'https://baleares.scout.es/manual/',
+	);
+
+	/**
+	 * Carpeta del manual de uso publicado, acabada en «/» (de ahí salen las capturas de la ayuda
+	 * de cada página y el enlace al manual completo de cada rol), o '' si no hay (v0.26).
+	 */
+	public static function manual(): string {
+		$v = get_option( self::OPTION, array() );
+		$v = is_array( $v ) ? $v : array();
+		return array_key_exists( 'manual', $v ) ? (string) $v['manual'] : ( self::MANUALES_PUBLICADOS[ self::clave() ] ?? '' );
+	}
+
+	/**
+	 * Guarda la dirección del manual publicado: la de la portada (…/manual/index.html) o la de su
+	 * carpeta; se guarda la carpeta. Vacía: sin enlaces al manual ni capturas en la ayuda.
+	 *
+	 * @return true|\WP_Error
+	 */
+	public static function guardar_manual( string $url ) {
+		$url = trim( $url );
+		if ( '' !== $url ) {
+			$url = esc_url_raw( $url, array( 'https', 'http' ) );
+			// Solo el formato (wp_http_validate_url preguntaría al DNS: sin red, o con un dominio aún sin publicar, fallaría).
+			if ( '' === $url || ! filter_var( $url, FILTER_VALIDATE_URL ) || '' === (string) wp_parse_url( $url, PHP_URL_HOST ) ) {
+				return new \WP_Error( 'asde_organizacion', asde_t( 'La dirección del manual no es válida: escribe una dirección web completa (https://…).' ) );
+			}
+			$url = preg_replace( '~/[^/]*\.html?$~i', '/', strtok( $url, '?#' ) );
+			$url = rtrim( $url, '/' ) . '/';
+		}
+		$v           = get_option( self::OPTION, array() );
+		$v           = is_array( $v ) ? $v : array();
+		$v['manual'] = $url;
+		update_option( self::OPTION, $v, false );
+		self::$cache = null;
+		return true;
+	}
+
 	/** Código de la organización en el nº de socio/a local ('' si no está configurado). */
 	public static function codigo(): string {
 		return self::datos()['codigo'];
@@ -143,6 +186,7 @@ final class Organizacion {
 		if ( null !== $identificador && ! in_array( $identificador, array( self::IDENTIFICADOR_ASDE, self::IDENTIFICADOR_LOCAL ), true ) ) {
 			return new \WP_Error( 'asde_organizacion', asde_t( 'Elige qué número es el usuario de acceso.' ) );
 		}
+		$antes = get_option( self::OPTION, array() );
 		update_option(
 			self::OPTION,
 			array(
@@ -151,7 +195,7 @@ final class Organizacion {
 				// Sin indicarlo, se conserva el que hubiera (o el nº local en una instalación anterior).
 				'identificador' => $identificador ?? self::identificador(),
 				'federacion'    => self::sanear_federacion( $federacion ),
-			),
+			) + ( is_array( $antes ) ? array_intersect_key( $antes, array( 'manual' => true ) ) : array() ), // Lo que se guarda aparte (el manual) se conserva.
 			false
 		);
 		self::$cache = null;

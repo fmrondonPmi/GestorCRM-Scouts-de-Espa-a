@@ -2253,3 +2253,84 @@ html.asde-cargando .asde-ap button {
 		padding-bottom: 10px;
 	}
 }
+
+/* v0.26.0 · Ayuda de cada página: el apartado del manual del rol (generado desde manual/fuentes) */
+.asde-ap .asde-ayuda h2 {
+	margin-top: 0;
+}
+.asde-ap .asde-ayuda h3 {
+	margin: 1.4em 0 0.5em;
+}
+.asde-ap .asde-ayuda h4 {
+	margin: 1.2em 0 0.4em;
+}
+.asde-ap .asde-ayuda .resumen {
+	font-size: 1.05em;
+}
+.asde-ap .asde-ayuda__apartado + .asde-ayuda__apartado {
+	margin-top: 2em;
+	padding-top: 1.5em;
+	border-top: 1px solid var(--asde-border);
+}
+.asde-ap .asde-ayuda__captura {
+	margin: 1em 0 1.4em;
+}
+.asde-ap .asde-ayuda__captura img {
+	display: block;
+	max-width: 100%;
+	height: auto;
+	border: 1px solid var(--asde-border);
+	border-radius: var(--asde-radius);
+}
+.asde-ap .asde-ayuda__captura--movil img {
+	max-width: 260px;
+}
+.asde-ap .asde-ayuda__captura figcaption {
+	margin-top: 6px;
+	color: var(--asde-muted);
+	font-size: 0.9em;
+}
+.asde-ap .asde-ayuda__moviles {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 16px;
+	align-items: flex-start;
+}
+.asde-ap .asde-ayuda__moviles > * {
+	flex: 1 1 240px;
+}
+.asde-ap .asde-ayuda .nota,
+.asde-ap .asde-ayuda .ojo {
+	margin: 1em 0;
+	padding: 10px 14px;
+	border-left: 4px solid var(--asde-primary);
+	border-radius: var(--asde-radius);
+	background: var(--asde-tint);
+}
+.asde-ap .asde-ayuda .ojo {
+	border-left-color: var(--asde-warn-text);
+	background: var(--asde-warn-bg);
+}
+.asde-ap .asde-ayuda .nota p,
+.asde-ap .asde-ayuda .ojo p {
+	margin: 0;
+}
+.asde-ap .asde-ayuda .tabla {
+	overflow-x: auto;
+}
+.asde-ap .asde-ayuda details.pregunta {
+	margin: 0.5em 0;
+}
+.asde-ap .asde-ayuda details.pregunta summary {
+	font-weight: 600;
+	cursor: pointer;
+}
+.asde-ap .asde-ayuda__wiki {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px 14px;
+	margin: 2em 0 0;
+	padding-top: 1.2em;
+	border-top: 1px solid var(--asde-border);
+}
