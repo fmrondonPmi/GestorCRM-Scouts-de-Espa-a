@@ -2,6 +2,7 @@
 namespace AsdeBalears\AreaPrivada\Informes;
 
 use AsdeBalears\AreaPrivada\Domain\Secciones;
+use AsdeBalears\AreaPrivada\Tesoreria\Config;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -13,6 +14,8 @@ defined( 'ABSPATH' ) || exit;
  *   edad_min   ?int
  *   edad_max   ?int
  *   salud      bool      solo quien tenga datos de salud relevantes
+ *   pago       string    '' | pagado | debe | vencido | sin_familia (Catalogo::FILTROS_PAGO, v0.25)
+ *   ronda      string    ronda de la cuota (AAAA-AAAA); vacío = la actual (v0.25)
  *   orden      string    apellidos | nombre | edad | seccion
  */
 final class Informe {
@@ -70,6 +73,8 @@ final class Informe {
 			'edad_min'  => $edad( $f['edad_min'] ?? null ),
 			'edad_max'  => $edad( $f['edad_max'] ?? null ),
 			'salud'     => ! empty( $f['salud'] ),
+			'pago'      => isset( Catalogo::FILTROS_PAGO[ (string) ( $f['pago'] ?? '' ) ] ) ? (string) ( $f['pago'] ?? '' ) : '',
+			'ronda'     => Config::es_ronda( (string) ( $f['ronda'] ?? '' ) ) ? (string) $f['ronda'] : '',
 			'orden'     => isset( self::ORDENES[ $f['orden'] ?? '' ] ) ? (string) $f['orden'] : 'apellidos',
 		);
 	}

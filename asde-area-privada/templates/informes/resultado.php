@@ -3,17 +3,20 @@
  * Resultado de un informe.
  *
  * @var AsdeBalears\AreaPrivada\Informes\Informe $informe
- * @var array{columnas: array<string,string>, filas: list<array<string,string>>, secciones: string[], avisos: string[], salud: bool} $res
+ * @var array{columnas: array<string,string>, filas: list<array<string,string>>, secciones: string[], avisos: string[], salud: bool, ronda: ?string, pago: string} $res
  * @var string                                   $url
  * @var string                                   $url_csv
  * @var string                                   $url_edit
  * @var bool                                     $global
  */
 use AsdeBalears\AreaPrivada\Domain\Secciones;
+use AsdeBalears\AreaPrivada\Informes\Catalogo;
 
 defined( 'ABSPATH' ) || exit;
 
-$f = $informe->filtros;
+$f     = $informe->filtros;
+$ronda = $res['ronda'] ?? null;
+$pago  = (string) ( $res['pago'] ?? '' );
 ?>
 <p class="asde-back asde-no-print"><a href="<?php echo esc_url( $url ); ?>"><?php asde_e( '← Volver a informes' ); ?></a></p>
 
@@ -39,8 +42,13 @@ $f = $informe->filtros;
 		<?php echo null !== $f['edad_min'] ? esc_html( ' · ' . sprintf( asde_t( 'desde %d años' ), $f['edad_min'] ) ) : ''; ?>
 		<?php echo null !== $f['edad_max'] ? esc_html( ' · ' . sprintf( asde_t( 'hasta %d años' ), $f['edad_max'] ) ) : ''; ?>
 		<?php echo $f['salud'] ? esc_html( asde_t( ' · solo con datos de salud relevantes' ) ) : ''; ?>
+		<?php echo '' !== $pago ? esc_html( ' · ' . mb_strtolower( asde_t( Catalogo::FILTROS_PAGO[ $pago ] ) ) ) : ''; ?>
 		· <?php echo esc_html( wp_date( 'd/m/Y H:i' ) ); ?>
 	</p>
+	<?php if ( null !== $ronda ) : ?>
+		<?php /* translators: %s: ronda (2026-2027) */ ?>
+		<p class="asde-help"><?php echo esc_html( sprintf( asde_t( 'Cuota de la ronda %s, de Tesorería: los importes son los de la familia de cada socio (con sus hermanos).' ), $ronda ) ); ?></p>
+	<?php endif; ?>
 	<?php foreach ( $res['avisos'] as $aviso ) : ?>
 		<div class="asde-notice asde-notice--warning" role="status"><?php echo esc_html( $aviso ); ?></div>
 	<?php endforeach; ?>

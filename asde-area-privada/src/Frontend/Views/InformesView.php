@@ -10,6 +10,7 @@ use AsdeBalears\AreaPrivada\Informes\Catalogo;
 use AsdeBalears\AreaPrivada\Informes\Generador;
 use AsdeBalears\AreaPrivada\Informes\Informe;
 use AsdeBalears\AreaPrivada\Informes\InformesTable;
+use AsdeBalears\AreaPrivada\Tesoreria\Config;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -37,10 +38,16 @@ final class InformesView extends View {
 	}
 
 	private function lista(): string {
+		// Los predefinidos con datos que el rol no ve (p. ej. «Pagos de la cuota» sin acceso a Tesorería) no salen.
+		$permitidas = Catalogo::permitidas( Ambito::actual() );
+		$informes   = array_filter(
+			InformesTable::visibles( get_current_user_id() ),
+			static fn( Informe $i ) => ! $i->sistema || ! array_diff( $i->columnas, array_keys( $permitidas ) )
+		);
 		return $this->tpl(
 			'informes/lista',
 			array(
-				'informes' => InformesTable::visibles( get_current_user_id() ),
+				'informes' => array_values( $informes ),
 				'user'     => wp_get_current_user(),
 				'url'      => $this->url( 'informes' ),
 			)
@@ -72,6 +79,8 @@ final class InformesView extends View {
 				'global'     => $ambito->vision_global(),
 				'mis_secc'   => $ambito->secciones_scouter(),
 				'salud'      => current_user_can( 'asde_view_health' ),
+				'pagos'      => Catalogo::ve_pagos( $ambito ),
+				'rondas'     => Config::rondas(),
 				'url'        => $this->url( 'informes' ),
 			)
 		);
@@ -223,6 +232,8 @@ final class InformesView extends View {
 				'edad_min'  => $src['edad_min'] ?? null,
 				'edad_max'  => $src['edad_max'] ?? null,
 				'salud'     => ! empty( $src['salud'] ),
+				'pago'      => (string) ( $src['pago'] ?? '' ),
+				'ronda'     => (string) ( $src['ronda'] ?? '' ),
 				'orden'     => (string) ( $src['orden'] ?? '' ),
 			)
 		);
@@ -242,6 +253,8 @@ final class InformesView extends View {
 				'edad_min'  => $i->filtros['edad_min'],
 				'edad_max'  => $i->filtros['edad_max'],
 				'salud'     => $i->filtros['salud'] ? 1 : null,
+				'pago'      => $i->filtros['pago'],
+				'ronda'     => $i->filtros['ronda'],
 				'orden'     => $i->filtros['orden'],
 			),
 			static fn( $v ) => null !== $v && array() !== $v && '' !== $v
@@ -257,6 +270,8 @@ final class InformesView extends View {
 				'global'     => $ambito->vision_global(),
 				'mis_secc'   => $ambito->secciones_scouter(),
 				'salud'      => current_user_can( 'asde_view_health' ),
+				'pagos'      => Catalogo::ve_pagos( $ambito ),
+				'rondas'     => Config::rondas(),
 				'url'        => $this->url( 'informes' ),
 			)
 		);

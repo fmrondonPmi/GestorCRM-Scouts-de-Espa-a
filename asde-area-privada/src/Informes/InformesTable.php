@@ -43,9 +43,10 @@ final class InformesTable {
 	}
 
 	/**
-	 * Informes de ejemplo (nombre, descripción, columnas), en castellano: así se guardan; se traducen al mostrarlos.
+	 * Informes de ejemplo (nombre, descripción, columnas y, si los tiene, filtros), en castellano:
+	 * así se guardan; se traducen al mostrarlos.
 	 *
-	 * @return array<int, array{0: string, 1: string, 2: string[]}>
+	 * @return array<int, array{0: string, 1: string, 2: string[], 3?: array}>
 	 */
 	public static function predefinidos(): array {
 		return array(
@@ -53,24 +54,30 @@ final class InformesTable {
 			array( 'Contactos de las familias', 'Tutores y sus teléfonos y emails.', array( 'nombre', 'apellidos', 'seccion', 'tutor1', 'tutor1_movil', 'tutor1_email', 'tutor2', 'tutor2_movil', 'tutor2_email' ) ),
 			array( 'Alergias y alimentación', 'Para campamentos y actividades con comida.', array( 'nombre', 'apellidos', 'seccion', 'alergias', 'alim_alergia_que', 'alim_intol_que', 'alim_regimen_que', 'alerg_medic_cual', 'medicacion_cual' ) ),
 			array( 'Autorizaciones', 'Cesión de imagen y consentimiento de medicación.', array( 'nombre', 'apellidos', 'seccion', 'edad', 'cesion_imagen', 'consent_medic' ) ),
+			// v0.25: para que cada scouter vea quién de su sección ha pagado la cuota y quién no.
+			array( 'Pagos de la cuota', 'Quién ha pagado la cuota de la ronda y cuánto le falta a cada familia.', array( 'num_local', 'nombre', 'apellidos', 'seccion', 'pago_familia', 'pago_estado', 'pago_a_pagar', 'pago_pagado', 'pago_pendiente', 'pago_vencido' ), array( 'orden' => 'seccion' ) ),
 		);
 	}
 
-	/** Informes de ejemplo, compartidos con todos (no se pueden borrar). */
+	/**
+	 * Informes de ejemplo, compartidos con todos (no se pueden borrar). Al actualizar el
+	 * plugin se añaden los que falten (desde la v0.25, «Pagos de la cuota»).
+	 */
 	private static function sembrar_predefinidos(): void {
 		global $wpdb;
-		if ( (int) $wpdb->get_var( 'SELECT COUNT(*) FROM ' . self::table() . ' WHERE sistema = 1' ) > 0 ) { // phpcs:ignore WordPress.DB
-			return;
-		}
-		$predefinidos = self::predefinidos();
-		foreach ( $predefinidos as list( $nombre, $desc, $cols ) ) {
+		$hay = array_map( 'strval', (array) $wpdb->get_col( 'SELECT nombre FROM ' . self::table() . ' WHERE sistema = 1' ) ); // phpcs:ignore WordPress.DB
+		foreach ( self::predefinidos() as $p ) {
+			list( $nombre, $desc, $cols ) = $p;
+			if ( in_array( $nombre, $hay, true ) ) {
+				continue;
+			}
 			self::guardar(
 				new Informe(
 					0,
 					$nombre,
 					$desc,
 					$cols,
-					array( 'salud' => 'alergias y alimentación' === mb_strtolower( $nombre ) ),
+					( $p[3] ?? array() ) + array( 'salud' => 'alergias y alimentación' === mb_strtolower( $nombre ) ),
 					0,
 					true,
 					true

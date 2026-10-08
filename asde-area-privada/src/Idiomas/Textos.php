@@ -82,6 +82,7 @@ final class Textos {
 		$add( Informe::ORDENES, 'Informes' );
 		$add( array_map( static fn( array $p ) => array( $p[0], $p[1] ), InformesTable::predefinidos() ), 'Informes' );
 		$add( Catalogo::GRUPOS, 'Informes' );
+		$add( Catalogo::FILTROS_PAGO, 'Informes' );
 		$add( Catalogo::ENUMS, 'Informes' );
 		$add( Numeros::CORTO, 'Números de socio' );
 		$add( Numeracion::ETIQUETAS, 'Números de socio' );

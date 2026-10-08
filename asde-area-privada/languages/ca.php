@@ -2364,4 +2364,23 @@ return array(
 	'Viene del cobro de una remesa SEPA: la remesa lo seguirá dando por cobrado.' => 'Ve del cobrament d\'una remesa SEPA: la remesa el continuarà donant per cobrat.',
 	'con el cobro de una remesa SEPA' => 'amb el cobrament d\'una remesa SEPA',
 	'con un ingreso del banco' => 'amb un ingrés del banc',
+
+	// v0.25.0: informe de pagos por socio
+	'Con plazos vencidos sin pagar' => 'Amb terminis vençuts sense pagar',
+	'Cuota a pagar' => 'Quota a pagar',
+	'Cuota de la ronda %s, de Tesorería: los importes son los de la familia de cada socio (con sus hermanos).' => 'Quota de la ronda %s, de Tresoreria: els imports són els de la família de cada soci/sòcia (amb els seus germans).',
+	'Cuota y pagos' => 'Quota i pagaments',
+	'De Tesorería: los importes son los de la familia (con sus hermanos), en la ronda que elijas abajo.' => 'De Tresoreria: els imports són els de la família (amb els seus germans), en la ronda que triïs a sota.',
+	'El filtro de pagos no se aplica porque tu rol no tiene acceso a Tesorería.' => 'El filtre de pagaments no s\'aplica perquè el teu rol no té accés a Tresoreria.',
+	'Estado de la cuota' => 'Estat de la quota',
+	'Han pagado toda la cuota' => 'Han pagat tota la quota',
+	'La actual (%s)' => 'L\'actual (%s)',
+	'Les falta algo por pagar' => 'Els falta alguna cosa per pagar',
+	'Pagos de la cuota' => 'Pagaments de la quota',
+	'Pagos hechos' => 'Pagaments fets',
+	'Quién ha pagado la cuota de la ronda y cuánto le falta a cada familia.' => 'Qui ha pagat la quota de la ronda i quant li falta a cada família.',
+	'Ronda de la cuota' => 'Ronda de la quota',
+	'Según lo pagado' => 'Segons el que s\'ha pagat',
+	'Sin familia en Tesorería' => 'Sense família a Tresoreria',
+	'Vencido sin pagar' => 'Vençut sense pagar',
 );

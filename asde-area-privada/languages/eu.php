@@ -2364,4 +2364,23 @@ return array(
 	'Viene del cobro de una remesa SEPA: la remesa lo seguirá dando por cobrado.' => 'SEPA remesa baten kobrantzatik dator: remesak kobratutzat ematen jarraituko du.',
 	'con el cobro de una remesa SEPA' => 'SEPA remesa baten kobrantzarekin',
 	'con un ingreso del banco' => 'bankuko diru-sarrera batekin',
+
+	// v0.25.0: informe de pagos por socio
+	'Con plazos vencidos sin pagar' => 'Epe iraungiak ordaindu gabe',
+	'Cuota a pagar' => 'Ordaintzeko kuota',
+	'Cuota de la ronda %s, de Tesorería: los importes son los de la familia de cada socio (con sus hermanos).' => '%s txandako kuota, Diruzaintzakoa: zenbatekoak bazkide bakoitzaren familiarenak dira (anai-arrebak barne).',
+	'Cuota y pagos' => 'Kuota eta ordainketak',
+	'De Tesorería: los importes son los de la familia (con sus hermanos), en la ronda que elijas abajo.' => 'Diruzaintzakoa: zenbatekoak familiarenak dira (anai-arrebak barne), behean aukeratzen duzun txandan.',
+	'El filtro de pagos no se aplica porque tu rol no tiene acceso a Tesorería.' => 'Ordainketen iragazkia ez da aplikatzen, zure rolak ez duelako Diruzaintzarako sarbiderik.',
+	'Estado de la cuota' => 'Kuotaren egoera',
+	'Han pagado toda la cuota' => 'Kuota osoa ordaindu dute',
+	'La actual (%s)' => 'Oraingoa (%s)',
+	'Les falta algo por pagar' => 'Zerbait ordaintzeke dute',
+	'Pagos de la cuota' => 'Kuotaren ordainketak',
+	'Pagos hechos' => 'Egindako ordainketak',
+	'Quién ha pagado la cuota de la ronda y cuánto le falta a cada familia.' => 'Nork ordaindu duen txandako kuota eta familia bakoitzari zenbat falta zaion.',
+	'Ronda de la cuota' => 'Kuotaren txanda',
+	'Según lo pagado' => 'Ordaindutakoaren arabera',
+	'Sin familia en Tesorería' => 'Diruzaintzan familiarik gabe',
+	'Vencido sin pagar' => 'Iraungita ordaindu gabe',
 );

@@ -27,7 +27,13 @@ use AsdeBalears\AreaPrivada\Domain\Grupos;
 use AsdeBalears\AreaPrivada\Frontend\Pages;
 use AsdeBalears\AreaPrivada\Frontend\Router;
 use AsdeBalears\AreaPrivada\Frontend\Views\MisPagosView;
+use AsdeBalears\AreaPrivada\Domain\Modulos;
+use AsdeBalears\AreaPrivada\Frontend\Views\InformesView;
 use AsdeBalears\AreaPrivada\Frontend\Views\SepaView;
+use AsdeBalears\AreaPrivada\Informes\Catalogo;
+use AsdeBalears\AreaPrivada\Informes\Generador;
+use AsdeBalears\AreaPrivada\Informes\Informe;
+use AsdeBalears\AreaPrivada\Informes\InformesTable;
 use AsdeBalears\AreaPrivada\Frontend\Views\TesoreriaBaseView;
 use AsdeBalears\AreaPrivada\Install\Roles;
 use AsdeBalears\AreaPrivada\Sepa\Avisos;
@@ -500,8 +506,73 @@ try {
 	$dest = $enviar( new SepaView(), array( 'asde_action' => 'sepa_revocar', 'ronda' => $ronda, 'mandato' => (string) $m3['id'], 'motivo' => 'Cambio de banco' ), 'asde_sepa_revocar' );
 	$ok( Mandatos::REVOCADO === Mandatos::obtener( $m3['id'] )['estado'] && str_contains( Mandatos::obtener( $m3['id'] )['motivo'], 'Cambio de banco' ), 'Tesorería puede anular la autorización de una familia' );
 	$ok( shortcode_exists( 'asde_sepa' ) && '' !== Pages::url( 'sepa' ) && str_contains( Pages::url( 'sepa' ), 'domiciliaciones' ), 'la página «Domiciliaciones SEPA» existe con su shortcode' );
+
+	echo "\n== Informe de pagos por socio (v0.25) ==\n";
+	$repo     = PersonaRepository::make();
+	$familias = FamiliasTable::todas();
+	$calc     = static fn( int $fid ) => Calculadora::familia( $familias[ $fid ], $repo->obtener_varias( $familias[ $fid ]['miembros'] ), TesoreriaConfig::de( $ronda ), MovimientosTable::totales( $ronda )[ $fid ] ?? array() );
+	$cols_p   = array( 'nombre', 'seccion', 'pago_familia', 'pago_estado', 'pago_a_pagar', 'pago_pagado', 'pago_pendiente', 'pago_vencido', 'pago_hechos' );
+	$informe  = static fn( array $filtros, array $cols = array() ) => new Informe( 0, 'Prueba', '', $cols ?: $cols_p, $filtros + array( 'ronda' => $ronda ), 0, false );
+	$amb      = $como( $u_scout );
+	$ok( Catalogo::ve_pagos( $amb ) && isset( Catalogo::permitidas( $amb )['pago_estado'] ), 'un scouter (con acceso a Tesorería) tiene las columnas de la cuota y los pagos' );
+	$res = ( new Generador( $repo->crm() ) )->ejecutar( $informe( array() ), $amb );
+	$c1  = $calc( $f1 );
+	$leo = $res['filas'][0] ?? array();
+	$ok( 1 === count( $res['filas'] ) && 'Leo' === $leo['nombre'] && $familias[ $f1 ]['numero'] === $leo['pago_familia'] && $ronda === $res['ronda'], 'el scouter de Lobatos solo ve a los de su sección (Leo), con su familia' );
+	$ok( asde_t( Calculadora::ETIQUETAS[ $c1['estado'] ] ) === $leo['pago_estado'] && Calculadora::euros( $c1['a_pagar'] ) === $leo['pago_a_pagar'] && Calculadora::euros( $c1['pagado'] ) === $leo['pago_pagado'] && Calculadora::euros( max( 0, $c1['pendiente'] ) ) === $leo['pago_pendiente'] && 2 === count( $c1['pagan'] ), 'estado, cuota, pagado y pendiente como en el control de pagos: la cuota es la de la familia (Leo y su hermana Nora, de otra sección)' );
+	$hechos = array_filter( MovimientosTable::de_familia( $f1, $ronda ), static fn( $m ) => MovimientosTable::PAGO === $m['tipo'] && empty( $m['anulado_en'] ) );
+	$ok( $hechos && count( $hechos ) === count( explode( '; ', $leo['pago_hechos'] ) ) && str_contains( $leo['pago_hechos'], Calculadora::euros( (float) current( $hechos )['importe'] ) ), 'y los pagos hechos (fecha e importe), sin los eliminados' );
+
+	// Visión global: los filtros por lo pagado.
+	get_userdata( $u_teso )->add_role( Roles::COORDINACION );
+	$amb    = $como( $u_teso );
+	$todos  = ( new Generador( $repo->crm() ) )->ejecutar( $informe( array() ), $amb );
+	$estado = array_column( $todos['filas'], 'pago_estado', 'nombre' );
+	$filtra = static fn( string $f ) => array_column( ( new Generador( $repo->crm() ) )->ejecutar( $informe( array( 'pago' => $f ) ), $amb )['filas'], 'nombre' );
+	$deben  = array_keys( array_filter( $estado, static fn( $e ) => in_array( $e, array( asde_t( 'Pendiente' ), asde_t( 'Pago parcial' ), asde_t( 'Con plazos vencidos' ) ), true ) ) );
+	$ok( count( $todos['filas'] ) === count( $crm->personas ) && asde_t( 'Sin familia en Tesorería' ) === $estado['Eva'] && '' === array_column( $todos['filas'], 'pago_pagado', 'nombre' )['Eva'], 'Coordinación ve a todo el grupo; quien no está en ninguna familia lo dice' );
+	$ok( $deben && $filtra( 'debe' ) === array_values( array_intersect( array_keys( $estado ), $deben ) ) && ! in_array( 'Eva', $filtra( 'debe' ), true ), '«Les falta algo por pagar»: solo los de familias con algo pendiente (' . implode( ', ', $deben ) . ')' );
+	$ok( $filtra( 'pagado' ) === array_keys( array_filter( $estado, static fn( $e ) => asde_t( 'Pagado' ) === $e ) ) && array( 'Eva', 'Ana' ) === array_values( array_intersect( array( 'Eva', 'Ana' ), $filtra( 'sin_familia' ) ) ), '«Han pagado toda la cuota» y «Sin familia en Tesorería»' );
+	get_userdata( $u_teso )->remove_role( Roles::COORDINACION );
+
+	$avisos_php = array();
+	set_error_handler( // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_set_error_handler
+		static function ( $n, $texto ) use ( &$avisos_php ) {
+			$avisos_php[] = $texto;
+			return true;
+		}
+	);
+	$antiguo = Informe::from_row( array( 'id' => 0, 'nombre' => 'Antiguo', 'descripcion' => '', 'definicion' => '{"columnas":["nombre"],"filtros":{"secciones":[],"orden":"apellidos"}}', 'autor_id' => 0, 'compartido' => 0, 'sistema' => 0 ) );
+	restore_error_handler();
+	$ok( ! $avisos_php && '' === $antiguo->filtros['pago'] && '' === $antiguo->filtros['ronda'], 'un informe guardado antes de la v0.25 (sin los filtros de pagos) se lee sin avisos de PHP' );
+
+	// La pantalla: el informe predefinido, el editor y el resultado.
+	InformesTable::install_table();
+	$ok( 1 === (int) $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(*) FROM ' . InformesTable::table() . ' WHERE sistema = 1 AND nombre = %s', 'Pagos de la cuota' ) ), 'el informe predefinido «Pagos de la cuota» existe una sola vez (se añade al actualizar, sin repetirse)' ); // phpcs:ignore WordPress.DB
+	$como( $u_scout );
+	$lista_inf = ( new InformesView() )->render();
+	$_GET      = array( 'nuevo' => '1' );
+	$editor    = ( new InformesView() )->render();
+	$_GET      = array( 'ver' => '1', 'cols' => array( 'nombre', 'pago_estado', 'pago_pendiente' ), 'pago' => 'debe', 'ronda' => $ronda );
+	$resultado = ( new InformesView() )->render();
+	$_GET      = array();
+	$ok( str_contains( $lista_inf, 'Pagos de la cuota' ) && str_contains( $editor, 'Cuota y pagos' ) && str_contains( $editor, 'name="pago"' ) && str_contains( $editor, '<option value="' . $ronda . '"' ), 'el scouter ve el informe «Pagos de la cuota» y, en el editor, las columnas y los filtros de pagos (y la ronda)' );
+	$ok( str_contains( $resultado, 'Cuota de la ronda ' . $ronda ) && str_contains( $resultado, '· les falta algo por pagar' ), 'el resultado dice de qué ronda es la cuota y el filtro aplicado' );
+	$mod_antes = get_option( 'asde_ap_modulos', null );
+	Modulos::guardar( $grupo['numero'], array_values( array_diff( array_keys( Modulos::LISTA ), array( Modulos::TESORERIA ) ) ) );
+	$amb       = $como( $u_scout );
+	$sin       = ( new Generador( $repo->crm() ) )->ejecutar( $informe( array( 'pago' => 'debe' ), array( 'nombre', 'pago_estado' ) ), $amb );
+	$lista_sin = ( new InformesView() )->render();
+	null === $mod_antes ? delete_option( 'asde_ap_modulos' ) : update_option( 'asde_ap_modulos', $mod_antes, false );
+	Modulos::olvidar();
+	$ok( array( 'nombre' ) === array_keys( $sin['columnas'] ) && null === $sin['ronda'] && 2 === count( $sin['avisos'] ) && ! str_contains( $lista_sin, 'Pagos de la cuota' ), 'si el grupo no usa Tesorería: ni columnas ni filtro de pagos (con aviso), y el informe predefinido no sale' );
+	$como( $u_teso );
+
 	$ok( $crm->llamadas > 0 && 0 === $cortadas, "todas las consultas al CRM las ha respondido el simulador ({$crm->llamadas}); ninguna ha salido hacia el CRM real" );
 } finally {
+	if ( isset( $mod_antes ) && get_option( 'asde_ap_modulos', null ) !== $mod_antes ) {
+		null === $mod_antes ? delete_option( 'asde_ap_modulos' ) : update_option( 'asde_ap_modulos', $mod_antes, false );
+	}
 	// ---------------------------------------------------------------------------
 	// Limpieza: todo lo creado fuera; lo tocado, como estaba.
 	remove_filter( 'pre_wp_mail', $capturar, 5 );

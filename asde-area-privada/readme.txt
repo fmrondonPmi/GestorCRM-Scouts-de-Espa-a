@@ -56,6 +56,7 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 = 0.25.0 =
 * Treasury: the family record updates in place (registering a payment, also with a bank income, an adjustment or deleting one) without reloading the whole page. The bank list keeps its filters after conciliating or undoing.
 * Treasury: "Delete…" a payment or an adjustment with a reason; it stops counting and goes to the family's history (who registered and deleted it, when and why). A payment that came from a bank income leaves that income pending again.
+* Reports: new "Fee and payments" columns (family, fee status, amount due, paid, pending, overdue, payments made) and a filter by what has been paid, for whoever can access Treasury. New predefined report "Pagos de la cuota" so each scouter sees who in their section has paid.
 
 = 0.24.0 =
 * wp-admin → Scout Groups → "Repeated documents": for a group, the CRM records that share the same ID document (written in any form), to merge them in the CRM. Read-only; the document is shown masked.
@@ -108,7 +109,7 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 == Upgrade Notice ==
 
 = 0.25.0 =
-Treasury without full reloads, payment deletion with history. Adds one column to the payments table.
+Treasury without full reloads, payment deletion with history, payments report per member. Adds one column to the payments table and one predefined report.
 
 = 0.24.0 =
 New read-only report of repeated ID documents in wp-admin. No database changes.

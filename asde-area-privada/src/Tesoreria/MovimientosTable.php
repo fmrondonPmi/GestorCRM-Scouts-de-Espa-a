@@ -129,6 +129,23 @@ final class MovimientosTable {
 		return (array) $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . self::table() . ' WHERE familia_id = %d AND anulado_en IS NULL ORDER BY fecha DESC, id DESC', $familia_id ), ARRAY_A ); // phpcs:ignore WordPress.DB
 	}
 
+	/**
+	 * Pagos vigentes (sin anulados ni ajustes) de las familias del grupo en una ronda,
+	 * por familia y en orden de fecha (v0.25, informe de pagos).
+	 *
+	 * @return array<int, array[]> familia_id => pagos
+	 */
+	public static function pagos_de_ronda( string $ronda ): array {
+		global $wpdb;
+		$out = array();
+		$sql = 'SELECT m.* FROM ' . self::table() . ' m INNER JOIN ' . FamiliasTable::table() . ' f ON f.id = m.familia_id'
+			. ' WHERE m.ronda = %s AND m.tipo = %s AND m.anulado_en IS NULL AND f.grupo = %s ORDER BY m.fecha, m.id';
+		foreach ( (array) $wpdb->get_results( $wpdb->prepare( $sql, $ronda, self::PAGO, \AsdeBalears\AreaPrivada\Domain\Grupo::numero() ), ARRAY_A ) as $m ) { // phpcs:ignore WordPress.DB
+			$out[ (int) $m['familia_id'] ][] = $m;
+		}
+		return $out;
+	}
+
 	public static function hay_de_familia( int $familia_id ): bool {
 		global $wpdb;
 		return (bool) $wpdb->get_var( $wpdb->prepare( 'SELECT 1 FROM ' . self::table() . ' WHERE familia_id = %d LIMIT 1', $familia_id ) ); // phpcs:ignore WordPress.DB

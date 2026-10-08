@@ -9,6 +9,10 @@ use AsdeBalears\AreaPrivada\Domain\Grupo;
 use AsdeBalears\AreaPrivada\Domain\NumeroSocio;
 use AsdeBalears\AreaPrivada\Domain\Secciones;
 use AsdeBalears\AreaPrivada\Socios\SociosTable;
+use AsdeBalears\AreaPrivada\Tesoreria\Calculadora;
+use AsdeBalears\AreaPrivada\Tesoreria\Config;
+use AsdeBalears\AreaPrivada\Tesoreria\FamiliasTable;
+use AsdeBalears\AreaPrivada\Tesoreria\MovimientosTable;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -18,6 +22,10 @@ defined( 'ABSPATH' ) || exit;
  * - scouters: solo sus secciones; Secretaría/Coordinación/administradores: todo el grupo;
  * - solo las columnas que su rol puede ver.
  * Los resultados no se guardan en ningún sitio.
+ *
+ * Desde la v0.25, la cuota y los pagos de la familia de cada socio (de Tesorería, no
+ * del CRM) para quien entra en Tesorería: así un scouter sabe quién de su sección ha
+ * pagado y quién no.
  */
 final class Generador {
 
@@ -27,7 +35,7 @@ final class Generador {
 	public function __construct( private SinergiaV41Client $crm ) {}
 
 	/**
-	 * @return array{columnas: array<string,string>, filas: list<array<string,string>>, secciones: string[], avisos: string[], salud: bool}
+	 * @return array{columnas: array<string,string>, filas: list<array<string,string>>, secciones: string[], avisos: string[], salud: bool, ronda: ?string, pago: string}
 	 * @throws \InvalidArgumentException Si el informe no se puede ejecutar para este usuario.
 	 */
 	public function ejecutar( Informe $informe, Ambito $ambito ): array {
@@ -73,6 +81,14 @@ final class Generador {
 			$avisos[]     = asde_t( 'El filtro de datos de salud no se aplica porque tu rol no tiene acceso a esos datos.' );
 		}
 
+		// Cuota y pagos (v0.25): de la ronda elegida o de la actual.
+		$filtro_pago = $informe->filtros['pago'];
+		if ( '' !== $filtro_pago && ! Catalogo::ve_pagos( $ambito ) ) {
+			$filtro_pago = '';
+			$avisos[]    = asde_t( 'El filtro de pagos no se aplica porque tu rol no tiene acceso a Tesorería.' );
+		}
+		$ronda = ( '' !== $filtro_pago || Catalogo::incluye_pagos( $cols ) ) ? ( $informe->filtros['ronda'] ?: Config::ronda_actual() ) : null;
+
 		$campos = self::BASE;
 		foreach ( $cols as $c ) {
 			$campos = array_merge( $campos, $permitidas[ $c ][2] );
@@ -84,6 +100,7 @@ final class Generador {
 		$entries = PersonaRepository::filtrar_grupo( $this->crm->list_all( 'Contacts', implode( ' AND ', $where ), array_values( array_unique( $campos ) ), PersonaRepository::links_grupo() ) );
 		$tabla   = SociosTable::todas();
 		$grupo   = Grupo::actual()['numero'] ?? '';
+		$pagos   = null !== $ronda ? $this->pagos( $entries, $ronda ) : array();
 
 		$filas = array();
 		foreach ( $entries as $e ) {
@@ -91,9 +108,13 @@ final class Generador {
 			if ( $filtro_salud && ! self::tiene_salud( $f ) ) {
 				continue;
 			}
+			$pago = $pagos[ trim( (string) ( $f['numerosocio_c'] ?? '' ) ) ] ?? null;
+			if ( '' !== $filtro_pago && ! self::cumple_pago( $filtro_pago, $pago ) ) {
+				continue;
+			}
 			$celdas = array();
 			foreach ( $cols as $c ) {
-				$celdas[ $c ] = $this->valor( $permitidas[ $c ], $f, $tabla, $grupo );
+				$celdas[ $c ] = 'pago' === $permitidas[ $c ][3] ? self::valor_pago( $c, $pago ) : $this->valor( $permitidas[ $c ], $f, $tabla, $grupo );
 			}
 			$filas[] = array(
 				'orden'  => $this->clave_orden( $informe->filtros['orden'], $f ),
@@ -113,7 +134,109 @@ final class Generador {
 			'secciones' => $secciones,
 			'avisos'    => $avisos,
 			'salud'     => Catalogo::incluye_salud( $cols ),
+			'ronda'     => $ronda,
+			'pago'      => $filtro_pago,
 		);
+	}
+
+	/**
+	 * La familia de Tesorería de cada socio del informe, con su cuota de la ronda y sus
+	 * pagos. La cuota se calcula con todos los miembros de la familia, también los de
+	 * otras secciones (como en el control de pagos).
+	 *
+	 * @param array[] $entries Fichas del CRM del informe.
+	 * @return array<string, array{familia:array, calc:array, pagos:array[]}> nº Scouts de España => su familia
+	 */
+	private function pagos( array $entries, string $ronda ): array {
+		$mapa = FamiliasTable::mapa_socios();
+		$ids  = array();
+		foreach ( $entries as $e ) {
+			$num = trim( (string) ( $e['fields']['numerosocio_c'] ?? '' ) );
+			if ( isset( $mapa[ $num ] ) ) {
+				$ids[ $mapa[ $num ] ] = true;
+			}
+		}
+		if ( ! $ids ) {
+			return array();
+		}
+		$familias = array_intersect_key( FamiliasTable::todas(), $ids );
+		$miembros = array();
+		foreach ( $familias as $fam ) {
+			$miembros = array_merge( $miembros, $fam['miembros'] );
+		}
+		$personas = ( new PersonaRepository( $this->crm ) )->obtener_varias( $miembros );
+		$cfg      = Config::de( $ronda );
+		$totales  = MovimientosTable::totales( $ronda );
+		$hechos   = MovimientosTable::pagos_de_ronda( $ronda );
+		$por_fam  = array();
+		foreach ( $familias as $id => $fam ) {
+			$por_fam[ $id ] = array(
+				'familia' => $fam,
+				'calc'    => Calculadora::familia( $fam, $personas, $cfg, $totales[ $id ] ?? array() ),
+				'pagos'   => $hechos[ $id ] ?? array(),
+			);
+		}
+		$out = array();
+		foreach ( $mapa as $num => $id ) {
+			if ( isset( $por_fam[ $id ] ) ) {
+				$out[ (string) $num ] = $por_fam[ $id ];
+			}
+		}
+		return $out;
+	}
+
+	/** ¿Cumple el filtro de pagos? $pago es null si el socio no está en ninguna familia. */
+	private static function cumple_pago( string $filtro, ?array $pago ): bool {
+		if ( 'sin_familia' === $filtro ) {
+			return null === $pago;
+		}
+		if ( null === $pago ) {
+			return false;
+		}
+		$estado = $pago['calc']['estado'];
+		switch ( $filtro ) {
+			case 'pagado':
+				return Calculadora::PAGADO === $estado;
+			case 'debe':
+				return in_array( $estado, array( Calculadora::PENDIENTE, Calculadora::PARCIAL, Calculadora::ATRASADO ), true );
+			case 'vencido':
+				return Calculadora::ATRASADO === $estado;
+			default:
+				return true;
+		}
+	}
+
+	/** Valor de una columna de la cuota y los pagos (los importes son los de la familia). */
+	private static function valor_pago( string $col, ?array $pago ): string {
+		if ( null === $pago ) {
+			return 'pago_estado' === $col ? asde_t( 'Sin familia en Tesorería' ) : '';
+		}
+		$c = $pago['calc'];
+		switch ( $col ) {
+			case 'pago_familia':
+				return (string) $pago['familia']['numero'];
+			case 'pago_estado':
+				return asde_t( Calculadora::ETIQUETAS[ $c['estado'] ] ?? $c['estado'] );
+			case 'pago_a_pagar':
+				return Calculadora::euros( (float) $c['a_pagar'] );
+			case 'pago_pagado':
+				return Calculadora::euros( (float) $c['pagado'] );
+			case 'pago_pendiente':
+				return Calculadora::euros( max( 0.0, (float) $c['pendiente'] ) );
+			case 'pago_vencido':
+				// Lo que ya tendría que estar pagado (plazos vencidos) y no lo está.
+				$exigible = 0.0;
+				foreach ( $c['plazos'] as $pl ) {
+					if ( $pl['vencido'] ) {
+						$exigible = (float) $pl['acumulado'];
+					}
+				}
+				return Calculadora::euros( max( 0.0, round( $exigible - (float) $c['pagado'], 2 ) ) );
+			case 'pago_hechos':
+				return implode( '; ', array_map( static fn( $m ) => wp_date( 'd/m/Y', strtotime( $m['fecha'] . ' 12:00' ) ) . ' ' . Calculadora::euros( (float) $m['importe'] ), $pago['pagos'] ) );
+			default:
+				return '';
+		}
 	}
 
 	private function valor( array $def, array $f, array $tabla, string $grupo ): string {

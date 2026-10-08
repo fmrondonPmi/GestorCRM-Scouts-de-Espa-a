@@ -2,6 +2,7 @@
 namespace AsdeBalears\AreaPrivada\Informes;
 
 use AsdeBalears\AreaPrivada\Auth\Ambito;
+use AsdeBalears\AreaPrivada\Domain\Modulos;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -10,10 +11,12 @@ defined( 'ABSPATH' ) || exit;
  * ver docs/04 §7.3).
  *
  * Cada columna: [etiqueta, grupo, campos CRM, tipo, nivel]
- *   tipo:  texto | fecha | bool | sino | enum | edad | seccion | num_local | nombre_tutor
+ *   tipo:  texto | fecha | bool | sino | enum | edad | seccion | num_local | nombre_tutor | pago
  *   nivel: todos  → cualquiera con acceso a informes (dentro de su ámbito)
  *          salud  → requiere asde_view_health (scouters: solo su sección, solo lectura)
  *          global → solo visión global (Secretaría, Coordinación, administradores)
+ *          pagos  → requiere acceso a Tesorería y el módulo activo (v0.25): la cuota
+ *                   de la familia de cada socio, de Tesorería (no del CRM)
  * Los IBAN y datos bancarios NO están en el catálogo.
  */
 final class Catalogo {
@@ -24,7 +27,17 @@ final class Catalogo {
 		'contacto'       => 'Contacto',
 		'tutores'        => 'Familia / tutores',
 		'autorizaciones' => 'Autorizaciones y formación',
+		'pagos'          => 'Cuota y pagos',
 		'salud'          => 'Salud y alimentación',
+	);
+
+	/** Filtro por lo pagado (v0.25): quién ha pagado la cuota y quién no. */
+	public const FILTROS_PAGO = array(
+		''            => 'Todos',
+		'pagado'      => 'Han pagado toda la cuota',
+		'debe'        => 'Les falta algo por pagar',
+		'vencido'     => 'Con plazos vencidos sin pagar',
+		'sin_familia' => 'Sin familia en Tesorería',
 	);
 
 	/** @return array<string, array{0:string, 1:string, 2:string[], 3:string, 4:string}> */
@@ -64,6 +77,14 @@ final class Catalogo {
 			'certificado_ds_f' => array( asde_t( 'Fecha certificado DS' ), 'autorizaciones', array( 'certificadods_fecha_c' ), 'fecha', 'todos' ),
 			'formacion_scout'  => array( asde_t( 'Formación Scout' ), 'autorizaciones', array( 'formacionscout_c' ), 'enum', 'todos' ),
 			'formacion_tl'     => array( asde_t( 'Formación tiempo libre' ), 'autorizaciones', array( 'formaciontiempolibre_c' ), 'enum', 'todos' ),
+			// Cuota y pagos (v0.25): de Tesorería, por la familia del socio (con sus hermanos).
+			'pago_familia'     => array( asde_t( 'Familia' ), 'pagos', array( 'numerosocio_c' ), 'pago', 'pagos' ),
+			'pago_estado'      => array( asde_t( 'Estado de la cuota' ), 'pagos', array( 'numerosocio_c' ), 'pago', 'pagos' ),
+			'pago_a_pagar'     => array( asde_t( 'Cuota a pagar' ), 'pagos', array( 'numerosocio_c' ), 'pago', 'pagos' ),
+			'pago_pagado'      => array( asde_t( 'Pagado' ), 'pagos', array( 'numerosocio_c' ), 'pago', 'pagos' ),
+			'pago_pendiente'   => array( asde_t( 'Pendiente' ), 'pagos', array( 'numerosocio_c' ), 'pago', 'pagos' ),
+			'pago_vencido'     => array( asde_t( 'Vencido sin pagar' ), 'pagos', array( 'numerosocio_c' ), 'pago', 'pagos' ),
+			'pago_hechos'      => array( asde_t( 'Pagos hechos' ), 'pagos', array( 'numerosocio_c' ), 'pago', 'pagos' ),
 			// Salud y alimentación (categoría especial RGPD).
 			'alergias'         => array( asde_t( 'Alergias' ), 'salud', array( 'alergias_c' ), 'texto', 'salud' ),
 			'alergias_obs'     => array( asde_t( 'Otros datos de alergias' ), 'salud', array( 'alergias_obs_c' ), 'texto', 'salud' ),
@@ -158,10 +179,27 @@ final class Catalogo {
 	public static function permitidas( Ambito $ambito ): array {
 		$puede_salud = $ambito->user->has_cap( 'asde_view_health' );
 		$global      = $ambito->vision_global();
+		$pagos       = self::ve_pagos( $ambito );
 		return array_filter(
 			self::columnas(),
-			static fn( $c ) => 'todos' === $c[4] || ( 'salud' === $c[4] && $puede_salud ) || ( 'global' === $c[4] && $global )
+			static fn( $c ) => 'todos' === $c[4] || ( 'salud' === $c[4] && $puede_salud ) || ( 'global' === $c[4] && $global ) || ( 'pagos' === $c[4] && $pagos )
 		);
+	}
+
+	/** ¿Puede ver la cuota y los pagos? Quien entra en Tesorería, si el grupo la usa (v0.25). */
+	public static function ve_pagos( Ambito $ambito ): bool {
+		return $ambito->user->has_cap( 'asde_tesoreria_acceso' ) && Modulos::activo( Modulos::TESORERIA );
+	}
+
+	/** ¿Alguna de estas columnas es de la cuota y los pagos? */
+	public static function incluye_pagos( array $claves ): bool {
+		$cols = self::columnas();
+		foreach ( $claves as $k ) {
+			if ( isset( $cols[ $k ] ) && 'pagos' === $cols[ $k ][4] ) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/** ¿Alguna de estas columnas es de salud? */

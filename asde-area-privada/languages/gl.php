@@ -2364,4 +2364,23 @@ return array(
 	'Viene del cobro de una remesa SEPA: la remesa lo seguirá dando por cobrado.' => 'Vén do cobro dunha remesa SEPA: a remesa seguirá dándoo por cobrado.',
 	'con el cobro de una remesa SEPA' => 'co cobro dunha remesa SEPA',
 	'con un ingreso del banco' => 'cun ingreso do banco',
+
+	// v0.25.0: informe de pagos por socio
+	'Con plazos vencidos sin pagar' => 'Con prazos vencidos sen pagar',
+	'Cuota a pagar' => 'Cota a pagar',
+	'Cuota de la ronda %s, de Tesorería: los importes son los de la familia de cada socio (con sus hermanos).' => 'Cota da rolda %s, de Tesouraría: os importes son os da familia de cada socio/a (cos seus irmáns).',
+	'Cuota y pagos' => 'Cota e pagamentos',
+	'De Tesorería: los importes son los de la familia (con sus hermanos), en la ronda que elijas abajo.' => 'De Tesouraría: os importes son os da familia (cos seus irmáns), na rolda que escollas abaixo.',
+	'El filtro de pagos no se aplica porque tu rol no tiene acceso a Tesorería.' => 'O filtro de pagamentos non se aplica porque o teu rol non ten acceso a Tesouraría.',
+	'Estado de la cuota' => 'Estado da cota',
+	'Han pagado toda la cuota' => 'Pagaron toda a cota',
+	'La actual (%s)' => 'A actual (%s)',
+	'Les falta algo por pagar' => 'Fáltalles algo por pagar',
+	'Pagos de la cuota' => 'Pagamentos da cota',
+	'Pagos hechos' => 'Pagamentos feitos',
+	'Quién ha pagado la cuota de la ronda y cuánto le falta a cada familia.' => 'Quen pagou a cota da rolda e canto lle falta a cada familia.',
+	'Ronda de la cuota' => 'Rolda da cota',
+	'Según lo pagado' => 'Segundo o pagado',
+	'Sin familia en Tesorería' => 'Sen familia en Tesouraría',
+	'Vencido sin pagar' => 'Vencido sen pagar',
 );

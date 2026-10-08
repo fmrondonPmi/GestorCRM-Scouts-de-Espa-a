@@ -7,8 +7,11 @@
  * @var bool                                     $global     Visión global (todo el grupo)
  * @var string[]                                 $mis_secc   Secciones del scouter
  * @var bool                                     $salud      Puede ver datos de salud
+ * @var bool                                     $pagos      Puede ver la cuota y los pagos (Tesorería, v0.25)
+ * @var string[]                                 $rondas     Rondas de Tesorería (la más reciente primero)
  * @var string                                   $url
  */
+use AsdeBalears\AreaPrivada\Tesoreria\Config;
 use AsdeBalears\AreaPrivada\Domain\Secciones;
 use AsdeBalears\AreaPrivada\Informes\Catalogo;
 use AsdeBalears\AreaPrivada\Informes\Informe;
@@ -17,6 +20,8 @@ defined( 'ABSPATH' ) || exit;
 
 $f         = $informe->filtros;
 $secciones = $global ? array_keys( Secciones::all() ) : $mis_secc;
+$pagos     = $pagos ?? false;
+$rondas    = $rondas ?? array();
 ?>
 <p class="asde-back"><a href="<?php echo esc_url( $url ); ?>"><?php asde_e( '← Volver a informes' ); ?></a></p>
 
@@ -62,6 +67,8 @@ $secciones = $global ? array_keys( Secciones::all() ) : $mis_secc;
 					<?php endforeach; ?>
 					<?php if ( 'salud' === $grupo ) : ?>
 						<p class="asde-help asde-help--warning"><?php asde_e( 'Datos de salud: categoría especial (RGPD). Úsalos solo para la actividad y no los compartas fuera del equipo.' ); ?></p>
+					<?php elseif ( 'pagos' === $grupo ) : ?>
+						<p class="asde-help"><?php asde_e( 'De Tesorería: los importes son los de la familia (con sus hermanos), en la ronda que elijas abajo.' ); ?></p>
 					<?php endif; ?>
 				</fieldset>
 			<?php endforeach; ?>
@@ -98,6 +105,28 @@ $secciones = $global ? array_keys( Secciones::all() ) : $mis_secc;
 				<input type="checkbox" name="salud" value="1" <?php checked( $f['salud'] ); ?>>
 				<span><?php asde_e( 'Solo socios con datos de salud o alimentación relevantes' ); ?> <span class="asde-help"><?php asde_e( '(alergias, intolerancias, régimen, medicación, tratamiento o enfermedades)' ); ?></span></span>
 			</label>
+		<?php endif; ?>
+		<?php if ( $pagos ) : ?>
+			<div class="asde-grid-2">
+				<p>
+					<label for="asde-inf-pago"><?php asde_e( 'Según lo pagado' ); ?></label>
+					<select id="asde-inf-pago" name="pago">
+						<?php foreach ( asde_ta( Catalogo::FILTROS_PAGO ) as $k => $label ) : ?>
+							<option value="<?php echo esc_attr( $k ); ?>" <?php selected( $f['pago'], $k ); ?>><?php echo esc_html( $label ); ?></option>
+						<?php endforeach; ?>
+					</select>
+				</p>
+				<p>
+					<label for="asde-inf-ronda"><?php asde_e( 'Ronda de la cuota' ); ?></label>
+					<select id="asde-inf-ronda" name="ronda">
+						<?php /* translators: %s: ronda (2026-2027) */ ?>
+						<option value=""><?php echo esc_html( sprintf( asde_t( 'La actual (%s)' ), Config::ronda_actual() ) ); ?></option>
+						<?php foreach ( $rondas as $r ) : ?>
+							<option value="<?php echo esc_attr( $r ); ?>" <?php selected( $f['ronda'], $r ); ?>><?php echo esc_html( $r ); ?></option>
+						<?php endforeach; ?>
+					</select>
+				</p>
+			</div>
 		<?php endif; ?>
 		<p>
 			<label for="asde-inf-orden"><?php asde_e( 'Ordenar por' ); ?></label>
