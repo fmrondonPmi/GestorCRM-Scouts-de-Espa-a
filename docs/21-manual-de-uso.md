@@ -152,12 +152,6 @@ Un **WordPress de demostración aparte** (Local, Enfold, plugin, mu-plugin con C
 - **Arreglo que salió al fotografiar:** en el móvil (390 px) la tercera hoja («Registro de emails») quedaba cortada; las pestañas son ahora más compactas por debajo de 600 px y caben las tres (CSS del plugin; zip 0.25.0 rehecho, el anterior se conserva como `asde-area-privada-0.25.0-sin-hojas-movil.zip`).
 - El generador pasa a la versión 0.25. Paquete **`manual-de-uso-0.25.0.zip`** (carpeta antigua) y copia en `app/public/temporal/` de Local. **No se ha publicado nada**: lo sube el usuario.
 
-## Versión 4.9 · el manual va dentro del plugin (v0.27.0, 2026-10-09)
-
-- Petición del usuario: «añade al plugin que se copien las páginas de ayuda para que no sea una subida separada manual». Desde la v0.27 **el zip del plugin lleva el manual** (`asde-area-privada/manual/`: los seis HTML, `manual.css`, `manual.js` y `capturas/`, sin `fuentes/`), copiado del `manual/` del repo por `construir-zip.ps1`; en el Local lo copia `herramientas-desarrollo/desplegar-manual.sh` (desde `probar-todo.sh`). La ayuda de cada página y «Ver el manual completo» usan esa copia (doc 35). Ya **no hay que publicar el manual aparte**; `manual-de-uso-X.Y.Z.zip` se sigue haciendo por si se quiere también en la web.
-- Con la skill `manuales-area-privada`: manual de administración, «Organización federada» → **«Manual de uso»** (`#manual-de-uso`) explica el campo nuevo «Otro manual publicado (opcional)» y que el manual va en el plugin; pregunta frecuente «¿Cómo instalo una versión nueva?» (el zip trae el manual). Captura **`22-organizacion` rehecha** (el campo vacío, lo normal). `manual-capturas.php` vuelca esa pantalla sin la dirección del manual de la demostración.
-- El generador pasa a la versión 0.27 (solo cambia la cabecera de los trozos de ayuda). Paquete **`manual-de-uso-0.27.0.zip`** y copia en `app/public/temporal/` de Local. No se ha publicado nada.
-
 ## Versión 4.8 · desactivar borra la contraseña (v0.26.1, 2026-10-08)
 
 - Solo texto, con la skill `manuales-area-privada`: en «Usuarios del área privada» (`fuentes/usuarios.html`, manual de coordinación), **Desactivar** explica que, además de quitar los roles y cerrar las sesiones, borra la contraseña y la verificación en dos pasos, y que al volver a dar acceso llega una invitación nueva. Cambia también la ayuda de esa página (`asde-area-privada/ayuda/coordinacion/usuarios.html`). Sin capturas nuevas ni rehechas. Paquete **`manual-de-uso-0.26.1.zip`** y copia en `app/public/temporal/` de Local; no se ha publicado nada.

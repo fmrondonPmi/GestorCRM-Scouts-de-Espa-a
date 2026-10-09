@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       ASDE Scouts de España - Gestor CRM para Grupos Scouts
  * Description:       Área privada y gestión de los Grupos Scouts (socios, usuarios, informes y tesorería) con datos leídos de SinergiaCRM. Cada grupo con su propio acceso al CRM y sin visibilidad entre grupos.
- * Version:           0.27.0
+ * Version:           0.26.2
  * Requires at least: 6.4
  * Requires PHP:      8.0
  * Author:            Francisco Meri - Zorro Sabio
@@ -12,7 +12,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'ASDE_AP_VERSION', '0.27.0' );
+define( 'ASDE_AP_VERSION', '0.26.2' );
 define( 'ASDE_AP_FILE', __FILE__ );
 define( 'ASDE_AP_DIR', plugin_dir_path( __FILE__ ) );
 

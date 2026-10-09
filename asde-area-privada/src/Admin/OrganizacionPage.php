@@ -199,14 +199,10 @@ final class OrganizacionPage {
 				<h2><?php esc_html_e( 'Manual de uso', 'asde-area-privada' ); ?></h2>
 				<table class="form-table" role="presentation">
 					<tr>
-						<th scope="row"><label for="asde-manual"><?php esc_html_e( 'Otro manual publicado (opcional)', 'asde-area-privada' ); ?></label></th>
+						<th scope="row"><label for="asde-manual"><?php esc_html_e( 'Dirección del manual publicado', 'asde-area-privada' ); ?></label></th>
 						<td>
-							<?php /* v0.27: el manual viene dentro del plugin; el campo solo guarda otra dirección, si se quiere. */ ?>
-							<input type="url" id="asde-manual" name="manual" value="<?php echo esc_attr( Organizacion::manual_guardado() ); ?>" class="regular-text code" placeholder="<?php esc_attr_e( 'Vacío: el manual que trae el plugin', 'asde-area-privada' ); ?>">
-							<p class="description"><?php esc_html_e( 'En cada página del área privada, «Ayuda» enseña el apartado del manual del rol de quien entra, con sus capturas, y al final enlaza a su manual completo. El manual viene dentro del plugin y es siempre de su misma versión: no hay que subirlo aparte. Déjalo vacío salvo que quieras usar un manual publicado en otro sitio: entonces, escribe aquí su carpeta (o su portada, …/manual/index.html).', 'asde-area-privada' ); ?></p>
-							<?php if ( '' === Organizacion::manual_incluido() ) : ?>
-								<p class="description"><strong><?php esc_html_e( 'Esta copia del plugin no trae el manual (carpeta manual/): la ayuda sale sin capturas ni enlaces mientras no se ponga aquí la dirección de uno publicado.', 'asde-area-privada' ); ?></strong></p>
-							<?php endif; ?>
+							<input type="url" id="asde-manual" name="manual" value="<?php echo esc_attr( Organizacion::manual() ); ?>" class="regular-text code" placeholder="https://…/manual/">
+							<p class="description"><?php esc_html_e( 'La carpeta (o la portada, …/manual/index.html) donde está publicado el manual de uso. En cada página del área privada, «Ayuda» enseña el apartado del manual del rol de quien entra, con sus capturas sacadas de aquí, y al final enlaza a su manual completo. Vacía: la ayuda sale sin capturas ni enlaces.', 'asde-area-privada' ); ?></p>
 						</td>
 					</tr>
 				</table>

@@ -15,7 +15,3 @@ desktop.ini
 .idea/
 *.log
 *.tmp
-
-# El manual va dentro del plugin solo en el zip y en el Local (v0.27: lo copian construir-zip.ps1
-# y desplegar-manual.sh desde manual/); en el repo no se duplica.
-asde-area-privada/manual/

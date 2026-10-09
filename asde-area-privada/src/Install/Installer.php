@@ -97,7 +97,6 @@ final class Installer {
 		\AsdeBalears\AreaPrivada\Crm\Operaciones::install_table();
 		Grupos::migrar();
 		\AsdeBalears\AreaPrivada\Domain\Organizacion::migrar(); // Instalaciones anteriores: Scouts de Balears, código 7.
-		\AsdeBalears\AreaPrivada\Domain\Organizacion::migrar_manual(); // v0.27: la ayuda usa el manual que trae el plugin.
 		Pages::install();
 		Visibilidad::asegurar_menu();
 		Wordfence::configurar();

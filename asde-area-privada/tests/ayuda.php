@@ -137,56 +137,26 @@ try {
 	$tes = Ayuda::de_pagina( 'tesoreria', 'coordinacion' )['html'];
 	$ok( 1 === preg_match( '~href="' . preg_quote( $base, '~' ) . 'coordinacion\.html#[a-z-]+" target="_blank" rel="noopener"~', $tes ) && 1 === preg_match( '~href="' . preg_quote( $base, '~' ) . 'familias\.html#mis-pagos" target="_blank"~', $tes ), 'los enlaces llevan al manual publicado, en otra pestaña (al mismo manual o a otro)' );
 	Organizacion::guardar_manual( '' );
-	add_filter( 'asde_ap_manual_incluido', '__return_empty_string' ); // Como una copia del plugin sin manual/.
 	$sin_m = Ayuda::de_pagina( 'banco', 'coordinacion' )['html'];
-	$ok( ! str_contains( $sin_m, '<img' ) && ! str_contains( $sin_m, '{{' ) && ! str_contains( $sin_m, 'href="' ) && str_contains( $sin_m, 'Marcar varios como revisados' ) && '' === Ayuda::url_manual( 'coordinacion' ), 'sin ningún manual (ni el del plugin ni otro): el texto sin capturas ni enlaces, y sin enlace al manual completo' );
-	remove_filter( 'asde_ap_manual_incluido', '__return_empty_string' );
+	$ok( ! str_contains( $sin_m, '<img' ) && ! str_contains( $sin_m, '{{' ) && ! str_contains( $sin_m, 'href="' ) && str_contains( $sin_m, 'Marcar varios como revisados' ) && '' === Ayuda::url_manual( 'coordinacion' ), 'sin manual publicado: el texto sin capturas ni enlaces, y sin enlace al manual completo' );
 
-	echo "\n== Parte C · El manual que trae el plugin (v0.27) y otro publicado (wp-admin → Organización federada) ==\n";
+	echo "\n== Parte C · La dirección del manual publicado (wp-admin → Organización federada) ==\n";
 	$copia = get_option( Organizacion::OPTION, array() );
 	$sin_clave = is_array( $copia ) ? $copia : array();
 	unset( $sin_clave['manual'] );
 	update_option( Organizacion::OPTION, $sin_clave, false );
 	Organizacion::olvidar();
-	$incluido = plugins_url( 'manual/', ASDE_AP_FILE );
-	$ok( $incluido === Organizacion::manual() && $incluido === Organizacion::manual_incluido() && '' === Organizacion::manual_guardado(), 'sin guardar nada, el manual que trae el plugin (manual/, de su misma versión): no hay que subirlo aparte' );
-	$faltan = array();
-	foreach ( (array) glob( Ayuda::dir() . '*/*.html' ) as $f ) {
-		preg_match_all( '~\{\{capturas\}\}([^"\' ]+)~', (string) file_get_contents( $f ), $m ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- fichero del plugin
-		foreach ( $m[1] as $c ) {
-			if ( ! is_readable( ASDE_AP_DIR . 'manual/capturas/' . $c ) ) {
-				$faltan[ $c ] = true;
-			}
-		}
-	}
-	foreach ( array( 'index.html', 'administracion.html', 'familias.html', 'participantes.html', 'scouters.html', 'coordinacion.html', 'manual.css', 'manual.js' ) as $fm ) {
-		if ( ! is_readable( ASDE_AP_DIR . 'manual/' . $fm ) ) {
-			$faltan[ $fm ] = true;
-		}
-	}
-	$ok( ! $faltan && ! is_dir( ASDE_AP_DIR . 'manual/fuentes' ), 'el manual del plugin trae los seis manuales, su estilo y todas las capturas que usa la ayuda (y no las fuentes)' . ( $faltan ? ': faltan ' . implode( ', ', array_slice( array_keys( $faltan ), 0, 6 ) ) . ' (los copian desplegar-manual.sh y construir-zip.ps1)' : '' ) );
-	$h_inc = Ayuda::de_pagina( 'banco', 'coordinacion' )['html'];
-	$ok( str_contains( $h_inc, 'src="' . $incluido . 'capturas/20-banco.png"' ) && $incluido . 'coordinacion.html#banco' === Ayuda::url_manual( 'coordinacion', 'banco' ), 'la ayuda saca sus capturas del manual del plugin y «Ver el manual completo» lleva a él, en su apartado' );
+	$defecto = Organizacion::MANUALES_PUBLICADOS[ Organizacion::clave() ] ?? '';
+	$ok( Organizacion::manual() === $defecto && ( 'balears' !== Organizacion::clave() || 'https://baleares.scout.es/manual/' === $defecto ), 'sin guardar nada, la del manual publicado de la organización (Scouts de Balears: https://baleares.scout.es/manual/)' );
 	$r = Organizacion::guardar_manual( 'https://manual.example.invalid/docs/manual/index.html?x=1#y' );
-	$ok( true === $r && 'https://manual.example.invalid/docs/manual/' === Organizacion::manual() && 'https://manual.example.invalid/docs/manual/' === Organizacion::manual_guardado(), 'otro manual publicado: con la dirección de la portada (…/index.html) se guarda la carpeta y se usa ese' );
+	$ok( true === $r && 'https://manual.example.invalid/docs/manual/' === Organizacion::manual(), 'con la dirección de la portada (…/index.html) se guarda la carpeta' );
 	$r2 = Organizacion::guardar_manual( 'esto no es una dirección' );
 	$ok( is_wp_error( $r2 ) && 'https://manual.example.invalid/docs/manual/' === Organizacion::manual(), 'una dirección que no lo es no se guarda' );
 	$o = get_option( Organizacion::OPTION, array() );
 	Organizacion::guardar( (string) $o['organizacion'], (string) $o['codigo'], (array) $o['federacion'], (string) $o['identificador'] );
 	$ok( 'https://manual.example.invalid/docs/manual/' === Organizacion::manual(), 'guardar la organización no borra la dirección del manual' );
 	Organizacion::guardar_manual( '' );
-	$ok( $incluido === Organizacion::manual(), 'vacía: vuelve al manual del plugin' );
-	$o           = get_option( Organizacion::OPTION, array() );
-	$o['manual'] = 'https://baleares.scout.es/manual/';
-	update_option( Organizacion::OPTION, $o, false );
-	Organizacion::olvidar();
-	$antes_migrar = Organizacion::manual();
-	Organizacion::migrar_manual();
-	$ok( 'https://baleares.scout.es/manual/' === $antes_migrar && $incluido === Organizacion::manual() && ! array_key_exists( 'manual', (array) get_option( Organizacion::OPTION, array() ) ), 'al actualizar, la dirección que la v0.26 ponía por defecto (baleares.scout.es/manual/) se deja: la ayuda pasa al manual del plugin' );
-	Organizacion::guardar_manual( 'https://manual.example.invalid/otro/' );
-	Organizacion::migrar_manual();
-	$ok( 'https://manual.example.invalid/otro/' === Organizacion::manual(), 'otra dirección puesta a mano se respeta al actualizar' );
-	Organizacion::guardar_manual( '' );
+	$ok( '' === Organizacion::manual(), 'vacía: no hay manual publicado (aunque la organización tenga uno por defecto)' );
 
 	echo "\n== Parte D · En las pantallas ==\n";
 	Organizacion::guardar_manual( $base );
