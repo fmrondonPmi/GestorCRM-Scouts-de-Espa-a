@@ -2388,10 +2388,16 @@ return array(
 	'Ayuda' => 'Ajuda',
 	'Esta página todavía no tiene una ayuda propia.' => 'Aquesta pàgina encara no té una ajuda pròpia.',
 	'La ayuda y el manual están en castellano.' => 'L\'ajuda i el manual són en castellà.',
-	'Se abre en otra pestaña, con todo lo que puedes hacer en el área privada.' => 'S\'obre en una altra pestanya, amb tot el que pots fer a l\'àrea privada.',
 	'Ver el manual completo' => 'Veure el manual complet',
 	'← Volver a la página' => '← Torna a la pàgina',
 
 	// v0.26.1: desactivar borra la contraseña y la verificación en dos pasos
 	'Acceso desactivado para el usuario %s: se han borrado su contraseña y su verificación en dos pasos. Para devolvérselo, dale de alta de nuevo: le llegará una invitación para elegir otra contraseña.' => 'Accés desactivat per a l\'usuari %s: s\'han esborrat la seva contrasenya i la seva verificació en dos passos. Per tornar-l\'hi, dona\'l d\'alta de nou: li arribarà una invitació per triar una altra contrasenya.',
+
+	// v0.28.0: ayuda solo texto y manual completo en la ventana
+	'Ayuda extra: el mismo manual con capturas de pantalla, en otra pestaña.' => 'Ajuda extra: el mateix manual amb captures de pantalla, en una altra pestanya.',
+	'Manual con capturas' => 'Manual amb captures',
+	'Manual de uso' => 'Manual d\'ús',
+	'No hay un manual para tu cuenta.' => 'No hi ha cap manual per al teu compte.',
+	'Todo lo que puedes hacer en el área privada, en esta misma ventana.' => 'Tot el que pots fer a l\'àrea privada, en aquesta mateixa finestra.',
 );

@@ -194,7 +194,26 @@
 		}
 		cuerpo.scrollTop = 0;
 		cuerpo.focus( { preventScroll: true } );
+		irA( url.indexOf( '#' ) > -1 ? url.slice( url.indexOf( '#' ) + 1 ) : '' );
 	}
+
+	// v0.28: el manual completo de la ayuda se abre en su apartado (…#asde-manual-x) y sus enlaces
+	// internos (#…) se mueven dentro de la ventana, sin tocar la página de detrás (ni la dirección).
+	function irA( id ) {
+		var destino = id ? document.getElementById( decodeURIComponent( id ) ) : null;
+		if ( destino && cuerpo.contains( destino ) ) {
+			destino.scrollIntoView( { block: 'start' } );
+		}
+	}
+	document.addEventListener( 'click', function ( e ) {
+		var a = e.target.closest ? e.target.closest( 'a[href^="#"]' ) : null;
+		if ( ! a || ! dialogo || ! dialogo.open || ! dialogo.contains( a ) || ! normal( e ) || a.getAttribute( 'href' ).length < 2 ) {
+			return;
+		}
+		e.preventDefault();
+		e.stopPropagation();
+		irA( a.getAttribute( 'href' ).slice( 1 ) );
+	}, true );
 
 	function cargar( url, opciones ) {
 		opciones = opciones || {};
@@ -208,7 +227,9 @@
 					window.location.href = r.url || url;
 					return;
 				}
-				pintar( r.url || url, html );
+				// La dirección de la respuesta no trae el «#apartado» (v0.28: el manual completo de la ayuda).
+				var ancla = -1 !== url.indexOf( '#' ) ? url.slice( url.indexOf( '#' ) ) : '';
+				pintar( ( r.url || url ).split( '#' )[ 0 ] + ancla, html );
 			} );
 		} ).catch( function () {
 			window.location.href = url;

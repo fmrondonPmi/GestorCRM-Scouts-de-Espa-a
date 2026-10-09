@@ -2388,10 +2388,16 @@ return array(
 	'Ayuda' => 'Laguntza',
 	'Esta página todavía no tiene una ayuda propia.' => 'Orri honek ez du oraindik bere laguntzarik.',
 	'La ayuda y el manual están en castellano.' => 'Laguntza eta eskuliburua gaztelaniaz daude.',
-	'Se abre en otra pestaña, con todo lo que puedes hacer en el área privada.' => 'Beste fitxa batean irekitzen da, eremu pribatuan egin dezakezun guztiarekin.',
 	'Ver el manual completo' => 'Ikusi eskuliburu osoa',
 	'← Volver a la página' => '← Itzuli orrira',
 
 	// v0.26.1: desactivar borra la contraseña y la verificación en dos pasos
 	'Acceso desactivado para el usuario %s: se han borrado su contraseña y su verificación en dos pasos. Para devolvérselo, dale de alta de nuevo: le llegará una invitación para elegir otra contraseña.' => '%s erabiltzailearen sarbidea desaktibatu da: haren pasahitza eta bi urratseko egiaztapena ezabatu dira. Berriro emateko, eman alta berriro: beste pasahitz bat aukeratzeko gonbidapena jasoko du.',
+
+	// v0.28.0: ayuda solo texto y manual completo en la ventana
+	'Ayuda extra: el mismo manual con capturas de pantalla, en otra pestaña.' => 'Laguntza gehigarria: eskuliburu bera pantaila-argazkiekin, beste fitxa batean.',
+	'Manual con capturas' => 'Eskuliburua argazkiekin',
+	'Manual de uso' => 'Erabilera-eskuliburua',
+	'No hay un manual para tu cuenta.' => 'Ez dago eskulibururik zure konturako.',
+	'Todo lo que puedes hacer en el área privada, en esta misma ventana.' => 'Eremu pribatuan egin dezakezun guztia, leiho honetan bertan.',
 );

@@ -119,8 +119,9 @@ final class Organizacion {
 	);
 
 	/**
-	 * Carpeta del manual de uso publicado, acabada en «/» (de ahí salen las capturas de la ayuda
-	 * de cada página y el enlace al manual completo de cada rol), o '' si no hay (v0.26).
+	 * Carpeta del manual de uso con capturas publicado, acabada en «/», o '' si no hay (v0.26).
+	 * Desde la v0.28 la ayuda del área privada es solo texto y viene en el plugin: este manual (el
+	 * zip «manual-de-uso», se sube a mano) es una ayuda extra, enlazada al final de la ayuda.
 	 */
 	public static function manual(): string {
 		$v = get_option( self::OPTION, array() );

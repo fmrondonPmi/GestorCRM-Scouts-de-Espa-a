@@ -1,11 +1,11 @@
-<!-- Generado por herramientas/generar-manuales.php (manual «coordinacion», versión 0.26) a partir de manual/fuentes: no se edita a mano. -->
+<!-- Generado por herramientas/generar-manuales.php (manual «coordinacion», versión 0.28) a partir de manual/fuentes: no se edita a mano. -->
 <div class="asde-ayuda__texto" data-manual="coordinacion" data-ancla="sepa">
 <div class="asde-ayuda__apartado"><h2>Tesorería</h2>
 	<p class="resumen">Cuotas de las familias, pagos, banco, domiciliaciones SEPA y coste federativo, por ronda (curso scout). Todos los scouters ven pagos y familias; la configuración es de Tesorería, Secretaría y Coordinación.</p>
 	<h3>Domiciliaciones SEPA</h3>
 	<p class="quien-sub">Secretaría, Coordinación y Tesorería</p>
-	<p>Las familias autorizan en <a href="{{base}}familias.html#sepa" target="_blank" rel="noopener">«Mis pagos»</a> que se les cobre la cuota por <strong>adeudo directo SEPA</strong>. Aquí se generan los ficheros para el banco (formato XML <span class="mono">pain.008</span>, el «Cuaderno 19.14»), se avisa a las familias de cada cargo y se registran los cobros.</p>
-		<figure class="asde-ayuda__captura"><a href="{{capturas}}45-sepa.png" target="_blank" rel="noopener"><img src="{{capturas}}45-sepa.png" width="1280" height="2953" alt="Pantalla Domiciliaciones SEPA con los datos del acreedor, el formulario de nueva remesa, la lista de remesas y las autorizaciones de las familias" loading="lazy"></a><figcaption>Los pasos, los datos del acreedor, una nueva remesa, las remesas hechas y, abajo, qué familias han firmado su autorización.</figcaption></figure>
+	<p>Las familias autorizan en <a href="{{completo:familias}}#asde-manual-sepa" data-asde-modal>«Mis pagos»</a> que se les cobre la cuota por <strong>adeudo directo SEPA</strong>. Aquí se generan los ficheros para el banco (formato XML <span class="mono">pain.008</span>, el «Cuaderno 19.14»), se avisa a las familias de cada cargo y se registran los cobros.</p>
+		<p class="asde-ayuda__pantalla">Los pasos, los datos del acreedor, una nueva remesa, las remesas hechas y, abajo, qué familias han firmado su autorización.</p>
 	<ol class="pasos">
 		<li><div><strong>Datos del acreedor</strong> (el grupo): nombre, identificador del acreedor (ICS) e IBAN, que da el banco al contratar las domiciliaciones. El IBAN se guarda cifrado. Con «Ofrecer la domiciliación a las familias» marcado, aparece en «Mis pagos».</div></li>
 		<li><div><strong>Las familias firman</strong> su autorización. Abajo, «Autorizaciones de las familias» dice quién la tiene (referencia, IBAN enmascarado y fecha) y permite anularla con un motivo.</div></li>
@@ -13,7 +13,7 @@
 		<li><div><strong>Descarga el fichero XML</strong> y súbelo al banco (por ejemplo, en Colonya Directa, «Remesas de adeudos»). Márcala como <strong>enviada</strong> y <strong>avisa a las familias</strong> por email, con los días de antelación que hayas puesto en los datos del acreedor.</div></li>
 		<li><div>Cuando el banco cobre, <strong>registra los cobros</strong>: pasan a ser pagos de la familia en Tesorería. Marca los <strong>devueltos</strong>; los que no marques siguen pendientes.</div></li>
 	</ol>
-		<figure class="asde-ayuda__captura"><a href="{{capturas}}46-sepa-remesa.png" target="_blank" rel="noopener"><img src="{{capturas}}46-sepa-remesa.png" width="1280" height="1269" alt="Detalle de una remesa SEPA: sus datos, el fichero XML, el aviso a las familias y los adeudos con las casillas de cobrado y devuelto" loading="lazy"></a><figcaption>Una remesa enviada al banco: el fichero, el aviso a las familias y, por cada adeudo, si se ha cobrado o devuelto.</figcaption></figure>
+		<p class="asde-ayuda__pantalla">Una remesa enviada al banco: el fichero, el aviso a las familias y, por cada adeudo, si se ha cobrado o devuelto.</p>
 	<ul>
 		<li>La primera remesa de una familia lleva la secuencia <strong>FRST</strong>; las siguientes, <strong>RCUR</strong> (la web lo cambia al marcarla como enviada).</li>
 		<li>La web no deja crear dos remesas con los mismos adeudos sin cobrar.</li>

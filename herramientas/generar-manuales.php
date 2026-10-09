@@ -20,15 +20,18 @@
  * páginas del área privada (claves de Frontend\Pages) documenta. Con eso se escriben, en el plugin,
  * los trozos asde-area-privada/ayuda/<manual>/<página>.html que salen en la ventana «Ayuda» de cada
  * página según el rol de quien entra (Frontend\Ayuda). Un <h3> con data-paginas lleva su parte (hasta
- * el siguiente <h3>) y la entrada del apartado; un <section>, el apartado entero. Las capturas y los
- * enlaces de los trozos apuntan al manual publicado ({{capturas}}, {{manual}} y {{base}}, que pone
- * el plugin). Al cambiar los trozos cambia el plugin: hay que rehacer su zip.
+ * el siguiente <h3>) y la entrada del apartado; un <section>, el apartado entero. Desde la v0.28 la
+ * ayuda del plugin es solo texto (sin capturas: el zip no puede pesar) y lleva además el manual
+ * completo de cada rol (ayuda/<manual>/_completo.html), que «Ver el manual completo» abre en la
+ * misma ventana; los enlaces van a él ({{completo}}, {{completo:otro}}, que pone el plugin). El
+ * manual con capturas (manual/*.html) se sube a mano aparte, como ayuda extra. Al cambiar los
+ * trozos cambia el plugin: hay que rehacer su zip.
  */
 
 $raiz    = dirname( __DIR__ ) . '/manual';
 $fuentes = $raiz . '/fuentes';
 $plugin  = dirname( __DIR__ ) . '/asde-area-privada';
-$version = '0.26';
+$version = '0.28';
 $fecha   = 'octubre de 2026';
 $errores = 0;
 
@@ -264,29 +267,50 @@ $portada = '<!doctype html>
 file_put_contents( "$raiz/index.html", $portada );
 echo "index.html: portada\n";
 
-// --- Ayuda de cada página del área privada (v0.26) ------------------------------------------
-/** Un trozo para la ventana «Ayuda»: capturas y enlaces al manual publicado, sin ids ni «quién». */
-function para_ayuda( string $h, string $raiz ): string {
+// --- Ayuda dentro del plugin (v0.26; solo texto desde la v0.28) -------------------------------
+/**
+ * Texto para la ayuda del plugin. Desde la v0.28 (petición del usuario: el zip con el manual y sus
+ * capturas pesaba más de 10 MB) va sin imágenes: el pie de cada captura queda como una nota sobre
+ * lo que se ve en pantalla. Sin la etiqueta de «quién», y con los enlaces dentro de la ventana:
+ *   #id del mismo manual        → {{completo}}#asde-manual-id (el manual completo, en la ventana)
+ *   otro.html#id                → {{completo:otro}}#asde-manual-id
+ *   index.html, administracion.html → solo su texto (no están en el área privada)
+ * Con $completo (el manual entero del rol) los id llevan el prefijo asde-manual- y los #id del
+ * mismo manual saltan dentro de la misma ventana; sin él (el trozo de una página) se quitan los id,
+ * que chocarían con los de la página. Las direcciones las pone el plugin (Frontend\Ayuda).
+ */
+function para_ayuda( string $h, string $manual, bool $completo = false ): string {
+	global $manuales;
 	$h = preg_replace( '~<span class="quien">.*?</span>~s', '', $h );
-	$h = str_replace( array( '<moviles>', '</moviles>' ), array( '<div class="asde-ayuda__moviles">', '</div>' ), $h );
+	$h = str_replace( array( '<moviles>', '</moviles>' ), '', $h );
 	$h = preg_replace_callback(
-		'~<captura\s+([^>]*)>(.*?)</captura>~s',
-		static function ( $m ) use ( $raiz ) {
-			preg_match_all( '~(\w+)(?:="([^"]*)")?~', $m[1], $at, PREG_SET_ORDER );
-			$a = array();
-			foreach ( $at as $x ) {
-				$a[ $x[1] ] = $x[2] ?? true;
+		'~<captura\s+[^>]*>(.*?)</captura>~s',
+		static fn( $m ) => '' === trim( $m[1] ) ? '' : '<p class="asde-ayuda__pantalla">' . trim( $m[1] ) . '</p>',
+		$h
+	);
+	$h = preg_replace_callback(
+		'~<a href="([^"]*)"([^>]*)>(.*?)</a>~s',
+		static function ( $m ) use ( $manual, $completo, $manuales ) {
+			list( , $href, $resto, $texto ) = $m;
+			if ( preg_match( '~^#(.+)$~', $href, $x ) ) {
+				return $completo ? '<a href="#asde-manual-' . $x[1] . '"' . $resto . '>' . $texto . '</a>' : '<a href="{{completo}}#asde-manual-' . $x[1] . '" data-asde-modal' . $resto . '>' . $texto . '</a>';
 			}
-			$src            = (string) ( $a['src'] ?? '' );
-			list( $w, $hh ) = tamano( $raiz, $src );
-			$img            = '{{capturas}}' . $src . '.png';
-			return '<figure class="asde-ayuda__captura' . ( isset( $a['movil'] ) ? ' asde-ayuda__captura--movil' : '' ) . '"><a href="' . $img . '" target="_blank" rel="noopener"><img src="' . $img . '" width="' . $w . '" height="' . $hh . '" alt="' . htmlspecialchars( (string) ( $a['alt'] ?? '' ), ENT_QUOTES ) . '" loading="lazy"></a><figcaption>' . trim( $m[2] ) . '</figcaption></figure>';
+			if ( preg_match( '~^([a-z-]+)\.html(?:#(.+))?$~', $href, $x ) ) {
+				if ( 'index' === $x[1] || 'administracion' === $x[1] || ! isset( $manuales[ $x[1] ] ) ) {
+					return $texto;
+				}
+				$ancla = isset( $x[2] ) ? '#asde-manual-' . $x[2] : '';
+				if ( $completo && $x[1] === $manual ) {
+					return '<a href="' . ( '' !== $ancla ? $ancla : '#asde-manual-indice' ) . '"' . $resto . '>' . $texto . '</a>';
+				}
+				return '<a href="' . ( $x[1] === $manual ? '{{completo}}' : '{{completo:' . $x[1] . '}}' ) . $ancla . '" data-asde-modal' . $resto . '>' . $texto . '</a>';
+			}
+			return '<a href="' . $href . '"' . ( str_contains( $resto, 'target=' ) ? '' : ' target="_blank" rel="noopener"' ) . $resto . '>' . $texto . '</a>'; // Fuera del área privada.
 		},
 		$h
 	);
-	$h = preg_replace( '~href="#([^"]+)"~', 'href="{{manual}}#$1" target="_blank" rel="noopener"', $h );
-	$h = preg_replace( '~href="([a-z-]+\.html(?:#[^"]*)?)"~', 'href="{{base}}$1" target="_blank" rel="noopener"', $h );
-	return preg_replace( '~\s(?:id|data-paginas)="[^"]*"~', '', $h ); // Los id chocarían con los de la página.
+	$h = preg_replace( '~\sdata-paginas="[^"]*"~', '', $h );
+	return $completo ? preg_replace( '~\sid="([^"]+)"~', ' id="asde-manual-$1"', $h ) : preg_replace( '~\sid="[^"]*"~', '', $h );
 }
 
 preg_match_all( "~^\s*'([a-z_]+)'\s*=>\s*array\(~m", (string) file_get_contents( "$plugin/src/Frontend/Pages.php" ), $pk );
@@ -325,7 +349,7 @@ foreach ( $manuales as $slug => $m ) {
 					++$errores;
 					continue;
 				}
-				$ayuda[ $slug ][ $p ][] = array( para_ayuda( $html, $raiz ), $ancla );
+				$ayuda[ $slug ][ $p ][] = array( para_ayuda( $html, $slug ), $ancla );
 			}
 		}
 	}
@@ -346,5 +370,58 @@ foreach ( $ayuda as $slug => $paginas ) {
 	}
 	echo "ayuda/$slug: ", implode( ', ', array_keys( $paginas ) ), "\n";
 }
+
+// El manual completo de cada rol, solo texto (v0.28): «Ver el manual completo» lo abre en la ventana.
+// ayuda/<manual>/_completo.html (el «_» no puede ser una página: sus claves no lo llevan).
+$tamano_ayuda = 0;
+foreach ( $manuales as $slug => $m ) {
+	if ( 'administracion' === $slug ) {
+		continue;
+	}
+	$cuerpo = '';
+	foreach ( $m['apartados'] as $ap ) {
+		$cuerpo .= "\n" . trim( (string) @file_get_contents( "$fuentes/$ap.html" ) ) . "\n";
+	}
+	$texto = para_ayuda( str_replace( array( '{{version}}', '{{fecha}}' ), array( $version, $fecha ), $cuerpo ), $slug, true );
+	$indice = '';
+	preg_match_all( '~<section id="asde-manual-([^"]+)"[^>]*>(.*?)</section>~s', $texto, $secs, PREG_SET_ORDER );
+	foreach ( $secs as $s ) {
+		preg_match( '~<h2[^>]*>(.*?)</h2>~s', $s[2], $h2 );
+		$indice .= '<li><a href="#asde-manual-' . $s[1] . '">' . trim( strip_tags( $h2[1] ?? $s[1] ) ) . '</a>';
+		preg_match_all( '~<h3 id="asde-manual-([^"]+)"[^>]*>(.*?)</h3>~s', $s[2], $h3s, PREG_SET_ORDER );
+		if ( $h3s ) {
+			$indice .= '<ol>';
+			foreach ( $h3s as $h3 ) {
+				$indice .= '<li><a href="#asde-manual-' . $h3[1] . '">' . trim( strip_tags( $h3[2] ) ) . '</a></li>';
+			}
+			$indice .= '</ol>';
+		}
+		$indice .= "</li>\n";
+	}
+	preg_match_all( '~\sid="(asde-manual-[^"]+)"~', $texto, $ids_t );
+	$ids_t = array_merge( $ids_t[1], array( 'asde-manual-indice' ) );
+	preg_match_all( '~href="#(asde-manual-[^"]+)"~', $texto, $enl_t );
+	foreach ( array_unique( $enl_t[1] ) as $id ) {
+		if ( ! in_array( $id, $ids_t, true ) ) {
+			fwrite( STDERR, "[$slug, manual completo de la ayuda] enlace roto: #$id\n" );
+			++$errores;
+		}
+	}
+	$html  = '<!-- Generado por herramientas/generar-manuales.php (manual «' . $slug . '» completo, solo texto, versión ' . $version . ') a partir de manual/fuentes: no se edita a mano. -->' . "\n";
+	$html .= '<div class="asde-ayuda__texto asde-ayuda__completo" data-manual="' . $slug . '">' . "\n";
+	$html .= '<h2>' . $m['titulo'] . "</h2>\n" . '<p class="resumen">' . $m['entrada'] . "</p>\n";
+	$html .= '<nav class="asde-ayuda__indice" id="asde-manual-indice" aria-label="Índice del manual"><h3>En este manual</h3><ol>' . "\n" . $indice . "</ol></nav>\n";
+	$html .= trim( $texto ) . "\n</div>\n";
+	file_put_contents( "$plugin/ayuda/$slug/_completo.html", $html );
+	echo "ayuda/$slug/_completo.html: ", count( $secs ), ' apartados, ', round( strlen( $html ) / 1024 ), " KB\n";
+}
+foreach ( (array) glob( "$plugin/ayuda/*/*.html" ) as $f ) {
+	$tamano_ayuda += (int) filesize( $f );
+	if ( preg_match( '~<img\b|\{\{capturas\}\}~', (string) file_get_contents( $f ) ) ) {
+		fwrite( STDERR, 'La ayuda del plugin lleva una imagen: ' . basename( dirname( $f ) ) . '/' . basename( $f ) . "\n" );
+		++$errores;
+	}
+}
+echo 'Ayuda del plugin: ', round( $tamano_ayuda / 1024 ), " KB, solo texto\n";
 echo $errores ? "$errores ERRORES\n" : "Sin errores\n";
 exit( $errores ? 1 : 0 );

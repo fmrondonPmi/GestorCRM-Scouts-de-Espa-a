@@ -1,0 +1,416 @@
+<!-- Generado por herramientas/generar-manuales.php (manual «scouters» completo, solo texto, versión 0.28) a partir de manual/fuentes: no se edita a mano. -->
+<div class="asde-ayuda__texto asde-ayuda__completo" data-manual="scouters">
+<h2>Manual para scouters</h2>
+<p class="resumen">Lo que hace un scouter con su sección en el área privada: las fichas de sus educandos, los cambios que proponen las familias, las solicitudes de acceso, los informes (también quién ha pagado la cuota), los pagos y las familias, y los pedidos de uniforme. Y lo suyo: sus datos, sus pagos y su propio uniforme.</p>
+<nav class="asde-ayuda__indice" id="asde-manual-indice" aria-label="Índice del manual"><h3>En este manual</h3><ol>
+<li><a href="#asde-manual-para-quien">Para quién es este manual</a></li>
+<li><a href="#asde-manual-alta-enlace">Darte de alta con el enlace del grupo</a></li>
+<li><a href="#asde-manual-entrar">Entrar</a></li>
+<li><a href="#asde-manual-primera-vez">Primera vez y contraseña olvidada</a><ol><li><a href="#asde-manual-activar">Activar la cuenta</a></li><li><a href="#asde-manual-olvidada">¿Has olvidado tu contraseña?</a></li></ol></li>
+<li><a href="#asde-manual-instalar-app">Instalar el área privada en el móvil</a><ol><li><a href="#asde-manual-instalar-android">En Android (Chrome)</a></li><li><a href="#asde-manual-instalar-iphone">En iPhone y iPad (Safari)</a></li><li><a href="#asde-manual-usar-app">Usar la app</a></li><li><a href="#asde-manual-app-sin-conexion">Si no hay internet</a></li><li><a href="#asde-manual-quitar-app">Quitarla</a></li></ol></li>
+<li><a href="#asde-manual-seguridad">Seguridad de la cuenta</a></li>
+<li><a href="#asde-manual-inicio">El inicio y el menú</a></li>
+<li><a href="#asde-manual-ventana">La ventana emergente</a></li>
+<li><a href="#asde-manual-fichas">Las fichas de tu sección</a><ol><li><a href="#asde-manual-salud">Salud y alimentación</a></li></ol></li>
+<li><a href="#asde-manual-cambios">Cambios propuestos por las familias</a></li>
+<li><a href="#asde-manual-solicitudes">Solicitudes de acceso</a></li>
+<li><a href="#asde-manual-informes">Informes</a><ol><li><a href="#asde-manual-informe-pagos">Quién ha pagado la cuota</a></li></ol></li>
+<li><a href="#asde-manual-tesoreria">Tesorería: pagos y familias</a></li>
+<li><a href="#asde-manual-uniformes">Uniformes: el tuyo y los de tu sección</a><ol><li><a href="#asde-manual-mi-uniforme">Mi uniforme</a></li><li><a href="#asde-manual-gestion-uniformes">Gestión de uniformes</a></li></ol></li>
+<li><a href="#asde-manual-inventario">Inventario de material</a><ol><li><a href="#asde-manual-inventario-material">El material</a></li><li><a href="#asde-manual-inventario-tipos">Tipos de material</a></li><li><a href="#asde-manual-inventario-importar">Importar el material desde una hoja de cálculo</a></li><li><a href="#asde-manual-inventario-lista-compra">Preparar una lista de compra</a></li><li><a href="#asde-manual-inventario-visto-bueno">El visto bueno de Tesorería</a></li><li><a href="#asde-manual-inventario-pdf">Imprimir la lista</a></li></ol></li>
+<li><a href="#asde-manual-idioma">El idioma de la web</a></li>
+<li><a href="#asde-manual-preguntas">Preguntas frecuentes</a></li>
+</ol></nav>
+<section id="asde-manual-para-quien">
+	<h2>Para quién es este manual</h2>
+	<p class="resumen">Para los scouters y el voluntariado con <strong>sección asignada</strong> (Castores, Lobatos, Scouts, Escultas o Rovers) y sin otra responsabilidad en el grupo. Si además eres de Secretaría, Coordinación o Tesorería, mira también el <a href="{{completo:coordinacion}}" data-asde-modal>manual del equipo de coordinación</a>.</p>
+	<div class="tabla">
+		<table>
+			<thead><tr><th scope="col">Qué</th><th scope="col">Alcance</th></tr></thead>
+			<tbody>
+				<tr><td><a href="#asde-manual-fichas">Fichas</a></td><td>Las de los socios de tus secciones: editas el contacto y los tutores; ves salud y alimentación sin poder cambiarlas.</td></tr>
+				<tr><td><a href="#asde-manual-cambios">Cambios</a></td><td>Apruebas o rechazas los que proponen las familias de tus secciones.</td></tr>
+				<tr><td><a href="#asde-manual-solicitudes">Solicitudes</a></td><td>Apruebas las solicitudes de acceso de las familias y los socios de tus secciones.</td></tr>
+				<tr><td><a href="#asde-manual-informes">Informes</a></td><td>Listados de tus secciones, con las columnas que elijas.</td></tr>
+				<tr><td><a href="#asde-manual-tesoreria">Tesorería</a></td><td>El control de pagos y las familias de todo el grupo: consultas y registras pagos. La configuración no.</td></tr>
+				<tr><td><a href="#asde-manual-uniformes">Uniformes</a></td><td>Pides el tuyo y entregas los pedidos de tus secciones.</td></tr>
+				<tr><td><a href="#asde-manual-inventario">Inventario</a></td><td>El material del grupo: lo mantienes, lo importas desde una hoja de cálculo y preparas listas de compra (las aprueba Tesorería).</td></tr>
+			</tbody>
+		</table>
+	</div>
+	<ul>
+		<li><strong>El CRM no guarda con qué sección colabora cada scouter:</strong> la marca Secretaría o Coordinación al darte el acceso. Si no ves a tus educandos, pídeles que revisen tus secciones.</li>
+		<li>Personas, dar acceso y la lista de usuarios son de Secretaría y Coordinación.</li>
+		<li>Ves datos de menores, también de salud: úsalos solo para la actividad y no los saques del grupo. La verificación en dos pasos es obligatoria para tu cuenta.</li>
+	</ul>
+</section>
+
+<section id="asde-manual-alta-enlace">
+	<h2>Darte de alta con el enlace del grupo</h2>
+	<p class="resumen">El equipo de coordinación te pasa un <strong>enlace para scouters</strong>. Con él te das de alta tú mismo/a, con tu DNI o NIE, y eliges tus secciones.</p>
+	<p class="asde-ayuda__pantalla">El formulario del enlace. Sin el enlace vigente del grupo no se puede abrir.</p>
+	<ol class="pasos">
+		<li><div><strong>Tu DNI o NIE.</strong> Tiene que ser el de tu ficha del grupo, con membresía activa de Scouter o de Voluntariado.</div></li>
+		<li><div><strong>¿Cómo colaboras?</strong> «Soy scouter» y marca tus secciones (Castores a Rovers), o «Soy voluntario/a sin sección» si ayudas en Secretaría, Coordinación o Tesorería sin estar en una sección.</div></li>
+		<li><div><strong>Responsabilidades (opcional):</strong> si llevas Secretaría, Coordinación o Tesorería, márcalas. No tienen efecto hasta que las confirma el equipo de coordinación; mientras, entras como scouter de tus secciones.</div></li>
+		<li><div><strong>Tu email</strong> y <strong>«Darme de alta»</strong>. La activación te llega <strong>al email de tu ficha del grupo</strong>; el que escribes solo se usa si tu ficha no tiene email.</div></li>
+	</ol>
+	<ul>
+		<li>La pantalla contesta siempre lo mismo («Gracias. Si el DNI…»), sea cual sea el DNI: es a propósito, para que nadie pueda averiguar quién está en el grupo.</li>
+		<li>Si no te llega nada en unos minutos, mira en la carpeta de spam. Si tu ficha no tiene email, si eres voluntario/a sin sección o si has pedido una responsabilidad, el equipo de coordinación revisa tu alta y te escribe.</li>
+		<li>Después, activa la cuenta como cualquier otra (ver <a href="#asde-manual-primera-vez">Primera vez y contraseña</a>) y la verificación en dos pasos (ver <a href="#asde-manual-seguridad">Seguridad</a>).</li>
+		<li>Si ya tienes cuenta, el enlace no hace nada: entra con tu nº de socio/a o pide una contraseña nueva.</li>
+	</ul>
+</section>
+
+<section id="asde-manual-entrar">
+	<h2>Entrar</h2>
+	<p class="resumen">Se entra desde <strong>«Acceso socios»</strong>, en el menú de la web del grupo. Con la sesión iniciada, ese botón pasa a llamarse «Área privada».</p>
+	<p class="asde-ayuda__pantalla">La pantalla de acceso. El grupo viene elegido si en la web solo hay uno. Debajo, «¿Aún no tienes cuenta? Solicita el acceso».</p>
+	<ol class="pasos">
+		<li><div><strong>Grupo Scout.</strong> Elige tu grupo. Solo puedes entrar en el tuyo.</div></li>
+		<li><div><strong>Nº de socio/a o email.</strong> Cualquiera de los tres:
+			<ul>
+				<li><strong>Tu nº de socio/a de Scouts de España,</strong> el de tu ficha del CRM (por ejemplo <code>118241</code>).</li>
+				<li><strong>Tu nº de socio/a territorial,</strong> el de siempre: el código de la organización, el nº del grupo y 4 cifras (en Scouts de Balears, por ejemplo <code>79990390</code>).</li>
+				<li><strong>Tu email:</strong> el de tu cuenta, aquel al que te llegó la invitación.</li>
+			</ul>
+		</div></li>
+		<li><div><strong>Contraseña.</strong> La que elegiste al activar la cuenta.</div></li>
+		<li><div><strong>Código de verificación.</strong> Solo si tienes activada la verificación en dos pasos: las 6 cifras de tu app o uno de tus códigos de recuperación. Si lo olvidas, la pantalla te lo pide y vuelves a escribir la contraseña.</div></li>
+	</ol>
+	<div class="nota"><p><strong>¿Cuál es mi usuario?</strong> El número que el grupo ha elegido como usuario: el de Scouts de España o el territorial. Es el que ves junto a tu nombre al entrar. Puedes entrar con cualquiera de los dos o con el email.</p></div>
+	<div class="nota"><p><strong>El mismo email en dos cuentas.</strong> Si eres scouter y además madre o padre de un educando, tu email puede ser el de tu cuenta y el de la cuenta familiar. Al entrar con el email se abre la cuenta cuya contraseña escribas. Si las dos tienen la misma contraseña, la pantalla te pide el nº de socio/a de la que quieres usar.</p></div>
+	
+		<p class="asde-ayuda__pantalla">En el móvil, igual.</p>
+		<div>
+			<h3>Si no te deja entrar</h3>
+			<ul>
+				<li><strong>«Nº de socio/a o email, contraseña o grupo incorrectos.»</strong> Revisa los tres datos. El mensaje no dice cuál falla, a propósito.</li>
+				<li><strong>«Demasiados intentos fallidos…»</strong> Tras 5 fallos seguidos hay que esperar 15 minutos, o pedir una contraseña nueva. Los intentos se cuentan por cuenta: da igual el número con el que pruebes.</li>
+				<li><strong>«…el CRM no responde.»</strong> Solo puede pasar con el email en cuentas antiguas que aún no han entrado nunca con él. Entra con tu nº de socio/a.</li>
+				<li>La página <span class="mono">wp-login.php</span> de WordPress es solo para quien edita la web: se entra siempre por «Acceso socios».</li>
+			</ul>
+		</div>
+	
+</section>
+
+<section id="asde-manual-primera-vez">
+	<h2>Primera vez y contraseña olvidada</h2>
+	<h3 id="asde-manual-activar">Activar la cuenta</h3>
+	<ol class="pasos">
+		<li><div>Cuando el grupo te da acceso, o aprueba tu solicitud, te llega un email con tu usuario: «Activa tu acceso al área privada» o, si lo pediste tú, «Bienvenida al área privada: activa tu acceso».</div></li>
+		<li><div>Pulsa <strong>«Activar mi cuenta»</strong>. El enlace es personal, de un solo uso, y dura 7 días.</div></li>
+		<li><div>Elige una contraseña de al menos 10 caracteres. Mejor una frase fácil de recordar para ti y difícil de adivinar.</div></li>
+		<li><div>Entra por «Acceso socios» con tu usuario (el email de la invitación dice cuál es) o con el email en el que recibiste la invitación.</div></li>
+	</ol>
+	<h3 id="asde-manual-olvidada">¿Has olvidado tu contraseña?</h3>
+	<p class="asde-ayuda__pantalla">Desde el enlace «¿Has olvidado tu contraseña?» de la pantalla de acceso.</p>
+	<ul>
+		<li>Escribe tu usuario (vale el de Scouts de España o el territorial, con la T si es una cuenta familiar) o tu email.</li>
+		<li>Recibirás un enlace para elegir contraseña nueva, válido 24 horas, en el email de tu cuenta.</li>
+		<li>Si ese email es el de varias cuentas (la tuya y la de tu familia, por ejemplo), te llega un enlace para cada una. Cada email dice de qué usuario es.</li>
+		<li>La respuesta en pantalla es siempre la misma, exista o no el usuario. Si no llega nada, mira en la carpeta de spam; si el email está mal, pide a Secretaría que lo corrija en el CRM.</li>
+	</ul>
+</section>
+
+<section id="asde-manual-instalar-app">
+	<h2>Instalar el área privada en el móvil</h2>
+	<p class="resumen">Puedes tener el área privada como una app en la pantalla de inicio del móvil: se abre con un toque, a pantalla completa y sin escribir la dirección. Es la misma web de siempre, con tu usuario y tu contraseña; <strong>no hay que bajar nada de Google Play ni de App Store</strong>.</p>
+
+	<h3 id="asde-manual-instalar-android">En Android (Chrome)</h3>
+	<ol class="pasos">
+		<li><div>Abre la pantalla de <strong>«Acceso socios»</strong> del grupo en Chrome. Al cabo de unos segundos sale abajo el aviso <strong>«Instala la app en tu móvil»</strong>.</div></li>
+		<li><div>Pulsa <strong>«Instalar la app»</strong> y confirma en el cuadro que te enseña el móvil.</div></li>
+		<li><div>Busca el icono del área privada en la pantalla de inicio y ábrelo.</div></li>
+	</ol>
+	<p>Si el aviso no sale (lo cerraste hace poco, o el móvil aún no lo ofrece), pulsa los tres puntos <strong>⋮</strong> de Chrome y elige <strong>«Instalar aplicación»</strong> o «Añadir a pantalla de inicio».</p>
+
+	<h3 id="asde-manual-instalar-iphone">En iPhone y iPad (Safari)</h3>
+	<p>El iPhone no deja instalar con un botón, así que el aviso te enseña los pasos:</p>
+	<ol class="pasos">
+		<li><div>Abre «Acceso socios» en <strong>Safari</strong>.</div></li>
+		<li><div>Pulsa el botón <strong>Compartir</strong> (el cuadrado con la flecha hacia arriba).</div></li>
+		<li><div>Elige <strong>«Añadir a pantalla de inicio»</strong> y pulsa <strong>«Añadir»</strong>. Después, <strong>«Entendido»</strong> cierra el aviso.</div></li>
+	</ol>
+
+	<h3 id="asde-manual-usar-app">Usar la app</h3>
+	<ul>
+		<li>Se abre a pantalla completa, sin la barra del navegador. Las pantallas son las mismas; se ocultan la cabecera y el pie de la web para dejar sitio.</li>
+		<li>Abajo hay una barra con tres botones: <strong>«‹ Atrás»</strong> (vuelve a la pantalla anterior; está apagado si no hay a dónde volver), <strong>«Inicio»</strong> y <strong>«↻ Recargar»</strong>. En el iPhone es el único botón de «atrás», además de deslizar el dedo desde el borde izquierdo.</li>
+		<li><strong>«Salir»</strong> funciona como siempre y te devuelve a «Acceso socios» sin salir de la app.</li>
+		<li>Si tienes activada la verificación en dos pasos, el código se escribe igual que en el navegador.</li>
+	</ul>
+
+	<h3 id="asde-manual-app-sin-conexion">Si no hay internet</h3>
+	<p>Verás la pantalla <strong>«Sin conexión»</strong> con un botón <strong>«Reintentar»</strong>; cuando vuelva la red, se recarga sola. El área privada necesita internet para mostrar los datos del grupo: <strong>por seguridad, las fichas, los pagos y los datos de los socios no se guardan en el móvil</strong>. Lo único que guarda la app es su aspecto (los ficheros de diseño) y esa pantalla.</p>
+
+	<h3 id="asde-manual-quitar-app">Quitarla</h3>
+	<p>Como cualquier app: mantén pulsado su icono y elige <strong>«Desinstalar»</strong> (Android) o <strong>«Eliminar app»</strong> (iPhone). Tu cuenta no cambia. Si el grupo apaga la app, el móvil la retira sola en su próxima visita.</p>
+
+	<div class="nota"><p><strong>¿Te sale el aviso en el ordenador?</strong> También se puede instalar en Chrome o Edge de escritorio; funciona igual, en una ventana propia.</p></div>
+</section>
+
+<section id="asde-manual-seguridad">
+	<h2>Seguridad de la cuenta</h2>
+	<p class="resumen">La verificación en dos pasos pide, además de la contraseña, un código de 6 cifras de una app del móvil. Para Scouter, Secretaría, Coordinación y Tesorería es <strong>obligatoria</strong>: ves datos de muchas personas, también de salud.</p>
+	<ul>
+		<li>Hay <strong>10 días de margen</strong> desde el alta: hasta entonces, el inicio te avisa de la fecha límite. Después no podrás entrar sin ella.</li>
+		<li>Se activa en <strong>«Seguridad»</strong>, junto a tu nombre: instala una app de autenticación (Google Authenticator, Microsoft Authenticator, Authy…), escanea el código QR, escribe el código de 6 cifras que te enseña y guarda los <strong>códigos de recuperación</strong>, que sirven si pierdes el móvil.</li>
+		<li>Al entrar, el código va en el campo «Código de verificación» de «Acceso socios».</li>
+		<li>Si pierdes el móvil y los códigos, pide a la administración de la web que te la quite para volver a activarla.</li>
+	</ul>
+</section>
+
+<section id="asde-manual-inicio">
+	<h2>El inicio y el menú</h2>
+	<p class="resumen">El menú y el inicio tienen dos partes: <strong>«Mi espacio»</strong>, con lo tuyo, y <strong>«Gestión del grupo»</strong>, con lo de tus secciones.</p>
+	<p class="asde-ayuda__pantalla">El inicio de Jordi, scouter de la sección Scouts: los bloques «Para ti» y «Gestión del grupo». Cuando tiene algo pendiente, sale encima el recuadro «Pendiente de revisar».</p>
+	<div class="tabla">
+		<table>
+			<thead><tr><th scope="col">Parte del menú</th><th scope="col">Entradas</th></tr></thead>
+			<tbody>
+				<tr><td>Mi espacio</td><td>Mis datos · Mis pagos · Mi uniforme</td></tr>
+				<tr><td>Gestión del grupo</td><td>Solicitudes · Cambios · Informes · Gestión de uniformes · Inventario · Tesorería</td></tr>
+			</tbody>
+		</table>
+	</div>
+	<ul>
+		<li>El número entre paréntesis es lo que tienes pendiente: «Solicitudes (2)», «Cambios (1)».</li>
+		<li><strong>Pendiente de revisar</strong> reúne las solicitudes de acceso, los cambios propuestos y los uniformes por entregar de tus secciones, cada uno con el enlace a su lista.</li>
+		<li><strong>Junto a tu nombre:</strong> «Ayuda», «Seguridad», el idioma si el grupo deja elegirlo, «Salir» y «Ocultar cabecera», que pliega la cabecera de la web para dejar más sitio (solo con el tema de la web del grupo).</li>
+		<li><strong>«Ayuda»</strong> abre en una ventana lo que explica este manual sobre la página en la que estás (la de Tesorería, la de informes…); al final, «Ver el manual completo» lo abre entero en otra pestaña.</li>
+		<li><strong>Mis datos</strong> es tu ficha: puedes cambiar tu email y tus teléfonos. <strong>Mis pagos</strong>, lo tuyo con Tesorería (por ejemplo, tu uniforme).</li>
+		<li>Si además eres madre o padre de un educando, lo de tu familia está en la <strong>cuenta familiar</strong>, que es otra cuenta (ver el <a href="{{completo:familias}}" data-asde-modal>manual para familias</a>).</li>
+	</ul>
+</section>
+
+<section id="asde-manual-ventana">
+	<h2>La ventana emergente</h2>
+	<p class="resumen">Las fichas, «Dar acceso», las solicitudes y los pedidos de uniforme se abren en una ventana encima de la lista, sin salir de ella.</p>
+	<ul>
+		<li>Se cierra con la <strong>×</strong>, con la tecla <strong>Esc</strong> o pulsando fuera de ella. Si has guardado algo, la lista de detrás se actualiza al cerrarla.</li>
+		<li><strong>«Abrir en su página»</strong> la abre como página normal, por ejemplo para tenerla en otra pestaña.</li>
+		<li>En el móvil ocupa toda la pantalla.</li>
+		<li>Al pasar de una pantalla a otra, una <strong>barra fina arriba</strong> indica que se está cargando.</li>
+	</ul>
+</section>
+
+<section id="asde-manual-fichas">
+	<h2>Las fichas de tu sección</h2>
+	<p class="resumen">La ficha muestra los datos del CRM de una persona, ordenados en apartados. Llegas a ella desde los cambios, las solicitudes, los informes o los pedidos de uniforme.</p>
+	<p class="asde-ayuda__pantalla">Una ficha abierta en la ventana. El candado marca los datos que no se pueden cambiar; al pasar el ratón por encima se ve el motivo.</p>
+	<ul>
+		<li><strong>Qué editas:</strong> el contacto y los tutores de los socios de tus secciones. Lo demás aparece en solo lectura. Pulsa <strong>«Guardar cambios en el CRM»</strong>: se guarda al momento.</li>
+		<li><strong>Apartados plegables:</strong> datos personales, membresía, contacto, familia y tutores, autorizaciones, salud y alimentación. «Contraer todo» y «Expandir todo» los pliegan de una vez.</li>
+		<li>A los menores no se les muestran la formación ni el certificado de delitos sexuales.</li>
+		<li>Si el usuario del CRM del grupo no tiene permiso de edición, toda la ficha sale en solo lectura.</li>
+	</ul>
+	<h3 id="asde-manual-salud">Salud y alimentación</h3>
+	<p>Son datos especialmente protegidos. Los ves de tus secciones, <strong>sin poder cambiarlos</strong>: si algo no cuadra, pide a la familia que lo proponga desde su cuenta o díselo a Secretaría.</p>
+	<p class="asde-ayuda__pantalla">Apartado «Salud».</p>
+	<p class="asde-ayuda__pantalla">«Alimentación»: el tipo de régimen (vegetariana, vegana, sin cerdo…) lleva debajo su explicación.</p>
+</section>
+
+<section id="asde-manual-cambios">
+	<h2>Cambios propuestos por las familias</h2>
+	<p class="resumen">Lo que las familias corrigen en las fichas de sus hijos no se guarda hasta que alguien del grupo lo aprueba. En el menú, «Cambios» lleva entre paréntesis cuántos hay pendientes.</p>
+	<p class="asde-ayuda__pantalla">Cada propuesta enseña lo que hay ahora en el CRM y el valor nuevo. El nombre de la persona abre su ficha en la ventana.</p>
+	<ul>
+		<li><strong>Aprobar</strong> guarda el valor nuevo en el CRM. Si el dato del CRM ha cambiado desde que se propuso, la pantalla avisa antes de sobrescribirlo.</li>
+		<li><strong>Rechazar</strong> pide un motivo, que ve la familia en la ficha.</li>
+		<li>Nadie puede aprobar sus propias propuestas. Un scouter ve solo las de sus secciones; Secretaría y Coordinación, todas.</li>
+		<li>«Resueltos» guarda el historial.</li>
+	</ul>
+</section>
+
+<section id="asde-manual-solicitudes">
+	<h2>Solicitudes de acceso</h2>
+	<p class="resumen">Las familias y los socios piden el acceso con el enlace del grupo; la web comprueba su documento y su fecha de nacimiento con la ficha del CRM y la solicitud te llega aquí si es de tus secciones.</p>
+	<p class="asde-ayuda__pantalla">Arriba, el enlace del grupo con «Copiar el enlace», para pasarlo a las familias por WhatsApp o por email. Cada solicitud dice cómo se comprobó.</p>
+	<ol class="pasos">
+		<li><div><strong>«Revisar»</strong> abre la solicitud en la ventana: lo escrito junto a lo que hay en el CRM.</div></li>
+		<li><div><strong>Comprueba quién pide.</strong> Si su nombre es el de un tutor/a de la ficha, sale «coincide». Si no coincide ninguno, confirma con la familia antes de aprobar.</div></li>
+		<li><div><strong>Elige dónde se guarda el email</strong> en la ficha del CRM (viene propuesto) y, si tiene hermanos en el grupo, márcalos para la misma cuenta familiar.</div></li>
+		<li><div><strong>«Aprobar y enviar la invitación».</strong> Se crea la cuenta y le llega la invitación con la bienvenida.</div></li>
+	</ol>
+	<p class="asde-ayuda__pantalla">Quien pide coincide con el tutor/a 1, pero su email no está en la ficha: al aprobar se guardará.</p>
+	<ul>
+		<li><strong>Rechazar</strong> pide un motivo, que solo ve el grupo. Una casilla, marcada por defecto, avisa por email a quien la pidió con un texto genérico que le remite al email de contacto del grupo.</li>
+		<li>Las solicitudes de <strong>scouters y voluntariado</strong> no te llegan: las resuelven Secretaría y Coordinación, porque hay que elegir sus roles y secciones.</li>
+		<li>Si la familia ya tenía cuenta, se elige entre «Otro tutor/a» (cuenta nueva, <code>nº + T2</code>) y «La misma persona con otro email».</li>
+		<li>«Resueltas» guarda las aprobadas y las rechazadas, con quién y cuándo.</li>
+	</ul>
+</section>
+
+<section id="asde-manual-informes">
+	<h2>Informes</h2>
+	<p class="resumen">Listados con las columnas que elijas, para campamentos, salidas o comunicaciones, y para saber quién ha pagado la cuota. Cada uno ve solo su ámbito: un scouter, sus secciones; Secretaría y Coordinación, todo el grupo.</p>
+	<p class="asde-ayuda__pantalla">Los informes predefinidos (listado de sección, contactos de las familias, alergias y alimentación, autorizaciones y pagos de la cuota) y los guardados.</p>
+	<p class="asde-ayuda__pantalla">Un informe con datos de salud avisa de cómo tratarlos y deja constancia de quién lo consulta.</p>
+	<ol class="pasos">
+		<li><div><strong>«+ Nuevo informe»:</strong> marca las columnas (datos personales, contacto, tutores, autorizaciones, cuota y pagos, salud, alimentación…). Aparecerán en ese orden.</div></li>
+		<li><div><strong>¿De quién?</strong> Las secciones, la edad y, si hace falta, solo quien tenga datos de salud relevantes o según lo que haya pagado.</div></li>
+		<li><div><strong>Ver o guardar:</strong> se puede guardar para ti o compartirlo con el resto del equipo.</div></li>
+	</ol>
+	<ul>
+		<li><strong>«Descargar CSV»</strong> para abrirlo en una hoja de cálculo; «Imprimir» para llevarlo en papel. Destruye las copias impresas al terminar la actividad.</li>
+		<li>Solo cuentan los socios con membresía activa. Los datos se leen del CRM en el momento.</li>
+		<li>Si tu rol no ve alguna columna (salud, por ejemplo), el informe lo avisa y no la enseña.</li>
+	</ul>
+	<h3 id="asde-manual-informe-pagos">Quién ha pagado la cuota</h3>
+	<p>El informe predefinido <strong>«Pagos de la cuota»</strong> dice, socio por socio, cómo va la cuota de su familia en la ronda: así sabes rápido quién de tu sección ha pagado y quién no.</p>
+	<p class="asde-ayuda__pantalla">«Pagos de la cuota», ordenado por sección: la familia de cada socio, el estado de su cuota y los importes. Quien no está en ninguna familia sale «Sin familia en Tesorería».</p>
+	<ul>
+		<li><strong>Columnas de «Cuota y pagos»:</strong> familia, estado de la cuota (pagado, pago parcial, pendiente, con plazos vencidos o sin cuota), cuota a pagar, pagado, pendiente, <strong>vencido sin pagar</strong> (lo de los plazos que ya han pasado y falta) y los <strong>pagos hechos</strong> (fecha e importe de cada uno). Puedes añadirlas a cualquier informe.</li>
+		<li><strong>Los importes son los de la familia</strong>, porque la cuota se paga por familia: dos hermanos salen con las mismas cifras, aunque estén en secciones distintas.</li>
+		<li>En <strong>«¿De quién?»</strong>, <strong>«Según lo pagado»</strong> deja solo a los que han pagado toda la cuota, a los que les falta algo, a los que tienen plazos vencidos sin pagar o a los que no están en ninguna familia; y <strong>«Ronda de la cuota»</strong> elige la ronda (la actual, si no eliges otra).</li>
+		<li>Los datos salen de Tesorería, tal como están registrados. Lo ve quien entra en Tesorería, si el grupo la usa; un scouter, solo de sus secciones.</li>
+	</ul>
+</section>
+
+<section id="asde-manual-tesoreria">
+	<h2>Tesorería: pagos y familias</h2>
+	<p class="resumen">Todos los scouters ven el control de pagos y las familias del grupo, y pueden registrar un pago (por ejemplo, el que te da una familia en mano). Las cuotas, el coste federativo, el banco y las domiciliaciones son de Tesorería, Secretaría y Coordinación.</p>
+	<p class="asde-ayuda__pantalla">El control de pagos visto por un scouter: solo las pestañas «Control de pagos», «Familias», «Cuotas y plazos» y «Coste federativo» (estas dos, en solo lectura).</p>
+	<ul>
+		<li>Las familias tienen un número propio, <code>F</code> + grupo + correlativo (<code>F999001</code>): es la referencia que deben poner en las transferencias.</li>
+		<li><strong>Estados:</strong> «Pagado», «Pago parcial», «Pendiente» y «Con plazos vencidos». Pagan los educandos de Castores a Rovers; scouters y voluntariado no.</li>
+		<li><strong>Registrar un pago:</strong> abre la familia y escribe la fecha, el importe, la forma (efectivo, transferencia, bizum…), una referencia y, si quieres, una nota interna (la familia no la ve). Avisa a Tesorería de lo que hayas cobrado.</li>
+		<li>En la ficha de la familia, <strong>«Cuota de la ronda» se puede plegar</strong> pulsando su título: queda una línea con lo que hay que pagar, lo pagado y lo pendiente, y el navegador recuerda cómo la dejaste.</li>
+		<li>Registrar un pago cambia <strong>solo la ficha</strong>, sin recargar la página.</li>
+		<li>Un pago equivocado se quita con <strong>«Eliminar…»</strong> en su fila, escribiendo el <strong>motivo</strong>. No se borra: deja de contar y queda en el <strong>«Historial de la ronda»</strong> de la ficha, con quién lo hizo, cuándo y por qué.</li>
+		<li>Lo registrado es lo que cada familia ve en su «Mis pagos».</li>
+		<li>Para saber rápido <strong>quién de tu sección ha pagado y quién no</strong>, usa el informe <a href="#asde-manual-informe-pagos">«Pagos de la cuota»</a>.</li>
+	</ul>
+	<p>El detalle de la Tesorería está en el <a href="{{completo:coordinacion}}#asde-manual-tesoreria" data-asde-modal>manual del equipo de coordinación</a>.</p>
+</section>
+
+<section id="asde-manual-uniformes">
+	<h2>Uniformes: el tuyo y los de tu sección</h2>
+	<p class="resumen">En el menú hay dos entradas: <strong>«Mi uniforme»</strong>, para pedir el tuyo como cualquier socio, y <strong>«Gestión de uniformes»</strong>, para los pedidos de los socios de tus secciones.</p>
+	<h3 id="asde-manual-mi-uniforme">Mi uniforme</h3>
+	<p class="asde-ayuda__pantalla">Pides tu camisa y tus insignias igual que una familia: eliges modelo y talla («Tabla de medidas» abre la tabla en una ventana), las insignias y «Enviar el pedido». Te da el nº de pedido para el pago.</p>
+	<ul>
+		<li>Un scouter pide <strong>solo para sí mismo</strong>. Los pedidos de los educandos los hace su familia (o ellos, desde los 14 años, con su cuenta).</li>
+		<li>Págalo en efectivo o con un ingreso en la cuenta del grupo con el nº de pedido; cuando te lo entreguen, pulsa «Lo he recibido».</li>
+	</ul>
+	<h3 id="asde-manual-gestion-uniformes">Gestión de uniformes</h3>
+	<p class="asde-ayuda__pantalla">La gestión vista por un scouter: los pedidos de sus secciones y los suyos, con el estado de cada uno.</p>
+	<div class="tabla">
+		<table>
+			<thead><tr><th scope="col">Paso</th><th scope="col">Quién</th></tr></thead>
+			<tbody>
+				<tr><td>Pago</td><td>Tesorería lo valida.</td></tr>
+				<tr><td>En el pedido del grupo</td><td>Coordinación lo incluye en el pedido al proveedor.</td></tr>
+				<tr><td>Entregado</td><td><strong>Tú</strong>, cuando das el uniforme al socio/a o a su familia: «Marcar entregado» en la lista o en el detalle.</td></tr>
+				<tr><td>Recibido</td><td>El socio/a o su familia, desde su cuenta. Nadie más lo puede marcar.</td></tr>
+			</tbody>
+		</table>
+	</div>
+	<ul>
+		<li>Si entregas un pedido que no consta en ningún pedido del grupo, la pantalla avisa.</li>
+		<li>Una entrega equivocada se <strong>deshace</strong> desde el detalle (también borra la confirmación, si la había).</li>
+		<li>Los filtros (en curso, pendientes de entregar, recibidos…) y la búsqueda por nombre o nº de pedido ayudan a encontrar los tuyos.</li>
+	</ul>
+</section>
+
+<section id="asde-manual-inventario">
+	<h2>Inventario de material</h2>
+	<p class="resumen">En «Gestión del grupo → <strong>Inventario</strong>» está todo el material y el equipamiento del grupo: tiendas, cocina, herramientas, botiquines… Lo ven y lo mantienen los scouters (con o sin sección), Secretaría, Coordinación y Tesorería. Desde aquí también se preparan las <strong>listas de compra</strong>, que Tesorería tiene que aprobar antes de imprimirlas.</p>
+	<p>Arriba hay tres pestañas: <strong>Material</strong>, <strong>Tipos de material</strong> y <strong>Listas de compra</strong>.</p>
+
+	<h3 id="asde-manual-inventario-material">El material</h3>
+	<p class="asde-ayuda__pantalla">La lista del material. Arriba, cuántos materiales y unidades hay y su valor estimado (cantidad × precio). Las cantidades por debajo de 5 salen marcadas en amarillo.</p>
+	<ul>
+		<li><strong>Buscar y filtrar:</strong> escribe parte de la descripción o del nº de serie, o elige un tipo: la lista se filtra al momento, sin recargar.</li>
+		<li><strong>«Ver también los dados de baja»</strong> enseña el material que ya no está, por si hay que recuperarlo.</li>
+		<li>Pulsa la descripción de un material para verlo o cambiarlo.</li>
+	</ul>
+	<p class="asde-ayuda__pantalla">«Añadir material» (o un material de la lista) abre su ficha. Obligatorios: la descripción y la cantidad (0 o más). El año de compra es opcional; el precio es por unidad.</p>
+	<ul>
+		<li><strong>«Añadir y crear otro»</strong> guarda y deja el formulario vacío para el siguiente.</li>
+		<li><strong>Dar de baja</strong> (abajo, con un motivo opcional) es para lo que se ha roto, perdido o regalado: no se borra, deja de salir en la lista y se puede recuperar.</li>
+		<li>Abajo se ve quién lo creó y quién lo cambió por última vez.</li>
+	</ul>
+
+	<h3 id="asde-manual-inventario-tipos">Tipos de material</h3>
+	<p class="asde-ayuda__pantalla">El botón <strong>«+»</strong> junto al tipo abre los tipos en una ventana encima del formulario: crea el que falte, ciérrala y el desplegable ya lo tiene elegido. Lo que hubieras escrito en el formulario no se pierde.</p>
+	<ul>
+		<li>Los tipos también tienen su pestaña. Se les puede <strong>cambiar el nombre</strong> en cualquier momento.</li>
+		<li>Un tipo que usa algún material <strong>no se puede borrar</strong>: cambia antes el tipo de ese material.</li>
+	</ul>
+
+	<h3 id="asde-manual-inventario-importar">Importar el material desde una hoja de cálculo</h3>
+	<p>Si ya tenéis el inventario en Excel o en LibreOffice, no hace falta escribirlo otra vez: pulsa <strong>«Importar desde CSV»</strong>.</p>
+	<p class="asde-ayuda__pantalla">En la ventana: <strong>«Descargar un fichero de ejemplo»</strong>, el fichero que vas a subir y la casilla para crear los tipos que todavía no existan. Debajo, cómo tiene que ser el fichero.</p>
+	<ol>
+		<li>Descarga el ejemplo y ábrelo con Excel o LibreOffice. La primera fila son los nombres de las columnas: <em>Descripción, Tipo, Cantidad, Precio por unidad, Año de compra, Nº de serie y Notas</em>. Solo son obligatorias <strong>Descripción</strong> y <strong>Cantidad</strong>; las demás se pueden dejar en blanco o quitar.</li>
+		<li>Cambia las filas de ejemplo por vuestro material (una fila por material) y guárdalo como <strong>CSV</strong>: en Excel, «Guardar como» → «CSV (delimitado por punto y coma)».</li>
+		<li>Elige el fichero y pulsa <strong>«Importar»</strong>.</li>
+	</ol>
+	<p>Primero se comprueba el fichero entero (que sea un CSV, que tenga la cabecera, que no pase de 2 MB ni de 2.000 filas). Si algo falla ahí, no se importa nada y se dice por qué. Si está bien, se importan todas las filas correctas y, en la misma ventana, sale el informe:</p>
+	<p class="asde-ayuda__pantalla">Cuántos materiales se han importado y qué filas no, con su <strong>nº de fila</strong> (el de la hoja de cálculo) y el <strong>motivo</strong>. «Descargar las filas con error» te da solo esas filas en un CSV: corrígelas y vuelve a importarlo (las demás ya están dentro).</p>
+	<ul>
+		<li>Motivos habituales: una cantidad que no es un número entero, un precio mal escrito, un año que no es de cuatro cifras, una fila sin descripción, un tipo que no existe (si desmarcaste la casilla) o un <strong>nº de serie que ya está</strong> en el inventario o repetido en el fichero.</li>
+		<li>Al cerrar la ventana, la lista ya enseña el material nuevo.</li>
+	</ul>
+
+	<h3 id="asde-manual-inventario-lista-compra">Preparar una lista de compra</h3>
+	<ol>
+		<li>En la lista del material, <strong>marca la casilla</strong> de lo que hay que comprar. Si de un material quedan <strong>menos de 5 unidades</strong>, te pregunta «En el inventario solo hay N unidades… ¿Seguro que quieres añadirlo a la lista de compra?»: es un aviso, puedes seguir.</li>
+		<li>Pulsa <strong>«Crear una lista de compra con los marcados»</strong>.</li>
+		<li>Indica cuántas unidades comprar de cada uno (0 para quitarlo) y el precio estimado (viene el del inventario). El total se calcula mientras escribes. Añade una nota para Tesorería si hace falta.</li>
+		<li><strong>«Guardar y enviar a Tesorería»</strong>: a las personas de Tesorería les llega un email para que la revisen.</li>
+	</ol>
+	<p class="asde-ayuda__pantalla">La lista nueva, con el aviso en los materiales de los que quedan pocas unidades.</p>
+
+	<h3 id="asde-manual-inventario-visto-bueno">El visto bueno de Tesorería</h3>
+	<p class="asde-ayuda__pantalla">La pestaña «Listas de compra»: cada lista con su número (LC…), quién la pidió, el total estimado y su estado: <em>Pendiente del visto bueno</em>, <em>Con el visto bueno</em>, <em>Rechazada</em> o <em>Cancelada</em>. A Tesorería le sale además en el inicio y en el menú cuántas esperan su visto bueno.</p>
+	<p class="asde-ayuda__pantalla">Tesorería abre la lista (en una ventana) y pulsa <strong>«Dar el visto bueno»</strong> o la <strong>rechaza</strong> con un motivo, que verá quien la pidió.</p>
+	<ul>
+		<li>Solo Tesorería da el visto bueno. Se puede deshacer mientras nadie haya descargado el PDF.</li>
+		<li>Quien la pidió la puede <strong>cancelar</strong> mientras está pendiente. Una lista no se cambia: si hace falta, se cancela y se prepara otra.</li>
+	</ul>
+
+	<h3 id="asde-manual-inventario-pdf">Imprimir la lista</h3>
+	<p class="asde-ayuda__pantalla">Con el visto bueno aparece <strong>«Descargar PDF para imprimir»</strong> (también en la lista de listas). Se abre en otra pestaña para imprimirlo o guardarlo.</p>
+	<ul>
+		<li>El PDF lleva el nombre del grupo, el nº de la lista, quién la pidió, quién le dio el visto bueno y cuándo, la tabla del material (con lo que hay en el inventario y lo que hay que comprar), el total estimado y la nota.</li>
+		<li><strong>Sin el visto bueno no se puede imprimir:</strong> no sale el botón y, si se intenta imprimir la página, solo sale el aviso «Pendiente del visto bueno de Tesorería».</li>
+		<li>El visto bueno no cambia las cantidades del inventario: cuando llegue lo comprado, actualízalas en cada material.</li>
+	</ul>
+	<p class="asde-ayuda__pantalla">En el móvil, cada material sale en una tarjeta.</p>
+</section>
+
+<section id="asde-manual-idioma">
+	<h2>El idioma de la web</h2>
+	<p class="resumen">El área privada está en castellano, catalán, euskera y gallego. La administración de la web elige el idioma del grupo y si cada persona puede cambiarlo.</p>
+	<p class="asde-ayuda__pantalla">Si se deja elegir, el selector sale encima de las pantallas de entrar, activar la cuenta, recuperar la contraseña y pedir el acceso, y dentro del área junto a «Salir».</p>
+	<ul>
+		<li>Pulsa tu idioma. Con la sesión iniciada, la elección se guarda en tu cuenta y la próxima vez entrarás directamente en él, desde cualquier dispositivo.</li>
+		<li>Los <strong>emails</strong> que te mande el área privada (invitación, contraseña nueva, avisos de cargo de la domiciliación) te llegan en tu idioma.</li>
+		<li>Lo que escribe la gente (motivos, notas, el nombre de un informe o de una insignia) se ve tal como se escribió, en el idioma en que se escribió.</li>
+		<li>Si ves una traducción que no suena bien, díselo al grupo: la administración de la web puede cambiar cualquier texto sin tocar nada más.</li>
+	</ul>
+</section>
+
+<section id="asde-manual-preguntas">
+	<h2>Preguntas frecuentes</h2>
+	<details class="pregunta"><summary>¿Hay una ayuda dentro del área privada?</summary><div><p>Sí: <strong>«Ayuda»</strong>, junto a tu nombre, abre en una ventana lo que dice este manual sobre la página en la que estás. Al final, <strong>«Ver el manual completo»</strong> lo abre entero en la misma ventana, y <strong>«Manual con capturas»</strong> (si el grupo lo tiene publicado) lo abre con las imágenes de cada pantalla en otra pestaña.</p></div></details>
+	<details class="pregunta"><summary>¿Quién de mi sección no ha pagado la cuota?</summary><div><p>Abre el informe «Pagos de la cuota» en Informes: sale cada socio de tus secciones con el estado de la cuota de su familia, lo pagado y lo pendiente. En «Editar», «Según lo pagado → Les falta algo por pagar» deja solo a los que deben algo.</p></div></details>
+	<details class="pregunta"><summary>He registrado un pago por error.</summary><div><p>En la ficha de la familia, «Eliminar…» en su fila, escribe el motivo y «Eliminar el pago». No se borra: queda en el «Historial de la ronda» de la ficha. Avisa a Tesorería.</p></div></details>
+	<details class="pregunta"><summary>No veo a los educandos de mi sección.</summary><div><p>El CRM no guarda con qué sección colabora cada scouter: la marcan Secretaría o Coordinación al darte el acceso. Pídeles que revisen tus secciones en «Usuarios → Gestionar acceso».</p></div></details>
+	<details class="pregunta"><summary>Tengo cuenta de scouter y cuenta familiar con el mismo email. ¿En cuál entro?</summary><div><p>En la de la contraseña que escribas. Si las dos tienen la misma, la pantalla te pide el nº de socio/a de la que quieras usar: el tuyo, o el de tu hijo o hija con la T.</p></div></details>
+	<details class="pregunta"><summary>¿Por qué me obliga a la verificación en dos pasos?</summary><div><p>Porque ves datos de menores, también de salud. Tienes 10 días desde el alta para activarla en «Seguridad».</p></div></details>
+	<details class="pregunta"><summary>Una familia me dice que un dato de salud está mal.</summary><div><p>Tú no lo puedes cambiar. Pídeles que lo propongan desde su cuenta (en la ficha de su hijo): te llegará a «Cambios» para aprobarlo.</p></div></details>
+	<details class="pregunta"><summary>Me llega una solicitud de alguien que no conozco.</summary><div><p>La web ya ha comprobado el documento y la fecha de nacimiento con la ficha, pero si quien pide no coincide con ningún tutor/a, confirma con la familia antes de aprobar. Si no cuadra, recházala: el aviso que le llega es genérico.</p></div></details>
+	<details class="pregunta"><summary>Una familia me ha pagado la cuota en mano.</summary><div><p>Regístralo en Tesorería, en la ficha de su familia (efectivo, la fecha y el importe) y entrega el dinero a Tesorería.</p></div></details>
+	<details class="pregunta"><summary>He cambiado algo en el CRM y no lo veo en la web.</summary><div><p>Las fichas se leen del CRM cada pocos minutos para que las páginas vayan rápido: lo que cambies allí llega en unos minutos. Lo que se guarda desde la web se ve al instante.</p></div></details>
+	<details class="pregunta"><summary>¿Por qué no puedo imprimir la lista de compra que he preparado?</summary><div><p>Porque todavía no tiene el visto bueno de Tesorería. Al guardarla les llegó un email; cuando la aprueben, en la lista saldrá «Descargar PDF para imprimir». Si la rechazan, verás el motivo.</p></div></details>
+	<details class="pregunta"><summary>Al importar el inventario, algunas filas no han entrado.</summary><div><p>En el informe de la importación sale cada fila con el motivo. Descarga «las filas con error», corrígelas en la hoja de cálculo y vuelve a importar ese fichero: las demás ya estaban dentro y no se duplican.</p></div></details>
+	<details class="pregunta"><summary>¿Puedo pedir el uniforme de un educando?</summary><div><p>No: lo pide su familia (o él o ella, desde los 14 años, con su cuenta). Tú pides el tuyo y entregas los de tu sección.</p></div></details>
+	<details class="pregunta"><summary>¿Puedo tener el área privada como una app en el móvil?</summary><div><p>Sí: mira «Instalar el área privada en el móvil». En Android sale un aviso con el botón «Instalar la app»; en iPhone, con Safari, «Compartir» y «Añadir a pantalla de inicio». No hay que bajar nada de las tiendas.</p></div></details>
+	<details class="pregunta"><summary>He instalado la app: ¿se guardan mis datos en el móvil?</summary><div><p>No. La app solo guarda su diseño y una pantalla de «Sin conexión». Las fichas, los pagos y los datos de los socios se piden a la web cada vez, y por eso hace falta internet.</p></div></details>
+</section>
+</div>

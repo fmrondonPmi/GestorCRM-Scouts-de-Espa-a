@@ -199,10 +199,10 @@ final class OrganizacionPage {
 				<h2><?php esc_html_e( 'Manual de uso', 'asde-area-privada' ); ?></h2>
 				<table class="form-table" role="presentation">
 					<tr>
-						<th scope="row"><label for="asde-manual"><?php esc_html_e( 'Dirección del manual publicado', 'asde-area-privada' ); ?></label></th>
+						<th scope="row"><label for="asde-manual"><?php esc_html_e( 'Manual con capturas (ayuda extra)', 'asde-area-privada' ); ?></label></th>
 						<td>
 							<input type="url" id="asde-manual" name="manual" value="<?php echo esc_attr( Organizacion::manual() ); ?>" class="regular-text code" placeholder="https://…/manual/">
-							<p class="description"><?php esc_html_e( 'La carpeta (o la portada, …/manual/index.html) donde está publicado el manual de uso. En cada página del área privada, «Ayuda» enseña el apartado del manual del rol de quien entra, con sus capturas sacadas de aquí, y al final enlaza a su manual completo. Vacía: la ayuda sale sin capturas ni enlaces.', 'asde-area-privada' ); ?></p>
+							<p class="description"><?php esc_html_e( 'La ayuda de cada página y el manual completo de cada rol vienen dentro del plugin, solo con texto, y se abren en la ventana del área privada. Aquí va la carpeta (o la portada, …/manual/index.html) donde publiques el manual con capturas, el zip «manual-de-uso», que se sube a mano: sale al final de la ayuda como «Manual con capturas», en otra pestaña. Vacía: sin ese enlace.', 'asde-area-privada' ); ?></p>
 						</td>
 					</tr>
 				</table>

@@ -2272,32 +2272,38 @@ html.asde-cargando .asde-ap button {
 	padding-top: 1.5em;
 	border-top: 1px solid var(--asde-border);
 }
-.asde-ap .asde-ayuda__captura {
-	margin: 1em 0 1.4em;
+/* v0.28 · Solo texto: el pie de cada captura del manual queda como una nota sobre lo que se ve en pantalla. */
+.asde-ap .asde-ayuda__pantalla {
+	margin: 0.6em 0 1em;
+	padding: 4px 12px;
+	border-left: 3px solid var(--asde-border);
+	color: var(--asde-muted);
+	font-size: 0.95em;
 }
-.asde-ap .asde-ayuda__captura img {
-	display: block;
-	max-width: 100%;
-	height: auto;
+/* v0.28 · El manual completo del rol en la ventana: índice y un apartado tras otro. */
+.asde-ap .asde-ayuda__indice {
+	margin: 1em 0 1.5em;
+	padding: 10px 14px;
 	border: 1px solid var(--asde-border);
 	border-radius: var(--asde-radius);
 }
-.asde-ap .asde-ayuda__captura--movil img {
-	max-width: 260px;
+.asde-ap .asde-ayuda__indice h3 {
+	margin: 0 0 0.4em;
 }
-.asde-ap .asde-ayuda__captura figcaption {
-	margin-top: 6px;
-	color: var(--asde-muted);
-	font-size: 0.9em;
+.asde-ap .asde-ayuda__indice ol {
+	margin: 0;
+	padding-left: 1.4em;
 }
-.asde-ap .asde-ayuda__moviles {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 16px;
-	align-items: flex-start;
+.asde-ap .asde-ayuda__indice ol ol {
+	font-size: 0.95em;
 }
-.asde-ap .asde-ayuda__moviles > * {
-	flex: 1 1 240px;
+.asde-ap .asde-ayuda--completo section {
+	scroll-margin-top: 8px;
+}
+.asde-ap .asde-ayuda--completo section + section {
+	margin-top: 2em;
+	padding-top: 1.5em;
+	border-top: 1px solid var(--asde-border);
 }
 .asde-ap .asde-ayuda .nota,
 .asde-ap .asde-ayuda .ojo {
@@ -2326,11 +2332,16 @@ html.asde-cargando .asde-ap button {
 	cursor: pointer;
 }
 .asde-ap .asde-ayuda__wiki {
+	display: grid;
+	gap: 10px;
+	margin: 2em 0 0;
+	padding-top: 1.2em;
+	border-top: 1px solid var(--asde-border);
+}
+.asde-ap .asde-ayuda__wiki p {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
 	gap: 8px 14px;
-	margin: 2em 0 0;
-	padding-top: 1.2em;
-	border-top: 1px solid var(--asde-border);
+	margin: 0;
 }

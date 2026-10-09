@@ -217,7 +217,7 @@ final class Router {
 			( new InventarioTiposView() )->json();
 		}
 
-		// Ayuda de la página (v0.26): el apartado del manual del rol, en la ventana emergente.
+		// Ayuda de la página (v0.26) o manual completo del rol (v0.28, ?asde_ayuda=manual), en la ventana emergente.
 		if ( self::pide_modal() && Ayuda::pedida() && ! in_array( $key, Pages::PUBLICAS, true ) ) {
 			View::en_modal();
 			header( 'Content-Type: text/html; charset=utf-8' );

@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.26.2
+Stable tag: 0.28.0
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -52,6 +52,10 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.28.0 =
+* Help is now text only and always opens in the pop-up window: the help of each page shows the section of the user manual for that page and role without screenshots (each screenshot caption is kept as a short note), and "Ver el manual completo" opens the whole manual of the role, also text only, in the same window, with its index and links between sections. All of it ships inside the plugin (about 300 KB), so the plugin zip stays small (version 0.27.0, which bundled the illustrated manual, was discarded: its zip was over 10 MB).
+* The illustrated user manual (with screenshots) is uploaded separately by hand as extra help: wp-admin → Grupos Scouts → Organización federada → "Manual con capturas (ayuda extra)" holds its address (for Scouts de Balears, https://baleares.scout.es/manual/ by default), and the help shows a "Manual con capturas" link that opens it in another tab.
 
 = 0.26.2 =
 * Code quality: fixes all 589 findings of the WordPress Plugin Check report (5 errors and 584 warnings). Database queries pass table names with the %i placeholder and no longer build SQL by concatenation: optional filters go as prepared values (bank movements, change proposals, email log, access requests, inventory). A bank movement without a value date is stored as NULL with NULLIF instead of a conditional in the query. In-memory CSV streams (php://temp) are documented as such. Templates declare why their variables are not globals (they are included inside a function), and uninstall.php prefixes its global variables. No visible changes.
@@ -121,6 +125,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * First version with the mobile app (PWA).
 
 == Upgrade Notice ==
+
+= 0.28.0 =
+Text-only help in the pop-up window, with the full manual of each role inside the plugin; the illustrated manual is optional extra help uploaded separately. No database changes.
 
 = 0.26.2 =
 Code quality fixes from WordPress Plugin Check. No visible changes and no database changes.

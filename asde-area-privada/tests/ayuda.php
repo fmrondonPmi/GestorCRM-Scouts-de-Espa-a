@@ -1,7 +1,8 @@
 <?php
 /**
- * Pruebas de la v0.26 (entorno LOCAL): la ayuda de cada página según el rol (el apartado del
- * manual de uso en la ventana emergente) y el enlace al manual completo publicado.
+ * Pruebas de la v0.26 y la v0.28 (entorno LOCAL): la ayuda de cada página según el rol (el
+ * apartado del manual de uso en la ventana emergente), solo texto desde la v0.28, el manual
+ * completo de cada rol en la misma ventana y el enlace al manual con capturas (ayuda extra).
  * Ejecutar desde app/public del site Local:
  *
  *   wp eval-file <ruta completa>/wp-content/plugins/asde-area-privada/tests/ayuda.php
@@ -130,17 +131,43 @@ try {
 	Organizacion::guardar_manual( $base );
 	$banco = Ayuda::de_pagina( 'banco', 'familias' );
 	$ok( $banco && 'coordinacion' === $banco['manual'] && 'banco' === $banco['ancla'], 'si el manual del rol no tiene esa página, sale la del de coordinación (con su apartado)' );
-	$ok( null === Ayuda::de_pagina( '../../wp-config', 'coordinacion' ) && null === Ayuda::de_pagina( 'no-existe', 'coordinacion' ), 'una página inventada o con «../» no lee nada' );
+	$ok( null === Ayuda::de_pagina( '../../wp-config', 'coordinacion' ) && null === Ayuda::de_pagina( 'no-existe', 'coordinacion' ) && null === Ayuda::de_pagina( '_completo', 'familias' ), 'una página inventada, con «../» o el manual completo como si fuera una página no leen nada' );
 	$h = $banco['html'];
 	$ok( ! str_contains( $h, '{{' ) && ! str_contains( $h, '<!--' ) && ! preg_match( '~\sid="~', $h ) && ! str_contains( $h, 'class="quien"' ), 'el trozo, sin marcadores, sin comentarios, sin id (chocarían con la página) y sin la etiqueta de quién' );
-	$ok( str_contains( $h, 'src="' . $base . 'capturas/20-banco.png"' ) && str_contains( $h, '<h2>Tesorería</h2>' ) && str_contains( $h, 'Marcar varios como revisados' ) && ! str_contains( $h, 'Coste federativo</h3>' ), 'lleva la entrada del apartado y solo su parte (Banco, no el coste federativo), con las capturas del manual publicado' );
+	$ok( ! str_contains( $h, '<img' ) && ! str_contains( $h, '<figure' ) && str_contains( $h, 'class="asde-ayuda__pantalla"' ) && str_contains( $h, '<h2>Tesorería</h2>' ) && str_contains( $h, 'Marcar varios como revisados' ) && ! str_contains( $h, 'Coste federativo</h3>' ), 'solo texto (v0.28): la entrada del apartado y su parte (Banco, no el coste federativo), sin imágenes; el pie de cada captura queda como una nota' );
 	$tes = Ayuda::de_pagina( 'tesoreria', 'coordinacion' )['html'];
-	$ok( 1 === preg_match( '~href="' . preg_quote( $base, '~' ) . 'coordinacion\.html#[a-z-]+" target="_blank" rel="noopener"~', $tes ) && 1 === preg_match( '~href="' . preg_quote( $base, '~' ) . 'familias\.html#mis-pagos" target="_blank"~', $tes ), 'los enlaces llevan al manual publicado, en otra pestaña (al mismo manual o a otro)' );
-	Organizacion::guardar_manual( '' );
-	$sin_m = Ayuda::de_pagina( 'banco', 'coordinacion' )['html'];
-	$ok( ! str_contains( $sin_m, '<img' ) && ! str_contains( $sin_m, '{{' ) && ! str_contains( $sin_m, 'href="' ) && str_contains( $sin_m, 'Marcar varios como revisados' ) && '' === Ayuda::url_manual( 'coordinacion' ), 'sin manual publicado: el texto sin capturas ni enlaces, y sin enlace al manual completo' );
+	$ok( str_contains( $tes, 'href="' . esc_attr( Ayuda::url_completo( 'coordinacion' ) ) . '#asde-manual-' ) && str_contains( $tes, 'href="' . esc_attr( Ayuda::url_completo( 'familias' ) ) . '#asde-manual-mis-pagos" data-asde-modal' ), 'los enlaces llevan al manual completo (del mismo rol o de otro), en su apartado y en la misma ventana' );
 
-	echo "\n== Parte C · La dirección del manual publicado (wp-admin → Organización federada) ==\n";
+	echo "\n== Parte C · El manual completo de cada rol, solo texto y en la ventana (v0.28) ==\n";
+	$malos = array();
+	foreach ( Ayuda::MANUALES as $mm ) {
+		$c = Ayuda::completo( $mm );
+		if ( ! $c || ! str_contains( $c['html'], 'id="asde-manual-indice"' ) || str_contains( $c['html'], '<img' ) || str_contains( $c['html'], '{{' ) ) {
+			$malos[] = $mm;
+			continue;
+		}
+		preg_match_all( '~href="#(asde-manual-[^"]+)"~', $c['html'], $enl );
+		preg_match_all( '~\sid="(asde-manual-[^"]+)"~', $c['html'], $ids_c );
+		if ( array_diff( $enl[1], $ids_c[1] ) ) {
+			$malos[] = $mm . ' (enlaces rotos: ' . implode( ', ', array_slice( array_diff( $enl[1], $ids_c[1] ), 0, 3 ) ) . ')';
+		}
+	}
+	$ok( ! $malos, 'cada rol tiene su manual completo: con índice, sin imágenes ni marcas, y cada enlace interno lleva a su apartado' . ( $malos ? ': ' . implode( ', ', $malos ) : '' ) );
+	$fam = Ayuda::completo( 'familias' )['html'];
+	$ok( str_contains( $fam, '<h2>Manual para familias</h2>' ) && str_contains( $fam, 'id="asde-manual-mis-pagos"' ) && ! preg_match( '~\sid="(?!asde-manual-)~', $fam ), 'el de familias, con sus apartados; todos sus id llevan el prefijo (no chocan con los de la página de detrás)' );
+	$ok( null === Ayuda::completo( 'administracion' ) && null === Ayuda::completo( '../x' ), 'el de administración (es de wp-admin) y uno inventado no se leen' );
+	$tam      = 0;
+	$imagenes = 0;
+	foreach ( new RecursiveIteratorIterator( new RecursiveDirectoryIterator( Ayuda::dir(), FilesystemIterator::SKIP_DOTS ) ) as $f ) {
+		$tam += $f->getSize();
+		if ( preg_match( '~\.(png|jpe?g|gif|webp|svg)$~i', $f->getFilename() ) ) {
+			++$imagenes;
+		}
+	}
+	$ok( 0 === $imagenes && $tam < 600 * 1024 && ! is_dir( ASDE_AP_DIR . 'manual' ), 'la ayuda del plugin es solo texto y pesa poco (' . round( $tam / 1024 ) . ' KB; con capturas, el zip pasaba de 10 MB) y el plugin no lleva el manual con capturas' );
+	$ok( Ayuda::url_completo( 'scouters', 'tesoreria' ) === add_query_arg( array( 'asde_ayuda' => 'manual', 'asde_manual' => 'scouters' ), Pages::url( 'area' ) ) . '#asde-manual-tesoreria', 'la dirección del manual completo: ?asde_ayuda=manual, el manual y el apartado' );
+
+	echo "\n== Parte D · El manual con capturas, ayuda extra (wp-admin → Organización federada) ==\n";
 	$copia = get_option( Organizacion::OPTION, array() );
 	$sin_clave = is_array( $copia ) ? $copia : array();
 	unset( $sin_clave['manual'] );
@@ -156,33 +183,55 @@ try {
 	Organizacion::guardar( (string) $o['organizacion'], (string) $o['codigo'], (array) $o['federacion'], (string) $o['identificador'] );
 	$ok( 'https://manual.example.invalid/docs/manual/' === Organizacion::manual(), 'guardar la organización no borra la dirección del manual' );
 	Organizacion::guardar_manual( '' );
-	$ok( '' === Organizacion::manual(), 'vacía: no hay manual publicado (aunque la organización tenga uno por defecto)' );
+	$ok( '' === Organizacion::manual(), 'vacía: no hay manual con capturas (aunque la organización tenga uno por defecto)' );
 
-	echo "\n== Parte D · En las pantallas ==\n";
+	echo "\n== Parte E · En las pantallas ==\n";
 	Organizacion::guardar_manual( $base );
 	$como( $u_fam );
 	$inicio = ( new AreaPrivadaView() )->render();
 	$ok( 1 === preg_match( '~<a class="asde-nav__ayuda" href="[^"]*asde_ayuda=1[^"]*" data-asde-modal>Ayuda</a>~', $inicio ), 'en la cabecera de cada página, «Ayuda» (se abre en la ventana emergente)' );
 	$como( $u_coord );
 	$pagina = ( new AyudaView( 'tesoreria' ) )->render();
-	$ok( str_contains( $pagina, 'class="asde-card asde-ayuda"' ) && str_contains( $pagina, '<h2>Tesorería</h2>' ) && str_contains( $pagina, 'href="' . $base . 'coordinacion.html#control" target="_blank" rel="noopener">Ver el manual completo</a>' ) && str_contains( $pagina, '← Volver a la página' ) && str_contains( $pagina, 'asde-nav' ), 'en su página: la ayuda de Tesorería del manual de coordinación, «Ver el manual completo» en su apartado y «Volver»' );
+	$ok( str_contains( $pagina, 'class="asde-card asde-ayuda"' ) && str_contains( $pagina, '<h2>Tesorería</h2>' ) && str_contains( $pagina, 'href="' . esc_url( Ayuda::url_completo( 'coordinacion', 'control' ) ) . '" data-asde-modal>Ver el manual completo</a>' ) && str_contains( $pagina, '← Volver a la página' ) && str_contains( $pagina, 'asde-nav' ), 'en su página: la ayuda de Tesorería del manual de coordinación, «Ver el manual completo» (en la ventana, en su apartado) y «Volver»' );
+	$ok( str_contains( $pagina, 'href="' . $base . 'coordinacion.html#control" target="_blank" rel="noopener">Manual con capturas</a>' ) && 1 === preg_match( '~href="[^"]*asde_ayuda=manual[^"]*#asde-manual-[a-z-]+"\s+data-asde-modal~', $pagina ), 'con su dirección, el manual con capturas (ayuda extra, en otra pestaña); y los enlaces del texto siguen abriéndose en la ventana' );
 	View::en_modal();
 	$ventana = ( new AyudaView( 'tesoreria' ) )->render();
 	View::en_modal( false );
 	$ok( str_contains( $ventana, 'asde-ap--modal' ) && ! str_contains( $ventana, 'asde-nav' ) && ! str_contains( $ventana, '← Volver a la página' ) && str_contains( $ventana, 'Ver el manual completo' ), 'en la ventana: solo la ayuda y el enlace al manual completo' );
+	$_GET = array( Ayuda::PARAM => 'manual' );
+	View::en_modal();
+	$completo_v = ( new AyudaView( 'area' ) )->render();
+	View::en_modal( false );
+	$_GET = array(
+		Ayuda::PARAM        => 'manual',
+		Ayuda::PARAM_MANUAL => 'familias',
+	);
+	$otro = ( new AyudaView( 'area' ) )->render();
+	$_GET = array(
+		Ayuda::PARAM        => 'manual',
+		Ayuda::PARAM_MANUAL => 'administracion',
+	);
+	$raro = ( new AyudaView( 'area' ) )->render();
+	$_GET = array();
+	$ok( str_contains( $completo_v, 'asde-ap--modal' ) && str_contains( $completo_v, 'asde-ayuda--completo' ) && str_contains( $completo_v, '<h2>Manual del equipo de coordinación</h2>' ) && str_contains( $completo_v, 'id="asde-manual-indice"' ) && ! str_contains( $completo_v, 'data-asde-modal>Ver el manual completo</a>' ) && str_contains( $completo_v, 'Manual con capturas' ), 'con ?asde_ayuda=manual, el manual completo del rol en la ventana, con su índice y el enlace al manual con capturas' );
+	$ok( str_contains( $otro, '<h2>Manual para familias</h2>' ) && str_contains( $raro, '<h2>Manual del equipo de coordinación</h2>' ), 'se puede pedir el de otro rol (enlaces entre manuales); uno que no es de la ayuda da el propio' );
 	$como( $u_sco );
 	$_GET     = array( Ayuda::PARAM => '1' );
 	$codigo   = do_shortcode( '[asde_tesoreria]' );
 	$_GET     = array();
 	$sin_pedir = do_shortcode( '[asde_informes]' );
-	$ok( str_contains( $codigo, 'asde-ayuda' ) && str_contains( $codigo, 'Tesorería: pagos y familias' ) && str_contains( $codigo, 'scouters.html#tesoreria' ) && ! str_contains( $sin_pedir, 'asde-ayuda' ), 'un scouter, con ?asde_ayuda=1, ve en la página la ayuda de su manual (sin pedirla, la página de siempre)' );
+	$ok( str_contains( $codigo, 'asde-ayuda' ) && str_contains( $codigo, 'Tesorería: pagos y familias' ) && str_contains( $codigo, 'asde_manual=scouters' ) && ! str_contains( $sin_pedir, 'asde-ayuda' ), 'un scouter, con ?asde_ayuda=1, ve en la página la ayuda de su manual (sin pedirla, la página de siempre)' );
 	$como( $u_fam );
 	Idioma::forzar( 'ca' );
 	$en_ca = ( new AyudaView( 'pagos' ) )->render();
 	Idioma::forzar( null );
-	$ok( str_contains( $en_ca, 'asde-ayuda__idioma' ) && str_contains( $en_ca, 'familias.html#mis-pagos' ), 'en otro idioma avisa de que la ayuda está en castellano; la familia ve la de su manual' );
+	$ok( str_contains( $en_ca, 'asde-ayuda__idioma' ) && str_contains( $en_ca, 'asde_manual=familias' ) && str_contains( $en_ca, 'asde-manual-mis-pagos' ), 'en otro idioma avisa de que la ayuda está en castellano; la familia ve la de su manual' );
 	$como( $u_pol );
 	$ok( str_contains( ( new AyudaView( 'no_existe' ) )->render(), 'Esta página todavía no tiene una ayuda propia.' ), 'una página sin ayuda lo dice (y enlaza al manual completo)' );
+	$como( $u_coord );
+	Organizacion::guardar_manual( '' );
+	$sin_extra = ( new AyudaView( 'tesoreria' ) )->render();
+	$ok( str_contains( $sin_extra, 'Ver el manual completo' ) && ! str_contains( $sin_extra, 'Manual con capturas' ) && str_contains( $sin_extra, '<h2>Tesorería</h2>' ), 'sin la dirección del manual con capturas: la ayuda y el manual completo igual, sin ese enlace' );
 
 	$ok( 0 === $cortadas, 'ninguna petición ha salido hacia el CRM real' );
 } finally {
