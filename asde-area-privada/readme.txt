@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.26.2
+Stable tag: 0.27.0
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -52,6 +52,10 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.27.0 =
+* The user manual now ships inside the plugin (manual/ folder: the six manuals, their style and all screenshots). The help of each page takes its screenshots from it and "Ver el manual completo" opens it, so it is always the same version as the plugin and no longer has to be uploaded separately to the website.
+* wp-admin → Grupos Scouts → Organización federada: "Manual de uso" becomes optional ("Otro manual publicado"): leave it empty to use the manual inside the plugin, or enter the address of another published manual. When updating, the address that v0.26 set by default (https://baleares.scout.es/manual/) is cleared so the help switches to the bundled manual; any other address is kept.
 
 = 0.26.2 =
 * Code quality: fixes all 589 findings of the WordPress Plugin Check report (5 errors and 584 warnings). Database queries pass table names with the %i placeholder and no longer build SQL by concatenation: optional filters go as prepared values (bank movements, change proposals, email log, access requests, inventory). A bank movement without a value date is stored as NULL with NULLIF instead of a conditional in the query. In-memory CSV streams (php://temp) are documented as such. Templates declare why their variables are not globals (they are included inside a function), and uninstall.php prefixes its global variables. No visible changes.
@@ -121,6 +125,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * First version with the mobile app (PWA).
 
 == Upgrade Notice ==
+
+= 0.27.0 =
+The user manual comes inside the plugin: no separate upload is needed. The plugin zip is larger (about 11 MB, mostly screenshots). No database changes.
 
 = 0.26.2 =
 Code quality fixes from WordPress Plugin Check. No visible changes and no database changes.

@@ -21,14 +21,15 @@
  * los trozos asde-area-privada/ayuda/<manual>/<página>.html que salen en la ventana «Ayuda» de cada
  * página según el rol de quien entra (Frontend\Ayuda). Un <h3> con data-paginas lleva su parte (hasta
  * el siguiente <h3>) y la entrada del apartado; un <section>, el apartado entero. Las capturas y los
- * enlaces de los trozos apuntan al manual publicado ({{capturas}}, {{manual}} y {{base}}, que pone
- * el plugin). Al cambiar los trozos cambia el plugin: hay que rehacer su zip.
+ * enlaces de los trozos apuntan al manual ({{capturas}}, {{manual}} y {{base}}, que pone el plugin:
+ * desde la v0.27, el que va dentro de su zip, copiado de esta carpeta por construir-zip.ps1). Al
+ * cambiar los trozos o el manual cambia el plugin: hay que rehacer su zip.
  */
 
 $raiz    = dirname( __DIR__ ) . '/manual';
 $fuentes = $raiz . '/fuentes';
 $plugin  = dirname( __DIR__ ) . '/asde-area-privada';
-$version = '0.26';
+$version = '0.27';
 $fecha   = 'octubre de 2026';
 $errores = 0;
 

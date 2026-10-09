@@ -17,7 +17,8 @@ defined( 'ABSPATH' ) || exit;
  * el enlace a su manual completo publicado (la «wiki»). Los trozos los escribe
  * herramientas/generar-manuales.php en ayuda/<manual>/<página>.html a partir de manual/fuentes
  * (cada apartado dice qué páginas documenta con data-paginas). Las capturas y los enlaces van al
- * manual publicado (Organizacion::manual()); sin esa dirección, la ayuda sale sin ellos.
+ * manual (Organizacion::manual()): desde la v0.27, el que viene dentro del plugin (manual/, de su
+ * misma versión), salvo que en wp-admin se ponga otro; sin ninguno, la ayuda sale sin ellos.
  */
 final class Ayuda {
 
@@ -89,7 +90,7 @@ final class Ayuda {
 		return null;
 	}
 
-	/** Enlace al manual completo publicado (en su apartado, si se da), o '' si no hay manual publicado. */
+	/** Enlace al manual completo (en su apartado, si se da), o '' si no hay manual. */
 	public static function url_manual( string $manual, string $ancla = '' ): string {
 		$base = Organizacion::manual();
 		if ( '' === $base ) {
@@ -103,7 +104,7 @@ final class Ayuda {
 		return ASDE_AP_DIR . 'ayuda/';
 	}
 
-	/** Pone las direcciones del manual publicado; sin él, quita las capturas y deja el texto de los enlaces. */
+	/** Pone las direcciones del manual; sin él, quita las capturas y deja el texto de los enlaces. */
 	private static function preparar( string $html, string $manual ): string {
 		$html = (string) preg_replace( '/<!--.*?-->/s', '', $html );
 		$base = Organizacion::manual();

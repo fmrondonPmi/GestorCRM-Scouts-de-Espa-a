@@ -111,26 +111,52 @@ final class Organizacion {
 	}
 
 	/**
-	 * Dónde está publicado el manual de uso de cada organización, si se sabe (v0.26). Es el
-	 * valor por defecto de manual(): la administración lo puede cambiar o quitar.
+	 * Direcciones que la v0.26 ponía por defecto (el manual publicado aparte). Desde la v0.27 el
+	 * manual va dentro del plugin: si se guardó una de estas, al actualizar se deja de usar
+	 * (migrar_manual()) y la ayuda pasa a la copia del plugin.
 	 */
-	public const MANUALES_PUBLICADOS = array(
-		'balears' => 'https://baleares.scout.es/manual/',
-	);
+	public const MANUALES_ANTIGUOS = array( 'https://baleares.scout.es/manual/' );
 
 	/**
-	 * Carpeta del manual de uso publicado, acabada en «/» (de ahí salen las capturas de la ayuda
-	 * de cada página y el enlace al manual completo de cada rol), o '' si no hay (v0.26).
+	 * Carpeta del manual de uso, acabada en «/» (de ahí salen las capturas de la ayuda de cada
+	 * página y el enlace al manual completo de cada rol), o '' si no hay. Desde la v0.27 (petición
+	 * del usuario: «que no sea una subida separada») es la copia que viene dentro del plugin
+	 * (manual_incluido()), salvo que en wp-admin se haya puesto la dirección de otro.
 	 */
 	public static function manual(): string {
+		$guardado = self::manual_guardado();
+		return '' !== $guardado ? $guardado : self::manual_incluido();
+	}
+
+	/** Dirección de otro manual publicado puesta en wp-admin, o '' (lo normal: el del plugin). */
+	public static function manual_guardado(): string {
 		$v = get_option( self::OPTION, array() );
-		$v = is_array( $v ) ? $v : array();
-		return array_key_exists( 'manual', $v ) ? (string) $v['manual'] : ( self::MANUALES_PUBLICADOS[ self::clave() ] ?? '' );
+		return is_array( $v ) ? (string) ( $v['manual'] ?? '' ) : '';
 	}
 
 	/**
-	 * Guarda la dirección del manual publicado: la de la portada (…/manual/index.html) o la de su
-	 * carpeta; se guarda la carpeta. Vacía: sin enlaces al manual ni capturas en la ayuda.
+	 * Carpeta del manual que trae el plugin (manual/, la copian en el zip construir-zip.ps1 y en el
+	 * Local probar-todo.sh desde el manual/ del repo), o '' si no está. Es de la misma versión que
+	 * el plugin: la ayuda nunca se queda desfasada.
+	 */
+	public static function manual_incluido(): string {
+		$url = is_readable( ASDE_AP_DIR . 'manual/index.html' ) ? plugins_url( 'manual/', ASDE_AP_FILE ) : '';
+		return (string) apply_filters( 'asde_ap_manual_incluido', $url );
+	}
+
+	/** Al actualizar a la v0.27: deja de usar la dirección que la v0.26 ponía por defecto. */
+	public static function migrar_manual(): void {
+		$v = get_option( self::OPTION, array() );
+		if ( is_array( $v ) && in_array( (string) ( $v['manual'] ?? '' ), self::MANUALES_ANTIGUOS, true ) ) {
+			unset( $v['manual'] );
+			update_option( self::OPTION, $v, false );
+			self::olvidar();
+		}
+	}
+
+	/**
+	 * Guarda la dirección de otro manual publicado: la de la portada (…/manual/index.html) o la de
+	 * su carpeta; se guarda la carpeta. Vacía (lo normal): el manual que trae el plugin.
 	 *
 	 * @return true|\WP_Error
 	 */
