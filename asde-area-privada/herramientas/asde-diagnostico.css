@@ -1,0 +1,8 @@
+/* Herramientas → Diagnóstico segundo plano (v0.31: antes, un <style> en la página; WordPress pide encolarlo). */
+.asde-diag__global { padding: 12px 16px; border-left: 4px solid #72aee6; background: #fff; margin: 16px 0; font-size: 14px; }
+.asde-diag__global--ok { border-color: #00a32a; } .asde-diag__global--fallo { border-color: #d63638; } .asde-diag__global--aviso { border-color: #dba617; }
+.asde-diag__pruebas { background: #fff; border: 1px solid #c3c4c7; max-width: 900px; }
+.asde-diag__pruebas li { display: flex; gap: 10px; margin: 0; padding: 10px 14px; border-bottom: 1px solid #f0f0f1; }
+.asde-diag__icono { flex: 0 0 1.5em; font-size: 16px; }
+.asde-diag pre { background: #f6f7f7; border: 1px solid #c3c4c7; padding: 12px; max-width: 900px; overflow: auto; }
+.asde-diag table { max-width: 900px; }

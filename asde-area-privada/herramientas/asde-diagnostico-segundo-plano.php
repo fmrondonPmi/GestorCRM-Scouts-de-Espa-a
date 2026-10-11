@@ -44,11 +44,32 @@ if ( ! class_exists( 'Asde_Diagnostico_Segundo_Plano', false ) ) :
 
 		public static function register() {
 			add_action( 'admin_menu', array( __CLASS__, 'menu' ) );
+			add_action( 'admin_enqueue_scripts', array( __CLASS__, 'recursos' ) );
 			add_action( 'wp_ajax_asde_diag_iniciar', array( __CLASS__, 'ajax_iniciar' ) );
 			add_action( 'wp_ajax_asde_diag_estado', array( __CLASS__, 'ajax_estado' ) );
 			add_action( 'wp_ajax_nopriv_' . self::PING, array( __CLASS__, 'ajax_ping' ) );
 			add_action( 'wp_ajax_' . self::PING, array( __CLASS__, 'ajax_ping' ) );
 			add_action( self::HOOK_CRON, array( __CLASS__, 'cron' ) );
+		}
+
+		/** CSS y JS de la página, encolados (v0.31: WordPress pide no escribir <style> ni <script>). */
+		public static function recursos( $pantalla ) {
+			if ( false === strpos( (string) $pantalla, self::PAGINA ) || ! current_user_can( 'manage_options' ) ) {
+				return;
+			}
+			$version = defined( 'ASDE_AP_VERSION' ) ? ASDE_AP_VERSION : '1';
+			wp_enqueue_style( 'asde-diagnostico', plugins_url( 'asde-diagnostico.css', __FILE__ ), array(), $version );
+			wp_enqueue_script( 'asde-diagnostico', plugins_url( 'asde-diagnostico.js', __FILE__ ), array(), $version, true );
+			$d      = self::datos();
+			$ultimo = $d && ! empty( $d['resultado'] ) ? $d['resultado'] : null;
+			$cfg    = array(
+				'ajax'        => admin_url( 'admin-ajax.php' ),
+				'nonce'       => wp_create_nonce( 'asde_diag' ),
+				'ultimo'      => $ultimo,
+				'fechaUltimo' => $ultimo ? 'Última comprobación: ' . wp_date( 'j/n/Y H:i', (int) $d['fecha'] ) . '.' : '',
+				'cron'        => site_url( 'wp-cron.php' ),
+			);
+			wp_add_inline_script( 'asde-diagnostico', 'window.asdeDiag = ' . wp_json_encode( $cfg ) . ';', 'before' );
 		}
 
 		public static function menu() {
@@ -426,128 +447,12 @@ if ( ! class_exists( 'Asde_Diagnostico_Segundo_Plano', false ) ) :
 			if ( ! current_user_can( 'manage_options' ) ) {
 				return;
 			}
-			$d      = self::datos();
-			$ultimo = $d && ! empty( $d['resultado'] ) ? $d['resultado'] : null;
 			?>
 			<div class="wrap asde-diag">
 				<h1>Diagnóstico de tareas en segundo plano</h1>
 				<p>Las tareas largas del área privada (por ejemplo, corregir los números de socio de todo el grupo en el CRM) trabajan en segundo plano: por tandas cortas que se relanzan solas con una petición del servidor a sí mismo, y con WP-Cron de respaldo. Esta página comprueba si <strong>este hosting</strong> lo permite. No guarda datos personales ni se conecta al CRM.</p>
 				<p><button type="button" class="button button-primary" id="asde-diag-boton">Comprobar ahora</button> <span class="asde-diag__tiempo" id="asde-diag-tiempo"></span></p>
 				<div id="asde-diag-resultado" hidden></div>
-				<style>
-					.asde-diag__global { padding: 12px 16px; border-left: 4px solid #72aee6; background: #fff; margin: 16px 0; font-size: 14px; }
-					.asde-diag__global--ok { border-color: #00a32a; } .asde-diag__global--fallo { border-color: #d63638; } .asde-diag__global--aviso { border-color: #dba617; }
-					.asde-diag__pruebas { background: #fff; border: 1px solid #c3c4c7; max-width: 900px; }
-					.asde-diag__pruebas li { display: flex; gap: 10px; margin: 0; padding: 10px 14px; border-bottom: 1px solid #f0f0f1; }
-					.asde-diag__icono { flex: 0 0 1.5em; font-size: 16px; }
-					.asde-diag pre { background: #f6f7f7; border: 1px solid #c3c4c7; padding: 12px; max-width: 900px; overflow: auto; }
-					.asde-diag table { max-width: 900px; }
-				</style>
-				<script>
-				( function () {
-					var boton = document.getElementById( 'asde-diag-boton' );
-					var caja = document.getElementById( 'asde-diag-resultado' );
-					var tiempo = document.getElementById( 'asde-diag-tiempo' );
-					var ajax = <?php echo wp_json_encode( admin_url( 'admin-ajax.php' ) ); ?>;
-					var nonce = <?php echo wp_json_encode( wp_create_nonce( 'asde_diag' ) ); ?>;
-					var ultimo = <?php echo wp_json_encode( $ultimo ); ?>;
-					var fechaUltimo = <?php echo wp_json_encode( $ultimo ? 'Última comprobación: ' . wp_date( 'j/n/Y H:i', (int) $d['fecha'] ) . '.' : '' ); ?>;
-					var ICONOS = { ok: '✅', fallo: '❌', aviso: '⚠️', esperando: '⏳' };
-					var SI_NO = function ( v ) { return v ? 'sí' : 'no'; };
-
-					function el( tag, clase, texto ) {
-						var e = document.createElement( tag );
-						if ( clase ) { e.className = clase; }
-						if ( undefined !== texto ) { e.textContent = texto; }
-						return e;
-					}
-					function pintar( v, fecha ) {
-						caja.hidden = false;
-						caja.textContent = '';
-						if ( fecha ) {
-							caja.appendChild( el( 'p', 'description', fecha ) );
-						}
-						caja.appendChild( el( 'div', 'asde-diag__global asde-diag__global--' + v.global[0], ICONOS[ v.global[0] ] + ' ' + v.global[1] ) );
-						var ul = el( 'ul', 'asde-diag__pruebas' );
-						Object.keys( v.pruebas ).forEach( function ( k ) {
-							var p = v.pruebas[ k ];
-							var li = el( 'li' );
-							li.appendChild( el( 'span', 'asde-diag__icono', ICONOS[ p[0] ] ) );
-							var t = el( 'div' );
-							t.appendChild( el( 'strong', '', p[1] ) );
-							t.appendChild( el( 'div', '', p[2] ) );
-							li.appendChild( t );
-							ul.appendChild( li );
-						} );
-						caja.appendChild( ul );
-						if ( v.htaccess ) {
-							caja.appendChild( el( 'h2', '', 'Cómo arreglarlo: «noabort» en el .htaccess' ) );
-							caja.appendChild( el( 'p', '', 'Añade estas líneas al PRINCIPIO del fichero .htaccess de la raíz de la web (antes de «# BEGIN WordPress»). En Hostinger: hPanel → Archivos → Administrador de archivos → public_html/.htaccess. Guarda y vuelve a comprobar. Es la regla que recomienda LiteSpeed, limitada a las tareas del área privada y a wp-cron.php.' ) );
-							caja.appendChild( el( 'pre', '', v.htaccess ) );
-						}
-						if ( v.cron_servidor ) {
-							caja.appendChild( el( 'h2', '', 'Si WP-Cron falla' ) );
-							caja.appendChild( el( 'p', '', 'Crea un cron del servidor que llame a ' + <?php echo wp_json_encode( site_url( 'wp-cron.php' ) ); ?> + ' cada 5 minutos (en Hostinger: hPanel → Avanzado → Cron jobs). Si el problema es el corte de LiteSpeed, la regla de arriba también lo arregla para wp-cron.php.' ) );
-						}
-						var e = v.entorno || {};
-						var tabla = el( 'table', 'widefat striped' );
-						[
-							[ 'Servidor web', e.servidor ],
-							[ 'PHP', ( e.php || '' ) + ' (' + ( e.sapi || '' ) + ')' ],
-							[ '¿LiteSpeed?', SI_NO( e.litespeed ) ],
-							[ '¿«noabort» en el .htaccess?', e.htaccess ? SI_NO( e.noabort ) : 'no se puede leer el .htaccess' ],
-							[ 'WP-Cron automático', e.cron_desactivado ? 'desactivado (DISABLE_WP_CRON)' : ( e.cron_alternativo ? 'activado (ALTERNATE_WP_CRON)' : 'activado' ) ],
-							[ 'Tareas programadas atrasadas (más de 15 min)', String( e.atrasadas ) ],
-							[ 'Límite de tiempo de PHP', e.max_execution_time ? e.max_execution_time + ' s' : 'sin límite' ]
-						].forEach( function ( fila ) {
-							var tr = el( 'tr' );
-							tr.appendChild( el( 'th', '', fila[0] ) );
-							tr.appendChild( el( 'td', '', fila[1] ) );
-							tabla.appendChild( tr );
-						} );
-						caja.appendChild( el( 'h2', '', 'Datos del servidor' ) );
-						caja.appendChild( tabla );
-						tiempo.textContent = v.terminado ? '' : v.segundos + ' s…';
-					}
-					function pedir( accion ) {
-						var datos = new FormData();
-						datos.append( 'action', accion );
-						datos.append( 'nonce', nonce );
-						return fetch( ajax, { method: 'POST', body: datos, credentials: 'same-origin' } ).then( function ( r ) { return r.json(); } );
-					}
-					function seguir() {
-						pedir( 'asde_diag_estado' ).then( function ( r ) {
-							if ( r && r.success ) {
-								pintar( r.data );
-								if ( ! r.data.terminado ) {
-									window.setTimeout( seguir, 1500 );
-									return;
-								}
-							}
-							boton.disabled = false;
-						} ).catch( function () { window.setTimeout( seguir, 3000 ); } );
-					}
-					boton.addEventListener( 'click', function () {
-						boton.disabled = true;
-						tiempo.textContent = 'Lanzando las pruebas…';
-						pedir( 'asde_diag_iniciar' ).then( function ( r ) {
-							if ( r && r.success ) {
-								pintar( r.data );
-								window.setTimeout( seguir, 1500 );
-							} else {
-								tiempo.textContent = 'No se ha podido iniciar la comprobación.';
-								boton.disabled = false;
-							}
-						} ).catch( function () {
-							tiempo.textContent = 'No se ha podido iniciar la comprobación.';
-							boton.disabled = false;
-						} );
-					} );
-					if ( ultimo ) {
-						pintar( ultimo, fechaUltimo );
-					}
-				} )();
-				</script>
 			</div>
 			<?php
 		}
