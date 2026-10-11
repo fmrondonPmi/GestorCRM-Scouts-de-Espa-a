@@ -183,3 +183,4 @@ Las ✅ de la tabla están contestadas aquí. **Sigue abierta: P-43** (si Colony
 - **P-100:** servir y asignar camisas del inventario, **Coordinación y Tesorería** → hecho. **P-101:** chico = masculina, chica = femenina (correcto).
 - **P-102:** «Fichas reducidas» lleva también el **móvil del tutor/a 1** → hecho (los predefinidos se ponen al día al actualizar).
 - **P-103:** scouter = adulto con membresía de Scouter **o de Voluntariado**; un pedido cancelado no cuenta (el siguiente sigue siendo gratis). **P-104:** la primera camisa gratis, **activada en todos los grupos**.
+- **P-44 (actualización, 2026-10-11):** las **actividades** serán un **módulo nuevo** (con su precio y el cobro por SEPA), que se hará **después del reinicio semanal del límite de uso** (a partir del 2026-10-14). En la v0.30, por SEPA solo los **pedidos de uniforme**.
