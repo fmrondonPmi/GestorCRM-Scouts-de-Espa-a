@@ -10,7 +10,7 @@
  * @var int               $tipo       Filtro por tipo (0 = todos, -1 = sin tipo)
  * @var string            $q
  * @var bool              $bajas      Se ven también los dados de baja
- * @var int               $umbral     Por debajo, aviso al añadirlo a la lista de compra
+ * @var int               $umbral     Por debajo, «pocas unidades»; desde él, aviso al añadirlo a la lista de compra (P-62, v0.30)
  * @var int               $unidades
  * @var float             $valor
  * @var int               $n_activos
@@ -120,7 +120,7 @@ $buscar = $normal( trim( $q ) );
 				<button type="submit" class="button"><?php asde_e( 'Crear una lista de compra con los marcados' ); ?></button>
 				<span class="asde-muted" data-asde-inv-marcados></span>
 			</p>
-			<p class="asde-help"><?php echo esc_html( sprintf( asde_t( 'Marca el material que hay que comprar. Si de alguno hay menos de %d unidades, te lo preguntaremos antes de añadirlo. La lista la tiene que aprobar Tesorería antes de imprimirla.' ), $umbral ) ); ?></p>
+			<p class="asde-help"><?php echo esc_html( sprintf( asde_t( 'Marca el material que hay que comprar (lo que todavía no está en el inventario lo podrás escribir en la lista). Si de alguno ya hay %d unidades o más, te preguntaremos si de verdad hace falta comprar más. La lista la tiene que aprobar Tesorería antes de imprimirla.' ), $umbral ) ); ?></p>
 		</form>
 	<?php endif; ?>
 </section>

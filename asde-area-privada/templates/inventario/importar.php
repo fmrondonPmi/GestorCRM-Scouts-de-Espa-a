@@ -4,7 +4,7 @@
  * el inventario; sin JavaScript, en su página. Después de importar, el informe:
  * cuántos materiales entraron y qué filas no, con su motivo.
  *
- * @var array|null $resultado   importados, errores[{fila, datos, motivo}], tipos_creados, fichero, filas
+ * @var array|null $resultado   importados, sumados (v0.30), errores[{fila, datos, motivo}], tipos_creados, fichero, filas
  * @var bool       $caducado    Se pidió un informe que ya no está (caduca en una hora)
  * @var string     $url
  * @var string     $url_lista
@@ -26,6 +26,10 @@ $columnas = array_map( static fn( $c ) => asde_t( $c[0] ), Importador::COLUMNAS 
 		<p class="asde-muted"><?php echo esc_html( sprintf( asde_n( '%1$s: %2$d fila leída.', '%1$s: %2$d filas leídas.', $resultado['filas'] ), $resultado['fichero'], $resultado['filas'] ) ); ?></p>
 		<ul class="asde-resumen">
 			<li><strong><?php echo (int) $resultado['importados']; ?></strong> <?php echo esc_html( 1 === (int) $resultado['importados'] ? asde_t( 'material importado' ) : asde_t( 'materiales importados' ) ); ?></li>
+			<?php if ( ! empty( $resultado['sumados'] ) ) : ?>
+				<?php // v0.30 (P-67): las filas repetidas suman su cantidad al material que ya estaba. ?>
+				<li><strong><?php echo (int) $resultado['sumados']; ?></strong> <?php echo esc_html( 1 === (int) $resultado['sumados'] ? asde_t( 'fila sumada a un material que ya estaba (misma descripción y tipo)' ) : asde_t( 'filas sumadas a un material que ya estaba (misma descripción y tipo)' ) ); ?></li>
+			<?php endif; ?>
 			<li><strong><?php echo (int) count( $resultado['errores'] ); ?></strong> <?php echo esc_html( 1 === count( $resultado['errores'] ) ? asde_t( 'fila no importada' ) : asde_t( 'filas no importadas' ) ); ?></li>
 		</ul>
 		<?php if ( $resultado['tipos_creados'] ) : ?>
@@ -92,6 +96,7 @@ $columnas = array_map( static fn( $c ) => asde_t( $c[0] ), Importador::COLUMNAS 
 				<li><?php echo esc_html( sprintf( asde_t( 'Obligatorias: %s. La cantidad, un número entero de 0 en adelante.' ), implode( ', ', array_map( static fn( $c ) => asde_t( Importador::COLUMNAS[ $c ][0] ), Importador::OBLIGATORIAS ) ) ) ); ?></li>
 				<li><?php asde_e( 'El precio, con coma o punto para los decimales (12,50). El año de compra, con cuatro cifras o en blanco.' ); ?></li>
 				<li><?php asde_e( 'Un nº de serie que ya está en el inventario (o repetido en el fichero) no se vuelve a importar.' ); ?></li>
+				<li><?php asde_e( 'Sin nº de serie, una fila con la misma descripción y el mismo tipo que un material que ya está en el inventario (o que otra fila del fichero) suma su cantidad a ese material en vez de crear otro. Las camisas del uniforme, solo si coinciden también el modelo y la talla.' ); ?></li>
 				<li><?php echo esc_html( sprintf( asde_t( 'Separado por punto y coma o por comas, de hasta %1$d MB y %2$d filas.' ), (int) ( Importador::MAX_BYTES / MB_IN_BYTES ), Importador::MAX_FILAS ) ); ?></li>
 			</ul>
 		</details>

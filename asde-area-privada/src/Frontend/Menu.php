@@ -44,7 +44,7 @@ final class Menu {
 			}
 		}
 		$gestiona   = current_user_can( Servicio::CAP_GESTION );
-		$pide       = $ambito && current_user_can( Servicio::CAP_PEDIR ) && Servicio::para_quien( $ambito );
+		$pide       = $ambito && current_user_can( Servicio::CAP_PEDIR ) && Servicio::propios( $ambito );
 		$pendientes = $ambito && ( $pide || $gestiona ) ? Servicio::pendientes( $ambito ) : array();
 		if ( $pide ) {
 			$n                    = (int) $pendientes['confirmar'];

@@ -14,6 +14,9 @@ defined( 'ABSPATH' ) || exit;
  * «Uniforme» para los asociados: sus pedidos (y los de sus menores), el
  * formulario para pedir la camisa y las insignias, y la confirmación de que se
  * ha recibido. Ver Uniformes\Servicio.
+ *
+ * v0.30 (P-48): un scouter pide también para los socios/as de sus secciones; con muchas
+ * personas, «¿Para quién?» es un desplegable agrupado por sección.
  */
 final class UniformeView extends UniformesBaseView {
 
@@ -26,13 +29,12 @@ final class UniformeView extends UniformesBaseView {
 		if ( ! $para && current_user_can( Servicio::CAP_GESTION ) ) {
 			return $this->redirigir_gestion();
 		}
-		$cfg     = Config::de();
-		$pedidos = PedidosTable::de_socios( array_keys( $para ) );
-		// v0.29: lo que le cuesta la camisa a cada uno (la primera de un scouter, gratis).
-		$precios = array();
-		foreach ( $para as $n => $persona ) {
-			$precios[ $n ] = Servicio::precio_camisa( (string) $n, $persona->es_adulto_voluntario(), $cfg );
-		}
+		$cfg   = Config::de();
+		$todos = PedidosTable::de_socios( array_keys( $para ) ); // Una consulta para todas las personas.
+		// v0.29: lo que le cuesta la camisa a cada uno (la primera de un scouter, gratis); v0.30, sin una consulta por persona.
+		$precios = Servicio::precios_camisa( $para, $cfg, $todos );
+		// «Tus pedidos»: los suyos y los de su familia y, v0.30, los que ha pedido para alguien de su sección.
+		$pedidos = array_values( array_filter( $todos, static fn( array $p ) => Servicio::es_propio( $p, $a ) || Servicio::lo_pidio( $p ) ) );
 		$guias   = array();
 		foreach ( $cfg['modelos'] as $id => $m ) {
 			$url = Config::guia_medidas( $cfg, (string) $id );
@@ -50,6 +52,8 @@ final class UniformeView extends UniformesBaseView {
 				array(
 					'cfg'      => $cfg,
 					'para'     => $para,
+					'grupos'   => count( $para ) > Servicio::MAX_BOTONES_PARA ? Servicio::agrupar_para_quien( $a, $para ) : array(),
+					'otros'    => count( $para ) > count( Servicio::propios( $a ) ),
 					'precios'  => $precios,
 					'pedidos'  => $pedidos,
 					'ambito'   => $a,
@@ -93,7 +97,8 @@ final class UniformeView extends UniformesBaseView {
 
 		$p = PedidosTable::obtener( (int) $this->post( 'pedido' ) );
 		check_admin_referer( 'asde_uniforme_' . ( $p['id'] ?? 0 ) );
-		if ( ! $p || ! Servicio::es_propio( $p, $a ) ) {
+		// v0.30: también quien lo pidió (un scouter para alguien de su sección).
+		if ( ! $p || ! ( Servicio::es_propio( $p, $a ) || Servicio::lo_pidio( $p ) ) ) {
 			Notices::add( 'error', asde_t( 'No tienes acceso a ese pedido.' ) );
 			$this->redirect( $volver );
 		}

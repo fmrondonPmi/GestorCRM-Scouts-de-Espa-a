@@ -66,6 +66,18 @@ Hay que resolverlas antes de programar cada parte. Cuando se responde una, se ma
 | P-102 | ✅ **«Fichas reducidas» (supuesto, v0.29.0):** lleva el nombre del **tutor/a 1** como pediste, sin su teléfono ni el del tutor/a 2. ¿Añadimos «Móvil del tutor/a 1» (ya existe como columna)? (doc 36) | Informes |
 | P-103 | ✅ **Primera camisa gratis (supuesto, v0.29.0):** «scouter» es cualquier adulto con membresía de **Scouter o de Voluntariado** (como ya distinguía la gestión de uniformes); cuenta como «ya pidió una» cualquier pedido con camisa que **no esté cancelado** (también uno servido del inventario). Si cancela el pedido gratis, el siguiente vuelve a ser gratis. ¿Es así? (doc 36) | Uniformes |
 | P-104 | ✅ **Primera camisa gratis para todos los grupos (supuesto, v0.29.0):** es una opción de Configuración de uniformes **activada por defecto** también en los grupos que ya estaban, porque lo pediste como norma. Un grupo que no la quiera la apaga allí. (doc 36) | Uniformes |
+| P-105 | **Inventario · aviso al revés (supuesto, v0.30.0):** desde **5 unidades** se pregunta «¿seguro que hace falta comprar más?» y por debajo de 5 sigue la etiqueta amarilla de «pocas unidades». Con el umbral a 0 (filtro `asde_ap_inventario_umbral`) no se pregunta nunca. (doc 37, S-1) | Inventario |
+| P-106 | **Lista de compra · editar (supuesto, v0.30.0):** pediste el material nuevo «al crear o editar» la lista; una lista **ya enviada sigue sin poderse editar** (se cancela y se hace otra): el material nuevo se escribe al prepararla (y al volver al formulario). ¿Hace falta editar una lista pendiente? (doc 37, S-2) | Inventario |
+| P-107 | **Lista de compra · material nuevo (supuesto, v0.30.0):** en la lista no lleva **tipo** ni nº de serie; al darlo de alta queda sin tipo y se le pone después en el inventario. (doc 37, S-3) | Inventario |
+| P-108 | **Email de la revisión (supuesto, v0.30.0):** solo a **quien creó la lista**; no si la revisa ella misma (Tesorería con su propia lista) ni si su cuenta ya no está activa; sin email queda «Sin email» en el registro y Tesorería lo ve en el aviso. Deshacer el visto bueno o cancelar la lista **no** envían email. (doc 37, S-4) | Inventario |
+| P-109 | **«Marcar como comprada» · quién (supuesto, v0.30.0):** **cualquiera que entra en el inventario** (como P-61: todos editan), no solo quien la pidió o Tesorería. (doc 37, S-5) | Inventario |
+| P-110 | **«Marcar como comprada» · qué se suma (supuesto, v0.30.0):** las **cantidades de la lista** (si se compró otra cantidad, se corrige después en el material); el precio, el año y las notas del material que ya estaba no cambian. No hay «deshacer». (doc 37, S-6) | Inventario |
+| P-111 | **«Marcar como comprada» · material de baja y alta (supuesto, v0.30.0):** si un material de la lista se dio de baja mientras tanto (o sumarle pasaría de 99.999), se da de alta uno nuevo con los datos de la línea. El material nuevo se da de alta con el **año de compra actual** y la nota «Comprado con la lista de compra LC…». (doc 37, S-7) | Inventario |
+| P-112 | **Importar · repetidos (supuesto, v0.30.0):** solo suman a materiales **sin nº de serie y no dados de baja**; el precio, el año y las notas de la fila no cambian el material que ya estaba; si al sumar se pasaría de 99.999, la fila es un error. (doc 37, S-8) | Inventario |
+| P-113 | **Uniforme para la sección · quién (supuesto, v0.30.0):** las cuentas con el **rol Scouter**, para las **secciones de su cuenta** (las del alta; con «Scouters», también el resto del Kraal). Coordinación, Tesorería o Secretaría sin el rol Scouter no piden para otros desde «Mi uniforme» (ya asignan camisas desde la gestión). (doc 37, S-9) | Uniformes |
+| P-114 | **Uniforme para la sección · después (supuesto, v0.30.0):** el scouter ve en «Tus pedidos» los que ha pedido para otros y los **puede cancelar** mientras nadie los haya validado; «Lo he recibido» lo confirma el socio/a o su familia, que también lo ve y lo puede cancelar. **No se avisa por email** a la familia. (doc 37, S-10) | Uniformes |
+| P-115 | **Uniforme para la sección · desplegable (supuesto, v0.30.0):** a partir de **6 personas**, «¿Para quién?» es un desplegable agrupado en «Tú», «Tu familia» y una por sección (la primera de las del scouter en la que está la persona), por apellidos. (doc 37, S-11) | Uniformes |
+| P-116 | **Uniforme para la sección · CRM caído (supuesto, v0.30.0):** si el CRM no responde, el scouter sigue pudiendo pedir para sí mismo y su familia (no para su sección). (doc 37, S-12) | Uniformes |
 
 ## Resueltas
 
@@ -151,16 +163,16 @@ Las ✅ de la tabla están contestadas aquí. **Sigue abierta: P-43** (si Colony
 - **P-44 SEPA:** además de la cuota, cobrar por domiciliación los **pedidos de uniforme** y las **actividades** → v0.30.
 - **P-45 SEPA:** conciliar **solos** los cobros de la remesa con la Norma 43 → v0.30; hace falta un **fichero real** de Colonya con una remesa (P-28).
 - **P-46 / P-47 Idiomas:** las traducciones las revisa **la federación**; los nombres de secciones y roles **valen**; wp-admin **no** se traduce.
-- **P-48 Uniformes:** un **scouter puede pedir uniforme para los socios de su sección** → v0.30. (Separar el menú por rol, como se hizo en la v0.15, basta.)
+- **P-48 Uniformes:** un **scouter puede pedir uniforme para los socios de su sección** → hecho en la v0.30 (doc 37). (Separar el menú por rol, como se hizo en la v0.15, basta.)
 - **P-49…P-55 Técnico/a (doc 29, sigue aparcado):** la base legal la da **la federación** (responsable del tratamiento); es **personal, entra con su email**; ASDE **puede dar** un usuario de API de solo lectura de la federación (pedirlo); ve **todo en lectura, también la salud** (salvo banco y SEPA, como la propuesta); **sí** al panel con una fila por grupo; ve **todos los grupos** de la web; lo da de alta **solo el administrador**.
 - **P-56…P-60 Drive (doc 30):** **de momento no se hace nada** con Google Drive.
 - **P-61 Inventario:** todos editan (así está bien).
-- **P-62 Inventario:** el aviso, **al revés**: avisar al añadir a la lista de compra un material del que **ya hay bastantes** → v0.30.
-- **P-63 Inventario:** poder **escribir en la lista de compra material nuevo** (que no está en el inventario) → v0.30.
+- **P-62 Inventario:** el aviso, **al revés**: avisar al añadir a la lista de compra un material del que **ya hay bastantes** → hecho en la v0.30 (doc 37).
+- **P-63 Inventario:** poder **escribir en la lista de compra material nuevo** (que no está en el inventario) → hecho en la v0.30 (doc 37).
 - **P-64 Inventario:** Tesorería puede aprobar su propia lista (así está bien).
-- **P-65 Inventario:** **email** a quien pidió la lista cuando se aprueba o se rechaza (con el motivo) → v0.30.
-- **P-66 Inventario:** **«Marcar como comprada»**, que suma lo comprado al inventario → v0.30.
-- **P-67 Importar:** misma descripción y tipo → **se suma la cantidad** al material que ya existe → v0.30.
+- **P-65 Inventario:** **email** a quien pidió la lista cuando se aprueba o se rechaza (con el motivo) → hecho en la v0.30 (doc 37).
+- **P-66 Inventario:** **«Marcar como comprada»**, que suma lo comprado al inventario → hecho en la v0.30 (doc 37).
+- **P-67 Importar:** misma descripción y tipo → **se suma la cantidad** al material que ya existe → hecho en la v0.30 (doc 37).
 - **P-68 Importar:** los tipos que no existen **hacen fallar la fila** por defecto (casilla desmarcada) → hecho en la v0.29.
 - **P-76 Banco:** los 15 tipos valen.
 - **P-92 / P-93 Altas:** así están bien.

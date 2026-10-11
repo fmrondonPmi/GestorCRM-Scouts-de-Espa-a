@@ -174,6 +174,7 @@ final class InventarioView extends InventarioBaseView {
 			array(
 				'filas'         => count( $leido['filas'] ),
 				'importados'    => $res['importados'],
+				'sumados'       => $res['sumados'],
 				'errores'       => count( $res['errores'] ),
 				'tipos_creados' => count( $res['tipos_creados'] ),
 			)

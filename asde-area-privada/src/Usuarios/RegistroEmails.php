@@ -46,13 +46,17 @@ final class RegistroEmails {
 	/** Aviso de una baja dada desde la web, a Tesorería y a la familia (v0.23.1, doc 34). */
 	public const BAJA = 'baja';
 
+	/** Aviso a quien pidió una lista de compra: Tesorería la ha aprobado o rechazado (v0.30, doc 37). */
+	public const COMPRA_REVISADA = 'compra_revisada';
+
 	public const TIPOS = array(
-		Invitacion::ALTA  => 'Invitación',
-		Invitacion::RESET => 'Recuperar contraseña',
-		self::RECHAZO     => 'Solicitud rechazada',
-		self::SEPA        => 'Domiciliación SEPA',
-		self::COMPRA      => 'Lista de compra de material',
-		self::BAJA        => 'Aviso de baja',
+		Invitacion::ALTA      => 'Invitación',
+		Invitacion::RESET     => 'Recuperar contraseña',
+		self::RECHAZO         => 'Solicitud rechazada',
+		self::SEPA            => 'Domiciliación SEPA',
+		self::COMPRA          => 'Lista de compra de material',
+		self::COMPRA_REVISADA => 'Lista de compra revisada',
+		self::BAJA            => 'Aviso de baja',
 	);
 
 	public static function table(): string {
@@ -186,6 +190,9 @@ final class RegistroEmails {
 		if ( self::COMPRA === $fila['tipo'] ) {
 			$lista = \AsdeBalears\AreaPrivada\Inventario\ComprasTable::obtener( (int) ( $datos['lista'] ?? 0 ) );
 			return $lista ? \AsdeBalears\AreaPrivada\Inventario\AvisoTesoreria::html( $lista, $user ? Contacto::saludo( $user ) : '' ) : '';
+		}
+		if ( self::COMPRA_REVISADA === $fila['tipo'] ) {
+			return \AsdeBalears\AreaPrivada\Inventario\AvisoRevision::vista_previa( $datos, $user ? Contacto::saludo( $user ) : '' );
 		}
 		if ( self::BAJA === $fila['tipo'] ) {
 			return AvisoBaja::vista_previa( $datos, $user ? Contacto::saludo( $user ) : '' );

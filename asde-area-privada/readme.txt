@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.29.0
+Stable tag: 0.30.0
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -52,6 +52,14 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.30.0 =
+* Inventory: when an item is added to a shopping list, the "are you sure?" question is now asked when there are already 5 units or more ("do you really need to buy more?"), not when there are few. The yellow "few units" label stays.
+* Shopping lists can include new items that are not in the inventory yet (description, quantity and optional estimated price), also in a list made only of new items ("Lista de material nuevo"). They are shown in the list, in its PDF and in the email to Treasury.
+* When Treasury approves or rejects a shopping list, the person who asked for it gets an email with the result, the reason if rejected and a link to the list (if the account has an email; otherwise it is logged as "no email"). It is recorded in the email log as "Lista de compra revisada".
+* "Marcar como comprada": an approved list can be marked as bought (with confirmation, only once). The bought quantities are added to each inventory item and the new items are created in the inventory. Recorded in the audit log (item ids only).
+* CSV import: a row without serial number with the same description (ignoring case, accents and extra spaces) and type as an item already in the inventory, or as a previous row of the same file, adds its quantity to that item instead of creating a duplicate (uniform shirts only if model and size also match). The import report says how many rows were added this way.
+* Uniforms: a scouter can order the uniform for any member with an active membership in their sections, besides themselves (families, as before: their minors). The shirt price follows the rule of the person it is for (the first one of an adult scouter or volunteer is free). With more than five people, "¿Para quién?" becomes a drop-down grouped by section. The people come from the group snapshot (one read, no CRM query per person).
 
 = 0.29.0 =
 * Fix: in People, the member-number buttons (assign, pass to the CRM, correct the format, give a new number) did not ask for confirmation since 0.18.1; they do again. Code review fixes: cancelling an order returns a shirt served from the inventory, the Excel file is built in memory (no temporary file with personal data), the change history only shows edits made by the group's own accounts, approving changes without CRM write access keeps them pending.
@@ -136,6 +144,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * First version with the mobile app (PWA).
 
 == Upgrade Notice ==
+
+= 0.30.0 =
+Shopping lists with new items, email to the requester when Treasury approves or rejects, "mark as bought" (adds the quantities to the inventory), CSV import that merges repeated items, the inventory warning reversed and uniform orders by scouters for their sections. Adds two columns to the shopping lists table (applied automatically on update).
 
 = 0.29.0 =
 Excel and printable reports, "Fichas reducidas" (one record per page), collapsible boxes, live search in People, grouped approval of proposed changes and uniform shirts from the inventory. Adds columns to the inventory and uniform tables and a predefined report (applied automatically on update).

@@ -11,7 +11,7 @@ abstract class UniformesBaseView extends View {
 
 	protected function subnav( string $activo ): string {
 		$items = array();
-		if ( current_user_can( Servicio::CAP_PEDIR ) && Servicio::para_quien( Ambito::actual() ) ) {
+		if ( current_user_can( Servicio::CAP_PEDIR ) && Servicio::propios( Ambito::actual() ) ) {
 			$items['uniforme'] = asde_t( 'Mis pedidos' );
 		}
 		if ( current_user_can( Servicio::CAP_GESTION ) ) {

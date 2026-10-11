@@ -205,8 +205,14 @@ try {
 	$ok( $p_tom && '990025' === $p_tom['socio'] && $p_tom['adulto'], 'un scouter (solo scouter, de Lobatos) pide su camisa' );
 	// v0.29 (petición del usuario): la primera camisa de un scouter es gratis y queda pagada sola.
 	$ok( 0.0 === $p_eva['total'] && 0.0 === $p_tom['total'] && null !== $p_tom['pago_en'] && PedidosTable::REF_SIN_COSTE === $p_tom['pago_ref'] && 25.0 === Servicio::precio_camisa( '990025', true, Config::de() ), 'la primera camisa de un scouter, 0 € y pagada «sin coste»; la segunda ya costaría 25 €' );
+	// v0.30 (P-48, decisión del usuario): un scouter pide también para los socios/as de su sección, no para los de otras.
+	$enviar( new UniformeView(), array( 'asde_action' => 'uniforme_pedir', 'socio' => '990022', 'con_camisa' => '1', 'camisa' => 'femenina|12' ), 'asde_uniforme_pedir' );
+	$ok( $ultimo()['id'] === $p_tom['id'], 'el scouter de Lobatos no pide para alguien de otra sección (Nora, de Scouts)' );
 	$enviar( new UniformeView(), array( 'asde_action' => 'uniforme_pedir', 'socio' => '990021', 'con_camisa' => '1', 'camisa' => 'masculina|S' ), 'asde_uniforme_pedir' );
-	$ok( $ultimo()['id'] === $p_tom['id'], 'pero no pide por otra persona (aunque sea de su sección): lo suyo es lo suyo' );
+	$p_leo2 = $ultimo();
+	$ok( $p_leo2['id'] > $p_tom['id'] && '990021' === $p_leo2['socio'] && $u_scouter === $p_leo2['creado_por'] && 25.0 === $p_leo2['total'] && ! $p_leo2['adulto'], 'pero sí para alguien de su sección (Leo, de Lobatos), con el precio de Leo (P-48, v0.30)' );
+	$enviar( new UniformeView(), array( 'asde_action' => 'uniforme_cancelar', 'pedido' => (string) $p_leo2['id'] ), 'asde_uniforme_' . $p_leo2['id'] );
+	$ok( null !== PedidosTable::obtener( $p_leo2['id'] )['cancelado_en'], 'y lo puede cancelar (lo pidió él y nadie lo ha validado)' );
 
 	$cerrado            = $cfg;
 	$cerrado['abierto'] = false;

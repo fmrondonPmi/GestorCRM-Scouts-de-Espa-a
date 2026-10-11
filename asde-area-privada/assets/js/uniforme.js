@@ -112,10 +112,15 @@
 	}
 
 	// v0.29: el precio de la camisa depende de para quién es (la primera de un scouter, gratis).
+	// v0.30: «¿Para quién?» puede ser un desplegable (un scouter con sus secciones): el precio va en la opción.
 	var precioCamisa = form.querySelector( '[data-asde-precio-camisa]' );
 	form.addEventListener( 'change', function ( e ) {
-		var quien = e.target;
-		if ( ! camisa || 'socio' !== quien.name || ! quien.hasAttribute( 'data-precio-camisa' ) ) {
+		var campo = e.target;
+		if ( ! camisa || 'socio' !== campo.name ) {
+			return;
+		}
+		var quien = 'SELECT' === campo.tagName ? campo.options[ campo.selectedIndex ] : campo;
+		if ( ! quien || ! quien.hasAttribute( 'data-precio-camisa' ) ) {
 			return;
 		}
 		var precio = parseFloat( quien.getAttribute( 'data-precio-camisa' ) ) || 0;

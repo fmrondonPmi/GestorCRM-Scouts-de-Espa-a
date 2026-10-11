@@ -23,7 +23,7 @@
 
 ## Cómo lo pide un asociado (pestaña «Uniforme»)
 
-1. **Para quién:** la propia persona (si tiene membresía activa) o, en una cuenta familiar, cada uno de sus menores. Los scouters piden la suya igual que los demás.
+1. **Para quién:** la propia persona (si tiene membresía activa) o, en una cuenta familiar, cada uno de sus menores. Los scouters piden la suya igual que los demás. **v0.30 (P-48, doc 37):** un scouter pide también para cualquier socio/a con membresía activa de sus secciones (el precio de la camisa, el de esa persona); con más de 5 personas, «¿Para quién?» es un desplegable agrupado por sección.
 2. **Formulario:**
    - camisa sí o no, con el modelo y la talla (con la guía de tallas);
    - insignias con su imagen, dónde va, precio y cantidad (con la guía de colocación);

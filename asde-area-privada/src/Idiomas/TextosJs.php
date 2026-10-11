@@ -45,10 +45,10 @@ final class TextosJs {
 		// Inventario (v0.19, inventario.js).
 		'1 material marcado',
 		'%s materiales marcados',
-		'No queda ninguna unidad de «%s» en el inventario. ¿Seguro que quieres añadirlo a la lista de compra?',
-		'En el inventario solo hay 1 unidad de «%s». ¿Seguro que quieres añadirlo a la lista de compra?',
-		'En el inventario solo hay %s unidades de «%s». ¿Seguro que quieres añadirlo a la lista de compra?',
-		'Marca el material que hay que comprar.',
+		// v0.30 (P-62): se pregunta cuando ya hay bastantes; y una lista puede ser solo de material nuevo (P-63).
+		'Ya hay 1 unidad de «%s» en el inventario. ¿Seguro que hace falta comprar más?',
+		'Ya hay %s unidades de «%s» en el inventario. ¿Seguro que hace falta comprar más?',
+		'No has marcado ningún material del inventario. ¿Preparar una lista solo con material nuevo?',
 		'+ sin precio',
 		// v0.29: cuadros plegables (area.js) e imprimir un informe (informes.js).
 		'Contraer o expandir «%s»',

@@ -8,6 +8,7 @@
  * @var string   $url
  * @var string   $url_list
  * @var string   $url_pdf  '' si todavía no se puede imprimir
+ * @var string   $url_inv  El inventario (v0.30: enlace al material dado de alta al comprarla)
  */
 // phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
 use AsdeBalears\AreaPrivada\Inventario\ComprasTable;
@@ -42,6 +43,9 @@ $campos = static function () use ( $nonce, $l ): void {
 			<?php if ( $l['impresiones'] ) : ?>
 				<li><?php echo esc_html( sprintf( asde_t( 'PDF descargado por primera vez el %s.' ), $fecha( $l['impresa_en'] ) ) ); ?></li>
 			<?php endif; ?>
+		<?php elseif ( ComprasTable::COMPRADA === $l['estado'] ) : ?>
+			<li><?php echo esc_html( sprintf( asde_t( 'Visto bueno de Tesorería: %1$s, el %2$s.' ), $usuario( $l['revisado_por'] ) ?: '—', $fecha( $l['revisado_en'] ) ) ); ?></li>
+			<li><?php echo esc_html( sprintf( asde_t( 'Comprada: la marcó %1$s el %2$s. Lo comprado se sumó al inventario.' ), $usuario( $l['comprada_por'] ) ?: '—', $fecha( $l['comprada_en'] ) ) ); ?></li>
 		<?php elseif ( ComprasTable::RECHAZADA === $l['estado'] ) : ?>
 			<li><?php echo esc_html( sprintf( asde_t( 'Rechazada por %1$s el %2$s. Motivo: %3$s' ), $usuario( $l['revisado_por'] ) ?: '—', $fecha( $l['revisado_en'] ), $l['motivo'] ) ); ?></li>
 		<?php else : ?>
@@ -68,8 +72,15 @@ $campos = static function () use ( $nonce, $l ): void {
 						$extra = array_filter( array( $linea['tipo'], '' !== $linea['num_serie'] ? sprintf( asde_t( 'Nº de serie %s' ), $linea['num_serie'] ) : '' ) );
 						echo $extra ? '<br><span class="asde-muted">' . esc_html( implode( ' · ', $extra ) ) . '</span>' : '';
 						?>
+						<?php if ( 0 === $linea['material'] ) : ?>
+							<br><span class="asde-badge asde-badge--inv-nuevo"><?php asde_e( 'Material nuevo' ); ?></span>
+						<?php endif; ?>
+						<?php if ( $linea['alta'] ) : ?>
+							<?php // v0.30: dado de alta en el inventario al marcar la lista como comprada. ?>
+							<br><a class="asde-muted" href="<?php echo esc_url( add_query_arg( 'material', (int) $linea['alta'], $url_inv ) ); ?>"><?php asde_e( 'Dado de alta en el inventario' ); ?></a>
+						<?php endif; ?>
 					</td>
-					<td data-label="<?php echo esc_attr( asde_a( 'En inventario' ) ); ?>" class="asde-num"><?php echo (int) $linea['en_inventario']; ?></td>
+					<td data-label="<?php echo esc_attr( asde_a( 'En inventario' ) ); ?>" class="asde-num"><?php echo 0 === $linea['material'] ? '<span class="asde-muted">—</span>' : (int) $linea['en_inventario']; ?></td>
 					<td data-label="<?php echo esc_attr( asde_a( 'A comprar' ) ); ?>" class="asde-num"><strong><?php echo (int) $linea['cantidad']; ?></strong></td>
 					<td data-label="<?php echo esc_attr( asde_a( 'Precio' ) ); ?>" class="asde-num"><?php echo null === $linea['precio'] ? '<span class="asde-muted">—</span>' : esc_html( Calculadora::euros( $linea['precio'] ) ); ?></td>
 					<td data-label="<?php echo esc_attr( asde_a( 'Importe' ) ); ?>" class="asde-num"><?php echo null === $linea['precio'] ? '<span class="asde-muted">—</span>' : esc_html( Calculadora::euros( $linea['precio'] * $linea['cantidad'] ) ); ?></td>
@@ -93,6 +104,19 @@ $campos = static function () use ( $nonce, $l ): void {
 		<p class="asde-help"><?php asde_e( 'El PDF para imprimirla saldrá aquí cuando Tesorería le dé el visto bueno.' ); ?></p>
 	<?php endif; ?>
 </section>
+
+<?php if ( Servicio::puede_marcar_comprada( $l ) ) : ?>
+	<?php // v0.30 (P-66): suma lo comprado al inventario; con confirmación y una sola vez. ?>
+	<section class="asde-card" data-asde-no-plegable>
+		<h3 class="asde-card__title"><?php asde_e( '¿Ya se ha comprado?' ); ?></h3>
+		<p class="asde-muted"><?php asde_e( 'Cuando el material de la lista esté comprado, márcala como comprada: las cantidades se sumarán al inventario y el material nuevo se dará de alta. No se puede deshacer.' ); ?></p>
+		<form method="post" action="<?php echo esc_url( $url ); ?>" class="asde-form__fila" onsubmit="return confirm(<?php echo esc_attr( asde_js( '¿Marcar la lista %s como comprada? Las cantidades se sumarán al inventario y el material nuevo se dará de alta. No se puede deshacer.', $num ) ); ?>);">
+			<?php $campos(); ?>
+			<input type="hidden" name="asde_action" value="compra_comprada">
+			<button type="submit" class="button button-primary"><?php asde_e( 'Marcar como comprada' ); ?></button>
+		</form>
+	</section>
+<?php endif; ?>
 
 <?php if ( Servicio::puede_revisar( $l ) ) : ?>
 	<section class="asde-card">

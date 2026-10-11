@@ -49,7 +49,7 @@ final class AreaPrivadaView extends View {
 					),
 					// Uniformes entregados que el socio/a o su familia aún no ha confirmado.
 					'por_confirmar' => $uniformes['confirmar'],
-					'pide_uniforme' => current_user_can( Servicio::CAP_PEDIR ) && Servicio::para_quien( $ambito ),
+					'pide_uniforme' => current_user_can( Servicio::CAP_PEDIR ) && Servicio::propios( $ambito ),
 					'gestiona_uniformes' => $gestiona,
 				)
 			)

@@ -5,6 +5,8 @@
  * @var array<string, float> $precios Precio de la camisa de cada persona (v0.29: la primera de un scouter, gratis)
  * @var array                                              $cfg
  * @var array<string, AsdeBalears\AreaPrivada\Domain\Persona> $para    Para quién puede pedir (nº => persona)
+ * @var array[]                                            $grupos  v0.30: con muchas personas, agrupadas para el desplegable (etiqueta, personas); vacío si van en botones
+ * @var bool                                               $otros   v0.30: puede pedir también para socios/as de sus secciones (scouter)
  * @var array[]                                            $pedidos
  * @var AsdeBalears\AreaPrivada\Auth\Ambito                $ambito
  * @var array<string, array{nombre:string, url:string}>   $guias   Guías de tallas por modelo
@@ -100,7 +102,23 @@ $insignias = Config::insignias_activas( $cfg );
 			<?php wp_nonce_field( 'asde_uniforme_pedir' ); ?>
 			<input type="hidden" name="asde_action" value="uniforme_pedir">
 
-			<?php if ( count( $para ) > 1 ) : ?>
+			<?php if ( $grupos ) : ?>
+				<?php // v0.30 (P-48): con muchas personas (un scouter y sus secciones), un desplegable agrupado por sección. ?>
+				<p>
+					<label for="asde-uni-socio"><?php asde_e( '¿Para quién?' ); ?></label>
+					<select id="asde-uni-socio" name="socio" data-asde-uni-socio>
+						<?php $primero = true; ?>
+						<?php foreach ( $grupos as $g ) : ?>
+							<optgroup label="<?php echo esc_attr( $g['etiqueta'] ); ?>">
+								<?php foreach ( $g['personas'] as $n => $persona ) : ?>
+									<option value="<?php echo esc_attr( (string) $n ); ?>" data-precio-camisa="<?php echo esc_attr( (string) ( $precios[ $n ] ?? $cfg['precio_camisa'] ) ); ?>" <?php selected( $primero ); ?>><?php echo esc_html( '' !== $persona->apellidos ? $persona->apellidos . ', ' . $persona->nombre : $persona->nombre ); ?></option>
+									<?php $primero = false; ?>
+								<?php endforeach; ?>
+							</optgroup>
+						<?php endforeach; ?>
+					</select>
+				</p>
+			<?php elseif ( count( $para ) > 1 ) : ?>
 				<fieldset>
 					<legend><?php asde_e( '¿Para quién?' ); ?></legend>
 					<?php $primero = true; ?>
@@ -113,6 +131,9 @@ $insignias = Config::insignias_activas( $cfg );
 				<?php $persona = reset( $para ); ?>
 				<input type="hidden" name="socio" value="<?php echo esc_attr( (string) key( $para ) ); ?>">
 				<p><?php asde_e( 'Para:' ); ?> <strong><?php echo esc_html( $persona->nombre_completo() ); ?></strong></p>
+			<?php endif; ?>
+			<?php if ( $otros ) : ?>
+				<p class="asde-help"><?php asde_e( 'Como scouter, también puedes pedirlo para los socios y socias de tus secciones. El precio de la camisa es el de la persona para la que es.' ); ?></p>
 			<?php endif; ?>
 
 			<fieldset>

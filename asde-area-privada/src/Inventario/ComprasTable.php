@@ -17,7 +17,11 @@ defined( 'ABSPATH' ) || exit;
  *
  * Estados: pendiente (espera el visto bueno de Tesorería) → aprobada (ya se
  * puede imprimir) o rechazada (con motivo); cancelada en cualquier momento antes
- * de imprimirla. Nunca se borran.
+ * de imprimirla. v0.30: una aprobada pasa a comprada cuando alguien la marca así
+ * (lo comprado se suma al inventario; ya no cambia más). Nunca se borran.
+ *
+ * v0.30: una línea con material 0 es material nuevo, que no estaba en el inventario
+ * (P-63); al comprarla se da de alta y su id queda en la línea («alta»).
  */
 final class ComprasTable {
 
@@ -25,10 +29,12 @@ final class ComprasTable {
 	public const APROBADA  = 'aprobada';
 	public const RECHAZADA = 'rechazada';
 	public const CANCELADA = 'cancelada';
+	public const COMPRADA  = 'comprada';
 
 	public const ESTADOS = array(
 		self::PENDIENTE => 'Pendiente del visto bueno',
 		self::APROBADA  => 'Con el visto bueno',
+		self::COMPRADA  => 'Comprada',
 		self::RECHAZADA => 'Rechazada',
 		self::CANCELADA => 'Cancelada',
 	);
@@ -61,6 +67,8 @@ final class ComprasTable {
 				avisados smallint(5) unsigned NOT NULL DEFAULT 0,
 				impresiones int(11) unsigned NOT NULL DEFAULT 0,
 				impresa_en datetime NULL,
+				comprada_en datetime NULL,
+				comprada_por bigint(20) unsigned NOT NULL DEFAULT 0,
 				PRIMARY KEY  (id),
 				KEY grupo (grupo),
 				KEY estado (estado)
@@ -74,7 +82,7 @@ final class ComprasTable {
 	}
 
 	/**
-	 * @param array[] $lineas Cada una: material, descripcion, tipo, num_serie, en_inventario, cantidad, precio (float|null).
+	 * @param array[] $lineas Cada una: material (0 = material nuevo), descripcion, tipo, num_serie, en_inventario, cantidad, precio (float|null).
 	 * @return int Id de la lista.
 	 */
 	public static function crear( array $lineas, string $nota ): int {
@@ -184,6 +192,24 @@ final class ComprasTable {
 		);
 	}
 
+	/** Aprobada → comprada (v0.30, P-66). Solo si sigue aprobada: no se puede marcar dos veces. */
+	public static function marcar_comprada( int $id ): bool {
+		return self::cambiar(
+			$id,
+			array(
+				'estado'       => self::COMPRADA,
+				'comprada_en'  => current_time( 'mysql', true ),
+				'comprada_por' => get_current_user_id(),
+			),
+			self::APROBADA
+		);
+	}
+
+	/** Vuelve a guardar las líneas (v0.30: con el id del material dado de alta al comprarla). */
+	public static function guardar_lineas( int $id, array $lineas ): bool {
+		return self::cambiar( $id, array( 'lineas' => (string) wp_json_encode( array_values( $lineas ) ) ) );
+	}
+
 	/** Cuenta una descarga del PDF (la primera fecha se guarda). */
 	public static function marcar_impresa( int $id ): void {
 		global $wpdb;
@@ -207,6 +233,8 @@ final class ComprasTable {
 		foreach ( array( 'id', 'creado_por', 'revisado_por', 'avisados', 'impresiones' ) as $k ) {
 			$f[ $k ] = (int) $f[ $k ];
 		}
+		$f['comprada_por'] = (int) ( $f['comprada_por'] ?? 0 );
+		$f['comprada_en']  = $f['comprada_en'] ?? null;
 		$f['total']  = (float) $f['total'];
 		$lineas      = json_decode( (string) $f['lineas'], true );
 		$f['lineas'] = array();
@@ -222,6 +250,7 @@ final class ComprasTable {
 				'en_inventario' => (int) ( $l['en_inventario'] ?? 0 ),
 				'cantidad'      => (int) ( $l['cantidad'] ?? 0 ),
 				'precio'        => isset( $l['precio'] ) && null !== $l['precio'] ? (float) $l['precio'] : null,
+				'alta'          => (int) ( $l['alta'] ?? 0 ),
 			);
 		}
 		return $f;

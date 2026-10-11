@@ -2529,3 +2529,37 @@ dialog.asde-modal--imprimir {
 	white-space: pre-line;
 	overflow-wrap: anywhere;
 }
+
+/* v0.30 · Listas de compra: material nuevo, comprada; «¿Para quién?» en un desplegable (doc 37) */
+.asde-ap .asde-badge--compra-comprada {
+	background: var(--asde-ok-bg);
+	color: var(--asde-ok-text);
+	box-shadow: inset 0 0 0 1px currentColor;
+}
+.asde-ap .asde-badge--inv-nuevo {
+	margin-top: 4px;
+	background: var(--asde-tint);
+	color: var(--asde-text);
+	box-shadow: inset 0 0 0 1px var(--asde-border);
+}
+.asde-ap .asde-table--inv-nuevo input[type="text"][data-asde-inv-desc] {
+	width: 100%;
+	min-width: 12em;
+}
+.asde-ap .asde-inv-total {
+	margin: 12px 0;
+	text-align: right;
+	font-size: 1.05em;
+}
+.asde-ap select[data-asde-uni-socio] {
+	width: 100%;
+	max-width: 420px;
+}
+@media (max-width: 767px) {
+	.asde-ap .asde-table--inv-nuevo input[type="text"][data-asde-inv-desc] {
+		min-width: 0;
+	}
+	.asde-ap .asde-inv-total {
+		text-align: left;
+	}
+}

@@ -14,6 +14,12 @@ defined( 'ABSPATH' ) || exit;
  *    las correctas se importan y las demás vuelven en el informe con su nº de fila
  *    (el de la hoja de cálculo: la cabecera es la 1) y el motivo.
  *
+ * v0.30 (P-67): una fila sin nº de serie con la misma descripción (sin distinguir
+ * mayúsculas, acentos ni espacios de más) y el mismo tipo que un material que ya está
+ * en el inventario (o que otra fila del mismo fichero) suma su cantidad a ese material
+ * en vez de crear otro. Las camisas del uniforme, solo si coinciden también el modelo y
+ * la talla.
+ *
  * Admite lo que guarda Excel en España: separador «;» (o «,»), UTF-8 con o sin BOM
  * o Windows-1252 (ANSI). La cabecera se reconoce sin mayúsculas ni acentos y con
  * varios nombres por columna («Año de compra», «Año», «Anio»…).
@@ -103,11 +109,13 @@ final class Importador {
 	 *
 	 * @param array<int, array<string, string>> $filas       Lo que devuelve leer().
 	 * @param bool                              $crear_tipos Crear los tipos que no existan (si no, esa fila es un error).
-	 * @return array{importados:int, errores:array<int, array{fila:int, datos:array<string, string>, motivo:string}>, tipos_creados:string[]}
+	 * @return array{importados:int, sumados:int, errores:array<int, array{fila:int, datos:array<string, string>, motivo:string}>, tipos_creados:string[]}
+	 *         sumados: filas que han sumado su cantidad a un material que ya estaba (v0.30).
 	 */
 	public static function importar( array $filas, bool $crear_tipos ): array {
 		$res    = array(
 			'importados'    => 0,
+			'sumados'       => 0,
 			'errores'       => array(),
 			'tipos_creados' => array(),
 		);
@@ -115,6 +123,13 @@ final class Importador {
 		foreach ( MaterialesTable::todos( true ) as $m ) {
 			if ( '' !== $m['num_serie'] ) {
 				$series[ mb_strtolower( $m['num_serie'] ) ] = 0; // 0: ya estaba en el inventario.
+			}
+		}
+		// v0.30 (P-67): el material sin nº de serie que ya está en el inventario (no el dado de baja), por su clave.
+		$iguales = array();
+		foreach ( MaterialesTable::todos() as $m ) {
+			if ( '' === $m['num_serie'] ) {
+				$iguales[ self::clave_material( $m ) ] ??= $m['id'];
 			}
 		}
 		TiposTable::camisa(); // Que exista el tipo de las camisas del uniforme (v0.29) antes de buscar los tipos por nombre.
@@ -171,13 +186,41 @@ final class Importador {
 				$res['tipos_creados'][] = TiposTable::obtener( $tipo )['nombre'] ?? $nombre;
 			}
 			$datos['tipo'] = $tipo;
-			MaterialesTable::crear( $datos );
+			$clave         = '' === $serie ? self::clave_material( $datos ) : '';
+			if ( '' !== $clave && isset( $iguales[ $clave ] ) ) {
+				// Repetido: suma su cantidad al que ya está (del inventario o de una fila anterior).
+				if ( $datos['cantidad'] > 0 && ! MaterialesTable::sumar( $iguales[ $clave ], $datos['cantidad'] ) ) {
+					/* translators: %d: cantidad máxima */
+					$fallo( $n, $fila, sprintf( asde_t( 'Ya hay un material con esta descripción y este tipo, y sumándole esta cantidad pasaría de %d unidades.' ), MaterialesTable::MAX_CANTIDAD ) );
+					continue;
+				}
+				++$res['sumados'];
+				continue;
+			}
+			$id = MaterialesTable::crear( $datos );
 			if ( '' !== $serie ) {
 				$series[ $serie ] = $n;
+			} elseif ( $id ) {
+				$iguales[ $clave ] = $id;
 			}
 			++$res['importados'];
 		}
 		return $res;
+	}
+
+	/**
+	 * Clave para encontrar el mismo material (v0.30, P-67): la descripción sin mayúsculas, acentos
+	 * ni espacios de más y el tipo; en las camisas del uniforme, también el modelo y la talla.
+	 *
+	 * @param array $m descripcion, tipo (id), modelo y talla.
+	 */
+	public static function clave_material( array $m ): string {
+		$tipo  = (int) ( $m['tipo'] ?? 0 );
+		$clave = TiposTable::clave( (string) ( $m['descripcion'] ?? '' ) ) . '|' . $tipo;
+		if ( TiposTable::es_camisa( $tipo ) ) {
+			$clave .= '|' . (string) ( $m['modelo'] ?? '' ) . '|' . mb_strtolower( (string) ( $m['talla'] ?? '' ) );
+		}
+		return $clave;
 	}
 
 	/** Fichero de ejemplo (con BOM y «;», como lo abre bien Excel). */

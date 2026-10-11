@@ -23,10 +23,14 @@ $fecha = static fn( ?string $f ) => $f ? wp_date( 'd/m/Y', (int) strtotime( $f .
 <section class="asde-card">
 	<header class="asde-card__header asde-card__header--split">
 		<h2 class="asde-card__title"><?php asde_e( 'Listas de compra de material' ); ?></h2>
-		<span class="asde-actions"><a href="<?php echo esc_url( $url_inv ); ?>"><?php asde_e( 'Preparar una lista desde el inventario' ); ?></a></span>
+		<span class="asde-actions asde-actions--botones">
+			<a class="button" href="<?php echo esc_url( $url_inv ); ?>"><?php asde_e( 'Preparar una lista desde el inventario' ); ?></a>
+			<?php // v0.30 (P-63): una lista solo de material que todavía no está en el inventario. ?>
+			<a class="button asde-button-secundario" href="<?php echo esc_url( add_query_arg( 'nueva', '1', $url ) ); ?>"><?php asde_e( 'Lista de material nuevo' ); ?></a>
+		</span>
 	</header>
 	<p class="asde-muted">
-		<?php asde_e( 'Se preparan marcando el material en el inventario. Tesorería recibe un email y le da el visto bueno; solo entonces se puede descargar el PDF para imprimirla.' ); ?>
+		<?php asde_e( 'Se preparan marcando el material en el inventario (y escribiendo el que todavía no está). Tesorería recibe un email y le da el visto bueno; solo entonces se puede descargar el PDF para imprimirla. Quien la pidió recibe un email con la respuesta. Cuando el material esté comprado, se marca la lista como comprada y lo comprado se suma al inventario.' ); ?>
 	</p>
 	<?php if ( $aprueba && $cuenta[ ComprasTable::PENDIENTE ] ) : ?>
 		<div class="asde-notice asde-notice--info" role="status">
@@ -74,7 +78,7 @@ $fecha = static fn( ?string $f ) => $f ? wp_date( 'd/m/Y', (int) strtotime( $f .
 							<?php endif; ?>
 						</td>
 						<td data-label="<?php echo esc_attr( asde_a( 'Acciones' ) ); ?>">
-							<?php if ( ComprasTable::APROBADA === $l['estado'] ) : ?>
+							<?php if ( in_array( $l['estado'], array( ComprasTable::APROBADA, ComprasTable::COMPRADA ), true ) ) : ?>
 								<a href="<?php echo esc_url( $url_pdf( $l ) ); ?>" target="_blank" rel="noopener"><?php asde_e( 'PDF para imprimir' ); ?></a>
 							<?php elseif ( $aprueba && ComprasTable::PENDIENTE === $l['estado'] ) : ?>
 								<a href="<?php echo esc_url( $detalle ); ?>" data-asde-modal><?php asde_e( 'Revisar' ); ?></a>

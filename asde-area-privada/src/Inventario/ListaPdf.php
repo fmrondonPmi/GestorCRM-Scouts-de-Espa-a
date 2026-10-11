@@ -10,6 +10,9 @@ defined( 'ABSPATH' ) || exit;
  * PDF para imprimir una lista de compra con el visto bueno de Tesorería:
  * cabecera (grupo, nº, fecha, quién la pide y quién le dio el visto bueno),
  * tabla del material, total estimado, nota y «Página X de Y».
+ *
+ * v0.30: el material nuevo (que no estaba en el inventario, P-63) lo dice en la columna
+ * del tipo; y una lista comprada, quién la marcó y cuándo.
  */
 final class ListaPdf {
 
@@ -45,6 +48,9 @@ final class ListaPdf {
 			sprintf( asde_t( 'Creada el %1$s por %2$s.' ), $fecha( $lista['creado'] ), Servicio::usuario( $lista['creado_por'] ) ?: '—' ),
 			sprintf( asde_t( 'Visto bueno de Tesorería: %1$s, el %2$s.' ), Servicio::usuario( $lista['revisado_por'] ) ?: '—', $fecha( $lista['revisado_en'] ) ),
 		);
+		if ( ComprasTable::COMPRADA === $lista['estado'] ) {
+			$datos[] = sprintf( asde_t( 'Comprada: la marcó %1$s el %2$s. Lo comprado se sumó al inventario.' ), Servicio::usuario( (int) $lista['comprada_por'] ) ?: '—', $fecha( $lista['comprada_en'] ) );
+		}
 		foreach ( $datos as $linea ) {
 			$pdf->texto( $x0, $y, $linea, 10 );
 			$y += 14;
@@ -63,11 +69,12 @@ final class ListaPdf {
 		$y = self::fila( $pdf, $y, $cabecera, true );
 
 		foreach ( $lista['lineas'] as $l ) {
+			$nuevo  = empty( $l['material'] );
 			$celdas = array(
 				'descripcion'   => $l['descripcion'],
-				'tipo'          => $l['tipo'],
+				'tipo'          => $nuevo ? asde_t( 'Material nuevo' ) : $l['tipo'],
 				'num_serie'     => $l['num_serie'],
-				'en_inventario' => (string) $l['en_inventario'],
+				'en_inventario' => $nuevo ? '—' : (string) $l['en_inventario'],
 				'cantidad'      => (string) $l['cantidad'],
 				'precio'        => null === $l['precio'] ? '—' : Calculadora::euros( $l['precio'] ),
 				'importe'       => null === $l['precio'] ? '—' : Calculadora::euros( $l['precio'] * $l['cantidad'] ),

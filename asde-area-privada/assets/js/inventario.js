@@ -3,9 +3,11 @@
  * funciona con recargas.
  *
  * 1. Filtros de la lista (tipo y texto) en el navegador, sin recargar.
- * 2. Al marcar para la lista de compra un material con pocas unidades, se
- *    pregunta «¿seguro?» (no bloquea: si se acepta, queda marcado).
- * 3. «Nueva lista de compra»: importes y total en vivo.
+ * 2. Al marcar para la lista de compra un material del que ya hay bastantes
+ *    unidades (v0.30, P-62: antes era al revés), se pregunta «¿seguro que hace falta
+ *    comprar más?» (no bloquea: si se acepta, queda marcado).
+ * 3. «Nueva lista de compra»: importes y total en vivo y, v0.30 (P-63), «Añadir
+ *    otra línea» de material nuevo sin recargar.
  * 4. El «+» del tipo abre los tipos en la ventana emergente; al cerrarla, el
  *    desplegable se actualiza sin recargar (no se pierde lo escrito) y queda
  *    elegido el tipo recién creado.
@@ -86,13 +88,12 @@
 				return;
 			}
 			var cantidad = parseInt( c.getAttribute( 'data-cantidad' ) || '0', 10 );
-			if ( c.checked && cantidad < umbral ) {
+			// P-62 (v0.30): se pregunta cuando ya hay bastantes (con el umbral a 0, nunca).
+			if ( c.checked && umbral > 0 && cantidad >= umbral ) {
 				var nombre = c.getAttribute( 'data-nombre' ) || '';
-				var pregunta = 0 === cantidad
-					? asdeT( 'No queda ninguna unidad de «%s» en el inventario. ¿Seguro que quieres añadirlo a la lista de compra?', nombre )
-					: ( 1 === cantidad
-						? asdeT( 'En el inventario solo hay 1 unidad de «%s». ¿Seguro que quieres añadirlo a la lista de compra?', nombre )
-						: asdeT( 'En el inventario solo hay %s unidades de «%s». ¿Seguro que quieres añadirlo a la lista de compra?', String( cantidad ), nombre ) );
+				var pregunta = 1 === cantidad
+					? asdeT( 'Ya hay 1 unidad de «%s» en el inventario. ¿Seguro que hace falta comprar más?', nombre )
+					: asdeT( 'Ya hay %s unidades de «%s» en el inventario. ¿Seguro que hace falta comprar más?', String( cantidad ), nombre );
 				if ( ! window.confirm( pregunta ) ) {
 					c.checked = false;
 				}
@@ -100,9 +101,9 @@
 			contar();
 		} );
 		compra.addEventListener( 'submit', function ( e ) {
-			if ( 0 === contar() ) {
+			// v0.30: sin nada marcado también se puede seguir, para una lista solo de material nuevo.
+			if ( 0 === contar() && ! window.confirm( asdeT( 'No has marcado ningún material del inventario. ¿Preparar una lista solo con material nuevo?' ) ) ) {
 				e.preventDefault();
-				window.alert( asdeT( 'Marca el material que hay que comprar.' ) );
 			}
 		} );
 		contar();
@@ -121,6 +122,13 @@
 				var c = parseInt( tr.querySelector( '[data-asde-inv-cantidad]' ).value || '0', 10 ) || 0;
 				var p = importe( tr.querySelector( '[data-asde-inv-precio]' ).value );
 				var celda = tr.querySelector( '[data-asde-inv-importe]' );
+				var desc = tr.querySelector( '[data-asde-inv-desc]' );
+				if ( desc && '' === desc.value.trim() ) {
+					// Fila de material nuevo en blanco: no cuenta.
+					celda.textContent = '—';
+					tr.classList.remove( 'asde-fila--cancelada' );
+					return;
+				}
 				tr.classList.toggle( 'asde-fila--cancelada', 0 === c );
 				if ( null === p ) {
 					celda.textContent = '—';
@@ -134,6 +142,35 @@
 		};
 		nueva.addEventListener( 'input', recalcular );
 		recalcular();
+
+		// v0.30 (P-63): «Añadir otra línea» de material nuevo sin recargar (sin JavaScript, el
+		// botón envía el formulario y vuelve con una fila más).
+		var nuevos = nueva.querySelector( '[data-asde-inv-nuevos]' );
+		var otra = nueva.querySelector( '[data-asde-inv-otra]' );
+		if ( nuevos && otra ) {
+			otra.addEventListener( 'click', function ( e ) {
+				var filas = nuevos.querySelectorAll( '[data-asde-inv-nuevo]' );
+				var modelo = filas[ filas.length - 1 ];
+				if ( ! modelo ) {
+					return; // Sin fila de modelo: que lo haga el servidor.
+				}
+				e.preventDefault();
+				var i = filas.length;
+				var fila = modelo.cloneNode( true );
+				Array.prototype.forEach.call( fila.querySelectorAll( 'input' ), function ( campo ) {
+					campo.name = campo.name.replace( /\[\d+\]$/, '[' + i + ']' );
+					campo.id = campo.id.replace( /-\d+$/, '-' + i );
+					campo.value = campo.hasAttribute( 'data-asde-inv-cantidad' ) ? '1' : '';
+				} );
+				Array.prototype.forEach.call( fila.querySelectorAll( 'label' ), function ( label ) {
+					label.htmlFor = label.htmlFor.replace( /-\d+$/, '-' + i );
+					label.textContent = label.textContent.replace( /\d+/, String( i + 1 ) );
+				} );
+				nuevos.appendChild( fila );
+				recalcular();
+				fila.querySelector( '[data-asde-inv-desc]' ).focus();
+			} );
+		}
 	}
 
 	// ---------------------------------------------------------------------

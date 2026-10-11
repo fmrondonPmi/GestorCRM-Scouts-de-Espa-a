@@ -18,6 +18,8 @@ defined( 'ABSPATH' ) || exit;
  *
  * v0.29: las camisas del uniforme (tipo «Camisa uniforme») llevan modelo (chico o chica)
  * y talla; la gestión de uniformes las asigna a un pedido y las descuenta de aquí.
+ *
+ * v0.30: lo comprado con una lista de compra se suma aquí (sumar()).
  */
 final class MaterialesTable {
 
@@ -212,6 +214,31 @@ final class MaterialesTable {
 				'notas'       => '',
 				'modelo'      => $modelo,
 				'talla'       => $talla,
+			)
+		);
+	}
+
+	/**
+	 * Suma unidades a un material (v0.30: lo comprado con una lista, P-66, y las filas repetidas
+	 * de una importación, P-67). Atómico y solo si sigue en el inventario (no dado de baja) y no
+	 * pasa de la cantidad máxima.
+	 */
+	public static function sumar( int $id, int $unidades ): bool {
+		global $wpdb;
+		if ( $unidades <= 0 ) {
+			return false;
+		}
+		return (bool) $wpdb->query( // phpcs:ignore WordPress.DB
+			$wpdb->prepare(
+				'UPDATE %i SET cantidad = cantidad + %d, modificado = %s, modificado_por = %d WHERE id = %d AND grupo = %s AND baja_en IS NULL AND cantidad + %d <= %d',
+				self::table(),
+				$unidades,
+				current_time( 'mysql', true ),
+				get_current_user_id(),
+				$id,
+				Grupo::numero(),
+				$unidades,
+				self::MAX_CANTIDAD
 			)
 		);
 	}

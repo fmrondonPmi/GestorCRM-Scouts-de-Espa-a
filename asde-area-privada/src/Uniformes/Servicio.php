@@ -3,7 +3,10 @@ namespace AsdeBalears\AreaPrivada\Uniformes;
 
 use AsdeBalears\AreaPrivada\Audit\Logger;
 use AsdeBalears\AreaPrivada\Auth\Ambito;
+use AsdeBalears\AreaPrivada\Crm\CrmException;
+use AsdeBalears\AreaPrivada\Crm\PersonaRepository;
 use AsdeBalears\AreaPrivada\Domain\Persona;
+use AsdeBalears\AreaPrivada\Domain\Secciones;
 use AsdeBalears\AreaPrivada\Inventario\MaterialesTable;
 use AsdeBalears\AreaPrivada\Tesoreria\Calculadora;
 
@@ -22,8 +25,15 @@ defined( 'ABSPATH' ) || exit;
  * Quién gestiona: Tesorería y Coordinación (y Secretaría, administradores) ven
  * todos los pedidos del grupo; un scouter, los de socios de sus secciones que no
  * son adultos, y los suyos.
+ *
+ * v0.30 (P-48): un scouter puede pedir también para cualquier socio/a con membresía
+ * activa de sus secciones (en «Mi uniforme»); el precio de la camisa es el de la persona
+ * para la que es (precio_camisa()).
  */
 final class Servicio {
+
+	/** v0.30: con más personas que estas, «¿Para quién?» es un desplegable agrupado por sección. */
+	public const MAX_BOTONES_PARA = 5;
 
 	public const CAP_PEDIR   = 'asde_uniformes_pedir';
 	public const CAP_GESTION = 'asde_uniformes_gestion';
@@ -127,8 +137,13 @@ final class Servicio {
 	// Quién
 	// ---------------------------------------------------------------------
 
-	/** @return array<string, Persona> Para quién puede pedir esta cuenta: la propia persona y sus menores. */
-	public static function para_quien( Ambito $a ): array {
+	/**
+	 * La propia persona y sus menores (sin consultar el CRM: ya están en el ámbito). Basta para
+	 * saber si la cuenta pide uniforme (el menú y las pestañas).
+	 *
+	 * @return array<string, Persona>
+	 */
+	public static function propios( Ambito $a ): array {
 		$out = array();
 		if ( $a->persona && $a->socio_activo() ) {
 			$out[ $a->persona->num_socio_asde ] = $a->persona;
@@ -139,8 +154,98 @@ final class Servicio {
 		return $out;
 	}
 
+	/**
+	 * Para quién puede pedir esta cuenta: la propia persona y sus menores y, si es scouter
+	 * (v0.30, P-48), los socios/as con membresía activa de sus secciones.
+	 *
+	 * @return array<string, Persona> nº => persona (primero los propios; después, por sección y apellidos).
+	 */
+	public static function para_quien( Ambito $a ): array {
+		return self::propios( $a ) + self::de_mis_secciones( $a );
+	}
+
+	/**
+	 * Socios/as con membresía activa de las secciones del scouter (v0.30, P-48). Salen de
+	 * PersonaRepository::todas(), que se sirve de la instantánea (doc 26): una lectura para
+	 * todo el grupo, nunca una consulta al CRM por persona.
+	 *
+	 * @return array<string, Persona>
+	 */
+	public static function de_mis_secciones( Ambito $a ): array {
+		$mias = $a->secciones_scouter();
+		$repo = $mias ? PersonaRepository::make() : null;
+		if ( ! $repo ) {
+			return array();
+		}
+		try {
+			$todas = $repo->todas();
+		} catch ( CrmException $e ) {
+			return array(); // CRM caído: puede seguir pidiendo para los suyos.
+		}
+		$out = array();
+		foreach ( $todas as $p ) {
+			if ( $p->tiene_membresia_activa() && array_intersect( $p->secciones, $mias ) ) {
+				$out[ $p->num_socio_asde ] = $p;
+			}
+		}
+		return $out;
+	}
+
+	/**
+	 * «¿Para quién?» agrupado (v0.30): «Tú», «Tu familia» y una sección del scouter para cada
+	 * una de las demás personas (la primera de sus secciones que lleva el scouter), en el orden
+	 * de las secciones.
+	 *
+	 * @param array<string, Persona> $para Lo que devuelve para_quien().
+	 * @return array<int, array{etiqueta:string, personas:array<string, Persona>}>
+	 */
+	public static function agrupar_para_quien( Ambito $a, array $para ): array {
+		$mias   = $a->secciones_scouter();
+		$propia = array();
+		$fam    = array();
+		$secc   = array();
+		foreach ( $para as $n => $p ) {
+			$n = (string) $n;
+			if ( $a->persona && $a->persona->num_socio_asde === $n ) {
+				$propia[ $n ] = $p;
+			} elseif ( isset( $a->representados[ $n ] ) ) {
+				$fam[ $n ] = $p;
+			} else {
+				$s                = (string) ( array_values( array_intersect( $p->secciones, $mias ) )[0] ?? '' );
+				$secc[ $s ][ $n ] = $p;
+			}
+		}
+		$orden = array_flip( array_keys( Secciones::all() ) );
+		uksort( $secc, static fn( $x, $y ) => ( $orden[ $x ] ?? 99 ) <=> ( $orden[ $y ] ?? 99 ) );
+		$out = array();
+		if ( $propia ) {
+			$out[] = array(
+				'etiqueta' => asde_t( 'Tú' ),
+				'personas' => $propia,
+			);
+		}
+		if ( $fam ) {
+			$out[] = array(
+				'etiqueta' => asde_t( 'Tu familia' ),
+				'personas' => $fam,
+			);
+		}
+		foreach ( $secc as $s => $personas ) {
+			$out[] = array(
+				'etiqueta' => '' !== $s ? Secciones::nombre( $s ) : asde_t( 'Sin sección' ),
+				'personas' => $personas,
+			);
+		}
+		return $out;
+	}
+
 	public static function es_propio( array $p, Ambito $a ): bool {
 		return ( $a->persona && $a->persona->num_socio_asde === $p['socio'] ) || isset( $a->representados[ $p['socio'] ] );
+	}
+
+	/** ¿Lo pidió esta cuenta? (v0.30: un scouter para alguien de su sección.) */
+	public static function lo_pidio( array $p ): bool {
+		return get_current_user_id() > 0 && get_current_user_id() === (int) $p['creado_por'];
 	}
 
 	/** ¿Ve todos los pedidos del grupo? Tesorería, Coordinación, Secretaría y administradores. */
@@ -171,9 +276,9 @@ final class Servicio {
 		return current_user_can( self::CAP_ENTREGA ) && null === $p['cancelado_en'] && self::en_gestion( $p, $a );
 	}
 
-	/** El socio/a o su familia cancela el suyo mientras nadie haya validado nada. */
+	/** El socio/a o su familia (o quien lo pidió, v0.30) cancela el suyo mientras nadie haya validado nada. */
 	public static function puede_cancelar_propio( array $p, Ambito $a ): bool {
-		return self::es_propio( $p, $a ) && null === $p['cancelado_en'] && null === $p['pago_en'] && null === $p['pedido_en'] && null === $p['entregado_en'];
+		return ( self::es_propio( $p, $a ) || self::lo_pidio( $p ) ) && null === $p['cancelado_en'] && null === $p['pago_en'] && null === $p['pedido_en'] && null === $p['entregado_en'];
 	}
 
 	/**
@@ -250,6 +355,7 @@ final class Servicio {
 			return new \WP_Error( 'asde_uniforme', asde_t( 'No puedes hacer un pedido para esa persona.' ) );
 		}
 		if ( $lineas['camisa'] ) {
+			// El de la persona para la que es (v0.30: también si lo pide un scouter de su sección).
 			$lineas['camisa']['precio'] = self::precio_camisa( $p->num_socio_asde, $p->es_adulto_voluntario(), $cfg );
 		}
 		$t  = self::total( $lineas, $cfg );
@@ -266,9 +372,10 @@ final class Servicio {
 			'uniforme',
 			(string) $id,
 			array(
-				'camisa'    => (bool) $lineas['camisa'],
-				'insignias' => count( $lineas['insignias'] ),
-				'total'     => $t['total'],
+				'camisa'     => (bool) $lineas['camisa'],
+				'insignias'  => count( $lineas['insignias'] ),
+				'total'      => $t['total'],
+				'para_otros' => ! isset( self::propios( $a )[ $socio ] ), // v0.30: un scouter para alguien de su sección.
 			)
 		);
 		return $id;
@@ -396,12 +503,34 @@ final class Servicio {
 
 	/** ¿Tiene ya algún pedido con camisa (no cancelado)? $salvo: un pedido que no cuenta. */
 	public static function tiene_camisa( string $socio, int $salvo = 0 ): bool {
-		foreach ( PedidosTable::de_socios( array( $socio ) ) as $p ) {
-			if ( $p['id'] !== $salvo && null === $p['cancelado_en'] && ! empty( $p['lineas']['camisa'] ) ) {
+		return self::con_camisa( PedidosTable::de_socios( array( $socio ) ), $socio, $salvo );
+	}
+
+	/** ¿Hay, entre estos pedidos, alguno con camisa (no cancelado) de este socio/a? */
+	private static function con_camisa( array $pedidos, string $socio, int $salvo = 0 ): bool {
+		foreach ( $pedidos as $p ) {
+			if ( $socio === (string) $p['socio'] && $p['id'] !== $salvo && null === $p['cancelado_en'] && ! empty( $p['lineas']['camisa'] ) ) {
 				return true;
 			}
 		}
 		return false;
+	}
+
+	/**
+	 * Precio de la camisa para cada persona de «¿Para quién?» (v0.30), con los pedidos de todas
+	 * ya leídos (una consulta para todas, no una por persona). Misma regla que precio_camisa().
+	 *
+	 * @param array<string, Persona> $para
+	 * @param array[]                $pedidos Los de esas personas (PedidosTable::de_socios).
+	 * @return array<string, float>
+	 */
+	public static function precios_camisa( array $para, array $cfg, array $pedidos ): array {
+		$out = array();
+		foreach ( $para as $n => $persona ) {
+			$n         = (string) $n;
+			$out[ $n ] = $persona->es_adulto_voluntario() && ! empty( $cfg['primera_gratis'] ) && ! self::con_camisa( $pedidos, $n ) ? 0.0 : (float) $cfg['precio_camisa'];
+		}
+		return $out;
 	}
 
 	/** Importe que Tesorería propone al validar el pago: el total con los precios de hoy. */

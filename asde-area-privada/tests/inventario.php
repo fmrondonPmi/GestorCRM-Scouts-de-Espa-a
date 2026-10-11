@@ -311,7 +311,8 @@ try {
 	echo "\n== Parte D · Nueva lista de compra y aviso a Tesorería ==\n";
 	$como( $u_scouter );
 	$h = $ver( new InventarioComprasView(), array( 'nueva' => '1', 'm' => array( (string) $tienda['id'], (string) $hornillo['id'], (string) $cuerda['id'], (string) $ajeno ) ) );
-	$ok( str_contains( $h, 'solo hay 3 unidades' ) && str_contains( $h, 'no queda ninguna unidad en el inventario' ) && ! str_contains( $h, 'solo hay 10 unidades' ) && ! str_contains( $h, 'Material de otro grupo' ) && str_contains( $h, 'ya no está en el inventario' ), 'el formulario avisa de los que tienen menos de 5 (no bloquea) y no admite material de otro grupo' );
+	// v0.30 (P-62, decisión del usuario): el aviso, al revés: cuando ya hay 5 o más.
+	$ok( str_contains( $h, 'Ojo: ya hay 10 unidades en el inventario. ¿Seguro que hace falta comprar más?' ) && 1 === substr_count( $h, 'asde-inv-aviso' ) && ! str_contains( $h, 'ya hay 3 unidades' ) && ! str_contains( $h, 'ya hay 0 unidades' ) && ! str_contains( $h, 'Material de otro grupo' ) && str_contains( $h, 'ya no está en el inventario' ), 'el formulario avisa de los que ya tienen 5 o más (no bloquea; no de los que tienen 3 o ninguna) y no admite material de otro grupo' );
 
 	$enviar( new InventarioComprasView(), array( 'asde_action' => 'compra_crear', 'cantidad' => array( $tienda['id'] => '0', $hornillo['id'] => '0' ), 'precio' => array() ), 'asde_inventario_compra_nueva' );
 	$ok( $com_antes === $max_id( ComprasTable::table() ), 'una lista vacía no se crea' );

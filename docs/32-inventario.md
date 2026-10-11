@@ -1,11 +1,11 @@
-# 32 · Inventario de material, listas de compra e importación (v0.19.0–v0.19.1)
+# 32 · Inventario de material, listas de compra e importación (v0.19.0–v0.19.1; cambios de la v0.30.0 en el doc 37)
 
 ## Petición del usuario (2026-10-05)
 
 - Un módulo nuevo, **«Inventario»**, con todo el material y el equipamiento del grupo. Además de **cantidad** y **descripción**: **precio**, **tipo**, **año de compra** (opcional) y **número de serie**.
 - El **tipo** es una gestión aparte (crear tipos nuevos). En el desplegable de tipos hay un **«+»** al lado que abre, en una **ventana modal**, el mantenimiento de tipos.
 - Acceso: **scouters con y sin sección** (el «voluntario sin sección» del doc 02) y, por supuesto, **Coordinación, Tesorería y Secretaría**. Familias y participantes, no.
-- **Listas de compra**: se marcan los materiales que se quieren comprar. Si la cantidad del material es **< 5**, sale un aviso con la cantidad que hay («¿Seguro que quieres añadirlo a la lista de compra?»), **no bloqueante**.
+- **Listas de compra**: se marcan los materiales que se quieren comprar. Si la cantidad del material es **< 5**, sale un aviso con la cantidad que hay («¿Seguro que quieres añadirlo a la lista de compra?»), **no bloqueante**. **v0.30 (P-62): al revés**: el aviso sale cuando **ya hay 5 o más** («¿Seguro que hace falta comprar más?»).
 - La lista se genera en un **PDF para imprimir**. Al generarla se envía un **email a Tesorería** para que dé el **visto bueno**; **sin él no se puede imprimir**.
 
 ## Cómo queda
@@ -23,22 +23,23 @@ Un voluntario sin sección tiene Secretaría, Coordinación o Tesorería, así q
 
 - `{prefix}asde_inventario` — un material: grupo, descripción, tipo, cantidad, precio por unidad (opcional), año de compra (opcional), nº de serie (opcional), notas, quién y cuándo lo creó y lo cambió, y la **baja** (no se borra: se da de baja con motivo y se puede recuperar).
 - `{prefix}asde_inventario_tipos` — los tipos de cada grupo (nombre único por grupo, sin distinguir mayúsculas ni acentos). Un tipo **en uso no se puede borrar** (se puede renombrar).
-- `{prefix}asde_inventario_compras` — las listas: nº `LC` + grupo + número (p. ej. **LC6840003**), líneas (copia de cada material en ese momento: descripción, tipo, nº de serie, cantidad en inventario, cantidad a comprar, precio), total estimado, nota, estado (**pendiente**, **aprobada**, **rechazada**, **cancelada**), quién la revisó, cuándo y el motivo del rechazo, y cuántas veces se ha descargado el PDF.
+- `{prefix}asde_inventario_compras` — las listas: nº `LC` + grupo + número (p. ej. **LC6840003**), líneas (copia de cada material en ese momento: descripción, tipo, nº de serie, cantidad en inventario, cantidad a comprar, precio), total estimado, nota, estado (**pendiente**, **aprobada**, **rechazada**, **cancelada** y, desde la v0.30, **comprada**), quién la revisó, cuándo y el motivo del rechazo, cuántas veces se ha descargado el PDF y (v0.30) quién la marcó como comprada y cuándo (`comprada_por`, `comprada_en`). Una línea con material 0 es **material nuevo** (v0.30, P-63); al comprarla, el id del material dado de alta queda en la línea (`alta`).
 
 Todo filtra por el nº de grupo: un grupo no ve el inventario de otro.
 
 ### Pantallas (pestaña «Inventario» en *Gestión del grupo*)
 
 1. **Inventario** (`inventario`): lista con buscador y filtro por tipo que **filtran en el navegador sin recargar** (sin JavaScript, el mismo filtro con un botón «Ver»); en móvil, tarjetas. «Añadir material» y «Editar» abren el formulario. Resumen: nº de materiales, unidades y valor estimado (cantidad × precio).
-   - En cada fila, una casilla para la **lista de compra**. Al marcar un material con **menos de 5 unidades** sale el aviso «Solo hay N unidades de «X» en el inventario. ¿Seguro que quieres añadirlo a la lista de compra?»; si se cancela, se desmarca. Sin JavaScript, el aviso sale en la pantalla siguiente, al lado de ese material.
+   - En cada fila, una casilla para la **lista de compra**. Desde la v0.30 (P-62), al marcar un material del que **ya hay 5 unidades o más** sale el aviso «Ya hay N unidades de «X» en el inventario. ¿Seguro que hace falta comprar más?»; si se cancela, se desmarca (hasta la v0.29 era al revés: con menos de 5). La etiqueta amarilla de «pocas unidades» (menos de 5) se queda. Sin JavaScript, el aviso sale en la pantalla siguiente, al lado de ese material. Sin nada marcado, el botón pregunta si se quiere una lista solo de material nuevo.
 2. **Formulario de material**: descripción (obligatoria), tipo (desplegable + **«+»**), cantidad (≥ 0), precio por unidad, año de compra (opcional, de 1950 al año actual), nº de serie, notas. Dar de baja (con motivo) y recuperar.
    - El **«+»** abre la pantalla de **tipos** en la ventana emergente (doc 23). Al cerrarla, el desplegable se actualiza **sin recargar** la página (no se pierde lo escrito) y queda elegido el tipo recién creado. Sin JavaScript, el «+» lleva a la página de tipos.
 3. **Tipos de material** (`inventario_tipos`): crear, renombrar y borrar (solo los que no se usan), con cuántos materiales tiene cada uno.
 4. **Listas de compra** (`inventario_compras`):
-   - **Nueva lista** (con los marcados): cantidad a comprar de cada uno (por defecto 1), precio estimado (el del inventario, se puede cambiar), quitar alguno, nota. Total en vivo.
+   - **Nueva lista** (con los marcados): cantidad a comprar de cada uno (por defecto 1), precio estimado (el del inventario, se puede cambiar), quitar alguno, nota. Total en vivo. **v0.30 (P-63):** debajo, **material nuevo** que no está en el inventario (descripción, cantidad y precio estimado opcional) con «Añadir otra línea»; una lista puede ser solo de material nuevo («Lista de material nuevo» en el listado). Sale en la lista, en su PDF y en el email a Tesorería.
    - Al guardarla: estado **pendiente** y **email a Tesorería** (todas las cuentas activas con el rol Tesorería del grupo, menos quien la crea; si no hay ninguna con email, al email de contacto del grupo). El aviso dice a cuántas personas se ha enviado. Queda en el registro de emails (tipo «Lista de compra de material»).
    - **Listado** con su estado; el **detalle** se abre en la ventana emergente.
-   - **Tesorería**: «Dar el visto bueno» o «Rechazar» (motivo obligatorio). Se puede deshacer el visto bueno mientras no se haya descargado el PDF.
+   - **Tesorería**: «Dar el visto bueno» o «Rechazar» (motivo obligatorio). Se puede deshacer el visto bueno mientras no se haya descargado el PDF. **v0.30 (P-65):** al aprobarla o rechazarla, **email a quien la pidió** con el estado, el motivo si se rechaza y el enlace (registro de emails: «Lista de compra revisada»).
+   - **v0.30 (P-66): «Marcar como comprada»** (lista aprobada, con confirmación, una sola vez): suma lo comprado a cada material del inventario y da de alta el material nuevo; estado «Comprada».
    - **PDF** («Descargar PDF para imprimir»): **solo con el visto bueno**. Antes, el enlace no sale, el servidor lo niega y la página del detalle no se imprime (al imprimirla sale «Pendiente del visto bueno de Tesorería»).
    - Quien la creó puede **cancelarla** mientras está pendiente; Tesorería, mientras no se haya impreso.
 5. En **Inicio**, Tesorería ve en «Pendiente de revisar» las listas que esperan su visto bueno, y la pestaña lleva el número: «Inventario (2)».
@@ -51,7 +52,7 @@ Todo filtra por el nº de grupo: un grupo no ve el inventario de otro.
 - **Paso 2, fila a fila** (`Importador::importar`): las mismas reglas que el formulario (`MaterialesTable::validar`), el tipo por su nombre (si no existe, se crea o la fila falla, según la casilla; una fila con error no deja creado su tipo) y el **nº de serie** no puede estar ya en el inventario ni repetido en el fichero. Las correctas se importan; las filas vacías se saltan.
 - **Informe en la misma ventana**: cuántas filas se leyeron, cuántos materiales se importaron, cuántas filas no y los tipos nuevos; tabla con el **nº de fila** (el de la hoja de cálculo: la cabecera es la 1), la descripción y el **motivo**; y **«Descargar las filas con error (CSV)»** con las mismas columnas más «Fila» y «Motivo del error» (que se ignoran al volver a importar), para corregirlas y reimportarlas. El informe se guarda una hora y solo lo ve quien importó. Al cerrar la ventana, el inventario se recarga con lo nuevo.
 - Auditoría: `inventario_importado` (filas, importados, errores y tipos creados; sin contenido). Las celdas que se descargan van a salvo de fórmulas (`Generador::celda_segura`).
-- **Supuestos** (a confirmar, P-67 y P-68): un nº de serie repetido es un error (sin nº de serie, se pueden repetir descripciones); los tipos que no existen se crean por defecto.
+- **Supuestos** (a confirmar, P-67 y P-68): un nº de serie repetido es un error (sin nº de serie, se pueden repetir descripciones); los tipos que no existen se crean por defecto. **Decididos:** P-68, los tipos que no existen hacen fallar la fila por defecto (v0.29); P-67, **una fila sin nº de serie con la misma descripción y el mismo tipo que un material del inventario (o que otra fila del fichero) suma su cantidad** a ese material (las camisas del uniforme, si coinciden también modelo y talla); el informe dice cuántas filas se han sumado (v0.30, doc 37).
 
 ### El PDF
 
@@ -59,16 +60,16 @@ Lo genera el propio plugin (`Inventario\Pdf`, sin librerías externas: PDF 1.4 c
 
 ### Auditoría
 
-`inventario_material_creado`, `…_modificado`, `…_baja`, `…_recuperado`, `inventario_tipo_creado`, `…_renombrado`, `…_borrado`, `inventario_compra_creada`, `…_aprobada`, `…_aprobacion_deshecha`, `…_rechazada`, `…_cancelada`, `…_pdf`.
+`inventario_material_creado`, `…_modificado`, `…_baja`, `…_recuperado`, `inventario_tipo_creado`, `…_renombrado`, `…_borrado`, `inventario_compra_creada`, `…_aprobada`, `…_aprobacion_deshecha`, `…_rechazada`, `…_cancelada`, `…_pdf` y, desde la v0.30, `inventario_compra_comprada` (ids de los materiales sumados y dados de alta).
 
 ## Supuestos (sin preguntar; a confirmar: P-61 a P-66 del doc 09)
 
 - **S-1.** Todos los que entran en el inventario pueden **añadir, editar y dar de baja** material y gestionar los tipos (no hay un rol solo de lectura).
-- **S-2.** El aviso de **< 5** es por la cantidad del material en el inventario; el umbral se puede cambiar con el filtro `asde_ap_inventario_umbral`.
-- **S-3.** En una lista solo entra material que ya está en el inventario; para comprar algo nuevo, se da de alta antes (con cantidad 0, y saldrá el aviso).
+- **S-2.** El aviso de **< 5** es por la cantidad del material en el inventario; el umbral se puede cambiar con el filtro `asde_ap_inventario_umbral`. *(v0.30, P-62: el aviso es ahora con 5 o más.)*
+- **S-3.** En una lista solo entra material que ya está en el inventario; para comprar algo nuevo, se da de alta antes (con cantidad 0, y saldrá el aviso). *(v0.30, P-63: ya se puede escribir material nuevo en la lista.)*
 - **S-4.** Una persona de **Tesorería puede dar el visto bueno a una lista que ha creado ella** (el email va al resto de Tesorería).
-- **S-5.** Una lista ya creada **no se edita**: se cancela y se hace otra. El visto bueno o el rechazo **no envía email** a quien la creó (lo ve en el listado).
-- **S-6.** Dar el visto bueno **no suma** lo comprado al inventario (posible siguiente paso: «Marcar como comprada» y sumar las cantidades).
+- **S-5.** Una lista ya creada **no se edita**: se cancela y se hace otra. El visto bueno o el rechazo **no envía email** a quien la creó (lo ve en el listado). *(v0.30, P-65: sí se le envía.)*
+- **S-6.** Dar el visto bueno **no suma** lo comprado al inventario (posible siguiente paso: «Marcar como comprada» y sumar las cantidades). *(v0.30, P-66: hecho, «Marcar como comprada».)*
 
 ## Pruebas
 
