@@ -322,7 +322,8 @@ final class TesoreriaView extends TesoreriaBaseView {
 			case 'anular': // Hasta la v0.24 se llamaba así.
 			case 'eliminar':
 				// v0.25: con motivo y en el historial; si vino del banco, el ingreso vuelve a quedar por conciliar.
-				$res = Pagos::eliminar( (int) $this->post( 'movimiento' ), $familia, $this->post( 'motivo' ) );
+				// v0.29: solo Tesorería (P-94).
+				$res = Pagos::puede_eliminar() ? Pagos::eliminar( (int) $this->post( 'movimiento' ), $familia, $this->post( 'motivo' ) ) : new \WP_Error( 'asde_pago', asde_t( 'Eliminar un pago o un ajuste lo hace Tesorería.' ) );
 				if ( is_wp_error( $res ) ) {
 					$r  = $res;
 					$ok = '';

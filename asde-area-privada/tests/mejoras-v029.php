@@ -115,8 +115,8 @@ $ok( str_contains( TemplateLoader::render( 'informes/imprimir', array( 'informe'
 // Fichas reducidas (petición del usuario): una ficha por persona y, al imprimir, una por página.
 $ok( 'fichas' === Informe::limpiar_filtros( array( 'vista' => 'fichas' ) )['vista'] && 'tabla' === Informe::limpiar_filtros( array( 'vista' => 'grid' ) )['vista'], 'presentación: tabla (por defecto) o una ficha por persona' );
 $pre = array_values( array_filter( InformesTable::predefinidos(), static fn( $p ) => 'Fichas reducidas' === $p[0] ) );
-$ok( $pre && array( 'nombre', 'apellidos', 'movil', 'tutor1', 'cesion_imagen', 'alergias', 'alerg_medic', 'alim_alergia', 'alim_intol', 'alim_intol_que', 'alim_regimen', 'alim_regimen_que', 'alim_trastorno', 'enfermedades' ) === $pre[0][2] && 'fichas' === ( $pre[0][3]['vista'] ?? '' ), 'predefinido «Fichas reducidas» con las 14 columnas pedidas, en fichas' );
-$ok( (bool) $wpdb->get_var( $wpdb->prepare( "SELECT id FROM %i WHERE sistema = 1 AND nombre = 'Fichas reducidas'", InformesTable::table() ) ), 'se ha creado al actualizar el plugin (sin tocar los demás informes)' );
+$ok( $pre && array( 'nombre', 'apellidos', 'movil', 'tutor1', 'tutor1_movil', 'cesion_imagen', 'alergias', 'alerg_medic', 'alim_alergia', 'alim_intol', 'alim_intol_que', 'alim_regimen', 'alim_regimen_que', 'alim_trastorno', 'enfermedades' ) === $pre[0][2] && 'fichas' === ( $pre[0][3]['vista'] ?? '' ), 'predefinido «Fichas reducidas» con las 14 columnas pedidas y el móvil del tutor/a 1 (P-102), en fichas' );
+$ok( str_contains( (string) $wpdb->get_var( $wpdb->prepare( "SELECT definicion FROM %i WHERE sistema = 1 AND nombre = 'Fichas reducidas'", InformesTable::table() ) ), 'tutor1_movil' ), 'se ha creado al actualizar el plugin y los predefinidos se ponen al día (ya con el móvil del tutor/a 1)' );
 $fichas_inf = new Informe( 0, 'Fichas reducidas', '', array( 'nombre', 'apellidos', 'movil', 'alergias' ), array( 'vista' => 'fichas' ), 0, false, true );
 $fichas_res = array(
 	'columnas'  => array(
@@ -382,7 +382,10 @@ try {
 	$p_sin  = PedidosTable::crear( '990074', array( 'lobatos' ), false, array( 'camisa' => $linea( 'masculina', 'S' ), 'insignias' => array() ), 25.0, false, '' );
 	$ok( Servicio::puede_inventario() && Servicio::se_puede_servir( PedidosTable::obtener( $p_solo ) ), 'Coordinación (con el inventario) puede servir camisas del inventario' );
 	$como( $u_secre );
-	$ok( ! Servicio::puede_inventario(), 'Secretaría no (no incluye pedidos en el pedido al proveedor)' );
+	$ok( ! Servicio::puede_inventario() && ! \AsdeBalears\AreaPrivada\Tesoreria\Pagos::puede_eliminar(), 'Secretaría no sirve camisas ni elimina pagos' );
+	$u_teso = $crear( 'prueba-v029-teso', array( Roles::TESORERIA ), array() );
+	$como( $u_teso );
+	$ok( Servicio::puede_inventario() && \AsdeBalears\AreaPrivada\Tesoreria\Pagos::puede_eliminar(), 'Tesorería sirve y asigna camisas del inventario (P-100) y es quien elimina pagos (P-94)' );
 	$como( $u_coord );
 
 	$ok( true === Servicio::servir( PedidosTable::obtener( $p_solo ) ), 'servir del inventario la camisa de un pedido' );

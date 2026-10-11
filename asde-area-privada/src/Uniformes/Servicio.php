@@ -279,11 +279,12 @@ final class Servicio {
 	// ---------------------------------------------------------------------
 
 	/**
-	 * ¿Puede servir y asignar camisas del inventario? Quien incluye los pedidos en el pedido al
-	 * proveedor (Coordinación) y tiene el inventario (el módulo activo en el grupo).
+	 * ¿Puede servir y asignar camisas del inventario? Coordinación (incluye los pedidos en el pedido
+	 * al proveedor) y Tesorería (valida los pagos), decisión del usuario (P-100), si tienen el
+	 * inventario (el módulo activo en el grupo).
 	 */
 	public static function puede_inventario(): bool {
-		return current_user_can( self::CAP_PEDIDO ) && current_user_can( \AsdeBalears\AreaPrivada\Inventario\Servicio::CAP );
+		return ( current_user_can( self::CAP_PEDIDO ) || current_user_can( self::CAP_PAGO ) ) && current_user_can( \AsdeBalears\AreaPrivada\Inventario\Servicio::CAP );
 	}
 
 	/** ¿Se puede servir del inventario la camisa de este pedido? (Con camisa, en curso y aún sin pedir al proveedor.) */
@@ -339,7 +340,7 @@ final class Servicio {
 		$cfg   = Config::de();
 		$talla = Config::talla_de( $cfg, $modelo, $talla );
 		if ( ! self::puede_inventario() ) {
-			return new \WP_Error( 'asde_uniforme', asde_t( 'Asignar camisas del inventario lo hace quien incluye los pedidos en el pedido al proveedor.' ) );
+			return new \WP_Error( 'asde_uniforme', asde_t( 'Servir y asignar camisas del inventario lo hacen Coordinación y Tesorería.' ) );
 		}
 		if ( '' === $talla ) {
 			return new \WP_Error( 'asde_uniforme', asde_t( 'Elige el modelo y la talla de la camisa.' ) );

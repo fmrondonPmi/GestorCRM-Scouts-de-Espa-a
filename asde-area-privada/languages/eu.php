@@ -2434,7 +2434,6 @@ return array(
 	'%d cambios aprobados y guardados en el CRM.' => '%d aldaketa onartu eta CRMan gorde dira.',
 	'%d cambios no se han aplicado: el dato del CRM ha cambiado desde que se propusieron. Revísalos y márcalos otra vez si quieres aplicarlos igualmente.' => '%d aldaketa ez dira aplikatu: CRMko datua proposatu zirenetik aldatu da. Berrikusi eta markatu berriro hala ere aplikatu nahi badituzu.',
 	'%d cambios rechazados. Quien los propuso verá el motivo en la ficha.' => '%d aldaketa ukatu dira. Proposatu zituenak arrazoia fitxan ikusiko du.',
-	'Asignar camisas del inventario lo hace quien incluye los pedidos en el pedido al proveedor.' => 'Inbentarioko alkandorak esleitzea eskaerak hornitzaileari egindako eskaeran sartzen dituenari dagokio.',
 	'Camisa asignada a %1$s y descontada del inventario (pedido %2$s).' => 'Alkandora %1$s(r)i esleitu zaio eta inbentariotik kendu da (%2$s eskaera).',
 	'Elige a quién se le da la camisa (un socio/a con membresía activa).' => 'Aukeratu nori ematen zaion alkandora (kidetza aktiboa duen bazkide bat).',
 	'La camisa del pedido %s ha vuelto al inventario.' => '%s eskaerako alkandora inbentariora itzuli da.',
@@ -2481,7 +2480,6 @@ return array(
 	'Presentación' => 'Aurkezpena',
 	'Tabla' => 'Taula',
 	'Una ficha por persona (al imprimir, una por página)' => 'Fitxa bat pertsonako (inprimatzean, bat orrialdeko)',
-	'Una página por socio/a con su móvil, su tutor/a, la cesión de imagen, las alergias, la alimentación y las enfermedades. Elige la sección al verlo.' => 'Orrialde bat bazkide bakoitzeko: mugikorra, tutorea, irudiaren lagapena, alergiak, elikadura eta gaixotasunak. Aukeratu atala ikustean.',
 
 	// v0.29: primera camisa de scouter gratis
 	'La primera camisa de cada scouter es gratis (desde la segunda, paga el precio)' => 'Scouter bakoitzaren lehen alkandora doakoa da (bigarrenetik aurrera, prezioa ordaintzen du)',
@@ -2489,4 +2487,9 @@ return array(
 	'Precio: %s.' => 'Prezioa: %s.',
 	'Precio: %s. A un scouter, su primera camisa es gratis (el pedido queda pagado «sin coste»); desde la segunda, paga el precio.' => 'Prezioa: %s. Scouter batentzat, bere lehen alkandora doakoa da (eskaera «kosturik gabe» ordainduta geratzen da); bigarrenetik aurrera, prezioa ordaintzen du.',
 	'Sin coste: primera camisa de scouter' => 'Kosturik gabe: scouterraren lehen alkandora',
+
+	// v0.29: respuestas del usuario
+	'Una página por socio/a con su móvil, su tutor/a y su móvil, la cesión de imagen, las alergias, la alimentación y las enfermedades. Elige la sección al verlo.' => 'Orrialde bat bazkide bakoitzeko: mugikorra, tutorea eta haren mugikorra, irudiaren lagapena, alergiak, elikadura eta gaixotasunak. Aukeratu atala ikustean.',
+	'Eliminar un pago o un ajuste lo hace Tesorería.' => 'Ordainketa edo doikuntza bat ezabatzea Diruzaintzak egiten du.',
+	'Servir y asignar camisas del inventario lo hacen Coordinación y Tesorería.' => 'Inbentarioko alkandorak hornitu eta esleitzea Koordinazioak eta Diruzaintzak egiten dute.',
 );

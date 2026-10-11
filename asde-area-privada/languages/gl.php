@@ -2434,7 +2434,6 @@ return array(
 	'%d cambios aprobados y guardados en el CRM.' => '%d cambios aprobados e gardados no CRM.',
 	'%d cambios no se han aplicado: el dato del CRM ha cambiado desde que se propusieron. Revísalos y márcalos otra vez si quieres aplicarlos igualmente.' => '%d cambios non se aplicaron: o dato do CRM cambiou desde que se propuxeron. Revísaos e márcaos outra vez se queres aplicalos igualmente.',
 	'%d cambios rechazados. Quien los propuso verá el motivo en la ficha.' => '%d cambios rexeitados. Quen os propuxo verá o motivo na ficha.',
-	'Asignar camisas del inventario lo hace quien incluye los pedidos en el pedido al proveedor.' => 'Asignar camisas do inventario faino quen inclúe os pedidos no pedido ao provedor.',
 	'Camisa asignada a %1$s y descontada del inventario (pedido %2$s).' => 'Camisa asignada a %1$s e descontada do inventario (pedido %2$s).',
 	'Elige a quién se le da la camisa (un socio/a con membresía activa).' => 'Escolle a quen se lle dá a camisa (un socio/a con membresía activa).',
 	'La camisa del pedido %s ha vuelto al inventario.' => 'A camisa do pedido %s volveu ao inventario.',
@@ -2481,7 +2480,6 @@ return array(
 	'Presentación' => 'Presentación',
 	'Tabla' => 'Táboa',
 	'Una ficha por persona (al imprimir, una por página)' => 'Unha ficha por persoa (ao imprimir, unha por páxina)',
-	'Una página por socio/a con su móvil, su tutor/a, la cesión de imagen, las alergias, la alimentación y las enfermedades. Elige la sección al verlo.' => 'Unha páxina por socio/a co seu móbil, o seu titor/a, a cesión de imaxe, as alerxias, a alimentación e as enfermidades. Escolle a sección ao velo.',
 
 	// v0.29: primera camisa de scouter gratis
 	'La primera camisa de cada scouter es gratis (desde la segunda, paga el precio)' => 'A primeira camisa de cada scouter é gratuíta (desde a segunda, paga o prezo)',
@@ -2489,4 +2487,9 @@ return array(
 	'Precio: %s.' => 'Prezo: %s.',
 	'Precio: %s. A un scouter, su primera camisa es gratis (el pedido queda pagado «sin coste»); desde la segunda, paga el precio.' => 'Prezo: %s. A un scouter, a súa primeira camisa é gratuíta (o pedido queda pagado «sen custo»); desde a segunda, paga o prezo.',
 	'Sin coste: primera camisa de scouter' => 'Sen custo: primeira camisa de scouter',
+
+	// v0.29: respuestas del usuario
+	'Una página por socio/a con su móvil, su tutor/a y su móvil, la cesión de imagen, las alergias, la alimentación y las enfermedades. Elige la sección al verlo.' => 'Unha páxina por socio/a co seu móbil, o seu titor/a e o seu móbil, a cesión de imaxe, as alerxias, a alimentación e as enfermidades. Escolle a sección ao velo.',
+	'Eliminar un pago o un ajuste lo hace Tesorería.' => 'Eliminar un pagamento ou un axuste faino Tesouraría.',
+	'Servir y asignar camisas del inventario lo hacen Coordinación y Tesorería.' => 'Servir e asignar camisas do inventario fano Coordinación e Tesouraría.',
 );

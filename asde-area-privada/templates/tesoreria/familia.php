@@ -204,6 +204,7 @@ $user = static fn( $id ) => ( $u = get_userdata( (int) $id ) ) ? $u->user_login 
 						<td data-label="<?php echo esc_attr( asde_a( 'Registrado por' ) ); ?>"><?php echo esc_html( $user( $m['registrado_por'] ) ); ?></td>
 						<td data-label="">
 							<?php /* v0.25: «Eliminar» pide el motivo; el movimiento no se borra: pasa al historial. */ ?>
+							<?php if ( \AsdeBalears\AreaPrivada\Tesoreria\Pagos::puede_eliminar() ) : // v0.29: solo Tesorería (P-94). ?>
 							<details class="asde-eliminar-mov">
 								<summary class="asde-btn-link asde-btn-danger"><?php asde_e( 'Eliminar…' ); ?></summary>
 								<form method="post" class="asde-form asde-eliminar-mov__form">
@@ -222,6 +223,7 @@ $user = static fn( $id ) => ( $u = get_userdata( (int) $id ) ) ? $u->user_login 
 									<button type="submit" class="button asde-button-secundario"><?php echo MovimientosTable::PAGO === $m['tipo'] ? esc_html( asde_t( 'Eliminar el pago' ) ) : esc_html( asde_t( 'Eliminar el ajuste' ) ); ?></button>
 								</form>
 							</details>
+							<?php endif; ?>
 						</td>
 					</tr>
 				<?php endforeach; ?>

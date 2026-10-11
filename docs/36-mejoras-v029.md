@@ -173,3 +173,7 @@ confirmaciones, aislamiento entre grupos). 12 hallazgos, **todos corregidos** co
 10. Las cifras del resumen de Personas se actualizan con la lista (zona `personas-cifras`).
 11. `TiposTable::todos()` se guarda por petición (el importador hacía una consulta por fila).
 12. Pruebas de los casos anteriores en `tests/mejoras-v029.php` (78).
+
+## 10. Respuestas del usuario (2026-10-11)
+
+Ver el final del doc 09. En la v0.29: Tesorería también sirve y asigna camisas del inventario (P-100), «Fichas reducidas» con el móvil del tutor/a 1 (P-102; los informes predefinidos se ponen al día al actualizar el plugin), cambios directos de los últimos 30 días (P-98), eliminar pagos solo Tesorería (P-94), al importar los tipos que no existen hacen fallar la fila por defecto (P-68). Para la **v0.30** (el usuario pidió hacerlo todo antes del push): SEPA de uniformes y actividades y conciliación automática (P-44, P-45), pedidos del scouter para su sección (P-48), aviso del inventario al revés, material nuevo en la lista, email al aprobar o rechazar, «Marcar como comprada» y sumar repetidos al importar (P-62…P-67) y la ayuda en catalán, euskera y gallego (P-97).

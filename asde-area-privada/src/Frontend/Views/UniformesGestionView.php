@@ -31,7 +31,7 @@ final class UniformesGestionView extends UniformesBaseView {
 		}
 		$a = Ambito::actual();
 		if ( '1' === $this->get( 'asignar' ) ) {
-			return $this->layout( 'uniformes', Servicio::puede_inventario() ? $this->asignar( $a ) : $this->denegado( asde_t( 'Asignar camisas del inventario lo hace quien incluye los pedidos en el pedido al proveedor.' ) ) );
+			return $this->layout( 'uniformes', Servicio::puede_inventario() ? $this->asignar( $a ) : $this->denegado( asde_t( 'Servir y asignar camisas del inventario lo hacen Coordinación y Tesorería.' ) ) );
 		}
 		$id = (int) $this->get( 'pedido' );
 		if ( $id ) {

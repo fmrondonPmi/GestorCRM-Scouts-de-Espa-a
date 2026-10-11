@@ -57,7 +57,7 @@ final class InformesTable {
 			// v0.25: para que cada scouter vea quién de su sección ha pagado la cuota y quién no.
 			array( 'Pagos de la cuota', 'Quién ha pagado la cuota de la ronda y cuánto le falta a cada familia.', array( 'num_local', 'nombre', 'apellidos', 'seccion', 'pago_familia', 'pago_estado', 'pago_a_pagar', 'pago_pagado', 'pago_pendiente', 'pago_vencido' ), array( 'orden' => 'seccion' ) ),
 			// v0.29 (petición del usuario): la ficha reducida de cada socio/a, una por página al imprimir; se elige la sección al verlo.
-			array( 'Fichas reducidas', 'Una página por socio/a con su móvil, su tutor/a, la cesión de imagen, las alergias, la alimentación y las enfermedades. Elige la sección al verlo.', array( 'nombre', 'apellidos', 'movil', 'tutor1', 'cesion_imagen', 'alergias', 'alerg_medic', 'alim_alergia', 'alim_intol', 'alim_intol_que', 'alim_regimen', 'alim_regimen_que', 'alim_trastorno', 'enfermedades' ), array( 'vista' => 'fichas' ) ),
+			array( 'Fichas reducidas', 'Una página por socio/a con su móvil, su tutor/a y su móvil, la cesión de imagen, las alergias, la alimentación y las enfermedades. Elige la sección al verlo.', array( 'nombre', 'apellidos', 'movil', 'tutor1', 'tutor1_movil', 'cesion_imagen', 'alergias', 'alerg_medic', 'alim_alergia', 'alim_intol', 'alim_intol_que', 'alim_regimen', 'alim_regimen_que', 'alim_trastorno', 'enfermedades' ), array( 'vista' => 'fichas' ) ),
 		);
 	}
 
@@ -67,24 +67,20 @@ final class InformesTable {
 	 */
 	private static function sembrar_predefinidos(): void {
 		global $wpdb;
-		$hay = array_map( 'strval', (array) $wpdb->get_col( $wpdb->prepare( 'SELECT nombre FROM %i WHERE sistema = 1', self::table() ) ) ); // phpcs:ignore WordPress.DB
+		$hay = array_column( (array) $wpdb->get_results( $wpdb->prepare( 'SELECT id, nombre, descripcion, definicion FROM %i WHERE sistema = 1', self::table() ), ARRAY_A ), null, 'nombre' ); // phpcs:ignore WordPress.DB
 		foreach ( self::predefinidos() as $p ) {
 			list( $nombre, $desc, $cols ) = $p;
-			if ( in_array( $nombre, $hay, true ) ) {
-				continue;
+			$informe = new Informe( 0, $nombre, $desc, $cols, ( $p[3] ?? array() ) + array( 'salud' => 'alergias y alimentación' === mb_strtolower( $nombre ) ), 0, true, true );
+			// v0.29: los predefinidos no se editan desde el área; al actualizar se ponen como los define el
+			// plugin (p. ej. «Fichas reducidas» con el móvil del tutor/a 1, P-102).
+			if ( isset( $hay[ $nombre ] ) ) {
+				$definicion = wp_json_encode( array( 'columnas' => $informe->columnas, 'filtros' => $informe->filtros ) );
+				if ( $definicion === $hay[ $nombre ]['definicion'] && $desc === $hay[ $nombre ]['descripcion'] ) {
+					continue;
+				}
+				$informe->id = (int) $hay[ $nombre ]['id'];
 			}
-			self::guardar(
-				new Informe(
-					0,
-					$nombre,
-					$desc,
-					$cols,
-					( $p[3] ?? array() ) + array( 'salud' => 'alergias y alimentación' === mb_strtolower( $nombre ) ),
-					0,
-					true,
-					true
-				)
-			);
+			self::guardar( $informe );
 		}
 	}
 

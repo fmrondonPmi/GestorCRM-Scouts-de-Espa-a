@@ -29,7 +29,7 @@ final class CambiosView extends View {
 	private const CAP = 'asde_approve_changes';
 
 	/** Días de cambios hechos directamente en las fichas que se ven en «Resueltos». */
-	public const DIAS_DIRECTOS = 90;
+	public const DIAS_DIRECTOS = 30; // Decisión del usuario (P-98).
 
 	public function render( string $content = '' ): string {
 		if ( ! current_user_can( self::CAP ) ) {

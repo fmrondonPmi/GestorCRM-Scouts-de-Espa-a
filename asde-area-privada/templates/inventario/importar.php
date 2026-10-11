@@ -80,7 +80,7 @@ $columnas = array_map( static fn( $c ) => asde_t( $c[0] ), Importador::COLUMNAS 
 				<label for="asde-inv-fichero"><?php asde_e( 'Fichero CSV' ); ?> <span class="asde-obligatorio" aria-hidden="true">*</span></label>
 				<input type="file" id="asde-inv-fichero" name="fichero" accept=".csv,text/csv,text/plain" required>
 			</p>
-			<label class="asde-choice"><input type="checkbox" name="crear_tipos" value="1" checked><span><?php asde_e( 'Crear los tipos de material que todavía no existan (si no, esas filas no se importan)' ); ?></span></label>
+			<label class="asde-choice"><input type="checkbox" name="crear_tipos" value="1"><span><?php asde_e( 'Crear los tipos de material que todavía no existan (si no, esas filas no se importan)' ); ?></span></label>
 			<p class="asde-form__acciones">
 				<button type="submit" class="button button-primary"><?php asde_e( 'Importar' ); ?></button>
 			</p>

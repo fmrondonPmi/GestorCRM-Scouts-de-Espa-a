@@ -2,6 +2,7 @@
 namespace AsdeBalears\AreaPrivada\Tesoreria;
 
 use AsdeBalears\AreaPrivada\Audit\Logger;
+use AsdeBalears\AreaPrivada\Install\Roles;
 use AsdeBalears\AreaPrivada\Tesoreria\Banco\BancoTable;
 
 defined( 'ABSPATH' ) || exit;
@@ -22,6 +23,11 @@ final class Pagos {
 	/**
 	 * @return array{mov:array, banco:?array}|\WP_Error El movimiento eliminado y, si lo había, el ingreso del banco que vuelve a quedar por conciliar.
 	 */
+	/** Eliminar un pago o un ajuste lo hace solo Tesorería (decisión del usuario, P-94; los scouters los registran). */
+	public static function puede_eliminar(): bool {
+		return in_array( Roles::TESORERIA, (array) wp_get_current_user()->roles, true ) || current_user_can( 'manage_options' );
+	}
+
 	public static function eliminar( int $mov_id, int $familia_id, string $motivo ) {
 		$m      = MovimientosTable::obtener( $mov_id );
 		$motivo = trim( sanitize_text_field( $motivo ) );
