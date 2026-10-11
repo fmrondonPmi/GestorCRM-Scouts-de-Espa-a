@@ -12,7 +12,7 @@ use AsdeBalears\AreaPrivada\Usuarios\RegistroEmails;
 
 defined( 'ABSPATH' ) || exit;
 ?>
-<section class="asde-card">
+<section class="asde-card" data-asde-plegable="email-detalle">
 	<header class="asde-card__header asde-card__header--split">
 		<h2 class="asde-card__title"><?php echo esc_html( ( asde_t( RegistroEmails::TIPOS[ $fila['tipo'] ] ?? $fila['tipo'] ) ) . ' · ' . $fila['login'] ); ?></h2>
 		<a href="<?php echo esc_url( $url ); ?>"><?php asde_e( '← Registro de emails' ); ?></a>

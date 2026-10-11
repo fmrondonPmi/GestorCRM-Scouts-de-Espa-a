@@ -2,6 +2,7 @@
 /**
  * Uniforme · mis pedidos y nuevo pedido.
  *
+ * @var array<string, float> $precios Precio de la camisa de cada persona (v0.29: la primera de un scouter, gratis)
  * @var array                                              $cfg
  * @var array<string, AsdeBalears\AreaPrivada\Domain\Persona> $para    Para quién puede pedir (nº => persona)
  * @var array[]                                            $pedidos
@@ -27,6 +28,9 @@ $insignias = Config::insignias_activas( $cfg );
 	<p>
 		<?php asde_e( 'Pide aquí la' ); ?> <strong><?php asde_e( 'camisa scout' ); ?></strong> (<?php echo esc_html( Calculadora::euros( $cfg['precio_camisa'] ) ); ?>)<?php echo $insignias ? ' ' . wp_kses_post( asde_h( 'y las <strong>insignias</strong>' ) ) : ''; ?><?php asde_e( '. Después, págalo en efectivo o con un ingreso en la cuenta del grupo, indicando el nº de pedido. Cuando Tesorería lo reciba lo verás aquí como pagado; el grupo lo incluirá en su pedido al proveedor y te lo entregará. Cuando lo tengas, confírmalo aquí.' ); ?>
 	</p>
+	<?php if ( $cfg['primera_gratis'] && in_array( 0.0, $precios, true ) ) : ?>
+		<p class="asde-help"><?php asde_e( 'La primera camisa de cada scouter es gratis; desde la segunda, se paga el precio.' ); ?></p>
+	<?php endif; ?>
 	<?php if ( '' !== trim( $cfg['texto_pago'] ) ) : ?>
 		<div class="asde-notice asde-notice--info"><?php echo wp_kses_post( wpautop( $cfg['texto_pago'] ) ); ?></div>
 	<?php endif; ?>
@@ -101,7 +105,7 @@ $insignias = Config::insignias_activas( $cfg );
 					<legend><?php asde_e( '¿Para quién?' ); ?></legend>
 					<?php $primero = true; ?>
 					<?php foreach ( $para as $n => $persona ) : ?>
-						<label class="asde-choice"><input type="radio" name="socio" value="<?php echo esc_attr( $n ); ?>" <?php checked( $primero ); ?>><span><?php echo esc_html( $persona->nombre_completo() ); ?></span></label>
+						<label class="asde-choice"><input type="radio" name="socio" value="<?php echo esc_attr( $n ); ?>" data-precio-camisa="<?php echo esc_attr( (string) ( $precios[ $n ] ?? $cfg['precio_camisa'] ) ); ?>" <?php checked( $primero ); ?>><span><?php echo esc_html( $persona->nombre_completo() ); ?></span></label>
 						<?php $primero = false; ?>
 					<?php endforeach; ?>
 				</fieldset>
@@ -113,7 +117,8 @@ $insignias = Config::insignias_activas( $cfg );
 
 			<fieldset>
 				<legend><?php asde_e( 'Camisa scout' ); ?></legend>
-				<label class="asde-choice"><input type="checkbox" name="con_camisa" value="1" checked data-precio="<?php echo esc_attr( (string) $cfg['precio_camisa'] ); ?>"><span><?php asde_e( 'Quiero la camisa (' ); ?><?php echo esc_html( Calculadora::euros( $cfg['precio_camisa'] ) ); ?>)</span></label>
+				<?php $precio_camisa = $precios ? (float) reset( $precios ) : (float) $cfg['precio_camisa']; // El de la primera persona (la elegida de antemano); uniforme.js lo cambia con «¿Para quién?». ?>
+				<label class="asde-choice"><input type="checkbox" name="con_camisa" value="1" checked data-precio="<?php echo esc_attr( (string) $precio_camisa ); ?>"><span><?php asde_e( 'Quiero la camisa (' ); ?><span data-asde-precio-camisa><?php echo esc_html( Calculadora::euros( $precio_camisa ) ); ?></span>)</span></label>
 				<p>
 					<label for="asde-uni-talla"><?php asde_e( 'Modelo y talla' ); ?></label>
 					<select id="asde-uni-talla" name="camisa">
@@ -169,7 +174,7 @@ $insignias = Config::insignias_activas( $cfg );
 				<label for="asde-uni-nota"><?php asde_e( 'Observaciones (opcional)' ); ?></label>
 				<input type="text" id="asde-uni-nota" name="nota" maxlength="255">
 			</p>
-			<p class="asde-uniforme-total"><?php asde_e( 'Total:' ); ?> <strong data-asde-total><?php echo esc_html( Calculadora::euros( $cfg['precio_camisa'] ) ); ?></strong> <span class="asde-muted" data-asde-total-nota hidden><?php asde_e( '+ insignias con el precio por confirmar' ); ?></span></p>
+			<p class="asde-uniforme-total"><?php asde_e( 'Total:' ); ?> <strong data-asde-total><?php echo esc_html( Calculadora::euros( $precio_camisa ) ); ?></strong> <span class="asde-muted" data-asde-total-nota hidden><?php asde_e( '+ insignias con el precio por confirmar' ); ?></span></p>
 			<p><button type="submit" class="button"><?php asde_e( 'Enviar el pedido' ); ?></button></p>
 		</form>
 	<?php endif; ?>

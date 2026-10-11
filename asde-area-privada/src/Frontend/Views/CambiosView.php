@@ -151,6 +151,10 @@ final class CambiosView extends View {
 			$this->redirect( $volver );
 		}
 
+		if ( ! Escritura::disponible() ) {
+			Notices::add( 'error', asde_t( 'El usuario del CRM del grupo no puede editar fichas ahora mismo: los cambios no se pueden aprobar hasta que lo tenga.' ) );
+			$this->redirect( $volver );
+		}
 		try {
 			$campos   = array_map( static fn( int $id ) => (string) Cambios::obtener( $id )['campo'], $ids );
 			$actuales = $repo->valores( $p, $campos );

@@ -51,7 +51,7 @@ $fecha   = static function ( string $etiqueta, string $min = '' ) use ( $v, $hoy
 $desde   = static fn( array $m ): string => sprintf( asde_t( '%1$s, desde el %2$s' ), Secciones::nombre( (string) Secciones::from_crm( (string) $m['relationship_type'] ) ), $dma( (string) $m['start_date'] ) );
 ?>
 <p class="asde-back"><a href="<?php echo esc_url( $url_ficha ); ?>" data-asde-modal><?php /* translators: %s: nombre */ echo esc_html( sprintf( asde_t( '← Ficha de %s' ), $p->nombre_completo() ) ); ?></a></p>
-<section class="asde-card asde-membresia-crm">
+<section class="asde-card asde-membresia-crm" data-asde-plegable="ficha-membresia-accion">
 	<h2 class="asde-card__title"><?php echo esc_html( $titulos[ $accion ] . ' · ' . $p->nombre_completo() ); ?></h2>
 
 	<?php if ( ! $altas ) : ?>

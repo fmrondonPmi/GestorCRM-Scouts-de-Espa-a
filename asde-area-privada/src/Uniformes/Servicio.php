@@ -176,6 +176,18 @@ final class Servicio {
 		return self::es_propio( $p, $a ) && null === $p['cancelado_en'] && null === $p['pago_en'] && null === $p['pedido_en'] && null === $p['entregado_en'];
 	}
 
+	/**
+	 * Cancela un pedido (v0.29): si su camisa había salido del inventario y no se ha entregado,
+	 * vuelve a él. Lo usan la familia («Mi uniforme») y la gestión.
+	 */
+	public static function cancelar( array $p, string $motivo ): bool {
+		if ( (int) $p['inventario_id'] && null === $p['entregado_en'] ) {
+			MaterialesTable::devolver_camisa( (int) $p['inventario_id'], (string) ( $p['lineas']['camisa']['modelo'] ?? '' ), (string) ( $p['lineas']['camisa']['talla'] ?? '' ) );
+			PedidosTable::quitar_camisa_servida( $p['id'], false );
+		}
+		return PedidosTable::cancelar( $p['id'], $motivo );
+	}
+
 	/** Tesorería o Coordinación cancelan cualquiera hasta que se entregue. */
 	public static function puede_cancelar_gestion( array $p ): bool {
 		return ( current_user_can( self::CAP_PAGO ) || current_user_can( self::CAP_PEDIDO ) ) && null === $p['cancelado_en'] && null === $p['entregado_en'];
@@ -237,10 +249,17 @@ final class Servicio {
 		if ( ! $p ) {
 			return new \WP_Error( 'asde_uniforme', asde_t( 'No puedes hacer un pedido para esa persona.' ) );
 		}
+		if ( $lineas['camisa'] ) {
+			$lineas['camisa']['precio'] = self::precio_camisa( $p->num_socio_asde, $p->es_adulto_voluntario(), $cfg );
+		}
 		$t  = self::total( $lineas, $cfg );
 		$id = PedidosTable::crear( $p->num_socio_asde, $p->secciones, $p->es_adulto_voluntario(), $lineas, $t['total'], $t['provisional'], $nota );
 		if ( ! $id ) {
 			return new \WP_Error( 'asde_uniforme', asde_t( 'No se ha podido guardar el pedido.' ) );
+		}
+		// La primera camisa de un scouter, sin nada más que pagar: queda pagada «sin coste».
+		if ( $lineas['camisa'] && 0.0 === (float) $lineas['camisa']['precio'] && 0.0 === (float) $t['total'] && ! $t['provisional'] ) {
+			PedidosTable::marcar_pago( $id, wp_date( 'Y-m-d' ), '', 0.0, PedidosTable::REF_SIN_COSTE );
 		}
 		Logger::log(
 			'uniforme_pedido',
@@ -289,7 +308,10 @@ final class Servicio {
 			/* translators: 1: modelo de camisa, 2: talla */
 			return new \WP_Error( 'asde_uniforme', sprintf( asde_t( 'No queda ninguna camisa «%1$s» de la talla %2$s en el inventario.' ), $c['nombre'], $c['talla'] ) );
 		}
-		PedidosTable::servir_camisa( $p['id'], $material, ! $p['lineas']['insignias'] );
+		if ( ! PedidosTable::servir_camisa( $p['id'], $material, ! $p['lineas']['insignias'] ) ) {
+			MaterialesTable::devolver_camisa( $material, (string) $c['modelo'], (string) $c['talla'] );
+			return new \WP_Error( 'asde_uniforme', asde_t( 'No se ha podido guardar el pedido.' ) );
+		}
 		Logger::log( 'uniforme_servido_inventario', 'uniforme', (string) $p['id'], array( 'material' => $material ) );
 		return true;
 	}
@@ -307,12 +329,13 @@ final class Servicio {
 	}
 
 	/**
-	 * Asigna una camisa del inventario a quien no la ha pedido: crea su pedido, ya servido.
-	 * Con importe 0 queda pagado «sin coste»; si no, Tesorería valida el pago como siempre.
+	 * Asigna una camisa del inventario a quien no la ha pedido: crea su pedido, ya servido. El
+	 * precio, el de siempre (precio_camisa(): la primera de un scouter, gratis, y queda pagada
+	 * «sin coste»); lo demás lo valida Tesorería como siempre.
 	 *
 	 * @return int|\WP_Error Id del pedido.
 	 */
-	public static function asignar( Persona $persona, string $modelo, string $talla, float $importe, string $nota ) {
+	public static function asignar( Persona $persona, string $modelo, string $talla, string $nota ) {
 		$cfg   = Config::de();
 		$talla = Config::talla_de( $cfg, $modelo, $talla );
 		if ( ! self::puede_inventario() ) {
@@ -326,7 +349,7 @@ final class Servicio {
 			/* translators: 1: modelo de camisa, 2: talla */
 			return new \WP_Error( 'asde_uniforme', sprintf( asde_t( 'No queda ninguna camisa «%1$s» de la talla %2$s en el inventario.' ), $cfg['modelos'][ $modelo ]['nombre'], $talla ) );
 		}
-		$importe = round( max( 0.0, $importe ), 2 );
+		$importe = self::precio_camisa( $persona->num_socio_asde, $persona->es_adulto_voluntario(), $cfg );
 		$lineas  = array(
 			'camisa'    => array(
 				'modelo'   => $modelo,
@@ -356,6 +379,28 @@ final class Servicio {
 			)
 		);
 		return $id;
+	}
+
+	/**
+	 * Precio de la camisa para esta persona (v0.29, petición del usuario): el de la configuración
+	 * (25 € por defecto) para los asociados; a un scouter (o voluntario adulto) la primera es gratis
+	 * y desde la segunda paga el precio. Cuentan sus pedidos con camisa que no se han cancelado.
+	 */
+	public static function precio_camisa( string $socio, bool $adulto, array $cfg, int $salvo = 0 ): float {
+		if ( $adulto && ! empty( $cfg['primera_gratis'] ) && ! self::tiene_camisa( $socio, $salvo ) ) {
+			return 0.0;
+		}
+		return (float) $cfg['precio_camisa'];
+	}
+
+	/** ¿Tiene ya algún pedido con camisa (no cancelado)? $salvo: un pedido que no cuenta. */
+	public static function tiene_camisa( string $socio, int $salvo = 0 ): bool {
+		foreach ( PedidosTable::de_socios( array( $socio ) ) as $p ) {
+			if ( $p['id'] !== $salvo && null === $p['cancelado_en'] && ! empty( $p['lineas']['camisa'] ) ) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/** Importe que Tesorería propone al validar el pago: el total con los precios de hoy. */

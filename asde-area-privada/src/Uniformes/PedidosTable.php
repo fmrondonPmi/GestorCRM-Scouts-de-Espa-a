@@ -33,8 +33,8 @@ final class PedidosTable {
 	 */
 	public const REF_INVENTARIO = 'Del inventario del grupo';
 
-	/** v0.29: referencia del pago de una camisa asignada del inventario sin coste. */
-	public const REF_SIN_COSTE = 'Sin coste (camisa del inventario)';
+	/** v0.29: referencia del pago de la primera camisa de un scouter, que es gratis (queda pagada sola). */
+	public const REF_SIN_COSTE = 'Sin coste: primera camisa de scouter';
 
 	/** Filtros de la gestión. */
 	public const SIN_PAGAR     = 'sin_pagar';

@@ -117,12 +117,12 @@
 		Array.prototype.forEach.call( ( raiz || document ).querySelectorAll( 'details[data-asde-recordar]:not([data-asde-recordado])' ), function ( d ) {
 			var clave = 'asde_plegado_' + d.getAttribute( 'data-asde-recordar' );
 			d.setAttribute( 'data-asde-recordado', '' );
+			// v0.29: si la persona no lo ha abierto nunca, contraído (petición del usuario).
+			var guardado = null;
 			try {
-				var guardado = window.localStorage.getItem( clave );
-				if ( null !== guardado ) {
-					d.open = '1' === guardado;
-				}
+				guardado = window.localStorage.getItem( clave );
 			} catch ( e ) {}
+			d.open = '1' === guardado;
 			d.addEventListener( 'toggle', function () {
 				try {
 					window.localStorage.setItem( clave, d.open ? '1' : '0' );
@@ -135,7 +135,8 @@
 	// ---------------------------------------------------------------------
 	// 4b. Cuadros plegables (v0.29): cada cuadro del área (section.asde-card) que empieza
 	// por su título se puede contraer con el botón ▾ del título (o pulsando el título);
-	// contraído solo se ve su cabecera. Se recuerda en este navegador. Fuera:
+	// contraído solo se ve su cabecera. **Empiezan contraídos** (petición del usuario) y se
+	// recuerda en este navegador lo que cada persona abre o cierra. Fuera:
 	// data-asde-no-plegable. Clave fija: data-asde-plegable="clave" (si no, la página y el título).
 	// ---------------------------------------------------------------------
 	function plegar( card, cerrar, guardar ) {
@@ -184,10 +185,17 @@
 			try {
 				guardado = window.localStorage.getItem( card.asdeClave );
 			} catch ( e ) {}
-			plegar( card, '0' === guardado, false );
+			plegar( card, '1' !== guardado, false );
 		} );
 	}
 	plegables( document );
+	// Un campo obligatorio vacío dentro de un cuadro contraído: se abre para corregirlo.
+	document.addEventListener( 'invalid', function ( e ) {
+		var card = e.target.closest ? e.target.closest( 'section.asde-card.is-plegada' ) : null;
+		if ( card ) {
+			plegar( card, false, false );
+		}
+	}, true );
 	// Para «Contraer todo / Expandir todo» de la ficha (ficha.js) y la ventana emergente.
 	window.asdePlegables = {
 		iniciar: plegables,

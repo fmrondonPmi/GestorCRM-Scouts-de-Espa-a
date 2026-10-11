@@ -36,7 +36,7 @@ defined( 'ABSPATH' ) || exit;
 $boton = static function ( string $accion, string $socio, string $texto, string $confirmar = '' ): string {
 	return sprintf(
 		'<form method="post"%s>%s<input type="hidden" name="asde_action" value="%s"><input type="hidden" name="socio" value="%s"><button type="submit" class="asde-btn-link">%s</button></form>',
-		$confirmar ? ' onsubmit="return confirm(<?php echo asde_js( ' . esc_attr( (string) wp_json_encode( $confirmar ) ) . ' ); ?>);"' : '',
+		$confirmar ? ' onsubmit="return confirm(' . esc_attr( (string) wp_json_encode( $confirmar ) ) . ');"' : '',
 		wp_nonce_field( 'asde_numero_' . $accion . '_' . $socio, '_wpnonce', true, false ),
 		esc_attr( $accion ),
 		esc_attr( $socio ),
@@ -69,7 +69,8 @@ $columnas = array(
 			<?php asde_e( 'Las fichas se leen del CRM cada pocos minutos para que las páginas vayan rápido (la última lectura fue' ); ?> <?php echo $edad_datos < 60 ? esc_html( asde_t( 'hace menos de un minuto' ) ) : esc_html( 'hace ' . (int) floor( $edad_datos / 60 ) . ' min' ); ?><?php asde_e( '). Si acabas de cambiar algo directamente en el CRM:' ); ?> <a href="<?php echo esc_url( wp_nonce_url( add_query_arg( 'actualizar', '1', $url ), 'asde_actualizar_personas' ) ); ?>"><?php asde_e( 'Actualizar ahora' ); ?></a>.
 		</p>
 	<?php endif; ?>
-	<dl class="asde-datos">
+	<?php /* Zona (parcial.js): al cerrar la ventana tras un alta, las cifras se actualizan con la lista. */ ?>
+	<dl class="asde-datos" data-asde-parcial="personas-cifras">
 		<div><dt><?php asde_e( 'Con membresía activa' ); ?></dt><dd><strong><?php echo (int) $resumen['activas']; ?></strong></dd></div>
 		<div><dt><?php asde_e( 'Sin membresía activa' ); ?></dt><dd><?php echo (int) $resumen['inactivas']; ?></dd></div>
 		<div><dt><?php asde_e( 'Siguiente nº de socio/a libre' ); ?></dt><dd><strong><?php echo esc_html( $siguiente ); ?></strong></dd></div>

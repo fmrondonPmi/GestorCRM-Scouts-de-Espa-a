@@ -19,7 +19,8 @@
 	// ---------------------------------------------------------------------
 	// 1. Apartados plegables
 	// ---------------------------------------------------------------------
-	var CLAVE = 'asde_ficha_plegados';
+	// v0.29: los apartados empiezan contraídos (petición del usuario) y se recuerdan los que se abren.
+	var CLAVE = 'asde_ficha_abiertos';
 
 	function leer() {
 		try {
@@ -39,18 +40,18 @@
 	}
 
 	function iniciar( raiz ) {
-	var secciones = Array.prototype.slice.call( raiz.querySelectorAll( 'details.asde-plegable' ) );
-	var plegados = leer();
+	// Solo los apartados de la ficha (data-grupo): otros <details> (los tutores del alta, la cuota
+	// de la familia) tienen su propio estado.
+	var secciones = Array.prototype.slice.call( raiz.querySelectorAll( 'details.asde-plegable[data-grupo]' ) );
+	var abiertos = leer();
 	secciones.forEach( function ( d ) {
-		if ( -1 !== plegados.indexOf( d.getAttribute( 'data-grupo' ) ) ) {
-			d.open = false;
-		}
+		d.open = -1 !== abiertos.indexOf( d.getAttribute( 'data-grupo' ) );
 		d.addEventListener( 'toggle', function () {
 			var grupo = d.getAttribute( 'data-grupo' );
 			var lista = leer().filter( function ( g ) {
 				return g !== grupo;
 			} );
-			if ( ! d.open ) {
+			if ( d.open ) {
 				lista.push( grupo );
 			}
 			guardar( lista );

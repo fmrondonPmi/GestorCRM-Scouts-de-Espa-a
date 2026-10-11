@@ -27,6 +27,13 @@ final class TiposTable {
 	/** Nombre con el que se crea (se puede cambiar; lo que cuenta es la marca). */
 	public const NOMBRE_CAMISA = 'Camisa uniforme';
 
+	/** @var array<string, array> Los tipos de cada grupo en esta petición (se olvida al cambiarlos). */
+	private static array $cache = array();
+
+	public static function olvidar(): void {
+		self::$cache = array();
+	}
+
 	public static function table(): string {
 		global $wpdb;
 		return $wpdb->prefix . 'asde_inventario_tipos';
@@ -58,6 +65,9 @@ final class TiposTable {
 
 	/** @return array<int, array{id:int, nombre:string, especial:string}> id => tipo, por orden alfabético. */
 	public static function todos(): array {
+		if ( isset( self::$cache[ Grupo::numero() ] ) ) {
+			return self::$cache[ Grupo::numero() ];
+		}
 		global $wpdb;
 		$filas = (array) $wpdb->get_results( $wpdb->prepare( 'SELECT id, nombre, especial FROM %i WHERE grupo = %s', self::table(), Grupo::numero() ), ARRAY_A );
 		$out   = array();
@@ -69,6 +79,7 @@ final class TiposTable {
 			);
 		}
 		uasort( $out, static fn( $a, $b ) => strcmp( self::clave( $a['nombre'] ), self::clave( $b['nombre'] ) ) );
+		self::$cache[ Grupo::numero() ] = $out;
 		return $out;
 	}
 
@@ -102,6 +113,7 @@ final class TiposTable {
 				'grupo' => Grupo::numero(),
 			)
 		);
+		self::olvidar();
 		return (int) $id;
 	}
 
@@ -139,6 +151,7 @@ final class TiposTable {
 				'creado_por' => get_current_user_id(),
 			)
 		);
+		self::olvidar();
 		return (int) $wpdb->insert_id;
 	}
 
@@ -163,6 +176,7 @@ final class TiposTable {
 				'grupo' => Grupo::numero(),
 			)
 		);
+		self::olvidar();
 		return true;
 	}
 
@@ -188,6 +202,7 @@ final class TiposTable {
 				'grupo' => Grupo::numero(),
 			)
 		);
+		self::olvidar();
 		return true;
 	}
 

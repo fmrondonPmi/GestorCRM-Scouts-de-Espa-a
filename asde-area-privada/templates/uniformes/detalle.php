@@ -40,7 +40,7 @@ $form    = static function ( string $accion, string $boton, string $clase = 'asd
 ?>
 <p class="asde-back asde-solo-pagina"><a href="<?php echo esc_url( $url ); ?>"><?php asde_e( '← Gestión de pedidos' ); ?></a></p>
 
-<section class="asde-card">
+<section class="asde-card" data-asde-plegable="uniforme-pedido">
 	<header class="asde-card__header asde-card__header--split">
 		<h2 class="asde-card__title"><?php asde_e( 'Pedido' ); ?> <?php echo esc_html( PedidosTable::numero( $p ) ); ?></h2>
 		<span class="asde-badge asde-badge--uniforme-<?php echo esc_attr( $estado ); ?>"><?php echo esc_html( asde_t( PedidosTable::ESTADOS[ $estado ] ) ); ?></span>

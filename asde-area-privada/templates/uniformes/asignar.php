@@ -67,9 +67,8 @@ uksort( $por_seccion, static fn( $x, $y ) => ( $orden[ $x ] ?? 99 ) <=> ( $orden
 			</p>
 			<div class="asde-form__columnas">
 				<p>
-					<label for="asde-asig-importe"><?php asde_e( 'Importe (€)' ); ?></label>
-					<input type="text" id="asde-asig-importe" name="importe" inputmode="decimal" size="8" value="<?php echo esc_attr( number_format( (float) $cfg['precio_camisa'], 2, ',', '' ) ); ?>">
-					<span class="asde-help"><?php asde_e( 'El precio de la camisa. Pon 0 si no se cobra: el pedido queda pagado «sin coste».' ); ?></span>
+					<?php /* translators: %s: precio de la camisa */ ?>
+					<span class="asde-help"><?php echo esc_html( sprintf( $cfg['primera_gratis'] ? asde_t( 'Precio: %s. A un scouter, su primera camisa es gratis (el pedido queda pagado «sin coste»); desde la segunda, paga el precio.' ) : asde_t( 'Precio: %s.' ), \AsdeBalears\AreaPrivada\Tesoreria\Calculadora::euros( (float) $cfg['precio_camisa'] ) ) ); ?></span>
 				</p>
 				<p>
 					<label for="asde-asig-nota"><?php asde_e( 'Observaciones (opcional)' ); ?></label>

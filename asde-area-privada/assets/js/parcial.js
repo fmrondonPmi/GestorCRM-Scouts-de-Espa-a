@@ -25,6 +25,7 @@
 
 	var ocupado = false;
 	var controlador = null;
+	var enCursoConsulta = false;
 	var flotantes = null;
 	// Se escucha en el contenedor del área (no en document): así se actúa antes que el
 	// aviso de carga de area.js (que escucha en document y respeta preventDefault) y
@@ -67,19 +68,21 @@
 
 	/**
 	 * Pide la página y cambia las zonas. Si no puede, va a la página de la forma de siempre.
-	 * Mientras hay una petición en camino no se hace otra, salvo una consulta (GET): esa
-	 * cancela la anterior (al buscar escribiendo, cuenta la última letra).
+	 * Si la que está en camino es una consulta (GET), la nueva la cancela (al buscar
+	 * escribiendo cuenta la última letra, y un botón que guarda algo no se pierde); si es
+	 * un envío (POST), se espera a que termine.
 	 */
 	function pedir( url, opciones, origen, nuevaDireccion, destino ) {
 		opciones = opciones || {};
 		var consulta = ! opciones.method || 'GET' === opciones.method;
 		if ( ocupado ) {
-			if ( ! consulta || ! controlador ) {
+			if ( ! enCursoConsulta || ! controlador ) {
 				return;
 			}
 			controlador.abort();
 		}
 		ocupado = true;
+		enCursoConsulta = consulta;
 		var actual = destino || zona( origen );
 		if ( actual ) {
 			actual.setAttribute( 'aria-busy', 'true' );

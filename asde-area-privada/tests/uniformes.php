@@ -203,6 +203,8 @@ try {
 	$enviar( new UniformeView(), array( 'asde_action' => 'uniforme_pedir', 'socio' => '990025', 'con_camisa' => '1', 'camisa' => 'masculina|L' ), 'asde_uniforme_pedir' );
 	$p_tom = $ultimo();
 	$ok( $p_tom && '990025' === $p_tom['socio'] && $p_tom['adulto'], 'un scouter (solo scouter, de Lobatos) pide su camisa' );
+	// v0.29 (petición del usuario): la primera camisa de un scouter es gratis y queda pagada sola.
+	$ok( 0.0 === $p_eva['total'] && 0.0 === $p_tom['total'] && null !== $p_tom['pago_en'] && PedidosTable::REF_SIN_COSTE === $p_tom['pago_ref'] && 25.0 === Servicio::precio_camisa( '990025', true, Config::de() ), 'la primera camisa de un scouter, 0 € y pagada «sin coste»; la segunda ya costaría 25 €' );
 	$enviar( new UniformeView(), array( 'asde_action' => 'uniforme_pedir', 'socio' => '990021', 'con_camisa' => '1', 'camisa' => 'masculina|S' ), 'asde_uniforme_pedir' );
 	$ok( $ultimo()['id'] === $p_tom['id'], 'pero no pide por otra persona (aunque sea de su sección): lo suyo es lo suyo' );
 
@@ -226,7 +228,7 @@ try {
 	$ok( ! current_user_can( Servicio::CAP_GESTION ) && str_contains( ( new UniformesGestionView() )->render(), 'No tienes acceso' ), 'una familia no entra en la gestión' );
 	$pt = Servicio::pendientes( $como( $u_teso ) );
 	$pc = Servicio::pendientes( $como( $u_coord ) );
-	$ok( $pt['pago'] >= 4 && 0 === $pt['pedido'] && $pc['pedido'] >= 4 && 0 === $pc['pago'], 'pendientes: Tesorería, los de pago; Coordinación, los de incluir en el pedido' );
+	$ok( $pt['pago'] >= 2 && 0 === $pt['pedido'] && $pc['pedido'] >= 4 && 0 === $pc['pago'], 'pendientes: Tesorería, los de pago; Coordinación, los de incluir en el pedido' );
 	$tabs = View::pestanas( $como( $u_scouter ) );
 	$ok( isset( $tabs['uniformes'], $tabs['uniforme'], $tabs['pagos'] ) && str_starts_with( $tabs['uniforme'], 'Mi uniforme' ) && str_starts_with( $tabs['uniformes'], 'Gestión de uniformes' ), 'pestañas del scouter: «Mi uniforme» (pedir), «Gestión de uniformes» y «Mis pagos»' );
 	$como( $u_scouter );

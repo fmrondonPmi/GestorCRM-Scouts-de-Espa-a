@@ -164,7 +164,7 @@ final class Cambios {
 	/**
 	 * Cambios hechos directamente en las fichas en los últimos $dias (de la auditoría): solo
 	 * qué datos, quién y cuándo (los valores no se guardan, regla 6). La auditoría no lleva el
-	 * grupo: quien llama se queda con las personas de su grupo (las que encuentra en el CRM).
+	 * grupo: se quedan los hechos por cuentas de este grupo, y quien llama, con las personas de su grupo.
 	 *
 	 * @return array<int, array{id:int, creado:string, user_id:int, socio:string, campos:string[], motivo:string}>
 	 */
@@ -189,6 +189,10 @@ final class Cambios {
 			$motivo = is_array( $d ) ? (string) ( $d['motivo'] ?? '' ) : '';
 			$campos = is_array( $d ) ? array_values( array_filter( array_map( 'strval', (array) ( $d['campos'] ?? array() ) ) ) ) : array();
 			if ( ! isset( self::MOTIVOS_DIRECTOS[ $motivo ] ) || ! $campos ) {
+				continue;
+			}
+			// Una persona puede estar en varios grupos (doc 34): un grupo no ve lo que hizo otro.
+			if ( (string) get_user_meta( (int) $f['user_id'], \AsdeBalears\AreaPrivada\Usuarios\Usuarios::META_GRUPO, true ) !== Grupo::id() ) {
 				continue;
 			}
 			$out[] = array(

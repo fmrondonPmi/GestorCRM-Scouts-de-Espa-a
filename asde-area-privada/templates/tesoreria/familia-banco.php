@@ -28,7 +28,7 @@ $ve     = static fn( array $m ): bool => Conciliacion::coincide( $m['texto'], $q
 $hay    = (bool) array_filter( $movs, $ve );
 ?>
 <p class="asde-back asde-solo-pagina"><a href="<?php echo esc_url( $volver ); ?>"><?php asde_e( '← Volver a la familia' ); ?></a></p>
-<section class="asde-card asde-banco-elegir" data-asde-banco-elegir>
+<section class="asde-card asde-banco-elegir" data-asde-banco-elegir data-asde-plegable="familia-banco">
 	<h2 class="asde-card__title"><?php /* translators: %s: nº de familia */ echo esc_html( sprintf( asde_t( 'Ingresos del banco para la familia %s' ), $familia['numero'] ) ); ?></h2>
 	<p class="asde-muted"><?php asde_e( 'Los ingresos importados del banco que aún no están conciliados. Elige el de esta familia: el pago se registra con su fecha y su importe.' ); ?></p>
 

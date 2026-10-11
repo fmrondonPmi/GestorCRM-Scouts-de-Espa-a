@@ -122,9 +122,54 @@ Vale para todas las descargas del área (informes, Tesorería, uniformes, invent
 
 ## Pruebas
 
-`tests/mejoras-v029.php` (71 comprobaciones): Excel, versión para imprimir y fichas, plantillas y
+`tests/mejoras-v029.php` (78 comprobaciones): Excel, versión para imprimir y fichas, plantillas y
 JavaScript de descargas, plegables y Personas, cambios agrupados (una escritura por persona, avisos de
 conflicto, rechazo con motivo, cambios directos), camisas del inventario (tipo, validación,
 importación, servir, devolver, asignar, cancelar). El JavaScript se probó además en un banco estático
 con datos inventados (plegar y recordar, «Contraer todo», «Todos», la descarga que no llega al tema,
 buscar desde la 3.ª letra con una sola petición y sin perder el foco, la ventana de imprimir).
+
+## 8. Tercera tanda (mismo día)
+
+- **Todo plegable empieza plegado** (petición del usuario): los cuadros (`area.js`: contraídos
+  salvo que la persona los haya abierto, `localStorage` `asde_cuadro_*` = `1`), los apartados de
+  la ficha (`ficha.js`: ahora se recuerdan los abiertos, `asde_ficha_abiertos`; solo los
+  `details.asde-plegable[data-grupo]`, para no tocar los tutores del alta ni otros) y los
+  `details[data-asde-recordar]` (la cuota de la ronda de una familia). Sin JavaScript, todo se ve
+  abierto como antes. No se pliegan la ayuda ni «Acceso restringido» (`data-asde-no-plegable`).
+  Los cuadros con título variable (el nombre de una persona, de un pedido, de un informe…) tienen
+  clave fija (`data-asde-plegable`), para que abrir uno sirva para todos los de su clase. Un campo
+  obligatorio vacío dentro de un cuadro plegado lo abre al enviar.
+- **Precio de la camisa** (petición del usuario): «siempre 25 € a los asociados; a los scouters, 0 la
+  primera vez que piden una; desde la segunda, 25 €». `Servicio::precio_camisa()` (el precio de la
+  configuración, 25 € por defecto; un adulto —Scouter o Voluntariado— sin ningún pedido con camisa
+  sin cancelar, 0 €) lo usan «Mi uniforme» (que enseña el precio de cada persona y recalcula el
+  total al cambiar «¿Para quién?») y «Asignar una camisa» (ya sin importe a mano). Un pedido de 0 €
+  queda **pagado «sin coste»** sin pasar por Tesorería. Opción nueva en Configuración de uniformes,
+  **activada**: «La primera camisa de cada scouter es gratis» (supuestos P-103 y P-104).
+
+## 9. Revisión de código (cierre de la versión)
+
+A petición del usuario, `/code-review` (nivel xhigh) al cerrar la v0.29. Alcance: todo lo que no
+estaba en GitHub (v0.27–v0.29, ~2400 líneas, con las funciones enteras que tocan) y, del resto del
+plugin (~40 600 líneas), búsquedas de los fallos típicos (permisos y nonce de cada `handle_post`,
+confirmaciones, aislamiento entre grupos). 12 hallazgos, **todos corregidos** con su prueba:
+
+1. **Personas (de la v0.18.1):** los botones del nº («Asignar nº», «Pasar al CRM», «Corregir en el
+   CRM», «Dar nº nuevo») **no pedían confirmación**: el `onsubmit` llevaba `<?php echo asde_js(…) ?>`
+   dentro de una cadena de PHP, sin ejecutar; el navegador descartaba el JavaScript y escribía en el
+   CRM directamente.
+2. Cancelar desde «Mi uniforme» un pedido con la camisa servida del inventario no la devolvía:
+   `Servicio::cancelar()` lo hace para la familia y para la gestión.
+3. «Resueltos» podía enseñar a un grupo los cambios que hizo otro en una persona de los dos: solo
+   los hechos por cuentas del grupo.
+4. El Excel se montaba en un fichero temporal (datos de salud en el disco; vacío si fallaba): ahora
+   el zip se hace **en memoria** (DEFLATE + CRC-32, sin ZipArchive ni PclZip).
+5. Solo la primera camisa gratis de un scouter queda pagada «sin coste» (no cualquier pedido de 0 €).
+6. El cargo de la cabecera de la ficha respeta `PermisosFicha::ve_campo()`.
+7. `parcial.js`: un envío (POST) ya no se pierde si hay una búsqueda en camino (la cancela).
+8. Aprobar sin permiso de escritura en el CRM deja las propuestas pendientes (antes pasaban a error).
+9. Servir del inventario devuelve la camisa si el pedido no se puede guardar.
+10. Las cifras del resumen de Personas se actualizan con la lista (zona `personas-cifras`).
+11. `TiposTable::todos()` se guarda por petición (el importador hacía una consulta por fila).
+12. Pruebas de los casos anteriores en `tests/mejoras-v029.php` (78).

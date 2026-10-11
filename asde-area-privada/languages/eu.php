@@ -2436,7 +2436,6 @@ return array(
 	'%d cambios rechazados. Quien los propuso verá el motivo en la ficha.' => '%d aldaketa ukatu dira. Proposatu zituenak arrazoia fitxan ikusiko du.',
 	'Asignar camisas del inventario lo hace quien incluye los pedidos en el pedido al proveedor.' => 'Inbentarioko alkandorak esleitzea eskaerak hornitzaileari egindako eskaeran sartzen dituenari dagokio.',
 	'Camisa asignada a %1$s y descontada del inventario (pedido %2$s).' => 'Alkandora %1$s(r)i esleitu zaio eta inbentariotik kendu da (%2$s eskaera).',
-	'El importe no es válido (por ejemplo: 25,00; 0 si no se cobra).' => 'Zenbatekoa ez da baliozkoa (adibidez: 25,00; 0 ez bada kobratzen).',
 	'Elige a quién se le da la camisa (un socio/a con membresía activa).' => 'Aukeratu nori ematen zaion alkandora (kidetza aktiboa duen bazkide bat).',
 	'La camisa del pedido %s ha vuelto al inventario.' => '%s eskaerako alkandora inbentariora itzuli da.',
 	'La camisa del pedido %s sale del inventario: se ha descontado una.' => '%s eskaerako alkandora inbentariotik ateratzen da: bat kendu da.',
@@ -2455,7 +2454,6 @@ return array(
 	'Camisas del inventario' => 'Inbentarioko alkandorak',
 	'Del inventario del grupo' => 'Taldearen inbentariokoa',
 	'Devolver la camisa al inventario' => 'Itzuli alkandora inbentariora',
-	'El precio de la camisa. Pon 0 si no se cobra: el pedido queda pagado «sin coste».' => 'Alkandoraren prezioa. Jarri 0 ez bada kobratzen: eskaera «kosturik gabe» ordainduta geratzen da.',
 	'Hay en el inventario' => 'Inbentarioan dago',
 	'La camisa de este pedido no se puede devolver al inventario.' => 'Eskaera honetako alkandora ezin da inbentariora itzuli.',
 	'La camisa de este pedido no se puede servir del inventario.' => 'Eskaera honetako alkandora ezin da inbentariotik hornitu.',
@@ -2469,7 +2467,6 @@ return array(
 	'Para dar a alguien una camisa que el grupo ya tiene guardada, sin que la haya pedido: se crea su pedido, ya servido del inventario, y se descuenta la camisa. Después se entrega y se cobra como cualquier otro pedido.' => 'Taldeak gordeta duen alkandora bat eskatu ez duen norbaiti emateko: bere eskaera sortzen da, jada inbentariotik hornituta, eta alkandora kentzen da. Gero, beste edozein eskaera bezala, entregatu eta kobratu egiten da.',
 	'Para quién' => 'Nori',
 	'Servir del inventario' => 'Hornitu inbentariotik',
-	'Sin coste (camisa del inventario)' => 'Kosturik gabe (inbentarioko alkandora)',
 	'Sin sección' => 'Atalik gabe',
 	'Talla %1$s · queda %2$d' => 'Neurria %1$s · %2$d geratzen da',
 	'Talla %1$s · quedan %2$d' => 'Neurria %1$s · %2$d geratzen dira',
@@ -2485,4 +2482,11 @@ return array(
 	'Tabla' => 'Taula',
 	'Una ficha por persona (al imprimir, una por página)' => 'Fitxa bat pertsonako (inprimatzean, bat orrialdeko)',
 	'Una página por socio/a con su móvil, su tutor/a, la cesión de imagen, las alergias, la alimentación y las enfermedades. Elige la sección al verlo.' => 'Orrialde bat bazkide bakoitzeko: mugikorra, tutorea, irudiaren lagapena, alergiak, elikadura eta gaixotasunak. Aukeratu atala ikustean.',
+
+	// v0.29: primera camisa de scouter gratis
+	'La primera camisa de cada scouter es gratis (desde la segunda, paga el precio)' => 'Scouter bakoitzaren lehen alkandora doakoa da (bigarrenetik aurrera, prezioa ordaintzen du)',
+	'La primera camisa de cada scouter es gratis; desde la segunda, se paga el precio.' => 'Scouter bakoitzaren lehen alkandora doakoa da; bigarrenetik aurrera, prezioa ordaintzen da.',
+	'Precio: %s.' => 'Prezioa: %s.',
+	'Precio: %s. A un scouter, su primera camisa es gratis (el pedido queda pagado «sin coste»); desde la segunda, paga el precio.' => 'Prezioa: %s. Scouter batentzat, bere lehen alkandora doakoa da (eskaera «kosturik gabe» ordainduta geratzen da); bigarrenetik aurrera, prezioa ordaintzen du.',
+	'Sin coste: primera camisa de scouter' => 'Kosturik gabe: scouterraren lehen alkandora',
 );

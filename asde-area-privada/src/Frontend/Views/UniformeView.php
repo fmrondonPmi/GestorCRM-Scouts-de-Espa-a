@@ -28,6 +28,11 @@ final class UniformeView extends UniformesBaseView {
 		}
 		$cfg     = Config::de();
 		$pedidos = PedidosTable::de_socios( array_keys( $para ) );
+		// v0.29: lo que le cuesta la camisa a cada uno (la primera de un scouter, gratis).
+		$precios = array();
+		foreach ( $para as $n => $persona ) {
+			$precios[ $n ] = Servicio::precio_camisa( (string) $n, $persona->es_adulto_voluntario(), $cfg );
+		}
 		$guias   = array();
 		foreach ( $cfg['modelos'] as $id => $m ) {
 			$url = Config::guia_medidas( $cfg, (string) $id );
@@ -45,6 +50,7 @@ final class UniformeView extends UniformesBaseView {
 				array(
 					'cfg'      => $cfg,
 					'para'     => $para,
+					'precios'  => $precios,
 					'pedidos'  => $pedidos,
 					'ambito'   => $a,
 					'guias'    => $guias,
@@ -93,7 +99,7 @@ final class UniformeView extends UniformesBaseView {
 		}
 		switch ( $this->post( 'asde_action' ) ) {
 			case 'uniforme_cancelar':
-				if ( Servicio::puede_cancelar_propio( $p, $a ) && PedidosTable::cancelar( $p['id'], 'Cancelado por el socio/a o su familia' ) ) {
+				if ( Servicio::puede_cancelar_propio( $p, $a ) && Servicio::cancelar( $p, 'Cancelado por el socio/a o su familia' ) ) {
 					Logger::log( 'uniforme_cancelado', 'uniforme', (string) $p['id'], array( 'por' => 'socio' ) );
 					Notices::add( 'success', asde_t( 'Pedido cancelado.' ) );
 				} else {

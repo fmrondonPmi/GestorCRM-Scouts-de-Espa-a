@@ -52,6 +52,7 @@ final class UniformesConfigView extends UniformesBaseView {
 		$lista   = static fn( string $v ): array => array_values( array_unique( array_filter( array_map( static fn( $t ) => mb_substr( trim( $t ), 0, 10 ), explode( ',', $v ) ) ) ) );
 
 		$cfg['abierto']       = '1' === $this->post( 'abierto' );
+		$cfg['primera_gratis'] = '1' === $this->post( 'primera_gratis' );
 		$cfg['precio_camisa'] = $euros( $this->post( 'precio_camisa' ) ) ?? $cfg['precio_camisa'];
 		$cfg['texto_pago']    = mb_substr( sanitize_textarea_field( $this->post( 'texto_pago' ) ), 0, 600 );
 		$cfg['tallas_especiales'] = $lista( $this->post( 'tallas_especiales' ) );

@@ -2436,7 +2436,6 @@ return array(
 	'%d cambios rechazados. Quien los propuso verá el motivo en la ficha.' => '%d canvis rebutjats. Qui els va proposar veurà el motiu a la fitxa.',
 	'Asignar camisas del inventario lo hace quien incluye los pedidos en el pedido al proveedor.' => 'Assignar camises de l\'inventari ho fa qui inclou les comandes a la comanda al proveïdor.',
 	'Camisa asignada a %1$s y descontada del inventario (pedido %2$s).' => 'Camisa assignada a %1$s i descomptada de l\'inventari (comanda %2$s).',
-	'El importe no es válido (por ejemplo: 25,00; 0 si no se cobra).' => 'L\'import no és vàlid (per exemple: 25,00; 0 si no es cobra).',
 	'Elige a quién se le da la camisa (un socio/a con membresía activa).' => 'Tria a qui es dona la camisa (un soci/sòcia amb membresia activa).',
 	'La camisa del pedido %s ha vuelto al inventario.' => 'La camisa de la comanda %s ha tornat a l\'inventari.',
 	'La camisa del pedido %s sale del inventario: se ha descontado una.' => 'La camisa de la comanda %s surt de l\'inventari: se n\'ha descomptat una.',
@@ -2455,7 +2454,6 @@ return array(
 	'Camisas del inventario' => 'Camises de l\'inventari',
 	'Del inventario del grupo' => 'De l\'inventari del grup',
 	'Devolver la camisa al inventario' => 'Torna la camisa a l\'inventari',
-	'El precio de la camisa. Pon 0 si no se cobra: el pedido queda pagado «sin coste».' => 'El preu de la camisa. Posa 0 si no es cobra: la comanda queda pagada «sense cost».',
 	'Hay en el inventario' => 'Hi ha a l\'inventari',
 	'La camisa de este pedido no se puede devolver al inventario.' => 'La camisa d\'aquesta comanda no es pot tornar a l\'inventari.',
 	'La camisa de este pedido no se puede servir del inventario.' => 'La camisa d\'aquesta comanda no es pot servir de l\'inventari.',
@@ -2469,7 +2467,6 @@ return array(
 	'Para dar a alguien una camisa que el grupo ya tiene guardada, sin que la haya pedido: se crea su pedido, ya servido del inventario, y se descuenta la camisa. Después se entrega y se cobra como cualquier otro pedido.' => 'Per donar a algú una camisa que el grup ja té guardada, sense que l\'hagi demanada: es crea la seva comanda, ja servida de l\'inventari, i es descompta la camisa. Després es lliura i es cobra com qualsevol altra comanda.',
 	'Para quién' => 'Per a qui',
 	'Servir del inventario' => 'Serveix de l\'inventari',
-	'Sin coste (camisa del inventario)' => 'Sense cost (camisa de l\'inventari)',
 	'Sin sección' => 'Sense secció',
 	'Talla %1$s · queda %2$d' => 'Talla %1$s · queda %2$d',
 	'Talla %1$s · quedan %2$d' => 'Talla %1$s · queden %2$d',
@@ -2485,4 +2482,11 @@ return array(
 	'Tabla' => 'Taula',
 	'Una ficha por persona (al imprimir, una por página)' => 'Una fitxa per persona (en imprimir, una per pàgina)',
 	'Una página por socio/a con su móvil, su tutor/a, la cesión de imagen, las alergias, la alimentación y las enfermedades. Elige la sección al verlo.' => 'Una pàgina per soci/sòcia amb el mòbil, el tutor/a, la cessió d\'imatge, les al·lèrgies, l\'alimentació i les malalties. Tria la secció en veure\'l.',
+
+	// v0.29: primera camisa de scouter gratis
+	'La primera camisa de cada scouter es gratis (desde la segunda, paga el precio)' => 'La primera camisa de cada scouter és gratuïta (des de la segona, paga el preu)',
+	'La primera camisa de cada scouter es gratis; desde la segunda, se paga el precio.' => 'La primera camisa de cada scouter és gratuïta; des de la segona, es paga el preu.',
+	'Precio: %s.' => 'Preu: %s.',
+	'Precio: %s. A un scouter, su primera camisa es gratis (el pedido queda pagado «sin coste»); desde la segunda, paga el precio.' => 'Preu: %s. A un scouter, la seva primera camisa és gratuïta (la comanda queda pagada «sense cost»); des de la segona, paga el preu.',
+	'Sin coste: primera camisa de scouter' => 'Sense cost: primera camisa de scouter',
 );

@@ -15,7 +15,7 @@
 
 defined( 'ABSPATH' ) || exit;
 ?>
-<section class="asde-card asde-ayuda<?php echo $completo ? ' asde-ayuda--completo' : ''; ?>">
+<section class="asde-card asde-ayuda<?php echo $completo ? ' asde-ayuda--completo' : ''; ?>" data-asde-no-plegable>
 	<?php if ( '' !== $volver ) : ?>
 		<p class="asde-back"><a href="<?php echo esc_url( $volver ); ?>"><?php asde_e( '← Volver a la página' ); ?></a></p>
 	<?php endif; ?>

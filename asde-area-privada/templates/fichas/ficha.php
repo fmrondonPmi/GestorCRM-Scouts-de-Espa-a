@@ -135,7 +135,7 @@ $control = static function ( string $campo, array $f ) use ( $pendientes ): stri
 				echo '<span class="asde-badge asde-badge--estado-desactivado">' . esc_html( asde_t( 'Sin membresía activa' ) ) . '</span>';
 			}
 			?>
-			<?php if ( '' !== trim( $p->cargo ) ) : ?>
+			<?php if ( '' !== trim( $p->cargo ) && $perm->ve_campo( 'cargoeducativo_c' ) ) : ?>
 				<span class="asde-muted"><?php echo esc_html( asde_t( Catalogo::ENUMS['cargoeducativo_c'][ $p->cargo ] ?? $p->cargo ) ); ?></span>
 			<?php endif; ?>
 		</p>

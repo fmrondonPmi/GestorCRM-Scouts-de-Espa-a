@@ -25,7 +25,7 @@ $campos = static function () use ( $nonce, $l ): void {
 };
 ?>
 <p class="asde-back asde-solo-pagina"><a href="<?php echo esc_url( $url_list ); ?>"><?php asde_e( '← Listas de compra' ); ?></a></p>
-<section class="asde-card asde-inv-compra<?php echo '' === $url_pdf ? ' asde-inv-compra--sin-visto-bueno' : ''; ?>">
+<section class="asde-card asde-inv-compra<?php echo '' === $url_pdf ? ' asde-inv-compra--sin-visto-bueno' : ''; ?>" data-asde-plegable="inventario-compra">
 	<header class="asde-card__header asde-card__header--split">
 		<h2 class="asde-card__title"><?php echo esc_html( sprintf( asde_t( 'Lista de compra %s' ), $num ) ); ?></h2>
 		<span class="asde-badge asde-badge--compra-<?php echo esc_attr( $l['estado'] ); ?>"><?php echo esc_html( asde_t( ComprasTable::ESTADOS[ $l['estado'] ] ?? $l['estado'] ) ); ?></span>

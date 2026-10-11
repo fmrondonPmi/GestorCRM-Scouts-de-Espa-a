@@ -38,7 +38,7 @@ $opciones = static function ( float $importe, ?int $elegido ) use ( $tipos ): st
 	return $h;
 };
 ?>
-<section class="asde-card asde-banco-revisar">
+<section class="asde-card asde-banco-revisar" data-asde-plegable="banco-revisar">
 	<h2 class="asde-card__title"><?php echo esc_html( $titulo ); ?></h2>
 	<?php if ( $conciliados ) : ?>
 		<div class="asde-notice asde-notice--warning" role="status"><?php echo esc_html( sprintf( asde_n( '%d movimiento elegido ya está conciliado con una familia y no sale aquí: para cambiarlo, deshaz antes la conciliación.', '%d movimientos elegidos ya están conciliados con una familia y no salen aquí: para cambiarlos, deshaz antes la conciliación.', $conciliados ), $conciliados ) ); ?></div>

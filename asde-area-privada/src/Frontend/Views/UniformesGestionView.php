@@ -345,12 +345,7 @@ final class UniformesGestionView extends UniformesBaseView {
 						$error = asde_t( 'Indica el motivo de la cancelación.' );
 						break;
 					}
-					// La camisa que había salido del inventario (v0.29) vuelve a él.
-					if ( $p['inventario_id'] && null === $p['entregado_en'] ) {
-						MaterialesTable::devolver_camisa( (int) $p['inventario_id'], (string) ( $p['lineas']['camisa']['modelo'] ?? '' ), (string) ( $p['lineas']['camisa']['talla'] ?? '' ) );
-						PedidosTable::quitar_camisa_servida( $p['id'], false );
-					}
-					PedidosTable::cancelar( $p['id'], $motivo );
+					Servicio::cancelar( $p, $motivo ); // Si su camisa había salido del inventario, vuelve a él (v0.29).
 					Logger::log( 'uniforme_cancelado', 'uniforme', (string) $p['id'], array( 'por' => 'grupo' ) );
 					$hecho  = sprintf( asde_t( 'Pedido %s cancelado.' ), $num );
 					$volver = $lista;
@@ -380,12 +375,7 @@ final class UniformesGestionView extends UniformesBaseView {
 			$this->redirect( $volver );
 		}
 		list( $modelo, $talla ) = array_pad( explode( '|', $this->post( 'camisa' ), 2 ), 2, '' );
-		$importe                = MaterialesTable::euros( $this->post( 'importe' ) );
-		if ( false === $importe ) {
-			Notices::add( 'error', asde_t( 'El importe no es válido (por ejemplo: 25,00; 0 si no se cobra).' ) );
-			$this->redirect( add_query_arg( 'socio', $socio, $volver ) );
-		}
-		$r = Servicio::asignar( $persona, sanitize_key( $modelo ), $talla, (float) $importe, $this->post( 'nota' ) );
+		$r                      = Servicio::asignar( $persona, sanitize_key( $modelo ), $talla, $this->post( 'nota' ) );
 		if ( is_wp_error( $r ) ) {
 			Notices::add( 'error', esc_html( $r->get_error_message() ) );
 			$this->redirect( add_query_arg( 'socio', $socio, $volver ) );

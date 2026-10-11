@@ -111,6 +111,19 @@
 		} );
 	}
 
+	// v0.29: el precio de la camisa depende de para quién es (la primera de un scouter, gratis).
+	var precioCamisa = form.querySelector( '[data-asde-precio-camisa]' );
+	form.addEventListener( 'change', function ( e ) {
+		var quien = e.target;
+		if ( ! camisa || 'socio' !== quien.name || ! quien.hasAttribute( 'data-precio-camisa' ) ) {
+			return;
+		}
+		var precio = parseFloat( quien.getAttribute( 'data-precio-camisa' ) ) || 0;
+		camisa.setAttribute( 'data-precio', String( precio ) );
+		if ( precioCamisa ) {
+			precioCamisa.textContent = euros ? euros.format( precio ) : precio.toFixed( 2 ).replace( '.', ',' ) + ' €';
+		}
+	} );
 	form.addEventListener( 'input', calcular );
 	form.addEventListener( 'change', calcular );
 	form.addEventListener( 'change', marcarModelo );

@@ -23,7 +23,7 @@ $ronda = $res['ronda'] ?? null;
 ?>
 <p class="asde-back asde-no-print"><a href="<?php echo esc_url( $url ); ?>"><?php asde_e( '← Volver a informes' ); ?></a></p>
 
-<section class="asde-card">
+<section class="asde-card" data-asde-plegable="informe-resultado">
 	<header class="asde-card__header asde-card__header--split">
 		<h2 class="asde-card__title"><?php echo esc_html( $informe->titulo() ); ?></h2>
 		<p class="asde-actions asde-no-print">

@@ -12,8 +12,7 @@ defined( 'ABSPATH' ) || exit;
  * como «texto en línea»: Excel no lo interpreta nunca como fórmula (no hace falta la comilla
  * de Generador::celda_segura del CSV).
  *
- * El zip se hace con ZipArchive y, si el servidor no lo tiene, con PclZip, que viene con
- * WordPress.
+ * El zip se monta en memoria (zip()): nada pasa por el disco.
  */
 final class Xlsx {
 
@@ -166,37 +165,27 @@ final class Xlsx {
 		return htmlspecialchars( $s, ENT_XML1 | ENT_QUOTES, 'UTF-8' );
 	}
 
-	/** @param array<string, string> $ficheros ruta dentro del zip => contenido */
+	/**
+	 * El zip, en memoria (revisión de la v0.29): sin fichero temporal, para que los datos del
+	 * informe (también los de salud) no pasen por el disco del servidor (regla 1 del CLAUDE.md),
+	 * y sin depender de ZipArchive. Cada fichero va comprimido con DEFLATE (o sin comprimir si
+	 * el servidor no tiene zlib), con su CRC-32, como pide el formato zip.
+	 *
+	 * @param array<string, string> $ficheros ruta dentro del zip => contenido
+	 */
 	private static function zip( array $ficheros ): string {
-		require_once ABSPATH . 'wp-admin/includes/file.php'; // wp_tempnam(), que en la parte pública no está cargada.
-		$tmp = wp_tempnam( 'asde-xlsx' );
-		if ( ! $tmp ) {
-			return '';
+		$zip     = '';
+		$central = '';
+		foreach ( $ficheros as $nombre => $datos ) {
+			$comprimido = function_exists( 'gzdeflate' ) ? gzdeflate( $datos, 6 ) : false;
+			$metodo     = false === $comprimido ? 0 : 8;
+			$cuerpo     = false === $comprimido ? $datos : $comprimido;
+			// Versión, marcas, método, hora y fecha (1/1/1980), CRC-32, tamaños y longitud del nombre.
+			$cabecera = pack( 'vvvvvVVVvv', 20, 0, $metodo, 0, 0x21, crc32( $datos ), strlen( $cuerpo ), strlen( $datos ), strlen( (string) $nombre ), 0 );
+			$central .= pack( 'Vv', 0x02014b50, 20 ) . $cabecera . pack( 'vvvVV', 0, 0, 0, 0, strlen( $zip ) ) . $nombre;
+			$zip     .= pack( 'V', 0x04034b50 ) . $cabecera . $nombre . $cuerpo;
 		}
-		$hecho = false;
-		if ( class_exists( \ZipArchive::class ) ) {
-			$zip = new \ZipArchive();
-			if ( true === $zip->open( $tmp, \ZipArchive::CREATE | \ZipArchive::OVERWRITE ) ) {
-				foreach ( $ficheros as $nombre => $contenido ) {
-					$zip->addFromString( $nombre, $contenido );
-				}
-				$hecho = $zip->close();
-			}
-		}
-		if ( ! $hecho ) {
-			require_once ABSPATH . 'wp-admin/includes/class-pclzip.php';
-			$lista = array();
-			foreach ( $ficheros as $nombre => $contenido ) {
-				$lista[] = array(
-					PCLZIP_ATT_FILE_NAME    => $nombre,
-					PCLZIP_ATT_FILE_CONTENT => $contenido,
-				);
-			}
-			wp_delete_file( $tmp );
-			$hecho = 0 !== ( new \PclZip( $tmp ) )->create( $lista );
-		}
-		$datos = $hecho ? (string) file_get_contents( $tmp ) : ''; // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- fichero temporal propio, en local
-		wp_delete_file( $tmp );
-		return $datos;
+		$n = count( $ficheros );
+		return $zip . $central . pack( 'VvvvvVVv', 0x06054b50, 0, 0, $n, $n, strlen( $central ), strlen( $zip ), 0 );
 	}
 }

@@ -33,7 +33,7 @@ $url_ver = 'resueltos' === $ver ? add_query_arg( 'ver', 'resueltos', $url ) : $u
 ?>
 <?php if ( '' !== $socio ) : ?>
 	<p class="asde-back asde-solo-pagina"><a href="<?php echo esc_url( $url_ver ); ?>"><?php asde_e( '← Cambios propuestos' ); ?></a></p>
-	<section class="asde-card">
+	<section class="asde-card" data-asde-plegable="cambios-persona">
 		<?php /* translators: %s: nombre de la persona */ ?>
 		<h2 class="asde-card__title"><?php echo $g ? esc_html( sprintf( asde_t( 'Cambios de %s' ), $g['persona']->nombre_completo() ) ) : esc_html( asde_t( 'Cambios propuestos' ) ); ?></h2>
 		<?php if ( ! $g ) : ?>

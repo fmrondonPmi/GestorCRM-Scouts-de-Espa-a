@@ -64,6 +64,8 @@ Hay que resolverlas antes de programar cada parte. Cuando se responde una, se ma
 | P-100 | **Camisas del inventario (supuesto, v0.29.0):** servir y asignar camisas del inventario lo hace **Coordinación** (quien incluye los pedidos en el pedido al proveedor) y solo si el grupo usa el inventario; una camisa asignada **a 0 €** queda pagada «sin coste» sin pasar por Tesorería. ¿Debe poder hacerlo también Tesorería o el scouter de la sección? (doc 36) | Uniformes |
 | P-101 | **Chico y chica (supuesto, v0.29.0):** «chico» es la camisa masculina y «chica» la femenina (los dos modelos de ASDE); si un grupo tiene modelos propios en la configuración de uniformes, salen con su nombre. (doc 36) | Inventario |
 | P-102 | **«Fichas reducidas» (supuesto, v0.29.0):** lleva el nombre del **tutor/a 1** como pediste, sin su teléfono ni el del tutor/a 2. ¿Añadimos «Móvil del tutor/a 1» (ya existe como columna)? (doc 36) | Informes |
+| P-103 | **Primera camisa gratis (supuesto, v0.29.0):** «scouter» es cualquier adulto con membresía de **Scouter o de Voluntariado** (como ya distinguía la gestión de uniformes); cuenta como «ya pidió una» cualquier pedido con camisa que **no esté cancelado** (también uno servido del inventario). Si cancela el pedido gratis, el siguiente vuelve a ser gratis. ¿Es así? (doc 36) | Uniformes |
+| P-104 | **Primera camisa gratis para todos los grupos (supuesto, v0.29.0):** es una opción de Configuración de uniformes **activada por defecto** también en los grupos que ya estaban, porque lo pediste como norma. Un grupo que no la quiera la apaga allí. (doc 36) | Uniformes |
 
 ## Resueltas
 

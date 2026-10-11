@@ -153,6 +153,8 @@ $ok( str_contains( $area, 'function esDescarga' ) && str_contains( $area, 'e.sto
 $descargas = array( 'templates/informes/resultado.php', 'templates/tesoreria/control.php', 'templates/uniformes/gestion.php', 'templates/inventario/importar.php' );
 $ok( ! array_filter( $descargas, static fn( $f ) => ! str_contains( $leer( $f ), 'no-transition' ) ), 'los enlaces de descarga llevan la clase no-transition (Enfold)' );
 $ok( str_contains( $area, 'function plegables' ) && str_contains( $area, 'asde_cuadro_' ) && str_contains( $area, 'data-asde-marcar-todos' ), 'area.js: cuadros plegables que se recuerdan y casilla «Todos»' );
+$ok( str_contains( $area, "plegar( card, '1' !== guardado, false )" ) && str_contains( $area, "d.open = '1' === guardado" ) && str_contains( $leer( 'assets/js/ficha.js' ), "'asde_ficha_abiertos'" ) && str_contains( $leer( 'assets/js/ficha.js' ), 'details.asde-plegable[data-grupo]' ), 'por defecto, todo plegado (cuadros, apartados de la ficha y plegables que se recuerdan); se recuerda lo que se abre' );
+$ok( str_contains( $leer( 'templates/comun/ayuda.php' ), 'data-asde-no-plegable' ) && str_contains( $leer( 'templates/comun/denegado.php' ), 'data-asde-no-plegable' ) && str_contains( $leer( 'templates/fichas/cambios.php' ), 'data-asde-plegable="cambios-persona"' ) && str_contains( $area, "addEventListener( 'invalid'" ), 'la ayuda y los avisos no se pliegan; los cuadros de título variable tienen clave fija; un campo obligatorio abre su cuadro' );
 $ficha = $leer( 'templates/fichas/ficha.php' );
 $ok( str_contains( $ficha, 'data-asde-plegable="ficha-cabecera"' ) && str_contains( $ficha, 'data-asde-plegable="ficha-membresia"' ) && strpos( $ficha, 'asde-ficha__plegar' ) < strpos( $ficha, 'data-asde-plegable="ficha-cabecera"' ), 'ficha: nombre y membresía plegables; «Contraer todo» arriba del todo' );
 $ok( 1 === substr_count( $ficha, 'data-asde-plegar="todo"' ) && str_contains( $leer( 'assets/js/ficha.js' ), 'window.asdePlegables.plegar' ), '«Contraer todo» pliega también los cuadros' );
@@ -160,6 +162,7 @@ $pers = $leer( 'templates/personas/listado.php' );
 $ok( str_contains( $pers, 'asde-filter asde-filter--una-linea' ) && str_contains( $leer( 'assets/css/area-privada.css' ), '#top .asde-ap .asde-filter--una-linea select' ), 'personas: «Mostrar», el cuadro de búsqueda y «Filtrar» en la misma línea (contra el #top select de Enfold)' );
 $ok( str_contains( $pers, 'data-asde-plegable="personas-resumen"' ) && str_contains( $pers, 'data-asde-parcial-form="personas-lista"' ) && str_contains( $pers, 'data-asde-parcial="personas-lista"' ) && str_contains( $pers, 'data-asde-buscar' ), 'personas: resumen plegable, lista que se actualiza sola y búsqueda al escribir' );
 $ok( ! str_contains( $pers, 'class="button asde-button-secundario" href="<?php echo esc_url( add_query_arg( \'socio\', $p->num_socio_asde, $url_alta ) ); ?>" data-asde-modal><?php asde_e( \'Dar acceso\' )' ) && preg_match( '/asde-filter__buscar">.*?data-asde-buscar.*?Filtrar/s', $pers ), '«Dar acceso» es un enlace y «Filtrar» va junto al cuadro de búsqueda' );
+$ok( ! str_contains( $pers, 'confirm(<?php echo asde_js( \' .' ) && str_contains( $pers, "' onsubmit=\"return confirm(' . esc_attr( (string) wp_json_encode( \$confirmar ) ) . ');\"'" ) && str_contains( $pers, 'data-asde-parcial="personas-cifras"' ), 'personas: los botones del nº piden confirmación de verdad (antes llevaban PHP sin ejecutar) y las cifras se actualizan con la lista' );
 $parcial = $leer( 'assets/js/parcial.js' );
 $ok( str_contains( $parcial, 'data-asde-parcial-form' ) && str_contains( $parcial, 'input[data-asde-buscar]' ) && str_contains( $parcial, 'texto.length < 3' ) && str_contains( $parcial, 'AbortController' ), 'parcial.js: formulario de fuera de la zona, búsqueda desde la 3.ª letra y la última consulta manda' );
 
@@ -321,6 +324,12 @@ try {
 	// Cambios hechos directamente en la ficha (de la auditoría).
 	Logger::log( 'crm_ficha_editada', 'socio', '990074', array( 'campos' => array( 'phone_mobile' ), 'rechazados' => array(), 'motivo' => 'ficha' ) );
 	Logger::log( 'crm_ficha_editada', 'socio', '990074', array( 'campos' => array( 'numsocioantiguo_enficha_c' ), 'rechazados' => array(), 'motivo' => 'numeracion' ) );
+	// Revisión de código: un cambio que hizo una cuenta de OTRO grupo (la persona está en los dos) no se ve aquí.
+	$u_otro = $crear( 'prueba-v029-otro', array( Roles::SECRETARIA ), array() );
+	update_user_meta( $u_otro, Usuarios::META_GRUPO, 'otro-grupo-de-prueba' );
+	wp_set_current_user( $u_otro );
+	Logger::log( 'crm_ficha_editada', 'socio', '990074', array( 'campos' => array( 'email1' ), 'rechazados' => array(), 'motivo' => 'ficha' ) );
+	$como( $u_secre );
 	$dir = Cambios::directos( 90, '990074' );
 	$ok( 1 === count( $dir ) && array( 'phone_mobile' ) === $dir[0]['campos'] && 'ficha' === $dir[0]['motivo'], 'cambios directos: los de la ficha sí, los de la numeración no' );
 	$ok( ! array_filter( Cambios::directos( 90, '990073' ), static fn( $d ) => 'cambios_aprobados' === $d['motivo'] ), 'las propuestas aprobadas no salen dos veces' );
@@ -386,11 +395,15 @@ try {
 	$ok( is_wp_error( $sin ) && str_contains( $sin->get_error_message(), 'No queda ninguna camisa' ) && 0 === PedidosTable::obtener( $p_sin )['inventario_id'], 'sin camisas de esa talla, no se sirve' );
 	$ok( true === Servicio::devolver( PedidosTable::obtener( $p_solo ) ) && 3 === MaterialesTable::camisas()['femenina']['M'] && null === PedidosTable::obtener( $p_solo )['pedido_en'] && 0 === PedidosTable::obtener( $p_solo )['inventario_id'], 'devolver la camisa: vuelve al inventario y el pedido, a pendiente de pedir' );
 
-	$ona = $repo->obtener( '990074' );
-	$asig = Servicio::asignar( $ona, 'femenina', 'm', 0.0, 'Talla grande' );
+	// Precio (petición del usuario): 25 € a los asociados; a un scouter, la primera camisa gratis y desde la segunda, 25 €.
+	$ok( 25.0 === Servicio::precio_camisa( '990074', false, $cfg ) && 0.0 === Servicio::precio_camisa( '990071', true, $cfg ) && 25.0 === Servicio::precio_camisa( '990071', true, array( 'primera_gratis' => false ) + $cfg ), 'precio de la camisa: 25 € a los asociados, la primera de un scouter gratis (se puede apagar en la configuración)' );
+	$ona  = $repo->obtener( '990074' );
+	$sara = $repo->obtener( '990071' );
+	$asig = Servicio::asignar( $sara, 'femenina', 'm', 'Talla grande' );
 	$pa   = is_int( $asig ) ? PedidosTable::obtener( $asig ) : null;
-	$ok( $pa && '990074' === $pa['socio'] && 'M' === $pa['lineas']['camisa']['talla'] && $pa['inventario_id'] > 0 && null !== $pa['pedido_en'] && null !== $pa['pago_en'] && PedidosTable::REF_SIN_COSTE === $pa['pago_ref'] && 2 === MaterialesTable::camisas()['femenina']['M'], 'asignar una camisa a quien no la pidió: pedido creado, servido y, a 0 €, pagado «sin coste»' );
-	$asig2 = Servicio::asignar( $ona, 'masculina', 'S', 25.0, '' );
+	$ok( $pa && '990071' === $pa['socio'] && 'M' === $pa['lineas']['camisa']['talla'] && $pa['inventario_id'] > 0 && null !== $pa['pedido_en'] && null !== $pa['pago_en'] && PedidosTable::REF_SIN_COSTE === $pa['pago_ref'] && 2 === MaterialesTable::camisas()['femenina']['M'], 'asignar una camisa a quien no la pidió: pedido creado, servido y, la primera de un scouter, 0 € y pagado «sin coste»' );
+	$ok( 25.0 === Servicio::precio_camisa( '990071', true, $cfg ), 'la segunda camisa de ese scouter ya cuesta 25 €' );
+	$asig2 = Servicio::asignar( $ona, 'masculina', 'S', '' );
 	$ok( is_wp_error( $asig2 ), 'asignar una talla que no queda: error' );
 
 	// Desde la pantalla: la tarjeta, la ventana de asignar y cancelar un pedido servido.
@@ -402,9 +415,11 @@ try {
 	$ok( $m1 === PedidosTable::obtener( $p_solo )['inventario_id'] && 1 === MaterialesTable::camisas()['femenina']['M'], 'servir desde la ficha del pedido' );
 	$enviar( new UniformesGestionView(), array( 'asde_action' => 'uniforme_cancelar', 'pedido' => (string) $p_solo, 'motivo' => 'Ya no la quiere' ), 'asde_uniforme_' . $p_solo );
 	$ok( null !== PedidosTable::obtener( $p_solo )['cancelado_en'] && 2 === MaterialesTable::camisas()['femenina']['M'], 'cancelar un pedido servido devuelve la camisa al inventario' );
-	$enviar( new UniformesGestionView(), array( 'asde_action' => 'uniforme_asignar', 'socio' => '990073', 'camisa' => 'masculina|XL', 'importe' => '12,5', 'nota' => '' ), 'asde_uniformes_asignar' );
+	$enviar( new UniformesGestionView(), array( 'asde_action' => 'uniforme_asignar', 'socio' => '990073', 'camisa' => 'masculina|XL', 'nota' => '' ), 'asde_uniformes_asignar' );
 	$ultimo = PedidosTable::obtener( $max_id( PedidosTable::table() ) );
-	$ok( $ultimo && '990073' === $ultimo['socio'] && 12.5 === (float) $ultimo['total'] && null === $ultimo['pago_en'] && 1 === MaterialesTable::camisas()['masculina']['XL'], 'asignar desde la ventana con importe: queda pendiente de pago' );
+	$ok( $ultimo && '990073' === $ultimo['socio'] && 25.0 === (float) $ultimo['total'] && null === $ultimo['pago_en'] && 1 === MaterialesTable::camisas()['masculina']['XL'], 'asignar desde la ventana a un asociado: 25 € y pendiente de pago' );
+	$ok( true === Servicio::cancelar( PedidosTable::obtener( $p_ins ), 'Prueba' ) && 1 === ( MaterialesTable::camisas()['masculina']['S'] ?? 0 ) && 0 === PedidosTable::obtener( $p_ins )['inventario_id'], 'cancelar un pedido con la camisa servida (con insignias, aún sin pedir) la devuelve al inventario' );
+	$ok( str_contains( $leer( 'src/Frontend/Views/UniformeView.php' ), "Servicio::cancelar( \$p, 'Cancelado por el socio/a o su familia' )" ), 'también cuando lo cancela la familia desde «Mi uniforme»' );
 	$ok( $m2 > $m1 && $m3 > $m2, '(materiales de la prueba creados)' );
 } finally {
 	Escritura::usar_para_pruebas( null );

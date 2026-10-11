@@ -34,7 +34,7 @@ $talla  = $valor( 'talla', $m['talla'] ?? '' );
 ?>
 <p class="asde-back"><a href="<?php echo esc_url( $url_lista ); ?>"><?php asde_e( '← Inventario' ); ?></a></p>
 
-<section class="asde-card">
+<section class="asde-card" data-asde-plegable="inventario-material">
 	<h2 class="asde-card__title"><?php echo $m ? esc_html( $m['descripcion'] ) : esc_html( asde_t( 'Añadir material' ) ); ?></h2>
 	<?php if ( $m && ! $activo ) : ?>
 		<div class="asde-notice asde-notice--warning" role="status">

@@ -61,7 +61,7 @@ if ( $solicitud && \AsdeBalears\AreaPrivada\Usuarios\Solicitudes::POR_ENLACE ===
 ?>
 <p class="asde-back asde-solo-pagina"><a href="<?php echo esc_url( $url_volver ); ?>"><?php asde_e( '← Volver a la búsqueda' ); ?></a></p>
 
-<section class="asde-card">
+<section class="asde-card" data-asde-plegable="dar-acceso-persona">
 	<header class="asde-card__header">
 		<h2 class="asde-card__title"><?php echo esc_html( $p->nombre_completo() ); ?></h2>
 		<?php

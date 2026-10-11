@@ -102,7 +102,7 @@ $columnas = array(
 <?php endif; ?>
 
 <?php if ( $movs ) : ?>
-	<section class="asde-card">
+	<section class="asde-card" data-asde-plegable="banco-previa">
 		<h3><?php echo (int) $total; ?> <?php asde_e( 'movimientos ·' ); ?> <?php echo (int) $nuevos; ?> <?php asde_e( 'nuevos' ); ?></h3>
 		<?php if ( $posibles ) : ?>
 			<p class="asde-help asde-help--warning"><?php echo (int) $posibles; ?> <?php asde_e( 'nuevos coinciden en cuenta, fecha e importe con otro ya importado (¿el mismo movimiento desde otro formato?). Se importarán; si sobran, márcalos como revisados.' ); ?></p>

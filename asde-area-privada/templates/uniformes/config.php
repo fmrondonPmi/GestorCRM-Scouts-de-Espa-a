@@ -28,6 +28,7 @@ $imagen = static function ( string $campo, int $adjunto, string $alt ): string {
 			<label for="asde-uc-precio"><?php asde_e( 'Precio de la camisa (€)' ); ?></label>
 			<input type="text" id="asde-uc-precio" name="precio_camisa" value="<?php echo esc_attr( $euros( $cfg['precio_camisa'] ) ); ?>" inputmode="decimal" size="8">
 		</p>
+		<label class="asde-choice"><input type="checkbox" name="primera_gratis" value="1" <?php checked( $cfg['primera_gratis'] ); ?>><span><?php asde_e( 'La primera camisa de cada scouter es gratis (desde la segunda, paga el precio)' ); ?></span></label>
 		<p>
 			<label for="asde-uc-texto"><?php asde_e( 'Cómo pagar (lo ven las familias al pedir)' ); ?></label>
 			<textarea id="asde-uc-texto" name="texto_pago" rows="3" maxlength="600" placeholder="<?php echo esc_attr( asde_a( 'Por ejemplo: en efectivo en el local los sábados, o por ingreso en la cuenta ES00 0000… indicando el nº de pedido.' ) ); ?>"><?php echo esc_textarea( $cfg['texto_pago'] ); ?></textarea>
