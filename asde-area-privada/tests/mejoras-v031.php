@@ -42,7 +42,7 @@ $router = $leer( 'src/Frontend/Router.php' );
 $ok( str_contains( $router, "! in_array( \$key, Pages::PUBLICAS, true ) && ! wp_script_is( 'asde-parcial', 'enqueued' )" ), 'parcial.js se carga en todas las páginas del área' );
 
 echo "\n== Cambio de sección ==\n";
-$ok( array( 'lobatos' ) === Secciones::destinos_cambio( 'castores' ) && array( 'scouters' ) === Secciones::destinos_cambio( 'rovers' ), 'un educando solo pasa a la siguiente por edad (de Rovers, a Scouters)' );
+$ok( array( 'lobatos' ) === Secciones::destinos_cambio( 'castores' ) && Secciones::ADULTAS === Secciones::destinos_cambio( 'rovers' ), 'un educando solo pasa a la siguiente por edad (de Rovers, a Scouters o Voluntariado, P-119)' );
 $ok( ! in_array( 'scouters', Secciones::destinos_cambio( 'scouters' ), true ) && in_array( 'castores', Secciones::destinos_cambio( 'voluntariado' ), true ), 'un adulto cambia a cualquier otra sección' );
 
 echo "\n== Revisión de WordPress.org ==\n";

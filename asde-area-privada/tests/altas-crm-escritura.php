@@ -221,7 +221,7 @@ try {
 	$ok( is_array( $r9 ) && 2 === count( $mn ) && 'cambioseccion' === $mn[0]['end_reason'] && $hoy === $mn[0]['end_date'] && 'Escultas' === $mn[1]['relationship_type'] && $hoy === $mn[1]['start_date'] && '^Escultas^' === $ficha( $id_de( 71 ) )['stic_relationship_type_c'], 'cambio de sección: baja con motivo «cambioseccion» y alta en la nueva, el mismo día' );
 	$ok( 'asde_cambio' === $codigo( $altas->cambio_seccion( $repo->obtener( '990071' ), 'escultas' ) ), 'a la misma sección no se cambia' );
 	$ok( 'asde_cambio' === $codigo( $altas->cambio_seccion( $repo->obtener( '990071' ), 'castores' ) ), 'v0.31: un educando solo pasa a la siguiente sección por edad' );
-	$ok( array( 'lobatos' ) === \AsdeBalears\AreaPrivada\Domain\Secciones::destinos_cambio( 'castores' ) && array( 'scouters' ) === \AsdeBalears\AreaPrivada\Domain\Secciones::destinos_cambio( 'rovers' ) && 6 === count( \AsdeBalears\AreaPrivada\Domain\Secciones::destinos_cambio( 'scouters' ) ), 'v0.31: de Castores, a Lobatos; de Rovers, a Scouters; un scouter, a cualquier otra' );
+	$ok( array( 'lobatos' ) === \AsdeBalears\AreaPrivada\Domain\Secciones::destinos_cambio( 'castores' ) && array( 'scouters', 'voluntariado' ) === \AsdeBalears\AreaPrivada\Domain\Secciones::destinos_cambio( 'rovers' ) && 6 === count( \AsdeBalears\AreaPrivada\Domain\Secciones::destinos_cambio( 'scouters' ) ), 'v0.31: de Castores, a Lobatos; de Rovers, a Scouters o Voluntariado; un scouter, a cualquier otra' );
 	$crm->fallos['set_entry:stic_Contacts_Relationships'] = 1;
 	$pep = $repo->obtener( '990072' );
 	$ok( 'asde_alta_a_medias' === $codigo( $altas->cambio_seccion( $pep, 'voluntariado' ) ), 'si falla el alta del cambio, se queda a medias (con la baja hecha)' );

@@ -28,7 +28,7 @@ apartado 4 con su plan.
   Personas como hasta ahora.
 - **Cambio de sección** (`Domain\Secciones::destinos_cambio`, `Crm\Altas::cambio_seccion` y la
   ventana): un educando solo pasa a la **siguiente sección por edad** (Castores → Lobatos → Scouts
-  → Escultas → Rovers → Scouters); un adulto (Scouters o Voluntariado, como en P-103) a cualquier
+  → Escultas → Rovers → Scouters o Voluntariado, P-119); un adulto (Scouters o Voluntariado, como en P-103) a cualquier
   otra (P-119). El servidor lo comprueba aunque se fuerce el formulario.
 
 ## 3. Revisión de WordPress.org
@@ -60,7 +60,7 @@ WordPress.org pide quitar `languages/*.php` del paquete: las traducciones las da
 idioma de translate.wordpress.org (guía: make.wordpress.org/meta/handbook/tutorials-guides/translations/:
 *text domain* = *slug* `asde-area-privada`, ya en la cabecera; los textos se extraen de `__()`,
 `_e()`…; los `.mo` que haya se importan una vez al aprobar el plugin y luego se quitan; el paquete
-de un idioma se genera con el 90 % traducido y aprobado). Plan (después del reinicio semanal):
+de un idioma se genera con el 90 % traducido y aprobado). **Aparcado por decisión del usuario (P-122): se deja todo como está, en castellano y con los catálogos dentro del plugin.** El plan, por si se retoma:
 
 1. `Traducciones::t()` deja de leer `languages/<código>.php` y lee el paquete de WordPress:
    `WP_LANG_DIR/plugins/asde-area-privada-<locale>.l10n.php` (WP ≥ 6.5) o `.mo` (clase `MO`), con
