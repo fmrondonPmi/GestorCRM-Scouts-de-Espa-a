@@ -50,6 +50,10 @@ final class TextosJs {
 		'En el inventario solo hay %s unidades de «%s». ¿Seguro que quieres añadirlo a la lista de compra?',
 		'Marca el material que hay que comprar.',
 		'+ sin precio',
+		// v0.29: cuadros plegables (area.js) e imprimir un informe (informes.js).
+		'Contraer o expandir «%s»',
+		'Imprimir',
+		'Versión para imprimir',
 		// Banco (v0.20, banco.js).
 		'1 movimiento marcado',
 		'%s movimientos marcados',

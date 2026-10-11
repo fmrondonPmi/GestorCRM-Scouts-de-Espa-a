@@ -177,4 +177,44 @@
 				} );
 		} );
 	}
+
+	// ---------------------------------------------------------------------
+	// 5. Camisas del uniforme (v0.29): modelo y talla solo con el tipo «Camisa
+	// uniforme»; la descripción deja de ser obligatoria (se pone sola) y la talla
+	// enseña solo las del modelo elegido.
+	// ---------------------------------------------------------------------
+	var camisa = document.querySelector( '[data-asde-inv-camisa]' );
+	if ( select && camisa ) {
+		var modelo = camisa.querySelector( 'select[name="modelo"]' );
+		var talla = camisa.querySelector( 'select[name="talla"]' );
+		var desc = document.getElementById( 'asde-inv-desc' );
+		var asterisco = document.querySelector( '[data-asde-inv-no-camisa]' );
+		var mostrar = function () {
+			var es = '0' !== camisa.getAttribute( 'data-asde-inv-camisa' ) && select.value === camisa.getAttribute( 'data-asde-inv-camisa' );
+			camisa.hidden = ! es;
+			modelo.required = es;
+			talla.required = es;
+			if ( desc ) {
+				desc.required = ! es;
+			}
+			if ( asterisco ) {
+				asterisco.hidden = es;
+			}
+		};
+		var tallas = function () {
+			Array.prototype.forEach.call( talla.querySelectorAll( 'optgroup' ), function ( g ) {
+				var suyo = g.getAttribute( 'data-modelo' ) === modelo.value;
+				g.hidden = ! suyo;
+				g.disabled = ! suyo;
+			} );
+			var elegida = talla.options[ talla.selectedIndex ];
+			if ( elegida && elegida.parentNode.disabled ) {
+				talla.value = '';
+			}
+		};
+		select.addEventListener( 'change', mostrar );
+		modelo.addEventListener( 'change', tallas );
+		mostrar();
+		tallas();
+	}
 } )();

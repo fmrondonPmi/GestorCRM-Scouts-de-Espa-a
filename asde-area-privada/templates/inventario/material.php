@@ -7,6 +7,8 @@
  *
  * @var array|null        $m         El material (null: uno nuevo)
  * @var array<int, array> $tipos
+ * @var int               $camisa    Id del tipo «Camisa uniforme» (v0.29)
+ * @var array             $cfg       Configuración de uniformes (modelos y tallas)
  * @var array             $borrador  Lo escrito la vez anterior, si no se pudo guardar
  * @var string            $url
  * @var string            $url_lista
@@ -15,6 +17,7 @@
  */
 // phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
 use AsdeBalears\AreaPrivada\Inventario\MaterialesTable;
+use AsdeBalears\AreaPrivada\Uniformes\Config;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -26,6 +29,8 @@ $id     = $m ? (int) $m['id'] : 0;
 $fecha  = static fn( ?string $f ) => $f ? wp_date( 'd/m/Y H:i', (int) strtotime( $f . ' UTC' ) ) : '';
 $tipo   = (int) $valor( 'tipo', $m ? $m['tipo'] : 0 );
 $activo = ! $m || null === $m['baja_en'];
+$modelo = Config::modelo_de( $valor( 'modelo', $m['modelo'] ?? '' ), $cfg );
+$talla  = $valor( 'talla', $m['talla'] ?? '' );
 ?>
 <p class="asde-back"><a href="<?php echo esc_url( $url_lista ); ?>"><?php asde_e( '← Inventario' ); ?></a></p>
 
@@ -43,7 +48,7 @@ $activo = ! $m || null === $m['baja_en'];
 		<input type="hidden" name="asde_action" value="material_guardar">
 		<input type="hidden" name="material" value="<?php echo (int) $id; ?>">
 		<p>
-			<label for="asde-inv-desc"><?php asde_e( 'Descripción' ); ?> <span class="asde-obligatorio" aria-hidden="true">*</span></label>
+			<label for="asde-inv-desc"><?php asde_e( 'Descripción' ); ?> <span class="asde-obligatorio" aria-hidden="true" data-asde-inv-no-camisa>*</span></label>
 			<input type="text" id="asde-inv-desc" name="descripcion" maxlength="255" required value="<?php echo esc_attr( $valor( 'descripcion', $m['descripcion'] ?? '' ) ); ?>" placeholder="<?php echo esc_attr( asde_a( 'Por ejemplo: Tienda canadiense 4 plazas' ) ); ?>">
 		</p>
 		<p>
@@ -58,6 +63,34 @@ $activo = ! $m || null === $m['baja_en'];
 				<a class="button asde-button-secundario asde-inv-mas" href="<?php echo esc_url( $url_tipos ); ?>" data-asde-modal data-asde-inv-mas title="<?php echo esc_attr( asde_a( 'Crear o cambiar los tipos de material' ) ); ?>" aria-label="<?php echo esc_attr( asde_a( 'Crear o cambiar los tipos de material' ) ); ?>">+</a>
 			</span>
 		</p>
+		<?php /* v0.29: camisas del uniforme. Sin JavaScript se ven siempre; inventario.js las enseña solo con ese tipo. */ ?>
+		<div class="asde-inv-camisa" data-asde-inv-camisa="<?php echo (int) $camisa; ?>">
+			<div class="asde-form__columnas">
+				<p>
+					<label for="asde-inv-modelo"><?php asde_e( 'Modelo' ); ?> <span class="asde-obligatorio" aria-hidden="true">*</span></label>
+					<select id="asde-inv-modelo" name="modelo">
+						<option value=""><?php asde_e( 'Elige…' ); ?></option>
+						<?php foreach ( array_keys( $cfg['modelos'] ) as $id_modelo ) : ?>
+							<option value="<?php echo esc_attr( (string) $id_modelo ); ?>" <?php selected( $modelo, (string) $id_modelo ); ?>><?php echo esc_html( Config::nombre_modelo( $cfg, (string) $id_modelo ) ); ?></option>
+						<?php endforeach; ?>
+					</select>
+				</p>
+				<p>
+					<label for="asde-inv-talla"><?php asde_e( 'Talla' ); ?> <span class="asde-obligatorio" aria-hidden="true">*</span></label>
+					<select id="asde-inv-talla" name="talla">
+						<option value=""><?php asde_e( 'Elige…' ); ?></option>
+						<?php foreach ( $cfg['modelos'] as $id_modelo => $mod ) : ?>
+							<optgroup label="<?php echo esc_attr( Config::nombre_modelo( $cfg, (string) $id_modelo ) ); ?>" data-modelo="<?php echo esc_attr( (string) $id_modelo ); ?>">
+								<?php foreach ( $mod['tallas'] as $t ) : ?>
+									<option value="<?php echo esc_attr( $t ); ?>" <?php selected( $modelo === (string) $id_modelo && $talla === $t ); ?>><?php echo esc_html( $t ); ?></option>
+								<?php endforeach; ?>
+							</optgroup>
+						<?php endforeach; ?>
+					</select>
+				</p>
+			</div>
+			<p class="asde-help"><?php asde_e( 'Solo para el tipo «Camisa uniforme»: la gestión de uniformes asigna estas camisas a los pedidos y las descuenta de aquí. Si no escribes la descripción, se pone sola.' ); ?></p>
+		</div>
 		<div class="asde-form__columnas">
 			<p>
 				<label for="asde-inv-cant"><?php asde_e( 'Cantidad' ); ?> <span class="asde-obligatorio" aria-hidden="true">*</span></label>

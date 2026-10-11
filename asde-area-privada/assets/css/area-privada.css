@@ -2345,3 +2345,187 @@ html.asde-cargando .asde-ap button {
 	gap: 8px 14px;
 	margin: 0;
 }
+
+/* v0.29 · Cuadros plegables (area.js): el ▾ delante del título, como los apartados de la ficha. */
+.asde-ap .asde-card__titulo-plegable {
+	cursor: pointer;
+}
+#top .asde-ap .asde-card__plegar,
+.asde-ap .asde-card__plegar {
+	display: inline-block;
+	width: auto;
+	min-width: 0;
+	margin: 0 6px 0 0;
+	padding: 0 2px;
+	border: 0;
+	background: transparent;
+	color: var(--asde-primary);
+	font-size: 0.8em;
+	line-height: 1;
+	vertical-align: 0.1em;
+	box-shadow: none;
+	cursor: pointer;
+	transition: transform 0.15s ease;
+}
+.asde-ap .asde-card__plegar:focus-visible {
+	outline: 2px solid var(--asde-primary);
+	outline-offset: 2px;
+	border-radius: 4px;
+}
+.asde-ap .asde-card.is-plegada .asde-card__plegar {
+	transform: rotate(-90deg);
+}
+.asde-ap .asde-card.is-plegada > :not(.asde-card__cabeza) {
+	display: none !important;
+}
+.asde-ap .asde-card.is-plegada > .asde-card__cabeza {
+	margin-bottom: 0;
+}
+.asde-ap .asde-card.is-plegada {
+	padding-top: 14px;
+	padding-bottom: 14px;
+}
+/* Lo que solo se ve con el cuadro contraído (p. ej. las cifras del resumen de Personas). */
+.asde-ap .asde-card__si-plegada {
+	display: none;
+	font-size: 13px;
+}
+.asde-ap .asde-card.is-plegada .asde-card__si-plegada {
+	display: inline;
+}
+/* Ficha: el nombre y debajo la sección o el cargo (lo que queda con el cuadro contraído). */
+.asde-ap .asde-ficha__cabecera > .asde-card__header {
+	display: block;
+}
+.asde-ap .asde-ficha__rol {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 4px 8px;
+	margin: 6px 0 0;
+}
+.asde-ap .asde-ficha__accesos {
+	margin: 0 0 12px;
+}
+
+/* v0.29 · Personas: el botón «Filtrar» pegado al cuadro de búsqueda. */
+.asde-ap .asde-filter__buscar {
+	display: inline-flex;
+	flex: 1 1 280px;
+	align-items: center;
+	gap: 6px;
+	min-width: 0;
+	max-width: 480px;
+}
+#top .asde-ap .asde-filter__buscar input[type="search"],
+.asde-ap .asde-filter__buscar input[type="search"] {
+	flex: 1 1 auto;
+	width: auto;
+	min-width: 0;
+	margin: 0;
+}
+.asde-ap .asde-filter__buscar .button {
+	flex: 0 0 auto;
+	margin: 0;
+}
+
+/* v0.29 · Informes: la versión para imprimir, en la ventana emergente (informes.js). */
+dialog.asde-modal--imprimir {
+	width: min(1400px, calc(100vw - 24px));
+	height: calc(100vh - 32px);
+}
+.asde-modal__marco {
+	flex: 1 1 auto;
+	width: 100%;
+	min-height: 0;
+	border: 0;
+	background: var(--asde-surface);
+}
+.asde-modal__barra .asde-modal__imprimir {
+	margin: 0;
+	white-space: nowrap;
+}
+
+/* v0.29 · Cambios propuestos: la casilla de cada cambio y «Todos» (area.js). */
+.asde-ap .asde-col-marca {
+	width: 1%;
+	white-space: nowrap;
+}
+.asde-ap .asde-marcar-todos {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+	margin: 0;
+	font-weight: 600;
+	white-space: nowrap;
+}
+.asde-ap .asde-fila--aviso td {
+	background: var(--asde-warn-soft);
+}
+
+/* v0.29 · Uniformes e inventario: camisas del inventario. */
+.asde-ap .asde-badge--inv-camisa {
+	background: var(--asde-ok-bg);
+	color: var(--asde-ok-text);
+}
+.asde-ap a.asde-badge--inv-hay {
+	background: var(--asde-info-bg);
+	color: var(--asde-info-text);
+	text-decoration: none;
+}
+.asde-ap .asde-inv-camisa[hidden] {
+	display: none;
+}
+
+/* v0.29 · Personas: «Mostrar», el cuadro de búsqueda y «Filtrar» en la misma línea (Enfold pone
+   #top select { width: 100% }, que la partía). En el móvil, si no cabe, baja a otra línea. */
+.asde-ap .asde-filter--una-linea {
+	flex-wrap: nowrap;
+}
+#top .asde-ap .asde-filter--una-linea select,
+.asde-ap .asde-filter--una-linea select {
+	flex: 0 1 auto;
+	width: auto;
+	min-width: 0;
+	margin: 0;
+}
+#top .asde-ap .asde-filter--una-linea input[type="search"] {
+	margin: 0;
+}
+@media (max-width: 600px) {
+	.asde-ap .asde-filter--una-linea {
+		flex-wrap: wrap;
+	}
+}
+
+/* v0.29 · Informes «Una ficha por persona» (p. ej. «Fichas reducidas»): en pantalla, una
+   ficha debajo de otra; para imprimir, la versión para imprimir pone una por página. */
+.asde-ap .asde-informe-fichas {
+	display: grid;
+	gap: 16px;
+}
+.asde-ap .asde-informe-ficha {
+	padding: 14px 16px;
+	border: 1px solid var(--asde-border);
+	border-left: 4px solid var(--asde-primary);
+	border-radius: var(--asde-radius);
+}
+.asde-ap .asde-informe-ficha h3 {
+	margin: 0 0 10px;
+}
+.asde-ap .asde-informe-ficha dl {
+	display: grid;
+	grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+	gap: 8px 16px;
+	margin: 0;
+}
+.asde-ap .asde-informe-ficha dt {
+	font-size: 12px;
+	font-weight: 600;
+	color: var(--asde-muted);
+}
+.asde-ap .asde-informe-ficha dd {
+	margin: 0;
+	white-space: pre-line;
+	overflow-wrap: anywhere;
+}

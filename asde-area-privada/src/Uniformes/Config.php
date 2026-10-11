@@ -31,6 +31,12 @@ final class Config {
 		),
 	);
 
+	/** Para quién es cada modelo de ASDE (v0.29, inventario: «si es de chica o chico»). */
+	public const PARA_QUIEN = array(
+		'masculina' => 'chico',
+		'femenina'  => 'chica',
+	);
+
 	public const MAX_INSIGNIAS = 10;
 
 	/** @return array{precio_camisa:float, modelos:array, tallas_especiales:string[], insignias:array, guia_insignias:int, abierto:bool, texto_pago:string} */
@@ -113,6 +119,45 @@ final class Config {
 
 	public static function es_especial( array $cfg, string $talla ): bool {
 		return in_array( $talla, $cfg['tallas_especiales'], true );
+	}
+
+	/** «Camisa femenina (chica)»: el nombre del modelo y, en los dos de ASDE, para quién es (v0.29). */
+	public static function nombre_modelo( array $cfg, string $modelo ): string {
+		$nombre = (string) ( $cfg['modelos'][ $modelo ]['nombre'] ?? $modelo );
+		return isset( self::PARA_QUIEN[ $modelo ] ) ? sprintf( '%s (%s)', $nombre, asde_t( self::PARA_QUIEN[ $modelo ] ) ) : $nombre;
+	}
+
+	/**
+	 * El modelo a partir de lo que se escribe (v0.29, importar el inventario): su clave
+	 * («femenina»), su nombre («Camisa femenina») o para quién es («chica»). '' si no es ninguno.
+	 */
+	public static function modelo_de( string $texto, array $cfg ): string {
+		$clave = static fn( string $s ): string => mb_strtolower( remove_accents( trim( $s ) ) );
+		$t     = $clave( $texto );
+		if ( '' === $t ) {
+			return '';
+		}
+		foreach ( $cfg['modelos'] as $id => $m ) {
+			if ( $t === (string) $id || $t === $clave( (string) $m['nombre'] ) || $t === $clave( self::nombre_modelo( $cfg, (string) $id ) ) ) {
+				return (string) $id;
+			}
+		}
+		foreach ( self::PARA_QUIEN as $id => $quien ) {
+			if ( isset( $cfg['modelos'][ $id ] ) && ( $t === $quien || $t === $clave( asde_t( $quien ) ) ) ) {
+				return $id;
+			}
+		}
+		return '';
+	}
+
+	/** La talla tal como está en el modelo («m» → «M»), o '' si el modelo no la tiene. */
+	public static function talla_de( array $cfg, string $modelo, string $talla ): string {
+		foreach ( (array) ( $cfg['modelos'][ $modelo ]['tallas'] ?? array() ) as $t ) {
+			if ( 0 === strcasecmp( (string) $t, trim( $talla ) ) ) {
+				return (string) $t;
+			}
+		}
+		return '';
 	}
 
 	/** Identificador para una insignia nueva a partir de su nombre. */

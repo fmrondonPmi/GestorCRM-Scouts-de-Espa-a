@@ -137,6 +137,15 @@ $rondas    = $rondas ?? array();
 				<?php endforeach; ?>
 			</select>
 		</p>
+		<?php /* v0.29: en tabla o una ficha por persona (al imprimir, una por página). */ ?>
+		<p>
+			<label for="asde-inf-vista"><?php asde_e( 'Presentación' ); ?></label>
+			<select id="asde-inf-vista" name="vista">
+				<?php foreach ( asde_ta( Informe::VISTAS ) as $k => $label ) : ?>
+					<option value="<?php echo esc_attr( $k ); ?>" <?php selected( $f['vista'], $k ); ?>><?php echo esc_html( $label ); ?></option>
+				<?php endforeach; ?>
+			</select>
+		</p>
 	</section>
 
 	<section class="asde-card">

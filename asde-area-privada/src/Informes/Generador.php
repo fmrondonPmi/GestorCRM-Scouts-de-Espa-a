@@ -303,6 +303,62 @@ final class Generador {
 		return false;
 	}
 
+	/**
+	 * Lo que dice el informe en una línea (v0.29, la página y la versión para imprimir):
+	 * «12 socios con membresía activa · Lobatos · desde 8 años · 11/10/2026 10:30».
+	 */
+	public static function resumen( Informe $informe, array $res ): string {
+		$f      = $informe->filtros;
+		$n      = count( $res['filas'] );
+		$partes = array(
+			sprintf( asde_n( '%d socio', '%d socios', $n ), $n ) . ' ' . asde_t( 'con membresía activa' ),
+			$res['secciones'] ? implode( ', ', array_map( array( Secciones::class, 'nombre' ), $res['secciones'] ) ) : asde_t( 'todo el grupo' ),
+		);
+		if ( null !== $f['edad_min'] ) {
+			$partes[] = sprintf( asde_t( 'desde %d años' ), $f['edad_min'] );
+		}
+		if ( null !== $f['edad_max'] ) {
+			$partes[] = sprintf( asde_t( 'hasta %d años' ), $f['edad_max'] );
+		}
+		if ( $f['salud'] ) {
+			$partes[] = asde_t( 'solo con datos de salud relevantes' );
+		}
+		$pago = (string) ( $res['pago'] ?? '' );
+		if ( '' !== $pago && isset( Catalogo::FILTROS_PAGO[ $pago ] ) ) {
+			$partes[] = mb_strtolower( asde_t( Catalogo::FILTROS_PAGO[ $pago ] ) );
+		}
+		$partes[] = wp_date( 'd/m/Y H:i' );
+		return implode( ' · ', $partes );
+	}
+
+	/**
+	 * Una fila del informe como ficha (v0.29, «Una ficha por persona»): el título (nombre y
+	 * apellidos o, si no están, la primera columna) y el resto de datos, etiqueta => valor.
+	 *
+	 * @param array<string, string> $fila     columna => valor
+	 * @param array<string, string> $columnas columna => etiqueta
+	 * @return array{titulo: string, datos: array<string, string>}
+	 */
+	public static function ficha( array $fila, array $columnas ): array {
+		$titulo = trim( ( $fila['nombre'] ?? '' ) . ' ' . ( $fila['apellidos'] ?? '' ) );
+		$fuera  = array( 'nombre', 'apellidos' );
+		if ( '' === $titulo ) {
+			$primera = (string) array_key_first( $columnas );
+			$titulo  = (string) ( $fila[ $primera ] ?? '' );
+			$fuera   = array( $primera );
+		}
+		$datos = array();
+		foreach ( $columnas as $col => $etiqueta ) {
+			if ( ! in_array( $col, $fuera, true ) ) {
+				$datos[ $etiqueta ] = (string) ( $fila[ $col ] ?? '' );
+			}
+		}
+		return array(
+			'titulo' => $titulo,
+			'datos'  => $datos,
+		);
+	}
+
 	/** Descarga CSV (separador ";" y BOM para que Excel lo abra bien en español). */
 	public static function csv( string $nombre, array $resultado ): void {
 		$archivo = sanitize_file_name( remove_accents( $nombre ?: 'informe' ) ) . '-' . wp_date( 'Ymd' ) . '.csv';

@@ -7,6 +7,7 @@ use AsdeBalears\AreaPrivada\Inventario\Importador;
 use AsdeBalears\AreaPrivada\Inventario\MaterialesTable;
 use AsdeBalears\AreaPrivada\Inventario\Servicio;
 use AsdeBalears\AreaPrivada\Inventario\TiposTable;
+use AsdeBalears\AreaPrivada\Uniformes\Config;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -21,6 +22,7 @@ final class InventarioView extends InventarioBaseView {
 		if ( ! current_user_can( Servicio::CAP ) ) {
 			return $this->denegado();
 		}
+		TiposTable::camisa(); // v0.29: el tipo de las camisas del uniforme está siempre (lo usa la gestión de uniformes).
 		if ( '1' === $this->get( 'importar' ) ) {
 			// Importar desde CSV: se abre en la ventana emergente (sin las pestañas) o en su página.
 			return $this->layout( 'inventario', ( self::es_modal() ? '' : $this->subnav( 'inventario' ) ) . $this->importacion() );
@@ -65,6 +67,8 @@ final class InventarioView extends InventarioBaseView {
 			array(
 				'm'         => $m,
 				'tipos'     => TiposTable::todos(),
+				'camisa'    => TiposTable::camisa(),
+				'cfg'       => Config::de(),
 				'borrador'  => $this->borrador(),
 				'url'       => $url,
 				'url_lista' => $this->url( 'inventario' ),
@@ -229,7 +233,7 @@ final class InventarioView extends InventarioBaseView {
 		}
 
 		$entrada = array();
-		foreach ( array( 'descripcion', 'tipo', 'cantidad', 'precio', 'anio', 'num_serie', 'notas' ) as $campo ) {
+		foreach ( array( 'descripcion', 'tipo', 'cantidad', 'precio', 'anio', 'num_serie', 'notas', 'modelo', 'talla' ) as $campo ) {
 			$entrada[ $campo ] = $this->post( $campo );
 		}
 		$datos = MaterialesTable::validar( $entrada );

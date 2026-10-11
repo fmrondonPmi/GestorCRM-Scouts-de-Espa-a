@@ -52,9 +52,12 @@ $columnas = array(
 	'acceso'    => asde_t( 'Acceso web' ),
 );
 ?>
-<section class="asde-card">
+<?php /* Plegable (v0.29, area.js): contraído quedan el título, «Alta de socio/a» y las dos cifras. */ ?>
+<section class="asde-card" data-asde-plegable="personas-resumen">
 	<header class="asde-card__header asde-card__header--split">
 		<h2><?php asde_e( 'Personas del grupo' ); ?></h2>
+		<?php /* translators: 1: personas con membresía activa, 2: sin membresía activa */ ?>
+		<span class="asde-card__si-plegada asde-muted"><?php echo esc_html( sprintf( asde_t( '%1$d con membresía activa · %2$d sin membresía activa' ), (int) $resumen['activas'], (int) $resumen['inactivas'] ) ); ?></span>
 		<?php if ( $altas ) : ?>
 			<?php /* Doc 34, fase 3: persona nueva con su primera membresía; el primer paso comprueba si ya tiene ficha. */ ?>
 			<a class="button" href="<?php echo esc_url( add_query_arg( 'alta', '1', $url ) ); ?>" data-asde-modal><?php asde_e( 'Alta de socio/a' ); ?></a>
@@ -127,15 +130,19 @@ $columnas = array(
 <?php endif; ?>
 
 <section class="asde-card">
-	<form method="get" action="<?php echo esc_url( $url ); ?>" class="asde-filter">
+	<?php /* v0.29: el filtro actualiza solo la lista (parcial.js), y busca al escribir desde la 3.ª letra. */ ?>
+	<form method="get" action="<?php echo esc_url( $url ); ?>" class="asde-filter asde-filter--una-linea" data-asde-parcial-form="personas-lista">
 		<label for="asde-ver"><?php asde_e( 'Mostrar' ); ?></label>
-		<select id="asde-ver" name="ver" onchange="this.form.submit()">
+		<select id="asde-ver" name="ver" onchange="this.form.requestSubmit ? this.form.requestSubmit() : this.form.submit()">
 			<?php foreach ( asde_ta( PersonasView::FILTROS ) as $k => $label ) : ?>
 				<option value="<?php echo esc_attr( $k ); ?>" <?php selected( $filtro, $k ); ?>><?php echo esc_html( $label ); ?></option>
 			<?php endforeach; ?>
 		</select>
-		<label for="asde-q-personas" class="screen-reader-text"><?php asde_e( 'Buscar' ); ?></label>
-		<input type="search" id="asde-q-personas" name="q" value="<?php echo esc_attr( $q ); ?>" placeholder="<?php echo esc_attr( asde_a( 'Nombre o nº de socio' ) ); ?>">
+		<span class="asde-filter__buscar">
+			<label for="asde-q-personas" class="screen-reader-text"><?php asde_e( 'Buscar' ); ?></label>
+			<input type="search" id="asde-q-personas" name="q" value="<?php echo esc_attr( $q ); ?>" placeholder="<?php echo esc_attr( asde_a( 'Nombre o nº de socio' ) ); ?>" data-asde-buscar autocomplete="off">
+			<button type="submit" class="button"><?php asde_e( 'Filtrar' ); ?></button>
+		</span>
 		<?php // En el móvil no se ven los encabezados de la tabla: se ordena desde aquí. ?>
 		<span class="asde-solo-movil">
 			<label for="asde-orden-personas"><?php asde_e( 'Ordenar por' ); ?></label>
@@ -149,9 +156,9 @@ $columnas = array(
 				<option value="desc" <?php selected( $tabla->dir(), 'desc' ); ?>><?php asde_e( 'Descendente' ); ?></option>
 			</select>
 		</span>
-		<button type="submit" class="button"><?php asde_e( 'Filtrar' ); ?></button>
 	</form>
 
+	<div data-asde-parcial="personas-lista">
 	<p class="asde-muted"><?php echo esc_html( sprintf( asde_n( '%d persona', '%d personas', $total ), $total ) ); ?></p>
 	<?php if ( $lista ) : ?>
 		<table class="asde-table">
@@ -202,7 +209,7 @@ $columnas = array(
 								<a href="<?php echo esc_url( add_query_arg( 'socio', $p->num_socio_asde, $url_alta ) ); ?>" data-asde-modal title="<?php echo esc_attr( asde_a( 'Cuenta familiar: hermanos/as y email' ) ); ?>"><?php echo esc_html( $fam->user_login ); ?></a>
 								<span class="asde-muted"><?php asde_e( '· Cuenta familiar ·' ); ?> <?php echo esc_html( Usuarios::etiqueta_estado( Usuarios::estado( $fam ) ) ); ?></span>
 							<?php elseif ( $activa ) : ?>
-								<a class="button asde-button-secundario" href="<?php echo esc_url( add_query_arg( 'socio', $p->num_socio_asde, $url_alta ) ); ?>" data-asde-modal><?php asde_e( 'Dar acceso' ); ?></a>
+								<a href="<?php echo esc_url( add_query_arg( 'socio', $p->num_socio_asde, $url_alta ) ); ?>" data-asde-modal><?php asde_e( 'Dar acceso' ); ?></a>
 							<?php else : ?>
 								<span class="asde-muted">—</span>
 							<?php endif; ?>
@@ -230,4 +237,5 @@ $columnas = array(
 		</table>
 		<?php echo $tabla->paginacion(); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 	<?php endif; ?>
+	</div>
 </section>

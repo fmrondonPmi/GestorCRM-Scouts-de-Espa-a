@@ -152,6 +152,13 @@ Un **WordPress de demostración aparte** (Local, Enfold, plugin, mu-plugin con C
 - **Arreglo que salió al fotografiar:** en el móvil (390 px) la tercera hoja («Registro de emails») quedaba cortada; las pestañas son ahora más compactas por debajo de 600 px y caben las tres (CSS del plugin; zip 0.25.0 rehecho, el anterior se conserva como `asde-area-privada-0.25.0-sin-hojas-movil.zip`).
 - El generador pasa a la versión 0.25. Paquete **`manual-de-uso-0.25.0.zip`** (carpeta antigua) y copia en `app/public/temporal/` de Local. **No se ha publicado nada**: lo sube el usuario.
 
+## Versión 4.10 · lote de mejoras (v0.29.0, 2026-10-11)
+
+Solo textos (las capturas **no** se han rehecho todavía: las de informes, Personas, la ficha, cambios propuestos, gestión de uniformes e inventario enseñan aún las pantallas de la v0.28; ofrecido al usuario). Cambia la ayuda del plugin (se regenera con el manual).
+
+- **Coordinación y scouters:** `informes.html` («Descargar Excel», «Imprimir» en una ventana, «Sección» y el apartado nuevo «Fichas reducidas», `#fichas-reducidas`); `cambios.html` (una fila por persona, «Revisar», casillas, «Aprobar los seleccionados», «Resueltos» con los cambios directos); `personas.html` (buscar al escribir, «Dar acceso» como enlace, resumen plegable); `coordinacion-fichas.html` y `coordinacion-inicio.html` (cuadros plegables); `uniformes-gestion.html` (camisas del inventario: servir, asignar, devolver); `inventario.html` (tipo «Camisa uniforme» con modelo y talla).
+- **Familias y asociados menores:** `familias-fichas.html` y `participantes-ficha.html` (el cuadro del nombre también se pliega; «Contraer todo» arriba).
+
 ## Versión 4.9 · la ayuda del plugin, solo texto (v0.28.0, 2026-10-09)
 
 - Petición del usuario: «el zip con las ayudas ha quedado demasiado pesado … rehacer todo el manual sin tantas capturas y solo con texto explicativo, siempre en ventanas modales; dejaremos una versión que se sube manualmente con el manual como ayuda extra». La v0.27.0 (el manual con capturas dentro del zip, ~10 MB) se **descartó** y se deshizo su commit.

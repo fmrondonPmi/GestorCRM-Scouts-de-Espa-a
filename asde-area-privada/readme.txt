@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.28.0
+Stable tag: 0.29.0
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -52,6 +52,15 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.29.0 =
+* Fix: downloads (reports, Treasury and uniform lists, inventory CSV files) left the page blank with themes that fade the page out on every link (Enfold's page transitions): the file was downloaded but the page stayed white. Download links no longer trigger the theme transition.
+* Reports: "Descargar Excel" downloads a real .xlsx spreadsheet (bold, frozen header row with filters, column widths, numbers as numbers) instead of a CSV. "Imprimir" opens a printable version of the whole report (all columns, text wraps instead of being cut, landscape with many columns, header repeated on every page) in a pop-up window with its own "Imprimir" button.
+* Every box of the private area with a title can be collapsed (▾ next to the title) and the browser remembers it. In a person's record, the name box (collapsed: only the full name and the section or role) and "Membresía en el CRM" can be collapsed too, and "Contraer todo / Expandir todo" is now at the top. In People, the summary box can be collapsed.
+* People: the list filters without reloading the page and searches while typing from the third letter; "Dar acceso" is a link like "Ver ficha" (shorter rows) and "Mostrar", the search box and "Filtrar" stay on one line (the theme stretched the drop-down to full width).
+* Reports: new predefined report "Fichas reducidas": the short record of each active member (name, mobile, guardian 1, image consent, allergies, food allergies and intolerances, special diet, eating disorder and illnesses), one per page when printed instead of a table. Any report can use the new "one record per person" layout, and a "Sección" selector on the result shows a single section without editing the report.
+* Proposed changes: grouped by person. "Revisar" opens all the pending changes of that person in the pop-up window, each with a checkbox, "Todos" at the top of the column and a single "Aprobar los seleccionados" button (or reject them with one reason); they are saved in the CRM in a single write. "Resueltos" now also lists the changes made directly in the records by the Secretariat, Coordination or scouters in the last 90 days (which data, who and when; values are never stored), which is why it looked empty before.
+* Uniforms and inventory: the inventory has a "Camisa uniforme" type (created automatically, cannot be deleted) whose items record the model (boy or girl shirt) and the size; the CSV import accepts "Modelo (camisas)" and "Talla (camisas)" columns. Uniform management shows the shirts in stock and can serve an order's shirt from the inventory instead of ordering it from the supplier, give a shirt from the inventory to someone who did not order it (creating their order, free of charge if the amount is 0), and return a shirt to the inventory; the stock is updated each time.
 
 = 0.28.0 =
 * Help is now text only and always opens in the pop-up window: the help of each page shows the section of the user manual for that page and role without screenshots (each screenshot caption is kept as a short note), and "Ver el manual completo" opens the whole manual of the role, also text only, in the same window, with its index and links between sections. All of it ships inside the plugin (about 300 KB), so the plugin zip stays small (version 0.27.0, which bundled the illustrated manual, was discarded: its zip was over 10 MB).
@@ -125,6 +134,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * First version with the mobile app (PWA).
 
 == Upgrade Notice ==
+
+= 0.29.0 =
+Excel and printable reports, "Fichas reducidas" (one record per page), collapsible boxes, live search in People, grouped approval of proposed changes and uniform shirts from the inventory. Adds columns to the inventory and uniform tables and a predefined report (applied automatically on update).
 
 = 0.28.0 =
 Text-only help in the pop-up window, with the full manual of each role inside the plugin; the illustrated manual is optional extra help uploaded separately. No database changes.

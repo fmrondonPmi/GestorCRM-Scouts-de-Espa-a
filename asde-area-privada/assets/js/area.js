@@ -7,6 +7,8 @@
  *    formularios de dentro se envían sin salir de la ventana; al cerrarla, si
  *    se ha guardado algo, se recarga la página de detrás para verlo.
  * 2. Botones «Copiar» (data-asde-copiar="id del elemento con el texto").
+ * 3. Aviso de carga y descargas (v0.29: el tema no tapa la página al descargar).
+ * 4. Plegables que se recuerdan: <details data-asde-recordar> (v0.20) y cuadros (v0.29).
  */
 ( function () {
 	'use strict';
@@ -76,11 +78,23 @@
 		if ( a.target || a.hasAttribute( 'download' ) || a.hasAttribute( 'data-asde-modal' ) || a.hasAttribute( 'data-asde-copiar' ) || '#' === destino.charAt( 0 ) || /^(mailto|tel|javascript):/i.test( destino ) || a.origin !== window.location.origin ) {
 			return;
 		}
-		if ( /[?&]formato=csv/.test( a.search ) ) {
-			return; // Descarga: la página no cambia.
-		}
 		cargando( true );
 	} );
+
+	// Descargas (v0.29): con las transiciones de página de Enfold activadas, el tema tapa la
+	// pantalla de blanco al pulsar un enlace y espera a la página nueva; una descarga no cambia
+	// de página y el blanco se quedaba («se queda en una página en blanco»). En la fase de
+	// captura, el clic no sigue hasta el tema (ni hasta el aviso de carga) y el navegador
+	// descarga el fichero como siempre. Los enlaces llevan además la clase no-transition.
+	function esDescarga( a ) {
+		return a.hasAttribute( 'download' ) || a.hasAttribute( 'data-asde-descarga' ) || /[?&]formato=(csv|xlsx|pdf|csv-ejemplo|csv-errores)(&|$)/.test( a.search );
+	}
+	document.addEventListener( 'click', function ( e ) {
+		var a = e.target.closest ? e.target.closest( 'a[href]' ) : null;
+		if ( a && a.closest( '.asde-ap, .asde-modal' ) && ! a.target && esDescarga( a ) ) {
+			e.stopPropagation();
+		}
+	}, true );
 
 	document.addEventListener( 'submit', function ( e ) {
 		var form = e.target;
@@ -117,9 +131,107 @@
 		} );
 	}
 	recordar( document );
+
+	// ---------------------------------------------------------------------
+	// 4b. Cuadros plegables (v0.29): cada cuadro del área (section.asde-card) que empieza
+	// por su título se puede contraer con el botón ▾ del título (o pulsando el título);
+	// contraído solo se ve su cabecera. Se recuerda en este navegador. Fuera:
+	// data-asde-no-plegable. Clave fija: data-asde-plegable="clave" (si no, la página y el título).
+	// ---------------------------------------------------------------------
+	function plegar( card, cerrar, guardar ) {
+		card.classList.toggle( 'is-plegada', cerrar );
+		var boton = card.querySelector( '.asde-card__plegar' );
+		if ( boton ) {
+			boton.setAttribute( 'aria-expanded', cerrar ? 'false' : 'true' );
+		}
+		if ( guardar && card.asdeClave ) {
+			try {
+				window.localStorage.setItem( card.asdeClave, cerrar ? '0' : '1' );
+			} catch ( e ) {}
+		}
+	}
+
+	function plegables( raiz ) {
+		Array.prototype.forEach.call( ( raiz || document ).querySelectorAll( 'section.asde-card:not([data-asde-no-plegable]):not([data-asde-plegable-listo])' ), function ( card ) {
+			var cabeza = card.firstElementChild;
+			if ( ! cabeza || ! cabeza.matches( 'h2, h3, header' ) || card.children.length < 2 ) {
+				return;
+			}
+			var titulo = cabeza.matches( 'h2, h3' ) ? cabeza : cabeza.querySelector( 'h2, h3' );
+			if ( ! titulo ) {
+				return;
+			}
+			var texto = titulo.textContent.trim();
+			var fija = card.getAttribute( 'data-asde-plegable' );
+			card.asdeClave = 'asde_cuadro_' + ( fija || window.location.pathname + '|' + texto.toLowerCase().slice( 0, 60 ) );
+			card.setAttribute( 'data-asde-plegable-listo', '' );
+			card.classList.add( 'asde-card--plegable' );
+			cabeza.classList.add( 'asde-card__cabeza' );
+			titulo.classList.add( 'asde-card__titulo-plegable' );
+			var boton = document.createElement( 'button' );
+			boton.type = 'button';
+			boton.className = 'asde-card__plegar';
+			boton.setAttribute( 'aria-label', asdeT( 'Contraer o expandir «%s»', texto ) );
+			boton.innerHTML = '<span aria-hidden="true">▾</span>';
+			titulo.insertBefore( boton, titulo.firstChild );
+			titulo.addEventListener( 'click', function ( e ) {
+				if ( e.target.closest( 'a, input, select, textarea, label' ) ) {
+					return;
+				}
+				plegar( card, ! card.classList.contains( 'is-plegada' ), true );
+			} );
+			var guardado = null;
+			try {
+				guardado = window.localStorage.getItem( card.asdeClave );
+			} catch ( e ) {}
+			plegar( card, '0' === guardado, false );
+		} );
+	}
+	plegables( document );
+	// Para «Contraer todo / Expandir todo» de la ficha (ficha.js) y la ventana emergente.
+	window.asdePlegables = {
+		iniciar: plegables,
+		plegar: plegar
+	};
+
+	// ---------------------------------------------------------------------
+	// 4c. «Todos» (v0.29): la casilla data-asde-marcar-todos="nombre" marca o desmarca las
+	// casillas con ese nombre de su formulario, y enseña si están todas, ninguna o algunas.
+	// ---------------------------------------------------------------------
+	document.addEventListener( 'change', function ( e ) {
+		var c = e.target;
+		if ( ! c.form || 'checkbox' !== c.type ) {
+			return;
+		}
+		var todos = c.hasAttribute( 'data-asde-marcar-todos' ) ? c : null;
+		Array.prototype.forEach.call( c.form.querySelectorAll( '[data-asde-marcar-todos]' ), function ( t ) {
+			if ( ! todos && t.getAttribute( 'data-asde-marcar-todos' ) === c.name ) {
+				todos = t;
+			}
+		} );
+		if ( ! todos ) {
+			return;
+		}
+		var nombre = todos.getAttribute( 'data-asde-marcar-todos' );
+		var casillas = Array.prototype.filter.call( c.form.querySelectorAll( 'input[type="checkbox"]' ), function ( x ) {
+			return x.name === nombre && ! x.disabled;
+		} );
+		if ( c === todos ) {
+			casillas.forEach( function ( x ) {
+				x.checked = todos.checked;
+			} );
+		}
+		var marcadas = casillas.filter( function ( x ) {
+			return x.checked;
+		} ).length;
+		todos.checked = marcadas > 0 && marcadas === casillas.length;
+		todos.indeterminate = marcadas > 0 && marcadas < casillas.length;
+	} );
+
 	// Lo que llega al actualizar una zona sin recargar (parcial.js, v0.25) también se recuerda.
 	document.addEventListener( 'asde:parcial', function () {
 		recordar( document );
+		plegables( document );
 	} );
 
 	// ---------------------------------------------------------------------
@@ -186,6 +298,7 @@
 		abrirPagina.href = url;
 		var h = cuerpo.querySelector( 'h2, h3' );
 		titulo.textContent = h ? h.textContent.trim() : '';
+		plegables( cuerpo );
 		if ( window.asdeFicha ) {
 			window.asdeFicha.iniciar( cuerpo );
 		}

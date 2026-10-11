@@ -5,22 +5,27 @@ use AsdeBalears\AreaPrivada\Audit\Logger;
 use AsdeBalears\AreaPrivada\Auth\Ambito;
 use AsdeBalears\AreaPrivada\Crm\ClientFactory;
 use AsdeBalears\AreaPrivada\Crm\CrmException;
+use AsdeBalears\AreaPrivada\Domain\Secciones;
 use AsdeBalears\AreaPrivada\Frontend\Notices;
 use AsdeBalears\AreaPrivada\Informes\Catalogo;
 use AsdeBalears\AreaPrivada\Informes\Generador;
 use AsdeBalears\AreaPrivada\Informes\Informe;
 use AsdeBalears\AreaPrivada\Informes\InformesTable;
+use AsdeBalears\AreaPrivada\Informes\Xlsx;
 use AsdeBalears\AreaPrivada\Tesoreria\Config;
 
 defined( 'ABSPATH' ) || exit;
 
 /**
  * Generador de informes: listado de informes guardados, editor (columnas +
- * filtros) y resultado (tabla, CSV, impresión).
+ * filtros) y resultado (tabla, Excel y versión para imprimir; v0.29).
  */
 final class InformesView extends View {
 
 	private const CAP = 'asde_reports';
+
+	/** Lo que se pide con ?formato= (Router, antes de pintar la página). El CSV queda por si alguien guardó el enlace. */
+	public const FORMATOS = array( 'xlsx', 'imprimir', 'csv' );
 
 	public function render( string $content = '' ): string {
 		if ( ! current_user_can( self::CAP ) ) {
@@ -114,14 +119,20 @@ final class InformesView extends View {
 			)
 		);
 
-		$args = array_merge( $this->args_de( $informe ), array( 'formato' => 'csv', '_wpnonce' => wp_create_nonce( 'asde_informe_csv' ) ) );
+		$seccion = $this->seccion_pedida();
+		$args    = array_merge( $this->args_de( $informe ), array_filter( array( 'seccion' => $seccion ) ), array( '_wpnonce' => wp_create_nonce( 'asde_informe_descarga' ) ) );
 		return $this->tpl(
 			'informes/resultado',
 			array(
 				'informe'   => $informe,
 				'res'       => $res,
 				'url'       => $this->url( 'informes' ),
-				'url_csv'   => $this->url( 'informes', $args ),
+				'url_excel' => $this->url( 'informes', array_merge( $args, array( 'formato' => 'xlsx' ) ) ),
+				'url_print' => $this->url( 'informes', array_merge( $args, array( 'formato' => 'imprimir' ) ) ),
+				// v0.29: elegir la sección al verlo (p. ej. «Fichas reducidas»), sin editar el informe.
+				'seccion'   => $seccion,
+				'secciones' => $ambito->vision_global() ? array_keys( Secciones::all() ) : $ambito->secciones_scouter(),
+				'args_base' => $this->args_de( $informe ),
 				'url_edit'  => $informe->id && $informe->puede_editar( wp_get_current_user() )
 					? $this->url( 'informes', array( 'editar' => $informe->id ) )
 					: $this->url( 'informes', array_merge( array( 'nuevo' => 1 ), $this->args_de( $informe, false ) ) ),
@@ -130,9 +141,14 @@ final class InformesView extends View {
 		);
 	}
 
-	/** Descarga CSV (se llama antes de pintar la página). */
-	public function exportar(): void {
-		if ( ! current_user_can( self::CAP ) || ! wp_verify_nonce( $this->get( '_wpnonce' ), 'asde_informe_csv' ) ) {
+	/**
+	 * Excel, versión para imprimir o CSV (se llama antes de pintar la página). La versión
+	 * para imprimir es una página propia, sin el tema: se abre en la ventana emergente (en
+	 * un marco, ?marco=1) o, sin JavaScript, en otra pestaña.
+	 */
+	public function exportar( string $formato = 'xlsx' ): void {
+		$formato = in_array( $formato, self::FORMATOS, true ) ? $formato : 'xlsx';
+		if ( ! current_user_can( self::CAP ) || ! wp_verify_nonce( $this->get( '_wpnonce' ), 'asde_informe_descarga' ) ) {
 			wp_die( esc_html__( 'Enlace de descarga no válido o caducado. Vuelve a generar el informe.', 'asde-area-privada' ), 403 );
 		}
 		$informe = $this->informe_de_la_peticion();
@@ -146,16 +162,38 @@ final class InformesView extends View {
 			wp_die( esc_html( $e->getMessage() ), 400 );
 		}
 		Logger::log(
-			'informe_exportado',
+			'imprimir' === $formato ? 'informe_impreso' : 'informe_exportado',
 			'informe',
 			(string) $informe->id,
 			array(
+				'formato'  => $formato,
 				'columnas' => array_keys( $res['columnas'] ),
 				'filas'    => count( $res['filas'] ),
 				'salud'    => $res['salud'],
 			)
 		);
-		Generador::csv( $informe->nombre, $res );
+		if ( 'imprimir' === $formato ) {
+			nocache_headers();
+			header( 'Content-Type: text/html; charset=utf-8' );
+			header( 'X-Robots-Tag: noindex, nofollow' );
+			$pagina = $this->tpl(
+				'informes/imprimir',
+				array(
+					'informe' => $informe,
+					'res'     => $res,
+					'resumen' => Generador::resumen( $informe, $res ),
+					'marco'   => '1' === $this->get( 'marco' ),
+				)
+			);
+			echo $pagina; // phpcs:ignore WordPress.Security.EscapeOutput -- plantilla con su salida escapada
+			exit;
+		}
+		if ( 'csv' === $formato ) {
+			Generador::csv( $informe->nombre, $res );
+			exit;
+		}
+		$nombre = '' !== $informe->nombre ? $informe->nombre : asde_t( 'Informe' );
+		Xlsx::descargar( sanitize_file_name( remove_accents( $nombre ) ) . '-' . wp_date( 'Ymd' ) . '.xlsx', $nombre, array_values( $res['columnas'] ), array_map( 'array_values', $res['filas'] ) );
 		exit;
 	}
 
@@ -209,13 +247,27 @@ final class InformesView extends View {
 		}
 	}
 
-	/** Informe guardado (?informe=ID) o improvisado desde los parámetros (?ver=1&cols[]=…). */
+	/**
+	 * Informe guardado (?informe=ID) o improvisado desde los parámetros (?ver=1&cols[]=…).
+	 * Con ?seccion= (v0.29), solo esa sección (el generador sigue limitando a las del scouter).
+	 */
 	private function informe_de_la_peticion(): ?Informe {
 		if ( '' !== $this->get( 'informe' ) ) {
-			return $this->cargar( (int) $this->get( 'informe' ) );
+			$informe = $this->cargar( (int) $this->get( 'informe' ) );
+		} else {
+			$cols    = isset( $_GET['cols'] ) ? array_map( 'sanitize_key', (array) wp_unslash( $_GET['cols'] ) ) : array(); // phpcs:ignore WordPress.Security
+			$informe = new Informe( 0, sanitize_text_field( $this->get( 'nombre' ) ) ?: 'Informe', '', $cols, $this->filtros_de( $_GET ), get_current_user_id(), false ); // phpcs:ignore WordPress.Security
 		}
-		$cols = isset( $_GET['cols'] ) ? array_map( 'sanitize_key', (array) wp_unslash( $_GET['cols'] ) ) : array(); // phpcs:ignore WordPress.Security
-		return new Informe( 0, sanitize_text_field( $this->get( 'nombre' ) ) ?: 'Informe', '', $cols, $this->filtros_de( $_GET ), get_current_user_id(), false ); // phpcs:ignore WordPress.Security
+		if ( $informe && '' !== $this->seccion_pedida() ) {
+			$informe->filtros['secciones'] = array( $this->seccion_pedida() );
+		}
+		return $informe;
+	}
+
+	/** La sección elegida en el resultado (?seccion=), si existe. */
+	private function seccion_pedida(): string {
+		$s = sanitize_key( $this->get( 'seccion' ) );
+		return isset( Secciones::all()[ $s ] ) ? $s : '';
 	}
 
 	/** Solo informes predefinidos, compartidos o propios. */
@@ -235,6 +287,7 @@ final class InformesView extends View {
 				'pago'      => (string) ( $src['pago'] ?? '' ),
 				'ronda'     => (string) ( $src['ronda'] ?? '' ),
 				'orden'     => (string) ( $src['orden'] ?? '' ),
+				'vista'     => (string) ( $src['vista'] ?? '' ),
 			)
 		);
 	}
@@ -256,6 +309,7 @@ final class InformesView extends View {
 				'pago'      => $i->filtros['pago'],
 				'ronda'     => $i->filtros['ronda'],
 				'orden'     => $i->filtros['orden'],
+				'vista'     => 'fichas' === $i->filtros['vista'] ? 'fichas' : null,
 			),
 			static fn( $v ) => null !== $v && array() !== $v && '' !== $v
 		);

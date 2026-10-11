@@ -12,10 +12,20 @@ defined( 'ABSPATH' ) || exit;
  *
  * El nombre es único en el grupo sin distinguir mayúsculas ni acentos («Tiendas»
  * y «tiendas» son el mismo). Un tipo que usa algún material no se borra.
+ *
+ * v0.29: el tipo «Camisa uniforme» (especial = camisa) lo crea el plugin en cada grupo
+ * y no se borra: sus materiales llevan modelo y talla, y la gestión de uniformes los
+ * asigna y descuenta (MaterialesTable::descontar_camisa()).
  */
 final class TiposTable {
 
 	public const MAX_NOMBRE = 80;
+
+	/** Marca del tipo de las camisas del uniforme (columna «especial»). */
+	public const CAMISA = 'camisa';
+
+	/** Nombre con el que se crea (se puede cambiar; lo que cuenta es la marca). */
+	public const NOMBRE_CAMISA = 'Camisa uniforme';
 
 	public static function table(): string {
 		global $wpdb;
@@ -32,6 +42,7 @@ final class TiposTable {
 				id bigint(20) unsigned NOT NULL AUTO_INCREMENT,
 				grupo varchar(3) NOT NULL,
 				nombre varchar(80) NOT NULL,
+				especial varchar(20) NOT NULL DEFAULT '',
 				creado datetime NOT NULL,
 				creado_por bigint(20) unsigned NOT NULL DEFAULT 0,
 				PRIMARY KEY  (id),
@@ -45,15 +56,16 @@ final class TiposTable {
 		return mb_strtolower( remove_accents( preg_replace( '/\s+/u', ' ', trim( $nombre ) ) ?? '' ) );
 	}
 
-	/** @return array<int, array{id:int, nombre:string}> id => tipo, por orden alfabético. */
+	/** @return array<int, array{id:int, nombre:string, especial:string}> id => tipo, por orden alfabético. */
 	public static function todos(): array {
 		global $wpdb;
-		$filas = (array) $wpdb->get_results( $wpdb->prepare( 'SELECT id, nombre FROM %i WHERE grupo = %s', self::table(), Grupo::numero() ), ARRAY_A );
+		$filas = (array) $wpdb->get_results( $wpdb->prepare( 'SELECT id, nombre, especial FROM %i WHERE grupo = %s', self::table(), Grupo::numero() ), ARRAY_A );
 		$out   = array();
 		foreach ( $filas as $f ) {
 			$out[ (int) $f['id'] ] = array(
-				'id'     => (int) $f['id'],
-				'nombre' => (string) $f['nombre'],
+				'id'       => (int) $f['id'],
+				'nombre'   => (string) $f['nombre'],
+				'especial' => (string) ( $f['especial'] ?? '' ),
 			);
 		}
 		uasort( $out, static fn( $a, $b ) => strcmp( self::clave( $a['nombre'] ), self::clave( $b['nombre'] ) ) );
@@ -62,6 +74,39 @@ final class TiposTable {
 
 	public static function obtener( int $id ): ?array {
 		return self::todos()[ $id ] ?? null;
+	}
+
+	/**
+	 * Id del tipo de las camisas del uniforme del grupo (v0.29). Si no existe, lo crea; si ya
+	 * había un tipo con ese nombre (hecho a mano), lo marca. 0 si no se ha podido crear.
+	 */
+	public static function camisa(): int {
+		foreach ( self::todos() as $id => $t ) {
+			if ( self::CAMISA === $t['especial'] ) {
+				return $id;
+			}
+		}
+		$id = self::por_nombre( self::NOMBRE_CAMISA );
+		if ( ! $id ) {
+			$id = self::crear( self::NOMBRE_CAMISA );
+			if ( is_wp_error( $id ) ) {
+				return 0;
+			}
+		}
+		global $wpdb;
+		$wpdb->update(
+			self::table(),
+			array( 'especial' => self::CAMISA ),
+			array(
+				'id'    => $id,
+				'grupo' => Grupo::numero(),
+			)
+		);
+		return (int) $id;
+	}
+
+	public static function es_camisa( int $id ): bool {
+		return $id > 0 && self::CAMISA === ( self::obtener( $id )['especial'] ?? '' );
 	}
 
 	/** Id del tipo con ese nombre en el grupo, o 0. */
@@ -126,6 +171,9 @@ final class TiposTable {
 		$tipo = self::obtener( $id );
 		if ( ! $tipo ) {
 			return new \WP_Error( 'asde_inventario', asde_t( 'Ese tipo no existe.' ) );
+		}
+		if ( self::CAMISA === $tipo['especial'] ) {
+			return new \WP_Error( 'asde_inventario', asde_t( 'Es el tipo de las camisas del uniforme: no se puede borrar (lo usa la gestión de uniformes).' ) );
 		}
 		$usos = MaterialesTable::contar_por_tipo()[ $id ] ?? 0;
 		if ( $usos ) {

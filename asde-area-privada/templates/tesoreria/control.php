@@ -27,7 +27,7 @@ $pct = $resumen['a_pagar'] > 0 ? round( 100 * $resumen['pagado'] / $resumen['a_p
 <section class="asde-card">
 	<header class="asde-card__header asde-card__header--split">
 		<h2 class="asde-card__title"><?php asde_e( 'Control de pagos ·' ); ?> <?php echo esc_html( $ronda ); ?></h2>
-		<a class="button asde-button-secundario" href="<?php echo esc_url( $url_csv ); ?>"><?php asde_e( 'Descargar CSV' ); ?></a>
+		<a class="button asde-button-secundario no-transition" href="<?php echo esc_url( $url_csv ); ?>" data-asde-descarga><?php asde_e( 'Descargar CSV' ); ?></a>
 	</header>
 	<dl class="asde-datos">
 		<div><dt><?php asde_e( 'Familias con cuota' ); ?></dt><dd><strong><?php echo (int) $resumen['familias']; ?></strong></dd></div>

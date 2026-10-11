@@ -12,7 +12,7 @@
 <body>
 <header class="portada">
 	<div class="portada__dentro">
-		<p class="antetitulo">Manual de uso · versión 0.28 · octubre de 2026 · <a class="portada__volver" href="index.html">Todos los manuales</a></p>
+		<p class="antetitulo">Manual de uso · versión 0.29 · octubre de 2026 · <a class="portada__volver" href="index.html">Todos los manuales</a></p>
 		<h1>Manual para scouters</h1>
 		<p class="portada__perfil">Scouters y voluntariado con sección</p>
 		<p class="entrada">Lo que hace un scouter con su sección en el área privada: las fichas de sus educandos, los cambios que proponen las familias, las solicitudes de acceso, los informes (también quién ha pagado la cuota), los pagos y las familias, y los pedidos de uniforme. Y lo suyo: sus datos, sus pagos y su propio uniforme.</p>
@@ -47,6 +47,7 @@
 <li><a href="#cambios">Cambios propuestos por las familias</a></li>
 <li><a href="#solicitudes">Solicitudes de acceso</a></li>
 <li><a href="#informes">Informes</a></li>
+<li class="sub"><a href="#fichas-reducidas">Fichas reducidas: una página por socio/a</a></li>
 <li class="sub"><a href="#informe-pagos">Quién ha pagado la cuota</a></li>
 <li><a href="#tesoreria">Tesorería: pagos y familias</a></li>
 <li><a href="#uniformes">Uniformes: el tuyo y los de tu sección</a></li>
@@ -284,10 +285,11 @@
 	<p class="resumen">Lo que las familias corrigen en las fichas de sus hijos no se guarda hasta que alguien del grupo lo aprueba. En el menú, «Cambios» lleva entre paréntesis cuántos hay pendientes.</p>
 	<figure class="captura"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/cambios-pendientes/</span></div><div class="navegador__vista" data-ampliar><img src="capturas/06-cambios.png" width="1280" height="1039" alt="Tabla de cambios propuestos con el valor actual del CRM, el nuevo valor y los botones Aprobar y Rechazar" loading="lazy"></div></div><figcaption><span>Cada propuesta enseña lo que hay ahora en el CRM y el valor nuevo. El nombre de la persona abre su ficha en la ventana.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
 	<ul>
-		<li><strong>Aprobar</strong> guarda el valor nuevo en el CRM. Si el dato del CRM ha cambiado desde que se propuso, la pantalla avisa antes de sobrescribirlo.</li>
-		<li><strong>Rechazar</strong> pide un motivo, que ve la familia en la ficha.</li>
+		<li>La lista tiene <strong>una fila por persona</strong>, con cuántos cambios tiene y de qué datos. <strong>«Revisar»</strong> abre en la ventana todos sus cambios, cada uno con su casilla; «Todos», arriba de la columna, los marca o desmarca de una vez.</li>
+		<li><strong>«Aprobar los seleccionados»</strong> guarda en el CRM los cambios marcados, todos de una vez. Si el dato del CRM ha cambiado desde que se propuso, el cambio sale avisado (⚠️) y sin marcar: márcalo solo si quieres aplicarlo igualmente.</li>
+		<li><strong>«Rechazar los seleccionados»</strong> pide un motivo, que ve la familia en la ficha.</li>
 		<li>Nadie puede aprobar sus propias propuestas. Un scouter ve solo las de sus secciones; Secretaría y Coordinación, todas.</li>
-		<li>«Resueltos» guarda el historial.</li>
+		<li><strong>«Resueltos»</strong> guarda el historial, también por persona: las propuestas ya revisadas y los <strong>cambios hechos directamente en las fichas</strong> por Secretaría, Coordinación o los scouters en los últimos 90 días (qué datos, quién y cuándo; los valores no se guardan en la web).</li>
 	</ul>
 </section>
 
@@ -321,9 +323,17 @@
 		<li><div><strong>Ver o guardar:</strong> se puede guardar para ti o compartirlo con el resto del equipo.</div></li>
 	</ol>
 	<ul>
-		<li><strong>«Descargar CSV»</strong> para abrirlo en una hoja de cálculo; «Imprimir» para llevarlo en papel. Destruye las copias impresas al terminar la actividad.</li>
+		<li><strong>«Descargar Excel»</strong> baja el informe como hoja de cálculo (.xlsx), con la primera fila fija y filtros en cada columna. <strong>«Imprimir»</strong> abre en una ventana la versión para imprimir, con el informe entero (todas las columnas, en horizontal si son muchas) y su botón «Imprimir». Destruye las copias impresas al terminar la actividad.</li>
+		<li><strong>«Sección»</strong>, debajo del título, saca el informe de una sola sección sin tener que editarlo.</li>
 		<li>Solo cuentan los socios con membresía activa. Los datos se leen del CRM en el momento.</li>
 		<li>Si tu rol no ve alguna columna (salud, por ejemplo), el informe lo avisa y no la enseña.</li>
+	</ul>
+	<h3 id="fichas-reducidas">Fichas reducidas: una página por socio/a</h3>
+	<p>El informe predefinido <strong>«Fichas reducidas»</strong> no es una tabla: enseña la ficha de cada socio/a con membresía activa, y al imprimirlo sale <strong>una página por persona</strong>, para llevarlas a una actividad. Elige la sección en «Sección» y pulsa «Imprimir».</p>
+	<ul>
+		<li>Lleva el nombre y los apellidos, el móvil, el tutor/a 1, la cesión de imagen, las alergias (también a medicamentos), la alergia y la intolerancia alimentaria (y a qué alimentos), el régimen especial de comidas y su tipo, el trastorno alimentario y las enfermedades. Lo que está vacío sale con una raya.</li>
+		<li>Tiene datos de salud: lo ve quien puede ver la salud, y queda constancia de quién lo consulta o lo imprime.</li>
+		<li>Cualquier informe propio puede salir así: en «Ordenar por», elige la presentación <strong>«Una ficha por persona»</strong>.</li>
 	</ul>
 	<h3 id="informe-pagos">Quién ha pagado la cuota</h3>
 	<p>El informe predefinido <strong>«Pagos de la cuota»</strong> dice, socio por socio, cómo va la cuota de su familia en la ronda: así sabes rápido quién de tu sección ha pagado y quién no.</p>
@@ -406,6 +416,7 @@
 	<ul>
 		<li>Los tipos también tienen su pestaña. Se les puede <strong>cambiar el nombre</strong> en cualquier momento.</li>
 		<li>Un tipo que usa algún material <strong>no se puede borrar</strong>: cambia antes el tipo de ese material.</li>
+		<li>El tipo <strong>«Camisa uniforme»</strong> lo crea la web y no se borra: sus materiales piden además el <strong>modelo</strong> (chico o chica) y la <strong>talla</strong>, y si no escribes la descripción se pone sola («Camisa femenina (chica), talla M»). La gestión de uniformes los asigna a los pedidos y los descuenta de aquí. Al importar un CSV, sus columnas son «Modelo (camisas)» y «Talla (camisas)».</li>
 	</ul>
 
 	<h3 id="inventario-importar">Importar el material desde una hoja de cálculo</h3>
@@ -491,7 +502,7 @@
 			</ul>
 		</section>
 
-		<p class="pie">Manual para scouters del plugin «ASDE Scouts de España – Gestor CRM para Grupos Scouts», versión 0.28 (octubre de 2026). Capturas hechas en un WordPress de demostración con un CRM simulado y datos inventados.</p>
+		<p class="pie">Manual para scouters del plugin «ASDE Scouts de España – Gestor CRM para Grupos Scouts», versión 0.29 (octubre de 2026). Capturas hechas en un WordPress de demostración con un CRM simulado y datos inventados.</p>
 	</main>
 </div>
 

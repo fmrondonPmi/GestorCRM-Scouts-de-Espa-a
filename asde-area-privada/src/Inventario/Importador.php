@@ -32,6 +32,9 @@ final class Importador {
 		'anio'        => array( 'Año de compra', array( 'ano de compra', 'ano', 'anio', 'anio de compra', 'ano compra' ) ),
 		'num_serie'   => array( 'Nº de serie', array( 'n de serie', 'no de serie', 'numero de serie', 'num serie', 'n serie', 'serie' ) ),
 		'notas'       => array( 'Notas', array( 'notas', 'observaciones', 'comentarios' ) ),
+		// v0.29: solo para las camisas del uniforme (tipo «Camisa uniforme»): chico o chica, y la talla.
+		'modelo'      => array( 'Modelo (camisas)', array( 'modelo camisas', 'modelo', 'chico chica', 'chica chico', 'genero', 'sexo' ) ),
+		'talla'       => array( 'Talla (camisas)', array( 'talla camisas', 'talla', 'size' ) ),
 	);
 
 	/** Sin estas columnas en la cabecera no se puede importar. */
@@ -114,6 +117,7 @@ final class Importador {
 				$series[ mb_strtolower( $m['num_serie'] ) ] = 0; // 0: ya estaba en el inventario.
 			}
 		}
+		TiposTable::camisa(); // Que exista el tipo de las camisas del uniforme (v0.29) antes de buscar los tipos por nombre.
 		$fallo = static function ( int $n, array $fila, string $motivo ) use ( &$res ): void {
 			$res['errores'][] = array(
 				'fila'   => $n,
@@ -151,8 +155,9 @@ final class Importador {
 				continue;
 			}
 
-			// Mismas reglas que el formulario (sin el tipo, que se resuelve después para no crearlo si la fila falla).
-			$datos = MaterialesTable::validar( array( 'tipo' => '0' ) + $fila );
+			// Mismas reglas que el formulario, con el tipo si ya existe (las camisas piden modelo y talla); uno
+			// nuevo se crea después, para no crearlo si la fila falla.
+			$datos = MaterialesTable::validar( array( 'tipo' => (string) $tipo ) + $fila );
 			if ( is_wp_error( $datos ) ) {
 				$fallo( $n, $fila, $datos->get_error_message() );
 				continue;
@@ -179,9 +184,11 @@ final class Importador {
 	public static function ejemplo(): string {
 		$filas = array(
 			array_map( static fn( $c ) => asde_t( $c[0] ), self::COLUMNAS ),
-			array( asde_t( 'Tienda canadiense 4 plazas' ), asde_t( 'Tiendas' ), '3', '120,00', '2019', 'TC-0001', asde_t( 'En el local, estantería 2' ) ),
-			array( asde_t( 'Hornillo de gas' ), asde_t( 'Cocina' ), '6', '35,50', '', '', '' ),
-			array( asde_t( 'Cuerda de 20 m' ), '', '10', '', '', '', '' ),
+			array( asde_t( 'Tienda canadiense 4 plazas' ), asde_t( 'Tiendas' ), '3', '120,00', '2019', 'TC-0001', asde_t( 'En el local, estantería 2' ), '', '' ),
+			array( asde_t( 'Hornillo de gas' ), asde_t( 'Cocina' ), '6', '35,50', '', '', '', '', '' ),
+			array( asde_t( 'Cuerda de 20 m' ), '', '10', '', '', '', '', '', '' ),
+			// Una camisa del uniforme: sin descripción, se pone sola («Camisa femenina (chica), talla M»).
+			array( '', TiposTable::obtener( TiposTable::camisa() )['nombre'] ?? TiposTable::NOMBRE_CAMISA, '4', '', '', '', '', asde_t( 'chica' ), 'M' ),
 		);
 		return "\xEF\xBB\xBF" . self::a_csv( $filas );
 	}

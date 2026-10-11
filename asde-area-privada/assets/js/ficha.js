@@ -57,8 +57,10 @@
 		} );
 	} );
 
+	// v0.29: la barra va arriba del todo y pliega también los cuadros de la ficha (nombre,
+	// membresía en el CRM, cambios propuestos), que son los plegables de area.js.
 	var barra = raiz.querySelector( '.asde-ficha__plegar' );
-	if ( barra && secciones.length > 1 ) {
+	if ( barra && secciones.length + raiz.querySelectorAll( 'section.asde-card[data-asde-plegable]' ).length > 1 ) {
 		barra.hidden = false;
 		barra.addEventListener( 'click', function ( e ) {
 			var b = e.target.closest( '[data-asde-plegar]' );
@@ -69,6 +71,11 @@
 			secciones.forEach( function ( d ) {
 				d.open = abrir;
 			} );
+			if ( window.asdePlegables ) {
+				Array.prototype.forEach.call( raiz.querySelectorAll( 'section.asde-card--plegable' ), function ( c ) {
+					window.asdePlegables.plegar( c, ! abrir, true );
+				} );
+			}
 		} );
 	}
 

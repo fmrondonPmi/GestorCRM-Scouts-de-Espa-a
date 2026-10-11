@@ -42,7 +42,7 @@ defined( 'ABSPATH' ) || exit;
 final class Router {
 
 	/** Páginas que se pueden abrir en la ventana emergente. */
-	public const MODALES = array( 'ficha', 'alta', 'solicitudes', 'uniformes', 'inventario', 'inventario_tipos', 'inventario_compras', 'banco', 'tesoreria', 'personas' );
+	public const MODALES = array( 'ficha', 'alta', 'solicitudes', 'uniformes', 'inventario', 'inventario_tipos', 'inventario_compras', 'banco', 'tesoreria', 'personas', 'cambios' );
 
 	/** La pide la ventana emergente del área (assets/js/area.js). */
 	public static function pide_modal(): bool {
@@ -237,19 +237,20 @@ final class Router {
 			exit;
 		}
 
-		// Descargas CSV (antes de enviar nada al navegador).
-		if ( 'csv' === sanitize_key( wp_unslash( $_GET['formato'] ?? '' ) ) ) { // phpcs:ignore WordPress.Security.NonceVerification
-			if ( 'informes' === $key ) {
-				( new InformesView() )->exportar();
-			} elseif ( 'tesoreria' === $key ) {
+		// Descargas (antes de enviar nada al navegador). Informes (v0.29): Excel y la versión para imprimir.
+		$formato = sanitize_key( wp_unslash( $_GET['formato'] ?? '' ) ); // phpcs:ignore WordPress.Security.NonceVerification -- cada descarga comprueba su nonce
+		if ( 'informes' === $key && in_array( $formato, InformesView::FORMATOS, true ) ) {
+			( new InformesView() )->exportar( $formato );
+		}
+		if ( 'csv' === $formato ) {
+			if ( 'tesoreria' === $key ) {
 				( new TesoreriaView() )->exportar();
 			} elseif ( 'uniformes' === $key ) {
 				( new UniformesGestionView() )->exportar();
 			}
 		}
-		// Importar material: el CSV de ejemplo y las filas que no se importaron.
+		// Importar material: el CSV de ejemplo y las filas que no se importaron (el de las filas con error comprueba su nonce; el ejemplo no tiene datos).
 		if ( 'inventario' === $key ) {
-			$formato = sanitize_key( wp_unslash( $_GET['formato'] ?? '' ) ); // phpcs:ignore WordPress.Security.NonceVerification -- el de las filas con error comprueba su nonce; el ejemplo no tiene datos
 			if ( 'csv-ejemplo' === $formato ) {
 				( new InventarioView() )->ejemplo();
 			} elseif ( 'csv-errores' === $formato ) {
@@ -257,7 +258,7 @@ final class Router {
 			}
 		}
 		// PDF de una lista de compra (solo con el visto bueno de Tesorería).
-		if ( 'inventario_compras' === $key && 'pdf' === sanitize_key( wp_unslash( $_GET['formato'] ?? '' ) ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+		if ( 'inventario_compras' === $key && 'pdf' === $formato ) {
 			( new InventarioComprasView() )->pdf();
 		}
 	}
@@ -293,6 +294,10 @@ final class Router {
 			wp_enqueue_script( 'asde-tesoreria', plugins_url( 'assets/js/tesoreria.js', ASDE_AP_FILE ), array( 'asde-i18n' ), ASDE_AP_VERSION, true );
 			// v0.25: la ficha de una familia se actualiza sin recargar la página (pagos, conciliar, eliminar).
 			wp_enqueue_script( 'asde-parcial', plugins_url( 'assets/js/parcial.js', ASDE_AP_FILE ), array( 'asde-i18n', 'asde-area', 'asde-tesoreria' ), ASDE_AP_VERSION, true );
+		}
+		// v0.29: el listado de Personas se filtra (y busca al escribir) sin recargar la página.
+		if ( 'personas' === $key ) {
+			wp_enqueue_script( 'asde-parcial', plugins_url( 'assets/js/parcial.js', ASDE_AP_FILE ), array( 'asde-i18n', 'asde-area' ), ASDE_AP_VERSION, true );
 		}
 		// v0.20: zonas que se actualizan sin recargar (listado del banco).
 		if ( 'banco' === $key ) {

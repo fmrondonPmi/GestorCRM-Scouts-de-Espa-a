@@ -10,6 +10,11 @@
  * Mejora progresiva: sin JavaScript, o si algo falla, todo funciona como antes,
  * recargando la página. Lo marcado con data-asde-recarga (p. ej. subir un
  * fichero) va siempre por el camino de siempre.
+ *
+ * v0.29 (listado de Personas): un formulario fuera de la zona la actualiza con
+ * data-asde-parcial-form="nombre de la zona" (así el cuadro de búsqueda no se
+ * cambia y no pierde el foco), y un cuadro data-asde-buscar busca al escribir,
+ * desde la 3.ª letra. Una consulta (GET) nueva cancela la que estaba en camino.
  */
 ( function () {
 	'use strict';
@@ -19,6 +24,7 @@
 	}
 
 	var ocupado = false;
+	var controlador = null;
 	var flotantes = null;
 	// Se escucha en el contenedor del área (no en document): así se actúa antes que el
 	// aviso de carga de area.js (que escucha en document y respeta preventDefault) y
@@ -59,19 +65,32 @@
 		} );
 	}
 
-	/** Pide la página y cambia las zonas. Si no puede, va a la página de la forma de siempre. */
-	function pedir( url, opciones, origen, nuevaDireccion ) {
+	/**
+	 * Pide la página y cambia las zonas. Si no puede, va a la página de la forma de siempre.
+	 * Mientras hay una petición en camino no se hace otra, salvo una consulta (GET): esa
+	 * cancela la anterior (al buscar escribiendo, cuenta la última letra).
+	 */
+	function pedir( url, opciones, origen, nuevaDireccion, destino ) {
+		opciones = opciones || {};
+		var consulta = ! opciones.method || 'GET' === opciones.method;
 		if ( ocupado ) {
-			return;
+			if ( ! consulta || ! controlador ) {
+				return;
+			}
+			controlador.abort();
 		}
 		ocupado = true;
-		var actual = zona( origen );
+		var actual = destino || zona( origen );
 		if ( actual ) {
 			actual.setAttribute( 'aria-busy', 'true' );
 			actual.classList.add( 'asde-parcial--cargando' );
 		}
-		opciones = opciones || {};
 		opciones.credentials = 'same-origin';
+		controlador = window.AbortController ? new window.AbortController() : null;
+		if ( controlador ) {
+			opciones.signal = controlador.signal;
+		}
+		var propio = controlador;
 		window.fetch( url, opciones ).then( function ( r ) {
 			return r.text().then( function ( html ) {
 				var doc = new window.DOMParser().parseFromString( html, 'text/html' );
@@ -97,7 +116,10 @@
 				}
 				document.dispatchEvent( new window.CustomEvent( 'asde:parcial' ) );
 			} );
-		} ).catch( function () {
+		} ).catch( function ( error ) {
+			if ( error && 'AbortError' === error.name ) {
+				return; // La ha sustituido otra más nueva.
+			}
 			// Plan B: la página completa (sin perder lo que se pedía).
 			if ( opciones.method && 'POST' === opciones.method ) {
 				window.location.reload();
@@ -105,12 +127,15 @@
 				window.location.href = url;
 			}
 		} ).then( function () {
+			if ( propio !== controlador ) {
+				return; // Sigue en camino la que la sustituyó.
+			}
 			ocupado = false;
-			var z = document.querySelector( '[aria-busy="true"][data-asde-parcial]' );
-			if ( z ) {
+			controlador = null;
+			document.querySelectorAll( '[aria-busy="true"][data-asde-parcial]' ).forEach( function ( z ) {
 				z.removeAttribute( 'aria-busy' );
 				z.classList.remove( 'asde-parcial--cargando' );
-			}
+			} );
 		} );
 	}
 
@@ -143,7 +168,9 @@
 
 	raiz.addEventListener( 'submit', function ( e ) {
 		var form = e.target;
-		if ( e.defaultPrevented || ! zona( form ) || form.hasAttribute( 'data-asde-recarga' ) || form.target || 'multipart/form-data' === form.enctype ) {
+		var nombre = form.getAttribute( 'data-asde-parcial-form' );
+		var objetivo = nombre ? document.querySelector( '[data-asde-parcial="' + nombre + '"]' ) : zona( form );
+		if ( e.defaultPrevented || ! objetivo || form.hasAttribute( 'data-asde-recarga' ) || form.target || 'multipart/form-data' === form.enctype ) {
 			return;
 		}
 		var accion = form.getAttribute( 'action' ) || window.location.href;
@@ -157,10 +184,34 @@
 			datos.append( e.submitter.name, e.submitter.value );
 		}
 		if ( 'post' === ( form.getAttribute( 'method' ) || 'get' ).toLowerCase() ) {
-			pedir( destino.href, { method: 'POST', body: datos }, form, false );
+			pedir( destino.href, { method: 'POST', body: datos }, form, false, objetivo );
 			return;
 		}
 		destino.search = new window.URLSearchParams( datos ).toString();
-		pedir( destino.href, {}, form, true );
+		pedir( destino.href, {}, form, true, objetivo );
+	} );
+
+	// Buscar al escribir (v0.29): el cuadro data-asde-buscar envía su formulario (sin recargar)
+	// cuando se deja de teclear un momento, desde la 3.ª letra; y también al borrar (para
+	// volver a la lista entera o a un texto más corto que ya se había buscado).
+	var espera = null;
+	raiz.addEventListener( 'input', function ( e ) {
+		var campo = e.target;
+		if ( ! campo.matches || ! campo.matches( 'input[data-asde-buscar]' ) || ! campo.form || ! campo.form.requestSubmit ) {
+			return;
+		}
+		var texto = campo.value.trim();
+		var antes = undefined === campo.asdeBuscado ? campo.defaultValue.trim() : campo.asdeBuscado;
+		if ( texto.length < 3 && '' !== texto && antes.length < 3 ) {
+			return;
+		}
+		window.clearTimeout( espera );
+		espera = window.setTimeout( function () {
+			if ( texto === antes ) {
+				return;
+			}
+			campo.asdeBuscado = texto;
+			campo.form.requestSubmit();
+		}, 300 );
 	} );
 } )();

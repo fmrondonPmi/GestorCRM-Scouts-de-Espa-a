@@ -4,6 +4,7 @@ namespace AsdeBalears\AreaPrivada\Uniformes;
 use AsdeBalears\AreaPrivada\Audit\Logger;
 use AsdeBalears\AreaPrivada\Auth\Ambito;
 use AsdeBalears\AreaPrivada\Domain\Persona;
+use AsdeBalears\AreaPrivada\Inventario\MaterialesTable;
 use AsdeBalears\AreaPrivada\Tesoreria\Calculadora;
 
 defined( 'ABSPATH' ) || exit;
@@ -254,6 +255,109 @@ final class Servicio {
 		return $id;
 	}
 
+	// ---------------------------------------------------------------------
+	// Camisas del inventario (v0.29)
+	// ---------------------------------------------------------------------
+
+	/**
+	 * ¿Puede servir y asignar camisas del inventario? Quien incluye los pedidos en el pedido al
+	 * proveedor (Coordinación) y tiene el inventario (el módulo activo en el grupo).
+	 */
+	public static function puede_inventario(): bool {
+		return current_user_can( self::CAP_PEDIDO ) && current_user_can( \AsdeBalears\AreaPrivada\Inventario\Servicio::CAP );
+	}
+
+	/** ¿Se puede servir del inventario la camisa de este pedido? (Con camisa, en curso y aún sin pedir al proveedor.) */
+	public static function se_puede_servir( array $p ): bool {
+		return self::puede_inventario() && null === $p['cancelado_en'] && null === $p['entregado_en'] && null === $p['pedido_en']
+			&& ! empty( $p['lineas']['camisa'] ) && 0 === (int) $p['inventario_id'];
+	}
+
+	/** ¿Se puede devolver al inventario la camisa de este pedido? (Salió de él y aún no se ha entregado.) */
+	public static function se_puede_devolver( array $p ): bool {
+		return self::puede_inventario() && (int) $p['inventario_id'] > 0 && null === $p['entregado_en'];
+	}
+
+	/** La camisa del pedido sale del inventario: se descuenta una de su modelo y talla. @return true|\WP_Error */
+	public static function servir( array $p ) {
+		if ( ! self::se_puede_servir( $p ) ) {
+			return new \WP_Error( 'asde_uniforme', asde_t( 'La camisa de este pedido no se puede servir del inventario.' ) );
+		}
+		$c        = $p['lineas']['camisa'];
+		$material = MaterialesTable::descontar_camisa( (string) $c['modelo'], (string) $c['talla'] );
+		if ( ! $material ) {
+			/* translators: 1: modelo de camisa, 2: talla */
+			return new \WP_Error( 'asde_uniforme', sprintf( asde_t( 'No queda ninguna camisa «%1$s» de la talla %2$s en el inventario.' ), $c['nombre'], $c['talla'] ) );
+		}
+		PedidosTable::servir_camisa( $p['id'], $material, ! $p['lineas']['insignias'] );
+		Logger::log( 'uniforme_servido_inventario', 'uniforme', (string) $p['id'], array( 'material' => $material ) );
+		return true;
+	}
+
+	/** La camisa vuelve al inventario (y el pedido, si solo era la camisa, deja de constar como incluido). @return true|\WP_Error */
+	public static function devolver( array $p ) {
+		if ( ! self::se_puede_devolver( $p ) ) {
+			return new \WP_Error( 'asde_uniforme', asde_t( 'La camisa de este pedido no se puede devolver al inventario.' ) );
+		}
+		$c        = (array) $p['lineas']['camisa'];
+		$material = MaterialesTable::devolver_camisa( (int) $p['inventario_id'], (string) ( $c['modelo'] ?? '' ), (string) ( $c['talla'] ?? '' ) );
+		PedidosTable::quitar_camisa_servida( $p['id'], PedidosTable::REF_INVENTARIO === $p['pedido_ref'] );
+		Logger::log( 'uniforme_devuelto_inventario', 'uniforme', (string) $p['id'], array( 'material' => $material ) );
+		return true;
+	}
+
+	/**
+	 * Asigna una camisa del inventario a quien no la ha pedido: crea su pedido, ya servido.
+	 * Con importe 0 queda pagado «sin coste»; si no, Tesorería valida el pago como siempre.
+	 *
+	 * @return int|\WP_Error Id del pedido.
+	 */
+	public static function asignar( Persona $persona, string $modelo, string $talla, float $importe, string $nota ) {
+		$cfg   = Config::de();
+		$talla = Config::talla_de( $cfg, $modelo, $talla );
+		if ( ! self::puede_inventario() ) {
+			return new \WP_Error( 'asde_uniforme', asde_t( 'Asignar camisas del inventario lo hace quien incluye los pedidos en el pedido al proveedor.' ) );
+		}
+		if ( '' === $talla ) {
+			return new \WP_Error( 'asde_uniforme', asde_t( 'Elige el modelo y la talla de la camisa.' ) );
+		}
+		$material = MaterialesTable::descontar_camisa( $modelo, $talla );
+		if ( ! $material ) {
+			/* translators: 1: modelo de camisa, 2: talla */
+			return new \WP_Error( 'asde_uniforme', sprintf( asde_t( 'No queda ninguna camisa «%1$s» de la talla %2$s en el inventario.' ), $cfg['modelos'][ $modelo ]['nombre'], $talla ) );
+		}
+		$importe = round( max( 0.0, $importe ), 2 );
+		$lineas  = array(
+			'camisa'    => array(
+				'modelo'   => $modelo,
+				'nombre'   => $cfg['modelos'][ $modelo ]['nombre'],
+				'talla'    => $talla,
+				'especial' => Config::es_especial( $cfg, $talla ),
+				'precio'   => $importe,
+			),
+			'insignias' => array(),
+		);
+		$id = PedidosTable::crear( $persona->num_socio_asde, $persona->secciones, $persona->es_adulto_voluntario(), $lineas, $importe, false, $nota );
+		if ( ! $id ) {
+			MaterialesTable::devolver_camisa( $material, $modelo, $talla );
+			return new \WP_Error( 'asde_uniforme', asde_t( 'No se ha podido guardar el pedido.' ) );
+		}
+		PedidosTable::servir_camisa( $id, $material, true );
+		if ( 0.0 === $importe ) {
+			PedidosTable::marcar_pago( $id, wp_date( 'Y-m-d' ), '', 0.0, PedidosTable::REF_SIN_COSTE );
+		}
+		Logger::log(
+			'uniforme_asignado_inventario',
+			'uniforme',
+			(string) $id,
+			array(
+				'material' => $material,
+				'importe'  => $importe,
+			)
+		);
+		return $id;
+	}
+
 	/** Importe que Tesorería propone al validar el pago: el total con los precios de hoy. */
 	public static function importe_a_cobrar( array $p ): float {
 		return self::total( $p['lineas'], Config::de() )['total'];
@@ -277,7 +381,8 @@ final class Servicio {
 		}
 		foreach ( $pedidos as $p ) {
 			$c = $p['lineas']['camisa'];
-			if ( $c ) {
+			// La camisa que sale del inventario (v0.29) no se pide al proveedor.
+			if ( $c && empty( $p['inventario_id'] ) ) {
 				$camisas[ $c['modelo'] ]['nombre']                   ??= $c['nombre'];
 				$camisas[ $c['modelo'] ]['tallas'][ $c['talla'] ] = ( $camisas[ $c['modelo'] ]['tallas'][ $c['talla'] ] ?? 0 ) + 1;
 				++$n;

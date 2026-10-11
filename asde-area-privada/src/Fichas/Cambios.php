@@ -37,9 +37,31 @@ final class Cambios {
 		self::ERROR     => 'Aprobado, pero el CRM no lo aceptó',
 	);
 
+	/**
+	 * Cambios hechos directamente en una ficha (v0.29, «Resueltos»): los motivos con los que
+	 * Escritura::guardar() deja constancia en la auditoría. No están las propuestas aprobadas
+	 * (ya salen como propuestas) ni los nº de socio de la numeración (van aparte, en Personas).
+	 */
+	public const MOTIVOS_DIRECTOS = array(
+		'ficha'            => 'Guardado en la ficha',
+		'documento'        => 'Documento puesto desde la ficha',
+		'solicitud_acceso' => 'Email de una solicitud de acceso',
+	);
+
+	/** Datos que no están en la ficha (CamposFicha) pero se escriben desde la web. */
+	public const ETIQUETAS_EXTRA = array(
+		'stic_identification_number_c' => 'Documento de identidad',
+	);
+
 	public static function table(): string {
 		global $wpdb;
 		return $wpdb->prefix . 'asde_cambios';
+	}
+
+	/** Nombre de un dato de la ficha para mostrarlo («Móvil», «Alergias»…). */
+	public static function etiqueta( string $campo ): string {
+		$def = CamposFicha::todos()[ $campo ][0] ?? self::ETIQUETAS_EXTRA[ $campo ] ?? '';
+		return '' !== $def ? asde_t( $def ) : $campo;
 	}
 
 	public static function install_table(): void {
@@ -139,6 +161,48 @@ final class Cambios {
 		return array_map( array( self::class, 'descifrar' ), (array) $filas );
 	}
 
+	/**
+	 * Cambios hechos directamente en las fichas en los últimos $dias (de la auditoría): solo
+	 * qué datos, quién y cuándo (los valores no se guardan, regla 6). La auditoría no lleva el
+	 * grupo: quien llama se queda con las personas de su grupo (las que encuentra en el CRM).
+	 *
+	 * @return array<int, array{id:int, creado:string, user_id:int, socio:string, campos:string[], motivo:string}>
+	 */
+	public static function directos( int $dias, string $socio = '' ): array {
+		global $wpdb;
+		$desde = gmdate( 'Y-m-d H:i:s', time() - max( 1, $dias ) * DAY_IN_SECONDS );
+		$filas = (array) $wpdb->get_results( // phpcs:ignore WordPress.DB
+			$wpdb->prepare(
+				"SELECT id, creado, user_id, objeto_id, detalles FROM %i WHERE accion = 'crm_ficha_editada' AND objeto = 'socio' AND creado >= %s"
+				. " AND ( %s = '' OR objeto_id = %s )"
+				. ' ORDER BY id DESC LIMIT 500',
+				Logger::table(),
+				$desde,
+				$socio,
+				$socio
+			),
+			ARRAY_A
+		);
+		$out = array();
+		foreach ( $filas as $f ) {
+			$d      = json_decode( (string) $f['detalles'], true );
+			$motivo = is_array( $d ) ? (string) ( $d['motivo'] ?? '' ) : '';
+			$campos = is_array( $d ) ? array_values( array_filter( array_map( 'strval', (array) ( $d['campos'] ?? array() ) ) ) ) : array();
+			if ( ! isset( self::MOTIVOS_DIRECTOS[ $motivo ] ) || ! $campos ) {
+				continue;
+			}
+			$out[] = array(
+				'id'      => (int) $f['id'],
+				'creado'  => (string) $f['creado'],
+				'user_id' => (int) $f['user_id'],
+				'socio'   => (string) $f['objeto_id'],
+				'campos'  => $campos,
+				'motivo'  => $motivo,
+			);
+		}
+		return $out;
+	}
+
 	public static function contar_pendientes(): int {
 		global $wpdb;
 		return (int) $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(*) FROM %i WHERE grupo = %s AND estado = %s', self::table(), Grupo::numero(), self::PENDIENTE ) ); // phpcs:ignore WordPress.DB
@@ -173,6 +237,59 @@ final class Cambios {
 		self::marcar( $id, self::APLICADO );
 		do_action( 'asde_cambio_aprobado', $id, $p->num_socio_asde, $c['campo'] );
 		return true;
+	}
+
+	/**
+	 * Aprueba varios cambios de una persona a la vez (v0.29) y los escribe en el CRM en una
+	 * sola escritura. Los que tienen el dato del CRM cambiado desde la propuesta se quedan
+	 * pendientes, salvo los de $forzar (quien revisa ya vio el aviso y los marcó igualmente).
+	 *
+	 * @param int[]                 $ids
+	 * @param array<string, string> $actuales campo => valor de ahora en el CRM (releído por quien aprueba).
+	 * @param int[]                 $forzar
+	 * @return array{aprobados:int[], conflictos:int[], errores:array<int, string>}
+	 */
+	public static function aprobar_varios( array $ids, Persona $p, array $actuales, array $forzar = array() ): array {
+		$out     = array(
+			'aprobados'  => array(),
+			'conflictos' => array(),
+			'errores'    => array(),
+		);
+		$valores = array();
+		$de      = array(); // campo => id del cambio que lo trae
+		foreach ( array_unique( array_map( 'intval', $ids ) ) as $id ) {
+			$c = self::obtener( $id );
+			if ( ! $c || self::PENDIENTE !== $c['estado'] || $c['socio'] !== $p->num_socio_asde ) {
+				$out['errores'][ $id ] = asde_t( 'Ese cambio ya no está pendiente.' );
+				continue;
+			}
+			if ( ! in_array( $id, $forzar, true ) && ! Escritura::iguales( (string) ( $actuales[ $c['campo'] ] ?? '' ), $c['anterior'] ) ) {
+				$out['conflictos'][] = $id;
+				continue;
+			}
+			// Del mismo dato no hay dos pendientes (proponer() sustituye el anterior); por si acaso, manda el más reciente.
+			if ( isset( $de[ $c['campo'] ] ) && $de[ $c['campo'] ] > $id ) {
+				continue;
+			}
+			$valores[ $c['campo'] ] = $c['nuevo'];
+			$de[ $c['campo'] ]      = $id;
+		}
+		if ( ! $valores ) {
+			return $out;
+		}
+		$r = Escritura::guardar( $p, $valores, 'cambios_aprobados' );
+		foreach ( $de as $campo => $id ) {
+			if ( is_wp_error( $r ) || ! in_array( $campo, $r['guardados'], true ) ) {
+				$motivo = is_wp_error( $r ) ? $r->get_error_message() : asde_t( 'El CRM no ha aceptado el valor.' );
+				self::marcar( $id, self::ERROR, $motivo );
+				$out['errores'][ $id ] = $motivo;
+				continue;
+			}
+			self::marcar( $id, self::APLICADO );
+			do_action( 'asde_cambio_aprobado', $id, $p->num_socio_asde, $campo );
+			$out['aprobados'][] = $id;
+		}
+		return $out;
 	}
 
 	public static function rechazar( int $id, string $motivo ) {

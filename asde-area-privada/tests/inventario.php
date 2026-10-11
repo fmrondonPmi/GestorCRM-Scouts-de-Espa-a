@@ -491,7 +491,7 @@ try {
 
 	echo "-- El ejemplo y la pantalla\n";
 	$ej = Importador::leer( $fichero( Importador::ejemplo() ) );
-	$ok( ! is_wp_error( $ej ) && 3 === count( $ej['filas'] ) && 7 === count( $ej['columnas'] ) && str_starts_with( Importador::ejemplo(), "\xEF\xBB\xBFDescripción;Tipo;Cantidad" ), 'el CSV de ejemplo (con BOM y «;») se puede importar tal cual: 3 filas y todas las columnas' );
+	$ok( ! is_wp_error( $ej ) && 4 === count( $ej['filas'] ) && 9 === count( $ej['columnas'] ) && str_starts_with( Importador::ejemplo(), "\xEF\xBB\xBFDescripción;Tipo;Cantidad" ), 'el CSV de ejemplo (con BOM y «;») se puede importar tal cual: 4 filas (una, camisa del uniforme, v0.29) y todas las columnas' );
 	$ok( "'=HIPERVINCULO(\"x\")" === str_getcsv( trim( Importador::a_csv( array( array( '=HIPERVINCULO("x")' ) ) ) ), ';' )[0], 'las celdas que se descargan van a salvo de fórmulas' );
 	$h = $ver( new InventarioView() );
 	$ok( 1 === preg_match( '/href="[^"]*importar=1"[^>]*data-asde-modal/', $h ), 'el inventario tiene el botón «Importar desde CSV», que abre la ventana emergente' );

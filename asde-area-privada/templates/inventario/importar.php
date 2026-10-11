@@ -54,7 +54,7 @@ $columnas = array_map( static fn( $c ) => asde_t( $c[0] ), Importador::COLUMNAS 
 				</tbody>
 			</table>
 			<p class="asde-form__acciones">
-				<a class="button" href="<?php echo esc_url( $url_errores ); ?>" download><?php asde_e( 'Descargar las filas con error (CSV)' ); ?></a>
+				<a class="button no-transition" href="<?php echo esc_url( $url_errores ); ?>" download><?php asde_e( 'Descargar las filas con error (CSV)' ); ?></a>
 				<a class="button asde-button-secundario" href="<?php echo esc_url( $url ); ?>"><?php asde_e( 'Importar otro fichero' ); ?></a>
 			</p>
 		<?php else : ?>
@@ -70,7 +70,7 @@ $columnas = array_map( static fn( $c ) => asde_t( $c[0] ), Importador::COLUMNAS 
 		<?php endif; ?>
 		<p><?php asde_e( 'Prepara el material en una hoja de cálculo, guárdala como CSV y súbela aquí. Primero se comprueba el fichero; después se importan las filas correctas y verás las que no se hayan podido importar, con el motivo.' ); ?></p>
 		<p>
-			<a href="<?php echo esc_url( $url_ejemplo ); ?>" download><?php asde_e( 'Descargar un fichero de ejemplo' ); ?></a>
+			<a class="no-transition" href="<?php echo esc_url( $url_ejemplo ); ?>" download><?php asde_e( 'Descargar un fichero de ejemplo' ); ?></a>
 			<span class="asde-muted"><?php asde_e( '(ábrelo con Excel o LibreOffice, sustituye las filas de ejemplo por tu material y guárdalo como CSV)' ); ?></span>
 		</p>
 		<form method="post" action="<?php echo esc_url( $url ); ?>" enctype="multipart/form-data" class="asde-form">

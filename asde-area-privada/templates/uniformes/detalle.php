@@ -7,6 +7,7 @@
  * @var AsdeBalears\AreaPrivada\Auth\Ambito            $ambito
  * @var callable                                       $usuario  fn( id ) → nombre de quien lo hizo
  * @var float                                          $a_cobrar Importe con los precios de hoy
+ * @var array<string, array<string, int>>              $stock    Camisas del inventario (v0.29; vacío si no las gestiona)
  * @var string                                         $url
  * @var string                                         $url_ficha
  */
@@ -22,6 +23,9 @@ $fecha   = static fn( ?string $f ) => $f ? wp_date( 'd/m/Y', strtotime( $f . ( s
 $cuando  = static fn( string $con, string $sin, int $id, string $f ): string => sprintf( '' !== $usuario( $id ) ? $con : $sin, $usuario( $id ), $f );
 $estado  = PedidosTable::estado( $p );
 $activo  = null === $p['cancelado_en'];
+$camisa  = $p['lineas']['camisa'];
+$quedan  = $camisa ? (int) ( $stock[ $camisa['modelo'] ?? '' ][ $camisa['talla'] ?? '' ] ?? 0 ) : 0;
+$del_inv = PedidosTable::REF_INVENTARIO === $p['pedido_ref'];
 $form    = static function ( string $accion, string $boton, string $clase = 'asde-btn-link', string $confirmar = '' ) use ( $p ): string {
 	return sprintf(
 		'<form method="post" class="asde-inline-form"%s>%s<input type="hidden" name="asde_action" value="%s"><input type="hidden" name="pedido" value="%d"><input type="hidden" name="desde" value="detalle"><button type="submit" class="%s">%s</button></form>',
@@ -103,10 +107,16 @@ $form    = static function ( string $accion, string $boton, string $clase = 'asd
 		<li class="<?php echo null !== $p['pedido_en'] ? 'is-hecho' : ''; ?>">
 			<span class="asde-pasos__marca" aria-hidden="true"><?php echo null !== $p['pedido_en'] ? '✓' : ''; ?></span>
 			<strong><?php asde_e( 'Incluido en el pedido del grupo' ); ?></strong> <span class="asde-muted"><?php asde_e( '(Coordinación)' ); ?></span>
+			<?php if ( $p['inventario_id'] ) : ?>
+				<?php /* v0.29: la camisa ha salido del inventario del grupo. */ ?>
+				<br><span class="asde-badge asde-badge--inv-camisa"><?php asde_e( 'Camisa del inventario' ); ?></span>
+				<?php echo $p['lineas']['insignias'] && null === $p['pedido_en'] ? esc_html( asde_t( 'Las insignias sí van en el pedido al proveedor.' ) ) : ''; ?>
+				<?php echo Servicio::se_puede_devolver( $p ) ? $form( 'uniforme_devolver', esc_html( asde_t( 'Devolver la camisa al inventario' ) ), 'asde-btn-link', esc_html( asde_t( '¿Devolver la camisa al inventario? El pedido vuelve a quedar pendiente de pedir.' ) ) ) : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?>
+			<?php endif; ?>
 			<?php if ( null !== $p['pedido_en'] ) : ?>
-				<br><?php echo esc_html( '«' . $p['pedido_ref'] . '»' ); ?>
+				<br><?php echo esc_html( '«' . ( $del_inv ? asde_t( PedidosTable::REF_INVENTARIO ) : $p['pedido_ref'] ) . '»' ); ?>
 				<span class="asde-muted"><?php echo esc_html( $cuando( asde_t( 'por %1$s el %2$s' ), asde_t( 'el %2$s' ), (int) $p['pedido_por'], $fecha( $p['pedido_en'] ) ) ); ?></span>
-				<?php echo Servicio::puede_pedir( $p ) ? $form( 'uniforme_deshacer_pedido', esc_html( asde_t( 'Deshacer' ) ), 'asde-btn-link', esc_html( asde_t( '¿Quitar este pedido del pedido del grupo?' ) ) ) : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?>
+				<?php echo ! $del_inv && Servicio::puede_pedir( $p ) ? $form( 'uniforme_deshacer_pedido', esc_html( asde_t( 'Deshacer' ) ), 'asde-btn-link', esc_html( asde_t( '¿Quitar este pedido del pedido del grupo?' ) ) ) : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?>
 			<?php elseif ( $activo && Servicio::puede_pedir( $p ) ) : ?>
 				<form method="post" class="asde-form asde-form--compacta">
 					<?php wp_nonce_field( 'asde_uniforme_' . $p['id'] ); ?>
@@ -121,6 +131,11 @@ $form    = static function ( string $accion, string $boton, string $clase = 'asd
 						<p class="asde-help asde-help--warning"><?php asde_e( 'Aún no consta el pago.' ); ?></p>
 					<?php endif; ?>
 				</form>
+				<?php if ( Servicio::se_puede_servir( $p ) && $quedan ) : ?>
+					<?php /* translators: 1: modelo y talla, 2: unidades que quedan */ ?>
+					<p class="asde-help"><?php echo esc_html( sprintf( asde_n( 'O, sin pedirla al proveedor: en el inventario queda %2$d camisa «%1$s».', 'O, sin pedirla al proveedor: en el inventario quedan %2$d camisas «%1$s».', $quedan ), $camisa['nombre'] . ', ' . $camisa['talla'], $quedan ) ); ?></p>
+					<?php echo $form( 'uniforme_servir', esc_html( asde_t( 'Servir del inventario' ) ), 'button asde-button-secundario' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+				<?php endif; ?>
 			<?php else : ?>
 				<br><span class="asde-muted"><?php asde_e( 'Pendiente' ); ?></span>
 			<?php endif; ?>

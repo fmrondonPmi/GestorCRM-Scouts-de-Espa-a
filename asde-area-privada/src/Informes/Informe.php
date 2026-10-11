@@ -20,6 +20,15 @@ defined( 'ABSPATH' ) || exit;
  */
 final class Informe {
 
+	/**
+	 * Presentación (v0.29): en tabla o una ficha por persona (al imprimir, una por página).
+	 * Va en los filtros de la definición guardada, sin cambiar la tabla.
+	 */
+	public const VISTAS = array(
+		'tabla'  => 'Tabla',
+		'fichas' => 'Una ficha por persona (al imprimir, una por página)',
+	);
+
 	public const ORDENES = array(
 		'apellidos' => 'Apellidos',
 		'nombre'    => 'Nombre',
@@ -76,7 +85,12 @@ final class Informe {
 			'pago'      => isset( Catalogo::FILTROS_PAGO[ (string) ( $f['pago'] ?? '' ) ] ) ? (string) ( $f['pago'] ?? '' ) : '',
 			'ronda'     => Config::es_ronda( (string) ( $f['ronda'] ?? '' ) ) ? (string) $f['ronda'] : '',
 			'orden'     => isset( self::ORDENES[ $f['orden'] ?? '' ] ) ? (string) $f['orden'] : 'apellidos',
+			'vista'     => 'fichas' === ( $f['vista'] ?? '' ) ? 'fichas' : 'tabla',
 		);
+	}
+
+	public function en_fichas(): bool {
+		return 'fichas' === $this->filtros['vista'];
 	}
 
 	public function puede_editar( \WP_User $user ): bool {

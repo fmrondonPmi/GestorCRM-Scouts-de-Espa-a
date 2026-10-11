@@ -2,6 +2,7 @@
 namespace AsdeBalears\AreaPrivada\Inventario;
 
 use AsdeBalears\AreaPrivada\Domain\Grupo;
+use AsdeBalears\AreaPrivada\Uniformes\Config;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -14,6 +15,9 @@ defined( 'ABSPATH' ) || exit;
  *
  * No se borra: se da de baja (con motivo) y se puede recuperar, para que las
  * listas de compra y la auditoría sigan teniendo sentido.
+ *
+ * v0.29: las camisas del uniforme (tipo «Camisa uniforme») llevan modelo (chico o chica)
+ * y talla; la gestión de uniformes las asigna a un pedido y las descuenta de aquí.
  */
 final class MaterialesTable {
 
@@ -42,6 +46,8 @@ final class MaterialesTable {
 				anio smallint(5) unsigned NULL,
 				num_serie varchar(120) NOT NULL DEFAULT '',
 				notas varchar(500) NOT NULL DEFAULT '',
+				modelo varchar(20) NOT NULL DEFAULT '',
+				talla varchar(10) NOT NULL DEFAULT '',
 				creado datetime NOT NULL,
 				creado_por bigint(20) unsigned NOT NULL DEFAULT 0,
 				modificado datetime NULL,
@@ -59,18 +65,31 @@ final class MaterialesTable {
 	/**
 	 * Valida y limpia lo que llega del formulario.
 	 *
-	 * @param array<string, string> $d descripcion, tipo, cantidad, precio, anio, num_serie, notas.
+	 * @param array<string, string> $d descripcion, tipo, cantidad, precio, anio, num_serie, notas (y modelo y talla, las camisas).
 	 * @return array|\WP_Error Los campos listos para guardar.
 	 */
 	public static function validar( array $d ) {
 		$errores     = array();
 		$descripcion = mb_substr( trim( sanitize_text_field( (string) ( $d['descripcion'] ?? '' ) ) ), 0, 255 );
-		if ( '' === $descripcion ) {
-			$errores[] = asde_t( 'Escribe la descripción del material.' );
-		}
-		$tipo = (int) ( $d['tipo'] ?? 0 );
+		$tipo        = (int) ( $d['tipo'] ?? 0 );
 		if ( $tipo && ! TiposTable::obtener( $tipo ) ) {
 			$errores[] = asde_t( 'El tipo elegido ya no existe: elige otro.' );
+		}
+		// Camisas del uniforme (v0.29): modelo y talla de la configuración de uniformes; sin descripción, se pone sola.
+		$modelo = '';
+		$talla  = '';
+		if ( TiposTable::es_camisa( $tipo ) ) {
+			$cfg    = Config::de();
+			$modelo = Config::modelo_de( (string) ( $d['modelo'] ?? '' ), $cfg );
+			$talla  = '' !== $modelo ? Config::talla_de( $cfg, $modelo, (string) ( $d['talla'] ?? '' ) ) : '';
+			if ( '' === $talla ) {
+				$errores[] = asde_t( 'Las camisas del uniforme necesitan el modelo (chico o chica) y una talla de ese modelo.' );
+			} elseif ( '' === $descripcion ) {
+				$descripcion = self::descripcion_camisa( $cfg, $modelo, $talla );
+			}
+		}
+		if ( '' === $descripcion ) {
+			$errores[] = asde_t( 'Escribe la descripción del material.' );
 		}
 		$cantidad = trim( (string) ( $d['cantidad'] ?? '' ) );
 		if ( ! preg_match( '/^\d{1,5}$/', $cantidad ) ) {
@@ -98,6 +117,102 @@ final class MaterialesTable {
 			'anio'        => '' === $anio ? null : (int) $anio,
 			'num_serie'   => mb_substr( trim( sanitize_text_field( (string) ( $d['num_serie'] ?? '' ) ) ), 0, 120 ),
 			'notas'       => mb_substr( trim( sanitize_textarea_field( (string) ( $d['notas'] ?? '' ) ) ), 0, 500 ),
+			'modelo'      => $modelo,
+			'talla'       => $talla,
+		);
+	}
+
+	/** «Camisa femenina (chica), talla M»: la descripción de una camisa que no la tiene. Se guarda en castellano. */
+	public static function descripcion_camisa( array $cfg, string $modelo, string $talla ): string {
+		$nombre = (string) ( $cfg['modelos'][ $modelo ]['nombre'] ?? $modelo );
+		$quien  = Config::PARA_QUIEN[ $modelo ] ?? '';
+		return '' !== $quien ? sprintf( '%s (%s), talla %s', $nombre, $quien, $talla ) : sprintf( '%s, talla %s', $nombre, $talla );
+	}
+
+	/**
+	 * Camisas del uniforme que hay en el inventario (v0.29), sin las dadas de baja.
+	 *
+	 * @return array<string, array<string, int>> modelo => talla => unidades
+	 */
+	public static function camisas(): array {
+		$tipo = TiposTable::camisa();
+		$out  = array();
+		foreach ( self::todos() as $m ) {
+			if ( $tipo && $tipo === $m['tipo'] && '' !== $m['modelo'] && '' !== $m['talla'] && $m['cantidad'] > 0 ) {
+				$out[ $m['modelo'] ][ $m['talla'] ] = ( $out[ $m['modelo'] ][ $m['talla'] ] ?? 0 ) + $m['cantidad'];
+			}
+		}
+		return $out;
+	}
+
+	/**
+	 * Descuenta una camisa de ese modelo y talla (v0.29), del material más antiguo que tenga.
+	 * Atómico: solo si sigue quedando alguna (dos personas a la vez no se llevan la misma).
+	 *
+	 * @return int Id del material del que sale, o 0 si no queda ninguna.
+	 */
+	public static function descontar_camisa( string $modelo, string $talla ): int {
+		global $wpdb;
+		$tipo       = TiposTable::camisa();
+		$candidatos = array_filter( self::todos(), static fn( $m ) => $tipo && $tipo === $m['tipo'] && $modelo === $m['modelo'] && $talla === $m['talla'] && $m['cantidad'] > 0 );
+		ksort( $candidatos );
+		foreach ( $candidatos as $id => $m ) {
+			$n = $wpdb->query( // phpcs:ignore WordPress.DB
+				$wpdb->prepare(
+					'UPDATE %i SET cantidad = cantidad - 1, modificado = %s, modificado_por = %d WHERE id = %d AND grupo = %s AND cantidad > 0 AND baja_en IS NULL',
+					self::table(),
+					current_time( 'mysql', true ),
+					get_current_user_id(),
+					$id,
+					Grupo::numero()
+				)
+			);
+			if ( $n ) {
+				return (int) $id;
+			}
+		}
+		return 0;
+	}
+
+	/**
+	 * Devuelve una camisa al inventario (v0.29): al material del que salió si sigue ahí; si
+	 * no, a otro del mismo modelo y talla; y si no hay ninguno, a uno nuevo.
+	 *
+	 * @return int Id del material al que vuelve.
+	 */
+	public static function devolver_camisa( int $material, string $modelo, string $talla ): int {
+		global $wpdb;
+		$tipo  = TiposTable::camisa();
+		$igual = static fn( $m ) => $m && null === $m['baja_en'] && $tipo === $m['tipo'] && $modelo === $m['modelo'] && $talla === $m['talla'];
+		$m     = self::obtener( $material );
+		if ( ! $igual( $m ) ) {
+			$m = current( array_filter( self::todos(), $igual ) ) ?: null;
+		}
+		if ( $m ) {
+			$wpdb->query( // phpcs:ignore WordPress.DB
+				$wpdb->prepare(
+					'UPDATE %i SET cantidad = cantidad + 1, modificado = %s, modificado_por = %d WHERE id = %d AND grupo = %s',
+					self::table(),
+					current_time( 'mysql', true ),
+					get_current_user_id(),
+					$m['id'],
+					Grupo::numero()
+				)
+			);
+			return (int) $m['id'];
+		}
+		return self::crear(
+			array(
+				'descripcion' => self::descripcion_camisa( Config::de(), $modelo, $talla ),
+				'tipo'        => $tipo,
+				'cantidad'    => 1,
+				'precio'      => null,
+				'anio'        => null,
+				'num_serie'   => '',
+				'notas'       => '',
+				'modelo'      => $modelo,
+				'talla'       => $talla,
+			)
 		);
 	}
 

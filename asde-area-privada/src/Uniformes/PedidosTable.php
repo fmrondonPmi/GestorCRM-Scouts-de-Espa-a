@@ -27,6 +27,15 @@ final class PedidosTable {
 		'ingreso'  => 'Ingreso en cuenta',
 	);
 
+	/**
+	 * v0.29: «pedido del grupo» de los pedidos cuya camisa sale del inventario (no van al
+	 * proveedor). Se guarda en castellano, como el resto de lo guardado.
+	 */
+	public const REF_INVENTARIO = 'Del inventario del grupo';
+
+	/** v0.29: referencia del pago de una camisa asignada del inventario sin coste. */
+	public const REF_SIN_COSTE = 'Sin coste (camisa del inventario)';
+
 	/** Filtros de la gestión. */
 	public const SIN_PAGAR     = 'sin_pagar';
 	public const POR_PEDIR     = 'por_pedir';
@@ -85,6 +94,7 @@ final class PedidosTable {
 				cancelado_por bigint(20) unsigned NOT NULL DEFAULT 0,
 				cancelado_en datetime NULL,
 				cancelado_motivo varchar(255) NOT NULL DEFAULT '',
+				inventario_id bigint(20) unsigned NOT NULL DEFAULT 0,
 				PRIMARY KEY  (id),
 				KEY grupo (grupo),
 				KEY socio (socio)
@@ -304,6 +314,35 @@ final class PedidosTable {
 		);
 	}
 
+	/**
+	 * La camisa del pedido sale del inventario (material $material, v0.29). Sin insignias, el
+	 * pedido ya no va al proveedor: queda como incluido «del inventario del grupo».
+	 */
+	public static function servir_camisa( int $id, int $material, bool $sin_proveedor ): bool {
+		$datos = array( 'inventario_id' => $material );
+		if ( $sin_proveedor ) {
+			$datos += array(
+				'pedido_ref' => self::REF_INVENTARIO,
+				'pedido_por' => get_current_user_id(),
+				'pedido_en'  => current_time( 'mysql', true ),
+			);
+		}
+		return self::actualizar( $id, $datos );
+	}
+
+	/** Lo contrario de servir_camisa(): la camisa vuelve al inventario (eso lo hace quien llama). */
+	public static function quitar_camisa_servida( int $id, bool $quitar_pedido ): bool {
+		$datos = array( 'inventario_id' => 0 );
+		if ( $quitar_pedido ) {
+			$datos += array(
+				'pedido_ref' => '',
+				'pedido_por' => 0,
+				'pedido_en'  => null,
+			);
+		}
+		return self::actualizar( $id, $datos );
+	}
+
 	private static function actualizar( int $id, array $datos ): bool {
 		global $wpdb;
 		return false !== $wpdb->update(
@@ -331,6 +370,7 @@ final class PedidosTable {
 		foreach ( array( 'creado_por', 'pago_por', 'pedido_por', 'entregado_por', 'recibido_por', 'cancelado_por' ) as $k ) {
 			$f[ $k ] = (int) $f[ $k ];
 		}
+		$f['inventario_id'] = (int) ( $f['inventario_id'] ?? 0 );
 		return $f;
 	}
 }

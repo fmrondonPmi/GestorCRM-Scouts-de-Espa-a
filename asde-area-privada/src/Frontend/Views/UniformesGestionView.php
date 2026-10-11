@@ -6,6 +6,8 @@ use AsdeBalears\AreaPrivada\Auth\Ambito;
 use AsdeBalears\AreaPrivada\Domain\Secciones;
 use AsdeBalears\AreaPrivada\Frontend\Notices;
 use AsdeBalears\AreaPrivada\Informes\Generador;
+use AsdeBalears\AreaPrivada\Inventario\MaterialesTable;
+use AsdeBalears\AreaPrivada\Inventario\TiposTable;
 use AsdeBalears\AreaPrivada\Tesoreria\Calculadora;
 use AsdeBalears\AreaPrivada\Uniformes\Config;
 use AsdeBalears\AreaPrivada\Uniformes\PedidosTable;
@@ -17,6 +19,9 @@ defined( 'ABSPATH' ) || exit;
  * Gestión de los pedidos de uniforme (scouters, Tesorería, Coordinación):
  * validar el pago, incluir en el pedido del grupo, marcar la entrega, cancelar;
  * resumen de tallas e insignias para el proveedor y descarga en CSV.
+ *
+ * v0.29: camisas del inventario del grupo (tipo «Camisa uniforme»): lo que hay por modelo
+ * y talla, servir del inventario la camisa de un pedido y asignar una a quien no la pidió.
  */
 final class UniformesGestionView extends UniformesBaseView {
 
@@ -24,7 +29,10 @@ final class UniformesGestionView extends UniformesBaseView {
 		if ( ! current_user_can( Servicio::CAP_GESTION ) ) {
 			return $this->denegado();
 		}
-		$a  = Ambito::actual();
+		$a = Ambito::actual();
+		if ( '1' === $this->get( 'asignar' ) ) {
+			return $this->layout( 'uniformes', Servicio::puede_inventario() ? $this->asignar( $a ) : $this->denegado( asde_t( 'Asignar camisas del inventario lo hace quien incluye los pedidos en el pedido al proveedor.' ) ) );
+		}
 		$id = (int) $this->get( 'pedido' );
 		if ( $id ) {
 			$p = PedidosTable::obtener( $id );
@@ -68,6 +76,9 @@ final class UniformesGestionView extends UniformesBaseView {
 					'global'       => Servicio::vision_global( $a ),
 					'resumen'      => Servicio::resumen( array_filter( $por_pedir, static fn( $p ) => null !== $p['pago_en'] ), $cfg ),
 					'sin_pagar'    => count( array_filter( $por_pedir, static fn( $p ) => null === $p['pago_en'] ) ),
+					'stock'        => Servicio::puede_inventario() ? MaterialesTable::camisas() : null,
+					'url_asignar'  => $this->url( 'uniformes', array( 'asignar' => '1' ) ),
+					'url_inv'      => Servicio::puede_inventario() ? $this->url( 'inventario', array( 'tipo' => (string) TiposTable::camisa() ) ) : '',
 					'url'          => $this->url( 'uniformes' ),
 					'url_csv'      => $this->url(
 						'uniformes',
@@ -132,8 +143,35 @@ final class UniformesGestionView extends UniformesBaseView {
 				'ambito'   => $a,
 				'usuario'  => $usuario,
 				'a_cobrar' => Servicio::importe_a_cobrar( $p ),
+				'stock'    => Servicio::puede_inventario() ? MaterialesTable::camisas() : array(),
 				'url'      => $this->url( 'uniformes' ),
 				'url_ficha' => $this->url( 'ficha', array( 'socio' => $p['socio'] ) ),
+			)
+		);
+	}
+
+	/** «Asignar una camisa del inventario» (v0.29): en la ventana emergente o en su página. */
+	private function asignar( Ambito $a ): string {
+		$repo = \AsdeBalears\AreaPrivada\Crm\PersonaRepository::make();
+		try {
+			$personas = $repo ? $repo->todas() : array();
+		} catch ( \AsdeBalears\AreaPrivada\Crm\CrmException $e ) {
+			$personas = array();
+		}
+		$mias = $a->secciones_scouter();
+		if ( ! Servicio::vision_global( $a ) ) {
+			$personas = array_filter( $personas, static fn( $p ) => (bool) array_intersect( $p->secciones, $mias ) );
+		}
+		return $this->tpl(
+			'uniformes/asignar',
+			array(
+				'personas'  => array_values( $personas ),
+				'stock'     => MaterialesTable::camisas(),
+				'cfg'       => Config::de(),
+				'socio'     => $this->get( 'socio' ),
+				'url'       => $this->url( 'uniformes', array( 'asignar' => '1' ) ),
+				'url_lista' => $this->url( 'uniformes' ),
+				'url_inv'   => $this->url( 'inventario', array( 'tipo' => (string) TiposTable::camisa() ) ),
 			)
 		);
 	}
@@ -211,6 +249,12 @@ final class UniformesGestionView extends UniformesBaseView {
 			$this->redirect( $lista );
 		}
 
+		// Asignar una camisa del inventario a quien no la ha pedido (v0.29).
+		if ( 'uniforme_asignar' === $accion ) {
+			check_admin_referer( 'asde_uniformes_asignar' );
+			$this->asignar_post( $a );
+		}
+
 		$p = PedidosTable::obtener( (int) $this->post( 'pedido' ) );
 		check_admin_referer( 'asde_uniforme_' . ( $p['id'] ?? 0 ) );
 		if ( ! $p || ! Servicio::en_gestion( $p, $a ) ) {
@@ -274,12 +318,37 @@ final class UniformesGestionView extends UniformesBaseView {
 				}
 				break;
 
+			case 'uniforme_servir':
+				$r = Servicio::servir( $p );
+				if ( is_wp_error( $r ) ) {
+					$error = $r->get_error_message();
+					break;
+				}
+				/* translators: %s: nº de pedido */
+				$hecho = sprintf( asde_t( 'La camisa del pedido %s sale del inventario: se ha descontado una.' ), $num );
+				break;
+
+			case 'uniforme_devolver':
+				$r = Servicio::devolver( $p );
+				if ( is_wp_error( $r ) ) {
+					$error = $r->get_error_message();
+					break;
+				}
+				/* translators: %s: nº de pedido */
+				$hecho = sprintf( asde_t( 'La camisa del pedido %s ha vuelto al inventario.' ), $num );
+				break;
+
 			case 'uniforme_cancelar':
 				$motivo = $this->post( 'motivo' );
 				if ( Servicio::puede_cancelar_gestion( $p ) ) {
 					if ( '' === trim( $motivo ) ) {
 						$error = asde_t( 'Indica el motivo de la cancelación.' );
 						break;
+					}
+					// La camisa que había salido del inventario (v0.29) vuelve a él.
+					if ( $p['inventario_id'] && null === $p['entregado_en'] ) {
+						MaterialesTable::devolver_camisa( (int) $p['inventario_id'], (string) ( $p['lineas']['camisa']['modelo'] ?? '' ), (string) ( $p['lineas']['camisa']['talla'] ?? '' ) );
+						PedidosTable::quitar_camisa_servida( $p['id'], false );
 					}
 					PedidosTable::cancelar( $p['id'], $motivo );
 					Logger::log( 'uniforme_cancelado', 'uniforme', (string) $p['id'], array( 'por' => 'grupo' ) );
@@ -294,6 +363,37 @@ final class UniformesGestionView extends UniformesBaseView {
 
 		'' !== $hecho ? Notices::add( 'success', esc_html( $hecho ) ) : Notices::add( 'error', esc_html( $error ) );
 		$this->redirect( $volver );
+	}
+
+	/** Asigna una camisa del inventario (formulario de asignar()); siempre redirige. */
+	private function asignar_post( Ambito $a ): void {
+		$volver = $this->url( 'uniformes', array( 'asignar' => '1' ) );
+		$socio  = preg_match( '/^\d{1,20}$/', $this->post( 'socio' ) ) ? $this->post( 'socio' ) : '';
+		$repo   = \AsdeBalears\AreaPrivada\Crm\PersonaRepository::make();
+		try {
+			$persona = '' !== $socio && $repo ? $repo->obtener( $socio ) : null;
+		} catch ( \AsdeBalears\AreaPrivada\Crm\CrmException $e ) {
+			$persona = null;
+		}
+		if ( ! $persona || ! $persona->tiene_membresia_activa() || ( ! Servicio::vision_global( $a ) && ! array_intersect( $persona->secciones, $a->secciones_scouter() ) ) ) {
+			Notices::add( 'error', asde_t( 'Elige a quién se le da la camisa (un socio/a con membresía activa).' ) );
+			$this->redirect( $volver );
+		}
+		list( $modelo, $talla ) = array_pad( explode( '|', $this->post( 'camisa' ), 2 ), 2, '' );
+		$importe                = MaterialesTable::euros( $this->post( 'importe' ) );
+		if ( false === $importe ) {
+			Notices::add( 'error', asde_t( 'El importe no es válido (por ejemplo: 25,00; 0 si no se cobra).' ) );
+			$this->redirect( add_query_arg( 'socio', $socio, $volver ) );
+		}
+		$r = Servicio::asignar( $persona, sanitize_key( $modelo ), $talla, (float) $importe, $this->post( 'nota' ) );
+		if ( is_wp_error( $r ) ) {
+			Notices::add( 'error', esc_html( $r->get_error_message() ) );
+			$this->redirect( add_query_arg( 'socio', $socio, $volver ) );
+		}
+		$nuevo = PedidosTable::obtener( (int) $r );
+		/* translators: 1: nombre, 2: nº de pedido */
+		Notices::add( 'success', esc_html( sprintf( asde_t( 'Camisa asignada a %1$s y descontada del inventario (pedido %2$s).' ), $persona->nombre_completo(), $nuevo ? PedidosTable::numero( $nuevo ) : '' ) ) );
+		$this->redirect( $this->url( 'uniformes', array( 'pedido' => (string) $r ) ) );
 	}
 
 	/** Nombre del pedido del grupo al proveedor (p. ej. «Pedido 29/09/2026»). */

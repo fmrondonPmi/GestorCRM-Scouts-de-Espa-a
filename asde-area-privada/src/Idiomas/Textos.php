@@ -53,6 +53,8 @@ final class Textos {
 		};
 
 		$add( Cambios::ESTADOS, 'Fichas' );
+		$add( Cambios::MOTIVOS_DIRECTOS, 'Fichas' );
+		$add( Cambios::ETIQUETAS_EXTRA, 'Fichas' );
 		$add( CamposFicha::GRUPOS, 'Fichas' );
 		$add( CamposFicha::SOLO_LECTURA, 'Fichas' );
 		$add( CamposFicha::OPCIONES, 'Fichas' );
@@ -63,6 +65,8 @@ final class Textos {
 		$add( PedidosTable::METODOS, 'Uniformes' );
 		$add( PedidosTable::FILTROS, 'Uniformes' );
 		$add( PedidosTable::ESTADOS, 'Uniformes' );
+		$add( array( PedidosTable::REF_INVENTARIO, PedidosTable::REF_SIN_COSTE ), 'Uniformes' );
+		$add( \AsdeBalears\AreaPrivada\Uniformes\Config::PARA_QUIEN, 'Uniformes' );
 		$add( \AsdeBalears\AreaPrivada\Inventario\ComprasTable::ESTADOS, 'Inventario' );
 		$add( array_column( \AsdeBalears\AreaPrivada\Inventario\Importador::COLUMNAS, 0 ), 'Inventario' );
 		$add( \AsdeBalears\AreaPrivada\Tesoreria\Banco\TiposMovimiento::NATURALEZAS, 'Tesorería' );
@@ -80,6 +84,7 @@ final class Textos {
 		$add( RegistroEmails::ESTADOS, 'Usuarios' );
 		$add( RegistroEmails::TIPOS, 'Usuarios' );
 		$add( Informe::ORDENES, 'Informes' );
+		$add( Informe::VISTAS, 'Informes' );
 		$add( array_map( static fn( array $p ) => array( $p[0], $p[1] ), InformesTable::predefinidos() ), 'Informes' );
 		$add( Catalogo::GRUPOS, 'Informes' );
 		$add( Catalogo::FILTROS_PAGO, 'Informes' );

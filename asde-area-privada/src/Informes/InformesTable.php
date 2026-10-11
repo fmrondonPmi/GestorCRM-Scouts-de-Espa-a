@@ -56,12 +56,14 @@ final class InformesTable {
 			array( 'Autorizaciones', 'Cesión de imagen y consentimiento de medicación.', array( 'nombre', 'apellidos', 'seccion', 'edad', 'cesion_imagen', 'consent_medic' ) ),
 			// v0.25: para que cada scouter vea quién de su sección ha pagado la cuota y quién no.
 			array( 'Pagos de la cuota', 'Quién ha pagado la cuota de la ronda y cuánto le falta a cada familia.', array( 'num_local', 'nombre', 'apellidos', 'seccion', 'pago_familia', 'pago_estado', 'pago_a_pagar', 'pago_pagado', 'pago_pendiente', 'pago_vencido' ), array( 'orden' => 'seccion' ) ),
+			// v0.29 (petición del usuario): la ficha reducida de cada socio/a, una por página al imprimir; se elige la sección al verlo.
+			array( 'Fichas reducidas', 'Una página por socio/a con su móvil, su tutor/a, la cesión de imagen, las alergias, la alimentación y las enfermedades. Elige la sección al verlo.', array( 'nombre', 'apellidos', 'movil', 'tutor1', 'cesion_imagen', 'alergias', 'alerg_medic', 'alim_alergia', 'alim_intol', 'alim_intol_que', 'alim_regimen', 'alim_regimen_que', 'alim_trastorno', 'enfermedades' ), array( 'vista' => 'fichas' ) ),
 		);
 	}
 
 	/**
 	 * Informes de ejemplo, compartidos con todos (no se pueden borrar). Al actualizar el
-	 * plugin se añaden los que falten (desde la v0.25, «Pagos de la cuota»).
+	 * plugin se añaden los que falten (desde la v0.25, «Pagos de la cuota»; v0.29, «Fichas reducidas»).
 	 */
 	private static function sembrar_predefinidos(): void {
 		global $wpdb;

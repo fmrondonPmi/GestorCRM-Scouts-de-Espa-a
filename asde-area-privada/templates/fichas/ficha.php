@@ -23,6 +23,7 @@ use AsdeBalears\AreaPrivada\Fichas\Cambios;
 use AsdeBalears\AreaPrivada\Fichas\CamposFicha;
 use AsdeBalears\AreaPrivada\Fichas\FichaService;
 use AsdeBalears\AreaPrivada\Fichas\PermisosFicha;
+use AsdeBalears\AreaPrivada\Informes\Catalogo;
 use AsdeBalears\AreaPrivada\Domain\Identidad;
 use AsdeBalears\AreaPrivada\Socios\Numeracion;
 use AsdeBalears\AreaPrivada\Socios\Numeros;
@@ -114,23 +115,37 @@ $control = static function ( string $campo, array $f ) use ( $pendientes ): stri
 	</nav>
 <?php endif; ?>
 
-<section class="asde-card">
-	<header class="asde-card__header asde-card__header--split">
-		<div>
-			<h2 class="asde-card__title"><?php echo esc_html( $p->nombre_completo() ); ?></h2>
+<?php /* v0.29: arriba del todo; pliega también los cuadros de la ficha (ficha.js y area.js). */ ?>
+<p class="asde-ficha__plegar" hidden>
+	<button type="button" class="asde-btn-link" data-asde-plegar="todo"><?php asde_e( 'Contraer todo' ); ?></button>
+	<button type="button" class="asde-btn-link" data-asde-plegar="nada"><?php asde_e( 'Expandir todo' ); ?></button>
+</p>
+
+<?php /* Plegable (v0.29): contraído, solo se ven el nombre y la sección o el cargo (la cabecera). */ ?>
+<section class="asde-card asde-ficha__cabecera" data-asde-plegable="ficha-cabecera">
+	<header class="asde-card__header">
+		<h2 class="asde-card__title"><?php echo esc_html( $p->nombre_completo() ); ?></h2>
+		<p class="asde-ficha__rol">
 			<?php
-			foreach ( $p->secciones as $s ) {
-				echo Secciones::badge( $s ); // phpcs:ignore WordPress.Security.EscapeOutput
+			if ( $p->tiene_membresia_activa() ) {
+				foreach ( $p->secciones as $s ) {
+					echo Secciones::badge( $s ); // phpcs:ignore WordPress.Security.EscapeOutput
+				}
+			} else {
+				echo '<span class="asde-badge asde-badge--estado-desactivado">' . esc_html( asde_t( 'Sin membresía activa' ) ) . '</span>';
 			}
 			?>
-		</div>
-		<?php if ( current_user_can( 'asde_manage_users' ) ) : ?>
-			<span class="asde-actions">
-				<a href="<?php echo esc_url( add_query_arg( 'socio', $p->num_socio_asde, $url_alta ) ); ?>" data-asde-modal><?php asde_e( 'Acceso web' ); ?></a>
-				<a class="asde-solo-pagina" href="<?php echo esc_url( $url_personas ); ?>"><?php asde_e( '← Personas' ); ?></a>
-			</span>
-		<?php endif; ?>
+			<?php if ( '' !== trim( $p->cargo ) ) : ?>
+				<span class="asde-muted"><?php echo esc_html( asde_t( Catalogo::ENUMS['cargoeducativo_c'][ $p->cargo ] ?? $p->cargo ) ); ?></span>
+			<?php endif; ?>
+		</p>
 	</header>
+	<?php if ( current_user_can( 'asde_manage_users' ) ) : ?>
+		<p class="asde-actions asde-ficha__accesos">
+			<a href="<?php echo esc_url( add_query_arg( 'socio', $p->num_socio_asde, $url_alta ) ); ?>" data-asde-modal><?php asde_e( 'Acceso web' ); ?></a>
+			<a class="asde-solo-pagina" href="<?php echo esc_url( $url_personas ); ?>"><?php asde_e( '← Personas' ); ?></a>
+		</p>
+	<?php endif; ?>
 	<dl class="asde-datos">
 		<div>
 			<dt><?php echo Identidad::es_asde() ? esc_html( asde_t( 'Nº socio/a Scouts de España' ) ) : esc_html( asde_t( 'Nº socio/a' ) ); ?></dt>
@@ -152,7 +167,7 @@ $control = static function ( string $campo, array $f ) use ( $pendientes ): stri
 
 <?php if ( $altas ) : ?>
 	<?php $membresia = static fn( string $accion ): string => add_query_arg( array( 'socio' => $p->num_socio_asde, 'membresia' => $accion ), $url ); ?>
-	<section class="asde-card asde-membresia-crm">
+	<section class="asde-card asde-membresia-crm" data-asde-plegable="ficha-membresia">
 		<h3><?php asde_e( 'Membresía en el CRM' ); ?></h3>
 		<p>
 			<?php if ( $p->tiene_membresia_activa() ) : ?>
@@ -182,10 +197,6 @@ $control = static function ( string $campo, array $f ) use ( $pendientes ): stri
 	<?php wp_nonce_field( 'asde_ficha_' . $p->num_socio_asde ); ?>
 	<input type="hidden" name="asde_action" value="guardar_ficha">
 	<input type="hidden" name="socio" value="<?php echo esc_attr( $p->num_socio_asde ); ?>">
-	<p class="asde-ficha__plegar" hidden>
-		<button type="button" class="asde-btn-link" data-asde-plegar="todo"><?php asde_e( 'Contraer todo' ); ?></button>
-		<button type="button" class="asde-btn-link" data-asde-plegar="nada"><?php asde_e( 'Expandir todo' ); ?></button>
-	</p>
 	<?php foreach ( asde_ta( CamposFicha::GRUPOS ) as $grupo => $titulo ) : ?>
 		<?php $del_grupo = array_filter( $campos, static fn( $f ) => $f['grupo'] === $grupo ); ?>
 		<?php if ( ! $del_grupo ) : ?>
@@ -223,7 +234,7 @@ $control = static function ( string $campo, array $f ) use ( $pendientes ): stri
 </form>
 
 <?php if ( $cambios ) : ?>
-	<section class="asde-card">
+	<section class="asde-card" data-asde-plegable="ficha-cambios">
 		<h3><?php asde_e( 'Cambios propuestos en esta ficha' ); ?></h3>
 		<table class="asde-table">
 			<thead><tr><th scope="col"><?php asde_e( 'Fecha' ); ?></th><th scope="col"><?php asde_e( 'Dato' ); ?></th><th scope="col"><?php asde_e( 'Nuevo valor' ); ?></th><th scope="col"><?php asde_e( 'Estado' ); ?></th><th scope="col"><span class="screen-reader-text"><?php asde_e( 'Acciones' ); ?></span></th></tr></thead>
@@ -250,7 +261,7 @@ $control = static function ( string $campo, array $f ) use ( $pendientes ): stri
 									<button type="submit" class="asde-btn-link"><?php asde_e( 'Retirar' ); ?></button>
 								</form>
 							<?php elseif ( Cambios::PENDIENTE === $c['estado'] && current_user_can( 'asde_approve_changes' ) ) : ?>
-								<a href="<?php echo esc_url( $url_cambios ); ?>"><?php asde_e( 'Revisar' ); ?></a>
+								<a href="<?php echo esc_url( add_query_arg( 'socio', $p->num_socio_asde, $url_cambios ) ); ?>" data-asde-modal><?php asde_e( 'Revisar' ); ?></a>
 							<?php endif; ?>
 						</td>
 					</tr>
