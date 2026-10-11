@@ -78,6 +78,12 @@ Hay que resolverlas antes de programar cada parte. Cuando se responde una, se ma
 | P-114 | **Uniforme para la sección · después (supuesto, v0.30.0):** el scouter ve en «Tus pedidos» los que ha pedido para otros y los **puede cancelar** mientras nadie los haya validado; «Lo he recibido» lo confirma el socio/a o su familia, que también lo ve y lo puede cancelar. **No se avisa por email** a la familia. (doc 37, S-10) | Uniformes |
 | P-115 | **Uniforme para la sección · desplegable (supuesto, v0.30.0):** a partir de **6 personas**, «¿Para quién?» es un desplegable agrupado en «Tú», «Tu familia» y una por sección (la primera de las del scouter en la que está la persona), por apellidos. (doc 37, S-11) | Uniformes |
 | P-116 | **Uniforme para la sección · CRM caído (supuesto, v0.30.0):** si el CRM no responde, el scouter sigue pudiendo pedir para sí mismo y su familia (no para su sección). (doc 37, S-12) | Uniformes |
+| P-117 | **Tamaño de página (supuesto, v0.31.0):** los 10 por página (de 5 en 5 hasta 50) valen para todos los listados (el tamaño es uno por persona); quien tenía 75 o 100 pasa a 10. (doc 38) | Listados |
+| P-118 | **Orden de Personas (supuesto, v0.31.0):** por sección y, dentro de cada una, por apellidos; las personas sin membresía activa, al final. (doc 38) | Listados |
+| P-119 | **Cambio de sección (supuesto, v0.31.0):** de Rovers, la siguiente es Scouters; Voluntariado cuenta como scouter (cambia a cualquier sección, como en P-103). (doc 38) | Altas |
+| P-120 | **Nº territorial en el alta (supuesto, v0.31.0):** además de generarlo, se guarda en el CRM si se puede (como «Asignar nº» de Personas). (doc 38) | Altas |
+| P-121 | **Tooltip de la cuota (supuesto, v0.31.0):** lleva los hijos que pagan y, si lo hay, el ajuste. (doc 38) | Tesorería |
+| P-122 | **Traducciones en translate.wordpress.org (pregunta, v0.31.0):** los textos originales del área están en castellano y translate.wordpress.org espera inglés. ¿Se dejan en castellano (funciona igual) o se plantea pasarlos a inglés (mucho trabajo)? Plan de la migración en el doc 38, §4. | Idiomas |
 
 ## Resueltas
 

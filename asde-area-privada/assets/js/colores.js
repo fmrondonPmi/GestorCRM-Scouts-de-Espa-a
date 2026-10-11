@@ -13,7 +13,11 @@
 	if ( ! cfg || ! $form.length ) {
 		return;
 	}
-	var $css = $( '#asde-colores-css' );
+	// v0.31: los colores van en el <style> que añade wp_add_inline_style (ColoresPage::scripts).
+	var $css = $( '#asde-area-privada-inline-css' );
+	if ( ! $css.length ) {
+		$css = $( '<style id="asde-area-privada-inline-css"></style>' ).appendTo( 'head' );
+	}
 	var $avisos = $( '#asde-colores-avisos' );
 	var temporizador = null;
 	var peticion = 0;

@@ -26,6 +26,14 @@ $suave = $color( (string) $col['fondo'], '#f4f1f7' );
 // Con muchas columnas, la hoja en horizontal (las fichas, siempre en vertical: una por página).
 $fichas     = $informe->en_fichas();
 $horizontal = ! $fichas && count( $res['columnas'] ) > 6;
+// v0.31: la hoja de estilos y el botón, encolados como pide WordPress (antes, <style> y onclick en la plantilla).
+// Se puede pintar más de una vez en la misma petición (pruebas): se registra de nuevo cada vez.
+wp_deregister_style( 'asde-informe-imprimir' );
+wp_styles()->done = array_diff( wp_styles()->done, array( 'asde-informe-imprimir' ) );
+wp_scripts()->done = array_diff( wp_scripts()->done, array( 'asde-imprimir' ) );
+wp_register_style( 'asde-informe-imprimir', plugins_url( 'assets/css/informe-imprimir.css', ASDE_AP_FILE ), array(), ASDE_AP_VERSION );
+wp_add_inline_style( 'asde-informe-imprimir', sprintf( '@page { size: A4 %1$s; margin: 12mm 10mm; } :root { --asde-prim: %2$s; --asde-texto: %3$s; --asde-suave: %4$s; }', $horizontal ? 'landscape' : 'portrait', $prim, $texto, $suave ) );
+wp_register_script( 'asde-imprimir', plugins_url( 'assets/js/imprimir.js', ASDE_AP_FILE ), array(), ASDE_AP_VERSION, true );
 ?>
 <!DOCTYPE html>
 <html lang="<?php echo esc_attr( Idioma::actual() ); ?>">
@@ -34,46 +42,11 @@ $horizontal = ! $fichas && count( $res['columnas'] ) > 6;
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
 <title><?php echo esc_html( $informe->titulo() ); ?></title>
-<style>
-	@page { size: A4 <?php echo $horizontal ? 'landscape' : 'portrait'; ?>; margin: 12mm 10mm; }
-	* { box-sizing: border-box; }
-	body { margin: 0; padding: 24px; font: 13px/1.4 -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: <?php echo esc_html( $texto ); ?>; background: #ffffff; }
-	.barra { display: flex; gap: 8px; justify-content: flex-end; margin: 0 0 16px; }
-	.barra button { font: inherit; padding: 6px 14px; border: 1px solid <?php echo esc_html( $prim ); ?>; border-radius: 4px; background: <?php echo esc_html( $prim ); ?>; color: #ffffff; cursor: pointer; }
-	.grupo { margin: 0; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; color: <?php echo esc_html( $prim ); ?>; }
-	h1 { margin: 2px 0 4px; font-size: 20px; color: <?php echo esc_html( $prim ); ?>; }
-	.descripcion { margin: 0 0 4px; }
-	.resumen { margin: 0 0 12px; font-size: 12px; opacity: .8; }
-	.aviso { margin: 0 0 12px; padding: 8px 10px; border-left: 4px solid <?php echo esc_html( $prim ); ?>; background: <?php echo esc_html( $suave ); ?>; font-size: 12px; }
-	table { width: 100%; border-collapse: collapse; font-size: 12px; }
-	thead { display: table-header-group; }
-	th, td { padding: 4px 6px; border: 1px solid #cccccc; text-align: left; vertical-align: top; overflow-wrap: anywhere; }
-	th { background: <?php echo esc_html( $suave ); ?>; font-weight: 600; }
-	tbody tr:nth-child(even) td { background: #fafafa; }
-	tr { page-break-inside: avoid; break-inside: avoid; }
-	.vacio { font-style: italic; }
-	.pie { margin: 12px 0 0; font-size: 11px; opacity: .7; }
-	/* v0.29: una ficha por persona y, al imprimir, una por página. */
-	.ficha { margin: 0 0 24px; padding: 16px 0 0; border-top: 2px solid <?php echo esc_html( $prim ); ?>; }
-	.ficha__cabeza { margin: 0 0 4px; font-size: 11px; opacity: .7; }
-	.ficha h2 { margin: 0 0 12px; font-size: 22px; color: <?php echo esc_html( $prim ); ?>; }
-	.ficha dl { margin: 0; display: grid; grid-template-columns: minmax(150px, 34%) 1fr; border-top: 1px solid #cccccc; }
-	.ficha dt, .ficha dd { margin: 0; padding: 7px 8px; border-bottom: 1px solid #cccccc; }
-	.ficha dt { font-weight: 600; background: <?php echo esc_html( $suave ); ?>; }
-	.ficha dd { white-space: pre-line; overflow-wrap: anywhere; }
-	@media print {
-		body { padding: 0; }
-		.barra { display: none; }
-		th, tbody tr:nth-child(even) td, .ficha dt { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-		.ficha { margin: 0; border-top: 0; padding: 0; break-after: page; page-break-after: always; }
-		.ficha:last-of-type { break-after: auto; page-break-after: auto; }
-		.ficha dl, .ficha dt, .ficha dd { break-inside: avoid; page-break-inside: avoid; }
-	}
-</style>
+<?php wp_print_styles( 'asde-informe-imprimir' ); ?>
 </head>
 <body>
 <?php if ( ! $marco ) : ?>
-	<p class="barra"><button type="button" onclick="window.print()"><?php asde_e( 'Imprimir' ); ?></button></p>
+	<p class="barra"><button type="button" data-asde-imprimir-pagina><?php asde_e( 'Imprimir' ); ?></button></p>
 <?php endif; ?>
 <p class="grupo"><?php echo esc_html( Grupo::nombre() ); ?></p>
 <h1><?php echo esc_html( $informe->titulo() ); ?></h1>
@@ -130,5 +103,6 @@ $horizontal = ! $fichas && count( $res['columnas'] ) > 6;
 <?php endif; ?>
 <?php /* translators: %s: fecha y hora */ ?>
 <p class="pie"><?php echo esc_html( sprintf( asde_t( 'Impreso desde el área privada el %s.' ), wp_date( 'd/m/Y H:i' ) ) ); ?></p>
+<?php if ( ! $marco ) { wp_print_scripts( 'asde-imprimir' ); } ?>
 </body>
 </html>

@@ -351,7 +351,7 @@ try {
 	echo "\n== D. P-66 · Marcar como comprada ==\n";
 	$como( $u_scout );
 	$d = $ver( new InventarioComprasView(), array( 'lista' => (string) $l1['id'] ) );
-	$ok( str_contains( $d, 'value="compra_comprada"' ) && str_contains( $d, 'Marcar como comprada' ) && 1 === preg_match( '/onsubmit="return confirm\(&quot;[^"]*Marcar la lista LC\d+ como comprada\?[^"]*&quot;\);"/', $d ), 'una lista aprobada tiene «Marcar como comprada», con confirmación' );
+	$ok( str_contains( $d, 'value="compra_comprada"' ) && str_contains( $d, 'Marcar como comprada' ) && 1 === preg_match( '/data-asde-confirmar="[^"]*Marcar la lista LC\d+ como comprada\?[^"]*"/', $d ), 'una lista aprobada tiene «Marcar como comprada», con confirmación' );
 	$p_pend = $ver( new InventarioComprasView(), array( 'lista' => (string) $l_solo['id'] ) );
 	$ok( ! str_contains( $p_pend, 'value="compra_comprada"' ) && ! Inventario::puede_marcar_comprada( $l_solo ), 'una pendiente, no' );
 	$enviar( new InventarioComprasView(), array( 'asde_action' => 'compra_comprada', 'lista' => (string) $l_solo['id'] ), 'asde_inventario_compra_' . $l_solo['id'] );

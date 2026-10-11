@@ -2537,4 +2537,11 @@ return array(
 	'Tu familia' => 'Zure familia',
 	'Tú' => 'Zu',
 	'Lista de compra revisada' => 'Berrikusitako erosketa-zerrenda',
+
+	// v0.31: cambio de sección y cuota
+	'Desde %1$s solo se puede pasar a %2$s, la siguiente por edad (solo los scouters cambian a cualquier sección).' => '%1$s ataletik %2$s atalera bakarrik pasa daiteke, adinagatik hurrengoa (scouterrek bakarrik alda dezakete edozein atalera).',
+	'Un educando pasa a la siguiente sección por edad.' => 'Hezigaia adinagatik hurrengo atalera pasatzen da.',
+	'%d hijo/a' => '%d seme-alaba',
+	'%d hijos/as' => '%d seme-alaba',
+	'ajuste %s' => 'doikuntza %s',
 );

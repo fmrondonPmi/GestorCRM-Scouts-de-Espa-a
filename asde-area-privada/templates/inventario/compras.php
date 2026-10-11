@@ -38,9 +38,9 @@ $fecha = static fn( ?string $f ) => $f ? wp_date( 'd/m/Y', (int) strtotime( $f .
 		</div>
 	<?php endif; ?>
 
-	<form method="get" action="<?php echo esc_url( $url ); ?>" class="asde-filter">
+	<form method="get" action="<?php echo esc_url( $url ); ?>" class="asde-filter" data-asde-parcial-form="inv-compras">
 		<label for="asde-inv-estado"><?php asde_e( 'Mostrar' ); ?></label>
-		<select id="asde-inv-estado" name="estado">
+		<select id="asde-inv-estado" name="estado" data-asde-autoenviar>
 			<option value=""><?php echo esc_html( asde_t( 'Todas' ) . ' (' . $total . ')' ); ?></option>
 			<?php foreach ( asde_ta( ComprasTable::ESTADOS ) as $e => $etiqueta ) : ?>
 				<option value="<?php echo esc_attr( $e ); ?>" <?php selected( $estado, $e ); ?>><?php echo esc_html( $etiqueta . ' (' . $cuenta[ $e ] . ')' ); ?></option>
@@ -49,6 +49,8 @@ $fecha = static fn( ?string $f ) => $f ? wp_date( 'd/m/Y', (int) strtotime( $f .
 		<button type="submit" class="button"><?php asde_e( 'Ver' ); ?></button>
 	</form>
 
+	<?php /* v0.31: el filtro actualiza solo la lista (parcial.js). */ ?>
+	<div data-asde-parcial="inv-compras">
 	<?php if ( ! $listas ) : ?>
 		<p><?php asde_e( 'No hay listas de compra con este filtro.' ); ?></p>
 	<?php else : ?>
@@ -89,4 +91,5 @@ $fecha = static fn( ?string $f ) => $f ? wp_date( 'd/m/Y', (int) strtotime( $f .
 			</tbody>
 		</table>
 	<?php endif; ?>
+	</div>
 </section>

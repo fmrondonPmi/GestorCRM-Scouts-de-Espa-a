@@ -205,20 +205,6 @@ final class EntornoPage {
 				</li>
 				<li><?php esc_html_e( 'Desde el área privada, da acceso a Secretaría y Coordinación (Personas → Dar acceso); a partir de ahí, ellos dan acceso al resto y aprueban las solicitudes de acceso.', 'asde-area-privada' ); ?></li>
 			</ol>
-			<style>
-				.asde-entorno__tabla { max-width: 1100px; }
-				.asde-entorno__tabla th { width: 230px; }
-				.asde-entorno__icono { width: 28px; font-size: 16px; }
-				.asde-entorno__enlaces a { display: inline-block; margin-right: 10px; white-space: nowrap; }
-				.asde-entorno__fila--falta th { color: #b32d2e; }
-				.asde-entorno__resumen { margin-left: 10px; font-size: 13px; font-weight: 400; color: #646970; }
-				.asde-entorno__opcion { margin: 8px 0 8px 4px; }
-				.asde-entorno__opcion select { margin-left: 8px; }
-				.asde-entorno__lista { list-style: disc; margin-left: 20px; }
-				.asde-entorno__email { display: inline-block; margin-left: 6px; }
-				.asde-entorno__pasos li { margin-bottom: 8px; }
-				.asde-entorno__clave { background: #f6f7f7; border: 1px solid #c3c4c7; padding: 8px 12px; max-width: 900px; overflow: auto; user-select: all; }
-			</style>
 		</div>
 		<?php
 	}

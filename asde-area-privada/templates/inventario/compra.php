@@ -110,7 +110,7 @@ $campos = static function () use ( $nonce, $l ): void {
 	<section class="asde-card" data-asde-no-plegable>
 		<h3 class="asde-card__title"><?php asde_e( '¿Ya se ha comprado?' ); ?></h3>
 		<p class="asde-muted"><?php asde_e( 'Cuando el material de la lista esté comprado, márcala como comprada: las cantidades se sumarán al inventario y el material nuevo se dará de alta. No se puede deshacer.' ); ?></p>
-		<form method="post" action="<?php echo esc_url( $url ); ?>" class="asde-form__fila" onsubmit="return confirm(<?php echo esc_attr( asde_js( '¿Marcar la lista %s como comprada? Las cantidades se sumarán al inventario y el material nuevo se dará de alta. No se puede deshacer.', $num ) ); ?>);">
+		<form method="post" action="<?php echo esc_url( $url ); ?>" class="asde-form__fila" data-asde-confirmar="<?php echo esc_attr( asde_js( '¿Marcar la lista %s como comprada? Las cantidades se sumarán al inventario y el material nuevo se dará de alta. No se puede deshacer.', $num ) ); ?>">
 			<?php $campos(); ?>
 			<input type="hidden" name="asde_action" value="compra_comprada">
 			<button type="submit" class="button button-primary"><?php asde_e( 'Marcar como comprada' ); ?></button>

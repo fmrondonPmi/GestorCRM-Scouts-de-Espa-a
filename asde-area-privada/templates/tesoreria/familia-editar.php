@@ -45,7 +45,7 @@ defined( 'ABSPATH' ) || exit;
 							<?php echo ( ! $p || ! $p->tiene_membresia_activa() ) ? '<br><span class="asde-help asde-help--warning">' . esc_html( asde_t( 'Sin membresía activa: no cuenta para la cuota' ) ) . '</span>' : ''; ?>
 						</td>
 						<td data-label="">
-							<form method="post" onsubmit="return confirm(<?php echo esc_attr( asde_js( '¿Quitar a este socio de la familia?' ) ); ?>);">
+							<form method="post" data-asde-confirmar="<?php echo esc_attr( asde_js( '¿Quitar a este socio de la familia?' ) ); ?>">
 								<?php wp_nonce_field( 'asde_familias' ); ?>
 								<input type="hidden" name="asde_action" value="quitar">
 								<input type="hidden" name="familia" value="<?php echo (int) $familia['id']; ?>">
@@ -83,7 +83,7 @@ defined( 'ABSPATH' ) || exit;
 
 <?php if ( ! $familia['miembros'] ) : ?>
 	<section class="asde-card">
-		<form method="post" onsubmit="return confirm(<?php echo esc_attr( asde_js( '¿Borrar la familia %s?', $familia['numero'] ) ); ?>);">
+		<form method="post" data-asde-confirmar="<?php echo esc_attr( asde_js( '¿Borrar la familia %s?', $familia['numero'] ) ); ?>">
 			<?php wp_nonce_field( 'asde_familias' ); ?>
 			<input type="hidden" name="asde_action" value="borrar">
 			<input type="hidden" name="familia" value="<?php echo (int) $familia['id']; ?>">

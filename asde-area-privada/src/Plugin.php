@@ -37,6 +37,7 @@ final class Plugin {
 
 		if ( is_admin() ) {
 			( new SettingsPage() )->register();
+			( new \AsdeBalears\AreaPrivada\Admin\Recursos() )->register(); // v0.31: CSS y JS comunes de wp-admin, encolados.
 			( new OrganizacionPage() )->register();
 			( new ColoresPage() )->register();
 			( new IdiomasPage() )->register();

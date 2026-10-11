@@ -117,10 +117,11 @@ final class PersonasView extends View {
 				'nombre'    => static fn( Persona $p ) => $p->apellidos . ' ' . $p->nombre,
 				'numero'    => static fn( Persona $p ) => (string) ( $analisis[ $p->num_socio_asde ]['numero'] ?? '' ),
 				'asde'      => static fn( Persona $p ) => (int) $p->num_socio_asde,
-				'membresia' => static fn( Persona $p ) => $p->tiene_membresia_activa() && $p->secciones ? min( array_map( static fn( $s ) => $orden[ $s ] ?? 99, $p->secciones ) ) : '',
+				// Por sección (de la más pequeña a la mayor) y, dentro de cada una, por apellidos.
+				'membresia' => static fn( Persona $p ) => $p->tiene_membresia_activa() && $p->secciones ? sprintf( '%02d %s %s', min( array_map( static fn( $s ) => $orden[ $s ] ?? 99, $p->secciones ) ), $p->apellidos, $p->nombre ) : '',
 				'acceso'    => static fn( Persona $p ) => ( $usuarios[ $p->num_socio_asde ] ?? $familiares[ $p->num_socio_asde ] ?? null )?->user_login ?? '',
 			),
-			'nombre'
+			'membresia' // v0.31: por defecto, siempre por sección (petición del usuario).
 		);
 		$total = count( $lista );
 		$pagina = $tabla->aplicar( $lista );

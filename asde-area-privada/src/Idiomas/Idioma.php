@@ -137,7 +137,7 @@ final class Idioma {
 				return $meta;
 			}
 		}
-		$cookie = $_COOKIE[ self::COOKIE ] ?? null; // phpcs:ignore WordPress.Security
+		$cookie = isset( $_COOKIE[ self::COOKIE ] ) ? sanitize_key( wp_unslash( $_COOKIE[ self::COOKIE ] ) ) : null;
 		return self::es_valido( $cookie ) ? $cookie : null;
 	}
 

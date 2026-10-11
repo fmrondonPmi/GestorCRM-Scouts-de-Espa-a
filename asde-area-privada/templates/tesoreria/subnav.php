@@ -22,7 +22,7 @@ defined( 'ABSPATH' ) || exit;
 	</ul>
 	<form method="get" class="asde-subnav__ronda">
 		<label for="asde-ronda"><?php asde_e( 'Ronda' ); ?></label>
-		<select id="asde-ronda" name="ronda" onchange="this.form.submit()">
+		<select id="asde-ronda" name="ronda" data-asde-autoenviar>
 			<?php foreach ( $rondas as $r ) : ?>
 				<option value="<?php echo esc_attr( $r ); ?>" <?php selected( $ronda, $r ); ?>><?php echo esc_html( $r ); ?></option>
 			<?php endforeach; ?>

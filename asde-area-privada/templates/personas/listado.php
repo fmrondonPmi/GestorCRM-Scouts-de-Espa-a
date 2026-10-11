@@ -36,7 +36,7 @@ defined( 'ABSPATH' ) || exit;
 $boton = static function ( string $accion, string $socio, string $texto, string $confirmar = '' ): string {
 	return sprintf(
 		'<form method="post"%s>%s<input type="hidden" name="asde_action" value="%s"><input type="hidden" name="socio" value="%s"><button type="submit" class="asde-btn-link">%s</button></form>',
-		$confirmar ? ' onsubmit="return confirm(' . esc_attr( (string) wp_json_encode( $confirmar ) ) . ');"' : '',
+		$confirmar ? ' data-asde-confirmar="' . esc_attr( $confirmar ) . '"' : '',
 		wp_nonce_field( 'asde_numero_' . $accion . '_' . $socio, '_wpnonce', true, false ),
 		esc_attr( $accion ),
 		esc_attr( $socio ),
@@ -89,13 +89,13 @@ $columnas = array(
 			<form method="post" class="asde-actions asde-numeracion-todas">
 				<?php wp_nonce_field( 'asde_numeracion_todas' ); ?>
 				<?php if ( ! empty( $incid[ Numeracion::CORREGIDO ] ) ) : ?>
-					<button type="submit" name="asde_action" value="corregir_todos" class="button" onclick="return confirm(<?php echo esc_attr( asde_js( 'Se guardará en el CRM el formato correcto (7 + grupo + 4 cifras) de todos los números con formato antiguo (también los de fichas sin membresía activa). Se hace en segundo plano: podrás seguir usando la web. ¿Continuar?' ) ); ?>);"><?php asde_e( 'Corregir en el CRM los formatos antiguos' ); ?></button>
+					<button type="submit" name="asde_action" value="corregir_todos" class="button" data-asde-confirmar="<?php echo esc_attr( asde_js( 'Se guardará en el CRM el formato correcto (7 + grupo + 4 cifras) de todos los números con formato antiguo (también los de fichas sin membresía activa). Se hace en segundo plano: podrás seguir usando la web. ¿Continuar?' ) ); ?>"><?php asde_e( 'Corregir en el CRM los formatos antiguos' ); ?></button>
 				<?php endif; ?>
 				<?php if ( ! empty( $incid[ Numeracion::DUPLICADO ] ) ) : ?>
-					<button type="submit" name="asde_action" value="resolver_duplicados" class="button" onclick="return confirm(<?php echo esc_attr( asde_js( 'En cada número repetido lo conservará quien entra en la web con él (o quien tiene membresía activa, o el nº de Scouts de España más antiguo); el resto recibirá el siguiente número libre, guardado en el CRM. Se hace en segundo plano. ¿Continuar?' ) ); ?>);"><?php asde_e( 'Resolver los duplicados' ); ?></button>
+					<button type="submit" name="asde_action" value="resolver_duplicados" class="button" data-asde-confirmar="<?php echo esc_attr( asde_js( 'En cada número repetido lo conservará quien entra en la web con él (o quien tiene membresía activa, o el nº de Scouts de España más antiguo); el resto recibirá el siguiente número libre, guardado en el CRM. Se hace en segundo plano. ¿Continuar?' ) ); ?>"><?php asde_e( 'Resolver los duplicados' ); ?></button>
 				<?php endif; ?>
 				<?php if ( $generados ) : ?>
-					<button type="submit" name="asde_action" value="pasar_todos" class="button" onclick="return confirm(<?php echo esc_attr( asde_js( 'Se guardarán en el CRM los números generados desde la web. Se hace en segundo plano. ¿Continuar?' ) ); ?>);"><?php asde_e( 'Pasar al CRM los números generados' ); ?></button>
+					<button type="submit" name="asde_action" value="pasar_todos" class="button" data-asde-confirmar="<?php echo esc_attr( asde_js( 'Se guardarán en el CRM los números generados desde la web. Se hace en segundo plano. ¿Continuar?' ) ); ?>"><?php asde_e( 'Pasar al CRM los números generados' ); ?></button>
 				<?php endif; ?>
 			</form>
 		<?php elseif ( ! $escritura ) : ?>
@@ -134,7 +134,7 @@ $columnas = array(
 	<?php /* v0.29: el filtro actualiza solo la lista (parcial.js), y busca al escribir desde la 3.ª letra. */ ?>
 	<form method="get" action="<?php echo esc_url( $url ); ?>" class="asde-filter asde-filter--una-linea" data-asde-parcial-form="personas-lista">
 		<label for="asde-ver"><?php asde_e( 'Mostrar' ); ?></label>
-		<select id="asde-ver" name="ver" onchange="this.form.requestSubmit ? this.form.requestSubmit() : this.form.submit()">
+		<select id="asde-ver" name="ver" data-asde-autoenviar>
 			<?php foreach ( asde_ta( PersonasView::FILTROS ) as $k => $label ) : ?>
 				<option value="<?php echo esc_attr( $k ); ?>" <?php selected( $filtro, $k ); ?>><?php echo esc_html( $label ); ?></option>
 			<?php endforeach; ?>
@@ -160,7 +160,6 @@ $columnas = array(
 	</form>
 
 	<div data-asde-parcial="personas-lista">
-	<p class="asde-muted"><?php echo esc_html( sprintf( asde_n( '%d persona', '%d personas', $total ), $total ) ); ?></p>
 	<?php if ( $lista ) : ?>
 		<table class="asde-table">
 			<thead>
@@ -236,7 +235,9 @@ $columnas = array(
 				<?php endforeach; ?>
 			</tbody>
 		</table>
-		<?php echo $tabla->paginacion(); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 	<?php endif; ?>
+	<?php /* v0.31: el contador, debajo de la lista (antes iba justo después de «Filtrar»). */ ?>
+	<p class="asde-muted asde-contador"><?php echo esc_html( sprintf( asde_n( '%d persona', '%d personas', $total ), $total ) ); ?></p>
+	<?php echo $lista ? $tabla->paginacion() : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?>
 	</div>
 </section>

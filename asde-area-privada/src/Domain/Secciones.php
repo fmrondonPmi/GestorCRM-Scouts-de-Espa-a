@@ -62,6 +62,21 @@ final class Secciones {
 		return in_array( $slug, self::ADULTAS, true );
 	}
 
+	/**
+	 * Secciones a las que se puede pasar desde $actual en un cambio de sección (v0.31, petición
+	 * del usuario): un educando, solo a la siguiente por edad (de Rovers, a Scouters); un adulto
+	 * (Scouters o Voluntariado), a cualquier otra.
+	 *
+	 * @return list<string>
+	 */
+	public static function destinos_cambio( string $actual ): array {
+		if ( self::is_educativa( $actual ) ) {
+			$orden = array_merge( self::EDUCATIVAS, array( 'scouters' ) );
+			return array( $orden[ (int) array_search( $actual, $orden, true ) + 1 ] );
+		}
+		return array_values( array_diff( array_keys( self::all() ), array( $actual ) ) );
+	}
+
 	/** Etiqueta de color de la sección (HTML escapado). */
 	public static function badge( string $slug ): string {
 		if ( self::SIN_SECCION === $slug ) {

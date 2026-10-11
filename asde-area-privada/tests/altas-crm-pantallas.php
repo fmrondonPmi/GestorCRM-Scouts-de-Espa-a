@@ -405,7 +405,7 @@ try {
 	}
 	$num_fam = is_wp_error( $f_mia ) ? '' : (string) FamiliasTable::obtener( (int) $f_mia )['numero'];
 	$h       = $ver( new FichaView(), array( 'socio' => '990073', 'membresia' => 'baja' ) );
-	$ok( '' !== $num_fam && str_contains( $h, 'Lobatos, desde el 01/09/2024' ) && str_contains( $h, 'prueba-pantalta-mia' ) && str_contains( $h, 'prueba-pantalta-fam' ) && str_contains( $h, 'nº ' . $num_fam ) && str_contains( $h, 'name="motivo"' ) && str_contains( $h, 'confirm(' ), 'dar de baja: la membresía que se cierra y qué cambia (su cuenta, las familiares y la cuota de su familia), con confirmación' );
+	$ok( '' !== $num_fam && str_contains( $h, 'Lobatos, desde el 01/09/2024' ) && str_contains( $h, 'prueba-pantalta-mia' ) && str_contains( $h, 'prueba-pantalta-fam' ) && str_contains( $h, 'nº ' . $num_fam ) && str_contains( $h, 'name="motivo"' ) && str_contains( $h, 'data-asde-confirmar="' ),'dar de baja: la membresía que se cierra y qué cambia (su cuenta, las familiares y la cuota de su familia), con confirmación' );
 	list( , $destino, $h ) = $memb( '990073', 'membresia_baja', array( 'fecha' => $hoy, 'motivo' => 'inventado' ) );
 	list( , $destino2, $h2 ) = $memb( '990073', 'membresia_baja', array( 'fecha' => $manana, 'motivo' => 'personal' ) );
 	$ok( '' === $destino && str_contains( $h, 'Elige la fecha y el motivo de la baja.' ) && '' === $destino2 && str_contains( $h2, 'La fecha de baja no puede ser posterior a hoy.' ) && 'activo' === $de( $id_de( 73 ) )[0]['estado_c'], 'sin un motivo de la lista o con fecha futura no se da de baja' );

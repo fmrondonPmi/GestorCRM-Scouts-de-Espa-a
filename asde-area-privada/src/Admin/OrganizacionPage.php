@@ -308,15 +308,6 @@ final class OrganizacionPage {
 					</ul>
 				</details>
 			<?php endif; ?>
-			<style>
-				.asde-organizacion .asde-conceptos__tabla { border-collapse: collapse; background: #fff; border: 1px solid #c3c4c7; max-width: 760px; width: 100%; }
-				.asde-organizacion .asde-conceptos__tabla th, .asde-organizacion .asde-conceptos__tabla td { padding: 6px 8px; text-align: left; border-bottom: 1px solid #f0f0f1; }
-				.asde-organizacion .asde-conceptos__tabla input[type="text"] { width: 100%; }
-				.asde-organizacion .asde-conceptos__tabla input[type="number"] { width: 110px; }
-				.asde-organizacion .asde-conceptos__acciones { margin-top: 8px; }
-				.asde-organizacion .asde-conceptos__acciones .asde-help { color: #646970; margin-left: 8px; }
-				.asde-organizacion__cuidado { margin-top: 8px; color: #8a2424; }
-			</style>
 		</div>
 		<?php
 	}

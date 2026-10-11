@@ -42,7 +42,7 @@ final class Logger {
 	/** @param array<string, mixed> $detalles Solo identificadores y valores no sensibles. */
 	public static function log( string $accion, string $objeto = '', string $objeto_id = '', array $detalles = array() ): void {
 		global $wpdb;
-		$ip = (string) ( $_SERVER['REMOTE_ADDR'] ?? '' ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
+		$ip = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '';
 		$wpdb->insert(
 			self::table(),
 			array(

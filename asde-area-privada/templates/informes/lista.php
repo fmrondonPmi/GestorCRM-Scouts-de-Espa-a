@@ -60,7 +60,7 @@ defined( 'ABSPATH' ) || exit;
 								<a href="<?php echo esc_url( add_query_arg( array( 'nuevo' => 1, 'desde' => $i->id ), $url ) ); ?>"><?php asde_e( 'Duplicar' ); ?></a>
 								<?php if ( $i->puede_editar( $user ) ) : ?>
 									<a href="<?php echo esc_url( add_query_arg( 'editar', $i->id, $url ) ); ?>"><?php asde_e( 'Editar' ); ?></a>
-									<form method="post" onsubmit="return confirm(<?php echo esc_attr( asde_js( '¿Borrar el informe «%s»?', $i->nombre ) ); ?>);">
+									<form method="post" data-asde-confirmar="<?php echo esc_attr( asde_js( '¿Borrar el informe «%s»?', $i->nombre ) ); ?>">
 										<?php wp_nonce_field( 'asde_informe_borrar_' . $i->id ); ?>
 										<input type="hidden" name="asde_action" value="borrar">
 										<input type="hidden" name="id" value="<?php echo (int) $i->id; ?>">

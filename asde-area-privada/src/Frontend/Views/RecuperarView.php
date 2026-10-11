@@ -52,7 +52,7 @@ final class RecuperarView extends View {
 		self::$enviado = true; // La respuesta no revela si el usuario existe.
 
 		$login = Identificacion::normalizar( $this->post( 'usuario' ) );
-		$ip    = (string) ( $_SERVER['REMOTE_ADDR'] ?? '' ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
+		$ip    = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '';
 		$clave = 'asde_ap_rec_' . md5( strtolower( $login ) . '|' . $ip );
 		if ( '' === $login || get_transient( $clave ) || ! self::contar_peticion( $ip ) ) {
 			return; // Petición repetida o demasiadas desde el mismo dispositivo: no se envía (evita abusos).

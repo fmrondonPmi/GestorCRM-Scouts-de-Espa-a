@@ -110,7 +110,7 @@ $desde   = static fn( array $m ): string => sprintf( asde_t( '%1$s, desde el %2$
 						<li><?php asde_e( 'No se borra nada: la ficha y sus membresías anteriores se quedan en el CRM. Si vuelve, se le da una membresía nueva.' ); ?></li>
 					</ul>
 				</div>
-				<form method="post" action="<?php echo esc_url( $url ); ?>" class="asde-form" onsubmit="return confirm(<?php echo esc_attr( asde_js( '¿Dar de baja a %s en el CRM?', $p->nombre_completo() ) ); ?>);">
+				<form method="post" action="<?php echo esc_url( $url ); ?>" class="asde-form" data-asde-confirmar="<?php echo esc_attr( asde_js( '¿Dar de baja a %s en el CRM?', $p->nombre_completo() ) ); ?>">
 					<?php $comun( 'membresia_baja' ); ?>
 					<div class="asde-form__columnas">
 						<?php $fecha( asde_t( 'Fecha de baja' ), max( array_map( static fn( $m ) => (string) $m['start_date'], $activas ) ) ); ?>
@@ -143,13 +143,22 @@ $desde   = static fn( array $m ): string => sprintf( asde_t( '%1$s, desde el %2$
 						<p>
 							<label for="asde-memb-seccion"><?php asde_e( 'Sección nueva' ); ?> <span class="asde-obligatorio" aria-hidden="true">*</span></label>
 							<select id="asde-memb-seccion" name="seccion" required>
-								<option value=""><?php asde_e( 'Elige…' ); ?></option>
+								<?php
+								// v0.31: un educando, solo a la siguiente por edad; un scouter, a cualquiera.
+								$destinos = '' !== $actual ? Secciones::destinos_cambio( $actual ) : array_keys( Secciones::all() );
+								?>
+								<?php if ( count( $destinos ) > 1 ) : ?>
+									<option value=""><?php asde_e( 'Elige…' ); ?></option>
+								<?php endif; ?>
 								<?php foreach ( Secciones::all() as $slug => $sec ) : ?>
-									<?php if ( $slug !== $actual ) : ?>
+									<?php if ( $slug !== $actual && in_array( $slug, $destinos, true ) ) : ?>
 										<option value="<?php echo esc_attr( $slug ); ?>" <?php selected( $v( 'seccion' ), $slug ); ?>><?php echo esc_html( $sec['nombre'] . ( '' !== $sec['edad'] ? ' (' . $sec['edad'] . ')' : '' ) ); ?></option>
 									<?php endif; ?>
 								<?php endforeach; ?>
 							</select>
+							<?php if ( Secciones::is_educativa( $actual ) ) : ?>
+								<span class="asde-help"><?php asde_e( 'Un educando pasa a la siguiente sección por edad.' ); ?></span>
+							<?php endif; ?>
 						</p>
 						<?php $fecha( asde_t( 'Fecha del cambio' ), (string) $activas[0]['start_date'] ); ?>
 					</div>

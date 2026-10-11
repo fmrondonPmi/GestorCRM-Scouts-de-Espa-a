@@ -183,7 +183,7 @@ final class Mandatos {
 		if ( ! Config::lista( $cfg ) ) {
 			return new \WP_Error( 'asde_sepa', asde_t( 'El grupo aún no tiene activadas las domiciliaciones SEPA.' ) );
 		}
-		$ip  = (string) ( $_SERVER['REMOTE_ADDR'] ?? '' ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
+		$ip  = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '';
 		$hoy = current_time( 'Y-m-d' );
 		$wpdb->insert(
 			self::table(),

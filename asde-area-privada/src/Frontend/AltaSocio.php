@@ -2,6 +2,9 @@
 namespace AsdeBalears\AreaPrivada\Frontend;
 
 use AsdeBalears\AreaPrivada\Crm\Altas;
+use AsdeBalears\AreaPrivada\Crm\PersonaRepository;
+use AsdeBalears\AreaPrivada\Socios\Numeracion;
+use AsdeBalears\AreaPrivada\Crm\CrmException;
 use AsdeBalears\AreaPrivada\Domain\Secciones;
 
 defined( 'ABSPATH' ) || exit;
@@ -117,7 +120,7 @@ final class AltaSocio {
 				$r = $altas->crear_persona( $s['datos'], $s['seccion'], $s['inicio'], ! empty( $post['confirmo'] ) );
 				if ( is_array( $r ) ) {
 					$s['paso']      = self::HECHO;
-					$s['resultado'] = $r;
+					$s['resultado'] = $r + array( 'territorial' => self::territorial( (string) $r['numero'] ) );
 					return $s;
 				}
 				$s['error'] = $r->get_error_message();
@@ -143,6 +146,31 @@ final class AltaSocio {
 	}
 
 	/** Lo que ha llegado en los campos del formulario (los ocultos de los pasos anteriores incluidos). */
+	/**
+	 * v0.31 (petición del usuario): con los datos obligatorios guardados en el CRM, el nº
+	 * territorial se genera siempre, aunque el grupo no lo use para entrar, y se guarda también
+	 * en el CRM (como «Asignar nº» de Personas). Solo se enseña a quien lo tiene visible.
+	 * Si no se puede (el CRM no responde, falta el código de la organización…), se queda sin
+	 * número: se asigna después desde Personas, como hasta ahora.
+	 */
+	private static function territorial( string $asde ): string {
+		if ( '' === $asde ) {
+			return '';
+		}
+		try {
+			$repo = PersonaRepository::make();
+			$p    = $repo ? $repo->obtener( $asde ) : null;
+			if ( ! $repo || ! $p ) {
+				return '';
+			}
+			$r = ( new Numeracion( $repo ) )->asignar_y_guardar( $p );
+			return is_wp_error( $r ) ? '' : (string) $r['numero'];
+		} catch ( CrmException $e ) {
+			unset( $e );
+			return '';
+		}
+	}
+
 	private static function desde_post( array $post ): array {
 		$s     = self::inicio();
 		$datos = is_array( $post['d'] ?? null ) ? $post['d'] : array();

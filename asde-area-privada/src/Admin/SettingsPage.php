@@ -192,7 +192,7 @@ final class SettingsPage {
 										<?php wp_nonce_field( self::ACCION_PROBAR ); ?>
 										<button type="submit" class="button button-small"><?php esc_html_e( 'Probar conexión', 'asde-area-privada' ); ?></button>
 									</form>
-									<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="display:inline" onsubmit="return confirm('<?php /* translators: %s: nombre del grupo */ echo esc_js( sprintf( __( '¿Dar de baja el grupo %s? Sus usuarios dejarán de poder entrar. Sus datos se conservan.', 'asde-area-privada' ), Grupos::etiqueta( $g ) ) ); ?>');">
+									<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="display:inline" data-asde-confirmar="<?php /* translators: %s: nombre del grupo */ echo esc_attr( sprintf( __( '¿Dar de baja el grupo %s? Sus usuarios dejarán de poder entrar. Sus datos se conservan.', 'asde-area-privada' ), Grupos::etiqueta( $g ) ) ); ?>">
 										<input type="hidden" name="action" value="<?php echo esc_attr( self::ACCION_BORRAR ); ?>">
 										<input type="hidden" name="numero" value="<?php echo esc_attr( $g['numero'] ); ?>">
 										<?php wp_nonce_field( self::ACCION_BORRAR ); ?>

@@ -40,7 +40,7 @@ $columnas = array(
 			<input type="hidden" name="usuario" value="<?php echo (int) $usuario->ID; ?>">
 		<?php endif; ?>
 		<label for="asde-estado-email"><?php asde_e( 'Mostrar' ); ?></label>
-		<select id="asde-estado-email" name="estado" onchange="this.form.submit()">
+		<select id="asde-estado-email" name="estado" data-asde-autoenviar>
 			<option value=""><?php asde_e( 'Todos' ); ?></option>
 			<?php foreach ( asde_ta( RegistroEmails::ESTADOS ) as $k => $label ) : ?>
 				<option value="<?php echo esc_attr( $k ); ?>" <?php selected( $estado, $k ); ?>><?php echo esc_html( $label ); ?></option>

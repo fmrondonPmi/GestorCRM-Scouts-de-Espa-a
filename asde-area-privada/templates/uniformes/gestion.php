@@ -62,15 +62,16 @@ $singular = array(
 		<li><strong><?php echo esc_html( Calculadora::euros( $cobrado ) ); ?></strong> <?php asde_e( 'cobrados ·' ); ?> <strong><?php echo esc_html( Calculadora::euros( $pendiente ) ); ?></strong> <?php asde_e( 'por cobrar' ); ?></li>
 	</ul>
 
-	<form method="get" action="<?php echo esc_url( $url ); ?>" class="asde-filter">
+	<?php /* v0.31: el filtro actualiza solo la lista (parcial.js). */ ?>
+	<form method="get" action="<?php echo esc_url( $url ); ?>" class="asde-filter" data-asde-parcial-form="uniformes-lista">
 		<label for="asde-uni-estado"><?php asde_e( 'Mostrar' ); ?></label>
-		<select id="asde-uni-estado" name="estado">
+		<select id="asde-uni-estado" name="estado" data-asde-autoenviar>
 			<?php foreach ( asde_ta( PedidosTable::FILTROS ) as $f => $etiqueta ) : ?>
 				<option value="<?php echo esc_attr( $f ); ?>" <?php selected( $filtro, $f ); ?>><?php echo esc_html( $etiqueta . ' (' . $cuentas[ $f ] . ')' ); ?></option>
 			<?php endforeach; ?>
 		</select>
 		<label for="asde-uni-seccion"><?php asde_e( 'Sección' ); ?></label>
-		<select id="asde-uni-seccion" name="seccion">
+		<select id="asde-uni-seccion" name="seccion" data-asde-autoenviar>
 			<option value=""><?php asde_e( 'Todas' ); ?></option>
 			<?php foreach ( Secciones::all() as $s => $def ) : ?>
 				<option value="<?php echo esc_attr( $s ); ?>" <?php selected( $seccion, $s ); ?>><?php echo esc_html( $def['nombre'] ); ?></option>
@@ -81,10 +82,11 @@ $singular = array(
 		<button type="submit" class="button"><?php asde_e( 'Ver' ); ?></button>
 	</form>
 
+	<div data-asde-parcial="uniformes-lista">
 	<?php if ( ! $lista ) : ?>
 		<p><?php asde_e( 'No hay pedidos con estos filtros.' ); ?></p>
 	<?php else : ?>
-		<form method="post" id="asde-uni-lote">
+		<form method="post" id="asde-uni-lote" data-asde-recarga>
 			<?php wp_nonce_field( 'asde_uniformes_lote' ); ?>
 			<input type="hidden" name="asde_action" value="uniforme_incluir_lote">
 			<input type="hidden" name="volver" value="<?php echo esc_url( $volver ); ?>">
@@ -170,7 +172,7 @@ $singular = array(
 			<?php endif; ?>
 		</form>
 		<?php foreach ( $entregar as $id ) : ?>
-			<form method="post" id="asde-uni-entregar-<?php echo (int) $id; ?>" hidden>
+			<form method="post" id="asde-uni-entregar-<?php echo (int) $id; ?>" hidden data-asde-recarga>
 				<?php wp_nonce_field( 'asde_uniforme_' . $id ); ?>
 				<input type="hidden" name="asde_action" value="uniforme_entregar">
 				<input type="hidden" name="pedido" value="<?php echo (int) $id; ?>">
@@ -178,6 +180,7 @@ $singular = array(
 			</form>
 		<?php endforeach; ?>
 	<?php endif; ?>
+	</div>
 </section>
 
 <?php if ( null !== $stock ) : ?>

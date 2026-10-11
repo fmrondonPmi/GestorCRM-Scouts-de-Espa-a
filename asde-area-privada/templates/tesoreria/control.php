@@ -75,19 +75,23 @@ $pct = $resumen['a_pagar'] > 0 ? round( 100 * $resumen['pagado'] / $resumen['a_p
 </section>
 
 <section class="asde-card">
-	<form method="get" action="<?php echo esc_url( $url ); ?>" class="asde-filter">
+	<?php /* v0.31: el selector, el cuadro de búsqueda y «Filtrar» en una línea; la lista se actualiza sola (parcial.js). */ ?>
+	<form method="get" action="<?php echo esc_url( $url ); ?>" class="asde-filter asde-filter--una-linea" data-asde-parcial-form="pagos-lista">
 		<input type="hidden" name="ronda" value="<?php echo esc_attr( $ronda ); ?>">
 		<label for="asde-estado"><?php asde_e( 'Mostrar' ); ?></label>
-		<select id="asde-estado" name="estado" onchange="this.form.submit()">
+		<select id="asde-estado" name="estado" data-asde-autoenviar>
 			<?php foreach ( asde_ta( TesoreriaView::FILTROS ) as $k => $label ) : ?>
 				<option value="<?php echo esc_attr( $k ); ?>" <?php selected( $estado, $k ); ?>><?php echo esc_html( $label ); ?></option>
 			<?php endforeach; ?>
 		</select>
 		<label for="asde-q-tes" class="screen-reader-text"><?php asde_e( 'Buscar' ); ?></label>
-		<input type="search" id="asde-q-tes" name="q" value="<?php echo esc_attr( $q ); ?>" placeholder="<?php echo esc_attr( asde_a( 'Nº de familia o nombre' ) ); ?>">
-		<button type="submit" class="button"><?php asde_e( 'Filtrar' ); ?></button>
+		<span class="asde-filter__buscar">
+			<input type="search" id="asde-q-tes" name="q" value="<?php echo esc_attr( $q ); ?>" placeholder="<?php echo esc_attr( asde_a( 'Nº de familia o nombre' ) ); ?>" data-asde-buscar autocomplete="off">
+			<button type="submit" class="button"><?php asde_e( 'Filtrar' ); ?></button>
+		</span>
 	</form>
 
+	<div data-asde-parcial="pagos-lista">
 	<?php if ( ! $lista ) : ?>
 		<p><?php asde_e( 'No hay familias' ); ?><?php echo '' !== $estado || '' !== $q ? esc_html( asde_t( ' con estos filtros' ) ) : ''; ?>. <a href="<?php echo esc_url( $url_fam ); ?>"><?php asde_e( 'Gestionar familias' ); ?></a></p>
 	<?php else : ?>
@@ -120,17 +124,20 @@ $pct = $resumen['a_pagar'] > 0 ? round( 100 * $resumen['pagado'] / $resumen['a_p
 								</span>
 							<?php endforeach; ?>
 						</td>
-						<td data-label="<?php echo esc_attr( asde_a( 'Cuota' ) ); ?>">
-							<?php echo esc_html( Calculadora::euros( $c['a_pagar'] ) ); ?>
-							<br><span class="asde-muted"><?php echo esc_html( count( $c['pagan'] ) . ' hijo(s)' . ( $c['ajustes'] ? ' · ajuste ' . Calculadora::euros( $c['ajustes'] ) : '' ) ); ?></span>
-						</td>
+						<?php
+						// v0.31: los hijos que pagan (y el ajuste), como tooltip del importe: la fila no se parte en dos líneas.
+						/* translators: %d: nº de hijos que pagan cuota */
+						$detalle = sprintf( asde_n( '%d hijo/a', '%d hijos/as', count( $c['pagan'] ) ), count( $c['pagan'] ) ) . ( $c['ajustes'] ? ' · ' . sprintf( asde_t( 'ajuste %s' ), Calculadora::euros( $c['ajustes'] ) ) : '' );
+						?>
+						<td data-label="<?php echo esc_attr( asde_a( 'Cuota' ) ); ?>"><span class="asde-tooltip" title="<?php echo esc_attr( $detalle ); ?>" tabindex="0"><?php echo esc_html( Calculadora::euros( $c['a_pagar'] ) ); ?></span><span class="screen-reader-text"> (<?php echo esc_html( $detalle ); ?>)</span></td>
 						<td data-label="<?php echo esc_attr( asde_a( 'Pagado' ) ); ?>"><?php echo esc_html( Calculadora::euros( $c['pagado'] ) ); ?></td>
 						<td data-label="<?php echo esc_attr( asde_a( 'Pendiente' ) ); ?>"><?php echo esc_html( Calculadora::euros( max( 0, $c['pendiente'] ) ) ); ?><?php echo $c['pendiente'] < 0 ? '<br><span class="asde-muted">' . esc_html( sprintf( asde_t( 'Saldo a favor %s' ), Calculadora::euros( -$c['pendiente'] ) ) ) . '</span>' : ''; ?></td>
 						<td data-label="<?php echo esc_attr( asde_a( 'Estado' ) ); ?>"><span class="asde-badge asde-badge--pago-<?php echo esc_attr( $c['estado'] ); ?>"><?php echo esc_html( asde_t( Calculadora::ETIQUETAS[ $c['estado'] ] ) ); ?></span></td>
-						<td data-label=""><a class="button" href="<?php echo esc_url( add_query_arg( array( 'familia' => $id, 'ronda' => $ronda ), $url ) ); ?>"><?php asde_e( 'Ver / registrar pago' ); ?></a></td>
+						<td data-label=""><a href="<?php echo esc_url( add_query_arg( array( 'familia' => $id, 'ronda' => $ronda ), $url ) ); ?>" data-asde-recarga><?php asde_e( 'Ver / registrar pago' ); ?></a></td>
 					</tr>
 				<?php endforeach; ?>
 			</tbody>
 		</table>
 	<?php endif; ?>
+	</div>
 </section>

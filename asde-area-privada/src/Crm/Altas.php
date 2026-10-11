@@ -350,6 +350,13 @@ final class Altas {
 					Operaciones::descartar( $op['id'] );
 					return new \WP_Error( 'asde_cambio', 1 !== count( $activas ) ? asde_t( 'Para cambiar de sección tiene que tener una membresía activa (y solo una).' ) : asde_t( 'Ya está en esa sección.' ) );
 				}
+				// v0.31: un educando solo pasa a la siguiente sección por edad; un scouter, a cualquiera.
+				$actual = (string) Secciones::from_crm( (string) $activas[0]['relationship_type'] );
+				if ( '' !== $actual && ! in_array( $seccion, Secciones::destinos_cambio( $actual ), true ) ) {
+					Operaciones::descartar( $op['id'] );
+					/* translators: 1: sección actual, 2: la siguiente por edad */
+					return new \WP_Error( 'asde_cambio', sprintf( asde_t( 'Desde %1$s solo se puede pasar a %2$s, la siguiente por edad (solo los scouters cambian a cualquier sección).' ), Secciones::nombre( $actual ), implode( ', ', array_map( array( Secciones::class, 'nombre' ), Secciones::destinos_cambio( $actual ) ) ) ) );
+				}
 				if ( $fecha < (string) $activas[0]['start_date'] ) {
 					Operaciones::descartar( $op['id'] );
 					/* translators: %s: fecha de alta */

@@ -243,6 +243,47 @@
 	} );
 
 	// ---------------------------------------------------------------------
+	// 5. Lo que antes iba en atributos onchange/onsubmit/onclick de las plantillas (v0.31:
+	// WordPress pide no poner JavaScript en ellas).
+	//  - data-asde-confirmar="pregunta" en un formulario (o en su botón): se pregunta antes de
+	//    enviarlo; si se cancela, no se envía. Se escucha en la fase de captura para ir antes
+	//    que la ventana emergente y parcial.js.
+	//  - data-asde-autoenviar en un desplegable: al cambiarlo se envía su formulario (con
+	//    requestSubmit, para que parcial.js actualice solo la lista).
+	//  - data-asde-imprimir-pagina: abre el cuadro de impresión (data-asde-imprimir, sin más, es
+	//    la versión para imprimir de un informe en la ventana emergente: informes.js).
+	// ---------------------------------------------------------------------
+	var ultimoBoton = null;
+	document.addEventListener( 'click', function ( e ) {
+		ultimoBoton = e.target.closest ? e.target.closest( 'button[type="submit"], input[type="submit"]' ) : null;
+		if ( e.target.closest && e.target.closest( '[data-asde-imprimir-pagina]' ) ) {
+			e.preventDefault();
+			window.print();
+		}
+	}, true );
+	document.addEventListener( 'submit', function ( e ) {
+		var form = e.target;
+		var boton = e.submitter || ( ultimoBoton && ultimoBoton.form === form ? ultimoBoton : null );
+		var pregunta = boton && boton.hasAttribute( 'data-asde-confirmar' ) ? boton.getAttribute( 'data-asde-confirmar' ) : form.getAttribute( 'data-asde-confirmar' );
+		ultimoBoton = null;
+		if ( pregunta && ! window.confirm( pregunta ) ) {
+			e.preventDefault();
+			e.stopImmediatePropagation();
+		}
+	}, true );
+	document.addEventListener( 'change', function ( e ) {
+		var campo = e.target;
+		if ( ! campo.form || ! campo.hasAttribute || ! campo.hasAttribute( 'data-asde-autoenviar' ) ) {
+			return;
+		}
+		if ( campo.form.requestSubmit ) {
+			campo.form.requestSubmit();
+		} else {
+			campo.form.submit();
+		}
+	} );
+
+	// ---------------------------------------------------------------------
 	// 1. Ventana emergente
 	// ---------------------------------------------------------------------
 	if ( 'function' !== typeof window.HTMLDialogElement || ! window.fetch || ! window.FormData ) {

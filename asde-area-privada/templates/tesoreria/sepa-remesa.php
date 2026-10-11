@@ -59,20 +59,20 @@ $pendientes = array_filter( $lineas, static fn( $l ) => Remesas::PENDIENTE === $
 				<input type="hidden" name="remesa" value="<?php echo (int) $r['id']; ?>">
 				<button type="submit" class="button"><?php asde_e( 'Descargar el fichero XML' ); ?></button>
 			</form>
-			<form method="post" onsubmit="return confirm(<?php echo esc_attr( asde_js( 'Se enviará un email a las cuentas de cada familia con la fecha y el importe del cargo. ¿Continuar?' ) ); ?>);">
+			<form method="post" data-asde-confirmar="<?php echo esc_attr( asde_js( 'Se enviará un email a las cuentas de cada familia con la fecha y el importe del cargo. ¿Continuar?' ) ); ?>">
 				<?php wp_nonce_field( 'asde_sepa_remesa_' . (int) $r['id'] ); ?>
 				<input type="hidden" name="asde_action" value="sepa_avisar">
 				<input type="hidden" name="remesa" value="<?php echo (int) $r['id']; ?>">
 				<button type="submit" class="button asde-button-secundario"><?php echo $r['avisada_en'] ? esc_html( asde_t( 'Volver a avisar a las familias' ) ) : esc_html( asde_t( 'Avisar a las familias por email' ) ); ?></button>
 			</form>
 			<?php if ( Remesas::GENERADA === $r['estado'] ) : ?>
-				<form method="post" onsubmit="return confirm(<?php echo esc_attr( asde_js( '¿Confirmas que has subido el fichero al banco?' ) ); ?>);">
+				<form method="post" data-asde-confirmar="<?php echo esc_attr( asde_js( '¿Confirmas que has subido el fichero al banco?' ) ); ?>">
 					<?php wp_nonce_field( 'asde_sepa_remesa_' . (int) $r['id'] ); ?>
 					<input type="hidden" name="asde_action" value="sepa_enviada">
 					<input type="hidden" name="remesa" value="<?php echo (int) $r['id']; ?>">
 					<button type="submit" class="button asde-button-secundario"><?php asde_e( 'Marcar como enviada al banco' ); ?></button>
 				</form>
-				<form method="post" onsubmit="return confirm(<?php echo esc_attr( asde_js( '¿Anular la remesa? Se borrarán sus datos.' ) ); ?>);">
+				<form method="post" data-asde-confirmar="<?php echo esc_attr( asde_js( '¿Anular la remesa? Se borrarán sus datos.' ) ); ?>">
 					<?php wp_nonce_field( 'asde_sepa_remesa_' . (int) $r['id'] ); ?>
 					<input type="hidden" name="asde_action" value="sepa_anular">
 					<input type="hidden" name="remesa" value="<?php echo (int) $r['id']; ?>">

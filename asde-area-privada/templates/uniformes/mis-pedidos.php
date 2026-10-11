@@ -80,7 +80,7 @@ $insignias = Config::insignias_activas( $cfg );
 							<span class="asde-help"><?php asde_e( 'El grupo lo ha marcado como entregado: confírmalo cuando lo tengas.' ); ?></span>
 						</form>
 					<?php elseif ( Servicio::puede_cancelar_propio( $p, $ambito ) ) : ?>
-						<form method="post" class="asde-pedido__accion" onsubmit="return confirm(<?php echo esc_attr( asde_js( '¿Cancelar el pedido %s?', PedidosTable::numero( $p ) ) ); ?>);">
+						<form method="post" class="asde-pedido__accion" data-asde-confirmar="<?php echo esc_attr( asde_js( '¿Cancelar el pedido %s?', PedidosTable::numero( $p ) ) ); ?>">
 							<?php wp_nonce_field( 'asde_uniforme_' . $p['id'] ); ?>
 							<input type="hidden" name="asde_action" value="uniforme_cancelar">
 							<input type="hidden" name="pedido" value="<?php echo (int) $p['id']; ?>">

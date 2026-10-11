@@ -106,7 +106,7 @@ $html = TemplateLoader::render(
 	)
 );
 $ok( str_starts_with( ltrim( $html ), '<!DOCTYPE html>' ) && str_contains( $html, '<h1>Lista de prueba</h1>' ) && 2 === substr_count( $html, '<th scope="col">' ) && str_contains( $html, 'Ana &lt;b&gt;Pérez&lt;/b&gt;' ), 'página propia con la tabla entera y los datos escapados' );
-$ok( str_contains( $html, 'size: A4 portrait' ) && str_contains( $html, 'display: table-header-group' ) && str_contains( $html, 'destruye las copias impresas' ) && ! str_contains( $html, 'onclick="window.print()"' ), 'hoja A4, cabecera en cada hoja, aviso de salud y, en la ventana, sin su propio botón' );
+$ok( str_contains( $html, 'size: A4 portrait' ) && str_contains( $html, 'informe-imprimir.css' ) && str_contains( $html, 'destruye las copias impresas' ) && ! str_contains( $html, 'data-asde-imprimir-pagina' ), 'hoja A4, cabecera en cada hoja, aviso de salud y, en la ventana, sin su propio botón' );
 $res8 = $res;
 foreach ( range( 1, 7 ) as $i ) {
 	$res8['columnas'][ 'c' . $i ] = 'C' . $i;
@@ -139,7 +139,7 @@ $fichas_res = array(
 $f1 = Generador::ficha( $fichas_res['filas'][0], $fichas_res['columnas'] );
 $ok( 'Ana Pérez' === $f1['titulo'] && array( 'Móvil' => '600000001', 'Alergias' => 'Polen' ) === $f1['datos'], 'cada fila como ficha: nombre y apellidos de título y el resto de datos' );
 $fhtml = TemplateLoader::render( 'informes/imprimir', array( 'informe' => $fichas_inf, 'res' => $fichas_res, 'resumen' => '', 'marco' => true ) );
-$ok( 3 === substr_count( $fhtml, '<section class="ficha">' ) && ! str_contains( $fhtml, '<table>' ) && str_contains( $fhtml, '<h2>Bea López</h2>' ) && str_contains( $fhtml, 'page-break-after: always' ) && str_contains( $fhtml, 'size: A4 portrait' ), 'para imprimir: sin tabla, una ficha por página (en vertical)' );
+$ok( 3 === substr_count( $fhtml, '<section class="ficha">' ) && ! str_contains( $fhtml, '<table>' ) && str_contains( $fhtml, '<h2>Bea López</h2>' ) && str_contains( $fhtml, 'informe-imprimir.css' ) && str_contains( $fhtml, 'size: A4 portrait' ), 'para imprimir: sin tabla, una ficha por página (en vertical)' );
 $ok( str_contains( $fhtml, '<dd>—</dd>' ), 'un dato vacío sale como «—»' );
 $ok( str_contains( $leer( 'templates/informes/resultado.php' ), 'asde-informe-fichas' ) && str_contains( $leer( 'templates/informes/resultado.php' ), 'name="seccion"' ) && str_contains( $leer( 'templates/informes/editor.php' ), 'name="vista"' ), 'en pantalla, fichas; la sección se elige al verlo; y cualquier informe puede ir en fichas' );
 $tpl = $leer( 'templates/informes/resultado.php' );
@@ -162,7 +162,7 @@ $pers = $leer( 'templates/personas/listado.php' );
 $ok( str_contains( $pers, 'asde-filter asde-filter--una-linea' ) && str_contains( $leer( 'assets/css/area-privada.css' ), '#top .asde-ap .asde-filter--una-linea select' ), 'personas: «Mostrar», el cuadro de búsqueda y «Filtrar» en la misma línea (contra el #top select de Enfold)' );
 $ok( str_contains( $pers, 'data-asde-plegable="personas-resumen"' ) && str_contains( $pers, 'data-asde-parcial-form="personas-lista"' ) && str_contains( $pers, 'data-asde-parcial="personas-lista"' ) && str_contains( $pers, 'data-asde-buscar' ), 'personas: resumen plegable, lista que se actualiza sola y búsqueda al escribir' );
 $ok( ! str_contains( $pers, 'class="button asde-button-secundario" href="<?php echo esc_url( add_query_arg( \'socio\', $p->num_socio_asde, $url_alta ) ); ?>" data-asde-modal><?php asde_e( \'Dar acceso\' )' ) && preg_match( '/asde-filter__buscar">.*?data-asde-buscar.*?Filtrar/s', $pers ), '«Dar acceso» es un enlace y «Filtrar» va junto al cuadro de búsqueda' );
-$ok( ! str_contains( $pers, 'confirm(<?php echo asde_js( \' .' ) && str_contains( $pers, "' onsubmit=\"return confirm(' . esc_attr( (string) wp_json_encode( \$confirmar ) ) . ');\"'" ) && str_contains( $pers, 'data-asde-parcial="personas-cifras"' ), 'personas: los botones del nº piden confirmación de verdad (antes llevaban PHP sin ejecutar) y las cifras se actualizan con la lista' );
+$ok( ! str_contains( $pers, 'confirm(<?php echo asde_js( \' .' ) && str_contains( $pers, "' data-asde-confirmar=\"' . esc_attr( \$confirmar ) . '\"'" ) && str_contains( $pers, 'data-asde-parcial="personas-cifras"' ), 'personas: los botones del nº piden confirmación de verdad (antes llevaban PHP sin ejecutar) y las cifras se actualizan con la lista' );
 $parcial = $leer( 'assets/js/parcial.js' );
 $ok( str_contains( $parcial, 'data-asde-parcial-form' ) && str_contains( $parcial, 'input[data-asde-buscar]' ) && str_contains( $parcial, 'texto.length < 3' ) && str_contains( $parcial, 'AbortController' ), 'parcial.js: formulario de fuera de la zona, búsqueda desde la 3.ª letra y la última consulta manda' );
 

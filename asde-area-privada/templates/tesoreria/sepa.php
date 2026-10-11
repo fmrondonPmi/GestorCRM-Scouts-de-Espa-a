@@ -209,7 +209,7 @@ $nombres   = static function ( array $f ) use ( $personas ): string {
 						</td>
 						<td data-label="">
 							<?php if ( $m ) : ?>
-								<form method="post" class="asde-actions" onsubmit="return confirm(<?php echo esc_attr( asde_js( '¿Anular esta autorización?' ) ); ?>);">
+								<form method="post" class="asde-actions" data-asde-confirmar="<?php echo esc_attr( asde_js( '¿Anular esta autorización?' ) ); ?>">
 									<?php wp_nonce_field( 'asde_sepa_revocar' ); ?>
 									<input type="hidden" name="asde_action" value="sepa_revocar">
 									<input type="hidden" name="ronda" value="<?php echo esc_attr( $ronda ); ?>">

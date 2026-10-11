@@ -2563,3 +2563,18 @@ dialog.asde-modal--imprimir {
 		text-align: left;
 	}
 }
+
+/* v0.31 · Listados: el contador («12 personas», «40 movimientos») va debajo de la lista; el
+   detalle de una cifra (los hijos que pagan la cuota) sale al pasar el puntero por encima. */
+.asde-ap .asde-contador {
+	margin: 8px 0 0;
+}
+.asde-ap .asde-tooltip {
+	border-bottom: 1px dotted currentColor;
+	cursor: help;
+	white-space: nowrap;
+}
+.asde-ap .asde-filter--una-linea input[type="search"] {
+	flex: 1 1 180px;
+	min-width: 120px;
+}

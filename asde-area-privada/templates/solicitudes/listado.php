@@ -48,7 +48,7 @@ $publico = add_query_arg( 'grupo', Grupo::numero(), $enlace );
 			<code class="asde-copiar__texto" id="asde-enlace-scouters"><?php echo esc_html( $enlace_scouters ); ?></code>
 			<button type="button" class="asde-btn-link" data-asde-copiar="asde-enlace-scouters"><?php asde_e( 'Copiar el enlace' ); ?></button>
 		</p>
-		<form method="post" onsubmit="return confirm(<?php echo esc_attr( asde_js( '¿Generar un enlace nuevo? El que ya has pasado dejará de servir.' ) ); ?>);">
+		<form method="post" data-asde-confirmar="<?php echo esc_attr( asde_js( '¿Generar un enlace nuevo? El que ya has pasado dejará de servir.' ) ); ?>">
 			<?php wp_nonce_field( 'asde_enlace_scouters' ); ?>
 			<input type="hidden" name="asde_action" value="renovar_enlace_scouters">
 			<button type="submit" class="asde-btn-link"><?php asde_e( 'Generar enlace nuevo' ); ?></button>

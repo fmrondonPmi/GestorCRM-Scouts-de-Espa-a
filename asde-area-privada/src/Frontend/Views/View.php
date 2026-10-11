@@ -171,7 +171,7 @@ abstract class View {
 	 * petición devuelve false y se perdían los filtros.
 	 */
 	protected function url_actual( string $defecto ): string {
-		$uri  = isset( $_SERVER['REQUEST_URI'] ) ? (string) wp_unslash( $_SERVER['REQUEST_URI'] ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- se valida abajo con wp_validate_redirect
+		$uri  = isset( $_SERVER['REQUEST_URI'] ) ? esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : ''; // v0.31: saneado (y validado abajo con wp_validate_redirect).
 		$host = isset( $_SERVER['HTTP_HOST'] ) ? sanitize_text_field( wp_unslash( $_SERVER['HTTP_HOST'] ) ) : '';
 		if ( '' === $uri || '' === $host || '/' !== $uri[0] ) {
 			return $defecto;

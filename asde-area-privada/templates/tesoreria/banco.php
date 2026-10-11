@@ -109,7 +109,7 @@ $revisar = static fn( array $ids ) => add_query_arg(
 		<span class="asde-actions"><a href="<?php echo esc_url( add_query_arg( 'tipos', '1', $url ) ); ?>"><?php asde_e( 'Tipos de gasto e ingreso' ); ?></a></span>
 		<?php if ( $sugeridas && BancoTable::PENDIENTE === $filtros['estado'] ) : ?>
 			<?php $uno = 1 === (int) $sugeridas; ?>
-			<form method="post" onsubmit="return confirm(<?php echo esc_attr( (string) wp_json_encode( $uno ? asde_t( '¿Conciliar el ingreso que lleva la referencia de su familia en el concepto?' ) : sprintf( asde_t( '¿Conciliar los %d ingresos que llevan la referencia de su familia en el concepto?' ), (int) $sugeridas ) ) ); ?>);">
+			<form method="post" data-asde-confirmar="<?php echo esc_attr( $uno ? asde_t( '¿Conciliar el ingreso que lleva la referencia de su familia en el concepto?' ) : sprintf( asde_t( '¿Conciliar los %d ingresos que llevan la referencia de su familia en el concepto?' ), (int) $sugeridas ) ); ?>">
 				<?php wp_nonce_field( 'asde_banco_sugeridas' ); ?>
 				<input type="hidden" name="asde_action" value="conciliar_sugeridas">
 				<button type="submit" class="button"><?php echo esc_html( $uno ? asde_t( 'Conciliar el que lleva la referencia de familia' ) : sprintf( asde_t( 'Conciliar los %d que llevan la referencia de familia' ), (int) $sugeridas ) ); ?></button>
@@ -117,21 +117,24 @@ $revisar = static fn( array $ids ) => add_query_arg(
 		<?php endif; ?>
 	</header>
 
-	<form method="get" action="<?php echo esc_url( $url ); ?>" class="asde-filter">
-		<label for="asde-banco-estado"><?php asde_e( 'Mostrar' ); ?></label>
-		<select id="asde-banco-estado" name="estado" onchange="this.form.requestSubmit ? this.form.requestSubmit() : this.form.submit()">
+	<?php /* v0.31: primero el cuadro de búsqueda y después los tres desplegables y «Filtrar», en una línea. */ ?>
+	<form method="get" action="<?php echo esc_url( $url ); ?>" class="asde-filter asde-filter--una-linea">
+		<label for="asde-banco-q" class="screen-reader-text"><?php asde_e( 'Buscar' ); ?></label>
+		<input type="search" id="asde-banco-q" name="q" value="<?php echo esc_attr( $filtros['q'] ); ?>" placeholder="<?php echo esc_attr( asde_a( 'Concepto, ordenante o referencia' ) ); ?>">
+		<label for="asde-banco-estado" class="screen-reader-text"><?php asde_e( 'Mostrar' ); ?></label>
+		<select id="asde-banco-estado" name="estado" data-asde-autoenviar>
 			<option value=""><?php asde_e( 'Todos' ); ?></option>
 			<?php foreach ( asde_ta( BancoTable::ESTADOS ) as $k => $label ) : ?>
 				<option value="<?php echo esc_attr( $k ); ?>" <?php selected( $filtros['estado'], $k ); ?>><?php echo esc_html( $label ); ?></option>
 			<?php endforeach; ?>
 		</select>
-		<select name="tipo" aria-label="<?php echo esc_attr( asde_a( 'Tipo' ) ); ?>" onchange="this.form.requestSubmit ? this.form.requestSubmit() : this.form.submit()">
+		<select name="tipo" aria-label="<?php echo esc_attr( asde_a( 'Tipo' ) ); ?>" data-asde-autoenviar>
 			<option value=""><?php asde_e( 'Ingresos y gastos' ); ?></option>
 			<option value="ingresos" <?php selected( $filtros['tipo'], 'ingresos' ); ?>><?php asde_e( 'Solo ingresos' ); ?></option>
 			<option value="gastos" <?php selected( $filtros['tipo'], 'gastos' ); ?>><?php asde_e( 'Solo gastos' ); ?></option>
 		</select>
 		<?php if ( $tipos ) : ?>
-			<select name="clase" aria-label="<?php echo esc_attr( asde_a( 'Tipo de gasto o ingreso' ) ); ?>" onchange="this.form.requestSubmit ? this.form.requestSubmit() : this.form.submit()">
+			<select name="clase" aria-label="<?php echo esc_attr( asde_a( 'Tipo de gasto o ingreso' ) ); ?>" data-asde-autoenviar>
 				<option value=""><?php asde_e( 'Todos los tipos' ); ?></option>
 				<?php foreach ( $tipos as $t ) : ?>
 					<option value="<?php echo (int) $t['id']; ?>" <?php selected( $filtros['clase'], (string) $t['id'] ); ?>><?php echo esc_html( $t['nombre'] ); ?></option>
@@ -139,8 +142,6 @@ $revisar = static fn( array $ids ) => add_query_arg(
 				<option value="sin" <?php selected( $filtros['clase'], 'sin' ); ?>><?php asde_e( 'Revisados sin tipo' ); ?></option>
 			</select>
 		<?php endif; ?>
-		<label for="asde-banco-q" class="screen-reader-text"><?php asde_e( 'Buscar' ); ?></label>
-		<input type="search" id="asde-banco-q" name="q" value="<?php echo esc_attr( $filtros['q'] ); ?>" placeholder="<?php echo esc_attr( asde_a( 'Concepto, ordenante o referencia' ) ); ?>">
 		<button type="submit" class="button"><?php asde_e( 'Filtrar' ); ?></button>
 	</form>
 
@@ -148,7 +149,6 @@ $revisar = static fn( array $ids ) => add_query_arg(
 		<p><?php echo $filtros['estado'] || $filtros['tipo'] || $filtros['q'] || $filtros['clase'] ? esc_html( asde_t( 'No hay movimientos con este filtro.' ) ) : esc_html( asde_t( 'Todavía no hay movimientos: importa el primer fichero del banco.' ) ); ?></p>
 	<?php else : ?>
 		<?php $hay_pendientes = (bool) array_filter( $movs, static fn( $m ) => BancoTable::PENDIENTE === $m['estado'] ); ?>
-		<p class="asde-muted"><?php echo esc_html( sprintf( asde_n( '%d movimiento', '%d movimientos', $total ), $total ) ); ?></p>
 		<?php if ( $hay_pendientes ) : ?>
 			<?php /* Selección múltiple: solo para marcar como revisados (con su tipo, en la ventana). Las casillas van con form="…" porque cada fila tiene sus propios formularios. */ ?>
 			<form method="get" action="<?php echo esc_url( $url ); ?>" id="asde-banco-lote" class="asde-form__fila asde-banco-lote" data-asde-recarga>
@@ -241,7 +241,7 @@ $revisar = static fn( array $ids ) => add_query_arg(
 									<?php if ( BancoTable::IGNORADO === $m['estado'] ) : ?>
 										<a href="<?php echo esc_url( $revisar( array( (int) $m['id'] ) ) ); ?>" data-asde-modal><?php asde_e( 'Cambiar el tipo' ); ?></a>
 									<?php endif; ?>
-									<form method="post" onsubmit="return confirm(<?php echo esc_attr( (string) wp_json_encode( asde_t( '¿Deshacer?' ) . ( BancoTable::CONCILIADO === $m['estado'] ? ' ' . asde_t( 'Se anulará el pago que se registró en la familia.' ) : '' ) ) ); ?>);">
+									<form method="post" data-asde-confirmar="<?php echo esc_attr( asde_t( '¿Deshacer?' ) . ( BancoTable::CONCILIADO === $m['estado'] ? ' ' . asde_t( 'Se anulará el pago que se registró en la familia.' ) : '' ) ); ?>">
 										<?php wp_nonce_field( 'asde_banco_mov_' . (int) $m['id'] ); ?>
 										<input type="hidden" name="asde_action" value="deshacer">
 										<input type="hidden" name="mov" value="<?php echo (int) $m['id']; ?>">
@@ -254,6 +254,8 @@ $revisar = static fn( array $ids ) => add_query_arg(
 				<?php endforeach; ?>
 			</tbody>
 		</table>
+		<?php /* v0.31: el contador, debajo de la lista. */ ?>
+		<p class="asde-muted asde-contador"><?php echo esc_html( sprintf( asde_n( '%d movimiento', '%d movimientos', $total ), $total ) ); ?></p>
 		<?php echo $tabla->paginacion(); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 	<?php endif; ?>
 </section>

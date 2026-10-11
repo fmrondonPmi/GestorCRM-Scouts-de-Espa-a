@@ -193,7 +193,7 @@ try {
 	}
 	$ok( str_contains( $html, 'class="asde-filtros" hidden' ) && str_contains( $html, 'data-asde-paginacion' ), 'los filtros y la paginación los activa el navegador (sin JavaScript se ve la lista entera)' );
 	$ok( ! str_contains( $html, 'onchange="this.form.submit()"' ), 'ningún control recarga la página' );
-	$ok( str_contains( $html, 'data-por-pagina="' . Tabla::por_pagina_guardada() . '"' ) && str_contains( $html, 'data-opciones="25,50,75,100"' ), 'el tamaño de página es el que la persona tenía elegido (25, 50, 75 o 100)' );
+	$ok( str_contains( $html, 'data-por-pagina="' . Tabla::por_pagina_guardada() . '"' ) && str_contains( $html, 'data-opciones="5,10,15,20,25,30,35,40,45,50"' ), 'el tamaño de página es el que la persona tenía elegido (de 5 en 5 hasta 50)' );
 	$_GET = array( 'rol' => Roles::TUTOR );
 	$ok( str_contains( ( new UsuariosView() )->render(), 'data-rol="' . Roles::TUTOR . '"' ), 'un enlace antiguo con ?rol= abre el filtro de rol puesto' );
 	$_GET = array( 'rol' => '<script>' );

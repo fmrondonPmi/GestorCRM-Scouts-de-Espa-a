@@ -28,7 +28,7 @@ final class Limite {
 	}
 
 	private static function clave( string $accion ): string {
-		$ip = (string) ( $_SERVER['REMOTE_ADDR'] ?? '' ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
+		$ip = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '';
 		return 'asde_ap_lim_' . substr( hash_hmac( 'sha256', $accion . '|' . $ip, wp_salt( 'auth' ) ), 0, 32 );
 	}
 }

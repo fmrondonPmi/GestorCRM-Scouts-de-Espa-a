@@ -29,7 +29,7 @@ $del_inv = PedidosTable::REF_INVENTARIO === $p['pedido_ref'];
 $form    = static function ( string $accion, string $boton, string $clase = 'asde-btn-link', string $confirmar = '' ) use ( $p ): string {
 	return sprintf(
 		'<form method="post" class="asde-inline-form"%s>%s<input type="hidden" name="asde_action" value="%s"><input type="hidden" name="pedido" value="%d"><input type="hidden" name="desde" value="detalle"><button type="submit" class="%s">%s</button></form>',
-		'' !== $confirmar ? ' onsubmit="return confirm(\'' . esc_js( $confirmar ) . '\');"' : '',
+		'' !== $confirmar ? ' data-asde-confirmar="' . esc_attr( $confirmar ) . '"' : '',
 		wp_nonce_field( 'asde_uniforme_' . $p['id'], '_wpnonce', true, false ),
 		esc_attr( $accion ),
 		(int) $p['id'],

@@ -121,7 +121,7 @@ if ( $u->has_cap( 'manage_options' ) ) {
 				</form>
 			<?php endif; ?>
 			<?php if ( $roles_u && ! $u->has_cap( 'manage_options' ) && get_current_user_id() !== $u->ID ) : ?>
-				<form method="post" onsubmit="return confirm(<?php echo esc_attr( asde_js( '¿Desactivar el acceso del usuario %s? Se le quitarán todos los roles del área privada.', $u->user_login ) ); ?>);">
+				<form method="post" data-asde-confirmar="<?php echo esc_attr( asde_js( '¿Desactivar el acceso del usuario %s? Se le quitarán todos los roles del área privada.', $u->user_login ) ); ?>">
 					<?php wp_nonce_field( 'asde_desactivar_' . $u->ID ); ?>
 					<input type="hidden" name="asde_action" value="desactivar">
 					<input type="hidden" name="user_id" value="<?php echo (int) $u->ID; ?>">

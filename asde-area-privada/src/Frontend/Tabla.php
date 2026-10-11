@@ -8,11 +8,14 @@ defined( 'ABSPATH' ) || exit;
  *
  * Todo va en la URL (orden, dir, pag, por_pagina), así que funciona sin
  * JavaScript, con el botón "atrás" y al compartir el enlace. El tamaño de página
- * (25, 50, 75 o 100) se recuerda para cada usuario.
+ * (de 5 en 5 hasta 50; 10 si no se ha elegido, v0.31) se recuerda para cada usuario.
  */
 final class Tabla {
 
-	public const POR_PAGINA = array( 25, 50, 75, 100 );
+	public const POR_PAGINA = array( 5, 10, 15, 20, 25, 30, 35, 40, 45, 50 );
+
+	/** Tamaño de página si la persona no ha elegido otro (petición del usuario, v0.31). */
+	public const POR_PAGINA_DEFECTO = 10;
 
 	private const META_POR_PAGINA = 'asde_por_pagina';
 
@@ -31,17 +34,17 @@ final class Tabla {
 		$this->orden = isset( $columnas[ $orden ] ) ? $orden : $orden_defecto;
 		$this->dir   = in_array( $dir, array( 'asc', 'desc' ), true ) ? $dir : $dir_defecto;
 
-		$pedido = isset( $_GET['por_pagina'] ) ? (int) $_GET['por_pagina'] : 0; // phpcs:ignore WordPress.Security.NonceVerification
+		$pedido = isset( $_GET['por_pagina'] ) ? absint( $_GET['por_pagina'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification
 		self::guardar_por_pagina( $pedido );
 		$this->por_pagina = self::por_pagina_guardada();
-		$this->pagina     = max( 1, isset( $_GET['pag'] ) ? (int) $_GET['pag'] : 1 ); // phpcs:ignore WordPress.Security.NonceVerification
+		$this->pagina     = max( 1, isset( $_GET['pag'] ) ? absint( $_GET['pag'] ) : 1 ); // phpcs:ignore WordPress.Security.NonceVerification
 	}
 
 	/** Tamaño de página que ha elegido la persona (el mismo en todos los listados). */
 	public static function por_pagina_guardada(): int {
 		$user_id = get_current_user_id();
 		$pedido  = $user_id ? (int) get_user_meta( $user_id, self::META_POR_PAGINA, true ) : 0;
-		return in_array( $pedido, self::POR_PAGINA, true ) ? $pedido : self::POR_PAGINA[0];
+		return in_array( $pedido, self::POR_PAGINA, true ) ? $pedido : self::POR_PAGINA_DEFECTO;
 	}
 
 	/** Recuerda el tamaño elegido; cualquier otro valor se ignora. */
@@ -59,7 +62,7 @@ final class Tabla {
 
 	public static function ajax_por_pagina(): void {
 		check_ajax_referer( 'asde_ap_por_pagina', 'nonce' );
-		self::guardar_por_pagina( isset( $_POST['por_pagina'] ) ? (int) $_POST['por_pagina'] : 0 );
+		self::guardar_por_pagina( isset( $_POST['por_pagina'] ) ? absint( $_POST['por_pagina'] ) : 0 );
 		wp_send_json_success( self::por_pagina_guardada() );
 	}
 

@@ -23,6 +23,8 @@ $ronda = $res['ronda'] ?? null;
 ?>
 <p class="asde-back asde-no-print"><a href="<?php echo esc_url( $url ); ?>"><?php asde_e( '← Volver a informes' ); ?></a></p>
 
+<?php /* v0.31: al cambiar la sección se actualiza solo el resultado (parcial.js). */ ?>
+<div data-asde-parcial="informe-resultado">
 <section class="asde-card" data-asde-plegable="informe-resultado">
 	<header class="asde-card__header asde-card__header--split">
 		<h2 class="asde-card__title"><?php echo esc_html( $informe->titulo() ); ?></h2>
@@ -43,7 +45,7 @@ $ronda = $res['ronda'] ?? null;
 				<?php endforeach; ?>
 			<?php endforeach; ?>
 			<label for="asde-inf-seccion"><?php asde_e( 'Sección' ); ?></label>
-			<select id="asde-inf-seccion" name="seccion" onchange="this.form.submit()">
+			<select id="asde-inf-seccion" name="seccion" data-asde-autoenviar>
 				<option value=""><?php echo $informe->filtros['secciones'] && '' === $seccion ? esc_html( asde_t( 'Las del informe' ) ) : esc_html( asde_t( 'Todas' ) ); ?></option>
 				<?php foreach ( $secciones as $s ) : ?>
 					<option value="<?php echo esc_attr( $s ); ?>" <?php selected( $seccion, $s ); ?>><?php echo esc_html( Secciones::nombre( $s ) ); ?></option>
@@ -103,3 +105,4 @@ $ronda = $res['ronda'] ?? null;
 		</div>
 	<?php endif; ?>
 </section>
+</div>

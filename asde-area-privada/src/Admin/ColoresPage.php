@@ -49,6 +49,8 @@ final class ColoresPage {
 		wp_enqueue_style( 'wp-color-picker' );
 		// El CSS del área, para que la vista previa sea la de verdad.
 		wp_enqueue_style( 'asde-area-privada', plugins_url( 'assets/css/area-privada.css', ASDE_AP_FILE ), array(), ASDE_AP_VERSION );
+		// Los colores elegidos (v0.31: con wp_add_inline_style; colores.js cambia este <style> al vuelo).
+		wp_add_inline_style( 'asde-area-privada', wp_strip_all_tags( Colores::css() ) );
 		wp_enqueue_script( 'asde-colores', plugins_url( 'assets/js/colores.js', ASDE_AP_FILE ), array( 'wp-color-picker' ), ASDE_AP_VERSION, true );
 		wp_localize_script(
 			'asde-colores',
@@ -130,14 +132,6 @@ final class ColoresPage {
 				<div class="notice notice-<?php echo 'success' === $aviso[0] ? 'success' : 'error'; ?>"><p><?php echo esc_html( $aviso[1] ); ?></p></div>
 			<?php endif; ?>
 
-			<style>
-				.asde-colores__cuerpo { display: flex; flex-wrap: wrap; gap: 24px; align-items: flex-start; }
-				.asde-colores__form { flex: 1 1 420px; max-width: 640px; }
-				.asde-colores__vista { flex: 1 1 420px; max-width: 760px; position: sticky; top: 40px; }
-				.asde-colores__area { padding: 16px; border: 1px solid #dcdcde; background: #ffffff; }
-				.asde-colores__modelo { display: inline-flex; align-items: center; gap: 8px; margin: 0 8px 8px 0 !important; }
-				.asde-colores__muestra { display: inline-block; width: 16px; height: 16px; border: 1px solid rgba(0, 0, 0, 0.25); border-radius: 50%; }
-			</style>
 			<h2><?php esc_html_e( 'Modelos de partida', 'asde-area-privada' ); ?></h2>
 			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" class="asde-colores__modelos">
 				<input type="hidden" name="action" value="<?php echo esc_attr( self::ACCION ); ?>">
@@ -177,7 +171,7 @@ final class ColoresPage {
 					<?php endforeach; ?>
 					<p class="submit">
 						<button type="submit" class="button button-primary"><?php esc_html_e( 'Guardar los colores', 'asde-area-privada' ); ?></button>
-						<button type="submit" name="accion" value="restablecer" class="button" onclick="return confirm('¿Volver a los colores de siempre?');"><?php esc_html_e( 'Restablecer', 'asde-area-privada' ); ?></button>
+						<button type="submit" name="accion" value="restablecer" class="button" data-asde-confirmar="<?php esc_attr_e( '¿Volver a los colores de siempre?', 'asde-area-privada' ); ?>"><?php esc_html_e( 'Restablecer', 'asde-area-privada' ); ?></button>
 					</p>
 				</form>
 
@@ -186,7 +180,6 @@ final class ColoresPage {
 					<div id="asde-colores-avisos" class="notice notice-warning inline" <?php echo Colores::avisos() ? '' : 'hidden'; ?>>
 						<p><?php echo esc_html( implode( ' ', Colores::avisos() ) ); ?></p>
 					</div>
-					<style id="asde-colores-css"><?php echo wp_strip_all_tags( Colores::css() ); // phpcs:ignore WordPress.Security.EscapeOutput ?></style>
 					<div class="asde-ap asde-colores__area">
 						<nav class="asde-nav" aria-label="Vista previa">
 							<ul class="asde-nav__tabs">

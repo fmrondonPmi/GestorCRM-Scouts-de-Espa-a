@@ -2537,4 +2537,11 @@ return array(
 	'Tu familia' => 'A túa familia',
 	'Tú' => 'Ti',
 	'Lista de compra revisada' => 'Lista da compra revisada',
+
+	// v0.31: cambio de sección y cuota
+	'Desde %1$s solo se puede pasar a %2$s, la siguiente por edad (solo los scouters cambian a cualquier sección).' => 'Desde %1$s só se pode pasar a %2$s, a seguinte por idade (só os scouters cambian a calquera sección).',
+	'Un educando pasa a la siguiente sección por edad.' => 'Un educando pasa á seguinte sección por idade.',
+	'%d hijo/a' => '%d fillo/a',
+	'%d hijos/as' => '%d fillos/as',
+	'ajuste %s' => 'axuste %s',
 );

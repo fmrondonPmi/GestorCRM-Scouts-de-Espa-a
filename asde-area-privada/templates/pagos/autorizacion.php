@@ -63,5 +63,5 @@ $dir_deu = trim( implode( ', ', array_filter( array( $d['calle'], trim( $d['cp']
 		<p><?php echo esc_html( $parrafo ); ?></p>
 	<?php endforeach; ?>
 
-	<p class="asde-no-print"><button type="button" class="button" onclick="window.print()"><?php asde_e( 'Imprimir o guardar como PDF' ); ?></button></p>
+	<p class="asde-no-print"><button type="button" class="button" data-asde-imprimir-pagina><?php asde_e( 'Imprimir o guardar como PDF' ); ?></button></p>
 </section>

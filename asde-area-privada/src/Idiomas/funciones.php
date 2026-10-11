@@ -41,14 +41,16 @@ if ( ! function_exists( 'asde_a' ) ) {
 
 if ( ! function_exists( 'asde_js' ) ) {
 	/**
-	 * Texto traducido como cadena de JavaScript lista para un atributo HTML: <code>onsubmit="return confirm(&lt;?php echo asde_js( '…' ); ?&gt;)"</code>.
-	 * Con argumentos, rellena los marcadores %s/%d.
+	 * Pregunta traducida para confirmar un envío (sin escapar), con los marcadores %s/%d ya
+	 * rellenos: <code>data-asde-confirmar="&lt;?php echo esc_attr( asde_js( '¿Borrar %s?', $x ) ); ?&gt;"</code>.
+	 * v0.31: area.js la pregunta al enviar; antes era una cadena JSON para un onsubmit en línea,
+	 * y WordPress pide no poner JavaScript en las plantillas.
 	 *
 	 * @param mixed ...$args
 	 */
 	function asde_js( string $es, ...$args ): string {
 		$t = Traducciones::t( $es );
-		return esc_attr( (string) wp_json_encode( $args ? vsprintf( $t, $args ) : $t ) );
+		return $args ? vsprintf( $t, $args ) : $t;
 	}
 }
 if ( ! function_exists( 'asde_ta' ) ) {

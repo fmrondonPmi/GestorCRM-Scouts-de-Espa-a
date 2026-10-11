@@ -46,12 +46,12 @@ final class Router {
 
 	/** La pide la ventana emergente del área (assets/js/area.js). */
 	public static function pide_modal(): bool {
-		return '1' === ( $_SERVER['HTTP_X_ASDE_MODAL'] ?? '' ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
+		return isset( $_SERVER['HTTP_X_ASDE_MODAL'] ) && '1' === sanitize_text_field( wp_unslash( $_SERVER['HTTP_X_ASDE_MODAL'] ) );
 	}
 
 	/** La pide el listado de usuarios para trabajar sin recargar (assets/js/usuarios.js): el servidor contesta en JSON. */
 	public static function pide_json(): bool {
-		return '1' === ( $_SERVER['HTTP_X_ASDE_JSON'] ?? '' ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
+		return isset( $_SERVER['HTTP_X_ASDE_JSON'] ) && '1' === sanitize_text_field( wp_unslash( $_SERVER['HTTP_X_ASDE_JSON'] ) );
 	}
 
 	/** La vista de una página o, si se pide y se ha entrado (v0.26), su ayuda. */
@@ -103,7 +103,7 @@ final class Router {
 		// Idioma de cada persona (v0.15): atributo lang del área y selector en las pantallas públicas.
 		add_filter( 'do_shortcode_tag', array( $this, 'marcar_idioma' ), 10, 2 );
 		add_filter( 'gettext', array( $this, 'traducir_gettext' ), 10, 3 );
-		add_action( 'wp_head', array( $this, 'cabecera_guardada' ), 1 );
+		add_action( 'wp_enqueue_scripts', array( $this, 'cabecera_guardada' ), 1 );
 		// Al pasar a Enfold, las páginas del área reciben sus ajustes (ancho completo, sin barra de título).
 		add_action( 'after_switch_theme', static fn() => Tema::ajustar_paginas( array_values( Pages::ids() ) ) );
 	}
@@ -150,14 +150,17 @@ final class Router {
 	/**
 	 * Cabecera del tema plegada (solo con un tema cuya cabecera sabemos plegar, ver Tema): se
 	 * aplica antes de pintar la página para que no se vea abrirse y cerrarse (el estado se
-	 * guarda en el navegador de cada persona).
+	 * guarda en el navegador de cada persona). v0.31: con wp_add_inline_script en la cabecera
+	 * (WordPress pide no imprimir <script> a mano).
 	 */
 	public function cabecera_guardada(): void {
 		$key = Pages::current_key();
 		if ( null === $key || in_array( $key, Pages::PUBLICAS, true ) || ! Tema::cabecera_plegable() ) {
 			return;
 		}
-		echo "<script>try{if(localStorage.getItem('asde_cabecera_oculta')==='1'){document.documentElement.classList.add('asde-cabecera-oculta');}}catch(e){}</script>\n";
+		wp_register_script( 'asde-cabecera-guardada', false, array(), ASDE_AP_VERSION, false );
+		wp_enqueue_script( 'asde-cabecera-guardada' );
+		wp_add_inline_script( 'asde-cabecera-guardada', "try{if(localStorage.getItem('asde_cabecera_oculta')==='1'){document.documentElement.classList.add('asde-cabecera-oculta');}}catch(e){}" );
 	}
 
 	public function template_redirect(): void {
@@ -198,7 +201,7 @@ final class Router {
 
 		// «Mostrar / Ocultar nº territorial» (v0.14, preferencia de cada persona, doc 27).
 		if ( isset( $_GET['asde_ver_local'] ) && is_user_logged_in() && wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_wpnonce'] ?? '' ) ), 'asde_ver_local' ) ) { // phpcs:ignore WordPress.Security.NonceVerification
-			\AsdeBalears\AreaPrivada\Socios\Numeros::fijar_ver_local( '1' === $_GET['asde_ver_local'] ); // phpcs:ignore WordPress.Security
+			\AsdeBalears\AreaPrivada\Socios\Numeros::fijar_ver_local( '1' === sanitize_text_field( wp_unslash( $_GET['asde_ver_local'] ) ) ); // phpcs:ignore WordPress.Security.NonceVerification -- comprobado arriba
 			wp_safe_redirect( remove_query_arg( array( 'asde_ver_local', '_wpnonce' ) ) );
 			exit;
 		}
@@ -295,14 +298,15 @@ final class Router {
 			// v0.25: la ficha de una familia se actualiza sin recargar la página (pagos, conciliar, eliminar).
 			wp_enqueue_script( 'asde-parcial', plugins_url( 'assets/js/parcial.js', ASDE_AP_FILE ), array( 'asde-i18n', 'asde-area', 'asde-tesoreria' ), ASDE_AP_VERSION, true );
 		}
-		// v0.29: el listado de Personas se filtra (y busca al escribir) sin recargar la página.
-		if ( 'personas' === $key ) {
-			wp_enqueue_script( 'asde-parcial', plugins_url( 'assets/js/parcial.js', ASDE_AP_FILE ), array( 'asde-i18n', 'asde-area' ), ASDE_AP_VERSION, true );
-		}
 		// v0.20: zonas que se actualizan sin recargar (listado del banco).
 		if ( 'banco' === $key ) {
 			wp_enqueue_script( 'asde-parcial', plugins_url( 'assets/js/parcial.js', ASDE_AP_FILE ), array( 'asde-i18n', 'asde-combobox', 'asde-area' ), ASDE_AP_VERSION, true );
 			wp_enqueue_script( 'asde-banco', plugins_url( 'assets/js/banco.js', ASDE_AP_FILE ), array( 'asde-i18n', 'asde-area' ), ASDE_AP_VERSION, true );
+		}
+		// v0.29 Personas; v0.31 todos los listados (petición del usuario): lo que está en una zona
+		// data-asde-parcial (la lista) se filtra y se pagina sin recargar la página entera.
+		if ( ! in_array( $key, Pages::PUBLICAS, true ) && ! wp_script_is( 'asde-parcial', 'enqueued' ) ) {
+			wp_enqueue_script( 'asde-parcial', plugins_url( 'assets/js/parcial.js', ASDE_AP_FILE ), array( 'asde-i18n', 'asde-area' ), ASDE_AP_VERSION, true );
 		}
 		// v0.25: Usuarios, Dar acceso y Registro de emails son hojas de la sección «Usuarios»:
 		// desde cualquiera se abren las otras sin recargar (también el listado de usuarios).

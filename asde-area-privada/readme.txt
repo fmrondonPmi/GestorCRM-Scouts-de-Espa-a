@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.30.0
+Stable tag: 0.31.0
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -52,6 +52,12 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.31.0 =
+* Lists: 10 rows per page by default (5 to 50, in steps of 5); filtering and paging refresh only the list in every list (payments, uniform orders, purchase lists, report sections). People list sorted by section; counters moved below the lists.
+* Payments: filter on one line, "View / record payment" as a link, children per fee as a tooltip. Bank: search box first and filters on one line.
+* New members get their territorial number automatically (shown only to who has it visible). A youth member can only move to the next section by age; adult volunteers to any section.
+* WordPress.org review: no inline <script>, <style> or event handlers (enqueued assets and data attributes instead), sanitized $_SERVER/$_COOKIE input.
 
 = 0.30.0 =
 * Inventory: when an item is added to a shopping list, the "are you sure?" question is now asked when there are already 5 units or more ("do you really need to buy more?"), not when there are few. The yellow "few units" label stays.
@@ -144,6 +150,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * First version with the mobile app (PWA).
 
 == Upgrade Notice ==
+
+= 0.31.0 =
+Lists refresh without reloading the page, territorial number on new members and next-section rule. No database changes.
 
 = 0.30.0 =
 Shopping lists with new items, email to the requester when Treasury approves or rejects, "mark as bought" (adds the quantities to the inventory), CSV import that merges repeated items, the inventory warning reversed and uniform orders by scouters for their sections. Adds two columns to the shopping lists table (applied automatically on update).

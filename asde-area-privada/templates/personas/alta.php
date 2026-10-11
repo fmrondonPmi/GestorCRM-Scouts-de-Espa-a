@@ -277,6 +277,10 @@ $edad  = static function ( string $f ) use ( $hoy ): ?int {
 			<?php if ( '' !== $r['numero'] ) : ?>
 				<dl class="asde-datos">
 					<div><dt><?php asde_e( 'Nº socio/a Scouts de España' ); ?></dt><dd><strong class="asde-alta-socio__numero"><?php echo esc_html( $r['numero'] ); ?></strong></dd></div>
+					<?php /* v0.31: el nº territorial se genera siempre al dar de alta; se enseña a quien lo tiene visible. */ ?>
+					<?php if ( '' !== ( $r['territorial'] ?? '' ) && \AsdeBalears\AreaPrivada\Socios\Numeros::ver_local() ) : ?>
+						<div><dt><?php asde_e( 'Nº territorial' ); ?></dt><dd><strong><?php echo esc_html( $r['territorial'] ); ?></strong></dd></div>
+					<?php endif; ?>
 				</dl>
 			<?php else : ?>
 				<div class="asde-notice asde-notice--warning" role="status"><p><?php asde_e( 'El CRM todavía no le ha puesto el nº de socio/a. Lo verás en su ficha cuando lo tenga.' ); ?></p></div>
