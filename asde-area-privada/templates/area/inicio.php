@@ -88,6 +88,9 @@ $user = $ambito->user;
 			<?php if ( $por_revisar['solicitudes'] ) : ?>
 				<li><a href="<?php echo esc_url( $url( 'solicitudes' ) ); ?>"><strong><?php echo (int) $por_revisar['solicitudes']; ?></strong> <?php echo 1 === (int) $por_revisar['solicitudes'] ? esc_html( asde_t( 'solicitud de acceso' ) ) : esc_html( asde_t( 'solicitudes de acceso' ) ); ?></a></li>
 			<?php endif; ?>
+			<?php if ( ! empty( $por_revisar['lista_espera'] ) ) : ?>
+				<li><a href="<?php echo esc_url( $url( 'lista_espera', array( 'estado' => 'en_espera' ) ) ); ?>"><?php echo $num( (int) $por_revisar['lista_espera'], esc_html( asde_t( 'persona en la lista de espera sin contactar' ) ), esc_html( asde_t( 'personas en la lista de espera sin contactar' ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></a></li>
+			<?php endif; ?>
 			<?php if ( $por_revisar['cambios'] ) : ?>
 				<li><a href="<?php echo esc_url( $url( 'cambios' ) ); ?>"><strong><?php echo (int) $por_revisar['cambios']; ?></strong> <?php echo 1 === (int) $por_revisar['cambios'] ? esc_html( asde_t( 'cambio propuesto por una familia' ) ) : esc_html( asde_t( 'cambios propuestos por las familias' ) ); ?></a></li>
 			<?php endif; ?>
@@ -140,6 +143,9 @@ if ( current_user_can( 'asde_reports' ) ) {
 }
 if ( current_user_can( \AsdeBalears\AreaPrivada\Inventario\Servicio::CAP ) ) {
 	$grupo_tiles[] = $tile( $url( 'inventario' ), asde_t( 'Inventario' ), asde_t( 'El material y el equipamiento del grupo, y las listas de compra.' ) );
+}
+if ( current_user_can( 'asde_lista_espera' ) ) {
+	$grupo_tiles[] = $tile( $url( 'lista_espera' ), asde_t( 'Lista de espera' ), asde_t( 'Quién quiere entrar en el grupo, la sección que le toca por edad y su paso al CRM.' ) );
 }
 if ( current_user_can( 'asde_tesoreria_acceso' ) ) {
 	$grupo_tiles[] = $tile( $url( 'tesoreria' ), asde_t( 'Tesorería' ), asde_t( 'Cuotas de las familias, pagos, familias y coste federativo.' ) );

@@ -76,6 +76,7 @@ final class Mantenimiento {
 		}
 		Grupo::forzar( null );
 		Solicitudes::purgar();
+		\AsdeBalears\AreaPrivada\ListaEspera\Inscripciones::mantenimiento(); // Lista de espera: sin confirmar, caducadas y avisos (v0.32).
 		\AsdeBalears\AreaPrivada\Sepa\Mandatos::purgar(); // Mandatos revocados hace más de 14 meses.
 		\AsdeBalears\AreaPrivada\Sepa\Remesas::purgar();  // Adeudos de remesas con cobro hace más de 14 meses.
 		return $total;

@@ -68,6 +68,8 @@ final class Textos {
 		$add( array( PedidosTable::REF_INVENTARIO, PedidosTable::REF_SIN_COSTE ), 'Uniformes' );
 		$add( \AsdeBalears\AreaPrivada\Uniformes\Config::PARA_QUIEN, 'Uniformes' );
 		$add( \AsdeBalears\AreaPrivada\Inventario\ComprasTable::ESTADOS, 'Inventario' );
+		$add( \AsdeBalears\AreaPrivada\ListaEspera\Inscripciones::ESTADOS, 'Lista de espera' );
+		$add( \AsdeBalears\AreaPrivada\ListaEspera\Inscripciones::MEDIOS, 'Lista de espera' );
 		$add( array_column( \AsdeBalears\AreaPrivada\Inventario\Importador::COLUMNAS, 0 ), 'Inventario' );
 		$add( \AsdeBalears\AreaPrivada\Tesoreria\Banco\TiposMovimiento::NATURALEZAS, 'Tesorería' );
 		$add( array_map( static fn( array $m ) => array( $m[0], $m[1] ), \AsdeBalears\AreaPrivada\Domain\Modulos::LISTA ), 'Datos del grupo' );

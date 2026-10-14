@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.31.0
+Stable tag: 0.32.0
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -52,6 +52,11 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.32.0 =
+* New "Waiting list" module (off by default; turn it on per group in Scout Groups → Modules): a group link where non-members leave the minimum data (name, surnames, birth date, ID document from age 14, contact phone and email, notes), email confirmation, a personal link to view, keep (12 more months) or delete their data, and automatic deletion after 12 months with a reminder 30 days before.
+* Scouters, Secretary, Coordination and Treasury see the list with the section that matches each age and the order of arrival; they log contacts (email sent from the site or phone call) and change the status. Secretary and Coordination assign the section and register the person in the CRM through "New member", which checks the ID document against the CRM first; the waiting list entry is deleted right after.
+* All waiting list data is stored encrypted.
 
 = 0.31.0 =
 * Lists: 10 rows per page by default (5 to 50, in steps of 5); filtering and paging refresh only the list in every list (payments, uniform orders, purchase lists, report sections). People list sorted by section; counters moved below the lists.
@@ -150,6 +155,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * First version with the mobile app (PWA).
 
 == Upgrade Notice ==
+
+= 0.32.0 =
+Waiting list module (off by default). Adds a new table for the waiting list (created automatically on update).
 
 = 0.31.0 =
 Lists refresh without reloading the page, territorial number on new members and next-section rule. No database changes.

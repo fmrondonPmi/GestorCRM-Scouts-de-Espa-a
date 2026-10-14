@@ -45,6 +45,8 @@
 10. **Endpoints REST propios** (`/wp-json/asde/v1/...`), siempre con `permission_callback` que pase por `AccessPolicy` y con nonce.
 11. **Exportaciones** (CSV de cambios, listados para campamentos): se registran en auditoría y solo están disponibles para los roles que las necesitan.
 
+12. **Lista de espera (v0.32, doc 39):** datos de personas que **aún no son del grupo**, dados por ellas mismas o su familia con consentimiento expreso (casilla). Todo lo escrito y el historial de contactos van **cifrados** (`Crm\Crypto`) en `{prefix}asde_lista_espera`; en claro solo estado, sección, fechas y dos huellas HMAC. El email se confirma antes de entrar en la lista. Se borran: sin confirmar a los **7 días**; a los **12 meses** de la confirmación o de la última renovación (aviso 30 días antes); al darlas de alta en el CRM (en el momento); cuando lo pide la persona desde su enlace o lo hace Secretaría/Coordinación. Acceso de la persona sin cuenta: enlace personal (token HMAC, no guardado) **más su email**. El documento solo lo ven Secretaría y Coordinación. La auditoría guarda acciones e ids, nunca datos; el registro de emails, el destino enmascarado. Al desinstalar, la tabla se vacía.
+
 ## Documentación que habrá que actualizar (no técnica)
 
 - Registro de actividades de tratamiento: nuevo tratamiento "Área privada web".

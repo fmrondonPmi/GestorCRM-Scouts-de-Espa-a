@@ -49,6 +49,9 @@ final class RegistroEmails {
 	/** Aviso a quien pidió una lista de compra: Tesorería la ha aprobado o rechazado (v0.30, doc 37). */
 	public const COMPRA_REVISADA = 'compra_revisada';
 
+	/** Emails de la lista de espera: confirmar, enlaces, caducidad y mensajes del grupo (v0.32, doc 39). */
+	public const LISTA_ESPERA = 'lista_espera';
+
 	public const TIPOS = array(
 		Invitacion::ALTA      => 'Invitación',
 		Invitacion::RESET     => 'Recuperar contraseña',
@@ -57,6 +60,7 @@ final class RegistroEmails {
 		self::COMPRA          => 'Lista de compra de material',
 		self::COMPRA_REVISADA => 'Lista de compra revisada',
 		self::BAJA            => 'Aviso de baja',
+		self::LISTA_ESPERA    => 'Lista de espera',
 	);
 
 	public static function table(): string {

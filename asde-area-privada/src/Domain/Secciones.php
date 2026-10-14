@@ -78,6 +78,39 @@ final class Secciones {
 		return array_values( array_diff( array_keys( self::all() ), array( $actual ) ) );
 	}
 
+	/** Edad desde la que se entra en cada sección (v0.32, lista de espera; P-123). */
+	public const EDAD_DESDE = array(
+		'castores' => 6,
+		'lobatos'  => 8,
+		'scouts'   => 11,
+		'escultas' => 14,
+		'rovers'   => 17,
+		'scouters' => 21,
+	);
+
+	/**
+	 * Sección que le toca por edad (v0.32, lista de espera; P-123): según la edad que cumple
+	 * en el año en que empieza la ronda (de septiembre a agosto), así no cambia a mitad de
+	 * ronda. '' si aún no tiene edad para Castores.
+	 *
+	 * @param string $nacimiento AAAA-MM-DD
+	 * @param string $hoy        AAAA-MM-DD (por defecto, hoy)
+	 */
+	public static function por_edad( string $nacimiento, string $hoy = '' ): string {
+		$hoy = '' !== $hoy ? $hoy : wp_date( 'Y-m-d' );
+		if ( ! preg_match( '/^(\d{4})-\d{2}-\d{2}$/', $nacimiento, $n ) || ! preg_match( '/^(\d{4})-(\d{2})-\d{2}$/', $hoy, $h ) ) {
+			return '';
+		}
+		$edad = ( (int) $h[2] >= 9 ? (int) $h[1] : (int) $h[1] - 1 ) - (int) $n[1];
+		$out  = '';
+		foreach ( self::EDAD_DESDE as $slug => $desde ) {
+			if ( $edad >= $desde ) {
+				$out = $slug;
+			}
+		}
+		return $out;
+	}
+
 	/** Etiqueta de color de la sección (HTML escapado). */
 	public static function badge( string $slug ): string {
 		if ( self::SIN_SECCION === $slug ) {

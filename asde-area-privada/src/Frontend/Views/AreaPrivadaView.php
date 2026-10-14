@@ -46,6 +46,8 @@ final class AreaPrivadaView extends View {
 						'uniforme_entrega' => $gestiona ? $uniformes['entrega'] : 0,
 						// v0.19: listas de compra de material que esperan el visto bueno de Tesorería.
 						'compras'          => current_user_can( \AsdeBalears\AreaPrivada\Inventario\Servicio::CAP_APROBAR ) ? \AsdeBalears\AreaPrivada\Inventario\ComprasTable::contar_pendientes() : 0,
+						// v0.32: inscripciones de la lista de espera que nadie ha contactado.
+						'lista_espera'     => current_user_can( 'asde_lista_espera' ) ? \AsdeBalears\AreaPrivada\ListaEspera\Inscripciones::contar_sin_contactar() : 0,
 					),
 					// Uniformes entregados que el socio/a o su familia aún no ha confirmado.
 					'por_confirmar' => $uniformes['confirmar'],

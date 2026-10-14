@@ -5,6 +5,8 @@ use AsdeBalears\AreaPrivada\Auth\Ambito;
 use AsdeBalears\AreaPrivada\Frontend\Views\AccesoView;
 use AsdeBalears\AreaPrivada\Frontend\Views\ActivarCuentaView;
 use AsdeBalears\AreaPrivada\Frontend\Views\AltaScoutersView;
+use AsdeBalears\AreaPrivada\Frontend\Views\InscripcionEsperaView;
+use AsdeBalears\AreaPrivada\Frontend\Views\ListaEsperaView;
 use AsdeBalears\AreaPrivada\Frontend\Views\AltaUsuariosView;
 use AsdeBalears\AreaPrivada\Frontend\Views\AreaPrivadaView;
 use AsdeBalears\AreaPrivada\Frontend\Views\AyudaView;
@@ -90,6 +92,8 @@ final class Router {
 		'inventario'         => array( 'asde_inventario', InventarioView::class ),
 		'inventario_tipos'   => array( 'asde_inventario_tipos', InventarioTiposView::class ),
 		'inventario_compras' => array( 'asde_inventario_compras', InventarioComprasView::class ),
+		'lista_espera'       => array( 'asde_lista_espera', ListaEsperaView::class ),
+		'inscripcion_espera' => array( 'asde_inscripcion_espera', InscripcionEsperaView::class ),
 	);
 
 	public function register(): void {

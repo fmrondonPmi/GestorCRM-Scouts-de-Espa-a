@@ -46,6 +46,7 @@ final class Roles {
 					'asde_uniformes_entrega' => true,
 					'asde_mis_pagos'         => true,
 					'asde_inventario'        => true, // Inventario de material (v0.19, doc 32).
+					'asde_lista_espera'      => true, // Lista de espera (v0.32, doc 39): ver, contactar y cambiar el estado.
 				),
 			),
 			self::SECRETARIA   => array(
@@ -66,6 +67,8 @@ final class Roles {
 					'asde_uniformes_entrega' => true,
 					'asde_mis_pagos'         => true,
 					'asde_inventario'        => true,
+					'asde_lista_espera'      => true,
+					'asde_lista_espera_alta' => true, // Asignar sección, dar de alta en el CRM y borrar (v0.32).
 				),
 			),
 			self::COORDINACION => array(
@@ -90,6 +93,8 @@ final class Roles {
 					'asde_uniformes_config'  => true,
 					'asde_mis_pagos'         => true,
 					'asde_inventario'        => true,
+					'asde_lista_espera'      => true,
+					'asde_lista_espera_alta' => true,
 				),
 			),
 			self::TESORERIA    => array(
@@ -108,6 +113,7 @@ final class Roles {
 					// Inventario: Tesorería da el visto bueno a las listas de compra (sin él no se imprimen).
 					'asde_inventario'         => true,
 					'asde_inventario_aprobar' => true,
+					'asde_lista_espera'       => true,
 				),
 			),
 			self::TUTOR        => array(

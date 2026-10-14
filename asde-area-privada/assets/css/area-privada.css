@@ -2578,3 +2578,23 @@ dialog.asde-modal--imprimir {
 	flex: 1 1 180px;
 	min-width: 120px;
 }
+
+/* ---------------------------------------------------------------------------
+ * v0.32 · Lista de espera (doc 39)
+ * ------------------------------------------------------------------------- */
+.asde-ap .asde-espera-enlaces {
+	margin-top: 1.5em;
+}
+.asde-ap .asde-espera-enlaces summary {
+	cursor: pointer;
+}
+.asde-ap .asde-espera-historial {
+	margin: 0;
+	padding-left: 1.2em;
+}
+.asde-ap .asde-espera-historial li {
+	margin-bottom: 0.8em;
+}
+.asde-ap .asde-espera-borrar {
+	margin-top: 1.5em;
+}

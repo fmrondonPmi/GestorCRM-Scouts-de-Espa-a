@@ -83,6 +83,14 @@ Hay que resolverlas antes de programar cada parte. Cuando se responde una, se ma
 | P-119 | ✅ **Cambio de sección (supuesto, v0.31.0):** de Rovers, la siguiente es Scouters; Voluntariado cuenta como scouter (cambia a cualquier sección, como en P-103). (doc 38) | Altas |
 | P-120 | ✅ **Nº territorial en el alta (supuesto, v0.31.0):** además de generarlo, se guarda en el CRM si se puede (como «Asignar nº» de Personas). (doc 38) | Altas |
 | P-121 | ✅ **Tooltip de la cuota (supuesto, v0.31.0):** lleva los hijos que pagan y, si lo hay, el ajuste. (doc 38) | Tesorería |
+| P-123 | **Sección por edad (supuesto, v0.32.0):** la edad que cumple en el año en que empieza la ronda (septiembre a agosto): Castores 6-7, Lobatos 8-10, Scouts 11-13, Escultas 14-16, Rovers 17-20, Scouters 21+. (doc 39) | Lista de espera |
+| P-124 | **Quién ve qué (supuesto, v0.32.0):** los scouters ven **toda** la lista del grupo (no solo sus secciones), con filtro por sección; el documento solo lo ven Secretaría y Coordinación. (doc 39) | Lista de espera |
+| P-125 | **Persona de contacto (supuesto, v0.32.0):** se piden su nombre y apellidos, obligatorios por debajo de 18 años (el alta en el CRM los necesita como tutor/a 1). El género no se pide: lo pone Secretaría al dar de alta. (doc 39) | Lista de espera |
+| P-126 | **Sin editar (supuesto, v0.32.0):** desde su enlace la persona ve, mantiene y borra sus datos, pero no los edita (escribe al grupo o se vuelve a apuntar). (doc 39) | Lista de espera |
+| P-127 | **Plazos (supuesto, v0.32.0):** sin confirmar se borran a los 7 días; el aviso de caducidad sale 30 días antes, una vez por periodo. (doc 39) | Lista de espera |
+| P-128 | **Apagado por defecto (supuesto, v0.32.0):** el módulo se enciende por grupo en wp-admin → Módulos; «Dar de alta» necesita además las altas en el CRM activas. (doc 39) | Lista de espera |
+| P-129 | **Repetidas (supuesto, v0.32.0):** misma persona y mismo email no se repite (se reenvía el email); con otro email se apunta y sale como «Repetida». (doc 39) | Lista de espera |
+| P-130 | **Observaciones (supuesto, v0.32.0):** no van al CRM (no hay campo); Secretaría las lee antes del alta. (doc 39) | Lista de espera |
 | P-122 | ✅ **Traducciones en translate.wordpress.org (pregunta, v0.31.0):** los textos originales del área están en castellano y translate.wordpress.org espera inglés. ¿Se dejan en castellano (funciona igual) o se plantea pasarlos a inglés (mucho trabajo)? Plan de la migración en el doc 38, §4. | Idiomas |
 
 ## Resueltas

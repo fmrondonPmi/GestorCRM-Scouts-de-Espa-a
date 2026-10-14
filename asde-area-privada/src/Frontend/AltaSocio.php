@@ -51,6 +51,7 @@ final class AltaSocio {
 			'error'         => '',
 			'resultado'     => null,
 			'escrito'       => '',
+			'espera'        => 0, // v0.32: inscripción de la lista de espera de la que viene (doc 39).
 		);
 	}
 
@@ -184,6 +185,7 @@ final class AltaSocio {
 		$s['inicio']        = self::texto( $post['inicio'] ?? '' ) ?: wp_date( 'Y-m-d' );
 		$s['sin_documento'] = ! empty( $post['sin_doc'] );
 		$s['comprobado']    = self::texto( $post['comprobado'] ?? '' );
+		$s['espera']        = absint( $post['espera'] ?? 0 );
 		$otros              = (string) ( $post['otros'] ?? '0' );
 		$s['otros']         = 'x' === $otros ? null : absint( $otros );
 		return $s;
@@ -252,6 +254,9 @@ final class AltaSocio {
 		$add( 'otros', null === $s['otros'] ? 'x' : (string) (int) $s['otros'] );
 		if ( $s['sin_documento'] ) {
 			$add( 'sin_doc', '1' );
+		}
+		if ( $s['espera'] ) {
+			$add( 'espera', (string) $s['espera'] );
 		}
 		return $html;
 	}

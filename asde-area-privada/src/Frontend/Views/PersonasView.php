@@ -12,6 +12,7 @@ use AsdeBalears\AreaPrivada\Domain\Grupo;
 use AsdeBalears\AreaPrivada\Domain\Persona;
 use AsdeBalears\AreaPrivada\Domain\Secciones;
 use AsdeBalears\AreaPrivada\Frontend\AltaSocio;
+use AsdeBalears\AreaPrivada\ListaEspera\Inscripciones;
 use AsdeBalears\AreaPrivada\Frontend\Notices;
 use AsdeBalears\AreaPrivada\Frontend\Tabla;
 use AsdeBalears\AreaPrivada\Socios\Numeracion;
@@ -184,7 +185,20 @@ final class PersonasView extends View {
 			// Sin redirigir: cada paso se pinta en esta misma petición y lo escrito va en el
 			// formulario, así no tiene que guardarse en ningún sitio para enseñarlo después.
 			if ( Altas::disponible() ) {
-				self::$alta = AltaSocio::atender( $accion, $this->campos_alta(), fn( string $d ) => $this->comprobar( $d ), Altas::make() );
+				$campos = $this->campos_alta();
+				$espera = $this->inscripcion_espera( (int) $campos['espera'] );
+				if ( ! $espera ) {
+					$campos['espera'] = '';
+				} elseif ( 'alta_documento' === $accion ) {
+					// v0.32 (doc 39): desde la lista de espera, sus datos se descifran aquí (nunca van en el HTML de la lista).
+					$campos['d']       = Inscripciones::datos_alta( $espera ) + $campos['d'];
+					$campos['seccion'] = '' !== $campos['seccion'] ? $campos['seccion'] : $espera['seccion_final'];
+				}
+				self::$alta = AltaSocio::atender( $accion, $campos, fn( string $d ) => $this->comprobar( $d ), Altas::make() );
+				if ( $espera && AltaSocio::HECHO === self::$alta['paso'] ) {
+					// Ya está en el CRM: sus datos de la lista de espera se borran en el momento.
+					self::$alta['espera_borrada'] = Inscripciones::borrar( $espera['id'], 'alta', array( 'socio' => (string) ( self::$alta['resultado']['numero'] ?? '' ) ) );
+				}
 			}
 			return;
 		}
@@ -272,10 +286,15 @@ final class PersonasView extends View {
 		);
 	}
 
+	/** Inscripción de la lista de espera de la que viene el alta (solo para quien puede dar de alta desde ella). */
+	private function inscripcion_espera( int $id ): ?array {
+		return $id && current_user_can( ListaEsperaView::CAP_ALTA ) ? Inscripciones::obtener( $id ) : null;
+	}
+
 	/** Campos que envían los pasos del alta. */
 	private function campos_alta(): array {
 		$out = array( 'd' => $this->post_array( 'd' ) );
-		foreach ( array( 'documento', 'sin_documento', 'sin_doc', 'seccion', 'inicio', 'comprobado', 'otros', 'confirmo', 'corregir' ) as $c ) {
+		foreach ( array( 'documento', 'sin_documento', 'sin_doc', 'seccion', 'inicio', 'comprobado', 'otros', 'confirmo', 'corregir', 'espera' ) as $c ) {
 			$out[ $c ] = $this->post( $c );
 		}
 		return $out;

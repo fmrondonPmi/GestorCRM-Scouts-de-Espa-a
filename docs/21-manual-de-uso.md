@@ -152,6 +152,10 @@ Un **WordPress de demostración aparte** (Local, Enfold, plugin, mu-plugin con C
 - **Arreglo que salió al fotografiar:** en el móvil (390 px) la tercera hoja («Registro de emails») quedaba cortada; las pestañas son ahora más compactas por debajo de 600 px y caben las tres (CSS del plugin; zip 0.25.0 rehecho, el anterior se conserva como `asde-area-privada-0.25.0-sin-hojas-movil.zip`).
 - El generador pasa a la versión 0.25. Paquete **`manual-de-uso-0.25.0.zip`** (carpeta antigua) y copia en `app/public/temporal/` de Local. **No se ha publicado nada**: lo sube el usuario.
 
+## Versión 4.11 · lista de espera (v0.32.0, 2026-10-14)
+
+Solo textos, sin capturas nuevas: apartado nuevo `lista-espera.html` (`#lista-espera`, `data-paginas="lista_espera"`: el enlace para apuntarse, la lista con la sección por edad y el orden, contactar y cambiar el estado, asignar la sección y dar de alta) en los manuales de **scouters** y de **coordinación**, y la fila «Lista de espera» (apagada por defecto) en `admin-modulos.html`. El generador pasa a «versión 0.32» (por eso cambian todos los ficheros de `asde-area-privada/ayuda/`). Las v0.30 y v0.31 siguen sin textos en el manual (pendiente).
+
 ## Versión 4.10 · lote de mejoras (v0.29.0, 2026-10-11)
 
 Solo textos (las capturas **no** se han rehecho todavía: las de informes, Personas, la ficha, cambios propuestos, gestión de uniformes e inventario enseñan aún las pantallas de la v0.28; ofrecido al usuario). Cambia la ayuda del plugin (se regenera con el manual).

@@ -109,7 +109,7 @@ try {
 	Grupo::forzar( $falso );
 	echo "== Parte A · Por defecto, todo activo ==\n";
 	$como( $u_teso );
-	$ok( ! array_filter( array_keys( Modulos::LISTA ), static fn( $m ) => ! Modulos::activo( $m ) ), 'sin guardar nada, todos los módulos están activos (una instalación anterior no cambia)' );
+	$ok( ! array_filter( array_keys( Modulos::LISTA ), static fn( $m ) => Modulos::activo( $m ) === in_array( $m, Modulos::POR_DEFECTO_APAGADOS, true ) ), 'sin guardar nada, todos los módulos están activos (una instalación anterior no cambia) salvo los que nacen apagados (v0.32: la lista de espera)' );
 	$ok( current_user_can( 'asde_inventario' ) && current_user_can( 'asde_tesoreria_config' ) && current_user_can( 'asde_mis_pagos' ), 'Tesorería tiene sus permisos de siempre' );
 
 	echo "\n== Parte B · Apagar un módulo ==\n";
@@ -120,9 +120,9 @@ try {
 	$ok( current_user_can( 'asde_tesoreria_config' ) && current_user_can( 'asde_uniformes_pago' ), 'los demás módulos siguen igual' );
 	$como( $u_admin );
 	$ok( ! current_user_can( 'asde_inventario' ) && current_user_can( 'manage_options' ), 'también para un administrador mientras trabaja en ese grupo (wp-admin sigue igual)' );
-	$ok( Modulos::activo( Modulos::INVENTARIO, '998' ) && ! Modulos::caps_quitadas( '998' ), 'otro grupo no se ve afectado' );
+	$ok( Modulos::activo( Modulos::INVENTARIO, '998' ) && array( 'asde_lista_espera', 'asde_lista_espera_alta' ) === Modulos::caps_quitadas( '998' ), 'otro grupo no se ve afectado (solo le falta lo que nace apagado)' );
 	$stored = get_option( 'asde_ap_modulos' );
-	$ok( array( '999' => array( 'inventario' => false ) ) === $stored, 'solo se guarda lo apagado' );
+	$ok( array( '999' => array( 'inventario' => false, 'lista_espera' => true ) ) === $stored, 'solo se guarda lo que no es el valor por defecto (lo apagado y lo encendido que nace apagado)' );
 
 	echo "\n== Parte C · Banco y Domiciliaciones, dentro de Tesorería ==\n";
 	Modulos::guardar( '999', $todos_menos( Modulos::BANCO ) );
@@ -138,7 +138,7 @@ try {
 	$ok( ! current_user_can( 'asde_mis_pagos' ) && ! current_user_can( 'asde_uniformes_pedir' ), 'sin Tesorería ni Uniformes, «Mis pagos» también se va' );
 	Modulos::guardar( '999', array_keys( Modulos::LISTA ) );
 	$como( $u_teso );
-	$ok( current_user_can( 'asde_tesoreria_acceso' ) && current_user_can( 'asde_inventario' ) && ! isset( get_option( 'asde_ap_modulos', array() )['999'] ), 'al activarlos de nuevo vuelve todo, y el grupo deja de estar en la opción' );
+	$ok( current_user_can( 'asde_tesoreria_acceso' ) && current_user_can( 'asde_inventario' ) && array( 'lista_espera' => true ) === ( get_option( 'asde_ap_modulos', array() )['999'] ?? null ), 'al activarlos de nuevo vuelve todo, y del grupo solo queda en la opción la lista de espera encendida' );
 
 	echo "\n== Parte D · Formularios públicos ==\n";
 	Grupo::forzar( null );

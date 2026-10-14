@@ -164,3 +164,13 @@ asde_manage_users                 # alta/baja/vinculación de usuarios
 
 - **Cómo:** `Domain\Modulos` quita las capabilities de los módulos apagados con el filtro `user_has_cap` (en el grupo de esa persona; para quien está conectado, el grupo en el que trabaja). Con ellas desaparecen el menú, las tarjetas del inicio, los avisos de «Pendiente de revisar», las pantallas y las acciones, sin tocar cada vista. Banco y Domiciliaciones (que comparten la capability de configurar Tesorería) y los formularios públicos preguntan a `Modulos::activo()`.
 - Prueba: `tests/modulos.php`.
+
+## Actualización v0.32.0 (2026-10-14): lista de espera (doc 39)
+
+| Capability | Roles | Qué permite |
+|---|---|---|
+| `asde_lista_espera` | Scouter, Secretaría, Coordinación, Tesorería | Ver la lista de espera del grupo (toda, con filtro por sección, P-124) y el enlace para apuntarse; enviar un email, apuntar un contacto y cambiar el estado. El documento no lo ven. |
+| `asde_lista_espera_alta` | Secretaría, Coordinación | Además: ver el documento, asignar la sección, renovar el enlace del grupo, borrar una inscripción y **dar de alta en el CRM** desde ella (con «Alta de socio/a», que necesita también `asde_manage_users` y las altas en el CRM activas). |
+
+- Módulo **«Lista de espera»** en wp-admin → Grupos Scouts → Módulos, **apagado por defecto** (regla 5): `Domain\Modulos::POR_DEFECTO_APAGADOS`; encendido se guarda `[lista_espera => true]` en `asde_ap_modulos`. Apagado, nadie del grupo tiene esas dos capabilities y el enlace del grupo no enseña el formulario (los enlaces personales siguen sirviendo para ver o borrar los datos).
+- La página pública (`inscripcion_espera`) no pide sesión.

@@ -17,6 +17,7 @@ use AsdeBalears\AreaPrivada\Crm\Altas;
 use AsdeBalears\AreaPrivada\Crm\Duplicados;
 use AsdeBalears\AreaPrivada\Domain\Secciones;
 use AsdeBalears\AreaPrivada\Frontend\AltaSocio;
+use AsdeBalears\AreaPrivada\Frontend\Pages;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -62,6 +63,10 @@ $edad  = static function ( string $f ) use ( $hoy ): ?int {
 			<div class="asde-notice asde-notice--error" role="alert"><p><?php echo esc_html( $s['error'] ); ?></p></div>
 		<?php endif; ?>
 
+		<?php if ( ! empty( $s['espera'] ) && AltaSocio::HECHO !== $s['paso'] ) : ?>
+			<p class="asde-help"><?php asde_e( 'Viene de la lista de espera: los datos son los que escribió la familia. Revísalos y completa lo que falta (el género). Al terminar, la inscripción se borra de la lista.' ); ?> <a href="<?php echo esc_url( Pages::url( 'lista_espera', array( 'inscripcion' => (string) $s['espera'] ) ) ); ?>"><?php asde_e( 'Ver la inscripción' ); ?></a></p>
+		<?php endif; ?>
+
 		<?php if ( in_array( $s['paso'], array( AltaSocio::DATOS, AltaSocio::REVISAR ), true ) ) : ?>
 			<?php if ( null === $otros ) : ?>
 				<div class="asde-notice asde-notice--warning" role="status"><p><?php asde_e( 'No se ha podido comprobar si está dada de alta en otros grupos u organizaciones. Puedes seguir igualmente.' ); ?></p></div>
@@ -75,6 +80,9 @@ $edad  = static function ( string $f ) use ( $hoy ): ?int {
 			<form method="post" action="<?php echo esc_url( $url ); ?>" class="asde-form" data-asde-solo-consulta>
 				<?php wp_nonce_field( 'asde_alta_socio' ); ?>
 				<input type="hidden" name="asde_action" value="alta_documento">
+				<?php if ( ! empty( $s['espera'] ) ) : ?>
+					<input type="hidden" name="espera" value="<?php echo (int) $s['espera']; ?>">
+				<?php endif; ?>
 				<p>
 					<label for="asde-alta-doc"><?php asde_e( 'DNI, NIE u otro documento' ); ?></label>
 					<input type="text" id="asde-alta-doc" name="documento" maxlength="30" required autocomplete="off" spellcheck="false" value="<?php echo esc_attr( $s['escrito'] ); ?>">
@@ -272,6 +280,9 @@ $edad  = static function ( string $f ) use ( $hoy ): ?int {
 			?>
 			<div class="asde-notice asde-notice--success" role="status">
 				<p><strong><?php asde_e( 'Alta hecha en el CRM.' ); ?></strong>
+				<?php if ( ! empty( $s['espera_borrada'] ) ) : ?>
+					<?php asde_e( 'Sus datos de la lista de espera se han borrado.' ); ?>
+				<?php endif; ?>
 				<?php /* translators: 1: nombre, 2: sección, 3: fecha */ echo esc_html( sprintf( asde_t( '%1$s ya es socio/a del grupo, en %2$s desde el %3$s.' ), $nombre, Secciones::nombre( $s['seccion'] ), $dma( $s['inicio'] ) ) ); ?></p>
 			</div>
 			<?php if ( '' !== $r['numero'] ) : ?>

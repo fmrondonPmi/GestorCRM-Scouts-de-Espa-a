@@ -149,7 +149,6 @@ final class ModulosPage {
 
 	/** La casilla refleja lo guardado del propio módulo (aunque su módulo padre esté apagado). */
 	private function marcado( string $modulo, string $grupo ): bool {
-		$apagados = Modulos::apagados();
-		return empty( $apagados[ $grupo ] ) || ! array_key_exists( $modulo, $apagados[ $grupo ] );
+		return Modulos::encendido( $modulo, $grupo ); // v0.32: algunos nacen apagados.
 	}
 }

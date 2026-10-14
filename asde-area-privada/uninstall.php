@@ -28,6 +28,11 @@ if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->prefix . 'asd
 	$wpdb->query( "UPDATE {$wpdb->prefix}asde_solicitudes SET datos_enc = NULL" ); // phpcs:ignore WordPress.DB
 }
 
+// Lista de espera (v0.32): cada fila es de alguien que aún no es del grupo; se vacía entera.
+if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->prefix . 'asde_lista_espera' ) ) ) { // phpcs:ignore WordPress.DB
+	$wpdb->query( "DELETE FROM {$wpdb->prefix}asde_lista_espera" ); // phpcs:ignore WordPress.DB
+}
+
 $asde_menu_item = (int) get_option( 'asde_ap_menu_item' );
 if ( $asde_menu_item && 'nav_menu_item' === get_post_type( $asde_menu_item ) ) {
 	wp_delete_post( $asde_menu_item, true );
@@ -45,7 +50,7 @@ foreach ( is_array( $asde_grupos ) ? $asde_grupos : array() as $asde_grupo ) {
 delete_transient( 'asde_ap_numeracion' );
 delete_transient( 'asde_ap_grupos_reintento' );
 
-foreach ( array( 'asde_ap_crm', 'asde_ap_crm_last_test', 'asde_ap_version', 'asde_ap_grupo', 'asde_ap_grupos', 'asde_ap_pages', 'asde_ap_menu_item', 'asde_ap_wordfence_config', 'asde_ap_tesoreria', 'asde_ap_banco_csv', 'asde_ap_colores', 'asde_ap_idioma', 'asde_ap_etiquetas', 'asde_ap_enlace_scouters' ) as $asde_option ) {
+foreach ( array( 'asde_ap_crm', 'asde_ap_crm_last_test', 'asde_ap_version', 'asde_ap_grupo', 'asde_ap_grupos', 'asde_ap_pages', 'asde_ap_menu_item', 'asde_ap_wordfence_config', 'asde_ap_tesoreria', 'asde_ap_banco_csv', 'asde_ap_colores', 'asde_ap_idioma', 'asde_ap_etiquetas', 'asde_ap_enlace_scouters', 'asde_ap_enlace_espera' ) as $asde_option ) {
 	delete_option( $asde_option );
 }
 delete_metadata( 'user', 0, 'asde_ap_idioma', '', true ); // Idioma elegido por cada persona (v0.15).

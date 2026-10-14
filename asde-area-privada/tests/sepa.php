@@ -311,7 +311,7 @@ try {
 	$imprimir             = ( new MisPagosView() )->render();
 	unset( $_GET['autorizacion'] );
 	$volcar( "autorizacion", $imprimir );
-	$ok( str_contains( $imprimir, 'Orden de domiciliación de adeudo directo SEPA' ) && str_contains( $imprimir, $m1['referencia'] ) && str_contains( $imprimir, $ICS_OK ) && str_contains( $imprimir, 'ES66 2100 0418 4012 3456 7891' ) && str_contains( $imprimir, 'Recurrente' ) && str_contains( $imprimir, 'Firmada electrónicamente' ) && str_contains( $imprimir, 'window.print' ), 'la autorización para imprimir lleva todos sus datos (referencia, acreedor, deudor, IBAN entero para quien firma, tipo de pago y firma electrónica)' );
+	$ok( str_contains( $imprimir, 'Orden de domiciliación de adeudo directo SEPA' ) && str_contains( $imprimir, $m1['referencia'] ) && str_contains( $imprimir, $ICS_OK ) && str_contains( $imprimir, 'ES66 2100 0418 4012 3456 7891' ) && str_contains( $imprimir, 'Recurrente' ) && str_contains( $imprimir, 'Firmada electrónicamente' ) && str_contains( $imprimir, 'data-asde-imprimir-pagina' ), 'la autorización para imprimir lleva todos sus datos (referencia, acreedor, deudor, IBAN entero para quien firma, tipo de pago y firma electrónica)' );
 	$como( $u_otra );
 	$_GET['autorizacion'] = (string) $m1['id'];
 	$ajena                = ( new MisPagosView() )->render();
