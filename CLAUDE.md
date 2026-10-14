@@ -32,7 +32,7 @@ Plugin de WordPress (`asde-area-privada/`, PHP ≥ 8.0, namespace `AsdeBalears\A
 
 ## Cómo se trabaja una versión
 
-1. **Entender antes de tocar**: `docs/00-INDICE.md` → el doc del módulo. Si el cambio es grande, escribir antes el plan en un doc nuevo (`docs/NN-…md`) y empezar después.
+1. **Entender antes de tocar**: `docs/40-mapa-de-la-aplicacion.md` (mapa mental, qué tocar para cada cambio e inventario; se regenera con la skill de usuario `mapa-area-privada`) → `docs/00-INDICE.md` → el doc del módulo. Si el cambio es grande, escribir antes el plan en un doc nuevo (`docs/NN-…md`) y empezar después.
 2. **Código**: seguir el estilo de al lado (WordPress Coding Standards, tabs, `array()` largo, comentarios en español que explican el *por qué*). Archivos nuevos en `src/` con autoload por namespace; nada de `require` salvo los `tests/lib`.
 3. **Pruebas** (obligatorias, una por cambio): `tests/<tema>.php` con el CRM simulado; cada prueba **restaura** todo lo que toca (opciones, tablas, usuarios, cachés, `asde_socios`) en un `finally`. Se escriben aserciones que puedan fallar (nada de `|| true` ni de ORs que siempre se cumplen).
    - Lanzar todo: `herramientas-desarrollo/probar-todo.sh` (despliega en Local y corre cada fichero; deben dar **«TODO OK»**). Una sola: `herramientas-desarrollo/probar-todo.sh identidad`.
