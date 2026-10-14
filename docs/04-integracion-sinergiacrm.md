@@ -273,6 +273,14 @@ Obtenido con el usuario de API del grupo, a partir de metadatos (`get_module_fie
 | **Salud y alimentación** | `alergias_c`, `alergias_obs_c`, `alergiamedicamentos*_c`, `alergias_medicamentossn_c`, `alimentacion_*` (alergias, intolerancias, régimen, trastornos), `datosmedicos_*` (medicación, consentimiento para administrarla, operaciones, enfermedades, minusvalías), `medicos_*` (enfermedades 1–3, tratamiento, vacunas, seguro y póliza, informe adjunto), `medicosnumtarjetasanitaria_c` → **categoría especial (RGPD art. 9)**, ver doc 08 |
 | Otros | `cesionimagen_c`, `certificadods_c` y `certificadods_fecha_c` (certificado de delitos sexuales), `formacionscout_c`, `formaciontiempolibre_c`, `iban_*`, `apodo_c` |
 
+### 7.3 bis Datos bancarios (comprobado 2026-10-14 con `herramientas-desarrollo/crm-datos-bancarios.php`, solo lectura)
+
+- **En la ficha (`Contacts`)** hay tres campos propios de ASDE: `iban_c` (varchar **24**, «IBAN»: cabe un IBAN español sin espacios, no uno extranjero largo), `iban_titular_c` (varchar 255, «Titular de IBAN») e `iban_entidad_c` (varchar 255, «IBAN Entidad»). No hay campos de mandato (referencia, fecha de firma) ni de BIC.
+- El usuario de la API del grupo **puede verlos y editarlos** (Contacts: ver, listar y editar; importar no).
+- Uso (solo recuentos): en el grupo 684, **0** fichas con IBAN; en todo el CRM, **5.585** con `iban_c`, 4.997 con titular y 3.200 con entidad (de unas 104.000): otros grupos u organizaciones federadas sí los usan.
+- Los módulos estándar de SinergiaCRM para domiciliar (`stic_Payment_Commitments` con cuenta y mandato, `stic_Payments`, `stic_Remittances` que genera la remesa SEPA) **no son accesibles** para el usuario de la API del grupo («You do not have access»).
+- Hoy la web no lee ni escribe estos campos: las autorizaciones SEPA (IBAN, titular, mandato) se guardan cifradas en WordPress (doc 25). Decisión pendiente: P-131.
+
 ### 7.4 Membresías (`stic_Contacts_Relationships`, reetiquetado)
 
 | Campo | Valores |
