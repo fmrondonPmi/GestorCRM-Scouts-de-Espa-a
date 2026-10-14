@@ -4,6 +4,7 @@
  *
  * @var array       $familia   [id, numero, miembros]
  * @var array|null  $mandato   Autorización vigente (Mandatos::activo_de_familia)
+ * @var array|null|false $cuenta La cuenta autorizada, de la ficha del CRM (null: la de la ficha ya no es la autorizada; false: el CRM no responde)
  * @var true|string $puede     true si puede firmar/anular; si no, el motivo
  * @var array[]     $proximos  Próximos adeudos de la familia (Remesas::proximos_de_familia)
  * @var bool        $lista     El grupo tiene activadas las domiciliaciones y sus datos completos
@@ -49,10 +50,14 @@ $fecha  = static fn( string $f ) => '' !== $f ? wp_date( 'd/m/Y', (int) strtotim
 		<ul class="asde-resumen">
 			<li><?php asde_e( 'Referencia:' ); ?> <strong><?php echo esc_html( $mandato['referencia'] ); ?></strong></li>
 			<li><?php asde_e( 'Firmada el' ); ?> <strong><?php echo esc_html( $fecha( $mandato['fecha_firma'] ) ); ?></strong></li>
-			<?php if ( '' !== $mandato['datos']['titular'] ) : ?>
-				<li><?php asde_e( 'Titular:' ); ?> <strong><?php echo esc_html( $mandato['datos']['titular'] ); ?></strong></li>
+			<?php if ( is_array( $cuenta ) && '' !== $cuenta['titular'] ) : ?>
+				<li><?php asde_e( 'Titular:' ); ?> <strong><?php echo esc_html( $cuenta['titular'] ); ?></strong></li>
 			<?php endif; ?>
 		</ul>
+		<?php if ( null === $cuenta ) : ?>
+			<p class="asde-help asde-help--warning"><?php asde_e( '⚠️ La cuenta que figura en la ficha del CRM ya no es la que autorizaste: hasta que firmes una autorización nueva no se cobrará nada por domiciliación.' ); ?></p>
+		<?php endif; ?>
+		<p class="asde-help"><?php asde_e( 'Los datos de la cuenta se guardan en la ficha de cada miembro de la familia en el CRM de Scouts de España; aquí solo se enseña enmascarada.' ); ?></p>
 		<div class="asde-actions">
 			<a class="button" href="<?php echo esc_url( add_query_arg( 'autorizacion', (int) $mandato['id'], $url ) ); ?>"><?php asde_e( 'Ver e imprimir la autorización' ); ?></a>
 			<?php if ( true === $puede ) : ?>

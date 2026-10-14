@@ -201,7 +201,12 @@ $nombres   = static function ( array $f ) use ( $personas ): string {
 						<td data-label="<?php echo esc_attr( asde_a( 'Autorización' ) ); ?>">
 							<?php if ( $m ) : ?>
 								<?php echo esc_html( sprintf( asde_t( '%s · %s · firmada el %s' ), $m['referencia'], $m['iban_mask'], $fmt_fecha( $m['fecha_firma'] ) ) ); ?>
-								<?php echo '' !== $m['datos']['titular'] ? '<br><span class="asde-muted">Titular: ' . esc_html( $m['datos']['titular'] ) . '</span>' : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?>
+								<?php $cuenta = null !== $cuentas ? ( $cuentas[ $id ] ?? null ) : false; ?>
+								<?php if ( $cuenta ) : ?>
+									<br><span class="asde-muted"><?php echo esc_html( sprintf( asde_t( 'Titular: %s' ), $cuenta['titular'] ) ); ?></span>
+								<?php elseif ( null === $cuenta ) : ?>
+									<br><span class="asde-help asde-help--warning"><?php asde_e( '⚠️ La cuenta de su ficha del CRM no es la autorizada (o no está): no se le cobrará hasta que firme de nuevo.' ); ?></span>
+								<?php endif; ?>
 								<?php echo null === $m['usado_en'] ? '<br><span class="asde-muted">' . esc_html( asde_t( 'Aún sin usar: el primer cobro irá como FRST.' ) ) . '</span>' : ''; ?>
 							<?php else : ?>
 								<span class="asde-muted"><?php asde_e( 'Sin autorización' ); ?></span>
@@ -224,5 +229,14 @@ $nombres   = static function ( array $f ) use ( $personas ): string {
 			</tbody>
 		</table>
 	<?php endif; ?>
-	<p class="asde-help"><?php asde_e( 'La autorización guarda el titular y el IBAN cifrados y solo enseña el IBAN enmascarado. Se conserva mientras esté vigente y 14 meses después de anularla, como pide la norma SEPA.' ); ?></p>
+	<p class="asde-help"><?php asde_e( 'La cuenta (IBAN, titular y entidad) se guarda en la ficha del CRM de Scouts de España de cada miembro de la familia; la web guarda la autorización (quién la firmó y cuándo, y la dirección), el IBAN enmascarado y una huella para comprobar, antes de cobrar, que la cuenta del CRM sigue siendo la autorizada. La autorización se conserva mientras esté vigente y 14 meses después de anularla, como pide la norma SEPA.' ); ?></p>
+	<?php if ( $locales ) : ?>
+		<form method="post" class="asde-form" data-asde-confirmar="<?php echo esc_attr( asde_js( '¿Pasar las cuentas de las autorizaciones a las fichas del CRM? Se escriben en la ficha de cada miembro de la familia y se borran de la web.' ) ); ?>">
+			<?php wp_nonce_field( 'asde_sepa_cuentas_crm' ); ?>
+			<input type="hidden" name="asde_action" value="sepa_cuentas_crm">
+			<input type="hidden" name="ronda" value="<?php echo esc_attr( $ronda ); ?>">
+			<p class="asde-help asde-help--warning"><?php asde_e( 'Hay autorizaciones firmadas antes de la versión 0.33 que guardan la cuenta en la web. Pásalas a las fichas del CRM: desde entonces la web ya no guarda ninguna cuenta.' ); ?></p>
+			<p><button type="submit" class="button"><?php asde_e( 'Pasar las cuentas al CRM' ); ?></button></p>
+		</form>
+	<?php endif; ?>
 </section>

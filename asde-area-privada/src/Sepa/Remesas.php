@@ -29,8 +29,13 @@ defined( 'ABSPATH' ) || exit;
  * - Cobros: cuando el banco ha cobrado, Tesorería registra los pagos (con la
  *   forma «Domiciliación SEPA») y marca los que se han devuelto.
  *
- * Los adeudos (titular, IBAN…) van en un JSON cifrado; se vacía 14 meses después
- * de la fecha de cobro. Tampoco se guardan si la remesa se anula.
+ * Los adeudos van en un JSON cifrado; se vacía 14 meses después de la fecha de cobro.
+ * Tampoco se guardan si la remesa se anula. v0.33 (P-131): la cuenta (IBAN y titular) no
+ * se guarda en la remesa: se lee de las fichas del CRM al prepararla y al descargar el
+ * fichero, comprobando con la huella de la autorización que es la cuenta autorizada. Una
+ * familia es un solo adeudo aunque su cuenta esté repetida en la ficha de cada miembro.
+ * (Los adeudos de autorizaciones de antes de la v0.33 sin pasar al CRM llevan su cuenta
+ * guardada, como antes: `cuenta` = `local`.)
  */
 final class Remesas {
 
@@ -145,6 +150,12 @@ final class Remesas {
 		$personas = $repo->obtener_varias( $nums );
 		$totales  = MovimientosTable::totales( $ronda );
 		$mandatos = Mandatos::activos();
+		// La cuenta de cada familia con autorización, de las fichas del CRM (en vivo, una consulta).
+		$socios_m = array();
+		foreach ( array_intersect_key( $familias, $mandatos ) as $f ) {
+			$socios_m = array_merge( $socios_m, $f['miembros'] );
+		}
+		$cuentas = $socios_m ? CuentaCrm::leer( $repo, $socios_m ) : array();
 		$en_curso = self::familias_sin_cobrar( $ronda );
 		$plazos   = array_values( $cfg['plazos'] );
 		$nombre   = '' !== $plazo && isset( $plazos[ (int) $plazo ] ) ? (string) $plazos[ (int) $plazo ]['nombre'] : asde_t( 'Todo lo pendiente' );
@@ -163,12 +174,16 @@ final class Remesas {
 			if ( $centimos <= 0 ) {
 				continue; // Ya tiene pagado lo que toca hasta ese plazo.
 			}
-			$m = $mandatos[ $id ] ?? null;
+			$m      = $mandatos[ $id ] ?? null;
+			$local  = $m ? Mandatos::cuenta_local( $m ) : null;
+			$cuenta = $m ? ( $local ?? CuentaCrm::de_familia( $f, (string) $m['iban_huella'], $cuentas ) ) : null;
 			if ( ! $m ) {
 				$omitidas[] = self::omitida( $f, $centimos, asde_t( 'Sin autorización SEPA' ) );
 			} elseif ( isset( $en_curso[ $id ] ) ) {
 				$omitidas[] = self::omitida( $f, $centimos, sprintf( asde_t( 'Ya está en la remesa %s (falta registrar su cobro)' ), $en_curso[ $id ] ) );
-			} elseif ( ! Iban::es_valido( $m['datos']['iban'] ) ) {
+			} elseif ( ! $cuenta ) {
+				$omitidas[] = self::omitida( $f, $centimos, asde_t( 'La cuenta de su ficha del CRM no es la autorizada (o no está): tiene que firmar la autorización de nuevo' ) );
+			} elseif ( ! Iban::es_valido( $cuenta['iban'] ) || '' === $cuenta['titular'] ) {
 				$omitidas[] = self::omitida( $f, $centimos, asde_t( 'No se puede leer la autorización (pídele que la firme de nuevo)' ) );
 			} else {
 				$lineas[] = array(
@@ -177,9 +192,12 @@ final class Remesas {
 					'familia_n'   => $f['numero'],
 					'umr'         => $m['referencia'],
 					'fecha_firma' => $m['fecha_firma'],
-					'titular'     => $m['datos']['titular'],
-					'iban'        => $m['datos']['iban'],
-					'iban_mask'   => $m['iban_mask'],
+					'titular'     => $cuenta['titular'],
+					'iban'        => $cuenta['iban'],
+					'iban_mask'   => Iban::enmascarar( $cuenta['iban'] ),
+					'cuenta'      => $local ? 'local' : 'crm',
+					'socio'       => (string) ( $cuenta['socio'] ?? '' ),
+					'iban_huella' => (string) $m['iban_huella'],
 					'secuencia'   => Mandatos::secuencia( $m ),
 					'centimos'    => $centimos,
 					'e2e'         => '',
@@ -282,7 +300,8 @@ final class Remesas {
 		}
 		$contenido = array(
 			'acreedor' => array_intersect_key( $cfg, array_flip( array( 'nombre', 'ics', 'iban', 'bic', 'calle', 'cp', 'poblacion' ) ) ),
-			'lineas'   => $lineas,
+			// v0.33: la cuenta se queda en el CRM (se vuelve a leer al descargar el fichero).
+			'lineas'   => array_map( static fn( array $l ): array => 'local' === ( $l['cuenta'] ?? 'local' ) ? $l : array_diff_key( $l, array_flip( array( 'iban', 'titular' ) ) ), $lineas ),
 		);
 		$wpdb->update( self::table(), array( 'lineas_enc' => Crypto::encrypt_contexto( (string) wp_json_encode( $contenido ), 'sepa|remesa|' . $id ) ), array( 'id' => $id ) );
 		Logger::log(
@@ -344,7 +363,12 @@ final class Remesas {
 			return new \WP_Error( 'asde_sepa', asde_t( 'Los datos de esta remesa ya no se conservan.' ) );
 		}
 		$cfg = array_merge( Config::defaults(), $c['acreedor'] );
-		$err = Pain008::errores( $cfg, (string) $remesa['fecha_cobro'], $c['lineas'] );
+		$con = self::con_cuentas( $c['lineas'] );
+		if ( $con['errores'] ) {
+			return new \WP_Error( 'asde_sepa', implode( ' ', $con['errores'] ) );
+		}
+		$c['lineas'] = $con['lineas'];
+		$err         = Pain008::errores( $cfg, (string) $remesa['fecha_cobro'], $c['lineas'] );
 		if ( $err ) {
 			return new \WP_Error( 'asde_sepa', implode( ' ', $err ) );
 		}
@@ -358,6 +382,59 @@ final class Remesas {
 				'creada'      => get_date_from_gmt( $remesa['creada'], 'Y-m-d\TH:i:s' ),
 			),
 			$c['lineas']
+		);
+	}
+
+	/**
+	 * Completa los adeudos con la cuenta de las fichas del CRM (v0.33): el titular y el IBAN de
+	 * la ficha cuyo IBAN es el autorizado (por la huella). Los que la llevan guardada (de antes
+	 * de la v0.33) se dejan como están.
+	 *
+	 * @param array[] $lineas
+	 * @return array{lineas:array[], errores:string[]}
+	 */
+	public static function con_cuentas( array $lineas ): array {
+		$familias = array();
+		foreach ( $lineas as $l ) {
+			if ( ! isset( $l['iban'] ) && ( $f = FamiliasTable::obtener( (int) $l['familia'] ) ) ) {
+				$familias[ (int) $l['familia'] ] = $f;
+			}
+		}
+		if ( ! $familias ) {
+			return array(
+				'lineas'  => $lineas,
+				'errores' => array(),
+			);
+		}
+		$repo = PersonaRepository::make();
+		try {
+			$cuentas = $repo ? CuentaCrm::leer( $repo, array_merge( ...array_values( array_column( $familias, 'miembros' ) ) ) ) : null;
+		} catch ( \AsdeBalears\AreaPrivada\Crm\CrmException $e ) {
+			$cuentas = null;
+		}
+		if ( null === $cuentas ) {
+			return array(
+				'lineas'  => $lineas,
+				'errores' => array( asde_t( 'No se ha podido leer la cuenta de las familias en el CRM: inténtalo más tarde.' ) ),
+			);
+		}
+		$errores = array();
+		foreach ( $lineas as $i => $l ) {
+			if ( isset( $l['iban'] ) ) {
+				continue;
+			}
+			$c = isset( $familias[ (int) $l['familia'] ] ) ? CuentaCrm::de_familia( $familias[ (int) $l['familia'] ], (string) ( $l['iban_huella'] ?? '' ), $cuentas ) : null;
+			if ( ! $c ) {
+				/* translators: %s: nº de la familia */
+				$errores[] = sprintf( asde_t( 'Familia %s: la cuenta de su ficha del CRM ya no es la autorizada.' ), $l['familia_n'] );
+				continue;
+			}
+			$lineas[ $i ]['iban']    = $c['iban'];
+			$lineas[ $i ]['titular'] = $c['titular'];
+		}
+		return array(
+			'lineas'  => $lineas,
+			'errores' => $errores,
 		);
 	}
 

@@ -6,6 +6,7 @@ use AsdeBalears\AreaPrivada\Crm\Altas;
 use AsdeBalears\AreaPrivada\Crm\CrmException;
 use AsdeBalears\AreaPrivada\Crm\Escritura;
 use AsdeBalears\AreaPrivada\Crm\PersonaRepository;
+use AsdeBalears\AreaPrivada\Sepa\CuentaCrm;
 use AsdeBalears\AreaPrivada\Domain\Persona;
 use AsdeBalears\AreaPrivada\Domain\Secciones;
 use AsdeBalears\AreaPrivada\Fichas\Cambios;
@@ -69,6 +70,7 @@ final class FichaView extends View {
 			}
 			$campos = ( new FichaService( $repo ) )->cargar( $p, $perm );
 			$numero = ( new Numeracion( $repo ) )->de( $p );
+			$sepa   = $this->sepa( $repo, $ambito, $p, $perm );
 		} catch ( CrmException $e ) {
 			return $this->error_crm( 'ficha', asde_t( 'No se ha podido consultar el CRM: ' ) . $e->getMessage() );
 		}
@@ -91,7 +93,44 @@ final class FichaView extends View {
 					'url_personas'  => $this->url( 'personas' ),
 					'url_cambios'   => $this->url( 'cambios' ),
 					'url_alta'      => $this->url( 'alta' ),
+					'sepa'          => $sepa,
 				)
+			)
+		);
+	}
+
+	/**
+	 * v0.33 (P-131): los datos bancarios de la ficha (del CRM, en vivo; no se guardan) y la
+	 * autorización SEPA de su familia. Los ven Tesorería (y quien configura la Tesorería), la
+	 * familia y el propio asociado mayor de edad; '' para el resto o con el módulo apagado.
+	 */
+	private function sepa( PersonaRepository $repo, Ambito $a, \AsdeBalears\AreaPrivada\Domain\Persona $p, PermisosFicha $perm ): string {
+		if ( ! \AsdeBalears\AreaPrivada\Domain\Modulos::activo( \AsdeBalears\AreaPrivada\Domain\Modulos::SEPA ) ) {
+			return '';
+		}
+		$familiar  = isset( $a->representados[ $p->num_socio_asde ] ) || ( $perm->es_propia() && null !== $p->edad() && $p->edad() >= 18 );
+		$tesoreria = current_user_can( 'asde_tesoreria_config' );
+		if ( ! $familiar && ! $tesoreria ) {
+			return '';
+		}
+		$v       = $repo->valores( $p, array( CuentaCrm::IBAN, CuentaCrm::TITULAR, CuentaCrm::ENTIDAD ) );
+		$iban    = \AsdeBalears\AreaPrivada\Sepa\Iban::normalizar( (string) ( $v[ CuentaCrm::IBAN ] ?? '' ) );
+		$cuenta  = '' !== $iban ? array(
+			'iban'    => $iban,
+			'titular' => trim( (string) ( $v[ CuentaCrm::TITULAR ] ?? '' ) ),
+			'entidad' => trim( (string) ( $v[ CuentaCrm::ENTIDAD ] ?? '' ) ),
+		) : null;
+		$familia = \AsdeBalears\AreaPrivada\Tesoreria\FamiliasTable::de_socio( $p->num_socio_asde );
+		$mandato = $familia ? \AsdeBalears\AreaPrivada\Sepa\Mandatos::activo_de_familia( (int) $familia['id'] ) : null;
+		return $this->tpl(
+			'fichas/sepa',
+			array(
+				'cuenta'        => $cuenta,
+				'familia'       => $familia,
+				'mandato'       => $mandato,
+				'coincide'      => $mandato && ( null !== \AsdeBalears\AreaPrivada\Sepa\Mandatos::cuenta_local( $mandato ) || ( $cuenta && hash_equals( (string) $mandato['iban_huella'], CuentaCrm::huella( $iban ) ) ) ),
+				'url_gestion'   => $familiar ? $this->url( 'pagos' ) . ( $familia ? '#sepa-' . (int) $familia['id'] : '' ) : $this->url( 'sepa' ),
+				'texto_gestion' => $familiar ? asde_t( 'Autorizar el cobro o cambiar la cuenta en «Mis pagos»' ) : asde_t( 'Ver las domiciliaciones (Tesorería)' ),
 			)
 		);
 	}

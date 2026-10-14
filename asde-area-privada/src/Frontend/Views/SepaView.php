@@ -8,6 +8,7 @@ use AsdeBalears\AreaPrivada\Frontend\Notices;
 use AsdeBalears\AreaPrivada\Sepa\Avisos;
 use AsdeBalears\AreaPrivada\Sepa\Config as SepaConfig;
 use AsdeBalears\AreaPrivada\Sepa\Iban;
+use AsdeBalears\AreaPrivada\Sepa\CuentaCrm;
 use AsdeBalears\AreaPrivada\Sepa\Mandatos;
 use AsdeBalears\AreaPrivada\Sepa\Remesas;
 use AsdeBalears\AreaPrivada\Tesoreria\Calculadora;
@@ -71,6 +72,22 @@ final class SepaView extends TesoreriaBaseView {
 			$prep    = Remesas::preparar( $repo, $ronda, $plazo );
 		}
 
+		// v0.33: la cuenta de cada autorización está en las fichas del CRM (titular y si sigue siendo la autorizada).
+		$mandatos = Mandatos::activos();
+		$cuentas  = array();
+		$socios_m = array();
+		foreach ( array_intersect_key( $familias, $mandatos ) as $f ) {
+			$socios_m = array_merge( $socios_m, $f['miembros'] );
+		}
+		try {
+			$leidas = $socios_m ? CuentaCrm::leer( $repo, $socios_m ) : array();
+			foreach ( $mandatos as $fid => $m ) {
+				$cuentas[ $fid ] = Mandatos::cuenta_local( $m ) ?? ( isset( $familias[ $fid ] ) ? CuentaCrm::de_familia( $familias[ $fid ], (string) $m['iban_huella'], $leidas ) : null );
+			}
+		} catch ( CrmException $e ) {
+			$cuentas = null; // Sin CRM no se puede saber: no se avisa de nada.
+		}
+
 		return $this->tpl(
 			'tesoreria/sepa',
 			array(
@@ -82,7 +99,9 @@ final class SepaView extends TesoreriaBaseView {
 				'plazos'     => array_values( $tcfg['plazos'] ),
 				'familias'   => $familias,
 				'personas'   => $personas,
-				'mandatos'   => Mandatos::activos(),
+				'mandatos'   => $mandatos,
+				'cuentas'    => $cuentas,
+				'locales'    => Mandatos::hay_cuentas_locales(),
 				'remesas'    => Remesas::listado(),
 				'prep'       => $prep,
 				'errores'    => $errores,
@@ -101,7 +120,7 @@ final class SepaView extends TesoreriaBaseView {
 		if ( ! $r ) {
 			return $this->tpl( 'comun/avisos', array( 'avisos' => array( array( 'error', asde_t( 'Esa remesa no existe.' ) ) ) ) ) . $this->panel( $repo, $ronda );
 		}
-		$lineas   = Remesas::lineas( $r );
+		$lineas   = Remesas::con_cuentas( Remesas::lineas( $r ) )['lineas']; // v0.33: el titular, de la ficha del CRM.
 		$familias = array();
 		foreach ( $lineas as $l ) {
 			$f = FamiliasTable::obtener( (int) $l['familia'] );
@@ -139,6 +158,23 @@ final class SepaView extends TesoreriaBaseView {
 			case 'sepa_config':
 				check_admin_referer( 'asde_sepa_config' );
 				$this->guardar_config();
+				$this->redirect( $volver );
+				break;
+
+			case 'sepa_cuentas_crm':
+				// v0.33 (P-131): las cuentas de las autorizaciones de antes, a las fichas del CRM.
+				check_admin_referer( 'asde_sepa_cuentas_crm' );
+				$repo = PersonaRepository::make();
+				if ( ! $repo ) {
+					Notices::add( 'error', asde_t( 'La conexión con el CRM no está disponible.' ) );
+					$this->redirect( $volver );
+				}
+				$res = Mandatos::pasar_al_crm( $repo );
+				/* translators: 1: autorizaciones pasadas, 2: anuladas limpiadas */
+				Notices::add( $res['errores'] ? 'warning' : 'success', esc_html( sprintf( asde_t( 'Cuentas pasadas a las fichas del CRM: %1$d. Autorizaciones anuladas de las que se ha borrado la cuenta: %2$d.' ), $res['pasadas'], $res['borradas'] ) ) );
+				foreach ( $res['errores'] as $e ) {
+					Notices::add( 'error', esc_html( $e ) );
+				}
 				$this->redirect( $volver );
 				break;
 

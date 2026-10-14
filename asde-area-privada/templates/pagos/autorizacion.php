@@ -37,11 +37,11 @@ $dir_deu = trim( implode( ', ', array_filter( array( $d['calle'], trim( $d['cp']
 			<?php if ( '' !== $dir_acr ) : ?>
 				<div><dt><?php asde_e( 'Dirección del acreedor' ); ?></dt><dd><?php echo esc_html( $dir_acr ); ?></dd></div>
 			<?php endif; ?>
-			<div><dt><?php asde_e( 'Nombre del deudor' ); ?></dt><dd><?php echo '' !== $d['titular'] ? esc_html( $d['titular'] ) : '—'; ?></dd></div>
+			<div><dt><?php asde_e( 'Nombre del deudor' ); ?></dt><dd><?php echo $cuenta && '' !== $cuenta['titular'] ? esc_html( $cuenta['titular'] ) : '—'; ?></dd></div>
 			<?php if ( '' !== $dir_deu ) : ?>
 				<div><dt><?php asde_e( 'Dirección del deudor' ); ?></dt><dd><?php echo esc_html( $dir_deu ); ?></dd></div>
 			<?php endif; ?>
-			<div><dt><?php asde_e( 'Cuenta de adeudo (IBAN)' ); ?></dt><dd><?php echo esc_html( $completo && '' !== $d['iban'] ? Iban::formatear( $d['iban'] ) : $mandato['iban_mask'] ); ?></dd></div>
+			<div><dt><?php asde_e( 'Cuenta de adeudo (IBAN)' ); ?></dt><dd><?php echo esc_html( $completo && $cuenta ? Iban::formatear( $cuenta['iban'] ) : $mandato['iban_mask'] ); ?></dd></div>
 			<div><dt><?php asde_e( 'Tipo de pago' ); ?></dt><dd><?php asde_e( 'Recurrente' ); ?></dd></div>
 			<div><dt><?php asde_e( 'Familia (Tesorería)' ); ?></dt><dd><?php echo esc_html( $familia['numero'] ); ?></dd></div>
 			<div><dt><?php asde_e( 'Fecha y localidad de la firma' ); ?></dt><dd><?php echo esc_html( $fecha( $mandato['fecha_firma'] ) . ( '' !== $d['lugar'] ? ', ' . $d['lugar'] : '' ) ); ?></dd></div>

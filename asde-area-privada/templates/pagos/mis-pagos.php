@@ -73,6 +73,7 @@ $fecha = static fn( string $f ) => '' !== $f ? wp_date( 'd/m/Y', strtotime( $f )
 			array(
 				'familia'  => $c['familia'],
 				'mandato'  => $s['mandato'],
+				'cuenta'   => $s['cuenta'],
 				'puede'    => $s['puede'],
 				'proximos' => $s['proximos'],
 				'valores'  => $s['valores'],

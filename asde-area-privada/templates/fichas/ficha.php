@@ -233,6 +233,12 @@ $control = static function ( string $campo, array $f ) use ( $pendientes ): stri
 	<?php endif; ?>
 </form>
 
+<?php
+if ( '' !== ( $sepa ?? '' ) ) {
+	echo $sepa; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- plantilla propia (fichas/sepa), escapada dentro.
+}
+?>
+
 <?php if ( $cambios ) : ?>
 	<section class="asde-card" data-asde-plegable="ficha-cambios">
 		<h3><?php asde_e( 'Cambios propuestos en esta ficha' ); ?></h3>

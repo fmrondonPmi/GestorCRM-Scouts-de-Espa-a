@@ -26,7 +26,11 @@ $fid = (int) $familia['id'];
 		<p>
 			<label for="asde-sepa-iban-<?php echo absint( $fid ); ?>"><?php asde_e( 'IBAN de la cuenta' ); ?></label>
 			<input type="text" id="asde-sepa-iban-<?php echo absint( $fid ); ?>" name="iban" maxlength="40" required inputmode="text" autocapitalize="characters" spellcheck="false" placeholder="<?php echo esc_attr( asde_a( 'ES00 0000 0000 0000 0000 0000' ) ); ?>" value="<?php echo esc_attr( $campo( 'iban' ) ); ?>">
-			<span class="asde-help"><?php asde_e( 'Cuenta de una entidad de la zona SEPA. Se guarda cifrada y solo se enseña enmascarada.' ); ?></span>
+			<span class="asde-help"><?php asde_e( 'Cuenta española (24 caracteres). Se guarda, con el titular y la entidad, en la ficha de cada miembro de la familia en el CRM de Scouts de España; la web solo guarda tu autorización.' ); ?></span>
+		</p>
+		<p>
+			<label for="asde-sepa-entidad-<?php echo absint( $fid ); ?>"><?php asde_e( 'Entidad (banco, opcional)' ); ?></label>
+			<input type="text" id="asde-sepa-entidad-<?php echo absint( $fid ); ?>" name="entidad" maxlength="70" autocomplete="off" value="<?php echo esc_attr( $campo( 'entidad' ) ); ?>">
 		</p>
 		<p>
 			<label for="asde-sepa-calle-<?php echo absint( $fid ); ?>"><?php asde_e( 'Dirección (calle y número)' ); ?></label>

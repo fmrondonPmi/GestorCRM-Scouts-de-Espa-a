@@ -139,6 +139,33 @@ final class PersonaRepository {
 	}
 
 	/**
+	 * Valores de campos concretos de varias fichas del grupo, siempre en vivo (v0.33: la
+	 * cuenta bancaria, que no entra en la instantánea). Nada se guarda.
+	 *
+	 * @param string[] $nums   Nº Scouts de España
+	 * @param string[] $campos
+	 * @return array<string, array<string, string>> num_asde => campo => valor
+	 */
+	public function valores_varias( array $nums, array $campos ): array {
+		$nums   = array_values( array_unique( array_filter( array_map( 'strval', $nums ), array( self::class, 'es_num_asde' ) ) ) );
+		$campos = array_values( array_unique( array_filter( $campos, static fn( $c ) => (bool) preg_match( '/^[a-z0-9_]+$/', (string) $c ) ) ) );
+		$out    = array();
+		foreach ( array_chunk( $nums, 50 ) as $lote ) {
+			$in = implode( ',', array_map( array( Query::class, 'str' ), $lote ) );
+			foreach ( self::filtrar_grupo( $this->crm->list_entries( 'Contacts', "contacts_cstm.numerosocio_c IN ($in)", array_merge( array( 'id', 'numerosocio_c' ), $campos ), self::links_grupo(), 0, 60 )['entries'] ) as $e ) {
+				$f   = (array) ( $e['fields'] ?? array() );
+				$num = (string) ( $f['numerosocio_c'] ?? '' );
+				if ( '' !== $num ) {
+					foreach ( $campos as $c ) {
+						$out[ $num ][ $c ] = (string) ( $f[ $c ] ?? '' );
+					}
+				}
+			}
+		}
+		return $out;
+	}
+
+	/**
 	 * Aislamiento entre grupos: con cada ficha se pide su grupo de seguridad del
 	 * CRM y se descarta todo lo que no sea del grupo en el que se trabaja. Así no
 	 * hay visibilidad entre grupos aunque unas credenciales vieran varios.

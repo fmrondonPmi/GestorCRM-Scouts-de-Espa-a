@@ -7,6 +7,7 @@ use AsdeBalears\AreaPrivada\Crm\PersonaRepository;
 use AsdeBalears\AreaPrivada\Frontend\Notices;
 use AsdeBalears\AreaPrivada\Sepa\Avisos;
 use AsdeBalears\AreaPrivada\Sepa\Config as SepaConfig;
+use AsdeBalears\AreaPrivada\Sepa\CuentaCrm;
 use AsdeBalears\AreaPrivada\Sepa\Mandatos;
 use AsdeBalears\AreaPrivada\Sepa\Remesas;
 use AsdeBalears\AreaPrivada\Tesoreria\Calculadora;
@@ -134,8 +135,10 @@ final class MisPagosView extends View {
 			'familias' => array(),
 		);
 		foreach ( $familias as $id => $f ) {
+			$m                       = Mandatos::activo_de_familia( $id );
 			$sepa['familias'][ $id ] = array(
-				'mandato'  => Mandatos::activo_de_familia( $id ),
+				'mandato'  => $m,
+				'cuenta'   => $m ? self::cuenta( $repo, $f, $m ) : null,
 				'puede'    => Mandatos::puede_firmar( $a, $f ),
 				'proximos' => Remesas::proximos_de_familia( $id ),
 				'valores'  => self::$valores && (int) ( self::$valores['familia'] ?? 0 ) === $id ? self::$valores['datos'] : null,
@@ -159,6 +162,28 @@ final class MisPagosView extends View {
 		);
 	}
 
+	/**
+	 * La cuenta autorizada de la familia, de las fichas del CRM (v0.33, P-131), o la guardada en
+	 * una autorización antigua. null si la de las fichas ya no es la autorizada; false si el CRM
+	 * no responde.
+	 *
+	 * @return array|null|false
+	 */
+	private static function cuenta( ?PersonaRepository $repo, array $familia, array $m ) {
+		$local = Mandatos::cuenta_local( $m );
+		if ( $local ) {
+			return $local;
+		}
+		if ( ! $repo ) {
+			return false;
+		}
+		try {
+			return CuentaCrm::de_familia( $familia, (string) $m['iban_huella'], CuentaCrm::leer( $repo, $familia['miembros'] ) );
+		} catch ( \AsdeBalears\AreaPrivada\Crm\CrmException $e ) {
+			return false;
+		}
+	}
+
 	/** La autorización para ver e imprimir (solo quien es de esa familia). */
 	private function autorizacion( Ambito $a, array $familias, int $id ): string {
 		$m       = Mandatos::obtener( $id );
@@ -166,12 +191,14 @@ final class MisPagosView extends View {
 		if ( ! $m || ! $familia ) {
 			return $this->denegado( asde_t( 'No tienes acceso a esa autorización.' ) );
 		}
+		$cuenta = Mandatos::ACTIVO === $m['estado'] ? self::cuenta( PersonaRepository::make(), $familia, $m ) : Mandatos::cuenta_local( $m );
 		return $this->layout(
 			'pagos',
 			$this->tpl(
 				'pagos/autorizacion',
 				array(
 					'mandato'   => $m,
+					'cuenta'    => is_array( $cuenta ) ? $cuenta : null,
 					'familia'   => $familia,
 					'acreedor'  => SepaConfig::de(),
 					'texto'     => Mandatos::texto( SepaConfig::de() ),
@@ -209,6 +236,7 @@ final class MisPagosView extends View {
 					array(
 						'titular'   => $this->post( 'titular' ),
 						'iban'      => $this->post( 'iban' ),
+						'entidad'   => $this->post( 'entidad' ),
 						'calle'     => $this->post( 'calle' ),
 						'cp'        => $this->post( 'cp' ),
 						'poblacion' => $this->post( 'poblacion' ),

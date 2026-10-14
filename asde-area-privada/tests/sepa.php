@@ -21,6 +21,9 @@ require_once ABSPATH . 'wp-admin/includes/user.php';
 use AsdeBalears\AreaPrivada\Audit\Logger;
 use AsdeBalears\AreaPrivada\Auth\Ambito;
 use AsdeBalears\AreaPrivada\Crm\Crypto;
+use AsdeBalears\AreaPrivada\Crm\Escritura;
+use AsdeBalears\AreaPrivada\Frontend\Views\FichaView;
+use AsdeBalears\AreaPrivada\Sepa\CuentaCrm;
 use AsdeBalears\AreaPrivada\Crm\PersonaRepository;
 use AsdeBalears\AreaPrivada\Domain\Grupo;
 use AsdeBalears\AreaPrivada\Domain\Grupos;
@@ -119,6 +122,23 @@ $crm = new Asde_Prueba_Crm(
 $falsos = array_map( static fn( $p ) => $p['numerosocio_c'], $crm->personas );
 Grupo::forzar( $grupo );
 $crm->activar();
+Escritura::usar_para_pruebas( $crm ); // v0.33: la cuenta se escribe en las fichas (del simulado).
+// La cuenta guardada en una ficha del CRM simulado, y cambiarla «desde la federación».
+$ficha_crm   = static function ( string $socio ) use ( $crm ): array {
+	foreach ( $crm->personas as $p ) {
+		if ( $socio === $p['numerosocio_c'] ) {
+			return $p;
+		}
+	}
+	return array();
+};
+$cambiar_crm = static function ( array $socios, string $iban ) use ( $crm ): void {
+	foreach ( $crm->personas as $i => $p ) {
+		if ( in_array( $p['numerosocio_c'], $socios, true ) ) {
+			$crm->personas[ $i ]['iban_c'] = $iban;
+		}
+	}
+};
 
 $ids   = array();
 $crear = static function ( string $login, array $roles, array $meta, ?string $email = null ) use ( &$ids, $grupo ): int {
@@ -298,7 +318,8 @@ try {
 	$destino    = $enviar( new MisPagosView(), $form_mandato( $f1 ), 'asde_sepa_firmar_' . $f1 );
 	$m1         = Mandatos::activo_de_familia( $f1 );
 	$ok( str_contains( $destino, 'mis-pagos' ) && $m1 && 'M' . $grupo['numero'] . '-' . str_pad( (string) $m1['id'], 6, '0', STR_PAD_LEFT ) === $m1['referencia'] && Mandatos::ACTIVO === $m1['estado'] && $u_fam === $m1['firmado_por'] && current_time( 'Y-m-d' ) === $m1['fecha_firma'], 'firma correcta → autorización vigente con su referencia (M684-…), quién firmó y la fecha' );
-	$ok( 'ES66 **** **** **** **** 7891' === $m1['iban_mask'] && $IBAN_1 === $m1['datos']['iban'] && 'María Núñez Pérez' === $m1['datos']['titular'] && 'FRST' === Mandatos::secuencia( $m1 ), 'guarda el IBAN (limpio y sin espacios), el titular y la dirección; la primera vez irá como FRST' );
+	$ok( 'ES66 **** **** **** **** 7891' === $m1['iban_mask'] && CuentaCrm::huella( $IBAN_1 ) === $m1['iban_huella'] && '' === $m1['datos']['iban'] && '' === $m1['datos']['titular'] && 'Calle Mayor 5, 2.º' === $m1['datos']['calle'] && 'FRST' === Mandatos::secuencia( $m1 ), 'la web guarda la autorización (dirección, IBAN enmascarado y su huella), pero no la cuenta; la primera vez irá como FRST' );
+	$ok( $IBAN_1 === ( $ficha_crm( '990031' )['iban_c'] ?? '' ) && $IBAN_1 === ( $ficha_crm( '990032' )['iban_c'] ?? '' ) && 'María Núñez Pérez' === ( $ficha_crm( '990031' )['iban_titular_c'] ?? '' ) && 'María Núñez Pérez' === ( $ficha_crm( '990032' )['iban_titular_c'] ?? '' ), 'la cuenta (IBAN limpio y titular) se guarda en la ficha del CRM de cada miembro de la familia (P-131)' );
 	$crudo = (array) $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . Mandatos::table() . ' WHERE id = %d', $m1['id'] ), ARRAY_A ); // phpcs:ignore WordPress.DB
 	$todo  = implode( '|', $crudo );
 	$ok( ! str_contains( $todo, '6621000418' ) && ! str_contains( $todo, 'Núñez' ) && ! str_contains( $todo, 'Calle Mayor' ) && ! str_contains( $todo, '192.0.2.77' ) && null === Crypto::decrypt_contexto( (string) $crudo['datos_enc'], 'sepa|mandato|' . ( $m1['id'] + 1 ) ) && ! isset( json_decode( (string) Crypto::decrypt_contexto( (string) $crudo['datos_enc'], 'sepa|mandato|' . $m1['id'] ), true )['ip'] ), 'en la base de datos no hay IBAN, nombre, dirección ni IP en claro: todo cifrado con una clave ligada al mandato' );
@@ -327,7 +348,7 @@ try {
 	$como( $u_rex );
 	$enviar( new MisPagosView(), $form_mandato( $f3, array( 'titular' => 'Rex Sepa Gil', 'iban' => $IBAN_3, 'calle' => 'Plaza 1', 'cp' => '07003' ) ), 'asde_sepa_firmar_' . $f3 );
 	$m3 = Mandatos::activo_de_familia( $f3 );
-	$ok( $m3 && $u_rex === $m3['firmado_por'] && $IBAN_3 === $m3['datos']['iban'], 'un asociado mayor de edad firma la autorización de su familia' );
+	$ok( $m3 && $u_rex === $m3['firmado_por'] && $IBAN_3 === ( $ficha_crm( '990034' )['iban_c'] ?? '' ), 'un asociado mayor de edad firma la autorización de su familia (y la cuenta va a su ficha)' );
 
 	echo "\n== Parte E · Sustituir y anular ==\n";
 	$como( $u_fam );
@@ -343,7 +364,7 @@ try {
 	$como( $u_fam );
 	$enviar( new MisPagosView(), $form_mandato( $f1 ), 'asde_sepa_firmar_' . $f1 );
 	$m1 = Mandatos::activo_de_familia( $f1 );
-	$ok( $m1 && $IBAN_1 === $m1['datos']['iban'], 'la familia vuelve a firmar (cuenta de la familia 1)' );
+	$ok( $m1 && CuentaCrm::huella( $IBAN_1 ) === $m1['iban_huella'] && $IBAN_1 === ( $ficha_crm( '990031' )['iban_c'] ?? '' ), 'la familia vuelve a firmar (cuenta de la familia 1, otra vez en sus fichas)' );
 
 	echo "\n== Parte F · Qué se cobra (vista previa) ==\n";
 	$repo = PersonaRepository::make();
@@ -355,6 +376,11 @@ try {
 	$por_familia = array_column( $prep['lineas'], null, 'familia' );
 	$ok( 2 === count( $prep['lineas'] ) && 20000 === $por_familia[ $f1 ]['centimos'] && 14000 === $por_familia[ $f3 ]['centimos'] && 34000 === $prep['total'] && 'Todo lo pendiente' === $prep['plazo_nombre'], 'todo lo pendiente: familia 1 (258 − 58 ya pagados = 200 €) y Rex (140 €)' );
 	$ok( 'FRST' === $por_familia[ $f1 ]['secuencia'] && 'FRST' === $por_familia[ $f3 ]['secuencia'] && $m1['referencia'] === $por_familia[ $f1 ]['umr'] && $IBAN_1 === $por_familia[ $f1 ]['iban'], 'las autorizaciones estrenadas van como FRST, con su referencia y su cuenta' );
+	$ok( 1 === count( array_filter( $prep['lineas'], static fn( $l ) => $f1 === (int) $l['familia'] ) ) && $IBAN_1 === ( $ficha_crm( '990032' )['iban_c'] ?? '' ), 'la cuenta está en las dos fichas de la familia 1, pero se cobra una sola vez (un adeudo por autorización)' );
+	$cambiar_crm( array( '990031', '990032' ), $IBAN_3 );
+	$cambio = Remesas::preparar( $repo, $ronda, '' );
+	$cambiar_crm( array( '990031', '990032' ), $IBAN_1 );
+	$ok( ! isset( array_column( $cambio['lineas'], null, 'familia' )[ $f1 ] ) && str_contains( (string) ( array_column( $cambio['omitidas'], 'motivo', 'familia' )[ $f1 ] ?? '' ), 'no es la autorizada' ), 'si la cuenta de las fichas cambia en el CRM, no se cobra: hay que firmar de nuevo (la huella no coincide)' );
 	$omitidas = array_column( $prep['omitidas'], 'motivo', 'familia' );
 	$ok( 2 === count( $omitidas ) && 'Sin autorización SEPA' === ( $omitidas[ $f2 ] ?? '' ) && 'Sin autorización SEPA' === ( $omitidas[ $f4 ] ?? '' ), 'las familias con algo pendiente y sin autorización salen aparte («Sin autorización SEPA»)' );
 	$p0 = Remesas::preparar( $repo, $ronda, '0' );
@@ -377,7 +403,12 @@ try {
 	$r    = is_int( $id_r ) ? Remesas::obtener( $id_r ) : null;
 	$ok( $r && preg_match( '/^R' . $grupo['numero'] . '-\d{4}$/', $r['numero'] ) && Remesas::GENERADA === $r['estado'] && 2 === $r['adeudos'] && 340.0 === $r['total'] && $fecha_cobro === $r['fecha_cobro'] && $ronda === $r['ronda'], 'remesa creada: nº R684-…, generada, 2 adeudos, 340,00 €' );
 	$crudo_r = (array) $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . Remesas::table() . ' WHERE id = %d', $id_r ), ARRAY_A ); // phpcs:ignore WordPress.DB
-	$ok( ! str_contains( implode( '|', $crudo_r ), '6621000418' ) && ! str_contains( implode( '|', $crudo_r ), 'Núñez' ) && 2 === count( Remesas::lineas( $r ) ), 'los adeudos (titular e IBAN) van cifrados en la base de datos' );
+	$ok( ! str_contains( implode( '|', $crudo_r ), '6621000418' ) && ! str_contains( implode( '|', $crudo_r ), 'Núñez' ) && 2 === count( Remesas::lineas( $r ) ), 'los adeudos van cifrados en la base de datos' );
+	$ok( ! array_filter( Remesas::lineas( $r ), static fn( $l ) => isset( $l['iban'] ) || isset( $l['titular'] ) ), 'y sin la cuenta: ni IBAN ni titular (se leen del CRM al descargar el fichero)' );
+	$cambiar_crm( array( '990031', '990032' ), $IBAN_3 );
+	$xml_mal = Remesas::xml( $r );
+	$cambiar_crm( array( '990031', '990032' ), $IBAN_1 );
+	$ok( is_wp_error( $xml_mal ) && str_contains( $xml_mal->get_error_message(), 'ya no es la autorizada' ), 'si al descargar la cuenta del CRM ya no es la autorizada, no se genera el fichero' );
 	$xml = Remesas::xml( $r );
 	$dom = new DOMDocument();
 	$ok( is_string( $xml ) && $dom->loadXML( $xml ), 'el fichero es un XML bien formado' );
@@ -396,7 +427,7 @@ try {
 	$q = static fn( string $c ) => (string) ( $t1 ? ( $xp->query( $c, $t1 )->item( 0 )->textContent ?? '' ) : '' );
 	$ok( 2 === $tx->length && $t1 && '200.00' === $q( 'p:InstdAmt' ) && 'EUR' === $xp->query( 'p:InstdAmt', $t1 )->item( 0 )->getAttribute( 'Ccy' ) && $m1['referencia'] === $q( 'p:DrctDbtTx/p:MndtRltdInf/p:MndtId' ) && current_time( 'Y-m-d' ) === $q( 'p:DrctDbtTx/p:MndtRltdInf/p:DtOfSgntr' ) && $IBAN_1 === $q( 'p:DbtrAcct/p:Id/p:IBAN' ) && $r['numero'] . '-' . $fam1['numero'] === $q( 'p:PmtId/p:EndToEndId' ) && str_contains( $q( 'p:RmtInf/p:Ustrd' ), $fam1['numero'] ) && 'NOTPROVIDED' === $q( 'p:DbtrAgt/p:FinInstnId/p:Othr/p:Id' ), 'cada adeudo: importe, referencia y fecha de la autorización, IBAN del deudor, nombre limpio (Maria Nunez Perez), referencia extremo a extremo con el nº de familia y concepto con el nº de familia' );
 	$ok( ! preg_match( '/[^\x00-\x7F]/', (string) $xml ), 'el fichero es todo ASCII: sin tildes ni ñ' );
-	$largo = array( 'lineas' => Remesas::lineas( $r ) );
+	$largo = array( 'lineas' => Remesas::con_cuentas( Remesas::lineas( $r ) )['lineas'] ); // v0.33: con la cuenta del CRM, como al descargar.
 	$mal   = $largo['lineas'];
 	$mal[0]['iban'] = 'ES6621000418401234567892';
 	$ok( array() !== Pain008::errores( SepaConfig::de(), $fecha_cobro, $mal ) && array() === Pain008::errores( SepaConfig::de(), $fecha_cobro, $largo['lineas'] ), 'un IBAN mal en un adeudo impide generar el fichero, con su motivo' );
@@ -458,7 +489,7 @@ try {
 	$ok( 1 === count( Remesas::preparar( $repo, $ronda, '' )['lineas'] ), 'anulada, su familia vuelve a poder incluirse en otra' );
 	$wpdb->update( Mandatos::table(), array( 'revocado_en' => gmdate( 'Y-m-d H:i:s', strtotime( '-15 months' ) ) ), array( 'id' => $m1b['id'] ) );
 	$purga = Mandatos::purgar();
-	$ok( $purga >= 1 && '' === Mandatos::obtener( $m1b['id'] )['datos']['iban'] && $IBAN_1 === Mandatos::activo_de_familia( $f1 )['datos']['iban'], 'un mandato revocado hace más de 14 meses pierde sus datos; los vigentes no se tocan' );
+	$ok( $purga >= 1 && '' === Mandatos::obtener( $m1b['id'] )['datos']['calle'] && '' !== Mandatos::activo_de_familia( $f1 )['datos']['calle'], 'un mandato revocado hace más de 14 meses pierde sus datos; los vigentes no se tocan' );
 	$wpdb->update( Remesas::table(), array( 'fecha_cobro' => gmdate( 'Y-m-d', strtotime( '-15 months' ) ) ), array( 'id' => $id_r ) );
 	Remesas::purgar();
 	$ok( array() === Remesas::lineas( Remesas::obtener( (int) $id_r ) ), 'los adeudos de una remesa con cobro hace más de 14 meses se borran (queda el resumen)' );
@@ -568,6 +599,43 @@ try {
 	$ok( array( 'nombre' ) === array_keys( $sin['columnas'] ) && null === $sin['ronda'] && 2 === count( $sin['avisos'] ) && ! str_contains( $lista_sin, 'Pagos de la cuota' ), 'si el grupo no usa Tesorería: ni columnas ni filtro de pagos (con aviso), y el informe predefinido no sale' );
 	$como( $u_teso );
 
+	echo "\n== Parte K · La cuenta en la ficha del CRM (v0.33, P-131) ==\n";
+	$como( $u_fam );
+	$_GET = array( 'socio' => '990031' );
+	$h    = ( new FichaView() )->render();
+	$_GET = array();
+	$ok( str_contains( $h, 'Datos bancarios y domiciliación SEPA' ) && str_contains( $h, 'ES66 **** **** **** **** 7891' ) && str_contains( $h, 'María Núñez Pérez' ) && ! str_contains( $h, '2100 0418 4012' ) && str_contains( $h, $m1['referencia'] ), 'la ficha enseña a la familia los datos bancarios del CRM (enmascarados) y su autorización' );
+	$como( $u_scout );
+	$_GET = array( 'socio' => '990031' );
+	$h    = ( new FichaView() )->render();
+	$_GET = array();
+	$ok( str_contains( $h, 'Leo' ) && ! str_contains( $h, 'Datos bancarios' ) && ! str_contains( $h, '7891' ), 'un scouter que ve la ficha no ve los datos bancarios' );
+	// Una autorización de antes de la v0.33, con la cuenta guardada en la web (familia de Pol).
+	$wpdb->insert(
+		Mandatos::table(),
+		array(
+			'grupo'         => $grupo['numero'],
+			'familia_id'    => $f2,
+			'estado'        => Mandatos::ACTIVO,
+			'iban_mask'     => Iban::enmascarar( $IBAN_3 ),
+			'iban_huella'   => CuentaCrm::huella( $IBAN_3 ),
+			'texto_version' => 'v1',
+			'firmado_por'   => $u_fam,
+			'firmado_en'    => current_time( 'mysql', true ),
+			'fecha_firma'   => current_time( 'Y-m-d' ),
+		)
+	);
+	$mv = (int) $wpdb->insert_id;
+	$wpdb->update( Mandatos::table(), array( 'referencia' => Mandatos::referencia( $grupo['numero'], $mv ), 'datos_enc' => Crypto::encrypt_contexto( (string) wp_json_encode( array( 'titular' => 'Pol Sepa Mas', 'iban' => $IBAN_3, 'calle' => 'Calle Vieja 2', 'cp' => '07001', 'poblacion' => 'Palma' ) ), 'sepa|mandato|' . $mv ) ), array( 'id' => $mv ) );
+	$ok( Mandatos::hay_cuentas_locales() && 'local' === ( array_column( Remesas::preparar( $repo, $ronda, '' )['lineas'], null, 'familia' )[ $f2 ]['cuenta'] ?? '' ), 'una autorización antigua (con la cuenta en la web) sigue cobrándose con su cuenta mientras no se pase al CRM' );
+	$como( $u_teso );
+	$ok( str_contains( ( new SepaView() )->render(), 'value="sepa_cuentas_crm"' ), 'Tesorería ve «Pasar las cuentas al CRM»' );
+	$enviar( new SepaView(), array( 'asde_action' => 'sepa_cuentas_crm', 'ronda' => $ronda ), 'asde_sepa_cuentas_crm' );
+	$mvd = Mandatos::obtener( $mv );
+	$ok( $IBAN_3 === ( $ficha_crm( '990033' )['iban_c'] ?? '' ) && 'Pol Sepa Mas' === ( $ficha_crm( '990033' )['iban_titular_c'] ?? '' ) && '' === $mvd['datos']['iban'] && 'Calle Vieja 2' === $mvd['datos']['calle'] && ! Mandatos::hay_cuentas_locales(), '«Pasar las cuentas al CRM»: la cuenta va a las fichas de la familia y se borra de la web (queda la autorización)' );
+	$ok( 'crm' === ( array_column( Remesas::preparar( $repo, $ronda, '' )['lineas'], null, 'familia' )[ $f2 ]['cuenta'] ?? '' ), 'y desde entonces se cobra con la cuenta del CRM' );
+	$ok( ! str_contains( ( new SepaView() )->render(), 'value="sepa_cuentas_crm"' ), 'sin cuentas en la web, el botón ya no sale' );
+
 	$ok( $crm->llamadas > 0 && 0 === $cortadas, "todas las consultas al CRM las ha respondido el simulador ({$crm->llamadas}); ninguna ha salido hacia el CRM real" );
 } finally {
 	if ( isset( $mod_antes ) && get_option( 'asde_ap_modulos', null ) !== $mod_antes ) {
@@ -580,6 +648,7 @@ try {
 	remove_filter( 'send_auth_cookies', '__return_false' );
 	remove_filter( 'wp_redirect', $redirigir, 1 );
 	$_POST = $_GET = $_REQUEST = array();
+	Escritura::usar_para_pruebas( null );
 	$crm->desactivar();
 	remove_filter( 'pre_http_request', $cortar_crm, 2 );
 	wp_using_ext_object_cache( $cache_externa );

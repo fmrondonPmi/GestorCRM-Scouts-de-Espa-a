@@ -3,7 +3,9 @@ namespace AsdeBalears\AreaPrivada\Sepa;
 
 use AsdeBalears\AreaPrivada\Audit\Logger;
 use AsdeBalears\AreaPrivada\Auth\Ambito;
+use AsdeBalears\AreaPrivada\Crm\CrmException;
 use AsdeBalears\AreaPrivada\Crm\Crypto;
+use AsdeBalears\AreaPrivada\Crm\PersonaRepository;
 use AsdeBalears\AreaPrivada\Domain\Grupo;
 use AsdeBalears\AreaPrivada\Tesoreria\FamiliasTable;
 
@@ -20,10 +22,14 @@ defined( 'ABSPATH' ) || exit;
  * firmar otra, la anterior queda revocada («sustituida»).
  *
  * Qué se guarda y cómo:
- * - titular, IBAN y dirección, en JSON cifrado (libsodium, con una clave ligada
- *   al id del mandato y a la clave del sitio, que no está en la base de datos);
- * - en claro solo el IBAN enmascarado (ES91 **** **** ** ******1332) y su huella
- *   (HMAC), para enseñarlo y detectar repetidos;
+ * - v0.33 (P-131, decisión del usuario): la **cuenta** (IBAN, titular y entidad) se guarda
+ *   en la ficha del CRM de cada miembro de la familia (CuentaCrm), no aquí. La web guarda
+ *   la **autorización**: la dirección del deudor y el lugar de la firma, en JSON cifrado
+ *   (libsodium, con una clave ligada al id del mandato y a la clave del sitio, que no está
+ *   en la base de datos), y en claro el IBAN enmascarado (ES91 **** … 1332) y su huella
+ *   (HMAC), para enseñarlo y comprobar antes de cobrar que la cuenta del CRM es la
+ *   autorizada. Las autorizaciones de antes de la v0.33 llevaban también titular e IBAN
+ *   cifrados (cuenta_local()); «Pasar las cuentas al CRM» (pasar_al_crm()) los mueve;
  * - quién firmó, cuándo, y una huella de la IP (nunca la IP);
  * - la referencia única del mandato (M684-000012), la fecha de la firma y si ya
  *   se ha usado en una remesa (la primera vez es FRST y después RCUR).
@@ -141,6 +147,7 @@ final class Mandatos {
 		$d     = array(
 			'titular'   => $texto( $in['titular'] ?? '', 70 ),
 			'iban'      => Iban::normalizar( (string) ( $in['iban'] ?? '' ) ),
+			'entidad'   => $texto( $in['entidad'] ?? '', 70 ),
 			'calle'     => $texto( $in['calle'] ?? '', 70 ),
 			'cp'        => $texto( $in['cp'] ?? '', 10 ),
 			'poblacion' => $texto( $in['poblacion'] ?? '', 50 ),
@@ -154,6 +161,9 @@ final class Mandatos {
 		$e = Iban::error( $d['iban'] );
 		if ( '' !== $e ) {
 			$err[] = $e;
+		} elseif ( strlen( $d['iban'] ) > CuentaCrm::MAX_IBAN ) {
+			/* translators: %d: caracteres */
+			$err[] = sprintf( asde_t( 'La ficha del CRM solo admite cuentas de hasta %d caracteres (las españolas tienen 24): usa una cuenta española.' ), CuentaCrm::MAX_IBAN );
 		}
 		if ( '' === $d['calle'] || '' === $d['cp'] || '' === $d['poblacion'] ) {
 			$err[] = asde_t( 'Escribe la dirección del titular (calle, código postal y población).' );
@@ -183,6 +193,19 @@ final class Mandatos {
 		if ( ! Config::lista( $cfg ) ) {
 			return new \WP_Error( 'asde_sepa', asde_t( 'El grupo aún no tiene activadas las domiciliaciones SEPA.' ) );
 		}
+		// v0.33: primero la cuenta en las fichas del CRM; si el CRM no la guarda, no hay autorización.
+		$repo = PersonaRepository::make();
+		if ( ! $repo ) {
+			return new \WP_Error( 'asde_sepa', asde_t( 'La conexión con el CRM no está disponible.' ) );
+		}
+		try {
+			$guardada = CuentaCrm::guardar( $repo, $familia['miembros'], $datos );
+		} catch ( CrmException $e ) {
+			$guardada = new \WP_Error( 'asde_sepa', asde_t( 'El CRM no responde: inténtalo más tarde.' ) );
+		}
+		if ( is_wp_error( $guardada ) ) {
+			return $guardada;
+		}
 		$ip  = isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '';
 		$hoy = current_time( 'Y-m-d' );
 		$wpdb->insert(
@@ -192,7 +215,7 @@ final class Mandatos {
 				'familia_id'    => $familia_id,
 				'estado'        => self::ACTIVO,
 				'iban_mask'     => Iban::enmascarar( $datos['iban'] ),
-				'iban_huella'   => Crypto::hmac( 'sepa|iban|' . $datos['iban'] ),
+				'iban_huella'   => CuentaCrm::huella( $datos['iban'] ),
 				'texto_version' => self::TEXTO_VERSION,
 				'firmado_por'   => $user_id,
 				'firmado_en'    => current_time( 'mysql', true ),
@@ -208,7 +231,8 @@ final class Mandatos {
 			self::table(),
 			array(
 				'referencia' => self::referencia( Grupo::numero(), $id ),
-				'datos_enc'  => Crypto::encrypt_contexto( (string) wp_json_encode( $datos ), 'sepa|mandato|' . $id ),
+				// Sin la cuenta (está en el CRM): solo la dirección del deudor y el lugar de la firma.
+				'datos_enc'  => Crypto::encrypt_contexto( (string) wp_json_encode( array_diff_key( $datos, array_flip( array( 'iban', 'titular', 'entidad' ) ) ) ), 'sepa|mandato|' . $id ),
 			),
 			array( 'id' => $id )
 		);
@@ -216,6 +240,77 @@ final class Mandatos {
 		$wpdb->query( $wpdb->prepare( 'UPDATE %i SET estado = %s, revocado_por = %d, revocado_en = %s, motivo = %s WHERE familia_id = %d AND estado = %s AND id <> %d', self::table(), self::REVOCADO, $user_id, current_time( 'mysql', true ), 'Sustituida por una autorización nueva', $familia_id, self::ACTIVO, $id ) ); // phpcs:ignore WordPress.DB
 		Logger::log( 'sepa_mandato_firmado', 'familia', (string) $familia_id, array( 'mandato' => $id ) );
 		return $id;
+	}
+
+	/**
+	 * Cuenta guardada en la propia autorización (las firmadas antes de la v0.33), o null.
+	 *
+	 * @return array{iban:string, titular:string, entidad:string}|null
+	 */
+	public static function cuenta_local( array $m ): ?array {
+		return '' !== (string) $m['datos']['iban'] ? array(
+			'iban'    => (string) $m['datos']['iban'],
+			'titular' => (string) $m['datos']['titular'],
+			'entidad' => '',
+		) : null;
+	}
+
+	/** ¿Quedan autorizaciones del grupo con la cuenta guardada en la web (de antes de la v0.33)? */
+	public static function hay_cuentas_locales(): bool {
+		global $wpdb;
+		foreach ( (array) $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM %i WHERE grupo = %s AND datos_enc IS NOT NULL', self::table(), Grupo::numero() ), ARRAY_A ) as $fila ) { // phpcs:ignore WordPress.DB
+			if ( null !== self::cuenta_local( self::preparar( $fila ) ) ) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * «Pasar las cuentas al CRM» (v0.33): la cuenta de cada autorización vigente de antes de la
+	 * v0.33 se escribe en las fichas de su familia y se borra de la web; de las anuladas solo se
+	 * borra (no se escriben en el CRM).
+	 *
+	 * @return array{pasadas:int, borradas:int, errores:string[]}
+	 */
+	public static function pasar_al_crm( PersonaRepository $repo ): array {
+		global $wpdb;
+		$res   = array(
+			'pasadas'  => 0,
+			'borradas' => 0,
+			'errores'  => array(),
+		);
+		$filas = (array) $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM %i WHERE grupo = %s AND datos_enc IS NOT NULL', self::table(), Grupo::numero() ), ARRAY_A ); // phpcs:ignore WordPress.DB
+		foreach ( $filas as $fila ) {
+			$m      = self::preparar( $fila );
+			$cuenta = self::cuenta_local( $m );
+			if ( null === $cuenta ) {
+				continue;
+			}
+			if ( self::ACTIVO === $m['estado'] ) {
+				$familia = FamiliasTable::obtener( $m['familia_id'] );
+				try {
+					$r = $familia ? CuentaCrm::guardar( $repo, $familia['miembros'], $cuenta ) : new \WP_Error( 'asde_sepa', asde_t( 'Esa familia no existe.' ) );
+				} catch ( CrmException $e ) {
+					$r = new \WP_Error( 'asde_sepa', $e->getMessage() );
+				}
+				if ( is_wp_error( $r ) ) {
+					/* translators: 1: referencia de la autorización, 2: motivo */
+					$res['errores'][] = sprintf( asde_t( '%1$s: %2$s' ), $m['referencia'], $r->get_error_message() );
+					continue;
+				}
+				++$res['pasadas'];
+			} else {
+				++$res['borradas'];
+			}
+			$wpdb->update(
+				self::table(),
+				array( 'datos_enc' => Crypto::encrypt_contexto( (string) wp_json_encode( array_diff_key( $m['datos'], array_flip( array( 'iban', 'titular', 'entidad' ) ) ) ), 'sepa|mandato|' . $m['id'] ) ),
+				array( 'id' => $m['id'] )
+			);
+		}
+		Logger::log( 'sepa_cuentas_al_crm', 'grupo', Grupo::numero(), array( 'pasadas' => $res['pasadas'], 'borradas' => $res['borradas'], 'errores' => count( $res['errores'] ) ) );
+		return $res;
 	}
 
 	/** Del grupo actual. */
@@ -302,6 +397,7 @@ final class Mandatos {
 		$fila['datos'] = $datos + array(
 			'titular'   => '',
 			'iban'      => '',
+			'entidad'   => '',
 			'calle'     => '',
 			'cp'        => '',
 			'poblacion' => '',

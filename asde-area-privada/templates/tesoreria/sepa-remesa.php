@@ -115,7 +115,7 @@ $pendientes = array_filter( $lineas, static fn( $l ) => Remesas::PENDIENTE === $
 					<tr>
 						<td data-label="<?php echo esc_attr( asde_a( 'Familia' ) ); ?>"><a href="<?php echo esc_url( add_query_arg( array( 'familia' => (int) $l['familia'], 'ronda' => $r['ronda'] ), $url_fam ) ); ?>"><?php echo esc_html( $l['familia_n'] ); ?></a></td>
 						<td data-label="<?php echo esc_attr( asde_a( 'Socios' ) ); ?>"><?php echo esc_html( $nombres( (int) $l['familia'] ) ); ?></td>
-						<td data-label="<?php echo esc_attr( asde_a( 'Titular' ) ); ?>"><?php echo esc_html( $l['titular'] . ' · ' . ( $l['iban_mask'] ?? '' ) ); ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Titular' ) ); ?>"><?php echo esc_html( ( '' !== (string) ( $l['titular'] ?? '' ) ? $l['titular'] : '—' ) . ' · ' . ( $l['iban_mask'] ?? '' ) ); ?></td>
 						<td data-label="<?php echo esc_attr( asde_a( 'Secuencia' ) ); ?>"><?php echo esc_html( $l['secuencia'] ); ?></td>
 						<td data-label="<?php echo esc_attr( asde_a( 'Importe' ) ); ?>"><?php echo esc_html( Calculadora::euros( $l['centimos'] / 100 ) ); ?></td>
 						<td data-label="<?php echo esc_attr( asde_a( 'Estado' ) ); ?>"><?php echo esc_html( $estado_l[ $l['estado'] ] ?? $l['estado'] ); ?></td>
