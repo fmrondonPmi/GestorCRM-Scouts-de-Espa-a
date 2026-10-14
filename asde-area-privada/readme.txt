@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.32.0
+Stable tag: 0.33.0
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -52,6 +52,11 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.33.0 =
+* SEPA direct debit: the bank account (IBAN, holder, bank) is no longer stored by the plugin. When a guardian or an adult member signs the authorization, the account is written to the CRM record of every member of the family; the plugin keeps the authorization, the masked IBAN and a fingerprint to check, before each collection, that the CRM account is still the authorized one. Each family is still a single debit in the SEPA file.
+* Person record: new "Bank details and SEPA direct debit" section (masked), for the family, adult members and Treasury.
+* Treasury: "Move accounts to the CRM" for authorizations signed before 0.33.
 
 = 0.32.0 =
 * New "Waiting list" module (off by default; turn it on per group in Scout Groups → Modules): a group link where non-members leave the minimum data (name, surnames, birth date, ID document from age 14, contact phone and email, notes), email confirmation, a personal link to view, keep (12 more months) or delete their data, and automatic deletion after 12 months with a reminder 30 days before.
@@ -155,6 +160,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * First version with the mobile app (PWA).
 
 == Upgrade Notice ==
+
+= 0.33.0 =
+The SEPA bank account moves to the CRM record. No database changes; Treasury can move older authorizations with one button.
 
 = 0.32.0 =
 Waiting list module (off by default). Adds a new table for the waiting list (created automatically on update).

@@ -67,7 +67,8 @@ mindmap
         tipos de movimiento
       Domiciliación SEPA
         autorización de la familia
-        remesa pain.008
+        cuenta en la ficha del CRM
+        remesa pain.008 un adeudo por familia
       Mis pagos
     CRM SinergiaCRM
       Cliente v4_1
@@ -159,7 +160,7 @@ grupo no ve a otro**; **nunca** se prueba contra el CRM real ni se escribe en é
 | Un email nuevo | clase con `asunto()/html()/enviar()` + `templates/email/…` + tipo en `Usuarios\RegistroEmails::TIPOS` | idioma de quien lo recibe, destino enmascarado |
 | Tarea automática diaria | `Install\Mantenimiento` | sin CRM si no hace falta |
 | Tesorería, cuotas, pagos | `src/Tesoreria/` (`Calculadora`, `Pagos`, `FamiliasTable`), vistas `Tesoreria*View` | la familia es la unidad de pago |
-| Domiciliación SEPA | `src/Sepa/` (`Mandatos`, `Remesas`, `Pain008`, `Iban`, `Avisos`, `Config`), `MisPagosView`, `SepaView` | doc 25; una remesa = un adeudo por familia |
+| Domiciliación SEPA | `src/Sepa/` (`Mandatos`, `Remesas`, `Pain008`, `Iban`, `Avisos`, `Config`, `CuentaCrm`), `MisPagosView`, `SepaView`, `FichaView` (apartado de datos bancarios) | doc 25 §9: la cuenta está en la ficha del CRM (no en la web) y se comprueba con la huella; una remesa = un adeudo por familia |
 | Estilos | al **final** de `assets/css/area-privada.css`, en un bloque con la versión | sin colores fijos (prueba `colores.php`); móvil a 390 px |
 | JavaScript | `assets/js/…` y sus textos en `Idiomas\TextosJs::LISTA` | probar en el banco estático (skill de versión §5) |
 | Ayuda de una página | `manual/fuentes/*.html` con `data-paginas="<clave>"` y `php herramientas/generar-manuales.php` | cambia el plugin (`ayuda/`) |
@@ -168,7 +169,7 @@ grupo no ve a otro**; **nunca** se prueba contra el CRM real ni se escribe en é
 ## 5. Inventario (generado)
 
 <!-- inventario:inicio -->
-_Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10-14 · plugin 0.32.0. No editar a mano: se regenera._
+_Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10-14 · plugin 0.33.0. No editar a mano: se regenera._
 
 ### Páginas (Frontend\Pages + Router)
 
@@ -456,6 +457,7 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 
 - `Avisos` — Emails de la domiciliación SEPA:
 - `Config` — Datos del acreedor para las domiciliaciones SEPA de cada grupo (opción asde_ap_sepa_<grupo>):
+- `CuentaCrm` — La cuenta bancaria de la domiciliación, en la ficha del CRM (v0.33, doc 25 §9; decisión del usuario, P-131):
 - `Iban` — IBAN:
 - `Mandatos` — Autorizaciones (mandatos) de adeudo directo SEPA ({prefix}asde_sepa_mandatos).
 - `Pain008` — Fichero de adeudos directos SEPA Core (ISO 20022 pain.008.001.02, el que aceptan los bancos españoles como «Cuaderno 19.14»).

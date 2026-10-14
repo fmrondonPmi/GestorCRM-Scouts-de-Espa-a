@@ -98,6 +98,7 @@
 	<ul>
 		<li>La primera remesa de una familia lleva la secuencia <strong>FRST</strong>; las siguientes, <strong>RCUR</strong> (la web lo cambia al marcarla como enviada).</li>
 		<li>La web no deja crear dos remesas con los mismos adeudos sin cobrar.</li>
-		<li>El IBAN y el titular se guardan cifrados, la autorización se conserva mientras esté vigente y 14 meses después de anularla, como pide la norma SEPA.</li>
+		<li>La cuenta (IBAN, titular y entidad) está en la ficha del CRM de cada miembro de la familia; la web guarda la autorización y comprueba antes de cobrar que la cuenta del CRM sigue siendo la autorizada (si no, la familia sale aparte y tiene que firmar de nuevo). Aunque la cuenta esté en varias fichas, cada familia es un solo adeudo. La autorización se conserva mientras esté vigente y 14 meses después de anularla, como pide la norma SEPA.</li>
+		<li>Si hay autorizaciones de antes de la versión 0.33, sale <strong>«Pasar las cuentas al CRM»</strong>: escribe su cuenta en las fichas y la borra de la web.</li>
 	</ul>
 </section>

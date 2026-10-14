@@ -142,6 +142,25 @@ La misma pestaña lista las familias con su autorización (referencia, IBAN enma
 - **I** · volver a cobrar lo devuelto (RCUR), anular, purga de datos antiguos;
 - **J** · pantalla de Tesorería (permisos, pestaña, vista previa, crear desde la pantalla, guardar datos del acreedor, datos incompletos, anular una autorización).
 
+## 9. La cuenta, en la ficha del CRM (v0.33, 2026-10-14; P-131)
+
+Decisión del usuario: «mejor no almacenar nosotros los datos de la cuenta, mejor la federación;
+de nuestra parte sí debe quedar la autorización de uso de cobros SEPA, que la podrá dar un
+tutor/a o asociado mayor de 18 años; no es problema duplicarlo en cada ficha, lo importante es
+que la domiciliación y el fichero SEPA no lo dupliquen».
+
+| Qué | Dónde |
+|---|---|
+| **IBAN, titular y entidad** | En la ficha del CRM de **cada miembro de la familia** (`iban_c` —24 caracteres, solo cuentas españolas—, `iban_titular_c`, `iban_entidad_c`; doc 04, §7.3 bis). Los escribe la web al firmar, a través de `Crm\Escritura` (`Sepa\CuentaCrm::guardar`). |
+| **La autorización** | En la web (`asde_sepa_mandatos`): referencia, quién firmó (cuenta familiar o asociado mayor de edad) y cuándo, la dirección del deudor y el lugar (cifrados), el **IBAN enmascarado** (para enseñarlo) y la **huella** (HMAC) del IBAN autorizado. Ni el IBAN entero ni el titular. |
+| **La remesa** | Un adeudo **por autorización (por familia)**, aunque la cuenta esté en varias fichas. Al prepararla, la cuenta se lee del CRM (una consulta) y se toma la de la primera ficha de la familia cuyo IBAN coincide con la huella; si ninguna coincide (la cuenta se ha cambiado en el CRM), la familia sale aparte: «tiene que firmar la autorización de nuevo». Lo guardado de la remesa no lleva ni IBAN ni titular: al **descargar el fichero** se vuelven a leer del CRM y se comprueba la huella (si no coincide, no se genera). |
+| **Ver la cuenta** | En la **ficha** de la persona, apartado «Datos bancarios y domiciliación SEPA» (enmascarada, en vivo: no entra en la instantánea): la ven la familia, el propio asociado mayor de edad y Tesorería (`asde_tesoreria_config`); los scouters no. Se cambia firmando una autorización nueva en «Mis pagos». La autorización para imprimir enseña el IBAN entero (leído del CRM) a quien puede firmarla. |
+| **Autorizaciones de antes** | Las firmadas antes de la v0.33 guardaban la cuenta cifrada en la web; siguen cobrándose con ella hasta que Tesorería pulsa **«Pasar las cuentas al CRM»** (Domiciliaciones): la cuenta de cada autorización vigente se escribe en las fichas de su familia y se borra de la web; de las anuladas solo se borra. |
+
+Sin permiso del usuario de la API para editar fichas no se puede firmar (se explica). Al anular una
+autorización, la cuenta **no** se borra del CRM (P-133). Pruebas: `tests/sepa.php` (114), partes D, F,
+G y K.
+
 ## Pendiente
 
 - **P-42:** datos reales del acreedor y confirmar con Colonya el formato, el canal y los plazos.
