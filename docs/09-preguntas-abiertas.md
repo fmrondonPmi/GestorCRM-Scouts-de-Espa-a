@@ -6,7 +6,6 @@ Hay que resolverlas antes de programar cada parte. Cuando se responde una, se ma
 
 | # | Pregunta | Afecta a |
 |---|---|---|
-| P-08 | ¿La "ficha de participación en eventos" corresponde a las inscripciones (`stic_Registrations`) del CRM? (Se resuelve con P-61, doc 32) | Eventos |
 | P-10 | ¿Se mantiene la URL `/nuestro-grupo-scout/` o pasa a `/grupo-scout/<grupo>/`? | URLs, SEO |
 | P-11 | ¿Qué hace el **módulo de sincronización con el CRM** de Coordinación? | Módulo CRM |
 | P-14 | ¿Cómo se notifican los cambios propuestos y su resolución: email, aviso en el área o ambos? (los ganchos ya están, doc 07) | Cola de cambios |
@@ -27,7 +26,7 @@ Hay que resolverlas antes de programar cada parte. Cuando se responde una, se ma
 | P-41 | **Uniformes:** ¿avisar por email a la familia cuando está pagado o listo para recoger? ¿Conciliar los ingresos del banco también con los pedidos de uniforme (hoy solo con la cuota)? (doc 24) | Uniformes, banco |
 | P-42 | **SEPA · datos reales del acreedor:** nombre, **identificador del acreedor (ICS)** e IBAN del grupo, que da el banco al contratar las domiciliaciones. Hay que confirmar con **Colonya** que acepta el fichero **XML pain.008 (Cuaderno 19.14)**, por qué canal se sube, si pide el **BIC** y con cuántos días hábiles de margen (la web exige 3) (doc 25) | Tesorería · SEPA |
 | P-43 | **SEPA · validez de la firma:** la autorización se firma **electrónicamente** (queda registrado quién, cuándo y el texto aceptado). ¿La acepta Colonya como orden de domiciliación o quiere el papel firmado? También: quién custodia el mandato mientras esté vigente y los 14 meses siguientes (doc 25) | Tesorería · SEPA |
-| P-44 | **SEPA · qué se cobra:** hoy solo la **cuota de la ronda** (por plazos o todo lo pendiente). ¿También los pedidos de uniforme y el coste de actividades? ¿Se añade recargo a las devoluciones? (doc 25) | Tesorería · SEPA |
+| P-44 | **SEPA · qué se cobra:** hoy solo la **cuota de la ronda** (por plazos o todo lo pendiente). ¿También los pedidos de uniforme y el coste de actividades? ¿Se añade recargo a las devoluciones? (doc 25). **Actividades: sí** (P-68, 2026-10-15: la remesa también cobrará los eventos, doc 32) | Tesorería · SEPA |
 | P-45 | **SEPA · conciliación con el banco:** los cobros se registran a mano en la remesa («cobrado» o «devuelto»). ¿Se concilian solos con la Norma 43 de Colonya (abono agrupado de la remesa y devoluciones)? Hace falta un fichero real (P-28) (doc 25) | Tesorería · SEPA, banco |
 | P-46 | **Idiomas · revisión de las traducciones:** el catalán, el euskera y el gallego son una primera versión sin revisión de hablantes nativos. ¿Quién las revisa? (se corrigen desde wp-admin → Grupos Scouts → Idioma y etiquetas, sin tocar el código; doc 28) | Idiomas |
 | P-47 | **Idiomas · nombres propios:** ¿cómo se llaman las secciones y los roles en cada idioma (Castors / Llobatons, Kastorrak / Otsokumeak…)? Se ha puesto una propuesta. ¿Se traducen también las pantallas de wp-admin del plugin (hoy, en castellano)? (doc 28) | Idiomas |
@@ -44,20 +43,8 @@ Hay que resolverlas antes de programar cada parte. Cuando se responde una, se ma
 | P-58 | **Carpeta de Drive · dónde:** ¿tarjeta en el inicio, entrada en el menú o las dos? ¿En «Para ti» o en «Gestión del grupo»? (doc 30) | Drive |
 | P-59 | **Carpeta de Drive · cuántas:** ¿una por grupo o también una por sección? (doc 30) | Drive |
 | P-60 | **Carpeta de Drive · cómo se comparte:** ¿restringida a las cuentas de Google de los scouters (recomendado) o «cualquiera con el enlace»? (doc 30) | Drive |
-| P-61 | **Eventos · dónde viven:** solo en la web (A), solo en el CRM (B) o en la web y después publicados en el CRM (C, recomendada). ¿La federación usa `stic_Events`/`stic_Registrations` y espera ver ahí las actividades del grupo? (doc 32) | Eventos |
-| P-62 | **Eventos · tipos:** ¿valen los diez propuestos? ¿Entran las reuniones semanales (con asistencia) o solo las actividades con inscripción? (doc 32) | Eventos |
-| P-63 | **Eventos · quién crea y publica:** ¿cualquier scouter para sus secciones o hace falta que Coordinación apruebe antes de publicar? (doc 32) | Eventos |
-| P-64 | **Eventos · asociados de 14 a 17:** ¿se preinscriben y confirma la familia, se inscriben solos o solo inscribe la familia? (doc 32) | Eventos |
-| P-65 | **Eventos · autorización:** ¿vale la firma electrónica (como la SEPA) o hace falta papel? ¿Hay un modelo de ASDE o de Scouts de Balears? ¿El consentimiento de imagen es por evento o anual? (doc 32) | Eventos |
-| P-66 | **Eventos · normativa de tiempo libre en las Illes Balears:** comunicación de acampadas y campamentos, ratio y titulación exigidas, y quién lo tramita (doc 32) | Eventos |
-| P-67 | **Eventos · precios:** ¿descuento por hermanos? ¿Pagan los scouters? ¿Recargo por inscripción tardía? ¿Política de devolución por defecto? (doc 32) | Eventos |
-| P-68 | **Eventos · cobro:** efectivo e ingreso como el uniforme, ¿también Bizum? ¿Domiciliación SEPA de actividades (P-44)? ¿Conciliar el banco con la referencia del evento? (doc 32) | Eventos |
-| P-69 | **Eventos · presupuesto y gastos:** ¿presupuesto aprobado antes de publicar (por quién)? ¿Justificantes en el evento? ¿Anticipos de caja a los scouters? (doc 32, enlaza con P-24) | Eventos |
-| P-70 | **Eventos · salud:** ¿quién ve e imprime el listado del campamento con salud y alimentación? ¿Se imprime o solo en pantalla? (doc 32) | Eventos |
-| P-71 | **Inventario:** ¿hay un inventario que importar? ¿Responsable de material (rol o responsabilidad)? ¿Material del grupo o también de cada sección? ¿Préstamos a otros grupos? (doc 32) | Inventario |
-| P-72 | **Eventos · conservación:** ¿cuánto se guardan inscripciones y autorizaciones de un evento celebrado? ¿Lo revisa la persona delegada de protección de datos de ASDE? (doc 32) | Eventos |
-| P-73 | **Eventos externos** (Festival ASDE, Scouts de Balears): ¿se inscribe desde aquí y se manda la lista al organizador? ¿Se leen del CRM? (doc 32) | Eventos |
-| P-74 | **Eventos · avisos:** ¿email al publicar, al confirmar y como recordatorio? ¿Avisos push de la app? (doc 32) | Eventos |
+| P-75 | **Eventos · seguro:** ¿el seguro de la federación cubre los accidentes y la responsabilidad civil que exige la Ley 10/2022 (art. 21.3.e) en todas las actividades, o algunas (campamentos, actividades de riesgo, participantes no socios) necesitan un seguro aparte? (doc 32) | Eventos |
+| P-76 | **Eventos · declaración responsable hoy:** ¿qué actividades declara ya el grupo al Consell de Mallorca (solo acampadas y campamentos o también salidas de un día), quién la presenta y si la actividad semanal está declarada como «actividad continuada» (Ley 10/2022, art. 18.2)? Decide qué tipos la piden por defecto (doc 32) | Eventos |
 
 ## Resueltas
 
@@ -113,3 +100,18 @@ Hay que resolverlas antes de programar cada parte. Cuando se responde una, se ma
 | ✅ Contacto | El **email de contacto es parte de la configuración de cada grupo** (*Grupos Scouts*), no de una pantalla aparte (decisión del usuario, 2026-09-30). Lo usan «Solicitar acceso», el aviso de rechazo y los emails SEPA; «Instalación y entorno» y *Solicitudes* avisan si falta (v0.12) |
 | ✅ SEPA | **Domiciliación SEPA** (petición del usuario, 2026-09-30): las familias (y los asociados mayores de edad) **firman la autorización en «Mis pagos»** y Tesorería **genera el fichero de adeudos** para el banco, con aviso previo a las familias y registro de cobros y devoluciones (v0.12, doc 25) |
 | ✅ Usuario | **El usuario de acceso pasa a ser configurable: nº de Scouts de España o nº territorial** (petición del usuario, 2026-10-02, v0.14, doc 27). Valen los dos al entrar; el nº territorial se sigue vigilando y corrigiendo, se puede ver en todas las pantallas («Mostrar nº territorial») y su advertencia sale siempre. **A confirmar:** la preferencia de mostrarlo es por persona y empieza apagada; el alta ya no genera nº territorial con `asde`; las familias no ven esos números |
+| ✅ P-08 | La «ficha de participación en eventos» son las **inscripciones** (`stic_Registrations`): el módulo de eventos las guarda en la web y las copia al CRM en la última fase (P-61, doc 32) |
+| ✅ P-61 | **Eventos en la web y copiados al CRM después** (`stic_Events` / `stic_Registrations`), sin datos personales en claro ni salud (decisión del usuario, 2026-10-15, doc 32) |
+| ✅ P-62 | **Solo actividades:** ni las reuniones semanales de sección ni las de adultos (Kraal, Consejo, asamblea). Ocho tipos: salida, acampada, campamento, ruta, actividad de grupo, servicio, externo y formación (2026-10-15) |
+| ✅ P-63 | **Cada scouter crea y publica los eventos de sus secciones**; Coordinación, los de grupo y los externos. Con coste, antes **Tesorería valida el presupuesto** (2026-10-15) |
+| ✅ P-64 | **De 14 a 17:** se preinscriben y firma la familia; la familia también los inscribe y **eso cuenta como firma** (2026-10-15) |
+| ✅ P-65 | **Autorización por las dos vías:** firma en la web o papel que marca un scouter. **Imagen:** la cesión anual de la ficha del CRM (`cesionimagen_c`) (2026-10-15) |
+| ✅ P-66 | **Normativa balear:** el usuario pidió «investiga y propón». Propuesta en el doc 32, apartado 6 (Ley 10/2022 y Decreto 23/2018): declaración responsable 15 días antes, equipo dirigente comprobado con la ficha (edad, titulación, certificado de menos de 12 meses), ratio 1/10 con fracción de 5 y lista de comprobación; todo avisa, no bloquea. Quedan P-75 y P-76 (2026-10-15) |
+| ✅ P-67 | **El precio sale del coste:** el coste del equipo se reparte entre los participantes, con **margen del 5 % para el fondo de emergencia** (configurable: activo o no y porcentaje), **precio por sección** y **becas y ajustes**; sin descuento por hermanos, recargo ni opciones. **Fijo al publicar** con los participantes previstos; lo que sobra o falta lo asume el grupo. **Devoluciones a criterio de Tesorería** (2026-10-15) |
+| ✅ P-68 | **Cobro de eventos:** efectivo, ingreso o transferencia, Bizum y domiciliación SEPA (2026-10-15) |
+| ✅ P-69 | **Tesorería valida el presupuesto** antes de publicar. Gastos con **justificantes**, **reembolsos a scouters**, **anticipos de caja** y **uso del fondo de emergencia** (2026-10-15) |
+| ✅ P-70 | **Listado con salud:** equipo del evento, scouters de las secciones que van, Secretaría y Coordinación; **se puede imprimir**, con auditoría (2026-10-15) |
+| ✅ P-71 | **Inventario:** rol nuevo **Responsable de material** (responsabilidad de un scouter) y material **del grupo y de cada sección**; sin importación ni préstamos (2026-10-15) |
+| ✅ P-72 | **Conservación:** lo cifrado de la inscripción se borra al cerrar el evento; la firma de la autorización se queda (2026-10-15) |
+| ✅ P-73 | **Eventos externos:** el grupo inscribe, cobra y saca la lista; además, los federativos **se leen del CRM** (2026-10-15) |
+| ✅ P-74 | **Avisos de eventos:** email al publicar, al confirmar y recordatorio, y aviso push de la app (2026-10-15) |

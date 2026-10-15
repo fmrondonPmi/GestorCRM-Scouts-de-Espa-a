@@ -1,228 +1,340 @@
 # 32 · Plan: módulo de eventos (sin código)
 
-> **Estado:** plan escrito el 2026-10-15, **sin código**. Se empieza a programar cuando el usuario responda las preguntas **P-61 a P-74** (al final y en el doc 09) o dé por buenos los supuestos marcados como *(supuesto)*.
+> **Estado:** plan escrito el 2026-10-15 y **decidido** el mismo día. El usuario respondió en el chat las preguntas P-61 a P-74 (tabla «Decisiones»). Para la P-66 (la normativa balear) pidió «investiga y propón»: la propuesta está en el apartado 6. Siguen **sin código**. Quedan abiertas dos preguntas nuevas, P-75 y P-76, que no impiden empezar por la 0.19.0.
 
 ## Petición del usuario (2026-10-15)
 
 > «Iniciamos con el módulo de eventos. Primero define: tipos de eventos a realizar, secciones que pueden participar, gestión económica del evento, gestión de inscripción de participación, inventario asociado a un evento. Planifica primero.»
 
+## Decisiones del usuario (2026-10-15)
+
+| # | Decisión |
+|---|---|
+| P-61 | Los eventos se guardan **en la web**. En una fase final **se copian al CRM** (`stic_Events` / `stic_Registrations`). Con eso se responde también la P-08: sí, la «ficha de participación» son las inscripciones del CRM |
+| P-62 | **Solo actividades.** Las reuniones semanales de sección **no** entran, y las de adultos (Kraal, Consejo de Grupo, asamblea de familias) **tampoco**. Desaparecen esos dos tipos y la modalidad «solo asistencia» |
+| P-63 | Cada **scouter** crea y publica los eventos **de sus secciones**; **Coordinación**, los de grupo y los externos. Si el evento tiene coste, antes de publicarlo **Tesorería valida el presupuesto** (P-69) |
+| P-64 | Los **asociados de 14 a 17** se preinscriben ellos y **firma la familia**. La familia también puede inscribirlos directamente, y **esa inscripción cuenta como autorización firmada** |
+| P-65 | **Autorización:** las dos vías. La familia firma en la web o entrega el **papel**, y un scouter marca que lo ha recibido. **Consentimiento de imagen:** anual, el de la ficha del CRM (`cesionimagen_c`). El evento solo lo consulta |
+| P-66 | «**Investiga y propón**»: la propuesta está en el apartado 6 |
+| P-67 | **El precio sale del coste.** El coste del equipo (scouters) se **reparte** en la cuota de los asociados. Al coste se le suma un **margen del 5 %**, que es el **fondo de emergencia** de la actividad. El margen se puede activar o no y cambiar de porcentaje. Hay **precio por sección** y **becas y ajustes**. **Sin** descuento por hermanos, recargo por inscribirse tarde ni opciones con precio. **Devoluciones:** sin regla automática, **las decide Tesorería** con un motivo |
+| P-67 bis | El precio queda **fijo al publicar** y se calcula con los participantes previstos. **Lo que sobre o falte lo asume el grupo** |
+| P-68 | Se cobra en **efectivo**, por **ingreso o transferencia**, por **Bizum** y por **domiciliación SEPA** (con esto se responde en parte la P-44: la remesa también cobra actividades) |
+| P-69 | **Tesorería valida el presupuesto** antes de publicar. En los gastos: **justificantes**, **reembolsos a scouters**, **anticipos de caja** y **uso del fondo de emergencia** |
+| P-70 | El listado con salud y alimentación lo ven el **equipo del evento**, los **scouters de las secciones que van**, **Secretaría** y **Coordinación**, y **se puede imprimir**. Queda registrado quién lo consulta |
+| P-71 | Habrá un **responsable de material** (responsabilidad nueva de un scouter). Hay **material del grupo y de cada sección**. Ni importación (no hay inventario previo) ni préstamos a otros grupos |
+| P-72 | Lo cifrado de la inscripción (quién recoge al menor, observaciones) **se borra al cerrar** el evento. La firma de la autorización se queda con el evento |
+| P-73 | En los **eventos externos**, el grupo inscribe, cobra y saca la lista para el organizador. **Además**, los eventos federativos **se leen del CRM** para no crearlos a mano |
+| P-74 | Avisos: **email al publicar**, **al confirmar**, **recordatorio** antes del evento y **aviso push** de la app |
+
 ## Lo que ya hay y condiciona el diseño
 
 | Pieza | Qué aporta al módulo |
 |---|---|
-| **CRM: `stic_Events` y `stic_Registrations`** (doc 04 §2 y §7.5) | El CRM federal **ya tiene eventos** (23; `type`: festivalasde, festivalof, as —asamblea—, campamento, Curso, taller, jornada, reunion) e **inscripciones** (5.091; `status`: participa, noparticipa, confirmado, cancelado, lista_espera, no_se_presenta; `participation_type`: asistente, ponente, delegado, organización, voluntario, coordinador…). `special_needs` puede llevar **datos de salud** |
-| Matriz de permisos (doc 02) y `Roles` | Fila «Ficha de participación en eventos» con ❓ y la capability **`asde_edit_section_events`**, que tiene el rol Scouter desde la v0.4 pero **no usa ningún código** (P-08) |
-| **Uniformes** (doc 24) | El patrón de «una cosa por socio/a con comprobaciones, cada una con quién y cuándo»; nº con prefijo (`U6840007`); pago validado por Tesorería; «Mis pagos»; ventana emergente; CSV con auditoría |
-| **Tesorería** (doc 14) | Familias `F684001`, descuento por hermanos, **ajustes con motivo**, movimientos que **no se borran (se anulan)**, ronda de septiembre a agosto. **Gastos** pendientes de diseñar (P-24) |
-| **SEPA** (doc 25) | La **firma electrónica** de un texto versionado: quién, cuándo, versión del texto y HMAC de la IP. Vale para la **autorización de participación** |
-| Salud (doc 08) e `Instantanea` (doc 26) | La salud **nunca se guarda**: se lee en vivo. Los nombres y contactos salen de la instantánea, sin consultas al CRM por fila |
-| Informes (doc 13) | Columnas con salud por ámbito y CSV: base de los **listados del campamento** |
-| App móvil (otro plugin) | Se engancha con `do_action`/`apply_filters` genéricos: los avisos push del evento serán un enganche, no código de la app |
-
-## Decisión de fondo: ¿dónde vive el evento? (P-61)
-
-| Opción | Ventajas | Inconvenientes |
-|---|---|---|
-| **A · Solo en la web** (tablas `asde_*`) | Se controla todo (precios, inventario, autorización, lista de espera); no depende de lo que permita el CRM; se prueba con el CRM simulado | La federación no ve las inscripciones del grupo en el CRM |
-| B · Solo en el CRM (`stic_Events`/`stic_Registrations`) | Fuente única, como las fichas | El CRM no tiene inventario, precios por sección, descuentos ni firma de autorización; cada pantalla costaría consultas de 0,5–1,5 s; `Escritura` hoy **nunca crea registros** |
-| **C · En la web y, después, publicado en el CRM** *(recomendada)* | Lo mejor de A y, cuando se quiera, el evento y sus inscripciones se **copian** al CRM (estado y tipo de participación, sin salud) | Una fase más (la última) y un permiso de escritura en dos módulos del CRM |
-
-**Propuesta:** empezar con A (todo en la web, sin datos personales en claro) y dejar la publicación en el CRM para la última fase, si la federación la quiere. Mientras tanto, **se leen** del CRM los eventos federativos (Festival ASDE, asamblea…) solo si el usuario lo pide (P-73).
+| **CRM: `stic_Events` y `stic_Registrations`** (doc 04 §2 y §7.5) | El CRM federal ya tiene **eventos** (23; `type`: festivalasde, festivalof, as, campamento, Curso, taller, jornada, reunion) e **inscripciones** (5.091; `status`: participa, noparticipa, confirmado, cancelado, lista_espera, no_se_presenta; `participation_type`: asistente, organización, voluntario, coordinador…). El campo `special_needs` puede llevar **datos de salud** |
+| **CRM: campos de la ficha** (doc 04 §7) | `cesionimagen_c` (cesión de imagen), `formaciontiempolibre_c`, `formacionscout_c`, `certificadods_c` y `certificadods_fecha_c` (certificado de delitos sexuales). Sirven para las **comprobaciones del equipo dirigente** (apartado 6) |
+| Matriz de permisos (doc 02) y `Roles` | La fila «Ficha de participación en eventos» y la capability `asde_edit_section_events`, que **no usa ningún código** |
+| **Uniformes** (doc 24) | «Una cosa por socio/a con comprobaciones, cada una con quién y cuándo»; nº con prefijo (`U6840007`); pago validado por Tesorería; «Mis pagos»; ventana emergente; CSV con auditoría |
+| **Tesorería** (doc 14) | Familias `F684001`, **ajustes con motivo**, movimientos que **no se borran (se anulan)**, ronda de septiembre a agosto; **gastos** pendientes de diseñar (P-24) |
+| **SEPA** (doc 25) | La **firma electrónica** de un texto versionado (quién, cuándo, versión, HMAC de la IP) y las **remesas**, que también cobrarán eventos |
+| Salud (doc 08) e `Instantanea` (doc 26) | La salud **nunca se guarda**. Nombres y contactos, de la instantánea, sin consultas al CRM por fila |
+| App móvil (otro plugin) | Avisos push con un **enganche genérico** (`do_action`), sin clases de la app aquí |
 
 ---
 
 ## 1. Tipos de evento
 
-Los tipos son un **catálogo configurable por grupo** (como las insignias del uniforme), precargado con esta tabla. Un tipo es una **plantilla de valores por defecto**: en cada evento se puede cambiar todo.
+Los tipos son un **catálogo configurable por grupo**, precargado con estos ocho. Un tipo es una **plantilla de valores por defecto**: en cada evento se puede cambiar todo.
 
-| Clave | Tipo | Ejemplos | Pernocta | Inscripción | Autorización familiar | Coste | Listado con salud | Material | `type` del CRM |
+| Clave | Tipo | Ejemplos | Pernocta | Autorización familiar | Coste | Listado con salud | Material | Declaración responsable (apartado 6) | `type` del CRM |
 |---|---|---|---|---|---|---|---|---|---|
-| `reunion` | **Reunión o actividad de sección** | La reunión del sábado | No | No (solo asistencia) | No (la de la ronda) | No | No | Opcional | reunion |
-| `salida` | **Salida o excursión** | Excursión de día, visita, actividad en la ciudad | No | Sí | Sí | Opcional | Sí | Opcional | jornada |
-| `acampada` | **Acampada** | Fin de semana en un albergue o terreno | Sí (1–3 noches) | Sí | Sí | Sí | Sí | Sí | campamento |
-| `campamento` | **Campamento** | Campamento de verano, de Pascua | Sí (4 o más noches) | Sí | Sí | Sí | Sí | Sí | campamento |
-| `ruta` | **Ruta o travesía** | Ruta de Escultas o Rovers, Camino | Sí | Sí | Sí | Sí | Sí | Sí | campamento |
-| `grupo` | **Actividad de grupo** | Inicio y fin de ronda, promesas, pasos de sección, aniversario | Opcional | Opcional | Según el caso | Opcional | Si hay pernocta | Opcional | jornada |
-| `servicio` | **Servicio o voluntariado** | Limpieza de un espacio natural, recogida de alimentos | No | Sí | Sí | No | Sí | Opcional | jornada |
-| `externo` | **Evento externo** | Festival ASDE, actividad de Scouts de Balears, Jamboree, actividad de otro grupo | Según el caso | Sí (solo las del grupo) | Sí | Sí (lo cobra el grupo) | Sí | Opcional | festivalasde / festivalof |
-| `formacion` | **Formación** | Curso de monitor/a, taller de primeros auxilios | Según el caso | Sí | No (adultos) | Opcional | No | No | Curso / taller |
-| `reunion_adultos` | **Kraal, Consejo de Grupo o asamblea** | Consejo de Grupo, reunión de familias, asamblea | No | No (convocatoria) | No | No | No | No | as / reunion |
+| `salida` | **Salida o excursión** | Excursión de día, visita | No | Sí | Según el caso | Sí | Opcional | Según el caso (P-76) | jornada |
+| `acampada` | **Acampada** | Fin de semana en albergue o terreno | Sí (1–3 noches) | Sí | Sí | Sí | Sí | **Sí** | campamento |
+| `campamento` | **Campamento** | Verano, Pascua | Sí (4 o más) | Sí | Sí | Sí | Sí | **Sí** | campamento |
+| `ruta` | **Ruta o travesía** | Ruta de Escultas o Rovers | Sí | Sí | Sí | Sí | Sí | **Sí** | campamento |
+| `grupo` | **Actividad de grupo** | Inicio y fin de ronda, promesas, pasos de sección, aniversario | Opcional | Según el caso | Opcional | Si hay pernocta | Opcional | Según el caso (P-76) | jornada |
+| `servicio` | **Servicio o voluntariado** | Limpieza de un espacio natural, recogida de alimentos | No | Sí | No | Sí | Opcional | Según el caso (P-76) | jornada |
+| `externo` | **Evento externo** | Festival ASDE, actividad de Scouts de Balears, Jamboree, otro grupo | Según el caso | Sí | Sí | Sí | Opcional | No (la presenta quien organiza) | festivalasde / festivalof |
+| `formacion` | **Formación** | Curso de monitor/a, primeros auxilios | Según el caso | No (adultos) | Opcional | No | No | No | Curso / taller |
 
-- **Duración:** fecha y hora de inicio y de fin. La pernocta sale de las fechas (si acaba otro día) y cambia lo que se pide (autorización, listado con salud, material).
+- **Fuera del módulo** (P-62): las reuniones semanales de sección y las de adultos (Kraal, Consejo de Grupo, asamblea de familias).
+- **Duración:** fecha y hora de inicio y de fin. La pernocta se deduce de las fechas (si acaba otro día).
 - **Ámbito del evento:**
-  - *de sección* (una sección);
-  - *de varias secciones*;
-  - *de grupo* (todas);
-  - *externo* (lo organiza otra entidad: el grupo solo gestiona **sus** inscripciones, su cobro y su material).
+  - de una sección;
+  - de varias secciones;
+  - de grupo;
+  - externo (lo organiza otra entidad y el grupo gestiona solo **lo suyo**).
 - **Estados del evento:**
 
 | Estado | Qué se puede hacer |
 |---|---|
-| **Borrador** | Lo ven solo sus responsables y Coordinación. Se edita todo |
-| **Publicado · inscripción abierta** | Lo ven las secciones convocadas; las familias se inscriben |
-| **Inscripción cerrada** | Solo los gestores inscriben o dan de baja (con motivo) |
-| **En curso** | Pasar lista, salida del material |
-| **Celebrado** | Devolución del material, gastos reales, devoluciones de dinero |
-| **Cerrado** | Tesorería cierra las cuentas: ya no se tocan pagos ni gastos. Solo consulta |
-| **Cancelado** | Con motivo; se avisa a las inscritas y se proponen las devoluciones |
+| **Borrador** | Lo ven sus responsables, Coordinación y Tesorería. Se prepara el presupuesto |
+| **Presupuesto validado** | Tesorería lo ha validado y el **precio queda fijo** (solo en los eventos con coste) |
+| **Publicado · inscripción abierta** | Lo ven las secciones convocadas y las familias se inscriben. Sale el email de publicación |
+| **Inscripción cerrada** | Solo los gestores inscriben o dan de baja, con motivo |
+| **En curso** | Pasar lista y sacar el material |
+| **Celebrado** | Devolver el material, apuntar los gastos reales, liquidar anticipos, devoluciones |
+| **Cerrado** | Tesorería cierra las cuentas: ya no se tocan. Se borra lo cifrado de las inscripciones (P-72) |
+| **Cancelado** | Con motivo. Se avisa a las inscritas y Tesorería decide las devoluciones |
 
-- **Datos de cada evento:** nº de evento (**`E` + grupo + correlativo**, p. ej. `E6840012`, como `U6840007`), nombre, tipo, ámbito, fechas, lugar (texto y enlace a un mapa), punto y hora de salida y de llegada, descripción o circular (texto y PDF opcional), **lista de material personal** (lo que lleva cada participante), **responsable** (scouter que dirige la actividad) y **equipo** (scouters y voluntariado), secciones convocadas, plazas, plazo de inscripción, precios y opciones.
+- **Datos de cada evento:**
+  - nº de evento: **`E` + grupo + correlativo**, p. ej. `E6840012`;
+  - nombre, tipo y ámbito;
+  - fechas, lugar (texto y enlace a un mapa), punto y hora de salida y de llegada;
+  - circular (texto y PDF opcional) y **lista de material personal**;
+  - **equipo dirigente** (apartado 6);
+  - secciones convocadas, plazas y plazo de inscripción;
+  - presupuesto y precio por sección.
 
 ## 2. Secciones que pueden participar
 
-Salen del catálogo de siempre (`Domain\Secciones`, doc 05); el evento guarda las **secciones convocadas**.
+Salen del catálogo de siempre (`Domain\Secciones`, doc 05). Cada evento guarda las **secciones convocadas**.
 
-| Sección | Papel en un evento | Notas |
+| Sección | Papel en el evento | Paga |
 |---|---|---|
-| Castores, Lobatos, Scouts, Escultas, Rovers | **Participantes** (educandos) | Inscripción de la familia o, en mayores de edad, de la propia persona |
-| Scouters | **Equipo** (organización) por defecto; **participantes** en formación, Kraal o Consejo | No pagan por defecto (como en la cuota); se puede cambiar por evento |
-| Voluntariado de apoyo | **Equipo** (cocina, intendencia, transporte) | Igual que los scouters |
-| Familias | Asistentes a una asamblea o fiesta de grupo | Sin inscripción: convocatoria y, si hace falta, recuento |
+| Castores, Lobatos, Scouts, Escultas, Rovers | **Participantes** (educandos) | Sí: el precio de su sección |
+| Scouters | **Equipo dirigente**: director/a, monitores, personas en prácticas. En una formación, **participantes** | No. Su coste se reparte entre los participantes (P-67) |
+| Voluntariado de apoyo | **Equipo de apoyo** (cocina, intendencia, transporte) | No. Su coste también se reparte |
 
 **Reglas:**
 
-1. Solo se convoca o inscribe a personas con **membresía activa** en el grupo (`Auth\Ambito`). **Un grupo no ve los eventos de otro** (cada evento lleva su nº de grupo; regla 3 de `CLAUDE.md`).
-2. **Secciones convocadas:** una o varias. Opcionalmente, **plazas por sección** y en total.
-3. **Edad** opcional (mínima y máxima el día de inicio): sirve para actividades de mayores de edad o para los que **pasan de sección** ese verano.
-4. **Excepciones:** el responsable, Coordinación o Secretaría pueden inscribir a alguien de otra sección (p. ej. un escultas que va de ayudante con la manada), **con motivo** y en la auditoría.
-5. **Ratio de educadores:** si el equipo no llega a la ratio configurada (p. ej. 1 scouter por cada 8–10 educandos, valor a confirmar con la normativa, P-66), la pantalla **avisa, no bloquea**.
-6. **Quién gestiona un evento:**
-   - de sección o de varias: **los scouters de esas secciones** y el equipo del evento;
-   - de grupo y externos: **Coordinación** y el responsable designado;
-   - Secretaría y Coordinación ven **todos** los del grupo (visión global, como en uniformes).
-7. **Eventos con otro grupo:** fuera de alcance; cada grupo crea el suyo y gestiona a los suyos.
+1. Solo se convoca o inscribe a personas con **membresía activa** en el grupo (`Auth\Ambito`). **Un grupo no ve los eventos de otro** (cada evento lleva su nº de grupo).
+2. **Secciones convocadas:** una o varias, con **plazas previstas** por sección (sirven para calcular el precio) y **plazas máximas** opcionales.
+3. **Edad** opcional, mínima y máxima, el día de inicio: para actividades de mayores de edad o para quienes **pasan de sección**.
+4. **Excepciones:** el responsable, Coordinación o Secretaría pueden inscribir a alguien de otra sección, **con motivo** y con constancia en la auditoría.
+5. **Ratio y equipo:** comprobaciones de la normativa balear (apartado 6). **Avisan, no bloquean.**
+6. **Quién gestiona un evento** (P-63):
+   - de sección o de varias, **los scouters de esas secciones** y el equipo del evento;
+   - de grupo y externos, **Coordinación** y el responsable designado;
+   - Secretaría y Coordinación ven **todos** los del grupo, y Tesorería, la parte económica de todos.
+7. **Eventos con otro grupo:** fuera de alcance. Cada grupo crea el suyo.
 
 ## 3. Gestión de la inscripción
 
-### Tres modalidades (las elige el tipo, se cambian en el evento)
+### Dos modalidades
 
 | Modalidad | Cómo funciona | Para |
 |---|---|---|
 | **Inscripción abierta** | La familia entra en «Mis eventos» y apunta a sus menores | Acampadas, campamentos, salidas |
-| **Convocatoria** | La lista sale sola de las secciones convocadas («convocado»); cada familia responde **sí o no**, y el equipo ve **quién no ha contestado** | Actividades a las que se espera a todos (promesas, inicio de ronda) |
-| **Solo asistencia** | Sin inscripción: el día se pasa lista | Reuniones de sección, Kraal |
+| **Convocatoria** | La lista sale sola de las secciones convocadas. Cada familia responde **sí o no**, y el equipo ve **quién no ha contestado** | Actividades a las que se espera a todos (promesas, inicio de ronda) |
 
-### Quién inscribe a quién
+### Quién inscribe a quién (P-64)
 
-| Quién | A quién | Cómo |
+| Quién | A quién | Autorización |
 |---|---|---|
-| Cuenta familiar (`nº + T`, `nº + T2`) | Sus menores | Desde «Mis eventos», firmando la autorización |
-| Asociado/a **mayor de edad** | A sí mismo | Desde «Mis eventos» |
-| Asociado/a **de 14 a 17** | A sí mismo, como **preinscripción** *(supuesto, P-64)* | La inscripción no queda confirmada hasta que la autoriza su familia |
-| Scouter | A los de sus secciones | «En nombre de la familia» (autorización en papel): queda anotado quién y por qué |
-| Coordinación y Secretaría | A cualquiera del grupo | Igual que el scouter |
-| Responsable del evento | Al **equipo** (scouters y voluntariado) | Los añade al equipo; cada scouter puede apuntarse al equipo de un evento de sus secciones |
+| Cuenta familiar (`nº + T`, `nº + T2`) | Sus menores | **Inscribir ya es firmar**: la inscripción lleva la firma de la autorización |
+| Asociado/a **de 14 a 17** | A sí mismo, como **preinscripción** | Queda **pendiente** hasta que la familia firma desde su cuenta o entrega el papel |
+| Asociado/a **mayor de edad** | A sí mismo | No hace falta |
+| Scouter de la sección, Coordinación, Secretaría | A los de su ámbito, «en nombre de la familia» | **Papel** entregado: quien lo recibe marca «autorización en papel recibida» (quién y cuándo) |
+| Responsable del evento | Al **equipo** (scouters y voluntariado) | No hace falta (son adultos) |
 
 ### Qué se pide al inscribirse (solo lo que no está en el CRM)
 
-- **Autorización de participación**, firmada electrónicamente por quien tiene la patria potestad o la tutela (texto versionado configurable, quién, cuándo y HMAC de la IP, como la SEPA; P-65).
-- **Consentimiento de imagen** para ese evento, si no consta ya en la ficha (P-65).
-- **Transporte:** con el grupo, por su cuenta, ida o vuelta.
-- **Personas autorizadas a recoger** al menor (nombre y documento): **cifrado** y se borra al cerrar el evento.
-- **Opciones del evento** con su precio (p. ej. camiseta del campamento con talla, autobús).
-- **Observaciones para el equipo:** cifradas y con caducidad.
-- **«He revisado la ficha de salud y alimentación y está al día»**, con un enlace a la ficha para proponer cambios (cola de cambios, doc 17). **La salud no se copia al evento**: se lee del CRM al hacer los listados.
+- **Autorización de participación** (la exige el art. 21.3.g de la Ley 10/2022). Se firma en la web, con un texto versionado y configurable; queda quién, cuándo, la versión y el HMAC de la IP, como en la SEPA. O se entrega en papel (P-65).
+- **Transporte:** con el grupo o por su cuenta, a la ida y a la vuelta.
+- **Personas autorizadas a recoger** al menor (nombre y documento). Va **cifrado** y se borra al cerrar el evento.
+- **Observaciones para el equipo.** Van cifradas y se borran al cerrar.
+- La casilla **«He revisado la ficha de salud y alimentación y está al día»**, con un enlace para proponer cambios (cola de cambios, doc 17). **La salud no se copia al evento.**
+- **Imagen:** no se pide. Se usa la cesión de imagen de la ficha (`cesionimagen_c`), y el listado del equipo marca a quien **no** la tiene.
 
 ### Estados de una inscripción (y su equivalente en el CRM)
 
 | Estado | Cuándo | CRM |
 |---|---|---|
-| Convocado | Convocatoria sin respuesta | (no se publica) |
-| **Pendiente** | Inscrito, pero falta la autorización o el pago | confirmado |
-| **Confirmada** | Autorizada y pagada (o sin coste) | confirmado |
+| Convocado | Convocatoria sin respuesta | (no se copia) |
+| **Pendiente** | Falta la autorización (preinscripción de 14 a 17) o el pago | confirmado |
+| **Confirmada** | Autorizada y pagada (o sin coste). Sale el email de confirmación | confirmado |
 | Lista de espera | No quedaban plazas | lista_espera |
-| No participa | Ha contestado «no» a la convocatoria | noparticipa |
+| No participa | Ha respondido «no» a la convocatoria | noparticipa |
 | Baja | La familia o un gestor la cancela | cancelado |
-| **Participa** / No se presenta | Al pasar lista | participa / no_se_presenta |
+| **Participa** / No se presenta | Al pasar lista el día del evento | participa / no_se_presenta |
 
 ### Plazas, plazos y bajas
 
-- **Plazas** en total y por sección. Al llenarse, las nuevas entran en **lista de espera** por orden. Si se libera una plaza, se ofrece a la primera con un email y **X días para confirmar** *(supuesto: 3 días; si no confirma, pasa a la siguiente)*.
-- **Plazo de inscripción:** fecha de apertura y de cierre. Cerrado, solo inscriben los gestores.
-- **Baja:** la familia, hasta el cierre de la inscripción; después, un gestor con motivo. La devolución sigue la política del evento (apartado 4).
+- **Plazas máximas** en total y por sección. Cuando se llenan, las nuevas inscripciones entran en **lista de espera**, por orden. Si se libera una plaza, se ofrece a la primera de la lista por email, con **3 días para confirmar** *(supuesto)*. Si no confirma, pasa a la siguiente.
+- **Plazo de inscripción:** fecha de apertura y de cierre. Pasado el cierre, solo inscriben los gestores.
+- **Baja:** la familia, hasta el cierre; después, un gestor con motivo. **La devolución la decide Tesorería** (P-67).
 
 ### Listados para el equipo (lo más sensible del módulo)
 
-- **Participantes** por sección: estado, pago, autorización, transporte y opciones.
-- **Contactos de emergencia:** los tutores y sus teléfonos (de la instantánea, sin consultas por fila).
-- **Salud y alimentación:** leídas **en vivo** del CRM en una sola lectura, **nunca guardadas**, con la auditoría de quién las consulta. Quién las ve: los scouters del **equipo del evento** y los de las secciones de los participantes, Secretaría y Coordinación *(supuesto, P-70)*.
+- **Participantes** por sección: estado, pago, autorización, transporte y cesión de imagen.
+- **Contactos de emergencia:** tutores y teléfonos, sacados de la instantánea.
+- **Salud y alimentación:** se leen **en vivo** del CRM, en una sola lectura, y **nunca se guardan**. Pueden verlas e **imprimirlas** el equipo del evento, los scouters de las secciones que van, Secretaría y Coordinación (P-70). Cada consulta e impresión queda en la auditoría.
 - **Resumen para cocina:** recuento por tipo de régimen y alergias alimentarias.
 - **Lista para el autobús** y de quién recoge a quién.
-- **Imprimir** (para llevar al campamento, donde puede no haber cobertura) y **CSV**, cada descarga en la auditoría (doc 08, punto 11) y con aviso de que lleva datos de salud.
+- **Imprimir** (en el campamento puede no haber cobertura) y **CSV**. Cada descarga queda en la auditoría y lleva el aviso de que contiene datos de salud.
+- **Hoja del equipo dirigente** para la declaración responsable (apartado 6).
 
 ### El día del evento
 
-- **Pasar lista** desde el móvil: participa o no se presenta; llegada y salida (quién lo recoge).
-- Cambios de última hora (baja por enfermedad) con motivo.
+- **Pasar lista** desde el móvil: participa o no se presenta, y llegada y salida (quién lo recoge).
+- Bajas de última hora, con motivo.
 
-### Comunicación
+### Avisos (P-74)
 
-- Emails (en el **registro de emails**): publicación o convocatoria, inscripción recibida, confirmada, plaza liberada, recordatorio unos días antes, cancelación del evento.
-- Enganche genérico `do_action( 'asde_ap_evento_aviso', … )` para que la app móvil mande el aviso push (sin código de la app aquí).
-- **«Mis eventos»** (Mi espacio / Mi familia): próximos eventos de sus menores o propios, inscribirse, estado, **lo que falta** (pagar, autorizar), circular, material personal y horarios.
-- **Inicio:** «Pendiente de revisar» con las inscripciones y autorizaciones pendientes de cada uno.
+- **Emails** (anotados en el registro de emails):
+  - al **publicar**, a las familias de las secciones convocadas;
+  - al **confirmar** una inscripción, o cuando alguien pasa de la lista de espera a tener plaza;
+  - un **recordatorio** unos días antes, con la información práctica y lo que falte (pagar, autorizar);
+  - si se **cancela** el evento.
+- **Avisos push:** enganche `do_action( 'asde_ap_evento_aviso', … )`. El plugin de la app los manda con el texto genérico de siempre.
+- **«Mis eventos»** (Mi espacio / Mi familia): los próximos eventos, inscribirse, el estado, **lo que falta** y la información práctica.
+- En **Inicio**, «Pendiente de revisar»: inscripciones por revisar, autorizaciones en papel por marcar, presupuestos por validar.
 
 ## 4. Gestión económica
 
-### Lo que paga cada participante
+### Cómo sale el precio (P-67)
 
-- **Precio base** por participante y, si hace falta, **por sección** o **por papel** (el equipo, gratis por defecto).
-- **Descuento por hermanos** en el mismo evento (importe o % a partir del 2.º), con las **familias de Tesorería**.
-- **Precio con fecha:** hasta un día, un precio; después, otro (inscripción tardía).
-- **Opciones** con precio (camiseta, autobús).
-- **Becas y ajustes** con motivo (Tesorería), como en la cuota.
-- El importe se **congela al inscribirse** con los precios de ese día (como el uniforme). Tesorería siempre puede escribir lo que ha cobrado de verdad.
-- **Plazos** opcionales: señal al inscribirse y el resto antes de una fecha.
+1. El responsable del evento prepara el **presupuesto de gastos**. Cada partida tiene una forma de reparto:
+   - **importe total para todos**: transporte, alojamiento, intendencia común;
+   - **importe total para una sección**: el albergue de los Castores, una actividad solo de Scouts;
+   - **importe por persona**: por participante o por miembro del equipo (cuota del organizador de un evento externo, comida por persona).
+2. **El coste del equipo se reparte** entre los participantes: lo que cuesta un scouter (su comida, su plaza, su transporte) entra como gasto y se divide entre los que pagan.
+3. **Otros ingresos previstos** (subvención, aportación del grupo) se restan de lo que hay que repartir.
+4. **Coste por participante de cada sección** = partidas comunes netas ÷ participantes previstos de todas las secciones + partidas de la sección ÷ participantes previstos de esa sección.
+5. **Margen del fondo de emergencia:** precio = coste × (1 + margen). Por defecto está **activo y al 5 %**. El grupo lo configura (activo o no, y porcentaje) y cada evento lo puede cambiar antes de validar el presupuesto.
+6. **Redondeo:** al euro entero hacia arriba; lo que sobra del redondeo va al fondo *(supuesto)*.
+7. **Tesorería valida el presupuesto** (P-69) y el **precio por sección queda fijo** (P-67 bis). Si cambia el presupuesto, Tesorería puede volver a validarlo mientras **no haya inscripciones** *(supuesto)*. Después, el precio ya no cambia: lo que sobre o falte lo asume el grupo.
+8. **Becas y ajustes:** Tesorería sube o baja el importe de una inscripción, **siempre con motivo**, como en la cuota. El precio de los demás no cambia.
 
-### Cobro
+Ejemplo: una acampada de 20 Lobatos y 15 Scouts (35 participantes) con 6 scouters.
 
-- Tesorería registra los **pagos** (efectivo, ingreso o transferencia; domiciliación SEPA si se decide, P-44 y P-68) de una inscripción o **de la familia** (un solo pago para los hermanos).
-- **Referencia para la transferencia:** nº de evento + nº de familia (`E6840012 F684001`) o, si no tiene familia, el nº de inscripción. Más adelante, el banco la concilia sola (doc 16).
+| Partida | Reparto | Importe |
+|---|---|---|
+| Autobús | Todos | 420 € |
+| Albergue (41 personas a 12 €) | Por persona, participantes y equipo | 492 € |
+| Comida (41 personas a 15 €) | Por persona, participantes y equipo | 615 € |
+| Actividad de escalada | Solo Scouts | 150 € |
+
+- Partidas comunes: 420 + 492 + 615 = 1.527 €, entre 35 participantes: 43,63 € por cabeza.
+- Escalada: 150 € entre los 15 Scouts: 10 € más para cada uno.
+- Precio de Lobatos: 43,63 × 1,05 = 45,81 → **46 €**.
+- Precio de Scouts: 53,63 × 1,05 = 56,31 → **57 €**.
+- El albergue y la comida de los 6 scouters (162 €) quedan repartidos entre los 35 participantes.
+
+### Cobro (P-68)
+
+- Tesorería registra los **pagos** de una inscripción o **de la familia** (un solo pago para los hermanos): **efectivo**, **ingreso o transferencia**, **Bizum** y **domiciliación SEPA**.
+- **Referencia para la transferencia o el Bizum:** nº de evento y nº de familia (`E6840012 F684001`) o, si no tiene familia, el nº de inscripción. Más adelante, el banco la concilia sola (doc 16).
+- **Domiciliación SEPA:** el importe del evento entra en la **remesa** de las familias que tienen la autorización firmada (doc 25), con su aviso previo. Es la primera vez que la remesa cobra algo que no es la cuota.
 - **«Mis pagos»** muestra lo que hay que pagar de cada evento, lo pagado y lo pendiente.
 - **No entra en la cuota** de la ronda ni en el control de pagos (como el uniforme).
-- **Devoluciones:** política del evento (p. ej. «hasta 15 días antes, se devuelve todo; después, el 50 %»), siempre con la última palabra de Tesorería y con motivo. Se registran como movimiento negativo; **nada se borra, se anula**.
+- **Devoluciones:** **las decide Tesorería** en cada baja o cancelación, con motivo. Cada evento puede describir su política en la circular. Se registran como movimiento negativo: **nada se borra, se anula**.
 
-### Presupuesto, gastos y balance
+### Gastos, anticipos y fondo de emergencia (P-69)
 
-- **Presupuesto** (lo prepara el responsable del evento): partidas de **ingreso** (cuotas de los participantes, que se calculan solas; subvención; aportación del grupo; otras) y de **gasto** (transporte, alojamiento o terreno, alimentación, material y actividades, seguros, otros).
-- **Gastos reales:** fecha, partida, concepto, proveedor, importe, **quién lo pagó** (el grupo o un scouter al que hay que **reembolsar**) y **justificante** (imagen o PDF, guardado fuera de la carpeta pública). Es el primer uso de los **gastos** que la Tesorería tiene pendientes (P-24): se diseña para que la Tesorería general lo reutilice.
-- **Anticipo de caja** al responsable para las compras durante el evento y su liquidación *(fase 2)*.
-- **Balance:** previsto y real, lo cobrado y lo pendiente, el coste real por participante y el **punto de equilibrio** (cuántos participantes hacen falta para cubrir los gastos fijos).
-- **Cierre:** Tesorería cierra las cuentas del evento; queda un **informe final** (imprimir y CSV) para el Consejo de Grupo.
+- **Gastos reales:** fecha, partida del presupuesto, concepto, proveedor, importe, forma de pago y **justificante** (imagen o PDF, guardado fuera de la carpeta pública).
+- **Quién lo pagó:**
+  - el grupo (cuenta o caja);
+  - un scouter, al que hay que **reembolsar**: queda pendiente hasta que Tesorería lo marca como reembolsado (fecha y forma).
+- **Anticipos de caja:** dinero que Tesorería da al responsable antes del evento. Al volver se **liquida**: gastos con justificante + dinero devuelto = anticipo. La diferencia se avisa.
+- **Fondo de emergencia:** lo que aporta el margen (y el redondeo). Los gastos imprevistos se pueden marcar **«con cargo al fondo»**. Al cerrar, lo que sobra se queda en el grupo *(supuesto, por P-67 bis)*.
+- **Balance:** previsto y real por partida, lo cobrado y lo pendiente, el fondo (recaudado, usado y sobrante) y el resultado, que asume el grupo.
+- **Cierre:** Tesorería cierra las cuentas, con el **informe final** (imprimir y CSV) para el Consejo de Grupo. Los gastos se diseñan para que la **Tesorería general** los reutilice (P-24).
 
 ### Quién hace qué
 
 | | Responsable del evento | Tesorería | Coordinación | Secretaría |
 |---|---|---|---|---|
-| Precios y opciones | ✅ (mientras no haya pagos) | ✅ | ✅ | 👁 |
-| Presupuesto | ✅ | ✅ | ✅ (¿lo aprueba? P-69) | 👁 |
+| Presupuesto y margen | ✅ lo prepara | ✅ **lo valida** (fija el precio) | 👁 | 👁 |
 | Registrar pagos y devoluciones | — | ✅ | — | — |
+| Becas y ajustes | — | ✅ con motivo | — | — |
 | Gastos | 📝 los propone con justificante | ✅ los valida y reembolsa | 👁 | 👁 |
-| Becas y ajustes | — | ✅ (con motivo) | — | — |
-| Cerrar las cuentas | — | ✅ | — | — |
+| Anticipos de caja | 📝 lo pide y lo liquida | ✅ lo da y cierra la liquidación | 👁 | — |
+| Cerrar las cuentas | — | ✅ | 👁 | 👁 |
 
 ## 5. Inventario asociado al evento
 
-El inventario es **del grupo** (permanente) y cada evento **reserva** lo que se lleva.
+El inventario es **del grupo y de sus secciones** (P-71) y **permanente**. Cada evento **reserva** lo que se lleva.
 
 ### Catálogo de material
 
-- **Categorías** (configurables): tiendas de campaña (canadiense, iglú, intendencia); cocina (fogones, bombonas, ollas, neveras, depósitos de agua); herramientas (palas, sierras, mazas, hachas); pionerismo (cuerdas, troncos, piquetas); iluminación (focos, frontales); primeros auxilios (botiquines, extintores); juegos y talleres; banderas y mástiles; electrónica (altavoz, proyector); mobiliario (mesas, sillas, lonas, toldos).
-- **Cada artículo:** código (**`M` + grupo + correlativo**, p. ej. `M6840031`, para una etiqueta o un QR), nombre, categoría, foto, **unidades**, si se sigue **una a una** (la tienda nº 3) o **a granel** (40 piquetas), estado (bueno, regular, a reparar, de baja), ubicación (local, almacén…), de quién es (del grupo, de una sección, prestado), fecha de compra y valor (opcional, para el seguro), **caducidad** (botiquín, extintor, gas) y última revisión con notas.
+- **De quién es:** del **grupo** o de **una sección** (la Manada tiene su material de juegos; la Tropa, sus tiendas de patrulla).
+- **Categorías** (configurables):
+  - tiendas de campaña (canadiense, iglú, intendencia);
+  - cocina (fogones, bombonas, ollas, neveras, depósitos de agua);
+  - herramientas (palas, sierras, mazas, hachas);
+  - pionerismo (cuerdas, troncos, piquetas);
+  - iluminación (focos, frontales);
+  - primeros auxilios (botiquines, extintores);
+  - juegos y talleres;
+  - banderas y mástiles;
+  - electrónica (altavoz, proyector);
+  - mobiliario (mesas, sillas, lonas, toldos).
+- **Cada artículo:**
+  - código **`M` + grupo + correlativo** (`M6840031`), para ponerle una etiqueta o un QR;
+  - nombre, categoría y foto;
+  - unidades, y si se sigue **una a una** (la tienda nº 3) o **a granel** (40 piquetas);
+  - estado: bueno, regular, a reparar o de baja;
+  - ubicación;
+  - fecha de compra y valor (opcionales);
+  - **caducidad** (botiquín, extintor, gas) y última revisión con notas.
 - **Historial:** alta, revisiones, reparaciones y baja (con motivo).
 - **Avisos en Inicio:** lo que caduca en 30 días y lo que está pendiente de reparar.
+- **Sin importación** (no hay inventario previo) y **sin préstamos** a otros grupos (P-71).
 
 ### Material de un evento
 
-1. **Lista de material** del evento: artículos y cantidades, con **plantillas por tipo** («material de acampada»: tiendas, cocina, botiquín…) para no empezar de cero.
-2. **Aviso de conflicto** si otro evento que se solapa en fechas reserva el mismo material y no hay unidades suficientes.
-3. **Salida:** quién lo saca y cuándo (casilla por artículo o «todo»).
-4. **Devolución:** comprobación a la vuelta con **incidencias** (falta, roto): cambia el estado del artículo y, si hay que reponerlo, propone el **gasto** en las cuentas del evento.
-5. **Responsable de material** del evento (intendencia).
+1. **Lista de material** del evento: artículos y cantidades, con **plantillas por tipo** («material de acampada»).
+2. **Aviso de conflicto** si otro evento en las mismas fechas reserva el mismo material y no hay unidades suficientes.
+3. **Salida:** quién lo saca y cuándo.
+4. **Devolución** con **incidencias** (falta, roto). El estado del artículo cambia y, si hay que reponerlo, se propone el **gasto** en las cuentas del evento (con cargo al fondo, si se quiere).
+5. El **material personal** de cada participante no es inventario: es un texto del evento.
 
-- El **material personal** de cada participante no es inventario: es un texto del evento que ven las familias.
-- **No hay datos personales** en el inventario (solo quién lo saca, como id de usuario). Las fotos van a la biblioteca de medios, como las de las insignias (sin SVG).
-- **Préstamos** a otros grupos o entidades: *fase 2* (P-71).
+- **No hay datos personales** en el inventario. De quién lo saca, solo el id de usuario. Las fotos van a la biblioteca de medios, como las de las insignias (sin SVG).
+
+## 6. Normativa de tiempo libre en las Illes Balears (P-66: investigada y propuesta)
+
+> Investigado el 2026-10-15 en fuentes oficiales. **No es asesoramiento legal**: conviene confirmarlo con Scouts de Balears o con el Servei de Joventut del Consell de Mallorca antes de la primera acampada gestionada con la web.
+
+### Qué dice la norma
+
+**Fuentes:**
+- **Ley 10/2022**, de 23 de diciembre, de tiempo libre educativo para la infancia y la juventud de las Illes Balears ([BOE-A-2023-2979](https://www.boe.es/buscar/act.php?id=BOE-A-2023-2979));
+- **Decreto 23/2018**, de 6 de julio (título III, arts. 37–54, con modificaciones hasta 2026; [normativa del Servei de Joventut](https://www.caib.es/sites/joventut/ca/normativa_i_documents_dinteres-43982));
+- la guía del **Consell de Mallorca** [«Equip dirigent de les activitats d'educació en el lleure educatiu infantil i juvenil»](https://joventut.conselldemallorca.es/documents/867081/9460530/EQUIP+DIRIGENT+DE+LES+ACTIVITATS+D%E2%80%99EDUCACI%C3%93+EN+EL+TEMPS+LLIURE+INFANTIL+I+JUVENIL_compressed.pdf/e14dbb89-f3e2-dcc7-18db-978c9f25f727?t=1710940527642);
+- el trámite del Consell de Mallorca [«Comunicació de les activitats de lleure educatiu»](https://seu.conselldemallorca.net/ca/fitxa?key=30119).
+
+| Tema | Regla | Dónde |
+|---|---|---|
+| **A qué se aplica** | Actividades de tiempo libre educativo con **menores desde los 3 años** en las Illes Balears. Quedan fuera las familiares, las extraescolares y el deporte federado. También entran las **actividades continuadas** (al menos 6 meses al año con inscripción permanente) | Ley 10/2022, arts. 2.1.b, 18.1, 18.2 y 18.6 |
+| **Declaración responsable** | La presenta la entidad organizadora **al consell insular** (Mallorca: Joventut), **al menos 15 días naturales antes** del inicio, con la **relación del equipo dirigente**: identificación, titulación, función (director/a, monitor/a, en prácticas) y, para quien está en prácticas, la escuela | Ley 10/2022, art. 21.1 y 21.2 |
+| **Condiciones de la actividad** | Proyecto educativo; personal cualificado en proporción a los participantes; **medidas de emergencia y evacuación** y **evaluación de riesgos**; **seguro de accidentes y de responsabilidad civil**; condiciones higiénicas, sanitarias y de seguridad; **autorización de madres, padres o tutores** de los menores | Ley 10/2022, art. 21.3 |
+| **Equipo dirigente** | **Director/a responsable** y monitores, **presentes durante la actividad**. Todos **mayores de 18**, con la **titulación** del Decreto 23/2018 y el **certificado negativo del Registro Central de Delincuentes Sexuales de menos de 12 meses** | Ley 10/2022, art. 21.4; guía del Consell |
+| **Ratio** | Además del director/a, **1 monitor/a por cada 10 participantes**, y otro si sobra una fracción de **5 o más** (el director/a no cuenta) | Decreto 23/2018 (art. 48); guía del Consell |
+| **Titulación** | **Director/a:** diploma de director/a de tiempo libre (o certificado de profesionalidad de dirección, TS en animación sociocultural…). **Monitores:** al menos **la mitad** con diploma de monitor/a de tiempo libre (o certificado de dinamización…); el resto, con estudios universitarios o FP superior relacionados con la educación, el deporte o el ocio | Decreto 23/2018; guía del Consell |
+| **En prácticas** | Como máximo tantas como el equipo titulado; **no cuentan** en la ratio y no cobran | Guía del Consell |
+| **Dependencia reconocida** | **+1 monitor/a de apoyo por cada 3** participantes con grado I o II; **1 por participante** con grado III | Decreto 23/2018 (art. 48.9, modificado en 2026) |
+| **Actividades de riesgo** | Alta montaña, barrancos, escalada, buceo, náutica: con **personal titulado** en esa actividad. En **piscina o mar**: **socorrista** presente | Guía del Consell |
+| **Prohibiciones** | Tabaco, alcohol y otras sustancias adictivas; fomentar conductas adictivas o apuestas | Ley 10/2022, art. 22 |
+| **Protección de la infancia** | Obligaciones de la LO 8/2021; la entidad designa un **delegado/a de protección contra el maltrato** | LO 8/2021, art. 48; guía del Consell |
+
+**Ojo:** según el art. 18.2, la **actividad semanal** del grupo puede ser una «actividad continuada» con su propia declaración. Eso queda **fuera del módulo** (P-62), pero conviene que el grupo lo compruebe.
+
+### Qué hará la web (propuesta)
+
+Todo **avisa, no bloquea**: la responsabilidad es de la entidad organizadora y la web solo ayuda a no olvidar nada.
+
+1. **Declaración responsable** en la ficha del evento:
+   - una casilla **«Requiere declaración responsable»**, marcada por defecto según el tipo (tabla del apartado 1; P-76);
+   - **fecha límite** = inicio − 15 días naturales, con aviso en *Inicio* a los 25 días y en rojo pasada la fecha;
+   - fecha de presentación, nº de registro y justificante (PDF opcional).
+2. **Equipo dirigente:** se elige entre los scouters y el voluntariado del grupo, con su función: director/a, monitor/a, en prácticas o apoyo. La web lo **comprueba con la ficha del CRM** (sin copiarla):
+   - **mayor de 18** el día de inicio (fecha de nacimiento);
+   - **titulación** (`formaciontiempolibre_c`): director/a con titulación de dirección y al menos la mitad de los monitores con titulación de monitor/a. Los valores del campo se leen de los metadatos del CRM (`Metadatos`) al programarlo;
+   - **certificado de delitos sexuales** (`certificadods_c`, `certificadods_fecha_c`) de **menos de 12 meses** el día de **fin** del evento;
+   - personas en **prácticas**: no más que las tituladas.
+3. **Ratio automática:** monitores necesarios = máx(1, ⌊n/10⌋ + 1 si el resto de n/10 es 5 o más), con n = participantes confirmados (o plazas máximas mientras está abierto). No cuentan el director/a ni las personas en prácticas.
+   - El director/a puede escribir **cuántos** participantes tienen dependencia reconocida (grado I-II y grado III). **Solo números, sin nombres**: la web suma los monitores de apoyo.
+   - Ejemplo: 35 participantes → ⌊35/10⌋ = 3 y resto 5 → **4 monitores** además del director/a.
+4. **Hoja del equipo dirigente** para copiar en el trámite: nombre, documento, titulación y función. Se genera en el momento desde el CRM, **no se guarda** y queda en la auditoría.
+5. **Lista de comprobación** en el resumen del evento:
+   - proyecto educativo (adjunto o enlace);
+   - evaluación de riesgos y plan de emergencia (adjunto);
+   - seguro de accidentes y RC (P-75);
+   - casilla «hay actividades de riesgo especializado» → pide el profesional titulado;
+   - casilla «hay agua (piscina o mar)» → pide el socorrista;
+   - autorizaciones de las familias (cuántas faltan).
+6. **Configuración del grupo:** nombre del **delegado/a de protección** (LO 8/2021), que sale en la circular y en la hoja del equipo.
 
 ---
 
@@ -232,99 +344,92 @@ Siempre **capability + ámbito** (doc 02): la sección del evento, el equipo del
 
 | Capability | Roles | Qué permite |
 |---|---|---|
-| `asde_eventos_inscribir` | Todos | «Mis eventos»: ver los eventos a los que está convocado/a (o sus menores), inscribir y dar de baja |
-| `asde_eventos_gestion` | Scouter, Secretaría, Coordinación | Crear y gestionar eventos e inscripciones **en su ámbito** (un scouter, los de sus secciones y aquellos en cuyo equipo está). **Sustituye a `asde_edit_section_events`**, que no usa nadie *(supuesto)* |
-| `asde_eventos_grupo` | Coordinación | Crear eventos **de grupo** y externos, y gestionar todos los del grupo |
-| `asde_eventos_economia` | Tesorería (y Coordinación, Secretaría para ver) | Pagos, devoluciones, becas, gastos y cierre de las cuentas |
-| `asde_eventos_config` | Coordinación | Tipos de evento, plantillas de material, textos de la autorización, ratio |
+| `asde_eventos_inscribir` | Todos | «Mis eventos»: ver los eventos a los que está convocado/a (o sus menores), inscribir, firmar la autorización y dar de baja |
+| `asde_eventos_gestion` | Scouter, Secretaría, Coordinación | Crear, publicar y gestionar eventos **en su ámbito** (un scouter, los de sus secciones y los de su equipo); marcar autorizaciones en papel; pasar lista. **Sustituye a `asde_edit_section_events`** |
+| `asde_eventos_grupo` | Coordinación | Eventos **de grupo** y externos, y todos los del grupo |
+| `asde_eventos_economia` | **Tesorería** | Validar el presupuesto, pagos, devoluciones, becas, gastos, reembolsos, anticipos y cierre. Coordinación y Secretaría lo ven en solo lectura |
+| `asde_eventos_config` | Coordinación, Tesorería | Tipos, margen del fondo de emergencia, textos de la autorización, delegado/a de protección |
 | `asde_inventario_ver` | Scouter, Secretaría, Coordinación, Tesorería | Ver el material y reservarlo para un evento que gestiona |
-| `asde_inventario_gestion` | Coordinación (y el responsable de material, P-71) | Dar de alta, revisar, reparar y dar de baja material |
+| `asde_inventario_gestion` | **Responsable de material**, Coordinación | Alta, revisión, reparación y baja de todo el material |
 
-- **Salud en los listados:** no es una capability nueva. Se usa `asde_view_health` **con el ámbito del evento** (equipo del evento + secciones de los participantes) *(supuesto, P-70)*.
+- **Rol nuevo «Responsable de material»** (`asde_material`, P-71): una **responsabilidad de un scouter**, como Tesorería (exige también el rol Scouter). Tiene `asde_inventario_gestion` y `asde_inventario_ver`.
+- Los **scouters de una sección** gestionan el material **de su sección** *(supuesto)*.
+- **Salud en los listados:** con `asde_view_health` y **el ámbito del evento** (P-70).
 
 ## Datos (qué se guarda en WordPress)
 
-**Ningún dato personal en claro**: de las personas, solo el **nº de Scouts de España** (como los pedidos de uniforme); los nombres y contactos, de la instantánea; la salud, en vivo.
+**Ningún dato personal en claro.** De las personas, solo el **nº de Scouts de España**; los nombres y contactos salen de la instantánea, y la salud se lee en vivo.
 
 | Tabla / opción | Contenido |
 |---|---|
-| `{prefix}asde_eventos` | Grupo, nº (`E6840012`), tipo, ámbito, nombre, fechas, lugar, estado, secciones convocadas, plazas, responsables (ids de usuario), configuración (precios, opciones, política de devolución, formulario) y, en la fase CRM, el id de `stic_Events` |
-| `{prefix}asde_evento_inscripciones` | Evento, nº de Scouts de España, secciones, si es adulto, papel (participante o equipo), estado, orden en la lista de espera, líneas e importe congelado, **firma de la autorización** (quién, cuándo, versión del texto, HMAC de la IP), `datos_enc` **cifrado** (quién recoge, observaciones), asistencia; y quién y cuándo de cada paso |
-| `{prefix}asde_evento_movimientos` | Pagos, ajustes y devoluciones (inscripción o familia, importe, forma, referencia, nota, quién, anulación). Tabla propia, separada de la cuota *(supuesto)* |
-| `{prefix}asde_evento_partidas` | Presupuesto y gastos (previsto o real, ingreso o gasto, partida, concepto, proveedor, importe, justificante, quién pagó, reembolso) |
-| `{prefix}asde_material` | Catálogo de material (sin datos personales) |
+| `{prefix}asde_eventos` | Grupo, nº (`E6840012`), tipo, ámbito, nombre, fechas, lugar, estado, secciones convocadas con sus plazas previstas y máximas, **margen**, **precio por sección congelado**, validación del presupuesto (quién y cuándo), **declaración responsable** (si hace falta, fecha, nº de registro, justificante), lista de comprobación, nº de participantes con dependencia (solo el número), configuración y, en la fase del CRM, el id de `stic_Events` |
+| `{prefix}asde_evento_inscripciones` | Evento, nº de Scouts de España, secciones, si es adulto, **papel** (participante, director/a, monitor/a, en prácticas, apoyo), estado, orden en la lista de espera, importe, **autorización** (firma web: quién, cuándo, versión, HMAC de la IP; o papel: quién lo recibió y cuándo), `datos_enc` **cifrado** (quién recoge, observaciones), asistencia, y quién y cuándo de cada paso |
+| `{prefix}asde_evento_movimientos` | Pagos, becas y ajustes, devoluciones (inscripción o familia, importe, forma: efectivo, ingreso, Bizum o SEPA; referencia, nota, quién, anulación) |
+| `{prefix}asde_evento_partidas` | Presupuesto y gastos: previsto o real, ingreso o gasto, **reparto** (todos, una sección, por participante o por persona del equipo), concepto, proveedor, importe, justificante, quién lo pagó, reembolso, **con cargo al fondo** |
+| `{prefix}asde_evento_anticipos` | Anticipos de caja: a quién (id de usuario), importe, fecha y liquidación (gastado, devuelto, diferencia) |
+| `{prefix}asde_material` | Catálogo de material: del grupo o de una sección |
 | `{prefix}asde_material_historial` | Altas, revisiones, reparaciones, bajas e incidencias |
 | `{prefix}asde_evento_material` | Material reservado por evento: cantidad, salida, devolución e incidencias |
-| Opción `asde_ap_eventos_<grupo>` | Tipos, plantillas de material, textos de la autorización, ratio, política de devolución por defecto |
+| Opción `asde_ap_eventos_<grupo>` | Tipos, margen por defecto (activo, 5 %), plantillas de material, textos de la autorización, delegado/a de protección |
 
-- 7 tablas nuevas: *Instalación y entorno* pasa de 14 a **21**. `uninstall.php` las conserva (justificantes de cobros y gastos) y borra la configuración.
-- **Conservación** *(supuesto, P-72)*: `datos_enc` (quién recoge, observaciones) se vacía al **cerrar** el evento; la firma de la autorización (sin datos personales) se conserva con el evento.
-- Auditoría: `evento_creado`, `evento_publicado`, `evento_cancelado`, `inscripcion_*`, `evento_pago`, `evento_gasto`, `evento_cerrado`, `evento_listado_descargado`, `material_*`… con **nombres de campos, nunca valores**.
+- **8 tablas nuevas:** *Instalación y entorno* pasa de 14 a **22** (y `tests/entorno.php`). `uninstall.php` las conserva (son justificantes de cobros y gastos) y borra la configuración.
+- **Conservación** (P-72): al **cerrar** el evento se vacía `datos_enc`. La firma de la autorización (sin datos personales) se queda con el evento. Los justificantes de gastos se quedan como los de Tesorería.
+- **Auditoría** (nombres de campos, nunca valores): `evento_creado`, `evento_presupuesto_validado`, `evento_publicado`, `evento_cancelado`, `inscripcion_*`, `autorizacion_firmada`, `autorizacion_papel`, `evento_pago`, `evento_gasto`, `evento_anticipo`, `evento_cerrado`, `evento_listado_salud`, `evento_hoja_equipo`, `material_*`…
 
-## Publicación en el CRM (última fase, solo si P-61 = C)
+## CRM
 
-- Una **segunda puerta de escritura** (`Crm\EscrituraEventos`), aparte de `Escritura` (que sigue sin crear registros): solo `stic_Events` y `stic_Registrations`, solo crear y actualizar, solo si `Permisos::puede( …, 'edit' )`, con auditoría y probada **solo con el CRM simulado**.
-- Al publicar: el evento → `stic_Events` (tipo del CRM de la tabla del apartado 1); cada inscripción → `stic_Registrations` (estado de la tabla del apartado 3, `participation_type` asistente u organización). **Nunca** `special_needs` ni salud.
-- Lectura: el historial de eventos de una persona en su ficha, desde `stic_Registrations` (sin `special_needs`).
+- **Lectura de eventos federativos** (P-73): al crear un evento externo, se elige uno de `stic_Events` (nombre, fechas, tipo, lugar) para no escribirlo a mano. **Hay que comprobar** si el usuario del CRM de cada grupo ve los eventos federativos, porque el filtro por grupo de seguridad puede ocultarlos. Si no los ve, el evento externo se crea a mano.
+- **Copia al CRM** (P-61, última fase):
+  - una **segunda puerta de escritura** (`Crm\EscrituraEventos`), aparte de `Escritura` (que sigue sin crear registros): solo `stic_Events` y `stic_Registrations`, solo crear y actualizar, solo si `Permisos::puede( …, 'edit' )`, con auditoría y probada **solo con el CRM simulado**;
+  - el evento va con el `type` de la tabla del apartado 1; cada inscripción, con el estado de la tabla del apartado 3 y `participation_type` asistente u organización;
+  - **nunca** `special_needs` ni salud.
 
 ## Rendimiento (doc 26)
 
-- Agenda, inscripciones, economía y material: **0 consultas al CRM** (nombres de la instantánea con `obtener_varias`).
-- Listado con salud: **una** lectura en vivo para todo el evento, nunca una por participante.
+- Agenda, inscripciones, economía y material: **0 consultas al CRM** (nombres con `obtener_varias`, de la instantánea).
+- Listado con salud y comprobación del equipo: **una** lectura en vivo por evento, nunca una por persona.
 
 ## Pantallas
 
 | Dónde | Pantalla | Qué hay |
 |---|---|---|
 | Gestión del grupo → **Eventos** | Agenda | Eventos de la ronda en tarjetas (móvil) o tabla; filtros por estado, tipo y sección; «Nuevo evento» |
-| | Evento (pestañas) | **Resumen** (datos, estado, avisos de ratio y plazas) · **Inscripciones** · **Economía** · **Material** · **Listados** |
-| | Configuración | Tipos, plantillas de material, textos de la autorización |
-| Gestión del grupo → **Material** | Inventario | Catálogo con filtros, ficha del artículo con su historial, caducidades |
-| Mi espacio / Mi familia → **Mis eventos** | Mis eventos | Próximos eventos, inscribirse, estado, lo que falta, información práctica |
-| Inicio | «Pendiente de revisar» | Inscripciones, autorizaciones, gastos por validar, material que caduca |
+| | Evento (pestañas) | **Resumen** (datos, estado, lista de comprobación, ratio, declaración responsable) · **Equipo** · **Inscripciones** · **Economía** · **Material** · **Listados** |
+| | Configuración | Tipos, margen, textos de la autorización, delegado/a de protección, plantillas de material |
+| Gestión del grupo → **Material** | Inventario | Catálogo del grupo y de las secciones, con filtros; ficha del artículo con su historial; caducidades |
+| Mi espacio / Mi familia → **Mis eventos** | Mis eventos | Próximos eventos, inscribirse y firmar, estado, lo que falta, información práctica |
+| Inicio | «Pendiente de revisar» | Inscripciones, autorizaciones en papel, presupuestos por validar, gastos y reembolsos, declaraciones a punto de vencer, material que caduca |
 
-Todo con las convenciones de siempre: sin JavaScript funciona; con JavaScript, ventana emergente y sin recargar la pantalla entera; móvil primero; textos en los cuatro idiomas.
+Con las convenciones de siempre: sin JavaScript funciona; con JavaScript, ventana emergente y sin recargar la pantalla entera; móvil primero; textos en los cuatro idiomas.
 
 ## Fases (una versión cada una, con sus pruebas)
 
 | Versión | Qué | Pruebas |
 |---|---|---|
-| **0.19.0 · Eventos** | Tipos, crear, editar, publicar y cancelar; agenda; ámbito y permisos; nº de evento; equipo y ratio | `tests/eventos.php` |
-| **0.19.1 · Inscripciones** | Las tres modalidades, «Mis eventos», autorización firmada, plazas y lista de espera, bajas, emails | `tests/eventos-inscripciones.php` |
-| **0.19.2 · Economía** | Precios, hermanos, opciones, pagos, «Mis pagos», devoluciones, presupuesto, gastos con justificante, balance y cierre | `tests/eventos-economia.php` |
-| **0.19.3 · Listados y asistencia** | Participantes, emergencia, salud en vivo, cocina, autobús, imprimir y CSV con auditoría; pasar lista | `tests/eventos-listados.php` |
-| **0.20.0 · Inventario** | Catálogo, historial, caducidades, material del evento con plantillas, conflictos, salida y devolución | `tests/inventario.php` |
-| Después | Publicar en el CRM (P-61), conciliar el banco por referencia, SEPA de actividades (P-44), avisos push (enganche), calendario, préstamos de material | — |
+| **0.19.0 · Eventos, equipo y presupuesto** | Tipos, crear, editar y cancelar; agenda; ámbito y permisos; nº de evento; **equipo dirigente con las comprobaciones de la normativa** (edad, titulación, certificado, ratio) y declaración responsable; **presupuesto con reparto y margen**, validación de Tesorería, precio fijo por sección; publicar | `tests/eventos.php` |
+| **0.19.1 · Inscripciones y cobro** | Las dos modalidades, «Mis eventos», autorización (web o papel), preinscripción de 14 a 17, plazas y lista de espera, bajas; pagos en efectivo, por transferencia y por Bizum; «Mis pagos»; becas y ajustes; emails y enganche de los avisos push | `tests/eventos-inscripciones.php` |
+| **0.19.2 · Gastos, SEPA y cierre** | Gastos con justificante, reembolsos, anticipos, fondo de emergencia, devoluciones, balance y cierre (borra lo cifrado); **SEPA de eventos** en las remesas | `tests/eventos-economia.php` |
+| **0.19.3 · Listados y asistencia** | Participantes, emergencia, salud en vivo, cocina, autobús, hoja del equipo dirigente, imprimir y CSV con auditoría; pasar lista | `tests/eventos-listados.php` |
+| **0.19.4 · Eventos externos del CRM** | Leer `stic_Events` federativos para crear el evento externo | `tests/eventos-externos.php` |
+| **0.20.0 · Inventario** | Rol «Responsable de material», catálogo del grupo y de las secciones, historial, caducidades, material del evento con plantillas, conflictos, salida y devolución | `tests/inventario.php` |
+| **0.21.0 · Copia al CRM** | `EscrituraEventos`: eventos e inscripciones a `stic_Events` / `stic_Registrations` | `tests/eventos-crm.php` |
 
-Cada fase actualiza los docs (00, este, 02, 10 y 09) y los manuales de uso (`manual/fuentes/`). Para la mecánica repetida de cada fase hay dos *skills* del proyecto: **`modulo-nuevo`** (piezas de un módulo o pantalla nueva) y **`entregar-version`** (cierre de una versión) en `.claude/skills/`.
+Cada fase actualiza los docs (00, este, 02, 10 y 09) y los manuales de uso (`manual/fuentes/`). Para la mecánica repetida hay dos *skills* del proyecto en `.claude/skills/`: **`modulo-nuevo`** y **`entregar-version`**.
 
 ## Supuestos (para confirmar)
 
-1. Los eventos viven **en la web** y la publicación en el CRM es la última fase (P-61, opción C).
-2. Los tipos son un catálogo **configurable por grupo** con los diez de la tabla.
-3. El equipo (scouters y voluntariado) **no paga** por defecto.
-4. Los asociados de **14 a 17** solo se **preinscriben**; confirma la familia (P-64).
-5. La plaza liberada se ofrece a la primera de la lista de espera con **3 días** para confirmar.
-6. Ven la salud del listado: el **equipo del evento**, los scouters de las secciones de los participantes, Secretaría y Coordinación (P-70).
+1. Si se libera una plaza, la primera de la lista de espera tiene **3 días** para confirmar.
+2. El precio se **redondea al euro hacia arriba**, y lo que sobra del redondeo va al fondo de emergencia.
+3. Tesorería puede **volver a validar** el presupuesto (y cambiar el precio) mientras no haya inscripciones. Después, el precio queda fijo.
+4. Lo que **sobra del fondo de emergencia** al cerrar se queda en el grupo, igual que el resultado del evento.
+5. Los **scouters de una sección** gestionan el material de su sección; el responsable de material y Coordinación, todo.
+6. La comprobación del equipo (edad, titulación, certificado) **avisa, no bloquea**. La ratio cuenta los participantes **confirmados** (o las plazas máximas mientras la inscripción está abierta).
 7. Los cobros del evento van en **su propia tabla** y no cuentan en la cuota de la ronda.
 8. `asde_eventos_gestion` **sustituye** a `asde_edit_section_events`, que no usa ningún código.
-9. Lo escrito en la inscripción (quién recoge, observaciones) se borra **al cerrar el evento** (P-72).
 
-## Preguntas abiertas (también en el doc 09)
+## Preguntas que quedan abiertas (también en el doc 09)
 
 | # | Pregunta |
 |---|---|
-| P-61 | **¿Dónde vive el evento?** Solo en la web (A), solo en el CRM (B) o en la web y después publicado en el CRM (C, recomendada). ¿La federación usa `stic_Events`/`stic_Registrations` y espera ver ahí las actividades del grupo? (Resuelve P-08) |
-| P-62 | **Tipos de evento:** ¿valen los diez propuestos? ¿Las **reuniones semanales** entran en el módulo (con asistencia) o solo las actividades con inscripción? |
-| P-63 | **Quién crea y publica:** ¿cualquier scouter para sus secciones, o hace falta que **Coordinación apruebe** antes de publicar? |
-| P-64 | **Asociados de 14 a 17:** ¿se preinscriben y confirma la familia, se inscriben solos, o solo inscribe la familia? |
-| P-65 | **Autorización de participación:** ¿vale la firma electrónica (como la SEPA) o hace falta papel firmado? ¿Hay un **modelo** de ASDE o de Scouts de Balears? ¿El **consentimiento de imagen** es por evento o anual (en la ficha)? |
-| P-66 | **Normativa de actividades de tiempo libre en las Illes Balears:** ¿hay que comunicar las acampadas y campamentos a la administración, qué **ratio** y qué **titulación** (director/a, monitores) se exigen, y quién lo tramita? La web puede avisar de la ratio y guardar la fecha de la comunicación |
-| P-67 | **Precios:** ¿descuento por hermanos en los eventos? ¿Pagan los scouters? ¿Recargo por inscripción tardía? ¿Qué **política de devolución** por defecto? |
-| P-68 | **Cobro:** ¿efectivo e ingreso como el uniforme? ¿También **Bizum**? ¿**Domiciliación SEPA** de actividades (P-44)? ¿Conciliar el banco con la referencia del evento? |
-| P-69 | **Presupuesto y gastos:** ¿hace falta un presupuesto **aprobado** (por quién) antes de publicar? ¿Se suben los **justificantes** en el evento? ¿Hay **anticipos de caja** a los scouters? (Enlaza con P-24) |
-| P-70 | **Salud en el evento:** ¿quién puede ver e imprimir el listado del campamento con salud y alimentación? ¿Se imprime para llevarlo o solo en pantalla? |
-| P-71 | **Inventario:** ¿hay ya un inventario (hoja de cálculo) que importar? ¿Hay un **responsable de material** (rol nuevo o responsabilidad de un scouter)? ¿El material es todo del grupo o también de cada sección? ¿Se presta a otros grupos? |
-| P-72 | **Conservación:** ¿cuánto se guardan las inscripciones y las autorizaciones de un evento ya celebrado? ¿Lo revisa la persona delegada de protección de datos de ASDE? |
-| P-73 | **Eventos externos** (Festival ASDE, actividades de Scouts de Balears): ¿se inscribe desde aquí y se manda la lista al organizador? ¿Se leen del CRM? |
-| P-74 | **Avisos:** ¿email a las familias al publicar, al confirmar y como recordatorio? ¿Avisos push de la app (con el texto genérico de siempre)? |
+| P-75 | **Seguro de las actividades:** ¿el seguro de la federación (el de la cuota asociativa) cubre los **accidentes y la responsabilidad civil** que exige la Ley 10/2022 en todas las actividades, o algunas (campamentos, actividades de riesgo, participantes no socios) necesitan un seguro aparte? |
+| P-76 | **Declaración responsable hoy:** ¿qué actividades declara ya el grupo al Consell de Mallorca (¿solo acampadas y campamentos, o también salidas de un día?), quién la presenta y si la actividad semanal está declarada como «actividad continuada»? Con eso se decide qué tipos la piden por defecto |
