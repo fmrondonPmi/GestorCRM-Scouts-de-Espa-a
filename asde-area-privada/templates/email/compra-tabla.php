@@ -7,7 +7,7 @@
  * @var array $lista La lista (ComprasTable::obtener)
  * @var array $col   Colores del email (Colores::para_email)
  */
-// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound, WordPress.WP.GlobalVariablesOverride.Prohibited -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
 use AsdeBalears\AreaPrivada\Tesoreria\Calculadora;
 
 defined( 'ABSPATH' ) || exit;

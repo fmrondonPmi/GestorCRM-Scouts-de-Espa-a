@@ -69,10 +69,16 @@ final class TextosJs {
 		return $out;
 	}
 
-	/** Código JS que define asdeI18n y asdeT() (va antes de los scripts del área privada). */
+	/**
+	 * Código JS que define asdeI18n, asdeT() y asdeEsc() (va antes de los scripts del área privada).
+	 * Un texto de asdeT() puede venir de las etiquetas personalizadas (wp-admin → Idioma y etiquetas,
+	 * limpias con wp_kses pero con comillas): dentro de un atributo HTML se escribe con
+	 * asdeEsc( asdeT( '…' ) ) (v0.33.1, revisión de seguridad; tests/estilo-wordpress.php lo vigila).
+	 */
 	public static function script(): string {
 		return 'window.asdeI18n=' . wp_json_encode( self::diccionario(), JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_HEX_TAG | JSON_HEX_AMP )
 			. ';window.asdeT=function(s){var t=window.asdeI18n&&window.asdeI18n[s]?window.asdeI18n[s]:s,i=1,a=arguments;'
-			. 'return t.replace(/%s/g,function(){return i<a.length?a[i++]:"";});};';
+			. 'return t.replace(/%s/g,function(){return i<a.length?a[i++]:"";});};'
+			. 'window.asdeEsc=function(s){return String(s).replace(/[&<>"\']/g,function(c){return"&#"+c.charCodeAt(0)+";";});};';
 	}
 }

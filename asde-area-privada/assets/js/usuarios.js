@@ -195,10 +195,10 @@
 			}
 			var boton = function ( activo, destino, texto, etiqueta ) {
 				return activo
-					? '<li><a href="#" data-pag="' + destino + '" aria-label="' + etiqueta + '">' + texto + '</a></li>'
+					? '<li><a href="#" data-pag="' + destino + '" aria-label="' + asdeEsc( etiqueta ) + '">' + texto + '</a></li>'
 					: '<li><span class="is-disabled" aria-hidden="true">' + texto + '</span></li>';
 			};
-			var html = '<nav class="asde-paginacion" aria-label="' + asdeT( 'Paginación' ) + '"><p class="asde-paginacion__info">' + asdeT( 'Mostrando %s–%s de %s', desde + 1, desde + enPagina, n ) + '</p>';
+			var html = '<nav class="asde-paginacion" aria-label="' + asdeEsc( asdeT( 'Paginación' ) ) + '"><p class="asde-paginacion__info">' + asdeT( 'Mostrando %s–%s de %s', desde + 1, desde + enPagina, n ) + '</p>';
 			if ( paginas > 1 ) {
 				html += '<ul class="asde-paginacion__botones">'
 					+ boton( estado.pagina > 1, 1, '«', asdeT( 'Primera página' ) )
@@ -209,7 +209,7 @@
 					} else if ( q === estado.pagina ) {
 						html += '<li><span class="is-current" aria-current="page">' + q + '</span></li>';
 					} else {
-						html += '<li><a href="#" data-pag="' + q + '" aria-label="' + asdeT( 'Página %s', q ) + '">' + q + '</a></li>';
+						html += '<li><a href="#" data-pag="' + q + '" aria-label="' + asdeEsc( asdeT( 'Página %s', q ) ) + '">' + q + '</a></li>';
 					}
 				} );
 				html += boton( estado.pagina < paginas, estado.pagina + 1, '›', asdeT( 'Página siguiente' ) )

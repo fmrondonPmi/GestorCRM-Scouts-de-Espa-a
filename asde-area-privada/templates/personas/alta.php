@@ -12,7 +12,7 @@
  * @var string     $url_acceso «Dar acceso» (doc 11)
  * @var string     $volver     Personas
  */
-// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound, WordPress.WP.GlobalVariablesOverride.Prohibited -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
 use AsdeBalears\AreaPrivada\Crm\Altas;
 use AsdeBalears\AreaPrivada\Crm\Duplicados;
 use AsdeBalears\AreaPrivada\Domain\Secciones;

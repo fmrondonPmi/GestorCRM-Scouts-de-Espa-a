@@ -12,7 +12,7 @@
  * @var string      $url_gestion «Mis pagos» (familia) o Tesorería → Domiciliaciones ('' si no hay enlace)
  * @var string      $texto_gestion
  */
-// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound, WordPress.WP.GlobalVariablesOverride.Prohibited -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
 use AsdeBalears\AreaPrivada\Sepa\Iban;
 
 defined( 'ABSPATH' ) || exit;

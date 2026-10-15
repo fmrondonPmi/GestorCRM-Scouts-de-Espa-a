@@ -10,7 +10,7 @@
  * @var array   $sepa       Domiciliación SEPA: lista, acreedor, texto y, por familia, mandato, puede, proximos, valores
  * @var string  $url        Esta misma página
  */
-// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound, WordPress.WP.GlobalVariablesOverride.Prohibited -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
 use AsdeBalears\AreaPrivada\Frontend\TemplateLoader;
 use AsdeBalears\AreaPrivada\Tesoreria\Calculadora;
 

@@ -13,7 +13,7 @@
  * @var callable(int): string   $url
  * @var array<string, string>   $ocultos    Parámetros que conserva el cambio de tamaño
  */
-// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound, WordPress.WP.GlobalVariablesOverride.Prohibited -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
 defined( 'ABSPATH' ) || exit;
 
 $boton = static function ( bool $activo, int $p, string $texto, string $etiqueta ) use ( $url ) {

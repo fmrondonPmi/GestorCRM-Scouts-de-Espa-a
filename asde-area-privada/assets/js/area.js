@@ -304,7 +304,7 @@
 		dialogo.innerHTML = '<div class="asde-modal__barra">'
 			+ '<span class="asde-modal__titulo" id="asde-modal-titulo"></span>'
 			+ '<a class="asde-modal__pagina" href="#">' + asdeT( 'Abrir en su página' ) + '</a>'
-			+ '<button type="button" class="asde-modal__cerrar" aria-label="' + asdeT( 'Cerrar' ) + '">×</button>'
+			+ '<button type="button" class="asde-modal__cerrar" aria-label="' + asdeEsc( asdeT( 'Cerrar' ) ) + '">×</button>'
 			+ '</div><div class="asde-modal__cuerpo" tabindex="-1"></div>';
 		// Junto al contenido del área (no al final de <body>): así hereda los colores y
 		// la tipografía del tema. Con showModal() se dibuja encima de todo igualmente.

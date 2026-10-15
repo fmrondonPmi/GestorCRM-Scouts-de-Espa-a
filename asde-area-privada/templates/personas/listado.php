@@ -23,7 +23,7 @@
  * @var string                                              $url_ficha
  * @var int|null                                            $edad_datos Segundos desde que se leyeron las fichas del CRM (null si no se guardan)
  */
-// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound, WordPress.WP.GlobalVariablesOverride.Prohibited -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
 use AsdeBalears\AreaPrivada\Domain\Identidad;
 use AsdeBalears\AreaPrivada\Domain\Secciones;
 use AsdeBalears\AreaPrivada\Frontend\Views\PersonasView;

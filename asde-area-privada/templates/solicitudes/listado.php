@@ -10,7 +10,7 @@
  * @var string                                             $contacto  Email de contacto del grupo ('' si no hay)
  * @var string                                             $enlace_scouters Enlace de alta de scouters ('' si no le toca verlo; v0.16, doc 31)
  */
-// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound, WordPress.WP.GlobalVariablesOverride.Prohibited -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
 use AsdeBalears\AreaPrivada\Domain\Grupo;
 use AsdeBalears\AreaPrivada\Domain\Secciones;
 use AsdeBalears\AreaPrivada\Install\Roles;

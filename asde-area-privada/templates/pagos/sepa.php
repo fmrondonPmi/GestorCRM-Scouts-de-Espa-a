@@ -13,7 +13,7 @@
  * @var array|null  $valores   Lo escrito en el intento anterior (con errores)
  * @var string      $url       Mis pagos
  */
-// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound, WordPress.WP.GlobalVariablesOverride.Prohibited -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
 use AsdeBalears\AreaPrivada\Sepa\Iban;
 use AsdeBalears\AreaPrivada\Tesoreria\Calculadora;
 

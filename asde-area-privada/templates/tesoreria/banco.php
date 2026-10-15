@@ -15,7 +15,7 @@
  * @var string                                 $url
  * @var string                                 $url_fam
  */
-// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound, WordPress.WP.GlobalVariablesOverride.Prohibited -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
 use AsdeBalears\AreaPrivada\Tesoreria\Banco\BancoTable;
 use AsdeBalears\AreaPrivada\Tesoreria\Banco\Codificacion;
 use AsdeBalears\AreaPrivada\Tesoreria\Banco\Norma43;

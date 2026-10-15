@@ -10,7 +10,7 @@
  * @var string   $url_pdf  '' si todavía no se puede imprimir
  * @var string   $url_inv  El inventario (v0.30: enlace al material dado de alta al comprarla)
  */
-// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound, WordPress.WP.GlobalVariablesOverride.Prohibited -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
 use AsdeBalears\AreaPrivada\Inventario\ComprasTable;
 use AsdeBalears\AreaPrivada\Inventario\Servicio;
 use AsdeBalears\AreaPrivada\Tesoreria\Calculadora;

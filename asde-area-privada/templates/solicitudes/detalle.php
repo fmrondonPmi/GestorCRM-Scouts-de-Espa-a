@@ -17,7 +17,7 @@
  * @var string                                       $url_alta
  * @var string                                       $url_ficha
  */
-// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound, WordPress.WP.GlobalVariablesOverride.Prohibited -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
 use AsdeBalears\AreaPrivada\Domain\NumeroSocio;
 use AsdeBalears\AreaPrivada\Domain\Secciones;
 use AsdeBalears\AreaPrivada\Usuarios\Contacto;

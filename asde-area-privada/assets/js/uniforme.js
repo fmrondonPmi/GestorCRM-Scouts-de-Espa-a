@@ -23,7 +23,7 @@
 		visor.innerHTML = '<div class="asde-visor__barra">'
 			+ '<span class="asde-visor__titulo" id="asde-visor-titulo"></span>'
 			+ '<a class="asde-visor__abrir" href="#" target="_blank" rel="noopener">' + asdeT( 'Abrir en otra pestaña' ) + '</a>'
-			+ '<button type="button" class="asde-visor__cerrar" aria-label="' + asdeT( 'Cerrar' ) + '">×</button>'
+			+ '<button type="button" class="asde-visor__cerrar" aria-label="' + asdeEsc( asdeT( 'Cerrar' ) ) + '">×</button>'
 			+ '</div><div class="asde-visor__cuerpo" tabindex="-1"><img alt=""></div>';
 		// Junto al contenido del área (no al final de <body>): así hereda los colores y la tipografía del tema.
 		var area = document.querySelector( '.asde-ap' );

@@ -12,7 +12,7 @@
  * @var string                                          $activa    La hoja que se ve
  * @var string                                          $contenido HTML de la hoja (ya escapado por su vista)
  */
-// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound, WordPress.WP.GlobalVariablesOverride.Prohibited -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
 
 defined( 'ABSPATH' ) || exit;
 ?>

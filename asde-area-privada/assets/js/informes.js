@@ -32,7 +32,7 @@
 			+ '<span class="asde-modal__titulo" id="asde-imprimir-titulo"></span>'
 			+ '<button type="button" class="button asde-modal__imprimir">' + asdeT( 'Imprimir' ) + '</button>'
 			+ '<a class="asde-modal__pagina" target="_blank" rel="noopener">' + asdeT( 'Abrir en otra pestaña' ) + '</a>'
-			+ '<button type="button" class="asde-modal__cerrar" aria-label="' + asdeT( 'Cerrar' ) + '">×</button>'
+			+ '<button type="button" class="asde-modal__cerrar" aria-label="' + asdeEsc( asdeT( 'Cerrar' ) ) + '">×</button>'
 			+ '</div><iframe class="asde-modal__marco"></iframe>';
 		dialogo.querySelector( '.asde-modal__titulo' ).textContent = nombre;
 		dialogo.querySelector( '.asde-modal__pagina' ).href = url;

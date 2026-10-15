@@ -295,12 +295,30 @@ foreach ( $todos as $fichero ) {
 		continue;
 	}
 	++$plantillas;
-	if ( $globales( $fichero ) && ! str_contains( (string) file_get_contents( $fichero ), 'phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Plantilla' ) ) {
+	// v0.33.1: también WordPress.WP.GlobalVariablesOverride ($s, $m, $id, $cat… son globales de WordPress, pero aquí locales).
+	if ( $globales( $fichero ) && ! str_contains( (string) file_get_contents( $fichero ), 'phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound, WordPress.WP.GlobalVariablesOverride.Prohibited -- Plantilla' ) ) {
 		$sin_linea[] = $rel( $fichero );
 	}
 }
-$ok( $plantillas > 60 && ! $sin_linea, 'las plantillas con variables propias llevan la línea «phpcs:disable … PrefixAllGlobals» con su motivo (' . $plantillas . ' plantillas)' . ( $sin_linea ? ': ' . implode( ', ', array_slice( $sin_linea, 0, 8 ) ) : '' ) );
+$ok( $plantillas > 60 && ! $sin_linea, 'las plantillas con variables propias llevan la línea «phpcs:disable … PrefixAllGlobals, GlobalVariablesOverride» con su motivo (' . $plantillas . ' plantillas)' . ( $sin_linea ? ': ' . implode( ', ', array_slice( $sin_linea, 0, 8 ) ) : '' ) );
 $sin_prefijo = array_filter( array_keys( $globales( ASDE_AP_DIR . 'uninstall.php' ) ), static fn( $v ) => ! str_starts_with( $v, '$asde_' ) && '$wpdb' !== $v );
 $ok( ! $sin_prefijo, 'uninstall.php (ámbito global) solo usa variables con el prefijo $asde_' . ( $sin_prefijo ? ': ' . implode( ', ', $sin_prefijo ) : '' ) );
+
+// ---------------------------------------------------------------------------
+// F. JavaScript (v0.33.1, revisión con el plugin security-guidance): un texto de asdeT() puede
+// venir de las etiquetas personalizadas (wp_kses las deja con comillas), así que dentro de un
+// atributo HTML montado en una cadena va con asdeEsc(); si no, una comilla abre otro atributo.
+// ---------------------------------------------------------------------------
+$atributos = array();
+foreach ( (array) glob( ASDE_AP_DIR . 'assets/js/*.js' ) as $fichero ) {
+	foreach ( explode( "\n", (string) file_get_contents( $fichero ) ) as $n => $linea ) {
+		if ( preg_match( '/\b(?:aria-label|title|alt|placeholder)="\' \+ (?!asdeEsc\()/', $linea ) ) {
+			$atributos[] = basename( $fichero ) . ':' . ( $n + 1 );
+		}
+	}
+}
+$ok( ! $atributos, 'los JS escriben los textos de los atributos HTML con asdeEsc()' . ( $atributos ? ': ' . implode( ', ', $atributos ) : '' ) );
+$script = \AsdeBalears\AreaPrivada\Idiomas\TextosJs::script();
+$ok( str_contains( $script, 'window.asdeEsc=' ) && str_contains( $script, '/[&<>"\']/g' ), 'TextosJs::script() define asdeEsc(), que escapa & < > " y \'' );
 
 echo $fails ? "\n$fails FALLOS\n" : "\nTODO OK (solo lectura de ficheros)\n";

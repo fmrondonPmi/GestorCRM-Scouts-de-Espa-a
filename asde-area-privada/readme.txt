@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.33.0
+Stable tag: 0.33.1
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -29,6 +29,15 @@ The **mobile app** (installing the private area on Android and iPhone, push noti
 * WordPress stores, **encrypted** and for a short time: each account's email, access requests (30 days) and SEPA direct debit authorizations (while valid and for 14 months after).
 * Every action is recorded in an audit log with field names, never values.
 
+== External services ==
+
+This plugin connects to **SinergiaCRM**, the CRM where the members' data lives (SinergiaCRM is developed by SinergiaTIC). Without it the private area has no data.
+
+* **Which server:** only the SinergiaCRM instance of the federated organization. The administrator enters its address and the API user of each group in *Grupos Scouts → Grupos y conexión CRM*. Nothing is sent to any other service.
+* **What is sent:** the group's API user and password (to open a session) and the queries each screen needs (for example a member number, a document number to check for duplicates or a search text). When a person with permission edits a record, approves a change, registers or removes a member or signs a SEPA authorization, the new values are sent to the CRM.
+* **When:** when someone uses the private area or the plugin's screens in wp-admin, and in background tasks started from them (member numbering, refreshing the encrypted copy of the records).
+* **Terms and privacy:** the use of the CRM is governed by the agreement between the federated organization and SinergiaTIC (https://www.sinergiatic.org/). SinergiaTIC's privacy policy: https://www.sinergiatic.org/es/politica-de-privacidad/
+
 == Installation ==
 
 1. Upload the plugin in *Plugins → Add New → Upload Plugin* and activate it.
@@ -52,6 +61,11 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.33.1 =
+* Security review with the WordPress plugin audit, coding standards and security guidance tools: the screens that build HTML in JavaScript now escape translated texts inside HTML attributes (custom labels can contain quotes).
+* Templates: the WordPress coding standards no longer report local template variables as overridden WordPress globals.
+* readme.txt: new "External services" section (SinergiaCRM). Plugin header: License URI.
 
 = 0.33.0 =
 * SEPA direct debit: the bank account (IBAN, holder, bank) is no longer stored by the plugin. When a guardian or an adult member signs the authorization, the account is written to the CRM record of every member of the family; the plugin keeps the authorization, the masked IBAN and a fingerprint to check, before each collection, that the CRM account is still the authorized one. Each family is still a single debit in the SEPA file.
@@ -161,6 +175,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Upgrade Notice ==
 
+= 0.33.1 =
+Security hardening and coding-standards fixes. No database changes.
+
 = 0.33.0 =
 The SEPA bank account moves to the CRM record. No database changes; Treasury can move older authorizations with one button.
 
@@ -171,10 +188,10 @@ Waiting list module (off by default). Adds a new table for the waiting list (cre
 Lists refresh without reloading the page, territorial number on new members and next-section rule. No database changes.
 
 = 0.30.0 =
-Shopping lists with new items, email to the requester when Treasury approves or rejects, "mark as bought" (adds the quantities to the inventory), CSV import that merges repeated items, the inventory warning reversed and uniform orders by scouters for their sections. Adds two columns to the shopping lists table (applied automatically on update).
+Shopping lists: new items, emails on approval or rejection, "mark as bought" and CSV import that merges repeated items. Scouters order uniforms for their sections. Adds two columns to the shopping lists table (applied automatically on update).
 
 = 0.29.0 =
-Excel and printable reports, "Fichas reducidas" (one record per page), collapsible boxes, live search in People, grouped approval of proposed changes and uniform shirts from the inventory. Adds columns to the inventory and uniform tables and a predefined report (applied automatically on update).
+Excel and printable reports, one-record-per-page reports, collapsible boxes, live search in People, grouped approval of changes and shirts from the inventory. Adds columns to the inventory and uniform tables and a predefined report (applied on update).
 
 = 0.28.0 =
 Text-only help in the pop-up window, with the full manual of each role inside the plugin; the illustrated manual is optional extra help uploaded separately. No database changes.

@@ -7,7 +7,7 @@
  * @var array<int, array{gastos:int, ingresos:int, total:float}> $usos
  * @var string            $url  Listado del banco
  */
-// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound, WordPress.WP.GlobalVariablesOverride.Prohibited -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
 use AsdeBalears\AreaPrivada\Tesoreria\Banco\TiposMovimiento;
 use AsdeBalears\AreaPrivada\Tesoreria\Calculadora;
 

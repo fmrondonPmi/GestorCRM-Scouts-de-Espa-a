@@ -12,7 +12,7 @@
  * @var AsdeBalears\AreaPrivada\Frontend\Tabla $tabla
  * @var string                                 $url
  */
-// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound, WordPress.WP.GlobalVariablesOverride.Prohibited -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
 use AsdeBalears\AreaPrivada\Tesoreria\Banco\CsvBanco;
 use AsdeBalears\AreaPrivada\Tesoreria\Banco\Norma43;
 use AsdeBalears\AreaPrivada\Tesoreria\Calculadora;
