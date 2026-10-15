@@ -6,7 +6,7 @@ Hay que resolverlas antes de programar cada parte. Cuando se responde una, se ma
 
 | # | Pregunta | Afecta a |
 |---|---|---|
-| P-08 | ¿La "ficha de participación en eventos" corresponde a las inscripciones (`stic_Registrations`) del CRM? | Eventos |
+| P-08 | ¿La "ficha de participación en eventos" corresponde a las inscripciones (`stic_Registrations`) del CRM? (Se resuelve con P-61, doc 32) | Eventos |
 | P-10 | ¿Se mantiene la URL `/nuestro-grupo-scout/` o pasa a `/grupo-scout/<grupo>/`? | URLs, SEO |
 | P-11 | ¿Qué hace el **módulo de sincronización con el CRM** de Coordinación? | Módulo CRM |
 | P-14 | ¿Cómo se notifican los cambios propuestos y su resolución: email, aviso en el área o ambos? (los ganchos ya están, doc 07) | Cola de cambios |
@@ -44,6 +44,20 @@ Hay que resolverlas antes de programar cada parte. Cuando se responde una, se ma
 | P-58 | **Carpeta de Drive · dónde:** ¿tarjeta en el inicio, entrada en el menú o las dos? ¿En «Para ti» o en «Gestión del grupo»? (doc 30) | Drive |
 | P-59 | **Carpeta de Drive · cuántas:** ¿una por grupo o también una por sección? (doc 30) | Drive |
 | P-60 | **Carpeta de Drive · cómo se comparte:** ¿restringida a las cuentas de Google de los scouters (recomendado) o «cualquiera con el enlace»? (doc 30) | Drive |
+| P-61 | **Eventos · dónde viven:** solo en la web (A), solo en el CRM (B) o en la web y después publicados en el CRM (C, recomendada). ¿La federación usa `stic_Events`/`stic_Registrations` y espera ver ahí las actividades del grupo? (doc 32) | Eventos |
+| P-62 | **Eventos · tipos:** ¿valen los diez propuestos? ¿Entran las reuniones semanales (con asistencia) o solo las actividades con inscripción? (doc 32) | Eventos |
+| P-63 | **Eventos · quién crea y publica:** ¿cualquier scouter para sus secciones o hace falta que Coordinación apruebe antes de publicar? (doc 32) | Eventos |
+| P-64 | **Eventos · asociados de 14 a 17:** ¿se preinscriben y confirma la familia, se inscriben solos o solo inscribe la familia? (doc 32) | Eventos |
+| P-65 | **Eventos · autorización:** ¿vale la firma electrónica (como la SEPA) o hace falta papel? ¿Hay un modelo de ASDE o de Scouts de Balears? ¿El consentimiento de imagen es por evento o anual? (doc 32) | Eventos |
+| P-66 | **Eventos · normativa de tiempo libre en las Illes Balears:** comunicación de acampadas y campamentos, ratio y titulación exigidas, y quién lo tramita (doc 32) | Eventos |
+| P-67 | **Eventos · precios:** ¿descuento por hermanos? ¿Pagan los scouters? ¿Recargo por inscripción tardía? ¿Política de devolución por defecto? (doc 32) | Eventos |
+| P-68 | **Eventos · cobro:** efectivo e ingreso como el uniforme, ¿también Bizum? ¿Domiciliación SEPA de actividades (P-44)? ¿Conciliar el banco con la referencia del evento? (doc 32) | Eventos |
+| P-69 | **Eventos · presupuesto y gastos:** ¿presupuesto aprobado antes de publicar (por quién)? ¿Justificantes en el evento? ¿Anticipos de caja a los scouters? (doc 32, enlaza con P-24) | Eventos |
+| P-70 | **Eventos · salud:** ¿quién ve e imprime el listado del campamento con salud y alimentación? ¿Se imprime o solo en pantalla? (doc 32) | Eventos |
+| P-71 | **Inventario:** ¿hay un inventario que importar? ¿Responsable de material (rol o responsabilidad)? ¿Material del grupo o también de cada sección? ¿Préstamos a otros grupos? (doc 32) | Inventario |
+| P-72 | **Eventos · conservación:** ¿cuánto se guardan inscripciones y autorizaciones de un evento celebrado? ¿Lo revisa la persona delegada de protección de datos de ASDE? (doc 32) | Eventos |
+| P-73 | **Eventos externos** (Festival ASDE, Scouts de Balears): ¿se inscribe desde aquí y se manda la lista al organizador? ¿Se leen del CRM? (doc 32) | Eventos |
+| P-74 | **Eventos · avisos:** ¿email al publicar, al confirmar y como recordatorio? ¿Avisos push de la app? (doc 32) | Eventos |
 
 ## Resueltas
 
