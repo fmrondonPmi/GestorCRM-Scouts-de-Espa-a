@@ -44,6 +44,7 @@ final class Roles {
 					'asde_uniformes_gestion' => true,
 					'asde_uniformes_entrega' => true,
 					'asde_mis_pagos'         => true,
+					'asde_eventos_inscribir' => true, // v0.19.1: «Mis eventos» (inscribirse o inscribir a sus menores).
 					// Eventos (v0.19, doc 32): crea y gestiona los de sus secciones y aquellos en cuyo equipo está.
 					'asde_eventos_gestion'   => true,
 				),
@@ -65,6 +66,7 @@ final class Roles {
 					'asde_uniformes_gestion' => true,
 					'asde_uniformes_entrega' => true,
 					'asde_mis_pagos'         => true,
+					'asde_eventos_inscribir' => true,
 					'asde_eventos_gestion'   => true, // Los de sección de todo el grupo.
 				),
 			),
@@ -89,6 +91,7 @@ final class Roles {
 					'asde_uniformes_pedido'  => true,
 					'asde_uniformes_config'  => true,
 					'asde_mis_pagos'         => true,
+					'asde_eventos_inscribir' => true,
 					// Eventos: además, los de grupo y los externos, y la configuración.
 					'asde_eventos_gestion'   => true,
 					'asde_eventos_grupo'     => true,
@@ -108,6 +111,7 @@ final class Roles {
 					'asde_uniformes_pago'    => true,
 					'asde_uniformes_config'  => true,
 					'asde_mis_pagos'         => true,
+					'asde_eventos_inscribir' => true,
 					// Eventos: valida el presupuesto (el precio sale de él, P-69) y configura el margen.
 					'asde_eventos_economia'  => true,
 					'asde_eventos_config'    => true,
@@ -120,6 +124,7 @@ final class Roles {
 					'asde_propose_ward_changes' => true,
 					'asde_uniformes_pedir'      => true,
 					'asde_mis_pagos'            => true,
+					'asde_eventos_inscribir'    => true,
 					'asde_sepa_autorizar'       => true, // v0.12: firma la autorización de domiciliación SEPA de su familia.
 				),
 			),
@@ -131,6 +136,7 @@ final class Roles {
 					'asde_add_self_notes'    => true,
 					'asde_uniformes_pedir'   => true,
 					'asde_mis_pagos'         => true,
+					'asde_eventos_inscribir' => true,
 					'asde_sepa_autorizar'    => true, // Solo si es mayor de edad (Sepa\Mandatos::puede_firmar).
 				),
 			),

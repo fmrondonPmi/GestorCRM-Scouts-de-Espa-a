@@ -87,8 +87,25 @@ final class EventosConfigView extends EventosBaseView {
 			$cfg['titulaciones'][ $k ] = array_values( array_unique( array_filter( array_map( static fn( $v ) => mb_substr( trim( sanitize_text_field( (string) $v ) ), 0, 100 ), $marcadas ) ) ) );
 		}
 
+		// Inscripción (v0.19.1): texto de la autorización (vacío = el del plugin), cómo pagar y recordatorio.
+		$campos = array( 'margen', 'tipos', 'titulaciones' );
+		if ( isset( $_POST['autorizacion_texto'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification -- comprobado arriba.
+			$texto = mb_substr( trim( sanitize_textarea_field( $this->post( 'autorizacion_texto' ) ) ), 0, Config::MAX_AUTORIZACION );
+			// Si es el texto del plugin tal cual, se guarda vacío: así se sigue traduciendo.
+			$cfg['autorizacion_texto'] = trim( Config::autorizacion( array( 'autorizacion_texto' => '' ) ) ) === $texto ? '' : $texto;
+			$campos[]                  = 'autorizacion';
+		}
+		if ( isset( $_POST['texto_pago'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+			$cfg['texto_pago'] = mb_substr( trim( wp_kses_post( $this->post( 'texto_pago' ) ) ), 0, 1000 );
+			$campos[]          = 'texto_pago';
+		}
+		if ( isset( $_POST['recordatorio_dias'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+			$cfg['recordatorio_dias'] = min( 30, max( 0, (int) $this->post( 'recordatorio_dias' ) ) );
+			$campos[]                 = 'recordatorio_dias';
+		}
+
 		Config::guardar( $cfg );
-		Logger::log( 'eventos_configurados', 'grupo', Grupo::numero(), array( 'campos' => array( 'margen', 'tipos', 'titulaciones' ) ) );
+		Logger::log( 'eventos_configurados', 'grupo', Grupo::numero(), array( 'campos' => $campos ) );
 		Notices::add( 'success', asde_t( 'Configuración de eventos guardada.' ) );
 		$this->redirect( $this->url( 'eventos_config' ) );
 	}

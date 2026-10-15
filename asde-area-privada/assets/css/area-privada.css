@@ -1920,3 +1920,107 @@ html.asde-cargando .asde-ap button {
 		max-width: 100%;
 	}
 }
+
+/* v0.19.1 · Eventos: inscripciones, «Mis eventos» y cobros (doc 32) */
+.asde-ap .asde-badge--inscripcion-pendiente { background: var(--asde-warn-bg); color: var(--asde-warn-text); }
+.asde-ap .asde-badge--inscripcion-confirmada { background: var(--asde-ok-bg); color: var(--asde-ok-text); }
+.asde-ap .asde-badge--inscripcion-plaza { background: var(--asde-info-bg); color: var(--asde-info-text); }
+.asde-ap .asde-badge--inscripcion-espera { background: var(--asde-tint-strong); color: var(--asde-primary-dark); }
+.asde-ap .asde-badge--inscripcion-sin_respuesta { background: var(--asde-warn-bg); color: var(--asde-warn-text); }
+.asde-ap .asde-badge--inscripcion-no_participa,
+.asde-ap .asde-badge--inscripcion-baja { background: var(--asde-neutral-bg); color: var(--asde-muted); }
+.asde-ap .asde-mis-evento .asde-badge {
+	white-space: normal;
+}
+.asde-ap .asde-mis-evento__personas {
+	margin: 12px 0 0;
+	padding: 0;
+	list-style: none;
+}
+.asde-ap .asde-mis-evento__persona {
+	padding: 12px 0;
+	border-top: 1px solid var(--asde-tint-line);
+}
+.asde-ap .asde-mis-evento__quien {
+	margin: 0 0 6px;
+}
+.asde-ap .asde-mis-evento__info {
+	margin: 0 0 8px;
+}
+.asde-ap .asde-falta {
+	margin: 0 0 8px 20px;
+}
+.asde-ap .asde-inscribir {
+	margin: 8px 0;
+}
+.asde-ap .asde-inscribir > summary {
+	display: inline-block;
+	cursor: pointer;
+	list-style: none;
+}
+.asde-ap .asde-inscribir > summary::-webkit-details-marker {
+	display: none;
+}
+.asde-ap .asde-inscribir[open] > summary {
+	margin-bottom: 10px;
+}
+.asde-ap .asde-form--inscribir {
+	padding: 12px;
+	border-radius: var(--asde-radius);
+	background: var(--asde-tint);
+}
+.asde-ap .asde-form--inscribir textarea,
+.asde-ap .asde-form--inscribir select {
+	width: 100%;
+	max-width: 100%;
+}
+.asde-ap .asde-form--inscribir .asde-fieldset label {
+	display: inline-block;
+	margin-right: 12px;
+}
+.asde-ap .asde-autorizacion {
+	margin: 12px 0;
+	padding: 10px 12px;
+	border-left: 4px solid var(--asde-primary);
+	background: var(--asde-surface);
+	font-size: 0.95em;
+}
+.asde-ap .asde-autorizacion p:last-child {
+	margin-bottom: 0;
+}
+.asde-ap .asde-accion {
+	margin: 4px 0;
+}
+.asde-ap .asde-accion > summary {
+	cursor: pointer;
+	color: var(--asde-primary);
+}
+.asde-ap .asde-movimientos {
+	margin: 6px 0 0;
+	padding: 0;
+	list-style: none;
+	font-size: 0.9em;
+}
+.asde-ap .asde-movimientos .asde-anulado {
+	text-decoration: line-through;
+	color: var(--asde-muted);
+}
+.asde-ap .asde-lista-espera li,
+.asde-ap .asde-lista-nombres li {
+	margin-bottom: 6px;
+}
+@media (max-width: 767px) {
+	.asde-ap .asde-form--inscribir .asde-fieldset label {
+		display: block;
+		margin-right: 0;
+	}
+	.asde-ap .asde-table--inscripciones .asde-badge {
+		white-space: normal;
+	}
+	.asde-ap .asde-table--inscripciones input[type="text"],
+	.asde-ap .asde-table--inscripciones input[type="date"],
+	.asde-ap .asde-table--inscripciones select {
+		width: 100%;
+		max-width: 100%;
+	}
+}

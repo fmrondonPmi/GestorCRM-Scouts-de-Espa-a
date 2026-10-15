@@ -114,11 +114,11 @@ try {
 	echo "== Parte A · Familias y participantes: solo su espacio ==\n";
 	$g = Menu::grupos( $como( $u_fam ) );
 	$ok( array( Menu::PERSONAL ) === array_keys( $g ), 'una familia (tutor) tiene un solo grupo de menú: lo personal' );
-	$ok( array( 'ficha', 'pagos', 'uniforme' ) === $claves( $g[ Menu::PERSONAL ]['items'] ) && 'Mi familia' === $g[ Menu::PERSONAL ]['titulo'] && 'Mi familia' === $g[ Menu::PERSONAL ]['items']['ficha'] && 'Uniforme' === $g[ Menu::PERSONAL ]['items']['uniforme'], 'sus entradas: Mi familia, Mis pagos y Uniforme' );
+	$ok( array( 'ficha', 'mis_eventos', 'pagos', 'uniforme' ) === $claves( $g[ Menu::PERSONAL ]['items'] ) && 'Mi familia' === $g[ Menu::PERSONAL ]['titulo'] && 'Mi familia' === $g[ Menu::PERSONAL ]['items']['ficha'] && 'Uniforme' === $g[ Menu::PERSONAL ]['items']['uniforme'], 'sus entradas: Mi familia, Mis eventos (v0.19.1), Mis pagos y Uniforme' );
 	$g = Menu::grupos( $como( $u_pol ) );
 	$ok( array( Menu::PERSONAL ) === array_keys( $g ) && 'Mi espacio' === $g[ Menu::PERSONAL ]['titulo'] && 'Mis datos' === $g[ Menu::PERSONAL ]['items']['ficha'], 'un participante: Mi espacio con Mis datos, pagos y uniforme' );
 	$tabs = View::pestanas( $como( $u_fam ) );
-	$ok( array( 'area', 'ficha', 'pagos', 'uniforme' ) === $claves( $tabs ), 'la lista plana de pestañas de la familia (Inicio delante) no trae nada de gestión' );
+	$ok( array( 'area', 'ficha', 'mis_eventos', 'pagos', 'uniforme' ) === $claves( $tabs ), 'la lista plana de pestañas de la familia (Inicio delante) no trae nada de gestión' );
 
 	echo "\n== Parte B · Scouters: su espacio y la gestión, por separado ==\n";
 	$g = Menu::grupos( $como( $u_sco ) );

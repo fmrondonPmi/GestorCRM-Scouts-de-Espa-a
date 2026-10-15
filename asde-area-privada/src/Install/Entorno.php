@@ -422,6 +422,7 @@ final class Entorno {
 			\AsdeBalears\AreaPrivada\Eventos\EventosTable::table(),
 			\AsdeBalears\AreaPrivada\Eventos\InscripcionesTable::table(),
 			\AsdeBalears\AreaPrivada\Eventos\PartidasTable::table(),
+			\AsdeBalears\AreaPrivada\Eventos\MovimientosTable::table(),
 		);
 	}
 

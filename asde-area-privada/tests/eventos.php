@@ -507,7 +507,7 @@ try {
 	$cfg = Config::de();
 	$ok( 7.5 === $cfg['margen_pct'] && isset( $cfg['tipos']['intercambio'] ) && $cfg['tipos']['intercambio']['coste'] && ! $cfg['tipos']['campamento']['activo'] && $cfg['tipos']['acampada']['activo'] && array( 'dtl' ) === $cfg['titulaciones']['director'], 'Coordinación configura: margen 7,5 %, tipo nuevo, tipos sin marcar desactivados y titulaciones' );
 	$a_fam = $como( $u_fam );
-	$ok( ! isset( Menu::grupos( $a_fam )[ Menu::GESTION ] ) && ! str_contains( ( new AreaPrivadaView() )->render(), '<strong>Eventos</strong>' ), 'la familia no tiene «Eventos» ni en el menú ni en el inicio (llega con «Mis eventos» en la 0.19.1)' );
+	$ok( ! isset( Menu::grupos( $a_fam )[ Menu::GESTION ] ) && ! str_contains( ( new AreaPrivadaView() )->render(), '<strong>Eventos</strong>' ), 'la familia no tiene «Eventos» (la gestión) ni en el menú ni en el inicio: lo suyo es «Mis eventos» (v0.19.1)' );
 
 	echo "\n== Parte J · Sin datos personales y sin el CRM real ==\n";
 	$cols = array_keys( (array) $wpdb->get_row( 'SELECT * FROM ' . EventosTable::table() . ' LIMIT 1', ARRAY_A ) ); // phpcs:ignore WordPress.DB
@@ -528,6 +528,12 @@ try {
 	wp_using_ext_object_cache( $cache_externa );
 	wp_set_current_user( 0 );
 
+	// Los avisos que publicar o cancelar deja programados (v0.19.1), fuera.
+	foreach ( array_map( 'intval', (array) $wpdb->get_col( $wpdb->prepare( 'SELECT id FROM ' . EventosTable::table() . ' WHERE id > %d', $ev_antes ) ) ) as $eid ) { // phpcs:ignore WordPress.DB
+		foreach ( array( 'publicado', 'cancelado' ) as $tipo ) {
+			wp_clear_scheduled_hook( \AsdeBalears\AreaPrivada\Eventos\Avisos::HOOK, array( $grupo['numero'], $eid, $tipo ) );
+		}
+	}
 	$lista = implode( ',', array_map( 'intval', $ids ) ) ?: '0';
 	$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . EventosTable::table() . ' WHERE id > %d', $ev_antes ) ); // phpcs:ignore WordPress.DB
 	$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . InscripcionesTable::table() . ' WHERE id > %d', $ins_antes ) ); // phpcs:ignore WordPress.DB

@@ -10,17 +10,68 @@ defined( 'ABSPATH' ) || exit;
  * dirigente (v0.19.0) y, desde la 0.19.1, los participantes inscritos.
  *
  * De cada persona solo se guarda su nº Scouts de España, sus secciones y si es adulta
- * (para saber quién la gestiona sin consultar el CRM) y su papel en el evento. Una
- * persona está una sola vez en cada evento.
+ * el día que empieza el evento (para saber quién la gestiona y contar los menores sin
+ * consultar el CRM) y su papel en el evento. Una persona está una sola vez en cada evento.
+ *
+ * De los participantes (papel «participante», v0.19.1), además: el estado de la
+ * inscripción, la sección por la que paga y su precio (fijo), la autorización (firmada en
+ * la web —quién, cuándo, versión del texto y una huella de la IP— o en papel —quién lo
+ * recibió y cuándo—), el transporte y, **cifrado**, quién recoge al menor y las
+ * observaciones para el equipo (se borran al cerrar el evento, P-72). La salud no se copia:
+ * solo la fecha en que la familia dijo que la ficha estaba al día.
  */
 final class InscripcionesTable {
 
-	/** Papeles del equipo (el de los participantes llega en la 0.19.1). */
+	/** Papeles del equipo. */
 	public const PAPELES = array(
 		'director'  => 'Director/a',
 		'monitor'   => 'Monitor/a',
 		'practicas' => 'En prácticas',
 		'apoyo'     => 'Apoyo (cocina, intendencia, transporte)',
+	);
+
+	/** Papel de quien se inscribe para participar (v0.19.1). */
+	public const PARTICIPANTE = 'participante';
+
+	// Estados de la inscripción de un participante (doc 32, apartado 3).
+	public const PENDIENTE    = 'pendiente';
+	public const CONFIRMADA   = 'confirmada';
+	public const ESPERA       = 'espera';
+	public const NO_PARTICIPA = 'no_participa';
+	public const BAJA         = 'baja';
+
+	/** Etiquetas de los estados («sin_respuesta» y «plaza» no se guardan: se deducen). */
+	public const ESTADOS = array(
+		'sin_respuesta' => 'Sin respuesta',
+		'pendiente'     => 'Pendiente',
+		'confirmada'    => 'Confirmada',
+		'plaza'         => 'Plaza ofrecida',
+		'espera'        => 'En lista de espera',
+		'no_participa'  => 'No participa',
+		'baja'          => 'Baja',
+	);
+
+	/** Estados que ocupan plaza (con la lista de espera aparte: ocupa la que tiene una plaza ofrecida). */
+	public const ACTIVAS = array( self::PENDIENTE, self::CONFIRMADA );
+
+	/** Cómo está la autorización de participación ('' = falta). */
+	public const AUTORIZACIONES = array(
+		''      => 'Falta la autorización',
+		'web'   => 'Firmada en la web',
+		'papel' => 'Entregada en papel',
+		'no'    => 'No hace falta (mayor de edad)',
+	);
+
+	/** Quién hizo la inscripción. */
+	public const COMO = array(
+		'familia' => 'La familia',
+		'propia'  => 'La propia persona',
+		'gestor'  => 'El equipo del grupo',
+	);
+
+	public const TRANSPORTES = array(
+		'grupo'  => 'Con el grupo',
+		'propio' => 'Por su cuenta',
 	);
 
 	public static function table(): string {
@@ -44,9 +95,31 @@ final class InscripcionesTable {
 				papel varchar(20) NOT NULL,
 				creado datetime NOT NULL,
 				creado_por bigint(20) unsigned NOT NULL DEFAULT 0,
+				estado varchar(20) NOT NULL DEFAULT '',
+				seccion varchar(20) NOT NULL DEFAULT '',
+				precio decimal(10,2) NOT NULL DEFAULT 0.00,
+				como varchar(10) NOT NULL DEFAULT '',
+				motivo varchar(255) NOT NULL DEFAULT '',
+				espera_en datetime NULL,
+				oferta_hasta datetime NULL,
+				autorizacion varchar(10) NOT NULL DEFAULT '',
+				autorizacion_por bigint(20) unsigned NOT NULL DEFAULT 0,
+				autorizacion_en datetime NULL,
+				autorizacion_version varchar(20) NOT NULL DEFAULT '',
+				autorizacion_huella varchar(64) NOT NULL DEFAULT '',
+				transporte_ida varchar(10) NOT NULL DEFAULT '',
+				transporte_vuelta varchar(10) NOT NULL DEFAULT '',
+				salud_revisada datetime NULL,
+				datos_enc text NULL,
+				confirmada_en datetime NULL,
+				baja_por bigint(20) unsigned NOT NULL DEFAULT 0,
+				baja_en datetime NULL,
+				baja_motivo varchar(255) NOT NULL DEFAULT '',
+				actualizado datetime NULL,
 				PRIMARY KEY  (id),
 				UNIQUE KEY evento_socio (evento_id,socio),
-				KEY grupo (grupo)
+				KEY grupo (grupo),
+				KEY evento_estado (evento_id,estado)
 			) $charset;"
 		);
 	}
@@ -141,6 +214,129 @@ final class InscripcionesTable {
 		return (bool) $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(*) FROM ' . self::table() . " WHERE evento_id = %d AND grupo = %s AND papel NOT IN ($marcas)", array_merge( array( $evento_id, Grupo::numero() ), $papeles ) ) ); // phpcs:ignore WordPress.DB
 	}
 
+	// ---------------------------------------------------------------------
+	// Participantes (v0.19.1)
+	// ---------------------------------------------------------------------
+
+	/** Columnas de un participante que se pueden escribir (el servicio ya las ha validado). */
+	private const COLUMNAS = array( 'secciones', 'adulto', 'estado', 'seccion', 'precio', 'como', 'motivo', 'espera_en', 'oferta_hasta', 'autorizacion', 'autorizacion_por', 'autorizacion_en', 'autorizacion_version', 'autorizacion_huella', 'transporte_ida', 'transporte_vuelta', 'salud_revisada', 'datos_enc', 'confirmada_en', 'baja_por', 'baja_en', 'baja_motivo' );
+
+	/**
+	 * Inscribe a un participante. Si ya tenía una fila de participante (una baja o un «no
+	 * participa»), se reutiliza: una persona está una sola vez en cada evento.
+	 *
+	 * @return int Id de la fila (0 si está en el equipo del evento o no se ha podido guardar).
+	 */
+	public static function inscribir( int $evento_id, string $socio, array $datos ): int {
+		global $wpdb;
+		$previa = self::de_socio( $evento_id, $socio );
+		if ( $previa && self::PARTICIPANTE !== $previa['papel'] ) {
+			return 0;
+		}
+		$fila = array_intersect_key( $datos, array_flip( self::COLUMNAS ) );
+		if ( isset( $fila['secciones'] ) ) {
+			$fila['secciones'] = mb_substr( implode( ',', (array) $fila['secciones'] ), 0, 120 );
+		}
+		// Al reutilizar una fila, nada de la inscripción anterior pasa a la nueva (salvo sus pagos, que siguen siendo suyos).
+		$limpia = array(
+			'motivo'               => '',
+			'espera_en'            => null,
+			'oferta_hasta'         => null,
+			'autorizacion'         => '',
+			'autorizacion_por'     => 0,
+			'autorizacion_en'      => null,
+			'autorizacion_version' => '',
+			'autorizacion_huella'  => '',
+			'transporte_ida'       => '',
+			'transporte_vuelta'    => '',
+			'salud_revisada'       => null,
+			'datos_enc'            => null,
+			'confirmada_en'        => null,
+			'baja_por'             => 0,
+			'baja_en'              => null,
+			'baja_motivo'          => '',
+			'actualizado'          => current_time( 'mysql', true ),
+		);
+		if ( $previa ) {
+			$wpdb->update(
+				self::table(),
+				array_merge( $limpia, $fila, array( 'creado_por' => get_current_user_id() ) ),
+				array(
+					'id'    => $previa['id'],
+					'grupo' => Grupo::numero(),
+				)
+			);
+			return $previa['id'];
+		}
+		$wpdb->insert(
+			self::table(),
+			array_merge(
+				$limpia,
+				$fila,
+				array(
+					'evento_id'  => $evento_id,
+					'grupo'      => Grupo::numero(),
+					'socio'      => $socio,
+					'papel'      => self::PARTICIPANTE,
+					'creado'     => current_time( 'mysql', true ),
+					'creado_por' => get_current_user_id(),
+				)
+			)
+		);
+		return (int) $wpdb->insert_id;
+	}
+
+	/** Cambia columnas de un participante. */
+	public static function actualizar( int $id, array $datos ): bool {
+		global $wpdb;
+		$fila = array_intersect_key( $datos, array_flip( self::COLUMNAS ) );
+		if ( ! $fila ) {
+			return false;
+		}
+		$fila['actualizado'] = current_time( 'mysql', true );
+		return false !== $wpdb->update(
+			self::table(),
+			$fila,
+			array(
+				'id'    => $id,
+				'grupo' => Grupo::numero(),
+				'papel' => self::PARTICIPANTE,
+			)
+		);
+	}
+
+	/** @return array[] Participantes del evento (todos los estados), por orden de inscripción. */
+	public static function participantes( int $evento_id ): array {
+		global $wpdb;
+		$filas = (array) $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . self::table() . ' WHERE evento_id = %d AND grupo = %s AND papel = %s ORDER BY id ASC', $evento_id, Grupo::numero(), self::PARTICIPANTE ), ARRAY_A ); // phpcs:ignore WordPress.DB
+		return array_map( array( self::class, 'preparar' ), $filas );
+	}
+
+	/** @return array[] Inscripciones de estas personas en los eventos del grupo («Mis eventos», «Mis pagos»). */
+	public static function de_socios( array $socios ): array {
+		global $wpdb;
+		$socios = array_values( array_unique( array_map( 'strval', $socios ) ) );
+		if ( ! $socios ) {
+			return array();
+		}
+		$marcas = implode( ',', array_fill( 0, count( $socios ), '%s' ) );
+		$filas  = (array) $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . self::table() . " WHERE grupo = %s AND papel = %s AND socio IN ($marcas) ORDER BY id ASC", array_merge( array( Grupo::numero(), self::PARTICIPANTE ), $socios ) ), ARRAY_A ); // phpcs:ignore WordPress.DB
+		return array_map( array( self::class, 'preparar' ), $filas );
+	}
+
+	/** @return array[] Participantes con estos estados en los eventos del grupo (avisos y recuentos, sin consultar el CRM). */
+	public static function con_estado( array $estados ): array {
+		global $wpdb;
+		$marcas = implode( ',', array_fill( 0, count( $estados ), '%s' ) );
+		$filas  = (array) $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM ' . self::table() . " WHERE grupo = %s AND papel = %s AND estado IN ($marcas) ORDER BY id ASC", array_merge( array( Grupo::numero(), self::PARTICIPANTE ), $estados ) ), ARRAY_A ); // phpcs:ignore WordPress.DB
+		return array_map( array( self::class, 'preparar' ), $filas );
+	}
+
+	/** Nº de la inscripción (referencia de pago si la persona no tiene familia en Tesorería): I + grupo + id. */
+	public static function numero( array $f ): string {
+		return 'I' . $f['grupo'] . str_pad( (string) $f['id'], 5, '0', STR_PAD_LEFT );
+	}
+
 	/** Borra todas las filas de un evento (al borrar un borrador). */
 	public static function borrar_evento( int $evento_id ): void {
 		global $wpdb;
@@ -159,6 +355,13 @@ final class InscripcionesTable {
 		$f['adulto']     = (bool) (int) $f['adulto'];
 		$f['secciones']  = array_values( array_filter( explode( ',', (string) $f['secciones'] ) ) );
 		$f['creado_por'] = (int) $f['creado_por'];
+		$f['precio']     = round( (float) ( $f['precio'] ?? 0 ), 2 );
+		foreach ( array( 'autorizacion_por', 'baja_por' ) as $k ) {
+			$f[ $k ] = (int) ( $f[ $k ] ?? 0 );
+		}
+		foreach ( array( 'estado', 'seccion', 'como', 'motivo', 'autorizacion', 'autorizacion_version', 'autorizacion_huella', 'transporte_ida', 'transporte_vuelta', 'baja_motivo' ) as $k ) {
+			$f[ $k ] = (string) ( $f[ $k ] ?? '' );
+		}
 		return $f;
 	}
 }

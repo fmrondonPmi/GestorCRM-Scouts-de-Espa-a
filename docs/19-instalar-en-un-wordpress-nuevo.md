@@ -30,9 +30,9 @@
 
 | Pieza | Qué hace |
 |---|---|
-| Tablas | Crea las 17 tablas si faltan (`dbDelta`, no toca datos). `asde_solicitudes` es de la v0.10 (doc 22), `asde_uniformes`, de la v0.11 (doc 24), `asde_sepa_mandatos` y `asde_sepa_remesas`, de la v0.12 (doc 25), y `asde_eventos`, `asde_evento_inscripciones` y `asde_evento_partidas`, de la v0.19 (doc 32) |
+| Tablas | Crea las 18 tablas si faltan (`dbDelta`, no toca datos; también añade las columnas nuevas de las que ya existen). `asde_solicitudes` es de la v0.10 (doc 22), `asde_uniformes`, de la v0.11 (doc 24), `asde_sepa_mandatos` y `asde_sepa_remesas`, de la v0.12 (doc 25), `asde_eventos`, `asde_evento_inscripciones` y `asde_evento_partidas`, de la v0.19 (doc 32), y `asde_evento_movimientos` (cobros de los eventos), de la 0.19.1 |
 | Roles | Crea o sincroniza los 6 roles; los administradores reciben todos los permisos del área |
-| Páginas (17) | Crea las que faltan y **recupera** las que están en la papelera: la misma página, con su dirección, no una copia. Publica las que estaban sin publicar y **vuelve a poner el shortcode** si alguien lo quitó, conservando el texto que hubiera. Sin barra de título ni migas en Enfold |
+| Páginas (28) | Crea las que faltan y **recupera** las que están en la papelera: la misma página, con su dirección, no una copia. Publica las que estaban sin publicar y **vuelve a poner el shortcode** si alguien lo quitó, conservando el texto que hubiera. Sin barra de título ni migas en Enfold |
 | «Acceso socios» | Lo añade al menú principal; también si lo habían borrado a mano |
 | Tarea diaria | La programa si no lo está |
 | Wordfence | Si está activo, aplica la verificación en dos pasos de los roles del área |
@@ -72,7 +72,7 @@ Aunque un ajuste llegue marcado, si ya no hacía falta **no se aplica**.
 |---|---|
 | `Install\Entorno` | `comprobar()`: 19 piezas con estado (la v0.12 añade «Email de contacto del grupo»). `opciones()`: los ajustes que tiene sentido ofrecer. `generar()`: crea o repara y devuelve lo hecho, los avisos y los errores. `poner_noabort()` |
 | `Admin\EntornoPage` | La página: estado, ajustes, botón, informe, siguientes pasos, email de prueba y aviso en Escritorio y Plugins |
-| `Frontend\Pages::reparar()` / `revisar()` | Reparación y estado de las 17 páginas. `install()` (activación y actualización) también recupera de la papelera en vez de duplicar |
+| `Frontend\Pages::reparar()` / `revisar()` | Reparación y estado de las 28 páginas. `install()` (activación y actualización) también recupera de la papelera en vez de duplicar |
 | `Frontend\Visibilidad` | `ubicacion_principal()`, `menu_principal()`, `menu_visible()`, `asegurar_menu( $forzar )` y el filtro `get_pages` |
 
 ## Probado (2026-09-27)
@@ -80,7 +80,7 @@ Aunque un ajuste llegue marcado, si ya no hacía falta **no se aplica**.
 **En un WordPress nuevo de verdad.** Se montó con los ficheros de WordPress de Local (sin descargar nada), una base de datos vacía en el MySQL de Local y `wp server`; al acabar se borró todo.
 
 - **Enfold recién activado, sin menús.**
-  - Tras activar el plugin: 17 páginas en `/area-privada/`, pero sin menú ni «Acceso socios».
+  - Tras activar el plugin: las páginas del área (28 desde la 0.19.1) en `/area-privada/`, pero sin menú ni «Acceso socios».
   - La página propuso enlaces permanentes, zona horaria (v0.8; desde la v0.9 ya no) y menú principal. Tras pulsar el botón: enlaces `/%postname%/`, zona Europe/Madrid y «Menú principal» (Inicio + Acceso socios) en la ubicación `avia`.
   - En la web, sin sesión: el menú muestra «Inicio» y «Acceso socios» y ninguna otra página del área. Las privadas redirigen a *Acceso socios*, que sin grupos dice que el acceso no está disponible.
 - **Reparación:** «Banco» en la papelera, «Ficha» sin su shortcode y «Acceso socios» borrado del menú.

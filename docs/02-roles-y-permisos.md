@@ -147,3 +147,15 @@ asde_manage_users                 # alta/baja/vinculación de usuarios
 
 - Tesorería es siempre un scouter: como tal, también gestiona los eventos de su sección.
 - Las familias y los participantes no ven los eventos todavía: llegan con «Mis eventos» en la 0.19.1.
+
+## Actualización v0.19.1 (2026-10-15): inscripciones a los eventos (doc 32)
+
+| Capability | Roles | Qué permite |
+|---|---|---|
+| `asde_eventos_inscribir` | **Todos** (Scouter, Secretaría, Coordinación, Tesorería, Tutor, Participante) | «Mis eventos»: ver los eventos a los que están convocados la persona o los menores que representa, inscribir, firmar la autorización, responder a una convocatoria, confirmar una plaza de la lista de espera y darse de baja mientras el plazo está abierto |
+
+Y lo que ya había, con lo nuevo:
+
+- `asde_eventos_gestion` (en el ámbito del evento): además, **inscribir** a alguien en nombre de su familia (fuera de las secciones convocadas o de la edad, con motivo), **marcar la autorización en papel** y **dar de baja** con motivo, hasta que acaba el evento. Ve quién recoge a cada menor y las observaciones (cifradas en la base de datos).
+- `asde_eventos_economia` (Tesorería): **registrar pagos** (efectivo, ingreso o transferencia, Bizum) de una inscripción o de una familia, **becas y ajustes** con motivo y **anular** un movimiento. No ve quién recoge ni las observaciones, salvo que esté en el equipo del evento.
+- Ámbito de «Mis eventos» (como en el uniforme): la cuenta familiar, sus menores (y firma por ellos); el asociado/a de 14 a 17, se preinscribe (firma su familia); el mayor de edad (el día que empieza el evento), se inscribe sin autorización. Un scouter ve «Mis eventos» solo si hay algún evento para él (p. ej. una formación).

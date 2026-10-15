@@ -27,11 +27,12 @@ Copia el plugin del repo, borra los transients (la instantánea que deje la sesi
 
 - **Lo que no se puede probar aquí:** lo que lee el CRM real. `alta-reglas.php` (parte 2), `grupos-emails-banco.php` (la verificación del grupo da «CONNECT tunnel failed, response 502») y `fichas-escritura.php` (0 comprobaciones). Antes de cambiar nada, lanzar la suite para tener la **línea base** y comparar con ella; al entregar, decir que esas tres hay que pasarlas en el Local.
 - Una prueba que cuente cosas del sitio (pendientes, filas) tiene que compararlas **con lo que había antes**: el WordPress de pruebas puede tener datos de demostración, y el Local del usuario, datos reales.
-- Recuento de referencia (v0.19.0): 809 OK en 20 ficheros.
+- Recuento de referencia: v0.19.0, 809 OK en 20 ficheros; v0.19.1, 900 OK en 21.
+- Una prueba que pinte una pantalla con **todos** los eventos (o pedidos…) del sitio tiene que mirar solo lo suyo (p. ej. la tarjeta de su evento): los datos de demostración de las capturas también están en la base de datos.
 
 ## 3. Mirar las pantallas (escritorio y 390 px)
 
-1. CRM de demostración **solo para las peticiones web**: `mkdir -p $NUBE/wp/wp-content/mu-plugins && cp .claude/skills/probar-en-la-nube/crm-demo.php $NUBE/wp/wp-content/mu-plugins/` (fichas inventadas 990041–990047; ampliarlas en el propio fichero si hace falta).
+1. CRM de demostración **solo para las peticiones web**: `mkdir -p $NUBE/wp/wp-content/mu-plugins && cp .claude/skills/probar-en-la-nube/crm-demo.php $NUBE/wp/wp-content/mu-plugins/` (fichas inventadas 990041–990049; ampliarlas en el propio fichero si hace falta).
 2. Datos de la pantalla que se mira (eventos, pedidos…): un `wp eval-file` propio en el scratchpad que los cree con las clases del plugin.
 3. Cuentas y cookies: `$NUBE/bin/wp eval-file .claude/skills/probar-en-la-nube/sesion.php > $NUBE/sesion.json` (perfiles `scouter`, `tesoreria`, `coordinacion`, `familia`).
 4. Servidor: `(NUBE=$NUBE nohup php -S localhost:8099 -t $NUBE/wp .claude/skills/probar-en-la-nube/router.php > $NUBE/servidor.log 2>&1 &)`.
@@ -45,4 +46,6 @@ Copia el plugin del repo, borra los transients (la instantánea que deje la sesi
 - Como root, WP-CLI pide `--allow-root` (ya va en `$NUBE/bin/wp`).
 - Chromium está en `/opt/pw-browsers` y Playwright, global (`npm root -g`): no ejecutar `playwright install`.
 - El correo no sale (las pruebas lo cortan con `pre_wp_mail`); no hay Mailpit.
+- `router.php` corre en el ámbito global, como `index.php`: sus variables llevan prefijo (`$asde_nube_…`). Una `$wp` pisa el objeto de WordPress y todas las páginas dan «error crítico».
+- Para parar el servidor, no uses `pkill -f "php -S …"`: el patrón también coincide con la propia orden de la shell y la mata. Mejor `for p in $(pgrep -f '^php -S localhost:8099'); do kill $p; done`.
 - Al acabar no hace falta limpiar: la carpeta es de la sesión. Nada de esto va al repo ni al zip.

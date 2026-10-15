@@ -2,6 +2,7 @@
 namespace AsdeBalears\AreaPrivada\Frontend;
 
 use AsdeBalears\AreaPrivada\Auth\Ambito;
+use AsdeBalears\AreaPrivada\Eventos\Inscripciones;
 use AsdeBalears\AreaPrivada\Eventos\Servicio as Eventos;
 use AsdeBalears\AreaPrivada\Fichas\Cambios;
 use AsdeBalears\AreaPrivada\Frontend\Views\MisPagosView;
@@ -14,7 +15,7 @@ defined( 'ABSPATH' ) || exit;
  * Menú del área privada, separado por tipo de usuario (v0.15, doc 28).
  *
  * - **Personal** («Mi espacio» o «Mi familia»): lo que hace cada persona o familia
- *   con lo suyo: su ficha, sus pagos y su uniforme.
+ *   con lo suyo: su ficha, sus eventos (v0.19.1), sus pagos y su uniforme.
  * - **Gestión** («Gestión del grupo»): lo de scouters, Secretaría, Coordinación y
  *   Tesorería: personas, usuarios, solicitudes, cambios, informes, eventos (v0.19),
  *   tesorería y la gestión de uniformes.
@@ -40,6 +41,10 @@ final class Menu {
 		// --- Lo personal / familiar ---
 		if ( $ambito && ( $ambito->persona || $ambito->representados ) ) {
 			$personal['ficha'] = $ambito->persona ? asde_t( 'Mis datos' ) : asde_t( 'Mi familia' );
+			if ( Inscripciones::en_menu( $ambito ) ) {
+				$n                       = array_sum( Inscripciones::pendientes( $ambito ) );
+				$personal['mis_eventos'] = asde_t( 'Mis eventos' ) . ( $n ? ' (' . $n . ')' : '' );
+			}
 			if ( current_user_can( MisPagosView::CAP ) ) {
 				$personal['pagos'] = asde_t( 'Mis pagos' );
 			}

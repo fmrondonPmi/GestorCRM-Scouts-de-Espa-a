@@ -1,6 +1,6 @@
 # 32 · Plan: módulo de eventos (sin código)
 
-> **Estado:** plan escrito y **decidido** el 2026-10-15 (preguntas P-61 a P-76, tabla «Decisiones»; para la P-66, la normativa balear, el usuario pidió «investiga y propón»: apartado 6). **La v0.19.0 está hecha** (eventos, equipo dirigente y presupuesto): ver «v0.19.0 · lo que ya está». Siguiente: 0.19.1 (inscripciones y cobro).
+> **Estado:** plan escrito y **decidido** el 2026-10-15 (preguntas P-61 a P-76, tabla «Decisiones»; para la P-66, la normativa balear, el usuario pidió «investiga y propón»: apartado 6). **Hechas la v0.19.0** (eventos, equipo dirigente y presupuesto) **y la v0.19.1** (inscripciones y cobro): ver «lo que ya está» de cada una. Siguiente: 0.19.2 (gastos, SEPA y cierre).
 
 ## Petición del usuario (2026-10-15)
 
@@ -67,6 +67,63 @@
 5. Un borrador se borra con su equipo y su presupuesto; uno publicado no se borra (se cancela).
 
 **Para producción:** al subir la 0.19.0 se crean las tres tablas y las páginas «Eventos» y «Configuración de eventos». Conviene entrar en *Eventos → Configuración* y marcar qué valores de la formación de tiempo libre del CRM son de director/a y de monitor/a.
+
+## v0.19.1 · lo que ya está (2026-10-15)
+
+Petición del usuario: «Sigue con la siguiente» (la fase 0.19.1 de este plan).
+
+**Para las familias y los asociados: «Mis eventos»** (*Mi espacio* / *Mi familia*; página `mis-eventos`):
+
+- Los eventos publicados (que no han acabado) a los que están convocados la persona o los menores que representa (su sección y su edad el día que empieza), con fechas, lugar, mapa, información práctica (salida, llegada, descripción, material) y el **precio** de su sección.
+- Por persona: su estado (sin respuesta, pendiente, confirmada, plaza ofrecida, lista de espera con su puesto, no participa, baja) y **lo que falta** (la autorización; pagar tanto, con la referencia) y cómo pagar (texto de la configuración).
+- **Inscribir** (en un desplegable, sin JavaScript): transporte de ida y de vuelta (con el grupo o por su cuenta), personas autorizadas a recoger al menor y observaciones para el equipo (las dos **cifradas**), la casilla «he revisado la ficha de salud y alimentación» (con el enlace a la ficha para proponer cambios) y, la familia, el **texto de la autorización** con la casilla «la firmo»: **inscribir es firmar** (P-64).
+- **Preinscripción de 14 a 17**: el asociado/a se apunta desde su cuenta y queda pendiente hasta que su familia **firma** desde la suya («Firmar la autorización») o la entrega en papel. **Mayores de edad**: se inscriben sin autorización.
+- **Convocatoria**: además de inscribir, «No va» (queda como «no participa»; se puede cambiar de idea mientras el plazo está abierto).
+- **Plaza ofrecida**: «Confirmar la plaza». **Baja**: mientras el plazo está abierto («Darse de baja», o salir de la lista de espera); después, con el equipo.
+- En el **menú**, «Mis eventos (n)» con lo pendiente (autorizaciones por firmar, plazas por confirmar, convocatorias por responder); en el **inicio**, el aviso con esas tres cosas y la tarjeta «Mis eventos».
+- En **«Mis pagos»**: los pagos de cada evento y lo que queda, con la referencia («E6840012 F684001» o, sin familia en Tesorería, el nº de inscripción «I68400087»).
+
+**Para el equipo: pestaña «Inscripciones»** del evento (entre «Equipo» y «Presupuesto»):
+
+- Modalidad, plazo, plazas ocupadas por sección y en total, y el recuento (confirmadas, pendientes, en espera, bajas).
+- **Participantes** (tabla que en el móvil son tarjetas): sección, transporte, quién recoge y observaciones (solo quien gestiona el evento), estado y lo que falta, la autorización (firmada en la web —fecha y versión— o en papel) con «Marcar la de papel como recibida», el pago y «Dar de baja» con motivo.
+- **Lista de espera** por orden (con la plaza ofrecida y hasta cuándo), **convocados sin respuesta** (o sin inscribir), **bajas y «no va»** (con lo que habían pagado: la devolución, en la 0.19.2) e **«Inscribir a alguien»**: de las secciones convocadas o, como excepción y **con motivo**, otra persona del grupo.
+- **Tesorería**: «Registrar un pago» (importe, forma —efectivo, ingreso o transferencia, Bizum—, fecha, referencia, nota), «Beca o ajuste» (rebaja o recargo, con motivo), los movimientos con «Anular» y el **pago de una familia** (un solo pago para los hermanos, que se reparte por orden de inscripción; anularlo lo anula entero).
+- En el **inicio**, «n autorizaciones de eventos por recoger en papel».
+
+**Formulario del evento:** modalidad (abierta o convocatoria) y plazo de inscripción (desde y hasta, opcionales; sin «hasta», hasta que empieza). Si se suben las plazas, se ofrecen solas a la lista de espera.
+
+**Configuración:** el **texto de la autorización** (vacío = el del plugin, que se traduce; cada cambio sube su **versión**, y cada firma guarda la que firmó: «v3» o «v4-propio»), cómo pagar los eventos y cuántos días antes sale el recordatorio (3; 0 = no).
+
+**Reglas** (`Eventos\Inscripciones`, `Eventos\Cobros`):
+
+- **Confirmada** = autorización (web, papel o no hace falta) + pagada (o sin coste). Si se anula un pago, vuelve a pendiente (sin repetir el email).
+- **Plazas**: las ocupan las pendientes, las confirmadas y las plazas ofrecidas. Sin plaza (en la sección o en total), a la **lista de espera**. Cuando se libera una (baja, más plazas), se ofrece por orden con **3 días** para confirmarla (como mucho, hasta que empieza); si no, se pierde (baja automática con su motivo) y pasa a la siguiente.
+- **Precio**: el de su sección, fijo desde que Tesorería validó el presupuesto. **Becas y ajustes** cambian solo esa inscripción, con motivo; una rebaja no puede pasar del precio.
+- **Ratio y comunicación a ASDE Baleares**: cuentan a los inscritos (pendientes y confirmados; menores = sin 18 años el día que empieza, guardado al inscribir, sin consultar el CRM): mientras el plazo está abierto, lo mayor entre la previsión y los inscritos; cerrado, los inscritos.
+
+**Avisos** (`Eventos\Avisos`, P-74): emails al **publicar** (a las cuentas de las personas convocadas, en segundo plano con WP-Cron y una sola vez), al **confirmar**, cuando se **libera una plaza**, el **recordatorio** (tarea diaria, con lo que falte) y al **cancelar** (a quien estaba inscrito o en espera). Cada email sale en el idioma de quien lo recibe y queda en el registro de emails (tipo «Eventos», sin nombres ni direcciones; con vista previa). Cada aviso dispara el enganche **`do_action( 'asde_ap_evento_aviso', $tipo, $evento_id, $user_ids )`** para que la app móvil mande el aviso push (este plugin no usa clases de la app). La tarea diaria también caduca las plazas ofrecidas y ofrece las libres.
+
+**Datos:** `asde_evento_inscripciones` gana columnas (estado, sección, precio, quién inscribió, motivo de la excepción, lista de espera y oferta, autorización —quién, cuándo, versión y huella HMAC de la IP, no la IP—, transporte, fecha de la revisión de la ficha de salud, `datos_enc` cifrado, confirmación y baja); `asde_eventos`, modalidad, plazo y las marcas de los avisos; tabla nueva **`asde_evento_movimientos`** (pagos y ajustes; nada se borra, se anula). *Instalación y entorno*: **18 tablas**. Página nueva «Mis eventos». Capability nueva **`asde_eventos_inscribir`** (todos los roles, doc 02). La salud no se copia nunca.
+
+**Auditoría:** `inscripcion_creada`, `inscripcion_espera`, `inscripcion_confirmada` / `_pendiente`, `inscripcion_no_participa`, `inscripcion_plaza_ofrecida` / `_aceptada`, `inscripcion_oferta_caducada`, `inscripcion_baja`, `autorizacion_firmada`, `autorizacion_papel`, `evento_pago`, `evento_pago_familia`, `evento_ajuste`, `evento_movimiento_anulado` (nombres de campos e ids, nunca valores ni motivos).
+
+**Textos:** 206 nuevos, en los cuatro idiomas (primera versión sin revisión nativa; los más visibles: el texto de la autorización y los emails).
+
+**Pruebas:** `tests/eventos-inscripciones.php`, **91 comprobaciones** (configuración y versión de la autorización, aviso al publicar, «Mis eventos», la familia inscribe y firma, datos cifrados y auditoría sin valores, plazas y lista de espera con su oferta y su caducidad, preinscripción de 14 a 17, mayores de edad, convocatoria, el equipo inscribe y marca el papel, excepciones con motivo, cobros de Tesorería y de la familia, becas, anular, «Mis pagos», plazo cerrado y bajas, pantallas, normativa, recordatorio, cancelación, registro de emails, nonce y datos personales). Ajustadas `menus.php` (la familia tiene «Mis eventos»), `entorno.php` (18 tablas) y `eventos.php` (borra los avisos que deja programados).
+
+**Supuestos de esta versión (para confirmar):**
+
+1. **3 días** para confirmar una plaza que se libera (nunca más allá del inicio). Si no se confirma, la inscripción pasa a **baja** (con el motivo «No se confirmó a tiempo la plaza ofrecida») y no vuelve al final de la lista.
+2. Una **excepción** (alguien de otra sección, con motivo) ocupa plaza en la **primera sección convocada** y paga el **precio más alto** del evento; Tesorería lo ajusta si hace falta.
+3. Una inscripción **pendiente de pago ocupa plaza** (si no, se podría pasar del máximo).
+4. Sin fechas, el plazo va **de la publicación al inicio**; el equipo puede inscribir y dar de baja **hasta que acaba** el evento.
+5. El email de publicación va a las **cuentas** (familiares y de asociados de 14 años o más) de las personas convocadas, no a los emails de la ficha de quien no tiene cuenta. Si hace falta avisar a quien no tiene cuenta, se hace a mano.
+6. El **recordatorio** sale una vez, 3 días antes (configurable), a las inscripciones pendientes y confirmadas, con lo que les falte.
+7. Quién recoge y las observaciones las ve **quien gestiona el evento**, no Tesorería (salvo que esté en su equipo).
+8. Un **scouter** solo ve «Mis eventos» si hay algún evento para él (una formación, p. ej.); las familias y los asociados de una sección educativa, siempre.
+
+**Para producción:** al subir la 0.19.1 se crean la tabla de cobros y la página «Mis eventos» y se añaden las columnas nuevas (sin tocar los datos). Conviene revisar en *Eventos → Configuración* el **texto de la autorización** (o dejar el del plugin), **cómo pagar** los eventos y el recordatorio. Los eventos publicados en la 0.19.0 no mandan el email de publicación (solo los que se publiquen desde ahora).
 
 ## Lo que ya hay y condiciona el diseño
 
@@ -471,14 +528,14 @@ Con las convenciones de siempre: sin JavaScript funciona; con JavaScript, ventan
 | Versión | Qué | Pruebas |
 |---|---|---|
 | ✅ **0.19.0 · Eventos, equipo y presupuesto** (hecha, 2026-10-15) | Tipos, crear, editar y cancelar; agenda; ámbito y permisos; nº de evento; **equipo dirigente con las comprobaciones de la normativa** (edad, titulación, certificado, ratio), internacional y seguro; **presupuesto con reparto y margen**, validación de Tesorería, precio fijo por sección; publicar | `tests/eventos.php` |
-| **0.19.1 · Inscripciones y cobro** | Las dos modalidades, «Mis eventos», autorización (web o papel), preinscripción de 14 a 17, plazas y lista de espera, bajas; pagos en efectivo, por transferencia y por Bizum; «Mis pagos»; becas y ajustes; emails y enganche de los avisos push | `tests/eventos-inscripciones.php` |
+| ✅ **0.19.1 · Inscripciones y cobro** (hecha, 2026-10-15) | Las dos modalidades, «Mis eventos», autorización (web o papel), preinscripción de 14 a 17, plazas y lista de espera, bajas; pagos en efectivo, por transferencia y por Bizum; «Mis pagos»; becas y ajustes; emails y enganche de los avisos push | `tests/eventos-inscripciones.php` |
 | **0.19.2 · Gastos, SEPA y cierre** | Gastos con justificante, reembolsos, anticipos, fondo de emergencia, devoluciones, balance y cierre (borra lo cifrado); **SEPA de eventos** en las remesas | `tests/eventos-economia.php` |
 | **0.19.3 · Listados, comunicación y asistencia** | Participantes, emergencia, salud en vivo, cocina, autobús, imprimir y CSV con auditoría; **comunicación a ASDE Baleares** (enviar o descargar, con los adjuntos y el email de *Organización federada*); pasar lista | `tests/eventos-listados.php` |
 | **0.19.4 · Eventos externos del CRM** | Leer `stic_Events` federativos para crear el evento externo | `tests/eventos-externos.php` |
 | **0.20.0 · Inventario** | Rol «Responsable de material», catálogo del grupo y de las secciones, historial, caducidades, material del evento con plantillas, conflictos, salida y devolución | `tests/inventario.php` |
 | **0.21.0 · Copia al CRM** | `EscrituraEventos`: eventos e inscripciones a `stic_Events` / `stic_Registrations` | `tests/eventos-crm.php` |
 
-Cada fase actualiza los docs (00, este, 02, 10 y 09) y los manuales de uso (`manual/fuentes/`). Para la mecánica repetida hay dos *skills* del proyecto en `.claude/skills/`: **`modulo-nuevo`** y **`entregar-version`**.
+Cada fase actualiza los docs (00, este, 02, 10 y 09) y los manuales de uso (`manual/fuentes/`). Para la mecánica repetida hay *skills* del proyecto en `.claude/skills/`: **`modulo-nuevo`**, **`entregar-version`**, **`traducir-textos`** y **`probar-en-la-nube`**.
 
 ## Supuestos (para confirmar)
 

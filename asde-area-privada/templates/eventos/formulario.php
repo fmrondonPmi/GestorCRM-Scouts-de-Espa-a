@@ -55,6 +55,9 @@ $d = array(
 	'socorrista'      => $e['normativa']['socorrista'] ?? false,
 	'dependencia12'   => (string) ( $e['normativa']['dependencia12'] ?? 0 ),
 	'dependencia3'    => (string) ( $e['normativa']['dependencia3'] ?? 0 ),
+	'modalidad'       => $e['modalidad'] ?? 'abierta',
+	'inscripcion_desde' => (string) ( $e['inscripcion_desde'] ?? '' ),
+	'inscripcion_hasta' => (string) ( $e['inscripcion_hasta'] ?? '' ),
 );
 foreach ( $secciones as $s ) {
 	$d[ 'previstas_' . $s ] = (string) ( $e['plazas'][ $s ]['previstas'] ?? 0 );
@@ -178,6 +181,21 @@ $accion = $e ? add_query_arg(
 			<label><?php asde_e( 'Edad mínima (opcional)' ); ?> <input type="number" name="edad_min" value="<?php echo esc_attr( $d['edad_min'] ); ?>" min="0" max="99" inputmode="numeric"></label>
 			<label><?php asde_e( 'Edad máxima (opcional)' ); ?> <input type="number" name="edad_max" value="<?php echo esc_attr( $d['edad_max'] ); ?>" min="0" max="99" inputmode="numeric"></label>
 		</p>
+	</section>
+
+	<section class="asde-card">
+		<h3 class="asde-card__title"><?php asde_e( 'Inscripción' ); ?></h3>
+		<fieldset>
+			<legend><?php asde_e( 'Modalidad' ); ?></legend>
+			<?php foreach ( EventosTable::MODALIDADES as $m => $etiqueta ) : ?>
+				<label class="asde-check"><input type="radio" name="modalidad" value="<?php echo esc_attr( $m ); ?>"<?php checked( $d['modalidad'], $m ); ?>> <?php echo esc_html( asde_t( $etiqueta ) ); ?></label>
+			<?php endforeach; ?>
+		</fieldset>
+		<p class="asde-form__fila">
+			<label><?php asde_e( 'Inscripción desde (opcional)' ); ?> <input type="date" name="inscripcion_desde" value="<?php echo esc_attr( $d['inscripcion_desde'] ); ?>"></label>
+			<label><?php asde_e( 'Inscripción hasta (opcional)' ); ?> <input type="date" name="inscripcion_hasta" value="<?php echo esc_attr( $d['inscripcion_hasta'] ); ?>"></label>
+		</p>
+		<p class="asde-help"><?php asde_e( 'Sin fechas, la inscripción se abre al publicar y se cierra cuando empieza el evento. Pasado el plazo, solo inscribe el equipo. Si no quedan plazas, las nuevas inscripciones entran en la lista de espera.' ); ?></p>
 	</section>
 
 	<section class="asde-card">

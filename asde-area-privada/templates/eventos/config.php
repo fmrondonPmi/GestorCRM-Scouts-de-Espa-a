@@ -89,5 +89,22 @@ defined( 'ABSPATH' ) || exit;
 		<?php endif; ?>
 	</section>
 
+	<section class="asde-card">
+		<h3 class="asde-card__title"><?php asde_e( 'Inscripciones' ); ?></h3>
+		<p>
+			<label for="asde-evc-autorizacion"><?php asde_e( 'Texto de la autorización de participación' ); ?></label>
+			<textarea id="asde-evc-autorizacion" name="autorizacion_texto" rows="6" maxlength="<?php echo (int) Config::MAX_AUTORIZACION; ?>"><?php echo esc_textarea( Config::autorizacion( $cfg ) ); ?></textarea>
+		</p>
+		<p class="asde-help"><?php echo esc_html( sprintf( asde_t( 'Es lo que firma la familia al inscribir a un menor (encima sale a quién y a qué evento autoriza). Versión actual: %s. Si lo cambias, las firmas anteriores siguen guardando la versión que firmaron. Déjalo vacío para usar el del plugin.' ), Config::version_autorizacion( $cfg ) ) ); ?></p>
+		<p>
+			<label for="asde-evc-pago"><?php asde_e( 'Cómo pagar los eventos (cuenta del grupo, Bizum…)' ); ?></label>
+			<textarea id="asde-evc-pago" name="texto_pago" rows="3" maxlength="1000"><?php echo esc_textarea( $cfg['texto_pago'] ); ?></textarea>
+		</p>
+		<p>
+			<label for="asde-evc-recordatorio"><?php asde_e( 'Recordatorio a las familias (días antes del evento; 0 = no se manda)' ); ?></label>
+			<input type="number" id="asde-evc-recordatorio" name="recordatorio_dias" value="<?php echo (int) $cfg['recordatorio_dias']; ?>" min="0" max="30" inputmode="numeric">
+		</p>
+	</section>
+
 	<p><button type="submit" class="button button-primary"><?php asde_e( 'Guardar' ); ?></button></p>
 </form>

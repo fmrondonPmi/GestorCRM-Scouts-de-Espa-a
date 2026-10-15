@@ -33,14 +33,14 @@ $manuales = array(
 	'familias'      => array(
 		'titulo'   => 'Manual para familias',
 		'perfil'   => 'Madres, padres y tutores',
-		'entrada'  => 'Cómo entrar en el área privada del grupo con la cuenta familiar, ver y corregir las fichas de tus hijos, consultar los pagos, firmar la domiciliación SEPA y pedir el uniforme.',
-		'apartados' => array( 'familias-perfil', 'entrar-familias', 'solicitar', 'primera-vez', 'instalar-app', 'familias-inicio', 'familias-fichas', 'mis-pagos', 'mis-pagos-sepa', 'uniforme-pedir', 'idioma', 'seguridad-opcional', 'preguntas-familias' ),
+		'entrada'  => 'Cómo entrar en el área privada del grupo con la cuenta familiar, ver y corregir las fichas de tus hijos, inscribirlos en las salidas y acampadas, consultar los pagos, firmar la domiciliación SEPA y pedir el uniforme.',
+		'apartados' => array( 'familias-perfil', 'entrar-familias', 'solicitar', 'primera-vez', 'instalar-app', 'familias-inicio', 'familias-fichas', 'mis-eventos', 'mis-pagos', 'mis-pagos-sepa', 'uniforme-pedir', 'idioma', 'seguridad-opcional', 'preguntas-familias' ),
 	),
 	'participantes' => array(
 		'titulo'   => 'Manual para asociados menores de edad',
 		'perfil'   => 'Educandos de 14 a 17 años con cuenta propia',
-		'entrada'  => 'Si tienes entre 14 y 17 años y eres socio/a del grupo, puedes tener tu propia cuenta: consultar tu ficha, tener al día tu email y tus teléfonos, ver tus pagos y pedir tu uniforme.',
-		'apartados' => array( 'participantes-perfil', 'entrar-socios', 'solicitar', 'primera-vez', 'instalar-app', 'participantes-inicio', 'participantes-ficha', 'participantes-pagos', 'uniforme-pedir', 'idioma', 'seguridad-opcional', 'preguntas-participantes' ),
+		'entrada'  => 'Si tienes entre 14 y 17 años y eres socio/a del grupo, puedes tener tu propia cuenta: consultar tu ficha, tener al día tu email y tus teléfonos, preinscribirte en las actividades, ver tus pagos y pedir tu uniforme.',
+		'apartados' => array( 'participantes-perfil', 'entrar-socios', 'solicitar', 'primera-vez', 'instalar-app', 'participantes-inicio', 'participantes-ficha', 'mis-eventos', 'participantes-pagos', 'uniforme-pedir', 'idioma', 'seguridad-opcional', 'preguntas-participantes' ),
 	),
 	'scouters'      => array(
 		'titulo'   => 'Manual para scouters',
@@ -51,7 +51,7 @@ $manuales = array(
 	'coordinacion'  => array(
 		'titulo'   => 'Manual del equipo de coordinación',
 		'perfil'   => 'Tesorería, Secretaría y Coordinación',
-		'entrada'  => 'Todo lo que lleva el equipo del grupo: personas y números de socio, dar acceso, solicitudes, usuarios y emails, fichas y cambios, informes, la Tesorería completa (cuotas, coste federativo, banco y domiciliaciones SEPA), los uniformes, del pago a la entrega, y los eventos (equipo, normativa y presupuesto).',
+		'entrada'  => 'Todo lo que lleva el equipo del grupo: personas y números de socio, dar acceso, solicitudes, usuarios y emails, fichas y cambios, informes, la Tesorería completa (cuotas, coste federativo, banco y domiciliaciones SEPA), los uniformes, del pago a la entrega, y los eventos (equipo, normativa, presupuesto, inscripciones y cobros).',
 		'apartados' => array( 'coordinacion-perfil', 'entrar-socios', 'primera-vez', 'instalar-app', 'seguridad-obligatoria', 'coordinacion-inicio', 'ventana', 'personas', 'alta', 'solicitudes', 'usuarios', 'coordinacion-fichas', 'cambios', 'informes', 'tesoreria', 'uniformes-gestion', 'eventos', 'idioma', 'preguntas-coordinacion' ),
 	),
 );

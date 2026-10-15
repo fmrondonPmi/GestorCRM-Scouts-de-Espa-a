@@ -22,6 +22,8 @@ defined( 'ABSPATH' ) || exit;
  * 3. Mantiene al día el email guardado de las cuentas cuyo email viene de un
  *    campo del CRM (y lo guarda en las de antes de la v0.10).
  * 4. Borra los datos de las solicitudes de acceso ya resueltas hace tiempo.
+ * 5. Eventos (v0.19.1): caduca las plazas ofrecidas sin confirmar, ofrece las libres a la
+ *    lista de espera y manda los recordatorios de los que empiezan pronto.
  */
 final class Mantenimiento {
 
@@ -70,6 +72,11 @@ final class Mantenimiento {
 				$total['numeros']           += count( ( new Numeracion( $repo ) )->analizar_todo( true ) );
 				$total['tutelas_retiradas'] += self::revisar_tutelas( $repo );
 				$total['emails']            += self::sincronizar_emails( $repo );
+			} catch ( CrmException $e ) {
+				Logger::log( 'mantenimiento_error', 'crm', $grupo['numero'], array( 'error' => $e->getMessage() ) );
+			}
+			try {
+				\AsdeBalears\AreaPrivada\Eventos\Avisos::diario();
 			} catch ( CrmException $e ) {
 				Logger::log( 'mantenimiento_error', 'crm', $grupo['numero'], array( 'error' => $e->getMessage() ) );
 			}

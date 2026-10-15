@@ -4,7 +4,9 @@ namespace AsdeBalears\AreaPrivada\Idiomas;
 use AsdeBalears\AreaPrivada\Domain\Organizacion;
 use AsdeBalears\AreaPrivada\Eventos\Config as EventosConfig;
 use AsdeBalears\AreaPrivada\Eventos\EventosTable;
+use AsdeBalears\AreaPrivada\Eventos\Inscripciones;
 use AsdeBalears\AreaPrivada\Eventos\InscripcionesTable;
+use AsdeBalears\AreaPrivada\Eventos\MovimientosTable as EventosMovimientos;
 use AsdeBalears\AreaPrivada\Eventos\Normativa;
 use AsdeBalears\AreaPrivada\Eventos\Presupuesto;
 use AsdeBalears\AreaPrivada\Fichas\Cambios;
@@ -77,6 +79,14 @@ final class Textos {
 		$add( Presupuesto::REPARTOS, 'Eventos' );
 		$add( Normativa::COMUNICACION, 'Eventos' );
 		$add( EventosView::PESTANAS, 'Eventos' );
+		// v0.19.1: inscripciones y cobros (y el texto de la autorización del plugin).
+		$add( EventosTable::MODALIDADES, 'Eventos' );
+		$add( InscripcionesTable::ESTADOS, 'Eventos' );
+		$add( InscripcionesTable::AUTORIZACIONES, 'Eventos' );
+		$add( InscripcionesTable::COMO, 'Eventos' );
+		$add( InscripcionesTable::TRANSPORTES, 'Eventos' );
+		$add( EventosMovimientos::FORMAS, 'Eventos' );
+		$add( array( EventosConfig::AUTORIZACION, Inscripciones::MOTIVO_CADUCADA ), 'Eventos' );
 		$add( BancoTable::ESTADOS, 'Tesorería' );
 		$add( CsvBanco::CAMPOS, 'Tesorería' );
 		$add( Codificacion::LISTA, 'Tesorería' );

@@ -33,6 +33,7 @@ final class Plugin {
 		TareaNumeracion::register();
 		Tabla::register();
 		Instantanea::register();
+		\AsdeBalears\AreaPrivada\Eventos\Avisos::register(); // v0.19.1: avisos masivos de los eventos (WP-Cron).
 
 		if ( is_admin() ) {
 			( new SettingsPage() )->register();

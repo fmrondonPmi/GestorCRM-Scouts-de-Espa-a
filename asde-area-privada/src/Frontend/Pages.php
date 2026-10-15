@@ -47,6 +47,7 @@ final class Pages {
 		// v0.19: eventos (doc 32).
 		'eventos'          => array( 'eventos', 'Eventos', '[asde_eventos]', 'area' ),
 		'eventos_config'   => array( 'configuracion', 'Configuración de eventos', '[asde_eventos_config]', 'eventos' ),
+		'mis_eventos'      => array( 'mis-eventos', 'Mis eventos', '[asde_mis_eventos]', 'area' ), // v0.19.1: inscripciones.
 	);
 
 	/** Páginas accesibles sin iniciar sesión (no salen en listados ni menús: Visibilidad). */

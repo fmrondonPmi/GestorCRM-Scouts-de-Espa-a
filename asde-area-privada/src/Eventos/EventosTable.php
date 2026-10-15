@@ -14,9 +14,13 @@ defined( 'ABSPATH' ) || exit;
  * (solo su nº Scouts de España). Las fechas del evento se guardan en la hora local
  * del sitio, tal como se escriben; las marcas de quién y cuándo, en UTC.
  *
- * Estados guardados: borrador, publicado y cancelado (las inscripciones, el cierre y
- * las cuentas llegan en las versiones siguientes). Lo que se enseña (estado_visible)
- * añade «pendiente de Tesorería», «presupuesto validado», «en curso» y «celebrado».
+ * Estados guardados: borrador, publicado y cancelado (el cierre y las cuentas llegan en
+ * las versiones siguientes). Lo que se enseña (estado_visible) añade «pendiente de
+ * Tesorería», «presupuesto validado», «en curso» y «celebrado».
+ *
+ * Desde la 0.19.1, la inscripción: modalidad (abierta o convocatoria), plazo (desde y
+ * hasta, fechas locales; sin «hasta», hasta que empieza) y las marcas de los avisos ya
+ * enviados (publicación y recordatorio), para no repetirlos.
  */
 final class EventosTable {
 
@@ -40,6 +44,12 @@ final class EventosTable {
 		'secciones' => 'De sección (una o varias)',
 		'grupo'     => 'De grupo (todas las secciones)',
 		'externo'   => 'Externo (lo organiza otra entidad)',
+	);
+
+	/** Modalidad de la inscripción (doc 32, apartado 3). */
+	public const MODALIDADES = array(
+		'abierta'      => 'Inscripción abierta: las familias apuntan a quien quiera ir',
+		'convocatoria' => 'Convocatoria: se espera a todos y cada familia responde sí o no',
 	);
 
 	/** Filtros de la agenda. */
@@ -101,6 +111,11 @@ final class EventosTable {
 				cancelado_en datetime NULL,
 				cancelado_motivo varchar(255) NOT NULL DEFAULT '',
 				crm_id varchar(36) NOT NULL DEFAULT '',
+				modalidad varchar(15) NOT NULL DEFAULT 'abierta',
+				inscripcion_desde date NULL,
+				inscripcion_hasta date NULL,
+				avisado_en datetime NULL,
+				recordatorio_en datetime NULL,
 				PRIMARY KEY  (id),
 				KEY grupo (grupo),
 				KEY inicio (inicio)
@@ -276,6 +291,11 @@ final class EventosTable {
 		);
 	}
 
+	/** Anota que ya se ha avisado (publicación o recordatorio) para no repetirlo. @param string $cual avisado_en | recordatorio_en */
+	public static function marcar_aviso( int $id, string $cual ): bool {
+		return in_array( $cual, array( 'avisado_en', 'recordatorio_en' ), true ) && self::actualizar( $id, array( $cual => current_time( 'mysql', true ) ) );
+	}
+
 	/** Borra un borrador (no hay pagos ni inscripciones: no es un justificante de nada). */
 	public static function borrar( int $id ): bool {
 		global $wpdb;
@@ -292,7 +312,7 @@ final class EventosTable {
 	/** Columnas que se guardan desde el formulario (ya validadas por el servicio). */
 	private static function columnas( array $d ): array {
 		$out = array();
-		foreach ( array( 'tipo', 'ambito', 'nombre', 'inicio', 'fin', 'lugar', 'mapa', 'salida', 'llegada', 'descripcion', 'material' ) as $k ) {
+		foreach ( array( 'tipo', 'ambito', 'nombre', 'inicio', 'fin', 'lugar', 'mapa', 'salida', 'llegada', 'descripcion', 'material', 'modalidad' ) as $k ) {
 			if ( array_key_exists( $k, $d ) ) {
 				$out[ $k ] = (string) $d[ $k ];
 			}
@@ -313,6 +333,11 @@ final class EventosTable {
 		foreach ( array( 'edad_min', 'edad_max' ) as $k ) {
 			if ( array_key_exists( $k, $d ) ) {
 				$out[ $k ] = null === $d[ $k ] ? null : (int) $d[ $k ];
+			}
+		}
+		foreach ( array( 'inscripcion_desde', 'inscripcion_hasta' ) as $k ) {
+			if ( array_key_exists( $k, $d ) ) {
+				$out[ $k ] = null === $d[ $k ] || '' === $d[ $k ] ? null : (string) $d[ $k ];
 			}
 		}
 		if ( array_key_exists( 'margen_pct', $d ) ) {
@@ -349,6 +374,10 @@ final class EventosTable {
 		$f['presupuesto']   = is_array( $presupuesto ) ? $presupuesto : null;
 		$f['descripcion']   = (string) $f['descripcion'];
 		$f['material']      = (string) $f['material'];
+		$f['modalidad']     = isset( self::MODALIDADES[ $f['modalidad'] ?? '' ] ) ? (string) $f['modalidad'] : 'abierta';
+		foreach ( array( 'inscripcion_desde', 'inscripcion_hasta', 'avisado_en', 'recordatorio_en' ) as $k ) {
+			$f[ $k ] = isset( $f[ $k ] ) && '' !== (string) $f[ $k ] && ! str_starts_with( (string) $f[ $k ], '0000' ) ? (string) $f[ $k ] : null;
+		}
 		foreach ( array( 'creado_por', 'validacion_pedida_por', 'validado_por', 'publicado_por', 'cancelado_por' ) as $k ) {
 			$f[ $k ] = (int) $f[ $k ];
 		}

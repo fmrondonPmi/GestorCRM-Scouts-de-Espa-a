@@ -67,20 +67,36 @@ final class Normativa {
 		return $ini && $fin && $fin > $ini ? (int) $ini->diff( $fin )->days : 0;
 	}
 
-	/** Participantes para la ratio: las plazas máximas si las hay; si no, los previstos. */
+	/**
+	 * Participantes para la ratio: las plazas máximas si las hay; si no, los previstos. Con
+	 * inscripciones (v0.19.1, $e['inscritos'] de Inscripciones::recuento), mientras el plazo está
+	 * abierto cuenta lo mayor de las dos cosas y, cerrado, los inscritos (pendientes y confirmados).
+	 */
 	public static function participantes( array $e ): int {
 		$previstos = array_sum( Presupuesto::previstos( $e ) );
 		$maximas   = $e['plazas_max'] > 0 ? $e['plazas_max'] : array_sum( array_map( static fn( $s ) => (int) ( $e['plazas'][ $s ]['maximas'] ?? 0 ), $e['secciones'] ) );
-		return max( $previstos, $maximas );
+		$base      = max( $previstos, $maximas );
+		$inscritos = $e['inscritos'] ?? null;
+		if ( ! $inscritos || ! $inscritos['total'] ) {
+			return $base;
+		}
+		return $inscritos['cerrado'] ? $inscritos['total'] : max( $base, $inscritos['total'] );
 	}
 
-	/** Menores previstos (participantes previstos de Castores a Escultas). */
+	/**
+	 * Menores para la comunicación: los previstos de Castores a Escultas y, con inscripciones,
+	 * los inscritos que no tienen 18 años el día que empieza (igual que en la ratio).
+	 */
 	public static function menores_previstos( array $e ): int {
 		$n = 0;
 		foreach ( Presupuesto::previstos( $e ) as $s => $previstos ) {
 			$n += in_array( $s, self::SECCIONES_MENORES, true ) ? $previstos : 0;
 		}
-		return $n;
+		$inscritos = $e['inscritos'] ?? null;
+		if ( ! $inscritos || ! $inscritos['total'] ) {
+			return $n;
+		}
+		return $inscritos['cerrado'] ? $inscritos['menores'] : max( $n, $inscritos['menores'] );
 	}
 
 	/**

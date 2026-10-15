@@ -3,6 +3,7 @@ namespace AsdeBalears\AreaPrivada\Frontend\Views;
 
 use AsdeBalears\AreaPrivada\Auth\Ambito;
 use AsdeBalears\AreaPrivada\Domain\Grupo;
+use AsdeBalears\AreaPrivada\Eventos\Inscripciones;
 use AsdeBalears\AreaPrivada\Eventos\Servicio as Eventos;
 use AsdeBalears\AreaPrivada\Fichas\Cambios;
 use AsdeBalears\AreaPrivada\Install\Roles;
@@ -47,12 +48,17 @@ final class AreaPrivadaView extends View {
 						'uniforme_entrega' => $gestiona ? $uniformes['entrega'] : 0,
 						// v0.19: presupuestos de eventos que esperan a Tesorería.
 						'eventos_validar'  => Eventos::pendientes( $ambito )['validar'],
+						// v0.19.1: autorizaciones de menores que el equipo tiene que recoger en papel.
+						'eventos_papel'    => Inscripciones::por_recoger( $ambito ),
 					),
 					// Uniformes entregados que el socio/a o su familia aún no ha confirmado.
 					'por_confirmar' => $uniformes['confirmar'],
 					'pide_uniforme' => current_user_can( Servicio::CAP_PEDIR ) && Servicio::para_quien( $ambito ),
 					'gestiona_uniformes' => $gestiona,
 					'eventos'            => Eventos::puede_entrar(),
+					// v0.19.1: «Mis eventos» y lo que espera a la familia o a la persona.
+					'mis_eventos'        => Inscripciones::en_menu( $ambito ),
+					'eventos_pendientes' => Inscripciones::pendientes( $ambito ),
 				)
 			)
 		);

@@ -243,6 +243,17 @@ final class Servicio {
 			$errores[] = asde_t( 'La edad mínima no puede ser mayor que la máxima.' );
 		}
 
+		// Inscripción (v0.19.1): modalidad y plazo (sin «hasta», hasta que empieza el evento).
+		$modalidad = isset( EventosTable::MODALIDADES[ $in['modalidad'] ?? '' ] ) ? (string) $in['modalidad'] : 'abierta';
+		$dia       = static fn( string $k ): ?string => preg_match( '/^\d{4}-\d{2}-\d{2}$/', (string) ( $in[ $k ] ?? '' ) ) && date_create( (string) $in[ $k ] ) ? (string) $in[ $k ] : null;
+		$desde     = $dia( 'inscripcion_desde' );
+		$hasta     = $dia( 'inscripcion_hasta' );
+		if ( $desde && $hasta && $hasta < $desde ) {
+			$errores[] = asde_t( 'El plazo de inscripción no puede acabar antes de empezar.' );
+		} elseif ( $hasta && null !== $inicio && $hasta > substr( $inicio, 0, 10 ) ) {
+			$errores[] = asde_t( 'El plazo de inscripción tiene que acabar antes de que empiece el evento.' );
+		}
+
 		$normativa = Normativa::datos(
 			array(
 				'internacional'   => $si( 'internacional' ),
@@ -290,6 +301,9 @@ final class Servicio {
 				'edad_max'    => $edad_max,
 				'normativa'   => $normativa,
 				'con_coste'   => $con_coste,
+				'modalidad'   => $modalidad,
+				'inscripcion_desde' => $desde,
+				'inscripcion_hasta' => $hasta,
 			),
 			'errores' => $errores,
 		);
@@ -344,6 +358,10 @@ final class Servicio {
 		}
 		EventosTable::guardar( $e['id'], $v['datos'] );
 		Logger::log( 'evento_editado', 'evento', (string) $e['id'], array( 'campos' => $cambios ) );
+		$nuevo = EventosTable::obtener( $e['id'] );
+		if ( $nuevo ) {
+			Inscripciones::revisar( $nuevo ); // Si hay más plazas, se ofrecen a la lista de espera.
+		}
 		return true;
 	}
 
@@ -579,6 +597,7 @@ final class Servicio {
 		}
 		EventosTable::publicar( $e['id'] );
 		Logger::log( 'evento_publicado', 'evento', (string) $e['id'] );
+		Avisos::programar( $e, 'publicado' ); // Email a las familias convocadas, en segundo plano (una sola vez).
 		return true;
 	}
 
@@ -602,6 +621,9 @@ final class Servicio {
 		}
 		EventosTable::cancelar( $e['id'], $motivo );
 		Logger::log( 'evento_cancelado', 'evento', (string) $e['id'] );
+		if ( EventosTable::PUBLICADO === $e['estado'] ) {
+			Avisos::programar( $e, 'cancelado' ); // A quien estaba inscrito/a o en la lista de espera.
+		}
 		return true;
 	}
 

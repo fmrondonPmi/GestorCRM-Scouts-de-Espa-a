@@ -2,9 +2,14 @@
 namespace AsdeBalears\AreaPrivada\Frontend\Views;
 
 use AsdeBalears\AreaPrivada\Auth\Ambito;
+use AsdeBalears\AreaPrivada\Crm\CrmException;
+use AsdeBalears\AreaPrivada\Crm\PersonaRepository;
+use AsdeBalears\AreaPrivada\Eventos\Cobros;
 use AsdeBalears\AreaPrivada\Eventos\Config;
 use AsdeBalears\AreaPrivada\Eventos\EventosTable;
+use AsdeBalears\AreaPrivada\Eventos\Inscripciones;
 use AsdeBalears\AreaPrivada\Eventos\InscripcionesTable;
+use AsdeBalears\AreaPrivada\Eventos\MovimientosTable;
 use AsdeBalears\AreaPrivada\Eventos\Normativa;
 use AsdeBalears\AreaPrivada\Eventos\PartidasTable;
 use AsdeBalears\AreaPrivada\Eventos\Presupuesto;
@@ -15,15 +20,17 @@ defined( 'ABSPATH' ) || exit;
 
 /**
  * Eventos del grupo (v0.19.0, doc 32): la agenda, el formulario del evento y su ficha con
- * tres pestañas: resumen (con la lista de comprobación de la normativa), equipo dirigente
- * y presupuesto (con el precio por sección y la validación de Tesorería).
+ * cuatro pestañas: resumen (con la lista de comprobación de la normativa), equipo dirigente,
+ * inscripciones (v0.19.1: participantes, lista de espera, autorizaciones en papel, bajas y,
+ * para Tesorería, los cobros) y presupuesto (con el precio por sección y su validación).
  */
 final class EventosView extends EventosBaseView {
 
 	public const PESTANAS = array(
-		'resumen'     => 'Resumen',
-		'equipo'      => 'Equipo',
-		'presupuesto' => 'Presupuesto',
+		'resumen'       => 'Resumen',
+		'equipo'        => 'Equipo',
+		'inscripciones' => 'Inscripciones',
+		'presupuesto'   => 'Presupuesto',
 	);
 
 	/** Lo escrito en el formulario cuando no se ha podido guardar (se vuelve a enseñar): evento (0 = nuevo) y datos. */
@@ -114,6 +121,9 @@ final class EventosView extends EventosBaseView {
 
 	private function evento( array $e, Ambito $a, array $cfg ): string {
 		$pestana = isset( self::PESTANAS[ $this->get( 'pestana' ) ] ) ? $this->get( 'pestana' ) : 'resumen';
+		Inscripciones::revisar( $e ); // Lista de espera al día (plazas que caducan o se liberan).
+		$filas           = InscripcionesTable::participantes( $e['id'] );
+		$e['inscritos']  = Inscripciones::recuento( $e, $filas ); // La ratio y la comunicación cuentan a los inscritos.
 		$equipo  = InscripcionesTable::equipo( $e['id'] );
 		$nombres = $this->personas( array_column( $equipo, 'socio' ) );
 		// La formación y el certificado se leen en vivo del CRM (una consulta) en el resumen y en el equipo.
@@ -131,6 +141,8 @@ final class EventosView extends EventosBaseView {
 		$contenido = '';
 		if ( 'resumen' === $pestana ) {
 			$contenido = $this->tpl( 'eventos/resumen', $vars + array( 'lista' => Normativa::lista( $e, (array) $check ) ) );
+		} elseif ( 'inscripciones' === $pestana ) {
+			$contenido = $this->tpl( 'eventos/inscripciones', $vars + $this->inscripciones( $e, $a, $filas ) );
 		} elseif ( 'equipo' === $pestana ) {
 			$contenido = $this->tpl(
 				'eventos/equipo',
@@ -157,6 +169,69 @@ final class EventosView extends EventosBaseView {
 				'contenido' => $contenido,
 				'agenda'    => $this->url( 'eventos' ),
 			)
+		);
+	}
+
+	/** Lo que necesita la pestaña «Inscripciones». */
+	private function inscripciones( array $e, Ambito $a, array $filas ): array {
+		$movs     = MovimientosTable::de_evento( $e['id'] );
+		$gestiona = Servicio::en_gestion( $e, $a );
+		$personas = $this->personas( array_column( $filas, 'socio' ) );
+		$cobros   = array();
+		$refs     = array();
+		$datos    = array();
+		foreach ( $filas as $f ) {
+			$cobros[ $f['id'] ] = Cobros::de( $f, $movs[ $f['id'] ] ?? array() );
+			if ( Cobros::puede() && in_array( $f['estado'], InscripcionesTable::ACTIVAS, true ) ) {
+				$refs[ $f['id'] ] = Cobros::referencia( $e, $f );
+			}
+			// Quién recoge y las observaciones, solo para quien gestiona el evento.
+			if ( $gestiona && ! empty( $f['datos_enc'] ) ) {
+				$datos[ $f['id'] ] = Inscripciones::datos( $f );
+			}
+		}
+		// Convocados sin respuesta y quién se puede inscribir (de la instantánea: una sola lectura).
+		$convocados = array();
+		$otros      = array();
+		$repo       = PersonaRepository::make();
+		$con_fila   = array_flip( array_column( $filas, 'socio' ) );
+		$activos    = array_flip( array_column( array_filter( $filas, static fn( $f ) => in_array( $f['estado'], array( InscripcionesTable::PENDIENTE, InscripcionesTable::CONFIRMADA, InscripcionesTable::ESPERA ), true ) ), 'socio' ) );
+		$equipo     = array_flip( array_column( InscripcionesTable::equipo( $e['id'] ), 'socio' ) );
+		if ( $repo && EventosTable::BORRADOR !== $e['estado'] ) {
+			try {
+				foreach ( $repo->todas() as $p ) {
+					if ( isset( $activos[ $p->num_socio_asde ] ) || isset( $equipo[ $p->num_socio_asde ] ) || ! $p->tiene_membresia_activa() ) {
+						continue;
+					}
+					if ( Inscripciones::convocada( $e, $p ) ) {
+						$convocados[ $p->num_socio_asde ] = $p;
+					} elseif ( $p->es_participante() || $p->es_adulto_voluntario() ) {
+						$otros[ $p->num_socio_asde ] = $p;
+					}
+				}
+			} catch ( CrmException $ex ) {
+				$convocados = array();
+				$otros      = array();
+			}
+		}
+		$orden = static fn( $x, $y ) => strcoll( remove_accents( $x->nombre_completo() ), remove_accents( $y->nombre_completo() ) );
+		uasort( $convocados, $orden );
+		uasort( $otros, $orden );
+		return array(
+			'filas'       => $filas,
+			'personas'    => $personas + $convocados,
+			'cobros'      => $cobros,
+			'refs'        => $refs,
+			'datos'       => $datos,
+			'movs'        => $movs,
+			'ocupadas'    => Inscripciones::ocupadas( $filas ),
+			'espera'      => Inscripciones::lista_espera( $filas ),
+			'sin_respuesta' => array_diff_key( $convocados, $con_fila ),
+			'convocados'  => $convocados,
+			'otros'       => $otros,
+			'familias'    => Cobros::puede() ? Cobros::familias( $e ) : array(),
+			'economia'    => Cobros::puede(),
+			'gestionable' => $gestiona && Inscripciones::gestionable( $e ),
 		);
 	}
 
@@ -268,6 +343,46 @@ final class EventosView extends EventosBaseView {
 			case 'evento_cancelar':
 				$r     = Servicio::cancelar( $e, $a, $this->post( 'motivo' ) );
 				$hecho = sprintf( asde_t( 'Evento %s cancelado.' ), $num );
+				break;
+
+			case 'evento_inscribir':
+				$r = Inscripciones::inscribir_gestor( $e, $a, $this->post( 'socio' ) ?: $this->post( 'otro' ), $in );
+				if ( ! is_wp_error( $r ) ) {
+					$hecho = InscripcionesTable::ESPERA === $r['estado'] ? asde_t( 'No quedaban plazas: queda en la lista de espera.' ) : asde_t( 'Inscripción guardada.' );
+				}
+				break;
+
+			case 'evento_papel':
+				$r     = Inscripciones::papel( $e, $a, (int) $this->post( 'fila' ) );
+				$hecho = asde_t( 'Autorización en papel anotada.' );
+				break;
+
+			case 'evento_baja':
+				$r     = Inscripciones::baja( $e, $a, (int) $this->post( 'fila' ), $this->post( 'motivo' ), true );
+				$hecho = asde_t( 'Inscripción dada de baja.' );
+				break;
+
+			case 'evento_pago':
+				$importe = (float) str_replace( ',', '.', $this->post( 'importe' ) );
+				$r       = Cobros::pagar( $e, (int) $this->post( 'fila' ), $importe, sanitize_key( $this->post( 'forma' ) ), $this->post( 'fecha' ), $this->post( 'referencia' ), $this->post( 'nota' ) );
+				$hecho   = sprintf( asde_t( 'Pago de %s registrado.' ), \AsdeBalears\AreaPrivada\Tesoreria\Calculadora::euros( $importe ) );
+				break;
+
+			case 'evento_pago_familia':
+				$importe = (float) str_replace( ',', '.', $this->post( 'importe' ) );
+				$r       = Cobros::pagar_familia( $e, (int) $this->post( 'familia' ), $importe, sanitize_key( $this->post( 'forma' ) ), $this->post( 'fecha' ), $this->post( 'referencia' ), $this->post( 'nota' ) );
+				$hecho   = sprintf( asde_t( 'Pago de %s registrado y repartido entre las inscripciones de la familia.' ), \AsdeBalears\AreaPrivada\Tesoreria\Calculadora::euros( $importe ) );
+				break;
+
+			case 'evento_ajuste':
+				$importe = abs( (float) str_replace( ',', '.', $this->post( 'importe' ) ) ) * ( 'recargo' === $this->post( 'sentido' ) ? 1 : -1 );
+				$r       = Cobros::ajustar( $e, (int) $this->post( 'fila' ), $importe, $this->post( 'motivo' ) );
+				$hecho   = asde_t( 'Ajuste guardado: el importe de la inscripción ha cambiado.' );
+				break;
+
+			case 'evento_anular':
+				$r     = Cobros::anular( $e, (int) $this->post( 'movimiento' ) );
+				$hecho = asde_t( 'Movimiento anulado.' );
 				break;
 
 			case 'evento_borrar':

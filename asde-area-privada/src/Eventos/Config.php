@@ -13,12 +13,26 @@ defined( 'ABSPATH' ) || exit;
  * - **margen** del fondo de emergencia: activo y porcentaje (5 % por defecto, P-67).
  * - **titulaciones**: qué valores del campo «formación de tiempo libre» del CRM cuentan
  *   como título de director/a o de monitor/a. Vacío = se deduce del texto del valor.
+ * - **autorización** (v0.19.1): el texto que firma la familia al inscribir (vacío = el del
+ *   plugin) y su versión, que sube cada vez que el grupo lo cambia: cada firma guarda la
+ *   versión que se firmó (como la autorización SEPA).
+ * - **texto_pago**: cómo pagar un evento (cuenta, Bizum…), para las familias.
+ * - **recordatorio_dias**: cuántos días antes se manda el recordatorio (0 = no se manda).
  */
 final class Config {
 
 	private const OPTION = 'asde_ap_eventos_';
 
 	public const MAX_TIPOS = 20;
+
+	public const MAX_AUTORIZACION = 3000;
+
+	/**
+	 * Texto de la autorización del plugin (art. 21.3.g de la Ley 10/2022: autorización de
+	 * participación de quien tiene la tutela). Va sin huecos: la pantalla pone encima a quién
+	 * y a qué evento se autoriza.
+	 */
+	public const AUTORIZACION = 'Como madre, padre o tutor/a legal, autorizo su participación en esta actividad del grupo scout, organizada bajo la responsabilidad de su equipo de scouters, y declaro que he leído la información de la actividad. Autorizo también que, en caso de urgencia y si no se me puede localizar, el equipo tome las decisiones médicas, quirúrgicas o de traslado que indique el personal sanitario.';
 
 	/**
 	 * Los ocho tipos de actividad del plan (doc 32, apartado 1). Las reuniones de sección y
@@ -94,6 +108,10 @@ final class Config {
 				'director' => array(),
 				'monitor'  => array(),
 			),
+			'autorizacion_texto'   => '',
+			'autorizacion_version' => 1,
+			'texto_pago'           => '',
+			'recordatorio_dias'    => 3,
 		);
 	}
 
@@ -126,11 +144,30 @@ final class Config {
 			'director' => array_values( array_filter( array_map( 'strval', (array) ( $tit['director'] ?? array() ) ) ) ),
 			'monitor'  => array_values( array_filter( array_map( 'strval', (array) ( $tit['monitor'] ?? array() ) ) ) ),
 		);
+		$cfg['autorizacion_texto']   = mb_substr( (string) $cfg['autorizacion_texto'], 0, self::MAX_AUTORIZACION );
+		$cfg['autorizacion_version'] = max( 1, (int) $cfg['autorizacion_version'] );
+		$cfg['texto_pago']           = mb_substr( (string) $cfg['texto_pago'], 0, 1000 );
+		$cfg['recordatorio_dias']    = min( 30, max( 0, (int) $cfg['recordatorio_dias'] ) );
 		return $cfg;
+	}
+
+	/** El texto de la autorización que se enseña y se firma: el del grupo o, si no tiene, el del plugin (traducido). */
+	public static function autorizacion( array $cfg ): string {
+		return '' !== trim( $cfg['autorizacion_texto'] ) ? $cfg['autorizacion_texto'] : asde_t( self::AUTORIZACION );
+	}
+
+	/** Versión que se guarda con cada firma: «v3» (o «v3-propio» si el grupo ha escrito el suyo). */
+	public static function version_autorizacion( array $cfg ): string {
+		return 'v' . $cfg['autorizacion_version'] . ( '' !== trim( $cfg['autorizacion_texto'] ) ? '-propio' : '' );
 	}
 
 	public static function guardar( array $cfg, string $grupo = '' ): void {
 		$grupo = '' !== $grupo ? $grupo : Grupo::numero();
+		// Si cambia el texto de la autorización, cambia su versión: las firmas anteriores siguen diciendo qué texto firmaron.
+		$antes = self::de( $grupo );
+		if ( array_key_exists( 'autorizacion_texto', $cfg ) && trim( (string) $cfg['autorizacion_texto'] ) !== trim( $antes['autorizacion_texto'] ) ) {
+			$cfg['autorizacion_version'] = $antes['autorizacion_version'] + 1;
+		}
 		update_option( self::OPTION . $grupo, array_intersect_key( $cfg, self::defaults() ), false );
 	}
 

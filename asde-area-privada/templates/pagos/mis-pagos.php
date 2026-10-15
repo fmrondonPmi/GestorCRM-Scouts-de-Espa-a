@@ -5,8 +5,9 @@
  * @var string  $ronda      Ronda en curso
  * @var array[] $cuotas     familia_id => [familia, personas, calc]
  * @var array[] $pagos      [fecha, concepto, metodo, importe, ref], más recientes primero
- * @var array[] $pendientes Uniformes sin pagar: [concepto, importe]
+ * @var array[] $pendientes Uniformes y eventos sin pagar: [concepto, importe, ref?]
  * @var string  $url_uniforme
+ * @var string  $url_eventos  «Mis eventos» ('' si no hay nada de eventos)
  * @var array   $sepa       Domiciliación SEPA: lista, acreedor, texto y, por familia, mandato, puede, proximos, valores
  * @var string  $url        Esta misma página
  */
@@ -117,9 +118,12 @@ $fecha = static fn( string $f ) => '' !== $f ? wp_date( 'd/m/Y', strtotime( $f )
 		<h3 class="asde-card__title"><?php asde_e( 'Pendiente de pago' ); ?></h3>
 		<ul>
 			<?php foreach ( $pendientes as $p ) : ?>
-				<li><?php echo esc_html( $p['concepto'] ); ?> — <strong><?php echo esc_html( $p['importe'] ); ?></strong></li>
+				<li><?php echo esc_html( $p['concepto'] ); ?> — <strong><?php echo esc_html( $p['importe'] ); ?></strong><?php echo ! empty( $p['ref'] ) ? '<br><span class="asde-muted">' . esc_html( sprintf( asde_t( 'Referencia para la transferencia o el Bizum: %s' ), $p['ref'] ) ) . '</span>' : ''; ?></li>
 			<?php endforeach; ?>
 		</ul>
 		<p class="asde-muted"><?php asde_e( 'Los pedidos de uniforme se ven en' ); ?> <a href="<?php echo esc_url( $url_uniforme ); ?>"><?php asde_e( 'Uniforme' ); ?></a>.</p>
+		<?php if ( ! empty( $url_eventos ) ) : ?>
+			<p class="asde-muted"><?php asde_e( 'Las inscripciones a los eventos se ven en' ); ?> <a href="<?php echo esc_url( $url_eventos ); ?>"><?php asde_e( 'Mis eventos' ); ?></a>.</p>
+		<?php endif; ?>
 	</section>
 <?php endif; ?>

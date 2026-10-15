@@ -24,7 +24,7 @@ add_action(
 		}
 		$dias = static fn( int $n ): string => gmdate( 'Y-m-d', strtotime( "today -$n days" ) );
 		$P    = array( 'Asde_Prueba_Crm', 'persona' );
-		// Fichas inventadas: nº Scouts de España 990000 + n. Ampliar aquí lo que haga falta para cada pantalla.
+		// Fichas inventadas: nº Scouts de España 990000 + n (41–49). Ampliar aquí lo que haga falta para cada pantalla.
 		$GLOBALS['asde_crm_demo'] = new Asde_Prueba_Crm(
 			array(
 				$P( 41, 'Lucía', 'Ejemplo Ruiz', '2016-05-10', 'Lobatos' ),
@@ -34,6 +34,8 @@ add_action(
 				$P( 45, 'Eva', 'Ejemplo Coll', '1980-08-08', 'Scouters', array( 'formaciontiempolibre_c' => 'Director/a de tiempo libre', 'certificadods_c' => '1', 'certificadods_fecha_c' => $dias( 30 ) ) ),
 				$P( 46, 'Pol', 'Ejemplo Mas', '1992-03-03', 'Scouters', array( 'formaciontiempolibre_c' => 'Monitor/a de tiempo libre', 'certificadods_c' => '1', 'certificadods_fecha_c' => $dias( 90 ) ) ),
 				$P( 47, 'Gil', 'Ejemplo Pons', '1995-09-09', 'Voluntariado' ),
+				$P( 48, 'Nil', 'Ejemplo Font', '2016-03-12', 'Lobatos' ),
+				$P( 49, 'Ona', 'Ejemplo Bosch', '2015-11-30', 'Lobatos' ),
 			),
 			$grupo['crm_id']
 		);

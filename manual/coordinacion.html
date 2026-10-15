@@ -15,7 +15,7 @@
 		<p class="antetitulo">Manual de uso · versión 0.19 · octubre de 2026 · <a class="portada__volver" href="index.html">Todos los manuales</a></p>
 		<h1>Manual del equipo de coordinación</h1>
 		<p class="portada__perfil">Tesorería, Secretaría y Coordinación</p>
-		<p class="entrada">Todo lo que lleva el equipo del grupo: personas y números de socio, dar acceso, solicitudes, usuarios y emails, fichas y cambios, informes, la Tesorería completa (cuotas, coste federativo, banco y domiciliaciones SEPA), los uniformes, del pago a la entrega, y los eventos (equipo, normativa y presupuesto).</p>
+		<p class="entrada">Todo lo que lleva el equipo del grupo: personas y números de socio, dar acceso, solicitudes, usuarios y emails, fichas y cambios, informes, la Tesorería completa (cuotas, coste federativo, banco y domiciliaciones SEPA), los uniformes, del pago a la entrega, y los eventos (equipo, normativa, presupuesto, inscripciones y cobros).</p>
 		<p class="demo"><strong>Todas las capturas son de un WordPress de demostración con un CRM simulado y datos inventados:</strong> el «Grupo Scout Ejemplo» (grupo 999), personas que no existen y emails <span class="mono">@example.invalid</span>. En tu grupo verás tus datos del CRM.</p>
 	</div>
 	<div class="secciones-franja" aria-hidden="true">
@@ -67,6 +67,8 @@
 <li class="sub"><a href="#eventos-equipo">Equipo dirigente</a></li>
 <li class="sub"><a href="#eventos-presupuesto">Presupuesto y precio</a></li>
 <li class="sub"><a href="#eventos-publicar">Lista de comprobación y publicar</a></li>
+<li class="sub"><a href="#eventos-inscripciones">Inscripciones</a></li>
+<li class="sub"><a href="#eventos-cobros">Cobros (Tesorería)</a></li>
 <li class="sub"><a href="#eventos-configuracion">Configuración</a></li>
 <li><a href="#idioma">El idioma de la web</a></li>
 <li><a href="#preguntas">Preguntas frecuentes</a></li>
@@ -553,7 +555,7 @@
 
 <section id="eventos">
 	<h2><span class="quien">Scouters, Coordinación y Tesorería</span>Eventos</h2>
-	<p class="resumen">Salidas, acampadas, campamentos y demás actividades del grupo: sus datos, el equipo dirigente, lo que pide la normativa de tiempo libre y el presupuesto, del que sale el precio. Está en <strong>Gestión del grupo → Eventos</strong> desde la v0.19. Las inscripciones de las familias y los cobros llegan en las próximas versiones.</p>
+	<p class="resumen">Salidas, acampadas, campamentos y demás actividades del grupo: sus datos, el equipo dirigente, lo que pide la normativa de tiempo libre y el presupuesto, del que sale el precio. Está en <strong>Gestión del grupo → Eventos</strong> desde la v0.19; las inscripciones y los cobros, desde la v0.19.1 (las familias se inscriben en «Mis eventos», que explica el manual para familias). Los gastos y el cierre de cuentas llegan en la próxima versión.</p>
 
 	<h3 id="eventos-crear">Crear un evento</h3>
 	<ul>
@@ -601,8 +603,31 @@
 	</ul>
 	<p>Con el presupuesto validado (o sin coste), «<strong>Publicar el evento</strong>». Se puede volver a borrador mientras no haya nadie inscrito, <strong>cancelar</strong> con un motivo o, si es un borrador, borrarlo.</p>
 
+	<h3 id="eventos-inscripciones">Inscripciones</h3>
+	<p>Al crear o editar el evento se elige la <strong>modalidad</strong> (inscripción abierta, o convocatoria: se espera a todos y cada familia responde sí o no) y, si hace falta, el <strong>plazo</strong> (desde y hasta; sin fechas, de la publicación al inicio). Al publicar, a las familias de las secciones convocadas les llega un email y se inscriben desde «Mis eventos»: inscribir a un menor ya es <strong>firmar su autorización</strong>.</p>
+	<p>La pestaña «<strong>Inscripciones</strong>» del evento enseña:</p>
+	<ul>
+		<li>las <strong>plazas</strong> ocupadas por sección y en total, y cuántas inscripciones hay confirmadas, pendientes, en espera y de baja;</li>
+		<li>los <strong>participantes</strong>: transporte, quién recoge y las observaciones (solo quien gestiona el evento), el estado y lo que falta, la autorización y el pago;</li>
+		<li>la <strong>lista de espera</strong>, por orden: cuando se libera una plaza (una baja, o si subes las plazas) se ofrece a la primera, que tiene 3 días para confirmarla;</li>
+		<li>los convocados <strong>sin respuesta</strong> y las bajas.</li>
+	</ul>
+	<ul>
+		<li>«<strong>Inscribir a alguien</strong>»: en nombre de su familia. Si es menor, la autorización llega en papel y, cuando la tengas, «<strong>Marcar la de papel como recibida</strong>» (el inicio te recuerda las que faltan). Alguien de otra sección o de otra edad, solo como excepción y con motivo.</li>
+		<li>«<strong>Dar de baja</strong>», con motivo, hasta que acaba el evento (las familias, solo mientras el plazo está abierto).</li>
+		<li>Una inscripción queda <strong>confirmada</strong> cuando tiene la autorización (o no le hace falta, si es mayor de edad) y está pagada.</li>
+	</ul>
+
+	<h3 id="eventos-cobros">Cobros (Tesorería)</h3>
+	<ul>
+		<li>En la misma pestaña, por participante: «<strong>Registrar un pago</strong>» (importe, efectivo, ingreso o transferencia o Bizum, fecha y referencia) y «<strong>Beca o ajuste</strong>» (rebaja o recargo, siempre con motivo; el precio de los demás no cambia).</li>
+		<li>«<strong>Pago de una familia</strong>»: un solo pago para los hermanos, que se reparte entre sus inscripciones por orden.</li>
+		<li>Un movimiento equivocado se <strong>anula</strong> (no se borra); el pago de una familia se anula entero.</li>
+		<li>La referencia que ven las familias es el nº del evento y el de su familia de Tesorería (<code>E9990012 F999001</code>) o, sin familia, el de la inscripción.</li>
+	</ul>
+
 	<h3 id="eventos-configuracion">Configuración</h3>
-	<p>Coordinación y Tesorería, en «Eventos → Configuración»: el <strong>margen del fondo de emergencia</strong> (activo o no y porcentaje), los <strong>tipos de actividad</strong> (si nacen con coste y si se comunican a ASDE Baleares) y qué valores de la formación de tiempo libre del CRM cuentan como título de <strong>director/a</strong> o de <strong>monitor/a</strong>.</p>
+	<p>Coordinación y Tesorería, en «Eventos → Configuración»: el <strong>margen del fondo de emergencia</strong> (activo o no y porcentaje), los <strong>tipos de actividad</strong> (si nacen con coste y si se comunican a ASDE Baleares), qué valores de la formación de tiempo libre del CRM cuentan como título de <strong>director/a</strong> o de <strong>monitor/a</strong>, el <strong>texto de la autorización</strong> que firman las familias (cada cambio sube su versión), <strong>cómo pagar</strong> los eventos y cuántos días antes sale el <strong>recordatorio</strong>.</p>
 </section>
 
 <section id="idioma">

@@ -38,11 +38,15 @@ final class RegistroEmails {
 	/** Confirmación de una autorización SEPA o aviso previo de un cargo. */
 	public const SEPA = 'sepa';
 
+	/** Avisos de los eventos (v0.19.1): publicación, confirmación, plaza libre, recordatorio y cancelación. */
+	public const EVENTOS = 'eventos';
+
 	public const TIPOS = array(
 		Invitacion::ALTA  => 'Invitación',
 		Invitacion::RESET => 'Recuperar contraseña',
 		self::RECHAZO     => 'Solicitud rechazada',
 		self::SEPA        => 'Domiciliación SEPA',
+		self::EVENTOS     => 'Eventos',
 	);
 
 	public static function table(): string {
@@ -169,6 +173,9 @@ final class RegistroEmails {
 		$user  = get_userdata( (int) $fila['user_id'] );
 		if ( self::SEPA === $fila['tipo'] ) {
 			return \AsdeBalears\AreaPrivada\Sepa\Avisos::html( $datos, $user ? Contacto::saludo( $user ) : '' );
+		}
+		if ( self::EVENTOS === $fila['tipo'] ) {
+			return \AsdeBalears\AreaPrivada\Eventos\Avisos::html( $datos, $user ? Contacto::saludo( $user ) : '' );
 		}
 		$autor = ! empty( $datos['autor_id'] ) ? get_userdata( (int) $datos['autor_id'] ) : null;
 		$tipo  = isset( self::TIPOS[ $fila['tipo'] ] ) ? $fila['tipo'] : Invitacion::ALTA;
