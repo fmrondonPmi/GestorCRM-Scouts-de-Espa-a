@@ -2627,3 +2627,8 @@ dialog.asde-modal--mini .asde-banco-tipo-nuevo {
 dialog.asde-modal--mini .asde-banco-tipo-nuevo h3 {
 	margin-top: 0;
 }
+/* v0.34 · En las columnas de casillas (p. ej. «Educandos sin familia»), el nº territorial y su aviso pasan
+   a la línea siguiente en lugar de montarse sobre la columna de al lado (se veía en el manual). */
+.asde-ap .asde-columnas .asde-numeros {
+	white-space: normal;
+}
