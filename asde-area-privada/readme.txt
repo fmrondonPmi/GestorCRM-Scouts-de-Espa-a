@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.35.0
+Stable tag: 0.35.1
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -61,6 +61,13 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.35.1 =
+* Families: an empty family (no members, payments, SEPA authorisations or bank movements) has "Delete" in the list; the row says why when it cannot be deleted.
+* Two-step verification is now optional for every role (it was required for Scouter, Secretaría, Coordinación and Tesorería). Applied once on update; an administrator can require it again in Wordfence.
+* Login: the verification code field is collapsed; it opens, highlighted and required, when Wordfence asks for the code.
+* Fix: a membership ended in the CRM showed the person as active until the CRM recalculated "Secciones actuales". Sections are now taken from the memberships that are active by their dates, read in the same request (snapshot, searches, People and reports).
+* People: "Remove from the website" for someone with no active membership. Nothing changes in the CRM; they leave People and their family, and their web accounts are deactivated. They come back by themselves if they get an active membership again.
 
 = 0.35.0 =
 * New "Events" module, off by default (switch it on for each group in wp-admin → Grupos Scouts → Módulos): outings, camps and other activities of the group, with their leader team checked against the Balearic youth leisure rules (director, ratio, qualifications, certificate), a budget whose price per section is validated by Treasury, a checklist and publishing.
@@ -189,6 +196,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * First version with the mobile app (PWA).
 
 == Upgrade Notice ==
+
+= 0.35.1 =
+Two-step verification becomes optional for every role (applied once). Fix for memberships ended in the CRM. No database changes.
 
 = 0.35.0 =
 New Events module, off by default. Four new database tables (events, registrations, budget lines and event payments) are created automatically on update.

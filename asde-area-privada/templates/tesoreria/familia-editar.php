@@ -3,6 +3,7 @@
  * Editar los socios de una familia.
  *
  * @var array{id:int, numero:string, miembros:string[]}       $familia
+ * @var string                                                $no_borrar '' si se puede eliminar; si no, el motivo (v0.35.1)
  * @var array<string, AsdeBalears\AreaPrivada\Domain\Persona> $personas
  * @var AsdeBalears\AreaPrivada\Domain\Persona[]              $sin_fam
  * @var ?WP_User                                              $cuenta
@@ -83,12 +84,15 @@ defined( 'ABSPATH' ) || exit;
 
 <?php if ( ! $familia['miembros'] ) : ?>
 	<section class="asde-card">
-		<form method="post" data-asde-confirmar="<?php echo esc_attr( asde_js( '¿Borrar la familia %s?', $familia['numero'] ) ); ?>">
-			<?php wp_nonce_field( 'asde_familias' ); ?>
-			<input type="hidden" name="asde_action" value="borrar">
-			<input type="hidden" name="familia" value="<?php echo (int) $familia['id']; ?>">
-			<button type="submit" class="asde-btn-link asde-btn-danger"><?php asde_e( 'Borrar esta familia' ); ?></button>
-			<span class="asde-help"><?php asde_e( 'Solo si no tiene pagos registrados.' ); ?></span>
-		</form>
+		<?php if ( '' === $no_borrar ) : ?>
+			<form method="post" data-asde-confirmar="<?php echo esc_attr( asde_js( '¿Eliminar la familia %s? No tiene socios. No se puede deshacer.', $familia['numero'] ) ); ?>">
+				<?php wp_nonce_field( 'asde_familias' ); ?>
+				<input type="hidden" name="asde_action" value="borrar">
+				<input type="hidden" name="familia" value="<?php echo (int) $familia['id']; ?>">
+				<button type="submit" class="asde-btn-link asde-btn-danger"><?php asde_e( 'Eliminar esta familia' ); ?></button>
+			</form>
+		<?php else : ?>
+			<p class="asde-help"><?php echo esc_html( $no_borrar ); ?></p>
+		<?php endif; ?>
 	</section>
 <?php endif; ?>

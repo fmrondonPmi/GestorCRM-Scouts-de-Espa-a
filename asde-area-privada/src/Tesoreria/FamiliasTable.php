@@ -194,18 +194,39 @@ final class FamiliasTable {
 		self::tocar( $familia_id );
 	}
 
-	/** Borra una familia vacía y sin movimientos. @return true|\WP_Error */
+	/**
+	 * Por qué no se puede eliminar una familia, o '' si se puede: tiene que estar sin socios y sin
+	 * nada que cuelgue de ella (pagos, autorizaciones SEPA o movimientos del banco asignados), que
+	 * se quedaría sin familia (v0.35.1).
+	 *
+	 * @param array{id:int, miembros:string[]} $f
+	 */
+	public static function por_que_no_borrar( array $f ): string {
+		if ( $f['miembros'] ) {
+			return asde_t( 'Solo se puede eliminar una familia sin socios.' );
+		}
+		if ( MovimientosTable::hay_de_familia( (int) $f['id'] ) ) {
+			return asde_t( 'Tiene pagos registrados: no se puede eliminar.' );
+		}
+		if ( \AsdeBalears\AreaPrivada\Sepa\Mandatos::hay_de_familia( (int) $f['id'] ) ) {
+			return asde_t( 'Tiene autorizaciones de domiciliación: no se puede eliminar.' );
+		}
+		if ( Banco\BancoTable::hay_de_familia( (int) $f['id'] ) ) {
+			return asde_t( 'Tiene movimientos del banco asignados: no se puede eliminar.' );
+		}
+		return '';
+	}
+
+	/** Elimina una familia vacía y sin nada que cuelgue de ella (por_que_no_borrar()). @return true|\WP_Error */
 	public static function borrar( int $familia_id ) {
 		global $wpdb;
 		$f = self::obtener( $familia_id );
 		if ( ! $f ) {
 			return new \WP_Error( 'asde_familia', asde_t( 'Esa familia no existe.' ) );
 		}
-		if ( $f['miembros'] ) {
-			return new \WP_Error( 'asde_familia', asde_t( 'Solo se puede borrar una familia sin socios.' ) );
-		}
-		if ( MovimientosTable::hay_de_familia( $familia_id ) ) {
-			return new \WP_Error( 'asde_familia', asde_t( 'La familia tiene pagos registrados: no se puede borrar.' ) );
+		$motivo = self::por_que_no_borrar( $f );
+		if ( '' !== $motivo ) {
+			return new \WP_Error( 'asde_familia', $motivo );
 		}
 		$wpdb->delete( self::table(), array( 'id' => $familia_id ) );
 		return true;

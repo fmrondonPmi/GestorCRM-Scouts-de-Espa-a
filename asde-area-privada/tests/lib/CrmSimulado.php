@@ -498,6 +498,8 @@ final class Asde_Prueba_Crm implements EscritorCrm {
 		}
 		$trozo   = array_slice( $filas, $offset, max( 1, $max ) );
 		$con_sg  = (bool) array_filter( $links, static fn( $l ) => 'SecurityGroups' === ( $l['name'] ?? '' ) );
+		// v0.35.1: las membresías de cada ficha (PersonaRepository::links_lectura()).
+		$con_m   = array_values( array_filter( $links, static fn( $l ) => 'stic_contacts_relationships_contacts' === ( $l['name'] ?? '' ) ) );
 		$entries = array();
 		$rels    = array();
 		foreach ( $trozo as $r ) {
@@ -513,14 +515,33 @@ final class Asde_Prueba_Crm implements EscritorCrm {
 				'module_name'     => $modulo,
 				'name_value_list' => $nvl,
 			);
-			$rels[]    = array(
-				'link_list' => $con_sg ? array(
-					array(
-						'name'    => 'SecurityGroups',
-						'records' => array( array( 'link_value' => array( 'id' => array( 'name' => 'id', 'value' => $this->grupo_sg ) ) ) ),
-					),
-				) : array(),
-			);
+			$link_list = $con_sg ? array(
+				array(
+					'name'    => 'SecurityGroups',
+					'records' => array( array( 'link_value' => array( 'id' => array( 'name' => 'id', 'value' => $this->grupo_sg ) ) ) ),
+				),
+			) : array();
+			if ( $con_m ) {
+				$registros = array();
+				foreach ( $this->membresias as $m ) {
+					if ( (string) ( $m['persona'] ?? '' ) !== (string) $r['id'] ) {
+						continue;
+					}
+					$lv = array();
+					foreach ( (array) ( $con_m[0]['value'] ?? array() ) as $c ) {
+						$lv[ $c ] = array(
+							'name'  => $c,
+							'value' => (string) ( $m[ $c ] ?? '' ),
+						);
+					}
+					$registros[] = array( 'link_value' => $lv );
+				}
+				$link_list[] = array(
+					'name'    => 'stic_contacts_relationships_contacts',
+					'records' => $registros,
+				);
+			}
+			$rels[] = array( 'link_list' => $link_list );
 		}
 		return array(
 			'result_count'      => count( $entries ),

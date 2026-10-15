@@ -70,6 +70,12 @@ $crm = new Asde_Prueba_Crm(
 );
 $falsos = array_map( static fn( $p ) => $p['numerosocio_c'], $crm->personas );
 Grupo::forzar( $grupo );
+// v0.35.1: con los módulos por defecto en el grupo (el Local puede tenerlos cambiados: «Eventos» encendido añade «Mis eventos»).
+$modulos_antes = get_option( 'asde_ap_modulos', null );
+$sin_grupo     = (array) $modulos_antes;
+unset( $sin_grupo[ (string) $grupo['numero'] ] );
+update_option( 'asde_ap_modulos', $sin_grupo, false );
+\AsdeBalears\AreaPrivada\Domain\Modulos::olvidar();
 $crm->activar();
 
 $ids   = array();
@@ -188,6 +194,8 @@ try {
 			$wpdb->replace( SociosTable::table(), $f );
 		}
 	}
+	null === $modulos_antes ? delete_option( 'asde_ap_modulos' ) : update_option( 'asde_ap_modulos', $modulos_antes, false );
+	\AsdeBalears\AreaPrivada\Domain\Modulos::olvidar();
 	Grupo::forzar( null );
 
 	$quedan = (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->users} WHERE user_login LIKE 'prueba-menu-%'" ); // phpcs:ignore WordPress.DB

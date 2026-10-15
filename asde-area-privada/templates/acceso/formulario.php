@@ -58,11 +58,15 @@ $ejemplo = \AsdeBalears\AreaPrivada\Domain\NumeroSocio::ejemplo_tutor();
 				<label for="asde-acc-clave"><?php asde_e( 'Contraseña' ); ?></label>
 				<input type="password" id="asde-acc-clave" name="clave" autocomplete="current-password" required>
 			</p>
-			<p class="<?php echo $pedir_codigo ? 'asde-destacado' : ''; ?>">
-				<label for="asde-acc-codigo"><?php asde_e( 'Código de verificación' ); ?> <?php echo $pedir_codigo ? '' : '<span class="asde-help asde-help--inline">' . esc_html( asde_t( '(solo si tienes activada la verificación en dos pasos)' ) ) . '</span>'; ?></label>
-				<input type="text" id="asde-acc-codigo" name="wfls-token" autocomplete="one-time-code" spellcheck="false" maxlength="24" <?php echo $pedir_codigo ? 'required autofocus' : ''; ?>>
-				<span class="asde-help"><?php asde_e( 'Las 6 cifras de tu app de autenticación o, si has perdido el móvil, uno de tus códigos de recuperación.' ); ?></span>
-			</p>
+			<?php /* v0.35.1 (petición del usuario): plegado; abierto cuando Wordfence pide el código. */ ?>
+			<details class="asde-acceso__codigo<?php echo $pedir_codigo ? ' asde-destacado' : ''; ?>"<?php echo $pedir_codigo ? ' open' : ''; ?>>
+				<summary><?php asde_e( 'Código de verificación' ); ?> <?php echo $pedir_codigo ? '' : '<span class="asde-help asde-help--inline">' . esc_html( asde_t( '(solo si tienes activada la verificación en dos pasos)' ) ) . '</span>'; ?></summary>
+				<p>
+					<label for="asde-acc-codigo" class="screen-reader-text"><?php asde_e( 'Código de verificación' ); ?></label>
+					<input type="text" id="asde-acc-codigo" name="wfls-token" autocomplete="one-time-code" spellcheck="false" maxlength="24" <?php echo $pedir_codigo ? 'required autofocus' : ''; ?>>
+					<span class="asde-help"><?php asde_e( 'Las 6 cifras de tu app de autenticación o, si has perdido el móvil, uno de tus códigos de recuperación.' ); ?></span>
+				</p>
+			</details>
 			<label class="asde-choice"><input type="checkbox" name="recordar" value="1"><span><?php asde_e( 'Mantener la sesión iniciada en este dispositivo' ); ?></span></label>
 			<p><button type="submit" class="button"><?php asde_e( 'Entrar' ); ?></button></p>
 		</form>

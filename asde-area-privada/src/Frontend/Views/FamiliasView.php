@@ -58,6 +58,7 @@ final class FamiliasView extends TesoreriaBaseView {
 				'tesoreria/familia-editar',
 				array(
 					'familia'  => $familias[ $editar ],
+					'no_borrar' => FamiliasTable::por_que_no_borrar( $familias[ $editar ] ),
 					'personas' => $por_num,
 					'sin_fam'  => $sin_fam,
 					'cuenta'   => $this->cuenta_familiar( $familias[ $editar ]['miembros'] ),
@@ -67,9 +68,13 @@ final class FamiliasView extends TesoreriaBaseView {
 			);
 		} else {
 			$cuentas = array();
+			$borrar  = array(); // v0.35.1 (petición del usuario): «Eliminar» en la lista para las familias sin socios.
 			foreach ( $familias as $id => $f ) {
 				$c              = $this->cuenta_familiar( $f['miembros'] );
 				$cuentas[ $id ] = $c ? $c->user_login : '';
+				if ( ! $f['miembros'] ) {
+					$borrar[ $id ] = FamiliasTable::por_que_no_borrar( $f );
+				}
 			}
 			// v0.34 (petición del usuario): buscador por nº de familia, cuenta familiar y nombre o nº de socio de sus miembros.
 			$q     = mb_strtolower( remove_accents( $this->get( 'q' ) ) );
@@ -92,6 +97,7 @@ final class FamiliasView extends TesoreriaBaseView {
 					'q'           => $this->get( 'q' ),
 					'personas'    => $por_num,
 					'cuentas'     => $cuentas,
+					'borrar'      => $borrar,
 					'sugerencias' => Sugerencias::por_email( $activas, $mapa, $cfg['secciones_pagan'] ),
 					'sin_fam'     => array_values( array_filter( $sin_fam, static fn( Persona $p ) => (bool) array_intersect( $p->secciones, $cfg['secciones_pagan'] ) ) ),
 					'sin_fam_adultos' => array_values( array_filter( $sin_fam, static fn( Persona $p ) => ! array_intersect( $p->secciones, $cfg['secciones_pagan'] ) ) ),
@@ -120,7 +126,7 @@ final class FamiliasView extends TesoreriaBaseView {
 		check_admin_referer( 'asde_familias' );
 		$repo    = PersonaRepository::make();
 		$familia = (int) $this->post( 'familia' );
-		$volver  = $familia ? $this->url( 'familias', array( 'familia' => $familia ) ) : $this->url( 'familias' );
+		$volver  = $familia && 'lista' !== $this->post( 'desde' ) ? $this->url( 'familias', array( 'familia' => $familia ) ) : $this->url( 'familias' );
 
 		// Solo socios del grupo con membresía activa.
 		$validar = function ( array $nums ) use ( $repo ): array {
@@ -164,7 +170,7 @@ final class FamiliasView extends TesoreriaBaseView {
 				$r = FamiliasTable::borrar( $familia );
 				if ( ! is_wp_error( $r ) ) {
 					Logger::log( 'familia_borrada', 'familia', (string) $familia );
-					Notices::add( 'success', asde_t( 'Familia borrada.' ) );
+					Notices::add( 'success', asde_t( 'Familia eliminada.' ) );
 					$volver = $this->url( 'familias' );
 				}
 				break;

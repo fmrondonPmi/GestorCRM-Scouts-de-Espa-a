@@ -146,8 +146,8 @@ final class Entorno {
 
 		// Wordfence (verificación en dos pasos).
 		if ( Wordfence::disponible() ) {
-			$c['wordfence'] = (int) get_option( 'asde_ap_wordfence_config' ) >= 2
-				? array( self::OK, 'Wordfence (verificación en dos pasos)', 'Obligatoria para Scouter, Secretaría, Coordinación y Tesorería; opcional para familias y participantes.', array() )
+			$c['wordfence'] = (int) get_option( 'asde_ap_wordfence_config' ) >= Wordfence::VERSION
+				? array( self::OK, 'Wordfence (verificación en dos pasos)', 'Opcional para todos los roles del área privada (desde la v0.35.1): cada persona la activa en «Seguridad».', array() )
 				: array( self::FALTA, 'Wordfence (verificación en dos pasos)', 'Instalado, pero sin la configuración del área privada.', array() );
 		} elseif ( file_exists( WP_PLUGIN_DIR . '/wordfence/wordfence.php' ) ) {
 			$c['wordfence'] = array( self::AVISO, 'Wordfence (verificación en dos pasos)', 'Está instalado pero desactivado. Actívalo y vuelve a generar el entorno.', array( 'Plugins' => admin_url( 'plugins.php' ) ) );
@@ -260,7 +260,7 @@ final class Entorno {
 			$r['hecho'][] = 'Tarea diaria de mantenimiento programada.';
 		}
 		if ( Wordfence::disponible() && self::FALTA === $antes['wordfence'][0] ) {
-			$r[ Wordfence::configurar() || (int) get_option( 'asde_ap_wordfence_config' ) >= 2 ? 'hecho' : 'errores' ][] = 'Wordfence: verificación en dos pasos configurada para los roles del área privada.';
+			$r[ Wordfence::configurar() || (int) get_option( 'asde_ap_wordfence_config' ) >= Wordfence::VERSION ? 'hecho' : 'errores' ][] = 'Wordfence: verificación en dos pasos configurada para los roles del área privada.';
 		}
 
 		// 2. Ajustes del sitio marcados.

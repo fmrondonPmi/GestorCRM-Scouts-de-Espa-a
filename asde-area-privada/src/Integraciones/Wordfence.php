@@ -13,11 +13,16 @@ defined( 'ABSPATH' ) || exit;
  * 10 días de margen para activarlo. Como estos usuarios no entran en wp-admin,
  * lo gestionan desde la página "Seguridad" del área privada (shortcode de
  * Wordfence, que hay que habilitar).
+ *
+ * v0.35.1 (petición del usuario, 2026-10-15): OPCIONAL para todos los roles. Si el
+ * administrador vuelve a hacerla obligatoria para algún rol en Wordfence, el inicio y
+ * «Seguridad» lo siguen avisando (pendiente()).
  */
 final class Wordfence {
 
-	private const OPTION  = 'asde_ap_wordfence_config';
-	private const VERSION = 2; // 2: añade Tesorería.
+	private const OPTION = 'asde_ap_wordfence_config';
+	/** 2: añade Tesorería. 3: opcional para todos los roles (v0.35.1). */
+	public const VERSION = 3;
 
 	public static function disponible(): bool {
 		return class_exists( '\WordfenceLS\Controller_Settings' ) && class_exists( '\WordfenceLS\Controller_Users' );
@@ -30,10 +35,10 @@ final class Wordfence {
 		}
 		$ok = \WordfenceLS\Controller_Settings::shared()->set_multiple(
 			array(
-				'enabled-roles.' . Roles::SCOUTER      => 'required',
-				'enabled-roles.' . Roles::SECRETARIA   => 'required',
-				'enabled-roles.' . Roles::COORDINACION => 'required',
-				'enabled-roles.' . Roles::TESORERIA    => 'required',
+				'enabled-roles.' . Roles::SCOUTER      => 'optional',
+				'enabled-roles.' . Roles::SECRETARIA   => 'optional',
+				'enabled-roles.' . Roles::COORDINACION => 'optional',
+				'enabled-roles.' . Roles::TESORERIA    => 'optional',
 				'enabled-roles.' . Roles::TUTOR        => 'optional',
 				'enabled-roles.' . Roles::PARTICIPANTE => 'optional',
 				'enable-shortcode'                     => true,

@@ -7,6 +7,7 @@
  * @var string                                                     $q        Lo buscado (v0.34)
  * @var array<string, AsdeBalears\AreaPrivada\Domain\Persona>      $personas
  * @var array<int, string>                                         $cuentas  familia_id => usuario de la cuenta familiar
+ * @var array<int, string>                                         $borrar   Familias sin socios: familia_id => '' si se puede eliminar, o el motivo (v0.35.1)
  * @var AsdeBalears\AreaPrivada\Domain\Persona[][]                 $sugerencias
  * @var AsdeBalears\AreaPrivada\Domain\Persona[]                   $sin_fam  Educandos activos sin familia
  * @var AsdeBalears\AreaPrivada\Domain\Persona[]                   $sin_fam_adultos Scouters/voluntariado sin familia
@@ -92,7 +93,20 @@ $fila_persona = static function ( $p ) {
 							<?php endforeach; ?>
 						</td>
 						<td data-label="<?php echo esc_attr( asde_a( 'Cuenta familiar' ) ); ?>"><?php echo $cuentas[ $id ] ? esc_html( $cuentas[ $id ] ) : '<span class="asde-muted">—</span>'; ?></td>
-						<td data-label=""><a class="button" href="<?php echo esc_url( add_query_arg( 'familia', $id, $url ) ); ?>"><?php asde_e( 'Editar' ); ?></a></td>
+						<td data-label="">
+							<a class="button" href="<?php echo esc_url( add_query_arg( 'familia', $id, $url ) ); ?>"><?php asde_e( 'Editar' ); ?></a>
+							<?php if ( isset( $borrar[ $id ] ) && '' === $borrar[ $id ] ) : ?>
+								<form method="post" class="asde-inline-form" data-asde-confirmar="<?php echo esc_attr( asde_js( '¿Eliminar la familia %s? No tiene socios. No se puede deshacer.', $f['numero'] ) ); ?>">
+									<?php wp_nonce_field( 'asde_familias' ); ?>
+									<input type="hidden" name="asde_action" value="borrar">
+									<input type="hidden" name="familia" value="<?php echo (int) $id; ?>">
+									<input type="hidden" name="desde" value="lista">
+									<button type="submit" class="asde-btn-link asde-btn-danger"><?php asde_e( 'Eliminar' ); ?></button>
+								</form>
+							<?php elseif ( isset( $borrar[ $id ] ) ) : ?>
+								<span class="asde-help"><?php echo esc_html( $borrar[ $id ] ); ?></span>
+							<?php endif; ?>
+						</td>
 					</tr>
 				<?php endforeach; ?>
 			</tbody>

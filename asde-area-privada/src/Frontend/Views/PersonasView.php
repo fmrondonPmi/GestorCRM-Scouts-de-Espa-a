@@ -17,6 +17,7 @@ use AsdeBalears\AreaPrivada\Frontend\Notices;
 use AsdeBalears\AreaPrivada\Frontend\Tabla;
 use AsdeBalears\AreaPrivada\Socios\Numeracion;
 use AsdeBalears\AreaPrivada\Socios\SociosTable;
+use AsdeBalears\AreaPrivada\Socios\Eliminadas;
 use AsdeBalears\AreaPrivada\Socios\TareaNumeracion;
 use AsdeBalears\AreaPrivada\Usuarios\Usuarios;
 
@@ -69,6 +70,25 @@ final class PersonasView extends View {
 				Numeracion::olvidar_cache();
 			}
 			$todas    = $repo->todas( false );
+			// v0.35.1: sin las eliminadas de la web (mientras no vuelvan a tener una membresía activa).
+			$eliminadas = Eliminadas::todas();
+			if ( $eliminadas ) {
+				$todas = array_values(
+					array_filter(
+						$todas,
+						static function ( Persona $p ) use ( $eliminadas ): bool {
+							if ( ! isset( $eliminadas[ $p->num_socio_asde ] ) ) {
+								return true;
+							}
+							if ( $p->tiene_membresia_activa() ) {
+								Eliminadas::quitar_marca( $p->num_socio_asde );
+								return true;
+							}
+							return false;
+						}
+					)
+				);
+			}
 			$num      = new Numeracion( $repo );
 			$analisis = $num->analizar( $todas ); // Sincroniza la tabla de equivalencias.
 		} catch ( CrmException $e ) {

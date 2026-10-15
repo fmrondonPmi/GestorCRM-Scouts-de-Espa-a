@@ -16,6 +16,7 @@
  * @var string                                       $url_cambios
  * @var string                                       $url_alta
  * @var string                                       $socio_desde Y-m-d desde el que es socio/a sin cortes (v0.34), o ''
+ * @var bool                                         $eliminar    Puede «Eliminar de la web» (sin membresía activa; v0.35.1)
  */
 // phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound, WordPress.WP.GlobalVariablesOverride.Prohibited -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
 use AsdeBalears\AreaPrivada\Crm\Escritura;
@@ -201,6 +202,18 @@ $control = static function ( string $campo, array $f ) use ( $pendientes ): stri
 			<?php endif; ?>
 			<a href="<?php echo esc_url( $membresia( 'documento' ) ); ?>" data-asde-modal><?php asde_e( 'Poner el documento' ); ?></a>
 		</p>
+	</section>
+<?php endif; ?>
+
+<?php if ( $eliminar ) : ?>
+	<section class="asde-card">
+		<form method="post" data-asde-confirmar="<?php echo esc_attr( asde_js( '¿Eliminar a %s de la web? Deja de salir en Personas, sale de su familia y sus cuentas de acceso se desactivan. En el CRM no cambia nada.', $p->nombre_completo() ) ); ?>">
+			<?php wp_nonce_field( 'asde_eliminar_' . $p->num_socio_asde ); ?>
+			<input type="hidden" name="asde_action" value="eliminar_de_la_web">
+			<input type="hidden" name="socio" value="<?php echo esc_attr( $p->num_socio_asde ); ?>">
+			<button type="submit" class="asde-btn-link asde-btn-danger"><?php asde_e( 'Eliminar de la web' ); ?></button>
+			<span class="asde-help"><?php asde_e( 'No tiene membresía activa: deja de salir en Personas, sale de su familia y sus cuentas de acceso se desactivan. En el CRM no cambia nada; si vuelve a tener una membresía activa, vuelve a salir.' ); ?></span>
+		</form>
 	</section>
 <?php endif; ?>
 

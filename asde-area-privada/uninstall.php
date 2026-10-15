@@ -48,6 +48,7 @@ foreach ( is_array( $asde_grupos ) ? $asde_grupos : array() as $asde_grupo ) {
 	delete_option( 'asde_ap_uniformes_' . $asde_grupo['numero'] );
 	delete_option( 'asde_ap_eventos_' . $asde_grupo['numero'] ); // Tipos, margen y titulaciones de los eventos (v0.35).
 	delete_option( 'asde_ap_sepa_' . $asde_grupo['numero'] ); // Datos del acreedor SEPA (el IBAN, cifrado).
+	delete_option( 'asde_ap_eliminadas_' . $asde_grupo['numero'] ); // Personas eliminadas de la web (v0.35.1).
 }
 delete_transient( 'asde_ap_numeracion' );
 delete_transient( 'asde_ap_grupos_reintento' );

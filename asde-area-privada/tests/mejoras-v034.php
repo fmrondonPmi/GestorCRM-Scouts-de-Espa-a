@@ -99,6 +99,7 @@ $crm->alta_membresia( $id_de( 75 ), 'Scouters', '2015-09-01' );
 $crm->alta_membresia( $id_de( 76 ), 'Scouters', '2016-09-01' );
 Grupo::forzar( $grupo );
 $crm->activar();
+add_filter( 'asde_ap_instantanea_segundos', '__return_zero' ); // v0.35.1: sin la instantánea, para no dejar en la del grupo las fichas simuladas.
 Permisos::olvidar( $grupo['numero'] );
 
 $ids   = array();
@@ -173,6 +174,7 @@ try {
 	$ok( str_contains( $h, 'Ninguna familia coincide con «zzzz-nadie».' ) && str_contains( $h, 'value="zzzz-nadie"' ), 'sin resultados: lo dice y conserva lo buscado' );
 } finally {
 	$crm->desactivar();
+	remove_filter( 'asde_ap_instantanea_segundos', '__return_zero' );
 	remove_filter( 'pre_http_request', $cortar_crm, 2 );
 	remove_filter( 'pre_wp_mail', '__return_true' );
 	wp_using_ext_object_cache( $cache_externa );

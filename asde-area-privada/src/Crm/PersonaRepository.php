@@ -104,7 +104,7 @@ final class PersonaRepository {
 
 		// Si las credenciales ven varios grupos se filtra después: se piden más para no quedarse cortos.
 		$pedir    = ! empty( Grupo::actual()['filtrar'] ) ? $limite * 4 : $limite;
-		$personas = $this->personas( $this->crm->list_entries( 'Contacts', $where, self::CAMPOS, self::links_grupo(), 0, $pedir )['entries'] );
+		$personas = $this->personas( $this->crm->list_entries( 'Contacts', $where, self::CAMPOS, self::links_lectura(), 0, $pedir )['entries'], $solo_activas );
 		return array_slice( $personas, 0, $limite );
 	}
 
@@ -121,7 +121,7 @@ final class PersonaRepository {
 			}
 			// Una ficha que no está (recién creada en el CRM): se pregunta al CRM.
 		}
-		$personas = $this->personas( $this->crm->list_entries( 'Contacts', 'contacts_cstm.numerosocio_c = ' . Query::str( $num_asde ), self::CAMPOS, self::links_grupo(), 0, 2 )['entries'] );
+		$personas = $this->personas( $this->crm->list_entries( 'Contacts', 'contacts_cstm.numerosocio_c = ' . Query::str( $num_asde ), self::CAMPOS, self::links_lectura(), 0, 2 )['entries'] );
 		return 1 === count( $personas ) ? $personas[0] : null;
 	}
 
@@ -174,6 +174,41 @@ final class PersonaRepository {
 		return array( 'SecurityGroups' => array( 'id' ) );
 	}
 
+	/** links_grupo() y las membresías de cada ficha, para con_secciones_vigentes() (v0.35.1). */
+	public static function links_lectura(): array {
+		return self::links_grupo() + array( Escritura::ENLACE_MEMBRESIAS => array( 'id', 'relationship_type', 'start_date', 'end_date' ) );
+	}
+
+	/**
+	 * v0.35.1 (fallo visto por el usuario): el CRM recalcula «Secciones actuales»
+	 * (stic_relationship_type_c) más tarde que la membresía. Tras una baja con la fecha de hoy,
+	 * la membresía ya tiene active=0, pero la ficha sigue diciendo «Castores», y la web la daba de
+	 * alta (y «Dar de baja» decía que no tenía ninguna activa). Las secciones se sacan de las
+	 * membresías activas por sus fechas (Altas::activa(), como el CRM). Si la ficha no trae
+	 * ninguna membresía (el grupo no las ve), se deja lo que diga el CRM.
+	 *
+	 * @param array[] $entries Entradas de get_entry_list pedidas con links_lectura().
+	 * @return array[] Las mismas, con stic_relationship_type_c recalculado.
+	 */
+	public static function con_secciones_vigentes( array $entries ): array {
+		$hoy = wp_date( 'Y-m-d' );
+		foreach ( $entries as $i => $e ) {
+			$membresias = (array) ( $e['links'][ Escritura::ENLACE_MEMBRESIAS ] ?? array() );
+			if ( ! $membresias ) {
+				continue;
+			}
+			$tipos = array();
+			foreach ( $membresias as $m ) {
+				$tipo = trim( (string) ( $m['relationship_type'] ?? '' ) );
+				if ( '' !== $tipo && Altas::activa( (array) $m, $hoy ) ) {
+					$tipos[] = $tipo;
+				}
+			}
+			$entries[ $i ]['fields']['stic_relationship_type_c'] = $tipos ? '^' . implode( '^,^', array_unique( $tipos ) ) . '^' : '';
+		}
+		return $entries;
+	}
+
 	/** @param array[] $entries Entradas de get_entry_list (con links_grupo()). */
 	public static function filtrar_grupo( array $entries ): array {
 		$crm_id = (string) ( Grupo::actual()['crm_id'] ?? '' );
@@ -212,7 +247,7 @@ final class PersonaRepository {
 		}
 		foreach ( array_chunk( $nums_vivas, 50 ) as $lote ) {
 			$in = implode( ',', array_map( array( Query::class, 'str' ), $lote ) );
-			foreach ( $this->personas( $this->crm->list_entries( 'Contacts', "contacts_cstm.numerosocio_c IN ($in)", self::CAMPOS, self::links_grupo(), 0, 60 )['entries'] ) as $p ) {
+			foreach ( $this->personas( $this->crm->list_entries( 'Contacts', "contacts_cstm.numerosocio_c IN ($in)", self::CAMPOS, self::links_lectura(), 0, 60 )['entries'] ) as $p ) {
 				$por_num[ $p->num_socio_asde ] = $p;
 			}
 		}
@@ -267,7 +302,7 @@ final class PersonaRepository {
 				)
 			);
 		}
-		return $this->personas( $this->crm->list_all( 'Contacts', $solo_activas ? self::WHERE_ACTIVAS : '', self::CAMPOS, self::links_grupo() ) );
+		return $this->personas( $this->crm->list_all( 'Contacts', $solo_activas ? self::WHERE_ACTIVAS : '', self::CAMPOS, self::links_lectura() ), $solo_activas );
 	}
 
 	/**
@@ -283,7 +318,7 @@ final class PersonaRepository {
 			return array();
 		}
 		$where = $this->where_emails( $emails ) . ( $solo_activas ? ' AND ' . self::WHERE_ACTIVAS : '' );
-		return $this->personas( $this->crm->list_entries( 'Contacts', $where, self::CAMPOS, self::links_grupo(), 0, $limite )['entries'] );
+		return $this->personas( $this->crm->list_entries( 'Contacts', $where, self::CAMPOS, self::links_lectura(), 0, $limite )['entries'], $solo_activas );
 	}
 
 	/** Número de fichas del grupo (activas o no) en las que aparece este email (máx. 50). */
@@ -311,9 +346,9 @@ final class PersonaRepository {
 		$digitos = (string) preg_replace( '/\D/', '', $doc );
 		$where   = ( strlen( $digitos ) >= 5 ? 'contacts_cstm.stic_identification_number_c LIKE ' . Query::contains( $digitos ) : 'contacts_cstm.stic_identification_number_c = ' . Query::str( $doc ) )
 			. ' AND ' . self::WHERE_ACTIVAS;
-		$entradas = $this->crm->list_entries( 'Contacts', $where, array_merge( self::CAMPOS, array( 'stic_identification_number_c' ) ), self::links_grupo(), 0, 20 )['entries'];
+		$entradas = $this->crm->list_entries( 'Contacts', $where, array_merge( self::CAMPOS, array( 'stic_identification_number_c' ) ), self::links_lectura(), 0, 20 )['entries'];
 		$iguales  = array_filter( $entradas, static fn( array $e ) => self::normalizar_documento( (string) ( $e['fields']['stic_identification_number_c'] ?? '' ) ) === $doc );
-		return $this->personas( array_values( $iguales ) );
+		return $this->personas( array_values( $iguales ), true );
 	}
 
 	/**
@@ -326,17 +361,23 @@ final class PersonaRepository {
 		if ( ! preg_match( '/^\d{4}-\d{2}-\d{2}$/', $fecha ) ) {
 			return array();
 		}
-		return $this->personas( $this->crm->list_entries( 'Contacts', 'contacts.birthdate = ' . Query::str( $fecha ) . ' AND ' . self::WHERE_ACTIVAS, self::CAMPOS, self::links_grupo(), 0, 60 )['entries'] );
+		return $this->personas( $this->crm->list_entries( 'Contacts', 'contacts.birthdate = ' . Query::str( $fecha ) . ' AND ' . self::WHERE_ACTIVAS, self::CAMPOS, self::links_lectura(), 0, 60 )['entries'], true );
 	}
 
 	/**
 	 * Entradas del CRM → Persona[], ordenadas por apellidos y nombre.
-	 * (El CRM de ASDE ignora el parámetro order_by de get_entry_list.)
+	 * (El CRM de ASDE ignora el parámetro order_by de get_entry_list.) Con las secciones de sus
+	 * membresías vigentes (con_secciones_vigentes()); con $solo_activas se quitan las que, con
+	 * ellas, se quedan sin ninguna (el CRM aún las tenía en «Secciones actuales»).
 	 *
 	 * @return Persona[]
 	 */
-	private function personas( array $entries ): array {
-		return $this->ordenar( array_map( array( Persona::class, 'from_crm' ), self::filtrar_grupo( $entries ) ) );
+	private function personas( array $entries, bool $solo_activas = false ): array {
+		$entries = self::con_secciones_vigentes( self::filtrar_grupo( $entries ) );
+		if ( $solo_activas ) {
+			$entries = array_filter( $entries, array( self::class, 'es_activa' ) );
+		}
+		return $this->ordenar( array_map( array( Persona::class, 'from_crm' ), array_values( $entries ) ) );
 	}
 
 	/** @param Persona[] $personas @return Persona[] */
@@ -351,7 +392,7 @@ final class PersonaRepository {
 	// ---------------------------------------------------------------------
 
 	/** Membresía activa: «Secciones actuales» no vacío (lo mismo que WHERE_ACTIVAS, en memoria). */
-	private static function es_activa( array $entrada ): bool {
+	public static function es_activa( array $entrada ): bool {
 		$v = trim( (string) ( $entrada['fields']['stic_relationship_type_c'] ?? '' ) );
 		return '' !== $v && '^^' !== $v;
 	}
@@ -396,7 +437,8 @@ final class PersonaRepository {
 	 */
 	public function refrescar_instantanea(): array {
 		$entradas = array();
-		foreach ( self::filtrar_grupo( $this->crm->list_all( 'Contacts', '', self::CAMPOS, self::links_grupo() ) ) as $e ) {
+		// v0.35.1: con las membresías, para que una baja del CRM se vea ya (con_secciones_vigentes()).
+		foreach ( self::con_secciones_vigentes( self::filtrar_grupo( $this->crm->list_all( 'Contacts', '', self::CAMPOS, self::links_lectura() ) ) ) as $e ) {
 			$entradas[] = array(
 				'id'     => (string) $e['id'],
 				'fields' => array_map( 'strval', $e['fields'] ),

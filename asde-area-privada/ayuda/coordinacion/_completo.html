@@ -62,7 +62,7 @@
 			</ul>
 		</div></li>
 		<li><div><strong>Contraseña.</strong> La que elegiste al activar la cuenta.</div></li>
-		<li><div><strong>Código de verificación.</strong> Solo si tienes activada la verificación en dos pasos: las 6 cifras de tu app o uno de tus códigos de recuperación. Si lo olvidas, la pantalla te lo pide y vuelves a escribir la contraseña.</div></li>
+		<li><div><strong>Código de verificación</strong> (plegado: despliégalo). Solo si tienes activada la verificación en dos pasos: las 6 cifras de tu app o uno de tus códigos de recuperación. Si lo olvidas, la pantalla te lo pide y vuelves a escribir la contraseña.</div></li>
 	</ol>
 	<div class="nota"><p><strong>¿Cuál es mi usuario?</strong> El número que el grupo ha elegido como usuario: el de Scouts de España o el territorial. Es el que ves junto a tu nombre al entrar. Puedes entrar con cualquiera de los dos o con el email.</p></div>
 	<div class="nota"><p><strong>El mismo email en dos cuentas.</strong> Si eres scouter y además madre o padre de un educando, tu email puede ser el de tu cuenta y el de la cuenta familiar. Al entrar con el email se abre la cuenta cuya contraseña escribas. Si las dos tienen la misma contraseña, la pantalla te pide el nº de socio/a de la que quieres usar.</p></div>
@@ -138,13 +138,13 @@
 
 <section id="asde-manual-seguridad">
 	<h2>Seguridad de la cuenta</h2>
-	<p class="resumen">La verificación en dos pasos pide, además de la contraseña, un código de 6 cifras de una app del móvil. Para Scouter, Secretaría, Coordinación y Tesorería es <strong>obligatoria</strong>: ves datos de muchas personas, también de salud.</p>
-	<ul>
-		<li>Hay <strong>10 días de margen</strong> desde el alta: hasta entonces, el inicio te avisa de la fecha límite. Después no podrás entrar sin ella.</li>
-		<li>Se activa en <strong>«Seguridad»</strong>, junto a tu nombre: instala una app de autenticación (Google Authenticator, Microsoft Authenticator, Authy…), escanea el código QR, escribe el código de 6 cifras que te enseña y guarda los <strong>códigos de recuperación</strong>, que sirven si pierdes el móvil.</li>
-		<li>Al entrar, el código va en el campo «Código de verificación» de «Acceso socios».</li>
-		<li>Si pierdes el móvil y los códigos, pide a la administración de la web que te la quite para volver a activarla.</li>
-	</ul>
+	<p class="resumen">La verificación en dos pasos pide, además de la contraseña, un código de 6 cifras de una app del móvil (Google Authenticator, Microsoft Authenticator o similar). Es <strong>opcional</strong> para todas las cuentas, pero protege mejor los datos: si ves datos de otras personas (scouters, Secretaría, Coordinación, Tesorería), te la recomendamos.</p>
+	<ol class="pasos">
+		<li><div>Pulsa <strong>«Seguridad»</strong>, junto a tu nombre, arriba del área.</div></li>
+		<li><div>Instala en tu móvil una app de autenticación y escanea con ella el código QR.</div></li>
+		<li><div>Escribe el código de 6 cifras que te muestra la app y guarda los <strong>códigos de recuperación</strong> en un lugar seguro: te servirán si pierdes el móvil.</div></li>
+	</ol>
+	<p>Desde entonces, al entrar, despliega «Código de verificación» en «Acceso socios» y escribe el código. Si pierdes el móvil y los códigos de recuperación, pide a la administración de la web que te la quite para volver a activarla.</p>
 </section>
 
 <section id="asde-manual-inicio">
@@ -202,6 +202,8 @@
 			<li>Se puede ordenar por cualquier columna y filtrar por nombre o nº de socio: la lista se actualiza <strong>al escribir, desde la tercera letra</strong>, sin recargar la página («Mostrar», el cuadro y «Filtrar» van en la misma línea).</li>
 			<li>El cuadro del resumen (membresías activas, siguiente nº libre, incidencias) se pliega con ▾; plegado, enseña solo las dos cifras.</li>
 			<li>Las fichas se leen del CRM cada pocos minutos para que las páginas vayan rápido: el aviso de arriba dice cuándo fue la última lectura. Si acabas de cambiar algo directamente en el CRM, «Actualizar ahora» lo vuelve a leer.</li>
+			<li>Quién tiene membresía activa sale de las <strong>fechas de sus membresías</strong>: una baja hecha en el CRM se ve en cuanto se vuelven a leer las fichas, aunque el CRM tarde en actualizar «Secciones actuales».</li>
+			<li>A quien ya no tiene ninguna membresía activa se le puede quitar de la web: en su ficha, <strong>«Eliminar de la web»</strong>. Deja de salir aquí, sale de su familia y sus cuentas de acceso se desactivan. En el CRM no cambia nada y, si vuelve a tener una membresía activa, vuelve a salir.</li>
 		</ul>
 		<p>Colores de las secciones, los mismos en toda el área:</p>
 		<ul class="leyenda">
@@ -505,6 +507,7 @@
 	<p class="asde-ayuda__pantalla">Las familias del grupo y, debajo, los educandos que aún no están en ninguna: se marcan y se crea su familia. Si varios comparten email, la web sugiere juntarlos (suelen ser hermanos). Una familia puede incluir a la madre o al padre scouter.</p>
 	<ul>
 		<li><strong>Buscador:</strong> escribe el nº de familia, el nombre o el nº de socio de cualquiera de sus miembros, o el usuario de la cuenta familiar. La lista se filtra mientras escribes (desde la 3.ª letra), sin recargar la página, y debajo dice cuántas salen de todas.</li>
+		<li><strong>Eliminar:</strong> una familia sin socios tiene «Eliminar» en su fila (y, dentro, «Eliminar esta familia»). Si tiene pagos, autorizaciones de domiciliación o movimientos del banco asignados, no se puede: la fila dice por qué.</li>
 	</ul>
 	<h3 id="asde-manual-cuotas">Cuotas y plazos</h3>
 	<p class="asde-ayuda__pantalla">Inscripción y seguro por hijo, anualidad según el número de hijos con un máximo, secciones que pagan y plazos. La tabla final enseña lo que paga una familia de 1 a 5 hijos.</p>
@@ -819,7 +822,8 @@
 	<details class="pregunta"><summary>Quiero dar de alta a alguien, pero no sé si ya está en el CRM.</summary><div><p>Empieza el alta: el primer paso, con su documento, lo comprueba. Si ya tiene ficha en tu grupo, el alta se para y te lleva a ella (si había dejado el grupo, «Darle una membresía nueva»). Si está en otro grupo u organización, se avisa y se puede seguir.</p></div></details>
 	<details class="pregunta"><summary>Me he equivocado al dar una baja.</summary><div><p>No se ha borrado nada. En su ficha, «Nueva membresía» con su sección y la fecha. Si lo que estaba mal era la fecha o el motivo, corrígelo en el CRM. Ten en cuenta que a Tesorería y a la familia les llegó el email de la baja: avísales.</p></div></details>
 	<details class="pregunta"><summary>He dado de alta a alguien: ¿cuál es su usuario para entrar en la web?</summary><div><p>El CRM le da su nº de socio/a de Scouts de España al darlo de alta. Si tu grupo usa el nº territorial como usuario, asígnaselo en Personas como a cualquier otra persona («Asignar nº»). Después, «Dar acceso».</p></div></details>
-	<details class="pregunta"><summary>He dado de baja a alguien en el CRM y en la web sigue de alta.</summary><div><p>Para el CRM, una membresía sigue activa mientras no tenga <strong>fecha de baja</strong> (o si la fecha es más adelante), aunque su estado diga «baja»: por eso la persona sigue en «Secciones actuales» y la web la enseña de alta. Dale de baja desde su ficha en la web («Membresía en el CRM → Dar de baja»): le pone la fecha y el motivo, y avisa a Tesorería y a la familia. O ponle la fecha de baja en el CRM.</p></div></details>
+	<details class="pregunta"><summary>He dado de baja a alguien en el CRM y en la web sigue de alta.</summary><div><p>La web decide quién está de alta por las <strong>fechas de sus membresías</strong>, como el CRM: con la fecha de baja de hoy o anterior ya sale sin membresía activa, aunque el CRM aún no haya quitado la sección de «Secciones actuales» (lo hace más tarde). Las fichas se leen cada pocos minutos: en Personas, «Actualizar ahora» lo vuelve a leer. Si en el CRM solo le cambiaste el estado a «baja», sin fecha de baja, para el CRM sigue activa. Dale de baja desde su ficha en la web («Membresía en el CRM → Dar de baja»): le pone la fecha y el motivo, y avisa a Tesorería y a la familia. O ponle la fecha de baja en el CRM.</p></div></details>
+	<details class="pregunta"><summary>Quiero quitar de la web a alguien que ya no es del grupo.</summary><div><p>Si no tiene ninguna membresía activa, en su ficha (Personas → «Sin membresía activa» → «Ver ficha») pulsa <strong>«Eliminar de la web»</strong>: deja de salir en Personas, sale de su familia y sus cuentas de acceso se desactivan. En el CRM no cambia nada. Si algún día vuelve a tener una membresía activa, vuelve a salir y se le puede dar acceso de nuevo.</p></div></details>
 	<details class="pregunta"><summary>He cambiado algo en el CRM y no lo veo en la web.</summary><div><p>Las fichas se leen del CRM cada pocos minutos para que las páginas vayan rápido. En Personas y en Usuarios, «Actualizar ahora» las lee en el momento. Lo que se guarda desde la web se ve al instante.</p></div></details>
 	<details class="pregunta"><summary>Una familia ha pagado la cuota por transferencia sin la referencia.</summary><div><p>Importa el extracto en «Banco» y concilia el ingreso eligiendo la familia (búscala por un apellido). O, desde la ficha de la familia, «Registrar pago → Buscar en el banco…» y busca el ingreso por el nombre del tutor o del socio.</p></div></details>
 	<details class="pregunta"><summary>Hemos registrado un pago dos veces (o en la familia equivocada).</summary><div><p>En la ficha de la familia, «Eliminar…» en la fila del pago repetido, escribe el motivo y «Eliminar el pago». Deja de contar en la cuota y queda en el «Historial de la ronda». Si se registró con un ingreso del banco, el ingreso vuelve a estar por conciliar: concílialo con la familia correcta.</p></div></details>

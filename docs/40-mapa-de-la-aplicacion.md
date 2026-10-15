@@ -175,7 +175,7 @@ grupo no ve a otro**; **nunca** se prueba contra el CRM real ni se escribe en é
 ## 5. Inventario (generado)
 
 <!-- inventario:inicio -->
-_Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10-15 · plugin 0.35.0. No editar a mano: se regenera._
+_Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10-15 · plugin 0.35.1. No editar a mano: se regenera._
 
 ### Páginas (Frontend\Pages + Router)
 
@@ -503,6 +503,7 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 
 **Socios/**
 
+- `Eliminadas` — «Eliminar de la web» a una persona SIN membresía activa (v0.35.1, petición del usuario).
 - `Numeracion` — Números de socio:
 - `Numeros` — Cómo se ven los números de socio/a de una persona en las pantallas (v0.14, doc 27).
 - `SociosTable` — Tabla de equivalencias {prefix}asde_socios:
@@ -574,5 +575,5 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 
 ### Pruebas (`tests/`)
 
-`acceso` · `alta-reglas` · `alta-scouters` · `altas-crm-escritura` · `altas-crm-pantallas` · `altas-crm` · `app-enganches` · `ayuda` · `banco-gestion` · `colores` · `entorno` · `estilo-wordpress` · `eventos-inscripciones` · `eventos` · `fichas-escritura` · `grupos-emails-banco` · `identidad` · `idiomas-catalogos` · `idiomas` · `inventario` · `lista-espera` · `mejoras-v029` · `mejoras-v030` · `mejoras-v031` · `mejoras-v034` · `menus` · `modulos` · `organizacion` · `rendimiento` · `sepa` · `solicitudes` · `tema` · `uniformes` · `usuarios-listado`
+`acceso` · `alta-reglas` · `alta-scouters` · `altas-crm-escritura` · `altas-crm-pantallas` · `altas-crm` · `app-enganches` · `ayuda` · `banco-gestion` · `colores` · `entorno` · `estilo-wordpress` · `eventos-inscripciones` · `eventos` · `fichas-escritura` · `grupos-emails-banco` · `identidad` · `idiomas-catalogos` · `idiomas` · `inventario` · `lista-espera` · `mejoras-v029` · `mejoras-v030` · `mejoras-v031` · `mejoras-v034` · `mejoras-v0351` · `menus` · `modulos` · `organizacion` · `rendimiento` · `sepa` · `solicitudes` · `tema` · `uniformes` · `usuarios-listado`
 <!-- inventario:fin -->

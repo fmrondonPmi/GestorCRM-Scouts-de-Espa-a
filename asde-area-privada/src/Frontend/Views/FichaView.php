@@ -88,6 +88,8 @@ final class FichaView extends View {
 					'cambios'       => Cambios::listado( '', $p->num_socio_asde ),
 					'escritura'     => Escritura::disponible(),
 					'altas'         => current_user_can( 'asde_manage_users' ) && Altas::disponible(),
+					// v0.35.1: «Eliminar de la web» (sin membresía activa; en el CRM no cambia nada).
+					'eliminar'      => current_user_can( 'asde_manage_users' ) && ! $perm->es_propia() && ! $p->tiene_membresia_activa() && ! \AsdeBalears\AreaPrivada\Socios\Eliminadas::esta( $p->num_socio_asde ),
 					'representados' => $ambito->representados,
 					'ambito'        => $ambito,
 					'url'           => $this->url( 'ficha' ),
@@ -160,6 +162,10 @@ final class FichaView extends View {
 
 		if ( isset( self::ACCIONES_MEMBRESIA[ $this->post( 'asde_action' ) ] ) ) {
 			$this->membresia_post( $this->post( 'asde_action' ), $socio );
+			return;
+		}
+		if ( 'eliminar_de_la_web' === $this->post( 'asde_action' ) ) {
+			$this->eliminar_post( $socio );
 			return;
 		}
 		if ( 'cancelar_cambio' === $this->post( 'asde_action' ) ) {
@@ -380,6 +386,45 @@ final class FichaView extends View {
 		}
 		Notices::add( 'success', $ok );
 		$this->redirect( $this->url( 'ficha', array( 'socio' => $socio ) ) );
+	}
+
+	/** «Eliminar de la web» (v0.35.1): solo Secretaría y Coordinación, y a quien no tiene membresía activa. */
+	private function eliminar_post( string $socio ): void {
+		if ( ! current_user_can( 'asde_manage_users' ) || ! PersonaRepository::es_num_asde( $socio ) ) {
+			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-area-privada' ), 403 );
+		}
+		check_admin_referer( 'asde_eliminar_' . $socio );
+		$repo = PersonaRepository::make();
+		try {
+			$p = $repo ? $repo->obtener( $socio ) : null;
+		} catch ( CrmException $e ) {
+			Notices::add( 'error', esc_html( asde_t( 'No se ha podido consultar el CRM: ' ) . $e->getMessage() ) );
+			$this->redirect( $this->url( 'ficha', array( 'socio' => $socio ) ) );
+		}
+		if ( ! $p ) {
+			Notices::add( 'error', asde_t( 'No se encuentra esa ficha en el CRM del grupo.' ) );
+			$this->redirect( $this->url( 'personas' ) );
+		}
+		$r = \AsdeBalears\AreaPrivada\Socios\Eliminadas::eliminar( $p, get_current_user_id() );
+		if ( is_wp_error( $r ) ) {
+			Notices::add( 'error', esc_html( $r->get_error_message() ) );
+			$this->redirect( $this->url( 'ficha', array( 'socio' => $socio ) ) );
+		}
+		/* translators: %s: nombre */
+		$ok = sprintf( asde_t( '%s ya no sale en la web. En el CRM no ha cambiado nada.' ), esc_html( $p->nombre_completo() ) );
+		if ( '' !== $r['familia'] ) {
+			/* translators: %s: nº de familia */
+			$ok .= ' ' . sprintf( asde_t( 'Ha salido de la familia nº %s.' ), esc_html( $r['familia'] ) );
+		}
+		if ( $r['cuenta'] ) {
+			$ok .= ' ' . asde_t( 'Su cuenta de acceso se ha desactivado.' );
+		}
+		if ( $r['familiares'] ) {
+			/* translators: 1: cuentas familiares, 2: de ellas, desactivadas */
+			$ok .= ' ' . sprintf( asde_t( 'Ya no está en %1$d cuenta(s) familiar(es); %2$d se han desactivado porque no representan a nadie más.' ), $r['familiares'], $r['desactivadas'] );
+		}
+		Notices::add( 'success', $ok );
+		$this->redirect( $this->url( 'personas', array( 'ver' => 'inactivas' ) ) );
 	}
 
 	private static function dma( string $fecha ): string {

@@ -97,7 +97,24 @@ final class Generador {
 			$campos = array_merge( $campos, array_keys( Catalogo::CAMPOS_SALUD_RELEVANTE ) );
 		}
 
-		$entries = PersonaRepository::filtrar_grupo( $this->crm->list_all( 'Contacts', implode( ' AND ', $where ), array_values( array_unique( $campos ) ), PersonaRepository::links_grupo() ) );
+		$entries = PersonaRepository::filtrar_grupo( $this->crm->list_all( 'Contacts', implode( ' AND ', $where ), array_values( array_unique( $campos ) ), PersonaRepository::links_lectura() ) );
+		// v0.35.1: las secciones, de las membresías vigentes (una baja del CRM aún en «Secciones actuales» no sale).
+		$entries = array_values(
+			array_filter(
+				PersonaRepository::con_secciones_vigentes( $entries ),
+				static function ( array $e ) use ( $secciones ): bool {
+					if ( ! PersonaRepository::es_activa( $e ) ) {
+						return false;
+					}
+					foreach ( $secciones as $s ) {
+						if ( str_contains( strtolower( (string) $e['fields']['stic_relationship_type_c'] ), strtolower( '^' . Secciones::all()[ $s ]['crm'] . '^' ) ) ) {
+							return true;
+						}
+					}
+					return ! $secciones;
+				}
+			)
+		);
 		$tabla   = SociosTable::todas();
 		$grupo   = Grupo::actual()['numero'] ?? '';
 		$pagos   = null !== $ronda ? $this->pagos( $entries, $ronda ) : array();

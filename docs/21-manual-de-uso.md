@@ -152,6 +152,14 @@ Un **WordPress de demostración aparte** (Local, Enfold, plugin, mu-plugin con C
 - **Arreglo que salió al fotografiar:** en el móvil (390 px) la tercera hoja («Registro de emails») quedaba cortada; las pestañas son ahora más compactas por debajo de 600 px y caben las tres (CSS del plugin; zip 0.25.0 rehecho, el anterior se conserva como `asde-area-privada-0.25.0-sin-hojas-movil.zip`).
 - El generador pasa a la versión 0.25. Paquete **`manual-de-uso-0.25.0.zip`** (carpeta antigua) y copia en `app/public/temporal/` de Local. **No se ha publicado nada**: lo sube el usuario.
 
+## Versión 4.14 · lote de la v0.35.1 (2026-10-15)
+
+- **Todos los manuales con «Acceso socios»** (`entrar-socios.html`, `entrar-familias.html`): el «Código de verificación», plegado. **Capturas rehechas:** 01, 26 (móvil) y 61 (con idiomas).
+- **Verificación en dos pasos opcional para todos:** los manuales de scouters y de coordinación usan ya `seguridad-opcional.html` (con una frase para quien ve datos de otras personas); se quita `seguridad-obligatoria.html`. `scouters-perfil.html` y la pregunta de `preguntas-scouters.html` («¿Tengo que activar la verificación en dos pasos?»), al día.
+- **Coordinación:** `personas.html`, que quién está de alta sale de las fechas de las membresías y «Eliminar de la web»; `preguntas-coordinacion.html`, la pregunta de las bajas hechas en el CRM rehecha y una nueva («Quiero quitar de la web a alguien que ya no es del grupo»); `tesoreria.html`, «Eliminar» en Familias.
+- **Scouters** (`scouters-tesoreria.html`): «Eliminar» en Familias.
+- Sin cambio de versión en el generador (sigue «0.35»). Paquete `manual-de-uso-0.35.1.zip`.
+
 ## Versión 4.13 · eventos (v0.35.0, 2026-10-15)
 
 Los apartados del módulo de eventos, escritos en la sesión de la nube (doc 43), integrados en la v0.35.

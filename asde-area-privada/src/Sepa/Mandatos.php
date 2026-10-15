@@ -337,6 +337,12 @@ final class Mandatos {
 		return $out;
 	}
 
+	/** ¿Tiene la familia alguna autorización (vigente o no)? Para no eliminarla (v0.35.1). */
+	public static function hay_de_familia( int $familia_id ): bool {
+		global $wpdb;
+		return (bool) $wpdb->get_var( $wpdb->prepare( 'SELECT 1 FROM %i WHERE familia_id = %d LIMIT 1', self::table(), $familia_id ) ); // phpcs:ignore WordPress.DB
+	}
+
 	/** @return array[] Todas las de una familia, las más recientes primero (para el historial; con los datos descifrados si aún se conservan). */
 	public static function de_familia( int $familia_id ): array {
 		global $wpdb;

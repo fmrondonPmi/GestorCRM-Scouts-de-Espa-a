@@ -1375,6 +1375,21 @@ dialog.asde-modal::backdrop {
 	cursor: pointer;
 	color: var(--asde-primary);
 }
+/* v0.35.1: el código de la verificación en dos pasos, plegado en «Acceso socios». */
+.asde-ap .asde-acceso__codigo {
+	margin: 0 0 1em;
+}
+.asde-ap .asde-acceso__codigo summary {
+	cursor: pointer;
+	color: var(--asde-primary);
+	font-weight: 600;
+}
+.asde-ap .asde-acceso__codigo summary .asde-help {
+	font-weight: 400;
+}
+.asde-ap .asde-acceso__codigo > p {
+	margin: 8px 0 0;
+}
 .asde-ap .asde-guia figure {
 	margin: 10px 0;
 }

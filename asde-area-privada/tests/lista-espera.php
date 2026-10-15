@@ -67,6 +67,10 @@ $modulos_antes = get_option( 'asde_ap_modulos', null );
 $enlace_antes  = get_option( Enlaces::OPCION, null );
 $socios_antes  = array_column( (array) $wpdb->get_results( 'SELECT * FROM ' . SociosTable::table(), ARRAY_A ), null, 'num_socio_asde' ); // phpcs:ignore WordPress.DB
 
+// v0.35.1: la prueba cuenta con «Altas en el CRM» apagadas en el grupo (el Local puede tenerlas encendidas).
+$altas_antes = Altas::activo( (string) $grupo['numero'] );
+Altas::activar( (string) $grupo['numero'], false );
+
 $cache_externa = wp_using_ext_object_cache( true );
 $cortar_crm    = static fn( $pre, $args, $url ) => false === $pre && str_contains( (string) $url, '/rest.php' ) ? new WP_Error( 'prueba', 'CRM real cortado durante la prueba' ) : $pre;
 add_filter( 'pre_http_request', $cortar_crm, 2, 3 );
@@ -444,6 +448,7 @@ try {
 	$wpdb->query( $wpdb->prepare( 'DELETE FROM %i WHERE id > %d', Operaciones::table(), $ops_antes ) );
 	null === $altas_antes ? delete_option( Altas::OPCION ) : update_option( Altas::OPCION, $altas_antes, false );
 	null === $modulos_antes ? delete_option( 'asde_ap_modulos' ) : update_option( 'asde_ap_modulos', $modulos_antes, false );
+	Altas::activar( (string) $grupo['numero'], $altas_antes );
 	null === $enlace_antes ? delete_option( Enlaces::OPCION ) : update_option( Enlaces::OPCION, $enlace_antes, false );
 	Modulos::olvidar();
 	Permisos::olvidar( $grupo['numero'] );
