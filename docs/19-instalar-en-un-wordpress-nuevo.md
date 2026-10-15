@@ -30,7 +30,7 @@
 
 | Pieza | Qué hace |
 |---|---|
-| Tablas | Crea las 14 tablas si faltan (`dbDelta`, no toca datos). `asde_solicitudes` es de la v0.10 (doc 22), `asde_uniformes`, de la v0.11 (doc 24) y `asde_sepa_mandatos` y `asde_sepa_remesas`, de la v0.12 (doc 25) |
+| Tablas | Crea las 17 tablas si faltan (`dbDelta`, no toca datos). `asde_solicitudes` es de la v0.10 (doc 22), `asde_uniformes`, de la v0.11 (doc 24), `asde_sepa_mandatos` y `asde_sepa_remesas`, de la v0.12 (doc 25), y `asde_eventos`, `asde_evento_inscripciones` y `asde_evento_partidas`, de la v0.19 (doc 32) |
 | Roles | Crea o sincroniza los 6 roles; los administradores reciben todos los permisos del área |
 | Páginas (17) | Crea las que faltan y **recupera** las que están en la papelera: la misma página, con su dirección, no una copia. Publica las que estaban sin publicar y **vuelve a poner el shortcode** si alguien lo quitó, conservando el texto que hubiera. Sin barra de título ni migas en Enfold |
 | «Acceso socios» | Lo añade al menú principal; también si lo habían borrado a mano |

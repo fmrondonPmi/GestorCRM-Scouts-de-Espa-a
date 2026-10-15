@@ -96,6 +96,9 @@ $user = $ambito->user;
 			<?php if ( ! empty( $por_revisar['uniforme_pedido'] ) ) : ?>
 				<li><a href="<?php echo esc_url( $uni( 'por_pedir' ) ); ?>"><?php echo $num( (int) $por_revisar['uniforme_pedido'], asde_t( 'pedido de uniforme por incluir en el pedido al proveedor' ), asde_t( 'pedidos de uniforme por incluir en el pedido al proveedor' ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></a></li>
 			<?php endif; ?>
+			<?php if ( ! empty( $por_revisar['eventos_validar'] ) ) : ?>
+				<li><a href="<?php echo esc_url( $url( 'eventos' ) ); ?>"><?php echo $num( (int) $por_revisar['eventos_validar'], asde_t( 'presupuesto de evento por validar' ), asde_t( 'presupuestos de eventos por validar' ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></a></li>
+			<?php endif; ?>
 			<?php if ( ! empty( $por_revisar['uniforme_entrega'] ) ) : ?>
 				<li><a href="<?php echo esc_url( $uni( 'por_entregar' ) ); ?>"><?php echo $num( (int) $por_revisar['uniforme_entrega'], asde_t( 'uniforme pedido al proveedor por entregar' ), asde_t( 'uniformes pedidos al proveedor por entregar' ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></a></li>
 			<?php endif; ?>
@@ -122,6 +125,9 @@ if ( ! empty( $pide_uniforme ) ) {
 }
 
 $grupo_tiles = array();
+if ( ! empty( $eventos ) ) {
+	$grupo_tiles[] = $tile( $url( 'eventos' ), asde_t( 'Eventos' ), asde_t( 'Salidas, acampadas y campamentos: equipo, normativa y presupuesto.' ) );
+}
 if ( ! empty( $gestiona_uniformes ) ) {
 	$grupo_tiles[] = $tile( $url( 'uniformes' ), asde_t( 'Gestión de uniformes' ), asde_t( 'Pagos, pedido al proveedor y entregas de las camisas del grupo.' ) );
 }

@@ -1835,3 +1835,88 @@ html.asde-cargando .asde-ap button {
 	gap: 4px 16px;
 	margin: 2px 0 10px 28px;
 }
+
+/* v0.19 · Eventos: agenda, equipo dirigente y presupuesto (doc 32) */
+.asde-ap .asde-badge--evento-borrador { background: var(--asde-neutral-bg); color: var(--asde-muted); }
+.asde-ap .asde-badge--evento-por_validar { background: var(--asde-warn-bg); color: var(--asde-warn-text); }
+.asde-ap .asde-badge--evento-validado { background: var(--asde-info-bg); color: var(--asde-info-text); }
+.asde-ap .asde-badge--evento-publicado { background: var(--asde-ok-bg); color: var(--asde-ok-text); }
+.asde-ap .asde-badge--evento-en_curso { background: var(--asde-ok-strong); color: var(--asde-ok-text); }
+.asde-ap .asde-badge--evento-celebrado { background: var(--asde-tint-strong); color: var(--asde-primary-dark); }
+.asde-ap .asde-badge--evento-cancelado { background: var(--asde-neutral-bg); color: var(--asde-muted); }
+.asde-ap .asde-badge--ingreso { background: var(--asde-ok-bg); color: var(--asde-ok-text); }
+.asde-ap .asde-evento__editar {
+	margin-left: 8px;
+	white-space: nowrap;
+}
+.asde-ap .asde-comprobacion {
+	margin: 0 0 12px;
+	padding: 0;
+	list-style: none;
+}
+.asde-ap .asde-comprobacion li {
+	display: flex;
+	gap: 8px;
+	align-items: baseline;
+	padding: 6px 0;
+	border-bottom: 1px solid var(--asde-tint-line);
+}
+.asde-ap .asde-comprobacion li:last-child {
+	border-bottom: 0;
+}
+.asde-ap .asde-comprobacion__marca {
+	flex: 0 0 20px;
+	height: 20px;
+	border-radius: 50%;
+	font-size: 12px;
+	font-weight: 700;
+	line-height: 20px;
+	text-align: center;
+}
+.asde-ap .asde-comprobacion--ok .asde-comprobacion__marca { background: var(--asde-ok-bg); color: var(--asde-ok-text); }
+.asde-ap .asde-comprobacion--aviso .asde-comprobacion__marca { background: var(--asde-warn-bg); color: var(--asde-warn-text); }
+.asde-ap .asde-comprobacion--info .asde-comprobacion__marca { background: var(--asde-info-bg); color: var(--asde-info-text); }
+.asde-ap span.asde-comprobacion--ok { color: var(--asde-ok-text); }
+.asde-ap span.asde-comprobacion--aviso { color: var(--asde-warn-text); font-weight: 600; }
+.asde-ap .asde-ratio {
+	margin-top: 12px;
+	padding: 8px 12px;
+	border-radius: var(--asde-radius);
+	background: var(--asde-tint);
+}
+.asde-ap .asde-table--plazas input[type="number"] {
+	width: 6em;
+}
+.asde-ap .asde-table--tipos input[type="text"] {
+	width: 100%;
+	min-width: 10em;
+}
+.asde-ap .asde-form--evento textarea {
+	width: 100%;
+}
+.asde-ap .asde-form--evento select,
+.asde-ap .asde-table--equipo select {
+	max-width: 100%;
+}
+@media (max-width: 767px) {
+	.asde-ap .asde-evento__editar {
+		display: inline-block;
+		margin: 6px 0 0;
+	}
+	/* En las tarjetas del móvil, nada más ancho que la tarjeta: los desplegables con opciones
+	   largas («Apoyo (cocina, intendencia, transporte)», los repartos) y las insignias largas. */
+	.asde-ap .asde-table--eventos .asde-badge,
+	.asde-ap .asde-evento .asde-badge {
+		white-space: normal;
+	}
+	.asde-ap .asde-table--tipos input[type="text"] {
+		min-width: 0;
+	}
+	.asde-ap .asde-table--equipo select,
+	.asde-ap .asde-table--tipos select,
+	.asde-ap .asde-form--compacta select,
+	.asde-ap .asde-form--evento select {
+		width: 100%;
+		max-width: 100%;
+	}
+}

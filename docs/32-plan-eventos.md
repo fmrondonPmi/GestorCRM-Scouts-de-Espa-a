@@ -1,6 +1,6 @@
 # 32 · Plan: módulo de eventos (sin código)
 
-> **Estado:** plan escrito el 2026-10-15 y **decidido del todo** el mismo día. El usuario respondió en el chat las preguntas P-61 a P-76 (tabla «Decisiones»). Para la P-66 (la normativa balear) pidió «investiga y propón»: la propuesta está en el apartado 6, ajustada a cómo trabaja hoy el grupo (P-76: **comunicación a ASDE Baleares 30 días antes**). Sigue **sin código** y **no queda ninguna pregunta abierta**: se puede empezar por la 0.19.0.
+> **Estado:** plan escrito y **decidido** el 2026-10-15 (preguntas P-61 a P-76, tabla «Decisiones»; para la P-66, la normativa balear, el usuario pidió «investiga y propón»: apartado 6). **La v0.19.0 está hecha** (eventos, equipo dirigente y presupuesto): ver «v0.19.0 · lo que ya está». Siguiente: 0.19.1 (inscripciones y cobro).
 
 ## Petición del usuario (2026-10-15)
 
@@ -28,6 +28,45 @@
 | P-75 | **Seguro:** el de la federación cubre accidentes y responsabilidad civil en todas las actividades. **Solo las internacionales** necesitan un seguro aparte |
 | P-76 | **Cómo se comunica hoy:** el grupo **avisa por correo a ASDE Baleares** con **30 días de antelación**. El correo lleva: tipo de actividad y fechas; **director/a**; scouters titulados como **monitores o directores** de tiempo libre; **número** de voluntarios en prácticas y de apoyo; de **todos los scouters**, nombre completo, **DNI**, email y teléfono; **número de participantes** con su **rango de edades** y **distribución por género**; si **todas las personas mayores de 18** (educandos o scouters) tienen el **certificado de delitos sexuales**; y el **proyecto educativo** (con el programa) y la **evaluación de riesgos** |
 | P-76 bis | **Qué se comunica:** las actividades de **2 o más noches** con **10 o más participantes menores de edad**. La comunicación se puede **enviar desde la web** o **descargar** para enviarla a mano; en los dos casos queda la fecha de envío |
+
+## v0.19.0 · lo que ya está (2026-10-15)
+
+**Pantallas** (*Gestión del grupo → Eventos*; páginas `eventos` y `eventos/configuracion`):
+
+- **Agenda**: los eventos que ve cada uno, con filtros por estado (próximos y en curso, ya celebrados, borradores, cancelados, todos), sección y tipo; en el móvil, en tarjetas. «Nuevo evento».
+- **Ficha del evento** con tres pestañas y «Editar los datos»:
+  - **Resumen**: la lista de comprobación (presupuesto, equipo dirigente, comunicación a ASDE Baleares, seguro, actividades de riesgo y agua), los datos y las acciones (publicar, volver a borrador, cancelar con motivo, borrar un borrador);
+  - **Equipo**: director/a, monitores, en prácticas y apoyo, con lo que dice la ficha de cada uno (titulación, certificado, edad) y la ratio;
+  - **Presupuesto**: partidas previstas con su reparto, previsión (personas del equipo y margen), el precio que sale por sección y la validación de Tesorería.
+- **Configuración** (Coordinación y Tesorería): margen del fondo de emergencia, tipos de actividad (nombre, si nacen con coste, si se comunican, activos; se pueden añadir) y qué valores de `formaciontiempolibre_c` cuentan como título de director/a o de monitor/a (casillas si el CRM da la lista; si no, uno por línea).
+- **Menú e inicio**: «Eventos» en *Gestión del grupo* (con el nº de presupuestos por validar para Tesorería, «Eventos (1)»), tarjeta «Eventos» y, en «Pendiente de revisar», los presupuestos por validar.
+- Sin JavaScript (formularios normales); a 1280 y a 390 px sin desbordes (revisado con capturas de Chrome con datos inventados).
+
+**Estados:** borrador → (presupuesto pendiente de Tesorería → presupuesto validado) → publicado, que se ve «en curso» y «celebrado» por las fechas. Se cancela con motivo; un borrador se borra (con su equipo y sus partidas); un publicado vuelve a borrador mientras no haya nadie inscrito.
+
+**Permisos** (doc 02): `asde_eventos_gestion` (Scouter, Secretaría, Coordinación; sustituye a `asde_edit_section_events`, que no usaba nadie), `asde_eventos_grupo` (Coordinación: eventos de grupo y externos), `asde_eventos_economia` (Tesorería: validar y reabrir el presupuesto) y `asde_eventos_config` (Coordinación y Tesorería). Siempre con ámbito: un scouter gestiona los eventos de sus secciones y aquellos en cuyo equipo está.
+
+**Precio** (`Eventos\Presupuesto`): el del apartado 4, con el ejemplo del plan como prueba (Lobatos 46 € y Scouts 57 €). Validado, queda guardado en el evento y no cambia; Tesorería lo reabre solo en borrador y sin inscritos.
+
+**Normativa** (`Eventos\Normativa`, apartado 6): comprobación del equipo con **una** lectura en vivo del CRM para todo el equipo (`PersonaRepository::campos_varias`; formación y certificado no se guardan), ratio, comunicación a ASDE Baleares (2 o más noches y 10 o más menores previstos; fecha límite 30 días antes), seguro de las actividades internacionales, riesgo y agua. Todo avisa; lo único que bloquea es publicar un evento con coste sin el presupuesto validado.
+
+**Datos:** `asde_eventos`, `asde_evento_inscripciones` (de momento, solo el equipo: nº Scouts de España, secciones y papel) y `asde_evento_partidas`, y la opción `asde_ap_eventos_<grupo>`. *Instalación y entorno* pasa a **17 tablas**. Sin datos personales en claro. Auditoría: `evento_creado`, `evento_editado` (nombres de campos), `evento_equipo_*`, `evento_partida_*`, `evento_presupuesto_*`, `evento_publicado`, `evento_despublicado`, `evento_cancelado`, `evento_borrado` y `eventos_configurados`.
+
+**Textos:** 279 nuevos, en los cuatro idiomas (catalán, euskera y gallego, primera versión sin revisión nativa, P-46).
+
+**Manual de uso:** apartado «Eventos» en los manuales de scouters y del equipo de coordinación (sin capturas todavía: se hacen con `manual-capturas.sh`).
+
+**Pruebas:** `tests/eventos.php`, **92 comprobaciones** (configuración, precio, normativa, quién crea y gestiona, editar, equipo, presupuesto y validación, estados, pantallas, CRM caído, sin datos personales); doc 10.
+
+**Supuestos de esta versión (para confirmar):**
+
+1. Mientras no haya inscripciones, la ratio cuenta las **plazas** (o, si no hay, los participantes previstos) y la comunicación cuenta como **menores** los previstos de Castores a Escultas (los Rovers suelen ser mayores de edad). Con las inscripciones (0.19.1) se contará con las fechas de nacimiento.
+2. **Tesorería**, que siempre es scouter, también crea y gestiona los eventos de su sección.
+3. **Secretaría** gestiona los eventos de sección de todo el grupo, pero no crea los de grupo ni los externos (eso es Coordinación).
+4. Hasta que se elijan en *Configuración* los valores reales de `formaciontiempolibre_c`, la titulación se deduce del texto del valor («director», «monitor»).
+5. Un borrador se borra con su equipo y su presupuesto; uno publicado no se borra (se cancela).
+
+**Para producción:** al subir la 0.19.0 se crean las tres tablas y las páginas «Eventos» y «Configuración de eventos». Conviene entrar en *Eventos → Configuración* y marcar qué valores de la formación de tiempo libre del CRM son de director/a y de monitor/a.
 
 ## Lo que ya hay y condiciona el diseño
 
@@ -431,7 +470,7 @@ Con las convenciones de siempre: sin JavaScript funciona; con JavaScript, ventan
 
 | Versión | Qué | Pruebas |
 |---|---|---|
-| **0.19.0 · Eventos, equipo y presupuesto** | Tipos, crear, editar y cancelar; agenda; ámbito y permisos; nº de evento; **equipo dirigente con las comprobaciones de la normativa** (edad, titulación, certificado, ratio), internacional y seguro; **presupuesto con reparto y margen**, validación de Tesorería, precio fijo por sección; publicar | `tests/eventos.php` |
+| ✅ **0.19.0 · Eventos, equipo y presupuesto** (hecha, 2026-10-15) | Tipos, crear, editar y cancelar; agenda; ámbito y permisos; nº de evento; **equipo dirigente con las comprobaciones de la normativa** (edad, titulación, certificado, ratio), internacional y seguro; **presupuesto con reparto y margen**, validación de Tesorería, precio fijo por sección; publicar | `tests/eventos.php` |
 | **0.19.1 · Inscripciones y cobro** | Las dos modalidades, «Mis eventos», autorización (web o papel), preinscripción de 14 a 17, plazas y lista de espera, bajas; pagos en efectivo, por transferencia y por Bizum; «Mis pagos»; becas y ajustes; emails y enganche de los avisos push | `tests/eventos-inscripciones.php` |
 | **0.19.2 · Gastos, SEPA y cierre** | Gastos con justificante, reembolsos, anticipos, fondo de emergencia, devoluciones, balance y cierre (borra lo cifrado); **SEPA de eventos** en las remesas | `tests/eventos-economia.php` |
 | **0.19.3 · Listados, comunicación y asistencia** | Participantes, emergencia, salud en vivo, cocina, autobús, imprimir y CSV con auditoría; **comunicación a ASDE Baleares** (enviar o descargar, con los adjuntos y el email de *Organización federada*); pasar lista | `tests/eventos-listados.php` |

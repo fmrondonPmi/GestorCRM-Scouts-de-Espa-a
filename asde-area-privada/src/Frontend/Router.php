@@ -12,6 +12,8 @@ use AsdeBalears\AreaPrivada\Frontend\Views\CambiosView;
 use AsdeBalears\AreaPrivada\Frontend\Views\FichaView;
 use AsdeBalears\AreaPrivada\Frontend\Views\CuotasView;
 use AsdeBalears\AreaPrivada\Frontend\Views\EmailsView;
+use AsdeBalears\AreaPrivada\Frontend\Views\EventosConfigView;
+use AsdeBalears\AreaPrivada\Frontend\Views\EventosView;
 use AsdeBalears\AreaPrivada\Frontend\Views\FamiliasView;
 use AsdeBalears\AreaPrivada\Frontend\Views\FederacionView;
 use AsdeBalears\AreaPrivada\Frontend\Views\InformesView;
@@ -77,6 +79,9 @@ final class Router {
 		'uniformes_config' => array( 'asde_uniformes_config', UniformesConfigView::class ),
 		'pagos'            => array( 'asde_mis_pagos', MisPagosView::class ),
 		'alta_scouters'    => array( 'asde_alta_scouters', AltaScoutersView::class ),
+		// v0.19: eventos (doc 32).
+		'eventos'          => array( 'asde_eventos', EventosView::class ),
+		'eventos_config'   => array( 'asde_eventos_config', EventosConfigView::class ),
 	);
 
 	public function register(): void {

@@ -135,3 +135,15 @@ asde_manage_users                 # alta/baja/vinculación de usuarios
 | `asde_tesoreria_config` (ya existía) | Secretaría, Coordinación, Tesorería | Además, la pestaña **Domiciliaciones**: datos del acreedor, remesas, fichero, aviso a las familias, cobros y anular autorizaciones |
 
 - Las dos cuentas de tutor/a de una familia (`nº + T` y `nº + T2`) tienen el mismo rol y los mismos permisos (doc 12).
+
+## Actualización v0.19.0 (2026-10-15): eventos (doc 32)
+
+| Capability | Roles | Qué permite |
+|---|---|---|
+| `asde_eventos_gestion` | Scouter, Secretaría, Coordinación | Crear y gestionar eventos **en su ámbito**: un scouter, los de sus secciones y aquellos en cuyo equipo está; Secretaría, los de sección de todo el grupo. **Sustituye a `asde_edit_section_events`**, que no usaba ningún código (se quita al actualizar) |
+| `asde_eventos_grupo` | Coordinación | Además, los eventos **de grupo** y los **externos**, y todos los del grupo |
+| `asde_eventos_economia` | Tesorería | Ver todos los eventos y **validar** (o reabrir) su presupuesto, del que sale el precio |
+| `asde_eventos_config` | Coordinación, Tesorería | Margen del fondo de emergencia, tipos de actividad y titulaciones de tiempo libre |
+
+- Tesorería es siempre un scouter: como tal, también gestiona los eventos de su sección.
+- Las familias y los participantes no ven los eventos todavía: llegan con «Mis eventos» en la 0.19.1.

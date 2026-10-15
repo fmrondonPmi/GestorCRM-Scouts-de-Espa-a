@@ -2,9 +2,15 @@
 namespace AsdeBalears\AreaPrivada\Idiomas;
 
 use AsdeBalears\AreaPrivada\Domain\Organizacion;
+use AsdeBalears\AreaPrivada\Eventos\Config as EventosConfig;
+use AsdeBalears\AreaPrivada\Eventos\EventosTable;
+use AsdeBalears\AreaPrivada\Eventos\InscripcionesTable;
+use AsdeBalears\AreaPrivada\Eventos\Normativa;
+use AsdeBalears\AreaPrivada\Eventos\Presupuesto;
 use AsdeBalears\AreaPrivada\Fichas\Cambios;
 use AsdeBalears\AreaPrivada\Fichas\CamposFicha;
 use AsdeBalears\AreaPrivada\Frontend\Views\AccesoView;
+use AsdeBalears\AreaPrivada\Frontend\Views\EventosView;
 use AsdeBalears\AreaPrivada\Frontend\Views\PersonasView;
 use AsdeBalears\AreaPrivada\Frontend\Views\TesoreriaView;
 use AsdeBalears\AreaPrivada\Informes\Catalogo;
@@ -62,6 +68,15 @@ final class Textos {
 		$add( PedidosTable::FILTROS, 'Uniformes' );
 		$add( PedidosTable::ESTADOS, 'Uniformes' );
 		$add( Remesas::ESTADOS, 'Domiciliaciones SEPA' );
+		// v0.19: eventos (de los tipos, solo el nombre: lo demás son claves internas).
+		$add( array_column( EventosConfig::TIPOS, 'nombre' ), 'Eventos' );
+		$add( EventosTable::ESTADOS, 'Eventos' );
+		$add( EventosTable::AMBITOS, 'Eventos' );
+		$add( EventosTable::FILTROS, 'Eventos' );
+		$add( InscripcionesTable::PAPELES, 'Eventos' );
+		$add( Presupuesto::REPARTOS, 'Eventos' );
+		$add( Normativa::COMUNICACION, 'Eventos' );
+		$add( EventosView::PESTANAS, 'Eventos' );
 		$add( BancoTable::ESTADOS, 'Tesorería' );
 		$add( CsvBanco::CAMPOS, 'Tesorería' );
 		$add( Codificacion::LISTA, 'Tesorería' );

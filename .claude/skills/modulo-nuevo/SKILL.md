@@ -42,7 +42,7 @@ Marca cada pieza que toque; las que no apliquen, sáltalas a propósito.
 - [ ] Todo texto visible en `asde_t()` / `asde_h()` / `asde_e()` / `asde_a()` / `asde_js()` / `asde_n()`, frases enteras con `sprintf`.
 - [ ] Constantes con textos (estados, filtros): se muestran con `asde_ta()` y la constante se añade a `Idiomas\Textos::extras()`.
 - [ ] JS: `asdeT( 'texto', arg )` y el texto en `Idiomas\TextosJs::LISTA`.
-- [ ] Regenerar `languages/es.php` con `herramientas/generar-es.php` (WP-CLI en el Local: `wp eval-file <ruta>/herramientas/generar-es.php <ruta-al-plugin>`; no se edita a mano) y añadir cada texto nuevo a `languages/ca.php`, `eu.php` y `gl.php`. `tests/idiomas-catalogos.php` avisa de los que faltan.
+- [ ] Regenerar `languages/es.php` con `herramientas/generar-es.php` (WP-CLI en el Local: `wp eval-file <ruta>/herramientas/generar-es.php <ruta-al-plugin>`; no se edita a mano) y añadir cada texto nuevo a `languages/ca.php`, `eu.php` y `gl.php` con la skill **`traducir-textos`**. `tests/idiomas-catalogos.php` avisa de los que faltan.
 - [ ] Lo que **se guarda** (motivos, conceptos, referencias) va en castellano, sin traducir. wp-admin sigue con `__()`.
 
 ## 5. Auditoría y avisos
@@ -58,7 +58,7 @@ Marca cada pieza que toque; las que no apliquen, sáltalas a propósito.
 - [ ] Aserciones que puedan fallar (nada de `|| true` ni ORs siempre ciertos); partes A, B, C… con `echo "== Parte X · … ==\n"`.
 - [ ] Cubrir: permisos y ámbito (otra sección, otra familia, otro grupo, sin capability), nonce, cada estado, lo que se guarda (sin datos personales en claro) y la pantalla (HTML de la vista).
 - [ ] Revisar las pruebas que dependen de lo tocado: `tests/menus.php` (entradas del menú por rol), `tests/entorno.php` (nº de tablas), `tests/idiomas-catalogos.php` (textos), y las del módulo vecino.
-- [ ] `php -l` de cada fichero cambiado. En el entorno del usuario: `herramientas-desarrollo/probar-todo.sh <modulo>` y después todo hasta **«TODO OK»**. **No cortar nunca una prueba a medias.** En una sesión en la nube no hay Local: decirlo y dejar la suite para el usuario.
+- [ ] `php -l` de cada fichero cambiado. En el entorno del usuario: `herramientas-desarrollo/probar-todo.sh <modulo>` y después todo hasta **«TODO OK»**. **No cortar nunca una prueba a medias.** En una sesión en la nube no hay Local: skill **`probar-en-la-nube`** (pruebas y capturas) y dejar para el Local lo que lee el CRM real.
 
 ## 7. Documentación
 

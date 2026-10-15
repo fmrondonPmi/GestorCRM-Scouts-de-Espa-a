@@ -1,0 +1,93 @@
+<?php
+/**
+ * Configuración de los eventos del grupo.
+ *
+ * @var array                 $cfg
+ * @var array<string, string> $opciones Valores del campo «formación de tiempo libre» del CRM (vacío si no los da)
+ * @var string                $url
+ */
+use AsdeBalears\AreaPrivada\Eventos\Config;
+
+defined( 'ABSPATH' ) || exit;
+?>
+<form method="post" class="asde-form" action="<?php echo esc_url( $url ); ?>">
+	<?php wp_nonce_field( 'asde_eventos_config' ); ?>
+	<input type="hidden" name="asde_action" value="eventos_config">
+
+	<section class="asde-card">
+		<h2 class="asde-card__title"><?php asde_e( 'Eventos · configuración' ); ?></h2>
+		<h3><?php asde_e( 'Fondo de emergencia' ); ?></h3>
+		<p class="asde-muted"><?php asde_e( 'Al coste de cada participante se le suma este margen: es el fondo de emergencia de la actividad. Es el valor con el que nace cada evento nuevo; en cada uno se puede cambiar hasta que Tesorería valida su presupuesto.' ); ?></p>
+		<label class="asde-choice"><input type="checkbox" name="margen_activo" value="1" <?php checked( $cfg['margen_activo'] ); ?>><span><?php asde_e( 'Aplicar el margen del fondo de emergencia' ); ?></span></label>
+		<p>
+			<label for="asde-evc-margen"><?php asde_e( 'Margen (%)' ); ?></label>
+			<input type="text" id="asde-evc-margen" name="margen_pct" value="<?php echo esc_attr( number_format( $cfg['margen_pct'], 2, ',', '' ) ); ?>" inputmode="decimal" size="6">
+		</p>
+	</section>
+
+	<section class="asde-card">
+		<h3 class="asde-card__title"><?php asde_e( 'Tipos de actividad' ); ?></h3>
+		<p class="asde-muted"><?php asde_e( 'Cada tipo da los valores con los que nace un evento: si tiene coste y si se comunica a ASDE Baleares (las actividades de 2 o más noches con 10 o más menores).' ); ?></p>
+		<table class="asde-table asde-table--tipos">
+			<thead>
+				<tr>
+					<th scope="col"><?php asde_e( 'Nombre' ); ?></th>
+					<th scope="col"><?php asde_e( 'Con coste' ); ?></th>
+					<th scope="col"><?php asde_e( 'Comunicación' ); ?></th>
+					<th scope="col"><?php asde_e( 'Activo' ); ?></th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php foreach ( $cfg['tipos'] as $id => $t ) : ?>
+					<tr>
+						<td data-label="<?php echo asde_a( 'Nombre' ); ?>"><input type="text" name="tipo_nombre_<?php echo esc_attr( $id ); ?>" value="<?php echo esc_attr( $t['nombre'] ); ?>" maxlength="60" aria-label="<?php echo asde_a( 'Nombre' ); ?>"></td>
+						<td data-label="<?php echo asde_a( 'Con coste' ); ?>"><label class="asde-choice asde-choice--inline"><input type="checkbox" name="tipo_coste_<?php echo esc_attr( $id ); ?>" value="1" <?php checked( $t['coste'] ); ?>><span><?php asde_e( 'Sí' ); ?></span></label></td>
+						<td data-label="<?php echo asde_a( 'Comunicación' ); ?>">
+							<select name="tipo_comunicacion_<?php echo esc_attr( $id ); ?>" aria-label="<?php echo asde_a( 'Comunicación' ); ?>">
+								<option value="auto" <?php selected( $t['comunicacion'], 'auto' ); ?>><?php asde_e( 'Según noches y menores' ); ?></option>
+								<option value="no" <?php selected( $t['comunicacion'], 'no' ); ?>><?php asde_e( 'No' ); ?></option>
+							</select>
+						</td>
+						<td data-label="<?php echo asde_a( 'Activo' ); ?>"><label class="asde-choice asde-choice--inline"><input type="checkbox" name="tipo_activo_<?php echo esc_attr( $id ); ?>" value="1" <?php checked( $t['activo'] ); ?>><span><?php asde_e( 'Sí' ); ?></span></label></td>
+					</tr>
+				<?php endforeach; ?>
+			</tbody>
+		</table>
+		<fieldset>
+			<legend><?php asde_e( 'Nuevo tipo' ); ?></legend>
+			<p class="asde-form__fila">
+				<label><?php asde_e( 'Nombre' ); ?> <input type="text" name="nuevo_tipo" maxlength="60"></label>
+				<label><?php asde_e( 'Comunicación' ); ?>
+					<select name="nuevo_comunicacion">
+						<option value="auto"><?php asde_e( 'Según noches y menores' ); ?></option>
+						<option value="no"><?php asde_e( 'No' ); ?></option>
+					</select>
+				</label>
+			</p>
+			<label class="asde-choice"><input type="checkbox" name="nuevo_coste" value="1"><span><?php asde_e( 'Con coste' ); ?></span></label>
+		</fieldset>
+	</section>
+
+	<section class="asde-card">
+		<h3 class="asde-card__title"><?php asde_e( 'Titulaciones de tiempo libre' ); ?></h3>
+		<p class="asde-muted"><?php asde_e( 'Qué valores de la formación de tiempo libre de la ficha cuentan como título de director/a (vale también como monitor/a) o de monitor/a. Si no marcas ninguno, se deduce del texto («director», «monitor»).' ); ?></p>
+		<?php foreach ( array( 'director' => asde_t( 'Cuentan como director/a' ), 'monitor' => asde_t( 'Cuentan como monitor/a' ) ) as $k => $titulo ) : ?>
+			<fieldset>
+				<legend><?php echo esc_html( $titulo ); ?></legend>
+				<?php if ( $opciones ) : ?>
+					<?php foreach ( $opciones as $valor => $etiqueta ) : ?>
+						<label class="asde-choice"><input type="checkbox" name="titulacion_<?php echo esc_attr( $k ); ?>[]" value="<?php echo esc_attr( (string) $valor ); ?>" <?php checked( in_array( (string) $valor, $cfg['titulaciones'][ $k ], true ) ); ?>><span><?php echo esc_html( '' !== $etiqueta ? $etiqueta : (string) $valor ); ?></span></label>
+					<?php endforeach; ?>
+				<?php else : ?>
+					<label for="asde-evc-tit-<?php echo esc_attr( $k ); ?>" class="screen-reader-text"><?php echo esc_html( $titulo ); ?></label>
+					<textarea id="asde-evc-tit-<?php echo esc_attr( $k ); ?>" name="titulacion_<?php echo esc_attr( $k ); ?>_texto" rows="3" placeholder="<?php echo asde_a( 'Un valor del CRM por línea' ); ?>"><?php echo esc_textarea( implode( "\n", $cfg['titulaciones'][ $k ] ) ); ?></textarea>
+				<?php endif; ?>
+			</fieldset>
+		<?php endforeach; ?>
+		<?php if ( ! $opciones ) : ?>
+			<p class="asde-help"><?php asde_e( 'El CRM no ha dado la lista de valores de ese campo: escríbelos tal como están en el CRM, uno por línea.' ); ?></p>
+		<?php endif; ?>
+	</section>
+
+	<p><button type="submit" class="button button-primary"><?php asde_e( 'Guardar' ); ?></button></p>
+</form>

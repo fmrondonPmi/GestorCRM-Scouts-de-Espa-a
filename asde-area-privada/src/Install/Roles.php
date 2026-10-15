@@ -34,7 +34,6 @@ final class Roles {
 					'asde_edit_self_contact'    => true,
 					'asde_view_section'         => true,
 					'asde_edit_section_contact' => true,
-					'asde_edit_section_events'  => true,
 					'asde_approve_changes'      => true,
 					'asde_aprobar_solicitudes' => true, // Solicitudes de acceso (v0.10): un scouter, las de sus secciones.
 					'asde_view_health'          => true, // Solo lectura y solo su sección (2026-09-26).
@@ -45,6 +44,8 @@ final class Roles {
 					'asde_uniformes_gestion' => true,
 					'asde_uniformes_entrega' => true,
 					'asde_mis_pagos'         => true,
+					// Eventos (v0.19, doc 32): crea y gestiona los de sus secciones y aquellos en cuyo equipo está.
+					'asde_eventos_gestion'   => true,
 				),
 			),
 			self::SECRETARIA   => array(
@@ -64,6 +65,7 @@ final class Roles {
 					'asde_uniformes_gestion' => true,
 					'asde_uniformes_entrega' => true,
 					'asde_mis_pagos'         => true,
+					'asde_eventos_gestion'   => true, // Los de sección de todo el grupo.
 				),
 			),
 			self::COORDINACION => array(
@@ -87,6 +89,10 @@ final class Roles {
 					'asde_uniformes_pedido'  => true,
 					'asde_uniformes_config'  => true,
 					'asde_mis_pagos'         => true,
+					// Eventos: además, los de grupo y los externos, y la configuración.
+					'asde_eventos_gestion'   => true,
+					'asde_eventos_grupo'     => true,
+					'asde_eventos_config'    => true,
 				),
 			),
 			self::TESORERIA    => array(
@@ -102,6 +108,9 @@ final class Roles {
 					'asde_uniformes_pago'    => true,
 					'asde_uniformes_config'  => true,
 					'asde_mis_pagos'         => true,
+					// Eventos: valida el presupuesto (el precio sale de él, P-69) y configura el margen.
+					'asde_eventos_economia'  => true,
+					'asde_eventos_config'    => true,
 				),
 			),
 			self::TUTOR        => array(

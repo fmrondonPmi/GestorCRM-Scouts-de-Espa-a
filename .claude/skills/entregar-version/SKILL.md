@@ -17,8 +17,9 @@ Orden fijo; no saltar pasos. Todo en español.
 - [ ] `php -l` de todo el plugin: `find asde-area-privada -name '*.php' -print0 | xargs -0 -n1 php -l | grep -v 'No syntax errors'` (no debe salir nada).
 - [ ] Revisar que no se hayan comido las `\` de `AsdeBalears\AreaPrivada\…` en lo editado con scripts.
 - [ ] Nada de datos reales, credenciales ni zips en el diff (`git diff --stat`, `git status`). Emails de ejemplo con `@example.invalid`.
-- [ ] Pruebas: en el entorno del usuario, `herramientas-desarrollo/probar-todo.sh` hasta **«TODO OK»** (nunca cortarlo a medias). Anotar el recuento (comprobaciones y ficheros). En una sesión en la nube sin Local, **decir que no se han podido lanzar**; no inventar el recuento.
-- [ ] Pantallas nuevas o cambiadas, vistas con datos inventados en escritorio y a 390 px (`herramientas-desarrollo/vistas-movil.php`).
+- [ ] Pruebas: en el entorno del usuario, `herramientas-desarrollo/probar-todo.sh` hasta **«TODO OK»** (nunca cortarlo a medias). Anotar el recuento (comprobaciones y ficheros). En una sesión en la nube sin Local, con la skill **`probar-en-la-nube`** (cubre todo menos lo que lee el CRM real: decir qué ficheros quedan para el Local y no inventar el recuento del Local).
+- [ ] Pantallas nuevas o cambiadas, vistas con datos inventados en escritorio y a 390 px (`herramientas-desarrollo/vistas-movil.php`; en la nube, las capturas de `probar-en-la-nube`).
+- [ ] Textos nuevos en los cuatro idiomas (skill **`traducir-textos`**) y `tests/idiomas-catalogos.php` en verde.
 
 ## 3. Documentación
 

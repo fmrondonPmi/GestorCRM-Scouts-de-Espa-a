@@ -12,10 +12,10 @@
 <body>
 <header class="portada">
 	<div class="portada__dentro">
-		<p class="antetitulo">Manual de uso · versión 0.18 · octubre de 2026 · <a class="portada__volver" href="index.html">Todos los manuales</a></p>
+		<p class="antetitulo">Manual de uso · versión 0.19 · octubre de 2026 · <a class="portada__volver" href="index.html">Todos los manuales</a></p>
 		<h1>Manual del equipo de coordinación</h1>
 		<p class="portada__perfil">Tesorería, Secretaría y Coordinación</p>
-		<p class="entrada">Todo lo que lleva el equipo del grupo: personas y números de socio, dar acceso, solicitudes, usuarios y emails, fichas y cambios, informes, la Tesorería completa (cuotas, coste federativo, banco y domiciliaciones SEPA) y los uniformes, del pago a la entrega.</p>
+		<p class="entrada">Todo lo que lleva el equipo del grupo: personas y números de socio, dar acceso, solicitudes, usuarios y emails, fichas y cambios, informes, la Tesorería completa (cuotas, coste federativo, banco y domiciliaciones SEPA), los uniformes, del pago a la entrega, y los eventos (equipo, normativa y presupuesto).</p>
 		<p class="demo"><strong>Todas las capturas son de un WordPress de demostración con un CRM simulado y datos inventados:</strong> el «Grupo Scout Ejemplo» (grupo 999), personas que no existen y emails <span class="mono">@example.invalid</span>. En tu grupo verás tus datos del CRM.</p>
 	</div>
 	<div class="secciones-franja" aria-hidden="true">
@@ -62,6 +62,12 @@
 <li><a href="#uniformes">Uniformes: pagos, pedido al proveedor y entregas</a></li>
 <li class="sub"><a href="#uniformes-gestion">Gestión de pedidos</a></li>
 <li class="sub"><a href="#uniformes-config">Configuración</a></li>
+<li><a href="#eventos">Eventos</a></li>
+<li class="sub"><a href="#eventos-crear">Crear un evento</a></li>
+<li class="sub"><a href="#eventos-equipo">Equipo dirigente</a></li>
+<li class="sub"><a href="#eventos-presupuesto">Presupuesto y precio</a></li>
+<li class="sub"><a href="#eventos-publicar">Lista de comprobación y publicar</a></li>
+<li class="sub"><a href="#eventos-configuracion">Configuración</a></li>
 <li><a href="#idioma">El idioma de la web</a></li>
 <li><a href="#preguntas">Preguntas frecuentes</a></li>
 		</ol>
@@ -87,6 +93,7 @@
 <li><a href="#informes">Informes</a></li>
 <li><a href="#tesoreria">Tesorería</a></li>
 <li><a href="#uniformes">Uniformes: pagos, pedido al proveedor y entregas</a></li>
+<li><a href="#eventos">Eventos</a></li>
 <li><a href="#idioma">El idioma de la web</a></li>
 <li><a href="#preguntas">Preguntas frecuentes</a></li>
 			</ol>
@@ -544,6 +551,60 @@
 	</ul>
 </section>
 
+<section id="eventos">
+	<h2><span class="quien">Scouters, Coordinación y Tesorería</span>Eventos</h2>
+	<p class="resumen">Salidas, acampadas, campamentos y demás actividades del grupo: sus datos, el equipo dirigente, lo que pide la normativa de tiempo libre y el presupuesto, del que sale el precio. Está en <strong>Gestión del grupo → Eventos</strong> desde la v0.19. Las inscripciones de las familias y los cobros llegan en las próximas versiones.</p>
+
+	<h3 id="eventos-crear">Crear un evento</h3>
+	<ul>
+		<li>«<strong>Nuevo evento</strong>»: tipo de actividad, nombre, fechas y horas, lugar, salida y llegada, las secciones convocadas con sus <strong>participantes previstos</strong> y sus plazas, y lo que verán las familias (la circular y el material personal).</li>
+		<li>Un scouter convoca a <strong>sus secciones</strong>. Los eventos <strong>de grupo</strong> y los <strong>externos</strong> (Festival ASDE, actividades de Scouts de Balears…) los crea Coordinación.</li>
+		<li>Nace como <strong>borrador</strong>, con su nº: <code>E</code> + grupo + número (<code>E9990012</code>).</li>
+		<li>Lo gestionan los scouters de las secciones convocadas, Secretaría, Coordinación y quien esté en su <a href="#eventos-equipo">equipo</a>. Tesorería ve todos (la parte económica).</li>
+	</ul>
+
+	<h3 id="eventos-equipo">Equipo dirigente</h3>
+	<p>En la pestaña «Equipo» se añaden los scouters y el voluntariado del grupo con su función: <strong>director/a</strong>, <strong>monitor/a</strong>, <strong>en prácticas</strong> o <strong>apoyo</strong> (cocina, intendencia, transporte). La web comprueba lo que pide la normativa balear de tiempo libre con la ficha del CRM de cada persona:</p>
+	<div class="tabla">
+		<table>
+			<thead><tr><th scope="col">Qué</th><th scope="col">Regla</th></tr></thead>
+			<tbody>
+				<tr><td>Director/a</td><td>Uno, con la titulación de director/a de tiempo libre.</td></tr>
+				<tr><td>Ratio</td><td>Además del director/a, <strong>1 monitor/a por cada 10 participantes</strong> y otro si sobran 5 o más (35 participantes → 4). Más los de apoyo si hay participantes con dependencia reconocida (solo se escribe cuántos, sin nombres).</td></tr>
+				<tr><td>Titulación</td><td>Al menos la mitad de los monitores, con la titulación de tiempo libre.</td></tr>
+				<tr><td>Certificado</td><td>Todo el equipo, mayor de edad y con el certificado de delitos sexuales de <strong>menos de 12 meses</strong> el día que acaba el evento.</td></tr>
+				<tr><td>En prácticas</td><td>No más que las personas tituladas.</td></tr>
+			</tbody>
+		</table>
+	</div>
+	<ul>
+		<li>Son <strong>avisos</strong>: no impiden publicar. Si un dato no cuadra (formación, certificado), se corrige en la ficha del CRM.</li>
+		<li>El equipo <strong>no paga</strong>: lo que cuesta se reparte en el precio de los participantes.</li>
+	</ul>
+
+	<h3 id="eventos-presupuesto">Presupuesto y precio</h3>
+	<p>Si el evento tiene coste, en la pestaña «Presupuesto» se escriben los gastos previstos y cómo se reparte cada uno:</p>
+	<ul>
+		<li><strong>Importe total</strong>, entre todos los participantes (el autobús) o solo entre los de una sección (una actividad solo de Scouts);</li>
+		<li><strong>por persona</strong>: cada participante, participantes y equipo (el albergue, la comida) o solo el equipo (la plaza de un scouter en un evento externo);</li>
+		<li>los <strong>ingresos</strong> (subvención, aportación del grupo) se restan de lo común.</li>
+	</ul>
+	<p>El precio de cada sección es su coste (con el del equipo repartido) más el <strong>margen del fondo de emergencia</strong> (5 % por defecto), redondeado al euro hacia arriba. Cuando está listo, «Enviar a Tesorería para validar»: <strong>Tesorería lo valida</strong> y desde ese momento el precio es fijo (lo que sobre o falte lo asume el grupo). Mientras no haya nadie inscrito, Tesorería lo puede reabrir.</p>
+
+	<h3 id="eventos-publicar">Lista de comprobación y publicar</h3>
+	<p>El «Resumen» del evento reúne lo que conviene no olvidar:</p>
+	<ul>
+		<li>el presupuesto (validado o pendiente) y el equipo dirigente;</li>
+		<li>la <strong>comunicación a ASDE Baleares</strong>, que hace falta en las actividades de <strong>2 o más noches con 10 o más menores</strong>, <strong>30 días antes</strong> del inicio;</li>
+		<li>el <strong>seguro</strong>: el de la federación lo cubre todo salvo las actividades <strong>internacionales</strong>, que necesitan uno aparte (compañía y póliza);</li>
+		<li>las actividades de riesgo (montaña, barrancos, escalada, buceo, náutica) con personal titulado, y el socorrista si hay piscina o mar.</li>
+	</ul>
+	<p>Con el presupuesto validado (o sin coste), «<strong>Publicar el evento</strong>». Se puede volver a borrador mientras no haya nadie inscrito, <strong>cancelar</strong> con un motivo o, si es un borrador, borrarlo.</p>
+
+	<h3 id="eventos-configuracion">Configuración</h3>
+	<p>Coordinación y Tesorería, en «Eventos → Configuración»: el <strong>margen del fondo de emergencia</strong> (activo o no y porcentaje), los <strong>tipos de actividad</strong> (si nacen con coste y si se comunican a ASDE Baleares) y qué valores de la formación de tiempo libre del CRM cuentan como título de <strong>director/a</strong> o de <strong>monitor/a</strong>.</p>
+</section>
+
 <section id="idioma">
 	<h2>El idioma de la web</h2>
 	<p class="resumen">El área privada está en castellano, catalán, euskera y gallego. La administración de la web elige el idioma del grupo y si cada persona puede cambiarlo.</p>
@@ -581,7 +642,7 @@
 			</ul>
 		</section>
 
-		<p class="pie">Manual del equipo de coordinación del plugin «ASDE Scouts de España – Gestor CRM para Grupos Scouts», versión 0.18 (octubre de 2026). Capturas hechas en un WordPress de demostración con un CRM simulado y datos inventados.</p>
+		<p class="pie">Manual del equipo de coordinación del plugin «ASDE Scouts de España – Gestor CRM para Grupos Scouts», versión 0.19 (octubre de 2026). Capturas hechas en un WordPress de demostración con un CRM simulado y datos inventados.</p>
 	</main>
 </div>
 

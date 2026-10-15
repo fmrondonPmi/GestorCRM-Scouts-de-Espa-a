@@ -56,6 +56,7 @@ abstract class View {
 			'emails'           => 'usuarios',
 			'uniforme'         => isset( $items['uniforme'] ) ? 'uniforme' : 'uniformes',
 			'uniformes_config' => 'uniformes',
+			'eventos_config'   => 'eventos',
 		)[ $activo ] ?? $activo;
 		return '<div class="asde-ap">'
 			. $this->tpl(
