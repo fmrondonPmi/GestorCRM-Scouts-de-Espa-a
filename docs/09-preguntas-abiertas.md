@@ -43,8 +43,6 @@ Hay que resolverlas antes de programar cada parte. Cuando se responde una, se ma
 | P-58 | **Carpeta de Drive · dónde:** ¿tarjeta en el inicio, entrada en el menú o las dos? ¿En «Para ti» o en «Gestión del grupo»? (doc 30) | Drive |
 | P-59 | **Carpeta de Drive · cuántas:** ¿una por grupo o también una por sección? (doc 30) | Drive |
 | P-60 | **Carpeta de Drive · cómo se comparte:** ¿restringida a las cuentas de Google de los scouters (recomendado) o «cualquiera con el enlace»? (doc 30) | Drive |
-| P-75 | **Eventos · seguro:** ¿el seguro de la federación cubre los accidentes y la responsabilidad civil que exige la Ley 10/2022 (art. 21.3.e) en todas las actividades, o algunas (campamentos, actividades de riesgo, participantes no socios) necesitan un seguro aparte? (doc 32) | Eventos |
-| P-76 | **Eventos · declaración responsable hoy:** ¿qué actividades declara ya el grupo al Consell de Mallorca (solo acampadas y campamentos o también salidas de un día), quién la presenta y si la actividad semanal está declarada como «actividad continuada» (Ley 10/2022, art. 18.2)? Decide qué tipos la piden por defecto (doc 32) | Eventos |
 
 ## Resueltas
 
@@ -106,7 +104,7 @@ Hay que resolverlas antes de programar cada parte. Cuando se responde una, se ma
 | ✅ P-63 | **Cada scouter crea y publica los eventos de sus secciones**; Coordinación, los de grupo y los externos. Con coste, antes **Tesorería valida el presupuesto** (2026-10-15) |
 | ✅ P-64 | **De 14 a 17:** se preinscriben y firma la familia; la familia también los inscribe y **eso cuenta como firma** (2026-10-15) |
 | ✅ P-65 | **Autorización por las dos vías:** firma en la web o papel que marca un scouter. **Imagen:** la cesión anual de la ficha del CRM (`cesionimagen_c`) (2026-10-15) |
-| ✅ P-66 | **Normativa balear:** el usuario pidió «investiga y propón». Propuesta en el doc 32, apartado 6 (Ley 10/2022 y Decreto 23/2018): declaración responsable 15 días antes, equipo dirigente comprobado con la ficha (edad, titulación, certificado de menos de 12 meses), ratio 1/10 con fracción de 5 y lista de comprobación; todo avisa, no bloquea. Quedan P-75 y P-76 (2026-10-15) |
+| ✅ P-66 | **Normativa balear:** el usuario pidió «investiga y propón». Propuesta en el doc 32, apartado 6 (Ley 10/2022 y Decreto 23/2018): declaración responsable 15 días antes, equipo dirigente comprobado con la ficha (edad, titulación, certificado de menos de 12 meses), ratio 1/10 con fracción de 5 y lista de comprobación; todo avisa, no bloquea. Ajustada con P-75 y P-76: en la práctica, **comunicación a ASDE Baleares 30 días antes** (2026-10-15) |
 | ✅ P-67 | **El precio sale del coste:** el coste del equipo se reparte entre los participantes, con **margen del 5 % para el fondo de emergencia** (configurable: activo o no y porcentaje), **precio por sección** y **becas y ajustes**; sin descuento por hermanos, recargo ni opciones. **Fijo al publicar** con los participantes previstos; lo que sobra o falta lo asume el grupo. **Devoluciones a criterio de Tesorería** (2026-10-15) |
 | ✅ P-68 | **Cobro de eventos:** efectivo, ingreso o transferencia, Bizum y domiciliación SEPA (2026-10-15) |
 | ✅ P-69 | **Tesorería valida el presupuesto** antes de publicar. Gastos con **justificantes**, **reembolsos a scouters**, **anticipos de caja** y **uso del fondo de emergencia** (2026-10-15) |
@@ -115,3 +113,5 @@ Hay que resolverlas antes de programar cada parte. Cuando se responde una, se ma
 | ✅ P-72 | **Conservación:** lo cifrado de la inscripción se borra al cerrar el evento; la firma de la autorización se queda (2026-10-15) |
 | ✅ P-73 | **Eventos externos:** el grupo inscribe, cobra y saca la lista; además, los federativos **se leen del CRM** (2026-10-15) |
 | ✅ P-74 | **Avisos de eventos:** email al publicar, al confirmar y recordatorio, y aviso push de la app (2026-10-15) |
+| ✅ P-75 | **Seguro de las actividades:** el de la federación cubre accidentes y responsabilidad civil; **solo las actividades internacionales** necesitan un seguro aparte (decisión del usuario, 2026-10-15, doc 32) |
+| ✅ P-76 | **Comunicación de actividades:** el grupo avisa por correo a **ASDE Baleares** con **30 días** de antelación (tipo, fechas, director/a, scouters titulados con DNI, email y teléfono, nº en prácticas y de apoyo, participantes con rango de edades y género, certificados de los mayores de 18, proyecto educativo y evaluación de riesgos) para las actividades de **2 o más noches con 10 o más menores**. La web la **envía o la deja descargar** (2026-10-15, doc 32) |

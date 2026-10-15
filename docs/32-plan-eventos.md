@@ -1,6 +1,6 @@
 # 32 · Plan: módulo de eventos (sin código)
 
-> **Estado:** plan escrito el 2026-10-15 y **decidido** el mismo día. El usuario respondió en el chat las preguntas P-61 a P-74 (tabla «Decisiones»). Para la P-66 (la normativa balear) pidió «investiga y propón»: la propuesta está en el apartado 6. Siguen **sin código**. Quedan abiertas dos preguntas nuevas, P-75 y P-76, que no impiden empezar por la 0.19.0.
+> **Estado:** plan escrito el 2026-10-15 y **decidido del todo** el mismo día. El usuario respondió en el chat las preguntas P-61 a P-76 (tabla «Decisiones»). Para la P-66 (la normativa balear) pidió «investiga y propón»: la propuesta está en el apartado 6, ajustada a cómo trabaja hoy el grupo (P-76: **comunicación a ASDE Baleares 30 días antes**). Sigue **sin código** y **no queda ninguna pregunta abierta**: se puede empezar por la 0.19.0.
 
 ## Petición del usuario (2026-10-15)
 
@@ -25,13 +25,16 @@
 | P-72 | Lo cifrado de la inscripción (quién recoge al menor, observaciones) **se borra al cerrar** el evento. La firma de la autorización se queda con el evento |
 | P-73 | En los **eventos externos**, el grupo inscribe, cobra y saca la lista para el organizador. **Además**, los eventos federativos **se leen del CRM** para no crearlos a mano |
 | P-74 | Avisos: **email al publicar**, **al confirmar**, **recordatorio** antes del evento y **aviso push** de la app |
+| P-75 | **Seguro:** el de la federación cubre accidentes y responsabilidad civil en todas las actividades. **Solo las internacionales** necesitan un seguro aparte |
+| P-76 | **Cómo se comunica hoy:** el grupo **avisa por correo a ASDE Baleares** con **30 días de antelación**. El correo lleva: tipo de actividad y fechas; **director/a**; scouters titulados como **monitores o directores** de tiempo libre; **número** de voluntarios en prácticas y de apoyo; de **todos los scouters**, nombre completo, **DNI**, email y teléfono; **número de participantes** con su **rango de edades** y **distribución por género**; si **todas las personas mayores de 18** (educandos o scouters) tienen el **certificado de delitos sexuales**; y el **proyecto educativo** (con el programa) y la **evaluación de riesgos** |
+| P-76 bis | **Qué se comunica:** las actividades de **2 o más noches** con **10 o más participantes menores de edad**. La comunicación se puede **enviar desde la web** o **descargar** para enviarla a mano; en los dos casos queda la fecha de envío |
 
 ## Lo que ya hay y condiciona el diseño
 
 | Pieza | Qué aporta al módulo |
 |---|---|
 | **CRM: `stic_Events` y `stic_Registrations`** (doc 04 §2 y §7.5) | El CRM federal ya tiene **eventos** (23; `type`: festivalasde, festivalof, as, campamento, Curso, taller, jornada, reunion) e **inscripciones** (5.091; `status`: participa, noparticipa, confirmado, cancelado, lista_espera, no_se_presenta; `participation_type`: asistente, organización, voluntario, coordinador…). El campo `special_needs` puede llevar **datos de salud** |
-| **CRM: campos de la ficha** (doc 04 §7) | `cesionimagen_c` (cesión de imagen), `formaciontiempolibre_c`, `formacionscout_c`, `certificadods_c` y `certificadods_fecha_c` (certificado de delitos sexuales). Sirven para las **comprobaciones del equipo dirigente** (apartado 6) |
+| **CRM: campos de la ficha** (doc 04 §7) | `cesionimagen_c` (cesión de imagen), `formaciontiempolibre_c`, `formacionscout_c`, `certificadods_c` y `certificadods_fecha_c` (certificado de delitos sexuales). Sirven para las **comprobaciones del equipo dirigente** y para la **comunicación a ASDE Baleares** (apartado 6). El DNI (`stic_identification_number_c`) y el género (`stic_gender_c`) **no** están en la instantánea: se leen en vivo solo para esa comunicación |
 | Matriz de permisos (doc 02) y `Roles` | La fila «Ficha de participación en eventos» y la capability `asde_edit_section_events`, que **no usa ningún código** |
 | **Uniformes** (doc 24) | «Una cosa por socio/a con comprobaciones, cada una con quién y cuándo»; nº con prefijo (`U6840007`); pago validado por Tesorería; «Mis pagos»; ventana emergente; CSV con auditoría |
 | **Tesorería** (doc 14) | Familias `F684001`, **ajustes con motivo**, movimientos que **no se borran (se anulan)**, ronda de septiembre a agosto; **gastos** pendientes de diseñar (P-24) |
@@ -45,17 +48,19 @@
 
 Los tipos son un **catálogo configurable por grupo**, precargado con estos ocho. Un tipo es una **plantilla de valores por defecto**: en cada evento se puede cambiar todo.
 
-| Clave | Tipo | Ejemplos | Pernocta | Autorización familiar | Coste | Listado con salud | Material | Declaración responsable (apartado 6) | `type` del CRM |
+| Clave | Tipo | Ejemplos | Pernocta | Autorización familiar | Coste | Listado con salud | Material | Comunicación a ASDE Baleares (apartado 6) | `type` del CRM |
 |---|---|---|---|---|---|---|---|---|---|
-| `salida` | **Salida o excursión** | Excursión de día, visita | No | Sí | Según el caso | Sí | Opcional | Según el caso (P-76) | jornada |
-| `acampada` | **Acampada** | Fin de semana en albergue o terreno | Sí (1–3 noches) | Sí | Sí | Sí | Sí | **Sí** | campamento |
-| `campamento` | **Campamento** | Verano, Pascua | Sí (4 o más) | Sí | Sí | Sí | Sí | **Sí** | campamento |
-| `ruta` | **Ruta o travesía** | Ruta de Escultas o Rovers | Sí | Sí | Sí | Sí | Sí | **Sí** | campamento |
-| `grupo` | **Actividad de grupo** | Inicio y fin de ronda, promesas, pasos de sección, aniversario | Opcional | Según el caso | Opcional | Si hay pernocta | Opcional | Según el caso (P-76) | jornada |
-| `servicio` | **Servicio o voluntariado** | Limpieza de un espacio natural, recogida de alimentos | No | Sí | No | Sí | Opcional | Según el caso (P-76) | jornada |
-| `externo` | **Evento externo** | Festival ASDE, actividad de Scouts de Balears, Jamboree, otro grupo | Según el caso | Sí | Sí | Sí | Opcional | No (la presenta quien organiza) | festivalasde / festivalof |
-| `formacion` | **Formación** | Curso de monitor/a, primeros auxilios | Según el caso | No (adultos) | Opcional | No | No | No | Curso / taller |
+| `salida` | **Salida o excursión** | Excursión de día, visita | No | Sí | Según el caso | Sí | Opcional | No (sin pernocta) | jornada |
+| `acampada` | **Acampada** | Fin de semana en albergue o terreno | Sí (1–3 noches) | Sí | Sí | Sí | Sí | **Automática** | campamento |
+| `campamento` | **Campamento** | Verano, Pascua | Sí (4 o más) | Sí | Sí | Sí | Sí | **Automática** | campamento |
+| `ruta` | **Ruta o travesía** | Ruta de Escultas o Rovers | Sí | Sí | Sí | Sí | Sí | **Automática** | campamento |
+| `grupo` | **Actividad de grupo** | Inicio y fin de ronda, promesas, pasos de sección, aniversario | Opcional | Según el caso | Opcional | Si hay pernocta | Opcional | **Automática** | jornada |
+| `servicio` | **Servicio o voluntariado** | Limpieza de un espacio natural, recogida de alimentos | No | Sí | No | Sí | Opcional | No (sin pernocta) | jornada |
+| `externo` | **Evento externo** | Festival ASDE, actividad de Scouts de Balears, Jamboree, otro grupo | Según el caso | Sí | Sí | Sí | Opcional | No (la hace quien organiza) | festivalasde / festivalof |
+| `formacion` | **Formación** | Curso de monitor/a, primeros auxilios | Según el caso | No (adultos) | Opcional | No | No | No (adultos) | Curso / taller |
 
+- **Comunicación «automática»** (P-76 bis): la web la pide cuando el evento tiene **2 o más noches** y **10 o más participantes menores de edad**. Se puede marcar o desmarcar a mano en cada evento, con aviso.
+- **Internacional:** casilla en el evento. Si se marca, hace falta un **seguro aparte** (P-75).
 - **Fuera del módulo** (P-62): las reuniones semanales de sección y las de adultos (Kraal, Consejo de Grupo, asamblea de familias).
 - **Duración:** fecha y hora de inicio y de fin. La pernocta se deduce de las fechas (si acaba otro día).
 - **Ámbito del evento:**
@@ -162,7 +167,7 @@ Salen del catálogo de siempre (`Domain\Secciones`, doc 05). Cada evento guarda 
 - **Resumen para cocina:** recuento por tipo de régimen y alergias alimentarias.
 - **Lista para el autobús** y de quién recoge a quién.
 - **Imprimir** (en el campamento puede no haber cobertura) y **CSV**. Cada descarga queda en la auditoría y lleva el aviso de que contiene datos de salud.
-- **Hoja del equipo dirigente** para la declaración responsable (apartado 6).
+- **Comunicación a ASDE Baleares** con el equipo dirigente y los recuentos (apartado 6).
 
 ### El día del evento
 
@@ -310,31 +315,51 @@ El inventario es **del grupo y de sus secciones** (P-71) y **permanente**. Cada 
 
 **Ojo:** según el art. 18.2, la **actividad semanal** del grupo puede ser una «actividad continuada» con su propia declaración. Eso queda **fuera del módulo** (P-62), pero conviene que el grupo lo compruebe.
 
-### Qué hará la web (propuesta)
+### Cómo lo hace hoy el grupo (P-75 y P-76)
+
+- **No presenta la declaración al Consell.** El grupo **avisa por correo a ASDE Baleares** con **30 días de antelación**; el plazo legal de la declaración es de 15 días.
+- Se avisa de las actividades de **2 o más noches** con **10 o más participantes menores de edad**.
+- **Seguro:** el de la federación cubre accidentes y responsabilidad civil. **Solo las actividades internacionales** necesitan un seguro aparte.
+
+### Qué hará la web
 
 Todo **avisa, no bloquea**: la responsabilidad es de la entidad organizadora y la web solo ayuda a no olvidar nada.
 
-1. **Declaración responsable** en la ficha del evento:
-   - una casilla **«Requiere declaración responsable»**, marcada por defecto según el tipo (tabla del apartado 1; P-76);
-   - **fecha límite** = inicio − 15 días naturales, con aviso en *Inicio* a los 25 días y en rojo pasada la fecha;
-   - fecha de presentación, nº de registro y justificante (PDF opcional).
-2. **Equipo dirigente:** se elige entre los scouters y el voluntariado del grupo, con su función: director/a, monitor/a, en prácticas o apoyo. La web lo **comprueba con la ficha del CRM** (sin copiarla):
+1. **Comunicación a ASDE Baleares** (P-76):
+   - **cuándo:** la web la pide sola si el evento tiene **2 o más noches** y **10 o más participantes menores** (inscritos, pendientes o confirmados, menores el día de inicio). Se puede marcar o desmarcar a mano, con aviso;
+   - **fecha límite** = inicio − **30 días**: aviso en *Inicio* a los 40 días y en rojo pasada la fecha;
+   - **qué lleva**, montado en el momento a partir del evento y del CRM:
+     - tipo de actividad, fechas y lugar;
+     - **director/a** de la actividad;
+     - scouters **titulados como directores o monitores** de tiempo libre;
+     - **número** de personas en prácticas y de voluntariado de apoyo;
+     - de **todos los scouters** del equipo, nombre completo, **DNI**, email y teléfono;
+     - **número de participantes**, **rango de edades** (la menor y la mayor el día de inicio) y **distribución por género** (solo recuentos);
+     - si **todas las personas mayores de 18**, educandos (Rovers) o scouters, tienen el **certificado de delitos sexuales** vigente. A ASDE Baleares le llega «sí» o «no»; el equipo ve quién falta;
+     - **adjuntos:** el **proyecto educativo** (con el programa) y la **evaluación de riesgos**, que se suben al evento (PDF, fuera de la carpeta pública);
+   - **dos formas de enviarla** (P-76 bis):
+     - **«Enviar a ASDE Baleares»**: vista previa y botón. Sale del correo del grupo hacia la dirección de ASDE Baleares (nueva en *Organización federada*), con copia al director/a y a Coordinación, y con los adjuntos;
+     - **«Descargar para enviarla a mano»**: un PDF o una página para imprimir con lo mismo y los adjuntos aparte. Después se marca **«Enviada el …»**;
+   - **datos personales:** el DNI y el género se leen **en vivo** del CRM solo para montarla y **no se guardan**. El **registro de emails** anota que se ha enviado, a quién y cuándo, **sin el texto**. La auditoría anota quién la envía o la descarga;
+   - si el equipo o las inscripciones cambian después de enviarla, la web avisa de que **la comunicación ya no está al día** y deja volver a enviarla.
+2. **Equipo dirigente:** se elige entre los scouters y el voluntariado del grupo, con su función: director/a, monitor/a, en prácticas o apoyo. La web lo **comprueba con la ficha del CRM**, sin copiarla:
    - **mayor de 18** el día de inicio (fecha de nacimiento);
    - **titulación** (`formaciontiempolibre_c`): director/a con titulación de dirección y al menos la mitad de los monitores con titulación de monitor/a. Los valores del campo se leen de los metadatos del CRM (`Metadatos`) al programarlo;
-   - **certificado de delitos sexuales** (`certificadods_c`, `certificadods_fecha_c`) de **menos de 12 meses** el día de **fin** del evento;
+   - **certificado de delitos sexuales** (`certificadods_c`, `certificadods_fecha_c`) de **menos de 12 meses** el día de **fin** del evento. Se comprueba también a los **participantes mayores de 18** (P-76);
    - personas en **prácticas**: no más que las tituladas.
 3. **Ratio automática:** monitores necesarios = máx(1, ⌊n/10⌋ + 1 si el resto de n/10 es 5 o más), con n = participantes confirmados (o plazas máximas mientras está abierto). No cuentan el director/a ni las personas en prácticas.
    - El director/a puede escribir **cuántos** participantes tienen dependencia reconocida (grado I-II y grado III). **Solo números, sin nombres**: la web suma los monitores de apoyo.
    - Ejemplo: 35 participantes → ⌊35/10⌋ = 3 y resto 5 → **4 monitores** además del director/a.
-4. **Hoja del equipo dirigente** para copiar en el trámite: nombre, documento, titulación y función. Se genera en el momento desde el CRM, **no se guarda** y queda en la auditoría.
-5. **Lista de comprobación** en el resumen del evento:
-   - proyecto educativo (adjunto o enlace);
-   - evaluación de riesgos y plan de emergencia (adjunto);
-   - seguro de accidentes y RC (P-75);
+4. **Lista de comprobación** en el resumen del evento:
+   - comunicación a ASDE Baleares (si hace falta): enviada o no, y si sigue al día;
+   - proyecto educativo y evaluación de riesgos (adjuntos);
+   - **seguro**: «cubierto por el seguro de la federación»; si el evento es **internacional**, pide el **seguro aparte** (compañía, póliza y justificante) (P-75);
    - casilla «hay actividades de riesgo especializado» → pide el profesional titulado;
    - casilla «hay agua (piscina o mar)» → pide el socorrista;
-   - autorizaciones de las familias (cuántas faltan).
-6. **Configuración del grupo:** nombre del **delegado/a de protección** (LO 8/2021), que sale en la circular y en la hoja del equipo.
+   - certificados de delitos sexuales y autorizaciones de las familias (cuántos faltan).
+5. **Configuración:**
+   - del grupo: nombre del **delegado/a de protección** (LO 8/2021), que sale en la circular;
+   - de *Organización federada* (doc 20): **email para comunicar actividades** y días de antelación (30 por defecto).
 
 ---
 
@@ -362,7 +387,7 @@ Siempre **capability + ámbito** (doc 02): la sección del evento, el equipo del
 
 | Tabla / opción | Contenido |
 |---|---|
-| `{prefix}asde_eventos` | Grupo, nº (`E6840012`), tipo, ámbito, nombre, fechas, lugar, estado, secciones convocadas con sus plazas previstas y máximas, **margen**, **precio por sección congelado**, validación del presupuesto (quién y cuándo), **declaración responsable** (si hace falta, fecha, nº de registro, justificante), lista de comprobación, nº de participantes con dependencia (solo el número), configuración y, en la fase del CRM, el id de `stic_Events` |
+| `{prefix}asde_eventos` | Grupo, nº (`E6840012`), tipo, ámbito, nombre, fechas, lugar, estado, secciones convocadas con sus plazas previstas y máximas, **margen**, **precio por sección congelado**, validación del presupuesto (quién y cuándo), **comunicación a ASDE Baleares** (si hace falta, enviada o descargada, quién y cuándo, y una huella de lo enviado para saber si sigue al día), **internacional** y su seguro aparte, adjuntos (proyecto educativo, evaluación de riesgos), lista de comprobación, nº de participantes con dependencia (solo el número), configuración y, en la fase del CRM, el id de `stic_Events` |
 | `{prefix}asde_evento_inscripciones` | Evento, nº de Scouts de España, secciones, si es adulto, **papel** (participante, director/a, monitor/a, en prácticas, apoyo), estado, orden en la lista de espera, importe, **autorización** (firma web: quién, cuándo, versión, HMAC de la IP; o papel: quién lo recibió y cuándo), `datos_enc` **cifrado** (quién recoge, observaciones), asistencia, y quién y cuándo de cada paso |
 | `{prefix}asde_evento_movimientos` | Pagos, becas y ajustes, devoluciones (inscripción o familia, importe, forma: efectivo, ingreso, Bizum o SEPA; referencia, nota, quién, anulación) |
 | `{prefix}asde_evento_partidas` | Presupuesto y gastos: previsto o real, ingreso o gasto, **reparto** (todos, una sección, por participante o por persona del equipo), concepto, proveedor, importe, justificante, quién lo pagó, reembolso, **con cargo al fondo** |
@@ -374,7 +399,7 @@ Siempre **capability + ámbito** (doc 02): la sección del evento, el equipo del
 
 - **8 tablas nuevas:** *Instalación y entorno* pasa de 14 a **22** (y `tests/entorno.php`). `uninstall.php` las conserva (son justificantes de cobros y gastos) y borra la configuración.
 - **Conservación** (P-72): al **cerrar** el evento se vacía `datos_enc`. La firma de la autorización (sin datos personales) se queda con el evento. Los justificantes de gastos se quedan como los de Tesorería.
-- **Auditoría** (nombres de campos, nunca valores): `evento_creado`, `evento_presupuesto_validado`, `evento_publicado`, `evento_cancelado`, `inscripcion_*`, `autorizacion_firmada`, `autorizacion_papel`, `evento_pago`, `evento_gasto`, `evento_anticipo`, `evento_cerrado`, `evento_listado_salud`, `evento_hoja_equipo`, `material_*`…
+- **Auditoría** (nombres de campos, nunca valores): `evento_creado`, `evento_presupuesto_validado`, `evento_publicado`, `evento_cancelado`, `inscripcion_*`, `autorizacion_firmada`, `autorizacion_papel`, `evento_pago`, `evento_gasto`, `evento_anticipo`, `evento_cerrado`, `evento_listado_salud`, `evento_comunicacion_enviada`, `evento_comunicacion_descargada`, `material_*`…
 
 ## CRM
 
@@ -394,11 +419,11 @@ Siempre **capability + ámbito** (doc 02): la sección del evento, el equipo del
 | Dónde | Pantalla | Qué hay |
 |---|---|---|
 | Gestión del grupo → **Eventos** | Agenda | Eventos de la ronda en tarjetas (móvil) o tabla; filtros por estado, tipo y sección; «Nuevo evento» |
-| | Evento (pestañas) | **Resumen** (datos, estado, lista de comprobación, ratio, declaración responsable) · **Equipo** · **Inscripciones** · **Economía** · **Material** · **Listados** |
+| | Evento (pestañas) | **Resumen** (datos, estado, lista de comprobación, ratio, comunicación a ASDE Baleares) · **Equipo** · **Inscripciones** · **Economía** · **Material** · **Listados** |
 | | Configuración | Tipos, margen, textos de la autorización, delegado/a de protección, plantillas de material |
 | Gestión del grupo → **Material** | Inventario | Catálogo del grupo y de las secciones, con filtros; ficha del artículo con su historial; caducidades |
 | Mi espacio / Mi familia → **Mis eventos** | Mis eventos | Próximos eventos, inscribirse y firmar, estado, lo que falta, información práctica |
-| Inicio | «Pendiente de revisar» | Inscripciones, autorizaciones en papel, presupuestos por validar, gastos y reembolsos, declaraciones a punto de vencer, material que caduca |
+| Inicio | «Pendiente de revisar» | Inscripciones, autorizaciones en papel, presupuestos por validar, gastos y reembolsos, comunicaciones a ASDE Baleares a punto de vencer o desfasadas, material que caduca |
 
 Con las convenciones de siempre: sin JavaScript funciona; con JavaScript, ventana emergente y sin recargar la pantalla entera; móvil primero; textos en los cuatro idiomas.
 
@@ -406,10 +431,10 @@ Con las convenciones de siempre: sin JavaScript funciona; con JavaScript, ventan
 
 | Versión | Qué | Pruebas |
 |---|---|---|
-| **0.19.0 · Eventos, equipo y presupuesto** | Tipos, crear, editar y cancelar; agenda; ámbito y permisos; nº de evento; **equipo dirigente con las comprobaciones de la normativa** (edad, titulación, certificado, ratio) y declaración responsable; **presupuesto con reparto y margen**, validación de Tesorería, precio fijo por sección; publicar | `tests/eventos.php` |
+| **0.19.0 · Eventos, equipo y presupuesto** | Tipos, crear, editar y cancelar; agenda; ámbito y permisos; nº de evento; **equipo dirigente con las comprobaciones de la normativa** (edad, titulación, certificado, ratio), internacional y seguro; **presupuesto con reparto y margen**, validación de Tesorería, precio fijo por sección; publicar | `tests/eventos.php` |
 | **0.19.1 · Inscripciones y cobro** | Las dos modalidades, «Mis eventos», autorización (web o papel), preinscripción de 14 a 17, plazas y lista de espera, bajas; pagos en efectivo, por transferencia y por Bizum; «Mis pagos»; becas y ajustes; emails y enganche de los avisos push | `tests/eventos-inscripciones.php` |
 | **0.19.2 · Gastos, SEPA y cierre** | Gastos con justificante, reembolsos, anticipos, fondo de emergencia, devoluciones, balance y cierre (borra lo cifrado); **SEPA de eventos** en las remesas | `tests/eventos-economia.php` |
-| **0.19.3 · Listados y asistencia** | Participantes, emergencia, salud en vivo, cocina, autobús, hoja del equipo dirigente, imprimir y CSV con auditoría; pasar lista | `tests/eventos-listados.php` |
+| **0.19.3 · Listados, comunicación y asistencia** | Participantes, emergencia, salud en vivo, cocina, autobús, imprimir y CSV con auditoría; **comunicación a ASDE Baleares** (enviar o descargar, con los adjuntos y el email de *Organización federada*); pasar lista | `tests/eventos-listados.php` |
 | **0.19.4 · Eventos externos del CRM** | Leer `stic_Events` federativos para crear el evento externo | `tests/eventos-externos.php` |
 | **0.20.0 · Inventario** | Rol «Responsable de material», catálogo del grupo y de las secciones, historial, caducidades, material del evento con plantillas, conflictos, salida y devolución | `tests/inventario.php` |
 | **0.21.0 · Copia al CRM** | `EscrituraEventos`: eventos e inscripciones a `stic_Events` / `stic_Registrations` | `tests/eventos-crm.php` |
@@ -426,10 +451,15 @@ Cada fase actualiza los docs (00, este, 02, 10 y 09) y los manuales de uso (`man
 6. La comprobación del equipo (edad, titulación, certificado) **avisa, no bloquea**. La ratio cuenta los participantes **confirmados** (o las plazas máximas mientras la inscripción está abierta).
 7. Los cobros del evento van en **su propia tabla** y no cuentan en la cuota de la ronda.
 8. `asde_eventos_gestion` **sustituye** a `asde_edit_section_events`, que no usa ningún código.
+9. Para decidir si hay que comunicar el evento a ASDE Baleares, las **noches** son los días que hay entre la fecha de inicio y la de fin, y los **menores** son los inscritos (pendientes o confirmados) que no tienen 18 años el día de inicio.
+10. **Internacional** quiere decir que la actividad es, toda o en parte, fuera de España.
+11. La comunicación enviada guarda solo una **huella** (no el contenido) para avisar si el equipo o los recuentos cambian después.
 
-## Preguntas que quedan abiertas (también en el doc 09)
+## Preguntas abiertas
 
-| # | Pregunta |
-|---|---|
-| P-75 | **Seguro de las actividades:** ¿el seguro de la federación (el de la cuota asociativa) cubre los **accidentes y la responsabilidad civil** que exige la Ley 10/2022 en todas las actividades, o algunas (campamentos, actividades de riesgo, participantes no socios) necesitan un seguro aparte? |
-| P-76 | **Declaración responsable hoy:** ¿qué actividades declara ya el grupo al Consell de Mallorca (¿solo acampadas y campamentos, o también salidas de un día?), quién la presenta y si la actividad semanal está declarada como «actividad continuada»? Con eso se decide qué tipos la piden por defecto |
+Ninguna: P-61 a P-76 están respondidas (tabla «Decisiones» y doc 09).
+
+Lo que hay que **comprobar al programar** (no es una pregunta para el usuario):
+- qué valores tiene `formaciontiempolibre_c` en el CRM (`Metadatos`);
+- qué valores tiene `stic_gender_c`;
+- si el usuario del CRM de cada grupo **ve los eventos federativos** de `stic_Events`.
