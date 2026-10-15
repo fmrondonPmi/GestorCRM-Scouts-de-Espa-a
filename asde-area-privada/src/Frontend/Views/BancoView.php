@@ -46,7 +46,7 @@ final class BancoView extends TesoreriaBaseView {
 		$ronda = $this->ronda();
 		TiposMovimiento::sembrar();
 		if ( '1' === $this->get( 'tipos' ) ) {
-			return $this->layout( 'tesoreria', $this->subnav( 'banco', $ronda ) . $this->tpl( 'tesoreria/banco-tipos', array( 'tipos' => TiposMovimiento::todos(), 'usos' => TiposMovimiento::usos(), 'url' => $this->url( 'banco' ) ) ) );
+			return $this->layout( 'tesoreria', $this->subnav( 'banco', $ronda ) . $this->tpl( 'tesoreria/banco-tipos', array( 'tipos' => TiposMovimiento::todos(), 'usos' => TiposMovimiento::usos(), 'url' => $this->url( 'banco' ), 'volver' => $this->volver_tipos() ) ) );
 		}
 		// Marcar como revisado (uno o varios) con su tipo: también se abre en la ventana emergente.
 		$revisar = $this->get( 'revisar' );
@@ -128,8 +128,21 @@ final class BancoView extends TesoreriaBaseView {
 				'volver' => wp_validate_redirect( esc_url_raw( $this->get( 'volver' ) ), $url ) ?: $url,
 				'conciliados' => count( $ids ) - count( $movs ),
 				'url_tipos'   => add_query_arg( 'tipos', '1', $url ),
+				// v0.34: el «+» de cada fila. Con JavaScript crea el tipo en una ventana pequeña; sin él, va a los tipos y vuelve aquí.
+				'url_mas'     => add_query_arg(
+					array(
+						'tipos'  => '1',
+						'volver' => rawurlencode( $this->url_actual( add_query_arg( 'revisar', '1', $url ) ) ),
+					),
+					$url
+				),
 			)
 		);
+	}
+
+	/** Adónde vuelve la página de tipos (v0.34): esc_url_raw y no get(), que borraría los %5B%5D de los m[] de la dirección. */
+	private function volver_tipos(): string {
+		return isset( $_GET['volver'] ) ? (string) wp_validate_redirect( esc_url_raw( wp_unslash( $_GET['volver'] ) ), '' ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- solo una dirección de vuelta de este sitio
 	}
 
 	public function handle_post(): void {
@@ -232,13 +245,29 @@ final class BancoView extends TesoreriaBaseView {
 				$r  = 'tipo_crear' === $accion
 					? TiposMovimiento::crear( $this->post( 'nombre' ), $this->post( 'naturaleza' ) )
 					: ( 'tipo_cambiar' === $accion ? TiposMovimiento::cambiar( $id, $this->post( 'nombre' ), $this->post( 'naturaleza' ) ) : TiposMovimiento::borrar( $id ) );
+				// v0.34: el «+» de «Marcar como revisado» crea el tipo sin salir de la ventana y recibe el tipo en JSON.
+				$json = 'tipo_crear' === $accion && Router::pide_json();
 				if ( is_wp_error( $r ) ) {
+					if ( $json ) {
+						wp_send_json_error( array( 'mensaje' => $r->get_error_message() ) );
+					}
 					Notices::add( 'error', esc_html( $r->get_error_message() ) );
 				} else {
 					Logger::log( 'banco_' . $accion, 'banco_tipo', (string) ( 'tipo_crear' === $accion ? $r : $id ) );
+					if ( $json ) {
+						$t = TiposMovimiento::obtener( (int) $r );
+						wp_send_json_success(
+							array(
+								'id'         => (int) $r,
+								'nombre'     => (string) ( $t['nombre'] ?? '' ),
+								'naturaleza' => (string) ( $t['naturaleza'] ?? '' ),
+							)
+						);
+					}
 					Notices::add( 'success', 'tipo_crear' === $accion ? asde_t( 'Tipo creado.' ) : ( 'tipo_cambiar' === $accion ? asde_t( 'Tipo guardado.' ) : asde_t( 'Tipo borrado.' ) ) );
 				}
-				$this->redirect( $this->url( 'banco', array( 'tipos' => '1' ) ) );
+				$a_tipos = $this->volver_tipos();
+				$this->redirect( $this->url( 'banco', array( 'tipos' => '1' ) + ( '' !== $a_tipos ? array( 'volver' => rawurlencode( $a_tipos ) ) : array() ) ) );
 				break;
 
 			default:

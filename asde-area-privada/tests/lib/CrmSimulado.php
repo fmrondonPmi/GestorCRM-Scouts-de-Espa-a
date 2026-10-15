@@ -374,7 +374,8 @@ final class Asde_Prueba_Crm implements EscritorCrm {
 		$persona = '';
 		foreach ( $this->membresias as $i => $m ) {
 			if ( $m['id'] === $membresia ) {
-				$activa                           = (string) ( $m['start_date'] ?? '' ) <= $hoy && ( '' === (string) ( $m['end_date'] ?? '' ) || (string) $m['end_date'] > $hoy ) && 'baja' !== ( $m['estado_c'] ?? '' );
+				// Como SinergiaCRM (P-74): solo por las fechas; `estado_c` no cuenta (v0.34: una membresía en «baja» sin fecha sigue activa).
+				$activa                           = (string) ( $m['start_date'] ?? '' ) <= $hoy && ( '' === (string) ( $m['end_date'] ?? '' ) || (string) $m['end_date'] > $hoy );
 				$this->membresias[ $i ]['active'] = $activa ? '1' : '0';
 				$persona                          = $m['persona'];
 			}

@@ -2711,4 +2711,22 @@ return array(
 	'Titular: %s' => 'Titularra: %s',
 	'¿Pasar las cuentas de las autorizaciones a las fichas del CRM? Se escriben en la ficha de cada miembro de la familia y se borran de la web.' => 'Baimenen kontuak CRMko fitxetara pasatu nahi dituzu? Familiako kide bakoitzaren fitxan idazten dira eta webetik ezabatzen dira.',
 	'⚠️ La cuenta de su ficha del CRM no es la autorizada (o no está): no se le cobrará hasta que firme de nuevo.' => '⚠️ CRMko fitxako kontua ez da baimendutakoa (edo ez dago): ez zaio kobratuko berriro sinatu arte.',
+
+	// v0.34: «+» del tipo en el banco
+	'No se ha podido crear el tipo. Vuelve a intentarlo.' => 'Ezin izan da mota sortu. Saiatu berriro.',
+	'Crear un tipo nuevo' => 'Sortu mota berri bat',
+	'Tipo nuevo' => 'Mota berria',
+	'← Volver a «Marcar como revisado»' => '← Itzuli «Markatu berrikusita gisa» atalera',
+
+	// v0.34: buscador de Familias y «Socio/a desde» en la ficha
+	'%d año' => '%d urte',
+	'%d día' => '%d egun',
+	'%d días' => '%d egun',
+	'%d mes' => '%d hilabete',
+	'%d meses' => '%d hilabete',
+	'(%1$s, %2$s y %3$s)' => '(%1$s, %2$s eta %3$s)',
+	'Socio/a desde' => 'Bazkide noiztik',
+	'%1$d de %2$d familias' => '%1$d / %2$d familia',
+	'Ninguna familia coincide con «%s».' => 'Ez dago «%s» bilaketarekin bat datorren familiarik.',
+	'Nº de familia, nombre o nº de socio' => 'Familia-zk., izena edo bazkide-zenbakia',
 );

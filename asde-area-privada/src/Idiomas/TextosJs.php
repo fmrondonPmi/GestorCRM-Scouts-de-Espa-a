@@ -58,6 +58,8 @@ final class TextosJs {
 		'1 movimiento marcado',
 		'%s movimientos marcados',
 		'Marca en la lista los movimientos que no son cuotas.',
+		// v0.34: el «+» de «Marcar como revisado» (ventana «Tipo nuevo»).
+		'No se ha podido crear el tipo. Vuelve a intentarlo.',
 	);
 
 	/** Texto en castellano => texto en el idioma actual. */

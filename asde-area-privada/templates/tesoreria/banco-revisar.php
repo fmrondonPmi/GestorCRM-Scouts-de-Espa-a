@@ -10,6 +10,7 @@
  * @var string            $volver      Listado del que se viene
  * @var int               $conciliados Elegidos que no se pueden revisar (conciliados con una familia)
  * @var string            $url_tipos
+ * @var string            $url_mas     El «+» de cada fila (v0.34): los tipos, con la vuelta a esta ventana
  */
 // phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound, WordPress.WP.GlobalVariablesOverride.Prohibited -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
 use AsdeBalears\AreaPrivada\Tesoreria\Banco\BancoTable;
@@ -29,7 +30,7 @@ $opciones = static function ( float $importe, ?int $elegido ) use ( $tipos ): st
 		$grupos[ $t['naturaleza'] ][] = $t;
 	}
 	foreach ( $grupos as $nat => $lista ) {
-		$h .= '<optgroup label="' . esc_attr( asde_t( TiposMovimiento::NATURALEZAS[ $nat ] ) ) . '">';
+		$h .= '<optgroup label="' . esc_attr( asde_t( TiposMovimiento::NATURALEZAS[ $nat ] ) ) . '" data-naturaleza="' . esc_attr( $nat ) . '">';
 		foreach ( $lista as $t ) {
 			$h .= '<option value="' . (int) $t['id'] . '"' . selected( $elegido, $t['id'], false ) . '>' . esc_html( $t['nombre'] ) . '</option>';
 		}
@@ -89,9 +90,12 @@ $opciones = static function ( float $importe, ?int $elegido ) use ( $tipos ): st
 							<td data-label="<?php echo esc_attr( asde_a( 'Importe' ) ); ?>" class="asde-num asde-importe <?php echo $ingreso ? 'asde-importe--ingreso' : 'asde-importe--gasto'; ?>"><?php echo esc_html( ( $ingreso ? '+' : '' ) . Calculadora::euros( $m['importe'] ) ); ?></td>
 							<td data-label="<?php echo esc_attr( asde_a( 'Tipo' ) ); ?>">
 								<label class="screen-reader-text" for="asde-tipo-<?php echo (int) $m['id']; ?>"><?php asde_e( 'Tipo' ); ?></label>
-								<select id="asde-tipo-<?php echo (int) $m['id']; ?>" name="tipo[<?php echo (int) $m['id']; ?>]" required data-asde-tipo-fila>
-									<?php echo $opciones( $m['importe'], $m['tipo_id'] ); // phpcs:ignore WordPress.Security.EscapeOutput -- construido arriba con esc_html/esc_attr ?>
-								</select>
+								<span class="asde-banco-tipo">
+									<select id="asde-tipo-<?php echo (int) $m['id']; ?>" name="tipo[<?php echo (int) $m['id']; ?>]" required data-asde-tipo-fila data-asde-signo="<?php echo $ingreso ? 'ingreso' : 'gasto'; ?>">
+										<?php echo $opciones( $m['importe'], $m['tipo_id'] ); // phpcs:ignore WordPress.Security.EscapeOutput -- construido arriba con esc_html/esc_attr ?>
+									</select>
+									<a class="button asde-button-secundario asde-banco-mas" href="<?php echo esc_url( $url_mas ); ?>" data-asde-banco-tipo-nuevo title="<?php echo esc_attr( asde_a( 'Crear un tipo nuevo' ) ); ?>" aria-label="<?php echo esc_attr( asde_a( 'Crear un tipo nuevo' ) ); ?>">+</a>
+								</span>
 							</td>
 						</tr>
 					<?php endforeach; ?>
@@ -110,5 +114,30 @@ $opciones = static function ( float $importe, ?int $elegido ) use ( $tipos ): st
 				<a href="<?php echo esc_url( $url_tipos ); ?>" class="asde-solo-pagina"><?php asde_e( 'Gestionar los tipos de gasto e ingreso' ); ?></a>
 			</p>
 		</form>
+		<?php // v0.34: la ventana pequeña del «+» (banco.js la abre encima; sin JavaScript no se usa y el «+» va a los tipos). ?>
+		<template data-asde-banco-tipo-plantilla>
+			<form method="post" action="<?php echo esc_url( $url_tipos ); ?>" class="asde-form asde-banco-tipo-nuevo">
+				<h3 id="asde-bt-mini-titulo"><?php asde_e( 'Tipo nuevo' ); ?></h3>
+				<?php wp_nonce_field( 'asde_banco_tipos' ); ?>
+				<input type="hidden" name="asde_action" value="tipo_crear">
+				<p>
+					<label for="asde-bt-mini-nombre"><?php asde_e( 'Nombre del tipo nuevo' ); ?></label>
+					<input type="text" id="asde-bt-mini-nombre" name="nombre" maxlength="80" required>
+				</p>
+				<p>
+					<label for="asde-bt-mini-clase"><?php asde_e( 'Clase' ); ?></label>
+					<select id="asde-bt-mini-clase" name="naturaleza">
+						<?php foreach ( TiposMovimiento::NATURALEZAS as $k => $etiqueta ) : ?>
+							<option value="<?php echo esc_attr( $k ); ?>"><?php echo esc_html( asde_t( $etiqueta ) ); ?></option>
+						<?php endforeach; ?>
+					</select>
+				</p>
+				<p class="asde-notice asde-notice--error" role="alert" data-asde-error hidden></p>
+				<p class="asde-form__acciones">
+					<button type="submit" class="button button-primary"><?php asde_e( 'Crear tipo' ); ?></button>
+					<button type="button" class="button asde-button-secundario" data-asde-cerrar><?php asde_e( 'Cancelar' ); ?></button>
+				</p>
+			</form>
+		</template>
 	<?php endif; ?>
 </section>

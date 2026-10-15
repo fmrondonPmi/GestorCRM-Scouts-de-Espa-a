@@ -6,6 +6,7 @@
  * @var array<int, array> $tipos
  * @var array<int, array{gastos:int, ingresos:int, total:float}> $usos
  * @var string            $url  Listado del banco
+ * @var string            $volver «Marcar como revisado» del que se viene con su «+» (sin JavaScript, v0.34), o ''
  */
 // phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound, WordPress.WP.GlobalVariablesOverride.Prohibited -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
 use AsdeBalears\AreaPrivada\Tesoreria\Banco\TiposMovimiento;
@@ -13,7 +14,7 @@ use AsdeBalears\AreaPrivada\Tesoreria\Calculadora;
 
 defined( 'ABSPATH' ) || exit;
 
-$aqui       = add_query_arg( 'tipos', '1', $url );
+$aqui       = add_query_arg( array_filter( array( 'tipos' => '1', 'volver' => '' !== $volver ? rawurlencode( $volver ) : '' ) ), $url );
 $naturaleza = static function ( string $nombre, string $actual, string $id ): string {
 	$h = '<select name="' . esc_attr( $nombre ) . '" id="' . esc_attr( $id ) . '">';
 	foreach ( TiposMovimiento::NATURALEZAS as $k => $etiqueta ) {
@@ -22,7 +23,11 @@ $naturaleza = static function ( string $nombre, string $actual, string $id ): st
 	return $h . '</select>';
 };
 ?>
-<p class="asde-back"><a href="<?php echo esc_url( $url ); ?>"><?php asde_e( '← Banco' ); ?></a></p>
+<?php if ( '' !== $volver ) : ?>
+	<p class="asde-back"><a href="<?php echo esc_url( $volver ); ?>"><?php asde_e( '← Volver a «Marcar como revisado»' ); ?></a></p>
+<?php else : ?>
+	<p class="asde-back"><a href="<?php echo esc_url( $url ); ?>"><?php asde_e( '← Banco' ); ?></a></p>
+<?php endif; ?>
 <section class="asde-card">
 	<h2 class="asde-card__title"><?php asde_e( 'Tipos de gasto e ingreso' ); ?></h2>
 	<p class="asde-muted"><?php asde_e( 'Para clasificar los movimientos del banco que no son cuotas de las familias. Cada tipo es de gasto, de ingreso o de las dos cosas (por ejemplo, devoluciones). Un tipo que usa algún movimiento no se puede borrar, pero sí cambiarle el nombre.' ); ?></p>

@@ -5,6 +5,9 @@
  * - Casilla para marcar todos los pendientes de la página y cuántos hay marcados.
  * - «Marcar como revisados…» abre la ventana emergente con los elegidos.
  * - En la ventana, «El mismo tipo para todos» lo pone en las filas en las que encaja.
+ * - v0.34: el «+» junto al tipo de cada fila abre encima una ventana pequeña para crear un
+ *   tipo sin perder lo elegido; el tipo nuevo entra en los desplegables en los que encaja y
+ *   queda elegido en esa fila. Sin JavaScript, el «+» lleva a los tipos y vuelve.
  */
 ( function () {
 	'use strict';
@@ -70,4 +73,89 @@
 		a.click();
 		a.remove();
 	} );
+
+	// v0.34: «+» → ventana pequeña «Tipo nuevo». En la fase de captura de window, antes que
+	// area.js (que llevaría el enlace a su página) y que el tema.
+	function anadirTipo( caja, tipo, fila ) {
+		var opcion = caja.querySelector( 'template[data-asde-banco-tipo-plantilla]' ).content.querySelector( 'select[name="naturaleza"] option[value="' + tipo.naturaleza + '"]' );
+		var etiqueta = opcion ? opcion.textContent : tipo.naturaleza;
+		caja.querySelectorAll( '[data-asde-tipo-fila]' ).forEach( function ( s ) {
+			if ( 'ambos' !== tipo.naturaleza && s.getAttribute( 'data-asde-signo' ) !== tipo.naturaleza ) {
+				return; // Un tipo de ingreso no sirve para un gasto (TiposMovimiento::encaja).
+			}
+			var grupo = s.querySelector( 'optgroup[data-naturaleza="' + tipo.naturaleza + '"]' );
+			if ( ! grupo ) {
+				grupo = document.createElement( 'optgroup' );
+				grupo.label = etiqueta;
+				grupo.setAttribute( 'data-naturaleza', tipo.naturaleza );
+				s.appendChild( grupo );
+			}
+			grupo.appendChild( new window.Option( tipo.nombre, String( tipo.id ) ) );
+		} );
+		if ( fila.querySelector( 'option[value="' + tipo.id + '"]' ) ) {
+			fila.value = String( tipo.id );
+		}
+		var todos = caja.querySelector( '[data-asde-tipo-todos]' );
+		if ( todos ) {
+			todos.add( new window.Option( tipo.nombre + ' (' + etiqueta.toLowerCase() + ')', String( tipo.id ) ) );
+		}
+	}
+
+	window.addEventListener( 'click', function ( e ) {
+		var mas = e.target.closest ? e.target.closest( '[data-asde-banco-tipo-nuevo]' ) : null;
+		var caja = mas ? mas.closest( '.asde-banco-revisar' ) : null;
+		var plantilla = caja ? caja.querySelector( 'template[data-asde-banco-tipo-plantilla]' ) : null;
+		if ( ! plantilla || ! window.fetch || 'function' !== typeof document.createElement( 'dialog' ).showModal || 0 !== e.button || e.metaKey || e.ctrlKey || e.shiftKey ) {
+			return; // Sin todo lo necesario, el enlace lleva a la página de los tipos.
+		}
+		e.preventDefault();
+		e.stopPropagation();
+		var fila = mas.parentNode.querySelector( '[data-asde-tipo-fila]' );
+		var d = document.createElement( 'dialog' );
+		d.className = 'asde-modal asde-modal--mini';
+		d.setAttribute( 'aria-labelledby', 'asde-bt-mini-titulo' );
+		d.appendChild( plantilla.content.cloneNode( true ) );
+		// Fuera de la tarjeta (plegable: plegada, escondería la ventana) y de su formulario (no puede ir uno dentro de otro).
+		caja.parentNode.appendChild( d );
+		var form = d.querySelector( 'form' );
+		var error = d.querySelector( '[data-asde-error]' );
+		form.elements.naturaleza.value = fila ? fila.getAttribute( 'data-asde-signo' ) : 'ingreso';
+		d.addEventListener( 'close', function () {
+			d.remove();
+			mas.focus();
+		} );
+		d.querySelector( '[data-asde-cerrar]' ).addEventListener( 'click', function () {
+			d.close();
+		} );
+		form.addEventListener( 'submit', function ( ev ) {
+			ev.preventDefault();
+			ev.stopPropagation(); // Que area.js no lo mande dentro de la ventana grande.
+			var boton = form.querySelector( 'button[type="submit"]' );
+			boton.disabled = true;
+			error.hidden = true;
+			window.fetch( form.getAttribute( 'action' ), { method: 'POST', body: new window.FormData( form ), credentials: 'same-origin', headers: { 'X-Asde-Json': '1' } } )
+				.then( function ( r ) {
+					return r.json();
+				} )
+				.then( function ( r ) {
+					if ( r && r.success ) {
+						anadirTipo( caja, r.data, fila );
+						d.close();
+						return;
+					}
+					// El motivo que da el servidor (p. ej. «Ya hay un tipo…»).
+					error.textContent = r && r.data && r.data.mensaje ? r.data.mensaje : asdeT( 'No se ha podido crear el tipo. Vuelve a intentarlo.' );
+					error.hidden = false;
+					boton.disabled = false;
+				} )
+				.catch( function () {
+					// Sin conexión o una respuesta que no es JSON (p. ej. la sesión ha caducado).
+					error.textContent = asdeT( 'No se ha podido crear el tipo. Vuelve a intentarlo.' );
+					error.hidden = false;
+					boton.disabled = false;
+				} );
+		} );
+		d.showModal();
+		form.elements.nombre.focus();
+	}, true );
 } )();

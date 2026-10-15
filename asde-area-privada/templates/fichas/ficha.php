@@ -15,6 +15,7 @@
  * @var string                                       $url_personas
  * @var string                                       $url_cambios
  * @var string                                       $url_alta
+ * @var string                                       $socio_desde Y-m-d desde el que es socio/a sin cortes (v0.34), o ''
  */
 // phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound, WordPress.WP.GlobalVariablesOverride.Prohibited -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
 use AsdeBalears\AreaPrivada\Crm\Escritura;
@@ -152,6 +153,16 @@ $control = static function ( string $campo, array $f ) use ( $pendientes ): stri
 			<dd><?php echo Numeros::html( $p, $numero ); // phpcs:ignore WordPress.Security.EscapeOutput ?></dd>
 		</div>
 		<div><dt><?php asde_e( 'Edad' ); ?></dt><dd><?php echo null === $p->edad() ? '—' : sprintf( esc_html( asde_t( '%d años' ) ), (int) $p->edad() ); ?></dd></div>
+		<?php if ( ! empty( $socio_desde ) ) : ?>
+			<?php $antiguedad = date_diff( date_create( $socio_desde ), date_create( wp_date( 'Y-m-d' ) ) ); ?>
+			<div>
+				<dt><?php asde_e( 'Socio/a desde' ); ?></dt>
+				<dd>
+					<?php echo esc_html( wp_date( 'd/m/Y', (int) strtotime( $socio_desde . ' 12:00' ) ) ); ?>
+					<span class="asde-muted asde-ficha__antiguedad"><?php echo esc_html( sprintf( asde_t( '(%1$s, %2$s y %3$s)' ), sprintf( asde_n( '%d año', '%d años', $antiguedad->y ), $antiguedad->y ), sprintf( asde_n( '%d mes', '%d meses', $antiguedad->m ), $antiguedad->m ), sprintf( asde_n( '%d día', '%d días', $antiguedad->d ), $antiguedad->d ) ) ); ?></span>
+				</dd>
+			</div>
+		<?php endif; ?>
 	</dl>
 
 	<?php if ( ! $escritura ) : ?>

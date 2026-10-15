@@ -2711,4 +2711,22 @@ return array(
 	'Titular: %s' => 'Titular: %s',
 	'¿Pasar las cuentas de las autorizaciones a las fichas del CRM? Se escriben en la ficha de cada miembro de la familia y se borran de la web.' => 'Vols passar els comptes de les autoritzacions a les fitxes del CRM? S\'escriuen a la fitxa de cada membre de la família i s\'esborren del web.',
 	'⚠️ La cuenta de su ficha del CRM no es la autorizada (o no está): no se le cobrará hasta que firme de nuevo.' => '⚠️ El compte de la seva fitxa del CRM no és l\'autoritzat (o no hi és): no se li cobrarà fins que signi de nou.',
+
+	// v0.34: «+» del tipo en el banco
+	'No se ha podido crear el tipo. Vuelve a intentarlo.' => 'No s\'ha pogut crear el tipus. Torna-ho a provar.',
+	'Crear un tipo nuevo' => 'Crea un tipus nou',
+	'Tipo nuevo' => 'Tipus nou',
+	'← Volver a «Marcar como revisado»' => '← Torna a «Marca com a revisat»',
+
+	// v0.34: buscador de Familias y «Socio/a desde» en la ficha
+	'%d año' => '%d any',
+	'%d día' => '%d dia',
+	'%d días' => '%d dies',
+	'%d mes' => '%d mes',
+	'%d meses' => '%d mesos',
+	'(%1$s, %2$s y %3$s)' => '(%1$s, %2$s i %3$s)',
+	'Socio/a desde' => 'Soci/sòcia des de',
+	'%1$d de %2$d familias' => '%1$d de %2$d famílies',
+	'Ninguna familia coincide con «%s».' => 'Cap família no coincideix amb «%s».',
+	'Nº de familia, nombre o nº de socio' => 'Núm. de família, nom o núm. de soci',
 );

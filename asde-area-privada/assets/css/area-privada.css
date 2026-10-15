@@ -1873,7 +1873,8 @@ html.asde-cargando .asde-ap button {
 	flex: 1 1 auto;
 	min-width: 0;
 }
-.asde-ap a.asde-inv-mas {
+.asde-ap a.asde-inv-mas,
+.asde-ap a.asde-banco-mas {
 	flex: 0 0 auto;
 	min-width: 2.6em;
 	padding: 0 10px;
@@ -2597,4 +2598,32 @@ dialog.asde-modal--imprimir {
 }
 .asde-ap .asde-espera-borrar {
 	margin-top: 1.5em;
+}
+
+/* v0.34 · Banco: «+» junto al tipo de cada fila de «Marcar como revisado» y la ventana pequeña «Tipo nuevo» encima de la grande. */
+.asde-ap .asde-banco-tipo {
+	display: flex;
+	gap: 6px;
+	align-items: stretch;
+}
+.asde-ap .asde-banco-tipo select,
+.asde-ap .asde-banco-tipo .asde-banco-mas,
+#top .asde-ap .asde-banco-tipo select {
+	margin: 0;
+}
+.asde-ap .asde-banco-tipo select {
+	flex: 1 1 auto;
+	min-width: 0;
+}
+dialog.asde-modal--mini {
+	width: min(460px, calc(100vw - 24px));
+	height: fit-content; /* La del navegador para un <dialog>: en el móvil, la grande ocupa toda la pantalla; esta, no. */
+	border-radius: 8px;
+}
+dialog.asde-modal--mini .asde-banco-tipo-nuevo {
+	padding: 16px 20px 20px;
+	overflow: auto;
+}
+dialog.asde-modal--mini .asde-banco-tipo-nuevo h3 {
+	margin-top: 0;
 }

@@ -71,6 +71,7 @@ final class FichaView extends View {
 			$campos = ( new FichaService( $repo ) )->cargar( $p, $perm );
 			$numero = ( new Numeracion( $repo ) )->de( $p );
 			$sepa   = $this->sepa( $repo, $ambito, $p, $perm );
+			$desde  = $this->socio_desde( $repo, $p, $perm );
 		} catch ( CrmException $e ) {
 			return $this->error_crm( 'ficha', asde_t( 'No se ha podido consultar el CRM: ' ) . $e->getMessage() );
 		}
@@ -94,9 +95,26 @@ final class FichaView extends View {
 					'url_cambios'   => $this->url( 'cambios' ),
 					'url_alta'      => $this->url( 'alta' ),
 					'sepa'          => $sepa,
+					'socio_desde'   => $desde,
 				)
 			)
 		);
+	}
+
+	/**
+	 * v0.34 (petición del usuario): «Socio/a desde» de la cabecera. Solo desde Personas (ni en la
+	 * ficha propia ni en la de la familia), porque cuesta una consulta más al CRM; si falla, no se
+	 * enseña y la ficha sale igual.
+	 */
+	private function socio_desde( PersonaRepository $repo, Persona $p, PermisosFicha $perm ): string {
+		if ( $perm->es_propia() || $perm->es_representado() || ! $p->tiene_membresia_activa() ) {
+			return '';
+		}
+		try {
+			return Altas::socio_desde( ( new Altas( $repo->crm() ) )->membresias( $p->id ), wp_date( 'Y-m-d' ) );
+		} catch ( CrmException | \InvalidArgumentException $e ) {
+			return '';
+		}
 	}
 
 	/**

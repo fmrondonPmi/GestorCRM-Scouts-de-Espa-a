@@ -71,10 +71,25 @@ final class FamiliasView extends TesoreriaBaseView {
 				$c              = $this->cuenta_familiar( $f['miembros'] );
 				$cuentas[ $id ] = $c ? $c->user_login : '';
 			}
-			$html = $this->tpl(
+			// v0.34 (petición del usuario): buscador por nº de familia, cuenta familiar y nombre o nº de socio de sus miembros.
+			$q     = mb_strtolower( remove_accents( $this->get( 'q' ) ) );
+			$lista = '' === $q ? $familias : array_filter(
+				$familias,
+				static function ( array $f, int $id ) use ( $por_num, $cuentas, $q ): bool {
+					$texto = $f['numero'] . ' ' . $cuentas[ $id ];
+					foreach ( $f['miembros'] as $n ) {
+						$texto .= ' ' . $n . ' ' . ( isset( $por_num[ $n ] ) ? $por_num[ $n ]->nombre_completo() : '' );
+					}
+					return str_contains( mb_strtolower( remove_accents( $texto ) ), $q );
+				},
+				ARRAY_FILTER_USE_BOTH
+			);
+			$html  = $this->tpl(
 				'tesoreria/familias',
 				array(
-					'familias'    => $familias,
+					'familias'    => $lista,
+					'total'       => count( $familias ),
+					'q'           => $this->get( 'q' ),
 					'personas'    => $por_num,
 					'cuentas'     => $cuentas,
 					'sugerencias' => Sugerencias::por_email( $activas, $mapa, $cfg['secciones_pagan'] ),

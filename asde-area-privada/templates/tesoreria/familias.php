@@ -2,7 +2,9 @@
 /**
  * Familias: listado, sugerencias y socios sin familia.
  *
- * @var array<int, array{id:int, numero:string, miembros:string[]}> $familias
+ * @var array<int, array{id:int, numero:string, miembros:string[]}> $familias Las que encajan con el buscador (todas, sin buscar)
+ * @var int                                                        $total    Todas las familias del grupo
+ * @var string                                                     $q        Lo buscado (v0.34)
  * @var array<string, AsdeBalears\AreaPrivada\Domain\Persona>      $personas
  * @var array<int, string>                                         $cuentas  familia_id => usuario de la cuenta familiar
  * @var AsdeBalears\AreaPrivada\Domain\Persona[][]                 $sugerencias
@@ -51,10 +53,22 @@ $fila_persona = static function ( $p ) {
 <?php endif; ?>
 
 <section class="asde-card">
-	<h3><?php asde_e( 'Familias (' ); ?><?php echo (int) count( $familias ); ?>)</h3>
-	<?php if ( ! $familias ) : ?>
+	<h3><?php asde_e( 'Familias (' ); ?><?php echo (int) $total; ?>)</h3>
+	<?php if ( ! $total ) : ?>
 		<p><?php asde_e( 'Todavía no hay familias. Empieza por las sugerencias o crea una con los socios sin familia de abajo.' ); ?></p>
 	<?php else : ?>
+		<?php /* v0.34: buscador como el de Personas (parcial.js: solo cambia la lista, y busca al escribir desde la 3.ª letra). */ ?>
+		<form method="get" action="<?php echo esc_url( $url ); ?>" class="asde-filter asde-filter--una-linea" data-asde-parcial-form="familias-lista" role="search">
+			<span class="asde-filter__buscar">
+				<label for="asde-q-familias" class="screen-reader-text"><?php asde_e( 'Buscar' ); ?></label>
+				<input type="search" id="asde-q-familias" name="q" value="<?php echo esc_attr( $q ); ?>" placeholder="<?php echo esc_attr( asde_a( 'Nº de familia, nombre o nº de socio' ) ); ?>" data-asde-buscar autocomplete="off">
+				<button type="submit" class="button"><?php asde_e( 'Filtrar' ); ?></button>
+			</span>
+		</form>
+		<div data-asde-parcial="familias-lista">
+		<?php if ( ! $familias ) : ?>
+			<p><?php echo esc_html( sprintf( asde_t( 'Ninguna familia coincide con «%s».' ), $q ) ); ?></p>
+		<?php else : ?>
 		<table class="asde-table">
 			<thead>
 				<tr>
@@ -83,6 +97,11 @@ $fila_persona = static function ( $p ) {
 				<?php endforeach; ?>
 			</tbody>
 		</table>
+		<?php endif; ?>
+		<?php if ( '' !== $q ) : ?>
+			<p class="asde-muted"><?php echo esc_html( sprintf( asde_t( '%1$d de %2$d familias' ), count( $familias ), $total ) ); ?></p>
+		<?php endif; ?>
+		</div>
 	<?php endif; ?>
 </section>
 

@@ -266,6 +266,44 @@ try {
 	$ok( str_contains( $h, 'Tipos de gasto e ingreso' ) && str_contains( $h, 'Crear tipo' ) && 1 === preg_match( '/-57,50/', $h ), 'la pantalla de tipos, con lo que suma cada uno' );
 	list( $avisos ) = $enviar( new BancoView(), array( 'asde_action' => 'tipo_crear', 'nombre' => 'Lotería', 'naturaleza' => 'ingreso' ), 'asde_banco_tipos' );
 	$ok( str_contains( $avisos, 'Tipo creado' ) && isset( array_column( TiposMovimiento::todos(), 'id', 'nombre' )['Lotería'] ), 'se crean tipos desde su pantalla' );
+
+	// v0.34 (petición del usuario): en «Marcar como revisado», un «+» junto al tipo de cada fila
+	// crea un tipo nuevo en una ventana pequeña (JSON) o, sin JavaScript, va a los tipos y vuelve.
+	View::en_modal( true );
+	$h = $ver( new BancoView(), array( 'revisar' => '1', 'm' => array( (string) $comision['id'] ) ) );
+	View::en_modal( false );
+	$ok( 1 === preg_match( '/data-asde-signo="gasto">.*?<a class="[^"]*asde-banco-mas" href="([^"]+)" data-asde-banco-tipo-nuevo/s', $h, $mas ) && str_contains( html_entity_decode( $mas[1] ), 'tipos=1' ) && str_contains( html_entity_decode( $mas[1] ), 'volver=' ), 'cada fila lleva su «+», que sin JavaScript va a los tipos con la vuelta a la ventana' );
+	$ok( 1 === preg_match( '/<template data-asde-banco-tipo-plantilla>.*name="asde_action" value="tipo_crear".*name="naturaleza".*<\/template>/s', $h ) && str_contains( $h, 'data-naturaleza="gasto"' ), 'la ventana pequeña va en un <template> (fuera del formulario) y los grupos del desplegable dicen su clase' );
+	// Con wp_doing_ajax, wp_send_json() acaba en el wp_die_ajax_handler de la prueba (lanza y $enviar lo recoge).
+	$json_banco = static function ( array $campos ) use ( $enviar ): array {
+		$_SERVER['HTTP_X_ASDE_JSON'] = '1';
+		add_filter( 'wp_doing_ajax', '__return_true' );
+		ob_start();
+		try {
+			list( $avisos ) = $enviar( new BancoView(), $campos, 'asde_banco_tipos' );
+		} finally {
+			$salida = (string) ob_get_clean();
+			remove_filter( 'wp_doing_ajax', '__return_true' );
+			unset( $_SERVER['HTTP_X_ASDE_JSON'] );
+		}
+		return array( json_decode( $salida, true ), $avisos );
+	};
+	list( $r, $avisos_json ) = $json_banco( array( 'asde_action' => 'tipo_crear', 'nombre' => 'Subvención municipal', 'naturaleza' => 'ingreso' ) );
+	$t = TiposMovimiento::obtener( (int) ( $r['data']['id'] ?? 0 ) );
+	$ok( ! empty( $r['success'] ) && $t && 'Subvención municipal' === $r['data']['nombre'] && 'ingreso' === $r['data']['naturaleza'] && '' === $avisos_json, 'con X-Asde-Json, crear un tipo devuelve el tipo en JSON (y no deja el aviso para la página siguiente)' );
+	list( $r ) = $json_banco( array( 'asde_action' => 'tipo_crear', 'nombre' => 'subvención MUNICIPAL', 'naturaleza' => 'ingreso' ) );
+	$ok( isset( $r['success'] ) && false === $r['success'] && str_contains( (string) ( $r['data']['mensaje'] ?? '' ), 'Ya hay un tipo' ), 'un tipo repetido devuelve el motivo en JSON' );
+	// Sin JavaScript: la página de tipos con la vuelta (los m[] de la dirección no se pierden).
+	$vuelta = Pages::url( 'banco', array( 'revisar' => '1' ) ) . '&m%5B0%5D=' . $comision['id'];
+	$h      = $ver( new BancoView(), array( 'tipos' => '1', 'volver' => $vuelta ) );
+	$ok( str_contains( $h, '← Volver a «Marcar como revisado»' ) && str_contains( $h, 'href="' . esc_url( $vuelta ) . '"' ), 'la página de tipos enseña «← Volver a «Marcar como revisado»» con los elegidos' );
+	$_GET = array( 'tipos' => '1', 'volver' => $vuelta );
+	list( , $destino ) = $enviar( new BancoView(), array( 'asde_action' => 'tipo_crear', 'nombre' => 'Rifa', 'naturaleza' => 'ingreso' ), 'asde_banco_tipos' );
+	$_GET = array( 'tipos' => '1', 'volver' => 'https://otra-web.example.invalid/' );
+	list( , $destino_fuera ) = $enviar( new BancoView(), array( 'asde_action' => 'tipo_crear', 'nombre' => 'Rifa 2', 'naturaleza' => 'ingreso' ), 'asde_banco_tipos' );
+	$_GET = array();
+	Notices::render();
+	$ok( str_contains( $destino, 'tipos=1' ) && str_contains( rawurldecode( $destino ), 'm%5B0%5D=' . $comision['id'] ) && ! str_contains( $destino_fuera, 'otra-web' ), 'tras crear un tipo se sigue con la vuelta (de este sitio; una dirección de fuera no)' );
 	// v0.25: después de deshacer o conciliar se vuelve a la misma vista (filtros y página), no a la del principio.
 	$filtrada    = Pages::url( 'banco', array( 'estado' => 'todos', 'q' => 'PRUEBA-BG', 'pag' => '1' ) );
 	$partes      = wp_parse_url( $filtrada );

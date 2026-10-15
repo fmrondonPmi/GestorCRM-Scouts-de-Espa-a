@@ -169,7 +169,7 @@ grupo no ve a otro**; **nunca** se prueba contra el CRM real ni se escribe en é
 ## 5. Inventario (generado)
 
 <!-- inventario:inicio -->
-_Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10-15 · plugin 0.33.2. No editar a mano: se regenera._
+_Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10-15 · plugin 0.34.0. No editar a mano: se regenera._
 
 ### Páginas (Frontend\Pages + Router)
 
@@ -538,5 +538,5 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 
 ### Pruebas (`tests/`)
 
-`acceso` · `alta-reglas` · `alta-scouters` · `altas-crm-escritura` · `altas-crm-pantallas` · `altas-crm` · `app-enganches` · `ayuda` · `banco-gestion` · `colores` · `entorno` · `estilo-wordpress` · `fichas-escritura` · `grupos-emails-banco` · `identidad` · `idiomas-catalogos` · `idiomas` · `inventario` · `lista-espera` · `mejoras-v029` · `mejoras-v030` · `mejoras-v031` · `menus` · `modulos` · `organizacion` · `rendimiento` · `sepa` · `solicitudes` · `tema` · `uniformes` · `usuarios-listado`
+`acceso` · `alta-reglas` · `alta-scouters` · `altas-crm-escritura` · `altas-crm-pantallas` · `altas-crm` · `app-enganches` · `ayuda` · `banco-gestion` · `colores` · `entorno` · `estilo-wordpress` · `fichas-escritura` · `grupos-emails-banco` · `identidad` · `idiomas-catalogos` · `idiomas` · `inventario` · `lista-espera` · `mejoras-v029` · `mejoras-v030` · `mejoras-v031` · `mejoras-v034` · `menus` · `modulos` · `organizacion` · `rendimiento` · `sepa` · `solicitudes` · `tema` · `uniformes` · `usuarios-listado`
 <!-- inventario:fin -->

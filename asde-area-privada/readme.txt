@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.33.2
+Stable tag: 0.34.0
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -61,6 +61,12 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.34.0 =
+* Bank: when marking movements as reviewed, a "+" next to each type opens a small window on top to create a new income or expense type without losing what was chosen; the new type is selected in that row.
+* Families: search by family number, family account, or the name or member number of any member, without reloading the page.
+* Person record: "Member since" in the header, with the years, months and days since the continuous membership began (seen from People).
+* Fix: a membership set to "baja" directly in the CRM without an end date is still active for the CRM (it computes it from the dates). The website showed the person as active and "Remove membership" said there was no active membership; now it finds it and sets the end date.
 
 = 0.33.2 =
 * Code review for simplicity (no change in use): all notices send email through one function, the two public group links share their secret-key code, the inventory screens use the same tested threshold rule, and unused code was removed.
@@ -177,6 +183,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * First version with the mobile app (PWA).
 
 == Upgrade Notice ==
+
+= 0.34.0 =
+New type from the bank review window, family search, "Member since" in the record and a fix for memberships ended in the CRM without a date. No database changes.
 
 = 0.33.2 =
 Internal clean-up, no change in use. No database changes.

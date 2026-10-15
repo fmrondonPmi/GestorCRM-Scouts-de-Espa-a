@@ -2711,4 +2711,22 @@ return array(
 	'Titular: %s' => 'Titular: %s',
 	'¿Pasar las cuentas de las autorizaciones a las fichas del CRM? Se escriben en la ficha de cada miembro de la familia y se borran de la web.' => 'Queres pasar as contas das autorizacións ás fichas do CRM? Escríbense na ficha de cada membro da familia e bórranse da web.',
 	'⚠️ La cuenta de su ficha del CRM no es la autorizada (o no está): no se le cobrará hasta que firme de nuevo.' => '⚠️ A conta da súa ficha do CRM non é a autorizada (ou non está): non se lle cobrará ata que asine de novo.',
+
+	// v0.34: «+» del tipo en el banco
+	'No se ha podido crear el tipo. Vuelve a intentarlo.' => 'Non se puido crear o tipo. Téntao de novo.',
+	'Crear un tipo nuevo' => 'Crear un tipo novo',
+	'Tipo nuevo' => 'Tipo novo',
+	'← Volver a «Marcar como revisado»' => '← Volver a «Marcar como revisado»',
+
+	// v0.34: buscador de Familias y «Socio/a desde» en la ficha
+	'%d año' => '%d ano',
+	'%d día' => '%d día',
+	'%d días' => '%d días',
+	'%d mes' => '%d mes',
+	'%d meses' => '%d meses',
+	'(%1$s, %2$s y %3$s)' => '(%1$s, %2$s e %3$s)',
+	'Socio/a desde' => 'Socio/a desde',
+	'%1$d de %2$d familias' => '%1$d de %2$d familias',
+	'Ninguna familia coincide con «%s».' => 'Ningunha familia coincide con «%s».',
+	'Nº de familia, nombre o nº de socio' => 'Nº de familia, nome ou nº de socio',
 );

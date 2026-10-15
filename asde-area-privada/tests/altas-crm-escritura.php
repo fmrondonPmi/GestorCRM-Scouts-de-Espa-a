@@ -215,6 +215,20 @@ try {
 	$mm = $de( $id_de( 73 ) )[0] ?? array();
 	$ok( is_array( $r8 ) && 'baja' === $mm['estado_c'] && $hoy === $mm['end_date'] && 'personal' === $mm['end_reason'] && '0' === $mm['active'] && '^^' === $ficha( $id_de( 73 ) )['stic_relationship_type_c'], 'la baja cierra la membresía (fecha, motivo y estado) sin borrar nada, y la ficha se queda sin sección' );
 	$ok( 'asde_baja' === $codigo( $altas->baja( $repo->obtener( '990073' ) ?? $mia, $hoy, 'personal' ) ), 'sin membresía activa no hay nada que dar de baja' );
+	// v0.34 (fallo visto por el usuario): una baja hecha a mano en el CRM poniendo la membresía en
+	// «baja» sin fecha de baja. Para el CRM sigue activa (calcula `active` y «Secciones actuales» por
+	// las fechas, P-74): la web la enseñaba de alta y «Dar de baja» decía que no tenía ninguna activa.
+	$altas->nueva_membresia( $repo->obtener( '990073' ) ?? $mia, 'lobatos' );
+	foreach ( $crm->membresias as $i => $mb ) {
+		if ( $mb['persona'] === $id_de( 73 ) && '' === (string) $mb['end_date'] ) {
+			$crm->membresias[ $i ]['estado_c'] = 'baja'; // Lo que cambió alguien en el CRM, sin fecha.
+		}
+	}
+	$mia = $repo->obtener( '990073' );
+	$ok( $mia && $mia->tiene_membresia_activa() && 1 === count( $altas->activas( $id_de( 73 ) ) ), 'en «baja» sin fecha de baja: para el CRM (y la web) sigue activa, y «Dar de baja» la encuentra' );
+	$r10 = $mia ? $altas->baja( $mia, $hoy, 'personal' ) : null;
+	$ab  = array_values( array_filter( $de( $id_de( 73 ) ), static fn( $m ) => 'personal' === $m['end_reason'] && $hoy === $m['end_date'] ) );
+	$ok( is_array( $r10 ) && 2 === count( $ab ) && '0' === $ab[1]['active'] && '^^' === $ficha( $id_de( 73 ) )['stic_relationship_type_c'], 'y la baja desde la web le pone la fecha: el CRM la quita de «Secciones actuales»' );
 
 	$r9 = $altas->cambio_seccion( $nuria, 'escultas', $hoy );
 	$mn = $de( $id_de( 71 ) );

@@ -467,15 +467,51 @@ final class Altas {
 		return null === $ficha ? null : '' !== trim( (string) ( $ficha['stic_identification_number_c'] ?? '' ) );
 	}
 
-	/** @return list<array<string, string>> Las membresías activas (estado «activo» y sin fecha de baja pasada). */
+	/** @return list<array<string, string>> Las membresías activas para el CRM (ver activa()). */
 	public function activas( string $persona_id ): array {
 		$hoy = wp_date( 'Y-m-d' );
-		return array_values(
-			array_filter(
-				$this->membresias( $persona_id ),
-				static fn( $m ) => 'activo' === strtolower( (string) $m['estado_c'] ) && ( '' === (string) $m['end_date'] || (string) $m['end_date'] > $hoy )
-			)
-		);
+		return array_values( array_filter( $this->membresias( $persona_id ), static fn( $m ) => self::activa( $m, $hoy ) ) );
+	}
+
+	/**
+	 * ¿Activa para el CRM? Como la calcula SinergiaCRM al guardarla (`active` y «Secciones actuales»,
+	 * P-74): por las fechas (alta de hoy o anterior; sin baja, o con la baja más adelante), no por
+	 * `estado_c`. v0.34 (fallo visto por el usuario): una membresía puesta en «baja» en el CRM sin
+	 * fecha de baja sigue activa para él; la web la enseñaba de alta y «Dar de baja» decía que no
+	 * tenía ninguna activa. Ahora la baja de la web la encuentra y le pone la fecha.
+	 */
+	public static function activa( array $m, string $hoy ): bool {
+		$inicio = (string) ( $m['start_date'] ?? '' );
+		$fin    = (string) ( $m['end_date'] ?? '' );
+		return ( '' === $inicio || $inicio <= $hoy ) && ( '' === $fin || $fin > $hoy );
+	}
+
+	/**
+	 * v0.34 (petición del usuario): desde cuándo es socio/a sin cortes, para la cabecera de la ficha.
+	 * El alta de la membresía activa más antigua y, hacia atrás, las que enlazan con ella: un cambio
+	 * de sección cierra una y abre otra el mismo día (o el siguiente). Quien se dio de baja y volvió
+	 * cuenta desde la vuelta. '' si no tiene ninguna activa.
+	 *
+	 * @param list<array<string, string>> $membresias Las de membresias().
+	 * @param string                      $hoy        Y-m-d
+	 */
+	public static function socio_desde( array $membresias, string $hoy ): string {
+		$activas = array_filter( $membresias, static fn( $m ) => '' !== (string) $m['start_date'] && self::activa( $m, $hoy ) );
+		if ( ! $activas ) {
+			return '';
+		}
+		$desde = min( array_map( 'strval', array_column( $activas, 'start_date' ) ) );
+		do {
+			$antes  = $desde;
+			$enlaza = gmdate( 'Y-m-d', (int) strtotime( $desde . ' -1 day' ) );
+			foreach ( $membresias as $m ) {
+				$inicio = (string) $m['start_date'];
+				if ( '' !== $inicio && $inicio < $desde && '' !== (string) $m['end_date'] && (string) $m['end_date'] >= $enlaza ) {
+					$desde = $inicio;
+				}
+			}
+		} while ( $desde !== $antes );
+		return $desde;
 	}
 
 	// ---------------------------------------------------------------------
