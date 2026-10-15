@@ -51,6 +51,10 @@ final class Pages {
 		// v0.32: lista de espera (doc 39): la del equipo y la pública para apuntarse.
 		'lista_espera'       => array( 'lista-de-espera', 'Lista de espera', '[asde_lista_espera]', 'area' ),
 		'inscripcion_espera' => array( 'inscripcion-lista-de-espera', 'Inscripción en la lista de espera', '[asde_inscripcion_espera]', 'area' ),
+		// v0.35: eventos (doc 43).
+		'eventos'            => array( 'eventos', 'Eventos', '[asde_eventos]', 'area' ),
+		'eventos_config'     => array( 'configuracion', 'Configuración de eventos', '[asde_eventos_config]', 'eventos' ),
+		'mis_eventos'        => array( 'mis-eventos', 'Mis eventos', '[asde_mis_eventos]', 'area' ),
 	);
 
 	/** Páginas accesibles sin iniciar sesión (no salen en listados ni menús: Visibilidad). */

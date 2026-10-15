@@ -138,7 +138,7 @@ final class ModulosPage {
 							<?php endforeach; ?>
 						</tbody>
 					</table>
-					<p class="description"><?php esc_html_e( 'Banco y Domiciliaciones SEPA van dentro de Tesorería: si se desactiva Tesorería, tampoco se ven. «Mis pagos» se queda mientras el grupo use Tesorería o Uniformes.', 'asde-area-privada' ); ?></p>
+					<p class="description"><?php esc_html_e( 'Banco y Domiciliaciones SEPA van dentro de Tesorería: si se desactiva Tesorería, tampoco se ven. «Mis pagos» se queda mientras el grupo use Tesorería, Uniformes o Eventos.', 'asde-area-privada' ); ?></p>
 					<p class="description"><?php esc_html_e( '«Altas en el CRM» nace apagada. Con ella, Secretaría y Coordinación dan de alta a personas nuevas con su membresía, dan membresías nuevas a quien vuelve, bajas y cambios de sección, y ponen el documento a quien no lo tiene: todo se escribe en el CRM de Scouts de España. Necesita que el usuario del CRM del grupo pueda crear personas y membresías; si no puede, las pantallas no salen.', 'asde-area-privada' ); ?></p>
 					<?php submit_button( __( 'Guardar los módulos', 'asde-area-privada' ) ); ?>
 				</form>

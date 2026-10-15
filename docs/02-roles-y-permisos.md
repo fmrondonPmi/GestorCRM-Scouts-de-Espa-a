@@ -174,3 +174,27 @@ asde_manage_users                 # alta/baja/vinculación de usuarios
 
 - Módulo **«Lista de espera»** en wp-admin → Grupos Scouts → Módulos, **apagado por defecto** (regla 5): `Domain\Modulos::POR_DEFECTO_APAGADOS`; encendido se guarda `[lista_espera => true]` en `asde_ap_modulos`. Apagado, nadie del grupo tiene esas dos capabilities y el enlace del grupo no enseña el formulario (los enlaces personales siguen sirviendo para ver o borrar los datos).
 - La página pública (`inscripcion_espera`) no pide sesión.
+
+## Actualización v0.35 (2026-10-15): eventos (doc 43)
+
+| Capability | Roles | Qué permite |
+|---|---|---|
+| `asde_eventos_gestion` | Scouter, Secretaría, Coordinación | Crear y gestionar eventos **en su ámbito**: un scouter, los de sus secciones y aquellos en cuyo equipo está; Secretaría, los de sección de todo el grupo. **Sustituye a `asde_edit_section_events`**, que no usaba ningún código (se quita al actualizar) |
+| `asde_eventos_grupo` | Coordinación | Además, los eventos **de grupo** y los **externos**, y todos los del grupo |
+| `asde_eventos_economia` | Tesorería | Ver todos los eventos y **validar** (o reabrir) su presupuesto, del que sale el precio |
+| `asde_eventos_config` | Coordinación, Tesorería | Margen del fondo de emergencia, tipos de actividad y titulaciones de tiempo libre |
+
+- Tesorería es siempre un scouter: como tal, también gestiona los eventos de su sección.
+- Las familias y los participantes no ven los eventos todavía: llegan con «Mis eventos» (la segunda parte, también en la v0.35).
+
+## Actualización v0.35 (2026-10-15): inscripciones a los eventos (doc 43)
+
+| Capability | Roles | Qué permite |
+|---|---|---|
+| `asde_eventos_inscribir` | **Todos** (Scouter, Secretaría, Coordinación, Tesorería, Tutor, Participante) | «Mis eventos»: ver los eventos a los que están convocados la persona o los menores que representa, inscribir, firmar la autorización, responder a una convocatoria, confirmar una plaza de la lista de espera y darse de baja mientras el plazo está abierto |
+
+Y lo que ya había, con lo nuevo:
+
+- `asde_eventos_gestion` (en el ámbito del evento): además, **inscribir** a alguien en nombre de su familia (fuera de las secciones convocadas o de la edad, con motivo), **marcar la autorización en papel** y **dar de baja** con motivo, hasta que acaba el evento. Ve quién recoge a cada menor y las observaciones (cifradas en la base de datos).
+- `asde_eventos_economia` (Tesorería): **registrar pagos** (efectivo, ingreso o transferencia, Bizum) de una inscripción o de una familia, **becas y ajustes** con motivo y **anular** un movimiento. No ve quién recoge ni las observaciones, salvo que esté en el equipo del evento.
+- Ámbito de «Mis eventos» (como en el uniforme): la cuenta familiar, sus menores (y firma por ellos); el asociado/a de 14 a 17, se preinscribe (firma su familia); el mayor de edad (el día que empieza el evento), se inscribe sin autorización. Un scouter ve «Mis eventos» solo si hay algún evento para él (p. ej. una formación).

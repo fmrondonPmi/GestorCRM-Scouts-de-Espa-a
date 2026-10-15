@@ -152,6 +152,17 @@ Un **WordPress de demostración aparte** (Local, Enfold, plugin, mu-plugin con C
 - **Arreglo que salió al fotografiar:** en el móvil (390 px) la tercera hoja («Registro de emails») quedaba cortada; las pestañas son ahora más compactas por debajo de 600 px y caben las tres (CSS del plugin; zip 0.25.0 rehecho, el anterior se conserva como `asde-area-privada-0.25.0-sin-hojas-movil.zip`).
 - El generador pasa a la versión 0.25. Paquete **`manual-de-uso-0.25.0.zip`** (carpeta antigua) y copia en `app/public/temporal/` de Local. **No se ha publicado nada**: lo sube el usuario.
 
+## Versión 4.13 · eventos (v0.35.0, 2026-10-15)
+
+Los apartados del módulo de eventos, escritos en la sesión de la nube (doc 43), integrados en la v0.35.
+
+- **Scouters y Coordinación** (`eventos.html`, nuevo): crear un evento, equipo dirigente y normativa, presupuesto y precio, lista de comprobación y publicar, inscripciones, cobros (Tesorería) y configuración. La entrada dice que sale con el módulo «Eventos» encendido.
+- **Familias y participantes** (`mis-eventos.html`, nuevo): inscribir y firmar la autorización, preinscripción de 14 a 17, estados de la inscripción, pagar y darse de baja. Las entradas de los dos manuales lo citan.
+- **Administración** (`admin-modulos.html`): la fila «Eventos» (apagado por defecto) y que por defecto están activos todos menos la lista de espera y los eventos.
+- **Ayuda de cada página:** `data-paginas` en los dos apartados (`eventos`, `eventos_config` y `mis_eventos`), que no existían en la base de la nube (v0.18).
+- **Capturas rehechas:** 80 (Módulos, con la columna «Eventos»). Las pantallas de eventos **aún no tienen capturas**: para hacerlas hay que sembrar en `manual-capturas.php` un evento de demostración con equipo, presupuesto e inscripciones y encender el módulo para el grupo 999 durante el volcado.
+- El generador pasa a «versión 0.35». Paquete `manual-de-uso-0.35.0.zip`.
+
 ## Versión 4.12 · tipo nuevo desde el banco, buscador de Familias y «Socio/a desde» (v0.34.0, 2026-10-15)
 
 Textos y capturas rehechas de la v0.34.0 (doc 42), a petición del usuario. (La v0.33.0 cambió sin apartado propio aquí los textos de la cuenta de la domiciliación en `mis-pagos-sepa.html` y `tesoreria.html`.)

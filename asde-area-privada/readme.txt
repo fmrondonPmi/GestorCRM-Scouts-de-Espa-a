@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.34.0
+Stable tag: 0.35.0
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -61,6 +61,12 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.35.0 =
+* New "Events" module, off by default (switch it on for each group in wp-admin → Grupos Scouts → Módulos): outings, camps and other activities of the group, with their leader team checked against the Balearic youth leisure rules (director, ratio, qualifications, certificate), a budget whose price per section is validated by Treasury, a checklist and publishing.
+* Registrations: "My events" for families and members. Registering a minor signs the participation authorisation (versioned text); members aged 14 to 17 pre-register and their family signs. Places and waiting list (a freed place is offered for 3 days), invitations with "not going", withdrawals while registration is open. The event's "Registrations" tab: participants, waiting list, no answer, registering on behalf of a family and paper authorisations.
+* Event payments (Treasury): cash, transfer or Bizum, one family payment split among siblings, grants and adjustments with a reason, and cancelling a movement. Event payments also show in "My payments". Emails when an event is published, a registration is confirmed, a place is offered or an event is cancelled, plus a reminder before it starts.
+* Built in a separate cloud session on an older base and adapted to this version: module switch, current roles, email log, help pages and Plugin Check rules.
 
 = 0.34.0 =
 * Bank: when marking movements as reviewed, a "+" next to each type opens a small window on top to create a new income or expense type without losing what was chosen; the new type is selected in that row.
@@ -183,6 +189,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * First version with the mobile app (PWA).
 
 == Upgrade Notice ==
+
+= 0.35.0 =
+New Events module, off by default. Four new database tables (events, registrations, budget lines and event payments) are created automatically on update.
 
 = 0.34.0 =
 New type from the bank review window, family search, "Member since" in the record and a fix for memberships ended in the CRM without a date. No database changes.

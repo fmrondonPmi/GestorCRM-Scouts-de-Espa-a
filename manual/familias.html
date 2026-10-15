@@ -12,10 +12,10 @@
 <body>
 <header class="portada">
 	<div class="portada__dentro">
-		<p class="antetitulo">Manual de uso · versión 0.34 · octubre de 2026 · <a class="portada__volver" href="index.html">Todos los manuales</a></p>
+		<p class="antetitulo">Manual de uso · versión 0.35 · octubre de 2026 · <a class="portada__volver" href="index.html">Todos los manuales</a></p>
 		<h1>Manual para familias</h1>
 		<p class="portada__perfil">Madres, padres y tutores</p>
-		<p class="entrada">Cómo entrar en el área privada del grupo con la cuenta familiar, ver y corregir las fichas de tus hijos, consultar los pagos, firmar la domiciliación SEPA y pedir el uniforme.</p>
+		<p class="entrada">Cómo entrar en el área privada del grupo con la cuenta familiar, ver y corregir las fichas de tus hijos, inscribirlos en las salidas y acampadas, consultar los pagos, firmar la domiciliación SEPA y pedir el uniforme.</p>
 		<p class="demo"><strong>Todas las capturas son de un WordPress de demostración con un CRM simulado y datos inventados:</strong> el «Grupo Scout Ejemplo» (grupo 999), personas que no existen y emails <span class="mono">@example.invalid</span>. En tu grupo verás tus datos del CRM.</p>
 	</div>
 	<div class="secciones-franja" aria-hidden="true">
@@ -44,6 +44,10 @@
 <li><a href="#fichas">Las fichas de tus hijos</a></li>
 <li class="sub"><a href="#proponer">Proponer un cambio</a></li>
 <li class="sub"><a href="#salud">Salud y alimentación</a></li>
+<li><a href="#mis-eventos">Mis eventos</a></li>
+<li class="sub"><a href="#mis-eventos-inscribir">Inscribir</a></li>
+<li class="sub"><a href="#mis-eventos-estado">Cómo va la inscripción</a></li>
+<li class="sub"><a href="#mis-eventos-pagar">Pagar y darse de baja</a></li>
 <li><a href="#mis-pagos">Mis pagos</a></li>
 <li><a href="#sepa">Firmar la domiciliación SEPA</a></li>
 <li><a href="#uniforme">Pedir el uniforme</a></li>
@@ -65,6 +69,7 @@
 <li><a href="#instalar-app">Instalar el área privada en el móvil</a></li>
 <li><a href="#inicio">El inicio y el menú</a></li>
 <li><a href="#fichas">Las fichas de tus hijos</a></li>
+<li><a href="#mis-eventos">Mis eventos</a></li>
 <li><a href="#mis-pagos">Mis pagos</a></li>
 <li><a href="#sepa">Firmar la domiciliación SEPA</a></li>
 <li><a href="#uniforme">Pedir el uniforme</a></li>
@@ -236,6 +241,52 @@
 	<figure class="captura"><div class="navegador"><div class="navegador__vista" data-ampliar><img src="capturas/14b-familia-salud.png" width="1180" height="680" alt="Apartado Salud visto por la familia" loading="lazy"></div></div><figcaption><span>El apartado «Salud» de la ficha.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
 </section>
 
+<section id="mis-eventos">
+	<h2>Mis eventos</h2>
+	<p class="resumen">En «Mis eventos» salen las salidas, acampadas y campamentos del grupo a los que estáis convocados: desde ahí se inscribe, se firma la autorización y se ve lo que falta. Solo sale si el grupo usa los eventos del área privada.</p>
+	<ul>
+		<li>Cada evento sale con sus fechas, el lugar (y el mapa), la <strong>información práctica</strong> (salida, llegada, la circular y el material que hay que llevar) y el <strong>precio</strong> de la sección.</li>
+		<li>En una cuenta familiar sale cada hijo o hija convocado; en una cuenta propia, tú. Junto al nombre, cómo está su inscripción y <strong>lo que falta</strong> para confirmarla.</li>
+		<li>Cuando el grupo publica un evento, os llega un email. Unos días antes, un <strong>recordatorio</strong> con lo que falte. El menú dice «Mis eventos (1)» si hay algo pendiente (una autorización por firmar, una plaza por confirmar, una convocatoria por responder), y el inicio también.</li>
+	</ul>
+
+	<h3 id="mis-eventos-inscribir">Inscribir</h3>
+	<ol class="pasos">
+		<li><div><strong>«Inscribir a …»</strong> (o «Inscribirme») abre el formulario, en la misma página.</div></li>
+		<li><div><strong>Transporte</strong> de ida y de vuelta: con el grupo o por vuestra cuenta.</div></li>
+		<li><div>Para un menor, las <strong>personas autorizadas a recogerle</strong> (nombre y DNI). Y, si hace falta, <strong>observaciones para el equipo</strong>. Las dos cosas solo las ve el equipo del evento, van cifradas y se borran al cerrarlo. La salud y la alimentación <strong>no</strong> se escriben aquí: van en la ficha.</div></li>
+		<li><div>Marca que has <strong>revisado la ficha de salud y alimentación</strong> y que está al día. El enlace lleva a la ficha, por si hay que proponer un cambio.</div></li>
+		<li><div>La familia lee la <strong>autorización de participación</strong> y marca «la firmo»: <strong>inscribir ya es firmar</strong>. Queda registrado quién la firma, cuándo y qué versión del texto.</div></li>
+	</ol>
+	<ul>
+		<li><strong>De 14 a 17 años</strong>, con cuenta propia: te puedes <strong>preinscribir</strong>, pero la autorización la tiene que firmar tu familia desde su cuenta («Firmar la autorización») o entregarla en papel al equipo.</li>
+		<li><strong>Mayores de edad</strong> (el día que empieza el evento): os inscribís sin autorización.</li>
+		<li>En una <strong>convocatoria</strong> (actividades a las que se espera a todos) también está «<strong>No va</strong>». Si cambia de idea, se puede inscribir mientras el plazo esté abierto.</li>
+	</ul>
+
+	<h3 id="mis-eventos-estado">Cómo va la inscripción</h3>
+	<div class="tabla">
+		<table>
+			<thead><tr><th scope="col">Estado</th><th scope="col">Qué quiere decir</th></tr></thead>
+			<tbody>
+				<tr><td>Pendiente</td><td>Falta la autorización o el pago. Debajo pone qué.</td></tr>
+				<tr><td>Confirmada</td><td>Todo listo: autorizada y pagada (o el evento no tiene coste). Os llega un email.</td></tr>
+				<tr><td>En lista de espera</td><td>No quedaban plazas. Sale vuestro puesto en la lista.</td></tr>
+				<tr><td>Plaza ofrecida</td><td>Se ha liberado una plaza: «<strong>Confirmar la plaza</strong>» antes de la fecha que pone (3 días). Si no, pasa a la siguiente persona de la lista.</td></tr>
+				<tr><td>No participa / Baja</td><td>Habéis respondido que no va, o se ha dado de baja.</td></tr>
+			</tbody>
+		</table>
+	</div>
+
+	<h3 id="mis-eventos-pagar">Pagar y darse de baja</h3>
+	<ul>
+		<li>Si falta pagar, sale el importe y la <strong>referencia</strong> para la transferencia o el Bizum (por ejemplo <code>E9990012 F999001</code>: el nº del evento y el de vuestra familia). El recuadro dice dónde pagar. Tesorería registra el pago y la inscripción se confirma sola. Los pagos de los eventos también se ven en «Mis pagos».</li>
+		<li>Para dos hermanos se puede hacer un solo pago: Tesorería lo reparte.</li>
+		<li>«<strong>Darse de baja</strong>» se puede mientras el plazo de inscripción está abierto. Después, hablad con el equipo de la sección. Si ya habíais pagado, la devolución la decide Tesorería.</li>
+		<li>Si el grupo cancela el evento, os llega un email y en «Mis eventos» sale cancelado, con el motivo.</li>
+	</ul>
+</section>
+
 <section id="mis-pagos">
 	<h2>Mis pagos</h2>
 	<p class="resumen">Lo que ha registrado Tesorería, solo para consultar: la cuota del grupo de este año, los pagos hechos y lo que queda por pagar.</p>
@@ -353,7 +404,7 @@
 			</ul>
 		</section>
 
-		<p class="pie">Manual para familias del plugin «ASDE Scouts de España – Gestor CRM para Grupos Scouts», versión 0.34 (octubre de 2026). Capturas hechas en un WordPress de demostración con un CRM simulado y datos inventados.</p>
+		<p class="pie">Manual para familias del plugin «ASDE Scouts de España – Gestor CRM para Grupos Scouts», versión 0.35 (octubre de 2026). Capturas hechas en un WordPress de demostración con un CRM simulado y datos inventados.</p>
 	</main>
 </div>
 

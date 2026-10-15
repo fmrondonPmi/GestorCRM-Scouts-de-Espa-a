@@ -81,7 +81,9 @@ add_filter( 'asde_ap_pre_personas_por_email', $simulador, 10, 2 );
 $ids    = array();
 $claves = array();
 $crear  = static function ( string $login, string $rol, string $origen, string $grupo_id, string $estado = Usuarios::ACTIVO ) use ( &$ids, &$claves ) {
-	$clave = wp_generate_password( 20, true, true );
+	// Sin los caracteres especiales «extra»: incluyen el espacio, y WordPress recorta la contraseña al
+	// cifrarla y al entrar; una clave al azar que empezara o acabara en espacio hacía fallar la prueba de vez en cuando.
+	$clave = wp_generate_password( 20, true, false );
 	$id    = wp_insert_user(
 		array(
 			'user_login' => $login,
@@ -118,7 +120,7 @@ $ids['prueba-acc-editor']    = wp_insert_user(
 	array(
 		'user_login' => 'prueba-acc-editor',
 		'user_email' => 'editor.prueba@example.invalid',
-		'user_pass'  => $claves['prueba-acc-editor'] = wp_generate_password( 20, true, true ),
+		'user_pass'  => $claves['prueba-acc-editor'] = wp_generate_password( 20, true, false ),
 		'role'       => 'editor',
 	)
 );

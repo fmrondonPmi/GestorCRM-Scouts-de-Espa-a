@@ -2632,3 +2632,192 @@ dialog.asde-modal--mini .asde-banco-tipo-nuevo h3 {
 .asde-ap .asde-columnas .asde-numeros {
 	white-space: normal;
 }
+
+/* v0.35 · Eventos (doc 43; hecho en la nube como v0.19): agenda, equipo dirigente y presupuesto */
+.asde-ap .asde-badge--evento-borrador { background: var(--asde-neutral-bg); color: var(--asde-muted); }
+.asde-ap .asde-badge--evento-por_validar { background: var(--asde-warn-bg); color: var(--asde-warn-text); }
+.asde-ap .asde-badge--evento-validado { background: var(--asde-info-bg); color: var(--asde-info-text); }
+.asde-ap .asde-badge--evento-publicado { background: var(--asde-ok-bg); color: var(--asde-ok-text); }
+.asde-ap .asde-badge--evento-en_curso { background: var(--asde-ok-strong); color: var(--asde-ok-text); }
+.asde-ap .asde-badge--evento-celebrado { background: var(--asde-tint-strong); color: var(--asde-primary-dark); }
+.asde-ap .asde-badge--evento-cancelado { background: var(--asde-neutral-bg); color: var(--asde-muted); }
+.asde-ap .asde-badge--ingreso { background: var(--asde-ok-bg); color: var(--asde-ok-text); }
+.asde-ap .asde-evento__editar {
+	margin-left: 8px;
+	white-space: nowrap;
+}
+.asde-ap .asde-comprobacion {
+	margin: 0 0 12px;
+	padding: 0;
+	list-style: none;
+}
+.asde-ap .asde-comprobacion li {
+	display: flex;
+	gap: 8px;
+	align-items: baseline;
+	padding: 6px 0;
+	border-bottom: 1px solid var(--asde-tint-line);
+}
+.asde-ap .asde-comprobacion li:last-child {
+	border-bottom: 0;
+}
+.asde-ap .asde-comprobacion__marca {
+	flex: 0 0 20px;
+	height: 20px;
+	border-radius: 50%;
+	font-size: 12px;
+	font-weight: 700;
+	line-height: 20px;
+	text-align: center;
+}
+.asde-ap .asde-comprobacion--ok .asde-comprobacion__marca { background: var(--asde-ok-bg); color: var(--asde-ok-text); }
+.asde-ap .asde-comprobacion--aviso .asde-comprobacion__marca { background: var(--asde-warn-bg); color: var(--asde-warn-text); }
+.asde-ap .asde-comprobacion--info .asde-comprobacion__marca { background: var(--asde-info-bg); color: var(--asde-info-text); }
+.asde-ap span.asde-comprobacion--ok { color: var(--asde-ok-text); }
+.asde-ap span.asde-comprobacion--aviso { color: var(--asde-warn-text); font-weight: 600; }
+.asde-ap .asde-ratio {
+	margin-top: 12px;
+	padding: 8px 12px;
+	border-radius: var(--asde-radius);
+	background: var(--asde-tint);
+}
+.asde-ap .asde-table--plazas input[type="number"] {
+	width: 6em;
+}
+.asde-ap .asde-table--tipos input[type="text"] {
+	width: 100%;
+	min-width: 10em;
+}
+.asde-ap .asde-form--evento textarea {
+	width: 100%;
+}
+.asde-ap .asde-form--evento select,
+.asde-ap .asde-table--equipo select {
+	max-width: 100%;
+}
+@media (max-width: 767px) {
+	.asde-ap .asde-evento__editar {
+		display: inline-block;
+		margin: 6px 0 0;
+	}
+	/* En las tarjetas del móvil, nada más ancho que la tarjeta: los desplegables con opciones
+	   largas («Apoyo (cocina, intendencia, transporte)», los repartos) y las insignias largas. */
+	.asde-ap .asde-table--eventos .asde-badge,
+	.asde-ap .asde-evento .asde-badge {
+		white-space: normal;
+	}
+	.asde-ap .asde-table--tipos input[type="text"] {
+		min-width: 0;
+	}
+	.asde-ap .asde-table--equipo select,
+	.asde-ap .asde-table--tipos select,
+	.asde-ap .asde-form--compacta select,
+	.asde-ap .asde-form--evento select {
+		width: 100%;
+		max-width: 100%;
+	}
+}
+
+/* v0.35 · Eventos: inscripciones, «Mis eventos» y cobros (doc 43; en la nube, v0.19.1) */
+.asde-ap .asde-badge--inscripcion-pendiente { background: var(--asde-warn-bg); color: var(--asde-warn-text); }
+.asde-ap .asde-badge--inscripcion-confirmada { background: var(--asde-ok-bg); color: var(--asde-ok-text); }
+.asde-ap .asde-badge--inscripcion-plaza { background: var(--asde-info-bg); color: var(--asde-info-text); }
+.asde-ap .asde-badge--inscripcion-espera { background: var(--asde-tint-strong); color: var(--asde-primary-dark); }
+.asde-ap .asde-badge--inscripcion-sin_respuesta { background: var(--asde-warn-bg); color: var(--asde-warn-text); }
+.asde-ap .asde-badge--inscripcion-no_participa,
+.asde-ap .asde-badge--inscripcion-baja { background: var(--asde-neutral-bg); color: var(--asde-muted); }
+.asde-ap .asde-mis-evento .asde-badge {
+	white-space: normal;
+}
+.asde-ap .asde-mis-evento__personas {
+	margin: 12px 0 0;
+	padding: 0;
+	list-style: none;
+}
+.asde-ap .asde-mis-evento__persona {
+	padding: 12px 0;
+	border-top: 1px solid var(--asde-tint-line);
+}
+.asde-ap .asde-mis-evento__quien {
+	margin: 0 0 6px;
+}
+.asde-ap .asde-mis-evento__info {
+	margin: 0 0 8px;
+}
+.asde-ap .asde-falta {
+	margin: 0 0 8px 20px;
+}
+.asde-ap .asde-inscribir {
+	margin: 8px 0;
+}
+.asde-ap .asde-inscribir > summary {
+	display: inline-block;
+	cursor: pointer;
+	list-style: none;
+}
+.asde-ap .asde-inscribir > summary::-webkit-details-marker {
+	display: none;
+}
+.asde-ap .asde-inscribir[open] > summary {
+	margin-bottom: 10px;
+}
+.asde-ap .asde-form--inscribir {
+	padding: 12px;
+	border-radius: var(--asde-radius);
+	background: var(--asde-tint);
+}
+.asde-ap .asde-form--inscribir textarea,
+.asde-ap .asde-form--inscribir select {
+	width: 100%;
+	max-width: 100%;
+}
+.asde-ap .asde-form--inscribir .asde-fieldset label {
+	display: inline-block;
+	margin-right: 12px;
+}
+.asde-ap .asde-autorizacion {
+	margin: 12px 0;
+	padding: 10px 12px;
+	border-left: 4px solid var(--asde-primary);
+	background: var(--asde-surface);
+	font-size: 0.95em;
+}
+.asde-ap .asde-autorizacion p:last-child {
+	margin-bottom: 0;
+}
+.asde-ap .asde-accion {
+	margin: 4px 0;
+}
+.asde-ap .asde-accion > summary {
+	cursor: pointer;
+	color: var(--asde-primary);
+}
+.asde-ap .asde-movimientos {
+	margin: 6px 0 0;
+	padding: 0;
+	list-style: none;
+	font-size: 0.9em;
+}
+.asde-ap .asde-movimientos .asde-anulado {
+	text-decoration: line-through;
+	color: var(--asde-muted);
+}
+.asde-ap .asde-lista-espera li,
+.asde-ap .asde-lista-nombres li {
+	margin-bottom: 6px;
+}
+@media (max-width: 767px) {
+	.asde-ap .asde-form--inscribir .asde-fieldset label {
+		display: block;
+		margin-right: 0;
+	}
+	.asde-ap .asde-table--inscripciones .asde-badge {
+		white-space: normal;
+	}
+	.asde-ap .asde-table--inscripciones input[type="text"],
+	.asde-ap .asde-table--inscripciones input[type="date"],
+	.asde-ap .asde-table--inscripciones select {
+		width: 100%;
+		max-width: 100%;
+	}
+}

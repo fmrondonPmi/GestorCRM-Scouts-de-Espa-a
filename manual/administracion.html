@@ -12,7 +12,7 @@
 <body>
 <header class="portada">
 	<div class="portada__dentro">
-		<p class="antetitulo">Manual de uso · versión 0.34 · octubre de 2026 · <a class="portada__volver" href="index.html">Todos los manuales</a></p>
+		<p class="antetitulo">Manual de uso · versión 0.35 · octubre de 2026 · <a class="portada__volver" href="index.html">Todos los manuales</a></p>
 		<h1>Manual de gestión del CRM y de la web</h1>
 		<p class="portada__perfil">Administración de WordPress</p>
 		<p class="entrada">Para quien instala y mantiene la web: la conexión de cada grupo con SinergiaCRM, la organización federada y el usuario de acceso, la instalación, los módulos de cada grupo (y las altas en el CRM), los documentos repetidos, el tema, los colores, los idiomas y las etiquetas, y qué datos se leen del CRM y cuáles guarda la web.</p>
@@ -139,7 +139,7 @@
 
 <section id="modulos">
 	<h2>Módulos de cada grupo</h2>
-	<p class="resumen">En <strong>wp-admin → Grupos Scouts → Módulos</strong> eliges qué partes del área privada usa cada grupo. Por defecto están todas activas.</p>
+	<p class="resumen">En <strong>wp-admin → Grupos Scouts → Módulos</strong> eliges qué partes del área privada usa cada grupo. Por defecto están todas activas menos la lista de espera y los eventos.</p>
 	<figure class="captura"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/wp-admin/admin.php?page=asde-area-privada-modulos</span></div><div class="navegador__vista" data-ampliar><img src="capturas/80-modulos.png" width="1280" height="560" alt="Pantalla Módulos de wp-admin con una fila por grupo, una casilla por módulo y la columna Altas en el CRM" loading="lazy"></div></div><figcaption><span>Una fila por grupo y una casilla por módulo. Desmarca lo que el grupo no use y pulsa «Guardar los módulos». La última columna, «Altas en el CRM», va aparte (abajo).</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
 	<div class="tabla">
 		<table>
@@ -154,13 +154,14 @@
 				<tr><td>Solicitudes de acceso</td><td>El enlace del grupo para pedir el acceso (el grupo deja de salir en «Solicitar acceso») y la pestaña Solicitudes.</td></tr>
 				<tr><td>Alta de scouters</td><td>El enlace para que los scouters se den de alta: deja de servir.</td></tr>
 				<tr><td>Lista de espera</td><td><strong>Apagada por defecto</strong> (v0.32): márcala para que el grupo tenga su enlace para apuntarse a la lista de espera y la lista para el equipo. Apagada, el enlace no enseña el formulario y la lista desaparece (los datos siguen, cifrados, y caducan igual).</td></tr>
+				<tr><td>Eventos</td><td><strong>Apagado por defecto</strong> (v0.35): márcalo para que el grupo tenga «Gestión del grupo → Eventos» (salidas y acampadas con su equipo dirigente, presupuesto, inscripciones y cobros) y las familias, «Mis eventos». Apagado, todo eso desaparece del menú y del inicio y no se envían sus avisos (los eventos siguen guardados).</td></tr>
 			</tbody>
 		</table>
 	</div>
 	<ul>
 		<li>Lo desactivado deja de salir en el menú, en el inicio y en sus pantallas para <strong>todas las cuentas de ese grupo</strong>, también para un administrador mientras trabaja en él (wp-admin no cambia).</li>
 		<li><strong>No se borra nada:</strong> al activarlo de nuevo, todo está como estaba.</li>
-		<li>Banco y Domiciliaciones van dentro de Tesorería: si se desactiva Tesorería, tampoco se ven. «Mis pagos» se queda mientras el grupo use Tesorería o Uniformes.</li>
+		<li>Banco y Domiciliaciones van dentro de Tesorería: si se desactiva Tesorería, tampoco se ven. «Mis pagos» se queda mientras el grupo use Tesorería, Uniformes o Eventos.</li>
 	</ul>
 	<h3 id="altas-crm-activar">Altas en el CRM</h3>
 	<p>La columna <strong>«Altas en el CRM»</strong> está <strong>apagada</strong> en todos los grupos hasta que la marques. Con ella, Secretaría y Coordinación del grupo dan de alta a personas nuevas con su membresía, dan membresías nuevas a quien vuelve, bajas y cambios de sección, y ponen el documento a quien no lo tiene: <strong>todo se escribe en el CRM de Scouts de España</strong> (en el manual del equipo de coordinación, «Altas, bajas y cambios de sección en el CRM»).</p>
@@ -348,7 +349,7 @@
 			</ul>
 		</section>
 
-		<p class="pie">Manual de gestión del CRM y de la web del plugin «ASDE Scouts de España – Gestor CRM para Grupos Scouts», versión 0.34 (octubre de 2026). Capturas hechas en un WordPress de demostración con un CRM simulado y datos inventados.</p>
+		<p class="pie">Manual de gestión del CRM y de la web del plugin «ASDE Scouts de España – Gestor CRM para Grupos Scouts», versión 0.35 (octubre de 2026). Capturas hechas en un WordPress de demostración con un CRM simulado y datos inventados.</p>
 	</main>
 </div>
 

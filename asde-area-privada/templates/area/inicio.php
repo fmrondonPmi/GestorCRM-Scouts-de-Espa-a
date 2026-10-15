@@ -77,6 +77,25 @@ $user = $ambito->user;
 	</div>
 <?php endif; ?>
 
+<?php if ( array_filter( $eventos_pendientes ?? array() ) ) : ?>
+	<?php $ep = $eventos_pendientes; ?>
+	<div class="asde-notice asde-notice--info" role="status">
+		<strong><?php asde_e( 'Tienes cosas pendientes en tus eventos:' ); ?></strong>
+		<ul>
+			<?php if ( $ep['firmar'] ) : ?>
+				<li><?php echo esc_html( sprintf( asde_n( '%d autorización por firmar', '%d autorizaciones por firmar', (int) $ep['firmar'] ), (int) $ep['firmar'] ) ); ?></li>
+			<?php endif; ?>
+			<?php if ( $ep['plaza'] ) : ?>
+				<li><?php echo esc_html( sprintf( asde_n( '%d plaza que se ha liberado por confirmar', '%d plazas que se han liberado por confirmar', (int) $ep['plaza'] ), (int) $ep['plaza'] ) ); ?></li>
+			<?php endif; ?>
+			<?php if ( $ep['responder'] ) : ?>
+				<li><?php echo esc_html( sprintf( asde_n( '%d convocatoria por responder', '%d convocatorias por responder', (int) $ep['responder'] ), (int) $ep['responder'] ) ); ?></li>
+			<?php endif; ?>
+		</ul>
+		<a href="<?php echo esc_url( $url( 'mis_eventos' ) ); ?>"><?php asde_e( 'Ir a Mis eventos' ); ?></a>
+	</div>
+<?php endif; ?>
+
 <?php if ( array_filter( $por_revisar ?? array() ) ) : ?>
 	<?php
 	$uni = static fn( string $estado ) => $url( 'uniformes', array( 'estado' => $estado ) );
@@ -100,6 +119,12 @@ $user = $ambito->user;
 			<?php if ( ! empty( $por_revisar['uniforme_pedido'] ) ) : ?>
 				<li><a href="<?php echo esc_url( $uni( 'por_pedir' ) ); ?>"><?php echo $num( (int) $por_revisar['uniforme_pedido'], esc_html( asde_t( 'pedido de uniforme por incluir en el pedido al proveedor' ) ), esc_html( asde_t( 'pedidos de uniforme por incluir en el pedido al proveedor' ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></a></li>
 			<?php endif; ?>
+			<?php if ( ! empty( $por_revisar['eventos_validar'] ) ) : ?>
+				<li><a href="<?php echo esc_url( $url( 'eventos' ) ); ?>"><?php echo $num( (int) $por_revisar['eventos_validar'], esc_html( asde_t( 'presupuesto de evento por validar' ) ), esc_html( asde_t( 'presupuestos de eventos por validar' ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></a></li>
+			<?php endif; ?>
+			<?php if ( ! empty( $por_revisar['eventos_papel'] ) ) : ?>
+				<li><a href="<?php echo esc_url( $url( 'eventos' ) ); ?>"><?php echo $num( (int) $por_revisar['eventos_papel'], esc_html( asde_t( 'autorización de evento por recoger en papel' ) ), esc_html( asde_t( 'autorizaciones de eventos por recoger en papel' ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></a></li>
+			<?php endif; ?>
 			<?php if ( ! empty( $por_revisar['uniforme_entrega'] ) ) : ?>
 				<li><a href="<?php echo esc_url( $uni( 'por_entregar' ) ); ?>"><?php echo $num( (int) $por_revisar['uniforme_entrega'], esc_html( asde_t( 'uniforme pedido al proveedor por entregar' ) ), esc_html( asde_t( 'uniformes pedidos al proveedor por entregar' ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></a></li>
 			<?php endif; ?>
@@ -121,6 +146,9 @@ if ( $ambito->persona ) {
 foreach ( $ambito->representados as $n => $p ) {
 	$mias[] = $tile( $url( 'ficha', array( 'socio' => $n ) ), sprintf( asde_t( 'Ficha de %s' ), $p->nombre ), asde_t( 'Consulta sus datos y propón cambios (los revisa el grupo).' ) );
 }
+if ( ! empty( $mis_eventos ) ) {
+	$mias[] = $tile( $url( 'mis_eventos' ), asde_t( 'Mis eventos' ), asde_t( 'Salidas, acampadas y campamentos: inscripción, autorización y lo que falta.' ) );
+}
 if ( ( $ambito->persona || $ambito->representados ) && current_user_can( 'asde_mis_pagos' ) ) {
 	$mias[] = $tile( $url( 'pagos' ), asde_t( 'Mis pagos' ), asde_t( 'Lo que ha registrado Tesorería: la cuota del grupo, sus plazos y los pagos del uniforme.' ) );
 }
@@ -129,6 +157,9 @@ if ( ! empty( $pide_uniforme ) ) {
 }
 
 $grupo_tiles = array();
+if ( ! empty( $eventos ) ) {
+	$grupo_tiles[] = $tile( $url( 'eventos' ), asde_t( 'Eventos' ), asde_t( 'Salidas, acampadas y campamentos: equipo, normativa y presupuesto.' ) );
+}
 if ( ! empty( $gestiona_uniformes ) ) {
 	$grupo_tiles[] = $tile( $url( 'uniformes' ), asde_t( 'Gestión de uniformes' ), asde_t( 'Pagos, pedido al proveedor y entregas de las camisas del grupo.' ) );
 }

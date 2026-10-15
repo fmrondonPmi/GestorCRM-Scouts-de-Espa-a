@@ -299,7 +299,7 @@ $ok( $grupo && Grupos::obtener( $grupo['id'] ), 'grupo detectado en el CRM: ' . 
 
 if ( isset( $u ) && $grupo ) {
 	$u      = get_userdata( $u->ID );
-	$clave  = wp_generate_password( 20, true, true ); // Solo en memoria durante la prueba.
+	$clave  = wp_generate_password( 20, true, false ); // Solo en memoria durante la prueba (sin espacios: WordPress recorta la contraseña).
 	wp_set_password( $clave, $u->ID );
 	$entrar = static fn( string $gid, string $pass ) => AccessHooks::en_grupo( $gid, static fn() => wp_authenticate( $u->user_login, $pass ) );
 

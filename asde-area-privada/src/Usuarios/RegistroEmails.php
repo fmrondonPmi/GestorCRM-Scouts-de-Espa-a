@@ -52,6 +52,9 @@ final class RegistroEmails {
 	/** Emails de la lista de espera: confirmar, enlaces, caducidad y mensajes del grupo (v0.32, doc 39). */
 	public const LISTA_ESPERA = 'lista_espera';
 
+	/** Avisos de los eventos (v0.35, doc 43): publicación, confirmación, plaza libre, recordatorio y cancelación. */
+	public const EVENTOS = 'eventos';
+
 	public const TIPOS = array(
 		Invitacion::ALTA      => 'Invitación',
 		Invitacion::RESET     => 'Recuperar contraseña',
@@ -61,6 +64,7 @@ final class RegistroEmails {
 		self::COMPRA_REVISADA => 'Lista de compra revisada',
 		self::BAJA            => 'Aviso de baja',
 		self::LISTA_ESPERA    => 'Lista de espera',
+		self::EVENTOS         => 'Eventos',
 	);
 
 	public static function table(): string {
@@ -206,6 +210,10 @@ final class RegistroEmails {
 			return EmailRechazo::html( $s ? EmailRechazo::saludo( $s ) : '', (string) ( $datos['grupo'] ?? '' ), (string) ( $datos['contacto'] ?? '' ) );
 		}
 		$user  = get_userdata( (int) $fila['user_id'] );
+		if ( self::EVENTOS === $fila['tipo'] ) {
+			$user = ! empty( $fila['user_id'] ) ? get_userdata( (int) $fila['user_id'] ) : false;
+			return \AsdeBalears\AreaPrivada\Eventos\Avisos::html( $datos, $user ? Contacto::saludo( $user ) : '' );
+		}
 		if ( self::COMPRA === $fila['tipo'] ) {
 			$lista = \AsdeBalears\AreaPrivada\Inventario\ComprasTable::obtener( (int) ( $datos['lista'] ?? 0 ) );
 			return $lista ? \AsdeBalears\AreaPrivada\Inventario\AvisoTesoreria::html( $lista, $user ? Contacto::saludo( $user ) : '' ) : '';

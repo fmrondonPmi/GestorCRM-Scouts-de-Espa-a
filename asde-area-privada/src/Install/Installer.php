@@ -96,6 +96,11 @@ final class Installer {
 		\AsdeBalears\AreaPrivada\Tesoreria\Banco\TiposMovimiento::install_table();
 		\AsdeBalears\AreaPrivada\Crm\Operaciones::install_table();
 		\AsdeBalears\AreaPrivada\ListaEspera\Inscripciones::install_table();
+		// v0.35: eventos (doc 43).
+		\AsdeBalears\AreaPrivada\Eventos\EventosTable::install_table();
+		\AsdeBalears\AreaPrivada\Eventos\InscripcionesTable::install_table();
+		\AsdeBalears\AreaPrivada\Eventos\PartidasTable::install_table();
+		\AsdeBalears\AreaPrivada\Eventos\MovimientosTable::install_table();
 		Grupos::migrar();
 		\AsdeBalears\AreaPrivada\Domain\Organizacion::migrar(); // Instalaciones anteriores: Scouts de Balears, código 7.
 		Pages::install();

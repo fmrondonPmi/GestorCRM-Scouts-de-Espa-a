@@ -58,6 +58,11 @@ mindmap
         sección por edad
         contactos y estados
         paso al CRM
+      Eventos módulo apagado por defecto
+        equipo dirigente y normativa
+        presupuesto validado por Tesorería
+        inscripciones y lista de espera
+        cobros y avisos
     Tesorería
       Familias y cuotas
       Control de pagos
@@ -70,6 +75,7 @@ mindmap
         cuenta en la ficha del CRM
         remesa pain.008 un adeudo por familia
       Mis pagos
+      Mis eventos inscribir y autorizar
     CRM SinergiaCRM
       Cliente v4_1
       PersonaRepository
@@ -169,7 +175,7 @@ grupo no ve a otro**; **nunca** se prueba contra el CRM real ni se escribe en é
 ## 5. Inventario (generado)
 
 <!-- inventario:inicio -->
-_Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10-15 · plugin 0.34.0. No editar a mano: se regenera._
+_Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10-15 · plugin 0.35.0. No editar a mano: se regenera._
 
 ### Páginas (Frontend\Pages + Router)
 
@@ -205,6 +211,9 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 | `inventario_compras` | listas-de-compra | `[asde_inventario_compras]` → `InventarioComprasView` |  | sí |
 | `lista_espera` | lista-de-espera | `[asde_lista_espera]` → `ListaEsperaView` |  |  |
 | `inscripcion_espera` | inscripcion-lista-de-espera | `[asde_inscripcion_espera]` → `InscripcionEsperaView` | sí |  |
+| `eventos` | eventos | `[asde_eventos]` → `EventosView` |  |  |
+| `eventos_config` | configuracion | `[asde_eventos_config]` → `EventosConfigView` |  |  |
+| `mis_eventos` | mis-eventos | `[asde_mis_eventos]` → `MisEventosView` |  |  |
 
 ### Capabilities por rol (Install\Roles)
 
@@ -218,8 +227,12 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 | `asde_crm_sync` |  |  | ✓ |  |  |  |
 | `asde_edit_all` |  | ✓ |  |  |  |  |
 | `asde_edit_section_contact` | ✓ |  |  |  |  |  |
-| `asde_edit_section_events` | ✓ |  |  |  |  |  |
 | `asde_edit_self_contact` | ✓ |  |  |  |  | ✓ |
+| `asde_eventos_config` |  |  | ✓ | ✓ |  |  |
+| `asde_eventos_economia` |  |  |  | ✓ |  |  |
+| `asde_eventos_gestion` | ✓ | ✓ | ✓ |  |  |  |
+| `asde_eventos_grupo` |  |  | ✓ |  |  |  |
+| `asde_eventos_inscribir` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 | `asde_inventario` | ✓ | ✓ | ✓ | ✓ |  |  |
 | `asde_inventario_aprobar` |  |  |  | ✓ |  |  |
 | `asde_lista_espera` | ✓ | ✓ | ✓ | ✓ |  |  |
@@ -256,6 +269,7 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 | `solicitudes` Solicitudes de acceso | El enlace del grupo para pedir el acceso y su revisión. | `asde_aprobar_solicitudes` | — | encendido |
 | `alta_scouters` Alta de scouters | El enlace para que los scouters se den de alta. | — | — | encendido |
 | `lista_espera` Lista de espera | El enlace para apuntarse a la lista de espera, la lista para el equipo y el paso al CRM. | `asde_lista_espera`, `asde_lista_espera_alta` | — | apagado |
+| `eventos` Eventos | Salidas, acampadas y otras actividades: equipo dirigente, presupuesto, inscripciones, «Mis eventos» y cobros. | `asde_eventos_gestion`, `asde_eventos_grupo`, `asde_eventos_economia`, `asde_eventos_config`, `asde_eventos_inscribir` | — | apagado |
 
 ### Tablas propias (`{prefix}asde_*`)
 
@@ -263,6 +277,10 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 |---|---|
 | `asde_auditoria` | `src/Audit/Logger.php` |
 | `asde_crm_operaciones` | `src/Crm/Operaciones.php` |
+| `asde_eventos` | `src/Eventos/EventosTable.php` |
+| `asde_evento_inscripciones` | `src/Eventos/InscripcionesTable.php` |
+| `asde_evento_movimientos` | `src/Eventos/MovimientosTable.php` |
+| `asde_evento_partidas` | `src/Eventos/PartidasTable.php` |
 | `asde_cambios` | `src/Fichas/Cambios.php` |
 | `asde_informes` | `src/Informes/InformesTable.php` |
 | `asde_inventario_compras` | `src/Inventario/ComprasTable.php` |
@@ -340,6 +358,20 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 - `Persona` — Persona del CRM (Contacts) con los campos que necesita el área privada.
 - `Secciones` — Catálogo de secciones de ASDE (docs/05-secciones-educativas.md).
 
+**Eventos/**
+
+- `Avisos` — Avisos de los eventos (v0.35, P-152):
+- `Cobros` — Cobro de las inscripciones (v0.35, doc 43, apartado 4):
+- `Config` — Configuración de los eventos de cada grupo (opción asde_ap_eventos_<grupo>, doc 43):
+- `EventosTable` — Eventos del grupo ({prefix}asde_eventos, doc 43):
+- `Inscripciones` — Inscripciones a los eventos (v0.35, doc 43, apartado 3).
+- `InscripcionesTable` — Personas de un evento ({prefix}asde_evento_inscripciones, doc 43):
+- `MovimientosTable` — Cobros de los eventos ({prefix}asde_evento_movimientos, doc 43, apartado 4):
+- `Normativa` — Lo que pide la normativa de tiempo libre de las Illes Balears y cómo trabaja hoy el grupo (doc 43, apartado 6; Ley 10/2022 y Decreto 23/2018).
+- `PartidasTable` — Partidas del presupuesto de un evento ({prefix}asde_evento_partidas, doc 43, apartado 4).
+- `Presupuesto` — El precio de un evento sale de su coste (P-145, doc 43, apartado 4):
+- `Servicio` — Eventos del grupo (v0.35, doc 43):
+
 **Fichas/**
 
 - `Cambios` — Cola de cambios propuestos ({prefix}asde_cambios, docs/07):
@@ -372,6 +404,9 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 - `CambiosView` — Bandeja de cambios propuestos por las cuentas familiares.
 - `CuotasView` — Configuración de las cuotas que paga cada familia (por ronda):
 - `EmailsView` — Registro de emails del grupo:
+- `EventosBaseView` — Base de las páginas de eventos:
+- `EventosConfigView` — Configuración de los eventos del grupo (Coordinación y Tesorería):
+- `EventosView` — Eventos del grupo (v0.35, doc 43):
 - `FamiliasView` — Familias:
 - `FederacionView` — Coste que paga el grupo a su organización federada:
 - `FichaView` — Ficha de una persona con todos los datos que el usuario puede ver.
@@ -382,6 +417,7 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 - `InventarioTiposView` — Tipos de material (doc 32):
 - `InventarioView` — Inventario de material del grupo (doc 32):
 - `ListaEsperaView` — Lista de espera (v0.32, doc 39) para scouters, Secretaría, Coordinación y Tesorería:
+- `MisEventosView` — «Mis eventos» (v0.35, doc 43):
 - `MisPagosView` — «Mis pagos» (petición del usuario, 2026-09-29):
 - `PersonasView` — Personas del grupo, activas y NO activas:
 - `RecuperarView` — "¿Has olvidado tu contraseña?" (pública).
@@ -538,5 +574,5 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 
 ### Pruebas (`tests/`)
 
-`acceso` · `alta-reglas` · `alta-scouters` · `altas-crm-escritura` · `altas-crm-pantallas` · `altas-crm` · `app-enganches` · `ayuda` · `banco-gestion` · `colores` · `entorno` · `estilo-wordpress` · `fichas-escritura` · `grupos-emails-banco` · `identidad` · `idiomas-catalogos` · `idiomas` · `inventario` · `lista-espera` · `mejoras-v029` · `mejoras-v030` · `mejoras-v031` · `mejoras-v034` · `menus` · `modulos` · `organizacion` · `rendimiento` · `sepa` · `solicitudes` · `tema` · `uniformes` · `usuarios-listado`
+`acceso` · `alta-reglas` · `alta-scouters` · `altas-crm-escritura` · `altas-crm-pantallas` · `altas-crm` · `app-enganches` · `ayuda` · `banco-gestion` · `colores` · `entorno` · `estilo-wordpress` · `eventos-inscripciones` · `eventos` · `fichas-escritura` · `grupos-emails-banco` · `identidad` · `idiomas-catalogos` · `idiomas` · `inventario` · `lista-espera` · `mejoras-v029` · `mejoras-v030` · `mejoras-v031` · `mejoras-v034` · `menus` · `modulos` · `organizacion` · `rendimiento` · `sepa` · `solicitudes` · `tema` · `uniformes` · `usuarios-listado`
 <!-- inventario:fin -->

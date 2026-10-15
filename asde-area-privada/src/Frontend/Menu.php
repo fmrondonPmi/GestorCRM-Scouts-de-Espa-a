@@ -2,6 +2,8 @@
 namespace AsdeBalears\AreaPrivada\Frontend;
 
 use AsdeBalears\AreaPrivada\Auth\Ambito;
+use AsdeBalears\AreaPrivada\Eventos\Inscripciones;
+use AsdeBalears\AreaPrivada\Eventos\Servicio as Eventos;
 use AsdeBalears\AreaPrivada\Fichas\Cambios;
 use AsdeBalears\AreaPrivada\Frontend\Views\MisPagosView;
 use AsdeBalears\AreaPrivada\Uniformes\Servicio;
@@ -13,10 +15,10 @@ defined( 'ABSPATH' ) || exit;
  * Menú del área privada, separado por tipo de usuario (v0.15, doc 28).
  *
  * - **Personal** («Mi espacio» o «Mi familia»): lo que hace cada persona o familia
- *   con lo suyo: su ficha, sus pagos y su uniforme.
+ *   con lo suyo: su ficha, sus eventos (v0.35), sus pagos y su uniforme.
  * - **Gestión** («Gestión del grupo»): lo de scouters, Secretaría, Coordinación y
- *   Tesorería: personas, usuarios, solicitudes, cambios, informes, tesorería y la
- *   gestión de uniformes.
+ *   Tesorería: personas, usuarios, solicitudes, cambios, informes, eventos (v0.35),
+ *   tesorería y la gestión de uniformes.
  *
  * No hay un «tipo de cuenta» aparte: cada entrada sale según las capabilities de
  * siempre. Una familia solo ve el grupo personal; un scouter, los dos (sus cosas
@@ -39,6 +41,10 @@ final class Menu {
 		// --- Lo personal / familiar ---
 		if ( $ambito && ( $ambito->persona || $ambito->representados ) ) {
 			$personal['ficha'] = $ambito->persona ? asde_t( 'Mis datos' ) : asde_t( 'Mi familia' );
+			if ( Inscripciones::en_menu( $ambito ) ) {
+				$n                       = array_sum( Inscripciones::pendientes( $ambito ) );
+				$personal['mis_eventos'] = asde_t( 'Mis eventos' ) . ( $n ? ' (' . $n . ')' : '' );
+			}
 			if ( current_user_can( MisPagosView::CAP ) ) {
 				$personal['pagos'] = asde_t( 'Mis pagos' );
 			}
@@ -65,6 +71,10 @@ final class Menu {
 		}
 		if ( current_user_can( 'asde_reports' ) ) {
 			$gestion['informes'] = asde_t( 'Informes' );
+		}
+		if ( $ambito && Eventos::puede_entrar() ) {
+			$n                  = Eventos::pendientes( $ambito )['validar'];
+			$gestion['eventos'] = asde_t( 'Eventos' ) . ( $n ? ' (' . $n . ')' : '' );
 		}
 		if ( $ambito && $gestiona ) {
 			$n                    = (int) ( $pendientes['pago'] + $pendientes['pedido'] + $pendientes['entrega'] );

@@ -5,7 +5,10 @@ use AsdeBalears\AreaPrivada\Auth\Ambito;
 use AsdeBalears\AreaPrivada\Frontend\Views\AccesoView;
 use AsdeBalears\AreaPrivada\Frontend\Views\ActivarCuentaView;
 use AsdeBalears\AreaPrivada\Frontend\Views\AltaScoutersView;
+use AsdeBalears\AreaPrivada\Frontend\Views\EventosConfigView;
+use AsdeBalears\AreaPrivada\Frontend\Views\EventosView;
 use AsdeBalears\AreaPrivada\Frontend\Views\InscripcionEsperaView;
+use AsdeBalears\AreaPrivada\Frontend\Views\MisEventosView;
 use AsdeBalears\AreaPrivada\Frontend\Views\ListaEsperaView;
 use AsdeBalears\AreaPrivada\Frontend\Views\AltaUsuariosView;
 use AsdeBalears\AreaPrivada\Frontend\Views\AreaPrivadaView;
@@ -94,6 +97,10 @@ final class Router {
 		'inventario_compras' => array( 'asde_inventario_compras', InventarioComprasView::class ),
 		'lista_espera'       => array( 'asde_lista_espera', ListaEsperaView::class ),
 		'inscripcion_espera' => array( 'asde_inscripcion_espera', InscripcionEsperaView::class ),
+		// v0.35: eventos (doc 43).
+		'eventos'            => array( 'asde_eventos', EventosView::class ),
+		'eventos_config'     => array( 'asde_eventos_config', EventosConfigView::class ),
+		'mis_eventos'        => array( 'asde_mis_eventos', MisEventosView::class ),
 	);
 
 	public function register(): void {

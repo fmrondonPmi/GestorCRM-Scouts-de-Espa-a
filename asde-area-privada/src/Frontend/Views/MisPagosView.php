@@ -4,6 +4,10 @@ namespace AsdeBalears\AreaPrivada\Frontend\Views;
 use AsdeBalears\AreaPrivada\Auth\Ambito;
 use AsdeBalears\AreaPrivada\Crm\CrmException;
 use AsdeBalears\AreaPrivada\Crm\PersonaRepository;
+use AsdeBalears\AreaPrivada\Eventos\Cobros as EventosCobros;
+use AsdeBalears\AreaPrivada\Eventos\EventosTable;
+use AsdeBalears\AreaPrivada\Eventos\InscripcionesTable;
+use AsdeBalears\AreaPrivada\Eventos\MovimientosTable as EventosMovimientos;
 use AsdeBalears\AreaPrivada\Frontend\Notices;
 use AsdeBalears\AreaPrivada\Sepa\Avisos;
 use AsdeBalears\AreaPrivada\Sepa\Config as SepaConfig;
@@ -124,6 +128,39 @@ final class MisPagosView extends View {
 				);
 			}
 		}
+		// v0.35: inscripciones a eventos (lo pagado y lo que queda, con su referencia).
+		$eventos      = array_column( EventosTable::todos(), null, 'id' );
+		$inscripciones = InscripcionesTable::de_socios( $nums );
+		$ev_movs      = EventosMovimientos::de_inscripciones( array_column( $inscripciones, 'id' ) );
+		$hay_eventos  = false;
+		foreach ( $inscripciones as $f ) {
+			$e = $eventos[ $f['evento_id'] ] ?? null;
+			if ( ! $e ) {
+				continue;
+			}
+			$concepto = sprintf( asde_t( 'Evento %1$s%2$s · %3$s' ), EventosTable::numero( $e ), count( $nums ) > 1 && isset( $nombres[ $f['socio'] ] ) ? ' (' . $nombres[ $f['socio'] ] . ')' : '', $e['nombre'] );
+			foreach ( $ev_movs[ $f['id'] ] ?? array() as $m ) {
+				if ( EventosMovimientos::PAGO === $m['tipo'] && null === $m['anulado_en'] ) {
+					$pagos[]     = array(
+						'fecha'    => (string) $m['fecha'],
+						'concepto' => $concepto,
+						'metodo'   => asde_t( EventosMovimientos::FORMAS[ $m['forma'] ] ?? '' ),
+						'importe'  => (float) $m['importe'],
+						'ref'      => (string) $m['referencia'],
+					);
+					$hay_eventos = true;
+				}
+			}
+			$cobro = EventosCobros::de( $f, $ev_movs[ $f['id'] ] ?? array() );
+			if ( in_array( $f['estado'], InscripcionesTable::ACTIVAS, true ) && EventosTable::CANCELADO !== $e['estado'] && $cobro['pendiente'] > 0 ) {
+				$pendientes[] = array(
+					'concepto' => $concepto,
+					'importe'  => Calculadora::euros( $cobro['pendiente'] ),
+					'ref'      => EventosCobros::referencia( $e, $f ),
+				);
+				$hay_eventos  = true;
+			}
+		}
 		usort( $pagos, static fn( $x, $y ) => strcmp( $y['fecha'], $x['fecha'] ) );
 
 		// Domiciliación SEPA de cada familia.
@@ -155,6 +192,7 @@ final class MisPagosView extends View {
 					'pagos'      => $pagos,
 					'pendientes' => $pendientes,
 					'url_uniforme' => $this->url( 'uniforme' ),
+					'url_eventos'  => $hay_eventos ? $this->url( 'mis_eventos' ) : '',
 					'sepa'       => $sepa,
 					'url'        => $this->url( 'pagos' ),
 				)

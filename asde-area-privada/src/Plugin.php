@@ -34,6 +34,7 @@ final class Plugin {
 		Tabla::register();
 		Instantanea::register();
 		\AsdeBalears\AreaPrivada\Domain\Modulos::register(); // v0.20: módulos que se activan o desactivan por grupo.
+		\AsdeBalears\AreaPrivada\Eventos\Avisos::register(); // v0.35 (eventos, doc 43): avisos masivos de los eventos (WP-Cron).
 
 		if ( is_admin() ) {
 			( new SettingsPage() )->register();

@@ -34,7 +34,6 @@ final class Roles {
 					'asde_edit_self_contact'    => true,
 					'asde_view_section'         => true,
 					'asde_edit_section_contact' => true,
-					'asde_edit_section_events'  => true,
 					'asde_approve_changes'      => true,
 					'asde_aprobar_solicitudes' => true, // Solicitudes de acceso (v0.10): un scouter, las de sus secciones.
 					'asde_view_health'          => true, // Solo lectura y solo su sección (2026-09-26).
@@ -47,6 +46,9 @@ final class Roles {
 					'asde_mis_pagos'         => true,
 					'asde_inventario'        => true, // Inventario de material (v0.19, doc 32).
 					'asde_lista_espera'      => true, // Lista de espera (v0.32, doc 39): ver, contactar y cambiar el estado.
+					'asde_eventos_inscribir' => true, // Eventos (v0.35, doc 43): «Mis eventos».
+					// Crea y gestiona los eventos de sus secciones y aquellos en cuyo equipo está.
+					'asde_eventos_gestion'   => true,
 				),
 			),
 			self::SECRETARIA   => array(
@@ -69,6 +71,8 @@ final class Roles {
 					'asde_inventario'        => true,
 					'asde_lista_espera'      => true,
 					'asde_lista_espera_alta' => true, // Asignar sección, dar de alta en el CRM y borrar (v0.32).
+					'asde_eventos_inscribir' => true,
+					'asde_eventos_gestion'   => true, // Los de sección de todo el grupo.
 				),
 			),
 			self::COORDINACION => array(
@@ -95,6 +99,11 @@ final class Roles {
 					'asde_inventario'        => true,
 					'asde_lista_espera'      => true,
 					'asde_lista_espera_alta' => true,
+					'asde_eventos_inscribir' => true,
+					// Eventos: además, los de grupo y los externos, y la configuración.
+					'asde_eventos_gestion'   => true,
+					'asde_eventos_grupo'     => true,
+					'asde_eventos_config'    => true,
 				),
 			),
 			self::TESORERIA    => array(
@@ -114,6 +123,10 @@ final class Roles {
 					'asde_inventario'         => true,
 					'asde_inventario_aprobar' => true,
 					'asde_lista_espera'       => true,
+					'asde_eventos_inscribir'  => true,
+					// Eventos: valida el presupuesto (el precio sale de él) y configura el margen.
+					'asde_eventos_economia'   => true,
+					'asde_eventos_config'     => true,
 				),
 			),
 			self::TUTOR        => array(
@@ -124,6 +137,7 @@ final class Roles {
 					'asde_uniformes_pedir'      => true,
 					'asde_mis_pagos'            => true,
 					'asde_sepa_autorizar'       => true, // v0.12: firma la autorización de domiciliación SEPA de su familia.
+					'asde_eventos_inscribir'    => true, // v0.35: «Mis eventos» (inscribir a sus menores).
 				),
 			),
 			self::PARTICIPANTE => array(
@@ -135,6 +149,7 @@ final class Roles {
 					'asde_uniformes_pedir'   => true,
 					'asde_mis_pagos'         => true,
 					'asde_sepa_autorizar'    => true, // Solo si es mayor de edad (Sepa\Mandatos::puede_firmar).
+					'asde_eventos_inscribir' => true,
 				),
 			),
 		);

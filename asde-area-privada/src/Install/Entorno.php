@@ -419,6 +419,10 @@ final class Entorno {
 			\AsdeBalears\AreaPrivada\Uniformes\PedidosTable::table(),
 			\AsdeBalears\AreaPrivada\Sepa\Mandatos::table(),
 			\AsdeBalears\AreaPrivada\Sepa\Remesas::table(),
+			\AsdeBalears\AreaPrivada\Eventos\EventosTable::table(),
+			\AsdeBalears\AreaPrivada\Eventos\InscripcionesTable::table(),
+			\AsdeBalears\AreaPrivada\Eventos\PartidasTable::table(),
+			\AsdeBalears\AreaPrivada\Eventos\MovimientosTable::table(),
 		);
 	}
 

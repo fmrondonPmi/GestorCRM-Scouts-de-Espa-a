@@ -5,10 +5,11 @@
  * Se conservan, a propósito, los usuarios, las páginas y las tablas
  * ({prefix}asde_auditoria, asde_socios, asde_informes, asde_familias,
  * asde_familia_miembros, asde_movimientos, asde_emails, asde_banco_lotes, asde_cambios,
- * asde_banco_movimientos, asde_solicitudes, asde_uniformes, asde_sepa_mandatos, asde_sepa_remesas)
+ * asde_banco_movimientos, asde_solicitudes, asde_uniformes, asde_sepa_mandatos, asde_sepa_remesas, y desde
+ * la v0.35 asde_eventos, asde_evento_inscripciones, asde_evento_partidas y asde_evento_movimientos, los cobros de los eventos)
  * y el email cifrado de cada cuenta. Las autorizaciones SEPA y las remesas se conservan (cifradas): son
  * el justificante de los cobros; quien no las necesite puede borrar esas dos tablas a mano.
- * La configuración de uniformes de cada grupo (asde_ap_uniformes_<grupo>) se borra;
+ * La configuración de uniformes y la de eventos de cada grupo (asde_ap_uniformes_<grupo>, asde_ap_eventos_<grupo>) se borran;
  * sus imágenes se quedan en la biblioteca de medios.
  * De las solicitudes de acceso sí se borra lo que escribió quien pedía.
  */
@@ -45,6 +46,7 @@ foreach ( is_array( $asde_grupos ) ? $asde_grupos : array() as $asde_grupo ) {
 	wp_clear_scheduled_hook( 'asde_ap_instantanea_refrescar', array( (string) $asde_grupo['numero'] ) );
 	delete_option( 'asde_ap_snaplock_' . $asde_grupo['numero'] ); // Cerrojo de la lectura de fichas.
 	delete_option( 'asde_ap_uniformes_' . $asde_grupo['numero'] );
+	delete_option( 'asde_ap_eventos_' . $asde_grupo['numero'] ); // Tipos, margen y titulaciones de los eventos (v0.35).
 	delete_option( 'asde_ap_sepa_' . $asde_grupo['numero'] ); // Datos del acreedor SEPA (el IBAN, cifrado).
 }
 delete_transient( 'asde_ap_numeracion' );

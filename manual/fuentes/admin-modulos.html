@@ -1,6 +1,6 @@
 <section id="modulos">
 	<h2>Módulos de cada grupo</h2>
-	<p class="resumen">En <strong>wp-admin → Grupos Scouts → Módulos</strong> eliges qué partes del área privada usa cada grupo. Por defecto están todas activas.</p>
+	<p class="resumen">En <strong>wp-admin → Grupos Scouts → Módulos</strong> eliges qué partes del área privada usa cada grupo. Por defecto están todas activas menos la lista de espera y los eventos.</p>
 	<captura src="80-modulos" url="/wp-admin/admin.php?page=asde-area-privada-modulos" alt="Pantalla Módulos de wp-admin con una fila por grupo, una casilla por módulo y la columna Altas en el CRM">Una fila por grupo y una casilla por módulo. Desmarca lo que el grupo no use y pulsa «Guardar los módulos». La última columna, «Altas en el CRM», va aparte (abajo).</captura>
 	<div class="tabla">
 		<table>
@@ -15,13 +15,14 @@
 				<tr><td>Solicitudes de acceso</td><td>El enlace del grupo para pedir el acceso (el grupo deja de salir en «Solicitar acceso») y la pestaña Solicitudes.</td></tr>
 				<tr><td>Alta de scouters</td><td>El enlace para que los scouters se den de alta: deja de servir.</td></tr>
 				<tr><td>Lista de espera</td><td><strong>Apagada por defecto</strong> (v0.32): márcala para que el grupo tenga su enlace para apuntarse a la lista de espera y la lista para el equipo. Apagada, el enlace no enseña el formulario y la lista desaparece (los datos siguen, cifrados, y caducan igual).</td></tr>
+				<tr><td>Eventos</td><td><strong>Apagado por defecto</strong> (v0.35): márcalo para que el grupo tenga «Gestión del grupo → Eventos» (salidas y acampadas con su equipo dirigente, presupuesto, inscripciones y cobros) y las familias, «Mis eventos». Apagado, todo eso desaparece del menú y del inicio y no se envían sus avisos (los eventos siguen guardados).</td></tr>
 			</tbody>
 		</table>
 	</div>
 	<ul>
 		<li>Lo desactivado deja de salir en el menú, en el inicio y en sus pantallas para <strong>todas las cuentas de ese grupo</strong>, también para un administrador mientras trabaja en él (wp-admin no cambia).</li>
 		<li><strong>No se borra nada:</strong> al activarlo de nuevo, todo está como estaba.</li>
-		<li>Banco y Domiciliaciones van dentro de Tesorería: si se desactiva Tesorería, tampoco se ven. «Mis pagos» se queda mientras el grupo use Tesorería o Uniformes.</li>
+		<li>Banco y Domiciliaciones van dentro de Tesorería: si se desactiva Tesorería, tampoco se ven. «Mis pagos» se queda mientras el grupo use Tesorería, Uniformes o Eventos.</li>
 	</ul>
 	<h3 id="altas-crm-activar">Altas en el CRM</h3>
 	<p>La columna <strong>«Altas en el CRM»</strong> está <strong>apagada</strong> en todos los grupos hasta que la marques. Con ella, Secretaría y Coordinación del grupo dan de alta a personas nuevas con su membresía, dan membresías nuevas a quien vuelve, bajas y cambios de sección, y ponen el documento a quien no lo tiene: <strong>todo se escribe en el CRM de Scouts de España</strong> (en el manual del equipo de coordinación, «Altas, bajas y cambios de sección en el CRM»).</p>

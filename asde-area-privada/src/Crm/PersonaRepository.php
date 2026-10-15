@@ -226,6 +226,33 @@ final class PersonaRepository {
 	}
 
 	/**
+	 * Campos concretos de varias fichas del grupo, leídos **en vivo** y en una sola
+	 * consulta (por cada 50). Es para datos que no están en la instantánea y que solo se
+	 * necesitan en una pantalla concreta (p. ej. la formación y el certificado de delitos
+	 * sexuales del equipo de un evento, v0.35). Nada se guarda.
+	 *
+	 * @param string[] $nums   Nº Scouts de España.
+	 * @param string[] $campos Campos del módulo Contacts.
+	 * @return array<string, array<string, string>> num_asde => campo => valor
+	 */
+	public function campos_varias( array $nums, array $campos ): array {
+		$nums   = array_values( array_unique( array_filter( array_map( 'strval', $nums ), array( self::class, 'es_num_asde' ) ) ) );
+		$campos = array_values( array_unique( array_filter( $campos, static fn( $c ) => (bool) preg_match( '/^[a-z0-9_]+$/', (string) $c ) ) ) );
+		$out    = array();
+		foreach ( array_chunk( $nums, 50 ) as $lote ) {
+			$in      = implode( ',', array_map( array( Query::class, 'str' ), $lote ) );
+			$entries = self::filtrar_grupo( $this->crm->list_entries( 'Contacts', "contacts_cstm.numerosocio_c IN ($in)", array_merge( array( 'id', 'numerosocio_c' ), $campos ), self::links_grupo(), 0, 60 )['entries'] );
+			foreach ( $entries as $e ) {
+				$num = (string) ( $e['fields']['numerosocio_c'] ?? '' );
+				if ( in_array( $num, $lote, true ) ) {
+					$out[ $num ] = array_map( 'strval', array_intersect_key( $e['fields'], array_flip( $campos ) ) );
+				}
+			}
+		}
+		return $out;
+	}
+
+	/**
 	 * Todas las fichas del grupo.
 	 *
 	 * @return Persona[]

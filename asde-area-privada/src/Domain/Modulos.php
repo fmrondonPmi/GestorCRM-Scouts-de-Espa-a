@@ -31,9 +31,10 @@ final class Modulos {
 	public const SOLICITUDES   = 'solicitudes';
 	public const ALTA_SCOUTERS = 'alta_scouters';
 	public const LISTA_ESPERA  = 'lista_espera';
+	public const EVENTOS       = 'eventos';
 
 	/** Módulos que nacen apagados (v0.32): cambian lo que ve el grupo y se encienden a mano. */
-	public const POR_DEFECTO_APAGADOS = array( self::LISTA_ESPERA );
+	public const POR_DEFECTO_APAGADOS = array( self::LISTA_ESPERA, self::EVENTOS );
 
 	/** módulo => [nombre, qué es, capabilities que se quitan si está apagado, módulo del que depende] */
 	public const LISTA = array(
@@ -46,6 +47,8 @@ final class Modulos {
 		self::SOLICITUDES   => array( 'Solicitudes de acceso', 'El enlace del grupo para pedir el acceso y su revisión.', array( 'asde_aprobar_solicitudes' ), '' ),
 		self::ALTA_SCOUTERS => array( 'Alta de scouters', 'El enlace para que los scouters se den de alta.', array(), '' ),
 		self::LISTA_ESPERA  => array( 'Lista de espera', 'El enlace para apuntarse a la lista de espera, la lista para el equipo y el paso al CRM.', array( 'asde_lista_espera', 'asde_lista_espera_alta' ), '' ),
+		// v0.35 (doc 43): apagado por defecto, como todo módulo nuevo (regla 5).
+		self::EVENTOS       => array( 'Eventos', 'Salidas, acampadas y otras actividades: equipo dirigente, presupuesto, inscripciones, «Mis eventos» y cobros.', array( 'asde_eventos_gestion', 'asde_eventos_grupo', 'asde_eventos_economia', 'asde_eventos_config', 'asde_eventos_inscribir' ), '' ),
 	);
 
 	/** @var array<string, string[]> nº de grupo => capabilities quitadas (por petición). */
@@ -127,8 +130,8 @@ final class Modulos {
 				$caps = array_merge( $caps, $def[2] );
 			}
 		}
-		// «Mis pagos» enseña lo de Tesorería y los pagos del uniforme: se va si se apagan los dos.
-		if ( ! self::activo( self::TESORERIA, $grupo ) && ! self::activo( self::UNIFORMES, $grupo ) ) {
+		// «Mis pagos» enseña lo de Tesorería, los pagos del uniforme y (v0.35) los de los eventos: se va si se apagan los tres.
+		if ( ! self::activo( self::TESORERIA, $grupo ) && ! self::activo( self::UNIFORMES, $grupo ) && ! self::activo( self::EVENTOS, $grupo ) ) {
 			$caps[] = 'asde_mis_pagos';
 		}
 		return self::$quitadas[ $grupo ] = array_values( array_unique( $caps ) );

@@ -3,6 +3,8 @@ namespace AsdeBalears\AreaPrivada\Frontend\Views;
 
 use AsdeBalears\AreaPrivada\Auth\Ambito;
 use AsdeBalears\AreaPrivada\Domain\Grupo;
+use AsdeBalears\AreaPrivada\Eventos\Inscripciones;
+use AsdeBalears\AreaPrivada\Eventos\Servicio as Eventos;
 use AsdeBalears\AreaPrivada\Fichas\Cambios;
 use AsdeBalears\AreaPrivada\Install\Roles;
 use AsdeBalears\AreaPrivada\Integraciones\Wordfence;
@@ -48,11 +50,18 @@ final class AreaPrivadaView extends View {
 						'compras'          => current_user_can( \AsdeBalears\AreaPrivada\Inventario\Servicio::CAP_APROBAR ) ? \AsdeBalears\AreaPrivada\Inventario\ComprasTable::contar_pendientes() : 0,
 						// v0.32: inscripciones de la lista de espera que nadie ha contactado.
 						'lista_espera'     => current_user_can( 'asde_lista_espera' ) ? \AsdeBalears\AreaPrivada\ListaEspera\Inscripciones::contar_sin_contactar() : 0,
+						// v0.35: presupuestos de eventos que esperan a Tesorería y autorizaciones por recoger en papel.
+						'eventos_validar'  => Eventos::pendientes( $ambito )['validar'],
+						'eventos_papel'    => Inscripciones::por_recoger( $ambito ),
 					),
 					// Uniformes entregados que el socio/a o su familia aún no ha confirmado.
 					'por_confirmar' => $uniformes['confirmar'],
 					'pide_uniforme' => current_user_can( Servicio::CAP_PEDIR ) && Servicio::propios( $ambito ),
 					'gestiona_uniformes' => $gestiona,
+					'eventos'            => Eventos::puede_entrar(),
+					// v0.35: «Mis eventos» y lo que espera a la familia o a la persona.
+					'mis_eventos'        => Inscripciones::en_menu( $ambito ),
+					'eventos_pendientes' => Inscripciones::pendientes( $ambito ),
 				)
 			)
 		);
