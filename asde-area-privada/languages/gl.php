@@ -103,7 +103,6 @@ return array(
 	'Ficha sin identificador del CRM.' => 'Ficha sen identificador do CRM.',
 	'Identificador de CRM no válido.' => 'Identificador de CRM non válido.',
 	'Lista de identificadores vacía.' => 'Lista de identificadores baleira.',
-	'Ningún valor permitido.' => 'Ningún valor permitido.',
 	'No se ha encontrado la API de SinergiaCRM en esa URL. Revisa que sea la dirección base del CRM (p. ej. https://entidad.sinergiacrm.org).' => 'Non se atopou a API de SinergiaCRM nesa URL. Revisa que sexa o enderezo base do CRM (p. ex. https://entidad.sinergiacrm.org).',
 	'No se ha encontrado la API de SinergiaCRM en la URL configurada.' => 'Non se atopou a API de SinergiaCRM na URL configurada.',
 	'No se puede conectar con el CRM: %s' => 'Non se pode conectar co CRM: %s',

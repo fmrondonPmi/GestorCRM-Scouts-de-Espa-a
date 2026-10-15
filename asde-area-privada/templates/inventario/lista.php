@@ -18,6 +18,7 @@
  * @var string            $url_compra
  */
 // phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound, WordPress.WP.GlobalVariablesOverride.Prohibited -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
+use AsdeBalears\AreaPrivada\Inventario\Servicio;
 use AsdeBalears\AreaPrivada\Tesoreria\Calculadora;
 
 defined( 'ABSPATH' ) || exit;
@@ -82,7 +83,7 @@ $buscar = $normal( trim( $q ) );
 						$texto       = $normal( $m['descripcion'] . ' ' . $m['num_serie'] . ' ' . $nombre_tipo );
 						$tipo_fila   = $nombre_tipo ? (int) $m['tipo'] : -1;
 						$activo      = null === $m['baja_en'];
-						$pocas       = $m['cantidad'] < $umbral;
+						$pocas       = Servicio::pocas_unidades( (int) $m['cantidad'] );
 						$oculta      = ( $tipo && $tipo !== $tipo_fila ) || ( '' !== $buscar && ! str_contains( $texto, $buscar ) );
 						?>
 						<tr data-tipo="<?php echo (int) $tipo_fila; ?>" data-texto="<?php echo esc_attr( $texto ); ?>"<?php echo $activo ? '' : ' class="asde-fila--cancelada"'; ?><?php echo $oculta ? ' hidden' : ''; ?>>

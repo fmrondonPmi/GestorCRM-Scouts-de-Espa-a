@@ -103,7 +103,6 @@ return array(
 	'Ficha sin identificador del CRM.' => 'CRMko identifikatzailerik gabeko fitxa.',
 	'Identificador de CRM no válido.' => 'CRMko identifikatzaile baliogabea.',
 	'Lista de identificadores vacía.' => 'Identifikatzaile-zerrenda hutsik.',
-	'Ningún valor permitido.' => 'Ez da baliorik onartzen.',
 	'No se ha encontrado la API de SinergiaCRM en esa URL. Revisa que sea la dirección base del CRM (p. ej. https://entidad.sinergiacrm.org).' => 'Ez da SinergiaCRMren APIrik aurkitu URL horretan. Egiaztatu CRMaren oinarrizko helbidea dela (adib. https://entidad.sinergiacrm.org).',
 	'No se ha encontrado la API de SinergiaCRM en la URL configurada.' => 'Ez da SinergiaCRMren APIrik aurkitu konfiguratutako URLan.',
 	'No se puede conectar con el CRM: %s' => 'Ezin da CRMarekin konektatu: %s',

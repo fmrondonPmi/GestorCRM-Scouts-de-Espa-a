@@ -378,7 +378,7 @@ update_option(
 Grupos::olvidar();
 $en_suyo = count( $repo->todas( true ) );
 $en_otro = Grupo::con( Grupos::obtener( '999' ), static fn() => count( $repo->todas( true ) ) );
-$ok( Grupos::multiples() && $en_suyo === count( $activas ) && 0 === $en_otro, "varios grupos: el grupo real ve sus $en_suyo socios activos y el otro, $en_otro" );
+$ok( count( Grupos::todos() ) > 1 && $en_suyo === count( $activas ) && 0 === $en_otro, "varios grupos: el grupo real ve sus $en_suyo socios activos y el otro, $en_otro" );
 wp_set_current_user( 0 );
 $form = ( new AccesoView() )->render();
 $ok( str_contains( $form, 'name="grupo"' ) && str_contains( $form, 'Elige tu grupo' ) && str_contains( $form, 'name="usuario"' ) && str_contains( $form, 'name="clave"' ) && str_contains( $form, 'name="wfls-token"' ), 'pantalla de acceso: desplegable de grupo + nº de socio + contraseña + código' );

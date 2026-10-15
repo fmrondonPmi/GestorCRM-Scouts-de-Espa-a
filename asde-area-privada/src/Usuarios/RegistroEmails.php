@@ -95,6 +95,21 @@ final class RegistroEmails {
 	}
 
 	/**
+	 * Envía un email y devuelve '' si el servidor de correo lo acepta o, si no, el motivo (lo da
+	 * PHPMailer por wp_mail_failed). Lo usan todos los avisos, que después lo apuntan con registrar().
+	 */
+	public static function enviar( string $email, string $asunto, string $html, array $headers = array( 'Content-Type: text/html; charset=UTF-8' ) ): string {
+		$error   = '';
+		$captura = static function ( $e ) use ( &$error ) {
+			$error = is_wp_error( $e ) ? $e->get_error_message() : asde_t( 'Error desconocido' );
+		};
+		add_action( 'wp_mail_failed', $captura );
+		$ok = wp_mail( $email, $asunto, $html, $headers );
+		remove_action( 'wp_mail_failed', $captura );
+		return $ok ? '' : ( $error ?: asde_t( 'El servidor de correo no ha aceptado el email.' ) );
+	}
+
+	/**
 	 * @param \WP_User|null        $user  Null en los avisos a quien aún no tiene cuenta (solicitud rechazada).
 	 * @param array<string, mixed> $datos Solo lo no personal: roles, grupo, días, autor_id.
 	 */

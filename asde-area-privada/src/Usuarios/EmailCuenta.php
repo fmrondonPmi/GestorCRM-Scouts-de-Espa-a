@@ -102,10 +102,4 @@ final class EmailCuenta {
 		}
 		return array_values( array_filter( $usuarios, static fn( \WP_User $u ) => ( Grupos::de_usuario( $u )['id'] ?? '' ) === $grupo_id ) );
 	}
-
-	/** Borra el email guardado de todas las cuentas (desinstalación). */
-	public static function borrar_todo(): void {
-		delete_metadata( 'user', 0, self::META_CIFRADO, '', true );
-		delete_metadata( 'user', 0, self::META_HUELLA, '', true );
-	}
 }

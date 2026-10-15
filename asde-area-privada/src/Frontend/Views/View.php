@@ -155,6 +155,18 @@ abstract class View {
 		return isset( $_POST[ $key ] ) && is_array( $_POST[ $key ] ) ? array_map( 'strval', array_map( 'wp_unslash', $_POST[ $key ] ) ) : array(); // phpcs:ignore WordPress.Security
 	}
 
+	/** @return array<int, string> Campo del formulario con forma campo[id] => valor (ids > 0 y valores de texto). */
+	protected function post_mapa( string $campo ): array {
+		$v   = isset( $_POST[ $campo ] ) && is_array( $_POST[ $campo ] ) ? wp_unslash( $_POST[ $campo ] ) : array(); // phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- el nonce lo comprueba handle_post(); cada valor se sanea aquí y se valida al usarlo
+		$out = array();
+		foreach ( (array) $v as $id => $valor ) {
+			if ( absint( $id ) && is_scalar( $valor ) ) {
+				$out[ absint( $id ) ] = sanitize_text_field( (string) $valor );
+			}
+		}
+		return $out;
+	}
+
 	protected function get( string $key ): string {
 		return isset( $_GET[ $key ] ) && is_scalar( $_GET[ $key ] ) ? trim( sanitize_text_field( wp_unslash( $_GET[ $key ] ) ) ) : ''; // phpcs:ignore WordPress.Security
 	}

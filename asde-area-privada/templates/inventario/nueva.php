@@ -6,7 +6,7 @@
  * @var array[]           $materiales
  * @var array[]           $nuevos   v0.30: filas de material nuevo (descripcion, cantidad, precio); la última, en blanco
  * @var array<int, array> $tipos
- * @var int               $umbral   Desde esta cantidad, el aviso «¿seguro que hace falta comprar más?» (P-62; sin JavaScript sale aquí, junto al material)
+ * (El aviso «¿seguro que hace falta comprar más?» sale junto al material desde Servicio::umbral(); P-62, sin JavaScript.)
  * @var array             $borrador Lo escrito la vez anterior, si no se pudo guardar
  * @var int               $perdidos Marcados que ya no están en el inventario
  * @var string            $url
@@ -14,6 +14,7 @@
  */
 // phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound, WordPress.WP.GlobalVariablesOverride.Prohibited -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
 use AsdeBalears\AreaPrivada\Inventario\MaterialesTable;
+use AsdeBalears\AreaPrivada\Inventario\Servicio;
 use AsdeBalears\AreaPrivada\Tesoreria\Calculadora;
 
 defined( 'ABSPATH' ) || exit;
@@ -63,7 +64,7 @@ $importe = static function ( string $precio, string $cantidad ): string {
 								$extra = array_filter( array( $tipos[ $m['tipo'] ]['nombre'] ?? '', '' !== $m['num_serie'] ? sprintf( asde_t( 'Nº de serie %s' ), $m['num_serie'] ) : '' ) );
 								echo $extra ? '<br><span class="asde-muted">' . esc_html( implode( ' · ', $extra ) ) . '</span>' : '';
 								?>
-								<?php if ( $umbral > 0 && $m['cantidad'] >= $umbral ) : ?>
+								<?php if ( Servicio::ya_hay_bastantes( (int) $m['cantidad'] ) ) : ?>
 									<?php // P-62 (v0.30): se avisa cuando ya hay bastantes, no cuando hay pocas. ?>
 									<br><span class="asde-inv-aviso" role="note"><?php echo esc_html( sprintf( asde_n( 'Ojo: ya hay %d unidad en el inventario. ¿Seguro que hace falta comprar más?', 'Ojo: ya hay %d unidades en el inventario. ¿Seguro que hace falta comprar más?', $m['cantidad'] ), $m['cantidad'] ) ); ?></span>
 								<?php endif; ?>

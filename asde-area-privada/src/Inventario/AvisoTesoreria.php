@@ -100,20 +100,15 @@ final class AvisoTesoreria {
 	}
 
 	private static function mandar( ?\WP_User $user, string $email, string $asunto, string $html, array $lista ): bool {
-		$error   = '';
-		$captura = static function ( $e ) use ( &$error ) {
-			$error = is_wp_error( $e ) ? $e->get_error_message() : asde_t( 'Error desconocido' );
-		};
-		add_action( 'wp_mail_failed', $captura );
-		$ok = wp_mail( $email, $asunto, $html, array( 'Content-Type: text/html; charset=UTF-8' ) );
-		remove_action( 'wp_mail_failed', $captura );
+		$error = RegistroEmails::enviar( $email, $asunto, $html );
+		$ok    = '' === $error;
 		RegistroEmails::registrar(
 			$user,
 			RegistroEmails::COMPRA,
 			Contacto::enmascarar( $email ),
 			$asunto,
 			$ok ? RegistroEmails::ENVIADO : RegistroEmails::ERROR,
-			$ok ? '' : ( $error ?: asde_t( 'El servidor de correo no ha aceptado el email.' ) ),
+			$error,
 			array(
 				'lista' => (int) $lista['id'],
 				'grupo' => Grupo::nombre(),

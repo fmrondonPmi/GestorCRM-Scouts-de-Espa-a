@@ -76,15 +76,8 @@ final class EmailRechazo {
 			$headers[] = 'Reply-To: ' . $contacto;
 		}
 
-		// El motivo de un fallo lo da PHPMailer a través de wp_mail_failed.
-		$error   = '';
-		$captura = static function ( $e ) use ( &$error ) {
-			$error = is_wp_error( $e ) ? $e->get_error_message() : asde_t( 'Error desconocido' );
-		};
-		add_action( 'wp_mail_failed', $captura );
-		$ok = wp_mail( $email, $asunto, $html, $headers );
-		remove_action( 'wp_mail_failed', $captura );
-
+		$error   = RegistroEmails::enviar( $email, $asunto, $html, $headers );
+		$ok      = '' === $error;
 		$destino = Contacto::enmascarar( $email );
 		RegistroEmails::registrar(
 			null,
@@ -92,7 +85,7 @@ final class EmailRechazo {
 			$destino,
 			$asunto,
 			$ok ? RegistroEmails::ENVIADO : RegistroEmails::ERROR,
-			$ok ? '' : ( $error ?: asde_t( 'El servidor de correo no ha aceptado el email.' ) ),
+			$error,
 			array(
 				'solicitud' => (int) $solicitud['id'],
 				'grupo'     => Grupo::nombre(),
@@ -102,7 +95,7 @@ final class EmailRechazo {
 		return array(
 			'estado'  => $ok ? self::ENVIADO : self::ERROR,
 			'destino' => $destino,
-			'error'   => $ok ? '' : ( $error ?: asde_t( 'El servidor de correo no ha aceptado el email.' ) ),
+			'error'   => $error,
 		);
 	}
 }

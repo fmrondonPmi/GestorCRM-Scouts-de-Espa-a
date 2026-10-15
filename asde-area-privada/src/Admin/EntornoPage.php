@@ -79,23 +79,19 @@ final class EntornoPage {
 		}
 		check_admin_referer( self::ACCION_EMAIL );
 		$user  = wp_get_current_user();
-		$error = '';
-		$fallo = static function ( \WP_Error $e ) use ( &$error ) {
-			$error = $e->get_error_message();
-		};
-		add_action( 'wp_mail_failed', $fallo );
-		$ok = wp_mail(
+		$error = \AsdeBalears\AreaPrivada\Usuarios\RegistroEmails::enviar(
 			$user->user_email,
 			'Prueba de email del área privada',
-			"Este es un email de prueba enviado desde «Instalación y entorno» del área privada de " . get_bloginfo( 'name' ) . ".\n\nSi te ha llegado a la bandeja de entrada (y no a spam), las invitaciones y la recuperación de contraseña también llegarán."
+			"Este es un email de prueba enviado desde «Instalación y entorno» del área privada de " . get_bloginfo( 'name' ) . ".\n\nSi te ha llegado a la bandeja de entrada (y no a spam), las invitaciones y la recuperación de contraseña también llegarán.",
+			array() // Texto plano.
 		);
-		remove_action( 'wp_mail_failed', $fallo );
+		$ok    = '' === $error;
 		set_transient(
 			self::INFORME . get_current_user_id(),
 			array(
 				'hecho'   => $ok ? array( sprintf( 'Email de prueba enviado a %s. Mira si llega a la bandeja de entrada (y no a spam).', $user->user_email ) ) : array(),
 				'avisos'  => array(),
-				'errores' => $ok ? array() : array( 'No se ha podido enviar el email de prueba' . ( '' !== $error ? ': ' . $error : '.' ) ),
+				'errores' => $ok ? array() : array( 'No se ha podido enviar el email de prueba: ' . $error ),
 			),
 			10 * MINUTE_IN_SECONDS
 		);

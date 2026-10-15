@@ -154,22 +154,16 @@ final class AvisoBaja {
 		if ( self::FAMILIA === $para && '' !== $datos['contacto'] ) {
 			$headers[] = 'Reply-To: ' . $datos['contacto'];
 		}
-		$error   = '';
-		$captura = static function ( $e ) use ( &$error ) {
-			$error = is_wp_error( $e ) ? $e->get_error_message() : asde_t( 'Error desconocido' );
-		};
-		add_action( 'wp_mail_failed', $captura );
-		$ok = wp_mail( $email, $asunto, self::html( $datos, $saludo, $p->nombre_completo() ), $headers );
-		remove_action( 'wp_mail_failed', $captura );
+		$error = RegistroEmails::enviar( $email, $asunto, self::html( $datos, $saludo, $p->nombre_completo() ), $headers );
 		RegistroEmails::registrar(
 			$user,
 			RegistroEmails::BAJA,
 			Contacto::enmascarar( $email ),
 			$asunto,
-			$ok ? RegistroEmails::ENVIADO : RegistroEmails::ERROR,
-			$ok ? '' : ( $error ?: asde_t( 'El servidor de correo no ha aceptado el email.' ) ),
+			'' === $error ? RegistroEmails::ENVIADO : RegistroEmails::ERROR,
+			$error,
 			$datos
 		);
-		return $ok;
+		return '' === $error;
 	}
 }

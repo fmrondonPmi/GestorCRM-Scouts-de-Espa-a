@@ -19,13 +19,4 @@ final class ConnectionResult {
 	public static function fail( string $message, array $details = array() ): self {
 		return new self( false, $message, $details );
 	}
-
-	public function to_array(): array {
-		return array(
-			'ok'       => $this->ok,
-			'message'  => $this->message,
-			'details'  => $this->details,
-			'warnings' => $this->warnings,
-		);
-	}
 }

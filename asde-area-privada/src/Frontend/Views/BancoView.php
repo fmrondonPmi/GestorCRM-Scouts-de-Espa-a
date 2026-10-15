@@ -132,18 +132,6 @@ final class BancoView extends TesoreriaBaseView {
 		);
 	}
 
-	/** @return array<int, string> Campo del formulario con forma campo[id] => valor. */
-	private function post_mapa( string $campo ): array {
-		$v   = isset( $_POST[ $campo ] ) && is_array( $_POST[ $campo ] ) ? wp_unslash( $_POST[ $campo ] ) : array(); // phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- el nonce se comprueba antes; cada valor se valida al usarlo
-		$out = array();
-		foreach ( (array) $v as $id => $valor ) {
-			if ( absint( $id ) && is_scalar( $valor ) ) {
-				$out[ absint( $id ) ] = sanitize_text_field( (string) $valor );
-			}
-		}
-		return $out;
-	}
-
 	public function handle_post(): void {
 		if ( ! current_user_can( self::CAP_CONFIG ) || ! \AsdeBalears\AreaPrivada\Domain\Modulos::activo( \AsdeBalears\AreaPrivada\Domain\Modulos::BANCO ) ) {
 			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-area-privada' ), 403 );

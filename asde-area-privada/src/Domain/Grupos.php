@@ -63,10 +63,6 @@ final class Grupos {
 		return self::todos()[ $numero ] ?? null;
 	}
 
-	public static function multiples(): bool {
-		return count( self::todos() ) > 1;
-	}
-
 	/**
 	 * Grupo "padre" de un usuario: el guardado al darle de alta o, si no, el que
 	 * indica su nº de socio (código de la organización + nº de grupo + 4 dígitos,

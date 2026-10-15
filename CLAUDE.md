@@ -28,7 +28,7 @@ Plugin de WordPress (`asde-area-privada/`, PHP ≥ 8.0, namespace `AsdeBalears\A
 3. **Un grupo no ve a otro**: toda lectura filtra por el grupo de seguridad del CRM (`PersonaRepository::filtrar_grupo`) y las cachés van por nº de grupo.
 4. **Seguridad en cada acción**: `current_user_can` con la capacidad `asde_*` que toque, nonce (`check_admin_referer`/`wp_verify_nonce`) en todo lo que cambia estado (también en GET: nada de `?accion=1` sin firmar), salida escapada (`esc_html`, `esc_attr`, `esc_url`), SQL con `$wpdb->prepare`. Los mensajes de error de acceso no revelan si el usuario existe.
 5. **No se rompe lo existente al actualizar**: lo nuevo que cambia comportamiento nace apagado o con el valor de siempre para las instalaciones anteriores (p. ej. `Organizacion::identificador()` = `local` si no está guardado).
-6. **Quien actúa sobre algo ve lo que pasa**: avisos con `Notices`, auditoría con `Logger::log` (nombres de campos, nunca valores).
+6. **Quien actúa sobre algo ve lo que pasa**: avisos con `Notices`, auditoría con `Logger::log` (nombres de campos, nunca valores). Los emails salen por `RegistroEmails::enviar()` (devuelve el motivo si fallan) y se apuntan con `RegistroEmails::registrar()` (v0.33.2).
 
 ## Cómo se trabaja una versión
 

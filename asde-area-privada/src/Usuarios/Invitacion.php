@@ -106,16 +106,9 @@ final class Invitacion {
 			)
 		);
 
-		// El motivo de un fallo lo da PHPMailer a través de wp_mail_failed.
-		$error   = '';
-		$captura = static function ( $e ) use ( &$error ) {
-			$error = is_wp_error( $e ) ? $e->get_error_message() : asde_t( 'Error desconocido' );
-		};
-		add_action( 'wp_mail_failed', $captura );
-		$ok = wp_mail( $email, $asunto, $html, array( 'Content-Type: text/html; charset=UTF-8' ) );
-		remove_action( 'wp_mail_failed', $captura );
-
-		RegistroEmails::registrar( $user, $tipo, Contacto::enmascarar( $email ), $asunto, $ok ? RegistroEmails::ENVIADO : RegistroEmails::ERROR, $ok ? '' : ( $error ?: asde_t( 'El servidor de correo no ha aceptado el email.' ) ), $datos );
+		$error = RegistroEmails::enviar( $email, $asunto, $html );
+		$ok    = '' === $error;
+		RegistroEmails::registrar( $user, $tipo, Contacto::enmascarar( $email ), $asunto, $ok ? RegistroEmails::ENVIADO : RegistroEmails::ERROR, $error, $datos );
 		return $ok;
 	}
 

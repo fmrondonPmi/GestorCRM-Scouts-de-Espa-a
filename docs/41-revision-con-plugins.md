@@ -1,4 +1,4 @@
-# 41 · Revisión del sitio con los plugins de Claude Code (v0.33.1)
+# 41 · Revisión del sitio con los plugins de Claude Code (v0.33.1 y v0.33.2)
 
 **Fecha:** 2026-10-15. **Petición del usuario:** «revisa con los nuevos plugins todo el site y ajusta cualquier cosa que encuentren».
 
@@ -11,7 +11,7 @@ Plugins nuevos de Claude Code (cuenta de claude.ai, activos desde el 2026-10-15)
 | **WordPress Dev Skills** (`wp-dev-skills` 1.3.0) | Skills `wp-plugin-audit` (auditoría en 4 dimensiones: versiones, prefijos/i18n, docs↔código, convenciones y seguridad), `wp-coding-standards`, `wp-org-submission` (17 motivos de rechazo de WordPress.org)… | Sus listas de comprobación, con grep y con el PHPCS de Plugin Check, sobre los tres plugins propios. |
 | **Security Guidance** (`security-guidance` 2.0.13, de Anthropic) | Avisos por patrones al editar, revisión del diff al acabar cada turno y revisión de cada commit con un modelo. | **No funciona en este equipo: necesita Python 3** en el PATH (solo está el atajo de la Microsoft Store). Sus reglas de patrones se pasaron a mano (grep). Se añadieron las reglas del proyecto en `.claude/claude-security-guidance.md`. |
 | **Frontend Design** | Guía de diseño para crear interfaces nuevas. | No revisa código existente: no aplica a esta revisión. |
-| (marketplace **ponytail**, añadido pero sin instalar) | «Modo programador vago» (necesita Node.js, que tampoco está). | Nada. |
+| (marketplace **ponytail**, añadido pero sin instalar) | «Modo programador vago» (necesita Node.js, que tampoco está). | Sus skills, a mano, en la v0.33.2: ver §6. |
 
 Alcance: los tres plugins propios del sitio — `asde-area-privada` (0.33.0, rama `Sepa-Cuenta-Crm`), `asde-area-privada-api` (0.1.0) y `asde-area-privada-app` (0.18.3, la PWA descartada pero aún activa). Los plugins de terceros y el tema Enfold no se tocan (ver §5).
 
@@ -43,10 +43,33 @@ Alcance: los tres plugins propios del sitio — `asde-area-privada` (0.33.0, ram
 - Plugin Check (PHPCS, los sniffs de la skill): **0** en el principal, la API y la app (sin `tests/` ni `herramientas/`, que no van en los zips).
 - WPCS extra (`wp-coding-standards`): sin `in_array` no estricto, comparaciones débiles, funciones de depuración, fechas ni redirecciones inseguras.
 - `revision-wporg.sh`: solo lo de §3 (catálogos y página sin conexión).
-- Pruebas: 1565 OK en 31 ficheros del principal + 311 de la app = 1876, 0 fallos; `pwa.php` 198 OK. Plugin Check completo por WP-CLI: 0 (se acortaron de paso los «Upgrade Notice» de la 0.29 y la 0.30, que pasaban de 300 caracteres).
+- Pruebas (v0.33.1): 1565 OK en 31 ficheros del principal + 311 de la app = 1876, 0 fallos; `pwa.php` 198 OK. Plugin Check completo por WP-CLI: 0 (se acortaron de paso los «Upgrade Notice» de la 0.29 y la 0.30, que pasaban de 300 caracteres).
 
 ## 5. Del sitio (no es código nuestro: lo decide el usuario)
 
 - **Security Guidance necesita Python 3** (y ponytail, Node.js) para funcionar: los instala el usuario si quiere las revisiones automáticas.
 - Plugins de terceros con actualización en el Local (2026-10-15): UpdraftPlus 1.26.9, WP Migrate DB 2.7.12, WP Statistics 14.16.17, MainWP Child 6.3 (inactivo). Mirarlo también en producción.
 - **WP File Manager** está activo: es un plugin con historial de fallos graves (CVE-2020-25213) que da acceso a todos los ficheros desde wp-admin; mejor tenerlo desactivado y activarlo solo cuando haga falta (también en producción).
+
+## 6. Revisión con ponytail (v0.33.2, mismo día)
+
+**Petición del usuario:** «revisa la implementación con el plugin de ponytail y reescribe lo que consideres que se puede mejorar». Ponytail (`DietrichGebert/ponytail` 5.2.0) solo está como catálogo: no se instaló y sus ganchos necesitan Node.js. Se siguieron sus skills a mano: **ponytail-audit** (todo el repo; orden: correcto, seguro, aguanta la carga, probado, rápido, ligero) y la regla «el cambio más pequeño que funciona» para reescribir.
+
+**Cómo se miró** (32 000 líneas de PHP no caben en una lectura): tres detectores con el tokenizador de PHP —funciones y constantes que nadie nombra (en los tres plugins, también como cadena), funciones con el mismo cuerpo en sitios distintos y consultas a la base de datos o al CRM dentro de bucles— y lectura a fondo de lo caro: dinero (cuotas, SEPA), permisos y escrituras (ya en §3). Carga supuesta: un grupo, unas decenas de personas a la vez y tareas diarias.
+
+| # | Hallazgo (ponytail) | Arreglo |
+|---|---|---|
+| 1 | **La regla del umbral del inventario, escrita tres veces** (`lista.php`, `nueva.php` y `inventario.js`); la prueba comprobaba `Servicio::pocas_unidades()`/`ya_hay_bastantes()`, que solo usaba ella. | Las plantillas llaman a esas dos funciones (la prueba ya cubre lo que se usa); `nueva.php` ya no recibe `$umbral`. El JS sigue con su copia (necesita el valor en el navegador: `data-umbral`). |
+| 2 | **El envío de los emails, copiado 7 veces** (invitación, rechazo, baja, SEPA, compras, compra revisada, lista de espera) y una 8.ª en «Instalación y entorno»: capturar `wp_mail_failed`, enviar, soltar la captura y el texto de respaldo. | `RegistroEmails::enviar( $email, $asunto, $html, $headers )` devuelve `''` si sale o el motivo. Prueba nueva en `grupos-emails-banco.php` (fallo con motivo, sin motivo, envío correcto y que no deja la captura enganchada): **ninguna prueba cubría el fallo**. |
+| 3 | **La clave secreta de los enlaces de grupo, copiada** en `Usuarios\EnlaceScouters` y `ListaEspera\Enlaces` (crear, renovar, validar con `hash_equals`). | `Domain\ClaveDeGrupo` (trait); cada clase pone su `OPCION`. |
+| 4 | `post_mapa()` repetido en `BancoView` e `InventarioComprasView`. | En `View`, junto a `post_array()`. |
+| 5 | Código muerto: `ConnectionResult::to_array`, `Query::enum_in` (y su texto «Ningún valor permitido.», fuera de los catálogos), `SinergiaV41Client::available_modules`, `CamposFicha::de_grupo`, `EmailCuenta::borrar_todo` (su comentario decía «desinstalación», pero `uninstall.php` conserva los emails a propósito) y `Grupos::multiples` (solo lo usaba una prueba). | Borrado. |
+
+Resultado: 22 ficheros, unas 140 líneas menos y una clase (el trait) más. Sin cambios de uso ni de base de datos.
+
+**Mirado y se queda como está:**
+- **Dinero:** importes `DECIMAL(10,2)`, `round( …, 2 )` en cada paso de `Calculadora` con margen de 0,001 al comparar, y el fichero SEPA en céntimos enteros (`Texto::importe`). Bien.
+- **Bucles con consultas:** los del CRM (`MisPagosView`, `Mantenimiento`) leen de la instantánea (una lectura para todas las fichas); los de la base de datos (importar el banco, la numeración) son de cientos de filas: bien para un grupo.
+- **Duplicados pequeños:** `dma()` (fecha d/m/a, en `Crm\Altas` y `FichaView`), `aviso()` de cuatro pantallas de wp-admin, las fábricas `make()` y los `obtener()` de cada tabla. Son de 2-4 líneas y en capas distintas: unirlos añadiría una clase para ahorrar menos de lo que cuesta.
+
+**No revisado línea a línea:** las 9 000 líneas de plantillas y el CSS.

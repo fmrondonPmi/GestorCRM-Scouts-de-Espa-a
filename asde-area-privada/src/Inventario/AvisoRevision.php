@@ -76,20 +76,15 @@ final class AvisoRevision {
 					RegistroEmails::registrar( $u, RegistroEmails::COMPRA_REVISADA, '', $asunto, RegistroEmails::SIN_EMAIL, asde_t( 'La cuenta no tiene un email al que escribir.' ), $datos );
 					return RegistroEmails::SIN_EMAIL;
 				}
-				$error   = '';
-				$captura = static function ( $e ) use ( &$error ) {
-					$error = is_wp_error( $e ) ? $e->get_error_message() : asde_t( 'Error desconocido' );
-				};
-				add_action( 'wp_mail_failed', $captura );
-				$ok = wp_mail( $email, $asunto, self::html( $lista, Contacto::saludo( $u, $repo ) ), array( 'Content-Type: text/html; charset=UTF-8' ) );
-				remove_action( 'wp_mail_failed', $captura );
+				$error = RegistroEmails::enviar( $email, $asunto, self::html( $lista, Contacto::saludo( $u, $repo ) ) );
+				$ok    = '' === $error;
 				RegistroEmails::registrar(
 					$u,
 					RegistroEmails::COMPRA_REVISADA,
 					Contacto::enmascarar( $email ),
 					$asunto,
 					$ok ? RegistroEmails::ENVIADO : RegistroEmails::ERROR,
-					$ok ? '' : ( $error ?: asde_t( 'El servidor de correo no ha aceptado el email.' ) ),
+					$error,
 					$datos
 				);
 				return $ok ? RegistroEmails::ENVIADO : RegistroEmails::ERROR;

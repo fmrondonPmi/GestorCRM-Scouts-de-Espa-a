@@ -232,12 +232,6 @@ final class SinergiaV41Client implements CrmClientInterface, EscritorCrm {
 		);
 	}
 
-	/** @return list<string> Módulos visibles para el usuario de API. */
-	public function available_modules(): array {
-		$data = $this->call( 'get_available_modules', array( 'filter' => 'all' ) );
-		return array_values( array_filter( array_map( static fn( $m ) => (string) ( $m['module_key'] ?? '' ), (array) ( $data['modules'] ?? array() ) ) ) );
-	}
-
 	/** @return array<string, array<string, bool>> módulo => acción (list, view, edit, delete…) => permitido */
 	public function acls(): array {
 		$data = $this->call( 'get_available_modules', array( 'filter' => 'all' ) );

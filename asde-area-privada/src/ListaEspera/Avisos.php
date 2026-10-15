@@ -189,14 +189,8 @@ final class Avisos {
 				if ( '' !== $contacto ) {
 					$headers[] = 'Reply-To: ' . $contacto;
 				}
-				$error   = '';
-				$captura = static function ( $e ) use ( &$error ) {
-					$error = is_wp_error( $e ) ? $e->get_error_message() : asde_t( 'Error desconocido' );
-				};
-				add_action( 'wp_mail_failed', $captura );
-				$ok = wp_mail( $email, $asunto, $html, $headers );
-				remove_action( 'wp_mail_failed', $captura );
-				$error   = $ok ? '' : ( $error ?: asde_t( 'El servidor de correo no ha aceptado el email.' ) );
+				$error   = RegistroEmails::enviar( $email, $asunto, $html, $headers );
+				$ok      = '' === $error;
 				$destino = Contacto::enmascarar( $email );
 				RegistroEmails::registrar(
 					null,

@@ -84,9 +84,4 @@ final class CamposFicha {
 		}
 		return $por_idioma[ $idioma ] = $campos;
 	}
-
-	/** @return string[] */
-	public static function de_grupo( string $grupo ): array {
-		return array_keys( array_filter( self::todos(), static fn( $c ) => $c[1] === $grupo ) );
-	}
 }

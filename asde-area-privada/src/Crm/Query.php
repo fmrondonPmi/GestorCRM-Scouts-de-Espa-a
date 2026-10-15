@@ -52,18 +52,4 @@ final class Query {
 		}
 		return '(' . implode( ',', array_map( array( self::class, 'id' ), array_values( array_unique( $ids ) ) ) ) . ')';
 	}
-
-	/**
-	 * Lista de valores de un desplegable (se validan contra una lista blanca).
-	 *
-	 * @param string[] $values
-	 * @param string[] $allowed
-	 */
-	public static function enum_in( array $values, array $allowed ): string {
-		$values = array_values( array_intersect( $values, $allowed ) );
-		if ( ! $values ) {
-			throw new \InvalidArgumentException( esc_html( asde_t( 'Ningún valor permitido.' ) ) );
-		}
-		return '(' . implode( ',', array_map( array( self::class, 'str' ), $values ) ) . ')';
-	}
 }

@@ -406,4 +406,31 @@ if ( $de_la_prueba ) {
 }
 unset( $_SERVER['REMOTE_ADDR'] );
 
+// v0.33.2 (revisión con ponytail): RegistroEmails::enviar(), el envío que usan todos los avisos.
+// Ningún email sale: pre_wp_mail decide el resultado (y, al fallar, imita el aviso de PHPMailer).
+$motivo    = 'Buzón lleno (simulado)';
+$simula    = static function () use ( &$motivo ) {
+	if ( null === $motivo ) {
+		return true;
+	}
+	if ( '' !== $motivo ) {
+		do_action( 'wp_mail_failed', new \WP_Error( 'wp_mail_failed', $motivo ) );
+	}
+	return false;
+};
+$enganches = static fn() => isset( $GLOBALS['wp_filter']['wp_mail_failed'] ) ? array_sum( array_map( 'count', $GLOBALS['wp_filter']['wp_mail_failed']->callbacks ) ) : 0;
+$antes     = $enganches();
+add_filter( 'pre_wp_mail', $simula, 99 );
+try {
+	$con_motivo = RegistroEmails::enviar( 'prueba@example.invalid', 'Prueba', '<p>Hola</p>' );
+	$motivo     = '';
+	$sin_motivo = RegistroEmails::enviar( 'prueba@example.invalid', 'Prueba', '<p>Hola</p>' );
+	$motivo     = null;
+	$enviado    = RegistroEmails::enviar( 'prueba@example.invalid', 'Prueba', '<p>Hola</p>' );
+	$ok( 'Buzón lleno (simulado)' === $con_motivo && '' !== $sin_motivo && '' === $enviado, 'RegistroEmails::enviar(): el motivo de PHPMailer si falla, un texto de respaldo si no lo da, y vacío si sale' );
+	$ok( $antes === $enganches(), 'RegistroEmails::enviar() no deja enganchada su captura de errores' );
+} finally {
+	remove_filter( 'pre_wp_mail', $simula, 99 );
+}
+
 echo $fails ? "\n$fails FALLOS\n" : "\nTODO OK (grupos, emails, usuarios y movimientos de prueba borrados)\n";

@@ -1,6 +1,7 @@
 <?php
 namespace AsdeBalears\AreaPrivada\ListaEspera;
 
+use AsdeBalears\AreaPrivada\Domain\ClaveDeGrupo;
 use AsdeBalears\AreaPrivada\Frontend\Pages;
 
 defined( 'ABSPATH' ) || exit;
@@ -15,41 +16,12 @@ defined( 'ABSPATH' ) || exit;
  *   cambiar la sal (o borrar la fila) los anula.
  */
 final class Enlaces {
+	use ClaveDeGrupo; // clave(), renovar(), valida() del enlace del grupo
 
 	public const OPCION = 'asde_ap_enlace_espera';
 
 	public const CONFIRMAR = 'confirmar';
 	public const ACCESO    = 'acceso';
-
-	/** @return array<string, string> id del grupo => clave */
-	private static function claves(): array {
-		$c = get_option( self::OPCION, array() );
-		return is_array( $c ) ? $c : array();
-	}
-
-	/** Clave actual del grupo (se crea la primera vez). */
-	public static function clave( array $grupo ): string {
-		$claves = self::claves();
-		$id     = (string) $grupo['id'];
-		if ( empty( $claves[ $id ] ) ) {
-			$claves[ $id ] = wp_generate_password( 24, false, false );
-			update_option( self::OPCION, $claves, false );
-		}
-		return $claves[ $id ];
-	}
-
-	/** Genera una clave nueva: el enlace anterior deja de valer. */
-	public static function renovar( array $grupo ): string {
-		$claves                          = self::claves();
-		$claves[ (string) $grupo['id'] ] = wp_generate_password( 24, false, false );
-		update_option( self::OPCION, $claves, false );
-		return $claves[ (string) $grupo['id'] ];
-	}
-
-	public static function valida( array $grupo, string $clave ): bool {
-		$actual = self::claves()[ (string) $grupo['id'] ] ?? '';
-		return '' !== $actual && '' !== $clave && hash_equals( $actual, $clave );
-	}
 
 	/** El enlace para apuntarse a la lista del grupo. */
 	public static function url( array $grupo ): string {
