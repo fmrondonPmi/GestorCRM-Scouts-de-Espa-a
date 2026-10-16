@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.37.1
+Stable tag: 0.38.0
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -61,6 +61,9 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.38.0 =
+* Waiting list: each group can add its own fields to the public sign-up form (label, type and optional/required), managed by Secretary and Coordination from the waiting list screen. The answers are stored encrypted with a key derived from the sign-up email, so they cannot be read once the entry is deleted.
 
 = 0.37.1 =
 * Treasury role: can open Reports and sees the payment reports for the whole group (identity and payment columns only; no contact or health data).
@@ -214,6 +217,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * First version with the mobile app (PWA).
 
 == Upgrade Notice ==
+
+= 0.38.0 =
+Custom waiting list fields. Adds an encrypted column to the waiting list table (updated automatically).
 
 = 0.37.1 =
 Treasury accounts get payment reports for the whole group. No database changes.

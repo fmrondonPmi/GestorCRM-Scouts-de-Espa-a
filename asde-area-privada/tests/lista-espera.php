@@ -29,6 +29,7 @@ use AsdeBalears\AreaPrivada\Frontend\Views\ListaEsperaView;
 use AsdeBalears\AreaPrivada\Frontend\Views\PersonasView;
 use AsdeBalears\AreaPrivada\Frontend\Views\View;
 use AsdeBalears\AreaPrivada\Install\Roles;
+use AsdeBalears\AreaPrivada\ListaEspera\CamposExtra;
 use AsdeBalears\AreaPrivada\ListaEspera\Enlaces;
 use AsdeBalears\AreaPrivada\ListaEspera\Formulario;
 use AsdeBalears\AreaPrivada\ListaEspera\Inscripciones;
@@ -65,6 +66,7 @@ $ins_antes     = $max_id( Inscripciones::table() );
 $altas_antes   = get_option( Altas::OPCION, null );
 $modulos_antes = get_option( 'asde_ap_modulos', null );
 $enlace_antes  = get_option( Enlaces::OPCION, null );
+$campos_antes  = get_option( CamposExtra::OPCION, null );
 $socios_antes  = array_column( (array) $wpdb->get_results( 'SELECT * FROM ' . SociosTable::table(), ARRAY_A ), null, 'num_socio_asde' ); // phpcs:ignore WordPress.DB
 
 // v0.35.1: la prueba cuenta con «Altas en el CRM» apagadas en el grupo (el Local puede tenerlas encendidas).
@@ -213,6 +215,10 @@ $form    = static function ( array $mas = array() ) use ( $grupo, $hace ): array
 	);
 };
 $fila_de = static fn( string $nombre ) => array_values( array_filter( Inscripciones::listado(), static fn( $f ) => $nombre === $f['datos']['nombre'] ) )[0] ?? null;
+
+// El límite por dispositivo (8 inscripciones por hora) no debe arrastrar ejecuciones anteriores.
+$sin_limite = static fn() => delete_transient( 'asde_ap_lim_' . substr( hash_hmac( 'sha256', 'lista_espera|' . ( isset( $_SERVER['REMOTE_ADDR'] ) ? sanitize_text_field( wp_unslash( $_SERVER['REMOTE_ADDR'] ) ) : '' ), wp_salt( 'auth' ) ), 0, 32 ) );
+$sin_limite();
 
 try {
 	echo "== A · Sección por edad y módulo apagado por defecto ==\n";
@@ -429,6 +435,80 @@ try {
 	$h = $ver( new InscripcionEsperaView(), $q );
 	$ok( str_contains( $h, 'no es válido' ), 'después, su enlace ya no lleva a nada' );
 
+	$sin_limite();
+	echo "\n== H · Campos propios del formulario (v0.38) ==\n";
+	Modulos::guardar( (string) $grupo['numero'], array_keys( Modulos::LISTA ) );
+	$num = (string) $grupo['numero'];
+	$como( $u_sco );
+	$campos_scouter = array( 'asde_action' => 'espera_campos', 'campo' => array( array( 'id' => '', 'etiqueta' => 'Cosa del scouter', 'tipo' => 'texto', 'obligatorio' => '0' ) ) );
+	$enviar( new ListaEsperaView(), $campos_scouter, 'asde_espera_campos' );
+	$ok( ! CamposExtra::del_grupo( $num ), 'un scouter no puede definir campos' );
+	$como( $u_sec );
+	$h = $ver( new ListaEsperaView() );
+	$ok( str_contains( $h, 'Campos propios del formulario' ) && str_contains( $h, 'name="campo[0][etiqueta]"' ), 'Secretaría ve el editor de campos en la lista' );
+	$def = array(
+		'asde_action' => 'espera_campos',
+		'campo'       => array(
+			array( 'id' => '', 'etiqueta' => 'Alergias', 'tipo' => 'parrafo', 'obligatorio' => '0' ),
+			array( 'id' => '', 'etiqueta' => 'Curso escolar', 'tipo' => 'texto', 'obligatorio' => '1' ),
+			array( 'id' => '', 'etiqueta' => 'Fecha de la visita', 'tipo' => 'fecha', 'obligatorio' => '0' ),
+			array( 'id' => '', 'etiqueta' => 'Hermanos', 'tipo' => 'numero', 'obligatorio' => '0' ),
+			array( 'id' => '', 'etiqueta' => 'Acepta fotos', 'tipo' => 'casilla', 'obligatorio' => '1' ),
+			array( 'id' => '', 'etiqueta' => '', 'tipo' => 'texto', 'obligatorio' => '0' ),
+		),
+	);
+	$enviar( new ListaEsperaView(), $def, 'asde_espera_campos' );
+	$campos = CamposExtra::del_grupo( $num );
+	$ok( 5 === count( $campos ) && 'Curso escolar' === $campos[1]['etiqueta'] && $campos[1]['obligatorio'] && ! $campos[0]['obligatorio'], 'Secretaría define 5 campos con etiqueta, tipo y obligatorio (la fila vacía se ignora)' );
+	$ids_c = array_column( $campos, 'id' );
+	$mala  = $def;
+	$mala['campo'] = array( array( 'id' => $ids_c[0], 'etiqueta' => '', 'tipo' => 'parrafo', 'obligatorio' => '0' ) );
+	$enviar( new ListaEsperaView(), $mala, 'asde_espera_campos' );
+	$ok( 5 === count( CamposExtra::del_grupo( $num ) ), 'sin etiqueta no se guarda: todo sigue igual' );
+	$mala['campo'] = array( array( 'id' => '', 'etiqueta' => 'Sin tipo', 'tipo' => 'inventado', 'obligatorio' => '0' ) );
+	$enviar( new ListaEsperaView(), $mala, 'asde_espera_campos' );
+	$ok( 5 === count( CamposExtra::del_grupo( $num ) ), 'un tipo que no existe no se guarda' );
+
+	$h = $ver( new InscripcionEsperaView(), array( 'grupo' => $grupo['id'], 'clave' => Enlaces::clave( $grupo ) ) );
+	$ok( str_contains( $h, 'Alergias (opcional)' ) && str_contains( $h, '>Curso escolar<' ) && str_contains( $h, 'name="extra_' . $ids_c[4] . '"' ) && str_contains( $h, 'type="date"' ), 'el formulario público enseña los campos con su etiqueta; los opcionales lo dicen' );
+
+	$base = $form( array( 'sello' => $sello(), 'nombre' => 'Extra', 'apellidos' => 'Prova Campos', 'email' => 'extra.campos@example.invalid' ) );
+	list( , , $h ) = $publica( $base, 'espera_inscribir' );
+	$ok( str_contains( $h, 'Falta rellenar «Curso escolar»' ) && str_contains( $h, 'Falta rellenar «Acepta fotos»' ) && null === $fila_de( 'Extra' ), 'los obligatorios propios se exigen y no se apunta a nadie' );
+	$base['sello'] = $sello();
+	list( , , $h ) = $publica( $base + array( 'extra_' . $ids_c[1] => '5.º primaria', 'extra_' . $ids_c[4] => '1', 'extra_' . $ids_c[3] => 'dos' ), 'espera_inscribir' );
+	$ok( str_contains( $h, '«Hermanos» tiene que ser un número' ) && null === $fila_de( 'Extra' ), 'un número que no lo es se rechaza' );
+	$base['sello'] = $sello();
+	list( , , $h ) = $publica( $base + array( 'extra_' . $ids_c[1] => '5.º primaria', 'extra_' . $ids_c[4] => '1', 'extra_' . $ids_c[0] => "Frutos secos\nPolen", 'extra_' . $ids_c[3] => '2' ), 'espera_inscribir' );
+	$extra = $fila_de( 'Extra' );
+	$ok( $extra && 4 === count( $extra['extra'] ) && 'Alergias' === $extra['extra'][0]['etiqueta'] && str_contains( $extra['extra'][0]['valor'], 'Polen' ) && 'Sí' === $extra['extra'][3]['valor'], 'con los campos bien rellenos se apunta y las respuestas se descifran con su etiqueta' );
+
+	$crudo = (string) $wpdb->get_var( $wpdb->prepare( 'SELECT extra_enc FROM %i WHERE id = %d', Inscripciones::table(), $extra['id'] ) ); // phpcs:ignore WordPress.DB
+	$ok( '' !== $crudo && ! str_contains( $crudo, 'Polen' ) && ! str_contains( $crudo, 'primaria' ) && ! str_contains( $crudo, 'Alergias' ), 'en la base de datos las respuestas y las etiquetas van cifradas' );
+	$ok( null === \AsdeBalears\AreaPrivada\Crm\Crypto::decrypt( $crudo ), 'no se descifran con la clave general: hace falta la del email de la inscripción' );
+	$ok( ! CamposExtra::descifrar( $crudo, 'otro.email@example.invalid', (string) $extra['sal'] ) && ! CamposExtra::descifrar( $crudo, 'extra.campos@example.invalid', 'otra-sal' ), 'con otro email o con otra sal, no se descifra' );
+	$ok( 4 === count( CamposExtra::descifrar( $crudo, 'EXTRA.campos@example.invalid ', (string) $extra['sal'] ) ), 'con su email (sin importar mayúsculas) sí se descifra' );
+
+	$como( $u_sco );
+	$h = $ver( new ListaEsperaView(), array( 'inscripcion' => (string) $extra['id'] ) );
+	$ok( str_contains( $h, 'Curso escolar' ) && str_contains( $h, '5.º primaria' ) && str_contains( $h, 'Frutos secos' ), 'el equipo ve las respuestas en la ficha de la inscripción' );
+
+	$como( $u_sec );
+	$cambio = $def;
+	$cambio['campo'] = array( array( 'id' => $ids_c[0], 'etiqueta' => '', 'tipo' => 'parrafo', 'obligatorio' => '0', 'quitar' => '1' ), array( 'id' => $ids_c[1], 'etiqueta' => 'Curso', 'tipo' => 'texto', 'obligatorio' => '1' ) );
+	$enviar( new ListaEsperaView(), $cambio, 'asde_espera_campos' );
+	$campos2 = CamposExtra::del_grupo( $num );
+	$ok( 1 === count( $campos2 ) && $ids_c[1] === $campos2[0]['id'] && 'Curso' === $campos2[0]['etiqueta'], 'Secretaría quita y renombra campos (conservan su id)' );
+	$despues = Inscripciones::por_id( (int) $extra['id'] );
+	$ok( 'Alergias' === $despues['extra'][0]['etiqueta'] && 'Curso escolar' === $despues['extra'][1]['etiqueta'], 'lo ya contestado conserva las etiquetas de entonces' );
+
+	$q = array( 'espera' => (string) $extra['id'], 't' => Enlaces::token( $extra, Enlaces::ACCESO ) );
+	list( , , $h ) = $publica( array( 'id' => $q['espera'], 't' => $q['t'], 'email' => 'extra.campos@example.invalid' ), 'espera_entrar' );
+	$ok( str_contains( $h, 'Frutos secos' ) && str_contains( $h, 'Alergias' ), 'la persona ve sus propias respuestas en su página personal' );
+	$ok( true === Inscripciones::borrar( (int) $extra['id'], 'prueba' ) && 0 === (int) $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(*) FROM %i WHERE id = %d', Inscripciones::table(), $extra['id'] ) ), 'al borrar la inscripción desaparecen respuestas, email y sal: nada con lo que descifrar' ); // phpcs:ignore WordPress.DB
+	$logs_c = (string) wp_json_encode( $wpdb->get_results( $wpdb->prepare( "SELECT accion, detalles FROM %i WHERE id > %d AND accion LIKE 'lista\\_espera%%'", Logger::table(), $log_antes ), ARRAY_A ) );
+	$ok( ! str_contains( $logs_c, 'Polen' ) && ! str_contains( $logs_c, 'primaria' ), 'la auditoría no guarda las respuestas' );
+
 	$logs = (string) wp_json_encode( $wpdb->get_results( $wpdb->prepare( "SELECT accion, detalles FROM %i WHERE id > %d AND accion LIKE 'lista\\_espera%%'", Logger::table(), $log_antes ), ARRAY_A ) );
 	$ok( str_contains( $logs, 'lista_espera_inscripcion' ) && ! str_contains( $logs, 'Prova' ) && ! str_contains( $logs, 'example.invalid' ) && ! str_contains( $logs, '22222222J' ), 'la auditoría guarda las acciones, sin nombres, emails ni documentos' );
 } finally {
@@ -450,13 +530,15 @@ try {
 	null === $modulos_antes ? delete_option( 'asde_ap_modulos' ) : update_option( 'asde_ap_modulos', $modulos_antes, false );
 	Altas::activar( (string) $grupo['numero'], $altas_antes );
 	null === $enlace_antes ? delete_option( Enlaces::OPCION ) : update_option( Enlaces::OPCION, $enlace_antes, false );
+	null === $campos_antes ? delete_option( CamposExtra::OPCION ) : update_option( CamposExtra::OPCION, $campos_antes, false );
 	Modulos::olvidar();
 	Permisos::olvidar( $grupo['numero'] );
 	delete_transient( 'asde_ap_recuento_federal_' . $grupo['numero'] );
 	wp_using_ext_object_cache( $cache_externa );
+	$sin_limite();
 	wp_set_current_user( 0 );
 	$lista = implode( ',', array_map( 'intval', $ids ) ) ?: '0';
-	$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . Logger::table() . " WHERE id > %d AND ( user_id IN ($lista) OR accion LIKE 'crm\\_%%' OR accion LIKE 'lista\\_espera%%' OR accion = 'enlace_espera_renovado' )", $log_antes ) ); // phpcs:ignore WordPress.DB
+	$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . Logger::table() . " WHERE id > %d AND ( user_id IN ($lista) OR accion LIKE 'crm\\_%%' OR accion LIKE 'lista\\_espera%%' OR accion = 'enlace_espera_renovado' OR accion = 'lista_espera_campos' )", $log_antes ) ); // phpcs:ignore WordPress.DB
 	foreach ( $ids as $uid ) {
 		delete_transient( 'asde_ap_comprobaciones_' . $uid );
 		delete_transient( 'asde_ap_notices_' . $uid );

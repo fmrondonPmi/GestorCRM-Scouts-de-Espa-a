@@ -11,9 +11,11 @@
  * @var string           $url
  * @var string           $enlace  Enlace para apuntarse
  * @var bool             $renovar Puede generar un enlace nuevo
+ * @var array[]|null     $campos  Campos propios del formulario (null si no puede editarlos)
  */
 // phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound, WordPress.WP.GlobalVariablesOverride.Prohibited -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
 use AsdeBalears\AreaPrivada\Domain\Secciones;
+use AsdeBalears\AreaPrivada\ListaEspera\CamposExtra;
 use AsdeBalears\AreaPrivada\Frontend\Views\ListaEsperaView;
 use AsdeBalears\AreaPrivada\ListaEspera\Inscripciones;
 
@@ -42,6 +44,70 @@ $fecha = static function ( ?string $utc ): string {
 		</form>
 	<?php endif; ?>
 </section>
+
+<?php if ( null !== $campos ) : ?>
+	<?php
+	$tipos  = asde_ta( CamposExtra::TIPOS );
+	$filas  = $campos;
+	$libres = max( 2, min( 4, CamposExtra::MAX_CAMPOS - count( $campos ) ) );
+	for ( $i = 0; $i < $libres && count( $filas ) < CamposExtra::MAX_CAMPOS; $i++ ) {
+		$filas[] = array(
+			'id'          => '',
+			'etiqueta'    => '',
+			'tipo'        => CamposExtra::TEXTO,
+			'obligatorio' => false,
+		);
+	}
+	?>
+	<section class="asde-card" data-asde-inicio="cerrado">
+		<h3 class="asde-card__title"><?php asde_e( 'Campos propios del formulario' ); ?></h3>
+		<p><?php asde_e( 'Además de los datos que siempre se piden, tu grupo puede añadir preguntas al formulario de la lista de espera. Cada campo necesita su etiqueta (el texto que verá quien se apunta) y se elige su tipo y si es obligatorio. Las respuestas se guardan cifradas con la clave del email de quien se apunta y se borran con la inscripción. Quitar o cambiar un campo no altera lo que ya contestaron.' ); ?></p>
+		<form method="post" class="asde-form">
+			<?php wp_nonce_field( 'asde_espera_campos' ); ?>
+			<input type="hidden" name="asde_action" value="espera_campos">
+			<table class="asde-table">
+				<thead>
+					<tr>
+						<th scope="col"><?php asde_e( 'Etiqueta' ); ?></th>
+						<th scope="col"><?php asde_e( 'Tipo' ); ?></th>
+						<th scope="col"><?php asde_e( 'Obligatorio' ); ?></th>
+						<th scope="col"><?php asde_e( 'Quitar' ); ?></th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php foreach ( $filas as $i => $c ) : ?>
+						<tr>
+							<td data-label="<?php echo esc_attr( asde_a( 'Etiqueta' ) ); ?>">
+								<input type="hidden" name="campo[<?php echo (int) $i; ?>][id]" value="<?php echo esc_attr( $c['id'] ); ?>">
+								<input type="text" name="campo[<?php echo (int) $i; ?>][etiqueta]" value="<?php echo esc_attr( $c['etiqueta'] ); ?>" maxlength="<?php echo (int) CamposExtra::MAX_ETIQUETA; ?>" aria-label="<?php echo esc_attr( asde_a( 'Etiqueta' ) ); ?>">
+							</td>
+							<td data-label="<?php echo esc_attr( asde_a( 'Tipo' ) ); ?>">
+								<select name="campo[<?php echo (int) $i; ?>][tipo]" aria-label="<?php echo esc_attr( asde_a( 'Tipo' ) ); ?>">
+									<?php foreach ( $tipos as $k => $nombre ) : ?>
+										<option value="<?php echo esc_attr( $k ); ?>" <?php selected( $c['tipo'], $k ); ?>><?php echo esc_html( $nombre ); ?></option>
+									<?php endforeach; ?>
+								</select>
+							</td>
+							<td data-label="<?php echo esc_attr( asde_a( 'Obligatorio' ) ); ?>">
+								<select name="campo[<?php echo (int) $i; ?>][obligatorio]" aria-label="<?php echo esc_attr( asde_a( 'Obligatorio' ) ); ?>">
+									<option value="0" <?php selected( ! $c['obligatorio'] ); ?>><?php asde_e( 'Opcional' ); ?></option>
+									<option value="1" <?php selected( $c['obligatorio'] ); ?>><?php asde_e( 'Obligatorio' ); ?></option>
+								</select>
+							</td>
+							<td data-label="<?php echo esc_attr( asde_a( 'Quitar' ) ); ?>">
+								<?php if ( '' !== $c['id'] ) : ?>
+									<label class="asde-choice"><input type="checkbox" name="campo[<?php echo (int) $i; ?>][quitar]" value="1"><span><?php asde_e( 'Quitar' ); ?></span></label>
+								<?php endif; ?>
+							</td>
+						</tr>
+					<?php endforeach; ?>
+				</tbody>
+			</table>
+			<p class="asde-help"><?php echo esc_html( sprintf( asde_t( 'Las filas vacías se ignoran. Para añadir más campos, guarda y vuelve a abrir este cuadro. Máximo %d campos.' ), CamposExtra::MAX_CAMPOS ) ); ?></p>
+			<p><button type="submit" class="button button-primary"><?php asde_e( 'Guardar los campos' ); ?></button></p>
+		</form>
+	</section>
+<?php endif; ?>
 
 <section class="asde-card">
 	<form method="get" action="<?php echo esc_url( $url ); ?>" class="asde-filter asde-filter--una-linea" data-asde-parcial-form="espera-lista">

@@ -19,6 +19,7 @@
 // phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound, WordPress.WP.GlobalVariablesOverride.Prohibited -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
 use AsdeBalears\AreaPrivada\Crm\Duplicados;
 use AsdeBalears\AreaPrivada\Domain\Grupos;
+use AsdeBalears\AreaPrivada\ListaEspera\CamposExtra;
 use AsdeBalears\AreaPrivada\ListaEspera\Formulario;
 use AsdeBalears\AreaPrivada\ListaEspera\Inscripciones;
 
@@ -128,6 +129,9 @@ $ya_estas = static function ( string $volver ): void {
 			<?php if ( '' !== $fila['datos']['observaciones'] ) : ?>
 				<dt><?php asde_e( 'Observaciones' ); ?></dt><dd><?php echo nl2br( esc_html( $fila['datos']['observaciones'] ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></dd>
 			<?php endif; ?>
+			<?php foreach ( $fila['extra'] as $x ) : ?>
+				<dt><?php echo esc_html( $x['etiqueta'] ); ?></dt><dd><?php echo nl2br( esc_html( $x['valor'] ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></dd>
+			<?php endforeach; ?>
 			<dt><?php asde_e( 'En la lista desde' ); ?></dt><dd><?php echo esc_html( $fecha( $fila['confirmada_en'] ?: $fila['creada'] ) ); ?></dd>
 			<?php if ( $fila['caduca'] ) : ?>
 				<dt><?php asde_e( 'Guardamos tus datos hasta' ); ?></dt><dd><?php echo esc_html( $fecha( $fila['caduca'] ) ); ?></dd>
@@ -190,6 +194,26 @@ $ya_estas = static function ( string $volver ): void {
 				</p>
 				<p><label for="asde-espera-obs"><?php asde_e( 'Observaciones (opcional)' ); ?></label><textarea id="asde-espera-obs" name="observaciones" rows="3" maxlength="<?php echo (int) Formulario::MAX_OBSERVACIONES; ?>"><?php echo esc_textarea( $v( 'observaciones' ) ); ?></textarea></p>
 			</fieldset>
+			<?php if ( $campos ) : ?>
+				<fieldset>
+					<legend><?php asde_e( 'Más datos que pide el grupo' ); ?></legend>
+					<?php foreach ( $campos as $c ) : ?>
+						<?php
+						$cid  = 'asde-espera-x-' . $c['id'];
+						$name = 'extra_' . $c['id'];
+						$req  = $c['obligatorio'] ? ' required' : '';
+						$opc  = $c['obligatorio'] ? '' : ' ' . asde_t( '(opcional)' );
+						?>
+						<?php if ( CamposExtra::CASILLA === $c['tipo'] ) : ?>
+							<label class="asde-choice"><input type="checkbox" name="<?php echo esc_attr( $name ); ?>" value="1" <?php checked( '1', $v( $name ) ); ?><?php echo esc_attr( $req ); ?>><span><?php echo esc_html( $c['etiqueta'] . $opc ); ?></span></label>
+						<?php elseif ( CamposExtra::PARRAFO === $c['tipo'] ) : ?>
+							<p><label for="<?php echo esc_attr( $cid ); ?>"><?php echo esc_html( $c['etiqueta'] . $opc ); ?></label><textarea id="<?php echo esc_attr( $cid ); ?>" name="<?php echo esc_attr( $name ); ?>" rows="3" maxlength="<?php echo (int) CamposExtra::MAX_RESPUESTA; ?>"<?php echo esc_attr( $req ); ?>><?php echo esc_textarea( $v( $name ) ); ?></textarea></p>
+						<?php else : ?>
+							<p><label for="<?php echo esc_attr( $cid ); ?>"><?php echo esc_html( $c['etiqueta'] . $opc ); ?></label><input type="<?php echo CamposExtra::FECHA === $c['tipo'] ? 'date' : 'text'; ?>"<?php echo CamposExtra::NUMERO === $c['tipo'] ? ' inputmode="decimal"' : ''; ?> id="<?php echo esc_attr( $cid ); ?>" name="<?php echo esc_attr( $name ); ?>" value="<?php echo esc_attr( $v( $name ) ); ?>" maxlength="200"<?php echo esc_attr( $req ); ?>></p>
+						<?php endif; ?>
+					<?php endforeach; ?>
+				</fieldset>
+			<?php endif; ?>
 			<label class="asde-choice"><input type="checkbox" name="acepto" value="1" <?php checked( '1', $v( 'acepto' ) ); ?> required><span><?php echo esc_html( sprintf( asde_t( 'Acepto que el %1$s guarde estos datos, cifrados, para gestionar la lista de espera durante %2$d meses (o hasta que me dé de alta o los borre). Solo los ve el equipo del grupo.' ), Grupos::etiqueta( $grupo ), Inscripciones::MESES ) ); ?></span></label>
 			<p><button type="submit" class="button button-primary"><?php asde_e( 'Apuntarme a la lista de espera' ); ?></button></p>
 		</form>

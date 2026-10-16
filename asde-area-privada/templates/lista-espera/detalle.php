@@ -75,6 +75,10 @@ $medios  = asde_ta( Inscripciones::MEDIOS );
 			<dt><?php asde_e( 'Observaciones' ); ?></dt>
 			<dd><?php echo nl2br( esc_html( $d['observaciones'] ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></dd>
 		<?php endif; ?>
+		<?php foreach ( $f['extra'] as $x ) : ?>
+			<dt><?php echo esc_html( $x['etiqueta'] ); ?></dt>
+			<dd><?php echo nl2br( esc_html( $x['valor'] ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></dd>
+		<?php endforeach; ?>
 		<dt><?php asde_e( 'Se apuntó' ); ?></dt>
 		<dd><?php echo esc_html( $fecha( $f['creada'] ) ); ?><?php echo $f['confirmada_en'] ? ' · ' . esc_html( sprintf( asde_t( 'confirmó el %s' ), $fecha( $f['confirmada_en'] ) ) ) : ''; ?></dd>
 		<?php if ( $f['caduca'] ) : ?>

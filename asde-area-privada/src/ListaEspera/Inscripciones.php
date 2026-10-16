@@ -78,6 +78,7 @@ final class Inscripciones {
 				estado varchar(16) NOT NULL DEFAULT 'sin_confirmar',
 				datos_enc text NULL,
 				historial_enc mediumtext NULL,
+				extra_enc mediumtext NULL,
 				email_huella varchar(64) NOT NULL DEFAULT '',
 				persona_huella varchar(64) NOT NULL DEFAULT '',
 				seccion varchar(20) NOT NULL DEFAULT '',
@@ -109,11 +110,13 @@ final class Inscripciones {
 	/**
 	 * Apunta a una persona (sin confirmar).
 	 *
-	 * @param array<string, string> $d Lo escrito (CAMPOS), ya validado.
+	 * @param array<string, string> $d     Lo escrito (CAMPOS), ya validado.
+	 * @param array[]               $extra Respuestas a los campos propios del grupo (CamposExtra::validar).
 	 */
-	public static function crear( string $grupo, array $d ): int {
+	public static function crear( string $grupo, array $d, array $extra = array() ): int {
 		global $wpdb;
-		$d = array_intersect_key( $d, array_flip( self::CAMPOS ) );
+		$d   = array_intersect_key( $d, array_flip( self::CAMPOS ) );
+		$sal = wp_generate_password( 32, false, false );
 		$wpdb->insert(
 			self::table(),
 			array(
@@ -122,7 +125,8 @@ final class Inscripciones {
 				'datos_enc'      => Crypto::encrypt( (string) wp_json_encode( $d ) ),
 				'email_huella'   => EmailCuenta::huella( (string) ( $d['email'] ?? '' ) ),
 				'persona_huella' => self::huella_persona( $grupo, $d ),
-				'sal'            => wp_generate_password( 32, false, false ),
+				'sal'            => $sal,
+				'extra_enc'      => CamposExtra::cifrar( $extra, (string) ( $d['email'] ?? '' ), $sal ),
 				'creada'         => current_time( 'mysql', true ),
 			)
 		);
@@ -385,6 +389,8 @@ final class Inscripciones {
 		$fila['datos'] = array_merge( array_fill_keys( self::CAMPOS, '' ), is_array( $datos ) ? array_map( 'strval', $datos ) : array() );
 		unset( $fila['datos_enc'], $fila['historial_enc'] );
 		$fila['historial'] = is_array( $historial ) ? $historial : array();
+		$fila['extra']     = CamposExtra::descifrar( $fila['extra_enc'] ?? null, $fila['datos']['email'], (string) $fila['sal'] );
+		unset( $fila['extra_enc'] );
 		$fila['id']        = (int) $fila['id'];
 		$fila['avisada']   = (bool) (int) $fila['avisada'];
 		$nac               = \DateTime::createFromFormat( '!Y-m-d', $fila['datos']['nacimiento'], wp_timezone() );

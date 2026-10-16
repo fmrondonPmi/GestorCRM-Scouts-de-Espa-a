@@ -6,6 +6,7 @@ use AsdeBalears\AreaPrivada\Domain\Grupos;
 use AsdeBalears\AreaPrivada\Domain\Modulos;
 use AsdeBalears\AreaPrivada\Idiomas\Idioma;
 use AsdeBalears\AreaPrivada\ListaEspera\Avisos;
+use AsdeBalears\AreaPrivada\ListaEspera\CamposExtra;
 use AsdeBalears\AreaPrivada\ListaEspera\Enlaces;
 use AsdeBalears\AreaPrivada\ListaEspera\Formulario;
 use AsdeBalears\AreaPrivada\ListaEspera\Inscripciones;
@@ -58,6 +59,7 @@ final class InscripcionEsperaView extends View {
 			'fila'    => $e['fila'] ?? null,
 			'grupo'   => null,
 			'valores' => array(),
+			'campos'  => array(),
 			'clave'   => '',
 			'sello'   => self::sello(),
 			'token'   => $this->post( 't' ) ?: $this->get( 't' ),
@@ -88,6 +90,10 @@ final class InscripcionEsperaView extends View {
 		if ( 'formulario' === $vars['modo'] ) {
 			foreach ( Formulario::CAMPOS as $c ) {
 				$vars['valores'][ $c ] = $this->post( $c );
+			}
+			$vars['campos'] = CamposExtra::del_grupo( (string) $vars['grupo']['numero'] );
+			foreach ( $vars['campos'] as $c ) {
+				$vars['valores'][ 'extra_' . $c['id'] ] = $this->post( 'extra_' . $c['id'] );
 			}
 		}
 		if ( $vars['fila'] ) {
@@ -138,11 +144,13 @@ final class InscripcionEsperaView extends View {
 		foreach ( Formulario::CAMPOS as $c ) {
 			$in[ $c ] = 'observaciones' === $c && isset( $_POST[ $c ] ) && is_string( $_POST[ $c ] ) ? sanitize_textarea_field( wp_unslash( $_POST[ $c ] ) ) : $this->post( $c ); // phpcs:ignore WordPress.Security.NonceVerification -- comprobado en handle_post()
 		}
-		$r = Formulario::validar( $in );
-		if ( $r['errores'] ) {
+		$r      = Formulario::validar( $in );
+		$campos = CamposExtra::del_grupo( (string) $grupo['numero'] );
+		$extra  = CamposExtra::validar( $campos, $this->extras_enviados( $campos ) );
+		if ( $r['errores'] || $extra['errores'] ) {
 			self::$estado = array(
 				'modo'    => 'formulario',
-				'errores' => $r['errores'],
+				'errores' => array_merge( $r['errores'], $extra['errores'] ),
 			);
 			return;
 		}
@@ -161,7 +169,7 @@ final class InscripcionEsperaView extends View {
 			// La misma persona con el mismo email (P-129): no se repite; se le reenvía lo suyo.
 			Inscripciones::SIN_CONFIRMAR === $repetida['estado'] ? Avisos::confirmar( $repetida ) : Avisos::enlaces( array( $repetida ) );
 		} else {
-			$id   = Inscripciones::crear( $numero, $d );
+			$id   = Inscripciones::crear( $numero, $d, $extra['respuestas'] );
 			$fila = $id ? Inscripciones::por_id( $id ) : null;
 			if ( $fila ) {
 				Avisos::confirmar( $fila );
@@ -171,6 +179,22 @@ final class InscripcionEsperaView extends View {
 			'modo'    => 'enviado',
 			'destino' => Contacto::enmascarar( $d['email'] ),
 		);
+	}
+
+	/**
+	 * Lo enviado en los campos propios del grupo (`extra_<id>`).
+	 *
+	 * @param array[] $campos Definiciones del grupo.
+	 * @return array<string, string>
+	 */
+	private function extras_enviados( array $campos ): array {
+		$out = array();
+		foreach ( $campos as $c ) {
+			$k = 'extra_' . $c['id'];
+			// phpcs:ignore WordPress.Security.NonceVerification -- comprobado en handle_post()
+			$out[ $k ] = isset( $_POST[ $k ] ) && is_string( $_POST[ $k ] ) ? sanitize_textarea_field( wp_unslash( $_POST[ $k ] ) ) : '';
+		}
+		return $out;
 	}
 
 	private function reenviar(): void {

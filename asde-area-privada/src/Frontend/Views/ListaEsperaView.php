@@ -8,6 +8,7 @@ use AsdeBalears\AreaPrivada\Domain\Grupos;
 use AsdeBalears\AreaPrivada\Domain\Secciones;
 use AsdeBalears\AreaPrivada\Frontend\Notices;
 use AsdeBalears\AreaPrivada\ListaEspera\Avisos;
+use AsdeBalears\AreaPrivada\ListaEspera\CamposExtra;
 use AsdeBalears\AreaPrivada\ListaEspera\Enlaces;
 use AsdeBalears\AreaPrivada\ListaEspera\Inscripciones;
 
@@ -77,6 +78,7 @@ final class ListaEsperaView extends View {
 					'url'     => $this->url( 'lista_espera' ),
 					'enlace'  => $grupo ? Enlaces::url( $grupo ) : '',
 					'renovar' => current_user_can( self::CAP_ALTA ),
+					'campos'  => current_user_can( self::CAP_ALTA ) ? CamposExtra::del_grupo( Grupo::numero() ) : null,
 				)
 			)
 		);
@@ -124,6 +126,33 @@ final class ListaEsperaView extends View {
 				Enlaces::renovar( Grupo::actual() );
 				Logger::log( 'enlace_espera_renovado', 'grupo', Grupo::numero() );
 				Notices::add( 'success', asde_t( 'Enlace de la lista de espera renovado: el anterior ya no sirve.' ) );
+			}
+			$this->redirect( $this->url( 'lista_espera' ) );
+		}
+		if ( 'espera_campos' === $accion ) {
+			check_admin_referer( 'asde_espera_campos' );
+			if ( current_user_can( self::CAP_ALTA ) && Grupo::actual() ) {
+				$filas = array();
+				// phpcs:ignore WordPress.Security.NonceVerification, WordPress.Security.ValidatedSanitizedInput -- comprobado arriba; CamposExtra::guardar() sanea cada valor.
+				$bruto = isset( $_POST['campo'] ) && is_array( $_POST['campo'] ) ? wp_unslash( $_POST['campo'] ) : array();
+				foreach ( array_slice( $bruto, 0, CamposExtra::MAX_CAMPOS + 4 ) as $c ) {
+					if ( is_array( $c ) ) {
+						$filas[] = array(
+							'id'          => (string) ( $c['id'] ?? '' ),
+							'etiqueta'    => (string) ( $c['etiqueta'] ?? '' ),
+							'tipo'        => (string) ( $c['tipo'] ?? '' ),
+							'obligatorio' => '1' === (string) ( $c['obligatorio'] ?? '' ),
+							'quitar'      => '1' === (string) ( $c['quitar'] ?? '' ),
+						);
+					}
+				}
+				$errores = CamposExtra::guardar( Grupo::numero(), $filas );
+				if ( $errores ) {
+					Notices::add( 'error', esc_html( implode( ' ', $errores ) ) );
+				} else {
+					Logger::log( 'lista_espera_campos', 'grupo', Grupo::numero() );
+					Notices::add( 'success', asde_t( 'Campos del formulario guardados.' ) );
+				}
 			}
 			$this->redirect( $this->url( 'lista_espera' ) );
 		}
