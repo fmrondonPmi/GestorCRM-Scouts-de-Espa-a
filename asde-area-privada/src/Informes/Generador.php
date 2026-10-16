@@ -51,7 +51,7 @@ final class Generador {
 
 		// Ámbito de secciones.
 		$secciones = $informe->filtros['secciones'];
-		if ( ! $ambito->vision_global() ) {
+		if ( ! $ambito->vision_global() && ! Catalogo::solo_tesoreria( $ambito ) ) {
 			$mias      = $ambito->secciones_scouter();
 			$secciones = $secciones ? array_values( array_intersect( $secciones, $mias ) ) : $mias;
 			if ( ! $secciones ) {

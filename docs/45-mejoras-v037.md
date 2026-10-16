@@ -28,6 +28,8 @@ Cuatro peticiones del usuario sobre la gestión de pagos de Tesorería. Sin tabl
 - En la barra de pestañas de Tesorería, dos accesos directos: **«Informe de pagos»** (el informe predefinido «Pagos de la cuota»; `InformesTable::predefinido()`) y **«Todos los informes»**.
 - **P-167 (supuesto, para confirmar):** salen a quien **ya puede ver informes y pagos** (`asde_reports` + `Catalogo::ve_pagos()`): scouters, Secretaría y Coordinación. El rol **Tesorería a secas no tiene `asde_reports`** y, sin visión global, un informe solo le daría las secciones que no tiene; no se ha cambiado su ámbito. Si el tesorero/a usa una cuenta solo de Tesorería, hay que decidir si recibe `asde_reports` y ver todo el grupo en los informes de pagos.
 
+**v0.37.1:** el usuario confirmó el P-167: el rol Tesorería recibe `asde_reports` y en los informes ve a **todo el grupo**, pero solo las columnas de identidad (nº, nombre, apellidos, sección) y las de pagos; nunca contactos ni salud.
+
 ## 4. Control de pagos: Excel bonito, no CSV
 
 **Petición:** «En control de pagos, el descargar debe ser un Excel bonito, no un CSV».

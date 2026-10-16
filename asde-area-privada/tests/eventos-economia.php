@@ -423,6 +423,12 @@ try {
 	$ok( ! Cobros::puede(), 'quien gestiona el evento no apunta pagos (sin selector de evento en su ficha)' );
 	$como( $u_teso );
 
+	// v0.37.1 (P-167): Tesorería a secas ve informes de pagos de todo el grupo, pero solo identidad y pagos.
+	$u_solo = $crear( 'prueba-eco-solo', array( Roles::TESORERIA ), array( Usuarios::META_SOCIO => '990086' ) );
+	$a_solo = $como( $u_solo );
+	$perm   = \AsdeBalears\AreaPrivada\Informes\Catalogo::permitidas( $a_solo );
+	$ok( user_can( $u_solo, 'asde_reports' ) && \AsdeBalears\AreaPrivada\Informes\Catalogo::solo_tesoreria( $a_solo ) && isset( $perm['pago_pendiente'], $perm['nombre'] ) && ! isset( $perm['email'], $perm['movil'], $perm['tutor1_movil'] ), 'Tesorería a secas: tiene informes, de todo el grupo, con identidad y pagos y sin contactos ni salud' );
+	$como( $u_teso );
 	$bin = Xlsx::generar(
 		'Control de pagos',
 		array( 'Nº familia', 'Socios', 'Pagado', 'Estado' ),

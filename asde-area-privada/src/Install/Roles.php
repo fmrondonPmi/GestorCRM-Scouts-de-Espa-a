@@ -110,6 +110,7 @@ final class Roles {
 				'Tesorería',
 				$base + array(
 					'asde_view_self'        => true,
+					'asde_reports'          => true, // v0.37.1: informes de pagos de todo el grupo (P-167); solo identidad y pagos, ver Catalogo::permitidas().
 					'asde_tesoreria_acceso' => true,
 					'asde_tesoreria_config' => true,
 					// Uniformes: Tesorería valida el pago.

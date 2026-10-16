@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.37.0
+Stable tag: 0.37.1
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -61,6 +61,9 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.37.1 =
+* Treasury role: can open Reports and sees the payment reports for the whole group (identity and payment columns only; no contact or health data).
 
 = 0.37.0 =
 * Treasury, family file: the new "Payment history" lists everything a family has paid (round fee, events and uniforms), newest first, with who recorded each payment and when; removed items show as removed.
@@ -211,6 +214,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * First version with the mobile app (PWA).
 
 == Upgrade Notice ==
+
+= 0.37.1 =
+Treasury accounts get payment reports for the whole group. No database changes.
 
 = 0.37.0 =
 Payment history per family, event payments in "Record payment", report links in Treasury and a formatted Excel for the payment control. No database changes.

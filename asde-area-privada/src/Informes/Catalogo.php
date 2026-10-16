@@ -3,6 +3,7 @@ namespace AsdeBalears\AreaPrivada\Informes;
 
 use AsdeBalears\AreaPrivada\Auth\Ambito;
 use AsdeBalears\AreaPrivada\Domain\Modulos;
+use AsdeBalears\AreaPrivada\Install\Roles;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -175,8 +176,23 @@ final class Catalogo {
 		),
 	);
 
+	/** Lo que ve en un informe quien solo es de Tesorería (v0.37.1, P-167): quién es y sus pagos, de todo el grupo. */
+	private const IDENTIDAD_TESORERIA = array( 'num_local', 'nombre', 'apellidos', 'seccion' );
+
+	/** ¿Es Tesorería sin visión global? Ve las familias de todo el grupo, pero solo identidad y pagos. */
+	public static function solo_tesoreria( Ambito $ambito ): bool {
+		return ! $ambito->vision_global() && in_array( Roles::TESORERIA, $ambito->roles_vigentes(), true );
+	}
+
 	/** Columnas que puede usar el ámbito dado. @return array<string, array> */
 	public static function permitidas( Ambito $ambito ): array {
+		if ( self::solo_tesoreria( $ambito ) ) {
+			return array_filter(
+				self::columnas(),
+				static fn( $c, $k ) => ( 'pagos' === $c[4] && self::ve_pagos( $ambito ) ) || in_array( $k, self::IDENTIDAD_TESORERIA, true ),
+				ARRAY_FILTER_USE_BOTH
+			);
+		}
 		$puede_salud = $ambito->user->has_cap( 'asde_view_health' );
 		$global      = $ambito->vision_global();
 		$pagos       = self::ve_pagos( $ambito );
