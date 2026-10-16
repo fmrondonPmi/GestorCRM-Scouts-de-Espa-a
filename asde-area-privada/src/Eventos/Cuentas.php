@@ -14,7 +14,8 @@ defined( 'ABSPATH' ) || exit;
  * - Quien gestiona el evento **propone** gastos con su justificante (P-158); **Tesorería**
  *   (`asde_eventos_economia`) los valida o los rechaza, reembolsa, registra los ingresos reales,
  *   da y liquida los anticipos y **cierra** las cuentas.
- * - Con las cuentas cerradas no se cambia nada (P-162).
+ * - Con las cuentas cerradas no se cambia nada; Tesorería puede reabrirlas con un motivo
+ *   (v0.36.1, P-162).
  */
 final class Cuentas {
 
@@ -470,7 +471,8 @@ final class Cuentas {
 
 	/**
 	 * Cierra las cuentas: guarda el balance como informe final y borra lo cifrado de las
-	 * inscripciones (quién recoge, observaciones: P-150). No se reabre (P-162).
+	 * inscripciones (quién recoge, observaciones: P-150). Se pueden reabrir (P-162), pero lo borrado
+	 * no vuelve.
 	 *
 	 * @return array<string, mixed>|\WP_Error El balance guardado.
 	 */
@@ -494,6 +496,40 @@ final class Cuentas {
 			)
 		);
 		return $balance;
+	}
+
+	/**
+	 * Reabre las cuentas cerradas (v0.36.1, P-162, cambiado por el usuario: «una cuenta puede
+	 * volver a abrirse»). Lo hace Tesorería, siempre con motivo. Lo que se borró al cerrar (quién
+	 * recoge, observaciones) no vuelve; el último informe se conserva hasta el próximo cierre.
+	 *
+	 * @return true|\WP_Error
+	 */
+	public static function reabrir( array $e, string $motivo ) {
+		if ( ! Cobros::puede() ) {
+			return new \WP_Error( 'asde_cuentas', asde_t( 'Las cuentas las reabre Tesorería.' ) );
+		}
+		if ( self::abiertas( $e ) ) {
+			return new \WP_Error( 'asde_cuentas', asde_t( 'Las cuentas de este evento no están cerradas.' ) );
+		}
+		$motivo = self::texto( $motivo, 255 );
+		if ( '' === $motivo ) {
+			return new \WP_Error( 'asde_cuentas', asde_t( 'Escribe el motivo para reabrir las cuentas.' ) );
+		}
+		if ( ! EventosTable::reabrir_cuentas( $e['id'] ) ) {
+			return new \WP_Error( 'asde_cuentas', asde_t( 'No se han podido reabrir las cuentas. Inténtalo de nuevo.' ) );
+		}
+		Logger::log(
+			'evento_cuentas_reabiertas',
+			'evento',
+			(string) $e['id'],
+			array(
+				'motivo'             => $motivo,
+				'cerradas_en'        => $e['cerrado_en'],
+				'resultado_anterior' => $e['balance']['resultado'] ?? null,
+			)
+		);
+		return true;
 	}
 
 	/** @return array<int, string[]> Las filas del informe final en CSV (sin cabecera de columnas: van en cada bloque). */

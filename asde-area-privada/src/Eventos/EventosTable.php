@@ -306,8 +306,8 @@ final class EventosTable {
 	}
 
 	/**
-	 * Cierra las cuentas (v0.36): guarda el balance final y deja el evento en solo lectura. No se
-	 * reabre (P-162).
+	 * Cierra las cuentas (v0.36): guarda el balance final y deja el evento en solo lectura (v0.36.1:
+	 * Tesorería puede reabrirlas, P-162).
 	 *
 	 * @param array<string, mixed> $balance Cuentas::balance() en el momento del cierre.
 	 */
@@ -326,6 +326,15 @@ final class EventosTable {
 				'cerrado_en' => null,
 			)
 		);
+	}
+
+	/**
+	 * Reabre las cuentas cerradas (v0.36.1, P-162). El último informe se queda en `balance` hasta
+	 * que se vuelvan a cerrar.
+	 */
+	public static function reabrir_cuentas( int $id ): bool {
+		global $wpdb;
+		return (bool) $wpdb->query( $wpdb->prepare( 'UPDATE %i SET cerrado_en = NULL, cerrado_por = 0 WHERE id = %d AND grupo = %s AND cerrado_en IS NOT NULL', self::table(), $id, Grupo::numero() ) ); // phpcs:ignore WordPress.DB
 	}
 
 	/** Borra un borrador (no hay pagos ni inscripciones: no es un justificante de nada). */

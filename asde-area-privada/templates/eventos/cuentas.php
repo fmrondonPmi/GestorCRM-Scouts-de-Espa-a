@@ -58,8 +58,19 @@ $yo              = get_current_user_id();
 ?>
 <?php if ( ! $abiertas ) : ?>
 	<div class="asde-notice asde-notice--info">
-		<?php echo esc_html( sprintf( asde_t( 'Cuentas cerradas el %1$s por %2$s: este es el informe final y ya no se puede cambiar nada.' ), wp_date( 'd/m/Y', (int) strtotime( $e['cerrado_en'] . ' UTC' ) ), $quien( $e['cerrado_por'] ) ) ); ?>
+		<?php echo esc_html( sprintf( asde_t( 'Cuentas cerradas el %1$s por %2$s: este es el informe final. Para cambiar algo, Tesorería tiene que reabrirlas.' ), wp_date( 'd/m/Y', (int) strtotime( $e['cerrado_en'] . ' UTC' ) ), $quien( $e['cerrado_por'] ) ) ); ?>
 	</div>
+	<?php if ( $economia ) : ?>
+		<details class="asde-accion asde-no-print">
+			<summary><?php asde_e( 'Reabrir las cuentas' ); ?></summary>
+			<form method="post" class="asde-form asde-form--compacta" data-asde-confirmar="<?php echo esc_attr( asde_js( '¿Reabrir las cuentas del evento? Habrá que volver a cerrarlas.' ) ); ?>">
+				<?php echo $campos( 'evento_reabrir_cuentas' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+				<p class="asde-help"><?php asde_e( 'Se podrá volver a cambiar el evento y sus cuentas. Quién recoge y las observaciones, que se borraron al cerrar, no vuelven.' ); ?></p>
+				<label><?php asde_e( 'Motivo' ); ?> <input type="text" name="motivo" maxlength="255" required></label>
+				<button type="submit" class="button"><?php asde_e( 'Reabrir las cuentas' ); ?></button>
+			</form>
+		</details>
+	<?php endif; ?>
 <?php endif; ?>
 
 <section class="asde-card asde-cuentas__balance">
@@ -393,8 +404,8 @@ $yo              = get_current_user_id();
 				<?php endforeach; ?>
 			</ul>
 		<?php else : ?>
-			<p><?php asde_e( 'Al cerrar, el balance de hoy queda como informe final, se borran los datos de recogida y las observaciones de las inscripciones y ya no se podrá cambiar nada del evento. No se puede deshacer.' ); ?></p>
-			<form method="post" data-asde-confirmar="<?php echo esc_attr( asde_js( '¿Cerrar las cuentas del evento? No se puede deshacer.' ) ); ?>">
+			<p><?php asde_e( 'Al cerrar, el balance de hoy queda como informe final, se borran los datos de recogida y las observaciones de las inscripciones y el evento queda en solo lectura. Si después hace falta cambiar algo, Tesorería puede reabrirlas (lo borrado no vuelve).' ); ?></p>
+			<form method="post" data-asde-confirmar="<?php echo esc_attr( asde_js( '¿Cerrar las cuentas del evento? Quién recoge y las observaciones de las inscripciones se borran y no vuelven.' ) ); ?>">
 				<?php echo $campos( 'evento_cerrar' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 				<button type="submit" class="button button-primary"><?php asde_e( 'Cerrar las cuentas' ); ?></button>
 			</form>

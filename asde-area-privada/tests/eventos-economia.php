@@ -472,7 +472,7 @@ try {
 
 	echo "\n== Parte I · Cerrado: solo lectura ==\n";
 	$ok( is_wp_error( Cuentas::proponer( $e, $como( $u_teso ), $gasto(), $fichero( $PNG, 'tarde.png' ) ) ) && is_wp_error( Cobros::pagar( $e, $f_leo['id'], 1, 'efectivo', $hoy, '', '' ) ) && is_wp_error( Cobros::devolver( $e, $f_leo['id'], 1, 'efectivo', $hoy, 'x' ) ) && is_wp_error( Cuentas::anticipo( $e, $u_mon, 5, $hoy, 'efectivo', '' ) ), 'con las cuentas cerradas no se apuntan gastos, pagos, devoluciones ni anticipos' );
-	$ok( is_wp_error( Cuentas::cerrar( $e ) ), 'no se cierra dos veces (ni se reabre: P-162)' );
+	$ok( is_wp_error( Cuentas::cerrar( $e ) ), 'no se cierra dos veces' );
 	$a_lob = $como( $u_lob );
 	$ok( ! Servicio::puede_editar( $e, $a_lob ), 'ya no se pueden editar los datos del evento' );
 	$antes = $e['nombre'];
@@ -485,6 +485,28 @@ try {
 	$ok( ! str_contains( $h, 'Acampada de cuentas' ), 'un evento cerrado ya no sale en «Cobrar un evento»' );
 	$h = $enviar( new EventosView(), array( 'asde_action' => 'evento_justificante', 'evento' => (string) $id_e, 'pestana' => 'cuentas', 'gasto' => '999999' ), 'asde_evento_' . $id_e );
 	$ok( str_contains( $h, 'no existe o no puedes verlo' ), 'pedir un justificante que no es de este evento: no se envía nada' );
+
+	echo "\n== Parte I bis · Reabrir las cuentas (v0.36.1, P-162) ==\n";
+	$como( $u_teso );
+	$h = $pintar( new EventosView(), array( 'evento' => (string) $id_e, 'pestana' => 'cuentas' ) );
+	$ok( str_contains( $h, 'value="evento_reabrir_cuentas"' ) && str_contains( $h, 'Tesorería tiene que reabrirlas' ), 'con las cuentas cerradas, Tesorería tiene «Reabrir las cuentas»' );
+	$como( $u_lob );
+	$h = $pintar( new EventosView(), array( 'evento' => (string) $id_e, 'pestana' => 'cuentas' ) );
+	$ok( ! str_contains( $h, 'value="evento_reabrir_cuentas"' ) && is_wp_error( Cuentas::reabrir( $ev( $id_e ), 'Falta un tique' ) ) && null !== $ev( $id_e )['cerrado_en'], 'quien gestiona el evento no las reabre (ni ve el botón)' );
+	$como( $u_teso );
+	$r = Cuentas::reabrir( $ev( $id_e ), '' );
+	$ok( is_wp_error( $r ) && str_contains( $r->get_error_message(), 'motivo' ) && null !== $ev( $id_e )['cerrado_en'], 'reabrir pide el motivo' );
+	$h = $enviar( new EventosView(), array( 'asde_action' => 'evento_reabrir_cuentas', 'evento' => (string) $id_e, 'pestana' => 'cuentas', 'motivo' => 'Ha llegado una factura tarde' ), 'asde_evento_' . $id_e );
+	$e = $ev( $id_e );
+	$reg = (string) $wpdb->get_var( $wpdb->prepare( 'SELECT detalles FROM ' . Logger::table() . " WHERE id > %d AND accion = 'evento_cuentas_reabiertas' AND objeto_id = %s ORDER BY id DESC LIMIT 1", $log_antes, (string) $id_e ) ); // phpcs:ignore WordPress.DB
+	$ok( str_contains( $h, 'reabiertas' ) && null === $e['cerrado_en'] && 'cerrado' !== EventosTable::estado_visible( $e ) && is_array( $e['balance'] ) && str_contains( $reg, 'factura tarde' ), 'Tesorería las reabre desde la pestaña: el evento vuelve a poder cambiarse, el último informe se conserva y el motivo queda en el registro' );
+	$ok( is_wp_error( Cuentas::reabrir( $e, 'otra vez' ) ), 'unas cuentas abiertas no se «reabren»' );
+	$g8    = Cuentas::proponer( $e, Ambito::actual(), $gasto( array( 'concepto' => 'Factura tardía', 'importe' => '6' ) ), $fichero( $PNG, 'factura-tarde.png' ) );
+	$datos = (int) $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(*) FROM ' . InscripcionesTable::table() . ' WHERE evento_id = %d AND datos_enc IS NOT NULL', $id_e ) ); // phpcs:ignore WordPress.DB
+	$ok( is_int( $g8 ) && 0 === $datos, 'reabiertas, se puede apuntar la factura que faltaba; quién recoge y las observaciones no vuelven' );
+	$b2 = Cuentas::cerrar( $ev( $id_e ) );
+	$e  = $ev( $id_e );
+	$ok( is_array( $b2 ) && null !== $e['cerrado_en'] && round( $b['gastos'] + 6, 2 ) === $e['balance']['gastos'], 'se vuelven a cerrar con el informe al día (con la factura nueva)' );
 
 	echo "\n== Parte J · Seguridad ==\n";
 	$cols = array_keys( (array) $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . GastosTable::table() . ' WHERE id > %d LIMIT 1', $gas_antes ), ARRAY_A ) ); // phpcs:ignore WordPress.DB

@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.36.0
+Stable tag: 0.36.1
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -61,6 +61,9 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.36.1 =
+* Events: Treasury can reopen an event's closed accounts, always with a reason (for example, an invoice that arrives late), and close them again with the report up to date. The pick-up details and notes deleted when closing do not come back.
 
 = 0.36.0 =
 * Events, new "Accounts" tab (event managers and Treasury): real expenses with their receipt (photo or PDF up to 5 MB, stored encrypted in uploads/asde-privado), proposed by the event team and validated or rejected by Treasury; reimbursements to whoever paid out of pocket; real income (grants); cash advances and their settlement (a note is required if it does not add up); emergency fund (collected, used, left); balance (planned and actual per budget line, collected, pending, refunded and result), printable and as CSV.
@@ -202,6 +205,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * First version with the mobile app (PWA).
 
 == Upgrade Notice ==
+
+= 0.36.1 =
+Treasury can reopen an event's closed accounts. No database changes.
 
 = 0.36.0 =
 Event accounts, refunds and SEPA for events. Two new database tables (event expenses and cash advances) and new columns in events and SEPA remittances are created automatically on update.

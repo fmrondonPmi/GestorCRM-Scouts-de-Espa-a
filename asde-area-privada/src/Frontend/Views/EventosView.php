@@ -311,8 +311,8 @@ final class EventosView extends EventosBaseView {
 		$r       = new \WP_Error( 'asde_evento', asde_t( 'Acción desconocida.' ) );
 		$cifra   = static fn( string $v ): float => (float) str_replace( ',', '.', $v );
 
-		// v0.36: con las cuentas cerradas el evento es de solo lectura (P-162).
-		if ( null !== $e['cerrado_en'] && ! in_array( $accion, array( 'evento_justificante', 'evento_informe' ), true ) ) {
+		// v0.36: con las cuentas cerradas el evento es de solo lectura; v0.36.1: Tesorería puede reabrirlas (P-162).
+		if ( null !== $e['cerrado_en'] && ! in_array( $accion, array( 'evento_justificante', 'evento_informe', 'evento_reabrir_cuentas' ), true ) ) {
 			Notices::add( 'error', asde_t( 'Las cuentas de este evento están cerradas: ya no se pueden cambiar.' ) );
 			$this->redirect( $volver );
 		}
@@ -492,6 +492,11 @@ final class EventosView extends EventosBaseView {
 			case 'evento_cerrar':
 				$r     = Cuentas::cerrar( $e );
 				$hecho = sprintf( asde_t( 'Cuentas del evento %s cerradas: el balance queda como informe final.' ), $num );
+				break;
+
+			case 'evento_reabrir_cuentas':
+				$r     = Cuentas::reabrir( $e, $this->post( 'motivo' ) );
+				$hecho = sprintf( asde_t( 'Cuentas del evento %s reabiertas: ya se pueden cambiar. Cuando esté todo, ciérralas de nuevo.' ), $num );
 				break;
 
 			case 'evento_justificante':
