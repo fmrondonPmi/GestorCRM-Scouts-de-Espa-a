@@ -4,6 +4,9 @@ namespace AsdeBalears\AreaPrivada\Frontend\Views;
 use AsdeBalears\AreaPrivada\Audit\Logger;
 use AsdeBalears\AreaPrivada\Crm\CrmException;
 use AsdeBalears\AreaPrivada\Crm\PersonaRepository;
+use AsdeBalears\AreaPrivada\Domain\Modulos;
+use AsdeBalears\AreaPrivada\Eventos\Cobros as EventosCobros;
+use AsdeBalears\AreaPrivada\Eventos\EventosTable;
 use AsdeBalears\AreaPrivada\Frontend\Notices;
 use AsdeBalears\AreaPrivada\Sepa\Avisos;
 use AsdeBalears\AreaPrivada\Sepa\Config as SepaConfig;
@@ -23,7 +26,8 @@ defined( 'ABSPATH' ) || exit;
  * - las autorizaciones de las familias;
  * - nueva remesa: qué se cobraría a cada familia y el fichero para el banco;
  * - las remesas hechas: descargar, avisar a las familias, marcar como enviada
- *   al banco y registrar los cobros y las devoluciones.
+ *   al banco y registrar los cobros y las devoluciones;
+ * - v0.36: «Cobrar un evento», la remesa de lo pendiente de las inscripciones de un evento.
  */
 final class SepaView extends TesoreriaBaseView {
 
@@ -72,6 +76,17 @@ final class SepaView extends TesoreriaBaseView {
 			$prep    = Remesas::preparar( $repo, $ronda, $plazo );
 		}
 
+		// v0.36: remesa de un evento (todo lo pendiente de sus inscripciones, P-163).
+		$eventos  = $this->eventos_sepa();
+		$ev_id    = (int) $this->get( 'evento_sepa' );
+		$ev_prep  = null;
+		$ev_err   = array();
+		$ev_fecha = $this->get( 'fecha_evento' );
+		if ( '1' === $this->get( 'preparar_evento' ) && isset( $eventos[ $ev_id ] ) && SepaConfig::lista( $cfg ) ) {
+			$ev_err  = array_filter( array( Remesas::error_fecha( $ev_fecha ) ) );
+			$ev_prep = Remesas::preparar_evento( $repo, $eventos[ $ev_id ] );
+		}
+
 		// v0.33: la cuenta de cada autorización está en las fichas del CRM (titular y si sigue siendo la autorizada).
 		$mandatos = Mandatos::activos();
 		$cuentas  = array();
@@ -109,10 +124,39 @@ final class SepaView extends TesoreriaBaseView {
 				'fecha'      => $fecha ?: Remesas::fecha_minima(),
 				'fecha_min'  => Remesas::fecha_minima(),
 				'concepto'   => $concepto,
+				'eventos'    => $eventos,
+				'ev_id'      => $ev_id,
+				'ev_prep'    => $ev_prep,
+				'ev_errores' => $ev_err,
+				'ev_fecha'   => $ev_fecha ?: Remesas::fecha_minima(),
+				'ev_concepto' => $this->get( 'concepto_evento' ) ?: ( isset( $eventos[ $ev_id ] ) ? self::concepto_evento( $eventos[ $ev_id ] ) : '' ),
 				'url'        => $this->url( 'sepa' ),
 				'url_ronda'  => $this->url( 'sepa', array( 'ronda' => $ronda ) ),
 			)
 		);
+	}
+
+	/**
+	 * Eventos que se pueden cobrar por domiciliación (v0.36): publicados, con coste y con las
+	 * cuentas abiertas; solo con el módulo de eventos y para quien lleva sus cobros.
+	 *
+	 * @return array<int, array> id => evento
+	 */
+	private function eventos_sepa(): array {
+		if ( ! Modulos::activo( Modulos::EVENTOS ) || ! EventosCobros::puede() ) {
+			return array();
+		}
+		$out = array();
+		foreach ( EventosTable::todos() as $e ) {
+			if ( EventosTable::PUBLICADO === $e['estado'] && $e['con_coste'] && EventosCobros::abiertas( $e ) ) {
+				$out[ (int) $e['id'] ] = $e;
+			}
+		}
+		return $out;
+	}
+
+	private static function concepto_evento( array $e ): string {
+		return mb_substr( sprintf( asde_t( 'Evento %1$s · %2$s' ), EventosTable::numero( $e ), $e['nombre'] ), 0, 140 );
 	}
 
 	private function remesa( PersonaRepository $repo, int $id, string $ronda ): string {
@@ -195,6 +239,36 @@ final class SepaView extends TesoreriaBaseView {
 				if ( is_wp_error( $nueva ) ) {
 					Notices::add( 'error', esc_html( $nueva->get_error_message() ) );
 					$this->redirect( add_query_arg( array( 'preparar' => '1', 'plazo' => $this->post( 'plazo' ), 'fecha' => $this->post( 'fecha' ), 'concepto' => $this->post( 'concepto' ) ), $volver ) );
+				}
+				$r = Remesas::obtener( $nueva );
+				Notices::add( 'success', sprintf( asde_t( 'Remesa <strong>%s</strong> creada: %s por %s. Descarga el fichero y súbelo al banco; después, márcala como enviada.' ), esc_html( $r['numero'] ), Remesas::adeudos( (int) $r['adeudos'] ), esc_html( Calculadora::euros( $r['total'] ) ) ) );
+				$this->redirect( $this->url( 'sepa', array( 'ronda' => $ronda, 'remesa' => (string) $nueva ) ) );
+				break;
+
+			case 'sepa_generar_evento':
+				// v0.36: la remesa de un evento.
+				check_admin_referer( 'asde_sepa_generar_evento' );
+				$ev   = $this->eventos_sepa()[ (int) $this->post( 'evento' ) ] ?? null;
+				$repo = PersonaRepository::make();
+				if ( ! $ev ) {
+					Notices::add( 'error', asde_t( 'Ese evento no se puede cobrar por domiciliación.' ) );
+					$this->redirect( $volver );
+				}
+				if ( ! $repo ) {
+					Notices::add( 'error', asde_t( 'La conexión con el CRM no está disponible.' ) );
+					$this->redirect( $volver );
+				}
+				try {
+					$prep = Remesas::preparar_evento( $repo, $ev );
+				} catch ( CrmException $e ) {
+					Notices::add( 'error', esc_html( asde_t( 'No se ha podido consultar el CRM: ' ) . $e->getMessage() ) );
+					$this->redirect( $volver );
+				}
+				$concepto = '' !== $this->post( 'concepto' ) ? $this->post( 'concepto' ) : self::concepto_evento( $ev );
+				$nueva    = Remesas::crear( $prep, $ronda, $this->post( 'fecha' ), $concepto, get_current_user_id(), (int) $ev['id'] );
+				if ( is_wp_error( $nueva ) ) {
+					Notices::add( 'error', esc_html( $nueva->get_error_message() ) );
+					$this->redirect( add_query_arg( array( 'preparar_evento' => '1', 'evento_sepa' => (string) $ev['id'], 'fecha_evento' => $this->post( 'fecha' ), 'concepto_evento' => $this->post( 'concepto' ) ), $volver ) );
 				}
 				$r = Remesas::obtener( $nueva );
 				Notices::add( 'success', sprintf( asde_t( 'Remesa <strong>%s</strong> creada: %s por %s. Descarga el fichero y súbelo al banco; después, márcala como enviada.' ), esc_html( $r['numero'] ), Remesas::adeudos( (int) $r['adeudos'] ), esc_html( Calculadora::euros( $r['total'] ) ) ) );

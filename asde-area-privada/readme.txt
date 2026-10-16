@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.35.1
+Stable tag: 0.36.0
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -61,6 +61,12 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.36.0 =
+* Events, new "Accounts" tab (event managers and Treasury): real expenses with their receipt (photo or PDF up to 5 MB, stored encrypted in uploads/asde-privado), proposed by the event team and validated or rejected by Treasury; reimbursements to whoever paid out of pocket; real income (grants); cash advances and their settlement (a note is required if it does not add up); emergency fund (collected, used, left); balance (planned and actual per budget line, collected, pending, refunded and result), printable and as CSV.
+* Closing an event's accounts (Treasury): once the event has ended, with nothing to review, reimburse or settle. The balance is kept as the final report, the pick-up details and notes of the registrations are deleted and the event becomes read-only. It cannot be reopened.
+* Refunds to families: from any registration with something paid, up to what was paid and with a reason. They show in "My events" and "My payments".
+* SEPA direct debits: "Charge an event" prepares one debit per family with an authorisation for everything pending in its registrations (siblings together). When the collections are recorded, the amount is split among the family's registrations as a "SEPA direct debit" payment.
 
 = 0.35.1 =
 * Families: an empty family (no members, payments, SEPA authorisations or bank movements) has "Delete" in the list; the row says why when it cannot be deleted.
@@ -196,6 +202,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * First version with the mobile app (PWA).
 
 == Upgrade Notice ==
+
+= 0.36.0 =
+Event accounts, refunds and SEPA for events. Two new database tables (event expenses and cash advances) and new columns in events and SEPA remittances are created automatically on update.
 
 = 0.35.1 =
 Two-step verification becomes optional for every role (applied once). Fix for memberships ended in the CRM. No database changes.

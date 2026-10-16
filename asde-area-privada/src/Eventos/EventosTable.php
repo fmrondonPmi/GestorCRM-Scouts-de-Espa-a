@@ -39,6 +39,7 @@ final class EventosTable {
 		'en_curso'    => 'En curso',
 		'celebrado'   => 'Celebrado',
 		'cancelado'   => 'Cancelado',
+		'cerrado'     => 'Cuentas cerradas',
 	);
 
 	/** Ámbito del evento (doc 43, apartado 1). */
@@ -118,6 +119,9 @@ final class EventosTable {
 				inscripcion_hasta date NULL,
 				avisado_en datetime NULL,
 				recordatorio_en datetime NULL,
+				cerrado_en datetime NULL,
+				cerrado_por bigint(20) unsigned NOT NULL DEFAULT 0,
+				balance longtext NULL,
 				PRIMARY KEY  (id),
 				KEY grupo (grupo),
 				KEY inicio (inicio)
@@ -172,6 +176,9 @@ final class EventosTable {
 	 * borrador y el de las fechas cuando está publicado.
 	 */
 	public static function estado_visible( array $e, ?int $ahora = null ): string {
+		if ( null !== ( $e['cerrado_en'] ?? null ) ) {
+			return 'cerrado';
+		}
 		if ( self::CANCELADO === $e['estado'] ) {
 			return 'cancelado';
 		}
@@ -298,6 +305,29 @@ final class EventosTable {
 		return in_array( $cual, array( 'avisado_en', 'recordatorio_en' ), true ) && self::actualizar( $id, array( $cual => current_time( 'mysql', true ) ) );
 	}
 
+	/**
+	 * Cierra las cuentas (v0.36): guarda el balance final y deja el evento en solo lectura. No se
+	 * reabre (P-162).
+	 *
+	 * @param array<string, mixed> $balance Cuentas::balance() en el momento del cierre.
+	 */
+	public static function cerrar( int $id, array $balance ): bool {
+		global $wpdb;
+		return (bool) $wpdb->update(
+			self::table(),
+			array(
+				'cerrado_en'  => current_time( 'mysql', true ),
+				'cerrado_por' => get_current_user_id(),
+				'balance'     => (string) wp_json_encode( $balance ),
+			),
+			array(
+				'id'         => $id,
+				'grupo'      => Grupo::numero(),
+				'cerrado_en' => null,
+			)
+		);
+	}
+
 	/** Borra un borrador (no hay pagos ni inscripciones: no es un justificante de nada). */
 	public static function borrar( int $id ): bool {
 		global $wpdb;
@@ -377,12 +407,14 @@ final class EventosTable {
 		$f['descripcion']   = (string) $f['descripcion'];
 		$f['material']      = (string) $f['material'];
 		$f['modalidad']     = isset( self::MODALIDADES[ $f['modalidad'] ?? '' ] ) ? (string) $f['modalidad'] : 'abierta';
-		foreach ( array( 'inscripcion_desde', 'inscripcion_hasta', 'avisado_en', 'recordatorio_en' ) as $k ) {
+		foreach ( array( 'inscripcion_desde', 'inscripcion_hasta', 'avisado_en', 'recordatorio_en', 'cerrado_en' ) as $k ) {
 			$f[ $k ] = isset( $f[ $k ] ) && '' !== (string) $f[ $k ] && ! str_starts_with( (string) $f[ $k ], '0000' ) ? (string) $f[ $k ] : null;
 		}
-		foreach ( array( 'creado_por', 'validacion_pedida_por', 'validado_por', 'publicado_por', 'cancelado_por' ) as $k ) {
-			$f[ $k ] = (int) $f[ $k ];
+		foreach ( array( 'creado_por', 'validacion_pedida_por', 'validado_por', 'publicado_por', 'cancelado_por', 'cerrado_por' ) as $k ) {
+			$f[ $k ] = (int) ( $f[ $k ] ?? 0 );
 		}
+		$balance      = json_decode( (string) ( $f['balance'] ?? '' ), true );
+		$f['balance'] = is_array( $balance ) ? $balance : null;
 		return $f;
 	}
 

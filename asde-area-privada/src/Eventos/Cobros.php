@@ -17,13 +17,16 @@ defined( 'ABSPATH' ) || exit;
  * - La referencia de la transferencia o el Bizum: nº de evento y nº de familia de Tesorería
  *   («E6840012 F684001») o, sin familia, el nº de la inscripción.
  * - Cada pago o ajuste vuelve a calcular el estado: pagada y autorizada = confirmada.
+ * - v0.36: las **devoluciones** a la familia (con motivo, hasta lo pagado: P-160), los cobros de
+ *   la **remesa SEPA** del evento y, con las cuentas cerradas, ya no se cambia nada.
  */
 final class Cobros {
 
-	/** @return array{precio:float, ajustes:float, total:float, pagado:float, pendiente:float} */
+	/** @return array{precio:float, ajustes:float, total:float, pagado:float, devuelto:float, neto:float, pendiente:float} */
 	public static function de( array $f, array $movs ): array {
-		$ajustes = 0.0;
-		$pagado  = 0.0;
+		$ajustes  = 0.0;
+		$pagado   = 0.0;
+		$devuelto = 0.0;
 		foreach ( $movs as $m ) {
 			if ( null !== $m['anulado_en'] ) {
 				continue;
@@ -32,16 +35,26 @@ final class Cobros {
 				$ajustes += $m['importe'];
 			} elseif ( MovimientosTable::PAGO === $m['tipo'] ) {
 				$pagado += $m['importe'];
+			} elseif ( MovimientosTable::DEVOLUCION === $m['tipo'] ) {
+				$devuelto += $m['importe'];
 			}
 		}
 		$total = max( 0.0, round( $f['precio'] + $ajustes, 2 ) );
+		$neto  = round( $pagado - $devuelto, 2 );
 		return array(
 			'precio'    => $f['precio'],
 			'ajustes'   => round( $ajustes, 2 ),
 			'total'     => $total,
 			'pagado'    => round( $pagado, 2 ),
-			'pendiente' => max( 0.0, round( $total - $pagado, 2 ) ),
+			'devuelto'  => round( $devuelto, 2 ),
+			'neto'      => $neto,
+			'pendiente' => max( 0.0, round( $total - $neto, 2 ) ),
 		);
+	}
+
+	/** ¿Se pueden cambiar todavía los cobros del evento? (v0.36: no, con las cuentas cerradas). */
+	public static function abiertas( array $e ): bool {
+		return null === ( $e['cerrado_en'] ?? null );
 	}
 
 	/** Referencia para pagar por transferencia o Bizum. */
@@ -59,6 +72,9 @@ final class Cobros {
 		$f = self::fila( $e, $fila );
 		if ( ! self::puede() || ! $f || ! in_array( $f['estado'], InscripcionesTable::ACTIVAS, true ) ) {
 			return new \WP_Error( 'asde_cobro', asde_t( 'Los pagos de las inscripciones los registra Tesorería.' ) );
+		}
+		if ( ! self::abiertas( $e ) ) {
+			return self::cerradas();
 		}
 		$error = self::validar( $importe, $forma, $fecha );
 		if ( $error ) {
@@ -86,18 +102,23 @@ final class Cobros {
 	 * Un pago de la familia para todas sus inscripciones del evento: se reparte entre las que
 	 * tienen algo pendiente, por orden de inscripción, en movimientos del mismo lote.
 	 *
+	 * v0.36: también lo cobrado por la remesa SEPA del evento ($sepa: forma «domiciliacion»).
+	 *
 	 * @return int|\WP_Error Cuántas inscripciones ha cubierto.
 	 */
-	public static function pagar_familia( array $e, int $familia_id, float $importe, string $forma, string $fecha, string $referencia, string $nota ) {
+	public static function pagar_familia( array $e, int $familia_id, float $importe, string $forma, string $fecha, string $referencia, string $nota, bool $sepa = false ) {
 		if ( ! self::puede() ) {
 			return new \WP_Error( 'asde_cobro', asde_t( 'Los pagos de las inscripciones los registra Tesorería.' ) );
+		}
+		if ( ! self::abiertas( $e ) ) {
+			return self::cerradas();
 		}
 		$familia = FamiliasTable::obtener( $familia_id );
 		$lista   = $familia ? ( self::familias( $e )[ $familia_id ] ?? null ) : null;
 		if ( ! $lista ) {
 			return new \WP_Error( 'asde_cobro', asde_t( 'Esa familia no tiene nada pendiente en este evento.' ) );
 		}
-		$error = self::validar( $importe, $forma, $fecha );
+		$error = self::validar( $importe, $forma, $fecha, $sepa );
 		if ( $error ) {
 			return $error;
 		}
@@ -141,6 +162,9 @@ final class Cobros {
 		if ( ! self::puede() || ! $f || ! in_array( $f['estado'], array( InscripcionesTable::PENDIENTE, InscripcionesTable::CONFIRMADA, InscripcionesTable::ESPERA ), true ) ) {
 			return new \WP_Error( 'asde_cobro', asde_t( 'Las becas y los ajustes los hace Tesorería.' ) );
 		}
+		if ( ! self::abiertas( $e ) ) {
+			return self::cerradas();
+		}
 		$motivo  = self::texto( $motivo, 255 );
 		$importe = round( $importe, 2 );
 		if ( 0.0 === $importe || '' === $motivo ) {
@@ -170,6 +194,9 @@ final class Cobros {
 		if ( ! self::puede() || ! $m || $m['evento_id'] !== $e['id'] || null !== $m['anulado_en'] ) {
 			return new \WP_Error( 'asde_cobro', asde_t( 'Ese movimiento no se puede anular.' ) );
 		}
+		if ( ! self::abiertas( $e ) ) {
+			return self::cerradas();
+		}
 		$afectadas = MovimientosTable::anular( $movimiento );
 		Logger::log(
 			'evento_movimiento_anulado',
@@ -184,6 +211,47 @@ final class Cobros {
 			Inscripciones::recalcular( $e, $fila );
 		}
 		return true;
+	}
+
+	/**
+	 * Devolución a la familia de lo pagado en una inscripción (v0.36, P-160): de cualquier
+	 * inscripción con algo pagado (una baja, la cancelación, un error), hasta lo pagado y siempre
+	 * con motivo. Lo decide Tesorería.
+	 *
+	 * @return int|\WP_Error Id del movimiento.
+	 */
+	public static function devolver( array $e, int $fila, float $importe, string $forma, string $fecha, string $motivo ) {
+		$f = self::fila( $e, $fila );
+		if ( ! self::puede() || ! $f ) {
+			return new \WP_Error( 'asde_cobro', asde_t( 'Las devoluciones las hace Tesorería.' ) );
+		}
+		if ( ! self::abiertas( $e ) ) {
+			return self::cerradas();
+		}
+		$motivo = self::texto( $motivo, 255 );
+		if ( '' === $motivo ) {
+			return new \WP_Error( 'asde_cobro', asde_t( 'Escribe el motivo de la devolución.' ) );
+		}
+		$error = self::validar( $importe, $forma, $fecha );
+		if ( $error ) {
+			return $error;
+		}
+		$cobro = self::de( $f, MovimientosTable::de_inscripciones( array( $f['id'] ) )[ $f['id'] ] ?? array() );
+		if ( $importe > $cobro['neto'] + 0.001 ) {
+			return new \WP_Error( 'asde_cobro', sprintf( asde_t( 'Es más de lo pagado (%s).' ), \AsdeBalears\AreaPrivada\Tesoreria\Calculadora::euros( $cobro['neto'] ) ) );
+		}
+		$id = MovimientosTable::anadir( $e['id'], $f['id'], MovimientosTable::DEVOLUCION, $fecha, $importe, $forma, '', $motivo );
+		Logger::log(
+			'evento_devolucion',
+			'evento',
+			(string) $e['id'],
+			array(
+				'inscripcion' => $f['id'],
+				'forma'       => $forma,
+			)
+		);
+		Inscripciones::recalcular( $e, $f['id'] );
+		return $id;
 	}
 
 	/**
@@ -213,11 +281,16 @@ final class Cobros {
 		return $out;
 	}
 
-	private static function validar( float $importe, string $forma, string $fecha ): ?\WP_Error {
+	private static function cerradas(): \WP_Error {
+		return new \WP_Error( 'asde_cobro', asde_t( 'Las cuentas de este evento están cerradas: ya no se pueden cambiar.' ) );
+	}
+
+	/** @param bool $sepa La domiciliación solo la pone la remesa SEPA del evento. */
+	private static function validar( float $importe, string $forma, string $fecha, bool $sepa = false ): ?\WP_Error {
 		if ( $importe <= 0 ) {
 			return new \WP_Error( 'asde_cobro', asde_t( 'Escribe un importe mayor que cero.' ) );
 		}
-		if ( ! isset( MovimientosTable::FORMAS[ $forma ] ) ) {
+		if ( ! in_array( $forma, $sepa ? array( 'domiciliacion' ) : MovimientosTable::FORMAS_MANUALES, true ) ) {
 			return new \WP_Error( 'asde_cobro', asde_t( 'Elige la forma de pago.' ) );
 		}
 		if ( ! preg_match( '/^\d{4}-\d{2}-\d{2}$/', $fecha ) || ! date_create( $fecha ) || $fecha > current_time( 'Y-m-d' ) ) {

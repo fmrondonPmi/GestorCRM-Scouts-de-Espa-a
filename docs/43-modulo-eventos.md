@@ -1,6 +1,6 @@
 # 43 · Módulo de eventos (plan, decisiones y lo que ya está)
 
-> **Estado:** plan escrito y **decidido** el 2026-10-15 (preguntas P-139 a P-154, tabla «Decisiones»; para la P-144, la normativa balear, el usuario pidió «investiga y propón»: apartado 6). **Hechas las dos primeras fases** (eventos, equipo dirigente y presupuesto; inscripciones y cobro): ver «lo que ya está» de cada una. Siguiente: **gastos, SEPA y cierre** (v0.36).
+> **Estado:** plan escrito y **decidido** el 2026-10-15 (preguntas P-139 a P-154, tabla «Decisiones»; para la P-144, la normativa balear, el usuario pidió «investiga y propón»: apartado 6). **Hechas las tres fases** (eventos, equipo dirigente y presupuesto; inscripciones y cobro; y, en la **v0.36.0**, gastos, SEPA y cierre): ver «lo que ya está» de cada una. Los supuestos de la v0.36 (P-158…P-164) están por confirmar.
 
 > **De dónde viene (2026-10-15):** este módulo se hizo en una **sesión de Claude Code en la nube** sobre el `main` de GitHub, que estaba en la v0.18 (allí fueron la v0.19.0 y la v0.19.1, este documento era el 32 y sus preguntas, P-61…P-76). A petición del usuario se integró en la línea de la v0.34 como **v0.35.0** (rama `Eventos`): doc 43, preguntas **P-139…P-154**, módulo **«Eventos» apagado por defecto** en wp-admin → Módulos (como los demás desde la v0.32) y adaptado a lo que cambió desde la v0.18 (ver «Integración en la v0.35»). El **inventario** que este plan proponía como fase propia **ya existe** en esta línea (doc 32, desde la v0.19): el material de un evento se hará sobre él.
 
@@ -143,6 +143,50 @@ Lo que se cambió al traer el módulo de la nube (base v0.18) a la línea de la 
 - **Skills de la nube** (`.claude/skills/`: entregar-version, modulo-nuevo, probar-en-la-nube y traducir-textos), traídas tal cual; el `CLAUDE.md` las cita.
 
 **Para producción (v0.35.0):** al actualizar se crean las cuatro tablas (eventos, inscripciones, partidas del presupuesto y movimientos) y las páginas «Eventos», «Configuración de eventos» y «Mis eventos». El módulo nace **apagado**: para usarlo, encenderlo en wp-admin → Grupos Scouts → Módulos y después revisar *Eventos → Configuración* (qué formación cuenta como título de director/a y de monitor/a, texto de la autorización, cómo pagar y el recordatorio).
+
+## Tercera fase · v0.36 · gastos, SEPA y cierre: diseño (2026-10-15)
+
+Petición del usuario: «Arranca con la siguiente versión» (las decisiones P-155…P-157 de la v0.35.1, confirmadas). Lo que el apartado 4 pide para los gastos, el cobro por domiciliación y el cierre, concretado así:
+
+**Datos (dos tablas nuevas y columnas nuevas):**
+- `{prefix}asde_evento_gastos` (`Eventos\GastosTable`): los **gastos reales** y los **ingresos reales** que no son cobros a familias (una subvención recibida). Fecha, partida del presupuesto (o ninguna), concepto, proveedor, importe, forma de pago, **quién lo pagó** (el grupo, un anticipo de caja o una persona del equipo, a la que hay que reembolsar), «con cargo al fondo», estado (**propuesto → validado o rechazado**), reembolso (fecha y forma), justificante y anulación.
+- `{prefix}asde_evento_anticipos` (`Eventos\AnticiposTable`): dinero que Tesorería da a alguien del equipo antes del evento; se **liquida** con lo devuelto.
+- `asde_evento_movimientos`: tipo nuevo **«devolución»** (lo que se devuelve a una familia, con motivo y forma) y forma **«Domiciliación SEPA»** (solo la pone la remesa).
+- `asde_sepa_remesas`: columna `evento_id` (0 = remesa de la cuota).
+- `asde_eventos`: `cerrado_en`, `cerrado_por` y `balance` (el informe final, guardado al cerrar).
+
+**Justificantes:** imagen (JPG, PNG, WebP) o PDF de hasta 5 MB. Se guardan **cifrados** (como los datos de las fichas) en `wp-content/uploads/asde-privado/<grupo>/`, con nombre aleatorio y la carpeta cerrada (`.htaccess`, `index.php`): aunque alguien llegara al fichero, no se puede leer. Se ven desde el gasto («Ver justificante»), solo quien gestiona el evento y Tesorería.
+
+**Quién hace qué** (como la tabla del apartado 4):
+- Quien gestiona el evento (equipo, scouters de las secciones, Coordinación) **propone gastos** con su justificante; si lo pagó de su bolsillo, queda a su nombre para el reembolso. Mientras está propuesto lo puede retirar.
+- **Tesorería** valida o rechaza (con motivo) cada gasto, lo **reembolsa**, registra los **ingresos reales**, da y **liquida los anticipos**, hace las **devoluciones** a las familias, la **remesa SEPA del evento** y **cierra las cuentas**.
+
+**Pestaña nueva «Cuentas»** (quien gestiona el evento y Tesorería): gastos e ingresos reales, reembolsos pendientes, anticipos, **fondo de emergencia** (lo que aportan el margen y el redondeo de las inscripciones activas, lo usado y lo que queda), **balance** (previsto y real por partida, cobrado, pendiente de cobro, devuelto y resultado, que asume el grupo) y **cierre**.
+
+**SEPA:** en «Domiciliaciones», además de la remesa de la cuota, **«Cobrar un evento»**: elige un evento publicado y prepara un adeudo por familia con autorización con lo pendiente de sus inscripciones activas (los hermanos, un solo adeudo). Al registrar los cobros de la remesa, el importe se reparte entre las inscripciones de la familia como un pago con la forma «Domiciliación SEPA»; los devueltos se marcan para reclamarlos. Una familia no entra en dos remesas del mismo evento sin cobrar.
+
+**Cierre:** cuando el evento ha terminado (o está cancelado), sin gastos por revisar, sin reembolsos pendientes y con los anticipos liquidados. Guarda el **balance** (informe final: imprimir y CSV), **borra lo cifrado de las inscripciones** (quién recoge, observaciones: P-150) y deja el evento en solo lectura.
+
+**Supuestos (para confirmar):**
+
+| # | Supuesto |
+|---|---|
+| P-158 | Todo **gasto** lleva **justificante** (no se puede proponer sin él). Los **ingresos reales** no |
+| P-159 | Al **liquidar un anticipo**, si los gastos validados con él más lo devuelto no suman el anticipo, se avisa de la diferencia, pero se puede liquidar con una nota |
+| P-160 | Una **devolución** a una familia puede ser de **cualquier inscripción** con algo pagado (baja, cancelación o un error), hasta lo pagado y siempre con motivo |
+| P-161 | El **fondo de emergencia** del evento = lo que aportan el margen y el redondeo de las inscripciones activas (precio de su sección menos su coste). Lo usado son los gastos validados «con cargo al fondo». Lo que sobra se queda en el grupo (supuesto 4 de abajo) |
+| P-162 | Un evento **cerrado no se reabre**: sus cuentas quedan como el informe final |
+| P-163 | La **remesa SEPA de un evento** cobra todo lo pendiente de las familias con autorización (no por plazos) |
+| P-164 | Los **reembolsos** no avisan por email a quien los recibe (se ven en la pestaña «Cuentas») |
+
+## Tercera fase · v0.36.0 · lo que ya está (2026-10-16)
+
+- **Datos:** `Eventos\GastosTable` (`asde_evento_gastos`), `Eventos\AnticiposTable` (`asde_evento_anticipos`); en `asde_eventos`, `cerrado_en`, `cerrado_por` y `balance` (JSON del informe final); en `asde_evento_movimientos`, el tipo `devolucion` y la forma `domiciliacion` (solo la pone la remesa: `MovimientosTable::FORMAS_MANUALES` son las que se eligen a mano); en `asde_sepa_remesas`, `evento_id`. Se crean al actualizar (Installer) y salen en el diagnóstico (`Entorno::tablas()`).
+- **Justificantes** (`Eventos\Justificantes`): tipo comprobado por el contenido (`wp_check_filetype_and_ext` y, si es imagen, `wp_getimagesize`), hasta 5 MB, cifrado con `Crypto::encrypt_contexto` (contexto `evento|justificante|<grupo>|<fichero>`), nombre aleatorio `<32 hex>.bin` en `uploads/asde-privado/<grupo>/`, carpeta cerrada con `.htaccess`, `web.config` e `index.php`. Se envían descifrados solo por POST con nonce y a quien ve las cuentas (`EventosView::ver_justificante`, `nosniff` y CSP con `sandbox`). Quedan al desinstalar (son justificante de las cuentas).
+- **Servicio** `Eventos\Cuentas`: `proponer` (de Tesorería, ya validado), `ingreso`, `retirar`, `validar`, `rechazar` (motivo), `reembolsar`, `anular` (motivo; uno reembolsado no), `anticipo`, `liquidar` (P-159; no con gastos por revisar), `anular_anticipo`, `fondo` (P-161), `balance` (lo previsto por partida con `Presupuesto::total_partida()` y los previstos del presupuesto validado), `por_cerrar`, `cerrar` (guarda el balance y borra `datos_enc` de las inscripciones: P-150) y `filas_csv`. `Cobros::devolver` (P-160) y el cierre en `Cobros` (`abiertas()`): con las cuentas cerradas no hay pagos, ajustes, anulaciones ni devoluciones; `Servicio::puede_editar` es falso y `EventosView::handle_post` rechaza cualquier acción menos ver un justificante o el CSV.
+- **Pantallas:** pestaña «Cuentas» (`templates/eventos/cuentas.php`, solo para quien gestiona el evento y Tesorería); «Devolver a la familia» en «Inscripciones» (también en las bajas); devoluciones en «Mis eventos» y, en negativo, en «Mis pagos».
+- **SEPA:** `Remesas::preparar_evento()` y `crear( …, $evento_id )`; `familias_sin_cobrar()` (cuota) no cuenta las del evento y `familias_sin_cobrar_evento()` evita dos remesas del mismo evento sin cobrar; `registrar_cobros()` reparte cada cobro entre las inscripciones con `Cobros::pagar_familia( …, 'domiciliacion', …, true )`. En «Domiciliaciones», «Cobrar un evento» (`SepaView::eventos_sepa()`: publicados, con coste, con las cuentas abiertas y para quien lleva los cobros de los eventos).
+- **Pruebas:** `tests/eventos-economia.php` (72): justificante obligatorio, tipo real y cifrado; revisión, reembolso, anulación e ingresos; anticipos con diferencia; devoluciones; la remesa del evento de la vista previa al cobro; fondo, balance, CSV y cierre; solo lectura después; limpieza de los justificantes.
 
 ## Lo que ya hay y condiciona el diseño
 

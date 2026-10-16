@@ -18,19 +18,25 @@ defined( 'ABSPATH' ) || exit;
  *   siempre con su motivo. El precio de los demás no cambia.
  * - **Nada se borra**: un movimiento equivocado se anula (y se ve anulado).
  *
- * Las devoluciones y la domiciliación SEPA llegan en la v0.36.
+ * - v0.36: una **devolución** a la familia (importe positivo, lo que se le devuelve), siempre con
+ *   motivo, y los cobros de la **remesa SEPA** del evento (forma «domiciliacion»).
  */
 final class MovimientosTable {
 
-	public const PAGO   = 'pago';
-	public const AJUSTE = 'ajuste';
+	public const PAGO       = 'pago';
+	public const AJUSTE     = 'ajuste';
+	public const DEVOLUCION = 'devolucion';
 
-	/** Formas de pago de un evento (P-146; la domiciliación SEPA, en la v0.36). */
+	/** Formas de pago de un evento (P-146). La domiciliación solo la pone la remesa SEPA (v0.36). */
 	public const FORMAS = array(
 		'efectivo'      => 'Efectivo',
 		'transferencia' => 'Ingreso o transferencia',
 		'bizum'         => 'Bizum',
+		'domiciliacion' => 'Domiciliación SEPA',
 	);
+
+	/** Las que Tesorería elige a mano (sin la domiciliación). */
+	public const FORMAS_MANUALES = array( 'efectivo', 'transferencia', 'bizum' );
 
 	public static function table(): string {
 		global $wpdb;
@@ -79,7 +85,7 @@ final class MovimientosTable {
 				'tipo'           => $tipo,
 				'fecha'          => $fecha,
 				'importe'        => round( $importe, 2 ),
-				'forma'          => self::PAGO === $tipo ? $forma : '',
+				'forma'          => self::AJUSTE === $tipo ? '' : $forma,
 				'referencia'     => mb_substr( $referencia, 0, 120 ),
 				'nota'           => mb_substr( $nota, 0, 255 ),
 				'lote'           => $lote,

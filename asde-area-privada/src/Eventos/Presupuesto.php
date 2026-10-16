@@ -133,6 +133,30 @@ final class Presupuesto {
 		);
 	}
 
+	/**
+	 * Lo que suma una partida en el presupuesto (v0.36, para el balance): las «por persona» por
+	 * cuántos se esperaban, con las mismas reglas que calcular().
+	 *
+	 * @param array<string, int> $previstos sección => participantes previstos.
+	 */
+	public static function total_partida( array $p, array $previstos, int $equipo ): float {
+		$importe = (float) $p['importe'];
+		$total_n = array_sum( array_map( 'intval', $previstos ) );
+		if ( PartidasTable::INGRESO === $p['tipo'] ) {
+			return round( $importe, 2 );
+		}
+		switch ( $p['reparto'] ) {
+			case 'participante':
+				return round( $importe * ( '' !== (string) $p['seccion'] ? (int) ( $previstos[ $p['seccion'] ] ?? 0 ) : $total_n ), 2 );
+			case 'participante_equipo':
+				return round( $importe * ( $total_n + $equipo ), 2 );
+			case 'equipo':
+				return round( $importe * $equipo, 2 );
+			default: // total, total_seccion
+				return round( $importe, 2 );
+		}
+	}
+
 	/** Participantes previstos por sección convocada (lo que se escribe en el evento). @return array<string, int> */
 	public static function previstos( array $e ): array {
 		$out = array();

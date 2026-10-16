@@ -2,8 +2,10 @@
 namespace AsdeBalears\AreaPrivada\Idiomas;
 
 use AsdeBalears\AreaPrivada\Domain\Organizacion;
+use AsdeBalears\AreaPrivada\Eventos\AnticiposTable;
 use AsdeBalears\AreaPrivada\Eventos\Config as EventosConfig;
 use AsdeBalears\AreaPrivada\Eventos\EventosTable;
+use AsdeBalears\AreaPrivada\Eventos\GastosTable;
 use AsdeBalears\AreaPrivada\Eventos\Inscripciones;
 use AsdeBalears\AreaPrivada\Eventos\InscripcionesTable;
 use AsdeBalears\AreaPrivada\Eventos\MovimientosTable as EventosMovimientos;
@@ -100,6 +102,11 @@ final class Textos {
 		$add( InscripcionesTable::TRANSPORTES, 'Eventos' );
 		$add( EventosMovimientos::FORMAS, 'Eventos' );
 		$add( array( EventosConfig::AUTORIZACION, Inscripciones::MOTIVO_CADUCADA ), 'Eventos' );
+		// v0.36: cuentas de los eventos.
+		$add( GastosTable::ESTADOS, 'Eventos' );
+		$add( GastosTable::PAGADORES, 'Eventos' );
+		$add( GastosTable::FORMAS, 'Eventos' );
+		$add( AnticiposTable::ESTADOS, 'Eventos' );
 		$add( BancoTable::ESTADOS, 'Tesorería' );
 		$add( CsvBanco::CAMPOS, 'Tesorería' );
 		$add( Codificacion::LISTA, 'Tesorería' );

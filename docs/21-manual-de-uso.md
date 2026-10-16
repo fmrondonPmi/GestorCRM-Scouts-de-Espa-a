@@ -152,6 +152,13 @@ Un **WordPress de demostración aparte** (Local, Enfold, plugin, mu-plugin con C
 - **Arreglo que salió al fotografiar:** en el móvil (390 px) la tercera hoja («Registro de emails») quedaba cortada; las pestañas son ahora más compactas por debajo de 600 px y caben las tres (CSS del plugin; zip 0.25.0 rehecho, el anterior se conserva como `asde-area-privada-0.25.0-sin-hojas-movil.zip`).
 - El generador pasa a la versión 0.25. Paquete **`manual-de-uso-0.25.0.zip`** (carpeta antigua) y copia en `app/public/temporal/` de Local. **No se ha publicado nada**: lo sube el usuario.
 
+## Versión 4.15 · cuentas de los eventos (v0.36.0, 2026-10-16)
+
+- **Scouters y Coordinación** (`eventos.html`): apartado nuevo «Cuentas» (`#eventos-cuentas`): gastos con justificante, revisión de Tesorería, fondo de emergencia, reembolsos, ingresos, anticipos de caja, anular y cerrar las cuentas; en «Cobros (Tesorería)», «Devolver a la familia» y «Cobrar un evento».
+- **Coordinación** (`tesoreria.html`, Domiciliaciones SEPA): párrafo «Cobrar un evento» (`#sepa-evento`).
+- **Familias y participantes** (`mis-eventos.html`): las devoluciones salen en el evento y en «Mis pagos».
+- Sin capturas nuevas (el apartado de eventos sigue solo con texto). Generador: versión «0.36». Paquete `manual-de-uso-0.36.0.zip`.
+
 ## Versión 4.14 · lote de la v0.35.1 (2026-10-15)
 
 - **Todos los manuales con «Acceso socios»** (`entrar-socios.html`, `entrar-familias.html`): el «Código de verificación», plegado. **Capturas rehechas:** 01, 26 (móvil) y 61 (con idiomas).

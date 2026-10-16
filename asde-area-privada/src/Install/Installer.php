@@ -101,6 +101,9 @@ final class Installer {
 		\AsdeBalears\AreaPrivada\Eventos\InscripcionesTable::install_table();
 		\AsdeBalears\AreaPrivada\Eventos\PartidasTable::install_table();
 		\AsdeBalears\AreaPrivada\Eventos\MovimientosTable::install_table();
+		// v0.36: las cuentas de los eventos (gastos e ingresos reales, anticipos de caja).
+		\AsdeBalears\AreaPrivada\Eventos\GastosTable::install_table();
+		\AsdeBalears\AreaPrivada\Eventos\AnticiposTable::install_table();
 		Grupos::migrar();
 		\AsdeBalears\AreaPrivada\Domain\Organizacion::migrar(); // Instalaciones anteriores: Scouts de Balears, código 7.
 		Pages::install();

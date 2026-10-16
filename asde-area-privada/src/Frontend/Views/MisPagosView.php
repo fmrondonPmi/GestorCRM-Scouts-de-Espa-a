@@ -140,12 +140,14 @@ final class MisPagosView extends View {
 			}
 			$concepto = sprintf( asde_t( 'Evento %1$s%2$s · %3$s' ), EventosTable::numero( $e ), count( $nums ) > 1 && isset( $nombres[ $f['socio'] ] ) ? ' (' . $nombres[ $f['socio'] ] . ')' : '', $e['nombre'] );
 			foreach ( $ev_movs[ $f['id'] ] ?? array() as $m ) {
-				if ( EventosMovimientos::PAGO === $m['tipo'] && null === $m['anulado_en'] ) {
+				// Pagos y (v0.36) devoluciones, en negativo.
+				if ( in_array( $m['tipo'], array( EventosMovimientos::PAGO, EventosMovimientos::DEVOLUCION ), true ) && null === $m['anulado_en'] ) {
+					$devolucion  = EventosMovimientos::DEVOLUCION === $m['tipo'];
 					$pagos[]     = array(
 						'fecha'    => (string) $m['fecha'],
-						'concepto' => $concepto,
+						'concepto' => $devolucion ? sprintf( asde_t( '%s · devolución' ), $concepto ) : $concepto,
 						'metodo'   => asde_t( EventosMovimientos::FORMAS[ $m['forma'] ] ?? '' ),
-						'importe'  => (float) $m['importe'],
+						'importe'  => $devolucion ? -(float) $m['importe'] : (float) $m['importe'],
 						'ref'      => (string) $m['referencia'],
 					);
 					$hay_eventos = true;

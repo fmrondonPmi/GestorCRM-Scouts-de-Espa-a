@@ -14,6 +14,7 @@
 // phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound, WordPress.WP.GlobalVariablesOverride.Prohibited -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
 use AsdeBalears\AreaPrivada\Domain\Secciones;
 use AsdeBalears\AreaPrivada\Eventos\Config;
+use AsdeBalears\AreaPrivada\Eventos\Cuentas;
 use AsdeBalears\AreaPrivada\Eventos\EventosTable;
 use AsdeBalears\AreaPrivada\Eventos\Servicio;
 use AsdeBalears\AreaPrivada\Frontend\Views\EventosView;
@@ -23,6 +24,9 @@ defined( 'ABSPATH' ) || exit;
 $estado  = EventosTable::estado_visible( $e );
 $pestanas = array();
 foreach ( asde_ta( EventosView::PESTANAS ) as $p => $etiqueta ) {
+	if ( 'cuentas' === $p && ! Cuentas::puede_ver( $e, $ambito ) ) {
+		continue; // v0.36: las cuentas, solo quien gestiona el evento y Tesorería.
+	}
 	$pestanas[ add_query_arg( 'pestana', $p, $url ) ] = $etiqueta;
 }
 ?>

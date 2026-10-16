@@ -36,6 +36,10 @@ defined( 'ABSPATH' ) || exit;
  * familia es un solo adeudo aunque su cuenta esté repetida en la ficha de cada miembro.
  * (Los adeudos de autorizaciones de antes de la v0.33 sin pasar al CRM llevan su cuenta
  * guardada, como antes: `cuenta` = `local`.)
+ *
+ * v0.36 (doc 43): también la **remesa de un evento** (`evento_id`): lo pendiente de las
+ * inscripciones activas de cada familia con autorización (P-163), un adeudo por familia. Sus
+ * cobros pasan a ser pagos del evento (Eventos\Cobros, forma «Domiciliación SEPA»).
  */
 final class Remesas {
 
@@ -91,6 +95,7 @@ final class Remesas {
 				anulada_en datetime NULL,
 				anulada_por bigint(20) unsigned NOT NULL DEFAULT 0,
 				descargas int(11) NOT NULL DEFAULT 0,
+				evento_id bigint(20) unsigned NOT NULL DEFAULT 0,
 				PRIMARY KEY  (id),
 				UNIQUE KEY numero (numero),
 				KEY grupo_estado (grupo, estado)
@@ -174,37 +179,7 @@ final class Remesas {
 			if ( $centimos <= 0 ) {
 				continue; // Ya tiene pagado lo que toca hasta ese plazo.
 			}
-			$m      = $mandatos[ $id ] ?? null;
-			$local  = $m ? Mandatos::cuenta_local( $m ) : null;
-			$cuenta = $m ? ( $local ?? CuentaCrm::de_familia( $f, (string) $m['iban_huella'], $cuentas ) ) : null;
-			if ( ! $m ) {
-				$omitidas[] = self::omitida( $f, $centimos, asde_t( 'Sin autorización SEPA' ) );
-			} elseif ( isset( $en_curso[ $id ] ) ) {
-				$omitidas[] = self::omitida( $f, $centimos, sprintf( asde_t( 'Ya está en la remesa %s (falta registrar su cobro)' ), $en_curso[ $id ] ) );
-			} elseif ( ! $cuenta ) {
-				$omitidas[] = self::omitida( $f, $centimos, asde_t( 'La cuenta de su ficha del CRM no es la autorizada (o no está): tiene que firmar la autorización de nuevo' ) );
-			} elseif ( ! Iban::es_valido( $cuenta['iban'] ) || '' === $cuenta['titular'] ) {
-				$omitidas[] = self::omitida( $f, $centimos, asde_t( 'No se puede leer la autorización (pídele que la firme de nuevo)' ) );
-			} else {
-				$lineas[] = array(
-					'mandato'     => $m['id'],
-					'familia'     => $id,
-					'familia_n'   => $f['numero'],
-					'umr'         => $m['referencia'],
-					'fecha_firma' => $m['fecha_firma'],
-					'titular'     => $cuenta['titular'],
-					'iban'        => $cuenta['iban'],
-					'iban_mask'   => Iban::enmascarar( $cuenta['iban'] ),
-					'cuenta'      => $local ? 'local' : 'crm',
-					'socio'       => (string) ( $cuenta['socio'] ?? '' ),
-					'iban_huella' => (string) $m['iban_huella'],
-					'secuencia'   => Mandatos::secuencia( $m ),
-					'centimos'    => $centimos,
-					'e2e'         => '',
-					'estado'      => self::PENDIENTE,
-				);
-				$total += $centimos;
-			}
+			self::linea( $f, $centimos, $mandatos[ $id ] ?? null, $cuentas, $en_curso[ $id ] ?? null, $lineas, $omitidas, $total );
 		}
 		return array(
 			'lineas'       => $lineas,
@@ -214,11 +189,118 @@ final class Remesas {
 		);
 	}
 
-	/** @return array<int, string> familia_id => nº de la remesa con adeudos sin cobrar de esa ronda (generada o enviada). */
+	/**
+	 * v0.36: qué se cobraría de un evento: por cada familia con autorización, todo lo pendiente de
+	 * sus inscripciones activas (P-163; los hermanos, un solo adeudo). Quien no tiene familia en
+	 * Tesorería no se puede domiciliar.
+	 *
+	 * @return array{lineas:array[], omitidas:array[], total:int, plazo_nombre:string}
+	 */
+	public static function preparar_evento( PersonaRepository $repo, array $e ): array {
+		$pend     = \AsdeBalears\AreaPrivada\Eventos\Cobros::familias( $e );
+		$mandatos = Mandatos::activos();
+		$socios_m = array();
+		foreach ( array_intersect_key( $pend, $mandatos ) as $x ) {
+			$socios_m = array_merge( $socios_m, $x['familia']['miembros'] );
+		}
+		$cuentas  = $socios_m ? CuentaCrm::leer( $repo, $socios_m ) : array();
+		$en_curso = self::familias_sin_cobrar_evento( (int) $e['id'] );
+		$lineas   = array();
+		$omitidas = array();
+		$total    = 0;
+		foreach ( $pend as $id => $x ) {
+			$centimos = (int) round( $x['pendiente'] * 100 );
+			if ( $centimos > 0 ) {
+				self::linea( $x['familia'], $centimos, $mandatos[ $id ] ?? null, $cuentas, $en_curso[ $id ] ?? null, $lineas, $omitidas, $total );
+			}
+		}
+		// Inscripciones con algo pendiente y sin familia en Tesorería.
+		$movs = \AsdeBalears\AreaPrivada\Eventos\MovimientosTable::de_evento( (int) $e['id'] );
+		foreach ( \AsdeBalears\AreaPrivada\Eventos\InscripcionesTable::participantes( (int) $e['id'] ) as $f ) {
+			if ( ! in_array( $f['estado'], \AsdeBalears\AreaPrivada\Eventos\InscripcionesTable::ACTIVAS, true ) || FamiliasTable::de_socio( $f['socio'] ) ) {
+				continue;
+			}
+			$c = \AsdeBalears\AreaPrivada\Eventos\Cobros::de( $f, $movs[ $f['id'] ] ?? array() );
+			if ( $c['pendiente'] > 0 ) {
+				$omitidas[] = array(
+					'familia'   => 0,
+					'familia_n' => \AsdeBalears\AreaPrivada\Eventos\InscripcionesTable::numero( $f ),
+					'centimos'  => (int) round( $c['pendiente'] * 100 ),
+					'motivo'    => asde_t( 'Sin familia en Tesorería' ),
+				);
+			}
+		}
+		return array(
+			'lineas'       => $lineas,
+			'omitidas'     => $omitidas,
+			'total'        => $total,
+			'plazo_nombre' => mb_substr( sprintf( asde_t( 'Evento %s' ), \AsdeBalears\AreaPrivada\Eventos\EventosTable::numero( $e ) ), 0, 60 ),
+		);
+	}
+
+	/**
+	 * El adeudo de una familia (con su autorización y la cuenta autorizada de su ficha del CRM) o,
+	 * si no se puede incluir, el motivo.
+	 *
+	 * @param array      $f        La familia.
+	 * @param array|null $m        Su autorización vigente.
+	 * @param array      $cuentas  Las cuentas leídas del CRM (CuentaCrm::leer).
+	 * @param string|null $en_curso Nº de la remesa en la que ya está sin cobrar, o null.
+	 */
+	private static function linea( array $f, int $centimos, ?array $m, array $cuentas, ?string $en_curso, array &$lineas, array &$omitidas, int &$total ): void {
+		$local  = $m ? Mandatos::cuenta_local( $m ) : null;
+		$cuenta = $m ? ( $local ?? CuentaCrm::de_familia( $f, (string) $m['iban_huella'], $cuentas ) ) : null;
+		if ( ! $m ) {
+			$omitidas[] = self::omitida( $f, $centimos, asde_t( 'Sin autorización SEPA' ) );
+		} elseif ( null !== $en_curso ) {
+			$omitidas[] = self::omitida( $f, $centimos, sprintf( asde_t( 'Ya está en la remesa %s (falta registrar su cobro)' ), $en_curso ) );
+		} elseif ( ! $cuenta ) {
+			$omitidas[] = self::omitida( $f, $centimos, asde_t( 'La cuenta de su ficha del CRM no es la autorizada (o no está): tiene que firmar la autorización de nuevo' ) );
+		} elseif ( ! Iban::es_valido( $cuenta['iban'] ) || '' === $cuenta['titular'] ) {
+			$omitidas[] = self::omitida( $f, $centimos, asde_t( 'No se puede leer la autorización (pídele que la firme de nuevo)' ) );
+		} else {
+			$lineas[] = array(
+				'mandato'     => $m['id'],
+				'familia'     => (int) $f['id'],
+				'familia_n'   => $f['numero'],
+				'umr'         => $m['referencia'],
+				'fecha_firma' => $m['fecha_firma'],
+				'titular'     => $cuenta['titular'],
+				'iban'        => $cuenta['iban'],
+				'iban_mask'   => Iban::enmascarar( $cuenta['iban'] ),
+				'cuenta'      => $local ? 'local' : 'crm',
+				'socio'       => (string) ( $cuenta['socio'] ?? '' ),
+				'iban_huella' => (string) $m['iban_huella'],
+				'secuencia'   => Mandatos::secuencia( $m ),
+				'centimos'    => $centimos,
+				'e2e'         => '',
+				'estado'      => self::PENDIENTE,
+			);
+			$total += $centimos;
+		}
+	}
+
+	/** @return array<int, string> familia_id => nº de la remesa con adeudos sin cobrar de esa ronda (generada o enviada). Solo las de la cuota. */
 	public static function familias_sin_cobrar( string $ronda ): array {
 		$out = array();
 		foreach ( self::listado() as $r ) {
-			if ( $r['ronda'] !== $ronda || self::ANULADA === $r['estado'] ) {
+			if ( $r['ronda'] !== $ronda || self::ANULADA === $r['estado'] || $r['evento_id'] > 0 ) {
+				continue;
+			}
+			foreach ( self::lineas( $r ) as $l ) {
+				if ( self::PENDIENTE === $l['estado'] ) {
+					$out[ (int) $l['familia'] ] = $r['numero'];
+				}
+			}
+		}
+		return $out;
+	}
+
+	/** @return array<int, string> familia_id => nº de la remesa del evento con su adeudo sin cobrar (v0.36). */
+	public static function familias_sin_cobrar_evento( int $evento_id ): array {
+		$out = array();
+		foreach ( self::listado() as $r ) {
+			if ( $r['evento_id'] !== $evento_id || self::ANULADA === $r['estado'] ) {
 				continue;
 			}
 			foreach ( self::lineas( $r ) as $l ) {
@@ -237,10 +319,11 @@ final class Remesas {
 	/**
 	 * Guarda la remesa con lo preparado (y el acreedor tal como está hoy).
 	 *
-	 * @param array $prep Salida de preparar().
+	 * @param array $prep      Salida de preparar() o, para un evento, de preparar_evento().
+	 * @param int   $evento_id v0.36: el evento que cobra (0 = la cuota).
 	 * @return int|\WP_Error Id de la remesa.
 	 */
-	public static function crear( array $prep, string $ronda, string $fecha_cobro, string $concepto, int $user_id ) {
+	public static function crear( array $prep, string $ronda, string $fecha_cobro, string $concepto, int $user_id, int $evento_id = 0 ) {
 		global $wpdb;
 		$cfg = Config::de();
 		if ( ! Config::lista( $cfg ) ) {
@@ -257,7 +340,7 @@ final class Remesas {
 		$wpdb->query( "SELECT GET_LOCK('asde_num_remesa', 10)" );
 		try {
 			// Nunca dos remesas con los mismos adeudos sin cobrar (dos tesoreros a la vez, una vista previa antigua…).
-			$en_curso      = self::familias_sin_cobrar( $ronda );
+			$en_curso      = $evento_id ? self::familias_sin_cobrar_evento( $evento_id ) : self::familias_sin_cobrar( $ronda );
 			$prep['lineas'] = array_values( array_filter( $prep['lineas'], static fn( $l ) => ! isset( $en_curso[ (int) $l['familia'] ] ) ) );
 			if ( ! $prep['lineas'] ) {
 				return new \WP_Error( 'asde_sepa', asde_t( 'Todas esas familias ya están en otra remesa que aún no tiene registrados sus cobros.' ) );
@@ -289,6 +372,7 @@ final class Remesas {
 					'msg_id'      => $msg,
 					'creada'      => current_time( 'mysql', true ),
 					'creada_por'  => $user_id,
+					'evento_id'   => $evento_id,
 				)
 			);
 			$id = (int) $wpdb->insert_id;
@@ -310,6 +394,7 @@ final class Remesas {
 			$numero,
 			array(
 				'ronda'   => $ronda,
+				'evento'  => $evento_id,
 				'adeudos' => count( $lineas ),
 				'total'   => round( $prep['total'] / 100, 2 ),
 			)
@@ -538,13 +623,21 @@ final class Remesas {
 		$cobradas  = array_map( 'intval', $cobradas );
 		$devueltas = array_map( 'intval', $devueltas );
 		$c         = self::contenido( $r );
+		$evento    = $r['evento_id'] > 0 ? \AsdeBalears\AreaPrivada\Eventos\EventosTable::obtener( $r['evento_id'] ) : null;
 		foreach ( $c['lineas'] as $i => $l ) {
 			if ( self::PENDIENTE !== $l['estado'] ) {
 				continue;
 			}
 			$familia = (int) $l['familia'];
 			if ( in_array( $familia, $cobradas, true ) && ! in_array( $familia, $devueltas, true ) ) {
-				$mov = MovimientosTable::registrar( $familia, $r['ronda'], MovimientosTable::PAGO, $fecha, $l['centimos'] / 100, 'domiciliacion', (string) $l['e2e'], 'Remesa SEPA ' . $r['numero'], 'sepa' );
+				if ( $r['evento_id'] > 0 ) {
+					// v0.36: el cobro de un evento se reparte entre las inscripciones de la familia.
+					$mov = $evento
+						? \AsdeBalears\AreaPrivada\Eventos\Cobros::pagar_familia( $evento, $familia, $l['centimos'] / 100, 'domiciliacion', $fecha, (string) $l['e2e'], 'Remesa SEPA ' . $r['numero'], true )
+						: new \WP_Error( 'asde_sepa', asde_t( 'El evento de la remesa ya no existe.' ) );
+				} else {
+					$mov = MovimientosTable::registrar( $familia, $r['ronda'], MovimientosTable::PAGO, $fecha, $l['centimos'] / 100, 'domiciliacion', (string) $l['e2e'], 'Remesa SEPA ' . $r['numero'], 'sepa' );
+				}
 				if ( is_wp_error( $mov ) ) {
 					$res['errores'][] = sprintf( asde_t( 'Familia %s: %s' ), $l['familia_n'], $mov->get_error_message() );
 					continue;
@@ -626,8 +719,8 @@ final class Remesas {
 	}
 
 	private static function preparar_fila( array $fila ): array {
-		foreach ( array( 'id', 'adeudos', 'creada_por', 'enviada_por', 'cobros_por', 'anulada_por', 'descargas' ) as $k ) {
-			$fila[ $k ] = (int) $fila[ $k ];
+		foreach ( array( 'id', 'adeudos', 'creada_por', 'enviada_por', 'cobros_por', 'anulada_por', 'descargas', 'evento_id' ) as $k ) {
+			$fila[ $k ] = (int) ( $fila[ $k ] ?? 0 );
 		}
 		$fila['total'] = (float) $fila['total'];
 		return $fila;

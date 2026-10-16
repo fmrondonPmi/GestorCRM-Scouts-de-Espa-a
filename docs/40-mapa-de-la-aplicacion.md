@@ -175,7 +175,7 @@ grupo no ve a otro**; **nunca** se prueba contra el CRM real ni se escribe en é
 ## 5. Inventario (generado)
 
 <!-- inventario:inicio -->
-_Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10-15 · plugin 0.35.1. No editar a mano: se regenera._
+_Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10-16 · plugin 0.36.0. No editar a mano: se regenera._
 
 ### Páginas (Frontend\Pages + Router)
 
@@ -277,7 +277,9 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 |---|---|
 | `asde_auditoria` | `src/Audit/Logger.php` |
 | `asde_crm_operaciones` | `src/Crm/Operaciones.php` |
+| `asde_evento_anticipos` | `src/Eventos/AnticiposTable.php` |
 | `asde_eventos` | `src/Eventos/EventosTable.php` |
+| `asde_evento_gastos` | `src/Eventos/GastosTable.php` |
 | `asde_evento_inscripciones` | `src/Eventos/InscripcionesTable.php` |
 | `asde_evento_movimientos` | `src/Eventos/MovimientosTable.php` |
 | `asde_evento_partidas` | `src/Eventos/PartidasTable.php` |
@@ -360,12 +362,16 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 
 **Eventos/**
 
+- `AnticiposTable` — Anticipos de caja de un evento ({prefix}asde_evento_anticipos, v0.36, doc 43, apartado 4):
 - `Avisos` — Avisos de los eventos (v0.35, P-152):
 - `Cobros` — Cobro de las inscripciones (v0.35, doc 43, apartado 4):
 - `Config` — Configuración de los eventos de cada grupo (opción asde_ap_eventos_<grupo>, doc 43):
+- `Cuentas` — Las cuentas de un evento (v0.36, doc 43:
 - `EventosTable` — Eventos del grupo ({prefix}asde_eventos, doc 43):
+- `GastosTable` — Gastos e ingresos reales de un evento ({prefix}asde_evento_gastos, v0.36, doc 43:
 - `Inscripciones` — Inscripciones a los eventos (v0.35, doc 43, apartado 3).
 - `InscripcionesTable` — Personas de un evento ({prefix}asde_evento_inscripciones, doc 43):
+- `Justificantes` — Justificantes de los gastos de un evento (v0.36, doc 43):
 - `MovimientosTable` — Cobros de los eventos ({prefix}asde_evento_movimientos, doc 43, apartado 4):
 - `Normativa` — Lo que pide la normativa de tiempo libre de las Illes Balears y cómo trabaja hoy el grupo (doc 43, apartado 6; Ley 10/2022 y Decreto 23/2018).
 - `PartidasTable` — Partidas del presupuesto de un evento ({prefix}asde_evento_partidas, doc 43, apartado 4).
@@ -575,5 +581,5 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 
 ### Pruebas (`tests/`)
 
-`acceso` · `alta-reglas` · `alta-scouters` · `altas-crm-escritura` · `altas-crm-pantallas` · `altas-crm` · `app-enganches` · `ayuda` · `banco-gestion` · `colores` · `entorno` · `estilo-wordpress` · `eventos-inscripciones` · `eventos` · `fichas-escritura` · `grupos-emails-banco` · `identidad` · `idiomas-catalogos` · `idiomas` · `inventario` · `lista-espera` · `mejoras-v029` · `mejoras-v030` · `mejoras-v031` · `mejoras-v034` · `mejoras-v0351` · `menus` · `modulos` · `organizacion` · `rendimiento` · `sepa` · `solicitudes` · `tema` · `uniformes` · `usuarios-listado`
+`acceso` · `alta-reglas` · `alta-scouters` · `altas-crm-escritura` · `altas-crm-pantallas` · `altas-crm` · `app-enganches` · `ayuda` · `banco-gestion` · `colores` · `entorno` · `estilo-wordpress` · `eventos-economia` · `eventos-inscripciones` · `eventos` · `fichas-escritura` · `grupos-emails-banco` · `identidad` · `idiomas-catalogos` · `idiomas` · `inventario` · `lista-espera` · `mejoras-v029` · `mejoras-v030` · `mejoras-v031` · `mejoras-v034` · `mejoras-v0351` · `menus` · `modulos` · `organizacion` · `rendimiento` · `sepa` · `solicitudes` · `tema` · `uniformes` · `usuarios-listado`
 <!-- inventario:fin -->

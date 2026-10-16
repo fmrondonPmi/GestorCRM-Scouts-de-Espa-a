@@ -19,6 +19,7 @@
  * @var array<string, AsdeBalears\AreaPrivada\Domain\Persona> $otros       Del grupo, fuera de lo convocado (excepción)
  * @var array<int, array>                                   $familias     Familias con algo pendiente (Tesorería)
  * @var bool                                                $economia     Es Tesorería
+ * @var bool                                                $abiertas     Las cuentas no están cerradas (v0.36)
  * @var bool                                                $gestionable  Puede inscribir y dar de baja ahora
  */
 // phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound, WordPress.WP.GlobalVariablesOverride.Prohibited -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
@@ -60,10 +61,22 @@ $selector = static function ( string $name, array $lista, bool $vacio ) use ( $e
 };
 $formas = static function (): string {
 	$h = '<select name="forma">';
-	foreach ( asde_ta( MovimientosTable::FORMAS ) as $k => $t ) {
+	foreach ( array_intersect_key( asde_ta( MovimientosTable::FORMAS ), array_flip( MovimientosTable::FORMAS_MANUALES ) ) as $k => $t ) {
 		$h .= '<option value="' . esc_attr( $k ) . '">' . esc_html( $t ) . '</option>';
 	}
 	return $h . '</select>';
+};
+// v0.36: devolver a la familia lo pagado (hasta lo pagado y con motivo, P-160). Lo hace Tesorería.
+$devolver = static function ( array $f, array $c ) use ( $campos, $fila_h, $formas, $hoy ): string {
+	return '<details class="asde-accion"><summary>' . esc_html( asde_t( 'Devolver a la familia' ) ) . '</summary>'
+		. '<form method="post" class="asde-form asde-form--compacta">'
+		. $campos( 'evento_devolucion', $fila_h( $f ) )
+		. '<label>' . esc_html( asde_t( 'Importe (€)' ) ) . ' <input type="text" name="importe" inputmode="decimal" value="' . esc_attr( number_format( $c['neto'], 2, ',', '' ) ) . '" required></label>'
+		. '<label>' . esc_html( asde_t( 'Forma de pago' ) ) . ' ' . $formas() . '</label>'
+		. '<label>' . esc_html( asde_t( 'Fecha' ) ) . ' <input type="date" name="fecha" value="' . esc_attr( $hoy ) . '" max="' . esc_attr( $hoy ) . '" required></label>'
+		. '<label>' . esc_html( asde_t( 'Motivo' ) ) . ' <input type="text" name="motivo" maxlength="255" required></label>'
+		. '<button type="submit" class="button">' . esc_html( asde_t( 'Anotar la devolución' ) ) . '</button>'
+		. '</form></details>';
 };
 ?>
 <?php if ( EventosTable::BORRADOR === $e['estado'] ) : ?>
@@ -174,7 +187,10 @@ $formas = static function (): string {
 						</td>
 						<?php if ( $e['con_coste'] ) : ?>
 							<td data-label="<?php echo esc_attr( asde_a( 'Pago' ) ); ?>">
-								<?php echo esc_html( sprintf( asde_t( '%1$s de %2$s' ), Calculadora::euros( $c['pagado'] ), Calculadora::euros( $c['total'] ) ) ); ?>
+								<?php echo esc_html( sprintf( asde_t( '%1$s de %2$s' ), Calculadora::euros( $c['neto'] ), Calculadora::euros( $c['total'] ) ) ); ?>
+								<?php if ( $c['devuelto'] > 0 ) : ?>
+									<br><span class="asde-muted"><?php echo esc_html( sprintf( asde_t( 'Devuelto: %s' ), Calculadora::euros( $c['devuelto'] ) ) ); ?></span>
+								<?php endif; ?>
 								<?php if ( 0.0 !== $c['ajustes'] ) : ?>
 									<br><span class="asde-muted"><?php echo esc_html( sprintf( asde_t( 'Precio %1$s, ajustes %2$s' ), Calculadora::euros( $c['precio'] ), Calculadora::euros( $c['ajustes'] ) ) ); ?></span>
 								<?php endif; ?>
@@ -186,15 +202,18 @@ $formas = static function (): string {
 										<?php foreach ( $movs[ $f['id'] ] as $m ) : ?>
 											<li class="<?php echo null !== $m['anulado_en'] ? 'asde-anulado' : ''; ?>">
 												<?php
-												echo esc_html(
-													MovimientosTable::PAGO === $m['tipo']
-														? sprintf( asde_t( '%1$s · pago de %2$s (%3$s)' ), wp_date( 'd/m/Y', (int) strtotime( $m['fecha'] ) ), Calculadora::euros( $m['importe'] ), asde_t( MovimientosTable::FORMAS[ $m['forma'] ] ?? $m['forma'] ) )
-														: sprintf( asde_t( '%1$s · ajuste de %2$s: %3$s' ), wp_date( 'd/m/Y', (int) strtotime( $m['fecha'] ) ), Calculadora::euros( $m['importe'] ), $m['nota'] )
-												);
+												if ( MovimientosTable::PAGO === $m['tipo'] ) {
+													$texto = sprintf( asde_t( '%1$s · pago de %2$s (%3$s)' ), wp_date( 'd/m/Y', (int) strtotime( $m['fecha'] ) ), Calculadora::euros( $m['importe'] ), asde_t( MovimientosTable::FORMAS[ $m['forma'] ] ?? $m['forma'] ) );
+												} elseif ( MovimientosTable::DEVOLUCION === $m['tipo'] ) {
+													$texto = sprintf( asde_t( '%1$s · devolución de %2$s (%3$s): %4$s' ), wp_date( 'd/m/Y', (int) strtotime( $m['fecha'] ) ), Calculadora::euros( $m['importe'] ), asde_t( MovimientosTable::FORMAS[ $m['forma'] ] ?? $m['forma'] ), $m['nota'] );
+												} else {
+													$texto = sprintf( asde_t( '%1$s · ajuste de %2$s: %3$s' ), wp_date( 'd/m/Y', (int) strtotime( $m['fecha'] ) ), Calculadora::euros( $m['importe'] ), $m['nota'] );
+												}
+												echo esc_html( $texto );
 												?>
 												<?php if ( null !== $m['anulado_en'] ) : ?>
 													<?php asde_e( '(anulado)' ); ?>
-												<?php else : ?>
+												<?php elseif ( $abiertas ) : ?>
 													<form method="post" class="asde-inline-form" data-asde-confirmar="<?php echo esc_attr( asde_js( '¿Anular este movimiento? Si es un pago de la familia, se anula entero.' ) ); ?>"><?php echo $campos( 'evento_anular', '<input type="hidden" name="movimiento" value="' . (int) $m['id'] . '">' ); // phpcs:ignore WordPress.Security.EscapeOutput ?><button type="submit" class="asde-btn-link"><?php asde_e( 'Anular' ); ?></button></form>
 												<?php endif; ?>
 											</li>
@@ -204,7 +223,7 @@ $formas = static function (): string {
 							</td>
 						<?php endif; ?>
 						<td data-label="<?php echo esc_attr( asde_a( 'Acciones' ) ); ?>">
-							<?php if ( $economia && $e['con_coste'] && $c['pendiente'] > 0 ) : ?>
+							<?php if ( $economia && $abiertas && $e['con_coste'] && $c['pendiente'] > 0 ) : ?>
 								<details class="asde-accion">
 									<summary><?php asde_e( 'Registrar un pago' ); ?></summary>
 									<form method="post" class="asde-form asde-form--compacta">
@@ -218,7 +237,10 @@ $formas = static function (): string {
 									</form>
 								</details>
 							<?php endif; ?>
-							<?php if ( $economia && $e['con_coste'] ) : ?>
+							<?php if ( $economia && $abiertas && $e['con_coste'] && $c['neto'] > 0 ) : ?>
+								<?php echo $devolver( $f, $c ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+							<?php endif; ?>
+							<?php if ( $economia && $abiertas && $e['con_coste'] ) : ?>
 								<details class="asde-accion">
 									<summary><?php asde_e( 'Beca o ajuste' ); ?></summary>
 									<form method="post" class="asde-form asde-form--compacta">
@@ -301,8 +323,14 @@ $formas = static function (): string {
 						<?php if ( InscripcionesTable::BAJA === $f['estado'] ) : ?>
 							<span class="asde-muted"><?php echo esc_html( $cuando( $f['baja_en'] ) . ( '' !== $f['baja_motivo'] ? ' · ' . asde_t( $f['baja_motivo'] ) : '' ) ); ?></span>
 						<?php endif; ?>
-						<?php if ( $e['con_coste'] && ( $cobros[ $f['id'] ]['pagado'] ?? 0 ) > 0 ) : ?>
-							<span class="asde-muted"><?php echo esc_html( sprintf( asde_t( 'Había pagado %s: la devolución la decide Tesorería.' ), Calculadora::euros( $cobros[ $f['id'] ]['pagado'] ) ) ); ?></span>
+						<?php if ( $e['con_coste'] && ( $cobros[ $f['id'] ]['devuelto'] ?? 0 ) > 0 ) : ?>
+							<span class="asde-muted"><?php echo esc_html( sprintf( asde_t( 'Devuelto: %s' ), Calculadora::euros( $cobros[ $f['id'] ]['devuelto'] ) ) ); ?></span>
+						<?php endif; ?>
+						<?php if ( $e['con_coste'] && ( $cobros[ $f['id'] ]['neto'] ?? 0 ) > 0 ) : ?>
+							<span class="asde-muted"><?php echo esc_html( sprintf( asde_t( 'Había pagado %s: la devolución la decide Tesorería.' ), Calculadora::euros( $cobros[ $f['id'] ]['neto'] ) ) ); ?></span>
+							<?php if ( $economia && $abiertas ) : ?>
+								<?php echo $devolver( $f, $cobros[ $f['id'] ] ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+							<?php endif; ?>
 						<?php endif; ?>
 					</li>
 				<?php endforeach; ?>

@@ -6,8 +6,10 @@
  * ({prefix}asde_auditoria, asde_socios, asde_informes, asde_familias,
  * asde_familia_miembros, asde_movimientos, asde_emails, asde_banco_lotes, asde_cambios,
  * asde_banco_movimientos, asde_solicitudes, asde_uniformes, asde_sepa_mandatos, asde_sepa_remesas, y desde
- * la v0.35 asde_eventos, asde_evento_inscripciones, asde_evento_partidas y asde_evento_movimientos, los cobros de los eventos)
- * y el email cifrado de cada cuenta. Las autorizaciones SEPA y las remesas se conservan (cifradas): son
+ * la v0.35 asde_eventos, asde_evento_inscripciones, asde_evento_partidas y asde_evento_movimientos, los cobros de los eventos;
+ * desde la v0.36 asde_evento_gastos y asde_evento_anticipos, las cuentas de los eventos)
+ * y el email cifrado de cada cuenta. Los justificantes de los gastos de los eventos (cifrados, en
+ * wp-content/uploads/asde-privado/) también se conservan: son el justificante de las cuentas. Las autorizaciones SEPA y las remesas se conservan (cifradas): son
  * el justificante de los cobros; quien no las necesite puede borrar esas dos tablas a mano.
  * La configuración de uniformes y la de eventos de cada grupo (asde_ap_uniformes_<grupo>, asde_ap_eventos_<grupo>) se borran;
  * sus imágenes se quedan en la biblioteca de medios.

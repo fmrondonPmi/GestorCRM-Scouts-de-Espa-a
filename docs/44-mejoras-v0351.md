@@ -7,7 +7,7 @@ Cinco peticiones del usuario en la misma sesión, después de integrar el módul
 **Petición:** «En el módulo de familias, añadir un eliminar familias si no tiene ningún asociado dentro».
 
 - Ya se podía, pero solo dentro de la familia («Editar» → abajo, «Borrar esta familia»). Ahora la lista de Familias tiene **«Eliminar»** en la fila de cada familia sin socios (con confirmación), y dentro se llama «Eliminar esta familia».
-- **Supuesto P-155:** además de no tener socios, no tiene que tener nada que cuelgue de ella, que se quedaría sin familia: **pagos** (como antes), **autorizaciones de domiciliación** y **movimientos del banco asignados**. Si los tiene, la fila dice por qué no se puede (`FamiliasTable::por_que_no_borrar()`).
+- **P-155 (confirmado por el usuario):** además de no tener socios, no tiene que tener nada que cuelgue de ella, que se quedaría sin familia: **pagos** (como antes), **autorizaciones de domiciliación** y **movimientos del banco asignados**. Si los tiene, la fila dice por qué no se puede (`FamiliasTable::por_que_no_borrar()`).
 - Pruebas: `mejoras-v0351.php` parte D.
 
 ## 2. Verificación en dos pasos: opcional para todos
@@ -43,8 +43,8 @@ Cinco peticiones del usuario en la misma sesión, después de integrar el módul
 **Petición:** «Poder marcar eliminar a un asociado de nuestro sistema; claro, obligatoriamente no debe tener membresía activa».
 
 - En la ficha de quien **no tiene ninguna membresía activa** (Personas → «Sin membresía activa» → «Ver ficha»), Secretaría y Coordinación tienen **«Eliminar de la web»** (con confirmación). No se ofrece en la ficha propia.
-- **Supuesto P-156 (qué hace):** en el **CRM no cambia nada** (la ficha y su historia siguen allí). En la web: deja de salir en Personas, **sale de su familia**, su **cuenta propia se desactiva** (`Usuarios::desactivar()`: roles, contraseña, verificación en dos pasos, llaves) y **deja de estar en las cuentas familiares**; la que se queda sin nadie a quien representar, también se desactiva. Queda en el registro (`persona_eliminada_web`).
-- **Supuesto P-157:** si vuelve a tener una membresía activa en el CRM, **vuelve a salir sola** (se le quita la marca) y se le puede dar acceso de nuevo, que le manda una invitación.
+- **P-156 (qué hace; confirmado por el usuario):** en el **CRM no cambia nada** (la ficha y su historia siguen allí). En la web: deja de salir en Personas, **sale de su familia**, su **cuenta propia se desactiva** (`Usuarios::desactivar()`: roles, contraseña, verificación en dos pasos, llaves) y **deja de estar en las cuentas familiares**; la que se queda sin nadie a quien representar, también se desactiva. Queda en el registro (`persona_eliminada_web`).
+- **P-157 (confirmado por el usuario):** si vuelve a tener una membresía activa en el CRM, **vuelve a salir sola** (se le quita la marca) y se le puede dar acceso de nuevo, que le manda una invitación.
 - Se guarda en `asde_ap_eliminadas_<grupo>` (nº de Scouts de España → cuándo y quién); `uninstall.php` la borra.
 - Pruebas: `mejoras-v0351.php` parte C.
 

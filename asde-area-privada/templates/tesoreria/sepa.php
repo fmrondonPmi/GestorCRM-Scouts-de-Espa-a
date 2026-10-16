@@ -18,10 +18,17 @@
  * @var string      $fecha        Fecha de cobro
  * @var string      $fecha_min
  * @var string      $concepto
+ * @var array[]     $eventos      v0.36: eventos que se pueden cobrar (id => evento)
+ * @var int         $ev_id        Evento elegido
+ * @var array|null  $ev_prep      Vista previa de su remesa (Sepa\Remesas::preparar_evento)
+ * @var string[]    $ev_errores
+ * @var string      $ev_fecha
+ * @var string      $ev_concepto
  * @var string      $url
  * @var string      $url_ronda
  */
 // phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound, WordPress.WP.GlobalVariablesOverride.Prohibited -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
+use AsdeBalears\AreaPrivada\Eventos\EventosTable;
 use AsdeBalears\AreaPrivada\Sepa\Mandatos;
 use AsdeBalears\AreaPrivada\Sepa\Remesas;
 use AsdeBalears\AreaPrivada\Tesoreria\Calculadora;
@@ -32,6 +39,36 @@ $fmt_fecha = static fn( string $f ) => '' !== $f ? wp_date( 'd/m/Y', (int) strto
 $nombres   = static function ( array $f ) use ( $personas ): string {
 	$n = array_map( static fn( $num ) => isset( $personas[ $num ] ) ? $personas[ $num ]->nombre : $num, $f['miembros'] );
 	return implode( ', ', $n );
+};
+// La vista previa de una remesa (de la cuota o de un evento): los adeudos y lo que no se incluye.
+$vista_previa = static function ( array $prep ) use ( $familias, $nombres ): void {
+	?>
+	<?php if ( $prep['lineas'] ) : ?>
+		<table class="asde-table">
+			<thead><tr><th scope="col"><?php asde_e( 'Familia' ); ?></th><th scope="col"><?php asde_e( 'Socios' ); ?></th><th scope="col"><?php asde_e( 'Titular · cuenta' ); ?></th><th scope="col"><?php asde_e( 'Secuencia' ); ?></th><th scope="col"><?php asde_e( 'Importe' ); ?></th></tr></thead>
+			<tbody>
+				<?php foreach ( $prep['lineas'] as $l ) : ?>
+					<tr>
+						<td data-label="<?php echo esc_attr( asde_a( 'Familia' ) ); ?>"><?php echo esc_html( $l['familia_n'] ); ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Socios' ) ); ?>"><?php echo esc_html( $nombres( $familias[ $l['familia'] ] ?? array( 'miembros' => array() ) ) ); ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Titular' ) ); ?>"><?php echo esc_html( $l['titular'] . ' · ' . $l['iban_mask'] ); ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Secuencia' ) ); ?>"><?php echo esc_html( 'FRST' === $l['secuencia'] ? asde_t( 'Primer cobro (FRST)' ) : asde_t( 'Recurrente (RCUR)' ) ); ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Importe' ) ); ?>"><?php echo esc_html( Calculadora::euros( $l['centimos'] / 100 ) ); ?></td>
+					</tr>
+				<?php endforeach; ?>
+			</tbody>
+			<tfoot><tr><th scope="row" colspan="4"><?php asde_e( 'Total ·' ); ?> <?php echo esc_html( Remesas::adeudos( count( $prep['lineas'] ) ) ); ?></th><td><strong><?php echo esc_html( Calculadora::euros( $prep['total'] / 100 ) ); ?></strong></td></tr></tfoot>
+		</table>
+	<?php endif; ?>
+	<?php if ( $prep['omitidas'] ) : ?>
+		<h4><?php asde_e( 'No se incluyen' ); ?></h4>
+		<ul>
+			<?php foreach ( $prep['omitidas'] as $o ) : ?>
+				<li><?php echo esc_html( sprintf( '%s (%s): %s', $o['familia_n'], Calculadora::euros( $o['centimos'] / 100 ), $o['motivo'] ) ); ?></li>
+			<?php endforeach; ?>
+		</ul>
+	<?php endif; ?>
+	<?php
 };
 ?>
 <section class="asde-card">
@@ -117,31 +154,8 @@ $nombres   = static function ( array $f ) use ( $personas ): string {
 			<?php endforeach; ?>
 			<?php if ( ! $prep['lineas'] ) : ?>
 				<p><?php asde_e( 'No hay ningún adeudo que incluir: ninguna familia con autorización tiene algo pendiente' ); ?> <?php echo '' !== $plazo ? esc_html( asde_t( 'hasta ese plazo' ) ) : ''; ?>.</p>
-			<?php else : ?>
-				<table class="asde-table">
-					<thead><tr><th scope="col"><?php asde_e( 'Familia' ); ?></th><th scope="col"><?php asde_e( 'Socios' ); ?></th><th scope="col"><?php asde_e( 'Titular · cuenta' ); ?></th><th scope="col"><?php asde_e( 'Secuencia' ); ?></th><th scope="col"><?php asde_e( 'Importe' ); ?></th></tr></thead>
-					<tbody>
-						<?php foreach ( $prep['lineas'] as $l ) : ?>
-							<tr>
-								<td data-label="<?php echo esc_attr( asde_a( 'Familia' ) ); ?>"><?php echo esc_html( $l['familia_n'] ); ?></td>
-								<td data-label="<?php echo esc_attr( asde_a( 'Socios' ) ); ?>"><?php echo esc_html( $nombres( $familias[ $l['familia'] ] ?? array( 'miembros' => array() ) ) ); ?></td>
-								<td data-label="<?php echo esc_attr( asde_a( 'Titular' ) ); ?>"><?php echo esc_html( $l['titular'] . ' · ' . $l['iban_mask'] ); ?></td>
-								<td data-label="<?php echo esc_attr( asde_a( 'Secuencia' ) ); ?>"><?php echo esc_html( 'FRST' === $l['secuencia'] ? asde_t( 'Primer cobro (FRST)' ) : asde_t( 'Recurrente (RCUR)' ) ); ?></td>
-								<td data-label="<?php echo esc_attr( asde_a( 'Importe' ) ); ?>"><?php echo esc_html( Calculadora::euros( $l['centimos'] / 100 ) ); ?></td>
-							</tr>
-						<?php endforeach; ?>
-					</tbody>
-					<tfoot><tr><th scope="row" colspan="4"><?php asde_e( 'Total ·' ); ?> <?php echo esc_html( Remesas::adeudos( count( $prep['lineas'] ) ) ); ?></th><td><strong><?php echo esc_html( Calculadora::euros( $prep['total'] / 100 ) ); ?></strong></td></tr></tfoot>
-				</table>
 			<?php endif; ?>
-			<?php if ( $prep['omitidas'] ) : ?>
-				<h4><?php asde_e( 'No se incluyen' ); ?></h4>
-				<ul>
-					<?php foreach ( $prep['omitidas'] as $o ) : ?>
-						<li><?php echo esc_html( sprintf( '%s (%s): %s', $o['familia_n'], Calculadora::euros( $o['centimos'] / 100 ), $o['motivo'] ) ); ?></li>
-					<?php endforeach; ?>
-				</ul>
-			<?php endif; ?>
+			<?php $vista_previa( $prep ); ?>
 			<?php if ( $prep['lineas'] && ! $errores ) : ?>
 				<form method="post" class="asde-form">
 					<?php wp_nonce_field( 'asde_sepa_generar' ); ?>
@@ -155,6 +169,59 @@ $nombres   = static function ( array $f ) use ( $personas ): string {
 			<?php endif; ?>
 		<?php endif; ?>
 	</section>
+
+	<?php if ( $eventos ) : ?>
+		<section class="asde-card">
+			<h3><?php asde_e( 'Cobrar un evento' ); ?></h3>
+			<p class="asde-help"><?php asde_e( 'Un adeudo por familia con autorización, con todo lo pendiente de sus inscripciones activas en el evento (los hermanos, juntos). Al registrar los cobros, el importe se reparte entre sus inscripciones.' ); ?></p>
+			<form method="get" action="<?php echo esc_url( $url ); ?>" class="asde-form">
+				<input type="hidden" name="ronda" value="<?php echo esc_attr( $ronda ); ?>">
+				<input type="hidden" name="preparar_evento" value="1">
+				<div class="asde-grid-2">
+					<p class="asde-grid-span">
+						<label for="asde-sepa-evento"><?php asde_e( 'Evento' ); ?></label>
+						<select id="asde-sepa-evento" name="evento_sepa">
+							<?php foreach ( $eventos as $id => $ev ) : ?>
+								<option value="<?php echo (int) $id; ?>" <?php selected( $ev_id, (int) $id ); ?>><?php echo esc_html( EventosTable::numero( $ev ) . ' · ' . $ev['nombre'] . ' · ' . EventosTable::cuando( $ev ) ); ?></option>
+							<?php endforeach; ?>
+						</select>
+					</p>
+					<p>
+						<label for="asde-sepa-fecha-evento"><?php asde_e( 'Fecha de cobro' ); ?></label>
+						<input type="date" id="asde-sepa-fecha-evento" name="fecha_evento" value="<?php echo esc_attr( $ev_fecha ); ?>" min="<?php echo esc_attr( $fecha_min ); ?>">
+					</p>
+					<p>
+						<label for="asde-sepa-concepto-evento"><?php asde_e( 'Concepto' ); ?></label>
+						<input type="text" id="asde-sepa-concepto-evento" name="concepto_evento" maxlength="140" value="<?php echo esc_attr( $ev_concepto ); ?>" placeholder="<?php echo esc_attr( asde_a( 'Por defecto, el número y el nombre del evento' ) ); ?>">
+					</p>
+				</div>
+				<p><button type="submit" class="button"><?php asde_e( 'Ver qué se cobraría' ); ?></button></p>
+			</form>
+
+			<?php if ( $ev_prep ) : ?>
+				<hr>
+				<h4><?php asde_e( 'Vista previa' ); ?></h4>
+				<?php foreach ( $ev_errores as $error ) : ?>
+					<div class="asde-notice asde-notice--error" role="alert"><?php echo esc_html( $error ); ?></div>
+				<?php endforeach; ?>
+				<?php if ( ! $ev_prep['lineas'] ) : ?>
+					<p><?php asde_e( 'No hay ningún adeudo que incluir: ninguna familia con autorización tiene algo pendiente en este evento.' ); ?></p>
+				<?php endif; ?>
+				<?php $vista_previa( $ev_prep ); ?>
+				<?php if ( $ev_prep['lineas'] && ! $ev_errores ) : ?>
+					<form method="post" class="asde-form">
+						<?php wp_nonce_field( 'asde_sepa_generar_evento' ); ?>
+						<input type="hidden" name="asde_action" value="sepa_generar_evento">
+						<input type="hidden" name="ronda" value="<?php echo esc_attr( $ronda ); ?>">
+						<input type="hidden" name="evento" value="<?php echo (int) $ev_id; ?>">
+						<input type="hidden" name="fecha" value="<?php echo esc_attr( $ev_fecha ); ?>">
+						<input type="hidden" name="concepto" value="<?php echo esc_attr( $ev_concepto ); ?>">
+						<p><button type="submit" class="button"><?php asde_e( 'Crear la remesa y preparar el fichero' ); ?></button></p>
+					</form>
+				<?php endif; ?>
+			<?php endif; ?>
+		</section>
+	<?php endif; ?>
 <?php endif; ?>
 
 <section class="asde-card">

@@ -3,18 +3,24 @@ namespace AsdeBalears\AreaPrivada\Frontend\Views;
 
 use AsdeBalears\AreaPrivada\Auth\Ambito;
 use AsdeBalears\AreaPrivada\Crm\CrmException;
+use AsdeBalears\AreaPrivada\Audit\Logger;
 use AsdeBalears\AreaPrivada\Crm\PersonaRepository;
+use AsdeBalears\AreaPrivada\Eventos\AnticiposTable;
 use AsdeBalears\AreaPrivada\Eventos\Cobros;
 use AsdeBalears\AreaPrivada\Eventos\Config;
+use AsdeBalears\AreaPrivada\Eventos\Cuentas;
 use AsdeBalears\AreaPrivada\Eventos\EventosTable;
+use AsdeBalears\AreaPrivada\Eventos\GastosTable;
 use AsdeBalears\AreaPrivada\Eventos\Inscripciones;
 use AsdeBalears\AreaPrivada\Eventos\InscripcionesTable;
+use AsdeBalears\AreaPrivada\Eventos\Justificantes;
 use AsdeBalears\AreaPrivada\Eventos\MovimientosTable;
 use AsdeBalears\AreaPrivada\Eventos\Normativa;
 use AsdeBalears\AreaPrivada\Eventos\PartidasTable;
 use AsdeBalears\AreaPrivada\Eventos\Presupuesto;
 use AsdeBalears\AreaPrivada\Eventos\Servicio;
 use AsdeBalears\AreaPrivada\Frontend\Notices;
+use AsdeBalears\AreaPrivada\Informes\Generador;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -23,6 +29,8 @@ defined( 'ABSPATH' ) || exit;
  * cuatro pestañas: resumen (con la lista de comprobación de la normativa), equipo dirigente,
  * inscripciones (v0.35: participantes, lista de espera, autorizaciones en papel, bajas y,
  * para Tesorería, los cobros) y presupuesto (con el precio por sección y su validación).
+ * v0.36: la pestaña «Cuentas» (gastos reales con justificante, reembolsos, anticipos, fondo,
+ * balance y cierre), las devoluciones a las familias y, con las cuentas cerradas, solo lectura.
  */
 final class EventosView extends EventosBaseView {
 
@@ -31,6 +39,7 @@ final class EventosView extends EventosBaseView {
 		'equipo'        => 'Equipo',
 		'inscripciones' => 'Inscripciones',
 		'presupuesto'   => 'Presupuesto',
+		'cuentas'       => 'Cuentas',
 	);
 
 	/** Lo escrito en el formulario cuando no se ha podido guardar (se vuelve a enseñar): evento (0 = nuevo) y datos. */
@@ -121,6 +130,9 @@ final class EventosView extends EventosBaseView {
 
 	private function evento( array $e, Ambito $a, array $cfg ): string {
 		$pestana = isset( self::PESTANAS[ $this->get( 'pestana' ) ] ) ? $this->get( 'pestana' ) : 'resumen';
+		if ( 'cuentas' === $pestana && ! Cuentas::puede_ver( $e, $a ) ) {
+			$pestana = 'resumen';
+		}
 		Inscripciones::revisar( $e ); // Lista de espera al día (plazas que caducan o se liberan).
 		$filas           = InscripcionesTable::participantes( $e['id'] );
 		$e['inscritos']  = Inscripciones::recuento( $e, $filas ); // La ratio y la comunicación cuentan a los inscritos.
@@ -143,6 +155,8 @@ final class EventosView extends EventosBaseView {
 			$contenido = $this->tpl( 'eventos/resumen', $vars + array( 'lista' => Normativa::lista( $e, (array) $check ) ) );
 		} elseif ( 'inscripciones' === $pestana ) {
 			$contenido = $this->tpl( 'eventos/inscripciones', $vars + $this->inscripciones( $e, $a, $filas ) );
+		} elseif ( 'cuentas' === $pestana ) {
+			$contenido = $this->tpl( 'eventos/cuentas', $vars + $this->cuentas( $e ) );
 		} elseif ( 'equipo' === $pestana ) {
 			$contenido = $this->tpl(
 				'eventos/equipo',
@@ -229,9 +243,33 @@ final class EventosView extends EventosBaseView {
 			'sin_respuesta' => array_diff_key( $convocados, $con_fila ),
 			'convocados'  => $convocados,
 			'otros'       => $otros,
-			'familias'    => Cobros::puede() ? Cobros::familias( $e ) : array(),
+			'familias'    => Cobros::puede() && Cobros::abiertas( $e ) ? Cobros::familias( $e ) : array(),
 			'economia'    => Cobros::puede(),
+			'abiertas'    => Cobros::abiertas( $e ),
 			'gestionable' => $gestiona && Inscripciones::gestionable( $e ),
+		);
+	}
+
+	/** Lo que necesita la pestaña «Cuentas» (v0.36). */
+	private function cuentas( array $e ): array {
+		$personas = Cuentas::personas( $e );
+		$nombres  = array();
+		$fichas   = $this->personas( array_values( $personas ) );
+		foreach ( $personas as $uid => $socio ) {
+			$u               = get_userdata( $uid );
+			$nombres[ $uid ] = isset( $fichas[ $socio ] ) ? $fichas[ $socio ]->nombre_completo() : ( $u ? $u->display_name : $socio );
+		}
+		$cerrado = null !== $e['cerrado_en'] && is_array( $e['balance'] );
+		$balance = $cerrado ? $e['balance'] : Cuentas::balance( $e );
+		return array(
+			'gastos'     => GastosTable::de_evento( $e['id'] ),
+			'anticipos'  => AnticiposTable::de_evento( $e['id'] ),
+			'personas'   => $nombres,
+			'partidas'   => PartidasTable::previstas( $e['id'] ),
+			'balance'    => $balance,
+			'por_cerrar' => $cerrado ? array() : Cuentas::por_cerrar( $e, $balance ),
+			'economia'   => Cobros::puede(),
+			'abiertas'   => Cuentas::abiertas( $e ),
 		);
 	}
 
@@ -271,6 +309,13 @@ final class EventosView extends EventosBaseView {
 		$num     = EventosTable::numero( $e );
 		$hecho   = '';
 		$r       = new \WP_Error( 'asde_evento', asde_t( 'Acción desconocida.' ) );
+		$cifra   = static fn( string $v ): float => (float) str_replace( ',', '.', $v );
+
+		// v0.36: con las cuentas cerradas el evento es de solo lectura (P-162).
+		if ( null !== $e['cerrado_en'] && ! in_array( $accion, array( 'evento_justificante', 'evento_informe' ), true ) ) {
+			Notices::add( 'error', asde_t( 'Las cuentas de este evento están cerradas: ya no se pueden cambiar.' ) );
+			$this->redirect( $volver );
+		}
 
 		switch ( $accion ) {
 			case 'evento_guardar':
@@ -385,6 +430,78 @@ final class EventosView extends EventosBaseView {
 				$hecho = asde_t( 'Movimiento anulado.' );
 				break;
 
+			case 'evento_devolucion':
+				$r     = Cobros::devolver( $e, (int) $this->post( 'fila' ), $cifra( $this->post( 'importe' ) ), sanitize_key( $this->post( 'forma' ) ), $this->post( 'fecha' ), $this->post( 'motivo' ) );
+				$hecho = sprintf( asde_t( 'Devolución de %s anotada.' ), \AsdeBalears\AreaPrivada\Tesoreria\Calculadora::euros( $cifra( $this->post( 'importe' ) ) ) );
+				break;
+
+			// v0.36: cuentas del evento.
+			case 'evento_gasto':
+				$fichero = $this->justificante_subido();
+				$r       = is_wp_error( $fichero ) ? $fichero : Cuentas::proponer( $e, $a, $in, $fichero );
+				$hecho   = Cobros::puede() ? asde_t( 'Gasto apuntado.' ) : asde_t( 'Gasto enviado a Tesorería para que lo revise.' );
+				break;
+
+			case 'evento_ingreso':
+				$r     = Cuentas::ingreso( $e, $in );
+				$hecho = asde_t( 'Ingreso apuntado.' );
+				break;
+
+			case 'evento_gasto_retirar':
+				$r     = Cuentas::retirar( $e, (int) $this->post( 'gasto' ) );
+				$hecho = asde_t( 'Gasto retirado.' );
+				break;
+
+			case 'evento_gasto_validar':
+				$r     = Cuentas::validar( $e, (int) $this->post( 'gasto' ) );
+				$hecho = asde_t( 'Gasto validado.' );
+				break;
+
+			case 'evento_gasto_rechazar':
+				$r     = Cuentas::rechazar( $e, (int) $this->post( 'gasto' ), $this->post( 'motivo' ) );
+				$hecho = asde_t( 'Gasto rechazado.' );
+				break;
+
+			case 'evento_gasto_reembolsar':
+				$r     = Cuentas::reembolsar( $e, (int) $this->post( 'gasto' ), $this->post( 'fecha' ), sanitize_key( $this->post( 'forma' ) ) );
+				$hecho = asde_t( 'Reembolso anotado.' );
+				break;
+
+			case 'evento_gasto_anular':
+				$r     = Cuentas::anular( $e, (int) $this->post( 'gasto' ), $this->post( 'motivo' ) );
+				$hecho = asde_t( 'Movimiento anulado.' );
+				break;
+
+			case 'evento_anticipo':
+				$r     = Cuentas::anticipo( $e, (int) $this->post( 'persona' ), $cifra( $this->post( 'importe' ) ), $this->post( 'fecha' ), sanitize_key( $this->post( 'forma' ) ), $this->post( 'nota' ) );
+				$hecho = asde_t( 'Anticipo anotado.' );
+				break;
+
+			case 'evento_anticipo_liquidar':
+				$r = Cuentas::liquidar( $e, (int) $this->post( 'anticipo' ), $cifra( $this->post( 'devuelto' ) ), $this->post( 'nota' ) );
+				if ( ! is_wp_error( $r ) ) {
+					$hecho = abs( $r ) >= 0.01 ? sprintf( asde_t( 'Anticipo liquidado, con una diferencia de %s.' ), \AsdeBalears\AreaPrivada\Tesoreria\Calculadora::euros( $r ) ) : asde_t( 'Anticipo liquidado.' );
+				}
+				break;
+
+			case 'evento_anticipo_anular':
+				$r     = Cuentas::anular_anticipo( $e, (int) $this->post( 'anticipo' ) );
+				$hecho = asde_t( 'Anticipo anulado.' );
+				break;
+
+			case 'evento_cerrar':
+				$r     = Cuentas::cerrar( $e );
+				$hecho = sprintf( asde_t( 'Cuentas del evento %s cerradas: el balance queda como informe final.' ), $num );
+				break;
+
+			case 'evento_justificante':
+				$r = $this->ver_justificante( $e, $a, (int) $this->post( 'gasto' ) ); // Si se puede ver, lo envía y no vuelve.
+				break;
+
+			case 'evento_informe':
+				$r = $this->informe_csv( $e, $a ); // Si se puede ver, lo envía y no vuelve.
+				break;
+
 			case 'evento_borrar':
 				$r = Servicio::borrar( $e, $a );
 				if ( ! is_wp_error( $r ) ) {
@@ -396,6 +513,73 @@ final class EventosView extends EventosBaseView {
 
 		is_wp_error( $r ) ? Notices::add( 'error', esc_html( $r->get_error_message() ) ) : Notices::add( 'success', esc_html( $hecho ) );
 		$this->redirect( $volver );
+	}
+
+	/**
+	 * El justificante subido con el gasto: solo su ruta temporal (comprobada con
+	 * is_uploaded_file()) y su nombre; null si no se ha subido ninguno.
+	 *
+	 * @return array{ruta:string, nombre:string}|\WP_Error|null
+	 */
+	private function justificante_subido() {
+		$f = $_FILES['justificante'] ?? null; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.NonceVerification.Missing -- el nonce se comprueba antes (check_admin_referer en handle_post); del fichero solo se usan datos validados con is_uploaded_file()
+		if ( is_array( $f ) && in_array( $f['error'] ?? 0, array( UPLOAD_ERR_INI_SIZE, UPLOAD_ERR_FORM_SIZE ), true ) ) {
+			return new \WP_Error( 'asde_cuentas', asde_t( 'El justificante tiene que ser una imagen (JPG, PNG o WebP) o un PDF de hasta 5 MB.' ) );
+		}
+		if ( ! is_array( $f ) || UPLOAD_ERR_OK !== ( $f['error'] ?? UPLOAD_ERR_NO_FILE ) || ! is_uploaded_file( (string) $f['tmp_name'] ) ) {
+			return null;
+		}
+		return array(
+			'ruta'   => (string) $f['tmp_name'],
+			'nombre' => sanitize_file_name( wp_unslash( (string) $f['name'] ) ),
+		);
+	}
+
+	/**
+	 * Envía el justificante de un gasto (descifrado) al navegador: solo quien ve las cuentas. Las
+	 * imágenes se abren en la pestaña (con una CSP que no deja ejecutar nada); los PDF se descargan
+	 * (el visor de PDF del navegador no funciona con esa CSP y un PDF puede llevar código).
+	 */
+	private function ver_justificante( array $e, Ambito $a, int $id ): \WP_Error {
+		$g = GastosTable::obtener( $id );
+		if ( ! Cuentas::puede_ver( $e, $a ) || ! $g || $g['evento_id'] !== $e['id'] || '' === $g['justificante'] ) {
+			return new \WP_Error( 'asde_cuentas', asde_t( 'Ese justificante no existe o no puedes verlo.' ) );
+		}
+		$contenido = Justificantes::leer( $g );
+		if ( null === $contenido || ! isset( Justificantes::TIPOS[ $g['justificante_tipo'] ] ) ) {
+			return new \WP_Error( 'asde_cuentas', asde_t( 'No se ha podido leer el justificante.' ) );
+		}
+		Logger::log( 'evento_justificante_visto', 'evento', (string) $e['id'], array( 'gasto' => $id ) );
+		$imagen = str_starts_with( $g['justificante_tipo'], 'image/' );
+		nocache_headers();
+		header( 'Content-Type: ' . $g['justificante_tipo'] );
+		header( 'Content-Disposition: ' . ( $imagen ? 'inline' : 'attachment' ) . '; filename="justificante-' . $id . '.' . Justificantes::TIPOS[ $g['justificante_tipo'] ] . '"' );
+		header( 'Content-Length: ' . strlen( $contenido ) );
+		header( 'X-Content-Type-Options: nosniff' );
+		if ( $imagen ) {
+			header( "Content-Security-Policy: default-src 'none'; img-src 'self' data:; style-src 'unsafe-inline'; sandbox" );
+		}
+		echo $contenido; // phpcs:ignore WordPress.Security.EscapeOutput -- fichero binario (imagen o PDF comprobados al subirlo), con su tipo y nosniff.
+		exit;
+	}
+
+	/** El balance (o el informe final, si están cerradas) en CSV. */
+	private function informe_csv( array $e, Ambito $a ): \WP_Error {
+		if ( ! Cuentas::puede_ver( $e, $a ) ) {
+			return new \WP_Error( 'asde_cuentas', asde_t( 'No puedes ver las cuentas de este evento.' ) );
+		}
+		$balance = null !== $e['cerrado_en'] && is_array( $e['balance'] ) ? $e['balance'] : Cuentas::balance( $e );
+		Logger::log( 'evento_informe', 'evento', (string) $e['id'] );
+		nocache_headers();
+		header( 'Content-Type: text/csv; charset=UTF-8' );
+		header( 'Content-Disposition: attachment; filename="cuentas-' . sanitize_file_name( EventosTable::numero( $e ) ) . '-' . wp_date( 'Ymd' ) . '.csv"' );
+		$out = fopen( 'php://output', 'w' );
+		fwrite( $out, "\xEF\xBB\xBF" ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fwrite -- php://output (descarga), no es el sistema de ficheros
+		foreach ( Cuentas::filas_csv( $balance ) as $fila ) {
+			fputcsv( $out, array_map( array( Generador::class, 'celda_segura' ), $fila ), ';' );
+		}
+		fclose( $out ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- php://output (descarga)
+		exit;
 	}
 
 	/** Sin redirigir: se vuelve a enseñar el formulario con lo escrito y los errores. */

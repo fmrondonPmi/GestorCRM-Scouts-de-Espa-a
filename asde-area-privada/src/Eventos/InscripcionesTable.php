@@ -160,6 +160,12 @@ final class InscripcionesTable {
 		);
 	}
 
+	/** Al cerrar las cuentas (P-150): borra lo cifrado de todas las inscripciones del evento (quién recoge, observaciones). @return int Cuántas tenían algo. */
+	public static function borrar_datos_evento( int $evento_id ): int {
+		global $wpdb;
+		return (int) $wpdb->query( $wpdb->prepare( 'UPDATE %i SET datos_enc = NULL WHERE evento_id = %d AND grupo = %s AND datos_enc IS NOT NULL', self::table(), $evento_id, Grupo::numero() ) ); // phpcs:ignore WordPress.DB
+	}
+
 	/** Quita a alguien del equipo (no es un justificante de nada: se borra la fila). */
 	public static function quitar( int $id ): bool {
 		global $wpdb;

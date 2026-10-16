@@ -106,7 +106,7 @@ final class Servicio {
 	}
 
 	public static function puede_editar( array $e, Ambito $a ): bool {
-		return EventosTable::CANCELADO !== $e['estado'] && self::en_gestion( $e, $a );
+		return EventosTable::CANCELADO !== $e['estado'] && null === ( $e['cerrado_en'] ?? null ) && self::en_gestion( $e, $a );
 	}
 
 	/** El presupuesto se puede cambiar: es un borrador y Tesorería aún no lo ha validado. */

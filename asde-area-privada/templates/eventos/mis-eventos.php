@@ -143,6 +143,9 @@ $texto_autorizacion = static function ( array $e, string $nombre ) use ( $autori
 							<?php if ( $cobro && $cobro['pagado'] > 0 ) : ?>
 								· <?php echo esc_html( sprintf( asde_t( 'pagado: %s' ), Calculadora::euros( $cobro['pagado'] ) ) ); ?>
 							<?php endif; ?>
+							<?php if ( $cobro && $cobro['devuelto'] > 0 ) : ?>
+								· <?php echo esc_html( sprintf( asde_t( 'devuelto: %s' ), Calculadora::euros( $cobro['devuelto'] ) ) ); ?>
+							<?php endif; ?>
 						</p>
 					<?php endif; ?>
 
