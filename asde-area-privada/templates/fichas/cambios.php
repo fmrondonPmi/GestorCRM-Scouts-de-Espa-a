@@ -161,7 +161,7 @@ $url_ver = 'resueltos' === $ver ? add_query_arg( 'ver', 'resueltos', $url ) : $u
 		<?php endif; ?>
 	</section>
 <?php else : ?>
-	<section class="asde-card">
+	<section class="asde-card" data-asde-inicio="<?php echo $grupos && 'pendientes' === $ver ? 'abierto' : 'cerrado'; ?>">
 		<header class="asde-card__header asde-card__header--split">
 			<h2 class="asde-card__title"><?php asde_e( 'Cambios propuestos por las familias' ); ?></h2>
 			<span class="asde-actions">

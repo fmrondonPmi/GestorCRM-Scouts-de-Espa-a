@@ -21,7 +21,7 @@ use AsdeBalears\AreaPrivada\Tesoreria\Calculadora;
 
 defined( 'ABSPATH' ) || exit;
 ?>
-<section class="asde-card">
+<section class="asde-card" data-asde-inicio="abierto">
 	<header class="asde-card__header asde-card__header--split">
 		<h2 class="asde-card__title"><?php asde_e( 'Eventos' ); ?></h2>
 		<?php if ( $puede_crear ) : ?>
@@ -36,7 +36,7 @@ defined( 'ABSPATH' ) || exit;
 		<p class="asde-notice asde-notice--info"><?php echo esc_html( sprintf( asde_n( '%d presupuesto espera a que Tesorería lo valide.', '%d presupuestos esperan a que Tesorería los valide.', $por_validar ), $por_validar ) ); ?></p>
 	<?php endif; ?>
 
-	<form method="get" action="<?php echo esc_url( $url ); ?>" class="asde-filter">
+	<form method="get" action="<?php echo esc_url( $url ); ?>" class="asde-filter asde-filter--una-linea">
 		<label for="asde-ev-estado"><?php asde_e( 'Mostrar' ); ?></label>
 		<select id="asde-ev-estado" name="estado">
 			<?php foreach ( asde_ta( EventosTable::FILTROS ) as $f => $etiqueta ) : ?>

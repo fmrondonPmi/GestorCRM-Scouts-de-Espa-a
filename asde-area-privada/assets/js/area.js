@@ -135,7 +135,8 @@
 	// ---------------------------------------------------------------------
 	// 4b. Cuadros plegables (v0.29): cada cuadro del área (section.asde-card) que empieza
 	// por su título se puede contraer con el botón ▾ del título (o pulsando el título);
-	// contraído solo se ve su cabecera. **Empiezan contraídos** (petición del usuario) y se
+	// contraído solo se ve su cabecera. Cada cuadro fija cómo empieza con data-asde-inicio
+	// ("abierto" o "cerrado"; sin él, abierto si es el único de la pantalla y cerrado si no) y se
 	// recuerda en este navegador lo que cada persona abre o cierra. Fuera:
 	// data-asde-no-plegable. Clave fija: data-asde-plegable="clave" (si no, la página y el título).
 	// ---------------------------------------------------------------------
@@ -153,7 +154,10 @@
 	}
 
 	function plegables( raiz ) {
-		Array.prototype.forEach.call( ( raiz || document ).querySelectorAll( 'section.asde-card:not([data-asde-no-plegable]):not([data-asde-plegable-listo])' ), function ( card ) {
+		var candidatos = ( raiz || document ).querySelectorAll( 'section.asde-card:not([data-asde-no-plegable]):not([data-asde-plegable-listo])' );
+		// Con un solo cuadro en la pantalla, empieza desplegado (no hay otra cosa que ver).
+		var unico = 1 === candidatos.length;
+		Array.prototype.forEach.call( candidatos, function ( card ) {
 			var cabeza = card.firstElementChild;
 			if ( ! cabeza || ! cabeza.matches( 'h2, h3, header' ) || card.children.length < 2 ) {
 				return;
@@ -164,7 +168,7 @@
 			}
 			var texto = titulo.textContent.trim();
 			var fija = card.getAttribute( 'data-asde-plegable' );
-			card.asdeClave = 'asde_cuadro_' + ( fija || window.location.pathname + '|' + texto.toLowerCase().slice( 0, 60 ) );
+			card.asdeClave = 'asde_cuadro2_' + ( fija || window.location.pathname + '|' + texto.toLowerCase().slice( 0, 60 ) );
 			card.setAttribute( 'data-asde-plegable-listo', '' );
 			card.classList.add( 'asde-card--plegable' );
 			cabeza.classList.add( 'asde-card__cabeza' );
@@ -185,7 +189,16 @@
 			try {
 				guardado = window.localStorage.getItem( card.asdeClave );
 			} catch ( e ) {}
-			plegar( card, '1' !== guardado, false );
+			// Lo que la persona dejó manda; si no, data-asde-inicio="abierto|cerrado" del cuadro;
+			// si no, abierto cuando es el único y cerrado en los demás casos.
+			var inicio = card.getAttribute( 'data-asde-inicio' );
+			var cerrado = 'abierto' === inicio ? false : ( 'cerrado' === inicio ? true : ! unico );
+			if ( '1' === guardado ) {
+				cerrado = false;
+			} else if ( '0' === guardado ) {
+				cerrado = true;
+			}
+			plegar( card, cerrado, false );
 		} );
 	}
 	plegables( document );

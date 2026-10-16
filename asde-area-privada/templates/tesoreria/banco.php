@@ -41,7 +41,7 @@ $revisar = static fn( array $ids ) => add_query_arg(
 	$url
 );
 ?>
-<section class="asde-card">
+<section class="asde-card" data-asde-inicio="cerrado">
 	<h2><?php asde_e( 'Banco' ); ?></h2>
 	<dl class="asde-datos" data-asde-parcial="banco-resumen">
 		<div><dt><?php asde_e( 'Saldo según el último fichero' ); ?></dt><dd><strong><?php echo null !== $resumen['saldo'] ? esc_html( Calculadora::euros( $resumen['saldo'] ) ) : '—'; ?></strong><?php echo $resumen['saldo_fecha'] ? ' <span class="asde-muted">a ' . esc_html( wp_date( 'd/m/Y', strtotime( $resumen['saldo_fecha'] . ' 12:00' ) ) ) . '</span>' : ''; ?></dd></div>
@@ -103,7 +103,7 @@ $revisar = static fn( array $ids ) => add_query_arg(
 </section>
 
 <?php /* v0.20: este listado se actualiza sin recargar la página (assets/js/parcial.js). */ ?>
-<section class="asde-card" data-asde-parcial="banco-movs">
+<section class="asde-card" data-asde-parcial="banco-movs" data-asde-inicio="abierto">
 	<header class="asde-card__header asde-card__header--split">
 		<h3 class="asde-card__title"><?php asde_e( 'Movimientos' ); ?></h3>
 		<span class="asde-actions"><a href="<?php echo esc_url( add_query_arg( 'tipos', '1', $url ) ); ?>"><?php asde_e( 'Tipos de gasto e ingreso' ); ?></a></span>
