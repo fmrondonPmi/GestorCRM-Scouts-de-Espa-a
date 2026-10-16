@@ -482,7 +482,7 @@ try {
 	$h                   = \AsdeBalears\AreaPrivada\Frontend\TemplateLoader::render( 'tesoreria/familia', $vars );
 	$vivo                = (int) current( wp_list_filter( $movs, array( 'anulado_en' => null ) ) )['id'];
 	$ok( 1 === preg_match( '/name="movimiento" value="' . $vivo . '">.*name="motivo" maxlength="255" required/s', $h ) && ! str_contains( $h, 'name="movimiento" value="' . $pago_banco . '"' ) && ! str_contains( $h, 'name="movimiento" value="' . $sepa . '"' ), 'en la ficha, «Eliminar…» pide el motivo, y los eliminados ya no están entre los movimientos' );
-	$ok( str_contains( $h, 'Historial de la ronda' ) && str_contains( $h, '5 anotaciones · 2 eliminados' ) && str_contains( $h, 'Pago de 120,00 € eliminado' ) && str_contains( $h, 'Motivo: Prueba: registrado dos veces' ) && str_contains( $h, 'con un ingreso del banco' ) && str_contains( $h, 'con el cobro de una remesa SEPA' ), 'y el historial de la ronda cuenta qué se registró y qué se eliminó, con el motivo' );
+	$ok( str_contains( $h, 'Historial de pagos' ) && str_contains( $h, '5 anotaciones · 2 eliminados' ) && str_contains( $h, 'Pago de 120,00 € eliminado' ) && str_contains( $h, 'Motivo: Prueba: registrado dos veces' ) && str_contains( $h, 'con un ingreso del banco' ) && str_contains( $h, 'con el cobro de una remesa SEPA' ), 'y el historial de la ronda cuenta qué se registró y qué se eliminó, con el motivo' );
 
 	$ok( 0 === $cortadas, 'ninguna petición ha salido hacia un CRM' );
 } finally {

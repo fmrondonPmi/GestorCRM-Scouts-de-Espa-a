@@ -6,6 +6,7 @@
  * @var string                $activo
  * @var string                $ronda
  * @var string[]              $rondas
+ * @var array<string, string>  $enlaces Accesos directos a los informes de pagos (etiqueta => dirección; v0.37)
  */
 // phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound, WordPress.WP.GlobalVariablesOverride.Prohibited -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
 use AsdeBalears\AreaPrivada\Frontend\Pages;
@@ -18,6 +19,9 @@ defined( 'ABSPATH' ) || exit;
 			<li>
 				<a href="<?php echo esc_url( Pages::url( $key, array( 'ronda' => $ronda ) ) ); ?>"<?php echo $key === $activo ? ' class="is-active" aria-current="page"' : ''; ?>><?php echo esc_html( $label ); ?></a>
 			</li>
+		<?php endforeach; ?>
+		<?php foreach ( ( $enlaces ?? array() ) as $etiqueta => $destino ) : ?>
+			<li class="asde-subnav__informe"><a href="<?php echo esc_url( $destino ); ?>"><?php echo esc_html( $etiqueta ); ?> ↗</a></li>
 		<?php endforeach; ?>
 	</ul>
 	<form method="get" class="asde-subnav__ronda">

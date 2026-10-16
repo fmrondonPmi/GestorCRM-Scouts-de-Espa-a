@@ -1,7 +1,10 @@
 <?php
 namespace AsdeBalears\AreaPrivada\Frontend\Views;
 
+use AsdeBalears\AreaPrivada\Auth\Ambito;
 use AsdeBalears\AreaPrivada\Domain\Modulos;
+use AsdeBalears\AreaPrivada\Informes\Catalogo;
+use AsdeBalears\AreaPrivada\Informes\InformesTable;
 use AsdeBalears\AreaPrivada\Tesoreria\Config;
 
 defined( 'ABSPATH' ) || exit;
@@ -33,9 +36,19 @@ abstract class TesoreriaBaseView extends View {
 				$items['sepa'] = asde_t( 'Domiciliaciones' );
 			}
 		}
+		// v0.37: acceso directo a los informes de pagos (quien puede ver informes y los pagos).
+		$enlaces = array();
+		if ( current_user_can( 'asde_reports' ) && Catalogo::ve_pagos( Ambito::actual() ) ) {
+			$cuota = InformesTable::predefinido( 'Pagos de la cuota' );
+			if ( $cuota ) {
+				$enlaces[ asde_t( 'Informe de pagos' ) ] = $this->url( 'informes', array( 'informe' => $cuota->id ) );
+			}
+			$enlaces[ asde_t( 'Todos los informes' ) ] = $this->url( 'informes' );
+		}
 		return $this->tpl(
 			'tesoreria/subnav',
 			array(
+				'enlaces' => $enlaces,
 				'items'  => $items,
 				'activo' => $activo,
 				'ronda'  => $ronda,

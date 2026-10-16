@@ -175,7 +175,7 @@ grupo no ve a otro**; **nunca** se prueba contra el CRM real ni se escribe en é
 ## 5. Inventario (generado)
 
 <!-- inventario:inicio -->
-_Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10-16 · plugin 0.36.0. No editar a mano: se regenera._
+_Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10-16 · plugin 0.37.0. No editar a mano: se regenera._
 
 ### Páginas (Frontend\Pages + Router)
 
@@ -529,6 +529,7 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 - `Calculadora` — Cálculos de Tesorería (sin efectos secundarios):
 - `Config` — Configuración de Tesorería por ronda solar (septiembre → agosto), opción `asde_ap_tesoreria`.
 - `FamiliasTable` — Familias:
+- `HistorialPagos` — Los pagos de una familia que no son de la cuota de la ronda (v0.37, petición del usuario:
 - `MovimientosTable` — Movimientos de Tesorería por familia y ronda ({prefix}asde_movimientos):
 - `Pagos` — Eliminar un pago (o un ajuste) de una familia y su historial (v0.25, petición del usuario:
 - `Sugerencias` — Sugiere familias a partir del CRM:

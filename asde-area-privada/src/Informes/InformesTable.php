@@ -84,6 +84,13 @@ final class InformesTable {
 		}
 	}
 
+	/** Un informe predefinido por su nombre (en castellano, como se guarda), o null. */
+	public static function predefinido( string $nombre ): ?Informe {
+		global $wpdb;
+		$row = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM %i WHERE sistema = 1 AND nombre = %s', self::table(), $nombre ), ARRAY_A ); // phpcs:ignore WordPress.DB
+		return $row ? Informe::from_row( $row ) : null;
+	}
+
 	public static function obtener( int $id ): ?Informe {
 		global $wpdb;
 		// Predefinidos (comunes) o del grupo en el que se trabaja.

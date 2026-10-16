@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.36.1
+Stable tag: 0.37.0
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -61,6 +61,12 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.37.0 =
+* Treasury, family file: the new "Payment history" lists everything a family has paid (round fee, events and uniforms), newest first, with who recorded each payment and when; removed items show as removed.
+* Treasury, "Record payment": a payment can be assigned to an event whose registration period is open and where the family still owes something (Treasury only; cash, transfer or Bizum). It is split among the family's registrations and does not touch the round fee.
+* Treasury: quick links to the payment reports ("Payment report" and "All reports") next to the Treasury tabs, for users who can see reports and payments.
+* Payment control: the download is now a formatted Excel workbook (title, euro amounts, coloured status and a totals row) instead of a CSV.
 
 = 0.36.1 =
 * Events: Treasury can reopen an event's closed accounts, always with a reason (for example, an invoice that arrives late), and close them again with the report up to date. The pick-up details and notes deleted when closing do not come back.
@@ -205,6 +211,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * First version with the mobile app (PWA).
 
 == Upgrade Notice ==
+
+= 0.37.0 =
+Payment history per family, event payments in "Record payment", report links in Treasury and a formatted Excel for the payment control. No database changes.
 
 = 0.36.1 =
 Treasury can reopen an event's closed accounts. No database changes.

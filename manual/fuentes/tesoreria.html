@@ -7,6 +7,8 @@
 		<li>Las familias tienen un nº propio, <code>F</code> + grupo + correlativo (<code>F999001</code>): es la referencia que deben poner en las transferencias.</li>
 		<li><strong>Estados:</strong> «Pagado», «Pago parcial», «Pendiente» y «Con plazos vencidos».</li>
 		<li>Pagan los educandos de Castores a Rovers; scouters y voluntariado no.</li>
+		<li><strong>«Descargar Excel»</strong> baja el control de pagos en una hoja de cálculo con formato: título, importes en euros, el estado de cada familia con su color y una fila de totales (las filas se pueden filtrar y ordenar en Excel).</li>
+		<li>Junto a las pestañas de Tesorería hay dos accesos directos, <strong>«Informe de pagos»</strong> (el informe «Pagos de la cuota», quién ha pagado y cuánto falta) y <strong>«Todos los informes»</strong>. Salen a quien puede ver informes y pagos.</li>
 		<li>Lo que se registra aquí es lo que cada familia ve en <a href="familias.html#mis-pagos">Mis pagos</a>. Los pagos del uniforme van aparte (ver <a href="#uniformes-gestion">Gestión de pedidos</a>).</li>
 		<li>Si tu grupo da las bajas desde la web, arriba salen las <strong>bajas recientes</strong> (30 días) de personas que están en alguna familia: ya no cuentan en su cuota. Además, a Tesorería le llega un email con cada baja (ver <a href="#avisos-baja">Quién se entera de una baja</a>).</li>
 	</ul>
@@ -16,13 +18,15 @@
 		<li><strong>«Cuota de la ronda» se puede plegar</strong> pulsando su título: plegada queda una línea con lo que hay que pagar, lo pagado y lo pendiente. El navegador recuerda cómo la dejaste.</li>
 		<li><strong>Registrar pago:</strong> fecha, importe, forma (efectivo, transferencia, bizum…), referencia y nota. La nota es interna: la familia no la ve.</li>
 		<li><strong>Ajuste:</strong> un descuento o beca (en negativo) o un recargo, siempre con su motivo.</li>
+		<li><strong>Pago de un evento:</strong> si el módulo Eventos está activo y eres de Tesorería, «Registrar pago» tiene el desplegable <strong>«Pago de»</strong>: la cuota de la ronda o uno de los eventos <strong>con la inscripción abierta</strong> en los que la familia tiene algo pendiente. El pago se reparte entre las inscripciones de la familia en ese evento (efectivo, transferencia o Bizum; sin ingreso del banco) y no toca la cuota.</li>
+		<li><strong>Historial de pagos:</strong> al final de la ficha están todos los pagos de la familia —la cuota, los eventos y los uniformes—, lo más reciente primero, con quién los registró y cuándo; lo eliminado sale tachado.</li>
 		<li>Registrar un pago o un ajuste, o eliminarlo, cambia <strong>solo la ficha</strong>: la página no se recarga y el aviso sale abajo a la derecha.</li>
 	</ul>
 	<h4 id="eliminar-pago">Eliminar un pago o un ajuste</h4>
 	<p>Si un pago o un ajuste está mal (registrado dos veces, en la familia equivocada…), pulsa <strong>«Eliminar…»</strong> en su fila, escribe el <strong>motivo</strong> (es obligatorio) y pulsa <strong>«Eliminar el pago»</strong>.</p>
-	<captura src="92-familia-eliminar-historial" url="/area-privada/tesoreria/?familia=1" alt="Movimientos de la ronda de una familia con Eliminar abierto en un pago, pidiendo el motivo, y debajo el Historial de la ronda con un pago registrado, el mismo registrado otra vez y eliminado con el motivo Registrado dos veces" larga>«Eliminar…» pide el motivo. Debajo, el <strong>«Historial de la ronda»</strong>: el primer plazo se registró dos veces y el repetido se eliminó, con quién lo hizo y por qué.</captura>
+	<captura src="92-familia-eliminar-historial" url="/area-privada/tesoreria/?familia=1" alt="Movimientos de la ronda de una familia con Eliminar abierto en un pago, pidiendo el motivo, y debajo el Historial de pagos con un pago registrado, el mismo registrado otra vez y eliminado con el motivo Registrado dos veces" larga>«Eliminar…» pide el motivo. Debajo, el <strong>«Historial de pagos»</strong>: el primer plazo se registró dos veces y el repetido se eliminó, con quién lo hizo y por qué.</captura>
 	<ul>
-		<li><strong>No se borra nada:</strong> el pago deja de contar en la cuota y desaparece de los movimientos y de «Mis pagos» de la familia, pero queda en el <strong>«Historial de la ronda»</strong> de la ficha, con quién lo registró, quién lo eliminó, cuándo y el motivo.</li>
+		<li><strong>No se borra nada:</strong> el pago deja de contar en la cuota y desaparece de los movimientos y de «Mis pagos» de la familia, pero queda en el <strong>«Historial de pagos»</strong> de la ficha, con quién lo registró, quién lo eliminó, cuándo y el motivo.</li>
 		<li>Si el pago se registró con un <strong>ingreso del banco</strong>, ese ingreso <strong>vuelve a estar por conciliar</strong> en el banco, para que lo concilies con la familia correcta. El aviso lo dice.</li>
 		<li>Si vino del <strong>cobro de una remesa SEPA</strong>, la remesa lo sigue dando por cobrado (es lo que dijo el banco): la ficha lo avisa antes de eliminarlo.</li>
 		<li>«Deshacer» una conciliación en el banco también elimina el pago, con el motivo «Se deshizo la conciliación con el banco.».</li>

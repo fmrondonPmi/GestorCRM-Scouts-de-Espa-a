@@ -256,10 +256,11 @@ final class Router {
 		if ( 'informes' === $key && in_array( $formato, InformesView::FORMATOS, true ) ) {
 			( new InformesView() )->exportar( $formato );
 		}
+		if ( 'tesoreria' === $key && in_array( $formato, array( 'xlsx', 'csv' ), true ) ) {
+			( new TesoreriaView() )->exportar(); // Siempre Excel (v0.37): el enlace «csv» de antes sigue valiendo.
+		}
 		if ( 'csv' === $formato ) {
-			if ( 'tesoreria' === $key ) {
-				( new TesoreriaView() )->exportar();
-			} elseif ( 'uniformes' === $key ) {
+			if ( 'uniformes' === $key ) {
 				( new UniformesGestionView() )->exportar();
 			}
 		}

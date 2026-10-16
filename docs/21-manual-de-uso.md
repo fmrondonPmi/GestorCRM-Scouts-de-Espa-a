@@ -152,6 +152,11 @@ Un **WordPress de demostración aparte** (Local, Enfold, plugin, mu-plugin con C
 - **Arreglo que salió al fotografiar:** en el móvil (390 px) la tercera hoja («Registro de emails») quedaba cortada; las pestañas son ahora más compactas por debajo de 600 px y caben las tres (CSS del plugin; zip 0.25.0 rehecho, el anterior se conserva como `asde-area-privada-0.25.0-sin-hojas-movil.zip`).
 - El generador pasa a la versión 0.25. Paquete **`manual-de-uso-0.25.0.zip`** (carpeta antigua) y copia en `app/public/temporal/` de Local. **No se ha publicado nada**: lo sube el usuario.
 
+## Versión 4.17 · pagos de Tesorería (v0.37.0, 2026-10-16)
+
+- **Scouters y Tesorería** (`tesoreria.html`): el control de pagos se descarga en Excel con formato; accesos directos a los informes de pagos; pago de un evento desde «Registrar pago»; «Historial de pagos» (antes «Historial de la ronda», también en las preguntas frecuentes de scouters y coordinación y en `scouters-tesoreria.html`).
+- Sin capturas nuevas: la 92 todavía enseña el título viejo «Historial de la ronda» (rehacerla con la skill). Generador en «0.37». Paquete `manual-de-uso-0.37.0.zip`.
+
 ## Versión 4.16 · reabrir las cuentas (v0.36.1, 2026-10-16)
 
 - **Scouters y Coordinación** (`eventos.html`, «Cuentas»): párrafo nuevo, «Reabrir las cuentas» (Tesorería, con motivo; lo borrado al cerrar no vuelve); el cierre ya no dice que no se reabre.

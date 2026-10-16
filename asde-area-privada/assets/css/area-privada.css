@@ -1169,6 +1169,10 @@ dialog.asde-modal::backdrop {
 	border-color: var(--asde-primary);
 	background: var(--asde-tint-strong);
 }
+/* v0.37: accesos directos a los informes de pagos, a la derecha de las pestañas de Tesorería. */
+.asde-ap .asde-subnav__tabs .asde-subnav__informe a {
+	border-style: dashed;
+}
 .asde-ap .asde-subnav__ronda {
 	display: flex;
 	align-items: center;

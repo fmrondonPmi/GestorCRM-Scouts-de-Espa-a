@@ -7,12 +7,17 @@ use AsdeBalears\AreaPrivada\Crm\CrmException;
 use AsdeBalears\AreaPrivada\Crm\PersonaRepository;
 use AsdeBalears\AreaPrivada\Domain\Modulos;
 use AsdeBalears\AreaPrivada\Frontend\Notices;
-use AsdeBalears\AreaPrivada\Informes\Generador;
+use AsdeBalears\AreaPrivada\Domain\Grupo;
+use AsdeBalears\AreaPrivada\Eventos\Cobros;
+use AsdeBalears\AreaPrivada\Eventos\EventosTable;
+use AsdeBalears\AreaPrivada\Eventos\Servicio as EventosServicio;
+use AsdeBalears\AreaPrivada\Informes\Xlsx;
 use AsdeBalears\AreaPrivada\Tesoreria\Banco\BancoTable;
 use AsdeBalears\AreaPrivada\Tesoreria\Banco\Conciliacion;
 use AsdeBalears\AreaPrivada\Tesoreria\Calculadora;
 use AsdeBalears\AreaPrivada\Tesoreria\Config;
 use AsdeBalears\AreaPrivada\Tesoreria\FamiliasTable;
+use AsdeBalears\AreaPrivada\Tesoreria\HistorialPagos;
 use AsdeBalears\AreaPrivada\Tesoreria\MovimientosTable;
 use AsdeBalears\AreaPrivada\Tesoreria\Pagos;
 use AsdeBalears\AreaPrivada\Usuarios\Usuarios;
@@ -183,7 +188,7 @@ final class TesoreriaView extends TesoreriaBaseView {
 				'q'         => $this->get( 'q' ),
 				'url'       => $this->url( 'tesoreria' ),
 				'url_fam'   => $this->url( 'familias' ),
-				'url_csv'   => $this->url( 'tesoreria', array( 'ronda' => $ronda, 'formato' => 'csv', '_wpnonce' => wp_create_nonce( 'asde_tesoreria_csv' ) ) ),
+				'url_csv'   => $this->url( 'tesoreria', array( 'ronda' => $ronda, 'formato' => 'xlsx', '_wpnonce' => wp_create_nonce( 'asde_tesoreria_csv' ) ) ),
 			)
 		);
 	}
@@ -217,6 +222,10 @@ final class TesoreriaView extends TesoreriaBaseView {
 				'movimientos' => $movs,
 				// v0.25: cuándo se registró y se eliminó cada movimiento, quién y por qué.
 				'historial'   => Pagos::historial( $movs ),
+				// v0.37: también los pagos de eventos y de uniformes de la familia.
+				'otros'       => HistorialPagos::otros( $f ),
+				// v0.37: eventos con la inscripción abierta a los que se puede apuntar el pago (solo quien cobra eventos).
+				'eventos'     => Modulos::activo( Modulos::EVENTOS ) && Cobros::puede() ? HistorialPagos::eventos_para_cobrar( $f ) : array(),
 				// v0.20: asociar un ingreso del banco al registrar el pago (solo quien ve el banco); se elige en una ventana con buscador (v0.20.1).
 				'banco'       => self::ve_banco() ? $this->banco_para( $f, $personas, $ronda ) : null,
 				'cuenta'      => $cuenta,
@@ -249,7 +258,11 @@ final class TesoreriaView extends TesoreriaBaseView {
 		);
 	}
 
-	/** Descarga CSV del control de pagos (se llama antes de pintar la página). */
+	/**
+	 * Descarga del control de pagos en Excel (se llama antes de pintar la página). Hasta la v0.36 era
+	 * un CSV; desde la v0.37 es una hoja de cálculo con formato (título, moneda, estados con color y
+	 * totales), petición del usuario.
+	 */
 	public function exportar(): void {
 		if ( ! current_user_can( self::CAP ) || ! wp_verify_nonce( $this->get( '_wpnonce' ), 'asde_tesoreria_csv' ) ) {
 			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-area-privada' ), 403 );
@@ -266,19 +279,55 @@ final class TesoreriaView extends TesoreriaBaseView {
 		}
 		Logger::log( 'tesoreria_exportada', 'ronda', $ronda, array( 'familias' => count( $filas ) ) );
 
-		nocache_headers();
-		header( 'Content-Type: text/csv; charset=UTF-8' );
-		header( 'Content-Disposition: attachment; filename="control-pagos-' . $ronda . '-' . wp_date( 'Ymd' ) . '.csv"' );
-		$out = fopen( 'php://output', 'w' );
-		fwrite( $out, "\xEF\xBB\xBF" ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fwrite -- php://output (descarga), no es el sistema de ficheros
-		fputcsv( $out, array( asde_t( 'Nº familia' ), asde_t( 'Socios' ), asde_t( 'Hijos que pagan' ), asde_t( 'Cuota' ), asde_t( 'Ajustes' ), asde_t( 'A pagar' ), asde_t( 'Pagado' ), asde_t( 'Pendiente' ), asde_t( 'Estado' ) ), ';' );
-		$num = static fn( float $v ) => number_format( $v, 2, ',', '' );
+		$datos = array();
+		$suma  = array_fill_keys( array( 'hijos', 'cuota', 'ajustes', 'a_pagar', 'pagado', 'pendiente' ), 0.0 );
 		foreach ( $filas as $f ) {
 			$c       = $f['calc'];
 			$nombres = array_map( static fn( $n ) => isset( $personas[ $n ] ) ? $personas[ $n ]->nombre_completo() : $n, $f['familia']['miembros'] );
-			fputcsv( $out, array_map( array( Generador::class, 'celda_segura' ), array( $f['familia']['numero'], implode( ', ', $nombres ), count( $c['pagan'] ), $num( $c['cuota']['total'] ), $num( $c['ajustes'] ), $num( $c['a_pagar'] ), $num( $c['pagado'] ), $num( $c['pendiente'] ), asde_t( Calculadora::ETIQUETAS[ $c['estado'] ] ) ) ), ';' );
+			$datos[] = array(
+				(string) $f['familia']['numero'],
+				implode( ', ', $nombres ),
+				count( $c['pagan'] ),
+				round( (float) $c['cuota']['total'], 2 ),
+				round( (float) $c['ajustes'], 2 ),
+				round( (float) $c['a_pagar'], 2 ),
+				round( (float) $c['pagado'], 2 ),
+				round( (float) $c['pendiente'], 2 ),
+				asde_t( Calculadora::ETIQUETAS[ $c['estado'] ] ),
+			);
+			$suma['hijos']    += count( $c['pagan'] );
+			$suma['cuota']    += $c['cuota']['total'];
+			$suma['ajustes']  += $c['ajustes'];
+			$suma['a_pagar']  += $c['a_pagar'];
+			$suma['pagado']   += $c['pagado'];
+			$suma['pendiente'] += $c['pendiente'];
 		}
-		fclose( $out ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fclose -- php://output (descarga)
+		$colores = array(
+			Calculadora::PAGADO    => 'verde',
+			Calculadora::PARCIAL   => 'ambar',
+			Calculadora::PENDIENTE => 'ambar',
+			Calculadora::ATRASADO  => 'rojo',
+			Calculadora::EXENTO    => 'gris',
+		);
+		$por_texto = array();
+		foreach ( Calculadora::ETIQUETAS as $estado => $etiqueta ) {
+			$por_texto[ asde_t( $etiqueta ) ] = $colores[ $estado ] ?? 'gris';
+		}
+		/* translators: 1: ronda, 2: fecha */
+		$subtitulo = sprintf( asde_t( 'Ronda %1$s · generado el %2$s' ), $ronda, wp_date( 'd/m/Y' ) );
+		Xlsx::descargar(
+			'control-de-pagos-' . $ronda . '-' . wp_date( 'Ymd' ) . '.xlsx',
+			asde_t( 'Control de pagos' ),
+			array( asde_t( 'Nº familia' ), asde_t( 'Socios' ), asde_t( 'Hijos que pagan' ), asde_t( 'Cuota' ), asde_t( 'Ajustes' ), asde_t( 'A pagar' ), asde_t( 'Pagado' ), asde_t( 'Pendiente' ), asde_t( 'Estado' ) ),
+			$datos,
+			array(
+				'titulo'    => asde_t( 'Control de pagos' ) . ' · ' . Grupo::nombre(),
+				'subtitulo' => $subtitulo,
+				'tipos'     => array( 'texto', 'texto', 'entero', 'euros', 'euros', 'euros', 'euros', 'euros', 'estado' ),
+				'colores'   => $por_texto,
+				'totales'   => array( asde_t( 'Total' ), sprintf( asde_n( '%d familia', '%d familias', count( $datos ) ), count( $datos ) ), $suma['hijos'], round( $suma['cuota'], 2 ), round( $suma['ajustes'], 2 ), round( $suma['a_pagar'], 2 ), round( $suma['pagado'], 2 ), round( $suma['pendiente'], 2 ), '' ),
+			)
+		);
 		exit;
 	}
 
@@ -298,7 +347,25 @@ final class TesoreriaView extends TesoreriaBaseView {
 
 		switch ( $this->post( 'asde_action' ) ) {
 			case 'registrar_pago':
-				$banco = (int) $this->post( 'banco' );
+				$banco  = (int) $this->post( 'banco' );
+				$evento = (int) $this->post( 'evento' );
+				if ( $evento ) {
+					// v0.37: el pago es de un evento (con la inscripción abierta), no de la cuota de la ronda.
+					$e = Modulos::activo( Modulos::EVENTOS ) ? EventosTable::obtener( $evento ) : null;
+					$f = FamiliasTable::obtener( $familia );
+					if ( ! $e || ! $f || ! in_array( $evento, array_map( static fn( $x ) => $x['evento']['id'], HistorialPagos::eventos_para_cobrar( $f ) ), true ) ) {
+						$r = new \WP_Error( 'x', asde_t( 'Ese evento no está abierto a inscripciones o esta familia no tiene nada pendiente en él.' ) );
+					} elseif ( $banco ) {
+						$r = new \WP_Error( 'x', asde_t( 'El ingreso del banco solo se asocia a la cuota de la ronda. Para un evento, quita el ingreso y escribe el pago.' ) );
+					} elseif ( ! in_array( sanitize_key( $this->post( 'metodo' ) ), \AsdeBalears\AreaPrivada\Eventos\MovimientosTable::FORMAS_MANUALES, true ) ) {
+						$r = new \WP_Error( 'x', asde_t( 'Para un evento, la forma de pago es efectivo, transferencia o Bizum.' ) );
+					} else {
+						$r = Cobros::pagar_familia( $e, $familia, $importe, sanitize_key( $this->post( 'metodo' ) ), $this->post( 'fecha' ), $this->post( 'referencia' ), $this->post( 'nota' ) );
+					}
+					/* translators: 1: importe, 2: nombre del evento */
+					$ok = $e ? sprintf( asde_t( 'Pago de %1$s registrado en el evento «%2$s». Queda en el historial de pagos de la familia.' ), Calculadora::euros( $importe ), $e['nombre'] ) : '';
+					break;
+				}
 				if ( $banco ) {
 					// Con un movimiento del banco (v0.20): el pago lleva su fecha y su importe y el movimiento queda conciliado.
 					$mb = BancoTable::obtener( $banco );

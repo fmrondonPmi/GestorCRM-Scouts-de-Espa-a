@@ -48,6 +48,9 @@ use AsdeBalears\AreaPrivada\Sepa\Mandatos;
 use AsdeBalears\AreaPrivada\Sepa\Remesas;
 use AsdeBalears\AreaPrivada\Socios\SociosTable;
 use AsdeBalears\AreaPrivada\Tesoreria\FamiliasTable;
+use AsdeBalears\AreaPrivada\Tesoreria\HistorialPagos;
+use AsdeBalears\AreaPrivada\Frontend\Views\TesoreriaView;
+use AsdeBalears\AreaPrivada\Informes\Xlsx;
 use AsdeBalears\AreaPrivada\Usuarios\EmailCuenta;
 use AsdeBalears\AreaPrivada\Usuarios\RegistroEmails;
 use AsdeBalears\AreaPrivada\Usuarios\Usuarios;
@@ -377,6 +380,86 @@ try {
 	echo "\n== Parte G · Remesa SEPA del evento ==\n";
 	$f1 = FamiliasTable::crear( array( '990081', '990082' ) );
 	$f3 = FamiliasTable::crear( array( '990083' ) );
+	echo "\n== Parte G0 · Pago de un evento desde «Registrar pago» y el historial de la familia (v0.37) ==\n";
+	$como( $u_teso );
+	$fam1  = FamiliasTable::obtener( $f1 );
+	$ronda_t = \AsdeBalears\AreaPrivada\Tesoreria\Config::ronda_actual();
+	$pend0 = round( $cobro( $id_e, '990081' )['pendiente'] + $cobro( $id_e, '990082' )['pendiente'], 2 );
+	$para  = HistorialPagos::eventos_para_cobrar( $fam1 );
+	$ok( 1 === count( $para ) && $id_e === $para[0]['evento']['id'] && abs( $para[0]['pendiente'] - $pend0 ) < 0.001, '«Registrar pago» ofrece el evento con la inscripción abierta y lo pendiente de la familia' );
+	$h = $pintar( new TesoreriaView(), array( 'familia' => (string) $f1 ) );
+	$ok( str_contains( $h, 'name="evento"' ) && str_contains( $h, 'Acampada de cuentas' ) && str_contains( $h, 'Historial de pagos' ), 'la ficha de la familia enseña el selector de evento y el historial de pagos' );
+	$ok( str_contains( $h, 'Devolución de 5,00' ), 'el historial de pagos ya trae lo del evento (la devolución de antes)' );
+	$pago = array( 'asde_action' => 'registrar_pago', 'familia' => (string) $f1, 'ronda' => $ronda_t, 'evento' => (string) $id_e, 'fecha' => $hoy, 'importe' => '10', 'metodo' => 'efectivo', 'referencia' => 'PRUEBA-V037', 'nota' => '' );
+	$av   = $enviar( new TesoreriaView(), array( 'metodo' => 'tarjeta' ) + $pago, 'asde_mov_' . $f1 );
+	$ok( str_contains( $av, 'efectivo, transferencia o Bizum' ) && abs( round( $cobro( $id_e, '990081' )['pendiente'] + $cobro( $id_e, '990082' )['pendiente'], 2 ) - $pend0 ) < 0.001, 'para un evento solo vale efectivo, transferencia o Bizum' );
+	$av = $enviar( new TesoreriaView(), array( 'banco' => '1' ) + $pago, 'asde_mov_' . $f1 );
+	$ok( str_contains( $av, 'solo se asocia a la cuota' ), 'el ingreso del banco no se asocia a un evento' );
+	$av = $enviar( new TesoreriaView(), array( 'importe' => (string) ( $pend0 + 50 ) ) + $pago, 'asde_mov_' . $f1 );
+	$ok( str_contains( $av, 'más de lo que queda por pagar' ), 'no se paga más de lo pendiente del evento' );
+	$av = $enviar( new TesoreriaView(), array( 'evento' => '999999' ) + $pago, 'asde_mov_' . $f1 );
+	$ok( str_contains( $av, 'no está abierto a inscripciones' ), 'un evento que no existe o no está abierto, no' );
+	$av = $enviar( new TesoreriaView(), $pago, 'asde_mov_' . $f1 );
+	$ok( str_contains( $av, 'registrado en el evento' ) && abs( round( $cobro( $id_e, '990081' )['pendiente'] + $cobro( $id_e, '990082' )['pendiente'], 2 ) - ( $pend0 - 10 ) ) < 0.001, 'el pago se apunta al evento (reparte entre sus inscripciones) y baja lo pendiente' );
+	$ok( ! \AsdeBalears\AreaPrivada\Tesoreria\MovimientosTable::de_familia( $f1, $ronda_t ), 'y no toca la cuota de la ronda' );
+	$otros = HistorialPagos::otros( FamiliasTable::obtener( $f1 ) );
+	$hay   = array_values( array_filter( $otros, static fn( $o ) => 'registrado' === $o['accion'] && str_contains( $o['que'], 'Pago de' ) && str_contains( $o['que'], 'Acampada de cuentas' ) && str_contains( $o['detalle'], 'PRUEBA-V037' ) && 'evento' === $o['modulo'] ) );
+	$ok( $hay && $u_teso === $hay[0]['quien'], 'el historial de la familia incluye el pago del evento, con quién lo registró' );
+	$h = $pintar( new TesoreriaView(), array( 'familia' => (string) $f1 ) );
+	$ok( str_contains( $h, 'PRUEBA-V037' ) && str_contains( $h, 'evento «Acampada de cuentas»' ), 'y la ficha lo enseña' );
+	// Se anula (queda en el historial como eliminado) y el evento vuelve a lo de antes.
+	$mov = 0;
+	foreach ( MovimientosTable::de_evento( $id_e ) as $lista ) {
+		foreach ( $lista as $m ) {
+			if ( 'PRUEBA-V037' === $m['referencia'] && null === $m['anulado_en'] ) {
+				$mov = $m['id'];
+			}
+		}
+	}
+	$ok( $mov && true === Cobros::anular( $ev( $id_e ), $mov ), 'Tesorería anula ese pago' );
+	$otros = HistorialPagos::otros( FamiliasTable::obtener( $f1 ) );
+	$ok( count( array_filter( $otros, static fn( $o ) => 'eliminado' === $o['accion'] && str_contains( $o['que'], 'Acampada de cuentas' ) ) ) >= 1 && abs( round( $cobro( $id_e, '990081' )['pendiente'] + $cobro( $id_e, '990082' )['pendiente'], 2 ) - $pend0 ) < 0.001, 'lo anulado sale como eliminado en el historial y deja de contar' );
+	$como( $u_lob );
+	$ok( ! Cobros::puede(), 'quien gestiona el evento no apunta pagos (sin selector de evento en su ficha)' );
+	$como( $u_teso );
+
+	$bin = Xlsx::generar(
+		'Control de pagos',
+		array( 'Nº familia', 'Socios', 'Pagado', 'Estado' ),
+		array( array( 'F1', 'Ana, Leo', 12.5, 'Pagada' ), array( 'F2', 'Bea', 0.0, 'Pendiente' ) ),
+		array(
+			'titulo'    => 'Control de pagos · Prueba',
+			'subtitulo' => 'Ronda 2026-2027',
+			'tipos'     => array( 'texto', 'texto', 'euros', 'estado' ),
+			'colores'   => array( 'Pagada' => 'verde', 'Pendiente' => 'ambar' ),
+			'totales'   => array( 'Total', '2 familias', 12.5, '' ),
+		)
+	);
+	$zip = new ZipArchive();
+	$tmp = wp_tempnam( 'xlsx-v037' );
+	file_put_contents( $tmp, $bin ); // phpcs:ignore WordPress.WP.AlternativeFunctions
+	$abre = true === $zip->open( $tmp );
+	$hoja = $abre ? (string) $zip->getFromName( 'xl/worksheets/sheet1.xml' ) : '';
+	$est  = $abre ? (string) $zip->getFromName( 'xl/styles.xml' ) : '';
+	$wb   = $abre ? (string) $zip->getFromName( 'xl/workbook.xml' ) : '';
+	if ( $abre ) {
+		$zip->close();
+	}
+	wp_delete_file( $tmp );
+	$dom = new DOMDocument();
+	$ok( $abre && $dom->loadXML( $hoja ) && $dom->loadXML( $est ) && $dom->loadXML( $wb ), 'Excel bonito: el .xlsx abre y su XML está bien formado' );
+	$ok( str_contains( $hoja, '<mergeCells count="2">' ) && str_contains( $hoja, 'Control de pagos · Prueba' ) && str_contains( $hoja, 'r="A4"' ) && str_contains( $hoja, '<autoFilter ref="A4:D6"/>' ) && str_contains( $wb, '$A$4:$D$6' ), 'con título, subtítulo, la cabecera en la fila 4 y el filtro sobre los datos' );
+	$ok( str_contains( $hoja, '<c r="C5" s="7"><v>12.5</v></c>' ) && str_contains( $hoja, '<c r="D5" t="inlineStr" s="11">' ) && str_contains( $hoja, '<c r="D6" t="inlineStr" s="12">' ) && str_contains( $hoja, '<c r="C7" s="16"><v>12.5</v></c>' ), 'importes en moneda, estados con su color y fila de totales' );
+	$plano = Xlsx::generar( 'Hoja', array( 'A', 'B' ), array( array( 'x', '1' ) ) );
+	$zip2  = new ZipArchive();
+	$tmp2  = wp_tempnam( 'xlsx-v037b' );
+	file_put_contents( $tmp2, $plano ); // phpcs:ignore WordPress.WP.AlternativeFunctions
+	$zip2->open( $tmp2 );
+	$hoja2 = (string) $zip2->getFromName( 'xl/worksheets/sheet1.xml' );
+	$zip2->close();
+	wp_delete_file( $tmp2 );
+	$ok( str_contains( $hoja2 , '<c r="A1" t="inlineStr" s="1">' ) && str_contains( $hoja2, '<autoFilter ref="A1:B2"/>' ) && ! str_contains( $hoja2, 'mergeCells' ), 'sin opciones, la hoja sencilla de los informes sigue igual' );
+
 	SepaConfig::guardar(
 		array(
 			'activo'     => true,
