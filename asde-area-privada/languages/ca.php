@@ -3432,4 +3432,22 @@ return array(
 	'«%s» no es una fecha válida.' => '«%s» no és una data vàlida.',
 	'«%s» tiene que ser un número.' => '«%s» ha de ser un número.',
 	'Campos del formulario guardados.' => 'Camps del formulari desats.',
+
+	// v0.39: avisos de eventos configurables
+	'Al final' => 'Al final',
+	'Al principio' => 'Al principi',
+	'Avisar también en la app móvil (si la usa el grupo)' => 'Avisa també a l\'app mòbil (si la fa servir el grup)',
+	'Avisos' => 'Avisos',
+	'Días para confirmar una plaza ofrecida de la lista de espera' => 'Dies per confirmar una plaça oferta de la llista d\'espera',
+	'Edad desde la que una persona recibe los avisos en su propia cuenta y se inscribe sola' => 'Edat a partir de la qual una persona rep els avisos al seu propi compte i s\'inscriu sola',
+	'Evento cancelado' => 'Esdeveniment cancel·lat',
+	'Evento nuevo: al publicarlo, a las personas convocadas' => 'Esdeveniment nou: en publicar-lo, a les persones convocades',
+	'Inscripción confirmada' => 'Inscripció confirmada',
+	'Plaza liberada para quien está en la lista de espera' => 'Plaça alliberada per a qui és a la llista d\'espera',
+	'Qué avisos manda el área privada a las familias y a las personas inscritas. Cada grupo decide los suyos.' => 'Quins avisos envia l\'àrea privada a les famílies i a les persones inscrites. Cada grup decideix els seus.',
+	'Recordatorio antes del evento (con los días de arriba)' => 'Recordatori abans de l\'esdeveniment (amb els dies de dalt)',
+	'Segundo recordatorio (días antes del evento; 0 = no se manda; menos que el primero)' => 'Segon recordatori (dies abans de l\'esdeveniment; 0 = no s\'envia; menys que el primer)',
+	'Si desactivas el aviso de plaza liberada, la plaza se sigue ofreciendo, pero la familia no recibe el email: tendrá que mirarlo en la aplicación.' => 'Si desactives l\'avís de plaça alliberada, la plaça se segueix oferint, però la família no rep l\'email: ho haurà de mirar a l\'aplicació.',
+	'Textos propios de los avisos' => 'Textos propis dels avisos',
+	'Un párrafo opcional al principio y otro al final de cada email (hasta %d caracteres). Salen igual en todos los idiomas: escríbelos en el idioma de tus familias.' => 'Un paràgraf opcional al principi i un altre al final de cada email (fins a %d caràcters). Surten igual en tots els idiomes: escriu-los en l\'idioma de les teves famílies.',
 );

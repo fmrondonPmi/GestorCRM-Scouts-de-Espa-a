@@ -18,6 +18,15 @@ defined( 'ABSPATH' ) || exit;
  *   versión que se firmó (como la autorización SEPA).
  * - **texto_pago**: cómo pagar un evento (cuenta, Bizum…), para las familias.
  * - **recordatorio_dias**: cuántos días antes se manda el recordatorio (0 = no se manda).
+ * - **avisos** (v0.39): qué avisos se mandan (publicado, confirmada, plaza, recordatorio,
+ *   cancelado); cada federación o grupo decide cuáles.
+ * - **push**: si además de los emails se dispara el aviso para la app móvil.
+ * - **dias_oferta**: días que tiene quien está en la lista de espera para confirmar una plaza.
+ * - **recordatorio_extra** (v0.39): segundo recordatorio, estos días antes (0 = no; menor que
+ *   recordatorio_dias).
+ * - **edad_cuenta_propia**: edad desde la que una persona recibe los avisos en su propia cuenta
+ *   y se puede inscribir sola (14 por defecto).
+ * - **textos**: por aviso, un párrafo propio al principio y otro al final del email (vacío = ninguno).
  */
 final class Config {
 
@@ -26,6 +35,19 @@ final class Config {
 	public const MAX_TIPOS = 20;
 
 	public const MAX_AUTORIZACION = 3000;
+
+	/** Avisos que se pueden activar o desactivar (los mismos que Avisos::TIPOS). */
+	public const AVISOS = array( 'publicado', 'confirmada', 'plaza', 'recordatorio', 'cancelado' );
+
+	/** Días por defecto para confirmar una plaza ofrecida, y su máximo. */
+	public const DIAS_OFERTA     = 3;
+	public const MAX_DIAS_OFERTA = 30;
+
+	/** Edad por defecto de la cuenta propia y su rango; máximo de cada texto propio de los avisos. */
+	public const EDAD_CUENTA_PROPIA = 14;
+	public const EDAD_MIN           = 10;
+	public const EDAD_MAX           = 18;
+	public const MAX_TEXTO_AVISO    = 600;
 
 	/**
 	 * Texto de la autorización del plugin (art. 21.3.g de la Ley 10/2022: autorización de
@@ -112,6 +134,12 @@ final class Config {
 			'autorizacion_version' => 1,
 			'texto_pago'           => '',
 			'recordatorio_dias'    => 3,
+			'avisos'               => array_fill_keys( self::AVISOS, true ),
+			'push'                 => true,
+			'dias_oferta'          => self::DIAS_OFERTA,
+			'recordatorio_extra'   => 0,
+			'edad_cuenta_propia'   => self::EDAD_CUENTA_PROPIA,
+			'textos'               => array(),
 		);
 	}
 
@@ -148,7 +176,35 @@ final class Config {
 		$cfg['autorizacion_version'] = max( 1, (int) $cfg['autorizacion_version'] );
 		$cfg['texto_pago']           = mb_substr( (string) $cfg['texto_pago'], 0, 1000 );
 		$cfg['recordatorio_dias']    = min( 30, max( 0, (int) $cfg['recordatorio_dias'] ) );
+		$avisos                      = (array) $cfg['avisos'];
+		$cfg['avisos']               = array();
+		foreach ( self::AVISOS as $a ) {
+			$cfg['avisos'][ $a ] = ! isset( $avisos[ $a ] ) || (bool) $avisos[ $a ];
+		}
+		$cfg['push']        = (bool) $cfg['push'];
+		$cfg['dias_oferta'] = min( self::MAX_DIAS_OFERTA, max( 1, (int) $cfg['dias_oferta'] ) );
+
+		$extra                      = max( 0, (int) $cfg['recordatorio_extra'] );
+		$cfg['recordatorio_extra']  = $extra < $cfg['recordatorio_dias'] ? $extra : 0; // El segundo va después del primero.
+		$cfg['edad_cuenta_propia']  = min( self::EDAD_MAX, max( self::EDAD_MIN, (int) $cfg['edad_cuenta_propia'] ) );
+		$textos                     = (array) $cfg['textos'];
+		$cfg['textos']              = array();
+		foreach ( self::AVISOS as $a ) {
+			foreach ( array( 'intro', 'pie' ) as $k ) {
+				$cfg['textos'][ $a ][ $k ] = mb_substr( trim( (string) ( $textos[ $a ][ $k ] ?? '' ) ), 0, self::MAX_TEXTO_AVISO );
+			}
+		}
 		return $cfg;
+	}
+
+	/** ¿Está activado este aviso en el grupo? (por defecto, sí). */
+	public static function aviso_activo( string $tipo, string $grupo = '' ): bool {
+		return ! empty( self::de( $grupo )['avisos'][ $tipo ] );
+	}
+
+	/** Párrafo propio del grupo para un aviso: intro | pie ('' si no lo hay). */
+	public static function texto_aviso( string $tipo, string $cual, string $grupo = '' ): string {
+		return (string) ( self::de( $grupo )['textos'][ $tipo ][ $cual ] ?? '' );
 	}
 
 	/** El texto de la autorización que se enseña y se firma: el del grupo o, si no tiene, el del plugin (traducido). */

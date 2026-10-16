@@ -48,7 +48,7 @@ final class Avisos {
 
 	/** Programa el aviso masivo (publicación o cancelación) en segundo plano. */
 	public static function programar( array $e, string $tipo ): void {
-		if ( in_array( $tipo, array( 'publicado', 'cancelado' ), true ) && ! wp_next_scheduled( self::HOOK, array( $e['grupo'], $e['id'], $tipo ) ) ) {
+		if ( in_array( $tipo, array( 'publicado', 'cancelado' ), true ) && Config::aviso_activo( $tipo, (string) $e['grupo'] ) && ! wp_next_scheduled( self::HOOK, array( $e['grupo'], $e['id'], $tipo ) ) ) {
 			wp_schedule_single_event( time(), self::HOOK, array( $e['grupo'], $e['id'], $tipo ) );
 		}
 	}
@@ -77,7 +77,7 @@ final class Avisos {
 		);
 		$e    = EventosTable::obtener( $evento_id );
 		$repo = PersonaRepository::make();
-		if ( ! $e || ! $repo ) {
+		if ( ! $e || ! $repo || ! Config::aviso_activo( $tipo ) ) { // Desactivado por el grupo (puede haberlo cambiado tras programarlo).
 			return $res;
 		}
 		$personas = array();
@@ -148,8 +148,19 @@ final class Avisos {
 			}
 			Inscripciones::revisar( $e, $ahora );
 			$inicio = EventosTable::marca( $e['inicio'] );
-			if ( $cfg['recordatorio_dias'] < 1 || null !== $e['recordatorio_en'] || $ahora >= $inicio || $inicio - $ahora > $cfg['recordatorio_dias'] * DAY_IN_SECONDS ) {
+			if ( $cfg['recordatorio_dias'] < 1 || empty( $cfg['avisos']['recordatorio'] ) || $ahora >= $inicio ) {
 				continue;
+			}
+			if ( null === $e['recordatorio_en'] ) {
+				if ( $inicio - $ahora > $cfg['recordatorio_dias'] * DAY_IN_SECONDS ) {
+					continue; // Todavía no toca el primero.
+				}
+			} else {
+				// Segundo recordatorio (v0.39): solo si el primero salió antes de que empezara su ventana.
+				$extra = $cfg['recordatorio_extra'] * DAY_IN_SECONDS;
+				if ( $extra < 1 || $inicio - $ahora > $extra || (int) strtotime( $e['recordatorio_en'] . ' UTC' ) >= $inicio - $extra ) {
+					continue;
+				}
 			}
 			$movs = MovimientosTable::de_evento( $e['id'] );
 			foreach ( InscripcionesTable::participantes( $e['id'] ) as $f ) {
@@ -176,7 +187,7 @@ final class Avisos {
 		}
 		foreach ( Usuarios::por_socios( array_keys( $personas ) ) as $num => $u ) {
 			$edad = isset( $personas[ $num ] ) ? Normativa::edad_en( $personas[ $num ], $e ) : null;
-			if ( null !== $edad && $edad >= Inscripciones::EDAD_PREINSCRIPCION ) {
+			if ( null !== $edad && $edad >= Inscripciones::edad_cuenta_propia() ) {
 				$out[ $u->ID ] = $u;
 			}
 		}
@@ -185,13 +196,16 @@ final class Avisos {
 
 	/** Texto del email (el envío y la vista previa del registro de emails usan lo mismo). */
 	public static function html( array $datos, string $saludo, string $quien = '' ): string {
+		$tipo_ok = in_array( $datos['tipo'] ?? '', self::TIPOS, true ) ? (string) $datos['tipo'] : 'publicado';
 		if ( '' === $quien && ! empty( $datos['inscripcion'] ) ) {
 			$quien = self::nombre_de( (int) $datos['inscripcion'] ); // Vista previa: el nombre se vuelve a leer del CRM.
 		}
 		return TemplateLoader::render(
 			'email/evento',
 			array(
-				'tipo'       => in_array( $datos['tipo'] ?? '', self::TIPOS, true ) ? (string) $datos['tipo'] : 'publicado',
+				'tipo'       => $tipo_ok,
+				'intro'      => Config::texto_aviso( $tipo_ok, 'intro' ),
+				'pie'        => Config::texto_aviso( $tipo_ok, 'pie' ),
 				'saludo'     => $saludo,
 				'quien'      => $quien,
 				'grupo'      => (string) ( $datos['grupo'] ?? '' ),
@@ -217,6 +231,9 @@ final class Avisos {
 
 	/** Email a las cuentas de una inscripción. @return int Cuántos han salido. */
 	private static function a_inscripcion( array $e, array $f, string $tipo, ?array $movs = null ): int {
+		if ( ! Config::aviso_activo( $tipo ) ) {
+			return 0;
+		}
 		$repo = PersonaRepository::make();
 		try {
 			$p = $repo ? $repo->obtener( $f['socio'] ) : null;
@@ -286,7 +303,7 @@ final class Avisos {
 	}
 
 	private static function push( string $tipo, array $e, array $cuentas ): void {
-		if ( $cuentas ) {
+		if ( $cuentas && Config::de()['push'] ) {
 			do_action( 'asde_ap_evento_aviso', $tipo, $e['id'], array_map( 'intval', array_keys( $cuentas ) ) ); // = self::PUSH (literal para Plugin Check).
 		}
 	}

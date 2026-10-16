@@ -107,5 +107,50 @@ defined( 'ABSPATH' ) || exit;
 		</p>
 	</section>
 
+	<section class="asde-card">
+		<h3 class="asde-card__title"><?php asde_e( 'Avisos' ); ?></h3>
+		<p class="asde-muted"><?php asde_e( 'Qué avisos manda el área privada a las familias y a las personas inscritas. Cada grupo decide los suyos.' ); ?></p>
+		<input type="hidden" name="avisos_enviado" value="1">
+		<?php
+		$avisos_txt = array(
+			'publicado'    => asde_t( 'Evento nuevo: al publicarlo, a las personas convocadas' ),
+			'confirmada'   => asde_t( 'Inscripción confirmada' ),
+			'plaza'        => asde_t( 'Plaza liberada para quien está en la lista de espera' ),
+			'recordatorio' => asde_t( 'Recordatorio antes del evento (con los días de arriba)' ),
+			'cancelado'    => asde_t( 'Evento cancelado' ),
+		);
+		foreach ( $avisos_txt as $a => $txt ) :
+			?>
+			<label class="asde-choice"><input type="checkbox" name="avisos[]" value="<?php echo esc_attr( $a ); ?>" <?php checked( ! empty( $cfg['avisos'][ $a ] ) ); ?>><span><?php echo esc_html( $txt ); ?></span></label>
+		<?php endforeach; ?>
+		<label class="asde-choice"><input type="checkbox" name="push" value="1" <?php checked( $cfg['push'] ); ?>><span><?php asde_e( 'Avisar también en la app móvil (si la usa el grupo)' ); ?></span></label>
+		<p>
+			<label for="asde-evc-oferta"><?php asde_e( 'Días para confirmar una plaza ofrecida de la lista de espera' ); ?></label>
+			<input type="number" id="asde-evc-oferta" name="dias_oferta" value="<?php echo (int) $cfg['dias_oferta']; ?>" min="1" max="<?php echo (int) Config::MAX_DIAS_OFERTA; ?>" inputmode="numeric">
+		</p>
+		<p>
+			<label for="asde-evc-extra"><?php asde_e( 'Segundo recordatorio (días antes del evento; 0 = no se manda; menos que el primero)' ); ?></label>
+			<input type="number" id="asde-evc-extra" name="recordatorio_extra" value="<?php echo (int) $cfg['recordatorio_extra']; ?>" min="0" max="29" inputmode="numeric">
+		</p>
+		<p>
+			<label for="asde-evc-edad"><?php asde_e( 'Edad desde la que una persona recibe los avisos en su propia cuenta y se inscribe sola' ); ?></label>
+			<input type="number" id="asde-evc-edad" name="edad_cuenta_propia" value="<?php echo (int) $cfg['edad_cuenta_propia']; ?>" min="<?php echo (int) Config::EDAD_MIN; ?>" max="<?php echo (int) Config::EDAD_MAX; ?>" inputmode="numeric">
+		</p>
+		<details>
+			<summary><?php asde_e( 'Textos propios de los avisos' ); ?></summary>
+			<p class="asde-help"><?php echo esc_html( sprintf( asde_t( 'Un párrafo opcional al principio y otro al final de cada email (hasta %d caracteres). Salen igual en todos los idiomas: escríbelos en el idioma de tus familias.' ), Config::MAX_TEXTO_AVISO ) ); ?></p>
+			<?php foreach ( $avisos_txt as $a => $txt ) : ?>
+				<fieldset>
+					<legend><?php echo esc_html( $txt ); ?></legend>
+					<label for="asde-evc-intro-<?php echo esc_attr( $a ); ?>"><?php asde_e( 'Al principio' ); ?></label>
+					<textarea id="asde-evc-intro-<?php echo esc_attr( $a ); ?>" name="texto_intro_<?php echo esc_attr( $a ); ?>" rows="2" maxlength="<?php echo (int) Config::MAX_TEXTO_AVISO; ?>"><?php echo esc_textarea( $cfg['textos'][ $a ]['intro'] ); ?></textarea>
+					<label for="asde-evc-pie-<?php echo esc_attr( $a ); ?>"><?php asde_e( 'Al final' ); ?></label>
+					<textarea id="asde-evc-pie-<?php echo esc_attr( $a ); ?>" name="texto_pie_<?php echo esc_attr( $a ); ?>" rows="2" maxlength="<?php echo (int) Config::MAX_TEXTO_AVISO; ?>"><?php echo esc_textarea( $cfg['textos'][ $a ]['pie'] ); ?></textarea>
+				</fieldset>
+			<?php endforeach; ?>
+		</details>
+		<p class="asde-help"><?php asde_e( 'Si desactivas el aviso de plaza liberada, la plaza se sigue ofreciendo, pero la familia no recibe el email: tendrá que mirarlo en la aplicación.' ); ?></p>
+	</section>
+
 	<p><button type="submit" class="button button-primary"><?php asde_e( 'Guardar' ); ?></button></p>
 </form>

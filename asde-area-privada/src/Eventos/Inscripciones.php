@@ -36,10 +36,10 @@ final class Inscripciones {
 	public const CAP = 'asde_eventos_inscribir';
 
 	/** Desde esta edad un asociado/a puede preinscribirse (la de las cuentas propias, AltaService). */
-	public const EDAD_PREINSCRIPCION = 14;
+	public const EDAD_PREINSCRIPCION = Config::EDAD_CUENTA_PROPIA;
 
 	/** Días para confirmar una plaza que se libera (supuesto del plan). */
-	public const DIAS_OFERTA = 3;
+	public const DIAS_OFERTA = Config::DIAS_OFERTA;
 
 	public const MAX_TEXTO = 1000;
 
@@ -223,7 +223,7 @@ final class Inscripciones {
 		$familia = isset( $a->representados[ $num ] );
 		$adulta  = self::adulta_en( $e, $p );
 		$edad    = Normativa::edad_en( $p, $e );
-		if ( ! $familia && ! $adulta && ( null === $edad || $edad < self::EDAD_PREINSCRIPCION ) ) {
+		if ( ! $familia && ! $adulta && ( null === $edad || $edad < self::edad_cuenta_propia() ) ) {
 			return new \WP_Error( 'asde_inscripcion', asde_t( 'Te tiene que inscribir tu familia desde su cuenta.' ) );
 		}
 		if ( empty( $in['salud'] ) ) {
@@ -494,7 +494,7 @@ final class Inscripciones {
 			if ( ! self::hay_plaza( $e, InscripcionesTable::participantes( $e['id'] ), $f['seccion'] ) ) {
 				continue;
 			}
-			$hasta = min( $ahora + self::DIAS_OFERTA * DAY_IN_SECONDS, $inicio );
+			$hasta = min( $ahora + self::dias_oferta() * DAY_IN_SECONDS, $inicio );
 			InscripcionesTable::actualizar( $f['id'], array( 'oferta_hasta' => gmdate( 'Y-m-d H:i:s', $hasta ) ) );
 			Logger::log( 'inscripcion_plaza_ofrecida', 'evento', (string) $e['id'], array( 'inscripcion' => $f['id'] ) );
 			$f = InscripcionesTable::obtener( $f['id'] );
@@ -629,13 +629,23 @@ final class Inscripciones {
 		return (bool) self::mis_eventos( $a );
 	}
 
+	/** Edad desde la que una persona usa su propia cuenta (configurable por grupo, 14 por defecto). */
+	public static function edad_cuenta_propia(): int {
+		return Config::de()['edad_cuenta_propia'];
+	}
+
+	/** Días que tiene quien está en la lista de espera para confirmar una plaza (configurable por grupo). */
+	public static function dias_oferta(): int {
+		return Config::de()['dias_oferta'];
+	}
+
 	/** ¿Puede esta cuenta inscribir a esta persona ella sola? (la familia, o la propia persona de 14 años o más). */
 	public static function puede_inscribirse_sola( Ambito $a, array $e, Persona $p ): bool {
 		if ( isset( $a->representados[ $p->num_socio_asde ] ) ) {
 			return true;
 		}
 		$edad = Normativa::edad_en( $p, $e );
-		return null !== $edad && $edad >= self::EDAD_PREINSCRIPCION;
+		return null !== $edad && $edad >= self::edad_cuenta_propia();
 	}
 
 	/** Recuento para la normativa (ratio y comunicación): participantes y menores inscritos, sin consultar el CRM. @return array{total:int, menores:int, cerrado:bool} */

@@ -4,6 +4,8 @@
  * recordatorio y cancelación.
  *
  * @var string   $tipo       publicado | confirmada | plaza | recordatorio | cancelado
+ * @var string   $intro      Párrafo propio del grupo al principio ('' si no hay)
+ * @var string   $pie        Párrafo propio del grupo al final ('' si no hay)
  * @var string   $saludo     Nombre para saludar (leído del CRM; puede ir vacío)
  * @var string   $quien      Nombre de la persona inscrita ('' en los avisos de publicación)
  * @var string   $grupo
@@ -63,6 +65,10 @@ $fuerte  = static fn( string $t ): string => '<strong>' . esc_html( $t ) . '</st
 						<p style="<?php echo esc_attr( $atenuar ); ?>"><?php asde_e( 'Si ya habías pagado, Tesorería se pondrá en contacto contigo para la devolución.' ); ?></p>
 					<?php endif; ?>
 
+					<?php if ( '' !== $intro ) : ?>
+						<p style="<?php echo esc_attr( $p ); ?>"><?php echo nl2br( esc_html( $intro ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+					<?php endif; ?>
+
 					<?php if ( 'cancelado' !== $tipo ) : ?>
 						<p style="<?php echo esc_attr( $p ); ?>">
 							<?php echo esc_html( $numero . ' · ' . $cuando ); ?>
@@ -92,6 +98,10 @@ $fuerte  = static fn( string $t ): string => '<strong>' . esc_html( $t ) . '</st
 								<li><?php echo sprintf( asde_h( 'pagar %1$s (referencia %2$s).' ), $fuerte( $importe ), esc_html( $referencia ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></li>
 							<?php endif; ?>
 						</ul>
+					<?php endif; ?>
+
+					<?php if ( '' !== $pie ) : ?>
+						<p style="<?php echo esc_attr( $p ); ?>"><?php echo nl2br( esc_html( $pie ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
 					<?php endif; ?>
 
 					<?php if ( $url && 'cancelado' !== $tipo ) : ?>

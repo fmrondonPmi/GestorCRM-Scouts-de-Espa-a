@@ -3432,4 +3432,22 @@ return array(
 	'«%s» no es una fecha válida.' => '«%s» non é unha data válida.',
 	'«%s» tiene que ser un número.' => '«%s» ten que ser un número.',
 	'Campos del formulario guardados.' => 'Campos do formulario gardados.',
+
+	// v0.39: avisos de eventos configurables
+	'Al final' => 'Ao final',
+	'Al principio' => 'Ao principio',
+	'Avisar también en la app móvil (si la usa el grupo)' => 'Avisar tamén na app móbil (se a usa o grupo)',
+	'Avisos' => 'Avisos',
+	'Días para confirmar una plaza ofrecida de la lista de espera' => 'Días para confirmar unha praza ofrecida da lista de espera',
+	'Edad desde la que una persona recibe los avisos en su propia cuenta y se inscribe sola' => 'Idade a partir da cal unha persoa recibe os avisos na súa propia conta e se inscribe soa',
+	'Evento cancelado' => 'Evento cancelado',
+	'Evento nuevo: al publicarlo, a las personas convocadas' => 'Evento novo: ao publicalo, ás persoas convocadas',
+	'Inscripción confirmada' => 'Inscrición confirmada',
+	'Plaza liberada para quien está en la lista de espera' => 'Praza liberada para quen está na lista de espera',
+	'Qué avisos manda el área privada a las familias y a las personas inscritas. Cada grupo decide los suyos.' => 'Que avisos manda a área privada ás familias e ás persoas inscritas. Cada grupo decide os seus.',
+	'Recordatorio antes del evento (con los días de arriba)' => 'Lembranza antes do evento (cos días de arriba)',
+	'Segundo recordatorio (días antes del evento; 0 = no se manda; menos que el primero)' => 'Segunda lembranza (días antes do evento; 0 = non se manda; menos que a primeira)',
+	'Si desactivas el aviso de plaza liberada, la plaza se sigue ofreciendo, pero la familia no recibe el email: tendrá que mirarlo en la aplicación.' => 'Se desactivas o aviso de praza liberada, a praza segue ofrecéndose, pero a familia non recibe o email: terá que miralo na aplicación.',
+	'Textos propios de los avisos' => 'Textos propios dos avisos',
+	'Un párrafo opcional al principio y otro al final de cada email (hasta %d caracteres). Salen igual en todos los idiomas: escríbelos en el idioma de tus familias.' => 'Un parágrafo opcional ao principio e outro ao final de cada email (ata %d caracteres). Saen igual en todos os idiomas: escríbeos no idioma das túas familias.',
 );

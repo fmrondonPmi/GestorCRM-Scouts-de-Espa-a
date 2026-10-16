@@ -3432,4 +3432,22 @@ return array(
 	'«%s» no es una fecha válida.' => '«%s» ez da baliozko data.',
 	'«%s» tiene que ser un número.' => '«%s» zenbaki bat izan behar da.',
 	'Campos del formulario guardados.' => 'Inprimakiaren eremuak gorde dira.',
+
+	// v0.39: avisos de eventos configurables
+	'Al final' => 'Amaieran',
+	'Al principio' => 'Hasieran',
+	'Avisar también en la app móvil (si la usa el grupo)' => 'Mugikorreko aplikazioan ere abisatu (taldeak erabiltzen badu)',
+	'Avisos' => 'Abisuak',
+	'Días para confirmar una plaza ofrecida de la lista de espera' => 'Itxaron-zerrendako plaza bat berresteko egunak',
+	'Edad desde la que una persona recibe los avisos en su propia cuenta y se inscribe sola' => 'Pertsona batek abisuak bere kontuan jasotzen dituen eta bere kabuz izena ematen duen adina',
+	'Evento cancelado' => 'Ekitaldia bertan behera utzi da',
+	'Evento nuevo: al publicarlo, a las personas convocadas' => 'Ekitaldi berria: argitaratzean, deituriko pertsonei',
+	'Inscripción confirmada' => 'Izen-ematea berretsita',
+	'Plaza liberada para quien está en la lista de espera' => 'Itxaron-zerrendan dagoenarentzat plaza libre',
+	'Qué avisos manda el área privada a las familias y a las personas inscritas. Cada grupo decide los suyos.' => 'Eremu pribatuak familiei eta izena emandako pertsonei zer abisu bidaltzen dizkien. Talde bakoitzak berea erabakitzen du.',
+	'Recordatorio antes del evento (con los días de arriba)' => 'Ekitaldiaren aurreko gogorarazpena (goiko egunekin)',
+	'Segundo recordatorio (días antes del evento; 0 = no se manda; menos que el primero)' => 'Bigarren gogorarazpena (ekitaldiaren aurreko egunak; 0 = ez da bidaltzen; lehenengoa baino gutxiago)',
+	'Si desactivas el aviso de plaza liberada, la plaza se sigue ofreciendo, pero la familia no recibe el email: tendrá que mirarlo en la aplicación.' => 'Plaza libre egotearen abisua desaktibatzen baduzu, plaza eskaintzen jarraitzen da, baina familiak ez du emailik jasoko: aplikazioan begiratu beharko du.',
+	'Textos propios de los avisos' => 'Abisuen testu propioak',
+	'Un párrafo opcional al principio y otro al final de cada email (hasta %d caracteres). Salen igual en todos los idiomas: escríbelos en el idioma de tus familias.' => 'Aukerako paragrafo bat hasieran eta beste bat amaieran, email bakoitzean (%d karaktere arte). Hizkuntza guztietan berdin ateratzen dira: idatzi itzazu zure familien hizkuntzan.',
 );

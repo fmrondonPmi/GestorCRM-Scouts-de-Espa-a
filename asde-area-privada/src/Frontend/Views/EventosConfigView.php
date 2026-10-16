@@ -103,6 +103,23 @@ final class EventosConfigView extends EventosBaseView {
 			$cfg['recordatorio_dias'] = min( 30, max( 0, (int) $this->post( 'recordatorio_dias' ) ) );
 			$campos[]                 = 'recordatorio_dias';
 		}
+		// Avisos (v0.39): cuáles se mandan, si hay aviso push y los días de la oferta de plaza.
+		if ( isset( $_POST['avisos_enviado'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+			$marcados = $this->post_array( 'avisos' );
+			foreach ( Config::AVISOS as $a ) {
+				$cfg['avisos'][ $a ] = in_array( $a, $marcados, true );
+			}
+			$cfg['push']        = '1' === $this->post( 'push' );
+			$cfg['dias_oferta'] = min( Config::MAX_DIAS_OFERTA, max( 1, (int) $this->post( 'dias_oferta' ) ) );
+			$cfg['recordatorio_extra'] = max( 0, (int) $this->post( 'recordatorio_extra' ) );
+			$cfg['edad_cuenta_propia'] = min( Config::EDAD_MAX, max( Config::EDAD_MIN, (int) $this->post( 'edad_cuenta_propia' ) ) );
+			foreach ( Config::AVISOS as $a ) {
+				foreach ( array( 'intro', 'pie' ) as $k ) {
+					$cfg['textos'][ $a ][ $k ] = mb_substr( trim( sanitize_textarea_field( $this->post( 'texto_' . $k . '_' . $a ) ) ), 0, Config::MAX_TEXTO_AVISO );
+				}
+			}
+			$campos[] = 'avisos';
+		}
 
 		Config::guardar( $cfg );
 		Logger::log( 'eventos_configurados', 'grupo', Grupo::numero(), array( 'campos' => $campos ) );

@@ -294,7 +294,7 @@ $devolver = static function ( array $f, array $c ) use ( $campos, $fila_h, $form
 				</li>
 			<?php endforeach; ?>
 		</ol>
-		<p class="asde-help"><?php echo esc_html( sprintf( asde_t( 'Cuando se libera una plaza, se ofrece por orden: tienen %d días para confirmarla.' ), Inscripciones::DIAS_OFERTA ) ); ?></p>
+		<p class="asde-help"><?php echo esc_html( sprintf( asde_t( 'Cuando se libera una plaza, se ofrece por orden: tienen %d días para confirmarla.' ), Inscripciones::dias_oferta() ) ); ?></p>
 	</section>
 <?php endif; ?>
 
