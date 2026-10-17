@@ -10,6 +10,7 @@
  * @var array<string, AsdeBalears\AreaPrivada\Domain\Persona> $nombres
  * @var array[]                                               $tareas
  * @var array<int, string>                                    $estado       hecha | vencida | semana | pronto | sin_fecha
+ * @var array<int, bool>                                      $auto         Tareas con comprobación automática que se puede medir: id => se cumple
  * @var array<int, int|null>                                  $dias         Días que faltan (negativo: ya pasó)
  * @var bool                                                  $puede_marcar
  * @var bool                                                  $puede_editar
@@ -115,7 +116,7 @@ $enlaces   = array(
 				?>
 				<li class="asde-tarea asde-tarea--<?php echo esc_attr( $st ); ?>">
 					<div class="asde-tarea__marca">
-						<?php if ( $puede_marcar ) : ?>
+						<?php if ( $puede_marcar && ! isset( $auto[ $t['id'] ] ) ) : ?>
 							<form method="post">
 								<?php echo $campos( 'hecha' === $st ? 'tarea_deshecha' : 'tarea_hecha' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 								<input type="hidden" name="tarea" value="<?php echo (int) $t['id']; ?>">
@@ -130,6 +131,9 @@ $enlaces   = array(
 						<?php echo '' !== $t['detalle'] ? '<span class="asde-muted">' . esc_html( Plantillas::texto( $t['detalle'] ) ) . '</span>' : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?>
 						<span class="asde-tarea__meta">
 							<span class="asde-badge asde-badge--tarea-<?php echo esc_attr( $st ); ?>"><?php echo esc_html( $etiquetas[ $st ] ); ?></span>
+							<?php if ( isset( $auto[ $t['id'] ] ) ) : ?>
+								<span class="asde-badge asde-badge--tarea-auto" title="<?php echo esc_attr( asde_a( 'Se marca sola cuando se cumple lo que mide la aplicación' ) ); ?>"><?php asde_e( 'Automática' ); ?></span>
+							<?php endif; ?>
 							<?php echo esc_html( $fecha( $f ) ); ?>
 							<?php if ( '' !== $cuando ) : ?>
 								<span class="asde-muted">· <?php echo esc_html( $cuando ); ?></span>
@@ -147,6 +151,20 @@ $enlaces   = array(
 						</span>
 						<?php echo '' !== $t['nota'] ? '<span class="asde-tarea__nota">' . esc_html( $t['nota'] ) . '</span>' : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?>
 
+						<?php if ( $puede_marcar && isset( $auto[ $t['id'] ] ) && ! $auto[ $t['id'] ] && null === $t['hecha_en'] ) : ?>
+							<details class="asde-tarea__editar asde-solo-pantalla">
+								<summary><?php asde_e( 'No procede' ); ?></summary>
+								<form method="post" class="asde-form asde-form--compacta">
+									<?php echo $campos( 'tarea_hecha' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+									<input type="hidden" name="tarea" value="<?php echo (int) $t['id']; ?>">
+									<p class="asde-form__fila">
+										<label><?php asde_e( 'Observación' ); ?> <input type="text" name="nota" value="<?php echo esc_attr( $t['nota'] ); ?>" maxlength="255" required></label>
+										<button type="submit" class="button"><?php asde_e( 'Cerrar la tarea' ); ?></button>
+									</p>
+									<p class="asde-help"><?php asde_e( 'Esta tarea se marca sola cuando se cumple. Si no procede, ciérrala con una observación.' ); ?></p>
+								</form>
+							</details>
+						<?php endif; ?>
 						<?php if ( $puede_editar ) : ?>
 							<details class="asde-tarea__editar asde-solo-pantalla">
 								<summary><?php asde_e( 'Cambiar' ); ?></summary>

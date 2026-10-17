@@ -21,10 +21,13 @@ use AsdeBalears\AreaPrivada\Auth\Ambito;
 use AsdeBalears\AreaPrivada\Crm\Escritura;
 use AsdeBalears\AreaPrivada\Domain\Grupo;
 use AsdeBalears\AreaPrivada\Domain\Grupos;
+use AsdeBalears\AreaPrivada\Eventos\AvisosTareas;
 use AsdeBalears\AreaPrivada\Eventos\Config;
 use AsdeBalears\AreaPrivada\Eventos\EventosTable;
 use AsdeBalears\AreaPrivada\Eventos\InscripcionesTable;
+use AsdeBalears\AreaPrivada\Eventos\PartidasTable;
 use AsdeBalears\AreaPrivada\Eventos\Plantillas;
+use AsdeBalears\AreaPrivada\Eventos\Presupuesto;
 use AsdeBalears\AreaPrivada\Eventos\Servicio;
 use AsdeBalears\AreaPrivada\Eventos\Tareas;
 use AsdeBalears\AreaPrivada\Eventos\TareasTable;
@@ -35,6 +38,7 @@ use AsdeBalears\AreaPrivada\Frontend\Views\EventosView;
 use AsdeBalears\AreaPrivada\Frontend\Views\View;
 use AsdeBalears\AreaPrivada\Install\Roles;
 use AsdeBalears\AreaPrivada\Socios\SociosTable;
+use AsdeBalears\AreaPrivada\Usuarios\RegistroEmails;
 use AsdeBalears\AreaPrivada\Usuarios\Usuarios;
 
 global $wpdb;
@@ -62,6 +66,8 @@ $log_antes    = $max_id( Logger::table() );
 $ev_antes     = $max_id( EventosTable::table() );
 $ins_antes    = $max_id( InscripcionesTable::table() );
 $tar_antes    = $max_id( TareasTable::table() );
+$par_antes    = $max_id( PartidasTable::table() );
+$email_antes  = $max_id( RegistroEmails::table() );
 $socios_antes = array_column( (array) $wpdb->get_results( 'SELECT * FROM ' . SociosTable::table(), ARRAY_A ), null, 'num_socio_asde' ); // phpcs:ignore WordPress.DB
 $opcion_cfg   = 'asde_ap_eventos_' . $grupo['numero'];
 $cfg_antes    = get_option( $opcion_cfg, null );
@@ -311,7 +317,7 @@ try {
 	$ok( true === $cfg['calendario_viernes'] && array() === $cfg['plantillas'] && Plantillas::es_original( $cfg ), 'de serie: fin de semana al viernes y solo la plantilla original' );
 	$enviar( new EventosConfigView(), array( 'asde_action' => 'calendario_guardar' ), 'asde_eventos_config' );
 	$ok( false === Config::de()['calendario_viernes'], 'Coordinación apaga el ajuste de fin de semana' );
-	$enviar( new EventosConfigView(), array( 'asde_action' => 'calendario_guardar', 'calendario_viernes' => '1' ), 'asde_eventos_config' );
+	$enviar( new EventosConfigView(), array( 'asde_action' => 'calendario_guardar', 'calendario_viernes' => '1', 'avisos_tareas' => '1' ), 'asde_eventos_config' );
 	$enviar( new EventosConfigView(), array( 'asde_action' => 'plantilla_nueva', 'nombre' => 'Salida de día', 'copiar' => '' ), 'asde_eventos_config' );
 	$ps = Plantillas::de_grupo();
 	$ok( isset( $ps['salida-de-dia'] ) && array() === $ps['salida-de-dia']['tareas'], 'crea una plantilla propia, vacía' );
@@ -348,7 +354,76 @@ try {
 	$como( $u_lob );
 	$ok( ! current_user_can( Servicio::CAP_CONFIG ), 'un scouter sin permiso de configuración no entra en ella' );
 
-	echo "\n== Parte G · Datos y limpieza ==\n";
+	echo "\n== Parte G · Tareas que se comprueban solas ==\n";
+	$a_lob = $como( $u_lob );
+	$enviar( new EventosView(), array( 'asde_action' => 'evento_crear' ) + $formulario( '2027-03-19', '2027-03-21' ), 'asde_evento_nuevo' );
+	$e3 = $ultimo();
+	$enviar( new EventosView(), array( 'asde_action' => 'tarea_aplicar', 'evento' => (string) $e3['id'], 'pestana' => 'calendario', 'plantilla' => 'acampada' ), 'asde_evento_' . $e3['id'] );
+	$t3   = array_column( TareasTable::de_evento( $e3['id'] ), null, 'titulo' );
+	$auto = Tareas::automaticas( $e3, array_values( $t3 ) );
+	$ok( false === ( $auto[ $t3['Estimar presupuesto de acampada']['id'] ] ?? null ) && false === ( $auto[ $t3['Elegir cocinero, intendente y ayudantes']['id'] ] ?? null ) && false === ( $auto[ $t3['Recoger autorizaciones, totales de educandos y enviar datos a las secciones']['id'] ] ?? null ), 'sin partidas, sin equipo y sin inscripciones, las tres comprobaciones salen sin cumplir' );
+	$ok( ! isset( $auto[ $t3['Estimar el número de títulos disponibles / necesarios']['id'] ] ) && ! isset( $auto[ $t3['Elaborar menú']['id'] ] ) && ! isset( $auto[ $t3['Enviar la ficha de la acampada a la OF (Organización Federada)']['id'] ] ), 'la de títulos (necesita leer el CRM), la del menú y la de la comunicación no se miden: las marca una persona' );
+	$ok( true === Tareas::comprobar( $e3, 'titulos', array( 'leido' => true, 'avisos' => array() ) ) && false === Tareas::comprobar( $e3, 'titulos', array( 'leido' => true, 'avisos' => array( 'Falta algo' ) ) ) && false === Tareas::comprobar( $e3, 'titulos', array( 'leido' => false, 'avisos' => array() ) ) && null === Tareas::comprobar( $e3, 'titulos' ), 'títulos: se cumple si el CRM se ha leído y la normativa no avisa de nada; sin leer, no se mide' );
+	Servicio::anadir_partida( $e3, $a_lob, 'gasto', 'Albergue', 'total', '', 500.0 );
+	$ok( true === Tareas::comprobar( $e3, 'presupuesto' ), 'con una partida, «Estimar presupuesto» se cumple sola' );
+	$h = $pintar( new EventosView(), array( 'evento' => (string) $e3['id'], 'pestana' => 'calendario' ) );
+	$ok( str_contains( $h, 'Automática' ), 'y la pestaña la marca como automática' );
+	Servicio::anadir_equipo( $e3, $a_lob, '990041', 'director' );
+	$ok( false === Tareas::comprobar( $e3, 'equipo' ), 'un director sin los monitores que pide la ratio: aún no' );
+	Servicio::anadir_equipo( $e3, $a_lob, '990042', 'monitor' );
+	Servicio::anadir_equipo( $e3, $a_lob, '990043', 'monitor' );
+	$ok( true === Tareas::comprobar( $e3, 'equipo' ), 'director/a y monitores suficientes: se cumple sola' );
+	$ok( false === Tareas::comprobar( $e3, 'autorizaciones' ), 'sin inscripciones no hay autorizaciones recogidas' );
+
+	$aut = $t3['Recoger autorizaciones, totales de educandos y enviar datos a las secciones'];
+	$h   = $enviar( new EventosView(), array( 'asde_action' => 'tarea_hecha', 'evento' => (string) $e3['id'], 'pestana' => 'calendario', 'tarea' => (string) $aut['id'] ), 'asde_evento_' . $e3['id'] );
+	$ok( null === TareasTable::obtener( $aut['id'] )['hecha_en'] && str_contains( $h, 'se marca sola' ), 'una tarea automática que no se cumple no se marca a mano sin más' );
+	$enviar( new EventosView(), array( 'asde_action' => 'tarea_hecha', 'evento' => (string) $e3['id'], 'pestana' => 'calendario', 'tarea' => (string) $aut['id'], 'nota' => 'No procede: es una salida sin menores' ), 'asde_evento_' . $e3['id'] );
+	$q = TareasTable::obtener( $aut['id'] );
+	$ok( null !== $q['hecha_en'] && 'No procede: es una salida sin menores' === $q['nota'], 'pero sí se cierra con una observación («no procede»)' );
+
+	echo "\n== Parte H · Avisos por email de las tareas ==\n";
+	$hoy = wp_date( 'Y-m-d' );
+	$ver = $t3['Ver lugar de acampada'];
+	TareasTable::actualizar( $ver['id'], array( 'fecha_propia' => Tareas::sumar( $hoy, 3 ), 'responsable' => '990041' ) );
+	$n_av = AvisosTareas::diario();
+	$ok( 1 === $n_av, 'a 3 días de la fecha, sale un aviso al responsable' );
+	$filas = array_values( array_filter( RegistroEmails::listado(), static fn( $f ) => (int) $f['id'] > $email_antes && RegistroEmails::EVENTOS === $f['tipo'] ) );
+	$ok( 1 === count( $filas ) && 'prueba-cal-lobatos' === $filas[0]['login'] && str_contains( $filas[0]['asunto'], 'vence pronto' ), 'queda en el registro de emails, a su cuenta, con el asunto «vence pronto»' );
+	$ok( 0 === AvisosTareas::diario(), 'y no se repite al día siguiente' );
+	TareasTable::actualizar( $ver['id'], array( 'fecha_propia' => $hoy ) );
+	$ok( 1 === AvisosTareas::diario() && 0 === AvisosTareas::diario(), 'el día que vence sale otro, una sola vez' );
+	$filas = array_values( array_filter( RegistroEmails::listado(), static fn( $f ) => (int) $f['id'] > $email_antes && RegistroEmails::EVENTOS === $f['tipo'] ) );
+	$vista = RegistroEmails::vista_previa( $filas[0] );
+	$ok( str_contains( $vista, 'Ver lugar de acampada' ) && str_contains( $vista, 'Hoy vence' ), 'la vista previa del registro vuelve a componer el texto' );
+	$ok( ! str_contains( (string) $filas[0]['datos'], '990041' ) && ! str_contains( (string) $filas[0]['datos'], '@' ), 'el registro no guarda nº de socio ni emails: solo la tarea, el evento y la fecha' );
+	$nuevo = TareasTable::crear( $e3['id'], 6000, array( 'titulo' => 'Sin responsable', 'propia' => 1, 'fecha_calc' => $hoy, 'fecha_aj' => $hoy, 'fecha_propia' => $hoy ) );
+	$ok( 1 === AvisosTareas::diario(), 'sin responsable, el aviso va al director/a del evento' );
+	$hecha = TareasTable::crear( $e3['id'], 6001, array( 'titulo' => 'Ya hecha', 'propia' => 1, 'fecha_calc' => $hoy, 'fecha_aj' => $hoy, 'fecha_propia' => $hoy ) );
+	TareasTable::marcar( $hecha, true );
+	$ok( 0 === AvisosTareas::diario(), 'de lo que ya está hecho no se avisa' );
+	$otra = TareasTable::crear( $e3['id'], 6002, array( 'titulo' => 'Apagado', 'propia' => 1, 'fecha_calc' => $hoy, 'fecha_aj' => $hoy, 'fecha_propia' => $hoy ) );
+	$cfg_av                  = Config::de();
+	$cfg_av['avisos_tareas'] = false;
+	Config::guardar( $cfg_av, $grupo['numero'] );
+	$ok( 0 === AvisosTareas::diario(), 'con los avisos de tareas desactivados en el grupo, no sale nada' );
+	$cfg_av['avisos_tareas'] = true;
+	Config::guardar( $cfg_av, $grupo['numero'] );
+	foreach ( array( $nuevo, $hecha, $otra ) as $id ) {
+		TareasTable::borrar( $id );
+	}
+
+	echo "\n== Parte H2 · Presupuesto: partidas sugeridas y autobuses ==\n";
+	$ok( 2 === Presupuesto::autobuses( 62 ) && 1 === Presupuesto::autobuses( 55 ) && 2 === Presupuesto::autobuses( 56 ) && 0 === Presupuesto::autobuses( 0 ) && 3 === Presupuesto::autobuses( 100, 40 ), 'autobuses = personas ÷ plazas, hacia arriba (55 plazas por defecto)' );
+	$antes = count( PartidasTable::previstas( $e3['id'] ) );
+	$id    = Servicio::anadir_autobuses( $e3, $a_lob, 62, 55, 300.0 );
+	$partidas = PartidasTable::previstas( $e3['id'] );
+	$ultima   = end( $partidas );
+	$ok( ! is_wp_error( $id ) && $antes + 1 === count( $partidas ) && 600.0 === (float) $ultima['importe'] && 'total' === $ultima['reparto'] && str_contains( $ultima['concepto'], '2 ×' ), 'la partida de autobuses: 2 × 300 € = 600 €, repartida entre todos' );
+	$ok( is_wp_error( Servicio::anadir_autobuses( $e3, $a_lob, 62, 55, 0.0 ) ) && is_wp_error( Servicio::anadir_autobuses( $e3, $a_lob, 0, 55, 300.0 ) ), 'sin precio o sin personas → error' );
+	$h = $pintar( new EventosView(), array( 'evento' => (string) $e3['id'], 'pestana' => 'presupuesto' ) );
+	$ok( str_contains( $h, 'asde-partidas-sugeridas' ) && str_contains( $h, 'Alimentación' ) && str_contains( $h, 'name="asde_action" value="evento_autobuses"' ), 'el presupuesto sugiere las categorías de la hoja y enseña la calculadora de autobuses' );
+	echo "\n== Parte I · Datos y limpieza ==\n";
 	$cols = array_column( (array) $wpdb->get_results( 'SHOW COLUMNS FROM ' . TareasTable::table(), ARRAY_A ), 'Field' ); // phpcs:ignore WordPress.DB
 	$ok( ! array_intersect( $cols, array( 'nombre', 'email', 'telefono', 'dni', 'salud', 'alergias' ) ), 'la tabla de tareas no tiene columnas de datos personales (el responsable es un nº Scouts de España)' );
 	$como( $u_lob );
@@ -369,6 +444,8 @@ try {
 
 	$lista = implode( ',', array_map( 'intval', $ids ) ) ?: '0';
 	$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . TareasTable::table() . ' WHERE id > %d', $tar_antes ) ); // phpcs:ignore WordPress.DB
+	$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . PartidasTable::table() . ' WHERE id > %d', $par_antes ) ); // phpcs:ignore WordPress.DB
+	$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . RegistroEmails::table() . ' WHERE id > %d', $email_antes ) ); // phpcs:ignore WordPress.DB
 	$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . InscripcionesTable::table() . ' WHERE id > %d', $ins_antes ) ); // phpcs:ignore WordPress.DB
 	$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . EventosTable::table() . ' WHERE id > %d', $ev_antes ) ); // phpcs:ignore WordPress.DB
 	$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . Logger::table() . " WHERE id > %d AND ( user_id IN ($lista) OR objeto = 'evento' )", $log_antes ) ); // phpcs:ignore WordPress.DB

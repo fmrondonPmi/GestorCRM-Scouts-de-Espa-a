@@ -196,6 +196,9 @@ final class Avisos {
 
 	/** Texto del email (el envío y la vista previa del registro de emails usan lo mismo). */
 	public static function html( array $datos, string $saludo, string $quien = '' ): string {
+		if ( in_array( $datos['tipo'] ?? '', AvisosTareas::TIPOS, true ) ) {
+			return AvisosTareas::html( $datos, $saludo ); // v0.40: los avisos del calendario de tareas.
+		}
 		$tipo_ok = in_array( $datos['tipo'] ?? '', self::TIPOS, true ) ? (string) $datos['tipo'] : 'publicado';
 		if ( '' === $quien && ! empty( $datos['inscripcion'] ) ) {
 			$quien = self::nombre_de( (int) $datos['inscripcion'] ); // Vista previa: el nombre se vuelve a leer del CRM.

@@ -79,6 +79,7 @@ final class Mantenimiento {
 				// Solo con el módulo encendido en el grupo (v0.35: nace apagado).
 				if ( \AsdeBalears\AreaPrivada\Domain\Modulos::activo( \AsdeBalears\AreaPrivada\Domain\Modulos::EVENTOS, (string) $grupo['numero'] ) ) {
 					\AsdeBalears\AreaPrivada\Eventos\Avisos::diario();
+					\AsdeBalears\AreaPrivada\Eventos\AvisosTareas::diario(); // v0.40: tareas del calendario que vencen.
 				}
 			} catch ( CrmException $e ) {
 				Logger::log( 'mantenimiento_error', 'crm', $grupo['numero'], array( 'error' => $e->getMessage() ) );

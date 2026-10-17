@@ -142,6 +142,7 @@ final class Config {
 			'textos'               => array(),
 			// v0.40 (doc 49): el calendario de tareas — las fechas de fin de semana se adelantan al viernes (P-185) y las plantillas del grupo.
 			'calendario_viernes'   => true,
+			'avisos_tareas'        => true,
 			'plantillas'           => array(),
 		);
 	}
@@ -191,6 +192,7 @@ final class Config {
 		$cfg['recordatorio_extra']  = $extra < $cfg['recordatorio_dias'] ? $extra : 0; // El segundo va después del primero.
 		$cfg['edad_cuenta_propia']  = min( self::EDAD_MAX, max( self::EDAD_MIN, (int) $cfg['edad_cuenta_propia'] ) );
 		$cfg['calendario_viernes']  = (bool) $cfg['calendario_viernes'];
+		$cfg['avisos_tareas']       = (bool) $cfg['avisos_tareas'];
 		$cfg['plantillas']          = Plantillas::limpiar( $cfg['plantillas'] );
 		$textos                     = (array) $cfg['textos'];
 		$cfg['textos']              = array();

@@ -162,7 +162,7 @@ final class EventosView extends EventosBaseView {
 		} elseif ( 'cuentas' === $pestana ) {
 			$contenido = $this->tpl( 'eventos/cuentas', $vars + $this->cuentas( $e ) );
 		} elseif ( 'calendario' === $pestana ) {
-			$contenido = $this->tpl( 'eventos/calendario', $vars + $this->calendario( $e, $a, $cfg ) );
+			$contenido = $this->tpl( 'eventos/calendario', $vars + $this->calendario( $e, $a, $cfg, $equipo, $nombres ) );
 		} elseif ( 'equipo' === $pestana ) {
 			$contenido = $this->tpl(
 				'eventos/equipo',
@@ -257,13 +257,16 @@ final class EventosView extends EventosBaseView {
 	}
 
 	/** Lo que necesita la pestaña «Calendario» (v0.40, doc 49). */
-	private function calendario( array $e, Ambito $a, array $cfg ): array {
+	private function calendario( array $e, Ambito $a, array $cfg, array $equipo, array $nombres ): array {
 		$tareas = TareasTable::de_evento( $e['id'] );
 		$hoy    = wp_date( 'Y-m-d' );
+		// La formación del equipo se lee en vivo del CRM solo si alguna tarea la comprueba sola.
+		$check  = in_array( 'titulos', array_column( $tareas, 'auto' ), true ) ? Servicio::comprobar_equipo( $e, $equipo, $nombres ) : null;
+		$auto   = Tareas::automaticas( $e, $tareas, $check );
 		$estado = array();
 		$dias   = array();
 		foreach ( $tareas as $t ) {
-			$estado[ $t['id'] ] = Tareas::estado( $t, $hoy );
+			$estado[ $t['id'] ] = Tareas::estado( $t, $hoy, $auto[ $t['id'] ] ?? null );
 			$dias[ $t['id'] ]   = Tareas::dias( $t, $hoy );
 		}
 		$plantillas = array();
@@ -274,6 +277,7 @@ final class EventosView extends EventosBaseView {
 		}
 		return array(
 			'tareas'     => $tareas,
+			'auto'       => $auto,
 			'estado'     => $estado,
 			'dias'       => $dias,
 			'puede_marcar' => Tareas::puede_marcar( $e, $a ),
@@ -389,6 +393,11 @@ final class EventosView extends EventosBaseView {
 			case 'evento_partida_anadir':
 				$r     = Servicio::anadir_partida( $e, $a, sanitize_key( $this->post( 'tipo' ) ), $this->post( 'concepto' ), sanitize_key( $this->post( 'reparto' ) ), $this->post( 'seccion' ), (float) str_replace( ',', '.', $this->post( 'importe' ) ) );
 				$hecho = asde_t( 'Partida añadida al presupuesto.' );
+				break;
+
+			case 'evento_autobuses':
+				$r     = Servicio::anadir_autobuses( $e, $a, (int) $this->post( 'personas' ), (int) $this->post( 'plazas' ), (float) str_replace( ',', '.', $this->post( 'precio' ) ) );
+				$hecho = asde_t( 'Partida de autobuses añadida al presupuesto.' );
 				break;
 
 			case 'evento_partida_quitar':
@@ -553,7 +562,7 @@ final class EventosView extends EventosBaseView {
 			case 'tarea_hecha':
 			case 'tarea_deshecha':
 				$t     = TareasTable::obtener( (int) $this->post( 'tarea' ) );
-				$r     = $t ? Tareas::marcar( $e, $t, 'tarea_hecha' === $accion, $a ) : new \WP_Error( 'asde_tareas', asde_t( 'Esa tarea no existe.' ) );
+				$r     = $t ? Tareas::marcar( $e, $t, 'tarea_hecha' === $accion, $a, $this->post( 'nota' ) ) : new \WP_Error( 'asde_tareas', asde_t( 'Esa tarea no existe.' ) );
 				$hecho = 'tarea_hecha' === $accion ? asde_t( 'Tarea hecha.' ) : asde_t( 'La tarea vuelve a estar pendiente.' );
 				break;
 

@@ -2873,6 +2873,7 @@ dialog.asde-modal--mini .asde-banco-tipo-nuevo h3 {
 .asde-ap .asde-badge--tarea-hecha { background: var(--asde-ok-bg); color: var(--asde-ok-text); }
 .asde-ap .asde-badge--tarea-vencida { background: var(--asde-error-bg); color: var(--asde-error-text); }
 .asde-ap .asde-badge--tarea-semana { background: var(--asde-warn-bg); color: var(--asde-warn-text); }
+.asde-ap .asde-badge--tarea-auto { background: var(--asde-info-bg); color: var(--asde-info-text); }
 .asde-ap .asde-badge--tarea-pronto,
 .asde-ap .asde-badge--tarea-sin_fecha { background: var(--asde-neutral-bg); color: var(--asde-muted); }
 @media print {

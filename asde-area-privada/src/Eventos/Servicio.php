@@ -519,6 +519,21 @@ final class Servicio {
 		return $id;
 	}
 
+	/**
+	 * Añade el gasto de los autobuses: personas ÷ plazas autobuses, a un precio cada uno (repartido entre todos). v0.40 (doc 49).
+	 *
+	 * @return int|\WP_Error Id de la partida.
+	 */
+	public static function anadir_autobuses( array $e, Ambito $a, int $personas, int $plazas, float $precio ) {
+		$n = Presupuesto::autobuses( $personas, $plazas );
+		if ( $n < 1 || $precio <= 0 ) {
+			return new \WP_Error( 'asde_evento', asde_t( 'Escribe cuántas personas viajan, las plazas de cada autobús y lo que cuesta uno.' ) );
+		}
+		/* translators: 1: nº de autobuses, 2: precio de cada uno */
+		$concepto = sprintf( asde_t( 'Autobuses (%1$d × %2$s)' ), $n, \AsdeBalears\AreaPrivada\Tesoreria\Calculadora::euros( $precio ) );
+		return self::anadir_partida( $e, $a, PartidasTable::GASTO, $concepto, 'total', '', $n * $precio );
+	}
+
 	/** @return true|\WP_Error */
 	public static function quitar_partida( array $e, Ambito $a, int $partida ) {
 		if ( ! self::puede_editar_presupuesto( $e, $a ) || ! PartidasTable::quitar( $partida, $e['id'] ) ) {

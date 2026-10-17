@@ -54,6 +54,7 @@ final class EventosConfigView extends EventosBaseView {
 		switch ( $accion ) {
 			case 'calendario_guardar':
 				$cfg['calendario_viernes'] = '1' === $this->post( 'calendario_viernes' );
+				$cfg['avisos_tareas']      = '1' === $this->post( 'avisos_tareas' );
 				$aviso = asde_t( 'Calendario guardado.' );
 				break;
 

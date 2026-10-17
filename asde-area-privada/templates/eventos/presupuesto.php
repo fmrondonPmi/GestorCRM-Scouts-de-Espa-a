@@ -12,6 +12,7 @@
 // phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound, WordPress.WP.GlobalVariablesOverride.Prohibited -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
 use AsdeBalears\AreaPrivada\Domain\Secciones;
 use AsdeBalears\AreaPrivada\Eventos\PartidasTable;
+use AsdeBalears\AreaPrivada\Eventos\Normativa;
 use AsdeBalears\AreaPrivada\Eventos\Presupuesto;
 use AsdeBalears\AreaPrivada\Eventos\Servicio;
 use AsdeBalears\AreaPrivada\Tesoreria\Calculadora;
@@ -100,7 +101,12 @@ $reparto  = static function ( array $p ): string {
 				<label class="asde-choice asde-choice--inline"><input type="radio" name="tipo" value="ingreso"><span><?php asde_e( 'Ingreso (subvención, aportación del grupo)' ); ?></span></label>
 			</fieldset>
 			<p class="asde-form__fila">
-				<label><?php asde_e( 'Concepto' ); ?> <input type="text" name="concepto" maxlength="160" required placeholder="<?php echo esc_attr( asde_a( 'p. ej. Autobús' ) ); ?>"></label>
+				<label><?php asde_e( 'Concepto' ); ?> <input type="text" name="concepto" maxlength="160" required list="asde-partidas-sugeridas" placeholder="<?php echo esc_attr( asde_a( 'p. ej. Autobús' ) ); ?>">
+					<datalist id="asde-partidas-sugeridas">
+						<?php foreach ( Presupuesto::SUGERIDAS as $sugerida ) : ?>
+							<option value="<?php echo esc_attr( asde_t( $sugerida ) ); ?>"></option>
+						<?php endforeach; ?>
+					</datalist></label>
 				<label><?php asde_e( 'Importe (€)' ); ?> <input type="text" name="importe" inputmode="decimal" size="10" required></label>
 			</p>
 			<p class="asde-form__fila">
@@ -122,6 +128,23 @@ $reparto  = static function ( array $p ): string {
 			</p>
 			<p><button type="submit" class="button"><?php asde_e( 'Añadir la partida' ); ?></button></p>
 			<p class="asde-help"><?php asde_e( '«Por persona: participantes y equipo» es lo que cuesta cada persona (albergue, comida): lo del equipo se reparte entre los participantes. «Solo el equipo» es lo que cuesta un scouter (p. ej. su plaza en un evento externo).' ); ?></p>
+		</form>
+	</section>
+
+	<section class="asde-card">
+		<h3 class="asde-card__title"><?php asde_e( 'Autobuses' ); ?></h3>
+		<?php
+		$viajan = max( 0, Normativa::participantes( $e ) ) + (int) $e['equipo_previsto'];
+		?>
+		<form method="post" class="asde-form asde-form--compacta">
+			<?php echo $campos( 'evento_autobuses' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+			<p class="asde-form__fila">
+				<label><?php asde_e( 'Personas que viajan' ); ?> <input type="number" name="personas" value="<?php echo (int) $viajan; ?>" min="1" max="9999" inputmode="numeric" required></label>
+				<label><?php asde_e( 'Plazas de cada autobús' ); ?> <input type="number" name="plazas" value="<?php echo (int) Presupuesto::PLAZAS_AUTOBUS; ?>" min="1" max="200" inputmode="numeric" required></label>
+				<label><?php asde_e( 'Precio de un autobús (€)' ); ?> <input type="text" name="precio" inputmode="decimal" size="10" required></label>
+			</p>
+			<p class="asde-help"><?php echo esc_html( sprintf( asde_n( 'Con %2$d plazas, %1$d persona necesita %3$d autobús.', 'Con %2$d plazas, %1$d personas necesitan %3$d autobuses.', $viajan ), $viajan, Presupuesto::PLAZAS_AUTOBUS, Presupuesto::autobuses( $viajan ) ) ); ?></p>
+			<p><button type="submit" class="button"><?php asde_e( 'Añadir la partida de autobuses' ); ?></button></p>
 		</form>
 	</section>
 

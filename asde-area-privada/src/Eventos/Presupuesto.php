@@ -31,6 +31,17 @@ final class Presupuesto {
 		'equipo'              => 'Por persona: solo el equipo',
 	);
 
+	/** Categorías de gasto de la hoja de presupuestos de ASDE: se sugieren al escribir el concepto de una partida. */
+	public const SUGERIDAS = array( 'Desplazamientos', 'Alimentación', 'Material y actividades', 'Gastos de voluntarios', 'Instalaciones', 'Otros' );
+
+	/** Plazas de un autobús grande (la hoja de presupuestos de ASDE usa 55). */
+	public const PLAZAS_AUTOBUS = 55;
+
+	/** Autobuses que hacen falta para tanta gente: personas ÷ plazas, hacia arriba. */
+	public static function autobuses( int $personas, int $plazas = self::PLAZAS_AUTOBUS ): int {
+		return $personas > 0 && $plazas > 0 ? (int) ceil( $personas / $plazas ) : 0;
+	}
+
 	/** Repartos que necesitan una sección (en «participante», es opcional). */
 	public const CON_SECCION = array( 'total_seccion' );
 

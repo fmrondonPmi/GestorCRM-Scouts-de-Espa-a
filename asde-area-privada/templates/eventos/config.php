@@ -167,6 +167,7 @@ defined( 'ABSPATH' ) || exit;
 		<?php wp_nonce_field( 'asde_eventos_config' ); ?>
 		<input type="hidden" name="asde_action" value="calendario_guardar">
 		<label class="asde-choice"><input type="checkbox" name="calendario_viernes" value="1" <?php checked( $cfg['calendario_viernes'] ); ?>><span><?php asde_e( 'Si una fecha límite cae en sábado o domingo, adelantarla al viernes' ); ?></span></label>
+		<label class="asde-choice"><input type="checkbox" name="avisos_tareas" value="1" <?php checked( $cfg['avisos_tareas'] ); ?>><span><?php asde_e( 'Avisar por email al responsable de cada tarea (o al director/a, si no tiene) 3 días antes y cuando vence' ); ?></span></label>
 		<p><button type="submit" class="button"><?php asde_e( 'Guardar' ); ?></button></p>
 	</form>
 
