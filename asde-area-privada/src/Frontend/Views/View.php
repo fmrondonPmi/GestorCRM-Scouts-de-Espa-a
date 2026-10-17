@@ -93,6 +93,7 @@ abstract class View {
 			'emails'           => 'usuarios',
 			'tienda_pedidos'         => isset( $items['tienda_pedidos'] ) ? 'tienda_pedidos' : 'tienda_gestion',
 			'tienda_config' => 'tienda_gestion',
+			'tienda_productos' => 'tienda_gestion',
 			'inventario_tipos'   => 'inventario',
 			'inventario_compras' => 'inventario',
 			'eventos_config'     => 'eventos',

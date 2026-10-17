@@ -2849,3 +2849,8 @@ dialog.asde-modal--mini .asde-banco-tipo-nuevo h3 {
 		max-width: 100%;
 	}
 }
+
+/* v0.39 (doc 48, fase 2): productos de la tienda. */
+.asde-table--tienda-variantes input[type="text"] { max-width: 100%; }
+.asde-table--tienda-variantes td:not(.asde-num) { vertical-align: middle; }
+.asde-table--tienda-productos .asde-badge { margin-left: .4rem; }

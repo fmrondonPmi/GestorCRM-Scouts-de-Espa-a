@@ -41,6 +41,8 @@ final class Servicio {
 	public const CAP_PEDIDO  = 'asde_tienda_pedido';
 	public const CAP_ENTREGA = 'asde_tienda_entrega';
 	public const CAP_CONFIG  = 'asde_tienda_admin';
+	/** v0.39 (doc 48): quien administra la tienda (productos, existencias y configuración): Coordinación, Tesorería y Secretaría. */
+	public const CAP_ADMIN   = 'asde_tienda_admin';
 
 	// ---------------------------------------------------------------------
 	// Qué se pide y cuánto cuesta

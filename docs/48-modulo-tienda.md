@@ -224,3 +224,12 @@ Pago con tarjeta (Redsys, Stripe), gastos de envío y envíos a domicilio, cupon
   - Migración `Install\MigracionTienda` (idempotente), probada en `tests/migracion-tienda.php` (17 comprobaciones). `tests/tienda.php` conserva las 66 de uniformes.
   - Textos nuevos con sus traducciones (ca, eu, gl). Auditoría: los tipos antiguos (`uniforme_*`) se mantienen tal cual.
   - **Pendiente de la fase 1:** textos y capturas de los manuales y la ayuda (se rehacen al cerrar la v0.39, cuando las fases 2 y 3 hayan cambiado las pantallas).
+
+- ✅ **Fase 2 hecha (2026-10-17, rama `Tienda`):** el catálogo y las existencias.
+  - Tablas `asde_tienda_productos` y `asde_tienda_variantes` (`ProductosTable`, `VariantesTable`): visibilidad `todos`/`socios` (el filtro está en la consulta: `ProductosTable::visibles()`), precio y precio de socio opcional, máximo por persona, «se encarga al proveedor», «sale del inventario», archivar en vez de borrar.
+  - Existencias siempre con una sola sentencia SQL (`reservar`, `devolver`, `ajustar`): nunca bajan de 0 ni se venden de más; `ilimitado` no cuenta unidades; los ajustes manuales llevan motivo y quedan en la auditoría (`tienda_existencias`).
+  - `Sembrado`: la camisa (una variante por modelo y talla) y las insignias de Uniformes pasan a ser productos (idempotente; lo que se cambie después se respeta). Hasta la fase 3 los pedidos siguen leyendo la configuración de Uniformes.
+  - Pantalla **Productos** (`asde_tienda_admin`: Coordinación, Tesorería y Secretaría): lista con filtros, formulario con variantes, cambio de existencias con +/− y motivo, imagen en la biblioteca de medios, archivar y recuperar.
+  - **Carga por CSV** (`ImportadorProductos`): una fila por variante; el producto que existe se actualiza solo con las celdas rellenas; las existencias se sustituyen o, si se marca, se suman; informe con el nº de fila y el motivo de cada error, y CSV de ejemplo.
+  - Pruebas: `tests/tienda-catalogo.php` (67 comprobaciones). Textos nuevos traducidos (ca, eu, gl); ayuda de la página en el manual de Coordinación.
+  - Decisiones propias (asumen las propuestas de §9): P-175 «Productos» y «Existencias»; P-177 precio de socio opcional por producto.

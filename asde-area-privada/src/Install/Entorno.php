@@ -417,6 +417,8 @@ final class Entorno {
 			Cambios::table(),
 			\AsdeBalears\AreaPrivada\Usuarios\Solicitudes::table(),
 			\AsdeBalears\AreaPrivada\Tienda\PedidosTable::table(),
+			\AsdeBalears\AreaPrivada\Tienda\ProductosTable::table(),
+			\AsdeBalears\AreaPrivada\Tienda\VariantesTable::table(),
 			\AsdeBalears\AreaPrivada\Sepa\Mandatos::table(),
 			\AsdeBalears\AreaPrivada\Sepa\Remesas::table(),
 			\AsdeBalears\AreaPrivada\Eventos\EventosTable::table(),

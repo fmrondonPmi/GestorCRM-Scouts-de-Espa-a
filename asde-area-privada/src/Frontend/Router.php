@@ -27,6 +27,7 @@ use AsdeBalears\AreaPrivada\Frontend\Views\InventarioView;
 use AsdeBalears\AreaPrivada\Frontend\Views\MisPagosView;
 use AsdeBalears\AreaPrivada\Frontend\Views\TesoreriaView;
 use AsdeBalears\AreaPrivada\Frontend\Views\TiendaPedidosView;
+use AsdeBalears\AreaPrivada\Frontend\Views\TiendaProductosView;
 use AsdeBalears\AreaPrivada\Frontend\Views\TiendaConfigView;
 use AsdeBalears\AreaPrivada\Frontend\Views\TiendaGestionView;
 use AsdeBalears\AreaPrivada\Frontend\Views\PersonasView;
@@ -89,6 +90,7 @@ final class Router {
 		'tienda_pedidos'         => array( 'asde_tienda_pedidos', TiendaPedidosView::class ),
 		'tienda_gestion'        => array( 'asde_tienda_gestion', TiendaGestionView::class ),
 		'tienda_config' => array( 'asde_tienda_config', TiendaConfigView::class ),
+		'tienda_productos' => array( 'asde_tienda_productos', TiendaProductosView::class ),
 		'pagos'            => array( 'asde_mis_pagos', MisPagosView::class ),
 		'alta_scouters'    => array( 'asde_alta_scouters', AltaScoutersView::class ),
 		// v0.19: inventario de material y listas de compra (doc 32).
@@ -270,6 +272,14 @@ final class Router {
 				( new InventarioView() )->ejemplo();
 			} elseif ( 'csv-errores' === $formato ) {
 				( new InventarioView() )->errores_csv();
+			}
+		}
+		// Cargar productos: el CSV de ejemplo y las filas que no se cargaron.
+		if ( 'tienda_productos' === $key ) {
+			if ( 'csv-ejemplo' === $formato ) {
+				( new TiendaProductosView() )->ejemplo();
+			} elseif ( 'csv-errores' === $formato ) {
+				( new TiendaProductosView() )->errores_csv();
 			}
 		}
 		// PDF de una lista de compra (solo con el visto bueno de Tesorería).

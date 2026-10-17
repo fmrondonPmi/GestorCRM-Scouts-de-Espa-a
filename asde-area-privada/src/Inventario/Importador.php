@@ -251,7 +251,7 @@ final class Importador {
 	// ---------------------------------------------------------------------
 
 	/** UTF-8 (sin el BOM) o, si no lo es, Windows-1252, que es lo que guarda Excel como «CSV». */
-	private static function a_utf8( string $texto ): string {
+	public static function a_utf8( string $texto ): string {
 		if ( str_starts_with( $texto, "\xEF\xBB\xBF" ) ) {
 			$texto = substr( $texto, 3 );
 		}
@@ -259,7 +259,7 @@ final class Importador {
 	}
 
 	/** @return array<int, string[]> Las filas del CSV, con el separador que más aparezca en la cabecera («;», «,» o tabulador). */
-	private static function filas_csv( string $texto ): array {
+	public static function filas_csv( string $texto ): array {
 		$primera = strtok( $texto, "\r\n" );
 		$sep     = ';';
 		$max     = -1;

@@ -41,6 +41,8 @@ final class Pages {
 		'tienda_pedidos' => array( 'mis-pedidos', 'Mis pedidos', '[asde_tienda_pedidos]', 'area' ),
 		'tienda_gestion'        => array( 'gestion-pedidos', 'Gestión de la tienda', '[asde_tienda_gestion]', 'tienda_pedidos' ),
 		'tienda_config' => array( 'configuracion', 'Configuración de la tienda', '[asde_tienda_config]', 'tienda_pedidos' ),
+		// v0.39 (doc 48, fase 2): el catálogo de la tienda.
+		'tienda_productos' => array( 'productos', 'Productos de la tienda', '[asde_tienda_productos]', 'tienda_pedidos' ),
 		'pagos'            => array( 'mis-pagos', 'Mis pagos', '[asde_mis_pagos]', 'area' ),
 		// v0.16: alta de scouters con el enlace del grupo (doc 31).
 		'alta_scouters'    => array( 'alta-scouters', 'Alta de scouters', '[asde_alta_scouters]', 'area' ),

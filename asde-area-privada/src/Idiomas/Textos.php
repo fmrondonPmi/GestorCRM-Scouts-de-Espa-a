@@ -31,7 +31,7 @@ use AsdeBalears\AreaPrivada\Tesoreria\Banco\CsvBanco;
 use AsdeBalears\AreaPrivada\Tesoreria\Banco\Norma43;
 use AsdeBalears\AreaPrivada\Tesoreria\Calculadora;
 use AsdeBalears\AreaPrivada\Tesoreria\MovimientosTable;
-use AsdeBalears\AreaPrivada\Uniformes\PedidosTable;
+use AsdeBalears\AreaPrivada\Tienda\PedidosTable;
 use AsdeBalears\AreaPrivada\Usuarios\RegistroEmails;
 use AsdeBalears\AreaPrivada\Usuarios\Solicitudes;
 
@@ -76,7 +76,10 @@ final class Textos {
 		$add( PedidosTable::FILTROS, 'Uniformes' );
 		$add( PedidosTable::ESTADOS, 'Uniformes' );
 		$add( array( PedidosTable::REF_INVENTARIO, PedidosTable::REF_SIN_COSTE ), 'Uniformes' );
-		$add( \AsdeBalears\AreaPrivada\Uniformes\Config::PARA_QUIEN, 'Uniformes' );
+		$add( \AsdeBalears\AreaPrivada\Tienda\Config::PARA_QUIEN, 'Uniformes' );
+		// v0.39 (doc 48, fase 2): el catálogo de la tienda.
+		$add( \AsdeBalears\AreaPrivada\Tienda\ProductosTable::VISIBILIDADES, 'Tienda' );
+		$add( array_column( \AsdeBalears\AreaPrivada\Tienda\ImportadorProductos::COLUMNAS, 0 ), 'Tienda' );
 		$add( \AsdeBalears\AreaPrivada\Inventario\ComprasTable::ESTADOS, 'Inventario' );
 		$add( \AsdeBalears\AreaPrivada\ListaEspera\Inscripciones::ESTADOS, 'Lista de espera' );
 		$add( \AsdeBalears\AreaPrivada\ListaEspera\Inscripciones::MEDIOS, 'Lista de espera' );

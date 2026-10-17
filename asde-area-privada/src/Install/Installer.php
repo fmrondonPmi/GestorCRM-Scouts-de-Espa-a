@@ -89,6 +89,7 @@ final class Installer {
 		Cambios::install_table();
 		\AsdeBalears\AreaPrivada\Usuarios\Solicitudes::install_table();
 		\AsdeBalears\AreaPrivada\Tienda\PedidosTable::install_table();
+		\AsdeBalears\AreaPrivada\Tienda\ProductosTable::install_table(); // v0.39 (doc 48, fase 2): productos y variantes de la tienda.
 		\AsdeBalears\AreaPrivada\Sepa\Mandatos::install_table();
 		\AsdeBalears\AreaPrivada\Sepa\Remesas::install_table();
 		\AsdeBalears\AreaPrivada\Inventario\TiposTable::install_table();
@@ -107,6 +108,7 @@ final class Installer {
 		\AsdeBalears\AreaPrivada\Eventos\AnticiposTable::install_table();
 		Grupos::migrar();
 		\AsdeBalears\AreaPrivada\Domain\Organizacion::migrar(); // Instalaciones anteriores: Scouts de Balears, código 7.
+		\AsdeBalears\AreaPrivada\Tienda\Sembrado::ejecutar(); // v0.39: la camisa y las insignias de Uniformes, como productos (idempotente).
 		Pages::install();
 		Visibilidad::asegurar_menu();
 		Wordfence::configurar();
