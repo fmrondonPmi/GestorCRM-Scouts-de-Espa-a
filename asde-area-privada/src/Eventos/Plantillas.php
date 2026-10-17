@@ -24,7 +24,7 @@ final class Plantillas {
 	public const AUTOMATICAS = array( 'presupuesto', 'equipo', 'titulos', 'comunicacion', 'autorizaciones', 'menu' );
 
 	/** Pestañas del evento a las que puede enlazar una tarea. */
-	public const ENLACES = array( 'resumen', 'equipo', 'inscripciones', 'presupuesto' );
+	public const ENLACES = array( 'resumen', 'equipo', 'inscripciones', 'menu', 'presupuesto' );
 
 	/** Plantilla que propone cada tipo de actividad ('' = ninguna). */
 	public const POR_TIPO = array(
@@ -59,7 +59,7 @@ final class Plantillas {
 				$t( 'Estimar número de educandos y scouters', 'inicio', -20, 'Por rama: Castores, Lobatos, Scouts, Escultas, Rovers y Scouters.', '', 'resumen' ),
 				$t( 'Estimar el número de títulos disponibles / necesarios', 'inicio', -20, 'Títulos necesarios = educandos ÷ ratio de la Comunidad Autónoma, redondeado hacia arriba.', 'titulos', 'equipo' ),
 				$t( 'Elegir cocinero, intendente y ayudantes', 'inicio', -20, '', 'equipo', 'equipo' ),
-				$t( 'Elaborar menú', 'inicio', -18, 'Revisar alergias típicas de los educandos del grupo.', 'menu' ),
+				$t( 'Elaborar menú', 'inicio', -18, 'Revisar alergias típicas de los educandos del grupo.', 'menu', 'menu' ),
 				$t( 'Estimar presupuesto de comidas', 'inicio', -18, 'Precio por acampado y día × acampados (educandos + scouters) × días.', '', 'presupuesto' ),
 				$t( 'Comprobar que hay suficientes scouters con titulación de manipulador de alimentos', 'inicio', -18, '', '', 'equipo' ),
 				$t( 'Estimar presupuesto de acampada', 'inicio', -18, 'Calcula total y total por educando.', 'presupuesto', 'presupuesto' ),
@@ -69,7 +69,7 @@ final class Plantillas {
 				$t( 'Enviar carta por correos', 'inicio', -11 ),
 				$t( 'Recoger autorizaciones, totales de educandos y enviar datos a las secciones', 'inicio', -8, '', 'autorizaciones', 'inscripciones' ),
 				$t( 'Revisar número de títulos disponibles / necesarios', 'inicio', -8, '', 'titulos', 'equipo' ),
-				$t( 'Revisar alergias médicas de asistentes, medicinas y menú', 'inicio', -8, '', 'menu' ),
+				$t( 'Revisar alergias médicas de asistentes, medicinas y menú', 'inicio', -8, 'Mira los avisos de alérgenos de la pestaña Menú y confírmalos o cambia el menú.', '', 'menu' ),
 				$t( 'Reserva final del autobús', 'inicio', -8 ),
 				$t( 'Reunión de padres', 'inicio', -7 ),
 				$t( 'Presentar el plan de actividades', 'inicio', -7 ),

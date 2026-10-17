@@ -58,6 +58,7 @@
 <li class="sub"><a href="#eventos-calendario">Calendario de tareas</a></li>
 <li class="sub"><a href="#eventos-equipo">Equipo dirigente</a></li>
 <li class="sub"><a href="#eventos-menu">Menú, lista de la compra y coste</a></li>
+<li class="sub"><a href="#eventos-alergenos">Alérgenos del menú y hoja de cocina</a></li>
 <li class="sub"><a href="#eventos-presupuesto">Presupuesto y precio</a></li>
 <li class="sub"><a href="#eventos-publicar">Lista de comprobación y publicar</a></li>
 <li class="sub"><a href="#eventos-inscripciones">Inscripciones</a></li>
@@ -468,6 +469,16 @@
 		<li><strong>Lista de la compra:</strong> suma lo escalado de cada ingrediente de todos los platos (g con kg y ml con l; unidades, cucharadas y pizcas no se mezclan). Puedes verla de <strong>todo el evento o de un día</strong>, <strong>imprimirla</strong> o <strong>descargarla en CSV</strong>.</li>
 		<li><strong>Coste:</strong> si los ingredientes tienen su coste anotado en el recetario, sale el coste de cada día y del menú, y por comensal. Lo que no tiene coste no suma y se avisa. «Proponer como partida de Alimentación» añade el coste al presupuesto como un gasto; <strong>nunca se cambia solo</strong>: si el menú cambia, quita la partida y propón otra.</li>
 	</ul>
+	<h3 id="eventos-alergenos">Alérgenos del menú y hoja de cocina</h3>
+	<p>Debajo del menú, el cuadro <strong>«Alérgenos del menú»</strong> compara el menú con la <strong>alimentación de quienes van</strong> (los inscritos y el equipo), leída en ese momento de sus fichas del CRM. <strong>No se guarda nada de lo que dicen las fichas</strong>: se calcula cada vez que abres la pestaña.</p>
+	<ul>
+		<li><strong>Conflicto</strong> (rojo): un ingrediente del plato lleva un alérgeno que afecta a alguien. <strong>Posible riesgo</strong> (ámbar): solo «puede contener» ese alérgeno, la dieta no se cumple (vegana o vegetariana frente a un plato con ingredientes de origen animal) o hay algo escrito en una ficha que no se ha podido entender. <strong>Datos incompletos</strong> (gris): hay fichas sin revisar o sin rellenar, así que no se puede asegurar nada. <strong>Sin conflictos</strong> (verde): a nadie le afecta nada.</li>
+		<li>Quien edita el menú ve cada aviso con el <strong>alérgeno, el ingrediente que lo causa y cuántas personas</strong> afecta, sin nombres. Los <strong>nombres</strong> los ven quienes ya ven la salud del evento.</li>
+		<li>Cada aviso se resuelve <strong>cambiando el menú</strong> o <strong>confirmándolo</strong>: elige qué se hace («se prepara una ración aparte sin el alérgeno», «se cambia el ingrediente», «se sustituye el plato» o «se habla con la familia») y pulsa «Confirmar». Solo se guarda qué plato, qué alérgeno, quién lo confirma, cuándo y esa alternativa: ni nombres ni diagnósticos. Nada bloquea el evento.</li>
+		<li><strong>Hoja de cocina:</strong> para quien cocina, el <strong>nombre de cada persona afectada y su alérgeno</strong> (y la dieta, si el plato no la cumple), comida por comida y solo lo que cruza con el menú. «Ver e imprimir la hoja» la genera al momento; «Enviar al equipo de cocina» la manda por email al equipo de apoyo que tiene cuenta (al resto se le imprime). Lleva la fecha y la hora, y avisa de que contiene datos de salud. <strong>No se guarda</strong>: del email solo queda constancia de que se envió. Si después cambia algo (un inscrito, una ficha o el menú), la pantalla avisa de que la última hoja está <strong>desfasada</strong> y hay que volver a generarla.</li>
+		<li>Las tareas del <a href="#eventos-calendario">calendario</a> «Elaborar menú» (se da por hecha sola cuando cada día tiene comida y cena) y «Revisar alergias médicas de asistentes, medicinas y menú» llevan a esta pestaña.</li>
+	</ul>
+
 	<h3 id="eventos-presupuesto">Presupuesto y precio</h3>
 	<p>Si el evento tiene coste, en la pestaña «Presupuesto» se escriben los gastos previstos y cómo se reparte cada uno:</p>
 	<ul>

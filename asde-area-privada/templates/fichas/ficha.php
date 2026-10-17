@@ -24,6 +24,8 @@ use AsdeBalears\AreaPrivada\Domain\Secciones;
 use AsdeBalears\AreaPrivada\Fichas\Cambios;
 use AsdeBalears\AreaPrivada\Fichas\CamposFicha;
 use AsdeBalears\AreaPrivada\Fichas\FichaService;
+use AsdeBalears\AreaPrivada\Frontend\TemplateLoader;
+use AsdeBalears\AreaPrivada\Menus\SelectorAlergenos;
 use AsdeBalears\AreaPrivada\Fichas\PermisosFicha;
 use AsdeBalears\AreaPrivada\Informes\Catalogo;
 use AsdeBalears\AreaPrivada\Domain\Identidad;
@@ -56,6 +58,21 @@ $control = static function ( string $campo, array $f ) use ( $pendientes ): stri
 	}
 	$huella = sprintf( '<input type="hidden" name="huella[%s]" value="%s">', esc_attr( $campo ), esc_attr( FichaService::huella( $v ) ) );
 	$maxlen = ! empty( $m['len'] ) ? ' maxlength="' . (int) $m['len'] . '"' : '';
+	// v0.41 (doc 49, B3): las alergias e intolerancias alimentarias se eligen en una ventana con pestañas y casillas (siguen siendo texto en el CRM).
+	if ( isset( SelectorAlergenos::CAMPOS[ $campo ] ) && in_array( $tipo, array( 'text', 'varchar', 'name', '' ), true ) ) {
+		return $huella . TemplateLoader::render(
+			'fichas/alergenos',
+			array(
+				'id'       => $id,
+				'name'     => $name,
+				'valor'    => $v,
+				'extra'    => $extra,
+				'maxlen'   => (int) ( $m['len'] ?? 0 ),
+				'etiqueta' => $f['etiqueta'],
+				'inicial'  => SelectorAlergenos::CAMPOS[ $campo ],
+			)
+		);
+	}
 	switch ( $tipo ) {
 		case 'text':
 			return $huella . sprintf( '<textarea id="%s" name="%s" rows="3"%s>%s</textarea>', esc_attr( $id ), esc_attr( $name ), $extra, esc_textarea( $v ) );

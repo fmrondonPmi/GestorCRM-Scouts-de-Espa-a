@@ -24,7 +24,10 @@ use AsdeBalears\AreaPrivada\Eventos\Tareas;
 use AsdeBalears\AreaPrivada\Eventos\TareasTable;
 use AsdeBalears\AreaPrivada\Frontend\Notices;
 use AsdeBalears\AreaPrivada\Informes\Generador;
+use AsdeBalears\AreaPrivada\Menus\AvisosTable;
+use AsdeBalears\AreaPrivada\Menus\HojaCocina;
 use AsdeBalears\AreaPrivada\Menus\MenuEvento;
+use AsdeBalears\AreaPrivada\Menus\Validacion;
 use AsdeBalears\AreaPrivada\Menus\RecetasTable;
 
 defined( 'ABSPATH' ) || exit;
@@ -263,14 +266,43 @@ final class EventosView extends EventosBaseView {
 
 	/** Lo que necesita la pestaña «Menú» (v0.41, doc 49, B2). */
 	private function menu( array $e, Ambito $a ): array {
+		$url_menu = $this->url( 'eventos', array( 'evento' => (string) $e['id'], 'pestana' => 'menu' ) );
+		// La hoja de cocina para imprimir: se compone en vivo, no se guarda y deja constancia.
+		if ( '1' === $this->get( 'hoja' ) && HojaCocina::puede_generar( $e, $a ) ) {
+			$hoja = HojaCocina::componer( $e );
+			if ( 'ok' === $hoja['estado'] ) {
+				HojaCocina::recordar( $e, $hoja, 'impresa' );
+			}
+			Logger::log( 'menu_hoja_generada', 'evento', (string) $e['id'] );
+			return array( 'modo' => 'hoja', 'hoja' => $hoja, 'url_menu' => $url_menu );
+		}
+		$quienes = Validacion::puede_ver_quienes( $e, $a );
+		$val     = Validacion::evaluar( $e, $quienes ); // En vivo: la salud no se guarda.
+		$conf    = AvisosTable::de_evento( $e['id'] );
+		if ( 'ok' === $val['estado'] ) {
+			Logger::log( 'menu_validado', 'evento', (string) $e['id'], array( 'con_nombres' => $quienes ? 1 : 0 ) );
+		}
+		$entrega = null;
+		if ( HojaCocina::puede_generar( $e, $a ) && null !== get_option( 'asde_ap_hoja_cocina_' . $e['id'], null ) ) {
+			$entrega = HojaCocina::estado( $e, HojaCocina::componer( $e ) );
+		}
 		$dia    = in_array( $this->get( 'dia' ), MenuEvento::dias( $e ), true ) ? $this->get( 'dia' ) : '';
 		$platos = MenuEvento::platos( $e );
 		$por    = array();
 		foreach ( $platos as $p ) {
 			$por[ $p['plato']['dia'] ][ $p['plato']['comida'] ][] = $p;
 		}
-		$url = $this->url( 'eventos', array( 'evento' => (string) $e['id'], 'pestana' => 'menu' ) );
+		$url = $url_menu;
 		return array(
+			'modo'        => 'menu',
+			'validacion'  => $val,
+			'nivel'       => Validacion::nivel_con_confirmaciones( $val, $conf ),
+			'confirmaciones' => $conf,
+			've_quienes'  => $quienes,
+			'puede_hoja'  => HojaCocina::puede_generar( $e, $a ),
+			'entrega'     => $entrega,
+			'url_hoja'    => add_query_arg( 'hoja', '1', $url_menu ),
+			'confirmantes' => array_filter( array_map( static fn( $c ) => ( $u = get_userdata( $c['por'] ) ) ? $u->display_name : '', $conf ) ),
 			'dias'        => MenuEvento::dias( $e ),
 			'por_dia'     => $por,
 			'recetas'     => array_values( array_filter( RecetasTable::visibles(), static fn( $r ) => $r['activa'] ) ),
@@ -618,6 +650,24 @@ final class EventosView extends EventosBaseView {
 			case 'menu_comensales':
 				$r     = MenuEvento::cambiar_comensales( $e, $a, (int) $this->post( 'plato' ), $this->post( 'comensales' ) );
 				$hecho = asde_t( 'Comensales cambiados.' );
+				break;
+
+			case 'menu_confirmar':
+				$r     = Validacion::confirmar( $e, $a, (int) $this->post( 'plato' ), sanitize_key( $this->post( 'alergeno' ) ), sanitize_key( $this->post( 'alternativa' ) ) );
+				$hecho = asde_t( 'Aviso confirmado.' );
+				break;
+
+			case 'menu_desconfirmar':
+				$r     = MenuEvento::puede_editar( $e, $a ) && AvisosTable::quitar( $e['id'], (int) $this->post( 'plato' ), sanitize_key( $this->post( 'alergeno' ) ) ) ? true : new \WP_Error( 'asde_menus', asde_t( 'No puedes cambiar el menú de este evento.' ) );
+				$hecho = asde_t( 'La confirmación se ha quitado: el aviso vuelve a estar sin resolver.' );
+				break;
+
+			case 'menu_hoja_enviar':
+				$r = HojaCocina::enviar( $e, $a );
+				if ( ! is_wp_error( $r ) ) {
+					$hecho = sprintf( asde_n( 'Hoja de cocina enviada a %d persona.', 'Hoja de cocina enviada a %d personas.', $r['enviados'] ), $r['enviados'] ) . ( $r['sin_cuenta'] ? ' ' . sprintf( asde_n( '%d persona del equipo de apoyo no tiene cuenta: imprímesela.', '%d personas del equipo de apoyo no tienen cuenta: imprímeselas.', $r['sin_cuenta'] ), $r['sin_cuenta'] ) : '' ) . ( $r['fallidos'] ? ' ' . sprintf( asde_n( 'Ha fallado el envío a %d.', 'Ha fallado el envío a %d.', $r['fallidos'] ), $r['fallidos'] ) : '' );
+					$r     = true;
+				}
 				break;
 
 			case 'menu_partida':

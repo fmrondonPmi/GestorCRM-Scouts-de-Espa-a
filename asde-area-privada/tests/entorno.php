@@ -45,7 +45,7 @@ if ( defined( 'ASDE_APP_VERSION' ) ) {
 $validos = array( Entorno::OK, Entorno::AVISO, Entorno::FALTA, Entorno::INFO );
 $ok( array() === array_diff( $claves, array_keys( $e ) ) && ! isset( $e['zona'] ) && ! array_filter( $e, static fn( $x ) => 4 !== count( $x ) || ! in_array( $x[0], $validos, true ) || '' === $x[1] || '' === $x[2] ), 'comprueba las ' . count( $claves ) . ' piezas (la hora no: es cosa de WordPress), cada una con estado, nombre y explicación' );
 $ok( Entorno::OK === $e['organizacion'][0] && str_contains( $e['organizacion'][2], 'Scouts de Balears' ), 'organización federada configurada (Scouts de Balears, código 7)' );
-$ok( Entorno::OK === $e['tablas'][0] && 27 === count( Entorno::tablas() ), 'tablas: las 27 existen (v0.36: gastos y anticipos de los eventos; v0.39: productos y variantes de la tienda; v0.40: tareas de los eventos; v0.41: ingredientes, recetas y sus líneas; v0.41 B2: el menú del evento)' );
+$ok( Entorno::OK === $e['tablas'][0] && 28 === count( Entorno::tablas() ), 'tablas: las 28 existen (v0.36: gastos y anticipos de los eventos; v0.39: productos y variantes de la tienda; v0.40: tareas de los eventos; v0.41: ingredientes, recetas y sus líneas; v0.41 B2: el menú del evento; B3: sus confirmaciones)' );
 $ok( Entorno::OK === $e['roles'][0] && Entorno::OK === $e['paginas'][0] && Entorno::OK === $e['cron'][0], 'roles, páginas y tarea diaria en orden' );
 $ok( Entorno::OK === $e['menu'][0] && Visibilidad::menu_visible(), '«Acceso socios» está en el menú principal (ubicación ' . Visibilidad::ubicacion_principal() . ')' );
 $ok( ! Entorno::opciones(), 'en un sitio ya configurado no propone cambiar ajustes del sitio' );

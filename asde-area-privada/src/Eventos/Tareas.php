@@ -106,8 +106,8 @@ final class Tareas {
 	// Comprobaciones automáticas (fase A2)
 	// ---------------------------------------------------------------------
 
-	/** Comprobaciones que se pueden medir con lo que ya sabe la aplicación. «comunicacion» y «menu» las marca una persona (todavía no hay nada que medir). */
-	public const EVALUABLES = array( 'presupuesto', 'equipo', 'titulos', 'autorizaciones' );
+	/** Comprobaciones que se pueden medir con lo que ya sabe la aplicación. «comunicacion» la marca una persona (todavía no hay nada que medir). */
+	public const EVALUABLES = array( 'presupuesto', 'equipo', 'titulos', 'autorizaciones', 'menu' );
 
 	/**
 	 * ¿Se cumple lo que mide esta comprobación? null = ahora no se puede medir y la marca una persona.
@@ -138,6 +138,22 @@ final class Tareas {
 				}
 				foreach ( $activas as $f ) {
 					if ( '' === $f['autorizacion'] ) {
+						return false;
+					}
+				}
+				return true;
+			case 'menu':
+				// v0.41 (doc 49, B2): el menú está hecho si cada día del evento tiene al menos la comida y la cena.
+				$dias = \AsdeBalears\AreaPrivada\Menus\MenuEvento::dias( $e );
+				if ( ! $dias ) {
+					return null;
+				}
+				$hay = array();
+				foreach ( \AsdeBalears\AreaPrivada\Menus\MenuTable::de_evento( $e['id'] ) as $p ) {
+					$hay[ $p['dia'] ][ $p['comida'] ] = true;
+				}
+				foreach ( $dias as $d ) {
+					if ( empty( $hay[ $d ]['comida'] ) || empty( $hay[ $d ]['cena'] ) ) {
 						return false;
 					}
 				}

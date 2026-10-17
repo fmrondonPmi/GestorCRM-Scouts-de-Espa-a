@@ -2881,3 +2881,22 @@ dialog.asde-modal--mini .asde-banco-tipo-nuevo h3 {
 	.asde-ap .asde-subnav { display: none !important; }
 	.asde-ap .asde-tarea { break-inside: avoid; }
 }
+
+/* v0.41 (doc 49, B3): el selector de alérgenos de la ficha de salud. */
+.asde-ap .asde-alerg__resumen { display: flex; flex-wrap: wrap; align-items: center; gap: .5rem; }
+.asde-ap .asde-alerg__chips { display: flex; flex-wrap: wrap; gap: .35rem; margin: 0; padding: 0; list-style: none; }
+.asde-ap .asde-alerg__chips li { background: var(--asde-tint); border: 1px solid var(--asde-border); border-radius: 999px; padding: .1rem .6rem; font-size: .9em; }
+.asde-ap .asde-alerg__chips li.asde-alerg__vacio { background: none; border-style: dashed; color: var(--asde-muted); }
+.asde-ap .asde-alerg__dialogo { max-width: min(42rem, 94vw); width: 100%; border: 1px solid var(--asde-border); border-radius: 8px; padding: 1.25rem; }
+.asde-ap .asde-alerg__dialogo::backdrop { background: rgba(0, 0, 0, .45); }
+.asde-ap .asde-alerg__tabs { display: flex; flex-wrap: wrap; gap: .25rem; border-bottom: 1px solid var(--asde-border); margin-bottom: .75rem; }
+.asde-ap .asde-alerg__tabs button { background: none; border: 0; border-bottom: 3px solid transparent; padding: .5rem .9rem; cursor: pointer; font: inherit; color: inherit; }
+.asde-ap .asde-alerg__tabs button.is-active { border-bottom-color: var(--asde-primary); font-weight: 600; }
+.asde-ap .asde-alerg__tabs button:focus-visible { outline: 2px solid var(--asde-primary); outline-offset: 2px; }
+.asde-ap .asde-alerg__panel { display: flex; flex-wrap: wrap; gap: .25rem 1.25rem; max-height: 40vh; overflow: auto; padding: .25rem; }
+.asde-ap .asde-alerg__panel[hidden] { display: none; }
+.asde-ap .asde-alerg__propio { margin-top: 1rem; }
+.asde-ap .asde-alerg__propio-fila { display: flex; gap: .5rem; align-items: center; }
+.asde-ap .asde-alerg__propio-fila input { flex: 1 1 auto; }
+.asde-ap .asde-alerg__error { color: var(--asde-error); }
+.asde-ap .asde-alerg__botones { display: flex; gap: 1rem; align-items: center; margin: 1rem 0 0; }

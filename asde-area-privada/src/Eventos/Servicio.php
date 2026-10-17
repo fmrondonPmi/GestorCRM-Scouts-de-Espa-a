@@ -651,6 +651,8 @@ final class Servicio {
 		InscripcionesTable::borrar_evento( $e['id'] );
 		TareasTable::borrar_de_evento( $e['id'] );
 		\AsdeBalears\AreaPrivada\Menus\MenuTable::borrar_evento( $e['id'] );
+		\AsdeBalears\AreaPrivada\Menus\AvisosTable::borrar_evento( $e['id'] );
+		\AsdeBalears\AreaPrivada\Menus\HojaCocina::olvidar( $e['id'] );
 		EventosTable::borrar( $e['id'] );
 		self::olvidar();
 		Logger::log( 'evento_borrado', 'evento', (string) $e['id'] );

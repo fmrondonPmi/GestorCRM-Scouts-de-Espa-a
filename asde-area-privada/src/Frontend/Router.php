@@ -318,7 +318,8 @@ final class Router {
 		if ( ! in_array( $key, Pages::PUBLICAS, true ) ) {
 			wp_enqueue_script( 'asde-cabecera', plugins_url( 'assets/js/cabecera.js', ASDE_AP_FILE ), array( 'asde-i18n' ), ASDE_AP_VERSION, true );
 			// En cualquier página se puede abrir una ficha o «Dar acceso» en la ventana emergente.
-			wp_enqueue_script( 'asde-ficha', plugins_url( 'assets/js/ficha.js', ASDE_AP_FILE ), array( 'asde-i18n' ), ASDE_AP_VERSION, true );
+			wp_enqueue_script( 'asde-alergenos', plugins_url( 'assets/js/alergenos.js', ASDE_AP_FILE ), array(), ASDE_AP_VERSION, true ); // v0.41: el selector de alérgenos de la ficha.
+			wp_enqueue_script( 'asde-ficha', plugins_url( 'assets/js/ficha.js', ASDE_AP_FILE ), array( 'asde-i18n', 'asde-alergenos' ), ASDE_AP_VERSION, true );
 			wp_enqueue_script( 'asde-alta', plugins_url( 'assets/js/alta.js', ASDE_AP_FILE ), array( 'asde-i18n' ), ASDE_AP_VERSION, true );
 			wp_enqueue_script( 'asde-area', plugins_url( 'assets/js/area.js', ASDE_AP_FILE ), array( 'asde-i18n', 'asde-ficha', 'asde-alta' ), ASDE_AP_VERSION, true );
 		}

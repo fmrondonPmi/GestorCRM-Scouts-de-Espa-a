@@ -273,6 +273,15 @@
 	} );
 	}
 
+	// v0.41: el selector de alérgenos de la ficha de salud (alergenos.js) también en la ventana emergente.
+	var iniciarFicha = iniciar;
+	iniciar = function ( raiz ) {
+		iniciarFicha( raiz );
+		if ( window.asdeAlergenos ) {
+			window.asdeAlergenos.iniciar( raiz );
+		}
+	};
+
 	window.asdeFicha = { iniciar: iniciar };
 	iniciar( document );
 } )();

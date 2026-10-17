@@ -65,6 +65,7 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 = 0.41.0 =
 * Events: recipe book for the menus (plan in docs/49, first phase). A new "Recipes" tab in Events lets scouts keep the group's recipes with their ingredients and the 14 mandatory allergens (traces and animal origin too); a recipe's allergens are worked out from its ingredients, never typed by hand, and the recipe warns about ingredients nobody has checked. Quantities are scaled to the number of diners (g and kg, ml and l are converted). Includes a small library of example recipes shared by all groups (copy and edit; the original never changes) and CSV import. It holds no personal data: matching the menu against the attendees' allergies comes in a later version.
 * Events: a "Menu" tab in each event (for those who manage it) sets the dishes for every day and meal from the recipe book, with the number of diners, a shopping list that adds up the scaled ingredients (printable, CSV, whole event or one day), the cost of the menu and a button to propose it as a "Food" line of the budget (never changed automatically).
+* Events, allergens: the allergy and intolerance fields of the health record are now chosen in a window with tabs and checkboxes (the 14 mandatory allergens, common foods and intolerances) plus any allergen typed by hand; the CRM still stores plain comma-separated text and what was already written is kept. The event menu is checked live against the attendees' records (nothing about health is stored): conflict, possible risk, incomplete data or no conflicts; warnings are confirmed with a closed list of alternatives, and a kitchen sheet with each affected person's name and allergen can be printed or emailed to the support team, never stored.
 
 = 0.40.0 =
 * Events: task calendar (plan in docs/49). A new "Calendar" tab in each event copies a template of tasks with deadlines counted from the start or end of the event (the ASDE camp programmer's 31-task "Acampada" template comes built in), shows a traffic light for each task (done, overdue, this week, later), lets any scout with access to the event tick tasks off, lets whoever manages the event assign a responsible person, set an own date, add and remove tasks, recalculates the dates if the event moves, adjusts weekend deadlines to the previous Friday (configurable) and prints. Each group can edit the template or create its own in Events settings. Overdue and this-week tasks appear in "Pending review" on the home page. A new table is created automatically.
@@ -233,7 +234,7 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 == Upgrade Notice ==
 
 = 0.41.0 =
-Recipe book for event menus. Adds four tables and one permission (created automatically); nothing else changes.
+Recipe book for event menus. Adds five tables and one permission (created automatically); nothing else changes.
 
 = 0.40.0 =
 Event task calendar. Adds one table (created automatically); nothing else changes.

@@ -199,6 +199,9 @@ final class Avisos {
 		if ( in_array( $datos['tipo'] ?? '', AvisosTareas::TIPOS, true ) ) {
 			return AvisosTareas::html( $datos, $saludo ); // v0.40: los avisos del calendario de tareas.
 		}
+		if ( 'cocina' === ( $datos['tipo'] ?? '' ) ) {
+			return '<p>' . esc_html( asde_t( 'Hoja de cocina del evento. Por contener datos de salud, el contenido no se guarda: solo consta que se envió.' ) ) . '</p>'; // v0.41 (B3): nunca se vuelve a componer en la vista previa.
+		}
 		$tipo_ok = in_array( $datos['tipo'] ?? '', self::TIPOS, true ) ? (string) $datos['tipo'] : 'publicado';
 		if ( '' === $quien && ! empty( $datos['inscripcion'] ) ) {
 			$quien = self::nombre_de( (int) $datos['inscripcion'] ); // Vista previa: el nombre se vuelve a leer del CRM.

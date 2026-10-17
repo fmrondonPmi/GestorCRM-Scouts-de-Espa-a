@@ -82,6 +82,7 @@ final class MenuEvento {
 		if ( ! self::puede_editar( $e, $a ) || ! MenuTable::quitar( $id, $e['id'] ) ) {
 			return new \WP_Error( 'asde_menus', asde_t( 'No puedes cambiar el menú de este evento.' ) );
 		}
+		AvisosTable::borrar_plato( $id ); // Sus confirmaciones ya no valen.
 		Logger::log( 'menu_comida_quitada', 'evento', (string) $e['id'] );
 		return true;
 	}

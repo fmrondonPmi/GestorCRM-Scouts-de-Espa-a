@@ -300,6 +300,7 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 | `asde_inventario` | `src/Inventario/MaterialesTable.php` |
 | `asde_inventario_tipos` | `src/Inventario/TiposTable.php` |
 | `asde_lista_espera` | `src/ListaEspera/Inscripciones.php` |
+| `asde_evento_menu_avisos` | `src/Menus/AvisosTable.php` |
 | `asde_menu_ingredientes` | `src/Menus/IngredientesTable.php` |
 | `asde_evento_menu` | `src/Menus/MenuTable.php` |
 | `asde_menu_recetas` | `src/Menus/RecetasTable.php` |
@@ -521,14 +522,18 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 **Menus/**
 
 - `Alergenos` — Los 14 alérgenos de declaración obligatoria (Reglamento (UE) 1169/2011) y lo que se deriva de ellos (doc 49, B1).
+- `AvisosTable` — Las confirmaciones de los avisos de alérgenos de un menú ({prefix}asde_evento_menu_avisos, doc 49, B3, P-191).
 - `Biblioteca` — La biblioteca básica común (doc 49, P-195):
 - `Conversion` — Utilidades pequeñas de texto de los menús.
 - `Escalado` — Unidades y escalado de las recetas (doc 49, B1).
+- `HojaCocina` — La hoja de cocina de un evento (doc 49, B3, apartado 9.1):
 - `IngredientesTable` — Ingredientes ({prefix}asde_menu_ingredientes, doc 49, B1).
 - `MenuEvento` — El menú de un evento (doc 49, B2):
 - `MenuTable` — Las comidas del menú de un evento ({prefix}asde_evento_menu, doc 49, B2):
 - `Recetario` — El recetario del grupo (doc 49, B1):
 - `RecetasTable` — Recetas ({prefix}asde_menu_recetas) y sus líneas ({prefix}asde_menu_receta_lineas), doc 49, B1.
+- `SelectorAlergenos` — El selector de alérgenos de la ficha de salud (v0.41, doc 49, B3) y el intérprete de lo que se guardó.
+- `Validacion` — Valida el menú de un evento contra la alimentación de quienes van (doc 49, B3).
 
 **(raíz)/**
 
@@ -607,6 +612,7 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 ### JavaScript (`assets/js/`)
 
 - `admin.js` — Páginas del plugin en wp-admin (v0.31: antes, onsubmit/onclick en las plantillas; WordPress pide no poner JavaScript en ellas).
+- `alergenos.js` — Selector de alérgenos de la ficha de salud (mejora progresiva: sin JavaScript queda el campo de texto).
 - `alta.js` — Alta de usuarios: mejora progresiva (el formulario funciona sin JS y todo se vuelve a comprobar en el servidor).
 - `area.js` — Área privada (mejora progresiva: sin JavaScript los enlaces abren la página).
 - `banco.js` — Tesorería → Banco (v0.20, doc 16).
@@ -628,5 +634,5 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 
 ### Pruebas (`tests/`)
 
-`acceso` · `alta-reglas` · `alta-scouters` · `altas-crm-escritura` · `altas-crm-pantallas` · `altas-crm` · `app-enganches` · `ayuda` · `banco-gestion` · `colores` · `entorno` · `estilo-wordpress` · `eventos-avisos-config` · `eventos-calendario` · `eventos-economia` · `eventos-inscripciones` · `eventos` · `fichas-escritura` · `grupos-emails-banco` · `identidad` · `idiomas-catalogos` · `idiomas` · `inventario` · `lista-espera` · `mejoras-v029` · `mejoras-v030` · `mejoras-v031` · `mejoras-v034` · `mejoras-v0351` · `menus-evento` · `menus-recetario` · `menus` · `migracion-tienda` · `modulos` · `organizacion` · `rendimiento` · `sepa` · `solicitudes` · `tema` · `tienda-catalogo` · `tienda-fase5` · `tienda-pedidos` · `tienda-publica` · `tienda` · `usuarios-listado`
+`acceso` · `alta-reglas` · `alta-scouters` · `altas-crm-escritura` · `altas-crm-pantallas` · `altas-crm` · `app-enganches` · `ayuda` · `banco-gestion` · `colores` · `entorno` · `estilo-wordpress` · `eventos-avisos-config` · `eventos-calendario` · `eventos-economia` · `eventos-inscripciones` · `eventos` · `ficha-alergenos` · `fichas-escritura` · `grupos-emails-banco` · `identidad` · `idiomas-catalogos` · `idiomas` · `inventario` · `lista-espera` · `mejoras-v029` · `mejoras-v030` · `mejoras-v031` · `mejoras-v034` · `mejoras-v0351` · `menus-evento` · `menus-recetario` · `menus-validacion` · `menus` · `migracion-tienda` · `modulos` · `organizacion` · `rendimiento` · `sepa` · `solicitudes` · `tema` · `tienda-catalogo` · `tienda-fase5` · `tienda-pedidos` · `tienda-publica` · `tienda` · `usuarios-listado`
 <!-- inventario:fin -->

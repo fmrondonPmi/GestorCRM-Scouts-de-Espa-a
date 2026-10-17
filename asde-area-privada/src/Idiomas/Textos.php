@@ -99,7 +99,7 @@ final class Textos {
 		$add( Presupuesto::REPARTOS, 'Eventos' );
 		$add( Normativa::COMUNICACION, 'Eventos' );
 		$add( EventosView::PESTANAS, 'Eventos' );
-		$add( array_merge( \AsdeBalears\AreaPrivada\Menus\Alergenos::LISTA, \AsdeBalears\AreaPrivada\Menus\RecetasTable::TIPOS, array_column( \AsdeBalears\AreaPrivada\Menus\Escalado::UNIDADES, 0 ), \AsdeBalears\AreaPrivada\Menus\Biblioteca::textos(), \AsdeBalears\AreaPrivada\Menus\MenuTable::COMIDAS, array( \AsdeBalears\AreaPrivada\Menus\MenuEvento::CONCEPTO_PARTIDA ) ), 'Menús' ); // v0.41: recetario.
+		$add( array_merge( \AsdeBalears\AreaPrivada\Menus\Alergenos::LISTA, \AsdeBalears\AreaPrivada\Menus\RecetasTable::TIPOS, array_column( \AsdeBalears\AreaPrivada\Menus\Escalado::UNIDADES, 0 ), \AsdeBalears\AreaPrivada\Menus\Biblioteca::textos(), \AsdeBalears\AreaPrivada\Menus\MenuTable::COMIDAS, array( \AsdeBalears\AreaPrivada\Menus\MenuEvento::CONCEPTO_PARTIDA ), \AsdeBalears\AreaPrivada\Menus\SelectorAlergenos::textos(), \AsdeBalears\AreaPrivada\Menus\AvisosTable::ALTERNATIVAS ), 'Menús' ); // v0.41: recetario.
 		$add( \AsdeBalears\AreaPrivada\Eventos\Plantillas::textos(), 'Eventos' ); // v0.40: la plantilla de Acampada.
 		// v0.35: inscripciones y cobros (y el texto de la autorización del plugin).
 		$add( EventosTable::MODALIDADES, 'Eventos' );

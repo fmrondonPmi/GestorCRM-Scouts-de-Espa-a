@@ -112,6 +112,7 @@ final class Installer {
 		\AsdeBalears\AreaPrivada\Menus\IngredientesTable::install_table();
 		\AsdeBalears\AreaPrivada\Menus\RecetasTable::install_table();
 		\AsdeBalears\AreaPrivada\Menus\MenuTable::install_table(); // B2: el menú de cada evento.
+		\AsdeBalears\AreaPrivada\Menus\AvisosTable::install_table(); // B3: las confirmaciones de los avisos de alérgenos.
 		Grupos::migrar();
 		\AsdeBalears\AreaPrivada\Domain\Organizacion::migrar(); // Instalaciones anteriores: Scouts de Balears, código 7.
 		\AsdeBalears\AreaPrivada\Menus\Biblioteca::sembrar(); // v0.41: la biblioteca común de recetas (idempotente).
