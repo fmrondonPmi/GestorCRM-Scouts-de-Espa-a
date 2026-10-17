@@ -296,4 +296,11 @@ Pruebas nuevas por fase (`tests/eventos-calendario.php`, `tests/menus-recetas.ph
   - **CSV** (`Recetario::importar`): una fila por ingrediente (Receta; Tipo; Porciones; Ingrediente; Cantidad; Unidad); ingredientes nuevos sin alérgenos y sin revisar; no pisa recetas existentes; informe con el motivo de cada fila rechazada.
   - Auditoría: `menu_receta_*`, `menu_ingrediente_*` (objeto `menus`). Archivar en lugar de borrar.
   - Pruebas: `tests/menus-recetario.php` (75). Textos nuevos traducidos (ca, eu, gl).
-  - **Quedan** B2 (menú del evento, lista de la compra, coste) y B3 (validación contra los asistentes, hoja de cocina) y el material del evento (v0.42).
+  - **Quedan** B2 y B3 (validación contra los asistentes, hoja de cocina) y el material del evento (v0.42).
+- ✅ **Fase B2 hecha (2026-10-17, rama `Calendario-Eventos`, v0.41.0):** el menú del evento.
+  - **Tabla** `asde_evento_menu` (`Menus\MenuTable`): día, comida (desayuno, comida, merienda, cena), receta y comensales propios opcionales. Varios platos por comida. Sin datos de personas. Se borra con el evento (borrador).
+  - **Pestaña «Menú»** del evento (`Menus\MenuEvento`, plantilla `eventos/menu.php`), solo para quien gestiona el evento (`Servicio::en_gestion`, con las cuentas cerradas es de solo lectura): platos por día y comida con los alérgenos de su receta (sin nombres: la comprobación con los asistentes es B3), añadir, cambiar comensales y quitar. Comensales por defecto = inscritos activos + equipo.
+  - **Lista de la compra:** suma lo escalado por ingrediente y familia de unidad (g↔kg, ml↔l; ud, cda y pizca aparte), de todo el evento o de un día; imprimir y CSV (nonce `asde_menu_csv_<evento>`, `Generador::celda_segura`).
+  - **Coste:** por la unidad habitual del ingrediente, solo si la unidad del plato es de la misma familia; lo que no tiene coste (o está en otra familia) no suma y se avisa; por día, total y por comensal. **Proponer como partida** «Alimentación (menú del evento)» (`Servicio::anadir_partida`, nunca automático; no duplica).
+  - Arreglo de paso: un coste escrito con coma («1,5») se leía como 1 (`IngredientesTable::guardar`).
+  - Pruebas: `tests/menus-evento.php` (42). Textos nuevos traducidos (ca, eu, gl).

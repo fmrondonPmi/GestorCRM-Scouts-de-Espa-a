@@ -301,6 +301,7 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 | `asde_inventario_tipos` | `src/Inventario/TiposTable.php` |
 | `asde_lista_espera` | `src/ListaEspera/Inscripciones.php` |
 | `asde_menu_ingredientes` | `src/Menus/IngredientesTable.php` |
+| `asde_evento_menu` | `src/Menus/MenuTable.php` |
 | `asde_menu_recetas` | `src/Menus/RecetasTable.php` |
 | `asde_menu_receta_lineas` | `src/Menus/RecetasTable.php` |
 | `asde_sepa_mandatos` | `src/Sepa/Mandatos.php` |
@@ -524,6 +525,8 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 - `Conversion` — Utilidades pequeñas de texto de los menús.
 - `Escalado` — Unidades y escalado de las recetas (doc 49, B1).
 - `IngredientesTable` — Ingredientes ({prefix}asde_menu_ingredientes, doc 49, B1).
+- `MenuEvento` — El menú de un evento (doc 49, B2):
+- `MenuTable` — Las comidas del menú de un evento ({prefix}asde_evento_menu, doc 49, B2):
 - `Recetario` — El recetario del grupo (doc 49, B1):
 - `RecetasTable` — Recetas ({prefix}asde_menu_recetas) y sus líneas ({prefix}asde_menu_receta_lineas), doc 49, B1.
 
@@ -625,5 +628,5 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 
 ### Pruebas (`tests/`)
 
-`acceso` · `alta-reglas` · `alta-scouters` · `altas-crm-escritura` · `altas-crm-pantallas` · `altas-crm` · `app-enganches` · `ayuda` · `banco-gestion` · `colores` · `entorno` · `estilo-wordpress` · `eventos-avisos-config` · `eventos-calendario` · `eventos-economia` · `eventos-inscripciones` · `eventos` · `fichas-escritura` · `grupos-emails-banco` · `identidad` · `idiomas-catalogos` · `idiomas` · `inventario` · `lista-espera` · `mejoras-v029` · `mejoras-v030` · `mejoras-v031` · `mejoras-v034` · `mejoras-v0351` · `menus-recetario` · `menus` · `migracion-tienda` · `modulos` · `organizacion` · `rendimiento` · `sepa` · `solicitudes` · `tema` · `tienda-catalogo` · `tienda-fase5` · `tienda-pedidos` · `tienda-publica` · `tienda` · `usuarios-listado`
+`acceso` · `alta-reglas` · `alta-scouters` · `altas-crm-escritura` · `altas-crm-pantallas` · `altas-crm` · `app-enganches` · `ayuda` · `banco-gestion` · `colores` · `entorno` · `estilo-wordpress` · `eventos-avisos-config` · `eventos-calendario` · `eventos-economia` · `eventos-inscripciones` · `eventos` · `fichas-escritura` · `grupos-emails-banco` · `identidad` · `idiomas-catalogos` · `idiomas` · `inventario` · `lista-espera` · `mejoras-v029` · `mejoras-v030` · `mejoras-v031` · `mejoras-v034` · `mejoras-v0351` · `menus-evento` · `menus-recetario` · `menus` · `migracion-tienda` · `modulos` · `organizacion` · `rendimiento` · `sepa` · `solicitudes` · `tema` · `tienda-catalogo` · `tienda-fase5` · `tienda-pedidos` · `tienda-publica` · `tienda` · `usuarios-listado`
 <!-- inventario:fin -->

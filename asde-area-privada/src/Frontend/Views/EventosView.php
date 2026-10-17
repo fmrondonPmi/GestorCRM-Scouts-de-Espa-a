@@ -24,6 +24,8 @@ use AsdeBalears\AreaPrivada\Eventos\Tareas;
 use AsdeBalears\AreaPrivada\Eventos\TareasTable;
 use AsdeBalears\AreaPrivada\Frontend\Notices;
 use AsdeBalears\AreaPrivada\Informes\Generador;
+use AsdeBalears\AreaPrivada\Menus\MenuEvento;
+use AsdeBalears\AreaPrivada\Menus\RecetasTable;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -42,6 +44,7 @@ final class EventosView extends EventosBaseView {
 		'calendario'    => 'Calendario',
 		'equipo'        => 'Equipo',
 		'inscripciones' => 'Inscripciones',
+		'menu'          => 'Menú',
 		'presupuesto'   => 'Presupuesto',
 		'cuentas'       => 'Cuentas',
 	);
@@ -134,7 +137,7 @@ final class EventosView extends EventosBaseView {
 
 	private function evento( array $e, Ambito $a, array $cfg ): string {
 		$pestana = isset( self::PESTANAS[ $this->get( 'pestana' ) ] ) ? $this->get( 'pestana' ) : 'resumen';
-		if ( 'cuentas' === $pestana && ! Cuentas::puede_ver( $e, $a ) ) {
+		if ( 'cuentas' === $pestana && ! Cuentas::puede_ver( $e, $a ) || 'menu' === $pestana && ! MenuEvento::puede_ver( $e, $a ) ) {
 			$pestana = 'resumen';
 		}
 		Inscripciones::revisar( $e ); // Lista de espera al día (plazas que caducan o se liberan).
@@ -161,6 +164,8 @@ final class EventosView extends EventosBaseView {
 			$contenido = $this->tpl( 'eventos/inscripciones', $vars + $this->inscripciones( $e, $a, $filas ) );
 		} elseif ( 'cuentas' === $pestana ) {
 			$contenido = $this->tpl( 'eventos/cuentas', $vars + $this->cuentas( $e ) );
+		} elseif ( 'menu' === $pestana ) {
+			$contenido = $this->tpl( 'eventos/menu', $vars + $this->menu( $e, $a ) );
 		} elseif ( 'calendario' === $pestana ) {
 			$contenido = $this->tpl( 'eventos/calendario', $vars + $this->calendario( $e, $a, $cfg, $equipo, $nombres ) );
 		} elseif ( 'equipo' === $pestana ) {
@@ -254,6 +259,47 @@ final class EventosView extends EventosBaseView {
 			'abiertas'    => Cobros::abiertas( $e ),
 			'gestionable' => $gestiona && Inscripciones::gestionable( $e ),
 		);
+	}
+
+	/** Lo que necesita la pestaña «Menú» (v0.41, doc 49, B2). */
+	private function menu( array $e, Ambito $a ): array {
+		$dia    = in_array( $this->get( 'dia' ), MenuEvento::dias( $e ), true ) ? $this->get( 'dia' ) : '';
+		$platos = MenuEvento::platos( $e );
+		$por    = array();
+		foreach ( $platos as $p ) {
+			$por[ $p['plato']['dia'] ][ $p['plato']['comida'] ][] = $p;
+		}
+		$url = $this->url( 'eventos', array( 'evento' => (string) $e['id'], 'pestana' => 'menu' ) );
+		return array(
+			'dias'        => MenuEvento::dias( $e ),
+			'por_dia'     => $por,
+			'recetas'     => array_values( array_filter( RecetasTable::visibles(), static fn( $r ) => $r['activa'] ) ),
+			'comensales'  => MenuEvento::comensales( $e ),
+			'compra'      => MenuEvento::compra( $e, $dia ),
+			'coste_total' => MenuEvento::compra( $e )['total'],
+			'coste_dias'  => MenuEvento::coste_por_dia( $e ),
+			'dia'         => $dia,
+			'puede_editar' => MenuEvento::puede_editar( $e, $a ),
+			'puede_partida' => Servicio::puede_editar_presupuesto( $e, $a ),
+			'url_menu'    => $url,
+			'url_csv'     => $this->url( 'eventos', array_filter( array( 'evento' => (string) $e['id'], 'formato' => 'csv', 'dia' => $dia, '_wpnonce' => wp_create_nonce( 'asde_menu_csv_' . $e['id'] ) ) ) ),
+			'url_recetas' => $this->url( 'eventos_recetas' ),
+		);
+	}
+
+	/** Descarga la lista de la compra del menú (se llama antes de pintar la página). */
+	public function exportar_compra(): void {
+		$e = EventosTable::obtener( (int) $this->get( 'evento' ) );
+		if ( ! $e || ! MenuEvento::puede_ver( $e, Ambito::actual() ) || ! wp_verify_nonce( $this->get( '_wpnonce' ), 'asde_menu_csv_' . $e['id'] ) ) {
+			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-area-privada' ), 403 );
+		}
+		$dia = in_array( $this->get( 'dia' ), MenuEvento::dias( $e ), true ) ? $this->get( 'dia' ) : '';
+		Logger::log( 'menu_compra_exportada', 'evento', (string) $e['id'] );
+		nocache_headers();
+		header( 'Content-Type: text/csv; charset=UTF-8' );
+		header( 'Content-Disposition: attachment; filename="compra-' . sanitize_file_name( EventosTable::numero( $e ) ) . '-' . wp_date( 'Ymd' ) . '.csv"' );
+		echo MenuEvento::csv( $e, $dia ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- es un fichero CSV, no HTML
+		exit;
 	}
 
 	/** Lo que necesita la pestaña «Calendario» (v0.40, doc 49). */
@@ -557,6 +603,26 @@ final class EventosView extends EventosBaseView {
 			case 'tarea_aplicar':
 				$r     = Tareas::aplicar( $e, sanitize_key( $this->post( 'plantilla' ) ), $a );
 				$hecho = is_wp_error( $r ) ? '' : sprintf( asde_n( 'Se ha creado %d tarea.', 'Se han creado %d tareas.', (int) $r ), (int) $r );
+				break;
+
+			case 'menu_anadir':
+				$r     = MenuEvento::anadir( $e, $a, $this->post( 'dia' ), $this->post( 'comida' ), (int) $this->post( 'receta' ), $this->post( 'comensales' ) );
+				$hecho = asde_t( 'Plato añadido al menú.' );
+				break;
+
+			case 'menu_quitar':
+				$r     = MenuEvento::quitar( $e, $a, (int) $this->post( 'plato' ) );
+				$hecho = asde_t( 'Plato quitado del menú.' );
+				break;
+
+			case 'menu_comensales':
+				$r     = MenuEvento::cambiar_comensales( $e, $a, (int) $this->post( 'plato' ), $this->post( 'comensales' ) );
+				$hecho = asde_t( 'Comensales cambiados.' );
+				break;
+
+			case 'menu_partida':
+				$r     = MenuEvento::proponer_partida( $e, $a );
+				$hecho = asde_t( 'Partida de alimentación añadida al presupuesto.' );
 				break;
 
 			case 'tarea_hecha':

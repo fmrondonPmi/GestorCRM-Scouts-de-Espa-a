@@ -265,6 +265,9 @@ final class Router {
 		if ( 'tesoreria' === $key && in_array( $formato, array( 'xlsx', 'csv' ), true ) ) {
 			( new TesoreriaView() )->exportar(); // Siempre Excel (v0.37): el enlace «csv» de antes sigue valiendo.
 		}
+		if ( 'csv' === $formato && 'eventos' === $key ) {
+			( new EventosView() )->exportar_compra(); // v0.41 (B2): la lista de la compra del menú.
+		}
 		if ( 'xlsx' === $formato && 'tienda_gestion' === $key ) {
 			( new TiendaGestionView() )->exportar_informe(); // v0.40 (fase 5): informes de ventas en Excel.
 		}

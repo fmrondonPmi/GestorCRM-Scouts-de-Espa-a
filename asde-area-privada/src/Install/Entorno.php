@@ -431,6 +431,7 @@ final class Entorno {
 			\AsdeBalears\AreaPrivada\Menus\IngredientesTable::table(),
 			\AsdeBalears\AreaPrivada\Menus\RecetasTable::table(),
 			\AsdeBalears\AreaPrivada\Menus\RecetasTable::table_lineas(),
+			\AsdeBalears\AreaPrivada\Menus\MenuTable::table(),
 		);
 	}
 

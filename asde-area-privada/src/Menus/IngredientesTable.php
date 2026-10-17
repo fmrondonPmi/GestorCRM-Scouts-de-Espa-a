@@ -103,7 +103,7 @@ final class IngredientesTable {
 			return new \WP_Error( 'asde_menus', asde_t( 'Escribe el nombre del ingrediente.' ) );
 		}
 		$unidad = Escalado::unidad_valida( (string) ( $d['unidad'] ?? '' ) ) ? (string) $d['unidad'] : 'g';
-		$coste  = isset( $d['coste'] ) && '' !== $d['coste'] && null !== $d['coste'] ? max( 0.0, round( (float) $d['coste'], 4 ) ) : null;
+		$coste  = isset( $d['coste'] ) && '' !== $d['coste'] && null !== $d['coste'] ? max( 0.0, round( is_string( $d['coste'] ) ? Conversion::numero( $d['coste'] ) : (float) $d['coste'], 4 ) ) : null;
 		$fila   = array(
 			'nombre'    => $nombre,
 			'unidad'    => $unidad,
