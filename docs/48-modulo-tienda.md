@@ -138,7 +138,7 @@ Cada fase: **rama desde `origin/main`**, pruebas verdes, versión, textos en ca/
 
 ### Fase 0 · Preparación
 1. Crear la rama `Tienda`. Leer docs 24, 32, 36 y 43 (patrón de cobros) y `modulo-area-privada`.
-2. P-174 y P-176 **ya decididas** (§9). Quedan P-175 y P-177…P-182: se asumen las propuestas salvo que el usuario diga otra cosa antes de la fase 2.
+2. **Todas las preguntas de §9 están decididas** (P-174 y P-176 el 2026-10-17; P-175 y P-177…P-182 el mismo día, una a una).
 
 ### Fase 1 · Renombrar y migrar (sin cambiar lo que hace)
 1. `Domain\Modulos`: `UNIFORMES` → `TIENDA = 'tienda'`, nombre «Tienda». Migración de la opción `asde_ap_modulos` (si estaba apagado, sigue apagado).
@@ -201,14 +201,14 @@ Pago con tarjeta (Redsys, Stripe), gastos de envío y envíos a domicilio, cupon
 | # | Pregunta | Propuesta |
 |---|---|---|
 | **P-174** ✅ | ¿Pueden **comprar** quienes no son socios (sin iniciar sesión)? | **Decidido (2026-10-17): sí.** Compran por transferencia o Bizum, con datos mínimos y confirmación por email |
-| P-175 | ¿«Productos / Existencias» está bien, o prefieres «Inventario»? | «Productos» y «Existencias» |
+| P-175 ✅ | ¿Cómo se llama lo que se vende y lo que queda? | **«Inventario de la tienda»** (decidido el 2026-10-17; la propuesta era «Productos» y «Existencias»). Pendiente en el código: la pestaña y los títulos de la fase 2 dicen «Productos» y «Existencias» |
 | **P-176** ✅ | ¿El tesorero marca como pagado **todos** los pagos o solo los de **en físico**? | **Decidido (2026-10-17): todos** (transferencia, Bizum y físico), tras ver el ingreso |
-| P-177 | ¿Un mismo producto puede tener **precio distinto** para socios y no socios? | Sí, un campo opcional «precio socio» |
-| P-178 | Datos de pago: ¿una sola cuenta IBAN y un solo teléfono Bizum por grupo? ¿De quién? | Sí, en la configuración del grupo |
-| P-179 | ¿Días máximos sin pagar antes de cancelar el pedido y devolver existencias? | 14 días, configurable |
-| P-180 | ¿Se mantiene «primera camisa de scouter gratis» y «camisa del inventario»? | Sí, como opciones del producto camisa |
-| P-181 | ¿Quién marca **entregado**: también la administración y los scouters de sección, como hoy? | Sí, igual que hoy |
-| P-182 | ¿Se avisa por email en cada paso (pedido, pagado, entregado)? (ligado a P-41) | Sí, los tres, con el idioma del destinatario |
+| P-177 ✅ | ¿Precio distinto para socios y no socios? | **Sí, opcional por producto** (decidido; ya hecho en la fase 2) |
+| P-178 ✅ | Datos de pago | **Una cuenta y un Bizum por grupo**, en la configuración de la tienda (decidido) |
+| P-179 ✅ | Días sin pagar antes de cancelar | **14 días, configurable** (decidido) |
+| P-180 ✅ | «Primera camisa de scouter gratis» y «camisa del inventario» | **Se mantienen, como opciones del producto camisa** (decidido) |
+| P-181 ✅ | ¿Quién marca entregado? | **Como hoy**: la administración y los scouters de sección en su ámbito (decidido) |
+| P-182 ✅ | Emails por paso | **Pedido, pagado y entregado**, en el idioma del destinatario (decidido) |
 
 ## 10. Cómo se prueba (resumen)
 
@@ -233,3 +233,4 @@ Pago con tarjeta (Redsys, Stripe), gastos de envío y envíos a domicilio, cupon
   - **Carga por CSV** (`ImportadorProductos`): una fila por variante; el producto que existe se actualiza solo con las celdas rellenas; las existencias se sustituyen o, si se marca, se suman; informe con el nº de fila y el motivo de cada error, y CSV de ejemplo.
   - Pruebas: `tests/tienda-catalogo.php` (67 comprobaciones). Textos nuevos traducidos (ca, eu, gl); ayuda de la página en el manual de Coordinación.
   - Decisiones propias (asumen las propuestas de §9): P-175 «Productos» y «Existencias»; P-177 precio de socio opcional por producto.
+- ✅ **Decisiones cerradas (2026-10-17):** P-175 a P-182 respondidas una a una; solo P-175 cambia algo respecto a lo hecho: el nombre de la sección pasa a **«Inventario de la tienda»** (código y textos de la fase 2, por renombrar en la fase 3).
