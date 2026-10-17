@@ -7,7 +7,7 @@
 		<table>
 			<thead><tr><th scope="col">Comprobación</th><th scope="col">Quién</th><th scope="col">Cómo</th></tr></thead>
 			<tbody>
-				<tr><td>Pago</td><td>Tesorería</td><td>«Validar»: efectivo o ingreso en cuenta, fecha, importe (propone el total) y referencia.</td></tr>
+				<tr><td>Pago</td><td>Tesorería</td><td>«Validar»: efectivo, ingreso en cuenta o Bizum (viene marcado lo que eligió quien pidió), fecha, importe (propone el total) y referencia. Solo Tesorería puede marcar un pago.</td></tr>
 				<tr><td>En el pedido del grupo</td><td>Coordinación</td><td>Uno a uno o varios a la vez, con el nombre del pedido al proveedor.</td></tr>
 				<tr><td>Entregado</td><td>El grupo: el scouter de la sección, Tesorería, Coordinación o Secretaría</td><td>«Marcar entregado» en la lista o en el detalle.</td></tr>
 				<tr><td>Recibido</td><td>El socio/a o su familia</td><td>«Lo he recibido», en su pestaña Uniforme. Nadie más lo puede marcar.</td></tr>
@@ -20,7 +20,7 @@
 		<li><strong>Resumen:</strong> pendientes de pago, de incluir en el pedido, de entregar y entregados sin confirmar (cada uno lleva a su lista), y lo cobrado y por cobrar.</li>
 		<li><strong>Filtros:</strong> por estado (en curso, cada pendiente, recibidos, cancelados o todos), sección, nombre o nº de pedido.</li>
 		<li><strong>Pedido en lote</strong> (Coordinación): marca los pedidos (vienen marcados los pagados), escribe el nombre del pedido al proveedor y pulsa «Incluir los marcados en el pedido».</li>
-		<li><strong>Para el próximo pedido al proveedor:</strong> lo pagado que aún no se ha pedido, por modelo y talla, y las insignias.</li>
+		<li><strong>Para el próximo pedido al proveedor:</strong> lo pagado que aún no se ha pedido, por modelo y talla, las insignias y «Otros productos» de la tienda que se encargan al proveedor. Lo que sale de las existencias de la tienda no pasa por aquí: queda incluido solo.</li>
 		<li><strong>Descargar CSV</strong> con la lista filtrada, para una hoja de cálculo.</li>
 		<li><strong>Camisas del inventario</strong> (Coordinación, si el grupo usa el inventario): las camisas que el grupo ya tiene, por modelo y talla (son las del tipo «Camisa uniforme» del <a href="#inventario">inventario</a>). Un pedido con camisa que aún no está en un pedido al proveedor sale con «Hay en el inventario»: ábrelo y pulsa <strong>«Servir del inventario»</strong> para dársela sin pedirla (se descuenta del inventario; si lleva insignias, esas sí van al proveedor). <strong>«Asignar una camisa»</strong> da una a quien no la ha pedido: crea su pedido, ya servido, con el precio de siempre (25 €; a un scouter, su primera camisa es gratis y queda pagada). Si el pedido se cancela o se pulsa «Devolver la camisa al inventario» antes de entregarla, la camisa vuelve.</li>
 	</ul>
@@ -35,17 +35,17 @@
 	<p class="quien-sub">Tesorería y Coordinación</p>
 	<captura src="38-uniformes-config" url="/area-privada/uniforme/configuracion/" alt="Configuración de los uniformes: pedidos abiertos, precio de la camisa, cómo pagar, modelos y tallas con su guía, insignias con precio e imagen y guía de colocación" larga>En «Uniformes → Configuración». La insignia mundial no tiene precio: sale «por confirmar».</captura>
 	<ul>
-		<li><strong>Se aceptan pedidos</strong> (sí o no), el <strong>precio de la camisa</strong>, si <strong>la primera camisa de cada scouter es gratis</strong> (sí por defecto; desde la segunda paga el precio) y <strong>cómo pagar</strong>, el texto que ven las familias al pedir.</li>
+		<li><strong>Se aceptan pedidos</strong> (sí o no), el <strong>precio de la camisa</strong>, si <strong>la primera camisa de cada scouter es gratis</strong> (sí por defecto; desde la segunda paga el precio) y <strong>cómo pagar</strong>, el texto que ven las familias al pedir. Aquí también van la <strong>cuenta del grupo (IBAN)</strong> y el <strong>teléfono de Bizum</strong>: salen en las instrucciones de pago y en los emails de los pedidos.</li>
 		<li><strong>Modelos y tallas:</strong> el nombre de cada modelo, sus tallas separadas por comas y la imagen de su guía de tallas; y qué tallas son especiales.</li>
 		<li><strong>Insignias:</strong> nombre, dónde va, precio (vacío = por confirmar), imagen y si se puede pedir. Se quitan con «Quitarla de la lista» y hay sitio para dos nuevas cada vez.</li>
 		<li><strong>Guía de colocación:</strong> la imagen de dónde va cada insignia.</li>
 		<li>Las imágenes pueden ser JPG, PNG, WebP o GIF de hasta 3 MB, y se guardan en la biblioteca de medios de la web. No se admite SVG, por seguridad.</li>
 		<li>Cada grupo tiene su propia configuración, porque cada uno tiene su insignia.</li>
 	</ul>
-	<h3 id="tienda-productos" data-paginas="tienda_productos">Productos de la tienda</h3>
+	<h3 id="tienda-productos" data-paginas="tienda_productos">Inventario de la tienda</h3>
 	<p class="quien-sub">Coordinación, Tesorería y Secretaría</p>
 	<ul>
-		<li>En <strong>Productos</strong> está el catálogo que la tienda puede vender. Cada producto tiene su nombre, categoría, descripción, imagen, <strong>precio</strong> (vacío = por confirmar) y, si quieres, un <strong>precio de socio</strong> y un <strong>máximo por persona</strong>.</li>
+		<li>En <strong>Inventario de la tienda</strong> está el catálogo que la tienda puede vender. Cada producto tiene su nombre, categoría, descripción, imagen, <strong>precio</strong> (vacío = por confirmar) y, si quieres, un <strong>precio de socio</strong> y un <strong>máximo por persona</strong>.</li>
 		<li><strong>Quién lo ve:</strong> «todos» (también quien no ha iniciado sesión) o «solo socios». Un producto de solo socios no sale a quien no tiene sesión, ni en la lista ni con su dirección.</li>
 		<li><strong>Variantes y existencias:</strong> una variante es lo que se compra (una talla, un color…). Las existencias no se escriben: se <strong>suman o restan</strong> en «Cambiar existencias» (+5, −2), con un motivo, y queda anotado. «Sin límite» no cuenta unidades, para lo que se encarga al proveedor.</li>
 		<li><strong>Archivar</strong> un producto lo quita de la venta sin borrar los pedidos que ya lo citan; se puede recuperar con «Ver también los archivados».</li>

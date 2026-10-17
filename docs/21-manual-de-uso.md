@@ -203,6 +203,14 @@ Textos y capturas rehechas de la v0.34.0 (doc 42), a petición del usuario. (La 
 
 Solo textos, sin capturas nuevas: apartado nuevo `lista-espera.html` (`#lista-espera`, `data-paginas="lista_espera"`: el enlace para apuntarse, la lista con la sección por edad y el orden, contactar y cambiar el estado, asignar la sección y dar de alta) en los manuales de **scouters** y de **coordinación**, y la fila «Lista de espera» (apagada por defecto) en `admin-modulos.html`. El generador pasa a «versión 0.32» (por eso cambian todos los ficheros de `asde-area-privada/ayuda/`). Las v0.30 y v0.31 siguen sin textos en el manual (pendiente).
 
+## Versión 4.11 · tienda y calendario de eventos (v0.39–v0.40, 2026-10-17)
+
+- Solo texto, con la skill `manuales-area-privada`; el generador pasa a la versión 0.40.
+- **Familias y participantes** (`uniforme-pedir.html`): «Pedir en la tienda: uniforme y más», con cómo pagar (transferencia, Bizum o en físico para socios), el cuadro «Tienda» con varias líneas en un pedido, existencias, máximo por persona, productos solo para socios, emails y cancelar.
+- **Coordinación** (`uniformes-gestion.html`): el pago con Bizum, «Otros productos» en el resumen para el proveedor, IBAN y Bizum en la configuración y «Productos» pasa a «Inventario de la tienda».
+- **Scouters y coordinación** (`eventos.html`): «Calendario de tareas» (plantilla de Acampada, semáforo, quién marca, fechas propias, recálculo, tareas automáticas, avisos, imprimir), calculadora de autobuses y categorías sugeridas, y las plantillas en la configuración.
+- **Pendiente:** capturas nuevas de «Mis pedidos» con el cuadro Tienda, del Calendario y de la configuración de plantillas (hay que añadirlas al volcado de `manual-capturas.php`), y el zip `manual-de-uso-0.40.0.zip`. Las capturas existentes de Uniforme enseñan todavía la pantalla anterior.
+
 ## Versión 4.10 · lote de mejoras (v0.29.0, 2026-10-11)
 
 Solo textos (las capturas **no** se han rehecho todavía: las de informes, Personas, la ficha, cambios propuestos, gestión de uniformes e inventario enseñan aún las pantallas de la v0.28; ofrecido al usuario). Cambia la ayuda del plugin (se regenera con el manual).
