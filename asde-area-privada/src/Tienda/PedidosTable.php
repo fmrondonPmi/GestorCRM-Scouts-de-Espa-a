@@ -1,6 +1,7 @@
 <?php
 namespace AsdeBalears\AreaPrivada\Tienda;
 
+use AsdeBalears\AreaPrivada\Crm\Crypto;
 use AsdeBalears\AreaPrivada\Domain\Grupo;
 
 defined( 'ABSPATH' ) || exit;
@@ -100,6 +101,8 @@ final class PedidosTable {
 				provisional tinyint(1) NOT NULL DEFAULT 0,
 				nota varchar(255) NOT NULL DEFAULT '',
 				forma_pago varchar(14) NOT NULL DEFAULT '',
+				invitado_enc longtext NULL,
+				sal varchar(32) NOT NULL DEFAULT '',
 				creado datetime NOT NULL,
 				creado_por bigint(20) unsigned NOT NULL DEFAULT 0,
 				pago_fecha date NULL,
@@ -135,11 +138,16 @@ final class PedidosTable {
 	 * @param array{camisa:?array, insignias:array} $lineas
 	 * @return int Id del pedido.
 	 */
-	public static function crear( string $socio, array $secciones, bool $adulto, array $lineas, float $total, bool $provisional, string $nota, string $forma_pago = '' ): int {
+	public static function crear( string $socio, array $secciones, bool $adulto, array $lineas, float $total, bool $provisional, string $nota, string $forma_pago = '', array $invitado = array() ): int {
 		global $wpdb;
+		// v0.39 (fase 4): una compra sin sesión guarda los datos de quien compra cifrados y una sal para su enlace personal.
+		$extra = $invitado ? array(
+			'invitado_enc' => Crypto::encrypt( (string) wp_json_encode( $invitado ) ),
+			'sal'          => wp_generate_password( 32, false, false ),
+		) : array();
 		$wpdb->insert(
 			self::table(),
-			array(
+			$extra + array(
 				'grupo'       => Grupo::numero(),
 				'socio'       => $socio,
 				'secciones'   => mb_substr( implode( ',', $secciones ), 0, 120 ),
@@ -154,6 +162,50 @@ final class PedidosTable {
 			)
 		);
 		return (int) $wpdb->insert_id;
+	}
+
+	/** Pedido por su id, de cualquier grupo (el enlace personal de quien compró sin sesión), o null. */
+	public static function por_id( int $id ): ?array {
+		global $wpdb;
+		$fila = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM %i WHERE id = %d', self::table(), $id ), ARRAY_A ); // phpcs:ignore WordPress.DB
+		return $fila ? self::preparar( $fila ) : null;
+	}
+
+	/** Los datos de quien compró sin sesión (nombre, email, teléfono, idioma), o null si no es una compra de invitado o ya se borraron. */
+	public static function invitado( array $p ): ?array {
+		if ( empty( $p['invitado_enc'] ) ) {
+			return null;
+		}
+		$d = json_decode( (string) Crypto::decrypt( (string) $p['invitado_enc'] ), true );
+		return is_array( $d ) ? $d : null;
+	}
+
+	/** Días que se guardan los datos de quien compró sin sesión después de entregar o cancelar el pedido. */
+	public const DIAS_DATOS_INVITADO = 90;
+
+	/**
+	 * Borra los datos personales de las compras sin sesión ya entregadas o canceladas hace más de DIAS_DATOS_INVITADO días.
+	 * El pedido queda (cantidades e importes); lo personal, no.
+	 *
+	 * @return int Pedidos limpiados.
+	 */
+	public static function purgar_invitados(): int {
+		global $wpdb;
+		$limite = gmdate( 'Y-m-d H:i:s', time() - self::DIAS_DATOS_INVITADO * DAY_IN_SECONDS );
+		$filas  = $wpdb->query( $wpdb->prepare( "UPDATE %i SET invitado_enc = NULL, sal = '' WHERE invitado_enc IS NOT NULL AND ( ( entregado_en IS NOT NULL AND entregado_en < %s ) OR ( cancelado_en IS NOT NULL AND cancelado_en < %s ) )", self::table(), $limite, $limite ) ); // phpcs:ignore WordPress.DB
+		return (int) $filas;
+	}
+
+	/**
+	 * Las compras sin sesión, sin pagar ni cancelar, hechas hace más de $dias días (de todos los grupos).
+	 *
+	 * @return array[]
+	 */
+	public static function invitados_sin_pagar( int $dias, string $grupo ): array {
+		global $wpdb;
+		$limite = gmdate( 'Y-m-d H:i:s', time() - $dias * DAY_IN_SECONDS );
+		$filas  = (array) $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM %i WHERE grupo = %s AND invitado_enc IS NOT NULL AND pago_en IS NULL AND cancelado_en IS NULL AND entregado_en IS NULL AND creado < %s', self::table(), $grupo, $limite ), ARRAY_A ); // phpcs:ignore WordPress.DB
+		return array_map( array( self::class, 'preparar' ), $filas );
 	}
 
 	/** Pedido del grupo actual, o null. */
@@ -389,6 +441,8 @@ final class PedidosTable {
 			'productos' => array_values( array_filter( (array) ( $lineas['productos'] ?? array() ), 'is_array' ) ), // v0.39: lo del catálogo.
 		);
 		$f['forma_pago']  = (string) ( $f['forma_pago'] ?? '' );
+		$f['sal']         = (string) ( $f['sal'] ?? '' );
+		$f['invitado']    = ! empty( $f['invitado_enc'] ); // Compra sin sesión (sus datos siguen guardados).
 		$f['pago_importe'] = null === $f['pago_importe'] ? null : (float) $f['pago_importe'];
 		foreach ( array( 'creado_por', 'pago_por', 'pedido_por', 'entregado_por', 'recibido_por', 'cancelado_por' ) as $k ) {
 			$f[ $k ] = (int) $f[ $k ];

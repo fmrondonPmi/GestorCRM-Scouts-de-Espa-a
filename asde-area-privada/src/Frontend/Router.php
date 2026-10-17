@@ -8,6 +8,7 @@ use AsdeBalears\AreaPrivada\Frontend\Views\AltaScoutersView;
 use AsdeBalears\AreaPrivada\Frontend\Views\EventosConfigView;
 use AsdeBalears\AreaPrivada\Frontend\Views\EventosView;
 use AsdeBalears\AreaPrivada\Frontend\Views\InscripcionEsperaView;
+use AsdeBalears\AreaPrivada\Frontend\Views\TiendaPublicaView;
 use AsdeBalears\AreaPrivada\Frontend\Views\MisEventosView;
 use AsdeBalears\AreaPrivada\Frontend\Views\ListaEsperaView;
 use AsdeBalears\AreaPrivada\Frontend\Views\AltaUsuariosView;
@@ -99,6 +100,7 @@ final class Router {
 		'inventario_compras' => array( 'asde_inventario_compras', InventarioComprasView::class ),
 		'lista_espera'       => array( 'asde_lista_espera', ListaEsperaView::class ),
 		'inscripcion_espera' => array( 'asde_inscripcion_espera', InscripcionEsperaView::class ),
+		'tienda_publica'     => array( 'asde_tienda_publica', TiendaPublicaView::class ),
 		// v0.35: eventos (doc 43).
 		'eventos'            => array( 'asde_eventos', EventosView::class ),
 		'eventos_config'     => array( 'asde_eventos_config', EventosConfigView::class ),

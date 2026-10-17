@@ -52,6 +52,8 @@ final class Pages {
 		'inventario_compras' => array( 'listas-de-compra', 'Listas de compra de material', '[asde_inventario_compras]', 'inventario' ),
 		// v0.32: lista de espera (doc 39): la del equipo y la pública para apuntarse.
 		'lista_espera'       => array( 'lista-de-espera', 'Lista de espera', '[asde_lista_espera]', 'area' ),
+		// v0.39 (doc 48, fase 4): la tienda pública, para comprar sin iniciar sesión.
+		'tienda_publica'     => array( 'tienda', 'Tienda', '[asde_tienda_publica]', 'area' ),
 		'inscripcion_espera' => array( 'inscripcion-lista-de-espera', 'Inscripción en la lista de espera', '[asde_inscripcion_espera]', 'area' ),
 		// v0.35: eventos (doc 43).
 		'eventos'            => array( 'eventos', 'Eventos', '[asde_eventos]', 'area' ),
@@ -60,7 +62,7 @@ final class Pages {
 	);
 
 	/** Páginas accesibles sin iniciar sesión (no salen en listados ni menús: Visibilidad). */
-	public const PUBLICAS = array( 'acceso', 'activar', 'recuperar', 'solicitar', 'alta_scouters', 'inscripcion_espera' );
+	public const PUBLICAS = array( 'acceso', 'activar', 'recuperar', 'solicitar', 'alta_scouters', 'inscripcion_espera', 'tienda_publica' );
 
 	/** Páginas a las que se puede entrar aunque el CRM no dé acceso (para ver el motivo o gestionar la seguridad). */
 	public const SIN_AMBITO = array( 'area', 'seguridad' );

@@ -76,6 +76,8 @@ final class Mantenimiento {
 				Logger::log( 'mantenimiento_error', 'crm', $grupo['numero'], array( 'error' => $e->getMessage() ) );
 			}
 			try {
+				// v0.39 (fase 4): las compras sin sesión que no se pagan en N días se cancelan y devuelven las existencias.
+				\AsdeBalears\AreaPrivada\Tienda\Servicio::cancelar_invitados_sin_pagar();
 				// Solo con el módulo encendido en el grupo (v0.35: nace apagado).
 				if ( \AsdeBalears\AreaPrivada\Domain\Modulos::activo( \AsdeBalears\AreaPrivada\Domain\Modulos::EVENTOS, (string) $grupo['numero'] ) ) {
 					\AsdeBalears\AreaPrivada\Eventos\Avisos::diario();
@@ -87,6 +89,7 @@ final class Mantenimiento {
 		}
 		Grupo::forzar( null );
 		Solicitudes::purgar();
+		\AsdeBalears\AreaPrivada\Tienda\PedidosTable::purgar_invitados(); // v0.39 (fase 4): datos de quien compró sin sesión, a los 90 días de entregar o cancelar.
 		\AsdeBalears\AreaPrivada\ListaEspera\Inscripciones::mantenimiento(); // Lista de espera: sin confirmar, caducadas y avisos (v0.32).
 		\AsdeBalears\AreaPrivada\Sepa\Mandatos::purgar(); // Mandatos revocados hace más de 14 meses.
 		\AsdeBalears\AreaPrivada\Sepa\Remesas::purgar();  // Adeudos de remesas con cobro hace más de 14 meses.

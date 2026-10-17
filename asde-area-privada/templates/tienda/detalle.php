@@ -49,7 +49,15 @@ $form    = static function ( string $accion, string $boton, string $clase = 'asd
 		<?php if ( $persona ) : ?>
 			<a href="<?php echo esc_url( $url_ficha ); ?>" data-asde-modal><?php echo esc_html( $persona->nombre_completo() ); ?></a><?php echo \AsdeBalears\AreaPrivada\Socios\Numeros::compacto( $persona ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 		<?php else : ?>
-			<?php asde_e( 'Nº Scouts de España' ); ?> <?php echo esc_html( $p['socio'] ); ?>
+			<?php if ( '' === $p['socio'] ) : ?>
+				<?php $inv = \AsdeBalears\AreaPrivada\Tienda\PedidosTable::invitado( $p ); ?>
+				<strong><?php echo esc_html( Servicio::comprador( $p ) ); ?></strong>
+				<?php if ( $inv ) : ?>
+					<br><span class="asde-muted"><?php echo esc_html( $inv['email'] . ( '' !== (string) $inv['telefono'] ? ' · ' . $inv['telefono'] : '' ) ); ?></span>
+				<?php endif; ?>
+			<?php else : ?>
+				<?php asde_e( 'Nº Scouts de España' ); ?> <?php echo esc_html( $p['socio'] ); ?>
+			<?php endif; ?>
 		<?php endif; ?>
 		<?php
 		foreach ( $p['secciones'] as $s ) {

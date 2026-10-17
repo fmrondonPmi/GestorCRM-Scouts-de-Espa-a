@@ -4,6 +4,7 @@
  *
  * @var array  $cfg
  * @var string $url
+ * @var string $enlace Enlace de la tienda pública del grupo (v0.39, fase 4)
  */
 // phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound, WordPress.WP.GlobalVariablesOverride.Prohibited -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
 use AsdeBalears\AreaPrivada\Tienda\Config;
@@ -37,6 +38,21 @@ $imagen = static function ( string $campo, int $adjunto, string $alt ): string {
 			<label for="asde-uc-texto"><?php asde_e( 'Cómo pagar (lo ven las familias al pedir)' ); ?></label>
 			<textarea id="asde-uc-texto" name="texto_pago" rows="3" maxlength="600" placeholder="<?php echo esc_attr( asde_a( 'Por ejemplo: en efectivo en el local los sábados, o por ingreso en la cuenta ES00 0000… indicando el nº de pedido.' ) ); ?>"><?php echo esc_textarea( $cfg['texto_pago'] ); ?></textarea>
 		</p>
+	</section>
+
+	<section class="asde-card">
+		<h3 class="asde-card__title"><?php asde_e( 'Tienda pública' ); ?></h3>
+		<p class="asde-muted"><?php asde_e( 'Con la tienda pública, cualquiera con el enlace puede comprar sin iniciar sesión lo que el grupo tenga a la venta «para todos» (nunca lo «solo socios»), pagando por transferencia o Bizum. Sus datos se guardan cifrados y se borran a los 90 días de entregar o cancelar el pedido.' ); ?></p>
+		<label class="asde-choice"><input type="checkbox" name="publica" value="1" <?php checked( $cfg['publica'] ); ?>><span><?php asde_e( 'Abrir la tienda pública (compra sin sesión)' ); ?></span></label>
+		<p>
+			<label for="asde-uc-dias"><?php asde_e( 'Días para pagar una compra sin sesión antes de cancelarla (0 = nunca)' ); ?></label>
+			<input type="number" id="asde-uc-dias" name="dias_sin_pagar" value="<?php echo (int) $cfg['dias_sin_pagar']; ?>" min="0" max="90" inputmode="numeric">
+		</p>
+		<?php if ( $cfg['publica'] && '' !== $enlace ) : ?>
+			<p><?php asde_e( 'Enlace de la tienda (compártelo donde quieras):' ); ?><br><input type="text" readonly value="<?php echo esc_attr( $enlace ); ?>" class="asde-input-ancho" aria-label="<?php echo esc_attr( asde_a( 'Enlace de la tienda' ) ); ?>"></p>
+			<p class="asde-help"><?php asde_e( 'Si el enlace se ha compartido donde no debía, crea uno nuevo: el anterior deja de valer (guarda antes los cambios de esta pantalla).' ); ?></p>
+			<p><button type="submit" class="asde-btn-link" name="asde_action" value="tienda_enlace_renovar" formnovalidate><?php asde_e( 'Crear un enlace nuevo' ); ?></button></p>
+		<?php endif; ?>
 	</section>
 
 	<section class="asde-card">

@@ -66,7 +66,10 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * Events: task calendar (plan in docs/49). A new "Calendar" tab in each event copies a template of tasks with deadlines counted from the start or end of the event (the ASDE camp programmer's 31-task "Acampada" template comes built in), shows a traffic light for each task (done, overdue, this week, later), lets any scout with access to the event tick tasks off, lets whoever manages the event assign a responsible person, set an own date, add and remove tasks, recalculates the dates if the event moves, adjusts weekend deadlines to the previous Friday (configurable) and prints. Each group can edit the template or create its own in Events settings. Overdue and this-week tasks appear in "Pending review" on the home page. A new table is created automatically.
 
 = 0.39.0 =
-* The "Uniforms" module is now "Shop" (plan in docs/48). Phase 1: same features under the new name, new Shop capabilities (Secretary joins Coordination and Treasury as shop administrator), pages "My orders", "Shop management" and "Shop settings" (old /uniforme addresses redirect), and an automatic, repeatable migration of the orders table, settings and module switch.
+* The "Uniforms" module is now "Shop" (plan in docs/48). Existing uniform orders, settings, pages and addresses keep working (old /uniforme addresses redirect; the orders table and settings are renamed automatically). Secretary joins Coordination and Treasury as shop administrator.
+* Shop catalogue: products with variants (size, colour), price, optional member price, per-person limit, stock adjusted with a reason, archiving and CSV import. The section is called "Shop inventory".
+* Cart and payment: members order several products at once; stock is reserved atomically and returned when the order is cancelled; pay by transfer, Bizum or, for members, in person to Treasury; the group's IBAN and Bizum number are in the settings; only Treasury marks payments; emails for order received, payment received and delivered.
+* Public shop (optional, off by default): anyone with the group's link can buy products marked for everybody without logging in; their details are stored encrypted, unpaid orders are cancelled after a configurable number of days (14) and the personal data are deleted 90 days after delivery or cancellation. Members-only products never appear there.
 
 = 0.38.0 =
 * Waiting list: each group can add its own fields to the public sign-up form (label, type and optional/required), managed by Secretary and Coordination from the waiting list screen. The answers are stored encrypted with a key derived from the sign-up email, so they cannot be read once the entry is deleted.
@@ -228,7 +231,7 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 Event task calendar. Adds one table (created automatically); nothing else changes.
 
 = 0.39.0 =
-Uniforms becomes the Shop. The orders table is renamed from asde_uniformes to asde_tienda_pedidos and the settings move automatically; nothing is lost.
+Uniforms becomes the Shop. The orders table is renamed from asde_uniformes to asde_tienda_pedidos, two tables for products and variants are added and the settings move automatically; nothing is lost.
 
 = 0.38.0 =
 Custom waiting list fields. Adds an encrypted column to the waiting list table (updated automatically).

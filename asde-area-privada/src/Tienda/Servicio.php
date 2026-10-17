@@ -7,6 +7,7 @@ use AsdeBalears\AreaPrivada\Crm\CrmException;
 use AsdeBalears\AreaPrivada\Crm\PersonaRepository;
 use AsdeBalears\AreaPrivada\Domain\Persona;
 use AsdeBalears\AreaPrivada\Domain\Secciones;
+use AsdeBalears\AreaPrivada\Idiomas\Idioma;
 use AsdeBalears\AreaPrivada\Inventario\MaterialesTable;
 use AsdeBalears\AreaPrivada\Tesoreria\Calculadora;
 
@@ -216,7 +217,7 @@ final class Servicio {
 			if ( $cantidad > ProductosTable::MAX_LIMITE ) {
 				return new \WP_Error( 'asde_tienda', asde_t( 'La cantidad no es válida.' ) );
 			}
-			if ( $p['limite_persona'] > 0 && self::ya_pedidas( $socio, $p['id'] ) + $cantidad > $p['limite_persona'] ) {
+			if ( $p['limite_persona'] > 0 && ( '' === $socio ? 0 : self::ya_pedidas( $socio, $p['id'] ) ) + $cantidad > $p['limite_persona'] ) {
 				/* translators: 1: producto, 2: máximo por persona */
 				return new \WP_Error( 'asde_tienda', sprintf( asde_t( 'De «%1$s» solo se pueden pedir %2$d por persona.' ), $p['nombre'], $p['limite_persona'] ) );
 			}
@@ -284,6 +285,53 @@ final class Servicio {
 		if ( is_wp_error( $productos ) ) {
 			return $productos;
 		}
+		return self::registrar( $productos, $persona, array(), $nota, $forma, $cfg, ! isset( self::propios( $a )[ $socio ] ) );
+	}
+
+	/**
+	 * Compra sin sesión (fase 4, P-174): quien compra deja nombre, email y teléfono (se guardan cifrados) y paga por
+	 * transferencia o Bizum; «en físico» y lo «solo socios» no existen para él o ella.
+	 *
+	 * @param array{nombre:string, email:string, telefono:string, idioma:string} $datos
+	 * @param array<int|string, int|string>                                      $cantidades id de variante => cantidad.
+	 * @return int|\WP_Error Id del pedido.
+	 */
+	public static function comprar_invitado( array $datos, array $cantidades, string $nota, string $forma_pago ) {
+		$cfg = Config::de();
+		if ( ! $cfg['abierto'] || ! $cfg['publica'] ) {
+			return new \WP_Error( 'asde_tienda', asde_t( 'Ahora mismo no se aceptan pedidos.' ) );
+		}
+		$nombre   = mb_substr( trim( sanitize_text_field( (string) ( $datos['nombre'] ?? '' ) ) ), 0, 80 );
+		$email    = sanitize_email( (string) ( $datos['email'] ?? '' ) );
+		$telefono = preg_replace( '/[^0-9+ ]/', '', (string) ( $datos['telefono'] ?? '' ) );
+		if ( mb_strlen( $nombre ) < 2 || ! is_email( $email ) ) {
+			return new \WP_Error( 'asde_tienda', asde_t( 'Escribe tu nombre y un email válido: ahí te mandamos el pedido.' ) );
+		}
+		$forma = self::forma_valida( $forma_pago, false, true );
+		if ( is_wp_error( $forma ) ) {
+			return $forma;
+		}
+		$productos = self::lineas_tienda( false, $cantidades, '' );
+		if ( is_wp_error( $productos ) ) {
+			return $productos;
+		}
+		$invitado = array(
+			'nombre'   => $nombre,
+			'email'    => $email,
+			'telefono' => mb_substr( trim( (string) $telefono ), 0, 20 ),
+			'idioma'   => Idioma::es_valido( $datos['idioma'] ?? null ) ? (string) $datos['idioma'] : Idioma::actual(),
+		);
+		return self::registrar( $productos, null, $invitado, $nota, $forma, $cfg, false );
+	}
+
+	/**
+	 * Reserva las existencias y crea el pedido (de un socio/a o de alguien sin sesión). Si algo falla, devuelve lo reservado.
+	 *
+	 * @param array[]      $productos Líneas ya validadas (lineas_tienda).
+	 * @param array<string, mixed> $invitado Datos de quien compra sin sesión (vacío si es una persona del CRM).
+	 * @return int|\WP_Error
+	 */
+	private static function registrar( array $productos, ?Persona $persona, array $invitado, string $nota, string $forma, array $cfg, bool $para_otros ) {
 		$hechas = array();
 		foreach ( $productos as $i => $l ) {
 			if ( ! VariantesTable::reservar( $l['variante'], $l['cantidad'] ) ) {
@@ -300,7 +348,7 @@ final class Servicio {
 			'productos' => $productos,
 		);
 		$t      = self::total( $lineas, $cfg );
-		$id     = PedidosTable::crear( $persona->num_socio_asde, $persona->secciones, $persona->es_adulto_voluntario(), $lineas, $t['total'], $t['provisional'], $nota, $forma );
+		$id     = PedidosTable::crear( $persona ? $persona->num_socio_asde : '', $persona ? $persona->secciones : array(), $persona ? $persona->es_adulto_voluntario() : false, $lineas, $t['total'], $t['provisional'], $nota, $forma, $invitado );
 		if ( ! $id ) {
 			self::devolver_lineas( $hechas );
 			return new \WP_Error( 'asde_tienda', asde_t( 'No se ha podido guardar el pedido.' ) );
@@ -321,7 +369,8 @@ final class Servicio {
 				'lineas'     => count( $productos ),
 				'total'      => $t['total'],
 				'forma_pago' => $forma,
-				'para_otros' => ! isset( self::propios( $a )[ $socio ] ),
+				'para_otros' => $para_otros,
+				'invitado'   => (bool) $invitado,
 			)
 		);
 		$pedido = PedidosTable::obtener( $id );
@@ -329,6 +378,41 @@ final class Servicio {
 			Avisos::enviar( $pedido, Avisos::PEDIDO );
 		}
 		return $id;
+	}
+
+	/** Nombre de quien hizo el pedido para las listas de gestión: la persona del CRM, o el invitado. */
+	public static function comprador( array $p, ?Persona $persona = null ): string {
+		if ( $persona ) {
+			return $persona->nombre_completo();
+		}
+		if ( '' === $p['socio'] ) {
+			$i = PedidosTable::invitado( $p );
+			return $i ? sprintf( asde_t( '%s (sin sesión)' ), (string) $i['nombre'] ) : asde_t( 'Compra sin sesión' );
+		}
+		return sprintf( asde_t( 'Nº %s' ), $p['socio'] );
+	}
+	/**
+	 * Cancela las compras sin sesión que llevan más de «días sin pagar» días sin pagarse (P-179, 14 por defecto; 0 = nunca) y
+	 * devuelve sus existencias. Solo las de invitados: las de los socios las decide la fase 5. Lo llama el mantenimiento diario.
+	 *
+	 * @return int Pedidos cancelados.
+	 */
+	public static function cancelar_invitados_sin_pagar(): int {
+		if ( ! \AsdeBalears\AreaPrivada\Domain\Modulos::activo( \AsdeBalears\AreaPrivada\Domain\Modulos::TIENDA, \AsdeBalears\AreaPrivada\Domain\Grupo::numero() ) ) {
+			return 0;
+		}
+		$dias = Config::de()['dias_sin_pagar'];
+		if ( $dias < 1 ) {
+			return 0;
+		}
+		$n = 0;
+		foreach ( PedidosTable::invitados_sin_pagar( $dias, \AsdeBalears\AreaPrivada\Domain\Grupo::numero() ) as $p ) {
+			if ( self::cancelar( $p, 'Sin pagar en ' . $dias . ' días' ) ) {
+				Logger::log( 'tienda_cancelado', 'tienda', (string) $p['id'], array( 'por' => 'caducidad' ) );
+				++$n;
+			}
+		}
+		return $n;
 	}
 
 	/** Devuelve a las existencias lo que se había reservado en estas líneas. @param array[] $lineas */

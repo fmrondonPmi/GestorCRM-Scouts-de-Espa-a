@@ -27,6 +27,9 @@ final class Avisos {
 
 	/** Manda el aviso a quien hizo el pedido. @return bool Si el servidor de correo lo aceptó. */
 	public static function enviar( array $pedido, string $tipo ): bool {
+		if ( '' === $pedido['socio'] ) {
+			return self::enviar_invitado( $pedido, $tipo ); // Compra sin sesión: al email que dejó.
+		}
 		$user = (int) $pedido['creado_por'] > 0 ? get_userdata( (int) $pedido['creado_por'] ) : false;
 		if ( ! $user || ! in_array( $tipo, self::TIPOS, true ) ) {
 			return false;
@@ -37,6 +40,28 @@ final class Avisos {
 			'pedido' => $pedido['id'],
 		);
 		return (bool) Idioma::en( Idioma::de_usuario( $user->ID ), static fn() => self::mandar( $user, $datos ) );
+	}
+
+	/** Aviso a quien compró sin sesión: a su email, en el idioma que tenía, con su enlace personal al pedido. */
+	private static function enviar_invitado( array $pedido, string $tipo ): bool {
+		$i = PedidosTable::invitado( $pedido );
+		if ( ! $i || ! in_array( $tipo, self::TIPOS, true ) || ! is_email( (string) $i['email'] ) ) {
+			return false;
+		}
+		$datos = array(
+			'tipo'   => $tipo,
+			'grupo'  => Grupo::nombre(),
+			'pedido' => $pedido['id'],
+		);
+		return (bool) Idioma::en(
+			Idioma::es_valido( $i['idioma'] ?? null ) ? (string) $i['idioma'] : Idioma::por_defecto(),
+			static function () use ( $pedido, $datos, $i ): bool {
+				$asunto = self::asunto( $datos['tipo'], $datos );
+				$error  = RegistroEmails::enviar( (string) $i['email'], $asunto, self::html( $datos, (string) $i['nombre'] ) );
+				RegistroEmails::registrar( null, RegistroEmails::TIENDA, Contacto::enmascarar( (string) $i['email'] ), $asunto, '' === $error ? RegistroEmails::ENVIADO : RegistroEmails::ERROR, $error, $datos );
+				return '' === $error;
+			}
+		);
 	}
 
 	private static function mandar( \WP_User $user, array $datos ): bool {
@@ -88,7 +113,8 @@ final class Avisos {
 				'importe'     => Servicio::importe( $p ),
 				'pagar'       => self::PEDIDO === $tipo && null === $p['pago_en'] ? Servicio::instrucciones_pago( $p, $cfg ) : array(),
 				'texto_pago'  => self::PEDIDO === $tipo && null === $p['pago_en'] ? $cfg['texto_pago'] : '',
-				'url'         => Pages::url( 'tienda_pedidos' ),
+				'url'         => '' === $p['socio'] ? Enlace::url_pedido( $p ) : Pages::url( 'tienda_pedidos' ),
+				'boton'       => '' === $p['socio'] ? asde_t( 'Ver mi pedido' ) : asde_t( 'Ver mis pedidos' ),
 				'contacto'    => EmailRechazo::contacto(),
 			)
 		);

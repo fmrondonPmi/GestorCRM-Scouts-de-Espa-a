@@ -126,7 +126,7 @@ $singular = array(
 							<?php endif; ?>
 							<td data-label="<?php echo esc_attr( asde_a( 'Pedido' ) ); ?>"><a href="<?php echo esc_url( $detalle ); ?>" data-asde-modal><?php echo esc_html( PedidosTable::numero( $p ) ); ?></a><br><span class="asde-muted"><?php echo esc_html( $fecha( $p['creado'] ) ); ?></span></td>
 							<td data-label="<?php echo esc_attr( asde_a( 'Socio/a' ) ); ?>">
-								<?php echo esc_html( $persona ? $persona->nombre_completo() : 'Nº ' . $p['socio'] ); ?><?php echo $persona ? \AsdeBalears\AreaPrivada\Socios\Numeros::compacto( $persona ) : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?>
+								<?php echo esc_html( Servicio::comprador( $p, $persona ) ); ?><?php echo $persona ? \AsdeBalears\AreaPrivada\Socios\Numeros::compacto( $persona ) : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?>
 								<?php
 								foreach ( $p['secciones'] as $s ) {
 									echo Secciones::badge( $s ); // phpcs:ignore WordPress.Security.EscapeOutput

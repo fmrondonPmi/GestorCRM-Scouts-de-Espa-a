@@ -58,6 +58,9 @@ final class Config {
 			// v0.39 (doc 48, P-178): una cuenta y un Bizum por grupo.
 			'iban'              => '',
 			'bizum'             => '',
+			// v0.39 (fase 4): la tienda pública (compra sin sesión) y los días que se espera el pago de esas compras.
+			'publica'           => false,
+			'dias_sin_pagar'    => 14,
 		);
 	}
 
@@ -104,6 +107,8 @@ final class Config {
 		$cfg['texto_pago']     = mb_substr( (string) $cfg['texto_pago'], 0, 600 );
 		$cfg['iban']           = self::iban( (string) $cfg['iban'] );
 		$cfg['bizum']          = self::bizum( (string) $cfg['bizum'] );
+		$cfg['publica']        = (bool) $cfg['publica'];
+		$cfg['dias_sin_pagar'] = min( 90, max( 0, (int) $cfg['dias_sin_pagar'] ) );
 		return $cfg;
 	}
 

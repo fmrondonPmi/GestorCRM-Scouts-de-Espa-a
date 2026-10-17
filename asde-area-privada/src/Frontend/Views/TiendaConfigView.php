@@ -3,7 +3,9 @@ namespace AsdeBalears\AreaPrivada\Frontend\Views;
 
 use AsdeBalears\AreaPrivada\Audit\Logger;
 use AsdeBalears\AreaPrivada\Frontend\Notices;
+use AsdeBalears\AreaPrivada\Domain\Grupo;
 use AsdeBalears\AreaPrivada\Tienda\Config;
+use AsdeBalears\AreaPrivada\Tienda\Enlace;
 use AsdeBalears\AreaPrivada\Tienda\Servicio;
 
 defined( 'ABSPATH' ) || exit;
@@ -26,6 +28,7 @@ final class TiendaConfigView extends TiendaBaseView {
 				'tienda/config',
 				array(
 					'cfg' => Config::de(),
+					'enlace' => Grupo::actual() ? Enlace::url( Grupo::actual() ) : '', // v0.39 (fase 4): la tienda pública.
 					'url' => $this->url( 'tienda_config' ),
 				)
 			)
@@ -37,6 +40,14 @@ final class TiendaConfigView extends TiendaBaseView {
 			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-area-privada' ), 403 );
 		}
 		check_admin_referer( 'asde_tienda_admin' );
+		if ( 'tienda_enlace_renovar' === $this->post( 'asde_action' ) ) {
+			if ( Grupo::actual() ) {
+				Enlace::renovar( Grupo::actual() );
+				Logger::log( 'tienda_enlace_renovado', 'grupo', Grupo::numero() );
+				Notices::add( 'success', asde_t( 'Enlace nuevo creado. El anterior ya no vale.' ) );
+			}
+			$this->redirect( $this->url( 'tienda_config' ) );
+		}
 		$cfg     = Config::de();
 		$avisos  = array();
 		$euros   = static fn( string $v ): ?float => '' === trim( $v ) ? null : max( 0.0, round( (float) str_replace( ',', '.', $v ), 2 ) );
@@ -46,6 +57,8 @@ final class TiendaConfigView extends TiendaBaseView {
 		$cfg['primera_gratis'] = '1' === $this->post( 'primera_gratis' );
 		$cfg['precio_camisa'] = $euros( $this->post( 'precio_camisa' ) ) ?? $cfg['precio_camisa'];
 		$cfg['texto_pago']    = mb_substr( sanitize_textarea_field( $this->post( 'texto_pago' ) ), 0, 600 );
+		$cfg['publica']       = '1' === $this->post( 'publica' );
+		$cfg['dias_sin_pagar'] = min( 90, max( 0, (int) $this->post( 'dias_sin_pagar' ) ) );
 		$cfg['iban']          = Config::iban( $this->post( 'iban' ) );
 		$cfg['bizum']         = Config::bizum( $this->post( 'bizum' ) );
 		if ( '' !== trim( $this->post( 'iban' ) ) && '' === $cfg['iban'] ) {

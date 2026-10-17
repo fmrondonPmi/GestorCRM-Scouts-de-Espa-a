@@ -10,7 +10,8 @@
  * @var string   $importe     «25,00 €»
  * @var string[] $pagar       Cómo pagar (solo en «pedido» y si aún no está pagado)
  * @var string   $texto_pago  Texto propio del grupo sobre cómo pagar ('' si no hay)
- * @var string   $url         «Mis pedidos»
+ * @var string   $url         «Mis pedidos» (o, en una compra sin sesión, el enlace personal al pedido)
+ * @var string   $boton       Texto del botón
  * @var string   $contacto    Email de contacto del grupo ('' si no hay)
  */
 // phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound, WordPress.WP.GlobalVariablesOverride.Prohibited -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
@@ -59,7 +60,7 @@ $fuerte  = static fn( string $t ): string => '<strong>' . esc_html( $t ) . '</st
 					<?php endif; ?>
 
 					<p style="margin:24px 0;text-align:center;">
-						<a href="<?php echo esc_url( $url ); ?>" style="display:inline-block;background:<?php echo esc_attr( $col['primary'] ); ?>;color:<?php echo esc_attr( $col['on_primary'] ); ?>;text-decoration:none;font-weight:600;padding:12px 24px;border-radius:4px;"><?php asde_e( 'Ver mis pedidos' ); ?></a>
+						<a href="<?php echo esc_url( $url ); ?>" style="display:inline-block;background:<?php echo esc_attr( $col['primary'] ); ?>;color:<?php echo esc_attr( $col['on_primary'] ); ?>;text-decoration:none;font-weight:600;padding:12px 24px;border-radius:4px;"><?php echo esc_html( $boton ); ?></a>
 					</p>
 					<?php if ( '' !== $contacto ) : ?>
 						<p style="margin:0;font-size:13px;color:<?php echo esc_attr( $col['atenuado'] ); ?>;"><?php echo sprintf( asde_h( '¿Dudas? Escríbenos a %s.' ), '<a href="mailto:' . esc_attr( $contacto ) . '" style="color:' . esc_attr( $col['primary'] ) . ';">' . esc_html( $contacto ) . '</a>' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
