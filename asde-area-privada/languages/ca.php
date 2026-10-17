@@ -129,7 +129,6 @@ return array(
 	'Buscar' => 'Cerca',
 	'Buscar socio' => 'Cerca soci',
 	'Cargo en el CRM' => 'Càrrec al CRM',
-	'Colabora sin sección: solo se le puede dar acceso como Tesorería, Secretaría o Coordinación (sin el rol de Scouter).' => 'Col·labora sense secció: només se li pot donar accés com a Tresoreria, Secretaria o Coordinació (sense el rol de Scouter).',
 	'Con cuenta familiar' => 'Amb compte familiar',
 	'Crear cuenta familiar y enviar invitación' => 'Crea el compte familiar i envia la invitació',
 	'Crear la cuenta del otro tutor/a y enviar invitación' => 'Crea el compte de l\'altre tutor/a i envia la invitació',
@@ -1708,7 +1707,6 @@ return array(
 	'(cuenta del 2.º tutor/a)' => '(compte del 2n tutor/a)',
 	'(no encontrado en el CRM)' => '(no trobat al CRM)',
 	': aquí aparece sustituido.' => ': aquí apareix substituït.',
-	'A un voluntario sin sección solo se le puede dar acceso como Tesorería, Secretaría o Coordinación: marca al menos una.' => 'A un voluntari sense secció només se li pot donar accés com a Tresoreria, Secretaria o Coordinació: marca\'n almenys una.',
 	'Activo' => 'Actiu',
 	'Actualizar' => 'Actualitza',
 	'Administrador/a WP' => 'Administrador/a WP',
@@ -1784,7 +1782,6 @@ return array(
 	'Reenviar invitación' => 'Reenvia la invitació',
 	'Registro de emails' => 'Registre d\'emails',
 	'Roles' => 'Rols',
-	'Secretaría, Coordinación y Tesorería son responsabilidades de un scouter: marca también el rol de Scouter, o elige «Voluntario sin sección».' => 'Secretaria, Coordinació i Tresoreria són responsabilitats d\'un scouter: marca també el rol de Scouter, o tria «Voluntari sense secció».',
 	'Sin email en el CRM' => 'Sense email al CRM',
 	'Sin membresía activa: no puede entrar' => 'Sense membresia activa: no pot entrar',
 	'Sin sección, elige al menos una responsabilidad: Secretaría, Coordinación o Tesorería.' => 'Sense secció, tria almenys una responsabilitat: Secretaria, Coordinació o Tresoreria.',
@@ -4202,4 +4199,14 @@ return array(
 	'Ya no está en el inventario' => 'Ja no és a l\'inventari',
 	'Ya se descontó del inventario lo que faltaba: no se puede cambiar la devolución.' => 'Ja s\'ha descomptat de l\'inventari el que faltava: no es pot canviar la devolució.',
 	'¿Descontar del inventario lo que no ha vuelto? Es definitivo.' => 'Descomptar de l\'inventari el que no ha tornat? És definitiu.',
+
+	// v0.43: rol Intendente y aviso de alérgenos
+	'Colabora sin sección: solo se le puede dar acceso como Tesorería, Secretaría, Coordinación o Intendencia (sin el rol de Scouter).' => 'Col·labora sense secció: només se li pot donar accés com a Tresoreria, Secretaria, Coordinació o Intendència (sense el rol de Scouter).',
+	'En el menú de %1$s (%2$s) hay platos que llevan un alérgeno de alguien que va al evento y nadie ha confirmado todavía qué se hará.' => 'Al menú de %1$s (%2$s) hi ha plats que porten un al·lèrgen d\'algú que va a l\'esdeveniment i ningú no ha confirmat encara què es farà.',
+	'Entra en la pestaña Menú para confirmar la alternativa de cada plato (por ejemplo, una ración sin gluten) o cambiar el menú.' => 'Entra a la pestanya Menú per confirmar l\'alternativa de cada plat (per exemple, una ració sense gluten) o canviar el menú.',
+	'Ver el menú' => 'Veure el menú',
+	'Intendente (responsable de material)' => 'Intendent (responsable de material)',
+	'[%1$s] Alérgenos sin resolver en el menú de %2$s' => '[%1$s] Al·lèrgens sense resoldre al menú de %2$s',
+	'A un voluntario sin sección solo se le puede dar acceso como Tesorería, Secretaría, Coordinación o Intendencia: marca al menos una.' => 'A un voluntari sense secció només se li pot donar accés com a Tresoreria, Secretaria, Coordinació o Intendència: marca\'n almenys una.',
+	'Secretaría, Coordinación, Tesorería e Intendencia son responsabilidades de un scouter: marca también el rol de Scouter, o elige «Voluntario sin sección».' => 'Secretaria, Coordinació, Tresoreria i Intendència són responsabilitats d\'un scouter: marca també el rol de Scouter, o tria «Voluntari sense secció».',
 );

@@ -129,7 +129,6 @@ return array(
 	'Buscar' => 'Bilatu',
 	'Buscar socio' => 'Bilatu bazkidea',
 	'Cargo en el CRM' => 'CRMko kargua',
-	'Colabora sin sección: solo se le puede dar acceso como Tesorería, Secretaría o Coordinación (sin el rol de Scouter).' => 'Atalik gabe laguntzen du: Diruzaintza, Idazkaritza edo Koordinazio gisa soilik eman dakioke sarbidea (Scouter rolik gabe).',
 	'Con cuenta familiar' => 'Familia-kontuarekin',
 	'Crear cuenta familiar y enviar invitación' => 'Sortu familia-kontua eta bidali gonbidapena',
 	'Crear la cuenta del otro tutor/a y enviar invitación' => 'Sortu beste tutorearen kontua eta bidali gonbidapena',
@@ -1708,7 +1707,6 @@ return array(
 	'(cuenta del 2.º tutor/a)' => '(2. tutorearen kontua)',
 	'(no encontrado en el CRM)' => '(ez da CRMan aurkitu)',
 	': aquí aparece sustituido.' => ': hemen ordezkatuta agertzen da.',
-	'A un voluntario sin sección solo se le puede dar acceso como Tesorería, Secretaría o Coordinación: marca al menos una.' => 'Atalik gabeko boluntario bati Diruzaintza, Idazkaritza edo Koordinazio gisa soilik eman dakioke sarbidea: markatu gutxienez bat.',
 	'Activo' => 'Aktiboa',
 	'Actualizar' => 'Eguneratu',
 	'Administrador/a WP' => 'WP administratzailea',
@@ -1784,7 +1782,6 @@ return array(
 	'Reenviar invitación' => 'Bidali berriro gonbidapena',
 	'Registro de emails' => 'Emailen erregistroa',
 	'Roles' => 'Rolak',
-	'Secretaría, Coordinación y Tesorería son responsabilidades de un scouter: marca también el rol de Scouter, o elige «Voluntario sin sección».' => 'Idazkaritza, Koordinazioa eta Diruzaintza scouter baten ardurak dira: markatu Scouter rola ere, edo aukeratu «Atalik gabeko boluntarioa».',
 	'Sin email en el CRM' => 'CRMan emailik gabe',
 	'Sin membresía activa: no puede entrar' => 'Kidetza aktiborik gabe: ezin da sartu',
 	'Sin sección, elige al menos una responsabilidad: Secretaría, Coordinación o Tesorería.' => 'Atalik gabe, aukeratu gutxienez ardura bat: Idazkaritza, Koordinazioa edo Diruzaintza.',
@@ -4202,4 +4199,14 @@ return array(
 	'Ya no está en el inventario' => 'Ez dago inventarioan jada',
 	'Ya se descontó del inventario lo que faltaba: no se puede cambiar la devolución.' => 'Falta zena inventariotik kendu da jada: ezin da itzulketa aldatu.',
 	'¿Descontar del inventario lo que no ha vuelto? Es definitivo.' => 'Itzuli ez dena inventariotik kendu? Behin betikoa da.',
+
+	// v0.43: rol Intendente y aviso de alérgenos
+	'Colabora sin sección: solo se le puede dar acceso como Tesorería, Secretaría, Coordinación o Intendencia (sin el rol de Scouter).' => 'Atalik gabe laguntzen du: Diruzaintza, Idazkaritza, Koordinazio edo Intendentzia gisa soilik eman dakioke sarbidea (Scouter rolik gabe).',
+	'En el menú de %1$s (%2$s) hay platos que llevan un alérgeno de alguien que va al evento y nadie ha confirmado todavía qué se hará.' => '%1$s (%2$s) ekitaldiaren menuan ekitaldira doan norbaiten alergenoa duten platerak daude, eta oraindik inork ez du baieztatu zer egingo den.',
+	'Entra en la pestaña Menú para confirmar la alternativa de cada plato (por ejemplo, una ración sin gluten) o cambiar el menú.' => 'Sartu Menua fitxan plater bakoitzaren alternatiba baieztatzeko (adibidez, glutenik gabeko anoa bat) edo menua aldatzeko.',
+	'Ver el menú' => 'Ikusi menua',
+	'Intendente (responsable de material)' => 'Intendentea (materialaren arduraduna)',
+	'[%1$s] Alérgenos sin resolver en el menú de %2$s' => '[%1$s] Ebatzi gabeko alergenoak %2$s ekitaldiaren menuan',
+	'A un voluntario sin sección solo se le puede dar acceso como Tesorería, Secretaría, Coordinación o Intendencia: marca al menos una.' => 'Atalik gabeko boluntario bati Diruzaintza, Idazkaritza, Koordinazio edo Intendentzia gisa soilik eman dakioke sarbidea: markatu gutxienez bat.',
+	'Secretaría, Coordinación, Tesorería e Intendencia son responsabilidades de un scouter: marca también el rol de Scouter, o elige «Voluntario sin sección».' => 'Idazkaritza, Koordinazioa, Diruzaintza eta Intendentzia scouter baten ardurak dira: markatu Scouter rola ere, edo aukeratu «Atalik gabeko boluntarioa».',
 );

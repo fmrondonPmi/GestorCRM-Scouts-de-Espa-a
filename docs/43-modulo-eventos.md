@@ -624,6 +624,12 @@ Lo que hay que **comprobar al programar** (no es una pregunta para el usuario):
 - qué valores tiene `stic_gender_c`;
 - si el usuario del CRM de cada grupo **ve los eventos federativos** de `stic_Events`.
 
+## Avance: rol Intendente (v0.43, 2026-10-17)
+
+- **Rol `asde_intendente`** («Intendente (responsable de material)»): es el «responsable de material» del punto 5 de las decisiones. Se da como Secretaría o Tesorería: junto al rol de Scouter o como voluntario sin sección (`AltaService::ROLES_RESPONSABILIDAD`); el cargo `responsablematerialGS` del CRM lo sugiere en el alta. Capacidades: `asde_inventario`, `asde_eventos_inscribir`, `asde_tienda_comprar`, `asde_mis_pagos`, `asde_view_self`, `asde_edit_self_contact` y la nueva **`asde_eventos_material`** (módulo Eventos).
+- **Qué ve:** todos los eventos del grupo (`Servicio::ve` y la agenda), pero **solo las pestañas Resumen y Material** (`Servicio::solo_material`); sin menú, cuentas, inscripciones, calendario, equipo ni salud. En *Material* puede todo lo que quien gestiona el evento (reservar, habitual, salida, devolución, descontar). No crea ni edita eventos. Su manual de ayuda es el de scouters. Wordfence: 2FA opcional como el resto (versión de la configuración 4).
+- Decisiones: el material de una sección lo siguen gestionando los scouters del evento; caducidades y material por sección siguen sin hacerse (el inventario no los tiene).
+
 ## Avance: material del evento (v0.42, 2026-10-17)
 
 - **Pestaña «Material»** del evento (`Eventos\Material`, tabla `asde_evento_material`, `templates/eventos/material.php`), para quien gestiona el evento y puede usar el inventario (`asde_inventario`). Reserva unidades del inventario del grupo (el que ya existe desde la v0.19, sin catálogo nuevo ni rol nuevo): **reservar no descuenta** nada.

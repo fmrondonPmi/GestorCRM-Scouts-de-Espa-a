@@ -23,7 +23,11 @@ defined( 'ABSPATH' ) || exit;
 
 $estado  = EventosTable::estado_visible( $e );
 $pestanas = array();
+$solo_material = Servicio::solo_material( $e, $ambito );
 foreach ( asde_ta( EventosView::PESTANAS ) as $p => $etiqueta ) {
+	if ( $solo_material && ! in_array( $p, array( 'resumen', 'material' ), true ) ) {
+		continue; // v0.43: el Intendente solo ve el resumen y el material.
+	}
 	if ( 'cuentas' === $p && ! Cuentas::puede_ver( $e, $ambito ) ) {
 		continue; // v0.36: las cuentas, solo quien gestiona el evento y Tesorería.
 	}

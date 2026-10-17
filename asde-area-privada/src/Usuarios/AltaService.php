@@ -38,14 +38,15 @@ final class AltaService {
 
 	public const EDAD_MINIMA_PARTICIPANTE = 14;
 
-	public const ROLES_PERSONA         = array( Roles::PARTICIPANTE, Roles::SCOUTER, Roles::SECRETARIA, Roles::COORDINACION, Roles::TESORERIA );
-	public const ROLES_RESPONSABILIDAD = array( Roles::SECRETARIA, Roles::COORDINACION, Roles::TESORERIA );
+	public const ROLES_PERSONA         = array( Roles::PARTICIPANTE, Roles::SCOUTER, Roles::SECRETARIA, Roles::COORDINACION, Roles::TESORERIA, Roles::INTENDENTE );
+	public const ROLES_RESPONSABILIDAD = array( Roles::SECRETARIA, Roles::COORDINACION, Roles::TESORERIA, Roles::INTENDENTE );
 
 	/** Cargo en el CRM (cargoeducativo_c) → rol que se sugiere en el alta. */
 	public const ROL_POR_CARGO = array(
 		'secretariogrupoGS'   => Roles::SECRETARIA,
 		'coordinadorgrupoGS'  => Roles::COORDINACION,
 		'tesorerogrupoGS'     => Roles::TESORERIA,
+		'responsablematerialGS' => Roles::INTENDENTE,
 		'scouterseccionGS'    => Roles::SCOUTER,
 		'coordinadorseccionGS' => Roles::SCOUTER,
 	);
@@ -98,6 +99,7 @@ final class AltaService {
 			Roles::SECRETARIA   => $adulto,
 			Roles::COORDINACION => $adulto,
 			Roles::TESORERIA    => $adulto,
+			Roles::INTENDENTE   => $adulto,
 		);
 	}
 
@@ -174,7 +176,7 @@ final class AltaService {
 		$sin_seccion  = in_array( Secciones::SIN_SECCION, $secciones, true );
 		$con_resp     = array_intersect( self::ROLES_RESPONSABILIDAD, array_merge( $roles, $vinculado ? (array) $vinculado->roles : array() ) );
 		if ( $sin_seccion ) {
-			// Voluntario sin sección: solo Tesorería, Secretaría o Coordinación, sin Scouter.
+			// Voluntario sin sección: solo Tesorería, Secretaría, Coordinación o Intendencia, sin Scouter.
 			if ( count( $secciones ) > 1 ) {
 				$errores[] = asde_t( '«Voluntario sin sección» no se combina con secciones educativas.' );
 			}
@@ -182,11 +184,11 @@ final class AltaService {
 				$errores[] = asde_t( 'Un voluntario sin sección no puede tener el rol de Scouter: quítalo o elige sus secciones educativas.' );
 			}
 			if ( ! $con_resp ) {
-				$errores[] = asde_t( 'A un voluntario sin sección solo se le puede dar acceso como Tesorería, Secretaría o Coordinación: marca al menos una.' );
+				$errores[] = asde_t( 'A un voluntario sin sección solo se le puede dar acceso como Tesorería, Secretaría, Coordinación o Intendencia: marca al menos una.' );
 			}
 		} else {
 			if ( array_intersect( self::ROLES_RESPONSABILIDAD, $roles ) && ! $sera_scouter ) {
-				$errores[] = asde_t( 'Secretaría, Coordinación y Tesorería son responsabilidades de un scouter: marca también el rol de Scouter, o elige «Voluntario sin sección».' );
+				$errores[] = asde_t( 'Secretaría, Coordinación, Tesorería e Intendencia son responsabilidades de un scouter: marca también el rol de Scouter, o elige «Voluntario sin sección».' );
 			}
 			if ( $sera_scouter && ! $secciones ) {
 				$errores[] = asde_t( 'Indica al menos una sección educativa para el rol de Scouter.' );

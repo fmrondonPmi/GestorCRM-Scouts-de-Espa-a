@@ -83,6 +83,7 @@ final class Mantenimiento {
 				if ( \AsdeBalears\AreaPrivada\Domain\Modulos::activo( \AsdeBalears\AreaPrivada\Domain\Modulos::EVENTOS, (string) $grupo['numero'] ) ) {
 					\AsdeBalears\AreaPrivada\Eventos\Avisos::diario();
 					\AsdeBalears\AreaPrivada\Eventos\AvisosTareas::diario(); // v0.40: tareas del calendario que vencen.
+					\AsdeBalears\AreaPrivada\Menus\AvisoAlergenos::diario(); // v0.43: alérgenos del menú sin resolver (P-192).
 				}
 			} catch ( CrmException $e ) {
 				Logger::log( 'mantenimiento_error', 'crm', $grupo['numero'], array( 'error' => $e->getMessage() ) );

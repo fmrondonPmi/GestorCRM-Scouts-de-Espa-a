@@ -14,7 +14,7 @@ defined( 'ABSPATH' ) || exit;
  * fechas se lleva lo mismo y no alcanza, anota cuándo sale y cómo vuelve (con lo que falta) y, si algo no vuelve, permite descontarlo
  * del inventario con un paso aparte y explícito. Cada tipo de evento puede tener su material habitual.
  *
- * Quien lo gestiona es quien gestiona el evento y puede usar el inventario. Nada de personas: solo el id de la cuenta.
+ * Lo gestiona quien gestiona el evento, o el Intendente de cualquier evento, si puede usar el inventario. Nada de personas: solo el id de la cuenta.
  */
 final class Material {
 
@@ -23,7 +23,7 @@ final class Material {
 	public const MAX_HABITUAL = 3000;
 
 	public static function puede_ver( array $e, Ambito $a ): bool {
-		return Servicio::en_gestion( $e, $a ) && current_user_can( Inventario::CAP );
+		return ( Servicio::en_gestion( $e, $a ) || current_user_can( Servicio::CAP_MATERIAL ) ) && current_user_can( Inventario::CAP );
 	}
 
 	public static function puede_editar( array $e, Ambito $a ): bool {

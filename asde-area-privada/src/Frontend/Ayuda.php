@@ -53,7 +53,7 @@ final class Ayuda {
 		if ( $admin || array_intersect( array( Roles::SECRETARIA, Roles::COORDINACION, Roles::TESORERIA ), $roles ) ) {
 			return 'coordinacion';
 		}
-		if ( in_array( Roles::SCOUTER, $roles, true ) ) {
+		if ( array_intersect( array( Roles::SCOUTER, Roles::INTENDENTE ), $roles ) ) {
 			return 'scouters';
 		}
 		if ( in_array( Roles::TUTOR, $roles, true ) ) {

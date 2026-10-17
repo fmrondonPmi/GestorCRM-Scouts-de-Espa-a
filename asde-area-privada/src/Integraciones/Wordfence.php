@@ -22,7 +22,7 @@ final class Wordfence {
 
 	private const OPTION = 'asde_ap_wordfence_config';
 	/** 2: añade Tesorería. 3: opcional para todos los roles (v0.35.1). */
-	public const VERSION = 3;
+	public const VERSION = 4;
 
 	public static function disponible(): bool {
 		return class_exists( '\WordfenceLS\Controller_Settings' ) && class_exists( '\WordfenceLS\Controller_Users' );
@@ -39,6 +39,7 @@ final class Wordfence {
 				'enabled-roles.' . Roles::SECRETARIA   => 'optional',
 				'enabled-roles.' . Roles::COORDINACION => 'optional',
 				'enabled-roles.' . Roles::TESORERIA    => 'optional',
+				'enabled-roles.' . Roles::INTENDENTE   => 'optional',
 				'enabled-roles.' . Roles::TUTOR        => 'optional',
 				'enabled-roles.' . Roles::PARTICIPANTE => 'optional',
 				'enable-shortcode'                     => true,

@@ -199,6 +199,9 @@ final class Avisos {
 		if ( in_array( $datos['tipo'] ?? '', AvisosTareas::TIPOS, true ) ) {
 			return AvisosTareas::html( $datos, $saludo ); // v0.40: los avisos del calendario de tareas.
 		}
+		if ( \AsdeBalears\AreaPrivada\Menus\AvisoAlergenos::TIPO === ( $datos['tipo'] ?? '' ) ) {
+			return \AsdeBalears\AreaPrivada\Menus\AvisoAlergenos::html( $datos, $saludo ); // v0.43: sin la lista de pendientes (datos de salud): solo el aviso general.
+		}
 		if ( 'cocina' === ( $datos['tipo'] ?? '' ) ) {
 			return '<p>' . esc_html( asde_t( 'Hoja de cocina del evento. Por contener datos de salud, el contenido no se guarda: solo consta que se envió.' ) ) . '</p>'; // v0.41 (B3): nunca se vuelve a componer en la vista previa.
 		}

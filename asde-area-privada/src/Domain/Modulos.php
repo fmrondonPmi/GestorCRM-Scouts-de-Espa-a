@@ -48,7 +48,7 @@ final class Modulos {
 		self::ALTA_SCOUTERS => array( 'Alta de scouters', 'El enlace para que los scouters se den de alta.', array(), '' ),
 		self::LISTA_ESPERA  => array( 'Lista de espera', 'El enlace para apuntarse a la lista de espera, la lista para el equipo y el paso al CRM.', array( 'asde_lista_espera', 'asde_lista_espera_alta' ), '' ),
 		// v0.35 (doc 43): apagado por defecto, como todo módulo nuevo (regla 5).
-		self::EVENTOS       => array( 'Eventos', 'Salidas, acampadas y otras actividades: equipo dirigente, presupuesto, inscripciones, «Mis eventos» y cobros.', array( 'asde_eventos_gestion', 'asde_menus_recetas', 'asde_eventos_grupo', 'asde_eventos_economia', 'asde_eventos_config', 'asde_eventos_inscribir' ), '' ),
+		self::EVENTOS       => array( 'Eventos', 'Salidas, acampadas y otras actividades: equipo dirigente, presupuesto, inscripciones, «Mis eventos» y cobros.', array( 'asde_eventos_gestion', 'asde_menus_recetas', 'asde_eventos_grupo', 'asde_eventos_economia', 'asde_eventos_config', 'asde_eventos_inscribir', 'asde_eventos_material' ), '' ),
 	);
 
 	/** @var array<string, string[]> nº de grupo => capabilities quitadas (por petición). */

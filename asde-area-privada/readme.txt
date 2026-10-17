@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.42.0
+Stable tag: 0.43.0
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -61,6 +61,10 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.43.0 =
+* New role "Intendente" (the person in charge of the group's material, matching the CRM's "Responsable de Material" position). It is granted like Secretary or Treasurer: together with the Scouter role or as a volunteer without a section. It sees every event of the group, but only the Summary and Material tabs, and manages the material (reservations, departure, return and deduction from the inventory); it sees nothing about menus, accounts, registrations or health.
+* Events, menus: a reminder email about allergens still unresolved in the menu. From the date of the "Review allergies" task of the calendar until the event starts, the daily task checks the menu against the attendees and, if some dish carries an allergen of someone going and nobody has confirmed the alternative, emails the event team (not the support team, who get the kitchen sheet). Names are included only for those who can already see the whole group's health records; the others get the dish, the allergen and how many people. Nothing about health is stored: the email log keeps only that it was sent, and a salted fingerprint prevents repeating the same warning every day.
 
 = 0.42.0 =
 * Events: event material. A new "Material" tab in each event (for those who manage it and can use the inventory) reserves items from the group inventory with a warning when another event on overlapping dates takes the same items and there are not enough; each event type can have its usual material, which loads with one button. Records when the material leaves and how it comes back (units, incident note); what did not come back can be deducted from the inventory in a separate, explicit step. Reserving never changes the inventory by itself.
@@ -236,6 +240,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * First version with the mobile app (PWA).
 
 == Upgrade Notice ==
+
+= 0.43.0 =
+New Intendente role and the unresolved-allergens reminder. No database changes; the role is added automatically.
 
 = 0.42.0 =
 Event material. Adds one table (created automatically); nothing else changes.

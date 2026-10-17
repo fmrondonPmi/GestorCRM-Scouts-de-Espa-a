@@ -27,6 +27,7 @@ final class Servicio {
 	public const CAP_GRUPO    = 'asde_eventos_grupo';
 	public const CAP_ECONOMIA = 'asde_eventos_economia';
 	public const CAP_CONFIG   = 'asde_eventos_config';
+	public const CAP_MATERIAL = 'asde_eventos_material';
 
 	public const MAX_TEXTO  = 4000;
 	public const MAX_PLAZAS = 999;
@@ -44,7 +45,12 @@ final class Servicio {
 
 	/** ¿Puede entrar en la pantalla de eventos? */
 	public static function puede_entrar(): bool {
-		return current_user_can( self::CAP_GESTION ) || current_user_can( self::CAP_ECONOMIA );
+		return current_user_can( self::CAP_GESTION ) || current_user_can( self::CAP_ECONOMIA ) || current_user_can( self::CAP_MATERIAL );
+	}
+
+	/** ¿Solo entra por el material (el Intendente), sin gestionar ni ver la economía del evento? Solo ve Resumen y Material. */
+	public static function solo_material( array $e, Ambito $a ): bool {
+		return current_user_can( self::CAP_MATERIAL ) && ! self::vision_global( $a ) && ! self::en_gestion( $e, $a );
 	}
 
 	/** ¿Ve todos los eventos del grupo? Secretaría, Coordinación, Tesorería y administradores. */
@@ -76,7 +82,7 @@ final class Servicio {
 	}
 
 	public static function ve( array $e, Ambito $a ): bool {
-		return self::vision_global( $a ) || self::en_gestion( $e, $a );
+		return self::vision_global( $a ) || self::en_gestion( $e, $a ) || current_user_can( self::CAP_MATERIAL );
 	}
 
 	/** @return array[] Los eventos que ve este ámbito, por fecha de inicio. */
@@ -654,6 +660,7 @@ final class Servicio {
 		\AsdeBalears\AreaPrivada\Menus\MenuTable::borrar_evento( $e['id'] );
 		\AsdeBalears\AreaPrivada\Menus\AvisosTable::borrar_evento( $e['id'] );
 		\AsdeBalears\AreaPrivada\Menus\HojaCocina::olvidar( $e['id'] );
+		\AsdeBalears\AreaPrivada\Menus\AvisoAlergenos::olvidar( $e['id'] );
 		EventosTable::borrar( $e['id'] );
 		self::olvidar();
 		Logger::log( 'evento_borrado', 'evento', (string) $e['id'] );

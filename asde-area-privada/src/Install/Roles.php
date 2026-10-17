@@ -17,8 +17,9 @@ final class Roles {
 	public const TESORERIA    = 'asde_tesoreria';
 	public const TUTOR        = 'asde_tutor';
 	public const PARTICIPANTE = 'asde_participante';
+	public const INTENDENTE   = 'asde_intendente';
 
-	public const ALL = array( self::SCOUTER, self::SECRETARIA, self::COORDINACION, self::TESORERIA, self::TUTOR, self::PARTICIPANTE );
+	public const ALL = array( self::SCOUTER, self::SECRETARIA, self::COORDINACION, self::TESORERIA, self::TUTOR, self::PARTICIPANTE, self::INTENDENTE );
 
 	/** @return array<string, array{0:string, 1:array<string,bool>}> rol => [etiqueta, capabilities] */
 	public static function definitions(): array {
@@ -155,6 +156,19 @@ final class Roles {
 					'asde_mis_pagos'         => true,
 					'asde_sepa_autorizar'    => true, // Solo si es mayor de edad (Sepa\Mandatos::puede_firmar).
 					'asde_eventos_inscribir' => true,
+				),
+			),
+			// v0.43: el Intendente es quien responde del material del grupo (cargo «Responsable de Material» del CRM). Es una responsabilidad de un scouter o de un voluntario sin sección.
+			self::INTENDENTE   => array(
+				'Intendente (responsable de material)',
+				$base + array(
+					'asde_view_self'         => true,
+					'asde_edit_self_contact' => true,
+					'asde_tienda_comprar'    => true,
+					'asde_mis_pagos'         => true,
+					'asde_inventario'        => true,
+					'asde_eventos_inscribir' => true,
+					'asde_eventos_material'  => true, // Ve todos los eventos y gestiona su material (pestañas Resumen y Material).
 				),
 			),
 		);

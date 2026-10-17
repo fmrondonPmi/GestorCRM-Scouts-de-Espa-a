@@ -142,6 +142,9 @@ final class EventosView extends EventosBaseView {
 
 	private function evento( array $e, Ambito $a, array $cfg ): string {
 		$pestana = isset( self::PESTANAS[ $this->get( 'pestana' ) ] ) ? $this->get( 'pestana' ) : 'resumen';
+		if ( Servicio::solo_material( $e, $a ) && ! in_array( $pestana, array( 'resumen', 'material' ), true ) ) {
+			$pestana = 'resumen';
+		}
 		if ( 'cuentas' === $pestana && ! Cuentas::puede_ver( $e, $a ) || 'menu' === $pestana && ! MenuEvento::puede_ver( $e, $a ) || 'material' === $pestana && ! Material::puede_ver( $e, $a ) ) {
 			$pestana = 'resumen';
 		}

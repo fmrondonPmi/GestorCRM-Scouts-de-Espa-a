@@ -203,7 +203,7 @@ if ( $solicitud && \AsdeBalears\AreaPrivada\Usuarios\Solicitudes::POR_ENLACE ===
 						<input type="checkbox" name="secciones[]" value="<?php echo esc_attr( Secciones::SIN_SECCION ); ?>" data-asde-sin-seccion <?php checked( in_array( Secciones::SIN_SECCION, $secc_actual, true ) ); ?>>
 						<span>
 							<?php echo Secciones::badge( Secciones::SIN_SECCION ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
-							<span class="asde-help"><?php asde_e( 'Colabora sin sección: solo se le puede dar acceso como Tesorería, Secretaría o Coordinación (sin el rol de Scouter).' ); ?></span>
+							<span class="asde-help"><?php asde_e( 'Colabora sin sección: solo se le puede dar acceso como Tesorería, Secretaría, Coordinación o Intendencia (sin el rol de Scouter).' ); ?></span>
 						</span>
 					</label>
 				</fieldset>
