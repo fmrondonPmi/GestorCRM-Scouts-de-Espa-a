@@ -9,7 +9,7 @@ use AsdeBalears\AreaPrivada\Fichas\Cambios;
 use AsdeBalears\AreaPrivada\Install\Roles;
 use AsdeBalears\AreaPrivada\Integraciones\Wordfence;
 use AsdeBalears\AreaPrivada\Socios\SociosTable;
-use AsdeBalears\AreaPrivada\Uniformes\Servicio;
+use AsdeBalears\AreaPrivada\Tienda\Servicio;
 use AsdeBalears\AreaPrivada\Usuarios\Solicitudes;
 
 defined( 'ABSPATH' ) || exit;

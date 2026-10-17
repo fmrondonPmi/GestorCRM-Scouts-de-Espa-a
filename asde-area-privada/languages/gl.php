@@ -602,7 +602,6 @@ return array(
 	'Coordinación' => 'Coordinación',
 	'Detener' => 'Deter',
 	'El nº territorial sale junto al nº de Scouts de España en todas las pantallas. Si tiene algún problema, el aviso sale siempre.' => 'O nº territorial sae xunto ao nº de Scouts de España en todas as pantallas. Se ten algún problema, o aviso sae sempre.',
-	'Gestión de uniformes' => 'Xestión de uniformes',
 	'Gestión del grupo' => 'Xestión do grupo',
 	'Idioma' => 'Idioma',
 	'Importe (€)' => 'Importe (€)',
@@ -611,7 +610,6 @@ return array(
 	'Inicio' => 'Inicio',
 	'Mi espacio' => 'O meu espazo',
 	'Mi familia' => 'A miña familia',
-	'Mi uniforme' => 'O meu uniforme',
 	'Mis datos' => 'Os meus datos',
 	'Mis pagos' => 'Os meus pagos',
 	'Mostrando' => 'Mostrando',
@@ -2136,8 +2134,6 @@ return array(
 	'Importar los movimientos de la cuenta, conciliarlos y tipificar los gastos.' => 'Importar os movementos da conta, concilialos e clasificar os gastos.',
 	'Listados con las columnas que se elijan.' => 'Listaxes coas columnas que se escollan.',
 	'Material del grupo, tipos y listas de compra.' => 'Material do grupo, tipos e listas da compra.',
-	'Pedidos de la camisa y las insignias, su pago y su entrega.' => 'Pedidos da camisa e as insignias, o seu pagamento e a súa entrega.',
-	'Uniformes' => 'Uniformes',
 	'El banco no está activo en tu grupo.' => 'O banco non está activo no teu grupo.',
 	'Las domiciliaciones SEPA no están activas en tu grupo.' => 'As domiciliacións SEPA non están activas no teu grupo.',
 	'Al DNI le falta la letra.' => 'Ao DNI fáltalle a letra.',
@@ -3450,4 +3446,9 @@ return array(
 	'Si desactivas el aviso de plaza liberada, la plaza se sigue ofreciendo, pero la familia no recibe el email: tendrá que mirarlo en la aplicación.' => 'Se desactivas o aviso de praza liberada, a praza segue ofrecéndose, pero a familia non recibe o email: terá que miralo na aplicación.',
 	'Textos propios de los avisos' => 'Textos propios dos avisos',
 	'Un párrafo opcional al principio y otro al final de cada email (hasta %d caracteres). Salen igual en todos los idiomas: escríbelos en el idioma de tus familias.' => 'Un parágrafo opcional ao principio e outro ao final de cada email (ata %d caracteres). Saen igual en todos os idiomas: escríbeos no idioma das túas familias.',
+
+	// v0.39: Tienda
+	'Productos del grupo (uniforme, insignias y más): pedidos, pago y entrega.' => 'Produtos do grupo (uniforme, insignias e máis): pedidos, pagamento e entrega.',
+	'Gestión de la tienda' => 'Xestión da tenda',
+	'Tienda' => 'Tenda',
 );

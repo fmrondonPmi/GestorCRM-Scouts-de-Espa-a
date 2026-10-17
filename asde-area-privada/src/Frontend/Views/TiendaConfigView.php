@@ -3,8 +3,8 @@ namespace AsdeBalears\AreaPrivada\Frontend\Views;
 
 use AsdeBalears\AreaPrivada\Audit\Logger;
 use AsdeBalears\AreaPrivada\Frontend\Notices;
-use AsdeBalears\AreaPrivada\Uniformes\Config;
-use AsdeBalears\AreaPrivada\Uniformes\Servicio;
+use AsdeBalears\AreaPrivada\Tienda\Config;
+use AsdeBalears\AreaPrivada\Tienda\Servicio;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -14,7 +14,7 @@ defined( 'ABSPATH' ) || exit;
  * guías de tallas y de colocación, pedidos abiertos o cerrados y el texto de
  * cómo pagar. Las imágenes van a la biblioteca de medios de WordPress.
  */
-final class UniformesConfigView extends UniformesBaseView {
+final class TiendaConfigView extends TiendaBaseView {
 
 	private const MAX_IMAGEN = 3 * MB_IN_BYTES;
 
@@ -30,12 +30,12 @@ final class UniformesConfigView extends UniformesBaseView {
 			return $this->denegado();
 		}
 		return $this->layout(
-			'uniformes_config',
-			$this->subnav( 'uniformes_config' ) . $this->tpl(
-				'uniformes/config',
+			'tienda_config',
+			$this->subnav( 'tienda_config' ) . $this->tpl(
+				'tienda/config',
 				array(
 					'cfg' => Config::de(),
-					'url' => $this->url( 'uniformes_config' ),
+					'url' => $this->url( 'tienda_config' ),
 				)
 			)
 		);
@@ -45,7 +45,7 @@ final class UniformesConfigView extends UniformesBaseView {
 		if ( ! current_user_can( Servicio::CAP_CONFIG ) ) {
 			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-area-privada' ), 403 );
 		}
-		check_admin_referer( 'asde_uniformes_config' );
+		check_admin_referer( 'asde_tienda_admin' );
 		$cfg     = Config::de();
 		$avisos  = array();
 		$euros   = static fn( string $v ): ?float => '' === trim( $v ) ? null : max( 0.0, round( (float) str_replace( ',', '.', $v ), 2 ) );
@@ -109,7 +109,7 @@ final class UniformesConfigView extends UniformesBaseView {
 			Notices::add( 'warning', esc_html( $a ) );
 		}
 		Notices::add( 'success', asde_t( 'Configuración guardada.' ) );
-		$this->redirect( $this->url( 'uniformes_config' ) );
+		$this->redirect( $this->url( 'tienda_config' ) );
 	}
 
 	/**

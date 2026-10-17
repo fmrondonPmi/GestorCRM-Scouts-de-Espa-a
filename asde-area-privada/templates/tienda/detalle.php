@@ -14,8 +14,8 @@
 // phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound, WordPress.WP.GlobalVariablesOverride.Prohibited -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
 use AsdeBalears\AreaPrivada\Domain\Secciones;
 use AsdeBalears\AreaPrivada\Tesoreria\Calculadora;
-use AsdeBalears\AreaPrivada\Uniformes\PedidosTable;
-use AsdeBalears\AreaPrivada\Uniformes\Servicio;
+use AsdeBalears\AreaPrivada\Tienda\PedidosTable;
+use AsdeBalears\AreaPrivada\Tienda\Servicio;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -95,7 +95,7 @@ $form    = static function ( string $accion, string $boton, string $clase = 'asd
 						<label><?php asde_e( 'Referencia (opcional)' ); ?> <input type="text" name="referencia" maxlength="120" placeholder="<?php echo esc_attr( PedidosTable::numero( $p ) ); ?>"></label>
 					</p>
 					<?php if ( $p['provisional'] ) : ?>
-						<p class="asde-help asde-help--warning"><?php asde_e( 'Se pidió con insignias sin precio: el importe propuesto usa los precios de hoy' ); ?><?php echo Servicio::total( $p['lineas'], \AsdeBalears\AreaPrivada\Uniformes\Config::de() )['provisional'] ? esc_html( asde_t( ', y alguna sigue sin precio: escribe lo que se ha cobrado' ) ) : ''; ?>.</p>
+						<p class="asde-help asde-help--warning"><?php asde_e( 'Se pidió con insignias sin precio: el importe propuesto usa los precios de hoy' ); ?><?php echo Servicio::total( $p['lineas'], \AsdeBalears\AreaPrivada\Tienda\Config::de() )['provisional'] ? esc_html( asde_t( ', y alguna sigue sin precio: escribe lo que se ha cobrado' ) ) : ''; ?>.</p>
 					<?php endif; ?>
 					<p><button type="submit" class="button"><?php asde_e( 'Validar el pago' ); ?></button></p>
 				</form>

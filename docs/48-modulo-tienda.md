@@ -213,3 +213,14 @@ Pago con tarjeta (Redsys, Stripe), gastos de envío y envíos a domicilio, cupon
 ## 10. Cómo se prueba (resumen)
 
 `tests/tienda.php` (migración de las 65 + nuevas por fase) con el CRM simulado; pruebas HTTP sin sesión para lo público; recorrido en el navegador por rol (visitante, socio, familia, scouter, Coordinación, Tesorería, Secretaría) y a 390 px; banco JS estático; Plugin Check. **Nunca contra el CRM real.**
+
+## 11. Avance
+
+- ✅ **Fase 1 hecha (2026-10-17, rama `Tienda`, v0.39.0 en preparación):**
+  - `src/Uniformes` → `src/Tienda`; vistas `Tienda{Pedidos,Gestion,Config,Base}View`; plantillas en `templates/tienda/`.
+  - Módulo `tienda` (`Modulos::TIENDA`), tabla `asde_tienda_pedidos`, opción `asde_ap_tienda_<grupo>`.
+  - Capabilities `asde_tienda_{comprar,gestion,admin,pago,pedido,entrega}`; **Secretaría ya tiene `asde_tienda_admin`**.
+  - Páginas con clave nueva (`tienda_pedidos` «Mis pedidos», `tienda_gestion`, `tienda_config`), mismas páginas (mismo id) y redirección 301 de `/uniforme/…` a `/mis-pedidos/…`.
+  - Migración `Install\MigracionTienda` (idempotente), probada en `tests/migracion-tienda.php` (17 comprobaciones). `tests/tienda.php` conserva las 66 de uniformes.
+  - Textos nuevos con sus traducciones (ca, eu, gl). Auditoría: los tipos antiguos (`uniforme_*`) se mantienen tal cual.
+  - **Pendiente de la fase 1:** textos y capturas de los manuales y la ayuda (se rehacen al cerrar la v0.39, cuando las fases 2 y 3 hayan cambiado las pantallas).

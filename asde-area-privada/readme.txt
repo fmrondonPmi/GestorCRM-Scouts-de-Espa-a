@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.38.0
+Stable tag: 0.39.0
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -61,6 +61,9 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.39.0 =
+* The "Uniforms" module is now "Shop" (plan in docs/48). Phase 1: same features under the new name, new Shop capabilities (Secretary joins Coordination and Treasury as shop administrator), pages "My orders", "Shop management" and "Shop settings" (old /uniforme addresses redirect), and an automatic, repeatable migration of the orders table, settings and module switch.
 
 = 0.38.0 =
 * Waiting list: each group can add its own fields to the public sign-up form (label, type and optional/required), managed by Secretary and Coordination from the waiting list screen. The answers are stored encrypted with a key derived from the sign-up email, so they cannot be read once the entry is deleted.
@@ -217,6 +220,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * First version with the mobile app (PWA).
 
 == Upgrade Notice ==
+
+= 0.39.0 =
+Uniforms becomes the Shop. The orders table is renamed from asde_uniformes to asde_tienda_pedidos and the settings move automatically; nothing is lost.
 
 = 0.38.0 =
 Custom waiting list fields. Adds an encrypted column to the waiting list table (updated automatically).

@@ -26,7 +26,7 @@ use AsdeBalears\AreaPrivada\Domain\Grupos;
 use AsdeBalears\AreaPrivada\Frontend\Notices;
 use AsdeBalears\AreaPrivada\Frontend\Views\InventarioComprasView;
 use AsdeBalears\AreaPrivada\Frontend\Views\InventarioView;
-use AsdeBalears\AreaPrivada\Frontend\Views\UniformeView;
+use AsdeBalears\AreaPrivada\Frontend\Views\TiendaPedidosView;
 use AsdeBalears\AreaPrivada\Frontend\Views\View;
 use AsdeBalears\AreaPrivada\Idiomas\TextosJs;
 use AsdeBalears\AreaPrivada\Install\Roles;
@@ -38,9 +38,9 @@ use AsdeBalears\AreaPrivada\Inventario\MaterialesTable;
 use AsdeBalears\AreaPrivada\Inventario\Servicio as Inventario;
 use AsdeBalears\AreaPrivada\Inventario\TiposTable;
 use AsdeBalears\AreaPrivada\Socios\SociosTable;
-use AsdeBalears\AreaPrivada\Uniformes\Config;
-use AsdeBalears\AreaPrivada\Uniformes\PedidosTable;
-use AsdeBalears\AreaPrivada\Uniformes\Servicio as Uniformes;
+use AsdeBalears\AreaPrivada\Tienda\Config;
+use AsdeBalears\AreaPrivada\Tienda\PedidosTable;
+use AsdeBalears\AreaPrivada\Tienda\Servicio as Uniformes;
 use AsdeBalears\AreaPrivada\Usuarios\EmailCuenta;
 use AsdeBalears\AreaPrivada\Usuarios\RegistroEmails;
 use AsdeBalears\AreaPrivada\Usuarios\Usuarios;
@@ -452,39 +452,39 @@ try {
 	$precios = Uniformes::precios_camisa( $para, $cfg_u, $todos_u );
 	$ok( 1 === $wpdb->num_queries - $q && 0.0 === $precios['990090'] && 0.0 === $precios['990081'] && 25.0 === $precios['990083'], 'el precio de la camisa, el de cada persona (scouter: la primera, gratis; lobato: 25 €), con una sola consulta para todas' );
 
-	$h = $ver( new UniformeView() );
+	$h = $ver( new TiendaPedidosView() );
 	$ok( str_contains( $h, '<select id="asde-uni-socio" name="socio"' ) && ! str_contains( $h, 'type="radio" name="socio"' ), 'con más de 5 personas, «¿Para quién?» es un desplegable' );
 	$ok( str_contains( $h, '<optgroup label="Tú">' ) && str_contains( $h, '<optgroup label="Lobatos">' ) && str_contains( $h, '<optgroup label="Scouters">' ) && strpos( $h, 'label="Tú"' ) < strpos( $h, 'label="Lobatos"' ) && strpos( $h, 'label="Lobatos"' ) < strpos( $h, 'label="Scouters"' ), 'agrupado: ella, y después por sección, en el orden de las secciones' );
 	$ok( 1 === preg_match( '/<option value="990090" data-precio-camisa="0"/', $h ) && 1 === preg_match( '/<option value="990083" data-precio-camisa="25"/', $h ) && 1 === preg_match( '/<option value="990081" data-precio-camisa="0"\s+selected=/', $h ) && str_contains( $h, 'Treinta Bauzà, Bea' ), 'cada opción lleva su precio de camisa (por apellidos), y ella está elegida de antemano' );
 	$ok( str_contains( $h, 'Como scouter, también puedes pedirlo para los socios y socias de tus secciones' ), 'se explica que puede pedir para los de sus secciones' );
 	$ok( str_contains( $leer( 'assets/js/uniforme.js' ), "'SELECT' === campo.tagName" ), 'uniforme.js cambia el precio de la camisa también con el desplegable' );
 
-	$h  = $enviar( new UniformeView(), array( 'asde_action' => 'uniforme_pedir', 'socio' => '990083', 'con_camisa' => '1', 'camisa' => 'masculina|10' ), 'asde_uniforme_pedir' );
+	$h  = $enviar( new TiendaPedidosView(), array( 'asde_action' => 'uniforme_pedir', 'socio' => '990083', 'con_camisa' => '1', 'camisa' => 'masculina|10' ), 'asde_uniforme_pedir' );
 	$pb = PedidosTable::obtener( $max_id( PedidosTable::table() ) );
 	$ok( $pb && $pb['id'] > $ped_antes && '990083' === $pb['socio'] && array( 'lobatos' ) === $pb['secciones'] && ! $pb['adulto'] && 25.0 === $pb['total'] && $u_scout === $pb['creado_por'] && null === $pb['pago_en'], 'el scouter pide la camisa de una lobata: a su nombre, 25 €, pendiente de pago' );
-	$enviar( new UniformeView(), array( 'asde_action' => 'uniforme_pedir', 'socio' => '990090', 'con_camisa' => '1', 'camisa' => 'masculina|L' ), 'asde_uniforme_pedir' );
+	$enviar( new TiendaPedidosView(), array( 'asde_action' => 'uniforme_pedir', 'socio' => '990090', 'con_camisa' => '1', 'camisa' => 'masculina|L' ), 'asde_uniforme_pedir' );
 	$pj = PedidosTable::obtener( $max_id( PedidosTable::table() ) );
 	$ok( $pj && '990090' === $pj['socio'] && $pj['adulto'] && 0.0 === $pj['total'] && PedidosTable::REF_SIN_COSTE === $pj['pago_ref'], 'y la de otro scouter del Kraal: su primera camisa, gratis (pagada «sin coste»)' );
 	$log = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM %i WHERE accion = %s AND objeto_id = %s', Logger::table(), 'uniforme_pedido', (string) $pb['id'] ), ARRAY_A ); // phpcs:ignore WordPress.DB
 	$ok( $log && str_contains( (string) $log['detalles'], '"para_otros":true' ), 'la auditoría anota que lo pidió para otra persona (sin datos personales)' );
 	$antes = $max_id( PedidosTable::table() );
-	$h     = $enviar( new UniformeView(), array( 'asde_action' => 'uniforme_pedir', 'socio' => '990089', 'con_camisa' => '1', 'camisa' => 'masculina|12' ), 'asde_uniforme_pedir' );
+	$h     = $enviar( new TiendaPedidosView(), array( 'asde_action' => 'uniforme_pedir', 'socio' => '990089', 'con_camisa' => '1', 'camisa' => 'masculina|12' ), 'asde_uniforme_pedir' );
 	$ok( $antes === $max_id( PedidosTable::table() ) && str_contains( $h, 'No puedes hacer un pedido para esa persona' ), 'para alguien de otra sección, no' );
-	$h = $ver( new UniformeView() );
+	$h = $ver( new TiendaPedidosView() );
 	$ok( str_contains( $h, PedidosTable::numero( $pb ) ) && str_contains( $h, 'Bea Treinta Bauzà' ), 'en «Tus pedidos» ve los que ha pedido para otros' );
-	$enviar( new UniformeView(), array( 'asde_action' => 'uniforme_cancelar', 'pedido' => (string) $pb['id'] ), 'asde_uniforme_' . $pb['id'] );
+	$enviar( new TiendaPedidosView(), array( 'asde_action' => 'uniforme_cancelar', 'pedido' => (string) $pb['id'] ), 'asde_uniforme_' . $pb['id'] );
 	$ok( null !== PedidosTable::obtener( $pb['id'] )['cancelado_en'], 'y puede cancelar uno que ha pedido él mientras nadie lo ha validado' );
 
 	$a_f = $como( $u_fam );
 	$ok( array( '990082' ) === array_map( 'strval', array_keys( Uniformes::para_quien( $a_f ) ) ), 'la familia, como antes: sus menores' );
 	$antes = $max_id( PedidosTable::table() );
-	$enviar( new UniformeView(), array( 'asde_action' => 'uniforme_pedir', 'socio' => '990083', 'con_camisa' => '1', 'camisa' => 'masculina|10' ), 'asde_uniforme_pedir' );
+	$enviar( new TiendaPedidosView(), array( 'asde_action' => 'uniforme_pedir', 'socio' => '990083', 'con_camisa' => '1', 'camisa' => 'masculina|10' ), 'asde_uniforme_pedir' );
 	$ok( $antes === $max_id( PedidosTable::table() ), 'y no pide para otros de la sección' );
-	$h = $ver( new UniformeView() );
+	$h = $ver( new TiendaPedidosView() );
 	$ok( ! str_contains( $h, PedidosTable::numero( $pj ) ) && ! str_contains( $h, 'Como scouter' ), 'ni ve los pedidos que el scouter hizo para otros' );
 
 	$a_s2 = $como( $u_sc2 );
-	$h    = $ver( new UniformeView() );
+	$h    = $ver( new TiendaPedidosView() );
 	$ok( array( '990090', '990089' ) === array_map( 'strval', array_keys( Uniformes::para_quien( $a_s2 ) ) ) && 2 === substr_count( $h, 'type="radio" name="socio"' ) && ! str_contains( $h, 'data-asde-uni-socio' ), 'con pocas personas (un scouter de Scouts: él y un scout), siguen los botones' );
 	$ok( 0 === $cortadas, 'ninguna consulta ha salido hacia el CRM real' );
 } finally {

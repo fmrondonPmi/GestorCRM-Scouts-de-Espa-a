@@ -19,7 +19,7 @@ use AsdeBalears\AreaPrivada\Domain\Grupo;
 use AsdeBalears\AreaPrivada\Domain\Grupos;
 use AsdeBalears\AreaPrivada\Frontend\Menu;
 use AsdeBalears\AreaPrivada\Frontend\Views\AreaPrivadaView;
-use AsdeBalears\AreaPrivada\Frontend\Views\UniformeView;
+use AsdeBalears\AreaPrivada\Frontend\Views\TiendaPedidosView;
 use AsdeBalears\AreaPrivada\Frontend\Views\View;
 use AsdeBalears\AreaPrivada\Install\Roles;
 use AsdeBalears\AreaPrivada\Socios\SociosTable;
@@ -121,18 +121,18 @@ try {
 	$g = Menu::grupos( $como( $u_fam ) );
 	$ok( array( Menu::PERSONAL ) === array_keys( $g ), 'una familia (tutor) tiene un solo grupo de menú: lo personal' );
 	// «Mis eventos» solo con el módulo «Eventos» encendido (v0.35: nace apagado; lo prueba eventos-inscripciones.php).
-	$ok( array( 'ficha', 'pagos', 'uniforme' ) === $claves( $g[ Menu::PERSONAL ]['items'] ) && 'Mi familia' === $g[ Menu::PERSONAL ]['titulo'] && 'Mi familia' === $g[ Menu::PERSONAL ]['items']['ficha'] && 'Uniforme' === $g[ Menu::PERSONAL ]['items']['uniforme'], 'sus entradas: Mi familia, Mis eventos (v0.19.1), Mis pagos y Uniforme' );
+	$ok( array( 'ficha', 'pagos', 'tienda_pedidos' ) === $claves( $g[ Menu::PERSONAL ]['items'] ) && 'Mi familia' === $g[ Menu::PERSONAL ]['titulo'] && 'Mi familia' === $g[ Menu::PERSONAL ]['items']['ficha'] && 'Tienda' === $g[ Menu::PERSONAL ]['items']['tienda_pedidos'], 'sus entradas: Mi familia, Mis eventos (v0.19.1), Mis pagos y Tienda' );
 	$g = Menu::grupos( $como( $u_pol ) );
 	$ok( array( Menu::PERSONAL ) === array_keys( $g ) && 'Mi espacio' === $g[ Menu::PERSONAL ]['titulo'] && 'Mis datos' === $g[ Menu::PERSONAL ]['items']['ficha'], 'un participante: Mi espacio con Mis datos, pagos y uniforme' );
 	$tabs = View::pestanas( $como( $u_fam ) );
-	$ok( array( 'area', 'ficha', 'pagos', 'uniforme' ) === $claves( $tabs ), 'la lista plana de pestañas de la familia (Inicio delante) no trae nada de gestión' );
+	$ok( array( 'area', 'ficha', 'pagos', 'tienda_pedidos' ) === $claves( $tabs ), 'la lista plana de pestañas de la familia (Inicio delante) no trae nada de gestión' );
 
 	echo "\n== Parte B · Scouters: su espacio y la gestión, por separado ==\n";
 	$g = Menu::grupos( $como( $u_sco ) );
 	$ok( array( Menu::PERSONAL, Menu::GESTION ) === array_keys( $g ), 'un scouter tiene dos grupos: lo suyo y la gestión del grupo' );
-	$ok( 'Mi uniforme' === $g[ Menu::PERSONAL ]['items']['uniforme'] && isset( $g[ Menu::PERSONAL ]['items']['ficha'], $g[ Menu::PERSONAL ]['items']['pagos'] ), 'en lo suyo: Mis datos, Mis pagos y Mi uniforme (pide el suyo)' );
+	$ok( 'Mis pedidos' === $g[ Menu::PERSONAL ]['items']['tienda_pedidos'] && isset( $g[ Menu::PERSONAL ]['items']['ficha'], $g[ Menu::PERSONAL ]['items']['pagos'] ), 'en lo suyo: Mis datos, Mis pagos y Mi uniforme (pide el suyo)' );
 	$gi = $g[ Menu::GESTION ]['items'];
-	$ok( 'Gestión del grupo' === $g[ Menu::GESTION ]['titulo'] && isset( $gi['solicitudes'], $gi['cambios'], $gi['informes'], $gi['tesoreria'], $gi['uniformes'] ) && str_starts_with( $gi['uniformes'], 'Gestión de uniformes' ), 'en la gestión: Solicitudes, Cambios, Informes, Tesorería y Gestión de uniformes' );
+	$ok( 'Gestión del grupo' === $g[ Menu::GESTION ]['titulo'] && isset( $gi['solicitudes'], $gi['cambios'], $gi['informes'], $gi['tesoreria'], $gi['tienda_gestion'] ) && str_starts_with( $gi['tienda_gestion'], 'Gestión de la tienda' ), 'en la gestión: Solicitudes, Cambios, Informes, Tesorería y Gestión de uniformes' );
 	$ok( ! isset( $gi['personas'] ) && ! isset( $gi['usuarios'] ) && ! isset( $g[ Menu::PERSONAL ]['items']['personas'] ), 'sin Personas ni Usuarios (eso es de Secretaría y Coordinación) y sin mezclar gestión en lo personal' );
 	$g = Menu::grupos( $como( $u_coord ) );
 	$ok( isset( $g[ Menu::GESTION ]['items']['personas'], $g[ Menu::GESTION ]['items']['usuarios'] ) && ! isset( $g[ Menu::PERSONAL ]['items']['personas'] ), 'Coordinación añade Personas y Usuarios, siempre dentro de la gestión' );
@@ -153,7 +153,7 @@ try {
 	$como( $u_sco );
 	$h = ( new AreaPrivadaView() )->render();
 	$ok( 2 === substr_count( $h, 'class="asde-nav__grupo"' ) && str_contains( $h, '>Mi espacio<' ) && str_contains( $h, '>Gestión del grupo<' ), 'el scouter ve el menú con los dos rótulos: Mi espacio y Gestión del grupo' );
-	$ok( str_contains( $h, '>Para ti</h3>' ) && str_contains( $h, '>Gestión del grupo</h3>' ) && str_contains( $h, '<strong>Mi uniforme</strong>' ) && str_contains( $h, '<strong>Gestión de uniformes</strong>' ), 'y su inicio, dos bloques: «Para ti» (con Mi uniforme) y «Gestión del grupo» (con Gestión de uniformes)' );
+	$ok( str_contains( $h, '>Para ti</h3>' ) && str_contains( $h, '>Gestión del grupo</h3>' ) && str_contains( $h, '<strong>Mis pedidos</strong>' ) && str_contains( $h, '<strong>Gestión de la tienda</strong>' ), 'y su inicio, dos bloques: «Para ti» (con Mi uniforme) y «Gestión del grupo» (con Gestión de uniformes)' );
 	$posicion_nav = strpos( $h, 'asde-nav__tabs' );
 	$p_datos      = strpos( $h, 'Mis datos', (int) $posicion_nav );
 	$p_gestion    = strpos( $h, '<span>Gestión del grupo</span>', (int) $posicion_nav );
@@ -166,9 +166,9 @@ try {
 
 	echo "\n== Parte E · Las páginas no cambian de permisos ==\n";
 	$como( $u_fam );
-	$ok( str_contains( ( new \AsdeBalears\AreaPrivada\Frontend\Views\UniformesGestionView() )->render(), 'No tienes acceso' ), 'una familia sigue sin entrar en la gestión de uniformes aunque se sepa la dirección' );
+	$ok( str_contains( ( new \AsdeBalears\AreaPrivada\Frontend\Views\TiendaGestionView() )->render(), 'No tienes acceso' ), 'una familia sigue sin entrar en la gestión de uniformes aunque se sepa la dirección' );
 	$como( $u_sco );
-	$ok( str_contains( ( new UniformeView() )->render(), 'name="asde_action" value="uniforme_pedir"' ), 'el scouter entra en «Mi uniforme» y ve el formulario del pedido' );
+	$ok( str_contains( ( new TiendaPedidosView() )->render(), 'name="asde_action" value="uniforme_pedir"' ), 'el scouter entra en «Mis pedidos» y ve el formulario del pedido' );
 	$ok( $crm->llamadas > 0 && 0 === $cortadas, "todas las consultas al CRM las ha respondido el simulador ({$crm->llamadas}); ninguna ha salido hacia el CRM real" );
 } finally {
 	// Limpieza: todo lo creado fuera; lo tocado, como estaba.

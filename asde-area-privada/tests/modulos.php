@@ -117,7 +117,7 @@ try {
 	$como( $u_teso );
 	$ok( ! Modulos::activo( Modulos::INVENTARIO ) && ! current_user_can( 'asde_inventario' ) && ! current_user_can( 'asde_inventario_aprobar' ), 'con el inventario apagado, nadie del grupo tiene sus permisos' );
 	$ok( ! isset( Menu::plano( Ambito::actual() )['inventario'] ) && str_contains( $ver( new InventarioView() ), 'No tienes acceso' ), 'y desaparece del menú y su pantalla no se abre' );
-	$ok( current_user_can( 'asde_tesoreria_config' ) && current_user_can( 'asde_uniformes_pago' ), 'los demás módulos siguen igual' );
+	$ok( current_user_can( 'asde_tesoreria_config' ) && current_user_can( 'asde_tienda_pago' ), 'los demás módulos siguen igual' );
 	$como( $u_admin );
 	$ok( ! current_user_can( 'asde_inventario' ) && current_user_can( 'manage_options' ), 'también para un administrador mientras trabaja en ese grupo (wp-admin sigue igual)' );
 	$ok( Modulos::activo( Modulos::INVENTARIO, '998' ) && array_merge( Modulos::LISTA[ Modulos::LISTA_ESPERA ][2], Modulos::LISTA[ Modulos::EVENTOS ][2] ) === Modulos::caps_quitadas( '998' ), 'otro grupo no se ve afectado (solo le falta lo que nace apagado: lista de espera y, desde la v0.35, eventos)' );
@@ -133,12 +133,12 @@ try {
 	$como( $u_teso );
 	$ok( ! Modulos::activo( Modulos::BANCO ) && ! Modulos::activo( Modulos::SEPA ) && ! current_user_can( 'asde_tesoreria_acceso' ) && ! current_user_can( 'asde_sepa_autorizar' ), 'sin Tesorería tampoco hay banco ni domiciliaciones (aunque sus casillas sigan marcadas)' );
 	$ok( current_user_can( 'asde_mis_pagos' ), '«Mis pagos» se queda mientras haya uniformes' );
-	Modulos::guardar( '999', $todos_menos( Modulos::TESORERIA, Modulos::UNIFORMES ) );
+	Modulos::guardar( '999', $todos_menos( Modulos::TESORERIA, Modulos::TIENDA ) );
 	$como( $u_teso );
-	$ok( current_user_can( 'asde_mis_pagos' ) && ! current_user_can( 'asde_uniformes_pedir' ), '«Mis pagos» se queda mientras haya eventos (v0.35: enseña sus pagos)' );
-	Modulos::guardar( '999', $todos_menos( Modulos::TESORERIA, Modulos::UNIFORMES, Modulos::EVENTOS ) );
+	$ok( current_user_can( 'asde_mis_pagos' ) && ! current_user_can( 'asde_tienda_comprar' ), '«Mis pagos» se queda mientras haya eventos (v0.35: enseña sus pagos)' );
+	Modulos::guardar( '999', $todos_menos( Modulos::TESORERIA, Modulos::TIENDA, Modulos::EVENTOS ) );
 	$como( $u_teso );
-	$ok( ! current_user_can( 'asde_mis_pagos' ) && ! current_user_can( 'asde_uniformes_pedir' ), 'sin Tesorería, Uniformes ni Eventos, «Mis pagos» también se va' );
+	$ok( ! current_user_can( 'asde_mis_pagos' ) && ! current_user_can( 'asde_tienda_comprar' ), 'sin Tesorería, Uniformes ni Eventos, «Mis pagos» también se va' );
 	Modulos::guardar( '999', array_keys( Modulos::LISTA ) );
 	$como( $u_teso );
 	$ok( current_user_can( 'asde_tesoreria_acceso' ) && current_user_can( 'asde_inventario' ) && array( 'lista_espera' => true, 'eventos' => true ) === ( get_option( 'asde_ap_modulos', array() )['999'] ?? null ), 'al activarlos de nuevo vuelve todo, y del grupo solo queda en la opción lo que nace apagado y se ha encendido (lista de espera y eventos)' );

@@ -26,9 +26,9 @@ use AsdeBalears\AreaPrivada\Frontend\Views\InventarioTiposView;
 use AsdeBalears\AreaPrivada\Frontend\Views\InventarioView;
 use AsdeBalears\AreaPrivada\Frontend\Views\MisPagosView;
 use AsdeBalears\AreaPrivada\Frontend\Views\TesoreriaView;
-use AsdeBalears\AreaPrivada\Frontend\Views\UniformeView;
-use AsdeBalears\AreaPrivada\Frontend\Views\UniformesConfigView;
-use AsdeBalears\AreaPrivada\Frontend\Views\UniformesGestionView;
+use AsdeBalears\AreaPrivada\Frontend\Views\TiendaPedidosView;
+use AsdeBalears\AreaPrivada\Frontend\Views\TiendaConfigView;
+use AsdeBalears\AreaPrivada\Frontend\Views\TiendaGestionView;
 use AsdeBalears\AreaPrivada\Frontend\Views\PersonasView;
 use AsdeBalears\AreaPrivada\Frontend\Views\RecuperarView;
 use AsdeBalears\AreaPrivada\Frontend\Views\SepaView;
@@ -47,7 +47,7 @@ defined( 'ABSPATH' ) || exit;
 final class Router {
 
 	/** Páginas que se pueden abrir en la ventana emergente. */
-	public const MODALES = array( 'ficha', 'alta', 'solicitudes', 'uniformes', 'inventario', 'inventario_tipos', 'inventario_compras', 'banco', 'tesoreria', 'personas', 'cambios' );
+	public const MODALES = array( 'ficha', 'alta', 'solicitudes', 'tienda_gestion', 'inventario', 'inventario_tipos', 'inventario_compras', 'banco', 'tesoreria', 'personas', 'cambios' );
 
 	/** La pide la ventana emergente del área (assets/js/area.js). */
 	public static function pide_modal(): bool {
@@ -86,9 +86,9 @@ final class Router {
 		'recuperar' => array( 'asde_recuperar', RecuperarView::class ),
 		'solicitar' => array( 'asde_solicitar', SolicitarView::class ),
 		'solicitudes' => array( 'asde_solicitudes', SolicitudesView::class ),
-		'uniforme'         => array( 'asde_uniforme', UniformeView::class ),
-		'uniformes'        => array( 'asde_uniformes', UniformesGestionView::class ),
-		'uniformes_config' => array( 'asde_uniformes_config', UniformesConfigView::class ),
+		'tienda_pedidos'         => array( 'asde_tienda_pedidos', TiendaPedidosView::class ),
+		'tienda_gestion'        => array( 'asde_tienda_gestion', TiendaGestionView::class ),
+		'tienda_config' => array( 'asde_tienda_config', TiendaConfigView::class ),
 		'pagos'            => array( 'asde_mis_pagos', MisPagosView::class ),
 		'alta_scouters'    => array( 'asde_alta_scouters', AltaScoutersView::class ),
 		// v0.19: inventario de material y listas de compra (doc 32).
@@ -260,8 +260,8 @@ final class Router {
 			( new TesoreriaView() )->exportar(); // Siempre Excel (v0.37): el enlace «csv» de antes sigue valiendo.
 		}
 		if ( 'csv' === $formato ) {
-			if ( 'uniformes' === $key ) {
-				( new UniformesGestionView() )->exportar();
+			if ( 'tienda_gestion' === $key ) {
+				( new TiendaGestionView() )->exportar();
 			}
 		}
 		// Importar material: el CSV de ejemplo y las filas que no se importaron (el de las filas con error comprueba su nonce; el ejemplo no tiene datos).
@@ -329,7 +329,7 @@ final class Router {
 		if ( 'federacion' === $key ) {
 			wp_enqueue_script( 'asde-conceptos', plugins_url( 'assets/js/conceptos.js', ASDE_AP_FILE ), array( 'asde-i18n' ), ASDE_AP_VERSION, true );
 		}
-		if ( 'uniforme' === $key ) {
+		if ( 'tienda_pedidos' === $key ) {
 			wp_enqueue_script( 'asde-uniforme', plugins_url( 'assets/js/uniforme.js', ASDE_AP_FILE ), array( 'asde-i18n' ), ASDE_AP_VERSION, true );
 		}
 		if ( in_array( $key, array( 'inventario', 'inventario_compras' ), true ) ) {

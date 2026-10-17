@@ -1,5 +1,5 @@
 <?php
-namespace AsdeBalears\AreaPrivada\Uniformes;
+namespace AsdeBalears\AreaPrivada\Tienda;
 
 use AsdeBalears\AreaPrivada\Domain\Grupo;
 
@@ -7,7 +7,7 @@ defined( 'ABSPATH' ) || exit;
 
 /**
  * Configuración de los pedidos de uniforme de cada grupo (opción
- * asde_ap_uniformes_<grupo>): precio de la camisa, modelos y tallas, insignias
+ * asde_ap_tienda_<grupo>): precio de la camisa, modelos y tallas, insignias
  * (nombre, dónde va, precio e imagen), guías de tallas y de colocación, si los
  * pedidos están abiertos y el texto que explica cómo pagar.
  *
@@ -17,7 +17,7 @@ defined( 'ABSPATH' ) || exit;
  */
 final class Config {
 
-	private const OPTION = 'asde_ap_uniformes_';
+	private const OPTION = 'asde_ap_tienda_';
 
 	/** Camisa scout oficial de ASDE: tallas de las tablas de medidas (2026-09-29). */
 	public const MODELOS = array(

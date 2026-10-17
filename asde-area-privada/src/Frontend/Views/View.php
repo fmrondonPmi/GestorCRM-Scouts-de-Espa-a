@@ -91,8 +91,8 @@ abstract class View {
 		$marcar = array(
 			'alta'             => 'usuarios',
 			'emails'           => 'usuarios',
-			'uniforme'         => isset( $items['uniforme'] ) ? 'uniforme' : 'uniformes',
-			'uniformes_config' => 'uniformes',
+			'tienda_pedidos'         => isset( $items['tienda_pedidos'] ) ? 'tienda_pedidos' : 'tienda_gestion',
+			'tienda_config' => 'tienda_gestion',
 			'inventario_tipos'   => 'inventario',
 			'inventario_compras' => 'inventario',
 			'eventos_config'     => 'eventos',

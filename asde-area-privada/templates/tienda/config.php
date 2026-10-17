@@ -6,7 +6,7 @@
  * @var string $url
  */
 // phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound, WordPress.WP.GlobalVariablesOverride.Prohibited -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
-use AsdeBalears\AreaPrivada\Uniformes\Config;
+use AsdeBalears\AreaPrivada\Tienda\Config;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -18,8 +18,8 @@ $imagen = static function ( string $campo, int $adjunto, string $alt ): string {
 };
 ?>
 <form method="post" enctype="multipart/form-data" class="asde-form" action="<?php echo esc_url( $url ); ?>">
-	<?php wp_nonce_field( 'asde_uniformes_config' ); ?>
-	<input type="hidden" name="asde_action" value="uniformes_config">
+	<?php wp_nonce_field( 'asde_tienda_admin' ); ?>
+	<input type="hidden" name="asde_action" value="tienda_config">
 
 	<section class="asde-card">
 		<h2 class="asde-card__title"><?php asde_e( 'Pedidos de uniforme · configuración' ); ?></h2>

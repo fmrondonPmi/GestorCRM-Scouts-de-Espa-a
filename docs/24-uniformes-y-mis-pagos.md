@@ -1,5 +1,7 @@
 # 24 · Pedidos de uniforme y «Mis pagos» (v0.11)
 
+> **v0.39:** el módulo se llama ahora **Tienda** (doc 48): `src/Tienda`, capabilities `asde_tienda_*`, páginas «Mis pedidos», «Gestión de la tienda» y «Configuración de la tienda», tabla `asde_tienda_pedidos` y opción `asde_ap_tienda_<grupo>`. Todo lo que cuenta este documento sobre pedidos, comprobaciones y configuración sigue valiendo; solo cambian los nombres.
+
 ## Petición del usuario (2026-09-29)
 
 - Un **gestor de pedidos de uniforme**: los asociados piden la **camisa scout** (25 €) y pueden **añadir insignias**. Las imágenes, con su nombre, las dejó en `C:\tmp\borrame`.

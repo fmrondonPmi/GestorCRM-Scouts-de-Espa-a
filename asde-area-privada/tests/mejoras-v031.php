@@ -35,7 +35,7 @@ $ok( str_contains( $ctrl, 'asde-filter--una-linea" data-asde-parcial-form="pagos
 $ok( ! str_contains( $ctrl, '<a class="button" href="<?php echo esc_url( add_query_arg( array( \'familia\'' ) && str_contains( $ctrl, 'asde-tooltip" title=' ) && ! str_contains( $ctrl, "' hijo(s)'" ), 'Control de pagos: «Ver / registrar pago» es un enlace y los hijos van en el tooltip del importe' );
 $banco = $leer( 'templates/tesoreria/banco.php' );
 $ok( strpos( $banco, 'id="asde-banco-q"' ) < strpos( $banco, 'id="asde-banco-estado"' ) && strpos( $banco, 'asde-contador' ) > strpos( $banco, '</table>' ), 'Banco: primero el cuadro de búsqueda y el contador debajo' );
-foreach ( array( 'uniformes/gestion' => 'uniformes-lista', 'inventario/compras' => 'inv-compras', 'informes/resultado' => 'informe-resultado' ) as $tpl => $zona ) {
+foreach ( array( 'tienda/gestion' => 'uniformes-lista', 'inventario/compras' => 'inv-compras', 'informes/resultado' => 'informe-resultado' ) as $tpl => $zona ) {
 	$ok( str_contains( $leer( "templates/$tpl.php" ), 'data-asde-parcial="' . $zona . '"' ), "$tpl: la lista se actualiza sin recargar ($zona)" );
 }
 $router = $leer( 'src/Frontend/Router.php' );

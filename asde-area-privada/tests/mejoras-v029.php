@@ -26,7 +26,7 @@ use AsdeBalears\AreaPrivada\Domain\Grupos;
 use AsdeBalears\AreaPrivada\Fichas\Cambios;
 use AsdeBalears\AreaPrivada\Frontend\TemplateLoader;
 use AsdeBalears\AreaPrivada\Frontend\Views\CambiosView;
-use AsdeBalears\AreaPrivada\Frontend\Views\UniformesGestionView;
+use AsdeBalears\AreaPrivada\Frontend\Views\TiendaGestionView;
 use AsdeBalears\AreaPrivada\Frontend\Views\View;
 use AsdeBalears\AreaPrivada\Informes\Generador;
 use AsdeBalears\AreaPrivada\Informes\Informe;
@@ -37,9 +37,9 @@ use AsdeBalears\AreaPrivada\Inventario\Importador;
 use AsdeBalears\AreaPrivada\Inventario\MaterialesTable;
 use AsdeBalears\AreaPrivada\Inventario\TiposTable;
 use AsdeBalears\AreaPrivada\Socios\SociosTable;
-use AsdeBalears\AreaPrivada\Uniformes\Config;
-use AsdeBalears\AreaPrivada\Uniformes\PedidosTable;
-use AsdeBalears\AreaPrivada\Uniformes\Servicio;
+use AsdeBalears\AreaPrivada\Tienda\Config;
+use AsdeBalears\AreaPrivada\Tienda\PedidosTable;
+use AsdeBalears\AreaPrivada\Tienda\Servicio;
 use AsdeBalears\AreaPrivada\Usuarios\Usuarios;
 
 global $wpdb;
@@ -150,7 +150,7 @@ $ok( in_array( 'xlsx', \AsdeBalears\AreaPrivada\Frontend\Views\InformesView::FOR
 echo "\n== C. Descargas, plegables y Personas (plantillas y JS) ==\n";
 $area = $leer( 'assets/js/area.js' );
 $ok( str_contains( $area, 'function esDescarga' ) && str_contains( $area, 'e.stopPropagation();' ) && str_contains( $area, "formato=(csv|xlsx|pdf" ), 'area.js: las descargas no pasan por la transición de página del tema' );
-$descargas = array( 'templates/informes/resultado.php', 'templates/tesoreria/control.php', 'templates/uniformes/gestion.php', 'templates/inventario/importar.php' );
+$descargas = array( 'templates/informes/resultado.php', 'templates/tesoreria/control.php', 'templates/tienda/gestion.php', 'templates/inventario/importar.php' );
 $ok( ! array_filter( $descargas, static fn( $f ) => ! str_contains( $leer( $f ), 'no-transition' ) ), 'los enlaces de descarga llevan la clase no-transition (Enfold)' );
 $ok( str_contains( $area, 'function plegables' ) && str_contains( $area, 'asde_cuadro2_' ) && str_contains( $area, 'data-asde-marcar-todos' ), 'area.js: cuadros plegables que se recuerdan y casilla «Todos»' );
 $ok( str_contains( $area, 'data-asde-inicio' ) && str_contains( $area, "'abierto' === inicio" ) && str_contains( $area, 'plegar( card, cerrado, false )' ) && str_contains( $leer( 'assets/js/ficha.js' ), "'asde_ficha_abiertos'" ) && str_contains( $leer( 'assets/js/ficha.js' ), 'details.asde-plegable[data-grupo]' ), 'cada cuadro fija cómo empieza (data-asde-inicio; el único de la pantalla, abierto); se recuerda lo que la persona abre o cierra; apartados de la ficha como antes' );
@@ -410,19 +410,19 @@ try {
 	$ok( is_wp_error( $asig2 ), 'asignar una talla que no queda: error' );
 
 	// Desde la pantalla: la tarjeta, la ventana de asignar y cancelar un pedido servido.
-	$gestion = $pintar( new UniformesGestionView(), array() );
+	$gestion = $pintar( new TiendaGestionView(), array() );
 	$ok( str_contains( $gestion, 'Camisas del inventario' ) && str_contains( $gestion, 'asignar=1' ) && str_contains( $gestion, 'Hay en el inventario' ) && str_contains( $gestion, 'Camisa del inventario' ), 'gestión: lo que hay, «Asignar una camisa» y qué pedidos se pueden servir' );
-	$asignar = $pintar( new UniformesGestionView(), array( 'asignar' => '1' ) );
+	$asignar = $pintar( new TiendaGestionView(), array( 'asignar' => '1' ) );
 	$ok( str_contains( $asignar, 'value="990073"' ) && str_contains( $asignar, 'value="femenina|M"' ) && ! str_contains( $asignar, 'value="masculina|S"' ), 'la ventana de asignar: socios y solo las tallas que quedan' );
-	$enviar( new UniformesGestionView(), array( 'asde_action' => 'uniforme_servir', 'pedido' => (string) $p_solo ), 'asde_uniforme_' . $p_solo );
+	$enviar( new TiendaGestionView(), array( 'asde_action' => 'uniforme_servir', 'pedido' => (string) $p_solo ), 'asde_uniforme_' . $p_solo );
 	$ok( $m1 === PedidosTable::obtener( $p_solo )['inventario_id'] && 1 === MaterialesTable::camisas()['femenina']['M'], 'servir desde la ficha del pedido' );
-	$enviar( new UniformesGestionView(), array( 'asde_action' => 'uniforme_cancelar', 'pedido' => (string) $p_solo, 'motivo' => 'Ya no la quiere' ), 'asde_uniforme_' . $p_solo );
+	$enviar( new TiendaGestionView(), array( 'asde_action' => 'uniforme_cancelar', 'pedido' => (string) $p_solo, 'motivo' => 'Ya no la quiere' ), 'asde_uniforme_' . $p_solo );
 	$ok( null !== PedidosTable::obtener( $p_solo )['cancelado_en'] && 2 === MaterialesTable::camisas()['femenina']['M'], 'cancelar un pedido servido devuelve la camisa al inventario' );
-	$enviar( new UniformesGestionView(), array( 'asde_action' => 'uniforme_asignar', 'socio' => '990073', 'camisa' => 'masculina|XL', 'nota' => '' ), 'asde_uniformes_asignar' );
+	$enviar( new TiendaGestionView(), array( 'asde_action' => 'uniforme_asignar', 'socio' => '990073', 'camisa' => 'masculina|XL', 'nota' => '' ), 'asde_uniformes_asignar' );
 	$ultimo = PedidosTable::obtener( $max_id( PedidosTable::table() ) );
 	$ok( $ultimo && '990073' === $ultimo['socio'] && 25.0 === (float) $ultimo['total'] && null === $ultimo['pago_en'] && 1 === MaterialesTable::camisas()['masculina']['XL'], 'asignar desde la ventana a un asociado: 25 € y pendiente de pago' );
 	$ok( true === Servicio::cancelar( PedidosTable::obtener( $p_ins ), 'Prueba' ) && 1 === ( MaterialesTable::camisas()['masculina']['S'] ?? 0 ) && 0 === PedidosTable::obtener( $p_ins )['inventario_id'], 'cancelar un pedido con la camisa servida (con insignias, aún sin pedir) la devuelve al inventario' );
-	$ok( str_contains( $leer( 'src/Frontend/Views/UniformeView.php' ), "Servicio::cancelar( \$p, 'Cancelado por el socio/a o su familia' )" ), 'también cuando lo cancela la familia desde «Mi uniforme»' );
+	$ok( str_contains( $leer( 'src/Frontend/Views/TiendaPedidosView.php' ), "Servicio::cancelar( \$p, 'Cancelado por el socio/a o su familia' )" ), 'también cuando lo cancela la familia desde «Mi uniforme»' );
 	$ok( $m2 > $m1 && $m3 > $m2, '(materiales de la prueba creados)' );
 } finally {
 	Escritura::usar_para_pruebas( null );

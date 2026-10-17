@@ -123,9 +123,9 @@ try {
 
 	echo "\n== Parte B · La ayuda de cada página ==\n";
 	$hay = static fn( string $m, array $paginas ) => ! array_filter( $paginas, static fn( $p ) => ! is_readable( Ayuda::dir() . "$m/$p.html" ) );
-	$ok( $hay( 'familias', array( 'area', 'ficha', 'pagos', 'uniforme', 'seguridad' ) ) && $hay( 'participantes', array( 'area', 'ficha', 'pagos', 'uniforme', 'seguridad' ) ), 'familias y participantes: inicio, ficha, pagos, uniforme y seguridad' );
-	$ok( $hay( 'scouters', array( 'area', 'personas', 'ficha', 'solicitudes', 'cambios', 'informes', 'tesoreria', 'uniforme', 'uniformes', 'inventario', 'seguridad' ) ), 'scouters: cada página que usan' );
-	$ok( $hay( 'coordinacion', array( 'area', 'personas', 'ficha', 'alta', 'usuarios', 'emails', 'solicitudes', 'cambios', 'informes', 'tesoreria', 'familias', 'cuotas', 'federacion', 'banco', 'sepa', 'uniformes', 'uniformes_config', 'inventario', 'inventario_tipos', 'inventario_compras', 'seguridad' ) ), 'coordinación: cada página de la gestión del grupo' );
+	$ok( $hay( 'familias', array( 'area', 'ficha', 'pagos', 'tienda_pedidos', 'seguridad' ) ) && $hay( 'participantes', array( 'area', 'ficha', 'pagos', 'tienda_pedidos', 'seguridad' ) ), 'familias y participantes: inicio, ficha, pagos, uniforme y seguridad' );
+	$ok( $hay( 'scouters', array( 'area', 'personas', 'ficha', 'solicitudes', 'cambios', 'informes', 'tesoreria', 'tienda_pedidos', 'tienda_gestion', 'inventario', 'seguridad' ) ), 'scouters: cada página que usan' );
+	$ok( $hay( 'coordinacion', array( 'area', 'personas', 'ficha', 'alta', 'usuarios', 'emails', 'solicitudes', 'cambios', 'informes', 'tesoreria', 'familias', 'cuotas', 'federacion', 'banco', 'sepa', 'tienda_gestion', 'tienda_config', 'inventario', 'inventario_tipos', 'inventario_compras', 'seguridad' ) ), 'coordinación: cada página de la gestión del grupo' );
 	$sin = array_filter( array_diff( array_keys( Pages::DEFINICIONES ), Pages::PUBLICAS ), static fn( $p ) => null === Ayuda::de_pagina( $p, '' ) );
 	$ok( ! $sin, 'todas las páginas del área tienen ayuda en algún manual' . ( $sin ? ' (faltan: ' . implode( ', ', $sin ) . ')' : '' ) );
 	Organizacion::guardar_manual( $base );

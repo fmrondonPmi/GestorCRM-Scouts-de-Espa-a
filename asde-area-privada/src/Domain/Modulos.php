@@ -25,7 +25,7 @@ final class Modulos {
 	public const TESORERIA     = 'tesoreria';
 	public const BANCO         = 'banco';
 	public const SEPA          = 'sepa';
-	public const UNIFORMES     = 'uniformes';
+	public const TIENDA        = 'tienda';
 	public const INVENTARIO    = 'inventario';
 	public const INFORMES      = 'informes';
 	public const SOLICITUDES   = 'solicitudes';
@@ -41,7 +41,7 @@ final class Modulos {
 		self::TESORERIA     => array( 'Tesorería', 'Control de pagos, familias, cuotas y coste federativo.', array( 'asde_tesoreria_acceso', 'asde_tesoreria_config', 'asde_sepa_autorizar' ), '' ),
 		self::BANCO         => array( 'Banco', 'Importar los movimientos de la cuenta, conciliarlos y tipificar los gastos.', array(), self::TESORERIA ),
 		self::SEPA          => array( 'Domiciliaciones SEPA', 'Autorizaciones de las familias y ficheros de adeudos para el banco.', array( 'asde_sepa_autorizar' ), self::TESORERIA ),
-		self::UNIFORMES     => array( 'Uniformes', 'Pedidos de la camisa y las insignias, su pago y su entrega.', array( 'asde_uniformes_pedir', 'asde_uniformes_gestion', 'asde_uniformes_pago', 'asde_uniformes_pedido', 'asde_uniformes_entrega', 'asde_uniformes_config' ), '' ),
+		self::TIENDA        => array( 'Tienda', 'Productos del grupo (uniforme, insignias y más): pedidos, pago y entrega.', array( 'asde_tienda_comprar', 'asde_tienda_gestion', 'asde_tienda_pago', 'asde_tienda_pedido', 'asde_tienda_entrega', 'asde_tienda_admin' ), '' ),
 		self::INVENTARIO    => array( 'Inventario', 'Material del grupo, tipos y listas de compra.', array( 'asde_inventario', 'asde_inventario_aprobar' ), '' ),
 		self::INFORMES      => array( 'Informes', 'Listados con las columnas que se elijan.', array( 'asde_reports' ), '' ),
 		self::SOLICITUDES   => array( 'Solicitudes de acceso', 'El enlace del grupo para pedir el acceso y su revisión.', array( 'asde_aprobar_solicitudes' ), '' ),
@@ -131,7 +131,7 @@ final class Modulos {
 			}
 		}
 		// «Mis pagos» enseña lo de Tesorería, los pagos del uniforme y (v0.35) los de los eventos: se va si se apagan los tres.
-		if ( ! self::activo( self::TESORERIA, $grupo ) && ! self::activo( self::UNIFORMES, $grupo ) && ! self::activo( self::EVENTOS, $grupo ) ) {
+		if ( ! self::activo( self::TESORERIA, $grupo ) && ! self::activo( self::TIENDA, $grupo ) && ! self::activo( self::EVENTOS, $grupo ) ) {
 			$caps[] = 'asde_mis_pagos';
 		}
 		return self::$quitadas[ $grupo ] = array_values( array_unique( $caps ) );

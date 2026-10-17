@@ -1,5 +1,5 @@
 <?php
-namespace AsdeBalears\AreaPrivada\Uniformes;
+namespace AsdeBalears\AreaPrivada\Tienda;
 
 use AsdeBalears\AreaPrivada\Domain\Grupo;
 
@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) || exit;
 // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- tablas propias del plugin ({prefix}asde_*): no hay función de WordPress para ellas y los datos cambian en cada petición, no se cachean.
 
 /**
- * Pedidos de uniforme ({prefix}asde_uniformes): una camisa (y/o insignias) para
+ * Pedidos de uniforme ({prefix}asde_tienda_pedidos): una camisa (y/o insignias) para
  * un socio/a, con sus cuatro comprobaciones, cada una con quién y cuándo:
  *
  *   pago      Tesorería ha recibido el pago (efectivo o ingreso en cuenta).
@@ -57,7 +57,7 @@ final class PedidosTable {
 
 	public static function table(): string {
 		global $wpdb;
-		return $wpdb->prefix . 'asde_uniformes';
+		return $wpdb->prefix . 'asde_tienda_pedidos';
 	}
 
 	public static function install_table(): void {

@@ -2,26 +2,26 @@
 namespace AsdeBalears\AreaPrivada\Frontend\Views;
 
 use AsdeBalears\AreaPrivada\Auth\Ambito;
-use AsdeBalears\AreaPrivada\Uniformes\Servicio;
+use AsdeBalears\AreaPrivada\Tienda\Servicio;
 
 defined( 'ABSPATH' ) || exit;
 
 /** Base de las páginas de uniformes: pestañas «Mis pedidos · Gestión · Configuración». */
-abstract class UniformesBaseView extends View {
+abstract class TiendaBaseView extends View {
 
 	protected function subnav( string $activo ): string {
 		$items = array();
 		if ( current_user_can( Servicio::CAP_PEDIR ) && Servicio::propios( Ambito::actual() ) ) {
-			$items['uniforme'] = asde_t( 'Mis pedidos' );
+			$items['tienda_pedidos'] = asde_t( 'Mis pedidos' );
 		}
 		if ( current_user_can( Servicio::CAP_GESTION ) ) {
-			$items['uniformes'] = asde_t( 'Gestión de pedidos' );
+			$items['tienda_gestion'] = asde_t( 'Gestión de pedidos' );
 		}
 		if ( current_user_can( Servicio::CAP_CONFIG ) ) {
-			$items['uniformes_config'] = asde_t( 'Configuración' );
+			$items['tienda_config'] = asde_t( 'Configuración' );
 		}
 		return count( $items ) > 1 ? $this->tpl(
-			'uniformes/subnav',
+			'tienda/subnav',
 			array(
 				'items'  => $items,
 				'activo' => $activo,

@@ -77,6 +77,7 @@ final class Installer {
 	}
 
 	public static function install(): void {
+		MigracionTienda::ejecutar(); // v0.39 (doc 48): Uniformes pasa a Tienda.
 		Roles::install();
 		Logger::install_table();
 		SociosTable::install_table();
@@ -87,7 +88,7 @@ final class Installer {
 		BancoTable::install_table();
 		Cambios::install_table();
 		\AsdeBalears\AreaPrivada\Usuarios\Solicitudes::install_table();
-		\AsdeBalears\AreaPrivada\Uniformes\PedidosTable::install_table();
+		\AsdeBalears\AreaPrivada\Tienda\PedidosTable::install_table();
 		\AsdeBalears\AreaPrivada\Sepa\Mandatos::install_table();
 		\AsdeBalears\AreaPrivada\Sepa\Remesas::install_table();
 		\AsdeBalears\AreaPrivada\Inventario\TiposTable::install_table();

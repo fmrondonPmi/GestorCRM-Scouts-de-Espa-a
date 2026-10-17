@@ -602,7 +602,6 @@ return array(
 	'Coordinación' => 'Coordinació',
 	'Detener' => 'Atura',
 	'El nº territorial sale junto al nº de Scouts de España en todas las pantallas. Si tiene algún problema, el aviso sale siempre.' => 'El núm. territorial surt al costat del núm. de Scouts de España a totes les pantalles. Si té algun problema, l\'avís surt sempre.',
-	'Gestión de uniformes' => 'Gestió d\'uniformes',
 	'Gestión del grupo' => 'Gestió del grup',
 	'Idioma' => 'Idioma',
 	'Importe (€)' => 'Import (€)',
@@ -611,7 +610,6 @@ return array(
 	'Inicio' => 'Inici',
 	'Mi espacio' => 'El meu espai',
 	'Mi familia' => 'La meva família',
-	'Mi uniforme' => 'El meu uniforme',
 	'Mis datos' => 'Les meves dades',
 	'Mis pagos' => 'Els meus pagaments',
 	'Mostrando' => 'Mostrant',
@@ -2136,8 +2134,6 @@ return array(
 	'Importar los movimientos de la cuenta, conciliarlos y tipificar los gastos.' => 'Importar els moviments del compte, conciliar-los i classificar les despeses.',
 	'Listados con las columnas que se elijan.' => 'Llistats amb les columnes que es triïn.',
 	'Material del grupo, tipos y listas de compra.' => 'Material del grup, tipus i llistes de compra.',
-	'Pedidos de la camisa y las insignias, su pago y su entrega.' => 'Comandes de la camisa i les insígnies, el pagament i el lliurament.',
-	'Uniformes' => 'Uniformes',
 	'El banco no está activo en tu grupo.' => 'El banc no està actiu al teu grup.',
 	'Las domiciliaciones SEPA no están activas en tu grupo.' => 'Les domiciliacions SEPA no estan actives al teu grup.',
 	'Al DNI le falta la letra.' => 'Al DNI li falta la lletra.',
@@ -3450,4 +3446,9 @@ return array(
 	'Si desactivas el aviso de plaza liberada, la plaza se sigue ofreciendo, pero la familia no recibe el email: tendrá que mirarlo en la aplicación.' => 'Si desactives l\'avís de plaça alliberada, la plaça se segueix oferint, però la família no rep l\'email: ho haurà de mirar a l\'aplicació.',
 	'Textos propios de los avisos' => 'Textos propis dels avisos',
 	'Un párrafo opcional al principio y otro al final de cada email (hasta %d caracteres). Salen igual en todos los idiomas: escríbelos en el idioma de tus familias.' => 'Un paràgraf opcional al principi i un altre al final de cada email (fins a %d caràcters). Surten igual en tots els idiomes: escriu-los en l\'idioma de les teves famílies.',
+
+	// v0.39: Tienda
+	'Productos del grupo (uniforme, insignias y más): pedidos, pago y entrega.' => 'Productes del grup (uniforme, insígnies i més): comandes, pagament i lliurament.',
+	'Gestión de la tienda' => 'Gestió de la botiga',
+	'Tienda' => 'Botiga',
 );

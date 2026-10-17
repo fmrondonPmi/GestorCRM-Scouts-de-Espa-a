@@ -12,7 +12,7 @@ abstract class InventarioBaseView extends View {
 	protected function subnav( string $activo ): string {
 		$pendientes = current_user_can( Servicio::CAP_APROBAR ) ? ComprasTable::contar_pendientes() : 0;
 		return $this->tpl(
-			'uniformes/subnav',
+			'tienda/subnav',
 			array(
 				'items'  => array(
 					'inventario'         => asde_t( 'Material' ),

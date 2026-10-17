@@ -9,9 +9,9 @@ use AsdeBalears\AreaPrivada\Informes\Generador;
 use AsdeBalears\AreaPrivada\Inventario\MaterialesTable;
 use AsdeBalears\AreaPrivada\Inventario\TiposTable;
 use AsdeBalears\AreaPrivada\Tesoreria\Calculadora;
-use AsdeBalears\AreaPrivada\Uniformes\Config;
-use AsdeBalears\AreaPrivada\Uniformes\PedidosTable;
-use AsdeBalears\AreaPrivada\Uniformes\Servicio;
+use AsdeBalears\AreaPrivada\Tienda\Config;
+use AsdeBalears\AreaPrivada\Tienda\PedidosTable;
+use AsdeBalears\AreaPrivada\Tienda\Servicio;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -23,7 +23,7 @@ defined( 'ABSPATH' ) || exit;
  * v0.29: camisas del inventario del grupo (tipo «Camisa uniforme»): lo que hay por modelo
  * y talla, servir del inventario la camisa de un pedido y asignar una a quien no la pidió.
  */
-final class UniformesGestionView extends UniformesBaseView {
+final class TiendaGestionView extends TiendaBaseView {
 
 	public function render( string $content = '' ): string {
 		if ( ! current_user_can( Servicio::CAP_GESTION ) ) {
@@ -31,7 +31,7 @@ final class UniformesGestionView extends UniformesBaseView {
 		}
 		$a = Ambito::actual();
 		if ( '1' === $this->get( 'asignar' ) ) {
-			return $this->layout( 'uniformes', Servicio::puede_inventario() ? $this->asignar( $a ) : $this->denegado( asde_t( 'Servir y asignar camisas del inventario lo hacen Coordinación y Tesorería.' ) ) );
+			return $this->layout( 'tienda_gestion', Servicio::puede_inventario() ? $this->asignar( $a ) : $this->denegado( asde_t( 'Servir y asignar camisas del inventario lo hacen Coordinación y Tesorería.' ) ) );
 		}
 		$id = (int) $this->get( 'pedido' );
 		if ( $id ) {
@@ -39,7 +39,7 @@ final class UniformesGestionView extends UniformesBaseView {
 			if ( ! $p || ! Servicio::en_gestion( $p, $a ) ) {
 				return $this->denegado( asde_t( 'No tienes acceso a ese pedido.' ) );
 			}
-			return $this->layout( 'uniformes', $this->detalle( $p, $a ) );
+			return $this->layout( 'tienda_gestion', $this->detalle( $p, $a ) );
 		}
 
 		$cfg      = Config::de();
@@ -59,9 +59,9 @@ final class UniformesGestionView extends UniformesBaseView {
 		$por_pedir = array_filter( $todos, static fn( $p ) => PedidosTable::cumple( $p, PedidosTable::POR_PEDIR ) );
 
 		return $this->layout(
-			'uniformes',
-			$this->subnav( 'uniformes' ) . $this->tpl(
-				'uniformes/gestion',
+			'tienda_gestion',
+			$this->subnav( 'tienda_gestion' ) . $this->tpl(
+				'tienda/gestion',
 				array(
 					'cfg'          => $cfg,
 					'ambito'       => $a,
@@ -77,11 +77,11 @@ final class UniformesGestionView extends UniformesBaseView {
 					'resumen'      => Servicio::resumen( array_filter( $por_pedir, static fn( $p ) => null !== $p['pago_en'] ), $cfg ),
 					'sin_pagar'    => count( array_filter( $por_pedir, static fn( $p ) => null === $p['pago_en'] ) ),
 					'stock'        => Servicio::puede_inventario() ? MaterialesTable::camisas() : null,
-					'url_asignar'  => $this->url( 'uniformes', array( 'asignar' => '1' ) ),
+					'url_asignar'  => $this->url( 'tienda_gestion', array( 'asignar' => '1' ) ),
 					'url_inv'      => Servicio::puede_inventario() ? $this->url( 'inventario', array( 'tipo' => (string) TiposTable::camisa() ) ) : '',
-					'url'          => $this->url( 'uniformes' ),
+					'url'          => $this->url( 'tienda_gestion' ),
 					'url_csv'      => $this->url(
-						'uniformes',
+						'tienda_gestion',
 						array(
 							'formato'  => 'csv',
 							'estado'   => $filtro,
@@ -91,7 +91,7 @@ final class UniformesGestionView extends UniformesBaseView {
 						)
 					),
 					'volver'       => $this->url(
-						'uniformes',
+						'tienda_gestion',
 						array_filter(
 							array(
 								'estado'  => $filtro,
@@ -136,7 +136,7 @@ final class UniformesGestionView extends UniformesBaseView {
 		$personas = $this->personas( array( $p ) );
 		$usuario  = static fn( int $id ): string => $id && ( $u = get_userdata( $id ) ) ? $u->display_name : '';
 		return $this->tpl(
-			'uniformes/detalle',
+			'tienda/detalle',
 			array(
 				'p'        => $p,
 				'persona'  => $personas[ $p['socio'] ] ?? null,
@@ -144,7 +144,7 @@ final class UniformesGestionView extends UniformesBaseView {
 				'usuario'  => $usuario,
 				'a_cobrar' => Servicio::importe_a_cobrar( $p ),
 				'stock'    => Servicio::puede_inventario() ? MaterialesTable::camisas() : array(),
-				'url'      => $this->url( 'uniformes' ),
+				'url'      => $this->url( 'tienda_gestion' ),
 				'url_ficha' => $this->url( 'ficha', array( 'socio' => $p['socio'] ) ),
 			)
 		);
@@ -163,14 +163,14 @@ final class UniformesGestionView extends UniformesBaseView {
 			$personas = array_filter( $personas, static fn( $p ) => (bool) array_intersect( $p->secciones, $mias ) );
 		}
 		return $this->tpl(
-			'uniformes/asignar',
+			'tienda/asignar',
 			array(
 				'personas'  => array_values( $personas ),
 				'stock'     => MaterialesTable::camisas(),
 				'cfg'       => Config::de(),
 				'socio'     => $this->get( 'socio' ),
-				'url'       => $this->url( 'uniformes', array( 'asignar' => '1' ) ),
-				'url_lista' => $this->url( 'uniformes' ),
+				'url'       => $this->url( 'tienda_gestion', array( 'asignar' => '1' ) ),
+				'url_lista' => $this->url( 'tienda_gestion' ),
 				'url_inv'   => $this->url( 'inventario', array( 'tipo' => (string) TiposTable::camisa() ) ),
 			)
 		);
@@ -225,7 +225,7 @@ final class UniformesGestionView extends UniformesBaseView {
 		}
 		$a      = Ambito::actual();
 		$accion = $this->post( 'asde_action' );
-		$lista  = wp_validate_redirect( esc_url_raw( $this->post( 'volver' ) ), $this->url( 'uniformes' ) );
+		$lista  = wp_validate_redirect( esc_url_raw( $this->post( 'volver' ) ), $this->url( 'tienda_gestion' ) );
 
 		// Incluir varios en el pedido del grupo (Coordinación).
 		if ( 'uniforme_incluir_lote' === $accion ) {
@@ -261,7 +261,7 @@ final class UniformesGestionView extends UniformesBaseView {
 			Notices::add( 'error', asde_t( 'No tienes acceso a ese pedido.' ) );
 			$this->redirect( $lista );
 		}
-		$volver = 'detalle' === $this->post( 'desde' ) ? $this->url( 'uniformes', array( 'pedido' => (string) $p['id'] ) ) : $lista;
+		$volver = 'detalle' === $this->post( 'desde' ) ? $this->url( 'tienda_gestion', array( 'pedido' => (string) $p['id'] ) ) : $lista;
 		$num    = PedidosTable::numero( $p );
 		$error  = asde_t( 'No tienes permiso para hacer esto con este pedido.' );
 		$hecho  = '';
@@ -362,7 +362,7 @@ final class UniformesGestionView extends UniformesBaseView {
 
 	/** Asigna una camisa del inventario (formulario de asignar()); siempre redirige. */
 	private function asignar_post( Ambito $a ): void {
-		$volver = $this->url( 'uniformes', array( 'asignar' => '1' ) );
+		$volver = $this->url( 'tienda_gestion', array( 'asignar' => '1' ) );
 		$socio  = preg_match( '/^\d{1,20}$/', $this->post( 'socio' ) ) ? $this->post( 'socio' ) : '';
 		$repo   = \AsdeBalears\AreaPrivada\Crm\PersonaRepository::make();
 		try {
@@ -383,7 +383,7 @@ final class UniformesGestionView extends UniformesBaseView {
 		$nuevo = PedidosTable::obtener( (int) $r );
 		/* translators: 1: nombre, 2: nº de pedido */
 		Notices::add( 'success', esc_html( sprintf( asde_t( 'Camisa asignada a %1$s y descontada del inventario (pedido %2$s).' ), $persona->nombre_completo(), $nuevo ? PedidosTable::numero( $nuevo ) : '' ) ) );
-		$this->redirect( $this->url( 'uniformes', array( 'pedido' => (string) $r ) ) );
+		$this->redirect( $this->url( 'tienda_gestion', array( 'pedido' => (string) $r ) ) );
 	}
 
 	/** Nombre del pedido del grupo al proveedor (p. ej. «Pedido 29/09/2026»). */

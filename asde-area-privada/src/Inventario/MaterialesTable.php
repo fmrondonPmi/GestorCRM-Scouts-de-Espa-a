@@ -2,7 +2,7 @@
 namespace AsdeBalears\AreaPrivada\Inventario;
 
 use AsdeBalears\AreaPrivada\Domain\Grupo;
-use AsdeBalears\AreaPrivada\Uniformes\Config;
+use AsdeBalears\AreaPrivada\Tienda\Config;
 
 defined( 'ABSPATH' ) || exit;
 

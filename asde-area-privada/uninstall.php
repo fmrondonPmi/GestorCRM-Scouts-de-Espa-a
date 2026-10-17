@@ -5,13 +5,13 @@
  * Se conservan, a propósito, los usuarios, las páginas y las tablas
  * ({prefix}asde_auditoria, asde_socios, asde_informes, asde_familias,
  * asde_familia_miembros, asde_movimientos, asde_emails, asde_banco_lotes, asde_cambios,
- * asde_banco_movimientos, asde_solicitudes, asde_uniformes, asde_sepa_mandatos, asde_sepa_remesas, y desde
+ * asde_banco_movimientos, asde_solicitudes, asde_tienda_pedidos, asde_sepa_mandatos, asde_sepa_remesas, y desde
  * la v0.35 asde_eventos, asde_evento_inscripciones, asde_evento_partidas y asde_evento_movimientos, los cobros de los eventos;
  * desde la v0.36 asde_evento_gastos y asde_evento_anticipos, las cuentas de los eventos)
  * y el email cifrado de cada cuenta. Los justificantes de los gastos de los eventos (cifrados, en
  * wp-content/uploads/asde-privado/) también se conservan: son el justificante de las cuentas. Las autorizaciones SEPA y las remesas se conservan (cifradas): son
  * el justificante de los cobros; quien no las necesite puede borrar esas dos tablas a mano.
- * La configuración de uniformes y la de eventos de cada grupo (asde_ap_uniformes_<grupo>, asde_ap_eventos_<grupo>) se borran;
+ * La configuración de la tienda y la de eventos de cada grupo (asde_ap_tienda_<grupo>, asde_ap_eventos_<grupo>) se borran;
  * sus imágenes se quedan en la biblioteca de medios.
  * De las solicitudes de acceso sí se borra lo que escribió quien pedía.
  */
@@ -47,7 +47,7 @@ foreach ( is_array( $asde_grupos ) ? $asde_grupos : array() as $asde_grupo ) {
 	delete_transient( 'asde_ap_snap_' . $asde_grupo['numero'] ); // Instantánea cifrada de las fichas (v0.12.3).
 	wp_clear_scheduled_hook( 'asde_ap_instantanea_refrescar', array( (string) $asde_grupo['numero'] ) );
 	delete_option( 'asde_ap_snaplock_' . $asde_grupo['numero'] ); // Cerrojo de la lectura de fichas.
-	delete_option( 'asde_ap_uniformes_' . $asde_grupo['numero'] );
+	delete_option( 'asde_ap_tienda_' . $asde_grupo['numero'] );
 	delete_option( 'asde_ap_eventos_' . $asde_grupo['numero'] ); // Tipos, margen y titulaciones de los eventos (v0.35).
 	delete_option( 'asde_ap_sepa_' . $asde_grupo['numero'] ); // Datos del acreedor SEPA (el IBAN, cifrado).
 	delete_option( 'asde_ap_eliminadas_' . $asde_grupo['numero'] ); // Personas eliminadas de la web (v0.35.1).

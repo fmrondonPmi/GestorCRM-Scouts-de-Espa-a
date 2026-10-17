@@ -6,7 +6,7 @@ use AsdeBalears\AreaPrivada\Eventos\Inscripciones;
 use AsdeBalears\AreaPrivada\Eventos\Servicio as Eventos;
 use AsdeBalears\AreaPrivada\Fichas\Cambios;
 use AsdeBalears\AreaPrivada\Frontend\Views\MisPagosView;
-use AsdeBalears\AreaPrivada\Uniformes\Servicio;
+use AsdeBalears\AreaPrivada\Tienda\Servicio;
 use AsdeBalears\AreaPrivada\Usuarios\Solicitudes;
 
 defined( 'ABSPATH' ) || exit;
@@ -54,7 +54,7 @@ final class Menu {
 		$pendientes = $ambito && ( $pide || $gestiona ) ? Servicio::pendientes( $ambito ) : array();
 		if ( $pide ) {
 			$n                    = (int) $pendientes['confirmar'];
-			$personal['uniforme'] = ( $gestiona ? asde_t( 'Mi uniforme' ) : asde_t( 'Uniforme' ) ) . ( $n ? ' (' . $n . ')' : '' );
+			$personal['tienda_pedidos'] = ( $gestiona ? asde_t( 'Mis pedidos' ) : asde_t( 'Tienda' ) ) . ( $n ? ' (' . $n . ')' : '' );
 		}
 
 		// --- Gestión del grupo ---
@@ -78,7 +78,7 @@ final class Menu {
 		}
 		if ( $ambito && $gestiona ) {
 			$n                    = (int) ( $pendientes['pago'] + $pendientes['pedido'] + $pendientes['entrega'] );
-			$gestion['uniformes'] = asde_t( 'Gestión de uniformes' ) . ( $n ? ' (' . $n . ')' : '' );
+			$gestion['tienda_gestion'] = asde_t( 'Gestión de la tienda' ) . ( $n ? ' (' . $n . ')' : '' );
 		}
 		if ( current_user_can( \AsdeBalears\AreaPrivada\Inventario\Servicio::CAP ) ) {
 			// v0.19 (doc 32): a Tesorería se le cuentan las listas de compra que esperan su visto bueno.

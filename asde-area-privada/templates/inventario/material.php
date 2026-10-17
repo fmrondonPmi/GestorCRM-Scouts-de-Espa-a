@@ -17,7 +17,7 @@
  */
 // phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound, WordPress.WP.GlobalVariablesOverride.Prohibited -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
 use AsdeBalears\AreaPrivada\Inventario\MaterialesTable;
-use AsdeBalears\AreaPrivada\Uniformes\Config;
+use AsdeBalears\AreaPrivada\Tienda\Config;
 
 defined( 'ABSPATH' ) || exit;
 

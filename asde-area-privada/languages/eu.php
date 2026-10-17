@@ -602,7 +602,6 @@ return array(
 	'Coordinación' => 'Koordinazioa',
 	'Detener' => 'Gelditu',
 	'El nº territorial sale junto al nº de Scouts de España en todas las pantallas. Si tiene algún problema, el aviso sale siempre.' => 'Lurralde-zenbakia Scouts de Españako zenbakiaren ondoan ageri da pantaila guztietan. Arazoren bat badu, oharra beti ageri da.',
-	'Gestión de uniformes' => 'Uniformeen kudeaketa',
 	'Gestión del grupo' => 'Taldearen kudeaketa',
 	'Idioma' => 'Hizkuntza',
 	'Importe (€)' => 'Zenbatekoa (€)',
@@ -611,7 +610,6 @@ return array(
 	'Inicio' => 'Hasiera',
 	'Mi espacio' => 'Nire espazioa',
 	'Mi familia' => 'Nire familia',
-	'Mi uniforme' => 'Nire uniformea',
 	'Mis datos' => 'Nire datuak',
 	'Mis pagos' => 'Nire ordainketak',
 	'Mostrando' => 'Erakusten',
@@ -2136,8 +2134,6 @@ return array(
 	'Importar los movimientos de la cuenta, conciliarlos y tipificar los gastos.' => 'Kontuko mugimenduak inportatu, bateratu eta gastuak sailkatu.',
 	'Listados con las columnas que se elijan.' => 'Aukeratutako zutabeekin egindako zerrendak.',
 	'Material del grupo, tipos y listas de compra.' => 'Taldearen materiala, motak eta erosketa-zerrendak.',
-	'Pedidos de la camisa y las insignias, su pago y su entrega.' => 'Alkandoraren eta insignien eskaerak, ordainketa eta entrega.',
-	'Uniformes' => 'Uniformeak',
 	'El banco no está activo en tu grupo.' => 'Bankua ez dago aktibo zure taldean.',
 	'Las domiciliaciones SEPA no están activas en tu grupo.' => 'SEPA helbideratzeak ez daude aktibo zure taldean.',
 	'Al DNI le falta la letra.' => 'NANari letra falta zaio.',
@@ -3450,4 +3446,9 @@ return array(
 	'Si desactivas el aviso de plaza liberada, la plaza se sigue ofreciendo, pero la familia no recibe el email: tendrá que mirarlo en la aplicación.' => 'Plaza libre egotearen abisua desaktibatzen baduzu, plaza eskaintzen jarraitzen da, baina familiak ez du emailik jasoko: aplikazioan begiratu beharko du.',
 	'Textos propios de los avisos' => 'Abisuen testu propioak',
 	'Un párrafo opcional al principio y otro al final de cada email (hasta %d caracteres). Salen igual en todos los idiomas: escríbelos en el idioma de tus familias.' => 'Aukerako paragrafo bat hasieran eta beste bat amaieran, email bakoitzean (%d karaktere arte). Hizkuntza guztietan berdin ateratzen dira: idatzi itzazu zure familien hizkuntzan.',
+
+	// v0.39: Tienda
+	'Productos del grupo (uniforme, insignias y más): pedidos, pago y entrega.' => 'Taldeko produktuak (uniformea, insigniak eta gehiago): eskaerak, ordainketa eta entrega.',
+	'Gestión de la tienda' => 'Dendaren kudeaketa',
+	'Tienda' => 'Denda',
 );

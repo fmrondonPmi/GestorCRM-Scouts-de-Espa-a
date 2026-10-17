@@ -7,7 +7,7 @@ use AsdeBalears\AreaPrivada\Inventario\Importador;
 use AsdeBalears\AreaPrivada\Inventario\MaterialesTable;
 use AsdeBalears\AreaPrivada\Inventario\Servicio;
 use AsdeBalears\AreaPrivada\Inventario\TiposTable;
-use AsdeBalears\AreaPrivada\Uniformes\Config;
+use AsdeBalears\AreaPrivada\Tienda\Config;
 
 defined( 'ABSPATH' ) || exit;
 

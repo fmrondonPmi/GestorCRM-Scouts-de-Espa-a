@@ -35,6 +35,7 @@ final class Plugin {
 		Instantanea::register();
 		\AsdeBalears\AreaPrivada\Domain\Modulos::register(); // v0.20: módulos que se activan o desactivan por grupo.
 		\AsdeBalears\AreaPrivada\Eventos\Avisos::register(); // v0.35 (eventos, doc 43): avisos masivos de los eventos (WP-Cron).
+		add_action( 'template_redirect', array( \AsdeBalears\AreaPrivada\Install\MigracionTienda::class, 'redirigir' ), 1 ); // v0.39: las direcciones antiguas de Uniformes llevan a la Tienda.
 
 		if ( is_admin() ) {
 			( new SettingsPage() )->register();

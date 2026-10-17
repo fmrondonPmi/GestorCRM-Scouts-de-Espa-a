@@ -416,7 +416,7 @@ final class Entorno {
 			BancoTable::table_lotes(),
 			Cambios::table(),
 			\AsdeBalears\AreaPrivada\Usuarios\Solicitudes::table(),
-			\AsdeBalears\AreaPrivada\Uniformes\PedidosTable::table(),
+			\AsdeBalears\AreaPrivada\Tienda\PedidosTable::table(),
 			\AsdeBalears\AreaPrivada\Sepa\Mandatos::table(),
 			\AsdeBalears\AreaPrivada\Sepa\Remesas::table(),
 			\AsdeBalears\AreaPrivada\Eventos\EventosTable::table(),

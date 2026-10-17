@@ -6,7 +6,7 @@ use AsdeBalears\AreaPrivada\Eventos\EventosTable;
 use AsdeBalears\AreaPrivada\Eventos\Inscripciones;
 use AsdeBalears\AreaPrivada\Eventos\InscripcionesTable;
 use AsdeBalears\AreaPrivada\Eventos\MovimientosTable as EventoMovimientos;
-use AsdeBalears\AreaPrivada\Uniformes\PedidosTable;
+use AsdeBalears\AreaPrivada\Tienda\PedidosTable;
 
 defined( 'ABSPATH' ) || exit;
 

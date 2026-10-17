@@ -18,8 +18,8 @@ use AsdeBalears\AreaPrivada\Tesoreria\Calculadora;
 use AsdeBalears\AreaPrivada\Tesoreria\Config as TesoreriaConfig;
 use AsdeBalears\AreaPrivada\Tesoreria\FamiliasTable;
 use AsdeBalears\AreaPrivada\Tesoreria\MovimientosTable;
-use AsdeBalears\AreaPrivada\Uniformes\PedidosTable;
-use AsdeBalears\AreaPrivada\Uniformes\Servicio;
+use AsdeBalears\AreaPrivada\Tienda\PedidosTable;
+use AsdeBalears\AreaPrivada\Tienda\Servicio;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -193,7 +193,7 @@ final class MisPagosView extends View {
 					'cuotas'     => $cuotas,
 					'pagos'      => $pagos,
 					'pendientes' => $pendientes,
-					'url_uniforme' => $this->url( 'uniforme' ),
+					'url_uniforme' => $this->url( 'tienda_pedidos' ),
 					'url_eventos'  => $hay_eventos ? $this->url( 'mis_eventos' ) : '',
 					'sepa'       => $sepa,
 					'url'        => $this->url( 'pagos' ),

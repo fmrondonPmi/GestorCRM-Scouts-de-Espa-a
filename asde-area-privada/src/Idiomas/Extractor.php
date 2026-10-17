@@ -151,7 +151,7 @@ final class Extractor {
 		$grupos = array(
 			'templates/comun/'       => 'Menú y avisos',
 			'templates/area/'        => 'Inicio',
-			'templates/uniformes/'   => 'Uniformes',
+			'templates/tienda/'   => 'Uniformes',
 			'templates/inventario/'  => 'Inventario',
 			'templates/eventos/'     => 'Eventos',
 			'templates/tesoreria/'   => 'Tesorería',

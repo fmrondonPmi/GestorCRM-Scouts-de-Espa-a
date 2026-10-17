@@ -40,9 +40,9 @@ final class Roles {
 					'asde_reports'              => true,
 					'asde_tesoreria_acceso' => true,
 					// Uniformes (v0.11): pedir, ver los de sus secciones y entregarlos.
-					'asde_uniformes_pedir'   => true,
-					'asde_uniformes_gestion' => true,
-					'asde_uniformes_entrega' => true,
+					'asde_tienda_comprar'   => true,
+					'asde_tienda_gestion' => true,
+					'asde_tienda_entrega' => true,
 					'asde_mis_pagos'         => true,
 					'asde_inventario'        => true, // Inventario de material (v0.19, doc 32).
 					'asde_lista_espera'      => true, // Lista de espera (v0.32, doc 39): ver, contactar y cambiar el estado.
@@ -64,9 +64,10 @@ final class Roles {
 					'asde_reports'         => true,
 					'asde_tesoreria_acceso' => true,
 					'asde_tesoreria_config' => true,
-					'asde_uniformes_pedir'   => true,
-					'asde_uniformes_gestion' => true,
-					'asde_uniformes_entrega' => true,
+					'asde_tienda_comprar'   => true,
+					'asde_tienda_gestion' => true,
+					'asde_tienda_entrega' => true,
+					'asde_tienda_admin'   => true, // v0.39 (doc 48): Secretaría administra la tienda como Coordinación y Tesorería.
 					'asde_mis_pagos'         => true,
 					'asde_inventario'        => true,
 					'asde_lista_espera'      => true,
@@ -90,11 +91,11 @@ final class Roles {
 					'asde_tesoreria_acceso' => true,
 					'asde_tesoreria_config' => true,
 					// Uniformes: Coordinación valida que están en el pedido del grupo.
-					'asde_uniformes_pedir'   => true,
-					'asde_uniformes_gestion' => true,
-					'asde_uniformes_entrega' => true,
-					'asde_uniformes_pedido'  => true,
-					'asde_uniformes_config'  => true,
+					'asde_tienda_comprar'   => true,
+					'asde_tienda_gestion' => true,
+					'asde_tienda_entrega' => true,
+					'asde_tienda_pedido'  => true,
+					'asde_tienda_admin'  => true,
 					'asde_mis_pagos'         => true,
 					'asde_inventario'        => true,
 					'asde_lista_espera'      => true,
@@ -114,11 +115,11 @@ final class Roles {
 					'asde_tesoreria_acceso' => true,
 					'asde_tesoreria_config' => true,
 					// Uniformes: Tesorería valida el pago.
-					'asde_uniformes_pedir'   => true,
-					'asde_uniformes_gestion' => true,
-					'asde_uniformes_entrega' => true,
-					'asde_uniformes_pago'    => true,
-					'asde_uniformes_config'  => true,
+					'asde_tienda_comprar'   => true,
+					'asde_tienda_gestion' => true,
+					'asde_tienda_entrega' => true,
+					'asde_tienda_pago'    => true,
+					'asde_tienda_admin'  => true,
 					'asde_mis_pagos'         => true,
 					// Inventario: Tesorería da el visto bueno a las listas de compra (sin él no se imprimen).
 					'asde_inventario'         => true,
@@ -135,7 +136,7 @@ final class Roles {
 				$base + array(
 					'asde_view_wards'           => true,
 					'asde_propose_ward_changes' => true,
-					'asde_uniformes_pedir'      => true,
+					'asde_tienda_comprar'      => true,
 					'asde_mis_pagos'            => true,
 					'asde_sepa_autorizar'       => true, // v0.12: firma la autorización de domiciliación SEPA de su familia.
 					'asde_eventos_inscribir'    => true, // v0.35: «Mis eventos» (inscribir a sus menores).
@@ -147,7 +148,7 @@ final class Roles {
 					'asde_view_self'         => true,
 					'asde_edit_self_contact' => true,
 					'asde_add_self_notes'    => true,
-					'asde_uniformes_pedir'   => true,
+					'asde_tienda_comprar'   => true,
 					'asde_mis_pagos'         => true,
 					'asde_sepa_autorizar'    => true, // Solo si es mayor de edad (Sepa\Mandatos::puede_firmar).
 					'asde_eventos_inscribir' => true,

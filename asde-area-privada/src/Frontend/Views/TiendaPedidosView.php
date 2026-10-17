@@ -4,21 +4,21 @@ namespace AsdeBalears\AreaPrivada\Frontend\Views;
 use AsdeBalears\AreaPrivada\Audit\Logger;
 use AsdeBalears\AreaPrivada\Auth\Ambito;
 use AsdeBalears\AreaPrivada\Frontend\Notices;
-use AsdeBalears\AreaPrivada\Uniformes\Config;
-use AsdeBalears\AreaPrivada\Uniformes\PedidosTable;
-use AsdeBalears\AreaPrivada\Uniformes\Servicio;
+use AsdeBalears\AreaPrivada\Tienda\Config;
+use AsdeBalears\AreaPrivada\Tienda\PedidosTable;
+use AsdeBalears\AreaPrivada\Tienda\Servicio;
 
 defined( 'ABSPATH' ) || exit;
 
 /**
  * «Uniforme» para los asociados: sus pedidos (y los de sus menores), el
  * formulario para pedir la camisa y las insignias, y la confirmación de que se
- * ha recibido. Ver Uniformes\Servicio.
+ * ha recibido. Ver Tienda\Servicio.
  *
  * v0.30 (P-48): un scouter pide también para los socios/as de sus secciones; con muchas
  * personas, «¿Para quién?» es un desplegable agrupado por sección.
  */
-final class UniformeView extends UniformesBaseView {
+final class TiendaPedidosView extends TiendaBaseView {
 
 	public function render( string $content = '' ): string {
 		if ( ! current_user_can( Servicio::CAP_PEDIR ) ) {
@@ -46,9 +46,9 @@ final class UniformeView extends UniformesBaseView {
 			}
 		}
 		return $this->layout(
-			'uniforme',
-			$this->subnav( 'uniforme' ) . $this->tpl(
-				'uniformes/mis-pedidos',
+			'tienda_pedidos',
+			$this->subnav( 'tienda_pedidos' ) . $this->tpl(
+				'tienda/mis-pedidos',
 				array(
 					'cfg'      => $cfg,
 					'para'     => $para,
@@ -59,7 +59,7 @@ final class UniformeView extends UniformesBaseView {
 					'ambito'   => $a,
 					'guias'    => $guias,
 					'colocar'  => Config::imagen( $cfg['guia_insignias'], 'large' ),
-					'url'      => $this->url( 'uniforme' ),
+					'url'      => $this->url( 'tienda_pedidos' ),
 					'url_pagos' => $this->url( 'pagos' ),
 				)
 			)
@@ -67,7 +67,7 @@ final class UniformeView extends UniformesBaseView {
 	}
 
 	private function redirigir_gestion(): string {
-		return $this->layout( 'uniforme', $this->subnav( 'uniforme' ) . '<section class="asde-card"><p>' . sprintf( asde_t( 'Desde aquí se gestionan los pedidos del grupo: %s.' ), '<a href="' . esc_url( $this->url( 'uniformes' ) ) . '">' . esc_html( asde_t( 'Gestión de pedidos' ) ) . '</a>' ) . '</p></section>' );
+		return $this->layout( 'tienda_pedidos', $this->subnav( 'tienda_pedidos' ) . '<section class="asde-card"><p>' . sprintf( asde_t( 'Desde aquí se gestionan los pedidos del grupo: %s.' ), '<a href="' . esc_url( $this->url( 'tienda_gestion' ) ) . '">' . esc_html( asde_t( 'Gestión de pedidos' ) ) . '</a>' ) . '</p></section>' );
 	}
 
 	public function handle_post(): void {
@@ -75,7 +75,7 @@ final class UniformeView extends UniformesBaseView {
 			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-area-privada' ), 403 );
 		}
 		$a      = Ambito::actual();
-		$volver = $this->url( 'uniforme' );
+		$volver = $this->url( 'tienda_pedidos' );
 
 		if ( 'uniforme_pedir' === $this->post( 'asde_action' ) ) {
 			check_admin_referer( 'asde_uniforme_pedir' );

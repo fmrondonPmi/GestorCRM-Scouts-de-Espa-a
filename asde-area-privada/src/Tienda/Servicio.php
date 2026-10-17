@@ -1,5 +1,5 @@
 <?php
-namespace AsdeBalears\AreaPrivada\Uniformes;
+namespace AsdeBalears\AreaPrivada\Tienda;
 
 use AsdeBalears\AreaPrivada\Audit\Logger;
 use AsdeBalears\AreaPrivada\Auth\Ambito;
@@ -35,12 +35,12 @@ final class Servicio {
 	/** v0.30: con más personas que estas, «¿Para quién?» es un desplegable agrupado por sección. */
 	public const MAX_BOTONES_PARA = 5;
 
-	public const CAP_PEDIR   = 'asde_uniformes_pedir';
-	public const CAP_GESTION = 'asde_uniformes_gestion';
-	public const CAP_PAGO    = 'asde_uniformes_pago';
-	public const CAP_PEDIDO  = 'asde_uniformes_pedido';
-	public const CAP_ENTREGA = 'asde_uniformes_entrega';
-	public const CAP_CONFIG  = 'asde_uniformes_config';
+	public const CAP_PEDIR   = 'asde_tienda_comprar';
+	public const CAP_GESTION = 'asde_tienda_gestion';
+	public const CAP_PAGO    = 'asde_tienda_pago';
+	public const CAP_PEDIDO  = 'asde_tienda_pedido';
+	public const CAP_ENTREGA = 'asde_tienda_entrega';
+	public const CAP_CONFIG  = 'asde_tienda_admin';
 
 	// ---------------------------------------------------------------------
 	// Qué se pide y cuánto cuesta

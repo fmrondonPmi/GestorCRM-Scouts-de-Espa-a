@@ -73,7 +73,7 @@ $user = $ambito->user;
 <?php if ( ! empty( $por_confirmar ) ) : ?>
 	<div class="asde-notice asde-notice--info" role="status">
 		<strong><?php echo esc_html( 1 === (int) $por_confirmar ? asde_t( 'El grupo te ha entregado un pedido de uniforme.' ) : sprintf( asde_t( 'El grupo te ha entregado %d pedidos de uniforme.' ), (int) $por_confirmar ) ); ?></strong>
-		<a href="<?php echo esc_url( $url( 'uniforme' ) ); ?>"><?php asde_e( 'Confirma que lo has recibido' ); ?></a>.
+		<a href="<?php echo esc_url( $url( 'tienda_pedidos' ) ); ?>"><?php asde_e( 'Confirma que lo has recibido' ); ?></a>.
 	</div>
 <?php endif; ?>
 
@@ -98,7 +98,7 @@ $user = $ambito->user;
 
 <?php if ( array_filter( $por_revisar ?? array() ) ) : ?>
 	<?php
-	$uni = static fn( string $estado ) => $url( 'uniformes', array( 'estado' => $estado ) );
+	$uni = static fn( string $estado ) => $url( 'tienda_gestion', array( 'estado' => $estado ) );
 	$num = static fn( int $n, string $uno, string $varios ) => '<strong>' . $n . '</strong> ' . esc_html( 1 === $n ? $uno : $varios );
 	?>
 	<section class="asde-card asde-card--aviso">
@@ -153,7 +153,7 @@ if ( ( $ambito->persona || $ambito->representados ) && current_user_can( 'asde_m
 	$mias[] = $tile( $url( 'pagos' ), asde_t( 'Mis pagos' ), asde_t( 'Lo que ha registrado Tesorería: la cuota del grupo, sus plazos y los pagos del uniforme.' ) );
 }
 if ( ! empty( $pide_uniforme ) ) {
-	$mias[] = $tile( $url( 'uniforme' ), ! empty( $gestiona_uniformes ) ? asde_t( 'Mi uniforme' ) : asde_t( 'Uniforme' ), asde_t( 'Pide la camisa scout y las insignias, y sigue tu pedido.' ) );
+	$mias[] = $tile( $url( 'tienda_pedidos' ), ! empty( $gestiona_uniformes ) ? asde_t( 'Mis pedidos' ) : asde_t( 'Tienda' ), asde_t( 'Pide la camisa scout y las insignias, y sigue tu pedido.' ) );
 }
 
 $grupo_tiles = array();
@@ -161,7 +161,7 @@ if ( ! empty( $eventos ) ) {
 	$grupo_tiles[] = $tile( $url( 'eventos' ), asde_t( 'Eventos' ), asde_t( 'Salidas, acampadas y campamentos: equipo, normativa y presupuesto.' ) );
 }
 if ( ! empty( $gestiona_uniformes ) ) {
-	$grupo_tiles[] = $tile( $url( 'uniformes' ), asde_t( 'Gestión de uniformes' ), asde_t( 'Pagos, pedido al proveedor y entregas de las camisas del grupo.' ) );
+	$grupo_tiles[] = $tile( $url( 'tienda_gestion' ), asde_t( 'Gestión de la tienda' ), asde_t( 'Pagos, pedido al proveedor y entregas de las camisas del grupo.' ) );
 }
 if ( current_user_can( 'asde_aprobar_solicitudes' ) ) {
 	$grupo_tiles[] = $tile( $url( 'solicitudes' ), asde_t( 'Solicitudes de acceso' ), asde_t( 'Aprueba a las familias y socios que piden entrar con el enlace del grupo.' ) );

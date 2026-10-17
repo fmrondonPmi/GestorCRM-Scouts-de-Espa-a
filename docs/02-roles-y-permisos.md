@@ -116,13 +116,13 @@ asde_manage_users                 # alta/baja/vinculación de usuarios
 
 | Capability | Roles | Qué permite |
 |---|---|---|
-| `asde_uniformes_pedir` | Todos | Pedir la camisa y las insignias para uno mismo o para sus menores (doc 24) |
+| `asde_tienda_comprar` (antes `asde_uniformes_pedir`, v0.39) | Todos | Pedir la camisa y las insignias para uno mismo o para sus menores (doc 24) |
 | `asde_mis_pagos` | Todos | Ver «Mis pagos» (solo lectura) |
-| `asde_uniformes_gestion` | Scouter, Secretaría, Coordinación, Tesorería | Entrar en la gestión de pedidos, con ámbito: un scouter, los de sus secciones que no son adultos, y los suyos; los demás, todos |
-| `asde_uniformes_entrega` | Scouter, Secretaría, Coordinación, Tesorería | Marcar como entregado (en su ámbito) |
-| `asde_uniformes_pago` | **Tesorería** | Validar el pago (efectivo o ingreso) y deshacerlo |
-| `asde_uniformes_pedido` | **Coordinación** | Incluir en el pedido del grupo al proveedor y deshacerlo |
-| `asde_uniformes_config` | Tesorería, Coordinación | Configurar precio, tallas, insignias, guías y si hay pedidos abiertos |
+| `asde_tienda_gestion` | Scouter, Secretaría, Coordinación, Tesorería | Entrar en la gestión de pedidos, con ámbito: un scouter, los de sus secciones que no son adultos, y los suyos; los demás, todos |
+| `asde_tienda_entrega` | Scouter, Secretaría, Coordinación, Tesorería | Marcar como entregado (en su ámbito) |
+| `asde_tienda_pago` | **Tesorería** | Validar el pago (efectivo o ingreso) y deshacerlo |
+| `asde_tienda_pedido` | **Coordinación** | Incluir en el pedido del grupo al proveedor y deshacerlo |
+| `asde_tienda_admin` (antes `asde_uniformes_config`) | **Coordinación, Tesorería y Secretaría** (Secretaría, desde la v0.39) | Configurar precio, tallas, insignias, guías y si hay pedidos abiertos |
 
 - Confirmar que se ha recibido no es una capability: solo lo puede hacer el socio/a o su familia, sobre su propio pedido.
 - Cancelar: el socio/a o su familia, el suyo, mientras nadie lo ha validado; Tesorería o Coordinación, cualquiera hasta que se entrega (con motivo).
@@ -155,7 +155,7 @@ asde_manage_users                 # alta/baja/vinculación de usuarios
 | Tesorería | `asde_tesoreria_acceso`, `asde_tesoreria_config`, `asde_sepa_autorizar` | Apaga también Banco y Domiciliaciones |
 | Banco (dentro de Tesorería) | — | Sin pestaña ni pantalla; sin el desplegable de ingresos en «Registrar pago» |
 | Domiciliaciones SEPA (dentro de Tesorería) | `asde_sepa_autorizar` | Sin pestaña ni pantalla; «Mis pagos» no ofrece firmar |
-| Uniformes | `asde_uniformes_*` | |
+| Tienda (antes Uniformes, v0.39) | `asde_tienda_*` | |
 | Inventario | `asde_inventario`, `asde_inventario_aprobar` | |
 | Informes | `asde_reports` | |
 | Solicitudes de acceso | `asde_aprobar_solicitudes` | El grupo no sale en «Solicitar acceso» y el servidor no acepta solicitudes suyas |
