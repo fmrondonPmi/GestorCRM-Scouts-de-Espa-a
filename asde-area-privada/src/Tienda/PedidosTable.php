@@ -434,6 +434,46 @@ final class PedidosTable {
 		return self::actualizar( $id, $datos );
 	}
 
+	/** Guarda las líneas del pedido (camisa, insignias y productos) tal como están; las insignias servidas del inventario llevan «inventario». */
+	public static function guardar_lineas( int $id, array $lineas ): bool {
+		return self::actualizar(
+			$id,
+			array(
+				'lineas' => (string) wp_json_encode(
+					array(
+						'camisa'    => $lineas['camisa'],
+						'insignias' => array_values( $lineas['insignias'] ),
+						'productos' => array_values( $lineas['productos'] ?? array() ),
+					)
+				),
+			)
+		);
+	}
+
+	/** Todo el pedido sale del inventario del grupo: no va al proveedor, queda como incluido «del inventario» (v0.41). */
+	public static function incluir_del_inventario( int $id ): bool {
+		return self::actualizar(
+			$id,
+			array(
+				'pedido_ref' => self::REF_INVENTARIO,
+				'pedido_por' => get_current_user_id(),
+				'pedido_en'  => current_time( 'mysql', true ),
+			)
+		);
+	}
+
+	/** Lo contrario: el pedido deja de constar como incluido (solo si lo estaba «del inventario»). */
+	public static function quitar_inclusion_inventario( int $id ): bool {
+		return self::actualizar(
+			$id,
+			array(
+				'pedido_ref' => '',
+				'pedido_por' => 0,
+				'pedido_en'  => null,
+			)
+		);
+	}
+
 	private static function actualizar( int $id, array $datos ): bool {
 		global $wpdb;
 		return false !== $wpdb->update(

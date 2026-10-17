@@ -494,7 +494,7 @@ final class TiendaGestionView extends TiendaBaseView {
 					break;
 				}
 				/* translators: %s: nº de pedido */
-				$hecho = sprintf( asde_t( 'La camisa del pedido %s sale del inventario: se ha descontado una.' ), $num );
+				$hecho = sprintf( asde_t( 'Lo del pedido %s que había en el inventario sale de él y se ha descontado.' ), $num );
 				break;
 
 			case 'uniforme_devolver':
@@ -504,7 +504,7 @@ final class TiendaGestionView extends TiendaBaseView {
 					break;
 				}
 				/* translators: %s: nº de pedido */
-				$hecho = sprintf( asde_t( 'La camisa del pedido %s ha vuelto al inventario.' ), $num );
+				$hecho = sprintf( asde_t( 'Lo del pedido %s que salió del inventario ha vuelto a él.' ), $num );
 				break;
 
 			case 'uniforme_cancelar':

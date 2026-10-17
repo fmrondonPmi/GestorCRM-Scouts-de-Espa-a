@@ -37,7 +37,9 @@ $lote     = current_user_can( Servicio::CAP_PEDIDO );
 $marca    = static fn( bool $si, string $detalle = '' ) => $si ? '<span class="asde-check" title="' . esc_attr( $detalle ) . '">✓</span>' . ( '' !== $detalle ? ' <span class="asde-muted">' . esc_html( $detalle ) . '</span>' : '' ) : '<span class="asde-muted">—</span>';
 $entregar = array();
 // v0.29: ¿queda en el inventario una camisa como la de este pedido?
-$en_stock = static fn( array $p ): bool => null !== $stock && Servicio::se_puede_servir( $p ) && ! empty( $stock[ $p['lineas']['camisa']['modelo'] ?? '' ][ $p['lineas']['camisa']['talla'] ?? '' ] );
+// v0.41: también las insignias; si queda en el inventario algo de lo que pide (y aún no ha salido), se puede servir.
+$en_stock = static fn( array $p ): bool => null !== $stock && Servicio::hay_en_inventario( $p );
+$insignias_inv = static fn( array $p ): bool => (bool) array_filter( $p['lineas']['insignias'], static fn( $i ) => ! empty( $i['inventario'] ) );
 $ref      = static fn( string $r ): string => PedidosTable::REF_INVENTARIO === $r ? asde_t( PedidosTable::REF_INVENTARIO ) : $r;
 // Resumen de arriba: «1 pendiente de entregar», «2 pendientes de entregar».
 $singular = array(
@@ -143,7 +145,11 @@ $singular = array(
 								<?php echo esc_html( Servicio::descripcion( $p['lineas'] ) ); ?>
 								<?php if ( $p['inventario_id'] ) : ?>
 									<br><span class="asde-badge asde-badge--inv-camisa"><?php asde_e( 'Camisa del inventario' ); ?></span>
-								<?php elseif ( $en_stock( $p ) ) : ?>
+								<?php endif; ?>
+								<?php if ( $insignias_inv( $p ) ) : ?>
+									<br><span class="asde-badge asde-badge--inv-camisa"><?php asde_e( 'Insignias del inventario' ); ?></span>
+								<?php endif; ?>
+								<?php if ( $en_stock( $p ) ) : ?>
 									<br><a class="asde-badge asde-badge--inv-hay" href="<?php echo esc_url( $detalle ); ?>" data-asde-modal title="<?php echo esc_attr( asde_a( 'Ábrelo y pulsa «Servir del inventario»' ) ); ?>"><?php asde_e( 'Hay en el inventario' ); ?></a>
 								<?php endif; ?>
 								<?php echo '' !== $p['nota'] ? '<br><span class="asde-muted">' . esc_html( $p['nota'] ) . '</span>' : ''; ?>

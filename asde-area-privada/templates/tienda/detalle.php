@@ -24,7 +24,20 @@ $cuando  = static fn( string $con, string $sin, int $id, string $f ): string => 
 $estado  = PedidosTable::estado( $p );
 $activo  = null === $p['cancelado_en'];
 $camisa  = $p['lineas']['camisa'];
-$quedan  = $camisa ? (int) ( $stock[ $camisa['modelo'] ?? '' ][ $camisa['talla'] ?? '' ] ?? 0 ) : 0;
+// v0.41: lo que queda en el inventario de lo que pide este pedido (camisa e insignias) y lo que ya salió de él.
+$inv      = Servicio::inventario_de( $p );
+$en_inventario = array();
+if ( $inv['camisa'] && ! $inv['camisa']['servida'] && $inv['camisa']['quedan'] > 0 ) {
+	/* translators: 1: camisa y talla, 2: unidades que quedan */
+	$en_inventario[] = sprintf( asde_t( 'camisa «%1$s» (quedan %2$d)' ), $inv['camisa']['nombre'] . ', ' . $inv['camisa']['talla'], $inv['camisa']['quedan'] );
+}
+foreach ( $inv['insignias'] as $i_inv ) {
+	if ( ! $i_inv['servida'] && $i_inv['quedan'] >= $i_inv['cantidad'] ) {
+		/* translators: 1: insignia, 2: unidades que quedan */
+		$en_inventario[] = sprintf( asde_t( 'insignia «%1$s» (quedan %2$d)' ), $i_inv['nombre'], $i_inv['quedan'] );
+	}
+}
+$insignias_servidas = array_filter( $p['lineas']['insignias'], static fn( $i ) => ! empty( $i['inventario'] ) );
 $del_inv = PedidosTable::REF_INVENTARIO === $p['pedido_ref'];
 $form    = static function ( string $accion, string $boton, string $clase = 'asde-btn-link', string $confirmar = '' ) use ( $p ): string {
 	return sprintf(
@@ -118,11 +131,16 @@ $form    = static function ( string $accion, string $boton, string $clase = 'asd
 		<li class="<?php echo null !== $p['pedido_en'] ? 'is-hecho' : ''; ?>">
 			<span class="asde-pasos__marca" aria-hidden="true"><?php echo null !== $p['pedido_en'] ? '✓' : ''; ?></span>
 			<strong><?php asde_e( 'Incluido en el pedido del grupo' ); ?></strong> <span class="asde-muted"><?php asde_e( '(Coordinación)' ); ?></span>
-			<?php if ( $p['inventario_id'] ) : ?>
-				<?php /* v0.29: la camisa ha salido del inventario del grupo. */ ?>
-				<br><span class="asde-badge asde-badge--inv-camisa"><?php asde_e( 'Camisa del inventario' ); ?></span>
-				<?php echo $p['lineas']['insignias'] && null === $p['pedido_en'] ? esc_html( asde_t( 'Las insignias sí van en el pedido al proveedor.' ) ) : ''; ?>
-				<?php echo Servicio::se_puede_devolver( $p ) ? $form( 'uniforme_devolver', esc_html( asde_t( 'Devolver la camisa al inventario' ) ), 'asde-btn-link', esc_html( asde_t( '¿Devolver la camisa al inventario? El pedido vuelve a quedar pendiente de pedir.' ) ) ) : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?>
+			<?php if ( $p['inventario_id'] || $insignias_servidas ) : ?>
+				<?php /* v0.29: la camisa ha salido del inventario del grupo; v0.41: y las insignias. */ ?>
+				<?php if ( $p['inventario_id'] ) : ?>
+					<br><span class="asde-badge asde-badge--inv-camisa"><?php asde_e( 'Camisa del inventario' ); ?></span>
+				<?php endif; ?>
+				<?php if ( $insignias_servidas ) : ?>
+					<br><span class="asde-badge asde-badge--inv-camisa"><?php asde_e( 'Insignias del inventario' ); ?></span>
+				<?php endif; ?>
+				<?php echo null === $p['pedido_en'] && ( ( $camisa && ! $p['inventario_id'] ) || count( $insignias_servidas ) < count( $p['lineas']['insignias'] ) ) ? ' ' . esc_html( asde_t( 'Lo demás va en el pedido al proveedor.' ) ) : ''; ?>
+				<?php echo Servicio::se_puede_devolver( $p ) ? $form( 'uniforme_devolver', esc_html( asde_t( 'Devolver al inventario lo que salió de él' ) ), 'asde-btn-link', esc_html( asde_t( '¿Devolver al inventario lo que salió de él? El pedido vuelve a quedar pendiente de pedir.' ) ) ) : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?>
 			<?php endif; ?>
 			<?php if ( null !== $p['pedido_en'] ) : ?>
 				<br><?php echo esc_html( '«' . ( $del_inv ? asde_t( PedidosTable::REF_INVENTARIO ) : $p['pedido_ref'] ) . '»' ); ?>
@@ -142,9 +160,9 @@ $form    = static function ( string $accion, string $boton, string $clase = 'asd
 						<p class="asde-help asde-help--warning"><?php asde_e( 'Aún no consta el pago.' ); ?></p>
 					<?php endif; ?>
 				</form>
-				<?php if ( Servicio::se_puede_servir( $p ) && $quedan ) : ?>
-					<?php /* translators: 1: modelo y talla, 2: unidades que quedan */ ?>
-					<p class="asde-help"><?php echo esc_html( sprintf( asde_n( 'O, sin pedirla al proveedor: en el inventario queda %2$d camisa «%1$s».', 'O, sin pedirla al proveedor: en el inventario quedan %2$d camisas «%1$s».', $quedan ), $camisa['nombre'] . ', ' . $camisa['talla'], $quedan ) ); ?></p>
+				<?php if ( Servicio::hay_en_inventario( $p ) ) : ?>
+					<?php /* v0.41: camisa e insignias; sin pedirlas al proveedor. */ ?>
+					<p class="asde-help"><?php echo esc_html( sprintf( asde_t( 'O, sin pedirlo al proveedor, del inventario: %s.' ), implode( ' · ', $en_inventario ) ) ); ?></p>
 					<?php echo $form( 'uniforme_servir', esc_html( asde_t( 'Servir del inventario' ) ), 'button asde-button-secundario' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 				<?php endif; ?>
 			<?php else : ?>

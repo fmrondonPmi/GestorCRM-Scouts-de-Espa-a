@@ -218,6 +218,107 @@ final class MaterialesTable {
 		);
 	}
 
+	// ---------------------------------------------------------------------
+	// Insignias del uniforme en el inventario (v0.41)
+	// ---------------------------------------------------------------------
+
+	/**
+	 * Insignias de la configuración de uniformes que hay en el inventario: se reconocen porque el material se llama igual que la
+	 * insignia (sin mayúsculas ni acentos). Sin las dadas de baja.
+	 *
+	 * @return array<string, int> id de la insignia => unidades
+	 */
+	public static function insignias( array $cfg ): array {
+		$ids = array();
+		foreach ( (array) ( $cfg['insignias'] ?? array() ) as $id => $i ) {
+			$ids[ TiposTable::clave( (string) $i['nombre'] ) ] = (string) $id;
+		}
+		$out = array();
+		foreach ( self::todos() as $m ) {
+			$k = TiposTable::clave( $m['descripcion'] );
+			if ( isset( $ids[ $k ] ) && $m['cantidad'] > 0 ) {
+				$out[ $ids[ $k ] ] = ( $out[ $ids[ $k ] ] ?? 0 ) + $m['cantidad'];
+			}
+		}
+		return $out;
+	}
+
+	/**
+	 * Descuenta N insignias de ese nombre de un solo material (el más antiguo que tenga suficientes). Atómico.
+	 *
+	 * @return int Id del material del que salen, o 0 si no hay suficientes en ninguno.
+	 */
+	public static function descontar_insignia( string $nombre, int $n ): int {
+		global $wpdb;
+		if ( $n < 1 ) {
+			return 0;
+		}
+		$clave      = TiposTable::clave( $nombre );
+		$candidatos = array_filter( self::todos(), static fn( $m ) => TiposTable::clave( $m['descripcion'] ) === $clave && $m['cantidad'] >= $n );
+		ksort( $candidatos );
+		foreach ( $candidatos as $id => $m ) {
+			$hecho = $wpdb->query( // phpcs:ignore WordPress.DB
+				$wpdb->prepare(
+					'UPDATE %i SET cantidad = cantidad - %d, modificado = %s, modificado_por = %d WHERE id = %d AND grupo = %s AND cantidad >= %d AND baja_en IS NULL',
+					self::table(),
+					$n,
+					current_time( 'mysql', true ),
+					get_current_user_id(),
+					$id,
+					Grupo::numero(),
+					$n
+				)
+			);
+			if ( $hecho ) {
+				return (int) $id;
+			}
+		}
+		return 0;
+	}
+
+	/**
+	 * Devuelve N insignias al inventario: al material del que salieron si sigue ahí y se llama igual; si no, a otro con ese nombre; y
+	 * si no hay ninguno, a uno nuevo.
+	 *
+	 * @return int Id del material al que vuelven.
+	 */
+	public static function devolver_insignia( int $material, string $nombre, int $n ): int {
+		global $wpdb;
+		$clave = TiposTable::clave( $nombre );
+		$igual = static fn( $m ) => $m && null === $m['baja_en'] && TiposTable::clave( $m['descripcion'] ) === $clave;
+		$m     = self::obtener( $material );
+		if ( ! $igual( $m ) ) {
+			$m = current( array_filter( self::todos(), $igual ) ) ?: null;
+		}
+		if ( $m ) {
+			$wpdb->query( // phpcs:ignore WordPress.DB
+				$wpdb->prepare(
+					'UPDATE %i SET cantidad = cantidad + %d, modificado = %s, modificado_por = %d WHERE id = %d AND grupo = %s',
+					self::table(),
+					$n,
+					current_time( 'mysql', true ),
+					get_current_user_id(),
+					$m['id'],
+					Grupo::numero()
+				)
+			);
+			return (int) $m['id'];
+		}
+		return self::crear(
+			array(
+				'descripcion' => mb_substr( $nombre, 0, 255 ),
+				'tipo'        => 0,
+				'cantidad'    => $n,
+				'precio'      => null,
+				'anio'        => null,
+				'num_serie'   => '',
+				'notas'       => '',
+				'modelo'      => '',
+				'talla'       => '',
+			)
+		);
+	}
+
 	/**
 	 * Suma unidades a un material (v0.30: lo comprado con una lista, P-66, y las filas repetidas
 	 * de una importación, P-67). Atómico y solo si sigue en el inventario (no dado de baja) y no

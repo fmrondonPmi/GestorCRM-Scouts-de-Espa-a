@@ -90,6 +90,7 @@ $imagen = static function ( string $campo, int $adjunto, string $alt ): string {
 
 	<section class="asde-card">
 		<h3 class="asde-card__title"><?php asde_e( 'Insignias' ); ?></h3>
+		<p class="asde-help"><?php asde_e( 'Si el grupo tiene insignias en el inventario, ponles el mismo nombre que aquí: así, cuando alguien las pida, se pueden servir del inventario sin pedirlas al proveedor.' ); ?></p>
 		<p class="asde-muted"><?php asde_e( 'Si dejas el precio vacío, sale como «precio por confirmar»: se puede pedir, y al validar el pago Tesorería cobra el importe real.' ); ?></p>
 		<?php foreach ( $cfg['insignias'] as $id => $i ) : ?>
 			<fieldset class="asde-insignia-config">

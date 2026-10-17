@@ -655,6 +655,7 @@ final class Servicio {
 				MaterialesTable::devolver_camisa( (int) $p['inventario_id'], (string) ( $p['lineas']['camisa']['modelo'] ?? '' ), (string) ( $p['lineas']['camisa']['talla'] ?? '' ) );
 				PedidosTable::quitar_camisa_servida( $p['id'], false );
 			}
+			self::devolver_insignias_servidas( $p ); // v0.41
 			self::devolver_lineas( $p['lineas']['productos'] ); // v0.39: lo del catálogo vuelve a las existencias.
 		}
 		return true;
@@ -769,48 +770,225 @@ final class Servicio {
 		return ( current_user_can( self::CAP_PEDIDO ) || current_user_can( self::CAP_PAGO ) ) && current_user_can( \AsdeBalears\AreaPrivada\Inventario\Servicio::CAP );
 	}
 
-	/** ¿Se puede servir del inventario la camisa de este pedido? (Con camisa, en curso y aún sin pedir al proveedor.) */
+	/** ¿Está el pedido en un estado en que se puede servir o devolver del inventario? (En curso y sin pedir al proveedor.) */
+	private static function en_estado_de_servir( array $p ): bool {
+		return self::puede_inventario() && null === $p['cancelado_en'] && null === $p['entregado_en'] && null === $p['pedido_en'];
+	}
+
+	/**
+	 * Lo que este pedido tiene de inventario (v0.41): la camisa y las insignias, con las unidades que quedan en el inventario y si ya
+	 * salieron de él. Solo para quien puede usar el inventario.
+	 *
+	 * @return array{camisa: ?array{nombre:string, talla:string, quedan:int, servida:bool}, insignias: array<int, array{nombre:string, cantidad:int, quedan:int, servida:bool}>}
+	 */
+	public static function inventario_de( array $p ): array {
+		$out = array( 'camisa' => null, 'insignias' => array() );
+		if ( ! self::puede_inventario() ) {
+			return $out;
+		}
+		$c = $p['lineas']['camisa'];
+		if ( $c ) {
+			$quedan       = (int) ( MaterialesTable::camisas()[ $c['modelo'] ?? '' ][ $c['talla'] ?? '' ] ?? 0 );
+			$out['camisa'] = array(
+				'nombre'  => (string) $c['nombre'],
+				'talla'   => (string) $c['talla'],
+				'quedan'  => $quedan,
+				'servida' => (int) $p['inventario_id'] > 0,
+			);
+		}
+		if ( $p['lineas']['insignias'] ) {
+			$stock = MaterialesTable::insignias( Config::de() );
+			foreach ( $p['lineas']['insignias'] as $n => $i ) {
+				$out['insignias'][ $n ] = array(
+					'nombre'   => (string) $i['nombre'],
+					'cantidad' => (int) $i['cantidad'],
+					'quedan'   => (int) ( $stock[ (string) ( $i['id'] ?? '' ) ] ?? 0 ),
+					'servida'  => ! empty( $i['inventario'] ),
+				);
+			}
+		}
+		return $out;
+	}
+
+	/** ¿Hay algo de este pedido que se pueda servir ahora del inventario? (Lo que pide y aún no ha salido de él, y de lo que queda.) */
+	public static function hay_en_inventario( array $p ): bool {
+		if ( ! self::en_estado_de_servir( $p ) ) {
+			return false;
+		}
+		$d = self::inventario_de( $p );
+		if ( $d['camisa'] && ! $d['camisa']['servida'] && $d['camisa']['quedan'] > 0 ) {
+			return true;
+		}
+		foreach ( $d['insignias'] as $i ) {
+			if ( ! $i['servida'] && $i['quedan'] >= $i['cantidad'] ) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * ¿Se puede servir del inventario algo de este pedido? (Con camisa o insignias sin servir, en curso y aún sin pedir al proveedor.)
+	 * Que luego quede en el inventario es otra cosa: servir() lo comprueba.
+	 */
 	public static function se_puede_servir( array $p ): bool {
-		return self::puede_inventario() && null === $p['cancelado_en'] && null === $p['entregado_en'] && null === $p['pedido_en']
-			&& ! empty( $p['lineas']['camisa'] ) && 0 === (int) $p['inventario_id'];
+		if ( ! self::en_estado_de_servir( $p ) ) {
+			return false;
+		}
+		if ( ! empty( $p['lineas']['camisa'] ) && 0 === (int) $p['inventario_id'] ) {
+			return true;
+		}
+		foreach ( $p['lineas']['insignias'] as $i ) {
+			if ( empty( $i['inventario'] ) ) {
+				return true;
+			}
+		}
+		return false;
 	}
 
-	/** ¿Se puede devolver al inventario la camisa de este pedido? (Salió de él y aún no se ha entregado.) */
+	/** ¿Se puede devolver al inventario algo de este pedido? (Salió de él y aún no se ha entregado.) */
 	public static function se_puede_devolver( array $p ): bool {
-		return self::puede_inventario() && (int) $p['inventario_id'] > 0 && null === $p['entregado_en'];
+		if ( ! self::puede_inventario() || null !== $p['entregado_en'] || null !== $p['cancelado_en'] ) {
+			return false;
+		}
+		if ( (int) $p['inventario_id'] > 0 ) {
+			return true;
+		}
+		foreach ( $p['lineas']['insignias'] as $i ) {
+			if ( ! empty( $i['inventario'] ) ) {
+				return true;
+			}
+		}
+		return false;
 	}
 
-	/** La camisa del pedido sale del inventario: se descuenta una de su modelo y talla. @return true|\WP_Error */
+	/** ¿Sale todo el pedido del inventario? (La camisa y las insignias servidas y nada del catálogo que se encargue al proveedor.) */
+	private static function todo_del_inventario( array $lineas, int $inventario_id ): bool {
+		if ( ! empty( $lineas['camisa'] ) && $inventario_id <= 0 ) {
+			return false;
+		}
+		foreach ( $lineas['insignias'] as $i ) {
+			if ( empty( $i['inventario'] ) ) {
+				return false;
+			}
+		}
+		foreach ( (array) ( $lineas['productos'] ?? array() ) as $l ) {
+			if ( ! empty( $l['proveedor'] ) ) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * Lo que se pidió sale del inventario (v0.29 la camisa, v0.41 también las insignias): se descuenta lo que quede de cada cosa. Si sale
+	 * todo, el pedido no va al proveedor; si solo sale una parte, el resto sigue en «Para el próximo pedido al proveedor».
+	 *
+	 * @return true|\WP_Error
+	 */
 	public static function servir( array $p ) {
 		if ( ! self::se_puede_servir( $p ) ) {
-			return new \WP_Error( 'asde_uniforme', asde_t( 'La camisa de este pedido no se puede servir del inventario.' ) );
+			return new \WP_Error( 'asde_uniforme', asde_t( 'Este pedido no se puede servir del inventario.' ) );
 		}
-		$c        = $p['lineas']['camisa'];
-		$material = MaterialesTable::descontar_camisa( (string) $c['modelo'], (string) $c['talla'] );
-		if ( ! $material ) {
-			/* translators: 1: modelo de camisa, 2: talla */
-			return new \WP_Error( 'asde_uniforme', sprintf( asde_t( 'No queda ninguna camisa «%1$s» de la talla %2$s en el inventario.' ), $c['nombre'], $c['talla'] ) );
+		$c         = $p['lineas']['camisa'];
+		$lineas    = $p['lineas'];
+		$material  = 0;
+		$insignias = array();
+		if ( $c && 0 === (int) $p['inventario_id'] ) {
+			$material = MaterialesTable::descontar_camisa( (string) $c['modelo'], (string) $c['talla'] );
 		}
-		if ( ! PedidosTable::servir_camisa( $p['id'], $material, ! $p['lineas']['insignias'] ) ) {
-			MaterialesTable::devolver_camisa( $material, (string) $c['modelo'], (string) $c['talla'] );
+		foreach ( $lineas['insignias'] as $n => $i ) {
+			if ( empty( $i['inventario'] ) ) {
+				$m = MaterialesTable::descontar_insignia( (string) $i['nombre'], (int) $i['cantidad'] );
+				if ( $m ) {
+					$lineas['insignias'][ $n ]['inventario'] = $m;
+					$insignias[ $n ]                         = $m;
+				}
+			}
+		}
+		if ( ! $material && ! $insignias ) {
+			if ( $c && 0 === (int) $p['inventario_id'] && ! $lineas['insignias'] ) {
+				/* translators: 1: modelo de camisa, 2: talla */
+				return new \WP_Error( 'asde_uniforme', sprintf( asde_t( 'No queda ninguna camisa «%1$s» de la talla %2$s en el inventario.' ), $c['nombre'], $c['talla'] ) );
+			}
+			return new \WP_Error( 'asde_uniforme', asde_t( 'No queda en el inventario nada de lo que se ha pedido.' ) );
+		}
+		$id_camisa = $material ?: (int) $p['inventario_id'];
+		$guardado  = true;
+		if ( $material ) {
+			$guardado = PedidosTable::servir_camisa( $p['id'], $material, false );
+		}
+		if ( $guardado && $insignias ) {
+			$guardado = PedidosTable::guardar_lineas( $p['id'], $lineas );
+		}
+		if ( ! $guardado ) {
+			if ( $material ) {
+				MaterialesTable::devolver_camisa( $material, (string) $c['modelo'], (string) $c['talla'] );
+				PedidosTable::quitar_camisa_servida( $p['id'], false );
+			}
+			foreach ( $insignias as $n => $m ) {
+				MaterialesTable::devolver_insignia( $m, (string) $lineas['insignias'][ $n ]['nombre'], (int) $lineas['insignias'][ $n ]['cantidad'] );
+			}
 			return new \WP_Error( 'asde_uniforme', asde_t( 'No se ha podido guardar el pedido.' ) );
 		}
-		Logger::log( 'uniforme_servido_inventario', 'uniforme', (string) $p['id'], array( 'material' => $material ) );
+		if ( self::todo_del_inventario( $lineas, $id_camisa ) ) {
+			PedidosTable::incluir_del_inventario( $p['id'] );
+		}
+		Logger::log(
+			'uniforme_servido_inventario',
+			'uniforme',
+			(string) $p['id'],
+			array(
+				'material'  => $material,
+				'insignias' => count( $insignias ),
+			)
+		);
 		return true;
 	}
 
-	/** La camisa vuelve al inventario (y el pedido, si solo era la camisa, deja de constar como incluido). @return true|\WP_Error */
+	/** Lo servido vuelve al inventario (y el pedido, si constaba como incluido «del inventario», deja de constarlo). @return true|\WP_Error */
 	public static function devolver( array $p ) {
 		if ( ! self::se_puede_devolver( $p ) ) {
-			return new \WP_Error( 'asde_uniforme', asde_t( 'La camisa de este pedido no se puede devolver al inventario.' ) );
+			return new \WP_Error( 'asde_uniforme', asde_t( 'Nada de este pedido se puede devolver al inventario.' ) );
 		}
-		$c        = (array) $p['lineas']['camisa'];
-		$material = MaterialesTable::devolver_camisa( (int) $p['inventario_id'], (string) ( $c['modelo'] ?? '' ), (string) ( $c['talla'] ?? '' ) );
-		PedidosTable::quitar_camisa_servida( $p['id'], PedidosTable::REF_INVENTARIO === $p['pedido_ref'] );
-		Logger::log( 'uniforme_devuelto_inventario', 'uniforme', (string) $p['id'], array( 'material' => $material ) );
+		$material = 0;
+		if ( (int) $p['inventario_id'] > 0 ) {
+			$c        = (array) $p['lineas']['camisa'];
+			$material = MaterialesTable::devolver_camisa( (int) $p['inventario_id'], (string) ( $c['modelo'] ?? '' ), (string) ( $c['talla'] ?? '' ) );
+			PedidosTable::quitar_camisa_servida( $p['id'], false );
+		}
+		$n = self::devolver_insignias_servidas( $p );
+		if ( PedidosTable::REF_INVENTARIO === $p['pedido_ref'] ) {
+			PedidosTable::quitar_inclusion_inventario( $p['id'] );
+		}
+		Logger::log(
+			'uniforme_devuelto_inventario',
+			'uniforme',
+			(string) $p['id'],
+			array(
+				'material'  => $material,
+				'insignias' => $n,
+			)
+		);
 		return true;
 	}
 
+	/** Devuelve al inventario las insignias del pedido que habían salido de él y lo apunta en el pedido. @return int Cuántas líneas. */
+	private static function devolver_insignias_servidas( array $p ): int {
+		$lineas = $p['lineas'];
+		$n      = 0;
+		foreach ( $lineas['insignias'] as $k => $i ) {
+			if ( ! empty( $i['inventario'] ) ) {
+				MaterialesTable::devolver_insignia( (int) $i['inventario'], (string) $i['nombre'], (int) $i['cantidad'] );
+				unset( $lineas['insignias'][ $k ]['inventario'] );
+				++$n;
+			}
+		}
+		if ( $n ) {
+			PedidosTable::guardar_lineas( $p['id'], $lineas );
+		}
+		return $n;
+	}
 	/**
 	 * Asigna una camisa del inventario a quien no la ha pedido: crea su pedido, ya servido. El
 	 * precio, el de siempre (precio_camisa(): la primera de un scouter, gratis, y queda pagada
@@ -939,6 +1117,9 @@ final class Servicio {
 				++$n;
 			}
 			foreach ( $p['lineas']['insignias'] as $i ) {
+				if ( ! empty( $i['inventario'] ) ) {
+					continue; // v0.41: sale del inventario del grupo, no se pide al proveedor.
+				}
 				$insignias[ $i['id'] ]['nombre']   = $i['nombre'];
 				$insignias[ $i['id'] ]['cantidad'] = ( $insignias[ $i['id'] ]['cantidad'] ?? 0 ) + (int) $i['cantidad'];
 			}
