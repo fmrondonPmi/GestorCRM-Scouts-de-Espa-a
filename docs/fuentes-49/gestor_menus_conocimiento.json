@@ -1,0 +1,66 @@
+{
+  "meta": {
+    "modulo": "Generador de menús de eventos",
+    "estado": "borrador funcional; nombres de tablas y campos pendientes del repositorio GestorCRM",
+    "base_normativa_alergenos": "Reglamento (UE) 1169/2011 (14 alérgenos)"
+  },
+  "alergenos": [
+    {"id": "gluten", "nombre": "Cereales con gluten"},
+    {"id": "crustaceos", "nombre": "Crustáceos"},
+    {"id": "huevos", "nombre": "Huevos"},
+    {"id": "pescado", "nombre": "Pescado"},
+    {"id": "cacahuetes", "nombre": "Cacahuetes"},
+    {"id": "soja", "nombre": "Soja"},
+    {"id": "leche", "nombre": "Leche y lácteos"},
+    {"id": "frutos_cascara", "nombre": "Frutos de cáscara"},
+    {"id": "apio", "nombre": "Apio"},
+    {"id": "mostaza", "nombre": "Mostaza"},
+    {"id": "sesamo", "nombre": "Granos de sésamo"},
+    {"id": "sulfitos", "nombre": "Dióxido de azufre y sulfitos"},
+    {"id": "altramuces", "nombre": "Altramuces"},
+    {"id": "moluscos", "nombre": "Moluscos"}
+  ],
+  "intolerancias_a_alergenos": {
+    "lactosa": ["leche"],
+    "celiaquia_gluten": ["gluten"]
+  },
+  "intolerancias_sin_alergeno_directo": ["fructosa", "histamina"],
+  "restricciones_dieteticas": ["vegetariano", "vegano"],
+  "entidades": {
+    "receta": ["nombre", "tipo_plato", "porciones_base", "elaboracion", "observaciones", "ingredientes[]"],
+    "ingrediente_en_receta": ["nombre", "cantidad", "unidad", "alergenos[]", "trazas[]", "coste_unitario (opcional)"],
+    "menu_evento": ["evento", "dias[]"],
+    "comida_del_menu": ["dia", "tipo_comida (desayuno|comida|merienda|cena)", "recetas[]", "comensales"],
+    "resultado_validacion": ["comida", "receta", "nivel", "alergeno", "ingrediente_causante", "personas_afectadas", "alternativa", "confirmado_por", "fecha_confirmacion"]
+  },
+  "reglas": {
+    "herencia_alergenos": "alergenos_receta = union(alergenos de sus ingredientes)",
+    "escalado": "cantidad_necesaria = cantidad_receta * (comensales / porciones_base)",
+    "comparacion": "para cada asistente: alergenos_receta ∩ (alergias + intolerancias convertidas a alergenos)",
+    "niveles_aviso": {
+      "conflicto": "alérgeno presente en ingrediente",
+      "posible_riesgo": "alérgeno solo como traza",
+      "sin_conflictos": "sin coincidencias",
+      "datos_incompletos": "asistente sin ficha de salud rellenada"
+    },
+    "disparadores_revalidacion": [
+      "asociar receta a una comida",
+      "cambio en la lista de asistentes",
+      "cambio en la ficha de salud",
+      "cambio en receta o ingrediente"
+    ],
+    "presupuesto_comidas": "(educandos + scouters) * precio_por_acampado_dia * dias"
+  },
+  "privacidad": [
+    "datos de salud: categoría especial RGPD art. 9",
+    "detalle nominal solo para roles autorizados",
+    "documentos de cocina: alérgeno y recuento, sin nombres",
+    "registrar consultas y confirmaciones de avisos"
+  ],
+  "pendiente_repo": [
+    "modelo de Evento e inscritos",
+    "ficha de salud: texto libre o catálogo",
+    "roles y permisos",
+    "tecnología y convenciones"
+  ]
+}
