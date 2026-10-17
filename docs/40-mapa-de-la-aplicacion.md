@@ -51,9 +51,11 @@ mindmap
       Inventario
         material y tipos
         listas de compra
-      Uniformes
-        pedidos camisa e insignias
-        pago entrega inventario
+      Tienda antes Uniformes
+        catálogo carrito y pago
+        inventario de la tienda y CSV
+        tienda pública sin sesión
+        camisa e insignias del uniforme
       Lista de espera equipo
         sección por edad
         contactos y estados
@@ -63,6 +65,7 @@ mindmap
         presupuesto validado por Tesorería
         inscripciones y lista de espera
         cobros y avisos
+        calendario de tareas y plantillas
     Tesorería
       Familias y cuotas
       Control de pagos
@@ -136,7 +139,7 @@ flowchart TB
     end
     subgraph WP[WordPress del grupo]
         U[Cuentas y roles<br/>email cifrado]
-        T[(Tablas asde_*:<br/>socios, familias, pagos, banco,<br/>SEPA, uniformes, inventario,<br/>solicitudes, lista de espera…)]
+        T[(Tablas asde_*:<br/>socios, familias, pagos, banco,<br/>SEPA, tienda, inventario,<br/>solicitudes, lista de espera…)]
         I[Instantánea cifrada<br/>5 min, sin salud]
         O[Opciones asde_ap_*]
     end
@@ -165,6 +168,9 @@ grupo no ve a otro**; **nunca** se prueba contra el CRM real ni se escribe en é
 | Menú o tarjetas del inicio | `Frontend\Menu::grupos()` y `templates/area/inicio.php` (+ `AreaPrivadaView` para «Pendiente de revisar») | contadores baratos (sin CRM) |
 | Un email nuevo | clase con `asunto()/html()/enviar()` + `templates/email/…` + tipo en `Usuarios\RegistroEmails::TIPOS` | idioma de quien lo recibe, destino enmascarado |
 | Tarea automática diaria | `Install\Mantenimiento` | sin CRM si no hace falta |
+| La tienda (catálogo, carrito, pago) | `src/Tienda/` (`Servicio`, `ProductosTable`, `VariantesTable`, `PedidosTable`, `Avisos`), vistas `Tienda*View`, plantillas `templates/tienda/` | las existencias solo con `VariantesTable::reservar/devolver` (una sentencia); el precio, siempre del servidor |
+| La tienda pública (sin sesión) | `Frontend\Views\TiendaPublicaView`, `Tienda\Enlace`, `Servicio::comprar_invitado` | solo lo «para todos»; datos del invitado cifrados (`PedidosTable::invitado`) y borrados a los 90 días |
+| Calendario de tareas de un evento | `src/Eventos/` (`Tareas`, `TareasTable`, `Plantillas`, `AvisosTareas`), pestaña `templates/eventos/calendario.php` | fechas con `Tareas::calcular`; las comprobaciones automáticas en `Tareas::comprobar` |
 | Tesorería, cuotas, pagos | `src/Tesoreria/` (`Calculadora`, `Pagos`, `FamiliasTable`), vistas `Tesoreria*View` | la familia es la unidad de pago |
 | Domiciliación SEPA | `src/Sepa/` (`Mandatos`, `Remesas`, `Pain008`, `Iban`, `Avisos`, `Config`, `CuentaCrm`), `MisPagosView`, `SepaView`, `FichaView` (apartado de datos bancarios) | doc 25 §9: la cuenta está en la ficha del CRM (no en la web) y se comprueba con la huella; una remesa = un adeudo por familia |
 | Estilos | al **final** de `assets/css/area-privada.css`, en un bloque con la versión | sin colores fijos (prueba `colores.php`); móvil a 390 px |
@@ -175,7 +181,7 @@ grupo no ve a otro**; **nunca** se prueba contra el CRM real ni se escribe en é
 ## 5. Inventario (generado)
 
 <!-- inventario:inicio -->
-_Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10-16 · plugin 0.37.0. No editar a mano: se regenera._
+_Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10-17 · plugin 0.40.0. No editar a mano: se regenera._
 
 ### Páginas (Frontend\Pages + Router)
 
@@ -201,15 +207,17 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 | `recuperar` | recuperar-contrasena | `[asde_recuperar]` → `RecuperarView` | sí |  |
 | `solicitar` | solicitar-acceso | `[asde_solicitar]` → `SolicitarView` | sí |  |
 | `solicitudes` | solicitudes | `[asde_solicitudes]` → `SolicitudesView` |  | sí |
-| `uniforme` | uniforme | `[asde_uniforme]` → `UniformeView` |  |  |
-| `uniformes` | gestion-pedidos | `[asde_uniformes]` → `UniformesGestionView` |  | sí |
-| `uniformes_config` | configuracion | `[asde_uniformes_config]` → `UniformesConfigView` |  |  |
+| `tienda_pedidos` | mis-pedidos | `[asde_tienda_pedidos]` → `TiendaPedidosView` |  |  |
+| `tienda_gestion` | gestion-pedidos | `[asde_tienda_gestion]` → `TiendaGestionView` |  | sí |
+| `tienda_config` | configuracion | `[asde_tienda_config]` → `TiendaConfigView` |  |  |
+| `tienda_productos` | productos | `[asde_tienda_productos]` → `TiendaProductosView` |  |  |
 | `pagos` | mis-pagos | `[asde_mis_pagos]` → `MisPagosView` |  |  |
 | `alta_scouters` | alta-scouters | `[asde_alta_scouters]` → `AltaScoutersView` | sí |  |
 | `inventario` | inventario | `[asde_inventario]` → `InventarioView` |  | sí |
 | `inventario_tipos` | tipos-de-material | `[asde_inventario_tipos]` → `InventarioTiposView` |  | sí |
 | `inventario_compras` | listas-de-compra | `[asde_inventario_compras]` → `InventarioComprasView` |  | sí |
 | `lista_espera` | lista-de-espera | `[asde_lista_espera]` → `ListaEsperaView` |  |  |
+| `tienda_publica` | tienda | `[asde_tienda_publica]` → `TiendaPublicaView` | sí |  |
 | `inscripcion_espera` | inscripcion-lista-de-espera | `[asde_inscripcion_espera]` → `InscripcionEsperaView` | sí |  |
 | `eventos` | eventos | `[asde_eventos]` → `EventosView` |  |  |
 | `eventos_config` | configuracion | `[asde_eventos_config]` → `EventosConfigView` |  |  |
@@ -240,16 +248,16 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 | `asde_manage_users` |  | ✓ | ✓ |  |  |  |
 | `asde_mis_pagos` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 | `asde_propose_ward_changes` |  |  |  |  | ✓ |  |
-| `asde_reports` | ✓ | ✓ | ✓ |  |  |  |
+| `asde_reports` | ✓ | ✓ | ✓ | ✓ |  |  |
 | `asde_sepa_autorizar` |  |  |  |  | ✓ | ✓ |
 | `asde_tesoreria_acceso` | ✓ | ✓ | ✓ | ✓ |  |  |
 | `asde_tesoreria_config` |  | ✓ | ✓ | ✓ |  |  |
-| `asde_uniformes_config` |  |  | ✓ | ✓ |  |  |
-| `asde_uniformes_entrega` | ✓ | ✓ | ✓ | ✓ |  |  |
-| `asde_uniformes_gestion` | ✓ | ✓ | ✓ | ✓ |  |  |
-| `asde_uniformes_pago` |  |  |  | ✓ |  |  |
-| `asde_uniformes_pedido` |  |  | ✓ |  |  |  |
-| `asde_uniformes_pedir` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+| `asde_tienda_admin` |  | ✓ | ✓ | ✓ |  |  |
+| `asde_tienda_comprar` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+| `asde_tienda_entrega` | ✓ | ✓ | ✓ | ✓ |  |  |
+| `asde_tienda_gestion` | ✓ | ✓ | ✓ | ✓ |  |  |
+| `asde_tienda_pago` |  |  |  | ✓ |  |  |
+| `asde_tienda_pedido` |  |  | ✓ |  |  |  |
 | `asde_view_all` |  | ✓ | ✓ |  |  |  |
 | `asde_view_health` | ✓ | ✓ | ✓ |  |  |  |
 | `asde_view_section` | ✓ |  |  |  |  |  |
@@ -263,7 +271,7 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 | `tesoreria` Tesorería | Control de pagos, familias, cuotas y coste federativo. | `asde_tesoreria_acceso`, `asde_tesoreria_config`, `asde_sepa_autorizar` | — | encendido |
 | `banco` Banco | Importar los movimientos de la cuenta, conciliarlos y tipificar los gastos. | — | tesoreria | encendido |
 | `sepa` Domiciliaciones SEPA | Autorizaciones de las familias y ficheros de adeudos para el banco. | `asde_sepa_autorizar` | tesoreria | encendido |
-| `uniformes` Uniformes | Pedidos de la camisa y las insignias, su pago y su entrega. | `asde_uniformes_pedir`, `asde_uniformes_gestion`, `asde_uniformes_pago`, `asde_uniformes_pedido`, `asde_uniformes_entrega`, `asde_uniformes_config` | — | encendido |
+| `tienda` Tienda | Productos del grupo (uniforme, insignias y más): pedidos, pago y entrega. | `asde_tienda_comprar`, `asde_tienda_gestion`, `asde_tienda_pago`, `asde_tienda_pedido`, `asde_tienda_entrega`, `asde_tienda_admin` | — | encendido |
 | `inventario` Inventario | Material del grupo, tipos y listas de compra. | `asde_inventario`, `asde_inventario_aprobar` | — | encendido |
 | `informes` Informes | Listados con las columnas que se elijan. | `asde_reports` | — | encendido |
 | `solicitudes` Solicitudes de acceso | El enlace del grupo para pedir el acceso y su revisión. | `asde_aprobar_solicitudes` | — | encendido |
@@ -283,6 +291,7 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 | `asde_evento_inscripciones` | `src/Eventos/InscripcionesTable.php` |
 | `asde_evento_movimientos` | `src/Eventos/MovimientosTable.php` |
 | `asde_evento_partidas` | `src/Eventos/PartidasTable.php` |
+| `asde_evento_tareas` | `src/Eventos/TareasTable.php` |
 | `asde_cambios` | `src/Fichas/Cambios.php` |
 | `asde_informes` | `src/Informes/InformesTable.php` |
 | `asde_inventario_compras` | `src/Inventario/ComprasTable.php` |
@@ -298,7 +307,9 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 | `asde_familias` | `src/Tesoreria/FamiliasTable.php` |
 | `asde_familia_miembros` | `src/Tesoreria/FamiliasTable.php` |
 | `asde_movimientos` | `src/Tesoreria/MovimientosTable.php` |
-| `asde_uniformes` | `src/Uniformes/PedidosTable.php` |
+| `asde_tienda_pedidos` | `src/Tienda/PedidosTable.php` |
+| `asde_tienda_productos` | `src/Tienda/ProductosTable.php` |
+| `asde_tienda_variantes` | `src/Tienda/VariantesTable.php` |
 | `asde_emails` | `src/Usuarios/RegistroEmails.php` |
 | `asde_solicitudes` | `src/Usuarios/Solicitudes.php` |
 
@@ -364,6 +375,7 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 
 - `AnticiposTable` — Anticipos de caja de un evento ({prefix}asde_evento_anticipos, v0.36, doc 43, apartado 4):
 - `Avisos` — Avisos de los eventos (v0.35, P-152):
+- `AvisosTareas` — Avisos del calendario de tareas (doc 49, fase A2, P-186):
 - `Cobros` — Cobro de las inscripciones (v0.35, doc 43, apartado 4):
 - `Config` — Configuración de los eventos de cada grupo (opción asde_ap_eventos_<grupo>, doc 43):
 - `Cuentas` — Las cuentas de un evento (v0.36, doc 43:
@@ -375,8 +387,11 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 - `MovimientosTable` — Cobros de los eventos ({prefix}asde_evento_movimientos, doc 43, apartado 4):
 - `Normativa` — Lo que pide la normativa de tiempo libre de las Illes Balears y cómo trabaja hoy el grupo (doc 43, apartado 6; Ley 10/2022 y Decreto 23/2018).
 - `PartidasTable` — Partidas del presupuesto de un evento ({prefix}asde_evento_partidas, doc 43, apartado 4).
+- `Plantillas` — Plantillas de tareas de los eventos (doc 49, fase A1):
 - `Presupuesto` — El precio de un evento sale de su coste (P-145, doc 43, apartado 4):
 - `Servicio` — Eventos del grupo (v0.35, doc 43):
+- `Tareas` — Calendario de tareas de un evento (doc 49, fase A1):
+- `TareasTable` — Calendario de tareas de un evento ({prefix}asde_evento_tareas, doc 49, fase A1):
 
 **Fichas/**
 
@@ -433,10 +448,12 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 - `SolicitudesView` — Solicitudes de acceso (scouters, Secretaría y Coordinación):
 - `TesoreriaBaseView` — Base de las páginas de Tesorería:
 - `TesoreriaView` — Tesorería · control de pagos:
-- `UniformeView` — «Uniforme» para los asociados:
-- `UniformesBaseView` — Base de las páginas de uniformes:
-- `UniformesConfigView` — Configuración de los pedidos de uniforme del grupo (Tesorería y Coordinación):
-- `UniformesGestionView` — Gestión de los pedidos de uniforme (scouters, Tesorería, Coordinación):
+- `TiendaBaseView` — Base de las páginas de la tienda:
+- `TiendaConfigView` — Configuración de los pedidos de uniforme del grupo (Tesorería y Coordinación):
+- `TiendaGestionView` — Gestión de los pedidos de uniforme (scouters, Tesorería, Coordinación):
+- `TiendaPedidosView` — «Uniforme» para los asociados:
+- `TiendaProductosView` — Productos de la tienda (doc 48, fase 2):
+- `TiendaPublicaView` — La tienda pública (v0.39, doc 48, fase 4, P-174):
 - `UsuariosView` — Listado de usuarios del área privada:
 - `View` — 
 
@@ -467,6 +484,7 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 - `Entorno` — «Generar el entorno»:
 - `Installer` — 
 - `Mantenimiento` — Tarea diaria (WP-Cron):
+- `MigracionTienda` — v0.39 (doc 48):
 - `Roles` — Roles y capabilities del área privada (docs/02-roles-y-permisos.md).
 
 **Integraciones/**
@@ -488,6 +506,7 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 **ListaEspera/**
 
 - `Avisos` — Emails de la lista de espera (v0.32, doc 39), todos con la plantilla email/lista-espera, en el idioma en que se apuntó la persona y con el email de contacto del grupo como «Respond
+- `CamposExtra` — Preguntas propias de cada grupo en el formulario de la lista de espera (v0.38, doc 46).
 - `Enlaces` — Enlaces de la lista de espera (v0.32, doc 39).
 - `Formulario` — Lo que se pide al apuntarse a la lista de espera y cómo se valida (v0.32, doc 39).
 - `Inscripciones` — Lista de espera (v0.32, doc 39):
@@ -534,11 +553,17 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 - `Pagos` — Eliminar un pago (o un ajuste) de una familia y su historial (v0.25, petición del usuario:
 - `Sugerencias` — Sugiere familias a partir del CRM:
 
-**Uniformes/**
+**Tienda/**
 
-- `Config` — Configuración de los pedidos de uniforme de cada grupo (opción asde_ap_uniformes_<grupo>):
-- `PedidosTable` — Pedidos de uniforme ({prefix}asde_uniformes):
+- `Avisos` — Emails de la tienda (v0.39, doc 48, P-182):
+- `Config` — Configuración de los pedidos de uniforme de cada grupo (opción asde_ap_tienda_<grupo>):
+- `Enlace` — Enlaces de la tienda pública (v0.39, doc 48, fase 4).
+- `ImportadorProductos` — Cargar productos y existencias de la tienda desde un CSV (doc 48, fase 2), con el mismo método que el inventario de material (Inventario\Importador):
+- `PedidosTable` — Pedidos de uniforme ({prefix}asde_tienda_pedidos):
+- `ProductosTable` — Catálogo de la tienda (doc 48, fase 2):
+- `Sembrado` — Doc 48, fase 2:
 - `Servicio` — Pedidos de uniforme (petición del usuario, 2026-09-29).
+- `VariantesTable` — Variantes de los productos de la tienda ({prefix}asde_tienda_variantes) y sus existencias (doc 48, fase 2).
 
 **Usuarios/**
 
@@ -582,5 +607,5 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 
 ### Pruebas (`tests/`)
 
-`acceso` · `alta-reglas` · `alta-scouters` · `altas-crm-escritura` · `altas-crm-pantallas` · `altas-crm` · `app-enganches` · `ayuda` · `banco-gestion` · `colores` · `entorno` · `estilo-wordpress` · `eventos-economia` · `eventos-inscripciones` · `eventos` · `fichas-escritura` · `grupos-emails-banco` · `identidad` · `idiomas-catalogos` · `idiomas` · `inventario` · `lista-espera` · `mejoras-v029` · `mejoras-v030` · `mejoras-v031` · `mejoras-v034` · `mejoras-v0351` · `menus` · `modulos` · `organizacion` · `rendimiento` · `sepa` · `solicitudes` · `tema` · `uniformes` · `usuarios-listado`
+`acceso` · `alta-reglas` · `alta-scouters` · `altas-crm-escritura` · `altas-crm-pantallas` · `altas-crm` · `app-enganches` · `ayuda` · `banco-gestion` · `colores` · `entorno` · `estilo-wordpress` · `eventos-avisos-config` · `eventos-calendario` · `eventos-economia` · `eventos-inscripciones` · `eventos` · `fichas-escritura` · `grupos-emails-banco` · `identidad` · `idiomas-catalogos` · `idiomas` · `inventario` · `lista-espera` · `mejoras-v029` · `mejoras-v030` · `mejoras-v031` · `mejoras-v034` · `mejoras-v0351` · `menus` · `migracion-tienda` · `modulos` · `organizacion` · `rendimiento` · `sepa` · `solicitudes` · `tema` · `tienda-catalogo` · `tienda-pedidos` · `tienda-publica` · `tienda` · `usuarios-listado`
 <!-- inventario:fin -->

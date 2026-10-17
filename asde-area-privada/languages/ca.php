@@ -1578,7 +1578,6 @@ return array(
 	'(lo confirma el socio/a o su familia)' => '(ho confirma el soci/sòcia o la seva família)',
 	'+ insignias con el precio por confirmar' => '+ insígnies amb el preu per confirmar',
 	', y alguna sigue sin precio: escribe lo que se ha cobrado' => ', i alguna continua sense preu: escriu el que s\'ha cobrat',
-	'. Después, págalo en efectivo o con un ingreso en la cuenta del grupo, indicando el nº de pedido. Cuando Tesorería lo reciba lo verás aquí como pagado; el grupo lo incluirá en su pedido al proveedor y te lo entregará. Cuando lo tengas, confírmalo aquí.' => '. Després, paga-la en efectiu o amb un ingrés al compte del grup, indicant el núm. de comanda. Quan Tresoreria la rebi la veuràs aquí com a pagada; el grup la inclourà a la seva comanda al proveïdor i te la lliurarà. Quan la tinguis, confirma-ho aquí.',
 	': todavía no' => ': encara no',
 	'Además hay %d pedido sin pagar.' => 'A més hi ha %d comanda sense pagar.',
 	'Además hay %d pedidos sin pagar.' => 'A més hi ha %d comandes sense pagar.',
@@ -3765,4 +3764,7 @@ return array(
 	'Tienda pública' => 'Botiga pública',
 	'Todavía no hay nada a la venta.' => 'Encara no hi ha res a la venda.',
 	'¡Pedido recibido! Te hemos mandado un email con este enlace: guárdalo para seguir tu pedido.' => 'Comanda rebuda! T\'hem enviat un email amb aquest enllaç: desa\'l per seguir la teva comanda.',
+
+	// v0.39: texto de pago del uniforme
+	'. Después, págalo por transferencia, por Bizum o, si eres socio o socia, en físico a Tesorería, indicando el nº de pedido. Cuando Tesorería lo reciba lo verás aquí como pagado; el grupo lo incluirá en su pedido al proveedor y te lo entregará. Cuando lo tengas, confírmalo aquí.' => '. Després, paga-la per transferència, per Bizum o, si ets soci o sòcia, en físic a Tresoreria, indicant el núm. de comanda. Quan Tresoreria la rebi la veuràs aquí com a pagada; el grup la inclourà a la seva comanda al proveïdor i te la lliurarà. Quan la tinguis, confirma-ho aquí.',
 );

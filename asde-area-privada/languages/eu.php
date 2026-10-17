@@ -1578,7 +1578,6 @@ return array(
 	'(lo confirma el socio/a o su familia)' => '(bazkideak edo bere familiak berresten du)',
 	'+ insignias con el precio por confirmar' => '+ prezioa berretsi gabeko insigniak',
 	', y alguna sigue sin precio: escribe lo que se ha cobrado' => ', eta batzuek oraindik ez dute preziorik: idatzi kobratu dena',
-	'. Después, págalo en efectivo o con un ingreso en la cuenta del grupo, indicando el nº de pedido. Cuando Tesorería lo reciba lo verás aquí como pagado; el grupo lo incluirá en su pedido al proveedor y te lo entregará. Cuando lo tengas, confírmalo aquí.' => '. Ondoren, ordaindu eskudirutan edo taldearen kontuan sarrera bat eginez, eskaera-zenbakia adieraziz. Diruzaintzak jasotzen duenean, hemen ordainduta ikusiko duzu; taldeak hornitzaileari egindako eskaeran sartu eta entregatuko dizu. Jasotzen duzunean, berretsi hemen.',
 	': todavía no' => ': oraindik ez',
 	'Además hay %d pedido sin pagar.' => 'Gainera, ordaindu gabeko eskaera %d dago.',
 	'Además hay %d pedidos sin pagar.' => 'Gainera, ordaindu gabeko %d eskaera daude.',
@@ -3765,4 +3764,7 @@ return array(
 	'Tienda pública' => 'Denda publikoa',
 	'Todavía no hay nada a la venta.' => 'Oraindik ez dago ezer salgai.',
 	'¡Pedido recibido! Te hemos mandado un email con este enlace: guárdalo para seguir tu pedido.' => 'Eskaera jaso da! Esteka honekin posta elektroniko bat bidali dizugu: gorde ezazu zure eskaera jarraitzeko.',
+
+	// v0.39: texto de pago del uniforme
+	'. Después, págalo por transferencia, por Bizum o, si eres socio o socia, en físico a Tesorería, indicando el nº de pedido. Cuando Tesorería lo reciba lo verás aquí como pagado; el grupo lo incluirá en su pedido al proveedor y te lo entregará. Cuando lo tengas, confírmalo aquí.' => '. Ondoren, ordaindu transferentziaz, Bizumez edo, bazkidea bazara, eskuz Diruzaintzari, eskaera-zenbakia adieraziz. Diruzaintzak jasotzen duenean, hemen ordainduta ikusiko duzu; taldeak hornitzaileari egindako eskaeran sartu eta entregatuko dizu. Jasotzen duzunean, berretsi hemen.',
 );

@@ -1578,7 +1578,6 @@ return array(
 	'(lo confirma el socio/a o su familia)' => '(confírmao o socio/a ou a súa familia)',
 	'+ insignias con el precio por confirmar' => '+ insignias co prezo por confirmar',
 	', y alguna sigue sin precio: escribe lo que se ha cobrado' => ', e algunha segue sen prezo: escribe o que se cobrou',
-	'. Después, págalo en efectivo o con un ingreso en la cuenta del grupo, indicando el nº de pedido. Cuando Tesorería lo reciba lo verás aquí como pagado; el grupo lo incluirá en su pedido al proveedor y te lo entregará. Cuando lo tengas, confírmalo aquí.' => '. Despois, págao en efectivo ou cun ingreso na conta do grupo, indicando o nº de pedido. Cando Tesouraría o reciba verás aquí como pagado; o grupo incluirao no seu pedido ao provedor e entregarache. Cando o teñas, confírmao aquí.',
 	': todavía no' => ': aínda non',
 	'Además hay %d pedido sin pagar.' => 'Ademais hai %d pedido sen pagar.',
 	'Además hay %d pedidos sin pagar.' => 'Ademais hai %d pedidos sen pagar.',
@@ -3765,4 +3764,7 @@ return array(
 	'Tienda pública' => 'Tenda pública',
 	'Todavía no hay nada a la venta.' => 'Aínda non hai nada á venda.',
 	'¡Pedido recibido! Te hemos mandado un email con este enlace: guárdalo para seguir tu pedido.' => 'Pedido recibido! Mandámosche un email con esta ligazón: gárdaa para seguir o teu pedido.',
+
+	// v0.39: texto de pago del uniforme
+	'. Después, págalo por transferencia, por Bizum o, si eres socio o socia, en físico a Tesorería, indicando el nº de pedido. Cuando Tesorería lo reciba lo verás aquí como pagado; el grupo lo incluirá en su pedido al proveedor y te lo entregará. Cuando lo tengas, confírmalo aquí.' => '. Despois, págao por transferencia, por Bizum ou, se es socio ou socia, en físico á Tesouraría, indicando o nº de pedido. Cando Tesouraría o reciba verás aquí como pagado; o grupo incluirao no seu pedido ao provedor e entregarache. Cando o teñas, confírmao aquí.',
 );

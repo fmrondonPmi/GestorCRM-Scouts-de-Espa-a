@@ -3333,7 +3333,7 @@ return array(
 	'(ábrelo con Excel o LibreOffice, sustituye las filas de ejemplo por tus productos y guárdalo como CSV)' => 'Uniformes',
 	'+ insignias con el precio por confirmar' => 'Uniformes',
 	', y alguna sigue sin precio: escribe lo que se ha cobrado' => 'Uniformes',
-	'. Después, págalo en efectivo o con un ingreso en la cuenta del grupo, indicando el nº de pedido. Cuando Tesorería lo reciba lo verás aquí como pagado; el grupo lo incluirá en su pedido al proveedor y te lo entregará. Cuando lo tengas, confírmalo aquí.' => 'Uniformes',
+	'. Después, págalo por transferencia, por Bizum o, si eres socio o socia, en físico a Tesorería, indicando el nº de pedido. Cuando Tesorería lo reciba lo verás aquí como pagado; el grupo lo incluirá en su pedido al proveedor y te lo entregará. Cuando lo tengas, confírmalo aquí.' => 'Uniformes',
 	': todavía no' => 'Uniformes',
 	'Abrir la tienda pública (compra sin sesión)' => 'Uniformes',
 	'Además hay %d pedido sin pagar.' => 'Uniformes',

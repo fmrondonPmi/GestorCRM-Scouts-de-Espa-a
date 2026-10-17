@@ -31,7 +31,7 @@ $insignias = Config::insignias_activas( $cfg );
 <section class="asde-card">
 	<h2 class="asde-card__title"><?php asde_e( 'Uniforme' ); ?></h2>
 	<p>
-		<?php asde_e( 'Pide aquí la' ); ?> <strong><?php asde_e( 'camisa scout' ); ?></strong> (<?php echo esc_html( Calculadora::euros( $cfg['precio_camisa'] ) ); ?>)<?php echo $insignias ? ' ' . wp_kses_post( asde_h( 'y las <strong>insignias</strong>' ) ) : ''; ?><?php asde_e( '. Después, págalo en efectivo o con un ingreso en la cuenta del grupo, indicando el nº de pedido. Cuando Tesorería lo reciba lo verás aquí como pagado; el grupo lo incluirá en su pedido al proveedor y te lo entregará. Cuando lo tengas, confírmalo aquí.' ); ?>
+		<?php asde_e( 'Pide aquí la' ); ?> <strong><?php asde_e( 'camisa scout' ); ?></strong> (<?php echo esc_html( Calculadora::euros( $cfg['precio_camisa'] ) ); ?>)<?php echo $insignias ? ' ' . wp_kses_post( asde_h( 'y las <strong>insignias</strong>' ) ) : ''; ?><?php asde_e( '. Después, págalo por transferencia, por Bizum o, si eres socio o socia, en físico a Tesorería, indicando el nº de pedido. Cuando Tesorería lo reciba lo verás aquí como pagado; el grupo lo incluirá en su pedido al proveedor y te lo entregará. Cuando lo tengas, confírmalo aquí.' ); ?>
 	</p>
 	<?php if ( $cfg['primera_gratis'] && in_array( 0.0, $precios, true ) ) : ?>
 		<p class="asde-help"><?php asde_e( 'La primera camisa de cada scouter es gratis; desde la segunda, se paga el precio.' ); ?></p>
