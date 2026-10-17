@@ -1,0 +1,708 @@
+{
+  "meta": {
+    "titulo": "Organizador de Acampadas y Campamentos – ASDE Scouts de España",
+    "fuente": "01_Organizador_de_Campamentos.xls (ASDE Scouts de España)",
+    "aprobado": "Servicio de Educación Scout, 24/05/2014 (versión original; contenido adaptado para uso desde 2026)",
+    "redactores": [
+      "Adrián Rodríguez Pernas (ASDE Scouts de Galicia)",
+      "David Navalón Mateos (ASDE Scouts de España)"
+    ],
+    "contacto": "asde@scout.es",
+    "aviso": "Herramienta orientativa, adaptada para su uso a partir de 2026. Los requisitos de titulaciones (monitor y director de tiempo libre), autorizaciones y seguros dependen de cada Comunidad Autónoma; conviene consultar la normativa vigente."
+  },
+  "programador_acampadas": {
+    "descripcion": "Acampadas de fin de semana o varios días durante el año.",
+    "fecha_referencia": "Día de inicio (T)",
+    "tareas": [
+      {
+        "offset_dias": -60,
+        "tarea": "Ver lugar de acampada",
+        "detalle": ""
+      },
+      {
+        "offset_dias": -60,
+        "tarea": "Reservar el lugar de acampada",
+        "detalle": "Introducir precio por persona y día O precio total, nunca ambos."
+      },
+      {
+        "offset_dias": -45,
+        "tarea": "Pedir presupuesto a los autobuses y prereservar",
+        "detalle": "Se puede anotar el precio de uno o de dos autobuses."
+      },
+      {
+        "offset_dias": -45,
+        "tarea": "Buscar evaluaciones de actividades similares y revisarlas",
+        "detalle": ""
+      },
+      {
+        "offset_dias": -30,
+        "tarea": "Pedir presupuesto a secciones e intendencias imputables a la acampada",
+        "detalle": "Hasta 5 gastos."
+      },
+      {
+        "offset_dias": -30,
+        "tarea": "Estudiar si hay actividad especial y encargarla",
+        "detalle": "Anotar responsables y presupuesto."
+      },
+      {
+        "offset_dias": -25,
+        "tarea": "Recopilar información sobre la comida en stock en el local de material",
+        "detalle": ""
+      },
+      {
+        "offset_dias": -20,
+        "tarea": "Estimar número de educandos y scouters",
+        "detalle": "Por rama: Castores, Lobatos, Scouts, Escultas, Rovers y Scouters."
+      },
+      {
+        "offset_dias": -20,
+        "tarea": "Estimar el número de títulos disponibles / necesarios",
+        "detalle": "Títulos necesarios = educandos ÷ ratio de la Comunidad Autónoma, redondeado hacia arriba."
+      },
+      {
+        "offset_dias": -20,
+        "tarea": "Elegir cocinero, intendente y ayudantes",
+        "detalle": ""
+      },
+      {
+        "offset_dias": -18,
+        "tarea": "Elaborar menú",
+        "detalle": "Revisar alergias típicas de los educandos del grupo."
+      },
+      {
+        "offset_dias": -18,
+        "tarea": "Estimar presupuesto de comidas",
+        "detalle": "Precio por acampado y día × acampados (educandos + scouters) × días."
+      },
+      {
+        "offset_dias": -18,
+        "tarea": "Comprobar que hay suficientes scouters con titulación de manipulador de alimentos",
+        "detalle": ""
+      },
+      {
+        "offset_dias": -18,
+        "tarea": "Estimar presupuesto de acampada",
+        "detalle": "Calcula total y total por educando."
+      },
+      {
+        "offset_dias": -18,
+        "tarea": "Elaborar horario general de acampada y enviarlo al grupo",
+        "detalle": ""
+      },
+      {
+        "offset_dias": -17,
+        "tarea": "Redactar carta y fotocopiarla",
+        "detalle": ""
+      },
+      {
+        "offset_dias": -13,
+        "tarea": "Entregar carta en reunión local y enviarla por correo electrónico",
+        "detalle": ""
+      },
+      {
+        "offset_dias": -11,
+        "tarea": "Enviar carta por correos",
+        "detalle": ""
+      },
+      {
+        "offset_dias": -8,
+        "tarea": "Recoger autorizaciones, totales de educandos y enviar datos a las secciones",
+        "detalle": ""
+      },
+      {
+        "offset_dias": -8,
+        "tarea": "Revisar número de títulos disponibles / necesarios",
+        "detalle": ""
+      },
+      {
+        "offset_dias": -8,
+        "tarea": "Revisar alergias médicas de asistentes, medicinas y menú",
+        "detalle": ""
+      },
+      {
+        "offset_dias": -8,
+        "tarea": "Reserva final del autobús",
+        "detalle": ""
+      },
+      {
+        "offset_dias": -7,
+        "tarea": "Reunión de padres",
+        "detalle": ""
+      },
+      {
+        "offset_dias": -7,
+        "tarea": "Presentar el plan de actividades",
+        "detalle": ""
+      },
+      {
+        "offset_dias": -3,
+        "tarea": "Comprar comida y embalarla",
+        "detalle": ""
+      },
+      {
+        "offset_dias": -3,
+        "tarea": "Enviar la ficha de la acampada a la OF (Organización Federada)",
+        "detalle": "Actualizar los datos antes de enviar la ficha."
+      },
+      {
+        "offset_dias": -2,
+        "tarea": "Preparar las intendencias y secciones el material de acampada",
+        "detalle": ""
+      },
+      {
+        "offset_dias": -1,
+        "tarea": "Cargar furgoneta",
+        "detalle": ""
+      },
+      {
+        "offset_dias": "fin+7",
+        "tarea": "Escribir un post de la acampada en la web de grupo",
+        "detalle": ""
+      },
+      {
+        "offset_dias": "fin+7",
+        "tarea": "Subir fotos de la acampada a la web del grupo",
+        "detalle": ""
+      },
+      {
+        "offset_dias": "fin+14",
+        "tarea": "Evaluar la acampada",
+        "detalle": ""
+      }
+    ]
+  },
+  "programador_campamentos": {
+    "descripcion": "Campamentos de varios días (ejemplo del Excel: 15 días).",
+    "fecha_referencia": "Día de inicio (T)",
+    "tareas": [
+      {
+        "offset_dias": -120,
+        "tarea": "Ver lugar de acampada",
+        "detalle": ""
+      },
+      {
+        "offset_dias": -120,
+        "tarea": "Reservar el lugar de acampada",
+        "detalle": "Precio por persona y día O precio total, nunca ambos."
+      },
+      {
+        "offset_dias": -60,
+        "tarea": "Pedir presupuesto a los autobuses y prereservar",
+        "detalle": ""
+      },
+      {
+        "offset_dias": -60,
+        "tarea": "Buscar evaluaciones de actividades similares",
+        "detalle": "Pedirlas al secretario o al DVD de grupo."
+      },
+      {
+        "offset_dias": -45,
+        "tarea": "Estimar número de educandos y scouters",
+        "detalle": ""
+      },
+      {
+        "offset_dias": -45,
+        "tarea": "Estimar el número de títulos disponibles / necesarios",
+        "detalle": ""
+      },
+      {
+        "offset_dias": -45,
+        "tarea": "Pedir presupuesto a intendencias imputables al campamento",
+        "detalle": "Hasta 15 gastos."
+      },
+      {
+        "offset_dias": -45,
+        "tarea": "Estudiar si hay actividades especiales y encargarlas",
+        "detalle": "Hasta 4 actividades, con responsable."
+      },
+      {
+        "offset_dias": -43,
+        "tarea": "Elaborar horario general y enviarlo a la lista",
+        "detalle": ""
+      },
+      {
+        "offset_dias": -40,
+        "tarea": "Recopilar información sobre comida en stock en el local de material",
+        "detalle": ""
+      },
+      {
+        "offset_dias": -40,
+        "tarea": "Elegir cocinero, intendente y ayudantes",
+        "detalle": ""
+      },
+      {
+        "offset_dias": -35,
+        "tarea": "Pedir presupuesto a secciones imputables al campamento",
+        "detalle": "Una partida por rama."
+      },
+      {
+        "offset_dias": -35,
+        "tarea": "Estimar presupuesto de comidas",
+        "detalle": ""
+      },
+      {
+        "offset_dias": -35,
+        "tarea": "Elaborar menú",
+        "detalle": "Revisar alergias típicas de los educandos."
+      },
+      {
+        "offset_dias": -35,
+        "tarea": "Comprobar que hay suficientes scouters con titulación de manipulador de alimentos",
+        "detalle": ""
+      },
+      {
+        "offset_dias": -30,
+        "tarea": "Estimar presupuesto de campamento",
+        "detalle": ""
+      },
+      {
+        "offset_dias": -29,
+        "tarea": "Redactar carta y fotocopiarla; ficha médica",
+        "detalle": ""
+      },
+      {
+        "offset_dias": -29,
+        "tarea": "Enviar carta por correos y ficha médica; también por email",
+        "detalle": ""
+      },
+      {
+        "offset_dias": -18,
+        "tarea": "Presentar el plan de actividades",
+        "detalle": ""
+      },
+      {
+        "offset_dias": -15,
+        "tarea": "Último día para pagar el campamento en la cuenta; enviar información a las secciones",
+        "detalle": ""
+      },
+      {
+        "offset_dias": -15,
+        "tarea": "Revisar número de títulos disponibles / necesarios",
+        "detalle": ""
+      },
+      {
+        "offset_dias": -15,
+        "tarea": "Revisar alergias médicas de asistentes, medicinas y menú",
+        "detalle": ""
+      },
+      {
+        "offset_dias": -15,
+        "tarea": "Reserva final del autobús",
+        "detalle": ""
+      },
+      {
+        "offset_dias": -12,
+        "tarea": "Reunión de padres",
+        "detalle": ""
+      },
+      {
+        "offset_dias": -8,
+        "tarea": "Comprar comida y embalarla",
+        "detalle": ""
+      },
+      {
+        "offset_dias": -7,
+        "tarea": "Preparar las intendencias y secciones el material de campamento",
+        "detalle": ""
+      },
+      {
+        "offset_dias": -5,
+        "tarea": "Cargar la furgoneta",
+        "detalle": ""
+      },
+      {
+        "offset_dias": -4,
+        "tarea": "Salida de la avanzadilla",
+        "detalle": ""
+      },
+      {
+        "offset_dias": -3,
+        "tarea": "Enviar la ficha del campamento a la OF (Organización Federada), si procede",
+        "detalle": ""
+      },
+      {
+        "offset_dias": -3,
+        "tarea": "Últimas compras que se llevan en el autobús",
+        "detalle": ""
+      },
+      {
+        "offset_dias": -3,
+        "tarea": "Dar al responsable de botiquín las fichas para comprar últimas medicinas",
+        "detalle": ""
+      },
+      {
+        "offset_dias": -1,
+        "tarea": "Cargar el autobús",
+        "detalle": ""
+      },
+      {
+        "offset_dias": "fin+7",
+        "tarea": "Escribir un post resumen del campamento",
+        "detalle": ""
+      },
+      {
+        "offset_dias": "fin+7",
+        "tarea": "Subir fotos del campamento a la web del grupo",
+        "detalle": ""
+      },
+      {
+        "offset_dias": "fin+60",
+        "tarea": "Evaluar el campamento",
+        "detalle": ""
+      }
+    ]
+  },
+  "presupuesto": {
+    "datos_generales": [
+      "Actividad",
+      "Lugar",
+      "Fechas",
+      "Nº de educandos",
+      "Nº de educandos con cuota especial (reducida o exentos)",
+      "Nº de voluntarios",
+      "Nº de días"
+    ],
+    "ingresos": {
+      "cuotas_participantes": [
+        "Cuota general (se calcula sola)",
+        "Cuota especial",
+        "Otras cuotas",
+        "Voluntarios"
+      ],
+      "aportaciones": [
+        "Asociativas",
+        "Comité de padres",
+        "Grupales",
+        "Empresas / privadas",
+        "Otras"
+      ]
+    },
+    "gastos": {
+      "desplazamientos": [
+        "Billetes de bus",
+        "Billetes de tren",
+        "Alquiler de bus"
+      ],
+      "alimentacion": [
+        "Participantes (precio persona/día × días)",
+        "Voluntarios (precio persona/día × días)"
+      ],
+      "material_y_actividades": [
+        "Actividades (importe por persona)",
+        "Gastos 1–6",
+        "Acampada",
+        "Suministros",
+        "Otros"
+      ],
+      "gastos_de_voluntarios": [
+        "Transporte",
+        "Telefonía",
+        "Otros"
+      ],
+      "instalaciones": [
+        "Albergue (coste total)",
+        "Albergue (por persona)",
+        "Otros"
+      ],
+      "otros_gastos": [
+        "Farmacia",
+        "Protocolo",
+        "Gastos 1–4"
+      ]
+    }
+  },
+  "formulas": {
+    "titulos_necesarios": "ceil(total_educandos / ratio_CCAA)  (ratio = 1 título cada N educandos)",
+    "acampada_comida_total": "(educandos + scouters) × precio_por_acampado_dia × dias",
+    "acampada_presupuesto_total": "lugar_total + lugar_pp_dia×(educandos+scouters)×dias + buses(1+2) + gastos_secciones(1..5) + actividad_especial + comida_total",
+    "campamento_presupuesto_total": "lugar + buses + gastos_intendencias(1..15) + actividades_especiales(1..4) + gastos_secciones(5 ramas) + comida_total",
+    "total_por_educando": "presupuesto_total / total_educandos",
+    "presupuesto_gastos_total": "suma de subtotales: desplazamientos + alimentación + material y actividades + gastos de voluntarios + instalaciones + otros gastos",
+    "alimentacion": "(educandos + especiales) × días × precio_dia_participante  +  voluntarios × días × precio_dia_voluntario",
+    "margen_error": "5% × gastos_totales",
+    "ingresos_seguros": "suma de aportaciones (asociativas, comité de padres, grupales, empresas, otras)",
+    "otras_cuotas": "cuotas especiales + otras cuotas + cuotas de voluntarios",
+    "a_cubrir_con_cuota_general": "gastos_totales − ingresos_seguros − otras_cuotas",
+    "cuota_inicial": "(a_cubrir_con_cuota_general + margen_5%) / nº_educandos",
+    "cuota_propuesta": "redondeo hacia arriba al euro entero",
+    "balance": "ingresos_totales − gastos_totales"
+  },
+  "ejemplos_fechas": {
+    "acampada": {
+      "inicio": "2027-03-19",
+      "dias": 2,
+      "tareas": [
+        {
+          "fecha": "2027-01-18",
+          "tarea": "Ver lugar de acampada"
+        },
+        {
+          "fecha": "2027-01-18",
+          "tarea": "Reservar el lugar de acampada"
+        },
+        {
+          "fecha": "2027-02-02",
+          "tarea": "Pedir presupuesto a los autobuses y prereservar"
+        },
+        {
+          "fecha": "2027-02-02",
+          "tarea": "Buscar evaluaciones de actividades similares y revisarlas"
+        },
+        {
+          "fecha": "2027-02-17",
+          "tarea": "Pedir presupuesto a secciones e intendencias imputables a la acampada"
+        },
+        {
+          "fecha": "2027-02-17",
+          "tarea": "Estudiar si hay actividad especial y encargarla"
+        },
+        {
+          "fecha": "2027-02-22",
+          "tarea": "Recopilar información sobre la comida en stock en el local de material"
+        },
+        {
+          "fecha": "2027-02-27",
+          "tarea": "Estimar número de educandos y scouters"
+        },
+        {
+          "fecha": "2027-02-27",
+          "tarea": "Estimar el número de títulos disponibles / necesarios"
+        },
+        {
+          "fecha": "2027-02-27",
+          "tarea": "Elegir cocinero, intendente y ayudantes"
+        },
+        {
+          "fecha": "2027-03-01",
+          "tarea": "Elaborar menú"
+        },
+        {
+          "fecha": "2027-03-01",
+          "tarea": "Estimar presupuesto de comidas"
+        },
+        {
+          "fecha": "2027-03-01",
+          "tarea": "Comprobar que hay suficientes scouters con titulación de manipulador de alimentos"
+        },
+        {
+          "fecha": "2027-03-01",
+          "tarea": "Estimar presupuesto de acampada"
+        },
+        {
+          "fecha": "2027-03-01",
+          "tarea": "Elaborar horario general de acampada y enviarlo al grupo"
+        },
+        {
+          "fecha": "2027-03-02",
+          "tarea": "Redactar carta y fotocopiarla"
+        },
+        {
+          "fecha": "2027-03-06",
+          "tarea": "Entregar carta en reunión local y enviarla por correo electrónico"
+        },
+        {
+          "fecha": "2027-03-08",
+          "tarea": "Enviar carta por correos"
+        },
+        {
+          "fecha": "2027-03-11",
+          "tarea": "Recoger autorizaciones, totales de educandos y enviar datos a las secciones"
+        },
+        {
+          "fecha": "2027-03-11",
+          "tarea": "Revisar número de títulos disponibles / necesarios"
+        },
+        {
+          "fecha": "2027-03-11",
+          "tarea": "Revisar alergias médicas de asistentes, medicinas y menú"
+        },
+        {
+          "fecha": "2027-03-11",
+          "tarea": "Reserva final del autobús"
+        },
+        {
+          "fecha": "2027-03-12",
+          "tarea": "Reunión de padres"
+        },
+        {
+          "fecha": "2027-03-12",
+          "tarea": "Presentar el plan de actividades"
+        },
+        {
+          "fecha": "2027-03-16",
+          "tarea": "Comprar comida y embalarla"
+        },
+        {
+          "fecha": "2027-03-16",
+          "tarea": "Enviar la ficha de la acampada a la OF (Organización Federada)"
+        },
+        {
+          "fecha": "2027-03-17",
+          "tarea": "Preparar las intendencias y secciones el material de acampada"
+        },
+        {
+          "fecha": "2027-03-18",
+          "tarea": "Cargar furgoneta"
+        },
+        {
+          "fecha": "2027-03-28",
+          "tarea": "Escribir un post de la acampada en la web de grupo"
+        },
+        {
+          "fecha": "2027-03-28",
+          "tarea": "Subir fotos de la acampada a la web del grupo"
+        },
+        {
+          "fecha": "2027-04-04",
+          "tarea": "Evaluar la acampada"
+        }
+      ]
+    },
+    "campamento": {
+      "inicio": "2027-07-16",
+      "dias": 15,
+      "tareas": [
+        {
+          "fecha": "2027-03-18",
+          "tarea": "Ver lugar de acampada"
+        },
+        {
+          "fecha": "2027-03-18",
+          "tarea": "Reservar el lugar de acampada"
+        },
+        {
+          "fecha": "2027-05-17",
+          "tarea": "Pedir presupuesto a los autobuses y prereservar"
+        },
+        {
+          "fecha": "2027-05-17",
+          "tarea": "Buscar evaluaciones de actividades similares"
+        },
+        {
+          "fecha": "2027-06-01",
+          "tarea": "Estimar número de educandos y scouters"
+        },
+        {
+          "fecha": "2027-06-01",
+          "tarea": "Estimar el número de títulos disponibles / necesarios"
+        },
+        {
+          "fecha": "2027-06-01",
+          "tarea": "Pedir presupuesto a intendencias imputables al campamento"
+        },
+        {
+          "fecha": "2027-06-01",
+          "tarea": "Estudiar si hay actividades especiales y encargarlas"
+        },
+        {
+          "fecha": "2027-06-03",
+          "tarea": "Elaborar horario general y enviarlo a la lista"
+        },
+        {
+          "fecha": "2027-06-06",
+          "tarea": "Recopilar información sobre comida en stock en el local de material"
+        },
+        {
+          "fecha": "2027-06-06",
+          "tarea": "Elegir cocinero, intendente y ayudantes"
+        },
+        {
+          "fecha": "2027-06-11",
+          "tarea": "Pedir presupuesto a secciones imputables al campamento"
+        },
+        {
+          "fecha": "2027-06-11",
+          "tarea": "Estimar presupuesto de comidas"
+        },
+        {
+          "fecha": "2027-06-11",
+          "tarea": "Elaborar menú"
+        },
+        {
+          "fecha": "2027-06-11",
+          "tarea": "Comprobar que hay suficientes scouters con titulación de manipulador de alimentos"
+        },
+        {
+          "fecha": "2027-06-16",
+          "tarea": "Estimar presupuesto de campamento"
+        },
+        {
+          "fecha": "2027-06-17",
+          "tarea": "Redactar carta y fotocopiarla; ficha médica"
+        },
+        {
+          "fecha": "2027-06-17",
+          "tarea": "Enviar carta por correos y ficha médica; también por email"
+        },
+        {
+          "fecha": "2027-06-28",
+          "tarea": "Presentar el plan de actividades"
+        },
+        {
+          "fecha": "2027-07-01",
+          "tarea": "Último día para pagar el campamento en la cuenta; enviar información a las secciones"
+        },
+        {
+          "fecha": "2027-07-01",
+          "tarea": "Revisar número de títulos disponibles / necesarios"
+        },
+        {
+          "fecha": "2027-07-01",
+          "tarea": "Revisar alergias médicas de asistentes, medicinas y menú"
+        },
+        {
+          "fecha": "2027-07-01",
+          "tarea": "Reserva final del autobús"
+        },
+        {
+          "fecha": "2027-07-04",
+          "tarea": "Reunión de padres"
+        },
+        {
+          "fecha": "2027-07-08",
+          "tarea": "Comprar comida y embalarla"
+        },
+        {
+          "fecha": "2027-07-09",
+          "tarea": "Preparar las intendencias y secciones el material de campamento"
+        },
+        {
+          "fecha": "2027-07-11",
+          "tarea": "Cargar la furgoneta"
+        },
+        {
+          "fecha": "2027-07-12",
+          "tarea": "Salida de la avanzadilla"
+        },
+        {
+          "fecha": "2027-07-13",
+          "tarea": "Enviar la ficha del campamento a la OF (Organización Federada), si procede"
+        },
+        {
+          "fecha": "2027-07-13",
+          "tarea": "Últimas compras que se llevan en el autobús"
+        },
+        {
+          "fecha": "2027-07-13",
+          "tarea": "Dar al responsable de botiquín las fichas para comprar últimas medicinas"
+        },
+        {
+          "fecha": "2027-07-15",
+          "tarea": "Cargar el autobús"
+        },
+        {
+          "fecha": "2027-08-07",
+          "tarea": "Escribir un post resumen del campamento"
+        },
+        {
+          "fecha": "2027-08-07",
+          "tarea": "Subir fotos del campamento a la web del grupo"
+        },
+        {
+          "fecha": "2027-09-29",
+          "tarea": "Evaluar el campamento"
+        }
+      ]
+    }
+  }
+}
