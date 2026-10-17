@@ -1,6 +1,6 @@
 # 49 · Programador de acampadas y campamentos + Gestor de menús (análisis y plan)
 
-> **Estado:** análisis y plan escritos el 2026-10-17; **decisiones del usuario recogidas el mismo día (apartado 9)**. **No hay código hecho.** Sale de las dos bases de conocimiento que dio el usuario («Siguiente módulo»), guardadas tal cual en `docs/fuentes-49/`:
+> **Estado:** análisis y plan escritos el 2026-10-17; **decisiones del usuario recogidas el mismo día (apartado 9)**. **Hechas: A1, A2 (v0.40) y B1 (v0.41); ver apartado 10.** Sale de las dos bases de conocimiento que dio el usuario («Siguiente módulo»), guardadas tal cual en `docs/fuentes-49/`:
 >
 > | Fichero | Qué es |
 > |---|---|
@@ -288,3 +288,12 @@ Pruebas nuevas por fase (`tests/eventos-calendario.php`, `tests/menus-recetas.ph
   - Pruebas: `tests/eventos-calendario.php` (74) con `tests/lib/ejemplos-calendario.php` (las dos tablas del programador). Textos nuevos traducidos (ca, eu, gl). Plugin Check: 0 hallazgos.
   - **Decisiones propias:** (1) la fecha del *fin* para «fin + N» es la fecha de fin del evento (en el ejemplo del Excel, inicio + días); (2) la ratio de «equipo» no mira titulaciones (eso es «títulos»); (3) «autorizaciones» exige al menos una inscripción activa; (4) el semáforo cuenta como *esta semana* hasta 7 días vista.
   - **Pendiente de A1/A2:** ayuda por página y manuales (se rehacen al cerrar la v0.40, junto con la v0.39), mapa `40` y `00-INDICE`. **Quedan** B1, B2 y B3 (v0.41, menús y alérgenos) y el material del evento (v0.42).
+- ✅ **Fase B1 hecha (2026-10-17, rama `Calendario-Eventos`, v0.41.0):** el recetario.
+  - **Tablas** `asde_menu_ingredientes`, `asde_menu_recetas` y `asde_menu_receta_lineas` (`Menus\IngredientesTable`, `RecetasTable`). Sin módulo nuevo (P-183): la capability `asde_menus_recetas` (scouters, Secretaría y Coordinación) se va con el módulo Eventos. Pestaña **Recetas** de Eventos (página `eventos_recetas`, `/eventos/recetas/`), con tres pantallas: recetario, receta e ingredientes, más la carga por CSV.
+  - **Alérgenos** (`Menus\Alergenos`): los 14 del Reglamento 1169/2011 y la tabla intolerancia → alérgeno (celiaquía → gluten, lactosa → lácteos) para la fase B3. Cada ingrediente lleva lo que **contiene**, las **trazas**, si es **de origen animal** (para las dietas), un coste opcional y la marca **«revisado»**. Los alérgenos de una receta **se calculan** juntando los de sus ingredientes (nunca se guardan); la receta avisa de los ingredientes sin revisar (los que crea una carga por CSV nacen así).
+  - **Escalado** (`Menus\Escalado`): cantidad × comensales ÷ porciones base, con 2 decimales y la unidad más legible (1.500 g → 1,5 kg); solo g↔kg y ml↔l se convierten (`ud`, `cda` y `pizca` no). El ejemplo del plan (1,5 kg × 42 ÷ 10 = 6,3 kg) está en la prueba.
+  - **Biblioteca común** (`Menus\Biblioteca`, P-195): 12 recetas de ejemplo y 27 ingredientes sembrados una vez en el grupo `*` (idempotente), marcados «de ejemplo»; sin datos personales ni vínculo con grupo o evento. Cada grupo las **copia** (`Recetario::copiar`) y edita su copia; la común no se toca y un grupo no ve lo de otro. **Los alérgenos de la biblioteca los puse yo y conviene que una persona del grupo los revise antes de publicar** (P-195).
+  - **CSV** (`Recetario::importar`): una fila por ingrediente (Receta; Tipo; Porciones; Ingrediente; Cantidad; Unidad); ingredientes nuevos sin alérgenos y sin revisar; no pisa recetas existentes; informe con el motivo de cada fila rechazada.
+  - Auditoría: `menu_receta_*`, `menu_ingrediente_*` (objeto `menus`). Archivar en lugar de borrar.
+  - Pruebas: `tests/menus-recetario.php` (75). Textos nuevos traducidos (ca, eu, gl).
+  - **Quedan** B2 (menú del evento, lista de la compra, coste) y B3 (validación contra los asistentes, hoja de cocina) y el material del evento (v0.42).

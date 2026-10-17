@@ -10,6 +10,7 @@ use AsdeBalears\AreaPrivada\Frontend\Views\EventosView;
 use AsdeBalears\AreaPrivada\Frontend\Views\InscripcionEsperaView;
 use AsdeBalears\AreaPrivada\Frontend\Views\TiendaPublicaView;
 use AsdeBalears\AreaPrivada\Frontend\Views\MisEventosView;
+use AsdeBalears\AreaPrivada\Frontend\Views\RecetasView;
 use AsdeBalears\AreaPrivada\Frontend\Views\ListaEsperaView;
 use AsdeBalears\AreaPrivada\Frontend\Views\AltaUsuariosView;
 use AsdeBalears\AreaPrivada\Frontend\Views\AreaPrivadaView;
@@ -104,6 +105,7 @@ final class Router {
 		// v0.35: eventos (doc 43).
 		'eventos'            => array( 'asde_eventos', EventosView::class ),
 		'eventos_config'     => array( 'asde_eventos_config', EventosConfigView::class ),
+		'eventos_recetas'    => array( 'asde_eventos_recetas', RecetasView::class ),
 		'mis_eventos'        => array( 'asde_mis_eventos', MisEventosView::class ),
 	);
 

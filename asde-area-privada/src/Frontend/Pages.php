@@ -58,6 +58,8 @@ final class Pages {
 		// v0.35: eventos (doc 43).
 		'eventos'            => array( 'eventos', 'Eventos', '[asde_eventos]', 'area' ),
 		'eventos_config'     => array( 'configuracion', 'Configuración de eventos', '[asde_eventos_config]', 'eventos' ),
+		// v0.41 (doc 49, B1): el recetario de los menús.
+		'eventos_recetas'    => array( 'recetas', 'Recetas', '[asde_eventos_recetas]', 'eventos' ),
 		'mis_eventos'        => array( 'mis-eventos', 'Mis eventos', '[asde_mis_eventos]', 'area' ),
 	);
 

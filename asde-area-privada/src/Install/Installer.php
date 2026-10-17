@@ -108,8 +108,12 @@ final class Installer {
 		\AsdeBalears\AreaPrivada\Eventos\AnticiposTable::install_table();
 		// v0.40: el calendario de tareas de los eventos (doc 49).
 		\AsdeBalears\AreaPrivada\Eventos\TareasTable::install_table();
+		// v0.41: el recetario de los menús (doc 49, B1).
+		\AsdeBalears\AreaPrivada\Menus\IngredientesTable::install_table();
+		\AsdeBalears\AreaPrivada\Menus\RecetasTable::install_table();
 		Grupos::migrar();
 		\AsdeBalears\AreaPrivada\Domain\Organizacion::migrar(); // Instalaciones anteriores: Scouts de Balears, código 7.
+		\AsdeBalears\AreaPrivada\Menus\Biblioteca::sembrar(); // v0.41: la biblioteca común de recetas (idempotente).
 		\AsdeBalears\AreaPrivada\Tienda\Sembrado::ejecutar(); // v0.39: la camisa y las insignias de Uniformes, como productos (idempotente).
 		Pages::install();
 		Visibilidad::asegurar_menu();

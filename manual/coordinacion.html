@@ -12,7 +12,7 @@
 <body>
 <header class="portada">
 	<div class="portada__dentro">
-		<p class="antetitulo">Manual de uso · versión 0.40 · octubre de 2026 · <a class="portada__volver" href="index.html">Todos los manuales</a></p>
+		<p class="antetitulo">Manual de uso · versión 0.41 · octubre de 2026 · <a class="portada__volver" href="index.html">Todos los manuales</a></p>
 		<h1>Manual del equipo de coordinación</h1>
 		<p class="portada__perfil">Tesorería, Secretaría y Coordinación</p>
 		<p class="entrada">Todo lo que lleva el equipo del grupo: personas y números de socio, altas, bajas y cambios de sección en el CRM, dar acceso, solicitudes, los usuarios (con sus hojas: usuarios, dar acceso y registro de emails), fichas y cambios, informes, la Tesorería completa (cuotas, coste federativo, banco y domiciliaciones SEPA) y los uniformes, del pago a la entrega.</p>
@@ -82,6 +82,7 @@
 <li class="sub"><a href="#eventos-inscripciones">Inscripciones</a></li>
 <li class="sub"><a href="#eventos-cobros">Cobros (Tesorería)</a></li>
 <li class="sub"><a href="#eventos-cuentas">Cuentas</a></li>
+<li class="sub"><a href="#eventos-recetario">Recetario</a></li>
 <li class="sub"><a href="#eventos-configuracion">Configuración</a></li>
 <li><a href="#inventario">Inventario de material</a></li>
 <li class="sub"><a href="#inventario-material">El material</a></li>
@@ -858,6 +859,22 @@
 	<p><strong>Cerrar las cuentas</strong> (Tesorería): cuando el evento ha terminado (o está cancelado), sin gastos por revisar, sin reembolsos pendientes, con los anticipos liquidados y con los cobros de la remesa SEPA del evento registrados. Al cerrar, el balance queda como <strong>informe final</strong>, se borran quién recoge y las observaciones de las inscripciones, y el evento sale como «Cuentas cerradas»: ya no se puede cambiar nada. Los justificantes y el informe se siguen viendo.</p>
 	<p>Si después hace falta cambiar algo (una factura que llega tarde, un error), Tesorería pulsa «<strong>Reabrir las cuentas</strong>» y escribe el motivo: el evento y sus cuentas se pueden volver a cambiar y, cuando esté todo, se vuelven a cerrar con el informe al día. Quién recoge y las observaciones, que se borraron al cerrar, no vuelven.</p>
 
+	<h3 id="eventos-recetario">Recetario</h3>
+	<p class="quien-sub">Scouters, Secretaría y Coordinación</p>
+	<p>En la pestaña <strong>«Recetas»</strong> de Eventos está el recetario del grupo: las recetas con sus ingredientes y sus <strong>alérgenos</strong>. Es la base de los menús de los eventos. <strong>No lleva datos de ninguna persona</strong>: los alérgenos que se ven son los de los ingredientes, no los de quienes van a comer.</p>
+	<figure class="captura captura--larga"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/eventos/recetas/</span></div><div class="navegador__vista" data-ampliar tabindex="0"><img src="capturas/109-menus-recetario.png" width="1280" height="1500" alt="El recetario: las recetas del grupo con sus alérgenos y la biblioteca de ejemplo" loading="lazy"></div></div><figcaption><span>El recetario: las recetas del grupo y, plegada, la biblioteca de ejemplo.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<ul>
+		<li><strong>Biblioteca de ejemplo:</strong> unas recetas básicas que vienen con la aplicación, iguales para todos los grupos. No se pueden cambiar: pulsa <strong>«Copiar a mi grupo»</strong> y edita tu copia. <strong>Revisa siempre los alérgenos de las marcas que uses</strong> antes de fiarte de una receta.</li>
+		<li><strong>Añadir una receta:</strong> nombre, tipo de plato, <strong>porciones base</strong> (para cuántas personas son las cantidades), ingredientes con su cantidad y unidad (g, kg, ml, l, unidades, cucharadas, pizcas), elaboración y observaciones. Los alérgenos de la receta <strong>se calculan solos</strong> con los de sus ingredientes; no se escriben a mano.</li>
+		<li><strong>Ingredientes:</strong> cada ingrediente lleva lo que <strong>contiene</strong> (los 14 alérgenos de declaración obligatoria), las <strong>trazas</strong> («puede contener») y si es de origen animal. Marca «he revisado los alérgenos» cuando hayas mirado la etiqueta: las recetas avisan de los ingredientes que nadie ha revisado. Los de la biblioteca no se cambian.</li>
+		<li><strong>Cantidades según los comensales:</strong> en una receta, escribe cuántos van a comer y pulsa «Calcular»: cada cantidad se multiplica por los comensales y se divide entre las porciones base (1,5 kg para 10 → 6,3 kg para 42). Solo se convierten g con kg y ml con l.</li>
+		<li><strong>Cargar desde un CSV:</strong> una fila por ingrediente de cada receta (Receta; Tipo; Porciones; Ingrediente; Cantidad; Unidad). Los ingredientes nuevos se crean <strong>sin alérgenos y sin revisar</strong>: anótalos después en «Ingredientes». No se pisa ninguna receta que ya exista.</li>
+		<li>Las recetas y los ingredientes se <strong>archivan</strong> en lugar de borrarse; se pueden recuperar.</li>
+	</ul>
+	<figure class="captura captura--larga"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/eventos/recetas/?receta=…</span></div><div class="navegador__vista" data-ampliar tabindex="0"><img src="capturas/110-menus-receta.png" width="1280" height="1700" alt="Una receta: sus alérgenos y el formulario con los ingredientes" loading="lazy"></div></div><figcaption><span>Una receta del grupo: arriba lo que contiene y, debajo, el formulario con sus ingredientes (más abajo, las cantidades según los comensales).</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<figure class="captura captura--larga"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/eventos/recetas/?ingredientes=1</span></div><div class="navegador__vista" data-ampliar tabindex="0"><img src="capturas/111-menus-ingredientes.png" width="1280" height="2000" alt="Los ingredientes: el formulario con los alérgenos y la lista del grupo y de la biblioteca" loading="lazy"></div></div><figcaption><span>Los ingredientes, con sus alérgenos y trazas.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<p>Si el módulo Eventos está apagado en el grupo, el recetario tampoco aparece.</p>
+
 	<h3 id="eventos-configuracion">Configuración</h3>
 	<p><strong>Calendario de tareas:</strong> en la configuración se elige si las fechas de fin de semana se adelantan al viernes y si se avisa por email del vencimiento; y se editan las <strong>plantillas</strong>: cambiar títulos, «desde el inicio o el fin» y los días de cada tarea, añadir las tuyas, restaurar la original de Acampada o crear plantillas nuevas (por ejemplo, «Salida de día»). Los cambios valen para los eventos que apliquen la plantilla a partir de entonces.</p>
 	<figure class="captura captura--larga"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/eventos/configuracion/</span></div><div class="navegador__vista" data-ampliar tabindex="0"><img src="capturas/105-eventos-config-calendario.png" width="1280" height="1300" alt="La configuración del calendario de tareas: ajuste de fin de semana, avisos y el editor de la plantilla de Acampada" loading="lazy"></div></div><figcaption><span>En la configuración de eventos: el ajuste de fin de semana, los avisos y el editor de las plantillas.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
@@ -1020,7 +1037,7 @@
 			</ul>
 		</section>
 
-		<p class="pie">Manual del equipo de coordinación del plugin «ASDE Scouts de España – Gestor CRM para Grupos Scouts», versión 0.40 (octubre de 2026). Capturas hechas en un WordPress de demostración con un CRM simulado y datos inventados.</p>
+		<p class="pie">Manual del equipo de coordinación del plugin «ASDE Scouts de España – Gestor CRM para Grupos Scouts», versión 0.41 (octubre de 2026). Capturas hechas en un WordPress de demostración con un CRM simulado y datos inventados.</p>
 	</main>
 </div>
 

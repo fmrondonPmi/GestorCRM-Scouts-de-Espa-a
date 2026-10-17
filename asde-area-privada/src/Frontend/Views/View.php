@@ -97,6 +97,7 @@ abstract class View {
 			'inventario_tipos'   => 'inventario',
 			'inventario_compras' => 'inventario',
 			'eventos_config'     => 'eventos',
+			'eventos_recetas'    => 'eventos',
 		)[ $activo ] ?? $activo;
 		return '<div class="asde-ap">'
 			. $this->tpl(

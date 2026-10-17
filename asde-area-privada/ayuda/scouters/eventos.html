@@ -1,4 +1,4 @@
-<!-- Generado por herramientas/generar-manuales.php (manual «scouters», versión 0.40) a partir de manual/fuentes: no se edita a mano. -->
+<!-- Generado por herramientas/generar-manuales.php (manual «scouters», versión 0.41) a partir de manual/fuentes: no se edita a mano. -->
 <div class="asde-ayuda__texto" data-manual="scouters" data-ancla="eventos">
 <div class="asde-ayuda__apartado"><h2>Eventos</h2>
 	<p class="resumen">Salidas, acampadas, campamentos y demás actividades del grupo: sus datos, el equipo dirigente, lo que pide la normativa de tiempo libre y el presupuesto, del que sale el precio. Está en <strong>Gestión del grupo → Eventos</strong> (desde la v0.35) si el grupo tiene encendido el módulo «Eventos», que nace apagado: lo enciende el administrador en wp-admin → Grupos Scouts → Módulos. Las familias se inscriben en «Mis eventos», que explica el manual para familias. Los gastos y el cierre de cuentas llegan en una próxima versión.</p>
@@ -103,6 +103,22 @@
 	</ul>
 	<p><strong>Cerrar las cuentas</strong> (Tesorería): cuando el evento ha terminado (o está cancelado), sin gastos por revisar, sin reembolsos pendientes, con los anticipos liquidados y con los cobros de la remesa SEPA del evento registrados. Al cerrar, el balance queda como <strong>informe final</strong>, se borran quién recoge y las observaciones de las inscripciones, y el evento sale como «Cuentas cerradas»: ya no se puede cambiar nada. Los justificantes y el informe se siguen viendo.</p>
 	<p>Si después hace falta cambiar algo (una factura que llega tarde, un error), Tesorería pulsa «<strong>Reabrir las cuentas</strong>» y escribe el motivo: el evento y sus cuentas se pueden volver a cambiar y, cuando esté todo, se vuelven a cerrar con el informe al día. Quién recoge y las observaciones, que se borraron al cerrar, no vuelven.</p>
+
+	<h3>Recetario</h3>
+	<p class="quien-sub">Scouters, Secretaría y Coordinación</p>
+	<p>En la pestaña <strong>«Recetas»</strong> de Eventos está el recetario del grupo: las recetas con sus ingredientes y sus <strong>alérgenos</strong>. Es la base de los menús de los eventos. <strong>No lleva datos de ninguna persona</strong>: los alérgenos que se ven son los de los ingredientes, no los de quienes van a comer.</p>
+	<p class="asde-ayuda__pantalla">El recetario: las recetas del grupo y, plegada, la biblioteca de ejemplo.</p>
+	<ul>
+		<li><strong>Biblioteca de ejemplo:</strong> unas recetas básicas que vienen con la aplicación, iguales para todos los grupos. No se pueden cambiar: pulsa <strong>«Copiar a mi grupo»</strong> y edita tu copia. <strong>Revisa siempre los alérgenos de las marcas que uses</strong> antes de fiarte de una receta.</li>
+		<li><strong>Añadir una receta:</strong> nombre, tipo de plato, <strong>porciones base</strong> (para cuántas personas son las cantidades), ingredientes con su cantidad y unidad (g, kg, ml, l, unidades, cucharadas, pizcas), elaboración y observaciones. Los alérgenos de la receta <strong>se calculan solos</strong> con los de sus ingredientes; no se escriben a mano.</li>
+		<li><strong>Ingredientes:</strong> cada ingrediente lleva lo que <strong>contiene</strong> (los 14 alérgenos de declaración obligatoria), las <strong>trazas</strong> («puede contener») y si es de origen animal. Marca «he revisado los alérgenos» cuando hayas mirado la etiqueta: las recetas avisan de los ingredientes que nadie ha revisado. Los de la biblioteca no se cambian.</li>
+		<li><strong>Cantidades según los comensales:</strong> en una receta, escribe cuántos van a comer y pulsa «Calcular»: cada cantidad se multiplica por los comensales y se divide entre las porciones base (1,5 kg para 10 → 6,3 kg para 42). Solo se convierten g con kg y ml con l.</li>
+		<li><strong>Cargar desde un CSV:</strong> una fila por ingrediente de cada receta (Receta; Tipo; Porciones; Ingrediente; Cantidad; Unidad). Los ingredientes nuevos se crean <strong>sin alérgenos y sin revisar</strong>: anótalos después en «Ingredientes». No se pisa ninguna receta que ya exista.</li>
+		<li>Las recetas y los ingredientes se <strong>archivan</strong> en lugar de borrarse; se pueden recuperar.</li>
+	</ul>
+	<p class="asde-ayuda__pantalla">Una receta del grupo: arriba lo que contiene y, debajo, el formulario con sus ingredientes (más abajo, las cantidades según los comensales).</p>
+	<p class="asde-ayuda__pantalla">Los ingredientes, con sus alérgenos y trazas.</p>
+	<p>Si el módulo Eventos está apagado en el grupo, el recetario tampoco aparece.</p>
 
 	<h3>Configuración</h3>
 	<p><strong>Calendario de tareas:</strong> en la configuración se elige si las fechas de fin de semana se adelantan al viernes y si se avisa por email del vencimiento; y se editan las <strong>plantillas</strong>: cambiar títulos, «desde el inicio o el fin» y los días de cada tarea, añadir las tuyas, restaurar la original de Acampada o crear plantillas nuevas (por ejemplo, «Salida de día»). Los cambios valen para los eventos que apliquen la plantilla a partir de entonces.</p>

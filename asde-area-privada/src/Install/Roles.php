@@ -49,6 +49,7 @@ final class Roles {
 					'asde_eventos_inscribir' => true, // Eventos (v0.35, doc 43): «Mis eventos».
 					// Crea y gestiona los eventos de sus secciones y aquellos en cuyo equipo está.
 					'asde_eventos_gestion'   => true,
+					'asde_menus_recetas'     => true, // Recetario de los menús (v0.41, doc 49).
 				),
 			),
 			self::SECRETARIA   => array(
@@ -74,6 +75,7 @@ final class Roles {
 					'asde_lista_espera_alta' => true, // Asignar sección, dar de alta en el CRM y borrar (v0.32).
 					'asde_eventos_inscribir' => true,
 					'asde_eventos_gestion'   => true, // Los de sección de todo el grupo.
+					'asde_menus_recetas'     => true,
 				),
 			),
 			self::COORDINACION => array(
@@ -103,6 +105,7 @@ final class Roles {
 					'asde_eventos_inscribir' => true,
 					// Eventos: además, los de grupo y los externos, y la configuración.
 					'asde_eventos_gestion'   => true,
+					'asde_menus_recetas'     => true,
 					'asde_eventos_grupo'     => true,
 					'asde_eventos_config'    => true,
 				),

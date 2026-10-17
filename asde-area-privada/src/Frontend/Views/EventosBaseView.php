@@ -5,13 +5,16 @@ use AsdeBalears\AreaPrivada\Eventos\Servicio;
 
 defined( 'ABSPATH' ) || exit;
 
-/** Base de las páginas de eventos: pestañas «Agenda · Configuración». */
+/** Base de las páginas de eventos: pestañas «Agenda · Recetas · Configuración». */
 abstract class EventosBaseView extends View {
 
 	protected function subnav( string $activo ): string {
 		$items = array( 'eventos' => asde_t( 'Agenda' ) );
 		if ( current_user_can( Servicio::CAP_CONFIG ) ) {
 			$items['eventos_config'] = asde_t( 'Configuración' );
+		}
+		if ( current_user_can( \AsdeBalears\AreaPrivada\Menus\Recetario::CAP ) ) {
+			$items['eventos_recetas'] = asde_t( 'Recetas' ); // v0.41 (doc 49, B1).
 		}
 		return count( $items ) > 1 ? $this->tpl(
 			'eventos/subnav',

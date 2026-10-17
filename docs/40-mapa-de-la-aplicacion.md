@@ -181,7 +181,7 @@ grupo no ve a otro**; **nunca** se prueba contra el CRM real ni se escribe en é
 ## 5. Inventario (generado)
 
 <!-- inventario:inicio -->
-_Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10-17 · plugin 0.40.0. No editar a mano: se regenera._
+_Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10-17 · plugin 0.41.0. No editar a mano: se regenera._
 
 ### Páginas (Frontend\Pages + Router)
 
@@ -221,6 +221,7 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 | `inscripcion_espera` | inscripcion-lista-de-espera | `[asde_inscripcion_espera]` → `InscripcionEsperaView` | sí |  |
 | `eventos` | eventos | `[asde_eventos]` → `EventosView` |  |  |
 | `eventos_config` | configuracion | `[asde_eventos_config]` → `EventosConfigView` |  |  |
+| `eventos_recetas` | recetas | `[asde_eventos_recetas]` → `RecetasView` |  |  |
 | `mis_eventos` | mis-eventos | `[asde_mis_eventos]` → `MisEventosView` |  |  |
 
 ### Capabilities por rol (Install\Roles)
@@ -246,6 +247,7 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 | `asde_lista_espera` | ✓ | ✓ | ✓ | ✓ |  |  |
 | `asde_lista_espera_alta` |  | ✓ | ✓ |  |  |  |
 | `asde_manage_users` |  | ✓ | ✓ |  |  |  |
+| `asde_menus_recetas` | ✓ | ✓ | ✓ |  |  |  |
 | `asde_mis_pagos` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 | `asde_propose_ward_changes` |  |  |  |  | ✓ |  |
 | `asde_reports` | ✓ | ✓ | ✓ | ✓ |  |  |
@@ -277,7 +279,7 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 | `solicitudes` Solicitudes de acceso | El enlace del grupo para pedir el acceso y su revisión. | `asde_aprobar_solicitudes` | — | encendido |
 | `alta_scouters` Alta de scouters | El enlace para que los scouters se den de alta. | — | — | encendido |
 | `lista_espera` Lista de espera | El enlace para apuntarse a la lista de espera, la lista para el equipo y el paso al CRM. | `asde_lista_espera`, `asde_lista_espera_alta` | — | apagado |
-| `eventos` Eventos | Salidas, acampadas y otras actividades: equipo dirigente, presupuesto, inscripciones, «Mis eventos» y cobros. | `asde_eventos_gestion`, `asde_eventos_grupo`, `asde_eventos_economia`, `asde_eventos_config`, `asde_eventos_inscribir` | — | apagado |
+| `eventos` Eventos | Salidas, acampadas y otras actividades: equipo dirigente, presupuesto, inscripciones, «Mis eventos» y cobros. | `asde_eventos_gestion`, `asde_menus_recetas`, `asde_eventos_grupo`, `asde_eventos_economia`, `asde_eventos_config`, `asde_eventos_inscribir` | — | apagado |
 
 ### Tablas propias (`{prefix}asde_*`)
 
@@ -298,6 +300,9 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 | `asde_inventario` | `src/Inventario/MaterialesTable.php` |
 | `asde_inventario_tipos` | `src/Inventario/TiposTable.php` |
 | `asde_lista_espera` | `src/ListaEspera/Inscripciones.php` |
+| `asde_menu_ingredientes` | `src/Menus/IngredientesTable.php` |
+| `asde_menu_recetas` | `src/Menus/RecetasTable.php` |
+| `asde_menu_receta_lineas` | `src/Menus/RecetasTable.php` |
 | `asde_sepa_mandatos` | `src/Sepa/Mandatos.php` |
 | `asde_sepa_remesas` | `src/Sepa/Remesas.php` |
 | `asde_socios` | `src/Socios/SociosTable.php` |
@@ -441,6 +446,7 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 - `MisEventosView` — «Mis eventos» (v0.35, doc 43):
 - `MisPagosView` — «Mis pagos» (petición del usuario, 2026-09-29):
 - `PersonasView` — Personas del grupo, activas y NO activas:
+- `RecetasView` — El recetario del grupo (v0.41, doc 49, B1):
 - `RecuperarView` — "¿Has olvidado tu contraseña?" (pública).
 - `SeguridadView` — Seguridad de la cuenta:
 - `SepaView` — Tesorería · Domiciliaciones SEPA (Secretaría, Coordinación y Tesorería):
@@ -510,6 +516,16 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 - `Enlaces` — Enlaces de la lista de espera (v0.32, doc 39).
 - `Formulario` — Lo que se pide al apuntarse a la lista de espera y cómo se valida (v0.32, doc 39).
 - `Inscripciones` — Lista de espera (v0.32, doc 39):
+
+**Menus/**
+
+- `Alergenos` — Los 14 alérgenos de declaración obligatoria (Reglamento (UE) 1169/2011) y lo que se deriva de ellos (doc 49, B1).
+- `Biblioteca` — La biblioteca básica común (doc 49, P-195):
+- `Conversion` — Utilidades pequeñas de texto de los menús.
+- `Escalado` — Unidades y escalado de las recetas (doc 49, B1).
+- `IngredientesTable` — Ingredientes ({prefix}asde_menu_ingredientes, doc 49, B1).
+- `Recetario` — El recetario del grupo (doc 49, B1):
+- `RecetasTable` — Recetas ({prefix}asde_menu_recetas) y sus líneas ({prefix}asde_menu_receta_lineas), doc 49, B1.
 
 **(raíz)/**
 
@@ -609,5 +625,5 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 
 ### Pruebas (`tests/`)
 
-`acceso` · `alta-reglas` · `alta-scouters` · `altas-crm-escritura` · `altas-crm-pantallas` · `altas-crm` · `app-enganches` · `ayuda` · `banco-gestion` · `colores` · `entorno` · `estilo-wordpress` · `eventos-avisos-config` · `eventos-calendario` · `eventos-economia` · `eventos-inscripciones` · `eventos` · `fichas-escritura` · `grupos-emails-banco` · `identidad` · `idiomas-catalogos` · `idiomas` · `inventario` · `lista-espera` · `mejoras-v029` · `mejoras-v030` · `mejoras-v031` · `mejoras-v034` · `mejoras-v0351` · `menus` · `migracion-tienda` · `modulos` · `organizacion` · `rendimiento` · `sepa` · `solicitudes` · `tema` · `tienda-catalogo` · `tienda-fase5` · `tienda-pedidos` · `tienda-publica` · `tienda` · `usuarios-listado`
+`acceso` · `alta-reglas` · `alta-scouters` · `altas-crm-escritura` · `altas-crm-pantallas` · `altas-crm` · `app-enganches` · `ayuda` · `banco-gestion` · `colores` · `entorno` · `estilo-wordpress` · `eventos-avisos-config` · `eventos-calendario` · `eventos-economia` · `eventos-inscripciones` · `eventos` · `fichas-escritura` · `grupos-emails-banco` · `identidad` · `idiomas-catalogos` · `idiomas` · `inventario` · `lista-espera` · `mejoras-v029` · `mejoras-v030` · `mejoras-v031` · `mejoras-v034` · `mejoras-v0351` · `menus-recetario` · `menus` · `migracion-tienda` · `modulos` · `organizacion` · `rendimiento` · `sepa` · `solicitudes` · `tema` · `tienda-catalogo` · `tienda-fase5` · `tienda-pedidos` · `tienda-publica` · `tienda` · `usuarios-listado`
 <!-- inventario:fin -->
