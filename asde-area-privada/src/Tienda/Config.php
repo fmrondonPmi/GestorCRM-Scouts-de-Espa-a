@@ -55,6 +55,9 @@ final class Config {
 			// v0.29 (petición del usuario): la primera camisa de cada scouter es gratis; desde la segunda, el precio.
 			'primera_gratis'    => true,
 			'texto_pago'        => '',
+			// v0.39 (doc 48, P-178): una cuenta y un Bizum por grupo.
+			'iban'              => '',
+			'bizum'             => '',
 		);
 	}
 
@@ -99,7 +102,21 @@ final class Config {
 		$cfg['abierto']        = (bool) $cfg['abierto'];
 		$cfg['primera_gratis'] = (bool) $cfg['primera_gratis'];
 		$cfg['texto_pago']     = mb_substr( (string) $cfg['texto_pago'], 0, 600 );
+		$cfg['iban']           = self::iban( (string) $cfg['iban'] );
+		$cfg['bizum']          = self::bizum( (string) $cfg['bizum'] );
 		return $cfg;
+	}
+
+	/** IBAN en mayúsculas y con espacios cada cuatro cifras, o '' si no tiene pinta de IBAN. */
+	public static function iban( string $iban ): string {
+		$iban = strtoupper( preg_replace( '/\s+/', '', $iban ) );
+		return preg_match( '/^[A-Z]{2}\d{2}[A-Z0-9]{10,30}$/', $iban ) ? trim( chunk_split( $iban, 4, ' ' ) ) : '';
+	}
+
+	/** Teléfono de Bizum (9 a 15 cifras, con un + inicial opcional), o ''. */
+	public static function bizum( string $telefono ): string {
+		$t = preg_replace( '/[\s.-]+/', '', $telefono );
+		return preg_match( '/^\+?\d{9,15}$/', $t ) ? $t : '';
 	}
 
 	public static function guardar( array $cfg, string $grupo = '' ): void {

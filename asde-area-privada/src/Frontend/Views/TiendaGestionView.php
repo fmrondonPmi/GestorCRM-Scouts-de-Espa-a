@@ -9,6 +9,7 @@ use AsdeBalears\AreaPrivada\Informes\Generador;
 use AsdeBalears\AreaPrivada\Inventario\MaterialesTable;
 use AsdeBalears\AreaPrivada\Inventario\TiposTable;
 use AsdeBalears\AreaPrivada\Tesoreria\Calculadora;
+use AsdeBalears\AreaPrivada\Tienda\Avisos;
 use AsdeBalears\AreaPrivada\Tienda\Config;
 use AsdeBalears\AreaPrivada\Tienda\PedidosTable;
 use AsdeBalears\AreaPrivada\Tienda\Servicio;
@@ -275,10 +276,11 @@ final class TiendaGestionView extends TiendaBaseView {
 				$fecha   = $this->post( 'fecha' );
 				$importe = (float) str_replace( ',', '.', $this->post( 'importe' ) );
 				if ( ! isset( PedidosTable::METODOS[ $metodo ] ) || ! preg_match( '/^\d{4}-\d{2}-\d{2}$/', $fecha ) || $fecha > wp_date( 'Y-m-d' ) || $importe < 0 ) {
-					$error = asde_t( 'Indica cómo se ha pagado (efectivo o ingreso), la fecha (no posterior a hoy) y el importe.' );
+					$error = asde_t( 'Indica cómo se ha pagado (efectivo, ingreso o Bizum), la fecha (no posterior a hoy) y el importe.' );
 					break;
 				}
 				PedidosTable::marcar_pago( $p['id'], $fecha, $metodo, $importe, $this->post( 'referencia' ) );
+				Avisos::enviar( (array) PedidosTable::obtener( $p['id'] ), Avisos::PAGADO ); // v0.39: aviso a quien hizo el pedido.
 				Logger::log( 'uniforme_pago', 'uniforme', (string) $p['id'], array( 'metodo' => $metodo, 'importe' => $importe ) );
 				$hecho = sprintf( asde_t( 'Pago de %s (%s) validado en el pedido %s.' ), Calculadora::euros( $importe ), mb_strtolower( asde_t( PedidosTable::METODOS[ $metodo ] ) ), $num );
 				break;
@@ -306,6 +308,7 @@ final class TiendaGestionView extends TiendaBaseView {
 
 			case 'uniforme_entregar':
 				if ( Servicio::puede_entregar( $p, $a ) && null === $p['entregado_en'] && PedidosTable::marcar_entregado( $p['id'] ) ) {
+					Avisos::enviar( (array) PedidosTable::obtener( $p['id'] ), Avisos::ENTREGADO ); // v0.39.
 					Logger::log( 'uniforme_entregado', 'uniforme', (string) $p['id'] );
 					$hecho = sprintf( asde_t( 'Pedido %s marcado como entregado. Falta que lo confirme el socio/a o su familia.' ), $num );
 				}

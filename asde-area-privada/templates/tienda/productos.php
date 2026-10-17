@@ -21,7 +21,7 @@ defined( 'ABSPATH' ) || exit;
 ?>
 <section class="asde-card" data-asde-inicio="abierto">
 	<header class="asde-card__header asde-card__header--split">
-		<h2 class="asde-card__title"><?php asde_e( 'Productos de la tienda' ); ?></h2>
+		<h2 class="asde-card__title"><?php asde_e( 'Inventario de la tienda' ); ?></h2>
 		<span class="asde-actions asde-actions--botones">
 			<a class="button" href="<?php echo esc_url( $url_nuevo ); ?>"><?php asde_e( 'Añadir producto' ); ?></a>
 			<a class="button asde-button-secundario" href="<?php echo esc_url( $url_csv ); ?>"><?php asde_e( 'Cargar desde CSV' ); ?></a>

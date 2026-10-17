@@ -29,6 +29,10 @@ $imagen = static function ( string $campo, int $adjunto, string $alt ): string {
 			<input type="text" id="asde-uc-precio" name="precio_camisa" value="<?php echo esc_attr( $euros( $cfg['precio_camisa'] ) ); ?>" inputmode="decimal" size="8">
 		</p>
 		<label class="asde-choice"><input type="checkbox" name="primera_gratis" value="1" <?php checked( $cfg['primera_gratis'] ); ?>><span><?php asde_e( 'La primera camisa de cada scouter es gratis (desde la segunda, paga el precio)' ); ?></span></label>
+		<p class="asde-form__fila">
+			<label for="asde-uc-iban"><?php asde_e( 'Cuenta del grupo (IBAN) para las transferencias' ); ?> <input type="text" id="asde-uc-iban" name="iban" value="<?php echo esc_attr( $cfg['iban'] ); ?>" maxlength="42" autocomplete="off" placeholder="ES00 0000 0000 0000 0000 0000"></label>
+			<label for="asde-uc-bizum"><?php asde_e( 'Teléfono de Bizum del grupo' ); ?> <input type="text" id="asde-uc-bizum" name="bizum" value="<?php echo esc_attr( $cfg['bizum'] ); ?>" maxlength="20" inputmode="tel" autocomplete="off"></label>
+		</p>
 		<p>
 			<label for="asde-uc-texto"><?php asde_e( 'Cómo pagar (lo ven las familias al pedir)' ); ?></label>
 			<textarea id="asde-uc-texto" name="texto_pago" rows="3" maxlength="600" placeholder="<?php echo esc_attr( asde_a( 'Por ejemplo: en efectivo en el local los sábados, o por ingreso en la cuenta ES00 0000… indicando el nº de pedido.' ) ); ?>"><?php echo esc_textarea( $cfg['texto_pago'] ); ?></textarea>

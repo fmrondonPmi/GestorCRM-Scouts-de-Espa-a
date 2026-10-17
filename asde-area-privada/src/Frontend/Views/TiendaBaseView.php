@@ -6,7 +6,7 @@ use AsdeBalears\AreaPrivada\Tienda\Servicio;
 
 defined( 'ABSPATH' ) || exit;
 
-/** Base de las páginas de la tienda: pestañas «Mis pedidos · Gestión · Productos · Configuración». */
+/** Base de las páginas de la tienda: pestañas «Mis pedidos · Gestión · Inventario de la tienda · Configuración». */
 abstract class TiendaBaseView extends View {
 
 	protected const MAX_IMAGEN = 3 * MB_IN_BYTES;
@@ -27,7 +27,7 @@ abstract class TiendaBaseView extends View {
 			$items['tienda_gestion'] = asde_t( 'Gestión de pedidos' );
 		}
 		if ( current_user_can( Servicio::CAP_ADMIN ) ) {
-			$items['tienda_productos'] = asde_t( 'Productos' );
+			$items['tienda_productos'] = asde_t( 'Inventario de la tienda' );
 		}
 		if ( current_user_can( Servicio::CAP_CONFIG ) ) {
 			$items['tienda_config'] = asde_t( 'Configuración' );

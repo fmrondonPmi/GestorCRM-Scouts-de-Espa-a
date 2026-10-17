@@ -83,10 +83,13 @@ $form    = static function ( string $accion, string $boton, string $clase = 'asd
 					<input type="hidden" name="asde_action" value="uniforme_pago">
 					<input type="hidden" name="pedido" value="<?php echo (int) $p['id']; ?>">
 					<input type="hidden" name="desde" value="detalle">
+					<?php if ( '' !== $p['forma_pago'] ) : ?>
+						<p class="asde-help"><?php echo esc_html( sprintf( asde_t( 'Quien lo pidió eligió pagar con: %s.' ), asde_t( PedidosTable::FORMAS[ $p['forma_pago'] ] ?? '' ) ) ); ?></p>
+					<?php endif; ?>
 					<fieldset>
 						<legend class="screen-reader-text"><?php asde_e( 'Cómo se ha pagado' ); ?></legend>
 						<?php foreach ( asde_ta( PedidosTable::METODOS ) as $m => $etiqueta ) : ?>
-							<label class="asde-choice"><input type="radio" name="metodo" value="<?php echo esc_attr( $m ); ?>" <?php checked( 'efectivo', $m ); ?>><span><?php echo esc_html( $etiqueta ); ?></span></label>
+							<label class="asde-choice"><input type="radio" name="metodo" value="<?php echo esc_attr( $m ); ?>" <?php checked( PedidosTable::METODO_DE_FORMA[ $p['forma_pago'] ] ?? 'efectivo', $m ); ?>><span><?php echo esc_html( $etiqueta ); ?></span></label>
 						<?php endforeach; ?>
 					</fieldset>
 					<p class="asde-form__fila">
@@ -95,7 +98,7 @@ $form    = static function ( string $accion, string $boton, string $clase = 'asd
 						<label><?php asde_e( 'Referencia (opcional)' ); ?> <input type="text" name="referencia" maxlength="120" placeholder="<?php echo esc_attr( PedidosTable::numero( $p ) ); ?>"></label>
 					</p>
 					<?php if ( $p['provisional'] ) : ?>
-						<p class="asde-help asde-help--warning"><?php asde_e( 'Se pidió con insignias sin precio: el importe propuesto usa los precios de hoy' ); ?><?php echo Servicio::total( $p['lineas'], \AsdeBalears\AreaPrivada\Tienda\Config::de() )['provisional'] ? esc_html( asde_t( ', y alguna sigue sin precio: escribe lo que se ha cobrado' ) ) : ''; ?>.</p>
+						<p class="asde-help asde-help--warning"><?php asde_e( 'Se pidió con artículos sin precio: el importe propuesto usa los precios de hoy' ); ?><?php echo Servicio::total( $p['lineas'], \AsdeBalears\AreaPrivada\Tienda\Config::de() )['provisional'] ? esc_html( asde_t( ', y alguna sigue sin precio: escribe lo que se ha cobrado' ) ) : ''; ?>.</p>
 					<?php endif; ?>
 					<p><button type="submit" class="button"><?php asde_e( 'Validar el pago' ); ?></button></p>
 				</form>

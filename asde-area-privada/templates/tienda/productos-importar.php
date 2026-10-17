@@ -17,7 +17,7 @@ defined( 'ABSPATH' ) || exit;
 
 $columnas = array_map( static fn( $c ) => asde_t( $c[0] ), ImportadorProductos::COLUMNAS );
 ?>
-<p class="asde-back asde-solo-pagina"><a href="<?php echo esc_url( $url_lista ); ?>"><?php asde_e( '← Productos' ); ?></a></p>
+<p class="asde-back asde-solo-pagina"><a href="<?php echo esc_url( $url_lista ); ?>"><?php asde_e( '← Inventario de la tienda' ); ?></a></p>
 
 <?php if ( $resultado ) : ?>
 	<section class="asde-card asde-inv-importar" data-asde-inicio="abierto">

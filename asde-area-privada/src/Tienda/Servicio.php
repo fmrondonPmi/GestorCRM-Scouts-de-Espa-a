@@ -105,6 +105,13 @@ final class Servicio {
 	public static function total( array $lineas, array $cfg ): array {
 		$total       = (float) ( $lineas['camisa']['precio'] ?? 0 );
 		$provisional = false;
+		foreach ( (array) ( $lineas['productos'] ?? array() ) as $l ) {
+			if ( null === ( $l['precio'] ?? null ) ) {
+				$provisional = true; // v0.39: un producto «por confirmar»; Tesorería cobra el importe real.
+				continue;
+			}
+			$total += (int) $l['cantidad'] * (float) $l['precio'];
+		}
 		foreach ( $lineas['insignias'] as $i ) {
 			$precio = $i['precio'] ?? ( $cfg['insignias'][ $i['id'] ]['precio'] ?? null );
 			if ( null === $precio ) {
@@ -128,7 +135,230 @@ final class Servicio {
 		foreach ( $lineas['insignias'] as $i ) {
 			$partes[] = $i['nombre'] . ( (int) $i['cantidad'] > 1 ? ' ×' . (int) $i['cantidad'] : '' );
 		}
+		foreach ( (array) ( $lineas['productos'] ?? array() ) as $l ) {
+			$partes[] = $l['nombre'] . ( '' !== (string) ( $l['etiqueta'] ?? '' ) && 'Única' !== $l['etiqueta'] ? ' (' . $l['etiqueta'] . ')' : '' ) . ( (int) $l['cantidad'] > 1 ? ' ×' . (int) $l['cantidad'] : '' );
+		}
 		return implode( ' · ', $partes );
+	}
+
+	// ---------------------------------------------------------------------
+	// La tienda (v0.39, doc 48, fase 3): catálogo, carrito y pago
+	// ---------------------------------------------------------------------
+
+	/** La camisa y las insignias se siguen pidiendo en el formulario de uniforme; el resto, desde el catálogo. */
+	public static function en_catalogo( array $producto ): bool {
+		return 'camisa' !== $producto['ref'] && 0 !== strpos( $producto['ref'], 'insignia:' );
+	}
+
+	/**
+	 * Lo que ve quien compra: los productos visibles para él o ella (el filtro «solo socios» está en la consulta)
+	 * con sus variantes activas.
+	 *
+	 * @return array<int, array{producto:array, variantes:array[]}>
+	 */
+	public static function catalogo( bool $es_socio ): array {
+		$productos = array_values( array_filter( ProductosTable::visibles( $es_socio ), array( self::class, 'en_catalogo' ) ) );
+		$variantes = VariantesTable::de_productos( array_column( $productos, 'id' ) );
+		$out       = array();
+		foreach ( $productos as $p ) {
+			$activas = array_values( array_filter( $variantes[ $p['id'] ] ?? array(), static fn( array $v ) => 1 === $v['activo'] ) );
+			if ( $activas ) {
+				$out[] = array(
+					'producto'  => $p,
+					'variantes' => $activas,
+				);
+			}
+		}
+		return $out;
+	}
+
+	/** Precio de una variante: el suyo, si lo tiene; si no, el del producto (con el de socio, si procede). null = por confirmar. */
+	public static function precio_variante( array $producto, array $variante, bool $es_socio ): ?float {
+		return null !== $variante['precio'] ? $variante['precio'] : ProductosTable::precio_para( $producto, $es_socio );
+	}
+
+	/** Unidades de un producto que ya tiene pedidas esta persona (pedidos no cancelados). */
+	public static function ya_pedidas( string $socio, int $producto ): int {
+		$n = 0;
+		foreach ( PedidosTable::de_socios( array( $socio ) ) as $p ) {
+			if ( null !== $p['cancelado_en'] ) {
+				continue;
+			}
+			foreach ( $p['lineas']['productos'] as $l ) {
+				if ( (int) $l['producto'] === $producto ) {
+					$n += (int) $l['cantidad'];
+				}
+			}
+		}
+		return $n;
+	}
+
+	/**
+	 * Líneas del pedido del catálogo a partir de las cantidades del formulario, con los precios del servidor
+	 * (nada de precios que vengan del navegador). Comprueba la visibilidad, las variantes activas, el límite por
+	 * persona y que queden unidades; todavía no las reserva.
+	 *
+	 * @param array<int|string, int|string> $cantidades id de variante => cantidad.
+	 * @return array[]|\WP_Error
+	 */
+	public static function lineas_tienda( bool $es_socio, array $cantidades, string $socio ) {
+		$lineas = array();
+		foreach ( $cantidades as $id => $cantidad ) {
+			$cantidad = (int) $cantidad;
+			if ( $cantidad <= 0 ) {
+				continue;
+			}
+			$v = VariantesTable::obtener( (int) $id );
+			$p = $v ? ProductosTable::obtener( $v['producto'] ) : null;
+			if ( ! $v || ! $p || 1 !== $v['activo'] || ! self::en_catalogo( $p ) || ! ProductosTable::visible_para( $p, $es_socio ) ) {
+				return new \WP_Error( 'asde_tienda', asde_t( 'Alguno de los productos elegidos ya no está disponible. Revisa tu selección.' ) );
+			}
+			if ( $cantidad > ProductosTable::MAX_LIMITE ) {
+				return new \WP_Error( 'asde_tienda', asde_t( 'La cantidad no es válida.' ) );
+			}
+			if ( $p['limite_persona'] > 0 && self::ya_pedidas( $socio, $p['id'] ) + $cantidad > $p['limite_persona'] ) {
+				/* translators: 1: producto, 2: máximo por persona */
+				return new \WP_Error( 'asde_tienda', sprintf( asde_t( 'De «%1$s» solo se pueden pedir %2$d por persona.' ), $p['nombre'], $p['limite_persona'] ) );
+			}
+			if ( ! VariantesTable::hay( $v, $cantidad ) ) {
+				/* translators: %s: producto */
+				return new \WP_Error( 'asde_tienda', sprintf( asde_t( 'No quedan unidades suficientes de «%s».' ), $p['nombre'] ) );
+			}
+			$lineas[] = array(
+				'producto'  => $p['id'],
+				'variante'  => $v['id'],
+				'nombre'    => $p['nombre'],
+				'etiqueta'  => $v['etiqueta'],
+				'cantidad'  => $cantidad,
+				'precio'    => self::precio_variante( $p, $v, $es_socio ),
+				'proveedor' => (int) $p['requiere_proveedor'],
+				'reservado' => false,
+			);
+		}
+		if ( ! $lineas ) {
+			return new \WP_Error( 'asde_tienda', asde_t( 'Elige al menos un producto.' ) );
+		}
+		return $lineas;
+	}
+
+	/**
+	 * Forma de pago elegida: transferencia o Bizum para cualquiera; «en físico» (a Tesorería) solo para socios/as.
+	 *
+	 * @return string|\WP_Error La forma, o '' si no se ha elegido y no hace falta.
+	 */
+	public static function forma_valida( string $forma, bool $es_socio, bool $obligatoria ) {
+		if ( '' === $forma ) {
+			return $obligatoria ? new \WP_Error( 'asde_tienda', asde_t( 'Elige cómo vas a pagar.' ) ) : '';
+		}
+		if ( ! isset( PedidosTable::FORMAS[ $forma ] ) ) {
+			return new \WP_Error( 'asde_tienda', asde_t( 'Elige cómo vas a pagar.' ) );
+		}
+		if ( 'fisico' === $forma && ! $es_socio ) {
+			return new \WP_Error( 'asde_tienda', asde_t( 'Pagar en físico a Tesorería solo está disponible para socios y socias.' ) );
+		}
+		return $forma;
+	}
+
+	/**
+	 * Compra del catálogo: reserva las existencias (una sentencia por variante, sin vender dos veces lo mismo) y
+	 * crea el pedido. Si algo falla, devuelve lo reservado.
+	 *
+	 * @param array<int|string, int|string> $cantidades id de variante => cantidad.
+	 * @return int|\WP_Error Id del pedido.
+	 */
+	public static function comprar( Ambito $a, string $socio, array $cantidades, string $nota, string $forma_pago ) {
+		$cfg = Config::de();
+		if ( ! $cfg['abierto'] ) {
+			return new \WP_Error( 'asde_tienda', asde_t( 'Ahora mismo no se aceptan pedidos.' ) );
+		}
+		$persona = self::para_quien( $a )[ $socio ] ?? null;
+		if ( ! $persona ) {
+			return new \WP_Error( 'asde_tienda', asde_t( 'No puedes hacer un pedido para esa persona.' ) );
+		}
+		$es_socio = $persona->tiene_membresia_activa();
+		$forma    = self::forma_valida( $forma_pago, $es_socio, true );
+		if ( is_wp_error( $forma ) ) {
+			return $forma;
+		}
+		$productos = self::lineas_tienda( $es_socio, $cantidades, $socio );
+		if ( is_wp_error( $productos ) ) {
+			return $productos;
+		}
+		$hechas = array();
+		foreach ( $productos as $i => $l ) {
+			if ( ! VariantesTable::reservar( $l['variante'], $l['cantidad'] ) ) {
+				self::devolver_lineas( $hechas );
+				/* translators: %s: producto */
+				return new \WP_Error( 'asde_tienda', sprintf( asde_t( 'No quedan unidades suficientes de «%s».' ), $l['nombre'] ) );
+			}
+			$productos[ $i ]['reservado'] = true;
+			$hechas[]                     = $productos[ $i ];
+		}
+		$lineas = array(
+			'camisa'    => null,
+			'insignias' => array(),
+			'productos' => $productos,
+		);
+		$t      = self::total( $lineas, $cfg );
+		$id     = PedidosTable::crear( $persona->num_socio_asde, $persona->secciones, $persona->es_adulto_voluntario(), $lineas, $t['total'], $t['provisional'], $nota, $forma );
+		if ( ! $id ) {
+			self::devolver_lineas( $hechas );
+			return new \WP_Error( 'asde_tienda', asde_t( 'No se ha podido guardar el pedido.' ) );
+		}
+		// Lo que sale de las existencias no va al proveedor: queda como incluido.
+		if ( ! array_filter( $productos, static fn( array $l ) => ! empty( $l['proveedor'] ) ) ) {
+			PedidosTable::marcar_pedido( array( $id ), PedidosTable::REF_TIENDA );
+		}
+		// Sin nada que pagar (todo a 0 €): queda pagado «sin coste».
+		if ( 0.0 === (float) $t['total'] && ! $t['provisional'] ) {
+			PedidosTable::marcar_pago( $id, wp_date( 'Y-m-d' ), '', 0.0, PedidosTable::REF_GRATIS );
+		}
+		Logger::log(
+			'tienda_pedido',
+			'tienda',
+			(string) $id,
+			array(
+				'lineas'     => count( $productos ),
+				'total'      => $t['total'],
+				'forma_pago' => $forma,
+				'para_otros' => ! isset( self::propios( $a )[ $socio ] ),
+			)
+		);
+		$pedido = PedidosTable::obtener( $id );
+		if ( $pedido ) {
+			Avisos::enviar( $pedido, Avisos::PEDIDO );
+		}
+		return $id;
+	}
+
+	/** Devuelve a las existencias lo que se había reservado en estas líneas. @param array[] $lineas */
+	public static function devolver_lineas( array $lineas ): void {
+		foreach ( $lineas as $l ) {
+			if ( ! empty( $l['reservado'] ) ) {
+				VariantesTable::devolver( (int) $l['variante'], (int) $l['cantidad'] );
+			}
+		}
+	}
+
+	/**
+	 * Cómo pagar este pedido, con los datos del grupo: una frase por cada dato que tenga el grupo configurado.
+	 *
+	 * @return string[]
+	 */
+	public static function instrucciones_pago( array $p, array $cfg ): array {
+		$num = PedidosTable::numero( $p );
+		switch ( $p['forma_pago'] ) {
+			case 'transferencia':
+				/* translators: 1: IBAN, 2: nº de pedido */
+				return '' !== $cfg['iban'] ? array( sprintf( asde_t( 'Transferencia a la cuenta %1$s, indicando como concepto el nº de pedido %2$s.' ), $cfg['iban'], $num ) ) : array( sprintf( asde_t( 'Transferencia a la cuenta del grupo, indicando como concepto el nº de pedido %s.' ), $num ) );
+			case 'bizum':
+				/* translators: 1: teléfono de Bizum, 2: nº de pedido */
+				return '' !== $cfg['bizum'] ? array( sprintf( asde_t( 'Bizum al %1$s, indicando como concepto el nº de pedido %2$s.' ), $cfg['bizum'], $num ) ) : array( sprintf( asde_t( 'Bizum al teléfono del grupo, indicando como concepto el nº de pedido %s.' ), $num ) );
+			case 'fisico':
+				/* translators: %s: nº de pedido */
+				return array( sprintf( asde_t( 'Entrega el importe en físico a Tesorería, indicando el nº de pedido %s.' ), $num ) );
+		}
+		return array();
 	}
 
 	public static function importe( array $p ): string {
@@ -280,7 +510,7 @@ final class Servicio {
 
 	/** El socio/a o su familia (o quien lo pidió, v0.30) cancela el suyo mientras nadie haya validado nada. */
 	public static function puede_cancelar_propio( array $p, Ambito $a ): bool {
-		return ( self::es_propio( $p, $a ) || self::lo_pidio( $p ) ) && null === $p['cancelado_en'] && null === $p['pago_en'] && null === $p['pedido_en'] && null === $p['entregado_en'];
+		return ( self::es_propio( $p, $a ) || self::lo_pidio( $p ) ) && null === $p['cancelado_en'] && null === $p['pago_en'] && ( null === $p['pedido_en'] || PedidosTable::REF_TIENDA === $p['pedido_ref'] ) && null === $p['entregado_en'];
 	}
 
 	/**
@@ -288,11 +518,18 @@ final class Servicio {
 	 * vuelve a él. Lo usan la familia («Mi uniforme») y la gestión.
 	 */
 	public static function cancelar( array $p, string $motivo ): bool {
-		if ( (int) $p['inventario_id'] && null === $p['entregado_en'] ) {
-			MaterialesTable::devolver_camisa( (int) $p['inventario_id'], (string) ( $p['lineas']['camisa']['modelo'] ?? '' ), (string) ( $p['lineas']['camisa']['talla'] ?? '' ) );
-			PedidosTable::quitar_camisa_servida( $p['id'], false );
+		// Primero se marca cancelado (una sola sentencia, solo si seguía en curso): así dos cancelaciones a la vez no devuelven dos veces.
+		if ( ! PedidosTable::cancelar( $p['id'], $motivo ) ) {
+			return false;
 		}
-		return PedidosTable::cancelar( $p['id'], $motivo );
+		if ( null === $p['entregado_en'] ) {
+			if ( (int) $p['inventario_id'] ) {
+				MaterialesTable::devolver_camisa( (int) $p['inventario_id'], (string) ( $p['lineas']['camisa']['modelo'] ?? '' ), (string) ( $p['lineas']['camisa']['talla'] ?? '' ) );
+				PedidosTable::quitar_camisa_servida( $p['id'], false );
+			}
+			self::devolver_lineas( $p['lineas']['productos'] ); // v0.39: lo del catálogo vuelve a las existencias.
+		}
+		return true;
 	}
 
 	/** Tesorería o Coordinación cancelan cualquiera hasta que se entregue. */
@@ -347,7 +584,7 @@ final class Servicio {
 	// ---------------------------------------------------------------------
 
 	/** @return int|\WP_Error Id del pedido. */
-	public static function pedir( Ambito $a, string $socio, array $lineas, string $nota ) {
+	public static function pedir( Ambito $a, string $socio, array $lineas, string $nota, string $forma_pago = '' ) {
 		$cfg = Config::de();
 		if ( ! $cfg['abierto'] ) {
 			return new \WP_Error( 'asde_uniforme', asde_t( 'Ahora mismo no se aceptan pedidos de uniforme.' ) );
@@ -356,12 +593,16 @@ final class Servicio {
 		if ( ! $p ) {
 			return new \WP_Error( 'asde_uniforme', asde_t( 'No puedes hacer un pedido para esa persona.' ) );
 		}
+		$forma = self::forma_valida( $forma_pago, $p->tiene_membresia_activa(), false ); // v0.39: opcional en el uniforme.
+		if ( is_wp_error( $forma ) ) {
+			return $forma;
+		}
 		if ( $lineas['camisa'] ) {
 			// El de la persona para la que es (v0.30: también si lo pide un scouter de su sección).
 			$lineas['camisa']['precio'] = self::precio_camisa( $p->num_socio_asde, $p->es_adulto_voluntario(), $cfg );
 		}
 		$t  = self::total( $lineas, $cfg );
-		$id = PedidosTable::crear( $p->num_socio_asde, $p->secciones, $p->es_adulto_voluntario(), $lineas, $t['total'], $t['provisional'], $nota );
+		$id = PedidosTable::crear( $p->num_socio_asde, $p->secciones, $p->es_adulto_voluntario(), $lineas, $t['total'], $t['provisional'], $nota, $forma );
 		if ( ! $id ) {
 			return new \WP_Error( 'asde_uniforme', asde_t( 'No se ha podido guardar el pedido.' ) );
 		}
@@ -380,6 +621,10 @@ final class Servicio {
 				'para_otros' => ! isset( self::propios( $a )[ $socio ] ), // v0.30: un scouter para alguien de su sección.
 			)
 		);
+		$pedido = PedidosTable::obtener( $id );
+		if ( $pedido ) {
+			Avisos::enviar( $pedido, Avisos::PEDIDO );
+		}
 		return $id;
 	}
 
@@ -549,6 +794,7 @@ final class Servicio {
 	public static function resumen( array $pedidos, array $cfg ): array {
 		$camisas   = array();
 		$insignias = array();
+		$productos = array();
 		$n         = 0;
 		foreach ( $cfg['modelos'] as $id => $m ) {
 			$camisas[ $id ] = array(
@@ -568,10 +814,20 @@ final class Servicio {
 				$insignias[ $i['id'] ]['nombre']   = $i['nombre'];
 				$insignias[ $i['id'] ]['cantidad'] = ( $insignias[ $i['id'] ]['cantidad'] ?? 0 ) + (int) $i['cantidad'];
 			}
+			// v0.39: lo del catálogo que se encarga al proveedor.
+			foreach ( $p['lineas']['productos'] as $l ) {
+				if ( empty( $l['proveedor'] ) ) {
+					continue;
+				}
+				$k                                = $l['producto'] . '|' . $l['variante'];
+				$productos[ $k ]['nombre']        = $l['nombre'] . ( 'Única' !== $l['etiqueta'] ? ' (' . $l['etiqueta'] . ')' : '' );
+				$productos[ $k ]['cantidad']      = ( $productos[ $k ]['cantidad'] ?? 0 ) + (int) $l['cantidad'];
+			}
 		}
 		return array(
 			'camisas'       => $camisas,
 			'insignias'     => $insignias,
+			'productos'     => array_values( $productos ),
 			'total_camisas' => $n,
 		);
 	}

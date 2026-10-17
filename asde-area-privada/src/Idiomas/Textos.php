@@ -75,7 +75,8 @@ final class Textos {
 		$add( PedidosTable::METODOS, 'Uniformes' );
 		$add( PedidosTable::FILTROS, 'Uniformes' );
 		$add( PedidosTable::ESTADOS, 'Uniformes' );
-		$add( array( PedidosTable::REF_INVENTARIO, PedidosTable::REF_SIN_COSTE ), 'Uniformes' );
+		$add( array( PedidosTable::REF_INVENTARIO, PedidosTable::REF_SIN_COSTE, PedidosTable::REF_TIENDA, PedidosTable::REF_GRATIS ), 'Uniformes' );
+		$add( PedidosTable::FORMAS, 'Tienda' );
 		$add( \AsdeBalears\AreaPrivada\Tienda\Config::PARA_QUIEN, 'Uniformes' );
 		// v0.39 (doc 48, fase 2): el catálogo de la tienda.
 		$add( \AsdeBalears\AreaPrivada\Tienda\ProductosTable::VISIBILIDADES, 'Tienda' );

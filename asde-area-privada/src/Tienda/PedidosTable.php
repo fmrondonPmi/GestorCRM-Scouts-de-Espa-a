@@ -25,7 +25,30 @@ final class PedidosTable {
 	public const METODOS = array(
 		'efectivo' => 'Efectivo',
 		'ingreso'  => 'Ingreso en cuenta',
+		'bizum'    => 'Bizum',
 	);
+
+	/**
+	 * v0.39 (doc 48, fase 3): cómo elige pagar quien compra y, entre paréntesis, el método con el que Tesorería
+	 * lo valida. «En físico» (a Tesorería) solo lo puede elegir un socio/a (P-174).
+	 */
+	public const FORMAS = array(
+		'transferencia' => 'Transferencia',
+		'bizum'         => 'Bizum',
+		'fisico'        => 'En físico (a Tesorería)',
+	);
+
+	public const METODO_DE_FORMA = array(
+		'transferencia' => 'ingreso',
+		'bizum'         => 'bizum',
+		'fisico'        => 'efectivo',
+	);
+
+	/** v0.39: referencia del pago de un pedido que no cuesta nada. */
+	public const REF_GRATIS = 'Sin coste';
+
+	/** v0.39: «pedido del grupo» de los pedidos de la tienda que salen de las existencias (no van al proveedor). */
+	public const REF_TIENDA = 'De las existencias de la tienda';
 
 	/**
 	 * v0.29: «pedido del grupo» de los pedidos cuya camisa sale del inventario (no van al
@@ -76,6 +99,7 @@ final class PedidosTable {
 				total decimal(10,2) NOT NULL DEFAULT 0,
 				provisional tinyint(1) NOT NULL DEFAULT 0,
 				nota varchar(255) NOT NULL DEFAULT '',
+				forma_pago varchar(14) NOT NULL DEFAULT '',
 				creado datetime NOT NULL,
 				creado_por bigint(20) unsigned NOT NULL DEFAULT 0,
 				pago_fecha date NULL,
@@ -111,7 +135,7 @@ final class PedidosTable {
 	 * @param array{camisa:?array, insignias:array} $lineas
 	 * @return int Id del pedido.
 	 */
-	public static function crear( string $socio, array $secciones, bool $adulto, array $lineas, float $total, bool $provisional, string $nota ): int {
+	public static function crear( string $socio, array $secciones, bool $adulto, array $lineas, float $total, bool $provisional, string $nota, string $forma_pago = '' ): int {
 		global $wpdb;
 		$wpdb->insert(
 			self::table(),
@@ -124,6 +148,7 @@ final class PedidosTable {
 				'total'       => round( $total, 2 ),
 				'provisional' => $provisional ? 1 : 0,
 				'nota'        => mb_substr( sanitize_text_field( $nota ), 0, 255 ),
+				'forma_pago'  => isset( self::FORMAS[ $forma_pago ] ) ? $forma_pago : '',
 				'creado'      => current_time( 'mysql', true ),
 				'creado_por'  => get_current_user_id(),
 			)
@@ -293,15 +318,11 @@ final class PedidosTable {
 		);
 	}
 
+	/** Cancela un pedido en curso, con una sola sentencia. @return bool false si no existe o ya estaba cancelado. */
 	public static function cancelar( int $id, string $motivo ): bool {
-		return self::actualizar(
-			$id,
-			array(
-				'cancelado_por'    => get_current_user_id(),
-				'cancelado_en'     => current_time( 'mysql', true ),
-				'cancelado_motivo' => mb_substr( sanitize_text_field( $motivo ), 0, 255 ),
-			)
-		);
+		global $wpdb;
+		$filas = $wpdb->query( $wpdb->prepare( 'UPDATE %i SET cancelado_por = %d, cancelado_en = %s, cancelado_motivo = %s WHERE id = %d AND grupo = %s AND cancelado_en IS NULL', self::table(), get_current_user_id(), current_time( 'mysql', true ), mb_substr( sanitize_text_field( $motivo ), 0, 255 ), $id, Grupo::numero() ) ); // phpcs:ignore WordPress.DB
+		return 1 === (int) $filas;
 	}
 
 	public static function recalcular( int $id, float $total, bool $provisional ): bool {
@@ -365,7 +386,9 @@ final class PedidosTable {
 		$f['lineas']      = array(
 			'camisa'    => is_array( $lineas['camisa'] ?? null ) ? $lineas['camisa'] : null,
 			'insignias' => array_values( array_filter( (array) ( $lineas['insignias'] ?? array() ), 'is_array' ) ),
+			'productos' => array_values( array_filter( (array) ( $lineas['productos'] ?? array() ), 'is_array' ) ), // v0.39: lo del catálogo.
 		);
+		$f['forma_pago']  = (string) ( $f['forma_pago'] ?? '' );
 		$f['pago_importe'] = null === $f['pago_importe'] ? null : (float) $f['pago_importe'];
 		foreach ( array( 'creado_por', 'pago_por', 'pedido_por', 'entregado_por', 'recibido_por', 'cancelado_por' ) as $k ) {
 			$f[ $k ] = (int) $f[ $k ];

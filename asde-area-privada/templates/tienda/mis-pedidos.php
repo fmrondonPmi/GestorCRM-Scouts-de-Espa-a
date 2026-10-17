@@ -8,6 +8,8 @@
  * @var array[]                                            $grupos  v0.30: con muchas personas, agrupadas para el desplegable (etiqueta, personas); vacío si van en botones
  * @var bool                                               $otros   v0.30: puede pedir también para socios/as de sus secciones (scouter)
  * @var array[]                                            $pedidos
+ * @var array[]                                            $catalogo v0.39: productos de la tienda que puede comprar (producto, variantes)
+ * @var bool                                               $es_socio v0.39: si alguna de sus personas es socio/a (productos «solo socios» y pago en físico)
  * @var AsdeBalears\AreaPrivada\Auth\Ambito                $ambito
  * @var array<string, array{nombre:string, url:string}>   $guias   Guías de tallas por modelo
  * @var string                                             $colocar Imagen «dónde van las insignias» ('' si no hay)
@@ -15,6 +17,7 @@
  * @var string                                             $url_pagos
  */
 // phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound, WordPress.WP.GlobalVariablesOverride.Prohibited -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
+use AsdeBalears\AreaPrivada\Frontend\TemplateLoader;
 use AsdeBalears\AreaPrivada\Tesoreria\Calculadora;
 use AsdeBalears\AreaPrivada\Tienda\Config;
 use AsdeBalears\AreaPrivada\Tienda\PedidosTable;
@@ -62,6 +65,11 @@ $insignias = Config::insignias_activas( $cfg );
 						<span class="asde-badge asde-badge--uniforme-<?php echo esc_attr( $estado ); ?>"><?php echo esc_html( asde_t( PedidosTable::ESTADOS[ $estado ] ) ); ?></span>
 					</header>
 					<p class="asde-pedido__contenido"><?php echo esc_html( Servicio::descripcion( $p['lineas'] ) ); ?> — <strong><?php echo esc_html( null !== $p['pago_importe'] ? Calculadora::euros( $p['pago_importe'] ) : Servicio::importe( $p ) ); ?></strong></p>
+					<?php if ( 'cancelado' !== $estado && null === $p['pago_en'] && '' !== $p['forma_pago'] ) : ?>
+						<?php foreach ( Servicio::instrucciones_pago( $p, $cfg ) as $linea ) : ?>
+							<p class="asde-help"><?php echo esc_html( $linea ); ?></p>
+						<?php endforeach; ?>
+					<?php endif; ?>
 					<?php if ( 'cancelado' === $estado ) : ?>
 						<p class="asde-muted"><?php asde_e( 'Cancelado el' ); ?> <?php echo esc_html( $fecha( $p['cancelado_en'] ) ); ?>.</p>
 					<?php else : ?>
@@ -91,6 +99,10 @@ $insignias = Config::insignias_activas( $cfg );
 			<?php endforeach; ?>
 		</div>
 	</section>
+<?php endif; ?>
+
+<?php if ( $catalogo ) : ?>
+	<?php echo TemplateLoader::render( 'tienda/catalogo', array( 'catalogo' => $catalogo, 'cfg' => $cfg, 'para' => $para, 'es_socio' => $es_socio ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 <?php endif; ?>
 
 <section class="asde-card">
@@ -191,6 +203,7 @@ $insignias = Config::insignias_activas( $cfg );
 				</fieldset>
 			<?php endif; ?>
 
+			<?php echo TemplateLoader::render( 'tienda/forma-pago', array( 'cfg' => $cfg, 'es_socio' => $es_socio, 'obligatoria' => false ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 			<p>
 				<label for="asde-uni-nota"><?php asde_e( 'Observaciones (opcional)' ); ?></label>
 				<input type="text" id="asde-uni-nota" name="nota" maxlength="255">

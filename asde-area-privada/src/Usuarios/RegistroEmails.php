@@ -55,6 +55,9 @@ final class RegistroEmails {
 	/** Avisos de los eventos (v0.35, doc 43): publicación, confirmación, plaza libre, recordatorio y cancelación. */
 	public const EVENTOS = 'eventos';
 
+	/** Avisos de la tienda (v0.39, doc 48): pedido recibido, pago validado y pedido entregado. */
+	public const TIENDA = 'tienda';
+
 	public const TIPOS = array(
 		Invitacion::ALTA      => 'Invitación',
 		Invitacion::RESET     => 'Recuperar contraseña',
@@ -65,6 +68,7 @@ final class RegistroEmails {
 		self::BAJA            => 'Aviso de baja',
 		self::LISTA_ESPERA    => 'Lista de espera',
 		self::EVENTOS         => 'Eventos',
+		self::TIENDA          => 'Tienda',
 	);
 
 	public static function table(): string {
@@ -213,6 +217,9 @@ final class RegistroEmails {
 		if ( self::EVENTOS === $fila['tipo'] ) {
 			$user = ! empty( $fila['user_id'] ) ? get_userdata( (int) $fila['user_id'] ) : false;
 			return \AsdeBalears\AreaPrivada\Eventos\Avisos::html( $datos, $user ? Contacto::saludo( $user ) : '' );
+		}
+		if ( self::TIENDA === $fila['tipo'] ) {
+			return \AsdeBalears\AreaPrivada\Tienda\Avisos::html( $datos, $user ? Contacto::saludo( $user ) : '' );
 		}
 		if ( self::COMPRA === $fila['tipo'] ) {
 			$lista = \AsdeBalears\AreaPrivada\Inventario\ComprasTable::obtener( (int) ( $datos['lista'] ?? 0 ) );

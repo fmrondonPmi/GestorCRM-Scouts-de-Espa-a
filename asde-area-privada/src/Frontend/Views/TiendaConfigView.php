@@ -46,6 +46,14 @@ final class TiendaConfigView extends TiendaBaseView {
 		$cfg['primera_gratis'] = '1' === $this->post( 'primera_gratis' );
 		$cfg['precio_camisa'] = $euros( $this->post( 'precio_camisa' ) ) ?? $cfg['precio_camisa'];
 		$cfg['texto_pago']    = mb_substr( sanitize_textarea_field( $this->post( 'texto_pago' ) ), 0, 600 );
+		$cfg['iban']          = Config::iban( $this->post( 'iban' ) );
+		$cfg['bizum']         = Config::bizum( $this->post( 'bizum' ) );
+		if ( '' !== trim( $this->post( 'iban' ) ) && '' === $cfg['iban'] ) {
+			$avisos[] = asde_t( 'El IBAN no parece válido; no se ha guardado.' );
+		}
+		if ( '' !== trim( $this->post( 'bizum' ) ) && '' === $cfg['bizum'] ) {
+			$avisos[] = asde_t( 'El teléfono de Bizum no parece válido; no se ha guardado.' );
+		}
 		$cfg['tallas_especiales'] = $lista( $this->post( 'tallas_especiales' ) );
 
 		foreach ( array_keys( $cfg['modelos'] ) as $id ) {

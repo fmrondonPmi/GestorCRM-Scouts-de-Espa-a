@@ -205,7 +205,7 @@ $singular = array(
 	</section>
 <?php endif; ?>
 
-<?php if ( $global && ( $resumen['total_camisas'] || $resumen['insignias'] || $sin_pagar ) ) : ?>
+<?php if ( $global && ( $resumen['total_camisas'] || $resumen['insignias'] || $resumen['productos'] || $sin_pagar ) ) : ?>
 	<section class="asde-card">
 		<h3 class="asde-card__title"><?php asde_e( 'Para el próximo pedido al proveedor' ); ?></h3>
 		<p class="asde-muted"><?php asde_e( 'Lo pagado que aún no está en ningún pedido.' ); ?><?php echo $sin_pagar ? ' ' . esc_html( sprintf( asde_n( 'Además hay %d pedido sin pagar.', 'Además hay %d pedidos sin pagar.', $sin_pagar ), $sin_pagar ) ) : ''; ?></p>
@@ -218,7 +218,10 @@ $singular = array(
 		<?php if ( $resumen['insignias'] ) : ?>
 			<p><strong><?php asde_e( 'Insignias:' ); ?></strong> <?php echo esc_html( implode( ' · ', array_map( static fn( $i ) => $i['nombre'] . ' × ' . $i['cantidad'], $resumen['insignias'] ) ) ); ?></p>
 		<?php endif; ?>
-		<?php if ( ! $resumen['total_camisas'] && ! $resumen['insignias'] ) : ?>
+		<?php if ( $resumen['productos'] ) : ?>
+			<p><strong><?php asde_e( 'Otros productos:' ); ?></strong> <?php echo esc_html( implode( ' · ', array_map( static fn( $i ) => $i['nombre'] . ' × ' . $i['cantidad'], $resumen['productos'] ) ) ); ?></p>
+		<?php endif; ?>
+		<?php if ( ! $resumen['total_camisas'] && ! $resumen['insignias'] && ! $resumen['productos'] ) : ?>
 			<p><?php asde_e( 'Todavía no hay nada pagado pendiente de pedir.' ); ?></p>
 		<?php endif; ?>
 	</section>

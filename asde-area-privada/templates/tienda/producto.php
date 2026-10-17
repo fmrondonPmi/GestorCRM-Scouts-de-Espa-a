@@ -27,7 +27,7 @@ $marca  = static function ( string $campo, int $guardado ) use ( $borrador ): bo
 };
 $imagen = $p ? Config::imagen( $p['imagen'], 'thumbnail' ) : '';
 ?>
-<p class="asde-back asde-solo-pagina"><a href="<?php echo esc_url( $url_lista ); ?>"><?php asde_e( '← Productos' ); ?></a></p>
+<p class="asde-back asde-solo-pagina"><a href="<?php echo esc_url( $url_lista ); ?>"><?php asde_e( '← Inventario de la tienda' ); ?></a></p>
 
 <form method="post" enctype="multipart/form-data" class="asde-form" action="<?php echo esc_url( $url ); ?>">
 	<?php wp_nonce_field( 'asde_tienda_producto_' . $id ); ?>

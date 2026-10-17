@@ -29,13 +29,18 @@ final class TiendaPedidosView extends TiendaBaseView {
 		if ( ! $para && current_user_can( Servicio::CAP_GESTION ) ) {
 			return $this->redirigir_gestion();
 		}
+		if ( ! $para ) {
+			// v0.39: una cuenta sin ninguna persona con membresía activa no tiene a quién pedirle nada.
+			return $this->layout( 'tienda_pedidos', $this->subnav( 'tienda_pedidos' ) . '<section class="asde-card"><p>' . esc_html( asde_t( 'Ahora mismo ninguna persona de tu cuenta tiene la membresía activa, así que no se puede hacer ningún pedido.' ) ) . '</p></section>' );
+		}
 		$cfg   = Config::de();
 		$todos = PedidosTable::de_socios( array_keys( $para ) ); // Una consulta para todas las personas.
 		// v0.29: lo que le cuesta la camisa a cada uno (la primera de un scouter, gratis); v0.30, sin una consulta por persona.
 		$precios = Servicio::precios_camisa( $para, $cfg, $todos );
 		// «Tus pedidos»: los suyos y los de su familia y, v0.30, los que ha pedido para alguien de su sección.
 		$pedidos = array_values( array_filter( $todos, static fn( array $p ) => Servicio::es_propio( $p, $a ) || Servicio::lo_pidio( $p ) ) );
-		$guias   = array();
+		$es_socio = (bool) array_filter( $para, static fn( $persona ) => $persona->tiene_membresia_activa() );
+		$guias    = array();
 		foreach ( $cfg['modelos'] as $id => $m ) {
 			$url = Config::guia_medidas( $cfg, (string) $id );
 			if ( '' !== $url ) {
@@ -54,6 +59,8 @@ final class TiendaPedidosView extends TiendaBaseView {
 					'para'     => $para,
 					'grupos'   => count( $para ) > Servicio::MAX_BOTONES_PARA ? Servicio::agrupar_para_quien( $a, $para ) : array(),
 					'otros'    => count( $para ) > count( Servicio::propios( $a ) ),
+					'catalogo' => Servicio::catalogo( $es_socio ), // v0.39: lo que ve esta cuenta (lo «solo socios», solo si hay un socio/a entre sus personas).
+					'es_socio' => $es_socio,
 					'precios'  => $precios,
 					'pedidos'  => $pedidos,
 					'ambito'   => $a,
@@ -77,6 +84,18 @@ final class TiendaPedidosView extends TiendaBaseView {
 		$a      = Ambito::actual();
 		$volver = $this->url( 'tienda_pedidos' );
 
+		if ( 'tienda_comprar' === $this->post( 'asde_action' ) ) {
+			check_admin_referer( 'asde_tienda_comprar' );
+			$r = Servicio::comprar( $a, $this->post( 'socio' ), $this->post_mapa( 'cant' ), $this->post( 'nota' ), $this->post( 'forma_pago' ) );
+			if ( is_wp_error( $r ) ) {
+				Notices::add( 'error', esc_html( $r->get_error_message() ) );
+			} else {
+				$p = PedidosTable::obtener( $r );
+				Notices::add( 'success', sprintf( asde_t( 'Pedido <strong>%1$s</strong> enviado: %2$s. Ahora falta pagarlo: en «Tus pedidos» tienes cómo hacerlo.' ), esc_html( PedidosTable::numero( $p ) ), esc_html( Servicio::importe( $p ) ) ) );
+			}
+			$this->redirect( $volver );
+		}
+
 		if ( 'uniforme_pedir' === $this->post( 'asde_action' ) ) {
 			check_admin_referer( 'asde_uniforme_pedir' );
 			$cfg        = Config::de();
@@ -85,7 +104,7 @@ final class TiendaPedidosView extends TiendaBaseView {
 				$cantidades[ $id ] = (int) $this->post( 'insignia_' . $id );
 			}
 			$lineas = Servicio::lineas( $cfg, '1' === $this->post( 'con_camisa' ) ? $this->post( 'camisa' ) : '', $cantidades );
-			$r      = is_wp_error( $lineas ) ? $lineas : Servicio::pedir( $a, $this->post( 'socio' ), $lineas, $this->post( 'nota' ) );
+			$r      = is_wp_error( $lineas ) ? $lineas : Servicio::pedir( $a, $this->post( 'socio' ), $lineas, $this->post( 'nota' ), $this->post( 'forma_pago' ) );
 			if ( is_wp_error( $r ) ) {
 				Notices::add( 'error', esc_html( $r->get_error_message() ) );
 			} else {
