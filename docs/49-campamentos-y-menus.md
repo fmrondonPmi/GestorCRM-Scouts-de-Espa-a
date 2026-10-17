@@ -154,9 +154,9 @@ El catálogo de alérgenos y la tabla *intolerancia → alérgeno* (lactosa → 
 | Quién | Ve |
 |---|---|
 | Equipo del evento, scouters de las secciones que van, Secretaría, Coordinación (los que ya ven el listado de salud) | **Quiénes** están afectados, por alérgeno. Cada consulta queda en la auditoría |
-| **Quien edita el menú** (P-190, cambiado por el usuario) | **Alérgeno, nº de personas y sus nombres.** Por eso editar el menú exige poder ver la salud del evento (`asde_menus_salud`) |
-| Cocina/intendencia que no edita | Solo **alérgeno y nº de personas**, sin nombres |
-| Menú impreso y lista de la compra | **Solo alérgenos**, ni nombres ni cifras (no decidido por el usuario: se mantiene la propuesta) |
+| **Quien genera o edita el menú** (P-190, aclarado el 2026-10-17) | **Alérgeno y nº de personas afectadas, sin nombres.** Para generar y editar el menú **no hace falta ver las restricciones de nadie**: `asde_menus_salud` no es necesaria |
+| **Hoja de cocina** (impresa o por email) para el equipo de cocina del evento | **Nombre de cada persona afectada y su alérgeno**, solo los que cruzan con el menú (apartado 9.1) |
+| Menú impreso y lista de la compra del evento | Solo alérgenos, sin nombres ni cifras |
 | Cualquier otro | Nada de salud |
 
 **Se revalida solo** porque se calcula al abrir: si alguien se inscribe, se da de baja, cambia su ficha o se cambia una receta, el siguiente que abra el menú lo ve. Para no depender de que alguien lo abra, la tarea *Revisar alergias y menú* (8 días antes en acampadas, 15 en campamentos) manda un aviso «hay avisos de alérgenos sin resolver en el menú de *X*» **sin cifras ni nombres** (P-192).
@@ -204,13 +204,16 @@ El catálogo de alérgenos y la tabla *intolerancia → alérgeno* (lactosa → 
 | P-187 ✅ | ¿Quién marca tareas como hechas? | **Cualquier scouter con acceso al evento** (decidido) |
 | P-188 ✅ | ¿Cómo están escritas las alergias en el CRM? | **Mirado en solo lectura el 2026-10-17** (solo metadatos de Contacts): ver apartado 9 |
 | P-189 ✅ | «Datos incompletos» | **Inscritos sin la ficha de salud revisada** (decidido) |
-| P-190 ✅ | ¿Qué ve quien edita el menú? | **También los nombres** (decidido; la propuesta era solo alérgeno y nº) |
+| P-190 ✅ | ¿Qué ve quien edita el menú? | **Alérgeno y nº, sin nombres** al generar y editar; **nombre y alérgeno de cada persona solo en la hoja de cocina** (decidido y aclarado el 2026-10-17) |
 | P-191 ✅ | ¿Qué se guarda al confirmar un aviso? | **Comida, alérgeno, quién, cuándo y alternativa genérica; nada de personas ni cifras** (decidido) |
-| P-192 ✅ | Email de «conflictos sin resolver» (T-8 / T-15) | **Con los nombres de quien no tiene la ficha revisada y de los afectados por cada conflicto** (decidido; la propuesta era sin cifras ni nombres). Ver las salvaguardas del apartado 9 |
+| P-192 ✅ | Email de «conflictos sin resolver» (T-8 / T-15) | **Con nombres, solo a quien ya ve la salud del evento y con el mínimo (nombre y alérgeno)**: la salvaguarda propuesta, aceptada el 2026-10-17. La **hoja de cocina** es otro envío (apartado 9.1) |
 | P-193 ✅ | ¿El coste propone la partida «Alimentación»? | **Sí, como propuesta que se acepta** (decidido) |
 | P-194 ✅ | Unidades | **Solo g↔kg y ml↔l** (decidido) |
 | P-195 ✅ | ¿Recetas compartidas? | **Biblioteca básica común** (decidido; la propuesta era no compartir) |
 | P-196 ✅ | El *material del evento* pasa a la v0.42 | **Sí** (decidido) |
+| P-197 ✅ | Entrega de la hoja de cocina a quien no tiene cuenta | **Impresa**; por email, solo a cuentas (decidido; ver 9.1) |
+| P-198 ✅ | Contenido de la hoja de cocina por persona | **Nombre, alérgenos del menú y dieta** (decidido; ver 9.1) |
+| P-199 ✅ | Cuándo se genera la hoja de cocina | **A mano, con aviso si está desfasada** (decidido; ver 9.1) |
 
 ## 9. Cómo se prueba
 
@@ -218,7 +221,7 @@ Pruebas nuevas por fase (`tests/eventos-calendario.php`, `tests/menus-recetas.ph
 
 ## 9. Decisiones del usuario (2026-10-17) y lo averiguado
 
-**Resumen de lo decidido:** todo dentro de Eventos (sin módulo Menús); solo se siembra la plantilla *Acampada*; las fechas de fin de semana se **adelantan al viernes**; aviso al responsable 3 días antes y al vencer; marca tareas como hechas **cualquier scouter con acceso al evento**; «datos incompletos» = inscritos sin ficha de salud revisada; quien edita el menú **ve también los nombres**; al confirmar un aviso se guarda solo comida, alérgeno, quién, cuándo y alternativa genérica; el email de conflictos lleva **nombres**; coste del menú como propuesta de partida; conversiones solo g↔kg y ml↔l; **biblioteca básica común** de recetas; el material del evento pasa a la v0.42.
+**Resumen de lo decidido:** todo dentro de Eventos (sin módulo Menús); solo se siembra la plantilla *Acampada*; las fechas de fin de semana se **adelantan al viernes**; aviso al responsable 3 días antes y al vencer; marca tareas como hechas **cualquier scouter con acceso al evento**; «datos incompletos» = inscritos sin ficha de salud revisada; quien genera o edita el menú **ve alérgenos y nº de personas, sin nombres**, y la **hoja de cocina** (impresa o por email) lleva **nombre y alérgeno** de cada persona; al confirmar un aviso se guarda solo comida, alérgeno, quién, cuándo y alternativa genérica; el email de conflictos lleva **nombres**; coste del menú como propuesta de partida; conversiones solo g↔kg y ml↔l; **biblioteca básica común** de recetas; el material del evento pasa a la v0.42.
 
 **P-188 · lo que hay en el CRM** (script `herramientas-desarrollo/crm-campos-alimentacion.php`, solo `get_module_fields` de Contacts, sin leer ninguna ficha; 20 campos):
 
@@ -240,7 +243,33 @@ Pruebas nuevas por fase (`tests/eventos-calendario.php`, `tests/menus-recetas.ph
 
 **Salvaguardas que piden las decisiones** (no cambian el plan, pero hay que cuidarlas al programar):
 
-1. **Editar el menú exige ver salud** (P-190): `asde_menus_gestion` y `asde_menus_salud` van juntas para quien edita el menú de un evento; quien no ve la salud no edita el menú, solo lo ve (alérgenos y nº).
-2. **El email con nombres** (P-192) lleva datos de salud de menores por correo, que no es un canal seguro. Se mandará **solo** a quien ya ve la salud de ese evento, con el mínimo (nombre y alérgeno, sin diagnóstico ni texto de la ficha), y cada envío queda en el registro de emails y en la auditoría. La alternativa es un email sin nombres con un enlace a la pantalla del menú (que exige sesión): el cambio es de una línea y se puede decidir al llegar a B3.
+1. **Editar el menú no exige ver salud** (P-190, aclarado): `asde_menus_gestion` basta para generar y editar; solo ve alérgenos y nº de personas. Los nombres salen únicamente en la hoja de cocina y en el email a quien ya ve la salud.
+2. **El email con nombres** (P-192) lleva datos de salud de menores por correo, que no es un canal seguro. Se mandará **solo** a quien ya ve la salud de ese evento, con el mínimo (nombre y alérgeno, sin diagnóstico ni texto de la ficha), y cada envío queda en el registro de emails y en la auditoría. **Aceptado por el usuario el 2026-10-17.**
 3. **Biblioteca básica común** (P-195): son recetas de ejemplo **incluidas en el plugin**, con sus ingredientes y alérgenos. Un alérgeno mal puesto es un riesgo real, así que se sembrarán pocas (10-15), **revisadas por una persona del grupo antes de publicar** y marcadas como «de ejemplo: revísalas». Cada grupo las copia y las edita; no se comparten recetas entre grupos.
 4. **Fechas al viernes** (P-185): las tareas guardan la fecha calculada y la ajustada; los ejemplos de fechas del fichero se prueban con el ajuste desactivado y activado.
+
+### 9.1 La hoja de cocina (aclaración del usuario, 2026-10-17)
+
+> «Para editar el menú desde la web no es necesario ver las restricciones. Generar y editar el menú solo debe restringir el uso de los alérgenos de los asistentes. Cuando se genera la impresión o el correo del menú que va al equipo de cocina, que son quienes prepararán el menú en el evento, tiene que venir indicado el **nombre y los alérgenos de cada persona**.»
+
+**Dos pantallas, dos niveles de detalle:**
+
+| | Quién | Qué ve | Se guarda |
+|---|---|---|---|
+| **Editar el menú** (web) | Quien gestiona el evento (`asde_menus_gestion`) | Avisos por **alérgeno** y **nº de personas** afectadas; sin nombres | Solo las confirmaciones (P-191) |
+| **Hoja de cocina** (impresión o email) | Se genera por quien gestiona el evento; la reciben el **equipo de cocina** del evento (cocinero/a, intendente y ayudantes) | Por cada comida del menú: **nombre de la persona afectada y su alérgeno** (los que cruzan con el menú; la dieta si procede). Sin diagnóstico, sin medicación y sin el texto libre de la ficha | **Nada**: se compone en el momento, en memoria; el email deja constancia (tipo, destino enmascarado, fecha), no su contenido |
+
+**Reglas de la hoja de cocina:**
+1. Se calcula **en vivo** en el momento de imprimirla o enviarla (nada de salud guardado) y lleva fecha y hora: «válida a fecha de…». Si luego cambia un inscrito o una ficha, hay que **volver a generarla** (la pantalla del menú avisa de que la última hoja enviada está desfasada si cambió algo después).
+2. **Auditoría de cada generación e impresión** (quién, evento, cuándo) y de cada envío (a quién, enmascarado).
+3. Por **email**, solo a las cuentas del equipo de cocina del evento (y mínimo contenido: nombre y alérgeno). Las impresiones llevan el aviso «contiene datos de salud: no dejar a la vista ni compartir».
+4. Entra en el cálculo solo lo que **cruza con el menú elegido**: una persona alérgica al marisco no sale si el menú no lleva marisco.
+5. El **equipo de cocina** se define en la pestaña *Equipo* del evento (cocinero/a, intendente, ayudantes); es la misma gente que la tarea *Elegir cocinero, intendente y ayudantes* del calendario.
+
+**Decisiones sobre la hoja de cocina (2026-10-17):**
+
+| # | Decidido |
+|---|---|
+| P-197 ✅ | **Email solo a quien tiene cuenta**; los miembros del equipo de cocina sin cuenta reciben la hoja **impresa** (la entrega el director/a o la gestión) |
+| P-198 ✅ | Por persona: **nombre, alérgenos que cruzan con el menú y dieta** (si el menú la incumple). Sin diagnóstico, sin medicación y sin el texto libre de la ficha |
+| P-199 ✅ | Se genera **a mano** (Imprimir / Enviar), con un **aviso de «desfasada»** si cambió algo después del último envío. Sin envío automático |
