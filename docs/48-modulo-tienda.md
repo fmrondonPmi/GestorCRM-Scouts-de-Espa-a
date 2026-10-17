@@ -1,6 +1,6 @@
 # 48 · Módulo «Tienda» (antes «Uniformes») — análisis y plan
 
-> Estado: **plan aprobado para ejecutar más adelante** (2026-10-17). No hay código hecho.
+> Estado: **fases 1 a 5 hechas** (2026-10-17, v0.39 y v0.40; ver §11). Queda la camisa y las insignias como opciones del producto «camisa».
 > Parte de la v0.38.0. Se ejecuta en una rama nueva desde `origin/main` (p. ej. `Tienda`), con las skills `modulo-area-privada` y `version-area-privada`.
 
 ## 1. Petición del usuario (2026-10-17)
@@ -252,4 +252,11 @@ Pago con tarjeta (Redsys, Stripe), gastos de envío y envíos a domicilio, cupon
   - **Gestión:** el pedido sale como «Nombre (sin sesión)» y el detalle enseña su email y teléfono a la administración.
   - **Caducidad** (mantenimiento diario): las compras sin sesión sin pagar a los **N días** (14, configurable; 0 = nunca) se cancelan y devuelven las existencias; los datos personales se **borran a los 90 días** de entregar o cancelar (el pedido queda con importes y cantidades; el enlace personal deja de valer). Los pedidos de socios no se cancelan solos (queda para la fase 5).
   - Pruebas: `tests/tienda-publica.php` (43). Textos nuevos traducidos (ca, eu, gl). Plugin Check: 0 hallazgos.
-  - **Se queda para la fase 5:** conciliación con el banco, informes de ventas y la cancelación automática de los pedidos de socios.
+  - **Se queda para la fase 5:** conciliación con el banco, informes de ventas y la cancelación automática de los pedidos de socios. *(Hecho, abajo.)*
+- ✅ **Fase 5 hecha (2026-10-17, rama `Calendario-Eventos`):** pedidos sin pagar, banco e informes.
+  - **Pedidos de socios sin pagar** (`Servicio::recordar_y_cancelar_socios`, mantenimiento diario): solo los de la tienda (con forma de pago) que cuestan algo, sin pagar ni entregar ni cancelar. Configuración nueva: **días para recordar** (7; 0 = no) y **días para cancelar** (0 = nunca, por defecto: nadie pierde un pedido sin avisar). El recordatorio sale **una sola vez** (columna `aviso_en`, `UPDATE … WHERE aviso_en IS NULL`), solo si llega antes que la cancelación, y dice hasta qué día si hay cancelación automática. Al cancelar, las existencias vuelven una sola vez y se avisa por email (también a las compras sin sesión). Emails nuevos `recordatorio` y `cancelado` en `Tienda\Avisos`.
+  - **Banco** (`Tienda\ConciliacionBanco`): los ingresos por conciliar que citan el nº de un pedido sin pagar (`U6840007`, escrito de varias formas, solo el del grupo) se proponen a Tesorería en un cuadro de la gestión, con aviso si el importe no coincide. **Nunca marca solo:** «Marcar pagado con este ingreso» comprueba en el servidor que el ingreso siga por conciliar, sea un ingreso y cite ese pedido; el pedido queda pagado con la fecha y el importe del ingreso y el ingreso queda revisado con la nota «Pedido de la tienda U…» (sin tocar el esquema del banco). Al deshacer el pago, el ingreso vuelve a estar por conciliar. Solo con el módulo Banco activo y los permisos de Tesorería (`asde_tienda_pago` + `asde_tesoreria_config`).
+  - **Ventas e informes** (`Tienda\Informes`, `?informe=1` en la gestión; Tesorería, Coordinación y administración de la tienda): ventas por producto y variante, por forma de pago y pendientes de cobro, con filtro de fechas y descarga en Excel (`Informes\Xlsx`, nonce `asde_tienda_informe`). Los cancelados no cuentan.
+  - La cabecera de la gestión pasa a llamarse **«Pedidos de la tienda»**.
+  - Pruebas: `tests/tienda-fase5.php` (49). Textos nuevos traducidos (ca, eu, gl).
+  - **Sigue pendiente:** la camisa y las insignias como opciones del producto «camisa» dentro del catálogo; que el banco también concilie por importe y ordenante cuando el concepto no cita el pedido.

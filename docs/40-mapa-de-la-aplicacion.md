@@ -556,9 +556,11 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 **Tienda/**
 
 - `Avisos` — Emails de la tienda (v0.39, doc 48, P-182):
+- `ConciliacionBanco` — Pedidos de la tienda y banco (v0.40, doc 48, fase 5):
 - `Config` — Configuración de los pedidos de uniforme de cada grupo (opción asde_ap_tienda_<grupo>):
 - `Enlace` — Enlaces de la tienda pública (v0.39, doc 48, fase 4).
 - `ImportadorProductos` — Cargar productos y existencias de la tienda desde un CSV (doc 48, fase 2), con el mismo método que el inventario de material (Inventario\Importador):
+- `Informes` — Informes de ventas de la tienda (v0.40, doc 48, fase 5):
 - `PedidosTable` — Pedidos de uniforme ({prefix}asde_tienda_pedidos):
 - `ProductosTable` — Catálogo de la tienda (doc 48, fase 2):
 - `Sembrado` — Doc 48, fase 2:
@@ -607,5 +609,5 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 
 ### Pruebas (`tests/`)
 
-`acceso` · `alta-reglas` · `alta-scouters` · `altas-crm-escritura` · `altas-crm-pantallas` · `altas-crm` · `app-enganches` · `ayuda` · `banco-gestion` · `colores` · `entorno` · `estilo-wordpress` · `eventos-avisos-config` · `eventos-calendario` · `eventos-economia` · `eventos-inscripciones` · `eventos` · `fichas-escritura` · `grupos-emails-banco` · `identidad` · `idiomas-catalogos` · `idiomas` · `inventario` · `lista-espera` · `mejoras-v029` · `mejoras-v030` · `mejoras-v031` · `mejoras-v034` · `mejoras-v0351` · `menus` · `migracion-tienda` · `modulos` · `organizacion` · `rendimiento` · `sepa` · `solicitudes` · `tema` · `tienda-catalogo` · `tienda-pedidos` · `tienda-publica` · `tienda` · `usuarios-listado`
+`acceso` · `alta-reglas` · `alta-scouters` · `altas-crm-escritura` · `altas-crm-pantallas` · `altas-crm` · `app-enganches` · `ayuda` · `banco-gestion` · `colores` · `entorno` · `estilo-wordpress` · `eventos-avisos-config` · `eventos-calendario` · `eventos-economia` · `eventos-inscripciones` · `eventos` · `fichas-escritura` · `grupos-emails-banco` · `identidad` · `idiomas-catalogos` · `idiomas` · `inventario` · `lista-espera` · `mejoras-v029` · `mejoras-v030` · `mejoras-v031` · `mejoras-v034` · `mejoras-v0351` · `menus` · `migracion-tienda` · `modulos` · `organizacion` · `rendimiento` · `sepa` · `solicitudes` · `tema` · `tienda-catalogo` · `tienda-fase5` · `tienda-pedidos` · `tienda-publica` · `tienda` · `usuarios-listado`
 <!-- inventario:fin -->

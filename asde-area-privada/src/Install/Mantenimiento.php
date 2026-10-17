@@ -78,6 +78,7 @@ final class Mantenimiento {
 			try {
 				// v0.39 (fase 4): las compras sin sesión que no se pagan en N días se cancelan y devuelven las existencias.
 				\AsdeBalears\AreaPrivada\Tienda\Servicio::cancelar_invitados_sin_pagar();
+				\AsdeBalears\AreaPrivada\Tienda\Servicio::recordar_y_cancelar_socios(); // v0.40 (fase 5): recordatorio y cancelación de los pedidos de socios sin pagar.
 				// Solo con el módulo encendido en el grupo (v0.35: nace apagado).
 				if ( \AsdeBalears\AreaPrivada\Domain\Modulos::activo( \AsdeBalears\AreaPrivada\Domain\Modulos::EVENTOS, (string) $grupo['numero'] ) ) {
 					\AsdeBalears\AreaPrivada\Eventos\Avisos::diario();

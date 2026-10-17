@@ -6,11 +6,14 @@ use AsdeBalears\AreaPrivada\Auth\Ambito;
 use AsdeBalears\AreaPrivada\Domain\Secciones;
 use AsdeBalears\AreaPrivada\Frontend\Notices;
 use AsdeBalears\AreaPrivada\Informes\Generador;
+use AsdeBalears\AreaPrivada\Informes\Xlsx;
 use AsdeBalears\AreaPrivada\Inventario\MaterialesTable;
 use AsdeBalears\AreaPrivada\Inventario\TiposTable;
 use AsdeBalears\AreaPrivada\Tesoreria\Calculadora;
 use AsdeBalears\AreaPrivada\Tienda\Avisos;
 use AsdeBalears\AreaPrivada\Tienda\Config;
+use AsdeBalears\AreaPrivada\Tienda\ConciliacionBanco;
+use AsdeBalears\AreaPrivada\Tienda\Informes;
 use AsdeBalears\AreaPrivada\Tienda\PedidosTable;
 use AsdeBalears\AreaPrivada\Tienda\Servicio;
 
@@ -33,6 +36,9 @@ final class TiendaGestionView extends TiendaBaseView {
 		$a = Ambito::actual();
 		if ( '1' === $this->get( 'asignar' ) ) {
 			return $this->layout( 'tienda_gestion', Servicio::puede_inventario() ? $this->asignar( $a ) : $this->denegado( asde_t( 'Servir y asignar camisas del inventario lo hacen Coordinación y Tesorería.' ) ) );
+		}
+		if ( '1' === $this->get( 'informe' ) ) {
+			return $this->layout( 'tienda_gestion', Servicio::puede_informes() ? $this->informe( $a ) : $this->denegado( asde_t( 'Los informes de ventas los ven Tesorería, Coordinación y la administración de la tienda.' ) ) );
 		}
 		$id = (int) $this->get( 'pedido' );
 		if ( $id ) {
@@ -59,9 +65,19 @@ final class TiendaGestionView extends TiendaBaseView {
 		$pendiente = array_sum( array_map( array( Servicio::class, 'importe_a_cobrar' ), array_filter( $activos, static fn( $p ) => null === $p['pago_en'] ) ) );
 		$por_pedir = array_filter( $todos, static fn( $p ) => PedidosTable::cumple( $p, PedidosTable::POR_PEDIR ) );
 
+		// v0.40 (fase 5): ingresos del banco que mencionan un pedido sin pagar (solo Tesorería, con el banco activo).
+		$sugerencias = Servicio::vision_global( $a ) ? ConciliacionBanco::sugerencias( $todos ) : array();
+
 		return $this->layout(
 			'tienda_gestion',
 			$this->subnav( 'tienda_gestion' ) . $this->tpl(
+				'tienda/banco-sugerencias',
+				array(
+					'sugerencias' => $sugerencias,
+					'personas'    => $sugerencias ? $this->personas( array_column( $sugerencias, 'pedido' ) ) : array(),
+					'volver'      => $this->url( 'tienda_gestion' ),
+				)
+			) . $this->tpl(
 				'tienda/gestion',
 				array(
 					'cfg'          => $cfg,
@@ -78,7 +94,8 @@ final class TiendaGestionView extends TiendaBaseView {
 					'resumen'      => Servicio::resumen( array_filter( $por_pedir, static fn( $p ) => null !== $p['pago_en'] ), $cfg ),
 					'sin_pagar'    => count( array_filter( $por_pedir, static fn( $p ) => null === $p['pago_en'] ) ),
 					'stock'        => Servicio::puede_inventario() ? MaterialesTable::camisas() : null,
-					'url_asignar'  => $this->url( 'tienda_gestion', array( 'asignar' => '1' ) ),
+						'url_asignar'  => $this->url( 'tienda_gestion', array( 'asignar' => '1' ) ),
+						'url_informe'  => Servicio::puede_informes() ? $this->url( 'tienda_gestion', array( 'informe' => '1' ) ) : '',
 					'url_inv'      => Servicio::puede_inventario() ? $this->url( 'inventario', array( 'tipo' => (string) TiposTable::camisa() ) ) : '',
 					'url'          => $this->url( 'tienda_gestion' ),
 					'url_csv'      => $this->url(
@@ -177,6 +194,132 @@ final class TiendaGestionView extends TiendaBaseView {
 		);
 	}
 
+	/** Periodo del informe: dos fechas (Y-m-d) o '' (sin límite). @return array{0:string,1:string} */
+	private function periodo(): array {
+		$fecha = fn( string $k ): string => preg_match( '/^\d{4}-\d{2}-\d{2}$/', $this->get( $k ) ) ? $this->get( $k ) : '';
+		return array( $fecha( 'desde' ), $fecha( 'hasta' ) );
+	}
+
+	/** Los pedidos del periodo que esta persona gestiona. */
+	private function del_periodo( Ambito $a ): array {
+		list( $desde, $hasta ) = $this->periodo();
+		return Informes::del_periodo( Servicio::de_gestion( $a ), $desde, $hasta );
+	}
+
+	/** «Ventas e informes» (v0.40, fase 5): por producto, por forma de pago y pendientes de cobro. */
+	private function informe( Ambito $a ): string {
+		list( $desde, $hasta ) = $this->periodo();
+		$pedidos    = $this->del_periodo( $a );
+		$pendientes = Informes::pendientes( $pedidos );
+		$excel      = fn( string $hoja ) => $this->url(
+			'tienda_gestion',
+			array_filter(
+				array(
+					'informe'  => '1',
+					'hoja'     => $hoja,
+					'formato'  => 'xlsx',
+					'desde'    => $desde,
+					'hasta'    => $hasta,
+					'_wpnonce' => wp_create_nonce( 'asde_tienda_informe' ),
+				)
+			)
+		);
+		return $this->subnav( 'tienda_gestion' ) . $this->tpl(
+			'tienda/informe',
+			array(
+				'desde'      => $desde,
+				'hasta'      => $hasta,
+				'n'          => count( $pedidos ),
+				'productos'  => Informes::por_producto( $pedidos, Config::de() ),
+				'formas'     => Informes::por_forma( $pedidos ),
+				'pendientes' => $pendientes,
+				'personas'   => $this->personas( $pendientes ),
+				'url'        => $this->url( 'tienda_gestion' ),
+				'excel'      => array(
+					'productos'  => $excel( 'productos' ),
+					'formas'     => $excel( 'formas' ),
+					'pendientes' => $excel( 'pendientes' ),
+				),
+			)
+		);
+	}
+
+	/** Excel de un informe de ventas (se llama antes de pintar la página). */
+	public function exportar_informe(): void {
+		if ( ! Servicio::puede_informes() || ! wp_verify_nonce( $this->get( '_wpnonce' ), 'asde_tienda_informe' ) ) {
+			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-area-privada' ), 403 );
+		}
+		$a       = Ambito::actual();
+		$pedidos = $this->del_periodo( $a );
+		list( $desde, $hasta ) = $this->periodo();
+		$hoja = $this->get( 'hoja' );
+		$cfg  = Config::de();
+		$fecha = static fn( ?string $f ) => $f ? wp_date( 'd/m/Y', strtotime( $f . ( strlen( $f ) > 10 ? ' UTC' : '' ) ) ) : '';
+		/* translators: 1: periodo, 2: fecha */
+		$periodo   = ( '' === $desde && '' === $hasta ) ? asde_t( 'Todos los pedidos' ) : trim( ( '' !== $desde ? sprintf( asde_t( 'desde el %s' ), $fecha( $desde ) ) : '' ) . ' ' . ( '' !== $hasta ? sprintf( asde_t( 'hasta el %s' ), $fecha( $hasta ) ) : '' ) );
+		$subtitulo = sprintf( asde_t( '%1$s · generado el %2$s' ), $periodo, wp_date( 'd/m/Y' ) );
+		$grupo     = \AsdeBalears\AreaPrivada\Domain\Grupo::nombre();
+
+		if ( 'formas' === $hoja ) {
+			$titulo = asde_t( 'Ventas por forma de pago' );
+			$filas  = array();
+			$suma   = array( 0, 0.0, 0.0, 0.0 );
+			foreach ( Informes::por_forma( $pedidos ) as $forma => $d ) {
+				$filas[] = array( '' !== $forma ? asde_t( PedidosTable::FORMAS[ $forma ] ) : asde_t( 'Sin indicar' ), $d['pedidos'], round( $d['total'], 2 ), round( $d['cobrado'], 2 ), round( $d['pendiente'], 2 ) );
+				$suma[0] += $d['pedidos'];
+				$suma[1] += $d['total'];
+				$suma[2] += $d['cobrado'];
+				$suma[3] += $d['pendiente'];
+			}
+			$cabecera = array( asde_t( 'Forma de pago' ), asde_t( 'Pedidos' ), asde_t( 'Importe' ), asde_t( 'Cobrado' ), asde_t( 'Por cobrar' ) );
+			$tipos    = array( 'texto', 'entero', 'euros', 'euros', 'euros' );
+			$totales  = array( asde_t( 'Total' ), $suma[0], round( $suma[1], 2 ), round( $suma[2], 2 ), round( $suma[3], 2 ) );
+			$archivo  = 'ventas-por-forma-de-pago';
+		} elseif ( 'pendientes' === $hoja ) {
+			$titulo   = asde_t( 'Pendientes de cobro' );
+			$personas = $this->personas( Informes::pendientes( $pedidos ) );
+			$filas    = array();
+			$suma     = 0.0;
+			foreach ( Informes::pendientes( $pedidos ) as $p ) {
+				$importe = Servicio::importe_a_cobrar( $p );
+				$suma   += $importe;
+				$filas[] = array( PedidosTable::numero( $p ), Servicio::comprador( $p, $personas[ $p['socio'] ] ?? null ), $fecha( $p['creado'] ), asde_t( PedidosTable::FORMAS[ $p['forma_pago'] ] ?? 'Sin indicar' ), (int) $p['dias'], round( $importe, 2 ) );
+			}
+			$cabecera = array( asde_t( 'Pedido' ), asde_t( 'Quién' ), asde_t( 'Fecha' ), asde_t( 'Forma de pago' ), asde_t( 'Días esperando' ), asde_t( 'Importe' ) );
+			$tipos    = array( 'texto', 'texto', 'texto', 'texto', 'entero', 'euros' );
+			$totales  = array( asde_t( 'Total' ), '', '', '', '', round( $suma, 2 ) );
+			$archivo  = 'pendientes-de-cobro';
+		} else {
+			$titulo  = asde_t( 'Ventas por producto' );
+			$filas   = array();
+			$suma    = array( 0, 0.0, 0.0 );
+			foreach ( Informes::por_producto( $pedidos, $cfg ) as $d ) {
+				$filas[] = array( $d['producto'], $d['variante'], $d['unidades'], round( $d['importe'], 2 ), round( $d['pagado'], 2 ) );
+				$suma[0] += $d['unidades'];
+				$suma[1] += $d['importe'];
+				$suma[2] += $d['pagado'];
+			}
+			$cabecera = array( asde_t( 'Producto' ), asde_t( 'Variante' ), asde_t( 'Unidades' ), asde_t( 'Importe' ), asde_t( 'De ellos, pagado' ) );
+			$tipos    = array( 'texto', 'texto', 'entero', 'euros', 'euros' );
+			$totales  = array( asde_t( 'Total' ), '', $suma[0], round( $suma[1], 2 ), round( $suma[2], 2 ) );
+			$archivo  = 'ventas-por-producto';
+		}
+		Logger::log( 'tienda_informe_exportado', 'grupo', \AsdeBalears\AreaPrivada\Domain\Grupo::numero(), array( 'hoja' => $archivo ) );
+		Xlsx::descargar(
+			$archivo . '-' . wp_date( 'Ymd' ) . '.xlsx',
+			$titulo,
+			$cabecera,
+			$filas,
+			array(
+				'titulo'    => $titulo . ' · ' . $grupo,
+				'subtitulo' => $subtitulo,
+				'tipos'     => $tipos,
+				'totales'   => $totales,
+			)
+		);
+		exit;
+	}
+
 	/** Descarga CSV de la lista (se llama antes de pintar la página). */
 	public function exportar(): void {
 		if ( ! current_user_can( Servicio::CAP_GESTION ) || ! wp_verify_nonce( $this->get( '_wpnonce' ), 'asde_uniformes_csv' ) ) {
@@ -250,6 +393,26 @@ final class TiendaGestionView extends TiendaBaseView {
 			$this->redirect( $lista );
 		}
 
+		// Marcar pagado un pedido con un ingreso del banco que lo menciona (v0.40, fase 5).
+		if ( 'tienda_banco_pagar' === $accion ) {
+			$pid = (int) $this->post( 'pedido' );
+			$mid = (int) $this->post( 'movimiento' );
+			check_admin_referer( 'asde_tienda_banco_' . $pid . '_' . $mid );
+			$pedido = PedidosTable::obtener( $pid );
+			if ( ! $pedido || ! Servicio::en_gestion( $pedido, $a ) || ! Servicio::puede_pagar( $pedido ) ) {
+				Notices::add( 'error', asde_t( 'No tienes permiso para hacer esto con este pedido.' ) );
+			} else {
+				$r = ConciliacionBanco::confirmar( $pid, $mid );
+				if ( is_wp_error( $r ) ) {
+					Notices::add( 'error', esc_html( $r->get_error_message() ) );
+				} else {
+					/* translators: %s: nº de pedido */
+					Notices::add( 'success', esc_html( sprintf( asde_t( 'Pedido %s marcado como pagado con el ingreso del banco.' ), PedidosTable::numero( $pedido ) ) ) );
+				}
+			}
+			$this->redirect( $lista );
+		}
+
 		// Asignar una camisa del inventario a quien no la ha pedido (v0.29).
 		if ( 'uniforme_asignar' === $accion ) {
 			check_admin_referer( 'asde_uniformes_asignar' );
@@ -289,6 +452,9 @@ final class TiendaGestionView extends TiendaBaseView {
 				if ( Servicio::puede_pagar( $p ) && PedidosTable::deshacer_pago( $p['id'] ) ) {
 					Logger::log( 'uniforme_pago_deshecho', 'uniforme', (string) $p['id'] );
 					$hecho = sprintf( asde_t( 'Pago deshecho en el pedido %s.' ), $num );
+					if ( ConciliacionBanco::deshacer( $p ) ) {
+						$hecho .= ' ' . asde_t( 'El ingreso del banco vuelve a estar por conciliar.' ); // v0.40 (fase 5).
+					}
 				}
 				break;
 

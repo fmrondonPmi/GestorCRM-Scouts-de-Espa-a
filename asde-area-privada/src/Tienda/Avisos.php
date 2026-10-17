@@ -22,8 +22,11 @@ final class Avisos {
 	public const PEDIDO    = 'pedido';
 	public const PAGADO    = 'pagado';
 	public const ENTREGADO = 'entregado';
+	// v0.40 (fase 5): el pedido sigue sin pagar / se ha cancelado por no pagarlo.
+	public const RECORDATORIO = 'recordatorio';
+	public const CANCELADO    = 'cancelado';
 
-	public const TIPOS = array( self::PEDIDO, self::PAGADO, self::ENTREGADO );
+	public const TIPOS = array( self::PEDIDO, self::PAGADO, self::ENTREGADO, self::RECORDATORIO, self::CANCELADO );
 
 	/** Manda el aviso a quien hizo el pedido. @return bool Si el servidor de correo lo aceptó. */
 	public static function enviar( array $pedido, string $tipo ): bool {
@@ -88,6 +91,12 @@ final class Avisos {
 			case self::ENTREGADO:
 				$plantilla = asde_t( '[%1$s] Pedido entregado: %2$s' );
 				break;
+			case self::RECORDATORIO:
+				$plantilla = asde_t( '[%1$s] Recordatorio: el pedido %2$s está sin pagar' );
+				break;
+			case self::CANCELADO:
+				$plantilla = asde_t( '[%1$s] Pedido cancelado: %2$s' );
+				break;
 			default:
 				$plantilla = asde_t( '[%1$s] Pedido recibido: %2$s' );
 		}
@@ -101,7 +110,12 @@ final class Avisos {
 		if ( ! $p ) {
 			return '';
 		}
-		$cfg = Config::de();
+		$cfg    = Config::de();
+		$limite = '';
+		if ( self::RECORDATORIO === $tipo && $cfg['dias_cancelar_socios'] > 0 && '' !== $p['socio'] ) {
+			$limite = wp_date( 'd/m/Y', strtotime( $p['creado'] . ' UTC' ) + $cfg['dias_cancelar_socios'] * DAY_IN_SECONDS );
+		}
+		$sin_pagar = null === $p['pago_en'] && in_array( $tipo, array( self::PEDIDO, self::RECORDATORIO ), true );
 		return TemplateLoader::render(
 			'email/tienda',
 			array(
@@ -111,8 +125,9 @@ final class Avisos {
 				'numero'      => PedidosTable::numero( $p ),
 				'descripcion' => Servicio::descripcion( $p['lineas'] ),
 				'importe'     => Servicio::importe( $p ),
-				'pagar'       => self::PEDIDO === $tipo && null === $p['pago_en'] ? Servicio::instrucciones_pago( $p, $cfg ) : array(),
-				'texto_pago'  => self::PEDIDO === $tipo && null === $p['pago_en'] ? $cfg['texto_pago'] : '',
+				'pagar'       => $sin_pagar ? Servicio::instrucciones_pago( $p, $cfg ) : array(),
+				'texto_pago'  => $sin_pagar ? $cfg['texto_pago'] : '',
+				'limite'      => $limite,
 				'url'         => '' === $p['socio'] ? Enlace::url_pedido( $p ) : Pages::url( 'tienda_pedidos' ),
 				'boton'       => '' === $p['socio'] ? asde_t( 'Ver mi pedido' ) : asde_t( 'Ver mis pedidos' ),
 				'contacto'    => EmailRechazo::contacto(),

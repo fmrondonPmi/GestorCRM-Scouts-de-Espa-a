@@ -41,6 +41,19 @@ $imagen = static function ( string $campo, int $adjunto, string $alt ): string {
 	</section>
 
 	<section class="asde-card">
+		<h3 class="asde-card__title"><?php asde_e( 'Pedidos sin pagar' ); ?></h3>
+		<p class="asde-muted"><?php asde_e( 'Los pedidos de socios y familias que se hacen en la tienda y no se pagan: se les recuerda por email y, si lo indicas, se cancelan solos y lo que pidieron vuelve a la tienda. Cuenta desde el día del pedido; con 0 no se hace.' ); ?></p>
+		<p>
+			<label for="asde-uc-aviso"><?php asde_e( 'Días para recordar el pago (0 = no recordar)' ); ?></label>
+			<input type="number" id="asde-uc-aviso" name="dias_aviso_socios" value="<?php echo (int) $cfg['dias_aviso_socios']; ?>" min="0" max="90" inputmode="numeric">
+		</p>
+		<p>
+			<label for="asde-uc-cancelar"><?php asde_e( 'Días para cancelar un pedido sin pagar (0 = nunca)' ); ?></label>
+			<input type="number" id="asde-uc-cancelar" name="dias_cancelar_socios" value="<?php echo (int) $cfg['dias_cancelar_socios']; ?>" min="0" max="180" inputmode="numeric">
+		</p>
+	</section>
+
+	<section class="asde-card">
 		<h3 class="asde-card__title"><?php asde_e( 'Tienda pública' ); ?></h3>
 		<p class="asde-muted"><?php asde_e( 'Con la tienda pública, cualquiera con el enlace puede comprar sin iniciar sesión lo que el grupo tenga a la venta «para todos» (nunca lo «solo socios»), pagando por transferencia o Bizum. Sus datos se guardan cifrados y se borran a los 90 días de entregar o cancelar el pedido.' ); ?></p>
 		<label class="asde-choice"><input type="checkbox" name="publica" value="1" <?php checked( $cfg['publica'] ); ?>><span><?php asde_e( 'Abrir la tienda pública (compra sin sesión)' ); ?></span></label>

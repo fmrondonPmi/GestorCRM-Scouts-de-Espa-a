@@ -70,6 +70,7 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * Shop catalogue: products with variants (size, colour), price, optional member price, per-person limit, stock adjusted with a reason, archiving and CSV import. The section is called "Shop inventory".
 * Cart and payment: members order several products at once; stock is reserved atomically and returned when the order is cancelled; pay by transfer, Bizum or, for members, in person to Treasury; the group's IBAN and Bizum number are in the settings; only Treasury marks payments; emails for order received, payment received and delivered.
 * Public shop (optional, off by default): anyone with the group's link can buy products marked for everybody without logging in; their details are stored encrypted, unpaid orders are cancelled after a configurable number of days (14) and the personal data are deleted 90 days after delivery or cancellation. Members-only products never appear there.
+* Shop, last phase: unpaid member orders get a one-off reminder email after a configurable number of days (7) and can be cancelled automatically after another (off by default), returning the stock; bank deposits that quote an order number are offered to Treasury to mark the order as paid (never automatic; undoing the payment returns the deposit to the pending list); "Sales and reports" with sales by product, by payment method and pending payments, in screen and Excel.
 
 = 0.38.0 =
 * Waiting list: each group can add its own fields to the public sign-up form (label, type and optional/required), managed by Secretary and Coordination from the waiting list screen. The answers are stored encrypted with a key derived from the sign-up email, so they cannot be read once the entry is deleted.
@@ -231,7 +232,7 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 Event task calendar. Adds one table (created automatically); nothing else changes.
 
 = 0.39.0 =
-Uniforms becomes the Shop. The orders table is renamed from asde_uniformes to asde_tienda_pedidos, two tables for products and variants are added and the settings move automatically; nothing is lost.
+Uniforms becomes the Shop. The orders table is renamed from asde_uniformes to asde_tienda_pedidos, two tables for products and variants are added and the settings move automatically; nothing is lost. A column is added to the orders table for the payment reminder (created automatically).
 
 = 0.38.0 =
 Custom waiting list fields. Adds an encrypted column to the waiting list table (updated automatically).

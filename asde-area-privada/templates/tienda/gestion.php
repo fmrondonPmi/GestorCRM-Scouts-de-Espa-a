@@ -21,6 +21,7 @@
  * @var array<string, array<string, int>>|null             $stock       Camisas del inventario (v0.29); null si no las gestiona
  * @var string                                             $url_asignar
  * @var string                                             $url_inv
+ * @var string                                             $url_informe Enlace a «Ventas e informes» ('' si no puede verlos)
  */
 // phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound, WordPress.WP.GlobalVariablesOverride.Prohibited -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
 use AsdeBalears\AreaPrivada\Domain\Secciones;
@@ -48,8 +49,13 @@ $singular = array(
 ?>
 <section class="asde-card">
 	<header class="asde-card__header asde-card__header--split">
-		<h2 class="asde-card__title"><?php asde_e( 'Pedidos de uniforme' ); ?></h2>
-		<span class="asde-actions"><a class="no-transition" href="<?php echo esc_url( $url_csv ); ?>" data-asde-descarga><?php asde_e( 'Descargar CSV' ); ?></a></span>
+		<h2 class="asde-card__title"><?php asde_e( 'Pedidos de la tienda' ); ?></h2>
+		<span class="asde-actions">
+			<?php if ( '' !== $url_informe ) : ?>
+				<a href="<?php echo esc_url( $url_informe ); ?>"><?php asde_e( 'Ventas e informes' ); ?></a>
+			<?php endif; ?>
+			<a class="no-transition" href="<?php echo esc_url( $url_csv ); ?>" data-asde-descarga><?php asde_e( 'Descargar CSV' ); ?></a>
+		</span>
 	</header>
 	<p class="asde-muted">
 		<?php echo $global ? esc_html( asde_t( 'Todos los pedidos del grupo.' ) ) : esc_html( asde_t( 'Los pedidos de los socios de tus secciones, y los tuyos.' ) ); ?>

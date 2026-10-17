@@ -2,13 +2,14 @@
 /**
  * Emails de la tienda (v0.39, doc 48): pedido recibido, pago validado y pedido entregado.
  *
- * @var string   $tipo        pedido | pagado | entregado
+ * @var string   $tipo        pedido | pagado | entregado | recordatorio | cancelado
  * @var string   $saludo      Nombre para saludar (leído del CRM; puede ir vacío)
  * @var string   $grupo
  * @var string   $numero      U6840007
  * @var string   $descripcion Lo que se ha pedido
  * @var string   $importe     «25,00 €»
- * @var string[] $pagar       Cómo pagar (solo en «pedido» y si aún no está pagado)
+ * @var string[] $pagar       Cómo pagar (solo en «pedido» y «recordatorio», si aún no está pagado)
+ * @var string   $limite      Fecha en que se cancelará si sigue sin pagar ('' si no se cancela solo)
  * @var string   $texto_pago  Texto propio del grupo sobre cómo pagar ('' si no hay)
  * @var string   $url         «Mis pedidos» (o, en una compra sin sesión, el enlace personal al pedido)
  * @var string   $boton       Texto del botón
@@ -40,6 +41,10 @@ $fuerte  = static fn( string $t ): string => '<strong>' . esc_html( $t ) . '</st
 
 					<?php if ( 'pagado' === $tipo ) : ?>
 						<p style="<?php echo esc_attr( $p ); ?>"><?php echo sprintf( asde_h( 'Tesorería ha validado el pago del pedido %s. ¡Gracias!' ), $fuerte( $numero ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+					<?php elseif ( 'recordatorio' === $tipo ) : ?>
+						<p style="<?php echo esc_attr( $p ); ?>"><?php echo sprintf( asde_h( 'Te recordamos que el pedido %s sigue sin pagar.' ), $fuerte( $numero ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?><?php echo '' !== $limite ? ' ' . sprintf( asde_h( 'Si no se paga antes del %s, se cancelará y lo que pediste volverá a la tienda.' ), $fuerte( $limite ) ) : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+					<?php elseif ( 'cancelado' === $tipo ) : ?>
+						<p style="<?php echo esc_attr( $p ); ?>"><?php echo sprintf( asde_h( 'El pedido %s se ha cancelado porque no se pagó a tiempo, y lo que pediste ha vuelto a la tienda. Si todavía lo quieres, puedes hacer un pedido nuevo.' ), $fuerte( $numero ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
 					<?php elseif ( 'entregado' === $tipo ) : ?>
 						<p style="<?php echo esc_attr( $p ); ?>"><?php echo sprintf( asde_h( 'El pedido %s ya está entregado. Cuando lo tengas, confírmalo en «Mis pedidos».' ), $fuerte( $numero ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
 					<?php else : ?>

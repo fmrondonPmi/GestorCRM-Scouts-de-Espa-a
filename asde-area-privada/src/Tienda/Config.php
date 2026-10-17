@@ -61,6 +61,9 @@ final class Config {
 			// v0.39 (fase 4): la tienda pública (compra sin sesión) y los días que se espera el pago de esas compras.
 			'publica'           => false,
 			'dias_sin_pagar'    => 14,
+			// v0.40 (fase 5): pedidos de socios sin pagar: recordatorio a los N días y cancelación a los M (0 = nunca).
+			'dias_aviso_socios'    => 7,
+			'dias_cancelar_socios' => 0,
 		);
 	}
 
@@ -109,6 +112,8 @@ final class Config {
 		$cfg['bizum']          = self::bizum( (string) $cfg['bizum'] );
 		$cfg['publica']        = (bool) $cfg['publica'];
 		$cfg['dias_sin_pagar'] = min( 90, max( 0, (int) $cfg['dias_sin_pagar'] ) );
+		$cfg['dias_aviso_socios']    = min( 90, max( 0, (int) $cfg['dias_aviso_socios'] ) );
+		$cfg['dias_cancelar_socios'] = min( 180, max( 0, (int) $cfg['dias_cancelar_socios'] ) );
 		return $cfg;
 	}
 

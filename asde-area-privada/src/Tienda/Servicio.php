@@ -409,10 +409,49 @@ final class Servicio {
 		foreach ( PedidosTable::invitados_sin_pagar( $dias, \AsdeBalears\AreaPrivada\Domain\Grupo::numero() ) as $p ) {
 			if ( self::cancelar( $p, 'Sin pagar en ' . $dias . ' días' ) ) {
 				Logger::log( 'tienda_cancelado', 'tienda', (string) $p['id'], array( 'por' => 'caducidad' ) );
+				Avisos::enviar( $p, Avisos::CANCELADO ); // v0.40: se le dice que se ha cancelado.
 				++$n;
 			}
 		}
 		return $n;
+	}
+
+	/**
+	 * Pedidos de la tienda de socios y familias sin pagar (v0.40, fase 5): a los «días para recordar» se les manda un recordatorio
+	 * (una sola vez) y a los «días para cancelar» se cancelan solos y lo que pidieron vuelve a las existencias. 0 = no se hace.
+	 * Lo llama el mantenimiento diario, dentro del grupo.
+	 *
+	 * @return array{recordados:int, cancelados:int}
+	 */
+	public static function recordar_y_cancelar_socios(): array {
+		$out = array(
+			'recordados' => 0,
+			'cancelados' => 0,
+		);
+		$grupo = \AsdeBalears\AreaPrivada\Domain\Grupo::numero();
+		if ( ! \AsdeBalears\AreaPrivada\Domain\Modulos::activo( \AsdeBalears\AreaPrivada\Domain\Modulos::TIENDA, $grupo ) ) {
+			return $out;
+		}
+		$cfg = Config::de();
+		if ( $cfg['dias_cancelar_socios'] > 0 ) {
+			foreach ( PedidosTable::socios_sin_pagar( $cfg['dias_cancelar_socios'], $grupo ) as $p ) {
+				if ( self::cancelar( $p, 'Sin pagar en ' . $cfg['dias_cancelar_socios'] . ' días' ) ) {
+					Logger::log( 'tienda_cancelado', 'tienda', (string) $p['id'], array( 'por' => 'caducidad' ) );
+					Avisos::enviar( $p, Avisos::CANCELADO );
+					++$out['cancelados'];
+				}
+			}
+		}
+		// El recordatorio, solo si llega antes de la cancelación (si no, el pedido ya no existe o se cancelaría el mismo día).
+		if ( $cfg['dias_aviso_socios'] > 0 && ( 0 === $cfg['dias_cancelar_socios'] || $cfg['dias_aviso_socios'] < $cfg['dias_cancelar_socios'] ) ) {
+			foreach ( PedidosTable::socios_sin_pagar( $cfg['dias_aviso_socios'], $grupo ) as $p ) {
+				if ( PedidosTable::marcar_aviso( $p['id'] ) ) {
+					Avisos::enviar( $p, Avisos::RECORDATORIO );
+					++$out['recordados'];
+				}
+			}
+		}
+		return $out;
 	}
 
 	/** Devuelve a las existencias lo que se había reservado en estas líneas. @param array[] $lineas */
@@ -557,6 +596,11 @@ final class Servicio {
 
 	public static function es_propio( array $p, Ambito $a ): bool {
 		return ( $a->persona && $a->persona->num_socio_asde === $p['socio'] ) || isset( $a->representados[ $p['socio'] ] );
+	}
+
+	/** Los informes de ventas (v0.40): Tesorería, Coordinación y la administración de la tienda. */
+	public static function puede_informes(): bool {
+		return current_user_can( self::CAP_PAGO ) || current_user_can( self::CAP_PEDIDO ) || current_user_can( self::CAP_ADMIN );
 	}
 
 	/** ¿Lo pidió esta cuenta? (v0.30: un scouter para alguien de su sección.) */

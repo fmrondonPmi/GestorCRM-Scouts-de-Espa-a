@@ -103,6 +103,7 @@ final class PedidosTable {
 				forma_pago varchar(14) NOT NULL DEFAULT '',
 				invitado_enc longtext NULL,
 				sal varchar(32) NOT NULL DEFAULT '',
+				aviso_en datetime NULL,
 				creado datetime NOT NULL,
 				creado_por bigint(20) unsigned NOT NULL DEFAULT 0,
 				pago_fecha date NULL,
@@ -206,6 +207,23 @@ final class PedidosTable {
 		$limite = gmdate( 'Y-m-d H:i:s', time() - $dias * DAY_IN_SECONDS );
 		$filas  = (array) $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM %i WHERE grupo = %s AND invitado_enc IS NOT NULL AND pago_en IS NULL AND cancelado_en IS NULL AND entregado_en IS NULL AND creado < %s', self::table(), $grupo, $limite ), ARRAY_A ); // phpcs:ignore WordPress.DB
 		return array_map( array( self::class, 'preparar' ), $filas );
+	}
+
+	/**
+	 * Pedidos de la tienda de socios y familias sin pagar, ni entregar ni cancelar, hechos hace más de N días (v0.40, fase 5).
+	 * Solo los que tienen forma de pago (los de la tienda) y cuestan algo.
+	 */
+	public static function socios_sin_pagar( int $dias, string $grupo ): array {
+		global $wpdb;
+		$limite = gmdate( 'Y-m-d H:i:s', time() - $dias * DAY_IN_SECONDS );
+		$filas  = (array) $wpdb->get_results( $wpdb->prepare( "SELECT * FROM %i WHERE grupo = %s AND invitado_enc IS NULL AND socio <> '' AND forma_pago <> '' AND total > 0 AND pago_en IS NULL AND cancelado_en IS NULL AND entregado_en IS NULL AND creado < %s ORDER BY id", self::table(), $grupo, $limite ), ARRAY_A ); // phpcs:ignore WordPress.DB
+		return array_map( array( self::class, 'preparar' ), $filas );
+	}
+
+	/** Apunta que se ha mandado el recordatorio; false si ya constaba (así no se manda dos veces). */
+	public static function marcar_aviso( int $id ): bool {
+		global $wpdb;
+		return 1 === (int) $wpdb->query( $wpdb->prepare( 'UPDATE %i SET aviso_en = %s WHERE id = %d AND aviso_en IS NULL', self::table(), current_time( 'mysql', true ), $id ) ); // phpcs:ignore WordPress.DB
 	}
 
 	/** Pedido del grupo actual, o null. */
