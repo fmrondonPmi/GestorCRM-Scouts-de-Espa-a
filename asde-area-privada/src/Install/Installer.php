@@ -106,6 +106,8 @@ final class Installer {
 		// v0.36: las cuentas de los eventos (gastos e ingresos reales, anticipos de caja).
 		\AsdeBalears\AreaPrivada\Eventos\GastosTable::install_table();
 		\AsdeBalears\AreaPrivada\Eventos\AnticiposTable::install_table();
+		// v0.40: el calendario de tareas de los eventos (doc 49).
+		\AsdeBalears\AreaPrivada\Eventos\TareasTable::install_table();
 		Grupos::migrar();
 		\AsdeBalears\AreaPrivada\Domain\Organizacion::migrar(); // Instalaciones anteriores: Scouts de Balears, código 7.
 		\AsdeBalears\AreaPrivada\Tienda\Sembrado::ejecutar(); // v0.39: la camisa y las insignias de Uniformes, como productos (idempotente).

@@ -4,10 +4,14 @@
  *
  * @var array                 $cfg
  * @var array<string, string> $opciones Valores del campo «formación de tiempo libre» del CRM (vacío si no los da)
+ * @var array<string, array>  $plantillas Plantillas de tareas del grupo (v0.40, doc 49)
+ * @var string                $plantilla  La que se está editando
+ * @var bool                  $original   Si la de Acampada es la original, sin cambios
  * @var string                $url
  */
 // phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound, WordPress.WP.GlobalVariablesOverride.Prohibited -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
 use AsdeBalears\AreaPrivada\Eventos\Config;
+use AsdeBalears\AreaPrivada\Eventos\Plantillas;
 
 defined( 'ABSPATH' ) || exit;
 ?>
@@ -154,3 +158,114 @@ defined( 'ABSPATH' ) || exit;
 
 	<p><button type="submit" class="button button-primary"><?php asde_e( 'Guardar' ); ?></button></p>
 </form>
+
+<section class="asde-card" id="calendario-de-tareas">
+	<h3 class="asde-card__title"><?php asde_e( 'Calendario de tareas' ); ?></h3>
+	<p class="asde-muted"><?php asde_e( 'Cada evento puede copiar una plantilla de tareas con su fecha límite (por ejemplo, 60 días antes del inicio). Viene la de Acampada; puedes cambiarla o crear las tuyas.' ); ?></p>
+
+	<form method="post" class="asde-form" action="<?php echo esc_url( $url ); ?>">
+		<?php wp_nonce_field( 'asde_eventos_config' ); ?>
+		<input type="hidden" name="asde_action" value="calendario_guardar">
+		<label class="asde-choice"><input type="checkbox" name="calendario_viernes" value="1" <?php checked( $cfg['calendario_viernes'] ); ?>><span><?php asde_e( 'Si una fecha límite cae en sábado o domingo, adelantarla al viernes' ); ?></span></label>
+		<p><button type="submit" class="button"><?php asde_e( 'Guardar' ); ?></button></p>
+	</form>
+
+	<h4><?php asde_e( 'Plantillas' ); ?></h4>
+	<ul class="asde-plantillas">
+		<?php foreach ( $plantillas as $pid => $pl ) : ?>
+			<li>
+				<?php if ( (string) $pid === $plantilla ) : ?>
+					<strong><?php echo esc_html( Plantillas::nombre( (string) $pid, $pl ) ); ?></strong>
+				<?php else : ?>
+					<a href="<?php echo esc_url( add_query_arg( 'plantilla', (string) $pid, $url ) . '#calendario-de-tareas' ); ?>"><?php echo esc_html( Plantillas::nombre( (string) $pid, $pl ) ); ?></a>
+				<?php endif; ?>
+				<span class="asde-muted">(<?php echo esc_html( sprintf( asde_n( '%d tarea', '%d tareas', count( $pl['tareas'] ) ), count( $pl['tareas'] ) ) ); ?>)</span>
+			</li>
+		<?php endforeach; ?>
+	</ul>
+
+	<?php $pl = $plantillas[ $plantilla ]; ?>
+	<form method="post" class="asde-form" action="<?php echo esc_url( $url ); ?>">
+		<?php wp_nonce_field( 'asde_eventos_config' ); ?>
+		<input type="hidden" name="asde_action" value="plantilla_guardar">
+		<input type="hidden" name="plantilla" value="<?php echo esc_attr( $plantilla ); ?>">
+		<input type="hidden" name="filas" value="<?php echo count( $pl['tareas'] ); ?>">
+		<p>
+			<label for="asde-plantilla-nombre"><?php asde_e( 'Nombre de la plantilla' ); ?></label>
+			<input type="text" id="asde-plantilla-nombre" name="nombre" value="<?php echo esc_attr( Plantillas::nombre( $plantilla, $pl ) ); ?>" maxlength="60">
+		</p>
+		<table class="asde-table asde-table--plantilla">
+			<thead>
+				<tr>
+					<th scope="col"><?php asde_e( 'Tarea' ); ?></th>
+					<th scope="col"><?php asde_e( 'Detalle' ); ?></th>
+					<th scope="col"><?php asde_e( 'Desde' ); ?></th>
+					<th scope="col"><?php asde_e( 'Días' ); ?></th>
+					<th scope="col"><?php asde_e( 'Quitar' ); ?></th>
+				</tr>
+			</thead>
+			<tbody>
+				<?php foreach ( $pl['tareas'] as $i => $t ) : ?>
+					<tr>
+						<td data-label="<?php echo esc_attr( asde_a( 'Tarea' ) ); ?>">
+							<input type="text" name="t_titulo_<?php echo (int) $i; ?>" value="<?php echo esc_attr( $t['titulo'] ); ?>" maxlength="200" aria-label="<?php echo esc_attr( asde_a( 'Tarea' ) ); ?>">
+							<input type="hidden" name="t_auto_<?php echo (int) $i; ?>" value="<?php echo esc_attr( $t['auto'] ); ?>">
+							<input type="hidden" name="t_enlace_<?php echo (int) $i; ?>" value="<?php echo esc_attr( $t['enlace'] ); ?>">
+						</td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Detalle' ) ); ?>"><input type="text" name="t_detalle_<?php echo (int) $i; ?>" value="<?php echo esc_attr( $t['detalle'] ); ?>" maxlength="400" aria-label="<?php echo esc_attr( asde_a( 'Detalle' ) ); ?>"></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Desde' ) ); ?>">
+							<select name="t_ref_<?php echo (int) $i; ?>" aria-label="<?php echo esc_attr( asde_a( 'Desde' ) ); ?>">
+								<option value="inicio" <?php selected( $t['ref'], 'inicio' ); ?>><?php asde_e( 'el inicio' ); ?></option>
+								<option value="fin" <?php selected( $t['ref'], 'fin' ); ?>><?php asde_e( 'el fin' ); ?></option>
+							</select>
+						</td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Días' ) ); ?>"><input type="number" name="t_desfase_<?php echo (int) $i; ?>" value="<?php echo (int) $t['desfase']; ?>" min="-730" max="730" step="1" aria-label="<?php echo esc_attr( asde_a( 'Días' ) ); ?>"></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Quitar' ) ); ?>"><input type="checkbox" name="t_quitar_<?php echo (int) $i; ?>" value="1" aria-label="<?php echo esc_attr( asde_a( 'Quitar' ) ); ?>"></td>
+					</tr>
+				<?php endforeach; ?>
+				<?php for ( $k = 0; $k < 3; $k++ ) : ?>
+					<tr>
+						<td data-label="<?php echo esc_attr( asde_a( 'Tarea' ) ); ?>"><input type="text" name="n_titulo_<?php echo (int) $k; ?>" maxlength="200" placeholder="<?php echo esc_attr( asde_a( 'Tarea nueva' ) ); ?>" aria-label="<?php echo esc_attr( asde_a( 'Tarea nueva' ) ); ?>"></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Detalle' ) ); ?>"><input type="text" name="n_detalle_<?php echo (int) $k; ?>" maxlength="400" aria-label="<?php echo esc_attr( asde_a( 'Detalle' ) ); ?>"></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Desde' ) ); ?>">
+							<select name="n_ref_<?php echo (int) $k; ?>" aria-label="<?php echo esc_attr( asde_a( 'Desde' ) ); ?>">
+								<option value="inicio"><?php asde_e( 'el inicio' ); ?></option>
+								<option value="fin"><?php asde_e( 'el fin' ); ?></option>
+							</select>
+						</td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Días' ) ); ?>"><input type="number" name="n_desfase_<?php echo (int) $k; ?>" value="0" min="-730" max="730" step="1" aria-label="<?php echo esc_attr( asde_a( 'Días' ) ); ?>"></td>
+						<td></td>
+					</tr>
+				<?php endfor; ?>
+			</tbody>
+		</table>
+		<p class="asde-help"><?php asde_e( 'Días: negativo = antes (−60 = 60 días antes del inicio); positivo = después (7 = una semana después del fin). Los cambios valen para los eventos que apliquen la plantilla a partir de ahora.' ); ?></p>
+		<p><button type="submit" class="button"><?php asde_e( 'Guardar la plantilla' ); ?></button></p>
+	</form>
+
+	<?php if ( 'acampada' === $plantilla && ! $original ) : ?>
+		<form method="post" action="<?php echo esc_url( $url ); ?>" data-asde-confirmar="<?php echo esc_attr( asde_js( '¿Restaurar la plantilla de Acampada a la original? Se pierden tus cambios en ella.' ) ); ?>">
+			<?php wp_nonce_field( 'asde_eventos_config' ); ?>
+			<input type="hidden" name="asde_action" value="plantilla_restaurar">
+			<button type="submit" class="asde-btn-link"><?php asde_e( 'Restaurar la plantilla original de Acampada' ); ?></button>
+		</form>
+	<?php elseif ( 'acampada' !== $plantilla ) : ?>
+		<form method="post" action="<?php echo esc_url( $url ); ?>" data-asde-confirmar="<?php echo esc_attr( asde_js( '¿Borrar esta plantilla? Los eventos que ya la aplicaron no cambian.' ) ); ?>">
+			<?php wp_nonce_field( 'asde_eventos_config' ); ?>
+			<input type="hidden" name="asde_action" value="plantilla_borrar">
+			<input type="hidden" name="plantilla" value="<?php echo esc_attr( $plantilla ); ?>">
+			<button type="submit" class="asde-btn-link asde-btn-danger"><?php asde_e( 'Borrar la plantilla' ); ?></button>
+		</form>
+	<?php endif; ?>
+
+	<h4><?php asde_e( 'Nueva plantilla' ); ?></h4>
+	<form method="post" class="asde-form" action="<?php echo esc_url( $url ); ?>">
+		<?php wp_nonce_field( 'asde_eventos_config' ); ?>
+		<input type="hidden" name="asde_action" value="plantilla_nueva">
+		<p class="asde-form__fila">
+			<label><?php asde_e( 'Nombre' ); ?> <input type="text" name="nombre" maxlength="60" placeholder="<?php echo esc_attr( asde_a( 'Por ejemplo: Salida de día' ) ); ?>" required></label>
+		</p>
+		<label class="asde-choice"><input type="checkbox" name="copiar" value="1"><span><?php asde_e( 'Empezar con una copia de las tareas de Acampada' ); ?></span></label>
+		<p><button type="submit" class="button"><?php asde_e( 'Crear la plantilla' ); ?></button></p>
+	</form>
+</section>

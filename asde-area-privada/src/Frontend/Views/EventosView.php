@@ -17,8 +17,11 @@ use AsdeBalears\AreaPrivada\Eventos\Justificantes;
 use AsdeBalears\AreaPrivada\Eventos\MovimientosTable;
 use AsdeBalears\AreaPrivada\Eventos\Normativa;
 use AsdeBalears\AreaPrivada\Eventos\PartidasTable;
+use AsdeBalears\AreaPrivada\Eventos\Plantillas;
 use AsdeBalears\AreaPrivada\Eventos\Presupuesto;
 use AsdeBalears\AreaPrivada\Eventos\Servicio;
+use AsdeBalears\AreaPrivada\Eventos\Tareas;
+use AsdeBalears\AreaPrivada\Eventos\TareasTable;
 use AsdeBalears\AreaPrivada\Frontend\Notices;
 use AsdeBalears\AreaPrivada\Informes\Generador;
 
@@ -36,6 +39,7 @@ final class EventosView extends EventosBaseView {
 
 	public const PESTANAS = array(
 		'resumen'       => 'Resumen',
+		'calendario'    => 'Calendario',
 		'equipo'        => 'Equipo',
 		'inscripciones' => 'Inscripciones',
 		'presupuesto'   => 'Presupuesto',
@@ -157,6 +161,8 @@ final class EventosView extends EventosBaseView {
 			$contenido = $this->tpl( 'eventos/inscripciones', $vars + $this->inscripciones( $e, $a, $filas ) );
 		} elseif ( 'cuentas' === $pestana ) {
 			$contenido = $this->tpl( 'eventos/cuentas', $vars + $this->cuentas( $e ) );
+		} elseif ( 'calendario' === $pestana ) {
+			$contenido = $this->tpl( 'eventos/calendario', $vars + $this->calendario( $e, $a, $cfg ) );
 		} elseif ( 'equipo' === $pestana ) {
 			$contenido = $this->tpl(
 				'eventos/equipo',
@@ -250,6 +256,34 @@ final class EventosView extends EventosBaseView {
 		);
 	}
 
+	/** Lo que necesita la pestaña «Calendario» (v0.40, doc 49). */
+	private function calendario( array $e, Ambito $a, array $cfg ): array {
+		$tareas = TareasTable::de_evento( $e['id'] );
+		$hoy    = wp_date( 'Y-m-d' );
+		$estado = array();
+		$dias   = array();
+		foreach ( $tareas as $t ) {
+			$estado[ $t['id'] ] = Tareas::estado( $t, $hoy );
+			$dias[ $t['id'] ]   = Tareas::dias( $t, $hoy );
+		}
+		$plantillas = array();
+		foreach ( Plantillas::de_grupo( $cfg ) as $id => $p ) {
+			if ( $p['tareas'] ) {
+				$plantillas[ $id ] = Plantillas::nombre( (string) $id, $p );
+			}
+		}
+		return array(
+			'tareas'     => $tareas,
+			'estado'     => $estado,
+			'dias'       => $dias,
+			'puede_marcar' => Tareas::puede_marcar( $e, $a ),
+			'puede_editar' => Tareas::puede_editar( $e, $a ),
+			'plantillas' => $plantillas,
+			'propuesta'  => Plantillas::propuesta( $e['tipo'], $cfg ),
+			'viernes'    => (bool) $cfg['calendario_viernes'],
+		);
+	}
+
 	/** Lo que necesita la pestaña «Cuentas» (v0.36). */
 	private function cuentas( array $e ): array {
 		$personas = Cuentas::personas( $e );
@@ -324,7 +358,11 @@ final class EventosView extends EventosBaseView {
 					$this->errores( $r, $in, $e['id'] );
 					return;
 				}
-				$hecho  = sprintf( asde_t( 'Evento %s guardado.' ), $num );
+				$hecho   = sprintf( asde_t( 'Evento %s guardado.' ), $num );
+				$movidas = Tareas::recalcular( EventosTable::obtener( $e['id'] ) ?? $e ); // v0.40: si cambian las fechas, las del calendario.
+				if ( $movidas ) {
+					$hecho .= ' ' . sprintf( asde_n( 'Ha cambiado la fecha de %d tarea del calendario.', 'Han cambiado las fechas de %d tareas del calendario.', $movidas ), $movidas );
+				}
 				$volver = $this->url( 'eventos', array( 'evento' => (string) $e['id'] ) );
 				break;
 
@@ -505,6 +543,35 @@ final class EventosView extends EventosBaseView {
 
 			case 'evento_informe':
 				$r = $this->informe_csv( $e, $a ); // Si se puede ver, lo envía y no vuelve.
+				break;
+
+			case 'tarea_aplicar':
+				$r     = Tareas::aplicar( $e, sanitize_key( $this->post( 'plantilla' ) ), $a );
+				$hecho = is_wp_error( $r ) ? '' : sprintf( asde_n( 'Se ha creado %d tarea.', 'Se han creado %d tareas.', (int) $r ), (int) $r );
+				break;
+
+			case 'tarea_hecha':
+			case 'tarea_deshecha':
+				$t     = TareasTable::obtener( (int) $this->post( 'tarea' ) );
+				$r     = $t ? Tareas::marcar( $e, $t, 'tarea_hecha' === $accion, $a ) : new \WP_Error( 'asde_tareas', asde_t( 'Esa tarea no existe.' ) );
+				$hecho = 'tarea_hecha' === $accion ? asde_t( 'Tarea hecha.' ) : asde_t( 'La tarea vuelve a estar pendiente.' );
+				break;
+
+			case 'tarea_guardar':
+				$t     = TareasTable::obtener( (int) $this->post( 'tarea' ) );
+				$r     = $t ? Tareas::guardar( $e, $t, $this->post( 'responsable' ), $this->post( 'fecha' ), $this->post( 'nota' ), array_column( InscripcionesTable::equipo( $e['id'] ), 'socio' ), $a ) : new \WP_Error( 'asde_tareas', asde_t( 'Esa tarea no existe.' ) );
+				$hecho = asde_t( 'Tarea guardada.' );
+				break;
+
+			case 'tarea_anadir':
+				$r     = Tareas::anadir( $e, $this->post( 'titulo' ), $this->post( 'fecha' ), $this->post( 'detalle' ), $a );
+				$hecho = asde_t( 'Tarea añadida.' );
+				break;
+
+			case 'tarea_quitar':
+				$t     = TareasTable::obtener( (int) $this->post( 'tarea' ) );
+				$r     = $t ? Tareas::quitar( $e, $t, $a ) : new \WP_Error( 'asde_tareas', asde_t( 'Esa tarea no existe.' ) );
+				$hecho = asde_t( 'Tarea quitada.' );
 				break;
 
 			case 'evento_borrar':

@@ -53,6 +53,8 @@ final class AreaPrivadaView extends View {
 						// v0.35: presupuestos de eventos que esperan a Tesorería y autorizaciones por recoger en papel.
 						'eventos_validar'  => Eventos::pendientes( $ambito )['validar'],
 						'eventos_papel'    => Inscripciones::por_recoger( $ambito ),
+						// v0.40: tareas de los calendarios de los eventos que gestiona, vencidas o de esta semana.
+						'eventos_tareas'   => array_sum( \AsdeBalears\AreaPrivada\Eventos\Tareas::pendientes( $ambito ) ),
 					),
 					// Uniformes entregados que el socio/a o su familia aún no ha confirmado.
 					'por_confirmar' => $uniformes['confirmar'],

@@ -125,6 +125,9 @@ $user = $ambito->user;
 			<?php if ( ! empty( $por_revisar['eventos_papel'] ) ) : ?>
 				<li><a href="<?php echo esc_url( $url( 'eventos' ) ); ?>"><?php echo $num( (int) $por_revisar['eventos_papel'], esc_html( asde_t( 'autorización de evento por recoger en papel' ) ), esc_html( asde_t( 'autorizaciones de eventos por recoger en papel' ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></a></li>
 			<?php endif; ?>
+			<?php if ( ! empty( $por_revisar['eventos_tareas'] ) ) : ?>
+				<li><a href="<?php echo esc_url( $url( 'eventos' ) ); ?>"><?php echo $num( (int) $por_revisar['eventos_tareas'], esc_html( asde_t( 'tarea de evento vencida o de esta semana' ) ), esc_html( asde_t( 'tareas de eventos vencidas o de esta semana' ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></a></li>
+			<?php endif; ?>
 			<?php if ( ! empty( $por_revisar['uniforme_entrega'] ) ) : ?>
 				<li><a href="<?php echo esc_url( $uni( 'por_entregar' ) ); ?>"><?php echo $num( (int) $por_revisar['uniforme_entrega'], esc_html( asde_t( 'uniforme pedido al proveedor por entregar' ) ), esc_html( asde_t( 'uniformes pedidos al proveedor por entregar' ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></a></li>
 			<?php endif; ?>

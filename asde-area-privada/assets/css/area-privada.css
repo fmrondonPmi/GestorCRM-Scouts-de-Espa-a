@@ -2854,3 +2854,29 @@ dialog.asde-modal--mini .asde-banco-tipo-nuevo h3 {
 .asde-table--tienda-variantes input[type="text"] { max-width: 100%; }
 .asde-table--tienda-variantes td:not(.asde-num) { vertical-align: middle; }
 .asde-table--tienda-productos .asde-badge { margin-left: .4rem; }
+
+/* v0.40 (doc 49, fase A1): calendario de tareas de los eventos. */
+.asde-ap .asde-tareas__resumen { margin: 0 0 .5rem; }
+.asde-ap .asde-tareas__lista { list-style: none; margin: 0; padding: 0; }
+.asde-ap .asde-tarea { display: flex; gap: .75rem; padding: .65rem 0; border-top: 1px solid var(--asde-border); }
+.asde-ap .asde-tarea:first-child { border-top: 0; }
+.asde-ap .asde-tarea__marca form { margin: 0; }
+.asde-ap .asde-tarea__boton { display: inline-flex; align-items: center; justify-content: center; width: 1.9rem; height: 1.9rem; min-height: 0; padding: 0; border: 2px solid var(--asde-border); border-radius: 50%; background: var(--asde-surface); color: var(--asde-ok-text); font-size: 1rem; line-height: 1; cursor: pointer; }
+.asde-ap .asde-tarea--hecha .asde-tarea__boton { background: var(--asde-ok-bg); border-color: var(--asde-ok); }
+.asde-ap .asde-tarea--vencida .asde-tarea__boton { border-color: var(--asde-error); }
+.asde-ap .asde-tarea--semana .asde-tarea__boton { border-color: var(--asde-warn); }
+.asde-ap .asde-tarea__cuerpo { display: flex; flex-direction: column; gap: .15rem; min-width: 0; flex: 1; }
+.asde-ap .asde-tarea--hecha .asde-tarea__titulo { text-decoration: line-through; color: var(--asde-muted); }
+.asde-ap .asde-tarea__meta { display: flex; flex-wrap: wrap; gap: .25rem .4rem; align-items: center; font-size: .9em; }
+.asde-ap .asde-tarea__nota { font-style: italic; }
+.asde-ap .asde-tarea__editar { margin-top: .35rem; }
+.asde-ap .asde-badge--tarea-hecha { background: var(--asde-ok-bg); color: var(--asde-ok-text); }
+.asde-ap .asde-badge--tarea-vencida { background: var(--asde-error-bg); color: var(--asde-error-text); }
+.asde-ap .asde-badge--tarea-semana { background: var(--asde-warn-bg); color: var(--asde-warn-text); }
+.asde-ap .asde-badge--tarea-pronto,
+.asde-ap .asde-badge--tarea-sin_fecha { background: var(--asde-neutral-bg); color: var(--asde-muted); }
+@media print {
+	.asde-ap .asde-solo-pantalla,
+	.asde-ap .asde-subnav { display: none !important; }
+	.asde-ap .asde-tarea { break-inside: avoid; }
+}

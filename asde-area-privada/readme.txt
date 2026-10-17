@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.39.0
+Stable tag: 0.40.0
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -61,6 +61,9 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.40.0 =
+* Events: task calendar (plan in docs/49). A new "Calendar" tab in each event copies a template of tasks with deadlines counted from the start or end of the event (the ASDE camp programmer's 31-task "Acampada" template comes built in), shows a traffic light for each task (done, overdue, this week, later), lets any scout with access to the event tick tasks off, lets whoever manages the event assign a responsible person, set an own date, add and remove tasks, recalculates the dates if the event moves, adjusts weekend deadlines to the previous Friday (configurable) and prints. Each group can edit the template or create its own in Events settings. Overdue and this-week tasks appear in "Pending review" on the home page. A new table is created automatically.
 
 = 0.39.0 =
 * The "Uniforms" module is now "Shop" (plan in docs/48). Phase 1: same features under the new name, new Shop capabilities (Secretary joins Coordination and Treasury as shop administrator), pages "My orders", "Shop management" and "Shop settings" (old /uniforme addresses redirect), and an automatic, repeatable migration of the orders table, settings and module switch.
@@ -220,6 +223,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * First version with the mobile app (PWA).
 
 == Upgrade Notice ==
+
+= 0.40.0 =
+Event task calendar. Adds one table (created automatically); nothing else changes.
 
 = 0.39.0 =
 Uniforms becomes the Shop. The orders table is renamed from asde_uniformes to asde_tienda_pedidos and the settings move automatically; nothing is lost.

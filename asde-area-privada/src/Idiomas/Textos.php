@@ -99,6 +99,7 @@ final class Textos {
 		$add( Presupuesto::REPARTOS, 'Eventos' );
 		$add( Normativa::COMUNICACION, 'Eventos' );
 		$add( EventosView::PESTANAS, 'Eventos' );
+		$add( \AsdeBalears\AreaPrivada\Eventos\Plantillas::textos(), 'Eventos' ); // v0.40: la plantilla de Acampada.
 		// v0.35: inscripciones y cobros (y el texto de la autorización del plugin).
 		$add( EventosTable::MODALIDADES, 'Eventos' );
 		$add( InscripcionesTable::ESTADOS, 'Eventos' );
