@@ -27,6 +27,9 @@ foreach ( asde_ta( EventosView::PESTANAS ) as $p => $etiqueta ) {
 	if ( 'cuentas' === $p && ! Cuentas::puede_ver( $e, $ambito ) ) {
 		continue; // v0.36: las cuentas, solo quien gestiona el evento y Tesorería.
 	}
+	if ( 'material' === $p && ! \AsdeBalears\AreaPrivada\Eventos\Material::puede_ver( $e, $ambito ) ) {
+		continue; // v0.42: el material, solo quien gestiona el evento y usa el inventario.
+	}
 	if ( 'menu' === $p && ! \AsdeBalears\AreaPrivada\Menus\MenuEvento::puede_ver( $e, $ambito ) ) {
 		continue; // v0.41: el menú, solo quien gestiona el evento.
 	}

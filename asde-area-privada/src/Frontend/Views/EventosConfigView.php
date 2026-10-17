@@ -143,6 +143,19 @@ final class EventosConfigView extends EventosBaseView {
 		check_admin_referer( 'asde_eventos_config' );
 		$cfg = Config::de();
 
+		// v0.42: el material habitual de cada tipo de evento.
+		if ( 'material_guardar' === $this->post( 'asde_action' ) ) {
+			$material = array();
+			foreach ( array_keys( $cfg['tipos'] ) as $tipo ) {
+				$material[ $tipo ] = $this->post( 'material_' . $tipo );
+			}
+			$cfg['material_por_tipo'] = $material;
+			Config::guardar( $cfg );
+			Logger::log( 'eventos_configurados', 'grupo', Grupo::numero(), array( 'campos' => array( 'material_por_tipo' ) ) );
+			Notices::add( 'success', asde_t( 'Material habitual guardado.' ) );
+			$this->redirect( $this->url( 'eventos_config' ) );
+		}
+
 		if ( str_starts_with( $this->post( 'asde_action' ), 'plantilla_' ) || 'calendario_guardar' === $this->post( 'asde_action' ) ) {
 			$this->calendario_post( $cfg );
 			return;

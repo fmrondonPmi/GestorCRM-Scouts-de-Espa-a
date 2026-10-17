@@ -428,6 +428,7 @@ final class Entorno {
 			\AsdeBalears\AreaPrivada\Eventos\GastosTable::table(),
 			\AsdeBalears\AreaPrivada\Eventos\AnticiposTable::table(),
 			\AsdeBalears\AreaPrivada\Eventos\TareasTable::table(),
+			\AsdeBalears\AreaPrivada\Eventos\MaterialTable::table(),
 			\AsdeBalears\AreaPrivada\Menus\IngredientesTable::table(),
 			\AsdeBalears\AreaPrivada\Menus\RecetasTable::table(),
 			\AsdeBalears\AreaPrivada\Menus\RecetasTable::table_lineas(),

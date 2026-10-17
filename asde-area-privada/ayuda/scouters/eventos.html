@@ -1,4 +1,4 @@
-<!-- Generado por herramientas/generar-manuales.php (manual «scouters», versión 0.41) a partir de manual/fuentes: no se edita a mano. -->
+<!-- Generado por herramientas/generar-manuales.php (manual «scouters», versión 0.42) a partir de manual/fuentes: no se edita a mano. -->
 <div class="asde-ayuda__texto" data-manual="scouters" data-ancla="eventos">
 <div class="asde-ayuda__apartado"><h2>Eventos</h2>
 	<p class="resumen">Salidas, acampadas, campamentos y demás actividades del grupo: sus datos, el equipo dirigente, lo que pide la normativa de tiempo libre y el presupuesto, del que sale el precio. Está en <strong>Gestión del grupo → Eventos</strong> (desde la v0.35) si el grupo tiene encendido el módulo «Eventos», que nace apagado: lo enciende el administrador en wp-admin → Grupos Scouts → Módulos. Las familias se inscriben en «Mis eventos», que explica el manual para familias. Los gastos y el cierre de cuentas llegan en una próxima versión.</p>
@@ -63,6 +63,19 @@
 		<li>Las tareas del <a href="{{completo}}#asde-manual-eventos-calendario" data-asde-modal>calendario</a> «Elaborar menú» (se da por hecha sola cuando cada día tiene comida y cena) y «Revisar alergias médicas de asistentes, medicinas y menú» llevan a esta pestaña.</li>
 	</ul>
 
+	<h3>Material del evento</h3>
+	<p>La pestaña <strong>«Material»</strong> (la ve quien gestiona el evento y puede usar el <a href="{{completo}}#asde-manual-inventario" data-asde-modal>inventario</a>) reserva lo que el evento se lleva del inventario del grupo y anota cuándo sale y cómo vuelve.</p>
+	<p class="asde-ayuda__pantalla">El material de una acampada: lo reservado, el aviso de si alcanza, la salida y la devolución.</p>
+	<ul>
+		<li><strong>Reservar:</strong> elige el material y la cantidad. Reservar <strong>no lo descuenta</strong> del inventario. Si otro evento que <strong>coincide en fechas</strong> se lleva lo mismo y no alcanza, la línea dice «Faltan N unidades» (solo avisa: no bloquea). Los eventos cancelados y lo que ya se ha devuelto no cuentan.</li>
+		<li><strong>Material habitual:</strong> en la <a href="{{completo}}#asde-manual-eventos-configuracion" data-asde-modal>configuración de eventos</a>, «Material habitual de cada tipo de evento», se escribe una línea por material con la cantidad y el nombre tal como está en el inventario («4; Tienda canadiense»). En la pestaña, «Cargar el material habitual» lo reserva de una vez y avisa de lo que no encuentre en el inventario.</li>
+		<li><strong>Cambiar y quitar:</strong> se puede cambiar la cantidad o quitar una línea mientras no haya salido.</li>
+		<li><strong>Salida:</strong> «Marcar salida» (una línea) o «Marcar la salida de todo» anota quién y cuándo.</li>
+		<li><strong>Devolución:</strong> escribe cuántas unidades vuelven y, si falta algo o está roto, una incidencia. Las que no vuelven salen como «Faltan N unidades». La devolución se puede corregir.</li>
+		<li><strong>Descontar del inventario:</strong> si algo no vuelve de verdad, «Descontar del inventario» quita esas unidades del inventario. Es un paso aparte, <strong>definitivo y de una sola vez</strong>. Para pagar una reposición, apúntala en las <a href="{{completo}}#asde-manual-eventos-cuentas" data-asde-modal>cuentas</a> del evento.</li>
+		<li>La tarea «Preparar las intendencias y secciones el material de acampada» del <a href="{{completo}}#asde-manual-eventos-calendario" data-asde-modal>calendario</a> lleva a esta pestaña. <strong>Imprimir</strong> saca la lista para llevarla.</li>
+	</ul>
+	<p class="asde-ayuda__pantalla">El material habitual de cada tipo de evento, en la configuración de eventos.</p>
 	<h3>Presupuesto y precio</h3>
 	<p>Si el evento tiene coste, en la pestaña «Presupuesto» se escriben los gastos previstos y cómo se reparte cada uno:</p>
 	<ul>

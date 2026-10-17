@@ -596,7 +596,7 @@ Con las convenciones de siempre: sin JavaScript funciona; con JavaScript, ventan
 | **0.36 · Gastos, SEPA y cierre** | Gastos con justificante, reembolsos, anticipos, fondo de emergencia, devoluciones, balance y cierre (borra lo cifrado); **SEPA de eventos** en las remesas | `tests/eventos-economia.php` |
 | **0.37 · Listados, comunicación y asistencia** | Participantes, emergencia, salud en vivo, cocina, autobús, imprimir y CSV con auditoría; **comunicación a ASDE Baleares** (enviar o descargar, con los adjuntos y el email de *Organización federada*); pasar lista | `tests/eventos-listados.php` |
 | **0.38 · Eventos externos del CRM** | Leer `stic_Events` federativos para crear el evento externo | `tests/eventos-externos.php` |
-| **0.39 · Material del evento** (el inventario **ya existe** en esta línea, doc 32) | Sobre el inventario de la v0.19: material del evento con plantillas, conflictos, salida y devolución (y, si hace falta, el rol «Responsable de material», caducidades y material de cada sección) | `tests/eventos-material.php` |
+| ✅ **0.42 · Material del evento** (hecha, 2026-10-17; el inventario **ya existe** en esta línea, doc 32; antes 0.39) | Sobre el inventario de la v0.19: material del evento con plantillas, conflictos, salida y devolución (y, si hace falta, el rol «Responsable de material», caducidades y material de cada sección) | `tests/eventos-material.php` |
 | **0.40 · Copia al CRM** | `EscrituraEventos`: eventos e inscripciones a `stic_Events` / `stic_Registrations` | `tests/eventos-crm.php` |
 
 Cada fase actualiza los docs (00, este, 02, 10 y 09) y los manuales de uso (`manual/fuentes/`). Para la mecánica repetida hay *skills* del proyecto en `.claude/skills/`: **`modulo-nuevo`**, **`entregar-version`**, **`traducir-textos`** y **`probar-en-la-nube`**.
@@ -623,3 +623,12 @@ Lo que hay que **comprobar al programar** (no es una pregunta para el usuario):
 - qué valores tiene `formaciontiempolibre_c` en el CRM (`Metadatos`);
 - qué valores tiene `stic_gender_c`;
 - si el usuario del CRM de cada grupo **ve los eventos federativos** de `stic_Events`.
+
+## Avance: material del evento (v0.42, 2026-10-17)
+
+- **Pestaña «Material»** del evento (`Eventos\Material`, tabla `asde_evento_material`, `templates/eventos/material.php`), para quien gestiona el evento y puede usar el inventario (`asde_inventario`). Reserva unidades del inventario del grupo (el que ya existe desde la v0.19, sin catálogo nuevo ni rol nuevo): **reservar no descuenta** nada.
+- **Aviso de conflicto:** otros eventos que coinciden en fechas y no han devuelto lo mismo (los cancelados no cuentan) restan de lo disponible; la línea dice «Faltan N unidades». Solo avisa, no bloquea.
+- **Material habitual por tipo** (opción `material_por_tipo` de la configuración de eventos; «cantidad; descripción» por línea, se busca en el inventario por nombre); un botón lo carga y avisa de lo que no encuentra.
+- **Salida** (quién y cuándo, una línea o todas) y **devolución** (unidades devueltas y una incidencia corta; se puede corregir). Lo que no vuelve se puede **descontar del inventario** con un paso aparte, explícito y de una sola vez (`MaterialesTable::restar`, atómico, sin bajar de cero). El gasto de reposición se apunta en las cuentas del evento a mano.
+- Sin datos personales: solo el id de la cuenta de quien saca y devuelve. Auditoría `evento_material_*`. Se borra con el evento (borrador). La tarea «Preparar … el material de acampada» del calendario enlaza a la pestaña.
+- **Decisiones propias frente al plan de 2026-10-15:** no se hace el rol «Responsable de material», las caducidades ni el material por sección (el inventario actual no los tiene); eso queda para cuando el inventario los pida. Pruebas: `tests/eventos-material.php` (56).

@@ -2900,3 +2900,9 @@ dialog.asde-modal--mini .asde-banco-tipo-nuevo h3 {
 .asde-ap .asde-alerg__propio-fila input { flex: 1 1 auto; }
 .asde-ap .asde-alerg__error { color: var(--asde-error); }
 .asde-ap .asde-alerg__botones { display: flex; gap: 1rem; align-items: center; margin: 1rem 0 0; }
+
+/* v0.42: el material de los eventos. */
+.asde-ap .asde-solo-impresion { display: none; }
+@media print {
+	.asde-ap .asde-solo-impresion { display: inline !important; }
+}

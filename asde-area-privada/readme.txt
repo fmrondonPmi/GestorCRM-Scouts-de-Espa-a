@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.41.0
+Stable tag: 0.42.0
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -61,6 +61,9 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.42.0 =
+* Events: event material. A new "Material" tab in each event (for those who manage it and can use the inventory) reserves items from the group inventory with a warning when another event on overlapping dates takes the same items and there are not enough; each event type can have its usual material, which loads with one button. Records when the material leaves and how it comes back (units, incident note); what did not come back can be deducted from the inventory in a separate, explicit step. Reserving never changes the inventory by itself.
 
 = 0.41.0 =
 * Uniform orders: when a member orders badges (not only the shirt) and the group has them in the inventory, they can be served from it and deducted, so they are not added to the order to the supplier; if only part is in stock, only that part is served. Cancelling or returning puts them back.
@@ -233,6 +236,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * First version with the mobile app (PWA).
 
 == Upgrade Notice ==
+
+= 0.42.0 =
+Event material. Adds one table (created automatically); nothing else changes.
 
 = 0.41.0 =
 Recipe book for event menus. Adds five tables and one permission (created automatically); nothing else changes.

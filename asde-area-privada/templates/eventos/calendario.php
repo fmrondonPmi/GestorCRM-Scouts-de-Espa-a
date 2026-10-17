@@ -55,6 +55,7 @@ $enlaces   = array(
 	'equipo'        => asde_t( 'Equipo' ),
 	'inscripciones' => asde_t( 'Inscripciones' ),
 	'menu'          => asde_t( 'Menú' ),
+	'material'      => asde_t( 'Material' ),
 	'presupuesto'   => asde_t( 'Presupuesto' ),
 );
 ?>

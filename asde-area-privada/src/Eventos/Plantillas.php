@@ -24,7 +24,7 @@ final class Plantillas {
 	public const AUTOMATICAS = array( 'presupuesto', 'equipo', 'titulos', 'comunicacion', 'autorizaciones', 'menu' );
 
 	/** Pestañas del evento a las que puede enlazar una tarea. */
-	public const ENLACES = array( 'resumen', 'equipo', 'inscripciones', 'menu', 'presupuesto' );
+	public const ENLACES = array( 'resumen', 'equipo', 'inscripciones', 'menu', 'material', 'presupuesto' );
 
 	/** Plantilla que propone cada tipo de actividad ('' = ninguna). */
 	public const POR_TIPO = array(
@@ -75,7 +75,7 @@ final class Plantillas {
 				$t( 'Presentar el plan de actividades', 'inicio', -7 ),
 				$t( 'Comprar comida y embalarla', 'inicio', -3 ),
 				$t( 'Enviar la ficha de la acampada a la OF (Organización Federada)', 'inicio', -3, 'Actualizar los datos antes de enviar la ficha.', 'comunicacion', 'resumen' ),
-				$t( 'Preparar las intendencias y secciones el material de acampada', 'inicio', -2 ),
+				$t( 'Preparar las intendencias y secciones el material de acampada', 'inicio', -2, '', '', 'material' ),
 				$t( 'Cargar furgoneta', 'inicio', -1 ),
 				$t( 'Escribir un post de la acampada en la web de grupo', 'fin', 7 ),
 				$t( 'Subir fotos de la acampada a la web del grupo', 'fin', 7 ),

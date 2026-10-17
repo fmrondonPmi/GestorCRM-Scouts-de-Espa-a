@@ -14,6 +14,7 @@ use AsdeBalears\AreaPrivada\Eventos\GastosTable;
 use AsdeBalears\AreaPrivada\Eventos\Inscripciones;
 use AsdeBalears\AreaPrivada\Eventos\InscripcionesTable;
 use AsdeBalears\AreaPrivada\Eventos\Justificantes;
+use AsdeBalears\AreaPrivada\Eventos\Material;
 use AsdeBalears\AreaPrivada\Eventos\MovimientosTable;
 use AsdeBalears\AreaPrivada\Eventos\Normativa;
 use AsdeBalears\AreaPrivada\Eventos\PartidasTable;
@@ -48,6 +49,7 @@ final class EventosView extends EventosBaseView {
 		'equipo'        => 'Equipo',
 		'inscripciones' => 'Inscripciones',
 		'menu'          => 'Menú',
+		'material'      => 'Material',
 		'presupuesto'   => 'Presupuesto',
 		'cuentas'       => 'Cuentas',
 	);
@@ -140,7 +142,7 @@ final class EventosView extends EventosBaseView {
 
 	private function evento( array $e, Ambito $a, array $cfg ): string {
 		$pestana = isset( self::PESTANAS[ $this->get( 'pestana' ) ] ) ? $this->get( 'pestana' ) : 'resumen';
-		if ( 'cuentas' === $pestana && ! Cuentas::puede_ver( $e, $a ) || 'menu' === $pestana && ! MenuEvento::puede_ver( $e, $a ) ) {
+		if ( 'cuentas' === $pestana && ! Cuentas::puede_ver( $e, $a ) || 'menu' === $pestana && ! MenuEvento::puede_ver( $e, $a ) || 'material' === $pestana && ! Material::puede_ver( $e, $a ) ) {
 			$pestana = 'resumen';
 		}
 		Inscripciones::revisar( $e ); // Lista de espera al día (plazas que caducan o se liberan).
@@ -167,6 +169,8 @@ final class EventosView extends EventosBaseView {
 			$contenido = $this->tpl( 'eventos/inscripciones', $vars + $this->inscripciones( $e, $a, $filas ) );
 		} elseif ( 'cuentas' === $pestana ) {
 			$contenido = $this->tpl( 'eventos/cuentas', $vars + $this->cuentas( $e ) );
+		} elseif ( 'material' === $pestana ) {
+			$contenido = $this->tpl( 'eventos/material', $vars + $this->material( $e, $a ) );
 		} elseif ( 'menu' === $pestana ) {
 			$contenido = $this->tpl( 'eventos/menu', $vars + $this->menu( $e, $a ) );
 		} elseif ( 'calendario' === $pestana ) {
@@ -261,6 +265,22 @@ final class EventosView extends EventosBaseView {
 			'economia'    => Cobros::puede(),
 			'abiertas'    => Cobros::abiertas( $e ),
 			'gestionable' => $gestiona && Inscripciones::gestionable( $e ),
+		);
+	}
+
+	/** Lo que necesita la pestaña «Material» (v0.42, doc 43). */
+	private function material( array $e, Ambito $a ): array {
+		$lineas = Material::lineas( $e );
+		$tipo   = Config::de()['material_por_tipo'][ $e['tipo'] ] ?? '';
+		return array(
+			'lineas'       => $lineas,
+			'reservable'   => Material::reservable(),
+			'habitual'     => '' !== trim( (string) $tipo ),
+			'puede_editar' => Material::puede_editar( $e, $a ),
+			'resumen'      => Material::resumen( $e ),
+			'url_material' => $this->url( 'eventos', array( 'evento' => (string) $e['id'], 'pestana' => 'material' ) ),
+			'url_config'   => $this->url( 'eventos_config' ),
+			'url_inventario' => $this->url( 'inventario' ),
 		);
 	}
 
@@ -635,6 +655,53 @@ final class EventosView extends EventosBaseView {
 			case 'tarea_aplicar':
 				$r     = Tareas::aplicar( $e, sanitize_key( $this->post( 'plantilla' ) ), $a );
 				$hecho = is_wp_error( $r ) ? '' : sprintf( asde_n( 'Se ha creado %d tarea.', 'Se han creado %d tareas.', (int) $r ), (int) $r );
+				break;
+
+			case 'material_anadir':
+				$r     = Material::anadir( $e, $a, (int) $this->post( 'material' ), (int) $this->post( 'cantidad' ) );
+				$hecho = asde_t( 'Material reservado para el evento.' );
+				break;
+
+			case 'material_cantidad':
+				$r     = Material::cambiar_cantidad( $e, $a, (int) $this->post( 'linea' ), (int) $this->post( 'cantidad' ) );
+				$hecho = asde_t( 'Cantidad cambiada.' );
+				break;
+
+			case 'material_quitar':
+				$r     = Material::quitar( $e, $a, (int) $this->post( 'linea' ) );
+				$hecho = asde_t( 'Material quitado de la lista del evento.' );
+				break;
+
+			case 'material_habitual':
+				$r = Material::cargar_habitual( $e, $a );
+				if ( ! is_wp_error( $r ) ) {
+					$hecho = sprintf( asde_n( 'Se ha reservado %d material habitual.', 'Se han reservado %d materiales habituales.', $r['anadidas'] ), $r['anadidas'] );
+					if ( $r['no_encontradas'] ) {
+						$hecho .= ' ' . sprintf( asde_t( 'No están en el inventario: %s.' ), implode( ', ', $r['no_encontradas'] ) );
+					}
+					$r = true;
+				}
+				break;
+
+			case 'material_salida':
+				$r = Material::salida( $e, $a, (int) $this->post( 'linea' ) );
+				if ( ! is_wp_error( $r ) ) {
+					$hecho = sprintf( asde_n( 'Salida anotada: %d línea.', 'Salida anotada: %d líneas.', $r ), $r );
+					$r     = true;
+				}
+				break;
+
+			case 'material_devolver':
+				$r     = Material::devolver( $e, $a, (int) $this->post( 'linea' ), (int) $this->post( 'devueltas' ), $this->post( 'incidencia' ) );
+				$hecho = asde_t( 'Devolución anotada.' );
+				break;
+
+			case 'material_descontar':
+				$r = Material::descontar_faltantes( $e, $a, (int) $this->post( 'linea' ) );
+				if ( ! is_wp_error( $r ) ) {
+					$hecho = sprintf( asde_n( 'Se ha descontado %d unidad del inventario.', 'Se han descontado %d unidades del inventario.', $r ), $r );
+					$r     = true;
+				}
 				break;
 
 			case 'menu_anadir':

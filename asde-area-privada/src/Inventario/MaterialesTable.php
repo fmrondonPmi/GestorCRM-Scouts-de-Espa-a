@@ -244,6 +244,36 @@ final class MaterialesTable {
 	}
 
 	/**
+	 * Resta unidades a un material (v0.42: lo que no volvió de un evento), sin bajar de cero. Atómico.
+	 *
+	 * @return int Unidades que se han quitado de verdad (puede ser menos de las pedidas si no había tantas).
+	 */
+	public static function restar( int $id, int $unidades ): int {
+		global $wpdb;
+		$m = self::obtener( $id );
+		if ( $unidades < 1 || ! $m || null !== $m['baja_en'] ) {
+			return 0;
+		}
+		$quitar = min( $unidades, (int) $m['cantidad'] );
+		if ( $quitar < 1 ) {
+			return 0;
+		}
+		$hecho = $wpdb->query( // phpcs:ignore WordPress.DB
+			$wpdb->prepare(
+				'UPDATE %i SET cantidad = cantidad - %d, modificado = %s, modificado_por = %d WHERE id = %d AND grupo = %s AND cantidad >= %d AND baja_en IS NULL',
+				self::table(),
+				$quitar,
+				current_time( 'mysql', true ),
+				get_current_user_id(),
+				$id,
+				Grupo::numero(),
+				$quitar
+			)
+		);
+		return $hecho ? $quitar : 0;
+	}
+
+	/**
 	 * Descuenta N insignias de ese nombre de un solo material (el más antiguo que tenga suficientes). Atómico.
 	 *
 	 * @return int Id del material del que salen, o 0 si no hay suficientes en ninguno.

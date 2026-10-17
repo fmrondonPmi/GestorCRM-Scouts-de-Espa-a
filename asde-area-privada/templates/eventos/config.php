@@ -159,6 +159,25 @@ defined( 'ABSPATH' ) || exit;
 	<p><button type="submit" class="button button-primary"><?php asde_e( 'Guardar' ); ?></button></p>
 </form>
 
+<section class="asde-card" id="material-habitual">
+	<h3 class="asde-card__title"><?php asde_e( 'Material habitual de cada tipo de evento' ); ?></h3>
+	<p class="asde-muted"><?php asde_e( 'Una línea por material, con la cantidad y el nombre tal como está en el inventario: «4; Tienda canadiense». En la pestaña Material de un evento se carga con un botón. Lo que no se encuentre en el inventario se avisa.' ); ?></p>
+	<form method="post" class="asde-form" action="<?php echo esc_url( $url ); ?>">
+		<?php wp_nonce_field( 'asde_eventos_config' ); ?>
+		<input type="hidden" name="asde_action" value="material_guardar">
+		<?php foreach ( $cfg['tipos'] as $tid => $t ) : ?>
+			<?php if ( empty( $t['activo'] ) ) : ?>
+				<?php continue; ?>
+			<?php endif; ?>
+			<p>
+				<label for="asde-mh-<?php echo esc_attr( (string) $tid ); ?>"><?php echo esc_html( $t['nombre'] ); ?></label>
+				<textarea id="asde-mh-<?php echo esc_attr( (string) $tid ); ?>" name="material_<?php echo esc_attr( (string) $tid ); ?>" rows="3" maxlength="<?php echo (int) \AsdeBalears\AreaPrivada\Eventos\Material::MAX_HABITUAL; ?>"><?php echo esc_textarea( (string) ( $cfg['material_por_tipo'][ $tid ] ?? '' ) ); ?></textarea>
+			</p>
+		<?php endforeach; ?>
+		<p><button type="submit" class="button"><?php asde_e( 'Guardar el material habitual' ); ?></button></p>
+	</form>
+</section>
+
 <section class="asde-card" id="calendario-de-tareas">
 	<h3 class="asde-card__title"><?php asde_e( 'Calendario de tareas' ); ?></h3>
 	<p class="asde-muted"><?php asde_e( 'Cada evento puede copiar una plantilla de tareas con su fecha límite (por ejemplo, 60 días antes del inicio). Viene la de Acampada; puedes cambiarla o crear las tuyas.' ); ?></p>

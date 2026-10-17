@@ -108,6 +108,8 @@ final class Installer {
 		\AsdeBalears\AreaPrivada\Eventos\AnticiposTable::install_table();
 		// v0.40: el calendario de tareas de los eventos (doc 49).
 		\AsdeBalears\AreaPrivada\Eventos\TareasTable::install_table();
+		// v0.42: el material de cada evento (reserva, salida y devolución).
+		\AsdeBalears\AreaPrivada\Eventos\MaterialTable::install_table();
 		// v0.41: el recetario de los menús (doc 49, B1).
 		\AsdeBalears\AreaPrivada\Menus\IngredientesTable::install_table();
 		\AsdeBalears\AreaPrivada\Menus\RecetasTable::install_table();

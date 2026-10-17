@@ -181,7 +181,7 @@ grupo no ve a otro**; **nunca** se prueba contra el CRM real ni se escribe en é
 ## 5. Inventario (generado)
 
 <!-- inventario:inicio -->
-_Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10-17 · plugin 0.41.0. No editar a mano: se regenera._
+_Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10-17 · plugin 0.42.0. No editar a mano: se regenera._
 
 ### Páginas (Frontend\Pages + Router)
 
@@ -291,6 +291,7 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 | `asde_eventos` | `src/Eventos/EventosTable.php` |
 | `asde_evento_gastos` | `src/Eventos/GastosTable.php` |
 | `asde_evento_inscripciones` | `src/Eventos/InscripcionesTable.php` |
+| `asde_evento_material` | `src/Eventos/MaterialTable.php` |
 | `asde_evento_movimientos` | `src/Eventos/MovimientosTable.php` |
 | `asde_evento_partidas` | `src/Eventos/PartidasTable.php` |
 | `asde_evento_tareas` | `src/Eventos/TareasTable.php` |
@@ -391,6 +392,8 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 - `Inscripciones` — Inscripciones a los eventos (v0.35, doc 43, apartado 3).
 - `InscripcionesTable` — Personas de un evento ({prefix}asde_evento_inscripciones, doc 43):
 - `Justificantes` — Justificantes de los gastos de un evento (v0.36, doc 43):
+- `Material` — El material de un evento (v0.42, doc 43 apartado 5):
+- `MaterialTable` — El material de un evento ({prefix}asde_evento_material, v0.42):
 - `MovimientosTable` — Cobros de los eventos ({prefix}asde_evento_movimientos, doc 43, apartado 4):
 - `Normativa` — Lo que pide la normativa de tiempo libre de las Illes Balears y cómo trabaja hoy el grupo (doc 43, apartado 6; Ley 10/2022 y Decreto 23/2018).
 - `PartidasTable` — Partidas del presupuesto de un evento ({prefix}asde_evento_partidas, doc 43, apartado 4).
@@ -634,5 +637,5 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 
 ### Pruebas (`tests/`)
 
-`acceso` · `alta-reglas` · `alta-scouters` · `altas-crm-escritura` · `altas-crm-pantallas` · `altas-crm` · `app-enganches` · `ayuda` · `banco-gestion` · `colores` · `entorno` · `estilo-wordpress` · `eventos-avisos-config` · `eventos-calendario` · `eventos-economia` · `eventos-inscripciones` · `eventos` · `ficha-alergenos` · `fichas-escritura` · `grupos-emails-banco` · `identidad` · `idiomas-catalogos` · `idiomas` · `inventario` · `lista-espera` · `mejoras-v029` · `mejoras-v030` · `mejoras-v031` · `mejoras-v034` · `mejoras-v0351` · `menus-evento` · `menus-recetario` · `menus-validacion` · `menus` · `migracion-tienda` · `modulos` · `organizacion` · `rendimiento` · `sepa` · `solicitudes` · `tema` · `tienda-catalogo` · `tienda-fase5` · `tienda-pedidos` · `tienda-publica` · `tienda` · `usuarios-listado`
+`acceso` · `alta-reglas` · `alta-scouters` · `altas-crm-escritura` · `altas-crm-pantallas` · `altas-crm` · `app-enganches` · `ayuda` · `banco-gestion` · `colores` · `entorno` · `estilo-wordpress` · `eventos-avisos-config` · `eventos-calendario` · `eventos-economia` · `eventos-inscripciones` · `eventos-material` · `eventos` · `ficha-alergenos` · `fichas-escritura` · `grupos-emails-banco` · `identidad` · `idiomas-catalogos` · `idiomas` · `inventario` · `lista-espera` · `mejoras-v029` · `mejoras-v030` · `mejoras-v031` · `mejoras-v034` · `mejoras-v0351` · `menus-evento` · `menus-recetario` · `menus-validacion` · `menus` · `migracion-tienda` · `modulos` · `organizacion` · `rendimiento` · `sepa` · `solicitudes` · `tema` · `tienda-catalogo` · `tienda-fase5` · `tienda-pedidos` · `tienda-publica` · `tienda` · `uniformes-inventario-insignias` · `usuarios-listado`
 <!-- inventario:fin -->

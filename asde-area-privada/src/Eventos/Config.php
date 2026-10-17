@@ -144,6 +144,8 @@ final class Config {
 			'calendario_viernes'   => true,
 			'avisos_tareas'        => true,
 			'plantillas'           => array(),
+			// v0.42 (doc 43, apartado 5): el material habitual de cada tipo de evento («cantidad; descripción» por línea).
+			'material_por_tipo'    => array(),
 		);
 	}
 
@@ -194,6 +196,14 @@ final class Config {
 		$cfg['calendario_viernes']  = (bool) $cfg['calendario_viernes'];
 		$cfg['avisos_tareas']       = (bool) $cfg['avisos_tareas'];
 		$cfg['plantillas']          = Plantillas::limpiar( $cfg['plantillas'] );
+		$material                   = array();
+		foreach ( (array) $cfg['material_por_tipo'] as $tipo => $texto ) {
+			$tipo = sanitize_key( (string) $tipo );
+			if ( isset( $cfg['tipos'][ $tipo ] ) && '' !== trim( (string) $texto ) ) {
+				$material[ $tipo ] = mb_substr( sanitize_textarea_field( (string) $texto ), 0, Material::MAX_HABITUAL );
+			}
+		}
+		$cfg['material_por_tipo']   = $material;
 		$textos                     = (array) $cfg['textos'];
 		$cfg['textos']              = array();
 		foreach ( self::AVISOS as $a ) {
