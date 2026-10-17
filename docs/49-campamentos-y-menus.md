@@ -209,7 +209,7 @@ El catálogo de alérgenos y la tabla *intolerancia → alérgeno* (lactosa → 
 | P-192 ✅ | Email de «conflictos sin resolver» (T-8 / T-15) | **Con nombres, solo a quien ya ve la salud del evento y con el mínimo (nombre y alérgeno)**: la salvaguarda propuesta, aceptada el 2026-10-17. La **hoja de cocina** es otro envío (apartado 9.1) |
 | P-193 ✅ | ¿El coste propone la partida «Alimentación»? | **Sí, como propuesta que se acepta** (decidido) |
 | P-194 ✅ | Unidades | **Solo g↔kg y ml↔l** (decidido) |
-| P-195 ✅ | ¿Recetas compartidas? | **Biblioteca básica común** (decidido; la propuesta era no compartir) |
+| P-195 ✅ | ¿Recetas compartidas? | **Biblioteca básica común**; la receta solo lleva su listado de alérgenos (por ingrediente) y **no se asocia a nadie**, así que se reutiliza (decidido y aclarado) |
 | P-196 ✅ | El *material del evento* pasa a la v0.42 | **Sí** (decidido) |
 | P-197 ✅ | Entrega de la hoja de cocina a quien no tiene cuenta | **Impresa**; por email, solo a cuentas (decidido; ver 9.1) |
 | P-198 ✅ | Contenido de la hoja de cocina por persona | **Nombre, alérgenos del menú y dieta** (decidido; ver 9.1) |
@@ -245,7 +245,7 @@ Pruebas nuevas por fase (`tests/eventos-calendario.php`, `tests/menus-recetas.ph
 
 1. **Editar el menú no exige ver salud** (P-190, aclarado): `asde_menus_gestion` basta para generar y editar; solo ve alérgenos y nº de personas. Los nombres salen únicamente en la hoja de cocina y en el email a quien ya ve la salud.
 2. **El email con nombres** (P-192) lleva datos de salud de menores por correo, que no es un canal seguro. Se mandará **solo** a quien ya ve la salud de ese evento, con el mínimo (nombre y alérgeno, sin diagnóstico ni texto de la ficha), y cada envío queda en el registro de emails y en la auditoría. **Aceptado por el usuario el 2026-10-17.**
-3. **Biblioteca básica común** (P-195): son recetas de ejemplo **incluidas en el plugin**, con sus ingredientes y alérgenos. Un alérgeno mal puesto es un riesgo real, así que se sembrarán pocas (10-15), **revisadas por una persona del grupo antes de publicar** y marcadas como «de ejemplo: revísalas». Cada grupo las copia y las edita; no se comparten recetas entre grupos.
+3. **Biblioteca básica común** (P-195, aclarado el 2026-10-17): una receta **no está asociada a ninguna persona ni a ningún evento**; solo lleva sus ingredientes y, de ahí, **su listado de alérgenos** (anotados en cada ingrediente; la receta suma los suyos). Por eso se puede **reutilizar** en cualquier evento y de cualquier grupo, y no contiene datos personales. Son recetas de ejemplo **incluidas en el plugin**; un alérgeno mal puesto es un riesgo real, así que se sembrarán pocas (10-15), **revisadas por una persona del grupo antes de publicar** y marcadas como «de ejemplo: revísalas». Cada grupo las copia y las edita sin que cambie la común; lo que un grupo crea o edita sigue siendo suyo (un grupo no ve las recetas de otro).
 4. **Fechas al viernes** (P-185): las tareas guardan la fecha calculada y la ajustada; los ejemplos de fechas del fichero se prueban con el ajuste desactivado y activado.
 
 ### 9.1 La hoja de cocina (aclaración del usuario, 2026-10-17)
