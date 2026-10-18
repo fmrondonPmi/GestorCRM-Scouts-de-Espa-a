@@ -247,3 +247,7 @@ Las ✅ de la tabla están contestadas aquí. **Sigue abierta: P-43** (si Colony
 - **P-106 → pendiente:** una lista de compra **pendiente** se puede **editar** (quien la pidió, hasta que Tesorería la revise).
 - **P-114 → pendiente:** cuando un scouter pide uniforme para un socio/a, **email a la familia** (pedido, precio y cómo pagarlo).
 - **P-43 → pendiente:** **Colonya acepta la firma electrónica** de la orden SEPA: se puede quitar la obligación del papel.
+
+## Plan de modo Oficina y alta de grupos (2026-10-18, doc 50)
+
+- **P-168…P-176 → pendientes:** nombre del modo y cuentas de la OF, caducidad del enlace, conexión fallida, identificación del primer usuario, informes con datos de asociados, salud/banco, uso de CIF y sede, grupos ya existentes y base legal. Detalle en el doc 50 §4.
