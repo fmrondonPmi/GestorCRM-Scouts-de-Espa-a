@@ -2,7 +2,7 @@
 
 **Petición del usuario (2026-10-18):** desdoblar el plugin porque se puede instalar en un WordPress que gestiona un grupo o en uno que gestiona la oficina federal (OF).
 
-**Estado:** plan, sin código. Rama `Oficina-Grupo-Modos` (desde `origin/main`). Preguntas abiertas: P-168…P-176 (doc 09).
+**Estado:** plan, sin código. Rama `Oficina-Grupo-Modos` (desde `origin/main`). Preguntas P-168…P-175 respondidas el 2026-10-18 (§5); queda P-176 (acuerdo de tratamiento).
 
 **Decisiones ya tomadas (2026-10-18):**
 
@@ -81,3 +81,15 @@
 - **P-174 — Datos de la sede, CIF y denominación fiscal:** ¿para qué se usan después (cabeceras de PDF, SEPA…) o solo se guardan?
 - **P-175 — Grupo ya existente:** los grupos que ya están dados de alta a mano (684…) ¿se quedan con su credencial actual o se les pide que la vuelvan a introducir con un enlace?
 - **P-176 — Base legal:** el acceso de la OF a datos de socios de los grupos necesita un acuerdo de tratamiento (doc 29, P-49); no es decisión técnica.
+
+## 5 · Respuestas del usuario (2026-10-18) y cambios en el plan
+
+- **P-168:** modo y rol **«Oficina»**, **varias cuentas** con la misma credencial de solo lectura.
+- **P-169:** enlace de **14 días**, un solo uso.
+- **P-170:** el formulario **verifica la credencial del CRM en la misma pantalla** y **no deja enviar hasta que sea correcta** (cambia la fase 5: botón «Comprobar», sin guardar nada hasta que pase; el enlace no se gasta mientras falle).
+- **P-171:** se pide **DNI y nombre** del primer usuario; el grupo elige Secretaría o Coordinación.
+- **P-172:** **todos los informes con datos de asociados**; descarga CSV/Excel permitida y **auditada**.
+- **P-173:** la OF **ve salud**; **no ve IBAN** (columnas bancarias ocultas aunque el informe las tenga). Ver salud exige P-176.
+- **P-174:** sede, CIF y denominación fiscal **se usan ya** en cabeceras de PDF y como acreedor en SEPA (añadir a la fase 6; revisar `Sepa` y los PDF de inventario y eventos).
+- **P-175:** los grupos actuales **conservan su credencial**; cambiarla solo con enlace del grupo.
+- **P-176:** pendiente, no técnica.

@@ -250,4 +250,12 @@ Las ✅ de la tabla están contestadas aquí. **Sigue abierta: P-43** (si Colony
 
 ## Plan de modo Oficina y alta de grupos (2026-10-18, doc 50)
 
-- **P-168…P-176 → pendientes:** nombre del modo y cuentas de la OF, caducidad del enlace, conexión fallida, identificación del primer usuario, informes con datos de asociados, salud/banco, uso de CIF y sede, grupos ya existentes y base legal. Detalle en el doc 50 §4.
+- **P-168 ✅** Modo y rol «Oficina»; **varias cuentas** de WordPress que leen con la misma credencial de solo lectura del CRM.
+- **P-169 ✅** Enlace de invitación: **14 días**, un solo uso.
+- **P-170 ✅** En la misma pantalla del formulario se **verifica el usuario del CRM** y **no se deja pasar hasta que sea correcto**.
+- **P-171 ✅** El formulario pide **DNI y nombre** del primer usuario (Secretaría o Coordinación, a elegir); al aprobar se busca su ficha.
+- **P-172 ✅** La OF ve **todos los informes que lleven datos de asociados**, con **descarga CSV/Excel registrada en la auditoría**.
+- **P-173 ✅** La OF **ve la salud** (solo lectura) y **no ve el IBAN** ni datos bancarios.
+- **P-174 ✅** Sede, CIF y denominación fiscal se **usan ya en los documentos** (cabeceras de PDF y acreedor de SEPA).
+- **P-175 ✅** Los grupos ya dados de alta **conservan su credencial**; deja de verse para el administrador y solo el grupo la cambia con un enlace.
+- **P-176 → pendiente (no técnica):** acuerdo de tratamiento de datos para que la OF vea datos de socios (más salud).
