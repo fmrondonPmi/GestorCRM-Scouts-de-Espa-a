@@ -2,7 +2,7 @@
 
 **Petición del usuario (2026-10-18):** desdoblar el plugin porque se puede instalar en un WordPress que gestiona un grupo o en uno que gestiona la oficina federal (OF).
 
-**Estado:** plan, sin código. Rama `Oficina-Grupo-Modos` (desde `origin/main`). Preguntas P-168…P-175 respondidas el 2026-10-18 (§5); queda P-176 (acuerdo de tratamiento).
+**Estado:** plan, sin código. Rama `Oficina-Grupo-Modos` (desde `origin/main`). Preguntas P-168…P-175 respondidas el 2026-10-18 (§5); P-176 (acuerdo de tratamiento) también: ya está implícito.
 
 **Decisiones ya tomadas (2026-10-18):**
 
@@ -89,7 +89,7 @@
 - **P-170:** el formulario **verifica la credencial del CRM en la misma pantalla** y **no deja enviar hasta que sea correcta** (cambia la fase 5: botón «Comprobar», sin guardar nada hasta que pase; el enlace no se gasta mientras falle).
 - **P-171:** se pide **DNI y nombre** del primer usuario; el grupo elige Secretaría o Coordinación.
 - **P-172:** **todos los informes con datos de asociados**; descarga CSV/Excel permitida y **auditada**.
-- **P-173:** la OF **ve salud**; **no ve IBAN** (columnas bancarias ocultas aunque el informe las tenga). Ver salud exige P-176.
+- **P-173:** la OF **ve salud**; **no ve IBAN** (columnas bancarias ocultas aunque el informe las tenga). 
 - **P-174:** sede, CIF y denominación fiscal **se usan ya** en cabeceras de PDF y como acreedor en SEPA (añadir a la fase 6; revisar `Sepa` y los PDF de inventario y eventos).
 - **P-175:** los grupos actuales **conservan su credencial**; cambiarla solo con enlace del grupo.
-- **P-176:** pendiente, no técnica.
+- **P-176:** el acuerdo de tratamiento **ya está implícito**; no hace falta nada más.

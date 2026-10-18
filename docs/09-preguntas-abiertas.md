@@ -258,4 +258,4 @@ Las ✅ de la tabla están contestadas aquí. **Sigue abierta: P-43** (si Colony
 - **P-173 ✅** La OF **ve la salud** (solo lectura) y **no ve el IBAN** ni datos bancarios.
 - **P-174 ✅** Sede, CIF y denominación fiscal se **usan ya en los documentos** (cabeceras de PDF y acreedor de SEPA).
 - **P-175 ✅** Los grupos ya dados de alta **conservan su credencial**; deja de verse para el administrador y solo el grupo la cambia con un enlace.
-- **P-176 → pendiente (no técnica):** acuerdo de tratamiento de datos para que la OF vea datos de socios (más salud).
+- **P-176 ✅** El acuerdo de tratamiento de datos para que la OF vea datos de socios (y salud) **ya está implícito**: no hace falta nada más.
