@@ -22,6 +22,9 @@ final class CamposExtra {
 
 	public const OPCION = 'asde_ap_espera_campos';
 
+	public const OPCION_DECLARACION = 'asde_ap_espera_declaracion';
+	public const MAX_DECLARACION    = 500;
+
 	public const MAX_CAMPOS   = 12;
 	public const MAX_ETIQUETA = 80;
 	public const MAX_RESPUESTA = 1000;
@@ -39,6 +42,31 @@ final class CamposExtra {
 		self::FECHA   => 'Fecha',
 		self::CASILLA => 'Casilla (sí / no)',
 	);
+
+	/** Texto de la casilla de declaración que el grupo ha escrito ('' = el de por defecto). */
+	public static function declaracion_propia( string $numero ): string {
+		$todo = get_option( self::OPCION_DECLARACION, array() );
+		return is_array( $todo ) && is_string( $todo[ $numero ] ?? null ) ? $todo[ $numero ] : '';
+	}
+
+	/** Texto de la casilla de declaración que verá quien se apunta: el del grupo o, si no hay, el de por defecto. */
+	public static function declaracion( string $numero ): string {
+		$propio = self::declaracion_propia( $numero );
+		return '' !== $propio ? $propio : asde_t( 'Declaro que todos los datos que he introducido son veraces y acepto las condiciones del grupo scout.' );
+	}
+
+	/** Guarda el texto de la declaración del grupo; vacío o igual al de por defecto = volver al de por defecto. */
+	public static function guardar_declaracion( string $numero, string $texto ): void {
+		$texto = mb_substr( trim( (string) preg_replace( '/\s+/u', ' ', sanitize_text_field( $texto ) ) ), 0, self::MAX_DECLARACION );
+		$todo  = get_option( self::OPCION_DECLARACION, array() );
+		$todo  = is_array( $todo ) ? $todo : array();
+		if ( '' === $texto || asde_t( 'Declaro que todos los datos que he introducido son veraces y acepto las condiciones del grupo scout.' ) === $texto ) {
+			unset( $todo[ $numero ] );
+		} else {
+			$todo[ $numero ] = $texto;
+		}
+		update_option( self::OPCION_DECLARACION, $todo, false );
+	}
 
 	/** @return array[] Campos del grupo: id, etiqueta, tipo, obligatorio. */
 	public static function del_grupo( string $numero ): array {

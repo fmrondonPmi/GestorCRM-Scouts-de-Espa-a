@@ -215,6 +215,7 @@ $ya_estas = static function ( string $volver ): void {
 				</fieldset>
 			<?php endif; ?>
 			<label class="asde-choice"><input type="checkbox" name="acepto" value="1" <?php checked( '1', $v( 'acepto' ) ); ?> required><span><?php echo esc_html( sprintf( asde_t( 'Acepto que el %1$s guarde estos datos, cifrados, para gestionar la lista de espera durante %2$d meses (o hasta que me dé de alta o los borre). Solo los ve el equipo del grupo.' ), Grupos::etiqueta( $grupo ), Inscripciones::MESES ) ); ?></span></label>
+			<label class="asde-choice"><input type="checkbox" name="declaro" value="1" <?php checked( '1', $v( 'declaro' ) ); ?> required><span><?php echo esc_html( $declaracion ); ?></span></label>
 			<p><button type="submit" class="button button-primary"><?php asde_e( 'Apuntarme a la lista de espera' ); ?></button></p>
 		</form>
 		<?php $ya_estas( 'formulario' ); ?>

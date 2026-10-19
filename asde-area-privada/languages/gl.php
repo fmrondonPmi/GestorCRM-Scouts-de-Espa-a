@@ -4209,4 +4209,10 @@ return array(
 	'[%1$s] Alérgenos sin resolver en el menú de %2$s' => '[%1$s] Alérxenos sen resolver no menú de %2$s',
 	'A un voluntario sin sección solo se le puede dar acceso como Tesorería, Secretaría, Coordinación o Intendencia: marca al menos una.' => 'A un voluntario sen sección só se lle pode dar acceso como Tesouraría, Secretaría, Coordinación ou Intendencia: marca polo menos unha.',
 	'Secretaría, Coordinación, Tesorería e Intendencia son responsabilidades de un scouter: marca también el rol de Scouter, o elige «Voluntario sin sección».' => 'Secretaría, Coordinación, Tesouraría e Intendencia son responsabilidades dun scouter: marca tamén o rol de Scouter, ou escolle «Voluntario sen sección».',
+
+	// lista de espera: declaración de veracidad
+	'Declaro que todos los datos que he introducido son veraces y acepto las condiciones del grupo scout.' => 'Declaro que todos os datos que introducín son veraces e acepto as condicións do grupo scout.',
+	'Para apuntarte tienes que marcar la declaración de que los datos son veraces y aceptar las condiciones del grupo.' => 'Para apuntarte tes que marcar a declaración de que os datos son veraces e aceptar as condicións do grupo.',
+	'Quien se apunta tiene que marcar esta casilla para continuar. Déjalo vacío para usar el texto de por defecto (el que se ve en gris).' => 'Quen se apunta ten que marcar esta caixa para continuar. Déixao baleiro para usar o texto por defecto (o que se ve en gris).',
+	'Texto de la casilla de declaración' => 'Texto da caixa de declaración',
 );

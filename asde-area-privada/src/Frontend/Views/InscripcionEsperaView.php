@@ -91,7 +91,8 @@ final class InscripcionEsperaView extends View {
 			foreach ( Formulario::CAMPOS as $c ) {
 				$vars['valores'][ $c ] = $this->post( $c );
 			}
-			$vars['campos'] = CamposExtra::del_grupo( (string) $vars['grupo']['numero'] );
+			$vars['campos']      = CamposExtra::del_grupo( (string) $vars['grupo']['numero'] );
+			$vars['declaracion'] = CamposExtra::declaracion( (string) $vars['grupo']['numero'] );
 			foreach ( $vars['campos'] as $c ) {
 				$vars['valores'][ 'extra_' . $c['id'] ] = $this->post( 'extra_' . $c['id'] );
 			}

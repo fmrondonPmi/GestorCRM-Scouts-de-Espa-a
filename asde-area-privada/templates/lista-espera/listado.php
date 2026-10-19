@@ -12,6 +12,7 @@
  * @var string           $enlace  Enlace para apuntarse
  * @var bool             $renovar Puede generar un enlace nuevo
  * @var array[]|null     $campos  Campos propios del formulario (null si no puede editarlos)
+ * @var string           $declaracion Texto propio de la casilla de declaración ('' = el de por defecto)
  */
 // phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound, WordPress.WP.GlobalVariablesOverride.Prohibited -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
 use AsdeBalears\AreaPrivada\Domain\Secciones;
@@ -103,6 +104,11 @@ $fecha = static function ( ?string $utc ): string {
 					<?php endforeach; ?>
 				</tbody>
 			</table>
+			<p>
+				<label for="asde-espera-declaracion"><?php asde_e( 'Texto de la casilla de declaración' ); ?></label>
+				<textarea id="asde-espera-declaracion" name="declaracion" rows="3" maxlength="<?php echo (int) CamposExtra::MAX_DECLARACION; ?>" placeholder="<?php echo esc_attr( asde_a( 'Declaro que todos los datos que he introducido son veraces y acepto las condiciones del grupo scout.' ) ); ?>"><?php echo esc_textarea( $declaracion ); ?></textarea>
+				<span class="asde-help"><?php asde_e( 'Quien se apunta tiene que marcar esta casilla para continuar. Déjalo vacío para usar el texto de por defecto (el que se ve en gris).' ); ?></span>
+			</p>
 			<p class="asde-help"><?php echo esc_html( sprintf( asde_t( 'Las filas vacías se ignoran. Para añadir más campos, guarda y vuelve a abrir este cuadro. Máximo %d campos.' ), CamposExtra::MAX_CAMPOS ) ); ?></p>
 			<p><button type="submit" class="button button-primary"><?php asde_e( 'Guardar los campos' ); ?></button></p>
 		</form>

@@ -4209,4 +4209,10 @@ return array(
 	'[%1$s] Alérgenos sin resolver en el menú de %2$s' => '[%1$s] Ebatzi gabeko alergenoak %2$s ekitaldiaren menuan',
 	'A un voluntario sin sección solo se le puede dar acceso como Tesorería, Secretaría, Coordinación o Intendencia: marca al menos una.' => 'Atalik gabeko boluntario bati Diruzaintza, Idazkaritza, Koordinazio edo Intendentzia gisa soilik eman dakioke sarbidea: markatu gutxienez bat.',
 	'Secretaría, Coordinación, Tesorería e Intendencia son responsabilidades de un scouter: marca también el rol de Scouter, o elige «Voluntario sin sección».' => 'Idazkaritza, Koordinazioa, Diruzaintza eta Intendentzia scouter baten ardurak dira: markatu Scouter rola ere, edo aukeratu «Atalik gabeko boluntarioa».',
+
+	// lista de espera: declaración de veracidad
+	'Declaro que todos los datos que he introducido son veraces y acepto las condiciones del grupo scout.' => 'Nik sartutako datu guztiak egiazkoak direla aitortzen dut eta talde scouten baldintzak onartzen ditut.',
+	'Para apuntarte tienes que marcar la declaración de que los datos son veraces y aceptar las condiciones del grupo.' => 'Izena emateko, datuak egiazkoak direla dioen aitorpena markatu eta taldearen baldintzak onartu behar dituzu.',
+	'Quien se apunta tiene que marcar esta casilla para continuar. Déjalo vacío para usar el texto de por defecto (el que se ve en gris).' => 'Izena ematen duenak laukitxo hau markatu behar du jarraitzeko. Utzi hutsik lehenetsitako testua erabiltzeko (grisez ikusten dena).',
+	'Texto de la casilla de declaración' => 'Aitorpen-laukitxoaren testua',
 );

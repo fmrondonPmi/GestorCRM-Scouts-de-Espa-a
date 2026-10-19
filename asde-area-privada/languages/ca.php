@@ -4209,4 +4209,10 @@ return array(
 	'[%1$s] Alérgenos sin resolver en el menú de %2$s' => '[%1$s] Al·lèrgens sense resoldre al menú de %2$s',
 	'A un voluntario sin sección solo se le puede dar acceso como Tesorería, Secretaría, Coordinación o Intendencia: marca al menos una.' => 'A un voluntari sense secció només se li pot donar accés com a Tresoreria, Secretaria, Coordinació o Intendència: marca\'n almenys una.',
 	'Secretaría, Coordinación, Tesorería e Intendencia son responsabilidades de un scouter: marca también el rol de Scouter, o elige «Voluntario sin sección».' => 'Secretaria, Coordinació, Tresoreria i Intendència són responsabilitats d\'un scouter: marca també el rol de Scouter, o tria «Voluntari sense secció».',
+
+	// lista de espera: declaración de veracidad
+	'Declaro que todos los datos que he introducido son veraces y acepto las condiciones del grupo scout.' => 'Declaro que totes les dades que he introduït són veraces i accepto les condicions del grup scout.',
+	'Para apuntarte tienes que marcar la declaración de que los datos son veraces y aceptar las condiciones del grupo.' => 'Per apuntar-te has de marcar la declaració que les dades són veraces i que acceptes les condicions del grup.',
+	'Quien se apunta tiene que marcar esta casilla para continuar. Déjalo vacío para usar el texto de por defecto (el que se ve en gris).' => 'Qui s\'apunta ha de marcar aquesta casella per continuar. Deixa-ho buit per usar el text per defecte (el que es veu en gris).',
+	'Texto de la casilla de declaración' => 'Text de la casella de declaració',
 );
