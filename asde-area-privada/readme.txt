@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.43.0
+Stable tag: 0.43.1
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -61,6 +61,9 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.43.1 =
+* Waiting list: the public form has a new required checkbox where the person declares that all the data entered is true and accepts the group's conditions. Secretary or Coordination can edit its text per group in the "Own form fields" box of the waiting list (empty = the default text). No database changes (the text is stored in a WordPress option).
 
 = 0.43.0 =
 * New role "Intendente" (the person in charge of the group's material, matching the CRM's "Responsable de Material" position). It is granted like Secretary or Treasurer: together with the Scouter role or as a volunteer without a section. It sees every event of the group, but only the Summary and Material tabs, and manages the material (reservations, departure, return and deduction from the inventory); it sees nothing about menus, accounts, registrations or health.
@@ -240,6 +243,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * First version with the mobile app (PWA).
 
 == Upgrade Notice ==
+
+= 0.43.1 =
+Waiting list: new required "the data is true and I accept the group's conditions" checkbox in the public form, with a text editable per group. No database changes.
 
 = 0.43.0 =
 New Intendente role and the unresolved-allergens reminder. No database changes; the role is added automatically.
