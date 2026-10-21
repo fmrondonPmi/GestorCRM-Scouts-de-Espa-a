@@ -64,7 +64,7 @@
 
 Orden recomendado: T1 → T3 → T2 → T4 → T5 → T6 (T3 es pequeña y se puede hacer antes de rehacer la pantalla).
 
-## 5 · Preguntas abiertas
+## 5 · Preguntas (todas respondidas, ver §7)
 
 - **P-177 — Pedido del scouter para su sección:** al quitar lo específico de uniformes, se retira. ¿Conforme? *(Propuesta: sí.)*
 - **P-178 — Enlace en el menú:** ¿un solo elemento «Tienda» en el menú principal (o uno por grupo con varios grupos)? ¿se abre en la misma pestaña?
@@ -79,3 +79,14 @@ Orden recomendado: T1 → T3 → T2 → T4 → T5 → T6 (T3 es pequeña y se pu
 - Enlace en el menú de la web, **configurable desde la sección de la tienda online** del área privada.
 - TPV: **ambos, primero el físico**.
 - Cantidad + talla en desplegable, y pedido al proveedor como pestaña aparte para el pedido de camisas.
+
+## 7 · Respuestas P-177…P-182 (2026-10-21)
+
+- **P-177:** se **retira** el pedido del scouter para su sección.
+- **P-178:** enlace en el menú **uno por grupo** con la tienda activada («Tienda»; con varios grupos, «Tienda · nombre del grupo»), en la misma pestaña.
+- **P-179:** **sí se propone conciliar** los cobros con datáfono con el banco: el abono global se sugiere a Tesorería agrupado con los pedidos pagados por TPV de esos días (como `Tienda\ConciliacionBanco`, nunca marca solo). Añade a la fase T3 una conciliación por importe y fechas.
+- **P-180:** el datáfono lo eligen **socios e invitados**.
+- **P-181:** lo recibido de más **suma a las existencias** de la tienda.
+- **P-182:** los precios y el precio de socio los fija la **administración de la tienda** (Coordinación, Tesorería, Secretaría) en cada producto; los pedidos antiguos conservan lo que pagaron.
+
+Con esto no queda ninguna pregunta abierta del doc 52.
