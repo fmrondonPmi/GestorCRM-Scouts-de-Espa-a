@@ -1,6 +1,8 @@
 <?php
 namespace AsdeBalears\AreaPrivada\Domain;
 
+use AsdeBalears\AreaPrivada\Audit\Logger;
+use AsdeBalears\AreaPrivada\Auth\Ambito;
 use AsdeBalears\AreaPrivada\Crm\ClientFactory;
 use AsdeBalears\AreaPrivada\Crm\ConnectionResult;
 use AsdeBalears\AreaPrivada\Crm\CrmException;
@@ -89,6 +91,23 @@ final class Oficina {
 		$r['probado'] = 0;
 		update_option( self::OPTION, $r, false );
 		ClientFactory::olvidar();
+		return true;
+	}
+
+	/**
+	 * La oficina elige el grupo que consulta (fase 3). Solo quien tiene la capability multigrupo, en una web de
+	 * oficina y entre los grupos dados de alta: esa lista es la frontera (`Grupo::actual()` la vuelve a validar).
+	 */
+	public static function cambiar_grupo( int $user_id, string $numero ): bool {
+		$user  = get_userdata( $user_id );
+		$grupo = Grupos::obtener( $numero );
+		if ( ! $user || ! $grupo || ! Organizacion::es_oficina() || ! $user->has_cap( 'asde_multigrupo' ) ) {
+			return false;
+		}
+		update_user_meta( $user_id, Grupo::META_CONTEXTO, $grupo['numero'] );
+		ClientFactory::olvidar();
+		Ambito::olvidar( $user_id );
+		Logger::log( 'oficina_cambio_grupo', 'grupo', $grupo['numero'] );
 		return true;
 	}
 

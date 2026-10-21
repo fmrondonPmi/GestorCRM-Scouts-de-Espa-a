@@ -204,3 +204,9 @@ Desarrolla el doc 50 (decisiones y respuestas P-168…P-176, todas cerradas el 2
   - Wordfence: 2FA **obligatoria** para este rol (`Wordfence::VERSION` 5).
   - Pantalla «Credencial del CRM de la oficina» en wp-admin → Organización federada (solo en modo Oficina): guardar, probar y borrar; la contraseña no se vuelve a mostrar.
   - Pruebas: `tests/oficina.php` (38). Pendiente de la fase 3: el bloqueo de escritura que usa `asde_solo_lectura`.
+- ✅ **Fase 3 (2026-10-21, v0.50.0):** solo lectura y selector de grupo.
+  - `Auth\SoloLectura` (capability `asde_solo_lectura`, lista blanca `oficina_cambiar_grupo`). `Router` rechaza, antes de `handle_post()`, todo envío de formulario de una cuenta de solo lectura (aviso y vuelta a la página). `Crm\Escritura::disponible()` y `puede_crear()` se niegan a escribir (cubre guardar, crear, cambiar membresías y relacionar), incluso con el CRM simulado.
+  - Selector de grupo en el menú (solo oficina): `Domain\Oficina::cambiar_grupo()` valida capability, tipo de instalación y que el grupo exista; guarda `asde_grupo_contexto`, olvida el ámbito y audita (`oficina_cambio_grupo`). Franja «Oficina · solo lectura».
+  - Los AJAX de numeración ya exigen su capability (la oficina no la tiene); el de tamaño de página es una preferencia propia y sigue permitido.
+  - Pruebas: `tests/solo-lectura.php` (17), que recorre las 127 acciones de formulario de las plantillas.
+  - **Se queda para la fase 4:** esconder en cada pantalla los botones de acción (hoy ya no salen casi todos porque el rol no tiene las capabilities), auditar las fichas consultadas por la oficina y el control propio de descargas.

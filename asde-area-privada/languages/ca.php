@@ -4252,4 +4252,10 @@ return array(
 	'Faltan el usuario o la contraseña del CRM de la oficina.' => 'Falten l\'usuari o la contrasenya del CRM de l\'oficina.',
 	'La web no puede comprobar que esta credencial sea de solo lectura: confírmalo con la oficina en el CRM.' => 'La web no pot comprovar que aquesta credencial sigui de només lectura: confirma-ho amb l\'oficina al CRM.',
 	'Oficina' => 'Oficina',
+
+	// v0.50: solo lectura
+	'Cambiar de grupo' => 'Canviar de grup',
+	'Grupo' => 'Grup',
+	'Oficina · solo lectura' => 'Oficina · només lectura',
+	'Tu cuenta es de solo lectura: no se puede cambiar nada.' => 'El teu compte és de només lectura: no es pot canviar res.',
 );

@@ -4252,4 +4252,10 @@ return array(
 	'Faltan el usuario o la contraseña del CRM de la oficina.' => 'Bulegoaren CRMko erabiltzailea edo pasahitza falta da.',
 	'La web no puede comprobar que esta credencial sea de solo lectura: confírmalo con la oficina en el CRM.' => 'Webguneak ezin du egiaztatu kredentzial hau irakurtzeko soilik denik: berretsi ezazu bulegoarekin CRMan.',
 	'Oficina' => 'Bulegoa',
+
+	// v0.50: solo lectura
+	'Cambiar de grupo' => 'Taldez aldatu',
+	'Grupo' => 'Taldea',
+	'Oficina · solo lectura' => 'Bulegoa · irakurtzeko soilik',
+	'Tu cuenta es de solo lectura: no se puede cambiar nada.' => 'Zure kontua irakurtzeko soilik da: ezin da ezer aldatu.',
 );

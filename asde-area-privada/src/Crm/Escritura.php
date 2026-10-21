@@ -2,6 +2,7 @@
 namespace AsdeBalears\AreaPrivada\Crm;
 
 use AsdeBalears\AreaPrivada\Audit\Logger;
+use AsdeBalears\AreaPrivada\Auth\SoloLectura;
 use AsdeBalears\AreaPrivada\Domain\Grupo;
 use AsdeBalears\AreaPrivada\Domain\Persona;
 
@@ -52,6 +53,9 @@ final class Escritura {
 	}
 
 	public static function disponible(): bool {
+		if ( SoloLectura::activo() ) { // v0.50: la oficina federal nunca escribe, ni siquiera con el CRM simulado.
+			return false;
+		}
 		return null !== self::$pruebas || ( null !== ClientFactory::reader() && Permisos::puede( self::MODULO, 'edit' ) );
 	}
 
@@ -119,7 +123,7 @@ final class Escritura {
 
 	/** ¿Puede el usuario de API del grupo crear personas y membresías? (v0.22) */
 	public static function puede_crear(): bool {
-		return null !== ClientFactory::reader() && Permisos::puede( self::MODULO, 'edit' ) && Permisos::puede( self::MEMBRESIAS, 'edit' );
+		return ! SoloLectura::activo() && null !== ClientFactory::reader() && Permisos::puede( self::MODULO, 'edit' ) && Permisos::puede( self::MEMBRESIAS, 'edit' );
 	}
 
 	/**

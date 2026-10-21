@@ -9,7 +9,10 @@
  * @var string                $nombre Nombre leído del CRM (no se guarda en WordPress)
  */
 // phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound, WordPress.WP.GlobalVariablesOverride.Prohibited -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
+use AsdeBalears\AreaPrivada\Domain\Grupo;
+use AsdeBalears\AreaPrivada\Domain\Grupos;
 use AsdeBalears\AreaPrivada\Domain\Identidad;
+use AsdeBalears\AreaPrivada\Domain\Organizacion;
 use AsdeBalears\AreaPrivada\Frontend\Ayuda;
 use AsdeBalears\AreaPrivada\Frontend\Pages;
 use AsdeBalears\AreaPrivada\Frontend\Tema;
@@ -63,5 +66,23 @@ defined( 'ABSPATH' ) || exit;
 				</button>
 			<?php endif; ?>
 		</p>
+	<?php endif; ?>
+	<?php if ( Organizacion::es_oficina() && current_user_can( 'asde_multigrupo' ) ) : ?>
+		<?php // v0.50 (doc 50, fase 3): la oficina elige el grupo que consulta; todo es de solo lectura. ?>
+		<form method="post" action="<?php echo esc_url( Pages::url( Pages::current_key() ?? 'area' ) ); ?>" class="asde-form asde-form--compacta asde-nav__oficina">
+			<input type="hidden" name="asde_action" value="oficina_cambiar_grupo">
+			<?php wp_nonce_field( 'asde_oficina_grupo' ); ?>
+			<p class="asde-form__fila asde-form__fila--una-linea">
+				<label for="asde-oficina-grupo"><?php asde_e( 'Grupo' ); ?>
+					<select id="asde-oficina-grupo" name="grupo" data-asde-autoenviar>
+						<?php foreach ( Grupos::todos() as $numero => $g ) : ?>
+							<option value="<?php echo esc_attr( (string) $numero ); ?>" <?php selected( Grupo::numero(), (string) $numero ); ?>><?php echo esc_html( Grupos::etiqueta( $g ) ); ?></option>
+						<?php endforeach; ?>
+					</select>
+				</label>
+				<noscript><button type="submit" class="button"><?php asde_e( 'Cambiar de grupo' ); ?></button></noscript>
+				<span class="asde-muted"><?php asde_e( 'Oficina · solo lectura' ); ?></span>
+			</p>
+		</form>
 	<?php endif; ?>
 </nav>

@@ -2,6 +2,8 @@
 namespace AsdeBalears\AreaPrivada\Frontend;
 
 use AsdeBalears\AreaPrivada\Auth\Ambito;
+use AsdeBalears\AreaPrivada\Auth\SoloLectura;
+use AsdeBalears\AreaPrivada\Domain\Oficina;
 use AsdeBalears\AreaPrivada\Frontend\Views\AccesoView;
 use AsdeBalears\AreaPrivada\Frontend\Views\ActivarCuentaView;
 use AsdeBalears\AreaPrivada\Frontend\Views\AltaScoutersView;
@@ -228,6 +230,21 @@ final class Router {
 		}
 
 		if ( 'POST' === strtoupper( sanitize_text_field( wp_unslash( $_SERVER['REQUEST_METHOD'] ?? '' ) ) ) && isset( $_POST['asde_action'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+			$accion = sanitize_key( wp_unslash( $_POST['asde_action'] ) ); // phpcs:ignore WordPress.Security.NonceVerification
+			// v0.50 (doc 50, fase 3): la oficina elige el grupo que consulta.
+			if ( 'oficina_cambiar_grupo' === $accion ) {
+				if ( wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_wpnonce'] ?? '' ) ), 'asde_oficina_grupo' ) ) { // phpcs:ignore WordPress.Security.NonceVerification
+					Oficina::cambiar_grupo( get_current_user_id(), sanitize_text_field( wp_unslash( $_POST['grupo'] ?? '' ) ) ); // phpcs:ignore WordPress.Security.NonceVerification
+				}
+				wp_safe_redirect( Pages::url( $key ) );
+				exit;
+			}
+			// Una cuenta de solo lectura no envía ningún otro formulario: se rechaza antes de llegar a la vista.
+			if ( SoloLectura::bloquea( $accion ) ) {
+				Notices::add( 'error', asde_t( 'Tu cuenta es de solo lectura: no se puede cambiar nada.' ) );
+				wp_safe_redirect( Pages::url( $key ) );
+				exit;
+			}
 			$class = self::VIEWS[ $key ][1];
 			( new $class() )->handle_post();
 		}
