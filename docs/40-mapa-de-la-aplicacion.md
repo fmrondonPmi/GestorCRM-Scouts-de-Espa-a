@@ -25,6 +25,12 @@ mindmap
         representados
         secciones del scouter
         visión global
+    Modo Oficina
+      Tipo de instalación grupo u oficina
+      Credencial de la oficina
+      Rol Oficina solo lectura
+      Invitar a un grupo y revisar altas
+      Primer usuario del grupo
     Páginas públicas
       Solicitar acceso
       Alta de scouters
@@ -181,7 +187,7 @@ grupo no ve a otro**; **nunca** se prueba contra el CRM real ni se escribe en é
 ## 5. Inventario (generado)
 
 <!-- inventario:inicio -->
-_Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10-17 · plugin 0.43.0. No editar a mano: se regenera._
+_Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10-22 · plugin 0.50.0. No editar a mano: se regenera._
 
 ### Páginas (Frontend\Pages + Router)
 
@@ -211,8 +217,10 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 | `tienda_gestion` | gestion-pedidos | `[asde_tienda_gestion]` → `TiendaGestionView` |  | sí |
 | `tienda_config` | configuracion | `[asde_tienda_config]` → `TiendaConfigView` |  |  |
 | `tienda_productos` | productos | `[asde_tienda_productos]` → `TiendaProductosView` |  |  |
+| `tienda_proveedor` | pedido-de-camisas | `[asde_tienda_proveedor]` → `TiendaProveedorView` |  |  |
 | `pagos` | mis-pagos | `[asde_mis_pagos]` → `MisPagosView` |  |  |
 | `alta_scouters` | alta-scouters | `[asde_alta_scouters]` → `AltaScoutersView` | sí |  |
+| `alta_grupo` | alta-grupo | `[asde_alta_grupo]` → `AltaGrupoView` | sí |  |
 | `inventario` | inventario | `[asde_inventario]` → `InventarioView` |  | sí |
 | `inventario_tipos` | tipos-de-material | `[asde_inventario_tipos]` → `InventarioTiposView` |  | sí |
 | `inventario_compras` | listas-de-compra | `[asde_inventario_compras]` → `InventarioComprasView` |  | sí |
@@ -223,49 +231,55 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 | `eventos_config` | configuracion | `[asde_eventos_config]` → `EventosConfigView` |  |  |
 | `eventos_recetas` | recetas | `[asde_eventos_recetas]` → `RecetasView` |  |  |
 | `mis_eventos` | mis-eventos | `[asde_mis_eventos]` → `MisEventosView` |  |  |
+| `reintegros` | reintegros | `[asde_reintegros]` → `ReintegrosView` |  |  |
 
 ### Capabilities por rol (Install\Roles)
 
-| Capability | Scouter / Voluntario | Secretaría | Coordinación | Tesorería | Tutor / Padre / Madre | Participante | Intendente (responsable de material) |
-|---|---|---|---|---|---|---|---|
-| `asde_access_area_privada` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
-| `asde_add_self_notes` |  |  |  |  |  | ✓ |  |
-| `asde_annotate_health` |  |  | ✓ |  |  |  |  |
-| `asde_approve_changes` | ✓ | ✓ | ✓ |  |  |  |  |
-| `asde_aprobar_solicitudes` | ✓ | ✓ | ✓ |  |  |  |  |
-| `asde_crm_sync` |  |  | ✓ |  |  |  |  |
-| `asde_edit_all` |  | ✓ |  |  |  |  |  |
-| `asde_edit_section_contact` | ✓ |  |  |  |  |  |  |
-| `asde_edit_self_contact` | ✓ |  |  |  |  | ✓ | ✓ |
-| `asde_eventos_config` |  |  | ✓ | ✓ |  |  |  |
-| `asde_eventos_economia` |  |  |  | ✓ |  |  |  |
-| `asde_eventos_gestion` | ✓ | ✓ | ✓ |  |  |  |  |
-| `asde_eventos_grupo` |  |  | ✓ |  |  |  |  |
-| `asde_eventos_inscribir` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
-| `asde_eventos_material` |  |  |  |  |  |  | ✓ |
-| `asde_inventario` | ✓ | ✓ | ✓ | ✓ |  |  | ✓ |
-| `asde_inventario_aprobar` |  |  |  | ✓ |  |  |  |
-| `asde_lista_espera` | ✓ | ✓ | ✓ | ✓ |  |  |  |
-| `asde_lista_espera_alta` |  | ✓ | ✓ |  |  |  |  |
-| `asde_manage_users` |  | ✓ | ✓ |  |  |  |  |
-| `asde_menus_recetas` | ✓ | ✓ | ✓ |  |  |  |  |
-| `asde_mis_pagos` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
-| `asde_propose_ward_changes` |  |  |  |  | ✓ |  |  |
-| `asde_reports` | ✓ | ✓ | ✓ | ✓ |  |  |  |
-| `asde_sepa_autorizar` |  |  |  |  | ✓ | ✓ |  |
-| `asde_tesoreria_acceso` | ✓ | ✓ | ✓ | ✓ |  |  |  |
-| `asde_tesoreria_config` |  | ✓ | ✓ | ✓ |  |  |  |
-| `asde_tienda_admin` |  | ✓ | ✓ | ✓ |  |  |  |
-| `asde_tienda_comprar` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
-| `asde_tienda_entrega` | ✓ | ✓ | ✓ | ✓ |  |  |  |
-| `asde_tienda_gestion` | ✓ | ✓ | ✓ | ✓ |  |  |  |
-| `asde_tienda_pago` |  |  |  | ✓ |  |  |  |
-| `asde_tienda_pedido` |  |  | ✓ |  |  |  |  |
-| `asde_view_all` |  | ✓ | ✓ |  |  |  |  |
-| `asde_view_health` | ✓ | ✓ | ✓ |  |  |  |  |
-| `asde_view_section` | ✓ |  |  |  |  |  |  |
-| `asde_view_self` | ✓ | ✓ | ✓ | ✓ |  | ✓ | ✓ |
-| `asde_view_wards` |  |  |  |  | ✓ |  |  |
+| Capability | Scouter / Voluntario | Secretaría | Coordinación | Oficina | Tesorería | Tutor / Padre / Madre | Participante | Intendente (responsable de material) |
+|---|---|---|---|---|---|---|---|---|
+| `asde_access_area_privada` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+| `asde_add_self_notes` |  |  |  |  |  |  | ✓ |  |
+| `asde_annotate_health` |  |  | ✓ |  |  |  |  |  |
+| `asde_approve_changes` | ✓ | ✓ | ✓ |  |  |  |  |  |
+| `asde_aprobar_solicitudes` | ✓ | ✓ | ✓ |  |  |  |  |  |
+| `asde_crm_sync` |  |  | ✓ |  |  |  |  |  |
+| `asde_edit_all` |  | ✓ |  |  |  |  |  |  |
+| `asde_edit_section_contact` | ✓ |  |  |  |  |  |  |  |
+| `asde_edit_self_contact` | ✓ |  |  |  |  |  | ✓ | ✓ |
+| `asde_eventos_config` |  |  | ✓ |  | ✓ |  |  |  |
+| `asde_eventos_economia` |  |  |  |  | ✓ |  |  |  |
+| `asde_eventos_gestion` | ✓ | ✓ | ✓ |  |  |  |  |  |
+| `asde_eventos_grupo` |  |  | ✓ |  |  |  |  |  |
+| `asde_eventos_inscribir` | ✓ | ✓ | ✓ |  | ✓ | ✓ | ✓ | ✓ |
+| `asde_eventos_material` |  |  |  |  |  |  |  | ✓ |
+| `asde_inventario` | ✓ | ✓ | ✓ |  | ✓ |  |  | ✓ |
+| `asde_inventario_aprobar` |  |  |  |  | ✓ |  |  |  |
+| `asde_lista_espera` | ✓ | ✓ | ✓ |  | ✓ |  |  |  |
+| `asde_lista_espera_alta` |  | ✓ | ✓ |  |  |  |  |  |
+| `asde_manage_users` |  | ✓ | ✓ | ✓ |  |  |  |  |
+| `asde_menus_recetas` | ✓ | ✓ | ✓ |  |  |  |  |  |
+| `asde_mis_pagos` | ✓ | ✓ | ✓ |  | ✓ | ✓ | ✓ | ✓ |
+| `asde_multigrupo` |  |  |  | ✓ |  |  |  |  |
+| `asde_propose_ward_changes` |  |  |  |  |  | ✓ |  |  |
+| `asde_reintegros` | ✓ |  | ✓ |  |  |  |  |  |
+| `asde_reintegros_aprobar` |  |  |  |  | ✓ |  |  |  |
+| `asde_reintegros_pagar` |  |  | ✓ |  | ✓ |  |  |  |
+| `asde_reports` | ✓ | ✓ | ✓ | ✓ | ✓ |  |  |  |
+| `asde_sepa_autorizar` |  |  |  |  |  | ✓ | ✓ |  |
+| `asde_solo_lectura` |  |  |  | ✓ |  |  |  |  |
+| `asde_tesoreria_acceso` | ✓ | ✓ | ✓ |  | ✓ |  |  |  |
+| `asde_tesoreria_config` |  | ✓ | ✓ |  | ✓ |  |  |  |
+| `asde_tienda_admin` |  | ✓ | ✓ |  | ✓ |  |  |  |
+| `asde_tienda_comprar` | ✓ | ✓ | ✓ |  | ✓ | ✓ | ✓ | ✓ |
+| `asde_tienda_entrega` | ✓ | ✓ | ✓ |  | ✓ |  |  |  |
+| `asde_tienda_gestion` | ✓ | ✓ | ✓ |  | ✓ |  |  |  |
+| `asde_tienda_pago` |  |  |  |  | ✓ |  |  |  |
+| `asde_tienda_pedido` |  |  | ✓ |  |  |  |  |  |
+| `asde_view_all` |  | ✓ | ✓ |  |  |  |  |  |
+| `asde_view_health` | ✓ | ✓ | ✓ | ✓ |  |  |  |  |
+| `asde_view_section` | ✓ |  |  |  |  |  |  |  |
+| `asde_view_self` | ✓ | ✓ | ✓ |  | ✓ |  | ✓ | ✓ |
+| `asde_view_wards` |  |  |  |  |  | ✓ |  |  |
 
 ### Módulos que se encienden por grupo (Domain\Modulos)
 
@@ -281,6 +295,7 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 | `alta_scouters` Alta de scouters | El enlace para que los scouters se den de alta. | — | — | encendido |
 | `lista_espera` Lista de espera | El enlace para apuntarse a la lista de espera, la lista para el equipo y el paso al CRM. | `asde_lista_espera`, `asde_lista_espera_alta` | — | apagado |
 | `eventos` Eventos | Salidas, acampadas y otras actividades: equipo dirigente, presupuesto, inscripciones, «Mis eventos» y cobros. | `asde_eventos_gestion`, `asde_menus_recetas`, `asde_eventos_grupo`, `asde_eventos_economia`, `asde_eventos_config`, `asde_eventos_inscribir`, `asde_eventos_material` | — | apagado |
+| `reintegros` Reintegros | Los scouters piden que les devuelvan un gasto (con el justificante y, si procede, un evento); Tesorería lo aprueba y Tesorería o Coordinación lo marcan pagado. | `asde_reintegros`, `asde_reintegros_aprobar`, `asde_reintegros_pagar` | — | apagado |
 
 ### Tablas propias (`{prefix}asde_*`)
 
@@ -288,6 +303,8 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 |---|---|
 | `asde_auditoria` | `src/Audit/Logger.php` |
 | `asde_crm_operaciones` | `src/Crm/Operaciones.php` |
+| `asde_grupo_invitaciones` | `src/Domain/GrupoInvitaciones.php` |
+| `asde_grupo_solicitudes` | `src/Domain/GrupoSolicitudes.php` |
 | `asde_evento_anticipos` | `src/Eventos/AnticiposTable.php` |
 | `asde_eventos` | `src/Eventos/EventosTable.php` |
 | `asde_evento_gastos` | `src/Eventos/GastosTable.php` |
@@ -307,6 +324,7 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 | `asde_evento_menu` | `src/Menus/MenuTable.php` |
 | `asde_menu_recetas` | `src/Menus/RecetasTable.php` |
 | `asde_menu_receta_lineas` | `src/Menus/RecetasTable.php` |
+| `asde_reintegros` | `src/Reintegros/ReintegrosTable.php` |
 | `asde_sepa_mandatos` | `src/Sepa/Mandatos.php` |
 | `asde_sepa_remesas` | `src/Sepa/Remesas.php` |
 | `asde_socios` | `src/Socios/SociosTable.php` |
@@ -318,6 +336,7 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 | `asde_movimientos` | `src/Tesoreria/MovimientosTable.php` |
 | `asde_tienda_pedidos` | `src/Tienda/PedidosTable.php` |
 | `asde_tienda_productos` | `src/Tienda/ProductosTable.php` |
+| `asde_tienda_proveedor` | `src/Tienda/ProveedorTable.php` |
 | `asde_tienda_variantes` | `src/Tienda/VariantesTable.php` |
 | `asde_emails` | `src/Usuarios/RegistroEmails.php` |
 | `asde_solicitudes` | `src/Usuarios/Solicitudes.php` |
@@ -330,6 +349,8 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 - `ColoresPage` — wp-admin → Grupos Scouts → Colores (v0.15, doc 28):
 - `DuplicadosPage` — wp-admin → Grupos Scouts → Documentos repetidos (v0.24, doc 34, §3.7):
 - `EntornoPage` — wp-admin → Grupos Scouts → Instalación y entorno.
+- `GruposAltasPage` — wp-admin → Grupos Scouts → Altas de grupos (v0.50, doc 50 fase 6; solo en la web de la oficina).
+- `GruposInvitacionesPage` — wp-admin → Grupos Scouts → Invitar a un grupo (v0.50, doc 50 fase 5; solo en la web de la oficina).
 - `IdiomasPage` — wp-admin → Grupos Scouts → Idioma y etiquetas (v0.15, doc 28).
 - `ModulosPage` — wp-admin → Grupos Scouts → Módulos (v0.20):
 - `OrganizacionPage` — wp-admin → Grupos Scouts → Organización federada:
@@ -347,6 +368,7 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 - `Identificacion` — Usuario de acceso de los socios:
 - `Intentos` — Límite de intentos fallidos en la pantalla de acceso:
 - `Limite` — Límite de peticiones por dispositivo (IP) para los formularios públicos (p.
+- `SoloLectura` — Cuentas de solo lectura (v0.50, doc 50 fase 3):
 
 **Crm/**
 
@@ -372,13 +394,18 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 
 - `ClaveDeGrupo` — Clave secreta de un enlace público del grupo (alta de scouters, lista de espera):
 - `Grupo` — Grupo Scout en el que se trabaja en esta petición:
+- `GrupoAltas` — Revisión de las altas de grupo (v0.50, doc 50 fase 6; solo en la web de la oficina):
+- `GrupoInvitaciones` — Invitaciones para que un grupo dé de alta su acceso (v0.50, doc 50 fase 5; solo en la web de la oficina).
+- `GrupoSolicitudes` — Altas de grupo recibidas por el formulario de una invitación (v0.50, doc 50 fases 5 y 6; solo en la web de la oficina).
 - `Grupos` — Grupos Scouts dados de alta en la web (a mano, por un administrador).
 - `Identidad` — Qué número es el USUARIO DE ACCESO (v0.14, doc 27).
 - `Modulos` — Módulos del área privada que se pueden activar o desactivar por grupo (v0.20; wp-admin → Grupos Scouts → Módulos, Admin\ModulosPage).
 - `NumeroSocio` — Nº de socio/a local/territorial.
+- `Oficina` — Credencial del CRM de la oficina federal (v0.50, doc 50 fase 2).
 - `Organizacion` — Organización federada de Scouts de España que usa el sistema (opción `asde_ap_organizacion`).
 - `Persona` — Persona del CRM (Contacts) con los campos que necesita el área privada.
 - `Secciones` — Catálogo de secciones de ASDE (docs/05-secciones-educativas.md).
+- `VerificacionGrupo` — Comprueba la credencial del CRM que escribe un grupo al darse de alta (v0.50, doc 50 fase 5):
 
 **Eventos/**
 
@@ -428,6 +455,7 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 
 - `AccesoView` — Pantalla de acceso al área privada (pública):
 - `ActivarCuentaView` — Página pública:
+- `AltaGrupoView` — «Alta de grupo» (pública, v0.50, doc 50 fase 5):
 - `AltaScoutersView` — «Alta de scouters» (pública, v0.16, doc 31):
 - `AltaUsuariosView` — Alta de usuarios:
 - `AreaPrivadaView` — 
@@ -454,6 +482,7 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 - `PersonasView` — Personas del grupo, activas y NO activas:
 - `RecetasView` — El recetario del grupo (v0.41, doc 49, B1):
 - `RecuperarView` — "¿Has olvidado tu contraseña?" (pública).
+- `ReintegrosView` — Reintegros (v0.47, doc 53):
 - `SeguridadView` — Seguridad de la cuenta:
 - `SepaView` — Tesorería · Domiciliaciones SEPA (Secretaría, Coordinación y Tesorería):
 - `SolicitarView` — «Solicitar acceso» (pública):
@@ -461,10 +490,11 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 - `TesoreriaBaseView` — Base de las páginas de Tesorería:
 - `TesoreriaView` — Tesorería · control de pagos:
 - `TiendaBaseView` — Base de las páginas de la tienda:
-- `TiendaConfigView` — Configuración de los pedidos de uniforme del grupo (Tesorería y Coordinación):
-- `TiendaGestionView` — Gestión de los pedidos de uniforme (scouters, Tesorería, Coordinación):
-- `TiendaPedidosView` — «Uniforme» para los asociados:
+- `TiendaConfigView` — Configuración de la tienda del grupo (Coordinación, Tesorería y Secretaría):
+- `TiendaGestionView` — Gestión de los pedidos de la tienda (scouters, Tesorería, Coordinación y administración):
+- `TiendaPedidosView` — «Mis pedidos» para los asociados:
 - `TiendaProductosView` — Productos de la tienda (doc 48, fase 2):
+- `TiendaProveedorView` — «Pedido de camisas» (v0.48, doc 52, T4):
 - `TiendaPublicaView` — La tienda pública (v0.39, doc 48, fase 4, P-174):
 - `UsuariosView` — Listado de usuarios del área privada:
 - `View` — 
@@ -544,6 +574,12 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 
 - `Plugin` — 
 
+**Reintegros/**
+
+- `Avisos` — Emails de los reintegros (v0.47, doc 53).
+- `ReintegrosTable` — Reintegros de gastos de los scouters ({prefix}asde_reintegros, v0.47, doc 53):
+- `Servicio` — Reintegros de gastos (v0.47, doc 53):
+
 **Sepa/**
 
 - `Avisos` — Emails de la domiciliación SEPA:
@@ -592,8 +628,10 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 - `Informes` — Informes de ventas de la tienda (v0.40, doc 48, fase 5):
 - `PedidosTable` — Pedidos de uniforme ({prefix}asde_tienda_pedidos):
 - `ProductosTable` — Catálogo de la tienda (doc 48, fase 2):
+- `Proveedor` — Pedido de camisas (y de lo demás que se encarga al proveedor) (v0.48, doc 52, T4):
+- `ProveedorTable` — Pedidos del grupo al proveedor (v0.48, doc 52, T4):
 - `Sembrado` — Doc 48, fase 2:
-- `Servicio` — Pedidos de uniforme (petición del usuario, 2026-09-29).
+- `Servicio` — Pedidos de la tienda (doc 48 y doc 52).
 - `VariantesTable` — Variantes de los productos de la tienda ({prefix}asde_tienda_variantes) y sus existencias (doc 48, fase 2).
 
 **Usuarios/**
@@ -631,13 +669,14 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 - `informes.js` — Informes (mejora progresiva: sin JavaScript todo funciona igual).
 - `inventario.js` — Inventario de material (v0.19, doc 32).
 - `parcial.js` — Zonas que se actualizan sin recargar la página (v0.20; primero, el listado del banco).
+- `reintegros.js` — Reintegros (v0.47, doc 53): el campo del IBAN solo se enseña si se elige cobrar por transferencia.
 - `sw-retirada.js` — Service worker de «app retirada» (src/Install/AppRetirada.php).
 - `tarea.js` — Monitor de la corrección de números en segundo plano.
 - `tesoreria.js` — Tesorería → ficha de una familia (v0.20; ventana con buscador desde la v0.20.1).
-- `uniforme.js` — Uniforme (v0.11): total del pedido mientras se rellena el formulario, y la talla obligatoria solo si se pide la camisa.
+- `tienda.js` — Tienda (v0.45, doc 52, T2): en los productos con varias tallas se ve una fila «cantidad + talla» y el botón «Añadir otra talla» enseña las siguientes.
 - `usuarios.js` — Listado de usuarios: filtra por columna, ordena y pagina en memoria.
 
 ### Pruebas (`tests/`)
 
-`acceso` · `alta-reglas` · `alta-scouters` · `altas-crm-escritura` · `altas-crm-pantallas` · `altas-crm` · `app-enganches` · `ayuda` · `banco-gestion` · `colores` · `entorno` · `estilo-wordpress` · `eventos-avisos-config` · `eventos-calendario` · `eventos-economia` · `eventos-inscripciones` · `eventos-intendente` · `eventos-material` · `eventos` · `ficha-alergenos` · `fichas-escritura` · `grupos-emails-banco` · `identidad` · `idiomas-catalogos` · `idiomas` · `inventario` · `lista-espera` · `mejoras-v029` · `mejoras-v030` · `mejoras-v031` · `mejoras-v034` · `mejoras-v0351` · `menus-evento` · `menus-recetario` · `menus-validacion` · `menus` · `migracion-tienda` · `modulos` · `organizacion` · `rendimiento` · `sepa` · `solicitudes` · `tema` · `tienda-catalogo` · `tienda-fase5` · `tienda-pedidos` · `tienda-publica` · `tienda` · `uniformes-inventario-insignias` · `usuarios-listado`
+`acceso` · `alta-grupo-aprobacion` · `alta-grupo-invitacion` · `alta-grupo-primer-usuario` · `alta-reglas` · `alta-scouters` · `altas-crm-escritura` · `altas-crm-pantallas` · `altas-crm` · `app-enganches` · `ayuda` · `banco-gestion` · `colores` · `entorno` · `estilo-wordpress` · `eventos-avisos-config` · `eventos-calendario` · `eventos-economia` · `eventos-inscripciones` · `eventos-intendente` · `eventos-material` · `eventos` · `ficha-alergenos` · `fichas-escritura` · `grupos-emails-banco` · `identidad` · `idiomas-catalogos` · `idiomas` · `inventario` · `lista-espera` · `mejoras-v029` · `mejoras-v030` · `mejoras-v031` · `mejoras-v034` · `mejoras-v0351` · `menus-evento` · `menus-recetario` · `menus-validacion` · `menus` · `migracion-tienda` · `modo-instalacion` · `modulos` · `oficina-pantallas` · `oficina` · `organizacion` · `reintegros` · `rendimiento` · `sepa` · `solicitudes` · `solo-lectura` · `tema` · `tienda-catalogo` · `tienda-fase5` · `tienda-pedidos` · `tienda-proveedor` · `tienda-publica` · `tienda` · `usuarios-listado`
 <!-- inventario:fin -->

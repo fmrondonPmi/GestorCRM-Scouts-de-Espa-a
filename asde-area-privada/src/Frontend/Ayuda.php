@@ -38,7 +38,7 @@ final class Ayuda {
 	public const PREFIJO_ID = 'asde-manual-';
 
 	/** Manuales con ayuda en el área privada (el de administración es de wp-admin). */
-	public const MANUALES = array( 'familias', 'participantes', 'scouters', 'coordinacion' );
+	public const MANUALES = array( 'familias', 'participantes', 'scouters', 'coordinacion', 'oficina' );
 
 	/** Si el manual del rol no tiene ayuda de una página, se busca en estos, por este orden. */
 	private const RESERVA = array( 'coordinacion', 'scouters', 'familias', 'participantes' );
@@ -50,6 +50,9 @@ final class Ayuda {
 	 * @param string[] $roles
 	 */
 	public static function manual_de( array $roles, bool $admin ): string {
+		if ( ! $admin && in_array( Roles::OFICINA, $roles, true ) ) { // v0.50: la oficina federal tiene el suyo.
+			return 'oficina';
+		}
 		if ( $admin || array_intersect( array( Roles::SECRETARIA, Roles::COORDINACION, Roles::TESORERIA ), $roles ) ) {
 			return 'coordinacion';
 		}

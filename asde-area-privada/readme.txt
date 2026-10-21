@@ -63,6 +63,7 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 == Changelog ==
 
 = 0.50.0 =
+* Office web: new "Oficina" manual and help, read-only screens without action buttons, and every record viewed or file downloaded by the office is audited.
 * Office web: groups can sign up by invitation (one-use link valid 14 days, credential checked on the same screen and stored encrypted); two new tables.
 * Office web: the federal office can store its CRM credential (encrypted, with a connection test) and there is a new read-only "Oficina" role that can pick any group and sign in without a member record. Nothing changes for group sites.
 * New setting "Installation type" (Organisation settings): the plugin can be installed on a group's WordPress (default, nothing changes) or on the federal office's WordPress. It does not change any screen yet: it is the first step towards the office read-only view and the group invitation flow. It can be fixed with the ASDE_AP_MODO constant in wp-config.php.

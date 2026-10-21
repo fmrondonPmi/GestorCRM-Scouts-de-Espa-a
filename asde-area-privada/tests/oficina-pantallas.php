@@ -86,6 +86,8 @@ try {
 	$ok( str_contains( $leer( 'src/Fichas/PermisosFicha.php' ), 'SoloLectura::activo()' ), 'La ficha de la oficina nunca ofrece editar' );
 	$ok( ! str_contains( $leer( 'src/Frontend/Views/FichaView.php' ), 'iban' ) || str_contains( $ficha, '$tesoreria' ), 'Los datos bancarios de la ficha solo los ven Tesorería y la familia' );
 
+	$ok( 'oficina' === \AsdeBalears\AreaPrivada\Frontend\Ayuda::manual_de( array( Roles::OFICINA ), false ) && is_file( ASDE_AP_DIR . 'ayuda/oficina/personas.html' ) && is_file( ASDE_AP_DIR . 'ayuda/oficina/informes.html' ), 'La oficina tiene su propio manual y su ayuda por página' );
+
 	echo "\n== E. Sin botones de acción ==\n";
 	$html = '<div><a href="https://x.example/area/alta/?socio=1" data-asde-modal>Dar acceso</a>'
 		. '<p><a href="/area/personas/?socio=7">Ver ficha</a></p>'
@@ -98,6 +100,9 @@ try {
 	$ok( ! str_contains( $lim, 'Eliminar' ) && ! str_contains( $lim, 'Otro' ) && ! str_contains( $lim, 'method="post"' ), 'Se quitan los formularios de envío' );
 	$ok( str_contains( $lim, 'Filtrar' ) && str_contains( $lim, 'Ver ficha' ), 'Se conservan los filtros (GET) y los enlaces de consulta' );
 	$ok( ! str_contains( $lim, 'Dar de baja' ) && ! str_contains( $lim, 'Alta de socio/a' ), 'Se quitan los enlaces de membresía y de alta' );
+	$editor = '<form method="post" action="/area/informes/"><input type="hidden" name="asde_action" value="guardar"><input name="nombre"><button type="submit" class="button">Guardar</button><button type="submit" class="button" formmethod="get" name="ver" value="1">Ver el resultado</button></form>';
+	$lim2   = SoloLectura::limpiar( $editor );
+	$ok( str_contains( $lim2, 'Ver el resultado' ) && ! str_contains( $lim2, '>Guardar<' ) && ! str_contains( $lim2, 'asde_action' ), 'El editor de informes se queda para consultar («Ver el resultado»), sin «Guardar»' );
 	$view = $leer( 'src/Frontend/Views/View.php' );
 	$ok( str_contains( $view, 'SoloLectura::limpiar( $contenido )' ), 'Todas las pantallas pasan por la limpieza en el envoltorio común' );
 } finally {

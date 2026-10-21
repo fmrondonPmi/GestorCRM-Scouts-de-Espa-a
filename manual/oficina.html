@@ -1,0 +1,213 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Manual para la oficina federal · Área privada de los Grupos Scouts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@600;700&family=JetBrains+Mono:wght@500&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap">
+<link rel="stylesheet" href="manual.css">
+</head>
+<body>
+<header class="portada">
+	<div class="portada__dentro">
+		<p class="antetitulo">Manual de uso · versión 0.49 · octubre de 2026 · <a class="portada__volver" href="index.html">Todos los manuales</a></p>
+		<h1>Manual para la oficina federal</h1>
+		<p class="portada__perfil">Personal de la oficina (consulta en solo lectura)</p>
+		<p class="entrada">Cómo consulta la oficina federal los grupos: elegir el grupo, ver las personas y sus fichas, los informes con datos de las personas asociadas y las cuentas de acceso, siempre en solo lectura y con cada consulta anotada.</p>
+		<p class="demo"><strong>Todas las capturas son de un WordPress de demostración con un CRM simulado y datos inventados:</strong> el «Grupo Scout Ejemplo» (grupo 999), personas que no existen y emails <span class="mono">@example.invalid</span>. En tu grupo verás tus datos del CRM.</p>
+	</div>
+	<div class="secciones-franja" aria-hidden="true">
+		<span style="background: var(--castores)"></span><span style="background: var(--lobatos)"></span><span style="background: var(--scouts)"></span><span style="background: var(--escultas)"></span><span style="background: var(--rovers)"></span>
+	</div>
+</header>
+
+<div class="cuerpo">
+	<nav class="indice" aria-label="Índice">
+		<h2>En este manual</h2>
+		<ol>
+<li><a href="#para-quien">Para quién es este manual</a></li>
+<li><a href="#entrar">Entrar</a></li>
+<li><a href="#primera-vez">Primera vez y contraseña olvidada</a></li>
+<li class="sub"><a href="#activar">Activar la cuenta</a></li>
+<li class="sub"><a href="#olvidada">¿Has olvidado tu contraseña?</a></li>
+<li><a href="#seguridad">Seguridad de la cuenta</a></li>
+<li><a href="#inicio">El inicio y el grupo que consultas</a></li>
+<li><a href="#consultar">Consultar personas, informes y usuarios</a></li>
+<li class="sub"><a href="#of-personas">Personas</a></li>
+<li class="sub"><a href="#of-ficha">La ficha</a></li>
+<li class="sub"><a href="#of-informes">Informes</a></li>
+<li class="sub"><a href="#of-usuarios">Usuarios</a></li>
+<li><a href="#idioma">El idioma de la web</a></li>
+		</ol>
+	</nav>
+
+	<main>
+		<details class="indice-movil">
+			<summary>Índice del manual</summary>
+			<ol>
+<li><a href="#para-quien">Para quién es este manual</a></li>
+<li><a href="#entrar">Entrar</a></li>
+<li><a href="#primera-vez">Primera vez y contraseña olvidada</a></li>
+<li><a href="#seguridad">Seguridad de la cuenta</a></li>
+<li><a href="#inicio">El inicio y el grupo que consultas</a></li>
+<li><a href="#consultar">Consultar personas, informes y usuarios</a></li>
+<li><a href="#idioma">El idioma de la web</a></li>
+			</ol>
+		</details>
+
+<section id="para-quien">
+	<h2>Para quién es este manual</h2>
+	<p class="resumen">Para el personal de la <strong>oficina federal</strong> que consulta los grupos. Tu cuenta tiene el rol <strong>Oficina</strong>: ves los datos de los grupos que están dados de alta, <strong>siempre de uno en uno y en solo lectura</strong>. No hay nada que puedas cambiar, aprobar ni borrar.</p>
+	<div class="tabla">
+		<table>
+			<thead><tr><th scope="col">Qué</th><th scope="col">Alcance</th></tr></thead>
+			<tbody>
+				<tr><td><a href="#consultar">Personas</a></td><td>Todas las personas del grupo elegido, con su ficha completa (también salud y alimentación).</td></tr>
+				<tr><td><a href="#consultar">Informes</a></td><td>Los listados con datos de las personas asociadas, para ver o descargar. No incluyen cuotas ni pagos ni cuentas bancarias.</td></tr>
+				<tr><td><a href="#consultar">Usuarios</a></td><td>Las cuentas de acceso del grupo, para consultar.</td></tr>
+			</tbody>
+		</table>
+	</div>
+	<ul>
+		<li><strong>Entras con tu email</strong> (o el usuario que te hayan dado) por «Acceso socios», eliges el grupo y, desde ese momento, todo lo que ves es de ese grupo. Para cambiar de grupo, usa el desplegable <strong>«Grupo»</strong> del menú.</li>
+		<li><strong>La verificación en dos pasos es obligatoria</strong> para esta cuenta, porque ves datos de menores de todos los grupos.</li>
+		<li>Cada ficha que abres y cada informe que descargas <strong>quedan anotados</strong> en el registro del sitio (quién, cuándo y de qué grupo). Usa los datos solo para tu trabajo y no los saques de la oficina.</li>
+		<li>Si algo no cuadra en un grupo, díselo al grupo: tú no puedes corregirlo desde aquí.</li>
+	</ul>
+</section>
+
+<section id="entrar">
+	<h2>Entrar</h2>
+	<p class="resumen">Se entra desde <strong>«Acceso socios»</strong>, en el menú de la web del grupo. Con la sesión iniciada, ese botón pasa a llamarse «Área privada».</p>
+	<figure class="captura"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/acceso/</span></div><div class="navegador__vista" data-ampliar><img src="capturas/01-acceso.png" width="1280" height="986" alt="Pantalla Acceso socios con los campos Grupo Scout, Nº de socio/a o email y Contraseña, y el Código de verificación plegado" loading="lazy"></div></div><figcaption><span>La pantalla de acceso. El grupo viene elegido si en la web solo hay uno. Debajo, «¿Aún no tienes cuenta? Solicita el acceso».</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<ol class="pasos">
+		<li><div><strong>Grupo Scout.</strong> Elige tu grupo. Solo puedes entrar en el tuyo.</div></li>
+		<li><div><strong>Nº de socio/a o email.</strong> Cualquiera de los tres:
+			<ul>
+				<li><strong>Tu nº de socio/a de Scouts de España,</strong> el de tu ficha del CRM (por ejemplo <code>118241</code>).</li>
+				<li><strong>Tu nº de socio/a territorial,</strong> el de siempre: el código de la organización, el nº del grupo y 4 cifras (en Scouts de Balears, por ejemplo <code>79990390</code>).</li>
+				<li><strong>Tu email:</strong> el de tu cuenta, aquel al que te llegó la invitación.</li>
+			</ul>
+		</div></li>
+		<li><div><strong>Contraseña.</strong> La que elegiste al activar la cuenta.</div></li>
+		<li><div><strong>Código de verificación</strong> (plegado: despliégalo). Solo si tienes activada la verificación en dos pasos: las 6 cifras de tu app o uno de tus códigos de recuperación. Si lo olvidas, la pantalla te lo pide y vuelves a escribir la contraseña.</div></li>
+	</ol>
+	<div class="nota"><p><strong>¿Cuál es mi usuario?</strong> El número que el grupo ha elegido como usuario: el de Scouts de España o el territorial. Es el que ves junto a tu nombre al entrar. Puedes entrar con cualquiera de los dos o con el email.</p></div>
+	<div class="nota"><p><strong>El mismo email en dos cuentas.</strong> Si eres scouter y además madre o padre de un educando, tu email puede ser el de tu cuenta y el de la cuenta familiar. Al entrar con el email se abre la cuenta cuya contraseña escribas. Si las dos tienen la misma contraseña, la pantalla te pide el nº de socio/a de la que quieres usar.</p></div>
+	<div class="moviles">
+		<figure class="captura movil"><div class="navegador"><div class="navegador__vista" data-ampliar><img src="capturas/26-movil-acceso.png" width="780" height="2125" alt="La pantalla de acceso en un móvil" loading="lazy"></div></div><figcaption><span>En el móvil, igual.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+		<div>
+			<h3>Si no te deja entrar</h3>
+			<ul>
+				<li><strong>«Nº de socio/a o email, contraseña o grupo incorrectos.»</strong> Revisa los tres datos. El mensaje no dice cuál falla, a propósito.</li>
+				<li><strong>«Demasiados intentos fallidos…»</strong> Tras 5 fallos seguidos hay que esperar 15 minutos, o pedir una contraseña nueva. Los intentos se cuentan por cuenta: da igual el número con el que pruebes.</li>
+				<li><strong>«…el CRM no responde.»</strong> Solo puede pasar con el email en cuentas antiguas que aún no han entrado nunca con él. Entra con tu nº de socio/a.</li>
+				<li>La página <span class="mono">wp-login.php</span> de WordPress es solo para quien edita la web: se entra siempre por «Acceso socios».</li>
+			</ul>
+		</div>
+	</div>
+</section>
+
+<section id="primera-vez">
+	<h2>Primera vez y contraseña olvidada</h2>
+	<h3 id="activar">Activar la cuenta</h3>
+	<ol class="pasos">
+		<li><div>Cuando el grupo te da acceso, o aprueba tu solicitud, te llega un email con tu usuario: «Activa tu acceso al área privada» o, si lo pediste tú, «Bienvenida al área privada: activa tu acceso».</div></li>
+		<li><div>Pulsa <strong>«Activar mi cuenta»</strong>. El enlace es personal, de un solo uso, y dura 7 días.</div></li>
+		<li><div>Elige una contraseña de al menos 10 caracteres. Mejor una frase fácil de recordar para ti y difícil de adivinar.</div></li>
+		<li><div>Entra por «Acceso socios» con tu usuario (el email de la invitación dice cuál es) o con el email en el que recibiste la invitación.</div></li>
+	</ol>
+	<h3 id="olvidada">¿Has olvidado tu contraseña?</h3>
+	<figure class="captura"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/recuperar-contrasena/</span></div><div class="navegador__vista" data-ampliar><img src="capturas/02-recuperar.png" width="1280" height="667" alt="Pantalla Recuperar contraseña con el campo Nº de socio/a o email" loading="lazy"></div></div><figcaption><span>Desde el enlace «¿Has olvidado tu contraseña?» de la pantalla de acceso.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<ul>
+		<li>Escribe tu usuario (vale el de Scouts de España o el territorial, con la T si es una cuenta familiar) o tu email.</li>
+		<li>Recibirás un enlace para elegir contraseña nueva, válido 24 horas, en el email de tu cuenta.</li>
+		<li>Si ese email es el de varias cuentas (la tuya y la de tu familia, por ejemplo), te llega un enlace para cada una. Cada email dice de qué usuario es.</li>
+		<li>La respuesta en pantalla es siempre la misma, exista o no el usuario. Si no llega nada, mira en la carpeta de spam; si el email está mal, pide a Secretaría que lo corrija en el CRM.</li>
+	</ul>
+</section>
+
+<section id="seguridad">
+	<h2>Seguridad de la cuenta</h2>
+	<p class="resumen">La verificación en dos pasos pide, además de la contraseña, un código de 6 cifras de una app del móvil (Google Authenticator, Microsoft Authenticator o similar). Es <strong>opcional</strong> para todas las cuentas, pero protege mejor los datos: si ves datos de otras personas (scouters, Secretaría, Coordinación, Tesorería), te la recomendamos.</p>
+	<ol class="pasos">
+		<li><div>Pulsa <strong>«Seguridad»</strong>, junto a tu nombre, arriba del área.</div></li>
+		<li><div>Instala en tu móvil una app de autenticación y escanea con ella el código QR.</div></li>
+		<li><div>Escribe el código de 6 cifras que te muestra la app y guarda los <strong>códigos de recuperación</strong> en un lugar seguro: te servirán si pierdes el móvil.</div></li>
+	</ol>
+	<p>Desde entonces, al entrar, despliega «Código de verificación» en «Acceso socios» y escribe el código. Si pierdes el móvil y los códigos de recuperación, pide a la administración de la web que te la quite para volver a activarla.</p>
+</section>
+
+<section id="inicio">
+	<h2>El inicio y el grupo que consultas</h2>
+	<p class="resumen">El inicio solo enseña tres accesos: <strong>Personas</strong>, <strong>Informes</strong> y <strong>Usuarios</strong>. Arriba, en el menú, el desplegable <strong>«Grupo»</strong> dice de cuál de los grupos estás viendo los datos, y <strong>«Oficina · solo lectura»</strong> te lo recuerda.</p>
+	<ul>
+		<li>Al cambiar el desplegable, la página se recarga con los datos del otro grupo. Hasta que no lo cambias, todo lo que ves es del grupo elegido.</li>
+		<li>Solo salen los grupos que están dados de alta y con la conexión al CRM comprobada. Si uno que esperas no está, pregunta al administrador de la web.</li>
+		<li>No verás botones de guardar, aprobar, dar acceso, dar de baja ni nada parecido: tu cuenta no puede hacerlo. Si abres una pantalla que no es de consulta, la web te devuelve al inicio.</li>
+	</ul>
+</section>
+
+<section id="consultar">
+	<h2>Consultar personas, informes y usuarios</h2>
+	<p class="resumen">Las tres pantallas funcionan como las del equipo del grupo, pero sin botones para cambiar nada.</p>
+	<h3 id="of-personas">Personas</h3>
+	<ul>
+		<li>La lista del grupo con el nombre, la sección y los números de socio. Se puede ordenar por cualquier columna y filtrar por nombre o número; la lista se actualiza al escribir, desde la tercera letra.</li>
+		<li>Las personas sin membresía activa también salen en esta lista.</li>
+		<li>Las fichas se leen del CRM cada pocos minutos: el aviso de arriba dice cuándo fue la última lectura.</li>
+	</ul>
+	<h3 id="of-ficha">La ficha</h3>
+	<ul>
+		<li>«Ver ficha» abre todos los datos de la persona, en apartados: contacto, tutores, salud, alimentación, membresías…</li>
+		<li>Todo se ve, pero <strong>nada se puede editar</strong>. Los datos bancarios no aparecen.</li>
+		<li>Cada ficha que abres queda anotada en el registro del sitio.</li>
+	</ul>
+	<h3 id="of-informes">Informes</h3>
+	<ul>
+		<li>Eliges un informe predefinido o preparas el tuyo con las columnas y los filtros que quieras, entre los datos de las personas asociadas (identidad, contacto, tutores, salud…). <strong>No hay columnas de cuotas, pagos ni cuentas bancarias.</strong></li>
+		<li>El resultado se ve en pantalla, se puede <strong>imprimir</strong> y se descarga en <strong>Excel</strong>. Cada descarga o impresión queda anotada con el informe y el grupo.</li>
+		<li>Como tu cuenta es de solo lectura, no puedes guardar informes nuevos ni borrar los que hay.</li>
+	</ul>
+	<h3 id="of-usuarios">Usuarios</h3>
+	<ul>
+		<li>La lista de cuentas de acceso del grupo (persona, usuario, roles y estado), para consultar quién tiene acceso. No puedes invitar, desactivar ni reenviar nada.</li>
+	</ul>
+</section>
+
+<section id="idioma">
+	<h2>El idioma de la web</h2>
+	<p class="resumen">El área privada está en castellano, catalán, euskera y gallego. La administración de la web elige el idioma del grupo y si cada persona puede cambiarlo.</p>
+	<figure class="captura"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/acceso/</span></div><div class="navegador__vista" data-ampliar><img src="capturas/61-acceso-idiomas.png" width="1280" height="760" alt="La pantalla de acceso con el selector de idioma encima: Castellano, Català, Euskara, Galego" loading="lazy"></div></div><figcaption><span>Si se deja elegir, el selector sale encima de las pantallas de entrar, activar la cuenta, recuperar la contraseña y pedir el acceso, y dentro del área junto a «Salir».</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<ul>
+		<li>Pulsa tu idioma. Con la sesión iniciada, la elección se guarda en tu cuenta y la próxima vez entrarás directamente en él, desde cualquier dispositivo.</li>
+		<li>Los <strong>emails</strong> que te mande el área privada (invitación, contraseña nueva, avisos de cargo de la domiciliación) te llegan en tu idioma.</li>
+		<li>Lo que escribe la gente (motivos, notas, el nombre de un informe o de una insignia) se ve tal como se escribió, en el idioma en que se escribió.</li>
+		<li>Si ves una traducción que no suena bien, díselo al grupo: la administración de la web puede cambiar cualquier texto sin tocar nada más.</li>
+	</ul>
+</section>
+
+		<section id="otros-manuales" class="otros">
+			<h2>Los otros manuales</h2>
+			<ul>
+<li><a href="administracion.html">Manual de gestión del CRM y de la web</a> <span class="otros__para">· Administración de WordPress</span></li>
+<li><a href="familias.html">Manual para familias</a> <span class="otros__para">· Madres, padres y tutores</span></li>
+<li><a href="participantes.html">Manual para asociados menores de edad</a> <span class="otros__para">· Educandos de 14 a 17 años con cuenta propia</span></li>
+<li><a href="scouters.html">Manual para scouters</a> <span class="otros__para">· Scouters y voluntariado con sección</span></li>
+<li><a href="coordinacion.html">Manual del equipo de coordinación</a> <span class="otros__para">· Tesorería, Secretaría y Coordinación</span></li>
+			</ul>
+		</section>
+
+		<p class="pie">Manual para la oficina federal del plugin «ASDE Scouts de España – Gestor CRM para Grupos Scouts», versión 0.49 (octubre de 2026). Capturas hechas en un WordPress de demostración con un CRM simulado y datos inventados.</p>
+	</main>
+</div>
+
+<dialog id="visor" aria-label="Captura ampliada">
+	<div class="visor__barra"><span id="visor-titulo">Captura</span><button type="button" id="visor-cerrar">Cerrar</button></div>
+	<div class="visor__imagen"><img id="visor-img" alt=""></div>
+</dialog>
+<script src="manual.js"></script>
+</body>
+</html>

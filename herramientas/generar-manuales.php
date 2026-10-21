@@ -40,7 +40,13 @@ $manuales = array(
 		'titulo'   => 'Manual de gestión del CRM y de la web',
 		'perfil'   => 'Administración de WordPress',
 		'entrada'  => 'Para quien instala y mantiene la web: la conexión de cada grupo con SinergiaCRM, la organización federada y el usuario de acceso, la instalación, los módulos de cada grupo (y las altas en el CRM), los documentos repetidos, el tema, los colores, los idiomas y las etiquetas, y qué datos se leen del CRM y cuáles guarda la web.',
-		'apartados' => array( 'admin-perfil', 'admin-crm', 'admin-grupos', 'admin-modulos', 'admin-duplicados', 'admin-organizacion', 'admin-entorno', 'admin-app', 'admin-tema', 'admin-colores', 'admin-idiomas', 'admin-datos', 'admin-diagnostico', 'preguntas-admin' ),
+		'apartados' => array( 'admin-perfil', 'admin-crm', 'admin-grupos', 'admin-modulos', 'admin-duplicados', 'admin-organizacion', 'admin-oficina', 'admin-entorno', 'admin-app', 'admin-tema', 'admin-colores', 'admin-idiomas', 'admin-datos', 'admin-diagnostico', 'preguntas-admin' ),
+	),
+	'oficina'       => array(
+		'titulo'   => 'Manual para la oficina federal',
+		'perfil'   => 'Personal de la oficina (consulta en solo lectura)',
+		'entrada'  => 'Cómo consulta la oficina federal los grupos: elegir el grupo, ver las personas y sus fichas, los informes con datos de las personas asociadas y las cuentas de acceso, siempre en solo lectura y con cada consulta anotada.',
+		'apartados' => array( 'oficina-perfil', 'entrar-socios', 'primera-vez', 'seguridad-opcional', 'oficina-inicio', 'oficina-consulta', 'idioma' ),
 	),
 	'familias'      => array(
 		'titulo'   => 'Manual para familias',

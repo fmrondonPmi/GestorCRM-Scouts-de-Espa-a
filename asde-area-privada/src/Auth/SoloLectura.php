@@ -28,8 +28,20 @@ final class SoloLectura {
 	 * oficina no vea botones que no puede usar, sin tocar cada plantilla.
 	 */
 	public static function limpiar( string $html ): string {
-		$html = (string) preg_replace( '#<form\b[^>]*\bmethod=["\']post["\'][^>]*>.*?</form>#is', '', $html );
-		$url = \AsdeBalears\AreaPrivada\Frontend\Pages::url( 'alta' );
+		// Un formulario de envío se quita entero, salvo si sirve también para consultar (un botón con formmethod="get",
+		// como el del editor de informes): entonces se queda, sin los botones que enviarían.
+		$html = (string) preg_replace_callback(
+			'#<form\b[^>]*\bmethod=["\']post["\'][^>]*>.*?</form>#is',
+			static function ( array $m ): string {
+				if ( ! preg_match( '#<button\b[^>]*\bformmethod=["\']get["\']#i', $m[0] ) ) {
+					return '';
+				}
+				$sin = (string) preg_replace( '#<button\b(?![^>]*\bformmethod=["\']get["\'])[^>]*>.*?</button>#is', '', $m[0] );
+				return (string) preg_replace( '#<input\b[^>]*\bname=["\']asde_action["\'][^>]*>#i', '', $sin );
+			},
+			$html
+		);
+		$url =\AsdeBalears\AreaPrivada\Frontend\Pages::url( 'alta' );
 		$pag = untrailingslashit( home_url() ) === untrailingslashit( $url ) ? '' : preg_quote( $url, '~' ) . '(?=["\'?#&])|';
 		return (string) preg_replace( '~<a\b[^>]*\bhref=["\'](?:' . $pag . '[^"\']*[?&;](?:amp;)?(?:membresia|alta)=)[^"\']*["\'][^>]*>.*?</a>~is', '', $html );
 	}

@@ -269,3 +269,11 @@ Las ✅ de la tabla están contestadas aquí. **Sigue abierta: P-43** (si Colony
 - **P-174 ✅** Sede, CIF y denominación fiscal se **usan ya en los documentos** (cabeceras de PDF y acreedor de SEPA).
 - **P-175 ✅** Los grupos ya dados de alta **conservan su credencial**; deja de verse para el administrador y solo el grupo la cambia con un enlace.
 - **P-176 ✅** El acuerdo de tratamiento de datos para que la OF vea datos de socios (y salud) **ya está implícito**: no hace falta nada más.
+
+## Modo Oficina, implementación (2026-10-22, docs 50 y 51)
+
+- **P-188 → supuesto, por confirmar con ASDE:** la web no puede comprobar que la credencial de la oficina sea de solo lectura en el CRM (hacerlo exigiría escribir); lo afirma quien la configura y la pantalla lo avisa tras probar la conexión.
+- **P-189 → supuesto:** el informe de pagos queda fuera de la oficina (son datos de Tesorería, no del CRM). Si lo quiere, otra petición.
+- **P-190 ✅ (decidido al implementar):** la contraseña escrita en el formulario del alta se guarda cifrada 30 minutos ligada a la invitación tras «Comprobar acceso» y no vuelve nunca al navegador.
+- **P-191 → pendiente:** el enlace de tipo «actualizar» para que un grupo **ya existente** cambie su credencial o complete sede/CIF/denominación fiscal (P-175) y, con él, esconder la credencial a la administración. Hasta entonces el administrador sigue editándola.
+- **P-192 → supuesto:** del CIF solo se usa la denominación y la sede (acreedor y dirección por defecto de SEPA y cabecera de la lista de compra en PDF); el identificador del acreedor (ICS) lo da el banco y sigue siendo un dato aparte.

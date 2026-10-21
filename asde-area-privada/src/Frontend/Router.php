@@ -1,6 +1,8 @@
 <?php
 namespace AsdeBalears\AreaPrivada\Frontend;
 
+defined( 'ABSPATH' ) || exit;
+
 use AsdeBalears\AreaPrivada\Auth\Ambito;
 use AsdeBalears\AreaPrivada\Auth\SoloLectura;
 use AsdeBalears\AreaPrivada\Domain\Oficina;
@@ -49,8 +51,6 @@ use AsdeBalears\AreaPrivada\Idiomas\Idioma;
 use AsdeBalears\AreaPrivada\Idiomas\TextosJs;
 use AsdeBalears\AreaPrivada\Idiomas\Traducciones;
 use AsdeBalears\AreaPrivada\Socios\TareaNumeracion;
-
-defined( 'ABSPATH' ) || exit;
 
 final class Router {
 

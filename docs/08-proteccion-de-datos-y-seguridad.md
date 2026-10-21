@@ -59,3 +59,16 @@
 - Tabla `{prefix}asde_reintegros`: quién lo pide (id de usuario), concepto, fecha, importe, evento opcional, forma de cobro y estado. **El IBAN** (solo si cobra por transferencia) va **cifrado** (`Crypto`) en `iban_enc` y se **borra** al pagarse, rechazarse o cancelarse el reintegro; solo lo ven quien lo pidió, Tesorería y Coordinación, y la auditoría nunca lo guarda.
 - El **justificante** (imagen o PDF de hasta 5 MB) se guarda **cifrado** en `uploads/asde-privado/<grupo>/` como los de los eventos (`Eventos\Justificantes`) y solo se abre por la pantalla, con permiso y registro. Al pagar un reintegro de un evento, el gasto de sus cuentas apunta al mismo fichero.
 - El email a Tesorería (reintegro por transferencia) lleva el IBAN; el **registro de emails** guarda solo el tipo y el id (la vista previa vuelve a leer el IBAN mientras exista). Al desinstalar, el IBAN de la tabla se vacía.
+
+## Actualización v0.50.0 (2026-10-22): modo Oficina y altas de grupo (docs 50 y 51)
+
+| Dato | Dónde | Protección | Cuánto tiempo |
+|---|---|---|---|
+| Credencial del CRM de la oficina | opción `asde_ap_oficina` (sin autoload) | Contraseña cifrada con `Crm\Crypto`; nunca en HTML, auditoría ni logs | Hasta que se borre; se vacía al desinstalar |
+| Invitaciones de grupo | tabla `asde_grupo_invitaciones` | Solo el **HMAC** del token (192 bits); un solo uso; 14 días | Se conservan como histórico (sin datos personales) |
+| Altas de grupo recibidas | tabla `asde_grupo_solicitudes` | Usuario y contraseña del CRM, DNI y nombre de la primera persona **cifrados**; ninguna pantalla los enseña | La credencial se borra al aprobar o rechazar; DNI y nombre, al crear el primer acceso o rechazar |
+| Credencial comprobada en el formulario | transitorio cifrado ligado a la invitación | Nunca vuelve al navegador; el envío usa la guardada | 30 minutos |
+
+- Cada cambio de grupo, ficha consultada por la oficina, informe descargado, invitación creada o anulada, y alta aprobada o rechazada queda en la auditoría **sin valores secretos**.
+- El enlace del alta es público: página neutra para cualquier token que no valga, límite de intentos por dispositivo, campo trampa, sello de tiempo, HTTPS obligatorio en producción y `noindex`.
+- Derecho de supresión: rechazar un alta borra todo lo secreto; desinstalar vacía las columnas cifradas y la credencial de la oficina.

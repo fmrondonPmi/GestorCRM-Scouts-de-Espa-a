@@ -208,3 +208,17 @@ Y lo que ya había, con lo nuevo:
 | `asde_reintegros_pagar` | Tesorería, Coordinación | Marcar como pagado un reintegro aprobado |
 
 Quien aprueba o paga ve todos los reintegros del grupo (con el IBAN mientras no esté pagado). Módulo **apagado por defecto** (`Domain\Modulos::REINTEGROS`).
+
+## Actualización v0.50.0 (2026-10-22): rol Oficina (docs 50 y 51)
+
+Solo tiene sentido en una web **de oficina** (`Organizacion::es_oficina()`); en una web de grupo el rol existe pero no deja entrar.
+
+| Capability | Qué permite |
+|---|---|
+| `asde_multigrupo` | Elegir el grupo que consulta (selector del menú) y leer con la credencial de la oficina, un grupo cada vez y solo si está verificado |
+| `asde_solo_lectura` | Todo envío de formulario se rechaza en el Router (salvo elegir el grupo) y `Crm\Escritura` se niega a escribir |
+| `asde_manage_users`, `asde_reports`, `asde_view_health` | Ver Personas, Usuarios, Informes y salud (solo lectura) |
+
+- Entra **sin ficha** del CRM. Solo abre Inicio, Personas, ficha, Informes, Usuarios y Seguridad (`Domain\Oficina::PAGINAS`); ninguna capability de edición, tesorería, tienda, inventario, eventos, lista de espera ni reintegros.
+- Informes: niveles `todos`, `global` y `salud`; nunca `pagos`; sin IBAN. Descargas y fichas consultadas, **auditadas**.
+- **2FA obligatoria** (Wordfence) para este rol. Las cuentas las crea el administrador de WordPress; Coordinación de un grupo no puede asignar este rol.
