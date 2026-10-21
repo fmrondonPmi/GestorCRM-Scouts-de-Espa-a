@@ -210,3 +210,9 @@ Desarrolla el doc 50 (decisiones y respuestas P-168…P-176, todas cerradas el 2
   - Los AJAX de numeración ya exigen su capability (la oficina no la tiene); el de tamaño de página es una preferencia propia y sigue permitido.
   - Pruebas: `tests/solo-lectura.php` (17), que recorre las 127 acciones de formulario de las plantillas.
   - **Se queda para la fase 4:** esconder en cada pantalla los botones de acción (hoy ya no salen casi todos porque el rol no tiene las capabilities), auditar las fichas consultadas por la oficina y el control propio de descargas.
+- ✅ **Fase 4 (2026-10-21, v0.50.0):** pantallas de la Oficina.
+  - Solo abre `Oficina::PAGINAS` (Inicio, Personas, ficha, Informes, Usuarios, Seguridad); el Router redirige al inicio con aviso en cualquier otra, aunque el rol tuviera la capability. El menú ya solo trae Personas, Informes y Usuarios (se rige por capabilities).
+  - Visión global del grupo elegido (`Ambito::vision_global()` incluye a la oficina): lectura completa de la ficha, salud incluida. `PermisosFicha::accion()` siempre es VER; las pantallas de membresía están cerradas. Los datos bancarios de la ficha no se ven (solo Tesorería y la familia).
+  - Informes: niveles `todos`, `global` y `salud`; nunca `pagos`; sin IBAN. Las descargas ya se auditaban; cada **ficha consultada** se audita ahora (`oficina_ficha_consultada`).
+  - **Sin botones de acción:** `SoloLectura::limpiar()` quita de toda pantalla los formularios de envío y los enlaces de alta, acceso y membresía en el envoltorio común (`View::layout`), sin tocar plantillas; la seguridad real sigue siendo el Router, `Escritura` y el rol.
+  - Pruebas: `tests/oficina-pantallas.php` (33). Pendiente: probar con un CRM simulado cada pantalla completa como oficina (se hará en el cierre, fase 8) y la ayuda del manual.

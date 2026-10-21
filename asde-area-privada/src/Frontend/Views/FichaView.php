@@ -66,7 +66,10 @@ final class FichaView extends View {
 			}
 			$accion = $this->get( 'membresia' );
 			if ( in_array( $accion, self::MEMBRESIA, true ) ) {
-				return current_user_can( 'asde_manage_users' ) ? $this->layout( 'personas', $this->membresia( $p, $accion ) ) : $this->denegado();
+				return current_user_can( 'asde_manage_users' ) && ! \AsdeBalears\AreaPrivada\Auth\SoloLectura::activo() ? $this->layout( 'personas', $this->membresia( $p, $accion ) ) : $this->denegado();
+			}
+			if ( $ambito->es_oficina() ) { // v0.50: cada ficha que consulta la oficina queda en la auditoría.
+				\AsdeBalears\AreaPrivada\Audit\Logger::log( 'oficina_ficha_consultada', 'persona', $socio );
 			}
 			$campos = ( new FichaService( $repo ) )->cargar( $p, $perm );
 			$numero = ( new Numeracion( $repo ) )->de( $p );

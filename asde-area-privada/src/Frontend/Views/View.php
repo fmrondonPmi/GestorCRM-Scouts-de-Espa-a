@@ -3,6 +3,7 @@ namespace AsdeBalears\AreaPrivada\Frontend\Views;
 
 use AsdeBalears\AreaPrivada\Auth\Ambito;
 use AsdeBalears\AreaPrivada\Frontend\Menu;
+use AsdeBalears\AreaPrivada\Auth\SoloLectura;
 use AsdeBalears\AreaPrivada\Frontend\Notices;
 use AsdeBalears\AreaPrivada\Frontend\Pages;
 use AsdeBalears\AreaPrivada\Frontend\TemplateLoader;
@@ -81,6 +82,9 @@ abstract class View {
 
 	/** Envoltorio común: menú del área privada + avisos + contenido. */
 	protected function layout( string $activo, string $contenido ): string {
+		if ( SoloLectura::activo() ) { // v0.50: la oficina no ve botones de acción.
+			$contenido = SoloLectura::limpiar( $contenido );
+		}
 		if ( self::$modal ) {
 			return '<div class="asde-ap asde-ap--modal">' . Notices::render() . $contenido . '</div>';
 		}

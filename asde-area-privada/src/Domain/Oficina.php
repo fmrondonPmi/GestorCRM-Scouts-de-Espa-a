@@ -20,6 +20,9 @@ final class Oficina {
 
 	public const OPTION = 'asde_ap_oficina';
 
+	/** Las únicas pantallas del área privada que abre la oficina (fase 4). El resto, aunque tuviera la capability, no. */
+	public const PAGINAS = array( 'area', 'personas', 'ficha', 'informes', 'usuarios', 'seguridad' );
+
 	/** @return array{usuario:string, clave_enc:string, estado:string, mensaje:string, probado:int, visibles:int} */
 	private static function raw(): array {
 		$v = get_option( self::OPTION, array() );

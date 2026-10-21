@@ -4258,4 +4258,7 @@ return array(
 	'Grupo' => 'Grupo',
 	'Oficina · solo lectura' => 'Oficina · só lectura',
 	'Tu cuenta es de solo lectura: no se puede cambiar nada.' => 'A túa conta é de só lectura: non se pode cambiar nada.',
+
+	// v0.50: pantallas oficina
+	'Tu cuenta de la oficina solo puede consultar Personas, Informes y Usuarios.' => 'A túa conta da oficina só pode consultar Persoas, Informes e Usuarios.',
 );

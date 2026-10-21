@@ -4258,4 +4258,7 @@ return array(
 	'Grupo' => 'Taldea',
 	'Oficina · solo lectura' => 'Bulegoa · irakurtzeko soilik',
 	'Tu cuenta es de solo lectura: no se puede cambiar nada.' => 'Zure kontua irakurtzeko soilik da: ezin da ezer aldatu.',
+
+	// v0.50: pantallas oficina
+	'Tu cuenta de la oficina solo puede consultar Personas, Informes y Usuarios.' => 'Zure bulego-kontuak Pertsonak, Txostenak eta Erabiltzaileak soilik kontsulta ditzake.',
 );

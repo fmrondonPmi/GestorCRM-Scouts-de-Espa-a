@@ -148,6 +148,6 @@ final class Ambito {
 
 	/** Visión global de todo el grupo (Secretaría, Coordinación, administradores). */
 	public function vision_global(): bool {
-		return $this->es_admin() || (bool) array_intersect( array( Roles::SECRETARIA, Roles::COORDINACION ), $this->roles_vigentes() );
+		return $this->es_admin() || $this->es_oficina() || (bool) array_intersect( array( Roles::SECRETARIA, Roles::COORDINACION ), $this->roles_vigentes() );
 	}
 }

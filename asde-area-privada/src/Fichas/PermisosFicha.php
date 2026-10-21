@@ -110,6 +110,9 @@ final class PermisosFicha {
 	 * @return array{0:string, 1:string} [acción, motivo de solo lectura]
 	 */
 	public function accion( string $campo, array $meta ): array {
+		if ( \AsdeBalears\AreaPrivada\Auth\SoloLectura::activo() ) { // v0.50: la oficina solo mira.
+			return array( self::VER, asde_t( 'Tu cuenta es de solo lectura: no se puede cambiar nada.' ) );
+		}
 		if ( isset( CamposFicha::SOLO_LECTURA[ $campo ] ) ) {
 			return array( self::VER, asde_t( CamposFicha::SOLO_LECTURA[ $campo ] ) );
 		}

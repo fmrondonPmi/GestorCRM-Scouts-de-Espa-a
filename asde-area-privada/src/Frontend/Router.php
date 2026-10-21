@@ -215,6 +215,12 @@ final class Router {
 			if ( ! is_user_logged_in() ) {
 				auth_redirect(); // Redirige al login y vuelve aquí después.
 			}
+			// v0.50 (doc 50, fase 4): la oficina solo abre Personas, Informes y Usuarios (y su ficha).
+			if ( Ambito::actual()->es_oficina() && ! in_array( $key, Oficina::PAGINAS, true ) ) {
+				Notices::add( 'error', asde_t( 'Tu cuenta de la oficina solo puede consultar Personas, Informes y Usuarios.' ) );
+				wp_safe_redirect( Pages::url( 'area' ) );
+				exit;
+			}
 			// Sin membresía activa (o sin menores a cargo) no se entra: al inicio se explica el motivo.
 			if ( ! in_array( $key, Pages::SIN_AMBITO, true ) && ! Ambito::actual()->puede_acceder() ) {
 				wp_safe_redirect( Pages::url( 'area' ) );
