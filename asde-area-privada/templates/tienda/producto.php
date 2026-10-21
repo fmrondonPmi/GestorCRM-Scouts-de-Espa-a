@@ -81,7 +81,6 @@ $imagen = $p ? Config::imagen( $p['imagen'], 'thumbnail' ) : '';
 			<input type="number" id="asde-tp-limite" name="limite_persona" value="<?php echo (int) $val( 'limite_persona', $p['limite_persona'] ?? 0 ); ?>" min="0" max="<?php echo (int) ProductosTable::MAX_LIMITE; ?>" class="small-text">
 		</p>
 		<label class="asde-choice"><input type="checkbox" name="requiere_proveedor" value="1" <?php checked( $marca( 'requiere_proveedor', (int) ( $p['requiere_proveedor'] ?? 0 ) ) ); ?>><span><?php asde_e( 'Se encarga al proveedor (pasa por «incluido en el pedido del grupo» antes de entregarse)' ); ?></span></label>
-		<label class="asde-choice"><input type="checkbox" name="sale_inventario" value="1" <?php checked( $marca( 'sale_inventario', (int) ( $p['sale_inventario'] ?? 0 ) ) ); ?>><span><?php asde_e( 'Se puede servir del inventario de material del grupo (solo las camisas del uniforme)' ); ?></span></label>
 		<p>
 			<?php asde_e( 'Imagen:' ); ?><br>
 			<?php if ( '' !== $imagen ) : ?>

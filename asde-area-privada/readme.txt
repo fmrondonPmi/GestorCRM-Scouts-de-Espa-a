@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.43.0
+Stable tag: 0.44.0
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -61,6 +61,9 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.44.0 =
+* Shop: the uniform is now just another sale. The shirt and the badges are ordinary products with the shop's own stock; the special uniform form, the "first shirt free for scouters" rule, the 25 EUR shirt price, the scouter ordering for their section and serving shirts from the general Inventory are gone. Orders placed before keep showing as they were. Prices are set in each product (price and member price).
 
 = 0.43.0 =
 * New role "Intendente" (the person in charge of the group's material, matching the CRM's "Responsable de Material" position). It is granted like Secretary or Treasurer: together with the Scouter role or as a volunteer without a section. It sees every event of the group, but only the Summary and Material tabs, and manages the material (reservations, departure, return and deduction from the inventory); it sees nothing about menus, accounts, registrations or health.
@@ -240,6 +243,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * First version with the mobile app (PWA).
 
 == Upgrade Notice ==
+
+= 0.44.0 =
+The shop no longer has its own uniform flow: shirt and badges are normal products. No database changes; old orders are kept.
 
 = 0.43.0 =
 New Intendente role and the unresolved-allergens reminder. No database changes; the role is added automatically.

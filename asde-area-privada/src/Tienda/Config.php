@@ -39,7 +39,7 @@ final class Config {
 
 	public const MAX_INSIGNIAS = 10;
 
-	/** @return array{precio_camisa:float, modelos:array, tallas_especiales:string[], insignias:array, guia_insignias:int, abierto:bool, primera_gratis:bool, texto_pago:string} */
+	/** @return array{precio_camisa:float, modelos:array, tallas_especiales:string[], insignias:array, guia_insignias:int, abierto:bool, texto_pago:string} */
 	public static function defaults(): array {
 		$modelos = array();
 		foreach ( self::MODELOS as $id => $m ) {
@@ -52,8 +52,6 @@ final class Config {
 			'insignias'         => array(),
 			'guia_insignias'    => 0,
 			'abierto'           => true,
-			// v0.29 (petición del usuario): la primera camisa de cada scouter es gratis; desde la segunda, el precio.
-			'primera_gratis'    => true,
 			'texto_pago'        => '',
 			// v0.39 (doc 48, P-178): una cuenta y un Bizum por grupo.
 			'iban'              => '',
@@ -106,7 +104,6 @@ final class Config {
 		$cfg['insignias']      = $insignias;
 		$cfg['guia_insignias'] = (int) $cfg['guia_insignias'];
 		$cfg['abierto']        = (bool) $cfg['abierto'];
-		$cfg['primera_gratis'] = (bool) $cfg['primera_gratis'];
 		$cfg['texto_pago']     = mb_substr( (string) $cfg['texto_pago'], 0, 600 );
 		$cfg['iban']           = self::iban( (string) $cfg['iban'] );
 		$cfg['bizum']          = self::bizum( (string) $cfg['bizum'] );

@@ -199,7 +199,7 @@ try {
 	$no      = $nombres( Servicio::catalogo( false ) );
 	$ok( in_array( 'Taza de prueba', $socio, true ) && in_array( 'Pañuelo de prueba', $socio, true ), 'un socio/a ve lo «para todos» y lo «solo socios»' );
 	$ok( in_array( 'Taza de prueba', $no, true ) && ! in_array( 'Pañuelo de prueba', $no, true ), 'quien no es socio/a no ve lo «solo socios»' );
-	$ok( ! in_array( 'Camisa scout', $socio, true ), 'la camisa y las insignias siguen en el formulario de uniforme, no en el catálogo' );
+	$ok( ! method_exists( Servicio::class, 'en_catalogo' ), 'la camisa y las insignias ya no se esconden del catálogo: son productos normales (v0.44)' );
 	$l = Servicio::lineas_tienda( true, array( $v_taza['Única'] => 2 ), '990021' );
 	$ok( is_array( $l ) && 4.0 === $l[0]['precio'] && 'Taza de prueba' === $l[0]['nombre'], 'el socio/a paga el precio de socio (4 €)' );
 	$l = Servicio::lineas_tienda( false, array( $v_taza['Única'] => 2 ), '990027' );
@@ -334,16 +334,6 @@ try {
 	$enviar( new \AsdeBalears\AreaPrivada\Frontend\Views\TiendaConfigView(), array( 'abierto' => '1', 'precio_camisa' => '25', 'iban' => 'ES00 mal', 'bizum' => '611 222 333' ), 'asde_tienda_admin' );
 	$c = Config::de( $grupo['numero'] );
 	$ok( '' === $c['iban'] && '611222333' === $c['bizum'], 'la configuración guarda un Bizum válido y descarta un IBAN que no lo es' );
-
-	echo "\n== Parte I · Formulario de uniforme con forma de pago ==\n";
-	$como( $u_fam );
-	$antes = $ultimo()['id'];
-	$h     = $enviar( new TiendaPedidosView(), array( 'asde_action' => 'uniforme_pedir', 'socio' => '990021', 'con_camisa' => '1', 'camisa' => 'masculina|M', 'forma_pago' => 'tarjeta' ), 'asde_uniforme_pedir' );
-	$ok( $ultimo()['id'] === $antes && str_contains( $h, 'Elige cómo vas a pagar' ), 'el uniforme tampoco admite una forma de pago inventada' );
-	$enviar( new TiendaPedidosView(), array( 'asde_action' => 'uniforme_pedir', 'socio' => '990021', 'con_camisa' => '1', 'camisa' => 'masculina|M', 'forma_pago' => 'fisico' ), 'asde_uniforme_pedir' );
-	$ok( 'fisico' === $ultimo()['forma_pago'] && $ultimo()['id'] > $antes, 'a un socio/a sí, y queda guardada la forma de pago' );
-	$enviar( new TiendaPedidosView(), array( 'asde_action' => 'uniforme_pedir', 'socio' => '990021', 'con_camisa' => '1', 'camisa' => 'masculina|L' ), 'asde_uniforme_pedir' );
-	$ok( '' === $ultimo()['forma_pago'], 'en el uniforme la forma de pago es opcional')	;
 
 	echo "\n== Parte J · Emails ==\n";
 	$e_fam = $emails( 'prueba-tp-fam' );

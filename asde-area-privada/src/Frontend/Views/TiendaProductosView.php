@@ -273,7 +273,6 @@ final class TiendaProductosView extends TiendaBaseView {
 			$entrada[ $c ] = $this->post( $c );
 		}
 		$entrada['requiere_proveedor'] = '1' === $this->post( 'requiere_proveedor' ) ? '1' : '';
-		$entrada['sale_inventario']    = '1' === $this->post( 'sale_inventario' ) ? '1' : '';
 		$entrada['activo']             = $p ? (string) $p['activo'] : '1';
 		$datos                         = ProductosTable::validar( $entrada );
 		$errores                       = is_wp_error( $datos ) ? array( $datos->get_error_message() ) : array();

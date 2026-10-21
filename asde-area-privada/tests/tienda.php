@@ -1,6 +1,7 @@
 <?php
 /**
- * Pruebas de la v0.11 (entorno LOCAL): pedidos de uniforme y «Mis pagos».
+ * Pruebas de la tienda sobre los pedidos anteriores a la v0.44 (camisa e insignias en sus líneas), la gestión,
+ * «Mis pagos» y lo que se retiró del uniforme (doc 52, T1). Las compras del catálogo, en tienda-pedidos.php.
  * Ejecutar desde app/public del site Local:
  *
  *   wp eval-file <ruta completa>/wp-content/plugins/asde-area-privada/tests/tienda.php
@@ -162,65 +163,63 @@ $enviar = static function ( $vista, array $campos, string $nonce ): string {
 $ultimo = static fn() => PedidosTable::obtener( $max_id( PedidosTable::table() ) );
 
 try {
-	echo "== Parte A · Qué se pide y cuánto cuesta ==\n";
+	echo "== Parte A · Pedidos anteriores a la v0.44 (camisa e insignias en sus líneas) ==\n";
 	$c = Config::de( $grupo['numero'] );
-	$ok( 25.0 === $c['precio_camisa'] && 13 === count( $c['modelos']['masculina']['tallas'] ) && 10 === count( $c['modelos']['femenina']['tallas'] ) && Config::es_especial( $c, '3XL' ), 'camisa a 25 €; masculina de la 6 a la 3XL (13 tallas), femenina de la 12 a la 3XL (10); la 3XL es talla especial' );
-	$l = Servicio::lineas( $c, 'masculina|M', array( 'parche' => 2 ) );
-	$ok( is_array( $l ) && 'M' === $l['camisa']['talla'] && 30.0 === Servicio::total( $l, $c )['total'] && ! Servicio::total( $l, $c )['provisional'], 'camisa M + 2 parches de 2,50 € = 30 €' );
-	$ok( 'Camisa masculina, talla M · Parche de prueba ×2' === Servicio::descripcion( $l ), 'descripción legible del pedido' );
-	$ok( is_wp_error( Servicio::lineas( $c, 'femenina|6', array() ) ) && is_wp_error( Servicio::lineas( $c, '', array() ) ), 'talla que no existe en ese modelo, o nada pedido → error' );
-	$ok( is_wp_error( Servicio::lineas( $c, '', array( 'parche' => 11 ) ) ) && is_wp_error( Servicio::lineas( $c, '', array( 'vieja' => 1 ) ) ), 'más de 10 insignias o una retirada → error' );
-	$l2 = Servicio::lineas( $c, '', array( 'mundial' => 1 ) );
-	$ok( is_array( $l2 ) && ! $l2['camisa'] && Servicio::total( $l2, $c )['provisional'] && 0.0 === Servicio::total( $l2, $c )['total'], 'solo insignias, con el precio por confirmar → importe provisional' );
+	$linea_camisa = static fn( string $modelo, string $talla, float $precio ) => array(
+		'modelo'   => $modelo,
+		'nombre'   => 'masculina' === $modelo ? 'Camisa masculina' : 'Camisa femenina',
+		'talla'    => $talla,
+		'especial' => false,
+		'precio'   => $precio,
+	);
+	$insignia = static fn( string $id, string $nombre, ?float $precio, int $n ) => array(
+		'id'       => $id,
+		'nombre'   => $nombre,
+		'cantidad' => $n,
+		'precio'   => $precio,
+	);
+	$l = array( 'camisa' => $linea_camisa( 'masculina', 'M', 25.0 ), 'insignias' => array( $insignia( 'parche', 'Parche de prueba', 2.5, 2 ) ), 'productos' => array() );
+	$ok( 30.0 === Servicio::total( $l, $c )['total'] && ! Servicio::total( $l, $c )['provisional'], 'una camisa M + 2 parches de 2,50 € (pedido antiguo) siguen sumando 30 €' );
+	$ok( 'Camisa masculina, talla M · Parche de prueba ×2' === Servicio::descripcion( $l ), 'y se describen igual' );
+	$l2 = array( 'camisa' => null, 'insignias' => array( $insignia( 'mundial', 'Mundial de prueba', null, 1 ) ), 'productos' => array() );
+	$ok( Servicio::total( $l2, $c )['provisional'] && 0.0 === Servicio::total( $l2, $c )['total'], 'una insignia sin precio sigue dando un importe provisional' );
+	$ok( ! method_exists( Servicio::class, 'lineas' ) && ! method_exists( Servicio::class, 'pedir' ) && ! method_exists( Servicio::class, 'servir' ) && ! method_exists( Servicio::class, 'devolver' ) && ! method_exists( Servicio::class, 'asignar' ) && ! method_exists( Servicio::class, 'precio_camisa' ), 'ya no hay pedidos de uniforme ni camisas que salgan del Inventario general (v0.44)' );
+	$ok( ! array_key_exists( 'primera_gratis', Config::defaults() ), 'ya no existe la regla «primera camisa de scouter gratis»' );
+	$ok( ! file_exists( ASDE_AP_DIR . 'assets/js/uniforme.js' ) && ! file_exists( ASDE_AP_DIR . 'templates/tienda/asignar.php' ), 'el formulario de uniforme y la asignación de camisas se han retirado' );
 
-	echo "\n== Parte B · Pedir (asociados) ==\n";
+	// Pedidos de antes, creados a mano (el formulario ya no existe).
+	$crear_pedido = static function ( string $socio, array $secciones, bool $adulto, array $lineas ) use ( $c ): int {
+		$t = Servicio::total( $lineas, $c );
+		return (int) PedidosTable::crear( $socio, $secciones, $adulto, $lineas, $t['total'], $t['provisional'], '' );
+	};
+	$id_leo  = $crear_pedido( '990021', array( 'lobatos' ), false, array( 'camisa' => $linea_camisa( 'masculina', '10', 25.0 ), 'insignias' => array( $insignia( 'parche', 'Parche de prueba', 2.5, 1 ), $insignia( 'mundial', 'Mundial de prueba', null, 1 ) ), 'productos' => array() ) );
+	$id_nora = $crear_pedido( '990022', array( 'scouts' ), false, array( 'camisa' => $linea_camisa( 'femenina', '12', 25.0 ), 'insignias' => array(), 'productos' => array() ) );
+	$id_pol  = $crear_pedido( '990023', array( 'escultas' ), false, array( 'camisa' => $linea_camisa( 'masculina', 'S', 25.0 ), 'insignias' => array(), 'productos' => array() ) );
+	$id_eva  = $crear_pedido( '990024', array( 'rovers' ), true, array( 'camisa' => $linea_camisa( 'femenina', 'M', 25.0 ), 'insignias' => array(), 'productos' => array() ) );
+	$id_tom  = $crear_pedido( '990025', array( 'lobatos' ), true, array( 'camisa' => $linea_camisa( 'masculina', 'L', 25.0 ), 'insignias' => array(), 'productos' => array() ) );
+	$p_leo   = PedidosTable::obtener( $id_leo );
+	$p_nora  = PedidosTable::obtener( $id_nora );
+	$p_pol   = PedidosTable::obtener( $id_pol );
+	$p_eva   = PedidosTable::obtener( $id_eva );
+	$p_tom   = PedidosTable::obtener( $id_tom );
+	$ok( $p_leo && '990021' === $p_leo['socio'] && 27.5 === $p_leo['total'] && $p_leo['provisional'] && 'Camisa masculina, talla 10 · Parche de prueba · Mundial de prueba' === Servicio::descripcion( $p_leo['lineas'] ), 'el pedido antiguo de Leo se lee: camisa 10 + parche + mundial (por confirmar) = 27,50 € provisional' );
+
+	echo "\n== Parte B · Comprar (cada cuenta compra para sí y su familia) ==\n";
 	$a_fam = $como( $u_fam );
-	$ok( array( '990021', '990022' ) === array_map( 'strval', array_keys( Servicio::para_quien( $a_fam ) ) ), 'la familia pide para sus dos menores' );
-	$h = $enviar( new TiendaPedidosView(), array( 'asde_action' => 'uniforme_pedir', 'socio' => '990021', 'con_camisa' => '1', 'camisa' => 'masculina|10', 'insignia_parche' => '1', 'insignia_mundial' => '1', 'nota' => 'Prueba' ), 'asde_uniforme_pedir' );
-	$p_leo = $ultimo();
-	$ok( $p_leo && '990021' === $p_leo['socio'] && array( 'lobatos' ) === $p_leo['secciones'] && ! $p_leo['adulto'] && 27.5 === $p_leo['total'] && $p_leo['provisional'] && str_contains( $h, PedidosTable::numero( $p_leo ) ), 'pedido de Leo: camisa 10 + parche + mundial (por confirmar) = 27,50 € provisional, con su nº en el aviso' );
-	$enviar( new TiendaPedidosView(), array( 'asde_action' => 'uniforme_pedir', 'socio' => '990022', 'con_camisa' => '1', 'camisa' => 'femenina|12' ), 'asde_uniforme_pedir' );
-	$p_nora = $ultimo();
-	$ok( $p_nora && '990022' === $p_nora['socio'] && 25.0 === $p_nora['total'], 'pedido de Nora: camisa femenina 12' );
-	$antes = $ultimo()['id'];
-	$h     = $enviar( new TiendaPedidosView(), array( 'asde_action' => 'uniforme_pedir', 'socio' => '990023', 'con_camisa' => '1', 'camisa' => 'masculina|M' ), 'asde_uniforme_pedir' );
-	$ok( $ultimo()['id'] === $antes && str_contains( $h, 'No puedes hacer un pedido para esa persona' ), 'para alguien que no es de su familia → no' );
-
+	$ok( array( '990021', '990022' ) === array_map( 'strval', array_keys( Servicio::para_quien( $a_fam ) ) ), 'la familia compra para sus dos menores' );
 	$a_pol = $como( $u_pol );
-	$enviar( new TiendaPedidosView(), array( 'asde_action' => 'uniforme_pedir', 'socio' => '990023', 'con_camisa' => '1', 'camisa' => 'masculina|S' ), 'asde_uniforme_pedir' );
-	$p_pol = $ultimo();
-	$ok( $p_pol && '990023' === $p_pol['socio'] && array( '990023' ) === array_map( 'strval', array_keys( Servicio::para_quien( $a_pol ) ) ), 'un participante de 15 pide la suya' );
-	$enviar( new TiendaPedidosView(), array( 'asde_action' => 'uniforme_pedir', 'socio' => '990023', 'con_camisa' => '1', 'camisa' => 'masculina|L' ), 'asde_uniforme_pedir' );
-	$p_pol2 = $ultimo();
-	$enviar( new TiendaPedidosView(), array( 'asde_action' => 'uniforme_cancelar', 'pedido' => (string) $p_pol2['id'] ), 'asde_uniforme_' . $p_pol2['id'] );
-	$ok( null !== PedidosTable::obtener( $p_pol2['id'] )['cancelado_en'], 'y cancela uno mientras nadie lo ha validado' );
-
-	$como( $u_teso );
-	$enviar( new TiendaPedidosView(), array( 'asde_action' => 'uniforme_pedir', 'socio' => '990024', 'con_camisa' => '1', 'camisa' => 'femenina|M' ), 'asde_uniforme_pedir' );
-	$p_eva = $ultimo();
-	$ok( $p_eva && $p_eva['adulto'], 'los scouters también piden la suya (Tesorería, adulta)' );
-	$como( $u_scouter );
-	$enviar( new TiendaPedidosView(), array( 'asde_action' => 'uniforme_pedir', 'socio' => '990025', 'con_camisa' => '1', 'camisa' => 'masculina|L' ), 'asde_uniforme_pedir' );
-	$p_tom = $ultimo();
-	$ok( $p_tom && '990025' === $p_tom['socio'] && $p_tom['adulto'], 'un scouter (solo scouter, de Lobatos) pide su camisa' );
-	// v0.29 (petición del usuario): la primera camisa de un scouter es gratis y queda pagada sola.
-	$ok( 0.0 === $p_eva['total'] && 0.0 === $p_tom['total'] && null !== $p_tom['pago_en'] && PedidosTable::REF_SIN_COSTE === $p_tom['pago_ref'] && 25.0 === Servicio::precio_camisa( '990025', true, Config::de() ), 'la primera camisa de un scouter, 0 € y pagada «sin coste»; la segunda ya costaría 25 €' );
-	// v0.30 (P-48, decisión del usuario): un scouter pide también para los socios/as de su sección, no para los de otras.
-	$enviar( new TiendaPedidosView(), array( 'asde_action' => 'uniforme_pedir', 'socio' => '990022', 'con_camisa' => '1', 'camisa' => 'femenina|12' ), 'asde_uniforme_pedir' );
-	$ok( $ultimo()['id'] === $p_tom['id'], 'el scouter de Lobatos no pide para alguien de otra sección (Nora, de Scouts)' );
-	$enviar( new TiendaPedidosView(), array( 'asde_action' => 'uniforme_pedir', 'socio' => '990021', 'con_camisa' => '1', 'camisa' => 'masculina|S' ), 'asde_uniforme_pedir' );
-	$p_leo2 = $ultimo();
-	$ok( $p_leo2['id'] > $p_tom['id'] && '990021' === $p_leo2['socio'] && $u_scouter === $p_leo2['creado_por'] && 25.0 === $p_leo2['total'] && ! $p_leo2['adulto'], 'pero sí para alguien de su sección (Leo, de Lobatos), con el precio de Leo (P-48, v0.30)' );
-	$enviar( new TiendaPedidosView(), array( 'asde_action' => 'uniforme_cancelar', 'pedido' => (string) $p_leo2['id'] ), 'asde_uniforme_' . $p_leo2['id'] );
-	$ok( null !== PedidosTable::obtener( $p_leo2['id'] )['cancelado_en'], 'y lo puede cancelar (lo pidió él y nadie lo ha validado)' );
+	$ok( array( '990023' ) === array_map( 'strval', array_keys( Servicio::para_quien( $a_pol ) ) ), 'un participante de 15 compra para sí' );
+	$a_sc = $como( $u_scouter );
+	$ok( array( '990025' ) === array_map( 'strval', array_keys( Servicio::para_quien( $a_sc ) ) ), 'un scouter solo compra para sí: ya no para los socios/as de su sección (P-177)' );
+	$h = ( new TiendaPedidosView() )->render();
+	$ok( ! str_contains( $h, 'uniforme_pedir' ) && ! str_contains( $h, 'Quiero la camisa' ) && str_contains( $h, 'Tienda' ), 'la pantalla «Mis pedidos» no tiene formulario de uniforme' );
+	$ok( ! str_contains( $h, 'Hay en el inventario' ), 'y no habla del inventario del grupo' );
 
 	$cerrado            = $cfg;
 	$cerrado['abierto'] = false;
 	Config::guardar( $cerrado, $grupo['numero'] );
 	$como( $u_fam );
-	$antes = $ultimo()['id'];
-	$h     = $enviar( new TiendaPedidosView(), array( 'asde_action' => 'uniforme_pedir', 'socio' => '990021', 'con_camisa' => '1', 'camisa' => 'masculina|12' ), 'asde_uniforme_pedir' );
-	$ok( $ultimo()['id'] === $antes && str_contains( $h, 'no se aceptan pedidos' ) && str_contains( ( new TiendaPedidosView() )->render(), 'no se aceptan pedidos' ), 'con los pedidos cerrados no se puede pedir, y se dice' );
+	$ok( ! str_contains( ( new TiendaPedidosView() )->render(), 'name="asde_action" value="tienda_comprar"' ), 'con los pedidos cerrados no hay formulario de compra' );
 	Config::guardar( $cfg, $grupo['numero'] );
 
 	echo "\n== Parte C · Quién gestiona qué ==\n";
@@ -236,13 +235,9 @@ try {
 	$pc = Servicio::pendientes( $como( $u_coord ) );
 	$ok( $pt['pago'] >= 2 && 0 === $pt['pedido'] && $pc['pedido'] >= 4 && 0 === $pc['pago'], 'pendientes: Tesorería, los de pago; Coordinación, los de incluir en el pedido' );
 	$tabs = View::pestanas( $como( $u_scouter ) );
-	$ok( isset( $tabs['tienda_gestion'], $tabs['tienda_pedidos'], $tabs['pagos'] ) && str_starts_with( $tabs['tienda_pedidos'], 'Mis pedidos' ) && str_starts_with( $tabs['tienda_gestion'], 'Gestión de la tienda' ), 'pestañas del scouter: «Mi uniforme» (pedir), «Gestión de uniformes» y «Mis pagos»' );
-	$como( $u_scouter );
-	$h = ( new TiendaPedidosView() )->render();
-	$ok( str_contains( $h, 'name="asde_action" value="uniforme_pedir"' ) && ! str_contains( $h, 'Desde aquí se gestionan los pedidos del grupo' ), 'el scouter ve el formulario para pedir su uniforme (no solo la gestión)' );
-	$tabs = View::pestanas( $como( $u_scouter ) );
+	$ok( isset( $tabs['tienda_gestion'], $tabs['tienda_pedidos'], $tabs['pagos'] ) && str_starts_with( $tabs['tienda_pedidos'], 'Mis pedidos' ) && str_starts_with( $tabs['tienda_gestion'], 'Gestión de la tienda' ), 'pestañas del scouter: «Mis pedidos», «Gestión de la tienda» y «Mis pagos»' );
 	$tabs = View::pestanas( $como( $u_fam ) );
-	$ok( isset( $tabs['tienda_pedidos'], $tabs['pagos'] ) && ! isset( $tabs['tienda_gestion'] ), 'pestañas de la familia: «Uniforme» y «Mis pagos»' );
+	$ok( isset( $tabs['tienda_pedidos'], $tabs['pagos'] ) && ! isset( $tabs['tienda_gestion'] ), 'pestañas de la familia: «Tienda» y «Mis pagos»' );
 
 	echo "\n== Parte D · Pago, pedido del grupo, entrega y recibido ==\n";
 	$como( $u_scouter );
@@ -265,7 +260,7 @@ try {
 	$ok( null === PedidosTable::obtener( $p_leo['id'] )['cancelado_en'] && str_contains( $h, 'ya no se puede cancelar' ), 'la familia ya no cancela un pedido pagado: habla con el grupo' );
 
 	$a_co = $como( $u_coord );
-	$ok( 0 < count( ( $r = Servicio::resumen( array_filter( Servicio::de_gestion( $a_co ), static fn( $p ) => PedidosTable::cumple( $p, PedidosTable::POR_PEDIR ) && null !== $p['pago_en'] ), Config::de() ) )['camisas'] ) && 1 === $r['camisas']['masculina']['tallas']['10'] && 1 === $r['camisas']['femenina']['tallas']['12'] && 1 === $r['insignias']['parche']['cantidad'], 'resumen para el proveedor: lo pagado por pedir, por modelo y talla, e insignias' );
+	$ok( 0 < count( ( $r = Servicio::resumen( array_filter( Servicio::de_gestion( $a_co ), static fn( $p ) => PedidosTable::cumple( $p, PedidosTable::POR_PEDIR ) && null !== $p['pago_en'] ), Config::de() ) )['camisas'] ) && 1 === $r['camisas']['masculina']['tallas']['10'] && 1 === $r['camisas']['femenina']['tallas']['12'] && 1 === $r['insignias']['parche']['cantidad'], 'resumen para el proveedor: lo pagado por pedir, por modelo y talla, e insignias (pedidos de antes)' );
 	$como( $u_scouter );
 	$h = $enviar( new TiendaGestionView(), array( 'asde_action' => 'uniforme_incluir_lote', 'pedidos' => array( (string) $p_leo['id'] ), 'referencia_pedido' => 'Pedido prueba' ), 'asde_uniformes_lote' );
 	$ok( null === PedidosTable::obtener( $p_leo['id'] )['pedido_en'] && str_contains( $h, 'lo hace Coordinación' ), 'un scouter no incluye en el pedido: es de Coordinación' );
@@ -304,12 +299,12 @@ try {
 	$como( $u_fam );
 	$h = ( new MisPagosView() )->render();
 	$ok( ! is_wp_error( $fam ) && str_contains( $h, 'Cuota del grupo · ronda ' . $ronda ) && str_contains( $h, '100,00 €' ) && str_contains( $h, 'Transferencia' ) && str_contains( $h, 'REF-PRUEBA' ), 'la familia ve la cuota de la ronda y el pago de 100 € por transferencia' );
-	$ok( str_contains( $h, PedidosTable::numero( $p_leo ) ) && str_contains( $h, '29,00 €' ) && str_contains( $h, 'Efectivo' ), 'y el pago del uniforme de Leo (29 € en efectivo)' );
+	$ok( str_contains( $h, PedidosTable::numero( $p_leo ) ) && str_contains( $h, '29,00 €' ) && str_contains( $h, 'Efectivo' ), 'y el pago del pedido de Leo (29 € en efectivo)' );
 	$ok( ! str_contains( $h, 'Nota interna' ) && ! str_contains( $h, 'Beca interna' ) && ! str_contains( $h, '999,00' ), 'sin las notas internas de Tesorería ni los pagos anulados' );
 	$ok( str_contains( $h, 'Hasta el' ) && str_contains( $h, 'F684' ), 'con los plazos y la referencia de la familia para la transferencia' );
 	$como( $u_pol );
 	$h = ( new MisPagosView() )->render();
-	$ok( ! str_contains( $h, 'Cuota del grupo' ) && str_contains( $h, 'Pendiente de pago' ) && str_contains( $h, PedidosTable::numero( $p_pol ) ), 'Pol (sin familia en Tesorería): su uniforme pendiente de pago' );
+	$ok( ! str_contains( $h, 'Cuota del grupo' ) && str_contains( $h, 'Pendiente de pago' ) && str_contains( $h, PedidosTable::numero( $p_pol ) ), 'Pol (sin familia en Tesorería): su pedido pendiente de pago' );
 	$como( $u_fam2 );
 	$h = ( new MisPagosView() )->render();
 	$ok( ! str_contains( $h, 'REF-PRUEBA' ) && str_contains( $h, 'Todavía no hay pagos registrados' ), 'otra familia no ve los pagos de esta' );
@@ -317,67 +312,39 @@ try {
 	echo "\n== Parte F · Pantallas y configuración ==\n";
 	$como( $u_fam );
 	$h = ( new TiendaPedidosView() )->render();
-	$ok( str_contains( $h, '<optgroup label="Camisa masculina">' ) && str_contains( $h, 'masculina|3XL' ) && str_contains( $h, '(talla especial)' ) && str_contains( $h, 'Precio por confirmar' ) && ! str_contains( $h, 'Retirada' ), 'formulario: tallas por modelo (3XL especial), insignias con su precio o «por confirmar», sin las retiradas' );
-	// v0.12.5: las tablas de medidas de la camisa van dentro del plugin y se abren encima del pedido.
-	$cfg_t = Config::de();
-	$f_url = Config::guia_medidas( $cfg_t, 'femenina' );
-	$m_url = Config::guia_medidas( $cfg_t, 'masculina' );
-	$ok( str_ends_with( $f_url, 'assets/img/medidas-camisa-femenina.png' ) && str_ends_with( $m_url, 'assets/img/medidas-camisa-masculina.png' ) && '' === Config::guia_medidas( $cfg_t, 'otro' ), 'sin imagen propia en la configuración, cada modelo usa la tabla de medidas de ASDE que va en el plugin' );
-	foreach ( array( 'femenina', 'masculina' ) as $mod ) {
-		$info = getimagesize( ASDE_AP_DIR . 'assets/img/medidas-camisa-' . $mod . '.png' );
-		$ok( $info && 'image/png' === $info['mime'] && $info[0] >= 800, "la imagen de la camisa $mod es un PNG legible (" . ( $info ? $info[0] . '×' . $info[1] : '?' ) . ')' );
-	}
-	$propia = static fn( $imagen, $id ) => 999999 === (int) $id ? array( 'https://ejemplo.invalid/medidas-propia.png', 900, 800, false ) : $imagen;
-	add_filter( 'wp_get_attachment_image_src', $propia, 10, 2 );
-	$cfg_p                                = $cfg_t;
-	$cfg_p['modelos']['masculina']['guia'] = 999999;
-	$ok( 'https://ejemplo.invalid/medidas-propia.png' === Config::guia_medidas( $cfg_p, 'masculina' ) && $f_url === Config::guia_medidas( $cfg_p, 'femenina' ), 'si el grupo sube su propia imagen, esa manda (y el otro modelo sigue con la de ASDE)' );
-	remove_filter( 'wp_get_attachment_image_src', $propia, 10 );
-	$ok( 1 === preg_match_all( '#<a [^>]*href="[^"]*medidas-camisa-femenina\.png"[^>]*data-asde-imagen[^>]*data-modelo="femenina"#', $h ) && 1 === preg_match_all( '#<a [^>]*href="[^"]*medidas-camisa-masculina\.png"[^>]*data-asde-imagen[^>]*data-modelo="masculina"#', $h ) && str_contains( $h, 'Tabla de medidas:' ), 'el formulario del pedido lleva un enlace a cada tabla de medidas (se abre encima del pedido, sin salir de la página)' );
-	$ok( str_contains( $h, 'target="_blank"' ) && ! str_contains( $h, 'asde-guia">' ), 'sin JavaScript el enlace abre la imagen en otra pestaña (no un desplegable que ocupe el formulario)' );
-	$js = (string) file_get_contents( ASDE_AP_DIR . 'assets/js/uniforme.js' );
-	$ok( str_contains( $js, 'a[data-asde-imagen]' ) && str_contains( $js, 'showModal' ) && str_contains( $js, "'#asde-visor-titulo'" ) === false, 'uniforme.js abre esos enlaces en una ventana (dialog) encima del pedido' );
 	$ok( str_contains( $h, 'Lo he recibido' ) === false && str_contains( $h, PedidosTable::numero( $p_leo ) ) && str_contains( $h, 'Recibido' ), 'sus pedidos, con los pasos (el de Leo, recibido)' );
 	$como( $u_teso );
 	$h = ( new TiendaGestionView() )->render();
 	$ok( str_contains( $h, PedidosTable::numero( $p_pol ) ) && str_contains( $h, 'data-asde-modal>Validar</a>' ) && preg_match( '#<strong>(?:1</strong> pendiente|(?:0|[2-9]|[1-9]\d+)</strong> pendientes) de pago#', $h ), 'gestión de Tesorería: la lista con «Validar» (en la ventana) y los pendientes (en singular si es uno)' );
+	$ok( ! str_contains( $h, 'Asignar una camisa' ) && ! str_contains( $h, 'Camisas del inventario' ), 'la gestión ya no asigna camisas ni enseña las del Inventario general' );
 	View::en_modal( true );
 	$_GET['pedido'] = (string) $p_pol['id'];
 	$h              = ( new TiendaGestionView() )->render();
 	unset( $_GET['pedido'] );
 	View::en_modal( false );
-	$ok( in_array( 'tienda_gestion', Router::MODALES, true ) && str_contains( $h, 'asde-ap--modal' ) && str_contains( $h, 'Validar el pago' ) && str_contains( $h, 'name="metodo" value="ingreso"' ), 'detalle en la ventana emergente, con el formulario del pago (efectivo o ingreso)' );
+	$ok( in_array( 'tienda_gestion', Router::MODALES, true ) && str_contains( $h, 'asde-ap--modal' ) && str_contains( $h, 'Validar el pago' ) && str_contains( $h, 'name="metodo" value="ingreso"' ) && ! str_contains( $h, 'Servir del inventario' ), 'detalle en la ventana emergente, con el formulario del pago (efectivo o ingreso) y sin «servir del inventario»' );
 	$como( $u_scouter );
-	$ok( str_contains( ( new TiendaConfigView() )->render(), 'No tienes acceso' ), 'la configuración es de Tesorería y Coordinación' );
+	$ok( str_contains( ( new TiendaConfigView() )->render(), 'No tienes acceso' ), 'la configuración es de la administración de la tienda' );
 	$como( $u_coord );
 	$enviar(
 		new TiendaConfigView(),
 		array(
-			'asde_action'           => 'tienda_config',
-			'abierto'               => '1',
-			'precio_camisa'         => '26,00',
-			'texto_pago'            => 'En efectivo los sábados.',
-			'modelo_nombre_masculina' => 'Camisa masculina',
-			'modelo_tallas_masculina' => '6, 8, 10, 12, 14, 16, XS, S, M, L, XL, XXL, 3XL',
-			'modelo_nombre_femenina'  => 'Camisa femenina',
-			'modelo_tallas_femenina'  => '12, 14, 16, XS, S, M, L, XL, XXL, 3XL',
-			'tallas_especiales'     => '3XL',
-			'insignia_nombre_parche' => 'Parche de prueba',
-			'insignia_lugar_parche'  => 'Brazo derecho',
-			'insignia_precio_parche' => '2,50',
-			'insignia_activa_parche' => '1',
-			'insignia_nombre_mundial' => 'Mundial de prueba',
-			'insignia_precio_mundial' => '3',
-			'insignia_activa_mundial' => '1',
-			'insignia_quitar_vieja'   => '1',
-			'nueva_nombre_0'        => 'Insignia de sección',
-			'nueva_precio_0'        => '',
+			'asde_action'    => 'tienda_config',
+			'abierto'        => '1',
+			'texto_pago'     => 'En efectivo los sábados.',
+			'precio_camisa'  => '99',
+			'primera_gratis' => '1',
 		),
 		'asde_tienda_admin'
 	);
 	$c = Config::de( $grupo['numero'] );
-	$ok( 26.0 === $c['precio_camisa'] && 3.0 === $c['insignias']['mundial']['precio'] && ! isset( $c['insignias']['vieja'] ) && isset( $c['insignias']['insignia-de-seccion'] ) && null === $c['insignias']['insignia-de-seccion']['precio'] && 'En efectivo los sábados.' === $c['texto_pago'], 'Coordinación guarda la configuración: precio, precio de una insignia, quitar una, añadir otra (por confirmar) y el texto de cómo pagar' );
-	$ok( 30.5 === Servicio::importe_a_cobrar( PedidosTable::obtener( $p_leo['id'] ) ), 'con el precio ya puesto, el importe propuesto de un pedido «por confirmar» lo incluye (27,50 + 3 €)' );
+	$ok( 'En efectivo los sábados.' === $c['texto_pago'] && 25.0 === $c['precio_camisa'] && isset( $c['insignias']['mundial'] ), 'Coordinación guarda la configuración (cómo pagar); un precio de camisa que llegue a mano ya no se toma' );
+	$h = ( new TiendaConfigView() )->render();
+	$ok( ! str_contains( $h, 'Modelos y tallas' ) && ! str_contains( $h, 'primera_gratis' ) && ! str_contains( $h, 'Nueva insignia' ) && str_contains( $h, 'name="texto_pago"' ), 'y la pantalla de configuración ya no tiene modelos, tallas, insignias ni precio de camisa' );
+	$cfg_precio = $c;
+	$cfg_precio['insignias']['mundial']['precio'] = 3.0;
+	Config::guardar( $cfg_precio, $grupo['numero'] );
+	$ok( 30.5 === Servicio::importe_a_cobrar( PedidosTable::obtener( $p_leo['id'] ) ), 'con el precio de la insignia ya puesto, el importe propuesto de un pedido antiguo «por confirmar» lo incluye (27,50 + 3 €)' );
 	$ok( $crm->llamadas > 0 && 0 === $cortadas, "todas las consultas al CRM las ha respondido el simulador ({$crm->llamadas}); ninguna ha salido hacia el CRM real" );
 } finally {
 	// ---------------------------------------------------------------------------

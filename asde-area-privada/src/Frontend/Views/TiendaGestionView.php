@@ -7,8 +7,6 @@ use AsdeBalears\AreaPrivada\Domain\Secciones;
 use AsdeBalears\AreaPrivada\Frontend\Notices;
 use AsdeBalears\AreaPrivada\Informes\Generador;
 use AsdeBalears\AreaPrivada\Informes\Xlsx;
-use AsdeBalears\AreaPrivada\Inventario\MaterialesTable;
-use AsdeBalears\AreaPrivada\Inventario\TiposTable;
 use AsdeBalears\AreaPrivada\Tesoreria\Calculadora;
 use AsdeBalears\AreaPrivada\Tienda\Avisos;
 use AsdeBalears\AreaPrivada\Tienda\Config;
@@ -20,12 +18,12 @@ use AsdeBalears\AreaPrivada\Tienda\Servicio;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Gestión de los pedidos de uniforme (scouters, Tesorería, Coordinación):
- * validar el pago, incluir en el pedido del grupo, marcar la entrega, cancelar;
- * resumen de tallas e insignias para el proveedor y descarga en CSV.
+ * Gestión de los pedidos de la tienda (scouters, Tesorería, Coordinación y administración):
+ * validar el pago, incluir en el pedido del grupo, marcar la entrega, cancelar; informes de
+ * ventas y descarga en CSV.
  *
- * v0.29: camisas del inventario del grupo (tipo «Camisa uniforme»): lo que hay por modelo
- * y talla, servir del inventario la camisa de un pedido y asignar una a quien no la pidió.
+ * v0.44 (doc 52): ya no se sirven ni asignan camisas del Inventario general; la tienda tiene
+ * sus propias existencias (Productos).
  */
 final class TiendaGestionView extends TiendaBaseView {
 
@@ -34,9 +32,6 @@ final class TiendaGestionView extends TiendaBaseView {
 			return $this->denegado();
 		}
 		$a = Ambito::actual();
-		if ( '1' === $this->get( 'asignar' ) ) {
-			return $this->layout( 'tienda_gestion', Servicio::puede_inventario() ? $this->asignar( $a ) : $this->denegado( asde_t( 'Servir y asignar camisas del inventario lo hacen Coordinación y Tesorería.' ) ) );
-		}
 		if ( '1' === $this->get( 'informe' ) ) {
 			return $this->layout( 'tienda_gestion', Servicio::puede_informes() ? $this->informe( $a ) : $this->denegado( asde_t( 'Los informes de ventas los ven Tesorería, Coordinación y la administración de la tienda.' ) ) );
 		}
@@ -93,10 +88,7 @@ final class TiendaGestionView extends TiendaBaseView {
 					'global'       => Servicio::vision_global( $a ),
 					'resumen'      => Servicio::resumen( array_filter( $por_pedir, static fn( $p ) => null !== $p['pago_en'] ), $cfg ),
 					'sin_pagar'    => count( array_filter( $por_pedir, static fn( $p ) => null === $p['pago_en'] ) ),
-					'stock'        => Servicio::puede_inventario() ? MaterialesTable::camisas() : null,
-						'url_asignar'  => $this->url( 'tienda_gestion', array( 'asignar' => '1' ) ),
 						'url_informe'  => Servicio::puede_informes() ? $this->url( 'tienda_gestion', array( 'informe' => '1' ) ) : '',
-					'url_inv'      => Servicio::puede_inventario() ? $this->url( 'inventario', array( 'tipo' => (string) TiposTable::camisa() ) ) : '',
 					'url'          => $this->url( 'tienda_gestion' ),
 					'url_csv'      => $this->url(
 						'tienda_gestion',
@@ -161,35 +153,8 @@ final class TiendaGestionView extends TiendaBaseView {
 				'ambito'   => $a,
 				'usuario'  => $usuario,
 				'a_cobrar' => Servicio::importe_a_cobrar( $p ),
-				'stock'    => Servicio::puede_inventario() ? MaterialesTable::camisas() : array(),
 				'url'      => $this->url( 'tienda_gestion' ),
 				'url_ficha' => $this->url( 'ficha', array( 'socio' => $p['socio'] ) ),
-			)
-		);
-	}
-
-	/** «Asignar una camisa del inventario» (v0.29): en la ventana emergente o en su página. */
-	private function asignar( Ambito $a ): string {
-		$repo = \AsdeBalears\AreaPrivada\Crm\PersonaRepository::make();
-		try {
-			$personas = $repo ? $repo->todas() : array();
-		} catch ( \AsdeBalears\AreaPrivada\Crm\CrmException $e ) {
-			$personas = array();
-		}
-		$mias = $a->secciones_scouter();
-		if ( ! Servicio::vision_global( $a ) ) {
-			$personas = array_filter( $personas, static fn( $p ) => (bool) array_intersect( $p->secciones, $mias ) );
-		}
-		return $this->tpl(
-			'tienda/asignar',
-			array(
-				'personas'  => array_values( $personas ),
-				'stock'     => MaterialesTable::camisas(),
-				'cfg'       => Config::de(),
-				'socio'     => $this->get( 'socio' ),
-				'url'       => $this->url( 'tienda_gestion', array( 'asignar' => '1' ) ),
-				'url_lista' => $this->url( 'tienda_gestion' ),
-				'url_inv'   => $this->url( 'inventario', array( 'tipo' => (string) TiposTable::camisa() ) ),
 			)
 		);
 	}
@@ -413,12 +378,6 @@ final class TiendaGestionView extends TiendaBaseView {
 			$this->redirect( $lista );
 		}
 
-		// Asignar una camisa del inventario a quien no la ha pedido (v0.29).
-		if ( 'uniforme_asignar' === $accion ) {
-			check_admin_referer( 'asde_uniformes_asignar' );
-			$this->asignar_post( $a );
-		}
-
 		$p = PedidosTable::obtener( (int) $this->post( 'pedido' ) );
 		check_admin_referer( 'asde_uniforme_' . ( $p['id'] ?? 0 ) );
 		if ( ! $p || ! Servicio::en_gestion( $p, $a ) ) {
@@ -487,26 +446,6 @@ final class TiendaGestionView extends TiendaBaseView {
 				}
 				break;
 
-			case 'uniforme_servir':
-				$r = Servicio::servir( $p );
-				if ( is_wp_error( $r ) ) {
-					$error = $r->get_error_message();
-					break;
-				}
-				/* translators: %s: nº de pedido */
-				$hecho = sprintf( asde_t( 'Lo del pedido %s que había en el inventario sale de él y se ha descontado.' ), $num );
-				break;
-
-			case 'uniforme_devolver':
-				$r = Servicio::devolver( $p );
-				if ( is_wp_error( $r ) ) {
-					$error = $r->get_error_message();
-					break;
-				}
-				/* translators: %s: nº de pedido */
-				$hecho = sprintf( asde_t( 'Lo del pedido %s que salió del inventario ha vuelto a él.' ), $num );
-				break;
-
 			case 'uniforme_cancelar':
 				$motivo = $this->post( 'motivo' );
 				if ( Servicio::puede_cancelar_gestion( $p ) ) {
@@ -514,7 +453,7 @@ final class TiendaGestionView extends TiendaBaseView {
 						$error = asde_t( 'Indica el motivo de la cancelación.' );
 						break;
 					}
-					Servicio::cancelar( $p, $motivo ); // Si su camisa había salido del inventario, vuelve a él (v0.29).
+					Servicio::cancelar( $p, $motivo ); // Lo del catálogo vuelve a las existencias.
 					Logger::log( 'uniforme_cancelado', 'uniforme', (string) $p['id'], array( 'por' => 'grupo' ) );
 					$hecho  = sprintf( asde_t( 'Pedido %s cancelado.' ), $num );
 					$volver = $lista;
@@ -527,32 +466,6 @@ final class TiendaGestionView extends TiendaBaseView {
 
 		'' !== $hecho ? Notices::add( 'success', esc_html( $hecho ) ) : Notices::add( 'error', esc_html( $error ) );
 		$this->redirect( $volver );
-	}
-
-	/** Asigna una camisa del inventario (formulario de asignar()); siempre redirige. */
-	private function asignar_post( Ambito $a ): void {
-		$volver = $this->url( 'tienda_gestion', array( 'asignar' => '1' ) );
-		$socio  = preg_match( '/^\d{1,20}$/', $this->post( 'socio' ) ) ? $this->post( 'socio' ) : '';
-		$repo   = \AsdeBalears\AreaPrivada\Crm\PersonaRepository::make();
-		try {
-			$persona = '' !== $socio && $repo ? $repo->obtener( $socio ) : null;
-		} catch ( \AsdeBalears\AreaPrivada\Crm\CrmException $e ) {
-			$persona = null;
-		}
-		if ( ! $persona || ! $persona->tiene_membresia_activa() || ( ! Servicio::vision_global( $a ) && ! array_intersect( $persona->secciones, $a->secciones_scouter() ) ) ) {
-			Notices::add( 'error', asde_t( 'Elige a quién se le da la camisa (un socio/a con membresía activa).' ) );
-			$this->redirect( $volver );
-		}
-		list( $modelo, $talla ) = array_pad( explode( '|', $this->post( 'camisa' ), 2 ), 2, '' );
-		$r                      = Servicio::asignar( $persona, sanitize_key( $modelo ), $talla, $this->post( 'nota' ) );
-		if ( is_wp_error( $r ) ) {
-			Notices::add( 'error', esc_html( $r->get_error_message() ) );
-			$this->redirect( add_query_arg( 'socio', $socio, $volver ) );
-		}
-		$nuevo = PedidosTable::obtener( (int) $r );
-		/* translators: 1: nombre, 2: nº de pedido */
-		Notices::add( 'success', esc_html( sprintf( asde_t( 'Camisa asignada a %1$s y descontada del inventario (pedido %2$s).' ), $persona->nombre_completo(), $nuevo ? PedidosTable::numero( $nuevo ) : '' ) ) );
-		$this->redirect( $this->url( 'tienda_gestion', array( 'pedido' => (string) $r ) ) );
 	}
 
 	/** Nombre del pedido del grupo al proveedor (p. ej. «Pedido 29/09/2026»). */

@@ -11,12 +11,11 @@ use AsdeBalears\AreaPrivada\Tienda\Servicio;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * «Uniforme» para los asociados: sus pedidos (y los de sus menores), el
- * formulario para pedir la camisa y las insignias, y la confirmación de que se
- * ha recibido. Ver Tienda\Servicio.
+ * «Mis pedidos» para los asociados: sus pedidos (y los de sus menores), el catálogo
+ * de la tienda para comprar y la confirmación de que se ha recibido. Ver Tienda\Servicio.
  *
- * v0.30 (P-48): un scouter pide también para los socios/as de sus secciones; con muchas
- * personas, «¿Para quién?» es un desplegable agrupado por sección.
+ * v0.44 (doc 52): el uniforme es una venta más; ya no hay formulario propio de camisa e
+ * insignias ni pedidos de un scouter para su sección.
  */
 final class TiendaPedidosView extends TiendaBaseView {
 
@@ -35,21 +34,9 @@ final class TiendaPedidosView extends TiendaBaseView {
 		}
 		$cfg   = Config::de();
 		$todos = PedidosTable::de_socios( array_keys( $para ) ); // Una consulta para todas las personas.
-		// v0.29: lo que le cuesta la camisa a cada uno (la primera de un scouter, gratis); v0.30, sin una consulta por persona.
-		$precios = Servicio::precios_camisa( $para, $cfg, $todos );
-		// «Tus pedidos»: los suyos y los de su familia y, v0.30, los que ha pedido para alguien de su sección.
+		// «Tus pedidos»: los suyos y los de su familia y los que pidió esta cuenta (pedidos anteriores de un scouter).
 		$pedidos = array_values( array_filter( $todos, static fn( array $p ) => Servicio::es_propio( $p, $a ) || Servicio::lo_pidio( $p ) ) );
 		$es_socio = (bool) array_filter( $para, static fn( $persona ) => $persona->tiene_membresia_activa() );
-		$guias    = array();
-		foreach ( $cfg['modelos'] as $id => $m ) {
-			$url = Config::guia_medidas( $cfg, (string) $id );
-			if ( '' !== $url ) {
-				$guias[ $id ] = array(
-					'nombre' => $m['nombre'],
-					'url'    => $url,
-				);
-			}
-		}
 		return $this->layout(
 			'tienda_pedidos',
 			$this->subnav( 'tienda_pedidos' ) . $this->tpl(
@@ -57,15 +44,10 @@ final class TiendaPedidosView extends TiendaBaseView {
 				array(
 					'cfg'      => $cfg,
 					'para'     => $para,
-					'grupos'   => count( $para ) > Servicio::MAX_BOTONES_PARA ? Servicio::agrupar_para_quien( $a, $para ) : array(),
-					'otros'    => count( $para ) > count( Servicio::propios( $a ) ),
 					'catalogo' => Servicio::catalogo( $es_socio ), // v0.39: lo que ve esta cuenta (lo «solo socios», solo si hay un socio/a entre sus personas).
 					'es_socio' => $es_socio,
-					'precios'  => $precios,
 					'pedidos'  => $pedidos,
 					'ambito'   => $a,
-					'guias'    => $guias,
-					'colocar'  => Config::imagen( $cfg['guia_insignias'], 'large' ),
 					'url'      => $this->url( 'tienda_pedidos' ),
 					'url_pagos' => $this->url( 'pagos' ),
 				)
@@ -92,24 +74,6 @@ final class TiendaPedidosView extends TiendaBaseView {
 			} else {
 				$p = PedidosTable::obtener( $r );
 				Notices::add( 'success', sprintf( asde_t( 'Pedido <strong>%1$s</strong> enviado: %2$s. Ahora falta pagarlo: en «Tus pedidos» tienes cómo hacerlo.' ), esc_html( PedidosTable::numero( $p ) ), esc_html( Servicio::importe( $p ) ) ) );
-			}
-			$this->redirect( $volver );
-		}
-
-		if ( 'uniforme_pedir' === $this->post( 'asde_action' ) ) {
-			check_admin_referer( 'asde_uniforme_pedir' );
-			$cfg        = Config::de();
-			$cantidades = array();
-			foreach ( Config::insignias_activas( $cfg ) as $id => $i ) {
-				$cantidades[ $id ] = (int) $this->post( 'insignia_' . $id );
-			}
-			$lineas = Servicio::lineas( $cfg, '1' === $this->post( 'con_camisa' ) ? $this->post( 'camisa' ) : '', $cantidades );
-			$r      = is_wp_error( $lineas ) ? $lineas : Servicio::pedir( $a, $this->post( 'socio' ), $lineas, $this->post( 'nota' ), $this->post( 'forma_pago' ) );
-			if ( is_wp_error( $r ) ) {
-				Notices::add( 'error', esc_html( $r->get_error_message() ) );
-			} else {
-				$p = PedidosTable::obtener( $r );
-				Notices::add( 'success', sprintf( asde_t( 'Pedido <strong>%s</strong> enviado: %s. Ahora falta pagarlo; cuando Tesorería lo reciba, lo verás aquí como pagado.' ), esc_html( PedidosTable::numero( $p ) ), esc_html( Servicio::importe( $p ) ) ) );
 			}
 			$this->redirect( $volver );
 		}

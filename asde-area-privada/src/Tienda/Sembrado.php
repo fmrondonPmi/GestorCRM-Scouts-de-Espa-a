@@ -42,7 +42,7 @@ final class Sembrado {
 					'precio_socio'       => null,
 					'limite_persona'     => 0,
 					'requiere_proveedor' => 1,
-					'sale_inventario'    => 1,
+					'sale_inventario'    => 0,
 					'activo'             => 1,
 				),
 				'camisa'

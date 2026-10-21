@@ -247,3 +247,7 @@ Las ✅ de la tabla están contestadas aquí. **Sigue abierta: P-43** (si Colony
 - **P-106 → pendiente:** una lista de compra **pendiente** se puede **editar** (quien la pidió, hasta que Tesorería la revise).
 - **P-114 → pendiente:** cuando un scouter pide uniforme para un socio/a, **email a la familia** (pedido, precio y cómo pagarlo).
 - **P-43 → pendiente:** **Colonya acepta la firma electrónica** de la orden SEPA: se puede quitar la obligación del papel.
+
+## Rediseño de la tienda (2026-10-21, doc 52)
+
+- **P-177 ✅** Se retira el pedido del scouter para su sección. **P-178 ✅** Un enlace de menú por grupo con la tienda activada. **P-179 ✅** El datáfono se propone conciliar con el banco (nunca marca solo). **P-180 ✅** El datáfono lo eligen socios e invitados. **P-181 ✅** Lo recibido de más del pedido al proveedor suma a las existencias. **P-182 ✅** Los precios los fija la administración de la tienda en cada producto.

@@ -90,3 +90,13 @@ Orden recomendado: T1 → T3 → T2 → T4 → T5 → T6 (T3 es pequeña y se pu
 - **P-182:** los precios y el precio de socio los fija la **administración de la tienda** (Coordinación, Tesorería, Secretaría) en cada producto; los pedidos antiguos conservan lo que pagaron.
 
 Con esto no queda ninguna pregunta abierta del doc 52.
+
+## 8 · Avance
+
+- ✅ **T1 hecha (2026-10-21, rama `Tienda-Rediseno`, v0.44.0):** el uniforme es una venta más.
+  - **Retirado:** el formulario de uniforme (`uniforme_pedir`, `Servicio::lineas/pedir`, `uniforme.js`, la sección «Nuevo pedido»), la regla «primera camisa de scouter gratis» y la camisa a 25 € (`precio_camisa`, `Config::primera_gratis`), el pedido de un scouter para su sección (P-177: `de_mis_secciones`, `agrupar_para_quien`; `para_quien` = los propios), servir/devolver/asignar camisas del Inventario general (`servir`, `devolver`, `asignar`, `inventario_de`…, `asignar.php`, los bloques de «Camisas del inventario» en la gestión y el detalle), `PedidosTable::servir_camisa` y compañía, la casilla «sale del inventario» del producto (la columna `sale_inventario` queda sin uso y a 0) y la edición de modelos, tallas, insignias y precios en la configuración.
+  - **Se mantiene (solo lectura):** los pedidos hechos antes con `camisa` e `insignias` en sus líneas se siguen viendo, cobrando, entregando y confirmando; `Servicio::total/descripcion/resumen` los entienden. `Tienda\Config` conserva las claves de modelos e insignias porque las usan `Sembrado`, la migración y el Inventario (importar camisas).
+  - **La camisa y las insignias** son ya productos normales del catálogo (`en_catalogo` desaparece): el precio y el precio de socio los fija la administración en cada producto (P-182). Si una cancelación afecta a un pedido antiguo cuya camisa salió del Inventario, ya no se devuelve sola.
+  - **Pendiente de limpieza (no urgente):** el tipo «Camisa uniforme» y las funciones de camisas/insignias de `Inventario\MaterialesTable`/`TiposTable`/`Importador` quedan sin uso desde la tienda; se pueden retirar más adelante sin tocar datos.
+  - **Pruebas:** `tienda.php` reescrita (53: pedidos antiguos, gestión, Mis pagos y lo retirado), `tienda-pedidos` 55, `tienda-catalogo` 67, `mejoras-v030` 58 (sección F → P-177); borrada `uniformes-inventario-insignias.php`. Textos: 87 quitados, 2 nuevos con ca/eu/gl. Plugin Check rápido: 0.
+  - **Manuales y ayuda:** sin tocar todavía (T6).

@@ -179,7 +179,7 @@ try {
 	}
 	$n1 = Sembrado::grupo();
 	$camisa = ProductosTable::por_ref( 'camisa' );
-	$ok( $n1 >= 3 && $camisa && 27.0 === $camisa['precio'] && ProductosTable::VIS_SOCIOS === $camisa['visibilidad'] && 1 === $camisa['requiere_proveedor'] && 1 === $camisa['sale_inventario'], 'la camisa sembrada: 27 € (el de la configuración), solo socios, se pide al proveedor' );
+	$ok( $n1 >= 3 && $camisa && 27.0 === $camisa['precio'] && ProductosTable::VIS_SOCIOS === $camisa['visibilidad'] && 1 === $camisa['requiere_proveedor'] && 0 === $camisa['sale_inventario'], 'la camisa sembrada: 27 € (el de la configuración), solo socios, se pide al proveedor y no sale del Inventario general' );
 	$vars = VariantesTable::de_producto( $camisa['id'] );
 	$ok( 23 === count( $vars ) && VariantesTable::por_ref( $camisa['id'], 'femenina|3XL' ) && 1 === VariantesTable::por_ref( $camisa['id'], 'masculina|M' )['ilimitado'], 'una variante por modelo y talla (13 + 10) y sin límite' );
 	$ins = ProductosTable::por_ref( 'insignia:pcat1' );
