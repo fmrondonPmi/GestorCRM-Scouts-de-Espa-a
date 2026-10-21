@@ -168,7 +168,7 @@ try {
 	$como( $u_fam );
 	$ok( str_contains( ( new \AsdeBalears\AreaPrivada\Frontend\Views\TiendaGestionView() )->render(), 'No tienes acceso' ), 'una familia sigue sin entrar en la gestión de uniformes aunque se sepa la dirección' );
 	$como( $u_sco );
-	$ok( str_contains( ( new TiendaPedidosView() )->render(), 'name="asde_action" value="uniforme_pedir"' ), 'el scouter entra en «Mis pedidos» y ve el formulario del pedido' );
+	$ok( str_contains( ( new TiendaPedidosView() )->render(), 'Elige más abajo lo que quieres comprar' ), 'el scouter entra en «Mis pedidos» y ve la tienda' );
 	$ok( $crm->llamadas > 0 && 0 === $cortadas, "todas las consultas al CRM las ha respondido el simulador ({$crm->llamadas}); ninguna ha salido hacia el CRM real" );
 } finally {
 	// Limpieza: todo lo creado fuera; lo tocado, como estaba.
