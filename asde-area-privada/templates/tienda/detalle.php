@@ -145,6 +145,8 @@ $form    = static function ( string $accion, string $boton, string $clase = 'asd
 			<?php if ( null !== $p['entregado_en'] ) : ?>
 				<span class="asde-muted"><?php echo esc_html( $cuando( asde_t( 'por %1$s el %2$s' ), asde_t( 'el %2$s' ), (int) $p['entregado_por'], $fecha( $p['entregado_en'] ) ) ); ?></span>
 				<?php echo Servicio::puede_entregar( $p, $ambito ) ? $form( 'uniforme_deshacer_entrega', esc_html( asde_t( 'Deshacer' ) ), 'asde-btn-link', esc_html( asde_t( '¿Deshacer la entrega? También se borra la confirmación del socio/a, si la había.' ) ) ) : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?>
+			<?php elseif ( $activo && null !== $p['pedido_en'] && \AsdeBalears\AreaPrivada\Tienda\Proveedor::esperando( $p ) ) : ?>
+				<br><span class="asde-help asde-help--warning"><?php asde_e( 'Todavía no ha llegado del proveedor: se podrá entregar cuando Coordinación marque su pedido como recibido.' ); ?></span>
 			<?php elseif ( $activo && Servicio::puede_entregar( $p, $ambito ) ) : ?>
 				<br><?php echo $form( 'uniforme_entregar', esc_html( asde_t( 'Marcar como entregado' ) ), 'button' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 				<?php if ( null === $p['pedido_en'] ) : ?>

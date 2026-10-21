@@ -92,8 +92,8 @@ final class TiendaGestionView extends TiendaBaseView {
 					'seccion'      => $seccion,
 					'q'            => $this->get( 'q' ),
 					'global'       => Servicio::vision_global( $a ),
-					'resumen'      => Servicio::resumen( array_filter( $por_pedir, static fn( $p ) => null !== $p['pago_en'] ), $cfg ),
-					'sin_pagar'    => count( array_filter( $por_pedir, static fn( $p ) => null === $p['pago_en'] ) ),
+					'n_pedir'      => count( \AsdeBalears\AreaPrivada\Tienda\Proveedor::lineas_de( \AsdeBalears\AreaPrivada\Tienda\Proveedor::por_pedir() ) ), // v0.48: lo pagado pendiente de pedir (su pestaña lo detalla).
+					'url_proveedor' => $this->url( 'tienda_proveedor' ),
 						'url_informe'  => Servicio::puede_informes() ? $this->url( 'tienda_gestion', array( 'informe' => '1' ) ) : '',
 					'url'          => $this->url( 'tienda_gestion' ),
 					'url_csv'      => $this->url(

@@ -11,6 +11,7 @@ use AsdeBalears\AreaPrivada\Frontend\Views\InscripcionEsperaView;
 use AsdeBalears\AreaPrivada\Frontend\Views\TiendaPublicaView;
 use AsdeBalears\AreaPrivada\Frontend\Views\MisEventosView;
 use AsdeBalears\AreaPrivada\Frontend\Views\ReintegrosView;
+use AsdeBalears\AreaPrivada\Frontend\Views\TiendaProveedorView;
 use AsdeBalears\AreaPrivada\Frontend\Views\RecetasView;
 use AsdeBalears\AreaPrivada\Frontend\Views\ListaEsperaView;
 use AsdeBalears\AreaPrivada\Frontend\Views\AltaUsuariosView;
@@ -94,6 +95,7 @@ final class Router {
 		'tienda_gestion'        => array( 'asde_tienda_gestion', TiendaGestionView::class ),
 		'tienda_config' => array( 'asde_tienda_config', TiendaConfigView::class ),
 		'tienda_productos' => array( 'asde_tienda_productos', TiendaProductosView::class ),
+		'tienda_proveedor' => array( 'asde_tienda_proveedor', TiendaProveedorView::class ), // v0.48 (T4).
 		'pagos'            => array( 'asde_mis_pagos', MisPagosView::class ),
 		'alta_scouters'    => array( 'asde_alta_scouters', AltaScoutersView::class ),
 		// v0.19: inventario de material y listas de compra (doc 32).
@@ -269,6 +271,9 @@ final class Router {
 		}
 		if ( 'csv' === $formato && 'eventos' === $key ) {
 			( new EventosView() )->exportar_compra(); // v0.41 (B2): la lista de la compra del menú.
+		}
+		if ( 'xlsx' === $formato && 'tienda_proveedor' === $key ) {
+			( new TiendaProveedorView() )->exportar(); // v0.48: el pedido al proveedor en Excel.
 		}
 		if ( 'xlsx' === $formato && 'tienda_gestion' === $key ) {
 			( new TiendaGestionView() )->exportar_informe(); // v0.40 (fase 5): informes de ventas en Excel.

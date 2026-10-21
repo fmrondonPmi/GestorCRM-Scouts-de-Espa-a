@@ -505,7 +505,8 @@ final class Servicio {
 	}
 
 	public static function puede_entregar( array $p, Ambito $a ): bool {
-		return current_user_can( self::CAP_ENTREGA ) && null === $p['cancelado_en'] && self::en_gestion( $p, $a );
+		// v0.48 (T4): lo que va en un pedido al proveedor no se entrega hasta que ese pedido llega.
+		return current_user_can( self::CAP_ENTREGA ) && null === $p['cancelado_en'] && ! Proveedor::esperando( $p ) && self::en_gestion( $p, $a );
 	}
 
 	/** El socio/a o su familia (o quien lo pidió, v0.30) cancela el suyo mientras nadie haya validado nada. */
@@ -570,7 +571,7 @@ final class Servicio {
 			}
 			$out['pago']    += (int) ( $pagar && null === $p['pago_en'] );
 			$out['pedido']  += (int) ( $pedir && null === $p['pedido_en'] && null === $p['entregado_en'] );
-			$out['entrega'] += (int) ( $entrega && null !== $p['pedido_en'] && null === $p['entregado_en'] );
+			$out['entrega'] += (int) ( $entrega && null !== $p['pedido_en'] && null === $p['entregado_en'] && ! Proveedor::esperando( $p ) );
 		}
 		return $out;
 	}

@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.47.0
+Stable tag: 0.48.0
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -61,6 +61,10 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.48.0 =
+* Shop: new "Pedido de camisas" tab (orders to the supplier). Coordination groups what customers have already paid and the shop does not have in stock, creates the order to the supplier (downloadable as Excel) and marks it as received when it arrives; anything that arrives beyond what was ordered is added to the shop stock. Customer orders that go in a supplier order cannot be delivered until it arrives. The old "next supplier order" box in the orders screen is replaced by a link to the new tab.
+* Screens: filters and action rows now go on a single line where they fit (new design rule); the new tab follows it.
 
 = 0.47.0 =
 * New module "Reintegros" (off by default; turn it on in Groups > Modules): scouters and Coordination can ask to be refunded for an expense they paid, attaching a photo or PDF of the receipt (stored encrypted), optionally linking it to an event, and choosing cash or bank transfer. For a transfer the IBAN is typed by the requester, stored encrypted and deleted when the refund ends, and an email with all the details goes to Treasury. Treasury approves (or rejects with a reason); Treasury or Coordination mark it as paid, which also adds the expense to the event's accounts when it has one.
@@ -208,6 +212,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * CRM registrations tested end to end in a browser against the simulated SinergiaCRM API (development only).
 
 == Upgrade Notice ==
+
+= 0.48.0 =
+New "Pedido de camisas" tab in the shop. Adds a table and a column (added automatically).
 
 = 0.47.0 =
 New "Reintegros" module (off by default). Adds a table; the new capabilities are added to the roles automatically.

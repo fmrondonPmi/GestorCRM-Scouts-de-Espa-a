@@ -26,6 +26,9 @@ abstract class TiendaBaseView extends View {
 		if ( current_user_can( Servicio::CAP_GESTION ) ) {
 			$items['tienda_gestion'] = asde_t( 'Gestión de pedidos' );
 		}
+		if ( \AsdeBalears\AreaPrivada\Tienda\Proveedor::puede_ver() ) {
+			$items['tienda_proveedor'] = asde_t( 'Pedido de camisas' ); // v0.48 (doc 52, T4).
+		}
 		if ( current_user_can( Servicio::CAP_ADMIN ) ) {
 			$items['tienda_productos'] = asde_t( 'Inventario de la tienda' );
 		}

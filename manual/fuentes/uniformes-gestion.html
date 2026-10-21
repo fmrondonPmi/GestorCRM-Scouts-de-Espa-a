@@ -20,7 +20,7 @@
 		<li><strong>Resumen:</strong> pendientes de pago, de incluir en el pedido, de entregar y entregados sin confirmar (cada uno lleva a su lista), y lo cobrado y por cobrar.</li>
 		<li><strong>Filtros:</strong> por estado (en curso, cada pendiente, recibidos, cancelados o todos), sección, nombre o nº de pedido.</li>
 		<li><strong>Pedido en lote</strong> (Coordinación): marca los pedidos (vienen marcados los pagados), escribe el nombre del pedido al proveedor y pulsa «Incluir los marcados en el pedido».</li>
-		<li><strong>Para el próximo pedido al proveedor:</strong> lo pagado que aún no se ha pedido, por modelo y talla, las insignias y «Otros productos» de la tienda que se encargan al proveedor. Lo que sale de las existencias de la tienda no pasa por aquí: queda incluido solo.</li>
+		<li><strong>Lo que hay que pedir al proveedor</strong> está en la pestaña «Pedido de camisas» (más abajo); aquí solo sale un aviso con el enlace. Antes era el cuadro «Para el próximo pedido al proveedor»: lo pagado que aún no se ha pedido, por modelo y talla, las insignias y «Otros productos» de la tienda que se encargan al proveedor. Lo que sale de las existencias de la tienda no pasa por aquí: queda incluido solo.</li>
 		<li><strong>Descargar CSV</strong> con la lista filtrada, para una hoja de cálculo.</li>
 		<li><strong>Camisas del inventario</strong> (Coordinación, si el grupo usa el inventario): las camisas que el grupo ya tiene, por modelo y talla (son las del tipo «Camisa uniforme» del <a href="#inventario">inventario</a>). Un pedido con camisa que aún no está en un pedido al proveedor sale con «Hay en el inventario»: ábrelo y pulsa <strong>«Servir del inventario»</strong> para dársela sin pedirla (se descuenta del inventario). <strong>Lo mismo con las insignias:</strong> si pidió insignias y en el inventario hay material que se llama igual que la insignia de la configuración (por ejemplo «Insignia de grupo»), «Servir del inventario» también las descuenta, y entonces <strong>no van al pedido al proveedor</strong>. Si solo hay una parte (por ejemplo, la camisa pero no la insignia mundial), sale lo que hay y el resto sigue en «Para el próximo pedido al proveedor». Si todo el pedido sale del inventario, queda como «Del inventario del grupo» y pasa a pendiente de entregar. «Devolver al inventario lo que salió de él» lo deshace, y cancelar un pedido también devuelve al inventario lo servido. Si no queda suficiente de una insignia, no se sirve a medias. <strong>«Asignar una camisa»</strong> da una a quien no la ha pedido: crea su pedido, ya servido, con el precio de siempre (25 €; a un scouter, su primera camisa es gratis y queda pagada). Si el pedido se cancela o se pulsa «Devolver la camisa al inventario» antes de entregarla, la camisa vuelve.</li>
 	</ul>
@@ -42,6 +42,16 @@
 		<li>Cada comprobación se puede <strong>deshacer</strong> si hubo un error. Deshacer la entrega borra también la confirmación.</li>
 		<li>Si se entrega un pedido que no consta en ningún pedido del grupo, la pantalla avisa.</li>
 		<li><strong>Cancelar:</strong> el socio/a o su familia, mientras nadie lo ha validado; Tesorería o Coordinación, con un motivo, hasta que se entrega. Los cancelados no se borran.</li>
+	</ul>
+
+	<h3 id="tienda-proveedor" data-paginas="tienda_proveedor">Pedido de camisas (al proveedor)</h3>
+	<p class="quien-sub">Coordinación hace y recibe los pedidos; Tesorería y la administración de la tienda lo ven</p>
+	<p>En la pestaña <strong>«Pedido de camisas»</strong> están los productos que se encargan al proveedor (camisas, insignias y lo que lleve la marca «se encarga al proveedor»).</p>
+	<ul>
+		<li><strong>Para pedir:</strong> lo que los clientes ya han pagado y aún no está en un pedido, junto por producto y talla. Se avisa de cuántos pedidos sin pagar quedan fuera. Escribe el nombre del pedido y pulsa <strong>«Crear el pedido al proveedor»</strong>: todos esos pedidos de clientes pasan a «en el pedido».</li>
+		<li><strong>Pedidos al proveedor:</strong> cada uno con su fecha, sus líneas y un <strong>«Descargar en Excel»</strong> para enviárselo al proveedor.</li>
+		<li><strong>Recibirlo:</strong> cuando llega, escribe lo que ha llegado de cada línea (viene escrito lo pedido) y pulsa <strong>«Marcar como recibido»</strong>. Lo que llegue <strong>de más</strong> se suma a las existencias de la tienda; si falta algo, se dice.</li>
+		<li>Hasta que el pedido llega, <strong>los pedidos de los clientes que van en él no se pueden entregar</strong>; su ficha lo explica.</li>
 	</ul>
 
 	<h3 id="uniformes-config" data-paginas="tienda_config">Configuración</h3>

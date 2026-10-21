@@ -127,6 +127,7 @@ final class PedidosTable {
 				cancelado_motivo varchar(255) NOT NULL DEFAULT '',
 				inventario_id bigint(20) unsigned NOT NULL DEFAULT 0,
 				banco_id bigint(20) unsigned NOT NULL DEFAULT 0,
+				proveedor_id bigint(20) unsigned NOT NULL DEFAULT 0,
 				PRIMARY KEY  (id),
 				KEY grupo (grupo),
 				KEY socio (socio)
@@ -427,6 +428,13 @@ final class PedidosTable {
 		}
 	}
 
+	/** Apunta el pedido al proveedor en el que va cada pedido (v0.48, doc 52, T4). @param int[] $ids */
+	public static function marcar_proveedor( array $ids, int $proveedor ): void {
+		foreach ( $ids as $id ) {
+			self::actualizar( (int) $id, array( 'proveedor_id' => $proveedor ) );
+		}
+	}
+
 	/** Suelta los pedidos de ese ingreso del banco (vuelven a estar por conciliar). @return int Cuántos. */
 	public static function quitar_banco( int $movimiento ): int {
 		global $wpdb;
@@ -465,6 +473,7 @@ final class PedidosTable {
 			$f[ $k ] = (int) $f[ $k ];
 		}
 		$f['inventario_id'] = (int) ( $f['inventario_id'] ?? 0 );
+		$f['proveedor_id']  = (int) ( $f['proveedor_id'] ?? 0 ); // v0.48: el pedido al proveedor en el que va.
 		$f['banco_id']      = (int) ( $f['banco_id'] ?? 0 ); // v0.46: el ingreso del banco con el que se concilió el abono del datáfono.
 		return $f;
 	}

@@ -13,8 +13,8 @@
  * @var string                                             $seccion
  * @var string                                             $q
  * @var bool                                               $global   Ve todos los pedidos del grupo
- * @var array                                              $resumen  Tallas e insignias de los pagados pendientes de pedir
- * @var int                                                $sin_pagar Pendientes de pedir sin pagar
+ * @var int                                                $n_pedir   Líneas pagadas pendientes de pedir al proveedor (v0.48)
+ * @var string                                             $url_proveedor Pestaña «Pedido de camisas»
  * @var string                                             $url
  * @var string                                             $url_csv
  * @var string                                             $volver
@@ -179,24 +179,9 @@ $singular = array(
 	</div>
 </section>
 
-<?php if ( $global && ( $resumen['total_camisas'] || $resumen['insignias'] || $resumen['productos'] || $sin_pagar ) ) : ?>
+<?php if ( $global && $n_pedir > 0 ) : ?>
+	<?php // v0.48 (doc 52, T4): lo que hay que pedir al proveedor tiene su pestaña. ?>
 	<section class="asde-card">
-		<h3 class="asde-card__title"><?php asde_e( 'Para el próximo pedido al proveedor' ); ?></h3>
-		<p class="asde-muted"><?php asde_e( 'Lo pagado que aún no está en ningún pedido.' ); ?><?php echo $sin_pagar ? ' ' . esc_html( sprintf( asde_n( 'Además hay %d pedido sin pagar.', 'Además hay %d pedidos sin pagar.', $sin_pagar ), $sin_pagar ) ) : ''; ?></p>
-		<?php foreach ( $resumen['camisas'] as $m ) : ?>
-			<?php $tallas = array_filter( $m['tallas'] ); ?>
-			<?php if ( $tallas ) : ?>
-				<p><strong><?php echo esc_html( $m['nombre'] ); ?>:</strong> <?php echo esc_html( implode( ' · ', array_map( static fn( $t, $n ) => $t . ' × ' . $n, array_keys( $tallas ), $tallas ) ) ); ?> <span class="asde-muted">(<?php echo (int) array_sum( $tallas ); ?>)</span></p>
-			<?php endif; ?>
-		<?php endforeach; ?>
-		<?php if ( $resumen['insignias'] ) : ?>
-			<p><strong><?php asde_e( 'Insignias:' ); ?></strong> <?php echo esc_html( implode( ' · ', array_map( static fn( $i ) => $i['nombre'] . ' × ' . $i['cantidad'], $resumen['insignias'] ) ) ); ?></p>
-		<?php endif; ?>
-		<?php if ( $resumen['productos'] ) : ?>
-			<p><strong><?php asde_e( 'Otros productos:' ); ?></strong> <?php echo esc_html( implode( ' · ', array_map( static fn( $i ) => $i['nombre'] . ' × ' . $i['cantidad'], $resumen['productos'] ) ) ); ?></p>
-		<?php endif; ?>
-		<?php if ( ! $resumen['total_camisas'] && ! $resumen['insignias'] && ! $resumen['productos'] ) : ?>
-			<p><?php asde_e( 'Todavía no hay nada pagado pendiente de pedir.' ); ?></p>
-		<?php endif; ?>
+		<p><?php echo esc_html( sprintf( asde_n( 'Hay pagado material pendiente de pedir al proveedor (%d línea).', 'Hay pagado material pendiente de pedir al proveedor (%d líneas).', $n_pedir ), $n_pedir ) ); ?> <a href="<?php echo esc_url( $url_proveedor ); ?>"><?php asde_e( 'Ir a «Pedido de camisas»' ); ?></a></p>
 	</section>
 <?php endif; ?>
