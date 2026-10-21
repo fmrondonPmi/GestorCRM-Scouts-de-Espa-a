@@ -107,6 +107,8 @@ final class Installer {
 		// v0.36: las cuentas de los eventos (gastos e ingresos reales, anticipos de caja).
 		\AsdeBalears\AreaPrivada\Eventos\GastosTable::install_table();
 		\AsdeBalears\AreaPrivada\Reintegros\ReintegrosTable::install_table(); // v0.47 (doc 53).
+		\AsdeBalears\AreaPrivada\Domain\GrupoInvitaciones::install_table(); // v0.50 (doc 50, fase 5): invitaciones de alta de grupo (modo Oficina).
+		\AsdeBalears\AreaPrivada\Domain\GrupoSolicitudes::install_table(); // v0.50 (doc 50, fases 5 y 6): altas de grupo recibidas.
 		\AsdeBalears\AreaPrivada\Eventos\AnticiposTable::install_table();
 		// v0.40: el calendario de tareas de los eventos (doc 49).
 		\AsdeBalears\AreaPrivada\Eventos\TareasTable::install_table();

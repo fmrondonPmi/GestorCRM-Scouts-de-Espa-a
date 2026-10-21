@@ -41,6 +41,12 @@ if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->prefix . 'asd
 	$wpdb->query( "UPDATE {$wpdb->prefix}asde_reintegros SET iban_enc = ''" ); // phpcs:ignore WordPress.DB
 }
 
+// Modo Oficina (v0.50): las altas de grupo guardan cifrados el usuario y la contraseña del CRM, el DNI y el nombre; al desinstalar se vacían. La credencial de la oficina también.
+if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->prefix . 'asde_grupo_solicitudes' ) ) ) { // phpcs:ignore WordPress.DB
+	$wpdb->query( "UPDATE {$wpdb->prefix}asde_grupo_solicitudes SET usuario_enc = '', clave_enc = '', dni_enc = '', persona_enc = ''" ); // phpcs:ignore WordPress.DB
+}
+delete_option( 'asde_ap_oficina' );
+
 $asde_menu_item = (int) get_option( 'asde_ap_menu_item' );
 if ( $asde_menu_item && 'nav_menu_item' === get_post_type( $asde_menu_item ) ) {
 	wp_delete_post( $asde_menu_item, true );

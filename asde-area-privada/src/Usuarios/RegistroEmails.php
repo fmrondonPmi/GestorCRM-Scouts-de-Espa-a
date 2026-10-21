@@ -59,6 +59,9 @@ final class RegistroEmails {
 	/** Avisos de la tienda (v0.39, doc 48): pedido recibido, pago validado y pedido entregado. */
 	public const TIENDA = 'tienda';
 
+	/** Invitación a dar de alta un grupo (v0.50, modo Oficina). */
+	public const INVITACION_GRUPO = 'invitacion_grupo';
+
 	public const TIPOS = array(
 		Invitacion::ALTA      => 'Invitación',
 		Invitacion::RESET     => 'Recuperar contraseña',
@@ -71,6 +74,7 @@ final class RegistroEmails {
 		self::LISTA_ESPERA    => 'Lista de espera',
 		self::EVENTOS         => 'Eventos',
 		self::TIENDA          => 'Tienda',
+		self::INVITACION_GRUPO => 'Invitación de grupo',
 	);
 
 	public static function table(): string {

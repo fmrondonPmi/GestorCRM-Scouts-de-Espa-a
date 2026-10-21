@@ -48,6 +48,7 @@ final class Pages {
 		'pagos'            => array( 'mis-pagos', 'Mis pagos', '[asde_mis_pagos]', 'area' ),
 		// v0.16: alta de scouters con el enlace del grupo (doc 31).
 		'alta_scouters'    => array( 'alta-scouters', 'Alta de scouters', '[asde_alta_scouters]', 'area' ),
+		'alta_grupo'       => array( 'alta-grupo', 'Alta de grupo', '[asde_alta_grupo]', 'area' ), // v0.50 (doc 50, fase 5): pública, solo con invitación.
 		// v0.19: inventario de material y listas de compra (doc 32).
 		'inventario'         => array( 'inventario', 'Inventario de material', '[asde_inventario]', 'area' ),
 		'inventario_tipos'   => array( 'tipos-de-material', 'Tipos de material', '[asde_inventario_tipos]', 'inventario' ),
@@ -68,7 +69,7 @@ final class Pages {
 	);
 
 	/** Páginas accesibles sin iniciar sesión (no salen en listados ni menús: Visibilidad). */
-	public const PUBLICAS = array( 'acceso', 'activar', 'recuperar', 'solicitar', 'alta_scouters', 'inscripcion_espera', 'tienda_publica' );
+	public const PUBLICAS = array( 'acceso', 'activar', 'recuperar', 'solicitar', 'alta_scouters', 'alta_grupo', 'inscripcion_espera', 'tienda_publica' );
 
 	/** Páginas a las que se puede entrar aunque el CRM no dé acceso (para ver el motivo o gestionar la seguridad). */
 	public const SIN_AMBITO = array( 'area', 'seguridad' );

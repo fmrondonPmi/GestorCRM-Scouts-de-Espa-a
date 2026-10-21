@@ -41,6 +41,7 @@ final class Plugin {
 			( new SettingsPage() )->register();
 			( new \AsdeBalears\AreaPrivada\Admin\Recursos() )->register(); // v0.31: CSS y JS comunes de wp-admin, encolados.
 			( new OrganizacionPage() )->register();
+			( new \AsdeBalears\AreaPrivada\Admin\GruposInvitacionesPage() )->register(); // v0.50 (doc 50, fase 5): invitar a un grupo (solo modo Oficina).
 			( new ColoresPage() )->register();
 			( new IdiomasPage() )->register();
 			( new EntornoPage() )->register();

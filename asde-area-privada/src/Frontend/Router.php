@@ -6,6 +6,7 @@ use AsdeBalears\AreaPrivada\Auth\SoloLectura;
 use AsdeBalears\AreaPrivada\Domain\Oficina;
 use AsdeBalears\AreaPrivada\Frontend\Views\AccesoView;
 use AsdeBalears\AreaPrivada\Frontend\Views\ActivarCuentaView;
+use AsdeBalears\AreaPrivada\Frontend\Views\AltaGrupoView;
 use AsdeBalears\AreaPrivada\Frontend\Views\AltaScoutersView;
 use AsdeBalears\AreaPrivada\Frontend\Views\EventosConfigView;
 use AsdeBalears\AreaPrivada\Frontend\Views\EventosView;
@@ -100,6 +101,7 @@ final class Router {
 		'tienda_proveedor' => array( 'asde_tienda_proveedor', TiendaProveedorView::class ), // v0.48 (T4).
 		'pagos'            => array( 'asde_mis_pagos', MisPagosView::class ),
 		'alta_scouters'    => array( 'asde_alta_scouters', AltaScoutersView::class ),
+		'alta_grupo'       => array( 'asde_alta_grupo', AltaGrupoView::class ), // v0.50 (doc 50, fase 5).
 		// v0.19: inventario de material y listas de compra (doc 32).
 		'inventario'         => array( 'asde_inventario', InventarioView::class ),
 		'inventario_tipos'   => array( 'asde_inventario_tipos', InventarioTiposView::class ),
