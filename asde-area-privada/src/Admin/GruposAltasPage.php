@@ -21,12 +21,14 @@ final class GruposAltasPage {
 	private const CAPABILITY = 'manage_options';
 	private const APROBAR    = 'asde_ap_grupo_alta_aprobar';
 	private const RECHAZAR   = 'asde_ap_grupo_alta_rechazar';
+	private const REINTENTAR = 'asde_ap_grupo_alta_reintentar';
 	private const AVISO      = 'asde_ap_galta_aviso_';
 
 	public function register(): void {
 		add_action( 'admin_menu', array( $this, 'add_menu' ), 13 );
 		add_action( 'admin_post_' . self::APROBAR, array( $this, 'handle_aprobar' ) );
 		add_action( 'admin_post_' . self::RECHAZAR, array( $this, 'handle_rechazar' ) );
+		add_action( 'admin_post_' . self::REINTENTAR, array( $this, 'handle_reintentar' ) );
 	}
 
 	public static function url( int $id = 0 ): string {
@@ -72,6 +74,19 @@ final class GruposAltasPage {
 		exit;
 	}
 
+	/** Vuelve a buscar la ficha de la primera persona con acceso y a mandarle la invitación. */
+	public function handle_reintentar(): void {
+		if ( ! current_user_can( self::CAPABILITY ) || ! Organizacion::es_oficina() ) {
+			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-area-privada' ), 403 );
+		}
+		check_admin_referer( self::REINTENTAR );
+		$id     = $this->id_enviado();
+		$estado = GrupoAltas::primer_usuario( $id );
+		$this->aviso( GrupoSolicitudes::USUARIO_INVITADO === $estado ? 'success' : 'warning', GrupoSolicitudes::USUARIO_INVITADO === $estado ? 'Invitación enviada a la primera persona con acceso.' : 'Todavía no se ha podido: la ficha con ese DNI no existe o no está activa en el CRM del grupo.' );
+		wp_safe_redirect( self::url( $id ) );
+		exit;
+	}
+
 	public function handle_rechazar(): void {
 		if ( ! current_user_can( self::CAPABILITY ) || ! Organizacion::es_oficina() ) {
 			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-area-privada' ), 403 );
@@ -110,6 +125,19 @@ final class GruposAltasPage {
 					<tr><th scope="row"><?php esc_html_e( 'Rol de la primera persona', 'asde-area-privada' ); ?></th><td><?php echo esc_html( GrupoSolicitudes::ROLES[ $s['rol'] ] ?? $s['rol'] ); ?></td></tr>
 					<tr><th scope="row"><?php esc_html_e( 'Acceso al CRM', 'asde-area-privada' ); ?></th><td><?php echo esc_html( $s['verificada'] ? sprintf( /* translators: %s: fecha */ __( 'Credencial guardada y comprobada el %s', 'asde-area-privada' ), get_date_from_gmt( $s['verificada'], 'd/m/Y H:i' ) ) : __( 'Sin comprobar', 'asde-area-privada' ) ); ?></td></tr>
 				</tbody></table>
+				<?php if ( GrupoSolicitudes::APROBADA === $s['estado'] ) : ?>
+					<?php if ( GrupoSolicitudes::USUARIO_INVITADO === $s['usuario_estado'] ) : ?>
+						<p><strong><?php esc_html_e( 'Primera persona con acceso:', 'asde-area-privada' ); ?></strong> <?php esc_html_e( 'invitación enviada al email del grupo.', 'asde-area-privada' ); ?></p>
+					<?php else : ?>
+						<div class="notice notice-warning inline"><p><?php esc_html_e( 'Falta el primer usuario: la ficha con ese DNI no existe o no está activa en el CRM del grupo. Corrígelo en el CRM y vuelve a intentarlo; mientras, nadie del grupo puede entrar.', 'asde-area-privada' ); ?></p></div>
+						<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
+							<input type="hidden" name="action" value="<?php echo esc_attr( self::REINTENTAR ); ?>">
+							<input type="hidden" name="id" value="<?php echo (int) $s['id']; ?>">
+							<?php wp_nonce_field( self::REINTENTAR ); ?>
+							<button type="submit" class="button"><?php esc_html_e( 'Buscar la ficha y enviar la invitación', 'asde-area-privada' ); ?></button>
+						</form>
+					<?php endif; ?>
+				<?php endif; ?>
 				<?php if ( GrupoSolicitudes::PENDIENTE === $s['estado'] ) : ?>
 					<p>
 					<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="display:inline">

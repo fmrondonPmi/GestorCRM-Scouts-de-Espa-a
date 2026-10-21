@@ -51,7 +51,59 @@ final class GrupoAltas {
 		);
 		Logger::log( 'grupo_alta_aprobada', 'solicitud_grupo', (string) $id, array( 'grupo' => $grupo['numero'] ) );
 		self::avisar( $s, true );
+		self::primer_usuario( $id ); // Si falla, el grupo queda aprobado y la pantalla de altas lo avisa para reintentarlo.
 		return $grupo;
+	}
+
+	/**
+	 * Primer usuario de acceso del grupo (fase 7): busca en el CRM del grupo la ficha por el DNI que se escribió, con
+	 * membresía activa, y le da el rol elegido (Secretaría o Coordinación) enviando la invitación **al email del grupo**.
+	 * Si no hay ficha, el grupo queda aprobado pero sin usuario, y se puede reintentar. Una sola invitación por solicitud.
+	 *
+	 * @return string Estado: `invitado`, `sin_ficha` o `error`.
+	 */
+	public static function primer_usuario( int $id ): string {
+		global $wpdb;
+		$s = GrupoSolicitudes::obtener( $id );
+		if ( ! $s || GrupoSolicitudes::APROBADA !== $s['estado'] || GrupoSolicitudes::USUARIO_INVITADO === $s['usuario_estado'] ) {
+			return $s ? (string) $s['usuario_estado'] : '';
+		}
+		$grupo = Grupos::por_numero( (string) $s['numero'] );
+		$dni   = (string) Crypto::decrypt( (string) $s['dni_enc'] );
+		$rol   = array(
+			'secretaria'   => \AsdeBalears\AreaPrivada\Install\Roles::SECRETARIA,
+			'coordinacion' => \AsdeBalears\AreaPrivada\Install\Roles::COORDINACION,
+		)[ $s['rol'] ] ?? '';
+		$estado = GrupoSolicitudes::USUARIO_ERROR;
+		if ( $grupo && '' !== $dni && '' !== $rol ) {
+			$estado = Grupo::con(
+				$grupo,
+				static function () use ( $dni, $rol, $s ): string {
+					$servicio = \AsdeBalears\AreaPrivada\Usuarios\AltaService::make();
+					if ( ! $servicio ) {
+						return GrupoSolicitudes::USUARIO_ERROR;
+					}
+					try {
+						$fichas = \AsdeBalears\AreaPrivada\Crm\PersonaRepository::make()->por_documento( $dni );
+						if ( 1 !== count( $fichas ) ) {
+							return GrupoSolicitudes::USUARIO_SIN_FICHA;
+						}
+						$r = $servicio->con_bienvenida()->alta_persona( $fichas[0]->num_socio_asde, array( $rol ), array( Secciones::SIN_SECCION ), 'email1', (string) $s['email'] );
+						return $r->ok ? GrupoSolicitudes::USUARIO_INVITADO : GrupoSolicitudes::USUARIO_SIN_FICHA;
+					} catch ( \AsdeBalears\AreaPrivada\Crm\CrmException $e ) {
+						return GrupoSolicitudes::USUARIO_ERROR;
+					}
+				}
+			);
+		}
+		$cambios = array( 'usuario_estado' => $estado );
+		if ( GrupoSolicitudes::USUARIO_INVITADO === $estado ) {
+			$cambios['dni_enc']     = ''; // Ya no hace falta guardar el DNI ni el nombre.
+			$cambios['persona_enc'] = '';
+		}
+		$wpdb->update( GrupoSolicitudes::table(), $cambios, array( 'id' => $id ) );
+		Logger::log( 'grupo_primer_usuario', 'solicitud_grupo', (string) $id, array( 'resultado' => $estado ) );
+		return $estado;
 	}
 
 	/** Rechaza una solicitud: borra todo lo secreto guardado y avisa (sin motivo) al grupo. */

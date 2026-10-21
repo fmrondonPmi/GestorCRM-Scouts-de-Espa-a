@@ -25,6 +25,11 @@ final class GrupoSolicitudes {
 		self::RECHAZADA => 'Rechazada',
 	);
 
+	/** Cómo va el primer usuario de acceso del grupo aprobado (fase 7). */
+	public const USUARIO_INVITADO = 'invitado';
+	public const USUARIO_SIN_FICHA = 'sin_ficha';
+	public const USUARIO_ERROR    = 'error';
+
 	/** Roles del primer usuario de acceso (doc 50, P-171). */
 	public const ROLES = array(
 		'secretaria'   => 'Secretaría',
@@ -58,6 +63,7 @@ final class GrupoSolicitudes {
 				dni_enc text NULL,
 				persona_enc text NULL,
 				estado varchar(10) NOT NULL DEFAULT 'pendiente',
+				usuario_estado varchar(12) NOT NULL DEFAULT '',
 				verificada datetime NULL,
 				creada datetime NOT NULL,
 				resuelta datetime NULL,
