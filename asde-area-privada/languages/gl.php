@@ -1585,7 +1585,6 @@ return array(
 	'Confirmado el %2$s' => 'Confirmado o %2$s',
 	'Confirmado por %1$s el %2$s' => 'Confirmado por %1$s o %2$s',
 	'Cómo pagar (lo ven las familias al pedir)' => 'Como pagar (veno as familias ao pedir)',
-	'Cómo se ha pagado' => 'Como se pagou',
 	'Efectivo' => 'Efectivo',
 	'El grupo lo ha marcado como entregado: confírmalo cuando lo tengas.' => 'O grupo marcouno como entregado: confírmao cando o teñas.',
 	'En curso' => 'En curso',
@@ -4163,7 +4162,6 @@ return array(
 	'Ese reintegro ya se ha revisado.' => 'Ese reintegro xa se revisou.',
 	'Evento (si es de uno)' => 'Evento (se é dun)',
 	'Fecha del pago' => 'Data do pagamento',
-	'IBAN donde cobrarlo (solo por transferencia)' => 'IBAN onde cobralo (só por transferencia)',
 	'Indica el motivo del rechazo.' => 'Indica o motivo do rexeitamento.',
 	'Indica la fecha del pago (no posterior a hoy).' => 'Indica a data do pagamento (non posterior a hoxe).',
 	'La fecha del gasto no puede ser futura ni de hace más de un año.' => 'A data do gasto non pode ser futura nin de hai máis dun ano.',
@@ -4242,4 +4240,10 @@ return array(
 	'Recibido el %s' => 'Recibido o %s',
 	'Todavía no ha llegado del proveedor: se podrá entregar cuando Coordinación marque su pedido como recibido.' => 'Aínda non chegou do provedor: poderase entregar cando a Coordinación marque o seu pedido como recibido.',
 	'Todavía no se ha hecho ningún pedido al proveedor.' => 'Aínda non se fixo ningún pedido ao provedor.',
+
+	// v0.48.1
+	'IBAN (solo por transferencia)' => 'IBAN (só por transferencia)',
+
+	// v0.49: enlace de la tienda en el menu
+	'Enlace en el menú de la web (texto; vacío = sin enlace)' => 'Ligazón no menú da web (texto; baleiro = sen ligazón)',
 );

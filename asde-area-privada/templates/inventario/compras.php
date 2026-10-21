@@ -38,7 +38,7 @@ $fecha = static fn( ?string $f ) => $f ? wp_date( 'd/m/Y', (int) strtotime( $f .
 		</div>
 	<?php endif; ?>
 
-	<form method="get" action="<?php echo esc_url( $url ); ?>" class="asde-filter" data-asde-parcial-form="inv-compras">
+	<form method="get" action="<?php echo esc_url( $url ); ?>" class="asde-filter asde-filter--una-linea" data-asde-parcial-form="inv-compras">
 		<label for="asde-inv-estado"><?php asde_e( 'Mostrar' ); ?></label>
 		<select id="asde-inv-estado" name="estado" data-asde-autoenviar>
 			<option value=""><?php echo esc_html( asde_t( 'Todas' ) . ' (' . $total . ')' ); ?></option>

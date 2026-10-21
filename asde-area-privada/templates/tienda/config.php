@@ -50,6 +50,10 @@ defined( 'ABSPATH' ) || exit;
 			<label for="asde-uc-dias"><?php asde_e( 'Días para pagar una compra sin sesión antes de cancelarla (0 = nunca)' ); ?></label>
 			<input type="number" id="asde-uc-dias" name="dias_sin_pagar" value="<?php echo (int) $cfg['dias_sin_pagar']; ?>" min="0" max="90" inputmode="numeric">
 		</p>
+		<p>
+			<label for="asde-uc-menu"><?php asde_e( 'Enlace en el menú de la web (texto; vacío = sin enlace)' ); ?></label>
+			<input type="text" id="asde-uc-menu" name="menu_tienda" value="<?php echo esc_attr( $cfg['menu_tienda'] ); ?>" maxlength="40" placeholder="<?php echo esc_attr( asde_a( 'Tienda' ) ); ?>">
+		</p>
 		<?php if ( $cfg['publica'] && '' !== $enlace ) : ?>
 			<p><?php asde_e( 'Enlace de la tienda (compártelo donde quieras):' ); ?><br><input type="text" readonly value="<?php echo esc_attr( $enlace ); ?>" class="asde-input-ancho" aria-label="<?php echo esc_attr( asde_a( 'Enlace de la tienda' ) ); ?>"></p>
 			<p class="asde-help"><?php asde_e( 'Si el enlace se ha compartido donde no debía, crea uno nuevo: el anterior deja de valer (guarda antes los cambios de esta pantalla).' ); ?></p>

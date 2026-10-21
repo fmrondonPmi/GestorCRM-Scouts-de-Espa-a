@@ -1,17 +1,15 @@
-<!-- Generado por herramientas/generar-manuales.php (manual «coordinacion», versión 0.48) a partir de manual/fuentes: no se edita a mano. -->
+<!-- Generado por herramientas/generar-manuales.php (manual «coordinacion», versión 0.49) a partir de manual/fuentes: no se edita a mano. -->
 <div class="asde-ayuda__texto" data-manual="coordinacion" data-ancla="uniformes-config">
-<div class="asde-ayuda__apartado"><h2>Uniformes: pagos, pedido al proveedor y entregas</h2>
+<div class="asde-ayuda__apartado"><h2>La tienda: pagos, pedido al proveedor y entregas</h2>
 	<h3>Configuración</h3>
 	<p class="quien-sub">Tesorería y Coordinación</p>
-	<p class="asde-ayuda__pantalla">En «Uniformes → Configuración». La insignia mundial no tiene precio: sale «por confirmar».</p>
+	<p class="asde-ayuda__pantalla">En «Configuración de la tienda».</p>
 	<ul>
-		<li><strong>Se aceptan pedidos</strong> (sí o no), el <strong>precio de la camisa</strong>, si <strong>la primera camisa de cada scouter es gratis</strong> (sí por defecto; desde la segunda paga el precio) y <strong>cómo pagar</strong>, el texto que ven las familias al pedir. Aquí también van la <strong>cuenta del grupo (IBAN)</strong> y el <strong>teléfono de Bizum</strong>: salen en las instrucciones de pago y en los emails de los pedidos.</li>
-		<li><strong>Modelos y tallas:</strong> el nombre de cada modelo, sus tallas separadas por comas y la imagen de su guía de tallas; y qué tallas son especiales.</li>
-		<li><strong>Insignias:</strong> nombre, dónde va, precio (vacío = por confirmar), imagen y si se puede pedir. Se quitan con «Quitarla de la lista» y hay sitio para dos nuevas cada vez.</li>
-		<li><strong>Guía de colocación:</strong> la imagen de dónde va cada insignia.</li>
-		<li>Las imágenes pueden ser JPG, PNG, WebP o GIF de hasta 3 MB, y se guardan en la biblioteca de medios de la web. No se admite SVG, por seguridad.</li>
+		<li><strong>Se aceptan pedidos</strong> (sí o no), si el grupo <strong>cobra con datáfono</strong> (tarjeta, en persona; lo marca Tesorería al cobrar) y <strong>cómo pagar</strong>, el texto que ven las familias al pedir. Aquí también van la <strong>cuenta del grupo (IBAN)</strong> y el <strong>teléfono de Bizum</strong>: salen en las instrucciones de pago y en los emails de los pedidos.</li>
 		<li><strong>Pedidos sin pagar:</strong> los <strong>días para recordar el pago</strong> (7 por defecto; 0 = no recordar) y los <strong>días para cancelar</strong> un pedido sin pagar (0 = nunca, por defecto). Cuentan desde el día del pedido y valen para los pedidos de la tienda de socios y familias: el recordatorio se manda una sola vez por email, con cómo pagar y, si hay cancelación automática, hasta qué día; al cancelarse, lo que pidieron vuelve a la tienda y se les avisa.</li>
 		<li><strong>Tienda pública:</strong> «Abrir la tienda pública» permite comprar sin iniciar sesión con el enlace del grupo (apagada por defecto). Ahí también se eligen los <strong>días para pagar</strong> una compra sin sesión antes de cancelarla (14; 0 = nunca) y se copia el enlace, que se puede renovar con «Crear un enlace nuevo» si se compartió donde no debía.</li>
+		<li><strong>Enlace en el menú de la web:</strong> escribe el texto (por ejemplo «Tienda») y, con la tienda pública abierta, el menú principal de la web del grupo lleva una entrada con ese nombre que abre la tienda sin iniciar sesión; vacío, no hay entrada. Al estar en un menú público, la clave del enlace deja de ser secreta: si hace falta, ciérrala con «Crear un enlace nuevo» o apaga la tienda pública.</li>
+		<li>Los <strong>productos</strong> (camisas, insignias, sus tallas y precios) ya no se configuran aquí: se dan de alta en el <a href="{{completo}}#asde-manual-tienda-productos" data-asde-modal>Inventario de la tienda</a>, con «Se encarga al proveedor» para los que se piden por lotes.</li>
 		<li>Cada grupo tiene su propia configuración, porque cada uno tiene su insignia.</li>
 	</ul>
 	<p class="asde-ayuda__pantalla">Los plazos para recordar y cancelar los pedidos sin pagar.</p>

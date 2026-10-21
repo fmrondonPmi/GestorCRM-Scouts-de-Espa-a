@@ -12,7 +12,7 @@
 <body>
 <header class="portada">
 	<div class="portada__dentro">
-		<p class="antetitulo">Manual de uso · versión 0.43 · octubre de 2026 · <a class="portada__volver" href="index.html">Todos los manuales</a></p>
+		<p class="antetitulo">Manual de uso · versión 0.49 · octubre de 2026 · <a class="portada__volver" href="index.html">Todos los manuales</a></p>
 		<h1>Manual para scouters</h1>
 		<p class="portada__perfil">Scouters y voluntariado con sección</p>
 		<p class="entrada">Lo que hace un scouter con su sección en el área privada: las fichas de sus educandos, los cambios que proponen las familias, las solicitudes de acceso, los informes (también quién ha pagado la cuota), los pagos y las familias, y los pedidos de uniforme. Y lo suyo: sus datos, sus pagos y su propio uniforme.</p>
@@ -50,9 +50,9 @@
 <li class="sub"><a href="#fichas-reducidas">Fichas reducidas: una página por socio/a</a></li>
 <li class="sub"><a href="#informe-pagos">Quién ha pagado la cuota</a></li>
 <li><a href="#tesoreria">Tesorería: pagos y familias</a></li>
-<li><a href="#uniformes">Uniformes: el tuyo y los de tu sección</a></li>
-<li class="sub"><a href="#mi-uniforme">Mi uniforme</a></li>
-<li class="sub"><a href="#gestion-uniformes">Gestión de uniformes</a></li>
+<li><a href="#uniformes">La tienda: la tuya y la gestión de pedidos</a></li>
+<li class="sub"><a href="#mi-uniforme">Mis pedidos</a></li>
+<li class="sub"><a href="#gestion-uniformes">Gestión de la tienda</a></li>
 <li><a href="#eventos">Eventos</a></li>
 <li class="sub"><a href="#eventos-crear">Crear un evento</a></li>
 <li class="sub"><a href="#eventos-calendario">Calendario de tareas</a></li>
@@ -79,6 +79,9 @@
 <li class="sub"><a href="#lista-espera-lista">La lista</a></li>
 <li class="sub"><a href="#lista-espera-ficha">Contactar y cambiar el estado</a></li>
 <li class="sub"><a href="#lista-espera-alta">Asignar la sección y dar de alta (Secretaría y Coordinación)</a></li>
+<li><a href="#reintegros">Reintegros</a></li>
+<li class="sub"><a href="#reintegros-pedir">Pedir un reintegro</a></li>
+<li class="sub"><a href="#reintegros-revisar">Aprobar y pagar (Tesorería y Coordinación)</a></li>
 <li><a href="#idioma">El idioma de la web</a></li>
 <li><a href="#preguntas">Preguntas frecuentes</a></li>
 		</ol>
@@ -101,10 +104,11 @@
 <li><a href="#solicitudes">Solicitudes de acceso</a></li>
 <li><a href="#informes">Informes</a></li>
 <li><a href="#tesoreria">Tesorería: pagos y familias</a></li>
-<li><a href="#uniformes">Uniformes: el tuyo y los de tu sección</a></li>
+<li><a href="#uniformes">La tienda: la tuya y la gestión de pedidos</a></li>
 <li><a href="#eventos">Eventos</a></li>
 <li><a href="#inventario">Inventario de material</a></li>
 <li><a href="#lista-espera">Lista de espera</a></li>
+<li><a href="#reintegros">Reintegros</a></li>
 <li><a href="#idioma">El idioma de la web</a></li>
 <li><a href="#preguntas">Preguntas frecuentes</a></li>
 			</ol>
@@ -122,7 +126,7 @@
 				<tr><td><a href="#solicitudes">Solicitudes</a></td><td>Apruebas las solicitudes de acceso de las familias y los socios de tus secciones.</td></tr>
 				<tr><td><a href="#informes">Informes</a></td><td>Listados de tus secciones, con las columnas que elijas.</td></tr>
 				<tr><td><a href="#tesoreria">Tesorería</a></td><td>El control de pagos y las familias de todo el grupo: consultas y registras pagos. La configuración no.</td></tr>
-				<tr><td><a href="#uniformes">Uniformes</a></td><td>Pides el tuyo y entregas los pedidos de tus secciones.</td></tr>
+				<tr><td><a href="#uniformes">Tienda</a></td><td>Compras lo tuyo (uniforme incluido), entregas los pedidos de tus secciones y pides reintegros de lo que pagas por el grupo.</td></tr>
 				<tr><td><a href="#inventario">Inventario</a></td><td>El material del grupo: lo mantienes, lo importas desde una hoja de cálculo y preparas listas de compra (las aprueba Tesorería).</td></tr>
 			</tbody>
 		</table>
@@ -259,8 +263,8 @@
 		<table>
 			<thead><tr><th scope="col">Parte del menú</th><th scope="col">Entradas</th></tr></thead>
 			<tbody>
-				<tr><td>Mi espacio</td><td>Mis datos · Mis pagos · Mi uniforme</td></tr>
-				<tr><td>Gestión del grupo</td><td>Solicitudes · Cambios · Informes · Gestión de uniformes · Inventario · Tesorería</td></tr>
+				<tr><td>Mi espacio</td><td>Mis datos · Mis pagos · Mis pedidos (la tienda, uniforme incluido)</td></tr>
+				<tr><td>Gestión del grupo</td><td>Solicitudes · Cambios · Informes · Gestión de la tienda · Reintegros · Inventario · Tesorería</td></tr>
 			</tbody>
 		</table>
 	</div>
@@ -388,22 +392,22 @@
 </section>
 
 <section id="uniformes">
-	<h2>Uniformes: el tuyo y los de tu sección</h2>
-	<p class="resumen">En el menú hay dos entradas: <strong>«Mi uniforme»</strong>, para pedir el tuyo como cualquier socio, y <strong>«Gestión de uniformes»</strong>, para los pedidos de los socios de tus secciones.</p>
-	<h3 id="mi-uniforme">Mi uniforme</h3>
-	<figure class="captura captura--larga"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/mis-pedidos/</span></div><div class="navegador__vista" data-ampliar tabindex="0"><img src="capturas/55-uniforme-scouter.png" width="1280" height="1931" alt="Página Mi uniforme de un scouter con el formulario de pedido" loading="lazy"></div></div><figcaption><span>Pides tu camisa y tus insignias igual que una familia: eliges modelo y talla («Tabla de medidas» abre la tabla en una ventana), las insignias y «Enviar el pedido». Te da el nº de pedido para el pago.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+	<h2>La tienda: la tuya y la gestión de pedidos</h2>
+	<p class="resumen">En el menú hay dos entradas: <strong>«Mis pedidos»</strong>, para comprar en la tienda del grupo (el uniforme es un producto más), y <strong>«Gestión de la tienda»</strong>, para ver los pedidos del grupo.</p>
+	<h3 id="mi-uniforme">Mis pedidos</h3>
+	<figure class="captura captura--larga"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/mis-pedidos/</span></div><div class="navegador__vista" data-ampliar tabindex="0"><img src="capturas/55-uniforme-scouter.png" width="1280" height="1931" alt="Página Mis pedidos de un scouter con la tienda" loading="lazy"></div></div><figcaption><span>Compras igual que una familia: pones la cantidad de cada producto (y la talla en el desplegable) y «Hacer el pedido». Te da el nº de pedido para el pago.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
 	<ul>
-		<li>Un scouter pide <strong>solo para sí mismo</strong>. Los pedidos de los educandos los hace su familia (o ellos, desde los 14 años, con su cuenta).</li>
-		<li>Págalo en efectivo o con un ingreso en la cuenta del grupo con el nº de pedido; cuando te lo entreguen, pulsa «Lo he recibido».</li>
+		<li>Un scouter compra <strong>para sí mismo</strong>. Los pedidos de los educandos los hace su familia (o ellos, desde los 14 años, con su cuenta). Ya no hay «primera camisa gratis» ni pedidos hechos por el scouter para su sección: el precio de socio de cada producto, si lo hay, se aplica solo.</li>
+		<li>Págalo en físico a Tesorería, con el datáfono (si el grupo lo tiene) o con un ingreso o Bizum con el nº de pedido; cuando te lo entreguen, pulsa «Lo he recibido».</li>
 	</ul>
-	<h3 id="gestion-uniformes">Gestión de uniformes</h3>
+	<h3 id="gestion-uniformes">Gestión de la tienda</h3>
 	<figure class="captura captura--larga"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/mis-pedidos/gestion-pedidos/</span></div><div class="navegador__vista" data-ampliar tabindex="0"><img src="capturas/56-uniformes-scouter.png" width="1280" height="1349" alt="Gestión de pedidos de uniforme vista por un scouter: los pedidos de sus secciones con su estado" loading="lazy"></div></div><figcaption><span>La gestión vista por un scouter: los pedidos de sus secciones y los suyos, con el estado de cada uno.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
 	<div class="tabla">
 		<table>
 			<thead><tr><th scope="col">Paso</th><th scope="col">Quién</th></tr></thead>
 			<tbody>
 				<tr><td>Pago</td><td>Tesorería lo valida.</td></tr>
-				<tr><td>En el pedido del grupo</td><td>Coordinación lo incluye en el pedido al proveedor.</td></tr>
+				<tr><td>En el pedido del grupo</td><td>Coordinación lo incluye en un pedido al proveedor (pestaña «Pedido de camisas»); hasta que llega, no se entrega.</td></tr>
 				<tr><td>Entregado</td><td><strong>Tú</strong>, cuando das el uniforme al socio/a o a su familia: «Marcar entregado» en la lista o en el detalle.</td></tr>
 				<tr><td>Recibido</td><td>El socio/a o su familia, desde su cuenta. Nadie más lo puede marcar.</td></tr>
 			</tbody>
@@ -685,6 +689,28 @@
 	</ul>
 </section>
 
+<section id="reintegros">
+	<h2>Reintegros</h2>
+	<p class="resumen">Si has pagado algo del grupo de tu bolsillo, en «Gestión del grupo → <strong>Reintegros</strong>» pides que te lo devuelvan. Lo pueden pedir los scouters y Coordinación; lo aprueba Tesorería y lo paga Tesorería o Coordinación. El módulo lo enciende el administrador de la web (el grupo lo tiene apagado hasta que se active).</p>
+
+	<h3 id="reintegros-pedir">Pedir un reintegro</h3>
+	<ul>
+		<li><strong>Qué pagaste</strong>, la <strong>fecha</strong> del gasto (no puede ser futura ni de hace más de un año) y el <strong>importe</strong>.</li>
+		<li>El <strong>tique o la factura</strong>: una foto (JPG, PNG o WebP) o un PDF de hasta 5 MB. Es obligatorio y se guarda cifrado.</li>
+		<li>Un <strong>evento</strong>, si el gasto es de uno (no es obligatorio). Cuando se pague, el gasto se apunta solo en las cuentas del evento.</li>
+		<li>Cómo prefieres cobrarlo: <strong>en efectivo</strong> o <strong>por transferencia</strong>. Si es por transferencia, escribe tu <strong>IBAN</strong>: solo lo ven Tesorería y Coordinación y se borra cuando el reintegro se paga, se rechaza o se cancela. A Tesorería le llega un email con todos los datos.</li>
+	</ul>
+	<p class="nota">Puedes <strong>cancelar</strong> un reintegro mientras Tesorería no lo haya revisado. En «Mis reintegros» ves cómo va cada uno, y te llega un email cuando se aprueba, se rechaza (con el motivo) o se paga.</p>
+
+	<h3 id="reintegros-revisar">Aprobar y pagar (Tesorería y Coordinación)</h3>
+	<ul>
+		<li>En «Por aprobar y por pagar» salen todos los pendientes, con el IBAN y el botón <strong>«Ver justificante»</strong>. El menú te dice cuántos esperan.</li>
+		<li><strong>Tesorería aprueba</strong> o <strong>rechaza</strong> (con el motivo). Nadie aprueba ni rechaza su propio reintegro.</li>
+		<li><strong>Tesorería o Coordinación marcan «pagado»</strong> con la fecha del pago y, si quieren, una referencia. El reintegro no se apunta en el banco ni en la contabilidad de Tesorería: se paga por fuera y se marca aquí.</li>
+		<li>Si el reintegro es de un evento y las cuentas del evento están abiertas, se añade como gasto (ya reembolsado). Si están cerradas, se paga igual y se avisa para apuntarlo a mano.</li>
+	</ul>
+</section>
+
 <section id="idioma">
 	<h2>El idioma de la web</h2>
 	<p class="resumen">El área privada está en castellano, catalán, euskera y gallego. La administración de la web elige el idioma del grupo y si cada persona puede cambiarlo.</p>
@@ -711,7 +737,7 @@
 	<details class="pregunta"><summary>He cambiado algo en el CRM y no lo veo en la web.</summary><div><p>Las fichas se leen del CRM cada pocos minutos para que las páginas vayan rápido: lo que cambies allí llega en unos minutos. Lo que se guarda desde la web se ve al instante.</p></div></details>
 	<details class="pregunta"><summary>¿Por qué no puedo imprimir la lista de compra que he preparado?</summary><div><p>Porque todavía no tiene el visto bueno de Tesorería. Al guardarla les llegó un email; cuando la aprueben, en la lista saldrá «Descargar PDF para imprimir». Si la rechazan, verás el motivo.</p></div></details>
 	<details class="pregunta"><summary>Al importar el inventario, algunas filas no han entrado.</summary><div><p>En el informe de la importación sale cada fila con el motivo. Descarga «las filas con error», corrígelas en la hoja de cálculo y vuelve a importar ese fichero: las demás ya estaban dentro y no se duplican.</p></div></details>
-	<details class="pregunta"><summary>¿Puedo pedir el uniforme de un educando?</summary><div><p>No: lo pide su familia (o él o ella, desde los 14 años, con su cuenta). Tú pides el tuyo y entregas los de tu sección.</p></div></details>
+	<details class="pregunta"><summary>¿Puedo pedir el uniforme de un educando?</summary><div><p>No: lo pide su familia (o él o ella, desde los 14 años, con su cuenta). Tú compras lo tuyo en la tienda y entregas los pedidos de tu sección.</p></div></details>
 	<details class="pregunta"><summary>¿Puedo tener el área privada como una app en el móvil?</summary><div><p>Sí: mira «Instalar el área privada en el móvil». En Android sale un aviso con el botón «Instalar la app»; en iPhone, con Safari, «Compartir» y «Añadir a pantalla de inicio». No hay que bajar nada de las tiendas.</p></div></details>
 	<details class="pregunta"><summary>He instalado la app: ¿se guardan mis datos en el móvil?</summary><div><p>No. La app solo guarda su diseño y una pantalla de «Sin conexión». Las fichas, los pagos y los datos de los socios se piden a la web cada vez, y por eso hace falta internet.</p></div></details>
 </section>
@@ -726,7 +752,7 @@
 			</ul>
 		</section>
 
-		<p class="pie">Manual para scouters del plugin «ASDE Scouts de España – Gestor CRM para Grupos Scouts», versión 0.43 (octubre de 2026). Capturas hechas en un WordPress de demostración con un CRM simulado y datos inventados.</p>
+		<p class="pie">Manual para scouters del plugin «ASDE Scouts de España – Gestor CRM para Grupos Scouts», versión 0.49 (octubre de 2026). Capturas hechas en un WordPress de demostración con un CRM simulado y datos inventados.</p>
 	</main>
 </div>
 

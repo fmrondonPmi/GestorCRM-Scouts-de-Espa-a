@@ -101,15 +101,16 @@ $medios  = asde_ta( Inscripciones::MEDIOS );
 		<form method="post" action="<?php echo esc_url( $url ); ?>" class="asde-form">
 			<?php $ocultos( 'espera_contacto' ); ?>
 			<h4><?php asde_e( 'Apuntar un contacto hecho por otra vía' ); ?></h4>
-			<p>
-				<label for="asde-espera-medio"><?php asde_e( 'Cómo' ); ?></label>
-				<select id="asde-espera-medio" name="medio">
-					<option value="<?php echo esc_attr( Inscripciones::POR_TELEFONO ); ?>"><?php echo esc_html( $medios[ Inscripciones::POR_TELEFONO ] ); ?></option>
-					<option value="<?php echo esc_attr( Inscripciones::POR_EMAIL ); ?>"><?php echo esc_html( $medios[ Inscripciones::POR_EMAIL ] ); ?></option>
-				</select>
+			<p class="asde-form__fila asde-form__fila--una-linea">
+				<label for="asde-espera-medio"><?php asde_e( 'Cómo' ); ?>
+					<select id="asde-espera-medio" name="medio">
+						<option value="<?php echo esc_attr( Inscripciones::POR_TELEFONO ); ?>"><?php echo esc_html( $medios[ Inscripciones::POR_TELEFONO ] ); ?></option>
+						<option value="<?php echo esc_attr( Inscripciones::POR_EMAIL ); ?>"><?php echo esc_html( $medios[ Inscripciones::POR_EMAIL ] ); ?></option>
+					</select>
+				</label>
+				<label for="asde-espera-nota"><?php asde_e( 'Nota (opcional)' ); ?> <input type="text" id="asde-espera-nota" name="nota" maxlength="250"></label>
+				<button type="submit" class="button"><?php asde_e( 'Apuntar el contacto' ); ?></button>
 			</p>
-			<p><label for="asde-espera-nota"><?php asde_e( 'Nota (opcional)' ); ?></label><textarea id="asde-espera-nota" name="nota" rows="2"></textarea></p>
-			<p><button type="submit" class="button"><?php asde_e( 'Apuntar el contacto' ); ?></button></p>
 		</form>
 	</section>
 
@@ -117,16 +118,17 @@ $medios  = asde_ta( Inscripciones::MEDIOS );
 		<h3><?php asde_e( 'Estado' ); ?></h3>
 		<form method="post" action="<?php echo esc_url( $url ); ?>" class="asde-form">
 			<?php $ocultos( 'espera_estado' ); ?>
-			<p>
-				<label for="asde-espera-est"><?php asde_e( 'Estado' ); ?></label>
-				<select id="asde-espera-est" name="estado">
+			<p class="asde-form__fila asde-form__fila--una-linea">
+				<label for="asde-espera-est"><?php asde_e( 'Estado' ); ?>
+					<select id="asde-espera-est" name="estado">
 					<?php foreach ( Inscripciones::ESTADOS_ELEGIBLES as $e ) : ?>
 						<option value="<?php echo esc_attr( $e ); ?>" <?php selected( $f['estado'], $e ); ?>><?php echo esc_html( $estados[ $e ] ); ?></option>
 					<?php endforeach; ?>
 				</select>
+				</label>
+				<label for="asde-espera-enota"><?php asde_e( 'Nota (opcional)' ); ?> <input type="text" id="asde-espera-enota" name="nota" maxlength="250"></label>
+				<button type="submit" class="button"><?php asde_e( 'Cambiar el estado' ); ?></button>
 			</p>
-			<p><label for="asde-espera-enota"><?php asde_e( 'Nota (opcional)' ); ?></label><input type="text" id="asde-espera-enota" name="nota" maxlength="250"></p>
-			<p><button type="submit" class="button"><?php asde_e( 'Cambiar el estado' ); ?></button></p>
 		</form>
 	</section>
 <?php endif; ?>

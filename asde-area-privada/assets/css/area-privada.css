@@ -2512,7 +2512,7 @@ dialog.asde-modal--imprimir {
 #top .asde-ap .asde-filter--una-linea input[type="search"] {
 	margin: 0;
 }
-@media (max-width: 600px) {
+@media (max-width: 700px) {
 	.asde-ap .asde-filter--una-linea {
 		flex-wrap: wrap;
 	}
@@ -2916,7 +2916,7 @@ dialog.asde-modal--mini .asde-banco-tipo-nuevo h3 {
 /* v0.48 · Filtros y acciones en una línea (regla del usuario, 2026-10-21; skill pantallas-area-privada).
    Enfold pone #top input/select { width: 100% }: se neutraliza. En el móvil, si no cabe, baja a otra línea. */
 .asde-ap .asde-form__fila--una-linea {
-	flex-wrap: nowrap;
+	flex-wrap: wrap;
 	align-items: center;
 }
 .asde-ap .asde-form__fila--una-linea label {
@@ -2945,8 +2945,87 @@ dialog.asde-modal--mini .asde-banco-tipo-nuevo h3 {
 	align-items: center;
 	gap: 6px 12px;
 }
-@media (max-width: 600px) {
+@media (max-width: 700px) {
 	.asde-ap .asde-form__fila--una-linea {
 		flex-wrap: wrap;
 	}
+}
+
+/* v0.48 · Toda fila de campos (asde-form__fila) enseña las etiquetas junto a su campo y con el ancho justo, sin el
+   #top input { width: 100% } de Enfold: lo que cabe va en una línea y, si no cabe, baja sin desbordar. */
+.asde-ap .asde-form__fila {
+	align-items: center;
+}
+.asde-ap .asde-form__fila > label {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	margin: 0;
+}
+#top .asde-ap .asde-form__fila > input:not([type="checkbox"]):not([type="radio"]),
+#top .asde-ap .asde-form__fila > select,
+#top .asde-ap .asde-form__fila > label > input:not([type="checkbox"]):not([type="radio"]),
+#top .asde-ap .asde-form__fila > label > select {
+	width: auto;
+	max-width: 100%;
+	min-width: 0;
+	margin: 0;
+}
+
+/* v0.48 · Formularios compactos de acción (asde-form--compacta): los campos, con su etiqueta corta, y el botón van en una línea
+   si caben y, si no, bajan sin desbordar. Lo largo (detalles, ayudas, avisos) ocupa su propia línea. */
+.asde-ap .asde-form--compacta {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px 14px;
+}
+.asde-ap .asde-form--compacta > label,
+.asde-ap .asde-form--compacta > p > label {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	margin: 0;
+}
+#top .asde-ap .asde-form--compacta input:not([type="checkbox"]):not([type="radio"]),
+#top .asde-ap .asde-form--compacta select,
+.asde-ap .asde-form--compacta input:not([type="checkbox"]):not([type="radio"]),
+.asde-ap .asde-form--compacta select {
+	width: auto;
+	min-width: 0;
+	max-width: 100%;
+	margin: 0;
+}
+.asde-ap .asde-form--compacta > details,
+.asde-ap .asde-form--compacta > .asde-help,
+.asde-ap .asde-form--compacta > .asde-notice,
+.asde-ap .asde-form--compacta > table,
+.asde-ap .asde-form--compacta > fieldset {
+	flex: 1 1 100%;
+}
+.asde-ap .asde-form--compacta > button {
+	flex: 0 0 auto;
+	white-space: nowrap;
+}
+
+/* v0.48 · Ajustes de las filas en una línea: etiquetas que se encogen, campos de texto que se reparten el sitio y botones que no se parten. */
+.asde-ap .asde-form__fila > label,
+.asde-ap .asde-form--compacta > label {
+	flex: 0 1 auto;
+	min-width: 0;
+}
+.asde-ap .asde-form__fila > label > input[type="text"],
+.asde-ap .asde-form__fila > label > input[type="search"],
+.asde-ap .asde-form--compacta > label > input[type="text"] {
+	flex: 1 1 8em;
+	min-width: 5em;
+}
+.asde-ap .asde-form__fila > label > input[type="file"] {
+	max-width: 15em;
+}
+.asde-ap .asde-form__fila > button,
+.asde-ap .asde-form--compacta > button,
+.asde-ap .asde-filter > button {
+	flex: 0 0 auto;
+	white-space: nowrap;
 }

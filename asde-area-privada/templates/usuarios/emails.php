@@ -35,7 +35,7 @@ $columnas = array(
 		</div>
 	<?php endif; ?>
 
-	<form method="get" action="<?php echo esc_url( $url ); ?>" class="asde-filter">
+	<form method="get" action="<?php echo esc_url( $url ); ?>" class="asde-filter asde-filter--una-linea">
 		<?php if ( $usuario ) : ?>
 			<input type="hidden" name="usuario" value="<?php echo (int) $usuario->ID; ?>">
 		<?php endif; ?>

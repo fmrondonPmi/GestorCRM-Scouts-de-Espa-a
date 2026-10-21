@@ -29,7 +29,7 @@ defined( 'ABSPATH' ) || exit;
 	</header>
 	<p class="asde-muted"><?php asde_e( 'Lo que está aquí es lo que la tienda puede vender. Cada producto tiene una o varias variantes (tallas, colores…) con sus existencias. Los «solo socios» solo los ven quienes han iniciado sesión.' ); ?></p>
 
-	<form method="get" action="<?php echo esc_url( $url ); ?>" class="asde-filter">
+	<form method="get" action="<?php echo esc_url( $url ); ?>" class="asde-filter asde-filter--una-linea">
 		<label for="asde-tp-cat"><?php asde_e( 'Categoría' ); ?></label>
 		<select id="asde-tp-cat" name="categoria">
 			<option value=""><?php asde_e( 'Todas' ); ?></option>

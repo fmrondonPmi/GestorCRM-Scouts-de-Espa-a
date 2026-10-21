@@ -66,7 +66,7 @@ $e = $edicion ?: array( 'id' => 0, 'nombre' => '', 'unidad' => 'g', 'alergenos' 
 
 <section class="asde-card" data-asde-inicio="abierto">
 	<h3 class="asde-card__title"><?php asde_e( 'Lista de ingredientes' ); ?></h3>
-	<form method="get" action="<?php echo esc_url( $url ); ?>" class="asde-filter">
+	<form method="get" action="<?php echo esc_url( $url ); ?>" class="asde-filter asde-filter--una-linea">
 		<input type="hidden" name="ingredientes" value="1">
 		<label class="asde-choice asde-choice--inline"><input type="checkbox" name="archivados" value="1" <?php checked( $archivados ); ?>><span><?php asde_e( 'Ver también los archivados' ); ?></span></label>
 		<button type="submit" class="button"><?php asde_e( 'Ver' ); ?></button>

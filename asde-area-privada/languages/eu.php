@@ -1585,7 +1585,6 @@ return array(
 	'Confirmado el %2$s' => '%2$s(e)an berretsia',
 	'Confirmado por %1$s el %2$s' => '%1$s(e)k berretsia %2$s(e)an',
 	'Cómo pagar (lo ven las familias al pedir)' => 'Nola ordaindu (familiek eskatzean ikusten dute)',
-	'Cómo se ha pagado' => 'Nola ordaindu den',
 	'Efectivo' => 'Eskudirua',
 	'El grupo lo ha marcado como entregado: confírmalo cuando lo tengas.' => 'Taldeak entregatutzat markatu du: berretsi jasotzen duzunean.',
 	'En curso' => 'Abian',
@@ -4163,7 +4162,6 @@ return array(
 	'Ese reintegro ya se ha revisado.' => 'Itzulketa hori jada berrikusi da.',
 	'Evento (si es de uno)' => 'Ekitaldia (baten bat bada)',
 	'Fecha del pago' => 'Ordainketaren data',
-	'IBAN donde cobrarlo (solo por transferencia)' => 'Kobratzeko IBANa (transferentzia bidez bakarrik)',
 	'Indica el motivo del rechazo.' => 'Adierazi ukatzearen arrazoia.',
 	'Indica la fecha del pago (no posterior a hoy).' => 'Adierazi ordainketaren data (gaurkoa baino geroagokoa ez).',
 	'La fecha del gasto no puede ser futura ni de hace más de un año.' => 'Gastuaren data ezin da etorkizunekoa izan, ezta urtebete baino zaharragoa ere.',
@@ -4242,4 +4240,10 @@ return array(
 	'Recibido el %s' => '%s(a)n jasoa',
 	'Todavía no ha llegado del proveedor: se podrá entregar cuando Coordinación marque su pedido como recibido.' => 'Oraindik ez da hornitzailearengandik iritsi: Koordinazioak bere eskaera jasotzat markatzen duenean eman ahal izango da.',
 	'Todavía no se ha hecho ningún pedido al proveedor.' => 'Oraindik ez da hornitzaileari eskaerarik egin.',
+
+	// v0.48.1
+	'IBAN (solo por transferencia)' => 'IBANa (transferentzia bidez bakarrik)',
+
+	// v0.49: enlace de la tienda en el menu
+	'Enlace en el menú de la web (texto; vacío = sin enlace)' => 'Webguneko menuko esteka (testua; hutsik = esteka gabe)',
 );

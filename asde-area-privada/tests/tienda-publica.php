@@ -291,6 +291,26 @@ try {
 	$ok( ! Enlace::valida( $grupo, $clave ) && Enlace::valida( $grupo, Enlace::clave( $grupo ) ), 'Coordinación crea un enlace nuevo: el anterior deja de valer' );
 	$h = ( new TiendaConfigView() )->render();
 	$ok( str_contains( $h, 'Tienda pública' ) && str_contains( $h, 'name="publica"' ) && str_contains( $h, Enlace::clave( $grupo ) ), 'la configuración enseña el interruptor y el enlace' );
+
+	echo "
+== Parte M · Enlace en el menú de la web (v0.49, T5) ==
+";
+	$principal = (object) array( 'theme_location' => \AsdeBalears\AreaPrivada\Frontend\Visibilidad::ubicacion_principal() );
+	$otro      = (object) array( 'theme_location' => 'pie-que-no-existe' );
+	$titulos   = static fn( array $items ): array => wp_list_pluck( $items, 'title' );
+	$ok( ! in_array( 'Comprar', $titulos( \AsdeBalears\AreaPrivada\Frontend\Visibilidad::menu( array(), $principal ) ), true ), 'sin texto en la configuración no hay enlace en el menú' );
+	$con               = Config::de( $grupo['numero'] );
+	$con['menu_tienda'] = 'Comprar';
+	Config::guardar( $con, $grupo['numero'] );
+	$items = \AsdeBalears\AreaPrivada\Frontend\Visibilidad::menu( array(), $principal );
+	$ok( 1 === count( $items ) && 'Comprar' === $items[0]->title && Enlace::url( $grupo ) === $items[0]->url, 'con texto, el menú principal lleva el enlace a la tienda del grupo' );
+	$ok( array() === \AsdeBalears\AreaPrivada\Frontend\Visibilidad::menu( array(), $otro ), 'en otros menús (pie, etc.) no sale' );
+	$con['publica'] = false;
+	Config::guardar( $con, $grupo['numero'] );
+	$ok( array() === \AsdeBalears\AreaPrivada\Frontend\Visibilidad::menu( array(), $principal ), 'con la tienda pública cerrada, el enlace desaparece' );
+	Config::guardar( $cfg, $grupo['numero'] );
+	$h = ( new TiendaConfigView() )->render();
+	$ok( str_contains( $h, 'name="menu_tienda"' ), 'la configuración tiene el campo del texto del enlace' );
 	$como( 0 );
 } finally {
 	remove_filter( 'wp_redirect', $redirigir, 1 );

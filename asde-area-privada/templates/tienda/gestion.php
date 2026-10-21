@@ -64,7 +64,7 @@ $singular = array(
 	</ul>
 
 	<?php /* v0.31: el filtro actualiza solo la lista (parcial.js). */ ?>
-	<form method="get" action="<?php echo esc_url( $url ); ?>" class="asde-filter" data-asde-parcial-form="uniformes-lista">
+	<form method="get" action="<?php echo esc_url( $url ); ?>" class="asde-filter asde-filter--una-linea" data-asde-parcial-form="uniformes-lista">
 		<label for="asde-uni-estado"><?php asde_e( 'Mostrar' ); ?></label>
 		<select id="asde-uni-estado" name="estado" data-asde-autoenviar>
 			<?php foreach ( asde_ta( PedidosTable::FILTROS ) as $f => $etiqueta ) : ?>

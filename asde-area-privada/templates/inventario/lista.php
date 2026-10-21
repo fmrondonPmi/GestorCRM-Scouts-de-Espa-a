@@ -44,7 +44,7 @@ $buscar = $normal( trim( $q ) );
 		?>
 	</p>
 
-	<form method="get" action="<?php echo esc_url( $url ); ?>" class="asde-filter" data-asde-inv-filtro>
+	<form method="get" action="<?php echo esc_url( $url ); ?>" class="asde-filter asde-filter--una-linea" data-asde-inv-filtro>
 		<label for="asde-inv-tipo"><?php asde_e( 'Tipo' ); ?></label>
 		<select id="asde-inv-tipo" name="tipo">
 			<option value="0"><?php asde_e( 'Todos' ); ?></option>

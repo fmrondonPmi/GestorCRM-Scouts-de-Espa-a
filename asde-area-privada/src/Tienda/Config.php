@@ -58,6 +58,8 @@ final class Config {
 			'bizum'             => '',
 			// v0.39 (fase 4): la tienda pública (compra sin sesión) y los días que se espera el pago de esas compras.
 			'publica'           => false,
+			// v0.49 (doc 52, T5): texto del enlace a la tienda pública en el menú de la web ('' = sin enlace).
+			'menu_tienda'       => '',
 			// v0.46 (doc 52, T3): el grupo cobra con datáfono (en persona); apagado por defecto.
 			'datafono'          => false,
 			'dias_sin_pagar'    => 14,
@@ -110,6 +112,7 @@ final class Config {
 		$cfg['iban']           = self::iban( (string) $cfg['iban'] );
 		$cfg['bizum']          = self::bizum( (string) $cfg['bizum'] );
 		$cfg['publica']        = (bool) $cfg['publica'];
+		$cfg['menu_tienda']    = mb_substr( trim( (string) $cfg['menu_tienda'] ), 0, 40 );
 		$cfg['datafono']       = (bool) $cfg['datafono'];
 		$cfg['dias_sin_pagar'] = min( 90, max( 0, (int) $cfg['dias_sin_pagar'] ) );
 		$cfg['dias_aviso_socios']    = min( 90, max( 0, (int) $cfg['dias_aviso_socios'] ) );

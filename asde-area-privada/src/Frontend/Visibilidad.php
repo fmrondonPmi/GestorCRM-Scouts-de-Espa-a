@@ -1,6 +1,11 @@
 <?php
 namespace AsdeBalears\AreaPrivada\Frontend;
 
+use AsdeBalears\AreaPrivada\Domain\Grupos;
+use AsdeBalears\AreaPrivada\Domain\Modulos;
+use AsdeBalears\AreaPrivada\Tienda\Config;
+use AsdeBalears\AreaPrivada\Tienda\Enlace;
+
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -23,7 +28,7 @@ final class Visibilidad {
 		add_action( 'pre_get_posts', array( self::class, 'busqueda' ) );
 		add_filter( 'rest_page_query', array( self::class, 'rest' ) );
 		add_filter( 'wp_sitemaps_posts_query_args', array( self::class, 'sitemap' ), 10, 2 );
-		add_filter( 'wp_nav_menu_objects', array( self::class, 'menu' ) );
+		add_filter( 'wp_nav_menu_objects', array( self::class, 'menu' ), 10, 2 );
 		add_filter( 'login_url', array( self::class, 'login_url' ), 20, 2 );
 	}
 
@@ -65,7 +70,7 @@ final class Visibilidad {
 	}
 
 	/** Elemento de acceso dinámico y ninguna otra página privada en los menús. */
-	public static function menu( $items ): array {
+	public static function menu( $items, $args = null ): array {
 		$acceso = Pages::id( 'acceso' );
 		$ids    = self::ids();
 		$out    = array();
@@ -84,6 +89,49 @@ final class Visibilidad {
 				}
 				$out[] = $item;
 			}
+		}
+		$ubicacion = is_object( $args ) ? (string) ( $args->theme_location ?? '' ) : '';
+		if ( '' !== $ubicacion && self::ubicacion_principal() === $ubicacion ) {
+			$out = array_merge( $out, self::enlaces_tienda( count( $out ) ) );
+		}
+		return $out;
+	}
+
+	/**
+	 * v0.49 (doc 52, T5): un enlace a la tienda pública de cada grupo que lo ha pedido en su configuración
+	 * (tienda pública abierta, módulo encendido y un texto escrito). Es el acceso de quien no tiene sesión.
+	 *
+	 * @return object[]
+	 */
+	private static function enlaces_tienda( int $posicion ): array {
+		$out = array();
+		foreach ( Grupos::todos() as $numero => $grupo ) {
+			$cfg = Config::de( (string) $numero );
+			if ( ! $cfg['publica'] || '' === $cfg['menu_tienda'] || ! Modulos::activo( Modulos::TIENDA, (string) $numero ) ) {
+				continue;
+			}
+			++$posicion;
+			$out[] = (object) array(
+				'ID'                     => 0,
+				'db_id'                  => 0,
+				'menu_item_parent'       => 0,
+				'menu_order'             => $posicion,
+				'object'                 => 'custom',
+				'object_id'              => 0,
+				'type'                   => 'custom',
+				'type_label'             => '',
+				'title'                  => $cfg['menu_tienda'],
+				'url'                    => Enlace::url( $grupo ),
+				'target'                 => '',
+				'attr_title'             => '',
+				'description'            => '',
+				'classes'                => array( 'menu-item', 'asde-menu-tienda' ),
+				'xfn'                    => '',
+				'current'                => false,
+				'current_item_ancestor'  => false,
+				'current_item_parent'    => false,
+				'post_type'              => 'nav_menu_item',
+			);
 		}
 		return $out;
 	}

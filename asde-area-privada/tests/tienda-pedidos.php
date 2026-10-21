@@ -298,7 +298,7 @@ try {
 	$_GET['pedido'] = (string) $p1['id'];
 	$detalle        = ( new TiendaGestionView() )->render();
 	unset( $_GET['pedido'] );
-	$ok( str_contains( $detalle, 'eligió pagar con: Bizum' ) && (bool) preg_match( '/value="bizum"[ ]+checked/', $detalle ), 'Tesorería ve cómo eligió pagar quien compró, y Bizum viene marcado' );
+	$ok( str_contains( $detalle, 'eligió pagar con: Bizum' ) && (bool) preg_match( '/value="bizum"[ ]+selected/', $detalle ), 'Tesorería ve cómo eligió pagar quien compró, y Bizum viene marcado' );
 	$enviar( new TiendaGestionView(), array( 'asde_action' => 'uniforme_pago', 'pedido' => (string) $p1['id'], 'metodo' => 'bizum', 'fecha' => wp_date( 'Y-m-d' ), 'importe' => '14', 'referencia' => 'Bizum de prueba' ), 'asde_uniforme_' . $p1['id'] );
 	$q = PedidosTable::obtener( $p1['id'] );
 	$ok( null !== $q['pago_en'] && 'bizum' === $q['pago_metodo'] && 14.0 === $q['pago_importe'] && $u_teso === $q['pago_por'], 'Tesorería marca pagado por Bizum' );
@@ -396,7 +396,7 @@ try {
 		View::en_modal( false );
 		return $h;
 	} )();
-	$ok( str_contains( $detalle, 'value="tpv"' ) && 1 === preg_match( '/value="tpv"[ ]+checked/', $detalle ), 'Tesorería ve «Datáfono / TPV» entre los métodos y viene marcado' );
+	$ok( str_contains( $detalle, 'value="tpv"' ) && 1 === preg_match( '/value="tpv"[ ]+selected/', $detalle ), 'Tesorería ve «Datáfono / TPV» entre los métodos y viene marcado' );
 	$enviar( new TiendaGestionView(), array( 'asde_action' => 'uniforme_pago', 'pedido' => (string) $pd['id'], 'metodo' => 'tpv', 'fecha' => wp_date( 'Y-m-d' ), 'importe' => '10', 'referencia' => 'Ticket 5' ), 'asde_uniforme_' . $pd['id'] );
 	$q = PedidosTable::obtener( $pd['id'] );
 	$ok( null !== $q['pago_en'] && 'tpv' === $q['pago_metodo'] && 10.0 === $q['pago_importe'], 'Tesorería lo marca pagado con el datáfono' );

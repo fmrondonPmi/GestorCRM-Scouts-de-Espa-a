@@ -124,41 +124,34 @@ $tabla = static function ( array $lista, bool $con_quien ) use ( $fila ): void {
 		<form method="post" enctype="multipart/form-data" class="asde-form" action="<?php echo esc_url( $url ); ?>" data-asde-reintegro>
 			<?php wp_nonce_field( 'asde_reintegro_pedir' ); ?>
 			<input type="hidden" name="asde_action" value="reintegro_pedir">
-			<p>
-				<label for="asde-rei-concepto"><?php asde_e( 'Qué pagaste' ); ?></label>
-				<input type="text" id="asde-rei-concepto" name="concepto" maxlength="120" required>
-			</p>
-			<p class="asde-form__fila">
+			<p class="asde-form__fila asde-form__fila--una-linea">
+				<label for="asde-rei-concepto"><?php asde_e( 'Qué pagaste' ); ?> <input type="text" id="asde-rei-concepto" name="concepto" maxlength="120" required></label>
 				<label for="asde-rei-fecha"><?php asde_e( 'Fecha del gasto' ); ?> <input type="date" id="asde-rei-fecha" name="fecha" value="<?php echo esc_attr( $hoy ); ?>" max="<?php echo esc_attr( $hoy ); ?>" required></label>
-				<label for="asde-rei-importe"><?php asde_e( 'Importe (€)' ); ?> <input type="text" id="asde-rei-importe" name="importe" inputmode="decimal" size="10" required></label>
+				<label for="asde-rei-importe"><?php asde_e( 'Importe (€)' ); ?> <input type="text" id="asde-rei-importe" name="importe" inputmode="decimal" size="8" required></label>
+				<?php if ( $eventos ) : ?>
+					<label for="asde-rei-evento"><?php asde_e( 'Evento (si es de uno)' ); ?>
+						<select id="asde-rei-evento" name="evento">
+							<option value=""><?php asde_e( 'Sin evento' ); ?></option>
+							<?php foreach ( $eventos as $id => $nombre_evento ) : ?>
+								<option value="<?php echo (int) $id; ?>"><?php echo esc_html( $nombre_evento ); ?></option>
+							<?php endforeach; ?>
+						</select>
+					</label>
+				<?php endif; ?>
 			</p>
-			<?php if ( $eventos ) : ?>
-				<p>
-					<label for="asde-rei-evento"><?php asde_e( 'Evento (si es de uno)' ); ?></label>
-					<select id="asde-rei-evento" name="evento">
-						<option value=""><?php asde_e( 'Sin evento' ); ?></option>
-						<?php foreach ( $eventos as $id => $nombre_evento ) : ?>
-							<option value="<?php echo (int) $id; ?>"><?php echo esc_html( $nombre_evento ); ?></option>
+			<p class="asde-form__fila asde-form__fila--una-linea">
+				<label for="asde-rei-just"><?php asde_e( 'Tique o factura (imagen o PDF, hasta 5 MB)' ); ?> <input type="file" id="asde-rei-just" name="justificante" accept="image/jpeg,image/png,image/webp,application/pdf" required></label>
+				<label for="asde-rei-forma"><?php asde_e( '¿Cómo prefieres cobrarlo?' ); ?>
+					<select id="asde-rei-forma" name="forma">
+						<?php foreach ( asde_ta( ReintegrosTable::FORMAS ) as $forma => $etiqueta ) : ?>
+							<option value="<?php echo esc_attr( $forma ); ?>"><?php echo esc_html( $etiqueta ); ?></option>
 						<?php endforeach; ?>
 					</select>
-				</p>
-			<?php endif; ?>
-			<p>
-				<label for="asde-rei-just"><?php asde_e( 'Tique o factura (imagen o PDF, hasta 5 MB)' ); ?></label>
-				<input type="file" id="asde-rei-just" name="justificante" accept="image/jpeg,image/png,image/webp,application/pdf" required>
+				</label>
+				<label for="asde-rei-iban" data-asde-iban><?php asde_e( 'IBAN (solo por transferencia)' ); ?> <input type="text" id="asde-rei-iban" name="iban" maxlength="42" autocomplete="off"></label>
+				<button type="submit" class="button"><?php asde_e( 'Pedir el reintegro' ); ?></button>
 			</p>
-			<fieldset>
-				<legend><?php asde_e( '¿Cómo prefieres cobrarlo?' ); ?></legend>
-				<?php foreach ( asde_ta( ReintegrosTable::FORMAS ) as $forma => $etiqueta ) : ?>
-					<label class="asde-choice"><input type="radio" name="forma" value="<?php echo esc_attr( $forma ); ?>" <?php checked( ReintegrosTable::EFECTIVO === $forma ); ?>><span><?php echo esc_html( $etiqueta ); ?></span></label>
-				<?php endforeach; ?>
-			</fieldset>
-			<p data-asde-iban>
-				<label for="asde-rei-iban"><?php asde_e( 'IBAN donde cobrarlo (solo por transferencia)' ); ?></label>
-				<input type="text" id="asde-rei-iban" name="iban" maxlength="42" autocomplete="off">
-				<span class="asde-help"><?php asde_e( 'Solo lo ven Tesorería y Coordinación, y se borra cuando el reintegro se paga, se rechaza o se cancela.' ); ?></span>
-			</p>
-			<p><button type="submit" class="button"><?php asde_e( 'Pedir el reintegro' ); ?></button></p>
+			<p class="asde-help"><?php asde_e( 'Solo lo ven Tesorería y Coordinación, y se borra cuando el reintegro se paga, se rechaza o se cancela.' ); ?></p>
 		</form>
 	</section>
 <?php endif; ?>

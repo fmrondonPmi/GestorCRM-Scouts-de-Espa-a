@@ -182,14 +182,17 @@ $user = static fn( $id ) => ( $u = get_userdata( (int) $id ) ) ? $u->user_login 
 			<input type="hidden" name="familia" value="<?php echo (int) $familia['id']; ?>">
 			<input type="hidden" name="ronda" value="<?php echo esc_attr( $ronda ); ?>">
 			<input type="hidden" name="fecha" value="<?php echo esc_attr( $hoy ); ?>">
-			<fieldset>
-				<legend><?php asde_e( 'Tipo' ); ?></legend>
-				<label class="asde-choice asde-choice--inline"><input type="radio" name="sentido" value="descuento" checked><span><?php asde_e( 'Descuento / beca' ); ?></span></label>
-				<label class="asde-choice asde-choice--inline"><input type="radio" name="sentido" value="recargo"><span><?php asde_e( 'Recargo' ); ?></span></label>
-			</fieldset>
-			<p><label for="asde-aj-importe"><?php asde_e( 'Importe (€)' ); ?></label><input type="number" id="asde-aj-importe" name="importe" step="0.01" min="0.01" required></p>
-			<p><label for="asde-aj-nota"><?php asde_e( 'Motivo' ); ?></label><input type="text" id="asde-aj-nota" name="nota" maxlength="255" required></p>
-			<p><button type="submit" class="button asde-button-secundario"><?php asde_e( 'Registrar ajuste' ); ?></button></p>
+			<p class="asde-form__fila asde-form__fila--una-linea">
+				<label><?php asde_e( 'Tipo' ); ?>
+					<select name="sentido">
+						<option value="descuento" selected><?php asde_e( 'Descuento / beca' ); ?></option>
+						<option value="recargo"><?php asde_e( 'Recargo' ); ?></option>
+					</select>
+				</label>
+				<label for="asde-aj-importe"><?php asde_e( 'Importe (€)' ); ?> <input type="number" id="asde-aj-importe" name="importe" step="0.01" min="0.01" size="8" required></label>
+				<label for="asde-aj-nota"><?php asde_e( 'Motivo' ); ?> <input type="text" id="asde-aj-nota" name="nota" maxlength="255" required></label>
+				<button type="submit" class="button asde-button-secundario"><?php asde_e( 'Registrar ajuste' ); ?></button>
+			</p>
 		</form>
 	</section>
 </div>

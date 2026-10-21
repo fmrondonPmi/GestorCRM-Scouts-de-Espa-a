@@ -265,7 +265,7 @@ $hay_aviso = static fn( string $k ): bool => isset( $confirmaciones[ $k ] );
 			<a class="no-transition" href="<?php echo esc_url( $url_csv ); ?>" data-asde-descarga><?php asde_e( 'Descargar CSV' ); ?></a>
 		</span>
 	</header>
-	<form method="get" action="<?php echo esc_url( $url ); ?>" class="asde-filter asde-solo-pantalla">
+	<form method="get" action="<?php echo esc_url( $url ); ?>" class="asde-filter asde-filter--una-linea asde-solo-pantalla">
 		<input type="hidden" name="evento" value="<?php echo (int) $e['id']; ?>">
 		<input type="hidden" name="pestana" value="menu">
 		<label for="asde-mn-dia"><?php asde_e( 'Para' ); ?></label>

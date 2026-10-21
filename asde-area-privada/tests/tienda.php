@@ -322,7 +322,7 @@ try {
 	$h              = ( new TiendaGestionView() )->render();
 	unset( $_GET['pedido'] );
 	View::en_modal( false );
-	$ok( in_array( 'tienda_gestion', Router::MODALES, true ) && str_contains( $h, 'asde-ap--modal' ) && str_contains( $h, 'Validar el pago' ) && str_contains( $h, 'name="metodo" value="ingreso"' ) && ! str_contains( $h, 'Servir del inventario' ), 'detalle en la ventana emergente, con el formulario del pago (efectivo o ingreso) y sin «servir del inventario»' );
+	$ok( in_array( 'tienda_gestion', Router::MODALES, true ) && str_contains( $h, 'asde-ap--modal' ) && str_contains( $h, 'Validar el pago' ) && str_contains( $h, '<select name="metodo">' ) && str_contains( $h, 'value="ingreso"' ) && ! str_contains( $h, 'Servir del inventario' ), 'detalle en la ventana emergente, con el formulario del pago (efectivo o ingreso) y sin «servir del inventario»' );
 	$como( $u_scouter );
 	$ok( str_contains( ( new TiendaConfigView() )->render(), 'No tienes acceso' ), 'la configuración es de la administración de la tienda' );
 	$como( $u_coord );

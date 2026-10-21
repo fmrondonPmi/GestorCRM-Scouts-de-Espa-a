@@ -11,17 +11,14 @@
 			return;
 		}
 		var bloque = form.querySelector( '[data-asde-iban]' );
-		var radios = form.querySelectorAll( 'input[name="forma"]' );
-		if ( ! bloque || ! radios.length ) {
+		var campo = form.querySelector( '[name="forma"]' );
+		if ( ! bloque || ! campo ) {
 			return;
 		}
 		function actualizar() {
-			var elegido = form.querySelector( 'input[name="forma"]:checked' );
-			bloque.hidden = ! elegido || 'transferencia' !== elegido.value;
+			bloque.hidden = 'transferencia' !== campo.value;
 		}
-		Array.prototype.forEach.call( radios, function ( r ) {
-			r.addEventListener( 'change', actualizar );
-		} );
+		campo.addEventListener( 'change', actualizar );
 		actualizar();
 	} );
 }() );

@@ -85,7 +85,7 @@ $cabecera = static function (): void {
 		</span>
 	</header>
 	<p class="asde-muted"><?php asde_e( 'Las recetas del grupo, con sus ingredientes. Los alérgenos de cada receta salen de los de sus ingredientes: no se escriben a mano. Aquí no hay datos de ninguna persona.' ); ?></p>
-	<form method="get" action="<?php echo esc_url( $url ); ?>" class="asde-filter">
+	<form method="get" action="<?php echo esc_url( $url ); ?>" class="asde-filter asde-filter--una-linea">
 		<label for="asde-rc-tipo"><?php asde_e( 'Tipo' ); ?></label>
 		<select id="asde-rc-tipo" name="tipo">
 			<option value=""><?php asde_e( 'Todos' ); ?></option>

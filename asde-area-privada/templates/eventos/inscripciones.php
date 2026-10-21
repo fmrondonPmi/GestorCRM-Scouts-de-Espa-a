@@ -245,8 +245,7 @@ $devolver = static function ( array $f, array $c ) use ( $campos, $fila_h, $form
 									<summary><?php asde_e( 'Beca o ajuste' ); ?></summary>
 									<form method="post" class="asde-form asde-form--compacta">
 										<?php echo $campos( 'evento_ajuste', $fila_h( $f ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
-										<label class="asde-check"><input type="radio" name="sentido" value="rebaja" checked> <?php asde_e( 'Rebaja o beca' ); ?></label>
-										<label class="asde-check"><input type="radio" name="sentido" value="recargo"> <?php asde_e( 'Recargo' ); ?></label>
+										<label><?php asde_e( 'Tipo' ); ?> <select name="sentido"><option value="rebaja" selected><?php asde_e( 'Rebaja o beca' ); ?></option><option value="recargo"><?php asde_e( 'Recargo' ); ?></option></select></label>
 										<label><?php asde_e( 'Importe (€)' ); ?> <input type="text" name="importe" inputmode="decimal" required></label>
 										<label><?php asde_e( 'Motivo' ); ?> <input type="text" name="motivo" maxlength="255" required></label>
 										<button type="submit" class="button"><?php asde_e( 'Guardar el ajuste' ); ?></button>

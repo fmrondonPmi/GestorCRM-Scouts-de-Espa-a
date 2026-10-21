@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.48.0
+Stable tag: 0.49.0
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -61,6 +61,12 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.49.0 =
+* Shop: each group can add a link to its public shop in the website's main menu (text set in the shop settings; no text, no link). Manuals and help updated for the new shop flow.
+
+= 0.48.1 =
+* Screens: filters and action rows (search, status, dates, "mark as paid", adjustments, contact log, material reservation, new refund…) now go on a single line where they fit, with the fewest fields possible (drop-downs instead of radio buttons); on narrow screens they wrap without overflowing.
 
 = 0.48.0 =
 * Shop: new "Pedido de camisas" tab (orders to the supplier). Coordination groups what customers have already paid and the shop does not have in stock, creates the order to the supplier (downloadable as Excel) and marks it as received when it arrives; anything that arrives beyond what was ordered is added to the shop stock. Customer orders that go in a supplier order cannot be delivered until it arrives. The old "next supplier order" box in the orders screen is replaced by a link to the new tab.
@@ -212,6 +218,12 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * CRM registrations tested end to end in a browser against the simulated SinergiaCRM API (development only).
 
 == Upgrade Notice ==
+
+= 0.49.0 =
+Optional link to the public shop in the main menu. No database changes.
+
+= 0.48.1 =
+Layout of filters and action rows. No database changes.
 
 = 0.48.0 =
 New "Pedido de camisas" tab in the shop. Adds a table and a column (added automatically).

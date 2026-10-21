@@ -66,7 +66,7 @@ defined( 'ABSPATH' ) || exit;
 	<?php if ( ! $sin_fam ) : ?>
 		<p><?php asde_e( 'No hay socios activos sin familia.' ); ?></p>
 	<?php else : ?>
-		<form method="post" class="asde-filter">
+		<form method="post" class="asde-filter asde-filter--una-linea">
 			<?php wp_nonce_field( 'asde_familias' ); ?>
 			<input type="hidden" name="asde_action" value="anadir">
 			<input type="hidden" name="familia" value="<?php echo (int) $familia['id']; ?>">

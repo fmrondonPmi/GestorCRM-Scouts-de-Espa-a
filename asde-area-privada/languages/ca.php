@@ -1585,7 +1585,6 @@ return array(
 	'Confirmado el %2$s' => 'Confirmada el %2$s',
 	'Confirmado por %1$s el %2$s' => 'Confirmada per %1$s el %2$s',
 	'Cómo pagar (lo ven las familias al pedir)' => 'Com pagar (ho veuen les famílies en demanar)',
-	'Cómo se ha pagado' => 'Com s\'ha pagat',
 	'Efectivo' => 'Efectiu',
 	'El grupo lo ha marcado como entregado: confírmalo cuando lo tengas.' => 'El grup l\'ha marcada com a lliurada: confirma-ho quan la tinguis.',
 	'En curso' => 'En curs',
@@ -4163,7 +4162,6 @@ return array(
 	'Ese reintegro ya se ha revisado.' => 'Aquest reintegrament ja s\'ha revisat.',
 	'Evento (si es de uno)' => 'Esdeveniment (si és d\'un)',
 	'Fecha del pago' => 'Data del pagament',
-	'IBAN donde cobrarlo (solo por transferencia)' => 'IBAN on cobrar-ho (només per transferència)',
 	'Indica el motivo del rechazo.' => 'Indica el motiu del rebuig.',
 	'Indica la fecha del pago (no posterior a hoy).' => 'Indica la data del pagament (no posterior a avui).',
 	'La fecha del gasto no puede ser futura ni de hace más de un año.' => 'La data de la despesa no pot ser futura ni de fa més d\'un any.',
@@ -4242,4 +4240,10 @@ return array(
 	'Recibido el %s' => 'Rebut el %s',
 	'Todavía no ha llegado del proveedor: se podrá entregar cuando Coordinación marque su pedido como recibido.' => 'Encara no ha arribat del proveïdor: es podrà lliurar quan Coordinació marqui la seva comanda com a rebuda.',
 	'Todavía no se ha hecho ningún pedido al proveedor.' => 'Encara no s\'ha fet cap comanda al proveïdor.',
+
+	// v0.48.1
+	'IBAN (solo por transferencia)' => 'IBAN (només per transferència)',
+
+	// v0.49: enlace de la tienda en el menu
+	'Enlace en el menú de la web (texto; vacío = sin enlace)' => 'Enllaç al menú de la web (text; buit = sense enllaç)',
 );

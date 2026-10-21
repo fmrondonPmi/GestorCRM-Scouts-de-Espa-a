@@ -148,20 +148,16 @@ $campos  = static function ( int $linea = 0 ) use ( $e ): string {
 			<form method="post" action="<?php echo esc_url( $url_material ); ?>" class="asde-form">
 				<?php echo $campos(); // phpcs:ignore WordPress.Security.EscapeOutput ?>
 				<input type="hidden" name="asde_action" value="material_anadir">
-				<p>
-					<label for="asde-ma-material"><?php asde_e( 'Material' ); ?></label>
-					<select id="asde-ma-material" name="material" required>
+				<p class="asde-form__fila asde-form__fila--una-linea">
+					<label for="asde-ma-material"><?php asde_e( 'Material' ); ?> <select id="asde-ma-material" name="material" required>
 						<option value="">—</option>
 						<?php foreach ( $reservable as $m ) : ?>
 							<option value="<?php echo (int) $m['id']; ?>"><?php echo esc_html( $m['descripcion'] . ' (' . (int) $m['cantidad'] . ')' ); ?></option>
 						<?php endforeach; ?>
-					</select>
+					</select></label>
+					<label for="asde-ma-cantidad"><?php asde_e( 'Cantidad' ); ?> <input type="number" id="asde-ma-cantidad" name="cantidad" min="1" max="99999" value="1" required></label>
+					<button type="submit" class="button"><?php asde_e( 'Reservar' ); ?></button>
 				</p>
-				<p>
-					<label for="asde-ma-cantidad"><?php asde_e( 'Cantidad' ); ?></label>
-					<input type="number" id="asde-ma-cantidad" name="cantidad" min="1" max="99999" value="1" required>
-				</p>
-				<p><button type="submit" class="button"><?php asde_e( 'Reservar' ); ?></button></p>
 			</form>
 		<?php endif; ?>
 		<?php if ( $habitual ) : ?>

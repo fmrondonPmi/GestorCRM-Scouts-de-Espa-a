@@ -27,7 +27,7 @@ $fecha = static fn( string $f ): string => wp_date( 'd/m/Y', strtotime( $f . ' U
 		<span class="asde-actions"><a href="<?php echo esc_url( $url ); ?>"><?php asde_e( 'Volver a la gestión' ); ?></a></span>
 	</header>
 	<p class="asde-muted"><?php asde_e( 'Lo vendido en la tienda según los pedidos, sin contar los cancelados. Elige el periodo por la fecha en que se hizo el pedido; sin fechas salen todos.' ); ?></p>
-	<form method="get" action="<?php echo esc_url( $url ); ?>" class="asde-filter">
+	<form method="get" action="<?php echo esc_url( $url ); ?>" class="asde-filter asde-filter--una-linea">
 		<input type="hidden" name="informe" value="1">
 		<label for="asde-inf-desde"><?php asde_e( 'Desde' ); ?></label>
 		<input type="date" id="asde-inf-desde" name="desde" value="<?php echo esc_attr( $desde ); ?>">

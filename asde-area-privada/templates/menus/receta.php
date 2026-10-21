@@ -144,7 +144,7 @@ $val        = static fn( string $k ) => $borrador[ $k ] ?? $r[ $k ] ?? '';
 <?php if ( $r['id'] && $escaladas ) : ?>
 	<section class="asde-card" data-asde-inicio="abierto">
 		<h3 class="asde-card__title"><?php asde_e( 'Cantidades según los comensales' ); ?></h3>
-		<form method="get" action="<?php echo esc_url( $url ); ?>" class="asde-filter">
+		<form method="get" action="<?php echo esc_url( $url ); ?>" class="asde-filter asde-filter--una-linea">
 			<input type="hidden" name="receta" value="<?php echo (int) $r['id']; ?>">
 			<label for="asde-rec-com"><?php asde_e( 'Comensales' ); ?></label>
 			<input type="number" id="asde-rec-com" name="comensales" min="1" max="5000" value="<?php echo (int) $comensales; ?>">
