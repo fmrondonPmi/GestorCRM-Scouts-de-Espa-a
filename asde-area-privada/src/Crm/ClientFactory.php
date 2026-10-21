@@ -3,6 +3,8 @@ namespace AsdeBalears\AreaPrivada\Crm;
 
 use AsdeBalears\AreaPrivada\Domain\Grupo;
 use AsdeBalears\AreaPrivada\Domain\Grupos;
+use AsdeBalears\AreaPrivada\Domain\Oficina;
+use AsdeBalears\AreaPrivada\Domain\Organizacion;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -24,6 +26,16 @@ final class ClientFactory {
 		return new SinergiaV41Client( $url, $cred['usuario'], $cred['clave'] );
 	}
 
+	/** Cliente con la credencial de la oficina federal; null si falta la URL o la credencial. */
+	public static function para_oficina(): ?SinergiaV41Client {
+		$url  = Settings::url();
+		$cred = Oficina::credenciales();
+		if ( '' === $url || ! $cred ) {
+			return null;
+		}
+		return new SinergiaV41Client( $url, $cred['usuario'], $cred['clave'] );
+	}
+
 	/**
 	 * Cliente de lectura del grupo en el que se trabaja. Solo si el grupo está
 	 * verificado (se conoce su grupo de seguridad en el CRM), para poder filtrar
@@ -33,6 +45,14 @@ final class ClientFactory {
 		$grupo = Grupo::actual();
 		if ( ! $grupo || '' === $grupo['crm_id'] ) {
 			return null;
+		}
+		// v0.50 (doc 50, fase 2): en la web de la oficina, quien tiene la capability multigrupo lee con la credencial de la oficina.
+		if ( Organizacion::es_oficina() && current_user_can( 'asde_multigrupo' ) ) {
+			$clave = 'oficina:' . $grupo['numero'];
+			if ( ! array_key_exists( $clave, self::$clientes ) ) {
+				self::$clientes[ $clave ] = self::para_oficina();
+			}
+			return self::$clientes[ $clave ];
 		}
 		if ( ! array_key_exists( $grupo['numero'], self::$clientes ) ) {
 			self::$clientes[ $grupo['numero'] ] = self::para_grupo( $grupo['numero'] );

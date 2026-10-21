@@ -63,6 +63,7 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 == Changelog ==
 
 = 0.50.0 =
+* Office web: the federal office can store its CRM credential (encrypted, with a connection test) and there is a new read-only "Oficina" role that can pick any group and sign in without a member record. Nothing changes for group sites.
 * New setting "Installation type" (Organisation settings): the plugin can be installed on a group's WordPress (default, nothing changes) or on the federal office's WordPress. It does not change any screen yet: it is the first step towards the office read-only view and the group invitation flow. It can be fixed with the ASDE_AP_MODO constant in wp-config.php.
 
 = 0.49.0 =
@@ -222,7 +223,7 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 == Upgrade Notice ==
 
 = 0.50.0 =
-New "Installation type" setting (group or office). Nothing changes for existing sites. No database changes.
+Office credential and role (office sites only). New "Installation type" setting (group or office). Nothing changes for existing sites. No database changes.
 
 = 0.49.0 =
 Optional link to the public shop in the main menu. No database changes.

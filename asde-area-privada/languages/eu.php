@@ -4246,4 +4246,10 @@ return array(
 
 	// v0.49: enlace de la tienda en el menu
 	'Enlace en el menú de la web (texto; vacío = sin enlace)' => 'Webguneko menuko esteka (testua; hutsik = esteka gabe)',
+
+	// v0.50: credencial y rol de la oficina
+	'Conexión correcta. La credencial de la oficina ve %d Grupos Scouts.' => 'Konexioa zuzena. Bulegoaren kredentzialak %d Talde Eskautak ikusten ditu.',
+	'Faltan el usuario o la contraseña del CRM de la oficina.' => 'Bulegoaren CRMko erabiltzailea edo pasahitza falta da.',
+	'La web no puede comprobar que esta credencial sea de solo lectura: confírmalo con la oficina en el CRM.' => 'Webguneak ezin du egiaztatu kredentzial hau irakurtzeko soilik denik: berretsi ezazu bulegoarekin CRMan.',
+	'Oficina' => 'Bulegoa',
 );

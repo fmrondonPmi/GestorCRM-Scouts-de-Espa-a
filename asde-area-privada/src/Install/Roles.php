@@ -18,8 +18,9 @@ final class Roles {
 	public const TUTOR        = 'asde_tutor';
 	public const PARTICIPANTE = 'asde_participante';
 	public const INTENDENTE   = 'asde_intendente';
+	public const OFICINA      = 'asde_oficina'; // v0.50 (doc 50): oficina federal, solo lectura de todos los grupos.
 
-	public const ALL = array( self::SCOUTER, self::SECRETARIA, self::COORDINACION, self::TESORERIA, self::TUTOR, self::PARTICIPANTE, self::INTENDENTE );
+	public const ALL = array( self::SCOUTER, self::SECRETARIA, self::COORDINACION, self::TESORERIA, self::TUTOR, self::PARTICIPANTE, self::INTENDENTE, self::OFICINA );
 
 	/** @return array<string, array{0:string, 1:array<string,bool>}> rol => [etiqueta, capabilities] */
 	public static function definitions(): array {
@@ -112,6 +113,16 @@ final class Roles {
 					'asde_reintegros'        => true, // Reintegros (v0.47): pide los suyos y marca pagados los de todos.
 					'asde_reintegros_pagar'  => true,
 					'asde_eventos_config'    => true,
+				),
+			),
+			self::OFICINA      => array(
+				'Oficina',
+				$base + array(
+					'asde_multigrupo'   => true, // Elige el grupo que consulta y lee con la credencial de la oficina.
+					'asde_solo_lectura' => true, // Ninguna escritura: la bloquea el Router (fase 3).
+					'asde_manage_users' => true, // Solo ver Personas y Usuarios.
+					'asde_reports'      => true,
+					'asde_view_health'  => true,
 				),
 			),
 			self::TESORERIA    => array(

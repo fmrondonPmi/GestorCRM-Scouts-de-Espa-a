@@ -3,6 +3,7 @@ namespace AsdeBalears\AreaPrivada\Auth;
 
 use AsdeBalears\AreaPrivada\Crm\CrmException;
 use AsdeBalears\AreaPrivada\Crm\PersonaRepository;
+use AsdeBalears\AreaPrivada\Domain\Organizacion;
 use AsdeBalears\AreaPrivada\Domain\Persona;
 use AsdeBalears\AreaPrivada\Install\Roles;
 use AsdeBalears\AreaPrivada\Usuarios\Contacto;
@@ -100,8 +101,13 @@ final class Ambito {
 		return $vigentes;
 	}
 
+	/** v0.50 (doc 50): la oficina federal entra sin ficha, solo en una web de la oficina. */
+	public function es_oficina(): bool {
+		return Organizacion::es_oficina() && in_array( Roles::OFICINA, Usuarios::roles_asde( $this->user ), true );
+	}
+
 	public function puede_acceder(): bool {
-		return $this->es_admin() || (bool) $this->roles_vigentes();
+		return $this->es_admin() || $this->es_oficina() || (bool) $this->roles_vigentes();
 	}
 
 	public function motivo(): string {

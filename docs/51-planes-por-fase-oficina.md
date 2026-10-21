@@ -190,3 +190,17 @@ Desarrolla el doc 50 (decisiones y respuestas P-168…P-176, todas cerradas el 2
 - **Informe de pagos** para la OF: se deja fuera (es dato de Tesorería, no del CRM); si la OF lo quiere, otra petición.
 - **Contraseña tras «Comprobar acceso»** (fase 5): reescribirla al enviar, o guardarla cifrada de forma temporal ligada al token. Se decide con una prueba de que no aparece en el HTML.
 - **Qué hace el ICS** (fase 6): el CIF del grupo no basta para el identificador del acreedor; solo se rellena el nombre y la dirección.
+
+---
+
+## Avance
+
+- ✅ **Fase 1 (v0.44 → renumerada v0.50.0 al fusionarse con la línea de la tienda):** tipo de instalación Grupo/Oficina.
+- ✅ **Fase 2 (2026-10-21, v0.50.0, rama `Oficina-Fase2`):** credencial y rol de la Oficina.
+  - `Domain\Oficina` (opción `asde_ap_oficina`, sin autoload, contraseña cifrada con `Crypto`; `datos()` nunca la devuelve; `probar()` entra y cuenta los Grupos Scouts que ve, con el aviso de que la web no puede comprobar que la credencial sea de solo lectura).
+  - `ClientFactory::para_oficina()` y `reader()`: solo en una web de oficina, con la capability `asde_multigrupo` y con el grupo elegido verificado (`crm_id`); si no, falla cerrado.
+  - Rol `asde_oficina` («Oficina») con `asde_multigrupo`, `asde_solo_lectura`, `asde_manage_users`, `asde_reports` y `asde_view_health`; ninguna de edición, tesorería, tienda, inventario ni eventos. No se ofrece al dar de alta personas en un grupo.
+  - `Ambito::es_oficina()`: entra sin ficha, solo en una web de oficina. El acceso y la pantalla de entrada tratan `asde_multigrupo` como a un administrador para elegir grupo.
+  - Wordfence: 2FA **obligatoria** para este rol (`Wordfence::VERSION` 5).
+  - Pantalla «Credencial del CRM de la oficina» en wp-admin → Organización federada (solo en modo Oficina): guardar, probar y borrar; la contraseña no se vuelve a mostrar.
+  - Pruebas: `tests/oficina.php` (38). Pendiente de la fase 3: el bloqueo de escritura que usa `asde_solo_lectura`.

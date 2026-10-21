@@ -129,7 +129,7 @@ final class AccesoView extends View {
 
 		Intentos::exito( $cuenta );
 		// Administradores: el grupo elegido es su grupo de trabajo en el área privada.
-		if ( $user->has_cap( 'manage_options' ) ) {
+		if ( $user->has_cap( 'manage_options' ) || $user->has_cap( 'asde_multigrupo' ) ) { // v0.50: también la oficina federal.
 			update_user_meta( $user->ID, Grupo::META_CONTEXTO, $grupo );
 		}
 		wp_set_current_user( $user->ID );

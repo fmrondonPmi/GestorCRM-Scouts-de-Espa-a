@@ -4246,4 +4246,10 @@ return array(
 
 	// v0.49: enlace de la tienda en el menu
 	'Enlace en el menú de la web (texto; vacío = sin enlace)' => 'Ligazón no menú da web (texto; baleiro = sen ligazón)',
+
+	// v0.50: credencial y rol de la oficina
+	'Conexión correcta. La credencial de la oficina ve %d Grupos Scouts.' => 'Conexión correcta. A credencial da oficina ve %d Grupos Scouts.',
+	'Faltan el usuario o la contraseña del CRM de la oficina.' => 'Faltan o usuario ou o contrasinal do CRM da oficina.',
+	'La web no puede comprobar que esta credencial sea de solo lectura: confírmalo con la oficina en el CRM.' => 'A web non pode comprobar que esta credencial sexa de só lectura: confírmao coa oficina no CRM.',
+	'Oficina' => 'Oficina',
 );

@@ -64,7 +64,7 @@ final class AccessHooks {
 	public static function comprobar_acceso( $user, $username = '', $password = '' ) {
 		// Pantalla de acceso: el usuario tiene que ser del grupo elegido.
 		if ( null !== self::$grupo_formulario ) {
-			if ( ! $user instanceof \WP_User || $user->has_cap( 'manage_options' ) ) {
+			if ( ! $user instanceof \WP_User || $user->has_cap( 'manage_options' ) || $user->has_cap( 'asde_multigrupo' ) ) {
 				return $user;
 			}
 			$grupo = Grupos::de_usuario( $user );

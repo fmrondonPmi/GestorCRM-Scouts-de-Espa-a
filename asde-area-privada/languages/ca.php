@@ -4246,4 +4246,10 @@ return array(
 
 	// v0.49: enlace de la tienda en el menu
 	'Enlace en el menú de la web (texto; vacío = sin enlace)' => 'Enllaç al menú de la web (text; buit = sense enllaç)',
+
+	// v0.50: credencial y rol de la oficina
+	'Conexión correcta. La credencial de la oficina ve %d Grupos Scouts.' => 'Connexió correcta. La credencial de l\'oficina veu %d Grups Escoltes.',
+	'Faltan el usuario o la contraseña del CRM de la oficina.' => 'Falten l\'usuari o la contrasenya del CRM de l\'oficina.',
+	'La web no puede comprobar que esta credencial sea de solo lectura: confírmalo con la oficina en el CRM.' => 'La web no pot comprovar que aquesta credencial sigui de només lectura: confirma-ho amb l\'oficina al CRM.',
+	'Oficina' => 'Oficina',
 );

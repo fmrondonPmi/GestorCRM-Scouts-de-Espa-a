@@ -5,6 +5,7 @@ use AsdeBalears\AreaPrivada\Audit\Logger;
 use AsdeBalears\AreaPrivada\Domain\Grupos;
 use AsdeBalears\AreaPrivada\Domain\Identidad;
 use AsdeBalears\AreaPrivada\Domain\NumeroSocio;
+use AsdeBalears\AreaPrivada\Domain\Oficina;
 use AsdeBalears\AreaPrivada\Domain\Organizacion;
 use AsdeBalears\AreaPrivada\Frontend\TemplateLoader;
 use AsdeBalears\AreaPrivada\Usuarios\MigracionUsuario;
@@ -24,12 +25,41 @@ final class OrganizacionPage {
 	private const ACCION     = 'asde_ap_organizacion';
 	private const ACCION_MIGRAR = 'asde_ap_migrar_usuarios';
 	private const AVISO      = 'asde_ap_organizacion_aviso_';
+	private const ACCION_OFICINA = 'asde_ap_oficina_credencial';
 
 	public function register(): void {
 		add_action( 'admin_menu', array( $this, 'add_menu' ), 11 );
 		add_action( 'admin_post_' . self::ACCION, array( $this, 'handle_guardar' ) );
 		add_action( 'admin_post_' . self::ACCION_MIGRAR, array( $this, 'handle_migrar' ) );
+		add_action( 'admin_post_' . self::ACCION_OFICINA, array( $this, 'handle_oficina' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'scripts' ) );
+	}
+
+	/** Credencial del CRM de la oficina federal (v0.50, doc 50 fase 2): guardar o probar. La contraseña no se vuelve a mostrar. */
+	public function handle_oficina(): void {
+		if ( ! current_user_can( self::CAPABILITY ) ) {
+			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-area-privada' ), 403 );
+		}
+		check_admin_referer( self::ACCION_OFICINA );
+		$post = wp_unslash( $_POST ); // phpcs:ignore WordPress.Security.NonceVerification
+		if ( ! Organizacion::es_oficina() ) {
+			$this->aviso( 'error', 'La credencial de la oficina solo se guarda en una web de tipo «La oficina federal».' );
+		} elseif ( isset( $post['probar'] ) ) {
+			$r = Oficina::probar();
+			Logger::log( 'oficina_credencial_probada', 'sitio', '', array( 'ok' => $r->ok ) );
+			$this->aviso( $r->ok ? 'success' : 'error', $r->message . ( $r->warnings ? ' ' . implode( ' ', $r->warnings ) : '' ) );
+		} elseif ( isset( $post['olvidar'] ) ) {
+			Oficina::olvidar_credencial();
+			Logger::log( 'oficina_credencial_borrada', 'sitio', '' );
+			$this->aviso( 'success', 'Credencial de la oficina borrada.' );
+		} elseif ( Oficina::guardar( sanitize_text_field( (string) ( $post['usuario'] ?? '' ) ), (string) ( $post['clave'] ?? '' ) ) ) {
+			Logger::log( 'oficina_credencial_guardada', 'sitio', '', array( 'usuario' => true ) ); // Solo que se guardó: ni usuario ni contraseña.
+			$this->aviso( 'success', 'Credencial de la oficina guardada. Pulsa «Probar la conexión».' );
+		} else {
+			$this->aviso( 'error', 'No se ha guardado: escribe el usuario y, la primera vez, la contraseña.' );
+		}
+		wp_safe_redirect( self::url() );
+		exit;
 	}
 
 	/** Renombra las cuentas existentes al usuario de acceso elegido (v0.14, doc 27). */
@@ -289,6 +319,40 @@ final class OrganizacionPage {
 
 				<?php submit_button( __( 'Guardar la organización', 'asde-area-privada' ) ); ?>
 			</form>
+
+			<?php if ( Organizacion::es_oficina() ) : ?>
+				<?php $of = Oficina::datos(); ?>
+				<h2><?php esc_html_e( 'Credencial del CRM de la oficina', 'asde-area-privada' ); ?></h2>
+				<p class="description"><?php esc_html_e( 'Con esta credencial el personal de la oficina consulta, en solo lectura, los grupos (uno cada vez). Pide a la oficina un usuario del CRM que solo pueda leer. La contraseña se guarda cifrada y no se vuelve a mostrar.', 'asde-area-privada' ); ?></p>
+				<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" autocomplete="off">
+					<input type="hidden" name="action" value="<?php echo esc_attr( self::ACCION_OFICINA ); ?>">
+					<?php wp_nonce_field( self::ACCION_OFICINA ); ?>
+					<table class="form-table" role="presentation">
+						<tr>
+							<th scope="row"><label for="asde-of-usuario"><?php esc_html_e( 'Usuario del CRM', 'asde-area-privada' ); ?></label></th>
+							<td><input type="text" id="asde-of-usuario" name="usuario" value="<?php echo esc_attr( $of['usuario'] ); ?>" class="regular-text" autocomplete="off"></td>
+						</tr>
+						<tr>
+							<th scope="row"><label for="asde-of-clave"><?php esc_html_e( 'Contraseña', 'asde-area-privada' ); ?></label></th>
+							<td>
+								<input type="password" id="asde-of-clave" name="clave" value="" class="regular-text" autocomplete="new-password" placeholder="<?php echo esc_attr( $of['tiene_clave'] ? '••••••••' : '' ); ?>">
+								<p class="description"><?php echo esc_html( $of['tiene_clave'] ? __( 'Guardada. Déjala vacía para conservarla.', 'asde-area-privada' ) : __( 'Todavía no hay ninguna guardada.', 'asde-area-privada' ) ); ?></p>
+							</td>
+						</tr>
+						<?php if ( $of['probado'] ) : ?>
+							<tr>
+								<th scope="row"><?php esc_html_e( 'Última prueba', 'asde-area-privada' ); ?></th>
+								<td><?php echo esc_html( wp_date( 'd/m/Y H:i', $of['probado'] ) . ' · ' . $of['mensaje'] ); ?></td>
+							</tr>
+						<?php endif; ?>
+					</table>
+					<p>
+						<button type="submit" class="button button-primary"><?php esc_html_e( 'Guardar la credencial', 'asde-area-privada' ); ?></button>
+						<button type="submit" name="probar" value="1" class="button" <?php disabled( ! $of['tiene_clave'] ); ?>><?php esc_html_e( 'Probar la conexión', 'asde-area-privada' ); ?></button>
+						<button type="submit" name="olvidar" value="1" class="button" <?php disabled( ! $of['tiene_clave'] ); ?>><?php esc_html_e( 'Borrar la credencial', 'asde-area-privada' ); ?></button>
+					</p>
+				</form>
+			<?php endif; ?>
 
 			<?php $plan = MigracionUsuario::plan(); ?>
 			<h2><?php esc_html_e( 'Renombrar las cuentas existentes', 'asde-area-privada' ); ?></h2>
