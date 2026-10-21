@@ -3483,7 +3483,6 @@ return array(
 	'Ahora mismo ninguna persona de tu cuenta tiene la membresía activa, así que no se puede hacer ningún pedido.' => 'Une honetan zure kontuko inork ez du kidetasun aktiborik, beraz ezin da eskaerarik egin.',
 	'El IBAN no parece válido; no se ha guardado.' => 'IBANa ez dirudi baliozkoa; ez da gorde.',
 	'El teléfono de Bizum no parece válido; no se ha guardado.' => 'Bizumeko telefonoa ez dirudi baliozkoa; ez da gorde.',
-	'Indica cómo se ha pagado (efectivo, ingreso o Bizum), la fecha (no posterior a hoy) y el importe.' => 'Adierazi nola ordaindu den (eskudirua, sarrera edo Bizuma), data (gaurkoa baino geroagokoa ez) eta zenbatekoa.',
 	'Inventario de la tienda' => 'Dendaren inbentarioa',
 	'Pedido <strong>%1$s</strong> enviado: %2$s. Ahora falta pagarlo: en «Tus pedidos» tienes cómo hacerlo.' => '<strong>%1$s</strong> eskaera bidalita: %2$s. Orain ordaindu behar da: «Zure eskaerak» atalean duzu nola egin.',
 	'En físico (a Tesorería)' => 'Eskuz (Diruzaintzari)',
@@ -4131,4 +4130,20 @@ return array(
 	'Elige la talla de «%s».' => 'Aukeratu «%s» produktuaren neurria.',
 	'Añadir otra talla' => 'Gehitu beste neurri bat',
 	'Elige la talla…' => 'Aukeratu neurria…',
+
+	// v0.46: datafono
+	'El grupo no cobra con datáfono.' => 'Taldeak ez du datafonoz kobratzen.',
+	'Ese ingreso ya está revisado o no existe.' => 'Sarrera hori jada berrikusita dago edo ez da existitzen.',
+	'Los cobros con datáfono ya no cuadran con ese ingreso. Revisa la lista.' => 'Datafonoko kobrantzak jada ez datoz bat sarrera horrekin. Berrikusi zerrenda.',
+	'Paga con tarjeta, en persona, con el datáfono del grupo al recogerlo, indicando el nº de pedido %s.' => 'Ordaindu txartelaz, pertsonalki, taldeko datafonoarekin jasotzean, eskaeraren zenbakia (%s) adieraziz.',
+	'Abono del datáfono conciliado con el ingreso del banco.' => 'Datafonoaren abonua bankuko sarrerarekin bateratu da.',
+	'Indica cómo se ha pagado (efectivo, ingreso, Bizum o datáfono), la fecha (no posterior a hoy) y el importe.' => 'Adierazi nola ordaindu den (eskudirua, sarrera, Bizum edo datafonoa), data (gaurkoa baino geroagokoa ez) eta zenbatekoa.',
+	'Datáfono (tarjeta, en persona)' => 'Datafonoa (txartela, pertsonalki)',
+	'Aceptamos pagar con datáfono (tarjeta, en persona; lo marca Tesorería al cobrar)' => 'Datafonoz ordaintzea onartzen dugu (txartela, pertsonalki; Diruzaintzak markatzen du kobratzean)',
+	'Coincide con lo cobrado' => 'Kobratutakoarekin bat dator',
+	'Conciliar este abono' => 'Bateratu abonu hau',
+	'Datáfono / TPV' => 'Datafonoa / TPV',
+	'El banco abona de una vez lo cobrado con el datáfono, menos su comisión. Estos ingresos cuadran con los cobros de los últimos días. Compruébalos y confirma cada uno: no se concilia nada solo.' => 'Bankuak datafonoz kobratutakoa batera abonatzen du, bere komisioa kenduta. Sarrera hauek azken egunetako kobrantzekin bat datoz. Egiaztatu eta berretsi bakoitza: ez da ezer bere kabuz bateratzen.',
+	'Ingresos del banco que parecen el abono del datáfono' => 'Datafonoaren abonua dirudien bankuko sarrerak',
+	'Se cobró %s (comisión del banco)' => '%s kobratu zen (bankuaren komisioa)',
 );

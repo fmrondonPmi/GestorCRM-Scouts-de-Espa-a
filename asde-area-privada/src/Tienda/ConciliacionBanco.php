@@ -111,6 +111,120 @@ final class ConciliacionBanco {
 		return true;
 	}
 
+	// ---------------------------------------------------------------------
+	// El abono del datáfono (v0.46, doc 52, T3)
+	// ---------------------------------------------------------------------
+
+	/** Nota (en castellano, como lo guardado) del ingreso revisado por un abono del datáfono. */
+	private const NOTA_DATAFONO = 'Abono del datáfono de la tienda (%d pedidos)';
+
+	/** Un abono llega unos días después de los cobros: se buscan los de los 10 días anteriores al ingreso. */
+	private const DIAS_DATAFONO = 10;
+
+	/** El banco abona lo cobrado menos su comisión: se admite hasta un 5 % menos. */
+	private const COMISION_MAX = 0.05;
+
+	/**
+	 * Los cobros del datáfono sin conciliar que explican este ingreso: los de los últimos días cuyo total es el del ingreso
+	 * (o hasta un 5 % más, por la comisión del banco). Vacío si no cuadra.
+	 *
+	 * @param array[] $pedidos Pedidos cobrados con datáfono y sin conciliar.
+	 * @param array   $mov     Ingreso del banco.
+	 * @return array[]
+	 */
+	private static function cobros_del_abono( array $pedidos, array $mov ): array {
+		$hasta = strtotime( $mov['fecha'] . ' 23:59:59' );
+		$desde = strtotime( $mov['fecha'] . ' 00:00:00' ) - self::DIAS_DATAFONO * DAY_IN_SECONDS;
+		$set   = array_values(
+			array_filter(
+				$pedidos,
+				static function ( array $p ) use ( $desde, $hasta ): bool {
+					$t = $p['pago_fecha'] ? strtotime( $p['pago_fecha'] . ' 12:00:00' ) : false;
+					return false !== $t && $t >= $desde && $t <= $hasta;
+				}
+			)
+		);
+		$suma = round( array_sum( array_column( $set, 'pago_importe' ) ), 2 );
+		if ( ! $set || $suma <= 0 || $mov['importe'] > $suma + 0.005 || $mov['importe'] < $suma * ( 1 - self::COMISION_MAX ) ) {
+			return array();
+		}
+		return $set;
+	}
+
+	/**
+	 * Ingresos del banco por conciliar que parecen el abono de lo cobrado con el datáfono. Nunca se marca nada solo.
+	 *
+	 * @return array[] Cada uno: mov, pedidos, suma, exacto.
+	 */
+	public static function sugerencias_datafono(): array {
+		if ( ! self::disponible() ) {
+			return array();
+		}
+		$pedidos = PedidosTable::tpv_sin_conciliar( Grupo::numero() );
+		if ( ! $pedidos ) {
+			return array();
+		}
+		$out = array();
+		foreach ( BancoTable::movimientos( array( 'estado' => BancoTable::PENDIENTE, 'tipo' => 'ingresos' ) ) as $m ) {
+			$set = self::cobros_del_abono( $pedidos, $m );
+			if ( $set ) {
+				$suma  = round( array_sum( array_column( $set, 'pago_importe' ) ), 2 );
+				$out[] = array(
+					'mov'     => $m,
+					'pedidos' => $set,
+					'suma'    => $suma,
+					'exacto'  => abs( $m['importe'] - $suma ) < 0.005,
+				);
+			}
+		}
+		return $out;
+	}
+
+	/**
+	 * Concilia el abono con estos cobros. Se recalcula todo aquí: el ingreso tiene que seguir por conciliar y los pedidos
+	 * mandados tienen que ser exactamente los que explican el ingreso (nunca se fía de lo que manda el formulario).
+	 *
+	 * @param int[] $ids Pedidos que se concilian.
+	 * @return true|\WP_Error
+	 */
+	public static function confirmar_datafono( int $mov_id, array $ids ) {
+		if ( ! self::disponible() ) {
+			return new \WP_Error( 'asde_tienda', asde_t( 'El banco solo lo usan Tesorería y quien lleve la configuración de Tesorería, con el módulo Banco activo.' ) );
+		}
+		$m = BancoTable::obtener( $mov_id );
+		if ( ! $m || BancoTable::PENDIENTE !== $m['estado'] || $m['importe'] <= 0 ) {
+			return new \WP_Error( 'asde_tienda', asde_t( 'Ese ingreso ya está revisado o no existe.' ) );
+		}
+		$set      = self::cobros_del_abono( PedidosTable::tpv_sin_conciliar( Grupo::numero() ), $m );
+		$esperado = array_map( 'intval', array_column( $set, 'id' ) );
+		$ids      = array_values( array_unique( array_map( 'intval', $ids ) ) );
+		sort( $esperado );
+		sort( $ids );
+		if ( ! $set || $esperado !== $ids ) {
+			return new \WP_Error( 'asde_tienda', asde_t( 'Los cobros con datáfono ya no cuadran con ese ingreso. Revisa la lista.' ) );
+		}
+		PedidosTable::marcar_banco( $ids, $mov_id );
+		BancoTable::revisar( $mov_id, 0, sprintf( self::NOTA_DATAFONO, count( $ids ) ) );
+		Logger::log( 'tienda_banco_datafono', 'tienda', (string) $mov_id, array( 'pedidos' => count( $ids ), 'importe' => $m['importe'] ) );
+		return true;
+	}
+
+	/** Si el cobro de este pedido se concilió con un abono del banco, el ingreso vuelve a estar por conciliar y sus pedidos, a estar sueltos. @return bool Si había algo. */
+	public static function deshacer_datafono( array $p ): bool {
+		$mov = (int) ( $p['banco_id'] ?? 0 );
+		if ( $mov <= 0 ) {
+			return false;
+		}
+		PedidosTable::quitar_banco( $mov );
+		if ( Modulos::activo( Modulos::BANCO ) && current_user_can( 'asde_tesoreria_config' ) ) {
+			$m = BancoTable::obtener( $mov );
+			if ( $m && str_starts_with( (string) $m['nota'], 'Abono del datáfono de la tienda' ) ) {
+				Conciliacion::deshacer( $mov );
+			}
+		}
+		return true;
+	}
+
 	/** Si el pago de este pedido salió de un ingreso del banco, ese ingreso vuelve a estar por conciliar. @return int Movimientos devueltos. */
 	public static function deshacer( array $p ): int {
 		if ( ! Modulos::activo( Modulos::BANCO ) || ! current_user_can( 'asde_tesoreria_config' ) ) {

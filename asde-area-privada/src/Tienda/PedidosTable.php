@@ -27,6 +27,7 @@ final class PedidosTable {
 		'efectivo' => 'Efectivo',
 		'ingreso'  => 'Ingreso en cuenta',
 		'bizum'    => 'Bizum',
+		'tpv'      => 'Datáfono / TPV', // v0.46 (doc 52, T3): cobro con el datáfono del grupo, en persona.
 	);
 
 	/**
@@ -37,12 +38,14 @@ final class PedidosTable {
 		'transferencia' => 'Transferencia',
 		'bizum'         => 'Bizum',
 		'fisico'        => 'En físico (a Tesorería)',
+		'datafono'      => 'Datáfono (tarjeta, en persona)', // v0.46: solo si el grupo lo ha activado.
 	);
 
 	public const METODO_DE_FORMA = array(
 		'transferencia' => 'ingreso',
 		'bizum'         => 'bizum',
 		'fisico'        => 'efectivo',
+		'datafono'      => 'tpv',
 	);
 
 	/** v0.39: referencia del pago de un pedido que no cuesta nada. */
@@ -123,6 +126,7 @@ final class PedidosTable {
 				cancelado_en datetime NULL,
 				cancelado_motivo varchar(255) NOT NULL DEFAULT '',
 				inventario_id bigint(20) unsigned NOT NULL DEFAULT 0,
+				banco_id bigint(20) unsigned NOT NULL DEFAULT 0,
 				PRIMARY KEY  (id),
 				KEY grupo (grupo),
 				KEY socio (socio)
@@ -405,6 +409,30 @@ final class PedidosTable {
 		);
 	}
 
+	/**
+	 * Pedidos del grupo cobrados con el datáfono cuyo abono aún no se ha conciliado con el banco (v0.46, doc 52, T3).
+	 *
+	 * @return array[]
+	 */
+	public static function tpv_sin_conciliar( string $grupo ): array {
+		global $wpdb;
+		$filas = (array) $wpdb->get_results( $wpdb->prepare( "SELECT * FROM %i WHERE grupo = %s AND pago_metodo = 'tpv' AND pago_en IS NOT NULL AND cancelado_en IS NULL AND banco_id = 0 ORDER BY pago_fecha ASC, id ASC", self::table(), $grupo ), ARRAY_A );
+		return array_map( array( self::class, 'preparar' ), $filas );
+	}
+
+	/** Apunta el ingreso del banco con el que se concilió el cobro de estos pedidos. @param int[] $ids */
+	public static function marcar_banco( array $ids, int $movimiento ): void {
+		foreach ( $ids as $id ) {
+			self::actualizar( (int) $id, array( 'banco_id' => $movimiento ) );
+		}
+	}
+
+	/** Suelta los pedidos de ese ingreso del banco (vuelven a estar por conciliar). @return int Cuántos. */
+	public static function quitar_banco( int $movimiento ): int {
+		global $wpdb;
+		return (int) $wpdb->query( $wpdb->prepare( 'UPDATE %i SET banco_id = 0 WHERE banco_id = %d AND grupo = %s', self::table(), $movimiento, Grupo::numero() ) );
+	}
+
 	private static function actualizar( int $id, array $datos ): bool {
 		global $wpdb;
 		return false !== $wpdb->update(
@@ -437,6 +465,7 @@ final class PedidosTable {
 			$f[ $k ] = (int) $f[ $k ];
 		}
 		$f['inventario_id'] = (int) ( $f['inventario_id'] ?? 0 );
+		$f['banco_id']      = (int) ( $f['banco_id'] ?? 0 ); // v0.46: el ingreso del banco con el que se concilió el abono del datáfono.
 		return $f;
 	}
 }

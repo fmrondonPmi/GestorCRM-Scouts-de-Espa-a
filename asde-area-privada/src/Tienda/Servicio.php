@@ -198,6 +198,9 @@ final class Servicio {
 		if ( 'fisico' === $forma && ! $es_socio ) {
 			return new \WP_Error( 'asde_tienda', asde_t( 'Pagar en físico a Tesorería solo está disponible para socios y socias.' ) );
 		}
+		if ( 'datafono' === $forma && ! Config::de()['datafono'] ) {
+			return new \WP_Error( 'asde_tienda', asde_t( 'El grupo no cobra con datáfono.' ) );
+		}
 		return $forma;
 	}
 
@@ -421,6 +424,9 @@ final class Servicio {
 			case 'fisico':
 				/* translators: %s: nº de pedido */
 				return array( sprintf( asde_t( 'Entrega el importe en físico a Tesorería, indicando el nº de pedido %s.' ), $num ) );
+			case 'datafono':
+				/* translators: %s: nº de pedido */
+				return array( sprintf( asde_t( 'Paga con tarjeta, en persona, con el datáfono del grupo al recogerlo, indicando el nº de pedido %s.' ), $num ) );
 		}
 		return array();
 	}

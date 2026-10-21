@@ -306,6 +306,54 @@ try {
 	$ok( 2 === count( ConciliacionBanco::sugerencias( PedidosTable::todos() ) ), 'y vuelve a sugerirse' );
 	$como( 0 );
 
+	echo "\n== Parte D2 · Abono del datáfono en el banco (v0.46) ==\n";
+	$hace3 = wp_date( 'Y-m-d', time() - 3 * DAY_IN_SECONDS );
+	$hace1 = wp_date( 'Y-m-d', time() - DAY_IN_SECONDS );
+	$vacio = array( 'camisa' => null, 'insignias' => array(), 'productos' => array() );
+	$t1    = (int) PedidosTable::crear( '990021', array( 'lobatos' ), false, $vacio, 20.0, false, '', 'datafono' );
+	$t2    = (int) PedidosTable::crear( '990022', array( 'scouts' ), false, $vacio, 10.0, false, '', 'datafono' );
+	PedidosTable::marcar_pago( $t1, $hace3, 'tpv', 20.0, 'Ticket 1' );
+	PedidosTable::marcar_pago( $t2, $hace3, 'tpv', 10.0, 'Ticket 2' );
+	$movs_d = BancoTable::clasificar( array_map( static fn( $m ) => $m + $base, array(
+		array( 'fecha' => $hace1, 'importe' => 29.55, 'concepto' => 'PRUEBA-F5D abono datafono' ),
+		array( 'fecha' => $hace1, 'importe' => 12.0, 'concepto' => 'PRUEBA-F5D otro ingreso' ),
+	) ) );
+	$res_d = BancoTable::importar( array( 'movimientos' => $movs_d, 'cuentas' => array( array( 'cuenta' => '9999 0001 ******0001', 'saldo_final' => null ) ) ), 'csv', 'prueba-f5d.csv', hash( 'sha256', wp_json_encode( $movs_d ) . microtime() ) );
+	$ok( is_array( $res_d ) && 2 === $res_d['nuevos'], 'ingresos de prueba importados' );
+	$mov_d = static function ( string $texto ) {
+		foreach ( BancoTable::movimientos( array( 'q' => $texto ) ) as $m ) {
+			return $m;
+		}
+		return null;
+	};
+	$como( $u_sc );
+	$ok( array() === ConciliacionBanco::sugerencias_datafono(), 'un scouter sin permisos de Tesorería no ve nada del banco' );
+	$como( $u_teso );
+	$sug = ConciliacionBanco::sugerencias_datafono();
+	$ok( 1 === count( $sug ) && 29.55 === (float) $sug[0]['mov']['importe'] && 2 === count( $sug[0]['pedidos'] ) && 30.0 === $sug[0]['suma'] && ! $sug[0]['exacto'], 'Tesorería ve 1 abono: 29,55 € de los dos cobros del datáfono (30 € menos la comisión); el otro ingreso no cuadra' );
+	$h = ( new TiendaGestionView() )->render();
+	$ok( str_contains( $h, 'abono del datáfono' ) && str_contains( $h, 'Conciliar este abono' ) && str_contains( $h, 'comisión del banco' ), 'la gestión enseña el cuadro, con el aviso de la comisión' );
+	$como( $u_coord );
+	$ok( ! str_contains( ( new TiendaGestionView() )->render(), 'abono del datáfono' ), 'Coordinación (sin Tesorería) no lo ve' );
+	$como( $u_teso );
+	$m_d = $mov_d( 'abono datafono' );
+	$ok( is_wp_error( ConciliacionBanco::confirmar_datafono( (int) $m_d['id'], array( $t1 ) ) ), 'si se mandan solo parte de los pedidos, no se concilia' );
+	$ok( is_wp_error( ConciliacionBanco::confirmar_datafono( (int) $mov_d( 'otro ingreso' )['id'], array( $t1, $t2 ) ) ), 'ni a un ingreso que no cuadra' );
+	$ok( true === ConciliacionBanco::confirmar_datafono( (int) $m_d['id'], array( $t1, $t2 ) ), 'con los dos cobros, sí' );
+	$md = BancoTable::obtener( (int) $m_d['id'] );
+	$ok( BancoTable::IGNORADO === $md['estado'] && str_contains( $md['nota'], 'Abono del datáfono' ) && (int) $m_d['id'] === PedidosTable::obtener( $t1 )['banco_id'] && (int) $m_d['id'] === PedidosTable::obtener( $t2 )['banco_id'], 'el ingreso queda revisado, con su nota, y los dos pedidos apuntan a él' );
+	$ok( array() === ConciliacionBanco::sugerencias_datafono() && is_wp_error( ConciliacionBanco::confirmar_datafono( (int) $m_d['id'], array( $t1, $t2 ) ) ), 'ya no se sugiere ni se puede conciliar dos veces' );
+	$_POST    = array( 'asde_action' => 'uniforme_deshacer_pago', 'pedido' => (string) $t1, '_wpnonce' => wp_create_nonce( 'asde_uniforme_' . $t1 ), 'desde' => 'detalle' );
+	$_REQUEST = $_POST;
+	try {
+		( new TiendaGestionView() )->handle_post();
+	} catch ( RuntimeException $e ) {
+		// Redirige.
+	}
+	$_POST    = array();
+	$_REQUEST = array();
+	$ok( null === PedidosTable::obtener( $t1 )['pago_en'] && 0 === PedidosTable::obtener( $t2 )['banco_id'] && BancoTable::PENDIENTE === BancoTable::obtener( (int) $m_d['id'] )['estado'], 'si se deshace el pago de uno de los pedidos, el ingreso vuelve a estar por conciliar y el otro queda suelto' );
+
 	echo "\n== Parte E · Informes de ventas ==\n";
 	// Ventas del periodo: a (10 €, sin pagar tras deshacer), b cancelado, c pagado 10 €, d_ (10 €, sin forma), e (10 €), f (0 €), g (10 €), h (10 €).
 	$todos = PedidosTable::todos();

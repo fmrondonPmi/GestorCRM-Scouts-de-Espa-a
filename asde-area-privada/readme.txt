@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.45.0
+Stable tag: 0.46.0
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -61,6 +61,9 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.46.0 =
+* Shop: new payment option "Datáfono / TPV" (card payment in person with the group's terminal). It is off by default (Shop settings); members and guests can choose it, and Treasury marks the order as paid. If the bank module is on, the bank deposit that matches what was collected with the terminal (minus the bank's fee) is suggested to Treasury, who confirms it; nothing is reconciled automatically.
 
 = 0.45.0 =
 * Shop: for products with several sizes you now type the quantity and pick the size from a drop-down (with an "Add another size" button for more rows), instead of one quantity per size. It works in the members' shop and in the public shop, and without JavaScript every row is shown.
@@ -246,6 +249,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * First version with the mobile app (PWA).
 
 == Upgrade Notice ==
+
+= 0.46.0 =
+Card terminal payment option in the shop. Adds a column to the shop orders table (added automatically).
 
 = 0.45.0 =
 Quantity and size drop-down in the shop. No database changes.

@@ -53,6 +53,7 @@ final class TiendaConfigView extends TiendaBaseView {
 		$cfg['abierto']       = '1' === $this->post( 'abierto' );
 		$cfg['texto_pago']    = mb_substr( sanitize_textarea_field( $this->post( 'texto_pago' ) ), 0, 600 );
 		$cfg['publica']       = '1' === $this->post( 'publica' );
+		$cfg['datafono']      = '1' === $this->post( 'datafono' );
 		$cfg['dias_sin_pagar'] = min( 90, max( 0, (int) $this->post( 'dias_sin_pagar' ) ) );
 		$cfg['dias_aviso_socios']    = min( 90, max( 0, (int) $this->post( 'dias_aviso_socios' ) ) );
 		$cfg['dias_cancelar_socios'] = min( 180, max( 0, (int) $this->post( 'dias_cancelar_socios' ) ) );

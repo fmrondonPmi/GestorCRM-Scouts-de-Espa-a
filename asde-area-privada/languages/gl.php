@@ -3483,7 +3483,6 @@ return array(
 	'Ahora mismo ninguna persona de tu cuenta tiene la membresía activa, así que no se puede hacer ningún pedido.' => 'Agora mesmo ningunha persoa da túa conta ten a membresía activa, así que non se pode facer ningún pedido.',
 	'El IBAN no parece válido; no se ha guardado.' => 'O IBAN non parece válido; non se gardou.',
 	'El teléfono de Bizum no parece válido; no se ha guardado.' => 'O teléfono de Bizum non parece válido; non se gardou.',
-	'Indica cómo se ha pagado (efectivo, ingreso o Bizum), la fecha (no posterior a hoy) y el importe.' => 'Indica como se pagou (efectivo, ingreso ou Bizum), a data (non posterior a hoxe) e o importe.',
 	'Inventario de la tienda' => 'Inventario da tenda',
 	'Pedido <strong>%1$s</strong> enviado: %2$s. Ahora falta pagarlo: en «Tus pedidos» tienes cómo hacerlo.' => 'Pedido <strong>%1$s</strong> enviado: %2$s. Agora falta pagalo: en «Os teus pedidos» tes como facelo.',
 	'En físico (a Tesorería)' => 'En físico (á Tesouraría)',
@@ -4131,4 +4130,20 @@ return array(
 	'Elige la talla de «%s».' => 'Escolle a talla de «%s».',
 	'Añadir otra talla' => 'Engadir outra talla',
 	'Elige la talla…' => 'Escolle a talla…',
+
+	// v0.46: datafono
+	'El grupo no cobra con datáfono.' => 'O grupo non cobra con datáfono.',
+	'Ese ingreso ya está revisado o no existe.' => 'Ese ingreso xa está revisado ou non existe.',
+	'Los cobros con datáfono ya no cuadran con ese ingreso. Revisa la lista.' => 'Os cobros con datáfono xa non cadran con ese ingreso. Revisa a lista.',
+	'Paga con tarjeta, en persona, con el datáfono del grupo al recogerlo, indicando el nº de pedido %s.' => 'Paga con tarxeta, en persoa, co datáfono do grupo ao recollelo, indicando o nº de pedido %s.',
+	'Abono del datáfono conciliado con el ingreso del banco.' => 'Abono do datáfono conciliado co ingreso do banco.',
+	'Indica cómo se ha pagado (efectivo, ingreso, Bizum o datáfono), la fecha (no posterior a hoy) y el importe.' => 'Indica como se pagou (efectivo, ingreso, Bizum ou datáfono), a data (non posterior a hoxe) e o importe.',
+	'Datáfono (tarjeta, en persona)' => 'Datáfono (tarxeta, en persoa)',
+	'Aceptamos pagar con datáfono (tarjeta, en persona; lo marca Tesorería al cobrar)' => 'Aceptamos pagar con datáfono (tarxeta, en persoa; márcao a Tesouraría ao cobrar)',
+	'Coincide con lo cobrado' => 'Coincide co cobrado',
+	'Conciliar este abono' => 'Conciliar este abono',
+	'Datáfono / TPV' => 'Datáfono / TPV',
+	'El banco abona de una vez lo cobrado con el datáfono, menos su comisión. Estos ingresos cuadran con los cobros de los últimos días. Compruébalos y confirma cada uno: no se concilia nada solo.' => 'O banco abona dunha vez o cobrado co datáfono, menos a súa comisión. Estes ingresos cadran cos cobros dos últimos días. Compróbaos e confirma cada un: non se concilia nada só.',
+	'Ingresos del banco que parecen el abono del datáfono' => 'Ingresos do banco que parecen o abono do datáfono',
+	'Se cobró %s (comisión del banco)' => 'Cobrouse %s (comisión do banco)',
 );

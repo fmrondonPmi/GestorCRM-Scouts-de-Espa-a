@@ -3483,7 +3483,6 @@ return array(
 	'Ahora mismo ninguna persona de tu cuenta tiene la membresía activa, así que no se puede hacer ningún pedido.' => 'Ara mateix cap persona del teu compte té la membresia activa, així que no es pot fer cap comanda.',
 	'El IBAN no parece válido; no se ha guardado.' => 'L\'IBAN no sembla vàlid; no s\'ha desat.',
 	'El teléfono de Bizum no parece válido; no se ha guardado.' => 'El telèfon de Bizum no sembla vàlid; no s\'ha desat.',
-	'Indica cómo se ha pagado (efectivo, ingreso o Bizum), la fecha (no posterior a hoy) y el importe.' => 'Indica com s\'ha pagat (efectiu, ingrés o Bizum), la data (no posterior a avui) i l\'import.',
 	'Inventario de la tienda' => 'Inventari de la botiga',
 	'Pedido <strong>%1$s</strong> enviado: %2$s. Ahora falta pagarlo: en «Tus pedidos» tienes cómo hacerlo.' => 'Comanda <strong>%1$s</strong> enviada: %2$s. Ara falta pagar-la: a «Les teves comandes» tens com fer-ho.',
 	'En físico (a Tesorería)' => 'En físic (a Tresoreria)',
@@ -4131,4 +4130,20 @@ return array(
 	'Elige la talla de «%s».' => 'Tria la talla de «%s».',
 	'Añadir otra talla' => 'Afegeix una altra talla',
 	'Elige la talla…' => 'Tria la talla…',
+
+	// v0.46: datafono
+	'El grupo no cobra con datáfono.' => 'El grup no cobra amb datàfon.',
+	'Ese ingreso ya está revisado o no existe.' => 'Aquest ingrés ja està revisat o no existeix.',
+	'Los cobros con datáfono ya no cuadran con ese ingreso. Revisa la lista.' => 'Els cobraments amb datàfon ja no quadren amb aquest ingrés. Revisa la llista.',
+	'Paga con tarjeta, en persona, con el datáfono del grupo al recogerlo, indicando el nº de pedido %s.' => 'Paga amb targeta, en persona, amb el datàfon del grup en recollir-ho, indicant el nº de comanda %s.',
+	'Abono del datáfono conciliado con el ingreso del banco.' => 'Abonament del datàfon conciliat amb l\'ingrés del banc.',
+	'Indica cómo se ha pagado (efectivo, ingreso, Bizum o datáfono), la fecha (no posterior a hoy) y el importe.' => 'Indica com s\'ha pagat (efectiu, ingrés, Bizum o datàfon), la data (no posterior a avui) i l\'import.',
+	'Datáfono (tarjeta, en persona)' => 'Datàfon (targeta, en persona)',
+	'Aceptamos pagar con datáfono (tarjeta, en persona; lo marca Tesorería al cobrar)' => 'Acceptem pagar amb datàfon (targeta, en persona; ho marca Tresoreria en cobrar)',
+	'Coincide con lo cobrado' => 'Coincideix amb el cobrat',
+	'Conciliar este abono' => 'Concilia aquest abonament',
+	'Datáfono / TPV' => 'Datàfon / TPV',
+	'El banco abona de una vez lo cobrado con el datáfono, menos su comisión. Estos ingresos cuadran con los cobros de los últimos días. Compruébalos y confirma cada uno: no se concilia nada solo.' => 'El banc abona d\'una vegada el que s\'ha cobrat amb el datàfon, menys la seva comissió. Aquests ingressos quadren amb els cobraments dels últims dies. Comprova\'ls i confirma cadascun: no es concilia res sol.',
+	'Ingresos del banco que parecen el abono del datáfono' => 'Ingressos del banc que semblen l\'abonament del datàfon',
+	'Se cobró %s (comisión del banco)' => 'Es va cobrar %s (comissió del banc)',
 );

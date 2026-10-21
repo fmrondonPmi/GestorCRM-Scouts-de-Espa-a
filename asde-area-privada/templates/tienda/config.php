@@ -18,6 +18,7 @@ defined( 'ABSPATH' ) || exit;
 	<section class="asde-card">
 		<h2 class="asde-card__title"><?php asde_e( 'Tienda · configuración' ); ?></h2>
 		<label class="asde-choice"><input type="checkbox" name="abierto" value="1" <?php checked( $cfg['abierto'] ); ?>><span><?php asde_e( 'Se aceptan pedidos (si no, las familias ven que están cerrados)' ); ?></span></label>
+		<label class="asde-choice"><input type="checkbox" name="datafono" value="1" <?php checked( $cfg['datafono'] ); ?>><span><?php asde_e( 'Aceptamos pagar con datáfono (tarjeta, en persona; lo marca Tesorería al cobrar)' ); ?></span></label>
 		<p class="asde-form__fila">
 			<label for="asde-uc-iban"><?php asde_e( 'Cuenta del grupo (IBAN) para las transferencias' ); ?> <input type="text" id="asde-uc-iban" name="iban" value="<?php echo esc_attr( $cfg['iban'] ); ?>" maxlength="42" autocomplete="off" placeholder="ES00 0000 0000 0000 0000 0000"></label>
 			<label for="asde-uc-bizum"><?php asde_e( 'Teléfono de Bizum del grupo' ); ?> <input type="text" id="asde-uc-bizum" name="bizum" value="<?php echo esc_attr( $cfg['bizum'] ); ?>" maxlength="20" inputmode="tel" autocomplete="off"></label>

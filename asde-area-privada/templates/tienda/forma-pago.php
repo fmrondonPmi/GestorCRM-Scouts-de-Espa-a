@@ -15,13 +15,14 @@ $detalle = array(
 	'transferencia' => '' !== $cfg['iban'] ? $cfg['iban'] : '',
 	'bizum'         => '' !== $cfg['bizum'] ? $cfg['bizum'] : '',
 	'fisico'        => '',
+	'datafono'      => '',
 );
 ?>
 <fieldset class="asde-forma-pago">
 	<legend><?php asde_e( '¿Cómo vas a pagar?' ); ?></legend>
 	<?php foreach ( asde_ta( PedidosTable::FORMAS ) as $forma => $etiqueta ) : ?>
 		<?php
-		if ( 'fisico' === $forma && ! $es_socio ) {
+		if ( ( 'fisico' === $forma && ! $es_socio ) || ( 'datafono' === $forma && empty( $cfg['datafono'] ) ) ) {
 			continue;
 		}
 		?>

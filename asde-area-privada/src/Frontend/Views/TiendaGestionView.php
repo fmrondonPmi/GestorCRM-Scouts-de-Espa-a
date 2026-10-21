@@ -73,6 +73,12 @@ final class TiendaGestionView extends TiendaBaseView {
 					'volver'      => $this->url( 'tienda_gestion' ),
 				)
 			) . $this->tpl(
+				'tienda/banco-datafono',
+				array(
+					'abonos' => ConciliacionBanco::sugerencias_datafono(),
+					'volver' => $this->url( 'tienda_gestion' ),
+				)
+			) . $this->tpl(
 				'tienda/gestion',
 				array(
 					'cfg'          => $cfg,
@@ -358,6 +364,19 @@ final class TiendaGestionView extends TiendaBaseView {
 			$this->redirect( $lista );
 		}
 
+		// El abono del datáfono (v0.46, T3): Tesorería confirma que un ingreso del banco es el de estos cobros.
+		if ( 'tienda_banco_datafono' === $accion ) {
+			$mid = (int) $this->post( 'movimiento' );
+			check_admin_referer( 'asde_tienda_datafono_' . $mid );
+			$r = ConciliacionBanco::confirmar_datafono( $mid, array_map( 'intval', $this->post_array( 'pedidos' ) ) );
+			if ( is_wp_error( $r ) ) {
+				Notices::add( 'error', esc_html( $r->get_error_message() ) );
+			} else {
+				Notices::add( 'success', esc_html( asde_t( 'Abono del datáfono conciliado con el ingreso del banco.' ) ) );
+			}
+			$this->redirect( $lista );
+		}
+
 		// Marcar pagado un pedido con un ingreso del banco que lo menciona (v0.40, fase 5).
 		if ( 'tienda_banco_pagar' === $accion ) {
 			$pid = (int) $this->post( 'pedido' );
@@ -398,7 +417,7 @@ final class TiendaGestionView extends TiendaBaseView {
 				$fecha   = $this->post( 'fecha' );
 				$importe = (float) str_replace( ',', '.', $this->post( 'importe' ) );
 				if ( ! isset( PedidosTable::METODOS[ $metodo ] ) || ! preg_match( '/^\d{4}-\d{2}-\d{2}$/', $fecha ) || $fecha > wp_date( 'Y-m-d' ) || $importe < 0 ) {
-					$error = asde_t( 'Indica cómo se ha pagado (efectivo, ingreso o Bizum), la fecha (no posterior a hoy) y el importe.' );
+					$error = asde_t( 'Indica cómo se ha pagado (efectivo, ingreso, Bizum o datáfono), la fecha (no posterior a hoy) y el importe.' );
 					break;
 				}
 				PedidosTable::marcar_pago( $p['id'], $fecha, $metodo, $importe, $this->post( 'referencia' ) );
@@ -411,8 +430,8 @@ final class TiendaGestionView extends TiendaBaseView {
 				if ( Servicio::puede_pagar( $p ) && PedidosTable::deshacer_pago( $p['id'] ) ) {
 					Logger::log( 'uniforme_pago_deshecho', 'uniforme', (string) $p['id'] );
 					$hecho = sprintf( asde_t( 'Pago deshecho en el pedido %s.' ), $num );
-					if ( ConciliacionBanco::deshacer( $p ) ) {
-						$hecho .= ' ' . asde_t( 'El ingreso del banco vuelve a estar por conciliar.' ); // v0.40 (fase 5).
+					if ( ConciliacionBanco::deshacer( $p ) || ConciliacionBanco::deshacer_datafono( $p ) ) {
+						$hecho .= ' ' . asde_t( 'El ingreso del banco vuelve a estar por conciliar.' ); // v0.40 (fase 5) y v0.46 (datáfono).
 					}
 				}
 				break;

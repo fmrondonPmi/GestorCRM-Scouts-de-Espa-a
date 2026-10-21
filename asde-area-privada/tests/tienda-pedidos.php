@@ -373,6 +373,37 @@ try {
 	$pk = $ultimo();
 	$ok( $pk['id'] > $antes && 2 === count( $pk['lineas']['productos'] ), 'en el mismo pedido se mezclan un producto con tallas y uno sin ellas' );
 
+	echo "\n== Parte L · Datáfono (v0.46) ==\n";
+	$cfg_df = Config::de( $grupo['numero'] );
+	$ok( is_wp_error( Servicio::forma_valida( 'datafono', true, true ) ) && is_wp_error( Servicio::forma_valida( 'datafono', false, true ) ), 'con el datáfono sin activar no se admite como forma de pago' );
+	$como( $u_fam );
+	$ok( ! str_contains( ( new TiendaPedidosView() )->render(), 'value="datafono"' ), 'y ni se ofrece' );
+	$cfg_df['datafono'] = true;
+	Config::guardar( $cfg_df, $grupo['numero'] );
+	$ok( 'datafono' === Servicio::forma_valida( 'datafono', false, true ) && 'datafono' === Servicio::forma_valida( 'datafono', true, true ), 'activado, lo pueden elegir socios y quien compra sin sesión' );
+	$ok( str_contains( ( new TiendaPedidosView() )->render(), 'value="datafono"' ), 'y se ofrece al comprar' );
+	$ok( str_contains( implode( ' ', Servicio::instrucciones_pago( array( 'forma_pago' => 'datafono', 'grupo' => $grupo['numero'], 'id' => 7 ), $cfg_df ) ), 'datáfono' ), 'las instrucciones dicen que se paga en persona con el datáfono' );
+	$antes = $ultimo()['id'];
+	$enviar( new TiendaPedidosView(), array( 'asde_action' => 'tienda_comprar', 'socio' => '990021', 'forma_pago' => 'datafono', 'lin' => array( $camiseta => array( 'cant' => array( '1' ), 'var' => array( (string) $v_cam['M'] ) ) ) ), 'asde_tienda_comprar' );
+	$pd = $ultimo();
+	$ok( $pd['id'] > $antes && 'datafono' === $pd['forma_pago'], 'un pedido pagado con datáfono se guarda con esa forma de pago' );
+	$como( $u_teso );
+	$detalle = ( function () use ( $pd ) {
+		View::en_modal( true );
+		$_GET['pedido'] = (string) $pd['id'];
+		$h              = ( new TiendaGestionView() )->render();
+		unset( $_GET['pedido'] );
+		View::en_modal( false );
+		return $h;
+	} )();
+	$ok( str_contains( $detalle, 'value="tpv"' ) && 1 === preg_match( '/value="tpv"[ ]+checked/', $detalle ), 'Tesorería ve «Datáfono / TPV» entre los métodos y viene marcado' );
+	$enviar( new TiendaGestionView(), array( 'asde_action' => 'uniforme_pago', 'pedido' => (string) $pd['id'], 'metodo' => 'tpv', 'fecha' => wp_date( 'Y-m-d' ), 'importe' => '10', 'referencia' => 'Ticket 5' ), 'asde_uniforme_' . $pd['id'] );
+	$q = PedidosTable::obtener( $pd['id'] );
+	$ok( null !== $q['pago_en'] && 'tpv' === $q['pago_metodo'] && 10.0 === $q['pago_importe'], 'Tesorería lo marca pagado con el datáfono' );
+	$cfg_df['datafono'] = false;
+	Config::guardar( $cfg_df, $grupo['numero'] );
+	$ok( 'Datáfono / TPV' === PedidosTable::METODOS['tpv'] && 'tpv' === PedidosTable::METODO_DE_FORMA['datafono'], 'el método tiene su nombre y la forma «datáfono» lleva a él' );
+
 	$ok( $crm->llamadas > 0 && 0 === $cortadas, "todas las consultas al CRM las ha respondido el simulador ({$crm->llamadas}); ninguna ha salido hacia el CRM real" );
 } finally {
 	// ---------------------------------------------------------------------------
