@@ -10,10 +10,7 @@
  */
 // phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound, WordPress.WP.GlobalVariablesOverride.Prohibited -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
 use AsdeBalears\AreaPrivada\Frontend\TemplateLoader;
-use AsdeBalears\AreaPrivada\Tesoreria\Calculadora;
 use AsdeBalears\AreaPrivada\Tienda\Config;
-use AsdeBalears\AreaPrivada\Tienda\Servicio;
-use AsdeBalears\AreaPrivada\Tienda\VariantesTable;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -60,26 +57,7 @@ $categoria = null;
 						<?php echo '' !== $prod['descripcion'] ? '<span class="asde-muted">' . esc_html( $prod['descripcion'] ) . '</span>' : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?>
 						<?php echo $prod['limite_persona'] > 0 ? '<span class="asde-muted">' . esc_html( sprintf( asde_t( 'Máximo %d por persona' ), $prod['limite_persona'] ) ) . '</span>' : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?>
 					</div>
-					<ul class="asde-producto__variantes">
-						<?php foreach ( $item['variantes'] as $v ) : ?>
-							<?php
-							$precio = Servicio::precio_variante( $prod, $v, $es_socio );
-							$hay    = VariantesTable::hay( $v );
-							?>
-							<li>
-								<label for="asde-var-<?php echo (int) $v['id']; ?>">
-									<?php echo 'Única' === $v['etiqueta'] ? '' : esc_html( VariantesTable::etiqueta( $v ) ) . ' · '; // phpcs:ignore WordPress.Security.EscapeOutput ?>
-									<?php echo null === $precio ? esc_html( asde_t( 'Precio por confirmar' ) ) : esc_html( Calculadora::euros( $precio ) ); ?>
-									<?php if ( ! $hay ) : ?>
-										<span class="asde-muted">(<?php asde_e( 'Agotado' ); ?>)</span>
-									<?php elseif ( 0 === $v['ilimitado'] && $v['existencias'] <= 5 ) : ?>
-										<span class="asde-muted">(<?php echo esc_html( sprintf( asde_n( 'Queda %d', 'Quedan %d', $v['existencias'] ), $v['existencias'] ) ); ?>)</span>
-									<?php endif; ?>
-								</label>
-								<input type="number" id="asde-var-<?php echo (int) $v['id']; ?>" name="cant[<?php echo (int) $v['id']; ?>]" value="0" min="0" max="<?php echo (int) \AsdeBalears\AreaPrivada\Tienda\ProductosTable::MAX_LIMITE; ?>" step="1" inputmode="numeric" <?php echo $hay ? '' : 'disabled'; ?> aria-label="<?php echo esc_attr( sprintf( asde_t( 'Cantidad: %s' ), $prod['nombre'] . ( 'Única' === $v['etiqueta'] ? '' : ' ' . VariantesTable::etiqueta( $v ) ) ) ); ?>">
-							</li>
-						<?php endforeach; ?>
-					</ul>
+					<?php echo TemplateLoader::render( 'tienda/lineas', array( 'prod' => $prod, 'variantes' => $item['variantes'], 'es_socio' => $es_socio, 'previas' => array(), 'existencias' => true ) ); // phpcs:ignore WordPress.Security.EscapeOutput -- HTML de una plantilla propia, ya escapado. ?>
 				</div>
 			<?php endforeach; ?>
 

@@ -68,7 +68,11 @@ final class TiendaPedidosView extends TiendaBaseView {
 
 		if ( 'tienda_comprar' === $this->post( 'asde_action' ) ) {
 			check_admin_referer( 'asde_tienda_comprar' );
-			$r = Servicio::comprar( $a, $this->post( 'socio' ), $this->post_mapa( 'cant' ), $this->post( 'nota' ), $this->post( 'forma_pago' ) );
+			$sin_talla = array();
+			$cantidades = $this->post_cantidades( $sin_talla );
+			$r = $sin_talla
+				? new \WP_Error( 'asde_tienda', sprintf( asde_t( 'Elige la talla de «%s».' ), implode( '», «', $sin_talla ) ) )
+				: Servicio::comprar( $a, $this->post( 'socio' ), $cantidades, $this->post( 'nota' ), $this->post( 'forma_pago' ) );
 			if ( is_wp_error( $r ) ) {
 				Notices::add( 'error', esc_html( $r->get_error_message() ) );
 			} else {

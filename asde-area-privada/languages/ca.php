@@ -4126,4 +4126,9 @@ return array(
 	// v0.44: tienda sin uniforme propio
 	'Elige más abajo lo que quieres comprar. Después, págalo por transferencia, por Bizum o, si eres socio o socia, en físico a Tesorería, indicando el nº de pedido. Cuando Tesorería lo reciba lo verás aquí como pagado; el grupo te lo entregará y, cuando lo tengas, confírmalo aquí.' => 'Tria més avall el que vols comprar. Després, paga-ho per transferència, per Bizum o, si ets soci o sòcia, en físic a Tresoreria, indicant el nº de comanda. Quan Tresoreria ho rebi ho veuràs aquí com a pagat; el grup t\'ho lliurarà i, quan ho tinguis, confirma-ho aquí.',
 	'Tienda · configuración' => 'Botiga · configuració',
+
+	// v0.45: cantidad y talla
+	'Elige la talla de «%s».' => 'Tria la talla de «%s».',
+	'Añadir otra talla' => 'Afegeix una altra talla',
+	'Elige la talla…' => 'Tria la talla…',
 );

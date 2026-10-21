@@ -121,25 +121,7 @@ $val   = static fn( string $k ): string => (string) ( $valores[ $k ] ?? '' );
 							<?php echo '' !== $prod['descripcion'] ? '<span class="asde-muted">' . esc_html( $prod['descripcion'] ) . '</span>' : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?>
 							<?php echo $prod['limite_persona'] > 0 ? '<span class="asde-muted">' . esc_html( sprintf( asde_t( 'Máximo %d por persona' ), $prod['limite_persona'] ) ) . '</span>' : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?>
 						</div>
-						<ul class="asde-producto__variantes">
-							<?php foreach ( $item['variantes'] as $v ) : ?>
-								<?php
-								$precio = Servicio::precio_variante( $prod, $v, false );
-								$hay    = VariantesTable::hay( $v );
-								$pedida = (int) ( $valores['cant'][ $v['id'] ] ?? 0 );
-								?>
-								<li>
-									<label for="asde-var-<?php echo (int) $v['id']; ?>">
-										<?php echo 'Única' === $v['etiqueta'] ? '' : esc_html( VariantesTable::etiqueta( $v ) ) . ' · '; // phpcs:ignore WordPress.Security.EscapeOutput ?>
-										<?php echo null === $precio ? esc_html( asde_t( 'Precio por confirmar' ) ) : esc_html( Calculadora::euros( $precio ) ); ?>
-										<?php if ( ! $hay ) : ?>
-											<span class="asde-muted">(<?php asde_e( 'Agotado' ); ?>)</span>
-										<?php endif; ?>
-									</label>
-									<input type="number" id="asde-var-<?php echo (int) $v['id']; ?>" name="cant[<?php echo (int) $v['id']; ?>]" value="<?php echo (int) $pedida; ?>" min="0" max="<?php echo (int) \AsdeBalears\AreaPrivada\Tienda\ProductosTable::MAX_LIMITE; ?>" step="1" inputmode="numeric" <?php echo $hay ? '' : 'disabled'; ?> aria-label="<?php echo esc_attr( sprintf( asde_t( 'Cantidad: %s' ), $prod['nombre'] . ( 'Única' === $v['etiqueta'] ? '' : ' ' . VariantesTable::etiqueta( $v ) ) ) ); ?>">
-								</li>
-							<?php endforeach; ?>
-						</ul>
+						<?php echo \AsdeBalears\AreaPrivada\Frontend\TemplateLoader::render( 'tienda/lineas', array( 'prod' => $prod, 'variantes' => $item['variantes'], 'es_socio' => false, 'previas' => array_intersect_key( array_map( 'intval', (array) ( $valores['cant'] ?? array() ) ), array_flip( array_column( $item['variantes'], 'id' ) ) ), 'existencias' => false ) ); // phpcs:ignore WordPress.Security.EscapeOutput -- HTML de una plantilla propia, ya escapado. ?>
 					</div>
 				<?php endforeach; ?>
 

@@ -170,6 +170,41 @@ abstract class View {
 		return $out;
 	}
 
+	/**
+	 * Cantidades de la tienda (v0.45, doc 52, T2): junta `cant[variante]` (productos de una sola variante) y las
+	 * filas `lin[producto][cant][]` + `lin[producto][var][]` (cantidad y talla en un desplegable) en un solo mapa
+	 * variante => cantidad (si la misma talla sale en dos filas, se suman). Las filas con cantidad y sin talla no
+	 * entran: su producto se anota en $sin_talla para avisar.
+	 *
+	 * @param string[] $sin_talla Nombres de los productos con cantidad y sin talla.
+	 * @return array<int, string> id de variante => cantidad (sin validar: lo hace Tienda\Servicio).
+	 */
+	protected function post_cantidades( array &$sin_talla = array() ): array {
+		$out = $this->post_mapa( 'cant' );
+		$lin = isset( $_POST['lin'] ) && is_array( $_POST['lin'] ) ? wp_unslash( $_POST['lin'] ) : array(); // phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- el nonce lo comprueba handle_post(); cada valor se sanea aquí y se valida al usarlo
+		foreach ( array_slice( (array) $lin, 0, 200, true ) as $producto => $campos ) {
+			if ( ! absint( $producto ) || ! is_array( $campos ) ) {
+				continue;
+			}
+			$cants = isset( $campos['cant'] ) && is_array( $campos['cant'] ) ? array_values( $campos['cant'] ) : array();
+			$vars  = isset( $campos['var'] ) && is_array( $campos['var'] ) ? array_values( $campos['var'] ) : array();
+			foreach ( array_slice( $cants, 0, 20 ) as $k => $cantidad ) {
+				$cantidad = is_scalar( $cantidad ) ? (int) $cantidad : 0;
+				$variante = isset( $vars[ $k ] ) && is_scalar( $vars[ $k ] ) ? absint( $vars[ $k ] ) : 0;
+				if ( $cantidad <= 0 ) {
+					continue;
+				}
+				if ( ! $variante ) {
+					$p           = \AsdeBalears\AreaPrivada\Tienda\ProductosTable::obtener( absint( $producto ) );
+					$sin_talla[] = $p ? (string) $p['nombre'] : '';
+					continue;
+				}
+				$out[ $variante ] = (string) ( (int) ( $out[ $variante ] ?? 0 ) + $cantidad );
+			}
+		}
+		return $out;
+	}
+
 	protected function get( string $key ): string {
 		return isset( $_GET[ $key ] ) && is_scalar( $_GET[ $key ] ) ? trim( sanitize_text_field( wp_unslash( $_GET[ $key ] ) ) ) : ''; // phpcs:ignore WordPress.Security
 	}

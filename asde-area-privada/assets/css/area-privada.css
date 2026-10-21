@@ -2906,3 +2906,9 @@ dialog.asde-modal--mini .asde-banco-tipo-nuevo h3 {
 @media print {
 	.asde-ap .asde-solo-impresion { display: inline !important; }
 }
+
+/* v0.45 (doc 52, T2): cantidad + desplegable de talla en la tienda. */
+.asde-ap .asde-producto__linea { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem .6rem; margin: 0 0 .4rem; }
+.asde-ap .asde-producto__linea[hidden] { display: none; }
+.asde-ap .asde-producto__linea input[type="number"] { width: 5rem; }
+.asde-ap .asde-producto__linea select { flex: 1 1 12rem; min-width: 0; max-width: 100%; }

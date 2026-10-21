@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.44.0
+Stable tag: 0.45.0
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -61,6 +61,9 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.45.0 =
+* Shop: for products with several sizes you now type the quantity and pick the size from a drop-down (with an "Add another size" button for more rows), instead of one quantity per size. It works in the members' shop and in the public shop, and without JavaScript every row is shown.
 
 = 0.44.0 =
 * Shop: the uniform is now just another sale. The shirt and the badges are ordinary products with the shop's own stock; the special uniform form, the "first shirt free for scouters" rule, the 25 EUR shirt price, the scouter ordering for their section and serving shirts from the general Inventory are gone. Orders placed before keep showing as they were. Prices are set in each product (price and member price).
@@ -243,6 +246,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * First version with the mobile app (PWA).
 
 == Upgrade Notice ==
+
+= 0.45.0 =
+Quantity and size drop-down in the shop. No database changes.
 
 = 0.44.0 =
 The shop no longer has its own uniform flow: shirt and badges are normal products. No database changes; old orders are kept.

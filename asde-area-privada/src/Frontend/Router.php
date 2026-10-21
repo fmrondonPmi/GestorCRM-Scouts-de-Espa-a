@@ -350,6 +350,9 @@ final class Router {
 		if ( 'federacion' === $key ) {
 			wp_enqueue_script( 'asde-conceptos', plugins_url( 'assets/js/conceptos.js', ASDE_AP_FILE ), array( 'asde-i18n' ), ASDE_AP_VERSION, true );
 		}
+		if ( in_array( $key, array( 'tienda_pedidos', 'tienda_publica' ), true ) ) {
+			wp_enqueue_script( 'asde-tienda', plugins_url( 'assets/js/tienda.js', ASDE_AP_FILE ), array(), ASDE_AP_VERSION, true ); // v0.45: cantidad + talla en un desplegable.
+		}
 		if ( in_array( $key, array( 'inventario', 'inventario_compras' ), true ) ) {
 			wp_enqueue_script( 'asde-inventario', plugins_url( 'assets/js/inventario.js', ASDE_AP_FILE ), array( 'asde-i18n', 'asde-area' ), ASDE_AP_VERSION, true );
 		}

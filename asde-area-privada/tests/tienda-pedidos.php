@@ -346,6 +346,33 @@ try {
 	$mas = array_filter( $e_fam, static fn( $f ) => str_contains( (string) $f['datos'], '@' ) || str_contains( (string) $f['datos'], 'Leo' ) );
 	$ok( ! $mas, 'el registro no guarda nombres ni emails: solo el tipo y el id del pedido' );
 
+	echo "\n== Parte K · Cantidad + talla en un desplegable (v0.45) ==\n";
+	list( $camiseta, $v_cam ) = $nuevo( 'Camiseta de prueba', 'todos', 10.0, null, 0, 0, array( 'S' => array( 5, 0 ), 'M' => array( 5, 0 ), 'L' => array( 0, 0 ) ) );
+	$como( $u_fam );
+	$h = ( new TiendaPedidosView() )->render();
+	$ok( str_contains( $h, 'name="lin[' . $camiseta . '][var][]"' ) && str_contains( $h, 'name="lin[' . $camiseta . '][cant][]"' ) && ! str_contains( $h, 'name="cant[' . $v_cam['S'] . ']"' ), 'un producto con tallas: cantidad y desplegable de talla, no una cantidad por talla' );
+	$ok( str_contains( $h, 'data-asde-linea-extra' ) && str_contains( $h, 'data-asde-linea-mas' ) && str_contains( $h, 'data-asde-tienda-lineas' ), 'las filas siguientes y el botón «Añadir otra talla» (que el JavaScript enseña)' );
+	$ok( 1 === preg_match( '#<option value="' . $v_cam['L'] . '"[^>]*disabled#', $h ) && 1 === preg_match( '#<option value="' . $v_cam['S'] . '"[^>]*>S · 10,00 € \(Quedan#', $h ), 'la talla agotada no se puede elegir y las que quedan pocas lo dicen' );
+	$ok( str_contains( $h, 'name="cant[' . $v_sudadera['M'] . ']"' ), 'un producto de una sola variante sigue con su cantidad' );
+	$antes = $ultimo()['id'];
+	$enviar( new TiendaPedidosView(), array( 'asde_action' => 'tienda_comprar', 'socio' => '990021', 'forma_pago' => 'bizum', 'lin' => array( $camiseta => array( 'cant' => array( '2', '1', '0' ), 'var' => array( (string) $v_cam['S'], (string) $v_cam['M'], '' ) ) ) ), 'asde_tienda_comprar' );
+	$pk = $ultimo();
+	$ok( $pk['id'] > $antes && 30.0 === $pk['total'] && 2 === count( $pk['lineas']['productos'] ) && 3 === $existencias( $v_cam['S'] ) && 4 === $existencias( $v_cam['M'] ), 'pedir 2 de la S y 1 de la M en un solo pedido: 30 € y las existencias bajan' );
+	$antes = $pk['id'];
+	$enviar( new TiendaPedidosView(), array( 'asde_action' => 'tienda_comprar', 'socio' => '990021', 'forma_pago' => 'bizum', 'lin' => array( $camiseta => array( 'cant' => array( '1', '1' ), 'var' => array( (string) $v_cam['S'], (string) $v_cam['S'] ) ) ) ), 'asde_tienda_comprar' );
+	$pk = $ultimo();
+	$ok( $pk['id'] > $antes && 1 === count( $pk['lineas']['productos'] ) && 2 === (int) $pk['lineas']['productos'][0]['cantidad'] && 1 === $existencias( $v_cam['S'] ), 'la misma talla en dos filas se suma en una línea' );
+	$antes = $pk['id'];
+	$h     = $enviar( new TiendaPedidosView(), array( 'asde_action' => 'tienda_comprar', 'socio' => '990021', 'forma_pago' => 'bizum', 'lin' => array( $camiseta => array( 'cant' => array( '1' ), 'var' => array( '' ) ) ) ), 'asde_tienda_comprar' );
+	$ok( $ultimo()['id'] === $antes && str_contains( $h, 'Elige la talla de' ) && str_contains( $h, 'Camiseta de prueba' ) && 1 === $existencias( $v_cam['S'] ), 'una cantidad sin talla no hace pedido y dice de qué producto' );
+	$h = $enviar( new TiendaPedidosView(), array( 'asde_action' => 'tienda_comprar', 'socio' => '990021', 'forma_pago' => 'bizum', 'lin' => array( $camiseta => array( 'cant' => array( '1' ), 'var' => array( (string) $v_cam['L'] ) ) ) ), 'asde_tienda_comprar' );
+	$ok( $ultimo()['id'] === $antes && str_contains( $h, 'No quedan unidades suficientes' ), 'una talla agotada mandada a mano no se vende' );
+	$h = $enviar( new TiendaPedidosView(), array( 'asde_action' => 'tienda_comprar', 'socio' => '990021', 'forma_pago' => 'bizum', 'lin' => array( $camiseta => array( 'cant' => array( '-3', 'x' ), 'var' => array( (string) $v_cam['M'], (string) $v_cam['M'] ) ), '0' => 'basura', 'abc' => array( 'cant' => 'no' ) ), 'cant' => array( 'z' => '5' ) ), 'asde_tienda_comprar' );
+	$ok( $ultimo()['id'] === $antes && 4 === $existencias( $v_cam['M'] ), 'cantidades negativas, texto o campos sin sentido no compran nada' );
+	$h = $enviar( new TiendaPedidosView(), array( 'asde_action' => 'tienda_comprar', 'socio' => '990021', 'forma_pago' => 'bizum', 'cant' => array( (string) $v_sudadera['M'] => '1' ), 'lin' => array( $camiseta => array( 'cant' => array( '1' ), 'var' => array( (string) $v_cam['M'] ) ) ) ), 'asde_tienda_comprar' );
+	$pk = $ultimo();
+	$ok( $pk['id'] > $antes && 2 === count( $pk['lineas']['productos'] ), 'en el mismo pedido se mezclan un producto con tallas y uno sin ellas' );
+
 	$ok( $crm->llamadas > 0 && 0 === $cortadas, "todas las consultas al CRM las ha respondido el simulador ({$crm->llamadas}); ninguna ha salido hacia el CRM real" );
 } finally {
 	// ---------------------------------------------------------------------------

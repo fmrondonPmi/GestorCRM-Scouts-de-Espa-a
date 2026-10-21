@@ -129,14 +129,23 @@ final class TiendaPublicaView extends View {
 			self::$estado = array( 'errores' => array( asde_t( 'No se ha podido enviar el pedido. Vuelve a intentarlo.' ) ) );
 			return;
 		}
+		$sin_talla = array();
+		$cantidades = $this->post_cantidades( $sin_talla );
 		$valores = array(
 			'nombre'     => $this->post( 'nombre' ),
 			'email'      => $this->post( 'email' ),
 			'telefono'   => $this->post( 'telefono' ),
 			'nota'       => $this->post( 'nota' ),
 			'forma_pago' => $this->post( 'forma_pago' ),
-			'cant'       => $this->post_mapa( 'cant' ),
+			'cant'       => $cantidades,
 		);
+		if ( $sin_talla ) {
+			self::$estado = array(
+				'errores' => array( sprintf( asde_t( 'Elige la talla de «%s».' ), implode( '», «', $sin_talla ) ) ),
+				'valores' => $valores,
+			);
+			return;
+		}
 		if ( ! Limite::permitir( 'tienda_publica', self::POR_HORA, HOUR_IN_SECONDS ) ) {
 			self::$estado = array(
 				'errores' => array( asde_t( 'Has hecho varios intentos seguidos. Espera una hora antes de volver a intentarlo.' ) ),

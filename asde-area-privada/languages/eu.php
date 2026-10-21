@@ -4126,4 +4126,9 @@ return array(
 	// v0.44: tienda sin uniforme propio
 	'Elige más abajo lo que quieres comprar. Después, págalo por transferencia, por Bizum o, si eres socio o socia, en físico a Tesorería, indicando el nº de pedido. Cuando Tesorería lo reciba lo verás aquí como pagado; el grupo te lo entregará y, cuando lo tengas, confírmalo aquí.' => 'Aukeratu behean erosi nahi duzuna. Gero, ordaindu transferentzia bidez, Bizum bidez edo, bazkidea bazara, Diruzaintzan eskudirutan, eskaeraren zenbakia adieraziz. Diruzaintzak jasotzen duenean, hemen ordainduta agertuko da; taldeak emango dizu eta, eskuratzen duzunean, berretsi hemen.',
 	'Tienda · configuración' => 'Denda · konfigurazioa',
+
+	// v0.45: cantidad y talla
+	'Elige la talla de «%s».' => 'Aukeratu «%s» produktuaren neurria.',
+	'Añadir otra talla' => 'Gehitu beste neurri bat',
+	'Elige la talla…' => 'Aukeratu neurria…',
 );
