@@ -1,4 +1,4 @@
-<!-- Generado por herramientas/generar-manuales.php (manual «coordinacion» completo, solo texto, versión 0.43) a partir de manual/fuentes: no se edita a mano. -->
+<!-- Generado por herramientas/generar-manuales.php (manual «coordinacion» completo, solo texto, versión 0.47) a partir de manual/fuentes: no se edita a mano. -->
 <div class="asde-ayuda__texto asde-ayuda__completo" data-manual="coordinacion">
 <h2>Manual del equipo de coordinación</h2>
 <p class="resumen">Todo lo que lleva el equipo del grupo: personas y números de socio, altas, bajas y cambios de sección en el CRM, dar acceso, solicitudes, los usuarios (con sus hojas: usuarios, dar acceso y registro de emails), fichas y cambios, informes, la Tesorería completa (cuotas, coste federativo, banco y domiciliaciones SEPA) y los uniformes, del pago a la entrega.</p>
@@ -23,6 +23,7 @@
 <li><a href="#asde-manual-eventos">Eventos</a><ol><li><a href="#asde-manual-eventos-crear">Crear un evento</a></li><li><a href="#asde-manual-eventos-calendario">Calendario de tareas</a></li><li><a href="#asde-manual-eventos-equipo">Equipo dirigente</a></li><li><a href="#asde-manual-eventos-menu">Menú, lista de la compra y coste</a></li><li><a href="#asde-manual-eventos-alergenos">Alérgenos del menú y hoja de cocina</a></li><li><a href="#asde-manual-eventos-material">Material del evento</a></li><li><a href="#asde-manual-eventos-presupuesto">Presupuesto y precio</a></li><li><a href="#asde-manual-eventos-publicar">Lista de comprobación y publicar</a></li><li><a href="#asde-manual-eventos-inscripciones">Inscripciones</a></li><li><a href="#asde-manual-eventos-cobros">Cobros (Tesorería)</a></li><li><a href="#asde-manual-eventos-cuentas">Cuentas</a></li><li><a href="#asde-manual-eventos-recetario">Recetario</a></li><li><a href="#asde-manual-eventos-configuracion">Configuración</a></li></ol></li>
 <li><a href="#asde-manual-inventario">Inventario de material</a><ol><li><a href="#asde-manual-inventario-material">El material</a></li><li><a href="#asde-manual-inventario-tipos">Tipos de material</a></li><li><a href="#asde-manual-inventario-importar">Importar el material desde una hoja de cálculo</a></li><li><a href="#asde-manual-inventario-lista-compra">Preparar una lista de compra</a></li><li><a href="#asde-manual-inventario-visto-bueno">El visto bueno de Tesorería</a></li><li><a href="#asde-manual-inventario-pdf">Imprimir la lista</a></li></ol></li>
 <li><a href="#asde-manual-lista-espera">Lista de espera</a><ol><li><a href="#asde-manual-lista-espera-enlace">El enlace para apuntarse</a></li><li><a href="#asde-manual-lista-espera-lista">La lista</a></li><li><a href="#asde-manual-lista-espera-ficha">Contactar y cambiar el estado</a></li><li><a href="#asde-manual-lista-espera-alta">Asignar la sección y dar de alta (Secretaría y Coordinación)</a></li></ol></li>
+<li><a href="#asde-manual-reintegros">Reintegros</a><ol><li><a href="#asde-manual-reintegros-pedir">Pedir un reintegro</a></li><li><a href="#asde-manual-reintegros-revisar">Aprobar y pagar (Tesorería y Coordinación)</a></li></ol></li>
 <li><a href="#asde-manual-idioma">El idioma de la web</a></li>
 <li><a href="#asde-manual-preguntas">Preguntas frecuentes</a></li>
 </ol></nav>
@@ -918,6 +919,28 @@
 		<li><strong>«Dar de alta en el CRM»</strong> abre el «Alta de socio/a» con sus datos ya escritos. Lo primero que hace es <strong>comprobar su DNI en el CRM</strong>: si ya tiene ficha en el grupo, el alta se para (bórrala de la lista); si está en otro grupo, avisa y se puede seguir. Revisa los datos y completa el <strong>género</strong>. Al terminar el alta, la inscripción <strong>se borra de la lista en ese momento</strong>. Hace falta tener las altas en el CRM activadas en el grupo.</li>
 		<li><strong>«Borrar de la lista»</strong>: si ya no quiere la plaza o te lo ha pedido; sus datos se borran y no se puede deshacer.</li>
 		<li>Solo Secretaría y Coordinación ven el DNI.</li>
+	</ul>
+</section>
+
+<section id="asde-manual-reintegros">
+	<h2>Reintegros</h2>
+	<p class="resumen">Si has pagado algo del grupo de tu bolsillo, en «Gestión del grupo → <strong>Reintegros</strong>» pides que te lo devuelvan. Lo pueden pedir los scouters y Coordinación; lo aprueba Tesorería y lo paga Tesorería o Coordinación. El módulo lo enciende el administrador de la web (el grupo lo tiene apagado hasta que se active).</p>
+
+	<h3 id="asde-manual-reintegros-pedir">Pedir un reintegro</h3>
+	<ul>
+		<li><strong>Qué pagaste</strong>, la <strong>fecha</strong> del gasto (no puede ser futura ni de hace más de un año) y el <strong>importe</strong>.</li>
+		<li>El <strong>tique o la factura</strong>: una foto (JPG, PNG o WebP) o un PDF de hasta 5 MB. Es obligatorio y se guarda cifrado.</li>
+		<li>Un <strong>evento</strong>, si el gasto es de uno (no es obligatorio). Cuando se pague, el gasto se apunta solo en las cuentas del evento.</li>
+		<li>Cómo prefieres cobrarlo: <strong>en efectivo</strong> o <strong>por transferencia</strong>. Si es por transferencia, escribe tu <strong>IBAN</strong>: solo lo ven Tesorería y Coordinación y se borra cuando el reintegro se paga, se rechaza o se cancela. A Tesorería le llega un email con todos los datos.</li>
+	</ul>
+	<p class="nota">Puedes <strong>cancelar</strong> un reintegro mientras Tesorería no lo haya revisado. En «Mis reintegros» ves cómo va cada uno, y te llega un email cuando se aprueba, se rechaza (con el motivo) o se paga.</p>
+
+	<h3 id="asde-manual-reintegros-revisar">Aprobar y pagar (Tesorería y Coordinación)</h3>
+	<ul>
+		<li>En «Por aprobar y por pagar» salen todos los pendientes, con el IBAN y el botón <strong>«Ver justificante»</strong>. El menú te dice cuántos esperan.</li>
+		<li><strong>Tesorería aprueba</strong> o <strong>rechaza</strong> (con el motivo). Nadie aprueba ni rechaza su propio reintegro.</li>
+		<li><strong>Tesorería o Coordinación marcan «pagado»</strong> con la fecha del pago y, si quieren, una referencia. El reintegro no se apunta en el banco ni en la contabilidad de Tesorería: se paga por fuera y se marca aquí.</li>
+		<li>Si el reintegro es de un evento y las cuentas del evento están abiertas, se añade como gasto (ya reembolsado). Si están cerradas, se paga igual y se avisa para apuntarlo a mano.</li>
 	</ul>
 </section>
 
