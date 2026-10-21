@@ -258,3 +258,14 @@ Las ✅ de la tabla están contestadas aquí. **Sigue abierta: P-43** (si Colony
 - **P-185 → supuesto, por confirmar:** justificante obligatorio (imagen o PDF de hasta 5 MB); nadie aprueba ni rechaza el suyo; fecha del gasto no futura ni de hace más de un año.
 - **P-186 → supuesto:** el email a Tesorería solo sale cuando se pide por transferencia (en efectivo basta el contador del menú); a quien pidió le llegan aprobado, rechazado (con motivo) y pagado.
 - **P-187 → supuesto:** el reintegro no genera un movimiento en el banco ni en Tesorería; se paga por fuera y se marca aquí.
+## Plan de modo Oficina y alta de grupos (2026-10-18, doc 50)
+
+- **P-168 ✅** Modo y rol «Oficina»; **varias cuentas** de WordPress que leen con la misma credencial de solo lectura del CRM.
+- **P-169 ✅** Enlace de invitación: **14 días**, un solo uso.
+- **P-170 ✅** En la misma pantalla del formulario se **verifica el usuario del CRM** y **no se deja pasar hasta que sea correcto**.
+- **P-171 ✅** El formulario pide **DNI y nombre** del primer usuario (Secretaría o Coordinación, a elegir); al aprobar se busca su ficha.
+- **P-172 ✅** La OF ve **todos los informes que lleven datos de asociados**, con **descarga CSV/Excel registrada en la auditoría**.
+- **P-173 ✅** La OF **ve la salud** (solo lectura) y **no ve el IBAN** ni datos bancarios.
+- **P-174 ✅** Sede, CIF y denominación fiscal se **usan ya en los documentos** (cabeceras de PDF y acreedor de SEPA).
+- **P-175 ✅** Los grupos ya dados de alta **conservan su credencial**; deja de verse para el administrador y solo el grupo la cambia con un enlace.
+- **P-176 ✅** El acuerdo de tratamiento de datos para que la OF vea datos de socios (y salud) **ya está implícito**: no hace falta nada más.

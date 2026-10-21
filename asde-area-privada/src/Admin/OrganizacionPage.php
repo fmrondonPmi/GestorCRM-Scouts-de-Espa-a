@@ -87,6 +87,10 @@ final class OrganizacionPage {
 			$this->aviso( 'error', 'No se ha guardado: para cambiar el código de la organización marca la casilla de confirmación (los números de socio del CRM con el código anterior dejarán de reconocerse como del grupo).' );
 		} else {
 			$identificador = isset( $post['identificador'] ) ? sanitize_key( (string) $post['identificador'] ) : null;
+			$tipo_antes    = Organizacion::tipo_instalacion();
+			if ( isset( $post['tipo_instalacion'] ) ) {
+				Organizacion::guardar_tipo( sanitize_key( (string) $post['tipo_instalacion'] ) ); // v0.44: Grupo u Oficina (doc 50).
+			}
 			$cambia_ident  = null !== $identificador && $identificador !== Organizacion::identificador();
 			$r             = Organizacion::guardar( $organizacion, $codigo, (array) ( $post['federacion'] ?? array() ), $identificador );
 			if ( ! is_wp_error( $r ) && isset( $post['manual'] ) ) {
@@ -109,6 +113,8 @@ final class OrganizacionPage {
 						'organizacion'    => $organizacion,
 						'codigo_cambiado' => $cambia,
 							'identificador'   => Organizacion::identificador(),
+							'tipo'            => Organizacion::tipo_instalacion(),
+							'tipo_cambiado'   => $tipo_antes !== Organizacion::tipo_instalacion(),
 						'conceptos'       => count( Organizacion::federacion()['conceptos'] ),
 					)
 				);
@@ -203,6 +209,24 @@ final class OrganizacionPage {
 						<td>
 							<input type="url" id="asde-manual" name="manual" value="<?php echo esc_attr( Organizacion::manual() ); ?>" class="regular-text code" placeholder="https://…/manual/">
 							<p class="description"><?php esc_html_e( 'La ayuda de cada página y el manual completo de cada rol vienen dentro del plugin, solo con texto, y se abren en la ventana del área privada. Aquí va la carpeta (o la portada, …/manual/index.html) donde publiques el manual con capturas, el zip «manual-de-uso», que se sube a mano: sale al final de la ayuda como «Manual con capturas», en otra pestaña. Vacía: sin ese enlace.', 'asde-area-privada' ); ?></p>
+						</td>
+					</tr>
+				</table>
+
+				<h2><?php esc_html_e( 'Tipo de instalación', 'asde-area-privada' ); ?></h2>
+				<table class="form-table" role="presentation">
+					<tr>
+						<th scope="row"><?php esc_html_e( 'Esta web es la de…', 'asde-area-privada' ); ?></th>
+						<td>
+							<?php $tipo = Organizacion::tipo_instalacion(); ?>
+							<fieldset>
+								<label><input type="radio" name="tipo_instalacion" value="<?php echo esc_attr( Organizacion::TIPO_GRUPO ); ?>" <?php checked( $tipo, Organizacion::TIPO_GRUPO ); ?> <?php disabled( null !== Organizacion::tipo_fijado_en_codigo() ); ?>> <?php esc_html_e( 'Un grupo (o varios grupos)', 'asde-area-privada' ); ?></label><br>
+								<label><input type="radio" name="tipo_instalacion" value="<?php echo esc_attr( Organizacion::TIPO_OFICINA ); ?>" <?php checked( $tipo, Organizacion::TIPO_OFICINA ); ?> <?php disabled( null !== Organizacion::tipo_fijado_en_codigo() ); ?>> <?php esc_html_e( 'La oficina federal', 'asde-area-privada' ); ?></label>
+							</fieldset>
+							<p class="description"><?php esc_html_e( 'Cambiarlo no borra ningún dato. En una web de la oficina aparecen las invitaciones y las altas de grupos, y la oficina puede consultar los grupos en solo lectura.', 'asde-area-privada' ); ?></p>
+							<?php if ( null !== Organizacion::tipo_fijado_en_codigo() ) : ?>
+								<p class="description"><?php esc_html_e( 'Lo fija la constante ASDE_AP_MODO de wp-config.php: no se puede cambiar desde aquí.', 'asde-area-privada' ); ?></p>
+							<?php endif; ?>
 						</td>
 					</tr>
 				</table>

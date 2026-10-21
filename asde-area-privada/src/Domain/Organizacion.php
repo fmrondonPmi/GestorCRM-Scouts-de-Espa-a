@@ -92,6 +92,41 @@ final class Organizacion {
 		return self::datos()['organizacion'];
 	}
 
+	/**
+	 * Tipo de instalación (v0.44, doc 50): el mismo plugin se instala en el WordPress de un grupo
+	 * (`grupo`, lo de siempre) o en el de la oficina federal (`oficina`). Opción propia, sin guardar =
+	 * `grupo` para que las instalaciones anteriores no cambien. La constante ASDE_AP_MODO en
+	 * wp-config.php manda sobre la opción.
+	 */
+	public const TIPO_OPCION  = 'asde_ap_tipo_instalacion';
+	public const TIPO_CONST   = 'ASDE_AP_MODO';
+	public const TIPO_GRUPO   = 'grupo';
+	public const TIPO_OFICINA = 'oficina';
+
+	/** @return string TIPO_GRUPO o TIPO_OFICINA */
+	public static function tipo_instalacion(): string {
+		$v = self::tipo_fijado_en_codigo() ?? (string) get_option( self::TIPO_OPCION, self::TIPO_GRUPO );
+		return self::TIPO_OFICINA === $v ? self::TIPO_OFICINA : self::TIPO_GRUPO;
+	}
+
+	public static function es_oficina(): bool {
+		return self::TIPO_OFICINA === self::tipo_instalacion();
+	}
+
+	/** ¿Lo fija wp-config.php? Entonces no se puede cambiar desde wp-admin. */
+	public static function tipo_fijado_en_codigo(): ?string {
+		return defined( self::TIPO_CONST ) ? (string) constant( self::TIPO_CONST ) : null;
+	}
+
+	/** Guarda el tipo; un valor no válido no cambia nada. */
+	public static function guardar_tipo( string $tipo ): bool {
+		if ( ! in_array( $tipo, array( self::TIPO_GRUPO, self::TIPO_OFICINA ), true ) || null !== self::tipo_fijado_en_codigo() ) {
+			return false;
+		}
+		update_option( self::TIPO_OPCION, $tipo, false );
+		return true;
+	}
+
 	/** ¿Se ha elegido organización y código? Sin ellos no se pueden generar números de socio. */
 	public static function configurada(): bool {
 		return '' !== self::clave() && '' !== self::codigo();

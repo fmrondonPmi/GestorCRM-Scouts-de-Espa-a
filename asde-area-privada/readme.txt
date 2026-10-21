@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.49.0
+Stable tag: 0.50.0
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -62,6 +62,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
 
+= 0.50.0 =
+* New setting "Installation type" (Organisation settings): the plugin can be installed on a group's WordPress (default, nothing changes) or on the federal office's WordPress. It does not change any screen yet: it is the first step towards the office read-only view and the group invitation flow. It can be fixed with the ASDE_AP_MODO constant in wp-config.php.
+
 = 0.49.0 =
 * Shop: each group can add a link to its public shop in the website's main menu (text set in the shop settings; no text, no link). Manuals and help updated for the new shop flow.
 
@@ -83,7 +86,6 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 = 0.44.0 =
 * Shop: the uniform is now just another sale. The shirt and the badges are ordinary products with the shop's own stock; the special uniform form, the "first shirt free for scouters" rule, the 25 EUR shirt price, the scouter ordering for their section and serving shirts from the general Inventory are gone. Orders placed before keep showing as they were. Prices are set in each product (price and member price).
-
 = 0.43.0 =
 * New role "Intendente" (the person in charge of the group's material, matching the CRM's "Responsable de Material" position). It is granted like Secretary or Treasurer: together with the Scouter role or as a volunteer without a section. It sees every event of the group, but only the Summary and Material tabs, and manages the material (reservations, departure, return and deduction from the inventory); it sees nothing about menus, accounts, registrations or health.
 * Events, menus: a reminder email about allergens still unresolved in the menu. From the date of the "Review allergies" task of the calendar until the event starts, the daily task checks the menu against the attendees and, if some dish carries an allergen of someone going and nobody has confirmed the alternative, emails the event team (not the support team, who get the kitchen sheet). Names are included only for those who can already see the whole group's health records; the others get the dish, the allergen and how many people. Nothing about health is stored: the email log keeps only that it was sent, and a salted fingerprint prevents repeating the same warning every day.
@@ -219,6 +221,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Upgrade Notice ==
 
+= 0.50.0 =
+New "Installation type" setting (group or office). Nothing changes for existing sites. No database changes.
+
 = 0.49.0 =
 Optional link to the public shop in the main menu. No database changes.
 
@@ -239,7 +244,6 @@ Quantity and size drop-down in the shop. No database changes.
 
 = 0.44.0 =
 The shop no longer has its own uniform flow: shirt and badges are normal products. No database changes; old orders are kept.
-
 = 0.43.0 =
 New Intendente role and the unresolved-allergens reminder. No database changes; the role is added automatically.
 
