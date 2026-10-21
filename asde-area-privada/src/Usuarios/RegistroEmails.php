@@ -62,6 +62,9 @@ final class RegistroEmails {
 	/** Invitación a dar de alta un grupo (v0.50, modo Oficina). */
 	public const INVITACION_GRUPO = 'invitacion_grupo';
 
+	/** Resultado de la revisión de un alta de grupo: aprobada o rechazada (v0.50, modo Oficina). */
+	public const ALTA_GRUPO = 'alta_grupo';
+
 	public const TIPOS = array(
 		Invitacion::ALTA      => 'Invitación',
 		Invitacion::RESET     => 'Recuperar contraseña',
@@ -75,6 +78,7 @@ final class RegistroEmails {
 		self::EVENTOS         => 'Eventos',
 		self::TIENDA          => 'Tienda',
 		self::INVITACION_GRUPO => 'Invitación de grupo',
+		self::ALTA_GRUPO       => 'Alta de grupo',
 	);
 
 	public static function table(): string {

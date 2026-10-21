@@ -176,6 +176,55 @@ final class Grupos {
 		return is_email( $email ) ? $email : '';
 	}
 
+	/**
+	 * Crea el grupo de una solicitud aprobada (v0.50, doc 50 fase 6) con la credencial **ya cifrada** (no pasa en claro por
+	 * ningún formulario) y la comprueba otra vez. Si en este momento ya no funciona, el grupo no se crea.
+	 *
+	 * @param array $s Fila de `GrupoSolicitudes` (con los secretos cifrados).
+	 * @return array|\WP_Error El grupo creado.
+	 */
+	public static function alta_desde_solicitud( array $s, string $usuario ) {
+		$num = self::normalizar_numero( (string) $s['numero'] );
+		if ( null === $num ) {
+			return new \WP_Error( 'asde_grupo', asde_t( 'El nº de grupo debe tener hasta 3 cifras (p. ej. 684).' ) );
+		}
+		$raw = self::raw();
+		if ( isset( $raw[ $num ] ) ) {
+			return new \WP_Error( 'asde_grupo', sprintf( asde_t( 'El grupo %s ya está dado de alta.' ), $num ) );
+		}
+		$g                   = self::vacio( $num );
+		$g['nombre']         = mb_substr( trim( sanitize_text_field( (string) $s['nombre'] ) ), 0, 120 );
+		$g['usuario']        = $usuario;
+		$g['clave_enc']      = (string) $s['clave_enc'];
+		$g['sede']           = sanitize_text_field( (string) $s['sede'] );
+		$g['cif']            = sanitize_text_field( (string) $s['cif'] );
+		$g['denominacion']   = sanitize_text_field( (string) $s['denominacion'] );
+		$g['email_contacto'] = is_email( (string) $s['email'] ) ? strtolower( (string) $s['email'] ) : '';
+		$raw[ $num ]         = $g;
+		self::guardar_raw( $raw );
+		$res = self::verificar( $num );
+		if ( ! $res->ok ) {
+			self::borrar( $num );
+			return new \WP_Error( 'asde_grupo', $res->message );
+		}
+		return self::por_numero( $num );
+	}
+
+	/** Línea de membrete del grupo para documentos: denominación fiscal (o nombre), CIF y sede, lo que haya. */
+	public static function membrete( ?array $grupo ): string {
+		if ( ! $grupo ) {
+			return '';
+		}
+		$partes = array_filter(
+			array(
+				'' !== (string) ( $grupo['denominacion'] ?? '' ) ? (string) $grupo['denominacion'] : '',
+				'' !== (string) ( $grupo['cif'] ?? '' ) ? 'CIF ' . $grupo['cif'] : '',
+				(string) ( $grupo['sede'] ?? '' ),
+			)
+		);
+		return implode( ' · ', $partes );
+	}
+
 	/** Baja del grupo: se borra su configuración; sus usuarios y datos se conservan (y vuelven si se da de alta otra vez). */
 	public static function borrar( string $numero ): bool {
 		$raw = self::raw();
@@ -344,6 +393,10 @@ final class Grupos {
 			'avisos'    => array(),
 			'probado'   => 0,
 			'email_contacto' => '',
+			// v0.50 (doc 50, fase 6): datos que da el grupo al darse de alta por invitación (vacíos = como siempre).
+			'sede'         => '',
+			'cif'          => '',
+			'denominacion' => '',
 		);
 	}
 }

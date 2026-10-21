@@ -224,3 +224,10 @@ Desarrolla el doc 50 (decisiones y respuestas P-168…P-176, todas cerradas el 2
   - **Enviar**: gasta la invitación con una sola sentencia atómica y crea la solicitud (si no se pudo guardar, la invitación se devuelve). Rechaza un nº de grupo que ya existe o que tiene una solicitud pendiente.
   - Desinstalar vacía los secretos de las solicitudes y la credencial de la oficina.
   - Pruebas: `tests/alta-grupo-invitacion.php` (36). 39 textos nuevos con ca/eu/gl.
+- ✅ **Fase 6 (2026-10-21/22, v0.50.0):** altas pendientes y aprobación.
+  - wp-admin → Grupos Scouts → **Altas de grupos** (`GruposAltasPage`, con el número de pendientes): lista y detalle con lo escrito; **nunca** se muestran el usuario ni la contraseña del CRM, ni el DNI ni el nombre de la primera persona («credencial guardada y comprobada el …»).
+  - **Aprobar** (`Domain\GrupoAltas::aprobar`): `Grupos::alta_desde_solicitud()` crea el grupo con la credencial **ya cifrada** (no pasa en claro por ningún formulario) y la **comprueba otra vez**; si ya no funciona, no se crea ni se aprueba. La solicitud suelta la credencial; DNI y nombre se conservan hasta crear el primer acceso (fase 7). Aviso por email al grupo sin credencial. Los módulos del grupo siguen las reglas de siempre (`Modulos::POR_DEFECTO_APAGADOS`) y se ajustan en Grupos Scouts → Módulos.
+  - **Rechazar:** borra usuario, contraseña, DNI y nombre; aviso genérico por email, sin motivo; el nº queda libre.
+  - Datos nuevos del grupo (`sede`, `cif`, `denominacion`, vacíos = como siempre): `Grupos::membrete()` los pone bajo el nombre en la lista de compra en PDF, y `Sepa\Config::de()` los usa como acreedor y calle por defecto mientras no se escriban otros.
+  - Tipo de email nuevo «Alta de grupo». Pruebas: `tests/alta-grupo-aprobacion.php` (22). 8 textos nuevos con ca/eu/gl.
+  - **Pendiente (P-175):** el enlace para que un grupo *ya existente* cambie su credencial o complete sede/CIF/denominación fiscal (invitación de tipo `actualizar`) y, con él, esconder la credencial en wp-admin → Grupos en modo Oficina. Hasta entonces el administrador sigue pudiendo editarla ahí.

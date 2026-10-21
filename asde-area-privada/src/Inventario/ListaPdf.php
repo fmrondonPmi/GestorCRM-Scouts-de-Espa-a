@@ -40,6 +40,11 @@ final class ListaPdf {
 		$pdf->nueva_pagina();
 		$y = self::MARGEN + 10;
 		$pdf->texto( $x0, $y, Grupo::nombre(), 11, true, 'izquierda', 0.35 );
+		$membrete = \AsdeBalears\AreaPrivada\Domain\Grupos::membrete( Grupo::actual() ); // v0.50: denominación fiscal, CIF y sede si el grupo los dio.
+		if ( '' !== $membrete ) {
+			$pdf->texto( $x0, $y + 12, $membrete, 8, false, 'izquierda', 0.35 );
+			$y += 8;
+		}
 		$y += 24;
 		$pdf->texto( $x0, $y, asde_t( 'Lista de compra de material' ), 18, true );
 		$pdf->texto( $x1, $y, $num, 14, true, 'derecha' );

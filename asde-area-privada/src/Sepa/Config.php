@@ -46,6 +46,14 @@ final class Config {
 		$cfg   = array_merge( $d, array_intersect_key( $c, $d ) );
 
 		$cfg['activo']     = (bool) $cfg['activo'];
+		// v0.50 (doc 50, fase 6): si el grupo dio su denominación fiscal y su sede al darse de alta, son el acreedor y la dirección por defecto.
+		$datos_grupo = \AsdeBalears\AreaPrivada\Domain\Grupos::por_numero( $grupo );
+		if ( '' === trim( (string) $cfg['nombre'] ) && '' !== (string) ( $datos_grupo['denominacion'] ?? '' ) ) {
+			$cfg['nombre'] = (string) $datos_grupo['denominacion'];
+		}
+		if ( '' === trim( (string) $cfg['calle'] ) && '' !== (string) ( $datos_grupo['sede'] ?? '' ) ) {
+			$cfg['calle'] = (string) $datos_grupo['sede'];
+		}
 		$cfg['nombre']     = mb_substr( (string) $cfg['nombre'], 0, 70 );
 		$cfg['ics']        = self::normalizar_ics( (string) $cfg['ics'] );
 		$cfg['iban']       = isset( $c['iban_enc'] ) && '' !== $c['iban_enc'] ? Iban::normalizar( (string) Crypto::decrypt( (string) $c['iban_enc'] ) ) : '';

@@ -4302,4 +4302,14 @@ return array(
 	'Este enlace ya se ha usado o ha caducado.' => 'Esta ligazón xa se usou ou caducou.',
 	'No se ha podido guardar la solicitud. Inténtalo de nuevo.' => 'Non se puido gardar a solicitude. Téntao de novo.',
 	'Invitación de grupo' => 'Convite de grupo',
+
+	// v0.50: aprobar altas
+	'Esa solicitud ya no está pendiente.' => 'Esa solicitude xa non está pendente.',
+	'No se puede descifrar la credencial guardada. Pide al grupo que repita el alta con una invitación nueva.' => 'Non se pode descifrar a credencial gardada. Pide ao grupo que repita a alta cun convite novo.',
+	'[%s] Sobre el alta de tu grupo' => '[%s] Sobre a alta do teu grupo',
+	'[%s] Tu grupo ya está dado de alta' => '[%s] O teu grupo xa está dado de alta',
+	'La oficina ha revisado el alta de <strong>%s</strong> y, con los datos recibidos, <strong>no ha podido darla</strong>.' => 'A oficina revisou a alta de <strong>%s</strong> e, cos datos recibidos, <strong>non puido darlla</strong>.',
+	'La oficina ha revisado el alta de <strong>%s</strong>: <strong>el grupo ya está dado de alta</strong> en el área privada.' => 'A oficina revisou a alta de <strong>%s</strong>: <strong>o grupo xa está dado de alta</strong> na área privada.',
+	'La primera persona con acceso recibirá un email para activar su cuenta.' => 'A primeira persoa con acceso recibirá un email para activar a súa conta.',
+	'Si crees que es un error o quieres volver a intentarlo, ponte en contacto con la oficina.' => 'Se pensas que é un erro ou queres tentalo de novo, ponte en contacto coa oficina.',
 );

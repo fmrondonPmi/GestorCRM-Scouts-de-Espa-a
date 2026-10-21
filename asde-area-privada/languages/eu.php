@@ -4302,4 +4302,14 @@ return array(
 	'Este enlace ya se ha usado o ha caducado.' => 'Esteka hau jada erabili da edo iraungi da.',
 	'No se ha podido guardar la solicitud. Inténtalo de nuevo.' => 'Ezin izan da eskaera gorde. Saiatu berriro.',
 	'Invitación de grupo' => 'Taldearen gonbidapena',
+
+	// v0.50: aprobar altas
+	'Esa solicitud ya no está pendiente.' => 'Eskaera hori ez dago jada zain.',
+	'No se puede descifrar la credencial guardada. Pide al grupo que repita el alta con una invitación nueva.' => 'Ezin da gordetako kredentziala deszifratu. Eskatu taldeari alta errepikatzeko gonbidapen berri batekin.',
+	'[%s] Sobre el alta de tu grupo' => '[%s] Zure taldearen altari buruz',
+	'[%s] Tu grupo ya está dado de alta' => '[%s] Zure taldea alta emanda dago jada',
+	'La oficina ha revisado el alta de <strong>%s</strong> y, con los datos recibidos, <strong>no ha podido darla</strong>.' => 'Bulegoak <strong>%s</strong> taldearen alta berrikusi du eta, jasotako datuekin, <strong>ezin izan du eman</strong>.',
+	'La oficina ha revisado el alta de <strong>%s</strong>: <strong>el grupo ya está dado de alta</strong> en el área privada.' => 'Bulegoak <strong>%s</strong> taldearen alta berrikusi du: <strong>taldea alta emanda dago</strong> eremu pribatuan.',
+	'La primera persona con acceso recibirá un email para activar su cuenta.' => 'Sarbidea duen lehen pertsonak emaila jasoko du bere kontua aktibatzeko.',
+	'Si crees que es un error o quieres volver a intentarlo, ponte en contacto con la oficina.' => 'Akatsa dela uste baduzu edo berriro saiatu nahi baduzu, jarri harremanetan bulegoarekin.',
 );
