@@ -251,3 +251,10 @@ Las ✅ de la tabla están contestadas aquí. **Sigue abierta: P-43** (si Colony
 ## Rediseño de la tienda (2026-10-21, doc 52)
 
 - **P-177 ✅** Se retira el pedido del scouter para su sección. **P-178 ✅** Un enlace de menú por grupo con la tienda activada. **P-179 ✅** El datáfono se propone conciliar con el banco (nunca marca solo). **P-180 ✅** El datáfono lo eligen socios e invitados. **P-181 ✅** Lo recibido de más del pedido al proveedor suma a las existencias. **P-182 ✅** Los precios los fija la administración de la tienda en cada producto.
+
+## Módulo Reintegros (2026-10-21, doc 53)
+
+- **P-183 ✅** El IBAN lo escribe quien pide (cifrado, borrado al terminar). **P-184 ✅** Con evento, al pagar se crea el gasto del evento.
+- **P-185 → supuesto, por confirmar:** justificante obligatorio (imagen o PDF de hasta 5 MB); nadie aprueba ni rechaza el suyo; fecha del gasto no futura ni de hace más de un año.
+- **P-186 → supuesto:** el email a Tesorería solo sale cuando se pide por transferencia (en efectivo basta el contador del menú); a quien pidió le llegan aprobado, rechazado (con motivo) y pagado.
+- **P-187 → supuesto:** el reintegro no genera un movimiento en el banco ni en Tesorería; se paga por fuera y se marca aquí.

@@ -53,3 +53,9 @@
 - Cláusula informativa y aviso legal del área privada.
 - Contrato de encargado del tratamiento con el hosting, si no existe ya.
 - Evaluación de impacto (EIPD): recomendable, porque se tratan datos de salud de menores.
+
+## Actualización v0.47.0 (2026-10-21): reintegros (doc 53)
+
+- Tabla `{prefix}asde_reintegros`: quién lo pide (id de usuario), concepto, fecha, importe, evento opcional, forma de cobro y estado. **El IBAN** (solo si cobra por transferencia) va **cifrado** (`Crypto`) en `iban_enc` y se **borra** al pagarse, rechazarse o cancelarse el reintegro; solo lo ven quien lo pidió, Tesorería y Coordinación, y la auditoría nunca lo guarda.
+- El **justificante** (imagen o PDF de hasta 5 MB) se guarda **cifrado** en `uploads/asde-privado/<grupo>/` como los de los eventos (`Eventos\Justificantes`) y solo se abre por la pantalla, con permiso y registro. Al pagar un reintegro de un evento, el gasto de sus cuentas apunta al mismo fichero.
+- El email a Tesorería (reintegro por transferencia) lleva el IBAN; el **registro de emails** guarda solo el tipo y el id (la vista previa vuelve a leer el IBAN mientras exista). Al desinstalar, el IBAN de la tabla se vacía.

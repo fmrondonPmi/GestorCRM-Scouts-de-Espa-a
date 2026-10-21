@@ -32,9 +32,10 @@ final class Modulos {
 	public const ALTA_SCOUTERS = 'alta_scouters';
 	public const LISTA_ESPERA  = 'lista_espera';
 	public const EVENTOS       = 'eventos';
+	public const REINTEGROS    = 'reintegros';
 
 	/** Módulos que nacen apagados (v0.32): cambian lo que ve el grupo y se encienden a mano. */
-	public const POR_DEFECTO_APAGADOS = array( self::LISTA_ESPERA, self::EVENTOS );
+	public const POR_DEFECTO_APAGADOS = array( self::LISTA_ESPERA, self::EVENTOS, self::REINTEGROS );
 
 	/** módulo => [nombre, qué es, capabilities que se quitan si está apagado, módulo del que depende] */
 	public const LISTA = array(
@@ -49,6 +50,8 @@ final class Modulos {
 		self::LISTA_ESPERA  => array( 'Lista de espera', 'El enlace para apuntarse a la lista de espera, la lista para el equipo y el paso al CRM.', array( 'asde_lista_espera', 'asde_lista_espera_alta' ), '' ),
 		// v0.35 (doc 43): apagado por defecto, como todo módulo nuevo (regla 5).
 		self::EVENTOS       => array( 'Eventos', 'Salidas, acampadas y otras actividades: equipo dirigente, presupuesto, inscripciones, «Mis eventos» y cobros.', array( 'asde_eventos_gestion', 'asde_menus_recetas', 'asde_eventos_grupo', 'asde_eventos_economia', 'asde_eventos_config', 'asde_eventos_inscribir', 'asde_eventos_material' ), '' ),
+		// v0.47 (doc 53): apagado por defecto, como todo módulo nuevo (regla 5).
+		self::REINTEGROS    => array( 'Reintegros', 'Los scouters piden que les devuelvan un gasto (con el justificante y, si procede, un evento); Tesorería lo aprueba y Tesorería o Coordinación lo marcan pagado.', array( 'asde_reintegros', 'asde_reintegros_aprobar', 'asde_reintegros_pagar' ), '' ),
 	);
 
 	/** @var array<string, string[]> nº de grupo => capabilities quitadas (por petición). */

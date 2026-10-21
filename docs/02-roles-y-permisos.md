@@ -198,3 +198,13 @@ Y lo que ya había, con lo nuevo:
 - `asde_eventos_gestion` (en el ámbito del evento): además, **inscribir** a alguien en nombre de su familia (fuera de las secciones convocadas o de la edad, con motivo), **marcar la autorización en papel** y **dar de baja** con motivo, hasta que acaba el evento. Ve quién recoge a cada menor y las observaciones (cifradas en la base de datos).
 - `asde_eventos_economia` (Tesorería): **registrar pagos** (efectivo, ingreso o transferencia, Bizum) de una inscripción o de una familia, **becas y ajustes** con motivo y **anular** un movimiento. No ve quién recoge ni las observaciones, salvo que esté en el equipo del evento.
 - Ámbito de «Mis eventos» (como en el uniforme): la cuenta familiar, sus menores (y firma por ellos); el asociado/a de 14 a 17, se preinscribe (firma su familia); el mayor de edad (el día que empieza el evento), se inscribe sin autorización. Un scouter ve «Mis eventos» solo si hay algún evento para él (p. ej. una formación).
+
+## Actualización v0.47.0 (2026-10-21): reintegros (doc 53)
+
+| Capability | Roles | Qué permite |
+|---|---|---|
+| `asde_reintegros` | Scouter, Coordinación | Pedir el reintegro de un gasto y ver, cancelar y seguir los suyos |
+| `asde_reintegros_aprobar` | Tesorería | Aprobar o rechazar (con motivo) los reintegros del grupo; nadie aprueba el suyo |
+| `asde_reintegros_pagar` | Tesorería, Coordinación | Marcar como pagado un reintegro aprobado |
+
+Quien aprueba o paga ve todos los reintegros del grupo (con el IBAN mientras no esté pagado). Módulo **apagado por defecto** (`Domain\Modulos::REINTEGROS`).

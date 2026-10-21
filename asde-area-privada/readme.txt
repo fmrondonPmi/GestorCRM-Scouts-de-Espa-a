@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.46.0
+Stable tag: 0.47.0
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -61,6 +61,9 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.47.0 =
+* New module "Reintegros" (off by default; turn it on in Groups > Modules): scouters and Coordination can ask to be refunded for an expense they paid, attaching a photo or PDF of the receipt (stored encrypted), optionally linking it to an event, and choosing cash or bank transfer. For a transfer the IBAN is typed by the requester, stored encrypted and deleted when the refund ends, and an email with all the details goes to Treasury. Treasury approves (or rejects with a reason); Treasury or Coordination mark it as paid, which also adds the expense to the event's accounts when it has one.
 
 = 0.46.0 =
 * Shop: new payment option "Datáfono / TPV" (card payment in person with the group's terminal). It is off by default (Shop settings); members and guests can choose it, and Treasury marks the order as paid. If the bank module is on, the bank deposit that matches what was collected with the terminal (minus the bank's fee) is suggested to Treasury, who confirms it; nothing is reconciled automatically.
@@ -204,51 +207,10 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * wp-admin → Scout Groups → "Repeated documents": for a group, the CRM records that share the same ID document (written in any form), to merge them in the CRM. Read-only; the document is shown masked.
 * CRM registrations tested end to end in a browser against the simulated SinergiaCRM API (development only).
 
-= 0.23.1 =
-* Register a member: under 18, guardian 1 (name, surnames and email) is required.
-* A leaving done from the web is emailed to Treasury and to the family (or to the person if adult); with the reason "Decease" nothing is sent to the family. The emails appear in Users → Emails.
-* The ID document check now only exists as the first step of "Register a member": the separate "Is this person already in the CRM?" button in People is gone.
-
-= 0.23.0 =
-* CRM registrations, screens (off by default; enabled per group in wp-admin → Modules, "CRM registrations" column): People → "Register a member" in steps (ID document → details and membership → review → done, with the member number returned by the CRM and links to the record and to "Give access"). The document is checked first: already in the group, the registration stops and leads to that record (a new membership for someone who returns); in another group or organisation, it must be confirmed. What is typed travels in the form and is never stored in WordPress.
-* Record → "Membership in the CRM" (Secretary and Coordination): new membership, leaving (date and reason, with what changes: the person's account, the family accounts and the family fee), section change and adding the ID document to someone who has none (checked first). Dates cannot be in the future, nor before the current membership started.
-* Treasury → Payment control lists the recent leavings done from the web of people in a family (last 30 days): they no longer count in their family fee.
-
-= 0.22.0 =
-* CRM registrations, internal part (no screens yet; off by default, enabled per group): create a new person with their first membership (name, surnames, birth date, gender, and the ID document from age 14), a new membership for someone who returns, leaving (end date and reason; nothing is deleted), section change and adding an ID document to a minor. Checks before writing (already in the group: no second record; in another group: must be confirmed), a lock so two clicks never create two records, and retries that continue where a failed registration stopped. New table for these operations (no personal data).
-* Development: a simulated SinergiaCRM API server for testing registrations without the real CRM (not included in the package).
-
-= 0.21.0 =
-* People: new "Is this person already in the CRM?" check (Secretary and Coordination), before registering someone. With an ID document (DNI, NIE or other) it says whether the person already has a record in the group (with or without an active membership) and whether they are already registered in another group or organisation of Scouts de España (a count only: nothing of that record is read). The document is validated (DNI/NIE letter) and never stored.
-
-= 0.20.1 =
-* Payment control: the bank income for "Register payment" is chosen in a pop-up window with a search box (tutor's or member's name, concept, amount or date) and one-click searches with the family's names; incomes that carry a tutor's or member's name are suggested for the family. Without JavaScript the window is a page and works the same.
-* The one-line forms of the bank and inventory types no longer stack their fields with the Enfold theme.
-
-= 0.20.0 =
-* Bank: the movements list updates without reloading the page (pages, sorting, filters, reconciling); expense and income types with their own screen; "reviewed" movements get a type and a note in a pop-up window; multiple selection to mark several as reviewed.
-* Payment control: the "fee of the round" box can be collapsed; "Register payment" can use a pending bank income, which is reconciled with the family.
-* New wp-admin screen "Modules": turn each module on or off per group.
-
-= 0.19.1 =
-* Inventory: import materials from a CSV file (button and pop-up window, downloadable example, file check first, then the valid rows are imported and a report lists the rows that failed, which can be downloaded to fix them). The person who prepares a purchase list is shown by name.
-
-= 0.19.0 =
-* New "Inventory" module: the group's material and equipment (quantity, description, price, type, purchase year, serial number), material types managed in a pop-up window, and purchase lists that Treasury must approve (by email notice) before they can be printed as PDF.
-
-= 0.18.2 =
-* The readme is now in English and "Tested up to" is updated; code comments explain the use of core and cache-plugin hooks.
-
-= 0.18.1 =
-* Review with the WordPress plugin checker: translated texts escaped on output, translator comments, tables with `%i`, sanitized input and unified line endings.
-
-= 0.18.0 =
-* The mobile app became a separate plugin.
-
-= 0.17.0 =
-* First version with the mobile app (PWA).
-
 == Upgrade Notice ==
+
+= 0.47.0 =
+New "Reintegros" module (off by default). Adds a table; the new capabilities are added to the roles automatically.
 
 = 0.46.0 =
 Card terminal payment option in the shop. Adds a column to the shop orders table (added automatically).

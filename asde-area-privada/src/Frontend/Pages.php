@@ -61,6 +61,8 @@ final class Pages {
 		// v0.41 (doc 49, B1): el recetario de los menús.
 		'eventos_recetas'    => array( 'recetas', 'Recetas', '[asde_eventos_recetas]', 'eventos' ),
 		'mis_eventos'        => array( 'mis-eventos', 'Mis eventos', '[asde_mis_eventos]', 'area' ),
+		// v0.47 (doc 53): reintegros de gastos.
+		'reintegros'         => array( 'reintegros', 'Reintegros', '[asde_reintegros]', 'area' ),
 	);
 
 	/** Páginas accesibles sin iniciar sesión (no salen en listados ni menús: Visibilidad). */

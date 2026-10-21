@@ -48,6 +48,7 @@ final class RegistroEmails {
 
 	/** Aviso a quien pidió una lista de compra: Tesorería la ha aprobado o rechazado (v0.30, doc 37). */
 	public const COMPRA_REVISADA = 'compra_revisada';
+	public const REINTEGRO = 'reintegro';
 
 	/** Emails de la lista de espera: confirmar, enlaces, caducidad y mensajes del grupo (v0.32, doc 39). */
 	public const LISTA_ESPERA = 'lista_espera';
@@ -65,6 +66,7 @@ final class RegistroEmails {
 		self::SEPA            => 'Domiciliación SEPA',
 		self::COMPRA          => 'Lista de compra de material',
 		self::COMPRA_REVISADA => 'Lista de compra revisada',
+		self::REINTEGRO       => 'Reintegro',
 		self::BAJA            => 'Aviso de baja',
 		self::LISTA_ESPERA    => 'Lista de espera',
 		self::EVENTOS         => 'Eventos',
@@ -220,6 +222,9 @@ final class RegistroEmails {
 		}
 		if ( self::TIENDA === $fila['tipo'] ) {
 			return \AsdeBalears\AreaPrivada\Tienda\Avisos::html( $datos, $user ? Contacto::saludo( $user ) : '' );
+		}
+		if ( self::REINTEGRO === $fila['tipo'] ) {
+			return \AsdeBalears\AreaPrivada\Reintegros\Avisos::html( $datos, $user ? Contacto::saludo( $user ) : '' );
 		}
 		if ( self::COMPRA === $fila['tipo'] ) {
 			$lista = \AsdeBalears\AreaPrivada\Inventario\ComprasTable::obtener( (int) ( $datos['lista'] ?? 0 ) );

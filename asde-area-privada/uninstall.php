@@ -36,6 +36,11 @@ if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->prefix . 'asd
 	$wpdb->query( "DELETE FROM {$wpdb->prefix}asde_lista_espera" ); // phpcs:ignore WordPress.DB
 }
 
+// Reintegros (v0.47): el IBAN de quien cobra por transferencia va cifrado; al desinstalar se vacía.
+if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->prefix . 'asde_reintegros' ) ) ) { // phpcs:ignore WordPress.DB
+	$wpdb->query( "UPDATE {$wpdb->prefix}asde_reintegros SET iban_enc = ''" ); // phpcs:ignore WordPress.DB
+}
+
 $asde_menu_item = (int) get_option( 'asde_ap_menu_item' );
 if ( $asde_menu_item && 'nav_menu_item' === get_post_type( $asde_menu_item ) ) {
 	wp_delete_post( $asde_menu_item, true );

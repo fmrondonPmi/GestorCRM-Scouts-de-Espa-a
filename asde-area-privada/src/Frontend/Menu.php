@@ -85,6 +85,11 @@ final class Menu {
 			$n                     = current_user_can( \AsdeBalears\AreaPrivada\Inventario\Servicio::CAP_APROBAR ) ? \AsdeBalears\AreaPrivada\Inventario\ComprasTable::contar_pendientes() : 0;
 			$gestion['inventario'] = asde_t( 'Inventario' ) . ( $n ? ' (' . $n . ')' : '' );
 		}
+		if ( current_user_can( \AsdeBalears\AreaPrivada\Reintegros\Servicio::CAP_PEDIR ) || \AsdeBalears\AreaPrivada\Reintegros\Servicio::ve_todos() ) {
+			// v0.47 (doc 53): a quien aprueba o paga se le cuentan los que esperan.
+			$n                    = \AsdeBalears\AreaPrivada\Reintegros\Servicio::pendientes();
+			$gestion['reintegros'] = asde_t( 'Reintegros' ) . ( $n ? ' (' . $n . ')' : '' );
+		}
 		if ( current_user_can( 'asde_lista_espera' ) ) {
 			// v0.32 (doc 39): se cuentan las confirmadas que nadie ha contactado todavía.
 			$n                       = \AsdeBalears\AreaPrivada\ListaEspera\Inscripciones::contar_sin_contactar();

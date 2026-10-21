@@ -10,6 +10,7 @@ use AsdeBalears\AreaPrivada\Frontend\Views\EventosView;
 use AsdeBalears\AreaPrivada\Frontend\Views\InscripcionEsperaView;
 use AsdeBalears\AreaPrivada\Frontend\Views\TiendaPublicaView;
 use AsdeBalears\AreaPrivada\Frontend\Views\MisEventosView;
+use AsdeBalears\AreaPrivada\Frontend\Views\ReintegrosView;
 use AsdeBalears\AreaPrivada\Frontend\Views\RecetasView;
 use AsdeBalears\AreaPrivada\Frontend\Views\ListaEsperaView;
 use AsdeBalears\AreaPrivada\Frontend\Views\AltaUsuariosView;
@@ -107,6 +108,7 @@ final class Router {
 		'eventos_config'     => array( 'asde_eventos_config', EventosConfigView::class ),
 		'eventos_recetas'    => array( 'asde_eventos_recetas', RecetasView::class ),
 		'mis_eventos'        => array( 'asde_mis_eventos', MisEventosView::class ),
+		'reintegros'         => array( 'asde_reintegros', ReintegrosView::class ), // v0.47 (doc 53).
 	);
 
 	public function register(): void {
@@ -349,6 +351,9 @@ final class Router {
 		}
 		if ( 'federacion' === $key ) {
 			wp_enqueue_script( 'asde-conceptos', plugins_url( 'assets/js/conceptos.js', ASDE_AP_FILE ), array( 'asde-i18n' ), ASDE_AP_VERSION, true );
+		}
+		if ( 'reintegros' === $key ) {
+			wp_enqueue_script( 'asde-reintegros', plugins_url( 'assets/js/reintegros.js', ASDE_AP_FILE ), array(), ASDE_AP_VERSION, true ); // v0.47: el IBAN solo si cobra por transferencia.
 		}
 		if ( in_array( $key, array( 'tienda_pedidos', 'tienda_publica' ), true ) ) {
 			wp_enqueue_script( 'asde-tienda', plugins_url( 'assets/js/tienda.js', ASDE_AP_FILE ), array(), ASDE_AP_VERSION, true ); // v0.45: cantidad + talla en un desplegable.

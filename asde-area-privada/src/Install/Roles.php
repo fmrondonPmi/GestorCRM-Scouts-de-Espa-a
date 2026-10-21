@@ -51,6 +51,7 @@ final class Roles {
 					// Crea y gestiona los eventos de sus secciones y aquellos en cuyo equipo está.
 					'asde_eventos_gestion'   => true,
 					'asde_menus_recetas'     => true, // Recetario de los menús (v0.41, doc 49).
+					'asde_reintegros'        => true, // Reintegros (v0.47, doc 53): pedir el reintegro de un gasto.
 				),
 			),
 			self::SECRETARIA   => array(
@@ -108,6 +109,8 @@ final class Roles {
 					'asde_eventos_gestion'   => true,
 					'asde_menus_recetas'     => true,
 					'asde_eventos_grupo'     => true,
+					'asde_reintegros'        => true, // Reintegros (v0.47): pide los suyos y marca pagados los de todos.
+					'asde_reintegros_pagar'  => true,
 					'asde_eventos_config'    => true,
 				),
 			),
@@ -132,6 +135,8 @@ final class Roles {
 					'asde_eventos_inscribir'  => true,
 					// Eventos: valida el presupuesto (el precio sale de él) y configura el margen.
 					'asde_eventos_economia'   => true,
+					'asde_reintegros_aprobar' => true, // Reintegros (v0.47): aprueba y marca pagados.
+					'asde_reintegros_pagar'   => true,
 					'asde_eventos_config'     => true,
 				),
 			),
