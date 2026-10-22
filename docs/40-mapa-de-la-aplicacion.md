@@ -187,7 +187,7 @@ grupo no ve a otro**; **nunca** se prueba contra el CRM real ni se escribe en é
 ## 5. Inventario (generado)
 
 <!-- inventario:inicio -->
-_Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10-22 · plugin 0.51.0. No editar a mano: se regenera._
+_Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10-22 · plugin 0.52.0. No editar a mano: se regenera._
 
 ### Páginas (Frontend\Pages + Router)
 
@@ -664,6 +664,7 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 - `colores.js` — wp-admin → Grupos Scouts → Colores: selectores de color y vista previa en vivo.
 - `combobox.js` — Desplegable predictivo: convierte un <select class="asde-combobox"> en un campo de texto que empieza a buscar a partir de la 3.ª letra (data-min) y sugiere las 
 - `conceptos.js` — «Otros conceptos» del coste federativo: botón para añadir filas (sin JavaScript hay siempre una fila vacía para añadir de uno en uno).
+- `eventos.js` — Eventos (v0.52): al publicar un evento se abre una ventana donde se elige a quién avisar por email (familias, scouters o todos).
 - `ficha.js` — Ficha de una persona (mejora progresiva: sin JavaScript todo sigue funcionando).
 - `hojas.js` — Hojas de la sección «Usuarios» (v0.25): Usuarios, Dar acceso y Registro de emails son hojas de un mismo libro, como en una hoja de cálculo (templates/usuarios/h
 - `imprimir.js` — Botón «Imprimir» de las páginas propias para imprimir (v0.31; antes, onclick en la plantilla): cualquier elemento con data-asde-imprimir-pagina abre el cuadro d
@@ -679,5 +680,5 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 
 ### Pruebas (`tests/`)
 
-`acceso` · `alta-grupo-aprobacion` · `alta-grupo-invitacion` · `alta-grupo-primer-usuario` · `alta-reglas` · `alta-scouters` · `altas-crm-escritura` · `altas-crm-pantallas` · `altas-crm` · `app-enganches` · `ayuda` · `banco-gestion` · `colores` · `entorno` · `estilo-wordpress` · `eventos-avisos-config` · `eventos-calendario` · `eventos-economia` · `eventos-inscripciones` · `eventos-intendente` · `eventos-material` · `eventos` · `ficha-alergenos` · `fichas-escritura` · `grupos-emails-banco` · `identidad` · `idiomas-catalogos` · `idiomas` · `inventario` · `lista-espera` · `mejoras-v029` · `mejoras-v030` · `mejoras-v031` · `mejoras-v034` · `mejoras-v0351` · `menus-evento` · `menus-recetario` · `menus-validacion` · `menus` · `migracion-tienda` · `modo-instalacion` · `modulos` · `oficina-pantallas` · `oficina` · `organizacion` · `reintegros` · `rendimiento` · `sepa` · `solicitudes` · `solo-lectura` · `tema` · `tienda-catalogo` · `tienda-fase5` · `tienda-inventario` · `tienda-pedidos` · `tienda-proveedor` · `tienda-publica` · `tienda` · `usuarios-listado`
+`acceso` · `alta-grupo-aprobacion` · `alta-grupo-invitacion` · `alta-grupo-primer-usuario` · `alta-reglas` · `alta-scouters` · `altas-crm-escritura` · `altas-crm-pantallas` · `altas-crm` · `app-enganches` · `ayuda` · `banco-asociar` · `banco-gestion` · `colores` · `entorno` · `estilo-wordpress` · `eventos-avisos-config` · `eventos-calendario` · `eventos-economia` · `eventos-inscripciones` · `eventos-intendente` · `eventos-material` · `eventos` · `ficha-alergenos` · `fichas-escritura` · `grupos-emails-banco` · `identidad` · `idiomas-catalogos` · `idiomas` · `inventario` · `lista-espera` · `mejoras-v029` · `mejoras-v030` · `mejoras-v031` · `mejoras-v034` · `mejoras-v0351` · `menus-evento` · `menus-recetario` · `menus-validacion` · `menus` · `migracion-tienda` · `modo-instalacion` · `modulos` · `oficina-pantallas` · `oficina` · `organizacion` · `reintegros` · `rendimiento` · `sepa` · `solicitudes` · `solo-lectura` · `tema` · `tienda-catalogo` · `tienda-fase5` · `tienda-inventario` · `tienda-pedidos` · `tienda-proveedor` · `tienda-publica` · `tienda` · `usuarios-listado`
 <!-- inventario:fin -->

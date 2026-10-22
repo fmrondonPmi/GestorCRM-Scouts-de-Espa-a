@@ -409,6 +409,9 @@ final class EventosView extends EventosBaseView {
 			'por_cerrar' => $cerrado ? array() : Cuentas::por_cerrar( $e, $balance ),
 			'economia'   => Cobros::puede(),
 			'abiertas'   => Cuentas::abiertas( $e ),
+			// v0.52: los movimientos del banco que Tesorería ha asociado a este evento (solo los ve quien usa el banco).
+			'banco'      => Cobros::puede() && \AsdeBalears\AreaPrivada\Domain\Modulos::activo( \AsdeBalears\AreaPrivada\Domain\Modulos::BANCO ) ? \AsdeBalears\AreaPrivada\Tesoreria\Banco\BancoTable::revisados_de_evento( $e['id'] ) : array(),
+			'tipos_banco' => \AsdeBalears\AreaPrivada\Tesoreria\Banco\TiposMovimiento::todos(),
 		);
 	}
 
@@ -524,8 +527,15 @@ final class EventosView extends EventosBaseView {
 				break;
 
 			case 'evento_publicar':
-				$r     = Servicio::publicar( $e, $a );
-				$hecho = sprintf( asde_t( 'Evento %s publicado.' ), $num );
+				$avisar = \AsdeBalears\AreaPrivada\Eventos\Avisos::destinos_validos( $this->post_array( 'avisar' ) );
+				$r      = Servicio::publicar( $e, $a, $avisar );
+				$hecho  = sprintf( asde_t( 'Evento %s publicado.' ), $num ) . ' ' . (
+					array( 'familias' ) === $avisar ? asde_t( 'Se avisará por email a las familias.' ) : (
+						array( 'scouters' ) === $avisar ? asde_t( 'Se avisará por email a los scouters.' ) : (
+							$avisar ? asde_t( 'Se avisará por email a las familias y a los scouters.' ) : asde_t( 'No se ha enviado ningún aviso por email.' )
+						)
+					)
+				);
 				break;
 
 			case 'evento_despublicar':

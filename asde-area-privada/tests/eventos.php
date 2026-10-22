@@ -400,9 +400,13 @@ try {
 
 	echo "\n== Parte H · Publicar, volver a borrador, cancelar y borrar ==\n";
 	$a_lob = $como( $u_lob );
+	$ventana = \AsdeBalears\AreaPrivada\Frontend\TemplateLoader::render( 'eventos/resumen', array( 'e' => EventosTable::obtener( $id_lob ), 'cfg' => \AsdeBalears\AreaPrivada\Eventos\Config::de(), 'ambito' => $a_lob, 'lista' => array(), 'url' => '' ) );
+	$ok( str_contains( $ventana, 'data-asde-publicar-dialogo' ) && str_contains( $ventana, 'name="avisar[]" value="familias"' ) && str_contains( $ventana, 'name="avisar[]" value="scouters"' ) && str_contains( $ventana, 'name="avisar[]" value="todos"' ) && str_contains( $ventana, '<noscript>' ), 'al publicar se ofrece una ventana con Familias, Scouters y Todos (y el mismo formulario sin JavaScript)' );
+	$ok( ! str_contains( $ventana, ' checked' ), 'y no viene nada marcado de antemano' );
 	$h     = $enviar( new EventosView(), array( 'asde_action' => 'evento_publicar', 'evento' => (string) $id_lob ), 'asde_evento_' . $id_lob );
 	$e     = EventosTable::obtener( $id_lob );
 	$ok( EventosTable::PUBLICADO === $e['estado'] && 'publicado' === EventosTable::estado_visible( $e ) && str_contains( $h, 'publicado' ), 'con el presupuesto validado, se publica' );
+	$ok( str_contains( $h, 'No se ha enviado ningún aviso por email' ), 'si no se marca a nadie en la ventana de publicar, se dice que no se ha enviado ningún aviso' );
 	$ok( 'en_curso' === EventosTable::estado_visible( $e, EventosTable::marca( $ini . ' 12:00:00' ) ) && 'celebrado' === EventosTable::estado_visible( $e, EventosTable::marca( $fin . ' 18:00:00' ) ), 'publicado se ve «en curso» durante el evento y «celebrado» después' );
 	$enviar( new EventosView(), array( 'asde_action' => 'evento_despublicar', 'evento' => (string) $id_lob ), 'asde_evento_' . $id_lob );
 	$ok( EventosTable::BORRADOR === EventosTable::obtener( $id_lob )['estado'], 'vuelve a borrador (nadie inscrito)' );
@@ -535,6 +539,7 @@ try {
 	foreach ( array_map( 'intval', (array) $wpdb->get_col( $wpdb->prepare( 'SELECT id FROM ' . EventosTable::table() . ' WHERE id > %d', $ev_antes ) ) ) as $eid ) { // phpcs:ignore WordPress.DB
 		foreach ( array( 'publicado', 'cancelado' ) as $tipo ) {
 			wp_clear_scheduled_hook( \AsdeBalears\AreaPrivada\Eventos\Avisos::HOOK, array( $grupo['numero'], $eid, $tipo ) );
+			wp_unschedule_hook( \AsdeBalears\AreaPrivada\Eventos\Avisos::HOOK ); // v0.52: el aviso de publicar lleva también los destinatarios.
 		}
 	}
 	$lista = implode( ',', array_map( 'intval', $ids ) ) ?: '0';

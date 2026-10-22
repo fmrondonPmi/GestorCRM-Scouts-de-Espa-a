@@ -6,6 +6,8 @@
  *
  * @var array[]           $movs        Los elegidos (pendientes o ya revisados, para cambiarles el tipo)
  * @var array<int, array> $tipos       Tipos del grupo
+ * @var array<int, string> $eventos     Eventos a los que se puede asociar (id => nombre; vacío si el módulo está apagado)
+ * @var array<int, string> $familias    Familias a las que se puede asociar (id => etiqueta)
  * @var string            $url
  * @var string            $volver      Listado del que se viene
  * @var int               $conciliados Elegidos que no se pueden revisar (conciliados con una familia)
@@ -75,6 +77,12 @@ $opciones = static function ( float $importe, ?int $elegido ) use ( $tipos ): st
 						<th scope="col"><?php asde_e( 'Concepto' ); ?></th>
 						<th scope="col" class="asde-num"><?php asde_e( 'Importe' ); ?></th>
 						<th scope="col"><?php asde_e( 'Tipo' ); ?></th>
+						<?php if ( $eventos ) : ?>
+							<th scope="col"><?php asde_e( 'Evento' ); ?></th>
+						<?php endif; ?>
+						<?php if ( $familias ) : ?>
+							<th scope="col"><?php asde_e( 'Familia' ); ?></th>
+						<?php endif; ?>
 					</tr>
 				</thead>
 				<tbody>
@@ -97,6 +105,28 @@ $opciones = static function ( float $importe, ?int $elegido ) use ( $tipos ): st
 									<a class="button asde-button-secundario asde-banco-mas" href="<?php echo esc_url( $url_mas ); ?>" data-asde-banco-tipo-nuevo title="<?php echo esc_attr( asde_a( 'Crear un tipo nuevo' ) ); ?>" aria-label="<?php echo esc_attr( asde_a( 'Crear un tipo nuevo' ) ); ?>">+</a>
 								</span>
 							</td>
+							<?php if ( $eventos ) : ?>
+								<td data-label="<?php echo esc_attr( asde_a( 'Evento' ) ); ?>">
+									<label class="screen-reader-text" for="asde-evento-<?php echo (int) $m['id']; ?>"><?php asde_e( 'Evento' ); ?></label>
+									<select id="asde-evento-<?php echo (int) $m['id']; ?>" name="evento[<?php echo (int) $m['id']; ?>]">
+										<option value=""><?php asde_e( 'Ninguno' ); ?></option>
+										<?php foreach ( $eventos as $eid => $nombre ) : ?>
+											<option value="<?php echo (int) $eid; ?>" <?php selected( (int) ( $m['evento_id'] ?? 0 ), (int) $eid ); ?>><?php echo esc_html( $nombre ); ?></option>
+										<?php endforeach; ?>
+									</select>
+								</td>
+							<?php endif; ?>
+							<?php if ( $familias ) : ?>
+								<td data-label="<?php echo esc_attr( asde_a( 'Familia' ) ); ?>">
+									<label class="screen-reader-text" for="asde-familia-<?php echo (int) $m['id']; ?>"><?php asde_e( 'Familia' ); ?></label>
+									<select id="asde-familia-<?php echo (int) $m['id']; ?>" name="familia[<?php echo (int) $m['id']; ?>]">
+										<option value=""><?php asde_e( 'Ninguna' ); ?></option>
+										<?php foreach ( $familias as $fid => $etiqueta ) : ?>
+											<option value="<?php echo (int) $fid; ?>" <?php selected( (int) ( $m['familia_id'] ?? 0 ), (int) $fid ); ?>><?php echo esc_html( $etiqueta ); ?></option>
+										<?php endforeach; ?>
+									</select>
+								</td>
+							<?php endif; ?>
 						</tr>
 					<?php endforeach; ?>
 				</tbody>

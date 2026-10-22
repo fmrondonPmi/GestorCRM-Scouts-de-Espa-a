@@ -200,10 +200,13 @@ $revisar = static fn( array $ids ) => add_query_arg(
 							<?php if ( BancoTable::IGNORADO === $m['estado'] ) : ?>
 								<br><strong><?php echo esc_html( isset( $tipos[ (int) $m['tipo_id'] ] ) ? $tipos[ (int) $m['tipo_id'] ]['nombre'] : asde_t( 'Sin tipo' ) ); ?></strong>
 								<?php echo '' !== $m['nota'] ? '<br><span class="asde-muted">' . esc_html( $m['nota'] ) . '</span>' : ''; ?>
+								<?php if ( ! empty( $m['evento_id'] ) && isset( $eventos[ (int) $m['evento_id'] ] ) ) : ?>
+									<br><span class="asde-muted"><?php asde_e( 'Evento:' ); ?> <?php echo esc_html( $eventos[ (int) $m['evento_id'] ] ); ?></span>
+								<?php endif; ?>
 							<?php endif; ?>
 						</td>
 						<td data-label="<?php echo esc_attr( asde_a( 'Familia' ) ); ?>">
-							<?php if ( BancoTable::CONCILIADO === $m['estado'] ) : ?>
+							<?php if ( BancoTable::CONCILIADO === $m['estado'] || ( BancoTable::IGNORADO === $m['estado'] && ! empty( $m['familia_id'] ) ) ) : ?>
 								<?php echo esc_html( $familias['etiquetas'][ (int) $m['familia_id'] ] ?? '—' ); ?>
 							<?php elseif ( BancoTable::PENDIENTE === $m['estado'] && $ingreso ) : ?>
 								<?php if ( $sug ) : ?>

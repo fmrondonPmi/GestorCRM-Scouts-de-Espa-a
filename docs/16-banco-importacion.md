@@ -81,7 +81,7 @@ Cuaderno 43 de AEB, CECA y UNACC (junio de 2012): registros de 80 posiciones.
   - se crea el **pago en el control de pagos** de la familia (origen `banco`, forma «transferencia»);
   - el movimiento queda *Conciliado*.
 - **Conciliar todos los sugeridos por referencia:** un botón para los que llevan la referencia de familia.
-- **Revisado (no es cuota):** para donativos, subvenciones o gastos.
+- **Revisado (no es cuota):** para donativos, subvenciones o gastos, con su tipo y, desde la v0.52, opcionalmente un **evento** (si el grupo usa eventos) y una **familia**. No crea ningún pago de la cuota (columna `evento_id`; `familia_id` ya se guardaba al conciliar). La familia lo ve en su historial de pagos, el evento en el cuadro «Movimientos del banco asociados» de sus cuentas (solo referencia), una familia con movimientos asociados no se puede eliminar y «Deshacer» los quita.
 - **Deshacer:** vuelve a *Pendiente*; si estaba conciliado, **anula** el pago creado (no se borra: queda constancia).
 - Auditoría: `banco_importado` (con la huella del fichero), `banco_conciliado`, `banco_revisado` y `banco_deshecho`.
 

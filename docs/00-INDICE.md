@@ -1,6 +1,6 @@
 # Área privada · Grupo Scout — Base de conocimiento
 
-Proyecto: plugin de WordPress **«ASDE Scouts de España - Gestor CRM para Grupos Scouts»** (`asde-area-privada`): área privada con gestión de usuarios, tesorería, tienda, eventos y más para los Grupos Scouts de ASDE (empezó en Scouts de Balears, Grupo Myotragus 684). **Versión actual: 0.51.0.** El historial de versiones está en el `readme.txt` del plugin y en el git.
+Proyecto: plugin de WordPress **«ASDE Scouts de España - Gestor CRM para Grupos Scouts»** (`asde-area-privada`): área privada con gestión de usuarios, tesorería, tienda, eventos y más para los Grupos Scouts de ASDE (empezó en Scouts de Balears, Grupo Myotragus 684). **Versión actual: 0.52.0.** El historial de versiones está en el `readme.txt` del plugin y en el git.
 
 - Los datos personales se leen del **CRM federal de ASDE** (SinergiaCRM) y **no se guardan en WordPress**.
 - La web guarda solo números de socio, familias, configuración, pagos y lo que cada módulo necesita, y lo sensible va **cifrado** y con caducidad: el email de cada cuenta, lo escrito en solicitudes de acceso y listas de espera, las autorizaciones SEPA, los datos de quien compra sin sesión, los IBAN de los reintegros y las credenciales del CRM (doc 08).
@@ -59,11 +59,11 @@ Proyecto: plugin de WordPress **«ASDE Scouts de España - Gestor CRM para Grupo
 
 **Base:** acceso con nº de socio o email, por grupo; roles Scouter, Secretaría, Coordinación, Tesorería, Intendente, tutor/a y participante; fichas editables en el CRM con cola de cambios; personas y números de socio; usuarios, invitaciones y solicitudes de acceso; informes en Excel e impresión; ayuda por página y cinco manuales; idiomas ca/eu/gl; colores y tema configurables; módulos que cada grupo enciende o apaga.
 
-**Tesorería:** familias y cuotas por ronda, control de pagos, banco (Norma 43/CSV y conciliación, con tipificación), domiciliación SEPA y coste federativo.
+**Tesorería:** familias y cuotas por ronda, control de pagos, banco (Norma 43/CSV, conciliación y revisados con tipo, evento y familia), domiciliación SEPA y coste federativo.
 
 **Tienda y material:** inventario general con listas de compra e importación; tienda con catálogo, tienda pública, datáfono, pedido al proveedor y existencias del inventario; reintegros de gastos.
 
-**Eventos:** eventos con equipo y presupuesto, inscripciones, cuentas y devoluciones, material, calendario de tareas, recetario y menús con alérgenos; lista de espera.
+**Eventos:** eventos con equipo y presupuesto, inscripciones, cuentas y devoluciones, material, aviso opcional al publicar, calendario de tareas, recetario y menús con alérgenos; lista de espera.
 
 **Altas en el CRM** (apagadas por defecto): crear personas y membresías, bajas y cambios de sección.
 

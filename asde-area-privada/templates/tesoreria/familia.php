@@ -289,7 +289,7 @@ foreach ( $otros as $o ) {
 		'cuando'    => $o['cuando'],
 		'eliminado' => 'eliminado' === $o['accion'],
 		'que'       => $o['que'] . ( 'eliminado' === $o['accion'] ? ' · ' . asde_t( 'anulado' ) : '' ),
-		'extra'     => 'evento' === $o['modulo'] ? asde_t( 'evento' ) : asde_t( 'uniforme' ),
+		'extra'     => 'evento' === $o['modulo'] ? asde_t( 'evento' ) : ( 'banco' === $o['modulo'] ? asde_t( 'banco' ) : asde_t( 'tienda' ) ),
 		'quien'     => (int) $o['quien'],
 		'detalle'   => '' !== $o['detalle'] ? $o['detalle'] : '—',
 	);

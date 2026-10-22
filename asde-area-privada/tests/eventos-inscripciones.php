@@ -305,8 +305,8 @@ try {
 	$calc = Servicio::validar( $ev( $id_a ) );
 	$ok( is_array( $calc ) && 21.0 === (float) $calc['precios']['lobatos'] && 37.0 === (float) $calc['precios']['scouts'], 'precio validado: Lobatos 21 € y Scouts 37 € (140 € entre 7, más 75 € de Scouts entre 5, +5 %)' );
 	$a_lob = $como( $u_lob );
-	Servicio::publicar( $ev( $id_a ), $a_lob );
-	$ok( false !== wp_next_scheduled( Avisos::HOOK, array( $grupo['numero'], $id_a, 'publicado' ) ), 'al publicar, el email a las familias queda programado en segundo plano (WP-Cron)' );
+	Servicio::publicar( $ev( $id_a ), $a_lob, array( 'todos' ) );
+	$ok( false !== wp_next_scheduled( Avisos::HOOK, array( $grupo['numero'], $id_a, 'publicado', 'familias,scouters' ) ), 'al publicar, el email a las familias queda programado en segundo plano (WP-Cron)' );
 	$capturados = array();
 	$res        = Avisos::masivo( $grupo['numero'], $id_a, 'publicado' );
 	$esperados  = array( $correo( 'prueba-ins-fam1' ), $correo( 'prueba-ins-fam3' ), $correo( 'prueba-ins-fam4' ) );
@@ -397,6 +397,15 @@ try {
 	$id_b = Servicio::crear( $a_co, array( 'tipo' => 'salida', 'nombre' => 'Salida en convocatoria', 'ambito' => 'secciones', 'secciones' => array( 'escultas', 'rovers' ), 'inicio_fecha' => $ini, 'inicio_hora' => '09:00', 'fin_fecha' => $fin, 'fin_hora' => '18:00', 'modalidad' => 'convocatoria' ) );
 	Servicio::publicar( $ev( $id_b ), $a_co );
 	$ok( 'convocatoria' === $ev( $id_b )['modalidad'] && EventosTable::PUBLICADO === $ev( $id_b )['estado'], 'evento en convocatoria publicado (sin coste: no pasa por Tesorería)' );
+	// v0.52: la ventana de publicar elige a quién avisar; sin marcar nada no sale ningún email.
+	$ok( array() === Avisos::destinos_validos( array() ) && array( 'familias', 'scouters' ) === Avisos::destinos_validos( array( 'todos' ) ) && array( 'familias' ) === Avisos::destinos_validos( array( 'familias', 'basura' ) ) && array( 'scouters' ) === Avisos::destinos_validos( array( 'scouters' ) ), 'los destinatarios se limpian: «todos» son los dos y lo desconocido no cuenta' );
+	$ok( false === wp_next_scheduled( Avisos::HOOK, array( $grupo['numero'], $id_b, 'publicado', 'familias,scouters' ) ) && false === wp_next_scheduled( Avisos::HOOK, array( $grupo['numero'], $id_b, 'publicado', '' ) ), 'publicar sin marcar a nadie no programa ningún aviso' );
+	$capturados = array();
+	$sc         = Avisos::masivo( $grupo['numero'], $id_b, 'publicado', 'scouters' );
+	$ok( 0 === $sc['enviados'] && ! $capturados, 'avisar solo a los scouters no escribe a las familias de Escultas y Rovers' );
+	Servicio::despublicar( $ev( $id_b ), $a_co );
+	Servicio::publicar( $ev( $id_b ), $a_co, array( 'familias' ) );
+	$ok( false !== wp_next_scheduled( Avisos::HOOK, array( $grupo['numero'], $id_b, 'publicado', 'familias' ) ), 'avisar solo a las familias programa el aviso con ese destino' );
 	$a_f2 = $como( $u_fam2 );
 	$ok( 2 === Inscripciones::pendientes( $a_f2 )['responder'], 'la familia de Max e Ivo tiene dos convocatorias por responder' );
 	$a_max = $como( $u_max );
@@ -590,6 +599,7 @@ try {
 	foreach ( $creados as $eid ) {
 		foreach ( array( 'publicado', 'cancelado' ) as $tipo ) {
 			wp_clear_scheduled_hook( Avisos::HOOK, array( $grupo['numero'], $eid, $tipo ) );
+			wp_unschedule_hook( Avisos::HOOK ); // v0.52: el aviso de publicar lleva también los destinatarios.
 		}
 	}
 	$lista = implode( ',', array_map( 'intval', $ids ) ) ?: '0';

@@ -3311,7 +3311,6 @@ return array(
 	'Todo lo que ha pagado esta familia: la cuota de la ronda, los eventos y los uniformes, con quién lo registró y cuándo. Lo eliminado no cuenta.' => 'Todo o que pagou esta familia: a cota da rolda, os eventos e os uniformes, con quen o rexistrou e cando. O eliminado non conta.',
 	'anulado' => 'anulado',
 	'evento' => 'evento',
-	'uniforme' => 'uniforme',
 
 	// v0.38: campos propios de la lista de espera
 	'Casilla (sí / no)' => 'Caixa (si / non)',
@@ -4320,4 +4319,23 @@ return array(
 	'Las existencias de «%s» se cambian en el inventario general, no aquí.' => 'As existencias de «%s» cámbianse no inventario xeral, non aquí.',
 	'Se cambian en el inventario general' => 'Cámbianse no inventario xeral',
 	'Se encarga al proveedor' => 'Encárgase ao provedor',
+
+	// v0.52: banco y publicar evento
+	'Los ha asociado Tesorería al marcarlos como revisados en el banco. Son solo una referencia: no cambian el balance de arriba.' => 'Asociounos Tesouraría ao marcalos como revisados no banco. Son só unha referencia: non cambian o balance de arriba.',
+	'Movimientos del banco asociados' => 'Movementos do banco asociados',
+	'No se ha enviado ningún aviso por email.' => 'Non se enviou ningún aviso por email.',
+	'Se avisará por email a las familias y a los scouters.' => 'Avisarase por email ás familias e aos scouters.',
+	'Se avisará por email a las familias.' => 'Avisarase por email ás familias.',
+	'Se avisará por email a los scouters.' => 'Avisarase por email aos scouters.',
+	'Si no marcas nada, el evento se publica y no se envía ningún correo.' => 'Se non marcas nada, o evento publícase e non se envía ningún correo.',
+	'¿Avisar por email de que se ha publicado?' => 'Avisar por email de que se publicou?',
+	' · evento «%s»' => ' · evento «%s»',
+	'El evento elegido ya no existe: elige otro.' => 'O evento elixido xa non existe: elixe outro.',
+	'Evento:' => 'Evento:',
+	'Gasto de %1$s · %2$s' => 'Gasto de %1$s · %2$s',
+	'Ingreso de %1$s · %2$s' => 'Ingreso de %1$s · %2$s',
+	'La familia elegida ya no existe: elige otra.' => 'A familia elixida xa non existe: elixe outra.',
+	'Ninguno' => 'Ningún',
+	'banco' => 'banco',
+	'tienda' => 'tenda',
 );

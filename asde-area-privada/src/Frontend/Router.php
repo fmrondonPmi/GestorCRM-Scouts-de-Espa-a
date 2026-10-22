@@ -382,6 +382,9 @@ final class Router {
 		if ( 'federacion' === $key ) {
 			wp_enqueue_script( 'asde-conceptos', plugins_url( 'assets/js/conceptos.js', ASDE_AP_FILE ), array( 'asde-i18n' ), ASDE_AP_VERSION, true );
 		}
+		if ( 'eventos' === $key ) {
+			wp_enqueue_script( 'asde-eventos', plugins_url( 'assets/js/eventos.js', ASDE_AP_FILE ), array(), ASDE_AP_VERSION, true ); // v0.52: la ventana de publicar.
+		}
 		if ( 'reintegros' === $key ) {
 			wp_enqueue_script( 'asde-reintegros', plugins_url( 'assets/js/reintegros.js', ASDE_AP_FILE ), array(), ASDE_AP_VERSION, true ); // v0.47: el IBAN solo si cobra por transferencia.
 		}

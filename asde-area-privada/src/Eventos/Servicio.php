@@ -607,7 +607,7 @@ final class Servicio {
 	// ---------------------------------------------------------------------
 
 	/** @return true|\WP_Error */
-	public static function publicar( array $e, Ambito $a ) {
+	public static function publicar( array $e, Ambito $a, array $avisar = array() ) {
 		if ( ! self::puede_publicar( $e, $a ) ) {
 			return new \WP_Error(
 				'asde_evento',
@@ -618,7 +618,11 @@ final class Servicio {
 		}
 		EventosTable::publicar( $e['id'] );
 		Logger::log( 'evento_publicado', 'evento', (string) $e['id'] );
-		Avisos::programar( $e, 'publicado' ); // Email a las familias convocadas, en segundo plano (una sola vez).
+		// v0.52: quien publica elige a quién se avisa (familias, scouters o todos); sin elegir, no sale ningún email.
+		$destinos = Avisos::destinos_validos( $avisar );
+		if ( $destinos ) {
+			Avisos::programar( $e, 'publicado', $destinos ); // Email a las personas convocadas, en segundo plano (una sola vez).
+		}
 		return true;
 	}
 

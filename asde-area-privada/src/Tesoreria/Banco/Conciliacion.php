@@ -197,7 +197,7 @@ final class Conciliacion {
 	 *
 	 * @return true|\WP_Error
 	 */
-	public static function ignorar( int $mov_id, int $tipo_id, string $nota = '' ) {
+	public static function ignorar( int $mov_id, int $tipo_id, string $nota = '', int $evento_id = 0, int $familia_id = 0 ) {
 		$m = BancoTable::obtener( $mov_id );
 		if ( ! $m || ! in_array( $m['estado'], array( BancoTable::PENDIENTE, BancoTable::IGNORADO ), true ) ) {
 			return new \WP_Error( 'asde_banco', asde_t( 'Ese movimiento no se puede marcar como revisado (puede que ya esté conciliado con una familia).' ) );
@@ -216,13 +216,23 @@ final class Conciliacion {
 					: sprintf( asde_t( '«%s» es un tipo de gasto y este movimiento es un ingreso.' ), $tipo['nombre'] )
 			);
 		}
+		if ( $evento_id && ! \AsdeBalears\AreaPrivada\Eventos\EventosTable::obtener( $evento_id ) ) {
+			return new \WP_Error( 'asde_banco', asde_t( 'El evento elegido ya no existe: elige otro.' ) );
+		}
+		if ( $familia_id && ! FamiliasTable::obtener( $familia_id ) ) {
+			return new \WP_Error( 'asde_banco', asde_t( 'La familia elegida ya no existe: elige otra.' ) );
+		}
 		$antes = $m['estado'];
-		BancoTable::revisar( $mov_id, $tipo_id, $nota );
+		BancoTable::revisar( $mov_id, $tipo_id, $nota, $evento_id, $familia_id );
 		Logger::log(
 			BancoTable::IGNORADO === $antes ? 'banco_tipo_cambiado' : 'banco_revisado',
 			'banco',
 			(string) $mov_id,
-			array( 'tipo' => $tipo_id )
+			array(
+				'tipo'    => $tipo_id,
+				'evento'  => $evento_id,
+				'familia' => $familia_id,
+			)
 		);
 		return true;
 	}

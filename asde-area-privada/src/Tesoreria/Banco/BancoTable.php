@@ -91,6 +91,7 @@ final class BancoTable {
 				familia_id bigint(20) unsigned NULL,
 				pago_id bigint(20) unsigned NULL,
 				tipo_id bigint(20) unsigned NULL,
+				evento_id bigint(20) unsigned NULL,
 				nota varchar(255) NOT NULL DEFAULT '',
 				revisado_por bigint(20) unsigned NOT NULL DEFAULT 0,
 				revisado_en datetime NULL,
@@ -352,6 +353,7 @@ final class BancoTable {
 			array(
 				'estado'       => $estado,
 				'familia_id'   => $familia_id,
+				'evento_id'    => null,
 				'pago_id'      => $pago_id,
 				'tipo_id'      => null,
 				'nota'         => '',
@@ -365,14 +367,18 @@ final class BancoTable {
 		);
 	}
 
-	/** Revisado (no es cuota) con su tipo y una nota; también para cambiar el tipo de uno ya revisado. */
-	public static function revisar( int $id, int $tipo_id, string $nota ): bool {
+	/**
+	 * Revisado (no es cuota) con su tipo y una nota; también para cambiar el tipo de uno ya revisado. Desde la v0.52
+	 * puede llevar además el evento al que corresponde y la familia de la que viene o a la que va (sin crear ningún pago).
+	 */
+	public static function revisar( int $id, int $tipo_id, string $nota, int $evento_id = 0, int $familia_id = 0 ): bool {
 		global $wpdb;
 		return false !== $wpdb->update(
 			self::table(),
 			array(
 				'estado'       => self::IGNORADO,
-				'familia_id'   => null,
+				'familia_id'   => $familia_id ?: null,
+				'evento_id'    => $evento_id ?: null,
 				'pago_id'      => null,
 				'tipo_id'      => $tipo_id ?: null,
 				'nota'         => mb_substr( sanitize_text_field( $nota ), 0, 255 ),
@@ -384,6 +390,20 @@ final class BancoTable {
 				'grupo' => Grupo::numero(),
 			)
 		);
+	}
+
+	/** Los movimientos revisados asociados a un evento, más nuevos primero (v0.52). @return array[] */
+	public static function revisados_de_evento( int $evento_id ): array {
+		global $wpdb;
+		$filas = (array) $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM %i WHERE grupo = %s AND evento_id = %d AND estado = %s ORDER BY fecha DESC, id DESC', self::table(), Grupo::numero(), $evento_id, self::IGNORADO ), ARRAY_A ); // phpcs:ignore WordPress.DB
+		return array_map( array( self::class, 'descifrar' ), $filas );
+	}
+
+	/** Los movimientos revisados (no son cuota) asociados a una familia, más nuevos primero (v0.52). @return array[] */
+	public static function revisados_de_familia( int $familia_id ): array {
+		global $wpdb;
+		$filas = (array) $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM %i WHERE grupo = %s AND familia_id = %d AND estado = %s ORDER BY fecha DESC, id DESC', self::table(), Grupo::numero(), $familia_id, self::IGNORADO ), ARRAY_A ); // phpcs:ignore WordPress.DB
+		return array_map( array( self::class, 'descifrar' ), $filas );
 	}
 
 	/** ¿Hay algún movimiento del banco asignado a esta familia? Para no eliminarla (v0.35.1). */

@@ -3311,7 +3311,6 @@ return array(
 	'Todo lo que ha pagado esta familia: la cuota de la ronda, los eventos y los uniformes, con quién lo registró y cuándo. Lo eliminado no cuenta.' => 'Familia honek ordaindu duen guztia: txandako kuota, ekitaldiak eta uniformeak, nork eta noiz erregistratu zuen. Ezabatutakoak ez du balio.',
 	'anulado' => 'baliogabetua',
 	'evento' => 'ekitaldia',
-	'uniforme' => 'uniformea',
 
 	// v0.38: campos propios de la lista de espera
 	'Casilla (sí / no)' => 'Laukia (bai / ez)',
@@ -4320,4 +4319,23 @@ return array(
 	'Las existencias de «%s» se cambian en el inventario general, no aquí.' => '«%s» produktuaren izakinak inbentario orokorrean aldatzen dira, ez hemen.',
 	'Se cambian en el inventario general' => 'Inbentario orokorrean aldatzen dira',
 	'Se encarga al proveedor' => 'Hornitzaileari eskatzen zaio',
+
+	// v0.52: banco y publicar evento
+	'Los ha asociado Tesorería al marcarlos como revisados en el banco. Son solo una referencia: no cambian el balance de arriba.' => 'Diruzaintzak lotu ditu bankuan berrikusitako gisa markatzean. Erreferentzia bat baino ez dira: goiko balantzea ez dute aldatzen.',
+	'Movimientos del banco asociados' => 'Lotutako banku-mugimenduak',
+	'No se ha enviado ningún aviso por email.' => 'Ez da emailezko abisurik bidali.',
+	'Se avisará por email a las familias y a los scouters.' => 'Familiei eta scouterrei emailez abisatuko zaie.',
+	'Se avisará por email a las familias.' => 'Familiei emailez abisatuko zaie.',
+	'Se avisará por email a los scouters.' => 'Scouterrei emailez abisatuko zaie.',
+	'Si no marcas nada, el evento se publica y no se envía ningún correo.' => 'Ezer markatzen ez baduzu, ekitaldia argitaratzen da eta ez da posta elektronikorik bidaltzen.',
+	'¿Avisar por email de que se ha publicado?' => 'Argitaratu dela emailez abisatu?',
+	' · evento «%s»' => ' · ekitaldia «%s»',
+	'El evento elegido ya no existe: elige otro.' => 'Aukeratutako ekitaldia ez dago jada: aukeratu beste bat.',
+	'Evento:' => 'Ekitaldia:',
+	'Gasto de %1$s · %2$s' => '%1$s gastua · %2$s',
+	'Ingreso de %1$s · %2$s' => '%1$s sarrera · %2$s',
+	'La familia elegida ya no existe: elige otra.' => 'Aukeratutako familia ez dago jada: aukeratu beste bat.',
+	'Ninguno' => 'Bat ere ez',
+	'banco' => 'banku',
+	'tienda' => 'denda',
 );

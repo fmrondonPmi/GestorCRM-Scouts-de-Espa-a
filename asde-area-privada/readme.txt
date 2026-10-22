@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.51.0
+Stable tag: 0.52.0
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -61,6 +61,10 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.52.0 =
+* Bank: when marking a movement as reviewed it can be tied to an event and to a family (shown in the bank list, the family history and the event accounts). Adds a column to the bank table.
+* Events: publishing asks in a window whom to notify by email (families, scouters or everyone); if nothing is ticked, no email is sent.
 
 = 0.51.0 =
 * Shop: products now take their stock from the general inventory. A row of the inventory marked "Se vende en la tienda" is a shop variant; selling it more than is in stock is allowed and the shortfall goes to the supplier order. Existing shop stock is moved to the inventory once. Adds two columns to the inventory table and one to shop variants.
@@ -226,6 +230,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * CRM registrations tested end to end in a browser against the simulated SinergiaCRM API (development only).
 
 == Upgrade Notice ==
+
+= 0.52.0 =
+Publishing an event no longer emails anyone unless you choose whom to notify. Adds a database column.
 
 = 0.51.0 =
 The shop's stock now lives in the general inventory (existing stock is moved automatically). Adds database columns.

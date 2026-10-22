@@ -42,14 +42,37 @@ final class Avisos {
 
 	public const TIPOS = array( 'publicado', 'confirmada', 'plaza', 'recordatorio', 'cancelado' );
 
+	/** A quién se avisa al publicar (v0.52): familias (y asociados menores con cuenta) o scouters (y voluntariado). */
+	public const DESTINOS = array( 'familias', 'scouters' );
+
 	public static function register(): void {
-		add_action( self::HOOK, array( self::class, 'masivo' ), 10, 3 );
+		add_action( self::HOOK, array( self::class, 'masivo' ), 10, 4 );
 	}
 
-	/** Programa el aviso masivo (publicación o cancelación) en segundo plano. */
-	public static function programar( array $e, string $tipo ): void {
-		if ( in_array( $tipo, array( 'publicado', 'cancelado' ), true ) && Config::aviso_activo( $tipo, (string) $e['grupo'] ) && ! wp_next_scheduled( self::HOOK, array( $e['grupo'], $e['id'], $tipo ) ) ) {
-			wp_schedule_single_event( time(), self::HOOK, array( $e['grupo'], $e['id'], $tipo ) );
+	/**
+	 * Lo que se marcó en la ventana de publicar, limpio: «todos» son los dos; sin marcar nada, ninguno.
+	 *
+	 * @param string[] $marcados familias, scouters y/o todos.
+	 * @return string[]
+	 */
+	public static function destinos_validos( array $marcados ): array {
+		$marcados = array_map( 'sanitize_key', $marcados );
+		if ( in_array( 'todos', $marcados, true ) ) {
+			return self::DESTINOS;
+		}
+		return array_values( array_intersect( self::DESTINOS, $marcados ) );
+	}
+
+	/**
+	 * Programa el aviso masivo (publicación o cancelación) en segundo plano.
+	 *
+	 * @param string[] $destinos Solo para la publicación: a quién (por defecto, a todos).
+	 */
+	public static function programar( array $e, string $tipo, array $destinos = self::DESTINOS ): void {
+		$lista = implode( ',', self::destinos_validos( $destinos ) );
+		$args  = 'publicado' === $tipo ? array( $e['grupo'], $e['id'], $tipo, $lista ) : array( $e['grupo'], $e['id'], $tipo );
+		if ( in_array( $tipo, array( 'publicado', 'cancelado' ), true ) && ( 'publicado' !== $tipo || '' !== $lista ) && Config::aviso_activo( $tipo, (string) $e['grupo'] ) && ! wp_next_scheduled( self::HOOK, $args ) ) {
+			wp_schedule_single_event( time(), self::HOOK, $args );
 		}
 	}
 
@@ -58,7 +81,7 @@ final class Avisos {
 	 *
 	 * @return array{cuentas:int, enviados:int}
 	 */
-	public static function masivo( string $grupo, int $evento_id, string $tipo ): array {
+	public static function masivo( string $grupo, int $evento_id, string $tipo, string $destinos = 'familias,scouters' ): array {
 		$g = Grupos::por_numero( $grupo );
 		if ( ! $g ) {
 			return array(
@@ -66,11 +89,14 @@ final class Avisos {
 				'enviados' => 0,
 			);
 		}
-		return Grupo::con( $g, static fn() => self::masivo_en_grupo( $evento_id, $tipo ) );
+		return Grupo::con( $g, static fn() => self::masivo_en_grupo( $evento_id, $tipo, self::destinos_validos( explode( ',', $destinos ) ) ) );
 	}
 
-	/** @return array{cuentas:int, enviados:int} */
-	private static function masivo_en_grupo( int $evento_id, string $tipo ): array {
+	/**
+	 * @param string[] $destinos A quién (solo en la publicación).
+	 * @return array{cuentas:int, enviados:int}
+	 */
+	private static function masivo_en_grupo( int $evento_id, string $tipo, array $destinos = self::DESTINOS ): array {
 		$res = array(
 			'cuentas'  => 0,
 			'enviados' => 0,
@@ -109,7 +135,12 @@ final class Avisos {
 		} catch ( CrmException $ex ) {
 			return $res; // Sin el CRM no se sabe a quién escribir: no se marca y se puede repetir.
 		}
-		$datos   = self::datos( $e, $tipo );
+		$datos = self::datos( $e, $tipo );
+		if ( 'publicado' === $tipo && self::DESTINOS !== $destinos ) {
+			// Solo a las familias (o a los scouters): los adultos voluntarios por un lado y el resto por otro.
+			$adultos  = array_filter( $personas, static fn( Persona $p ) => $p->es_adulto_voluntario() );
+			$personas = in_array( 'scouters', $destinos, true ) ? $adultos : array_diff_key( $personas, $adultos );
+		}
 		$cuentas = self::cuentas( $personas, $e );
 		foreach ( $cuentas as $user ) {
 			++$res['cuentas'];

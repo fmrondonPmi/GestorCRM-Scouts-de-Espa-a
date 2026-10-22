@@ -11,6 +11,7 @@
  */
 // phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound, WordPress.WP.GlobalVariablesOverride.Prohibited -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
 use AsdeBalears\AreaPrivada\Domain\Secciones;
+use AsdeBalears\AreaPrivada\Eventos\Config;
 use AsdeBalears\AreaPrivada\Eventos\EventosTable;
 use AsdeBalears\AreaPrivada\Eventos\Normativa;
 use AsdeBalears\AreaPrivada\Eventos\Servicio;
@@ -97,7 +98,28 @@ $noches = Normativa::noches( $e );
 <?php
 $acciones = array();
 if ( Servicio::puede_publicar( $e, $ambito ) ) {
-	$acciones[] = $form( 'evento_publicar', asde_t( 'Publicar el evento' ), 'button button-primary', asde_t( '¿Publicar el evento? Lo verán los scouters de las secciones convocadas.' ) );
+	if ( Config::aviso_activo( 'publicado', (string) $e['grupo'] ) ) {
+		// v0.52: al publicar se pregunta a quién avisar por email (familias, scouters o todos); sin marcar nada, no sale ningún email.
+		$campos = '<fieldset class="asde-publicar__destinos"><legend>' . esc_html( asde_t( '¿Avisar por email de que se ha publicado?' ) ) . '</legend>'
+			. '<label class="asde-choice"><input type="checkbox" name="avisar[]" value="familias" data-asde-aviso-parte><span>' . esc_html( asde_t( 'Familias' ) ) . '</span></label>'
+			. '<label class="asde-choice"><input type="checkbox" name="avisar[]" value="scouters" data-asde-aviso-parte><span>' . esc_html( asde_t( 'Scouters' ) ) . '</span></label>'
+			. '<label class="asde-choice"><input type="checkbox" name="avisar[]" value="todos" data-asde-aviso-todos><span>' . esc_html( asde_t( 'Todos' ) ) . '</span></label>'
+			. '<p class="asde-help">' . esc_html( asde_t( 'Si no marcas nada, el evento se publica y no se envía ningún correo.' ) ) . '</p></fieldset>';
+		$form_publicar = sprintf(
+			'<form method="post" class="asde-form asde-publicar">%s<input type="hidden" name="asde_action" value="evento_publicar"><input type="hidden" name="evento" value="%d"><input type="hidden" name="pestana" value="resumen"><h3 id="asde-publicar-titulo">%s</h3>%s<p class="asde-form__acciones"><button type="submit" class="button button-primary">%s</button> <button type="button" class="button asde-button-secundario" data-asde-cerrar hidden>%s</button></p></form>',
+			wp_nonce_field( 'asde_evento_' . $e['id'], '_wpnonce', true, false ),
+			(int) $e['id'],
+			esc_html( asde_t( 'Publicar el evento' ) ),
+			$campos,
+			esc_html( asde_t( 'Publicar el evento' ) ),
+			esc_html( asde_t( 'Cancelar' ) )
+		);
+		$acciones[] = '<button type="button" class="button button-primary" data-asde-publicar-abrir hidden>' . esc_html( asde_t( 'Publicar el evento' ) ) . '</button>'
+			. '<dialog class="asde-modal asde-modal--mini" aria-labelledby="asde-publicar-titulo" data-asde-publicar-dialogo>' . $form_publicar . '</dialog>'
+			. '<noscript>' . $form_publicar . '</noscript>';
+	} else {
+		$acciones[] = $form( 'evento_publicar', asde_t( 'Publicar el evento' ), 'button button-primary', asde_t( '¿Publicar el evento? Lo verán los scouters de las secciones convocadas.' ) );
+	}
 } elseif ( EventosTable::BORRADOR === $e['estado'] && $e['con_coste'] && null === $e['validado_en'] && Servicio::en_gestion( $e, $ambito ) ) {
 	$acciones[] = '<span class="asde-help">' . esc_html( asde_t( 'Para publicarlo, Tesorería tiene que validar antes el presupuesto (pestaña «Presupuesto»).' ) ) . '</span>';
 }

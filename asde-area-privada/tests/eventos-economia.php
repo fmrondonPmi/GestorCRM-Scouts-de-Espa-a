@@ -643,6 +643,7 @@ try {
 	foreach ( $creados as $eid ) {
 		foreach ( array( 'publicado', 'cancelado' ) as $tipo ) {
 			wp_clear_scheduled_hook( Avisos::HOOK, array( $grupo['numero'], $eid, $tipo ) );
+			wp_unschedule_hook( Avisos::HOOK ); // v0.52: el aviso de publicar lleva también los destinatarios.
 		}
 	}
 	$lista = implode( ',', array_map( 'intval', $ids ) ) ?: '0';

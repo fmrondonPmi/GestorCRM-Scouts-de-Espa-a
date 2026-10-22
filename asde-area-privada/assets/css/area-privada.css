@@ -2646,6 +2646,23 @@ dialog.asde-modal--mini .asde-banco-tipo-nuevo {
 dialog.asde-modal--mini .asde-banco-tipo-nuevo h3 {
 	margin-top: 0;
 }
+/* v0.52 · La ventana de «Publicar el evento» (a quién se avisa por email). */
+dialog.asde-modal--mini .asde-publicar {
+	padding: 16px 20px 20px;
+}
+dialog.asde-modal--mini .asde-publicar h3 {
+	margin-top: 0;
+}
+.asde-ap .asde-publicar__destinos {
+	border: 0;
+	margin: 0 0 12px;
+	padding: 0;
+}
+.asde-ap .asde-publicar__destinos legend {
+	font-weight: 600;
+	padding: 0;
+	margin-bottom: 6px;
+}
 /* v0.34 · En las columnas de casillas (p. ej. «Educandos sin familia»), el nº territorial y su aviso pasan
    a la línea siguiente en lugar de montarse sobre la columna de al lado (se veía en el manual). */
 .asde-ap .asde-columnas .asde-numeros {

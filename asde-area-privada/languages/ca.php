@@ -3311,7 +3311,6 @@ return array(
 	'Todo lo que ha pagado esta familia: la cuota de la ronda, los eventos y los uniformes, con quién lo registró y cuándo. Lo eliminado no cuenta.' => 'Tot el que ha pagat aquesta família: la quota de la ronda, els esdeveniments i els uniformes, amb qui ho va registrar i quan. El que s\'ha eliminat no compta.',
 	'anulado' => 'anul·lat',
 	'evento' => 'esdeveniment',
-	'uniforme' => 'uniforme',
 
 	// v0.38: campos propios de la lista de espera
 	'Casilla (sí / no)' => 'Casella (sí / no)',
@@ -4320,4 +4319,23 @@ return array(
 	'Las existencias de «%s» se cambian en el inventario general, no aquí.' => 'Les existències de «%s» es canvien a l\'inventari general, no aquí.',
 	'Se cambian en el inventario general' => 'Es canvien a l\'inventari general',
 	'Se encarga al proveedor' => 'S\'encarrega al proveïdor',
+
+	// v0.52: banco y publicar evento
+	'Los ha asociado Tesorería al marcarlos como revisados en el banco. Son solo una referencia: no cambian el balance de arriba.' => 'Els ha associat Tresoreria en marcar-los com a revisats al banc. Són només una referència: no canvien el balanç de dalt.',
+	'Movimientos del banco asociados' => 'Moviments del banc associats',
+	'No se ha enviado ningún aviso por email.' => 'No s\'ha enviat cap avís per email.',
+	'Se avisará por email a las familias y a los scouters.' => 'S\'avisarà per email les famílies i els scouters.',
+	'Se avisará por email a las familias.' => 'S\'avisarà per email les famílies.',
+	'Se avisará por email a los scouters.' => 'S\'avisarà per email els scouters.',
+	'Si no marcas nada, el evento se publica y no se envía ningún correo.' => 'Si no marques res, l\'esdeveniment es publica i no s\'envia cap correu.',
+	'¿Avisar por email de que se ha publicado?' => 'Avisar per email que s\'ha publicat?',
+	' · evento «%s»' => ' · esdeveniment «%s»',
+	'El evento elegido ya no existe: elige otro.' => 'L\'esdeveniment triat ja no existeix: tria\'n un altre.',
+	'Evento:' => 'Esdeveniment:',
+	'Gasto de %1$s · %2$s' => 'Despesa de %1$s · %2$s',
+	'Ingreso de %1$s · %2$s' => 'Ingrés de %1$s · %2$s',
+	'La familia elegida ya no existe: elige otra.' => 'La família triada ja no existeix: tria\'n una altra.',
+	'Ninguno' => 'Cap',
+	'banco' => 'banc',
+	'tienda' => 'botiga',
 );

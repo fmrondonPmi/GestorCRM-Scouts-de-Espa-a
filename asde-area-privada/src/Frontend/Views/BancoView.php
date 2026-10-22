@@ -107,6 +107,7 @@ final class BancoView extends TesoreriaBaseView {
 					'lotes'      => BancoTable::lotes( 5 ),
 					'rondas'     => Config::rondas(),
 					'tipos'      => TiposMovimiento::todos(),
+					'eventos'    => \AsdeBalears\AreaPrivada\Domain\Modulos::activo( \AsdeBalears\AreaPrivada\Domain\Modulos::EVENTOS ) ? array_column( \AsdeBalears\AreaPrivada\Eventos\EventosTable::todos(), 'nombre', 'id' ) : array(),
 					'url'        => $this->url( 'banco' ),
 					'url_fam'    => $this->url( 'familias' ),
 				)
@@ -124,6 +125,9 @@ final class BancoView extends TesoreriaBaseView {
 			array(
 				'movs'   => $movs,
 				'tipos'  => TiposMovimiento::todos(),
+				// v0.52: a qué evento y a qué familia se asocia (los dos opcionales).
+				'eventos'  => \AsdeBalears\AreaPrivada\Domain\Modulos::activo( \AsdeBalears\AreaPrivada\Domain\Modulos::EVENTOS ) ? array_column( \AsdeBalears\AreaPrivada\Eventos\EventosTable::todos(), 'nombre', 'id' ) : array(),
+				'familias' => $this->familias()['etiquetas'],
 				'url'    => add_query_arg( 'revisar', '1', $url ),
 				'volver' => wp_validate_redirect( esc_url_raw( $this->get( 'volver' ) ), $url ) ?: $url,
 				'conciliados' => count( $ids ) - count( $movs ),
@@ -212,11 +216,13 @@ final class BancoView extends TesoreriaBaseView {
 				// Uno o varios movimientos: revisados (no son cuota) con su tipo (v0.20).
 				check_admin_referer( 'asde_banco_revisar' );
 				$tipos   = $this->post_mapa( 'tipo' );
+				$eventos = $this->post_mapa( 'evento' );
+				$fams    = $this->post_mapa( 'familia' );
 				$nota    = $this->post( 'nota' );
 				$hechos  = 0;
 				$errores = array();
 				foreach ( $tipos as $id => $tipo ) {
-					$r = Conciliacion::ignorar( $id, (int) $tipo, $nota );
+					$r = Conciliacion::ignorar( $id, (int) $tipo, $nota, (int) ( $eventos[ $id ] ?? 0 ), (int) ( $fams[ $id ] ?? 0 ) );
 					if ( is_wp_error( $r ) ) {
 						$m         = BancoTable::obtener( $id );
 						$errores[] = ( $m ? wp_date( 'd/m/Y', strtotime( $m['fecha'] . ' 12:00' ) ) . ' · ' . Calculadora::euros( $m['importe'] ) . ': ' : '' ) . $r->get_error_message();

@@ -14,6 +14,8 @@
  * @var string[]                            $por_cerrar Lo que falta para poder cerrar
  * @var bool                                $economia   Es Tesorería
  * @var bool                                $abiertas   Las cuentas no están cerradas
+ * @var array[]                             $banco      Movimientos del banco asociados al evento (BancoTable::revisados_de_evento), solo para Tesorería
+ * @var array<int, array>                   $tipos_banco Tipos de gasto e ingreso
  * @var string                              $url
  */
 // phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound, WordPress.WP.GlobalVariablesOverride.Prohibited -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
@@ -127,6 +129,25 @@ $yo              = get_current_user_id();
 	</dl>
 	<p class="asde-help"><?php asde_e( 'Resultado = lo cobrado a las familias (menos lo devuelto) + otros ingresos − gastos validados. Los gastos por revisar no cuentan hasta que Tesorería los valide.' ); ?></p>
 </section>
+
+<?php if ( ! empty( $banco ) ) : ?>
+	<section class="asde-card" data-asde-plegable="evento-banco" data-asde-inicio="cerrado">
+		<h3 class="asde-card__title"><?php asde_e( 'Movimientos del banco asociados' ); ?></h3>
+		<p class="asde-muted"><?php asde_e( 'Los ha asociado Tesorería al marcarlos como revisados en el banco. Son solo una referencia: no cambian el balance de arriba.' ); ?></p>
+		<table class="asde-table">
+			<thead><tr><th scope="col"><?php asde_e( 'Fecha' ); ?></th><th scope="col"><?php asde_e( 'Tipo' ); ?></th><th scope="col" class="asde-num"><?php asde_e( 'Importe' ); ?></th></tr></thead>
+			<tbody>
+				<?php foreach ( $banco as $b ) : ?>
+					<tr>
+						<td data-label="<?php echo esc_attr( asde_a( 'Fecha' ) ); ?>"><?php echo esc_html( wp_date( 'd/m/Y', strtotime( $b['fecha'] . ' 12:00' ) ) ); ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Tipo' ) ); ?>"><?php echo esc_html( isset( $tipos_banco[ (int) $b['tipo_id'] ] ) ? $tipos_banco[ (int) $b['tipo_id'] ]['nombre'] : asde_t( 'Sin tipo' ) ); ?><?php echo '' !== $b['nota'] ? ' · ' . esc_html( $b['nota'] ) : ''; ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Importe' ) ); ?>" class="asde-num"><?php echo esc_html( ( $b['importe'] > 0 ? '+' : '' ) . \AsdeBalears\AreaPrivada\Tesoreria\Calculadora::euros( (float) $b['importe'] ) ); ?></td>
+					</tr>
+				<?php endforeach; ?>
+			</tbody>
+		</table>
+	</section>
+<?php endif; ?>
 
 <section class="asde-card">
 	<h3 class="asde-card__title"><?php asde_e( 'Gastos e ingresos' ); ?></h3>

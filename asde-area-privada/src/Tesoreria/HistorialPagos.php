@@ -27,7 +27,7 @@ final class HistorialPagos {
 	 *         `cuando` en UTC como se guarda; `accion`: registrado | eliminado; `modulo`: evento | uniforme.
 	 */
 	public static function otros( array $familia ): array {
-		return array_merge( self::eventos( $familia['miembros'] ), self::uniformes( $familia['miembros'] ) );
+		return array_merge( self::eventos( $familia['miembros'] ), self::uniformes( $familia['miembros'] ), self::banco( (int) $familia['id'] ) );
 	}
 
 	/** @param string[] $socios */
@@ -78,6 +78,30 @@ final class HistorialPagos {
 					);
 				}
 			}
+		}
+		return $out;
+	}
+
+	/** Ingresos y gastos del banco revisados (no son cuota) que se asociaron a la familia (v0.52). */
+	private static function banco( int $familia_id ): array {
+		if ( $familia_id < 1 || ! \AsdeBalears\AreaPrivada\Domain\Modulos::activo( \AsdeBalears\AreaPrivada\Domain\Modulos::BANCO ) ) {
+			return array();
+		}
+		$out   = array();
+		$tipos = \AsdeBalears\AreaPrivada\Tesoreria\Banco\TiposMovimiento::todos();
+		foreach ( \AsdeBalears\AreaPrivada\Tesoreria\Banco\BancoTable::revisados_de_familia( $familia_id ) as $m ) {
+			$tipo   = isset( $tipos[ (int) $m['tipo_id'] ] ) ? $tipos[ (int) $m['tipo_id'] ]['nombre'] : asde_t( 'Sin tipo' );
+			$evento = ! empty( $m['evento_id'] ) ? EventosTable::obtener( (int) $m['evento_id'] ) : null;
+			/* translators: 1: importe, 2: tipo del movimiento */
+			$que    = sprintf( $m['importe'] < 0 ? asde_t( 'Gasto de %1$s · %2$s' ) : asde_t( 'Ingreso de %1$s · %2$s' ), Calculadora::euros( abs( (float) $m['importe'] ) ), $tipo );
+			$out[]  = array(
+				'cuando'  => (string) ( $m['revisado_en'] ?: $m['creado'] ),
+				'accion'  => 'registrado',
+				'modulo'  => 'banco',
+				'que'     => $que . ( $evento ? sprintf( asde_t( ' · evento «%s»' ), $evento['nombre'] ) : '' ),
+				'quien'   => (int) $m['revisado_por'],
+				'detalle' => trim( wp_date( 'd/m/Y', strtotime( $m['fecha'] . ' 12:00' ) ) . ( '' !== $m['nota'] ? ' · ' . $m['nota'] : '' ), ' ·' ),
+			);
 		}
 		return $out;
 	}
