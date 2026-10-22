@@ -1,262 +1,51 @@
-# 48 · Módulo «Tienda» (antes «Uniformes») — análisis y plan
+# 48 · Módulo «Tienda» (estado en la v0.51)
 
-> Estado: **fases 1 a 5 hechas** (2026-10-17, v0.39 y v0.40; ver §11). Queda la camisa y las insignias como opciones del producto «camisa».
-> Parte de la v0.38.0. Se ejecuta en una rama nueva desde `origin/main` (p. ej. `Tienda`), con las skills `modulo-area-privada` y `version-area-privada`.
+La tienda vende lo que el grupo tenga: el uniforme es **un producto más**, sin reglas propias. Este documento describe cómo funciona hoy; los detalles de las tres piezas nuevas están en los docs 53 (Reintegros), 54 (pantallas en una línea) y 55 (la tienda sobre el inventario general).
 
-## 1. Petición del usuario (2026-10-17)
-
-- Renombrar el módulo **Uniformes** a **tienda online** y que siga siendo un módulo de la aplicación.
-- **Coordinación, Tesorería y Secretaría** tendrán el rol de **administración** de la tienda. Esos roles pueden **cargar inventario para vender**.
-- Hay elementos **de venta solo para socios**: solo aparecen cuando el usuario ha iniciado sesión.
-- Pago de cada compra: **transferencia**, **Bizum** o **en físico entregándolo a Tesorería**.
-  - **Es el tesorero quien marca el elemento como pagado.**
-  - **El pago en físico es solo para socios.**
-
-Interpretaciones que he hecho (confirmar en las preguntas, §9): «Ordination» = **Coordinación**; «gestando» = **entregando** el dinero a Tesorería.
-
-## 2. Qué hay hoy (análisis del módulo Uniformes, docs 24 y 36)
-
-| Pieza | Dónde | Notas para la tienda |
-|---|---|---|
-| Lógica | `src/Uniformes/` (`Servicio` 576 líneas, `PedidosTable` 376, `Config` 194) | Está hecha **solo para camisa + insignias**: modelos y tallas, insignias con precio «por confirmar», primera camisa de scouter gratis, camisa servida del inventario |
-| Tabla | `{prefix}asde_uniformes` | Un pedido = **una persona** (nº ASDE) + `lineas` (JSON con camisa e insignias). Requiere socio: no admite compradores sin ficha |
-| Pantallas | `UniformeView` (pedir y mis pedidos), `UniformesGestionView` (lista, lote, CSV), `UniformesConfigView` + 6 plantillas en `templates/uniformes/` y `assets/js/uniforme.js` | Todas **privadas** (hay que tener sesión) |
-| Páginas | `uniforme`, `uniformes` (`gestion-pedidos`), `uniformes_config` en `Frontend\Pages` / `Router` | No hay ninguna pública para esto |
-| Permisos | `asde_uniformes_{pedir,gestion,pago,pedido,entrega,config}`; Tesorería = `pago`, Coordinación = `pedido`; los dos con `config` | Tesorería **ya es la única que valida el pago** (se mantiene) |
-| Pago | Solo `efectivo` e `ingreso` (`PedidosTable::METODOS`) | **Falta Bizum**; falta distinguir quién puede elegir «en físico» |
-| Pasos | Solicitado → Pagado → En el pedido del grupo → Entregado → Recibido | «Pedido del grupo» = pedido al proveedor; sobra para artículos que se venden del stock |
-| Inventario | Módulo `inventario` (material del grupo). Una camisa puede **salir del inventario** (v0.29) | Es el **material del grupo**, no el catálogo de venta: no confundir (ver §4.2) |
-| Módulo | `Domain\Modulos::UNIFORMES = 'uniformes'`, encendido por defecto; opción `asde_ap_uniformes_<grupo>` | Al renombrar hay que migrar la clave y la opción |
-| Cobros reutilizables | `Eventos\Cobros` ya cobra por **efectivo, ingreso y Bizum** (P-146) con referencia de familia | Copiar el patrón (textos, validación, referencia) |
-| Pagos | `Tesoreria\HistorialPagos` y `MisPagosView` leen `PedidosTable` | Hay que apuntarlos a las tablas nuevas |
-| Páginas públicas | `InscripcionEsperaView` / `AltaScoutersView`: enlace del grupo con clave, campo trampa, sello de tiempo y límite por dispositivo | Patrón para el **catálogo público** y la compra de quien no es socio |
-| Grupo en visitas sin sesión | `Domain\Grupo::actual()` toma el primer grupo si no hay sesión | La tienda pública necesita saber de **qué grupo** es (enlace `?grupo=`) |
-
-**Conclusión:** el módulo actual es un caso particular (uniforme) de una tienda. Se puede **generalizar**: la camisa y las insignias pasan a ser productos con variantes. No basta con cambiar el nombre.
-
-## 3. Requisitos (cerrados, con lo que hay que decidir marcado)
-
-| # | Requisito | Cómo se cumple |
-|---|---|---|
-| R1 | El módulo se llama **Tienda** | Nombre visible, menú, páginas, textos, ayuda y manuales. Clave interna `tienda` |
-| R2 | Administración: Coordinación, Tesorería, Secretaría | Capability nueva `asde_tienda_admin` en esos tres roles |
-| R3 | La administración **carga inventario para vender** | Alta de productos, variantes, precio y existencias; carga por CSV; ajustar existencias |
-| R4 | Productos **solo para socios** | Campo «Visible para» por producto: **todos** o **solo socios**. Los de solo socios no existen para quien no ha iniciado sesión (ni en la lista, ni por enlace directo) |
-| R5 | Pago: **transferencia, Bizum o en físico** | Tres formas de pago por pedido, con los datos de pago en la configuración del grupo |
-| R6 | **Tesorería marca como pagado** | Capability `asde_tienda_pago` solo en Tesorería. Nadie más marca pagado |
-| R7 | **En físico, solo socios** | La opción solo sale a quien tiene sesión y es socio/a (o su familia). Se vuelve a comprobar en el servidor |
-
-## 4. Diseño
-
-### 4.1 Quién ve y hace qué
+## Quién ve y hace qué
 
 | Rol | Hace |
 |---|---|
-| Visitante sin sesión | Ve los productos «para todos». Compra (según P-174) por transferencia o Bizum |
-| Socio/a o familia (con sesión) | Ve también los «solo socios». Compra por transferencia, Bizum o en físico. Ve y cancela sus pedidos |
-| **Administración** (Coordinación, Tesorería, Secretaría) | Productos y existencias; ver todos los pedidos del grupo; marcar **entregado**; cancelar con motivo (antes de entregar); configurar la tienda |
-| **Tesorería** (además) | **Marcar pagado** (forma, fecha, importe, referencia); deshacerlo |
-| Scouter | Compra como socio; ve los pedidos de su sección (como hoy) |
+| Visitante sin sesión | Ve los productos «para todos» en la tienda pública (enlace del grupo, que puede ir también en el menú de la web) y compra por transferencia, Bizum o datáfono |
+| Socio/a o familia | Ve también los «solo socios»; paga además «en físico» a Tesorería. Ve y cancela sus pedidos y confirma «Lo he recibido» |
+| Scouter | Compra como socio; ve los pedidos de sus secciones y los entrega |
+| Coordinación, Tesorería, Secretaría | Productos, configuración y todos los pedidos del grupo; entregar; cancelar con motivo |
+| Tesorería | **Marca pagado** (forma, fecha, importe, referencia) y concilia el banco |
+| Coordinación | Hace y recibe los pedidos al proveedor |
 
-Capabilities nuevas (renombran las `asde_uniformes_*`; se migran al subir la versión):
+Capabilities: `asde_tienda_comprar`, `_gestion`, `_admin`, `_pago`, `_entrega`, `_pedido`. Módulo `tienda` (Domain\Modulos): si está apagado en un grupo, las páginas públicas no existen.
 
-| Nueva | Sustituye a | Roles |
-|---|---|---|
-| `asde_tienda_comprar` | `asde_uniformes_pedir` | todos con acceso |
-| `asde_tienda_gestion` | `asde_uniformes_gestion` | Scouter, Secretaría, Coordinación, Tesorería |
-| `asde_tienda_admin` | `asde_uniformes_config` (+ nuevo) | **Coordinación, Tesorería, Secretaría** |
-| `asde_tienda_pago` | `asde_uniformes_pago` | **solo Tesorería** |
-| `asde_tienda_entrega` | `asde_uniformes_entrega` | Scouter (su sección), Secretaría, Coordinación, Tesorería |
-| `asde_tienda_pedido` | `asde_uniformes_pedido` | Coordinación (pedido al proveedor; solo para productos que lo piden) |
+## Productos, variantes y existencias
 
-> Secretaría **gana** administración (hoy no tiene `config`); Coordinación y Tesorería la conservan.
+- **Producto** (`asde_tienda_productos`): nombre, categoría, descripción, imagen, visibilidad (`todos` / `socios`), precio, precio de socio opcional, máximo por persona y «se encarga al proveedor».
+- **Variante** (`asde_tienda_variantes`): lo que se compra (talla, color o «Única»), precio propio opcional y existencias.
+- **Las existencias vienen del inventario general** (doc 55): una fila del inventario marcada «Se vende en la tienda» es una variante. Se vende aunque no queden; lo que falta va al pedido al proveedor. Una variante sin enlazar (poco habitual) lleva sus propias existencias, con la opción «sin límite».
+- Precio y existencias son siempre del servidor; la reserva descuenta con una sola sentencia para no vender de más.
 
-### 4.2 Inventario para vender ≠ módulo «Inventario»
+## Una compra
 
-El módulo **Inventario** es el material del grupo (tiendas de campaña, etc.). El catálogo de la tienda es otra cosa. Para evitar mezclas:
+1. Catálogo: **cantidad** de cada producto y, si tiene tallas, **talla en un desplegable** («Añadir otra talla»); el mismo formulario sirve con y sin sesión.
+2. ¿Para quién? (cuenta familiar: cada hijo; invitado: nombre, email y teléfono, cifrados y con caducidad de 90 días tras entregar o cancelar).
+3. Forma de pago: transferencia, Bizum, **datáfono** (si el grupo lo ofrece; lo marca pagado Tesorería al cobrar) o en físico (solo socios).
+4. Se crea el pedido (nº tipo `U9990167`), salen las unidades del inventario y llega un email con cómo pagar.
+5. Tesorería valida el pago → si lleva algo que pedir al proveedor, Coordinación lo incluye en un **pedido al proveedor** (pestaña «Pedido de camisas»; Excel; marcar recibido; lo que llega de más suma al inventario) → se **entrega** (no antes de que llegue el pedido al proveedor) → el socio confirma «Lo he recibido».
+6. Cancelar: el comprador mientras no esté pagado; la administración con motivo hasta que se entregue. Vuelve al inventario solo lo que había salido. Sin pagar tras N días: recordatorio y cancelación automática (configurable).
 
-- El catálogo vive en la tienda (**«Productos»**) con sus **existencias**; no se mezcla con el material.
-- **Se mantiene el vínculo que ya existe** (v0.29): un producto puede marcar «sale del inventario del grupo» (la camisa) y descuenta de `MaterialesTable`. Es opcional y solo se muestra con el módulo Inventario activo.
-- Se evita llamarlo «inventario» en la interfaz de la tienda: se dice **«Productos» y «Existencias»** (P-175 por si se prefiere otro nombre).
+## Pagos con datáfono y banco
 
-### 4.3 Modelo de datos
+Con el banco activo, Tesorería ve los ingresos que parecen el abono del datáfono (cobros de los últimos 10 días menos la comisión, hasta un 5 %) y los ingresos que citan el nº de un pedido sin pagar, y confirma cada uno: nada se concilia solo.
 
-Tablas nuevas (nacen con `dbDelta`; el módulo `uniformes` migra a ellas):
+## Configuración (por grupo)
 
-| Tabla | Para qué |
-|---|---|
-| `asde_tienda_productos` | grupo, nombre, descripción, categoría, imagen (adjunto), **visibilidad** (`todos` / `socios`), precio, `activo`, límite por persona, **requiere pedido al proveedor** (sí/no), vínculo opcional con inventario |
-| `asde_tienda_variantes` | producto, etiqueta (talla/modelo), precio propio opcional, **existencias**, `sin límite` |
-| `asde_tienda_pedidos` | grupo, comprador (nº ASDE **o** invitado: nombre, email y teléfono **cifrados** y con caducidad), total, forma de pago, estado, referencia (`T` + grupo + nº), notas y los pasos con quién y cuándo (pagado, pedido, entregado, recibido, cancelado) |
-| `asde_tienda_lineas` | pedido, producto/variante, cantidad, **precio de ese día** (se guarda, como hoy) |
+Pedidos abiertos, datáfono, IBAN, Bizum, texto de cómo pagar, días para recordar y para cancelar lo no pagado, tienda pública abierta (con sus días para pagar y el enlace, renovable) y el **texto del enlace en el menú de la web** (vacío = sin enlace). Productos y precios no se configuran aquí: están en «Inventario de la tienda».
 
-Reglas del proyecto que se mantienen: del socio solo su nº ASDE; **nada de salud**; lo personal del invitado, **cifrado y con caducidad** (se purga en la tarea diaria); un grupo no ve a otro.
+## Seguridad de las páginas sin sesión
 
-Configuración del grupo (opción `asde_ap_tienda_<grupo>`, migrada de `asde_ap_uniformes_<grupo>`): tienda abierta o cerrada; texto de cómo pagar; **IBAN y titular** (transferencia); **nº de teléfono Bizum**; tallas y guías de medidas; la regla «primera camisa de scouter gratis».
+- «Solo socios» se filtra en la consulta, no en la plantilla; un visitante recibe 404.
+- Compra de invitado: nonce, campo trampa, sello de tiempo y límite por dispositivo; «en físico» y «solo socios» se validan en el servidor.
+- El enlace del grupo lleva una clave renovable; el de cada compra, un token HMAC propio. Si la clave está en el menú público deja de ser secreta: se cierra renovándola o apagando la tienda pública.
+- Auditoría: `tienda_pedido`, `_pagado`, `_entregado`, `_cancelado`, `_producto_*`, `_existencias`, `_proveedor_*`.
 
-### 4.4 Flujo de una compra
+## Pedidos antiguos
 
-1. **Catálogo** → ficha del producto → variante y cantidad → **carrito** (en sesión de WordPress, sin datos personales).
-2. **Datos** (solo invitado): nombre, email, teléfono. Con sesión se toman del usuario.
-3. **Forma de pago:** transferencia (IBAN y referencia), Bizum (teléfono y concepto con la referencia) o **en físico** (solo socios).
-4. **Pedido creado:** se descuentan las existencias (reserva) y sale el **nº de pedido** y las instrucciones de pago. Email de confirmación.
-5. **Tesorería marca pagado** (forma, fecha, importe, referencia). Sale en *Mis pagos* y en el historial de la familia.
-6. **Entregado** (administración) y, si es socio, **«Lo he recibido»** (como hoy).
-7. **Cancelar:** el comprador mientras no esté pagado; la administración, con motivo, hasta que se entregue. **Vuelven las existencias.**
-8. **Sin pagar tras N días** (configurable): aviso y cancelación automática por la tarea diaria, devolviendo existencias.
-
-El paso «incluido en el pedido del grupo» solo existe en los productos con «requiere pedido al proveedor» (camisa, insignias). El resto (p. ej. una taza que ya está en el almacén) va directo a entregar.
-
-### 4.5 Páginas
-
-| Clave | Pública | Contenido |
-|---|---|---|
-| `tienda` | **sí** (enlace del grupo) | Catálogo. Muestra los de «todos»; con sesión, también los de «solo socios» |
-| `tienda_carrito` | sí | Carrito, datos del invitado y forma de pago |
-| `tienda_pedido` | sí (enlace personal con token, como la lista de espera) | Estado del pedido e instrucciones de pago |
-| `mis_pedidos` (antes `uniforme`) | no | Pedidos del socio/a y su familia; recibido; cancelar |
-| `tienda_gestion` (antes `uniformes`) | no | Lista de pedidos con filtros, marcar pagado/entregado, lote, CSV |
-| `tienda_productos` | no | Alta y edición de productos y existencias; carga CSV |
-| `tienda_config` (antes `uniformes_config`) | no | Configuración del grupo |
-
-Las URL antiguas (`/uniforme`, `/gestion-pedidos`, `/configuracion` bajo uniforme) **redirigen** (301) a las nuevas.
-
-### 4.6 Seguridad (la parte delicada: abrimos páginas sin sesión)
-
-- **Solo socios = no existe sin sesión.** El filtro se aplica en la consulta de productos, no en la plantilla; el detalle de un producto de socios responde **404** a un visitante.
-- Compra de invitado: `nonce`, campo trampa, sello de tiempo y **límite por dispositivo** (patrón de `AltaScoutersView`); email obligatorio; tamaño máximo de carrito y de cantidades.
-- «En físico» y «solo socios»: **se valida en el servidor** al crear el pedido y al marcar pagado.
-- Tesorería es la única que marca pagado: `current_user_can( 'asde_tienda_pago' )` en cada acción con `nonce`.
-- Precio y existencias **siempre del servidor**; el cliente solo manda ids y cantidades. Reserva de existencias con `UPDATE … WHERE existencias >= n` para no vender de más.
-- Datos del invitado: cifrados (`Crypto`), con caducidad y borrado; las respuestas no revelan si un email ya compró.
-- Auditoría (`Logger`): `tienda_pedido`, `tienda_pagado`, `tienda_entregado`, `tienda_cancelado`, `tienda_producto_*`, `tienda_existencias`.
-- Si el módulo está apagado en el grupo, las páginas públicas **no existen** (404), como la lista de espera.
-
-## 5. Plan de ejecución (por fases; cada una deja el plugin funcionando)
-
-Cada fase: **rama desde `origin/main`**, pruebas verdes, versión, textos en ca/eu/gl, ayuda y manual si hay cambios visibles, commit + push + merge al cerrar. Las fases 1–3 pueden ir en una sola versión (**v0.39.0**); las demás, en v0.40.
-
-### Fase 0 · Preparación
-1. Crear la rama `Tienda`. Leer docs 24, 32, 36 y 43 (patrón de cobros) y `modulo-area-privada`.
-2. **Todas las preguntas de §9 están decididas** (P-174 y P-176 el 2026-10-17; P-175 y P-177…P-182 el mismo día, una a una).
-
-### Fase 1 · Renombrar y migrar (sin cambiar lo que hace)
-1. `Domain\Modulos`: `UNIFORMES` → `TIENDA = 'tienda'`, nombre «Tienda». Migración de la opción `asde_ap_modulos` (si estaba apagado, sigue apagado).
-2. Renombrar `src/Uniformes` → `src/Tienda` (namespace), vistas, plantillas `templates/uniformes` → `templates/tienda`, JS y CSS, páginas y rutas, **con redirecciones** de las URL antiguas.
-3. Capabilities: crear las `asde_tienda_*`, **copiar** a ellas las que tenían las antiguas y retirarlas en `Install\Roles` (se aplica al subir la versión). Dar `asde_tienda_admin` a **Secretaría**, Coordinación y Tesorería.
-4. Migrar la opción `asde_ap_uniformes_<grupo>` → `asde_ap_tienda_<grupo>` y la tabla `asde_uniformes` → `asde_tienda_pedidos` (renombrar, no copiar; con comprobación de filas antes y después). Actualizar `uninstall.php`, `Entorno`, `Mantenimiento`.
-5. Menú, inicio, *Pendiente de revisar*, `MisPagosView`, `HistorialPagos`, auditoría (mantener los tipos viejos como alias para no romper el histórico).
-6. `tests/uniformes.php` → `tests/tienda.php` con **las 65 comprobaciones iguales** (red de seguridad antes de generalizar). Textos, ayuda y los cinco manuales.
-
-### Fase 2 · Productos y existencias (administración)
-1. Tablas `productos` y `variantes`; la camisa y las insignias actuales se **convierten en productos** (migración idempotente), con sus tallas como variantes.
-2. Pantalla *Productos* (alta, edición, imagen, precio, visibilidad, activo) y *Existencias* (ajuste con motivo, histórico en auditoría).
-3. **Carga por CSV** reutilizando el patrón de `Inventario\Importador` (vista previa, errores por línea, nada se guarda hasta confirmar).
-4. Vínculo opcional con el inventario del grupo (camisas, v0.29).
-5. Pruebas: permisos de `asde_tienda_admin` por rol, validación, CSV, existencias.
-
-### Fase 3 · Catálogo, carrito y pago (socios)
-1. Catálogo con sesión: productos «todos» y «socios», carrito, pedido con varias líneas.
-2. Formas de pago: **transferencia, Bizum y en físico** (esta última, solo socios); datos de pago en la configuración; referencia del pedido.
-3. **Tesorería marca pagado** con forma, fecha, importe y referencia; deshacer. Los demás roles no ven el botón.
-4. Entregado y recibido; cancelar con devolución de existencias.
-5. Emails: confirmación del pedido, pagado, entregado (en `Usuarios\RegistroEmails::TIPOS`, idioma de quien lo recibe).
-6. Pruebas: precio del servidor, «solo socios» no se cuela, «en físico» rechazado a no socios, existencias bajo concurrencia, solo Tesorería marca pagado.
-
-### Fase 4 · Tienda pública (sin sesión)
-1. Páginas públicas `tienda`, `tienda_carrito`, `tienda_pedido` (enlace del grupo con clave, como la lista de espera) y su interruptor en *Módulos*.
-2. Compra de invitado (según P-174): datos cifrados, límite por dispositivo, confirmación por email, token personal para ver el pedido.
-3. Los de «solo socios» **no aparecen** ni por URL directa. Pruebas HTTP sin sesión.
-4. Caducidad: los datos del invitado y los pedidos sin pagar se purgan en `Install\Mantenimiento`.
-
-### Fase 5 · Pulido y cierre
-1. *Mis pagos*, historial de familia y **conciliación del banco** (movimientos que coinciden con la referencia del pedido → sugerir «pagado» a Tesorería; no marca solo).
-2. Informes: ventas por producto, por forma de pago y pendientes de cobro (Excel).
-3. Cancelación automática de pedidos sin pagar; recordatorio a quien debe.
-4. Ayuda por página, manuales, traducciones, `docs/48` y `40-mapa` regenerado, `00-INDICE`, Plugin Check, banco de pruebas JS, zip.
-
-## 6. Archivos que se tocan (guía)
-
-`src/Uniformes/*` → `src/Tienda/*` · `src/Frontend/Views/Uniforme*View.php` → `Tienda*View.php` (+ vistas públicas nuevas) · `templates/uniformes/` → `templates/tienda/` · `assets/js/uniforme.js`, `inventario.js` (enlace) · `assets/css/area-privada.css` (bloque final) · `src/Frontend/{Pages,Router,Menu}.php` · `src/Domain/Modulos.php` · `src/Install/{Roles,Installer,Mantenimiento,Entorno}.php` · `src/Tesoreria/HistorialPagos.php` · `src/Frontend/Views/{MisPagosView,AreaPrivadaView}.php` · `src/Idiomas/*` y `languages/` · `uninstall.php` · `ayuda/*/uniforme*.html`, `manual/fuentes*` · `tests/` · docs 02, 24 (nota «sustituido por 48»), 40.
-
-## 7. Riesgos
-
-| Riesgo | Mitigación |
-|---|---|
-| Romper pedidos de uniforme existentes | Migrar renombrando tablas, comprobar filas, mantener las 65 pruebas y hacer copia antes |
-| Vender de más | Reserva atómica de existencias; pruebas de concurrencia |
-| Exponer productos de socios | Filtro en la consulta, 404 en detalle, prueba HTTP sin sesión |
-| Datos personales de invitados | Mínimos, cifrados, con caducidad y borrado a petición |
-| Spam en el pedido público | Trampa, sello, límite por dispositivo, email confirmado |
-| URL antiguas rotas | Redirecciones 301 y alias de auditoría |
-| Confusión con el módulo Inventario | Nombres distintos en pantalla («Productos» y «Existencias») |
-| Alcance de pago online | Fuera de alcance: **no** hay pasarela de tarjeta; solo transferencia, Bizum y físico |
-
-## 8. Fuera de alcance (de momento)
-
-Pago con tarjeta (Redsys, Stripe), gastos de envío y envíos a domicilio, cupones y descuentos, facturas, IVA/factura legal, venta entre grupos. Se anotarán si se piden.
-
-## 9. Preguntas abiertas
-
-| # | Pregunta | Propuesta |
-|---|---|---|
-| **P-174** ✅ | ¿Pueden **comprar** quienes no son socios (sin iniciar sesión)? | **Decidido (2026-10-17): sí.** Compran por transferencia o Bizum, con datos mínimos y confirmación por email |
-| P-175 ✅ | ¿Cómo se llama lo que se vende y lo que queda? | **«Inventario de la tienda»** (decidido el 2026-10-17; la propuesta era «Productos» y «Existencias»). Pendiente en el código: la pestaña y los títulos de la fase 2 dicen «Productos» y «Existencias» |
-| **P-176** ✅ | ¿El tesorero marca como pagado **todos** los pagos o solo los de **en físico**? | **Decidido (2026-10-17): todos** (transferencia, Bizum y físico), tras ver el ingreso |
-| P-177 ✅ | ¿Precio distinto para socios y no socios? | **Sí, opcional por producto** (decidido; ya hecho en la fase 2) |
-| P-178 ✅ | Datos de pago | **Una cuenta y un Bizum por grupo**, en la configuración de la tienda (decidido) |
-| P-179 ✅ | Días sin pagar antes de cancelar | **14 días, configurable** (decidido) |
-| P-180 ✅ | «Primera camisa de scouter gratis» y «camisa del inventario» | **Se mantienen, como opciones del producto camisa** (decidido) |
-| P-181 ✅ | ¿Quién marca entregado? | **Como hoy**: la administración y los scouters de sección en su ámbito (decidido) |
-| P-182 ✅ | Emails por paso | **Pedido, pagado y entregado**, en el idioma del destinatario (decidido) |
-
-## 10. Cómo se prueba (resumen)
-
-`tests/tienda.php` (migración de las 65 + nuevas por fase) con el CRM simulado; pruebas HTTP sin sesión para lo público; recorrido en el navegador por rol (visitante, socio, familia, scouter, Coordinación, Tesorería, Secretaría) y a 390 px; banco JS estático; Plugin Check. **Nunca contra el CRM real.**
-
-## 11. Avance
-
-- ✅ **Fase 1 hecha (2026-10-17, rama `Tienda`, v0.39.0 en preparación):**
-  - `src/Uniformes` → `src/Tienda`; vistas `Tienda{Pedidos,Gestion,Config,Base}View`; plantillas en `templates/tienda/`.
-  - Módulo `tienda` (`Modulos::TIENDA`), tabla `asde_tienda_pedidos`, opción `asde_ap_tienda_<grupo>`.
-  - Capabilities `asde_tienda_{comprar,gestion,admin,pago,pedido,entrega}`; **Secretaría ya tiene `asde_tienda_admin`**.
-  - Páginas con clave nueva (`tienda_pedidos` «Mis pedidos», `tienda_gestion`, `tienda_config`), mismas páginas (mismo id) y redirección 301 de `/uniforme/…` a `/mis-pedidos/…`.
-  - Migración `Install\MigracionTienda` (idempotente), probada en `tests/migracion-tienda.php` (17 comprobaciones). `tests/tienda.php` conserva las 66 de uniformes.
-  - Textos nuevos con sus traducciones (ca, eu, gl). Auditoría: los tipos antiguos (`uniforme_*`) se mantienen tal cual.
-  - **Pendiente de la fase 1:** textos y capturas de los manuales y la ayuda (se rehacen al cerrar la v0.39, cuando las fases 2 y 3 hayan cambiado las pantallas).
-
-- ✅ **Fase 2 hecha (2026-10-17, rama `Tienda`):** el catálogo y las existencias.
-  - Tablas `asde_tienda_productos` y `asde_tienda_variantes` (`ProductosTable`, `VariantesTable`): visibilidad `todos`/`socios` (el filtro está en la consulta: `ProductosTable::visibles()`), precio y precio de socio opcional, máximo por persona, «se encarga al proveedor», «sale del inventario», archivar en vez de borrar.
-  - Existencias siempre con una sola sentencia SQL (`reservar`, `devolver`, `ajustar`): nunca bajan de 0 ni se venden de más; `ilimitado` no cuenta unidades; los ajustes manuales llevan motivo y quedan en la auditoría (`tienda_existencias`).
-  - `Sembrado`: la camisa (una variante por modelo y talla) y las insignias de Uniformes pasan a ser productos (idempotente; lo que se cambie después se respeta). Hasta la fase 3 los pedidos siguen leyendo la configuración de Uniformes.
-  - Pantalla **Productos** (`asde_tienda_admin`: Coordinación, Tesorería y Secretaría): lista con filtros, formulario con variantes, cambio de existencias con +/− y motivo, imagen en la biblioteca de medios, archivar y recuperar.
-  - **Carga por CSV** (`ImportadorProductos`): una fila por variante; el producto que existe se actualiza solo con las celdas rellenas; las existencias se sustituyen o, si se marca, se suman; informe con el nº de fila y el motivo de cada error, y CSV de ejemplo.
-  - Pruebas: `tests/tienda-catalogo.php` (67 comprobaciones). Textos nuevos traducidos (ca, eu, gl); ayuda de la página en el manual de Coordinación.
-  - Decisiones propias (asumen las propuestas de §9): P-175 «Productos» y «Existencias»; P-177 precio de socio opcional por producto.
-- ✅ **Decisiones cerradas (2026-10-17):** P-175 a P-182 respondidas una a una; solo P-175 cambia algo respecto a lo hecho: el nombre de la sección pasa a **«Inventario de la tienda»** (código y textos de la fase 2, por renombrar en la fase 3).
-- ✅ **Fase 3 hecha (2026-10-17, rama `Tienda`):** catálogo, carrito y pago para quien tiene sesión.
-  - **Catálogo y carrito** en «Mis pedidos»: los productos visibles para esa cuenta (lo «solo socios» solo si alguna de sus personas es socia), una cantidad por variante y un único pedido con varias líneas (`Servicio::catalogo`, `lineas_tienda`, `comprar`). El precio lo pone el servidor (el de la variante, si lo tiene; si no, el de socio o el general); un precio vacío es «por confirmar». La camisa y las insignias siguen en su formulario de uniforme.
-  - **Existencias:** se reservan al pedir, una sentencia por variante; si falla una línea, se devuelve lo ya reservado. Se devuelven al cancelar (una sola vez, aunque se cancele dos veces) mientras no esté entregado. Máximo por persona contando lo ya pedido.
-  - **Forma de pago** (P-174/P-178): transferencia, Bizum o, solo para socios/as, en físico a Tesorería; el IBAN y el Bizum del grupo están en la configuración y salen en las instrucciones (pantalla y email). En el uniforme es opcional.
-  - **Tesorería marca pagado** con Bizum como método nuevo; la forma elegida viene preseleccionada; solo `asde_tienda_pago` (Tesorería) lo puede hacer. Lo que sale de las existencias queda «incluido» solo y se puede cancelar antes de pagar; lo que va al proveedor entra en el resumen del próximo pedido («Otros productos»). Lo que no cuesta nada queda pagado «sin coste».
-  - **Emails** (P-182): pedido recibido (con cómo pagar), pago recibido y pedido entregado, a quien hizo el pedido y en su idioma; el registro de emails guarda solo el tipo y el id del pedido (`Tienda\Avisos`, `email/tienda.php`).
-  - **Nombre:** la sección pasa a «Inventario de la tienda» (pestaña, título y enlaces de vuelta).
-  - Una cuenta sin ninguna persona con membresía activa ve un aviso en vez de formularios (antes fallaba la página).
-  - Pruebas: `tests/tienda-pedidos.php` (58). Textos nuevos traducidos (ca, eu, gl).
-  - **Se queda para después:** la camisa y las insignias como opciones del producto «camisa» dentro del catálogo (hoy conviven con su formulario), la cancelación automática a los 14 días (fase 5), la compra sin sesión (fase 4) y los textos y capturas de los manuales y la ayuda (al cerrar la v0.39).
-- ✅ **Fase 4 hecha (2026-10-17, rama `Calendario-Eventos`, apilada sobre `Tienda`):** la tienda pública, para comprar sin iniciar sesión (P-174).
-  - **Página pública** `tienda_publica` (`/tienda/`), con el enlace del grupo (`?grupo=…&clave=…`, `Tienda\Enlace`, clave de 24 caracteres que la administración renueva) y un interruptor **«Abrir la tienda pública»** en la configuración de la tienda (apagado por defecto). Si el módulo está apagado, la tienda pública no está abierta o la clave no vale, la página dice que no existe.
-  - **Solo lo «para todos»:** el filtro está en la consulta (`Servicio::catalogo( false )`); un producto «solo socios» mandado a mano se rechaza y no toca las existencias; sin «pagar en físico» (solo transferencia o Bizum); precio general, no el de socio; el máximo por persona vale por pedido.
-  - **Compra de invitado** (`Servicio::comprar_invitado`): nombre, email y teléfono opcional; **cifrados** en el pedido (`invitado_enc`) con una sal propia; campo trampa, sello de tiempo (mínimo 3 s), `nonce` y límite de 6 intentos por hora y dispositivo. Reserva las existencias como las demás compras. Tras comprar se va a la página personal del pedido (así recargar no lo repite).
-  - **Página personal** (`?pedido=…&t=…`, token HMAC con la sal del pedido): estado, cómo pagar y **cancelar** mientras no esté pagado (las existencias vuelven una sola vez). Los emails de pedido, pago y entrega van al email del invitado, en su idioma, con ese enlace; el registro de emails no guarda su dirección entera.
-  - **Gestión:** el pedido sale como «Nombre (sin sesión)» y el detalle enseña su email y teléfono a la administración.
-  - **Caducidad** (mantenimiento diario): las compras sin sesión sin pagar a los **N días** (14, configurable; 0 = nunca) se cancelan y devuelven las existencias; los datos personales se **borran a los 90 días** de entregar o cancelar (el pedido queda con importes y cantidades; el enlace personal deja de valer). Los pedidos de socios no se cancelan solos (queda para la fase 5).
-  - Pruebas: `tests/tienda-publica.php` (43). Textos nuevos traducidos (ca, eu, gl). Plugin Check: 0 hallazgos.
-  - **Se queda para la fase 5:** conciliación con el banco, informes de ventas y la cancelación automática de los pedidos de socios. *(Hecho, abajo.)*
-- ✅ **Fase 5 hecha (2026-10-17, rama `Calendario-Eventos`):** pedidos sin pagar, banco e informes.
-  - **Pedidos de socios sin pagar** (`Servicio::recordar_y_cancelar_socios`, mantenimiento diario): solo los de la tienda (con forma de pago) que cuestan algo, sin pagar ni entregar ni cancelar. Configuración nueva: **días para recordar** (7; 0 = no) y **días para cancelar** (0 = nunca, por defecto: nadie pierde un pedido sin avisar). El recordatorio sale **una sola vez** (columna `aviso_en`, `UPDATE … WHERE aviso_en IS NULL`), solo si llega antes que la cancelación, y dice hasta qué día si hay cancelación automática. Al cancelar, las existencias vuelven una sola vez y se avisa por email (también a las compras sin sesión). Emails nuevos `recordatorio` y `cancelado` en `Tienda\Avisos`.
-  - **Banco** (`Tienda\ConciliacionBanco`): los ingresos por conciliar que citan el nº de un pedido sin pagar (`U6840007`, escrito de varias formas, solo el del grupo) se proponen a Tesorería en un cuadro de la gestión, con aviso si el importe no coincide. **Nunca marca solo:** «Marcar pagado con este ingreso» comprueba en el servidor que el ingreso siga por conciliar, sea un ingreso y cite ese pedido; el pedido queda pagado con la fecha y el importe del ingreso y el ingreso queda revisado con la nota «Pedido de la tienda U…» (sin tocar el esquema del banco). Al deshacer el pago, el ingreso vuelve a estar por conciliar. Solo con el módulo Banco activo y los permisos de Tesorería (`asde_tienda_pago` + `asde_tesoreria_config`).
-  - **Ventas e informes** (`Tienda\Informes`, `?informe=1` en la gestión; Tesorería, Coordinación y administración de la tienda): ventas por producto y variante, por forma de pago y pendientes de cobro, con filtro de fechas y descarga en Excel (`Informes\Xlsx`, nonce `asde_tienda_informe`). Los cancelados no cuentan.
-  - La cabecera de la gestión pasa a llamarse **«Pedidos de la tienda»**.
-  - Pruebas: `tests/tienda-fase5.php` (49). Textos nuevos traducidos (ca, eu, gl).
-  - **Sigue pendiente:** la camisa y las insignias como opciones del producto «camisa» dentro del catálogo; que el banco también concilie por importe y ordenante cuando el concepto no cita el pedido.
+Los hechos antes de la v0.44 (con camisa e insignias en sus líneas) se siguen viendo, cobrando, entregando y confirmando.

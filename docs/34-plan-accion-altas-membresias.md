@@ -4,7 +4,7 @@
 
 > «Se hizo el estudio de cómo crear y asociar membresías: genera el plan de acción para esto. Con respecto a la pregunta de qué sucede si el DNI ya existe, deberás probarlo […] con un DNI que existe […] y cómo se puede asegurar que nuestro sistema no genere duplicados con otros grupos.»
 
-Parte del estudio del doc 33 (qué permite la API y cómo encaja con el modelo de ASDE). Este doc dice **qué se hace, en qué orden y con qué garantías**. Desde la v0.22 hay código de escritura (fases 2 y 3), probado solo con el CRM simulado y el servidor de la API simulado: **no se ha escrito nada en el CRM real** (regla 2 del `CLAUDE.md`).
+Parte del estudio del doc 34 (qué permite la API y cómo encaja con el modelo de ASDE). Este doc dice **qué se hace, en qué orden y con qué garantías**. Desde la v0.22 hay código de escritura (fases 2 y 3), probado solo con el CRM simulado y el servidor de la API simulado: **no se ha escrito nada en el CRM real** (regla 2 del `CLAUDE.md`).
 
 ## 1. Lo que se ha averiguado (2026-10-06)
 
@@ -215,4 +215,4 @@ Lo que el simulado no puede confirmar (P-73 y P-74 en la instancia real) se mira
 
 - SinergiaCRM (https://github.com/SinergiaTIC/SinergiaCRM, rama `master`): `custom/modules/Contacts/SticLogicHooksCode.php`, `sticContactsDuplicateQueries.php`, `SticUtils.php`; `modules/stic_Contacts_Relationships/LogicHooksCode.php`. Consultado el 2026-10-06; licencia AGPL-3.0: no se ha copiado código, solo se describe qué hace.
 - SuiteCRM (https://github.com/salesagility/SuiteCRM): `modules/SecurityGroups/SecurityGroup.php` (herencia de grupos de seguridad en los registros nuevos).
-- Doc 04 (§7, modelo real del CRM de ASDE) y doc 33 (estudio de la API).
+- Doc 04 (§7, modelo real del CRM de ASDE) y doc 34 (estudio de la API).

@@ -112,7 +112,7 @@ final class ConciliacionBanco {
 	}
 
 	// ---------------------------------------------------------------------
-	// El abono del datáfono (v0.46, doc 52, T3)
+	// El abono del datáfono (v0.46, doc 48, T3)
 	// ---------------------------------------------------------------------
 
 	/** Nota (en castellano, como lo guardado) del ingreso revisado por un abono del datáfono. */

@@ -27,7 +27,7 @@ final class PedidosTable {
 		'efectivo' => 'Efectivo',
 		'ingreso'  => 'Ingreso en cuenta',
 		'bizum'    => 'Bizum',
-		'tpv'      => 'Datáfono / TPV', // v0.46 (doc 52, T3): cobro con el datáfono del grupo, en persona.
+		'tpv'      => 'Datáfono / TPV', // v0.46 (doc 48, T3): cobro con el datáfono del grupo, en persona.
 	);
 
 	/**
@@ -411,7 +411,7 @@ final class PedidosTable {
 	}
 
 	/**
-	 * Pedidos del grupo cobrados con el datáfono cuyo abono aún no se ha conciliado con el banco (v0.46, doc 52, T3).
+	 * Pedidos del grupo cobrados con el datáfono cuyo abono aún no se ha conciliado con el banco (v0.46, doc 48, T3).
 	 *
 	 * @return array[]
 	 */
@@ -428,7 +428,7 @@ final class PedidosTable {
 		}
 	}
 
-	/** Apunta el pedido al proveedor en el que va cada pedido (v0.48, doc 52, T4). @param int[] $ids */
+	/** Apunta el pedido al proveedor en el que va cada pedido (v0.48, doc 48, T4). @param int[] $ids */
 	public static function marcar_proveedor( array $ids, int $proveedor ): void {
 		foreach ( $ids as $id ) {
 			self::actualizar( (int) $id, array( 'proveedor_id' => $proveedor ) );

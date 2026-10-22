@@ -494,7 +494,7 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 - `TiendaGestionView` — Gestión de los pedidos de la tienda (scouters, Tesorería, Coordinación y administración):
 - `TiendaPedidosView` — «Mis pedidos» para los asociados:
 - `TiendaProductosView` — Productos de la tienda (doc 48, fase 2):
-- `TiendaProveedorView` — «Pedido de camisas» (v0.48, doc 52, T4):
+- `TiendaProveedorView` — «Pedido de camisas» (v0.48, doc 48, T4):
 - `TiendaPublicaView` — La tienda pública (v0.39, doc 48, fase 4, P-174):
 - `UsuariosView` — Listado de usuarios del área privada:
 - `View` — 
@@ -535,7 +535,7 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 
 **Inventario/**
 
-- `AvisoRevision` — Email a quien pidió una lista de compra cuando Tesorería le da el visto bueno o la rechaza (v0.30, P-65; doc 37).
+- `AvisoRevision` — Email a quien pidió una lista de compra cuando Tesorería le da el visto bueno o la rechaza (v0.30, P-65; ).
 - `AvisoTesoreria` — Email a Tesorería cuando alguien crea una lista de compra de material:
 - `ComprasTable` — Listas de compra de material ({prefix}asde_inventario_compras).
 - `Importador` — Importar material al inventario desde un CSV (petición del usuario, 2026-10-05, doc 32).
@@ -629,10 +629,10 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 - `InventarioTienda` — La tienda sobre el inventario general (v0.51, doc 55):
 - `PedidosTable` — Pedidos de uniforme ({prefix}asde_tienda_pedidos):
 - `ProductosTable` — Catálogo de la tienda (doc 48, fase 2):
-- `Proveedor` — Pedido de camisas (y de lo demás que se encarga al proveedor) (v0.48, doc 52, T4):
-- `ProveedorTable` — Pedidos del grupo al proveedor (v0.48, doc 52, T4):
+- `Proveedor` — Pedido de camisas (y de lo demás que se encarga al proveedor) (v0.48, doc 48, T4):
+- `ProveedorTable` — Pedidos del grupo al proveedor (v0.48, doc 48, T4):
 - `Sembrado` — Doc 48, fase 2:
-- `Servicio` — Pedidos de la tienda (doc 48 y doc 52).
+- `Servicio` — Pedidos de la tienda (doc 48 y doc 48).
 - `VariantesTable` — Variantes de los productos de la tienda ({prefix}asde_tienda_variantes) y sus existencias (doc 48, fase 2).
 
 **Usuarios/**
@@ -674,7 +674,7 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 - `sw-retirada.js` — Service worker de «app retirada» (src/Install/AppRetirada.php).
 - `tarea.js` — Monitor de la corrección de números en segundo plano.
 - `tesoreria.js` — Tesorería → ficha de una familia (v0.20; ventana con buscador desde la v0.20.1).
-- `tienda.js` — Tienda (v0.45, doc 52, T2): en los productos con varias tallas se ve una fila «cantidad + talla» y el botón «Añadir otra talla» enseña las siguientes.
+- `tienda.js` — Tienda (v0.45, doc 48, T2): en los productos con varias tallas se ve una fila «cantidad + talla» y el botón «Añadir otra talla» enseña las siguientes.
 - `usuarios.js` — Listado de usuarios: filtra por columna, ordena y pagina en memoria.
 
 ### Pruebas (`tests/`)

@@ -1,6 +1,6 @@
 <?php
 /**
- * Pruebas de la v0.35.1 (entorno LOCAL, doc 44): las bajas del CRM se ven ya (las secciones salen
+ * Pruebas de la v0.35.1 (entorno LOCAL): las bajas del CRM se ven ya (las secciones salen
  * de las membresías vigentes, no de «Secciones actuales», que el CRM recalcula más tarde),
  * «Eliminar de la web» a quien no tiene membresía activa, «Eliminar» en la lista de Familias, la
  * verificación en dos pasos opcional para todos los roles y su código plegado en «Acceso socios».

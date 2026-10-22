@@ -1,6 +1,6 @@
 <?php
 /**
- * Tienda · Pedido de camisas (v0.48, doc 52, T4): lo pagado que hay que pedir y los pedidos al proveedor.
+ * Tienda · Pedido de camisas (v0.48, doc 48, T4): lo pagado que hay que pedir y los pedidos al proveedor.
  *
  * @var bool       $puede     Si puede hacer y recibir pedidos (Coordinación)
  * @var array[]    $por_pedir Pedidos de clientes pagados y sin pedir

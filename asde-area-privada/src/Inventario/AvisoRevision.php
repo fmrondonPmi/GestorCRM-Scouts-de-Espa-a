@@ -14,7 +14,7 @@ defined( 'ABSPATH' ) || exit;
 
 /**
  * Email a quien pidió una lista de compra cuando Tesorería le da el visto bueno o la
- * rechaza (v0.30, P-65; doc 37).
+ * rechaza (v0.30, P-65; ).
  *
  * - Va a la cuenta que creó la lista, si sigue activa y tiene email (el de la cuenta,
  *   Contacto::email: el del CRM o el guardado cifrado en la web), en su idioma.

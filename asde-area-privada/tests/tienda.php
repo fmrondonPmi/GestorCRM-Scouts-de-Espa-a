@@ -1,7 +1,7 @@
 <?php
 /**
  * Pruebas de la tienda sobre los pedidos anteriores a la v0.44 (camisa e insignias en sus líneas), la gestión,
- * «Mis pagos» y lo que se retiró del uniforme (doc 52, T1). Las compras del catálogo, en tienda-pedidos.php.
+ * «Mis pagos» y lo que se retiró del uniforme (doc 48, T1). Las compras del catálogo, en tienda-pedidos.php.
  * Ejecutar desde app/public del site Local:
  *
  *   wp eval-file <ruta completa>/wp-content/plugins/asde-area-privada/tests/tienda.php

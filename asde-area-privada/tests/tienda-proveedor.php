@@ -1,6 +1,6 @@
 <?php
 /**
- * Pruebas de la v0.48 (entorno LOCAL, doc 52, T4): pestaña «Pedido de camisas» (pedido al proveedor). Ejecutar desde
+ * Pruebas de la v0.48 (entorno LOCAL, doc 48, T4): pestaña «Pedido de camisas» (pedido al proveedor). Ejecutar desde
  * app/public del site Local:
  *
  *   wp eval-file <ruta completa>/wp-content/plugins/asde-area-privada/tests/tienda-proveedor.php

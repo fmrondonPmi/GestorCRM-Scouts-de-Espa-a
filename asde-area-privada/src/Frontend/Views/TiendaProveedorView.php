@@ -11,7 +11,7 @@ use AsdeBalears\AreaPrivada\Tienda\ProveedorTable;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * «Pedido de camisas» (v0.48, doc 52, T4): lo que los clientes han pagado y hay que pedir al proveedor, los pedidos ya
+ * «Pedido de camisas» (v0.48, doc 48, T4): lo que los clientes han pagado y hay que pedir al proveedor, los pedidos ya
  * hechos con su Excel para enviarlo y el paso «recibido en el grupo». Lo ven Coordinación, Tesorería y la administración
  * de la tienda; lo hace y lo recibe Coordinación.
  */

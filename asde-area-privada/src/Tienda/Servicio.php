@@ -10,7 +10,7 @@ use AsdeBalears\AreaPrivada\Tesoreria\Calculadora;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Pedidos de la tienda (doc 48 y doc 52).
+ * Pedidos de la tienda (doc 48 y doc 48).
  *
  * - Cualquier asociado compra para él o ella, o una familia para sus menores; quien no
  *   tiene sesión compra desde la tienda pública.
@@ -23,7 +23,7 @@ defined( 'ABSPATH' ) || exit;
  * todos los pedidos del grupo; un scouter, los de socios de sus secciones que no
  * son adultos, y los suyos.
  *
- * v0.44 (doc 52, T1): el uniforme es una venta más. La camisa y las insignias son productos
+ * v0.44 (doc 48, T1): el uniforme es una venta más. La camisa y las insignias son productos
  * normales, con las existencias de la tienda: ya no hay reglas de precio propias (primera
  * camisa gratis), ni salen del Inventario general, ni un scouter pide para su sección. Los
  * pedidos hechos antes (con `camisa` e `insignias` en sus líneas) se siguen viendo.

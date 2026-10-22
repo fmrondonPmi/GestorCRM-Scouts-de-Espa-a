@@ -180,7 +180,7 @@ $singular = array(
 </section>
 
 <?php if ( $global && $n_pedir > 0 ) : ?>
-	<?php // v0.48 (doc 52, T4): lo que hay que pedir al proveedor tiene su pestaña. ?>
+	<?php // v0.48 (doc 48, T4): lo que hay que pedir al proveedor tiene su pestaña. ?>
 	<section class="asde-card">
 		<p><?php echo esc_html( sprintf( asde_n( 'Hay pagado material pendiente de pedir al proveedor (%d línea).', 'Hay pagado material pendiente de pedir al proveedor (%d líneas).', $n_pedir ), $n_pedir ) ); ?> <a href="<?php echo esc_url( $url_proveedor ); ?>"><?php asde_e( 'Ir a «Pedido de camisas»' ); ?></a></p>
 	</section>

@@ -6,7 +6,7 @@ use AsdeBalears\AreaPrivada\Audit\Logger;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Pedido de camisas (y de lo demás que se encarga al proveedor) (v0.48, doc 52, T4): Coordinación reúne lo que los
+ * Pedido de camisas (y de lo demás que se encarga al proveedor) (v0.48, doc 48, T4): Coordinación reúne lo que los
  * clientes ya han pagado y la tienda no tiene en existencias, hace un pedido al proveedor y, cuando llega, lo marca
  * como recibido. Lo que llega de más que lo pedido para clientes **suma a las existencias** de la tienda (P-181).
  *

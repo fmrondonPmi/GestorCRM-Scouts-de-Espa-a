@@ -1,6 +1,6 @@
 <?php
 /**
- * Pruebas de la v0.29 (entorno LOCAL, doc 36): informes en Excel y para imprimir,
+ * Pruebas de la v0.29 (entorno LOCAL): informes en Excel y para imprimir,
  * descargas sin pantalla en blanco, cuadros plegables, listado de Personas sin
  * recargar, cambios propuestos agrupados por persona y camisas del uniforme en el
  * inventario. Ejecutar desde app/public del site Local:

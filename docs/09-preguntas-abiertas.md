@@ -1,8 +1,8 @@
 # 09 · Preguntas abiertas
 
-Hay que resolverlas antes de programar cada parte. Cuando se responde una, se marca ✅ y se anota la decisión.
+Solo lo que sigue sin decidir o es un supuesto por confirmar en la última versión. Lo ya decidido está en el doc de cada módulo y en el código; lo que se descartó se ha quitado. Cuando se responde algo, se aplica y se borra de aquí.
 
-## Pendientes
+## Pendientes de decidir o de hacer fuera del código
 
 | # | Pregunta | Afecta a |
 |---|---|---|
@@ -20,68 +20,14 @@ Hay que resolverlas antes de programar cada parte. Cuando se responde una, se ma
 | P-33 | **Producción (Hostinger, que usa LiteSpeed):** ¿permite las tareas en segundo plano? Hay que pasar el **diagnóstico** (doc 18): subir `asde-diagnostico-segundo-plano.zip` como plugin, *Herramientas → Diagnóstico segundo plano*, y borrarlo al acabar. Lo más probable es que haga falta la regla `noabort` en el `.htaccess` | Tareas en segundo plano |
 | P-34 | **Código de cada organización federada** en el nº de socio local (en Balears, el 7): ¿de dónde sale el de cada una? El usuario dará la fuente; de momento se escribe a mano en *Organización federada* (doc 20) | Números de socio |
 | P-37 | **Producción:** poner el **email de contacto** de cada grupo (*Grupos Scouts → el grupo*; «Instalación y entorno» avisa si falta) y decidir **dónde se publica el enlace** de «Solicitar acceso» (web del grupo, WhatsApp de las familias…) (doc 22) | Solicitudes |
-| P-38 | **Precio de cada insignia** del uniforme (insignia de grupo, insignia mundial…). Hoy salen «por confirmar» y Tesorería cobra el importe real al validar el pago (doc 24) | Uniformes |
-| P-39 | **¿Dónde va la insignia de grupo** de Myotragus? Se ha puesto en el **brazo derecho** (donde la guía de colocación pone la de la federación, y la de Myotragus lleva «ASDE Scouts de Balears»). La mundial, en el pecho izquierdo, como dice la guía (doc 24) | Uniformes |
-| P-40 | **Talla especial (3XL):** ¿cuesta lo mismo que las demás (25 €) o lleva recargo? ¿Tarda más? (doc 24) | Uniformes |
-| P-41 | **Uniformes:** ¿avisar por email a la familia cuando está pagado o listo para recoger? ¿Conciliar los ingresos del banco también con los pedidos de uniforme (hoy solo con la cuota)? (doc 24) | Uniformes, banco |
 | P-42 | **SEPA · datos reales del acreedor:** nombre, **identificador del acreedor (ICS)** e IBAN del grupo, que da el banco al contratar las domiciliaciones. Hay que confirmar con **Colonya** que acepta el fichero **XML pain.008 (Cuaderno 19.14)**, por qué canal se sube, si pide el **BIC** y con cuántos días hábiles de margen (la web exige 3) (doc 25) | Tesorería · SEPA |
-| P-43 | ✅ **SEPA · validez de la firma:** la autorización se firma **electrónicamente** (queda registrado quién, cuándo y el texto aceptado). ¿La acepta Colonya como orden de domiciliación o quiere el papel firmado? También: quién custodia el mandato mientras esté vigente y los 14 meses siguientes (doc 25) | Tesorería · SEPA |
-| P-44 | ✅ **SEPA · qué se cobra:** hoy solo la **cuota de la ronda** (por plazos o todo lo pendiente). ¿También los pedidos de uniforme y el coste de actividades? ¿Se añade recargo a las devoluciones? (doc 25) **Actividades: sí** (P-146, 2026-10-15: la remesa también cobrará los eventos, doc 43) | Tesorería · SEPA |
-| P-45 | ✅ **SEPA · conciliación con el banco:** los cobros se registran a mano en la remesa («cobrado» o «devuelto»). ¿Se concilian solos con la Norma 43 de Colonya (abono agrupado de la remesa y devoluciones)? Hace falta un fichero real (P-28) (doc 25) | Tesorería · SEPA, banco |
-| P-46 | ✅ **Idiomas · revisión de las traducciones:** el catalán, el euskera y el gallego son una primera versión sin revisión de hablantes nativos. ¿Quién las revisa? (se corrigen desde wp-admin → Grupos Scouts → Idioma y etiquetas, sin tocar el código; doc 28) | Idiomas |
-| P-47 | ✅ **Idiomas · nombres propios:** ¿cómo se llaman las secciones y los roles en cada idioma (Castors / Llobatons, Kastorrak / Otsokumeak…)? Se ha puesto una propuesta. ¿Se traducen también las pantallas de wp-admin del plugin (hoy, en castellano)? (doc 28) | Idiomas |
-| P-48 | ✅ **Menús por rol:** ¿basta con separar el menú (lo personal / la gestión del grupo) o se quieren también páginas distintas? ¿Un scouter debe poder pedir uniforme para otros de su sección? (doc 28) | Menús |
-| P-49 | ✅ **Técnico/a · base legal:** ¿quién autoriza que personal de la federación vea los datos de los socios de varios grupos, y con qué base (responsable o encargado del tratamiento)? (doc 29) | Técnico |
-| P-50 | ✅ **Técnico/a · quién es:** ¿es socio (con ficha en el CRM de la federación o de un grupo)? ¿Entra con su email o con un número? (doc 29) | Técnico |
-| P-51 | ✅ **Técnico/a · usuario de API:** ¿puede ASDE dar un usuario de API de la federación **de solo lectura** que vea todos los grupos? Es la opción recomendada (doc 29, opción B) | Técnico |
-| P-52 | ✅ **Técnico/a · qué ve:** ¿salud y alimentación? ¿descarga CSV? ¿Tesorería, banco y SEPA, solicitudes, usuarios y emails? Propuesta: todo en lectura salvo salud, banco y SEPA (doc 29) | Técnico |
-| P-53 | ✅ **Técnico/a · panel multigrupo:** ¿hace falta un resumen con una fila por grupo (socios, incidencias, solicitudes, cuota cobrada, uniformes)? (doc 29, fase 2) | Técnico |
-| P-54 | ✅ **Técnico/a · qué grupos:** ¿una lista de grupos por técnico o siempre todos los de la web? (doc 29) | Técnico |
-| P-55 | ✅ **Técnico/a · alta:** ¿solo el administrador de WordPress da de alta a los técnicos? (doc 29) | Técnico |
-| P-56 | ✅ **Carpeta de Drive · cómo se ve:** ¿incrustada dentro de la web o basta con el enlace a Google Drive? (doc 30) | Drive |
-| P-57 | ✅ **Carpeta de Drive · quién la configura:** ¿el administrador de la web o también Secretaría/Coordinación desde el área? (doc 30) | Drive |
-| P-58 | ✅ **Carpeta de Drive · dónde:** ¿tarjeta en el inicio, entrada en el menú o las dos? ¿En «Para ti» o en «Gestión del grupo»? (doc 30) | Drive |
-| P-59 | ✅ **Carpeta de Drive · cuántas:** ¿una por grupo o también una por sección? (doc 30) | Drive |
-| P-60 | ✅ **Carpeta de Drive · cómo se comparte:** ¿restringida a las cuentas de Google de los scouters (recomendado) o «cualquiera con el enlace»? (doc 30) | Drive |
-| P-61 | ✅ **Inventario · quién edita:** hecho así: todos los que entran (scouters, Secretaría, Coordinación, Tesorería) añaden, cambian y dan de baja material y gestionan los tipos. ¿Hace falta un perfil solo de lectura? (doc 32, S-1) | Inventario |
-| P-62 | ✅ **Inventario · aviso de pocas unidades:** hecho así: sale al añadir a la lista un material con **menos de 5** en el inventario (se puede cambiar con un filtro). ¿Es esa la idea, o el aviso debería ser al revés (ya hay bastantes)? ¿Umbral único o por material? (doc 32, S-2) | Inventario |
-| P-63 | ✅ **Inventario · material nuevo:** hecho así: en una lista solo entra material del inventario; lo nuevo se da de alta antes con cantidad 0. ¿Vale? (doc 32, S-3) | Inventario |
-| P-64 | ✅ **Inventario · visto bueno propio:** hecho así: alguien de Tesorería puede aprobar una lista que ha creado él o ella (el email va al resto de Tesorería). ¿Se prohíbe cuando hay más de una persona en Tesorería? (doc 32, S-4) | Inventario |
-| P-65 | ✅ **Inventario · avisos de vuelta:** hecho así: aprobar o rechazar **no envía email** a quien pidió la lista (lo ve en el listado). ¿Se le avisa por email? (doc 32, S-5) | Inventario |
-| P-66 | ✅ **Inventario · después de comprar:** hecho así: el visto bueno no cambia las cantidades del inventario. ¿Se añade «Marcar como comprada» que sume lo comprado? (doc 32, S-6) | Inventario |
-| P-67 | ✅ **Importar material · repetidos:** hecho así: una fila con un nº de serie que ya está en el inventario (o repetido en el fichero) no se importa; sin nº de serie no se comprueba nada (puede duplicarse una descripción). ¿Hay que avisar también de descripciones repetidas o sumar la cantidad al material que ya existe? (doc 32) | Inventario |
-| P-68 | ✅ **Importar material · tipos:** hecho así: los tipos que no existen se crean (casilla marcada por defecto; desmarcada, esas filas fallan). ¿Vale, o preferís que por defecto fallen para evitar tipos con erratas? (doc 32) | Inventario |
-| P-76 | ✅ **Banco · tipos de partida:** se crean 15 tipos de gasto e ingreso la primera vez (material, actividades, transporte, seguros, comisiones, donativos, subvenciones…). ¿Son los que usáis o preferís otra lista? (doc 16) | Tesorería |
-| P-92 | ✅ **Altas en el CRM · a quién avisa una baja (supuesto, v0.23.1):** a **Tesorería** siempre (cada cuenta con ese rol menos quien da la baja; si no hay ninguna con email, al email de contacto del grupo), también si no está en ninguna familia; a la **familia**: si es menor, sus cuentas familiares o, si no tiene, el email de sus tutores en la ficha; si es **mayor de edad, a la propia persona**. Con el motivo **«Fallecimiento» no se escribe a la familia** (sí a Tesorería). El email a la familia no lleva el motivo. ¿Así? (doc 34) | CRM |
-| P-93 | ✅ **Alta de socio/a · qué datos del tutor son obligatorios (supuesto, v0.23.1):** con menos de 18 años, el **tutor/a 1** con **nombre, apellidos y email** (el email hace falta para la cuenta familiar y los avisos); su móvil y el tutor/a 2, opcionales. ¿Hace falta también el móvil o el segundo tutor? (doc 34) | CRM |
-| P-94 | ✅ **Tesorería · eliminar un pago (supuesto, v0.25.0):** «Eliminar…» **no borra**: el pago o el ajuste queda anulado con **quién, cuándo y el motivo (obligatorio)**, deja de contar y sale en el **«Historial de la ronda»** de la familia; la familia no lo ve en «Mis pagos». Lo puede hacer **quien registra pagos** (también los scouters, como el «Anular» de antes). Si el pago vino de **conciliar un ingreso del banco**, el ingreso **vuelve a estar por conciliar**; si vino del **cobro de una remesa SEPA**, la remesa lo sigue dando por cobrado (se avisa). ¿Debe poder eliminar solo Tesorería? (doc 14) | Tesorería |
-| P-95 | ✅ **Informes · cuota y pagos (supuesto, v0.25.0):** los importes de cada socio son **los de su familia** (con sus hermanos, también de otras secciones; los pagos son por familia), de la **ronda actual** salvo que se elija otra; las columnas y el filtro «Según lo pagado» los ve **quien entra en Tesorería** (los scouters, solo sus secciones), si el grupo usa Tesorería; quien no está en ninguna familia sale «Sin familia en Tesorería». ¿Os sirve así o queréis un importe por socio? (doc 13) | Informes |
-| P-96 | ✅ **Usuarios con hojas (supuesto, v0.25.0):** tres hojas fijas (**Usuarios**, **Dar acceso** y **Registro de emails**) con la barra **arriba** (como en una hoja de cálculo pero arriba, para que se vea también en el móvil); las direcciones de las páginas no cambian; «Dar acceso» desde Personas o desde un usuario sigue abriéndose en la ventana emergente. ¿Queréis también poder abrir **más hojas**, por ejemplo una por persona? (doc 11) | Usuarios |
-| P-97 | ✅ **Ayuda de cada página (supuesto, v0.26.0):** quien administra la web sin roles del grupo ve la ayuda del manual de **coordinación**; si el manual del rol no tiene la página, sale la de otro (coordinación, scouters, familias, participantes, por ese orden); la ayuda está **solo en castellano**; sus capturas salen del **manual publicado**, así que hay que publicar el manual de la misma versión que el plugin. ¿Queréis la ayuda también en catalán, euskera y gallego? (doc 35) | Manual |
-| P-98 | ✅ **«Resueltos» en Cambios propuestos (supuesto, v0.29.0):** además de las propuestas revisadas, enseña los cambios hechos directamente en las fichas de los **últimos 90 días** (de la auditoría: qué datos, quién y cuándo; los valores no se guardan). ¿Os vale ese plazo? (doc 36) | Fichas |
-| P-99 | ✅ **Aprobar varios cambios a la vez (supuesto, v0.29.0):** pediste la ventana con casillas y «aprobarlos todos» «en la sección de resueltos»; como solo se puede aprobar lo pendiente, está en **Pendientes** («Revisar» de cada persona). En «Resueltos», la ventana de cada persona enseña solo el detalle. ¿Es lo que querías? (doc 36) | Fichas |
-| P-100 | ✅ **Camisas del inventario (supuesto, v0.29.0):** servir y asignar camisas del inventario lo hace **Coordinación** (quien incluye los pedidos en el pedido al proveedor) y solo si el grupo usa el inventario; una camisa asignada **a 0 €** queda pagada «sin coste» sin pasar por Tesorería. ¿Debe poder hacerlo también Tesorería o el scouter de la sección? (doc 36) | Uniformes |
-| P-101 | ✅ **Chico y chica (supuesto, v0.29.0):** «chico» es la camisa masculina y «chica» la femenina (los dos modelos de ASDE); si un grupo tiene modelos propios en la configuración de uniformes, salen con su nombre. (doc 36) | Inventario |
-| P-102 | ✅ **«Fichas reducidas» (supuesto, v0.29.0):** lleva el nombre del **tutor/a 1** como pediste, sin su teléfono ni el del tutor/a 2. ¿Añadimos «Móvil del tutor/a 1» (ya existe como columna)? (doc 36) | Informes |
-| P-103 | ✅ **Primera camisa gratis (supuesto, v0.29.0):** «scouter» es cualquier adulto con membresía de **Scouter o de Voluntariado** (como ya distinguía la gestión de uniformes); cuenta como «ya pidió una» cualquier pedido con camisa que **no esté cancelado** (también uno servido del inventario). Si cancela el pedido gratis, el siguiente vuelve a ser gratis. ¿Es así? (doc 36) | Uniformes |
-| P-104 | ✅ **Primera camisa gratis para todos los grupos (supuesto, v0.29.0):** es una opción de Configuración de uniformes **activada por defecto** también en los grupos que ya estaban, porque lo pediste como norma. Un grupo que no la quiera la apaga allí. (doc 36) | Uniformes |
-| P-105 | ✅ **Inventario · aviso al revés (supuesto, v0.30.0):** desde **5 unidades** se pregunta «¿seguro que hace falta comprar más?» y por debajo de 5 sigue la etiqueta amarilla de «pocas unidades». Con el umbral a 0 (filtro `asde_ap_inventario_umbral`) no se pregunta nunca. (doc 37, S-1) | Inventario |
-| P-106 | **Lista de compra · editar (supuesto, v0.30.0):** pediste el material nuevo «al crear o editar» la lista; una lista **ya enviada sigue sin poderse editar** (se cancela y se hace otra): el material nuevo se escribe al prepararla (y al volver al formulario). ¿Hace falta editar una lista pendiente? (doc 37, S-2) | Inventario |
-| P-107 | ✅ **Lista de compra · material nuevo (supuesto, v0.30.0):** en la lista no lleva **tipo** ni nº de serie; al darlo de alta queda sin tipo y se le pone después en el inventario. (doc 37, S-3) | Inventario |
-| P-108 | ✅ **Email de la revisión (supuesto, v0.30.0):** solo a **quien creó la lista**; no si la revisa ella misma (Tesorería con su propia lista) ni si su cuenta ya no está activa; sin email queda «Sin email» en el registro y Tesorería lo ve en el aviso. Deshacer el visto bueno o cancelar la lista **no** envían email. (doc 37, S-4) | Inventario |
-| P-109 | ✅ **«Marcar como comprada» · quién (supuesto, v0.30.0):** **cualquiera que entra en el inventario** (como P-61: todos editan), no solo quien la pidió o Tesorería. (doc 37, S-5) | Inventario |
-| P-110 | ✅ **«Marcar como comprada» · qué se suma (supuesto, v0.30.0):** las **cantidades de la lista** (si se compró otra cantidad, se corrige después en el material); el precio, el año y las notas del material que ya estaba no cambian. No hay «deshacer». (doc 37, S-6) | Inventario |
-| P-111 | ✅ **«Marcar como comprada» · material de baja y alta (supuesto, v0.30.0):** si un material de la lista se dio de baja mientras tanto (o sumarle pasaría de 99.999), se da de alta uno nuevo con los datos de la línea. El material nuevo se da de alta con el **año de compra actual** y la nota «Comprado con la lista de compra LC…». (doc 37, S-7) | Inventario |
-| P-112 | ✅ **Importar · repetidos (supuesto, v0.30.0):** solo suman a materiales **sin nº de serie y no dados de baja**; el precio, el año y las notas de la fila no cambian el material que ya estaba; si al sumar se pasaría de 99.999, la fila es un error. (doc 37, S-8) | Inventario |
-| P-113 | ✅ **Uniforme para la sección · quién (supuesto, v0.30.0):** las cuentas con el **rol Scouter**, para las **secciones de su cuenta** (las del alta; con «Scouters», también el resto del Kraal). Coordinación, Tesorería o Secretaría sin el rol Scouter no piden para otros desde «Mi uniforme» (ya asignan camisas desde la gestión). (doc 37, S-9) | Uniformes |
-| P-114 | **Uniforme para la sección · después (supuesto, v0.30.0):** el scouter ve en «Tus pedidos» los que ha pedido para otros y los **puede cancelar** mientras nadie los haya validado; «Lo he recibido» lo confirma el socio/a o su familia, que también lo ve y lo puede cancelar. **No se avisa por email** a la familia. (doc 37, S-10) | Uniformes |
-| P-115 | ✅ **Uniforme para la sección · desplegable (supuesto, v0.30.0):** a partir de **6 personas**, «¿Para quién?» es un desplegable agrupado en «Tú», «Tu familia» y una por sección (la primera de las del scouter en la que está la persona), por apellidos. (doc 37, S-11) | Uniformes |
-| P-116 | ✅ **Uniforme para la sección · CRM caído (supuesto, v0.30.0):** si el CRM no responde, el scouter sigue pudiendo pedir para sí mismo y su familia (no para su sección). (doc 37, S-12) | Uniformes |
-| P-117 | ✅ **Tamaño de página (supuesto, v0.31.0):** los 10 por página (de 5 en 5 hasta 50) valen para todos los listados (el tamaño es uno por persona); quien tenía 75 o 100 pasa a 10. (doc 38) | Listados |
-| P-118 | ✅ **Orden de Personas (supuesto, v0.31.0):** por sección y, dentro de cada una, por apellidos; las personas sin membresía activa, al final. (doc 38) | Listados |
-| P-119 | ✅ **Cambio de sección (supuesto, v0.31.0):** de Rovers, la siguiente es Scouters; Voluntariado cuenta como scouter (cambia a cualquier sección, como en P-103). (doc 38) | Altas |
-| P-120 | ✅ **Nº territorial en el alta (supuesto, v0.31.0):** además de generarlo, se guarda en el CRM si se puede (como «Asignar nº» de Personas). (doc 38) | Altas |
-| P-121 | ✅ **Tooltip de la cuota (supuesto, v0.31.0):** lleva los hijos que pagan y, si lo hay, el ajuste. (doc 38) | Tesorería |
+| P-43 | **SEPA · validez de la firma:** la autorización se firma **electrónicamente** (queda registrado quién, cuándo y el texto aceptado). ¿La acepta Colonya como orden de domiciliación o quiere el papel firmado? También: quién custodia el mandato mientras esté vigente y los 14 meses siguientes (doc 25) | Tesorería · SEPA |
+
+## Supuestos hechos al programar (por confirmar)
+
+| # | Supuesto | Afecta a |
+|---|---|---|
+| P-106 | **Lista de compra · editar (supuesto, v0.30.0):** pediste el material nuevo «al crear o editar» la lista; una lista **ya enviada sigue sin poderse editar** (se cancela y se hace otra): el material nuevo se escribe al prepararla (y al volver al formulario). ¿Hace falta editar una lista pendiente? | Inventario |
 | P-123 | **Sección por edad (supuesto, v0.32.0):** la edad que cumple en el año en que empieza la ronda (septiembre a agosto): Castores 6-7, Lobatos 8-10, Scouts 11-13, Escultas 14-16, Rovers 17-20, Scouters 21+. (doc 39) | Lista de espera |
 | P-124 | **Quién ve qué (supuesto, v0.32.0):** los scouters ven **toda** la lista del grupo (no solo sus secciones), con filtro por sección; el documento solo lo ven Secretaría y Coordinación. (doc 39) | Lista de espera |
 | P-125 | **Persona de contacto (supuesto, v0.32.0):** se piden su nombre y apellidos, obligatorios por debajo de 18 años (el alta en el CRM los necesita como tutor/a 1). El género no se pide: lo pone Secretaría al dar de alta. (doc 39) | Lista de espera |
@@ -94,186 +40,19 @@ Hay que resolverlas antes de programar cada parte. Cuando se responde una, se ma
 | P-133 | **Anular no borra la cuenta del CRM (supuesto, v0.33.0):** al anular una autorización, los datos bancarios se quedan en las fichas del CRM (pueden usarlos la federación u otros procesos); si la persona quiere que se borren, lo pide al grupo o a la federación. (doc 25 §9) | SEPA |
 | P-134 | **Quién ve los datos bancarios en la ficha (supuesto, v0.33.0):** la familia, el propio asociado mayor de edad y Tesorería (con quien configura la Tesorería: Secretaría y Coordinación); los scouters no. Siempre enmascarados. (doc 25 §9) | SEPA |
 | P-135 | **Solo cuentas españolas (supuesto, v0.33.0):** el campo `iban_c` del CRM admite 24 caracteres, así que no se aceptan IBAN más largos (de otros países). (doc 04 §7.3 bis) | SEPA |
-| P-136 | **«Socio/a desde» (supuesto, v0.34.0, doc 42):** cuenta desde el alta de la membresía activa y, hacia atrás, las que enlazan con ella sin cortes (un cambio de sección no reinicia la cuenta; quien se dio de baja y volvió cuenta desde la vuelta). Si se prefiere desde la primera membresía de todas (aunque haya huecos), es un cambio de una línea. | Personas |
+| P-136 | **«Socio/a desde» (supuesto, v0.34.0):** cuenta desde el alta de la membresía activa y, hacia atrás, las que enlazan con ella sin cortes (un cambio de sección no reinicia la cuenta; quien se dio de baja y volvió cuenta desde la vuelta). Si se prefiere desde la primera membresía de todas (aunque haya huecos), es un cambio de una línea. | Personas |
 | P-137 | **Quién ve «Socio/a desde» (supuesto, v0.34.0):** solo quien abre la ficha desde Personas; ni la propia persona ni su familia, porque cuesta una consulta más al CRM (0,5–1,5 s) y se pidió «en Personas». | Personas |
 | P-138 | **Bajas hechas en el CRM (comprobar, v0.34.0):** el fallo encaja con una membresía puesta en «baja» en el CRM **sin fecha de baja** (o con una fecha futura): para el CRM sigue activa (calcula `active` y «Secciones actuales» por las fechas, P-74). Confirmarlo con `herramientas-desarrollo/crm-revisar-alta.php` (solo lectura) y el nº de esa persona. Desde la v0.34, «Dar de baja» de la web la encuentra y le pone la fecha. | Altas en el CRM |
-| ✅ P-155 | **Eliminar una familia (confirmado por el usuario, 2026-10-15; v0.35.1, doc 44):** además de no tener socios, no puede tener pagos, autorizaciones de domiciliación ni movimientos del banco asignados (se quedarían sin familia). | Tesorería |
-| ✅ P-156 | **«Eliminar de la web» (confirmado por el usuario, 2026-10-15; v0.35.1, doc 44):** solo a quien no tiene membresía activa; en el CRM no cambia nada; en la web deja de salir en Personas, sale de su familia, su cuenta propia se desactiva y deja de estar en las cuentas familiares (la que no representa a nadie más, se desactiva). | Personas, Usuarios |
-| ✅ P-158 | **Justificante de los gastos (confirmado por el usuario, 2026-10-16; v0.36.0, doc 43):** todo gasto de un evento lleva justificante (foto o PDF): no se puede proponer sin él. Los ingresos reales (una subvención), no. | Eventos |
-| ✅ P-159 | **Liquidar un anticipo (confirmado por el usuario, 2026-10-16; v0.36.0):** si los gastos validados con él más lo devuelto no suman el anticipo, se avisa de la diferencia y se puede liquidar con una nota que la explique. | Eventos |
-| ✅ P-160 | **Devoluciones (confirmado por el usuario, 2026-10-16; v0.36.0):** de cualquier inscripción con algo pagado (baja, cancelación o error), hasta lo pagado y siempre con motivo; las hace Tesorería. | Eventos, Tesorería |
-| ✅ P-161 | **Fondo de emergencia del evento (confirmado por el usuario, 2026-10-16; v0.36.0):** lo que aportan el margen y el redondeo de las inscripciones activas (precio de su sección menos su coste); lo usado son los gastos validados «con cargo al fondo»; lo que sobra se queda en el grupo. | Eventos |
-| ✅ P-162 | **Cierre (cambiado por el usuario, 2026-10-16; v0.36.1):** «una cuenta puede volver a abrirse en el futuro». Tesorería reabre las cuentas cerradas con un motivo (queda en el registro) y las vuelve a cerrar con el informe al día; lo borrado al cerrar (quién recoge, observaciones) no vuelve. | Eventos |
-| ✅ P-163 | **Remesa SEPA de un evento (confirmado por el usuario, 2026-10-16; v0.36.0):** cobra todo lo pendiente de las inscripciones activas de cada familia con autorización (no por plazos). | Eventos, SEPA |
-| ✅ P-164 | **Reembolsos sin email (confirmado por el usuario, 2026-10-16; v0.36.0):** el reembolso de un gasto no avisa por email a quien lo recibe; se ve en la pestaña «Cuentas». | Eventos |
-| P-165 | **Historial de pagos de la familia (supuesto, v0.37.0, doc 45):** los pagos de eventos y de uniformes salen en el historial de la ficha de **todas las rondas** y no se eliminan desde allí (se anulan donde se registraron: «Inscripciones» del evento o «Gestión de pedidos»). | Tesorería |
-| P-166 | **Pago de un evento desde «Registrar pago» (supuesto, v0.37.0, doc 45):** solo Tesorería (quien cobra eventos), solo eventos publicados con la inscripción abierta y algo pendiente de la familia; efectivo, transferencia o Bizum; sin ingreso del banco; se reparte entre las inscripciones de la familia y no toca la cuota de la ronda. | Tesorería, Eventos |
-| ✅ P-167 | **Informes de pagos en Tesorería (confirmado por el usuario, 2026-10-16; v0.37.1: el rol Tesorería recibe `asde_reports` y ve a todo el grupo, solo identidad y pagos; `Catalogo::solo_tesoreria()`). Antes era un supuesto (v0.37.0, doc 45):** los accesos directos salen a quien ya puede ver informes y pagos (scouters, Secretaría, Coordinación). El rol Tesorería a secas no tiene `asde_reports` y sin visión global un informe no le daría familias: ¿se le da `asde_reports` y la visión de todo el grupo en los informes de pagos? | Tesorería, Informes |
-| ✅ P-157 | **Si vuelve (confirmado por el usuario, 2026-10-15; v0.35.1):** quien se eliminó de la web y vuelve a tener una membresía activa en el CRM vuelve a salir solo, y se le puede dar acceso de nuevo | Personas |
-| P-131 | ✅ **IBAN en el CRM (respondida 2026-10-14: la cuenta, en la ficha del CRM de cada miembro de la familia; la autorización, en la web; un solo adeudo por familia; doc 25 §9):** el CRM sí tiene en la ficha `iban_c`, `iban_titular_c` e `iban_entidad_c` y el usuario de la API del grupo puede escribirlos (doc 04, §7.3 bis); los compromisos de pago y las remesas del CRM no son accesibles. ¿Se deja como está (autorizaciones SEPA cifradas solo en la web, doc 25), se copia el IBAN de la autorización a la ficha del CRM al firmarla, o se piden a ASDE permisos para los compromisos de pago? | Tesorería / SEPA |
-| P-122 | ✅ **Traducciones en translate.wordpress.org (pregunta, v0.31.0):** los textos originales del área están en castellano y translate.wordpress.org espera inglés. ¿Se dejan en castellano (funciona igual) o se plantea pasarlos a inglés (mucho trabajo)? Plan de la migración en el doc 38, §4. | Idiomas |
+| P-165 | **Historial de pagos de la familia (supuesto, v0.37.0):** los pagos de eventos y de uniformes salen en el historial de la ficha de **todas las rondas** y no se eliminan desde allí (se anulan donde se registraron: «Inscripciones» del evento o «Gestión de pedidos»). | Tesorería |
+| P-166 | **Pago de un evento desde «Registrar pago» (supuesto, v0.37.0):** solo Tesorería (quien cobra eventos), solo eventos publicados con la inscripción abierta y algo pendiente de la familia; efectivo, transferencia o Bizum; sin ingreso del banco; se reparte entre las inscripciones de la familia y no toca la cuota de la ronda. | Tesorería, Eventos |
 
-## Resueltas
+## Tienda, Reintegros y modo Oficina
 
-| # | Decisión |
-|---|---|
-| — | **Módulo de eventos** (hecho en una sesión de Claude Code en la nube el 2026-10-15, sobre la v0.18, e integrado aquí en la v0.35.0; doc 43). Sus decisiones eran P-61…P-76 allí y aquí son **P-139…P-154** (las P-61…P-76 de esta línea son del inventario y la lista de compra) |
-| ✅ P-08 | La «ficha de participación en eventos» son las **inscripciones** (`stic_Registrations`): el módulo de eventos las guarda en la web y las copia al CRM en la última fase (P-139, doc 43) |
-| ✅ P-139 | **Eventos en la web y copiados al CRM después** (`stic_Events` / `stic_Registrations`), sin datos personales en claro ni salud (decisión del usuario, 2026-10-15, doc 43) |
-| ✅ P-140 | **Solo actividades:** ni las reuniones semanales de sección ni las de adultos (Kraal, Consejo, asamblea). Ocho tipos: salida, acampada, campamento, ruta, actividad de grupo, servicio, externo y formación (2026-10-15) |
-| ✅ P-141 | **Cada scouter crea y publica los eventos de sus secciones**; Coordinación, los de grupo y los externos. Con coste, antes **Tesorería valida el presupuesto** (2026-10-15) |
-| ✅ P-142 | **De 14 a 17:** se preinscriben y firma la familia; la familia también los inscribe y **eso cuenta como firma** (2026-10-15) |
-| ✅ P-143 | **Autorización por las dos vías:** firma en la web o papel que marca un scouter. **Imagen:** la cesión anual de la ficha del CRM (`cesionimagen_c`) (2026-10-15) |
-| ✅ P-144 | **Normativa balear:** el usuario pidió «investiga y propón». Propuesta en el doc 43, apartado 6 (Ley 10/2022 y Decreto 23/2018): declaración responsable 15 días antes, equipo dirigente comprobado con la ficha (edad, titulación, certificado de menos de 12 meses), ratio 1/10 con fracción de 5 y lista de comprobación; todo avisa, no bloquea. Ajustada con P-153 y P-154: en la práctica, **comunicación a ASDE Baleares 30 días antes** (2026-10-15) |
-| ✅ P-145 | **El precio sale del coste:** el coste del equipo se reparte entre los participantes, con **margen del 5 % para el fondo de emergencia** (configurable: activo o no y porcentaje), **precio por sección** y **becas y ajustes**; sin descuento por hermanos, recargo ni opciones. **Fijo al publicar** con los participantes previstos; lo que sobra o falta lo asume el grupo. **Devoluciones a criterio de Tesorería** (2026-10-15) |
-| ✅ P-146 | **Cobro de eventos:** efectivo, ingreso o transferencia, Bizum y domiciliación SEPA (2026-10-15) |
-| ✅ P-147 | **Tesorería valida el presupuesto** antes de publicar. Gastos con **justificantes**, **reembolsos a scouters**, **anticipos de caja** y **uso del fondo de emergencia** (2026-10-15) |
-| ✅ P-148 | **Listado con salud:** equipo del evento, scouters de las secciones que van, Secretaría y Coordinación; **se puede imprimir**, con auditoría (2026-10-15) |
-| ✅ P-149 | **Inventario:** rol nuevo **Responsable de material** (responsabilidad de un scouter) y material **del grupo y de cada sección**; sin importación ni préstamos (2026-10-15) |
-| ✅ P-150 | **Conservación:** lo cifrado de la inscripción se borra al cerrar el evento; la firma de la autorización se queda (2026-10-15) |
-| ✅ P-151 | **Eventos externos:** el grupo inscribe, cobra y saca la lista; además, los federativos **se leen del CRM** (2026-10-15) |
-| ✅ P-152 | **Avisos de eventos:** email al publicar, al confirmar y recordatorio, y aviso push de la app (2026-10-15) |
-| ✅ P-153 | **Seguro de las actividades:** el de la federación cubre accidentes y responsabilidad civil; **solo las actividades internacionales** necesitan un seguro aparte (decisión del usuario, 2026-10-15, doc 43) |
-| ✅ P-154 | **Comunicación de actividades:** el grupo avisa por correo a **ASDE Baleares** con **30 días** de antelación (tipo, fechas, director/a, scouters titulados con DNI, email y teléfono, nº en prácticas y de apoyo, participantes con rango de edades y género, certificados de los mayores de 18, proyecto educativo y evaluación de riesgos) para las actividades de **2 o más noches con 10 o más menores**. La web la **envía o la deja descargar** (2026-10-15, doc 43) |
-| ✅ P-01 | Módulo "Gestión de familias" del primer mensaje: fue un error al copiar y pegar. (Las **Familias** de Tesorería son otra cosa: ver P-26) |
-| ✅ P-02 | Alta **solo por invitación**, hecha por Secretaría, Coordinación o administradores |
-| ✅ P-05 | El scouter edita **contacto y tutores** de los socios de sus secciones. El resto de datos personales lo edita Secretaría (v0.7) |
-| ✅ P-06 | El participante cambia **directamente** su email y sus teléfonos (v0.7) |
-| ✅ P-12 | El usuario de API tiene permiso de edición en Contacts y Relaciones: **se usa para editar desde el área privada** según el rol (v0.7, petición del usuario). Si se le quita, todo pasa a solo lectura |
-| ✅ P-23 | **Banco:** se importan ficheros **Norma 43 o CSV** (v0.6, doc 16). La PSD2 directa queda descartada |
-| ✅ P-27 | **Grupos dados de alta a mano**, cada uno con **su usuario y contraseña del CRM**; la URL es común (v0.6, doc 15) |
-| ✅ Edición | Si el usuario del CRM puede editar: **todos los flujos de edición**, con lo no editable en solo lectura; «Asignar nº» escribe en el CRM; los duplicados reciben el siguiente número libre (v0.7, doc 17) |
-| ✅ Sin sección | «**Voluntario sin sección**»: solo Tesorería, Secretaría o Coordinación, sin el rol de Scouter (v0.7) |
-| ✅ P-30 | **Primera escritura real en el CRM:** la hizo el propio usuario desde *Personas* el 2026-09-27 (3 duplicados resueltos y 138 formatos corregidos); el CRM aceptó todas. La escritura por API queda comprobada (doc 17) |
-| ✅ Segundo plano | Las correcciones masivas son **tareas en segundo plano** con un **monitor** que dice cuántas fichas quedan, sin bloquear la página (v0.7.2, petición del usuario tras la pantalla «congelada») |
-| ✅ Ficha | Apartados **plegables**; a los **menores** no se les muestran formación ni certificado de delitos sexuales; el **cargo** solo con membresía de Scouter o Voluntariado; **Salud** y **Alimentación** separadas; **tipo de régimen** con 4 dietas y su explicación al pasar el ratón (v0.7.1) |
-| ✅ P-32 | El **cargo** se ve con membresía de **Scouter o de Voluntariado** (`Secciones::ADULTAS`) (v0.7.3) |
-| ✅ Instalación | **Botón «Instalación y entorno»** para dejar un WordPress nuevo listo: lo del plugin siempre; los ajustes del sitio solo si se marcan y si hacían falta; lo que requiere credenciales queda como siguiente paso (v0.8.0, doc 19) |
-| ✅ Organización | Pantalla **Organización federada** con las 17 organizaciones de scout.es: su nombre sale en los textos, su **código** (configurable) va en el nº de socio local y su **coste federativo** (con **otros conceptos**) es el punto de partida de cada ronda (v0.9, doc 20) |
-| ✅ Hora | La zona horaria **no la gestiona el plugin**: es un ajuste de WordPress. Se quitó de «Instalación y entorno» (v0.9, decisión del usuario) |
-| ✅ Acceso con email | El usuario de acceso es **el nº de socio/a o el email asociado a ese nº en el CRM** (el del campo elegido en el alta). Se busca en el CRM al entrar, sin guardarlo; si es de varias cuentas, manda la contraseña y, si vale para varias, se pide el nº (v0.9, doc 15) |
-| ✅ Cabecera | Botón para **plegar la cabecera morada**, con el menú principal y el del área fijos; **sin barra de título ni migas** en las páginas del área (v0.7, doc 06) |
-| ✅ Listados | Personas: **orden por columnas y paginación** de 25, 50, 75 o 100 por página (v0.6) |
-| ✅ Emails | **Registro de emails** con su estado y la vista del email, sin guardar el enlace personal (v0.6) |
-| ✅ Nombre | El plugin se llama «**ASDE Scouts de España - Gestor CRM para Grupos Scouts**» (la carpeta sigue siendo `asde-area-privada` para no desactivarlo) |
-| ✅ P-03 | **Todo es por grupo**: cada socio tiene un grupo «padre» y no hay visibilidad entre grupos. Secretaría y Coordinación gestionan su grupo (2026-09-26) |
-| ✅ Acceso | Pantalla **Acceso socios** con desplegable de Grupo Scout + nº de socio + contraseña. Es lo **único** del área privada en el menú superior; el resto de páginas privadas no aparece en el pie, el buscador, los menús ni los sitemaps (v0.5.0, doc 15) |
-| ✅ P-04 | Los **scouters ven la salud y la alimentación de su sección, en solo lectura** (2026-09-26) |
-| ✅ P-07 | Cuenta propia de participante **desde los 14 años** |
-| ✅ P-09 | La salud y la alimentación son campos de la ficha (doc 04 §7.3) y se usan en los informes |
-| ✅ P-13 | Sin CRM de pruebas: se trabaja en solo lectura contra el real, con el correo desviado a Mailpit |
-| ✅ P-15 | Grupo = grupo de seguridad; sección = membresía / "Secciones actuales"; tutores = campos de la ficha del menor |
-| ✅ P-16 | **Ultimate Member eliminado** (nadie lo usaba). Quedan restos inofensivos en la BD (opciones, 4 formularios, tabla `wp_um_metadata`) |
-| ✅ P-18 | Las cinco secciones tienen miembros activos |
-| ✅ P-19 | **A partir de 18 años solo accede la propia persona.** La familia deja de verla al momento y la tarea diaria retira el vínculo |
-| ✅ P-20 | **Doble factor obligatorio** para Scouter, Secretaría, Coordinación y Tesorería (10 días de margen) |
-| ✅ Usuario | **Usuario = nº de socio local** (7 + 684 + 4 dígitos; el 7 es configurable desde la v0.9); se genera si falta. Tutores: **nº del menor + T** (cuenta familiar). Desde la v0.9 también se entra con el email del CRM |
-| ✅ Datos | **En WordPress no hay datos personales**: tabla nº Scouts de España ↔ nº local; nombres y demás datos se leen del CRM. **Excepción desde la v0.10 (2026-09-28):** el email de cada cuenta se guarda **cifrado** (clave del sitio + id del usuario) con una huella para encontrarlo, y lo escrito en una solicitud de acceso se guarda cifrado y se borra a los 30 días (docs 15 y 22) |
-| ✅ Activos | Solo los socios con **membresía activa** aparecen en el área; la página *Personas* muestra también los inactivos |
-| ✅ Responsab. | **Secretaría, Coordinación y Tesorería son responsabilidades de un scouter**, y se sugieren por el cargo del CRM |
-| ✅ P-26 | **Familias** con nº **F + grupo + correlativo** (F684001) para Tesorería |
-| ✅ Cuotas | Configurables: inscripción 20 € + seguro 10 € por hijo + anualidad 110/198/242 (tope). **Plazos configurables.** Pagan **de Castores a Rovers**; scouters y voluntariado no |
-| ✅ Federación | Coste configurable: cuota asociativa 17 € + seguro (primas 2026: 1,92 / 2,44 / 6,06 € o promedio de 3 €), para **todos** los asociados. Desde la v0.9, con edad de corte y **otros conceptos** configurables, y los importes por defecto en *Organización federada* |
-| ✅ Tesorería | Acceso: todos los scouters (pagos y familias). Configuración: Secretaría, Coordinación y **Tesorería** (rol nuevo) |
-| ✅ Email cifrado | **El email de las cuentas se guarda en la web, cifrado** (petición del usuario del 2026-09-28). La clave no es solo el id del usuario, como se propuso, sino **la clave del sitio + el id**: con el id solo, una copia de la base de datos bastaría para descifrarlo todo (docs 08 y 15) |
-| ✅ Solicitudes | **Solicitudes de acceso** con un enlace por grupo: documento + fecha de nacimiento (o fecha + nombre, para menores de 14 sin documento), aprueba un scouter de la sección (o Secretaría/Coordinación) y llega la invitación con bienvenida. Si el email no es el de la ficha, **se actualiza en el CRM** al aprobar. Email de contacto configurable por grupo (Myotragus: `grupo@example.invalid`) (v0.10, doc 22) |
-| ✅ Ventanas | **Fichas, «Dar acceso» y solicitudes en ventana emergente** sobre la página; pestaña *Alta de usuarios* sustituida por «Dar acceso» en *Personas* y *Usuarios*; «Seguridad» junto al nombre (v0.10, doc 23) |
-| ✅ Uniformes | **Pedidos de uniforme** (petición del usuario, 2026-09-29): camisa a 25 € (modelos masculino y femenino, con las tallas de sus tablas de medidas) e insignias configurables con su imagen. **Tesorería** valida el pago (efectivo o ingreso), **Coordinación** el pedido al proveedor, **el grupo** la entrega y **el socio/a o su familia** confirma que la ha recibido. Scouters incluidos (v0.11, doc 24) |
-| ✅ Mis pagos | **«Mis pagos»**, pantalla propia y solo de consulta: cuota de la ronda con plazos, pagos registrados por Tesorería (sin notas internas ni anulados) y pagos del uniforme (v0.11, doc 24) |
-| ✅ P-35 | **Dos tutores, dos cuentas** (decisión del usuario, 2026-09-30): el primer tutor/a entra con `nº + T` y el segundo con **`nº + T2`**, cada uno con **su email y su contraseña**; ven a los mismos menores y comparten la familia de Tesorería. Al aprobar una solicitud de una familia que ya tiene cuenta se elige entre «otro tutor/a» (cuenta nueva) y «la misma persona con otro email» (sustituir). Máximo dos cuentas por familia (v0.12, docs 22 y 12) |
-| ✅ P-36 | **Aviso por email al rechazar una solicitud** (decisión del usuario, 2026-09-30): texto genérico (sin el motivo, que es solo para el grupo) con el **email de contacto del grupo**, casilla marcada por defecto, anotado en el registro de emails (v0.12, doc 22) |
-| ✅ P-77 | **Pago con un ingreso del banco · sugerencias por nombre** (decisión del usuario, 2026-10-06): se quedan como están en la v0.20.1: se sugieren los ingresos que llevan el nombre y el primer apellido de un socio o tutor de la familia (palabras enteras, sin acentos); es solo una sugerencia, nunca concilia sola (doc 14) |
-| ✅ P-69 | **Altas en el CRM · pruebas** (decisión del usuario, 2026-10-06; doc 34): no hay CRM de pruebas; se hace un **servidor de la API simulado** que conteste lo esperado en cada acción |
-| ✅ P-70 | **Altas en el CRM · permiso** (decisión del usuario, 2026-10-06; doc 34): **sí**, el grupo crea personas y da altas y bajas desde la web |
-| ✅ P-71 | **Altas en el CRM · en otro grupo** (decisión del usuario, 2026-10-06; doc 34): se puede continuar creando la persona en el grupo, con una **advertencia** de que ya está dada de alta en otro grupo y de su OF |
-| ✅ P-72 | **Altas en el CRM · nº de socio** (decisión del usuario, 2026-10-06; doc 34): lo devuelve el CRM automáticamente al crear la persona |
-| ✅ P-75 | **Altas en el CRM · obligatorios** (decisión del usuario, 2026-10-06; doc 34): nombre, apellidos, fecha de nacimiento, DNI o nº de documento y género |
-| ✅ P-78 | **Altas en el CRM · recuento federal** (decisión del usuario, 2026-10-06; doc 34): **sí**, se puede usar `get_entries_count` para saber si un documento ya existe en otro grupo |
-| ✅ P-79 | **Altas en el CRM · quien vuelve** (decisión del usuario, 2026-10-06; doc 34): si ya tiene ficha en el grupo, solo necesita una membresía nueva en esa ficha |
-| ✅ P-80 | **Altas en el CRM · menores sin documento** (decisión del usuario, 2026-10-06; doc 34): no se valida al darlos de alta; se valida cuando se les asigna un nº de documento, antes de guardarlo, avisando si ya existe |
-| ✅ P-81 | **Altas en el CRM · DNI único** (decisión del usuario, 2026-10-06; doc 34): **no**: una persona puede estar en dos grupos o en dos asociaciones; se informa siempre del duplicado durante el alta |
-| ✅ P-82 | **Altas en el CRM · documento obligatorio** (decisión del usuario, 2026-10-06; **ajustada el 2026-10-07**; doc 34): el documento es obligatorio para **todo asociado de 14 años o más**; por debajo de 14 se puede dar de alta sin él y se comprueba cuando se le pone (P-80) |
-| ✅ P-83 | **Altas en el CRM · si no se puede comprobar** (decisión del usuario, 2026-10-06; doc 34): si el recuento federal deja de serlo (lo detecta el canario), se avisa de que no se ha podido comprobar si está en otros grupos y se deja continuar |
-| ✅ P-84 | **Altas en el CRM · aviso de «está en otro grupo»** (decisión del usuario, 2026-10-06; doc 34): **genérico**, «Esta persona ya está dada de alta en otro grupo u organización de Scouts de España». El CRM no deja saber el grupo ni la OF actuales («You do not have access») y los datos de la importación de julio de 2024 no se mantienen. Si ASDE da un dato oficial del grupo actual, o el visto bueno a usar los de la importación, se añade |
-| ✅ P-87 | **Altas en el CRM · fechas** (decisión del usuario, 2026-10-07; doc 34): **no hace falta** dar altas con fecha futura: el alta, la baja y el cambio de sección van como mucho con fecha de hoy y nunca antes del alta de la membresía que se cierra |
-| ✅ P-88 | **Alta de socio/a · tutores** (decisión del usuario, 2026-10-07; doc 34): los tutores **no son opcionales si el asociado es menor de 18 años** (hecho así en la v0.23.1: tutor/a 1 con nombre, apellidos y email, P-93). Los pasos (documento → datos → revisar → hecho) se quedan como están |
-| ✅ P-89 | **Altas en el CRM · quién las activa** (aclaración del usuario, 2026-10-07; doc 34): los módulos solo los activa el **administrador de WordPress** (wp-admin → Grupos Scouts → Módulos, columna «Altas en el CRM»). Las pantallas las usan Secretaría y Coordinación, los que ven Personas |
-| ✅ P-90 | **Altas en el CRM · avisos de una baja** (decisión del usuario, 2026-10-07; doc 34): **se avisa por email a Tesorería y a la familia** (v0.23.1; a quién exactamente, P-92) |
-| ✅ P-91 | **Comprobar si el DNI existe** (decisión del usuario, 2026-10-07; doc 34): la comprobación **solo está en el flujo de dar de alta un nuevo asociado** (primer paso de «Alta de socio/a»). Se quita el botón suelto «¿Está ya en el CRM?» de Personas (v0.23.1). Poner el documento a un menor en su ficha lo sigue comprobando antes de guardarlo (P-80) |
-| ✅ P-73 | **Altas en el CRM · grupo de seguridad** (comprobado en la primera alta real, 2026-10-08; doc 34): la ficha nueva **entra sola en el grupo de seguridad del grupo** (el grupo la ve): la herencia del creador está activa en la instancia. El enlace de reserva del plugin no hace falta, pero se deja |
-| ✅ P-74 | **Altas en el CRM · secciones actuales** (comprobado en la primera alta real, 2026-10-08; doc 34): «Secciones actuales» **se recalcula solo** al guardar la membresía por la API y coincide con las membresías activas |
-| ✅ P-86 | **Altas en el CRM · campos de la membresía** (comprobado en la primera alta real, 2026-10-08; doc 34): frente a las membresías hechas por ASDE, a la nueva no le falta ningún campo que deba poner la web. La única diferencia es `assigned_user_name`, el nombre del usuario asignado, que SuiteCRM enseña a partir de `assigned_user_id`: la nueva sí tiene usuario asignado (el de la API), cuyo nombre la API no devuelve |
-| ✅ P-85 | **Altas en el CRM · fecha de baja** (comprobado en la primera baja real, 2026-10-08; doc 34): con una baja de fecha de hoy, el CRM deja la membresía con **`active=0`** y `estado_c` baja, y la quita de **«Secciones actuales»** ese mismo día: lo mismo que entiende la web (la fecha de baja es el día en que deja de estar). El motivo «Otro motivo» se guarda como `other` |
-| ✅ Contacto | El **email de contacto es parte de la configuración de cada grupo** (*Grupos Scouts*), no de una pantalla aparte (decisión del usuario, 2026-09-30). Lo usan «Solicitar acceso», el aviso de rechazo y los emails SEPA; «Instalación y entorno» y *Solicitudes* avisan si falta (v0.12) |
-| ✅ SEPA | **Domiciliación SEPA** (petición del usuario, 2026-09-30): las familias (y los asociados mayores de edad) **firman la autorización en «Mis pagos»** y Tesorería **genera el fichero de adeudos** para el banco, con aviso previo a las familias y registro de cobros y devoluciones (v0.12, doc 25) |
-| ✅ Usuario | **El usuario de acceso pasa a ser configurable: nº de Scouts de España o nº territorial** (petición del usuario, 2026-10-02, v0.14, doc 27). Valen los dos al entrar; el nº territorial se sigue vigilando y corrigiendo, se puede ver en todas las pantallas («Mostrar nº territorial») y su advertencia sale siempre. **A confirmar:** la preferencia de mostrarlo es por persona y empieza apagada; el alta ya no genera nº territorial con `asde`; las familias no ven esos números |
-
-## Respuestas del usuario (2026-10-11, al cerrar la v0.29)
-
-Las ✅ de la tabla están contestadas aquí. **Sigue abierta: P-43** (si Colonya acepta la firma electrónica: lo consulta el usuario).
-
-- **P-44 SEPA:** además de la cuota, cobrar por domiciliación los **pedidos de uniforme** y las **actividades** → v0.30.
-- **P-45 SEPA:** conciliar **solos** los cobros de la remesa con la Norma 43 → v0.30; hace falta un **fichero real** de Colonya con una remesa (P-28).
-- **P-46 / P-47 Idiomas:** las traducciones las revisa **la federación**; los nombres de secciones y roles **valen**; wp-admin **no** se traduce.
-- **P-48 Uniformes:** un **scouter puede pedir uniforme para los socios de su sección** → hecho en la v0.30 (doc 37). (Separar el menú por rol, como se hizo en la v0.15, basta.)
-- **P-49…P-55 Técnico/a (doc 29, sigue aparcado):** la base legal la da **la federación** (responsable del tratamiento); es **personal, entra con su email**; ASDE **puede dar** un usuario de API de solo lectura de la federación (pedirlo); ve **todo en lectura, también la salud** (salvo banco y SEPA, como la propuesta); **sí** al panel con una fila por grupo; ve **todos los grupos** de la web; lo da de alta **solo el administrador**.
-- **P-56…P-60 Drive (doc 30):** **de momento no se hace nada** con Google Drive.
-- **P-61 Inventario:** todos editan (así está bien).
-- **P-62 Inventario:** el aviso, **al revés**: avisar al añadir a la lista de compra un material del que **ya hay bastantes** → hecho en la v0.30 (doc 37).
-- **P-63 Inventario:** poder **escribir en la lista de compra material nuevo** (que no está en el inventario) → hecho en la v0.30 (doc 37).
-- **P-64 Inventario:** Tesorería puede aprobar su propia lista (así está bien).
-- **P-65 Inventario:** **email** a quien pidió la lista cuando se aprueba o se rechaza (con el motivo) → hecho en la v0.30 (doc 37).
-- **P-66 Inventario:** **«Marcar como comprada»**, que suma lo comprado al inventario → hecho en la v0.30 (doc 37).
-- **P-67 Importar:** misma descripción y tipo → **se suma la cantidad** al material que ya existe → hecho en la v0.30 (doc 37).
-- **P-68 Importar:** los tipos que no existen **hacen fallar la fila** por defecto (casilla desmarcada) → hecho en la v0.29.
-- **P-76 Banco:** los 15 tipos valen.
-- **P-92 / P-93 Altas:** así están bien.
-- **P-94 Tesorería:** eliminar un pago o un ajuste, **solo Tesorería** → hecho en la v0.29 (`Pagos::puede_eliminar()`).
-- **P-95 Informes:** importes por familia (así está bien). **P-96 Usuarios:** con tres hojas basta.
-- **P-97 Ayuda:** la ayuda de cada página **también en catalán, euskera y gallego** → v0.30 (traducir el manual de texto).
-- **P-98:** cambios directos de los **últimos 30 días** → hecho. **P-99:** aprobar en Pendientes, consultar en Resueltos (así está bien).
-- **P-100:** servir y asignar camisas del inventario, **Coordinación y Tesorería** → hecho. **P-101:** chico = masculina, chica = femenina (correcto).
-- **P-102:** «Fichas reducidas» lleva también el **móvil del tutor/a 1** → hecho (los predefinidos se ponen al día al actualizar).
-- **P-103:** scouter = adulto con membresía de Scouter **o de Voluntariado**; un pedido cancelado no cuenta (el siguiente sigue siendo gratis). **P-104:** la primera camisa gratis, **activada en todos los grupos**.
-- **P-44 (actualización, 2026-10-11):** las **actividades** serán un **módulo nuevo** (con su precio y el cobro por SEPA), que se hará **después del reinicio semanal del límite de uso** (a partir del 2026-10-14). En la v0.30, por SEPA solo los **pedidos de uniforme**.
-
-## Respuestas del usuario (2026-10-11, tras la v0.31)
-
-- **P-122 / traducciones:** se deja **todo como está** por ahora: los textos originales en castellano y los catálogos de `languages/` dentro del plugin (el área sigue en los cuatro idiomas). La migración a translate.wordpress.org (doc 38, §4) queda **aparcada**; WordPress.org seguirá pidiendo quitar esos ficheros.
-- **P-117:** 10 por página para **todos** los listados (así está). **P-118, P-121:** valen.
-- **P-119:** de **Rovers** se pasa a **Scouters o a Voluntariado** (hecho en la v0.31.0); Scouters y Voluntariado cambian a cualquier sección.
-- **P-120:** el nº territorial del alta se guarda **también en el CRM** (así está).
-- **P-105** (5 unidades), **P-107, P-108, P-109** (cualquiera del inventario), **P-110, P-111, P-112, P-113** (solo el rol Scouter), **P-115, P-116:** valen.
-- **P-106 → pendiente:** una lista de compra **pendiente** se puede **editar** (quien la pidió, hasta que Tesorería la revise).
-- **P-114 → pendiente:** cuando un scouter pide uniforme para un socio/a, **email a la familia** (pedido, precio y cómo pagarlo).
-- **P-43 → pendiente:** **Colonya acepta la firma electrónica** de la orden SEPA: se puede quitar la obligación del papel.
-
-## Rediseño de la tienda (2026-10-21, doc 52)
-
-- **P-177 ✅** Se retira el pedido del scouter para su sección. **P-178 ✅** Un enlace de menú por grupo con la tienda activada. **P-179 ✅** El datáfono se propone conciliar con el banco (nunca marca solo). **P-180 ✅** El datáfono lo eligen socios e invitados. **P-181 ✅** Lo recibido de más del pedido al proveedor suma a las existencias. **P-182 ✅** Los precios los fija la administración de la tienda en cada producto.
-
-## Módulo Reintegros (2026-10-21, doc 53)
-
-- **P-183 ✅** El IBAN lo escribe quien pide (cifrado, borrado al terminar). **P-184 ✅** Con evento, al pagar se crea el gasto del evento.
-- **P-185 → supuesto, por confirmar:** justificante obligatorio (imagen o PDF de hasta 5 MB); nadie aprueba ni rechaza el suyo; fecha del gasto no futura ni de hace más de un año.
+- **P-185 → supuesto:** justificante de Reintegros obligatorio (imagen o PDF de hasta 5 MB); nadie aprueba ni rechaza el suyo; fecha del gasto no futura ni de hace más de un año.
 - **P-186 → supuesto:** el email a Tesorería solo sale cuando se pide por transferencia (en efectivo basta el contador del menú); a quien pidió le llegan aprobado, rechazado (con motivo) y pagado.
-- **P-187 → supuesto:** el reintegro no genera un movimiento en el banco ni en Tesorería; se paga por fuera y se marca aquí.
-## Plan de modo Oficina y alta de grupos (2026-10-18, doc 50)
-
-- **P-168 ✅** Modo y rol «Oficina»; **varias cuentas** de WordPress que leen con la misma credencial de solo lectura del CRM.
-- **P-169 ✅** Enlace de invitación: **14 días**, un solo uso.
-- **P-170 ✅** En la misma pantalla del formulario se **verifica el usuario del CRM** y **no se deja pasar hasta que sea correcto**.
-- **P-171 ✅** El formulario pide **DNI y nombre** del primer usuario (Secretaría o Coordinación, a elegir); al aprobar se busca su ficha.
-- **P-172 ✅** La OF ve **todos los informes que lleven datos de asociados**, con **descarga CSV/Excel registrada en la auditoría**.
-- **P-173 ✅** La OF **ve la salud** (solo lectura) y **no ve el IBAN** ni datos bancarios.
-- **P-174 ✅** Sede, CIF y denominación fiscal se **usan ya en los documentos** (cabeceras de PDF y acreedor de SEPA).
-- **P-175 ✅** Los grupos ya dados de alta **conservan su credencial**; deja de verse para el administrador y solo el grupo la cambia con un enlace.
-- **P-176 ✅** El acuerdo de tratamiento de datos para que la OF vea datos de socios (y salud) **ya está implícito**: no hace falta nada más.
-
-## Modo Oficina, implementación (2026-10-22, docs 50 y 51)
-
-- **P-188 → supuesto, por confirmar con ASDE:** la web no puede comprobar que la credencial de la oficina sea de solo lectura en el CRM (hacerlo exigiría escribir); lo afirma quien la configura y la pantalla lo avisa tras probar la conexión.
-- **P-189 → supuesto:** el informe de pagos queda fuera de la oficina (son datos de Tesorería, no del CRM). Si lo quiere, otra petición.
-- **P-190 ✅ (decidido al implementar):** la contraseña escrita en el formulario del alta se guarda cifrada 30 minutos ligada a la invitación tras «Comprobar acceso» y no vuelve nunca al navegador.
-- **P-191 → pendiente:** el enlace de tipo «actualizar» para que un grupo **ya existente** cambie su credencial o complete sede/CIF/denominación fiscal (P-175) y, con él, esconder la credencial a la administración. Hasta entonces el administrador sigue editándola.
-- **P-192 → supuesto:** del CIF solo se usa la denominación y la sede (acreedor y dirección por defecto de SEPA y cabecera de la lista de compra en PDF); el identificador del acreedor (ICS) lo da el banco y sigue siendo un dato aparte.
+- **P-187 → supuesto:** un reintegro no genera movimiento en el banco ni en Tesorería; se paga por fuera y se marca en Reintegros.
+- **P-188 → supuesto, por confirmar con ASDE:** la web no puede comprobar que la credencial de la oficina sea de solo lectura en el CRM (haría falta escribir); lo afirma quien la configura y la pantalla lo avisa tras probar la conexión.
+- **P-189 → supuesto:** el informe de pagos queda fuera de la oficina (son datos de Tesorería, no del CRM).
+- **P-191 → pendiente de programar:** el enlace de tipo «actualizar» para que un grupo **ya existente** cambie su credencial o complete sede, CIF y denominación fiscal (P-175) y, con él, esconder la credencial a la administración. Hasta entonces el administrador la edita en Grupos Scouts.
+- **P-192 → supuesto:** del CIF solo se usa la denominación y la sede (acreedor y dirección por defecto de SEPA y cabecera de la lista de compra en PDF); el identificador del acreedor (ICS) lo da el banco.
+- **P-193 → supuesto (v0.51):** un producto de la tienda creado al marcar una fila del inventario nace «solo socios» y con el precio por confirmar; la migración de lo que tenía la tienda crea filas sin tipo con la nota «Pasado desde la tienda».

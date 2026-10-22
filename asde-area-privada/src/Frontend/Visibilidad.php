@@ -98,7 +98,7 @@ final class Visibilidad {
 	}
 
 	/**
-	 * v0.49 (doc 52, T5): un enlace a la tienda pública de cada grupo que lo ha pedido en su configuración
+	 * v0.49 (doc 48, T5): un enlace a la tienda pública de cada grupo que lo ha pedido en su configuración
 	 * (tienda pública abierta, módulo encendido y un texto escrito). Es el acceso de quien no tiene sesión.
 	 *
 	 * @return object[]

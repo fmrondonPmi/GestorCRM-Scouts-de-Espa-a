@@ -1,6 +1,6 @@
 # 55 · La tienda sobre el inventario general (v0.51)
 
-**Petición del usuario (2026-10-22).** Las existencias de la tienda (las camisas en concreto) estaban en un inventario propio, aparte del inventario general. Ahora **el inventario general marca qué se vende en la tienda y la tienda toma de él las existencias**. Esto **revierte** la decisión del doc 52 §3.1 («inventario propio de la tienda»), pedida entonces por no depender de lo específico de uniformes; ahora lo que se pide es un único almacén.
+**Petición del usuario (2026-10-22).** Las existencias de la tienda (las camisas en concreto) estaban en un inventario propio, aparte del inventario general. Ahora **el inventario general marca qué se vende en la tienda y la tienda toma de él las existencias**. Esto **revierte** la decisión del doc 48 §3.1 («inventario propio de la tienda»), pedida entonces por no depender de lo específico de uniformes; ahora lo que se pide es un único almacén.
 
 ## Respuestas (una pregunta cada vez)
 
@@ -25,4 +25,4 @@
 ## Pendiente / a vigilar
 
 - El importador CSV de productos de la tienda y la casilla «Sin límite» siguen existiendo para variantes **no** enlazadas; si se dejan de usar se pueden retirar.
-- Quedan sin uso desde la tienda el tipo «Camisa uniforme» y sus funciones `descontar_camisa`/`devolver_camisa`/`insignias` del inventario (limpieza pendiente desde el doc 52).
+- Quedan sin uso desde la tienda el tipo «Camisa uniforme» y sus funciones `descontar_camisa`/`devolver_camisa`/`insignias` del inventario (limpieza pendiente desde el doc 48).

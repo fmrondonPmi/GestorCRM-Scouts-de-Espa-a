@@ -22,7 +22,7 @@ defined( 'ABSPATH' ) || exit;
  * validar el pago, incluir en el pedido del grupo, marcar la entrega, cancelar; informes de
  * ventas y descarga en CSV.
  *
- * v0.44 (doc 52): ya no se sirven ni asignan camisas del Inventario general; la tienda tiene
+ * v0.44 (doc 48): ya no se sirven ni asignan camisas del Inventario general; la tienda tiene
  * sus propias existencias (Productos).
  */
 final class TiendaGestionView extends TiendaBaseView {

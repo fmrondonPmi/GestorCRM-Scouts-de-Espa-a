@@ -18,7 +18,7 @@
 - **Alta de usuarios** desaparece como pestaña: «Dar acceso» está en la fila de cada persona, en *Usuarios* y en las solicitudes. La página sigue existiendo (búsqueda por nombre o número) y se llega desde *Usuarios* («+ Dar acceso») y desde *Inicio*.
 - **Seguridad** (doble factor) pasa junto al nombre, arriba a la derecha: «*Nombre (usuario)* · Seguridad · Salir».
 - Cada rol ve solo lo suyo: un scouter ve *Inicio, Mis datos, Solicitudes, Cambios, Informes y Tesorería*; Secretaría y Coordinación, además *Personas* y *Usuarios*.
-- **v0.11 (doc 24):**
+- **v0.11 (doc 48):**
   - **Mis pagos**, detrás de *Mis datos* / *Mi familia*, para todos;
   - **Uniforme**, para las familias y los participantes (el número es de lo entregado por confirmar);
   - **Uniformes (n)**, para quien gestiona pedidos: scouters, Secretaría, Coordinación y Tesorería. Lleva a la gestión, con el número de lo que le toca hacer, y desde allí están sus propios pedidos («Mis pedidos») y la configuración.

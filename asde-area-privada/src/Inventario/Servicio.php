@@ -13,7 +13,7 @@ defined( 'ABSPATH' ) || exit;
  *   Tesorería: ven y editan el material y los tipos y crean listas de compra.
  * - Una lista de compra nace pendiente y se avisa por email a Tesorería; hasta
  *   que Tesorería le da el visto bueno no se puede descargar el PDF para imprimirla.
- * - v0.30 (doc 37): la lista puede llevar material nuevo (que no está en el
+ * - v0.30: la lista puede llevar material nuevo (que no está en el
  *   inventario); quien la pidió recibe un email cuando Tesorería la aprueba o la
  *   rechaza; y una lista aprobada se marca como comprada, lo que suma lo comprado
  *   al inventario (y da de alta el material nuevo).

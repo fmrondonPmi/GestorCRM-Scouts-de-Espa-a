@@ -20,7 +20,7 @@ defined( 'ABSPATH' ) || exit;
  * el inventario, el listado, el detalle (en la ventana emergente), el visto bueno
  * de Tesorería y el PDF para imprimir, que solo sale con ese visto bueno.
  *
- * v0.30 (doc 37): material nuevo en la lista (P-63), email a quien la pidió al
+ * v0.30: material nuevo en la lista (P-63), email a quien la pidió al
  * aprobarla o rechazarla (P-65) y «Marcar como comprada» (P-66).
  */
 final class InventarioComprasView extends InventarioBaseView {

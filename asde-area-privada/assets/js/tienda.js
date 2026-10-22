@@ -1,5 +1,5 @@
 /**
- * Tienda (v0.45, doc 52, T2): en los productos con varias tallas se ve una fila «cantidad + talla»
+ * Tienda (v0.45, doc 48, T2): en los productos con varias tallas se ve una fila «cantidad + talla»
  * y el botón «Añadir otra talla» enseña las siguientes. Sin JavaScript se ven todas las filas.
  */
 ( function () {

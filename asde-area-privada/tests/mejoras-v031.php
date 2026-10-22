@@ -1,6 +1,6 @@
 <?php
 /**
- * Pruebas de la v0.31 (doc 38, entorno LOCAL): listados (10 por página, contadores debajo,
+ * Pruebas de la v0.31: listados (10 por página, contadores debajo,
  * zonas que se actualizan sin recargar), Control de pagos y Banco en una línea, cambio de
  * sección y lo que pidió la revisión de WordPress.org (sin <script>/<style>/manejadores en
  * línea, entradas saneadas). Solo lee ficheros y pinta plantillas con datos inventados: no toca

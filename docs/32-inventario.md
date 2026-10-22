@@ -1,4 +1,4 @@
-# 32 · Inventario de material, listas de compra e importación (v0.19.0–v0.19.1; cambios de la v0.30.0 en el doc 37)
+# 32 · Inventario de material, listas de compra e importación (v0.19.0–v0.19.1; cambios de la v0.30.0 en el )
 
 ## Petición del usuario (2026-10-05)
 
@@ -52,7 +52,7 @@ Todo filtra por el nº de grupo: un grupo no ve el inventario de otro.
 - **Paso 2, fila a fila** (`Importador::importar`): las mismas reglas que el formulario (`MaterialesTable::validar`), el tipo por su nombre (si no existe, se crea o la fila falla, según la casilla; una fila con error no deja creado su tipo) y el **nº de serie** no puede estar ya en el inventario ni repetido en el fichero. Las correctas se importan; las filas vacías se saltan.
 - **Informe en la misma ventana**: cuántas filas se leyeron, cuántos materiales se importaron, cuántas filas no y los tipos nuevos; tabla con el **nº de fila** (el de la hoja de cálculo: la cabecera es la 1), la descripción y el **motivo**; y **«Descargar las filas con error (CSV)»** con las mismas columnas más «Fila» y «Motivo del error» (que se ignoran al volver a importar), para corregirlas y reimportarlas. El informe se guarda una hora y solo lo ve quien importó. Al cerrar la ventana, el inventario se recarga con lo nuevo.
 - Auditoría: `inventario_importado` (filas, importados, errores y tipos creados; sin contenido). Las celdas que se descargan van a salvo de fórmulas (`Generador::celda_segura`).
-- **Supuestos** (a confirmar, P-67 y P-68): un nº de serie repetido es un error (sin nº de serie, se pueden repetir descripciones); los tipos que no existen se crean por defecto. **Decididos:** P-68, los tipos que no existen hacen fallar la fila por defecto (v0.29); P-67, **una fila sin nº de serie con la misma descripción y el mismo tipo que un material del inventario (o que otra fila del fichero) suma su cantidad** a ese material (las camisas del uniforme, si coinciden también modelo y talla); el informe dice cuántas filas se han sumado (v0.30, doc 37).
+- **Supuestos** (a confirmar, P-67 y P-68): un nº de serie repetido es un error (sin nº de serie, se pueden repetir descripciones); los tipos que no existen se crean por defecto. **Decididos:** P-68, los tipos que no existen hacen fallar la fila por defecto (v0.29); P-67, **una fila sin nº de serie con la misma descripción y el mismo tipo que un material del inventario (o que otra fila del fichero) suma su cantidad** a ese material (las camisas del uniforme, si coinciden también modelo y talla); el informe dice cuántas filas se han sumado (v0.30).
 
 ### El PDF
 

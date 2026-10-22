@@ -1,6 +1,6 @@
 <?php
 /**
- * Pruebas de la v0.30 (entorno LOCAL, doc 37): el aviso del inventario al revés (P-62),
+ * Pruebas de la v0.30 (entorno LOCAL): el aviso del inventario al revés (P-62),
  * material nuevo en las listas de compra (P-63), el email a quien pidió la lista al
  * aprobarla o rechazarla (P-65), «Marcar como comprada» (P-66), los repetidos al importar
  * (P-67) y el scouter que pide uniforme para los de su sección (P-48). Ejecutar desde

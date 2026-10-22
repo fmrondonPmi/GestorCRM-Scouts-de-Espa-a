@@ -58,9 +58,9 @@ final class Config {
 			'bizum'             => '',
 			// v0.39 (fase 4): la tienda pública (compra sin sesión) y los días que se espera el pago de esas compras.
 			'publica'           => false,
-			// v0.49 (doc 52, T5): texto del enlace a la tienda pública en el menú de la web ('' = sin enlace).
+			// v0.49 (doc 48, T5): texto del enlace a la tienda pública en el menú de la web ('' = sin enlace).
 			'menu_tienda'       => '',
-			// v0.46 (doc 52, T3): el grupo cobra con datáfono (en persona); apagado por defecto.
+			// v0.46 (doc 48, T3): el grupo cobra con datáfono (en persona); apagado por defecto.
 			'datafono'          => false,
 			'dias_sin_pagar'    => 14,
 			// v0.40 (fase 5): pedidos de socios sin pagar: recordatorio a los N días y cancelación a los M (0 = nunca).

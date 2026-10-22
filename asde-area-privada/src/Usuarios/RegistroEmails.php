@@ -46,7 +46,7 @@ final class RegistroEmails {
 	/** Aviso de una baja dada desde la web, a Tesorería y a la familia (v0.23.1, doc 34). */
 	public const BAJA = 'baja';
 
-	/** Aviso a quien pidió una lista de compra: Tesorería la ha aprobado o rechazado (v0.30, doc 37). */
+	/** Aviso a quien pidió una lista de compra: Tesorería la ha aprobado o rechazado (v0.30). */
 	public const COMPRA_REVISADA = 'compra_revisada';
 	public const REINTEGRO = 'reintegro';
 

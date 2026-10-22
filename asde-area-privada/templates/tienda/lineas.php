@@ -1,6 +1,6 @@
 <?php
 /**
- * Tienda · cómo se elige la cantidad de un producto (v0.45, doc 52, T2).
+ * Tienda · cómo se elige la cantidad de un producto (v0.45, doc 48, T2).
  *
  * - Un producto con una sola variante (sin tallas): solo la cantidad.
  * - Un producto con varias (tallas, modelos…): filas «cantidad + desplegable de talla». Se puede pedir

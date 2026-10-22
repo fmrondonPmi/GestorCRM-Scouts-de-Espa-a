@@ -190,7 +190,7 @@ Los apartados del módulo de eventos, escritos en la sesión de la nube (doc 43)
 
 ## Versión 4.12 · tipo nuevo desde el banco, buscador de Familias y «Socio/a desde» (v0.34.0, 2026-10-15)
 
-Textos y capturas rehechas de la v0.34.0 (doc 42), a petición del usuario. (La v0.33.0 cambió sin apartado propio aquí los textos de la cuenta de la domiciliación en `mis-pagos-sepa.html` y `tesoreria.html`.)
+Textos y capturas rehechas de la v0.34.0, a petición del usuario. (La v0.33.0 cambió sin apartado propio aquí los textos de la cuenta de la domiciliación en `mis-pagos-sepa.html` y `tesoreria.html`.)
 
 - **Coordinación** (`tesoreria.html`): en «Marcar varios como revisados», el **«+»** junto al tipo de cada fila y la ventana pequeña «Tipo nuevo»; en «Tipos de gasto e ingreso», que también se crean desde ese «+»; en «Familias», el **buscador**. (`coordinacion-fichas.html`): **«Socio/a desde»** junto a la edad. (`altas-crm.html`): «Dar de baja» encuentra también la membresía puesta en «baja» en el CRM sin fecha. (`preguntas-coordinacion.html`): pregunta nueva «He dado de baja a alguien en el CRM y en la web sigue de alta».
 - **Scouters** (`scouters-tesoreria.html`): el buscador de Familias; (`scouters-fichas.html`): «Socio/a desde».

@@ -175,7 +175,7 @@ abstract class View {
 	}
 
 	/**
-	 * Cantidades de la tienda (v0.45, doc 52, T2): junta `cant[variante]` (productos de una sola variante) y las
+	 * Cantidades de la tienda (v0.45, doc 48, T2): junta `cant[variante]` (productos de una sola variante) y las
 	 * filas `lin[producto][cant][]` + `lin[producto][var][]` (cantidad y talla en un desplegable) en un solo mapa
 	 * variante => cantidad (si la misma talla sale en dos filas, se suman). Las filas con cantidad y sin talla no
 	 * entran: su producto se anota en $sin_talla para avisar.

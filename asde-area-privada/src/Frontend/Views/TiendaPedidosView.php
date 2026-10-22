@@ -14,7 +14,7 @@ defined( 'ABSPATH' ) || exit;
  * «Mis pedidos» para los asociados: sus pedidos (y los de sus menores), el catálogo
  * de la tienda para comprar y la confirmación de que se ha recibido. Ver Tienda\Servicio.
  *
- * v0.44 (doc 52): el uniforme es una venta más; ya no hay formulario propio de camisa e
+ * v0.44 (doc 48): el uniforme es una venta más; ya no hay formulario propio de camisa e
  * insignias ni pedidos de un scouter para su sección.
  */
 final class TiendaPedidosView extends TiendaBaseView {

@@ -1,7 +1,7 @@
 <?php
 /**
  * Nueva lista de compra con el material marcado en el inventario (doc 32) y, desde la
- * v0.30 (P-63, doc 37), material nuevo que todavía no está en el inventario.
+ * v0.30 (P-63), material nuevo que todavía no está en el inventario.
  *
  * @var array[]           $materiales
  * @var array[]           $nuevos   v0.30: filas de material nuevo (descripcion, cantidad, precio); la última, en blanco

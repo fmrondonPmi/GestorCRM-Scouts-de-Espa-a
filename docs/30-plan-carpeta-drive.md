@@ -33,7 +33,7 @@ Que los **adultos del grupo** (scouters y voluntariado, también el «voluntario
 ### 3.2 Quién lo ve
 
 - **Capability nueva `asde_carpeta_grupo`** para los roles Scouter, Secretaría, Coordinación y Tesorería. Así lo ven los scouters y los voluntarios sin sección (que tienen alguno de esos tres roles) y nunca las familias ni los participantes.
-- El **técnico** (doc 29) no lo ve salvo que se decida lo contrario.
+- El **técnico** (doc 50) no lo ve salvo que se decida lo contrario.
 - Si el grupo no ha puesto ninguna carpeta, no sale nada.
 
 ### 3.3 Dónde se configura
@@ -60,7 +60,7 @@ Que los **adultos del grupo** (scouters y voluntariado, también el «voluntario
 | 5 | CSS de la ventana con el iframe (alto completo, móvil) | `assets/css/area-privada.css` (bloque v0.16) | revisión a 390 px |
 | 6 | Textos en los cuatro idiomas; manuales de scouters, coordinación y administración; docs | `languages/`, `manual/fuentes/` | `idiomas-catalogos.php` |
 
-**Tamaño:** pequeño (unos días); puede ir en la misma versión que el doc 29 o antes, porque no depende de él.
+**Tamaño:** pequeño (unos días); puede ir en la misma versión que el doc 50 o antes, porque no depende de él.
 
 ## 5 · Preguntas abiertas (en el doc 09)
 

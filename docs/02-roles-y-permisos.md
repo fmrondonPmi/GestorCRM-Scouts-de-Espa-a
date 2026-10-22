@@ -116,13 +116,13 @@ asde_manage_users                 # alta/baja/vinculación de usuarios
 
 | Capability | Roles | Qué permite |
 |---|---|---|
-| `asde_tienda_comprar` (antes `asde_uniformes_pedir`, v0.39) | Todos | Pedir la camisa y las insignias para uno mismo o para sus menores (doc 24) |
+| `asde_tienda_comprar` (antes `asde_uniformes_pedir`, v0.39) | Todos | Comprar en la tienda (el uniforme incluido) para uno mismo o para sus menores (doc 48) |
 | `asde_mis_pagos` | Todos | Ver «Mis pagos» (solo lectura) |
 | `asde_tienda_gestion` | Scouter, Secretaría, Coordinación, Tesorería | Entrar en la gestión de pedidos, con ámbito: un scouter, los de sus secciones que no son adultos, y los suyos; los demás, todos |
 | `asde_tienda_entrega` | Scouter, Secretaría, Coordinación, Tesorería | Marcar como entregado (en su ámbito) |
 | `asde_tienda_pago` | **Tesorería** | Validar el pago (efectivo o ingreso) y deshacerlo |
 | `asde_tienda_pedido` | **Coordinación** | Incluir en el pedido del grupo al proveedor y deshacerlo |
-| `asde_tienda_admin` (antes `asde_uniformes_config`) | **Coordinación, Tesorería y Secretaría** (Secretaría, desde la v0.39) | Configurar precio, tallas, insignias, guías y si hay pedidos abiertos |
+| `asde_tienda_admin` (antes `asde_uniformes_config`) | **Coordinación, Tesorería y Secretaría** (Secretaría, desde la v0.39) | Configurar la tienda: pagos, plazos, datáfono, tienda pública y enlace del menú (los productos, en el inventario de la tienda) |
 
 - Confirmar que se ha recibido no es una capability: solo lo puede hacer el socio/a o su familia, sobre su propio pedido.
 - Cancelar: el socio/a o su familia, el suyo, mientras nadie lo ha validado; Tesorería o Coordinación, cualquiera hasta que se entrega (con motivo).

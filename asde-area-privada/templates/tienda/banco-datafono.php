@@ -1,6 +1,6 @@
 <?php
 /**
- * Abonos del datáfono en el banco (v0.46, doc 52, T3). Solo los ve Tesorería.
+ * Abonos del datáfono en el banco (v0.46, doc 48, T3). Solo los ve Tesorería.
  *
  * @var array[]  $abonos Cada uno: mov (ingreso del banco), pedidos (cobrados con datáfono), suma, exacto
  * @var string   $volver

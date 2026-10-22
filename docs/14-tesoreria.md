@@ -2,7 +2,7 @@
 
 > **Cambios en v0.12 (2026-09-30):** pestaña **Domiciliaciones** (solo Secretaría, Coordinación y Tesorería): datos del acreedor, remesas de **adeudos SEPA** (fichero XML para el banco), aviso previo a las familias y registro de cobros y devoluciones. Las familias firman su autorización en «Mis pagos». Nueva forma de pago **«Domiciliación SEPA»** (movimientos con origen `sepa`) y dos tablas más (14 en total). Todo en el [doc 25](25-domiciliacion-sepa.md).
 >
-> **Cambios en v0.11 (2026-09-29):** las familias y los socios ven lo que registra Tesorería en **«Mis pagos»**: la cuota de la ronda con sus plazos y los pagos de todas las rondas, sin las notas internas, sin los ajustes uno a uno y sin los anulados. Los **pedidos de uniforme** se cobran aparte (la validación del pago está en *Uniformes*) y no cuentan en la cuota (doc 24).
+> **Cambios en v0.11 (2026-09-29):** las familias y los socios ven lo que registra Tesorería en **«Mis pagos»**: la cuota de la ronda con sus plazos y los pagos de todas las rondas, sin las notas internas, sin los ajustes uno a uno y sin los anulados. Los **pedidos de uniforme** se cobran aparte (la validación del pago está en *Uniformes*) y no cuentan en la cuota (doc 48).
 
 ## Requisitos del usuario (2026-09-26)
 
@@ -99,7 +99,7 @@ Al crear una **cuenta familiar** (usuario nº + T), se crea o amplía automátic
 - **Banco (Colonya):** la API PSD2 de Redsys **no es viable** para la asociación. Propuesta: importar ficheros Norma 43 o CSV y, más adelante, un agregador. Ver la sección siguiente y P-23/P-28.
 - **Gastos:** quién, dónde, justificante (imagen o PDF), categoría y ronda. Diseño: tabla `asde_gastos` y adjuntos en la biblioteca de medios privada (fuera de la URL pública) o en una carpeta protegida.
 - Prorrateo de altas o bajas a mitad de ronda (hoy la cuota se calcula con los socios activos del momento).
-- Recibos o justificantes de pago para las familias. (La **vista de pagos para la propia familia** ya existe desde la v0.11: «Mis pagos», doc 24.)
+- Recibos o justificantes de pago para las familias. (La **vista de pagos para la propia familia** ya existe desde la v0.11: «Mis pagos», doc 48.)
 - Asignar familia a los 79 educandos (el 26-09 no había ninguna): usar las sugerencias y después el resto a mano.
 
 ## Banco (Colonya · Redsys PSD2)

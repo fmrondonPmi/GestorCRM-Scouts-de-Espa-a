@@ -8,7 +8,7 @@ defined( 'ABSPATH' ) || exit;
 // phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- tablas propias del plugin ({prefix}asde_*): no hay función de WordPress para ellas.
 
 /**
- * Pedidos del grupo al proveedor (v0.48, doc 52, T4): cada fila es un pedido que Coordinación ha hecho con lo que los
+ * Pedidos del grupo al proveedor (v0.48, doc 48, T4): cada fila es un pedido que Coordinación ha hecho con lo que los
  * clientes han pagado y la tienda no tiene en existencias. Guarda una copia de las líneas (producto, talla y cantidad
  * pedida y recibida) y los pasos: **pedido hecho → recibido en el grupo**; la entrega al cliente la sigue marcando cada
  * pedido de la tienda.

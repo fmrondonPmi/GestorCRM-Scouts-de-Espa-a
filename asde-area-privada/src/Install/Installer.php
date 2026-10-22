@@ -89,7 +89,7 @@ final class Installer {
 		Cambios::install_table();
 		\AsdeBalears\AreaPrivada\Usuarios\Solicitudes::install_table();
 		\AsdeBalears\AreaPrivada\Tienda\PedidosTable::install_table();
-		\AsdeBalears\AreaPrivada\Tienda\ProveedorTable::install_table(); // v0.48 (doc 52, T4): pedidos al proveedor.
+		\AsdeBalears\AreaPrivada\Tienda\ProveedorTable::install_table(); // v0.48 (doc 48, T4): pedidos al proveedor.
 		\AsdeBalears\AreaPrivada\Tienda\ProductosTable::install_table(); // v0.39 (doc 48, fase 2): productos y variantes de la tienda.
 		\AsdeBalears\AreaPrivada\Sepa\Mandatos::install_table();
 		\AsdeBalears\AreaPrivada\Sepa\Remesas::install_table();

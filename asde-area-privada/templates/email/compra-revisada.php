@@ -1,7 +1,7 @@
 <?php
 /**
  * Email a quien pidió una lista de compra de material: Tesorería le ha dado el visto bueno
- * o la ha rechazado, con el motivo (v0.30, P-65; HTML con estilos en línea; doc 37).
+ * o la ha rechazado, con el motivo (v0.30, P-65; HTML con estilos en línea; ).
  *
  * @var string $nombre  Cómo se llama quien lo recibe ('' si no se sabe)
  * @var string $grupo   Nombre del grupo

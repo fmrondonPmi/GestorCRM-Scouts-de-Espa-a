@@ -1,6 +1,6 @@
 <?php
 /**
- * Pruebas de la v0.34 (entorno LOCAL, doc 42): buscador de Familias y «Socio/a desde» con
+ * Pruebas de la v0.34 (entorno LOCAL): buscador de Familias y «Socio/a desde» con
  * el contador de años, meses y días en la cabecera de la ficha. (El «+» para crear un tipo
  * desde «Marcar como revisado» del banco está en banco-gestion.php.) Ejecutar desde
  * app/public del site Local:

@@ -2550,7 +2550,7 @@ dialog.asde-modal--imprimir {
 	overflow-wrap: anywhere;
 }
 
-/* v0.30 · Listas de compra: material nuevo, comprada; «¿Para quién?» en un desplegable (doc 37) */
+/* v0.30 · Listas de compra: material nuevo, comprada; «¿Para quién?» en un desplegable */
 .asde-ap .asde-badge--compra-comprada {
 	background: var(--asde-ok-bg);
 	color: var(--asde-ok-text);
@@ -2907,7 +2907,7 @@ dialog.asde-modal--mini .asde-banco-tipo-nuevo h3 {
 	.asde-ap .asde-solo-impresion { display: inline !important; }
 }
 
-/* v0.45 (doc 52, T2): cantidad + desplegable de talla en la tienda. */
+/* v0.45 (doc 48, T2): cantidad + desplegable de talla en la tienda. */
 .asde-ap .asde-producto__linea { display: flex; flex-wrap: wrap; align-items: center; gap: .4rem .6rem; margin: 0 0 .4rem; }
 .asde-ap .asde-producto__linea[hidden] { display: none; }
 .asde-ap .asde-producto__linea input[type="number"] { width: 5rem; }
