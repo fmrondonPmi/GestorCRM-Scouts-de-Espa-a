@@ -14,7 +14,7 @@ defined( 'ABSPATH' ) || exit;
  */
 final class Formulario {
 
-	public const CAMPOS = array( 'nombre', 'apellidos', 'nacimiento', 'documento', 'contacto_nombre', 'contacto_apellidos', 'telefono', 'email', 'observaciones', 'acepto' );
+	public const CAMPOS = array( 'nombre', 'apellidos', 'nacimiento', 'documento', 'contacto_nombre', 'contacto_apellidos', 'telefono', 'email', 'observaciones', 'acepto', 'declaro' );
 
 	public const MAX_OBSERVACIONES = 1000;
 
@@ -73,6 +73,9 @@ final class Formulario {
 		}
 		if ( '1' !== (string) ( $in['acepto'] ?? '' ) ) {
 			$e[] = asde_t( 'Para apuntarte tienes que aceptar el tratamiento de los datos.' );
+		}
+		if ( '1' !== (string) ( $in['declaro'] ?? '' ) ) {
+			$e[] = asde_t( 'Para apuntarte tienes que marcar la declaración de que los datos son veraces y aceptar las condiciones del grupo.' );
 		}
 		return array(
 			'datos'   => $d,

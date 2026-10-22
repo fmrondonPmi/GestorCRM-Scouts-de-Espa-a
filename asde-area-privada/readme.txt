@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.52.1
+Stable tag: 0.52.2
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -61,6 +61,9 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.52.2 =
+* Waiting list: the public form requires a declaration that the data is true and that the group's conditions are accepted; the text can be edited per group. Manuals and help updated.
 
 = 0.52.1 =
 * Shop: quantity and size now sit on one line also with the Enfold theme. Office home: the cards no longer mention actions the office cannot do.
@@ -233,6 +236,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * CRM registrations tested end to end in a browser against the simulated SinergiaCRM API (development only).
 
 == Upgrade Notice ==
+
+= 0.52.2 =
+New mandatory declaration checkbox in the waiting list form. No database changes.
 
 = 0.52.1 =
 Layout fixes. No database changes.

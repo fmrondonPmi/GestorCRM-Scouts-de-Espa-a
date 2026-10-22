@@ -4344,4 +4344,10 @@ return array(
 
 	// v0.52.1 producto
 	'Una variante es lo que se compra: una talla, un color… Si el producto no tiene variantes, deja una sola («Única»). Las existencias de las variantes enlazadas al inventario general se cambian allí; en las demás se suman o restan en «Cambiar existencias» (+5, -2) y queda anotado. «Sin límite» no cuenta unidades (lo que se encarga al proveedor).' => 'Aldaera erosten dena da: tailla bat, kolore bat… Produktuak aldaerarik ez badu, utzi bakarra («Bakarra»). Inbentario orokorrarekin lotutako aldaeren izakinak han aldatzen dira; besteetan «Aldatu izakinak» atalean gehitu edo kentzen dira (+5, -2) eta idatzita geratzen da. «Mugarik gabe» ez ditu unitateak zenbatzen (hornitzaileari eskatzen zaiona).',
+
+	// lista de espera: declaración de veracidad
+	'Declaro que todos los datos que he introducido son veraces y acepto las condiciones del grupo scout.' => 'Nik sartutako datu guztiak egiazkoak direla aitortzen dut eta talde scouten baldintzak onartzen ditut.',
+	'Para apuntarte tienes que marcar la declaración de que los datos son veraces y aceptar las condiciones del grupo.' => 'Izena emateko, datuak egiazkoak direla dioen aitorpena markatu eta taldearen baldintzak onartu behar dituzu.',
+	'Quien se apunta tiene que marcar esta casilla para continuar. Déjalo vacío para usar el texto de por defecto (el que se ve en gris).' => 'Izena ematen duenak laukitxo hau markatu behar du jarraitzeko. Utzi hutsik lehenetsitako testua erabiltzeko (grisez ikusten dena).',
+	'Texto de la casilla de declaración' => 'Aitorpen-laukitxoaren testua',
 );

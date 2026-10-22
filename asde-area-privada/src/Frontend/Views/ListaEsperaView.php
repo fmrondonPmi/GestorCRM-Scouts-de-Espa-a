@@ -79,6 +79,7 @@ final class ListaEsperaView extends View {
 					'enlace'  => $grupo ? Enlaces::url( $grupo ) : '',
 					'renovar' => current_user_can( self::CAP_ALTA ),
 					'campos'  => current_user_can( self::CAP_ALTA ) ? CamposExtra::del_grupo( Grupo::numero() ) : null,
+					'declaracion' => CamposExtra::declaracion_propia( Grupo::numero() ),
 				)
 			)
 		);
@@ -150,6 +151,7 @@ final class ListaEsperaView extends View {
 				if ( $errores ) {
 					Notices::add( 'error', esc_html( implode( ' ', $errores ) ) );
 				} else {
+					CamposExtra::guardar_declaracion( Grupo::numero(), $this->post( 'declaracion' ) );
 					Logger::log( 'lista_espera_campos', 'grupo', Grupo::numero() );
 					Notices::add( 'success', asde_t( 'Campos del formulario guardados.' ) );
 				}

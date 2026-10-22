@@ -4344,4 +4344,10 @@ return array(
 
 	// v0.52.1 producto
 	'Una variante es lo que se compra: una talla, un color… Si el producto no tiene variantes, deja una sola («Única»). Las existencias de las variantes enlazadas al inventario general se cambian allí; en las demás se suman o restan en «Cambiar existencias» (+5, -2) y queda anotado. «Sin límite» no cuenta unidades (lo que se encarga al proveedor).' => 'Unha variante é o que se compra: unha talla, unha cor… Se o produto non ten variantes, deixa só unha («Única»). As existencias das variantes ligadas ao inventario xeral cámbianse alí; nas demais sumánse ou réstanse en «Cambiar existencias» (+5, -2) e queda anotado. «Sen límite» non conta unidades (o que se encarga ao provedor).',
+
+	// lista de espera: declaración de veracidad
+	'Declaro que todos los datos que he introducido son veraces y acepto las condiciones del grupo scout.' => 'Declaro que todos os datos que introducín son veraces e acepto as condicións do grupo scout.',
+	'Para apuntarte tienes que marcar la declaración de que los datos son veraces y aceptar las condiciones del grupo.' => 'Para apuntarte tes que marcar a declaración de que os datos son veraces e aceptar as condicións do grupo.',
+	'Quien se apunta tiene que marcar esta casilla para continuar. Déjalo vacío para usar el texto de por defecto (el que se ve en gris).' => 'Quen se apunta ten que marcar esta caixa para continuar. Déixao baleiro para usar o texto por defecto (o que se ve en gris).',
+	'Texto de la casilla de declaración' => 'Texto da caixa de declaración',
 );

@@ -67,6 +67,7 @@ $altas_antes   = get_option( Altas::OPCION, null );
 $modulos_antes = get_option( 'asde_ap_modulos', null );
 $enlace_antes  = get_option( Enlaces::OPCION, null );
 $campos_antes  = get_option( CamposExtra::OPCION, null );
+$decl_antes    = get_option( CamposExtra::OPCION_DECLARACION, null );
 $socios_antes  = array_column( (array) $wpdb->get_results( 'SELECT * FROM ' . SociosTable::table(), ARRAY_A ), null, 'num_socio_asde' ); // phpcs:ignore WordPress.DB
 
 // v0.35.1: la prueba cuenta con «Altas en el CRM» apagadas en el grupo (el Local puede tenerlas encendidas).
@@ -210,6 +211,7 @@ $form    = static function ( array $mas = array() ) use ( $grupo, $hace ): array
 			'email'              => 'marta.espera@example.invalid',
 			'observaciones'      => "Tiene un hermano en el grupo.\nPrefiere sábados.",
 			'acepto'             => '1',
+			'declaro'            => '1',
 		),
 		$mas
 	);
@@ -254,6 +256,8 @@ try {
 	$ok( ! $r['errores'] && '22222222J' === $r['datos']['documento'] && '600112233' === $r['datos']['telefono'], 'un adulto sin contacto aparte vale; documento y teléfono normalizados' );
 	$r = Formulario::validar( $form( array( 'telefono' => '123', 'email' => 'no-es-email', 'acepto' => '' ) ) );
 	$ok( 3 === count( $r['errores'] ), 'teléfono corto, email no válido y sin aceptar: tres errores' );
+	$r = Formulario::validar( $form( array( 'declaro' => '' ) ) );
+	$ok( 1 === count( $r['errores'] ) && str_contains( $r['errores'][0], 'veraces' ), 'sin marcar la declaración de veracidad y condiciones no se continúa' );
 	$r = Formulario::validar( $form( array( 'nacimiento' => wp_date( 'Y-m-d', time() + 2 * DAY_IN_SECONDS ) ) ) );
 	$ok( in_array( 'La fecha de nacimiento no es válida.', $r['errores'], true ), 'sin fechas de nacimiento futuras' );
 
@@ -262,7 +266,7 @@ try {
 	$h = $ver( new InscripcionEsperaView(), array( 'grupo' => $grupo['id'], 'clave' => 'otra' ) );
 	$ok( str_contains( $h, 'Este enlace no es válido' ) && ! str_contains( $h, 'name="nombre"' ), 'con una clave que no es la del grupo, no hay formulario' );
 	$h = $ver( new InscripcionEsperaView(), array( 'grupo' => $grupo['id'], 'clave' => Enlaces::clave( $grupo ) ) );
-	$ok( str_contains( $h, 'name="nombre"' ) && str_contains( $h, 'name="nacimiento"' ) && str_contains( $h, 'name="documento"' ) && str_contains( $h, 'name="telefono"' ) && str_contains( $h, 'name="email"' ) && str_contains( $h, 'name="observaciones"' ) && str_contains( $h, 'name="acepto"' ) && str_contains( $h, 'name="web"' ), 'con el enlace del grupo: el formulario con los datos mínimos, el consentimiento y el campo trampa' );
+	$ok( str_contains( $h, 'name="nombre"' ) && str_contains( $h, 'name="nacimiento"' ) && str_contains( $h, 'name="documento"' ) && str_contains( $h, 'name="telefono"' ) && str_contains( $h, 'name="email"' ) && str_contains( $h, 'name="observaciones"' ) && str_contains( $h, 'name="acepto"' ) && str_contains( $h, 'name="declaro"' ) && str_contains( $h, 'son veraces y acepto las condiciones del grupo scout' ) && str_contains( $h, 'name="web"' ), 'con el enlace del grupo: el formulario con los datos mínimos, el consentimiento y el campo trampa' );
 
 	$correos = array();
 	list( , , $h ) = $publica( $form( array( 'web' => 'http://spam.example.invalid', 'sello' => $sello() ) ), 'espera_inscribir' );
@@ -461,6 +465,15 @@ try {
 	$campos = CamposExtra::del_grupo( $num );
 	$ok( 5 === count( $campos ) && 'Curso escolar' === $campos[1]['etiqueta'] && $campos[1]['obligatorio'] && ! $campos[0]['obligatorio'], 'Secretaría define 5 campos con etiqueta, tipo y obligatorio (la fila vacía se ignora)' );
 	$ids_c = array_column( $campos, 'id' );
+	$ok( str_contains( $h, 'name="declaracion"' ) && '' === CamposExtra::declaracion_propia( $num ), 'el editor tiene el texto de la declaración, vacío = el de por defecto' );
+	$texto_decl = 'Declaro que los datos son ciertos y acepto el reglamento del grupo.';
+	$mismos = array( 'asde_action' => 'espera_campos', 'campo' => array_map( static fn( $c ) => array( 'id' => $c['id'], 'etiqueta' => $c['etiqueta'], 'tipo' => $c['tipo'], 'obligatorio' => $c['obligatorio'] ? '1' : '0' ), $campos ) );
+	$enviar( new ListaEsperaView(), $mismos + array( 'declaracion' => '  ' . $texto_decl . '  ' ), 'asde_espera_campos' );
+	$ok( $texto_decl === CamposExtra::declaracion( $num ), 'Secretaría personaliza el texto de la declaración' );
+	$h_pub = $ver( new InscripcionEsperaView(), array( 'grupo' => $grupo['id'], 'clave' => Enlaces::clave( $grupo ) ) );
+	$ok( str_contains( $h_pub, $texto_decl ) && ! str_contains( $h_pub, 'son veraces y acepto' ), 'el formulario público muestra el texto personalizado' );
+	$enviar( new ListaEsperaView(), $mismos, 'asde_espera_campos' );
+	$ok( '' === CamposExtra::declaracion_propia( $num ) && $ids_c === array_column( CamposExtra::del_grupo( $num ), 'id' ), 'vaciar el texto vuelve al de por defecto' );
 	$mala  = $def;
 	$mala['campo'] = array( array( 'id' => $ids_c[0], 'etiqueta' => '', 'tipo' => 'parrafo', 'obligatorio' => '0' ) );
 	$enviar( new ListaEsperaView(), $mala, 'asde_espera_campos' );
@@ -531,6 +544,7 @@ try {
 	Altas::activar( (string) $grupo['numero'], $altas_antes );
 	null === $enlace_antes ? delete_option( Enlaces::OPCION ) : update_option( Enlaces::OPCION, $enlace_antes, false );
 	null === $campos_antes ? delete_option( CamposExtra::OPCION ) : update_option( CamposExtra::OPCION, $campos_antes, false );
+	null === $decl_antes ? delete_option( CamposExtra::OPCION_DECLARACION ) : update_option( CamposExtra::OPCION_DECLARACION, $decl_antes, false );
 	Modulos::olvidar();
 	Permisos::olvidar( $grupo['numero'] );
 	delete_transient( 'asde_ap_recuento_federal_' . $grupo['numero'] );
