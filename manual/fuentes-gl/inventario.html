@@ -1,0 +1,68 @@
+<section id="inventario">
+	<h2>Inventario de material</h2>
+	<p class="resumen">En «Xestión do grupo → <strong>Inventario</strong>» está todo o material e o equipamento do grupo: tendas, cociña, ferramentas, botiquíns… Vénno e mantenno os scouters (con ou sen sección), Secretaría, Coordinación e Tesouraría. Desde aquí tamén se preparan as <strong>listas da compra</strong>, que Tesouraría ten que aprobar antes de imprimilas.</p>
+	<p>Arriba hai tres pestanas: <strong>Material</strong>, <strong>Tipos de material</strong> e <strong>Listas da compra</strong>.</p>
+
+	<h3 id="inventario-material" data-paginas="inventario">O material</h3>
+	<captura src="67-inventario" url="/area-privada/inventario/" alt="Lista do inventario co material, o seu tipo, cantidade, prezo, ano de compra e nº de serie" larga>A lista do material. Arriba, cantos materiais e unidades hai e o seu valor estimado (cantidade × prezo). As cantidades por debaixo de 5 saen marcadas en amarelo.</captura>
+	<ul>
+		<li><strong>Buscar e filtrar:</strong> escribe parte da descrición ou do nº de serie, ou elixe un tipo: a lista fíltrase ao momento, sen recargar.</li>
+		<li><strong>«Ver tamén os dados de baixa»</strong> amosa o material que xa non está, por se hai que recuperalo.</li>
+		<li>Preme a descrición dun material para velo ou cambialo.</li>
+	</ul>
+	<captura src="68-inventario-material" url="/area-privada/inventario/?material=…" alt="Formulario dun material do inventario: descrición, tipo co botón +, cantidade, prezo, ano de compra, nº de serie e notas">«Engadir material» (ou un material da lista) abre a súa ficha. Obrigatorios: a descrición e a cantidade (0 ou máis). O ano de compra é opcional; o prezo é por unidade.</captura>
+	<ul>
+		<li><strong>«Engadir e crear outro»</strong> garda e deixa o formulario baleiro para o seguinte.</li>
+		<li><strong>Dar de baixa</strong> (abaixo, cun motivo opcional) é para o que se rompeu, perdeu ou regalou: non se borra, deixa de saír na lista e pódese recuperar.</li>
+		<li>Abaixo vese quen o creou e quen o cambiou por última vez.</li>
+	</ul>
+
+	<h3 id="inventario-tipos" data-paginas="inventario_tipos">Tipos de material</h3>
+	<captura src="69-inventario-tipos-ventana" url="/area-privada/inventario/tipos-de-material/" alt="Xanela emerxente cos tipos de material sobre o formulario dun material">O botón <strong>«+»</strong> xunto ao tipo abre os tipos nunha xanela enriba do formulario: crea o que falte, péchaa e o despregable xa o ten elixido. O que escribises no formulario non se perde.</captura>
+	<ul>
+		<li>Os tipos tamén teñen a súa pestana. Pódeselles <strong>cambiar o nome</strong> en calquera momento.</li>
+		<li>Un tipo que usa algún material <strong>non se pode borrar</strong>: cambia antes o tipo desse material.</li>
+		<li>O tipo <strong>«Camisa uniforme»</strong> créao a web e non se borra: os seus materiais piden ademais o <strong>modelo</strong> (rapaz ou rapaza) e a <strong>talla</strong>, e se non escribes a descrición ponse soa («Camisa feminina (rapaza), talla M»). A xestión de uniformes asígnaos aos pedidos e descóntaos de aquí. Ao importar un CSV, as súas columnas son «Modelo (camisas)» e «Talla (camisas)».</li>
+	</ul>
+
+	<h3 id="inventario-importar" data-paginas="inventario">Importar o material desde unha folla de cálculo</h3>
+	<p>Se xa tedes o inventario en Excel ou en LibreOffice, non fai falta escribilo outra vez: preme <strong>«Importar desde CSV»</strong>.</p>
+	<captura src="70-inventario-importar-ventana" url="/area-privada/inventario/?importar=1" alt="Xanela para importar material: selector de ficheiro CSV, ligazón para descargar un exemplo e explicación das columnas">Na xanela: <strong>«Descargar un ficheiro de exemplo»</strong>, o ficheiro que vas subir e a caixa para crear os tipos que aínda non existan. Debaixo, como ten que ser o ficheiro.</captura>
+	<ol>
+		<li>Descarga o exemplo e ábreo con Excel ou LibreOffice. A primeira fila son os nomes das columnas: <em>Descrición, Tipo, Cantidade, Prezo por unidade, Ano de compra, Nº de serie e Notas</em>. Só son obrigatorias <strong>Descrición</strong> e <strong>Cantidade</strong>; as demais pódense deixar en branco ou quitar.</li>
+		<li>Cambia as filas de exemplo polo voso material (unha fila por material) e gárdao como <strong>CSV</strong>: en Excel, «Gardar como» → «CSV (delimitado por punto e coma)».</li>
+		<li>Elixe o ficheiro e preme <strong>«Importar»</strong>.</li>
+	</ol>
+	<p>Primeiro compróbase o ficheiro enteiro (que sexa un CSV, que teña a cabeceira, que non pase de 2 MB nin de 2.000 filas). Se algo falla aí, non se importa nada e dise por que. Se está ben, impórtanse todas as filas correctas e, na mesma xanela, sae o informe:</p>
+	<captura src="71-inventario-importar-informe" url="/area-privada/inventario/?importar=1&amp;resultado=…" alt="Informe da importación: materiais importados, filas non importadas co seu número e o motivo, e botón para descargalas">Cantos materiais se importaron e que filas non, co seu <strong>nº de fila</strong> (o da folla de cálculo) e o <strong>motivo</strong>. «Descargar as filas con erro» dáche só esas filas nun CSV: corríxeas e volve importalo (as demais xa están dentro).</captura>
+	<ul>
+		<li>Motivos habituais: unha cantidade que non é un número enteiro, un prezo mal escrito, un ano que non é de catro cifras, unha fila sen descrición, un tipo que non existe (se desmarcaches a caixa) ou un <strong>nº de serie que xa está</strong> no inventario ou repetido no ficheiro.</li>
+		<li>Ao pechar a xanela, a lista xa amosa o material novo.</li>
+	</ul>
+
+	<h3 id="inventario-lista-compra" data-paginas="inventario inventario_compras">Preparar unha lista da compra</h3>
+	<ol>
+		<li>Na lista do material, <strong>marca a caixa</strong> do que hai que comprar. Se dun material quedan <strong>menos de 5 unidades</strong>, pregúntache «No inventario só hai N unidades… Seguro que queres engadilo á lista da compra?»: é un aviso, podes seguir.</li>
+		<li>Preme <strong>«Crear unha lista da compra cos marcados»</strong>.</li>
+		<li>Indica cantas unidades comprar de cada un (0 para quitalo) e o prezo estimado (vén o do inventario). O total calcúlase mentres escribes. Engade unha nota para Tesouraría se fai falta.</li>
+		<li><strong>«Gardar e enviar a Tesouraría»</strong>: ás persoas de Tesouraría chégalles un email para que a revisen.</li>
+	</ol>
+	<captura src="72-inventario-nueva-lista" url="/area-privada/inventario/listas-de-compra/?nueva=1" alt="Nova lista da compra coa cantidade e o prezo de cada material, avisos de poucas unidades e o total estimado" larga>A lista nova, co aviso nos materiais dos que quedan poucas unidades.</captura>
+
+	<h3 id="inventario-visto-bueno" data-paginas="inventario_compras">O visto e prace de Tesouraría</h3>
+	<captura src="73-inventario-compras" url="/area-privada/inventario/listas-de-compra/" alt="Listas da compra co seu número, quen a pediu, o total e o estado">A pestana «Listas da compra»: cada lista co seu número (LC…), quen a pediu, o total estimado e o seu estado: <em>Pendente do visto e prace</em>, <em>Co visto e prace</em>, <em>Rexeitada</em> ou <em>Cancelada</em>. A Tesouraría sáelle ademais no inicio e no menú cantas esperan o seu visto e prace.</captura>
+	<captura src="74-inventario-compra-ventana" url="/area-privada/inventario/listas-de-compra/?lista=…" alt="Detalle dunha lista da compra pendente cos botóns Dar o visto e prace e Rexeitar">Tesouraría abre a lista (nunha xanela) e preme <strong>«Dar o visto e prace»</strong> ou <strong>rexéitaa</strong> cun motivo, que verá quen a pediu.</captura>
+	<ul>
+		<li>Só Tesouraría dá o visto e prace. Pódese desfacer mentres ninguén descargue o PDF.</li>
+		<li>Quen a pediu pode <strong>cancelala</strong> mentres está pendente. Unha lista non se cambia: se fai falta, cancélase e prepárase outra.</li>
+	</ul>
+
+	<h3 id="inventario-pdf" data-paginas="inventario_compras">Imprimir a lista</h3>
+	<captura src="75-inventario-compra-aprobada" url="/area-privada/inventario/listas-de-compra/?lista=…" alt="Lista da compra co visto e prace de Tesouraría e o botón Descargar o PDF para imprimir">Co visto e prace aparece <strong>«Descargar o PDF para imprimir»</strong> (tamén na lista de listas). Ábrese noutra pestana para imprimilo ou gardalo.</captura>
+	<ul>
+		<li>O PDF leva o nome do grupo, o nº da lista, quen a pediu, quen lle deu o visto e prace e cando, a táboa do material (co que hai no inventario e o que hai que comprar), o total estimado e a nota.</li>
+		<li><strong>Sen o visto e prace non se pode imprimir:</strong> non sae o botón e, se se tenta imprimir a páxina, só sae o aviso «Pendente do visto e prace de Tesouraría».</li>
+		<li>O visto e prace non cambia as cantidades do inventario: cando chegue o comprado, actualízaas en cada material.</li>
+	</ul>
+	<captura src="76-movil-inventario" alt="O inventario no móbil, con cada material nunha tarxeta" movil>No móbil, cada material sae nunha tarxeta.</captura>
+</section>

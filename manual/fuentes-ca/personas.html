@@ -1,0 +1,44 @@
+<section id="personas" data-paginas="personas">
+	<h2><span class="quien">Secretaria i Coordinació</span>Persones del grup i números de soci</h2>
+	<p class="resumen">Per aquí es comença gairebé tot: les fitxes, donar accés i els números de soci. És l'única pàgina on apareixen també les persones sense membresia activa.</p>
+		<captura src="04-personas" url="/area-privada/personas/" alt="Llistat de Persones del grup amb el resum d'incidències de números de soci i la taula de persones amb el seu núm. territorial, el seu núm. de Scouts de España i el seu accés web" larga>A dalt, el resum i les incidències; a sota, la llista. Es pot desplaçar dins de la captura.</captura>
+		<ul>
+			<li>El <strong>nom</strong> i «Veure fitxa» obren la fitxa a la finestra.</li>
+			<li>Les dues columnes de números: <strong>Núm. territorial</strong>, el que es genera al grup i pot tenir incidències, i <strong>Núm. Scouts de España (usuari)</strong>, el del CRM, que és amb el qual entra la persona quan el grup ha triat aquest com a usuari.</li>
+			<li><strong>Accés web:</strong> l'usuari i el seu estat si té compte propi; el compte familiar si el té la seva família («900031T · Compte familiar · Actiu»); i si no en té cap, l'enllaç <strong>«Dona accés»</strong>.</li>
+			<li>Es pot ordenar per qualsevol columna i filtrar per nom o núm. de soci: la llista s'actualitza <strong>en escriure, des de la tercera lletra</strong>, sense recarregar la pàgina («Mostra», el quadre i «Filtra» van a la mateixa línia).</li>
+			<li>El quadre del resum (membresies actives, següent núm. lliure, incidències) es plega amb ▾; plegat, només mostra les dues xifres.</li>
+			<li>Les fitxes es llegeixen del CRM cada pocs minuts perquè les pàgines vagin ràpid: l'avís de dalt diu quan va ser l'última lectura. Si acabes de canviar alguna cosa directament al CRM, «Actualitza ara» la torna a llegir.</li>
+		</ul>
+		<p>Colors de les seccions, els mateixos a tota l'àrea:</p>
+		<ul class="leyenda">
+			<li><i style="background: var(--castores)"></i>Castors</li>
+			<li><i style="background: var(--lobatos)"></i>Llobatons</li>
+			<li><i style="background: var(--scouts)"></i>Scouts</li>
+			<li><i style="background: var(--escultas)"></i>Escoltes</li>
+			<li><i style="background: var(--rovers)"></i>Rovers</li>
+		</ul>
+		<h3 id="numero-territorial">El núm. territorial: veure'l i corregir-lo</h3>
+		<p>El grup pot deixar de fer servir el número territorial com a usuari, però aquest número <strong>se segueix vigilant</strong> i es pot corregir com sempre: és el que identifica la persona a l'organització i al CRM.</p>
+		<ul>
+			<li><strong>«Mostra el núm. territorial»</strong>, al costat del teu nom, fa que cada pantalla (llistes, fitxes, sol·licituds, «Dona accés») mostri el territorial al costat del de Scouts de España. És una preferència teva: la resta de persones no la veuen canviada, i es pot apagar igual.</li>
+			<li><strong>L'advertència surt sempre,</strong> amb la preferència que sigui: si el número territorial d'algú té un problema (format antic, duplicat, no vàlid o sense número), la fitxa, «Dona accés» i les sol·licituds ho avisen.</li>
+			<li>Amb el núm. de Scouts de España com a usuari, aquestes incidències <strong>avisen però no impedeixen</strong> donar accés. Si l'usuari és el territorial, l'alta espera que es corregeixi.</li>
+		</ul>				<captura src="48-ficha-territorial" url="/area-privada/personas/" alt="Fitxa de Paula oberta a la finestra, amb el seu núm. de Scouts de España, el seu núm. territorial i l'avís que no és vàlid">Amb «Mostra el núm. territorial», la fitxa mostra el territorial («terr.») al costat del de Scouts de España. L'avís que Paula té un número no vàlid sortiria igual amb la preferència apagada.</captura>
+		<h3>Incidències de números de soci</h3>
+		<div class="tabla">
+			<table>
+				<thead><tr><th scope="col">Incidència</th><th scope="col">Exemple</th><th scope="col">Què fer</th></tr></thead>
+				<tbody>
+					<tr><td>Format antic</td><td><code>079990040</code> o <code>9990041</code></td><td>«Corregeix al CRM» el deixa com <code>79990040</code>. Mentrestant, el web ja l'entén.</td></tr>
+					<tr><td>Duplicat</td><td>Dues persones amb <code>79990043</code></td><td>«Dona núm. nou» a una d'elles. Amb el territorial com a usuari, cap de les dues pot rebre accés fins aleshores; amb el núm. de Scouts de España, només avisa.</td></tr>
+					<tr><td>No vàlid</td><td><code>X-12</code></td><td>Revisar-lo al CRM, o «Assigna núm.» per donar-li el següent lliure.</td></tr>
+					<tr><td>Sense número</td><td>—</td><td>«Assigna núm.». Amb el territorial com a usuari, en donar-li accés també es genera sol.</td></tr>
+				</tbody>
+			</table>
+		</div>
+		<captura src="47-alta-aviso-territorial" url="/area-privada/personas/" alt="«Dona accés» a Paula, amb l'avís que el seu núm. territorial no és vàlid">«Dona accés» a Paula, el núm. territorial de la qual no és vàlid (<code>X-12</code>): l'avís surt a dalt, però amb el núm. de Scouts de España com a usuari se li pot donar accés igualment.</captura>
+		<h3>Correccions de totes les fitxes en segon pla</h3>
+		<p>Els botons de dalt («Corregeix al CRM els formats antics», «Resol els duplicats») llancen una tasca que continua sola al servidor. Pots continuar fent servir el web, i fins i tot tancar la pàgina: un requadre a totes les pàgines de l'àrea diu quantes fitxes queden.</p>
+		<captura src="21-monitor" url="/area-privada/personas/" alt="Requadre de progrés d'una correcció en segon pla: en queden 68 de 106">«Queden 68 de 106 · 38 corregides». «Atura» la para; el que ja s'ha corregit es queda. En acabar, les que hagin fallat apareixen a Persones amb el seu motiu.</captura>
+</section>

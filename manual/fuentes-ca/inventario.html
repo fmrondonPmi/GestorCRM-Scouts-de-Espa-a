@@ -1,0 +1,68 @@
+<section id="inventario">
+	<h2>Inventari de material</h2>
+	<p class="resumen">A «Gestió del grup → <strong>Inventari</strong>» hi ha tot el material i l'equipament del grup: tendes, cuina, eines, farmacioles… El veuen i el mantenen els scouters (amb o sense secció), Secretaria, Coordinació i Tresoreria. Des d'aquí també es preparen les <strong>llistes de compra</strong>, que Tresoreria ha d'aprovar abans d'imprimir-les.</p>
+	<p>A dalt hi ha tres pestanyes: <strong>Material</strong>, <strong>Tipus de material</strong> i <strong>Llistes de compra</strong>.</p>
+
+	<h3 id="inventario-material" data-paginas="inventario">El material</h3>
+	<captura src="67-inventario" url="/area-privada/inventario/" alt="Llista de l'inventari amb el material, el seu tipus, quantitat, preu, any de compra i núm. de sèrie" larga>La llista del material. A dalt, quants materials i unitats hi ha i el seu valor estimat (quantitat × preu). Les quantitats per sota de 5 surten marcades en groc.</captura>
+	<ul>
+		<li><strong>Cercar i filtrar:</strong> escriu part de la descripció o del núm. de sèrie, o tria un tipus: la llista es filtra a l'instant, sense recarregar.</li>
+		<li><strong>«Mostra també els donats de baixa»</strong> mostra el material que ja no hi és, per si cal recuperar-lo.</li>
+		<li>Prem la descripció d'un material per veure'l o canviar-lo.</li>
+	</ul>
+	<captura src="68-inventario-material" url="/area-privada/inventario/?material=…" alt="Formulari d'un material de l'inventari: descripció, tipus amb el botó +, quantitat, preu, any de compra, núm. de sèrie i notes">«Afegeix material» (o un material de la llista) obre la seva fitxa. Obligatoris: la descripció i la quantitat (0 o més). L'any de compra és opcional; el preu és per unitat.</captura>
+	<ul>
+		<li><strong>«Afegeix i crea'n un altre»</strong> desa i deixa el formulari buit per al següent.</li>
+		<li><strong>Dona de baixa</strong> (a baix, amb un motiu opcional) és per al que s'ha trencat, perdut o regalat: no s'esborra, deixa de sortir a la llista i es pot recuperar.</li>
+		<li>A baix es veu qui el va crear i qui el va canviar per última vegada.</li>
+	</ul>
+
+	<h3 id="inventario-tipos" data-paginas="inventario_tipos">Tipus de material</h3>
+	<captura src="69-inventario-tipos-ventana" url="/area-privada/inventario/tipos-de-material/" alt="Finestra emergent amb els tipus de material sobre el formulari d'un material">El botó <strong>«+»</strong> al costat del tipus obre els tipus en una finestra damunt del formulari: crea el que falti, tanca-la i el desplegable ja el té triat. El que haguessis escrit al formulari no es perd.</captura>
+	<ul>
+		<li>Els tipus també tenen la seva pestanya. Se'ls pot <strong>canviar el nom</strong> en qualsevol moment.</li>
+		<li>Un tipus que fa servir algun material <strong>no es pot esborrar</strong>: canvia abans el tipus d'aquest material.</li>
+		<li>El tipus <strong>«Camisa uniforme»</strong> el crea el web i no s'esborra: els seus materials demanen a més el <strong>model</strong> (noi o noia) i la <strong>talla</strong>, i si no escrius la descripció es posa sola («Camisa femenina (noia), talla M»). La gestió d'uniformes els assigna a les comandes i els descompta d'aquí. En importar un CSV, les seves columnes són «Model (camises)» i «Talla (camises)».</li>
+	</ul>
+
+	<h3 id="inventario-importar" data-paginas="inventario">Importar el material des d'un full de càlcul</h3>
+	<p>Si ja teniu l'inventari a Excel o a LibreOffice, no cal escriure'l una altra vegada: prem <strong>«Importa des de CSV»</strong>.</p>
+	<captura src="70-inventario-importar-ventana" url="/area-privada/inventario/?importar=1" alt="Finestra per importar material: selector de fitxer CSV, enllaç per descarregar un exemple i explicació de les columnes">A la finestra: <strong>«Descarrega un fitxer d'exemple»</strong>, el fitxer que pujaràs i la casella per crear els tipus que encara no existeixin. A sota, com ha de ser el fitxer.</captura>
+	<ol>
+		<li>Descarrega l'exemple i obre'l amb Excel o LibreOffice. La primera fila són els noms de les columnes: <em>Descripció, Tipus, Quantitat, Preu per unitat, Any de compra, Núm. de sèrie i Notes</em>. Només són obligatòries <strong>Descripció</strong> i <strong>Quantitat</strong>; les altres es poden deixar en blanc o treure.</li>
+		<li>Canvia les files d'exemple pel vostre material (una fila per material) i desa'l com a <strong>CSV</strong>: a Excel, «Desa com a» → «CSV (delimitat per punt i coma)».</li>
+		<li>Tria el fitxer i prem <strong>«Importa»</strong>.</li>
+	</ol>
+	<p>Primer es comprova el fitxer sencer (que sigui un CSV, que tingui la capçalera, que no passi de 2 MB ni de 2.000 files). Si alguna cosa falla aquí, no s'importa res i es diu per què. Si està bé, s'importen totes les files correctes i, a la mateixa finestra, surt l'informe:</p>
+	<captura src="71-inventario-importar-informe" url="/area-privada/inventario/?importar=1&amp;resultado=…" alt="Informe de la importació: materials importats, files no importades amb el seu número i el motiu, i botó per descarregar-les">Quants materials s'han importat i quines files no, amb el seu <strong>núm. de fila</strong> (el del full de càlcul) i el <strong>motiu</strong>. «Descarrega les files amb error» et dona només aquestes files en un CSV: corregeix-les i torna a importar-lo (les altres ja hi són).</captura>
+	<ul>
+		<li>Motius habituals: una quantitat que no és un nombre enter, un preu mal escrit, un any que no és de quatre xifres, una fila sense descripció, un tipus que no existeix (si vas desmarcar la casella) o un <strong>núm. de sèrie que ja hi és</strong> a l'inventari o repetit al fitxer.</li>
+		<li>En tancar la finestra, la llista ja mostra el material nou.</li>
+	</ul>
+
+	<h3 id="inventario-lista-compra" data-paginas="inventario inventario_compras">Preparar una llista de compra</h3>
+	<ol>
+		<li>A la llista del material, <strong>marca la casella</strong> del que cal comprar. Si d'un material en queden <strong>menys de 5 unitats</strong>, et pregunta «A l'inventari només hi ha N unitats… Segur que el vols afegir a la llista de compra?»: és un avís, pots continuar.</li>
+		<li>Prem <strong>«Crea una llista de compra amb els marcats»</strong>.</li>
+		<li>Indica quantes unitats comprar de cadascun (0 per treure'l) i el preu estimat (ve el de l'inventari). El total es calcula mentre escrius. Afegeix una nota per a Tresoreria si cal.</li>
+		<li><strong>«Desa i envia a Tresoreria»</strong>: a les persones de Tresoreria els arriba un email perquè la revisin.</li>
+	</ol>
+	<captura src="72-inventario-nueva-lista" url="/area-privada/inventario/listas-de-compra/?nueva=1" alt="Llista de compra nova amb la quantitat i el preu de cada material, avisos de poques unitats i el total estimat" larga>La llista nova, amb l'avís als materials dels quals queden poques unitats.</captura>
+
+	<h3 id="inventario-visto-bueno" data-paginas="inventario_compras">El vistiplau de Tresoreria</h3>
+	<captura src="73-inventario-compras" url="/area-privada/inventario/listas-de-compra/" alt="Llistes de compra amb el seu número, qui l'ha demanada, el total i l'estat">La pestanya «Llistes de compra»: cada llista amb el seu número (LC…), qui l'ha demanada, el total estimat i el seu estat: <em>Pendent del vistiplau</em>, <em>Amb el vistiplau</em>, <em>Rebutjada</em> o <em>Cancel·lada</em>. A Tresoreria li surt a més a l'inici i al menú quantes esperen el seu vistiplau.</captura>
+	<captura src="74-inventario-compra-ventana" url="/area-privada/inventario/listas-de-compra/?lista=…" alt="Detall d'una llista de compra pendent amb els botons Dona el vistiplau i Rebutja">Tresoreria obre la llista (en una finestra) i prem <strong>«Dona el vistiplau»</strong> o la <strong>rebutja</strong> amb un motiu, que veurà qui la va demanar.</captura>
+	<ul>
+		<li>Només Tresoreria dona el vistiplau. Es pot desfer mentre ningú hagi descarregat el PDF.</li>
+		<li>Qui la va demanar la pot <strong>cancel·lar</strong> mentre és pendent. Una llista no es canvia: si cal, es cancel·la i se'n prepara una altra.</li>
+	</ul>
+
+	<h3 id="inventario-pdf" data-paginas="inventario_compras">Imprimir la llista</h3>
+	<captura src="75-inventario-compra-aprobada" url="/area-privada/inventario/listas-de-compra/?lista=…" alt="Llista de compra amb el vistiplau de Tresoreria i el botó Descarrega el PDF per imprimir">Amb el vistiplau apareix <strong>«Descarrega el PDF per imprimir»</strong> (també a la llista de llistes). S'obre en una altra pestanya per imprimir-lo o desar-lo.</captura>
+	<ul>
+		<li>El PDF porta el nom del grup, el núm. de la llista, qui l'ha demanada, qui li ha donat el vistiplau i quan, la taula del material (amb el que hi ha a l'inventari i el que cal comprar), el total estimat i la nota.</li>
+		<li><strong>Sense el vistiplau no es pot imprimir:</strong> no surt el botó i, si s'intenta imprimir la pàgina, només surt l'avís «Pendent del vistiplau de Tresoreria».</li>
+		<li>El vistiplau no canvia les quantitats de l'inventari: quan arribi el que s'ha comprat, actualitza-les a cada material.</li>
+	</ul>
+	<captura src="76-movil-inventario" alt="L'inventari al mòbil, amb cada material en una targeta" movil>Al mòbil, cada material surt en una targeta.</captura>
+</section>

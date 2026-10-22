@@ -1,0 +1,44 @@
+<section id="personas" data-paginas="personas">
+	<h2><span class="quien">Secretaría e Coordinación</span>Persoas do grupo e números de socio</h2>
+	<p class="resumen">Por aquí comézase case todo: as fichas, dar acceso e os números de socio. É a única páxina onde aparecen tamén as persoas sen membresía activa.</p>
+		<captura src="04-personas" url="/area-privada/personas/" alt="Listaxe de Persoas do grupo co resumo de incidencias de números de socio e a táboa de persoas co seu nº territorial, o seu nº de Scouts de España e o seu acceso web" larga>Arriba, o resumo e as incidencias; debaixo, a lista. Pódese desprazar dentro da captura.</captura>
+		<ul>
+			<li>O <strong>nome</strong> e «Ver ficha» abren a ficha na xanela.</li>
+			<li>As dúas columnas de números: <strong>Nº territorial</strong>, o que se xera no grupo e pode ter incidencias, e <strong>Nº Scouts de España (usuario)</strong>, o do CRM, que é co que entra a persoa cando o grupo elixiu ese como usuario.</li>
+			<li><strong>Acceso web:</strong> o usuario e o seu estado se ten conta propia; a conta familiar se a ten a súa familia («900031T · Conta familiar · Activo»); e se non ten ningunha, a ligazón <strong>«Dar acceso»</strong>.</li>
+			<li>Pódese ordenar por calquera columna e filtrar por nome ou nº de socio: a lista actualízase <strong>ao escribir, desde a terceira letra</strong>, sen recargar a páxina («Mostrar», o cadro e «Filtrar» van na mesma liña).</li>
+			<li>O cadro do resumo (membresías activas, seguinte nº libre, incidencias) prégase co ▾; pregado, amosa só as dúas cifras.</li>
+			<li>As fichas lense do CRM cada poucos minutos para que as páxinas vaian rápido: o aviso de arriba di cando foi a última lectura. Se acabas de cambiar algo directamente no CRM, «Actualizar agora» volve lela.</li>
+		</ul>
+		<p>Cores das seccións, as mesmas en toda a área:</p>
+		<ul class="leyenda">
+			<li><i style="background: var(--castores)"></i>Castores</li>
+			<li><i style="background: var(--lobatos)"></i>Lobatos</li>
+			<li><i style="background: var(--scouts)"></i>Scouts</li>
+			<li><i style="background: var(--escultas)"></i>Escultas</li>
+			<li><i style="background: var(--rovers)"></i>Rovers</li>
+		</ul>
+		<h3 id="numero-territorial">O nº territorial: velo e corrixilo</h3>
+		<p>O grupo pode deixar de usar o número territorial como usuario, pero ese número <strong>segue vixiándose</strong> e pódese corrixir como sempre: é o que identifica a persoa na organización e no CRM.</p>
+		<ul>
+			<li><strong>«Amosar o nº territorial»</strong>, xunto ao teu nome, fai que cada pantalla (listas, fichas, solicitudes, «Dar acceso») amose o territorial ao lado do de Scouts de España. É unha preferencia túa: o resto de persoas non a ven cambiada, e pódese apagar igual.</li>
+			<li><strong>A advertencia sae sempre,</strong> coa preferencia que sexa: se o número territorial de alguén ten un problema (formato antigo, duplicado, non válido ou sen número), a ficha, «Dar acceso» e as solicitudes avísano.</li>
+			<li>Co nº de Scouts de España como usuario, esas incidencias <strong>avisan pero non impiden</strong> dar acceso. Se o usuario é o territorial, a alta agarda a que se corrixa.</li>
+		</ul>				<captura src="48-ficha-territorial" url="/area-privada/personas/" alt="Ficha de Paula aberta na xanela, co seu nº de Scouts de España, o seu nº territorial e o aviso de que non é válido">Con «Amosar o nº territorial», a ficha amosa o territorial («terr.») xunto ao de Scouts de España. O aviso de que Paula ten un número non válido sairía igual coa preferencia apagada.</captura>
+		<h3>Incidencias de números de socio</h3>
+		<div class="tabla">
+			<table>
+				<thead><tr><th scope="col">Incidencia</th><th scope="col">Exemplo</th><th scope="col">Que facer</th></tr></thead>
+				<tbody>
+					<tr><td>Formato antigo</td><td><code>079990040</code> ou <code>9990041</code></td><td>«Corrixir no CRM» déixao como <code>79990040</code>. Mentres, a web xa o entende.</td></tr>
+					<tr><td>Duplicado</td><td>Dúas persoas con <code>79990043</code></td><td>«Dar nº novo» a unha delas. Co territorial como usuario, ningunha das dúas pode recibir acceso ata entón; co nº de Scouts de España, só avisa.</td></tr>
+					<tr><td>Non válido</td><td><code>X-12</code></td><td>Revisalo no CRM, ou «Asignar nº» para darlle o seguinte libre.</td></tr>
+					<tr><td>Sen número</td><td>—</td><td>«Asignar nº». Co territorial como usuario, ao darlle acceso tamén se xera só.</td></tr>
+				</tbody>
+			</table>
+		</div>
+		<captura src="47-alta-aviso-territorial" url="/area-privada/personas/" alt="«Dar acceso» a Paula, co aviso de que o seu nº territorial non é válido">«Dar acceso» a Paula, cuxo nº territorial non é válido (<code>X-12</code>): o aviso sae arriba, pero co nº de Scouts de España como usuario pódeselle dar acceso igual.</captura>
+		<h3>Correccións de todas as fichas en segundo plano</h3>
+		<p>Os botóns de arriba («Corrixir no CRM os formatos antigos», «Resolver os duplicados») lanzan unha tarefa que segue soa no servidor. Podes seguir usando a web, e mesmo pechar a páxina: un cadro en todas as páxinas da área di cantas fichas quedan.</p>
+		<captura src="21-monitor" url="/area-privada/personas/" alt="Cadro de progreso dunha corrección en segundo plano: quedan 68 de 106">«Quedan 68 de 106 · 38 corrixidas». «Deter» párao; o xa corrixido queda. Ao acabar, as que fallasen aparecen en Persoas co seu motivo.</captura>
+</section>

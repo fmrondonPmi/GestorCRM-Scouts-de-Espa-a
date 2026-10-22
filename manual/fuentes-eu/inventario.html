@@ -1,0 +1,68 @@
+<section id="inventario">
+	<h2>Materialaren inbentarioa</h2>
+	<p class="resumen">«Taldearen kudeaketa → <strong>Inbentarioa</strong>» atalean taldeko material eta ekipamendu guztia dago: dendak, sukaldea, erremintak, botikinak… Scouterrek (atalarekin edo atalik gabe), Idazkaritzak, Koordinazioak eta Diruzaintzak ikusten eta mantentzen dute. Hemendik <strong>erosketa-zerrendak</strong> ere prestatzen dira, Diruzaintzak inprimatu aurretik onartu behar dituenak.</p>
+	<p>Goian hiru fitxa daude: <strong>Materiala</strong>, <strong>Material-motak</strong> eta <strong>Erosketa-zerrendak</strong>.</p>
+
+	<h3 id="inventario-material" data-paginas="inventario">Materiala</h3>
+	<captura src="67-inventario" url="/area-privada/inventario/" alt="Inbentarioaren zerrenda, materialarekin, bere mota, kopurua, prezioa, erosketa-urtea eta serie-zenbakiarekin" larga>Materialaren zerrenda. Goian, zenbat material eta unitate dauden eta haien balio estimatua (kopurua × prezioa). 5etik beherako kopuruak horiz markatuta ateratzen dira.</captura>
+	<ul>
+		<li><strong>Bilatu eta iragazi:</strong> idatzi deskribapenaren edo serie-zenbakiaren zati bat, edo aukeratu mota bat: zerrenda unean bertan iragazten da, birkargatu gabe.</li>
+		<li><strong>«Ikusi baja emandakoak ere»</strong> aukerak jada ez dagoen materiala erakusten du, berreskuratu behar bada.</li>
+		<li>Sakatu material baten deskribapena hura ikusteko edo aldatzeko.</li>
+	</ul>
+	<captura src="68-inventario-material" url="/area-privada/inventario/?material=…" alt="Inbentarioko material baten formularioa: deskribapena, mota + botoiarekin, kopurua, prezioa, erosketa-urtea, serie-zenbakia eta oharrak">«Gehitu materiala» (edo zerrendako material bat) aukerak bere fitxa irekitzen du. Derrigorrezkoak: deskribapena eta kopurua (0 edo gehiago). Erosketa-urtea aukerakoa da; prezioa unitateko da.</captura>
+	<ul>
+		<li><strong>«Gehitu eta sortu beste bat»</strong> aukerak gorde egiten du eta formularioa hutsik uzten du hurrengorako.</li>
+		<li><strong>Eman baja</strong> (behean, arrazoi aukerako batekin) hautsi, galdu edo oparitu denerako da: ez da ezabatzen, zerrendan agertzeari uzten dio eta berreskura daiteke.</li>
+		<li>Behean ikusten da nork sortu zuen eta nork aldatu zuen azken aldiz.</li>
+	</ul>
+
+	<h3 id="inventario-tipos" data-paginas="inventario_tipos">Material-motak</h3>
+	<captura src="69-inventario-tipos-ventana" url="/area-privada/inventario/tipos-de-material/" alt="Material-moten leiho gainerakorra, material baten formularioaren gainean">Motaren ondoko <strong>«+»</strong> botoiak motak formularioaren gaineko leiho batean irekitzen ditu: sortu falta dena, itxi eta goitibeheko zerrendak aukeratuta izango du. Formularioan idatzita zeneukana ez da galtzen.</captura>
+	<ul>
+		<li>Motek ere badute bere fitxa. Edonoiz <strong>aldatu dakioke izena</strong>.</li>
+		<li>Materialen batek erabiltzen duen mota bat <strong>ezin da ezabatu</strong>: aldatu lehenago material horren mota.</li>
+		<li><strong>«Camisa uniforme»</strong> mota webak sortzen du eta ez da ezabatzen: bere materialek, gainera, <strong>eredua</strong> (mutila edo neska) eta <strong>neurria</strong> eskatzen dituzte, eta deskribapenik idazten ez baduzu bere kabuz jartzen da («Alkandora emakumezkoa (neska), M neurria»). Uniformeen kudeaketak eskaeretara esleitzen ditu eta hemendik kentzen ditu. CSV bat inportatzean, bere zutabeak «Eredua (alkandorak)» eta «Neurria (alkandorak)» dira.</li>
+	</ul>
+
+	<h3 id="inventario-importar" data-paginas="inventario">Materiala kalkulu-orri batetik inportatzea</h3>
+	<p>Inbentarioa Excelen edo LibreOfficen baduzue, ez da berriro idatzi behar: sakatu <strong>«Inportatu CSVtik»</strong>.</p>
+	<captura src="70-inventario-importar-ventana" url="/area-privada/inventario/?importar=1" alt="Materiala inportatzeko leihoa: CSV fitxategiaren hautatzailea, adibide bat deskargatzeko esteka eta zutabeen azalpena">Leihoan: <strong>«Deskargatu adibide-fitxategi bat»</strong>, igoko duzun fitxategia eta oraindik ez dauden motak sortzeko laukia. Azpian, fitxategia nolakoa izan behar den.</captura>
+	<ol>
+		<li>Deskargatu adibidea eta ireki Excelekin edo LibreOfficerekin. Lehen errenkada zutabeen izenak dira: <em>Deskribapena, Mota, Kopurua, Unitateko prezioa, Erosketa-urtea, Serie-zenbakia eta Oharrak</em>. <strong>Deskribapena</strong> eta <strong>Kopurua</strong> soilik dira derrigorrezkoak; besteak hutsik utz daitezke edo kendu.</li>
+		<li>Aldatu adibideko errenkadak zuen materialagatik (errenkada bat materialeko) eta gorde <strong>CSV</strong> gisa: Excelen, «Gorde honela» → «CSV (puntu eta komaz mugatua)».</li>
+		<li>Aukeratu fitxategia eta sakatu <strong>«Inportatu»</strong>.</li>
+	</ol>
+	<p>Lehenik fitxategi osoa egiaztatzen da (CSV bat izatea, goiburua izatea, 2 MB edo 2.000 errenkada ez gainditzea). Hor zerbaitek huts egiten badu, ez da ezer inportatzen eta zergatik esaten da. Ondo badago, errenkada zuzen guztiak inportatzen dira eta, leiho berean, txostena ateratzen da:</p>
+	<captura src="71-inventario-importar-informe" url="/area-privada/inventario/?importar=1&amp;resultado=…" alt="Inportazioaren txostena: inportatutako materialak, inportatu gabeko errenkadak bere zenbaki eta arrazoiarekin, eta deskargatzeko botoia">Zenbat material inportatu diren eta zein errenkada ez, bere <strong>errenkada-zenbakiarekin</strong> (kalkulu-orrikoa) eta <strong>arrazoiarekin</strong>. «Deskargatu errorea duten errenkadak» aukerak errenkada horiek soilik ematen dizkizu CSV batean: zuzendu eta inportatu berriro (besteak barruan daude jada).</captura>
+	<ul>
+		<li>Arrazoi ohikoenak: zenbaki oso ez den kopuru bat, gaizki idatzitako prezio bat, lau zifrakoa ez den urte bat, deskribapenik gabeko errenkada bat, ez dagoen mota bat (laukia desmarkatu baduzu) edo inbentarioan dagoen edo fitxategian errepikatuta dagoen <strong>serie-zenbaki bat</strong>.</li>
+		<li>Leihoa ixtean, zerrendak jada material berria erakusten du.</li>
+	</ul>
+
+	<h3 id="inventario-lista-compra" data-paginas="inventario inventario_compras">Erosketa-zerrenda bat prestatzea</h3>
+	<ol>
+		<li>Materialaren zerrendan, <strong>markatu laukia</strong> erosi behar denarena. Material baten <strong>5 unitate baino gutxiago</strong> geratzen badira, galdetzen dizu «Inbentarioan N unitate besterik ez daude… Ziur erosketa-zerrendara gehitu nahi duzula?»: abisua da, jarrai dezakezu.</li>
+		<li>Sakatu <strong>«Sortu erosketa-zerrenda bat markatutakoekin»</strong>.</li>
+		<li>Adierazi bakoitzaren zenbat unitate erosi (0 kentzeko) eta prezio estimatua (inbentarioko prezioa dator). Guztizkoa idazten duzun bitartean kalkulatzen da. Behar bada, gehitu ohar bat Diruzaintzarentzat.</li>
+		<li><strong>«Gorde eta bidali Diruzaintzara»</strong>: Diruzaintzako pertsonei email bat iristen zaie berrikus dezaten.</li>
+	</ol>
+	<captura src="72-inventario-nueva-lista" url="/area-privada/inventario/listas-de-compra/?nueva=1" alt="Erosketa-zerrenda berria, material bakoitzaren kopuru eta prezioarekin, unitate gutxiko abisuekin eta guztizko estimatuarekin" larga>Zerrenda berria, unitate gutxi geratzen diren materialen abisuarekin.</captura>
+
+	<h3 id="inventario-visto-bueno" data-paginas="inventario_compras">Diruzaintzaren oniritzia</h3>
+	<captura src="73-inventario-compras" url="/area-privada/inventario/listas-de-compra/" alt="Erosketa-zerrendak, bere zenbaki, eskatu duenaren, guztizkoaren eta egoeraren arabera">«Erosketa-zerrendak» fitxa: zerrenda bakoitza bere zenbakiarekin (LC…), nork eskatu duen, guztizko estimatua eta bere egoera: <em>Oniritziaren zain</em>, <em>Oniritziarekin</em>, <em>Ukatua</em> edo <em>Ezeztatua</em>. Diruzaintzari, gainera, hasieran eta menuan ateratzen zaio zenbat dauden bere oniritziaren zain.</captura>
+	<captura src="74-inventario-compra-ventana" url="/area-privada/inventario/listas-de-compra/?lista=…" alt="Zain dagoen erosketa-zerrenda baten xehetasuna, Eman oniritzia eta Ukatu botoiekin">Diruzaintzak zerrenda irekitzen du (leiho batean) eta <strong>«Eman oniritzia»</strong> sakatzen du edo <strong>ukatu</strong> egiten du arrazoi batekin, eskatu zuenak ikusiko duena.</captura>
+	<ul>
+		<li>Diruzaintzak soilik ematen du oniritzia. Desegin daiteke inork PDFa deskargatu ez duen bitartean.</li>
+		<li>Eskatu zuenak <strong>ezeztatu</strong> dezake zain dagoen bitartean. Zerrenda bat ez da aldatzen: behar bada, ezeztatu egiten da eta beste bat prestatzen da.</li>
+	</ul>
+
+	<h3 id="inventario-pdf" data-paginas="inventario_compras">Zerrenda inprimatzea</h3>
+	<captura src="75-inventario-compra-aprobada" url="/area-privada/inventario/listas-de-compra/?lista=…" alt="Diruzaintzaren oniritzia duen erosketa-zerrenda eta Deskargatu PDFa inprimatzeko botoia">Oniritziarekin <strong>«Deskargatu PDFa inprimatzeko»</strong> agertzen da (zerrenden zerrendan ere). Beste fitxa batean irekitzen da inprimatzeko edo gordetzeko.</captura>
+	<ul>
+		<li>PDFak taldearen izena, zerrendaren zenbakia, nork eskatu duen, nork eman dion oniritzia eta noiz, materialaren taula (inbentarioan dagoenarekin eta erosi behar denarekin), guztizko estimatua eta oharra ditu.</li>
+		<li><strong>Oniritzirik gabe ezin da inprimatu:</strong> botoia ez da ageri eta, orria inprimatzen saiatzen bada, «Diruzaintzaren oniritziaren zain» oharra soilik ateratzen da.</li>
+		<li>Oniritziak ez ditu inbentarioko kopuruak aldatzen: erositakoa iristen denean, eguneratu itzazu material bakoitzean.</li>
+	</ul>
+	<captura src="76-movil-inventario" alt="Inbentarioa mugikorrean, material bakoitza txartel batean" movil>Mugikorrean, material bakoitza txartel batean ateratzen da.</captura>
+</section>
