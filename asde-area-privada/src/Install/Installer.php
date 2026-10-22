@@ -126,6 +126,7 @@ final class Installer {
 		Pages::install();
 		Visibilidad::asegurar_menu();
 		Wordfence::configurar();
+		\AsdeBalears\AreaPrivada\Tienda\InventarioTienda::migrar(); // v0.51 (doc 55): la tienda pasa a vivir sobre el inventario general (una vez por grupo).
 		Mantenimiento::programar();
 		// v0.10: el email de las cuentas se guarda cifrado; las que ya existían lo guardan en segundo plano.
 		if ( \AsdeBalears\AreaPrivada\Usuarios\EmailCuenta::pendientes() && ! wp_next_scheduled( Mantenimiento::HOOK_EMAILS ) ) {

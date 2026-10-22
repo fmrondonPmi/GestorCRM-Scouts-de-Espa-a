@@ -4312,4 +4312,12 @@ return array(
 	'La oficina ha revisado el alta de <strong>%s</strong>: <strong>el grupo ya está dado de alta</strong> en el área privada.' => 'Bulegoak <strong>%s</strong> taldearen alta berrikusi du: <strong>taldea alta emanda dago</strong> eremu pribatuan.',
 	'La primera persona con acceso recibirá un email para activar su cuenta.' => 'Sarbidea duen lehen pertsonak emaila jasoko du bere kontua aktibatzeko.',
 	'Si crees que es un error o quieres volver a intentarlo, ponte en contacto con la oficina.' => 'Akatsa dela uste baduzu edo berriro saiatu nahi baduzu, jarri harremanetan bulegoarekin.',
+
+	// v0.51: tienda sobre inventario
+	'Las filas con la misma descripción forman un producto de la tienda, con cada una como talla o variante. Las existencias de la tienda son la cantidad de esta fila; el precio y a quién se vende se ponen en «Inventario de la tienda».' => 'Deskribapen bera duten lerroek denda-produktu bat osatzen dute, bakoitza tailla edo aldaera gisa. Dendako izakinak lerro honen kopurua dira; prezioa eta nori saltzen zaion «Dendaren inbentarioa» atalean jartzen dira.',
+	'Nombre en la tienda (talla, color…)' => 'Izena dendan (tailla, kolorea…)',
+	'Se vende en la tienda' => 'Dendan saltzen da',
+	'Las existencias de «%s» se cambian en el inventario general, no aquí.' => '«%s» produktuaren izakinak inbentario orokorrean aldatzen dira, ez hemen.',
+	'Se cambian en el inventario general' => 'Inbentario orokorrean aldatzen dira',
+	'Se encarga al proveedor' => 'Hornitzaileari eskatzen zaio',
 );

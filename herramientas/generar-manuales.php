@@ -31,7 +31,7 @@
 $raiz    = dirname( __DIR__ ) . '/manual';
 $fuentes = $raiz . '/fuentes';
 $plugin  = dirname( __DIR__ ) . '/asde-area-privada';
-$version = '0.49';
+$version = '0.51';
 $fecha   = 'octubre de 2026';
 $errores = 0;
 

@@ -109,6 +109,11 @@ $talla  = $valor( 'talla', $m['talla'] ?? '' );
 				<input type="text" id="asde-inv-serie" name="num_serie" maxlength="120" value="<?php echo esc_attr( $valor( 'num_serie', $m['num_serie'] ?? '' ) ); ?>">
 			</p>
 		</div>
+		<p class="asde-form__fila asde-form__fila--una-linea">
+			<label class="asde-choice"><input type="checkbox" name="en_tienda" value="1" <?php checked( 1 === (int) ( $valor( 'en_tienda', $m['en_tienda'] ?? 0 ) ) ); ?>><span><?php asde_e( 'Se vende en la tienda' ); ?></span></label>
+			<label for="asde-inv-vtienda"><?php asde_e( 'Nombre en la tienda (talla, color…)' ); ?> <input type="text" id="asde-inv-vtienda" name="variante_tienda" maxlength="80" value="<?php echo esc_attr( $valor( 'variante_tienda', $m['variante_tienda'] ?? '' ) ); ?>" placeholder="<?php echo esc_attr( asde_a( 'Única' ) ); ?>"></label>
+		</p>
+		<p class="asde-help"><?php asde_e( 'Las filas con la misma descripción forman un producto de la tienda, con cada una como talla o variante. Las existencias de la tienda son la cantidad de esta fila; el precio y a quién se vende se ponen en «Inventario de la tienda».' ); ?></p>
 		<p>
 			<label for="asde-inv-notas"><?php asde_e( 'Notas' ); ?></label>
 			<textarea id="asde-inv-notas" name="notas" rows="2" maxlength="500" placeholder="<?php echo esc_attr( asde_a( 'Dónde se guarda, estado, a quién se ha prestado…' ) ); ?>"><?php echo esc_textarea( $valor( 'notas', $m['notas'] ?? '' ) ); ?></textarea>

@@ -216,6 +216,7 @@ final class InventarioView extends InventarioBaseView {
 
 		if ( 'material_baja' === $accion && $m ) {
 			if ( null === $m['baja_en'] && MaterialesTable::dar_baja( $id, $this->post( 'motivo' ) ) ) {
+				\AsdeBalears\AreaPrivada\Tienda\InventarioTienda::sincronizar( $id );
 				Logger::log( 'inventario_material_baja', 'inventario', (string) $id );
 				Notices::add( 'success', esc_html( sprintf( asde_t( '«%s» dado de baja. Lo puedes recuperar desde «Ver también los dados de baja».' ), $m['descripcion'] ) ) );
 			}
@@ -223,6 +224,7 @@ final class InventarioView extends InventarioBaseView {
 		}
 		if ( 'material_recuperar' === $accion && $m ) {
 			if ( null !== $m['baja_en'] && MaterialesTable::recuperar( $id ) ) {
+				\AsdeBalears\AreaPrivada\Tienda\InventarioTienda::sincronizar( $id );
 				Logger::log( 'inventario_material_recuperado', 'inventario', (string) $id );
 				Notices::add( 'success', esc_html( sprintf( asde_t( '«%s» vuelve a estar en el inventario.' ), $m['descripcion'] ) ) );
 			}
@@ -234,9 +236,10 @@ final class InventarioView extends InventarioBaseView {
 		}
 
 		$entrada = array();
-		foreach ( array( 'descripcion', 'tipo', 'cantidad', 'precio', 'anio', 'num_serie', 'notas', 'modelo', 'talla' ) as $campo ) {
+		foreach ( array( 'descripcion', 'tipo', 'cantidad', 'precio', 'anio', 'num_serie', 'notas', 'modelo', 'talla', 'variante_tienda' ) as $campo ) {
 			$entrada[ $campo ] = $this->post( $campo );
 		}
+		$entrada['en_tienda'] = '1' === $this->post( 'en_tienda' ) ? '1' : '';
 		$datos = MaterialesTable::validar( $entrada );
 		if ( is_wp_error( $datos ) ) {
 			set_transient( 'asde_ap_inv_material_' . get_current_user_id(), $entrada, 5 * MINUTE_IN_SECONDS );
@@ -245,11 +248,13 @@ final class InventarioView extends InventarioBaseView {
 		}
 		if ( $m ) {
 			MaterialesTable::actualizar( $id, $datos );
+			\AsdeBalears\AreaPrivada\Tienda\InventarioTienda::sincronizar( $id ); // v0.51: la tienda sigue lo que dice el inventario.
 			$cambiados = array_keys( array_filter( $datos, static fn( $v, $k ) => $v !== $m[ $k ], ARRAY_FILTER_USE_BOTH ) );
 			Logger::log( 'inventario_material_modificado', 'inventario', (string) $id, array( 'campos' => $cambiados ) );
 			Notices::add( 'success', esc_html( sprintf( asde_t( '«%s» guardado.' ), $datos['descripcion'] ) ) );
 		} else {
 			$id = MaterialesTable::crear( $datos );
+			\AsdeBalears\AreaPrivada\Tienda\InventarioTienda::sincronizar( $id );
 			Logger::log( 'inventario_material_creado', 'inventario', (string) $id );
 			Notices::add( 'success', esc_html( sprintf( asde_t( '«%s» añadido al inventario.' ), $datos['descripcion'] ) ) );
 		}

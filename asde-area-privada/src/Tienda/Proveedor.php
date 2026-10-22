@@ -41,13 +41,21 @@ final class Proveedor {
 		return ! isset( self::$llegados[ (int) $p['proveedor_id'] ] );
 	}
 
-	/** ¿Tiene algo que se pide al proveedor? (productos marcados «se encarga al proveedor» o, en los antiguos, camisa o insignias.) */
+	/**
+	 * Unidades de una línea que hay que pedir al proveedor: todas si el producto se encarga siempre al proveedor y, si no,
+	 * solo las que no había en el inventario general al comprar (`faltan`, v0.51).
+	 */
+	public static function unidades_a_pedir( array $l ): int {
+		return ! empty( $l['proveedor'] ) ? (int) $l['cantidad'] : max( 0, (int) ( $l['faltan'] ?? 0 ) );
+	}
+
+	/** ¿Tiene algo que se pide al proveedor? (productos marcados «se encarga al proveedor», lo que faltaba en el inventario o, en los antiguos, camisa o insignias.) */
 	private static function lleva_proveedor( array $p ): bool {
 		if ( $p['lineas']['camisa'] || $p['lineas']['insignias'] ) {
 			return true;
 		}
 		foreach ( $p['lineas']['productos'] as $l ) {
-			if ( ! empty( $l['proveedor'] ) ) {
+			if ( self::unidades_a_pedir( $l ) > 0 ) {
 				return true;
 			}
 		}
@@ -105,9 +113,10 @@ final class Proveedor {
 				$sum( 'insignia|' . ( $i['id'] ?? $i['nombre'] ), 0, 0, (string) $i['nombre'], '', (int) $i['cantidad'] );
 			}
 			foreach ( $p['lineas']['productos'] as $l ) {
-				if ( ! empty( $l['proveedor'] ) ) {
+				$pedir = self::unidades_a_pedir( $l );
+				if ( $pedir > 0 ) {
 					$etiqueta = 'Única' === ( $l['etiqueta'] ?? '' ) ? '' : (string) ( $l['etiqueta'] ?? '' );
-					$sum( 'p|' . $l['producto'] . '|' . $l['variante'], (int) $l['producto'], (int) $l['variante'], (string) $l['nombre'], $etiqueta, (int) $l['cantidad'] );
+					$sum( 'p|' . $l['producto'] . '|' . $l['variante'], (int) $l['producto'], (int) $l['variante'], (string) $l['nombre'], $etiqueta, $pedir );
 				}
 			}
 		}

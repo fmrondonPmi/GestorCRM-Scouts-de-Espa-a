@@ -306,7 +306,10 @@ final class TiendaProductosView extends TiendaBaseView {
 				$var['existencias'] = $v['existencias'];
 				$validas[ $vid ] = $var;
 				$delta = trim( $ajustes[ $vid ] ?? '' );
-				if ( '' !== $delta && 0 === $var['ilimitado'] ) {
+				if ( '' !== $delta && $v['material'] > 0 ) {
+					/* translators: %s: etiqueta de la variante */
+					$errores[] = sprintf( asde_t( 'Las existencias de «%s» se cambian en el inventario general, no aquí.' ), $var['etiqueta'] );
+				} elseif ( '' !== $delta && 0 === $var['ilimitado'] ) {
 					if ( ! preg_match( '/^[+-]?\d{1,5}$/', $delta ) || 0 === (int) $delta ) {
 						/* translators: %s: etiqueta de la variante */
 						$errores[] = sprintf( asde_t( 'El cambio de existencias de «%s» tiene que ser un número entero (por ejemplo +5 o -2).' ), $var['etiqueta'] );

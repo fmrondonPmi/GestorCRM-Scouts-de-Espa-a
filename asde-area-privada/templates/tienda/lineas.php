@@ -35,6 +35,8 @@ $texto = static function ( array $v ) use ( $prod, $es_socio, $existencias ): st
 	$t     .= null === $precio ? asde_t( 'Precio por confirmar' ) : Calculadora::euros( $precio );
 	if ( ! VariantesTable::hay( $v ) ) {
 		$t .= ' (' . asde_t( 'Agotado' ) . ')';
+	} elseif ( $v['material'] > 0 && $v['existencias'] < 1 ) {
+		$t .= ' (' . asde_t( 'Se encarga al proveedor' ) . ')'; // v0.51: sin existencias en el inventario se vende igualmente y se pide más tarde.
 	} elseif ( $existencias && 0 === $v['ilimitado'] && $v['existencias'] <= 5 ) {
 		$t .= ' (' . sprintf( asde_n( 'Queda %d', 'Quedan %d', $v['existencias'] ), $v['existencias'] ) . ')';
 	}

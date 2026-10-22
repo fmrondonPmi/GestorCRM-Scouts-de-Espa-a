@@ -278,6 +278,16 @@ final class Servicio {
 	private static function registrar( array $productos, ?Persona $persona, array $invitado, string $nota, string $forma, array $cfg, bool $para_otros ) {
 		$hechas = array();
 		foreach ( $productos as $i => $l ) {
+			$v = VariantesTable::obtener( (int) $l['variante'] );
+			if ( $v && $v['material'] > 0 ) {
+				// Enlazada al inventario general (v0.51, doc 55): sale lo que haya y lo que falte se pide al proveedor.
+				$tomadas                      = VariantesTable::tomar( (int) $l['variante'], (int) $l['cantidad'] );
+				$productos[ $i ]['reservado'] = true;
+				$productos[ $i ]['reservadas'] = $tomadas;
+				$productos[ $i ]['faltan']    = (int) $l['cantidad'] - $tomadas;
+				$hechas[]                     = $productos[ $i ];
+				continue;
+			}
 			if ( ! VariantesTable::reservar( $l['variante'], $l['cantidad'] ) ) {
 				self::devolver_lineas( $hechas );
 				/* translators: %s: producto */
@@ -298,7 +308,7 @@ final class Servicio {
 			return new \WP_Error( 'asde_tienda', asde_t( 'No se ha podido guardar el pedido.' ) );
 		}
 		// Lo que sale de las existencias no va al proveedor: queda como incluido.
-		if ( ! array_filter( $productos, static fn( array $l ) => ! empty( $l['proveedor'] ) ) ) {
+		if ( ! array_filter( $productos, static fn( array $l ) => Proveedor::unidades_a_pedir( $l ) > 0 ) ) {
 			PedidosTable::marcar_pedido( array( $id ), PedidosTable::REF_TIENDA );
 		}
 		// Sin nada que pagar (todo a 0 €): queda pagado «sin coste».
@@ -402,7 +412,8 @@ final class Servicio {
 	public static function devolver_lineas( array $lineas ): void {
 		foreach ( $lineas as $l ) {
 			if ( ! empty( $l['reservado'] ) ) {
-				VariantesTable::devolver( (int) $l['variante'], (int) $l['cantidad'] );
+				// Con el inventario general solo vuelve lo que de verdad salió de las existencias.
+				VariantesTable::devolver( (int) $l['variante'], isset( $l['reservadas'] ) ? (int) $l['reservadas'] : (int) $l['cantidad'] );
 			}
 		}
 	}
@@ -612,12 +623,13 @@ final class Servicio {
 			}
 			// v0.39: lo del catálogo que se encarga al proveedor.
 			foreach ( $p['lineas']['productos'] as $l ) {
-				if ( empty( $l['proveedor'] ) ) {
+				$pedir = Proveedor::unidades_a_pedir( $l );
+				if ( $pedir < 1 ) {
 					continue;
 				}
 				$k                                = $l['producto'] . '|' . $l['variante'];
 				$productos[ $k ]['nombre']        = $l['nombre'] . ( 'Única' !== $l['etiqueta'] ? ' (' . $l['etiqueta'] . ')' : '' );
-				$productos[ $k ]['cantidad']      = ( $productos[ $k ]['cantidad'] ?? 0 ) + (int) $l['cantidad'];
+				$productos[ $k ]['cantidad']      = ( $productos[ $k ]['cantidad'] ?? 0 ) + $pedir;
 			}
 		}
 		return array(

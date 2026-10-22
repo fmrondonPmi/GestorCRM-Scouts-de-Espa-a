@@ -4312,4 +4312,12 @@ return array(
 	'La oficina ha revisado el alta de <strong>%s</strong>: <strong>el grupo ya está dado de alta</strong> en el área privada.' => 'L\'oficina ha revisat l\'alta de <strong>%s</strong>: <strong>el grup ja està donat d\'alta</strong> a l\'àrea privada.',
 	'La primera persona con acceso recibirá un email para activar su cuenta.' => 'La primera persona amb accés rebrà un email per activar el seu compte.',
 	'Si crees que es un error o quieres volver a intentarlo, ponte en contacto con la oficina.' => 'Si creus que és un error o vols tornar-ho a provar, posa\'t en contacte amb l\'oficina.',
+
+	// v0.51: tienda sobre inventario
+	'Las filas con la misma descripción forman un producto de la tienda, con cada una como talla o variante. Las existencias de la tienda son la cantidad de esta fila; el precio y a quién se vende se ponen en «Inventario de la tienda».' => 'Les files amb la mateixa descripció formen un producte de la botiga, amb cadascuna com a talla o variant. Les existències de la botiga són la quantitat d\'aquesta fila; el preu i a qui es ven es posen a «Inventari de la botiga».',
+	'Nombre en la tienda (talla, color…)' => 'Nom a la botiga (talla, color…)',
+	'Se vende en la tienda' => 'Es ven a la botiga',
+	'Las existencias de «%s» se cambian en el inventario general, no aquí.' => 'Les existències de «%s» es canvien a l\'inventari general, no aquí.',
+	'Se cambian en el inventario general' => 'Es canvien a l\'inventari general',
+	'Se encarga al proveedor' => 'S\'encarrega al proveïdor',
 );

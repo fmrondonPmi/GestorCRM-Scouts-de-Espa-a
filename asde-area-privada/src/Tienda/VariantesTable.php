@@ -2,6 +2,7 @@
 namespace AsdeBalears\AreaPrivada\Tienda;
 
 use AsdeBalears\AreaPrivada\Audit\Logger;
+use AsdeBalears\AreaPrivada\Inventario\MaterialesTable;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -18,6 +19,10 @@ defined( 'ABSPATH' ) || exit;
  *   reservar()   quita unidades al comprar (falla si no quedan);
  *   devolver()   las devuelve al cancelar;
  *   ajustar()    cambio manual de la administración, con motivo (queda en la auditoría).
+ *
+ * v0.51 (doc 55): una variante puede estar **enlazada a una fila del inventario general** (`material`): sus existencias
+ * son la cantidad de esa fila, se compra aunque no queden (lo que falta va al pedido al proveedor) y se pueden
+ * cambiar solo desde el inventario general.
  *
  * `ilimitado` = no se cuentan (un servicio, un pedido que se encarga al proveedor).
  * `ref` guarda de dónde viene una variante sembrada (`masculina|M`).
@@ -48,6 +53,7 @@ final class VariantesTable {
 				activo tinyint(1) NOT NULL DEFAULT 1,
 				orden int(11) NOT NULL DEFAULT 0,
 				ref varchar(60) NOT NULL DEFAULT '',
+				material bigint(20) unsigned NOT NULL DEFAULT 0,
 				PRIMARY KEY  (id),
 				KEY producto (producto)
 			) $charset;"
@@ -134,6 +140,13 @@ final class VariantesTable {
 		return $out;
 	}
 
+	/** La variante enlazada a una fila del inventario general, o null. */
+	public static function de_material( int $material ): ?array {
+		global $wpdb;
+		$fila = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM %i WHERE material = %d ORDER BY id ASC LIMIT 1', self::table(), $material ), ARRAY_A ); // phpcs:ignore WordPress.DB
+		return $fila ? self::preparar( $fila ) : null;
+	}
+
 	/** Variante de un producto por su etiqueta (sin mayúsculas ni acentos), o null. */
 	public static function por_etiqueta( int $producto, string $etiqueta ): ?array {
 		$clave = \AsdeBalears\AreaPrivada\Inventario\TiposTable::clave( $etiqueta );
@@ -180,7 +193,7 @@ final class VariantesTable {
 
 	private static function columnas( array $datos ): array {
 		$out = array();
-		foreach ( array( 'etiqueta', 'sku', 'precio', 'existencias', 'ilimitado', 'activo' ) as $c ) {
+		foreach ( array( 'etiqueta', 'sku', 'precio', 'existencias', 'ilimitado', 'activo', 'material' ) as $c ) {
 			if ( array_key_exists( $c, $datos ) ) {
 				$out[ $c ] = $datos[ $c ];
 			}
@@ -195,6 +208,16 @@ final class VariantesTable {
 		$f['existencias'] = (int) $f['existencias'];
 		$f['ilimitado']   = (int) $f['ilimitado'];
 		$f['activo']      = (int) $f['activo'];
+		$f['material']    = (int) ( $f['material'] ?? 0 );
+		if ( $f['material'] > 0 ) {
+			// Enlazada al inventario general: la cantidad es la de la fila y, si la fila sale de la tienda o se da de baja, no se vende.
+			$m                = MaterialesTable::obtener( $f['material'] );
+			$f['existencias'] = $m ? (int) $m['cantidad'] : 0;
+			$f['ilimitado']   = 0;
+			if ( ! $m || null !== $m['baja_en'] || empty( $m['en_tienda'] ) ) {
+				$f['activo'] = 0;
+			}
+		}
 		return $f;
 	}
 
@@ -209,7 +232,27 @@ final class VariantesTable {
 
 	/** ¿Hay al menos n unidades? (siempre, si es ilimitada). */
 	public static function hay( array $v, int $n = 1 ): bool {
+		if ( $v['material'] > 0 ) { // Enlazada al inventario: se vende aunque no quede; lo que falta se pide al proveedor.
+			return 1 === $v['activo'];
+		}
 		return 1 === $v['activo'] && ( 1 === $v['ilimitado'] || $v['existencias'] >= $n );
+	}
+
+	/**
+	 * Saca del almacén las unidades que haya (hasta n) al comprar una variante enlazada al inventario; el resto
+	 * quedará pendiente de pedir al proveedor. En las no enlazadas, reservar() de siempre: todo o nada.
+	 *
+	 * @return int Unidades que salen de las existencias.
+	 */
+	public static function tomar( int $id, int $n ): int {
+		$v = self::obtener( $id );
+		if ( ! $v || $n < 1 ) {
+			return 0;
+		}
+		if ( $v['material'] > 0 ) {
+			return MaterialesTable::restar( $v['material'], $n );
+		}
+		return self::reservar( $id, $n ) ? $n : 0;
 	}
 
 	/**
@@ -232,6 +275,10 @@ final class VariantesTable {
 		if ( $n < 1 ) {
 			return false;
 		}
+		$enlazada = self::obtener( $id );
+		if ( $enlazada && $enlazada['material'] > 0 ) {
+			return MaterialesTable::sumar( $enlazada['material'], $n );
+		}
 		return false !== $wpdb->query( $wpdb->prepare( 'UPDATE %i SET existencias = LEAST(%d, existencias + %d) WHERE id = %d AND ilimitado = 0', self::table(), self::MAX_EXISTENCIAS, $n, $id ) ); // phpcs:ignore WordPress.DB
 	}
 
@@ -246,6 +293,14 @@ final class VariantesTable {
 		$antes = self::obtener( $id );
 		if ( ! $antes || 1 === $antes['ilimitado'] || 0 === $delta ) {
 			return false;
+		}
+		if ( $antes['material'] > 0 ) { // Las existencias de lo enlazado se cambian en el inventario; aquí solo llegan los sobrantes del proveedor.
+			$hecho = $delta > 0 ? MaterialesTable::sumar( $antes['material'], $delta ) : ( $antes['existencias'] + $delta >= 0 && $delta === -MaterialesTable::restar( $antes['material'], -$delta ) );
+			if ( ! $hecho ) {
+				return false;
+			}
+			Logger::log( 'tienda_existencias', 'tienda', (string) $id, array( 'antes' => $antes['existencias'], 'cambio' => $delta, 'motivo' => mb_substr( sanitize_text_field( $motivo ), 0, 200 ), 'inventario' => $antes['material'] ) );
+			return true;
 		}
 		$filas = $wpdb->query( $wpdb->prepare( 'UPDATE %i SET existencias = existencias + %d WHERE id = %d AND ilimitado = 0 AND existencias + %d >= 0 AND existencias + %d <= %d', self::table(), $delta, $id, $delta, $delta, self::MAX_EXISTENCIAS ) ); // phpcs:ignore WordPress.DB
 		if ( 1 !== (int) $filas ) {

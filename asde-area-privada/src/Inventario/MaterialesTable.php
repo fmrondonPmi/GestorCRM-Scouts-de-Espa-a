@@ -50,6 +50,8 @@ final class MaterialesTable {
 				notas varchar(500) NOT NULL DEFAULT '',
 				modelo varchar(20) NOT NULL DEFAULT '',
 				talla varchar(10) NOT NULL DEFAULT '',
+				en_tienda tinyint(1) NOT NULL DEFAULT 0,
+				variante_tienda varchar(80) NOT NULL DEFAULT '',
 				creado datetime NOT NULL,
 				creado_por bigint(20) unsigned NOT NULL DEFAULT 0,
 				modificado datetime NULL,
@@ -121,6 +123,9 @@ final class MaterialesTable {
 			'notas'       => mb_substr( trim( sanitize_textarea_field( (string) ( $d['notas'] ?? '' ) ) ), 0, 500 ),
 			'modelo'      => $modelo,
 			'talla'       => $talla,
+			// v0.51 (doc 55): se vende en la tienda, y cómo se llama allí esta fila (talla, color…).
+			'en_tienda'       => ! empty( $d['en_tienda'] ) ? 1 : 0,
+			'variante_tienda' => mb_substr( trim( sanitize_text_field( (string) ( $d['variante_tienda'] ?? '' ) ) ), 0, 80 ),
 		);
 	}
 
@@ -485,6 +490,8 @@ final class MaterialesTable {
 		}
 		$f['precio'] = null === $f['precio'] ? null : (float) $f['precio'];
 		$f['anio']   = null === $f['anio'] ? null : (int) $f['anio'];
+		$f['en_tienda']       = (int) ( $f['en_tienda'] ?? 0 );
+		$f['variante_tienda'] = (string) ( $f['variante_tienda'] ?? '' );
 		return $f;
 	}
 }
