@@ -185,9 +185,9 @@ if ( current_user_can( 'asde_tesoreria_acceso' ) ) {
 	$grupo_tiles[] = $tile( $url( 'tesoreria' ), asde_t( 'Tesorería' ), asde_t( 'Cuotas de las familias, pagos, familias y coste federativo.' ) );
 }
 if ( current_user_can( 'asde_manage_users' ) ) {
-	$grupo_tiles[] = $tile( $url( 'personas' ), asde_t( 'Personas del grupo' ), asde_t( 'Sus fichas, darles acceso y revisar los números de socio.' ) );
+	$grupo_tiles[] = $tile( $url( 'personas' ), asde_t( 'Personas del grupo' ), $ambito->es_oficina() ? asde_t( 'Consulta las fichas de las personas del grupo elegido.' ) : asde_t( 'Sus fichas, darles acceso y revisar los números de socio.' ) );
 	// v0.25: «Dar acceso» y los usuarios del área privada, en una sola sección con sus hojas.
-	$grupo_tiles[] = $tile( $url( 'usuarios' ), asde_t( 'Usuarios' ), asde_t( 'Quién tiene acceso, dar acceso a un socio o a su familia, invitaciones, bajas y el registro de emails.' ) );
+	$grupo_tiles[] = $tile( $url( 'usuarios' ), asde_t( 'Usuarios' ), $ambito->es_oficina() ? asde_t( 'Consulta quién tiene acceso al área del grupo.' ) : asde_t( 'Quién tiene acceso, dar acceso a un socio o a su familia, invitaciones, bajas y el registro de emails.' ) );
 }
 // La seguridad de la cuenta es de cada persona: va con lo suyo, o con lo de gestión si no tiene ficha.
 $cuenta = $tile( $url( 'seguridad' ), asde_t( 'Seguridad de la cuenta' ), asde_t( 'Verificación en dos pasos.' ) );

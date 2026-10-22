@@ -3427,7 +3427,6 @@ return array(
 	'Todas las filas se han cargado.' => 'Cargáronse todas as filas.',
 	'Un producto que ya existe (mismo nombre) se actualiza solo con las celdas rellenas: una celda vacía no borra nada. Una variante que ya existe cambia sus existencias.' => 'Un produto que xa existe (mesmo nome) actualízase só coas celas cubertas: unha cela baleira non borra nada. Unha variante que xa existe cambia as súas existencias.',
 	'Un producto «solo socios» no sale a quien no ha iniciado sesión, ni en la lista ni con su dirección.' => 'Un produto «só socios» non lle aparece a quen non iniciou sesión, nin na lista nin co seu enderezo.',
-	'Una variante es lo que se compra: una talla, un color… Si el producto no tiene variantes, deja una sola («Única»). Las existencias no se escriben: se suman o restan en «Cambiar existencias» (+5, -2) y queda anotado. «Sin límite» no cuenta unidades (lo que se encarga al proveedor).' => 'Unha variante é o que se compra: unha talla, unha cor… Se o produto non ten variantes, deixa só unha («Única»). As existencias non se escriben: sumanse ou réstanse en «Cambiar existencias» (+5, -2) e queda anotado. «Sen límite» non conta unidades (o que se encarga ao provedor).',
 	'Vacío = «precio por confirmar»: se puede pedir y Tesorería cobra el importe real.' => 'Baleiro = «prezo por confirmar»: pódese pedir e Tesourería cobra o importe real.',
 	'Variante' => 'Variante',
 	'Variante (talla, color…)' => 'Variante (talla, cor…)',
@@ -4338,4 +4337,11 @@ return array(
 	'Ninguno' => 'Ningún',
 	'banco' => 'banco',
 	'tienda' => 'tenda',
+
+	// v0.52.1
+	'Consulta las fichas de las personas del grupo elegido.' => 'Consulta as fichas das persoas do grupo elixido.',
+	'Consulta quién tiene acceso al área del grupo.' => 'Consulta quen ten acceso á área do grupo.',
+
+	// v0.52.1 producto
+	'Una variante es lo que se compra: una talla, un color… Si el producto no tiene variantes, deja una sola («Única»). Las existencias de las variantes enlazadas al inventario general se cambian allí; en las demás se suman o restan en «Cambiar existencias» (+5, -2) y queda anotado. «Sin límite» no cuenta unidades (lo que se encarga al proveedor).' => 'Unha variante é o que se compra: unha talla, unha cor… Se o produto non ten variantes, deixa só unha («Única»). As existencias das variantes ligadas ao inventario xeral cámbianse alí; nas demais sumánse ou réstanse en «Cambiar existencias» (+5, -2) e queda anotado. «Sen límite» non conta unidades (o que se encarga ao provedor).',
 );

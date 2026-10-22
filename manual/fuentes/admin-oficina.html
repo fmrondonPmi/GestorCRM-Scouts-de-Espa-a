@@ -2,18 +2,23 @@
 	<h2>Modo Oficina: invitar a un grupo y consultar los grupos</h2>
 	<p class="resumen">Una instalación puede ser de <strong>un grupo</strong> (lo de siempre) o de la <strong>oficina federal</strong>. Se elige en <strong>wp-admin → Grupos Scouts → Organización federada → Tipo de instalación</strong> (o con la constante <code>ASDE_AP_MODO</code> en wp-config.php, que manda sobre la opción). Cambiarlo no borra ningún dato. En una web de oficina aparecen tres cosas nuevas; en una web de grupo no se ve nada de esto.</p>
 	<h3 id="oficina-credencial">Credencial del CRM de la oficina</h3>
+	<captura src="124-oficina-credencial" url="/wp-admin/admin.php?page=asde-area-privada-organizacion" alt="El cuadro Credencial del CRM de la oficina en Organización federada, con el usuario, la contraseña guardada y los botones Guardar, Probar la conexión y Borrar" admin>El cuadro «Credencial del CRM de la oficina»: la contraseña no se vuelve a mostrar.</captura>
 	<ul>
 		<li>En <strong>Organización federada</strong>, el cuadro «Credencial del CRM de la oficina» guarda el usuario y la contraseña con los que el personal de la oficina lee los grupos. La contraseña se guarda cifrada y <strong>no se vuelve a mostrar</strong>.</li>
 		<li>«Probar la conexión» entra en el CRM y cuenta los Grupos Scouts que ve. La web <strong>no puede comprobar</strong> que esa credencial sea de solo lectura: pide a ASDE que la cree así y confírmalo con ellos.</li>
 		<li>Las cuentas del personal de la oficina se crean en <strong>Usuarios</strong> de WordPress con el rol <strong>Oficina</strong>. Entran por «Acceso socios» y su manual es el <a href="oficina.html">manual para la oficina</a>. La verificación en dos pasos de Wordfence es obligatoria para ese rol.</li>
 	</ul>
 	<h3 id="oficina-invitar">Invitar a un grupo y revisar su alta</h3>
+	<captura src="125-oficina-invitar" url="/wp-admin/admin.php?page=asde-area-privada-invitaciones" alt="Invitar a un grupo en wp-admin: el email opcional, Crear la invitación y la lista de invitaciones con su estado" admin>Invitar a un grupo: el enlace solo se enseña al crearlo.</captura>
 	<ol class="pasos">
 		<li><div><strong>Grupos Scouts → Invitar a un grupo.</strong> «Crear la invitación» genera un enlace de <strong>un solo uso que vale 14 días</strong>. Se muestra una única vez (copiarlo) y, si escribes un email, también se envía. Las pendientes se pueden anular.</div></li>
 		<li><div><strong>El grupo rellena el formulario</strong>: nº de grupo, nombre, sede, email, CIF y denominación fiscal (opcionales), usuario y contraseña del CRM y los datos de la primera persona con acceso (nombre, DNI y rol: Secretaría o Coordinación). Con «Comprobar acceso» la web verifica la credencial en la misma pantalla; hasta que sale bien no se puede enviar. La contraseña nunca vuelve a aparecer en la pantalla.</div></li>
 		<li><div><strong>Grupos Scouts → Altas de grupos.</strong> Ves lo que ha escrito el grupo (la credencial no se enseña, solo que está guardada y comprobada). <strong>«Aprobar»</strong> crea el grupo, vuelve a comprobar la conexión y manda la invitación a la primera persona; <strong>«Rechazar»</strong> borra todo lo secreto que se había guardado y avisa al grupo sin dar el motivo.</div></li>
 		<li><div><strong>El primer usuario.</strong> La web busca en el CRM del grupo la ficha con ese DNI (con membresía activa) y le da el rol elegido; la invitación sale al <strong>email del grupo</strong> que se escribió. Si la ficha no existe o no está activa, el grupo queda aprobado <strong>sin usuario</strong> y la pantalla de la solicitud lo avisa: corrígelo en el CRM y pulsa «Buscar la ficha y enviar la invitación».</div></li>
 	</ol>
+	<captura src="128-alta-grupo" url="/alta-grupo/?t=…" alt="El formulario público de alta de grupo con los datos del grupo, el acceso al CRM con Comprobar acceso y la primera persona con acceso" larga>Lo que ve el grupo al abrir el enlace.</captura>
+	<captura src="126-oficina-altas" url="/wp-admin/admin.php?page=asde-area-privada-altas" alt="Altas de grupos en wp-admin con una solicitud pendiente" admin>Altas de grupos: la lista de solicitudes.</captura>
+	<captura src="127-oficina-alta-detalle" url="/wp-admin/admin.php?page=asde-area-privada-altas&amp;alta=…" alt="Detalle de una alta con los datos del grupo, la credencial guardada y comprobada, y los botones Aprobar y Rechazar" admin>El detalle de una alta: sin la credencial, con Aprobar y Rechazar.</captura>
 	<ul>
 		<li>Un enlace que no vale (usado, anulado, caducado o inventado) enseña siempre la misma página, sin decir el motivo. Hay límite de intentos por dispositivo.</li>
 		<li>Los módulos de un grupo nuevo siguen las reglas de siempre: se ajustan en <strong>Grupos Scouts → Módulos</strong>.</li>

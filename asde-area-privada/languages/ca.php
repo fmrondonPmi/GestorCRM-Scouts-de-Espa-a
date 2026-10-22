@@ -3427,7 +3427,6 @@ return array(
 	'Todas las filas se han cargado.' => 'Totes les files s\'han carregat.',
 	'Un producto que ya existe (mismo nombre) se actualiza solo con las celdas rellenas: una celda vacía no borra nada. Una variante que ya existe cambia sus existencias.' => 'Un producte que ja existeix (mateix nom) s\'actualitza només amb les cel·les omplertes: una cel·la buida no esborra res. Una variant que ja existeix canvia les seves existències.',
 	'Un producto «solo socios» no sale a quien no ha iniciado sesión, ni en la lista ni con su dirección.' => 'Un producte «només socis» no surt a qui no ha iniciat la sessió, ni a la llista ni amb la seva adreça.',
-	'Una variante es lo que se compra: una talla, un color… Si el producto no tiene variantes, deja una sola («Única»). Las existencias no se escriben: se suman o restan en «Cambiar existencias» (+5, -2) y queda anotado. «Sin límite» no cuenta unidades (lo que se encarga al proveedor).' => 'Una variant és el que es compra: una talla, un color… Si el producte no té variants, deixa\'n una de sola («Única»). Les existències no s\'escriuen: se sumen o es resten a «Canviar existències» (+5, -2) i queda anotat. «Sense límit» no compta unitats (el que es demana al proveïdor).',
 	'Vacío = «precio por confirmar»: se puede pedir y Tesorería cobra el importe real.' => 'Buit = «preu per confirmar»: es pot demanar i Tresoreria cobra l\'import real.',
 	'Variante' => 'Variant',
 	'Variante (talla, color…)' => 'Variant (talla, color…)',
@@ -4338,4 +4337,11 @@ return array(
 	'Ninguno' => 'Cap',
 	'banco' => 'banc',
 	'tienda' => 'botiga',
+
+	// v0.52.1
+	'Consulta las fichas de las personas del grupo elegido.' => 'Consulta les fitxes de les persones del grup triat.',
+	'Consulta quién tiene acceso al área del grupo.' => 'Consulta qui té accés a l\'àrea del grup.',
+
+	// v0.52.1 producto
+	'Una variante es lo que se compra: una talla, un color… Si el producto no tiene variantes, deja una sola («Única»). Las existencias de las variantes enlazadas al inventario general se cambian allí; en las demás se suman o restan en «Cambiar existencias» (+5, -2) y queda anotado. «Sin límite» no cuenta unidades (lo que se encarga al proveedor).' => 'Una variant és el que es compra: una talla, un color… Si el producte no té variants, deixa\'n una de sola («Única»). Les existències de les variants enllaçades a l\'inventari general es canvien allà; a les altres se sumen o es resten a «Canviar existències» (+5, -2) i queda anotat. «Sense límit» no compta unitats (el que s\'encarrega al proveïdor).',
 );

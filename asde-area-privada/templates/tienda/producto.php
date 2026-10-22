@@ -93,7 +93,7 @@ $imagen = $p ? Config::imagen( $p['imagen'], 'thumbnail' ) : '';
 
 	<section class="asde-card" data-asde-inicio="abierto">
 		<h3 class="asde-card__title"><?php asde_e( 'Variantes y existencias' ); ?></h3>
-		<p class="asde-muted"><?php asde_e( 'Una variante es lo que se compra: una talla, un color… Si el producto no tiene variantes, deja una sola («Única»). Las existencias no se escriben: se suman o restan en «Cambiar existencias» (+5, -2) y queda anotado. «Sin límite» no cuenta unidades (lo que se encarga al proveedor).' ); ?></p>
+		<p class="asde-muted"><?php asde_e( 'Una variante es lo que se compra: una talla, un color… Si el producto no tiene variantes, deja una sola («Única»). Las existencias de las variantes enlazadas al inventario general se cambian allí; en las demás se suman o restan en «Cambiar existencias» (+5, -2) y queda anotado. «Sin límite» no cuenta unidades (lo que se encarga al proveedor).' ); ?></p>
 		<?php if ( $variantes ) : ?>
 			<table class="asde-table asde-table--tienda-variantes">
 				<thead>

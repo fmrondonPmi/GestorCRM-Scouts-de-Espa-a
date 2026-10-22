@@ -3427,7 +3427,6 @@ return array(
 	'Todas las filas se han cargado.' => 'Lerro guztiak kargatu dira.',
 	'Un producto que ya existe (mismo nombre) se actualiza solo con las celdas rellenas: una celda vacía no borra nada. Una variante que ya existe cambia sus existencias.' => 'Lehendik dagoen produktu bat (izen bera) beteta dauden gelaxkekin soilik eguneratzen da: gelaxka hutsak ez du ezer ezabatzen. Lehendik dagoen aldaera batek bere izakinak aldatzen ditu.',
 	'Un producto «solo socios» no sale a quien no ha iniciado sesión, ni en la lista ni con su dirección.' => '«Bazkideak soilik» produktua ez zaio ageri saioa hasi ez duenari, ez zerrendan ez bere helbidearekin.',
-	'Una variante es lo que se compra: una talla, un color… Si el producto no tiene variantes, deja una sola («Única»). Las existencias no se escriben: se suman o restan en «Cambiar existencias» (+5, -2) y queda anotado. «Sin límite» no cuenta unidades (lo que se encarga al proveedor).' => 'Aldaera erosten dena da: neurri bat, kolore bat… Produktuak aldaerarik ez badu, utzi bakarra («Bakarra»). Izakinak ez dira idazten: «Aldatu izakinak» atalean gehitu edo kentzen dira (+5, -2) eta idatzita geratzen da. «Mugarik gabe» aldaerak ez ditu unitateak zenbatzen (hornitzaileari eskatzen zaiona).',
 	'Vacío = «precio por confirmar»: se puede pedir y Tesorería cobra el importe real.' => 'Hutsik = «baieztatzeko prezioa»: eska daiteke eta Diruzaintzak benetako zenbatekoa kobratzen du.',
 	'Variante' => 'Aldaera',
 	'Variante (talla, color…)' => 'Aldaera (neurria, kolorea…)',
@@ -4338,4 +4337,11 @@ return array(
 	'Ninguno' => 'Bat ere ez',
 	'banco' => 'banku',
 	'tienda' => 'denda',
+
+	// v0.52.1
+	'Consulta las fichas de las personas del grupo elegido.' => 'Aukeratutako taldeko pertsonen fitxak kontsultatu.',
+	'Consulta quién tiene acceso al área del grupo.' => 'Kontsultatu nork duen taldearen eremurako sarbidea.',
+
+	// v0.52.1 producto
+	'Una variante es lo que se compra: una talla, un color… Si el producto no tiene variantes, deja una sola («Única»). Las existencias de las variantes enlazadas al inventario general se cambian allí; en las demás se suman o restan en «Cambiar existencias» (+5, -2) y queda anotado. «Sin límite» no cuenta unidades (lo que se encarga al proveedor).' => 'Aldaera erosten dena da: tailla bat, kolore bat… Produktuak aldaerarik ez badu, utzi bakarra («Bakarra»). Inbentario orokorrarekin lotutako aldaeren izakinak han aldatzen dira; besteetan «Aldatu izakinak» atalean gehitu edo kentzen dira (+5, -2) eta idatzita geratzen da. «Mugarik gabe» ez ditu unitateak zenbatzen (hornitzaileari eskatzen zaiona).',
 );
