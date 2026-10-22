@@ -222,3 +222,12 @@ Solo tiene sentido en una web **de oficina** (`Organizacion::es_oficina()`); en 
 - Entra **sin ficha** del CRM. Solo abre Inicio, Personas, ficha, Informes, Usuarios y Seguridad (`Domain\Oficina::PAGINAS`); ninguna capability de edición, tesorería, tienda, inventario, eventos, lista de espera ni reintegros.
 - Informes: niveles `todos`, `global` y `salud`; nunca `pagos`; sin IBAN. Descargas y fichas consultadas, **auditadas**.
 - **2FA obligatoria** (Wordfence) para este rol. Las cuentas las crea el administrador de WordPress; Coordinación de un grupo no puede asignar este rol.
+
+## Actualización v0.53.0 (2026-10-22): gestión de accesos (doc 56)
+
+| Capability | Roles | Qué permite |
+|---|---|---|
+| `asde_accesos` | Secretaría, Coordinación, Tesorería | Entrar en «Gestión de accesos»: cambiar los permisos de cada rol, conceder y retirar permisos sueltos a otras personas de gestión y ver el historial. **No se reparte** (solo la traen esos tres roles) |
+
+- Los permisos de cada rol que se ven en las tablas de arriba son los **de fábrica** (`Install\Roles::definitions()`); los gestores pueden cambiarlos desde la matriz (tabla `asde_permisos_rol`, que `Roles::install()` vuelve a aplicar) y añadir **permisos sueltos** por persona (tabla `asde_permisos_usuario`), con o sin fecha de caducidad.
+- Toda acción exige el «ver» de su módulo; nadie se concede permisos a sí mismo ni los añade a su propio rol; los sensibles llevan motivo. Detalle en el doc 56.

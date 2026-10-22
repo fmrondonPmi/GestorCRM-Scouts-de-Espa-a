@@ -72,6 +72,12 @@ mindmap
         inscripciones y lista de espera
         cobros y avisos
         calendario de tareas y plantillas
+    Gestión de accesos
+      Permisos por rol matriz
+      Permisos sueltos por persona
+        sin caducidad o hasta una fecha
+      Historial de accesos
+      can única con user_has_cap
     Tesorería
       Familias y cuotas
       Control de pagos
@@ -170,7 +176,9 @@ grupo no ve a otro**; **nunca** se prueba contra el CRM real ni se escribe en é
 | Un campo nuevo de la ficha del CRM | `Fichas\CamposFicha` (grupos, opciones, solo lectura) y `Crm\PersonaRepository` (campos que se leen) | ¿dato sensible? entonces en vivo, no en la `Instantanea` |
 | Escribir algo nuevo en el CRM | `Crm\Escritura` (y `Crm\Altas` para membresías) | `Permisos::puede()`; el simulado `tests/lib/CrmSimulado.php` |
 | Un módulo nuevo | skill `modulo-area-privada` (tabla, vista, página, caps, `Modulos`, menú, inicio, emails, tarea diaria, desinstalar) | nace apagado (`Modulos::POR_DEFECTO_APAGADOS`) |
-| Quién puede hacer qué | `Install\Roles` (capabilities) + `Auth\Ambito` (sobre quién) | se aplica al subir la versión |
+| Quién puede hacer qué | `Install\Roles` (capabilities de fábrica) + `Auth\Ambito` (sobre quién) | se aplica al subir la versión; los gestores pueden cambiarlo desde «Gestión de accesos» (`Accesos\PermisosRol`, que `Roles::install()` reaplica) |
+| Un permiso nuevo que se pueda repartir | `Accesos\Catalogo::lista()` (módulo, ver/acción, sensible, de qué «ver» depende) + `Install\Roles` | el test `tests/accesos.php` exige que ningún rol de fábrica tenga una acción sin su «ver» |
+| Permisos sueltos por persona, caducidad, historial | `src/Accesos/` (`Concesiones`, `PermisosRol`, `Auditoria`), `AccesosView`, `templates/accesos/`, `assets/js/accesos.js` | `can()` es `user_has_cap` (prioridad 10, antes de `Modulos` en la 20); nadie se concede nada a sí mismo; sensibles con motivo |
 | Menú o tarjetas del inicio | `Frontend\Menu::grupos()` y `templates/area/inicio.php` (+ `AreaPrivadaView` para «Pendiente de revisar») | contadores baratos (sin CRM) |
 | Un email nuevo | clase con `asunto()/html()/enviar()` + `templates/email/…` + tipo en `Usuarios\RegistroEmails::TIPOS` | idioma de quien lo recibe, destino enmascarado |
 | Tarea automática diaria | `Install\Mantenimiento` | sin CRM si no hace falta |
@@ -187,7 +195,7 @@ grupo no ve a otro**; **nunca** se prueba contra el CRM real ni se escribe en é
 ## 5. Inventario (generado)
 
 <!-- inventario:inicio -->
-_Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10-22 · plugin 0.52.0. No editar a mano: se regenera._
+_Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10-22 · plugin 0.53.0. No editar a mano: se regenera._
 
 ### Páginas (Frontend\Pages + Router)
 
@@ -232,11 +240,13 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 | `eventos_recetas` | recetas | `[asde_eventos_recetas]` → `RecetasView` |  |  |
 | `mis_eventos` | mis-eventos | `[asde_mis_eventos]` → `MisEventosView` |  |  |
 | `reintegros` | reintegros | `[asde_reintegros]` → `ReintegrosView` |  |  |
+| `accesos` | gestion-de-accesos | `[asde_accesos]` → `AccesosView` |  |  |
 
 ### Capabilities por rol (Install\Roles)
 
 | Capability | Scouter / Voluntario | Secretaría | Coordinación | Oficina | Tesorería | Tutor / Padre / Madre | Participante | Intendente (responsable de material) |
 |---|---|---|---|---|---|---|---|---|
+| `asde_accesos` |  | ✓ | ✓ |  | ✓ |  |  |  |
 | `asde_access_area_privada` | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
 | `asde_add_self_notes` |  |  |  |  |  |  | ✓ |  |
 | `asde_annotate_health` |  |  | ✓ |  |  |  |  |  |
@@ -301,6 +311,9 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 
 | Tabla | Clase |
 |---|---|
+| `asde_auditoria_accesos` | `src/Accesos/Auditoria.php` |
+| `asde_permisos_usuario` | `src/Accesos/Concesiones.php` |
+| `asde_permisos_rol` | `src/Accesos/PermisosRol.php` |
 | `asde_auditoria` | `src/Audit/Logger.php` |
 | `asde_crm_operaciones` | `src/Crm/Operaciones.php` |
 | `asde_grupo_invitaciones` | `src/Domain/GrupoInvitaciones.php` |
@@ -343,6 +356,13 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 
 ### Clases (`src/`)
 
+
+**Accesos/**
+
+- `Auditoria` — Historial de accesos ({prefix}asde_auditoria_accesos, v0.53, doc 56):
+- `Catalogo` — Catálogo de permisos que se pueden repartir desde «Gestión de accesos» (v0.53, doc 56).
+- `Concesiones` — Permisos sueltos de cada persona ({prefix}asde_permisos_usuario, v0.53, doc 56):
+- `PermisosRol` — Permisos de cada rol ({prefix}asde_permisos_rol, v0.53, doc 56).
 
 **Admin/**
 
@@ -454,6 +474,7 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 **Frontend/Views/**
 
 - `AccesoView` — Pantalla de acceso al área privada (pública):
+- `AccesosView` — Gestión de accesos (v0.53, doc 56):
 - `ActivarCuentaView` — Página pública:
 - `AltaGrupoView` — «Alta de grupo» (pública, v0.50, doc 50 fase 5):
 - `AltaScoutersView` — «Alta de scouters» (pública, v0.16, doc 31):
@@ -655,6 +676,7 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 
 ### JavaScript (`assets/js/`)
 
+- `accesos.js` — Gestión de accesos (v0.53, doc 56).
 - `admin.js` — Páginas del plugin en wp-admin (v0.31: antes, onsubmit/onclick en las plantillas; WordPress pide no poner JavaScript en ellas).
 - `alergenos.js` — Selector de alérgenos de la ficha de salud (mejora progresiva: sin JavaScript queda el campo de texto).
 - `alta.js` — Alta de usuarios: mejora progresiva (el formulario funciona sin JS y todo se vuelve a comprobar en el servidor).
@@ -680,5 +702,5 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 
 ### Pruebas (`tests/`)
 
-`acceso` · `alta-grupo-aprobacion` · `alta-grupo-invitacion` · `alta-grupo-primer-usuario` · `alta-reglas` · `alta-scouters` · `altas-crm-escritura` · `altas-crm-pantallas` · `altas-crm` · `app-enganches` · `ayuda` · `banco-asociar` · `banco-gestion` · `colores` · `entorno` · `estilo-wordpress` · `eventos-avisos-config` · `eventos-calendario` · `eventos-economia` · `eventos-inscripciones` · `eventos-intendente` · `eventos-material` · `eventos` · `ficha-alergenos` · `fichas-escritura` · `grupos-emails-banco` · `identidad` · `idiomas-catalogos` · `idiomas` · `inventario` · `lista-espera` · `mejoras-v029` · `mejoras-v030` · `mejoras-v031` · `mejoras-v034` · `mejoras-v0351` · `menus-evento` · `menus-recetario` · `menus-validacion` · `menus` · `migracion-tienda` · `modo-instalacion` · `modulos` · `oficina-pantallas` · `oficina` · `organizacion` · `reintegros` · `rendimiento` · `sepa` · `solicitudes` · `solo-lectura` · `tema` · `tienda-catalogo` · `tienda-fase5` · `tienda-inventario` · `tienda-pedidos` · `tienda-proveedor` · `tienda-publica` · `tienda` · `usuarios-listado`
+`acceso` · `accesos` · `alta-grupo-aprobacion` · `alta-grupo-invitacion` · `alta-grupo-primer-usuario` · `alta-reglas` · `alta-scouters` · `altas-crm-escritura` · `altas-crm-pantallas` · `altas-crm` · `app-enganches` · `ayuda` · `banco-asociar` · `banco-gestion` · `colores` · `entorno` · `estilo-wordpress` · `eventos-avisos-config` · `eventos-calendario` · `eventos-economia` · `eventos-inscripciones` · `eventos-intendente` · `eventos-material` · `eventos` · `ficha-alergenos` · `fichas-escritura` · `grupos-emails-banco` · `identidad` · `idiomas-catalogos` · `idiomas` · `inventario` · `lista-espera` · `mejoras-v029` · `mejoras-v030` · `mejoras-v031` · `mejoras-v034` · `mejoras-v0351` · `menus-evento` · `menus-recetario` · `menus-validacion` · `menus` · `migracion-tienda` · `modo-instalacion` · `modulos` · `oficina-pantallas` · `oficina` · `organizacion` · `reintegros` · `rendimiento` · `sepa` · `solicitudes` · `solo-lectura` · `tema` · `tienda-catalogo` · `tienda-fase5` · `tienda-inventario` · `tienda-pedidos` · `tienda-proveedor` · `tienda-publica` · `tienda` · `usuarios-listado`
 <!-- inventario:fin -->

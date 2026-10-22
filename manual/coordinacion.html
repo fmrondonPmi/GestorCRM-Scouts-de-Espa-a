@@ -12,7 +12,7 @@
 <body>
 <header class="portada">
 	<div class="portada__dentro">
-		<p class="antetitulo">Manual de uso · versión 0.52 · octubre de 2026 · <a class="portada__volver" href="index.html">Todos los manuales</a></p>
+		<p class="antetitulo">Manual de uso · versión 0.53 · octubre de 2026 · <a class="portada__volver" href="index.html">Todos los manuales</a></p>
 		<h1>Manual del equipo de coordinación</h1>
 		<p class="portada__perfil">Tesorería, Secretaría y Coordinación</p>
 		<p class="entrada">Todo lo que lleva el equipo del grupo: personas y números de socio, altas, bajas y cambios de sección en el CRM, dar acceso, solicitudes, los usuarios (con sus hojas: usuarios, dar acceso y registro de emails), fichas y cambios, informes, la Tesorería completa (cuotas, coste federativo, banco y domiciliaciones SEPA) y los uniformes, del pago a la entrega.</p>
@@ -55,6 +55,10 @@
 <li class="sub"><a href="#hojas">Las hojas de la sección</a></li>
 <li class="sub"><a href="#lista-usuarios">La lista de usuarios</a></li>
 <li class="sub"><a href="#registro-emails">Registro de emails</a></li>
+<li><a href="#accesos">Gestión de accesos</a></li>
+<li class="sub"><a href="#accesos-roles">Permisos por rol</a></li>
+<li class="sub"><a href="#accesos-personas">Accesos por persona</a></li>
+<li class="sub"><a href="#accesos-historial">Historial</a></li>
 <li><a href="#fichas">Fichas</a></li>
 <li class="sub"><a href="#salud">Salud y alimentación</a></li>
 <li><a href="#cambios">Cambios propuestos por las familias</a></li>
@@ -124,6 +128,7 @@
 <li><a href="#alta">Dar acceso a un socio o a su familia</a></li>
 <li><a href="#solicitudes">Solicitudes de acceso</a></li>
 <li><a href="#usuarios">Usuarios: quién tiene acceso, dar acceso y registro de emails</a></li>
+<li><a href="#accesos">Gestión de accesos</a></li>
 <li><a href="#fichas">Fichas</a></li>
 <li><a href="#cambios">Cambios propuestos por las familias</a></li>
 <li><a href="#informes">Informes</a></li>
@@ -504,6 +509,32 @@
 		<figure class="captura"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/usuarios/</span></div><div class="navegador__vista" data-ampliar><img src="capturas/42-usuarios-territorial.png" width="1280" height="1703" alt="Lista de usuarios con «Mostrar nº territorial» activado: la columna Persona enseña también el nº territorial" loading="lazy"></div></div><figcaption><span>Con «Mostrar nº territorial» activado, la columna Persona enseña también el territorial («terr. 79990035»); el enlace de arriba pasa a «Ocultar nº territorial».</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
 	<h3 id="registro-emails">Registro de emails</h3>
 		<figure class="captura"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/usuarios/emails/</span></div><div class="navegador__vista" data-ampliar><img src="capturas/10-emails.png" width="1280" height="1086" alt="Hoja Registro de emails de la sección Usuarios, con los emails enviados y su estado" loading="lazy"></div></div><figcaption><span>La hoja «Registro de emails»: cada invitación o recuperación queda registrada: «Enviado», «Error al enviar» (con el motivo) o «Sin email en el CRM». «Ver» enseña el email tal cual, sin el enlace personal; para volver a la lista, pulsa otra vez la hoja «Registro de emails».</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
+</section>
+
+<section id="accesos">
+	<h2>Gestión de accesos</h2>
+	<p class="resumen">En «Gestión del grupo → <strong>Accesos</strong>» Coordinación, Secretaría y Tesorería deciden <strong>qué puede hacer cada rol</strong> y pueden dar <strong>permisos sueltos</strong> a otra persona de gestión aunque no tenga ese rol (por ejemplo, para cubrir a alguien unas semanas). Tiene tres hojas: <em>Permisos por rol</em>, <em>Accesos por persona</em> e <em>Historial</em>.</p>
+
+	<h3 id="accesos-roles">Permisos por rol</h3>
+	<p>Una tabla con los permisos de cada módulo (Personas, Usuarios, Informes, Tesorería, Tienda, Inventario, Lista de espera, Eventos y Reintegros) y una columna por rol: Scouter, Secretaría, Coordinación, Tesorería e Intendente. Marca o desmarca y pulsa <strong>«Guardar los permisos»</strong>: el cambio vale para todas las personas con ese rol.</p>
+	<ul>
+		<li>Cada módulo tiene un permiso de <strong>ver</strong> y permisos de <strong>acción</strong> (editar, aprobar, marcar pagado…). <strong>Toda acción necesita antes el de ver</strong>: al marcar una acción se marca sola el «ver» que le hace falta, y al quitar un «ver» se quitan sus acciones.</li>
+		<li>La etiqueta <strong>Sensible</strong> marca lo que abre datos de salud, dinero o cuentas de acceso. Cualquiera de los tres roles de gestión puede darlos.</li>
+		<li>Un punto <strong>●</strong> señala lo que se ha cambiado respecto a los permisos de fábrica. «Volver a los permisos de fábrica» devuelve un rol a como venía.</li>
+	</ul>
+	<p class="nota">Nadie puede <strong>añadirse permisos</strong>: en el rol que tú tienes las casillas vacías salen bloqueadas (sí puedes quitar permisos). Que lo haga otra persona de Coordinación, Secretaría o Tesorería.</p>
+
+	<h3 id="accesos-personas">Accesos por persona</h3>
+	<p>Elige a una persona (puedes buscarla por nombre o usuario y filtrar por rol) y verás, módulo a módulo, <strong>qué le da su rol</strong> y qué tiene <strong>suelto</strong>: hasta cuándo vale, quién se lo concedió y por qué.</p>
+	<ul>
+		<li><strong>Conceder:</strong> en el permiso que le falta, abre «Conceder», elige <strong>Sin caducidad</strong> o <strong>Hasta una fecha</strong> y escribe el motivo (obligatorio en los sensibles). Si le falta el «ver» del módulo, la pantalla te dice cuál hay que darle antes.</li>
+		<li><strong>Quitar:</strong> el botón «Quitar» retira un permiso suelto; si otro se apoyaba en él, se retira también.</li>
+		<li>Un permiso <strong>con fecha</strong> se desactiva solo al pasar el día y queda anotado en el historial.</li>
+		<li>Solo se dan permisos sueltos a personas de gestión del grupo con la cuenta activa, y <strong>nunca a ti mismo</strong>.</li>
+	</ul>
+
+	<h3 id="accesos-historial">Historial</h3>
+	<p>Quién concedió o retiró cada permiso, a quién y cuándo, los cambios de los roles y los permisos que han caducado solos. Se filtra por <strong>qué pasó</strong>, <strong>a quién</strong>, <strong>permiso</strong> y <strong>cuándo</strong>. No se borra nada y no se envían avisos: el historial es el registro.</p>
 </section>
 
 <section id="fichas">
@@ -1125,7 +1156,7 @@
 			</ul>
 		</section>
 
-		<p class="pie">Manual del equipo de coordinación del plugin «ASDE Scouts de España – Gestor CRM para Grupos Scouts», versión 0.52 (octubre de 2026). Capturas hechas en un WordPress de demostración con un CRM simulado y datos inventados.</p>
+		<p class="pie">Manual del equipo de coordinación del plugin «ASDE Scouts de España – Gestor CRM para Grupos Scouts», versión 0.53 (octubre de 2026). Capturas hechas en un WordPress de demostración con un CRM simulado y datos inventados.</p>
 	</main>
 </div>
 

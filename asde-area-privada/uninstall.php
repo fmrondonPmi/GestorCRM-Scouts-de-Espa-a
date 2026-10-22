@@ -46,6 +46,7 @@ if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->prefix . 'asd
 	$wpdb->query( "UPDATE {$wpdb->prefix}asde_grupo_solicitudes SET usuario_enc = '', clave_enc = '', dni_enc = '', persona_enc = ''" ); // phpcs:ignore WordPress.DB
 }
 delete_option( 'asde_ap_oficina' );
+delete_option( 'asde_ap_hay_concesiones' ); // v0.53: las tablas asde_permisos_rol, asde_permisos_usuario y asde_auditoria_accesos solo guardan ids y códigos de permiso: se conservan como el resto.
 
 $asde_menu_item = (int) get_option( 'asde_ap_menu_item' );
 if ( $asde_menu_item && 'nav_menu_item' === get_post_type( $asde_menu_item ) ) {

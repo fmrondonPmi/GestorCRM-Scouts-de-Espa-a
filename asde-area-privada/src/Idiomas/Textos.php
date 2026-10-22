@@ -79,6 +79,8 @@ final class Textos {
 		$add( PedidosTable::FORMAS, 'Tienda' );
 		$add( \AsdeBalears\AreaPrivada\Reintegros\ReintegrosTable::ESTADOS, 'Reintegros' );
 		$add( \AsdeBalears\AreaPrivada\Reintegros\ReintegrosTable::FORMAS, 'Reintegros' );
+		$add( \AsdeBalears\AreaPrivada\Accesos\Catalogo::textos(), 'Accesos' ); // v0.53 (doc 56).
+		$add( \AsdeBalears\AreaPrivada\Accesos\Auditoria::ACCIONES, 'Accesos' );
 		$add( \AsdeBalears\AreaPrivada\Tienda\Config::PARA_QUIEN, 'Uniformes' );
 		// v0.39 (doc 48, fase 2): el catálogo de la tienda.
 		$add( \AsdeBalears\AreaPrivada\Tienda\ProductosTable::VISIBILIDADES, 'Tienda' );

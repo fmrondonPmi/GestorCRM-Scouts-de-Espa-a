@@ -56,3 +56,14 @@ Solo lo que sigue sin decidir o es un supuesto por confirmar en la última versi
 - **P-191 → pendiente de programar:** el enlace de tipo «actualizar» para que un grupo **ya existente** cambie su credencial o complete sede, CIF y denominación fiscal (P-175) y, con él, esconder la credencial a la administración. Hasta entonces el administrador la edita en Grupos Scouts.
 - **P-192 → supuesto:** del CIF solo se usa la denominación y la sede (acreedor y dirección por defecto de SEPA y cabecera de la lista de compra en PDF); el identificador del acreedor (ICS) lo da el banco.
 - **P-193 → supuesto (v0.51):** un producto de la tienda creado al marcar una fila del inventario nace «solo socios» y con el precio por confirmar; la migración de lo que tenía la tienda crea filas sin tipo con la nota «Pasado desde la tienda».
+
+## Gestión de accesos (v0.53, doc 56)
+
+- **P-194 → supuesto:** el «Permiso» del modelo es el catálogo del código (`Accesos\Catalogo`), no una tabla: cada permiso es una capability que el código ya comprueba; lo que se guarda en la base de datos son los cambios de los roles, las concesiones y el historial.
+- **P-195 → supuesto:** «revocaciones» son las concesiones que alguien retira; **no** se le niega a una persona un permiso que trae su rol (para eso se cambia el permiso del rol para todos o se le cambia de rol).
+- **P-196 → supuesto:** la matriz vale para **todo el sitio** (los roles de WordPress son únicos) y solo para los roles de gestión: Scouter, Secretaría, Coordinación, Tesorería e Intendente. Tutores, participantes y Oficina quedan fuera.
+- **P-197 → supuesto:** nadie añade un permiso a un rol que él mismo tiene (tampoco al restaurarlo); sí puede quitarlo. Así «nadie se concede permisos a sí mismo» también vale en la matriz. Un administrador de WordPress queda al margen.
+- **P-198 → supuesto:** los permisos sueltos solo se dan a cuentas activas del grupo con un rol de gestión (no a familias ni participantes).
+- **P-199 → supuesto:** se marcan como **sensibles** los que abren salud, todas las fichas, cuentas de acceso, dinero (tesorería, pagos de la tienda, reintegros, presupuestos de eventos), el alta desde la lista de espera y la sincronización con el CRM (lista en `Catalogo`). Piden motivo; no limitan quién los concede.
+- **P-200 → supuesto:** reintegros no tiene un «ver» aparte: «aprobar» y «pagar» se apoyan en cualquiera de los tres permisos del módulo (así Tesorería, que no pide reintegros, cumple lo de fábrica).
+- **P-201 → supuesto:** «Gestión de accesos» no lleva interruptor por grupo en Módulos (no cambia nada hasta que alguien lo usa); al actualizar, Secretaría, Coordinación y Tesorería ven «Accesos» en el menú. El historial no se purga.

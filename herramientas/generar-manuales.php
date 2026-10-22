@@ -31,7 +31,7 @@
 $raiz    = dirname( __DIR__ ) . '/manual';
 $fuentes = $raiz . '/fuentes';
 $plugin  = dirname( __DIR__ ) . '/asde-area-privada';
-$version = '0.52';
+$version = '0.53';
 $fecha   = 'octubre de 2026';
 $errores = 0;
 
@@ -70,7 +70,7 @@ $manuales = array(
 		'titulo'   => 'Manual del equipo de coordinación',
 		'perfil'   => 'Tesorería, Secretaría y Coordinación',
 		'entrada'  => 'Todo lo que lleva el equipo del grupo: personas y números de socio, altas, bajas y cambios de sección en el CRM, dar acceso, solicitudes, los usuarios (con sus hojas: usuarios, dar acceso y registro de emails), fichas y cambios, informes, la Tesorería completa (cuotas, coste federativo, banco y domiciliaciones SEPA) y los uniformes, del pago a la entrega.',
-		'apartados' => array( 'coordinacion-perfil', 'entrar-socios', 'primera-vez', 'instalar-app', 'seguridad-opcional', 'coordinacion-inicio', 'ventana', 'personas', 'altas-crm', 'alta', 'solicitudes', 'usuarios', 'coordinacion-fichas', 'cambios', 'informes', 'tesoreria', 'uniformes-gestion', 'eventos', 'inventario', 'lista-espera', 'reintegros', 'idioma', 'preguntas-coordinacion' ),
+		'apartados' => array( 'coordinacion-perfil', 'entrar-socios', 'primera-vez', 'instalar-app', 'seguridad-opcional', 'coordinacion-inicio', 'ventana', 'personas', 'altas-crm', 'alta', 'solicitudes', 'usuarios', 'accesos', 'coordinacion-fichas', 'cambios', 'informes', 'tesoreria', 'uniformes-gestion', 'eventos', 'inventario', 'lista-espera', 'reintegros', 'idioma', 'preguntas-coordinacion' ),
 	),
 );
 

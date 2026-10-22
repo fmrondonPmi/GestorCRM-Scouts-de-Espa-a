@@ -26,6 +26,7 @@ use AsdeBalears\AreaPrivada\Frontend\Views\BancoView;
 use AsdeBalears\AreaPrivada\Frontend\Views\CambiosView;
 use AsdeBalears\AreaPrivada\Frontend\Views\FichaView;
 use AsdeBalears\AreaPrivada\Frontend\Views\CuotasView;
+use AsdeBalears\AreaPrivada\Frontend\Views\AccesosView;
 use AsdeBalears\AreaPrivada\Frontend\Views\EmailsView;
 use AsdeBalears\AreaPrivada\Frontend\Views\FamiliasView;
 use AsdeBalears\AreaPrivada\Frontend\Views\FederacionView;
@@ -115,6 +116,7 @@ final class Router {
 		'eventos_recetas'    => array( 'asde_eventos_recetas', RecetasView::class ),
 		'mis_eventos'        => array( 'asde_mis_eventos', MisEventosView::class ),
 		'reintegros'         => array( 'asde_reintegros', ReintegrosView::class ), // v0.47 (doc 53).
+		'accesos'            => array( 'asde_accesos', AccesosView::class ), // v0.53 (doc 56).
 	);
 
 	public function register(): void {
@@ -384,6 +386,9 @@ final class Router {
 		}
 		if ( 'eventos' === $key ) {
 			wp_enqueue_script( 'asde-eventos', plugins_url( 'assets/js/eventos.js', ASDE_AP_FILE ), array(), ASDE_AP_VERSION, true ); // v0.52: la ventana de publicar.
+		}
+		if ( 'accesos' === $key ) {
+			wp_enqueue_script( 'asde-accesos', plugins_url( 'assets/js/accesos.js', ASDE_AP_FILE ), array(), ASDE_AP_VERSION, true ); // v0.53 (doc 56): la matriz marca lo que necesita cada permiso.
 		}
 		if ( 'reintegros' === $key ) {
 			wp_enqueue_script( 'asde-reintegros', plugins_url( 'assets/js/reintegros.js', ASDE_AP_FILE ), array(), ASDE_AP_VERSION, true ); // v0.47: el IBAN solo si cobra por transferencia.

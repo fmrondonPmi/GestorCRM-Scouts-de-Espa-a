@@ -101,6 +101,9 @@ final class Menu {
 		if ( current_user_can( 'asde_manage_users' ) ) {
 			$gestion['usuarios'] = asde_t( 'Usuarios' );
 		}
+		if ( current_user_can( \AsdeBalears\AreaPrivada\Accesos\Catalogo::CAP_GESTION ) ) {
+			$gestion['accesos'] = asde_t( 'Accesos' ); // v0.53 (doc 56).
+		}
 
 		$grupos = array();
 		if ( $personal ) {

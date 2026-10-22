@@ -1,6 +1,6 @@
 # Área privada · Grupo Scout — Base de conocimiento
 
-Proyecto: plugin de WordPress **«ASDE Scouts de España - Gestor CRM para Grupos Scouts»** (`asde-area-privada`): área privada con gestión de usuarios, tesorería, tienda, eventos y más para los Grupos Scouts de ASDE (empezó en Scouts de Balears, Grupo Myotragus 684). **Versión actual: 0.52.2.** El historial de versiones está en el `readme.txt` del plugin y en el git.
+Proyecto: plugin de WordPress **«ASDE Scouts de España - Gestor CRM para Grupos Scouts»** (`asde-area-privada`): área privada con gestión de usuarios, tesorería, tienda, eventos y más para los Grupos Scouts de ASDE (empezó en Scouts de Balears, Grupo Myotragus 684). **Versión actual: 0.53.0.** El historial de versiones está en el `readme.txt` del plugin y en el git.
 
 - Los datos personales se leen del **CRM federal de ASDE** (SinergiaCRM) y **no se guardan en WordPress**.
 - La web guarda solo números de socio, familias, configuración, pagos y lo que cada módulo necesita, y lo sensible va **cifrado** y con caducidad: el email de cada cuenta, lo escrito en solicitudes de acceso y listas de espera, las autorizaciones SEPA, los datos de quien compra sin sesión, los IBAN de los reintegros y las credenciales del CRM (doc 08).
@@ -53,6 +53,7 @@ Proyecto: plugin de WordPress **«ASDE Scouts de España - Gestor CRM para Grupo
 | [53-modulo-reintegros.md](53-modulo-reintegros.md) | Reintegros de gastos de los scouters |
 | [54-pantallas-en-una-linea.md](54-pantallas-en-una-linea.md) | Regla de pantallas: filtros y acciones en una línea |
 | [55-tienda-sobre-el-inventario.md](55-tienda-sobre-el-inventario.md) | La tienda toma sus existencias del inventario general |
+| [56-gestion-de-accesos.md](56-gestion-de-accesos.md) | Gestión de accesos: permisos por rol, permisos sueltos por persona (con caducidad) e historial |
 | [pwa/README.md](pwa/README.md) | La app móvil (PWA) es un plugin aparte, `asde-area-privada-app`, en su propio repo |
 
 ## Qué hay (v0.51)

@@ -91,6 +91,7 @@ final class Mantenimiento {
 		}
 		Grupo::forzar( null );
 		Solicitudes::purgar();
+		\AsdeBalears\AreaPrivada\Accesos\Concesiones::caducar_vencidas(); // v0.53 (doc 56): los permisos sueltos con fecha se desactivan solos y queda en el historial.
 		\AsdeBalears\AreaPrivada\Tienda\PedidosTable::purgar_invitados(); // v0.39 (fase 4): datos de quien compró sin sesión, a los 90 días de entregar o cancelar.
 		\AsdeBalears\AreaPrivada\ListaEspera\Inscripciones::mantenimiento(); // Lista de espera: sin confirmar, caducadas y avisos (v0.32).
 		\AsdeBalears\AreaPrivada\Sepa\Mandatos::purgar(); // Mandatos revocados hace más de 14 meses.

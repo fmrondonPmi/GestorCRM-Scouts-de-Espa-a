@@ -33,6 +33,7 @@ final class Plugin {
 		TareaNumeracion::register();
 		Tabla::register();
 		Instantanea::register();
+		\AsdeBalears\AreaPrivada\Accesos\Concesiones::register(); // v0.53 (doc 56): permisos sueltos por persona.
 		\AsdeBalears\AreaPrivada\Domain\Modulos::register(); // v0.20: módulos que se activan o desactivan por grupo.
 		\AsdeBalears\AreaPrivada\Eventos\Avisos::register(); // v0.35 (eventos, doc 43): avisos masivos de los eventos (WP-Cron).
 		add_action( 'template_redirect', array( \AsdeBalears\AreaPrivada\Install\MigracionTienda::class, 'redirigir' ), 1 ); // v0.39: las direcciones antiguas de Uniformes llevan a la Tienda.

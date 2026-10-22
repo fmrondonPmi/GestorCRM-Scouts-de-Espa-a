@@ -72,3 +72,9 @@
 - Cada cambio de grupo, ficha consultada por la oficina, informe descargado, invitación creada o anulada, y alta aprobada o rechazada queda en la auditoría **sin valores secretos**.
 - El enlace del alta es público: página neutra para cualquier token que no valga, límite de intentos por dispositivo, campo trampa, sello de tiempo, HTTPS obligatorio en producción y `noindex`.
 - Derecho de supresión: rechazar un alta borra todo lo secreto; desinstalar vacía las columnas cifradas y la credencial de la oficina.
+
+## Actualización v0.53.0 (2026-10-22): gestión de accesos (doc 56)
+
+- Tablas `asde_permisos_rol`, `asde_permisos_usuario` y `asde_auditoria_accesos`: solo **ids de cuenta y códigos de permiso**, fechas, estado y el motivo que escribe quien concede (texto libre de hasta 255 caracteres: pedir que no lleve datos personales de menores ni de salud). Nada de ello es dato del CRM.
+- El **historial no se borra ni se edita** (es la prueba de quién dio cada acceso); los nombres se buscan al mostrarlo y, si la cuenta ya no existe, sale «Cuenta borrada».
+- Al desinstalar se conservan las tablas (como el resto de históricos) y se borra la opción `asde_ap_hay_concesiones`.

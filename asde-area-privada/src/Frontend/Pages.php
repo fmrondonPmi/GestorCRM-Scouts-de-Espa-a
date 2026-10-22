@@ -66,6 +66,8 @@ final class Pages {
 		'mis_eventos'        => array( 'mis-eventos', 'Mis eventos', '[asde_mis_eventos]', 'area' ),
 		// v0.47 (doc 53): reintegros de gastos.
 		'reintegros'         => array( 'reintegros', 'Reintegros', '[asde_reintegros]', 'area' ),
+		// v0.53 (doc 56): quién puede hacer qué (matriz por rol, permisos sueltos por persona e historial).
+		'accesos'            => array( 'gestion-de-accesos', 'Gestión de accesos', '[asde_accesos]', 'area' ),
 	);
 
 	/** Páginas accesibles sin iniciar sesión (no salen en listados ni menús: Visibilidad). */

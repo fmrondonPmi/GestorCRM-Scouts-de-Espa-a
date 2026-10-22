@@ -79,6 +79,7 @@ final class Roles {
 					'asde_eventos_inscribir' => true,
 					'asde_eventos_gestion'   => true, // Los de sección de todo el grupo.
 					'asde_menus_recetas'     => true,
+					'asde_accesos'           => true, // Gestión de accesos (v0.53, doc 56).
 				),
 			),
 			self::COORDINACION => array(
@@ -113,6 +114,7 @@ final class Roles {
 					'asde_reintegros'        => true, // Reintegros (v0.47): pide los suyos y marca pagados los de todos.
 					'asde_reintegros_pagar'  => true,
 					'asde_eventos_config'    => true,
+					'asde_accesos'           => true, // Gestión de accesos (v0.53, doc 56).
 				),
 			),
 			self::OFICINA      => array(
@@ -149,6 +151,7 @@ final class Roles {
 					'asde_reintegros_aprobar' => true, // Reintegros (v0.47): aprueba y marca pagados.
 					'asde_reintegros_pagar'   => true,
 					'asde_eventos_config'     => true,
+					'asde_accesos'            => true, // Gestión de accesos (v0.53, doc 56).
 				),
 			),
 			self::TUTOR        => array(
@@ -222,6 +225,9 @@ final class Roles {
 				}
 			}
 		}
+
+		// Lo que los gestores han cambiado en la matriz de «Gestión de accesos» (v0.53) manda sobre los de fábrica.
+		\AsdeBalears\AreaPrivada\Accesos\PermisosRol::aplicar();
 
 		// Los administradores de WordPress pueden hacerlo todo en el área privada.
 		$admin = get_role( 'administrator' );

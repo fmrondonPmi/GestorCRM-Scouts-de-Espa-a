@@ -78,7 +78,12 @@ final class Installer {
 
 	public static function install(): void {
 		MigracionTienda::ejecutar(); // v0.39 (doc 48): Uniformes pasa a Tienda.
+		// v0.53 (doc 56): las tablas de «Gestión de accesos» antes que los roles, que leen los cambios guardados.
+		\AsdeBalears\AreaPrivada\Accesos\PermisosRol::install_table();
+		\AsdeBalears\AreaPrivada\Accesos\Concesiones::install_table();
+		\AsdeBalears\AreaPrivada\Accesos\Auditoria::install_table();
 		Roles::install();
+		\AsdeBalears\AreaPrivada\Accesos\Concesiones::olvidar();
 		Logger::install_table();
 		SociosTable::install_table();
 		InformesTable::install_table();
