@@ -47,7 +47,7 @@ final class Pagos {
 		if ( 'banco' === $m['origen'] ) {
 			$banco = BancoTable::por_pago( $mov_id );
 			if ( $banco && BancoTable::CONCILIADO === $banco['estado'] ) {
-				BancoTable::marcar( (int) $banco['id'], BancoTable::PENDIENTE );
+				BancoTable::marcar( (int) $banco['id'], BancoTable::PENDIENTE, null, null, BancoTable::CONCILIADO );
 				Logger::log( 'banco_desconciliado', 'banco', (string) $banco['id'], array( 'pago_eliminado' => $mov_id ) );
 			} else {
 				$banco = null;

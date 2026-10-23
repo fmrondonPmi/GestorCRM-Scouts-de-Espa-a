@@ -345,21 +345,28 @@ final class BancoTable {
 		return $r ? self::descifrar( $r ) : null;
 	}
 
-	/** Cambia el estado. El tipo y la nota (de los revisados) se quitan: para ponerlos, revisar(). */
-	public static function marcar( int $id, string $estado, ?int $familia_id = null, ?int $pago_id = null ): bool {
+	/**
+	 * Cambia el estado. El tipo y la nota (de los revisados) se quitan: para ponerlos, revisar().
+	 * Con `$si_estado`, solo si el movimiento sigue en ese estado (tomar()): devuelve false si otra petición se adelantó.
+	 */
+	public static function marcar( int $id, string $estado, ?int $familia_id = null, ?int $pago_id = null, ?string $si_estado = null ): bool {
 		global $wpdb;
+		$datos = array(
+			'estado'       => $estado,
+			'familia_id'   => $familia_id,
+			'evento_id'    => null,
+			'pago_id'      => $pago_id,
+			'tipo_id'      => null,
+			'nota'         => '',
+			'revisado_por' => self::PENDIENTE === $estado ? 0 : get_current_user_id(),
+			'revisado_en'  => self::PENDIENTE === $estado ? null : current_time( 'mysql', true ),
+		);
+		if ( null !== $si_estado ) {
+			return self::tomar( $id, $si_estado, $datos );
+		}
 		return false !== $wpdb->update(
 			self::table(),
-			array(
-				'estado'       => $estado,
-				'familia_id'   => $familia_id,
-				'evento_id'    => null,
-				'pago_id'      => $pago_id,
-				'tipo_id'      => null,
-				'nota'         => '',
-				'revisado_por' => self::PENDIENTE === $estado ? 0 : get_current_user_id(),
-				'revisado_en'  => self::PENDIENTE === $estado ? null : current_time( 'mysql', true ),
-			),
+			$datos,
 			array(
 				'id'    => $id,
 				'grupo' => Grupo::numero(),
@@ -368,23 +375,55 @@ final class BancoTable {
 	}
 
 	/**
+	 * Cambia el movimiento SOLO si sigue en `$estado_esperado`, en una sola sentencia (UPDATE … WHERE estado = …): dos
+	 * personas (o un doble clic) que concilian o revisan el mismo ingreso a la vez no pueden usarlo las dos (doc 59,
+	 * RC-TES-1 y RC-TES-6). Quien llama hace lo demás (registrar el pago, marcar el pedido) solo si devuelve true.
+	 *
+	 * @param array<string, mixed> $datos Columnas que se cambian.
+	 */
+	public static function tomar( int $id, string $estado_esperado, array $datos ): bool {
+		global $wpdb;
+		$n = $wpdb->update(
+			self::table(),
+			$datos,
+			array(
+				'id'     => $id,
+				'grupo'  => Grupo::numero(),
+				'estado' => $estado_esperado,
+			)
+		);
+		if ( 1 === $n ) {
+			return true;
+		}
+		if ( 0 === $n && ( $datos['estado'] ?? '' ) === $estado_esperado ) {
+			// Sin cambio de estado y con los mismos valores, MySQL cuenta 0 filas cambiadas: vale si sigue en ese estado.
+			return (bool) $wpdb->get_var( $wpdb->prepare( 'SELECT 1 FROM %i WHERE id = %d AND grupo = %s AND estado = %s', self::table(), $id, Grupo::numero(), $estado_esperado ) ); // phpcs:ignore WordPress.DB
+		}
+		return false;
+	}
+
+	/**
 	 * Revisado (no es cuota) con su tipo y una nota; también para cambiar el tipo de uno ya revisado. Desde la v0.52
 	 * puede llevar además el evento al que corresponde y la familia de la que viene o a la que va (sin crear ningún pago).
 	 */
-	public static function revisar( int $id, int $tipo_id, string $nota, int $evento_id = 0, int $familia_id = 0 ): bool {
+	public static function revisar( int $id, int $tipo_id, string $nota, int $evento_id = 0, int $familia_id = 0, ?string $si_estado = null ): bool {
 		global $wpdb;
+		$datos = array(
+			'estado'       => self::IGNORADO,
+			'familia_id'   => $familia_id ?: null,
+			'evento_id'    => $evento_id ?: null,
+			'pago_id'      => null,
+			'tipo_id'      => $tipo_id ?: null,
+			'nota'         => mb_substr( sanitize_text_field( $nota ), 0, 255 ),
+			'revisado_por' => get_current_user_id(),
+			'revisado_en'  => current_time( 'mysql', true ),
+		);
+		if ( null !== $si_estado ) {
+			return self::tomar( $id, $si_estado, $datos ); // Solo si sigue en ese estado (doc 59, RC-TES-1).
+		}
 		return false !== $wpdb->update(
 			self::table(),
-			array(
-				'estado'       => self::IGNORADO,
-				'familia_id'   => $familia_id ?: null,
-				'evento_id'    => $evento_id ?: null,
-				'pago_id'      => null,
-				'tipo_id'      => $tipo_id ?: null,
-				'nota'         => mb_substr( sanitize_text_field( $nota ), 0, 255 ),
-				'revisado_por' => get_current_user_id(),
-				'revisado_en'  => current_time( 'mysql', true ),
-			),
+			$datos,
 			array(
 				'id'    => $id,
 				'grupo' => Grupo::numero(),

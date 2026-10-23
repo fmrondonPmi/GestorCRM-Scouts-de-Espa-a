@@ -215,6 +215,33 @@ try {
 	$pago = Conciliacion::conciliar( (int) $cuota['id'], (int) $fam );
 	$ok( is_int( $pago ) && is_wp_error( Conciliacion::ignorar( (int) $cuota['id'], (int) $t_por['Donativos'] ) ), 'uno conciliado con una familia no se puede marcar como revisado (hay que deshacer antes)' );
 
+	// Doc 59, RC-TES-1: el mismo ingreso conciliado dos veces (doble clic o dos personas a la vez) da un solo pago.
+	$vigentes = static fn( int $f ) => count( array_filter( MovimientosTable::de_familia_todas( $f ), static fn( $x ) => MovimientosTable::PAGO === $x['tipo'] ) );
+	$segundo  = Conciliacion::conciliar( (int) $cuota['id'], (int) $fam );
+	$ok( is_wp_error( $segundo ) && 1 === $vigentes( (int) $fam ) && $pago === (int) BancoTable::obtener( (int) $cuota['id'] )['pago_id'], 'conciliar otra vez el mismo ingreso: error y la familia sigue con un solo pago (RC-TES-1)' );
+	// La otra petición ya leyó «pendiente» antes de que esta lo conciliara: su toma condicionada falla y no registra nada.
+	$ok( false === BancoTable::marcar( (int) $cuota['id'], BancoTable::CONCILIADO, (int) $fam, null, BancoTable::PENDIENTE ) && $pago === (int) BancoTable::obtener( (int) $cuota['id'] )['pago_id'], 'la toma condicionada (UPDATE … WHERE estado = pendiente) no pisa un ingreso ya conciliado' );
+	$ok( true === Conciliacion::deshacer( (int) $cuota['id'] ) && is_wp_error( Conciliacion::deshacer( (int) $cuota['id'] ) ) && 0 === $vigentes( (int) $fam ), 'deshacer dos veces: la segunda da error y el pago queda anulado una sola vez' );
+	// Otra petición (que también había leído «pendiente») lo concilia justo entre las comprobaciones y la escritura de esta.
+	$adelantada = false;
+	$adelantar  = static function ( $q ) use ( &$adelantada, $wpdb, $cuota ) {
+		if ( ! $adelantada && str_starts_with( ltrim( (string) $q ), 'UPDATE' ) && str_contains( (string) $q, BancoTable::table() ) && preg_match( "/WHERE .*`estado` = 'pendiente'/", (string) $q ) ) {
+			$adelantada = true;
+			$wpdb->update( BancoTable::table(), array( 'estado' => BancoTable::IGNORADO, 'nota' => 'Otra petición' ), array( 'id' => (int) $cuota['id'] ) ); // phpcs:ignore WordPress.DB
+		}
+		return $q;
+	};
+	add_filter( 'query', $adelantar );
+	try {
+		$r = Conciliacion::conciliar( (int) $cuota['id'], (int) $fam );
+	} finally {
+		remove_filter( 'query', $adelantar );
+	}
+	$ok( $adelantada && is_wp_error( $r ) && 0 === $vigentes( (int) $fam ) && 'Otra petición' === BancoTable::obtener( (int) $cuota['id'] )['nota'], 'si otra petición se lleva el ingreso a la vez, esta da error y no registra ningún pago' );
+	BancoTable::marcar( (int) $cuota['id'], BancoTable::PENDIENTE );
+	$pago = Conciliacion::conciliar( (int) $cuota['id'], (int) $fam );
+	$ok( is_int( $pago ) && 1 === $vigentes( (int) $fam ), 'y se puede volver a conciliar' );
+
 	// Varios a la vez, desde la ventana: uno mal (tipo de ingreso en un gasto).
 	list( $avisos, $destino ) = $enviar(
 		new BancoView(),

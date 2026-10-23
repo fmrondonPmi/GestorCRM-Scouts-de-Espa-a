@@ -163,7 +163,12 @@ final class Conciliacion {
 			return new \WP_Error( 'asde_banco', asde_t( 'Esa familia no existe.' ) );
 		}
 		$ronda = Config::es_ronda( $ronda ) ? $ronda : Config::ronda_de_fecha( $m['fecha'] );
-		$pago  = MovimientosTable::registrar(
+		// Primero se toma el movimiento (solo si sigue pendiente, en una sola sentencia) y después se registra el pago:
+		// dos conciliaciones a la vez del mismo ingreso no pueden registrar dos pagos (doc 59, RC-TES-1).
+		if ( ! BancoTable::marcar( $mov_id, BancoTable::CONCILIADO, $familia_id, null, BancoTable::PENDIENTE ) ) {
+			return new \WP_Error( 'asde_banco', asde_t( 'Ese movimiento ya está revisado.' ) );
+		}
+		$pago = MovimientosTable::registrar(
 			$familia_id,
 			$ronda,
 			MovimientosTable::PAGO,
@@ -175,6 +180,7 @@ final class Conciliacion {
 			'banco'
 		);
 		if ( is_wp_error( $pago ) ) {
+			BancoTable::marcar( $mov_id, BancoTable::PENDIENTE, null, null, BancoTable::CONCILIADO ); // Sin pago, vuelve a estar por conciliar.
 			return $pago;
 		}
 		BancoTable::marcar( $mov_id, BancoTable::CONCILIADO, $familia_id, $pago );
@@ -223,7 +229,10 @@ final class Conciliacion {
 			return new \WP_Error( 'asde_banco', asde_t( 'La familia elegida ya no existe: elige otra.' ) );
 		}
 		$antes = $m['estado'];
-		BancoTable::revisar( $mov_id, $tipo_id, $nota, $evento_id, $familia_id );
+		if ( ! BancoTable::revisar( $mov_id, $tipo_id, $nota, $evento_id, $familia_id, $antes ) ) {
+			// Otra petición lo ha conciliado o deshecho entretanto (doc 59, RC-TES-1).
+			return new \WP_Error( 'asde_banco', asde_t( 'Ese movimiento no se puede marcar como revisado (puede que ya esté conciliado con una familia).' ) );
+		}
 		Logger::log(
 			BancoTable::IGNORADO === $antes ? 'banco_tipo_cambiado' : 'banco_revisado',
 			'banco',
@@ -243,10 +252,13 @@ final class Conciliacion {
 		if ( ! $m || BancoTable::PENDIENTE === $m['estado'] ) {
 			return new \WP_Error( 'asde_banco', asde_t( 'Ese movimiento no está revisado.' ) );
 		}
+		// Se devuelve a pendiente solo si sigue como se leyó: dos «deshacer» a la vez no anulan dos veces (doc 59, RC-TES-1).
+		if ( ! BancoTable::marcar( $mov_id, BancoTable::PENDIENTE, null, null, $m['estado'] ) ) {
+			return new \WP_Error( 'asde_banco', asde_t( 'Ese movimiento no está revisado.' ) );
+		}
 		if ( BancoTable::CONCILIADO === $m['estado'] && $m['pago_id'] ) {
 			MovimientosTable::anular( (int) $m['pago_id'], 'Se deshizo la conciliación con el banco.' ); // Lo que se guarda va en castellano.
 		}
-		BancoTable::marcar( $mov_id, BancoTable::PENDIENTE );
 		Logger::log( 'banco_deshecho', 'banco', (string) $mov_id, array( 'pago_anulado' => (int) $m['pago_id'] ) );
 		return true;
 	}
