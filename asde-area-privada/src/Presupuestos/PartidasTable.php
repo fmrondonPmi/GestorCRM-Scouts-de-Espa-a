@@ -66,7 +66,8 @@ final class PartidasTable {
 				'veces'      => max( 1, $veces ),
 				'importe'    => round( $importe, 2 ),
 				'nota'       => mb_substr( sanitize_text_field( $nota ), 0, 255 ),
-				'orden'      => count( self::de( $ronda, $seccion ) ) + 1,
+				// El siguiente orden, sin leer todas las partidas (doc 59, RC-PRE-6).
+				'orden'      => (int) $wpdb->get_var( $wpdb->prepare( 'SELECT COALESCE(MAX(orden), 0) + 1 FROM %i WHERE grupo = %s AND ronda = %s AND seccion = %s', self::table(), Grupo::numero(), $ronda, $seccion ) ), // phpcs:ignore WordPress.DB
 				'creado'     => current_time( 'mysql', true ),
 				'creado_por' => get_current_user_id(),
 			)

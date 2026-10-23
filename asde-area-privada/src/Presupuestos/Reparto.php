@@ -48,6 +48,7 @@ final class Reparto {
 		}
 
 		$aportan   = array(); // nº de socio => true (quienes aportan cuota).
+		$costes    = array(); // nº de socio => coste federativo (se calcula una vez por persona: doc 59, RC-PRE-7).
 		$negativos = 0;
 		foreach ( $filas as $fila ) {
 			$calc  = $fila['calc'];
@@ -63,7 +64,7 @@ final class Reparto {
 				if ( null === $slug ) {
 					continue; // Cuota de alguien sin sección educativa que pague: no es de ninguna sección.
 				}
-				$coste = Calculadora::coste_persona( $p, $cfg, $ref )['total'];
+				$coste = $costes[ $num ] ??= Calculadora::coste_persona( $p, $cfg, $ref )['total'];
 				$neto  = round( round( $cuota_i, 2 ) - $coste, 2 );
 				$pct   = $secciones[ $slug ]['pct_grupo'];
 				$a_sec = round( $neto * ( 100 - $pct ) / 100, 2 );
@@ -99,7 +100,7 @@ final class Reparto {
 			if ( ! $p->tiene_membresia_activa() ) {
 				continue;
 			}
-			$coste      = Calculadora::coste_persona( $p, $cfg, $ref )['total'];
+			$coste      = $costes[ $p->num_socio_asde ] ??= Calculadora::coste_persona( $p, $cfg, $ref )['total'];
 			$total_fed += $coste;
 			if ( isset( $aportan[ $p->num_socio_asde ] ) ) {
 				continue;

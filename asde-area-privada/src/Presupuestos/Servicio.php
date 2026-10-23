@@ -111,6 +111,12 @@ final class Servicio {
 		return (float) str_replace( ',', '.', trim( (string) $v ) );
 	}
 
+	/** ¿Es un importe válido (un número, sin pasar del máximo; cero solo si $cero_vale)? Una sola regla para partidas, proyecto y gastos (doc 59, RC-PRE-5). */
+	public static function importe_valido( $v, bool $cero_vale ): bool {
+		$n = self::numero( $v );
+		return is_numeric( str_replace( ',', '.', trim( (string) $v ) ) ) && ( $cero_vale ? $n >= 0 : $n > 0 ) && $n <= self::MAX_IMPORTE;
+	}
+
 	/** Añade una partida. @return string Error, o '' si se añadió. */
 	public static function anadir_partida( string $ronda, string $seccion, Ambito $a, string $tipo, string $categoria, string $concepto, $veces, $importe, string $nota = '' ): string {
 		$error = self::error_edicion( $ronda, $seccion, $a );
@@ -126,7 +132,7 @@ final class Servicio {
 		if ( $veces_n < 1 || $veces_n > self::MAX_VECES ) {
 			return sprintf( asde_t( '«¿Cuántos?» tiene que ser un número entre 1 y %d.' ), self::MAX_VECES );
 		}
-		if ( ! is_numeric( str_replace( ',', '.', trim( (string) $importe ) ) ) || $importe_n < 0 || $importe_n > self::MAX_IMPORTE ) {
+		if ( ! self::importe_valido( $importe, true ) ) {
 			return asde_t( 'El importe tiene que ser un número positivo.' );
 		}
 		if ( PartidasTable::GASTO === $tipo ) {
@@ -153,7 +159,7 @@ final class Servicio {
 			return $error;
 		}
 		$importe_n = self::numero( $importe );
-		if ( ! is_numeric( str_replace( ',', '.', trim( (string) $importe ) ) ) || $importe_n < 0 || $importe_n > self::MAX_IMPORTE ) {
+		if ( ! self::importe_valido( $importe, true ) ) {
 			return asde_t( 'El importe tiene que ser un número positivo.' );
 		}
 		self::asegurar_proyecto( $ronda, $seccion );
@@ -215,7 +221,7 @@ final class Servicio {
 			return asde_t( 'La fecha no es válida.' );
 		}
 		$importe_n = self::numero( $importe );
-		if ( ! is_numeric( str_replace( ',', '.', trim( (string) $importe ) ) ) || $importe_n <= 0 || $importe_n > self::MAX_IMPORTE ) {
+		if ( ! self::importe_valido( $importe, false ) ) {
 			return asde_t( 'El importe tiene que ser un número mayor que cero.' );
 		}
 		$concepto = trim( sanitize_text_field( $concepto ) );
