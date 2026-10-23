@@ -6,6 +6,7 @@
  *   wp eval-file wp-content/plugins/asde-area-privada/tests/revision-codigo.php
  *
  * - RC-CRM-1: list_all no devuelve una lista cortada en silencio: con más registros que el límite, CrmException.
+ * - RC-TES-2: si los plazos suman el 100 %, el último cierra la cuota (sin céntimos de más ni de menos).
  * Las demás correcciones con prueba van en las pruebas de su módulo (banco-gestion, tienda-fase5, sepa, eventos-inscripciones…)
  * o en las partes siguientes de esta.
  * Usa el CRM simulado (fichas inventadas) y deja el sitio como estaba.
@@ -20,6 +21,8 @@ use AsdeBalears\AreaPrivada\Crm\CrmException;
 use AsdeBalears\AreaPrivada\Crm\Escritura;
 use AsdeBalears\AreaPrivada\Domain\Grupo;
 use AsdeBalears\AreaPrivada\Domain\Grupos;
+use AsdeBalears\AreaPrivada\Tesoreria\Calculadora;
+use AsdeBalears\AreaPrivada\Tesoreria\Config as TesoreriaConfig;
 
 global $wpdb;
 $fails = 0;
@@ -81,6 +84,22 @@ try {
 	$ok( str_contains( $reg, '"limite":3' ) && str_contains( $reg, '"total":5' ), 'y queda en el registro (límite y total, sin datos personales)' );
 	$filtradas = $cliente->list_all( 'Contacts', "contacts.last_name LIKE 'Rc C%'", array( 'id' ), array(), '', 3 );
 	$ok( 2 === count( $filtradas ), 'una consulta con menos resultados que el límite no se ve afectada' );
+
+	echo "== Parte B · RC-TES-2: el último plazo cierra la cuota ==\n";
+	$cfg     = TesoreriaConfig::defaults_ronda( '2026-2027' );
+	$plazo   = static fn( string $fecha, float $pct ): array => array( 'nombre' => 'Plazo ' . $fecha, 'fecha' => $fecha, 'porcentaje' => $pct );
+	$familia = array( 'id' => 0, 'numero' => 'F0000', 'miembros' => array() );
+	$despues = new DateTimeImmutable( '2027-03-01', wp_timezone() );
+	$cfg['plazos'] = array( $plazo( '2026-10-01', 33.33 ), $plazo( '2026-12-01', 33.33 ), $plazo( '2027-02-01', 33.34 ) );
+	$r = Calculadora::familia( $familia, array(), $cfg, array( 'pagado' => 50.0, 'ajustes' => 50.0 ), $despues );
+	$ok( 50.0 === $r['a_pagar'] && array( 16.67, 16.67, 16.66 ) === array_column( $r['plazos'], 'importe' ) && 50.0 === end( $r['plazos'] )['acumulado'], '50 € en plazos de 33,33/33,33/33,34 %: 16,67 + 16,67 + 16,66 = 50,00 (antes, 50,01)' );
+	$ok( ! in_array( false, array_column( $r['plazos'], 'cubierto' ), true ) && Calculadora::PAGADO === $r['estado'], 'quien lo ha pagado todo tiene todos los plazos cubiertos' );
+	$cfg['plazos'] = array( $plazo( '2026-10-01', 33.33 ), $plazo( '2026-12-01', 33.33 ), $plazo( '2027-02-01', 33.33 ) );
+	$r = Calculadora::familia( $familia, array(), $cfg, array( 'pagado' => 100.0, 'ajustes' => 100.0 ), $despues );
+	$ok( 100.0 === end( $r['plazos'] )['acumulado'] && 33.34 === end( $r['plazos'] )['importe'], 'con 3 × 33,33 % (el redondeo de un tercio) también cierra: el último plazo es 33,34 € de 100 €' );
+	$cfg['plazos'] = array( $plazo( '2026-10-01', 50 ), $plazo( '2026-12-01', 30 ) );
+	$r = Calculadora::familia( $familia, array(), $cfg, array( 'pagado' => 0.0, 'ajustes' => 50.0 ), $despues );
+	$ok( array( 25.0, 15.0 ) === array_column( $r['plazos'], 'importe' ), 'si los plazos no suman el 100 %, cada uno es su porcentaje (no se cambia nada)' );
 } catch ( Throwable $e ) {
 	++$fails;
 	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";

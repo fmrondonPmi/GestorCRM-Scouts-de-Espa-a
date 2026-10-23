@@ -62,8 +62,13 @@ final class Calculadora {
 		$plazos    = array();
 		$acumulado = 0.0;
 		$exigible  = 0.0;
-		foreach ( $cfg['plazos'] as $pl ) {
-			$importe   = round( $a_pagar * (float) $pl['porcentaje'] / 100, 2 );
+		// Si los plazos suman el 100 % (con el redondeo de los porcentajes: 3 × 33,33), el último es lo que falta hasta
+		// a_pagar: redondear cada plazo por separado podía dejar el total en 50,01 € y el último plazo «sin cubrir» a una
+		// familia que lo ha pagado todo (doc 59, RC-TES-2).
+		$cierra = abs( Config::suma_plazos( $cfg ) - 100 ) < 0.02;
+		$ultimo = count( $cfg['plazos'] ) - 1;
+		foreach ( array_values( $cfg['plazos'] ) as $i => $pl ) {
+			$importe   = $cierra && $i === $ultimo ? round( max( 0, $a_pagar - $acumulado ), 2 ) : round( $a_pagar * (float) $pl['porcentaje'] / 100, 2 );
 			$acumulado = round( $acumulado + $importe, 2 );
 			$vencido   = $pl['fecha'] < $hoy->format( 'Y-m-d' );
 			if ( $vencido ) {
