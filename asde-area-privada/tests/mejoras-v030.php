@@ -79,7 +79,7 @@ $ped_antes    = $max_id( PedidosTable::table() );
 $mat_cant     = array_column( (array) $wpdb->get_results( $wpdb->prepare( 'SELECT id, cantidad FROM %i', MaterialesTable::table() ), ARRAY_A ), 'cantidad', 'id' );
 $tip_especial = (array) $wpdb->get_results( $wpdb->prepare( "SELECT id, especial FROM %i WHERE especial <> ''", TiposTable::table() ), ARRAY_A );
 $socios_antes = array_column( (array) $wpdb->get_results( 'SELECT * FROM ' . SociosTable::table(), ARRAY_A ), null, 'num_socio_asde' ); // phpcs:ignore WordPress.DB
-$cfg_antes    = get_option( 'asde_ap_uniformes_' . $grupo['numero'], null );
+$cfg_antes    = get_option( 'asde_ap_tienda_' . $grupo['numero'], null );
 
 $cache_externa = wp_using_ext_object_cache( true );
 $correos       = array();
@@ -468,9 +468,9 @@ try {
 	wp_set_current_user( 0 );
 
 	if ( null === $cfg_antes ) {
-		delete_option( 'asde_ap_uniformes_' . $grupo['numero'] );
+		delete_option( 'asde_ap_tienda_' . $grupo['numero'] );
 	} else {
-		update_option( 'asde_ap_uniformes_' . $grupo['numero'], $cfg_antes, false );
+		update_option( 'asde_ap_tienda_' . $grupo['numero'], $cfg_antes, false );
 	}
 	$lista = implode( ',', array_map( 'intval', $ids ) ) ?: '0';
 	foreach ( array( array( MaterialesTable::table(), $mat_antes ), array( TiposTable::table(), $tip_antes ), array( ComprasTable::table(), $com_antes ), array( RegistroEmails::table(), $ema_antes ), array( PedidosTable::table(), $ped_antes ) ) as list( $tabla, $antes ) ) {

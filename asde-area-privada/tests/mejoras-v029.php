@@ -10,7 +10,8 @@
  * Usa el CRM simulado de tests/lib (fichas inventadas: ninguna petición llega al CRM
  * real) y guarda las cachés solo en la memoria de este proceso. Al terminar se borra
  * lo creado (usuarios, cambios, material, tipos, pedidos, registros) y la
- * configuración de uniformes queda como estaba.
+ * configuración de la tienda del grupo (asde_ap_tienda_<nº>; hasta el doc 60 se restauraba por error la antigua
+ * asde_ap_uniformes_<nº> y la de la tienda quedaba con los valores por defecto) queda como estaba.
  */
 defined( 'ABSPATH' ) || exit;
 
@@ -184,7 +185,7 @@ $tip_antes    = $max_id( TiposTable::table() );
 $ped_antes    = $max_id( PedidosTable::table() );
 $tip_especial = (array) $wpdb->get_results( $wpdb->prepare( "SELECT id, especial FROM %i WHERE especial <> ''", TiposTable::table() ), ARRAY_A );
 $socios_antes = array_column( (array) $wpdb->get_results( 'SELECT * FROM ' . SociosTable::table(), ARRAY_A ), null, 'num_socio_asde' ); // phpcs:ignore WordPress.DB
-$cfg_antes    = get_option( 'asde_ap_uniformes_' . $grupo['numero'], null );
+$cfg_antes    = get_option( 'asde_ap_tienda_' . $grupo['numero'], null );
 
 $cache_externa = wp_using_ext_object_cache( true );
 add_filter( 'pre_wp_mail', '__return_true' ); // No sale ningún email.
@@ -367,63 +368,13 @@ try {
 	);
 	$ok( 1 === $imp['importados'] && 1 === count( $imp['errores'] ) && 3 === $imp['errores'][0]['fila'] && 2 === ( MaterialesTable::camisas()['masculina']['XL'] ?? 0 ), 'importar: columnas «Modelo» y «Talla»; sin talla, la fila no entra' );
 	$ok( str_contains( Importador::ejemplo(), 'Modelo (camisas)' ) && str_contains( Importador::ejemplo(), TiposTable::NOMBRE_CAMISA ), 'el CSV de ejemplo lleva una camisa' );
-
-	echo "\n== F. Servir, devolver y asignar camisas en la gestión de uniformes ==\n";
-	$cfg    = Config::de();
-	$linea  = static fn( string $modelo, string $talla ): array => array(
-		'modelo'   => $modelo,
-		'nombre'   => $cfg['modelos'][ $modelo ]['nombre'],
-		'talla'    => $talla,
-		'especial' => false,
-		'precio'   => $cfg['precio_camisa'],
-	);
-	$p_solo = PedidosTable::crear( '990073', array( 'scouts' ), false, array( 'camisa' => $linea( 'femenina', 'M' ), 'insignias' => array() ), 25.0, false, '' );
-	$p_ins  = PedidosTable::crear( '990074', array( 'lobatos' ), false, array( 'camisa' => $linea( 'masculina', 'S' ), 'insignias' => array( array( 'id' => 'grupo', 'nombre' => 'Insignia de grupo', 'cantidad' => 1, 'precio' => 3.0 ) ) ), 28.0, false, '' );
-	$p_sin  = PedidosTable::crear( '990074', array( 'lobatos' ), false, array( 'camisa' => $linea( 'masculina', 'S' ), 'insignias' => array() ), 25.0, false, '' );
-	$ok( Servicio::puede_inventario() && Servicio::se_puede_servir( PedidosTable::obtener( $p_solo ) ), 'Coordinación (con el inventario) puede servir camisas del inventario' );
-	$como( $u_secre );
-	$ok( ! Servicio::puede_inventario() && ! \AsdeBalears\AreaPrivada\Tesoreria\Pagos::puede_eliminar(), 'Secretaría no sirve camisas ni elimina pagos' );
-	$u_teso = $crear( 'prueba-v029-teso', array( Roles::TESORERIA ), array() );
-	$como( $u_teso );
-	$ok( Servicio::puede_inventario() && \AsdeBalears\AreaPrivada\Tesoreria\Pagos::puede_eliminar(), 'Tesorería sirve y asigna camisas del inventario (P-100) y es quien elimina pagos (P-94)' );
-	$como( $u_coord );
-
-	$ok( true === Servicio::servir( PedidosTable::obtener( $p_solo ) ), 'servir del inventario la camisa de un pedido' );
-	$ps = PedidosTable::obtener( $p_solo );
-	$ok( $m1 === $ps['inventario_id'] && PedidosTable::REF_INVENTARIO === $ps['pedido_ref'] && null !== $ps['pedido_en'] && 2 === MaterialesTable::camisas()['femenina']['M'], 'sale del material más antiguo; el pedido pasa a «pendiente de entregar»' );
-	$ok( true === Servicio::servir( PedidosTable::obtener( $p_ins ) ) && null === PedidosTable::obtener( $p_ins )['pedido_en'], 'con insignias, el pedido sigue pendiente de pedir (por las insignias)' );
-	$resumen_prov = Servicio::resumen( array( PedidosTable::obtener( $p_ins ) ), $cfg );
-	$ok( 0 === $resumen_prov['total_camisas'] && 1 === count( $resumen_prov['insignias'] ), 'y su camisa ya no cuenta para el pedido al proveedor' );
-	$sin = Servicio::servir( PedidosTable::obtener( $p_sin ) );
-	$ok( is_wp_error( $sin ) && str_contains( $sin->get_error_message(), 'No queda ninguna camisa' ) && 0 === PedidosTable::obtener( $p_sin )['inventario_id'], 'sin camisas de esa talla, no se sirve' );
-	$ok( true === Servicio::devolver( PedidosTable::obtener( $p_solo ) ) && 3 === MaterialesTable::camisas()['femenina']['M'] && null === PedidosTable::obtener( $p_solo )['pedido_en'] && 0 === PedidosTable::obtener( $p_solo )['inventario_id'], 'devolver la camisa: vuelve al inventario y el pedido, a pendiente de pedir' );
-
-	// Precio (petición del usuario): 25 € a los asociados; a un scouter, la primera camisa gratis y desde la segunda, 25 €.
-	$ok( 25.0 === Servicio::precio_camisa( '990074', false, $cfg ) && 0.0 === Servicio::precio_camisa( '990071', true, $cfg ) && 25.0 === Servicio::precio_camisa( '990071', true, array( 'primera_gratis' => false ) + $cfg ), 'precio de la camisa: 25 € a los asociados, la primera de un scouter gratis (se puede apagar en la configuración)' );
-	$ona  = $repo->obtener( '990074' );
-	$sara = $repo->obtener( '990071' );
-	$asig = Servicio::asignar( $sara, 'femenina', 'm', 'Talla grande' );
-	$pa   = is_int( $asig ) ? PedidosTable::obtener( $asig ) : null;
-	$ok( $pa && '990071' === $pa['socio'] && 'M' === $pa['lineas']['camisa']['talla'] && $pa['inventario_id'] > 0 && null !== $pa['pedido_en'] && null !== $pa['pago_en'] && PedidosTable::REF_SIN_COSTE === $pa['pago_ref'] && 2 === MaterialesTable::camisas()['femenina']['M'], 'asignar una camisa a quien no la pidió: pedido creado, servido y, la primera de un scouter, 0 € y pagado «sin coste»' );
-	$ok( 25.0 === Servicio::precio_camisa( '990071', true, $cfg ), 'la segunda camisa de ese scouter ya cuesta 25 €' );
-	$asig2 = Servicio::asignar( $ona, 'masculina', 'S', '' );
-	$ok( is_wp_error( $asig2 ), 'asignar una talla que no queda: error' );
-
-	// Desde la pantalla: la tarjeta, la ventana de asignar y cancelar un pedido servido.
-	$gestion = $pintar( new TiendaGestionView(), array() );
-	$ok( str_contains( $gestion, 'Camisas del inventario' ) && str_contains( $gestion, 'asignar=1' ) && str_contains( $gestion, 'Hay en el inventario' ) && str_contains( $gestion, 'Camisa del inventario' ), 'gestión: lo que hay, «Asignar una camisa» y qué pedidos se pueden servir' );
-	$asignar = $pintar( new TiendaGestionView(), array( 'asignar' => '1' ) );
-	$ok( str_contains( $asignar, 'value="990073"' ) && str_contains( $asignar, 'value="femenina|M"' ) && ! str_contains( $asignar, 'value="masculina|S"' ), 'la ventana de asignar: socios y solo las tallas que quedan' );
-	$enviar( new TiendaGestionView(), array( 'asde_action' => 'uniforme_servir', 'pedido' => (string) $p_solo ), 'asde_uniforme_' . $p_solo );
-	$ok( $m1 === PedidosTable::obtener( $p_solo )['inventario_id'] && 1 === MaterialesTable::camisas()['femenina']['M'], 'servir desde la ficha del pedido' );
-	$enviar( new TiendaGestionView(), array( 'asde_action' => 'uniforme_cancelar', 'pedido' => (string) $p_solo, 'motivo' => 'Ya no la quiere' ), 'asde_uniforme_' . $p_solo );
-	$ok( null !== PedidosTable::obtener( $p_solo )['cancelado_en'] && 2 === MaterialesTable::camisas()['femenina']['M'], 'cancelar un pedido servido devuelve la camisa al inventario' );
-	$enviar( new TiendaGestionView(), array( 'asde_action' => 'uniforme_asignar', 'socio' => '990073', 'camisa' => 'masculina|XL', 'nota' => '' ), 'asde_uniformes_asignar' );
-	$ultimo = PedidosTable::obtener( $max_id( PedidosTable::table() ) );
-	$ok( $ultimo && '990073' === $ultimo['socio'] && 25.0 === (float) $ultimo['total'] && null === $ultimo['pago_en'] && 1 === MaterialesTable::camisas()['masculina']['XL'], 'asignar desde la ventana a un asociado: 25 € y pendiente de pago' );
-	$ok( true === Servicio::cancelar( PedidosTable::obtener( $p_ins ), 'Prueba' ) && 1 === ( MaterialesTable::camisas()['masculina']['S'] ?? 0 ) && 0 === PedidosTable::obtener( $p_ins )['inventario_id'], 'cancelar un pedido con la camisa servida (con insignias, aún sin pedir) la devuelve al inventario' );
-	$ok( str_contains( $leer( 'src/Frontend/Views/TiendaPedidosView.php' ), "Servicio::cancelar( \$p, 'Cancelado por el socio/a o su familia' )" ), 'también cuando lo cancela la familia desde «Mi uniforme»' );
-	$ok( $m2 > $m1 && $m3 > $m2, '(materiales de la prueba creados)' );
+	$ok( 3 === count( array_unique( array( $m1, $m2, $m3 ) ) ) && min( $m1, $m2, $m3 ) > $mat_antes, 'los tres materiales de la prueba se han creado' );
+	// La antigua parte F (servir, devolver y asignar camisas desde la gestión de uniformes) se quitó en el doc 60: esas
+	// funciones desaparecieron en la v0.44 (el uniforme es una venta más) y la parte moría en silencio con un error fatal.
+	// El inventario de la tienda de ahora lo prueban tienda-inventario.php y migracion-tienda.php.
+} catch ( Throwable $e ) {
+	++$fails;
+	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";
 } finally {
 	Escritura::usar_para_pruebas( null );
 	$crm->desactivar();
@@ -435,9 +386,9 @@ try {
 	wp_set_current_user( 0 );
 
 	if ( null === $cfg_antes ) {
-		delete_option( 'asde_ap_uniformes_' . $grupo['numero'] );
+		delete_option( 'asde_ap_tienda_' . $grupo['numero'] );
 	} else {
-		update_option( 'asde_ap_uniformes_' . $grupo['numero'], $cfg_antes, false );
+		update_option( 'asde_ap_tienda_' . $grupo['numero'], $cfg_antes, false );
 	}
 	$lista = implode( ',', array_map( 'intval', $ids ) ) ?: '0';
 	foreach ( array( array( Cambios::table(), $cam_antes ), array( MaterialesTable::table(), $mat_antes ), array( TiposTable::table(), $tip_antes ), array( PedidosTable::table(), $ped_antes ) ) as list( $tabla, $antes ) ) {
