@@ -5,7 +5,8 @@
  *
  *   wp eval-file <ruta completa>/wp-content/plugins/asde-area-privada/tests/tienda-proveedor.php
  *
- * Usa el CRM simulado de tests/lib (fichas inventadas): ninguna petición llega al CRM real. Al terminar se borra lo creado
+ * Usa el CRM simulado de tests/lib (fichas inventadas): ninguna petición llega al CRM real. Trabaja en un grupo ficticio
+ * (996, añadido solo en memoria con el filtro pre_option_asde_ap_grupos) para no ver los pedidos del Local. Al terminar se borra lo creado
  * (productos, pedidos, pedidos al proveedor, usuarios, registros).
  */
 defined( 'ABSPATH' ) || exit;
@@ -38,10 +39,24 @@ $ok    = function ( $cond, string $label ) use ( &$fails ) {
 	echo ( $cond ? 'OK   ' : 'FAIL ' ), $label, "\n";
 };
 
-$grupo = Grupos::por_numero( '684' ) ?? ( array_values( Grupos::todos() )[0] ?? null );
-if ( ! $grupo || '' === $grupo['crm_id'] ) {
-	exit( "Hace falta un grupo con la conexión al CRM comprobada.\n" );
+// Doc 60: la prueba trabaja en un grupo ficticio (996, solo en memoria, con su CRM simulado) para no depender de los
+// pedidos y pedidos al proveedor que haya en el Local (el volcado del manual deja «Camisas de otoño» sin recibir en el 684,
+// y la pestaña enseñaba su botón «Marcar como recibido»).
+if ( Grupos::por_numero( '996' ) ) {
+	exit( "El grupo 996 existe en el Local: esta prueba lo usa como grupo ficticio. Revisa de dónde ha salido.\n" );
 }
+$grupos_orig = get_option( 'asde_ap_grupos' );
+$mas_grupos  = static fn() => (array) $grupos_orig + array(
+	'996' => array(
+		'nombre'    => 'Grupo de prueba 996',
+		'usuario'   => 'prueba-996',
+		'clave_enc' => \AsdeBalears\AreaPrivada\Crm\Crypto::encrypt( 'clave-de-prueba' ),
+		'crm_id'    => 'sg-prueba-996',
+	),
+);
+add_filter( 'pre_option_asde_ap_grupos', $mas_grupos );
+Grupos::olvidar();
+$grupo = Grupos::por_numero( '996' );
 foreach ( get_users( array( 'search' => 'prueba-prv-*', 'search_columns' => array( 'user_login' ) ) ) as $u ) {
 	exit( 'Ya existe el usuario ' . $u->user_login . " (¿una ejecución anterior interrumpida?). Bórralo antes de repetir la prueba.\n" );
 }
@@ -270,8 +285,10 @@ try {
 	$a = $como( $u_coord );
 	$ok( false === Proveedor::esperando( PedidosTable::obtener( $o1 ) ) && Servicio::puede_entregar( PedidosTable::obtener( $o1 ), $a ) && 2 === Servicio::pendientes( $a )['entrega'], 'ya se pueden entregar los pedidos de los clientes (2 pendientes)' );
 	$ok( is_wp_error( Proveedor::recibir( $pp['id'], array() ) ) && $m_antes + 2 === $existencias( $v_cam['M'] ), 'no se recibe dos veces (y no se suma dos veces)' );
-	$h = ( new TiendaProveedorView() )->render();
-	$ok( str_contains( $h, 'Recibido el' ) && ! str_contains( $h, 'Marcar como recibido' ), 'la pestaña lo enseña recibido, sin botón' );
+	$h   = ( new TiendaProveedorView() )->render();
+	$art = preg_match( '~<article class="asde-pedido">(?:(?!</article>).)*Camisas octubre(?:(?!</article>).)*</article>~s', $h, $m ) ? $m[0] : '';
+	$ok( '' !== $art && str_contains( $art, 'Recibido el' ) && ! str_contains( $art, 'Marcar como recibido' ) && ! str_contains( $art, 'name="recibida[' ), 'la pestaña lo enseña recibido, sin botón ni casillas' );
+	$ok( ! str_contains( $h, 'Marcar como recibido' ), 'y no queda ningún pedido al proveedor por recibir en el grupo' );
 
 	echo "\n== Parte F · Un pedido sin diferencias y la descarga ==\n";
 	$o5 = $pedido( array( array( $camisa, $v_cam['L'], 'Camisa de prueba', 'L', 2, 1 ) ), true );
@@ -299,6 +316,9 @@ try {
 	$_GET = array();
 	$ok( true === $muerto, 'un scouter no descarga el Excel del pedido' );
 	$ok( $crm->llamadas > 0 && 0 === $cortadas, "todas las consultas al CRM las ha respondido el simulador ({$crm->llamadas}); ninguna ha salido hacia el CRM real" );
+} catch ( Throwable $e ) {
+	++$fails;
+	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";
 } finally {
 	remove_filter( 'wp_redirect', $redirigir, 1 );
 	remove_filter( 'send_auth_cookies', '__return_false' );
@@ -316,12 +336,14 @@ try {
 	$wpdb->query( $wpdb->prepare( 'DELETE FROM %i WHERE id > %d', ProveedorTable::table(), $prv_antes ) ); // phpcs:ignore WordPress.DB
 	$wpdb->query( $wpdb->prepare( 'DELETE FROM %i WHERE id > %d', VariantesTable::table(), $var_antes ) ); // phpcs:ignore WordPress.DB
 	$wpdb->query( $wpdb->prepare( 'DELETE FROM %i WHERE id > %d', ProductosTable::table(), $prod_antes ) ); // phpcs:ignore WordPress.DB
-	$wpdb->query( $wpdb->prepare( "DELETE FROM %i WHERE id > %d AND ( user_id IN ($lista) OR objeto = 'tienda' )", Logger::table(), $log_antes ) ); // phpcs:ignore WordPress.DB
+	$wpdb->query( $wpdb->prepare( "DELETE FROM %i WHERE id > %d AND user_id IN ($lista)", Logger::table(), $log_antes ) ); // phpcs:ignore WordPress.DB
 	foreach ( $ids as $uid ) {
 		Ambito::olvidar( (int) $uid );
 		wp_delete_user( (int) $uid );
 	}
 	Grupo::forzar( null );
+	remove_filter( 'pre_option_asde_ap_grupos', $mas_grupos );
+	Grupos::olvidar();
 
 	$quedan = (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->users} WHERE user_login LIKE 'prueba-prv-%'" ); // phpcs:ignore WordPress.DB
 	$ok( 0 === $quedan && 0 === (int) $wpdb->get_var( 'SELECT COUNT(*) FROM ' . PedidosTable::table() . ' WHERE id > ' . (int) $ped_antes ) && 0 === (int) $wpdb->get_var( 'SELECT COUNT(*) FROM ' . ProveedorTable::table() . ' WHERE id > ' . (int) $prv_antes ), 'limpieza: sin usuarios, pedidos, productos ni pedidos al proveedor de la prueba' ); // phpcs:ignore WordPress.DB
