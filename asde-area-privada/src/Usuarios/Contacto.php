@@ -64,14 +64,14 @@ final class Contacto {
 		return '';
 	}
 
-	/** "A", "A y B", "A, B y C" (o "A, B o C" con $y = 'o'). */
-	public static function lista( array $items, string $y = 'y' ): string {
+	/** "A", "A y B", "A, B y C" (o "A, B o C" con $o = true), con el conector en el idioma de quien lo ve (doc 59, RC-USU-2). */
+	public static function lista( array $items, bool $o = false ): string {
 		$items = array_values( array_filter( $items ) );
 		if ( count( $items ) < 2 ) {
 			return (string) ( $items[0] ?? '' );
 		}
 		$ultimo = array_pop( $items );
-		return implode( ', ', $items ) . ' ' . $y . ' ' . $ultimo;
+		return implode( ', ', $items ) . ' ' . ( $o ? asde_t( 'o' ) : asde_t( 'y' ) ) . ' ' . $ultimo;
 	}
 
 	/** Email enmascarado para mostrar sin revelarlo entero: ma***@gm***.com */

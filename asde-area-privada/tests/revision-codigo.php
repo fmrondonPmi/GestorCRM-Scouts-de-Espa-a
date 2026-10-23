@@ -9,6 +9,7 @@
  * - RC-TES-2: si los plazos suman el 100 %, el último cierra la cuota (sin céntimos de más ni de menos).
  * - RC-INS-1: un error cualquiera en la tarea diaria se registra y no corta los demás pasos ni las purgas (las escrituras
  *   de las purgas se neutralizan durante la prueba: no se borra nada).
+ * - RC-USU-2 y RC-USU-3: el conector de las listas en el idioma de quien lo ve y el error de «sin sección» con Intendencia.
  * Las demás correcciones con prueba van en las pruebas de su módulo (banco-gestion, tienda-fase5, sepa, eventos-inscripciones…)
  * o en las partes siguientes de esta.
  * Usa el CRM simulado (fichas inventadas) y deja el sitio como estaba.
@@ -23,9 +24,13 @@ use AsdeBalears\AreaPrivada\Crm\CrmException;
 use AsdeBalears\AreaPrivada\Crm\Escritura;
 use AsdeBalears\AreaPrivada\Domain\Grupo;
 use AsdeBalears\AreaPrivada\Domain\Grupos;
+use AsdeBalears\AreaPrivada\Idiomas\Idioma;
 use AsdeBalears\AreaPrivada\Install\Mantenimiento;
+use AsdeBalears\AreaPrivada\Install\Roles;
 use AsdeBalears\AreaPrivada\Sepa\Mandatos;
 use AsdeBalears\AreaPrivada\Sepa\Remesas;
+use AsdeBalears\AreaPrivada\Usuarios\AltaScouterService;
+use AsdeBalears\AreaPrivada\Usuarios\Contacto;
 use AsdeBalears\AreaPrivada\Usuarios\Solicitudes;
 use AsdeBalears\AreaPrivada\Tesoreria\Calculadora;
 use AsdeBalears\AreaPrivada\Tesoreria\Config as TesoreriaConfig;
@@ -159,6 +164,13 @@ try {
 	$purgas = static fn( string $tabla ): bool => (bool) array_filter( $escrituras, static fn( $q ) => str_contains( $q, $tabla ) );
 	$ok( is_array( $res ) && str_contains( $detalle( '' ), 'TypeError' ), 'la tarea diaria termina aunque falle la lista de grupos, y lo registra' );
 	$ok( $purgas( Solicitudes::table() ) && $purgas( Mandatos::table() ) && $purgas( Remesas::table() ), 'y las purgas (solicitudes, mandatos y remesas) se ejecutan igualmente' );
+
+	echo "== Parte D · RC-USU-2 y RC-USU-3: textos de Usuarios ==\n";
+	$ok( 'Ana, Bea y Ciro' === Contacto::lista( array( 'Ana', 'Bea', 'Ciro' ) ) && 'Ana o Bea' === Contacto::lista( array( 'Ana', 'Bea' ), true ) && 'Ana' === Contacto::lista( array( 'Ana' ) ), 'listas en castellano: «A, B y C» y «A o B»' );
+	$en = static fn( string $idioma, bool $o = false ): string => Idioma::en( $idioma, static fn() => Contacto::lista( array( 'Ana', 'Bea' ), $o ) );
+	$ok( 'Ana i Bea' === $en( 'ca' ) && 'Ana eta Bea' === $en( 'eu' ) && 'Ana e Bea' === $en( 'gl' ) && 'Ana ou Bea' === $en( 'gl', true ), 'y en catalán, euskera y gallego, con su conector (antes salía «y» en todos)' );
+	$err = AltaScouterService::errores( AltaScouterService::MODO_SIN_SECCION, array(), array(), 'voluntaria@example.invalid' );
+	$ok( 1 === count( $err ) && str_contains( $err[0], 'Intendencia' ) && array() === AltaScouterService::errores( AltaScouterService::MODO_SIN_SECCION, array(), array( Roles::INTENDENTE ), 'voluntaria@example.invalid' ), 'sin sección: el error nombra también Intendencia, que vale como responsabilidad' );
 } catch ( Throwable $e ) {
 	++$fails;
 	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";

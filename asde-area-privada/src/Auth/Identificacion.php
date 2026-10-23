@@ -179,7 +179,7 @@ final class Identificacion {
 				'asde_email_varias',
 				sprintf(
 					asde_t( 'Ese email es el de varias cuentas y la contraseña vale para todas. Escribe el nº de socio/a de la cuenta con la que quieres entrar: %s.' ),
-					Contacto::lista( array_map( static fn( \WP_User $u ) => $u->user_login, $validas ), 'o' )
+					Contacto::lista( array_map( static fn( \WP_User $u ) => $u->user_login, $validas ), true )
 				)
 			);
 		}

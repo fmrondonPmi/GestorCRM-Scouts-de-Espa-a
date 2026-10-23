@@ -55,7 +55,7 @@ final class AltaScouterService {
 			$errores[] = asde_t( 'Elige al menos una sección en la que colaboras.' );
 		}
 		if ( self::MODO_SIN_SECCION === $modo && ! array_intersect( AltaService::ROLES_RESPONSABILIDAD, $responsabilidades ) ) {
-			$errores[] = asde_t( 'Sin sección, elige al menos una responsabilidad: Secretaría, Coordinación o Tesorería.' );
+			$errores[] = asde_t( 'Sin sección, elige al menos una responsabilidad: Secretaría, Coordinación, Tesorería o Intendencia.' );
 		}
 		if ( ! in_array( $modo, array( self::MODO_SCOUTER, self::MODO_SIN_SECCION ), true ) ) {
 			$errores[] = asde_t( 'Elige cómo colaboras en el grupo.' );
