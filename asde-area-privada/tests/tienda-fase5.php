@@ -304,6 +304,24 @@ try {
 	$_REQUEST = array();
 	$ok( null === PedidosTable::por_id( $a )['pago_en'] && BancoTable::PENDIENTE === BancoTable::obtener( (int) $m_x['id'] )['estado'], 'si se deshace el pago del pedido, el ingreso del banco vuelve a estar por conciliar' );
 	$ok( 2 === count( ConciliacionBanco::sugerencias( PedidosTable::todos() ) ), 'y vuelve a sugerirse' );
+
+	// Doc 59, RC-TES-6: otra petición revisa el mismo ingreso justo entre las comprobaciones y la escritura de esta.
+	$adelantada = false;
+	$adelantar  = static function ( $q ) use ( &$adelantada, $wpdb, $m_x ) {
+		if ( ! $adelantada && str_starts_with( ltrim( (string) $q ), 'UPDATE' ) && str_contains( (string) $q, BancoTable::table() ) && preg_match( "/WHERE .*`estado` = 'pendiente'/", (string) $q ) ) {
+			$adelantada = true;
+			$wpdb->update( BancoTable::table(), array( 'estado' => BancoTable::IGNORADO, 'nota' => 'Otra petición' ), array( 'id' => (int) $m_x['id'] ) ); // phpcs:ignore WordPress.DB
+		}
+		return $q;
+	};
+	add_filter( 'query', $adelantar );
+	try {
+		$r = ConciliacionBanco::confirmar( $a, (int) $m_x['id'] );
+	} finally {
+		remove_filter( 'query', $adelantar );
+	}
+	$ok( $adelantada && is_wp_error( $r ) && null === PedidosTable::por_id( $a )['pago_en'] && 'Otra petición' === BancoTable::obtener( (int) $m_x['id'] )['nota'], 'si otra confirmación se lleva el ingreso a la vez, esta da error y no paga el pedido (RC-TES-6)' );
+	BancoTable::marcar( (int) $m_x['id'], BancoTable::PENDIENTE );
 	$como( 0 );
 
 	echo "\n== Parte D2 · Abono del datáfono en el banco (v0.46) ==\n";

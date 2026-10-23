@@ -100,9 +100,13 @@ final class ConciliacionBanco {
 		if ( BancoTable::PENDIENTE !== $m['estado'] || $m['importe'] <= 0 || PedidosTable::numero( $p ) !== self::referencia( self::texto( $m ), Grupo::numero() ) ) {
 			return new \WP_Error( 'asde_tienda', asde_t( 'Ese ingreso ya está revisado o no corresponde a este pedido.' ) );
 		}
+		// Primero se toma el ingreso (solo si sigue pendiente, en una sola sentencia) y después se paga el pedido: dos
+		// confirmaciones a la vez no pagan dos pedidos con el mismo ingreso (doc 59, RC-TES-6).
+		if ( ! BancoTable::revisar( $mov_id, 0, sprintf( self::NOTA, PedidosTable::numero( $p ) ), 0, 0, BancoTable::PENDIENTE ) ) {
+			return new \WP_Error( 'asde_tienda', asde_t( 'Ese ingreso ya está revisado o no corresponde a este pedido.' ) );
+		}
 		$metodo = PedidosTable::METODO_DE_FORMA[ $p['forma_pago'] ] ?? 'transferencia';
 		PedidosTable::marcar_pago( $p['id'], $m['fecha'], isset( PedidosTable::METODOS[ $metodo ] ) ? $metodo : 'transferencia', (float) $m['importe'], 'Banco' . ( '' !== $m['documento'] ? ' ' . $m['documento'] : '' ) );
-		BancoTable::revisar( $mov_id, 0, sprintf( self::NOTA, PedidosTable::numero( $p ) ) );
 		Logger::log( 'tienda_banco_pagado', 'tienda', (string) $p['id'], array( 'movimiento' => $mov_id, 'importe' => $m['importe'] ) );
 		$nuevo = PedidosTable::obtener( $p['id'] );
 		if ( $nuevo ) {
@@ -203,8 +207,11 @@ final class ConciliacionBanco {
 		if ( ! $set || $esperado !== $ids ) {
 			return new \WP_Error( 'asde_tienda', asde_t( 'Los cobros con datáfono ya no cuadran con ese ingreso. Revisa la lista.' ) );
 		}
+		// Igual que confirmar(): el ingreso se toma antes de marcar los pedidos (doc 59, RC-TES-6).
+		if ( ! BancoTable::revisar( $mov_id, 0, sprintf( self::NOTA_DATAFONO, count( $ids ) ), 0, 0, BancoTable::PENDIENTE ) ) {
+			return new \WP_Error( 'asde_tienda', asde_t( 'Ese ingreso ya está revisado o no existe.' ) );
+		}
 		PedidosTable::marcar_banco( $ids, $mov_id );
-		BancoTable::revisar( $mov_id, 0, sprintf( self::NOTA_DATAFONO, count( $ids ) ) );
 		Logger::log( 'tienda_banco_datafono', 'tienda', (string) $mov_id, array( 'pedidos' => count( $ids ), 'importe' => $m['importe'] ) );
 		return true;
 	}
