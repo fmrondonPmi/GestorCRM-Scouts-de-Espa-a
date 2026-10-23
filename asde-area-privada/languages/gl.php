@@ -1736,7 +1736,6 @@ return array(
 	'Roles' => 'Roles',
 	'Sin email en el CRM' => 'Sen email no CRM',
 	'Sin membresía activa: no puede entrar' => 'Sen membresía activa: non pode entrar',
-	'Sin sección, elige al menos una responsabilidad: Secretaría, Coordinación o Tesorería.' => 'Sen sección, elixe polo menos unha responsabilidade: Secretaría, Coordinación ou Tesouraría.',
 	'Solicitud' => 'Solicitude',
 	'Solicitud rechazada' => 'Solicitude rexeitada',
 	'Solo del usuario' => 'Só do usuario',
@@ -4607,4 +4606,15 @@ return array(
 	'No se ha guardado: para cambiar la provincia marca la casilla de confirmación (los números de socio/a del CRM con la provincia anterior dejarán de reconocerse como del grupo).' => 'Non se gardou: para cambiar a provincia marca a caixa de confirmación (os números de socio/a do CRM coa provincia anterior deixarán de recoñecerse como do grupo).',
 	'No tienes permiso para cambiar los datos del grupo.' => 'Non tes permiso para cambiar os datos do grupo.',
 	'Sale de' => 'Sae de',
+
+	// doc 59: revisión de código
+	'El CRM tiene más de %d registros visibles para esta conexión y no se pueden leer todos de una vez: el resultado saldría incompleto. Avisa a quien administra el área privada.' => 'O CRM ten máis de %d rexistros visibles para esta conexión e non se poden ler todos dunha vez: o resultado sairía incompleto. Avisa a quen administra a área privada.',
+	'%d adeudo' => '%d adebedo',
+	'%d adeudos' => '%d adebedos',
+	'Familia %1$s: el banco ha cobrado %2$s más de lo que quedaba por pagar en el evento. Queda como saldo a devolver: decide en Tesorería si se le devuelve.' => 'Familia %1$s: o banco cobrou %2$s máis do que quedaba por pagar no evento. Queda como saldo para devolver: decide en Tesouraría se se lle devolve.',
+	'Otra persona está haciendo un cambio en esto ahora mismo. Inténtalo de nuevo en unos segundos.' => 'Outra persoa está a facer un cambio nisto agora mesmo. Téntao de novo dentro duns segundos.',
+	'máximo %d caracteres.' => 'máximo %d caracteres.',
+	'nº territorial: %s' => 'nº territorial: %s',
+	'La cuenta de la web de esta persona es de otro grupo: no se puede cambiar desde aquí.' => 'A conta da web desta persoa é doutro grupo: non se pode cambiar desde aquí.',
+	'Sin sección, elige al menos una responsabilidad: Secretaría, Coordinación, Tesorería o Intendencia.' => 'Sen sección, escolle polo menos unha responsabilidade: Secretaría, Coordinación, Tesouraría ou Intendencia.',
 );

@@ -1736,7 +1736,6 @@ return array(
 	'Roles' => 'Rolak',
 	'Sin email en el CRM' => 'CRMan emailik gabe',
 	'Sin membresía activa: no puede entrar' => 'Kidetza aktiborik gabe: ezin da sartu',
-	'Sin sección, elige al menos una responsabilidad: Secretaría, Coordinación o Tesorería.' => 'Atalik gabe, aukeratu gutxienez ardura bat: Idazkaritza, Koordinazioa edo Diruzaintza.',
 	'Solicitud' => 'Eskaera',
 	'Solicitud rechazada' => 'Eskaera ukatua',
 	'Solo del usuario' => 'Erabiltzailearena soilik',
@@ -4607,4 +4606,15 @@ return array(
 	'No se ha guardado: para cambiar la provincia marca la casilla de confirmación (los números de socio/a del CRM con la provincia anterior dejarán de reconocerse como del grupo).' => 'Ez da gorde: probintzia aldatzeko, markatu berrespen-laukia (CRMko aurreko probintziako bazkide-zenbakiak ez dira gehiago taldekotzat joko).',
 	'No tienes permiso para cambiar los datos del grupo.' => 'Ez duzu taldearen datuak aldatzeko baimenik.',
 	'Sale de' => 'Hemendik dator:',
+
+	// doc 59: revisión de código
+	'El CRM tiene más de %d registros visibles para esta conexión y no se pueden leer todos de una vez: el resultado saldría incompleto. Avisa a quien administra el área privada.' => 'CRMak %d erregistro baino gehiago ditu konexio honetarako ikusgai, eta ezin dira guztiak batera irakurri: emaitza osatu gabe aterako litzateke. Jakinarazi eremu pribatua kudeatzen duenari.',
+	'%d adeudo' => '%d karga',
+	'%d adeudos' => '%d karga',
+	'Familia %1$s: el banco ha cobrado %2$s más de lo que quedaba por pagar en el evento. Queda como saldo a devolver: decide en Tesorería si se le devuelve.' => '%1$s familia: bankuak %2$s gehiago kobratu du ekitaldian ordaintzeko geratzen zena baino. Itzultzeko saldo gisa geratzen da: erabaki Diruzaintzan itzuliko zaion.',
+	'Otra persona está haciendo un cambio en esto ahora mismo. Inténtalo de nuevo en unos segundos.' => 'Beste pertsona bat aldaketa bat egiten ari da honetan oraintxe bertan. Saiatu berriro segundo batzuk barru.',
+	'máximo %d caracteres.' => 'gehienez %d karaktere.',
+	'nº territorial: %s' => 'lurralde-zenbakia: %s',
+	'La cuenta de la web de esta persona es de otro grupo: no se puede cambiar desde aquí.' => 'Pertsona honen webeko kontua beste talde batena da: ezin da hemendik aldatu.',
+	'Sin sección, elige al menos una responsabilidad: Secretaría, Coordinación, Tesorería o Intendencia.' => 'Atalik gabe, aukeratu gutxienez erantzukizun bat: Idazkaritza, Koordinazioa, Diruzaintza edo Intendentzia.',
 );

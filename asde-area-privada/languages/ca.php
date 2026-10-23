@@ -1736,7 +1736,6 @@ return array(
 	'Roles' => 'Rols',
 	'Sin email en el CRM' => 'Sense email al CRM',
 	'Sin membresía activa: no puede entrar' => 'Sense membresia activa: no pot entrar',
-	'Sin sección, elige al menos una responsabilidad: Secretaría, Coordinación o Tesorería.' => 'Sense secció, tria almenys una responsabilitat: Secretaria, Coordinació o Tresoreria.',
 	'Solicitud' => 'Sol·licitud',
 	'Solicitud rechazada' => 'Sol·licitud rebutjada',
 	'Solo del usuario' => 'Només de l\'usuari',
@@ -4607,4 +4606,15 @@ return array(
 	'No se ha guardado: para cambiar la provincia marca la casilla de confirmación (los números de socio/a del CRM con la provincia anterior dejarán de reconocerse como del grupo).' => 'No s\'ha desat: per canviar la província marca la casella de confirmació (els números de soci/sòcia del CRM amb la província anterior deixaran de reconèixer-se com del grup).',
 	'No tienes permiso para cambiar los datos del grupo.' => 'No tens permís per canviar les dades del grup.',
 	'Sale de' => 'Surt de',
+
+	// doc 59: revisión de código
+	'El CRM tiene más de %d registros visibles para esta conexión y no se pueden leer todos de una vez: el resultado saldría incompleto. Avisa a quien administra el área privada.' => 'El CRM té més de %d registres visibles per a aquesta connexió i no es poden llegir tots de cop: el resultat sortiria incomplet. Avisa qui administra l\'àrea privada.',
+	'%d adeudo' => '%d càrrec',
+	'%d adeudos' => '%d càrrecs',
+	'Familia %1$s: el banco ha cobrado %2$s más de lo que quedaba por pagar en el evento. Queda como saldo a devolver: decide en Tesorería si se le devuelve.' => 'Família %1$s: el banc ha cobrat %2$s més del que quedava per pagar a l\'esdeveniment. Queda com a saldo per retornar: decideix a Tresoreria si se li retorna.',
+	'Otra persona está haciendo un cambio en esto ahora mismo. Inténtalo de nuevo en unos segundos.' => 'Una altra persona hi està fent un canvi ara mateix. Torna-ho a provar d\'aquí a uns segons.',
+	'máximo %d caracteres.' => 'màxim %d caràcters.',
+	'nº territorial: %s' => 'núm. territorial: %s',
+	'La cuenta de la web de esta persona es de otro grupo: no se puede cambiar desde aquí.' => 'El compte web d\'aquesta persona és d\'un altre grup: no es pot canviar des d\'aquí.',
+	'Sin sección, elige al menos una responsabilidad: Secretaría, Coordinación, Tesorería o Intendencia.' => 'Sense secció, tria almenys una responsabilitat: Secretaria, Coordinació, Tresoreria o Intendència.',
 );
