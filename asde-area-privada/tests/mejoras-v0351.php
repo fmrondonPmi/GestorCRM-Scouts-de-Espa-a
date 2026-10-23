@@ -35,6 +35,7 @@ use AsdeBalears\AreaPrivada\Socios\SociosTable;
 use AsdeBalears\AreaPrivada\Tesoreria\Config;
 use AsdeBalears\AreaPrivada\Tesoreria\FamiliasTable;
 use AsdeBalears\AreaPrivada\Tesoreria\MovimientosTable;
+use AsdeBalears\AreaPrivada\Usuarios\AltaService;
 use AsdeBalears\AreaPrivada\Usuarios\Usuarios;
 
 global $wpdb;
@@ -163,7 +164,15 @@ $ver = static function ( $vista, array $get ): string {
 		$_GET = array();
 	}
 };
-$familias = array();
+$familias    = array();
+$grupos_orig = get_option( 'asde_ap_grupos' );
+$mas_grupos  = static fn() => (array) $grupos_orig + array(
+	'998' => array(
+		'nombre'  => 'Grupo de prueba 998',
+		'usuario' => '',
+		'crm_id'  => '',
+	),
+);
 
 try {
 	// -----------------------------------------------------------------------
@@ -188,8 +197,21 @@ try {
 	$ok( ! str_contains( $h, 'eliminar_de_la_web' ), 'en la de quien la tiene, no' );
 	$r = Eliminadas::eliminar( $repo->obtener( '990082' ), $u_secre );
 	$ok( is_wp_error( $r ), 'y tampoco se deja por detrás: ' . ( is_wp_error( $r ) ? $r->get_error_message() : '' ) );
+	// Doc 59, RC-USU-1: otro grupo de la instalación (998) con una cuenta familiar de Dani y la cuenta propia de Cai.
+	add_filter( 'pre_option_asde_ap_grupos', $mas_grupos );
+	Grupos::olvidar();
+	$u_otro_fam = $crear( 'prueba-v0351-otrofam', Roles::TUTOR, array( Usuarios::META_REPRESENTADO => '990084' ) );
+	$u_otro_cai = $crear( 'prueba-v0351-otrocai', Roles::PARTICIPANTE, array( Usuarios::META_SOCIO => '990083' ) );
+	update_user_meta( $u_otro_fam, Usuarios::META_GRUPO, '998' );
+	update_user_meta( $u_otro_cai, Usuarios::META_GRUPO, '998' );
+	$ok( ! Usuarios::del_grupo_actual( get_userdata( $u_otro_fam ) ) && Usuarios::del_grupo_actual( get_userdata( $u_dos ) ), 'se distingue una cuenta del grupo 998 de una del grupo actual' );
 	$r = Eliminadas::eliminar( $repo->obtener( '990084' ), $u_secre );
 	$ok( is_array( $r ) && $r['cuenta'] && 2 === $r['familiares'] && 1 === $r['desactivadas'] && '' !== $r['familia'], 'Dani: sale de su familia, su cuenta se desactiva, sale de las 2 cuentas familiares y la que no representa a nadie más se desactiva' );
+	$ok( Usuarios::ACTIVO === Usuarios::estado( get_userdata( $u_otro_fam ) ) && array( '990084' ) === array_values( Usuarios::representados( $u_otro_fam ) ), 'la cuenta familiar del otro grupo no se toca: sigue activa y con Dani (RC-USU-1)' );
+	$alta = AltaService::make()->alta_persona( '990083', array( Roles::SCOUTER ), array( 'scouts' ) );
+	$ok( ! $alta->ok && str_contains( implode( ' ', $alta->errores ), 'es de otro grupo' ) && '998' === get_user_meta( $u_otro_cai, Usuarios::META_GRUPO, true ) && ! in_array( Roles::SCOUTER, (array) get_userdata( $u_otro_cai )->roles, true ), 'dar acceso desde este grupo a quien tiene la cuenta en otro: error, y la cuenta sigue en su grupo y sin el rol nuevo (RC-USU-1)' );
+	remove_filter( 'pre_option_asde_ap_grupos', $mas_grupos );
+	Grupos::olvidar();
 	$ok( array( '990082' ) === FamiliasTable::obtener( $fam_dani )['miembros'], 'en su familia se queda Bru' );
 	$ok( Usuarios::DESACTIVADO === Usuarios::estado( get_userdata( $u_propia ) ) && Usuarios::DESACTIVADO === Usuarios::estado( get_userdata( $u_solo ) ), 'su cuenta y la familiar que solo la representaba a ella, desactivadas' );
 	$ok( Usuarios::ACTIVO === Usuarios::estado( get_userdata( $u_dos ) ) && array( '990082' ) === array_values( Usuarios::representados( $u_dos ) ), 'la familiar que también representa a Bru sigue, ya sin Dani' );
@@ -264,6 +286,8 @@ try {
 	$h = TemplateLoader::render( 'acceso/formulario', $vars + array( 'pedir_codigo' => true ) );
 	$ok( str_contains( $h, '<details class="asde-acceso__codigo asde-destacado" open>' ) && str_contains( $h, 'required autofocus' ), 'cuando Wordfence pide el código, abierto, destacado y obligatorio' );
 } finally {
+	remove_filter( 'pre_option_asde_ap_grupos', $mas_grupos );
+	Grupos::olvidar();
 	$crm->desactivar();
 	remove_filter( 'asde_ap_instantanea_segundos', '__return_zero' );
 	remove_filter( 'pre_http_request', $cortar_crm, 2 );

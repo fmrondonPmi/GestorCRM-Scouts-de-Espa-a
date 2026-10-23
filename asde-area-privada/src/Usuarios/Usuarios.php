@@ -1,6 +1,8 @@
 <?php
 namespace AsdeBalears\AreaPrivada\Usuarios;
 
+use AsdeBalears\AreaPrivada\Domain\Grupo;
+use AsdeBalears\AreaPrivada\Domain\Grupos;
 use AsdeBalears\AreaPrivada\Install\Roles;
 use AsdeBalears\AreaPrivada\Integraciones\Wordfence;
 
@@ -110,6 +112,16 @@ final class Usuarios {
 	}
 
 	/** @return \WP_User[] Cuentas familiares que representan a este socio (la del primer tutor/a, «…T», primero). */
+	/**
+	 * ¿Es una cuenta del grupo actual? Una persona puede estar en varios grupos de la instalación (doc 34): lo que se hace
+	 * en un grupo no toca las cuentas de otro (doc 59, RC-USU-1). Una cuenta sin grupo reconocible (instalaciones de un
+	 * solo grupo, cuentas antiguas) cuenta como del grupo actual.
+	 */
+	public static function del_grupo_actual( \WP_User $u ): bool {
+		$g = Grupos::de_usuario( $u );
+		return null === $g || $g['id'] === Grupo::id();
+	}
+
 	public static function tutores_de( string $num_asde ): array {
 		return get_users(
 			array(

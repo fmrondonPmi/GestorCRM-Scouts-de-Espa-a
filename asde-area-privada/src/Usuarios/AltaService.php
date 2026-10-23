@@ -154,6 +154,10 @@ final class AltaService {
 		}
 
 		$vinculado  = Usuarios::por_socio( $p->num_socio_asde );
+		if ( $vinculado && ! Usuarios::del_grupo_actual( $vinculado ) ) {
+			// La cuenta es de otro grupo de la instalación: no se la lleva este sin avisar (doc 59, RC-USU-1).
+			return AltaResult::error( asde_t( 'La cuenta de la web de esta persona es de otro grupo: no se puede cambiar desde aquí.' ) );
+		}
 		$ya_scouter = $vinculado && in_array( Roles::SCOUTER, (array) $vinculado->roles, true );
 
 		$pedidos = array_values( array_intersect( self::ROLES_PERSONA, $roles ) );
@@ -296,6 +300,10 @@ final class AltaService {
 		// ¿Ya existe una cuenta familiar para alguno de ellos? Se amplía esa (la del primer tutor/a).
 		$cuentas = Usuarios::cuentas_familiares( $nums );
 		$cuenta  = $cuentas[0] ?? null;
+		if ( array_filter( $cuentas, static fn( \WP_User $c ): bool => ! Usuarios::del_grupo_actual( $c ) ) ) {
+			// Una cuenta familiar de estos menores es de otro grupo de la instalación (doc 59, RC-USU-1).
+			return AltaResult::error( asde_t( 'La cuenta de la web de esta persona es de otro grupo: no se puede cambiar desde aquí.' ) );
+		}
 
 		if ( $otro_tutor ) {
 			// Cuenta propia para el otro tutor/a: representa a los mismos menores que la primera.
@@ -423,7 +431,8 @@ final class AltaService {
 			update_user_meta( $user->ID, Usuarios::META_ALTA_POR, get_current_user_id() );
 			update_user_meta( $user->ID, Usuarios::META_ALTA_EN, current_time( 'mysql', true ) );
 		}
-		if ( Grupo::id() ) {
+		if ( Grupo::id() && Usuarios::del_grupo_actual( $user ) ) {
+			// Nunca se cambia de grupo una cuenta que ya es de otro (doc 59, RC-USU-1; alta_* ya lo ha comprobado).
 			update_user_meta( $user->ID, Usuarios::META_GRUPO, Grupo::id() );
 		}
 

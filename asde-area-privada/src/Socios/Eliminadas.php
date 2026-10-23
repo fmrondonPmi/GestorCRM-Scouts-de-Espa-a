@@ -69,12 +69,21 @@ final class Eliminadas {
 			FamiliasTable::quitar( (int) $familia['id'], $num );
 			$out['familia'] = (string) $familia['numero'];
 		}
-		$cuenta = Usuarios::por_socio( $num );
-		if ( $cuenta && Usuarios::ACTIVO === Usuarios::estado( $cuenta ) ) {
-			Usuarios::desactivar( $cuenta );
-			$out['cuenta'] = true;
+		// Solo las cuentas de este grupo: la misma ficha puede estar en otro grupo de la instalación (doc 34) y allí sigue
+		// (doc 59, RC-USU-1).
+		$cuentas = get_users(
+			array(
+				'meta_key'   => Usuarios::META_SOCIO, // phpcs:ignore WordPress.DB.SlowDBQuery
+				'meta_value' => $num, // phpcs:ignore WordPress.DB.SlowDBQuery
+			)
+		);
+		foreach ( array_filter( $cuentas, array( Usuarios::class, 'del_grupo_actual' ) ) as $cuenta ) {
+			if ( Usuarios::ACTIVO === Usuarios::estado( $cuenta ) ) {
+				Usuarios::desactivar( $cuenta );
+				$out['cuenta'] = true;
+			}
 		}
-		foreach ( Usuarios::tutores_de( $num ) as $tutor ) {
+		foreach ( array_filter( Usuarios::tutores_de( $num ), array( Usuarios::class, 'del_grupo_actual' ) ) as $tutor ) {
 			Usuarios::quitar_representado( $tutor->ID, $num );
 			++$out['familiares'];
 			if ( ! Usuarios::representados( $tutor->ID ) && ! Usuarios::socio( $tutor->ID ) && Usuarios::ACTIVO === Usuarios::estado( $tutor ) ) {
