@@ -92,7 +92,7 @@ $user = static fn( $id ) => ( $u = get_userdata( (int) $id ) ) ? $u->user_login 
 		<ul>
 			<?php foreach ( $c['plazos'] as $pl ) : ?>
 				<li>
-					<?php echo esc_html( sprintf( asde_t( '%s: %s hasta el %s' ), $pl['nombre'], Calculadora::euros( $pl['importe'] ), wp_date( 'd/m/Y', strtotime( $pl['fecha'] . ' 12:00' ) ) ) ); ?>
+					<?php echo esc_html( sprintf( asde_t( '%s: %s hasta el %s' ), asde_t( (string) $pl['nombre'] ), Calculadora::euros( $pl['importe'] ), wp_date( 'd/m/Y', strtotime( $pl['fecha'] . ' 12:00' ) ) ) ); ?>
 					<?php echo $pl['cubierto'] ? '✅' : ( $pl['vencido'] ? '<span class="asde-help asde-help--warning">vencido</span>' : '' ); ?>
 				</li>
 			<?php endforeach; ?>

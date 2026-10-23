@@ -28,6 +28,25 @@ final class Config {
 
 	private const OPTION = 'asde_ap_tesoreria';
 
+	/**
+	 * Valores por defecto que se GUARDAN en la configuración: en castellano, sin traducir (se traducen al mostrarlos con
+	 * asde_t(); están en Textos::extras()). Antes se guardaban en el idioma de quien guardaba la configuración (doc 59,
+	 * RC-TES-4).
+	 */
+	public const PLAZO_DEFECTO = 'Cuota anual';
+
+	/** Proyecto de recaudación de cada sección (v0.54). */
+	public const PROYECTOS_DEFECTO = array(
+		'castores' => 'Dique',
+		'lobatos'  => 'Cacería',
+		'scouts'   => 'Aventura',
+		'escultas' => 'Empresa',
+		'rovers'   => 'Descubierta e Intervención',
+	);
+
+	/** Categorías de los gastos de los presupuestos (v0.55; el grupo puede cambiarlas). */
+	public const CATEGORIAS_DEFECTO = array( 'Campamento de verano', 'Acampada', 'Excursión', 'Salida de día', 'Material', 'Formación', 'Actividad especial', 'Otros' );
+
 	public static function defaults_ronda( string $ronda ): array {
 		$anio = (int) substr( $ronda, 0, 4 );
 		return array(
@@ -39,7 +58,7 @@ final class Config {
 			'secciones_pagan' => Secciones::EDUCATIVAS,
 			'plazos'          => array(
 				array(
-					'nombre'     => asde_t( 'Cuota anual' ),
+					'nombre'     => self::PLAZO_DEFECTO,
 					'fecha'      => $anio . '-10-31',
 					'porcentaje' => 100,
 				),
@@ -56,24 +75,9 @@ final class Config {
 		return array(
 			'pct_grupo'   => 40.0,
 			'pct_seccion' => array(),
-			'proyectos'   => array(
-				'castores' => asde_t( 'Dique' ),
-				'lobatos'  => asde_t( 'Cacería' ),
-				'scouts'   => asde_t( 'Aventura' ),
-				'escultas' => asde_t( 'Empresa' ),
-				'rovers'   => asde_t( 'Descubierta e Intervención' ),
-			),
+			'proyectos'   => self::PROYECTOS_DEFECTO,
 			// v0.55: categorías de los gastos de los presupuestos (el grupo puede cambiarlas).
-			'categorias'  => array(
-				asde_t( 'Campamento de verano' ),
-				asde_t( 'Acampada' ),
-				asde_t( 'Excursión' ),
-				asde_t( 'Salida de día' ),
-				asde_t( 'Material' ),
-				asde_t( 'Formación' ),
-				asde_t( 'Actividad especial' ),
-				asde_t( 'Otros' ),
-			),
+			'categorias'  => self::CATEGORIAS_DEFECTO,
 		);
 	}
 

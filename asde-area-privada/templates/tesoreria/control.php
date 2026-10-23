@@ -45,7 +45,7 @@ $pct = $resumen['a_pagar'] > 0 ? round( 100 * $resumen['pagado'] / $resumen['a_p
 	<p class="asde-muted">
 		<?php asde_e( 'Plazos:' ); ?>
 		<?php foreach ( $cfg['plazos'] as $pl ) : ?>
-			<?php echo esc_html( $pl['nombre'] . ' (' . sprintf( asde_t( '%s %%, hasta el %s' ), number_format_i18n( (float) $pl['porcentaje'] ), wp_date( 'd/m/Y', strtotime( $pl['fecha'] . ' 12:00' ) ) ) . ')' ); ?> ·
+			<?php echo esc_html( asde_t( (string) $pl['nombre'] ) . ' (' . sprintf( asde_t( '%s %%, hasta el %s' ), number_format_i18n( (float) $pl['porcentaje'] ), wp_date( 'd/m/Y', strtotime( $pl['fecha'] . ' 12:00' ) ) ) . ')' ); ?> ·
 		<?php endforeach; ?>
 		<?php asde_e( 'Referencia para transferencias: el nº de familia (p. ej.' ); ?> <?php echo esc_html( ( reset( $lista )['familia']['numero'] ?? 'F684001' ) ); ?>).
 	</p>

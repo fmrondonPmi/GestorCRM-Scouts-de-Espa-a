@@ -93,6 +93,10 @@ final class Textos {
 		$add( \AsdeBalears\AreaPrivada\Tesoreria\Banco\TiposMovimiento::NATURALEZAS, 'Tesorería' );
 		$add( array_map( static fn( array $m ) => array( $m[0], $m[1] ), \AsdeBalears\AreaPrivada\Domain\Modulos::LISTA ), 'Datos del grupo' );
 		$add( array_column( \AsdeBalears\AreaPrivada\Tesoreria\Banco\TiposMovimiento::INICIALES, 0 ), 'Tesorería' );
+		// Doc 59, RC-TES-4: valores por defecto de la configuración de Tesorería (se guardan en castellano).
+		$add( array( \AsdeBalears\AreaPrivada\Tesoreria\Config::PLAZO_DEFECTO ), 'Tesorería' );
+		$add( \AsdeBalears\AreaPrivada\Tesoreria\Config::PROYECTOS_DEFECTO, 'Tesorería' );
+		$add( \AsdeBalears\AreaPrivada\Tesoreria\Config::CATEGORIAS_DEFECTO, 'Tesorería' );
 		$add( Remesas::ESTADOS, 'Domiciliaciones SEPA' );
 		// v0.35: eventos (de los tipos, solo el nombre: lo demás son claves internas).
 		$add( array_column( EventosConfig::TIPOS, 'nombre' ), 'Eventos' );

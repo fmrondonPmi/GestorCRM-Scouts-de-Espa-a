@@ -85,8 +85,8 @@ $campos  = static function ( string $accion, array $extra = array() ) use ( $ron
 				<?php foreach ( $gastos as $p ) : ?>
 					<?php $gast = (float) ( $por_partida[ $p['id'] ] ?? 0 ); ?>
 					<tr>
-						<td data-label="<?php echo esc_attr( asde_a( 'Categoría' ) ); ?>"><?php echo esc_html( $p['categoria'] ); ?></td>
-						<td data-label="<?php echo esc_attr( asde_a( 'Concepto' ) ); ?>"><?php echo esc_html( $p['concepto'] ); ?><?php echo '' !== $p['nota'] ? ' <span class="asde-muted">· ' . esc_html( $p['nota'] ) . '</span>' : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Categoría' ) ); ?>"><?php echo esc_html( asde_t( (string) $p['categoria'] ) ); ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Concepto' ) ); ?>"><?php echo esc_html( asde_t( (string) $p['concepto'] ) ); ?><?php echo '' !== $p['nota'] ? ' <span class="asde-muted">· ' . esc_html( $p['nota'] ) . '</span>' : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?></td>
 						<td data-label="<?php echo esc_attr( asde_a( '¿Cuántos?' ) ); ?>"><?php echo (int) $p['veces']; ?></td>
 						<td data-label="<?php echo esc_attr( asde_a( 'Importe de cada uno' ) ); ?>"><?php echo esc_html( $e( $p['importe'] ) ); ?></td>
 						<td data-label="<?php echo esc_attr( asde_a( 'Total' ) ); ?>"><?php echo esc_html( $e( $p['total'] ) ); ?></td>
@@ -115,7 +115,7 @@ $campos  = static function ( string $accion, array $extra = array() ) use ( $ron
 				<?php foreach ( $ingres as $p ) : ?>
 					<?php $proy = PartidasTable::PROYECTO === $p['categoria']; ?>
 					<tr>
-						<td data-label="<?php echo esc_attr( asde_a( 'Concepto' ) ); ?>"><?php echo $proy ? esc_html( sprintf( asde_t( 'Proyecto «%s»: objetivo de recaudación' ), $p['concepto'] ) ) : esc_html( $p['concepto'] ); ?><?php echo '' !== $p['nota'] ? ' <span class="asde-muted">· ' . esc_html( $p['nota'] ) . '</span>' : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Concepto' ) ); ?>"><?php echo $proy ? esc_html( sprintf( asde_t( 'Proyecto «%s»: objetivo de recaudación' ), asde_t( (string) $p['concepto'] ) ) ) : esc_html( asde_t( (string) $p['concepto'] ) ); ?><?php echo '' !== $p['nota'] ? ' <span class="asde-muted">· ' . esc_html( $p['nota'] ) . '</span>' : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?></td>
 						<td data-label="<?php echo esc_attr( asde_a( '¿Cuántos?' ) ); ?>"><?php echo (int) $p['veces']; ?></td>
 						<td data-label="<?php echo esc_attr( asde_a( 'Importe de cada uno' ) ); ?>">
 							<?php if ( $proy && $editable ) : ?>
@@ -155,13 +155,13 @@ $campos  = static function ( string $accion, array $extra = array() ) use ( $ron
 				<?php
 				$nombres = array();
 				foreach ( $gastos as $p ) {
-					$nombres[ $p['id'] ] = $p['concepto'];
+					$nombres[ $p['id'] ] = asde_t( (string) $p['concepto'] );
 				}
 				?>
 				<?php foreach ( $gastos_reales as $g ) : ?>
 					<tr>
 						<td data-label="<?php echo esc_attr( asde_a( 'Fecha' ) ); ?>"><?php echo esc_html( wp_date( get_option( 'date_format' ), strtotime( $g['fecha'] ) ) ); ?></td>
-						<td data-label="<?php echo esc_attr( asde_a( 'Concepto' ) ); ?>"><?php echo esc_html( $g['concepto'] ); ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Concepto' ) ); ?>"><?php echo esc_html( asde_t( (string) $g['concepto'] ) ); ?></td>
 						<td data-label="<?php echo esc_attr( asde_a( 'Partida' ) ); ?>"><?php echo esc_html( $nombres[ $g['partida_id'] ] ?? '–' ); ?></td>
 						<td data-label="<?php echo esc_attr( asde_a( 'Importe' ) ); ?>"><?php echo esc_html( $e( $g['importe'] ) ); ?></td>
 						<td><form method="post" action="<?php echo esc_url( $url ); ?>"><?php echo $campos( 'gasto_quitar', array( 'id' => $g['id'] ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?><button type="submit" class="button button-small"><?php asde_e( 'Quitar' ); ?></button></form></td>
@@ -180,7 +180,7 @@ $campos  = static function ( string $accion, array $extra = array() ) use ( $ron
 					<label for="asde-pg-partida"><?php asde_e( 'Partida' ); ?></label>
 					<select id="asde-pg-partida" name="partida_id">
 						<?php foreach ( $gastos as $p ) : ?>
-							<option value="<?php echo (int) $p['id']; ?>"><?php echo esc_html( $p['concepto'] ); ?></option>
+							<option value="<?php echo (int) $p['id']; ?>"><?php echo esc_html( asde_t( (string) $p['concepto'] ) ); ?></option>
 						<?php endforeach; ?>
 					</select>
 				</p>
@@ -210,7 +210,7 @@ $campos  = static function ( string $accion, array $extra = array() ) use ( $ron
 					<label for="asde-pp-cat"><?php asde_e( 'Categoría (de un gasto)' ); ?></label>
 					<select id="asde-pp-cat" name="categoria">
 						<?php foreach ( $categorias as $c ) : ?>
-							<option value="<?php echo esc_attr( $c ); ?>"><?php echo esc_html( $c ); ?></option>
+							<option value="<?php echo esc_attr( $c ); ?>"><?php echo esc_html( asde_t( (string) $c ) ); ?></option>
 						<?php endforeach; ?>
 					</select>
 				</p>

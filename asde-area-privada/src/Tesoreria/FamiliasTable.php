@@ -95,7 +95,8 @@ final class FamiliasTable {
 				'miembros' => array(),
 			);
 		}
-		foreach ( (array) $wpdb->get_results( $wpdb->prepare( 'SELECT familia_id, num_socio_asde FROM %i ORDER BY creado', self::table_miembros() ), ARRAY_A ) as $r ) { // phpcs:ignore WordPress.DB
+		// Solo los miembros de las familias del grupo (antes se leían los de todos los grupos y se filtraba aquí: doc 59, RC-TES-3).
+		foreach ( (array) $wpdb->get_results( $wpdb->prepare( 'SELECT m.familia_id, m.num_socio_asde FROM %i m INNER JOIN %i f ON f.id = m.familia_id WHERE f.grupo = %s ORDER BY m.creado', self::table_miembros(), self::table(), Grupo::numero() ), ARRAY_A ) as $r ) { // phpcs:ignore WordPress.DB
 			if ( isset( $familias[ (int) $r['familia_id'] ] ) ) {
 				$familias[ (int) $r['familia_id'] ]['miembros'][] = (string) $r['num_socio_asde'];
 			}

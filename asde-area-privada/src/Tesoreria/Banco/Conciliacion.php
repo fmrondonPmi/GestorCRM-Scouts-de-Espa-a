@@ -20,9 +20,9 @@ defined( 'ABSPATH' ) || exit;
  */
 final class Conciliacion {
 
-	/** Referencia de familia del grupo en un texto: F + nº de grupo + 3 cifras. */
+	/** Referencia de familia del grupo en un texto: F + nº de grupo + 3 cifras o más (desde la familia 1000: F6841000; doc 59, RC-TES-5). */
 	public static function referencia( string $texto, string $grupo ): ?string {
-		if ( preg_match_all( '/(?<![A-Z0-9])F[\s\-.]?(\d{3})[\s\-.]?(\d{3})(?!\d)/i', $texto, $m, PREG_SET_ORDER ) ) {
+		if ( preg_match_all( '/(?<![A-Z0-9])F[\s\-.]?(\d{3})[\s\-.]?(\d{3,})(?!\d)/i', $texto, $m, PREG_SET_ORDER ) ) {
 			foreach ( $m as $x ) {
 				if ( $x[1] === $grupo ) {
 					return 'F' . $x[1] . $x[2];

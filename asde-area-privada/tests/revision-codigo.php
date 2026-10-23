@@ -10,6 +10,7 @@
  * - RC-INS-1: un error cualquiera en la tarea diaria se registra y no corta los demás pasos ni las purgas (las escrituras
  *   de las purgas se neutralizan durante la prueba: no se borra nada).
  * - RC-USU-2 y RC-USU-3: el conector de las listas en el idioma de quien lo ve y el error de «sin sección» con Intendencia.
+ * - RC-TES-4 y RC-TES-5: los valores por defecto de Tesorería se guardan en castellano; referencias de familia desde la 1000.
  * Las demás correcciones con prueba van en las pruebas de su módulo (banco-gestion, tienda-fase5, sepa, eventos-inscripciones…)
  * o en las partes siguientes de esta.
  * Usa el CRM simulado (fichas inventadas) y deja el sitio como estaba.
@@ -32,6 +33,7 @@ use AsdeBalears\AreaPrivada\Sepa\Remesas;
 use AsdeBalears\AreaPrivada\Usuarios\AltaScouterService;
 use AsdeBalears\AreaPrivada\Usuarios\Contacto;
 use AsdeBalears\AreaPrivada\Usuarios\Solicitudes;
+use AsdeBalears\AreaPrivada\Tesoreria\Banco\Conciliacion;
 use AsdeBalears\AreaPrivada\Tesoreria\Calculadora;
 use AsdeBalears\AreaPrivada\Tesoreria\Config as TesoreriaConfig;
 
@@ -171,6 +173,13 @@ try {
 	$ok( 'Ana i Bea' === $en( 'ca' ) && 'Ana eta Bea' === $en( 'eu' ) && 'Ana e Bea' === $en( 'gl' ) && 'Ana ou Bea' === $en( 'gl', true ), 'y en catalán, euskera y gallego, con su conector (antes salía «y» en todos)' );
 	$err = AltaScouterService::errores( AltaScouterService::MODO_SIN_SECCION, array(), array(), 'voluntaria@example.invalid' );
 	$ok( 1 === count( $err ) && str_contains( $err[0], 'Intendencia' ) && array() === AltaScouterService::errores( AltaScouterService::MODO_SIN_SECCION, array(), array( Roles::INTENDENTE ), 'voluntaria@example.invalid' ), 'sin sección: el error nombra también Intendencia, que vale como responsabilidad' );
+
+	echo "== Parte E · RC-TES-4 y RC-TES-5: Tesorería ==\n";
+	$en_ca = Idioma::en( 'ca', static fn() => TesoreriaConfig::defaults_ronda( '2026-2027' ) );
+	$ok( 'Cuota anual' === $en_ca['plazos'][0]['nombre'] && 'Dique' === $en_ca['presupuesto']['proyectos']['castores'] && 'Campamento de verano' === $en_ca['presupuesto']['categorias'][0], 'los valores por defecto de una ronda salen en castellano aunque quien la configura use el catalán (lo que se guarda no se traduce)' );
+	$ok( 'Cuota anual' !== Idioma::en( 'ca', static fn() => asde_t( 'Cuota anual' ) ) && 'Dique' !== Idioma::en( 'eu', static fn() => asde_t( 'Dique' ) ), 'y se traducen al mostrarlos' );
+	$ok( 'F6841000' === Conciliacion::referencia( 'Cuota F6841000 hijos', '684' ) && 'F68412345' === Conciliacion::referencia( 'pago f-684-12345', '684' ), 'la referencia de familia se reconoce también desde la familia 1000 (F6841000)' );
+	$ok( 'F684001' === Conciliacion::referencia( 'Cuota F-684-001', '684' ) && null === Conciliacion::referencia( 'F6841000', '999' ) && null === Conciliacion::referencia( 'F68400', '684' ), 'las de 3 cifras siguen igual, y solo las del grupo' );
 } catch ( Throwable $e ) {
 	++$fails;
 	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";

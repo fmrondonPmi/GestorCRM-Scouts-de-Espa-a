@@ -130,7 +130,7 @@ $vista_previa = static function ( array $prep ) use ( $familias, $nombres ): voi
 					<select id="asde-sepa-plazo" name="plazo">
 						<option value="" <?php selected( $plazo, '' ); ?>><?php asde_e( 'Todo lo pendiente de la ronda' ); ?></option>
 						<?php foreach ( $plazos as $i => $pl ) : ?>
-							<option value="<?php echo (int) $i; ?>" <?php selected( $plazo, (string) $i ); ?>><?php echo esc_html( sprintf( asde_t( '%s (hasta el %s, %s %%)' ), $pl['nombre'], $fmt_fecha( $pl['fecha'] ), number_format_i18n( (float) $pl['porcentaje'], 0 ) ) ); ?></option>
+							<option value="<?php echo (int) $i; ?>" <?php selected( $plazo, (string) $i ); ?>><?php echo esc_html( sprintf( asde_t( '%s (hasta el %s, %s %%)' ), asde_t( (string) $pl['nombre'] ), $fmt_fecha( $pl['fecha'] ), number_format_i18n( (float) $pl['porcentaje'], 0 ) ) ); ?></option>
 						<?php endforeach; ?>
 					</select>
 					<span class="asde-help"><?php asde_e( 'Con un plazo, se cobra a cada familia lo que le falta hasta ese plazo (contando lo que ya ha pagado).' ); ?></span>
@@ -237,7 +237,7 @@ $vista_previa = static function ( array $prep ) use ( $familias, $nombres ): voi
 				<?php foreach ( $remesas as $r ) : ?>
 					<tr>
 						<td data-label="<?php echo esc_attr( asde_a( 'Remesa' ) ); ?>"><a href="<?php echo esc_url( add_query_arg( array( 'ronda' => $r['ronda'], 'remesa' => $r['id'] ), $url ) ); ?>"><?php echo esc_html( $r['numero'] ); ?></a></td>
-						<td data-label="<?php echo esc_attr( asde_a( 'Ronda' ) ); ?>"><?php echo esc_html( $r['ronda'] . ' · ' . $r['plazo'] ); ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Ronda' ) ); ?>"><?php echo esc_html( $r['ronda'] . ' · ' . asde_t( (string) $r['plazo'] ) ); ?></td>
 						<td data-label="<?php echo esc_attr( asde_a( 'Cobro' ) ); ?>"><?php echo esc_html( $fmt_fecha( $r['fecha_cobro'] ) ); ?></td>
 						<td data-label="<?php echo esc_attr( asde_a( 'Adeudos' ) ); ?>"><?php echo (int) $r['adeudos']; ?></td>
 						<td data-label="<?php echo esc_attr( asde_a( 'Total' ) ); ?>"><?php echo esc_html( Calculadora::euros( $r['total'] ) ); ?></td>

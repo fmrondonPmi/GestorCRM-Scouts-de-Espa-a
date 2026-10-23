@@ -36,7 +36,7 @@ $pendientes = array_filter( $lineas, static fn( $l ) => Remesas::PENDIENTE === $
 		<span class="asde-badge"><?php echo esc_html( asde_t( Remesas::ESTADOS[ $r['estado'] ] ?? $r['estado'] ) ); ?></span>
 	</header>
 	<ul class="asde-resumen">
-		<li><?php asde_e( 'Ronda' ); ?> <strong><?php echo esc_html( $r['ronda'] ); ?></strong> · <?php echo esc_html( $r['plazo'] ); ?></li>
+		<li><?php asde_e( 'Ronda' ); ?> <strong><?php echo esc_html( $r['ronda'] ); ?></strong> · <?php echo esc_html( asde_t( (string) $r['plazo'] ) ); ?></li>
 		<li><?php asde_e( 'Fecha de cobro' ); ?> <strong><?php echo esc_html( $fmt_fecha( $r['fecha_cobro'] ) ); ?></strong></li>
 		<li><strong><?php echo esc_html( Remesas::adeudos( (int) $r['adeudos'] ) ); ?></strong> · <strong><?php echo esc_html( Calculadora::euros( $r['total'] ) ); ?></strong></li>
 	</ul>
