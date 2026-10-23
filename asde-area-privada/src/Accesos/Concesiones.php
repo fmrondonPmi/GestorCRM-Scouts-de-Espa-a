@@ -78,6 +78,7 @@ final class Concesiones {
 	public static function olvidar(): void {
 		global $wpdb;
 		self::$cache = array();
+		PermisosRol::olvidar();
 		$hay         = (int) $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(*) FROM %i WHERE estado = %s', self::table(), self::ACTIVO ) );
 		update_option( self::BANDERA, $hay ? '1' : '0', true );
 	}

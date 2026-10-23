@@ -342,6 +342,7 @@ try {
 			$wpdb->insert( PermisosRol::table(), array( 'rol' => $rol, 'permiso' => $p, 'valor' => $v ? 1 : 0, 'cambiado_por' => 0, 'cambiado' => current_time( 'mysql', true ) ) );
 		}
 	}
+	PermisosRol::olvidar();
 	Roles::install();
 	$lista = implode( ',', array_map( 'intval', $ids ) ) ?: '0';
 	$wpdb->query( "DELETE FROM " . Concesiones::table() . " WHERE user_id IN ($lista)" ); // phpcs:ignore WordPress.DB

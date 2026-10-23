@@ -42,14 +42,30 @@ final class PermisosRol {
 		);
 	}
 
+	/**
+	 * Cambios leídos en esta petición: Concesiones::del_rol() los pide por cada persona del listado de «Accesos por
+	 * persona» y en cada mapa() (doc 59, RC-ACC-1). Se vacía con olvidar() (al guardar, restaurar y Concesiones::olvidar()).
+	 *
+	 * @var array<string, array<string, bool>>|null
+	 */
+	private static ?array $cache = null;
+
 	/** @return array<string, array<string, bool>> rol => [permiso => valor cambiado] */
 	public static function cambios(): array {
 		global $wpdb;
+		if ( null !== self::$cache ) {
+			return self::$cache;
+		}
 		$out = array();
 		foreach ( (array) $wpdb->get_results( $wpdb->prepare( 'SELECT rol, permiso, valor FROM %i', self::table() ), ARRAY_A ) as $f ) {
 			$out[ $f['rol'] ][ $f['permiso'] ] = (bool) $f['valor'];
 		}
-		return $out;
+		return self::$cache = $out;
+	}
+
+	/** Vacía la memoria de cambios() (después de escribir en la tabla). */
+	public static function olvidar(): void {
+		self::$cache = null;
 	}
 
 	/** Permisos de fábrica de un rol (solo los del catálogo). @return array<string, bool> */
@@ -84,6 +100,9 @@ final class PermisosRol {
 	 * fábrica) y al guardar la matriz.
 	 */
 	public static function aplicar( ?array $cambios = null ): void {
+		if ( null === $cambios ) {
+			self::olvidar(); // Desde Roles::install(): siempre lo que hay en la tabla.
+		}
 		foreach ( ( $cambios ?? self::cambios() ) as $rol => $permisos ) {
 			$wp = get_role( $rol );
 			if ( ! $wp || ! in_array( $rol, Catalogo::ROLES, true ) ) {
@@ -191,6 +210,7 @@ final class PermisosRol {
 				++$n;
 			}
 		}
+		self::olvidar();
 		Concesiones::olvidar();
 		return array( 'cambios' => $n, 'avisos' => $avisos );
 	}
@@ -218,6 +238,7 @@ final class PermisosRol {
 			self::fijar_en_wp( $rol, $p, $fabrica[ $p ] ?? false );
 		}
 		$wpdb->delete( self::table(), array( 'rol' => $rol ) );
+		self::olvidar();
 		if ( $cambios ) {
 			Auditoria::registrar( Auditoria::ROL_RESTAURA, array( 'actor' => $actor->ID, 'rol' => $rol ) );
 		}
