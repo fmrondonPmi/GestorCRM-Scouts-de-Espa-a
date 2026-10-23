@@ -47,7 +47,7 @@ final class ReintegrosView extends View {
 
 		if ( 'reintegro_pedir' === $accion ) {
 			check_admin_referer( 'asde_reintegro_pedir' );
-			$fichero = $this->justificante_subido();
+			$fichero = Justificantes::subido();
 			$r       = is_wp_error( $fichero ) ? $fichero : Servicio::solicitar(
 				array(
 					'concepto' => $this->post( 'concepto' ),
@@ -110,40 +110,14 @@ final class ReintegrosView extends View {
 	 *
 	 * @return array{ruta:string, nombre:string}|\WP_Error|null
 	 */
-	private function justificante_subido() {
-		$f = $_FILES['justificante'] ?? null; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.NonceVerification.Missing -- el nonce lo comprueba handle_post(); el fichero se valida con is_uploaded_file() y su contenido, al guardarlo
-		if ( is_array( $f ) && in_array( $f['error'] ?? 0, array( UPLOAD_ERR_INI_SIZE, UPLOAD_ERR_FORM_SIZE ), true ) ) {
-			return new \WP_Error( 'asde_justificante', asde_t( 'El justificante tiene que ser una imagen (JPG, PNG o WebP) o un PDF de hasta 5 MB.' ) );
-		}
-		if ( ! is_array( $f ) || UPLOAD_ERR_OK !== ( $f['error'] ?? UPLOAD_ERR_NO_FILE ) || ! is_uploaded_file( (string) $f['tmp_name'] ) ) {
-			return null;
-		}
-		return array(
-			'ruta'   => (string) $f['tmp_name'],
-			'nombre' => sanitize_file_name( wp_unslash( (string) $f['name'] ) ),
-		);
-	}
-
-	/**
-	 * Envía el justificante (descifrado) al navegador: solo quien pidió el reintegro, Tesorería y Coordinación. Las imágenes
-	 * se abren en la pestaña (con una CSP que no deja ejecutar nada); los PDF se descargan.
-	 */
+	/** Envía el justificante (descifrado) al navegador (Justificantes::enviar()): solo quien pidió el reintegro, Tesorería y Coordinación. */
 	private function ver_justificante( array $r ): \WP_Error {
 		$contenido = '' !== $r['justificante'] ? Justificantes::leer( $r ) : null;
 		if ( null === $contenido || ! isset( Justificantes::TIPOS[ $r['justificante_tipo'] ] ) ) {
 			return new \WP_Error( 'asde_reintegro', asde_t( 'No se ha podido leer el justificante.' ) );
 		}
 		Logger::log( 'reintegro_justificante_visto', 'reintegro', (string) $r['id'] );
-		$imagen = str_starts_with( $r['justificante_tipo'], 'image/' );
-		nocache_headers();
-		header( 'Content-Type: ' . $r['justificante_tipo'] );
-		header( 'Content-Disposition: ' . ( $imagen ? 'inline' : 'attachment' ) . '; filename="justificante-reintegro-' . $r['id'] . '.' . Justificantes::TIPOS[ $r['justificante_tipo'] ] . '"' );
-		header( 'Content-Length: ' . strlen( $contenido ) );
-		header( 'X-Content-Type-Options: nosniff' );
-		if ( $imagen ) {
-			header( "Content-Security-Policy: default-src 'none'; img-src 'self' data:; style-src 'unsafe-inline'; sandbox" );
-		}
-		echo $contenido; // phpcs:ignore WordPress.Security.EscapeOutput -- fichero binario (imagen o PDF comprobados al subirlo), con su tipo y nosniff.
-		exit;
+		Justificantes::enviar( $contenido, $r['justificante_tipo'], 'justificante-reintegro-' . $r['id'] );
+		exit; // Justificantes::enviar() ya termina.
 	}
 }

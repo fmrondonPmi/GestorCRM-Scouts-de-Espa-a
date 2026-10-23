@@ -210,7 +210,7 @@ $yo              = get_current_user_id();
 						<td data-label="<?php echo esc_attr( asde_a( 'Estado' ) ); ?>">
 							<span class="asde-badge asde-badge--gasto-<?php echo esc_attr( $estado ); ?>"><?php echo esc_html( $anulado ? asde_t( 'Anulado' ) : asde_t( GastosTable::ESTADOS[ $g['estado'] ] ?? $g['estado'] ) ); ?></span>
 							<?php if ( '' !== $g['motivo'] && ( $anulado || GastosTable::RECHAZADO === $g['estado'] ) ) : ?>
-								<br><span class="asde-muted"><?php echo esc_html( sprintf( asde_t( 'Motivo: %s' ), $g['motivo'] ) ); ?></span>
+								<br><span class="asde-muted"><?php echo esc_html( sprintf( asde_t( 'Motivo: %s' ), asde_t( (string) $g['motivo'] ) ) ); ?></span>
 							<?php endif; ?>
 							<?php if ( null !== $g['reembolsado_en'] ) : ?>
 								<br><span class="asde-muted"><?php echo esc_html( sprintf( asde_t( 'Reembolsado el %1$s (%2$s)' ), $fecha( $g['reembolsado_en'] ), asde_t( GastosTable::FORMAS[ $g['reembolso_forma'] ] ?? $g['reembolso_forma'] ) ) ); ?></span>

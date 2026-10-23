@@ -506,11 +506,14 @@ final class Inscripciones {
 		if ( $ahora >= $inicio ) {
 			return; // Empezado el evento, ya no se ofrecen plazas.
 		}
-		foreach ( self::lista_espera( InscripcionesTable::participantes( $e['id'] ) ) as $f ) {
+		// Las inscripciones se leen una vez y se actualizan en memoria al ofrecer cada plaza (antes, una consulta por
+		// candidato: doc 59, RC-EVE-4).
+		$filas = array_column( InscripcionesTable::participantes( $e['id'] ), null, 'id' );
+		foreach ( self::lista_espera( $filas ) as $f ) {
 			if ( null !== $f['oferta_hasta'] ) {
 				continue;
 			}
-			if ( ! self::hay_plaza( $e, InscripcionesTable::participantes( $e['id'] ), $f['seccion'] ) ) {
+			if ( ! self::hay_plaza( $e, $filas, $f['seccion'] ) ) {
 				continue;
 			}
 			$hasta = min( $ahora + self::dias_oferta() * DAY_IN_SECONDS, $inicio );
@@ -518,6 +521,7 @@ final class Inscripciones {
 			Logger::log( 'inscripcion_plaza_ofrecida', 'evento', (string) $e['id'], array( 'inscripcion' => $f['id'] ) );
 			$f = InscripcionesTable::obtener( $f['id'] );
 			if ( $f ) {
+				$filas[ $f['id'] ] = $f; // Ya ocupa la plaza ofrecida.
 				Avisos::plaza( $e, $f );
 			}
 		}

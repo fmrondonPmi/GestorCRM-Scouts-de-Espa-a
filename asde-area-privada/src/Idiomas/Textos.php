@@ -97,6 +97,7 @@ final class Textos {
 		$add( array( \AsdeBalears\AreaPrivada\Tesoreria\Config::PLAZO_DEFECTO ), 'Tesorería' );
 		$add( \AsdeBalears\AreaPrivada\Tesoreria\Config::PROYECTOS_DEFECTO, 'Tesorería' );
 		$add( \AsdeBalears\AreaPrivada\Tesoreria\Config::CATEGORIAS_DEFECTO, 'Tesorería' );
+		$add( array( \AsdeBalears\AreaPrivada\Eventos\Cuentas::MOTIVO_RETIRADO ), 'Eventos' ); // Doc 59, RC-EVE-3.
 		$add( Remesas::ESTADOS, 'Domiciliaciones SEPA' );
 		// v0.35: eventos (de los tipos, solo el nombre: lo demás son claves internas).
 		$add( array_column( EventosConfig::TIPOS, 'nombre' ), 'Eventos' );

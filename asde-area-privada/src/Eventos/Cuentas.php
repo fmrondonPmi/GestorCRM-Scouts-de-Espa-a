@@ -120,7 +120,7 @@ final class Cuentas {
 		if ( ! self::abiertas( $e ) ) {
 			return self::cerradas();
 		}
-		GastosTable::actualizar( $id, self::anulacion( asde_t( 'Retirado' ) ) );
+		GastosTable::actualizar( $id, self::anulacion( self::MOTIVO_RETIRADO ) ); // Se guarda en castellano (doc 59, RC-EVE-3).
 		Logger::log( 'evento_gasto_retirado', 'evento', (string) $e['id'], array( 'gasto' => $id ) );
 		return true;
 	}
@@ -637,6 +637,9 @@ final class Cuentas {
 	}
 
 	/** @return array<string, mixed> */
+	/** Motivo que se guarda al retirar un gasto: en castellano; se traduce al mostrarlo (está en Textos::extras()). */
+	public const MOTIVO_RETIRADO = 'Retirado';
+
 	private static function anulacion( string $motivo ): array {
 		return array(
 			'motivo'      => mb_substr( $motivo, 0, 255 ),

@@ -595,7 +595,7 @@ final class EventosView extends EventosBaseView {
 
 			// v0.36: cuentas del evento.
 			case 'evento_gasto':
-				$fichero = $this->justificante_subido();
+				$fichero = Justificantes::subido();
 				$r       = is_wp_error( $fichero ) ? $fichero : Cuentas::proponer( $e, $a, $in, $fichero );
 				$hecho   = Cobros::puede() ? asde_t( 'Gasto apuntado.' ) : asde_t( 'Gasto enviado a Tesorería para que lo revise.' );
 				break;
@@ -798,25 +798,7 @@ final class EventosView extends EventosBaseView {
 	 *
 	 * @return array{ruta:string, nombre:string}|\WP_Error|null
 	 */
-	private function justificante_subido() {
-		$f = $_FILES['justificante'] ?? null; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.NonceVerification.Missing -- el nonce se comprueba antes (check_admin_referer en handle_post); del fichero solo se usan datos validados con is_uploaded_file()
-		if ( is_array( $f ) && in_array( $f['error'] ?? 0, array( UPLOAD_ERR_INI_SIZE, UPLOAD_ERR_FORM_SIZE ), true ) ) {
-			return new \WP_Error( 'asde_cuentas', asde_t( 'El justificante tiene que ser una imagen (JPG, PNG o WebP) o un PDF de hasta 5 MB.' ) );
-		}
-		if ( ! is_array( $f ) || UPLOAD_ERR_OK !== ( $f['error'] ?? UPLOAD_ERR_NO_FILE ) || ! is_uploaded_file( (string) $f['tmp_name'] ) ) {
-			return null;
-		}
-		return array(
-			'ruta'   => (string) $f['tmp_name'],
-			'nombre' => sanitize_file_name( wp_unslash( (string) $f['name'] ) ),
-		);
-	}
-
-	/**
-	 * Envía el justificante de un gasto (descifrado) al navegador: solo quien ve las cuentas. Las
-	 * imágenes se abren en la pestaña (con una CSP que no deja ejecutar nada); los PDF se descargan
-	 * (el visor de PDF del navegador no funciona con esa CSP y un PDF puede llevar código).
-	 */
+	/** Envía el justificante de un gasto (descifrado) al navegador (Justificantes::enviar()): solo quien ve las cuentas. */
 	private function ver_justificante( array $e, Ambito $a, int $id ): \WP_Error {
 		$g = GastosTable::obtener( $id );
 		if ( ! Cuentas::puede_ver( $e, $a ) || ! $g || $g['evento_id'] !== $e['id'] || '' === $g['justificante'] ) {
@@ -827,17 +809,8 @@ final class EventosView extends EventosBaseView {
 			return new \WP_Error( 'asde_cuentas', asde_t( 'No se ha podido leer el justificante.' ) );
 		}
 		Logger::log( 'evento_justificante_visto', 'evento', (string) $e['id'], array( 'gasto' => $id ) );
-		$imagen = str_starts_with( $g['justificante_tipo'], 'image/' );
-		nocache_headers();
-		header( 'Content-Type: ' . $g['justificante_tipo'] );
-		header( 'Content-Disposition: ' . ( $imagen ? 'inline' : 'attachment' ) . '; filename="justificante-' . $id . '.' . Justificantes::TIPOS[ $g['justificante_tipo'] ] . '"' );
-		header( 'Content-Length: ' . strlen( $contenido ) );
-		header( 'X-Content-Type-Options: nosniff' );
-		if ( $imagen ) {
-			header( "Content-Security-Policy: default-src 'none'; img-src 'self' data:; style-src 'unsafe-inline'; sandbox" );
-		}
-		echo $contenido; // phpcs:ignore WordPress.Security.EscapeOutput -- fichero binario (imagen o PDF comprobados al subirlo), con su tipo y nosniff.
-		exit;
+		Justificantes::enviar( $contenido, $g['justificante_tipo'], 'justificante-' . $id );
+		exit; // Justificantes::enviar() ya termina.
 	}
 
 	/** El balance (o el informe final, si están cerradas) en CSV. */

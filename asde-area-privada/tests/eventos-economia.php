@@ -320,7 +320,9 @@ try {
 	$como( $u_mon );
 	$ok( is_wp_error( Cuentas::retirar( $e, $g3 ) ), 'otra persona del equipo no retira un gasto que no propuso' );
 	$como( $u_lob );
-	$ok( true === Cuentas::retirar( $e, $g3 ) && null !== GastosTable::obtener( $g3 )['anulado_en'] && is_wp_error( Cuentas::retirar( $e, $g1 ) ), 'quien lo propuso lo retira mientras está por revisar (uno ya validado, no)' );
+	$retirado = \AsdeBalears\AreaPrivada\Idiomas\Idioma::en( 'ca', static fn() => Cuentas::retirar( $e, $g3 ) ); // En catalán: el motivo se guarda igualmente en castellano (doc 59, RC-EVE-3).
+	$ok( true === $retirado && null !== GastosTable::obtener( $g3 )['anulado_en'] && is_wp_error( Cuentas::retirar( $e, $g1 ) ), 'quien lo propuso lo retira mientras está por revisar (uno ya validado, no)' );
+	$ok( Cuentas::MOTIVO_RETIRADO === GastosTable::obtener( $g3 )['motivo'], 'el motivo «Retirado» se guarda en castellano aunque quien lo retira use otro idioma (RC-EVE-3)' );
 	$como( $u_teso );
 	$b = Cuentas::balance( $ev( $id_e ) );
 	$ok( 0 === $b['por_revisar'] && 40.5 === $b['gastos'] && 1 === $b['reembolsos']['n'] && 40.5 === $b['reembolsos']['importe'], 'balance: 40,50 € de gastos y un reembolso pendiente de 40,50 €' );

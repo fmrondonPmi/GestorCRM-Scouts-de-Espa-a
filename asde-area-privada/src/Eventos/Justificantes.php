@@ -128,6 +128,48 @@ final class Justificantes {
 		}
 	}
 
+	/**
+	 * El justificante que llega en el formulario ($_FILES[$campo]), o null si no se ha subido ninguno; error si pasa del
+	 * tamaño máximo. Lo usan los gastos de los eventos y los reintegros (antes, copiado en sus dos vistas: doc 59, RC-PRE-4).
+	 * El nonce lo comprueba antes quien llama (handle_post); el contenido se valida al guardarlo (guardar()).
+	 *
+	 * @return array{ruta:string, nombre:string}|\WP_Error|null
+	 */
+	public static function subido( string $campo = 'justificante' ) {
+		$f = $_FILES[ $campo ] ?? null; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.NonceVerification.Missing -- el nonce se comprueba antes (check_admin_referer en handle_post); del fichero solo se usan datos validados con is_uploaded_file()
+		if ( is_array( $f ) && in_array( $f['error'] ?? 0, array( UPLOAD_ERR_INI_SIZE, UPLOAD_ERR_FORM_SIZE ), true ) ) {
+			return new \WP_Error( 'asde_justificante', asde_t( 'El justificante tiene que ser una imagen (JPG, PNG o WebP) o un PDF de hasta 5 MB.' ) );
+		}
+		if ( ! is_array( $f ) || UPLOAD_ERR_OK !== ( $f['error'] ?? UPLOAD_ERR_NO_FILE ) || ! is_uploaded_file( (string) $f['tmp_name'] ) ) {
+			return null;
+		}
+		return array(
+			'ruta'   => (string) $f['tmp_name'],
+			'nombre' => sanitize_file_name( wp_unslash( (string) $f['name'] ) ),
+		);
+	}
+
+	/**
+	 * Envía un justificante (ya descifrado y con permiso comprobado) al navegador y termina. Las imágenes se abren en la
+	 * pestaña (con una CSP que no deja ejecutar nada); los PDF se descargan (el visor de PDF del navegador no funciona con
+	 * esa CSP y un PDF puede llevar código).
+	 *
+	 * @param string $nombre Nombre del fichero sin extensión (justificante-12).
+	 */
+	public static function enviar( string $contenido, string $tipo, string $nombre ): void {
+		$imagen = str_starts_with( $tipo, 'image/' );
+		nocache_headers();
+		header( 'Content-Type: ' . $tipo );
+		header( 'Content-Disposition: ' . ( $imagen ? 'inline' : 'attachment' ) . '; filename="' . $nombre . '.' . ( self::TIPOS[ $tipo ] ?? 'bin' ) . '"' );
+		header( 'Content-Length: ' . strlen( $contenido ) );
+		header( 'X-Content-Type-Options: nosniff' );
+		if ( $imagen ) {
+			header( "Content-Security-Policy: default-src 'none'; img-src 'self' data:; style-src 'unsafe-inline'; sandbox" );
+		}
+		echo $contenido; // phpcs:ignore WordPress.Security.EscapeOutput -- fichero binario (imagen o PDF comprobados al subirlo), con su tipo y nosniff.
+		exit;
+	}
+
 	/** Acceso directo a los ficheros (sin pedir credenciales FTP: es una carpeta del propio sitio). */
 	private static function fs(): \WP_Filesystem_Direct {
 		require_once ABSPATH . 'wp-admin/includes/class-wp-filesystem-base.php';
