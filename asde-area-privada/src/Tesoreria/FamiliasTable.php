@@ -1,6 +1,7 @@
 <?php
 namespace AsdeBalears\AreaPrivada\Tesoreria;
 
+use AsdeBalears\AreaPrivada\Domain\Bloqueo;
 use AsdeBalears\AreaPrivada\Domain\Grupo;
 
 defined( 'ABSPATH' ) || exit;
@@ -133,7 +134,10 @@ final class FamiliasTable {
 		if ( '' === $grupo ) {
 			return new \WP_Error( 'asde_familia', asde_t( 'No se sabe en qué Grupo Scout se está trabajando.' ) );
 		}
-		$wpdb->query( "SELECT GET_LOCK('asde_num_familia', 10)" );
+		if ( ! Bloqueo::tomar( 'asde_num_familia' ) ) {
+			return new \WP_Error( 'asde_familia', asde_t( 'No se ha podido crear la familia. Inténtalo de nuevo.' ) );
+		}
+		$ok = false;
 		try {
 			$ahora = current_time( 'mysql', true );
 			for ( $i = 0; $i < 5; $i++ ) {
@@ -150,9 +154,9 @@ final class FamiliasTable {
 					break;
 				}
 			}
-			$id = (int) $wpdb->insert_id;
+			$id = $ok ? (int) $wpdb->insert_id : 0; // Tras un insert fallido, insert_id sigue siendo el de otra fila.
 		} finally {
-			$wpdb->query( "SELECT RELEASE_LOCK('asde_num_familia')" );
+			Bloqueo::soltar( 'asde_num_familia' );
 		}
 		if ( ! $id ) {
 			return new \WP_Error( 'asde_familia', asde_t( 'No se ha podido crear la familia. Inténtalo de nuevo.' ) );
@@ -258,7 +262,7 @@ final class FamiliasTable {
 	public static function siguiente_numero( string $grupo ): string {
 		global $wpdb;
 		$prefijo = 'F' . $grupo;
-		$max     = (int) $wpdb->get_var( $wpdb->prepare( 'SELECT MAX(CAST(SUBSTRING(numero, %d) AS UNSIGNED)) FROM %i WHERE numero LIKE %s', strlen( $prefijo ) + 1, self::table(), $wpdb->esc_like( $prefijo ) . '%' ) ); // phpcs:ignore WordPress.DB
+		$max     = (int) $wpdb->get_var( $wpdb->prepare( 'SELECT MAX(CAST(SUBSTRING(numero, %d) AS UNSIGNED)) FROM %i WHERE grupo = %s AND numero LIKE %s', strlen( $prefijo ) + 1, self::table(), $grupo, $wpdb->esc_like( $prefijo ) . '%' ) ); // phpcs:ignore WordPress.DB
 		return $prefijo . str_pad( (string) ( $max + 1 ), 3, '0', STR_PAD_LEFT );
 	}
 

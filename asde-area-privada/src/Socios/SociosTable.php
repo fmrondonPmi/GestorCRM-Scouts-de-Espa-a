@@ -143,7 +143,10 @@ final class SociosTable {
 			return new \WP_Error( 'asde_num_socio', asde_t( 'Falta la provincia del grupo (Datos del grupo): sin ella no se pueden generar números de socio.' ) );
 		}
 
-		$wpdb->query( "SELECT GET_LOCK('asde_num_socio', 10)" ); // Evita que dos personas reciban el mismo número.
+		// Evita que dos personas reciban el mismo número.
+		if ( ! \AsdeBalears\AreaPrivada\Domain\Bloqueo::tomar( 'asde_num_socio' ) ) {
+			return new \WP_Error( 'asde_num_socio', asde_t( 'No se ha podido asignar un número de socio. Inténtalo de nuevo.' ) );
+		}
 		try {
 			for ( $intento = 0; $intento < 5; $intento++ ) {
 				$numero = self::siguiente( $grupo, $numeros_crm );
@@ -164,7 +167,7 @@ final class SociosTable {
 				$numeros_crm[] = $numero; // Ocupado: probar el siguiente.
 			}
 		} finally {
-			$wpdb->query( "SELECT RELEASE_LOCK('asde_num_socio')" );
+			\AsdeBalears\AreaPrivada\Domain\Bloqueo::soltar( 'asde_num_socio' );
 		}
 		return new \WP_Error( 'asde_num_socio', asde_t( 'No se ha podido asignar un número de socio. Inténtalo de nuevo.' ) );
 	}

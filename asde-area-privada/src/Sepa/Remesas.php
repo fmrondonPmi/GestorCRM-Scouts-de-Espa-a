@@ -337,7 +337,9 @@ final class Remesas {
 			return new \WP_Error( 'asde_sepa', asde_t( 'No hay ningún adeudo que incluir.' ) );
 		}
 		$grupo = Grupo::numero();
-		$wpdb->query( "SELECT GET_LOCK('asde_num_remesa', 10)" );
+		if ( ! \AsdeBalears\AreaPrivada\Domain\Bloqueo::tomar( 'asde_num_remesa' ) ) {
+			return new \WP_Error( 'asde_sepa', asde_t( 'No se ha podido guardar la remesa. Inténtalo de nuevo.' ) );
+		}
 		try {
 			// Nunca dos remesas con los mismos adeudos sin cobrar (dos tesoreros a la vez, una vista previa antigua…).
 			$en_curso      = $evento_id ? self::familias_sin_cobrar_evento( $evento_id ) : self::familias_sin_cobrar( $ronda );
@@ -377,7 +379,7 @@ final class Remesas {
 			);
 			$id = (int) $wpdb->insert_id;
 		} finally {
-			$wpdb->query( "SELECT RELEASE_LOCK('asde_num_remesa')" );
+			\AsdeBalears\AreaPrivada\Domain\Bloqueo::soltar( 'asde_num_remesa' );
 		}
 		if ( ! $ok || ! $id ) {
 			return new \WP_Error( 'asde_sepa', asde_t( 'No se ha podido guardar la remesa. Inténtalo de nuevo.' ) );
