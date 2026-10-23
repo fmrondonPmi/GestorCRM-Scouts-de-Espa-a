@@ -64,6 +64,7 @@ $lin_antes    = $max_id( RecetasTable::table_lineas() );
 $ing_antes    = $max_id( IngredientesTable::table() );
 $socios_antes = array_column( (array) $wpdb->get_results( 'SELECT * FROM ' . SociosTable::table(), ARRAY_A ), null, 'num_socio_asde' ); // phpcs:ignore WordPress.DB
 $modulos_antes = get_option( 'asde_ap_modulos', null );
+$eventos_cfg_antes = get_option( 'asde_ap_eventos_' . $grupo['numero'], null ); // La prueba guarda la configuración de eventos del grupo (doc 60: antes no se restauraba).
 
 $cache_externa = wp_using_ext_object_cache( true );
 add_filter( 'pre_wp_mail', '__return_true' );
@@ -314,6 +315,11 @@ try {
 		if ( ( $ahora[ $asde ] ?? null ) !== $f ) {
 			$wpdb->replace( SociosTable::table(), $f );
 		}
+	}
+	if ( null === $eventos_cfg_antes ) {
+		delete_option( 'asde_ap_eventos_' . $grupo['numero'] );
+	} else {
+		update_option( 'asde_ap_eventos_' . $grupo['numero'], $eventos_cfg_antes, false );
 	}
 	Grupo::forzar( null );
 
