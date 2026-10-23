@@ -4,6 +4,7 @@ namespace AsdeBalears\AreaPrivada\Sepa;
 use AsdeBalears\AreaPrivada\Audit\Logger;
 use AsdeBalears\AreaPrivada\Crm\PersonaRepository;
 use AsdeBalears\AreaPrivada\Crm\Crypto;
+use AsdeBalears\AreaPrivada\Domain\Bloqueo;
 use AsdeBalears\AreaPrivada\Domain\Grupo;
 use AsdeBalears\AreaPrivada\Tesoreria\Calculadora;
 use AsdeBalears\AreaPrivada\Tesoreria\Config as TesoreriaConfig;
@@ -337,7 +338,7 @@ final class Remesas {
 			return new \WP_Error( 'asde_sepa', asde_t( 'No hay ningún adeudo que incluir.' ) );
 		}
 		$grupo = Grupo::numero();
-		if ( ! \AsdeBalears\AreaPrivada\Domain\Bloqueo::tomar( 'asde_num_remesa' ) ) {
+		if ( ! Bloqueo::tomar( 'asde_num_remesa' ) ) {
 			return new \WP_Error( 'asde_sepa', asde_t( 'No se ha podido guardar la remesa. Inténtalo de nuevo.' ) );
 		}
 		try {
@@ -379,7 +380,7 @@ final class Remesas {
 			);
 			$id = (int) $wpdb->insert_id;
 		} finally {
-			\AsdeBalears\AreaPrivada\Domain\Bloqueo::soltar( 'asde_num_remesa' );
+			Bloqueo::soltar( 'asde_num_remesa' );
 		}
 		if ( ! $ok || ! $id ) {
 			return new \WP_Error( 'asde_sepa', asde_t( 'No se ha podido guardar la remesa. Inténtalo de nuevo.' ) );
@@ -607,19 +608,35 @@ final class Remesas {
 	 * @return array{cobrados:int, devueltos:int, errores:string[]}
 	 */
 	public static function registrar_cobros( int $id, array $cobradas, array $devueltas, string $fecha, int $user_id ): array {
-		global $wpdb;
 		$res = array(
 			'cobrados'  => 0,
 			'devueltos' => 0,
 			'errores'   => array(),
 		);
-		$r   = self::obtener( $id );
-		if ( ! $r || self::ENVIADA !== $r['estado'] ) {
-			$res['errores'][] = asde_t( 'Los cobros solo se registran de una remesa enviada al banco.' );
-			return $res;
-		}
 		if ( ! preg_match( '/^\d{4}-\d{2}-\d{2}$/', $fecha ) || $fecha > current_time( 'Y-m-d' ) ) {
 			$res['errores'][] = asde_t( 'La fecha del cobro no es válida (no puede ser posterior a hoy).' );
+			return $res;
+		}
+		// Dos envíos a la vez (doble clic, dos tesoreros) registrarían cada cobro dos veces: la remesa se relee y se
+		// guarda dentro de un bloqueo con nombre (doc 59, RC-SEPA-1).
+		$bloqueo = 'asde_sepa_cobros_' . $id;
+		if ( ! Bloqueo::tomar( $bloqueo ) ) {
+			$res['errores'][] = asde_t( 'Otra persona está haciendo un cambio en esto ahora mismo. Inténtalo de nuevo en unos segundos.' );
+			return $res;
+		}
+		try {
+			return self::registrar_cobros_bloqueado( $id, $cobradas, $devueltas, $fecha, $user_id, $res );
+		} finally {
+			Bloqueo::soltar( $bloqueo );
+		}
+	}
+
+	/** registrar_cobros() con el bloqueo de la remesa ya tomado. */
+	private static function registrar_cobros_bloqueado( int $id, array $cobradas, array $devueltas, string $fecha, int $user_id, array $res ): array {
+		global $wpdb;
+		$r = self::obtener( $id );
+		if ( ! $r || self::ENVIADA !== $r['estado'] ) {
+			$res['errores'][] = asde_t( 'Los cobros solo se registran de una remesa enviada al banco.' );
 			return $res;
 		}
 		$cobradas  = array_map( 'intval', $cobradas );

@@ -461,6 +461,16 @@ try {
 
 	$c_ko = Remesas::registrar_cobros( (int) $id_r, array( $f1 ), array(), '2999-01-01', 0 );
 	$ok( $c_ko['errores'] && 0 === $c_ko['cobrados'], 'la fecha del cobro no puede ser futura' );
+	// Doc 59, RC-SEPA-1: mientras otra petición registra los cobros de esta remesa (tiene su bloqueo), esta no registra nada.
+	$otra = new wpdb( DB_USER, DB_PASSWORD, DB_NAME, DB_HOST ); // Otra conexión: el bloqueo es de conexión.
+	try {
+		$otra->query( $otra->prepare( 'SELECT GET_LOCK(%s, 5)', 'asde_sepa_cobros_' . (int) $id_r ) );
+		$bloq = Remesas::registrar_cobros( (int) $id_r, array( $f1 ), array( $f3 ), current_time( 'Y-m-d' ), 0 );
+	} finally {
+		$otra->query( $otra->prepare( 'SELECT RELEASE_LOCK(%s)', 'asde_sepa_cobros_' . (int) $id_r ) );
+		$otra->close();
+	}
+	$ok( $bloq['errores'] && 0 === $bloq['cobrados'] && 0 === (int) $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(*) FROM ' . MovimientosTable::table() . ' WHERE familia_id = %d AND origen = %s', $f1, 'sepa' ) ), 'con el bloqueo de la remesa tomado por otra petición: error y ningún pago (RC-SEPA-1)' ); // phpcs:ignore WordPress.DB
 	$res = Remesas::registrar_cobros( (int) $id_r, array( $f1 ), array( $f3 ), current_time( 'Y-m-d' ), 0 );
 	$tot = MovimientosTable::totales( $ronda );
 	$r   = Remesas::obtener( (int) $id_r );
