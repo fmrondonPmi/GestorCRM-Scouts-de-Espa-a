@@ -169,7 +169,8 @@ final class FichaService {
 		}
 		$len = (int) ( $meta['len'] ?? 0 );
 		if ( $len > 0 && mb_strlen( $v ) > $len ) {
-			return new \WP_Error( 'asde_ficha', sprintf( 'máximo %d caracteres.', $len ) );
+			/* translators: %d: número máximo de caracteres del campo */
+			return new \WP_Error( 'asde_ficha', sprintf( asde_t( 'máximo %d caracteres.' ), $len ) );
 		}
 		return $v;
 	}
