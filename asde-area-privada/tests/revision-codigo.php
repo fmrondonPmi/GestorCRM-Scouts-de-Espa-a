@@ -11,6 +11,8 @@
  *   de las purgas se neutralizan durante la prueba: no se borra nada).
  * - RC-USU-2 y RC-USU-3: el conector de las listas en el idioma de quien lo ve y el error de «sin sección» con Intendencia.
  * - RC-TES-4 y RC-TES-5: los valores por defecto de Tesorería se guardan en castellano; referencias de familia desde la 1000.
+ * - RC-CRM-2: refrescar en segundo plano la instantánea de un grupo deja después el grupo que hubiera forzado (con dos
+ *   grupos ficticios, 997 y 998, añadidos solo en memoria; la instantánea del 997 va a un transient en memoria).
  * Las demás correcciones con prueba van en las pruebas de su módulo (banco-gestion, tienda-fase5, sepa, eventos-inscripciones…)
  * o en las partes siguientes de esta.
  * Usa el CRM simulado (fichas inventadas) y deja el sitio como estaba.
@@ -22,7 +24,9 @@ require_once __DIR__ . '/lib/CrmSimulado.php';
 use AsdeBalears\AreaPrivada\Audit\Logger;
 use AsdeBalears\AreaPrivada\Crm\ClientFactory;
 use AsdeBalears\AreaPrivada\Crm\CrmException;
+use AsdeBalears\AreaPrivada\Crm\Crypto;
 use AsdeBalears\AreaPrivada\Crm\Escritura;
+use AsdeBalears\AreaPrivada\Crm\Instantanea;
 use AsdeBalears\AreaPrivada\Domain\Grupo;
 use AsdeBalears\AreaPrivada\Domain\Grupos;
 use AsdeBalears\AreaPrivada\Idiomas\Idioma;
@@ -73,6 +77,31 @@ $crm = new Asde_Prueba_Crm(
 		$P( 85, 'Eli', 'Rc Cinco', '2014-01-01', 'Castores' ),
 	),
 	$grupo['crm_id']
+);
+// Parte F (RC-CRM-2): dos grupos ficticios añadidos solo en memoria y el CRM simulado del 997.
+if ( Grupos::por_numero( '997' ) || Grupos::por_numero( '998' ) ) {
+	exit( "Los grupos 997 o 998 existen en el Local: esta prueba los usa como grupos ficticios. Revisa de dónde han salido.\n" );
+}
+$grupos_orig = get_option( 'asde_ap_grupos' );
+$mas_grupos  = static fn() => (array) $grupos_orig + array(
+	'997' => array(
+		'nombre'    => 'Grupo de prueba 997',
+		'usuario'   => 'prueba-997',
+		'clave_enc' => Crypto::encrypt( 'clave-de-prueba' ),
+		'crm_id'    => 'sg-prueba-997',
+	),
+	'998' => array(
+		'nombre'  => 'Grupo de prueba 998',
+		'usuario' => '',
+		'crm_id'  => '',
+	),
+);
+$crm997 = new Asde_Prueba_Crm(
+	array(
+		$P( 95, 'Fio', 'Rc Seis', '2012-01-01', 'Scouts' ),
+		$P( 96, 'Gal', 'Rc Siete', '2013-01-01', 'Lobatos' ),
+	),
+	'sg-prueba-997'
 );
 Grupo::forzar( $grupo );
 $crm->activar();
@@ -181,6 +210,40 @@ try {
 	$ok( 'F6841000' === Conciliacion::referencia( 'Cuota F6841000 hijos', '684' ) && 'F68412345' === Conciliacion::referencia( 'pago f-684-12345', '684' ), 'la referencia de familia se reconoce también desde la familia 1000 (F6841000)' );
 	$ok( 'F684001' === Conciliacion::referencia( 'Cuota F-684-001', '684' ) && null === Conciliacion::referencia( 'F6841000', '999' ) && null === Conciliacion::referencia( 'F68400', '684' ), 'las de 3 cifras siguen igual, y solo las del grupo' );
 	$ok( '1 adeudo' === Remesas::adeudos( 1 ) && '3 adeudos' === Remesas::adeudos( 3 ) && '3 adeudos' !== Idioma::en( 'ca', static fn() => Remesas::adeudos( 3 ) ), 'RC-SEPA-2: «1 adeudo» / «3 adeudos», traducido en otro idioma' );
+
+	echo "== Parte F · RC-CRM-2: refrescar la instantánea de otro grupo deja el grupo que hubiera ==\n";
+	// Dos grupos ficticios, solo en memoria: el 997 (con su CRM simulado y dos fichas) se refresca y el 998 es el que
+	// «otra tarea del mismo WP-Cron» tenía forzado. La instantánea del 997 va a un transient en memoria
+	// (wp_using_ext_object_cache): no se toca la del grupo real.
+	$crm->desactivar();
+	$crm997->activar();
+	add_filter( 'pre_option_asde_ap_grupos', $mas_grupos );
+	add_filter( 'asde_ap_instantanea_en_pruebas', '__return_true' );
+	remove_filter( 'asde_ap_instantanea_segundos', '__return_zero' );
+	Grupos::olvidar();
+	Instantanea::olvidar( '997' );
+	Instantanea::olvidar( '998' );
+	$otro = Grupos::por_numero( '998' );
+	$ok( null !== $otro && null !== Grupos::por_numero( '997' ), 'los grupos ficticios 997 y 998 existen durante la prueba' );
+	$forzado = static fn() => ( new ReflectionProperty( Grupo::class, 'forzado' ) )->getValue();
+	Grupo::forzar( $otro );
+	Instantanea::refrescar_en_segundo_plano( '997' );
+	$ok( '998' === ( $forzado()['numero'] ?? '' ), 'después de refrescar el 997, sigue forzado el 998 que había (antes quedaba sin forzar)' );
+	$snap = Instantanea::leer( '997' );
+	$nums = $snap ? array_map( static fn( $e ) => $e['fields']['numerosocio_c'] ?? '', $snap['entries'] ) : array();
+	sort( $nums );
+	$ok( array( '990095', '990096' ) === $nums, 'la instantánea del 997 tiene sus dos fichas inventadas' );
+	$ok( null === Instantanea::leer( '998' ), 'y no se ha guardado nada en la del grupo forzado' );
+	Grupo::forzar( null );
+	Instantanea::refrescar_en_segundo_plano( '997' );
+	$ok( null === $forzado(), 'sin grupo forzado antes, queda sin forzar después' );
+	$llamadas = $crm997->llamadas;
+	Instantanea::refrescar_en_segundo_plano( '995' );
+	$ok( $llamadas === $crm997->llamadas && null === $forzado(), 'un grupo que no existe no consulta el CRM ni fuerza nada' );
+	$crm997->caido = true;
+	Grupo::forzar( $otro );
+	Instantanea::refrescar_en_segundo_plano( '997' );
+	$ok( '998' === ( $forzado()['numero'] ?? '' ), 'con el CRM caído (CrmException) tampoco se pierde el grupo forzado' );
 } catch ( Throwable $e ) {
 	++$fails;
 	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";
@@ -188,6 +251,12 @@ try {
 	$wpdb->query( $wpdb->prepare( 'DELETE FROM %i WHERE id > %d AND accion IN (%s, %s)', Logger::table(), $log_antes, 'crm_limite_lista', 'mantenimiento_error' ) ); // phpcs:ignore WordPress.DB
 	Escritura::usar_para_pruebas( null );
 	$crm->desactivar();
+	$crm997->desactivar();
+	remove_filter( 'pre_option_asde_ap_grupos', $mas_grupos );
+	remove_filter( 'asde_ap_instantanea_en_pruebas', '__return_true' );
+	Instantanea::olvidar( '997' );
+	Instantanea::olvidar( '998' );
+	Grupos::olvidar();
 	remove_filter( 'pre_http_request', $cortar_crm, 2 );
 	remove_filter( 'asde_ap_instantanea_segundos', '__return_zero' );
 	wp_using_ext_object_cache( $cache_externa );
