@@ -121,7 +121,8 @@ final class Numeros {
 			}
 		}
 		if ( '' !== $aviso ) {
-			$html .= ' <span class="asde-numeros__aviso" title="' . esc_attr( $aviso ) . '">⚠ nº territorial: ' . esc_html( asde_t( self::CORTO[ $n['estado'] ] ?? $aviso ) ) . '</span>';
+			/* translators: %s: qué le pasa al nº territorial (duplicado, falta…) */
+			$html .= ' <span class="asde-numeros__aviso" title="' . esc_attr( $aviso ) . '">⚠ ' . esc_html( sprintf( asde_t( 'nº territorial: %s' ), asde_t( self::CORTO[ $n['estado'] ] ?? $aviso ) ) ) . '</span>';
 		}
 		return $html;
 	}
