@@ -46,7 +46,56 @@ final class Config {
 			),
 			// Lo que marca la organización federada; el año de las primas es de cada ronda.
 			'federacion'      => Organizacion::federacion() + array( 'anio_primas' => $anio ),
+			// v0.54 (doc 57): reparto de la cuota entre el grupo y las secciones y proyecto de cada una.
+			'presupuesto'     => self::presupuesto_defecto(),
 		);
+	}
+
+	/** Presupuestos (v0.54): % que va al grupo (por defecto y por sección) y proyecto de recaudación de cada sección. */
+	public static function presupuesto_defecto(): array {
+		return array(
+			'pct_grupo'   => 40.0,
+			'pct_seccion' => array(),
+			'proyectos'   => array(
+				'castores' => asde_t( 'Dique' ),
+				'lobatos'  => asde_t( 'Cacería' ),
+				'scouts'   => asde_t( 'Aventura' ),
+				'escultas' => asde_t( 'Empresa' ),
+				'rovers'   => asde_t( 'Descubierta e Intervención' ),
+			),
+		);
+	}
+
+	/** Sanea la parte de presupuestos sobre una base (lo no indicado se queda como estaba). */
+	public static function sanear_presupuesto( array $in, array $base ): array {
+		$pct = static fn( $v ) => round( max( 0, min( 100, (float) str_replace( ',', '.', (string) $v ) ) ), 2 );
+		$out = $base;
+		if ( isset( $in['pct_grupo'] ) && '' !== trim( (string) $in['pct_grupo'] ) ) {
+			$out['pct_grupo'] = $pct( $in['pct_grupo'] );
+		}
+		if ( isset( $in['pct_seccion'] ) ) {
+			$out['pct_seccion'] = array();
+			foreach ( Secciones::EDUCATIVAS as $slug ) {
+				$v = $in['pct_seccion'][ $slug ] ?? '';
+				if ( '' !== trim( (string) $v ) ) {
+					$out['pct_seccion'][ $slug ] = $pct( $v ); // Vacío = el del grupo.
+				}
+			}
+		}
+		if ( isset( $in['proyectos'] ) ) {
+			$defecto = self::presupuesto_defecto()['proyectos'];
+			foreach ( Secciones::EDUCATIVAS as $slug ) {
+				$n                     = sanitize_text_field( (string) ( $in['proyectos'][ $slug ] ?? '' ) );
+				$out['proyectos'][ $slug ] = '' !== $n ? $n : $defecto[ $slug ];
+			}
+		}
+		return $out;
+	}
+
+	/** % del dinero de las cuotas (después del coste federativo) que va a las arcas del grupo, para una sección. */
+	public static function pct_grupo( array $cfg, string $seccion ): float {
+		$p = $cfg['presupuesto'];
+		return (float) ( $p['pct_seccion'][ $seccion ] ?? $p['pct_grupo'] );
 	}
 
 	/** Categorías del seguro de una ronda (dependen de su edad de corte). */
@@ -107,6 +156,9 @@ final class Config {
 			$anio            = isset( $f['anio_primas'] ) ? (int) $f['anio_primas'] : (int) $d['federacion']['anio_primas'];
 			$d['federacion'] = Organizacion::sanear_federacion( $f + $d['federacion'] ) + array( 'anio_primas' => $anio );
 		}
+		if ( isset( $c['presupuesto'] ) ) {
+			$d['presupuesto'] = self::sanear_presupuesto( (array) $c['presupuesto'], $d['presupuesto'] );
+		}
 		return $d;
 	}
 
@@ -157,6 +209,10 @@ final class Config {
 			$actual['federacion'] = Organizacion::sanear_federacion( $f ) + array(
 				'anio_primas' => max( 2000, min( 2100, (int) ( $f['anio_primas'] ?? substr( $ronda, 0, 4 ) ) ) ),
 			);
+		}
+
+		if ( isset( $datos['presupuesto'] ) ) {
+			$actual['presupuesto'] = self::sanear_presupuesto( (array) $datos['presupuesto'], $actual['presupuesto'] );
 		}
 
 		$todo           = self::todo();

@@ -32,6 +32,10 @@ abstract class TesoreriaBaseView extends View {
 			if ( Modulos::activo( Modulos::BANCO ) ) {
 				$items['banco'] = asde_t( 'Banco' );
 			}
+			// v0.54 (doc 57): el reparto de las cuotas entre el grupo y las secciones.
+			if ( Modulos::activo( Modulos::PRESUPUESTOS ) ) {
+				$items['presupuestos'] = asde_t( 'Presupuestos' );
+			}
 			if ( Modulos::activo( Modulos::SEPA ) ) {
 				$items['sepa'] = asde_t( 'Domiciliaciones' );
 			}

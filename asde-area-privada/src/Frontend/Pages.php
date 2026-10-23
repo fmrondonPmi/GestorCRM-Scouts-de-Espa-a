@@ -28,6 +28,8 @@ final class Pages {
 		'cuotas'    => array( 'cuotas', 'Cuotas y plazos', '[asde_cuotas]', 'tesoreria' ),
 		'federacion' => array( 'coste-federativo', 'Coste federativo', '[asde_coste_federativo]', 'tesoreria' ),
 		'banco'     => array( 'banco', 'Banco', '[asde_banco]', 'tesoreria' ),
+		// v0.54 (doc 57): reparto de las cuotas entre el grupo y las secciones.
+		'presupuestos' => array( 'presupuestos', 'Presupuestos', '[asde_presupuestos]', 'tesoreria' ),
 		// v0.12: domiciliaciones SEPA (ficheros de adeudos para el banco).
 		'sepa'      => array( 'domiciliaciones', 'Domiciliaciones SEPA', '[asde_sepa]', 'tesoreria' ),
 		// El shortcode de Wordfence va dentro del nuestro para que Wordfence cargue sus scripts.

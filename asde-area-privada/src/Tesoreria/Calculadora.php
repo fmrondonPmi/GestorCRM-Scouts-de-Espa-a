@@ -179,6 +179,58 @@ final class Calculadora {
 		);
 	}
 
+	/**
+	 * Coste federativo de UNA persona con membresía activa (v0.54, doc 57): su cuota asociativa,
+	 * la prima de su categoría y los otros conceptos «por asociado / educando / adulto».
+	 * Los conceptos «fijo por grupo» no son de nadie: ver coste_fijo_grupo().
+	 * La suma de todas las personas más lo fijo da exactamente el total de coste_federativo().
+	 *
+	 * @return array{categoria:string, cuota_asociativa:float, seguro:float, conceptos:float, total:float}
+	 */
+	public static function coste_persona( Persona $p, array $cfg, ?\DateTimeImmutable $referencia = null ): array {
+		$fed   = $cfg['federacion'];
+		$corte = (int) ( $fed['edad_corte'] ?? 14 );
+		$ref   = $referencia ?: new \DateTimeImmutable( 'today', wp_timezone() );
+
+		if ( $p->es_participante() ) {
+			$nac       = $p->fecha_nacimiento ? date_create( $p->fecha_nacimiento, wp_timezone() ) : false;
+			$edad      = $nac ? (int) date_diff( $nac, $ref )->y : 99;
+			$categoria = $edad < $corte ? 'menores' : 'mayores';
+			$aplica    = array( 'asociado', 'educando' );
+		} else {
+			$categoria = 'scouters';
+			$aplica    = array( 'asociado', 'adulto' );
+		}
+
+		$conceptos = 0.0;
+		foreach ( (array) ( $fed['conceptos'] ?? array() ) as $c ) {
+			if ( in_array( (string) $c['aplica'], $aplica, true ) ) {
+				$conceptos += (float) $c['importe'];
+			}
+		}
+		$cuota  = (float) $fed['cuota_asociativa'];
+		$seguro = (float) $fed['primas'][ $categoria ];
+
+		return array(
+			'categoria'        => $categoria,
+			'cuota_asociativa' => round( $cuota, 2 ),
+			'seguro'           => round( $seguro, 2 ),
+			'conceptos'        => round( $conceptos, 2 ),
+			'total'            => round( $cuota + $seguro + $conceptos, 2 ),
+		);
+	}
+
+	/** Conceptos del coste federativo que se pagan una vez por grupo (no son de ninguna persona). */
+	public static function coste_fijo_grupo( array $cfg ): float {
+		$total = 0.0;
+		foreach ( (array) ( $cfg['federacion']['conceptos'] ?? array() ) as $c ) {
+			if ( 'grupo' === (string) $c['aplica'] ) {
+				$total += (float) $c['importe'];
+			}
+		}
+		return round( $total, 2 );
+	}
+
 	public static function euros( float $v ): string {
 		return number_format_i18n( $v, 2 ) . ' €';
 	}

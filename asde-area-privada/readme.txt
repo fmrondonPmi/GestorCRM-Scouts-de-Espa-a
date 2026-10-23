@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.53.0
+Stable tag: 0.54.0
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -61,6 +61,9 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.54.0 =
+* New "Budgets" tab in Treasury (phase 1) for Coordination, Secretary and Treasury: from the yearly fees, minus the federation cost, a configurable percentage goes to the group and the rest to the section of each member; per-section percentages and the fundraising project name of each section. Calculated live, nothing new is stored in the database. Can be switched off per group (Modules).
 
 = 0.53.0 =
 * New page "Access management" for Coordination, Secretary and Treasury: a role x permission matrix grouped by module, extra permissions for single people (with or without an expiry date, expiring on their own) and a filterable history. Every action needs the "view" permission of its module, nobody can grant permissions to themselves and sensitive permissions require a reason. Three new database tables.
@@ -239,6 +242,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * CRM registrations tested end to end in a browser against the simulated SinergiaCRM API (development only).
 
 == Upgrade Notice ==
+
+= 0.54.0 =
+Adds the "Budgets" tab to Treasury (fee split between the group and the sections). No database changes.
 
 = 0.53.0 =
 Adds the "Access management" page (Coordination, Secretary, Treasury) and three database tables (role permission changes, per-person permissions, access history). Nothing changes until someone uses it.

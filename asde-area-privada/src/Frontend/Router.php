@@ -30,6 +30,7 @@ use AsdeBalears\AreaPrivada\Frontend\Views\AccesosView;
 use AsdeBalears\AreaPrivada\Frontend\Views\EmailsView;
 use AsdeBalears\AreaPrivada\Frontend\Views\FamiliasView;
 use AsdeBalears\AreaPrivada\Frontend\Views\FederacionView;
+use AsdeBalears\AreaPrivada\Frontend\Views\PresupuestosView;
 use AsdeBalears\AreaPrivada\Frontend\Views\InformesView;
 use AsdeBalears\AreaPrivada\Frontend\Views\InventarioComprasView;
 use AsdeBalears\AreaPrivada\Frontend\Views\InventarioTiposView;
@@ -88,6 +89,7 @@ final class Router {
 		'cuotas'    => array( 'asde_cuotas', CuotasView::class ),
 		'federacion' => array( 'asde_coste_federativo', FederacionView::class ),
 		'banco'     => array( 'asde_banco', BancoView::class ),
+		'presupuestos' => array( 'asde_presupuestos', PresupuestosView::class ), // v0.54 (doc 57).
 		'sepa'      => array( 'asde_sepa', SepaView::class ),
 		'seguridad' => array( 'asde_seguridad', SeguridadView::class ),
 		'acceso'    => array( 'asde_acceso', AccesoView::class ),

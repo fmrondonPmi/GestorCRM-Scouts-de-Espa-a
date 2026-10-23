@@ -12,7 +12,7 @@
 <body>
 <header class="portada">
 	<div class="portada__dentro">
-		<p class="antetitulo">Manual de uso · versión 0.53 · octubre de 2026 · <a class="portada__volver" href="index.html">Todos los manuales</a></p>
+		<p class="antetitulo">Manual de uso · versión 0.54 · octubre de 2026 · <a class="portada__volver" href="index.html">Todos los manuales</a></p>
 		<h1>Manual del equipo de coordinación</h1>
 		<p class="portada__perfil">Tesorería, Secretaría y Coordinación</p>
 		<p class="entrada">Todo lo que lleva el equipo del grupo: personas y números de socio, altas, bajas y cambios de sección en el CRM, dar acceso, solicitudes, los usuarios (con sus hojas: usuarios, dar acceso y registro de emails), fichas y cambios, informes, la Tesorería completa (cuotas, coste federativo, banco y domiciliaciones SEPA) y los uniformes, del pago a la entrega.</p>
@@ -71,6 +71,7 @@
 <li class="sub"><a href="#familias">Familias</a></li>
 <li class="sub"><a href="#cuotas">Cuotas y plazos</a></li>
 <li class="sub"><a href="#coste-federativo">Coste federativo</a></li>
+<li class="sub"><a href="#presupuestos">Presupuestos</a></li>
 <li class="sub"><a href="#banco">Banco</a></li>
 <li class="sub"><a href="#sepa">Domiciliaciones SEPA</a></li>
 <li><a href="#uniformes">La tienda: pagos, pedido al proveedor y entregas</a></li>
@@ -676,6 +677,16 @@
 		<li>Cada ronda empieza con los importes de la organización federada (ver <a href="administracion.html#organizacion">Administración</a>) y el grupo los puede ajustar.</li>
 	</ul>
 
+	<h3 id="presupuestos">Presupuestos</h3>
+	<p>Reparte el dinero de las cuotas entre las arcas del grupo y cada sección. A la cuota prevista de las familias se le resta el <strong>coste federativo</strong> (ese dinero ya está comprometido); del resto, un porcentaje va al grupo y lo demás a la sección de cada educando. Se calcula en el momento con los socios activos del CRM; no se guarda nada.</p>
+	<ul>
+		<li><strong>% para las arcas del grupo (por defecto):</strong> el porcentaje que va al grupo. Cada sección puede tener el suyo; si lo dejas vacío, usa el del grupo.</li>
+		<li><strong>Reparto por sección:</strong> educandos, cuota, coste federativo, neto, lo que va al grupo y lo que queda para la sección.</li>
+		<li><strong>Arcas del grupo:</strong> su parte de las cuotas menos el coste federativo de scouters y voluntariado, de los educandos sin cuota y los conceptos fijos por grupo.</li>
+		<li><strong>Proyecto de recaudación:</strong> el nombre del proyecto de cada sección (Dique, Cacería, Aventura, Empresa, Descubierta e Intervención), que se usará en su presupuesto.</li>
+	</ul>
+	<p>Solo la ven y la cambian Secretaría, Coordinación y Tesorería, y se puede apagar en wp-admin → Módulos.</p>
+
 	<h3 id="banco">Banco</h3>
 	<figure class="captura captura--larga"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/tesoreria/banco/</span></div><div class="navegador__vista" data-ampliar tabindex="0"><img src="capturas/20-banco.png" width="1280" height="3412" alt="Página Banco con la última importación y los movimientos, con casillas para elegir varios, el tipo de los revisados y el paginador" loading="lazy"></div></div><figcaption><span>Movimientos importados del extracto: los ingresos se concilian con las familias y lo que no es cuota se marca como revisado con su tipo. Cambiar de página, ordenar, filtrar o conciliar no recarga la pantalla.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
 	<ol class="pasos">
@@ -1160,7 +1171,7 @@
 			</ul>
 		</section>
 
-		<p class="pie">Manual del equipo de coordinación del plugin «ASDE Scouts de España – Gestor CRM para Grupos Scouts», versión 0.53 (octubre de 2026). Capturas hechas en un WordPress de demostración con un CRM simulado y datos inventados.</p>
+		<p class="pie">Manual del equipo de coordinación del plugin «ASDE Scouts de España – Gestor CRM para Grupos Scouts», versión 0.54 (octubre de 2026). Capturas hechas en un WordPress de demostración con un CRM simulado y datos inventados.</p>
 	</main>
 </div>
 

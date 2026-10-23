@@ -1,4 +1,4 @@
-<!-- Generado por herramientas/generar-manuales.php (manual «coordinacion» completo, solo texto, versión 0.53) a partir de manual/fuentes: no se edita a mano. -->
+<!-- Generado por herramientas/generar-manuales.php (manual «coordinacion» completo, solo texto, versión 0.54) a partir de manual/fuentes: no se edita a mano. -->
 <div class="asde-ayuda__texto asde-ayuda__completo" data-manual="coordinacion">
 <h2>Manual del equipo de coordinación</h2>
 <p class="resumen">Todo lo que lleva el equipo del grupo: personas y números de socio, altas, bajas y cambios de sección en el CRM, dar acceso, solicitudes, los usuarios (con sus hojas: usuarios, dar acceso y registro de emails), fichas y cambios, informes, la Tesorería completa (cuotas, coste federativo, banco y domiciliaciones SEPA) y los uniformes, del pago a la entrega.</p>
@@ -19,7 +19,7 @@
 <li><a href="#asde-manual-fichas">Fichas</a><ol><li><a href="#asde-manual-salud">Salud y alimentación</a></li></ol></li>
 <li><a href="#asde-manual-cambios">Cambios propuestos por las familias</a></li>
 <li><a href="#asde-manual-informes">Informes</a><ol><li><a href="#asde-manual-fichas-reducidas">Fichas reducidas: una página por socio/a</a></li><li><a href="#asde-manual-informe-pagos">Quién ha pagado la cuota</a></li></ol></li>
-<li><a href="#asde-manual-tesoreria">Tesorería</a><ol><li><a href="#asde-manual-control">Control de pagos</a></li><li><a href="#asde-manual-familia">Ficha de una familia</a></li><li><a href="#asde-manual-familias">Familias</a></li><li><a href="#asde-manual-cuotas">Cuotas y plazos</a></li><li><a href="#asde-manual-coste-federativo">Coste federativo</a></li><li><a href="#asde-manual-banco">Banco</a></li><li><a href="#asde-manual-sepa">Domiciliaciones SEPA</a></li></ol></li>
+<li><a href="#asde-manual-tesoreria">Tesorería</a><ol><li><a href="#asde-manual-control">Control de pagos</a></li><li><a href="#asde-manual-familia">Ficha de una familia</a></li><li><a href="#asde-manual-familias">Familias</a></li><li><a href="#asde-manual-cuotas">Cuotas y plazos</a></li><li><a href="#asde-manual-coste-federativo">Coste federativo</a></li><li><a href="#asde-manual-presupuestos">Presupuestos</a></li><li><a href="#asde-manual-banco">Banco</a></li><li><a href="#asde-manual-sepa">Domiciliaciones SEPA</a></li></ol></li>
 <li><a href="#asde-manual-uniformes">La tienda: pagos, pedido al proveedor y entregas</a><ol><li><a href="#asde-manual-uniformes-gestion">Gestión de pedidos</a></li><li><a href="#asde-manual-tienda-proveedor">Pedido de camisas (al proveedor)</a></li><li><a href="#asde-manual-uniformes-config">Configuración</a></li><li><a href="#asde-manual-tienda-productos">Inventario de la tienda</a></li></ol></li>
 <li><a href="#asde-manual-eventos">Eventos</a><ol><li><a href="#asde-manual-eventos-crear">Crear un evento</a></li><li><a href="#asde-manual-eventos-calendario">Calendario de tareas</a></li><li><a href="#asde-manual-eventos-equipo">Equipo dirigente</a></li><li><a href="#asde-manual-eventos-menu">Menú, lista de la compra y coste</a></li><li><a href="#asde-manual-eventos-alergenos">Alérgenos del menú y hoja de cocina</a></li><li><a href="#asde-manual-eventos-material">Material del evento</a></li><li><a href="#asde-manual-eventos-presupuesto">Presupuesto y precio</a></li><li><a href="#asde-manual-eventos-publicar">Lista de comprobación y publicar</a></li><li><a href="#asde-manual-eventos-inscripciones">Inscripciones</a></li><li><a href="#asde-manual-eventos-cobros">Cobros (Tesorería)</a></li><li><a href="#asde-manual-eventos-cuentas">Cuentas</a></li><li><a href="#asde-manual-eventos-recetario">Recetario</a></li><li><a href="#asde-manual-eventos-configuracion">Configuración</a></li></ol></li>
 <li><a href="#asde-manual-inventario">Inventario de material</a><ol><li><a href="#asde-manual-inventario-material">El material</a></li><li><a href="#asde-manual-inventario-tipos">Tipos de material</a></li><li><a href="#asde-manual-inventario-importar">Importar el material desde una hoja de cálculo</a></li><li><a href="#asde-manual-inventario-lista-compra">Preparar una lista de compra</a></li><li><a href="#asde-manual-inventario-visto-bueno">El visto bueno de Tesorería</a></li><li><a href="#asde-manual-inventario-pdf">Imprimir la lista</a></li></ol></li>
@@ -560,6 +560,16 @@
 		<li><strong>Totales:</strong> con la tabla de primas y con el seguro promedio, y la diferencia con lo que se espera cobrar a las familias.</li>
 		<li>Cada ronda empieza con los importes de la organización federada (ver Administración) y el grupo los puede ajustar.</li>
 	</ul>
+
+	<h3 id="asde-manual-presupuestos">Presupuestos</h3>
+	<p>Reparte el dinero de las cuotas entre las arcas del grupo y cada sección. A la cuota prevista de las familias se le resta el <strong>coste federativo</strong> (ese dinero ya está comprometido); del resto, un porcentaje va al grupo y lo demás a la sección de cada educando. Se calcula en el momento con los socios activos del CRM; no se guarda nada.</p>
+	<ul>
+		<li><strong>% para las arcas del grupo (por defecto):</strong> el porcentaje que va al grupo. Cada sección puede tener el suyo; si lo dejas vacío, usa el del grupo.</li>
+		<li><strong>Reparto por sección:</strong> educandos, cuota, coste federativo, neto, lo que va al grupo y lo que queda para la sección.</li>
+		<li><strong>Arcas del grupo:</strong> su parte de las cuotas menos el coste federativo de scouters y voluntariado, de los educandos sin cuota y los conceptos fijos por grupo.</li>
+		<li><strong>Proyecto de recaudación:</strong> el nombre del proyecto de cada sección (Dique, Cacería, Aventura, Empresa, Descubierta e Intervención), que se usará en su presupuesto.</li>
+	</ul>
+	<p>Solo la ven y la cambian Secretaría, Coordinación y Tesorería, y se puede apagar en wp-admin → Módulos.</p>
 
 	<h3 id="asde-manual-banco">Banco</h3>
 	<p class="asde-ayuda__pantalla">Movimientos importados del extracto: los ingresos se concilian con las familias y lo que no es cuota se marca como revisado con su tipo. Cambiar de página, ordenar, filtrar o conciliar no recarga la pantalla.</p>
