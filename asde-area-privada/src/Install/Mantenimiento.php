@@ -50,6 +50,9 @@ final class Mantenimiento {
 	/**
 	 * Se ejecuta grupo a grupo (cada uno en su propio contexto, sin mezclar datos).
 	 *
+	 * Doc 59, RC-INS-1: cualquier error (no solo del CRM) en un grupo se registra y no corta la tarea: los grupos
+	 * siguientes se procesan y las purgas del final (plazos de conservación de datos) se ejecutan siempre (finally).
+	 *
 	 * @return array{numeros:int, tutelas_retiradas:int}
 	 */
 	public static function ejecutar(): array {
@@ -58,45 +61,103 @@ final class Mantenimiento {
 			'tutelas_retiradas' => 0,
 			'emails'            => 0,
 		);
-		Grupos::verificar_todos();
-		foreach ( Grupos::todos() as $grupo ) {
-			if ( '' === $grupo['crm_id'] ) {
-				continue; // Sin conexión verificada con el CRM.
-			}
-			Grupo::forzar( $grupo );
-			$repo = PersonaRepository::make();
-			if ( ! $repo ) {
-				continue;
-			}
-			try {
-				$total['numeros']           += count( ( new Numeracion( $repo ) )->analizar_todo( true ) );
-				$total['tutelas_retiradas'] += self::revisar_tutelas( $repo );
-				$total['emails']            += self::sincronizar_emails( $repo );
-			} catch ( CrmException $e ) {
-				Logger::log( 'mantenimiento_error', 'crm', $grupo['numero'], array( 'error' => $e->getMessage() ) );
-			}
-			try {
-				// v0.39 (fase 4): las compras sin sesión que no se pagan en N días se cancelan y devuelven las existencias.
-				\AsdeBalears\AreaPrivada\Tienda\Servicio::cancelar_invitados_sin_pagar();
-				\AsdeBalears\AreaPrivada\Tienda\Servicio::recordar_y_cancelar_socios(); // v0.40 (fase 5): recordatorio y cancelación de los pedidos de socios sin pagar.
-				// Solo con el módulo encendido en el grupo (v0.35: nace apagado).
-				if ( \AsdeBalears\AreaPrivada\Domain\Modulos::activo( \AsdeBalears\AreaPrivada\Domain\Modulos::EVENTOS, (string) $grupo['numero'] ) ) {
-					\AsdeBalears\AreaPrivada\Eventos\Avisos::diario();
-					\AsdeBalears\AreaPrivada\Eventos\AvisosTareas::diario(); // v0.40: tareas del calendario que vencen.
-					\AsdeBalears\AreaPrivada\Menus\AvisoAlergenos::diario(); // v0.43: alérgenos del menú sin resolver (P-192).
+		try {
+			self::paso( '', array( Grupos::class, 'verificar_todos' ) );
+			foreach ( Grupos::todos() as $grupo ) {
+				if ( '' === $grupo['crm_id'] ) {
+					continue; // Sin conexión verificada con el CRM.
 				}
-			} catch ( CrmException $e ) {
-				Logger::log( 'mantenimiento_error', 'crm', $grupo['numero'], array( 'error' => $e->getMessage() ) );
+				$numero = (string) $grupo['numero'];
+				Grupo::forzar( $grupo );
+				$repo = null;
+				self::paso(
+					$numero,
+					static function () use ( &$repo ): void {
+						$repo = PersonaRepository::make();
+					}
+				);
+				if ( ! $repo ) {
+					continue;
+				}
+				self::paso(
+					$numero,
+					static function () use ( $repo, &$total ): void {
+						$total['numeros']           += count( ( new Numeracion( $repo ) )->analizar_todo( true ) );
+						$total['tutelas_retiradas'] += self::revisar_tutelas( $repo );
+						$total['emails']            += self::sincronizar_emails( $repo );
+					}
+				);
+				self::paso(
+					$numero,
+					static function () use ( $numero ): void {
+						// v0.39 (fase 4): las compras sin sesión que no se pagan en N días se cancelan y devuelven las existencias.
+						\AsdeBalears\AreaPrivada\Tienda\Servicio::cancelar_invitados_sin_pagar();
+						\AsdeBalears\AreaPrivada\Tienda\Servicio::recordar_y_cancelar_socios(); // v0.40 (fase 5): recordatorio y cancelación de los pedidos de socios sin pagar.
+						// Solo con el módulo encendido en el grupo (v0.35: nace apagado).
+						if ( \AsdeBalears\AreaPrivada\Domain\Modulos::activo( \AsdeBalears\AreaPrivada\Domain\Modulos::EVENTOS, $numero ) ) {
+							\AsdeBalears\AreaPrivada\Eventos\Avisos::diario();
+							\AsdeBalears\AreaPrivada\Eventos\AvisosTareas::diario(); // v0.40: tareas del calendario que vencen.
+							\AsdeBalears\AreaPrivada\Menus\AvisoAlergenos::diario(); // v0.43: alérgenos del menú sin resolver (P-192).
+						}
+					}
+				);
+			}
+		} catch ( \Throwable $e ) {
+			self::registrar_error( '', $e ); // P. ej. al leer la lista de grupos.
+		} finally {
+			Grupo::forzar( null );
+			foreach ( self::PURGAS as $purga ) {
+				self::paso( '', $purga );
 			}
 		}
-		Grupo::forzar( null );
-		Solicitudes::purgar();
-		\AsdeBalears\AreaPrivada\Accesos\Concesiones::caducar_vencidas(); // v0.53 (doc 56): los permisos sueltos con fecha se desactivan solos y queda en el historial.
-		\AsdeBalears\AreaPrivada\Tienda\PedidosTable::purgar_invitados(); // v0.39 (fase 4): datos de quien compró sin sesión, a los 90 días de entregar o cancelar.
-		\AsdeBalears\AreaPrivada\ListaEspera\Inscripciones::mantenimiento(); // Lista de espera: sin confirmar, caducadas y avisos (v0.32).
-		\AsdeBalears\AreaPrivada\Sepa\Mandatos::purgar(); // Mandatos revocados hace más de 14 meses.
-		\AsdeBalears\AreaPrivada\Sepa\Remesas::purgar();  // Adeudos de remesas con cobro hace más de 14 meses.
 		return $total;
+	}
+
+	/**
+	 * Las purgas de cada día (plazos de conservación de datos), una tras otra; un error en una no impide las demás.
+	 * Solicitudes resueltas; permisos sueltos con fecha (v0.53, doc 56); datos de quien compró sin sesión, a los 90 días
+	 * (v0.39); lista de espera: sin confirmar, caducadas y avisos (v0.32); mandatos revocados y adeudos de remesas con
+	 * cobro hace más de 14 meses.
+	 */
+	private const PURGAS = array(
+		array( Solicitudes::class, 'purgar' ),
+		array( \AsdeBalears\AreaPrivada\Accesos\Concesiones::class, 'caducar_vencidas' ),
+		array( \AsdeBalears\AreaPrivada\Tienda\PedidosTable::class, 'purgar_invitados' ),
+		array( \AsdeBalears\AreaPrivada\ListaEspera\Inscripciones::class, 'mantenimiento' ),
+		array( \AsdeBalears\AreaPrivada\Sepa\Mandatos::class, 'purgar' ),
+		array( \AsdeBalears\AreaPrivada\Sepa\Remesas::class, 'purgar' ),
+	);
+
+	/**
+	 * Un paso de la tarea diaria: si falla (por lo que sea), se registra y se sigue con el siguiente (doc 59, RC-INS-1).
+	 *
+	 * @return bool Si ha ido bien.
+	 */
+	public static function paso( string $grupo, callable $fn ): bool {
+		try {
+			$fn();
+			return true;
+		} catch ( \Throwable $e ) {
+			self::registrar_error( $grupo, $e );
+			return false;
+		}
+	}
+
+	/** Del CRM, su mensaje (como siempre); de cualquier otro error, solo su clase y dónde (el mensaje podría llevar datos). */
+	private static function registrar_error( string $grupo, \Throwable $e ): void {
+		if ( $e instanceof CrmException ) {
+			Logger::log( 'mantenimiento_error', 'crm', $grupo, array( 'error' => $e->getMessage() ) );
+			return;
+		}
+		Logger::log(
+			'mantenimiento_error',
+			'tarea',
+			$grupo,
+			array(
+				'error' => get_class( $e ),
+				'donde' => basename( $e->getFile() ) . ':' . $e->getLine(),
+			)
+		);
 	}
 
 	/** Solo el paso de los emails, en todos los grupos (una vez, tras actualizar). @return int Cuentas actualizadas. */
@@ -107,12 +168,13 @@ final class Mantenimiento {
 				continue;
 			}
 			Grupo::forzar( $grupo );
-			$repo = PersonaRepository::make();
-			try {
-				$n += $repo ? self::sincronizar_emails( $repo ) : 0;
-			} catch ( CrmException $e ) {
-				Logger::log( 'mantenimiento_error', 'crm', $grupo['numero'], array( 'error' => $e->getMessage() ) );
-			}
+			self::paso(
+				(string) $grupo['numero'],
+				static function () use ( &$n ): void {
+					$repo = PersonaRepository::make();
+					$n   += $repo ? self::sincronizar_emails( $repo ) : 0;
+				}
+			);
 		}
 		Grupo::forzar( null );
 		return $n;

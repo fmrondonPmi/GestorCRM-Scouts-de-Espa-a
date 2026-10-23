@@ -7,6 +7,8 @@
  *
  * - RC-CRM-1: list_all no devuelve una lista cortada en silencio: con más registros que el límite, CrmException.
  * - RC-TES-2: si los plazos suman el 100 %, el último cierra la cuota (sin céntimos de más ni de menos).
+ * - RC-INS-1: un error cualquiera en la tarea diaria se registra y no corta los demás pasos ni las purgas (las escrituras
+ *   de las purgas se neutralizan durante la prueba: no se borra nada).
  * Las demás correcciones con prueba van en las pruebas de su módulo (banco-gestion, tienda-fase5, sepa, eventos-inscripciones…)
  * o en las partes siguientes de esta.
  * Usa el CRM simulado (fichas inventadas) y deja el sitio como estaba.
@@ -21,6 +23,10 @@ use AsdeBalears\AreaPrivada\Crm\CrmException;
 use AsdeBalears\AreaPrivada\Crm\Escritura;
 use AsdeBalears\AreaPrivada\Domain\Grupo;
 use AsdeBalears\AreaPrivada\Domain\Grupos;
+use AsdeBalears\AreaPrivada\Install\Mantenimiento;
+use AsdeBalears\AreaPrivada\Sepa\Mandatos;
+use AsdeBalears\AreaPrivada\Sepa\Remesas;
+use AsdeBalears\AreaPrivada\Usuarios\Solicitudes;
 use AsdeBalears\AreaPrivada\Tesoreria\Calculadora;
 use AsdeBalears\AreaPrivada\Tesoreria\Config as TesoreriaConfig;
 
@@ -100,11 +106,64 @@ try {
 	$cfg['plazos'] = array( $plazo( '2026-10-01', 50 ), $plazo( '2026-12-01', 30 ) );
 	$r = Calculadora::familia( $familia, array(), $cfg, array( 'pagado' => 0.0, 'ajustes' => 50.0 ), $despues );
 	$ok( array( 25.0, 15.0 ) === array_column( $r['plazos'], 'importe' ), 'si los plazos no suman el 100 %, cada uno es su porcentaje (no se cambia nada)' );
+
+	echo "== Parte C · RC-INS-1: un error cualquiera no corta la tarea diaria ==\n";
+	$detalle = static fn( string $grupo ): string => (string) $wpdb->get_var( $wpdb->prepare( 'SELECT detalles FROM %i WHERE id > %d AND accion = %s AND objeto_id = %s ORDER BY id DESC LIMIT 1', Logger::table(), $log_antes, 'mantenimiento_error', $grupo ) ); // phpcs:ignore WordPress.DB
+	$ok(
+		false === Mantenimiento::paso(
+			'901',
+			static function (): void {
+				throw new TypeError( 'dato raro de prueba' );
+			}
+		),
+		'un paso que lanza un TypeError no corta la tarea (devuelve false)'
+	);
+	$ok( str_contains( $detalle( '901' ), 'TypeError' ) && ! str_contains( $detalle( '901' ), 'dato raro' ), 'queda en el registro con la clase del error, sin su mensaje' );
+	$ok(
+		false === Mantenimiento::paso(
+			'902',
+			static function (): void {
+				throw new CrmException( 'CRM sin respuesta (prueba)' );
+			}
+		) && str_contains( $detalle( '902' ), 'CRM sin respuesta (prueba)' ),
+		'un error del CRM, con su mensaje (como antes)'
+	);
+	$ok( true === Mantenimiento::paso( '903', static function (): void {} ) && '' === $detalle( '903' ), 'un paso que va bien: true y nada en el registro' );
+
+	// La tarea entera, con la lista de grupos rota (TypeError): termina y hace las purgas. Sus escrituras se neutralizan.
+	$escrituras = array();
+	$neutro     = static function ( $q ) use ( &$escrituras ) {
+		$q = (string) $q;
+		if ( preg_match( '/^\s*(UPDATE|DELETE|INSERT|REPLACE)\b/i', $q ) && ! str_contains( $q, Logger::table() ) ) {
+			$escrituras[] = $q;
+			return 'SELECT 1';
+		}
+		return $q;
+	};
+	$romper     = static function () {
+		throw new TypeError( 'lista de grupos rota (prueba)' );
+	};
+	add_filter( 'query', $neutro );
+	add_filter( 'pre_option_asde_ap_grupos', $romper );
+	add_filter( 'pre_wp_mail', '__return_true' );
+	Grupos::olvidar();
+	try {
+		$res = Mantenimiento::ejecutar();
+	} finally {
+		remove_filter( 'query', $neutro );
+		remove_filter( 'pre_option_asde_ap_grupos', $romper );
+		remove_filter( 'pre_wp_mail', '__return_true' );
+		Grupos::olvidar();
+		Grupo::forzar( $grupo );
+	}
+	$purgas = static fn( string $tabla ): bool => (bool) array_filter( $escrituras, static fn( $q ) => str_contains( $q, $tabla ) );
+	$ok( is_array( $res ) && str_contains( $detalle( '' ), 'TypeError' ), 'la tarea diaria termina aunque falle la lista de grupos, y lo registra' );
+	$ok( $purgas( Solicitudes::table() ) && $purgas( Mandatos::table() ) && $purgas( Remesas::table() ), 'y las purgas (solicitudes, mandatos y remesas) se ejecutan igualmente' );
 } catch ( Throwable $e ) {
 	++$fails;
 	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";
 } finally {
-	$wpdb->query( $wpdb->prepare( 'DELETE FROM %i WHERE id > %d AND accion = %s', Logger::table(), $log_antes, 'crm_limite_lista' ) ); // phpcs:ignore WordPress.DB
+	$wpdb->query( $wpdb->prepare( 'DELETE FROM %i WHERE id > %d AND accion IN (%s, %s)', Logger::table(), $log_antes, 'crm_limite_lista', 'mantenimiento_error' ) ); // phpcs:ignore WordPress.DB
 	Escritura::usar_para_pruebas( null );
 	$crm->desactivar();
 	remove_filter( 'pre_http_request', $cortar_crm, 2 );
