@@ -180,6 +180,7 @@ try {
 	$ok( 'Cuota anual' !== Idioma::en( 'ca', static fn() => asde_t( 'Cuota anual' ) ) && 'Dique' !== Idioma::en( 'eu', static fn() => asde_t( 'Dique' ) ), 'y se traducen al mostrarlos' );
 	$ok( 'F6841000' === Conciliacion::referencia( 'Cuota F6841000 hijos', '684' ) && 'F68412345' === Conciliacion::referencia( 'pago f-684-12345', '684' ), 'la referencia de familia se reconoce también desde la familia 1000 (F6841000)' );
 	$ok( 'F684001' === Conciliacion::referencia( 'Cuota F-684-001', '684' ) && null === Conciliacion::referencia( 'F6841000', '999' ) && null === Conciliacion::referencia( 'F68400', '684' ), 'las de 3 cifras siguen igual, y solo las del grupo' );
+	$ok( '1 adeudo' === Remesas::adeudos( 1 ) && '3 adeudos' === Remesas::adeudos( 3 ) && '3 adeudos' !== Idioma::en( 'ca', static fn() => Remesas::adeudos( 3 ) ), 'RC-SEPA-2: «1 adeudo» / «3 adeudos», traducido en otro idioma' );
 } catch ( Throwable $e ) {
 	++$fails;
 	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";

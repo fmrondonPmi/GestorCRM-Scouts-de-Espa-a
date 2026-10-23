@@ -526,9 +526,9 @@ final class Remesas {
 		);
 	}
 
-	/** «1 adeudo», «2 adeudos». */
+	/** «1 adeudo», «2 adeudos», en el idioma de quien lo ve (doc 59, RC-SEPA-2). */
 	public static function adeudos( int $n ): string {
-		return $n . ( 1 === $n ? ' adeudo' : ' adeudos' );
+		return sprintf( asde_n( '%d adeudo', '%d adeudos', $n ), $n );
 	}
 
 	public static function nombre_fichero( array $remesa ): string {
