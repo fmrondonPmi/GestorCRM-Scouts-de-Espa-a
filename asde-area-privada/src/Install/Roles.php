@@ -117,6 +117,7 @@ final class Roles {
 					'asde_reintegros_pagar'  => true,
 					'asde_eventos_config'    => true,
 					'asde_presupuestos_seccion' => true, // Presupuestos (v0.55, doc 57).
+					'asde_grupo_datos'       => true, // Datos del grupo (v0.56, doc 58): los edita Coordinación.
 					'asde_accesos'           => true, // Gestión de accesos (v0.53, doc 56).
 				),
 			),

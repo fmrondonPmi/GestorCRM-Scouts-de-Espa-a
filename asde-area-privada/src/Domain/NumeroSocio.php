@@ -6,45 +6,72 @@ defined( 'ABSPATH' ) || exit;
 /**
  * Nº de socio/a local/territorial.
  *
- * Formato: código de la organización federada + nº de grupo + 4 dígitos
- * incrementales. El código se configura en wp-admin → Grupos Scouts →
- * Organización federada (Domain\Organizacion); en Scouts de Balears es 7:
- *   76840390 → código 7 · grupo 684 · socio 0390
+ * Desde la v0.56 (doc 58) el formato lo fija cada grupo con sus datos (Datos del grupo):
+ *   provincia (2 cifras, con su 0 inicial) + nº de grupo + 4 cifras incrementales.
+ * En Illes Balears (provincia 07) y el grupo 684:
+ *   076840390 → provincia 07 · grupo 684 · socio 0390
  *
- * En el CRM (campo numsocioantiguo_enficha_c) conviven formatos antiguos que se
- * normalizan al leerlos:
- *   076840123 (0 inicial)       → 76840123
- *   6840123   (sin el código)   → 76840123
+ * Los números de antes de la v0.56 llevaban el «código de la organización» (en Scouts de Balears,
+ * 7) en lugar de la provincia, es decir, el mismo número SIN el 0 inicial (76840390). Siguen
+ * siendo válidos tal cual (no se tocan los del CRM ni las cuentas que los usan como usuario);
+ * los números nuevos se generan ya con la provincia completa. En el CRM pueden convivir además
+ * formatos más antiguos que se normalizan al leerlos:
+ *   0076840123 (ceros de más)   → 076840123
+ *   6840123    (sin provincia)  → 076840123
  * Cualquier otro formato se considera inválido y hay que corregirlo en el CRM.
- * Sin código configurado no se reconoce ni se genera ningún número.
+ * Sin la provincia del grupo no se reconoce ni se genera ningún número.
  *
  * Es el USUARIO DE ACCESO de todos: socios con su número; tutores con el nº
- * del menor + "T" (cuenta familiar), p. ej. 76840390T.
+ * del menor + "T" (cuenta familiar), p. ej. 076840390T.
  */
 final class NumeroSocio {
 
 	public const SUFIJO_TUTOR = 'T';
 
-	/** Código de la organización federada ('' si aún no se ha configurado). */
-	public static function codigo(): string {
-		return Organizacion::codigo();
+	/** Provincia del grupo, dos cifras con su 0 inicial ('' si aún no se sabe). */
+	public static function provincia( string $grupo ): string {
+		return '' === $grupo ? '' : Grupos::provincia( $grupo );
 	}
 
+	/** ¿Se puede formar el nº de socio/a de este grupo? (hace falta su provincia) */
+	public static function configurado( string $grupo ): bool {
+		return '' !== self::prefijo( $grupo );
+	}
+
+	/** Provincia + nº de grupo (p. ej. «07684»), o '' si el grupo no tiene provincia. */
 	public static function prefijo( string $grupo ): string {
-		return self::codigo() . $grupo;
+		$provincia = self::provincia( $grupo );
+		return '' === $provincia || '' === $grupo ? '' : $provincia . $grupo;
 	}
 
-	/** Normaliza un valor del CRM o introducido por una persona. null si no es válido. */
+	/** El mismo prefijo sin el 0 inicial de la provincia: la forma de antes de la v0.56 («7684»). */
+	public static function prefijo_antiguo( string $grupo ): string {
+		return ltrim( self::prefijo( $grupo ), '0' );
+	}
+
+	/**
+	 * Normaliza un valor del CRM o introducido por una persona. null si no es válido.
+	 * El 0 inicial de la provincia se conserva; la forma de antes de la v0.56 (sin él) vale tal cual.
+	 */
 	public static function normalizar( string $valor, string $grupo ): ?string {
-		$digitos = ltrim( (string) preg_replace( '/\D/', '', $valor ), '0' );
-		if ( '' === $digitos || '' === $grupo || '' === self::codigo() ) {
+		$prefijo = self::prefijo( $grupo );
+		$d       = (string) preg_replace( '/\D/', '', $valor );
+		if ( '' === $d || '' === $prefijo ) {
 			return null;
 		}
-		if ( preg_match( '/^' . preg_quote( self::prefijo( $grupo ), '/' ) . '\d{4}$/', $digitos ) ) {
-			return $digitos;
+		if ( preg_match( '/^' . preg_quote( $prefijo, '/' ) . '\d{4}$/', $d ) ) {
+			return $d;
 		}
-		if ( preg_match( '/^' . preg_quote( $grupo, '/' ) . '\d{4}$/', $digitos ) ) {
-			return self::codigo() . $digitos; // Le faltaba el código de la organización.
+		$sin_ceros = ltrim( $d, '0' );
+		$antiguo   = self::prefijo_antiguo( $grupo );
+		if ( $antiguo !== $prefijo && preg_match( '/^' . preg_quote( $antiguo, '/' ) . '\d{4}$/', $d ) ) {
+			return $d; // Forma de antes de la v0.56.
+		}
+		if ( preg_match( '/^' . preg_quote( $antiguo, '/' ) . '\d{4}$/', $sin_ceros ) ) {
+			return $prefijo . substr( $sin_ceros, -4 ); // Ceros de más.
+		}
+		if ( preg_match( '/^' . preg_quote( $grupo, '/' ) . '\d{4}$/', $d ) || preg_match( '/^' . preg_quote( $grupo, '/' ) . '\d{4}$/', $sin_ceros ) ) {
+			return $prefijo . substr( $d, -4 ); // Le faltaba la provincia.
 		}
 		return null;
 	}
@@ -53,17 +80,42 @@ final class NumeroSocio {
 		return self::normalizar( $numero, $grupo ) === $numero;
 	}
 
+	/**
+	 * Las dos formas de escribir un mismo nº de socio/a local que pueden existir como usuario
+	 * (con y sin el 0 inicial de la provincia), contando todos los grupos dados de alta.
+	 *
+	 * @return string[] Las otras formas (sin incluir la dada).
+	 */
+	public static function otras_formas( string $numero ): array {
+		$otras = array();
+		foreach ( array_keys( Grupos::todos() ) as $grupo ) {
+			$grupo   = (string) $grupo;
+			$prefijo = self::prefijo( $grupo );
+			$antiguo = self::prefijo_antiguo( $grupo );
+			if ( '' === $prefijo || $prefijo === $antiguo ) {
+				continue;
+			}
+			if ( preg_match( '/^' . preg_quote( $prefijo, '/' ) . '(\d{4})$/', $numero, $m ) ) {
+				$otras[] = $antiguo . $m[1];
+			} elseif ( preg_match( '/^' . preg_quote( $antiguo, '/' ) . '(\d{4})$/', $numero, $m ) ) {
+				$otras[] = $prefijo . $m[1];
+			}
+		}
+		return array_values( array_unique( $otras ) );
+	}
+
 	public static function sufijo( string $numero ): int {
 		return (int) substr( $numero, -4 );
 	}
 
+	/** Número nuevo de un grupo: siempre con la provincia completa (076840001). */
 	public static function formatear( string $grupo, int $sufijo ): string {
 		return self::prefijo( $grupo ) . str_pad( (string) $sufijo, 4, '0', STR_PAD_LEFT );
 	}
 
 	/**
 	 * Usuario de la cuenta familiar (tutores) de un socio menor. La primera cuenta
-	 * es «nº + T» (76840390T) y la del segundo tutor/a, «nº + T2» (76840390T2):
+	 * es «nº + T» (076840390T) y la del segundo tutor/a, «nº + T2» (076840390T2):
 	 * cada tutor/a entra con su propia cuenta y su propio email (v0.12).
 	 */
 	public static function usuario_tutor( string $numero, int $orden = 1 ): string {
@@ -82,24 +134,30 @@ final class NumeroSocio {
 
 	/**
 	 * Grupo de un usuario por su nº de socio (con T en las familias): el grupo
-	 * dado de alta cuyo prefijo (código + nº de grupo) encaja, seguido de 4 cifras.
+	 * dado de alta cuyo prefijo (provincia + nº de grupo, o la forma de antes de la v0.56)
+	 * encaja, seguido de 4 cifras.
 	 *
 	 * @param string[] $grupos Números de grupo dados de alta.
 	 */
 	public static function grupo_de_login( string $login, array $grupos ): ?string {
-		if ( '' === self::codigo() ) {
-			return null;
-		}
 		$base = self::socio_de_usuario_tutor( $login ) ?? $login;
 		foreach ( $grupos as $grupo ) {
-			if ( preg_match( '/^' . preg_quote( self::prefijo( (string) $grupo ), '/' ) . '\d{4}$/', $base ) ) {
-				return (string) $grupo;
+			$grupo   = (string) $grupo;
+			$prefijo = self::prefijo( $grupo );
+			if ( '' === $prefijo ) {
+				continue;
+			}
+			$formas = array_unique( array( $prefijo, self::prefijo_antiguo( $grupo ) ) );
+			foreach ( $formas as $f ) {
+				if ( preg_match( '/^' . preg_quote( $f, '/' ) . '\d{4}$/', $base ) ) {
+					return $grupo;
+				}
 			}
 		}
 		return null;
 	}
 
-	/** Ejemplo para las ayudas de las pantallas (p. ej. 118241T o 76840390T según el usuario de acceso elegido). */
+	/** Ejemplo para las ayudas de las pantallas (p. ej. 118241T o 076840390T según el usuario de acceso elegido). */
 	public static function ejemplo_tutor(): string {
 		return Identidad::ejemplo_tutor();
 	}

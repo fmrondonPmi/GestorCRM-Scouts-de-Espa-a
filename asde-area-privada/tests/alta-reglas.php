@@ -59,8 +59,8 @@ $mailpit_antes = $mailpit_ids();
 // ---------------------------------------------------------------------------
 echo "== Parte 1 · Números de socio (sin CRM) ==\n";
 $ok( '76840390' === NumeroSocio::normalizar( '76840390', '684' ), 'formato correcto se mantiene' );
-$ok( '76840390' === NumeroSocio::normalizar( '076840390', '684' ), '0 inicial → se quita' );
-$ok( '76840390' === NumeroSocio::normalizar( '6840390', '684' ), 'sin el 7 → se añade' );
+$ok( '076840390' === NumeroSocio::normalizar( '076840390', '684' ), 'con la provincia completa (07 + 684 + 0390) se mantiene, con su 0 inicial' );
+$ok( '076840390' === NumeroSocio::normalizar( '6840390', '684' ), 'sin la provincia → se añade (076840390)' );
 $ok( '76840390' === NumeroSocio::normalizar( ' 7684-0390 ', '684' ), 'espacios y guiones → se limpian' );
 $ok( null === NumeroSocio::normalizar( '7684036', '684' ), '768+4 dígitos (ambiguo) → inválido' );
 $ok( null === NumeroSocio::normalizar( '76850390', '684' ), 'otro grupo → inválido' );
@@ -77,14 +77,14 @@ $p = static fn( string $asde, string $local, string $secc = '^Scouts^' ) => Pers
 	)
 );
 $n  = new Numeracion( PersonaRepository::make() );
-$an = $n->analizar( array( $p( '1', '76840100' ), $p( '2', '076840101' ), $p( '3', '76840102' ), $p( '4', '76840102' ), $p( '5', '768401' ), $p( '6', '' ) ), false );
+$an = $n->analizar( array( $p( '1', '76840100' ), $p( '2', '6840101' ), $p( '3', '76840102' ), $p( '4', '76840102' ), $p( '5', '768401' ), $p( '6', '' ) ), false );
 $ok( Numeracion::OK === $an['1']['estado'], 'estado OK' );
-$ok( Numeracion::CORREGIDO === $an['2']['estado'] && '76840101' === $an['2']['numero'], 'estado CORREGIDO (formato antiguo)' );
+$ok( Numeracion::CORREGIDO === $an['2']['estado'] && '076840101' === $an['2']['numero'], 'estado CORREGIDO (sin la provincia)' );
 $ok( Numeracion::DUPLICADO === $an['3']['estado'] && Numeracion::DUPLICADO === $an['4']['estado'], 'estado DUPLICADO en ambas fichas' );
 $ok( Numeracion::INVALIDO === $an['5']['estado'], 'estado INVALIDO' );
 $ok( Numeracion::FALTA === $an['6']['estado'], 'estado FALTA' );
 $sig = SociosTable::siguiente( '684', array( '76840391', '76840100' ) );
-$ok( 8 === strlen( $sig ) && str_starts_with( $sig, '7684' ) && $sig >= '76840392', "siguiente número = máximo + 1 ($sig)" );
+$ok( 9 === strlen( $sig ) && str_starts_with( $sig, '07684' ) && $sig >= '076840392', "siguiente número = máximo + 1, con la provincia completa ($sig)" );
 
 // ---------------------------------------------------------------------------
 echo "\n== Parte 1b · Tesorería (sin CRM) ==\n";

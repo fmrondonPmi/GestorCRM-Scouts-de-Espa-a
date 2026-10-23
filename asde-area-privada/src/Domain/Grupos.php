@@ -177,6 +177,76 @@ final class Grupos {
 	}
 
 	/**
+	 * Provincia del grupo (dos cifras, p. ej. «07»): los dos primeros dígitos de su nº de socio/a local.
+	 * Si el grupo aún no la tiene guardada, sale del código de organización de antes de la v0.56
+	 * (en Scouts de Balears, 7 → 07) para que nada cambie. '' si no se sabe.
+	 */
+	public static function provincia( string $numero ): string {
+		$g = self::por_numero( $numero );
+		$p = Provincias::normalizar( (string) ( $g['provincia'] ?? '' ) );
+		return $p ?? ( Provincias::normalizar( Organizacion::codigo_antiguo() ) ?? '' );
+	}
+
+	/**
+	 * Guarda los datos del grupo (v0.56, «Datos del grupo»): nombre, denominación fiscal, CIF,
+	 * dirección, código postal, población, provincia y email de contacto. No toca las credenciales
+	 * del CRM ni el nº de grupo.
+	 *
+	 * @param array<string, string> $d
+	 * @return array|\WP_Error El grupo guardado.
+	 */
+	public static function guardar_datos( string $numero, array $d ) {
+		$raw = self::raw();
+		if ( ! isset( $raw[ $numero ] ) ) {
+			return new \WP_Error( 'asde_grupo', asde_t( 'Ese grupo no existe.' ) );
+		}
+		$texto  = static fn( $v, int $max ) => mb_substr( trim( sanitize_text_field( (string) $v ) ), 0, $max );
+		$nombre = $texto( $d['nombre'] ?? '', 120 );
+		if ( '' === $nombre ) {
+			return new \WP_Error( 'asde_grupo', asde_t( 'Escribe el nombre del grupo.' ) );
+		}
+		$cif = strtoupper( (string) preg_replace( '/[\s.-]/', '', (string) ( $d['cif'] ?? '' ) ) );
+		if ( '' !== $cif && ! preg_match( '/^[A-Z0-9]{9}$/', $cif ) ) {
+			return new \WP_Error( 'asde_grupo', asde_t( 'El CIF tiene que tener 9 caracteres (letras y números), p. ej. G07123456.' ) );
+		}
+		$cp = trim( (string) ( $d['cp'] ?? '' ) );
+		if ( '' !== $cp && ! preg_match( '/^\d{5}$/', $cp ) ) {
+			return new \WP_Error( 'asde_grupo', asde_t( 'El código postal tiene que tener 5 cifras.' ) );
+		}
+		$provincia = trim( (string) ( $d['provincia'] ?? '' ) );
+		$provincia = '' === $provincia ? '' : ( Provincias::normalizar( $provincia ) ?? '' );
+		if ( '' === $provincia && '' !== trim( (string) ( $d['provincia'] ?? '' ) ) ) {
+			return new \WP_Error( 'asde_grupo', asde_t( 'Elige la provincia de la lista.' ) );
+		}
+		$email = strtolower( trim( (string) ( $d['email_contacto'] ?? '' ) ) );
+		if ( '' !== $email && ! is_email( $email ) ) {
+			return new \WP_Error( 'asde_grupo', asde_t( 'El email de contacto no es válido.' ) );
+		}
+		$g                   = $raw[ $numero ];
+		$g['nombre']         = $nombre;
+		$g['denominacion']   = $texto( $d['denominacion'] ?? '', 120 );
+		$g['cif']            = $cif;
+		$g['sede']           = $texto( $d['sede'] ?? '', 160 );
+		$g['cp']             = $cp;
+		$g['poblacion']      = $texto( $d['poblacion'] ?? '', 80 );
+		$g['provincia']      = $provincia;
+		$g['email_contacto'] = $email;
+		$raw[ $numero ]      = $g;
+		self::guardar_raw( $raw );
+		return self::por_numero( $numero );
+	}
+
+	/** Dirección completa del grupo en una línea (calle, código postal y población, provincia), lo que haya. */
+	public static function direccion( ?array $grupo ): string {
+		if ( ! $grupo ) {
+			return '';
+		}
+		$cp_pob = trim( (string) ( $grupo['cp'] ?? '' ) . ' ' . (string) ( $grupo['poblacion'] ?? '' ) );
+		$prov   = Provincias::nombre( Provincias::normalizar( (string) ( $grupo['provincia'] ?? '' ) ) ?? '' );
+		return implode( ', ', array_filter( array( (string) ( $grupo['sede'] ?? '' ), $cp_pob, $prov ) ) );
+	}
+
+	/**
 	 * Crea el grupo de una solicitud aprobada (v0.50, doc 50 fase 6) con la credencial **ya cifrada** (no pasa en claro por
 	 * ningún formulario) y la comprueba otra vez. Si en este momento ya no funciona, el grupo no se crea.
 	 *
@@ -219,7 +289,7 @@ final class Grupos {
 			array(
 				'' !== (string) ( $grupo['denominacion'] ?? '' ) ? (string) $grupo['denominacion'] : '',
 				'' !== (string) ( $grupo['cif'] ?? '' ) ? 'CIF ' . $grupo['cif'] : '',
-				(string) ( $grupo['sede'] ?? '' ),
+				self::direccion( $grupo ),
 			)
 		);
 		return implode( ' · ', $partes );
@@ -397,6 +467,10 @@ final class Grupos {
 			'sede'         => '',
 			'cif'          => '',
 			'denominacion' => '',
+			// v0.56 (doc 58): «Datos del grupo». La provincia (dos cifras) es el principio de su nº de socio/a local.
+			'cp'           => '',
+			'poblacion'    => '',
+			'provincia'    => '',
 		);
 	}
 }

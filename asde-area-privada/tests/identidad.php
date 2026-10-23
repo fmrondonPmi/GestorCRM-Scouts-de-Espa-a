@@ -81,7 +81,7 @@ $crm = new Asde_Prueba_Crm(
 		$P( 4, 'Tom', 'Ide Luz', '1985-05-05', 'Scouters', array( 'email1' => 'tom.ide@example.invalid', 'numsocioantiguo_enficha_c' => '12345' ) ), // Nº territorial no válido.
 		$P( 5, 'Marta', 'Ide Vila', '1992-02-02', 'Scouters', array( 'email1' => 'marta.ide@example.invalid', 'numsocioantiguo_enficha_c' => '76849903' ) ), // Duplicado con el de Eva.
 		$P( 6, 'Pau', 'Ide Roca', '1991-03-03', 'Scouters', array( 'email1' => 'pau.ide@example.invalid', 'numsocioantiguo_enficha_c' => '' ) ), // Sin nº territorial.
-		$P( 7, 'Iris', 'Ide Mas', '1993-04-04', 'Scouters', array( 'email1' => 'iris.ide@example.invalid', 'numsocioantiguo_enficha_c' => '076849907' ) ), // Formato antiguo.
+		$P( 7, 'Iris', 'Ide Mas', '1993-04-04', 'Scouters', array( 'email1' => 'iris.ide@example.invalid', 'numsocioantiguo_enficha_c' => '6849907' ) ), // Formato antiguo (sin la provincia).
 	),
 	$grupo['crm_id']
 );
@@ -121,7 +121,7 @@ try {
 	$ok( is_wp_error( Organizacion::guardar( 'balears', '7', array(), 'otro' ) ), 'un valor que no es ninguno de los dos se rechaza' );
 	$ok( 'nº de socio/a de Scouts de España' === Identidad::etiqueta() && '118241' === Identidad::ejemplo() && '118241T' === Identidad::ejemplo_tutor(), 'textos y ejemplos según el modo (118241 y 118241T)' );
 	$poner_modo( Organizacion::IDENTIFICADOR_LOCAL );
-	$ok( 'nº de socio/a local' === Identidad::etiqueta() && str_ends_with( Identidad::ejemplo_tutor(), 'T' ) && str_starts_with( Identidad::ejemplo(), '7684' ), 'y el de siempre con el nº local (7684…)' );
+	$ok( 'nº de socio/a local' === Identidad::etiqueta() && str_ends_with( Identidad::ejemplo_tutor(), 'T' ) && str_starts_with( Identidad::ejemplo(), '07684' ), 'y el de siempre con el nº local (con la provincia: 07684…)' );
 
 	echo "\n== Parte B · Reconocer los números ==\n";
 	$ok( '118241' === Identidad::normalizar_numero( ' 0118241 ' ) && '118241T' === Identidad::normalizar_numero( '118241t' ) && '118241T2' === Identidad::normalizar_numero( '118.241-t2' ) && '76840390T' === Identidad::normalizar_numero( '076840390t' ), 'nº de Scouts de España o local, con ceros delante, puntos o la T en minúscula → formato de usuario' );

@@ -121,11 +121,11 @@ try {
 	$g = Menu::grupos( $como( $u_fam ) );
 	$ok( array( Menu::PERSONAL ) === array_keys( $g ), 'una familia (tutor) tiene un solo grupo de menú: lo personal' );
 	// «Mis eventos» solo con el módulo «Eventos» encendido (v0.35: nace apagado; lo prueba eventos-inscripciones.php).
-	$ok( array( 'ficha', 'pagos', 'tienda_pedidos' ) === $claves( $g[ Menu::PERSONAL ]['items'] ) && 'Mi familia' === $g[ Menu::PERSONAL ]['titulo'] && 'Mi familia' === $g[ Menu::PERSONAL ]['items']['ficha'] && 'Tienda' === $g[ Menu::PERSONAL ]['items']['tienda_pedidos'], 'sus entradas: Mi familia, Mis eventos (v0.19.1), Mis pagos y Tienda' );
+	$ok( array( 'ficha', 'pagos', 'tienda_pedidos', 'grupo_datos' ) === $claves( $g[ Menu::PERSONAL ]['items'] ) && 'Mi familia' === $g[ Menu::PERSONAL ]['titulo'] && 'Mi familia' === $g[ Menu::PERSONAL ]['items']['ficha'] && 'Tienda' === $g[ Menu::PERSONAL ]['items']['tienda_pedidos'], 'sus entradas: Mi familia, Mis pagos, Tienda y Datos del grupo (v0.56: lo ve todo el mundo)' );
 	$g = Menu::grupos( $como( $u_pol ) );
 	$ok( array( Menu::PERSONAL ) === array_keys( $g ) && 'Mi espacio' === $g[ Menu::PERSONAL ]['titulo'] && 'Mis datos' === $g[ Menu::PERSONAL ]['items']['ficha'], 'un participante: Mi espacio con Mis datos, pagos y uniforme' );
 	$tabs = View::pestanas( $como( $u_fam ) );
-	$ok( array( 'area', 'ficha', 'pagos', 'tienda_pedidos' ) === $claves( $tabs ), 'la lista plana de pestañas de la familia (Inicio delante) no trae nada de gestión' );
+	$ok( array( 'area', 'ficha', 'pagos', 'tienda_pedidos', 'grupo_datos' ) === $claves( $tabs ), 'la lista plana de pestañas de la familia (Inicio delante) no trae nada de gestión' );
 
 	echo "\n== Parte B · Scouters: su espacio y la gestión, por separado ==\n";
 	$g = Menu::grupos( $como( $u_sco ) );

@@ -175,9 +175,17 @@ final class MigracionUsuario {
 
 		$base_asde  = null;
 		$base_local = null;
-		if ( isset( $mapas['local_a_asde'][ $base ] ) ) {            // El nombre es un nº local.
-			$base_asde  = $mapas['local_a_asde'][ $base ];
-			$base_local = $base;
+		// v0.56: el nº local con o sin el 0 inicial de la provincia (076840390 / 76840390) es el mismo.
+		$forma_local = null;
+		foreach ( array_merge( array( $base ), NumeroSocio::otras_formas( $base ) ) as $forma ) {
+			if ( isset( $mapas['local_a_asde'][ $forma ] ) ) {
+				$forma_local = $forma;
+				break;
+			}
+		}
+		if ( null !== $forma_local ) {                               // El nombre es un nº local.
+			$base_asde  = $mapas['local_a_asde'][ $forma_local ];
+			$base_local = $forma_local;
 		} elseif ( isset( $mapas['asde_a_local'][ $base ] ) ) {      // El nombre es un nº de Scouts de España.
 			$base_asde  = $base;
 			$base_local = $mapas['asde_a_local'][ $base ];
@@ -197,7 +205,7 @@ final class MigracionUsuario {
 			}
 		}
 		// Sin equivalencia: si el nombre tiene la forma de un nº local, no se sabe de qué ficha es; si no, ya es de Scouts de España.
-		$parece_local = $grupo && '' !== NumeroSocio::codigo() && NumeroSocio::es_valido( $base, (string) $grupo['numero'] );
+		$parece_local = $grupo && NumeroSocio::configurado( (string) $grupo['numero'] ) && NumeroSocio::es_valido( $base, (string) $grupo['numero'] );
 		if ( null === $base_asde && null === $base_local ) {
 			if ( $parece_local ) {
 				$base_local = $base;

@@ -53,7 +53,7 @@ final class Identidad {
 			return '118241';
 		}
 		$grupo = (string) ( array_key_first( Grupos::todos() ) ?? '' );
-		return '' !== NumeroSocio::codigo() && '' !== $grupo ? NumeroSocio::formatear( $grupo, 390 ) : '';
+		return '' !== $grupo && NumeroSocio::configurado( $grupo ) ? NumeroSocio::formatear( $grupo, 390 ) : '';
 	}
 
 	/** Usuario de ejemplo de una cuenta familiar (p. ej. 118241T). */
@@ -110,9 +110,12 @@ final class Identidad {
 			return $login;
 		}
 		list( $base, $sufijo ) = $partes;
-		foreach ( array_unique( array_filter( array( SociosTable::asde_de( $base ), SociosTable::local_de( $base ) ) ) ) as $otro ) {
-			if ( username_exists( $otro . $sufijo ) ) {
-				return $otro . $sufijo;
+		// v0.56: el mismo nº local con y sin el 0 inicial de la provincia (076840390 / 76840390) es la misma persona.
+		foreach ( array_merge( array( $base ), NumeroSocio::otras_formas( $base ) ) as $forma ) {
+			foreach ( array_unique( array_filter( array( $forma === $base ? '' : $forma, SociosTable::asde_de( $forma ), SociosTable::local_de( $forma ) ) ) ) as $otro ) {
+				if ( username_exists( $otro . $sufijo ) ) {
+					return $otro . $sufijo;
+				}
 			}
 		}
 		return $login;

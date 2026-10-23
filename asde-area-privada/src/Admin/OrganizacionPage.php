@@ -109,20 +109,16 @@ final class OrganizacionPage {
 		check_admin_referer( self::ACCION );
 		$post         = wp_unslash( $_POST ); // phpcs:ignore WordPress.Security.NonceVerification
 		$organizacion = sanitize_key( (string) ( $post['organizacion'] ?? '' ) );
-		$codigo       = trim( (string) ( $post['codigo'] ?? '' ) );
-		$anterior     = Organizacion::codigo();
-		$cambia       = '' !== $anterior && $codigo !== $anterior;
+		$cambia       = false; // v0.56: el nº de socio/a ya no lleva un código de la organización: sale de la provincia de cada grupo (Datos del grupo).
 
-		if ( $cambia && Grupos::todos() && empty( $post['confirmar_codigo'] ) ) {
-			$this->aviso( 'error', 'No se ha guardado: para cambiar el código de la organización marca la casilla de confirmación (los números de socio del CRM con el código anterior dejarán de reconocerse como del grupo).' );
-		} else {
+		{
 			$identificador = isset( $post['identificador'] ) ? sanitize_key( (string) $post['identificador'] ) : null;
 			$tipo_antes    = Organizacion::tipo_instalacion();
 			if ( isset( $post['tipo_instalacion'] ) ) {
 				Organizacion::guardar_tipo( sanitize_key( (string) $post['tipo_instalacion'] ) ); // v0.44: Grupo u Oficina (doc 50).
 			}
 			$cambia_ident  = null !== $identificador && $identificador !== Organizacion::identificador();
-			$r             = Organizacion::guardar( $organizacion, $codigo, (array) ( $post['federacion'] ?? array() ), $identificador );
+			$r             = Organizacion::guardar( $organizacion, '', (array) ( $post['federacion'] ?? array() ), $identificador );
 			if ( ! is_wp_error( $r ) && isset( $post['manual'] ) ) {
 				$r = Organizacion::guardar_manual( (string) $post['manual'] ); // v0.26: el manual publicado (ayuda de cada página).
 			}
@@ -150,7 +146,7 @@ final class OrganizacionPage {
 				);
 				$this->aviso(
 						'success',
-						sprintf( 'Guardado: %s, código %s.', Organizacion::nombre(), Organizacion::codigo() )
+						sprintf( 'Guardado: %s.', Organizacion::nombre() )
 						. ( $cambia_ident ? ' El usuario de acceso de las cuentas NUEVAS es ahora el ' . Identidad::etiqueta() . '; para pasar las que ya existen, usa «Renombrar las cuentas existentes» (más abajo).' : '' )
 					);
 			}
@@ -176,13 +172,13 @@ final class OrganizacionPage {
 		?>
 		<div class="wrap asde-organizacion">
 			<h1><?php esc_html_e( 'Organización federada', 'asde-area-privada' ); ?></h1>
-			<p><?php esc_html_e( 'Lo que depende de la organización federada de Scouts de España que usa el sistema: su nombre (sale en los textos del área privada), su código en el nº de socio local y el coste federativo con el que empieza cada ronda en la Tesorería de los grupos.', 'asde-area-privada' ); ?></p>
+			<p><?php esc_html_e( 'Lo que depende de la organización federada de Scouts de España que usa el sistema: su nombre (sale en los textos del área privada) y el coste federativo con el que empieza cada ronda en la Tesorería de los grupos. El formato del nº de socio local lo fija cada grupo con su provincia en «Datos del grupo» (en el área privada).', 'asde-area-privada' ); ?></p>
 
 			<?php if ( is_array( $aviso ) ) : ?>
 				<div class="notice notice-<?php echo 'success' === $aviso[0] ? 'success' : 'error'; ?>"><p><?php echo esc_html( $aviso[1] ); ?></p></div>
 			<?php endif; ?>
 			<?php if ( ! Organizacion::configurada() ) : ?>
-				<div class="notice notice-warning"><p><?php esc_html_e( 'Falta elegir la organización y su código: sin ellos no se pueden reconocer ni generar números de socio.', 'asde-area-privada' ); ?></p></div>
+				<div class="notice notice-warning"><p><?php esc_html_e( 'Falta elegir la organización federada.', 'asde-area-privada' ); ?></p></div>
 			<?php endif; ?>
 
 			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
@@ -209,26 +205,8 @@ final class OrganizacionPage {
 						</td>
 					</tr>
 					<tr>
-						<th scope="row"><label for="asde-codigo"><?php esc_html_e( 'Código en el nº de socio local', 'asde-area-privada' ); ?></label></th>
-						<td>
-							<input type="text" id="asde-codigo" name="codigo" value="<?php echo esc_attr( $datos['codigo'] ); ?>" class="small-text" inputmode="numeric" pattern="[1-9][0-9]{0,2}" maxlength="3" required>
-							<p class="description">
-								<?php
-								echo esc_html(
-									sprintf(
-										/* translators: %s: ejemplo de números con el código y un grupo */
-										__( 'Primera parte del nº de socio/a local: código + nº de grupo + 4 cifras. En Scouts de Balears es 7. %s', 'asde-area-privada' ),
-										'' !== $datos['codigo'] ? sprintf( 'Con este código, en el grupo %1$s: %2$s, %3$s…', $grupo, NumeroSocio::formatear( $grupo, 1 ), NumeroSocio::formatear( $grupo, 2 ) ) : ''
-									)
-								);
-								?>
-							</p>
-							<?php if ( '' !== $datos['codigo'] && Grupos::todos() ) : ?>
-								<p class="asde-organizacion__cuidado">
-									<label><input type="checkbox" name="confirmar_codigo" value="1"> <?php esc_html_e( 'Si cambio el código, entiendo que los números de socio del CRM con el código anterior dejarán de reconocerse como del grupo (habrá que corregirlos en el CRM y, mientras, esas personas no se pueden dar de alta). Los usuarios ya creados siguen entrando con su usuario de siempre o con su email.', 'asde-area-privada' ); ?></label>
-								</p>
-							<?php endif; ?>
-						</td>
+						<th scope="row"><?php esc_html_e( 'Nº de socio local', 'asde-area-privada' ); ?></th>
+						<td><p class="description"><?php esc_html_e( 'Ya no hay un código de la organización: el nº de socio/a local es provincia (2 cifras, con su 0 inicial) + nº de grupo + 4 cifras, y cada grupo elige su provincia en «Datos del grupo» (área privada).', 'asde-area-privada' ); ?></p></td>
 					</tr>
 				</table>
 

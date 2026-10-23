@@ -51,8 +51,12 @@ final class Config {
 		if ( '' === trim( (string) $cfg['nombre'] ) && '' !== (string) ( $datos_grupo['denominacion'] ?? '' ) ) {
 			$cfg['nombre'] = (string) $datos_grupo['denominacion'];
 		}
-		if ( '' === trim( (string) $cfg['calle'] ) && '' !== (string) ( $datos_grupo['sede'] ?? '' ) ) {
-			$cfg['calle'] = (string) $datos_grupo['sede'];
+		// v0.56 (doc 58): la dirección del acreedor sale de «Datos del grupo» (una sola fuente); lo que se guardó aquí antes solo se aprovecha si el grupo no la tiene.
+		$dg = \AsdeBalears\AreaPrivada\Domain\DatosGrupo::de( $grupo );
+		foreach ( array( 'calle' => 'sede', 'cp' => 'cp', 'poblacion' => 'poblacion', 'provincia' => 'provincia_nombre' ) as $aqui => $alli ) {
+			if ( '' !== $dg[ $alli ] ) {
+				$cfg[ $aqui ] = $dg[ $alli ];
+			}
 		}
 		$cfg['nombre']     = mb_substr( (string) $cfg['nombre'], 0, 70 );
 		$cfg['ics']        = self::normalizar_ics( (string) $cfg['ics'] );

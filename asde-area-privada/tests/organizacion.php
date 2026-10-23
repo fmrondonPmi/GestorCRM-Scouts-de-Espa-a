@@ -50,7 +50,7 @@ Grupo::forzar( Grupos::por_numero( '684' ) );
 echo "== Parte A · Organización federada ==\n";
 $ok( 17 === count( Organizacion::FEDERADAS ) && 'Scouts de Balears' === Organizacion::FEDERADAS['balears'][0] && 'Euskadiko Esploratzaileak' === Organizacion::FEDERADAS['euskadi'][0], 'las 17 organizaciones federadas de scout.es' );
 $ok( Organizacion::configurada() && 'balears' === Organizacion::clave() && '7' === Organizacion::codigo() && 17.0 === Organizacion::federacion()['cuota_asociativa'], 'esta instalación (anterior a la v0.9) quedó como Scouts de Balears, código 7, con sus importes' );
-$ok( '76840390T' === NumeroSocio::ejemplo_tutor(), 'el ejemplo de las ayudas sale del código y del grupo (76840390T)' );
+$ok( '076840390T' === NumeroSocio::ejemplo_tutor(), 'el ejemplo de las ayudas sale de la provincia (07, del código de antes) y del grupo (076840390T)' );
 
 delete_option( Organizacion::OPTION );
 Organizacion::olvidar();

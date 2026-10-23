@@ -127,9 +127,9 @@ final class Organizacion {
 		return true;
 	}
 
-	/** ¿Se ha elegido organización y código? Sin ellos no se pueden generar números de socio. */
+	/** ¿Se ha elegido la organización federada? (Desde la v0.56 el nº de socio/a local ya no depende de un código de la organización: sale de la provincia de cada grupo.) */
 	public static function configurada(): bool {
-		return '' !== self::clave() && '' !== self::codigo();
+		return '' !== self::clave();
 	}
 
 	/** Nombre de la organización federada (el que sale en los textos). */
@@ -189,9 +189,18 @@ final class Organizacion {
 		return true;
 	}
 
-	/** Código de la organización en el nº de socio/a local ('' si no está configurado). */
-	public static function codigo(): string {
+	/**
+	 * Código que usaba la organización en el nº de socio/a local antes de la v0.56 ('' si no lo hay). Ya no
+	 * se configura: solo sirve para saber la provincia de un grupo que aún no la tiene guardada
+	 * (Grupos::provincia(); en Scouts de Balears, 7 → 07).
+	 */
+	public static function codigo_antiguo(): string {
 		return self::datos()['codigo'];
+	}
+
+	/** @deprecated v0.56: igual que codigo_antiguo(); el nº de socio/a ya no usa un código de la organización. */
+	public static function codigo(): string {
+		return self::codigo_antiguo();
 	}
 
 	/** Coste federativo por defecto de la organización (con lo que empieza cada ronda). */
@@ -215,8 +224,11 @@ final class Organizacion {
 		if ( ! isset( self::FEDERADAS[ $organizacion ] ) ) {
 			return new \WP_Error( 'asde_organizacion', asde_t( 'Elige la organización federada de la lista.' ) );
 		}
+		// v0.56: el código ya no se pide; si no se indica, se conserva el que hubiera.
 		$codigo = trim( $codigo );
-		if ( ! self::codigo_valido( $codigo ) ) {
+		if ( '' === $codigo ) {
+			$codigo = self::codigo_antiguo();
+		} elseif ( ! self::codigo_valido( $codigo ) ) {
 			return new \WP_Error( 'asde_organizacion', asde_t( 'El código de la organización tiene que ser un número de 1 a 3 cifras que no empiece por 0.' ) );
 		}
 		if ( null !== $identificador && ! in_array( $identificador, array( self::IDENTIFICADOR_ASDE, self::IDENTIFICADOR_LOCAL ), true ) ) {

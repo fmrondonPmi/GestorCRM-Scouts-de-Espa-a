@@ -139,8 +139,8 @@ final class SociosTable {
 		if ( $existente ) {
 			return $existente;
 		}
-		if ( '' === NumeroSocio::codigo() ) {
-			return new \WP_Error( 'asde_num_socio', asde_t( 'Falta el código de la organización federada (wp-admin → Grupos Scouts → Organización federada): sin él no se pueden generar números de socio.' ) );
+		if ( ! NumeroSocio::configurado( $grupo ) ) {
+			return new \WP_Error( 'asde_num_socio', asde_t( 'Falta la provincia del grupo (Datos del grupo): sin ella no se pueden generar números de socio.' ) );
 		}
 
 		$wpdb->query( "SELECT GET_LOCK('asde_num_socio', 10)" ); // Evita que dos personas reciban el mismo número.
@@ -172,12 +172,18 @@ final class SociosTable {
 	/** Siguiente número libre: máximo entre CRM y esta tabla, + 1. */
 	public static function siguiente( string $grupo, array $numeros_crm ): string {
 		global $wpdb;
-		$prefijo = NumeroSocio::prefijo( $grupo );
-		$locales = (array) $wpdb->get_col( $wpdb->prepare( 'SELECT num_socio_local FROM %i WHERE num_socio_local LIKE %s', self::table(), $wpdb->esc_like( $prefijo ) . '%' ) ); // phpcs:ignore WordPress.DB
-		$max     = 0;
+		// El contador es de todo el grupo: cuentan los números con la provincia completa (076840390) y los de antes de la v0.56 (76840390).
+		$formas  = array_unique( array( NumeroSocio::prefijo( $grupo ), NumeroSocio::prefijo_antiguo( $grupo ) ) );
+		$locales = array();
+		foreach ( $formas as $prefijo ) {
+			$locales = array_merge( $locales, (array) $wpdb->get_col( $wpdb->prepare( 'SELECT num_socio_local FROM %i WHERE num_socio_local LIKE %s', self::table(), $wpdb->esc_like( $prefijo ) . '%' ) ) ); // phpcs:ignore WordPress.DB
+		}
+		$max = 0;
 		foreach ( array_merge( $numeros_crm, $locales ) as $n ) {
-			if ( str_starts_with( (string) $n, $prefijo ) && strlen( $prefijo ) + 4 === strlen( (string) $n ) ) {
-				$max = max( $max, NumeroSocio::sufijo( (string) $n ) );
+			foreach ( $formas as $prefijo ) {
+				if ( str_starts_with( (string) $n, $prefijo ) && strlen( $prefijo ) + 4 === strlen( (string) $n ) ) {
+					$max = max( $max, NumeroSocio::sufijo( (string) $n ) );
+				}
 			}
 		}
 		return NumeroSocio::formatear( $grupo, $max + 1 );

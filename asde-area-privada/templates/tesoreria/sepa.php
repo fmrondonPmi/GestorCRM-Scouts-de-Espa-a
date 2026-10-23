@@ -102,10 +102,12 @@ $vista_previa = static function ( array $prep ) use ( $familias, $nombres ): voi
 			<p><label for="asde-sepa-ics"><?php asde_e( 'Identificador del acreedor (ICS)' ); ?></label><input type="text" id="asde-sepa-ics" name="ics" maxlength="35" value="<?php echo esc_attr( $cfg['ics'] ); ?>" placeholder="<?php echo esc_attr( asde_a( 'ES00ZZZG00000000' ) ); ?>"><span class="asde-help"><?php asde_e( 'Empieza por ES y son 16 caracteres.' ); ?></span></p>
 			<p><label for="asde-sepa-iban"><?php asde_e( 'IBAN del acreedor' ); ?></label><input type="text" id="asde-sepa-iban" name="iban" maxlength="40" value="" placeholder="<?php echo '' !== $cfg['iban'] ? esc_attr( \AsdeBalears\AreaPrivada\Sepa\Iban::enmascarar( $cfg['iban'] ) . asde_t( ' (guardado; déjalo vacío para conservarlo)' ) ) : 'ES00 0000 0000 0000 0000 0000'; ?>" autocomplete="off"><span class="asde-help"><?php asde_e( 'La cuenta donde el banco ingresa lo cobrado. Se guarda cifrado.' ); ?></span></p>
 			<p><label for="asde-sepa-bic"><?php asde_e( 'BIC (opcional)' ); ?></label><input type="text" id="asde-sepa-bic" name="bic" maxlength="11" value="<?php echo esc_attr( $cfg['bic'] ); ?>"></p>
-			<p><label for="asde-sepa-calle"><?php asde_e( 'Dirección (calle y número)' ); ?></label><input type="text" id="asde-sepa-calle" name="calle" maxlength="70" value="<?php echo esc_attr( $cfg['calle'] ); ?>"></p>
-			<p><label for="asde-sepa-cp"><?php asde_e( 'Código postal' ); ?></label><input type="text" id="asde-sepa-cp" name="cp" maxlength="10" value="<?php echo esc_attr( $cfg['cp'] ); ?>"></p>
-			<p><label for="asde-sepa-poblacion"><?php asde_e( 'Población' ); ?></label><input type="text" id="asde-sepa-poblacion" name="poblacion" maxlength="50" value="<?php echo esc_attr( $cfg['poblacion'] ); ?>"></p>
-			<p><label for="asde-sepa-provincia"><?php asde_e( 'Provincia' ); ?></label><input type="text" id="asde-sepa-provincia" name="provincia" maxlength="40" value="<?php echo esc_attr( $cfg['provincia'] ); ?>"></p>
+			<p>
+				<span class="asde-label"><?php asde_e( 'Dirección del acreedor' ); ?></span>
+				<?php $dir_acreedor = trim( implode( ', ', array_filter( array( $cfg['calle'], trim( $cfg['cp'] . ' ' . $cfg['poblacion'] ), $cfg['provincia'] ) ) ) ); ?>
+				<span class="asde-valor"><?php echo esc_html( '' !== $dir_acreedor ? $dir_acreedor : '–' ); ?></span>
+				<span class="asde-help"><?php asde_e( 'Sale de' ); ?> <a href="<?php echo esc_url( \AsdeBalears\AreaPrivada\Frontend\Pages::url( 'grupo_datos' ) ); ?>"><?php asde_e( 'Datos del grupo' ); ?></a>.</span>
+			</p>
 			<p><label for="asde-sepa-aviso"><?php asde_e( 'Días de aviso antes de cada cargo' ); ?></label><input type="number" id="asde-sepa-aviso" name="dias_aviso" min="1" max="30" value="<?php echo (int) $cfg['dias_aviso']; ?>"><span class="asde-help"><?php asde_e( 'La norma pide 14 días salvo que se pacte otro plazo: aquí se pacta y sale en la autorización.' ); ?></span></p>
 			<p><label for="asde-sepa-concepto"><?php asde_e( 'Concepto de los cargos' ); ?></label><input type="text" id="asde-sepa-concepto" name="concepto" maxlength="90" value="<?php echo esc_attr( $cfg['concepto'] ); ?>"><span class="asde-help"><?php asde_e( 'Puedes usar {grupo} y {ronda}. Al final se añade el nº de familia.' ); ?></span></p>
 		</div>

@@ -105,6 +105,17 @@ final class Menu {
 			$gestion['accesos'] = asde_t( 'Accesos' ); // v0.53 (doc 56).
 		}
 
+		// v0.56 (doc 58): «Datos del grupo» lo ve todo el mundo; quien los cambia (Coordinación) lo tiene en la gestión.
+		if ( $ambito && $ambito->es_oficina() ) {
+			// La oficina federal consulta personas, informes y usuarios: no lleva los datos de un grupo.
+		} elseif ( current_user_can( \AsdeBalears\AreaPrivada\Frontend\Views\DatosGrupoView::CAP_EDITAR ) && ( $gestion || ! $personal ) ) {
+			$gestion['grupo_datos'] = asde_t( 'Datos del grupo' );
+		} elseif ( $personal ) {
+			$personal['grupo_datos'] = asde_t( 'Datos del grupo' );
+		} elseif ( $gestion ) {
+			$gestion['grupo_datos'] = asde_t( 'Datos del grupo' );
+		}
+
 		$grupos = array();
 		if ( $personal ) {
 			$grupos[ self::PERSONAL ] = array(

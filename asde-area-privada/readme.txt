@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.55.0
+Stable tag: 0.56.0
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -61,6 +61,9 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.56.0 =
+* New "Group data" page (name, tax name, tax ID, address, postcode, town, province, contact email) in one place: everybody can see it, the Coordination team edits it (new permission, listed in Access management). The local member number is now province (2 digits, keeping the leading 0) + group number + 4-digit counter, so the "organisation code" setting is gone; numbers without the leading 0 stay valid. The SEPA creditor address now comes from the group data. No database changes.
 
 = 0.55.0 =
 * Budgets, phases 2 and 3: each section (and the group) prepares its budget with expense items (category x how many x amount each) and income items (the fundraising project target of each section and others), with balance, draft / sent / approved status (Treasury approves and reopens with a reason), copy from the previous round and real spending recorded against each item (budgeted / spent / left). New permission "Prepare the budget of their sections" (Scouters, Secretary, Coordination, Treasury; listed in Access management). Three new database tables.
@@ -245,6 +248,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * CRM registrations tested end to end in a browser against the simulated SinergiaCRM API (development only).
 
 == Upgrade Notice ==
+
+= 0.56.0 =
+Adds the "Group data" page and a new permission. The member number format now uses the group province (set it in Group data; Scouts de Balears keeps working with 07). No database changes.
 
 = 0.55.0 =
 Adds the budgets of each section and of the group (items, approval, real spending) and a new permission. Three new database tables (items, status, real spending).

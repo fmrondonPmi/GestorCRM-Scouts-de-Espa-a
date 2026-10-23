@@ -350,10 +350,11 @@ final class SepaView extends TesoreriaBaseView {
 			'ics'        => SepaConfig::normalizar_ics( $this->post( 'ics' ) ),
 			'iban'       => Iban::normalizar( $this->post( 'iban' ) ),
 			'bic'        => strtoupper( (string) preg_replace( '/[^A-Za-z0-9]/', '', $this->post( 'bic' ) ) ),
-			'calle'      => $texto( 'calle', 70 ),
-			'cp'         => $texto( 'cp', 10 ),
-			'poblacion'  => $texto( 'poblacion', 50 ),
-			'provincia'  => $texto( 'provincia', 40 ),
+			// v0.56 (doc 58): la dirección del acreedor se cambia en «Datos del grupo»; aquí se conserva lo que haya.
+			'calle'      => $actual['calle'],
+			'cp'         => $actual['cp'],
+			'poblacion'  => $actual['poblacion'],
+			'provincia'  => $actual['provincia'],
 			'dias_aviso' => max( 1, min( 30, (int) $this->post( 'dias_aviso' ) ) ),
 			'concepto'   => $texto( 'concepto', 90 ),
 		);

@@ -31,6 +31,7 @@ use AsdeBalears\AreaPrivada\Frontend\Views\EmailsView;
 use AsdeBalears\AreaPrivada\Frontend\Views\FamiliasView;
 use AsdeBalears\AreaPrivada\Frontend\Views\FederacionView;
 use AsdeBalears\AreaPrivada\Frontend\Views\PresupuestosView;
+use AsdeBalears\AreaPrivada\Frontend\Views\DatosGrupoView;
 use AsdeBalears\AreaPrivada\Frontend\Views\InformesView;
 use AsdeBalears\AreaPrivada\Frontend\Views\InventarioComprasView;
 use AsdeBalears\AreaPrivada\Frontend\Views\InventarioTiposView;
@@ -90,6 +91,7 @@ final class Router {
 		'federacion' => array( 'asde_coste_federativo', FederacionView::class ),
 		'banco'     => array( 'asde_banco', BancoView::class ),
 		'presupuestos' => array( 'asde_presupuestos', PresupuestosView::class ), // v0.54 (doc 57).
+		'grupo_datos'  => array( 'asde_grupo_datos', DatosGrupoView::class ), // v0.56 (doc 58).
 		'sepa'      => array( 'asde_sepa', SepaView::class ),
 		'seguridad' => array( 'asde_seguridad', SeguridadView::class ),
 		'acceso'    => array( 'asde_acceso', AccesoView::class ),

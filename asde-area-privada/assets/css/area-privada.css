@@ -3149,11 +3149,11 @@ dialog.asde-modal--mini .asde-publicar h3 {
 	margin: 0;
 }
 .asde-ap .asde-negativo {
-	color: var(--asde-error-text, #b32d2e);
+	color: var(--asde-error-text);
 }
 .asde-ap .asde-badge--presupuesto-borrador {
 	background: var(--asde-neutral-bg);
-	color: var(--asde-neutral-text, #3c434a);
+	color: var(--asde-muted);
 }
 .asde-ap .asde-badge--presupuesto-enviado {
 	background: var(--asde-warn-bg);

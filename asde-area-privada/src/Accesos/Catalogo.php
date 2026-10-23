@@ -34,6 +34,7 @@ final class Catalogo {
 
 	/** módulo => [nombre] en el orden en que se enseñan. */
 	public const MODULOS = array(
+		'grupo'        => 'Datos del grupo',
 		'personas'     => 'Personas y fichas',
 		'usuarios'     => 'Usuarios y solicitudes',
 		'informes'     => 'Informes',
@@ -53,6 +54,7 @@ final class Catalogo {
 	private static function lista(): array {
 		$ver_personas = array( 'asde_view_all', 'asde_view_section' );
 		return array(
+			'asde_grupo_datos'          => array( 'grupo', self::ACCION, 'Cambiar los datos del grupo (nombre, CIF, dirección y provincia)', false, array() ),
 			'asde_view_section'         => array( 'personas', self::VER, 'Ver las fichas de las personas de su sección', false, array() ),
 			'asde_view_all'             => array( 'personas', self::VER, 'Ver las fichas de todo el grupo', true, array() ),
 			'asde_edit_section_contact' => array( 'personas', self::ACCION, 'Editar los datos de contacto de su sección', false, array( 'asde_view_section' ) ),

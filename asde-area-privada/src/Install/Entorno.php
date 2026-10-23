@@ -98,8 +98,8 @@ final class Entorno {
 		// Organización federada (nombre en los textos, código del nº de socio, coste federativo).
 		$org_url           = \AsdeBalears\AreaPrivada\Admin\OrganizacionPage::url();
 		$c['organizacion'] = Organizacion::configurada()
-			? array( self::OK, 'Organización federada', sprintf( '%s (código %s en el nº de socio local).', Organizacion::nombre(), Organizacion::codigo() ), array( 'Organización' => $org_url ) )
-			: array( self::FALTA, 'Organización federada', 'Sin elegir: hace falta para los textos, el nº de socio local (código de la organización) y el coste federativo.', array( 'Elegirla' => $org_url ) );
+			? array( self::OK, 'Organización federada', sprintf( '%s.', Organizacion::nombre() ), array( 'Organización' => $org_url ) )
+			: array( self::FALTA, 'Organización federada', 'Sin elegir: hace falta para los textos y el coste federativo.', array( 'Elegirla' => $org_url ) );
 
 		// Tablas.
 		$faltan = array();

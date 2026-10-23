@@ -357,12 +357,12 @@ if ( is_array( $tarea_previa ) && TareaNumeracion::EN_CURSO === ( $tarea_previa[
 	$ok( true, 'segundo plano: hay una corrección real en marcha en el grupo (se omite para no interferir)' );
 } else {
 	// Desde el 2026-09-28 el CRM real ya no tiene números en formato antiguo: la
-	// tarea trabaja con 4 fichas inventadas (nº 0768499nn) en el CRM simulado de
+	// tarea trabaja con 4 fichas inventadas (nº 684 + 99nn, sin la provincia: formato antiguo) en el CRM simulado de
 	// tests/lib, que atiende también las lecturas. Al acabar, todo como estaba.
 	require_once __DIR__ . '/lib/CrmSimulado.php';
 	$sim_fichas = array();
 	for ( $n = 41; $n <= 44; $n++ ) {
-		$sim_fichas[] = Asde_Prueba_Crm::persona( $n, 'Prueba', 'Tanda ' . $n, '2012-01-01', 'Scouts', array( 'numsocioantiguo_enficha_c' => sprintf( '0768499%02d', $n ) ) );
+		$sim_fichas[] = Asde_Prueba_Crm::persona( $n, 'Prueba', 'Tanda ' . $n, '2012-01-01', 'Scouts', array( 'numsocioantiguo_enficha_c' => sprintf( '68499%02d', $n ) ) );
 	}
 	$sim           = new Asde_Prueba_Crm( $sim_fichas, (string) $grupo['crm_id'] );
 	$sim_inicial   = $sim->personas;
@@ -420,7 +420,7 @@ if ( is_array( $tarea_previa ) && TareaNumeracion::EN_CURSO === ( $tarea_previa[
 		$tc    = TareaNumeracion::trabajar( '684', 120 );
 		$fin   = json_decode( (string) $wpdb->get_var( $wpdb->prepare( 'SELECT detalles FROM ' . Logger::table() . ' WHERE id > %d AND accion = %s', $log_g, 'numeros_corregir_todos' ) ), true ) ?: array();
 		$ok( TareaNumeracion::TERMINADA === $tc['estado'] && $tc['hechas'] === $tc['total'] && 'terminada' === ( $fin['estado'] ?? '' ) && $tc['total'] === (int) ( $fin['resueltos'] ?? -1 ), 'terminada: todas corregidas y resumen en la auditoría (' . $tc['total'] . ' fichas, ' . $tc['tandas'] . ' tanda)' );
-		$ok( 4 === count( array_filter( $sim->personas, static fn( $p ) => (bool) preg_match( '/^768499\d{2}$/', $p['numsocioantiguo_enficha_c'] ) ) ), 'en el CRM (simulado) las 4 fichas quedan con el formato correcto' );
+		$ok( 4 === count( array_filter( $sim->personas, static fn( $p ) => (bool) preg_match( '/^0768499\d{2}$/', $p['numsocioantiguo_enficha_c'] ) ) ), 'en el CRM (simulado) las 4 fichas quedan con el formato correcto' );
 		TareaNumeracion::cerrar( '684' );
 	} finally {
 		// Fuera el CRM simulado: tabla de números, caché y sesiones del CRM como estaban.
