@@ -65,8 +65,8 @@ final class Grupos {
 
 	/**
 	 * Grupo "padre" de un usuario: el guardado al darle de alta o, si no, el que
-	 * indica su nº de socio (código de la organización + nº de grupo + 4 dígitos,
-	 * con T en las familias).
+	 * indica su nº de socio local (desde la v0.56, provincia con su 0 + nº de grupo
+	 * + 4 dígitos, o la forma de antes, sin el 0; con T en las familias).
 	 */
 	public static function de_usuario( \WP_User $user ): ?array {
 		$id = (string) get_user_meta( $user->ID, Usuarios::META_GRUPO, true );
@@ -86,6 +86,7 @@ final class Grupos {
 	public static function olvidar(): void {
 		self::$cache = null;
 		ClientFactory::olvidar();
+		NumeroSocio::olvidar();
 	}
 
 	/** @return array{usuario:string, clave:?string}|null */
@@ -237,6 +238,10 @@ final class Grupos {
 	}
 
 	/** Dirección completa del grupo en una línea (calle, código postal y población, provincia), lo que haya. */
+	/**
+	 * Dirección en una línea con los datos guardados en el grupo (sin respaldos: el membrete enseña solo lo que el grupo
+	 * escribió). DatosGrupo::direccion() la usa con los respaldos.
+	 */
 	public static function direccion( ?array $grupo ): string {
 		if ( ! $grupo ) {
 			return '';

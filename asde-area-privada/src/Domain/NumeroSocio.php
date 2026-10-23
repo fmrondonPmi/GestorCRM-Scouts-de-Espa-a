@@ -28,6 +28,18 @@ final class NumeroSocio {
 
 	public const SUFIJO_TUTOR = 'T';
 
+	/**
+	 * Pares [prefijo, prefijo antiguo] de los grupos cuyo nº tiene dos formas (memoria de la petición, doc 59, RC-PRE-3).
+	 * Se vacía con olvidar() (desde Grupos::olvidar() y Organizacion::olvidar()).
+	 *
+	 * @var list<array{0:string, 1:string}>|null
+	 */
+	private static ?array $formas = null;
+
+	public static function olvidar(): void {
+		self::$formas = null;
+	}
+
 	/** Provincia del grupo, dos cifras con su 0 inicial ('' si aún no se sabe). */
 	public static function provincia( string $grupo ): string {
 		return '' === $grupo ? '' : Grupos::provincia( $grupo );
@@ -87,18 +99,26 @@ final class NumeroSocio {
 	 * @return string[] Las otras formas (sin incluir la dada).
 	 */
 	public static function otras_formas( string $numero ): array {
-		$otras = array();
-		foreach ( array_keys( Grupos::todos() ) as $grupo ) {
-			$grupo   = (string) $grupo;
-			$prefijo = self::prefijo( $grupo );
-			$antiguo = self::prefijo_antiguo( $grupo );
-			if ( '' === $prefijo || $prefijo === $antiguo ) {
-				continue;
+		if ( null === self::$formas ) {
+			self::$formas = array();
+			foreach ( array_keys( Grupos::todos() ) as $grupo ) {
+				$prefijo = self::prefijo( (string) $grupo );
+				$antiguo = ltrim( $prefijo, '0' );
+				if ( '' !== $prefijo && $prefijo !== $antiguo ) {
+					self::$formas[] = array( $prefijo, $antiguo );
+				}
 			}
-			if ( preg_match( '/^' . preg_quote( $prefijo, '/' ) . '(\d{4})$/', $numero, $m ) ) {
-				$otras[] = $antiguo . $m[1];
-			} elseif ( preg_match( '/^' . preg_quote( $antiguo, '/' ) . '(\d{4})$/', $numero, $m ) ) {
-				$otras[] = $prefijo . $m[1];
+		}
+		$sufijo = substr( $numero, -4 );
+		if ( 4 !== strlen( $sufijo ) || ! ctype_digit( $sufijo ) ) {
+			return array();
+		}
+		$otras = array();
+		foreach ( self::$formas as list( $prefijo, $antiguo ) ) {
+			if ( $prefijo . $sufijo === $numero ) {
+				$otras[] = $antiguo . $sufijo;
+			} elseif ( $antiguo . $sufijo === $numero ) {
+				$otras[] = $prefijo . $sufijo;
 			}
 		}
 		return array_values( array_unique( $otras ) );

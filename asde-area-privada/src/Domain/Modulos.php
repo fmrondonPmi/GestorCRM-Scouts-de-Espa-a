@@ -151,8 +151,9 @@ final class Modulos {
 	 * @return array<string, bool>
 	 */
 	public static function quitar_caps( $todas, $pedidas, $args, $user ) {
-		// Con módulos apagados por defecto siempre hay algo que quitar (v0.32).
-		if ( ! is_array( $todas ) || ( ! self::apagados() && ! self::POR_DEFECTO_APAGADOS ) || ! $user instanceof \WP_User || ! $user->ID ) {
+		// Con módulos apagados por defecto (POR_DEFECTO_APAGADOS) siempre hay algo que quitar (v0.32): no se mira si hay
+		// alguno apagado antes de seguir.
+		if ( ! is_array( $todas ) || ! $user instanceof \WP_User || ! $user->ID ) {
 			return $todas;
 		}
 		$grupo = $user->ID === get_current_user_id() ? Grupo::numero() : (string) ( Grupos::de_usuario( $user )['numero'] ?? '' );

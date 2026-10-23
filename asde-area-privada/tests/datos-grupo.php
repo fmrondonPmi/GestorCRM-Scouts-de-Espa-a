@@ -154,6 +154,7 @@ try {
 	update_option( 'asde_ap_sepa_' . $n, array( 'nombre' => 'Acreedor SEPA', 'calle' => 'Calle Vieja 2', 'cp' => '07002', 'poblacion' => 'Inca', 'provincia' => 'Baleares' ), false );
 	$d = DatosGrupo::de( $n );
 	$ok( 'Calle Vieja 2' === $d['sede'] && '07002' === $d['cp'] && 'Inca' === $d['poblacion'], 'si el grupo no tiene dirección, se aprovecha la que se escribió en las domiciliaciones' );
+	$ok( str_starts_with( DatosGrupo::direccion( $n ), 'Calle Vieja 2, 07002 Inca' ) && ! str_contains( Grupos::direccion( Grupos::por_numero( $n ) ), 'Calle Vieja' ), 'la dirección en una línea con respaldos (DatosGrupo) y sin ellos (Grupos, la del membrete) se montan igual (doc 59, RC-PRE-1)' );
 	Grupos::guardar_datos( $n, $base );
 	$s = SepaConfig::de( $n );
 	$ok( 'Calle Mayor 1' === $s['calle'] && '07001' === $s['cp'] && 'Palma' === $s['poblacion'] && 'Illes Balears' === $s['provincia'], 'la SEPA usa la dirección de los datos del grupo (manda sobre la guardada antes)' );

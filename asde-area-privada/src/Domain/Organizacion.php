@@ -8,8 +8,10 @@ defined( 'ABSPATH' ) || exit;
  * `asde_ap_organizacion`). Es todo lo que antes era propio de Scouts de Balears:
  *
  * - el NOMBRE, que sale en los textos (pantalla de acceso, coste federativo…);
- * - el CÓDIGO de la organización con el que empieza el nº de socio/a local
- *   (código + nº de grupo + 4 cifras; en Balears, 7 → 76840123);
+ * - el CÓDIGO que usaba antes de la v0.56 el nº de socio/a local (en Balears, 7 → 76840123).
+ *   Ya no se configura: desde la v0.56 el nº local es la provincia del grupo con su 0 + nº de
+ *   grupo + 4 cifras (076840123) y el código solo sirve de respaldo para la provincia de un
+ *   grupo que aún no la tiene guardada (Grupos::provincia());
  * - el COSTE FEDERATIVO por defecto: cuota asociativa, seguro (promedio o tabla
  *   de primas por edad) y otros conceptos. Es con lo que empieza cada ronda en
  *   la Tesorería de los grupos, que lo pueden ajustar.
@@ -198,11 +200,6 @@ final class Organizacion {
 		return self::datos()['codigo'];
 	}
 
-	/** @deprecated v0.56: igual que codigo_antiguo(); el nº de socio/a ya no usa un código de la organización. */
-	public static function codigo(): string {
-		return self::codigo_antiguo();
-	}
-
 	/** Coste federativo por defecto de la organización (con lo que empieza cada ronda). */
 	public static function federacion(): array {
 		return self::datos()['federacion'];
@@ -253,6 +250,7 @@ final class Organizacion {
 	/** Tras cambiar la opción desde fuera (pruebas). */
 	public static function olvidar(): void {
 		self::$cache = null;
+		NumeroSocio::olvidar(); // Sus formas dependen de la provincia de respaldo (el código de antes).
 	}
 
 	/**

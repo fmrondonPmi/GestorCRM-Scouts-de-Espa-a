@@ -42,11 +42,12 @@ final class DatosGrupo {
 		);
 	}
 
-	/** Dirección en una línea: calle, código postal y población, provincia. */
+	/**
+	 * Dirección en una línea: calle, código postal y población, provincia. Con los respaldos de de() (la dirección de las
+	 * domiciliaciones SEPA y la provincia de la organización); la línea la monta Grupos::direccion() (doc 59, RC-PRE-1).
+	 */
 	public static function direccion( string $numero ): string {
-		$d      = self::de( $numero );
-		$cp_pob = trim( $d['cp'] . ' ' . $d['poblacion'] );
-		return implode( ', ', array_filter( array( $d['sede'], $cp_pob, $d['provincia_nombre'] ) ) );
+		return Grupos::direccion( self::de( $numero ) );
 	}
 
 	/** Lo que falta para que el grupo pueda dar nº de socio/a y firmar documentos. @return string[] */

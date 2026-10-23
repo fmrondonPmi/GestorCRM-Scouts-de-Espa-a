@@ -12,9 +12,10 @@ defined( 'ABSPATH' ) || exit;
  *
  * - nº de socio/a de Scouts de España (numerosocio_c): es la clave estable de la
  *   persona, siempre existe y es único (4–6 cifras). Ejemplo: 118241.
- * - nº de socio/a local/territorial (numsocioantiguo_enficha_c): código de la
- *   organización + grupo + 4 cifras (76840397), con las incidencias que se
- *   vigilan en Socios\Numeracion. Era el usuario hasta la v0.12.
+ * - nº de socio/a local/territorial (numsocioantiguo_enficha_c): desde la v0.56,
+ *   provincia con su 0 + grupo + 4 cifras (076840397; los de antes, sin el 0:
+ *   76840397), con las incidencias que se vigilan en Socios\Numeracion. Era el
+ *   usuario hasta la v0.12.
  *
  * En los dos casos las cuentas familiares son «nº del menor + T» (y «+ T2» el
  * segundo tutor/a). Al entrar se aceptan los dos números: si no existe un usuario

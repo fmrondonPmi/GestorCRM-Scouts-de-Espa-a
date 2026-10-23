@@ -40,7 +40,9 @@ final class Identificacion {
 
 	/**
 	 * Nº de socio con ceros delante, espacios o la "t" en minúscula → formato de
-	 * usuario (76840390, 76840390T, 76840390T2); email → sin espacios y en minúsculas.
+	 * usuario sin ceros iniciales (76840390, 76840390T, 76840390T2; también el 0 de la
+	 * provincia de los números de la v0.56: 076840390 → 76840390, y la cuenta con el 0 la
+	 * encuentra después Identidad::resolver()); email → sin espacios y en minúsculas.
 	 */
 	public static function normalizar( string $valor ): string {
 		$valor = trim( $valor );
