@@ -522,9 +522,16 @@ try {
 	$ok( ! $prep2['lineas'] && array_filter( $prep2['omitidas'], static fn( $o ) => str_contains( (string) $o['motivo'], 'Ya está en la remesa' ) ), 'no entra dos veces en una remesa del mismo evento sin cobrar' );
 	$ok( in_array( 'Hay una remesa SEPA del evento sin registrar sus cobros.', Cuentas::por_cerrar( $ev( $id_e ) ), true ), 'con la remesa sin registrar, las cuentas no se pueden cerrar' );
 	Remesas::marcar_enviada( (int) $rem['id'], $u_teso );
-	$res  = Remesas::registrar_cobros( (int) $rem['id'], array( $f1 ), array(), $hoy, $u_teso );
+	// Doc 59, RC-EVE-2: entre la remesa y el registro de su cobro, la familia paga algo a mano (hasta 5 € de lo de Leo).
+	$extra  = min( 5.0, $cobro( $id_e, '990081' )['pendiente'] );
+	$manual = Cobros::pagar( $ev( $id_e ), (int) $fila( $id_e, '990081' )['id'], $extra, 'efectivo', $hoy, '', 'Pago a mano antes del cobro de la remesa' );
+	$res    = Remesas::registrar_cobros( (int) $rem['id'], array( $f1 ), array(), $hoy, $u_teso );
+	$ok( $extra > 0 && is_int( $manual ) && 1 === $res['cobrados'] && ! $res['errores'] && 1 === count( $res['avisos'] ) && str_contains( $res['avisos'][0], \AsdeBalears\AreaPrivada\Tesoreria\Calculadora::euros( $extra ) ) && str_contains( $res['avisos'][0], 'saldo a devolver' ), 'si la familia pagó algo a mano entretanto, el cobro del banco se apunta igualmente (ya está cobrado), con un aviso para Tesorería (RC-EVE-2)' );
 	$movs = array_filter( MovimientosTable::de_evento( $id_e )[ $fila( $id_e, '990082' )['id'] ] ?? array(), static fn( $m ) => 'domiciliacion' === $m['forma'] );
 	$ok( 0.0 === $cobro( $id_e, '990081' )['pendiente'] && 0.0 === $cobro( $id_e, '990082' )['pendiente'] && $movs, 'al registrar los cobros, el importe se reparte entre Leo y Nora como pagos «Domiciliación SEPA»: nada pendiente' );
+	$nora = $cobro( $id_e, '990082' );
+	$ok( abs( $nora['neto'] - $nora['total'] - $extra ) < 0.001, 'lo cobrado de más queda en la última inscripción (Nora) como saldo a devolver' );
+	$ok( is_int( Cobros::devolver( $ev( $id_e ), (int) $fila( $id_e, '990082' )['id'], $extra, 'transferencia', $hoy, 'Cobrado de más por la remesa' ) ), 'y Tesorería se lo devuelve' );
 	$ok( ! Remesas::familias_sin_cobrar_evento( $id_e ), 'cobrada: ya no queda nada «sin cobrar» del evento' );
 	$como( $u_fam1 );
 	$h = $pintar( new MisPagosView() );

@@ -318,6 +318,9 @@ final class SepaView extends TesoreriaBaseView {
 				foreach ( $res['errores'] as $e ) {
 					Notices::add( 'error', esc_html( $e ) );
 				}
+				foreach ( $res['avisos'] as $a ) {
+					Notices::add( 'warning', esc_html( $a ) );
+				}
 				if ( $res['cobrados'] || $res['devueltos'] ) {
 					Notices::add( 'success', sprintf( asde_t( 'Registrados %d cobros como pagos de las familias%s.' ), (int) $res['cobrados'], $res['devueltos'] ? sprintf( asde_t( ' y %d devoluciones' ), (int) $res['devueltos'] ) : '' ) );
 				}

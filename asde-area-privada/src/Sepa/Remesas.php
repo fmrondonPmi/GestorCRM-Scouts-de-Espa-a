@@ -605,13 +605,14 @@ final class Remesas {
 	 * @param int[]  $cobradas  Familias cuyo adeudo se ha cobrado.
 	 * @param int[]  $devueltas Familias cuyo adeudo se ha devuelto.
 	 * @param string $fecha     Fecha del cobro (AAAA-MM-DD, no futura).
-	 * @return array{cobrados:int, devueltos:int, errores:string[]}
+	 * @return array{cobrados:int, devueltos:int, errores:string[], avisos:string[]}
 	 */
 	public static function registrar_cobros( int $id, array $cobradas, array $devueltas, string $fecha, int $user_id ): array {
 		$res = array(
 			'cobrados'  => 0,
 			'devueltos' => 0,
 			'errores'   => array(),
+			'avisos'    => array(),
 		);
 		if ( ! preg_match( '/^\d{4}-\d{2}-\d{2}$/', $fecha ) || $fecha > current_time( 'Y-m-d' ) ) {
 			$res['errores'][] = asde_t( 'La fecha del cobro no es válida (no puede ser posterior a hoy).' );
@@ -651,9 +652,15 @@ final class Remesas {
 			if ( in_array( $familia, $cobradas, true ) && ! in_array( $familia, $devueltas, true ) ) {
 				if ( $r['evento_id'] > 0 ) {
 					// v0.36: el cobro de un evento se reparte entre las inscripciones de la familia.
-					$mov = $evento
-						? \AsdeBalears\AreaPrivada\Eventos\Cobros::pagar_familia( $evento, $familia, $l['centimos'] / 100, 'domiciliacion', $fecha, (string) $l['e2e'], 'Remesa SEPA ' . $r['numero'], true )
+					$sobra = 0.0;
+					$mov   = $evento
+						? \AsdeBalears\AreaPrivada\Eventos\Cobros::pagar_familia( $evento, $familia, $l['centimos'] / 100, 'domiciliacion', $fecha, (string) $l['e2e'], 'Remesa SEPA ' . $r['numero'], true, $sobra )
 						: new \WP_Error( 'asde_sepa', asde_t( 'El evento de la remesa ya no existe.' ) );
+					if ( ! is_wp_error( $mov ) && $sobra > 0 ) {
+						// El banco ya cobró: se apunta todo y Tesorería decide la devolución (doc 59, RC-EVE-2).
+						/* translators: 1: nº de la familia, 2: importe */
+						$res['avisos'][] = sprintf( asde_t( 'Familia %1$s: el banco ha cobrado %2$s más de lo que quedaba por pagar en el evento. Queda como saldo a devolver: decide en Tesorería si se le devuelve.' ), $l['familia_n'], Calculadora::euros( $sobra ) );
+					}
 				} else {
 					$mov = MovimientosTable::registrar( $familia, $r['ronda'], MovimientosTable::PAGO, $fecha, $l['centimos'] / 100, 'domiciliacion', (string) $l['e2e'], 'Remesa SEPA ' . $r['numero'], 'sepa' );
 				}

@@ -103,10 +103,15 @@ final class Cobros {
 	 * tienen algo pendiente, por orden de inscripción, en movimientos del mismo lote.
 	 *
 	 * v0.36: también lo cobrado por la remesa SEPA del evento ($sepa: forma «domiciliacion»).
+	 * Doc 59, RC-EVE-2: con $sepa el banco **ya cobró**, así que se apunta siempre todo lo cobrado aunque entretanto la
+	 * familia haya pagado algo a mano o le hayan hecho una rebaja: se reparte lo pendiente y lo que sobra va a la última
+	 * inscripción (queda como saldo a devolver; `$sobra` dice cuánto, para avisar a Tesorería).
 	 *
+	 * @param float $sobra Salida: lo cobrado por encima de lo pendiente (solo con $sepa).
 	 * @return int|\WP_Error Cuántas inscripciones ha cubierto.
 	 */
-	public static function pagar_familia( array $e, int $familia_id, float $importe, string $forma, string $fecha, string $referencia, string $nota, bool $sepa = false ) {
+	public static function pagar_familia( array $e, int $familia_id, float $importe, string $forma, string $fecha, string $referencia, string $nota, bool $sepa = false, float &$sobra = 0.0 ) {
+		$sobra = 0.0;
 		if ( ! self::puede() ) {
 			return new \WP_Error( 'asde_cobro', asde_t( 'Los pagos de las inscripciones los registra Tesorería.' ) );
 		}
@@ -115,6 +120,9 @@ final class Cobros {
 		}
 		$familia = FamiliasTable::obtener( $familia_id );
 		$lista   = $familia ? ( self::familias( $e )[ $familia_id ] ?? null ) : null;
+		if ( ! $lista && $sepa && $familia ) {
+			$lista = self::de_la_familia( $e, $familia ); // Sin nada pendiente: el cobro del banco va igualmente a sus inscripciones.
+		}
 		if ( ! $lista ) {
 			return new \WP_Error( 'asde_cobro', asde_t( 'Esa familia no tiene nada pendiente en este evento.' ) );
 		}
@@ -122,23 +130,28 @@ final class Cobros {
 		if ( $error ) {
 			return $error;
 		}
-		if ( $importe > $lista['pendiente'] + 0.001 ) {
+		if ( ! $sepa && $importe > $lista['pendiente'] + 0.001 ) {
 			return new \WP_Error( 'asde_cobro', sprintf( asde_t( 'Es más de lo que queda por pagar (%s).' ), \AsdeBalears\AreaPrivada\Tesoreria\Calculadora::euros( $lista['pendiente'] ) ) );
 		}
-		$lote  = substr( md5( uniqid( 'evento', true ) ), 0, 16 );
-		$resto = round( $importe, 2 );
-		$n     = 0;
-		foreach ( $lista['filas'] as $f ) {
+		$lote   = substr( md5( uniqid( 'evento', true ) ), 0, 16 );
+		$resto  = round( $importe, 2 );
+		$n      = 0;
+		$filas  = array_values( $lista['filas'] );
+		$ultima = count( $filas ) - 1;
+		foreach ( $filas as $i => $f ) {
 			if ( $resto <= 0 ) {
 				break;
 			}
-			$parte = min( $resto, $f['cobro']['pendiente'] );
+			$parte = $sepa && $i === $ultima ? $resto : min( $resto, $f['cobro']['pendiente'] );
 			if ( $parte <= 0 ) {
 				continue;
 			}
 			MovimientosTable::anadir( $e['id'], $f['id'], MovimientosTable::PAGO, $fecha, $parte, $forma, self::texto( $referencia, 120 ), self::texto( $nota, 255 ), $lote );
 			$resto = round( $resto - $parte, 2 );
 			++$n;
+		}
+		if ( $sepa ) {
+			$sobra = max( 0.0, round( $importe - $lista['pendiente'], 2 ) );
 		}
 		Logger::log(
 			'evento_pago_familia',
@@ -279,6 +292,25 @@ final class Cobros {
 			$out[ $familia['id'] ]['pendiente'] = round( ( $out[ $familia['id'] ]['pendiente'] ?? 0 ) + $cobro['pendiente'], 2 );
 		}
 		return $out;
+	}
+
+	/**
+	 * Las inscripciones de la familia en el evento aunque no tengan nada pendiente (para un cobro SEPA que llega cuando ya
+	 * lo han pagado de otra forma): las activas o, si no queda ninguna, todas. Mismo formato que familias().
+	 */
+	private static function de_la_familia( array $e, array $familia ): ?array {
+		$movs  = MovimientosTable::de_evento( $e['id'] );
+		$todas = array_values( array_filter( InscripcionesTable::participantes( $e['id'] ), static fn( array $f ) => in_array( $f['socio'], $familia['miembros'], true ) ) );
+		$act   = array_values( array_filter( $todas, static fn( array $f ) => in_array( $f['estado'], InscripcionesTable::ACTIVAS, true ) ) );
+		$filas = array();
+		foreach ( $act ? $act : $todas as $f ) {
+			$filas[] = $f + array( 'cobro' => self::de( $f, $movs[ $f['id'] ] ?? array() ) );
+		}
+		return $filas ? array(
+			'familia'   => $familia,
+			'filas'     => $filas,
+			'pendiente' => round( array_sum( array_map( static fn( $f ) => $f['cobro']['pendiente'], $filas ) ), 2 ),
+		) : null;
 	}
 
 	private static function cerradas(): \WP_Error {
