@@ -1,6 +1,8 @@
 <?php
 namespace AsdeBalears\AreaPrivada\Crm;
 
+use AsdeBalears\AreaPrivada\Audit\Logger;
+
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -135,19 +137,43 @@ final class SinergiaV41Client implements CrmClientInterface, EscritorCrm {
 	/**
 	 * Todos los registros que cumplen la consulta, paginando internamente.
 	 *
+	 * Si se llega a `$hard_limit` y el CRM aún tiene más, se lanza CrmException en vez de
+	 * devolver una lista cortada: quien filtra después por grupo (PersonaRepository::todas,
+	 * Duplicados) perdería en silencio las fichas que caen tras el corte (doc 59, RC-CRM-1).
+	 *
 	 * @return list<array>
+	 * @throws CrmException Si hay más registros que el límite.
 	 */
 	public function list_all( string $module, string $query = '', array $fields = array( 'id' ), array $links = array(), string $order_by = '', int $hard_limit = 5000 ): array {
 		$all    = array();
 		$offset = 0;
+		$hard_limit = max( 1, $hard_limit );
 		do {
-			$page = $this->list_entries( $module, $query, $fields, $links, $offset, 200, $order_by );
+			$page = $this->list_entries( $module, $query, $fields, $links, $offset, min( 200, $hard_limit ), $order_by );
 			$all  = array_merge( $all, $page['entries'] );
 			if ( ! $page['entries'] || $page['next_offset'] <= $offset ) {
 				break;
 			}
 			$offset = $page['next_offset'];
 		} while ( count( $all ) < $page['total'] && count( $all ) < $hard_limit );
+
+		if ( count( $all ) >= $hard_limit && count( $all ) < $page['total'] ) {
+			// El total puede contar más de lo visible: se mira si de verdad queda algo después.
+			$mas = $this->list_entries( $module, $query, array( 'id' ), array(), $offset, 1, $order_by );
+			if ( $mas['entries'] ) {
+				Logger::log(
+					'crm_limite_lista',
+					$module,
+					'',
+					array(
+						'limite' => $hard_limit,
+						'total'  => (int) $page['total'],
+					)
+				);
+				/* translators: %d: número máximo de registros que se leen de una vez */
+				throw new CrmException( esc_html( sprintf( asde_t( 'El CRM tiene más de %d registros visibles para esta conexión y no se pueden leer todos de una vez: el resultado saldría incompleto. Avisa a quien administra el área privada.' ), $hard_limit ) ) );
+			}
+		}
 
 		return $all;
 	}
