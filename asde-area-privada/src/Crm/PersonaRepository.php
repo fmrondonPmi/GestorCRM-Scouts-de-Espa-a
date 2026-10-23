@@ -237,7 +237,8 @@ final class PersonaRepository {
 		$por_num  = array();
 		$entradas = $this->entradas_grupo();
 		if ( null !== $entradas ) {
-			foreach ( $this->ordenar( array_map( array( Persona::class, 'from_crm' ), Instantanea::por_numeros( Grupo::numero(), $nums ) ) ) as $p ) {
+			// Sin ordenar: el resultado sale en el orden pedido (doc 59, RC-CRM-3).
+			foreach ( array_map( array( Persona::class, 'from_crm' ), Instantanea::por_numeros( Grupo::numero(), $nums ) ) as $p ) {
 				$por_num[ $p->num_socio_asde ] = $p;
 			}
 			// Las que no están en la instantánea (recién creadas en el CRM) se piden al CRM.

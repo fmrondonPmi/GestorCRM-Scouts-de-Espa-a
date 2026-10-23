@@ -239,16 +239,19 @@ final class Instantanea {
 		if ( ! $datos ) {
 			return;
 		}
-		Grupo::forzar( $datos );
-		try {
-			$repo = PersonaRepository::make();
-			if ( $repo ) {
-				$repo->refrescar_instantanea();
+		// Grupo::con() deja después el grupo que hubiera forzado otra tarea del mismo WP-Cron (doc 59, RC-CRM-2).
+		Grupo::con(
+			$datos,
+			static function (): void {
+				try {
+					$repo = PersonaRepository::make();
+					if ( $repo ) {
+						$repo->refrescar_instantanea();
+					}
+				} catch ( CrmException $e ) {
+					unset( $e ); // Se reintenta con la próxima visita.
+				}
 			}
-		} catch ( CrmException $e ) {
-			unset( $e ); // Se reintenta con la próxima visita.
-		} finally {
-			Grupo::forzar( null );
-		}
+		);
 	}
 }
