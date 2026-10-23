@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.54.0
+Stable tag: 0.55.0
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -61,6 +61,9 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.55.0 =
+* Budgets, phases 2 and 3: each section (and the group) prepares its budget with expense items (category x how many x amount each) and income items (the fundraising project target of each section and others), with balance, draft / sent / approved status (Treasury approves and reopens with a reason), copy from the previous round and real spending recorded against each item (budgeted / spent / left). New permission "Prepare the budget of their sections" (Scouters, Secretary, Coordination, Treasury; listed in Access management). Three new database tables.
 
 = 0.54.0 =
 * New "Budgets" tab in Treasury (phase 1) for Coordination, Secretary and Treasury: from the yearly fees, minus the federation cost, a configurable percentage goes to the group and the rest to the section of each member; per-section percentages and the fundraising project name of each section. Calculated live, nothing new is stored in the database. Can be switched off per group (Modules).
@@ -242,6 +245,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * CRM registrations tested end to end in a browser against the simulated SinergiaCRM API (development only).
 
 == Upgrade Notice ==
+
+= 0.55.0 =
+Adds the budgets of each section and of the group (items, approval, real spending) and a new permission. Three new database tables (items, status, real spending).
 
 = 0.54.0 =
 Adds the "Budgets" tab to Treasury (fee split between the group and the sections). No database changes.

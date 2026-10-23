@@ -123,6 +123,7 @@ final class Textos {
 		$add( Codificacion::LISTA, 'Tesorería' );
 		$add( Norma43::CONCEPTOS, 'Tesorería' );
 		$add( Calculadora::ETIQUETAS, 'Tesorería' );
+		$add( \AsdeBalears\AreaPrivada\Presupuestos\EstadosTable::ETIQUETAS, 'Tesorería' ); // v0.55: estados de los presupuestos.
 		$add( MovimientosTable::METODOS, 'Tesorería' );
 		$add( Organizacion::APLICA, 'Tesorería' );
 		$add( Solicitudes::ESTADOS, 'Solicitudes de acceso' );

@@ -53,6 +53,7 @@ final class Roles {
 					'asde_eventos_gestion'   => true,
 					'asde_menus_recetas'     => true, // Recetario de los menús (v0.41, doc 49).
 					'asde_reintegros'        => true, // Reintegros (v0.47, doc 53): pedir el reintegro de un gasto.
+					'asde_presupuestos_seccion' => true, // Presupuestos (v0.55, doc 57): prepara el de sus secciones.
 				),
 			),
 			self::SECRETARIA   => array(
@@ -79,6 +80,7 @@ final class Roles {
 					'asde_eventos_inscribir' => true,
 					'asde_eventos_gestion'   => true, // Los de sección de todo el grupo.
 					'asde_menus_recetas'     => true,
+					'asde_presupuestos_seccion' => true, // Presupuestos (v0.55, doc 57).
 					'asde_accesos'           => true, // Gestión de accesos (v0.53, doc 56).
 				),
 			),
@@ -114,6 +116,7 @@ final class Roles {
 					'asde_reintegros'        => true, // Reintegros (v0.47): pide los suyos y marca pagados los de todos.
 					'asde_reintegros_pagar'  => true,
 					'asde_eventos_config'    => true,
+					'asde_presupuestos_seccion' => true, // Presupuestos (v0.55, doc 57).
 					'asde_accesos'           => true, // Gestión de accesos (v0.53, doc 56).
 				),
 			),
@@ -151,6 +154,7 @@ final class Roles {
 					'asde_reintegros_aprobar' => true, // Reintegros (v0.47): aprueba y marca pagados.
 					'asde_reintegros_pagar'   => true,
 					'asde_eventos_config'     => true,
+					'asde_presupuestos_seccion' => true, // Presupuestos (v0.55, doc 57).
 					'asde_accesos'            => true, // Gestión de accesos (v0.53, doc 56).
 				),
 			),

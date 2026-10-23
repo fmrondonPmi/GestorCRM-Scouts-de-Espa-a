@@ -63,6 +63,17 @@ final class Config {
 				'escultas' => asde_t( 'Empresa' ),
 				'rovers'   => asde_t( 'Descubierta e Intervención' ),
 			),
+			// v0.55: categorías de los gastos de los presupuestos (el grupo puede cambiarlas).
+			'categorias'  => array(
+				asde_t( 'Campamento de verano' ),
+				asde_t( 'Acampada' ),
+				asde_t( 'Excursión' ),
+				asde_t( 'Salida de día' ),
+				asde_t( 'Material' ),
+				asde_t( 'Formación' ),
+				asde_t( 'Actividad especial' ),
+				asde_t( 'Otros' ),
+			),
 		);
 	}
 
@@ -88,6 +99,17 @@ final class Config {
 				$n                     = sanitize_text_field( (string) ( $in['proyectos'][ $slug ] ?? '' ) );
 				$out['proyectos'][ $slug ] = '' !== $n ? $n : $defecto[ $slug ];
 			}
+		}
+		if ( isset( $in['categorias'] ) ) {
+			$lineas = is_array( $in['categorias'] ) ? $in['categorias'] : preg_split( '/\R/', (string) $in['categorias'] );
+			$cats   = array();
+			foreach ( (array) $lineas as $l ) {
+				$n = mb_substr( sanitize_text_field( (string) $l ), 0, 80 );
+				if ( '' !== $n && ! in_array( $n, $cats, true ) ) {
+					$cats[] = $n;
+				}
+			}
+			$out['categorias'] = array_slice( $cats, 0, 30 ) ?: self::presupuesto_defecto()['categorias'];
 		}
 		return $out;
 	}

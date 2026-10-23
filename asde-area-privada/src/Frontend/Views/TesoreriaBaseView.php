@@ -27,6 +27,10 @@ abstract class TesoreriaBaseView extends View {
 			'cuotas'     => asde_t( 'Cuotas y plazos' ),
 			'federacion' => asde_t( 'Coste federativo' ),
 		);
+		// v0.55 (doc 57): quien prepara el presupuesto de su sección ve la pestaña, aunque no configure Tesorería.
+		if ( ! current_user_can( self::CAP_CONFIG ) && current_user_can( 'asde_presupuestos_seccion' ) && Modulos::activo( Modulos::PRESUPUESTOS ) ) {
+			$items['presupuestos'] = asde_t( 'Presupuestos' );
+		}
 		if ( current_user_can( self::CAP_CONFIG ) ) {
 			// v0.20: Banco y Domiciliaciones se pueden desactivar por grupo (wp-admin → Grupos Scouts → Módulos).
 			if ( Modulos::activo( Modulos::BANCO ) ) {

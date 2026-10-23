@@ -68,6 +68,7 @@ final class Catalogo {
 			'asde_reports'              => array( 'informes', self::VER, 'Sacar informes del grupo', false, array() ),
 
 			'asde_tesoreria_acceso'     => array( 'tesoreria', self::VER, 'Ver Tesorería (familias, pagos y banco)', false, array() ),
+			'asde_presupuestos_seccion' => array( 'tesoreria', self::ACCION, 'Preparar el presupuesto de sus secciones', false, array() ),
 			'asde_tesoreria_config'     => array( 'tesoreria', self::ACCION, 'Cambiar cuotas, plazos y coste federativo', true, array( 'asde_tesoreria_acceso' ) ),
 
 			'asde_tienda_comprar'       => array( 'tienda', self::VER, 'Comprar en la tienda', false, array() ),

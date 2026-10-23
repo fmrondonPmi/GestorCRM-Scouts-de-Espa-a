@@ -3131,3 +3131,35 @@ dialog.asde-modal--mini .asde-publicar h3 {
 		text-align: left;
 	}
 }
+/* v0.55 (doc 57): presupuestos de las secciones y del grupo. */
+.asde-ap .asde-linea {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 8px;
+	margin: 0 0 12px;
+}
+.asde-ap .asde-linea label {
+	margin: 0;
+	font-weight: 600;
+}
+.asde-ap .asde-linea select,
+.asde-ap .asde-linea input {
+	width: auto;
+	margin: 0;
+}
+.asde-ap .asde-negativo {
+	color: var(--asde-error-text, #b32d2e);
+}
+.asde-ap .asde-badge--presupuesto-borrador {
+	background: var(--asde-neutral-bg);
+	color: var(--asde-neutral-text, #3c434a);
+}
+.asde-ap .asde-badge--presupuesto-enviado {
+	background: var(--asde-warn-bg);
+	color: var(--asde-warn-text);
+}
+.asde-ap .asde-badge--presupuesto-aprobado {
+	background: var(--asde-ok-bg);
+	color: var(--asde-ok-text);
+}

@@ -110,6 +110,45 @@ $sec = Secciones::all();
 		</section>
 	<?php endif; ?>
 
+	<?php if ( ! empty( $presupuestos ) ) : ?>
+		<section class="asde-card" data-asde-plegable="presupuestos-estados" data-asde-inicio="abierto">
+			<h3><?php asde_e( 'Presupuesto de cada sección y del grupo' ); ?></h3>
+			<table class="asde-table asde-table--resumen">
+				<thead>
+					<tr>
+						<th scope="col"><?php asde_e( 'Presupuesto' ); ?></th>
+						<th scope="col"><?php asde_e( 'Disponible' ); ?></th>
+						<th scope="col"><?php asde_e( 'Gastos' ); ?></th>
+						<th scope="col"><?php asde_e( 'Gastado' ); ?></th>
+						<th scope="col"><?php asde_e( 'Objetivo de recaudación' ); ?></th>
+						<th scope="col"><?php asde_e( 'Saldo' ); ?></th>
+						<th scope="col"><?php asde_e( 'Estado' ); ?></th>
+					</tr>
+				</thead>
+				<tbody>
+					<?php foreach ( $presupuestos as $clave => $pr ) : ?>
+						<?php $r = $pr['resultado']; ?>
+						<tr>
+							<th scope="row" data-label="<?php echo esc_attr( asde_a( 'Presupuesto' ) ); ?>"><a href="<?php echo esc_url( add_query_arg( array( 'ronda' => $ronda, 'vista' => $clave ), $url ) ); ?>"><?php echo esc_html( \AsdeBalears\AreaPrivada\Presupuestos\Servicio::nombre( $clave ) ); ?></a></th>
+							<td data-label="<?php echo esc_attr( asde_a( 'Disponible' ) ); ?>"><?php echo esc_html( $e( $r['disponible'] ) ); ?></td>
+							<td data-label="<?php echo esc_attr( asde_a( 'Gastos' ) ); ?>"><?php echo esc_html( $e( $r['gastos'] ) ); ?></td>
+							<td data-label="<?php echo esc_attr( asde_a( 'Gastado' ) ); ?>"><?php echo esc_html( $e( $pr['ejecucion']['gastado'] ) ); ?></td>
+							<td data-label="<?php echo esc_attr( asde_a( 'Objetivo de recaudación' ) ); ?>"><?php echo esc_html( $e( $r['recaudacion'] ) ); ?></td>
+							<td data-label="<?php echo esc_attr( asde_a( 'Saldo' ) ); ?>"><strong<?php echo $r['saldo'] < 0 ? ' class="asde-negativo"' : ''; ?>><?php echo esc_html( $e( $r['saldo'] ) ); ?></strong></td>
+							<td data-label="<?php echo esc_attr( asde_a( 'Estado' ) ); ?>"><?php echo esc_html( asde_t( \AsdeBalears\AreaPrivada\Presupuestos\EstadosTable::ETIQUETAS[ $pr['estado'] ] ) ); ?></td>
+						</tr>
+					<?php endforeach; ?>
+				</tbody>
+			</table>
+		</section>
+	<?php endif; ?>
+
+	<section class="asde-card" data-asde-plegable="presupuestos-categorias" data-asde-inicio="cerrado">
+		<h3><?php asde_e( 'Categorías de gasto' ); ?></h3>
+		<p class="asde-help"><?php asde_e( 'Una por línea. Son las que se eligen al añadir un gasto a un presupuesto.' ); ?></p>
+		<p><label for="asde-p-cats"><?php asde_e( 'Categorías' ); ?></label><textarea id="asde-p-cats" name="presupuesto[categorias]" rows="8"><?php echo esc_textarea( implode( "\n", $pre['categorias'] ) ); ?></textarea></p>
+	</section>
+
 	<section class="asde-card" data-asde-plegable="presupuestos-proyectos" data-asde-inicio="cerrado">
 		<h3><?php asde_e( 'Proyecto de recaudación de cada sección' ); ?></h3>
 		<p class="asde-help"><?php asde_e( 'Cada sección tiene un proyecto con su objetivo de dinero a recaudar; este es el nombre que se usará en su presupuesto.' ); ?></p>

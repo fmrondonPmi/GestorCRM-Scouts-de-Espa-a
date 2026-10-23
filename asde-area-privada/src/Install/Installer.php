@@ -102,6 +102,10 @@ final class Installer {
 		\AsdeBalears\AreaPrivada\Inventario\MaterialesTable::install_table();
 		\AsdeBalears\AreaPrivada\Inventario\ComprasTable::install_table();
 		\AsdeBalears\AreaPrivada\Tesoreria\Banco\TiposMovimiento::install_table();
+		// v0.55 (doc 57): presupuestos de las secciones y del grupo.
+		\AsdeBalears\AreaPrivada\Presupuestos\PartidasTable::install_table();
+		\AsdeBalears\AreaPrivada\Presupuestos\EstadosTable::install_table();
+		\AsdeBalears\AreaPrivada\Presupuestos\GastosRealesTable::install_table();
 		\AsdeBalears\AreaPrivada\Crm\Operaciones::install_table();
 		\AsdeBalears\AreaPrivada\ListaEspera\Inscripciones::install_table();
 		// v0.35: eventos (doc 43).

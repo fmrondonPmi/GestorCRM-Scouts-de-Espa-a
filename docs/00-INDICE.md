@@ -54,7 +54,7 @@ Proyecto: plugin de WordPress **«ASDE Scouts de España - Gestor CRM para Grupo
 | [54-pantallas-en-una-linea.md](54-pantallas-en-una-linea.md) | Regla de pantallas: filtros y acciones en una línea |
 | [55-tienda-sobre-el-inventario.md](55-tienda-sobre-el-inventario.md) | La tienda toma sus existencias del inventario general |
 | [56-gestion-de-accesos.md](56-gestion-de-accesos.md) | Gestión de accesos: permisos por rol, permisos sueltos por persona (con caducidad) e historial |
-| [57-presupuestos.md](57-presupuestos.md) | **Presupuestos del grupo y de las secciones** (plan 2026-10-21; **fase 1 hecha en la v0.54.0**: pestaña «Presupuestos» de Tesorería con el reparto cuota − coste federativo entre el grupo y cada sección, % por defecto y por sección, proyecto de cada sección; faltan las partidas, estados y aprobación: fase 2) |
+| [57-presupuestos.md](57-presupuestos.md) | **Presupuestos del grupo y de las secciones** (plan 2026-10-21; **fases 1 (v0.54.0), 2 y 3 (v0.55.0) hechas**: pestaña «Presupuestos» de Tesorería con el reparto cuota − coste federativo entre el grupo y cada sección, % por defecto y por sección, proyecto de cada sección; partidas por sección y grupo, estados borrador-enviado-aprobado, copiar de la ronda anterior y gasto real anotado a mano; falta enlazar con Banco y Eventos, PR-12) |
 | [pwa/README.md](pwa/README.md) | La app móvil (PWA) es un plugin aparte, `asde-area-privada-app`, en su propio repo |
 
 ## Qué hay (v0.51)

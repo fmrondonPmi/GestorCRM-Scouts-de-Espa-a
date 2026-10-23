@@ -1,6 +1,6 @@
 # 57 · Presupuestos del grupo y de las secciones (plan y conocimiento para implementar)
 
-> **Estado:** plan escrito el 2026-10-21. **Fase 1 hecha en la v0.54.0 (2026-10-23)**: `Reparto`, `Calculadora::coste_persona`, config `presupuesto`, pestaña y prueba `presupuestos-reparto` (el módulo `presupuestos` depende de Tesorería; la capability `asde_presupuestos_seccion` llega con la fase 2). Renumerado: era «doc 50» en otra rama. Parte de la v0.43.0. Las decisiones que el usuario ya dio están en el apartado 1; lo que se supone sin preguntar, en el apartado 9 (`PR-n`, a confirmar; al entrar en `09-preguntas-abiertas.md` tomarán número `P-…`: no se numeran aquí porque otras ramas van reservando números).
+> **Estado:** plan escrito el 2026-10-21. **Fases 1 (v0.54.0) y 2 y 3 (v0.55.0) hechas el 2026-10-23**; la fase 3 se hizo como gasto real anotado a mano contra cada partida (no se enlazó con Banco ni con Eventos: pendiente, ver P-PR-12). Fase 1: `Reparto`, `Calculadora::coste_persona`, config `presupuesto`, pestaña y prueba `presupuestos-reparto` (el módulo `presupuestos` depende de Tesorería; la capability `asde_presupuestos_seccion` llega con la fase 2). Renumerado: era «doc 50» en otra rama. Parte de la v0.43.0. Las decisiones que el usuario ya dio están en el apartado 1; lo que se supone sin preguntar, en el apartado 9 (`PR-n`, a confirmar; al entrar en `09-preguntas-abiertas.md` tomarán número `P-…`: no se numeran aquí porque otras ramas van reservando números).
 >
 > Cuándo leerlo: antes de tocar nada de Tesorería para este cambio. Dónde encaja: pestaña nueva **«Presupuestos»** dentro de Tesorería (doc 14), junto a *Coste federativo* (doc 14/20) y con un enlace futuro a Eventos (doc 43) y Banco (doc 16).
 
@@ -186,6 +186,7 @@ presupuesto => array(
 | PR-9 | El presupuesto es **por ronda** (sept→ago), con botón «Copiar de la ronda anterior» (partidas y %; nunca estados). | Presupuesto continuo, sin ronda. |
 | PR-10 | La pestaña es **independiente de Eventos** al principio; el gasto real y la relación con los eventos van en la fase 3. | Enlazar ya los presupuestos de eventos validados. |
 | PR-11 | Pueden recibir cuota solo los **educandos** (`secciones_pagan` de la ronda); adultos no aportan. | Permitir otra configuración. |
+| PR-12 | **Fase 3 (gasto real):** se anota **a mano** contra cada partida de gasto (fecha, concepto, importe) y se enseña presupuestado / gastado / queda. | Imputar automáticamente los gastos de **Banco** (doc 16) y de **Eventos** (cuentas, doc 43), y que un evento de campamento tome su coste de la partida: pendiente de decidir con el usuario. |
 
 Preguntas abiertas para el usuario con más impacto: **PR-2, PR-3, PR-5 y PR-8**.
 
