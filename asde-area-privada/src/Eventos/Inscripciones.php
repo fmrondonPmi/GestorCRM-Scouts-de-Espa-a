@@ -6,6 +6,7 @@ use AsdeBalears\AreaPrivada\Auth\Ambito;
 use AsdeBalears\AreaPrivada\Crm\CrmException;
 use AsdeBalears\AreaPrivada\Crm\Crypto;
 use AsdeBalears\AreaPrivada\Crm\PersonaRepository;
+use AsdeBalears\AreaPrivada\Domain\Bloqueo;
 use AsdeBalears\AreaPrivada\Domain\Persona;
 
 defined( 'ABSPATH' ) || exit;
@@ -45,6 +46,9 @@ final class Inscripciones {
 
 	/** Motivo de la baja automática de una plaza ofrecida sin confirmar (se guarda en castellano y se traduce al enseñarlo). */
 	public const MOTIVO_CADUCADA = 'No se confirmó a tiempo la plaza ofrecida';
+
+	/** Bloqueo con nombre (más el id del evento) para contar plazas y escribir sin que se adelante otra petición (doc 59). */
+	private const BLOQUEO = 'asde_evento_';
 
 	// ---------------------------------------------------------------------
 	// Quién y para qué evento
@@ -467,7 +471,22 @@ final class Inscripciones {
 		if ( EventosTable::PUBLICADO !== $e['estado'] ) {
 			return;
 		}
-		$ahora = $ahora ?? time();
+		// Contar las plazas libres y ofrecerlas va con el bloqueo del evento (el mismo que las altas): dos revisiones a la
+		// vez no ofrecen la misma plaza dos veces (doc 59, RC-EVE-1). Si otra petición lo tiene, esta no hace nada: la lista
+		// se vuelve a revisar al mirar el evento y cada día.
+		$bloqueo = self::BLOQUEO . $e['id'];
+		if ( ! Bloqueo::tomar( $bloqueo, 2 ) ) {
+			return;
+		}
+		try {
+			self::revisar_bloqueado( $e, $ahora ?? time() );
+		} finally {
+			Bloqueo::soltar( $bloqueo );
+		}
+	}
+
+	/** revisar() con el bloqueo del evento ya tomado. */
+	private static function revisar_bloqueado( array $e, int $ahora ): void {
 		foreach ( InscripcionesTable::participantes( $e['id'] ) as $f ) {
 			if ( InscripcionesTable::ESPERA === $f['estado'] && null !== $f['oferta_hasta'] && self::utc( (string) $f['oferta_hasta'] ) < $ahora ) {
 				InscripcionesTable::actualizar(
@@ -685,28 +704,38 @@ final class Inscripciones {
 
 	/** Alta común: sección, precio, plaza o lista de espera, y la confirmación si ya está todo. @return array|\WP_Error */
 	private static function alta( array $e, Persona $p, string $como, array $datos, string $motivo ) {
-		$filas   = array_filter( InscripcionesTable::participantes( $e['id'] ), static fn( array $f ) => $f['socio'] !== $p->num_socio_asde );
-		$propia  = self::seccion_de( $e, $p );
-		// Una excepción (de otra sección) ocupa plaza en la primera sección convocada y paga el precio más alto.
-		$seccion = $propia ?? (string) ( $e['secciones'][0] ?? '' );
-		$espera  = ! self::hay_plaza( $e, $filas, $seccion );
-		$id      = InscripcionesTable::inscribir(
-			$e['id'],
-			$p->num_socio_asde,
-			array_merge(
-				$datos,
-				array(
-					'secciones' => $p->secciones,
-					'adulto'    => self::adulta_en( $e, $p ) ? 1 : 0,
-					'seccion'   => $seccion,
-					'precio'    => self::precio( $e, $propia ?? '' ),
-					'estado'    => $espera ? InscripcionesTable::ESPERA : InscripcionesTable::PENDIENTE,
-					'como'      => $como,
-					'motivo'    => $motivo,
-					'espera_en' => $espera ? current_time( 'mysql', true ) : null,
+		// Contar si hay plaza e inscribir van juntos, con el bloqueo del evento: si muchas familias entran a la vez, dos no
+		// pueden llevarse la última plaza (doc 59, RC-EVE-1).
+		$bloqueo = self::BLOQUEO . $e['id'];
+		if ( ! Bloqueo::tomar( $bloqueo ) ) {
+			return new \WP_Error( 'asde_inscripcion', asde_t( 'Otra persona está haciendo un cambio en esto ahora mismo. Inténtalo de nuevo en unos segundos.' ) );
+		}
+		try {
+			$filas   = array_filter( InscripcionesTable::participantes( $e['id'] ), static fn( array $f ) => $f['socio'] !== $p->num_socio_asde );
+			$propia  = self::seccion_de( $e, $p );
+			// Una excepción (de otra sección) ocupa plaza en la primera sección convocada y paga el precio más alto.
+			$seccion = $propia ?? (string) ( $e['secciones'][0] ?? '' );
+			$espera  = ! self::hay_plaza( $e, $filas, $seccion );
+			$id      = InscripcionesTable::inscribir(
+				$e['id'],
+				$p->num_socio_asde,
+				array_merge(
+					$datos,
+					array(
+						'secciones' => $p->secciones,
+						'adulto'    => self::adulta_en( $e, $p ) ? 1 : 0,
+						'seccion'   => $seccion,
+						'precio'    => self::precio( $e, $propia ?? '' ),
+						'estado'    => $espera ? InscripcionesTable::ESPERA : InscripcionesTable::PENDIENTE,
+						'como'      => $como,
+						'motivo'    => $motivo,
+						'espera_en' => $espera ? current_time( 'mysql', true ) : null,
+					)
 				)
-			)
-		);
+			);
+		} finally {
+			Bloqueo::soltar( $bloqueo );
+		}
 		if ( ! $id ) {
 			return new \WP_Error( 'asde_inscripcion', asde_t( 'No se ha podido guardar la inscripción.' ) );
 		}

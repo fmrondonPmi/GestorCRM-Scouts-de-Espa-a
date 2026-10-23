@@ -357,6 +357,16 @@ try {
 
 	echo "\n== Parte E · Plazas y lista de espera ==\n";
 	$como( $u_fam3 );
+	// Doc 59, RC-EVE-1: mientras otra petición cuenta las plazas de este evento (tiene su bloqueo), no se inscribe a nadie.
+	$otra = new wpdb( DB_USER, DB_PASSWORD, DB_NAME, DB_HOST ); // Otra conexión: el bloqueo es de conexión.
+	try {
+		$otra->query( $otra->prepare( 'SELECT GET_LOCK(%s, 5)', 'asde_evento_' . $id_a ) );
+		$h = $enviar( new MisEventosView(), array_merge( $base, array( 'socio' => '990056', 'salud' => '1', 'acepto' => '1', 'recoge' => '', 'observaciones' => '' ) ), 'asde_mis_eventos_' . $id_a );
+	} finally {
+		$otra->query( $otra->prepare( 'SELECT RELEASE_LOCK(%s)', 'asde_evento_' . $id_a ) );
+		$otra->close();
+	}
+	$ok( null === $fila( $id_a, '990056' ) && str_contains( $h, 'Otra persona está haciendo un cambio' ), 'con el bloqueo del evento tomado por otra petición: no se inscribe y se pide repetirlo (RC-EVE-1)' );
 	$enviar( new MisEventosView(), array_merge( $base, array( 'socio' => '990056', 'salud' => '1', 'acepto' => '1', 'recoge' => '', 'observaciones' => '' ) ), 'asde_mis_eventos_' . $id_a );
 	$teo = $fila( $id_a, '990056' );
 	$ok( $teo && InscripcionesTable::PENDIENTE === $teo['estado'] && null === $teo['datos_enc'], 'Teo ocupa la segunda plaza de Lobatos (sin datos que cifrar, no se guarda nada)' );
@@ -384,9 +394,20 @@ try {
 	// Más plazas en Lobatos: se ofrecen solas a la lista de espera.
 	$a_lob = $como( $u_lob );
 	$e     = $ev( $id_a );
-	$r     = Servicio::guardar( $e, $a_lob, array( 'tipo' => 'acampada', 'nombre' => $e['nombre'], 'ambito' => 'secciones', 'secciones' => array( 'lobatos', 'scouts' ), 'inicio_fecha' => $ini, 'inicio_hora' => '10:00', 'fin_fecha' => $fin, 'fin_hora' => '17:00', 'lugar' => $e['lugar'], 'salida' => $e['salida'], 'previstas_lobatos' => '2', 'maximas_lobatos' => '3', 'previstas_scouts' => '5', 'con_coste' => '1', 'modalidad' => 'abierta' ) );
-	$teo   = $fila( $id_a, '990056' );
-	$ok( true === $r && Inscripciones::con_oferta( $teo ), 'si el equipo sube las plazas, la nueva se ofrece a Teo' );
+	// Doc 59, RC-EVE-1: con el bloqueo del evento en otra petición, la revisión no ofrece nada (lo hará la siguiente).
+	$otra = new wpdb( DB_USER, DB_PASSWORD, DB_NAME, DB_HOST );
+	try {
+		$otra->query( $otra->prepare( 'SELECT GET_LOCK(%s, 5)', 'asde_evento_' . $id_a ) );
+		$r   = Servicio::guardar( $e, $a_lob, array( 'tipo' => 'acampada', 'nombre' => $e['nombre'], 'ambito' => 'secciones', 'secciones' => array( 'lobatos', 'scouts' ), 'inicio_fecha' => $ini, 'inicio_hora' => '10:00', 'fin_fecha' => $fin, 'fin_hora' => '17:00', 'lugar' => $e['lugar'], 'salida' => $e['salida'], 'previstas_lobatos' => '2', 'maximas_lobatos' => '3', 'previstas_scouts' => '5', 'con_coste' => '1', 'modalidad' => 'abierta' ) );
+		$teo = $fila( $id_a, '990056' );
+	} finally {
+		$otra->query( $otra->prepare( 'SELECT RELEASE_LOCK(%s)', 'asde_evento_' . $id_a ) );
+		$otra->close();
+	}
+	$ok( true === $r && ! Inscripciones::con_oferta( $teo ), 'con el bloqueo del evento en otra petición, la plaza nueva aún no se ofrece (RC-EVE-1)' );
+	Inscripciones::revisar( $ev( $id_a ) );
+	$teo = $fila( $id_a, '990056' );
+	$ok( Inscripciones::con_oferta( $teo ), 'si el equipo sube las plazas, la nueva se ofrece a Teo (en la revisión siguiente)' );
 	Inscripciones::revisar( $ev( $id_a ), time() + 4 * DAY_IN_SECONDS );
 	$teo = $fila( $id_a, '990056' );
 	$ok( InscripcionesTable::BAJA === $teo['estado'] && Inscripciones::MOTIVO_CADUCADA === $teo['baja_motivo'] && 0 === $teo['baja_por'], 'si no la confirma en 3 días, la pierde (baja automática, con su motivo)' );
