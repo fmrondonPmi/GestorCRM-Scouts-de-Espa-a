@@ -273,7 +273,7 @@
 			<thead><tr><th scope="col">Parte del menú</th><th scope="col">Entradas</th></tr></thead>
 			<tbody>
 				<tr><td>Mi espacio</td><td>Mis datos · Mis pagos · Mis pedidos (la tienda, uniforme incluido)</td></tr>
-				<tr><td>Gestión del grupo</td><td>Personas · Solicitudes · Cambios · Informes · Gestión de la tienda · Reintegros · Inventario · Tesorería · Usuarios (cada una, según tus roles)</td></tr>
+				<tr><td>Gestión del grupo</td><td>Personas · Solicitudes · Cambios · Informes · Gestión de la tienda · Reintegros · Inventario · Tesorería · Usuarios · Accesos (cada una, según tus roles)</td></tr>
 			</tbody>
 		</table>
 	</div>
@@ -517,6 +517,7 @@
 
 	<h3 id="accesos-roles">Permisos por rol</h3>
 	<p>Una tabla con los permisos de cada módulo (Personas, Usuarios, Informes, Tesorería, Tienda, Inventario, Lista de espera, Eventos y Reintegros) y una columna por rol: Scouter, Secretaría, Coordinación, Tesorería e Intendente. Marca o desmarca y pulsa <strong>«Guardar los permisos»</strong>: el cambio vale para todas las personas con ese rol.</p>
+	<figure class="captura captura--larga"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/gestion-de-accesos/</span></div><div class="navegador__vista" data-ampliar tabindex="0"><img src="capturas/129-accesos-matriz.png" width="1280" height="1500" alt="Hoja Permisos por rol de Gestión de accesos: un cuadro por módulo y una columna por rol con casillas de ver y de acción" loading="lazy"></div></div><figcaption><span>Un cuadro por módulo (en la web empiezan plegados: pulsa el título para abrirlos). Cada columna es un rol; «Sensible» y el punto ● avisan de lo delicado y de lo cambiado.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
 	<ul>
 		<li>Cada módulo tiene un permiso de <strong>ver</strong> y permisos de <strong>acción</strong> (editar, aprobar, marcar pagado…). <strong>Toda acción necesita antes el de ver</strong>: al marcar una acción se marca sola el «ver» que le hace falta, y al quitar un «ver» se quitan sus acciones.</li>
 		<li>La etiqueta <strong>Sensible</strong> marca lo que abre datos de salud, dinero o cuentas de acceso. Cualquiera de los tres roles de gestión puede darlos.</li>
@@ -525,7 +526,9 @@
 	<p class="nota">Nadie puede <strong>añadirse permisos</strong>: en el rol que tú tienes las casillas vacías salen bloqueadas (sí puedes quitar permisos). Que lo haga otra persona de Coordinación, Secretaría o Tesorería.</p>
 
 	<h3 id="accesos-personas">Accesos por persona</h3>
+	<figure class="captura"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/gestion-de-accesos/?vista=personas</span></div><div class="navegador__vista" data-ampliar><img src="capturas/130-accesos-personas.png" width="1280" height="1243" alt="Listado de personas de gestión con su rol y cuántos permisos sueltos tienen, con búsqueda y filtro por rol" loading="lazy"></div></div><figcaption><span>El listado: busca por nombre o usuario, filtra por rol y entra en «Ver accesos».</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
 	<p>Elige a una persona (puedes buscarla por nombre o usuario y filtrar por rol) y verás, módulo a módulo, <strong>qué le da su rol</strong> y qué tiene <strong>suelto</strong>: hasta cuándo vale, quién se lo concedió y por qué.</p>
+	<figure class="captura captura--larga"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/gestion-de-accesos/?vista=personas&amp;amp;usuario=</span></div><div class="navegador__vista" data-ampliar tabindex="0"><img src="capturas/131-accesos-persona.png" width="1280" height="1700" alt="Accesos de un scouter: lo que le da su rol, dos permisos sueltos (uno sin caducidad y otro hasta una fecha) y el botón Conceder en lo que le falta" loading="lazy"></div></div><figcaption><span>Los accesos de una persona: «Por su rol», los permisos «Suelto» con su caducidad, quién los dio y el motivo, y «Conceder» en lo que le falta.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
 	<ul>
 		<li><strong>Conceder:</strong> en el permiso que le falta, abre «Conceder», elige <strong>Sin caducidad</strong> o <strong>Hasta una fecha</strong> y escribe el motivo (obligatorio en los sensibles). Si le falta el «ver» del módulo, la pantalla te dice cuál hay que darle antes.</li>
 		<li><strong>Quitar:</strong> el botón «Quitar» retira un permiso suelto; si otro se apoyaba en él, se retira también.</li>
@@ -534,6 +537,7 @@
 	</ul>
 
 	<h3 id="accesos-historial">Historial</h3>
+	<figure class="captura"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/gestion-de-accesos/?vista=historial</span></div><div class="navegador__vista" data-ampliar><img src="capturas/132-accesos-historial.png" width="1280" height="1265" alt="Historial de accesos con quién, qué, a quién y permiso, y los filtros en una línea" loading="lazy"></div></div><figcaption><span>El historial, de lo más nuevo a lo más antiguo; «Automático» es un permiso que ha caducado solo.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
 	<p>Quién concedió o retiró cada permiso, a quién y cuándo, los cambios de los roles y los permisos que han caducado solos. Se filtra por <strong>qué pasó</strong>, <strong>a quién</strong>, <strong>permiso</strong> y <strong>cuándo</strong>. No se borra nada y no se envían avisos: el historial es el registro.</p>
 </section>
 

@@ -72,7 +72,7 @@ Proyecto: plugin de WordPress **«ASDE Scouts de España - Gestor CRM para Grupo
 
 ## Pendiente
 
-- Capturas de los manuales para lo último (catálogo con talla, pedido de camisas, datáfono, Reintegros, modo Oficina).
+- Capturas de los manuales para lo último (catálogo con talla, pedido de camisas, datáfono, Reintegros, modo Oficina): hechas hasta la v0.53 (Gestión de accesos; manuales 5.2).
 - Enlace para que un grupo ya existente cambie su credencial (P-191) y probar el modo Oficina con el CRM real.
 - Limpieza del tipo «Camisa uniforme» y sus funciones en el inventario (ya sin uso).
 - Producción: diagnóstico de tareas en segundo plano, email de contacto de cada grupo y datos reales del acreedor SEPA (doc 09).

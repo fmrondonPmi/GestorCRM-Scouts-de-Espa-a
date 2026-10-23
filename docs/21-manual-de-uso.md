@@ -256,3 +256,9 @@ Solo textos (las capturas **no** se han rehecho todavía: las de informes, Perso
 ## Versión 5.1 · declaración en la lista de espera (v0.52.2, 2026-10-22)
 
 - Se rehacen sobre la v0.52 los dos commits de la rama `Lista-Espera-Declaracion` (v0.43.1), que había quedado atrás: `fuentes/lista-espera.html` explica las dos casillas del formulario público (tratamiento de datos y declaración de veracidad) y dónde cambia el texto Secretaría o Coordinación. Sin capturas nuevas. Regenerados los manuales y la ayuda de lista de espera de scouters y coordinación.
+
+## Versión 5.2 · gestión de accesos (v0.53.0, 2026-10-23)
+
+- Apartado nuevo `fuentes/accesos.html` («Gestión de accesos», con `data-paginas="accesos"`) en el manual de **Coordinación** (Coordinación, Secretaría y Tesorería): permisos por rol, accesos por persona e historial. «Accesos» añadido al menú descrito en `coordinacion-inicio.html`.
+- Capturas nuevas **129** (matriz), **130** (listado de personas), **131** (accesos de una persona, con dos permisos sueltos) y **132** (historial). En `manual-capturas.php` (antes de la limpieza) se crean concesiones y un cambio de rol de ejemplo y se **restauran** al acabar (roles, concesiones, historial). Con los cuadros plegados por defecto, la captura 129 los enseña abiertos (el volcado es estático).
+- El generador pasa a la versión 0.53; la ayuda del plugin (`ayuda/coordinacion/accesos.html`) sale del mismo apartado. Paquete `manual-de-uso-0.53.0.zip` y copia en `app/public/temporal/` de Local. **No se ha publicado nada.**
