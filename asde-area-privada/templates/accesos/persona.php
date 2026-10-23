@@ -32,7 +32,7 @@ $fecha = static fn( string $f ): string => wp_date( 'd/m/Y', strtotime( $f . ' 1
 </section>
 
 <?php foreach ( $modulos as $modulo => $nombre_modulo ) : ?>
-	<section class="asde-card" data-asde-plegable="accesos-persona-<?php echo esc_attr( $modulo ); ?>" data-asde-inicio="abierto">
+	<section class="asde-card" data-asde-plegable="accesos-persona-<?php echo esc_attr( $modulo ); ?>" data-asde-inicio="cerrado">
 		<header class="asde-card__header">
 			<h2 class="asde-card__title"><?php echo esc_html( asde_t( $nombre_modulo ) ); ?></h2>
 		</header>
