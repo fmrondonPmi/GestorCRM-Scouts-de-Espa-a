@@ -74,8 +74,11 @@ add_filter( 'wp_get_environment_type', $entorno );
 add_filter( 'asde_ap_solicitud_segundos_minimos', $sin_espera );
 add_filter( 'pre_wp_mail', $captura, 10, 2 );
 
-$limpiar_transients = static function () use ( $wpdb ) {
-	$wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE '\\_transient\\_asde\\_ap\\_agv\\_%' OR option_name LIKE '\\_transient\\_timeout\\_asde\\_ap\\_agv\\_%' OR option_name LIKE '\\_transient\\_asde\\_ap\\_lim\\_%' OR option_name LIKE '\\_transient\\_timeout\\_asde\\_ap\\_lim\\_%'" ); // phpcs:ignore WordPress.DB
+// Doc 60: los contadores de intentos (asde_ap_lim_*, asde_ap_agv_*) van en la memoria de este proceso. Antes se
+// guardaban en la base de datos y se borraban TODOS, también los de las personas que usaban la web a la vez.
+$cache_externa      = wp_using_ext_object_cache( true );
+$limpiar_transients = static function (): void {
+	wp_cache_flush();
 };
 
 /** Pinta la página (GET) como visitante. */
@@ -199,6 +202,9 @@ try {
 	$ok( true === GrupoInvitaciones::anular( $c['id'] ) && false === GrupoInvitaciones::anular( $c['id'] ), 'Se anula una pendiente y no se vuelve a anular' );
 	GrupoInvitaciones::recordar_para_mostrar( 'https://x.example/alta-grupo/?t=abc' );
 	$ok( 'https://x.example/alta-grupo/?t=abc' === GrupoInvitaciones::tomar_para_mostrar() && '' === GrupoInvitaciones::tomar_para_mostrar(), 'El enlace se enseña una sola vez' );
+} catch ( Throwable $e ) {
+	++$fails;
+	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";
 } finally {
 	remove_filter( 'pre_option_' . Settings::OPTION, $url_falsa );
 	remove_filter( 'asde_ap_alta_grupo_cliente', $cliente, 10 );
@@ -208,11 +214,16 @@ try {
 	$_GET     = array();
 	$_POST    = array();
 	$_REQUEST = array();
+	// Solo lo de la prueba (doc 60; antes borraba todo el registro y todos los emails posteriores al inicio).
+	$en      = static fn( array $ids ): string => "'" . implode( "','", array_map( 'intval', $ids ?: array( 0 ) ) ) . "'";
+	$l_inv   = $en( (array) $wpdb->get_col( $wpdb->prepare( 'SELECT id FROM %i WHERE id > %d', GrupoInvitaciones::table(), $inv0 ) ) ); // phpcs:ignore WordPress.DB
+	$l_solic = $en( (array) $wpdb->get_col( $wpdb->prepare( 'SELECT id FROM %i WHERE id > %d', GrupoSolicitudes::table(), $sol0 ) ) ); // phpcs:ignore WordPress.DB
+	$wpdb->query( $wpdb->prepare( "DELETE FROM %i WHERE id > %d AND ( ( objeto = 'invitacion' AND objeto_id IN ($l_inv) ) OR ( objeto = 'solicitud_grupo' AND objeto_id IN ($l_solic) ) )", Logger::table(), $log0 ) ); // phpcs:ignore WordPress.DB
+	$wpdb->query( $wpdb->prepare( 'DELETE FROM %i WHERE id > %d AND destino LIKE %s', RegistroEmails::table(), $mail0, '%.invalid' ) ); // phpcs:ignore WordPress.DB
 	$wpdb->query( $wpdb->prepare( 'DELETE FROM %i WHERE id > %d', GrupoInvitaciones::table(), $inv0 ) ); // phpcs:ignore WordPress.DB
 	$wpdb->query( $wpdb->prepare( 'DELETE FROM %i WHERE id > %d', GrupoSolicitudes::table(), $sol0 ) ); // phpcs:ignore WordPress.DB
-	$wpdb->query( $wpdb->prepare( 'DELETE FROM %i WHERE id > %d', Logger::table(), $log0 ) ); // phpcs:ignore WordPress.DB
-	$wpdb->query( $wpdb->prepare( 'DELETE FROM %i WHERE id > %d', RegistroEmails::table(), $mail0 ) ); // phpcs:ignore WordPress.DB
 	$limpiar_transients();
+	wp_using_ext_object_cache( $cache_externa );
 	if ( null === $tipo0 ) {
 		delete_option( Organizacion::TIPO_OPCION );
 	} else {

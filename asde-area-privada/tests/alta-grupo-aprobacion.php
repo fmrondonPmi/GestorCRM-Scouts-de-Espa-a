@@ -41,6 +41,14 @@ $tipo0  = get_option( Organizacion::TIPO_OPCION, null );
 $actual = get_current_user_id();
 $sepa0  = get_option( 'asde_ap_sepa_901', null );
 $admin  = 0;
+// Doc 60: el finally borra los grupos 901, 902 y 903; si alguno existe (otra prueba cortada o uno real), no se sigue.
+foreach ( array( '901', '902', '903' ) as $g ) {
+	if ( Grupos::por_numero( $g ) ) {
+		exit( "El grupo $g existe en el Local (¿una ejecución anterior interrumpida?). Revísalo antes de repetir la prueba.\n" );
+	}
+}
+$sepa_684_antes = SepaConfig::de( '684' ); // Para comprobar que aprobar otro grupo no cambia nada del 684.
+$cache_externa  = wp_using_ext_object_cache( true ); // La sesión del CRM simulado y las cachés, solo en memoria.
 
 $capturados = array();
 $captura    = static function ( $pre, $atts ) use ( &$capturados ) {
@@ -136,8 +144,11 @@ try {
 	delete_option( 'asde_ap_sepa_901' );
 	$c = SepaConfig::de( '901' );
 	$ok( 'Asociación Inventada 901' === $c['nombre'] && 'Calle Inventada 1' === $c['calle'], 'SEPA: el acreedor y la calle empiezan con la denominación fiscal y la sede' );
-	$c2 = SepaConfig::de( '684' );
-	$ok( ! isset( Grupos::por_numero( '684' )['denominacion'] ) || '' === Grupos::por_numero( '684' )['denominacion'] || $c2['nombre'] === Grupos::por_numero( '684' )['denominacion'] || '' !== $c2['nombre'], 'Un grupo sin esos datos queda como siempre' );
+	// Doc 60: antes era un OR que se cumplía siempre ('' !== nombre); ahora se compara con lo que había al empezar.
+	$ok( $sepa_684_antes === SepaConfig::de( '684' ), 'el acreedor SEPA de otro grupo (684) queda exactamente como estaba' );
+} catch ( Throwable $e ) {
+	++$fails;
+	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";
 } finally {
 	$crm->desactivar();
 	remove_filter( 'pre_wp_mail', $captura, 10 );
@@ -153,16 +164,22 @@ try {
 	} else {
 		update_option( 'asde_ap_sepa_901', $sepa0, false );
 	}
+	// Solo lo de la prueba (doc 60; antes borraba todo el registro y todos los emails posteriores al inicio).
+	$solic   = array_map( 'intval', (array) $wpdb->get_col( $wpdb->prepare( 'SELECT id FROM %i WHERE id > %d', GrupoSolicitudes::table(), $sol0 ) ) ); // phpcs:ignore WordPress.DB
+	$l_solic = "'" . implode( "','", $solic ?: array( 0 ) ) . "'";
 	$wpdb->query( $wpdb->prepare( 'DELETE FROM %i WHERE id > %d', GrupoSolicitudes::table(), $sol0 ) ); // phpcs:ignore WordPress.DB
-	$wpdb->query( $wpdb->prepare( 'DELETE FROM %i WHERE id > %d', Logger::table(), $log0 ) ); // phpcs:ignore WordPress.DB
-	$wpdb->query( $wpdb->prepare( 'DELETE FROM %i WHERE id > %d', RegistroEmails::table(), $mail0 ) ); // phpcs:ignore WordPress.DB
+	$wpdb->query( $wpdb->prepare( "DELETE FROM %i WHERE id > %d AND ( user_id = %d OR ( objeto = 'solicitud_grupo' AND objeto_id IN ($l_solic) ) )", Logger::table(), $log0, (int) $admin ) ); // phpcs:ignore WordPress.DB
+	$wpdb->query( $wpdb->prepare( "DELETE FROM %i WHERE id > %d AND ( grupo IN ('901','902','903') OR destino LIKE %s )", RegistroEmails::table(), $mail0, '%.invalid' ) ); // phpcs:ignore WordPress.DB
 	if ( null === $tipo0 ) {
 		delete_option( Organizacion::TIPO_OPCION );
 	} else {
 		update_option( Organizacion::TIPO_OPCION, $tipo0, false );
 	}
 	ClientFactory::olvidar();
+	wp_using_ext_object_cache( $cache_externa );
+	Grupos::olvidar();
 	$_GET = array();
+	$ok( null === Grupos::por_numero( '901' ) && null === Grupos::por_numero( '902' ) && null === Grupos::por_numero( '903' ) && false === get_user_by( 'login', 'prueba-ga-admin' ), 'limpieza: sin los grupos ni la cuenta de la prueba' );
 }
 
 echo $fails ? "\nHAY $fails FALLOS\n" : "\nTODO OK\n";

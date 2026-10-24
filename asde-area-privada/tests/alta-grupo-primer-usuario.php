@@ -19,6 +19,7 @@ use AsdeBalears\AreaPrivada\Domain\GrupoSolicitudes;
 use AsdeBalears\AreaPrivada\Domain\Grupos;
 use AsdeBalears\AreaPrivada\Domain\Organizacion;
 use AsdeBalears\AreaPrivada\Install\Roles;
+use AsdeBalears\AreaPrivada\Socios\SociosTable;
 use AsdeBalears\AreaPrivada\Usuarios\RegistroEmails;
 use AsdeBalears\AreaPrivada\Usuarios\Usuarios;
 
@@ -38,6 +39,20 @@ $log0   = $max_id( Logger::table() );
 $mail0  = $max_id( RegistroEmails::table() );
 $user0  = (int) $wpdb->get_var( "SELECT COALESCE(MAX(ID), 0) FROM {$wpdb->users}" ); // phpcs:ignore WordPress.DB
 $tipo0  = get_option( Organizacion::TIPO_OPCION, null );
+// Doc 60: los grupos de la prueba no pueden existir (el finally los borra) ni quedar cuentas de una ejecución cortada.
+$grupos_prueba = array( '904', '905', '906', '907' );
+foreach ( $grupos_prueba as $g ) {
+	if ( Grupos::por_numero( $g ) ) {
+		exit( "El grupo $g existe en el Local (¿una ejecución anterior interrumpida?). Revísalo antes de repetir la prueba.\n" );
+	}
+}
+foreach ( array( '990061', '990063' ) as $n ) {
+	if ( Usuarios::por_socio( $n ) ) {
+		exit( "Ya hay una cuenta de la ficha $n (¿una ejecución anterior interrumpida?). Bórrala antes de repetir la prueba.\n" );
+	}
+}
+$socios0       = array_column( (array) $wpdb->get_results( 'SELECT * FROM ' . SociosTable::table(), ARRAY_A ), null, 'num_socio_asde' ); // phpcs:ignore WordPress.DB
+$cache_externa = wp_using_ext_object_cache( true ); // La sesión del CRM simulado y las cachés, solo en memoria.
 
 $capturados = array();
 $captura    = static function ( $pre, $atts ) use ( &$capturados ) {
@@ -124,24 +139,41 @@ try {
 	$pend = $nueva( '907', '22222222J', 'secretaria' );
 	$ok( GrupoSolicitudes::PENDIENTE === GrupoSolicitudes::obtener( $pend )['estado'] && '' === GrupoAltas::primer_usuario( $pend ), 'Una solicitud sin aprobar no crea usuarios' );
 	$ok( null === Usuarios::por_socio( '990062' ), 'La ficha del DNI de una solicitud pendiente no tiene cuenta' );
+} catch ( Throwable $e ) {
+	++$fails;
+	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";
 } finally {
 	$crm->desactivar();
 	remove_filter( 'pre_wp_mail', $captura, 10 );
-	foreach ( $wpdb->get_col( $wpdb->prepare( "SELECT ID FROM {$wpdb->users} WHERE ID > %d", $user0 ) ) as $uid ) { // phpcs:ignore WordPress.DB
-		wp_delete_user( (int) $uid );
+	// Solo lo de la prueba (doc 60; antes borraba todos los usuarios, registros y emails posteriores al inicio).
+	$en_grupos = "'" . implode( "','", $grupos_prueba ) . "'";
+	$cuentas   = array_map( 'intval', (array) $wpdb->get_col( $wpdb->prepare( "SELECT u.ID FROM {$wpdb->users} u INNER JOIN {$wpdb->usermeta} m ON m.user_id = u.ID AND m.meta_key = %s WHERE u.ID > %d AND m.meta_value IN ($en_grupos)", Usuarios::META_GRUPO, $user0 ) ) ); // phpcs:ignore WordPress.DB
+	$solic     = array_map( 'intval', (array) $wpdb->get_col( $wpdb->prepare( 'SELECT id FROM %i WHERE id > %d', GrupoSolicitudes::table(), $sol0 ) ) ); // phpcs:ignore WordPress.DB
+	$l_cuentas = "'" . implode( "','", $cuentas ?: array( 0 ) ) . "'";
+	$l_solic   = "'" . implode( "','", $solic ?: array( 0 ) ) . "'";
+	foreach ( $cuentas as $uid ) {
+		wp_delete_user( $uid );
 	}
-	foreach ( array( '904', '905', '906', '907' ) as $g ) {
+	foreach ( $grupos_prueba as $g ) {
 		Grupos::borrar( $g );
 	}
 	$wpdb->query( $wpdb->prepare( 'DELETE FROM %i WHERE id > %d', GrupoSolicitudes::table(), $sol0 ) ); // phpcs:ignore WordPress.DB
-	$wpdb->query( $wpdb->prepare( 'DELETE FROM %i WHERE id > %d', Logger::table(), $log0 ) ); // phpcs:ignore WordPress.DB
-	$wpdb->query( $wpdb->prepare( 'DELETE FROM %i WHERE id > %d', RegistroEmails::table(), $mail0 ) ); // phpcs:ignore WordPress.DB
+	$wpdb->query( $wpdb->prepare( "DELETE FROM %i WHERE id > %d AND ( user_id IN ($l_cuentas) OR ( objeto = 'user' AND objeto_id IN ($l_cuentas) ) OR ( objeto = 'solicitud_grupo' AND objeto_id IN ($l_solic) ) )", Logger::table(), $log0 ) ); // phpcs:ignore WordPress.DB
+	$wpdb->query( $wpdb->prepare( "DELETE FROM %i WHERE id > %d AND ( user_id IN ($l_cuentas) OR grupo IN ($en_grupos) OR destino LIKE %s )", RegistroEmails::table(), $mail0, '%.invalid' ) ); // phpcs:ignore WordPress.DB
+	$ahora = array_column( (array) $wpdb->get_results( 'SELECT * FROM ' . SociosTable::table(), ARRAY_A ), null, 'num_socio_asde' ); // phpcs:ignore WordPress.DB
+	foreach ( array_diff_key( $ahora, $socios0 ) as $asde => $f ) {
+		$wpdb->delete( SociosTable::table(), array( 'num_socio_asde' => (string) $asde ) );
+	}
 	if ( null === $tipo0 ) {
 		delete_option( Organizacion::TIPO_OPCION );
 	} else {
 		update_option( Organizacion::TIPO_OPCION, $tipo0, false );
 	}
 	ClientFactory::olvidar();
+	wp_using_ext_object_cache( $cache_externa );
+	Grupos::olvidar();
+	$quedan = (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$wpdb->usermeta} WHERE meta_key = %s AND meta_value IN ($en_grupos)", Usuarios::META_GRUPO ) ); // phpcs:ignore WordPress.DB
+	$ok( 0 === $quedan && ! array_filter( $grupos_prueba, static fn( $g ) => Grupos::por_numero( $g ) ) && null === Usuarios::por_socio( '990061' ), 'limpieza: sin cuentas ni grupos de la prueba' );
 }
 
-echo $fails ? "\nHAY $fails FALLOS\n" : "\nTODO OK\n";
+echo $fails ? "\nHAY $fails FALLOS\n" : "\nTODO OK (nada tocado en el CRM real; el sitio queda como estaba)\n";
