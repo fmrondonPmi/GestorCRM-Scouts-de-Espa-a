@@ -15,7 +15,9 @@ defined( 'ABSPATH' ) || exit;
  *   tipo:  texto | fecha | bool | sino | enum | edad | seccion | num_local | nombre_tutor | pago
  *   nivel: todos  → cualquiera con acceso a informes (dentro de su ámbito)
  *          salud  → requiere asde_view_health (scouters: solo su sección, solo lectura)
- *          global → solo visión global (Secretaría, Coordinación, administradores)
+ *          global → visión global (Secretaría, Coordinación, administradores) y, desde la v0.58, también
+ *                   los scouters (de los socios de sus secciones, que es todo lo que ven): «un scouter de
+ *                   sección ve todos los datos de los asociados de su sección». Las familias, no.
  *          pagos  → requiere acceso a Tesorería y el módulo activo (v0.25): la cuota
  *                   de la familia de cada socio, de Tesorería (no del CRM)
  * Los IBAN y datos bancarios NO están en el catálogo.
@@ -194,7 +196,8 @@ final class Catalogo {
 			);
 		}
 		$puede_salud = $ambito->user->has_cap( 'asde_view_health' );
-		$global      = $ambito->vision_global();
+		// v0.58: el nivel «global» (el DNI) también para el scouter: sus informes ya se limitan a sus secciones.
+		$global      = $ambito->vision_global() || (bool) $ambito->secciones_scouter();
 		$pagos       = self::ve_pagos( $ambito );
 		return array_filter(
 			self::columnas(),

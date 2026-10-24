@@ -277,31 +277,7 @@ final class TesoreriaView extends TesoreriaBaseView {
 		} catch ( CrmException $e ) {
 			wp_die( esc_html( $e->getMessage() ), 500 );
 		}
-		Logger::log( 'tesoreria_exportada', 'ronda', $ronda, array( 'familias' => count( $filas ) ) );
-
-		$datos = array();
-		$suma  = array_fill_keys( array( 'hijos', 'cuota', 'ajustes', 'a_pagar', 'pagado', 'pendiente' ), 0.0 );
-		foreach ( $filas as $f ) {
-			$c       = $f['calc'];
-			$nombres = array_map( static fn( $n ) => isset( $personas[ $n ] ) ? $personas[ $n ]->nombre_completo() : $n, $f['familia']['miembros'] );
-			$datos[] = array(
-				(string) $f['familia']['numero'],
-				implode( ', ', $nombres ),
-				count( $c['pagan'] ),
-				round( (float) $c['cuota']['total'], 2 ),
-				round( (float) $c['ajustes'], 2 ),
-				round( (float) $c['a_pagar'], 2 ),
-				round( (float) $c['pagado'], 2 ),
-				round( (float) $c['pendiente'], 2 ),
-				asde_t( Calculadora::ETIQUETAS[ $c['estado'] ] ),
-			);
-			$suma['hijos']    += count( $c['pagan'] );
-			$suma['cuota']    += $c['cuota']['total'];
-			$suma['ajustes']  += $c['ajustes'];
-			$suma['a_pagar']  += $c['a_pagar'];
-			$suma['pagado']   += $c['pagado'];
-			$suma['pendiente'] += $c['pendiente'];
-		}
+		list( $datos, $suma ) = self::datos_excel( $filas, $personas );
 		$colores = array(
 			Calculadora::PAGADO    => 'verde',
 			Calculadora::PARCIAL   => 'ambar',
@@ -313,6 +289,7 @@ final class TesoreriaView extends TesoreriaBaseView {
 		foreach ( Calculadora::ETIQUETAS as $estado => $etiqueta ) {
 			$por_texto[ asde_t( $etiqueta ) ] = $colores[ $estado ] ?? 'gris';
 		}
+		Logger::log( 'tesoreria_exportada', 'ronda', $ronda, array( 'familias' => count( $datos ) ) );
 		/* translators: 1: ronda, 2: fecha */
 		$subtitulo = sprintf( asde_t( 'Ronda %1$s · generado el %2$s' ), $ronda, wp_date( 'd/m/Y' ) );
 		Xlsx::descargar(
@@ -329,6 +306,44 @@ final class TesoreriaView extends TesoreriaBaseView {
 			)
 		);
 		exit;
+	}
+
+	/**
+	 * Las filas del Excel del control de pagos y sus totales. v0.58 (petición del usuario): sin las familias que no
+	 * tienen ningún asociado con membresía activa (todos dados de baja o fuera del grupo).
+	 *
+	 * @param array<int, array{familia:array, calc:array}>              $filas    De estados().
+	 * @param array<string, \AsdeBalears\AreaPrivada\Domain\Persona> $personas
+	 * @return array{0: list<array>, 1: array<string, float>}
+	 */
+	public static function datos_excel( array $filas, array $personas ): array {
+		$datos = array();
+		$suma  = array_fill_keys( array( 'hijos', 'cuota', 'ajustes', 'a_pagar', 'pagado', 'pendiente' ), 0.0 );
+		foreach ( $filas as $f ) {
+			$c = $f['calc'];
+			if ( ! $c['pagan'] && ! $c['no_pagan'] ) {
+				continue;
+			}
+			$nombres = array_map( static fn( $n ) => isset( $personas[ $n ] ) ? $personas[ $n ]->nombre_completo() : $n, $f['familia']['miembros'] );
+			$datos[] = array(
+				(string) $f['familia']['numero'],
+				implode( ', ', $nombres ),
+				count( $c['pagan'] ),
+				round( (float) $c['cuota']['total'], 2 ),
+				round( (float) $c['ajustes'], 2 ),
+				round( (float) $c['a_pagar'], 2 ),
+				round( (float) $c['pagado'], 2 ),
+				round( (float) $c['pendiente'], 2 ),
+				asde_t( Calculadora::ETIQUETAS[ $c['estado'] ] ),
+			);
+			$suma['hijos']     += count( $c['pagan'] );
+			$suma['cuota']     += $c['cuota']['total'];
+			$suma['ajustes']   += $c['ajustes'];
+			$suma['a_pagar']   += $c['a_pagar'];
+			$suma['pagado']    += $c['pagado'];
+			$suma['pendiente'] += $c['pendiente'];
+		}
+		return array( $datos, $suma );
 	}
 
 	public function handle_post(): void {

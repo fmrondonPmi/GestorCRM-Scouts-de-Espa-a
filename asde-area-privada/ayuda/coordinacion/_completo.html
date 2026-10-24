@@ -1,4 +1,4 @@
-<!-- Generado por herramientas/generar-manuales.php (manual «coordinacion» completo, solo texto, versión 0.57.1) a partir de manual/fuentes: no se edita a mano. -->
+<!-- Generado por herramientas/generar-manuales.php (manual «coordinacion» completo, solo texto, versión 0.58) a partir de manual/fuentes: no se edita a mano. -->
 <div class="asde-ayuda__texto asde-ayuda__completo" data-manual="coordinacion">
 <h2>Manual del equipo de coordinación</h2>
 <p class="resumen">Todo lo que lleva el equipo del grupo: personas y números de socio, altas, bajas y cambios de sección en el CRM, dar acceso, solicitudes, los usuarios (con sus hojas: usuarios, dar acceso y registro de emails), fichas y cambios, informes, la Tesorería completa (cuotas, coste federativo, banco y domiciliaciones SEPA) y los uniformes, del pago a la entrega.</p>
@@ -465,7 +465,7 @@
 
 <section id="asde-manual-informes">
 	<h2>Informes</h2>
-	<p class="resumen">Listados con las columnas que elijas, para campamentos, salidas o comunicaciones, y para saber quién ha pagado la cuota. Cada uno ve solo su ámbito: un scouter, sus secciones; Secretaría y Coordinación, todo el grupo.</p>
+	<p class="resumen">Listados con las columnas que elijas, para campamentos, salidas o comunicaciones, y para saber quién ha pagado la cuota. Cada uno ve solo su ámbito: un scouter, sus secciones (y de ellas, todos los datos, también el DNI y la fecha de nacimiento); Secretaría y Coordinación, todo el grupo.</p>
 	<p class="asde-ayuda__pantalla">Los informes predefinidos (listado de sección, contactos de las familias, alergias y alimentación, autorizaciones y pagos de la cuota) y los guardados.</p>
 	<p class="asde-ayuda__pantalla">Un informe con datos de salud avisa de cómo tratarlos y deja constancia de quién lo consulta.</p>
 	<ol class="pasos">
@@ -506,8 +506,8 @@
 		<li>Las familias tienen un nº propio, <code>F</code> + grupo + correlativo (<code>F999001</code>): es la referencia que deben poner en las transferencias.</li>
 		<li><strong>Estados:</strong> «Pagado», «Pago parcial», «Pendiente» y «Con plazos vencidos».</li>
 		<li>Pagan los educandos de Castores a Rovers; scouters y voluntariado no.</li>
-		<li><strong>«Descargar Excel»</strong> baja el control de pagos en una hoja de cálculo con formato: título, importes en euros, el estado de cada familia con su color y una fila de totales (las filas se pueden filtrar y ordenar en Excel).</li>
-		<li>Junto a las pestañas de Tesorería hay dos accesos directos, <strong>«Informe de pagos»</strong> (el informe «Pagos de la cuota», quién ha pagado y cuánto falta) y <strong>«Todos los informes»</strong>. Salen a quien puede ver informes y pagos.</li>
+		<li><strong>«Descargar Excel»</strong> baja el control de pagos en una hoja de cálculo con formato: título, importes en euros, el estado de cada familia con su color y una fila de totales (las filas se pueden filtrar y ordenar en Excel). No salen las familias que ya no tienen ningún asociado con membresía activa.</li>
+		<li>Junto a las pestañas de Tesorería están los accesos directos <strong>«Informe de pagos»</strong> (el informe «Pagos de la cuota», quién ha pagado y cuánto falta; para quien puede ver informes y pagos) e <strong>«Informe del banco»</strong> (todos los movimientos del banco en Excel; para quien ve el banco). Los demás informes, en el menú «Informes».</li>
 		<li>Lo que se registra aquí es lo que cada familia ve en <a href="{{completo:familias}}#asde-manual-mis-pagos" data-asde-modal>Mis pagos</a>. Los pagos del uniforme van aparte (ver <a href="#asde-manual-uniformes-gestion">Gestión de pedidos</a>).</li>
 		<li>Si tu grupo da las bajas desde la web, arriba salen las <strong>bajas recientes</strong> (30 días) de personas que están en alguna familia: ya no cuentan en su cuota. Además, a Tesorería le llega un email con cada baja (ver <a href="#asde-manual-avisos-baja">Quién se entera de una baja</a>).</li>
 	</ul>
@@ -594,6 +594,12 @@
 		<li><div>Lo que no es una cuota (gastos, donativos, subvenciones…) se marca como <strong>revisado</strong> con su <strong>tipo</strong>: «No es una cuota…» en un ingreso o «Marcar revisado…» en un gasto abren una ventana para elegirlo. Los ingresos de los uniformes se validan en su pedido.</div></li>
 	</ol>
 	<p>Con varios ingresos que llevan la referencia de su familia, un botón los concilia todos de una vez.</p>
+	<h4 id="asde-manual-banco-asociar">Asociar dos movimientos y el informe del banco</h4>
+	<ul>
+		<li><strong>«Asociar…»</strong>, en cada movimiento, abre una ventana para juntarlo con otro: por ejemplo, un gasto y el ingreso que lo devuelve. Primero salen los de signo contrario y el mismo importe (destacados); con el buscador, los que contienen un texto. Cada movimiento se asocia con uno solo.</li>
+		<li>En el listado, bajo el estado, sale <strong>«↔ Asociado con»</strong> y la fecha y el importe del otro. <strong>«Quitar asociación»</strong> la deshace en los dos. Asociarlos no cambia su estado, su tipo ni ningún pago: sirve para saber que van juntos.</li>
+		<li><strong>«Descargar Excel»</strong>, arriba del listado, baja los movimientos del filtro que tengas puesto (con el estado en «Todos», todos los registros): fecha, fecha valor, ordenante, concepto, referencias, importe, estado, tipo, familia, evento, nota y con cuál está asociado, más los totales de ingresos y gastos.</li>
+	</ul>
 	<h4 id="asde-manual-banco-revisar">Marcar varios como revisados</h4>
 	<p class="asde-ayuda__pantalla">Marca las casillas de los pendientes (o la de arriba, para todos los de la página) y pulsa «Marcar como revisados…»: se abre esta ventana con todos ellos.</p>
 	<ul>

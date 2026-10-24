@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.57.1
+Stable tag: 0.58.0
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -61,6 +61,12 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.58.0 =
+* Treasury: the payments control Excel no longer lists families with no member with an active membership. The "All reports" shortcut is removed from the treasury bar and a new "Bank report" shortcut downloads every bank movement in Excel.
+* Bank: "Download Excel" exports the movements of the current filter (date, value date, payer, concept, references, amount, status, type, family, event, note and linked movement, with totals). Two bank movements can now be linked to each other (e.g. an expense and the income that refunds it); linking does not change their status or type.
+* Reports: section scouters can now select every column for the members of their sections, including the ID document.
+* Ledger and cash box: plan only (doc 61), nothing changes yet.
 
 = 0.57.1 =
 * Fix: new members and leavers added from the web were sometimes not shown for several minutes. A background re-read of the CRM that had started before the change could save the old list of members over it; now every change bumps a counter and an older read is discarded.
@@ -260,6 +266,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * CRM registrations tested end to end in a browser against the simulated SinergiaCRM API (development only).
 
 == Upgrade Notice ==
+
+= 0.58.0 =
+Bank report in Excel, linked bank movements and report changes. Database change: the bank movements table gets a new column (linked movement), added automatically on update.
 
 = 0.57.1 =
 Fixes: new members and leavers are shown at once, and budgets split only the yearly fee (registration and insurance pay the federation cost). No database changes.

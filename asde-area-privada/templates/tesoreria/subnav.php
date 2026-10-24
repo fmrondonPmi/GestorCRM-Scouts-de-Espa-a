@@ -21,7 +21,12 @@ defined( 'ABSPATH' ) || exit;
 			</li>
 		<?php endforeach; ?>
 		<?php foreach ( ( $enlaces ?? array() ) as $etiqueta => $destino ) : ?>
-			<li class="asde-subnav__informe"><a href="<?php echo esc_url( $destino ); ?>"><?php echo esc_html( $etiqueta ); ?> ↗</a></li>
+			<?php /* v0.58: el informe del banco es una descarga (Excel): sin la transición de página de Enfold. */ ?>
+			<?php if ( str_contains( $destino, 'formato=xlsx' ) ) : ?>
+				<li class="asde-subnav__informe"><a class="no-transition" href="<?php echo esc_url( $destino ); ?>" data-asde-descarga><?php echo esc_html( $etiqueta ); ?> ↓</a></li>
+			<?php else : ?>
+				<li class="asde-subnav__informe"><a href="<?php echo esc_url( $destino ); ?>"><?php echo esc_html( $etiqueta ); ?> ↗</a></li>
+			<?php endif; ?>
 		<?php endforeach; ?>
 	</ul>
 	<form method="get" class="asde-subnav__ronda">

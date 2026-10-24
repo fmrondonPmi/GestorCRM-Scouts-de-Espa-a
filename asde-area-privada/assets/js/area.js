@@ -447,6 +447,16 @@
 
 	function enviarDentro( e ) {
 		var form = e.target;
+		// v0.58: un buscador (GET) marcado con data-asde-en-ventana se queda en la ventana (p. ej. «Asociar…» del banco).
+		if ( ! e.defaultPrevented && form.hasAttribute( 'data-asde-en-ventana' ) && 'get' === ( form.getAttribute( 'method' ) || 'get' ).toLowerCase() ) {
+			e.preventDefault();
+			var destino = new window.URL( form.getAttribute( 'action' ) || actual, window.location.href );
+			new window.FormData( form ).forEach( function ( valor, clave ) {
+				destino.searchParams.set( clave, valor );
+			} );
+			cargar( destino.toString() );
+			return;
+		}
 		// Un confirm() cancelado deja el envío anulado: no se hace nada.
 		if ( e.defaultPrevented || 'post' !== ( form.getAttribute( 'method' ) || '' ).toLowerCase() ) {
 			return;

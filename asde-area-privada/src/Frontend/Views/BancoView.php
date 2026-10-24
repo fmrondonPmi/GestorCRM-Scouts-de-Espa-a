@@ -15,6 +15,7 @@ use AsdeBalears\AreaPrivada\Tesoreria\Banco\CsvBanco;
 use AsdeBalears\AreaPrivada\Tesoreria\Banco\Norma43;
 use AsdeBalears\AreaPrivada\Tesoreria\Banco\TiposMovimiento;
 use AsdeBalears\AreaPrivada\Frontend\Router;
+use AsdeBalears\AreaPrivada\Informes\Xlsx;
 use AsdeBalears\AreaPrivada\Tesoreria\Calculadora;
 use AsdeBalears\AreaPrivada\Tesoreria\Config;
 use AsdeBalears\AreaPrivada\Tesoreria\FamiliasTable;
@@ -56,6 +57,11 @@ final class BancoView extends TesoreriaBaseView {
 				: $this->revisar();
 			return $this->layout( 'tesoreria', ( self::es_modal() ? '' : $this->subnav( 'banco', $ronda ) ) . $cuerpo );
 		}
+		// v0.58: asociar un movimiento con otro (p. ej. un gasto y su devolución), también en la ventana emergente.
+		$asociar = $this->get( 'asociar' );
+		if ( '' !== $asociar ) {
+			return $this->layout( 'tesoreria', ( self::es_modal() ? '' : $this->subnav( 'banco', $ronda ) ) . $this->asociar( $asociar ) );
+		}
 		$token = $this->get( 'previa' );
 		if ( $token ) {
 			$previa = $this->previa( $token );
@@ -91,6 +97,9 @@ final class BancoView extends TesoreriaBaseView {
 		$total  = count( $movs );
 		$sugeridas = count( array_filter( $movs, static fn( $m ) => ! empty( $m['sugerencia']['fiable'] ) ) );
 		$pagina = $tabla->aplicar( $movs );
+		// v0.58: el movimiento con el que está asociado cada uno de la página.
+		$con       = array_values( array_filter( array_map( static fn( $m ) => (int) ( $m['asociado_id'] ?? 0 ), $pagina ) ) );
+		$asociados = $con ? array_column( BancoTable::movimientos( array( 'ids' => $con ) ), null, 'id' ) : array();
 
 		return $this->layout(
 			'tesoreria',
@@ -110,9 +119,115 @@ final class BancoView extends TesoreriaBaseView {
 					'eventos'    => \AsdeBalears\AreaPrivada\Domain\Modulos::activo( \AsdeBalears\AreaPrivada\Domain\Modulos::EVENTOS ) ? array_column( \AsdeBalears\AreaPrivada\Eventos\EventosTable::todos(), 'nombre', 'id' ) : array(),
 					'url'        => $this->url( 'banco' ),
 					'url_fam'    => $this->url( 'familias' ),
+					'asociados'  => $asociados,
+					// v0.58: el informe de los movimientos (los del filtro de arriba) en Excel.
+					'url_excel'  => $this->url( 'banco', array_filter( array( 'estado' => $filtros['estado'], 'tipo' => $filtros['tipo'], 'q' => $filtros['q'], 'clase' => $filtros['clase'] ) ) + array( 'formato' => 'xlsx', '_wpnonce' => wp_create_nonce( 'asde_banco_excel' ) ) ),
 				)
 			)
 		);
+	}
+
+	/**
+	 * Ventana «Asociar con otro movimiento» (v0.58): el elegido y los movimientos con los que se puede asociar (primero
+	 * los de signo contrario y el mismo importe), con buscador. Tras asociarlos, ?asociar=hecho.
+	 */
+	private function asociar( string $asociar ): string {
+		$url = $this->url( 'banco' );
+		if ( 'hecho' === $asociar ) {
+			return $this->tpl( 'tesoreria/banco-asociar', array( 'hecho' => true, 'url' => $url ) );
+		}
+		$m = BancoTable::obtener( absint( $asociar ) );
+		return $this->tpl(
+			'tesoreria/banco-asociar',
+			array(
+				'hecho'      => false,
+				'mov'        => $m,
+				'candidatos' => $m && empty( $m['asociado_id'] ) ? BancoTable::candidatos( $m, $this->get( 'q' ) ) : array(),
+				'q'          => $this->get( 'q' ),
+				'url'        => $url,
+				'volver'     => wp_validate_redirect( esc_url_raw( $this->get( 'volver' ) ), $url ) ?: $url,
+			)
+		);
+	}
+
+	/**
+	 * Informe del banco en Excel (v0.58, petición del usuario: «informes de todos los registros del banco»). Con los
+	 * filtros del listado; con ?todos=1, de todos los estados. Se llama antes de pintar la página.
+	 */
+	public function exportar(): void {
+		if ( ! current_user_can( self::CAP_CONFIG ) || ! \AsdeBalears\AreaPrivada\Domain\Modulos::activo( \AsdeBalears\AreaPrivada\Domain\Modulos::BANCO ) || ! wp_verify_nonce( $this->get( '_wpnonce' ), 'asde_banco_excel' ) ) {
+			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-area-privada' ), 403 );
+		}
+		$filtros = self::filtros_excel( $_GET ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- el nonce se ha comprobado arriba
+		$movs    = BancoTable::movimientos( $filtros );
+		Logger::log( 'banco_exportado', 'banco', Grupo::numero(), array( 'movimientos' => count( $movs ) ) );
+		list( $cabecera, $filas, $opciones ) = self::informe_excel( $movs );
+		Xlsx::descargar( 'banco-' . wp_date( 'Ymd' ) . '.xlsx', asde_t( 'Banco' ), $cabecera, $filas, $opciones );
+		exit;
+	}
+
+	/** Los filtros del informe del banco, de la petición (saneados). @return array{estado:string, tipo:string, q:string, clase:string} */
+	public static function filtros_excel( array $src ): array {
+		$src    = wp_unslash( $src );
+		$estado = sanitize_key( (string) ( $src['estado'] ?? '' ) );
+		$tipo   = sanitize_key( (string) ( $src['tipo'] ?? '' ) );
+		$clase  = sanitize_key( (string) ( $src['clase'] ?? '' ) );
+		return array(
+			'estado' => isset( BancoTable::ESTADOS[ $estado ] ) ? $estado : '',
+			'tipo'   => in_array( $tipo, array( 'ingresos', 'gastos' ), true ) ? $tipo : '',
+			'q'      => sanitize_text_field( (string) ( $src['q'] ?? '' ) ),
+			'clase'  => 'sin' === $clase || ctype_digit( $clase ) ? $clase : '',
+		);
+	}
+
+	/**
+	 * Cabecera, filas y formato del Excel del banco: una fila por movimiento, de más antiguo a más nuevo, con su
+	 * estado, tipo, familia (su nº), evento, nota y el movimiento con el que está asociado; al final, los totales.
+	 *
+	 * @param array[] $movs De BancoTable::movimientos().
+	 * @return array{0: string[], 1: list<array>, 2: array}
+	 */
+	public static function informe_excel( array $movs ): array {
+		$tipos    = TiposMovimiento::todos();
+		$familias = array_column( FamiliasTable::todas(), 'numero', 'id' );
+		$eventos  = \AsdeBalears\AreaPrivada\Domain\Modulos::activo( \AsdeBalears\AreaPrivada\Domain\Modulos::EVENTOS ) ? array_column( \AsdeBalears\AreaPrivada\Eventos\EventosTable::todos(), 'nombre', 'id' ) : array();
+		$por_id   = array_column( $movs, null, 'id' );
+		$fecha    = static fn( ?string $f ) => $f ? wp_date( 'd/m/Y', strtotime( $f . ' 12:00' ) ) : '';
+		usort( $movs, static fn( $a, $b ) => strcmp( $a['fecha'] . sprintf( '%012d', $a['id'] ), $b['fecha'] . sprintf( '%012d', $b['id'] ) ) );
+		$filas    = array();
+		$ingresos = 0.0;
+		$gastos   = 0.0;
+		foreach ( $movs as $m ) {
+			$otro = ! empty( $m['asociado_id'] ) ? ( $por_id[ $m['asociado_id'] ] ?? BancoTable::obtener( (int) $m['asociado_id'] ) ) : null;
+			$filas[] = array(
+				$fecha( $m['fecha'] ),
+				$fecha( $m['fecha_valor'] ?? null ),
+				$m['ordenante'],
+				'' !== $m['concepto'] ? $m['concepto'] : asde_t( Norma43::CONCEPTOS[ $m['concepto_comun'] ] ?? '' ),
+				trim( $m['referencia1'] . ' ' . $m['referencia2'] ),
+				round( (float) $m['importe'], 2 ),
+				asde_t( BancoTable::ESTADOS[ $m['estado'] ] ?? $m['estado'] ),
+				BancoTable::IGNORADO === $m['estado'] ? ( isset( $tipos[ (int) $m['tipo_id'] ] ) ? $tipos[ (int) $m['tipo_id'] ]['nombre'] : asde_t( 'Sin tipo' ) ) : '',
+				! empty( $m['familia_id'] ) ? (string) ( $familias[ (int) $m['familia_id'] ] ?? '' ) : '',
+				! empty( $m['evento_id'] ) ? (string) ( $eventos[ (int) $m['evento_id'] ] ?? '' ) : '',
+				$m['nota'],
+				$otro ? $fecha( $otro['fecha'] ) . ' · ' . Calculadora::euros( (float) $otro['importe'] ) : '',
+			);
+			if ( $m['importe'] > 0 ) {
+				$ingresos += $m['importe'];
+			} else {
+				$gastos += $m['importe'];
+			}
+		}
+		$cabecera = array( asde_t( 'Fecha' ), asde_t( 'Fecha valor' ), asde_t( 'Ordenante' ), asde_t( 'Concepto' ), asde_t( 'Referencias' ), asde_t( 'Importe' ), asde_t( 'Estado' ), asde_t( 'Tipo de gasto o ingreso' ), asde_t( 'Familia' ), asde_t( 'Evento' ), asde_t( 'Nota' ), asde_t( 'Asociado con' ) );
+		$opciones = array(
+			'titulo'    => asde_t( 'Movimientos del banco' ) . ' · ' . Grupo::nombre(),
+			/* translators: 1: ingresos, 2: gastos, 3: fecha */
+			'subtitulo' => sprintf( asde_t( 'Ingresos %1$s · gastos %2$s · generado el %3$s' ), Calculadora::euros( round( $ingresos, 2 ) ), Calculadora::euros( round( $gastos, 2 ) ), wp_date( 'd/m/Y' ) ),
+			'tipos'     => array( 'texto', 'texto', 'texto', 'texto', 'texto', 'euros', 'texto', 'texto', 'texto', 'texto', 'texto', 'texto' ),
+			'totales'   => array( asde_t( 'Total' ), sprintf( asde_n( '%d movimiento', '%d movimientos', count( $filas ) ), count( $filas ) ), '', '', '', round( $ingresos + $gastos, 2 ), '', '', '', '', '', '' ),
+		);
+		return array( $cabecera, $filas, $opciones );
 	}
 
 	/** Ventana «Marcar como revisado»: los movimientos elegidos (?m[]=id), cada uno con su tipo. */
@@ -241,6 +356,33 @@ final class BancoView extends TesoreriaBaseView {
 				}
 				$lista = wp_validate_redirect( esc_url_raw( $this->post( 'volver' ) ), $this->url( 'banco' ) );
 				$this->redirect( Router::pide_modal() ? $this->url( 'banco', array( 'revisar' => 'hecho' ) ) : $lista );
+				break;
+
+			case 'asociar':
+				// v0.58: asociar dos movimientos entre sí (un gasto y su devolución…).
+				$id = (int) $this->post( 'mov' );
+				check_admin_referer( 'asde_banco_mov_' . $id );
+				$con = (int) $this->post( 'con' );
+				$r   = BancoTable::asociar( $id, $con );
+				if ( is_wp_error( $r ) ) {
+					Notices::add( 'error', esc_html( $r->get_error_message() ) );
+				} else {
+					Logger::log( 'banco_asociado', 'banco', (string) $id, array( 'con' => $con ) );
+					Notices::add( 'success', asde_t( 'Movimientos asociados.' ) );
+				}
+				$lista = wp_validate_redirect( esc_url_raw( $this->post( 'volver' ) ), $this->url( 'banco' ) );
+				$this->redirect( Router::pide_modal() && ! is_wp_error( $r ) ? $this->url( 'banco', array( 'asociar' => 'hecho' ) ) : ( is_wp_error( $r ) ? $this->url( 'banco', array( 'asociar' => $id ) ) : $lista ) );
+				break;
+
+			case 'desasociar':
+				$id = (int) $this->post( 'mov' );
+				check_admin_referer( 'asde_banco_mov_' . $id );
+				$otro = BancoTable::desasociar( $id );
+				if ( $otro ) {
+					Logger::log( 'banco_desasociado', 'banco', (string) $id, array( 'con' => $otro ) );
+					Notices::add( 'success', asde_t( 'Asociación quitada.' ) );
+				}
+				$this->redirect( $volver );
 				break;
 
 			case 'tipo_crear':

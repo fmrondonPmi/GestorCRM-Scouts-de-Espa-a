@@ -37,6 +37,7 @@ use AsdeBalears\AreaPrivada\Domain\Persona;
 use AsdeBalears\AreaPrivada\Frontend\Pages;
 use AsdeBalears\AreaPrivada\Frontend\Views\AccesoView;
 use AsdeBalears\AreaPrivada\Frontend\Visibilidad;
+use AsdeBalears\AreaPrivada\Informes\Catalogo;
 use AsdeBalears\AreaPrivada\Informes\Generador;
 use AsdeBalears\AreaPrivada\Informes\Informe;
 use AsdeBalears\AreaPrivada\Install\Mantenimiento;
@@ -298,12 +299,13 @@ try {
 		$creados[] = $r->usuario->ID;
 		$uid_sct2  = $r->usuario->ID;
 
-		// Informes: un scouter solo ve su sección; DNI solo visión global; salud visible (solo lectura).
-		$inf  = new Informe( 0, 'Prueba', '', array( 'nombre', 'seccion', 'dni', 'alergias' ), array(), 10, false );
+		// Informes: un scouter solo ve su sección y, de ella, todos los datos (v0.58: también el DNI); salud visible (solo lectura).
+		$inf  = new Informe( 0, 'Prueba', '', array( 'nombre', 'seccion', 'dni', 'nacimiento', 'alergias' ), array(), 10, false );
 		$res  = ( new Generador( $crmc ) )->ejecutar( $inf, Ambito::de( get_userdata( $uid_sct2 ) ) );
 		$secs = array_values( array_unique( array_column( $res['filas'], 'seccion' ) ) );
 		$ok( array( 'Escultas' ) === $secs && 1 === count( $res['filas'] ), 'informe de scouter: solo socios de su sección (Eva, de Escultas)' );
-		$ok( ! isset( $res['columnas']['dni'] ) && isset( $res['columnas']['alergias'] ), 'scouter: sin DNI (solo visión global) y con salud (solo lectura)' );
+		$ok( isset( $res['columnas']['dni'], $res['columnas']['nacimiento'], $res['columnas']['alergias'] ), 'scouter: con DNI y fecha de nacimiento de los socios de su sección (v0.58) y con salud (solo lectura)' );
+		$ok( isset( Catalogo::permitidas( Ambito::de( get_userdata( $uid_sct2 ) ) )['dni'], Catalogo::permitidas( Ambito::de( get_userdata( $uid_sct2 ) ) )['nacimiento'] ), 'scouter: el DNI y la fecha de nacimiento salen en el editor para elegirlos' );
 
 		$r2 = $alta->alta_persona( $scout2->num_socio_asde, array( Roles::COORDINACION ), array( 'escultas' ) );
 		$ok( $r2->ok && in_array( Roles::COORDINACION, $r2->usuario->roles, true ), 'añadir Coordinación a un scouter existente', $r2 );

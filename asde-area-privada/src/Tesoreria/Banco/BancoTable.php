@@ -19,6 +19,8 @@ defined( 'ABSPATH' ) || exit;
  *   del ordenante, además, un HMAC para reconocerlo en pagos siguientes.
  * - Cada movimiento tiene una huella (HMAC de sus datos): al importar un fichero
  *   que se solapa con otro ya importado, lo repetido se ignora.
+ * - v0.58: dos movimientos se pueden asociar entre sí (asociado_id en los dos), p. ej. un gasto y el ingreso
+ *   que lo devuelve. Asociarlos no cambia su estado ni su tipo.
  */
 final class BancoTable {
 
@@ -92,6 +94,7 @@ final class BancoTable {
 				pago_id bigint(20) unsigned NULL,
 				tipo_id bigint(20) unsigned NULL,
 				evento_id bigint(20) unsigned NULL,
+				asociado_id bigint(20) unsigned NULL,
 				nota varchar(255) NOT NULL DEFAULT '',
 				revisado_por bigint(20) unsigned NOT NULL DEFAULT 0,
 				revisado_en datetime NULL,
@@ -101,6 +104,7 @@ final class BancoTable {
 				KEY grupo_fecha (grupo, fecha),
 				KEY grupo_estado (grupo, estado),
 				KEY grupo_tipo (grupo, tipo_id),
+				KEY grupo_asociado (grupo, asociado_id),
 				KEY ordenante_hmac (ordenante_hmac)
 			) $charset;"
 		);
@@ -461,6 +465,72 @@ final class BancoTable {
 		return $id ?: null;
 	}
 
+	// ---------------------------------------------------------------------
+	// Movimientos asociados entre sí (v0.58)
+	// ---------------------------------------------------------------------
+
+	/**
+	 * Asocia dos movimientos del grupo entre sí (p. ej. un gasto y el ingreso que lo devuelve). Cada uno solo puede
+	 * estar asociado con otro. Se hace con dos UPDATE condicionados a que sigan sin asociar: si otra petición asoció
+	 * uno de los dos entretanto, se deshace lo hecho y no queda ninguno a medias.
+	 *
+	 * @return true|\WP_Error
+	 */
+	public static function asociar( int $a, int $b ) {
+		global $wpdb;
+		$ma = self::obtener( $a );
+		$mb = self::obtener( $b );
+		if ( ! $ma || ! $mb || $a === $b ) {
+			return new \WP_Error( 'asde_banco_asociar', asde_t( 'Elige otro movimiento del banco del grupo.' ) );
+		}
+		if ( ! empty( $ma['asociado_id'] ) || ! empty( $mb['asociado_id'] ) ) {
+			return new \WP_Error( 'asde_banco_asociar', asde_t( 'Uno de los dos ya está asociado con otro movimiento: quita antes esa asociación.' ) );
+		}
+		$poner = static fn( int $id, int $con ) => (int) $wpdb->query( $wpdb->prepare( 'UPDATE %i SET asociado_id = %d WHERE id = %d AND grupo = %s AND asociado_id IS NULL', self::table(), $con, $id, Grupo::numero() ) ); // phpcs:ignore WordPress.DB
+		if ( 1 !== $poner( $a, $b ) ) {
+			return new \WP_Error( 'asde_banco_asociar', asde_t( 'Uno de los dos ya está asociado con otro movimiento: quita antes esa asociación.' ) );
+		}
+		if ( 1 !== $poner( $b, $a ) ) {
+			$wpdb->query( $wpdb->prepare( 'UPDATE %i SET asociado_id = NULL WHERE id = %d AND grupo = %s AND asociado_id = %d', self::table(), $a, Grupo::numero(), $b ) ); // phpcs:ignore WordPress.DB
+			return new \WP_Error( 'asde_banco_asociar', asde_t( 'Uno de los dos ya está asociado con otro movimiento: quita antes esa asociación.' ) );
+		}
+		return true;
+	}
+
+	/** Quita la asociación de un movimiento (y la del otro). Devuelve el id del otro, o 0 si no tenía. */
+	public static function desasociar( int $id ): int {
+		global $wpdb;
+		$m = self::obtener( $id );
+		if ( ! $m || empty( $m['asociado_id'] ) ) {
+			return 0;
+		}
+		$otro = (int) $m['asociado_id'];
+		$wpdb->query( $wpdb->prepare( 'UPDATE %i SET asociado_id = NULL WHERE grupo = %s AND ( ( id = %d AND asociado_id = %d ) OR ( id = %d AND asociado_id = %d ) )', self::table(), Grupo::numero(), $id, $otro, $otro, $id ) ); // phpcs:ignore WordPress.DB
+		return $otro;
+	}
+
+	/**
+	 * Movimientos con los que se puede asociar uno: los del grupo sin asociar, primero los de signo contrario y el
+	 * mismo importe (la devolución de un gasto), después los de signo contrario y, dentro de cada grupo, los de
+	 * fecha más cercana. Con $q, solo los que lo contienen (concepto, ordenante, referencias o nota).
+	 *
+	 * @return array[]
+	 */
+	public static function candidatos( array $m, string $q = '', int $limite = 100 ): array {
+		$cent  = (int) round( abs( (float) $m['importe'] ) * 100 );
+		$signo = $m['importe'] < 0 ? -1 : 1;
+		$dia   = (int) ( strtotime( $m['fecha'] . ' 12:00' ) / DAY_IN_SECONDS );
+		$lista = array_values( array_filter( self::movimientos( array( 'q' => $q ) ), static fn( $o ) => (int) $o['id'] !== (int) $m['id'] && empty( $o['asociado_id'] ) ) );
+		foreach ( $lista as &$o ) {
+			$contrario  = ( $o['importe'] < 0 ? -1 : 1 ) !== $signo;
+			$o['igual'] = $contrario && (int) round( abs( $o['importe'] ) * 100 ) === $cent;
+			$o['orden'] = sprintf( '%d%08d', $o['igual'] ? 0 : ( $contrario ? 1 : 2 ), abs( (int) ( strtotime( $o['fecha'] . ' 12:00' ) / DAY_IN_SECONDS ) - $dia ) );
+		}
+		unset( $o );
+		usort( $lista, static fn( $x, $y ) => strcmp( $x['orden'], $y['orden'] ) );
+		return array_slice( $lista, 0, $limite );
+	}
+
 	/** @return array{pendientes:int, pendientes_importe:float, saldo:?float, saldo_fecha:?string} */
 	public static function resumen(): array {
 		global $wpdb;
@@ -480,6 +550,7 @@ final class BancoTable {
 		unset( $r['concepto_enc'], $r['ordenante_enc'] );
 		$r['importe'] = (float) $r['importe'];
 		$r['tipo_id'] = null === ( $r['tipo_id'] ?? null ) ? null : (int) $r['tipo_id'];
+		$r['asociado_id'] = empty( $r['asociado_id'] ) ? null : (int) $r['asociado_id'];
 		$r['nota']    = (string) ( $r['nota'] ?? '' );
 		return $r;
 	}

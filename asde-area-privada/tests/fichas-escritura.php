@@ -213,13 +213,14 @@ $ok( PermisosFicha::EDITAR === $p->accion_rol( 'first_name' ) && PermisosFicha::
 $ok( PermisosFicha::VER === $p->accion_rol( 'numerosocio_c' ) && PermisosFicha::VER === $p->accion_rol( 'stic_relationship_type_c' ), 'nadie edita el nº Scouts de España ni la sección (vienen del CRM)' );
 $p = $perm( $u_scout, $nino );
 $ok( $p->puede_ver() && PermisosFicha::EDITAR === $p->accion_rol( 'phone_mobile' ) && PermisosFicha::EDITAR === $p->accion_rol( 'tutor1_email_c' ), 'scouter: edita contacto y tutores de su sección' );
-$ok( PermisosFicha::VER === $p->accion_rol( 'first_name' ) && $p->ve_salud() && PermisosFicha::VER === $p->accion_rol( 'alergias_c' ) && ! $p->ve_campo( 'stic_identification_number_c' ), 'scouter: datos personales y salud en solo lectura; sin DNI' );
+$ok( PermisosFicha::VER === $p->accion_rol( 'first_name' ) && $p->ve_salud() && PermisosFicha::VER === $p->accion_rol( 'alergias_c' ) && $p->ve_campo( 'stic_identification_number_c' ) && PermisosFicha::VER === $p->accion_rol( 'stic_identification_number_c' ), 'scouter: datos personales, DNI (v0.58: ve todos los datos de su sección) y salud, en solo lectura' );
 $ok( ! $perm( $u_scout, $otro )->puede_ver(), 'scouter: no ve fichas de otras secciones' );
 $p = $perm( $u_coord, $nino );
 $ok( PermisosFicha::EDITAR === $p->accion_rol( 'alergias_c' ) && PermisosFicha::VER === $p->accion_rol( 'alergiamedicamentos_c' ) && PermisosFicha::VER === $p->accion_rol( 'first_name' ), 'Coordinación: anota en los textos de salud; el resto, solo lectura' );
 $p = $perm( $u_tutor, $nino );
 $ok( $p->puede_ver() && PermisosFicha::PROPONER === $p->accion_rol( 'first_name' ) && PermisosFicha::PROPONER === $p->accion_rol( 'alergias_c' ) && PermisosFicha::VER === $p->accion_rol( 'cargoeducativo_c' ), 'familia: propone cambios en la ficha de su menor (no en la membresía)' );
 $ok( ! $perm( $u_tutor, $otro )->puede_ver(), 'familia: no ve otras fichas' );
+$ok( ! $perm( $u_tutor, $nino )->ve_campo( 'stic_identification_number_c' ), 'familia: sigue sin ver el DNI en la ficha (v0.58: solo se abre a los scouters)' );
 $p = $perm( $u_teen, $teen );
 $ok( $p->es_propia() && PermisosFicha::EDITAR === $p->accion_rol( 'email1' ) && PermisosFicha::EDITAR === $p->accion_rol( 'phone_mobile' ) && PermisosFicha::VER === $p->accion_rol( 'first_name' ) && ! $p->ve_salud(), 'participante: cambia su email y teléfonos; el resto, solo lectura' );
 list( $acc, $motivo ) = $perm( $u_secre, $nino )->accion( 'stic_relationship_type_c', array( 'tipo' => 'multienum' ) );

@@ -44,14 +44,24 @@ abstract class TesoreriaBaseView extends View {
 				$items['sepa'] = asde_t( 'Domiciliaciones' );
 			}
 		}
-		// v0.37: acceso directo a los informes de pagos (quien puede ver informes y los pagos).
+		// v0.37: acceso directo a los informes de pagos (quien puede ver informes y los pagos). v0.58 (petición del
+		// usuario): sin el enlace a «Todos los informes», que ya está en el menú.
 		$enlaces = array();
 		if ( current_user_can( 'asde_reports' ) && Catalogo::ve_pagos( Ambito::actual() ) ) {
 			$cuota = InformesTable::predefinido( 'Pagos de la cuota' );
 			if ( $cuota ) {
 				$enlaces[ asde_t( 'Informe de pagos' ) ] = $this->url( 'informes', array( 'informe' => $cuota->id ) );
 			}
-			$enlaces[ asde_t( 'Todos los informes' ) ] = $this->url( 'informes' );
+		}
+		// v0.58: el informe de todos los movimientos del banco, en Excel (quien ve el banco).
+		if ( current_user_can( self::CAP_CONFIG ) && Modulos::activo( Modulos::BANCO ) ) {
+			$enlaces[ asde_t( 'Informe del banco' ) ] = $this->url(
+				'banco',
+				array(
+					'formato'  => 'xlsx',
+					'_wpnonce' => wp_create_nonce( 'asde_banco_excel' ),
+				)
+			);
 		}
 		return $this->tpl(
 			'tesoreria/subnav',

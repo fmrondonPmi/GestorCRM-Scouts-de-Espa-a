@@ -14,6 +14,8 @@
  * @var array<int, array>                      $tipos     Tipos de gasto e ingreso (v0.20)
  * @var string                                 $url
  * @var string                                 $url_fam
+ * @var array<int, array>                      $asociados Movimientos con los que están asociados los de la página (v0.58)
+ * @var string                                 $url_excel Informe de los movimientos del filtro, en Excel (v0.58)
  */
 // phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound, WordPress.WP.GlobalVariablesOverride.Prohibited -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
 use AsdeBalears\AreaPrivada\Tesoreria\Banco\BancoTable;
@@ -32,6 +34,14 @@ $columnas = array(
 	'estado'   => asde_t( 'Estado' ),
 );
 $aqui    = add_query_arg( array() ); // Este listado, con sus filtros (para volver después de revisar).
+$asociados = $asociados ?? array();
+$asociar   = static fn( int $id ) => add_query_arg(
+	array(
+		'asociar' => $id,
+		'volver'  => rawurlencode( $aqui ),
+	),
+	$url
+);
 $revisar = static fn( array $ids ) => add_query_arg(
 	array(
 		'revisar' => '1',
@@ -106,7 +116,12 @@ $revisar = static fn( array $ids ) => add_query_arg(
 <section class="asde-card" data-asde-parcial="banco-movs" data-asde-inicio="abierto">
 	<header class="asde-card__header asde-card__header--split">
 		<h3 class="asde-card__title"><?php asde_e( 'Movimientos' ); ?></h3>
-		<span class="asde-actions"><a href="<?php echo esc_url( add_query_arg( 'tipos', '1', $url ) ); ?>"><?php asde_e( 'Tipos de gasto e ingreso' ); ?></a></span>
+		<span class="asde-actions">
+			<a href="<?php echo esc_url( add_query_arg( 'tipos', '1', $url ) ); ?>"><?php asde_e( 'Tipos de gasto e ingreso' ); ?></a>
+			<?php if ( ! empty( $url_excel ) ) : ?>
+				<a class="no-transition" href="<?php echo esc_url( $url_excel ); ?>" data-asde-descarga title="<?php echo esc_attr( asde_a( 'Los movimientos de este filtro (con «Todos», todos los registros)' ) ); ?>"><?php asde_e( 'Descargar Excel' ); ?></a>
+			<?php endif; ?>
+		</span>
 		<?php if ( $sugeridas && BancoTable::PENDIENTE === $filtros['estado'] ) : ?>
 			<?php $uno = 1 === (int) $sugeridas; ?>
 			<form method="post" data-asde-confirmar="<?php echo esc_attr( $uno ? asde_t( '¿Conciliar el ingreso que lleva la referencia de su familia en el concepto?' ) : sprintf( asde_t( '¿Conciliar los %d ingresos que llevan la referencia de su familia en el concepto?' ), (int) $sugeridas ) ); ?>">
@@ -204,6 +219,10 @@ $revisar = static fn( array $ids ) => add_query_arg(
 									<br><span class="asde-muted"><?php asde_e( 'Evento:' ); ?> <?php echo esc_html( $eventos[ (int) $m['evento_id'] ] ); ?></span>
 								<?php endif; ?>
 							<?php endif; ?>
+							<?php if ( ! empty( $m['asociado_id'] ) ) : ?>
+								<?php $otro = $asociados[ (int) $m['asociado_id'] ] ?? null; ?>
+								<br><span class="asde-banco-asociado">↔ <?php asde_e( 'Asociado con' ); ?> <?php echo $otro ? esc_html( wp_date( 'd/m/Y', strtotime( $otro['fecha'] . ' 12:00' ) ) . ' · ' . ( $otro['importe'] > 0 ? '+' : '' ) . Calculadora::euros( $otro['importe'] ) ) : '—'; ?></span>
+							<?php endif; ?>
 						</td>
 						<td data-label="<?php echo esc_attr( asde_a( 'Familia' ) ); ?>">
 							<?php if ( BancoTable::CONCILIADO === $m['estado'] || ( BancoTable::IGNORADO === $m['estado'] && ! empty( $m['familia_id'] ) ) ) : ?>
@@ -238,6 +257,16 @@ $revisar = static fn( array $ids ) => add_query_arg(
 								<?php endif; ?>
 							<?php endif; ?>
 							<div class="asde-actions">
+								<?php if ( empty( $m['asociado_id'] ) ) : ?>
+									<a href="<?php echo esc_url( $asociar( (int) $m['id'] ) ); ?>" data-asde-modal><?php asde_e( 'Asociar…' ); ?></a>
+								<?php else : ?>
+									<form method="post" data-asde-confirmar="<?php echo esc_attr( asde_t( '¿Quitar la asociación entre estos dos movimientos?' ) ); ?>">
+										<?php wp_nonce_field( 'asde_banco_mov_' . (int) $m['id'] ); ?>
+										<input type="hidden" name="asde_action" value="desasociar">
+										<input type="hidden" name="mov" value="<?php echo (int) $m['id']; ?>">
+										<button type="submit" class="asde-btn-link"><?php asde_e( 'Quitar asociación' ); ?></button>
+									</form>
+								<?php endif; ?>
 								<?php if ( BancoTable::PENDIENTE === $m['estado'] ) : ?>
 									<a href="<?php echo esc_url( $revisar( array( (int) $m['id'] ) ) ); ?>" data-asde-modal><?php echo $ingreso ? esc_html( asde_t( 'No es una cuota…' ) ) : esc_html( asde_t( 'Marcar revisado…' ) ); ?></a>
 								<?php else : ?>

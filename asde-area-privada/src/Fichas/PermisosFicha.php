@@ -71,7 +71,8 @@ final class PermisosFicha {
 		}
 		return match ( $def[2] ) {
 			'salud'  => $this->ve_salud(),
-			'global' => $this->a->vision_global(),
+			// v0.58: el DNI, también para el scouter en las fichas de su sección (las familias siguen sin verlo).
+			'global' => $this->a->vision_global() || $this->de_su_seccion(),
 			default  => true,
 		};
 	}

@@ -3163,3 +3163,12 @@ dialog.asde-modal--mini .asde-publicar h3 {
 	background: var(--asde-ok-bg);
 	color: var(--asde-ok-text);
 }
+
+/* v0.58 · Banco: movimientos asociados entre sí (un gasto y su devolución). */
+.asde-ap .asde-banco-asociado {
+	color: var(--asde-info-text);
+	font-size: 0.9em;
+}
+.asde-ap .asde-banco-asociar__igual td {
+	background: var(--asde-ok-bg);
+}
