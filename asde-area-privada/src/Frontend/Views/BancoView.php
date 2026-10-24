@@ -161,7 +161,7 @@ final class BancoView extends TesoreriaBaseView {
 		$filtros = self::filtros_excel( $_GET ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- el nonce se ha comprobado arriba
 		$movs    = BancoTable::movimientos( $filtros );
 		Logger::log( 'banco_exportado', 'banco', Grupo::numero(), array( 'movimientos' => count( $movs ) ) );
-		list( $cabecera, $filas, $opciones ) = self::informe_excel( $movs );
+		list( $cabecera, $filas, $opciones ) = self::informe_excel( $movs, self::nombres_familias( $movs ) );
 		Xlsx::descargar( 'banco-' . wp_date( 'Ymd' ) . '.xlsx', asde_t( 'Banco' ), $cabecera, $filas, $opciones );
 		exit;
 	}
@@ -181,13 +181,47 @@ final class BancoView extends TesoreriaBaseView {
 	}
 
 	/**
-	 * Cabecera, filas y formato del Excel del banco: una fila por movimiento, de más antiguo a más nuevo, con su
-	 * estado, tipo, familia (su nº), evento, nota y el movimiento con el que está asociado; al final, los totales.
+	 * v0.58.1 (petición del usuario): los nombres de los asociados de cada familia que sale en los movimientos, leídos
+	 * del CRM en una sola consulta (de la instantánea). Si el CRM no responde, el Excel sale solo con el nº de familia.
 	 *
-	 * @param array[] $movs De BancoTable::movimientos().
+	 * @param array[] $movs
+	 * @return array<int, string> id de familia => «Nombre Apellidos, Nombre Apellidos»
+	 */
+	public static function nombres_familias( array $movs ): array {
+		$ids      = array_flip( array_filter( array_map( static fn( $m ) => (int) ( $m['familia_id'] ?? 0 ), $movs ) ) );
+		$familias = array_intersect_key( FamiliasTable::todas(), $ids );
+		$repo     = $familias ? PersonaRepository::make() : null;
+		if ( ! $repo ) {
+			return array();
+		}
+		try {
+			$personas = $repo->obtener_varias( array_merge( ...array_values( array_map( static fn( $f ) => $f['miembros'], $familias ) ) ) );
+		} catch ( CrmException $e ) {
+			return array();
+		}
+		$out = array();
+		foreach ( $familias as $id => $f ) {
+			$nombres = array();
+			foreach ( $f['miembros'] as $n ) {
+				if ( isset( $personas[ $n ] ) ) {
+					$nombres[] = $personas[ $n ]->nombre_completo();
+				}
+			}
+			$out[ (int) $id ] = implode( ', ', $nombres );
+		}
+		return $out;
+	}
+
+	/**
+	 * Cabecera, filas y formato del Excel del banco: una fila por movimiento, de más antiguo a más nuevo, con su
+	 * estado, tipo, familia (su nº y, desde la v0.58.1, los nombres de sus asociados), evento, nota y el movimiento
+	 * con el que está asociado; al final, los totales.
+	 *
+	 * @param array[]            $movs    De BancoTable::movimientos().
+	 * @param array<int, string> $nombres De nombres_familias().
 	 * @return array{0: string[], 1: list<array>, 2: array}
 	 */
-	public static function informe_excel( array $movs ): array {
+	public static function informe_excel( array $movs, array $nombres = array() ): array {
 		$tipos    = TiposMovimiento::todos();
 		$familias = array_column( FamiliasTable::todas(), 'numero', 'id' );
 		$eventos  = \AsdeBalears\AreaPrivada\Domain\Modulos::activo( \AsdeBalears\AreaPrivada\Domain\Modulos::EVENTOS ) ? array_column( \AsdeBalears\AreaPrivada\Eventos\EventosTable::todos(), 'nombre', 'id' ) : array();
@@ -208,7 +242,7 @@ final class BancoView extends TesoreriaBaseView {
 				round( (float) $m['importe'], 2 ),
 				asde_t( BancoTable::ESTADOS[ $m['estado'] ] ?? $m['estado'] ),
 				BancoTable::IGNORADO === $m['estado'] ? ( isset( $tipos[ (int) $m['tipo_id'] ] ) ? $tipos[ (int) $m['tipo_id'] ]['nombre'] : asde_t( 'Sin tipo' ) ) : '',
-				! empty( $m['familia_id'] ) ? (string) ( $familias[ (int) $m['familia_id'] ] ?? '' ) : '',
+				! empty( $m['familia_id'] ) ? trim( (string) ( $familias[ (int) $m['familia_id'] ] ?? '' ) . ( '' !== ( $nombres[ (int) $m['familia_id'] ] ?? '' ) ? ' · ' . $nombres[ (int) $m['familia_id'] ] : '' ) ) : '',
 				! empty( $m['evento_id'] ) ? (string) ( $eventos[ (int) $m['evento_id'] ] ?? '' ) : '',
 				$m['nota'],
 				$otro ? $fecha( $otro['fecha'] ) . ' · ' . Calculadora::euros( (float) $otro['importe'] ) : '',

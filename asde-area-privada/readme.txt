@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.58.0
+Stable tag: 0.58.1
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -61,6 +61,10 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.58.1 =
+* Treasury: families with no member with an active membership are also hidden from the payments control screen (list, summary and totals), not only from its Excel. They stay in "Families".
+* Bank Excel: the "Family" column now shows the family number and the names of its members.
 
 = 0.58.0 =
 * Treasury: the payments control Excel no longer lists families with no member with an active membership. The "All reports" shortcut is removed from the treasury bar and a new "Bank report" shortcut downloads every bank movement in Excel.
@@ -266,6 +270,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * CRM registrations tested end to end in a browser against the simulated SinergiaCRM API (development only).
 
 == Upgrade Notice ==
+
+= 0.58.1 =
+Payments control without families with no active members; bank Excel with family member names. No database changes.
 
 = 0.58.0 =
 Bank report in Excel, linked bank movements and report changes. Database change: the bank movements table gets a new column (linked movement), added automatically on update.

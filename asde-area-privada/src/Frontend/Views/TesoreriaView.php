@@ -112,8 +112,20 @@ final class TesoreriaView extends TesoreriaBaseView {
 		return array( $filas, $personas );
 	}
 
+	/**
+	 * v0.58.1 (petición del usuario): fuera del control de pagos (pantalla y Excel) las familias sin ningún asociado
+	 * con membresía activa (todos dados de baja o fuera del grupo). Siguen en «Familias», para revisarlas o eliminarlas.
+	 *
+	 * @param array<int, array{familia:array, calc:array}> $filas De estados().
+	 * @return array<int, array{familia:array, calc:array}>
+	 */
+	public static function con_activos( array $filas ): array {
+		return array_filter( $filas, static fn( $f ) => $f['calc']['pagan'] || $f['calc']['no_pagan'] );
+	}
+
 	private function control( PersonaRepository $repo, string $ronda ): string {
-		list( $filas, $personas ) = self::estados( $repo, $ronda );
+		list( $todas, $personas ) = self::estados( $repo, $ronda );
+		$filas                    = self::con_activos( $todas );
 		$cfg                      = Config::de( $ronda );
 
 		// Resumen.
@@ -145,10 +157,11 @@ final class TesoreriaView extends TesoreriaBaseView {
 		$bajas = array();
 		foreach ( Altas::bajas_recientes() as $b ) {
 			$id = $mapa[ $b['socio'] ] ?? 0;
-			if ( $id && isset( $filas[ $id ] ) ) {
+			// Con todas las familias: la baja que deja a una sin asociados activos también se avisa (v0.58.1).
+			if ( $id && isset( $todas[ $id ] ) ) {
 				$bajas[] = $b + array(
 					'familia' => $id,
-					'numero'  => (string) $filas[ $id ]['familia']['numero'],
+					'numero'  => (string) $todas[ $id ]['familia']['numero'],
 					'nombre'  => isset( $personas[ $b['socio'] ] ) ? $personas[ $b['socio'] ]->nombre_completo() : $b['socio'],
 				);
 			}
@@ -319,11 +332,8 @@ final class TesoreriaView extends TesoreriaBaseView {
 	public static function datos_excel( array $filas, array $personas ): array {
 		$datos = array();
 		$suma  = array_fill_keys( array( 'hijos', 'cuota', 'ajustes', 'a_pagar', 'pagado', 'pendiente' ), 0.0 );
-		foreach ( $filas as $f ) {
+		foreach ( self::con_activos( $filas ) as $f ) {
 			$c = $f['calc'];
-			if ( ! $c['pagan'] && ! $c['no_pagan'] ) {
-				continue;
-			}
 			$nombres = array_map( static fn( $n ) => isset( $personas[ $n ] ) ? $personas[ $n ]->nombre_completo() : $n, $f['familia']['miembros'] );
 			$datos[] = array(
 				(string) $f['familia']['numero'],

@@ -76,6 +76,9 @@ try {
 	$nums = array_column( $datos, 0 );
 	$ok( array( 'F1', 'F3' ) === $nums, 'fuera la familia F2 (su único miembro ya no tiene membresía activa); F3 sigue (un scouter activo, aunque no pague)' );
 	$ok( $igual( 140, $suma['a_pagar'] ) && $igual( 140, $suma['pagado'] ) && 1 === (int) $suma['hijos'], 'los totales solo suman las familias que salen' );
+	$ok( array( 1, 3 ) === array_keys( TesoreriaView::con_activos( $filas ) ), 'v0.58.1: la pantalla del control de pagos también las quita (con_activos)' );
+	$ctl = file_get_contents( dirname( __DIR__ ) . '/src/Frontend/Views/TesoreriaView.php' );
+	$ok( (bool) preg_match( '/function control\(.*?\n.*?self::estados\(.*?\n\s*\$filas\s*= self::con_activos\( \$todas \);/s', $ctl ), 'la pantalla usa con_activos() justo después de leer los estados (y el aviso de bajas, todas las familias)' );
 
 	echo "\n== B · Informes: el scouter ve el DNI (v0.58) ==\n";
 	$cols = Catalogo::columnas();
@@ -164,6 +167,11 @@ try {
 	$ok( false !== $col_imp && $igual( -25, $filas_x[0][ $col_imp ] ) && 'euros' === $op['tipos'][ $col_imp ], 'el importe es un número con formato de moneda' );
 	$ok( false !== $col_aso && str_contains( $filas_x[0][ $col_aso ], '05/03/2099' ) && str_contains( $filas_x[3][ $col_aso ], '01/03/2099' ) && '' === $filas_x[1][ $col_aso ], 'la columna «Asociado con» dice la fecha y el importe del otro (vacía si no tiene)' );
 	$ok( $igual( 0, $op['totales'][ $col_imp ] ) && str_contains( $op['subtitulo'], '35,00' ), 'totales: la suma de los importes (25 − 25 + 10 − 10 = 0) e ingresos y gastos en el subtítulo' );
+	$wpdb->update( BancoTable::table(), array( 'familia_id' => 987654321 ), array( 'id' => $otro ) );
+	list( , $con_nom ) = BancoView::informe_excel( BancoTable::movimientos( array( 'ids' => $ids_mov ) ), array( 987654321 => 'Ana Prueba Sanz, Leo Prueba Sanz' ) );
+	$col_fam = array_search( 'Familia', $cab, true );
+	$ok( false !== $col_fam && str_contains( $con_nom[1][ $col_fam ], 'Ana Prueba Sanz, Leo Prueba Sanz' ), 'v0.58.1: en la columna «Familia», los nombres de sus asociados' );
+	$ok( array() === BancoView::nombres_familias( array( array( 'familia_id' => null ) ) ), 'sin familias en los movimientos, no se consulta nada' );
 	$f = BancoView::filtros_excel( array( 'estado' => 'inventado', 'tipo' => 'gastos', 'clase' => '12', 'q' => ' <b>hola</b> ' ) );
 	$ok( '' === $f['estado'] && 'gastos' === $f['tipo'] && '12' === $f['clase'] && 'hola' === $f['q'], 'los filtros del Excel se sanean (un estado que no existe = todos)' );
 	$ok( 4 === count( BancoTable::movimientos( array( 'q' => 'prueba-v058' ) ) ), 'sin estado, el informe trae todos los registros (pendientes y revisados)' );
