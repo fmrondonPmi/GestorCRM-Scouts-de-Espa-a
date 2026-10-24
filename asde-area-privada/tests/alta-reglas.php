@@ -1,23 +1,34 @@
 <?php
 /**
- * Pruebas del área privada (entorno LOCAL). Ejecutar desde app/public del site Local:
+ * Pruebas de las reglas de alta y acceso (entorno LOCAL). Ejecutar desde app/public del site Local:
  *
  *   wp eval-file wp-content/plugins/asde-area-privada/tests/alta-reglas.php
  *
  * - Parte 1 sin CRM: normalización y numeración de socios.
- * - Parte 2 contra el CRM real (solo lectura): alta, cuentas familiares, ámbito,
- *   mayoría de edad, informes y recuperación de contraseña.
- * - Los emails se leen del CRM pero van a Mailpit (mu-plugin local-mailpit.php).
- *   Al terminar se borran SOLO los emails de la prueba (no los que ya hubiera),
- *   sus usuarios, reservas de número y su registro de emails.
- * - Necesita Mailpit en :10006.
+ * - Parte 1b sin CRM: cuotas, coste federativo y estado de una familia.
+ * - Parte 2 con el CRM simulado: alta, cuentas familiares, ámbito, mayoría de edad, informes y recuperación de
+ *   contraseña.
+ * - Parte 3: acceso socios (grupo, contraseña, 2FA de Wordfence, límite de intentos), visibilidad entre grupos y de
+ *   las páginas privadas.
+ * Doc 60: hasta ahora la parte 2 leía el CRM REAL (fichas de verdad del grupo 684), creaba cuentas de personas reales
+ * y les mandaba la invitación (a Mailpit); además cambiaba la opción de grupos sin restaurarla en un finally. Ahora
+ * trabaja en un grupo ficticio (996, añadido solo en memoria con el filtro pre_option_asde_ap_grupos) con fichas
+ * inventadas del CRM simulado, captura los emails (no sale ninguno) y guarda las cachés, los intentos y la sesión del
+ * CRM en la memoria del proceso. Al terminar borra sus usuarios, familias, emails registrados y registro y devuelve la
+ * tabla de números como estaba.
  */
 defined( 'ABSPATH' ) || exit;
 
+require_once __DIR__ . '/lib/CrmSimulado.php';
+require_once ABSPATH . 'wp-admin/includes/user.php';
+
+use AsdeBalears\AreaPrivada\Audit\Logger;
 use AsdeBalears\AreaPrivada\Auth\AccessHooks;
 use AsdeBalears\AreaPrivada\Auth\Ambito;
 use AsdeBalears\AreaPrivada\Auth\Intentos;
 use AsdeBalears\AreaPrivada\Crm\ClientFactory;
+use AsdeBalears\AreaPrivada\Crm\Crypto;
+use AsdeBalears\AreaPrivada\Crm\Escritura;
 use AsdeBalears\AreaPrivada\Crm\PersonaRepository;
 use AsdeBalears\AreaPrivada\Domain\Grupo;
 use AsdeBalears\AreaPrivada\Domain\Grupos;
@@ -39,216 +50,300 @@ use AsdeBalears\AreaPrivada\Tesoreria\MovimientosTable;
 use AsdeBalears\AreaPrivada\Tesoreria\Sugerencias;
 use AsdeBalears\AreaPrivada\Usuarios\AltaService;
 use AsdeBalears\AreaPrivada\Usuarios\Invitacion;
+use AsdeBalears\AreaPrivada\Usuarios\RegistroEmails;
 use AsdeBalears\AreaPrivada\Usuarios\Usuarios;
 
-require_once ABSPATH . 'wp-admin/includes/user.php';
+global $wpdb;
 
 $fails = 0;
 $ok    = function ( $cond, string $label, $r = null ) use ( &$fails ) {
 	if ( ! $cond ) {
 		++$fails;
 	}
-	// Los mensajes de error pueden llevar nombres del CRM: solo se muestran si la comprobación falla.
 	echo ( $cond ? 'OK   ' : 'FAIL ' ), $label, ( ! $cond && $r && isset( $r->ok ) && ! $r->ok ) ? '  → ' . implode( ' | ', $r->errores ) : '', "\n";
 };
-$mailpit = static fn() => (int) ( json_decode( wp_remote_retrieve_body( wp_remote_get( 'http://localhost:10006/api/v1/messages?limit=1' ) ), true )['total'] ?? 0 );
-// Ids de los emails que ya había en Mailpit: al terminar solo se borran los de la prueba.
-$mailpit_ids = static fn() => array_column( (array) ( json_decode( wp_remote_retrieve_body( wp_remote_get( 'http://localhost:10006/api/v1/messages?limit=1000' ) ), true )['messages'] ?? array() ), 'ID' );
-$mailpit_antes = $mailpit_ids();
 
-// ---------------------------------------------------------------------------
-echo "== Parte 1 · Números de socio (sin CRM) ==\n";
-$ok( '76840390' === NumeroSocio::normalizar( '76840390', '684' ), 'formato correcto se mantiene' );
-$ok( '076840390' === NumeroSocio::normalizar( '076840390', '684' ), 'con la provincia completa (07 + 684 + 0390) se mantiene, con su 0 inicial' );
-$ok( '076840390' === NumeroSocio::normalizar( '6840390', '684' ), 'sin la provincia → se añade (076840390)' );
-$ok( '76840390' === NumeroSocio::normalizar( ' 7684-0390 ', '684' ), 'espacios y guiones → se limpian' );
-$ok( null === NumeroSocio::normalizar( '7684036', '684' ), '768+4 dígitos (ambiguo) → inválido' );
-$ok( null === NumeroSocio::normalizar( '76850390', '684' ), 'otro grupo → inválido' );
-$ok( '76840390T' === NumeroSocio::usuario_tutor( '76840390' ) && '76840390' === NumeroSocio::socio_de_usuario_tutor( '76840390t' ), 'usuario de cuenta familiar' );
-
-$p = static fn( string $asde, string $local, string $secc = '^Scouts^' ) => Persona::from_crm(
-	array(
-		'id'     => wp_generate_uuid4(),
-		'fields' => array(
-			'numerosocio_c'             => $asde,
-			'numsocioantiguo_enficha_c' => $local,
-			'stic_relationship_type_c'  => $secc,
-		),
-	)
-);
-$n  = new Numeracion( PersonaRepository::make() );
-$an = $n->analizar( array( $p( '1', '76840100' ), $p( '2', '6840101' ), $p( '3', '76840102' ), $p( '4', '76840102' ), $p( '5', '768401' ), $p( '6', '' ) ), false );
-$ok( Numeracion::OK === $an['1']['estado'], 'estado OK' );
-$ok( Numeracion::CORREGIDO === $an['2']['estado'] && '076840101' === $an['2']['numero'], 'estado CORREGIDO (sin la provincia)' );
-$ok( Numeracion::DUPLICADO === $an['3']['estado'] && Numeracion::DUPLICADO === $an['4']['estado'], 'estado DUPLICADO en ambas fichas' );
-$ok( Numeracion::INVALIDO === $an['5']['estado'], 'estado INVALIDO' );
-$ok( Numeracion::FALTA === $an['6']['estado'], 'estado FALTA' );
-$sig = SociosTable::siguiente( '684', array( '76840391', '76840100' ) );
-$ok( 9 === strlen( $sig ) && str_starts_with( $sig, '07684' ) && $sig >= '076840392', "siguiente número = máximo + 1, con la provincia completa ($sig)" );
-
-// ---------------------------------------------------------------------------
-echo "\n== Parte 1b · Tesorería (sin CRM) ==\n";
-$cfg = Config::defaults_ronda( '2026-2027' );
-// Importes de Scouts de Balears 2026 (la prueba no depende de la organización configurada).
-$cfg['federacion'] = \AsdeBalears\AreaPrivada\Domain\Organizacion::sanear_federacion(
-	array(
-		'cuota_asociativa' => 17,
-		'seguro_promedio'  => 3,
-		'edad_corte'       => 14,
-		'primas'           => array( 'menores' => 1.92, 'mayores' => 2.44, 'scouters' => 6.06 ),
-	)
-) + array( 'anio_primas' => 2026 );
-$tot = array_map( static fn( $h ) => Config::cuota( $cfg, $h )['total'], array( 1, 2, 3, 4, 5 ) );
-$ok( array( 140.0, 258.0, 332.0, 362.0, 392.0 ) === $tot, 'cuotas 1-5 hijos = 140 / 258 / 332 / 362 / 392 € (' . implode( ' / ', $tot ) . ')' );
-$ok( 242.0 === Config::anualidad( $cfg, 7 ), 'anualidad con tope de 242 € a partir del 3er hijo' );
-
-$mk = static function ( string $asde, string $secc, string $nac ) {
-	return Persona::from_crm( array( 'id' => wp_generate_uuid4(), 'fields' => array( 'numerosocio_c' => $asde, 'stic_relationship_type_c' => $secc, 'birthdate' => $nac ) ) );
-};
-$fed = array();
-for ( $i = 0; $i < 46; $i++ ) {
-	$fed[] = $mk( "m$i", '^Lobatos^', '2016-01-01' );
+// --- Restos y grupo ficticio ---------------------------------------------------
+if ( Grupos::por_numero( '996' ) ) {
+	exit( "El grupo 996 existe en el Local: esta prueba lo usa como grupo ficticio. Revisa de dónde ha salido.\n" );
 }
-for ( $i = 0; $i < 42; $i++ ) {
-	$fed[] = $mk( "M$i", '^Escultas^', '2010-01-01' );
+foreach ( get_users( array( 'search' => 'prueba-reglas-*', 'search_columns' => array( 'user_login' ) ) ) as $viejo ) {
+	exit( 'Ya existe el usuario ' . $viejo->user_login . " (¿una ejecución anterior interrumpida?). Bórralo antes de repetir la prueba.\n" );
 }
-for ( $i = 0; $i < 22; $i++ ) {
-	$fed[] = $mk( "s$i", '^Scouters^', '1990-01-01' );
-}
-$cf = Calculadora::coste_federativo( $fed, $cfg );
-$ok( 110 === $cf['total_socios'] && 46 === $cf['categorias']['menores']['n'] && 42 === $cf['categorias']['mayores']['n'] && 22 === $cf['categorias']['scouters']['n'], 'coste federativo: 46 menores / 42 mayores de 14 / 22 scouters' );
-$ok( 88.32 === $cf['categorias']['menores']['importe'] && 102.48 === $cf['categorias']['mayores']['importe'] && 133.32 === $cf['categorias']['scouters']['importe'], 'primas 2026: 88,32 + 102,48 + 133,32 €' );
-$ok( 324.12 === $cf['seguro_tabla'] && 1870.0 === $cf['cuota_asociativa'] && 330.0 === $cf['seguro_promedio'] && 2194.12 === $cf['total_tabla'] && 2200.0 === $cf['total_promedio'], 'total: 1.870 € cuota + 324,12 € seguro (tabla) / 330 € (promedio)' );
-
-// Estado de una familia con 2 hijos y un padre scouter; 2 plazos (uno vencido).
-$fam_p = array( 'h1' => $mk( 'h1', '^Castores^', '2019-05-01' ), 'h2' => $mk( 'h2', '^Scouts^', '2013-05-01' ), 'pa' => $mk( 'pa', '^Scouters^', '1985-05-01' ), 'ex' => $mk( 'ex', '^^', '2012-05-01' ) );
-$cfg2  = $cfg;
-$cfg2['plazos'] = array( array( 'nombre' => '1º', 'fecha' => '2026-01-10', 'porcentaje' => 50 ), array( 'nombre' => '2º', 'fecha' => '2099-01-10', 'porcentaje' => 50 ) );
-$fx    = array( 'id' => 1, 'numero' => 'F684999', 'miembros' => array( 'h1', 'h2', 'pa', 'ex' ) );
-$e1    = Calculadora::familia( $fx, $fam_p, $cfg2, array() );
-$ok( array( 'h1', 'h2' ) === $e1['pagan'] && array( 'pa' ) === $e1['no_pagan'] && array( 'ex' ) === $e1['fuera'] && 258.0 === $e1['a_pagar'], 'familia: pagan 2 hijos (258 €); el padre scouter no paga; sin membresía no cuenta' );
-$ok( Calculadora::ATRASADO === $e1['estado'], 'sin pagos y con un plazo vencido → con plazos vencidos' );
-$ok( Calculadora::PARCIAL === Calculadora::familia( $fx, $fam_p, $cfg2, array( 'pagado' => 129.0 ) )['estado'], 'pagado el 1er plazo (129 €) → pago parcial' );
-$ok( Calculadora::PAGADO === Calculadora::familia( $fx, $fam_p, $cfg2, array( 'pagado' => 200.0, 'ajustes' => -58.0 ) )['estado'], 'con beca de 58 € y 200 € pagados → pagado' );
-$sug = Sugerencias::por_email(
-	array(
-		Persona::from_crm( array( 'id' => '1', 'fields' => array( 'numerosocio_c' => 'a1', 'stic_relationship_type_c' => '^Lobatos^', 'email1' => 'fam@example.invalid' ) ) ),
-		Persona::from_crm( array( 'id' => '2', 'fields' => array( 'numerosocio_c' => 'a2', 'stic_relationship_type_c' => '^Scouts^', 'tutor1_email_c' => 'FAM@example.invalid' ) ) ),
-		Persona::from_crm( array( 'id' => '3', 'fields' => array( 'numerosocio_c' => 'a3', 'stic_relationship_type_c' => '^Castores^', 'email1' => 'otra@example.invalid' ) ) ),
-	),
-	array(),
-	$cfg['secciones_pagan']
-);
-$ok( 1 === count( $sug ) && 2 === count( $sug[0] ), 'sugerencias: agrupa a los que comparten email (propio o de tutor)' );
-
-// ---------------------------------------------------------------------------
-echo "\n== Parte 2 · Contra el CRM (solo lectura) ==\n";
-$repo = PersonaRepository::make();
-$alta = AltaService::make();
-$crm  = ClientFactory::reader();
-$num  = $alta->numeracion();
-$num->analizar_todo( true );
-
-// Elegir fichas reales para las pruebas (sin imprimir datos personales).
-$activas = $repo->todas( true );
-$elige   = function ( callable $cond ) use ( $activas, $num ) {
-	foreach ( $activas as $x ) {
-		$e = $num->de( $x )['estado'];
-		if ( in_array( $e, array( Numeracion::OK, Numeracion::CORREGIDO ), true ) && $x->email && ! Usuarios::por_socio( $x->num_socio_asde ) && ! Usuarios::tutores_de( $x->num_socio_asde ) && $cond( $x ) ) {
-			return $x;
-		}
+foreach ( array( '990015', '990016', '990017', '990019' ) as $n ) {
+	if ( Usuarios::por_socio( $n ) || Usuarios::tutores_de( $n ) ) {
+		exit( "Ya hay una cuenta de la ficha inventada $n (¿una ejecución anterior interrumpida?). Bórrala antes de repetir la prueba.\n" );
 	}
-	return null;
-};
-$teen    = $elige( fn( $x ) => $x->es_participante() && $x->edad() >= 14 && $x->edad() < 18 );
-$scouter = $elige( fn( $x ) => in_array( 'scouters', $x->secciones, true ) );
-$scout2  = $elige( fn( $x ) => in_array( 'scouters', $x->secciones, true ) && $scouter && $x->num_socio_asde !== $scouter->num_socio_asde );
-$nino    = $elige( fn( $x ) => $x->es_participante() && null !== $x->edad() && $x->edad() < 14 );
-$adulto  = $elige( fn( $x ) => $x->es_participante() && $x->edad() >= 18 );
-$ok( $teen && $scouter && $scout2 && $nino, 'fichas de prueba encontradas (participante 14-17, 2 scouters, menor de 14)' );
-if ( ! ( $teen && $scouter && $scout2 && $nino ) ) {
-	exit( "\nNo se puede continuar.\n" );
 }
+wp_set_current_user( 0 );
+
+$max_id        = static fn( string $t ) => (int) $wpdb->get_var( "SELECT COALESCE(MAX(id), 0) FROM $t" ); // phpcs:ignore WordPress.DB
+$log_antes     = $max_id( Logger::table() );
+$emails_antes  = $max_id( RegistroEmails::table() );
+$fam_antes     = $max_id( FamiliasTable::table() );
+$mov_antes     = $max_id( MovimientosTable::table() );
+$socios_antes  = array_column( (array) $wpdb->get_results( 'SELECT * FROM ' . SociosTable::table(), ARRAY_A ), null, 'num_socio_asde' ); // phpcs:ignore WordPress.DB
+$ip_antes      = $_SERVER['REMOTE_ADDR'] ?? null;
+$cache_externa = wp_using_ext_object_cache( true ); // Cachés, intentos, numeración y sesión del CRM: solo en memoria.
+$cortadas      = 0;
+$cortar_crm    = static function ( $pre, $args, $url ) use ( &$cortadas ) {
+	if ( false === $pre && str_contains( (string) $url, '/rest.php' ) ) {
+		++$cortadas;
+		return new WP_Error( 'prueba', 'CRM real cortado durante la prueba' );
+	}
+	return $pre;
+};
+add_filter( 'pre_http_request', $cortar_crm, 2, 3 );
+$capturados = array();
+$captura    = static function ( $pre, $atts ) use ( &$capturados ) {
+	$capturados[] = $atts;
+	return true;
+};
+add_filter( 'pre_wp_mail', $captura, 10, 2 );
+add_filter( 'send_auth_cookies', '__return_false' );
+
+$grupos_orig = get_option( 'asde_ap_grupos' );
+$mas_grupos  = static fn() => (array) $grupos_orig + array(
+	'996' => array(
+		'nombre'    => 'Grupo de prueba 996',
+		'usuario'   => 'prueba-996',
+		'clave_enc' => Crypto::encrypt( 'clave-de-prueba' ),
+		'crm_id'    => 'sg-prueba-996',
+	),
+);
+add_filter( 'pre_option_asde_ap_grupos', $mas_grupos );
+Grupos::olvidar();
+
+// Fichas inventadas del grupo 996 (nº local 7 + 996 + 4 cifras). Edades relativas a hoy.
+$anio = (int) wp_date( 'Y' );
+$P    = array( 'Asde_Prueba_Crm', 'persona' );
+$crm  = new Asde_Prueba_Crm(
+	array(
+		$P( 15, 'Tea', 'Reglas Joven', ( $anio - 15 ) . '-01-15', 'Scouts', array( 'numsocioantiguo_enficha_c' => '79960015', 'email1' => 'tea.joven@example.invalid', 'stic_identification_number_c' => '00000015T' ) ),
+		$P( 16, 'Sara', 'Reglas Scouter', '1990-03-03', 'Scouters', array( 'numsocioantiguo_enficha_c' => '79960016', 'email1' => 'sara.scouter@example.invalid', 'stic_identification_number_c' => '00000016R' ) ),
+		$P( 17, 'Tomás', 'Reglas Monitor', '1992-04-04', 'Scouters', array( 'numsocioantiguo_enficha_c' => '79960017', 'email1' => 'tomas.monitor@example.invalid', 'stic_identification_number_c' => '00000017W' ) ),
+		$P( 18, 'Eva', 'Reglas Esculta', ( $anio - 15 ) . '-06-06', 'Escultas', array( 'numsocioantiguo_enficha_c' => '79960018', 'email1' => 'eva.esculta@example.invalid', 'stic_identification_number_c' => '00000018A' ) ),
+		$P( 19, 'Nico', 'Reglas Peque', ( $anio - 9 ) . '-02-02', 'Lobatos', array( 'numsocioantiguo_enficha_c' => '79960019', 'email1' => 'familia.nico@example.invalid', 'tutor1_email_c' => 'familia.nico@example.invalid' ) ),
+		$P( 20, 'Ada', 'Reglas Mayor', ( $anio - 20 ) . '-07-07', 'Rovers', array( 'numsocioantiguo_enficha_c' => '79960020', 'email1' => 'ada.mayor@example.invalid' ) ),
+	),
+	'sg-prueba-996'
+);
+$crm->numgrupo = '996';
+$g996          = Grupos::por_numero( '996' );
+Grupo::forzar( $g996 );
+$crm->activar();
+Escritura::usar_para_pruebas( $crm );
 
 $creados = array();
-$mail0   = $mailpit();
-wp_set_current_user( 10 ); // prueba-secretaria (asde_manage_users)
+$u_secre = wp_insert_user(
+	array(
+		'user_login' => 'prueba-reglas-secre',
+		'user_email' => 'prueba-reglas-secre@example.invalid',
+		'user_pass'  => wp_generate_password( 24 ),
+		'role'       => Roles::SECRETARIA,
+	)
+);
+update_user_meta( $u_secre, Usuarios::META_GRUPO, '996' );
+update_user_meta( $u_secre, Usuarios::META_ESTADO, Usuarios::ACTIVO );
+$creados[] = $u_secre;
 
-// Participante 14-17.
-$r = $alta->alta_persona( $teen->num_socio_asde, array( Roles::PARTICIPANTE ) );
-$ok( $r->ok && 'creado' === $r->accion && $r->invitacion_enviada, 'participante 14-17 creado + invitación', $r );
-if ( $r->ok ) {
-	$u         = $r->usuario;
-	$creados[] = $u->ID;
-	$ok( $u->user_login === $num->de( $teen )['numero'], 'usuario = nº de socio local' );
-	$ok( '' === $u->user_email && '' === $u->first_name && '' === $u->last_name && $u->display_name === $u->user_login, 'sin datos personales en WordPress (sin email ni nombre)' );
-	$ok( Usuarios::socio( $u->ID ) === $teen->num_socio_asde && array( 'asde' => $teen->num_socio_asde, 'campo' => 'email1' ) === Usuarios::email_origen( $u->ID ), 'vínculo por nº Scouts de España + origen del email' );
-	$ok( Ambito::de( $u )->puede_acceder() && array( Roles::PARTICIPANTE ) === Ambito::de( $u )->roles_vigentes(), 'ámbito: el participante puede entrar' );
-}
-$r = $alta->alta_persona( $nino->num_socio_asde, array( Roles::PARTICIPANTE ) );
-$ok( ! $r->ok, 'menor de 14 no puede tener cuenta propia', $r );
+try {
+	// ---------------------------------------------------------------------------
+	echo "== Parte 1 · Números de socio (sin CRM) ==\n";
+	$ok( '76840390' === NumeroSocio::normalizar( '76840390', '684' ), 'formato correcto se mantiene' );
+	$ok( '076840390' === NumeroSocio::normalizar( '076840390', '684' ), 'con la provincia completa (07 + 684 + 0390) se mantiene, con su 0 inicial' );
+	$ok( '076840390' === NumeroSocio::normalizar( '6840390', '684' ), 'sin la provincia → se añade (076840390)' );
+	$ok( '76840390' === NumeroSocio::normalizar( ' 7684-0390 ', '684' ), 'espacios y guiones → se limpian' );
+	$ok( null === NumeroSocio::normalizar( '7684036', '684' ), '768+4 dígitos (ambiguo) → inválido' );
+	$ok( null === NumeroSocio::normalizar( '76850390', '684' ), 'otro grupo → inválido' );
+	$ok( '76840390T' === NumeroSocio::usuario_tutor( '76840390' ) && '76840390' === NumeroSocio::socio_de_usuario_tutor( '76840390t' ), 'usuario de cuenta familiar' );
 
-// Scouter + responsabilidades.
-$r = $alta->alta_persona( $scouter->num_socio_asde, array( Roles::SECRETARIA ), array(), 'email1' );
-$ok( ! $r->ok, 'Secretaría sin Scouter → error (es responsabilidad de un scouter)', $r );
-$r = $alta->alta_persona( $scouter->num_socio_asde, array( Roles::SCOUTER, Roles::SECRETARIA ), array( 'scouts' ) );
-$ok( $r->ok && ! array_diff( array( Roles::SCOUTER, Roles::SECRETARIA ), $r->usuario->roles ), 'Scouter + Secretaría a la vez', $r );
-if ( $r->ok ) {
-	$creados[] = $r->usuario->ID;
-	$uid_sct   = $r->usuario->ID;
-}
-$r = $alta->alta_persona( $scout2->num_socio_asde, array( Roles::SCOUTER ), array( 'escultas' ) );
-$ok( $r->ok, 'scouter de Escultas creado', $r );
-if ( $r->ok ) {
-	$creados[] = $r->usuario->ID;
-	$uid_sct2  = $r->usuario->ID;
+	$p = static fn( string $asde, string $local, string $secc = '^Scouts^' ) => Persona::from_crm(
+		array(
+			'id'     => wp_generate_uuid4(),
+			'fields' => array(
+				'numerosocio_c'             => $asde,
+				'numsocioantiguo_enficha_c' => $local,
+				'stic_relationship_type_c'  => $secc,
+			),
+		)
+	);
+	// La numeración de esta parte es la del 684 (los números de ejemplo son de ese grupo); sin datos del CRM.
+	$g684 = array( 'id' => '684', 'numero' => '684', 'nombre' => '684', 'crm_id' => 'sg-prueba-996' );
+	$n    = Grupo::con( $g684, static fn() => new Numeracion( PersonaRepository::make() ) );
+	$an = $n->analizar( array( $p( '1', '76840100' ), $p( '2', '6840101' ), $p( '3', '76840102' ), $p( '4', '76840102' ), $p( '5', '768401' ), $p( '6', '' ) ), false );
+	$ok( Numeracion::OK === $an['1']['estado'], 'estado OK' );
+	$ok( Numeracion::CORREGIDO === $an['2']['estado'] && '076840101' === $an['2']['numero'], 'estado CORREGIDO (sin la provincia)' );
+	$ok( Numeracion::DUPLICADO === $an['3']['estado'] && Numeracion::DUPLICADO === $an['4']['estado'], 'estado DUPLICADO en ambas fichas' );
+	$ok( Numeracion::INVALIDO === $an['5']['estado'], 'estado INVALIDO' );
+	$ok( Numeracion::FALTA === $an['6']['estado'], 'estado FALTA' );
+	$sig = SociosTable::siguiente( '684', array( '76840391', '76840100' ) );
+	$ok( 9 === strlen( $sig ) && str_starts_with( $sig, '07684' ) && $sig >= '076840392', "siguiente número = máximo + 1, con la provincia completa ($sig)" );
 
-	// Informes: un scouter solo ve su sección; DNI solo visión global; salud visible (solo lectura).
-	$inf  = new Informe( 0, 'Prueba', '', array( 'nombre', 'seccion', 'dni', 'alergias' ), array(), 10, false );
-	$res  = ( new Generador( $crm ) )->ejecutar( $inf, Ambito::de( get_userdata( $uid_sct2 ) ) );
-	$secs = array_values( array_unique( array_column( $res['filas'], 'seccion' ) ) );
-	$ok( array( 'Escultas' ) === $secs && count( $res['filas'] ) > 0, 'informe de scouter: solo socios de su sección (' . count( $res['filas'] ) . ')' );
-	$ok( ! isset( $res['columnas']['dni'] ) && isset( $res['columnas']['alergias'] ), 'scouter: sin DNI (solo visión global) y con salud (solo lectura)' );
+	// ---------------------------------------------------------------------------
+	echo "\n== Parte 1b · Tesorería (sin CRM) ==\n";
+	$cfg = Config::defaults_ronda( '2026-2027' );
+	// Importes de Scouts de Balears 2026 (la prueba no depende de la organización configurada).
+	$cfg['federacion'] = \AsdeBalears\AreaPrivada\Domain\Organizacion::sanear_federacion(
+		array(
+			'cuota_asociativa' => 17,
+			'seguro_promedio'  => 3,
+			'edad_corte'       => 14,
+			'primas'           => array( 'menores' => 1.92, 'mayores' => 2.44, 'scouters' => 6.06 ),
+		)
+	) + array( 'anio_primas' => 2026 );
+	$tot = array_map( static fn( $h ) => Config::cuota( $cfg, $h )['total'], array( 1, 2, 3, 4, 5 ) );
+	$ok( array( 140.0, 258.0, 332.0, 362.0, 392.0 ) === $tot, 'cuotas 1-5 hijos = 140 / 258 / 332 / 362 / 392 € (' . implode( ' / ', $tot ) . ')' );
+	$ok( 242.0 === Config::anualidad( $cfg, 7 ), 'anualidad con tope de 242 € a partir del 3er hijo' );
 
-	$r2 = $alta->alta_persona( $scout2->num_socio_asde, array( Roles::COORDINACION ), array( 'escultas' ) );
-	$ok( $r2->ok && in_array( Roles::COORDINACION, $r2->usuario->roles, true ), 'añadir Coordinación a un scouter existente', $r2 );
-	Ambito::olvidar( $uid_sct2 );
-	$ok( Ambito::de( get_userdata( $uid_sct2 ) )->vision_global(), 'con Coordinación pasa a visión global' );
-}
-
-// Cuenta familiar.
-$r = $alta->alta_tutor( $nino->num_socio_asde, array(), 'email1' );
-$ok( $r->ok && 'creado' === $r->accion && $r->usuario->user_login === NumeroSocio::usuario_tutor( $num->de( $nino )['numero'] ), 'cuenta familiar creada con usuario nº del menor + T', $r );
-if ( $r->ok ) {
-	$fam       = $r->usuario;
-	$creados[] = $fam->ID;
-	$ok( array( $nino->num_socio_asde ) === Usuarios::representados( $fam->ID ) && '' === $fam->user_email, 'la cuenta familiar representa al menor y no guarda email' );
-	$fam_tes = FamiliasTable::de_socio( $nino->num_socio_asde );
-	$ok( $fam_tes && preg_match( '/^F684\d{3}$/', $fam_tes['numero'] ), 'al crear la cuenta familiar se crea su familia de Tesorería (' . ( $fam_tes['numero'] ?? '-' ) . ')' );
-	if ( $fam_tes ) {
-		$r3 = FamiliasTable::crear( array( $nino->num_socio_asde ) );
-		$ok( is_wp_error( $r3 ), 'un socio no puede estar en dos familias' );
-		$m1 = MovimientosTable::registrar( $fam_tes['id'], '2026-2027', MovimientosTable::PAGO, '2026-10-01', 70, 'transferencia', $fam_tes['numero'] );
-		$m2 = MovimientosTable::registrar( $fam_tes['id'], '2026-2027', MovimientosTable::AJUSTE, '2026-10-01', -10, '', '', 'Beca de prueba' );
-		$m3 = MovimientosTable::registrar( $fam_tes['id'], '2026-2027', MovimientosTable::AJUSTE, '2026-10-01', -5, '', '', '' );
-		$t  = MovimientosTable::totales( '2026-2027' )[ $fam_tes['id'] ] ?? array();
-		$ok( is_int( $m1 ) && is_int( $m2 ) && is_wp_error( $m3 ) && 70.0 === $t['pagado'] && -10.0 === $t['ajustes'], 'pagos y ajustes (un ajuste sin motivo se rechaza)' );
-		MovimientosTable::anular( $m1 );
-		$ok( 0.0 === ( MovimientosTable::totales( '2026-2027' )[ $fam_tes['id'] ]['pagado'] ?? 0.0 ), 'un pago anulado deja de contar' );
-		$ok( is_wp_error( FamiliasTable::borrar( $fam_tes['id'] ) ), 'no se borra una familia con socios o pagos' );
+	$mk = static function ( string $asde, string $secc, string $nac ) {
+		return Persona::from_crm( array( 'id' => wp_generate_uuid4(), 'fields' => array( 'numerosocio_c' => $asde, 'stic_relationship_type_c' => $secc, 'birthdate' => $nac ) ) );
+	};
+	$fed = array();
+	for ( $i = 0; $i < 46; $i++ ) {
+		$fed[] = $mk( "m$i", '^Lobatos^', '2016-01-01' );
 	}
-	$ok( Ambito::de( $fam )->puede_acceder() && isset( Ambito::de( $fam )->representados[ $nino->num_socio_asde ] ), 'ámbito: la familia ve al menor' );
-	$r2 = $alta->alta_tutor( $nino->num_socio_asde, array(), 'email1' );
-	$ok( ! $r2->ok, 'misma cuenta y mismo menor → nada que cambiar', $r2 );
+	for ( $i = 0; $i < 42; $i++ ) {
+		$fed[] = $mk( "M$i", '^Escultas^', '2010-01-01' );
+	}
+	for ( $i = 0; $i < 22; $i++ ) {
+		$fed[] = $mk( "s$i", '^Scouters^', '1990-01-01' );
+	}
+	$cf = Calculadora::coste_federativo( $fed, $cfg );
+	$ok( 110 === $cf['total_socios'] && 46 === $cf['categorias']['menores']['n'] && 42 === $cf['categorias']['mayores']['n'] && 22 === $cf['categorias']['scouters']['n'], 'coste federativo: 46 menores / 42 mayores de 14 / 22 scouters' );
+	$ok( 88.32 === $cf['categorias']['menores']['importe'] && 102.48 === $cf['categorias']['mayores']['importe'] && 133.32 === $cf['categorias']['scouters']['importe'], 'primas 2026: 88,32 + 102,48 + 133,32 €' );
+	$ok( 324.12 === $cf['seguro_tabla'] && 1870.0 === $cf['cuota_asociativa'] && 330.0 === $cf['seguro_promedio'] && 2194.12 === $cf['total_tabla'] && 2200.0 === $cf['total_promedio'], 'total: 1.870 € cuota + 324,12 € seguro (tabla) / 330 € (promedio)' );
 
-	// Mayoría de edad: si se vincula a un adulto (a mano), no cuenta y el mantenimiento lo retira.
-	if ( $adulto ) {
+	// Estado de una familia con 2 hijos y un padre scouter; 2 plazos (uno vencido).
+	$fam_p = array( 'h1' => $mk( 'h1', '^Castores^', '2019-05-01' ), 'h2' => $mk( 'h2', '^Scouts^', '2013-05-01' ), 'pa' => $mk( 'pa', '^Scouters^', '1985-05-01' ), 'ex' => $mk( 'ex', '^^', '2012-05-01' ) );
+	$cfg2  = $cfg;
+	$cfg2['plazos'] = array( array( 'nombre' => '1º', 'fecha' => '2026-01-10', 'porcentaje' => 50 ), array( 'nombre' => '2º', 'fecha' => '2099-01-10', 'porcentaje' => 50 ) );
+	$fx    = array( 'id' => 1, 'numero' => 'F684999', 'miembros' => array( 'h1', 'h2', 'pa', 'ex' ) );
+	$e1    = Calculadora::familia( $fx, $fam_p, $cfg2, array() );
+	$ok( array( 'h1', 'h2' ) === $e1['pagan'] && array( 'pa' ) === $e1['no_pagan'] && array( 'ex' ) === $e1['fuera'] && 258.0 === $e1['a_pagar'], 'familia: pagan 2 hijos (258 €); el padre scouter no paga; sin membresía no cuenta' );
+	$ok( Calculadora::ATRASADO === $e1['estado'], 'sin pagos y con un plazo vencido → con plazos vencidos' );
+	$ok( Calculadora::PARCIAL === Calculadora::familia( $fx, $fam_p, $cfg2, array( 'pagado' => 129.0 ) )['estado'], 'pagado el 1er plazo (129 €) → pago parcial' );
+	$ok( Calculadora::PAGADO === Calculadora::familia( $fx, $fam_p, $cfg2, array( 'pagado' => 200.0, 'ajustes' => -58.0 ) )['estado'], 'con beca de 58 € y 200 € pagados → pagado' );
+	$sug = Sugerencias::por_email(
+		array(
+			Persona::from_crm( array( 'id' => '1', 'fields' => array( 'numerosocio_c' => 'a1', 'stic_relationship_type_c' => '^Lobatos^', 'email1' => 'fam@example.invalid' ) ) ),
+			Persona::from_crm( array( 'id' => '2', 'fields' => array( 'numerosocio_c' => 'a2', 'stic_relationship_type_c' => '^Scouts^', 'tutor1_email_c' => 'FAM@example.invalid' ) ) ),
+			Persona::from_crm( array( 'id' => '3', 'fields' => array( 'numerosocio_c' => 'a3', 'stic_relationship_type_c' => '^Castores^', 'email1' => 'otra@example.invalid' ) ) ),
+		),
+		array(),
+		$cfg['secciones_pagan']
+	);
+	$ok( 1 === count( $sug ) && 2 === count( $sug[0] ), 'sugerencias: agrupa a los que comparten email (propio o de tutor)' );
+
+	// ---------------------------------------------------------------------------
+	echo "\n== Parte 2 · Con el CRM simulado (fichas inventadas del grupo 996) ==\n";
+	$repo = PersonaRepository::make();
+	$alta = AltaService::make();
+	$crmc = ClientFactory::reader();
+	$ok( null !== $repo && null !== $alta && null !== $crmc, 'el grupo 996 lee del CRM simulado' );
+	$num = $alta->numeracion();
+	$num->analizar_todo( true );
+
+	$activas = $repo->todas( true );
+	$ficha   = static function ( string $n ) use ( $activas ) {
+		foreach ( $activas as $x ) {
+			if ( $n === $x->num_socio_asde ) {
+				return $x;
+			}
+		}
+		return null;
+	};
+	$teen    = $ficha( '990015' );
+	$scouter = $ficha( '990016' );
+	$scout2  = $ficha( '990017' );
+	$nino    = $ficha( '990019' );
+	$adulto  = $ficha( '990020' );
+	$ok( 6 === count( $activas ) && $teen && $scouter && $scout2 && $nino && $adulto, 'las 6 fichas inventadas están activas en el grupo 996' );
+	$ok( Numeracion::OK === $num->de( $teen )['estado'] && '79960015' === $num->de( $teen )['numero'], 'su nº local (7 + 996 + 4 cifras) se reconoce' );
+	if ( ! ( $teen && $scouter && $scout2 && $nino && $adulto ) ) {
+		throw new RuntimeException( 'No se puede continuar sin las fichas de prueba.' );
+	}
+	$correos0 = count( $capturados );
+	wp_set_current_user( $u_secre );
+
+	// Participante 14-17.
+	$r = $alta->alta_persona( $teen->num_socio_asde, array( Roles::PARTICIPANTE ) );
+	$ok( $r->ok && 'creado' === $r->accion && $r->invitacion_enviada, 'participante 14-17 creado + invitación', $r );
+	if ( $r->ok ) {
+		$u         = $r->usuario;
+		$creados[] = $u->ID;
+		$ok( $u->user_login === $num->de( $teen )['numero'], 'usuario = nº de socio local' );
+		$ok( '' === $u->user_email && '' === $u->first_name && '' === $u->last_name && $u->display_name === $u->user_login, 'sin datos personales en WordPress (sin email ni nombre)' );
+		$ok( Usuarios::socio( $u->ID ) === $teen->num_socio_asde && array( 'asde' => $teen->num_socio_asde, 'campo' => 'email1' ) === Usuarios::email_origen( $u->ID ), 'vínculo por nº Scouts de España + origen del email' );
+		$ok( '996' === (string) get_user_meta( $u->ID, Usuarios::META_GRUPO, true ), 'la cuenta queda en el grupo en el que se da el alta (996)' );
+		$ok( Ambito::de( $u )->puede_acceder() && array( Roles::PARTICIPANTE ) === Ambito::de( $u )->roles_vigentes(), 'ámbito: el participante puede entrar' );
+		$inv = end( $capturados );
+		$ok( is_array( $inv ) && 'tea.joven@example.invalid' === $inv['to'], 'la invitación va al email de la ficha del CRM' );
+	}
+	$r = $alta->alta_persona( $nino->num_socio_asde, array( Roles::PARTICIPANTE ) );
+	$ok( ! $r->ok, 'menor de 14 no puede tener cuenta propia', $r );
+
+	// Scouter + responsabilidades.
+	$r = $alta->alta_persona( $scouter->num_socio_asde, array( Roles::SECRETARIA ), array(), 'email1' );
+	$ok( ! $r->ok, 'Secretaría sin Scouter → error (es responsabilidad de un scouter)', $r );
+	$r = $alta->alta_persona( $scouter->num_socio_asde, array( Roles::SCOUTER, Roles::SECRETARIA ), array( 'scouts' ) );
+	$ok( $r->ok && ! array_diff( array( Roles::SCOUTER, Roles::SECRETARIA ), $r->usuario->roles ), 'Scouter + Secretaría a la vez', $r );
+	if ( $r->ok ) {
+		$creados[] = $r->usuario->ID;
+		$uid_sct   = $r->usuario->ID;
+	}
+	$r = $alta->alta_persona( $scout2->num_socio_asde, array( Roles::SCOUTER ), array( 'escultas' ) );
+	$ok( $r->ok, 'scouter de Escultas creado', $r );
+	if ( $r->ok ) {
+		$creados[] = $r->usuario->ID;
+		$uid_sct2  = $r->usuario->ID;
+
+		// Informes: un scouter solo ve su sección; DNI solo visión global; salud visible (solo lectura).
+		$inf  = new Informe( 0, 'Prueba', '', array( 'nombre', 'seccion', 'dni', 'alergias' ), array(), 10, false );
+		$res  = ( new Generador( $crmc ) )->ejecutar( $inf, Ambito::de( get_userdata( $uid_sct2 ) ) );
+		$secs = array_values( array_unique( array_column( $res['filas'], 'seccion' ) ) );
+		$ok( array( 'Escultas' ) === $secs && 1 === count( $res['filas'] ), 'informe de scouter: solo socios de su sección (Eva, de Escultas)' );
+		$ok( ! isset( $res['columnas']['dni'] ) && isset( $res['columnas']['alergias'] ), 'scouter: sin DNI (solo visión global) y con salud (solo lectura)' );
+
+		$r2 = $alta->alta_persona( $scout2->num_socio_asde, array( Roles::COORDINACION ), array( 'escultas' ) );
+		$ok( $r2->ok && in_array( Roles::COORDINACION, $r2->usuario->roles, true ), 'añadir Coordinación a un scouter existente', $r2 );
+		Ambito::olvidar( $uid_sct2 );
+		$ok( Ambito::de( get_userdata( $uid_sct2 ) )->vision_global(), 'con Coordinación pasa a visión global' );
+	}
+
+	// Cuenta familiar.
+	$r = $alta->alta_tutor( $nino->num_socio_asde, array(), 'email1' );
+	$ok( $r->ok && 'creado' === $r->accion && $r->usuario->user_login === NumeroSocio::usuario_tutor( $num->de( $nino )['numero'] ), 'cuenta familiar creada con usuario nº del menor + T', $r );
+	if ( $r->ok ) {
+		$fam       = $r->usuario;
+		$creados[] = $fam->ID;
+		$ok( array( $nino->num_socio_asde ) === Usuarios::representados( $fam->ID ) && '' === $fam->user_email, 'la cuenta familiar representa al menor y no guarda email' );
+		$fam_tes = FamiliasTable::de_socio( $nino->num_socio_asde );
+		$ok( $fam_tes && preg_match( '/^F996\d{3}$/', $fam_tes['numero'] ), 'al crear la cuenta familiar se crea su familia de Tesorería (' . ( $fam_tes['numero'] ?? '-' ) . ')' );
+		if ( $fam_tes ) {
+			$r3 = FamiliasTable::crear( array( $nino->num_socio_asde ) );
+			$ok( is_wp_error( $r3 ), 'un socio no puede estar en dos familias' );
+			$m1 = MovimientosTable::registrar( $fam_tes['id'], '2026-2027', MovimientosTable::PAGO, '2026-10-01', 70, 'transferencia', $fam_tes['numero'] );
+			$m2 = MovimientosTable::registrar( $fam_tes['id'], '2026-2027', MovimientosTable::AJUSTE, '2026-10-01', -10, '', '', 'Beca de prueba' );
+			$m3 = MovimientosTable::registrar( $fam_tes['id'], '2026-2027', MovimientosTable::AJUSTE, '2026-10-01', -5, '', '', '' );
+			$t  = MovimientosTable::totales( '2026-2027' )[ $fam_tes['id'] ] ?? array();
+			$ok( is_int( $m1 ) && is_int( $m2 ) && is_wp_error( $m3 ) && 70.0 === $t['pagado'] && -10.0 === $t['ajustes'], 'pagos y ajustes (un ajuste sin motivo se rechaza)' );
+			MovimientosTable::anular( $m1 );
+			$ok( 0.0 === ( MovimientosTable::totales( '2026-2027' )[ $fam_tes['id'] ]['pagado'] ?? 0.0 ), 'un pago anulado deja de contar' );
+			$ok( is_wp_error( FamiliasTable::borrar( $fam_tes['id'] ) ), 'no se borra una familia con socios o pagos' );
+		}
+		$ok( Ambito::de( $fam )->puede_acceder() && isset( Ambito::de( $fam )->representados[ $nino->num_socio_asde ] ), 'ámbito: la familia ve al menor' );
+		$r2 = $alta->alta_tutor( $nino->num_socio_asde, array(), 'email1' );
+		$ok( ! $r2->ok, 'misma cuenta y mismo menor → nada que cambiar', $r2 );
+
+		// Mayoría de edad: si se vincula a un adulto (a mano), no cuenta y el mantenimiento lo retira.
+		// revisar_tutelas() recorre las cuentas familiares del grupo en el que se trabaja: aquí, solo las del 996.
 		add_user_meta( $fam->ID, Usuarios::META_REPRESENTADO, $adulto->num_socio_asde );
 		Ambito::olvidar( $fam->ID );
 		$amb = Ambito::de( get_userdata( $fam->ID ) );
 		$ok( ! isset( $amb->representados[ $adulto->num_socio_asde ] ) && in_array( $adulto->num_socio_asde, $amb->retirados, true ), 'ámbito: un mayor de edad no cuenta como representado' );
 		$retiradas = Mantenimiento::revisar_tutelas( $repo );
-		$ok( $retiradas >= 1 && ! in_array( $adulto->num_socio_asde, Usuarios::representados( $fam->ID ), true ), 'mantenimiento: retira al mayor de edad de la cuenta familiar' );
+		$ok( 1 === $retiradas && ! in_array( $adulto->num_socio_asde, Usuarios::representados( $fam->ID ), true ) && in_array( $nino->num_socio_asde, Usuarios::representados( $fam->ID ), true ), 'mantenimiento: retira al mayor de edad de la cuenta familiar (y deja al menor)' );
 
 		// v0.26.1: una cuenta familiar que se queda sin nadie a quien representar se desactiva como a mano: sin contraseña.
 		$clave_sola = wp_generate_password( 24 );
@@ -260,6 +355,7 @@ if ( $r->ok ) {
 				'role'       => Roles::TUTOR,
 			)
 		);
+		$ok( ! is_wp_error( $solo_id ), 'cuenta familiar que solo representa a un adulto creada' );
 		if ( ! is_wp_error( $solo_id ) ) {
 			$creados[] = $solo_id;
 			add_user_meta( $solo_id, Usuarios::META_REPRESENTADO, $adulto->num_socio_asde );
@@ -272,184 +368,199 @@ if ( $r->ok ) {
 			$ok( Usuarios::DESACTIVADO === Usuarios::estado( $solo ) && array() === Usuarios::roles_asde( $solo ) && ! wp_check_password( $clave_sola, $solo->user_pass, $solo_id ) && ! Usuarios::ha_activado( $solo ), 'mantenimiento: la cuenta familiar sin menores queda desactivada y sin su contraseña (v0.26.1)' );
 		}
 	}
-}
-$r = $alta->alta_tutor( $teen->num_socio_asde, array( $scouter->num_socio_asde ), 'email1' );
-$ok( ! $r->ok, 'una cuenta familiar no puede incluir a un adulto scouter', $r );
+	$r = $alta->alta_tutor( $teen->num_socio_asde, array( $scouter->num_socio_asde ), 'email1' );
+	$ok( ! $r->ok, 'una cuenta familiar no puede incluir a un adulto scouter', $r );
 
-if ( isset( $uid_sct ) ) {
-	$inf = new Informe( 0, 'Prueba', '', array( 'nombre', 'seccion', 'dni' ), array( 'edad_min' => 14, 'edad_max' => 17 ), 10, false );
-	$res = ( new Generador( $crm ) )->ejecutar( $inf, Ambito::de( get_userdata( $uid_sct ) ) );
-	$ok( isset( $res['columnas']['dni'] ) && count( $res['filas'] ) > 0, 'Secretaría: visión global con DNI y filtro de edad (' . count( $res['filas'] ) . ')' );
-}
-
-// Recuperación de contraseña: enlace al email del CRM.
-if ( isset( $fam ) ) {
-	$m = $mailpit();
-	$ok( Invitacion::enviar( get_userdata( $fam->ID ), Invitacion::RESET ) && Invitacion::RESET === Invitacion::tipo( $fam->ID ) && $mailpit() === $m + 1, 'recuperación: email enviado al email del CRM' );
-}
-$ok( $mailpit() - $mail0 >= 5, 'emails a Mailpit: ' . ( $mailpit() - $mail0 ) );
-
-// ---------------------------------------------------------------------------
-echo "\n== Parte 3 · Acceso socios, grupos y visibilidad ==\n";
-// IP de documentación (TEST-NET-1), distinta en cada ejecución: los fallos de estas
-// pruebas no cuentan para los bloqueos de Wordfence de la IP real.
-$_SERVER['REMOTE_ADDR'] = '192.0.2.' . random_int( 1, 254 );
-$grupo                  = Grupo::actual();
-$ok( $grupo && Grupos::obtener( $grupo['id'] ), 'grupo detectado en el CRM: ' . ( $grupo ? Grupos::etiqueta( $grupo ) : '-' ) );
-
-if ( isset( $u ) && $grupo ) {
-	$u      = get_userdata( $u->ID );
-	$clave  = wp_generate_password( 20, true, false ); // Solo en memoria durante la prueba (sin espacios: WordPress recorta la contraseña).
-	wp_set_password( $clave, $u->ID );
-	$entrar = static fn( string $gid, string $pass ) => AccessHooks::en_grupo( $gid, static fn() => wp_authenticate( $u->user_login, $pass ) );
-
-	$r1 = $entrar( $grupo['id'], $clave );
-	$ok( $r1 instanceof WP_User && $r1->ID === $u->ID, 'acceso: su grupo + nº de socio + contraseña → entra' );
-	$r2 = $entrar( 'otro-grupo', $clave );
-	$ok( is_wp_error( $r2 ) && 'asde_grupo' === $r2->get_error_code(), 'acceso: otro grupo → rechazado (mismo mensaje que una contraseña incorrecta)' );
-	$r3 = $entrar( $grupo['id'], $clave . 'x' );
-	$ok( is_wp_error( $r3 ) && 'incorrect_password' === $r3->get_error_code(), 'acceso: contraseña incorrecta → rechazado' );
-	$r4 = wp_authenticate( $u->user_login, $clave );
-	$r5 = wp_authenticate( $u->user_login, $clave . 'x' );
-	$ok( is_wp_error( $r4 ) && 'asde_usar_acceso' === $r4->get_error_code() && is_wp_error( $r5 ) && 'asde_usar_acceso' === $r5->get_error_code(), 'wp-login.php/XML-RPC: un socio no entra, y la respuesta es igual con contraseña buena o mala' );
-	$ok( ! wp_is_application_passwords_available_for_user( $u ), 'socios sin contraseñas de aplicación' );
-
-	// Verificación en dos pasos de Wordfence desde la pantalla de acceso (campo wfls-token).
-	if ( class_exists( '\WordfenceLS\Controller_TOTP' ) ) {
-		$totp    = static function ( string $hex, int $t ): string {
-			$h = hash_hmac( 'sha1', pack( 'J', intdiv( $t, 30 ) ), hex2bin( $hex ), true );
-			$o = ord( $h[19] ) & 0xf;
-			$n = ( ( ord( $h[ $o ] ) & 0x7f ) << 24 ) | ( ord( $h[ $o + 1 ] ) << 16 ) | ( ord( $h[ $o + 2 ] ) << 8 ) | ord( $h[ $o + 3 ] );
-			return str_pad( (string) ( $n % 1000000 ), 6, '0', STR_PAD_LEFT );
-		};
-		$secreto = bin2hex( random_bytes( 20 ) );
-		\WordfenceLS\Controller_TOTP::shared()->activate_2fa( $u, $secreto, array( bin2hex( random_bytes( 8 ) ) ), time() - 120 );
-		unset( $_POST['wfls-token'] );
-		$r6                  = $entrar( $grupo['id'], $clave );
-		$bueno               = $totp( $secreto, time() );
-		$_POST['wfls-token'] = str_pad( (string) ( ( (int) $bueno + 1 ) % 1000000 ), 6, '0', STR_PAD_LEFT );
-		$r7                  = $entrar( $grupo['id'], $clave );
-		$_POST['wfls-token'] = $bueno;
-		$r8                  = $entrar( $grupo['id'], $clave );
-		unset( $_POST['wfls-token'] );
-		\WordfenceLS\Controller_Users::shared()->deactivate_2fa( $u );
-		$ok( is_wp_error( $r6 ) && 'wfls_twofactor_required' === $r6->get_error_code(), '2FA: sin código → pide el código' );
-		$ok( is_wp_error( $r7 ) && 'wfls_twofactor_failed' === $r7->get_error_code(), '2FA: código erróneo → rechazado' );
-		$ok( $r8 instanceof WP_User, '2FA: código correcto → entra' );
+	if ( isset( $uid_sct ) ) {
+		$inf = new Informe( 0, 'Prueba', '', array( 'nombre', 'seccion', 'dni' ), array( 'edad_min' => 14, 'edad_max' => 17 ), 10, false );
+		$res = ( new Generador( $crmc ) )->ejecutar( $inf, Ambito::de( get_userdata( $uid_sct ) ) );
+		$ok( isset( $res['columnas']['dni'] ) && 2 === count( $res['filas'] ), 'Secretaría: visión global con DNI y filtro de edad 14-17 (Tea y Eva: ' . count( $res['filas'] ) . ' filas; ' . ( isset( $res['columnas']['dni'] ) ? 'con' : 'sin' ) . ' DNI)' );
 	}
-}
 
-$admin = get_users(
-	array(
-		'role'   => 'administrator',
-		'number' => 1,
-	)
-)[0] ?? null;
-if ( $admin ) {
-	$ra = AccessHooks::en_grupo( 'cualquier-grupo', static fn() => AccessHooks::comprobar_acceso( $admin, $admin->user_login, '' ) );
-	$ok( $ra instanceof WP_User, 'administradores: entran eligiendo cualquier grupo (pasa a ser su grupo de trabajo)' );
-}
+	// Recuperación de contraseña: enlace al email del CRM.
+	if ( isset( $fam ) ) {
+		$m = count( $capturados );
+		$ok( Invitacion::enviar( get_userdata( $fam->ID ), Invitacion::RESET ) && Invitacion::RESET === Invitacion::tipo( $fam->ID ) && count( $capturados ) === $m + 1 && 'familia.nico@example.invalid' === end( $capturados )['to'], 'recuperación: email enviado al email del CRM' );
+	}
+	$nuevos = array_slice( $capturados, $correos0 );
+	$ok( count( $nuevos ) >= 5 && ! array_filter( $nuevos, static fn( $c ) => ! str_ends_with( (string) $c['to'], '@example.invalid' ) ), 'emails capturados (ninguno sale): ' . count( $nuevos ) . ', todos a direcciones inventadas' );
 
-for ( $i = 0; $i < 5; $i++ ) {
-	Intentos::fallo( 'PRUEBA-LIMITE' );
-}
-$ok( Intentos::bloqueado( 'PRUEBA-LIMITE' ) && ! Intentos::bloqueado( 'PRUEBA-OTRO' ), 'límite: 5 fallos bloquean ese nº de socio en ese dispositivo (15 min), no a los demás' );
-Intentos::exito( 'PRUEBA-LIMITE' );
-$ok( ! Intentos::bloqueado( 'PRUEBA-LIMITE' ), 'límite: al entrar bien se reinicia' );
+	// ---------------------------------------------------------------------------
+	echo "\n== Parte 3 · Acceso socios, grupos y visibilidad ==\n";
+	// IP de documentación (TEST-NET-1), distinta en cada ejecución: los fallos de estas
+	// pruebas no cuentan para los bloqueos de Wordfence de la IP real.
+	$_SERVER['REMOTE_ADDR'] = '192.0.2.' . random_int( 1, 254 );
+	$grupo                  = Grupo::actual();
+	$ok( $grupo && '996' === $grupo['numero'] && Grupos::obtener( $grupo['id'] ), 'se trabaja en el grupo ficticio: ' . ( $grupo ? Grupos::etiqueta( $grupo ) : '-' ) );
 
-$ok(
-	'999' === Grupo::con( array( 'id' => 'zzz', 'numero' => '999', 'nombre' => 'Grupo de prueba' ), static fn() => Grupo::numero() ) && Grupo::numero() === $grupo['numero'],
-	'Grupo::con trabaja en otro grupo y después restaura el anterior'
-);
+	if ( isset( $u ) && $grupo ) {
+		$u      = get_userdata( $u->ID );
+		$clave  = wp_generate_password( 20, true, false ); // Solo en memoria durante la prueba (sin espacios: WordPress recorta la contraseña).
+		wp_set_password( $clave, $u->ID );
+		$entrar = static fn( string $gid, string $pass ) => AccessHooks::en_grupo( $gid, static fn() => wp_authenticate( $u->user_login, $pass ) );
 
-// Sin visibilidad entre grupos: con un 2º grupo (ficticio) cada uno ve solo a sus socios.
-$grupos_orig = get_option( 'asde_ap_grupos' );
-update_option(
-	'asde_ap_grupos',
-	$grupos_orig + array(
-		'999' => array(
-			'nombre'  => 'Grupo de prueba 999',
+		$r1 = $entrar( $grupo['id'], $clave );
+		$ok( $r1 instanceof WP_User && $r1->ID === $u->ID, 'acceso: su grupo + nº de socio + contraseña → entra' );
+		$r2 = $entrar( 'otro-grupo', $clave );
+		$ok( is_wp_error( $r2 ) && 'asde_grupo' === $r2->get_error_code(), 'acceso: otro grupo → rechazado (mismo mensaje que una contraseña incorrecta)' );
+		$r3 = $entrar( $grupo['id'], $clave . 'x' );
+		$ok( is_wp_error( $r3 ) && 'incorrect_password' === $r3->get_error_code(), 'acceso: contraseña incorrecta → rechazado' );
+		$r4 = wp_authenticate( $u->user_login, $clave );
+		$r5 = wp_authenticate( $u->user_login, $clave . 'x' );
+		$ok( is_wp_error( $r4 ) && 'asde_usar_acceso' === $r4->get_error_code() && is_wp_error( $r5 ) && 'asde_usar_acceso' === $r5->get_error_code(), 'wp-login.php/XML-RPC: un socio no entra, y la respuesta es igual con contraseña buena o mala' );
+		$ok( ! wp_is_application_passwords_available_for_user( $u ), 'socios sin contraseñas de aplicación' );
+
+		// Verificación en dos pasos de Wordfence desde la pantalla de acceso (campo wfls-token).
+		if ( class_exists( '\WordfenceLS\Controller_TOTP' ) ) {
+			$totp    = static function ( string $hex, int $t ): string {
+				$h = hash_hmac( 'sha1', pack( 'J', intdiv( $t, 30 ) ), hex2bin( $hex ), true );
+				$o = ord( $h[19] ) & 0xf;
+				$n = ( ( ord( $h[ $o ] ) & 0x7f ) << 24 ) | ( ord( $h[ $o + 1 ] ) << 16 ) | ( ord( $h[ $o + 2 ] ) << 8 ) | ord( $h[ $o + 3 ] );
+				return str_pad( (string) ( $n % 1000000 ), 6, '0', STR_PAD_LEFT );
+			};
+			$secreto = bin2hex( random_bytes( 20 ) );
+			\WordfenceLS\Controller_TOTP::shared()->activate_2fa( $u, $secreto, array( bin2hex( random_bytes( 8 ) ) ), time() - 120 );
+			try {
+				unset( $_POST['wfls-token'] );
+				$r6                  = $entrar( $grupo['id'], $clave );
+				$bueno               = $totp( $secreto, time() );
+				$_POST['wfls-token'] = str_pad( (string) ( ( (int) $bueno + 1 ) % 1000000 ), 6, '0', STR_PAD_LEFT );
+				$r7                  = $entrar( $grupo['id'], $clave );
+				$_POST['wfls-token'] = $bueno;
+				$r8                  = $entrar( $grupo['id'], $clave );
+			} finally {
+				unset( $_POST['wfls-token'] );
+				\WordfenceLS\Controller_Users::shared()->deactivate_2fa( $u );
+			}
+			$ok( is_wp_error( $r6 ) && 'wfls_twofactor_required' === $r6->get_error_code(), '2FA: sin código → pide el código' );
+			$ok( is_wp_error( $r7 ) && 'wfls_twofactor_failed' === $r7->get_error_code(), '2FA: código erróneo → rechazado' );
+			$ok( $r8 instanceof WP_User, '2FA: código correcto → entra' );
+		}
+	}
+
+	$admin = get_users(
+		array(
+			'role'   => 'administrator',
+			'number' => 1,
+		)
+	)[0] ?? null;
+	if ( $admin ) {
+		$ra = AccessHooks::en_grupo( 'cualquier-grupo', static fn() => AccessHooks::comprobar_acceso( $admin, $admin->user_login, '' ) );
+		$ok( $ra instanceof WP_User, 'administradores: entran eligiendo cualquier grupo (pasa a ser su grupo de trabajo)' );
+	}
+
+	for ( $i = 0; $i < 5; $i++ ) {
+		Intentos::fallo( 'PRUEBA-LIMITE' );
+	}
+	$ok( Intentos::bloqueado( 'PRUEBA-LIMITE' ) && ! Intentos::bloqueado( 'PRUEBA-OTRO' ), 'límite: 5 fallos bloquean ese nº de socio en ese dispositivo (15 min), no a los demás' );
+	Intentos::exito( 'PRUEBA-LIMITE' );
+	$ok( ! Intentos::bloqueado( 'PRUEBA-LIMITE' ), 'límite: al entrar bien se reinicia' );
+
+	$ok(
+		'999' === Grupo::con( array( 'id' => 'zzz', 'numero' => '999', 'nombre' => 'Grupo de prueba' ), static fn() => Grupo::numero() ) && Grupo::numero() === $grupo['numero'],
+		'Grupo::con trabaja en otro grupo y después restaura el anterior'
+	);
+
+	// Sin visibilidad entre grupos: con otro grupo (ficticio, 997) cada uno ve solo a sus socios.
+	$mas_997 = static fn( $grupos ) => (array) $grupos + array(
+		'997' => array(
+			'nombre'  => 'Grupo de prueba 997',
 			'usuario' => '',
 			'crm_id'  => 'grupo-de-seguridad-inexistente',
 		),
-	),
-	false
-);
-Grupos::olvidar();
-$en_suyo = count( $repo->todas( true ) );
-$en_otro = Grupo::con( Grupos::obtener( '999' ), static fn() => count( $repo->todas( true ) ) );
-$ok( count( Grupos::todos() ) > 1 && $en_suyo === count( $activas ) && 0 === $en_otro, "varios grupos: el grupo real ve sus $en_suyo socios activos y el otro, $en_otro" );
-wp_set_current_user( 0 );
-$form = ( new AccesoView() )->render();
-$ok( str_contains( $form, 'name="grupo"' ) && str_contains( $form, 'Elige tu grupo' ) && str_contains( $form, 'name="usuario"' ) && str_contains( $form, 'name="clave"' ) && str_contains( $form, 'name="wfls-token"' ), 'pantalla de acceso: desplegable de grupo + nº de socio + contraseña + código' );
-update_option( 'asde_ap_grupos', $grupos_orig, false );
-Grupos::olvidar();
+	);
+	add_filter( 'pre_option_asde_ap_grupos', $mas_997, 20 );
+	Grupos::olvidar();
+	$en_suyo = count( $repo->todas( true ) );
+	$en_otro = Grupo::con( Grupos::obtener( '997' ), static fn() => count( $repo->todas( true ) ) );
+	$ok( count( Grupos::todos() ) > 2 && $en_suyo === count( $activas ) && 0 === $en_otro, "varios grupos: el grupo 996 ve sus $en_suyo socios activos y otro grupo, $en_otro" );
+	wp_set_current_user( 0 );
+	$form = ( new AccesoView() )->render();
+	$ok( str_contains( $form, 'name="grupo"' ) && str_contains( $form, 'Elige tu grupo' ) && str_contains( $form, 'name="usuario"' ) && str_contains( $form, 'name="clave"' ) && str_contains( $form, 'name="wfls-token"' ), 'pantalla de acceso: desplegable de grupo + nº de socio + contraseña + código' );
+	remove_filter( 'pre_option_asde_ap_grupos', $mas_997, 20 );
+	Grupos::olvidar();
 
-// Visibilidad: páginas del área privada fuera de listados, búsquedas, sitemaps y menús.
-$privadas = array_values( array_filter( Pages::ids() ) );
-$lista    = wp_list_pages(
-	array(
-		'title_li' => '',
-		'depth'    => -1,
-		'echo'     => 0,
-	)
-);
-$fugas    = array_filter( $privadas, static fn( $id ) => str_contains( $lista, 'href="' . get_permalink( $id ) . '"' ) );
-$ok( '' !== $lista && ! $fugas, 'pie "Páginas" (wp_list_pages): ninguna de las ' . count( $privadas ) . ' páginas del área privada' );
-$busqueda = new WP_Query(
-	array(
-		's'              => 'asde_',
-		'post_type'      => 'page',
-		'fields'         => 'ids',
-		'posts_per_page' => 50,
-	)
-);
-$ok( ! array_intersect( $privadas, $busqueda->posts ), 'buscador: no encuentra páginas del área privada' );
-$ok( ! array_diff( $privadas, apply_filters( 'wp_sitemaps_posts_query_args', array(), 'page' )['post__not_in'] ?? array() ), 'sitemap: excluye las páginas del área privada' );
-
-$items           = wp_get_nav_menu_items( get_nav_menu_locations()['avia'] );
-$falso           = clone $items[0];
-$falso->object   = 'page';
-$falso->object_id = Pages::id( 'informes' );
-$falso->title    = 'Informes';
-$fuera           = wp_list_pluck( Visibilidad::menu( array_merge( $items, array( $falso ) ) ), 'title' );
-$ok( in_array( 'Acceso socios', $fuera, true ) && ! in_array( 'Informes', $fuera, true ), 'menú sin sesión: "Acceso socios" sí, el resto de páginas privadas no' );
-wp_set_current_user( 10 );
-$dentro = Visibilidad::menu( wp_get_nav_menu_items( get_nav_menu_locations()['avia'] ) );
-$acc    = array_values( array_filter( $dentro, static fn( $i ) => (int) $i->object_id === Pages::id( 'acceso' ) ) )[0] ?? null;
-$ok( $acc && 'Área privada' === $acc->title && $acc->url === Pages::url( 'area' ), 'menú con sesión: el elemento pasa a "Área privada"' );
-$ok( str_starts_with( wp_login_url( Pages::url( 'informes' ) ), Pages::url( 'acceso' ) ) && str_contains( wp_login_url( admin_url() ), 'wp-login.php' ), 'login: páginas privadas → Acceso socios; wp-admin → wp-login.php' );
-unset( $_SERVER['REMOTE_ADDR'] );
-
-// ---------------------------------------------------------------------------
-// Limpieza.
-foreach ( $creados as $id ) {
-	wp_delete_user( $id );
-}
-global $wpdb;
-foreach ( array( $teen, $scouter, $scout2, $nino ) as $x ) {
-	$wpdb->delete( SociosTable::table(), array( 'num_socio_asde' => $x->num_socio_asde, 'origen' => SociosTable::GENERADO ) );
-	$f = FamiliasTable::de_socio( $x->num_socio_asde );
-	if ( $f ) {
-		$wpdb->delete( MovimientosTable::table(), array( 'familia_id' => $f['id'] ) );
-		$wpdb->delete( FamiliasTable::table_miembros(), array( 'familia_id' => $f['id'] ) );
-		$wpdb->delete( FamiliasTable::table(), array( 'id' => $f['id'] ) );
-	}
-}
-$de_la_prueba = array_values( array_diff( $mailpit_ids(), $mailpit_antes ) );
-if ( $de_la_prueba ) {
-	wp_remote_request(
-		'http://localhost:10006/api/v1/messages',
+	// Visibilidad: páginas del área privada fuera de listados, búsquedas, sitemaps y menús.
+	$privadas = array_values( array_filter( Pages::ids() ) );
+	$lista    = wp_list_pages(
 		array(
-			'method'  => 'DELETE',
-			'headers' => array( 'Content-Type' => 'application/json' ),
-			'body'    => wp_json_encode( array( 'IDs' => $de_la_prueba ) ),
+			'title_li' => '',
+			'depth'    => -1,
+			'echo'     => 0,
 		)
 	);
-}
-// Registro de emails de los usuarios de prueba (ya borrados).
-$wpdb->query( 'DELETE FROM ' . \AsdeBalears\AreaPrivada\Usuarios\RegistroEmails::table() . ' WHERE user_id IN (' . implode( ',', array_map( 'intval', $creados ?: array( 0 ) ) ) . ')' ); // phpcs:ignore WordPress.DB
-Numeracion::olvidar_cache();
-$wpdb->query( "DELETE FROM {$wpdb->options} WHERE option_name LIKE '\\_transient\\_asde\\_ap\\_int\\_%' OR option_name LIKE '\\_transient\\_timeout\\_asde\\_ap\\_int\\_%'" ); // phpcs:ignore WordPress.DB
+	$fugas    = array_filter( $privadas, static fn( $id ) => str_contains( $lista, 'href="' . get_permalink( $id ) . '"' ) );
+	$ok( '' !== $lista && ! $fugas, 'pie "Páginas" (wp_list_pages): ninguna de las ' . count( $privadas ) . ' páginas del área privada' );
+	$busqueda = new WP_Query(
+		array(
+			's'              => 'asde_',
+			'post_type'      => 'page',
+			'fields'         => 'ids',
+			'posts_per_page' => 50,
+		)
+	);
+	$ok( ! array_intersect( $privadas, $busqueda->posts ), 'buscador: no encuentra páginas del área privada' );
+	$ok( ! array_diff( $privadas, apply_filters( 'wp_sitemaps_posts_query_args', array(), 'page' )['post__not_in'] ?? array() ), 'sitemap: excluye las páginas del área privada' );
 
-echo $fails ? "\n$fails FALLOS\n" : "\nTODO OK (usuarios, reservas y emails de prueba borrados)\n";
+	$items = wp_get_nav_menu_items( get_nav_menu_locations()['avia'] ?? 0 );
+	$ok( is_array( $items ) && $items, 'el tema tiene un menú principal (avia) con elementos' );
+	if ( is_array( $items ) && $items ) {
+		$falso            = clone $items[0];
+		$falso->object    = 'page';
+		$falso->object_id = Pages::id( 'informes' );
+		$falso->title     = 'Informes';
+		$fuera            = wp_list_pluck( Visibilidad::menu( array_merge( $items, array( $falso ) ) ), 'title' );
+		$ok( in_array( 'Acceso socios', $fuera, true ) && ! in_array( 'Informes', $fuera, true ), 'menú sin sesión: "Acceso socios" sí, el resto de páginas privadas no' );
+		wp_set_current_user( $u_secre );
+		$dentro = Visibilidad::menu( wp_get_nav_menu_items( get_nav_menu_locations()['avia'] ) );
+		$acc    = array_values( array_filter( $dentro, static fn( $i ) => (int) $i->object_id === Pages::id( 'acceso' ) ) )[0] ?? null;
+		$ok( $acc && 'Área privada' === $acc->title && $acc->url === Pages::url( 'area' ), 'menú con sesión: el elemento pasa a "Área privada"' );
+	}
+	$ok( str_starts_with( wp_login_url( Pages::url( 'informes' ) ), Pages::url( 'acceso' ) ) && str_contains( wp_login_url( admin_url() ), 'wp-login.php' ), 'login: páginas privadas → Acceso socios; wp-admin → wp-login.php' );
+	$ok( $crm->llamadas > 0 && 0 === $cortadas, "todas las consultas al CRM las ha respondido el simulador ({$crm->llamadas}); ninguna ha salido hacia el CRM real" );
+} catch ( Throwable $e ) {
+	++$fails;
+	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";
+} finally {
+	// ---------------------------------------------------------------------------
+	// Limpieza: solo lo de la prueba.
+	unset( $_POST['wfls-token'] );
+	Escritura::usar_para_pruebas( null );
+	$crm->desactivar();
+	remove_filter( 'pre_http_request', $cortar_crm, 2 );
+	remove_filter( 'pre_wp_mail', $captura, 10 );
+	remove_filter( 'send_auth_cookies', '__return_false' );
+	wp_set_current_user( 0 );
+	$lista_u = implode( ',', array_map( 'intval', $creados ?: array( 0 ) ) );
+	foreach ( (array) $wpdb->get_col( $wpdb->prepare( 'SELECT id FROM %i WHERE id > %d', FamiliasTable::table(), $fam_antes ) ) as $fid ) { // phpcs:ignore WordPress.DB
+		$wpdb->delete( MovimientosTable::table(), array( 'familia_id' => (int) $fid ) );
+		$wpdb->delete( FamiliasTable::table_miembros(), array( 'familia_id' => (int) $fid ) );
+		$wpdb->delete( FamiliasTable::table(), array( 'id' => (int) $fid ) );
+	}
+	$wpdb->query( $wpdb->prepare( "DELETE FROM %i WHERE id > %d AND user_id IN ($lista_u)", RegistroEmails::table(), $emails_antes ) ); // phpcs:ignore WordPress.DB
+	$wpdb->query( $wpdb->prepare( "DELETE FROM %i WHERE id > %d AND ( user_id IN ($lista_u) OR ( objeto = 'user' AND objeto_id IN ('" . str_replace( ',', "','", $lista_u ) . "') ) )", Logger::table(), $log_antes ) ); // phpcs:ignore WordPress.DB
+	foreach ( $creados as $id ) {
+		Ambito::olvidar( (int) $id );
+		wp_delete_user( (int) $id );
+	}
+	$ahora = array_column( (array) $wpdb->get_results( 'SELECT * FROM ' . SociosTable::table(), ARRAY_A ), null, 'num_socio_asde' ); // phpcs:ignore WordPress.DB
+	foreach ( array_diff_key( $ahora, $socios_antes ) as $asde => $f ) {
+		$wpdb->delete( SociosTable::table(), array( 'num_socio_asde' => (string) $asde ) );
+	}
+	Numeracion::olvidar_cache();
+	remove_filter( 'pre_option_asde_ap_grupos', $mas_grupos );
+	Grupos::olvidar();
+	Grupo::forzar( null );
+	wp_using_ext_object_cache( $cache_externa );
+	if ( null === $ip_antes ) {
+		unset( $_SERVER['REMOTE_ADDR'] );
+	} else {
+		$_SERVER['REMOTE_ADDR'] = $ip_antes;
+	}
+
+	$quedan = (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->users} WHERE user_login LIKE 'prueba-reglas-%' OR user_login LIKE '7996%'" ); // phpcs:ignore WordPress.DB
+	$filas  = (int) $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(*) FROM %i WHERE id > %d', FamiliasTable::table(), $fam_antes ) ); // phpcs:ignore WordPress.DB
+	$ok( 0 === $quedan && 0 === $filas && ! array_diff_key( array_column( (array) $wpdb->get_results( 'SELECT * FROM ' . SociosTable::table(), ARRAY_A ), null, 'num_socio_asde' ), $socios_antes ), 'limpieza: sin usuarios, familias ni números de la prueba' ); // phpcs:ignore WordPress.DB
+}
+
+echo $fails ? "\n$fails FALLOS\n" : "\nTODO OK (nada tocado en el CRM real; el sitio queda como estaba)\n";

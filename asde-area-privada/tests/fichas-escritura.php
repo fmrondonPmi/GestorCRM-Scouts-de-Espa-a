@@ -4,8 +4,8 @@
  *
  *   wp eval-file wp-content/plugins/asde-area-privada/tests/fichas-escritura.php
  *
- * ⚠️ NO ESCRIBE EN EL CRM REAL: toda escritura va a un CRM simulado
- * (Escritura::usar_para_pruebas). Del CRM real solo se LEE.
+ * ⚠️ NO TOCA EL CRM REAL: toda escritura va a un CRM simulado (Escritura::usar_para_pruebas) y, desde el doc 60,
+ * también las lecturas (fichas inventadas de tests/lib/CrmSimulado.php; antes leía las fichas reales del 684).
  *
  * - Escritura: permisos, campos prohibidos, verificación y auditoría.
  * - Permisos de la ficha por rol (Secretaría, scouter, Coordinación, familia, la propia persona).
@@ -41,6 +41,7 @@ use AsdeBalears\AreaPrivada\Usuarios\RegistroEmails;
 use AsdeBalears\AreaPrivada\Usuarios\Usuarios;
 
 require_once ABSPATH . 'wp-admin/includes/user.php';
+require_once __DIR__ . '/lib/CrmSimulado.php';
 global $wpdb;
 
 $fails = 0;
@@ -50,10 +51,26 @@ $ok    = function ( $cond, string $label ) use ( &$fails ) {
 	}
 	echo ( $cond ? 'OK   ' : 'FAIL ' ), $label, "\n";
 };
-$mailpit_ids   = static fn() => array_column( (array) ( json_decode( wp_remote_retrieve_body( wp_remote_get( 'http://localhost:10006/api/v1/messages?limit=1000' ) ), true )['messages'] ?? array() ), 'ID' );
-$mailpit_antes = $mailpit_ids();
 $log_antes     = (int) $wpdb->get_var( 'SELECT MAX(id) FROM ' . Logger::table() );
 $socios_antes  = (array) $wpdb->get_results( 'SELECT * FROM ' . SociosTable::table(), ARRAY_A );
+foreach ( get_users( array( 'search' => 'prueba-fichas-*', 'search_columns' => array( 'user_login' ) ) ) as $viejo ) {
+	exit( 'Ya existe el usuario ' . $viejo->user_login . " (¿una ejecución anterior interrumpida?). Bórralo antes de repetir la prueba.\n" );
+}
+
+// Doc 60: hasta ahora esta prueba LEÍA EL CRM REAL y trabajaba con fichas reales del grupo 684 (y las partes de la
+// numeración se saltaban si en el Local no había fichas sin número, con formato antiguo o repetidas). Ahora todo va
+// con fichas inventadas del CRM simulado (tests/lib), los emails se capturan y las cachés van en memoria.
+$cache_externa = wp_using_ext_object_cache( true );
+$cortadas      = 0;
+$cortar_crm    = static function ( $pre, $args, $url ) use ( &$cortadas ) {
+	if ( false === $pre && str_contains( (string) $url, '/rest.php' ) ) {
+		++$cortadas;
+		return new WP_Error( 'prueba', 'CRM real cortado durante la prueba' );
+	}
+	return $pre;
+};
+add_filter( 'pre_http_request', $cortar_crm, 2, 3 );
+add_filter( 'pre_wp_mail', '__return_true' );
 
 // CRM simulado: guarda lo "escrito" en memoria y lo devuelve al releer.
 $falso = new class() implements EscritorCrm {
@@ -84,29 +101,52 @@ Escritura::usar_para_pruebas( $falso );
 // petición interna ni WP-Cron): en otra petición escribirían en el CRM real.
 add_filter( 'asde_ap_tarea_lanzar', '__return_false' );
 $grupo = Grupos::por_numero( '684' );
+if ( ! $grupo || '' === $grupo['crm_id'] ) {
+	exit( "Hace falta el grupo 684 con la conexión al CRM comprobada.\n" );
+}
+// Fichas inventadas (nº Scouts de España 990101…; nº local del 684 en la serie 09xx, que no usa nadie).
+$anio   = (int) wp_date( 'Y' );
+$P      = array( 'Asde_Prueba_Crm', 'persona' );
+$ficha  = static fn( int $n, string $nombre, string $nac, string $secc, string $local ) => $P( $n, $nombre, 'Fichas Prueba', $nac, $secc, array( 'numsocioantiguo_enficha_c' => $local, 'email1' => 'fichas' . $n . '@example.invalid' ) );
+$fichas = array(
+	$ficha( 101, 'Abel', '1980-01-01', 'Scouters', '76840901' ),
+	$ficha( 102, 'Berta', '1981-01-01', 'Scouters', '76840902' ),
+	$ficha( 103, 'Carles', '1982-01-01', 'Scouters', '76840903' ),
+	$ficha( 104, 'Dolors', '1983-01-01', 'Scouters', '76840904' ),
+	$ficha( 105, 'Elia', ( $anio - 15 ) . '-03-03', 'Scouts', '76840905' ),
+	$ficha( 106, 'Fermí', ( $anio - 9 ) . '-03-03', 'Lobatos', '76840906' ),
+	$ficha( 107, 'Gala', ( $anio - 12 ) . '-03-03', 'Scouts', '76840907' ),
+	$ficha( 108, 'Hugo', ( $anio - 10 ) . '-03-03', 'Lobatos', '' ),         // Sin número (FALTA).
+	$ficha( 109, 'Irene', ( $anio - 11 ) . '-03-03', 'Lobatos', '6840909' ), // Formato antiguo (CORREGIDO)…
+	$ficha( 110, 'Joan', ( $anio - 11 ) . '-03-03', 'Lobatos', '6840910' ),
+	$ficha( 111, 'Kira', ( $anio - 11 ) . '-03-03', 'Lobatos', '6840911' ),
+	$ficha( 112, 'Lluc', ( $anio - 11 ) . '-03-03', 'Lobatos', '6840912' ),
+	$ficha( 113, 'Marta', ( $anio - 11 ) . '-03-03', 'Lobatos', '6840913' ),
+	$ficha( 114, 'Nil', ( $anio - 11 ) . '-03-03', 'Lobatos', '6840914' ),
+	$ficha( 115, 'Olga', ( $anio - 13 ) . '-03-03', 'Scouts', '76840915' ),  // Repetidos (DUPLICADO).
+	$ficha( 116, 'Pau', ( $anio - 13 ) . '-03-03', 'Scouts', '76840915' ),
+);
+$crm = new Asde_Prueba_Crm( $fichas, $grupo['crm_id'] );
+$crm->metadatos = true; // La ficha necesita los tipos de los campos (get_module_fields).
 Grupo::forzar( $grupo );
+$crm->activar();
 $repo = PersonaRepository::make();
 $num  = new Numeracion( $repo );
 $num->analizar_todo( true );
 
-// Fichas reales de prueba (solo se leen; no se muestran datos personales).
 $activas = $repo->todas( true );
-$elige   = static function ( callable $cond ) use ( $activas ) {
-	foreach ( $activas as $x ) {
-		if ( ! Usuarios::por_socio( $x->num_socio_asde ) && ! Usuarios::tutores_de( $x->num_socio_asde ) && $cond( $x ) ) {
-			return $x;
-		}
-	}
-	return null;
-};
-$adulto  = $elige( fn( $x ) => $x->es_adulto_voluntario() );
-$adulto2 = $elige( fn( $x ) => $x->es_adulto_voluntario() && $adulto && $x->num_socio_asde !== $adulto->num_socio_asde );
-$adulto3 = $elige( fn( $x ) => $x->es_adulto_voluntario() && $adulto2 && ! in_array( $x->num_socio_asde, array( $adulto->num_socio_asde, $adulto2->num_socio_asde ), true ) );
-$adulto4 = $elige( fn( $x ) => $x->es_adulto_voluntario() && $adulto3 && ! in_array( $x->num_socio_asde, array( $adulto->num_socio_asde, $adulto2->num_socio_asde, $adulto3->num_socio_asde ), true ) );
-$teen    = $elige( fn( $x ) => $x->es_participante() && null !== $x->edad() && $x->edad() >= 14 && $x->edad() < 18 );
-$nino    = $elige( fn( $x ) => $x->es_participante() && null !== $x->edad() && $x->edad() < 14 && $x->seccion_educativa() );
-$otro    = $elige( fn( $x ) => $x->es_participante() && $nino && $x->seccion_educativa() && $x->seccion_educativa() !== $nino->seccion_educativa() );
-$ok( $adulto && $adulto2 && $adulto3 && $adulto4 && $teen && $nino && $otro, 'fichas de prueba encontradas (4 adultos, participante 14-17, menor de 14, otra sección)' );
+$por_num = array();
+foreach ( $activas as $x ) {
+	$por_num[ $x->num_socio_asde ] = $x;
+}
+$adulto  = $por_num['990101'] ?? null;
+$adulto2 = $por_num['990102'] ?? null;
+$adulto3 = $por_num['990103'] ?? null;
+$adulto4 = $por_num['990104'] ?? null;
+$teen    = $por_num['990105'] ?? null;
+$nino    = $por_num['990106'] ?? null;
+$otro    = $por_num['990107'] ?? null;
+$ok( $adulto && $adulto2 && $adulto3 && $adulto4 && $teen && $nino && $otro && $adulto->es_adulto_voluntario() && 'lobatos' === $nino->seccion_educativa() && 'scouts' === $otro->seccion_educativa(), 'fichas de prueba (inventadas): 4 adultos, participante 14-17, menor de 14 y otra sección' );
 if ( ! ( $adulto && $adulto2 && $adulto3 && $adulto4 && $teen && $nino && $otro ) ) {
 	exit( "\nNo se puede continuar.\n" );
 }
@@ -289,13 +329,15 @@ if ( $falta ) {
 	$r               = $num->asignar_y_guardar( $falta );
 	$ok( is_array( $r ) && $r['crm'] && $r['numero'] === ( $falso->llamadas[0][2]['numsocioantiguo_enficha_c'] ?? '' ) && SociosTable::CRM === ( SociosTable::todas()[ $falta->num_socio_asde ]['origen'] ?? '' ), 'asignar nº: se reserva y se guarda en el CRM (ya no queda «pendiente»)' );
 } else {
-	$ok( true, 'asignar nº: no hay fichas activas sin número (se omite)' );
+	$ok( false, 'asignar nº: tendría que haber una ficha activa sin número (la inventada 990108)' );
 }
 $corr = $por_estado[ Numeracion::CORREGIDO ][0] ?? null;
 if ( $corr ) {
 	$falso->llamadas = array();
 	$esperado        = $num->de( $corr )['numero'];
 	$ok( true === $num->corregir_formato( $corr ) && $esperado === $falso->llamadas[0][2]['numsocioantiguo_enficha_c'], 'formato antiguo: se escribe en el CRM el formato correcto' );
+} else {
+	$ok( false, 'formato antiguo: tendría que haber una ficha con el formato antiguo (las inventadas 990109-990114)' );
 }
 // Por tandas (lo usa la corrección en segundo plano, parte G).
 $pend = count( array_filter( $todas, static fn( $x ) => Numeracion::CORREGIDO === $num->de( $x )['estado'] ) );
@@ -310,7 +352,7 @@ if ( $pend > 3 ) {
 	$r3              = $num->guardar_todos( $todas, Numeracion::CORREGIDO, null, array( $salta->num_socio_asde ) );
 	$ok( $pend - 3 === $r3['resueltos'] && 0 === $r3['pendientes'] && ! $r3['fallidas'] && ! in_array( $salta->id, array_column( $falso->llamadas, 1 ), true ), 'por tandas: las fichas que ya fallaron se saltan (no se reintentan en bucle)' );
 } else {
-	$ok( true, 'por tandas: no hay bastantes formatos antiguos (se omite)' );
+	$ok( false, 'por tandas: tendría que haber más de 3 fichas con el formato antiguo (las inventadas 990109-990114)' );
 }
 $dups = $por_estado[ Numeracion::DUPLICADO ] ?? array();
 if ( count( $dups ) >= 2 ) {
@@ -331,7 +373,7 @@ if ( count( $dups ) >= 2 ) {
 	$nuevos          = array_map( static fn( $l ) => $l[2]['numsocioantiguo_enficha_c'], $falso->llamadas );
 	$ok( $r['resueltos'] >= 1 && ! $r['fallidas'] && count( array_unique( $nuevos ) ) === count( $nuevos ) && ! in_array( $numero, $nuevos, true ), 'duplicados: una ficha de cada número repetido recibe un número nuevo y libre (' . $r['resueltos'] . ')' );
 } else {
-	$ok( true, 'duplicados: no hay números repetidos (se omite)' );
+	$ok( false, 'duplicados: tendría que haber un número repetido (las inventadas 990115 y 990116)' );
 }
 
 // ---------------------------------------------------------------------------
@@ -371,6 +413,7 @@ if ( is_array( $tarea_previa ) && TareaNumeracion::EN_CURSO === ( $tarea_previa[
 	$sim_sesiones  = (array) $wpdb->get_results( "SELECT option_name, option_value FROM {$wpdb->options} WHERE option_name LIKE '\\_transient\\_asde\\_ap\\_crm\\_sess\\_%'", OBJECT_K ); // phpcs:ignore WordPress.DB
 	// Las cachés (transients) del CRM simulado, solo en la memoria de este proceso: la web real no las ve.
 	$sim_cache_ext = wp_using_ext_object_cache( true );
+	$crm->desactivar(); // El CRM simulado de esta parte, solo (los dos atenderían las mismas peticiones).
 	$sim->activar();
 	Escritura::usar_para_pruebas( $sim );
 	Numeracion::olvidar_cache();
@@ -486,6 +529,9 @@ preg_match( '/RewriteCond %\{QUERY_STRING\} (\S+)/', Asde_Diagnostico_Segundo_Pl
 $ok( isset( $regla[1] ) && preg_match( '/' . $regla[1] . '/', 'action=asde_ap_tarea' ) && preg_match( '/' . $regla[1] . '/', 'action=asde_diag_ping' ) && ! preg_match( '/' . $regla[1] . '/', 'action=heartbeat' ), 'la regla «noabort» cubre justo las peticiones de las tareas y del diagnóstico' );
 
 // ---------------------------------------------------------------------------
+} catch ( Throwable $e ) {
+	++$fails;
+	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";
 } finally {
 	// Limpieza.
 	if ( ! is_array( $tarea_previa ) || TareaNumeracion::EN_CURSO !== ( $tarea_previa['estado'] ?? '' ) ) {
@@ -522,18 +568,18 @@ $ok( isset( $regla[1] ) && preg_match( '/' . $regla[1] . '/', 'action=asde_ap_ta
 	// nunca acciones reales de la web hechas mientras tanto.
 	$quienes = implode( ',', array_map( 'intval', $uids ?: array( -1 ) ) );
 	$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . Logger::table() . " WHERE id > %d AND ( user_id IN ($quienes) OR ( user_id = 0 AND ( accion IN ('crm_ficha_editada', 'crm_escritura_error', 'alta_usuario', 'tutela_retirada_mayoria_edad') OR accion LIKE 'cambio\\_%%' OR accion LIKE 'numero%%' OR accion LIKE 'usuario\\_%%' ) ) )", $log_antes ) ); // phpcs:ignore WordPress.DB
-	$de_la_prueba = array_values( array_diff( $mailpit_ids(), $mailpit_antes ) );
-	if ( $de_la_prueba ) {
-		wp_remote_request(
-			'http://localhost:10006/api/v1/messages',
-			array(
-				'method'  => 'DELETE',
-				'headers' => array( 'Content-Type' => 'application/json' ),
-				'body'    => wp_json_encode( array( 'IDs' => $de_la_prueba ) ),
-			)
-		);
+	// Las fichas son inventadas (9901xx): toda fila nueva de la tabla de números es de la prueba.
+	$ahora_socios = array_column( (array) $wpdb->get_results( 'SELECT * FROM ' . SociosTable::table(), ARRAY_A ), null, 'num_socio_asde' ); // phpcs:ignore WordPress.DB
+	foreach ( array_diff_key( $ahora_socios, $antes_por_socio ) as $asde => $fila ) {
+		$wpdb->delete( SociosTable::table(), array( 'num_socio_asde' => (string) $asde ) );
 	}
-	$ok( ! array_filter( $tocados, static fn( $asde ) => SociosTable::local_de( $asde ) !== ( $antes_por_socio[ $asde ]['num_socio_local'] ?? null ) ), 'limpieza: tabla de números restaurada en las fichas de la prueba' );
+	Numeracion::olvidar_cache();
+	$crm->desactivar();
+	remove_filter( 'pre_http_request', $cortar_crm, 2 );
+	remove_filter( 'pre_wp_mail', '__return_true' );
+	wp_using_ext_object_cache( $cache_externa );
+	$ahora_socios = array_column( (array) $wpdb->get_results( 'SELECT * FROM ' . SociosTable::table(), ARRAY_A ), null, 'num_socio_asde' ); // phpcs:ignore WordPress.DB
+	$ok( $ahora_socios == $antes_por_socio && 0 === $cortadas, 'limpieza: la tabla de números, exactamente como estaba; ninguna consulta al CRM real' ); // phpcs:ignore Universal.Operators.StrictComparisons
 }
 
 echo $fails ? "\n$fails FALLOS\n" : "\nTODO OK (nada escrito en el CRM real; usuarios, cambios y números de prueba restaurados)\n";
