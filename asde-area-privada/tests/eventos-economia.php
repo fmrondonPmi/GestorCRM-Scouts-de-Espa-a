@@ -314,6 +314,12 @@ try {
 	echo "\n== Parte D · Tesorería revisa, reembolsa y anula ==\n";
 	$como( $u_teso );
 	$ok( true === Cuentas::validar( $e, $g1 ) && GastosTable::VALIDADO === GastosTable::obtener( $g1 )['estado'] && GastosTable::por_reembolsar( GastosTable::obtener( $g1 ) ), 'Tesorería valida el gasto: cuenta y queda pendiente de reembolso a quien lo pagó' );
+	// Doc 59, RC-DEC-3: los ficheros de los justificantes antes de rechazar y retirar.
+	$fich = static fn( int $gid ): string => Justificantes::carpeta() . '/' . (string) GastosTable::obtener( $gid )['justificante'];
+	$f_g1 = $fich( (int) $g1 );
+	$f_g2 = $fich( (int) $g2 );
+	$f_g3 = $fich( (int) $g3 );
+	$ok( is_file( $f_g1 ) && is_file( $f_g2 ) && is_file( $f_g3 ), 'los tres gastos tienen su fichero de justificante' );
 	$r = Cuentas::rechazar( $e, $g2, '' );
 	$ok( is_wp_error( $r ) && str_contains( $r->get_error_message(), 'motivo' ), 'rechazar pide el motivo' );
 	$ok( true === Cuentas::rechazar( $e, $g2, 'No es de este evento' ) && 'No es de este evento' === GastosTable::obtener( $g2 )['motivo'] && GastosTable::RECHAZADO === GastosTable::obtener( $g2 )['estado'], 'rechazado con su motivo' );
@@ -323,6 +329,9 @@ try {
 	$retirado = \AsdeBalears\AreaPrivada\Idiomas\Idioma::en( 'ca', static fn() => Cuentas::retirar( $e, $g3 ) ); // En catalán: el motivo se guarda igualmente en castellano (doc 59, RC-EVE-3).
 	$ok( true === $retirado && null !== GastosTable::obtener( $g3 )['anulado_en'] && is_wp_error( Cuentas::retirar( $e, $g1 ) ), 'quien lo propuso lo retira mientras está por revisar (uno ya validado, no)' );
 	$ok( Cuentas::MOTIVO_RETIRADO === GastosTable::obtener( $g3 )['motivo'], 'el motivo «Retirado» se guarda en castellano aunque quien lo retira use otro idioma (RC-EVE-3)' );
+	$ok( ! is_file( $f_g2 ) && '' === GastosTable::obtener( $g2 )['justificante'], 'al rechazar un gasto se borra su justificante (fichero y referencia) (RC-DEC-3)' );
+	$ok( ! is_file( $f_g3 ) && '' === GastosTable::obtener( $g3 )['justificante'], 'al retirarlo, también' );
+	$ok( is_file( $f_g1 ) && $PNG === Justificantes::leer( GastosTable::obtener( $g1 ) ), 'el del gasto válido se conserva' );
 	$como( $u_teso );
 	$b = Cuentas::balance( $ev( $id_e ) );
 	$ok( 0 === $b['por_revisar'] && 40.5 === $b['gastos'] && 1 === $b['reembolsos']['n'] && 40.5 === $b['reembolsos']['importe'], 'balance: 40,50 € de gastos y un reembolso pendiente de 40,50 €' );
@@ -567,6 +576,7 @@ try {
 	$datos = (int) $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(*) FROM ' . InscripcionesTable::table() . ' WHERE evento_id = %d AND datos_enc IS NOT NULL', $id_e ) ); // phpcs:ignore WordPress.DB
 	$ok( str_contains( $h, 'cerradas' ) && null !== $e['cerrado_en'] && $u_teso === $e['cerrado_por'] && is_array( $e['balance'] ) && $b['resultado'] === $e['balance']['resultado'] && 'cerrado' === EventosTable::estado_visible( $e ), 'Tesorería cierra: se guarda el balance como informe final y el evento sale como «Cuentas cerradas»' );
 	$ok( 0 === $datos, 'al cerrar se borran quién recoge y las observaciones de todas las inscripciones (P-150)' );
+	$ok( is_file( $f_g1 ), 'y el justificante del gasto válido se conserva también con las cuentas cerradas (RC-DEC-3)' );
 
 	echo "\n== Parte I · Cerrado: solo lectura ==\n";
 	$ok( is_wp_error( Cuentas::proponer( $e, $como( $u_teso ), $gasto(), $fichero( $PNG, 'tarde.png' ) ) ) && is_wp_error( Cobros::pagar( $e, $f_leo['id'], 1, 'efectivo', $hoy, '', '' ) ) && is_wp_error( Cobros::devolver( $e, $f_leo['id'], 1, 'efectivo', $hoy, 'x' ) ) && is_wp_error( Cuentas::anticipo( $e, $u_mon, 5, $hoy, 'efectivo', '' ) ), 'con las cuentas cerradas no se apuntan gastos, pagos, devoluciones ni anticipos' );

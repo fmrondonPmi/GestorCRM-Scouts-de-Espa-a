@@ -178,10 +178,11 @@ final class Servicio {
 		if ( '' === $motivo ) {
 			return new \WP_Error( 'asde_reintegro', asde_t( 'Indica el motivo del rechazo.' ) );
 		}
-		if ( ! ReintegrosTable::cambiar( $r['id'], ReintegrosTable::SOLICITADO, ReintegrosTable::RECHAZADO, self::revision() + array( 'motivo' => $motivo, 'iban_enc' => '' ) ) ) {
+		if ( ! ReintegrosTable::cambiar( $r['id'], ReintegrosTable::SOLICITADO, ReintegrosTable::RECHAZADO, self::revision() + array( 'motivo' => $motivo, 'iban_enc' => '' ) + Justificantes::SIN_JUSTIFICANTE ) ) {
 			return new \WP_Error( 'asde_reintegro', asde_t( 'Ese reintegro ya se ha revisado.' ) );
 		}
-		Logger::log( 'reintegro_rechazado', 'reintegro', (string) $r['id'] );
+		$borrado = Justificantes::borrar_si_libre( (string) $r['justificante'] ); // El justificante se borra si nadie más lo usa (doc 59, RC-DEC-3).
+		Logger::log( 'reintegro_rechazado', 'reintegro', (string) $r['id'], array( 'justificante_borrado' => $borrado ) );
 		Avisos::a_solicitante( (array) ReintegrosTable::obtener( $r['id'] ), Avisos::RECHAZADO );
 		return true;
 	}
@@ -191,10 +192,11 @@ final class Servicio {
 		if ( ! self::puede_cancelar( $r ) ) {
 			return new \WP_Error( 'asde_reintegro', asde_t( 'Ese reintegro ya no se puede cancelar: ya lo ha revisado Tesorería.' ) );
 		}
-		if ( ! ReintegrosTable::cambiar( $r['id'], ReintegrosTable::SOLICITADO, ReintegrosTable::CANCELADO, array( 'iban_enc' => '' ) ) ) {
+		if ( ! ReintegrosTable::cambiar( $r['id'], ReintegrosTable::SOLICITADO, ReintegrosTable::CANCELADO, array( 'iban_enc' => '' ) + Justificantes::SIN_JUSTIFICANTE ) ) {
 			return new \WP_Error( 'asde_reintegro', asde_t( 'Ese reintegro ya se ha revisado.' ) );
 		}
-		Logger::log( 'reintegro_cancelado', 'reintegro', (string) $r['id'] );
+		$borrado = Justificantes::borrar_si_libre( (string) $r['justificante'] ); // Doc 59, RC-DEC-3.
+		Logger::log( 'reintegro_cancelado', 'reintegro', (string) $r['id'], array( 'justificante_borrado' => $borrado ) );
 		return true;
 	}
 

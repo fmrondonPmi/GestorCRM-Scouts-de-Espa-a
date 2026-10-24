@@ -257,11 +257,14 @@ try {
 	$h = $enviar( array( 'asde_action' => 'reintegro_rechazar', 'reintegro' => (string) $r_efe['id'], 'motivo' => '' ), 'asde_reintegro_' . $r_efe['id'] );
 	$ok( ReintegrosTable::SOLICITADO === ReintegrosTable::obtener( $r_efe['id'] )['estado'] && str_contains( $h, 'motivo' ), 'rechazar pide el motivo' );
 	$correos = array();
+	$f_efe   = Justificantes::carpeta() . '/' . $r_efe['justificante']; // Doc 59, RC-DEC-3.
+	$ok( is_file( $f_efe ), 'el reintegro por rechazar tiene su fichero de justificante' );
 	$enviar( array( 'asde_action' => 'reintegro_rechazar', 'reintegro' => (string) $r_efe['id'], 'motivo' => 'Eso lo paga el grupo' ), 'asde_reintegro_' . $r_efe['id'] );
 	$q = ReintegrosTable::obtener( $r_efe['id'] );
 	$ok( ReintegrosTable::RECHAZADO === $q['estado'] && 'Eso lo paga el grupo' === $q['motivo'] && $u_teso === $q['revisado_por'], 'Tesorería lo rechaza con motivo' );
 	$a_ana = array_values( array_filter( $correos, static fn( $c ) => in_array( 'ana-rei@example.invalid', (array) $c['to'], true ) ) );
 	$ok( 1 === count( $a_ana ) && str_contains( (string) $a_ana[0]['message'], 'Eso lo paga el grupo' ), 'y Ana recibe un email con el motivo' );
+	$ok( ! is_file( $f_efe ) && '' === $q['justificante'] && '' === $q['justificante_tipo'], 'al rechazarlo se borra su justificante (fichero y referencia) (RC-DEC-3)' );
 	$enviar( array( 'asde_action' => 'reintegro_aprobar', 'reintegro' => (string) $r_efe['id'] ), 'asde_reintegro_' . $r_efe['id'] );
 	$ok( ReintegrosTable::RECHAZADO === ReintegrosTable::obtener( $r_efe['id'] )['estado'], 'uno rechazado no se puede aprobar después' );
 	$correos = array();
@@ -276,11 +279,14 @@ try {
 	$como( $u_sc );
 	$id_c = Servicio::solicitar( array( 'forma' => 'transferencia', 'iban' => $iban_ok, 'concepto' => 'Se canceló' ) + $valido, $fichero );
 	$r_c  = ReintegrosTable::obtener( (int) $id_c );
+	$f_c  = Justificantes::carpeta() . '/' . $r_c['justificante'];
 	$como( $u_sc2 );
 	$ok( is_wp_error( Servicio::cancelar( $r_c ) ), 'otro scouter no cancela el reintegro de Ana' );
 	$como( $u_sc );
 	$ok( true === Servicio::cancelar( $r_c ) && ReintegrosTable::CANCELADO === ReintegrosTable::obtener( $r_c['id'] )['estado'] && '' === ReintegrosTable::obtener( $r_c['id'] )['iban_enc'], 'Ana cancela el suyo mientras está por aprobar, y se borra su IBAN' );
 	$ok( is_wp_error( Servicio::cancelar( ReintegrosTable::obtener( $r_tra['id'] ) ) ), 'uno aprobado ya no se cancela' );
+	$ok( ! is_file( $f_c ) && '' === ReintegrosTable::obtener( $r_c['id'] )['justificante'], 'al cancelarlo se borra su justificante (RC-DEC-3)' );
+	$ok( is_file( Justificantes::carpeta() . '/' . $r_tra['justificante'] ), 'el del aprobado se conserva' );
 
 	echo "\n== Parte G · Pagar ==\n";
 	$como( $u_sc );
@@ -300,6 +306,7 @@ try {
 	$ok( $g && GastosTable::VALIDADO === $g['estado'] && GastosTable::PAGO_PERSONA === $g['pagado_por'] && $u_sc === $g['persona'] && 40.0 === $g['importe'] && $hoy === $g['reembolsado_en'] && 'transferencia' === $g['reembolso_forma'] && $g['evento_id'] === $evento && $g['justificante'] === $q['justificante'] && ! GastosTable::por_reembolsar( $g ), 'el gasto del evento: validado, de su bolsillo, ya reembolsado y con el mismo justificante' );
 	$ok( 1 === count( array_filter( $correos, static fn( $c ) => in_array( 'ana-rei@example.invalid', (array) $c['to'], true ) ) ), 'y Ana recibe el aviso de pagado' );
 	$ok( is_wp_error( Servicio::pagar( $q, $hoy, '' ) ), 'no se paga dos veces' );
+	$ok( false === Justificantes::borrar_si_libre( $q['justificante'] ) && is_file( Justificantes::carpeta() . '/' . $q['justificante'] ), 'un justificante que usan el reintegro y el gasto del evento no se borra (RC-DEC-3)' );
 	$como( $u_sc );
 	$ok( '' === Servicio::iban( $q ), 'ya nadie ve el IBAN' );
 

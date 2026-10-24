@@ -120,8 +120,10 @@ final class Cuentas {
 		if ( ! self::abiertas( $e ) ) {
 			return self::cerradas();
 		}
-		GastosTable::actualizar( $id, self::anulacion( self::MOTIVO_RETIRADO ) ); // Se guarda en castellano (doc 59, RC-EVE-3).
-		Logger::log( 'evento_gasto_retirado', 'evento', (string) $e['id'], array( 'gasto' => $id ) );
+		// El motivo se guarda en castellano (doc 59, RC-EVE-3); el justificante se borra si nadie más lo usa (RC-DEC-3).
+		GastosTable::actualizar( $id, self::anulacion( self::MOTIVO_RETIRADO ) + Justificantes::SIN_JUSTIFICANTE );
+		$borrado = Justificantes::borrar_si_libre( (string) $g['justificante'] );
+		Logger::log( 'evento_gasto_retirado', 'evento', (string) $e['id'], array( 'gasto' => $id, 'justificante_borrado' => $borrado ) );
 		return true;
 	}
 
@@ -159,9 +161,10 @@ final class Cuentas {
 				'motivo'       => $motivo,
 				'revisado_en'  => current_time( 'mysql', true ),
 				'revisado_por' => get_current_user_id(),
-			)
+			) + Justificantes::SIN_JUSTIFICANTE
 		);
-		Logger::log( 'evento_gasto_rechazado', 'evento', (string) $e['id'], array( 'gasto' => $id ) );
+		$borrado = Justificantes::borrar_si_libre( (string) $g['justificante'] ); // Doc 59, RC-DEC-3.
+		Logger::log( 'evento_gasto_rechazado', 'evento', (string) $e['id'], array( 'gasto' => $id, 'justificante_borrado' => $borrado ) );
 		return true;
 	}
 

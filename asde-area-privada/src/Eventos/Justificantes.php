@@ -75,6 +75,38 @@ final class Justificantes {
 		);
 	}
 
+	/** Columnas de una fila (gasto o reintegro) cuyo justificante se borra. */
+	public const SIN_JUSTIFICANTE = array(
+		'justificante'        => '',
+		'justificante_tipo'   => '',
+		'justificante_nombre' => '',
+	);
+
+	/**
+	 * Borra el fichero de un justificante si ya ninguna fila lo usa: ni un gasto de un evento ni un reintegro (el gasto
+	 * que crea un reintegro pagado con evento lleva el mismo fichero: Reintegros\Servicio::gasto_del_evento()). Se llama
+	 * al rechazar o cancelar un reintegro y al rechazar o retirar un gasto, después de vaciar las columnas de su fila
+	 * (SIN_JUSTIFICANTE). Los justificantes de los gastos válidos se conservan (doc 59, RC-DEC-3).
+	 *
+	 * @return bool Si se ha borrado el fichero.
+	 */
+	public static function borrar_si_libre( string $fichero ): bool {
+		global $wpdb;
+		if ( ! preg_match( '/^[0-9a-f]{32}\.bin$/', $fichero ) ) {
+			return false;
+		}
+		$usos = (int) $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(*) FROM %i WHERE justificante = %s', GastosTable::table(), $fichero ) ) // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+			+ (int) $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(*) FROM %i WHERE justificante = %s', \AsdeBalears\AreaPrivada\Reintegros\ReintegrosTable::table(), $fichero ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery
+		if ( $usos > 0 ) {
+			return false;
+		}
+		$dir = self::carpeta();
+		if ( '' === $dir || ! is_file( $dir . '/' . $fichero ) ) {
+			return false;
+		}
+		return self::fs()->delete( $dir . '/' . $fichero );
+	}
+
 	/** El contenido descifrado del justificante de un gasto, o null. */
 	public static function leer( array $gasto ): ?string {
 		$fichero = (string) $gasto['justificante'];
