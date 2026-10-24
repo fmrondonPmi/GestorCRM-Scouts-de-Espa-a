@@ -40,6 +40,15 @@ $estados = asde_ta( Inscripciones::ESTADOS );
 $medios  = asde_ta( Inscripciones::MEDIOS );
 ?>
 <p class="asde-back"><a href="<?php echo esc_url( $volver ); ?>"><?php asde_e( '← Lista de espera' ); ?></a></p>
+<?php if ( Inscripciones::ASOCIADA === $f['estado'] ) : // Doc 59, RC-NUE-1: ya no tiene datos; solo su nº de socio/a y la fecha. ?>
+	<section class="asde-card asde-espera-ficha">
+		<h2 class="asde-card__title"><?php echo esc_html( sprintf( asde_t( 'Asociado/a nº %s' ), '' !== $f['socio'] ? $f['socio'] : '—' ) ); ?></h2>
+		<p><?php echo esc_html( sprintf( asde_t( 'Se incorporó como asociado/a el %s. Sus datos de la lista de espera se han borrado.' ), $fecha( $f['asociada_en'] ) ) ); ?></p>
+	</section>
+	<?php
+	return;
+endif;
+?>
 
 <section class="asde-card asde-espera-ficha">
 	<h2 class="asde-card__title"><?php echo esc_html( $nombre ); ?></h2>
@@ -158,8 +167,8 @@ $medios  = asde_ta( Inscripciones::MEDIOS );
 					<?php else : ?>
 						<input type="hidden" name="sin_documento" value="1">
 					<?php endif; ?>
-					<p><button type="submit" class="button button-primary"><?php asde_e( 'Dar de alta en el CRM' ); ?></button></p>
-					<p class="asde-help"><?php asde_e( 'Abre el «Alta de socio/a» con sus datos. Primero se comprueba su documento en el CRM (si ya tiene ficha en el grupo, el alta se para). Al terminar el alta, esta inscripción se borra de la lista.' ); ?></p>
+					<p><button type="submit" class="button button-primary"><?php asde_e( 'Se incorpora como asociado/a' ); ?></button></p>
+					<p class="asde-help"><?php asde_e( 'Abre el «Alta de socio/a» con todos sus datos. Si tiene documento, primero se comprueba en el CRM (si ya tiene ficha en el grupo, el alta se para). Al terminar el alta, la inscripción queda como «Asociado/a» con su nº de socio/a y sus datos se borran.' ); ?></p>
 				</form>
 			<?php else : ?>
 				<p class="asde-help"><?php echo esc_html( $altas_motivo ); ?></p>

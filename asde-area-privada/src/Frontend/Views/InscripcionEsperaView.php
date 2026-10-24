@@ -48,7 +48,8 @@ final class InscripcionEsperaView extends View {
 	private function inscripcion( string $param, string $uso ): ?array {
 		$id   = absint( $this->post( 'id' ) ?: $this->get( $param ) );
 		$fila = $id ? Inscripciones::por_id( $id ) : null;
-		return $fila && Enlaces::token_valido( $fila, $uso, $this->post( 't' ) ?: $this->get( 't' ) ) ? $fila : null;
+		// Una «Asociado/a» ya no tiene datos ni página personal (doc 59, RC-NUE-1).
+		return $fila && Inscripciones::ASOCIADA !== $fila['estado'] && Enlaces::token_valido( $fila, $uso, $this->post( 't' ) ?: $this->get( 't' ) ) ? $fila : null;
 	}
 
 	public function render( string $content = '' ): string {

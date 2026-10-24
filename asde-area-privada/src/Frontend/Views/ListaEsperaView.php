@@ -77,6 +77,9 @@ final class ListaEsperaView extends View {
 					'seccion' => $seccion,
 					'url'     => $this->url( 'lista_espera' ),
 					'enlace'  => $grupo ? Enlaces::url( $grupo ) : '',
+				// Doc 59, RC-NUE-1: «Se incorpora como asociado/a» también en cada fila.
+				'altas'    => current_user_can( self::CAP_ALTA ) && current_user_can( 'asde_manage_users' ) && Altas::disponible(),
+				'url_alta' => $this->url( 'personas', array( 'alta' => '1' ) ),
 					'renovar' => current_user_can( self::CAP_ALTA ),
 					'campos'  => current_user_can( self::CAP_ALTA ) ? CamposExtra::del_grupo( Grupo::numero() ) : null,
 					'declaracion' => CamposExtra::declaracion_propia( Grupo::numero() ),

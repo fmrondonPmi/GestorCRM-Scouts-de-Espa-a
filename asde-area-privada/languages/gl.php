@@ -2448,7 +2448,6 @@ return array(
 	'%1$s ya está en la lista de espera del %2$s. Te hemos enviado un email con el enlace para ver tus datos.' => '%1$s xa está na lista de espera do %2$s. Enviámosche un email coa ligazón para ver os teus datos.',
 	'%d inscripciones' => '%d inscricións',
 	'%d inscripción' => '%d inscrición',
-	'Abre el «Alta de socio/a» con sus datos. Primero se comprueba su documento en el CRM (si ya tiene ficha en el grupo, el alta se para). Al terminar el alta, esta inscripción se borra de la lista.' => 'Abre a «Alta de socio/a» cos seus datos. Primeiro compróbase o seu documento no CRM (se xa ten ficha no grupo, a alta párase). Ao terminar a alta, esta inscrición bórrase da lista.',
 	'Acepto que el %1$s guarde estos datos, cifrados, para gestionar la lista de espera durante %2$d meses (o hasta que me dé de alta o los borre). Solo los ve el equipo del grupo.' => 'Acepto que o %1$s garde estes datos, cifrados, para xestionar a lista de espera durante %2$d meses (ou ata que me dea de alta ou os borre). Só os ve o equipo do grupo.',
 	'Apellidos de la persona de contacto' => 'Apelidos da persoa de contacto',
 	'Apuntada más de una vez con distinto email' => 'Apuntada máis dunha vez con distinto email',
@@ -2561,9 +2560,7 @@ return array(
 	'No se ha podido cambiar el estado.' => 'Non se puido cambiar o estado.',
 	'Sección asignada: %s.' => 'Sección asignada: %s.',
 	'Sección: la de su edad.' => 'Sección: a da súa idade.',
-	'Sus datos de la lista de espera se han borrado.' => 'Os seus datos da lista de espera borráronse.',
 	'Ver la inscripción' => 'Ver a inscrición',
-	'Viene de la lista de espera: los datos son los que escribió la familia. Revísalos y completa lo que falta (el género). Al terminar, la inscripción se borra de la lista.' => 'Vén da lista de espera: os datos son os que escribiu a familia. Revísaos e completa o que falta (o xénero). Ao terminar, a inscrición bórrase da lista.',
 
 	// v0.32: lista de espera (orden)
 	'Orden' => 'Orde',
@@ -4620,4 +4617,13 @@ return array(
 	'Soy voluntario/a sin sección (Secretaría, Coordinación, Tesorería o Intendencia)' => 'Son voluntario/a sen sección (Secretaría, Coordinación, Tesouraría ou Intendencia)',
 	'Nadie la revisó en 90 días: rechazada automáticamente.' => 'Ninguén a revisou en 90 días: rexeitada automaticamente.',
 	'Pásalo a los scouters y al voluntariado del grupo. Se dan de alta con su DNI o NIE, eligen sus secciones y la activación les llega al email de su ficha. Las responsabilidades (Secretaría, Coordinación, Tesorería, Intendencia) que pidan, las altas sin sección y las de quien no tiene email en la ficha aparecen aquí para que las revises.' => 'Pásallo aos scouters e ao voluntariado do grupo. Danse de alta co seu DNI ou NIE, elixen as súas seccións e a activación chégalles ao email da súa ficha. As responsabilidades (Secretaría, Coordinación, Tesouraría, Intendencia) que pidan, as altas sen sección e as de quen non ten email na ficha aparecen aquí para que as revises.',
+
+	// doc 59: RC-NUE-1
+	'Asociado/a' => 'Asociado/a',
+	'Abre el «Alta de socio/a» con todos sus datos. Si tiene documento, primero se comprueba en el CRM (si ya tiene ficha en el grupo, el alta se para). Al terminar el alta, la inscripción queda como «Asociado/a» con su nº de socio/a y sus datos se borran.' => 'Abre a «Alta de socio/a» con todos os seus datos. Se ten documento, primeiro compróbase no CRM (se xa ten ficha no grupo, a alta detense). Ao terminar a alta, a inscrición queda como «Asociado/a» co seu nº de socio/a e os seus datos bórranse.',
+	'Asociado/a nº %s' => 'Asociado/a nº %s',
+	'Se incorpora como asociado/a' => 'Incorpórase como asociado/a',
+	'Se incorporó como asociado/a el %s. Sus datos de la lista de espera se han borrado.' => 'Incorporouse como asociado/a o %s. Os seus datos da lista de espera borráronse.',
+	'En la lista de espera queda como «Asociado/a» y sus datos se han borrado.' => 'Na lista de espera queda como «Asociado/a» e os seus datos borráronse.',
+	'Viene de la lista de espera: los datos son los que escribió la familia. Revísalos y completa lo que falta (el género). Al terminar, la inscripción pasa a «Asociado/a» y sus datos se borran de la lista.' => 'Vén da lista de espera: os datos son os que escribiu a familia. Revísaos e completa o que falta (o xénero). Ao terminar, a inscrición pasa a «Asociado/a» e os seus datos bórranse da lista.',
 );

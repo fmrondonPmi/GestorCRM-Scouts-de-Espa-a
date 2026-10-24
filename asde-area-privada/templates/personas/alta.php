@@ -64,7 +64,7 @@ $edad  = static function ( string $f ) use ( $hoy ): ?int {
 		<?php endif; ?>
 
 		<?php if ( ! empty( $s['espera'] ) && AltaSocio::HECHO !== $s['paso'] ) : ?>
-			<p class="asde-help"><?php asde_e( 'Viene de la lista de espera: los datos son los que escribió la familia. Revísalos y completa lo que falta (el género). Al terminar, la inscripción se borra de la lista.' ); ?> <a href="<?php echo esc_url( Pages::url( 'lista_espera', array( 'inscripcion' => (string) $s['espera'] ) ) ); ?>"><?php asde_e( 'Ver la inscripción' ); ?></a></p>
+			<p class="asde-help"><?php asde_e( 'Viene de la lista de espera: los datos son los que escribió la familia. Revísalos y completa lo que falta (el género). Al terminar, la inscripción pasa a «Asociado/a» y sus datos se borran de la lista.' ); ?> <a href="<?php echo esc_url( Pages::url( 'lista_espera', array( 'inscripcion' => (string) $s['espera'] ) ) ); ?>"><?php asde_e( 'Ver la inscripción' ); ?></a></p>
 		<?php endif; ?>
 
 		<?php if ( in_array( $s['paso'], array( AltaSocio::DATOS, AltaSocio::REVISAR ), true ) ) : ?>
@@ -280,8 +280,8 @@ $edad  = static function ( string $f ) use ( $hoy ): ?int {
 			?>
 			<div class="asde-notice asde-notice--success" role="status">
 				<p><strong><?php asde_e( 'Alta hecha en el CRM.' ); ?></strong>
-				<?php if ( ! empty( $s['espera_borrada'] ) ) : ?>
-					<?php asde_e( 'Sus datos de la lista de espera se han borrado.' ); ?>
+				<?php if ( ! empty( $s['espera_asociada'] ) ) : ?>
+					<?php asde_e( 'En la lista de espera queda como «Asociado/a» y sus datos se han borrado.' ); ?>
 				<?php endif; ?>
 				<?php /* translators: 1: nombre, 2: sección, 3: fecha */ echo esc_html( sprintf( asde_t( '%1$s ya es socio/a del grupo, en %2$s desde el %3$s.' ), $nombre, Secciones::nombre( $s['seccion'] ), $dma( $s['inicio'] ) ) ); ?></p>
 			</div>

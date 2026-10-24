@@ -13,6 +13,8 @@
  * @var bool             $renovar Puede generar un enlace nuevo
  * @var array[]|null     $campos  Campos propios del formulario (null si no puede editarlos)
  * @var string           $declaracion Texto propio de la casilla de declaración ('' = el de por defecto)
+ * @var bool             $altas    Puede dar de alta en el CRM («Se incorpora como asociado/a», doc 59, RC-NUE-1)
+ * @var string           $url_alta Personas → Alta de socio/a
  */
 // phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound, WordPress.WP.GlobalVariablesOverride.Prohibited -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
 use AsdeBalears\AreaPrivada\Domain\Secciones;
@@ -156,9 +158,21 @@ $fecha = static function ( ?string $utc ): string {
 					<tr>
 						<td data-label="<?php echo esc_attr( asde_a( 'Orden' ) ); ?>"><?php echo isset( $orden[ $f['id'] ] ) ? (int) $orden[ $f['id'] ] : '—'; ?></td>
 						<td data-label="<?php echo esc_attr( asde_a( 'Nombre' ) ); ?>">
-							<a href="<?php echo esc_url( add_query_arg( 'inscripcion', $f['id'], $url ) ); ?>" data-asde-recarga><?php echo esc_html( trim( $f['datos']['nombre'] . ' ' . $f['datos']['apellidos'] ) ); ?></a>
-							<?php if ( $f['repetida'] ) : ?>
+							<?php if ( Inscripciones::ASOCIADA === $f['estado'] ) : ?>
+								<a href="<?php echo esc_url( add_query_arg( 'inscripcion', $f['id'], $url ) ); ?>" data-asde-recarga><?php echo esc_html( sprintf( asde_t( 'Asociado/a nº %s' ), '' !== $f['socio'] ? $f['socio'] : '—' ) ); ?></a>
+							<?php else : ?>
+								<a href="<?php echo esc_url( add_query_arg( 'inscripcion', $f['id'], $url ) ); ?>" data-asde-recarga><?php echo esc_html( trim( $f['datos']['nombre'] . ' ' . $f['datos']['apellidos'] ) ); ?></a>
+							<?php endif; ?>
+							<?php if ( $f['repetida'] && Inscripciones::ASOCIADA !== $f['estado'] ) : ?>
 								<span class="asde-badge asde-badge--estado-invitado" title="<?php echo esc_attr( asde_a( 'Apuntada más de una vez con distinto email' ) ); ?>"><?php asde_e( 'Repetida' ); ?></span>
+							<?php endif; ?>
+							<?php if ( ! empty( $altas ) && ListaEsperaView::sigue( $f ) ) : ?>
+								<form method="post" action="<?php echo esc_url( $url_alta ); ?>" class="asde-linea">
+									<?php wp_nonce_field( 'asde_alta_socio' ); ?>
+									<input type="hidden" name="asde_action" value="alta_documento">
+									<input type="hidden" name="espera" value="<?php echo (int) $f['id']; ?>">
+									<button type="submit" class="button button-small"><?php asde_e( 'Se incorpora como asociado/a' ); ?></button>
+								</form>
 							<?php endif; ?>
 						</td>
 						<td data-label="<?php echo esc_attr( asde_a( 'Edad' ) ); ?>"><?php echo null !== $f['edad'] ? esc_html( sprintf( asde_t( '%d años' ), $f['edad'] ) ) : '—'; ?></td>

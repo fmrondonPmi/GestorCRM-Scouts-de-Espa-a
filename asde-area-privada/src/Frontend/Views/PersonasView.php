@@ -213,11 +213,20 @@ final class PersonasView extends View {
 					// v0.32 (doc 39): desde la lista de espera, sus datos se descifran aquí (nunca van en el HTML de la lista).
 					$campos['d']       = Inscripciones::datos_alta( $espera ) + $campos['d'];
 					$campos['seccion'] = '' !== $campos['seccion'] ? $campos['seccion'] : $espera['seccion_final'];
+					// Doc 59, RC-NUE-1: el botón de la lista solo manda la inscripción; el documento sale de ella (con él se
+					// comprueba antes en el CRM; sin él, menores de 14, se sigue sin comprobarlo).
+					if ( '' === $campos['documento'] && '' === $campos['sin_documento'] ) {
+						if ( '' !== $espera['datos']['documento'] ) {
+							$campos['documento'] = $espera['datos']['documento'];
+						} else {
+							$campos['sin_documento'] = '1';
+						}
+					}
 				}
 				self::$alta = AltaSocio::atender( $accion, $campos, fn( string $d ) => $this->comprobar( $d ), Altas::make() );
 				if ( $espera && AltaSocio::HECHO === self::$alta['paso'] ) {
-					// Ya está en el CRM: sus datos de la lista de espera se borran en el momento.
-					self::$alta['espera_borrada'] = Inscripciones::borrar( $espera['id'], 'alta', array( 'socio' => (string) ( self::$alta['resultado']['numero'] ?? '' ) ) );
+					// Ya está en el CRM: la inscripción pasa a «Asociado/a» y sus datos se vacían en el momento (RC-NUE-1).
+					self::$alta['espera_asociada'] = Inscripciones::asociar( $espera, (string) ( self::$alta['resultado']['numero'] ?? '' ) );
 				}
 			}
 			return;
@@ -308,7 +317,8 @@ final class PersonasView extends View {
 
 	/** Inscripción de la lista de espera de la que viene el alta (solo para quien puede dar de alta desde ella). */
 	private function inscripcion_espera( int $id ): ?array {
-		return $id && current_user_can( ListaEsperaView::CAP_ALTA ) ? Inscripciones::obtener( $id ) : null;
+		$f = $id && current_user_can( ListaEsperaView::CAP_ALTA ) ? Inscripciones::obtener( $id ) : null;
+		return $f && Inscripciones::ASOCIADA !== $f['estado'] ? $f : null; // Una «Asociado/a» ya no tiene datos.
 	}
 
 	/** Campos que envían los pasos del alta. */

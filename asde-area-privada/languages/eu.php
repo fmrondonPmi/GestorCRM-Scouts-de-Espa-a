@@ -2448,7 +2448,6 @@ return array(
 	'%1$s ya está en la lista de espera del %2$s. Te hemos enviado un email con el enlace para ver tus datos.' => '%1$s dagoeneko %2$s(r)en itxaron-zerrendan dago. Email bat bidali dizugu zure datuak ikusteko estekarekin.',
 	'%d inscripciones' => '%d izen-emate',
 	'%d inscripción' => '%d izen-emate',
-	'Abre el «Alta de socio/a» con sus datos. Primero se comprueba su documento en el CRM (si ya tiene ficha en el grupo, el alta se para). Al terminar el alta, esta inscripción se borra de la lista.' => 'Ireki «Bazkide-alta» bere datuekin. Lehenik, bere dokumentua CRMn egiaztatzen da (taldean dagoeneko fitxa badu, alta gelditu egiten da). Alta amaitzean, izen-emate hau zerrendatik ezabatzen da.',
 	'Acepto que el %1$s guarde estos datos, cifrados, para gestionar la lista de espera durante %2$d meses (o hasta que me dé de alta o los borre). Solo los ve el equipo del grupo.' => 'Onartzen dut %1$s(e)k datu hauek zifratuta gordetzea itxaron-zerrenda kudeatzeko %2$d hilabetez (edo alta eman didaten edo ezabatu ditudan arte). Taldeko ekipoak soilik ikusten ditu.',
 	'Apellidos de la persona de contacto' => 'Kontaktu-pertsonaren abizenak',
 	'Apuntada más de una vez con distinto email' => 'Izena behin baino gehiagotan eman du, email desberdinekin',
@@ -2561,9 +2560,7 @@ return array(
 	'No se ha podido cambiar el estado.' => 'Ezin izan da egoera aldatu.',
 	'Sección asignada: %s.' => 'Esleitutako atala: %s.',
 	'Sección: la de su edad.' => 'Atala: bere adinari dagokiona.',
-	'Sus datos de la lista de espera se han borrado.' => 'Itxaron-zerrendako bere datuak ezabatu dira.',
 	'Ver la inscripción' => 'Ikusi izen-ematea',
-	'Viene de la lista de espera: los datos son los que escribió la familia. Revísalos y completa lo que falta (el género). Al terminar, la inscripción se borra de la lista.' => 'Itxaron-zerrendatik dator: datuak familiak idatzitakoak dira. Berrikusi eta osatu falta dena (generoa). Amaitzean, izen-ematea zerrendatik ezabatzen da.',
 
 	// v0.32: lista de espera (orden)
 	'Orden' => 'Ordena',
@@ -4620,4 +4617,13 @@ return array(
 	'Soy voluntario/a sin sección (Secretaría, Coordinación, Tesorería o Intendencia)' => 'Atalik gabeko boluntarioa naiz (Idazkaritza, Koordinazioa, Diruzaintza edo Intendentzia)',
 	'Nadie la revisó en 90 días: rechazada automáticamente.' => 'Inork ez zuen 90 egunetan berrikusi: automatikoki baztertua.',
 	'Pásalo a los scouters y al voluntariado del grupo. Se dan de alta con su DNI o NIE, eligen sus secciones y la activación les llega al email de su ficha. Las responsabilidades (Secretaría, Coordinación, Tesorería, Intendencia) que pidan, las altas sin sección y las de quien no tiene email en la ficha aparecen aquí para que las revises.' => 'Pasatu taldeko scouterrei eta boluntarioei. NANa edo AIZa erabiliz ematen dute alta, beren atalak aukeratzen dituzte eta aktibazioa fitxako emailera iristen zaie. Eskatzen dituzten ardurak (Idazkaritza, Koordinazioa, Diruzaintza, Intendentzia), atalik gabeko altak eta fitxan emailik ez dutenenak hemen agertzen dira zuk berrikus ditzazun.',
+
+	// doc 59: RC-NUE-1
+	'Asociado/a' => 'Bazkide',
+	'Abre el «Alta de socio/a» con todos sus datos. Si tiene documento, primero se comprueba en el CRM (si ya tiene ficha en el grupo, el alta se para). Al terminar el alta, la inscripción queda como «Asociado/a» con su nº de socio/a y sus datos se borran.' => '«Bazkide-alta» irekitzen du bere datu guztiekin. Dokumentua badu, lehenik CRMan egiaztatzen da (taldean fitxa badu, alta gelditu egiten da). Alta amaitzean, izen-ematea «Bazkide» gisa geratzen da bere bazkide-zenbakiarekin, eta bere datuak ezabatu egiten dira.',
+	'Asociado/a nº %s' => '%s zenbakiko bazkidea',
+	'Se incorpora como asociado/a' => 'Bazkide gisa sartzen da',
+	'Se incorporó como asociado/a el %s. Sus datos de la lista de espera se han borrado.' => '%s(e)an sartu zen bazkide gisa. Itxaron-zerrendako bere datuak ezabatu dira.',
+	'En la lista de espera queda como «Asociado/a» y sus datos se han borrado.' => 'Itxaron-zerrendan «Bazkide» gisa geratzen da eta bere datuak ezabatu dira.',
+	'Viene de la lista de espera: los datos son los que escribió la familia. Revísalos y completa lo que falta (el género). Al terminar, la inscripción pasa a «Asociado/a» y sus datos se borran de la lista.' => 'Itxaron-zerrendatik dator: datuak familiak idatzitakoak dira. Berrikusi eta osatu falta dena (generoa). Amaitzean, izen-ematea «Bazkide» egoerara igarotzen da eta bere datuak zerrendatik ezabatzen dira.',
 );

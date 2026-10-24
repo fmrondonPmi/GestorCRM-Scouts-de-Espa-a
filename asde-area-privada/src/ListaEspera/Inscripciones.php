@@ -22,7 +22,7 @@ defined( 'ABSPATH' ) || exit;
  *   huellas (HMAC) para encontrar el email y los repetidos sin descifrar.
  * - Los datos se guardan MESES meses desde la confirmación o la última renovación; la tarea
  *   diaria avisa DIAS_AVISO días antes y borra las caducadas.
- * - Al darla de alta en el CRM (Personas → Alta de socio/a) la fila se borra en el momento.
+ * - Al darla de alta en el CRM (Personas → Alta de socio/a) la fila pasa a «Asociado/a» y sus datos se vacían en el momento (doc 59, RC-NUE-1).
  */
 final class Inscripciones {
 
@@ -31,6 +31,8 @@ final class Inscripciones {
 	public const CONTACTADA     = 'contactada';
 	public const PLAZA_OFRECIDA = 'plaza_ofrecida';
 	public const DESCARTADA     = 'descartada';
+	/** Se incorporó como asociado/a (doc 59, RC-NUE-1): queda solo su nº de socio/a y la fecha; sus datos se han vaciado. */
+	public const ASOCIADA       = 'asociada';
 
 	public const ESTADOS = array(
 		self::SIN_CONFIRMAR  => 'Sin confirmar el email',
@@ -38,6 +40,7 @@ final class Inscripciones {
 		self::CONTACTADA     => 'Contactada',
 		self::PLAZA_OFRECIDA => 'Plaza ofrecida',
 		self::DESCARTADA     => 'Descartada',
+		self::ASOCIADA       => 'Asociado/a',
 	);
 
 	/** Estados que puede poner el equipo a mano (el de sin confirmar lo quita solo el email). */
@@ -90,6 +93,8 @@ final class Inscripciones {
 				caduca datetime NULL,
 				avisada tinyint(1) NOT NULL DEFAULT 0,
 				actualizada datetime NULL,
+				socio varchar(20) NOT NULL DEFAULT '',
+				asociada_en datetime NULL,
 				PRIMARY KEY  (id),
 				KEY grupo_estado (grupo, estado),
 				KEY email_huella (email_huella),
@@ -228,7 +233,7 @@ final class Inscripciones {
 	}
 
 	public static function cambiar_estado( array $fila, string $estado, string $nota = '' ): bool {
-		if ( ! in_array( $estado, self::ESTADOS_ELEGIBLES, true ) || self::SIN_CONFIRMAR === $fila['estado'] ) {
+		if ( ! in_array( $estado, self::ESTADOS_ELEGIBLES, true ) || in_array( $fila['estado'], array( self::SIN_CONFIRMAR, self::ASOCIADA ), true ) ) {
 			return false;
 		}
 		return self::guardar(
@@ -244,7 +249,7 @@ final class Inscripciones {
 
 	/** Sección elegida por Secretaría o Coordinación ('' = la de su edad). */
 	public static function asignar_seccion( array $fila, string $seccion ): bool {
-		if ( '' !== $seccion && ! Secciones::exists( $seccion ) ) {
+		if ( ( '' !== $seccion && ! Secciones::exists( $seccion ) ) || self::ASOCIADA === $fila['estado'] ) {
 			return false;
 		}
 		return self::guardar(
@@ -262,7 +267,7 @@ final class Inscripciones {
 	 * que se apunta a mano. Si estaba «En espera», pasa a «Contactada».
 	 */
 	public static function registrar_contacto( array $fila, string $medio, string $nota = '', string $asunto = '' ): bool {
-		if ( ! isset( self::MEDIOS[ $medio ] ) || self::SIN_CONFIRMAR === $fila['estado'] ) {
+		if ( ! isset( self::MEDIOS[ $medio ] ) || in_array( $fila['estado'], array( self::SIN_CONFIRMAR, self::ASOCIADA ), true ) ) {
 			return false;
 		}
 		$cambios = array(
@@ -281,6 +286,33 @@ final class Inscripciones {
 				'nota'   => $nota,
 			)
 		);
+	}
+
+	/**
+	 * Se ha dado de alta en el CRM desde la lista de espera (doc 59, RC-NUE-1): la inscripción no se borra, pasa a
+	 * «Asociado/a» con su nº de socio/a y la fecha, y se vacían todos sus datos (cifrados, huellas y caducidad).
+	 */
+	public static function asociar( array $fila, string $socio ): bool {
+		global $wpdb;
+		$ahora = current_time( 'mysql', true );
+		$n     = $wpdb->query( // phpcs:ignore WordPress.DB
+			$wpdb->prepare(
+				"UPDATE %i SET estado = %s, socio = %s, asociada_en = %s, datos_enc = NULL, historial_enc = NULL, extra_enc = NULL, email_huella = '', persona_huella = '', contacto_medio = '', caduca = NULL, avisada = 0, actualizada = %s WHERE id = %d AND grupo = %s AND estado <> %s",
+				self::table(),
+				self::ASOCIADA,
+				mb_substr( $socio, 0, 20 ),
+				$ahora,
+				$ahora,
+				(int) $fila['id'],
+				(string) $fila['grupo'],
+				self::ASOCIADA
+			)
+		);
+		$ok = 1 === (int) $n;
+		if ( $ok ) {
+			Logger::log( 'lista_espera_asociada', 'lista_espera', (string) $fila['id'], array( 'socio' => $socio ) );
+		}
+		return $ok;
 	}
 
 	/** Borra la inscripción entera (alta, petición de la persona, el equipo o la caducidad). */
@@ -304,12 +336,13 @@ final class Inscripciones {
 		global $wpdb;
 		$avisar  = $avisar ?? array( Avisos::class, 'caducidad' );
 		$ahora   = current_time( 'mysql', true );
-		$borrar  = (array) $wpdb->get_col( $wpdb->prepare( 'SELECT id FROM %i WHERE ( estado = %s AND creada < %s ) OR ( caduca IS NOT NULL AND caduca < %s )', self::table(), self::SIN_CONFIRMAR, gmdate( 'Y-m-d H:i:s', time() - self::DIAS_CONFIRMAR * DAY_IN_SECONDS ), $ahora ) ); // phpcs:ignore WordPress.DB
+		// Las «Asociado/a» no tienen datos: ni caducan ni se avisan (doc 59, RC-NUE-1).
+		$borrar  = (array) $wpdb->get_col( $wpdb->prepare( 'SELECT id FROM %i WHERE estado <> %s AND ( ( estado = %s AND creada < %s ) OR ( caduca IS NOT NULL AND caduca < %s ) )', self::table(), self::ASOCIADA, self::SIN_CONFIRMAR, gmdate( 'Y-m-d H:i:s', time() - self::DIAS_CONFIRMAR * DAY_IN_SECONDS ), $ahora ) ); // phpcs:ignore WordPress.DB
 		$borradas = 0;
 		foreach ( $borrar as $id ) {
 			$borradas += self::borrar( (int) $id, 'caducada' ) ? 1 : 0;
 		}
-		$filas    = (array) $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM %i WHERE estado <> %s AND avisada = 0 AND caduca IS NOT NULL AND caduca < %s', self::table(), self::SIN_CONFIRMAR, gmdate( 'Y-m-d H:i:s', time() + self::DIAS_AVISO * DAY_IN_SECONDS ) ), ARRAY_A ); // phpcs:ignore WordPress.DB
+		$filas    = (array) $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM %i WHERE estado NOT IN (%s, %s) AND avisada = 0 AND caduca IS NOT NULL AND caduca < %s', self::table(), self::SIN_CONFIRMAR, self::ASOCIADA, gmdate( 'Y-m-d H:i:s', time() + self::DIAS_AVISO * DAY_IN_SECONDS ) ), ARRAY_A ); // phpcs:ignore WordPress.DB
 		$avisadas = 0;
 		foreach ( $filas as $f ) {
 			$f = self::preparar( $f );
@@ -393,6 +426,8 @@ final class Inscripciones {
 		unset( $fila['extra_enc'] );
 		$fila['id']        = (int) $fila['id'];
 		$fila['avisada']   = (bool) (int) $fila['avisada'];
+		$fila['socio']       = (string) ( $fila['socio'] ?? '' );
+		$fila['asociada_en'] = $fila['asociada_en'] ?? null;
 		$nac               = \DateTime::createFromFormat( '!Y-m-d', $fila['datos']['nacimiento'], wp_timezone() );
 		$fila['edad']      = $nac ? (int) $nac->diff( new \DateTime( 'today', wp_timezone() ) )->y : null;
 		$fila['seccion_edad']  = Secciones::por_edad( $fila['datos']['nacimiento'] );

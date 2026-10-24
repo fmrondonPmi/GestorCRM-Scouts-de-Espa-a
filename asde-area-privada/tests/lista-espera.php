@@ -369,7 +369,9 @@ try {
 	echo "\n== E · Dar de alta en el CRM (comprueba antes el DNI) ==\n";
 	Altas::activar( (string) $grupo['numero'], true );
 	$h = $pintar( new ListaEsperaView(), array( 'inscripcion' => (string) $joana['id'] ) );
-	$ok( str_contains( $h, 'value="alta_documento"' ) && str_contains( $h, 'name="espera" value="' . $joana['id'] . '"' ), 'con las altas activas, «Dar de alta en el CRM»' );
+	$ok( str_contains( $h, 'value="alta_documento"' ) && str_contains( $h, 'name="espera" value="' . $joana['id'] . '"' ) && str_contains( $h, 'Se incorpora como asociado/a' ), 'con las altas activas, «Se incorpora como asociado/a» (RC-NUE-1)' );
+	$hl = $pintar( new ListaEsperaView(), array() );
+	$ok( 1 === preg_match( '/name="espera" value="' . $joana['id'] . '">\s*<button type="submit" class="button button-small">Se incorpora como asociado\/a<\/button>/', $hl ) && ! str_contains( $hl, '22222222J' ), 'y también en su fila del listado, sin el documento en la página (RC-NUE-1)' );
 	$alta = static fn( array $campos ) => $enviar( new PersonasView(), $campos, 'asde_alta_socio', array( 'alta' => '1' ) );
 	list( , , $h ) = $alta( array( 'asde_action' => 'alta_documento', 'documento' => '12345678Z', 'espera' => (string) $laia['id'] ) );
 	$ok( str_contains( $h, 'Ya tiene ficha en tu grupo' ) && null !== Inscripciones::obtener( (int) $laia['id'] ), 'si el DNI ya tiene ficha en el grupo, el alta se para y la inscripción se queda' );
@@ -396,8 +398,48 @@ try {
 	// El simulado no sabe contar en otros grupos: se confirma que se sigue igualmente.
 	list( , , $h ) = $alta( $base + array( 'asde_action' => 'alta_crear', 'confirmo' => '1' ) );
 	$nueva = array_values( array_filter( $crm->personas, static fn( $p ) => '22222222J' === $p['stic_identification_number_c'] ) )[0] ?? null;
-	$ok( str_contains( $h, 'Alta hecha en el CRM.' ) && $nueva && null === Inscripciones::obtener( (int) $joana['id'] ) && str_contains( $h, 'Sus datos de la lista de espera se han borrado.' ), 'alta hecha: ficha en el CRM y la inscripción borrada en el momento' );
-	$ok( 0 === (int) $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(*) FROM %i WHERE id = %d', Inscripciones::table(), $joana['id'] ) ), '(ni rastro de la fila)' );
+	$jo = Inscripciones::obtener( (int) $joana['id'] );
+	$ok( str_contains( $h, 'Alta hecha en el CRM.' ) && $nueva && $jo && Inscripciones::ASOCIADA === $jo['estado'] && str_contains( $h, 'queda como «Asociado/a» y sus datos se han borrado' ), 'alta hecha: ficha en el CRM y la inscripción pasa a «Asociado/a» (RC-NUE-1)' );
+	$ok( $nueva && (string) $nueva['numerosocio_c'] === $jo['socio'] && null !== $jo['asociada_en'], 'con su nº de socio/a y la fecha' );
+	$crudo = (array) $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM %i WHERE id = %d', Inscripciones::table(), $joana['id'] ), ARRAY_A ); // phpcs:ignore WordPress.DB
+	$ok( null === $crudo['datos_enc'] && null === $crudo['historial_enc'] && null === $crudo['extra_enc'] && '' === $crudo['email_huella'] && '' === $crudo['persona_huella'] && null === $crudo['caduca'], 'y sin ningún dato: ni cifrados, ni huellas, ni caducidad' );
+	$reg = (string) $wpdb->get_var( $wpdb->prepare( 'SELECT detalles FROM %i WHERE id > %d AND accion = %s AND objeto_id = %s', Logger::table(), $log_antes, 'lista_espera_asociada', (string) $joana['id'] ) ); // phpcs:ignore WordPress.DB
+	$ok( str_contains( $reg, (string) $nueva['numerosocio_c'] ), 'queda en el registro (con el nº de socio/a)' );
+	$ok( false === Inscripciones::cambiar_estado( $jo, Inscripciones::EN_ESPERA ) && false === Inscripciones::registrar_contacto( $jo, Inscripciones::POR_TELEFONO ) && false === Inscripciones::asociar( $jo, '1' ), 'a una «Asociado/a» no se le cambia el estado, ni se apunta contacto, ni se asocia otra vez' );
+	$hl = $pintar( new ListaEsperaView(), array() );
+	$ok( ! str_contains( $hl, 'Asociado/a nº ' . $jo['socio'] ), 'no sale entre las que siguen en la lista' );
+	$hl = $pintar( new ListaEsperaView(), array( 'estado' => Inscripciones::ASOCIADA ) );
+	$ok( str_contains( $hl, 'Asociado/a nº ' . $jo['socio'] ) && str_contains( $hl, 'value="' . Inscripciones::ASOCIADA . '"' ), 'con su filtro propio, sí' );
+	$hd = $pintar( new ListaEsperaView(), array( 'inscripcion' => (string) $joana['id'] ) );
+	$ok( str_contains( $hd, 'Se incorporó como asociado/a el' ) && ! str_contains( $hd, 'value="espera_email"' ) && ! str_contains( $hd, 'value="alta_documento"' ), 'su ficha dice cuándo se incorporó, sin acciones' );
+	$wpdb->update( Inscripciones::table(), array( 'creada' => gmdate( 'Y-m-d H:i:s', time() - 400 * DAY_IN_SECONDS ) ), array( 'id' => $joana['id'] ) ); // phpcs:ignore WordPress.DB
+	$avisos_jo = array();
+	Inscripciones::mantenimiento(
+		static function ( array $f ) use ( &$avisos_jo ): bool {
+			$avisos_jo[] = $f['id'];
+			return true;
+		}
+	);
+	$ok( null !== Inscripciones::obtener( (int) $joana['id'] ) && ! in_array( (int) $joana['id'], $avisos_jo, true ), 'la tarea diaria no la borra ni la avisa (no tiene datos)' );
+
+	// Sin documento (menor de 14): desde la fila del listado, solo con la inscripción.
+	$id_nil = Inscripciones::crear( (string) $grupo['numero'], array( 'nombre' => 'Nil', 'apellidos' => 'Prova Sense Doc', 'nacimiento' => $hace( 8 ), 'documento' => '', 'contacto_nombre' => 'Marta', 'contacto_apellidos' => 'Espera Mare', 'telefono' => '600 11 22 34', 'email' => 'nil.espera@example.invalid', 'observaciones' => '', 'idioma' => 'es' ) );
+	Inscripciones::confirmar( $id_nil );
+	list( , , $h ) = $alta( array( 'asde_action' => 'alta_documento', 'espera' => (string) $id_nil ) );
+	$ok( str_contains( $h, 'value="alta_revisar"' ) && str_contains( $h, 'value="Nil"' ) && str_contains( $h, 'value="Marta"' ) && str_contains( $h, 'value="nil.espera@example.invalid"' ), 'sin documento: pasa directamente a los datos (sin comprobar nada), con el tutor/a 1 de la lista de espera' );
+	$d_nil = array(
+		'first_name'         => 'Nil',
+		'last_name'          => 'Prova Sense Doc',
+		'birthdate'          => $hace( 8 ),
+		'stic_gender_c'      => 'masculino',
+		'tutor1_nombre_c'    => 'Marta',
+		'tutor1_apellidos_c' => 'Espera Mare',
+		'tutor1_email_c'     => 'nil.espera@example.invalid',
+		'tutor1_movil_c'     => '600 11 22 34',
+	);
+	list( , , $h ) = $alta( array( 'd' => $d_nil, 'seccion' => 'lobatos', 'inicio' => wp_date( 'Y-m-d' ), 'sin_doc' => '1', 'otros' => '0', 'espera' => (string) $id_nil, 'asde_action' => 'alta_crear', 'confirmo' => '1' ) );
+	$nil = Inscripciones::obtener( $id_nil );
+	$ok( str_contains( $h, 'Alta hecha en el CRM.' ) && $nil && Inscripciones::ASOCIADA === $nil['estado'] && '' === $nil['datos']['nombre'], 'sin documento también: alta hecha y la inscripción queda «Asociado/a», sin datos (RC-NUE-1)' );
 	$como( $u_sco );
 	list( , , $h ) = $alta( array( 'asde_action' => 'alta_documento', 'documento' => '33333333P', 'espera' => (string) $laia['id'] ) );
 	$ok( null !== Inscripciones::obtener( (int) $laia['id'] ), 'un scouter no puede usar el alta (ni tocar la inscripción)' );

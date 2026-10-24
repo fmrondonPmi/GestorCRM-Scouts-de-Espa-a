@@ -2448,7 +2448,6 @@ return array(
 	'%1$s ya está en la lista de espera del %2$s. Te hemos enviado un email con el enlace para ver tus datos.' => '%1$s ja està a la llista d\'espera del %2$s. T\'hem enviat un email amb l\'enllaç per veure les teves dades.',
 	'%d inscripciones' => '%d inscripcions',
 	'%d inscripción' => '%d inscripció',
-	'Abre el «Alta de socio/a» con sus datos. Primero se comprueba su documento en el CRM (si ya tiene ficha en el grupo, el alta se para). Al terminar el alta, esta inscripción se borra de la lista.' => 'Obre l\'«Alta de soci/sòcia» amb les seves dades. Primer es comprova el seu document al CRM (si ja té fitxa al grup, l\'alta s\'atura). En acabar l\'alta, aquesta inscripció s\'esborra de la llista.',
 	'Acepto que el %1$s guarde estos datos, cifrados, para gestionar la lista de espera durante %2$d meses (o hasta que me dé de alta o los borre). Solo los ve el equipo del grupo.' => 'Accepto que el %1$s desi aquestes dades, xifrades, per gestionar la llista d\'espera durant %2$d mesos (o fins que em doni d\'alta o les esborri). Només les veu l\'equip del grup.',
 	'Apellidos de la persona de contacto' => 'Cognoms de la persona de contacte',
 	'Apuntada más de una vez con distinto email' => 'Apuntada més d\'una vegada amb un email diferent',
@@ -2561,9 +2560,7 @@ return array(
 	'No se ha podido cambiar el estado.' => 'No s\'ha pogut canviar l\'estat.',
 	'Sección asignada: %s.' => 'Secció assignada: %s.',
 	'Sección: la de su edad.' => 'Secció: la de la seva edat.',
-	'Sus datos de la lista de espera se han borrado.' => 'Les seves dades de la llista d\'espera s\'han esborrat.',
 	'Ver la inscripción' => 'Veure la inscripció',
-	'Viene de la lista de espera: los datos son los que escribió la familia. Revísalos y completa lo que falta (el género). Al terminar, la inscripción se borra de la lista.' => 'Ve de la llista d\'espera: les dades són les que ha escrit la família. Revisa-les i completa el que falta (el gènere). En acabar, la inscripció s\'esborra de la llista.',
 
 	// v0.32: lista de espera (orden)
 	'Orden' => 'Ordre',
@@ -4620,4 +4617,13 @@ return array(
 	'Soy voluntario/a sin sección (Secretaría, Coordinación, Tesorería o Intendencia)' => 'Sóc voluntari/ària sense secció (Secretaria, Coordinació, Tresoreria o Intendència)',
 	'Nadie la revisó en 90 días: rechazada automáticamente.' => 'Ningú no la va revisar en 90 dies: rebutjada automàticament.',
 	'Pásalo a los scouters y al voluntariado del grupo. Se dan de alta con su DNI o NIE, eligen sus secciones y la activación les llega al email de su ficha. Las responsabilidades (Secretaría, Coordinación, Tesorería, Intendencia) que pidan, las altas sin sección y las de quien no tiene email en la ficha aparecen aquí para que las revises.' => 'Passa\'l als scouters i al voluntariat del grup. Es donen d\'alta amb el seu DNI o NIE, trien les seves seccions i l\'activació els arriba a l\'email de la seva fitxa. Les responsabilitats (Secretaria, Coordinació, Tresoreria, Intendència) que demanin, les altes sense secció i les de qui no té email a la fitxa apareixen aquí perquè les revisis.',
+
+	// doc 59: RC-NUE-1
+	'Asociado/a' => 'Associat/ada',
+	'Abre el «Alta de socio/a» con todos sus datos. Si tiene documento, primero se comprueba en el CRM (si ya tiene ficha en el grupo, el alta se para). Al terminar el alta, la inscripción queda como «Asociado/a» con su nº de socio/a y sus datos se borran.' => 'Obre l\'«Alta de soci/sòcia» amb totes les seves dades. Si té document, primer es comprova al CRM (si ja té fitxa al grup, l\'alta s\'atura). En acabar l\'alta, la inscripció queda com a «Associat/ada» amb el seu núm. de soci/sòcia i les seves dades s\'esborren.',
+	'Asociado/a nº %s' => 'Associat/ada núm. %s',
+	'Se incorpora como asociado/a' => 'S\'incorpora com a associat/ada',
+	'Se incorporó como asociado/a el %s. Sus datos de la lista de espera se han borrado.' => 'Es va incorporar com a associat/ada el %s. Les seves dades de la llista d\'espera s\'han esborrat.',
+	'En la lista de espera queda como «Asociado/a» y sus datos se han borrado.' => 'A la llista d\'espera queda com a «Associat/ada» i les seves dades s\'han esborrat.',
+	'Viene de la lista de espera: los datos son los que escribió la familia. Revísalos y completa lo que falta (el género). Al terminar, la inscripción pasa a «Asociado/a» y sus datos se borran de la lista.' => 'Ve de la llista d\'espera: les dades són les que va escriure la família. Revisa-les i completa el que falta (el gènere). En acabar, la inscripció passa a «Associat/ada» i les seves dades s\'esborren de la llista.',
 );
