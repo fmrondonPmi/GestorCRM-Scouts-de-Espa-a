@@ -199,6 +199,8 @@ try {
 	$ok( '' === $err && 1 === count( $capturados ) && str_contains( (string) $capturados[0]['message'], $c['url'] ) && str_contains( (string) $capturados[0]['message'], '14' ), 'El email lleva el enlace y los días de validez' );
 	$reg = $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM %i WHERE id > %d', RegistroEmails::table(), $mail0 ), ARRAY_A ); // phpcs:ignore WordPress.DB
 	$ok( $reg && ! str_contains( (string) wp_json_encode( $reg ), $c['token'] ) && ! str_contains( (string) wp_json_encode( $reg ), 'destino@example' ), 'El registro de emails no guarda el enlace ni el destino en claro' );
+	$vista = $reg ? RegistroEmails::vista_previa( $reg[0] ) : '';
+	$ok( str_contains( $vista, 'Dar de alta el grupo' ) && ! str_contains( $vista, 'Activar mi cuenta' ) && ! str_contains( $vista, $c['token'] ), 'v0.57: la vista previa del registro es la invitación del grupo (no la de acceso), sin el enlace' );
 	$ok( true === GrupoInvitaciones::anular( $c['id'] ) && false === GrupoInvitaciones::anular( $c['id'] ), 'Se anula una pendiente y no se vuelve a anular' );
 	GrupoInvitaciones::recordar_para_mostrar( 'https://x.example/alta-grupo/?t=abc' );
 	$ok( 'https://x.example/alta-grupo/?t=abc' === GrupoInvitaciones::tomar_para_mostrar() && '' === GrupoInvitaciones::tomar_para_mostrar(), 'El enlace se enseña una sola vez' );

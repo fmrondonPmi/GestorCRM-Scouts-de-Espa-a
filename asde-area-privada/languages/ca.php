@@ -4629,4 +4629,9 @@ return array(
 
 	// doc 59: RC-NUE-2
 	'Ahora no se puede comprobar tu membresía en el CRM del grupo. Inténtalo de nuevo en unos minutos.' => 'Ara no es pot comprovar la teva membresia al CRM del grup. Torna-ho a provar d\'aquí a uns minuts.',
+
+	// v0.57: vista previa de emails
+	'(El texto del mensaje no se guarda en el registro de emails.)' => '(El text del missatge no es guarda al registre d\'emails.)',
+	'Los datos de esta inscripción ya no se conservan (se borraron o pasó a asociado/a): no se puede reconstruir el texto del email.' => 'Les dades d\'aquesta inscripció ja no es conserven (es van esborrar o va passar a associat/ada): no es pot reconstruir el text de l\'email.',
+	'tu grupo' => 'el teu grup',
 );

@@ -283,6 +283,10 @@ try {
 	$ok( 'lobatos' === $pau['seccion_edad'] && 'lobatos' === $pau['seccion_final'], 'su sección por edad sale sola (9 años: Lobatos)' );
 	$reg = (array) $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM %i WHERE id > %d AND tipo = %s ORDER BY id DESC LIMIT 1', RegistroEmails::table(), $ema_antes, RegistroEmails::LISTA_ESPERA ), ARRAY_A );
 	$ok( $reg && ! str_contains( (string) $reg['destino'], 'marta.espera@' ) && str_contains( (string) $reg['destino'], '*' ), 'queda en el registro de emails con el destino enmascarado' );
+	$vista = $reg ? RegistroEmails::vista_previa( $reg ) : '';
+	$ok( str_contains( $vista, 'Confirmar la inscripción' ) && str_contains( $vista, 'Prova Espera' ) && str_contains( $vista, 'ENLACE-PERSONAL-NO-GUARDADO' ) && ! str_contains( $vista, 'Activar mi cuenta' ) && ! str_contains( $vista, Enlaces::token( $pau, Enlaces::CONFIRMAR ) ), 'v0.57: la vista previa del registro es el email de la lista de espera (no la invitación de acceso), sin el enlace personal' );
+	$vista = $reg ? RegistroEmails::vista_previa( array_merge( $reg, array( 'datos' => wp_json_encode( array( 'inscripcion' => 0, 'aviso' => 'confirmar' ) ) ) ) ) : '';
+	$ok( str_contains( $vista, 'ya no se conservan' ) && ! str_contains( $vista, 'Activar mi cuenta' ), 'v0.57: de una inscripción que ya no tiene datos, la vista previa lo dice' );
 
 	$antes = $max_id( Inscripciones::table() );
 	list( , , $h ) = $publica( $form( array( 'sello' => $sello() ) ), 'espera_inscribir' );

@@ -4629,4 +4629,9 @@ return array(
 
 	// doc 59: RC-NUE-2
 	'Ahora no se puede comprobar tu membresía en el CRM del grupo. Inténtalo de nuevo en unos minutos.' => 'Orain ezin da zure bazkidetza egiaztatu taldearen CRMan. Saiatu berriro minutu batzuk barru.',
+
+	// v0.57: vista previa de emails
+	'(El texto del mensaje no se guarda en el registro de emails.)' => '(Mezuaren testua ez da emailen erregistroan gordetzen.)',
+	'Los datos de esta inscripción ya no se conservan (se borraron o pasó a asociado/a): no se puede reconstruir el texto del email.' => 'Izen-emate honen datuak ez dira gehiago gordetzen (ezabatu egin ziren edo bazkide bihurtu zen): ezin da emailaren testua berreraiki.',
+	'tu grupo' => 'zure taldea',
 );

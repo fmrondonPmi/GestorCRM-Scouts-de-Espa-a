@@ -2,6 +2,8 @@
 namespace AsdeBalears\AreaPrivada\Usuarios;
 
 use AsdeBalears\AreaPrivada\Domain\Grupo;
+use AsdeBalears\AreaPrivada\Domain\GrupoInvitaciones;
+use AsdeBalears\AreaPrivada\Domain\Organizacion;
 use AsdeBalears\AreaPrivada\Frontend\Pages;
 use AsdeBalears\AreaPrivada\Frontend\TemplateLoader;
 use AsdeBalears\AreaPrivada\Idiomas\Idioma;
@@ -247,8 +249,32 @@ final class RegistroEmails {
 		if ( self::SEPA === $fila['tipo'] ) {
 			return \AsdeBalears\AreaPrivada\Sepa\Avisos::html( $datos, $user ? Contacto::saludo( $user ) : '' );
 		}
+		// Estos tres van a quien aún no tiene cuenta: antes caían en la plantilla de la invitación de acceso (v0.57).
+		if ( self::LISTA_ESPERA === $fila['tipo'] ) {
+			return \AsdeBalears\AreaPrivada\ListaEspera\Avisos::vista_previa( $datos );
+		}
+		if ( self::INVITACION_GRUPO === $fila['tipo'] ) {
+			return TemplateLoader::render(
+				'email/invitacion-grupo',
+				array(
+					'organizacion' => Organizacion::nombre(),
+					'url'          => GrupoInvitaciones::url( 'ENLACE-PERSONAL-NO-GUARDADO' ),
+					'dias'         => (int) ( $datos['dias'] ?? GrupoInvitaciones::DIAS ),
+				)
+			);
+		}
+		if ( self::ALTA_GRUPO === $fila['tipo'] ) {
+			return TemplateLoader::render(
+				'email/alta-grupo-resultado',
+				array(
+					'organizacion' => Organizacion::nombre(),
+					'grupo'        => (string) ( $datos['grupo'] ?? '' ) ?: asde_t( 'tu grupo' ),
+					'aprobada'     => ! empty( $datos['aprobada'] ),
+				)
+			);
+		}
 		$autor = ! empty( $datos['autor_id'] ) ? get_userdata( (int) $datos['autor_id'] ) : null;
-		$tipo  = isset( self::TIPOS[ $fila['tipo'] ] ) ? $fila['tipo'] : Invitacion::ALTA;
+		$tipo  = in_array( $fila['tipo'], array( Invitacion::ALTA, Invitacion::RESET ), true ) ? $fila['tipo'] : Invitacion::ALTA;
 		return TemplateLoader::render(
 			'email/invitacion',
 			array(

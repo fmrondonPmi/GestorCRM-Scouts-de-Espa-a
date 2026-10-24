@@ -154,7 +154,18 @@ final class GrupoAltas {
 			)
 		);
 		$error = RegistroEmails::enviar( (string) $s['email'], $asunto, $html );
-		RegistroEmails::registrar( null, RegistroEmails::ALTA_GRUPO, Contacto::enmascarar( (string) $s['email'] ), $asunto, '' === $error ? RegistroEmails::ENVIADO : RegistroEmails::ERROR, $error, array( 'aprobada' => $aprobada ) );
+		RegistroEmails::registrar(
+			null,
+			RegistroEmails::ALTA_GRUPO,
+			Contacto::enmascarar( (string) $s['email'] ),
+			$asunto,
+			'' === $error ? RegistroEmails::ENVIADO : RegistroEmails::ERROR,
+			$error,
+			array(
+				'aprobada' => $aprobada,
+				'grupo'    => (string) $s['nombre'], // Para la vista previa del registro de emails (v0.57).
+			)
+		);
 		return $error;
 	}
 }

@@ -116,6 +116,9 @@ try {
 	$ok( 'rechazada' === $s['estado'] && '' === $s['usuario_enc'] && '' === $s['clave_enc'] && '' === $s['dni_enc'] && '' === $s['persona_enc'], 'Rechazar borra todo lo secreto guardado' );
 	$ok( null === Grupos::por_numero( '902' ) && false === GrupoAltas::rechazar( $id2 ), 'No crea el grupo y no se rechaza otra vez' );
 	$ok( 1 === count( $capturados ) && str_contains( (string) $capturados[0]['message'], 'no ha podido' ) && ! str_contains( (string) $capturados[0]['message'], 'Clave Secreta' ), 'El aviso es genérico, sin motivo ni credencial' );
+	$fila_reg = (array) $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM %i WHERE id > %d AND tipo = %s ORDER BY id DESC LIMIT 1', RegistroEmails::table(), $mail0, RegistroEmails::ALTA_GRUPO ), ARRAY_A ); // phpcs:ignore WordPress.DB
+	$vista    = $fila_reg ? RegistroEmails::vista_previa( $fila_reg ) : '';
+	$ok( str_contains( $vista, 'no ha podido' ) && str_contains( $vista, 'Grupo de prueba 902' ) && ! str_contains( $vista, 'Activar mi cuenta' ), 'v0.57: la vista previa del registro es el aviso del rechazo (no la invitación de acceso)' );
 	$ok( false === GrupoSolicitudes::pendiente_con_numero( '902' ), 'El nº queda libre para volver a intentarlo' );
 
 	echo "\n== C. Pantalla de la oficina: nunca la credencial ==\n";
