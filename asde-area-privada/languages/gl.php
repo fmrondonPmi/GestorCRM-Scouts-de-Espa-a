@@ -4626,4 +4626,7 @@ return array(
 	'Se incorporó como asociado/a el %s. Sus datos de la lista de espera se han borrado.' => 'Incorporouse como asociado/a o %s. Os seus datos da lista de espera borráronse.',
 	'En la lista de espera queda como «Asociado/a» y sus datos se han borrado.' => 'Na lista de espera queda como «Asociado/a» e os seus datos borráronse.',
 	'Viene de la lista de espera: los datos son los que escribió la familia. Revísalos y completa lo que falta (el género). Al terminar, la inscripción pasa a «Asociado/a» y sus datos se borran de la lista.' => 'Vén da lista de espera: os datos son os que escribiu a familia. Revísaos e completa o que falta (o xénero). Ao terminar, a inscrición pasa a «Asociado/a» e os seus datos bórranse da lista.',
+
+	// doc 59: RC-NUE-2
+	'Ahora no se puede comprobar tu membresía en el CRM del grupo. Inténtalo de nuevo en unos minutos.' => 'Agora non se pode comprobar a túa pertenza no CRM do grupo. Téntao de novo dentro duns minutos.',
 );

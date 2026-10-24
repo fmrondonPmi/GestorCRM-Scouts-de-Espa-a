@@ -114,6 +114,12 @@ final class AccesoView extends View {
 				self::$error        = asde_t( 'Tienes activada la verificación en dos pasos: escribe el código de 6 cifras de tu app y vuelve a escribir la contraseña.' );
 				return; // No es un fallo: la contraseña era correcta.
 			}
+			if ( AccessHooks::SIN_MEMBRESIA === $codigo ) {
+				// La contraseña era correcta: no cuenta como intento fallido (doc 59, RC-NUE-2).
+				self::$error = wp_strip_all_tags( $user->get_error_message() );
+				Logger::log( 'acceso_sin_membresia', 'user', (string) ( get_user_by( 'login', $usuario )->ID ?? 0 ), array( 'grupo' => Grupos::obtener( $grupo )['numero'] ?? '' ) );
+				return;
+			}
 			if ( 'wfls_twofactor_failed' === $codigo ) {
 				self::$pedir_codigo = true;
 				self::$error        = asde_t( 'El código de verificación no es correcto o ha caducado. Vuelve a intentarlo.' );

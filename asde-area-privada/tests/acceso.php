@@ -13,13 +13,20 @@
  * (pre_wp_mail). Los datos son inventados (@example.invalid). Crea usuarios de
  * prueba (prueba-acc-*) que se borran al terminar, junto con lo que generan:
  * registros de auditoría y de emails y los contadores de intentos.
+ *
+ * Doc 59, RC-NUE-2: al entrar se comprueba la membresía activa con el CRM simulado (fichas inventadas 990028-990049): las
+ * cuentas que entran tienen su ficha activa; una sin membresía, una familia sin menores activos y el CRM caído no entran.
  */
 defined( 'ABSPATH' ) || exit;
+
+require_once __DIR__ . '/lib/CrmSimulado.php';
 
 use AsdeBalears\AreaPrivada\Audit\Logger;
 use AsdeBalears\AreaPrivada\Auth\AccessHooks;
 use AsdeBalears\AreaPrivada\Auth\Identificacion;
+use AsdeBalears\AreaPrivada\Auth\Ambito;
 use AsdeBalears\AreaPrivada\Auth\Intentos;
+use AsdeBalears\AreaPrivada\Crm\Escritura;
 use AsdeBalears\AreaPrivada\Domain\Grupos;
 use AsdeBalears\AreaPrivada\Domain\Persona;
 use AsdeBalears\AreaPrivada\Frontend\Pages;
@@ -42,9 +49,9 @@ $ok    = function ( $cond, string $label ) use ( &$fails ) {
 	echo ( $cond ? 'OK   ' : 'FAIL ' ), $label, "\n";
 };
 
-$grupo = array_values( Grupos::todos() )[0] ?? null;
-if ( ! $grupo ) {
-	exit( "Hace falta un grupo dado de alta en el WordPress local.\n" );
+$grupo = Grupos::por_numero( '684' ) ?? ( array_values( Grupos::todos() )[0] ?? null );
+if ( ! $grupo || '' === $grupo['crm_id'] ) {
+	exit( "Hace falta un grupo con la conexión al CRM comprobada.\n" );
 }
 wp_set_current_user( 0 );
 // IP de documentación (TEST-NET-1), distinta en cada ejecución: los intentos de la
@@ -78,6 +85,22 @@ $simulador = static function ( $pre, string $email ) use ( &$fichas, &$crm_caido
 };
 add_filter( 'asde_ap_pre_personas_por_email', $simulador, 10, 2 );
 
+// Doc 59, RC-NUE-2: la membresía se comprueba al entrar, con el CRM simulado (fichas inventadas).
+$P   = array( 'Asde_Prueba_Crm', 'persona' );
+$crm = new Asde_Prueba_Crm(
+	array(
+		$P( 28, 'Marta', 'Acceso Scouter', '1985-01-01', 'Scouters' ),
+		$P( 29, 'Leo', 'Acceso Hijo', '2016-01-01', 'Lobatos' ),
+		$P( 30, 'Carla', 'Acceso Compartido', '1990-01-01', 'Scouters' ),
+		$P( 40, 'Sergi', 'Acceso Sin Membresia', '1980-01-01', '' ),
+		$P( 49, 'Nora', 'Acceso Hija Sin', '2015-01-01', '' ),
+	),
+	$grupo['crm_id']
+);
+$crm->activar();
+Escritura::usar_para_pruebas( $crm );
+add_filter( 'asde_ap_instantanea_segundos', '__return_zero' );
+
 // Cuentas de prueba (contraseñas aleatorias, solo en memoria).
 $ids    = array();
 $claves = array();
@@ -105,7 +128,7 @@ $crear  = static function ( string $login, string $rol, string $origen, string $
 	$claves[ $login ] = $clave;
 	return $id;
 };
-foreach ( array( 'prueba-acc-1', 'prueba-acc-2t', 'prueba-acc-3', 'prueba-acc-4', 'prueba-acc-5', 'prueba-acc-6', 'prueba-acc-editor' ) as $login ) {
+foreach ( array( 'prueba-acc-1', 'prueba-acc-2t', 'prueba-acc-3', 'prueba-acc-4', 'prueba-acc-5', 'prueba-acc-6', 'prueba-acc-7', 'prueba-acc-8t', 'prueba-acc-editor' ) as $login ) {
 	if ( username_exists( $login ) ) {
 		exit( "Ya existe el usuario $login (¿una ejecución anterior interrumpida?). Bórralo antes de repetir la prueba.\n" );
 	}
@@ -116,6 +139,14 @@ $crear( 'prueba-acc-3', Roles::SCOUTER, '990000103:email1', $grupo['id'] );
 $crear( 'prueba-acc-4', Roles::SCOUTER, '990000104:email1', $grupo['id'], Usuarios::DESACTIVADO );
 $crear( 'prueba-acc-5', Roles::SCOUTER, '990000105:email1', '999' );
 $crear( 'prueba-acc-6', Roles::SCOUTER, '990000106:email1', $grupo['id'] ); // Su email no se busca con el CRM activo: se queda sin guardar.
+$crear( 'prueba-acc-7', Roles::SCOUTER, '990040:email1', $grupo['id'] );
+$crear( 'prueba-acc-8t', Roles::TUTOR, '990049:tutor1_email_c', $grupo['id'] );
+// Doc 59, RC-NUE-2: cada cuenta, con su ficha del CRM simulado.
+update_user_meta( $ids['prueba-acc-1'], Usuarios::META_SOCIO, '990028' );
+add_user_meta( $ids['prueba-acc-2t'], Usuarios::META_REPRESENTADO, '990029' );
+update_user_meta( $ids['prueba-acc-3'], Usuarios::META_SOCIO, '990030' );
+update_user_meta( $ids['prueba-acc-7'], Usuarios::META_SOCIO, '990040' );
+add_user_meta( $ids['prueba-acc-8t'], Usuarios::META_REPRESENTADO, '990049' );
 // Usuario de WordPress "normal" con email propio (como un administrador, pero sin permisos).
 $ids['prueba-acc-editor']    = wp_insert_user(
 	array(
@@ -223,6 +254,26 @@ try {
 	$crm_caido = false;
 	$res = $enviar( 'prueba-acc-3', $claves['prueba-acc-3'] );
 	$ok( str_starts_with( $res, 'asde-redirect:' ) && get_current_user_id() === $ids['prueba-acc-3'], 'con el usuario de siempre se sigue entrando igual' );
+
+	// Doc 59, RC-NUE-2: sin membresía activa no se entra (después de acertar la contraseña).
+	$sin = $enviar( 'prueba-acc-7', $claves['prueba-acc-7'] );
+	$ok( str_contains( $sin, 'Tu membresía no está activa' ) && 0 === get_current_user_id(), 'sin membresía activa: no entra y se le dice por qué (RC-NUE-2)' );
+	$ok( AccesoView::MENSAJE_CREDENCIALES === $enviar( 'prueba-acc-7', 'contraseña-incorrecta' ), 'con la contraseña mal, el mensaje genérico (no revela nada de la membresía)' );
+	for ( $i = 0; $i < 5; $i++ ) {
+		$enviar( 'prueba-acc-7', $claves['prueba-acc-7'] );
+	}
+	$ok( ! str_contains( $enviar( 'prueba-acc-7', $claves['prueba-acc-7'] ), 'Demasiados intentos' ), 'no cuenta como intento fallido de contraseña' );
+	$fam = $enviar( 'prueba-acc-8t', $claves['prueba-acc-8t'] );
+	$ok( str_contains( $fam, 'ya no tiene participantes a su cargo' ) && 0 === get_current_user_id(), 'una cuenta familiar sin ningún menor con membresía activa: no entra' );
+	$reg = (int) $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(*) FROM ' . Logger::table() . ' WHERE id > %d AND accion = %s AND objeto_id = %s', $log_antes, 'acceso_sin_membresia', (string) $ids['prueba-acc-8t'] ) ); // phpcs:ignore WordPress.DB
+	$ok( 1 === $reg, 'queda en el registro (acceso_sin_membresia)' );
+	$crm->caido = true;
+	Ambito::olvidar( $ids['prueba-acc-3'] );
+	$caido = $enviar( 'prueba-acc-3', $claves['prueba-acc-3'] );
+	$crm->caido = false;
+	$ok( str_contains( $caido, 'Ahora no se puede comprobar tu membresía' ) && 0 === get_current_user_id(), 'con el CRM sin responder, no se entra (y se dice que lo intente en unos minutos)' );
+	Ambito::olvidar( $ids['prueba-acc-3'] );
+	$ok( str_starts_with( $enviar( 'prueba-acc-3', $claves['prueba-acc-3'] ), 'asde-redirect:' ), 'cuando vuelve a responder, entra' );
 	// 5 contraseñas incorrectas con ese email: el 6.º intento, aunque sea con la buena, se bloquea.
 	for ( $i = 0; $i < 5; $i++ ) {
 		$enviar( 'compartido+scouts@example.invalid', 'mala-' . $i );
@@ -288,6 +339,9 @@ try {
 	// -----------------------------------------------------------------------
 	// Limpieza: usuarios de prueba y todo lo que han generado.
 	remove_filter( 'asde_ap_pre_personas_por_email', $simulador, 10 );
+	Escritura::usar_para_pruebas( null );
+	$crm->desactivar();
+	remove_filter( 'asde_ap_instantanea_segundos', '__return_zero' );
 	remove_filter( 'pre_http_request', $cortar_crm, 1 );
 	remove_filter( 'pre_wp_mail', '__return_true' );
 	wp_set_current_user( 0 );

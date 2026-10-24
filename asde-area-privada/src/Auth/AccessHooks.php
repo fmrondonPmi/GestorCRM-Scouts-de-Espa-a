@@ -1,6 +1,7 @@
 <?php
 namespace AsdeBalears\AreaPrivada\Auth;
 
+use AsdeBalears\AreaPrivada\Domain\Grupo;
 use AsdeBalears\AreaPrivada\Domain\Grupos;
 use AsdeBalears\AreaPrivada\Frontend\Pages;
 use AsdeBalears\AreaPrivada\Usuarios\Usuarios;
@@ -20,6 +21,9 @@ final class AccessHooks {
 
 	/** Grupo elegido en la pantalla de acceso mientras se valida el login. */
 	private static ?string $grupo_formulario = null;
+
+	/** Código del error de acceso sin membresía activa (no es un fallo de contraseña: no cuenta en Intentos). */
+	public const SIN_MEMBRESIA = 'asde_sin_membresia';
 
 	public static function register(): void {
 		add_filter( 'authenticate', array( self::class, 'comprobar_acceso' ), 22, 3 );
@@ -72,7 +76,7 @@ final class AccessHooks {
 				// Mismo mensaje que con la contraseña incorrecta: no revela nada.
 				return new \WP_Error( 'asde_grupo', __( 'Nº de socio/a o email, contraseña o grupo incorrectos.', 'asde-area-privada' ) );
 			}
-			return $user;
+			return self::con_membresia( $user, $grupo );
 		}
 
 		// Cualquier otra vía (wp-login.php, XML-RPC…): los socios no entran por aquí.
@@ -91,6 +95,24 @@ final class AccessHooks {
 			);
 		}
 		return $user;
+	}
+
+	/**
+	 * Solo entra quien tiene membresía activa en el CRM (doc 59, RC-NUE-2), con cualquier rol: la cuenta familiar, si
+	 * representa al menos a un menor con membresía activa (Ambito::representados). Se comprueba aquí, después de validar
+	 * la contraseña (prioridad 22 > 20), así que no revela nada a quien no la ha acertado. Si el CRM no responde, no se
+	 * entra. Los administradores y la oficina federal no llegan aquí (comprobar_acceso() los deja pasar antes).
+	 *
+	 * @return \WP_User|\WP_Error
+	 */
+	private static function con_membresia( \WP_User $user, array $grupo ) {
+		$a = Grupo::con( $grupo, static fn() => Ambito::de( $user ) );
+		if ( $a->puede_acceder() ) {
+			return $user;
+		}
+		Ambito::olvidar( $user->ID );
+		$motivo = '' !== $a->error_crm ? asde_t( 'Ahora no se puede comprobar tu membresía en el CRM del grupo. Inténtalo de nuevo en unos minutos.' ) : $a->motivo();
+		return new \WP_Error( self::SIN_MEMBRESIA, $motivo );
 	}
 
 	/**

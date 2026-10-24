@@ -11,6 +11,7 @@ return array(
 	'. También sirve el email al que te llegó la invitación' => 'Acceso',
 	': comprobamos tus datos con los del grupo y te llega una invitación por email.' => 'Acceso',
 	'Ahora no se puede comprobar el email porque el CRM no responde. Entra con tu nº de socio/a o inténtalo más tarde.' => 'Acceso',
+	'Ahora no se puede comprobar tu membresía en el CRM del grupo. Inténtalo de nuevo en unos minutos.' => 'Acceso',
 	'Contraseña' => 'Acceso',
 	'Contraseña guardada. Ya puedes entrar con tu nº de socio/a (o tu email) y la contraseña que acabas de elegir.' => 'Acceso',
 	'Código de verificación' => 'Acceso',

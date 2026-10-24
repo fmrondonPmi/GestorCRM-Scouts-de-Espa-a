@@ -4626,4 +4626,7 @@ return array(
 	'Se incorporó como asociado/a el %s. Sus datos de la lista de espera se han borrado.' => '%s(e)an sartu zen bazkide gisa. Itxaron-zerrendako bere datuak ezabatu dira.',
 	'En la lista de espera queda como «Asociado/a» y sus datos se han borrado.' => 'Itxaron-zerrendan «Bazkide» gisa geratzen da eta bere datuak ezabatu dira.',
 	'Viene de la lista de espera: los datos son los que escribió la familia. Revísalos y completa lo que falta (el género). Al terminar, la inscripción pasa a «Asociado/a» y sus datos se borran de la lista.' => 'Itxaron-zerrendatik dator: datuak familiak idatzitakoak dira. Berrikusi eta osatu falta dena (generoa). Amaitzean, izen-ematea «Bazkide» egoerara igarotzen da eta bere datuak zerrendatik ezabatzen dira.',
+
+	// doc 59: RC-NUE-2
+	'Ahora no se puede comprobar tu membresía en el CRM del grupo. Inténtalo de nuevo en unos minutos.' => 'Orain ezin da zure bazkidetza egiaztatu taldearen CRMan. Saiatu berriro minutu batzuk barru.',
 );
