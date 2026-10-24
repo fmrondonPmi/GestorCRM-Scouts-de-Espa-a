@@ -748,6 +748,21 @@ final class Asde_Prueba_Consulta {
 					case '<>':
 						return $a !== $b;
 				}
+				// Doc 60: <, <=, > y >= (fechas aaaa-mm-dd o números), p. ej. el filtro de edad de los informes.
+				if ( '' === $a ) {
+					return false; // Como en SQL: un campo vacío (NULL) no cumple ninguna comparación.
+				}
+				$c = is_numeric( $a ) && is_numeric( $b ) ? ( (float) $a <=> (float) $b ) : strcmp( $a, $b );
+				switch ( $n[2] ) {
+					case '<':
+						return $c < 0;
+					case '<=':
+						return $c <= 0;
+					case '>':
+						return $c > 0;
+					case '>=':
+						return $c >= 0;
+				}
 		}
 		return false;
 	}
