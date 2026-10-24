@@ -256,6 +256,9 @@ try {
 	$ajena = $de( $id_de( 72 ) )[0]['id'];
 	$ok( is_wp_error( Escritura::actualizar_membresia( $repo->obtener( '990071' ), $ajena, array( 'estado_c' => 'baja' ), 'prueba' ) ), 'una membresía solo se cambia a través de su persona' );
 	$ok( 0 === $cortadas, 'ninguna petición ha salido hacia un CRM real' );
+} catch ( Throwable $e ) {
+	++$fails;
+	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";
 } finally {
 	// Limpieza: todo lo creado fuera; lo tocado, como estaba.
 	$crm->desactivar();

@@ -264,6 +264,9 @@ try {
 	$ing_f = IngredientesTable::por_nombre( 'Aceite del formulario' );
 	$ok( $ing_f && array( 'soja' ) === $ing_f['trazas'] && 3.5 === $ing_f['coste'] && $ing_f['revisado'], 'crear un ingrediente desde la pantalla' );
 	$como( 0 );
+} catch ( Throwable $e ) {
+	++$fails;
+	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";
 } finally {
 	remove_filter( 'wp_redirect', $redirigir, 1 );
 	$_POST = array();

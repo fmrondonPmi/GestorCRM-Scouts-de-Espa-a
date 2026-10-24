@@ -157,6 +157,9 @@ try {
 	$ok( str_contains( $h0, 'background:#632599' ) && ! str_contains( $h0, '#2e7d32' ) && str_contains( $h1, 'background:#2e7d32' ) && ! str_contains( $h1, '#632599' ), 'el email de invitación usa el color elegido (y ya no el morado)' );
 	$ok( str_contains( $h1, 'Aina' ) && str_contains( $h1, 'Grupo Prueba' ), 'y el resto del email sigue igual' );
 	Colores::restablecer();
+} catch ( Throwable $e ) {
+	++$fails;
+	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";
 } finally {
 	remove_filter( 'wp_redirect', $redirigir, 1 );
 	wp_set_current_user( 0 );

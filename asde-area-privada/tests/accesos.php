@@ -325,6 +325,9 @@ try {
 	$ok( ! $tiene( $u_sc, 'asde_inventario_aprobar' ) && ! Concesiones::activas_de( $u_sc ), 'si la persona deja de ser de gestión, sus permisos sueltos se retiran' );
 	$u2->set_role( Roles::SCOUTER );
 	$ok( ! $tiene( $u_sc, 'asde_inventario_aprobar' ), 'y no reaparecen al volver' );
+} catch ( Throwable $e ) {
+	++$fails;
+	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";
 } finally {
 	remove_filter( 'wp_redirect', $redirigir, 1 );
 	remove_filter( 'send_auth_cookies', '__return_false' );

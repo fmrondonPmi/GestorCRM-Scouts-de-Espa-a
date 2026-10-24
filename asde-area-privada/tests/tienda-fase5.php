@@ -404,6 +404,9 @@ try {
 	$xlsx = \AsdeBalears\AreaPrivada\Informes\Xlsx::generar( 'Ventas', array( 'Producto', 'Unidades' ), array( array( 'Taza', 3 ) ) );
 	$ok( 'PK' === substr( $xlsx, 0, 2 ), 'el generador de Excel funciona con los datos del informe' );
 	$como( 0 );
+} catch ( Throwable $e ) {
+	++$fails;
+	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";
 } finally {
 	remove_filter( 'wp_redirect', $redirigir, 1 );
 	remove_filter( 'pre_wp_mail', '__return_true' );

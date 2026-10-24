@@ -597,6 +597,9 @@ try {
 	$cols = array_keys( (array) $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . InscripcionesTable::table() . ' WHERE id > %d LIMIT 1', $ins_antes ), ARRAY_A ) ); // phpcs:ignore WordPress.DB
 	$ok( $cols && ! array_intersect( $cols, array( 'nombre', 'dni', 'email', 'telefono', 'salud', 'alergias', 'ip' ) ), 'la tabla de inscripciones no tiene columnas de datos personales (ni la IP)' );
 	$ok( $crm->llamadas > 0 && 0 === $cortadas, "todas las consultas al CRM las ha respondido el simulador ({$crm->llamadas}); ninguna ha salido hacia el CRM real" );
+} catch ( Throwable $e ) {
+	++$fails;
+	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";
 } finally {
 	// ---------------------------------------------------------------------------
 	// Limpieza: todo lo creado fuera; lo tocado, como estaba.

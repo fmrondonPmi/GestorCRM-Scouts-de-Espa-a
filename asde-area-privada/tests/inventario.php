@@ -540,6 +540,9 @@ try {
 	}
 	$ok( ! $repetidas, 'las tres páginas del inventario existen y no están repetidas' . ( $repetidas ? ': ' . implode( ', ', $repetidas ) : '' ) );
 	$ok( $crm->llamadas >= 0 && 0 === $cortadas, 'ninguna consulta ha salido hacia el CRM real' );
+} catch ( Throwable $e ) {
+	++$fails;
+	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";
 } finally {
 	// ---------------------------------------------------------------------------
 	// Limpieza: todo lo creado fuera; lo tocado, como estaba.

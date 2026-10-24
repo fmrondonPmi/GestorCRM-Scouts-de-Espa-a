@@ -85,6 +85,9 @@ try {
 	$html = Avisos::html( array( 'tipo' => 'recordatorio', 'grupo' => 'G', 'evento' => 'Acampada' ), 'Ana', 'Leo' );
 	$ok( str_contains( $html, 'Traed la mochila.' ) && str_contains( $html, '&lt;b&gt;Hasta pronto&lt;/b&gt;' ), 'el email lleva el texto del grupo, escapado' );
 	$ok( ! str_contains( Avisos::html( array( 'tipo' => 'cancelado' ), 'Ana' ), 'Traed la mochila.' ), 'el texto de un aviso no sale en otro' );
+} catch ( Throwable $e ) {
+	++$fallos;
+	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";
 } finally {
 	if ( isset( $opc_act ) ) {
 		null === $antes_ac ? delete_option( $opc_act ) : update_option( $opc_act, $antes_ac, false );
@@ -96,4 +99,4 @@ try {
 	}
 }
 
-echo $fallos ? "\n$fallos FALLO(S)\n" : "\nTodo correcto.\n";
+echo $fallos ? "\n$fallos FALLOS\n" : "\nTODO OK (la configuración de eventos de los grupos, como estaba)\n";

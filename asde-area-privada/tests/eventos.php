@@ -520,6 +520,9 @@ try {
 	$cols = array_keys( (array) $wpdb->get_row( 'SELECT * FROM ' . EventosTable::table() . ' LIMIT 1', ARRAY_A ) ); // phpcs:ignore WordPress.DB
 	$ok( ! array_intersect( $cols, array( 'dni', 'email', 'telefono', 'salud' ) ), 'la tabla de eventos no tiene columnas de datos personales' );
 	$ok( $crm->llamadas > 0 && 0 === $cortadas, "todas las consultas al CRM las ha respondido el simulador ({$crm->llamadas}); ninguna ha salido hacia el CRM real" );
+} catch ( Throwable $e ) {
+	++$fails;
+	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";
 } finally {
 	// ---------------------------------------------------------------------------
 	// Limpieza: todo lo creado fuera; lo tocado, como estaba.

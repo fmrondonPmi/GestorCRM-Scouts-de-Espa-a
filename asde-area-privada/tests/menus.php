@@ -170,6 +170,9 @@ try {
 	$como( $u_sco );
 	$ok( str_contains( ( new TiendaPedidosView() )->render(), 'Elige más abajo lo que quieres comprar' ), 'el scouter entra en «Mis pedidos» y ve la tienda' );
 	$ok( $crm->llamadas > 0 && 0 === $cortadas, "todas las consultas al CRM las ha respondido el simulador ({$crm->llamadas}); ninguna ha salido hacia el CRM real" );
+} catch ( Throwable $e ) {
+	++$fails;
+	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";
 } finally {
 	// Limpieza: todo lo creado fuera; lo tocado, como estaba.
 	$_POST = array();

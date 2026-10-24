@@ -130,6 +130,9 @@ try {
 
 	// Nadie desde un grupo puede asignar el rol Oficina al dar de alta a alguien.
 	$ok( ! in_array( Roles::OFICINA, \AsdeBalears\AreaPrivada\Usuarios\AltaService::ROLES_PERSONA, true ), 'El alta de personas del grupo no ofrece el rol Oficina' );
+} catch ( Throwable $e ) {
+	++$fails;
+	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";
 } finally {
 	wp_set_current_user( $antes_actual );
 	Grupo::forzar( null );

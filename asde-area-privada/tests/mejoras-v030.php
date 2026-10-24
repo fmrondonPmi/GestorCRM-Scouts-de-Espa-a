@@ -451,6 +451,9 @@ try {
 	$a_s2 = $como( $u_sc2 );
 	$ok( array( '990090' ) === array_map( 'strval', array_keys( Uniformes::para_quien( $a_s2 ) ) ), 'y otro scouter, solo para sí' );
 	$ok( 0 === $cortadas, 'ninguna consulta ha salido hacia el CRM real' );
+} catch ( Throwable $e ) {
+	++$fails;
+	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";
 } finally {
 	// ---------------------------------------------------------------------------
 	// Limpieza: todo lo creado fuera; lo tocado, como estaba.

@@ -110,6 +110,9 @@ try {
 	$admin->add_cap( 'asde_uniformes_pago' );
 	MigracionTienda::ejecutar();
 	$ok( ! $admin->has_cap( 'asde_uniformes_pago' ), 'el administrador pierde las capabilities asde_uniformes_*' );
+} catch ( Throwable $e ) {
+	++$fails;
+	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";
 } finally {
 	if ( ! $existe( $nueva ) && $existe( $vieja ) ) {
 		$wpdb->query( $wpdb->prepare( 'RENAME TABLE %i TO %i', $vieja, $nueva ) );

@@ -105,6 +105,9 @@ try {
 	$ok( str_contains( $lim2, 'Ver el resultado' ) && ! str_contains( $lim2, '>Guardar<' ) && ! str_contains( $lim2, 'asde_action' ), 'El editor de informes se queda para consultar («Ver el resultado»), sin «Guardar»' );
 	$view = $leer( 'src/Frontend/Views/View.php' );
 	$ok( str_contains( $view, 'SoloLectura::limpiar( $contenido )' ), 'Todas las pantallas pasan por la limpieza en el envoltorio común' );
+} catch ( Throwable $e ) {
+	++$fails;
+	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";
 } finally {
 	wp_set_current_user( $antes_actual );
 	foreach ( $uids as $u ) {

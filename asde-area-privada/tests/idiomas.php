@@ -246,6 +246,9 @@ try {
 	wp_set_current_user( $admin->ID );
 	$acciones = (int) $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(*) FROM ' . Logger::table() . " WHERE id > %d AND ( accion LIKE 'idioma\\_%%' OR accion LIKE 'etiquetas\\_%%' )", $log_antes ) ); // phpcs:ignore WordPress.DB
 	$ok( $acciones >= 4, "cada cambio queda en la auditoría ($acciones)" );
+} catch ( Throwable $e ) {
+	++$fails;
+	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";
 } finally {
 	remove_filter( 'wp_redirect', $redirigir, 1 );
 	remove_filter( 'asde_ap_textos', $f_textos );

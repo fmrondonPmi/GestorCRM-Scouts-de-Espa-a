@@ -276,6 +276,9 @@ try {
 	}
 	$r = Servicio::borrar( EventosTable::obtener( $e['id'] ), $a );
 	$ok( true === $r && 0 === MenuTable::contar( $e['id'] ), 'al borrar el borrador se borra su menú' );
+} catch ( Throwable $e ) {
+	++$fails;
+	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";
 } finally {
 	remove_filter( 'wp_redirect', $redirigir, 1 );
 	remove_filter( 'send_auth_cookies', '__return_false' );

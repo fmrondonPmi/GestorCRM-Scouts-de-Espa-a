@@ -172,6 +172,9 @@ try {
 	$ok( str_contains( $h, '>' . $n1 . '<' ) && ! str_contains( $h, '>' . $n2 . '<' ), 'con acentos o sin ellos y apellidos completos' );
 	$h = $ver( new FamiliasView(), array( 'q' => 'zzzz-nadie' ) );
 	$ok( str_contains( $h, 'Ninguna familia coincide con «zzzz-nadie».' ) && str_contains( $h, 'value="zzzz-nadie"' ), 'sin resultados: lo dice y conserva lo buscado' );
+} catch ( Throwable $e ) {
+	++$fails;
+	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";
 } finally {
 	$crm->desactivar();
 	remove_filter( 'asde_ap_instantanea_segundos', '__return_zero' );

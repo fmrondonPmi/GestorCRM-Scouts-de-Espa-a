@@ -285,6 +285,9 @@ try {
 	$ok( 1 === preg_match( '/<details class="asde-acceso__codigo">\s*<summary>Código de verificación <span class="asde-help asde-help--inline">\(solo si tienes activada la verificación en dos pasos\)<\/span><\/summary>/', $h ) && 1 === preg_match( '/name="wfls-token"[^>]*maxlength="24"\s*>/', $h ), 'normalmente, plegado (sin «open») y el campo sin «required»' );
 	$h = TemplateLoader::render( 'acceso/formulario', $vars + array( 'pedir_codigo' => true ) );
 	$ok( str_contains( $h, '<details class="asde-acceso__codigo asde-destacado" open>' ) && str_contains( $h, 'required autofocus' ), 'cuando Wordfence pide el código, abierto, destacado y obligatorio' );
+} catch ( Throwable $e ) {
+	++$fails;
+	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";
 } finally {
 	remove_filter( 'pre_option_asde_ap_grupos', $mas_grupos );
 	Grupos::olvidar();

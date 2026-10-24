@@ -524,6 +524,9 @@ try {
 
 	$logs = (string) wp_json_encode( $wpdb->get_results( $wpdb->prepare( "SELECT accion, detalles FROM %i WHERE id > %d AND accion LIKE 'lista\\_espera%%'", Logger::table(), $log_antes ), ARRAY_A ) );
 	$ok( str_contains( $logs, 'lista_espera_inscripcion' ) && ! str_contains( $logs, 'Prova' ) && ! str_contains( $logs, 'example.invalid' ) && ! str_contains( $logs, '22222222J' ), 'la auditoría guarda las acciones, sin nombres, emails ni documentos' );
+} catch ( Throwable $e ) {
+	++$fails;
+	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";
 } finally {
 	$crm->desactivar();
 	remove_filter( 'pre_http_request', $cortar_crm, 2 );

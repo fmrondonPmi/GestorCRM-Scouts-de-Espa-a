@@ -250,6 +250,9 @@ try {
 
 	$ok( ! $crm->escrituras, 'nada escrito en el CRM (simulado)' );
 	$ok( 0 === $cortadas, 'ninguna petición ha salido hacia un CRM real' );
+} catch ( Throwable $e ) {
+	++$fails;
+	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";
 } finally {
 	// Limpieza: todo lo creado fuera; lo tocado, como estaba.
 	$_POST    = array();

@@ -271,6 +271,9 @@ try {
 	$como( $u_lob );
 	$ok( MaterialTable::contar( $e3['id'] ) > 0, 'el evento tiene material' );
 	$ok( true === Servicio::borrar( EventosTable::obtener( $e3['id'] ), $a_lob ) && 0 === MaterialTable::contar( $e3['id'] ), 'al borrar el borrador se borra su material' );
+} catch ( Throwable $e ) {
+	++$fails;
+	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";
 } finally {
 	remove_filter( 'wp_redirect', $redirigir, 1 );
 	remove_filter( 'send_auth_cookies', '__return_false' );

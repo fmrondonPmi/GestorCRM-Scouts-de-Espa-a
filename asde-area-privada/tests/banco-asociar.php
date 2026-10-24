@@ -121,6 +121,9 @@ try {
 	$d = BancoTable::obtener( (int) $ing['id'] );
 	$ok( BancoTable::PENDIENTE === $d['estado'] && null === $d['familia_id'] && null === $d['evento_id'], 'Y le quita la familia y el evento' );
 	$ok( ! BancoTable::revisados_de_familia( $fam ), 'La familia ya no lo tiene' );
+} catch ( Throwable $e ) {
+	++$fails;
+	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";
 } finally {
 	$wpdb->query( "DELETE FROM " . BancoTable::table() . " WHERE grupo = '999'" ); // phpcs:ignore WordPress.DB
 	$wpdb->query( "DELETE FROM " . BancoTable::table_lotes() . " WHERE grupo = '999'" ); // phpcs:ignore WordPress.DB

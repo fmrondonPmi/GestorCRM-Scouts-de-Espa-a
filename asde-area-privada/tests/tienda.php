@@ -346,6 +346,9 @@ try {
 	Config::guardar( $cfg_precio, $grupo['numero'] );
 	$ok( 30.5 === Servicio::importe_a_cobrar( PedidosTable::obtener( $p_leo['id'] ) ), 'con el precio de la insignia ya puesto, el importe propuesto de un pedido antiguo «por confirmar» lo incluye (27,50 + 3 €)' );
 	$ok( $crm->llamadas > 0 && 0 === $cortadas, "todas las consultas al CRM las ha respondido el simulador ({$crm->llamadas}); ninguna ha salido hacia el CRM real" );
+} catch ( Throwable $e ) {
+	++$fails;
+	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";
 } finally {
 	// ---------------------------------------------------------------------------
 	// Limpieza: todo lo creado fuera; lo tocado, como estaba.

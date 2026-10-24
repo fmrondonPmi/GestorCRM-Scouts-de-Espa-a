@@ -300,6 +300,9 @@ try {
 	$wpdb->update( EventosTable::table(), array( 'estado' => $e['estado'] ), array( 'id' => $e['id'] ) ); // phpcs:ignore WordPress.DB
 	$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . TareasTable::table() . ' WHERE evento_id = %d AND enlace = %s', $e['id'], 'menu' ) ); // phpcs:ignore WordPress.DB
 	$ok( 0 === AvisoAlergenos::diario( $toca, array( $e['id'] ) ), 'sin la tarea «Revisar alergias…» en el calendario del evento, no se avisa' );
+} catch ( Throwable $e ) {
+	++$fails;
+	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";
 } finally {
 	remove_filter( 'wp_redirect', $redirigir, 1 );
 	remove_filter( 'send_auth_cookies', '__return_false' );

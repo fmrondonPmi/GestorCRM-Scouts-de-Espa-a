@@ -324,6 +324,9 @@ try {
 	$creerlo_libre();
 	$ok( Instantanea::tomar_cerrojo( $num_grupo ) && false !== get_option( $cerrojo ), 'después de tomarlo, get_option() lo ve (se limpian las cachés de opciones)' );
 	Instantanea::soltar_cerrojo( $num_grupo );
+} catch ( Throwable $e ) {
+	++$fails;
+	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";
 } finally {
 	if ( isset( $colarse ) ) {
 		remove_filter( 'query', $colarse );

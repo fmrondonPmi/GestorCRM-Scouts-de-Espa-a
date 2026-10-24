@@ -512,6 +512,9 @@ try {
 	$ok( str_contains( $h, 'Historial de pagos' ) && str_contains( $h, '5 anotaciones · 2 eliminados' ) && str_contains( $h, 'Pago de 120,00 € eliminado' ) && str_contains( $h, 'Motivo: Prueba: registrado dos veces' ) && str_contains( $h, 'con un ingreso del banco' ) && str_contains( $h, 'con el cobro de una remesa SEPA' ), 'y el historial de la ronda cuenta qué se registró y qué se eliminó, con el motivo' );
 
 	$ok( 0 === $cortadas, 'ninguna petición ha salido hacia un CRM' );
+} catch ( Throwable $e ) {
+	++$fails;
+	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";
 } finally {
 	remove_filter( 'wp_redirect', $redirigir, 1 );
 	remove_filter( 'wp_die_handler', $morir, PHP_INT_MAX );

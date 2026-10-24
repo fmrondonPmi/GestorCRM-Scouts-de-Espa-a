@@ -152,6 +152,9 @@ try {
 	$ok( 'Taza antigua de prueba' === $ma['descripcion'] && 'Azul' === $ma['variante_tienda'] && 1 === $ma['en_tienda'], 'La fila lleva la descripción del producto, el nombre en la tienda y «se vende»' );
 	$ok( 0 === ProductosTable::obtener( $pid )['requiere_proveedor'], 'El producto ya no pide todo al proveedor: manda la cantidad del inventario' );
 	$ok( 0 === InventarioTienda::migrar_grupo(), 'Pasarlo otra vez no hace nada más' );
+} catch ( Throwable $e ) {
+	++$fails;
+	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";
 } finally {
 	$wpdb->query( $wpdb->prepare( 'DELETE FROM %i WHERE id > %d', $tablas['mat'], $antes['mat'] ) ); // phpcs:ignore WordPress.DB
 	$wpdb->query( $wpdb->prepare( 'DELETE FROM %i WHERE id > %d', $tablas['var'], $antes['var'] ) ); // phpcs:ignore WordPress.DB

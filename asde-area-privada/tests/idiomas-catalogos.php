@@ -108,6 +108,9 @@ try {
 	$ok( str_contains( $h, 'Contrasinal' ) && str_contains( $h, 'Entrar' ) && ! str_contains( $h, '>Contraseña<' ), 'la pantalla de acceso sale en gallego («Contrasinal»)' );
 	Idioma::forzar( 'es' );
 	$ok( 'Mis datos' === asde_t( 'Mis datos' ), 'y en castellano, el texto de siempre' );
+} catch ( Throwable $e ) {
+	++$fails;
+	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";
 } finally {
 	Idioma::forzar( null );
 	Traducciones::olvidar();

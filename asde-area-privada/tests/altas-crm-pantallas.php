@@ -444,6 +444,9 @@ try {
 	$ok( str_contains( $h, 'Bajas recientes' ) && str_contains( $h, 'Mia Pantalla Tres' ) && str_contains( $h, 'familia nº ' . $num_fam ) && str_contains( $h, 'familia=' . (int) $f_mia ), 'Tesorería → Control de pagos avisa de la baja, con su familia (enlazada)' );
 
 	$ok( 0 === $cortadas, 'ninguna petición ha salido hacia el CRM real' );
+} catch ( Throwable $e ) {
+	++$fails;
+	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";
 } finally {
 	// Limpieza: todo lo creado fuera; lo tocado, como estaba.
 	$crm->desactivar();

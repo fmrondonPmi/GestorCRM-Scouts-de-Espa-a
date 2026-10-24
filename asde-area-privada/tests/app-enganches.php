@@ -39,6 +39,9 @@ try {
 	$ok( __FILE__ === TemplateLoader::locate( 'pwa/prueba-enganche' ), 'otro plugin puede poner la plantilla de un nombre' );
 	$ok( ASDE_AP_DIR . 'templates/acceso/formulario.php' === TemplateLoader::locate( 'acceso/formulario' ), 'las demás plantillas no cambian' );
 	$ok( '' === TemplateLoader::locate( '../wp-config' ), 'un nombre con «..» sigue sin valer' );
+} catch ( Throwable $e ) {
+	++$fails;
+	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";
 } finally {
 	remove_filter( 'asde_ap_plantilla', $falsa, 10 );
 }

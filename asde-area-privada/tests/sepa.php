@@ -647,6 +647,9 @@ try {
 	$ok( ! str_contains( ( new SepaView() )->render(), 'value="sepa_cuentas_crm"' ), 'sin cuentas en la web, el botón ya no sale' );
 
 	$ok( $crm->llamadas > 0 && 0 === $cortadas, "todas las consultas al CRM las ha respondido el simulador ({$crm->llamadas}); ninguna ha salido hacia el CRM real" );
+} catch ( Throwable $e ) {
+	++$fails;
+	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";
 } finally {
 	if ( isset( $mod_antes ) && get_option( 'asde_ap_modulos', null ) !== $mod_antes ) {
 		null === $mod_antes ? delete_option( 'asde_ap_modulos' ) : update_option( 'asde_ap_modulos', $mod_antes, false );

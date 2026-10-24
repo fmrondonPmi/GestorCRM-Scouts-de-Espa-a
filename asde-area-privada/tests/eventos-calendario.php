@@ -430,6 +430,9 @@ try {
 	$enviar( new EventosView(), array( 'asde_action' => 'evento_borrar', 'evento' => (string) $e1['id'], 'pestana' => 'resumen' ), 'asde_evento_' . $e1['id'] );
 	$ok( 0 === TareasTable::contar( $e1['id'] ) && null === EventosTable::obtener( $e1['id'] ), 'al borrar el borrador se borran también sus tareas' );
 	$ok( $crm->llamadas > 0 && 0 === $cortadas, "todas las consultas al CRM las ha respondido el simulador ({$crm->llamadas}); ninguna ha salido hacia el CRM real" );
+} catch ( Throwable $e ) {
+	++$fails;
+	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";
 } finally {
 	remove_filter( 'wp_redirect', $redirigir, 1 );
 	remove_filter( 'send_auth_cookies', '__return_false' );

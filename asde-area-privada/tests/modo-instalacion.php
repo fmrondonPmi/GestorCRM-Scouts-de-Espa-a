@@ -54,6 +54,9 @@ try {
 	Organizacion::guardar_tipo( Organizacion::TIPO_GRUPO );
 	$autoload = $wpdb->get_var( $wpdb->prepare( 'SELECT autoload FROM %i WHERE option_name = %s', $wpdb->options, Organizacion::TIPO_OPCION ) );
 	$ok( in_array( $autoload, array( 'off', 'no', 'auto-off' ), true ), 'La opción no se carga automáticamente (' . $autoload . ')' );
+} catch ( Throwable $e ) {
+	++$fails;
+	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";
 } finally {
 	if ( null === $antes ) {
 		delete_option( Organizacion::TIPO_OPCION );

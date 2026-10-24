@@ -234,6 +234,9 @@ try {
 	$ok( str_contains( $sin_extra, 'Ver el manual completo' ) && ! str_contains( $sin_extra, 'Manual con capturas' ) && str_contains( $sin_extra, '<h2>Tesorería</h2>' ), 'sin la dirección del manual con capturas: la ayuda y el manual completo igual, sin ese enlace' );
 
 	$ok( 0 === $cortadas, 'ninguna petición ha salido hacia el CRM real' );
+} catch ( Throwable $e ) {
+	++$fails;
+	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";
 } finally {
 	// Limpieza: todo lo creado fuera; lo tocado, como estaba.
 	$_GET = array();

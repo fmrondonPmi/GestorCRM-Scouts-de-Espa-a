@@ -278,6 +278,9 @@ try {
 	$ok( in_array( Roles::TESORERIA, (array) $eva->roles, true ) && Solicitudes::APROBADA === Solicitudes::obtener( $s_eva['id'] )['estado'] && 'eva.ficha@example.invalid' === EmailCuenta::leer( $eva->ID ), 'coordinación confirma la Tesorería: se añade, la solicitud queda aprobada y el email no cambia' );
 
 	$ok( $crm->llamadas > 0 && 0 === $cortadas, "todas las consultas al CRM las ha respondido el simulador ({$crm->llamadas}); ninguna ha salido hacia el CRM real" );
+} catch ( Throwable $e ) {
+	++$fails;
+	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";
 } finally {
 	remove_filter( 'pre_wp_mail', '__return_true' );
 	remove_filter( 'asde_ap_solicitud_segundos_minimos', '__return_zero' );

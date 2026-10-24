@@ -522,6 +522,9 @@ try {
 	$pol = PersonaRepository::make()->obtener( '990003' );
 	$ok( '76849903' === ( ( new Numeracion( PersonaRepository::make() ) )->de( $pol )['numero'] ?? '' ), 'si la caché de la numeración no tiene la ficha, se rehace (no sale «Sin número»)' );
 	$ok( $crm->llamadas > 0 && 0 === $cortadas, "todas las consultas al CRM las ha respondido el simulador ({$crm->llamadas}); ninguna ha salido hacia el CRM real" );
+} catch ( Throwable $e ) {
+	++$fails;
+	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";
 } finally {
 	// ---------------------------------------------------------------------------
 	// Limpieza: todo lo creado fuera; lo tocado, como estaba.

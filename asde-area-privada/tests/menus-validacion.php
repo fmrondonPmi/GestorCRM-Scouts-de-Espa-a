@@ -341,6 +341,9 @@ try {
 	$por_titulo = array_column( \AsdeBalears\AreaPrivada\Eventos\Plantillas::incorporada()['tareas'], null, 'titulo' );
 	$ok( 'menu' === $por_titulo['Elaborar menú']['auto'] && 'menu' === $por_titulo['Elaborar menú']['enlace'], '«Elaborar menú» es automática y lleva a la pestaña Menú' );
 	$ok( '' === $por_titulo['Revisar alergias médicas de asistentes, medicinas y menú']['auto'] && 'menu' === $por_titulo['Revisar alergias médicas de asistentes, medicinas y menú']['enlace'], '«Revisar alergias…» la hace una persona (con el menú delante) y lleva a la pestaña Menú' );
+} catch ( Throwable $e ) {
+	++$fails;
+	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";
 } finally {
 	remove_filter( 'wp_redirect', $redirigir, 1 );
 	remove_filter( 'send_auth_cookies', '__return_false' );

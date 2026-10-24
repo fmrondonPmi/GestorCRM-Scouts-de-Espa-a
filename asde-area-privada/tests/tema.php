@@ -125,6 +125,9 @@ try {
 		}
 	}
 	$ok( ! $sueltos, 'las páginas, el enrutado, el entorno y el menú no tocan metadatos ni detectan Enfold por su cuenta: todo pasa por Tema' );
+} catch ( Throwable $e ) {
+	++$fails;
+	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";
 } finally {
 	foreach ( $antes as $id => $meta ) {
 		foreach ( $meta as $clave => $valor ) {

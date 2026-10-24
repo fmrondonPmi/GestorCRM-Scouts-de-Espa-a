@@ -185,6 +185,9 @@ try {
 	$como( $u_teso );
 	$ok( ! current_user_can( 'manage_options' ), 'la pantalla es solo para administradores' );
 	$ok( 0 === $cortadas, 'ninguna petición ha salido hacia el CRM' );
+} catch ( Throwable $e ) {
+	++$fails;
+	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";
 } finally {
 	remove_filter( 'wp_redirect', $redirigir, 1 );
 	remove_filter( 'send_auth_cookies', '__return_false' );

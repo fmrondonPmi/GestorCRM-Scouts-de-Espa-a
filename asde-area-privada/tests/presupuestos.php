@@ -322,6 +322,9 @@ try {
 	$ok( 25.0 === $cfg['pct_grupo'] && array( 'Campamento', 'Material' ) === $cfg['categorias'], 'Tesorería cambia el % y las categorías (sin repetidas)' );
 	remove_filter( 'wp_redirect', $redirigir, 1 );
 	remove_filter( 'wp_die_handler', $morir, 999 );
+} catch ( Throwable $e ) {
+	++$fails;
+	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";
 } finally {
 	$_POST = $_REQUEST = array();
 	wp_set_current_user( 0 );

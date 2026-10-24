@@ -245,6 +245,9 @@ try {
 	$ok( 'B12345678' === Grupos::por_numero( $n )['cif'], 'un dato inválido no se guarda' );
 	remove_filter( 'wp_redirect', $redirigir, 1 );
 	remove_filter( 'wp_die_handler', $morir, 999 );
+} catch ( Throwable $e ) {
+	++$fails;
+	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";
 } finally {
 	$_POST = $_REQUEST = array();
 	wp_set_current_user( 0 );

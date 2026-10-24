@@ -312,6 +312,9 @@ try {
 	$h = ( new TiendaConfigView() )->render();
 	$ok( str_contains( $h, 'name="menu_tienda"' ), 'la configuración tiene el campo del texto del enlace' );
 	$como( 0 );
+} catch ( Throwable $e ) {
+	++$fails;
+	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";
 } finally {
 	remove_filter( 'wp_redirect', $redirigir, 1 );
 	remove_filter( 'send_auth_cookies', '__return_false' );
