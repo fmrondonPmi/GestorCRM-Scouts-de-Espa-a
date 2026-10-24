@@ -120,6 +120,7 @@ final class Mantenimiento {
 	 * cobro hace más de 14 meses.
 	 */
 	private const PURGAS = array(
+		array( Solicitudes::class, 'caducar_pendientes' ), // Doc 59, RC-DEC-2: las pendientes de más de 90 días se rechazan (con email).
 		array( Solicitudes::class, 'purgar' ),
 		array( \AsdeBalears\AreaPrivada\Accesos\Concesiones::class, 'caducar_vencidas' ),
 		array( \AsdeBalears\AreaPrivada\Tienda\PedidosTable::class, 'purgar_invitados' ),

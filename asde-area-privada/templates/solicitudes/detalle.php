@@ -45,7 +45,7 @@ $adulto    = $s['adulto'] || ( $p && $p->es_adulto_voluntario() );
 		<?php echo $tutor ? esc_html( asde_t( 'La pide su familia (madre, padre o tutor/a).' ) ) : esc_html( asde_t( 'La pide el propio socio/a.' ) ); ?>
 		<?php if ( $revisor ) : ?>
 			<?php echo esc_html( sprintf( asde_t( '%s por %s el %s.' ), Solicitudes::APROBADA === $s['estado'] ? asde_t( 'Aprobada' ) : asde_t( 'Rechazada' ), $revisor->display_name, wp_date( 'd/m/Y', strtotime( $s['revisada_en'] . ' UTC' ) ) ) ); ?>
-			<?php echo '' !== $s['motivo'] ? esc_html( sprintf( asde_t( 'Motivo: %s' ), $s['motivo'] ) ) : ''; ?>
+			<?php echo '' !== $s['motivo'] ? esc_html( sprintf( asde_t( 'Motivo: %s' ), asde_t( (string) $s['motivo'] ) ) ) : ''; ?>
 		<?php endif; ?>
 	</p>
 

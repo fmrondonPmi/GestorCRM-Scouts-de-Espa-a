@@ -1,9 +1,11 @@
 <?php
 namespace AsdeBalears\AreaPrivada\Usuarios;
 
+use AsdeBalears\AreaPrivada\Audit\Logger;
 use AsdeBalears\AreaPrivada\Auth\Ambito;
 use AsdeBalears\AreaPrivada\Crm\Crypto;
 use AsdeBalears\AreaPrivada\Domain\Grupo;
+use AsdeBalears\AreaPrivada\Domain\Grupos;
 use AsdeBalears\AreaPrivada\Domain\Persona;
 use AsdeBalears\AreaPrivada\Idiomas\Idioma;
 
@@ -44,6 +46,12 @@ final class Solicitudes {
 
 	/** Días que se guardan los datos escritos después de resolver la solicitud. */
 	public const DIAS_DATOS = 30;
+
+	/** Días que puede seguir pendiente: después se rechaza sola, con el email de rechazo (doc 59, RC-DEC-2). */
+	public const DIAS_PENDIENTE = 90;
+
+	/** Motivo (en castellano, como lo guardado; se traduce al mostrarlo) del rechazo automático. */
+	public const MOTIVO_CADUCADA = 'Nadie la revisó en 90 días: rechazada automáticamente.';
 
 	public static function table(): string {
 		global $wpdb;
@@ -170,6 +178,53 @@ final class Solicitudes {
 				'estado' => self::PENDIENTE,
 			)
 		);
+	}
+
+	/**
+	 * Rechaza las solicitudes que llevan más de DIAS_PENDIENTE días pendientes, con el email de rechazo de siempre (tarea
+	 * diaria; doc 59, RC-DEC-2). Así lo escrito no se guarda para siempre: purgar() lo vacía DIAS_DATOS días después, como
+	 * en las demás. Cada una se rechaza en el contexto de su grupo (el email lleva su contacto).
+	 *
+	 * @param string $grupo Solo las de este grupo ('' = todas; las pruebas usan un grupo ficticio).
+	 * @return int Cuántas se han rechazado.
+	 */
+	public static function caducar_pendientes( ?int $ahora = null, string $grupo = '' ): int {
+		global $wpdb;
+		$limite = gmdate( 'Y-m-d H:i:s', ( $ahora ?? time() ) - self::DIAS_PENDIENTE * DAY_IN_SECONDS );
+		$filas  = (array) $wpdb->get_results( $wpdb->prepare( "SELECT id, grupo FROM %i WHERE estado = %s AND creada < %s AND ( %s = '' OR grupo = %s ) ORDER BY id", self::table(), self::PENDIENTE, $limite, $grupo, $grupo ), ARRAY_A ); // phpcs:ignore WordPress.DB
+		$n      = 0;
+		foreach ( $filas as $f ) {
+			$numero = (string) $f['grupo'];
+			$datos  = Grupos::por_numero( $numero );
+			// Un grupo dado de baja: se rechaza igual (sus datos tienen que borrarse), pero sin email (no hay contacto).
+			$ctx  = $datos ?? array(
+				'id'     => $numero,
+				'numero' => $numero,
+				'nombre' => $numero,
+				'crm_id' => '',
+			);
+			$n   += (int) Grupo::con(
+				$ctx,
+				static function () use ( $f, $datos ): bool {
+					$s = self::obtener( (int) $f['id'] );
+					if ( ! $s || ! self::resolver( $s['id'], self::RECHAZADA, 0, self::MOTIVO_CADUCADA ) ) {
+						return false;
+					}
+					$aviso = $datos ? EmailRechazo::enviar( $s ) : array( 'estado' => 'no' );
+					Logger::log(
+						'solicitud_caducada',
+						'solicitud',
+						(string) $s['id'],
+						array(
+							'tipo'  => $s['tipo'],
+							'aviso' => $aviso['estado'],
+						)
+					);
+					return true;
+				}
+			);
+		}
+		return $n;
 	}
 
 	/** Borra lo escrito de las solicitudes resueltas hace más de DIAS_DATOS días (tarea diaria). @return int */
