@@ -11,6 +11,7 @@ defined( 'ABSPATH' ) || exit;
 
 require_once ABSPATH . 'wp-admin/includes/user.php';
 
+use AsdeBalears\AreaPrivada\Audit\Logger;
 use AsdeBalears\AreaPrivada\Auth\SoloLectura;
 use AsdeBalears\AreaPrivada\Crm\Escritura;
 use AsdeBalears\AreaPrivada\Domain\Grupo;
@@ -28,8 +29,11 @@ $ok    = function ( $cond, string $label ) use ( &$fails ) {
 	echo ( $cond ? 'OK   ' : 'FAIL ' ), $label, "\n";
 };
 
-$antes_tipo   = get_option( Organizacion::TIPO_OPCION, null );
-$antes_actual = get_current_user_id();
+global $wpdb;
+$antes_tipo    = get_option( Organizacion::TIPO_OPCION, null );
+$antes_actual  = get_current_user_id();
+$log_antes     = (int) $wpdb->get_var( 'SELECT COALESCE(MAX(id), 0) FROM ' . Logger::table() ); // phpcs:ignore WordPress.DB
+$cache_externa = wp_using_ext_object_cache( true );
 $uids         = array();
 $crear        = static function ( string $login, string $rol ) use ( &$uids ): int {
 	$viejo = get_user_by( 'login', $login );
@@ -115,9 +119,15 @@ try {
 		$html = TemplateLoader::render( 'comun/nav', array( 'items' => array( 'area' => 'Inicio' ), 'activo' => 'area', 'pagina' => 'area', 'user' => get_userdata( $scou ), 'nombre' => '' ) );
 		$ok( ! str_contains( $html, 'oficina_cambiar_grupo' ), 'Un scouter no ve el selector de grupo' );
 	}
+} catch ( Throwable $e ) {
+	++$fails;
+	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";
 } finally {
 	Escritura::usar_para_pruebas( null );
 	wp_set_current_user( $antes_actual );
+	// Doc 60: también el registro de lo que hicieron sus usuarios (el cambio de grupo de la oficina quedaba).
+	$lista = implode( ',', array_map( 'intval', array_filter( $uids ) ?: array( 0 ) ) );
+	$wpdb->query( $wpdb->prepare( "DELETE FROM %i WHERE id > %d AND user_id IN ($lista)", Logger::table(), $log_antes ) ); // phpcs:ignore WordPress.DB
 	foreach ( $uids as $u ) {
 		if ( $u > 0 ) {
 			wp_delete_user( $u );
@@ -128,6 +138,8 @@ try {
 	} else {
 		update_option( Organizacion::TIPO_OPCION, $antes_tipo, false );
 	}
+	wp_using_ext_object_cache( $cache_externa );
+	$ok( 0 === (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM %i WHERE id > %d AND user_id IN ($lista)", Logger::table(), $log_antes ) ) && 0 === (int) $wpdb->get_var( "SELECT COUNT(*) FROM {$wpdb->users} WHERE user_login LIKE 'prueba-sl-%'" ), 'limpieza: sin usuarios ni registro de la prueba' ); // phpcs:ignore WordPress.DB
 }
 
-echo $fails ? "\nHAY $fails FALLOS\n" : "\nTODO OK\n";
+echo $fails ? "\nHAY $fails FALLOS\n" : "\nTODO OK (el sitio queda como estaba)\n";

@@ -53,6 +53,7 @@ $_SERVER['REMOTE_ADDR'] = '192.0.2.' . random_int( 1, 254 );
 $log_antes              = (int) $wpdb->get_var( 'SELECT COALESCE(MAX(id), 0) FROM ' . Logger::table() );
 $transitorios           = static fn() => $wpdb->get_col( "SELECT option_name FROM {$wpdb->options} WHERE option_name LIKE '\\_transient\\_asde\\_ap\\_int\\_%' OR option_name LIKE '\\_transient\\_asde\\_ap\\_rec\\_%'" ); // phpcs:ignore WordPress.DB
 $trans_antes            = $transitorios();
+$cache_externa          = wp_using_ext_object_cache( true ); // Doc 60: contadores, avisos y cachés solo en memoria (antes borraba la instantánea real del 684).
 
 // El CRM no se toca: toda petición a su API se corta.
 $cortar_crm = static fn( $pre, $args, $url ) => str_contains( (string) $url, '/rest.php' ) ? new WP_Error( 'prueba', 'CRM cortado durante la prueba' ) : $pre;
@@ -280,6 +281,9 @@ try {
 	Grupos::olvidar();
 	$html_uno = ( new RecuperarView() )->render();
 	$ok( ! str_contains( $html_varios, 'name="grupo"' ) && ! str_contains( $html_uno, 'name="grupo"' ) && str_contains( $html_uno, 'Nº de socio/a o email' ) && str_contains( $html_uno, 'Solicita el acceso' ), 'formulario: ya no pregunta el grupo (el email guardado es de su cuenta, sea del grupo que sea) y enlaza con «Solicitar acceso»' );
+} catch ( Throwable $e ) {
+	++$fails;
+	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";
 } finally {
 	// -----------------------------------------------------------------------
 	// Limpieza: usuarios de prueba y todo lo que han generado.
@@ -287,6 +291,7 @@ try {
 	remove_filter( 'pre_http_request', $cortar_crm, 1 );
 	remove_filter( 'pre_wp_mail', '__return_true' );
 	wp_set_current_user( 0 );
+	wp_using_ext_object_cache( $cache_externa );
 	$lista = implode( ',', array_map( 'intval', array_filter( $ids, 'is_int' ) ) );
 	if ( '' !== $lista ) {
 		$wpdb->query( 'DELETE FROM ' . RegistroEmails::table() . " WHERE user_id IN ($lista)" ); // phpcs:ignore WordPress.DB

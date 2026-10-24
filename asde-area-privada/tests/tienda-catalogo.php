@@ -53,6 +53,7 @@ Grupo::forzar( $grupo );
 $max_id    = static fn( string $t ) => (int) $wpdb->get_var( "SELECT COALESCE(MAX(id), 0) FROM $t" ); // phpcs:ignore WordPress.DB
 $log_antes = $max_id( Logger::table() );
 $prod_antes = $max_id( ProductosTable::table() );
+$cache_externa = wp_using_ext_object_cache( true ); // Doc 60: las cachés de los productos (transients) solo en memoria.
 $var_antes  = $max_id( VariantesTable::table() );
 $opcion_cfg = 'asde_ap_tienda_' . $grupo['numero'];
 $cfg_antes  = get_option( $opcion_cfg, null );
@@ -322,10 +323,17 @@ try {
 	echo "\n== Parte G · La descarga del ejemplo y los datos de otro grupo ==\n";
 	$ej_csv = ImportadorProductos::ejemplo();
 	$ok( str_starts_with( $ej_csv, "\xEF\xBB\xBF" ) && str_contains( $ej_csv, ';' ) && str_contains( $ej_csv, 'Camiseta del grupo' ), 'el ejemplo lleva BOM, separador «;» y filas de ejemplo' );
-	$otro = $wpdb->get_var( $wpdb->prepare( 'SELECT id FROM ' . ProductosTable::table() . ' WHERE grupo <> %s LIMIT 1', $grupo['numero'] ) ); // phpcs:ignore WordPress.DB
-	$ok( ! $otro || null === ProductosTable::obtener( (int) $otro ), 'un producto de otro grupo no se ve (si lo hubiera)' );
+	// Doc 60: antes se buscaba un producto de otro grupo en el Local y, si no había, la aserción no comprobaba nada.
+	$g_otro = array( 'id' => '996', 'numero' => '996', 'nombre' => 'Grupo de prueba 996', 'crm_id' => '' );
+	$otro   = (int) Grupo::con( $g_otro, static fn() => ProductosTable::crear( ProductosTable::validar( array( 'nombre' => 'PruebaCat Otro grupo', 'precio' => '3', 'visibilidad' => 'todos' ) ) ) );
+	$ok( $otro > $prod_antes && '996' === $wpdb->get_var( $wpdb->prepare( 'SELECT grupo FROM ' . ProductosTable::table() . ' WHERE id = %d', $otro ) ), 'se crea un producto en otro grupo (996)' ); // phpcs:ignore WordPress.DB
+	$ok( null === ProductosTable::obtener( $otro ) && null === ProductosTable::por_nombre( 'PruebaCat Otro grupo' ) && ! in_array( $otro, array_map( 'intval', array_column( ProductosTable::todos( true ), 'id' ) ), true ), 'desde este grupo no se ve: ni por id, ni por nombre, ni en el catálogo' );
 	$ok( null === ProductosTable::obtener( 0 ) && null === ProductosTable::por_ref( '' ), 'ids y referencias vacías no devuelven nada' );
+} catch ( Throwable $e ) {
+	++$fails;
+	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";
 } finally {
+	wp_using_ext_object_cache( $cache_externa );
 	$lista = implode( ',', array_map( 'intval', $ids ) ) ?: '0';
 	$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . VariantesTable::table() . ' WHERE id > %d', $var_antes ) ); // phpcs:ignore WordPress.DB
 	$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . ProductosTable::table() . ' WHERE id > %d', $prod_antes ) ); // phpcs:ignore WordPress.DB

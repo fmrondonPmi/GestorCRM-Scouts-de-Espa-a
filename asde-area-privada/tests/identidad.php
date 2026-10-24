@@ -67,9 +67,7 @@ foreach ( (array) $wpdb->get_results( 'SELECT * FROM ' . SociosTable::table(), A
 	$socios_antes[ $f['num_socio_asde'] ] = $f;
 }
 $org_antes  = get_option( Organizacion::OPTION, null );
-$clave_num  = 'asde_ap_numeracion_' . $grupo['numero'];
-$cache_num  = get_transient( $clave_num );
-delete_transient( $clave_num );
+$clave_num  = 'asde_ap_numeracion_' . $grupo['numero']; // Doc 60: la caché de numeración de la prueba va solo en memoria; la del Local no se toca.
 add_filter( 'pre_wp_mail', '__return_true' );
 
 $P   = array( 'Asde_Prueba_Crm', 'persona' );
@@ -300,6 +298,9 @@ try {
 	$_GET      = array();
 	$ok( ! $sin_firma && $con_firma && ! $mala, '?refrescar=1 solo vale con el nonce del botón (un enlace de otra web no fuerza la lectura del CRM)' );
 	$ok( str_contains( (string) file_get_contents( ASDE_AP_DIR . 'templates/personas/listado.php' ), "wp_nonce_url( add_query_arg( 'actualizar'" ) && str_contains( (string) file_get_contents( ASDE_AP_DIR . 'src/Frontend/Views/PersonasView.php' ), "'asde_actualizar_personas'" ), 'y «Actualizar ahora» de Personas también' );
+} catch ( Throwable $e ) {
+	++$fails;
+	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";
 } finally {
 	wp_set_current_user( 0 );
 	Numeros::olvidar();
@@ -323,10 +324,7 @@ try {
 			$wpdb->replace( SociosTable::table(), $fila );
 		}
 	}
-	delete_transient( $clave_num );
-	if ( false !== $cache_num ) {
-		set_transient( $clave_num, $cache_num, 10 * MINUTE_IN_SECONDS );
-	}
+	delete_transient( $clave_num ); // La de la memoria (wp_using_ext_object_cache).
 	null === $org_antes ? delete_option( Organizacion::OPTION ) : update_option( Organizacion::OPTION, $org_antes, false );
 	Organizacion::olvidar();
 	$crm->desactivar();
