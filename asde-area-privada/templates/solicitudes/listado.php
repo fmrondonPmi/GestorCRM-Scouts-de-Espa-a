@@ -43,7 +43,7 @@ $publico = add_query_arg( 'grupo', Grupo::numero(), $enlace );
 <?php if ( '' !== ( $enlace_scouters ?? '' ) ) : ?>
 	<section class="asde-card">
 		<h3><?php asde_e( 'Enlace para scouters' ); ?></h3>
-		<p><?php asde_e( 'Pásalo a los scouters y al voluntariado del grupo. Se dan de alta con su DNI o NIE, eligen sus secciones y la activación les llega al email de su ficha. Las responsabilidades (Secretaría, Coordinación, Tesorería) que pidan, las altas sin sección y las de quien no tiene email en la ficha aparecen aquí para que las revises.' ); ?></p>
+		<p><?php asde_e( 'Pásalo a los scouters y al voluntariado del grupo. Se dan de alta con su DNI o NIE, eligen sus secciones y la activación les llega al email de su ficha. Las responsabilidades (Secretaría, Coordinación, Tesorería, Intendencia) que pidan, las altas sin sección y las de quien no tiene email en la ficha aparecen aquí para que las revises.' ); ?></p>
 		<p class="asde-copiar">
 			<code class="asde-copiar__texto" id="asde-enlace-scouters"><?php echo esc_html( $enlace_scouters ); ?></code>
 			<button type="button" class="asde-btn-link" data-asde-copiar="asde-enlace-scouters"><?php asde_e( 'Copiar el enlace' ); ?></button>

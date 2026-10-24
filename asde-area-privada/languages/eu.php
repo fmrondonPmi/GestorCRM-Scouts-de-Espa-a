@@ -81,7 +81,6 @@ return array(
 	'Si eres scouter o voluntario/a del %s, date de alta en el área privada. Comprobaremos tu DNI con tu ficha del grupo.' => '%s(e)ko scouter edo boluntarioa bazara, eman alta eremu pribatuan. Zure NANa taldeko zure fitxarekin egiaztatuko dugu.',
 	'Si ya tienes cuenta, entra con tu nº de socio/a o con tu email; si no recuerdas la contraseña,' => 'Kontua baduzu jada, sartu zure bazkide-zenbakiarekin edo zure emailarekin; pasahitza gogoratzen ez baduzu,',
 	'Soy scouter de una o varias secciones' => 'Atal bateko edo gehiagoko scouterra naiz',
-	'Soy voluntario/a sin sección (Secretaría, Coordinación o Tesorería)' => 'Atalik gabeko boluntarioa naiz (Idazkaritza, Koordinazioa edo Diruzaintza)',
 	'Tu DNI o NIE' => 'Zure NANa edo AIZa',
 	'Tu email' => 'Zure emaila',
 	'Usamos estos datos solo para comprobar tu alta con tu ficha del grupo. Se guardan cifrados y se borran 30 días después de revisarla.' => 'Datu hauek zure alta taldeko zure fitxarekin egiaztatzeko soilik erabiltzen ditugu. Zifratuta gordetzen dira eta berrikusi eta 30 egunera ezabatzen dira.',
@@ -1131,7 +1130,6 @@ return array(
 	'Pide el acceso a la Secretaría de tu grupo, con el nombre del socio/a y tu relación con él o ella.' => 'Eskatu sarbidea zure taldeko Idazkaritzari, bazkidearen izenarekin eta berarekin duzun harremanarekin.',
 	'Pide el acceso por email a <a href="mailto:%1$s">%2$s</a>, con el nombre del socio/a y tu relación con él o ella.' => 'Eskatu sarbidea emailez <a href="mailto:%1$s">%2$s</a> helbidera, bazkidearen izenarekin eta berarekin duzun harremanarekin.',
 	'Pide: %s' => 'Eskatzen du: %s',
-	'Pásalo a los scouters y al voluntariado del grupo. Se dan de alta con su DNI o NIE, eligen sus secciones y la activación les llega al email de su ficha. Las responsabilidades (Secretaría, Coordinación, Tesorería) que pidan, las altas sin sección y las de quien no tiene email en la ficha aparecen aquí para que las revises.' => 'Pasatu taldeko scouterrei eta boluntarioei. NANa edo AIZa erabiliz ematen dute alta, beren atalak aukeratzen dituzte eta aktibazioa fitxako emailera iristen zaie. Eskatzen dituzten ardurak (Idazkaritza, Koordinazioa, Diruzaintza), atalik gabeko altak eta fitxan emailik ez dutenenak hemen agertzen dira zuk berrikus ditzazun.',
 	'Quién pide' => 'Nork eskatzen duen',
 	'Rechazada' => 'Ukatua',
 	'Rechazar la solicitud' => 'Ukatu eskaera',
@@ -4617,4 +4615,9 @@ return array(
 	'nº territorial: %s' => 'lurralde-zenbakia: %s',
 	'La cuenta de la web de esta persona es de otro grupo: no se puede cambiar desde aquí.' => 'Pertsona honen webeko kontua beste talde batena da: ezin da hemendik aldatu.',
 	'Sin sección, elige al menos una responsabilidad: Secretaría, Coordinación, Tesorería o Intendencia.' => 'Atalik gabe, aukeratu gutxienez erantzukizun bat: Idazkaritza, Koordinazioa, Diruzaintza edo Intendentzia.',
+
+	// doc 59: decisiones del usuario
+	'Soy voluntario/a sin sección (Secretaría, Coordinación, Tesorería o Intendencia)' => 'Atalik gabeko boluntarioa naiz (Idazkaritza, Koordinazioa, Diruzaintza edo Intendentzia)',
+	'Nadie la revisó en 90 días: rechazada automáticamente.' => 'Inork ez zuen 90 egunetan berrikusi: automatikoki baztertua.',
+	'Pásalo a los scouters y al voluntariado del grupo. Se dan de alta con su DNI o NIE, eligen sus secciones y la activación les llega al email de su ficha. Las responsabilidades (Secretaría, Coordinación, Tesorería, Intendencia) que pidan, las altas sin sección y las de quien no tiene email en la ficha aparecen aquí para que las revises.' => 'Pasatu taldeko scouterrei eta boluntarioei. NANa edo AIZa erabiliz ematen dute alta, beren atalak aukeratzen dituzte eta aktibazioa fitxako emailera iristen zaie. Eskatzen dituzten ardurak (Idazkaritza, Koordinazioa, Diruzaintza, Intendentzia), atalik gabeko altak eta fitxan emailik ez dutenenak hemen agertzen dira zuk berrikus ditzazun.',
 );

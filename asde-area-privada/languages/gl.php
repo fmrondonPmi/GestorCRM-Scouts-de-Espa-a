@@ -81,7 +81,6 @@ return array(
 	'Si eres scouter o voluntario/a del %s, date de alta en el área privada. Comprobaremos tu DNI con tu ficha del grupo.' => 'Se es scouter ou voluntario/a do %s, dáte de alta na área privada. Comprobaremos o teu DNI coa túa ficha do grupo.',
 	'Si ya tienes cuenta, entra con tu nº de socio/a o con tu email; si no recuerdas la contraseña,' => 'Se xa tes conta, entra co teu nº de socio/a ou co teu email; se non lembras o contrasinal,',
 	'Soy scouter de una o varias secciones' => 'Son scouter dunha ou varias seccións',
-	'Soy voluntario/a sin sección (Secretaría, Coordinación o Tesorería)' => 'Son voluntario/a sen sección (Secretaría, Coordinación ou Tesouraría)',
 	'Tu DNI o NIE' => 'O teu DNI ou NIE',
 	'Tu email' => 'O teu email',
 	'Usamos estos datos solo para comprobar tu alta con tu ficha del grupo. Se guardan cifrados y se borran 30 días después de revisarla.' => 'Usamos estes datos só para comprobar a túa alta coa túa ficha do grupo. Gárdanse cifrados e bórranse 30 días despois de revisala.',
@@ -1131,7 +1130,6 @@ return array(
 	'Pide el acceso a la Secretaría de tu grupo, con el nombre del socio/a y tu relación con él o ella.' => 'Pide o acceso á Secretaría do teu grupo, co nome do socio/a e a túa relación con el ou ela.',
 	'Pide el acceso por email a <a href="mailto:%1$s">%2$s</a>, con el nombre del socio/a y tu relación con él o ella.' => 'Pide o acceso por email a <a href="mailto:%1$s">%2$s</a>, co nome do socio/a e a túa relación con el ou ela.',
 	'Pide: %s' => 'Pide: %s',
-	'Pásalo a los scouters y al voluntariado del grupo. Se dan de alta con su DNI o NIE, eligen sus secciones y la activación les llega al email de su ficha. Las responsabilidades (Secretaría, Coordinación, Tesorería) que pidan, las altas sin sección y las de quien no tiene email en la ficha aparecen aquí para que las revises.' => 'Pásallo aos scouters e ao voluntariado do grupo. Danse de alta co seu DNI ou NIE, elixen as súas seccións e a activación chégalles ao email da súa ficha. As responsabilidades (Secretaría, Coordinación, Tesouraría) que pidan, as altas sen sección e as de quen non ten email na ficha aparecen aquí para que as revises.',
 	'Quién pide' => 'Quen o pide',
 	'Rechazada' => 'Rexeitada',
 	'Rechazar la solicitud' => 'Rexeitar a solicitude',
@@ -4617,4 +4615,9 @@ return array(
 	'nº territorial: %s' => 'nº territorial: %s',
 	'La cuenta de la web de esta persona es de otro grupo: no se puede cambiar desde aquí.' => 'A conta da web desta persoa é doutro grupo: non se pode cambiar desde aquí.',
 	'Sin sección, elige al menos una responsabilidad: Secretaría, Coordinación, Tesorería o Intendencia.' => 'Sen sección, escolle polo menos unha responsabilidade: Secretaría, Coordinación, Tesouraría ou Intendencia.',
+
+	// doc 59: decisiones del usuario
+	'Soy voluntario/a sin sección (Secretaría, Coordinación, Tesorería o Intendencia)' => 'Son voluntario/a sen sección (Secretaría, Coordinación, Tesouraría ou Intendencia)',
+	'Nadie la revisó en 90 días: rechazada automáticamente.' => 'Ninguén a revisou en 90 días: rexeitada automaticamente.',
+	'Pásalo a los scouters y al voluntariado del grupo. Se dan de alta con su DNI o NIE, eligen sus secciones y la activación les llega al email de su ficha. Las responsabilidades (Secretaría, Coordinación, Tesorería, Intendencia) que pidan, las altas sin sección y las de quien no tiene email en la ficha aparecen aquí para que las revises.' => 'Pásallo aos scouters e ao voluntariado do grupo. Danse de alta co seu DNI ou NIE, elixen as súas seccións e a activación chégalles ao email da súa ficha. As responsabilidades (Secretaría, Coordinación, Tesouraría, Intendencia) que pidan, as altas sen sección e as de quen non ten email na ficha aparecen aquí para que as revises.',
 );

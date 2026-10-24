@@ -123,7 +123,7 @@ return array(
 	'Si eres scouter o voluntario/a del %s, date de alta en el área privada. Comprobaremos tu DNI con tu ficha del grupo.' => 'Alta de scouters',
 	'Si ya tienes cuenta, entra con tu nº de socio/a o con tu email; si no recuerdas la contraseña,' => 'Alta de scouters',
 	'Soy scouter de una o varias secciones' => 'Alta de scouters',
-	'Soy voluntario/a sin sección (Secretaría, Coordinación o Tesorería)' => 'Alta de scouters',
+	'Soy voluntario/a sin sección (Secretaría, Coordinación, Tesorería o Intendencia)' => 'Alta de scouters',
 	'Tu DNI o NIE' => 'Alta de scouters',
 	'Tu email' => 'Alta de scouters',
 	'Usamos estos datos solo para comprobar tu alta con tu ficha del grupo. Se guardan cifrados y se borran 30 días después de revisarla.' => 'Alta de scouters',
@@ -3430,6 +3430,9 @@ return array(
 	'en un lugar seguro: te servirán si pierdes el móvil.' => 'Seguridad',
 	'obligatoria' => 'Seguridad',
 
+	// Solicitudes
+	'Nadie la revisó en 90 días: rechazada automáticamente.' => 'Solicitudes',
+
 	// Solicitudes de acceso
 	' (ahora vacío)' => 'Solicitudes de acceso',
 	'%s por %s el %s.' => 'Solicitudes de acceso',
@@ -3498,7 +3501,7 @@ return array(
 	'Pide el acceso a la Secretaría de tu grupo, con el nombre del socio/a y tu relación con él o ella.' => 'Solicitudes de acceso',
 	'Pide el acceso por email a <a href="mailto:%1$s">%2$s</a>, con el nombre del socio/a y tu relación con él o ella.' => 'Solicitudes de acceso',
 	'Pide: %s' => 'Solicitudes de acceso',
-	'Pásalo a los scouters y al voluntariado del grupo. Se dan de alta con su DNI o NIE, eligen sus secciones y la activación les llega al email de su ficha. Las responsabilidades (Secretaría, Coordinación, Tesorería) que pidan, las altas sin sección y las de quien no tiene email en la ficha aparecen aquí para que las revises.' => 'Solicitudes de acceso',
+	'Pásalo a los scouters y al voluntariado del grupo. Se dan de alta con su DNI o NIE, eligen sus secciones y la activación les llega al email de su ficha. Las responsabilidades (Secretaría, Coordinación, Tesorería, Intendencia) que pidan, las altas sin sección y las de quien no tiene email en la ficha aparecen aquí para que las revises.' => 'Solicitudes de acceso',
 	'Quién pide' => 'Solicitudes de acceso',
 	'Rechazada' => 'Solicitudes de acceso',
 	'Rechazar la solicitud' => 'Solicitudes de acceso',

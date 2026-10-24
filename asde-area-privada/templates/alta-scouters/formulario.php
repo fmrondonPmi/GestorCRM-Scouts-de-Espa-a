@@ -66,7 +66,7 @@ defined( 'ABSPATH' ) || exit;
 						<label class="asde-choice"><input type="checkbox" name="secciones[]" value="<?php echo esc_attr( $slug ); ?>" <?php checked( in_array( $slug, $valores['secciones'], true ) ); ?>><span><?php echo Secciones::badge( $slug ); // phpcs:ignore WordPress.Security.EscapeOutput ?></span></label>
 					<?php endforeach; ?>
 				</div>
-				<label class="asde-choice"><input type="radio" name="modo" value="<?php echo esc_attr( A::MODO_SIN_SECCION ); ?>" <?php checked( $valores['modo'], A::MODO_SIN_SECCION ); ?>><span><?php asde_e( 'Soy voluntario/a sin sección (Secretaría, Coordinación o Tesorería)' ); ?></span></label>
+				<label class="asde-choice"><input type="radio" name="modo" value="<?php echo esc_attr( A::MODO_SIN_SECCION ); ?>" <?php checked( $valores['modo'], A::MODO_SIN_SECCION ); ?>><span><?php asde_e( 'Soy voluntario/a sin sección (Secretaría, Coordinación, Tesorería o Intendencia)' ); ?></span></label>
 			</fieldset>
 			<fieldset>
 				<legend><?php asde_e( 'Responsabilidades en el equipo del grupo (opcional)' ); ?></legend>
