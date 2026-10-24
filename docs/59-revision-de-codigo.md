@@ -42,9 +42,12 @@ No se corrige: `MigracionUsuario` carga todos los usuarios (se usa una vez por m
 
 ## Requiere decisión del usuario (no corregir sin preguntar)
 
-- [ ] **RC-DEC-1 · P2** · `src/Accesos/Concesiones.php:230` (`conceder`) — quien tiene `asde_accesos` puede conceder a otra persona permisos que **él mismo no tiene**. Dos gestores pueden darse el uno al otro lo que ninguno tenía (la regla «nunca a sí mismo» se salta con dos personas). Propuesta: exigir `user_can( $actor, $permiso )` salvo a los administradores. Cambia el comportamiento del doc 56: preguntar antes.
+- [x] **RC-DEC-1 · P2** · `src/Accesos/Concesiones.php:230` (`conceder`) — quien tiene `asde_accesos` puede conceder a otra persona permisos que **él mismo no tiene**. Dos gestores pueden darse el uno al otro lo que ninguno tenía (la regla «nunca a sí mismo» se salta con dos personas). Propuesta: exigir `user_can( $actor, $permiso )` salvo a los administradores. Cambia el comportamiento del doc 56: preguntar antes.
+  - **Decisión del usuario (2026-10-23): se deja como está.** No se corrige.
 - [ ] **RC-DEC-2 · P2** · `src/Usuarios/Solicitudes.php:176` (`purgar`) — lo escrito en una solicitud de acceso (nombre, email, documento, fecha) se borra 30 días después de **resolverla**, pero una solicitud que nadie revisa se queda **pendiente para siempre** con esos datos (cifrados). La regla 1 de `CLAUDE.md` pide «solo cifrado y por poco tiempo». Propuesta: rechazar automáticamente (sin email, o con el de rechazo) las pendientes de más de N días (¿90?) y dejar que `purgar()` las vacíe a los 30. Hace falta decidir N y si se avisa.
+  - **Decisión del usuario (2026-10-23): rechazar automáticamente las pendientes de más de 90 días, con el email de rechazo de siempre**; `purgar()` vacía sus datos 30 días después, como las demás. Pendiente de hacer.
 - [ ] **RC-DEC-3 · P3** · `src/Eventos/Justificantes.php` — los justificantes (tiques y facturas, cifrados en `uploads/asde-privado/<grupo>/`) **no se borran nunca**, tampoco los de reintegros rechazados o cancelados ni los de gastos rechazados o retirados. Pueden llevar datos personales. Propuesta: `Justificantes::borrar( $fichero )` al rechazar o cancelar un reintegro y al rechazar o retirar un gasto, **solo si ninguna otra fila lo usa** (`Reintegros\Servicio::gasto_del_evento()` copia el mismo fichero al gasto del evento). Decidir si se hace y si se borra también al cerrar las cuentas del evento.
+  - **Decisión del usuario (2026-10-23): sí, borrar el fichero al rechazar o cancelar un reintegro y al rechazar o retirar un gasto, solo si ninguna otra fila lo usa.** Los justificantes de gastos válidos se conservan (también al cerrar las cuentas). Pendiente de hacer.
 
 ## Auth, Audit, Integraciones
 
@@ -88,6 +91,7 @@ Sin correcciones: límites de intentos, solo lectura, ámbito y Wordfence revisa
 - [x] **RC-USU-2 · P3** · `src/Usuarios/Contacto.php:68` (`lista`) — el conector `'y'`/`'o'` va en castellano también en catalán, euskera y gallego («família de Joan y Maria»). Traducir el conector con `asde_t( 'y' )` / `asde_t( 'o' )` dentro de `lista()` (y que los que llaman pasen un indicador en vez del texto).
   - Hecho en bee2f8f: Contacto::lista( $items, bool $o = false ) traduce el conector; Identificacion pasa true. Prueba: tests/revision-codigo.php (parte D, en los cuatro idiomas).
 - [x] **RC-USU-3 · P3** · `src/Usuarios/AltaScouterService.php:58` — el error dice «Secretaría, Coordinación o Tesorería», pero `ROLES_RESPONSABILIDAD` incluye también Intendencia (v0.4x). Corregir el texto (y su traducción).
+  - **Decisión del usuario (2026-10-23):** corregir también los otros dos textos que nombran solo «Secretaría, Coordinación o Tesorería»: la etiqueta de `templates/alta-scouters/formulario.php` y la ayuda de `templates/solicitudes/listado.php` (añadir Intendencia, con sus traducciones). Pendiente de hacer.
   - Hecho en bee2f8f: el error dice «Secretaría, Coordinación, Tesorería o Intendencia» (traducido en 24ca4b1). Prueba: tests/revision-codigo.php (parte D). Siguen sin Intendencia, por si se quieren cambiar también, la etiqueta «Soy voluntario/a sin sección (Secretaría, Coordinación o Tesorería)» de templates/alta-scouters/formulario.php y la ayuda de templates/solicitudes/listado.php.
 
 ## Tesorería y Banco
@@ -139,6 +143,22 @@ Sin correcciones. Revisado: caducidad y avisos de la lista de espera, datos para
 ## Frontend, plantillas y JavaScript
 
 Sin correcciones de seguridad: todos los `handle_post()` comprueban nonce y permiso (los públicos, además, clave del enlace, campo trampa y límite por IP); el Router bloquea a las cuentas de solo lectura; los avisos pasan por `wp_kses_post`; las descargas llevan su nonce. Solo lo de idiomas ya anotado (RC-FIC-1, RC-SOC-1, RC-USU-2, RC-SEPA-2).
+
+## Peticiones nuevas del usuario (2026-10-23) · pendientes de hacer
+
+- [ ] **RC-NUE-1 · Lista de espera → asociado/a.** Botón **«Se incorpora como asociado/a»** en la ficha de cada persona de la lista de espera (y en su fila del listado), para Secretaría y Coordinación (`asde_lista_espera_alta` + `asde_manage_users`) con las altas en el CRM activas. Hoy ya existe «Dar de alta en el CRM» (`templates/lista-espera/detalle.php:151`, acción `alta_documento` de `PersonasView`, datos con `Inscripciones::datos_alta()`), y al terminar **borra la fila entera** (`Inscripciones::borrar`). Cambios:
+  - El botón lleva al «Alta de socio/a» con **todos** los datos guardados en la lista de espera ya puestos en la ficha (nombre, apellidos, nacimiento, documento, contacto o tutor/a 1, teléfono, email, sección asignada).
+  - Si tiene documento, se comprueba primero (`Duplicados`, como ahora); si no lo tiene (menores de 14), se sigue sin comprobarlo.
+  - Al guardar el alta: la inscripción **no se borra**, pasa a un estado nuevo **`asociada`** («Asociado/a», con el nº de socio/a y la fecha) y se **vacían todos los datos cifrados** (`datos_enc`, `historial_enc`, `extra_enc`, huellas de email y persona). Queda en el registro (`Logger`) y sale en el listado con un filtro propio; no cuenta como «en espera».
+  - La tarea diaria no avisa ni caduca las `asociada` (no tienen datos). Revisar `mantenimiento()`, `sigue()`, los filtros y los recuentos.
+  - Texto del botón, estado y avisos en `asde_t()` con traducciones. Prueba con el CRM simulado: el alta desde la lista deja la fila en `asociada` y sin datos cifrados; sin documento también funciona.
+- [ ] **RC-NUE-2 · Acceso solo con membresía activa.** Hoy se entra y el inicio explica el motivo (`AreaPrivadaView`, `Ambito::puede_acceder`); se puede abrir incluso «Seguridad». Cambiar para que **se niegue el acceso al entrar**, con cualquier rol:
+  - Al validar el acceso (`AccesoView` → `AccessHooks::comprobar_acceso` con `en_grupo`, o justo después de `wp_signon` cerrando la sesión), comprobar con el CRM que la persona tiene membresía activa (`Ambito::de( $user )->socio_activo()`).
+  - **Cuentas familiares:** entran si **al menos uno de los menores que representan** tiene membresía activa y es menor de edad (lo que ya calcula `Ambito`: `representados`). Decisión del usuario.
+  - **CRM sin responder:** **se niega** el acceso con el aviso «ahora no se puede comprobar tu membresía, inténtalo en unos minutos». Decisión del usuario.
+  - Quedan fuera de la comprobación los administradores de WordPress (`manage_options`) y la oficina federal (no tienen ficha), como hoy en `Ambito::puede_acceder()`.
+  - El mensaje de rechazo explica el motivo (`Ambito::motivo()`), sin revelar nada a quien no ha acertado la contraseña: la comprobación va **después** de validar la contraseña. No cuenta como intento fallido de contraseña en `Intentos`.
+  - Mantener la comprobación de cada pantalla (`Router`) por si la membresía caduca con la sesión abierta. Prueba: con el CRM simulado, una persona con membresía entra; sin membresía, una familia sin menores activos y con el CRM caído, no.
 
 ---
 
