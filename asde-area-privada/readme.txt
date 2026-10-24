@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.57.0
+Stable tag: 0.57.1
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -61,6 +61,10 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.57.1 =
+* Fix: new members and leavers added from the web were sometimes not shown for several minutes. A background re-read of the CRM that had started before the change could save the old list of members over it; now every change bumps a counter and an older read is discarded.
+* Fix (budgets): the federation cost is paid with the registration and insurance fees charged per child (e.g. 30 of a 140 fee), and only the rest (the yearly fee, 110) is split between the group and the section. A grant that leaves the fee below the registration and insurance no longer gives the section a negative amount.
 
 = 0.57.0 =
 * Full code review (doc 59). Money and numbering are now safe under concurrent requests: bank reconciliation, payment of shop orders with a bank income, SEPA batch payments, event places and family numbers use atomic updates or database locks. Fixes: CRM lists are never silently truncated, SEPA payments of events are always recorded, the last fee instalment closes the total, account actions never touch users of another group, and the daily task no longer stops at the first error.
@@ -256,6 +260,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * CRM registrations tested end to end in a browser against the simulated SinergiaCRM API (development only).
 
 == Upgrade Notice ==
+
+= 0.57.1 =
+Fixes: new members and leavers are shown at once, and budgets split only the yearly fee (registration and insurance pay the federation cost). No database changes.
 
 = 0.57.0 =
 Code review fixes, "Joins as a member" in the waiting list and login only with an active membership. Database change: the waiting-list table gets two new columns (member number and date it joined), added automatically on update.

@@ -4473,12 +4473,10 @@ return array(
 	'Cada sección tiene un proyecto con su objetivo de dinero a recaudar; este es el nombre que se usará en su presupuesto.' => 'Cada secció té un projecte amb el seu objectiu de diners a recaptar; aquest és el nom que es farà servir en el seu pressupost.',
 	'Cobrado hasta hoy (informativo)' => 'Cobrat fins avui (informatiu)',
 	'Conceptos fijos por grupo' => 'Conceptes fixos per grup',
-	'Coste federativo (todos los asociados)' => 'Cost federatiu (tots els associats)',
 	'Coste federativo de educandos sin cuota' => 'Cost federatiu d\'educands sense quota',
 	'Coste federativo de scouters y voluntariado' => 'Cost federatiu de scouters i voluntariat',
 	'Cuotas previstas de las familias' => 'Quotes previstes de les famílies',
 	'Cuotas, coste federativo y lo que queda' => 'Quotes, cost federatiu i el que queda',
-	'De la cuota anual de las familias se descuenta el coste federativo (ese dinero ya está comprometido). Del resto, un porcentaje va a las arcas del grupo y lo demás al presupuesto de la sección de cada asociado. Se calcula con las cuotas previstas de la ronda y los socios activos del CRM.' => 'De la quota anual de les famílies es descompta el cost federatiu (aquests diners ja estan compromesos). Del que queda, un percentatge va a la caixa del grup i la resta al pressupost de la secció de cada associat. Es calcula amb les quotes previstes de la ronda i els socis actius del CRM.',
 	'Deja el porcentaje de una sección vacío para que use el del grupo.' => 'Deixa el percentatge d\'una secció buit perquè faci servir el del grup.',
 	'Descubierta e Intervención' => 'Descoberta i Intervenció',
 	'Dique' => 'Dic',
@@ -4486,7 +4484,6 @@ return array(
 	'Educandos' => 'Educands',
 	'Empresa' => 'Empresa',
 	'Guardar el reparto' => 'Desar el repartiment',
-	'Hay %d educandos con una cuota inferior a su coste federativo (becas o ajustes): aportan un importe negativo.' => 'Hi ha %d educands amb una quota inferior al seu cost federatiu (beques o ajustos): aporten un import negatiu.',
 	'Neto' => 'Net',
 	'Parte de las cuotas de los educandos' => 'Part de les quotes dels educands',
 	'Presupuestos ·' => 'Pressupostos ·',
@@ -4634,4 +4631,12 @@ return array(
 	'(El texto del mensaje no se guarda en el registro de emails.)' => '(El text del missatge no es guarda al registre d\'emails.)',
 	'Los datos de esta inscripción ya no se conservan (se borraron o pasó a asociado/a): no se puede reconstruir el texto del email.' => 'Les dades d\'aquesta inscripció ja no es conserven (es van esborrar o va passar a associat/ada): no es pot reconstruir el text de l\'email.',
 	'tu grupo' => 'el teu grup',
+
+	// v0.57.1: reparto de presupuestos con inscripción y seguro
+	'Coste federativo de los educandos con cuota' => 'Cost federatiu dels educands amb quota',
+	'De la cuota de las familias se aparta la inscripción y el seguro de cada educando: con ese dinero el grupo paga el coste federativo de todos los asociados. Del resto (la anualidad), un porcentaje va a las arcas del grupo y lo demás al presupuesto de la sección de cada asociado. Se calcula con las cuotas previstas de la ronda y los socios activos del CRM.' => 'De la quota de les famílies s\'aparta la inscripció i l\'assegurança de cada educand: amb aquests diners el grup paga el cost federatiu de tots els associats. De la resta (l\'anualitat), un percentatge va a la caixa del grup i la resta al pressupost de la secció de cada associat. Es calcula amb les quotes previstes de la ronda i els socis actius del CRM.',
+	'Hay %d educandos cuya cuota no llega a la inscripción y el seguro (becas o ajustes): no aportan nada a su sección y lo que falta lo pone el grupo.' => 'Hi ha %d educands la quota dels quals no arriba a la inscripció i l\'assegurança (beques o ajustos): no aporten res a la seva secció i el que falta ho posa el grup.',
+	'Inscripción y seguro' => 'Inscripció i assegurança',
+	'Inscripción y seguro (pagan el coste federativo)' => 'Inscripció i assegurança (paguen el cost federatiu)',
+	'Inscripción y seguro de las familias' => 'Inscripció i assegurança de les famílies',
 );

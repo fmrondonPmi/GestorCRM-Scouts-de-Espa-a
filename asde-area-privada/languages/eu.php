@@ -4473,12 +4473,10 @@ return array(
 	'Cada sección tiene un proyecto con su objetivo de dinero a recaudar; este es el nombre que se usará en su presupuesto.' => 'Atal bakoitzak proiektu bat du, bildu beharreko diru-helburuarekin; hau da bere aurrekontuan erabiliko den izena.',
 	'Cobrado hasta hoy (informativo)' => 'Gaur arte kobratua (informatiboa)',
 	'Conceptos fijos por grupo' => 'Taldeko kontzeptu finkoak',
-	'Coste federativo (todos los asociados)' => 'Kostu federatiboa (bazkide guztiak)',
 	'Coste federativo de educandos sin cuota' => 'Kuotarik gabeko hezigaien kostu federatiboa',
 	'Coste federativo de scouters y voluntariado' => 'Scouter eta boluntarioen kostu federatiboa',
 	'Cuotas previstas de las familias' => 'Familien aurreikusitako kuotak',
 	'Cuotas, coste federativo y lo que queda' => 'Kuotak, kostu federatiboa eta geratzen dena',
-	'De la cuota anual de las familias se descuenta el coste federativo (ese dinero ya está comprometido). Del resto, un porcentaje va a las arcas del grupo y lo demás al presupuesto de la sección de cada asociado. Se calcula con las cuotas previstas de la ronda y los socios activos del CRM.' => 'Familien urteko kuotatik kostu federatiboa kentzen da (dirua dagoeneko konprometituta dago). Gelditzen denetik, ehuneko bat taldearen kutxara doa eta gainerakoa bazkide bakoitzaren atalaren aurrekontura. Txandako aurreikusitako kuotekin eta CRMko bazkide aktiboekin kalkulatzen da.',
 	'Deja el porcentaje de una sección vacío para que use el del grupo.' => 'Utzi atal baten ehunekoa hutsik taldearena erabil dezan.',
 	'Descubierta e Intervención' => 'Aurkikuntza eta Esku-hartzea',
 	'Dique' => 'Dike',
@@ -4486,7 +4484,6 @@ return array(
 	'Educandos' => 'Hezigaiak',
 	'Empresa' => 'Enpresa',
 	'Guardar el reparto' => 'Gorde banaketa',
-	'Hay %d educandos con una cuota inferior a su coste federativo (becas o ajustes): aportan un importe negativo.' => '%d hezigaik beren kostu federatiboa baino kuota txikiagoa dute (bekak edo doikuntzak): zenbateko negatiboa ekartzen dute.',
 	'Neto' => 'Garbia',
 	'Parte de las cuotas de los educandos' => 'Hezigaien kuoten zatia',
 	'Presupuestos ·' => 'Aurrekontuak ·',
@@ -4634,4 +4631,12 @@ return array(
 	'(El texto del mensaje no se guarda en el registro de emails.)' => '(Mezuaren testua ez da emailen erregistroan gordetzen.)',
 	'Los datos de esta inscripción ya no se conservan (se borraron o pasó a asociado/a): no se puede reconstruir el texto del email.' => 'Izen-emate honen datuak ez dira gehiago gordetzen (ezabatu egin ziren edo bazkide bihurtu zen): ezin da emailaren testua berreraiki.',
 	'tu grupo' => 'zure taldea',
+
+	// v0.57.1: reparto de presupuestos con inscripción y seguro
+	'Coste federativo de los educandos con cuota' => 'Kuota duten hezigaien kostu federatiboa',
+	'De la cuota de las familias se aparta la inscripción y el seguro de cada educando: con ese dinero el grupo paga el coste federativo de todos los asociados. Del resto (la anualidad), un porcentaje va a las arcas del grupo y lo demás al presupuesto de la sección de cada asociado. Se calcula con las cuotas previstas de la ronda y los socios activos del CRM.' => 'Familien kuotatik hezigai bakoitzaren izen-ematea eta asegurua bereizten dira: diru horrekin taldeak bazkide guztien kostu federatiboa ordaintzen du. Gainerakotik (urteko kuota), ehuneko bat taldearen kutxara doa eta beste guztia bazkide bakoitzaren atalaren aurrekontura. Txandako aurreikusitako kuotekin eta CRMko bazkide aktiboekin kalkulatzen da.',
+	'Hay %d educandos cuya cuota no llega a la inscripción y el seguro (becas o ajustes): no aportan nada a su sección y lo que falta lo pone el grupo.' => '%d hezigairen kuota ez da iristen izen-ematera eta asegurura (bekak edo doikuntzak): ez diote ezer ematen beren atalari, eta falta dena taldeak jartzen du.',
+	'Inscripción y seguro' => 'Izen-ematea eta asegurua',
+	'Inscripción y seguro (pagan el coste federativo)' => 'Izen-ematea eta asegurua (kostu federatiboa ordaintzen dute)',
+	'Inscripción y seguro de las familias' => 'Familien izen-ematea eta asegurua',
 );

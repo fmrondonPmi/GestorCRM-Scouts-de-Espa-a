@@ -22,6 +22,9 @@ defined( 'ABSPATH' ) || exit;
  * - Fresca 5 minutos. Pasado ese tiempo se sigue sirviendo la antigua mientras se
  *   vuelve a leer en segundo plano (WP-Cron); a los 10 minutos ya no se sirve.
  * - Lo que se guarda en el CRM desde la web (Escritura) se aplica también aquí.
+ * - Altas, bajas y cambios de sección desde la web la borran (olvidar()) y suben su
+ *   «generación»: una lectura del CRM que empezó antes (el refresco en segundo plano)
+ *   ya no puede volver a guardar la foto antigua encima (v0.57.1, fallo visto por el usuario).
  * - Quien edita el CRM por otro lado se ve en la web en unos minutos; «Actualizar»
  *   (Personas y Usuarios) lo fuerza. Con el filtro asde_ap_instantanea_segundos se
  *   cambia el tiempo, y con 0 se desactiva (todo se lee del CRM, como antes).
@@ -37,6 +40,9 @@ final class Instantanea {
 	public const MIN_FORZAR = 30;
 
 	private const CERROJO = 'asde_ap_snaplock_';
+
+	/** Contador que sube cada vez que se olvida la instantánea (v0.57.1). */
+	private const GENERACION = 'asde_ap_snapgen_';
 
 	/** Un cerrojo más antiguo se da por perdido (la petición que leía el CRM murió). */
 	private const CERROJO_SEGUNDOS = 60;
@@ -59,7 +65,7 @@ final class Instantanea {
 		return max( 0, (int) apply_filters( 'asde_ap_instantanea_segundos', self::SEGUNDOS ) );
 	}
 
-	/** @return array{t:int, entries:list<array{id:string, fields:array<string,string>}>}|null */
+	/** @return array{t:int, g?:int, entries:list<array{id:string, fields:array<string,string>}>}|null */
 	public static function leer( string $grupo ): ?array {
 		if ( isset( self::$memoria[ $grupo ] ) ) {
 			return self::$memoria[ $grupo ];
@@ -108,16 +114,39 @@ final class Instantanea {
 		return $out;
 	}
 
-	/** @param list<array{id:string, fields:array<string,string>}> $entries */
-	public static function guardar( string $grupo, array $entries, ?int $t = null ): void {
+	/**
+	 * Guarda la instantánea, salvo que se haya olvidado desde que se empezó a leer: con $g, la
+	 * generación de cuando empezó la lectura (generacion()). Sin ella, la de ahora.
+	 *
+	 * @param list<array{id:string, fields:array<string,string>}> $entries
+	 * @return bool false si no se ha guardado porque ya era antigua.
+	 */
+	public static function guardar( string $grupo, array $entries, ?int $t = null, ?int $g = null ): bool {
+		$actual = self::generacion( $grupo );
+		if ( null !== $g && $g !== $actual ) {
+			// v0.57.1: la lectura empezó antes de un alta o una baja; lo leído ya no vale.
+			return false;
+		}
 		$snap = array(
 			't'       => $t ?? time(),
+			'g'       => $actual,
 			'entries' => $entries,
 		);
 		$s    = max( 1, self::segundos() );
 		set_transient( self::PREFIJO . $grupo, Crypto::encrypt( (string) gzcompress( (string) wp_json_encode( $snap ), 6 ) ), 2 * $s + 60 );
 		self::$memoria[ $grupo ] = $snap;
 		unset( self::$indice[ $grupo ] );
+		return true;
+	}
+
+	/**
+	 * Generación de la instantánea del grupo: sube en cada olvidar(). Se lee de la base de datos
+	 * sin caché, porque la cambia otra petición (la del alta o la baja).
+	 */
+	public static function generacion( string $grupo ): int {
+		global $wpdb;
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- lectura sin caché: el valor lo cambia otra petición
+		return (int) $wpdb->get_var( $wpdb->prepare( 'SELECT option_value FROM %i WHERE option_name = %s', $wpdb->options, self::GENERACION . $grupo ) );
 	}
 
 	/** 'fresca' (se usa tal cual), 'gracia' (se usa y se refresca en segundo plano) o 'caducada' (hay que leer el CRM). */
@@ -139,6 +168,13 @@ final class Instantanea {
 	public static function olvidar( string $grupo = '' ): void {
 		$grupo = '' !== $grupo ? $grupo : Grupo::numero();
 		unset( self::$memoria[ $grupo ], self::$indice[ $grupo ] );
+		// Antes de borrarla, otra generación: lo que se esté leyendo ahora mismo del CRM no se guardará.
+		global $wpdb;
+		$nombre = self::GENERACION . $grupo;
+		// phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- subir el contador tiene que ser una sola sentencia atómica
+		$wpdb->query( $wpdb->prepare( "INSERT INTO %i (option_name, option_value, autoload) VALUES (%s, '1', 'off') ON DUPLICATE KEY UPDATE option_value = option_value + 1", $wpdb->options, $nombre ) );
+		wp_cache_delete( $nombre, 'options' );
+		wp_cache_delete( 'notoptions', 'options' );
 		delete_transient( self::PREFIJO . $grupo );
 	}
 
@@ -220,7 +256,8 @@ final class Instantanea {
 						$snap['entries'][ $i ]['fields'][ $campo ] = (string) $valor;
 					}
 				}
-				self::guardar( $grupo, $snap['entries'], (int) $snap['t'] );
+				// Con la generación de cuando se leyó: si otra petición la olvidó entretanto, no se resucita.
+				self::guardar( $grupo, $snap['entries'], (int) $snap['t'], (int) ( $snap['g'] ?? 0 ) );
 				return;
 			}
 		}

@@ -4473,12 +4473,10 @@ return array(
 	'Cada sección tiene un proyecto con su objetivo de dinero a recaudar; este es el nombre que se usará en su presupuesto.' => 'Cada sección ten un proxecto co seu obxectivo de diñeiro a recadar; este é o nome que se usará no seu orzamento.',
 	'Cobrado hasta hoy (informativo)' => 'Cobrado ata hoxe (informativo)',
 	'Conceptos fijos por grupo' => 'Conceptos fixos por grupo',
-	'Coste federativo (todos los asociados)' => 'Custo federativo (todos os asociados)',
 	'Coste federativo de educandos sin cuota' => 'Custo federativo de educandos sen cota',
 	'Coste federativo de scouters y voluntariado' => 'Custo federativo de scouters e voluntariado',
 	'Cuotas previstas de las familias' => 'Cotas previstas das familias',
 	'Cuotas, coste federativo y lo que queda' => 'Cotas, custo federativo e o que queda',
-	'De la cuota anual de las familias se descuenta el coste federativo (ese dinero ya está comprometido). Del resto, un porcentaje va a las arcas del grupo y lo demás al presupuesto de la sección de cada asociado. Se calcula con las cuotas previstas de la ronda y los socios activos del CRM.' => 'Da cota anual das familias descóntase o custo federativo (ese diñeiro xa está comprometido). Do que queda, unha porcentaxe vai á caixa do grupo e o resto ao orzamento da sección de cada asociado. Calcúlase coas cotas previstas da rolda e os socios activos do CRM.',
 	'Deja el porcentaje de una sección vacío para que use el del grupo.' => 'Deixa a porcentaxe dunha sección baleira para que use a do grupo.',
 	'Descubierta e Intervención' => 'Descuberta e Intervención',
 	'Dique' => 'Dique',
@@ -4486,7 +4484,6 @@ return array(
 	'Educandos' => 'Educandos',
 	'Empresa' => 'Empresa',
 	'Guardar el reparto' => 'Gardar o reparto',
-	'Hay %d educandos con una cuota inferior a su coste federativo (becas o ajustes): aportan un importe negativo.' => 'Hai %d educandos cunha cota inferior ao seu custo federativo (bolsas ou axustes): achegan un importe negativo.',
 	'Neto' => 'Neto',
 	'Parte de las cuotas de los educandos' => 'Parte das cotas dos educandos',
 	'Presupuestos ·' => 'Orzamentos ·',
@@ -4634,4 +4631,12 @@ return array(
 	'(El texto del mensaje no se guarda en el registro de emails.)' => '(O texto da mensaxe non se garda no rexistro de emails.)',
 	'Los datos de esta inscripción ya no se conservan (se borraron o pasó a asociado/a): no se puede reconstruir el texto del email.' => 'Os datos desta inscrición xa non se conservan (borráronse ou pasou a asociado/a): non se pode reconstruír o texto do email.',
 	'tu grupo' => 'o teu grupo',
+
+	// v0.57.1: reparto de presupuestos con inscripción y seguro
+	'Coste federativo de los educandos con cuota' => 'Custo federativo dos educandos con cota',
+	'De la cuota de las familias se aparta la inscripción y el seguro de cada educando: con ese dinero el grupo paga el coste federativo de todos los asociados. Del resto (la anualidad), un porcentaje va a las arcas del grupo y lo demás al presupuesto de la sección de cada asociado. Se calcula con las cuotas previstas de la ronda y los socios activos del CRM.' => 'Da cota das familias apártase a inscrición e o seguro de cada educando: con ese diñeiro o grupo paga o custo federativo de todos os asociados. Do resto (a anualidade), unha porcentaxe vai á caixa do grupo e o demais ao orzamento da sección de cada asociado. Calcúlase coas cotas previstas da rolda e os socios activos do CRM.',
+	'Hay %d educandos cuya cuota no llega a la inscripción y el seguro (becas o ajustes): no aportan nada a su sección y lo que falta lo pone el grupo.' => 'Hai %d educandos cuxa cota non chega á inscrición e o seguro (bolsas ou axustes): non achegan nada á súa sección e o que falta pono o grupo.',
+	'Inscripción y seguro' => 'Inscrición e seguro',
+	'Inscripción y seguro (pagan el coste federativo)' => 'Inscrición e seguro (pagan o custo federativo)',
+	'Inscripción y seguro de las familias' => 'Inscrición e seguro das familias',
 );

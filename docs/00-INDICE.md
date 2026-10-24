@@ -1,6 +1,6 @@
 # Área privada · Grupo Scout — Base de conocimiento
 
-Proyecto: plugin de WordPress **«ASDE Scouts de España - Gestor CRM para Grupos Scouts»** (`asde-area-privada`): área privada con gestión de usuarios, tesorería, tienda, eventos y más para los Grupos Scouts de ASDE (empezó en Scouts de Balears, Grupo Myotragus 684). **Versión actual: 0.57.0.** El historial de versiones está en el `readme.txt` del plugin y en el git.
+Proyecto: plugin de WordPress **«ASDE Scouts de España - Gestor CRM para Grupos Scouts»** (`asde-area-privada`): área privada con gestión de usuarios, tesorería, tienda, eventos y más para los Grupos Scouts de ASDE (empezó en Scouts de Balears, Grupo Myotragus 684). **Versión actual: 0.57.1** (dos errores vistos por el usuario: altas y bajas que no se veían al momento, doc 26 «Generación de la instantánea»; y el reparto de los presupuestos, que ahora paga el coste federativo con la inscripción y el seguro, doc 57 §3). El historial de versiones está en el `readme.txt` del plugin y en el git.
 
 - Los datos personales se leen del **CRM federal de ASDE** (SinergiaCRM) y **no se guardan en WordPress**.
 - La web guarda solo números de socio, familias, configuración, pagos y lo que cada módulo necesita, y lo sensible va **cifrado** y con caducidad: el email de cada cuenta, lo escrito en solicitudes de acceso y listas de espera, las autorizaciones SEPA, los datos de quien compra sin sesión, los IBAN de los reintegros y las credenciales del CRM (doc 08).

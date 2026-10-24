@@ -7,7 +7,8 @@
  * - Calculadora::coste_persona(): coste federativo de una persona; la suma de todas más lo fijo
  *   por grupo da exactamente el total de coste_federativo().
  * - Presupuestos\Reparto: de la cuota al dinero de cada sección (neto, % al grupo por defecto y por
- *   sección, neto negativo, adultos y educandos sin cuota, redondeo, varias secciones).
+ *   sección, becas, adultos y educandos sin cuota, redondeo, varias secciones). Desde la v0.57.1 la
+ *   inscripción y el seguro pagan el coste federativo y solo se reparte el resto (la anualidad).
  * - Config: la parte «presupuesto» (valores por defecto, saneo, no pisa lo demás).
  * No usa el CRM (fichas inventadas en memoria) y deja la configuración como estaba.
  */
@@ -93,34 +94,38 @@ $personas = array( 'a' => $a, 'b' => $b, 'c' => $c, 'r' => $r );
 $cfg['presupuesto']['pct_grupo']   = 40.0;
 $cfg['presupuesto']['pct_seccion'] = array( 'scouts' => 50.0 );
 
+// Cuota de la ronda (por defecto): inscripción 20 € + seguro 10 € por hijo, y la anualidad.
+$ok( $igual( 20, $cfg['cuotas']['inscripcion'] ) && $igual( 10, $cfg['cuotas']['seguro'] ), 'la prueba usa inscripción 20 € + seguro 10 € por hijo' );
 $rep = Reparto::calcular( $activas, $filas, $personas, $cfg, $ref );
-$lo  = $rep['secciones']['lobatos'];
-$ok( 2 === $lo['educandos'] && $igual( 258, $lo['cuota'] ) && $igual( 100, $lo['cobrado'] ) && $igual( 44, $lo['coste_fed'] ) && $igual( 214, $lo['neto'] ), 'Lobatos: 2 educandos, cuota 258, cobrado 100, coste 44, neto 214' );
-$ok( $igual( 85.6, $lo['a_grupo'] ) && $igual( 128.4, $lo['a_seccion'] ), 'Lobatos con el 40 % por defecto: 85,60 al grupo y 128,40 a la sección' );
-$sc = $rep['secciones']['scouts'];
-$ok( 50.0 === $sc['pct_grupo'] && $igual( 117, $sc['neto'] ) && $igual( 58.5, $sc['a_seccion'] ) && $igual( 58.5, $sc['a_grupo'] ), 'Scouts con su propio 50 %: neto 117 → 58,50 y 58,50' );
+$sc  = $rep['secciones']['scouts'];
+$ok( $igual( 140, $sc['cuota'] ) && $igual( 30, $sc['inscripcion'] ) && $igual( 110, $sc['neto'] ), 'el ejemplo del usuario: 1 hijo paga 140 €, 30 € (inscripción y seguro) van al coste federativo y se reparten los 110 € restantes, aunque su coste federativo real sea 23 €' );
+$ok( 50.0 === $sc['pct_grupo'] && $igual( 55, $sc['a_seccion'] ) && $igual( 55, $sc['a_grupo'] ), 'Scouts con su propio 50 %: 110 → 55 y 55' );
+$lo = $rep['secciones']['lobatos'];
+$ok( 2 === $lo['educandos'] && $igual( 258, $lo['cuota'] ) && $igual( 100, $lo['cobrado'] ) && $igual( 60, $lo['inscripcion'] ) && $igual( 198, $lo['neto'] ), 'Lobatos: 2 educandos, cuota 258, cobrado 100, inscripción y seguro 2 × 30 = 60, neto 198' );
+$ok( $igual( 79.2, $lo['a_grupo'] ) && $igual( 118.8, $lo['a_seccion'] ), 'Lobatos con el 40 % por defecto: 79,20 al grupo y 118,80 a la sección' );
 $ro = $rep['secciones']['rovers'];
-$ok( $igual( -13, $ro['neto'] ) && $igual( -7.8, $ro['a_seccion'] ) && $igual( -5.2, $ro['a_grupo'] ) && 1 === $rep['total']['negativos'], 'neto negativo (beca): aporta −13 y se avisa de 1 educando' );
+$ok( $igual( 10, $ro['inscripcion'] ) && $igual( 0, $ro['neto'] ) && $igual( 0, $ro['a_seccion'] ) && $igual( 0, $ro['a_grupo'] ) && 1 === $rep['total']['no_cubren'], 'beca (paga 10 €, menos que los 30 € de inscripción y seguro): no aporta a su sección, nunca en negativo, y se avisa de 1 educando' );
 $ok( 0 === $rep['secciones']['castores']['educandos'] && $igual( 0, $rep['secciones']['castores']['a_seccion'] ), 'Castores sin educandos con cuota: 0 €' );
 
 $g = $rep['grupo'];
-$ok( $igual( 24, $g['adultos'] ) && $igual( 22, $g['sin_cuota'] ) && $igual( 10, $g['fijos'] ) && $igual( 56, $g['sin_dueno'] ), 'sin dueño: adulto 24 + educando sin cuota 22 + fijo 10 = 56 €' );
-$ok( $igual( 138.9, $g['a_grupo'] ) && $igual( 82.9, $g['disponible'] ), 'grupo: 138,90 de las cuotas − 56 = 82,90 disponibles' );
+$ok( $igual( 90, $g['educandos'] ) && $igual( 24, $g['adultos'] ) && $igual( 22, $g['sin_cuota'] ) && $igual( 10, $g['fijos'] ) && $igual( 146, $g['coste_fed'] ), 'coste federativo de todos: educandos con cuota 90 + adulto 24 + educando sin cuota 22 + fijo 10 = 146 €' );
+$ok( $igual( 134.2, $g['a_grupo'] ) && $igual( 100, $g['inscripcion'] ) && $igual( 88.2, $g['disponible'] ), 'grupo: 134,20 de las cuotas + 100 de inscripción y seguro − 146 de coste federativo = 88,20 disponibles' );
 $suma_sec = array_sum( array_column( $rep['secciones'], 'a_seccion' ) );
-$ok( $igual( 408, $rep['total']['cuota'] ) && $igual( 146, $rep['total']['coste_fed'] ) && $igual( 262, $rep['total']['bolsa'] ), 'totales: cuotas 408 − coste 146 = 262 para repartir' );
-$ok( $igual( $rep['total']['bolsa'], $suma_sec + $g['disponible'] ), 'cuadra al céntimo: Σ secciones + grupo = cuotas − coste federativo' );
+$ok( $igual( 408, $rep['total']['cuota'] ) && $igual( 100, $rep['total']['inscripcion'] ) && $igual( 308, $rep['total']['bolsa'] ) && $igual( 146, $rep['total']['coste_fed'] ), 'totales: cuotas 408 − inscripción y seguro 100 = 308 para repartir (coste federativo 146)' );
+$ok( $igual( 308, array_sum( array_column( $rep['secciones'], 'neto' ) ) ), 'lo que se reparte es la suma del neto de las secciones' );
+$ok( $igual( $rep['total']['cuota'] - $rep['total']['coste_fed'], $suma_sec + $g['disponible'] ), 'cuadra al céntimo: Σ secciones + grupo = cuotas − coste federativo' );
 
 // 0 % y 100 % al grupo.
 $cero = $cfg;
 $cero['presupuesto']['pct_grupo']   = 0.0;
 $cero['presupuesto']['pct_seccion'] = array();
 $r0 = Reparto::calcular( $activas, $filas, $personas, $cero, $ref );
-$ok( $igual( 0, $r0['secciones']['lobatos']['a_grupo'] ) && $igual( 214, $r0['secciones']['lobatos']['a_seccion'] ), '0 % al grupo: todo el neto va a la sección' );
+$ok( $igual( 0, $r0['secciones']['lobatos']['a_grupo'] ) && $igual( 198, $r0['secciones']['lobatos']['a_seccion'] ), '0 % al grupo: todo el neto va a la sección' );
 $cien = $cero;
 $cien['presupuesto']['pct_grupo'] = 100.0;
 $r1   = Reparto::calcular( $activas, $filas, $personas, $cien, $ref );
-$ok( $igual( 0, $r1['secciones']['lobatos']['a_seccion'] ) && $igual( 214, $r1['secciones']['lobatos']['a_grupo'] ), '100 % al grupo: nada a la sección' );
-$ok( $igual( $r1['total']['bolsa'], array_sum( array_column( $r1['secciones'], 'a_seccion' ) ) + $r1['grupo']['disponible'] ), 'con el 100 % también cuadra' );
+$ok( $igual( 0, $r1['secciones']['lobatos']['a_seccion'] ) && $igual( 198, $r1['secciones']['lobatos']['a_grupo'] ), '100 % al grupo: nada a la sección' );
+$ok( $igual( $r1['total']['cuota'] - $r1['total']['coste_fed'], array_sum( array_column( $r1['secciones'], 'a_seccion' ) ) + $r1['grupo']['disponible'] ), 'con el 100 % también cuadra' );
 
 // Redondeo: tres hijos con una cuota que no se reparte exacta (242 € entre 3 = 80,67) y 33,33 %.
 $tres   = array( $per( 'h1', '^Castores^', '2019-01-01' ), $per( 'h2', '^Castores^', '2019-02-01' ), $per( 'h3', '^Castores^', '2019-03-01' ) );
@@ -129,7 +134,8 @@ $redond = $cfg;
 $redond['presupuesto']['pct_grupo']   = 33.33;
 $redond['presupuesto']['pct_seccion'] = array();
 $rr     = Reparto::calcular( $tres, array( array( 'calc' => array( 'pagan' => array( 'h1', 'h2', 'h3' ), 'a_pagar' => 242.0, 'pagado' => 0.0 ) ) ), $pt, $redond, $ref );
-$ok( $igual( $rr['total']['bolsa'], $rr['secciones']['castores']['a_seccion'] + $rr['grupo']['disponible'] ), 'redondeo: aunque la cuota no se reparta exacta, Σ secciones + grupo cuadra al céntimo' );
+$ok( $igual( $rr['total']['cuota'] - $rr['total']['coste_fed'], $rr['secciones']['castores']['a_seccion'] + $rr['grupo']['disponible'] ), 'redondeo: aunque la cuota no se reparta exacta, Σ secciones + grupo cuadra al céntimo' );
+$ok( $igual( 90, $rr['secciones']['castores']['inscripcion'] ) && $igual( 152.01, $rr['secciones']['castores']['neto'] ), 'redondeo: 3 × 80,67 € de cuota, 3 × 30 € de inscripción y seguro y 152,01 € para repartir' );
 
 // Varias secciones: cuenta una sola vez, en la primera educativa.
 $doble = $per( 'z', '^Lobatos^,^Scouts^', '2015-01-01' );
@@ -140,7 +146,7 @@ $ok( 'scouts' === Reparto::seccion_de( $doble, $cfg_solo ) && null === Reparto::
 
 // Sin familias: nada que repartir, el coste federativo resta del grupo.
 $vacio = Reparto::calcular( $activas, array(), array(), $cfg, $ref );
-$ok( $igual( 0, $vacio['total']['cuota'] ) && $igual( -146, $vacio['grupo']['disponible'] ) && $igual( -146, $vacio['total']['bolsa'] ), 'sin cuotas: el coste federativo (146 €) queda en negativo en el grupo' );
+$ok( $igual( 0, $vacio['total']['cuota'] ) && $igual( -146, $vacio['grupo']['disponible'] ) && $igual( 0, $vacio['total']['bolsa'] ), 'sin cuotas: nada que repartir y el coste federativo (146 €) queda en negativo en el grupo' );
 // Un socio que paga y no está en las personas leídas no suma nada.
 $huerfano = Reparto::calcular( $activas, array( array( 'calc' => array( 'pagan' => array( 'fantasma' ), 'a_pagar' => 100.0, 'pagado' => 0.0 ) ) ), array(), $cfg, $ref );
 $ok( $igual( 0, $huerfano['total']['cuota'] ), 'un nº de socio que no está en el CRM no suma cuota' );

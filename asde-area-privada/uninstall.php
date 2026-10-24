@@ -59,6 +59,7 @@ foreach ( is_array( $asde_grupos ) ? $asde_grupos : array() as $asde_grupo ) {
 	delete_transient( 'asde_ap_snap_' . $asde_grupo['numero'] ); // Instantánea cifrada de las fichas (v0.12.3).
 	wp_clear_scheduled_hook( 'asde_ap_instantanea_refrescar', array( (string) $asde_grupo['numero'] ) );
 	delete_option( 'asde_ap_snaplock_' . $asde_grupo['numero'] ); // Cerrojo de la lectura de fichas.
+	delete_option( 'asde_ap_snapgen_' . $asde_grupo['numero'] ); // Generación de la instantánea (v0.57.1).
 	delete_option( 'asde_ap_tienda_' . $asde_grupo['numero'] );
 	delete_option( 'asde_ap_eventos_' . $asde_grupo['numero'] ); // Tipos, margen y titulaciones de los eventos (v0.35).
 	delete_option( 'asde_ap_sepa_' . $asde_grupo['numero'] ); // Datos del acreedor SEPA (el IBAN, cifrado).

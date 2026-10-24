@@ -41,20 +41,22 @@ No existe nada llamado «presupuesto» fuera de Eventos; esto es módulo nuevo (
 
 ### 3.1 Fórmula por asociado que paga (educando)
 
+**Corregido en la v0.57.1 (P-202, decisión del usuario):** el coste federativo se paga con la **inscripción y el seguro** que cobra el grupo por cada hijo; solo lo demás (la anualidad, después de becas y ajustes) se reparte. Ejemplo del usuario: una familia paga 140 € por un hijo; los 30 € de inscripción y seguro son para pagar el 100 % del coste federativo y los 110 € restantes se distribuyen entre el grupo y la sección. Hasta la v0.57.0 se restaba a cada educando su coste federativo **real** (cuota asociativa + prima + conceptos), que no es lo que se le cobra por él.
+
 ```
-cuota_i      = inscripción + seguro + anualidad_familia / nº_hijos_que_pagan     (de la familia de i)
-coste_fed_i  = cuota asociativa + prima de seguro de su categoría + otros conceptos «por asociado/educando»
-neto_i       = cuota_i − coste_fed_i                          (puede salir negativo: ver 3.4)
+cuota_i      = (cuota + ajustes de la familia) / nº_hijos_que_pagan                 (de la familia de i)
+insc_i       = min( cuota_i, inscripción + seguro por hijo de la ronda )            (nunca negativo)
+neto_i       = cuota_i − insc_i                                                     (nunca negativo: ver 3.4)
 a_grupo_i    = neto_i × p_grupo                               (p_grupo = % de la sección de i, apartado 4)
 a_seccion_i  = neto_i − a_grupo_i
 ```
 
 - **Inscripción y seguro** son por hijo, así que son exactos por persona. **La anualidad** tiene descuento por hermanos y es de la familia: se **reparte a partes iguales** entre los hijos que pagan (supuesto PR-2).
-- El presupuesto de una sección = Σ `a_seccion_i` de sus educandos. El del grupo = Σ `a_grupo_i` − costes sin dueño (3.2).
+- El presupuesto de una sección = Σ `a_seccion_i` de sus educandos. El del grupo = Σ `a_grupo_i` + Σ `insc_i` − coste federativo de todos (3.2).
 
-### 3.2 Costes que no son de una sección
+### 3.2 El coste federativo lo paga el grupo con la inscripción y el seguro
 
-El coste federativo **de los adultos** (scouters, voluntariado: pagan cuota asociativa y seguro pero no cuota al grupo) y los conceptos **«fijo por grupo»** no pertenecen a ningún educando. Se **restan de la bolsa del grupo** (están «comprometidos») antes de repartir nada a las secciones (supuesto PR-3). Alternativa a confirmar: prorratearlos entre las secciones por nº de educandos.
+Desde la v0.57.1 el coste federativo de **todos** los asociados (educandos con cuota, scouters y voluntariado, educandos sin cuota) y los conceptos **«fijo por grupo»** se paga con la inscripción y el seguro cobrados; **lo que sobre o falte es del grupo** (P-203). La pantalla lo desglosa en «Arcas del grupo». Siempre: Σ secciones + grupo = cuotas − coste federativo total.
 
 ### 3.3 Qué «cuota» se usa: previsto o cobrado
 
@@ -65,7 +67,7 @@ El coste federativo **de los adultos** (scouters, voluntariado: pagan cuota asoc
 
 | Caso | Tratamiento |
 |---|---|
-| `neto_i` negativo (la cuota no cubre el coste federativo, p. ej. con becas) | Se reparte igual (aporta negativo) para que el total cuadre; la pestaña avisa «hay N educandos con cuota inferior al coste federativo». |
+| La cuota no llega a la inscripción y el seguro (becas, ajustes) | Desde la v0.57.1 (P-204): la rebaja sale primero de la anualidad; ese educando no aporta nada a su sección (antes, en negativo) y lo que falta lo pone el grupo. La pestaña avisa «hay N educandos cuya cuota no llega a la inscripción y el seguro». |
 | Familia **sin** socios activos que pagan, o socio activo sin familia | Sin cuota: su coste federativo (si es educando) resta del grupo, no de su sección. |
 | Persona con **varias secciones** | Cuenta en la primera sección educativa (por edad) de `Persona->secciones` que paga; una sola vez. |
 | Cambio de sección durante la ronda | Se usa la sección **actual** al calcular (el cálculo se hace siempre en vivo, no se guarda). |
@@ -75,7 +77,7 @@ El coste federativo **de los adultos** (scouters, voluntariado: pagan cuota asoc
 
 ### 3.5 Ejemplo (cifras inventadas)
 
-Familia con dos Lobatos: inscripción 20, seguro 10, anualidad 2 hijos = 198 → cuota = 40 + 20 + 198 = **258**, **129** por hijo. Coste federativo por educando (cuota asociativa + prima), p. ej. **45** → neto **84** por hijo. Con 40 % al grupo: **33,60** al grupo y **50,40** a *Lobatos*, por cada hijo.
+Familia con dos Lobatos: inscripción 20, seguro 10, anualidad 2 hijos = 198 → cuota = 40 + 20 + 198 = **258**, **129** por hijo. Inscripción y seguro, **30** por hijo (para el coste federativo) → neto **99** por hijo. Con 40 % al grupo: **39,60** al grupo y **59,40** a *Lobatos*, por cada hijo. (Hasta la v0.57.0 se restaba el coste federativo real, p. ej. 45 → neto 84.)
 
 ## 4. Porcentaje grupo / sección
 
@@ -151,7 +153,7 @@ presupuesto => array(
 
 | Clase | Responsabilidad |
 |---|---|
-| `Reparto` | **Cálculo puro** (sin efectos): recibe personas activas, estados de familias y `cfg`; devuelve por sección `educandos`, `cuota`, `coste_fed`, `neto`, `a_grupo`, `a_seccion`, más el bloque `grupo` (costes sin dueño). Es lo que se prueba a fondo. |
+| `Reparto` | **Cálculo puro** (sin efectos): recibe personas activas, estados de familias y `cfg`; devuelve por sección `educandos`, `cuota`, `inscripcion` (antes `coste_fed`), `neto`, `a_grupo`, `a_seccion`, más el bloque `grupo` (`a_grupo`, `inscripcion`, el coste federativo desglosado y `disponible`) y `total` (`bolsa` = cuotas − inscripción y seguro; `no_cubren`). Es lo que se prueba a fondo. |
 | `PartidasTable` | Altas/bajas/consultas de partidas. |
 | `Servicio` | Reglas de negocio: quién puede qué, estados, copiar de la ronda anterior, totales y saldo, auditoría. |
 | `Categorias` | Catálogo de categorías y proyectos por defecto (con `asde_ta()` y `Textos::extras()`). |

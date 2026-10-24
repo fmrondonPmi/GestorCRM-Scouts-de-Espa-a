@@ -3,7 +3,8 @@
  * Pruebas de la v0.12.3 (entorno LOCAL): rendimiento. La instantánea cifrada de las
  * fichas del grupo (cuántas consultas al CRM hace cada lectura), la sesión del CRM
  * que se renueva mientras se usa y que los resultados son los mismos que leyendo
- * siempre del CRM. Ejecutar desde app/public del site Local:
+ * siempre del CRM. Desde la v0.57.1, que un alta o una baja a mitad de una lectura del
+ * CRM no deja guardada la foto antigua (generación). Ejecutar desde app/public del site Local:
  *
  *   wp eval-file <ruta completa>/wp-content/plugins/asde-area-privada/tests/rendimiento.php
  *
@@ -324,12 +325,63 @@ try {
 	$creerlo_libre();
 	$ok( Instantanea::tomar_cerrojo( $num_grupo ) && false !== get_option( $cerrojo ), 'después de tomarlo, get_option() lo ve (se limpian las cachés de opciones)' );
 	Instantanea::soltar_cerrojo( $num_grupo );
+
+	echo "\n== Parte H · Un alta o una baja a mitad de una lectura (v0.57.1, fallo visto por el usuario) ==\n";
+	// El refresco en segundo plano lee el CRM durante varios segundos. Si mientras tanto se da un
+	// alta desde la web (que olvida la instantánea), lo que leyó ya es antiguo y no debe guardarse.
+	$repo->refrescar_instantanea();
+	$g0 = Instantanea::generacion( $num_grupo );
+	Instantanea::olvidar( $num_grupo );
+	$ok( Instantanea::generacion( $num_grupo ) === $g0 + 1, 'olvidar() sube la generación' );
+	$cruzarse = static function ( $pre ) use ( $num_grupo, &$cruzado ) {
+		if ( ! $cruzado ) {
+			$cruzado = true;
+			Instantanea::olvidar( $num_grupo ); // «Otra petición» termina un alta justo ahora.
+		}
+		return $pre;
+	};
+	$cruzado = false;
+	add_filter( 'pre_http_request', $cruzarse, 0 );
+	$leidas = $repo->refrescar_instantanea();
+	remove_filter( 'pre_http_request', $cruzarse, 0 );
+	$ok( $cruzado && count( $leidas ) >= 5 && null === Instantanea::leer( $num_grupo ) && false === get_transient( 'asde_ap_snap_' . $num_grupo ), 'una lectura que empezó antes del alta devuelve lo suyo pero NO lo guarda como instantánea' );
+	$crm->personas[] = $P( 7, 'Recien', 'Prueba Alta', '2016-01-01', 'Lobatos' ); // Lo que el alta dejó en el CRM.
+	$ok( in_array( '990007', array_map( static fn( $p ) => $p->num_socio_asde, $repo->todas( true ) ), true ), 'la siguiente página vuelve a leer el CRM y ya enseña el alta' );
+	$ok( 'fresca' === Instantanea::estado( Instantanea::leer( $num_grupo ) ), 'y esa lectura sí queda guardada' );
+
+	// Lo mismo con el refresco en segundo plano (WP-Cron), que es donde pasaba.
+	Instantanea::guardar( $num_grupo, Instantanea::leer( $num_grupo )['entries'], time() - Instantanea::segundos() - 30 );
+	$cruzado = false;
+	add_filter( 'pre_http_request', $cruzarse, 0 );
+	Instantanea::refrescar_en_segundo_plano( $num_grupo );
+	remove_filter( 'pre_http_request', $cruzarse, 0 );
+	$ok( $cruzado && null === Instantanea::leer( $num_grupo ), 'el refresco en segundo plano tampoco guarda encima de un alta' );
+
+	// La hora de la instantánea es la de antes de leer (no la de después).
+	$antes_de_leer = time();
+	$repo->refrescar_instantanea();
+	$ok( (int) Instantanea::leer( $num_grupo )['t'] <= $antes_de_leer + 1, 'la hora guardada es la de cuando empezó la lectura' );
+
+	// Una ficha parcheada con una instantánea que otra petición ya había olvidado no la resucita.
+	$vieja = Instantanea::leer( $num_grupo );
+	$ficha = $repo->obtener( '990002' );
+	Instantanea::olvidar( $num_grupo );
+	$reflex = new ReflectionProperty( Instantanea::class, 'memoria' );
+	$reflex->setAccessible( true );
+	$reflex->setValue( null, array( $num_grupo => $vieja ) ); // Esta petición aún la tenía en memoria.
+	Instantanea::parchear( $num_grupo, $ficha->id, array( 'phone_mobile' => '600333444' ) );
+	$reflex->setValue( null, array() );
+	$ok( false === get_transient( 'asde_ap_snap_' . $num_grupo ), 'parchear una instantánea ya olvidada no la vuelve a guardar' );
+	$ok( true === Instantanea::guardar( $num_grupo, $vieja['entries'] ) && null !== Instantanea::leer( $num_grupo ), 'guardar() sin generación (como antes) sigue guardando' );
 } catch ( Throwable $e ) {
 	++$fails;
 	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";
 } finally {
 	if ( isset( $colarse ) ) {
 		remove_filter( 'query', $colarse );
+	}
+	if ( isset( $cruzarse ) ) {
+		remove_filter( 'pre_http_request', $cruzarse, 0 );
 	}
 	remove_filter( 'asde_ap_instantanea_en_pruebas', $con_instantanea );
 	delete_option( 'asde_ap_snaplock_' . $num_grupo );

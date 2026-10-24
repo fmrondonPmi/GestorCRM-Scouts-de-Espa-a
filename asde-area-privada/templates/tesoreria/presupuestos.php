@@ -22,7 +22,7 @@ $sec = Secciones::all();
 ?>
 <section class="asde-card">
 	<h2><?php asde_e( 'Presupuestos ·' ); ?> <?php echo esc_html( $ronda ); ?></h2>
-	<p><?php asde_e( 'De la cuota anual de las familias se descuenta el coste federativo (ese dinero ya está comprometido). Del resto, un porcentaje va a las arcas del grupo y lo demás al presupuesto de la sección de cada asociado. Se calcula con las cuotas previstas de la ronda y los socios activos del CRM.' ); ?></p>
+	<p><?php asde_e( 'De la cuota de las familias se aparta la inscripción y el seguro de cada educando: con ese dinero el grupo paga el coste federativo de todos los asociados. Del resto (la anualidad), un porcentaje va a las arcas del grupo y lo demás al presupuesto de la sección de cada asociado. Se calcula con las cuotas previstas de la ronda y los socios activos del CRM.' ); ?></p>
 	<?php if ( $error ) : ?>
 		<div class="asde-notice asde-notice--error" role="alert"><?php echo esc_html( $error ); ?></div>
 	<?php endif; ?>
@@ -35,13 +35,13 @@ $sec = Secciones::all();
 		<table class="asde-table asde-table--resumen">
 			<tbody>
 				<tr><th scope="row"><?php asde_e( 'Cuotas previstas de las familias' ); ?></th><td><?php echo esc_html( $e( $t['cuota'] ) ); ?></td></tr>
-				<tr><th scope="row"><?php asde_e( 'Coste federativo (todos los asociados)' ); ?></th><td>− <?php echo esc_html( $e( $t['coste_fed'] ) ); ?></td></tr>
+				<tr><th scope="row"><?php asde_e( 'Inscripción y seguro (pagan el coste federativo)' ); ?></th><td>− <?php echo esc_html( $e( $t['inscripcion'] ) ); ?></td></tr>
 				<tr class="asde-total"><th scope="row"><?php asde_e( 'Queda para repartir' ); ?></th><td><?php echo esc_html( $e( $t['bolsa'] ) ); ?></td></tr>
 				<tr><th scope="row"><?php asde_e( 'Cobrado hasta hoy (informativo)' ); ?></th><td><?php echo esc_html( $e( $t['cobrado'] ) ); ?></td></tr>
 			</tbody>
 		</table>
-		<?php if ( $t['negativos'] > 0 ) : ?>
-			<div class="asde-notice asde-notice--warning" role="status"><?php echo esc_html( sprintf( asde_t( 'Hay %d educandos con una cuota inferior a su coste federativo (becas o ajustes): aportan un importe negativo.' ), (int) $t['negativos'] ) ); ?></div>
+		<?php if ( $t['no_cubren'] > 0 ) : ?>
+			<div class="asde-notice asde-notice--warning" role="status"><?php echo esc_html( sprintf( asde_t( 'Hay %d educandos cuya cuota no llega a la inscripción y el seguro (becas o ajustes): no aportan nada a su sección y lo que falta lo pone el grupo.' ), (int) $t['no_cubren'] ) ); ?></div>
 		<?php endif; ?>
 	</section>
 <?php endif; ?>
@@ -63,7 +63,7 @@ $sec = Secciones::all();
 					<th scope="col"><?php asde_e( 'Sección' ); ?></th>
 					<th scope="col"><?php asde_e( 'Educandos' ); ?></th>
 					<th scope="col"><?php asde_e( 'Cuota' ); ?></th>
-					<th scope="col"><?php asde_e( 'Coste federativo' ); ?></th>
+					<th scope="col"><?php asde_e( 'Inscripción y seguro' ); ?></th>
 					<th scope="col"><?php asde_e( 'Neto' ); ?></th>
 					<th scope="col"><?php asde_e( '% al grupo' ); ?></th>
 					<th scope="col"><?php asde_e( 'Al grupo' ); ?></th>
@@ -77,7 +77,7 @@ $sec = Secciones::all();
 						<th scope="row" data-label="<?php echo esc_attr( asde_a( 'Sección' ) ); ?>"><?php echo esc_html( $sec[ $slug ]['nombre'] ); ?></th>
 						<td data-label="<?php echo esc_attr( asde_a( 'Educandos' ) ); ?>"><?php echo $s ? (int) $s['educandos'] : '–'; ?></td>
 						<td data-label="<?php echo esc_attr( asde_a( 'Cuota' ) ); ?>"><?php echo $s ? esc_html( $e( $s['cuota'] ) ) : '–'; ?></td>
-						<td data-label="<?php echo esc_attr( asde_a( 'Coste federativo' ) ); ?>"><?php echo $s ? esc_html( $e( $s['coste_fed'] ) ) : '–'; ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Inscripción y seguro' ) ); ?>"><?php echo $s ? esc_html( $e( $s['inscripcion'] ) ) : '–'; ?></td>
 						<td data-label="<?php echo esc_attr( asde_a( 'Neto' ) ); ?>"><?php echo $s ? esc_html( $e( $s['neto'] ) ) : '–'; ?></td>
 						<td data-label="<?php echo esc_attr( asde_a( '% al grupo' ) ); ?>">
 							<input type="number" name="presupuesto[pct_seccion][<?php echo esc_attr( $slug ); ?>]" step="0.01" min="0" max="100" placeholder="<?php echo esc_attr( $pct( (float) $pre['pct_grupo'] ) ); ?>" value="<?php echo esc_attr( isset( $pre['pct_seccion'][ $slug ] ) ? $pct( (float) $pre['pct_seccion'][ $slug ] ) : '' ); ?>" aria-label="<?php echo esc_attr( sprintf( asde_a( '%% al grupo de %s' ), $sec[ $slug ]['nombre'] ) ); ?>">
@@ -97,6 +97,8 @@ $sec = Secciones::all();
 			<table class="asde-table asde-table--resumen">
 				<tbody>
 					<tr><th scope="row"><?php asde_e( 'Parte de las cuotas de los educandos' ); ?></th><td><?php echo esc_html( $e( $g['a_grupo'] ) ); ?></td></tr>
+					<tr><th scope="row"><?php asde_e( 'Inscripción y seguro de las familias' ); ?></th><td>+ <?php echo esc_html( $e( $g['inscripcion'] ) ); ?></td></tr>
+					<tr><th scope="row"><?php asde_e( 'Coste federativo de los educandos con cuota' ); ?></th><td>− <?php echo esc_html( $e( $g['educandos'] ) ); ?></td></tr>
 					<tr><th scope="row"><?php asde_e( 'Coste federativo de scouters y voluntariado' ); ?></th><td>− <?php echo esc_html( $e( $g['adultos'] ) ); ?></td></tr>
 					<?php if ( $g['sin_cuota'] > 0 ) : ?>
 						<tr><th scope="row"><?php asde_e( 'Coste federativo de educandos sin cuota' ); ?></th><td>− <?php echo esc_html( $e( $g['sin_cuota'] ) ); ?></td></tr>

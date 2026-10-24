@@ -163,3 +163,17 @@ El cerrojo de la v0.14.1 se tomaba con `add_option()`, que **no es atómico**: m
 - Diferencia con el instalador: el `UPDATE` compara con el **valor leído tal cual** (no con su conversión a número), así un valor raro también se puede recuperar.
 - **No cambia el comportamiento:** `soltar_cerrojo()` sigue siendo `delete_option()`, y en `PersonaRepository` quien no toma el cerrojo sigue esperando hasta 8 s el resultado de la otra petición y, si no llega, lee el CRM igualmente (nadie se queda sin página).
 - Pruebas: `tests/rendimiento.php`, **parte G** (8 comprobaciones nuevas; 55 en total): libre se toma con la hora y `autoload` `off`; un segundo intento da `false`; también cuando la caché de esa petición dice que el cerrojo no existe (el caso en que `add_option()` daba «hecho» a las dos) y sin pisar la hora de quien lo tiene; soltarlo lo borra y se vuelve a tomar; uno de 30 s sigue valiendo; uno abandonado se recupera y vuelve a bloquear; si otra petición se cuela entre la lectura y el cambio (simulado con el filtro `query`), este intento da `false`; y `get_option()` lo ve después. **Con el código anterior fallaban las dos comprobaciones de carrera** (se lanzó la prueba antes de arreglarlo).
+
+## Generación de la instantánea (v0.57.1, 2026-10-24; fallo visto por el usuario)
+
+**Lo que pasaba:** «las altas y bajas nuevas no se ven inmediatamente en la web; en el CRM están bien». Cada alta, baja, membresía nueva o cambio de sección desde la web (`Crm\Altas`) borra la instantánea (`Instantanea::olvidar()`), pero **cualquier página** (también la del propio alta: se comprueba en cada petición quién entra) que encontraba la instantánea con más de 5 minutos pedía su **refresco en segundo plano** (WP-Cron). Ese refresco lee el grupo entero del CRM durante varios segundos, sin cerrojo; si el alta terminaba mientras tanto, el refresco acababa después y **volvía a guardar la foto de antes del alta como «fresca»**: la web no la enseñaba hasta pasados otros 5–10 minutos. Pasaba igual si otra página ya había vuelto a leer el CRM bien (el refresco viejo la pisaba).
+
+**Arreglo:**
+- `Instantanea::olvidar()` sube un contador por grupo (`asde_ap_snapgen_<grupo>` en `wp_options`, `autoload` off, con un solo `INSERT … ON DUPLICATE KEY UPDATE option_value = option_value + 1`, atómico) antes de borrar el transient. `Instantanea::generacion()` lo lee sin caché.
+- `PersonaRepository::refrescar_instantanea()` anota la generación y la hora **antes** de leer el CRM, y `Instantanea::guardar( …, $t, $g )` no guarda nada (devuelve `false`) si la generación ha cambiado entretanto. La hora guardada es la de antes de leer, no la de después.
+- La instantánea lleva su generación (`g`): `parchear()` (lo que se guarda desde la ficha) tampoco resucita una instantánea que otra petición ya olvidó.
+- `guardar()` sin generación guarda como antes. `uninstall.php` borra el contador.
+
+**Lo que no cambia:** lo que se cambie **directamente en el CRM** se sigue viendo en la web al refrescar la instantánea (de 5 a 10 minutos) o al momento con «Actualizar» en Personas o Usuarios (P-205).
+
+Pruebas: `tests/rendimiento.php`, **parte H** (8 comprobaciones nuevas; 63 en total): `olvidar()` sube la generación; una lectura con un alta a medias devuelve lo suyo pero no lo guarda; la página siguiente ya enseña el alta y esa lectura sí se guarda; el refresco en segundo plano tampoco guarda encima; la hora es la de antes de leer; `parchear()` sobre una instantánea olvidada no la resucita; `guardar()` sin generación sigue guardando.

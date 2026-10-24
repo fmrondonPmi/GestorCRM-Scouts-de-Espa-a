@@ -437,6 +437,11 @@ final class PersonaRepository {
 	 * @return list<array{id:string, fields:array<string,string>}>
 	 */
 	public function refrescar_instantanea(): array {
+		// v0.57.1: la hora y la generación son las de antes de leer. Si mientras se lee el CRM (varios
+		// segundos) alguien da un alta o una baja desde la web, lo leído no se guarda encima.
+		$grupo    = Grupo::numero();
+		$gen      = Instantanea::generacion( $grupo );
+		$desde    = time();
 		$entradas = array();
 		// v0.35.1: con las membresías, para que una baja del CRM se vea ya (con_secciones_vigentes()).
 		foreach ( self::con_secciones_vigentes( self::filtrar_grupo( $this->crm->list_all( 'Contacts', '', self::CAMPOS, self::links_lectura() ) ) ) as $e ) {
@@ -446,7 +451,7 @@ final class PersonaRepository {
 			);
 		}
 		if ( Instantanea::segundos() > 0 ) {
-			Instantanea::guardar( Grupo::numero(), $entradas );
+			Instantanea::guardar( $grupo, $entradas, $desde, $gen );
 		}
 		return $entradas;
 	}
