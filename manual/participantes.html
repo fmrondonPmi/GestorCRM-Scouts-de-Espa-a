@@ -12,7 +12,7 @@
 <body>
 <header class="portada">
 	<div class="portada__dentro">
-		<p class="antetitulo">Manual de uso · versión 0.56 · octubre de 2026 · <a class="portada__volver" href="index.html">Todos los manuales</a></p>
+		<p class="antetitulo">Manual de uso · versión 0.57 · octubre de 2026 · <a class="portada__volver" href="index.html">Todos los manuales</a></p>
 		<h1>Manual para asociados menores de edad</h1>
 		<p class="portada__perfil">Educandos de 14 a 17 años con cuenta propia</p>
 		<p class="entrada">Si tienes entre 14 y 17 años y eres socio/a del grupo, puedes tener tu propia cuenta: consultar tu ficha, tener al día tu email y tus teléfonos, preinscribirte en las actividades, ver tus pagos y pedir tu uniforme.</p>
@@ -123,6 +123,8 @@
 			<ul>
 				<li><strong>«Nº de socio/a o email, contraseña o grupo incorrectos.»</strong> Revisa los tres datos. El mensaje no dice cuál falla, a propósito.</li>
 				<li><strong>«Demasiados intentos fallidos…»</strong> Tras 5 fallos seguidos hay que esperar 15 minutos, o pedir una contraseña nueva. Los intentos se cuentan por cuenta: da igual el número con el que pruebes.</li>
+				<li><strong>Solo entra quien tiene una membresía activa</strong> en el CRM del grupo, sea cual sea su rol. Si no la tienes, la pantalla te dice el motivo (por ejemplo, «Tu membresía no está activa en el CRM del grupo») y no se cuenta como intento fallido: habla con Secretaría.</li>
+				<li><strong>«Ahora no se puede comprobar tu membresía en el CRM del grupo…»</strong> El CRM no responde en ese momento: inténtalo de nuevo en unos minutos.</li>
 				<li><strong>«…el CRM no responde.»</strong> Solo puede pasar con el email en cuentas antiguas que aún no han entrado nunca con él. Entra con tu nº de socio/a.</li>
 				<li>La página <span class="mono">wp-login.php</span> de WordPress es solo para quien edita la web: se entra siempre por «Acceso socios».</li>
 			</ul>
@@ -348,8 +350,8 @@
 		<li>Los encuentras en <strong>«Datos del grupo»</strong>, en el menú. Si no eres del equipo de Coordinación, solo se pueden consultar.</li>
 		<li>El <strong>equipo de Coordinación</strong> los cambia con <strong>«Guardar los datos del grupo»</strong>. El nº de grupo no se cambia aquí: lo fija quien administra la web.</li>
 		<li>Estos datos se usan en las <strong>domiciliaciones</strong> (la dirección del acreedor), en los <strong>documentos</strong> del grupo y para formar el <strong>nº de socio/a</strong>.</li>
-		<li><strong>Nº de socio/a:</strong> es la unión de los dos dígitos de la <strong>provincia</strong> (con su 0 inicial si lo lleva; Illes Balears es el 07), el <strong>nº de grupo</strong> y un <strong>número incremental</strong> de 4 cifras. Por ejemplo, grupo 684 en Illes Balears: 07 · 684 · 0001 → 076840001. Sin la provincia no se pueden reconocer ni generar números.</li>
-		<li>Los números que ya existían sin el 0 inicial (p. ej. 76840390) siguen siendo válidos; los nuevos se generan con la provincia completa.</li>
+		<li><strong>Nº de socio/a:</strong> es la unión de los dos dígitos de la <strong>provincia</strong> (con su 0 inicial si lo lleva; Illes Balears es el 07), el <strong>nº de grupo</strong> y un <strong>número incremental</strong> de 4 cifras. Por ejemplo, grupo 999 en Illes Balears: 07 · 999 · 0001 → 079990001. Sin la provincia no se pueden reconocer ni generar números.</li>
+		<li>Los números que ya existían sin el 0 inicial (p. ej. 79990390) siguen siendo válidos; los nuevos se generan con la provincia completa.</li>
 		<li>Cambiar la provincia de un grupo que ya la tenía pide marcar una casilla de confirmación: los números del CRM con la provincia anterior dejarían de reconocerse como del grupo.</li>
 	</ul>
 </section>
@@ -391,7 +393,7 @@
 			</ul>
 		</section>
 
-		<p class="pie">Manual para asociados menores de edad del plugin «ASDE Scouts de España – Gestor CRM para Grupos Scouts», versión 0.56 (octubre de 2026). Capturas hechas en un WordPress de demostración con un CRM simulado y datos inventados.</p>
+		<p class="pie">Manual para asociados menores de edad del plugin «ASDE Scouts de España – Gestor CRM para Grupos Scouts», versión 0.57 (octubre de 2026). Capturas hechas en un WordPress de demostración con un CRM simulado y datos inventados.</p>
 	</main>
 </div>
 

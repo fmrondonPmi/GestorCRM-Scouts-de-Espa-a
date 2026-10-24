@@ -32,10 +32,11 @@ $ok    = function ( $cond, string $label ) use ( &$fails ) {
 };
 $original_org = get_option( Organizacion::OPTION, null );
 $original_tes = get_option( 'asde_ap_tesoreria', null );
+$original_grp = get_option( 'asde_ap_grupos', null );
 // Se restaura pase lo que pase (también si la prueba se corta con un error):
 // con otro código, los números de socio del sitio dejarían de reconocerse.
-$restaurar = static function () use ( $original_org, $original_tes ) {
-	foreach ( array( Organizacion::OPTION => $original_org, 'asde_ap_tesoreria' => $original_tes ) as $opcion => $valor ) {
+$restaurar = static function () use ( $original_org, $original_tes, $original_grp ) {
+	foreach ( array( Organizacion::OPTION => $original_org, 'asde_ap_tesoreria' => $original_tes, 'asde_ap_grupos' => $original_grp ) as $opcion => $valor ) {
 		if ( null === $valor ) {
 			delete_option( $opcion );
 		} else {
@@ -43,8 +44,17 @@ $restaurar = static function () use ( $original_org, $original_tes ) {
 		}
 	}
 	Organizacion::olvidar();
+	Grupos::olvidar();
 };
 register_shutdown_function( $restaurar );
+// Las partes A y B prueban el nº de socio/a de un grupo SIN provincia guardada (sale del código de la
+// organización): si el 684 del Local ya tiene una en «Datos del grupo» (v0.56), se aparta mientras dura.
+if ( is_array( $original_grp ) && isset( $original_grp['684']['provincia'] ) ) {
+	$sin_provincia = $original_grp;
+	unset( $sin_provincia['684']['provincia'] );
+	update_option( 'asde_ap_grupos', $sin_provincia, false );
+	Grupos::olvidar();
+}
 Grupo::forzar( Grupos::por_numero( '684' ) );
 
 echo "== Parte A · Organización federada ==\n";
@@ -130,6 +140,6 @@ $ok( 20.0 === Config::de( '2099-2100' )['federacion']['cuota_asociativa'] && arr
 // Limpieza: la configuración como estaba.
 $restaurar();
 Grupo::forzar( null );
-$ok( get_option( Organizacion::OPTION, null ) === $original_org && get_option( 'asde_ap_tesoreria', null ) === $original_tes && '7' === Organizacion::codigo_antiguo(), 'limpieza: organización y Tesorería como estaban' );
+$ok( get_option( Organizacion::OPTION, null ) === $original_org && get_option( 'asde_ap_tesoreria', null ) === $original_tes && get_option( 'asde_ap_grupos', null ) === $original_grp && '7' === Organizacion::codigo_antiguo(), 'limpieza: organización, Tesorería y grupos como estaban' );
 
 echo $fails ? "\n$fails FALLOS\n" : "\nTODO OK (la configuración queda como estaba)\n";

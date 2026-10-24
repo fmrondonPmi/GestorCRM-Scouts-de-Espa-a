@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.56.0
+Stable tag: 0.57.0
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -61,6 +61,14 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.57.0 =
+* Full code review (doc 59). Money and numbering are now safe under concurrent requests: bank reconciliation, payment of shop orders with a bank income, SEPA batch payments, event places and family numbers use atomic updates or database locks. Fixes: CRM lists are never silently truncated, SEPA payments of events are always recorded, the last fee instalment closes the total, account actions never touch users of another group, and the daily task no longer stops at the first error.
+* Waiting list: new "Joins as a member" button that opens the new member form filled in with the stored data (checking the ID document if there is one); when saved, the entry is marked as a member and all its encrypted data is deleted.
+* Login: every user, whatever their role, needs an active membership in the CRM (family accounts: at least one of their children). If the CRM cannot be reached, access is denied with a notice.
+* Access requests pending for more than 90 days are rejected automatically with the usual rejection email. Receipts are deleted when a refund or an expense is rejected, cancelled or withdrawn, if no other row uses them. "Quartermaster" added to the scouter sign-up label and the requests help.
+* Email log: the preview of waiting-list emails and of group sign-up emails now shows the email that was sent, not the access invitation.
+* Test suite reviewed (doc 60): new tests and every test restores the site.
 
 = 0.56.0 =
 * New "Group data" page (name, tax name, tax ID, address, postcode, town, province, contact email) in one place: everybody can see it, the Coordination team edits it (new permission, listed in Access management). The local member number is now province (2 digits, keeping the leading 0) + group number + 4-digit counter, so the "organisation code" setting is gone; numbers without the leading 0 stay valid. The SEPA creditor address now comes from the group data. No database changes.
@@ -248,6 +256,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * CRM registrations tested end to end in a browser against the simulated SinergiaCRM API (development only).
 
 == Upgrade Notice ==
+
+= 0.57.0 =
+Code review fixes, "Joins as a member" in the waiting list and login only with an active membership. Database change: the waiting-list table gets two new columns (member number and date it joined), added automatically on update.
 
 = 0.56.0 =
 Adds the "Group data" page and a new permission. The member number format now uses the group province (set it in Group data; Scouts de Balears keeps working with 07). No database changes.

@@ -195,7 +195,7 @@ grupo no ve a otro**; **nunca** se prueba contra el CRM real ni se escribe en é
 ## 5. Inventario (generado)
 
 <!-- inventario:inicio -->
-_Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10-22 · plugin 0.53.0. No editar a mano: se regenera._
+_Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10-24 · plugin 0.57.0. No editar a mano: se regenera._
 
 ### Páginas (Frontend\Pages + Router)
 
@@ -214,6 +214,8 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 | `cuotas` | cuotas | `[asde_cuotas]` → `CuotasView` |  |  |
 | `federacion` | coste-federativo | `[asde_coste_federativo]` → `FederacionView` |  |  |
 | `banco` | banco | `[asde_banco]` → `BancoView` |  | sí |
+| `grupo_datos` | datos-del-grupo | `[asde_grupo_datos]` → `DatosGrupoView` |  |  |
+| `presupuestos` | presupuestos | `[asde_presupuestos]` → `PresupuestosView` |  |  |
 | `sepa` | domiciliaciones | `[asde_sepa]` → `SepaView` |  |  |
 | `seguridad` | seguridad | `[asde_seguridad]` → `SeguridadView` |  |  |
 | `acceso` | acceso | `[asde_acceso]` → `AccesoView` | sí |  |
@@ -262,6 +264,7 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 | `asde_eventos_grupo` |  |  | ✓ |  |  |  |  |  |
 | `asde_eventos_inscribir` | ✓ | ✓ | ✓ |  | ✓ | ✓ | ✓ | ✓ |
 | `asde_eventos_material` |  |  |  |  |  |  |  | ✓ |
+| `asde_grupo_datos` |  |  | ✓ |  |  |  |  |  |
 | `asde_inventario` | ✓ | ✓ | ✓ |  | ✓ |  |  | ✓ |
 | `asde_inventario_aprobar` |  |  |  |  | ✓ |  |  |  |
 | `asde_lista_espera` | ✓ | ✓ | ✓ |  | ✓ |  |  |  |
@@ -270,6 +273,7 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 | `asde_menus_recetas` | ✓ | ✓ | ✓ |  |  |  |  |  |
 | `asde_mis_pagos` | ✓ | ✓ | ✓ |  | ✓ | ✓ | ✓ | ✓ |
 | `asde_multigrupo` |  |  |  | ✓ |  |  |  |  |
+| `asde_presupuestos_seccion` | ✓ | ✓ | ✓ |  | ✓ |  |  |  |
 | `asde_propose_ward_changes` |  |  |  |  |  | ✓ |  |  |
 | `asde_reintegros` | ✓ |  | ✓ |  |  |  |  |  |
 | `asde_reintegros_aprobar` |  |  |  |  | ✓ |  |  |  |
@@ -305,6 +309,7 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 | `alta_scouters` Alta de scouters | El enlace para que los scouters se den de alta. | — | — | encendido |
 | `lista_espera` Lista de espera | El enlace para apuntarse a la lista de espera, la lista para el equipo y el paso al CRM. | `asde_lista_espera`, `asde_lista_espera_alta` | — | apagado |
 | `eventos` Eventos | Salidas, acampadas y otras actividades: equipo dirigente, presupuesto, inscripciones, «Mis eventos» y cobros. | `asde_eventos_gestion`, `asde_menus_recetas`, `asde_eventos_grupo`, `asde_eventos_economia`, `asde_eventos_config`, `asde_eventos_inscribir`, `asde_eventos_material` | — | apagado |
+| `presupuestos` Presupuestos | Reparto de las cuotas entre el grupo y las secciones y presupuesto de cada una. | `asde_presupuestos_seccion` | tesoreria | encendido |
 | `reintegros` Reintegros | Los scouters piden que les devuelvan un gasto (con el justificante y, si procede, un evento); Tesorería lo aprueba y Tesorería o Coordinación lo marcan pagado. | `asde_reintegros`, `asde_reintegros_aprobar`, `asde_reintegros_pagar` | — | apagado |
 
 ### Tablas propias (`{prefix}asde_*`)
@@ -337,6 +342,9 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 | `asde_evento_menu` | `src/Menus/MenuTable.php` |
 | `asde_menu_recetas` | `src/Menus/RecetasTable.php` |
 | `asde_menu_receta_lineas` | `src/Menus/RecetasTable.php` |
+| `asde_presupuesto_estados` | `src/Presupuestos/EstadosTable.php` |
+| `asde_presupuesto_gastos` | `src/Presupuestos/GastosRealesTable.php` |
+| `asde_presupuesto_partidas` | `src/Presupuestos/PartidasTable.php` |
 | `asde_reintegros` | `src/Reintegros/ReintegrosTable.php` |
 | `asde_sepa_mandatos` | `src/Sepa/Mandatos.php` |
 | `asde_sepa_remesas` | `src/Sepa/Remesas.php` |
@@ -412,7 +420,9 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 
 **Domain/**
 
+- `Bloqueo` — Bloqueo con nombre de MySQL (GET_LOCK) para numerar sin repetir (nº de socio/a, de familia, de remesa).
 - `ClaveDeGrupo` — Clave secreta de un enlace público del grupo (alta de scouters, lista de espera):
+- `DatosGrupo` — Datos del grupo (v0.56, doc 58):
 - `Grupo` — Grupo Scout en el que se trabaja en esta petición:
 - `GrupoAltas` — Revisión de las altas de grupo (v0.50, doc 50 fase 6; solo en la web de la oficina):
 - `GrupoInvitaciones` — Invitaciones para que un grupo dé de alta su acceso (v0.50, doc 50 fase 5; solo en la web de la oficina).
@@ -424,6 +434,7 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 - `Oficina` — Credencial del CRM de la oficina federal (v0.50, doc 50 fase 2).
 - `Organizacion` — Organización federada de Scouts de España que usa el sistema (opción `asde_ap_organizacion`).
 - `Persona` — Persona del CRM (Contacts) con los campos que necesita el área privada.
+- `Provincias` — Provincias de España con su código de dos cifras (el de los códigos postales y del INE; lista de https://www.codigospostales.com/).
 - `Secciones` — Catálogo de secciones de ASDE (docs/05-secciones-educativas.md).
 - `VerificacionGrupo` — Comprueba la credencial del CRM que escribe un grupo al darse de alta (v0.50, doc 50 fase 5):
 
@@ -484,6 +495,7 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 - `BancoView` — Tesorería → Banco:
 - `CambiosView` — Bandeja de cambios propuestos por las cuentas familiares.
 - `CuotasView` — Configuración de las cuotas que paga cada familia (por ronda):
+- `DatosGrupoView` — Datos del grupo (v0.56, doc 58):
 - `EmailsView` — Registro de emails del grupo:
 - `EventosBaseView` — Base de las páginas de eventos:
 - `EventosConfigView` — Configuración de los eventos del grupo (Coordinación y Tesorería):
@@ -501,6 +513,7 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 - `MisEventosView` — «Mis eventos» (v0.35, doc 43):
 - `MisPagosView` — «Mis pagos» (petición del usuario, 2026-09-29):
 - `PersonasView` — Personas del grupo, activas y NO activas:
+- `PresupuestosView` — Presupuestos (v0.54 y v0.55, doc 57):
 - `RecetasView` — El recetario del grupo (v0.41, doc 49, B1):
 - `RecuperarView` — "¿Has olvidado tu contraseña?" (pública).
 - `ReintegrosView` — Reintegros (v0.47, doc 53):
@@ -594,6 +607,14 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 **(raíz)/**
 
 - `Plugin` — 
+
+**Presupuestos/**
+
+- `EstadosTable` — Estado del presupuesto de cada sección (y del grupo) en una ronda ({prefix}asde_presupuesto_estados, v0.55, doc 57 §5.3):
+- `GastosRealesTable` — Gasto real imputado a una partida de gasto del presupuesto ({prefix}asde_presupuesto_gastos, v0.55, doc 57 fase 3):
+- `PartidasTable` — Partidas del presupuesto de una sección o del grupo en una ronda ({prefix}asde_presupuesto_partidas, v0.55, doc 57 §5).
+- `Reparto` — De la cuota al dinero de cada sección (v0.54, doc 57 §3).
+- `Servicio` — Reglas de los presupuestos de sección y de grupo (v0.55, doc 57 §5 y §8).
 
 **Reintegros/**
 
@@ -702,5 +723,5 @@ _Generado con la skill `mapa-area-privada` (`scripts/inventario.php`) el 2026-10
 
 ### Pruebas (`tests/`)
 
-`acceso` · `accesos` · `alta-grupo-aprobacion` · `alta-grupo-invitacion` · `alta-grupo-primer-usuario` · `alta-reglas` · `alta-scouters` · `altas-crm-escritura` · `altas-crm-pantallas` · `altas-crm` · `app-enganches` · `ayuda` · `banco-asociar` · `banco-gestion` · `colores` · `entorno` · `estilo-wordpress` · `eventos-avisos-config` · `eventos-calendario` · `eventos-economia` · `eventos-inscripciones` · `eventos-intendente` · `eventos-material` · `eventos` · `ficha-alergenos` · `fichas-escritura` · `grupos-emails-banco` · `identidad` · `idiomas-catalogos` · `idiomas` · `inventario` · `lista-espera` · `mejoras-v029` · `mejoras-v030` · `mejoras-v031` · `mejoras-v034` · `mejoras-v0351` · `menus-evento` · `menus-recetario` · `menus-validacion` · `menus` · `migracion-tienda` · `modo-instalacion` · `modulos` · `oficina-pantallas` · `oficina` · `organizacion` · `reintegros` · `rendimiento` · `sepa` · `solicitudes` · `solo-lectura` · `tema` · `tienda-catalogo` · `tienda-fase5` · `tienda-inventario` · `tienda-pedidos` · `tienda-proveedor` · `tienda-publica` · `tienda` · `usuarios-listado`
+`acceso` · `accesos` · `activar-cuenta` · `admin-grupos` · `alta-grupo-aprobacion` · `alta-grupo-invitacion` · `alta-grupo-primer-usuario` · `alta-reglas` · `alta-scouters` · `altas-crm-escritura` · `altas-crm-pantallas` · `altas-crm` · `app-enganches` · `ayuda` · `banco-asociar` · `banco-gestion` · `colores` · `datos-grupo` · `enlaces-publicos` · `entorno` · `estilo-wordpress` · `eventos-avisos-config` · `eventos-calendario` · `eventos-economia` · `eventos-inscripciones` · `eventos-intendente` · `eventos-material` · `eventos` · `ficha-alergenos` · `fichas-escritura` · `grupos-emails-banco` · `identidad` · `idiomas-catalogos` · `idiomas` · `inventario` · `lista-espera` · `mejoras-v029` · `mejoras-v030` · `mejoras-v031` · `mejoras-v034` · `mejoras-v0351` · `menus-evento` · `menus-recetario` · `menus-validacion` · `menus` · `migracion-tienda` · `modo-instalacion` · `modulos` · `numeracion-bloqueos` · `oficina-pantallas` · `oficina` · `organizacion` · `presupuestos-reparto` · `presupuestos` · `reintegros` · `rendimiento` · `revision-codigo-2` · `revision-codigo` · `sepa` · `solicitudes` · `solo-lectura` · `tema` · `tesoreria-cuotas` · `tienda-catalogo` · `tienda-fase5` · `tienda-inventario` · `tienda-pedidos` · `tienda-proveedor` · `tienda-publica` · `tienda` · `usuarios-listado`
 <!-- inventario:fin -->

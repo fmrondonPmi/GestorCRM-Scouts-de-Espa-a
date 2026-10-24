@@ -12,7 +12,7 @@
 <body>
 <header class="portada">
 	<div class="portada__dentro">
-		<p class="antetitulo">Manual de uso · versión 0.56 · octubre de 2026 · <a class="portada__volver" href="index.html">Todos los manuales</a></p>
+		<p class="antetitulo">Manual de uso · versión 0.57 · octubre de 2026 · <a class="portada__volver" href="index.html">Todos los manuales</a></p>
 		<h1>Manual para scouters</h1>
 		<p class="portada__perfil">Scouters y voluntariado con sección</p>
 		<p class="entrada">Lo que hace un scouter con su sección en el área privada: las fichas de sus educandos, los cambios que proponen las familias, las solicitudes de acceso, los informes (también quién ha pagado la cuota), los pagos y las familias, y los pedidos de uniforme. Y lo suyo: sus datos, sus pagos y su propio uniforme.</p>
@@ -147,8 +147,8 @@
 	<figure class="captura captura--larga"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/alta-scouters/?grupo=999&amp;clave=…</span></div><div class="navegador__vista" data-ampliar tabindex="0"><img src="capturas/66-alta-scouters.png" width="1280" height="1421" alt="Formulario Alta de scouters: DNI o NIE, cómo colaboras (scouter de una o varias secciones o voluntario/a sin sección), responsabilidades y email" loading="lazy"></div></div><figcaption><span>El formulario del enlace. Sin el enlace vigente del grupo no se puede abrir.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
 	<ol class="pasos">
 		<li><div><strong>Tu DNI o NIE.</strong> Tiene que ser el de tu ficha del grupo, con membresía activa de Scouter o de Voluntariado.</div></li>
-		<li><div><strong>¿Cómo colaboras?</strong> «Soy scouter» y marca tus secciones (Castores a Rovers), o «Soy voluntario/a sin sección» si ayudas en Secretaría, Coordinación o Tesorería sin estar en una sección.</div></li>
-		<li><div><strong>Responsabilidades (opcional):</strong> si llevas Secretaría, Coordinación o Tesorería, márcalas. No tienen efecto hasta que las confirma el equipo de coordinación; mientras, entras como scouter de tus secciones.</div></li>
+		<li><div><strong>¿Cómo colaboras?</strong> «Soy scouter» y marca tus secciones (Castores a Rovers), o «Soy voluntario/a sin sección» si ayudas en Secretaría, Coordinación, Tesorería o Intendencia sin estar en una sección.</div></li>
+		<li><div><strong>Responsabilidades (opcional):</strong> si llevas Secretaría, Coordinación, Tesorería o Intendencia (el material del grupo), márcalas. No tienen efecto hasta que las confirma el equipo de coordinación; mientras, entras como scouter de tus secciones.</div></li>
 		<li><div><strong>Tu email</strong> y <strong>«Darme de alta»</strong>. La activación te llega <strong>al email de tu ficha del grupo</strong>; el que escribes solo se usa si tu ficha no tiene email.</div></li>
 	</ol>
 	<ul>
@@ -184,6 +184,8 @@
 			<ul>
 				<li><strong>«Nº de socio/a o email, contraseña o grupo incorrectos.»</strong> Revisa los tres datos. El mensaje no dice cuál falla, a propósito.</li>
 				<li><strong>«Demasiados intentos fallidos…»</strong> Tras 5 fallos seguidos hay que esperar 15 minutos, o pedir una contraseña nueva. Los intentos se cuentan por cuenta: da igual el número con el que pruebes.</li>
+				<li><strong>Solo entra quien tiene una membresía activa</strong> en el CRM del grupo, sea cual sea su rol. Si no la tienes, la pantalla te dice el motivo (por ejemplo, «Tu membresía no está activa en el CRM del grupo») y no se cuenta como intento fallido: habla con Secretaría.</li>
+				<li><strong>«Ahora no se puede comprobar tu membresía en el CRM del grupo…»</strong> El CRM no responde en ese momento: inténtalo de nuevo en unos minutos.</li>
 				<li><strong>«…el CRM no responde.»</strong> Solo puede pasar con el email en cuentas antiguas que aún no han entrado nunca con él. Entra con tu nº de socio/a.</li>
 				<li>La página <span class="mono">wp-login.php</span> de WordPress es solo para quien edita la web: se entra siempre por «Acceso socios».</li>
 			</ul>
@@ -557,7 +559,7 @@
 	<p>La pestaña «<strong>Cuentas</strong>» la ven quien gestiona el evento y Tesorería. Tiene el <strong>balance</strong> (lo previsto y lo real de cada partida del presupuesto, lo cobrado a las familias, lo pendiente, lo devuelto, los otros ingresos, el fondo de emergencia y el resultado, que asume el grupo), los gastos e ingresos, los anticipos y el cierre. «<strong>Imprimir</strong>» y «<strong>Descargar CSV</strong>» sacan el balance.</p>
 	<ul>
 		<li><strong>Gastos:</strong> quien gestiona el evento los propone con «<strong>Apuntar un gasto</strong>»: fecha, importe, forma de pago, concepto, proveedor, la partida del presupuesto y quién lo pagó (el grupo, un anticipo de caja o tú, de tu bolsillo). El <strong>justificante</strong> es obligatorio: una foto del tique o la factura (JPG, PNG o WebP) o un PDF, de hasta 5 MB. Se guarda cifrado y solo se ve desde el gasto («Ver justificante»).</li>
-		<li>Hasta que Tesorería lo revisa, el gasto está «Por revisar» y no cuenta en el balance; mientras tanto, quien lo propuso lo puede <strong>retirar</strong>. Tesorería lo <strong>valida</strong> o lo <strong>rechaza</strong> con un motivo. Lo que apunta Tesorería queda validado directamente.</li>
+		<li>Hasta que Tesorería lo revisa, el gasto está «Por revisar» y no cuenta en el balance; mientras tanto, quien lo propuso lo puede <strong>retirar</strong>. Tesorería lo <strong>valida</strong> o lo <strong>rechaza</strong> con un motivo. Al rechazarlo o retirarlo, <strong>su justificante se borra</strong>. Lo que apunta Tesorería queda validado directamente.</li>
 		<li>Marca «<strong>Con cargo al fondo de emergencia</strong>» si es un imprevisto. El fondo es lo que aportan el margen y el redondeo del precio de las inscripciones; el balance dice lo recaudado, lo usado y lo que queda.</li>
 		<li><strong>Reembolsos:</strong> lo que alguien del equipo pagó de su bolsillo queda pendiente hasta que Tesorería pulsa «<strong>Reembolsar</strong>» (fecha y forma de pago). No se avisa por email: se ve en la pestaña.</li>
 		<li><strong>Ingresos</strong> que no son pagos de las familias (una subvención, una donación): los apunta Tesorería, sin justificante.</li>
@@ -694,10 +696,12 @@
 	<h3 id="lista-espera-alta">Asignar la sección y dar de alta (Secretaría y Coordinación)</h3>
 	<ul>
 		<li><strong>Sección</strong>: elige otra o vuelve a «La de su edad».</li>
-		<li><strong>«Dar de alta en el CRM»</strong> abre el «Alta de socio/a» con sus datos ya escritos. Lo primero que hace es <strong>comprobar su DNI en el CRM</strong>: si ya tiene ficha en el grupo, el alta se para (bórrala de la lista); si está en otro grupo, avisa y se puede seguir. Revisa los datos y completa el <strong>género</strong>. Al terminar el alta, la inscripción <strong>se borra de la lista en ese momento</strong>. Hace falta tener las altas en el CRM activadas en el grupo.</li>
+		<li><strong>«Se incorpora como asociado/a»</strong> (en su ficha y en su fila de la lista) abre el «Alta de socio/a» con <strong>todos los datos</strong> que dejó en la lista de espera ya escritos (nombre, apellidos, nacimiento, documento, contacto, teléfono, email y sección). Si tiene documento, lo primero es <strong>comprobarlo en el CRM</strong>: si ya tiene ficha en el grupo, el alta se para (bórrala de la lista); si está en otro grupo, avisa y se puede seguir. Sin documento (menores de 14), se sigue sin comprobarlo. Revisa los datos y completa el <strong>género</strong>. Hace falta tener las altas en el CRM activadas en el grupo.</li>
+		<li>Al terminar el alta, la inscripción <strong>queda como «Asociado/a nº …»</strong>, con su nº de socio/a y la fecha, y <strong>todos sus datos se borran</strong> (lo que escribió, el historial y su email). Sale con su propio filtro, ya no cuenta como «en espera», no caduca ni se puede cambiar, y su enlace personal deja de valer.</li>
 		<li><strong>«Borrar de la lista»</strong>: si ya no quiere la plaza o te lo ha pedido; sus datos se borran y no se puede deshacer.</li>
 		<li>Solo Secretaría y Coordinación ven el DNI.</li>
 	</ul>
+	<p class="nota">Los emails de la lista de espera quedan en el <strong>Registro de emails</strong> con el email de destino a medias. Su vista previa («Cómo era el email») vuelve a componer el email de la lista de espera con los datos que aún se guardan; si la inscripción ya se borró o pasó a «Asociado/a», lo dice en lugar del texto.</p>
 </section>
 
 <section id="reintegros">
@@ -718,7 +722,7 @@
 	<figure class="captura captura--larga"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/reintegros/</span></div><div class="navegador__vista" data-ampliar tabindex="0"><img src="capturas/121-reintegros-aprobar.png" width="1280" height="1531" alt="Página Reintegros vista por Tesorería: Por aprobar y por pagar, con Aprobar, Rechazar con motivo y Marcar pagado con su fecha" loading="lazy"></div></div><figcaption><span>Tesorería ve «Por aprobar y por pagar»: aprueba o rechaza (con motivo) y marca pagado con la fecha.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
 	<ul>
 		<li>En «Por aprobar y por pagar» salen todos los pendientes, con el IBAN y el botón <strong>«Ver justificante»</strong>. El menú te dice cuántos esperan.</li>
-		<li><strong>Tesorería aprueba</strong> o <strong>rechaza</strong> (con el motivo). Nadie aprueba ni rechaza su propio reintegro.</li>
+		<li><strong>Tesorería aprueba</strong> o <strong>rechaza</strong> (con el motivo). Nadie aprueba ni rechaza su propio reintegro. Al rechazarlo (o si quien lo pidió lo cancela), <strong>el justificante se borra</strong>.</li>
 		<li><strong>Tesorería o Coordinación marcan «pagado»</strong> con la fecha del pago y, si quieren, una referencia. El reintegro no se apunta en el banco ni en la contabilidad de Tesorería: se paga por fuera y se marca aquí.</li>
 		<li>Si el reintegro es de un evento y las cuentas del evento están abiertas, se añade como gasto (ya reembolsado). Si están cerradas, se paga igual y se avisa para apuntarlo a mano.</li>
 	</ul>
@@ -743,8 +747,8 @@
 		<li>Los encuentras en <strong>«Datos del grupo»</strong>, en el menú. Si no eres del equipo de Coordinación, solo se pueden consultar.</li>
 		<li>El <strong>equipo de Coordinación</strong> los cambia con <strong>«Guardar los datos del grupo»</strong>. El nº de grupo no se cambia aquí: lo fija quien administra la web.</li>
 		<li>Estos datos se usan en las <strong>domiciliaciones</strong> (la dirección del acreedor), en los <strong>documentos</strong> del grupo y para formar el <strong>nº de socio/a</strong>.</li>
-		<li><strong>Nº de socio/a:</strong> es la unión de los dos dígitos de la <strong>provincia</strong> (con su 0 inicial si lo lleva; Illes Balears es el 07), el <strong>nº de grupo</strong> y un <strong>número incremental</strong> de 4 cifras. Por ejemplo, grupo 684 en Illes Balears: 07 · 684 · 0001 → 076840001. Sin la provincia no se pueden reconocer ni generar números.</li>
-		<li>Los números que ya existían sin el 0 inicial (p. ej. 76840390) siguen siendo válidos; los nuevos se generan con la provincia completa.</li>
+		<li><strong>Nº de socio/a:</strong> es la unión de los dos dígitos de la <strong>provincia</strong> (con su 0 inicial si lo lleva; Illes Balears es el 07), el <strong>nº de grupo</strong> y un <strong>número incremental</strong> de 4 cifras. Por ejemplo, grupo 999 en Illes Balears: 07 · 999 · 0001 → 079990001. Sin la provincia no se pueden reconocer ni generar números.</li>
+		<li>Los números que ya existían sin el 0 inicial (p. ej. 79990390) siguen siendo válidos; los nuevos se generan con la provincia completa.</li>
 		<li>Cambiar la provincia de un grupo que ya la tenía pide marcar una casilla de confirmación: los números del CRM con la provincia anterior dejarían de reconocerse como del grupo.</li>
 	</ul>
 </section>
@@ -779,7 +783,7 @@
 			</ul>
 		</section>
 
-		<p class="pie">Manual para scouters del plugin «ASDE Scouts de España – Gestor CRM para Grupos Scouts», versión 0.56 (octubre de 2026). Capturas hechas en un WordPress de demostración con un CRM simulado y datos inventados.</p>
+		<p class="pie">Manual para scouters del plugin «ASDE Scouts de España – Gestor CRM para Grupos Scouts», versión 0.57 (octubre de 2026). Capturas hechas en un WordPress de demostración con un CRM simulado y datos inventados.</p>
 	</main>
 </div>
 

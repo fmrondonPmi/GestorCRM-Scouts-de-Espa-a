@@ -1,4 +1,4 @@
-<!-- Generado por herramientas/generar-manuales.php (manual «coordinacion» completo, solo texto, versión 0.56) a partir de manual/fuentes: no se edita a mano. -->
+<!-- Generado por herramientas/generar-manuales.php (manual «coordinacion» completo, solo texto, versión 0.57) a partir de manual/fuentes: no se edita a mano. -->
 <div class="asde-ayuda__texto asde-ayuda__completo" data-manual="coordinacion">
 <h2>Manual del equipo de coordinación</h2>
 <p class="resumen">Todo lo que lleva el equipo del grupo: personas y números de socio, altas, bajas y cambios de sección en el CRM, dar acceso, solicitudes, los usuarios (con sus hojas: usuarios, dar acceso y registro de emails), fichas y cambios, informes, la Tesorería completa (cuotas, coste federativo, banco y domiciliaciones SEPA) y los uniformes, del pago a la entrega.</p>
@@ -76,6 +76,8 @@
 			<ul>
 				<li><strong>«Nº de socio/a o email, contraseña o grupo incorrectos.»</strong> Revisa los tres datos. El mensaje no dice cuál falla, a propósito.</li>
 				<li><strong>«Demasiados intentos fallidos…»</strong> Tras 5 fallos seguidos hay que esperar 15 minutos, o pedir una contraseña nueva. Los intentos se cuentan por cuenta: da igual el número con el que pruebes.</li>
+				<li><strong>Solo entra quien tiene una membresía activa</strong> en el CRM del grupo, sea cual sea su rol. Si no la tienes, la pantalla te dice el motivo (por ejemplo, «Tu membresía no está activa en el CRM del grupo») y no se cuenta como intento fallido: habla con Secretaría.</li>
+				<li><strong>«Ahora no se puede comprobar tu membresía en el CRM del grupo…»</strong> El CRM no responde en ese momento: inténtalo de nuevo en unos minutos.</li>
 				<li><strong>«…el CRM no responde.»</strong> Solo puede pasar con el email en cuentas antiguas que aún no han entrado nunca con él. Entra con tu nº de socio/a.</li>
 				<li>La página <span class="mono">wp-login.php</span> de WordPress es solo para quien edita la web: se entra siempre por «Acceso socios».</li>
 			</ul>
@@ -337,6 +339,7 @@
 		<li><strong>Adultos:</strong> «Elegir roles y dar acceso» abre <em>Dar acceso</em> en la misma ventana, con el email de la solicitud ya elegido.</li>
 		<li><strong>Rechazar</strong> pide un motivo, que solo ve el grupo. Hay una casilla, marcada por defecto, para <strong>avisar por email</strong> a quien la pidió: el texto es genérico (no lleva el motivo) y le dice que escriba al email de contacto del grupo. El aviso queda anotado en el registro de emails.</li>
 		<li>«Resueltas» guarda las aprobadas y las rechazadas, con quién y cuándo.</li>
+		<li><strong>Las que nadie revisa en 90 días se rechazan solas</strong> (motivo: «Nadie la revisó en 90 días: rechazada automáticamente») y a quien la pidió le llega el email de rechazo de siempre. Si aún quiere el acceso, puede volver a pedirlo.</li>
 	</ul>
 	<h3>Cuando la persona ya tiene cuenta</h3>
 	<p>Puede pasar que, mientras la solicitud esperaba, ya se haya dado acceso a esa persona por otro lado. La solicitud no se queda pendiente para siempre:</p>
@@ -351,7 +354,7 @@
 			<thead><tr><th scope="col">Quien se da de alta</th><th scope="col">Qué pasa</th></tr></thead>
 			<tbody>
 				<tr><td>Scouter con email en su ficha</td><td>Su cuenta de Scouter, con las secciones que eligió, se crea al momento y la activación va al email de su ficha. Te llega una solicitud con «cuenta ya creada» para que lo veas.</td></tr>
-				<tr><td>Pide además una responsabilidad</td><td>Secretaría, Coordinación o Tesorería <strong>no se activan solas</strong>: «Elegir roles y dar acceso» las trae marcadas; guarda para confirmarlas, o cierra la solicitud si no corresponden.</td></tr>
+				<tr><td>Pide además una responsabilidad</td><td>Secretaría, Coordinación, Tesorería o Intendencia <strong>no se activan solas</strong>: «Elegir roles y dar acceso» las trae marcadas; guarda para confirmarlas, o cierra la solicitud si no corresponden.</td></tr>
 				<tr><td>Scouter sin email en su ficha</td><td>No hay cuenta todavía: revisa la solicitud y dale acceso con el email que escribió (se guarda en su ficha del CRM).</td></tr>
 				<tr><td>Voluntario/a sin sección</td><td>Siempre a revisión: su rol es la responsabilidad que pide.</td></tr>
 			</tbody>
@@ -658,7 +661,7 @@
 	</ul>
 	<p>Las <strong>compras sin sesión</strong> (de la tienda pública) salen en la misma lista como «Nombre (sin sesión)»; en su detalle la administración ve su email y su teléfono. Sus datos se guardan cifrados y se borran a los 90 días de entregar o cancelar el pedido.</p>
 	<h4 id="asde-manual-tienda-banco">Pagos que llegan al banco</h4>
-	<p>Si el grupo usa el <a href="#asde-manual-banco">banco</a>, Tesorería ve arriba de la gestión el cuadro <strong>«Ingresos del banco que parecen pagos de pedidos»</strong>: los ingresos por conciliar que llevan en el concepto el nº de un pedido sin pagar (el que se les dice a las familias que escriban, tipo <strong>U6840007</strong>). Compruébalo y pulsa <strong>«Marcar pagado con este ingreso»</strong>: el pedido queda pagado con la fecha y el importe del ingreso, y el ingreso queda revisado en el banco con una nota del pedido. <strong>No se marca nada solo</strong>; si el importe del ingreso no es el del pedido, la pantalla te lo avisa. Si luego deshaces el pago del pedido, el ingreso vuelve a estar por conciliar.</p>
+	<p>Si el grupo usa el <a href="#asde-manual-banco">banco</a>, Tesorería ve arriba de la gestión el cuadro <strong>«Ingresos del banco que parecen pagos de pedidos»</strong>: los ingresos por conciliar que llevan en el concepto el nº de un pedido sin pagar (el que se les dice a las familias que escriban, tipo <strong>U9990007</strong>). Compruébalo y pulsa <strong>«Marcar pagado con este ingreso»</strong>: el pedido queda pagado con la fecha y el importe del ingreso, y el ingreso queda revisado en el banco con una nota del pedido. <strong>No se marca nada solo</strong>; si el importe del ingreso no es el del pedido, la pantalla te lo avisa. Si luego deshaces el pago del pedido, el ingreso vuelve a estar por conciliar.</p>
 	<p class="asde-ayuda__pantalla">El cuadro de Tesorería: el ingreso del banco que cita el pedido y el botón para confirmarlo.</p>
 	<h4 id="asde-manual-tienda-datafono">Cobros con datáfono</h4>
 	<p>Si el grupo cobra con datáfono (se activa en la configuración), «Datáfono» es una forma de pago más: en persona, con tarjeta, y <strong>Tesorería marca el pedido pagado</strong> al cobrar, con la referencia del tique si quiere. Con el <a href="#asde-manual-banco">banco</a>, el cuadro <strong>«Ingresos del banco que parecen el abono del datáfono»</strong> junta lo cobrado en los últimos días y lo compara con el ingreso: el banco abona de una vez, menos su comisión (se admite hasta un 5 %). Compruébalo y confirma cada abono: no se concilia nada solo.</p>
@@ -849,7 +852,7 @@
 	<p>La pestaña «<strong>Cuentas</strong>» la ven quien gestiona el evento y Tesorería. Tiene el <strong>balance</strong> (lo previsto y lo real de cada partida del presupuesto, lo cobrado a las familias, lo pendiente, lo devuelto, los otros ingresos, el fondo de emergencia y el resultado, que asume el grupo), los gastos e ingresos, los anticipos y el cierre. «<strong>Imprimir</strong>» y «<strong>Descargar CSV</strong>» sacan el balance.</p>
 	<ul>
 		<li><strong>Gastos:</strong> quien gestiona el evento los propone con «<strong>Apuntar un gasto</strong>»: fecha, importe, forma de pago, concepto, proveedor, la partida del presupuesto y quién lo pagó (el grupo, un anticipo de caja o tú, de tu bolsillo). El <strong>justificante</strong> es obligatorio: una foto del tique o la factura (JPG, PNG o WebP) o un PDF, de hasta 5 MB. Se guarda cifrado y solo se ve desde el gasto («Ver justificante»).</li>
-		<li>Hasta que Tesorería lo revisa, el gasto está «Por revisar» y no cuenta en el balance; mientras tanto, quien lo propuso lo puede <strong>retirar</strong>. Tesorería lo <strong>valida</strong> o lo <strong>rechaza</strong> con un motivo. Lo que apunta Tesorería queda validado directamente.</li>
+		<li>Hasta que Tesorería lo revisa, el gasto está «Por revisar» y no cuenta en el balance; mientras tanto, quien lo propuso lo puede <strong>retirar</strong>. Tesorería lo <strong>valida</strong> o lo <strong>rechaza</strong> con un motivo. Al rechazarlo o retirarlo, <strong>su justificante se borra</strong>. Lo que apunta Tesorería queda validado directamente.</li>
 		<li>Marca «<strong>Con cargo al fondo de emergencia</strong>» si es un imprevisto. El fondo es lo que aportan el margen y el redondeo del precio de las inscripciones; el balance dice lo recaudado, lo usado y lo que queda.</li>
 		<li><strong>Reembolsos:</strong> lo que alguien del equipo pagó de su bolsillo queda pendiente hasta que Tesorería pulsa «<strong>Reembolsar</strong>» (fecha y forma de pago). No se avisa por email: se ve en la pestaña.</li>
 		<li><strong>Ingresos</strong> que no son pagos de las familias (una subvención, una donación): los apunta Tesorería, sin justificante.</li>
@@ -986,10 +989,12 @@
 	<h3 id="asde-manual-lista-espera-alta">Asignar la sección y dar de alta (Secretaría y Coordinación)</h3>
 	<ul>
 		<li><strong>Sección</strong>: elige otra o vuelve a «La de su edad».</li>
-		<li><strong>«Dar de alta en el CRM»</strong> abre el «Alta de socio/a» con sus datos ya escritos. Lo primero que hace es <strong>comprobar su DNI en el CRM</strong>: si ya tiene ficha en el grupo, el alta se para (bórrala de la lista); si está en otro grupo, avisa y se puede seguir. Revisa los datos y completa el <strong>género</strong>. Al terminar el alta, la inscripción <strong>se borra de la lista en ese momento</strong>. Hace falta tener las altas en el CRM activadas en el grupo.</li>
+		<li><strong>«Se incorpora como asociado/a»</strong> (en su ficha y en su fila de la lista) abre el «Alta de socio/a» con <strong>todos los datos</strong> que dejó en la lista de espera ya escritos (nombre, apellidos, nacimiento, documento, contacto, teléfono, email y sección). Si tiene documento, lo primero es <strong>comprobarlo en el CRM</strong>: si ya tiene ficha en el grupo, el alta se para (bórrala de la lista); si está en otro grupo, avisa y se puede seguir. Sin documento (menores de 14), se sigue sin comprobarlo. Revisa los datos y completa el <strong>género</strong>. Hace falta tener las altas en el CRM activadas en el grupo.</li>
+		<li>Al terminar el alta, la inscripción <strong>queda como «Asociado/a nº …»</strong>, con su nº de socio/a y la fecha, y <strong>todos sus datos se borran</strong> (lo que escribió, el historial y su email). Sale con su propio filtro, ya no cuenta como «en espera», no caduca ni se puede cambiar, y su enlace personal deja de valer.</li>
 		<li><strong>«Borrar de la lista»</strong>: si ya no quiere la plaza o te lo ha pedido; sus datos se borran y no se puede deshacer.</li>
 		<li>Solo Secretaría y Coordinación ven el DNI.</li>
 	</ul>
+	<p class="nota">Los emails de la lista de espera quedan en el <strong>Registro de emails</strong> con el email de destino a medias. Su vista previa («Cómo era el email») vuelve a componer el email de la lista de espera con los datos que aún se guardan; si la inscripción ya se borró o pasó a «Asociado/a», lo dice en lugar del texto.</p>
 </section>
 
 <section id="asde-manual-reintegros">
@@ -1010,7 +1015,7 @@
 	<p class="asde-ayuda__pantalla">Tesorería ve «Por aprobar y por pagar»: aprueba o rechaza (con motivo) y marca pagado con la fecha.</p>
 	<ul>
 		<li>En «Por aprobar y por pagar» salen todos los pendientes, con el IBAN y el botón <strong>«Ver justificante»</strong>. El menú te dice cuántos esperan.</li>
-		<li><strong>Tesorería aprueba</strong> o <strong>rechaza</strong> (con el motivo). Nadie aprueba ni rechaza su propio reintegro.</li>
+		<li><strong>Tesorería aprueba</strong> o <strong>rechaza</strong> (con el motivo). Nadie aprueba ni rechaza su propio reintegro. Al rechazarlo (o si quien lo pidió lo cancela), <strong>el justificante se borra</strong>.</li>
 		<li><strong>Tesorería o Coordinación marcan «pagado»</strong> con la fecha del pago y, si quieren, una referencia. El reintegro no se apunta en el banco ni en la contabilidad de Tesorería: se paga por fuera y se marca aquí.</li>
 		<li>Si el reintegro es de un evento y las cuentas del evento están abiertas, se añade como gasto (ya reembolsado). Si están cerradas, se paga igual y se avisa para apuntarlo a mano.</li>
 	</ul>
@@ -1035,8 +1040,8 @@
 		<li>Los encuentras en <strong>«Datos del grupo»</strong>, en el menú. Si no eres del equipo de Coordinación, solo se pueden consultar.</li>
 		<li>El <strong>equipo de Coordinación</strong> los cambia con <strong>«Guardar los datos del grupo»</strong>. El nº de grupo no se cambia aquí: lo fija quien administra la web.</li>
 		<li>Estos datos se usan en las <strong>domiciliaciones</strong> (la dirección del acreedor), en los <strong>documentos</strong> del grupo y para formar el <strong>nº de socio/a</strong>.</li>
-		<li><strong>Nº de socio/a:</strong> es la unión de los dos dígitos de la <strong>provincia</strong> (con su 0 inicial si lo lleva; Illes Balears es el 07), el <strong>nº de grupo</strong> y un <strong>número incremental</strong> de 4 cifras. Por ejemplo, grupo 684 en Illes Balears: 07 · 684 · 0001 → 076840001. Sin la provincia no se pueden reconocer ni generar números.</li>
-		<li>Los números que ya existían sin el 0 inicial (p. ej. 76840390) siguen siendo válidos; los nuevos se generan con la provincia completa.</li>
+		<li><strong>Nº de socio/a:</strong> es la unión de los dos dígitos de la <strong>provincia</strong> (con su 0 inicial si lo lleva; Illes Balears es el 07), el <strong>nº de grupo</strong> y un <strong>número incremental</strong> de 4 cifras. Por ejemplo, grupo 999 en Illes Balears: 07 · 999 · 0001 → 079990001. Sin la provincia no se pueden reconocer ni generar números.</li>
+		<li>Los números que ya existían sin el 0 inicial (p. ej. 79990390) siguen siendo válidos; los nuevos se generan con la provincia completa.</li>
 		<li>Cambiar la provincia de un grupo que ya la tenía pide marcar una casilla de confirmación: los números del CRM con la provincia anterior dejarían de reconocerse como del grupo.</li>
 	</ul>
 </section>

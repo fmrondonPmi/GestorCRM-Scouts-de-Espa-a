@@ -131,3 +131,9 @@ Creada en esta revisión (`C:\Users\fmron\.claude\skills\pruebas-area-privada\`)
 adelanta, grupo ficticio, formulario a una vista) y cuatro scripts: `resumen.sh` (OK/FAIL por prueba, MUERE y cambios
 respecto de otra ejecución), `con-huella.sh` + `huella.php` (¿deja el sitio como estaba?) y `restos.php` (restos de
 pruebas cortadas, solo lectura).
+
+## Cierre de la v0.57.0 (2026-10-24)
+
+- Batería completa: **3.682 OK y 0 FAIL en 75 pruebas**.
+- `organizacion` daba 8 fallos porque el grupo 684 del Local ya tenía provincia guardada en «Datos del grupo» (la guardó una persona desde la pantalla, no otra prueba). Las partes A y B prueban el nº de socio/a **sin** provincia: ahora la prueba la aparta mientras dura y la devuelve en `$restaurar` (comprueba también la opción `asde_ap_grupos` al final).
+- Vista previa del registro de emails: los emails de la lista de espera, la invitación de grupo y el aviso del alta de grupo se veían con la plantilla de la invitación de acceso. Comprobaciones nuevas en `lista-espera`, `alta-grupo-invitacion` y `alta-grupo-aprobacion`.
