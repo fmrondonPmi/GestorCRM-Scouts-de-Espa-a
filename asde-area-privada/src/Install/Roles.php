@@ -54,6 +54,7 @@ final class Roles {
 					'asde_menus_recetas'     => true, // Recetario de los menús (v0.41, doc 49).
 					'asde_reintegros'        => true, // Reintegros (v0.47, doc 53): pedir el reintegro de un gasto.
 					'asde_presupuestos_seccion' => true, // Presupuestos (v0.55, doc 57): prepara el de sus secciones.
+					'asde_caja'              => true, // Caja (v0.59, doc 61): ve y lleva la caja de sus secciones (P-210c).
 				),
 			),
 			self::SECRETARIA   => array(
@@ -82,6 +83,8 @@ final class Roles {
 					'asde_menus_recetas'     => true,
 					'asde_presupuestos_seccion' => true, // Presupuestos (v0.55, doc 57).
 					'asde_accesos'           => true, // Gestión de accesos (v0.53, doc 56).
+					'asde_caja'              => true, // Caja (v0.59, doc 61): todas las cajas y el libro mayor.
+					'asde_caja_todas'        => true,
 				),
 			),
 			self::COORDINACION => array(
@@ -119,6 +122,8 @@ final class Roles {
 					'asde_presupuestos_seccion' => true, // Presupuestos (v0.55, doc 57).
 					'asde_grupo_datos'       => true, // Datos del grupo (v0.56, doc 58): los edita Coordinación.
 					'asde_accesos'           => true, // Gestión de accesos (v0.53, doc 56).
+					'asde_caja'              => true, // Caja (v0.59, doc 61): todas las cajas y el libro mayor.
+					'asde_caja_todas'        => true,
 				),
 			),
 			self::OFICINA      => array(
@@ -157,6 +162,8 @@ final class Roles {
 					'asde_eventos_config'     => true,
 					'asde_presupuestos_seccion' => true, // Presupuestos (v0.55, doc 57).
 					'asde_accesos'            => true, // Gestión de accesos (v0.53, doc 56).
+					'asde_caja'               => true, // Caja (v0.59, doc 61): todas las cajas y el libro mayor.
+					'asde_caja_todas'         => true,
 				),
 			),
 			self::TUTOR        => array(

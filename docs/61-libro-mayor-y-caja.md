@@ -1,6 +1,6 @@
-# 61 · Libro mayor y caja en efectivo (PLAN, sin código)
+# 61 · Libro mayor y caja en efectivo
 
-Estado: **plan para revisar con el usuario** (2026-10-24). Pidió escribirlo antes de programar. Rama de trabajo: `Tesoreria-Informes-Caja` (v0.58; el resto de peticiones del mismo día ya está hecho en esa versión).
+Estado: plan escrito el 2026-10-24; **el usuario contestó las preguntas el 2026-10-25** (apartado 6, que manda sobre lo de los apartados 3 y 4 donde no coincidan). Hecho en la **v0.59.0** (rama `Libro-Mayor-Caja`): `src/Caja/` (`CajaTable`, `Cajas`, `Periodo`, `Automaticos`, `Servicio`, `LibroMayor`), `CajaView` y `LibroMayorView`, plantillas `tesoreria/caja*.php` y `libro-mayor.php`, prueba `tests/caja.php`. Supuestos de la implementación: P-221…P-224; pendiente P-225 (cuadros abiertos).
 
 ## 1. Qué pide el usuario (literal)
 
@@ -58,6 +58,26 @@ Conclusión: casi todo el efectivo **ya está apuntado** en su módulo. La caja 
 - **P-212** ¿Te parece bien que la caja se **calcule en vivo** con lo de cada módulo (recomendado) en vez de copiar los apuntes?
 - **P-213** Reintegros en efectivo: ¿la salida de caja va con la **fecha de pago** del reintegro (la que se pone al marcarlo pagado)?
 - **P-214** Gastos de eventos pagados por «El grupo (cuenta o caja)»: ¿con `forma = efectivo` es caja y con las demás es banco, o prefieres elegirlo al apuntar el gasto?
+
+## 6. Decisiones del usuario (2026-10-25)
+
+| Pregunta | Respuesta |
+|---|---|
+| P-206 | Libro mayor **por cuentas** (Banco y cada caja, con su saldo acumulado) **y resumen por tipo** de gasto e ingreso. |
+| P-207 | Periodo: la **ronda** por defecto y, en un desplegable, también el **año natural**. |
+| P-208 | Saldo inicial de cada caja y del banco **a mano una sola vez**; después se arrastra (el inicial de un periodo es el final del anterior). |
+| P-209 | Entra solo en la caja **todo** lo del apartado 2: cuotas y cobros/devoluciones de eventos en efectivo, tienda en efectivo, reintegros y reembolsos en efectivo, gastos e ingresos de eventos en efectivo y anticipos de caja (entregados y devueltos). |
+| P-210 | **La caja del grupo y una por sección**. |
+| P-210b | Lo automático va **siempre a la caja del grupo**; las de sección se mueven con apuntes a mano y traspasos con la del grupo. |
+| P-210c | La caja de una sección la **ven y llevan sus scouters**; Tesorería, Secretaría y Coordinación, todas (ajustable en la Gestión de accesos). |
+| P-211 | El **arqueo** lo hace quien lleva la caja, sin visto bueno; si no cuadra, con motivo, y la diferencia queda como apunte de ajuste. |
+| P-212 | Los automáticos se **calculan en vivo** (no se copian). |
+| P-213 | Un reintegro en efectivo sale de la caja con su **fecha de pago** (igual los reembolsos). |
+| P-214 | Gasto de evento pagado por «El grupo»: con forma **Efectivo** es caja; con las demás, banco. |
+| P-219 | Ingresar o sacar efectivo del banco = **traspaso** en la caja, que después se **asocia** con su movimiento del banco; el libro mayor no lo cuenta como gasto ni como ingreso. |
+| P-220 | **Todas las cajas existen desde el principio** (la del grupo y la de cada sección educativa), a 0 € hasta que se ponga su saldo inicial. |
+
+Supuestos de la implementación (a confirmar, P-221…): un reintegro con evento también crea un gasto del evento ya reembolsado: en la caja cuenta **solo el reintegro** (no el gasto, para no restar dos veces); un pedido de la tienda pagado en efectivo y cancelado después deja de contar; los gastos pagados con un anticipo no salen de la caja (salió el anticipo); el concepto y la nota de los apuntes a mano se guardan cifrados.
 
 ## 5. Fases propuestas (cuando se confirme)
 

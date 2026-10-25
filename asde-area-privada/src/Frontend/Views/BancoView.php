@@ -100,6 +100,8 @@ final class BancoView extends TesoreriaBaseView {
 		// v0.58: el movimiento con el que está asociado cada uno de la página.
 		$con       = array_values( array_filter( array_map( static fn( $m ) => (int) ( $m['asociado_id'] ?? 0 ), $pagina ) ) );
 		$asociados = $con ? array_column( BancoTable::movimientos( array( 'ids' => $con ) ), null, 'id' ) : array();
+		// v0.59 (P-219): los movimientos que son un traspaso de una caja de efectivo.
+		$traspasos = \AsdeBalears\AreaPrivada\Caja\Cajas::activo() ? \AsdeBalears\AreaPrivada\Caja\CajaTable::por_banco( array_column( $pagina, 'id' ) ) : array();
 
 		return $this->layout(
 			'tesoreria',
@@ -120,6 +122,7 @@ final class BancoView extends TesoreriaBaseView {
 					'url'        => $this->url( 'banco' ),
 					'url_fam'    => $this->url( 'familias' ),
 					'asociados'  => $asociados,
+					'traspasos'  => $traspasos,
 					// v0.58: el informe de los movimientos (los del filtro de arriba) en Excel.
 					'url_excel'  => $this->url( 'banco', array_filter( array( 'estado' => $filtros['estado'], 'tipo' => $filtros['tipo'], 'q' => $filtros['q'], 'clase' => $filtros['clase'] ) ) + array( 'formato' => 'xlsx', '_wpnonce' => wp_create_nonce( 'asde_banco_excel' ) ) ),
 				)

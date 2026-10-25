@@ -44,6 +44,13 @@ abstract class TesoreriaBaseView extends View {
 				$items['sepa'] = asde_t( 'Domiciliaciones' );
 			}
 		}
+		// v0.59 (doc 61): la caja (quien lleva alguna) y el libro mayor (quien lleva todas).
+		if ( \AsdeBalears\AreaPrivada\Caja\Cajas::visibles() ) {
+			$items['caja'] = asde_t( 'Caja' );
+		}
+		if ( \AsdeBalears\AreaPrivada\Caja\Cajas::todas_suyas() ) {
+			$items['libro_mayor'] = asde_t( 'Libro mayor' );
+		}
 		// v0.37: acceso directo a los informes de pagos (quien puede ver informes y los pagos). v0.58 (petición del
 		// usuario): sin el enlace a «Todos los informes», que ya está en el menú.
 		$enlaces = array();

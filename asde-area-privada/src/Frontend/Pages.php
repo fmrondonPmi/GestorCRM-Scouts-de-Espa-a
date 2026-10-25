@@ -32,6 +32,9 @@ final class Pages {
 		'grupo_datos' => array( 'datos-del-grupo', 'Datos del grupo', '[asde_grupo_datos]', 'area' ),
 		// v0.54 (doc 57): reparto de las cuotas entre el grupo y las secciones.
 		'presupuestos' => array( 'presupuestos', 'Presupuestos', '[asde_presupuestos]', 'tesoreria' ),
+		// v0.59 (doc 61): cajas de efectivo y libro mayor.
+		'caja'         => array( 'caja', 'Caja', '[asde_caja]', 'tesoreria' ),
+		'libro_mayor'  => array( 'libro-mayor', 'Libro mayor', '[asde_libro_mayor]', 'tesoreria' ),
 		// v0.12: domiciliaciones SEPA (ficheros de adeudos para el banco).
 		'sepa'      => array( 'domiciliaciones', 'Domiciliaciones SEPA', '[asde_sepa]', 'tesoreria' ),
 		// El shortcode de Wordfence va dentro del nuestro para que Wordfence cargue sus scripts.

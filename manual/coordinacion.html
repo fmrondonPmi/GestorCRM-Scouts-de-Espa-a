@@ -12,7 +12,7 @@
 <body>
 <header class="portada">
 	<div class="portada__dentro">
-		<p class="antetitulo">Manual de uso · versión 0.58.1 · octubre de 2026 · <a class="portada__volver" href="index.html">Todos los manuales</a></p>
+		<p class="antetitulo">Manual de uso · versión 0.59 · octubre de 2026 · <a class="portada__volver" href="index.html">Todos los manuales</a></p>
 		<h1>Manual del equipo de coordinación</h1>
 		<p class="portada__perfil">Tesorería, Secretaría y Coordinación</p>
 		<p class="entrada">Todo lo que lleva el equipo del grupo: personas y números de socio, altas, bajas y cambios de sección en el CRM, dar acceso, solicitudes, los usuarios (con sus hojas: usuarios, dar acceso y registro de emails), fichas y cambios, informes, la Tesorería completa (cuotas, coste federativo, banco y domiciliaciones SEPA) y los uniformes, del pago a la entrega.</p>
@@ -73,6 +73,8 @@
 <li class="sub"><a href="#coste-federativo">Coste federativo</a></li>
 <li class="sub"><a href="#presupuestos">Presupuestos</a></li>
 <li class="sub"><a href="#banco">Banco</a></li>
+<li class="sub"><a href="#caja">Caja (efectivo)</a></li>
+<li class="sub"><a href="#libro-mayor">Libro mayor</a></li>
 <li class="sub"><a href="#sepa">Domiciliaciones SEPA</a></li>
 <li><a href="#uniformes">La tienda: pagos, pedido al proveedor y entregas</a></li>
 <li class="sub"><a href="#uniformes-gestion">Gestión de pedidos</a></li>
@@ -736,6 +738,28 @@
 		<li>La columna «Suma» es un resumen rápido de en qué se gasta y de dónde entra el dinero; su número lleva a esos movimientos.</li>
 	</ul>
 
+	<h3 id="caja">Caja (efectivo)</h3>
+	<p class="quien-sub">La del grupo: Secretaría, Coordinación y Tesorería · la de cada sección: también sus scouters</p>
+	<p>El efectivo del grupo: la <strong>caja del grupo</strong> y una <strong>caja por sección</strong> (Castores, Lobatos, Scouts, Escultas y Rovers). Es un módulo que se enciende por grupo en wp-admin → Grupos Scouts → Módulos («Caja y libro mayor»).</p>
+	<ul>
+		<li>Arriba eliges la <strong>caja</strong> y el <strong>periodo</strong> (una ronda o un año natural) y ves lo que había al empezar, las entradas, las salidas, lo que hay al acabar y el último arqueo. «Descargar Excel» baja los apuntes del periodo con su saldo.</li>
+		<li><strong>Saldo inicial:</strong> la primera vez, escribe lo que había en la caja ese día. Lo anterior a esa fecha no cuenta; después el saldo se arrastra solo de un periodo a otro. Para cambiarlo, anúlalo y ponlo otra vez.</li>
+		<li><strong>Entra solo en la caja del grupo</strong>, sin escribirlo otra vez, lo cobrado y pagado <strong>en efectivo</strong> en los demás módulos: cuotas, cobros y devoluciones de eventos, gastos e ingresos de eventos pagados por el grupo en efectivo, reembolsos y reintegros pagados en efectivo (con su fecha de pago), anticipos de caja (al darlos y lo que se devuelve) y pedidos de la tienda pagados en efectivo. Se leen en vivo: si se anula allí, desaparece de la caja. «Ver en su sitio» lleva a la pantalla de donde viene.</li>
+		<li><strong>Apuntar una entrada o una salida:</strong> lo que no está en ningún otro sitio (sellos, un donativo en mano…), con su tipo de gasto o ingreso (los mismos del banco) y el concepto.</li>
+		<li><strong>Traspaso:</strong> dinero que pasa de esta caja a otra (por ejemplo, el grupo le da 100 € a Lobatos para una salida) o al banco. Tesorería también puede <strong>ingresarlo en el banco</strong> o <strong>sacarlo del banco</strong> para la caja; después, con «Asociar con el banco…», se elige el movimiento del extracto que le corresponde, para que no cuente como gasto ni como ingreso.</li>
+		<li><strong>Arqueo:</strong> cuenta el efectivo y escribe cuánto hay. Si cuadra, se guarda sin más; si no, escribe el motivo y la diferencia queda apuntada como ajuste.</li>
+		<li>Nada se borra: «Anular…» pide un motivo. Anular un traspaso entre cajas anula los dos apuntes.</li>
+	</ul>
+
+	<h3 id="libro-mayor">Libro mayor</h3>
+	<p class="quien-sub">Secretaría, Coordinación y Tesorería</p>
+	<ul>
+		<li>Una <strong>cuenta</strong> por medio de pago: el <strong>Banco</strong> (los movimientos importados) y cada <strong>caja</strong>, con lo que había al empezar el periodo, las entradas, las salidas y lo que hay al acabar; debajo, cada cuenta con sus apuntes y el saldo acumulado.</li>
+		<li>El <strong>resumen por partida</strong> suma las entradas y salidas de cada tipo de gasto o ingreso (y de dónde vienen las de la caja: cuotas en efectivo, eventos, tienda, reintegros…). Los <strong>traspasos</strong> entre cuentas del grupo salen en cada cuenta, pero no en el resumen.</li>
+		<li>El <strong>saldo inicial del banco</strong> se escribe aquí una vez (el del extracto en esa fecha); lo anterior no cuenta.</li>
+		<li>Periodo: la ronda o el año natural. «Excel de los apuntes» y «Excel del resumen» bajan las dos cosas.</li>
+	</ul>
+
 	<h3 id="sepa">Domiciliaciones SEPA</h3>
 	<p class="quien-sub">Secretaría, Coordinación y Tesorería</p>
 	<p>Las familias autorizan en <a href="familias.html#sepa">«Mis pagos»</a> que se les cobre la cuota por <strong>adeudo directo SEPA</strong>. Aquí se generan los ficheros para el banco (formato XML <span class="mono">pain.008</span>, el «Cuaderno 19.14»), se avisa a las familias de cada cargo y se registran los cobros.</p>
@@ -1207,7 +1231,7 @@
 			</ul>
 		</section>
 
-		<p class="pie">Manual del equipo de coordinación del plugin «ASDE Scouts de España – Gestor CRM para Grupos Scouts», versión 0.58.1 (octubre de 2026). Capturas hechas en un WordPress de demostración con un CRM simulado y datos inventados.</p>
+		<p class="pie">Manual del equipo de coordinación del plugin «ASDE Scouts de España – Gestor CRM para Grupos Scouts», versión 0.59 (octubre de 2026). Capturas hechas en un WordPress de demostración con un CRM simulado y datos inventados.</p>
 	</main>
 </div>
 

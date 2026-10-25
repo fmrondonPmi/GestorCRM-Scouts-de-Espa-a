@@ -34,9 +34,10 @@ final class Modulos {
 	public const EVENTOS       = 'eventos';
 	public const REINTEGROS    = 'reintegros';
 	public const PRESUPUESTOS  = 'presupuestos';
+	public const CAJA          = 'caja';
 
 	/** Módulos que nacen apagados (v0.32): cambian lo que ve el grupo y se encienden a mano. */
-	public const POR_DEFECTO_APAGADOS = array( self::LISTA_ESPERA, self::EVENTOS, self::REINTEGROS );
+	public const POR_DEFECTO_APAGADOS = array( self::LISTA_ESPERA, self::EVENTOS, self::REINTEGROS, self::CAJA );
 
 	/** módulo => [nombre, qué es, capabilities que se quitan si está apagado, módulo del que depende] */
 	public const LISTA = array(
@@ -55,6 +56,8 @@ final class Modulos {
 		self::PRESUPUESTOS  => array( 'Presupuestos', 'Reparto de las cuotas entre el grupo y las secciones y presupuesto de cada una.', array( 'asde_presupuestos_seccion' ), self::TESORERIA ),
 		// v0.47 (doc 53): apagado por defecto, como todo módulo nuevo (regla 5).
 		self::REINTEGROS    => array( 'Reintegros', 'Los scouters piden que les devuelvan un gasto (con el justificante y, si procede, un evento); Tesorería lo aprueba y Tesorería o Coordinación lo marcan pagado.', array( 'asde_reintegros', 'asde_reintegros_aprobar', 'asde_reintegros_pagar' ), '' ),
+		// v0.59 (doc 61): apagado por defecto, como todo módulo nuevo (regla 5).
+		self::CAJA          => array( 'Caja y libro mayor', 'Cajas de efectivo del grupo y de cada sección (apuntes, traspasos y arqueos, con lo cobrado y pagado en efectivo en los demás módulos) y libro mayor del banco y las cajas.', array( 'asde_caja', 'asde_caja_todas' ), self::TESORERIA ),
 	);
 
 	/** @var array<string, string[]> nº de grupo => capabilities quitadas (por petición). */

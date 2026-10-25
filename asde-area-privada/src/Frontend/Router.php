@@ -23,6 +23,8 @@ use AsdeBalears\AreaPrivada\Frontend\Views\AltaUsuariosView;
 use AsdeBalears\AreaPrivada\Frontend\Views\AreaPrivadaView;
 use AsdeBalears\AreaPrivada\Frontend\Views\AyudaView;
 use AsdeBalears\AreaPrivada\Frontend\Views\BancoView;
+use AsdeBalears\AreaPrivada\Frontend\Views\CajaView;
+use AsdeBalears\AreaPrivada\Frontend\Views\LibroMayorView;
 use AsdeBalears\AreaPrivada\Frontend\Views\CambiosView;
 use AsdeBalears\AreaPrivada\Frontend\Views\FichaView;
 use AsdeBalears\AreaPrivada\Frontend\Views\CuotasView;
@@ -58,7 +60,7 @@ use AsdeBalears\AreaPrivada\Socios\TareaNumeracion;
 final class Router {
 
 	/** Páginas que se pueden abrir en la ventana emergente. */
-	public const MODALES = array( 'ficha', 'alta', 'solicitudes', 'tienda_gestion', 'inventario', 'inventario_tipos', 'inventario_compras', 'banco', 'tesoreria', 'personas', 'cambios' );
+	public const MODALES = array( 'ficha', 'alta', 'solicitudes', 'tienda_gestion', 'inventario', 'inventario_tipos', 'inventario_compras', 'banco', 'tesoreria', 'personas', 'cambios', 'caja' );
 
 	/** La pide la ventana emergente del área (assets/js/area.js). */
 	public static function pide_modal(): bool {
@@ -91,6 +93,8 @@ final class Router {
 		'federacion' => array( 'asde_coste_federativo', FederacionView::class ),
 		'banco'     => array( 'asde_banco', BancoView::class ),
 		'presupuestos' => array( 'asde_presupuestos', PresupuestosView::class ), // v0.54 (doc 57).
+		'caja'         => array( 'asde_caja', CajaView::class ), // v0.59 (doc 61).
+		'libro_mayor'  => array( 'asde_libro_mayor', LibroMayorView::class ), // v0.59 (doc 61).
 		'grupo_datos'  => array( 'asde_grupo_datos', DatosGrupoView::class ), // v0.56 (doc 58).
 		'sepa'      => array( 'asde_sepa', SepaView::class ),
 		'seguridad' => array( 'asde_seguridad', SeguridadView::class ),
@@ -302,6 +306,12 @@ final class Router {
 		}
 		if ( 'xlsx' === $formato && 'banco' === $key ) {
 			( new BancoView() )->exportar(); // v0.58: el informe de los movimientos del banco.
+		}
+		if ( 'xlsx' === $formato && 'caja' === $key ) {
+			( new CajaView() )->exportar(); // v0.59: los apuntes de una caja.
+		}
+		if ( 'xlsx' === $formato && 'libro_mayor' === $key ) {
+			( new LibroMayorView() )->exportar(); // v0.59: el libro mayor (apuntes o resumen).
 		}
 		if ( 'csv' === $formato && 'eventos' === $key ) {
 			( new EventosView() )->exportar_compra(); // v0.41 (B2): la lista de la compra del menú.

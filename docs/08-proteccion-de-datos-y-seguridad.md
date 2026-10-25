@@ -78,3 +78,9 @@
 - Tablas `asde_permisos_rol`, `asde_permisos_usuario` y `asde_auditoria_accesos`: solo **ids de cuenta y códigos de permiso**, fechas, estado y el motivo que escribe quien concede (texto libre de hasta 255 caracteres: pedir que no lleve datos personales de menores ni de salud). Nada de ello es dato del CRM.
 - El **historial no se borra ni se edita** (es la prueba de quién dio cada acceso); los nombres se buscan al mostrarlo y, si la cuenta ya no existe, sale «Cuenta borrada».
 - Al desinstalar se conservan las tablas (como el resto de históricos) y se borra la opción `asde_ap_hay_concesiones`.
+
+## Actualización v0.59.0 (2026-10-25): caja de efectivo (doc 61)
+
+- Tabla `{prefix}asde_caja`: solo los apuntes propios de las cajas (saldo inicial, a mano, traspasos y arqueos) con su grupo, caja, fecha, importe, tipo, evento y quién lo apuntó (id de usuario). El **concepto y la nota van cifrados** (`Crm\Crypto`): pueden llevar nombres. No se borra nada: se anula con motivo.
+- Lo cobrado y pagado en efectivo en los demás módulos **no se copia**: se lee en vivo de su tabla (`Caja\Automaticos`), con su texto genérico («Cuota de la familia F684001», «Reintegro · <concepto>»), sin nombres de personas.
+- La desinstalación conserva la tabla, como las demás de dinero.

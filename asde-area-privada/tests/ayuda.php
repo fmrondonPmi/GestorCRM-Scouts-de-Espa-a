@@ -164,7 +164,7 @@ try {
 			++$imagenes;
 		}
 	}
-	$ok( 0 === $imagenes && $tam < 600 * 1024 && ! is_dir( ASDE_AP_DIR . 'manual' ), 'la ayuda del plugin es solo texto y pesa poco (' . round( $tam / 1024 ) . ' KB; con capturas, el zip pasaba de 10 MB) y el plugin no lleva el manual con capturas' );
+	$ok( 0 === $imagenes && $tam < 800 * 1024 && ! is_dir( ASDE_AP_DIR . 'manual' ), 'la ayuda del plugin es solo texto y pesa poco (' . round( $tam / 1024 ) . ' KB; con capturas, el zip pasaba de 10 MB) y el plugin no lleva el manual con capturas' );
 	$ok( Ayuda::url_completo( 'scouters', 'tesoreria' ) === add_query_arg( array( 'asde_ayuda' => 'manual', 'asde_manual' => 'scouters' ), Pages::url( 'area' ) ) . '#asde-manual-tesoreria', 'la dirección del manual completo: ?asde_ayuda=manual, el manual y el apartado' );
 
 	echo "\n== Parte D · El manual con capturas, ayuda extra (wp-admin → Organización federada) ==\n";

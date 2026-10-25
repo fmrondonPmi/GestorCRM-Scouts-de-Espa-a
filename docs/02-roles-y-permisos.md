@@ -231,3 +231,12 @@ Solo tiene sentido en una web **de oficina** (`Organizacion::es_oficina()`); en 
 
 - Los permisos de cada rol que se ven en las tablas de arriba son los **de fábrica** (`Install\Roles::definitions()`); los gestores pueden cambiarlos desde la matriz (tabla `asde_permisos_rol`, que `Roles::install()` vuelve a aplicar) y añadir **permisos sueltos** por persona (tabla `asde_permisos_usuario`), con o sin fecha de caducidad.
 - Toda acción exige el «ver» de su módulo; nadie se concede permisos a sí mismo ni los añade a su propio rol; los sensibles llevan motivo. Detalle en el doc 56.
+
+## Actualización v0.59.0 (2026-10-25): caja de efectivo y libro mayor (doc 61)
+
+| Capability | Roles | Qué permite |
+|---|---|---|
+| `asde_caja` | Scouter, Secretaría, Coordinación, Tesorería | Ver y llevar la caja de efectivo de sus secciones (un scouter, las de sus secciones educativas): saldo inicial, apuntes, traspasos a otra caja y arqueos |
+| `asde_caja_todas` | Secretaría, Coordinación, Tesorería | Todas las cajas (la del grupo y las de sección), los traspasos con el banco y el libro mayor |
+
+Las dos se reparten en la Gestión de accesos (doc 56, módulo Tesorería) y se quitan si el módulo **«Caja y libro mayor»** (`Domain\Modulos::CAJA`, depende de Tesorería) está apagado: nace **apagado por defecto** (regla 5).

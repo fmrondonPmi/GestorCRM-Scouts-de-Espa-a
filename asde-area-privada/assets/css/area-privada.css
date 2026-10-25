@@ -3172,3 +3172,34 @@ dialog.asde-modal--mini .asde-publicar h3 {
 .asde-ap .asde-banco-asociar__igual td {
 	background: var(--asde-ok-bg);
 }
+
+/* v0.59 · Caja y libro mayor (doc 61): los formularios de la caja en una línea (importes cortos, el concepto se estira). */
+#top .asde-ap .asde-caja-form input[name="importe"],
+#top .asde-ap .asde-caja-form input[name="recuento"],
+.asde-ap .asde-caja-form input[name="importe"],
+.asde-ap .asde-caja-form input[name="recuento"] {
+	flex: 0 1 7.5em;
+	width: 7.5em;
+}
+#top .asde-ap .asde-caja-form select,
+.asde-ap .asde-caja-form select {
+	min-width: 6.5em;
+}
+.asde-ap .asde-caja-form button {
+	flex: 0 0 auto;
+}
+/* Las etiquetas ocultas no ocupan sitio en la fila; el concepto y el motivo se encogen o se estiran. */
+.asde-ap .asde-caja-form .screen-reader-text {
+	position: absolute;
+}
+#top .asde-ap .asde-caja-form input[name="concepto"],
+#top .asde-ap .asde-caja-form input[name="motivo"],
+.asde-ap .asde-caja-form input[name="concepto"],
+.asde-ap .asde-caja-form input[name="motivo"] {
+	flex: 1 1 8em;
+	width: 8em;
+}
+.asde-ap .asde-caja-anular summary {
+	cursor: pointer;
+	white-space: nowrap;
+}

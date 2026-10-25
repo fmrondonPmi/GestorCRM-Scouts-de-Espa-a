@@ -3,6 +3,8 @@ namespace AsdeBalears\AreaPrivada\Domain;
 
 defined( 'ABSPATH' ) || exit;
 
+// phpcs:disable WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- GET_LOCK/RELEASE_LOCK de MySQL: no hay función de WordPress para ellos y no se pueden cachear.
+
 /**
  * Bloqueo con nombre de MySQL (GET_LOCK) para numerar sin repetir (nº de socio/a, de familia, de remesa).
  * Si no se consigue (otra petición lo tiene más de `$espera` segundos), NO se sigue como si se tuviera:

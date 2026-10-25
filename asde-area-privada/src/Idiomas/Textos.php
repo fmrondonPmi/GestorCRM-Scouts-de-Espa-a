@@ -125,6 +125,7 @@ final class Textos {
 		$add( GastosTable::FORMAS, 'Eventos' );
 		$add( AnticiposTable::ESTADOS, 'Eventos' );
 		$add( BancoTable::ESTADOS, 'Tesorería' );
+		$add( \AsdeBalears\AreaPrivada\Caja\Automaticos::ORIGENES, 'Tesorería' ); // v0.59: partidas de la caja.
 		$add( CsvBanco::CAMPOS, 'Tesorería' );
 		$add( Codificacion::LISTA, 'Tesorería' );
 		$add( Norma43::CONCEPTOS, 'Tesorería' );

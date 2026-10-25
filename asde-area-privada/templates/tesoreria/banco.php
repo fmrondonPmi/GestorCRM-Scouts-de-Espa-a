@@ -35,6 +35,7 @@ $columnas = array(
 );
 $aqui    = add_query_arg( array() ); // Este listado, con sus filtros (para volver después de revisar).
 $asociados = $asociados ?? array();
+$traspasos = $traspasos ?? array();
 $asociar   = static fn( int $id ) => add_query_arg(
 	array(
 		'asociar' => $id,
@@ -218,6 +219,10 @@ $revisar = static fn( array $ids ) => add_query_arg(
 								<?php if ( ! empty( $m['evento_id'] ) && isset( $eventos[ (int) $m['evento_id'] ] ) ) : ?>
 									<br><span class="asde-muted"><?php asde_e( 'Evento:' ); ?> <?php echo esc_html( $eventos[ (int) $m['evento_id'] ] ); ?></span>
 								<?php endif; ?>
+							<?php endif; ?>
+							<?php if ( isset( $traspasos[ (int) $m['id'] ] ) ) : ?>
+								<?php /* translators: %s: nombre de la caja */ ?>
+								<br><span class="asde-banco-asociado">↔ <?php echo esc_html( sprintf( asde_t( 'Traspaso: %s' ), \AsdeBalears\AreaPrivada\Caja\Cajas::nombre( (string) $traspasos[ (int) $m['id'] ]['caja'] ) ) ); ?></span>
 							<?php endif; ?>
 							<?php if ( ! empty( $m['asociado_id'] ) ) : ?>
 								<?php $otro = $asociados[ (int) $m['asociado_id'] ] ?? null; ?>

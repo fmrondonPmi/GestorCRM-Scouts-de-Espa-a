@@ -7,7 +7,8 @@
  * asde_familia_miembros, asde_movimientos, asde_emails, asde_banco_lotes, asde_cambios,
  * asde_banco_movimientos, asde_solicitudes, asde_tienda_pedidos, asde_sepa_mandatos, asde_sepa_remesas, y desde
  * la v0.35 asde_eventos, asde_evento_inscripciones, asde_evento_partidas y asde_evento_movimientos, los cobros de los eventos;
- * desde la v0.36 asde_evento_gastos y asde_evento_anticipos, las cuentas de los eventos)
+ * desde la v0.36 asde_evento_gastos y asde_evento_anticipos, las cuentas de los eventos; desde la v0.59 asde_caja, los
+ * apuntes propios de las cajas de efectivo, con el concepto y la nota cifrados)
  * y el email cifrado de cada cuenta. Los justificantes de los gastos de los eventos (cifrados, en
  * wp-content/uploads/asde-privado/) también se conservan: son el justificante de las cuentas. Las autorizaciones SEPA y las remesas se conservan (cifradas): son
  * el justificante de los cobros; quien no las necesite puede borrar esas dos tablas a mano.

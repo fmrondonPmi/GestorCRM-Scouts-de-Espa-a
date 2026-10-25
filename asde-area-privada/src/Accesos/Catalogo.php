@@ -72,6 +72,9 @@ final class Catalogo {
 			'asde_tesoreria_acceso'     => array( 'tesoreria', self::VER, 'Ver Tesorería (familias, pagos y banco)', false, array() ),
 			'asde_presupuestos_seccion' => array( 'tesoreria', self::ACCION, 'Preparar el presupuesto de sus secciones', false, array() ),
 			'asde_tesoreria_config'     => array( 'tesoreria', self::ACCION, 'Cambiar cuotas, plazos y coste federativo', true, array( 'asde_tesoreria_acceso' ) ),
+			// v0.59 (doc 61): la caja de sus secciones y, con el segundo, todas las cajas y el libro mayor.
+			'asde_caja'                 => array( 'tesoreria', self::ACCION, 'Llevar la caja de efectivo de sus secciones', true, array( 'asde_tesoreria_acceso' ) ),
+			'asde_caja_todas'           => array( 'tesoreria', self::ACCION, 'Llevar todas las cajas de efectivo y ver el libro mayor', true, array( 'asde_tesoreria_acceso' ) ),
 
 			'asde_tienda_comprar'       => array( 'tienda', self::VER, 'Comprar en la tienda', false, array() ),
 			'asde_tienda_gestion'       => array( 'tienda', self::VER, 'Ver la gestión de la tienda', false, array() ),

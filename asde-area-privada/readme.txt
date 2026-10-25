@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.58.1
+Stable tag: 0.59.0
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -61,6 +61,10 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.59.0 =
+* New module "Cash box and ledger" (off by default, under Treasury): the group cash box and one per section. Cash collected or paid in the other modules (fees, events, shop, refunds, advances) appears in the group cash box automatically, read live. Opening balance, manual entries, transfers between boxes and with the bank (linked to their bank movement), and cash counts with the difference recorded as an adjustment.
+* Ledger: the bank and every cash box with opening and closing balance, running balance and a summary by category, by round or calendar year, with Excel downloads.
 
 = 0.58.1 =
 * Treasury: families with no member with an active membership are also hidden from the payments control screen (list, summary and totals), not only from its Excel. They stay in "Families".
@@ -140,136 +144,13 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * New role "Intendente" (the person in charge of the group's material, matching the CRM's "Responsable de Material" position). It is granted like Secretary or Treasurer: together with the Scouter role or as a volunteer without a section. It sees every event of the group, but only the Summary and Material tabs, and manages the material (reservations, departure, return and deduction from the inventory); it sees nothing about menus, accounts, registrations or health.
 * Events, menus: a reminder email about allergens still unresolved in the menu. From the date of the "Review allergies" task of the calendar until the event starts, the daily task checks the menu against the attendees and, if some dish carries an allergen of someone going and nobody has confirmed the alternative, emails the event team (not the support team, who get the kitchen sheet). Names are included only for those who can already see the whole group's health records; the others get the dish, the allergen and how many people. Nothing about health is stored: the email log keeps only that it was sent, and a salted fingerprint prevents repeating the same warning every day.
 
-= 0.42.0 =
-* Events: event material. A new "Material" tab in each event (for those who manage it and can use the inventory) reserves items from the group inventory with a warning when another event on overlapping dates takes the same items and there are not enough; each event type can have its usual material, which loads with one button. Records when the material leaves and how it comes back (units, incident note); what did not come back can be deducted from the inventory in a separate, explicit step. Reserving never changes the inventory by itself.
-
-= 0.41.0 =
-* Uniform orders: when a member orders badges (not only the shirt) and the group has them in the inventory, they can be served from it and deducted, so they are not added to the order to the supplier; if only part is in stock, only that part is served. Cancelling or returning puts them back.
-* Events: recipe book for the menus (plan in docs/49, first phase). A new "Recipes" tab in Events lets scouts keep the group's recipes with their ingredients and the 14 mandatory allergens (traces and animal origin too); a recipe's allergens are worked out from its ingredients, never typed by hand, and the recipe warns about ingredients nobody has checked. Quantities are scaled to the number of diners (g and kg, ml and l are converted). Includes a small library of example recipes shared by all groups (copy and edit; the original never changes) and CSV import. It holds no personal data: matching the menu against the attendees' allergies comes in a later version.
-* Events: a "Menu" tab in each event (for those who manage it) sets the dishes for every day and meal from the recipe book, with the number of diners, a shopping list that adds up the scaled ingredients (printable, CSV, whole event or one day), the cost of the menu and a button to propose it as a "Food" line of the budget (never changed automatically).
-* Events, allergens: the allergy and intolerance fields of the health record are now chosen in a window with tabs and checkboxes (the 14 mandatory allergens, common foods and intolerances) plus any allergen typed by hand; the CRM still stores plain comma-separated text and what was already written is kept. The event menu is checked live against the attendees' records (nothing about health is stored): conflict, possible risk, incomplete data or no conflicts; warnings are confirmed with a closed list of alternatives, and a kitchen sheet with each affected person's name and allergen can be printed or emailed to the support team, never stored.
-
-= 0.40.0 =
-* Events: task calendar (plan in docs/49). A new "Calendar" tab in each event copies a template of tasks with deadlines counted from the start or end of the event (the ASDE camp programmer's 31-task "Acampada" template comes built in), shows a traffic light for each task (done, overdue, this week, later), lets any scout with access to the event tick tasks off, lets whoever manages the event assign a responsible person, set an own date, add and remove tasks, recalculates the dates if the event moves, adjusts weekend deadlines to the previous Friday (configurable) and prints. Each group can edit the template or create its own in Events settings. Overdue and this-week tasks appear in "Pending review" on the home page. A new table is created automatically.
-
-= 0.39.0 =
-* The "Uniforms" module is now "Shop" (plan in docs/48). Existing uniform orders, settings, pages and addresses keep working (old /uniforme addresses redirect; the orders table and settings are renamed automatically). Secretary joins Coordination and Treasury as shop administrator.
-* Shop catalogue: products with variants (size, colour), price, optional member price, per-person limit, stock adjusted with a reason, archiving and CSV import. The section is called "Shop inventory".
-* Cart and payment: members order several products at once; stock is reserved atomically and returned when the order is cancelled; pay by transfer, Bizum or, for members, in person to Treasury; the group's IBAN and Bizum number are in the settings; only Treasury marks payments; emails for order received, payment received and delivered.
-* Public shop (optional, off by default): anyone with the group's link can buy products marked for everybody without logging in; their details are stored encrypted, unpaid orders are cancelled after a configurable number of days (14) and the personal data are deleted 90 days after delivery or cancellation. Members-only products never appear there.
-* Shop, last phase: unpaid member orders get a one-off reminder email after a configurable number of days (7) and can be cancelled automatically after another (off by default), returning the stock; bank deposits that quote an order number are offered to Treasury to mark the order as paid (never automatic; undoing the payment returns the deposit to the pending list); "Sales and reports" with sales by product, by payment method and pending payments, in screen and Excel.
-
-= 0.38.0 =
-* Waiting list: each group can add its own fields to the public sign-up form (label, type and optional/required), managed by Secretary and Coordination from the waiting list screen. The answers are stored encrypted with a key derived from the sign-up email, so they cannot be read once the entry is deleted.
-
-= 0.37.1 =
-* Treasury role: can open Reports and sees the payment reports for the whole group (identity and payment columns only; no contact or health data).
-
-= 0.37.0 =
-* Treasury, family file: the new "Payment history" lists everything a family has paid (round fee, events and uniforms), newest first, with who recorded each payment and when; removed items show as removed.
-* Treasury, "Record payment": a payment can be assigned to an event whose registration period is open and where the family still owes something (Treasury only; cash, transfer or Bizum). It is split among the family's registrations and does not touch the round fee.
-* Treasury: quick links to the payment reports ("Payment report" and "All reports") next to the Treasury tabs, for users who can see reports and payments.
-* Payment control: the download is now a formatted Excel workbook (title, euro amounts, coloured status and a totals row) instead of a CSV.
-
-= 0.36.1 =
-* Events: Treasury can reopen an event's closed accounts, always with a reason (for example, an invoice that arrives late), and close them again with the report up to date. The pick-up details and notes deleted when closing do not come back.
-
-= 0.36.0 =
-* Events, new "Accounts" tab (event managers and Treasury): real expenses with their receipt (photo or PDF up to 5 MB, stored encrypted in uploads/asde-privado), proposed by the event team and validated or rejected by Treasury; reimbursements to whoever paid out of pocket; real income (grants); cash advances and their settlement (a note is required if it does not add up); emergency fund (collected, used, left); balance (planned and actual per budget line, collected, pending, refunded and result), printable and as CSV.
-* Closing an event's accounts (Treasury): once the event has ended, with nothing to review, reimburse or settle. The balance is kept as the final report, the pick-up details and notes of the registrations are deleted and the event becomes read-only. It cannot be reopened.
-* Refunds to families: from any registration with something paid, up to what was paid and with a reason. They show in "My events" and "My payments".
-* SEPA direct debits: "Charge an event" prepares one debit per family with an authorisation for everything pending in its registrations (siblings together). When the collections are recorded, the amount is split among the family's registrations as a "SEPA direct debit" payment.
-
-= 0.35.1 =
-* Families: an empty family (no members, payments, SEPA authorisations or bank movements) has "Delete" in the list; the row says why when it cannot be deleted.
-* Two-step verification is now optional for every role (it was required for Scouter, Secretaría, Coordinación and Tesorería). Applied once on update; an administrator can require it again in Wordfence.
-* Login: the verification code field is collapsed; it opens, highlighted and required, when Wordfence asks for the code.
-* Fix: a membership ended in the CRM showed the person as active until the CRM recalculated "Secciones actuales". Sections are now taken from the memberships that are active by their dates, read in the same request (snapshot, searches, People and reports).
-* People: "Remove from the website" for someone with no active membership. Nothing changes in the CRM; they leave People and their family, and their web accounts are deactivated. They come back by themselves if they get an active membership again.
-
-= 0.35.0 =
-* New "Events" module, off by default (switch it on for each group in wp-admin → Grupos Scouts → Módulos): outings, camps and other activities of the group, with their leader team checked against the Balearic youth leisure rules (director, ratio, qualifications, certificate), a budget whose price per section is validated by Treasury, a checklist and publishing.
-* Registrations: "My events" for families and members. Registering a minor signs the participation authorisation (versioned text); members aged 14 to 17 pre-register and their family signs. Places and waiting list (a freed place is offered for 3 days), invitations with "not going", withdrawals while registration is open. The event's "Registrations" tab: participants, waiting list, no answer, registering on behalf of a family and paper authorisations.
-* Event payments (Treasury): cash, transfer or Bizum, one family payment split among siblings, grants and adjustments with a reason, and cancelling a movement. Event payments also show in "My payments". Emails when an event is published, a registration is confirmed, a place is offered or an event is cancelled, plus a reminder before it starts.
-* Built in a separate cloud session on an older base and adapted to this version: module switch, current roles, email log, help pages and Plugin Check rules.
-
-= 0.34.0 =
-* Bank: when marking movements as reviewed, a "+" next to each type opens a small window on top to create a new income or expense type without losing what was chosen; the new type is selected in that row.
-* Families: search by family number, family account, or the name or member number of any member, without reloading the page.
-* Person record: "Member since" in the header, with the years, months and days since the continuous membership began (seen from People).
-* Fix: a membership set to "baja" directly in the CRM without an end date is still active for the CRM (it computes it from the dates). The website showed the person as active and "Remove membership" said there was no active membership; now it finds it and sets the end date.
-
-= 0.33.2 =
-* Code review for simplicity (no change in use): all notices send email through one function, the two public group links share their secret-key code, the inventory screens use the same tested threshold rule, and unused code was removed.
-
-= 0.33.1 =
-* Security review with the WordPress plugin audit, coding standards and security guidance tools: the screens that build HTML in JavaScript now escape translated texts inside HTML attributes (custom labels can contain quotes).
-* Templates: the WordPress coding standards no longer report local template variables as overridden WordPress globals.
-* readme.txt: new "External services" section (SinergiaCRM). Plugin header: License URI.
-
-= 0.33.0 =
-* SEPA direct debit: the bank account (IBAN, holder, bank) is no longer stored by the plugin. When a guardian or an adult member signs the authorization, the account is written to the CRM record of every member of the family; the plugin keeps the authorization, the masked IBAN and a fingerprint to check, before each collection, that the CRM account is still the authorized one. Each family is still a single debit in the SEPA file.
-* Person record: new "Bank details and SEPA direct debit" section (masked), for the family, adult members and Treasury.
-* Treasury: "Move accounts to the CRM" for authorizations signed before 0.33.
-
-= 0.32.0 =
-* New "Waiting list" module (off by default; turn it on per group in Scout Groups → Modules): a group link where non-members leave the minimum data (name, surnames, birth date, ID document from age 14, contact phone and email, notes), email confirmation, a personal link to view, keep (12 more months) or delete their data, and automatic deletion after 12 months with a reminder 30 days before.
-* Scouters, Secretary, Coordination and Treasury see the list with the section that matches each age and the order of arrival; they log contacts (email sent from the site or phone call) and change the status. Secretary and Coordination assign the section and register the person in the CRM through "New member", which checks the ID document against the CRM first; the waiting list entry is deleted right after.
-* All waiting list data is stored encrypted.
-
-= 0.31.0 =
-* Lists: 10 rows per page by default (5 to 50, in steps of 5); filtering and paging refresh only the list in every list (payments, uniform orders, purchase lists, report sections). People list sorted by section; counters moved below the lists.
-* Payments: filter on one line, "View / record payment" as a link, children per fee as a tooltip. Bank: search box first and filters on one line.
-* New members get their territorial number automatically (shown only to who has it visible). A youth member can only move to the next section by age; adult volunteers to any section.
-* WordPress.org review: no inline <script>, <style> or event handlers (enqueued assets and data attributes instead), sanitized $_SERVER/$_COOKIE input.
-
-= 0.30.0 =
-* Inventory: when an item is added to a shopping list, the "are you sure?" question is now asked when there are already 5 units or more ("do you really need to buy more?"), not when there are few. The yellow "few units" label stays.
-* Shopping lists can include new items that are not in the inventory yet (description, quantity and optional estimated price), also in a list made only of new items ("Lista de material nuevo"). They are shown in the list, in its PDF and in the email to Treasury.
-* When Treasury approves or rejects a shopping list, the person who asked for it gets an email with the result, the reason if rejected and a link to the list (if the account has an email; otherwise it is logged as "no email"). It is recorded in the email log as "Lista de compra revisada".
-* "Marcar como comprada": an approved list can be marked as bought (with confirmation, only once). The bought quantities are added to each inventory item and the new items are created in the inventory. Recorded in the audit log (item ids only).
-* CSV import: a row without serial number with the same description (ignoring case, accents and extra spaces) and type as an item already in the inventory, or as a previous row of the same file, adds its quantity to that item instead of creating a duplicate (uniform shirts only if model and size also match). The import report says how many rows were added this way.
-* Uniforms: a scouter can order the uniform for any member with an active membership in their sections, besides themselves (families, as before: their minors). The shirt price follows the rule of the person it is for (the first one of an adult scouter or volunteer is free). With more than five people, "¿Para quién?" becomes a drop-down grouped by section. The people come from the group snapshot (one read, no CRM query per person).
-
-= 0.29.0 =
-* Fix: in People, the member-number buttons (assign, pass to the CRM, correct the format, give a new number) did not ask for confirmation since 0.18.1; they do again. Code review fixes: cancelling an order returns a shirt served from the inventory, the Excel file is built in memory (no temporary file with personal data), the change history only shows edits made by the group's own accounts, approving changes without CRM write access keeps them pending.
-* Fix: downloads (reports, Treasury and uniform lists, inventory CSV files) left the page blank with themes that fade the page out on every link (Enfold's page transitions): the file was downloaded but the page stayed white. Download links no longer trigger the theme transition.
-* Reports: "Descargar Excel" downloads a real .xlsx spreadsheet (bold, frozen header row with filters, column widths, numbers as numbers) instead of a CSV. "Imprimir" opens a printable version of the whole report (all columns, text wraps instead of being cut, landscape with many columns, header repeated on every page) in a pop-up window with its own "Imprimir" button.
-* Every box of the private area with a title can be collapsed (▾ next to the title); boxes, record sections and remembered panels start collapsed and the browser remembers the ones each person opens. In a person's record, the name box (collapsed: only the full name and the section or role) and "Membresía en el CRM" can be collapsed too, and "Contraer todo / Expandir todo" is now at the top. In People, the summary box can be collapsed.
-* People: the list filters without reloading the page and searches while typing from the third letter; "Dar acceso" is a link like "Ver ficha" (shorter rows) and "Mostrar", the search box and "Filtrar" stay on one line (the theme stretched the drop-down to full width).
-* Reports: new predefined report "Fichas reducidas": the short record of each active member (name, mobile, guardian 1, image consent, allergies, food allergies and intolerances, special diet, eating disorder and illnesses), one per page when printed instead of a table. Any report can use the new "one record per person" layout, and a "Sección" selector on the result shows a single section without editing the report.
-* Proposed changes: grouped by person. "Revisar" opens all the pending changes of that person in the pop-up window, each with a checkbox, "Todos" at the top of the column and a single "Aprobar los seleccionados" button (or reject them with one reason); they are saved in the CRM in a single write. "Resueltos" now also lists the changes made directly in the records by the Secretariat, Coordination or scouters in the last 30 days (which data, who and when; values are never stored), which is why it looked empty before.
-* Uniforms: the shirt costs the configured price (25 €) for members; a scouter's first shirt is free (the order is marked as paid at no cost) and from the second one on it costs the price. New option in the uniform settings, on by default.
-* Uniforms and inventory: the inventory has a "Camisa uniforme" type (created automatically, cannot be deleted) whose items record the model (boy or girl shirt) and the size; the CSV import accepts "Modelo (camisas)" and "Talla (camisas)" columns. Uniform management shows the shirts in stock and can serve an order's shirt from the inventory instead of ordering it from the supplier, give a shirt from the inventory to someone who did not order it (creating their order, free of charge if the amount is 0), and return a shirt to the inventory; the stock is updated each time.
-
-= 0.28.0 =
-* Help is now text only and always opens in the pop-up window: the help of each page shows the section of the user manual for that page and role without screenshots (each screenshot caption is kept as a short note), and "Ver el manual completo" opens the whole manual of the role, also text only, in the same window, with its index and links between sections. All of it ships inside the plugin (about 300 KB), so the plugin zip stays small (version 0.27.0, which bundled the illustrated manual, was discarded: its zip was over 10 MB).
-* The illustrated user manual (with screenshots) is uploaded separately by hand as extra help: wp-admin → Grupos Scouts → Organización federada → "Manual con capturas (ayuda extra)" holds its address (for Scouts de Balears, https://baleares.scout.es/manual/ by default), and the help shows a "Manual con capturas" link that opens it in another tab.
-
-= 0.26.2 =
-* Code quality: fixes all 589 findings of the WordPress Plugin Check report (5 errors and 584 warnings). Database queries pass table names with the %i placeholder and no longer build SQL by concatenation: optional filters go as prepared values (bank movements, change proposals, email log, access requests, inventory). A bank movement without a value date is stored as NULL with NULLIF instead of a conditional in the query. In-memory CSV streams (php://temp) are documented as such. Templates declare why their variables are not globals (they are included inside a function), and uninstall.php prefixes its global variables. No visible changes.
-
-= 0.26.1 =
-* Security: deactivating a user (Usuarios → "Desactivar", or automatically when a family account no longer represents anyone) now also deletes what let them log in: the password (replaced by a random one nobody knows), WordPress application passwords and, with Wordfence Login Security, the two-step verification (secret and recovery codes) and passkeys. It also forgets that the account was activated, so giving access again sends a new invitation to choose a password. The activity log records what was removed.
-
-= 0.26.0 =
-* Help on every page: "Ayuda", next to the person's name, opens in the pop-up window the section of the user manual for that page and for the role of whoever is logged in (families, members aged 14-17, scouters or the coordination team), and at the end a link to their full manual. The help is generated from the manual sources (data-paginas) into the plugin's ayuda/ folder; its screenshots and links point to the published manual.
-* wp-admin → Grupos Scouts → Organización federada: new "Manual de uso" field with the address of the published manual (by default, https://baleares.scout.es/manual/ for Scouts de Balears).
-
-= 0.25.1 =
-* Fix: "Dar acceso" (opened as a page or in the pop-up window) failed with an error 500 when the person's role in the CRM ("Cargo en el CRM") was not one of the known ones; it now shows the role as the CRM has it. Known roles show their name again (they were blank). The bug came from v0.15.0.
-
-= 0.25.0 =
-* Treasury: the family record updates in place (registering a payment, also with a bank income, an adjustment or deleting one) without reloading the whole page. The bank list keeps its filters after conciliating or undoing.
-* Treasury: "Delete…" a payment or an adjustment with a reason; it stops counting and goes to the family's history (who registered and deleted it, when and why). A payment that came from a bank income leaves that income pending again.
-* Users: "Users", "Grant access" and "Email log" are now sheets of a single "Users" section, like a spreadsheet. Switching sheets does not reload the page and each sheet keeps its filters and search; the browser's back and forward buttons work. The home page shows a single "Users" tile.
-* Reports: new "Fee and payments" columns (family, fee status, amount due, paid, pending, overdue, payments made) and a filter by what has been paid, for whoever can access Treasury. New predefined report "Pagos de la cuota" so each scouter sees who in their section has paid.
-
-= 0.24.0 =
-* wp-admin → Scout Groups → "Repeated documents": for a group, the CRM records that share the same ID document (written in any form), to merge them in the CRM. Read-only; the document is shown masked.
-* CRM registrations tested end to end in a browser against the simulated SinergiaCRM API (development only).
+= Older versions =
+* The changelog of versions 0.42.0 and earlier is in changelog.txt, in the plugin folder.
 
 == Upgrade Notice ==
+
+= 0.59.0 =
+New "Cash box and ledger" module, off by default (turn it on per group in Modules). Database change: new table asde_caja, created automatically on update.
 
 = 0.58.1 =
 Payments control without families with no active members; bank Excel with family member names. No database changes.
