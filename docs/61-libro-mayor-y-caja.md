@@ -1,6 +1,6 @@
 # 61 · Libro mayor y caja en efectivo
 
-Estado: plan escrito el 2026-10-24; **el usuario contestó las preguntas el 2026-10-25** (apartado 6, que manda sobre lo de los apartados 3 y 4 donde no coincidan). Hecho en la **v0.59.0** (rama `Libro-Mayor-Caja`): `src/Caja/` (`CajaTable`, `Cajas`, `Periodo`, `Automaticos`, `Servicio`, `LibroMayor`), `CajaView` y `LibroMayorView`, plantillas `tesoreria/caja*.php` y `libro-mayor.php`, prueba `tests/caja.php`. Supuestos de la implementación: P-221…P-224; pendiente P-225 (cuadros abiertos).
+Estado: plan escrito el 2026-10-24; **el usuario contestó las preguntas el 2026-10-25** (apartado 6, que manda sobre lo de los apartados 3 y 4 donde no coincidan). Hecho en la **v0.59.0** (rama `Libro-Mayor-Caja`): `src/Caja/` (`CajaTable`, `Cajas`, `Periodo`, `Automaticos`, `Servicio`, `LibroMayor`), `CajaView` y `LibroMayorView`, plantillas `tesoreria/caja*.php` y `libro-mayor.php`, prueba `tests/caja.php`. Supuestos de la implementación: P-221…P-224; P-225 (cuadros abiertos) decidido: se quedan como están.
 
 ## 1. Qué pide el usuario (literal)
 
