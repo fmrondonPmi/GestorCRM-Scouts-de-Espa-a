@@ -63,7 +63,7 @@ defined( 'ABSPATH' ) || exit;
 				<label class="asde-choice"><input type="radio" name="modo" value="<?php echo esc_attr( A::MODO_SCOUTER ); ?>" <?php checked( $valores['modo'], A::MODO_SCOUTER ); ?>><span><?php asde_e( 'Soy scouter de una o varias secciones' ); ?></span></label>
 				<div class="asde-subopciones">
 					<?php foreach ( Secciones::EDUCATIVAS as $slug ) : ?>
-						<label class="asde-choice"><input type="checkbox" name="secciones[]" value="<?php echo esc_attr( $slug ); ?>" <?php checked( in_array( $slug, $valores['secciones'], true ) ); ?>><span><?php echo Secciones::badge( $slug ); // phpcs:ignore WordPress.Security.EscapeOutput ?></span></label>
+						<label class="asde-choice"><input type="checkbox" name="secciones[]" value="<?php echo esc_attr( $slug ); ?>" <?php checked( in_array( $slug, $valores['secciones'], true ) ); ?>><span><?php echo wp_kses( Secciones::badge( $slug ), asde_html_permitido() ); ?></span></label>
 					<?php endforeach; ?>
 				</div>
 				<label class="asde-choice"><input type="radio" name="modo" value="<?php echo esc_attr( A::MODO_SIN_SECCION ); ?>" <?php checked( $valores['modo'], A::MODO_SIN_SECCION ); ?>><span><?php asde_e( 'Soy voluntario/a sin sección (Secretaría, Coordinación, Tesorería o Intendencia)' ); ?></span></label>

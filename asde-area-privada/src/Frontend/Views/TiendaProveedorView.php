@@ -52,11 +52,11 @@ final class TiendaProveedorView extends TiendaBaseView {
 	public function exportar(): void {
 		$id = absint( $this->get( 'pedido' ) );
 		if ( ! Proveedor::puede_ver() || ! wp_verify_nonce( $this->get( '_wpnonce' ), 'asde_proveedor_excel_' . $id ) ) {
-			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-area-privada' ), 403 );
+			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		$pp = ProveedorTable::obtener( $id );
 		if ( ! $pp ) {
-			wp_die( esc_html__( 'Ese pedido no existe.', 'asde-area-privada' ), 404 );
+			wp_die( esc_html__( 'Ese pedido no existe.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 404 );
 		}
 		Logger::log( 'tienda_proveedor_excel', 'tienda', (string) $id );
 		$titulo = $pp['nombre'] . ' · ' . Grupo::nombre();
@@ -77,7 +77,7 @@ final class TiendaProveedorView extends TiendaBaseView {
 
 	public function handle_post(): void {
 		if ( ! Proveedor::puede_ver() ) {
-			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-area-privada' ), 403 );
+			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		$accion = $this->post( 'asde_action' );
 		$volver = $this->url( 'tienda_proveedor' );

@@ -30,7 +30,7 @@ $col = Colores::para_email(); // Los colores elegidos en wp-admin → Colores (l
 					<?php echo esc_html( $grupo ); ?> · <?php asde_e( 'Lista de espera' ); ?>
 				</td></tr>
 				<tr><td style="padding:28px;font-size:15px;line-height:1.6;">
-					<p style="margin:0 0 16px;"><?php echo '' !== $saludo ? sprintf( asde_h( 'Hola, %s:' ), esc_html( $saludo ) ) : asde_h( 'Hola:' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+					<p style="margin:0 0 16px;"><?php echo wp_kses( '' !== $saludo ? sprintf( asde_h( 'Hola, %s:' ), esc_html( $saludo ) ) : asde_h( 'Hola:' ), asde_html_permitido() ); ?></p>
 					<?php foreach ( $parrafos as $parrafo ) : ?>
 						<div style="margin:0 0 16px;"><?php echo wp_kses_post( $parrafo ); ?></div>
 					<?php endforeach; ?>
@@ -44,7 +44,7 @@ $col = Colores::para_email(); // Los colores elegidos en wp-admin → Colores (l
 						<p style="margin:0 0 16px;font-size:13px;color:<?php echo esc_attr( $col['atenuado'] ); ?>;"><?php echo wp_kses_post( $nota ); ?></p>
 					<?php endif; ?>
 					<?php if ( '' !== $contacto ) : ?>
-						<p style="margin:0;font-size:13px;color:<?php echo esc_attr( $col['atenuado'] ); ?>;"><?php echo sprintf( asde_h( '¿Dudas? Escríbenos a %s.' ), '<a href="mailto:' . esc_attr( $contacto ) . '" style="color:' . esc_attr( $col['primary'] ) . ';">' . esc_html( $contacto ) . '</a>' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+						<p style="margin:0;font-size:13px;color:<?php echo esc_attr( $col['atenuado'] ); ?>;"><?php echo wp_kses( sprintf( asde_h( '¿Dudas? Escríbenos a %s.' ), '<a href="mailto:' . esc_attr( $contacto ) . '" style="color:' . esc_attr( $col['primary'] ) . ';">' . esc_html( $contacto ) . '</a>' ), asde_html_permitido() ); ?></p>
 					<?php endif; ?>
 				</td></tr>
 			</table>

@@ -46,7 +46,7 @@ $columnas = array(
 			<thead>
 				<tr>
 					<?php foreach ( $columnas as $col => $etiqueta ) : ?>
-						<th scope="col"<?php echo $tabla->aria_sort( $col ); // phpcs:ignore WordPress.Security.EscapeOutput ?>><?php echo $tabla->cabecera( $col, $etiqueta ); // phpcs:ignore WordPress.Security.EscapeOutput ?></th>
+						<th scope="col"<?php echo wp_kses( $tabla->aria_sort( $col ), asde_html_permitido() ); ?>><?php echo wp_kses( $tabla->cabecera( $col, $etiqueta ), asde_html_permitido() ); ?></th>
 					<?php endforeach; ?>
 					<th scope="col"><span class="screen-reader-text"><?php asde_e( 'Acciones' ); ?></span></th>
 				</tr>
@@ -59,12 +59,12 @@ $columnas = array(
 							<?php if ( '' !== $f['nombre'] ) : ?><br><span class="asde-muted"><?php echo esc_html( $f['user']->user_login ); ?></span><?php endif; ?>
 						</td>
 						<td data-label="<?php echo esc_attr( asde_a( 'Rol' ) ); ?>"><?php echo esc_html( $f['roles'] ); ?></td>
-						<td data-label="<?php echo esc_attr( asde_a( 'Permisos sueltos' ) ); ?>"><?php echo $f['extras'] ? (int) $f['extras'] : '<span class="asde-muted">—</span>'; // phpcs:ignore WordPress.Security.EscapeOutput ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Permisos sueltos' ) ); ?>"><?php echo wp_kses( $f['extras'] ? (int) $f['extras'] : '<span class="asde-muted">—</span>', asde_html_permitido() ); ?></td>
 						<td data-label=""><a href="<?php echo esc_url( add_query_arg( 'usuario', (int) $f['user']->ID, $url ) ); ?>"><?php asde_e( 'Ver accesos' ); ?></a></td>
 					</tr>
 				<?php endforeach; ?>
 			</tbody>
 		</table>
-		<?php echo $tabla->paginacion(); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+		<?php echo wp_kses( $tabla->paginacion(), asde_html_permitido() ); ?>
 	<?php endif; ?>
 </section>

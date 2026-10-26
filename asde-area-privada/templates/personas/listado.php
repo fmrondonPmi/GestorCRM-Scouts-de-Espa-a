@@ -165,7 +165,7 @@ $columnas = array(
 			<thead>
 				<tr>
 					<?php foreach ( $columnas as $col => $etiqueta ) : ?>
-						<th scope="col"<?php echo $tabla->aria_sort( $col ); // phpcs:ignore WordPress.Security.EscapeOutput ?>><?php echo $tabla->cabecera( $col, $etiqueta ); // phpcs:ignore WordPress.Security.EscapeOutput ?></th>
+						<th scope="col"<?php echo wp_kses( $tabla->aria_sort( $col ), asde_html_permitido() ); ?>><?php echo wp_kses( $tabla->cabecera( $col, $etiqueta ), asde_html_permitido() ); ?></th>
 					<?php endforeach; ?>
 					<th scope="col"><span class="screen-reader-text"><?php asde_e( 'Acciones' ); ?></span></th>
 				</tr>
@@ -194,7 +194,7 @@ $columnas = array(
 							<?php
 							if ( $activa ) {
 								foreach ( $p->secciones as $s ) {
-									echo Secciones::badge( $s ); // phpcs:ignore WordPress.Security.EscapeOutput
+									echo wp_kses( Secciones::badge( $s ), asde_html_permitido() );
 								}
 							} else {
 								echo '<span class="asde-badge asde-badge--estado-desactivado">Sin membresía activa</span>';
@@ -219,13 +219,13 @@ $columnas = array(
 								<?php
 								$socio = $p->num_socio_asde;
 								if ( $activa && in_array( $n['estado'], array( Numeracion::FALTA, Numeracion::INVALIDO ), true ) ) {
-									echo $boton( 'asignar_numero', $socio, esc_html( asde_t( 'Asignar nº' ) ), $escritura ? sprintf( esc_html( asde_t( 'Se asignará el nº %s a %s y se guardará en el CRM. ¿Continuar?' ) ), $siguiente, $p->nombre_completo() ) : '' ); // phpcs:ignore WordPress.Security.EscapeOutput
+									echo wp_kses( $boton( 'asignar_numero', $socio, esc_html( asde_t( 'Asignar nº' ) ), $escritura ? sprintf( esc_html( asde_t( 'Se asignará el nº %s a %s y se guardará en el CRM. ¿Continuar?' ) ), $siguiente, $p->nombre_completo() ) : '' ), asde_html_permitido() );
 								} elseif ( $escritura && Numeracion::GENERADO === $n['estado'] ) {
-									echo $boton( 'pasar_crm', $socio, esc_html( asde_t( 'Pasar al CRM' ) ), sprintf( esc_html( asde_t( 'Se guardará el nº %s en la ficha del CRM de %s. ¿Continuar?' ) ), $n['numero'], $p->nombre_completo() ) ); // phpcs:ignore WordPress.Security.EscapeOutput
+									echo wp_kses( $boton( 'pasar_crm', $socio, esc_html( asde_t( 'Pasar al CRM' ) ), sprintf( esc_html( asde_t( 'Se guardará el nº %s en la ficha del CRM de %s. ¿Continuar?' ) ), $n['numero'], $p->nombre_completo() ) ), asde_html_permitido() );
 								} elseif ( $escritura && Numeracion::CORREGIDO === $n['estado'] ) {
-									echo $boton( 'corregir_formato', $socio, esc_html( asde_t( 'Corregir en el CRM' ) ), sprintf( esc_html( asde_t( 'En el CRM pasará de «%s» a «%s». ¿Continuar?' ) ), $p->num_socio_local_crm, $n['numero'] ) ); // phpcs:ignore WordPress.Security.EscapeOutput
+									echo wp_kses( $boton( 'corregir_formato', $socio, esc_html( asde_t( 'Corregir en el CRM' ) ), sprintf( esc_html( asde_t( 'En el CRM pasará de «%s» a «%s». ¿Continuar?' ) ), $p->num_socio_local_crm, $n['numero'] ) ), asde_html_permitido() );
 								} elseif ( $escritura && Numeracion::DUPLICADO === $n['estado'] ) {
-									echo $boton( 'resolver_duplicado', $socio, esc_html( asde_t( 'Dar nº nuevo' ) ), sprintf( esc_html( asde_t( '%s recibirá el siguiente nº libre (%s) y se guardará en el CRM. La otra ficha conserva el %s. ¿Continuar?' ) ), $p->nombre_completo(), $siguiente, $n['numero'] ) ); // phpcs:ignore WordPress.Security.EscapeOutput
+									echo wp_kses( $boton( 'resolver_duplicado', $socio, esc_html( asde_t( 'Dar nº nuevo' ) ), sprintf( esc_html( asde_t( '%s recibirá el siguiente nº libre (%s) y se guardará en el CRM. La otra ficha conserva el %s. ¿Continuar?' ) ), $p->nombre_completo(), $siguiente, $n['numero'] ) ), asde_html_permitido() );
 								}
 								?>
 								<a href="<?php echo esc_url( add_query_arg( 'socio', $socio, $url_ficha ) ); ?>" data-asde-modal><?php asde_e( 'Ver ficha' ); ?></a>
@@ -238,6 +238,6 @@ $columnas = array(
 	<?php endif; ?>
 	<?php /* v0.31: el contador, debajo de la lista (antes iba justo después de «Filtrar»). */ ?>
 	<p class="asde-muted asde-contador"><?php echo esc_html( sprintf( asde_n( '%d persona', '%d personas', $total ), $total ) ); ?></p>
-	<?php echo $lista ? $tabla->paginacion() : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?>
+	<?php echo wp_kses( $lista ? $tabla->paginacion() : '', asde_html_permitido() ); ?>
 	</div>
 </section>

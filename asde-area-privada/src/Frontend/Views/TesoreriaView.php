@@ -278,11 +278,11 @@ final class TesoreriaView extends TesoreriaBaseView {
 	 */
 	public function exportar(): void {
 		if ( ! current_user_can( self::CAP ) || ! wp_verify_nonce( $this->get( '_wpnonce' ), 'asde_tesoreria_csv' ) ) {
-			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-area-privada' ), 403 );
+			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		$repo = PersonaRepository::make();
 		if ( ! $repo ) {
-			wp_die( esc_html__( 'CRM no configurado.', 'asde-area-privada' ), 500 );
+			wp_die( esc_html__( 'CRM no configurado.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 500 );
 		}
 		$ronda = $this->ronda();
 		try {
@@ -358,7 +358,7 @@ final class TesoreriaView extends TesoreriaBaseView {
 
 	public function handle_post(): void {
 		if ( ! current_user_can( self::CAP ) ) {
-			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-area-privada' ), 403 );
+			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		$familia = (int) $this->post( 'familia' );
 		$ronda   = Config::es_ronda( $this->post( 'ronda' ) ) ? $this->post( 'ronda' ) : Config::ronda_actual();

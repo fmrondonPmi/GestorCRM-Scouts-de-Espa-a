@@ -27,8 +27,8 @@ $boton = static function ( bool $activo, int $p, string $texto, string $etiqueta
 	<?php if ( $paginas > 1 ) : ?>
 		<ul class="asde-paginacion__botones">
 			<?php
-			echo $boton( $pagina > 1, 1, '«', esc_html( asde_t( 'Primera página' ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput
-			echo $boton( $pagina > 1, $pagina - 1, '‹', esc_html( asde_t( 'Página anterior' ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput
+			echo wp_kses( $boton( $pagina > 1, 1, '«', esc_html( asde_t( 'Primera página' ) ) ), asde_html_permitido() );
+			echo wp_kses( $boton( $pagina > 1, $pagina - 1, '‹', esc_html( asde_t( 'Página anterior' ) ) ), asde_html_permitido() );
 			foreach ( $lista as $p ) {
 				if ( '…' === $p ) {
 					echo '<li><span class="asde-paginacion__hueco" aria-hidden="true">…</span></li>';
@@ -38,8 +38,8 @@ $boton = static function ( bool $activo, int $p, string $texto, string $etiqueta
 					echo '<li><a href="' . esc_url( $url( (int) $p ) ) . '" aria-label="' . esc_attr( sprintf( asde_t( 'Página %s' ), $p ) ) . '">' . (int) $p . '</a></li>';
 				}
 			}
-			echo $boton( $pagina < $paginas, $pagina + 1, '›', esc_html( asde_t( 'Página siguiente' ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput
-			echo $boton( $pagina < $paginas, $paginas, '»', esc_html( asde_t( 'Última página' ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput
+			echo wp_kses( $boton( $pagina < $paginas, $pagina + 1, '›', esc_html( asde_t( 'Página siguiente' ) ) ), asde_html_permitido() );
+			echo wp_kses( $boton( $pagina < $paginas, $paginas, '»', esc_html( asde_t( 'Última página' ) ) ), asde_html_permitido() );
 			?>
 		</ul>
 	<?php endif; ?>
@@ -47,6 +47,7 @@ $boton = static function ( bool $activo, int $p, string $texto, string $etiqueta
 		<?php foreach ( $ocultos as $k => $v ) : ?>
 			<input type="hidden" name="<?php echo esc_attr( $k ); ?>" value="<?php echo esc_attr( $v ); ?>">
 		<?php endforeach; ?>
+		<?php wp_nonce_field( 'asde_ap_por_pagina', '_asde_pp', false ); ?>
 		<label for="asde-por-pagina"><?php asde_e( 'Mostrar' ); ?></label>
 		<select id="asde-por-pagina" name="por_pagina" data-asde-autoenviar>
 			<?php foreach ( $opciones as $o ) : ?>

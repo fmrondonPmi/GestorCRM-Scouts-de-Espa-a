@@ -34,13 +34,13 @@ $aviso = 'preaviso' === $tipo;
 					<?php echo esc_html( $grupo ); ?> · <?php asde_e( 'Domiciliación SEPA' ); ?>
 				</td></tr>
 				<tr><td style="padding:28px;font-size:15px;line-height:1.6;">
-					<p style="margin:0 0 16px;"><?php echo $nombre ? sprintf( asde_h( 'Hola, %s:' ), esc_html( $nombre ) ) : asde_h( 'Hola:' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+					<p style="margin:0 0 16px;"><?php echo wp_kses( $nombre ? sprintf( asde_h( 'Hola, %s:' ), esc_html( $nombre ) ) : asde_h( 'Hola:' ), asde_html_permitido() ); ?></p>
 					<?php if ( $aviso ) : ?>
-						<p style="margin:0 0 16px;"><?php echo sprintf( asde_h( 'Te avisamos de que <strong>%1$s</strong> se cargarán <strong>%2$s</strong> en la cuenta <strong>%3$s</strong>, en concepto de «%4$s».' ), esc_html( $fecha ), esc_html( $importe ), esc_html( $iban ), esc_html( $concepto ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
-						<p style="margin:0 0 16px;font-size:13px;color:<?php echo esc_attr( $col['atenuado'] ); ?>;"><?php echo sprintf( asde_h( 'Es un adeudo directo SEPA, con la autorización que firmaste (referencia %s). Puedes ver el cargo y tus pagos en «Mis pagos». Si no estás de acuerdo, avísanos antes de esa fecha.' ), esc_html( $umr ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+						<p style="margin:0 0 16px;"><?php echo wp_kses( sprintf( asde_h( 'Te avisamos de que <strong>%1$s</strong> se cargarán <strong>%2$s</strong> en la cuenta <strong>%3$s</strong>, en concepto de «%4$s».' ), esc_html( $fecha ), esc_html( $importe ), esc_html( $iban ), esc_html( $concepto ) ), asde_html_permitido() ); ?></p>
+						<p style="margin:0 0 16px;font-size:13px;color:<?php echo esc_attr( $col['atenuado'] ); ?>;"><?php echo wp_kses( sprintf( asde_h( 'Es un adeudo directo SEPA, con la autorización que firmaste (referencia %s). Puedes ver el cargo y tus pagos en «Mis pagos». Si no estás de acuerdo, avísanos antes de esa fecha.' ), esc_html( $umr ) ), asde_html_permitido() ); ?></p>
 					<?php else : ?>
-						<p style="margin:0 0 16px;"><?php echo sprintf( asde_h( 'Hemos guardado tu <strong>autorización de domiciliación SEPA</strong> para los pagos del %s.' ), esc_html( $grupo ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
-						<p style="margin:0 0 16px;"><?php echo sprintf( asde_h( 'Cuenta: <strong>%s</strong>' ), esc_html( $iban ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?><br><?php echo sprintf( asde_h( 'Referencia de la autorización: <strong>%s</strong>' ), esc_html( $umr ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+						<p style="margin:0 0 16px;"><?php echo wp_kses( sprintf( asde_h( 'Hemos guardado tu <strong>autorización de domiciliación SEPA</strong> para los pagos del %s.' ), esc_html( $grupo ) ), asde_html_permitido() ); ?></p>
+						<p style="margin:0 0 16px;"><?php echo wp_kses( sprintf( asde_h( 'Cuenta: <strong>%s</strong>' ), esc_html( $iban ) ), asde_html_permitido() ); ?><br><?php echo wp_kses( sprintf( asde_h( 'Referencia de la autorización: <strong>%s</strong>' ), esc_html( $umr ) ), asde_html_permitido() ); ?></p>
 						<p style="margin:0 0 16px;font-size:13px;color:<?php echo esc_attr( $col['atenuado'] ); ?>;"><?php asde_e( 'Te avisaremos antes de cada cargo, con su fecha y su importe. Puedes ver la autorización, imprimirla o anularla cuando quieras desde «Mis pagos».' ); ?></p>
 					<?php endif; ?>
 					<?php if ( $url ) : ?>
@@ -50,7 +50,7 @@ $aviso = 'preaviso' === $tipo;
 					<?php endif; ?>
 					<p style="margin:0;font-size:13px;color:<?php echo esc_attr( $col['atenuado'] ); ?>;">
 						<?php if ( '' !== $contacto ) : ?>
-							<?php echo sprintf( asde_h( '¿Dudas? Escribe a %s.' ), '<a href="mailto:' . esc_attr( $contacto ) . '" style="color:' . esc_attr( $col['primary'] ) . ';">' . esc_html( $contacto ) . '</a>' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+							<?php echo wp_kses( sprintf( asde_h( '¿Dudas? Escribe a %s.' ), '<a href="mailto:' . esc_attr( $contacto ) . '" style="color:' . esc_attr( $col['primary'] ) . ';">' . esc_html( $contacto ) . '</a>' ), asde_html_permitido() ); ?>
 						<?php else : ?>
 							<?php asde_e( '¿Dudas? Habla con la Tesorería de tu grupo.' ); ?>
 						<?php endif; ?>

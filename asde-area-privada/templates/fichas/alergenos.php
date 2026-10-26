@@ -17,7 +17,7 @@ use AsdeBalears\AreaPrivada\Menus\SelectorAlergenos;
 defined( 'ABSPATH' ) || exit;
 ?>
 <div class="asde-alerg" data-asde-alerg data-maxlen="<?php echo (int) $maxlen; ?>" data-inicial="<?php echo esc_attr( $inicial ); ?>" data-msg-largo="<?php echo esc_attr( asde_a( 'Es demasiado largo para guardarlo en la ficha: quita alguno.' ) ); ?>" data-msg-vacio="<?php echo esc_attr( asde_a( 'Ninguno elegido' ) ); ?>">
-	<input type="text" id="<?php echo esc_attr( $id ); ?>" name="<?php echo esc_attr( $name ); ?>" class="asde-alerg__texto" value="<?php echo esc_attr( $valor ); ?>"<?php echo ( (int) $maxlen > 0 ? ' maxlength="' . (int) $maxlen . '"' : '' ) . $extra; // phpcs:ignore WordPress.Security.EscapeOutput ?>>
+	<input type="text" id="<?php echo esc_attr( $id ); ?>" name="<?php echo esc_attr( $name ); ?>" class="asde-alerg__texto" value="<?php echo esc_attr( $valor ); ?>"<?php echo wp_kses( ( (int) $maxlen > 0 ? ' maxlength="' . (int) $maxlen . '"' : '' ) . $extra, asde_html_permitido() ); ?>>
 	<div class="asde-alerg__resumen" hidden>
 		<ul class="asde-alerg__chips" data-asde-alerg-chips aria-live="polite"></ul>
 		<button type="button" class="button asde-button-secundario" data-asde-alerg-abrir aria-haspopup="dialog"><?php asde_e( 'Elegir…' ); ?></button>

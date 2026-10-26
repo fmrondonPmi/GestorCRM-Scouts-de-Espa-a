@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.59.0
+Stable tag: 0.59.1
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -61,6 +61,9 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.59.1 =
+* Review fixes from the WordPress.org plugin team: text domain now equals the plugin slug; the per-page choice is only saved with a nonce; form nonces are sanitized before verification and permission and nonce checks are separate; all HTML output is escaped with wp_kses and an allowed-tags list instead of ignore comments.
 
 = 0.59.0 =
 * New module "Cash box and ledger" (off by default, under Treasury): the group cash box and one per section. Cash collected or paid in the other modules (fees, events, shop, refunds, advances) appears in the group cash box automatically, read live. Opening balance, manual entries, transfers between boxes and with the bank (linked to their bank movement), and cash counts with the difference recorded as an adjustment.
@@ -148,6 +151,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * The changelog of versions 0.42.0 and earlier is in changelog.txt, in the plugin folder.
 
 == Upgrade Notice ==
+
+= 0.59.1 =
+Code review fixes only. No database changes.
 
 = 0.59.0 =
 New "Cash box and ledger" module, off by default (turn it on per group in Modules). Database change: new table asde_caja, created automatically on update.

@@ -80,7 +80,7 @@ final class Visibilidad {
 				$out[] = $item;
 			} elseif ( (int) $item->object_id === $acceso ) {
 				if ( is_user_logged_in() ) {
-					$item->title = __( 'Área privada', 'asde-area-privada' );
+					$item->title = __( 'Área privada', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 					$item->url   = Pages::url( 'area' );
 				}
 				if ( null !== Pages::current_key() ) {
@@ -186,7 +186,7 @@ final class Visibilidad {
 			$menu,
 			0,
 			array(
-				'menu-item-title'     => __( 'Acceso socios', 'asde-area-privada' ),
+				'menu-item-title'     => __( 'Acceso socios', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 				'menu-item-object'    => 'page',
 				'menu-item-object-id' => Pages::id( 'acceso' ),
 				'menu-item-type'      => 'post_type',

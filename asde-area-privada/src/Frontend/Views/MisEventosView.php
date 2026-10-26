@@ -89,7 +89,7 @@ final class MisEventosView extends View {
 	public function handle_post(): void {
 		$a = Ambito::actual();
 		if ( ! current_user_can( Inscripciones::CAP ) || ! Inscripciones::para_quien( $a ) ) {
-			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-area-privada' ), 403 );
+			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		$e = EventosTable::obtener( (int) $this->post( 'evento' ) );
 		check_admin_referer( 'asde_mis_eventos_' . ( $e['id'] ?? 0 ) );

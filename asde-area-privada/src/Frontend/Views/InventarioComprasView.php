@@ -143,7 +143,7 @@ final class InventarioComprasView extends InventarioBaseView {
 	public function pdf(): void {
 		$l = ComprasTable::obtener( (int) $this->get( 'lista' ) );
 		if ( ! $l || ! current_user_can( Servicio::CAP ) || ! wp_verify_nonce( $this->get( '_wpnonce' ), 'asde_inventario_pdf_' . $l['id'] ) ) {
-			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-area-privada' ), 403 );
+			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		if ( ! Servicio::puede_imprimir( $l ) ) {
 			wp_die( esc_html( asde_t( 'Esta lista de compra todavía no tiene el visto bueno de Tesorería: no se puede imprimir.' ) ), 403 );
@@ -156,7 +156,7 @@ final class InventarioComprasView extends InventarioBaseView {
 		header( 'Content-Type: application/pdf' );
 		header( 'Content-Disposition: inline; filename="' . sanitize_file_name( 'lista-compra-' . ComprasTable::numero( $l ) . '.pdf' ) . '"' );
 		header( 'Content-Length: ' . strlen( $pdf ) );
-		echo $pdf; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- es el PDF (binario), no HTML
+		echo $pdf; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- descarga PDF, no HTML
 		exit;
 	}
 

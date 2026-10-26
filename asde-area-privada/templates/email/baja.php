@@ -37,14 +37,14 @@ $fecha = $f ? $f->format( 'd/m/Y' ) : $fin;
 					<?php echo esc_html( $grupo ); ?> · <?php asde_e( 'Área privada' ); ?>
 				</td></tr>
 				<tr><td style="padding:28px;font-size:15px;line-height:1.6;">
-					<p style="margin:0 0 16px;"><?php echo '' !== $nombre ? sprintf( asde_h( 'Hola, %s:' ), esc_html( $nombre ) ) : asde_h( 'Hola:' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+					<p style="margin:0 0 16px;"><?php echo wp_kses( '' !== $nombre ? sprintf( asde_h( 'Hola, %s:' ), esc_html( $nombre ) ) : asde_h( 'Hola:' ), asde_html_permitido() ); ?></p>
 					<?php if ( AvisoBaja::TESORERIA === $para ) : ?>
-						<p style="margin:0 0 16px;"><?php echo sprintf( asde_h( 'Se ha dado de baja en el CRM a <strong>%1$s</strong> (nº de socio/a %2$s) desde el <strong>%3$s</strong>.' ), esc_html( $persona ), esc_html( $socio ), esc_html( $fecha ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+						<p style="margin:0 0 16px;"><?php echo wp_kses( sprintf( asde_h( 'Se ha dado de baja en el CRM a <strong>%1$s</strong> (nº de socio/a %2$s) desde el <strong>%3$s</strong>.' ), esc_html( $persona ), esc_html( $socio ), esc_html( $fecha ) ), asde_html_permitido() ); ?></p>
 						<?php if ( '' !== $motivo ) : ?>
 							<p style="margin:0 0 16px;"><strong><?php asde_e( 'Motivo:' ); ?></strong> <?php echo esc_html( $motivo ); ?></p>
 						<?php endif; ?>
 						<?php if ( '' !== $familia ) : ?>
-							<p style="margin:0 0 16px;"><?php echo sprintf( asde_h( 'Es de la familia <strong>%s</strong>: desde la baja ya no cuenta en su cuota. Revisa si hay que ajustar algo en sus pagos.' ), esc_html( $familia ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+							<p style="margin:0 0 16px;"><?php echo wp_kses( sprintf( asde_h( 'Es de la familia <strong>%s</strong>: desde la baja ya no cuenta en su cuota. Revisa si hay que ajustar algo en sus pagos.' ), esc_html( $familia ) ), asde_html_permitido() ); ?></p>
 						<?php else : ?>
 							<p style="margin:0 0 16px;"><?php asde_e( 'No está en ninguna familia de Tesorería.' ); ?></p>
 						<?php endif; ?>
@@ -53,10 +53,10 @@ $fecha = $f ? $f->format( 'd/m/Y' ) : $fin;
 						</p>
 						<p style="margin:0;font-size:13px;color:<?php echo esc_attr( $col['atenuado'] ); ?>;"><?php asde_e( 'Te llega porque tienes la responsabilidad de Tesorería en el área privada del grupo. Para verlo tendrás que iniciar sesión.' ); ?></p>
 					<?php else : ?>
-						<p style="margin:0 0 16px;"><?php echo sprintf( asde_h( 'Te confirmamos que <strong>%1$s</strong> ha causado baja en el <strong>%2$s</strong> el %3$s.' ), esc_html( $persona ), esc_html( $grupo ), esc_html( $fecha ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+						<p style="margin:0 0 16px;"><?php echo wp_kses( sprintf( asde_h( 'Te confirmamos que <strong>%1$s</strong> ha causado baja en el <strong>%2$s</strong> el %3$s.' ), esc_html( $persona ), esc_html( $grupo ), esc_html( $fecha ) ), asde_html_permitido() ); ?></p>
 						<p style="margin:0 0 16px;"><?php asde_e( 'Desde ese día ya no cuenta como socio/a del grupo ni en las cuotas, y su acceso al área privada se cierra. Su ficha se conserva: si algún día vuelve, solo hay que darle de alta de nuevo.' ); ?></p>
 						<?php if ( '' !== $contacto ) : ?>
-							<p style="margin:0 0 16px;"><?php echo sprintf( asde_h( 'Si es un error o tienes cualquier duda, escríbenos a %s.' ), '<a href="mailto:' . esc_attr( $contacto ) . '" style="color:' . esc_attr( $col['primary'] ) . ';font-weight:600;">' . esc_html( $contacto ) . '</a>' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+							<p style="margin:0 0 16px;"><?php echo wp_kses( sprintf( asde_h( 'Si es un error o tienes cualquier duda, escríbenos a %s.' ), '<a href="mailto:' . esc_attr( $contacto ) . '" style="color:' . esc_attr( $col['primary'] ) . ';font-weight:600;">' . esc_html( $contacto ) . '</a>' ), asde_html_permitido() ); ?></p>
 						<?php else : ?>
 							<p style="margin:0 0 16px;"><?php asde_e( 'Si es un error o tienes cualquier duda, habla con la Secretaría del grupo.' ); ?></p>
 						<?php endif; ?>

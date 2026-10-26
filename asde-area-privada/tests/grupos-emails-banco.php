@@ -241,13 +241,13 @@ try {
 	$html = $t->paginacion();
 	$ok( str_contains( $html, 'Mostrando 26–50 de 60' ) && str_contains( $html, 'aria-current="page">2<' ) && str_contains( $html, 'name="ver" value="activas"' ), 'barra de paginación con la página actual y los filtros conservados' );
 	$ok( str_contains( $t->cabecera( 'nombre', 'Nombre' ), 'dir=desc' ) && str_contains( $t->cabecera( 'nombre', 'Nombre' ), '▲' ), 'la columna ordenada se puede invertir (▲ → desc)' );
-	$_GET = array( 'por_pagina' => '50' );
+	$_GET = array( 'por_pagina' => '50', '_asde_pp' => wp_create_nonce( 'asde_ap_por_pagina' ) );
 	new Tabla( array( 'n' => static fn( $f ) => $f['n'] ), 'n' );
 	$_GET = array();
 	$t2   = new Tabla( array( 'n' => static fn( $f ) => $f['n'] ), 'n', 'desc' );
 	$pag  = $t2->aplicar( $filas );
 	$ok( 50 === count( $pag ) && 60 === $pag[0]['n'], 'el tamaño elegido (50) se recuerda para el usuario; orden descendente por defecto' );
-	$_GET = array( 'por_pagina' => '33' );
+	$_GET = array( 'por_pagina' => '33', '_asde_pp' => wp_create_nonce( 'asde_ap_por_pagina' ) );
 	$t3   = new Tabla( array( 'n' => static fn( $f ) => $f['n'] ), 'n' );
 	$ok( 50 === count( $t3->aplicar( $filas ) ), 'solo se admiten tamaños de 5 en 5 hasta 50 (v0.31)' );
 	$_GET = array();

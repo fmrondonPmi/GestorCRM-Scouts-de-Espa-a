@@ -346,14 +346,14 @@ final class EventosView extends EventosBaseView {
 	public function exportar_compra(): void {
 		$e = EventosTable::obtener( (int) $this->get( 'evento' ) );
 		if ( ! $e || ! MenuEvento::puede_ver( $e, Ambito::actual() ) || ! wp_verify_nonce( $this->get( '_wpnonce' ), 'asde_menu_csv_' . $e['id'] ) ) {
-			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-area-privada' ), 403 );
+			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		$dia = in_array( $this->get( 'dia' ), MenuEvento::dias( $e ), true ) ? $this->get( 'dia' ) : '';
 		Logger::log( 'menu_compra_exportada', 'evento', (string) $e['id'] );
 		nocache_headers();
 		header( 'Content-Type: text/csv; charset=UTF-8' );
 		header( 'Content-Disposition: attachment; filename="compra-' . sanitize_file_name( EventosTable::numero( $e ) ) . '-' . wp_date( 'Ymd' ) . '.csv"' );
-		echo MenuEvento::csv( $e, $dia ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- es un fichero CSV, no HTML
+		echo MenuEvento::csv( $e, $dia ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- descarga CSV, no HTML
 		exit;
 	}
 
@@ -417,7 +417,7 @@ final class EventosView extends EventosBaseView {
 
 	public function handle_post(): void {
 		if ( ! Servicio::puede_entrar() ) {
-			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-area-privada' ), 403 );
+			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		$a      = Ambito::actual();
 		$accion = $this->post( 'asde_action' );

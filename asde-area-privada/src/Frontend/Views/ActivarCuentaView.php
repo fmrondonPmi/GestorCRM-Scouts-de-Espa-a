@@ -50,7 +50,7 @@ final class ActivarCuentaView extends View {
 		if ( ! $user ) {
 			return; // render() mostrará "enlace no válido".
 		}
-		if ( ! wp_verify_nonce( $this->post( '_wpnonce' ), 'asde_activar_' . $user_id ) ) {
+		if ( ! wp_verify_nonce( $this->post_nonce(), 'asde_activar_' . $user_id ) ) {
 			self::$error = asde_t( 'La sesión del formulario ha caducado. Vuelve a intentarlo.' );
 			return;
 		}

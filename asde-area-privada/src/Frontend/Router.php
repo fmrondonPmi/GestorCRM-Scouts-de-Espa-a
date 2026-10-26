@@ -163,13 +163,13 @@ final class Router {
 	}
 
 	/**
-	 * Los textos del plugin que ya estaban marcados con __() (dominio asde-area-privada) también salen en el
+	 * Los textos del plugin que ya estaban marcados con __() (dominio asde-scouts-de-espana-gestor-crm-para-grupos-scouts) también salen en el
 	 * idioma de la persona, salvo en las pantallas de wp-admin, que siguen en el idioma de WordPress.
 	 *
 	 * @param mixed $traduccion Lo que ha dado WordPress.
 	 */
 	public function traducir_gettext( $traduccion, string $original, string $dominio ) {
-		if ( 'asde-area-privada' !== $dominio || ( is_admin() && ! wp_doing_ajax() ) ) {
+		if ( 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' !== $dominio || ( is_admin() && ! wp_doing_ajax() ) ) {
 			return $traduccion;
 		}
 		$t = Traducciones::t( $original );
@@ -281,7 +281,7 @@ final class Router {
 			View::en_modal();
 			header( 'Content-Type: text/html; charset=utf-8' );
 			header( 'X-Robots-Tag: noindex, nofollow' );
-			echo ( new AyudaView( $key ) )->render(); // phpcs:ignore WordPress.Security.EscapeOutput
+			echo wp_kses( ( new AyudaView( $key ) )->render(), asde_html_permitido() );
 			exit;
 		}
 
@@ -292,7 +292,7 @@ final class Router {
 			$class = self::VIEWS[ $key ][1];
 			header( 'Content-Type: text/html; charset=utf-8' );
 			header( 'X-Robots-Tag: noindex, nofollow' );
-			echo ( new $class() )->render(); // phpcs:ignore WordPress.Security.EscapeOutput
+			echo wp_kses( ( new $class() )->render(), asde_html_permitido() );
 			exit;
 		}
 

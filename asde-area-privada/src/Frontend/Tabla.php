@@ -34,9 +34,13 @@ final class Tabla {
 		$this->orden = isset( $columnas[ $orden ] ) ? $orden : $orden_defecto;
 		$this->dir   = in_array( $dir, array( 'asc', 'desc' ), true ) ? $dir : $dir_defecto;
 
-		$pedido = isset( $_GET['por_pagina'] ) ? absint( $_GET['por_pagina'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification
-		self::guardar_por_pagina( $pedido );
-		$this->por_pagina = self::por_pagina_guardada();
+		// Solo se recuerda el tamaño si la petición viene del selector de la página (lleva su nonce); si no, vale para esta vista y no se guarda.
+		$pedido = isset( $_GET['por_pagina'] ) ? absint( $_GET['por_pagina'] ) : 0; // phpcs:ignore WordPress.Security.NonceVerification -- solo elige el tamaño de esta vista; guardarlo exige el nonce (abajo)
+		$firmado = isset( $_GET['_asde_pp'] ) && false !== wp_verify_nonce( sanitize_text_field( wp_unslash( $_GET['_asde_pp'] ) ), 'asde_ap_por_pagina' );
+		if ( $firmado ) {
+			self::guardar_por_pagina( $pedido );
+		}
+		$this->por_pagina = $firmado || ! in_array( $pedido, self::POR_PAGINA, true ) ? self::por_pagina_guardada() : $pedido;
 		$this->pagina     = max( 1, isset( $_GET['pag'] ) ? absint( $_GET['pag'] ) : 1 ); // phpcs:ignore WordPress.Security.NonceVerification
 	}
 

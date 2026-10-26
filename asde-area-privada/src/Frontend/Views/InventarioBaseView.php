@@ -26,7 +26,7 @@ abstract class InventarioBaseView extends View {
 
 	protected function denegar_post(): void {
 		if ( ! current_user_can( Servicio::CAP ) ) {
-			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-area-privada' ), 403 );
+			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 	}
 

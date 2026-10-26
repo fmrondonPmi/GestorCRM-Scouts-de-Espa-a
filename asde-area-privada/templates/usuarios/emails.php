@@ -59,7 +59,7 @@ $columnas = array(
 			<thead>
 				<tr>
 					<?php foreach ( $columnas as $col => $etiqueta ) : ?>
-						<th scope="col"<?php echo $tabla->aria_sort( $col ); // phpcs:ignore WordPress.Security.EscapeOutput ?>><?php echo $tabla->cabecera( $col, $etiqueta ); // phpcs:ignore WordPress.Security.EscapeOutput ?></th>
+						<th scope="col"<?php echo wp_kses( $tabla->aria_sort( $col ), asde_html_permitido() ); ?>><?php echo wp_kses( $tabla->cabecera( $col, $etiqueta ), asde_html_permitido() ); ?></th>
 					<?php endforeach; ?>
 					<th scope="col"><?php asde_e( 'Enviado a' ); ?></th>
 					<th scope="col"><span class="screen-reader-text"><?php asde_e( 'Acciones' ); ?></span></th>
@@ -88,6 +88,6 @@ $columnas = array(
 				<?php endforeach; ?>
 			</tbody>
 		</table>
-		<?php echo $tabla->paginacion(); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+		<?php echo wp_kses( $tabla->paginacion(), asde_html_permitido() ); ?>
 	<?php endif; ?>
 </section>

@@ -26,11 +26,11 @@ $col = Colores::para_email(); // Los colores elegidos en wp-admin → Colores (l
 					<?php echo esc_html( $grupo ); ?> · <?php asde_e( 'Área privada' ); ?>
 				</td></tr>
 				<tr><td style="padding:28px;font-size:15px;line-height:1.6;">
-					<p style="margin:0 0 16px;"><?php echo '' !== $nombre ? sprintf( asde_h( 'Hola, %s:' ), esc_html( $nombre ) ) : asde_h( 'Hola:' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
-					<p style="margin:0 0 16px;"><?php echo sprintf( asde_h( 'Hemos revisado tu solicitud de acceso al área privada del <strong>%s</strong> y, con los datos que nos has enviado, <strong>no hemos podido darte acceso</strong>.' ), esc_html( $grupo ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+					<p style="margin:0 0 16px;"><?php echo wp_kses( '' !== $nombre ? sprintf( asde_h( 'Hola, %s:' ), esc_html( $nombre ) ) : asde_h( 'Hola:' ), asde_html_permitido() ); ?></p>
+					<p style="margin:0 0 16px;"><?php echo wp_kses( sprintf( asde_h( 'Hemos revisado tu solicitud de acceso al área privada del <strong>%s</strong> y, con los datos que nos has enviado, <strong>no hemos podido darte acceso</strong>.' ), esc_html( $grupo ) ), asde_html_permitido() ); ?></p>
 					<p style="margin:0 0 16px;"><?php asde_e( 'Suele ser porque algún dato no coincide con la ficha del socio/a o porque la ficha no está al día. Si crees que es un error, o quieres volver a intentarlo, ponte en contacto con nosotros:' ); ?></p>
 					<?php if ( '' !== $contacto ) : ?>
-						<p style="margin:0 0 16px;"><?php echo sprintf( asde_h( 'Escribe a %s, con el nombre del socio/a y tu relación con él o ella (madre, padre, tutor/a o el propio socio/a).' ), '<a href="mailto:' . esc_attr( $contacto ) . '" style="color:' . esc_attr( $col['primary'] ) . ';font-weight:600;">' . esc_html( $contacto ) . '</a>' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+						<p style="margin:0 0 16px;"><?php echo wp_kses( sprintf( asde_h( 'Escribe a %s, con el nombre del socio/a y tu relación con él o ella (madre, padre, tutor/a o el propio socio/a).' ), '<a href="mailto:' . esc_attr( $contacto ) . '" style="color:' . esc_attr( $col['primary'] ) . ';font-weight:600;">' . esc_html( $contacto ) . '</a>' ), asde_html_permitido() ); ?></p>
 					<?php else : ?>
 						<p style="margin:0 0 16px;"><?php asde_e( 'Habla con la Secretaría de tu grupo, diciéndole el nombre del socio/a y tu relación con él o ella (madre, padre, tutor/a o el propio socio/a).' ); ?></p>
 					<?php endif; ?>

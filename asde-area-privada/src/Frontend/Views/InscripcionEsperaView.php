@@ -110,7 +110,7 @@ final class InscripcionEsperaView extends View {
 		if ( ! in_array( $accion, array( 'espera_inscribir', 'espera_confirmar', 'espera_entrar', 'espera_mantener', 'espera_borrar', 'espera_enlaces' ), true ) ) {
 			return;
 		}
-		if ( ! wp_verify_nonce( $this->post( '_wpnonce' ), 'asde_' . $accion ) ) {
+		if ( ! wp_verify_nonce( $this->post_nonce(), 'asde_' . $accion ) ) {
 			self::$estado = array(
 				'modo'    => 'espera_enlaces' === $accion || 'espera_inscribir' === $accion ? 'formulario' : 'invalido',
 				'errores' => array( asde_t( 'La sesión del formulario ha caducado. Vuelve a intentarlo.' ) ),

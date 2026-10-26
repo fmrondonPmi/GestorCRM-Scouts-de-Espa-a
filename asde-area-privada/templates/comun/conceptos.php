@@ -43,10 +43,10 @@ $fila = static function ( string $i, array $c, bool $editable ) use ( $campo ): 
 		</thead>
 		<tbody data-asde-conceptos-filas>
 			<?php foreach ( array_values( $conceptos ) as $i => $c ) : ?>
-				<?php echo $fila( (string) $i, $c, $editable ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+				<?php echo wp_kses( $fila( (string) $i, $c, $editable ), asde_html_permitido() ); ?>
 			<?php endforeach; ?>
 			<?php if ( $editable && count( $conceptos ) < Organizacion::MAX_CONCEPTOS ) : ?>
-				<?php echo $fila( (string) count( $conceptos ), array(), true ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+				<?php echo wp_kses( $fila( (string) count( $conceptos ), array(), true ), asde_html_permitido() ); ?>
 			<?php endif; ?>
 			<?php if ( ! $conceptos && ! $editable ) : ?>
 				<tr><td colspan="3" class="asde-muted"><?php asde_e( 'Ningún otro concepto.' ); ?></td></tr>
@@ -54,7 +54,7 @@ $fila = static function ( string $i, array $c, bool $editable ) use ( $campo ): 
 		</tbody>
 	</table>
 	<?php if ( $editable ) : ?>
-		<template data-asde-conceptos-plantilla><?php echo $fila( '__i__', array(), true ); // phpcs:ignore WordPress.Security.EscapeOutput ?></template>
+		<template data-asde-conceptos-plantilla><?php echo wp_kses( $fila( '__i__', array(), true ), asde_html_permitido() ); ?></template>
 		<p class="asde-conceptos__acciones">
 			<button type="button" class="button" data-asde-conceptos-anadir hidden><?php asde_e( 'Añadir concepto' ); ?></button>
 			<span class="asde-help"><?php asde_e( 'Para quitar un concepto, deja su nombre vacío. Un importe negativo es un descuento. Máximo' ); ?> <?php echo (int) Organizacion::MAX_CONCEPTOS; ?>.</span>

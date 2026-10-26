@@ -60,14 +60,14 @@ $adulto    = $s['adulto'] || ( $p && $p->es_adulto_voluntario() );
 					<td data-label="<?php echo esc_attr( asde_a( 'Escrito' ) ); ?>">
 						<?php
 						$escrito = Solicitudes::POR_NOMBRE === $s['via'] ? $d['nombre_menor'] : ( $tutor ? '' : $d['nombre'] );
-						echo '' !== $escrito ? $marca( $c['nombre_socio'] ) . esc_html( $escrito ) : '<span class="asde-muted">—</span>'; // phpcs:ignore WordPress.Security.EscapeOutput
+						echo wp_kses( '' !== $escrito ? $marca( $c['nombre_socio'] ) . esc_html( $escrito ) : '<span class="asde-muted">—</span>', asde_html_permitido() );
 						?>
 					</td>
 					<td data-label="<?php echo esc_attr( asde_a( 'CRM' ) ); ?>">
-						<a href="<?php echo esc_url( $url_ficha ); ?>" data-asde-modal><?php echo esc_html( $p->nombre_completo() ); ?></a><?php echo \AsdeBalears\AreaPrivada\Socios\Numeros::compacto( $p ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+						<a href="<?php echo esc_url( $url_ficha ); ?>" data-asde-modal><?php echo esc_html( $p->nombre_completo() ); ?></a><?php echo wp_kses( \AsdeBalears\AreaPrivada\Socios\Numeros::compacto( $p ), asde_html_permitido() ); ?>
 						<?php
 						foreach ( $p->secciones as $sec ) {
-							echo Secciones::badge( $sec ); // phpcs:ignore WordPress.Security.EscapeOutput
+							echo wp_kses( Secciones::badge( $sec ), asde_html_permitido() );
 						}
 						?>
 						<br><span class="asde-help"><?php echo null === $p->edad() ? '' : sprintf( esc_html( asde_t( '%d años' ) ), (int) $p->edad() ); ?></span>
@@ -79,9 +79,9 @@ $adulto    = $s['adulto'] || ( $p && $p->es_adulto_voluntario() );
 						<?php if ( Solicitudes::POR_ENLACE === $s['via'] ) : ?>
 							<?php asde_e( 'Alta con el enlace para scouters: el DNI o NIE es el de esta ficha de Scouter o Voluntariado.' ); ?>
 						<?php elseif ( Solicitudes::POR_NOMBRE === $s['via'] ) : ?>
-							<?php echo $marca( (bool) $c['nacimiento'] ); // phpcs:ignore WordPress.Security.EscapeOutput ?> <?php asde_e( 'Fecha de nacimiento y nombre y apellidos (menor de 14 años sin documento en el CRM).' ); ?>
+							<?php echo wp_kses( $marca( (bool) $c['nacimiento'] ), asde_html_permitido() ); ?> <?php asde_e( 'Fecha de nacimiento y nombre y apellidos (menor de 14 años sin documento en el CRM).' ); ?>
 						<?php else : ?>
-							<?php echo $marca( (bool) $c['nacimiento'] ); // phpcs:ignore WordPress.Security.EscapeOutput ?> <?php asde_e( 'El nº de documento y la fecha de nacimiento coinciden con la ficha.' ); ?>
+							<?php echo wp_kses( $marca( (bool) $c['nacimiento'] ), asde_html_permitido() ); ?> <?php asde_e( 'El nº de documento y la fecha de nacimiento coinciden con la ficha.' ); ?>
 						<?php endif; ?>
 					</td>
 				</tr>
@@ -91,7 +91,7 @@ $adulto    = $s['adulto'] || ( $p && $p->es_adulto_voluntario() );
 						<td data-label="<?php echo esc_attr( asde_a( 'Escrito' ) ); ?>" colspan="2">
 							<?php echo esc_html( implode( ', ', array_map( array( \AsdeBalears\AreaPrivada\Install\Roles::class, 'label' ), (array) ( $d['roles_pedidos'] ?? array() ) ) ) ?: '—' ); ?>
 							<?php foreach ( (array) ( $d['secciones_pedidas'] ?? array() ) as $sec ) : ?>
-								<?php echo Secciones::badge( (string) $sec ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+								<?php echo wp_kses( Secciones::badge( (string) $sec ), asde_html_permitido() ); ?>
 							<?php endforeach; ?>
 							<?php if ( ! empty( $d['cuenta_creada'] ) ) : ?>
 								<br><span class="asde-help"><?php asde_e( 'Su cuenta de scouter ya está creada (le llegó la activación al email de su ficha). Revisa sus secciones y confirma las responsabilidades que pide, o cierra la solicitud si no hay nada que cambiar.' ); ?></span>
@@ -103,7 +103,7 @@ $adulto    = $s['adulto'] || ( $p && $p->es_adulto_voluntario() );
 				<?php endif; ?>
 				<tr>
 					<th scope="row"><?php asde_e( 'Quién pide' ); ?></th>
-					<td data-label="<?php echo esc_attr( asde_a( 'Escrito' ) ); ?>"><?php echo ( $tutor ? $marca( $c['tutor'] > 0 ) : '' ) . esc_html( $d['nombre'] ); // phpcs:ignore WordPress.Security.EscapeOutput ?></td>
+					<td data-label="<?php echo esc_attr( asde_a( 'Escrito' ) ); ?>"><?php echo wp_kses( ( $tutor ? $marca( $c['tutor'] > 0 ) : '' ) . esc_html( $d['nombre'] ), asde_html_permitido() ); ?></td>
 					<td data-label="<?php echo esc_attr( asde_a( 'CRM' ) ); ?>">
 						<?php if ( $tutor ) : ?>
 							<?php foreach ( array( 1, 2 ) as $n ) : ?>
@@ -122,7 +122,7 @@ $adulto    = $s['adulto'] || ( $p && $p->es_adulto_voluntario() );
 				</tr>
 				<tr>
 					<th scope="row"><?php asde_e( 'Email' ); ?></th>
-					<td data-label="<?php echo esc_attr( asde_a( 'Escrito' ) ); ?>"><?php echo ( null !== $c['email_en'] ? $marca( true ) : '' ) . esc_html( $d['email'] ); // phpcs:ignore WordPress.Security.EscapeOutput ?></td>
+					<td data-label="<?php echo esc_attr( asde_a( 'Escrito' ) ); ?>"><?php echo wp_kses( ( null !== $c['email_en'] ? $marca( true ) : '' ) . esc_html( $d['email'] ), asde_html_permitido() ); ?></td>
 					<td data-label="<?php echo esc_attr( asde_a( 'CRM' ) ); ?>">
 						<?php if ( null !== $c['email_en'] ) : ?>
 							<?php asde_e( 'Ya está en la ficha:' ); ?> <?php echo esc_html( Usuarios::etiqueta_campo_email( $c['email_en'] ) ); ?>.
@@ -176,7 +176,7 @@ $adulto    = $s['adulto'] || ( $p && $p->es_adulto_voluntario() );
 							<li>
 								<fieldset>
 										<legend><?php asde_e( '¿Quién pide el acceso?' ); ?></legend>
-									<p class="asde-muted"><?php asde_e( 'Esta familia ya tiene' ); ?> <?php echo 1 === count( $familiares ) ? esc_html( asde_t( "una cuenta" ) ) : esc_html( asde_t( "dos cuentas" ) ); ?>: <?php echo implode( ' y ', array_map( static fn( $f ) => '<strong>' . esc_html( $f->user_login ) . '</strong>' . ( '' !== ( $emails_familiares[ $f->user_login ] ?? '' ) ? ' (' . esc_html( $emails_familiares[ $f->user_login ] ) . ')' : '' ), $familiares ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?>.</p>
+									<p class="asde-muted"><?php asde_e( 'Esta familia ya tiene' ); ?> <?php echo 1 === count( $familiares ) ? esc_html( asde_t( "una cuenta" ) ) : esc_html( asde_t( "dos cuentas" ) ); ?>: <?php echo wp_kses( implode( ' y ', array_map( static fn( $f ) => '<strong>' . esc_html( $f->user_login ) . '</strong>' . ( '' !== ( $emails_familiares[ $f->user_login ] ?? '' ) ? ' (' . esc_html( $emails_familiares[ $f->user_login ] ) . ')' : '' ), $familiares ) ), asde_html_permitido() ); ?>.</p>
 										<?php if ( $propuesta['puede_nueva'] ) : ?>
 											<label class="asde-choice">
 												<input type="radio" name="modo" value="<?php echo esc_attr( SolicitudService::MODO_NUEVA ); ?>" <?php checked( SolicitudService::MODO_NUEVA, $propuesta['modo'] ); ?>>
@@ -238,9 +238,9 @@ $adulto    = $s['adulto'] || ( $p && $p->es_adulto_voluntario() );
 					<label class="asde-choice">
 						<input type="checkbox" name="avisar" value="1" checked>
 						<span><?php
-							echo '' !== $contacto
-								? sprintf( wp_kses_post( asde_h( 'Avisar por email a quien la pidió (%1$s). El texto es genérico: no lleva el motivo y le dice que escriba a %2$s.' ) ), esc_html( Contacto::enmascarar( (string) $d['email'] ) ), esc_html( $contacto ) ) // phpcs:ignore WordPress.Security.EscapeOutput
-								: sprintf( wp_kses_post( asde_h( 'Avisar por email a quien la pidió (%s). El texto es genérico: no lleva el motivo.' ) ), esc_html( Contacto::enmascarar( (string) $d['email'] ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput
+							echo wp_kses( '' !== $contacto
+								? sprintf( wp_kses_post( asde_h( 'Avisar por email a quien la pidió (%1$s). El texto es genérico: no lleva el motivo y le dice que escriba a %2$s.' ) ), esc_html( Contacto::enmascarar( (string) $d['email'] ) ), esc_html( $contacto ) ) 
+								: sprintf( wp_kses_post( asde_h( 'Avisar por email a quien la pidió (%s). El texto es genérico: no lleva el motivo.' ) ), esc_html( Contacto::enmascarar( (string) $d['email'] ) ) ), asde_html_permitido() );
 							?></span>
 					</label>
 					<?php if ( '' === $contacto ) : ?>

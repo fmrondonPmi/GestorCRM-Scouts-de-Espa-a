@@ -26,7 +26,7 @@ $col = Colores::para_email();
 				</td></tr>
 				<tr><td style="padding:28px;font-size:15px;line-height:1.6;">
 					<p style="margin:0 0 16px;"><?php asde_e( 'Hola:' ); ?></p>
-					<p style="margin:0 0 16px;"><?php echo sprintf( asde_h( 'La oficina de <strong>%s</strong> te invita a dar de alta tu grupo en el área privada.' ), esc_html( $organizacion ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+					<p style="margin:0 0 16px;"><?php echo wp_kses( sprintf( asde_h( 'La oficina de <strong>%s</strong> te invita a dar de alta tu grupo en el área privada.' ), esc_html( $organizacion ) ), asde_html_permitido() ); ?></p>
 					<p style="margin:0 0 24px;text-align:center;"><a href="<?php echo esc_url( $url ); ?>" style="display:inline-block;background:<?php echo esc_attr( $col['primary'] ); ?>;color:<?php echo esc_attr( $col['on_primary'] ); ?>;text-decoration:none;font-weight:600;padding:12px 24px;border-radius:4px;"><?php asde_e( 'Dar de alta el grupo' ); ?></a></p>
 					<p style="margin:0 0 16px;"><?php echo esc_html( sprintf( asde_t( 'El enlace es de un solo uso y vale %d días. Necesitarás el usuario y la contraseña del CRM de tu grupo.' ), $dias ) ); ?></p>
 					<p style="margin:0;font-size:13px;color:<?php echo esc_attr( $col['atenuado'] ); ?>;"><?php asde_e( 'Si no esperabas este correo, puedes ignorarlo.' ); ?></p>

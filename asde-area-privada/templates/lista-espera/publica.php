@@ -127,10 +127,10 @@ $ya_estas = static function ( string $volver ): void {
 			<dt><?php asde_e( 'Teléfono' ); ?></dt><dd><?php echo esc_html( $fila['datos']['telefono'] ); ?></dd>
 			<dt><?php asde_e( 'Email' ); ?></dt><dd><?php echo esc_html( $fila['datos']['email'] ); ?></dd>
 			<?php if ( '' !== $fila['datos']['observaciones'] ) : ?>
-				<dt><?php asde_e( 'Observaciones' ); ?></dt><dd><?php echo nl2br( esc_html( $fila['datos']['observaciones'] ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></dd>
+				<dt><?php asde_e( 'Observaciones' ); ?></dt><dd><?php echo wp_kses( nl2br( esc_html( $fila['datos']['observaciones'] ) ), asde_html_permitido() ); ?></dd>
 			<?php endif; ?>
 			<?php foreach ( $fila['extra'] as $x ) : ?>
-				<dt><?php echo esc_html( $x['etiqueta'] ); ?></dt><dd><?php echo nl2br( esc_html( $x['valor'] ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></dd>
+				<dt><?php echo esc_html( $x['etiqueta'] ); ?></dt><dd><?php echo wp_kses( nl2br( esc_html( $x['valor'] ) ), asde_html_permitido() ); ?></dd>
 			<?php endforeach; ?>
 			<dt><?php asde_e( 'En la lista desde' ); ?></dt><dd><?php echo esc_html( $fecha( $fila['confirmada_en'] ?: $fila['creada'] ) ); ?></dd>
 			<?php if ( $fila['caduca'] ) : ?>

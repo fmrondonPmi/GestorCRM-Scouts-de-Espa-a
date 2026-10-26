@@ -27,6 +27,6 @@ defined( 'ABSPATH' ) || exit;
 		</ul>
 	</nav>
 	<div class="asde-hoja" data-asde-hoja="<?php echo esc_attr( $activa ); ?>">
-		<?php echo $contenido; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML de la vista de la hoja, ya escapado. ?>
+		<?php echo wp_kses( $contenido, asde_html_permitido() ); ?>
 	</div>
 </div>

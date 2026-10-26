@@ -75,7 +75,7 @@ $reparto  = static function ( array $p ): string {
 						<?php if ( $editable ) : ?>
 							<td data-label="<?php echo esc_attr( asde_a( 'Quitar' ) ); ?>">
 								<form method="post" class="asde-inline-form">
-									<?php echo $campos( 'evento_partida_quitar' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+									<?php echo wp_kses( $campos( 'evento_partida_quitar' ), asde_html_permitido() ); ?>
 									<input type="hidden" name="partida" value="<?php echo (int) $p['id']; ?>">
 									<button type="submit" class="asde-btn-link"><?php asde_e( 'Quitar' ); ?></button>
 								</form>
@@ -94,7 +94,7 @@ $reparto  = static function ( array $p ): string {
 	<section class="asde-card">
 		<h3 class="asde-card__title"><?php asde_e( 'Añadir una partida' ); ?></h3>
 		<form method="post" class="asde-form asde-form--compacta">
-			<?php echo $campos( 'evento_partida_anadir' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+			<?php echo wp_kses( $campos( 'evento_partida_anadir' ), asde_html_permitido() ); ?>
 			<fieldset>
 				<legend class="screen-reader-text"><?php asde_e( 'Gasto o ingreso' ); ?></legend>
 				<label class="asde-choice asde-choice--inline"><input type="radio" name="tipo" value="gasto" checked><span><?php asde_e( 'Gasto' ); ?></span></label>
@@ -137,7 +137,7 @@ $reparto  = static function ( array $p ): string {
 		$viajan = max( 0, Normativa::participantes( $e ) ) + (int) $e['equipo_previsto'];
 		?>
 		<form method="post" class="asde-form asde-form--compacta">
-			<?php echo $campos( 'evento_autobuses' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+			<?php echo wp_kses( $campos( 'evento_autobuses' ), asde_html_permitido() ); ?>
 			<p class="asde-form__fila">
 				<label><?php asde_e( 'Personas que viajan' ); ?> <input type="number" name="personas" value="<?php echo (int) $viajan; ?>" min="1" max="9999" inputmode="numeric" required></label>
 				<label><?php asde_e( 'Plazas de cada autobús' ); ?> <input type="number" name="plazas" value="<?php echo (int) Presupuesto::PLAZAS_AUTOBUS; ?>" min="1" max="200" inputmode="numeric" required></label>
@@ -151,7 +151,7 @@ $reparto  = static function ( array $p ): string {
 	<section class="asde-card">
 		<h3 class="asde-card__title"><?php asde_e( 'Previsión' ); ?></h3>
 		<form method="post" class="asde-form asde-form--compacta">
-			<?php echo $campos( 'evento_prevision' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+			<?php echo wp_kses( $campos( 'evento_prevision' ), asde_html_permitido() ); ?>
 			<p class="asde-form__fila">
 				<label><?php asde_e( 'Personas del equipo previstas' ); ?> <input type="number" name="equipo_previsto" value="<?php echo (int) $e['equipo_previsto']; ?>" min="0" max="999" inputmode="numeric"></label>
 				<label><?php asde_e( 'Margen del fondo de emergencia (%)' ); ?> <input type="text" name="margen_pct" value="<?php echo esc_attr( number_format( $e['margen_pct'], 2, ',', '' ) ); ?>" inputmode="decimal" size="6"></label>
@@ -185,7 +185,7 @@ $reparto  = static function ( array $p ): string {
 			<tbody>
 				<?php foreach ( $calculo['precios'] as $s => $precio ) : ?>
 					<tr>
-						<td data-label="<?php echo esc_attr( asde_a( 'Sección' ) ); ?>"><?php echo Secciones::badge( (string) $s ); // phpcs:ignore WordPress.Security.EscapeOutput ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Sección' ) ); ?>"><?php echo wp_kses( Secciones::badge( (string) $s ), asde_html_permitido() ); ?></td>
 						<td data-label="<?php echo esc_attr( asde_a( 'Participantes previstos' ) ); ?>"><?php echo (int) ( $calculo['previstos'][ $s ] ?? 0 ); ?></td>
 						<td data-label="<?php echo esc_attr( asde_a( 'Coste por participante' ) ); ?>"><?php echo esc_html( Calculadora::euros( (float) ( $calculo['costes'][ $s ] ?? 0 ) ) ); ?></td>
 						<td data-label="<?php echo esc_attr( asde_a( 'Precio' ) ); ?>"><strong><?php echo esc_html( Calculadora::euros( (float) $precio ) ); ?></strong></td>
@@ -218,6 +218,6 @@ $reparto  = static function ( array $p ): string {
 	}
 	?>
 	<?php if ( $botones ) : ?>
-		<p class="asde-actions"><?php echo implode( ' ', $botones ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+		<p class="asde-actions"><?php echo wp_kses( implode( ' ', $botones ), asde_html_permitido() ); ?></p>
 	<?php endif; ?>
 </section>

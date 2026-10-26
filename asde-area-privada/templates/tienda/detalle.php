@@ -45,7 +45,7 @@ $form    = static function ( string $accion, string $boton, string $clase = 'asd
 	</header>
 	<p>
 		<?php if ( $persona ) : ?>
-			<a href="<?php echo esc_url( $url_ficha ); ?>" data-asde-modal><?php echo esc_html( $persona->nombre_completo() ); ?></a><?php echo \AsdeBalears\AreaPrivada\Socios\Numeros::compacto( $persona ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+			<a href="<?php echo esc_url( $url_ficha ); ?>" data-asde-modal><?php echo esc_html( $persona->nombre_completo() ); ?></a><?php echo wp_kses( \AsdeBalears\AreaPrivada\Socios\Numeros::compacto( $persona ), asde_html_permitido() ); ?>
 		<?php else : ?>
 			<?php if ( '' === $p['socio'] ) : ?>
 				<?php $inv = \AsdeBalears\AreaPrivada\Tienda\PedidosTable::invitado( $p ); ?>
@@ -59,7 +59,7 @@ $form    = static function ( string $accion, string $boton, string $clase = 'asd
 		<?php endif; ?>
 		<?php
 		foreach ( $p['secciones'] as $s ) {
-			echo Secciones::badge( $s ); // phpcs:ignore WordPress.Security.EscapeOutput
+			echo wp_kses( Secciones::badge( $s ), asde_html_permitido() );
 		}
 		?>
 	</p>
@@ -82,7 +82,7 @@ $form    = static function ( string $accion, string $boton, string $clase = 'asd
 			<?php if ( null !== $p['pago_en'] ) : ?>
 				<br><?php echo esc_html( sprintf( asde_t( '%s en %s el %s' ), Calculadora::euros( (float) $p['pago_importe'] ), mb_strtolower( asde_t( PedidosTable::METODOS[ $p['pago_metodo'] ] ?? $p['pago_metodo'] ) ), $fecha( $p['pago_fecha'] ) ) ); ?><?php echo '' !== $p['pago_ref'] ? esc_html( ' · ' . $p['pago_ref'] ) : ''; ?>
 				<span class="asde-muted"><?php echo esc_html( $cuando( asde_t( 'Validado por %1$s el %2$s' ), asde_t( 'Validado el %2$s' ), (int) $p['pago_por'], $fecha( $p['pago_en'] ) ) ); ?></span>
-				<?php echo Servicio::puede_pagar( $p ) ? $form( 'uniforme_deshacer_pago', esc_html( asde_t( 'Deshacer' ) ), 'asde-btn-link', esc_html( asde_t( '¿Deshacer el pago de este pedido?' ) ) ) : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?>
+				<?php echo wp_kses( Servicio::puede_pagar( $p ) ? $form( 'uniforme_deshacer_pago', esc_html( asde_t( 'Deshacer' ) ), 'asde-btn-link', esc_html( asde_t( '¿Deshacer el pago de este pedido?' ) ) ) : '', asde_html_permitido() ); ?>
 			<?php elseif ( $activo && Servicio::puede_pagar( $p ) ) : ?>
 				<form method="post" class="asde-form asde-form--compacta">
 					<?php wp_nonce_field( 'asde_uniforme_' . $p['id'] ); ?>
@@ -120,7 +120,7 @@ $form    = static function ( string $accion, string $boton, string $clase = 'asd
 			<?php if ( null !== $p['pedido_en'] ) : ?>
 				<br><?php echo esc_html( '«' . ( $del_inv ? asde_t( PedidosTable::REF_INVENTARIO ) : $p['pedido_ref'] ) . '»' ); ?>
 				<span class="asde-muted"><?php echo esc_html( $cuando( asde_t( 'por %1$s el %2$s' ), asde_t( 'el %2$s' ), (int) $p['pedido_por'], $fecha( $p['pedido_en'] ) ) ); ?></span>
-				<?php echo ! $del_inv && Servicio::puede_pedir( $p ) ? $form( 'uniforme_deshacer_pedido', esc_html( asde_t( 'Deshacer' ) ), 'asde-btn-link', esc_html( asde_t( '¿Quitar este pedido del pedido del grupo?' ) ) ) : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?>
+				<?php echo wp_kses( ! $del_inv && Servicio::puede_pedir( $p ) ? $form( 'uniforme_deshacer_pedido', esc_html( asde_t( 'Deshacer' ) ), 'asde-btn-link', esc_html( asde_t( '¿Quitar este pedido del pedido del grupo?' ) ) ) : '', asde_html_permitido() ); ?>
 			<?php elseif ( $activo && Servicio::puede_pedir( $p ) ) : ?>
 				<form method="post" class="asde-form asde-form--compacta">
 					<?php wp_nonce_field( 'asde_uniforme_' . $p['id'] ); ?>
@@ -145,11 +145,11 @@ $form    = static function ( string $accion, string $boton, string $clase = 'asd
 			<strong><?php asde_e( 'Entregado' ); ?></strong> <span class="asde-muted"><?php asde_e( '(el grupo)' ); ?></span>
 			<?php if ( null !== $p['entregado_en'] ) : ?>
 				<span class="asde-muted"><?php echo esc_html( $cuando( asde_t( 'por %1$s el %2$s' ), asde_t( 'el %2$s' ), (int) $p['entregado_por'], $fecha( $p['entregado_en'] ) ) ); ?></span>
-				<?php echo Servicio::puede_entregar( $p, $ambito ) ? $form( 'uniforme_deshacer_entrega', esc_html( asde_t( 'Deshacer' ) ), 'asde-btn-link', esc_html( asde_t( '¿Deshacer la entrega? También se borra la confirmación del socio/a, si la había.' ) ) ) : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?>
+				<?php echo wp_kses( Servicio::puede_entregar( $p, $ambito ) ? $form( 'uniforme_deshacer_entrega', esc_html( asde_t( 'Deshacer' ) ), 'asde-btn-link', esc_html( asde_t( '¿Deshacer la entrega? También se borra la confirmación del socio/a, si la había.' ) ) ) : '', asde_html_permitido() ); ?>
 			<?php elseif ( $activo && null !== $p['pedido_en'] && \AsdeBalears\AreaPrivada\Tienda\Proveedor::esperando( $p ) ) : ?>
 				<br><span class="asde-help asde-help--warning"><?php asde_e( 'Todavía no ha llegado del proveedor: se podrá entregar cuando Coordinación marque su pedido como recibido.' ); ?></span>
 			<?php elseif ( $activo && Servicio::puede_entregar( $p, $ambito ) ) : ?>
-				<br><?php echo $form( 'uniforme_entregar', esc_html( asde_t( 'Marcar como entregado' ) ), 'button' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+				<br><?php echo wp_kses( $form( 'uniforme_entregar', esc_html( asde_t( 'Marcar como entregado' ) ), 'button' ), asde_html_permitido() ); ?>
 				<?php if ( null === $p['pedido_en'] ) : ?>
 					<span class="asde-help asde-help--warning"><?php asde_e( 'No consta en ningún pedido del grupo.' ); ?></span>
 				<?php endif; ?>

@@ -35,8 +35,8 @@ final class EntornoPage {
 	public function add_menu(): void {
 		add_submenu_page(
 			self::PADRE,
-			__( 'Instalación y entorno', 'asde-area-privada' ),
-			__( 'Instalación y entorno', 'asde-area-privada' ),
+			__( 'Instalación y entorno', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+			__( 'Instalación y entorno', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 			self::CAPABILITY,
 			self::SLUG,
 			array( $this, 'render' )
@@ -51,16 +51,16 @@ final class EntornoPage {
 		}
 		printf(
 			'<div class="notice notice-info"><p><strong>%s</strong> %s <a class="button button-primary" href="%s">%s</a></p></div>',
-			esc_html__( 'Área privada de los Grupos Scouts:', 'asde-area-privada' ),
-			esc_html__( 'falta preparar el entorno y dar de alta el grupo.', 'asde-area-privada' ),
+			esc_html__( 'Área privada de los Grupos Scouts:', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+			esc_html__( 'falta preparar el entorno y dar de alta el grupo.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 			esc_url( self::url() ),
-			esc_html__( 'Instalación y entorno', 'asde-area-privada' )
+			esc_html__( 'Instalación y entorno', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' )
 		);
 	}
 
 	public function handle_generar(): void {
 		if ( ! current_user_can( self::CAPABILITY ) ) {
-			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-area-privada' ), 403 );
+			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		check_admin_referer( self::ACCION_GENERAR );
 		$marcadas = array();
@@ -75,7 +75,7 @@ final class EntornoPage {
 	/** Email de prueba a la propia cuenta de quien lo pide. */
 	public function handle_email(): void {
 		if ( ! current_user_can( self::CAPABILITY ) ) {
-			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-area-privada' ), 403 );
+			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		check_admin_referer( self::ACCION_EMAIL );
 		$user  = wp_get_current_user();
@@ -116,18 +116,18 @@ final class EntornoPage {
 		$cuenta   = array_count_values( array_column( $estado, 0 ) );
 		?>
 		<div class="wrap asde-entorno">
-			<h1><?php esc_html_e( 'Instalación y entorno del área privada', 'asde-area-privada' ); ?></h1>
-			<p><?php esc_html_e( 'Deja este WordPress listo para el área privada de los Grupos Scouts: tablas, roles, páginas, el acceso en el menú, tareas programadas y, si lo marcas, los ajustes del sitio que hagan falta. Se puede pulsar las veces que quieras: solo crea o repara lo que falta, nunca borra nada ni toca el contenido de la web.', 'asde-area-privada' ); ?></p>
+			<h1><?php esc_html_e( 'Instalación y entorno del área privada', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h1>
+			<p><?php esc_html_e( 'Deja este WordPress listo para el área privada de los Grupos Scouts: tablas, roles, páginas, el acceso en el menú, tareas programadas y, si lo marcas, los ajustes del sitio que hagan falta. Se puede pulsar las veces que quieras: solo crea o repara lo que falta, nunca borra nada ni toca el contenido de la web.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 
 			<?php if ( is_array( $informe ) ) : ?>
 				<?php if ( $informe['hecho'] ) : ?>
-					<div class="notice notice-success"><p><strong><?php esc_html_e( 'Hecho:', 'asde-area-privada' ); ?></strong></p><ul class="asde-entorno__lista"><?php foreach ( $informe['hecho'] as $linea ) : ?><li><?php echo esc_html( $linea ); ?></li><?php endforeach; ?></ul></div>
+					<div class="notice notice-success"><p><strong><?php esc_html_e( 'Hecho:', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></strong></p><ul class="asde-entorno__lista"><?php foreach ( $informe['hecho'] as $linea ) : ?><li><?php echo esc_html( $linea ); ?></li><?php endforeach; ?></ul></div>
 				<?php endif; ?>
 				<?php if ( $informe['errores'] ) : ?>
-					<div class="notice notice-error"><p><strong><?php esc_html_e( 'No se ha podido:', 'asde-area-privada' ); ?></strong></p><ul class="asde-entorno__lista"><?php foreach ( $informe['errores'] as $linea ) : ?><li><?php echo esc_html( $linea ); ?></li><?php endforeach; ?></ul></div>
+					<div class="notice notice-error"><p><strong><?php esc_html_e( 'No se ha podido:', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></strong></p><ul class="asde-entorno__lista"><?php foreach ( $informe['errores'] as $linea ) : ?><li><?php echo esc_html( $linea ); ?></li><?php endforeach; ?></ul></div>
 				<?php endif; ?>
 				<?php if ( $informe['avisos'] ) : ?>
-					<div class="notice notice-warning"><p><strong><?php esc_html_e( 'Queda en tus manos:', 'asde-area-privada' ); ?></strong></p><ul class="asde-entorno__lista"><?php foreach ( $informe['avisos'] as $linea ) : ?><li><?php echo esc_html( $linea ); ?></li><?php endforeach; ?></ul></div>
+					<div class="notice notice-warning"><p><strong><?php esc_html_e( 'Queda en tus manos:', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></strong></p><ul class="asde-entorno__lista"><?php foreach ( $informe['avisos'] as $linea ) : ?><li><?php echo esc_html( $linea ); ?></li><?php endforeach; ?></ul></div>
 				<?php endif; ?>
 			<?php endif; ?>
 
@@ -135,7 +135,7 @@ final class EntornoPage {
 				<input type="hidden" name="action" value="<?php echo esc_attr( self::ACCION_GENERAR ); ?>">
 				<?php wp_nonce_field( self::ACCION_GENERAR ); ?>
 				<?php if ( $opciones ) : ?>
-					<p><strong><?php esc_html_e( 'Además, ajustes de este WordPress que conviene cambiar (solo se tocan los marcados):', 'asde-area-privada' ); ?></strong></p>
+					<p><strong><?php esc_html_e( 'Además, ajustes de este WordPress que conviene cambiar (solo se tocan los marcados):', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></strong></p>
 					<?php foreach ( $opciones as $clave => list( $etiqueta, $explicacion ) ) : ?>
 						<p class="asde-entorno__opcion">
 							<label>
@@ -147,12 +147,12 @@ final class EntornoPage {
 					<?php endforeach; ?>
 				<?php endif; ?>
 				<p>
-					<button type="submit" class="button button-primary button-hero"><?php esc_html_e( 'Generar / reparar el entorno', 'asde-area-privada' ); ?></button>
+					<button type="submit" class="button button-primary button-hero"><?php esc_html_e( 'Generar / reparar el entorno', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 				</p>
 			</form>
 
 			<h2>
-				<?php esc_html_e( 'Estado', 'asde-area-privada' ); ?>
+				<?php esc_html_e( 'Estado', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>
 				<span class="asde-entorno__resumen"><?php echo esc_html( sprintf( '%d bien · %d por hacer · %d avisos', $cuenta[ Entorno::OK ] ?? 0, $cuenta[ Entorno::FALTA ] ?? 0, ( $cuenta[ Entorno::AVISO ] ?? 0 ) + ( $cuenta[ Entorno::INFO ] ?? 0 ) ) ); ?></span>
 			</h2>
 			<table class="widefat striped asde-entorno__tabla">
@@ -172,34 +172,34 @@ final class EntornoPage {
 				</tbody>
 			</table>
 
-			<h2><?php esc_html_e( 'Siguientes pasos', 'asde-area-privada' ); ?></h2>
+			<h2><?php esc_html_e( 'Siguientes pasos', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h2>
 			<ol class="asde-entorno__pasos">
 				<?php if ( ! \AsdeBalears\AreaPrivada\Domain\Organizacion::configurada() ) : ?>
-					<li><?php /* translators: %s: dirección de la pantalla Organización federada */ echo wp_kses_post( sprintf( __( '<a href="%s">Elige tu organización federada</a> y su código en el nº de socio local (y revisa el coste federativo por defecto).', 'asde-area-privada' ), esc_url( OrganizacionPage::url() ) ) ); ?></li>
+					<li><?php /* translators: %s: dirección de la pantalla Organización federada */ echo wp_kses_post( sprintf( __( '<a href="%s">Elige tu organización federada</a> y su código en el nº de socio local (y revisa el coste federativo por defecto).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), esc_url( OrganizacionPage::url() ) ) ); ?></li>
 				<?php endif; ?>
 				<?php if ( ! defined( 'ASDE_AP_ENCRYPTION_KEY' ) ) : ?>
 					<li>
 						<?php
 						echo esc_html(
 							Grupos::todos()
-								? __( '(Recomendado) Añade a wp-config.php una clave propia para cifrar las contraseñas del CRM. Como ya hay grupos, después tendrás que volver a escribir sus contraseñas. Por ejemplo, esta clave, generada ahora al azar (no se guarda en ningún sitio):', 'asde-area-privada' )
-								: __( '(Recomendado, ANTES de dar de alta los grupos) Añade a wp-config.php una clave propia para cifrar las contraseñas del CRM. Por ejemplo, esta clave, generada ahora al azar (no se guarda en ningún sitio):', 'asde-area-privada' )
+								? __( '(Recomendado) Añade a wp-config.php una clave propia para cifrar las contraseñas del CRM. Como ya hay grupos, después tendrás que volver a escribir sus contraseñas. Por ejemplo, esta clave, generada ahora al azar (no se guarda en ningún sitio):', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' )
+								: __( '(Recomendado, ANTES de dar de alta los grupos) Añade a wp-config.php una clave propia para cifrar las contraseñas del CRM. Por ejemplo, esta clave, generada ahora al azar (no se guarda en ningún sitio):', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' )
 						);
 						?>
 						<pre class="asde-entorno__clave">define( 'ASDE_AP_ENCRYPTION_KEY', '<?php echo esc_html( rtrim( strtr( base64_encode( random_bytes( 36 ) ), '+/', '-_' ), '=' ) ); ?>' );</pre>
 					</li>
 				<?php endif; ?>
-				<li><?php /* translators: %s: dirección de la pantalla Grupos y conexión CRM */ echo wp_kses_post( sprintf( __( '<a href="%s">Da de alta tu Grupo Scout</a> con su nº, su nombre y el usuario y la contraseña del CRM, y pulsa «Probar conexión».', 'asde-area-privada' ), esc_url( add_query_arg( 'nuevo', '1', admin_url( 'admin.php?page=asde-area-privada' ) ) ) ) ); ?></li>
-				<li><?php /* translators: %s: dirección del diagnóstico de tareas en segundo plano */ echo wp_kses_post( sprintf( __( 'Pasa el <a href="%s">diagnóstico de tareas en segundo plano</a> (en LiteSpeed/Hostinger suele hacer falta «noabort»).', 'asde-area-privada' ), esc_url( class_exists( '\Asde_Diagnostico_Segundo_Plano', false ) ? \Asde_Diagnostico_Segundo_Plano::url() : admin_url( 'tools.php' ) ) ) ); ?></li>
+				<li><?php /* translators: %s: dirección de la pantalla Grupos y conexión CRM */ echo wp_kses_post( sprintf( __( '<a href="%s">Da de alta tu Grupo Scout</a> con su nº, su nombre y el usuario y la contraseña del CRM, y pulsa «Probar conexión».', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), esc_url( add_query_arg( 'nuevo', '1', admin_url( 'admin.php?page=asde-area-privada' ) ) ) ) ); ?></li>
+				<li><?php /* translators: %s: dirección del diagnóstico de tareas en segundo plano */ echo wp_kses_post( sprintf( __( 'Pasa el <a href="%s">diagnóstico de tareas en segundo plano</a> (en LiteSpeed/Hostinger suele hacer falta «noabort»).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), esc_url( class_exists( '\Asde_Diagnostico_Segundo_Plano', false ) ? \Asde_Diagnostico_Segundo_Plano::url() : admin_url( 'tools.php' ) ) ) ); ?></li>
 				<li>
-					<?php esc_html_e( 'Comprueba que los emails llegan:', 'asde-area-privada' ); ?>
+					<?php esc_html_e( 'Comprueba que los emails llegan:', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>
 					<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" class="asde-entorno__email">
 						<input type="hidden" name="action" value="<?php echo esc_attr( self::ACCION_EMAIL ); ?>">
 						<?php wp_nonce_field( self::ACCION_EMAIL ); ?>
-						<button type="submit" class="button"><?php /* translators: %s: email de la cuenta que lo pide */ echo esc_html( sprintf( __( 'Enviarme un email de prueba (%s)', 'asde-area-privada' ), wp_get_current_user()->user_email ) ); ?></button>
+						<button type="submit" class="button"><?php /* translators: %s: email de la cuenta que lo pide */ echo esc_html( sprintf( __( 'Enviarme un email de prueba (%s)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), wp_get_current_user()->user_email ) ); ?></button>
 					</form>
 				</li>
-				<li><?php esc_html_e( 'Desde el área privada, da acceso a Secretaría y Coordinación (Personas → Dar acceso); a partir de ahí, ellos dan acceso al resto y aprueban las solicitudes de acceso.', 'asde-area-privada' ); ?></li>
+				<li><?php esc_html_e( 'Desde el área privada, da acceso a Secretaría y Coordinación (Personas → Dar acceso); a partir de ahí, ellos dan acceso al resto y aprueban las solicitudes de acceso.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></li>
 			</ol>
 		</div>
 		<?php

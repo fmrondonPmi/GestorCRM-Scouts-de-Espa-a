@@ -154,7 +154,12 @@ abstract class View {
 	}
 
 	protected function post( string $key ): string {
-		return isset( $_POST[ $key ] ) && is_scalar( $_POST[ $key ] ) ? trim( (string) wp_unslash( $_POST[ $key ] ) ) : ''; // phpcs:ignore WordPress.Security
+		return isset( $_POST[ $key ] ) && is_scalar( $_POST[ $key ] ) ? trim( sanitize_textarea_field( wp_unslash( $_POST[ $key ] ) ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing -- el nonce lo comprueba cada handle_post()
+	}
+
+	/** El nonce de un formulario, saneado antes de pasarlo a wp_verify_nonce(). */
+	protected function post_nonce(): string {
+		return isset( $_POST['_wpnonce'] ) && is_scalar( $_POST['_wpnonce'] ) ? sanitize_text_field( wp_unslash( $_POST['_wpnonce'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing -- aquí se lee el propio nonce
 	}
 
 	/** @return string[] */

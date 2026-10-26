@@ -86,7 +86,7 @@ $rondas    = $rondas ?? array();
 			<?php foreach ( $secciones as $slug ) : ?>
 				<label class="asde-choice asde-choice--inline">
 					<input type="checkbox" name="secciones[]" value="<?php echo esc_attr( $slug ); ?>" <?php checked( in_array( $slug, $f['secciones'], true ) ); ?>>
-					<span><?php echo Secciones::badge( $slug ); // phpcs:ignore WordPress.Security.EscapeOutput ?></span>
+					<span><?php echo wp_kses( Secciones::badge( $slug ), asde_html_permitido() ); ?></span>
 				</label>
 			<?php endforeach; ?>
 			<p class="asde-help"><?php asde_e( 'Si no marcas ninguna:' ); ?> <?php echo $global ? esc_html( asde_t( 'todo el grupo' ) ) : esc_html( asde_t( 'todas tus secciones' ) ); ?>.</p>

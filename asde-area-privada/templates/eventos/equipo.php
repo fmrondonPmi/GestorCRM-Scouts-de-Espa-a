@@ -77,7 +77,7 @@ $r        = $check['ratio'];
 							<?php echo esc_html( $p ? $p->nombre_completo() : sprintf( asde_t( 'Nº %s' ), $m['socio'] ) ); ?>
 							<?php
 							foreach ( $m['secciones'] as $s ) {
-								echo Secciones::badge( $s ); // phpcs:ignore WordPress.Security.EscapeOutput
+								echo wp_kses( Secciones::badge( $s ), asde_html_permitido() );
 							}
 							?>
 							<?php if ( $dato['menor'] ) : ?>
@@ -87,7 +87,7 @@ $r        = $check['ratio'];
 						<td data-label="<?php echo esc_attr( asde_a( 'Función' ) ); ?>">
 							<?php if ( $editable ) : ?>
 								<form method="post" class="asde-inline-form">
-									<?php echo $campos( 'evento_equipo_papel' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+									<?php echo wp_kses( $campos( 'evento_equipo_papel' ), asde_html_permitido() ); ?>
 									<input type="hidden" name="fila" value="<?php echo (int) $m['id']; ?>">
 									<label class="screen-reader-text" for="asde-papel-<?php echo (int) $m['id']; ?>"><?php asde_e( 'Función' ); ?></label>
 									<select id="asde-papel-<?php echo (int) $m['id']; ?>" name="papel">
@@ -106,7 +106,7 @@ $r        = $check['ratio'];
 						<?php if ( $editable ) : ?>
 							<td data-label="<?php echo esc_attr( asde_a( 'Quitar' ) ); ?>">
 								<form method="post" class="asde-inline-form" data-asde-confirmar="<?php echo esc_attr( asde_js( '¿Quitar a esta persona del equipo?' ) ); ?>">
-									<?php echo $campos( 'evento_equipo_quitar' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+									<?php echo wp_kses( $campos( 'evento_equipo_quitar' ), asde_html_permitido() ); ?>
 									<input type="hidden" name="fila" value="<?php echo (int) $m['id']; ?>">
 									<button type="submit" class="asde-btn-link"><?php asde_e( 'Quitar' ); ?></button>
 								</form>
@@ -138,7 +138,7 @@ $r        = $check['ratio'];
 			<p class="asde-muted"><?php asde_e( 'No quedan scouters ni voluntariado del grupo por añadir.' ); ?></p>
 		<?php else : ?>
 			<form method="post" class="asde-form asde-form--compacta">
-				<?php echo $campos( 'evento_equipo_anadir' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+				<?php echo wp_kses( $campos( 'evento_equipo_anadir' ), asde_html_permitido() ); ?>
 				<p class="asde-form__fila">
 					<label><?php asde_e( 'Persona' ); ?>
 						<select name="socio" required>

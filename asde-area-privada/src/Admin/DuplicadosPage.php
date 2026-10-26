@@ -32,8 +32,8 @@ final class DuplicadosPage {
 	public function add_menu(): void {
 		add_submenu_page(
 			self::PADRE,
-			__( 'Documentos repetidos', 'asde-area-privada' ),
-			__( 'Documentos repetidos', 'asde-area-privada' ),
+			__( 'Documentos repetidos', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+			__( 'Documentos repetidos', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 			self::CAPABILITY,
 			self::SLUG,
 			array( $this, 'render' )
@@ -62,7 +62,7 @@ final class DuplicadosPage {
 					static function () {
 						$dup = Duplicados::make();
 						if ( ! $dup ) {
-							throw new CrmException( esc_html( __( 'Sin conexión con el CRM para este grupo.', 'asde-area-privada' ) ) );
+							throw new CrmException( esc_html( __( 'Sin conexión con el CRM para este grupo.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) );
 						}
 						return $dup->repetidos();
 					}
@@ -73,21 +73,21 @@ final class DuplicadosPage {
 		}
 		?>
 		<div class="wrap asde-duplicados">
-			<h1><?php esc_html_e( 'Documentos repetidos en el CRM', 'asde-area-privada' ); ?></h1>
-			<p><?php esc_html_e( 'Busca en las fichas de un grupo las que tienen el mismo DNI, NIE u otro documento (escrito de cualquier forma: con guion, en minúsculas…). Suelen ser la misma persona dada de alta dos veces antes de las altas desde la web; hay que unificarlas en el CRM. Solo lee: no cambia nada.', 'asde-area-privada' ); ?></p>
+			<h1><?php esc_html_e( 'Documentos repetidos en el CRM', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h1>
+			<p><?php esc_html_e( 'Busca en las fichas de un grupo las que tienen el mismo DNI, NIE u otro documento (escrito de cualquier forma: con guion, en minúsculas…). Suelen ser la misma persona dada de alta dos veces antes de las altas desde la web; hay que unificarlas en el CRM. Solo lee: no cambia nada.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 			<?php if ( ! $grupos ) : ?>
-				<p><?php esc_html_e( 'No hay ningún grupo con la conexión al CRM comprobada.', 'asde-area-privada' ); ?></p>
+				<p><?php esc_html_e( 'No hay ningún grupo con la conexión al CRM comprobada.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 			<?php else : ?>
 				<form method="get" action="<?php echo esc_url( admin_url( 'admin.php' ) ); ?>">
 					<input type="hidden" name="page" value="<?php echo esc_attr( self::SLUG ); ?>">
 					<?php wp_nonce_field( self::NONCE, '_wpnonce', false ); ?>
-					<label for="asde-dup-grupo"><?php esc_html_e( 'Grupo', 'asde-area-privada' ); ?></label>
+					<label for="asde-dup-grupo"><?php esc_html_e( 'Grupo', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 					<select id="asde-dup-grupo" name="grupo">
 						<?php foreach ( $grupos as $g ) : ?>
 							<option value="<?php echo esc_attr( $g['numero'] ); ?>" <?php selected( $pedido, (string) $g['numero'] ); ?>><?php echo esc_html( Grupos::etiqueta( $g ) ); ?></option>
 						<?php endforeach; ?>
 					</select>
-					<?php submit_button( __( 'Buscar documentos repetidos', 'asde-area-privada' ), 'secondary', '', false ); ?>
+					<?php submit_button( __( 'Buscar documentos repetidos', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 'secondary', '', false ); ?>
 				</form>
 			<?php endif; ?>
 
@@ -96,16 +96,16 @@ final class DuplicadosPage {
 			<?php elseif ( null !== $lista ) : ?>
 				<h2><?php echo esc_html( Grupos::etiqueta( $grupo ) ); ?></h2>
 				<?php if ( ! $lista ) : ?>
-					<div class="notice notice-success inline"><p><?php esc_html_e( 'No hay fichas con el mismo documento en este grupo.', 'asde-area-privada' ); ?></p></div>
+					<div class="notice notice-success inline"><p><?php esc_html_e( 'No hay fichas con el mismo documento en este grupo.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p></div>
 				<?php else : ?>
 					<p>
 						<?php
 						/* translators: %d: documentos repetidos */
-						echo esc_html( sprintf( _n( '%d documento está en más de una ficha:', '%d documentos están en más de una ficha:', count( $lista ), 'asde-area-privada' ), count( $lista ) ) );
+						echo esc_html( sprintf( _n( '%d documento está en más de una ficha:', '%d documentos están en más de una ficha:', count( $lista ), 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), count( $lista ) ) );
 						?>
 					</p>
 					<table class="widefat striped">
-						<thead><tr><th scope="col"><?php esc_html_e( 'Documento', 'asde-area-privada' ); ?></th><th scope="col"><?php esc_html_e( 'Fichas', 'asde-area-privada' ); ?></th></tr></thead>
+						<thead><tr><th scope="col"><?php esc_html_e( 'Documento', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Fichas', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th></tr></thead>
 						<tbody>
 							<?php foreach ( $lista as $r ) : ?>
 								<tr>
@@ -115,8 +115,8 @@ final class DuplicadosPage {
 											<?php foreach ( $r['fichas'] as $f ) : ?>
 												<li>
 													<?php echo esc_html( $f['nombre'] ); ?> ·
-													<?php /* translators: %s: nº de socio */ echo esc_html( sprintf( __( 'nº Scouts de España %s', 'asde-area-privada' ), $f['socio'] ) ); ?> ·
-													<?php echo $f['activa'] ? esc_html__( 'con membresía activa', 'asde-area-privada' ) : esc_html__( 'sin membresía activa', 'asde-area-privada' ); ?>
+													<?php /* translators: %s: nº de socio */ echo esc_html( sprintf( __( 'nº Scouts de España %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $f['socio'] ) ); ?> ·
+													<?php echo $f['activa'] ? esc_html__( 'con membresía activa', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : esc_html__( 'sin membresía activa', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>
 												</li>
 											<?php endforeach; ?>
 										</ul>

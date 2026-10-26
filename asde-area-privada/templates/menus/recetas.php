@@ -27,7 +27,7 @@ $fila = static function ( array $r, bool $propia ) use ( $alergenos ): void {
 	<tr<?php echo $r['activa'] ? '' : ' class="asde-fila--cancelada"'; ?>>
 		<td data-label="<?php echo esc_attr( asde_a( 'Receta' ) ); ?>">
 			<a href="<?php echo esc_url( Pages::url( 'eventos_recetas', array( 'receta' => (string) $r['id'] ) ) ); ?>"><?php echo esc_html( $propia ? $r['nombre'] : asde_t( $r['nombre'] ) ); ?></a>
-			<?php echo $r['activa'] ? '' : ' <span class="asde-badge">' . esc_html( asde_t( 'Archivada' ) ) . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput ?>
+			<?php echo wp_kses( $r['activa'] ? '' : ' <span class="asde-badge">' . esc_html( asde_t( 'Archivada' ) ) . '</span>', asde_html_permitido() ); ?>
 		</td>
 		<td data-label="<?php echo esc_attr( asde_a( 'Tipo' ) ); ?>"><?php echo esc_html( asde_t( RecetasTable::TIPOS[ $r['tipo'] ] ?? 'Otro' ) ); ?></td>
 		<td data-label="<?php echo esc_attr( asde_a( 'Porciones base' ) ); ?>"><?php echo (int) $r['porciones']; ?></td>

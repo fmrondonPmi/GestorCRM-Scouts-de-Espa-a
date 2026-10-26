@@ -78,10 +78,10 @@ $publico = add_query_arg( 'grupo', Grupo::numero(), $enlace );
 						<td data-label="<?php echo esc_attr( asde_a( 'Fecha' ) ); ?>"><?php echo esc_html( wp_date( 'd/m/Y H:i', strtotime( $s['creada'] . ' UTC' ) ) ); ?></td>
 						<td data-label="<?php echo esc_attr( asde_a( 'Socio/a' ) ); ?>">
 							<?php if ( $p ) : ?>
-								<?php echo esc_html( $p->nombre_completo() ); ?><?php echo \AsdeBalears\AreaPrivada\Socios\Numeros::compacto( $p ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+								<?php echo esc_html( $p->nombre_completo() ); ?><?php echo wp_kses( \AsdeBalears\AreaPrivada\Socios\Numeros::compacto( $p ), asde_html_permitido() ); ?>
 								<?php
 								foreach ( $p->secciones as $sec ) {
-									echo Secciones::badge( $sec ); // phpcs:ignore WordPress.Security.EscapeOutput
+									echo wp_kses( Secciones::badge( $sec ), asde_html_permitido() );
 								}
 								?>
 							<?php else : ?>

@@ -46,7 +46,7 @@ final class RecuperarView extends View {
 		if ( 'recuperar' !== $this->post( 'asde_action' ) || is_user_logged_in() ) {
 			return;
 		}
-		if ( ! wp_verify_nonce( $this->post( '_wpnonce' ), 'asde_recuperar' ) ) {
+		if ( ! wp_verify_nonce( $this->post_nonce(), 'asde_recuperar' ) ) {
 			return;
 		}
 		self::$enviado = true; // La respuesta no revela si el usuario existe.

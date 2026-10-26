@@ -121,7 +121,7 @@ $accion = $e ? add_query_arg(
 			<?php if ( $validado ) : ?>
 				<p class="asde-help"><?php asde_e( 'El presupuesto está validado: las secciones y los participantes previstos no se pueden cambiar (Tesorería puede reabrirlo).' ); ?></p>
 				<?php foreach ( $e['secciones'] as $s ) : ?>
-					<?php echo Secciones::badge( $s ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+					<?php echo wp_kses( Secciones::badge( $s ), asde_html_permitido() ); ?>
 					<input type="hidden" name="secciones[]" value="<?php echo esc_attr( $s ); ?>">
 				<?php endforeach; ?>
 			<?php else : ?>
@@ -164,7 +164,7 @@ $accion = $e ? add_query_arg(
 			<tbody>
 				<?php foreach ( $validado ? $e['secciones'] : $secciones as $s ) : ?>
 					<tr>
-						<td data-label="<?php echo esc_attr( asde_a( 'Sección' ) ); ?>"><?php echo Secciones::badge( $s ); // phpcs:ignore WordPress.Security.EscapeOutput ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Sección' ) ); ?>"><?php echo wp_kses( Secciones::badge( $s ), asde_html_permitido() ); ?></td>
 						<td data-label="<?php echo esc_attr( asde_a( 'Participantes previstos' ) ); ?>">
 							<?php if ( $validado ) : ?>
 								<?php echo absint( $d[ 'previstas_' . $s ] ); ?><input type="hidden" name="previstas_<?php echo esc_attr( $s ); ?>" value="<?php echo absint( $d[ 'previstas_' . $s ] ); ?>">

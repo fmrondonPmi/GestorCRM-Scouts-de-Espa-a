@@ -60,7 +60,7 @@ $e = $edicion ?: array( 'id' => 0, 'nombre' => '', 'unidad' => 'g', 'alergenos' 
 			<label for="asde-ing-coste"><?php asde_e( 'Coste por unidad habitual, en euros (opcional)' ); ?></label>
 			<input type="text" inputmode="decimal" id="asde-ing-coste" name="coste" size="8" value="<?php echo null === $e['coste'] ? '' : esc_attr( rtrim( rtrim( number_format( (float) $e['coste'], 4, ',', '' ), '0' ), ',' ) ); ?>">
 		</p>
-		<p><button type="submit" class="button"><?php asde_e( 'Guardar el ingrediente' ); ?></button> <?php echo $e['id'] ? '<a href="' . esc_url( $url ) . '">' . esc_html( asde_t( 'Cancelar' ) ) . '</a>' : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+		<p><button type="submit" class="button"><?php asde_e( 'Guardar el ingrediente' ); ?></button> <?php echo wp_kses( $e['id'] ? '<a href="' . esc_url( $url ) . '">' . esc_html( asde_t( 'Cancelar' ) ) . '</a>' : '', asde_html_permitido() ); ?></p>
 	</form>
 </section>
 
@@ -87,12 +87,12 @@ $e = $edicion ?: array( 'id' => 0, 'nombre' => '', 'unidad' => 'g', 'alergenos' 
 				<tr<?php echo $i['activo'] ? '' : ' class="asde-fila--cancelada"'; ?>>
 					<td data-label="<?php echo esc_attr( asde_a( 'Ingrediente' ) ); ?>">
 						<?php echo esc_html( $comun ? asde_t( $i['nombre'] ) : $i['nombre'] ); ?>
-						<?php echo $comun ? ' <span class="asde-badge">' . esc_html( asde_t( 'Biblioteca' ) ) . '</span>' : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?>
-						<?php echo ! $i['revisado'] ? ' <span class="asde-badge asde-badge--pago-parcial">' . esc_html( asde_t( 'Sin revisar' ) ) . '</span>' : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?>
-						<?php echo $i['animal'] ? ' <span class="asde-muted">' . esc_html( asde_t( '(origen animal)' ) ) . '</span>' : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?>
+						<?php echo wp_kses( $comun ? ' <span class="asde-badge">' . esc_html( asde_t( 'Biblioteca' ) ) . '</span>' : '', asde_html_permitido() ); ?>
+						<?php echo wp_kses( ! $i['revisado'] ? ' <span class="asde-badge asde-badge--pago-parcial">' . esc_html( asde_t( 'Sin revisar' ) ) . '</span>' : '', asde_html_permitido() ); ?>
+						<?php echo wp_kses( $i['animal'] ? ' <span class="asde-muted">' . esc_html( asde_t( '(origen animal)' ) ) . '</span>' : '', asde_html_permitido() ); ?>
 					</td>
-					<td data-label="<?php echo esc_attr( asde_a( 'Contiene' ) ); ?>"><?php echo $i['alergenos'] ? esc_html( Alergenos::texto( $i['alergenos'] ) ) : '<span class="asde-muted">—</span>'; // phpcs:ignore WordPress.Security.EscapeOutput ?></td>
-					<td data-label="<?php echo esc_attr( asde_a( 'Puede contener' ) ); ?>"><?php echo $i['trazas'] ? esc_html( Alergenos::texto( $i['trazas'] ) ) : '<span class="asde-muted">—</span>'; // phpcs:ignore WordPress.Security.EscapeOutput ?></td>
+					<td data-label="<?php echo esc_attr( asde_a( 'Contiene' ) ); ?>"><?php echo wp_kses( $i['alergenos'] ? esc_html( Alergenos::texto( $i['alergenos'] ) ) : '<span class="asde-muted">—</span>', asde_html_permitido() ); ?></td>
+					<td data-label="<?php echo esc_attr( asde_a( 'Puede contener' ) ); ?>"><?php echo wp_kses( $i['trazas'] ? esc_html( Alergenos::texto( $i['trazas'] ) ) : '<span class="asde-muted">—</span>', asde_html_permitido() ); ?></td>
 					<td data-label="<?php echo esc_attr( asde_a( 'Recetas' ) ); ?>"><?php echo (int) ( $usos[ $i['id'] ] ?? 0 ); ?></td>
 					<td data-label="<?php echo esc_attr( asde_a( 'Acciones' ) ); ?>">
 						<?php if ( ! $comun ) : ?>

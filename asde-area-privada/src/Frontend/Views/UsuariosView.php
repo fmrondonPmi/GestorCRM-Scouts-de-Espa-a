@@ -144,7 +144,7 @@ final class UsuariosView extends View {
 			if ( Router::pide_json() ) {
 				wp_send_json_error( array( 'mensaje' => asde_t( 'No tienes permiso para hacer esto.' ) ), 403 );
 			}
-			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-area-privada' ), 403 );
+			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		$user_id = (int) $this->post( 'user_id' );
 		$user    = get_userdata( $user_id );

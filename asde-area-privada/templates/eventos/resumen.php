@@ -66,7 +66,7 @@ $noches = Normativa::noches( $e );
 			<dd>
 				<?php foreach ( $e['secciones'] as $s ) : ?>
 					<?php $pl = $e['plazas'][ $s ] ?? array( 'previstas' => 0, 'maximas' => 0 ); ?>
-					<?php echo Secciones::badge( $s ); // phpcs:ignore WordPress.Security.EscapeOutput ?> <?php echo esc_html( $pl['maximas'] ? sprintf( asde_t( '%1$d previstos de %2$d plazas' ), $pl['previstas'], $pl['maximas'] ) : sprintf( asde_t( '%d previstos' ), $pl['previstas'] ) ); ?><br>
+					<?php echo wp_kses( Secciones::badge( $s ), asde_html_permitido() ); ?> <?php echo esc_html( $pl['maximas'] ? sprintf( asde_t( '%1$d previstos de %2$d plazas' ), $pl['previstas'], $pl['maximas'] ) : sprintf( asde_t( '%d previstos' ), $pl['previstas'] ) ); ?><br>
 				<?php endforeach; ?>
 				<?php if ( $e['plazas_max'] ) : ?>
 					<?php echo esc_html( sprintf( asde_t( 'Plazas en total: %d' ), $e['plazas_max'] ) ); ?>
@@ -87,10 +87,10 @@ $noches = Normativa::noches( $e );
 			</dd></div>
 		<?php endif; ?>
 		<?php if ( '' !== trim( $e['descripcion'] ) ) : ?>
-			<div><dt><?php asde_e( 'Descripción' ); ?></dt><dd><?php echo nl2br( esc_html( $e['descripcion'] ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></dd></div>
+			<div><dt><?php asde_e( 'Descripción' ); ?></dt><dd><?php echo wp_kses( nl2br( esc_html( $e['descripcion'] ) ), asde_html_permitido() ); ?></dd></div>
 		<?php endif; ?>
 		<?php if ( '' !== trim( $e['material'] ) ) : ?>
-			<div><dt><?php asde_e( 'Material personal' ); ?></dt><dd><?php echo nl2br( esc_html( $e['material'] ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></dd></div>
+			<div><dt><?php asde_e( 'Material personal' ); ?></dt><dd><?php echo wp_kses( nl2br( esc_html( $e['material'] ) ), asde_html_permitido() ); ?></dd></div>
 		<?php endif; ?>
 	</dl>
 </section>
@@ -134,12 +134,12 @@ if ( Servicio::puede_borrar( $e, $ambito ) ) {
 	<section class="asde-card">
 		<h3 class="asde-card__title"><?php asde_e( 'Acciones' ); ?></h3>
 		<?php if ( $acciones ) : ?>
-			<p class="asde-actions"><?php echo implode( ' ', $acciones ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+			<p class="asde-actions"><?php echo wp_kses( implode( ' ', $acciones ), asde_html_permitido() ); ?></p>
 		<?php endif; ?>
 		<?php if ( Servicio::puede_cancelar( $e, $ambito ) && EventosTable::BORRADOR !== $e['estado'] ) : ?>
 			<details class="asde-rechazar">
 				<summary><?php asde_e( 'Cancelar el evento' ); ?></summary>
-				<?php echo $form( 'evento_cancelar', esc_html( asde_t( 'Cancelar el evento' ) ), 'button', esc_attr( asde_js( '¿Cancelar el evento? No se puede deshacer.' ) ), '<label>' . esc_html( asde_t( 'Motivo' ) ) . ' <input type="text" name="motivo" maxlength="255" required></label> ' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+				<?php echo wp_kses( $form( 'evento_cancelar', esc_html( asde_t( 'Cancelar el evento' ) ), 'button', esc_attr( asde_js( '¿Cancelar el evento? No se puede deshacer.' ) ), '<label>' . esc_html( asde_t( 'Motivo' ) ) . ' <input type="text" name="motivo" maxlength="255" required></label> ' ), asde_html_permitido() ); ?>
 			</details>
 		<?php endif; ?>
 	</section>

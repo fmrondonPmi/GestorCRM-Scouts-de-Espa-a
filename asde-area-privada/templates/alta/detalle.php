@@ -66,7 +66,7 @@ if ( $solicitud && \AsdeBalears\AreaPrivada\Usuarios\Solicitudes::POR_ENLACE ===
 		<h2 class="asde-card__title"><?php echo esc_html( $p->nombre_completo() ); ?></h2>
 		<?php
 		foreach ( $p->secciones as $s ) {
-			echo Secciones::badge( $s ); // phpcs:ignore WordPress.Security.EscapeOutput -- HTML escapado en badge().
+			echo wp_kses( Secciones::badge( $s ), asde_html_permitido() );
 		}
 		?>
 	</header>
@@ -74,7 +74,7 @@ if ( $solicitud && \AsdeBalears\AreaPrivada\Usuarios\Solicitudes::POR_ENLACE ===
 		<div>
 			<dt><?php echo Identidad::es_asde() ? esc_html( asde_t( 'Nº socio/a Scouts de España (usuario)' ) ) : esc_html( asde_t( 'Nº socio/a local (usuario)' ) ); ?></dt>
 			<dd>
-				<?php echo Numeros::html( $p, $numero ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+				<?php echo wp_kses( Numeros::html( $p, $numero ), asde_html_permitido() ); ?>
 				<?php // El aviso del problema ya lo da Numeros::html (⚠); aquí solo lo que se hace con él. ?>
 				<?php if ( Numeracion::FALTA === $numero['estado'] && ! Identidad::es_asde() ) : ?>
 					<br><span class="asde-help"><?php asde_e( 'Se generará al darle acceso.' ); ?></span>
@@ -196,13 +196,13 @@ if ( $solicitud && \AsdeBalears\AreaPrivada\Usuarios\Solicitudes::POR_ENLACE ===
 					<?php foreach ( Secciones::EDUCATIVAS as $slug ) : ?>
 						<label class="asde-choice">
 							<input type="checkbox" name="secciones[]" value="<?php echo esc_attr( $slug ); ?>" <?php checked( in_array( $slug, $secc_actual, true ) ); ?>>
-							<span><?php echo Secciones::badge( $slug ); // phpcs:ignore WordPress.Security.EscapeOutput ?></span>
+							<span><?php echo wp_kses( Secciones::badge( $slug ), asde_html_permitido() ); ?></span>
 						</label>
 					<?php endforeach; ?>
 					<label class="asde-choice asde-choice--separada">
 						<input type="checkbox" name="secciones[]" value="<?php echo esc_attr( Secciones::SIN_SECCION ); ?>" data-asde-sin-seccion <?php checked( in_array( Secciones::SIN_SECCION, $secc_actual, true ) ); ?>>
 						<span>
-							<?php echo Secciones::badge( Secciones::SIN_SECCION ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+							<?php echo wp_kses( Secciones::badge( Secciones::SIN_SECCION ), asde_html_permitido() ); ?>
 							<span class="asde-help"><?php asde_e( 'Colabora sin sección: solo se le puede dar acceso como Tesorería, Secretaría, Coordinación o Intendencia (sin el rol de Scouter).' ); ?></span>
 						</span>
 					</label>
@@ -242,11 +242,11 @@ if ( $solicitud && \AsdeBalears\AreaPrivada\Usuarios\Solicitudes::POR_ENLACE ===
 						<?php endif; ?>
 						<p class="asde-help"><?php
 						if ( Identidad::es_asde() ) {
-							echo sprintf( wp_kses_post( asde_h( 'El usuario será su nº de socio/a de Scouts de España (<strong>%s</strong>); también podrá entrar con el email elegido, que se guarda cifrado en la web.' ) ), esc_html( $p->num_socio_asde ) ); // phpcs:ignore WordPress.Security.EscapeOutput
+							echo wp_kses( sprintf( wp_kses_post( asde_h( 'El usuario será su nº de socio/a de Scouts de España (<strong>%s</strong>); también podrá entrar con el email elegido, que se guarda cifrado en la web.' ) ), esc_html( $p->num_socio_asde ) ), asde_html_permitido() );
 						} elseif ( $numero['numero'] ) {
-							echo sprintf( wp_kses_post( asde_h( 'El usuario será su nº de socio/a (<strong>%s</strong>); también podrá entrar con el email elegido, que se guarda cifrado en la web.' ) ), esc_html( $numero['numero'] ) ); // phpcs:ignore WordPress.Security.EscapeOutput
+							echo wp_kses( sprintf( wp_kses_post( asde_h( 'El usuario será su nº de socio/a (<strong>%s</strong>); también podrá entrar con el email elegido, que se guarda cifrado en la web.' ) ), esc_html( $numero['numero'] ) ), asde_html_permitido() );
 						} else {
-							echo wp_kses_post( asde_h( 'El usuario será su nº de socio/a, que se generará automáticamente; también podrá entrar con el email elegido, que se guarda cifrado en la web.' ) ); // phpcs:ignore WordPress.Security.EscapeOutput
+							echo wp_kses( wp_kses_post( asde_h( 'El usuario será su nº de socio/a, que se generará automáticamente; también podrá entrar con el email elegido, que se guarda cifrado en la web.' ) ), asde_html_permitido() );
 						}
 						?></p>
 					<?php endif; ?>
@@ -288,7 +288,7 @@ if ( $solicitud && \AsdeBalears\AreaPrivada\Usuarios\Solicitudes::POR_ENLACE ===
 				<legend><?php asde_e( 'Participantes de la cuenta' ); ?></legend>
 				<label class="asde-choice">
 					<input type="checkbox" checked disabled>
-					<span><?php echo esc_html( $p->nombre_completo() ); ?> <?php echo $p->seccion_educativa() ? Secciones::badge( $p->seccion_educativa() ) : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?></span>
+					<span><?php echo esc_html( $p->nombre_completo() ); ?> <?php echo wp_kses( $p->seccion_educativa() ? Secciones::badge( $p->seccion_educativa() ) : '', asde_html_permitido() ); ?></span>
 				</label>
 				<?php if ( $familia ) : ?>
 					<p class="asde-help"><?php asde_e( 'Posibles hermanos/as (comparten un email en el CRM). Márcalos si son de la misma familia:' ); ?></p>
@@ -302,7 +302,7 @@ if ( $solicitud && \AsdeBalears\AreaPrivada\Usuarios\Solicitudes::POR_ENLACE ===
 							<input type="checkbox" name="<?php echo $fijo ? '' : 'hermanos[]'; ?>" value="<?php echo esc_attr( $f->num_socio_asde ); ?>" <?php checked( $fijo ); ?> <?php disabled( $fijo ); ?>>
 							<span>
 								<?php echo esc_html( $f->nombre_completo() ); ?>
-								<?php echo $f->seccion_educativa() ? Secciones::badge( $f->seccion_educativa() ) : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?>
+								<?php echo wp_kses( $f->seccion_educativa() ? Secciones::badge( $f->seccion_educativa() ) : '', asde_html_permitido() ); ?>
 								<?php if ( null !== $f->edad() ) : ?>
 									<span class="asde-muted"><?php echo esc_html( sprintf( asde_t( '%d años' ), $f->edad() ) ); ?></span>
 								<?php endif; ?>
@@ -346,7 +346,7 @@ if ( $solicitud && \AsdeBalears\AreaPrivada\Usuarios\Solicitudes::POR_ENLACE ===
 			<hr>
 			<h4><?php asde_e( 'Otro tutor/a con su propia cuenta' ); ?></h4>
 			<?php if ( count( $cuentas_familiares ) >= Usuarios::MAX_CUENTAS_FAMILIARES ) : ?>
-				<p><?php asde_e( 'Esta familia ya tiene las dos cuentas de tutor/a:' ); ?> <?php echo implode( ' ' . esc_html( asde_t( 'y' ) ) . ' ', array_map( static fn( $c ) => '<strong>' . esc_html( $c->user_login ) . '</strong>', $cuentas_familiares ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?><?php asde_e( '. Cada una entra con su propio email y ve a los mismos participantes.' ); ?></p>
+				<p><?php asde_e( 'Esta familia ya tiene las dos cuentas de tutor/a:' ); ?> <?php echo wp_kses( implode( ' ' . esc_html( asde_t( 'y' ) ) . ' ', array_map( static fn( $c ) => '<strong>' . esc_html( $c->user_login ) . '</strong>', $cuentas_familiares ) ), asde_html_permitido() ); ?><?php asde_e( '. Cada una entra con su propio email y ve a los mismos participantes.' ); ?></p>
 			<?php else : ?>
 				<p>
 					<?php asde_e( 'Si el otro tutor/a (madre, padre…) quiere entrar con su propio email y su propia contraseña, se le crea una segunda cuenta (' ); ?><strong><?php echo esc_html( \AsdeBalears\AreaPrivada\Domain\NumeroSocio::usuario_tutor( \AsdeBalears\AreaPrivada\Domain\Identidad::convertir( (string) \AsdeBalears\AreaPrivada\Domain\NumeroSocio::socio_de_usuario_tutor( $cuenta_familiar->user_login ) ), 2 ) ); ?></strong><?php asde_e( ') que ve a los mismos participantes y comparte la familia de Tesorería.' ); ?>

@@ -42,7 +42,7 @@ $fila_persona = static function ( $p ) {
 						<li>
 							<label class="asde-choice">
 								<input type="checkbox" name="socios[]" value="<?php echo esc_attr( $p->num_socio_asde ); ?>" checked>
-								<span><?php echo $fila_persona( $p ); // phpcs:ignore WordPress.Security.EscapeOutput ?></span>
+								<span><?php echo wp_kses( $fila_persona( $p ), asde_html_permitido() ); ?></span>
 							</label>
 						</li>
 					<?php endforeach; ?>
@@ -89,7 +89,7 @@ $fila_persona = static function ( $p ) {
 							<?php endif; ?>
 							<?php foreach ( $f['miembros'] as $n ) : ?>
 								<?php $p = $personas[ $n ] ?? null; ?>
-								<span class="asde-miembro<?php echo ( ! $p || ! $p->tiene_membresia_activa() ) ? ' asde-miembro--fuera' : ''; ?>"><?php echo $p ? $fila_persona( $p ) : esc_html( 'Nº ' . $n ); // phpcs:ignore WordPress.Security.EscapeOutput ?></span>
+								<span class="asde-miembro<?php echo ( ! $p || ! $p->tiene_membresia_activa() ) ? ' asde-miembro--fuera' : ''; ?>"><?php echo wp_kses( $p ? $fila_persona( $p ) : esc_html( 'Nº ' . $n ), asde_html_permitido() ); ?></span>
 							<?php endforeach; ?>
 						</td>
 						<td data-label="<?php echo esc_attr( asde_a( 'Cuenta familiar' ) ); ?>"><?php echo $cuentas[ $id ] ? esc_html( $cuentas[ $id ] ) : '<span class="asde-muted">—</span>'; ?></td>
@@ -132,7 +132,7 @@ $fila_persona = static function ( $p ) {
 				<?php foreach ( $sin_fam as $p ) : ?>
 					<label class="asde-choice">
 						<input type="checkbox" name="socios[]" value="<?php echo esc_attr( $p->num_socio_asde ); ?>">
-						<span><?php echo $fila_persona( $p ); // phpcs:ignore WordPress.Security.EscapeOutput ?></span>
+						<span><?php echo wp_kses( $fila_persona( $p ), asde_html_permitido() ); ?></span>
 					</label>
 				<?php endforeach; ?>
 			</div>
@@ -143,7 +143,7 @@ $fila_persona = static function ( $p ) {
 						<?php foreach ( $sin_fam_adultos as $p ) : ?>
 							<label class="asde-choice">
 								<input type="checkbox" name="socios[]" value="<?php echo esc_attr( $p->num_socio_asde ); ?>">
-								<span><?php echo $fila_persona( $p ); // phpcs:ignore WordPress.Security.EscapeOutput ?></span>
+								<span><?php echo wp_kses( $fila_persona( $p ), asde_html_permitido() ); ?></span>
 							</label>
 						<?php endforeach; ?>
 					</div>

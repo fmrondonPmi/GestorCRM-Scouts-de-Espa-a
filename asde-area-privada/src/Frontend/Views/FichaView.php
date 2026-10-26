@@ -193,7 +193,7 @@ final class FichaView extends View {
 			}
 			$perm = new PermisosFicha( $ambito, $p );
 			if ( ! $perm->puede_ver() ) {
-				wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-area-privada' ), 403 );
+				wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 			}
 			$enviado = array();
 			foreach ( $this->post_array( 'campo' ) as $campo => $valor ) {
@@ -292,7 +292,7 @@ final class FichaView extends View {
 	/** Una acción sobre la membresía: si sale bien, vuelve a la ficha con el aviso; si no, se vuelve a pintar el formulario. */
 	private function membresia_post( string $accion, string $socio ): void {
 		if ( ! current_user_can( 'asde_manage_users' ) ) {
-			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-area-privada' ), 403 );
+			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		if ( ! PersonaRepository::es_num_asde( $socio ) ) {
 			Notices::add( 'error', asde_t( 'Petición no válida.' ) );
@@ -394,7 +394,7 @@ final class FichaView extends View {
 	/** «Eliminar de la web» (v0.35.1): solo Secretaría y Coordinación, y a quien no tiene membresía activa. */
 	private function eliminar_post( string $socio ): void {
 		if ( ! current_user_can( 'asde_manage_users' ) || ! PersonaRepository::es_num_asde( $socio ) ) {
-			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-area-privada' ), 403 );
+			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		check_admin_referer( 'asde_eliminar_' . $socio );
 		$repo = PersonaRepository::make();

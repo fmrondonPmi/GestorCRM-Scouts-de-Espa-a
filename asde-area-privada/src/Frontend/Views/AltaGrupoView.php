@@ -109,7 +109,7 @@ final class AltaGrupoView extends View {
 		if ( ! in_array( $accion, array( 'alta_grupo_comprobar', 'alta_grupo_enviar' ), true ) || is_user_logged_in() ) {
 			return;
 		}
-		if ( ! $this->permitida() || ! wp_verify_nonce( $this->post( '_wpnonce' ), 'asde_alta_grupo' ) ) {
+		if ( ! $this->permitida() || ! wp_verify_nonce( $this->post_nonce(), 'asde_alta_grupo' ) ) {
 			self::$estado = array( 'errores' => array( asde_t( 'La sesión del formulario ha caducado. Vuelve a intentarlo.' ) ) );
 			return;
 		}

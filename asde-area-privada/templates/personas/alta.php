@@ -151,7 +151,7 @@ $edad  = static function ( string $f ) use ( $hoy ): ?int {
 			<form method="post" action="<?php echo esc_url( $url ); ?>" class="asde-form asde-alta-socio__datos" data-asde-solo-consulta>
 				<?php wp_nonce_field( 'asde_alta_socio' ); ?>
 				<input type="hidden" name="asde_action" value="alta_revisar">
-				<?php echo AltaSocio::ocultos( $s, array( 'd' ) ); // phpcs:ignore WordPress.Security.EscapeOutput -- escapado en AltaSocio::ocultos(). ?>
+				<?php echo wp_kses( AltaSocio::ocultos( $s, array( 'd' ) ), asde_html_permitido() ); ?>
 				<fieldset>
 					<legend><?php asde_e( 'Persona' ); ?></legend>
 					<div class="asde-form__columnas">

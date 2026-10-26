@@ -78,7 +78,7 @@ $importe = static function ( string $precio, string $cantidad ): string {
 								<label class="screen-reader-text" for="asde-inv-p-<?php echo (int) $id; ?>"><?php echo esc_html( sprintf( asde_t( 'Precio de «%s»' ), $m['descripcion'] ) ); ?></label>
 								<input type="text" id="asde-inv-p-<?php echo (int) $id; ?>" name="precio[<?php echo (int) $id; ?>]" value="<?php echo esc_attr( $precio ); ?>" inputmode="decimal" size="8" placeholder="0,00" class="asde-inv-num" data-asde-inv-precio>
 							</td>
-							<td data-label="<?php echo esc_attr( asde_a( 'Importe' ) ); ?>" class="asde-num" data-asde-inv-importe><?php echo $importe( $precio, $cantidad ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escapado en $importe ?></td>
+							<td data-label="<?php echo esc_attr( asde_a( 'Importe' ) ); ?>" class="asde-num" data-asde-inv-importe><?php echo wp_kses( $importe( $precio, $cantidad ), asde_html_permitido() ); ?></td>
 						</tr>
 					<?php endforeach; ?>
 				</tbody>
@@ -121,7 +121,7 @@ $importe = static function ( string $precio, string $cantidad ): string {
 							<label class="screen-reader-text" for="asde-inv-np-<?php echo (int) $i; ?>"><?php echo esc_html( sprintf( asde_t( 'Precio estimado, línea %d (opcional)' ), $i + 1 ) ); ?></label>
 							<input type="text" id="asde-inv-np-<?php echo (int) $i; ?>" name="nuevo_precio[<?php echo (int) $i; ?>]" value="<?php echo esc_attr( $precio ); ?>" inputmode="decimal" size="8" placeholder="<?php echo esc_attr( asde_a( 'opcional' ) ); ?>" class="asde-inv-num" data-asde-inv-precio>
 						</td>
-						<td data-label="<?php echo esc_attr( asde_a( 'Importe' ) ); ?>" class="asde-num" data-asde-inv-importe><?php echo $vacia ? '<span class="asde-muted">—</span>' : $importe( $precio, $cantidad ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- escapado en $importe ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Importe' ) ); ?>" class="asde-num" data-asde-inv-importe><?php echo wp_kses( $vacia ? '<span class="asde-muted">—</span>' : $importe( $precio, $cantidad ), asde_html_permitido() ); ?></td>
 					</tr>
 				<?php endforeach; ?>
 			</tbody>

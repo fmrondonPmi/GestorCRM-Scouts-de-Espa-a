@@ -148,7 +148,7 @@ $control = static function ( string $campo, array $f ) use ( $pendientes ): stri
 			<?php
 			if ( $p->tiene_membresia_activa() ) {
 				foreach ( $p->secciones as $s ) {
-					echo Secciones::badge( $s ); // phpcs:ignore WordPress.Security.EscapeOutput
+					echo wp_kses( Secciones::badge( $s ), asde_html_permitido() );
 				}
 			} else {
 				echo '<span class="asde-badge asde-badge--estado-desactivado">' . esc_html( asde_t( 'Sin membresía activa' ) ) . '</span>';
@@ -168,7 +168,7 @@ $control = static function ( string $campo, array $f ) use ( $pendientes ): stri
 	<dl class="asde-datos">
 		<div>
 			<dt><?php echo Identidad::es_asde() ? esc_html( asde_t( 'Nº socio/a Scouts de España' ) ) : esc_html( asde_t( 'Nº socio/a' ) ); ?></dt>
-			<dd><?php echo Numeros::html( $p, $numero ); // phpcs:ignore WordPress.Security.EscapeOutput ?></dd>
+			<dd><?php echo wp_kses( Numeros::html( $p, $numero ), asde_html_permitido() ); ?></dd>
 		</div>
 		<div><dt><?php asde_e( 'Edad' ); ?></dt><dd><?php echo null === $p->edad() ? '—' : sprintf( esc_html( asde_t( '%d años' ) ), (int) $p->edad() ); ?></dd></div>
 		<?php if ( ! empty( $socio_desde ) ) : ?>
@@ -203,7 +203,7 @@ $control = static function ( string $campo, array $f ) use ( $pendientes ): stri
 				<?php asde_e( 'Membresía activa:' ); ?>
 				<?php
 				foreach ( $p->secciones as $s ) {
-					echo Secciones::badge( $s ); // phpcs:ignore WordPress.Security.EscapeOutput
+					echo wp_kses( Secciones::badge( $s ), asde_html_permitido() );
 				}
 				?>
 			<?php else : ?>
@@ -260,7 +260,7 @@ $control = static function ( string $campo, array $f ) use ( $pendientes ): stri
 								<span class="asde-help asde-help--inline"><?php asde_e( '(se revisará)' ); ?></span>
 							<?php endif; ?>
 						</label>
-						<?php echo $control( $campo, $f ); // phpcs:ignore WordPress.Security.EscapeOutput -- escapado en $control. ?>
+						<?php echo wp_kses( $control( $campo, $f ), asde_html_permitido() ); ?>
 						<?php if ( isset( $pendientes[ $campo ] ) ) : ?>
 							<span class="asde-help asde-help--warning"><?php asde_e( 'Cambio pendiente de aprobación: «' ); ?><?php echo esc_html( FichaService::mostrar( $pendientes[ $campo ]['nuevo'], $f['meta'] ) ); ?>»</span>
 						<?php endif; ?>
@@ -276,7 +276,7 @@ $control = static function ( string $campo, array $f ) use ( $pendientes ): stri
 
 <?php
 if ( '' !== ( $sepa ?? '' ) ) {
-	echo $sepa; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- plantilla propia (fichas/sepa), escapada dentro.
+	echo wp_kses( $sepa, asde_html_permitido() );
 }
 ?>
 

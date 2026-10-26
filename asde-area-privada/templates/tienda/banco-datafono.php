@@ -33,7 +33,7 @@ $fecha = static fn( string $f ): string => wp_date( 'd/m/Y', strtotime( $f . ' 1
 				<?php else : ?>
 					<span class="asde-badge asde-badge--pago-parcial"><?php echo esc_html( sprintf( asde_t( 'Se cobró %s (comisión del banco)' ), Calculadora::euros( $a['suma'] ) ) ); ?></span>
 				<?php endif; ?>
-				<?php echo '' !== (string) $m['concepto'] ? '<br><span class="asde-muted">' . esc_html( $m['concepto'] ) . '</span>' : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?>
+				<?php echo wp_kses( '' !== (string) $m['concepto'] ? '<br><span class="asde-muted">' . esc_html( $m['concepto'] ) . '</span>' : '', asde_html_permitido() ); ?>
 			</p>
 			<ul>
 				<?php foreach ( $a['pedidos'] as $p ) : ?>

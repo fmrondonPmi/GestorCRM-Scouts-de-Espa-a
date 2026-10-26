@@ -164,7 +164,7 @@ final class RecetasView extends EventosBaseView {
 			return;
 		}
 		if ( ! current_user_can( Recetario::CAP ) ) {
-			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-area-privada' ), 403 );
+			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		check_admin_referer( 'asde_menus' );
 		$lista = $this->url( 'eventos_recetas' );

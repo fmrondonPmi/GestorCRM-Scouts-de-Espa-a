@@ -35,8 +35,8 @@ final class ModulosPage {
 	public function add_menu(): void {
 		add_submenu_page(
 			self::PADRE,
-			__( 'Módulos', 'asde-area-privada' ),
-			__( 'Módulos', 'asde-area-privada' ),
+			__( 'Módulos', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+			__( 'Módulos', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 			self::CAPABILITY,
 			self::SLUG,
 			array( $this, 'render' )
@@ -45,7 +45,7 @@ final class ModulosPage {
 
 	public function handle_guardar(): void {
 		if ( ! current_user_can( self::CAPABILITY ) ) {
-			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-area-privada' ), 403 );
+			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		check_admin_referer( self::ACCION );
 		$pedidos = isset( $_POST['activos'] ) && is_array( $_POST['activos'] ) ? wp_unslash( $_POST['activos'] ) : array(); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- se sanea abajo: solo números de grupo y claves de módulo conocidos
@@ -75,7 +75,7 @@ final class ModulosPage {
 				'altas_crm' => $con,
 			)
 		);
-		set_transient( self::AVISO . get_current_user_id(), __( 'Módulos guardados.', 'asde-area-privada' ), 5 * MINUTE_IN_SECONDS );
+		set_transient( self::AVISO . get_current_user_id(), __( 'Módulos guardados.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 5 * MINUTE_IN_SECONDS );
 		wp_safe_redirect( self::url() );
 		exit;
 	}
@@ -89,13 +89,13 @@ final class ModulosPage {
 		$grupos = Grupos::todos();
 		?>
 		<div class="wrap asde-modulos">
-			<h1><?php esc_html_e( 'Módulos del área privada', 'asde-area-privada' ); ?></h1>
-			<p><?php esc_html_e( 'Elige qué partes del área privada usa cada grupo. Lo que se desactiva deja de salir en el menú, en el inicio y en sus pantallas para todas las cuentas de ese grupo, también para los administradores mientras trabajan en él. No se borra nada: al activarlo de nuevo, todo está como estaba.', 'asde-area-privada' ); ?></p>
+			<h1><?php esc_html_e( 'Módulos del área privada', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h1>
+			<p><?php esc_html_e( 'Elige qué partes del área privada usa cada grupo. Lo que se desactiva deja de salir en el menú, en el inicio y en sus pantallas para todas las cuentas de ese grupo, también para los administradores mientras trabajan en él. No se borra nada: al activarlo de nuevo, todo está como estaba.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 			<?php if ( is_string( $aviso ) ) : ?>
 				<div class="notice notice-success"><p><?php echo esc_html( $aviso ); ?></p></div>
 			<?php endif; ?>
 			<?php if ( ! $grupos ) : ?>
-				<p><?php esc_html_e( 'Todavía no hay ningún grupo dado de alta.', 'asde-area-privada' ); ?></p>
+				<p><?php esc_html_e( 'Todavía no hay ningún grupo dado de alta.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 			<?php else : ?>
 				<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 					<input type="hidden" name="action" value="<?php echo esc_attr( self::ACCION ); ?>">
@@ -103,18 +103,18 @@ final class ModulosPage {
 					<table class="widefat striped asde-modulos__tabla">
 						<thead>
 							<tr>
-								<th scope="col"><?php esc_html_e( 'Grupo', 'asde-area-privada' ); ?></th>
+								<th scope="col"><?php esc_html_e( 'Grupo', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
 								<?php foreach ( Modulos::LISTA as $m => $def ) : ?>
 									<th scope="col" title="<?php echo esc_attr( asde_t( $def[1] ) ); ?>">
 										<?php echo esc_html( asde_t( $def[0] ) ); ?>
 										<?php if ( '' !== $def[3] ) : ?>
-											<br><span class="description"><?php /* translators: %s: módulo del que depende */ echo esc_html( sprintf( __( '(dentro de %s)', 'asde-area-privada' ), asde_t( Modulos::LISTA[ $def[3] ][0] ) ) ); ?></span>
+											<br><span class="description"><?php /* translators: %s: módulo del que depende */ echo esc_html( sprintf( __( '(dentro de %s)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), asde_t( Modulos::LISTA[ $def[3] ][0] ) ) ); ?></span>
 										<?php endif; ?>
 									</th>
 								<?php endforeach; ?>
-								<th scope="col" title="<?php esc_attr_e( 'Secretaría y Coordinación dan de alta personas y membresías, bajas y cambios de sección desde la web, escribiendo en el CRM.', 'asde-area-privada' ); ?>">
-									<?php esc_html_e( 'Altas en el CRM', 'asde-area-privada' ); ?>
-									<br><span class="description"><?php esc_html_e( '(escribe en el CRM)', 'asde-area-privada' ); ?></span>
+								<th scope="col" title="<?php esc_attr_e( 'Secretaría y Coordinación dan de alta personas y membresías, bajas y cambios de sección desde la web, escribiendo en el CRM.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>">
+									<?php esc_html_e( 'Altas en el CRM', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>
+									<br><span class="description"><?php esc_html_e( '(escribe en el CRM)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span>
 								</th>
 							</tr>
 						</thead>
@@ -131,16 +131,16 @@ final class ModulosPage {
 									<?php endforeach; ?>
 									<?php $id = 'asde-altas-' . $g['numero']; ?>
 									<td>
-										<label for="<?php echo esc_attr( $id ); ?>" class="screen-reader-text"><?php echo esc_html( Grupos::etiqueta( $g ) . ' · ' . __( 'Altas en el CRM', 'asde-area-privada' ) ); ?></label>
+										<label for="<?php echo esc_attr( $id ); ?>" class="screen-reader-text"><?php echo esc_html( Grupos::etiqueta( $g ) . ' · ' . __( 'Altas en el CRM', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?></label>
 										<input type="checkbox" id="<?php echo esc_attr( $id ); ?>" name="altas[<?php echo esc_attr( $g['numero'] ); ?>]" value="1" <?php checked( Altas::activo( (string) $g['numero'] ) ); ?>>
 									</td>
 								</tr>
 							<?php endforeach; ?>
 						</tbody>
 					</table>
-					<p class="description"><?php esc_html_e( 'Banco y Domiciliaciones SEPA van dentro de Tesorería: si se desactiva Tesorería, tampoco se ven. «Mis pagos» se queda mientras el grupo use Tesorería, Uniformes o Eventos.', 'asde-area-privada' ); ?></p>
-					<p class="description"><?php esc_html_e( '«Altas en el CRM» nace apagada. Con ella, Secretaría y Coordinación dan de alta a personas nuevas con su membresía, dan membresías nuevas a quien vuelve, bajas y cambios de sección, y ponen el documento a quien no lo tiene: todo se escribe en el CRM de Scouts de España. Necesita que el usuario del CRM del grupo pueda crear personas y membresías; si no puede, las pantallas no salen.', 'asde-area-privada' ); ?></p>
-					<?php submit_button( __( 'Guardar los módulos', 'asde-area-privada' ) ); ?>
+					<p class="description"><?php esc_html_e( 'Banco y Domiciliaciones SEPA van dentro de Tesorería: si se desactiva Tesorería, tampoco se ven. «Mis pagos» se queda mientras el grupo use Tesorería, Uniformes o Eventos.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
+					<p class="description"><?php esc_html_e( '«Altas en el CRM» nace apagada. Con ella, Secretaría y Coordinación dan de alta a personas nuevas con su membresía, dan membresías nuevas a quien vuelve, bajas y cambios de sección, y ponen el documento a quien no lo tiene: todo se escribe en el CRM de Scouts de España. Necesita que el usuario del CRM del grupo pueda crear personas y membresías; si no puede, las pantallas no salen.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
+					<?php submit_button( __( 'Guardar los módulos', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>
 				</form>
 			<?php endif; ?>
 		</div>

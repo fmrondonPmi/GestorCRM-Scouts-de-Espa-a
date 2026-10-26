@@ -192,7 +192,7 @@ try {
 
 	echo "\n== Parte F · gettext: lo que ya llevaba __() ==\n";
 	Idioma::forzar( 'ca' );
-	$ok( 'Les meves dades' === $router->traducir_gettext( 'Mis datos', 'Mis datos', 'asde-area-privada' ) && 'X' === $router->traducir_gettext( 'X', 'Otro texto', 'asde-area-privada' ) && 'Y' === $router->traducir_gettext( 'Y', 'Mis datos', 'otro-plugin' ), 'los textos con __() del plugin se traducen; los de otro dominio y los que no tienen traducción, no' );
+	$ok( 'Les meves dades' === $router->traducir_gettext( 'Mis datos', 'Mis datos', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) && 'X' === $router->traducir_gettext( 'X', 'Otro texto', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) && 'Y' === $router->traducir_gettext( 'Y', 'Mis datos', 'otro-plugin' ), 'los textos con __() del plugin se traducen; los de otro dominio y los que no tienen traducción, no' );
 	Idioma::forzar( null );
 
 	echo "\n== Parte G · Pantalla de administración ==\n";

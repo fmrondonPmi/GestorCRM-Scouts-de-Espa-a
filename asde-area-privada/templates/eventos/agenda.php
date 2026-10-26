@@ -85,7 +85,7 @@ defined( 'ABSPATH' ) || exit;
 						<td data-label="<?php echo esc_attr( asde_a( 'Secciones' ) ); ?>">
 							<?php
 							foreach ( $e['secciones'] as $s ) {
-								echo Secciones::badge( $s ); // phpcs:ignore WordPress.Security.EscapeOutput
+								echo wp_kses( Secciones::badge( $s ), asde_html_permitido() );
 							}
 							?>
 						</td>

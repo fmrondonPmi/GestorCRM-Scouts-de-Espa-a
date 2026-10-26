@@ -37,21 +37,21 @@ $fuerte  = static fn( string $t ): string => '<strong>' . esc_html( $t ) . '</st
 					<?php echo esc_html( $grupo ); ?> · <?php asde_e( 'Tienda' ); ?>
 				</td></tr>
 				<tr><td style="padding:28px;font-size:15px;line-height:1.6;">
-					<p style="<?php echo esc_attr( $p ); ?>"><?php echo $saludo ? sprintf( asde_h( 'Hola, %s:' ), esc_html( $saludo ) ) : asde_h( 'Hola:' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+					<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( $saludo ? sprintf( asde_h( 'Hola, %s:' ), esc_html( $saludo ) ) : asde_h( 'Hola:' ), asde_html_permitido() ); ?></p>
 
 					<?php if ( 'pagado' === $tipo ) : ?>
-						<p style="<?php echo esc_attr( $p ); ?>"><?php echo sprintf( asde_h( 'Tesorería ha validado el pago del pedido %s. ¡Gracias!' ), $fuerte( $numero ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+						<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( sprintf( asde_h( 'Tesorería ha validado el pago del pedido %s. ¡Gracias!' ), $fuerte( $numero ) ), asde_html_permitido() ); ?></p>
 					<?php elseif ( 'recordatorio' === $tipo ) : ?>
-						<p style="<?php echo esc_attr( $p ); ?>"><?php echo sprintf( asde_h( 'Te recordamos que el pedido %s sigue sin pagar.' ), $fuerte( $numero ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?><?php echo '' !== $limite ? ' ' . sprintf( asde_h( 'Si no se paga antes del %s, se cancelará y lo que pediste volverá a la tienda.' ), $fuerte( $limite ) ) : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+						<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( sprintf( asde_h( 'Te recordamos que el pedido %s sigue sin pagar.' ), $fuerte( $numero ) ), asde_html_permitido() ); ?><?php echo wp_kses( '' !== $limite ? ' ' . sprintf( asde_h( 'Si no se paga antes del %s, se cancelará y lo que pediste volverá a la tienda.' ), $fuerte( $limite ) ) : '', asde_html_permitido() ); ?></p>
 					<?php elseif ( 'cancelado' === $tipo ) : ?>
-						<p style="<?php echo esc_attr( $p ); ?>"><?php echo sprintf( asde_h( 'El pedido %s se ha cancelado porque no se pagó a tiempo, y lo que pediste ha vuelto a la tienda. Si todavía lo quieres, puedes hacer un pedido nuevo.' ), $fuerte( $numero ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+						<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( sprintf( asde_h( 'El pedido %s se ha cancelado porque no se pagó a tiempo, y lo que pediste ha vuelto a la tienda. Si todavía lo quieres, puedes hacer un pedido nuevo.' ), $fuerte( $numero ) ), asde_html_permitido() ); ?></p>
 					<?php elseif ( 'entregado' === $tipo ) : ?>
-						<p style="<?php echo esc_attr( $p ); ?>"><?php echo sprintf( asde_h( 'El pedido %s ya está entregado. Cuando lo tengas, confírmalo en «Mis pedidos».' ), $fuerte( $numero ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+						<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( sprintf( asde_h( 'El pedido %s ya está entregado. Cuando lo tengas, confírmalo en «Mis pedidos».' ), $fuerte( $numero ) ), asde_html_permitido() ); ?></p>
 					<?php else : ?>
-						<p style="<?php echo esc_attr( $p ); ?>"><?php echo sprintf( asde_h( 'Hemos recibido tu pedido %s.' ), $fuerte( $numero ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+						<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( sprintf( asde_h( 'Hemos recibido tu pedido %s.' ), $fuerte( $numero ) ), asde_html_permitido() ); ?></p>
 					<?php endif; ?>
 
-					<p style="<?php echo esc_attr( $p ); ?>"><?php echo esc_html( $descripcion ); ?> — <?php echo $fuerte( $importe ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+					<p style="<?php echo esc_attr( $p ); ?>"><?php echo esc_html( $descripcion ); ?> — <?php echo wp_kses( $fuerte( $importe ), asde_html_permitido() ); ?></p>
 
 					<?php if ( $pagar ) : ?>
 						<p style="<?php echo esc_attr( $p ); ?>"><strong><?php asde_e( 'Cómo pagarlo' ); ?></strong></p>
@@ -59,7 +59,7 @@ $fuerte  = static fn( string $t ): string => '<strong>' . esc_html( $t ) . '</st
 							<p style="<?php echo esc_attr( $p ); ?>"><?php echo esc_html( $linea ); ?></p>
 						<?php endforeach; ?>
 						<?php if ( '' !== trim( $texto_pago ) ) : ?>
-							<p style="<?php echo esc_attr( $p ); ?>"><?php echo nl2br( esc_html( $texto_pago ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+							<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( nl2br( esc_html( $texto_pago ) ), asde_html_permitido() ); ?></p>
 						<?php endif; ?>
 						<p style="<?php echo esc_attr( $atenuar ); ?>"><?php asde_e( 'Cuando Tesorería reciba el pago, lo verás como pagado en «Mis pedidos».' ); ?></p>
 					<?php endif; ?>
@@ -68,7 +68,7 @@ $fuerte  = static fn( string $t ): string => '<strong>' . esc_html( $t ) . '</st
 						<a href="<?php echo esc_url( $url ); ?>" style="display:inline-block;background:<?php echo esc_attr( $col['primary'] ); ?>;color:<?php echo esc_attr( $col['on_primary'] ); ?>;text-decoration:none;font-weight:600;padding:12px 24px;border-radius:4px;"><?php echo esc_html( $boton ); ?></a>
 					</p>
 					<?php if ( '' !== $contacto ) : ?>
-						<p style="margin:0;font-size:13px;color:<?php echo esc_attr( $col['atenuado'] ); ?>;"><?php echo sprintf( asde_h( '¿Dudas? Escríbenos a %s.' ), '<a href="mailto:' . esc_attr( $contacto ) . '" style="color:' . esc_attr( $col['primary'] ) . ';">' . esc_html( $contacto ) . '</a>' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+						<p style="margin:0;font-size:13px;color:<?php echo esc_attr( $col['atenuado'] ); ?>;"><?php echo wp_kses( sprintf( asde_h( '¿Dudas? Escríbenos a %s.' ), '<a href="mailto:' . esc_attr( $contacto ) . '" style="color:' . esc_attr( $col['primary'] ) . ';">' . esc_html( $contacto ) . '</a>' ), asde_html_permitido() ); ?></p>
 					<?php endif; ?>
 				</td></tr>
 			</table>

@@ -30,8 +30,8 @@ $col = Colores::para_email(); // Los colores elegidos en wp-admin → Colores (l
 					<?php echo esc_html( $grupo ); ?> · <?php asde_e( 'Área privada' ); ?>
 				</td></tr>
 				<tr><td style="padding:28px;font-size:15px;line-height:1.6;">
-					<p style="margin:0 0 16px;"><?php echo '' !== $nombre ? sprintf( asde_h( 'Hola, %s:' ), esc_html( $nombre ) ) : asde_h( 'Hola:' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
-					<p style="margin:0 0 16px;"><?php echo sprintf( asde_h( '%1$s ha preparado la lista de compra de material <strong>%2$s</strong> y espera el <strong>visto bueno de Tesorería</strong>. Hasta que se lo des, no se puede imprimir.' ), esc_html( '' !== $autor ? $autor : asde_t( 'Alguien del grupo' ) ), esc_html( ComprasTable::numero( $lista ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+					<p style="margin:0 0 16px;"><?php echo wp_kses( '' !== $nombre ? sprintf( asde_h( 'Hola, %s:' ), esc_html( $nombre ) ) : asde_h( 'Hola:' ), asde_html_permitido() ); ?></p>
+					<p style="margin:0 0 16px;"><?php echo wp_kses( sprintf( asde_h( '%1$s ha preparado la lista de compra de material <strong>%2$s</strong> y espera el <strong>visto bueno de Tesorería</strong>. Hasta que se lo des, no se puede imprimir.' ), esc_html( '' !== $autor ? $autor : asde_t( 'Alguien del grupo' ) ), esc_html( ComprasTable::numero( $lista ) ) ), asde_html_permitido() ); ?></p>
 					<?php
 					$tabla = TemplateLoader::render(
 						'email/compra-tabla',
@@ -40,7 +40,7 @@ $col = Colores::para_email(); // Los colores elegidos en wp-admin → Colores (l
 							'col'   => $col,
 						)
 					);
-					echo $tabla; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML de la plantilla de la tabla, ya escapado en ella
+					echo wp_kses( $tabla, asde_html_permitido() );
 					?>
 					<?php if ( '' !== trim( $lista['nota'] ) ) : ?>
 						<p style="margin:0 0 16px;"><strong><?php asde_e( 'Nota:' ); ?></strong> <?php echo nl2br( esc_html( $lista['nota'] ) ); ?></p>

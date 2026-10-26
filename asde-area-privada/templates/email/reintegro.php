@@ -53,26 +53,26 @@ if ( '' !== $iban ) {
 					<?php echo esc_html( $grupo ); ?> · <?php asde_e( 'Reintegros' ); ?>
 				</td></tr>
 				<tr><td style="padding:28px;font-size:15px;line-height:1.6;">
-					<p style="<?php echo esc_attr( $p ); ?>"><?php echo $saludo ? sprintf( asde_h( 'Hola, %s:' ), esc_html( $saludo ) ) : asde_h( 'Hola:' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+					<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( $saludo ? sprintf( asde_h( 'Hola, %s:' ), esc_html( $saludo ) ) : asde_h( 'Hola:' ), asde_html_permitido() ); ?></p>
 
 					<?php if ( 'aprobado' === $tipo ) : ?>
-						<p style="<?php echo esc_attr( $p ); ?>"><?php echo sprintf( asde_h( 'Tesorería ha aprobado tu reintegro %s. En cuanto se pague, te lo avisamos.' ), $fuerte( $numero ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+						<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( sprintf( asde_h( 'Tesorería ha aprobado tu reintegro %s. En cuanto se pague, te lo avisamos.' ), $fuerte( $numero ) ), asde_html_permitido() ); ?></p>
 					<?php elseif ( 'rechazado' === $tipo ) : ?>
-						<p style="<?php echo esc_attr( $p ); ?>"><?php echo sprintf( asde_h( 'Tesorería no ha aprobado tu reintegro %s.' ), $fuerte( $numero ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+						<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( sprintf( asde_h( 'Tesorería no ha aprobado tu reintegro %s.' ), $fuerte( $numero ) ), asde_html_permitido() ); ?></p>
 						<?php if ( '' !== $motivo ) : ?>
-							<p style="<?php echo esc_attr( $p ); ?>"><?php echo sprintf( asde_h( 'Motivo: %s' ), esc_html( $motivo ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+							<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( sprintf( asde_h( 'Motivo: %s' ), esc_html( $motivo ) ), asde_html_permitido() ); ?></p>
 						<?php endif; ?>
 					<?php elseif ( 'pagado' === $tipo ) : ?>
-						<p style="<?php echo esc_attr( $p ); ?>"><?php echo sprintf( asde_h( 'Tu reintegro %1$s ya está pagado (%2$s).' ), $fuerte( $numero ), esc_html( $pago ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+						<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( sprintf( asde_h( 'Tu reintegro %1$s ya está pagado (%2$s).' ), $fuerte( $numero ), esc_html( $pago ) ), asde_html_permitido() ); ?></p>
 					<?php else : ?>
-						<p style="<?php echo esc_attr( $p ); ?>"><?php echo sprintf( asde_h( '%1$s pide el reintegro %2$s, que quiere cobrar por transferencia. Hay que aprobarlo y, después, pagarlo.' ), esc_html( $quien ), $fuerte( $numero ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+						<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( sprintf( asde_h( '%1$s pide el reintegro %2$s, que quiere cobrar por transferencia. Hay que aprobarlo y, después, pagarlo.' ), esc_html( $quien ), $fuerte( $numero ) ), asde_html_permitido() ); ?></p>
 					<?php endif; ?>
 
 					<table role="presentation" cellspacing="0" cellpadding="4" style="margin:0 0 16px;font-size:14px;">
 						<?php foreach ( $filas as $etiqueta => $valor ) : ?>
 							<tr>
 								<td style="color:<?php echo esc_attr( $col['atenuado'] ); ?>;vertical-align:top;"><?php echo esc_html( $etiqueta ); ?></td>
-								<td><?php echo $fuerte( (string) $valor ); // phpcs:ignore WordPress.Security.EscapeOutput ?></td>
+								<td><?php echo wp_kses( $fuerte( (string) $valor ), asde_html_permitido() ); ?></td>
 							</tr>
 						<?php endforeach; ?>
 					</table>
@@ -81,7 +81,7 @@ if ( '' !== $iban ) {
 						<a href="<?php echo esc_url( $url ); ?>" style="display:inline-block;background:<?php echo esc_attr( $col['primary'] ); ?>;color:<?php echo esc_attr( $col['on_primary'] ); ?>;text-decoration:none;font-weight:600;padding:12px 22px;border-radius:4px;"><?php asde_e( 'Ver los reintegros' ); ?></a>
 					</p>
 					<?php if ( '' !== $contacto ) : ?>
-						<p style="margin:0;font-size:13px;color:<?php echo esc_attr( $col['atenuado'] ); ?>;"><?php echo sprintf( asde_h( '¿Dudas? Escríbenos a %s.' ), '<a href="mailto:' . esc_attr( $contacto ) . '" style="color:' . esc_attr( $col['primary'] ) . ';">' . esc_html( $contacto ) . '</a>' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+						<p style="margin:0;font-size:13px;color:<?php echo esc_attr( $col['atenuado'] ); ?>;"><?php echo wp_kses( sprintf( asde_h( '¿Dudas? Escríbenos a %s.' ), '<a href="mailto:' . esc_attr( $contacto ) . '" style="color:' . esc_attr( $col['primary'] ) . ';">' . esc_html( $contacto ) . '</a>' ), asde_html_permitido() ); ?></p>
 					<?php endif; ?>
 				</td></tr>
 			</table>

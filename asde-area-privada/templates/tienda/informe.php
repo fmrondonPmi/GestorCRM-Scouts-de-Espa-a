@@ -60,7 +60,7 @@ $fecha = static fn( string $f ): string => wp_date( 'd/m/Y', strtotime( $f . ' U
 				<?php foreach ( $productos as $d ) : ?>
 					<tr>
 						<td data-label="<?php echo esc_attr( asde_a( 'Producto' ) ); ?>"><?php echo esc_html( $d['producto'] ); ?></td>
-						<td data-label="<?php echo esc_attr( asde_a( 'Variante' ) ); ?>"><?php echo '' !== $d['variante'] ? esc_html( $d['variante'] ) : '<span class="asde-muted">—</span>'; // phpcs:ignore WordPress.Security.EscapeOutput ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Variante' ) ); ?>"><?php echo wp_kses( '' !== $d['variante'] ? esc_html( $d['variante'] ) : '<span class="asde-muted">—</span>', asde_html_permitido() ); ?></td>
 						<td data-label="<?php echo esc_attr( asde_a( 'Unidades' ) ); ?>"><?php echo (int) $d['unidades']; ?></td>
 						<td data-label="<?php echo esc_attr( asde_a( 'Importe' ) ); ?>"><?php echo esc_html( Calculadora::euros( $d['importe'] ) ); ?></td>
 						<td data-label="<?php echo esc_attr( asde_a( 'De ellos, pagado' ) ); ?>"><?php echo esc_html( Calculadora::euros( $d['pagado'] ) ); ?></td>

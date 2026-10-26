@@ -25,7 +25,7 @@ $fecha = static fn( string $f ): string => wp_date( 'd/m/Y', strtotime( $f . ' 1
 	<header class="asde-card__header">
 		<h2 class="asde-card__title"><?php echo esc_html( '' !== $nombre ? $nombre : $user->user_login ); ?></h2>
 	</header>
-	<p><?php echo esc_html( $roles ); ?><?php echo '' !== $nombre ? ' · <span class="asde-muted">' . esc_html( $user->user_login ) . '</span>' : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?> · <a href="<?php echo esc_url( $volver ); ?>"><?php asde_e( 'Volver al listado' ); ?></a></p>
+	<p><?php echo esc_html( $roles ); ?><?php echo wp_kses( '' !== $nombre ? ' · <span class="asde-muted">' . esc_html( $user->user_login ) . '</span>' : '', asde_html_permitido() ); ?> · <a href="<?php echo esc_url( $volver ); ?>"><?php asde_e( 'Volver al listado' ); ?></a></p>
 	<?php if ( $soy_yo ) : ?>
 		<div class="asde-notice asde-notice--info" role="status"><?php asde_e( 'Esta eres tú: puedes ver tus accesos y quitarte permisos sueltos, pero no concedértelos. Que lo haga otra persona de Coordinación, Secretaría o Tesorería.' ); ?></div>
 	<?php endif; ?>

@@ -92,7 +92,7 @@ final class CajaView extends TesoreriaBaseView {
 	public function exportar(): void {
 		$caja = $this->get( 'caja' );
 		if ( ! wp_verify_nonce( $this->get( '_wpnonce' ), 'asde_caja_excel' ) || ! Cajas::puede( $caja ) ) {
-			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-area-privada' ), 403 );
+			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		$periodo = Periodo::de( $this->get( 'periodo' ) );
 		list( $cabecera, $filas, $opciones ) = self::excel( $caja, $periodo, Servicio::extracto( $caja, $periodo ) );
@@ -130,7 +130,7 @@ final class CajaView extends TesoreriaBaseView {
 
 	public function handle_post(): void {
 		if ( ! Cajas::visibles() ) {
-			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-area-privada' ), 403 );
+			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		check_admin_referer( 'asde_caja' );
 		$caja    = $this->post( 'caja' );

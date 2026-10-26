@@ -30,7 +30,7 @@ $p   = 'margin:0 0 12px;';
 					<?php asde_e( 'Hoja de cocina' ); ?> · <?php echo esc_html( $evento ); ?>
 				</td></tr>
 				<tr><td style="padding:28px;font-size:15px;line-height:1.6;">
-					<p style="<?php echo esc_attr( $p ); ?>"><?php echo $saludo ? sprintf( asde_h( 'Hola, %s:' ), esc_html( $saludo ) ) : asde_h( 'Hola:' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+					<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( $saludo ? sprintf( asde_h( 'Hola, %s:' ), esc_html( $saludo ) ) : asde_h( 'Hola:' ), asde_html_permitido() ); ?></p>
 					<p style="<?php echo esc_attr( $p ); ?>"><?php echo esc_html( sprintf( asde_t( 'Estas son las personas con alergias, intolerancias o dieta que cruzan con el menú de %1$s (%2$s). Válida a fecha de %3$s: si algo cambia, se volverá a enviar.' ), $numero, $cuando, $hoja['momento'] ) ); ?></p>
 					<p style="<?php echo esc_attr( $p ); ?>color:<?php echo esc_attr( $col['atenuado'] ); ?>;font-size:13px;"><?php asde_e( 'Contiene datos de salud de menores: no lo reenvíes, no lo dejes a la vista y bórralo al acabar el evento.' ); ?></p>
 					<?php foreach ( $hoja['platos'] as $pl ) : ?>

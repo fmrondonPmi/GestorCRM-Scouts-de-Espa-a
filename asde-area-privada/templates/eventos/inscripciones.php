@@ -104,7 +104,7 @@ $devolver = static function ( array $f, array $c ) use ( $campos, $fila_h, $form
 		<div><dt><?php asde_e( 'Plazas' ); ?></dt><dd>
 			<?php foreach ( $e['secciones'] as $s ) : ?>
 				<?php $max = (int) ( $e['plazas'][ $s ]['maximas'] ?? 0 ); ?>
-				<?php echo Secciones::badge( $s ); // phpcs:ignore WordPress.Security.EscapeOutput ?> <?php echo esc_html( $max ? sprintf( asde_t( '%1$d de %2$d plazas ocupadas' ), $ocupadas['seccion'][ $s ] ?? 0, $max ) : sprintf( asde_t( '%d plazas ocupadas' ), $ocupadas['seccion'][ $s ] ?? 0 ) ); ?><br>
+				<?php echo wp_kses( Secciones::badge( $s ), asde_html_permitido() ); ?> <?php echo esc_html( $max ? sprintf( asde_t( '%1$d de %2$d plazas ocupadas' ), $ocupadas['seccion'][ $s ] ?? 0, $max ) : sprintf( asde_t( '%d plazas ocupadas' ), $ocupadas['seccion'][ $s ] ?? 0 ) ); ?><br>
 			<?php endforeach; ?>
 			<?php if ( $e['plazas_max'] ) : ?>
 				<?php echo esc_html( sprintf( asde_t( 'En total: %1$d de %2$d' ), $ocupadas['total'], $e['plazas_max'] ) ); ?>
@@ -150,7 +150,7 @@ $devolver = static function ( array $f, array $c ) use ( $campos, $fila_h, $form
 					?>
 					<tr>
 						<td data-label="<?php echo esc_attr( asde_a( 'Nombre' ) ); ?>">
-							<strong><?php echo esc_html( $nombre( $f ) ); ?></strong> <?php echo Secciones::badge( $f['seccion'] ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+							<strong><?php echo esc_html( $nombre( $f ) ); ?></strong> <?php echo wp_kses( Secciones::badge( $f['seccion'] ), asde_html_permitido() ); ?>
 							<?php if ( '' !== $f['motivo'] ) : ?>
 								<br><span class="asde-muted"><?php echo esc_html( sprintf( asde_t( 'Excepción: %s' ), $f['motivo'] ) ); ?></span>
 							<?php endif; ?>
@@ -165,10 +165,10 @@ $devolver = static function ( array $f, array $c ) use ( $campos, $fila_h, $form
 								<details class="asde-inscripcion__datos">
 									<summary><?php asde_e( 'Recogida y observaciones' ); ?></summary>
 									<?php if ( '' !== $datos[ $f['id'] ]['recoge'] ) : ?>
-										<p><strong><?php asde_e( 'Recogen:' ); ?></strong> <?php echo nl2br( esc_html( $datos[ $f['id'] ]['recoge'] ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+										<p><strong><?php asde_e( 'Recogen:' ); ?></strong> <?php echo wp_kses( nl2br( esc_html( $datos[ $f['id'] ]['recoge'] ) ), asde_html_permitido() ); ?></p>
 									<?php endif; ?>
 									<?php if ( '' !== $datos[ $f['id'] ]['observaciones'] ) : ?>
-										<p><strong><?php asde_e( 'Observaciones:' ); ?></strong> <?php echo nl2br( esc_html( $datos[ $f['id'] ]['observaciones'] ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+										<p><strong><?php asde_e( 'Observaciones:' ); ?></strong> <?php echo wp_kses( nl2br( esc_html( $datos[ $f['id'] ]['observaciones'] ) ), asde_html_permitido() ); ?></p>
 									<?php endif; ?>
 								</details>
 							<?php endif; ?>
@@ -182,7 +182,7 @@ $devolver = static function ( array $f, array $c ) use ( $campos, $fila_h, $form
 							<?php if ( in_array( $f['autorizacion'], array( 'web', 'papel' ), true ) ) : ?>
 								<span class="asde-muted"><?php echo esc_html( $cuando( $f['autorizacion_en'] ) ); ?><?php echo 'web' === $f['autorizacion'] ? esc_html( ' · ' . $f['autorizacion_version'] ) : ''; ?></span>
 							<?php elseif ( '' === $f['autorizacion'] && $gestionable ) : ?>
-								<form method="post" class="asde-inline-form"><?php echo $campos( 'evento_papel', $fila_h( $f ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?><button type="submit" class="asde-btn-link"><?php asde_e( 'Marcar la de papel como recibida' ); ?></button></form>
+								<form method="post" class="asde-inline-form"><?php echo wp_kses( $campos( 'evento_papel', $fila_h( $f ) ), asde_html_permitido() ); ?><button type="submit" class="asde-btn-link"><?php asde_e( 'Marcar la de papel como recibida' ); ?></button></form>
 							<?php endif; ?>
 						</td>
 						<?php if ( $e['con_coste'] ) : ?>
@@ -214,7 +214,7 @@ $devolver = static function ( array $f, array $c ) use ( $campos, $fila_h, $form
 												<?php if ( null !== $m['anulado_en'] ) : ?>
 													<?php asde_e( '(anulado)' ); ?>
 												<?php elseif ( $abiertas ) : ?>
-													<form method="post" class="asde-inline-form" data-asde-confirmar="<?php echo esc_attr( asde_js( '¿Anular este movimiento? Si es un pago de la familia, se anula entero.' ) ); ?>"><?php echo $campos( 'evento_anular', '<input type="hidden" name="movimiento" value="' . (int) $m['id'] . '">' ); // phpcs:ignore WordPress.Security.EscapeOutput ?><button type="submit" class="asde-btn-link"><?php asde_e( 'Anular' ); ?></button></form>
+													<form method="post" class="asde-inline-form" data-asde-confirmar="<?php echo esc_attr( asde_js( '¿Anular este movimiento? Si es un pago de la familia, se anula entero.' ) ); ?>"><?php echo wp_kses( $campos( 'evento_anular', '<input type="hidden" name="movimiento" value="' . (int) $m['id'] . '">' ), asde_html_permitido() ); ?><button type="submit" class="asde-btn-link"><?php asde_e( 'Anular' ); ?></button></form>
 												<?php endif; ?>
 											</li>
 										<?php endforeach; ?>
@@ -227,9 +227,9 @@ $devolver = static function ( array $f, array $c ) use ( $campos, $fila_h, $form
 								<details class="asde-accion">
 									<summary><?php asde_e( 'Registrar un pago' ); ?></summary>
 									<form method="post" class="asde-form asde-form--compacta">
-										<?php echo $campos( 'evento_pago', $fila_h( $f ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+										<?php echo wp_kses( $campos( 'evento_pago', $fila_h( $f ) ), asde_html_permitido() ); ?>
 										<label><?php asde_e( 'Importe (€)' ); ?> <input type="text" name="importe" inputmode="decimal" value="<?php echo esc_attr( number_format( $c['pendiente'], 2, ',', '' ) ); ?>" required></label>
-										<label><?php asde_e( 'Forma de pago' ); ?> <?php echo $formas(); // phpcs:ignore WordPress.Security.EscapeOutput ?></label>
+										<label><?php asde_e( 'Forma de pago' ); ?> <?php echo wp_kses( $formas(), asde_html_permitido() ); ?></label>
 										<label><?php asde_e( 'Fecha' ); ?> <input type="date" name="fecha" value="<?php echo esc_attr( $hoy ); ?>" max="<?php echo esc_attr( $hoy ); ?>" required></label>
 										<label><?php asde_e( 'Referencia' ); ?> <input type="text" name="referencia" maxlength="120" value="<?php echo esc_attr( $refs[ $f['id'] ] ?? '' ); ?>"></label>
 										<label><?php asde_e( 'Nota' ); ?> <input type="text" name="nota" maxlength="255"></label>
@@ -238,13 +238,13 @@ $devolver = static function ( array $f, array $c ) use ( $campos, $fila_h, $form
 								</details>
 							<?php endif; ?>
 							<?php if ( $economia && $abiertas && $e['con_coste'] && $c['neto'] > 0 ) : ?>
-								<?php echo $devolver( $f, $c ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+								<?php echo wp_kses( $devolver( $f, $c ), asde_html_permitido() ); ?>
 							<?php endif; ?>
 							<?php if ( $economia && $abiertas && $e['con_coste'] ) : ?>
 								<details class="asde-accion">
 									<summary><?php asde_e( 'Beca o ajuste' ); ?></summary>
 									<form method="post" class="asde-form asde-form--compacta">
-										<?php echo $campos( 'evento_ajuste', $fila_h( $f ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+										<?php echo wp_kses( $campos( 'evento_ajuste', $fila_h( $f ) ), asde_html_permitido() ); ?>
 										<label><?php asde_e( 'Tipo' ); ?> <select name="sentido"><option value="rebaja" selected><?php asde_e( 'Rebaja o beca' ); ?></option><option value="recargo"><?php asde_e( 'Recargo' ); ?></option></select></label>
 										<label><?php asde_e( 'Importe (€)' ); ?> <input type="text" name="importe" inputmode="decimal" required></label>
 										<label><?php asde_e( 'Motivo' ); ?> <input type="text" name="motivo" maxlength="255" required></label>
@@ -256,7 +256,7 @@ $devolver = static function ( array $f, array $c ) use ( $campos, $fila_h, $form
 								<details class="asde-accion">
 									<summary><?php asde_e( 'Dar de baja' ); ?></summary>
 									<form method="post" class="asde-form asde-form--compacta">
-										<?php echo $campos( 'evento_baja', $fila_h( $f ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+										<?php echo wp_kses( $campos( 'evento_baja', $fila_h( $f ) ), asde_html_permitido() ); ?>
 										<label><?php asde_e( 'Motivo' ); ?> <input type="text" name="motivo" maxlength="255" required></label>
 										<button type="submit" class="button"><?php asde_e( 'Dar de baja' ); ?></button>
 									</form>
@@ -276,7 +276,7 @@ $devolver = static function ( array $f, array $c ) use ( $campos, $fila_h, $form
 		<ol class="asde-lista-espera">
 			<?php foreach ( $espera as $f ) : ?>
 				<li>
-					<?php echo esc_html( $nombre( $f ) ); ?> <?php echo Secciones::badge( $f['seccion'] ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+					<?php echo esc_html( $nombre( $f ) ); ?> <?php echo wp_kses( Secciones::badge( $f['seccion'] ), asde_html_permitido() ); ?>
 					<?php if ( Inscripciones::con_oferta( $f ) ) : ?>
 						<span class="asde-badge asde-badge--inscripcion-plaza"><?php echo esc_html( sprintf( asde_t( 'Plaza ofrecida hasta el %s' ), wp_date( 'd/m/Y H:i', (int) strtotime( $f['oferta_hasta'] . ' UTC' ) ) ) ); ?></span>
 					<?php endif; ?>
@@ -284,7 +284,7 @@ $devolver = static function ( array $f, array $c ) use ( $campos, $fila_h, $form
 						<details class="asde-accion">
 							<summary><?php asde_e( 'Sacar de la lista' ); ?></summary>
 							<form method="post" class="asde-form asde-form--compacta">
-								<?php echo $campos( 'evento_baja', $fila_h( $f ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+								<?php echo wp_kses( $campos( 'evento_baja', $fila_h( $f ) ), asde_html_permitido() ); ?>
 								<label><?php asde_e( 'Motivo' ); ?> <input type="text" name="motivo" maxlength="255" required></label>
 								<button type="submit" class="button"><?php asde_e( 'Sacar de la lista' ); ?></button>
 							</form>
@@ -304,7 +304,7 @@ $devolver = static function ( array $f, array $c ) use ( $campos, $fila_h, $form
 			<ul class="asde-lista-nombres">
 				<?php foreach ( $sin_respuesta as $p ) : ?>
 					<?php $s = Inscripciones::seccion_de( $e, $p ); ?>
-					<li><?php echo esc_html( $p->nombre_completo() ); ?> <?php echo $s ? Secciones::badge( $s ) : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?></li>
+					<li><?php echo esc_html( $p->nombre_completo() ); ?> <?php echo wp_kses( $s ? Secciones::badge( $s ) : '', asde_html_permitido() ); ?></li>
 				<?php endforeach; ?>
 			</ul>
 		</details>
@@ -328,7 +328,7 @@ $devolver = static function ( array $f, array $c ) use ( $campos, $fila_h, $form
 						<?php if ( $e['con_coste'] && ( $cobros[ $f['id'] ]['neto'] ?? 0 ) > 0 ) : ?>
 							<span class="asde-muted"><?php echo esc_html( sprintf( asde_t( 'Había pagado %s: la devolución la decide Tesorería.' ), Calculadora::euros( $cobros[ $f['id'] ]['neto'] ) ) ); ?></span>
 							<?php if ( $economia && $abiertas ) : ?>
-								<?php echo $devolver( $f, $cobros[ $f['id'] ] ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+								<?php echo wp_kses( $devolver( $f, $cobros[ $f['id'] ] ), asde_html_permitido() ); ?>
 							<?php endif; ?>
 						<?php endif; ?>
 					</li>
@@ -343,14 +343,14 @@ $devolver = static function ( array $f, array $c ) use ( $campos, $fila_h, $form
 		<h3 class="asde-card__title"><?php asde_e( 'Inscribir a alguien' ); ?></h3>
 		<p class="asde-help"><?php asde_e( 'En nombre de su familia: si es menor, la autorización llega en papel y la marcas aquí cuando la tengas.' ); ?></p>
 		<form method="post" class="asde-form asde-form--compacta">
-			<?php echo $campos( 'evento_inscribir' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+			<?php echo wp_kses( $campos( 'evento_inscribir' ), asde_html_permitido() ); ?>
 			<?php if ( $convocados ) : ?>
-				<label><?php asde_e( 'De las secciones convocadas' ); ?> <?php echo $selector( 'socio', $convocados, true ); // phpcs:ignore WordPress.Security.EscapeOutput ?></label>
+				<label><?php asde_e( 'De las secciones convocadas' ); ?> <?php echo wp_kses( $selector( 'socio', $convocados, true ), asde_html_permitido() ); ?></label>
 			<?php endif; ?>
 			<?php if ( $otros ) : ?>
 				<details>
 					<summary><?php asde_e( 'Otra persona del grupo (excepción, con motivo)' ); ?></summary>
-					<label><?php asde_e( 'Persona' ); ?> <?php echo $selector( 'otro', $otros, true ); // phpcs:ignore WordPress.Security.EscapeOutput ?></label>
+					<label><?php asde_e( 'Persona' ); ?> <?php echo wp_kses( $selector( 'otro', $otros, true ), asde_html_permitido() ); ?></label>
 					<label><?php asde_e( 'Motivo de la excepción' ); ?> <input type="text" name="motivo" maxlength="255"></label>
 				</details>
 			<?php endif; ?>
@@ -373,7 +373,7 @@ $devolver = static function ( array $f, array $c ) use ( $campos, $fila_h, $form
 		<h3 class="asde-card__title"><?php asde_e( 'Pago de una familia' ); ?></h3>
 		<p class="asde-help"><?php asde_e( 'Un solo pago para los hermanos: se reparte entre sus inscripciones con algo pendiente, por orden de inscripción.' ); ?></p>
 		<form method="post" class="asde-form asde-form--compacta">
-			<?php echo $campos( 'evento_pago_familia' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+			<?php echo wp_kses( $campos( 'evento_pago_familia' ), asde_html_permitido() ); ?>
 			<label><?php asde_e( 'Familia' ); ?>
 				<select name="familia">
 					<?php foreach ( $familias as $id => $x ) : ?>
@@ -382,7 +382,7 @@ $devolver = static function ( array $f, array $c ) use ( $campos, $fila_h, $form
 				</select>
 			</label>
 			<label><?php asde_e( 'Importe (€)' ); ?> <input type="text" name="importe" inputmode="decimal" required></label>
-			<label><?php asde_e( 'Forma de pago' ); ?> <?php echo $formas(); // phpcs:ignore WordPress.Security.EscapeOutput ?></label>
+			<label><?php asde_e( 'Forma de pago' ); ?> <?php echo wp_kses( $formas(), asde_html_permitido() ); ?></label>
 			<label><?php asde_e( 'Fecha' ); ?> <input type="date" name="fecha" value="<?php echo esc_attr( $hoy ); ?>" max="<?php echo esc_attr( $hoy ); ?>" required></label>
 			<label><?php asde_e( 'Referencia' ); ?> <input type="text" name="referencia" maxlength="120"></label>
 			<label><?php asde_e( 'Nota' ); ?> <input type="text" name="nota" maxlength="255"></label>

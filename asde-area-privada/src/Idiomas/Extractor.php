@@ -15,7 +15,7 @@ final class Extractor {
 
 	public const FUNCIONES = array( 'asde_t', 'asde_h', 'asde_e', 'asde_a', 'asde_js', 'asde_ta', 'asde_n' );
 	public const GETTEXT   = array( '__', '_e', 'esc_html__', 'esc_html_e', 'esc_attr__', 'esc_attr_e' );
-	public const DOMINIO   = 'asde-area-privada';
+	public const DOMINIO   = 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts';
 
 	/** Carpetas y ficheros que no se traducen (wp-admin, instalación, el propio idioma, pruebas). */
 	private const EXCLUIDOS = array( 'src/Admin/', 'src/Install/Entorno.php', 'src/Install/Installer.php', 'src/Idiomas/', 'tests/', 'herramientas/', 'languages/' );
@@ -109,7 +109,7 @@ final class Extractor {
 					continue; // Es una concatenación o algo dinámico: no se puede extraer.
 				}
 			} else {
-				// __( 'texto', 'asde-area-privada' )
+				// __( 'texto', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' )
 				if ( ',' !== $tokens[ $m ] ) {
 					continue;
 				}

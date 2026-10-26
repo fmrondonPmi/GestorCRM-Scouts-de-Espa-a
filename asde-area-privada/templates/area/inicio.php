@@ -43,14 +43,14 @@ $user = $ambito->user;
 			<?php asde_e( 'Tu sección:' ); ?>
 			<?php
 			foreach ( $ambito->persona->secciones as $s ) {
-				echo Secciones::badge( $s ); // phpcs:ignore WordPress.Security.EscapeOutput
+				echo wp_kses( Secciones::badge( $s ), asde_html_permitido() );
 			}
 			?>
 			<?php if ( $ambito->secciones_scouter() ) : ?>
 				<?php asde_e( '· Colaboras en:' ); ?>
 				<?php
 				foreach ( $ambito->secciones_scouter() as $s ) {
-					echo Secciones::badge( $s ); // phpcs:ignore WordPress.Security.EscapeOutput
+					echo wp_kses( Secciones::badge( $s ), asde_html_permitido() );
 				}
 				?>
 			<?php endif; ?>
@@ -63,7 +63,7 @@ $user = $ambito->user;
 			<?php foreach ( $ambito->representados as $p ) : ?>
 				<li>
 					<?php echo esc_html( $p->nombre_completo() ); ?>
-					<?php echo $p->seccion_educativa() ? Secciones::badge( $p->seccion_educativa() ) : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?>
+					<?php echo wp_kses( $p->seccion_educativa() ? Secciones::badge( $p->seccion_educativa() ) : '', asde_html_permitido() ); ?>
 				</li>
 			<?php endforeach; ?>
 		</ul>
@@ -108,31 +108,31 @@ $user = $ambito->user;
 				<li><a href="<?php echo esc_url( $url( 'solicitudes' ) ); ?>"><strong><?php echo (int) $por_revisar['solicitudes']; ?></strong> <?php echo 1 === (int) $por_revisar['solicitudes'] ? esc_html( asde_t( 'solicitud de acceso' ) ) : esc_html( asde_t( 'solicitudes de acceso' ) ); ?></a></li>
 			<?php endif; ?>
 			<?php if ( ! empty( $por_revisar['lista_espera'] ) ) : ?>
-				<li><a href="<?php echo esc_url( $url( 'lista_espera', array( 'estado' => 'en_espera' ) ) ); ?>"><?php echo $num( (int) $por_revisar['lista_espera'], esc_html( asde_t( 'persona en la lista de espera sin contactar' ) ), esc_html( asde_t( 'personas en la lista de espera sin contactar' ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></a></li>
+				<li><a href="<?php echo esc_url( $url( 'lista_espera', array( 'estado' => 'en_espera' ) ) ); ?>"><?php echo wp_kses( $num( (int) $por_revisar['lista_espera'], esc_html( asde_t( 'persona en la lista de espera sin contactar' ) ), esc_html( asde_t( 'personas en la lista de espera sin contactar' ) ) ), asde_html_permitido() ); ?></a></li>
 			<?php endif; ?>
 			<?php if ( $por_revisar['cambios'] ) : ?>
 				<li><a href="<?php echo esc_url( $url( 'cambios' ) ); ?>"><strong><?php echo (int) $por_revisar['cambios']; ?></strong> <?php echo 1 === (int) $por_revisar['cambios'] ? esc_html( asde_t( 'cambio propuesto por una familia' ) ) : esc_html( asde_t( 'cambios propuestos por las familias' ) ); ?></a></li>
 			<?php endif; ?>
 			<?php if ( ! empty( $por_revisar['uniforme_pago'] ) ) : ?>
-				<li><a href="<?php echo esc_url( $uni( 'sin_pagar' ) ); ?>"><?php echo $num( (int) $por_revisar['uniforme_pago'], esc_html( asde_t( 'pedido de uniforme pendiente de pago' ) ), esc_html( asde_t( 'pedidos de uniforme pendientes de pago' ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></a></li>
+				<li><a href="<?php echo esc_url( $uni( 'sin_pagar' ) ); ?>"><?php echo wp_kses( $num( (int) $por_revisar['uniforme_pago'], esc_html( asde_t( 'pedido de uniforme pendiente de pago' ) ), esc_html( asde_t( 'pedidos de uniforme pendientes de pago' ) ) ), asde_html_permitido() ); ?></a></li>
 			<?php endif; ?>
 			<?php if ( ! empty( $por_revisar['uniforme_pedido'] ) ) : ?>
-				<li><a href="<?php echo esc_url( $uni( 'por_pedir' ) ); ?>"><?php echo $num( (int) $por_revisar['uniforme_pedido'], esc_html( asde_t( 'pedido de uniforme por incluir en el pedido al proveedor' ) ), esc_html( asde_t( 'pedidos de uniforme por incluir en el pedido al proveedor' ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></a></li>
+				<li><a href="<?php echo esc_url( $uni( 'por_pedir' ) ); ?>"><?php echo wp_kses( $num( (int) $por_revisar['uniforme_pedido'], esc_html( asde_t( 'pedido de uniforme por incluir en el pedido al proveedor' ) ), esc_html( asde_t( 'pedidos de uniforme por incluir en el pedido al proveedor' ) ) ), asde_html_permitido() ); ?></a></li>
 			<?php endif; ?>
 			<?php if ( ! empty( $por_revisar['eventos_validar'] ) ) : ?>
-				<li><a href="<?php echo esc_url( $url( 'eventos' ) ); ?>"><?php echo $num( (int) $por_revisar['eventos_validar'], esc_html( asde_t( 'presupuesto de evento por validar' ) ), esc_html( asde_t( 'presupuestos de eventos por validar' ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></a></li>
+				<li><a href="<?php echo esc_url( $url( 'eventos' ) ); ?>"><?php echo wp_kses( $num( (int) $por_revisar['eventos_validar'], esc_html( asde_t( 'presupuesto de evento por validar' ) ), esc_html( asde_t( 'presupuestos de eventos por validar' ) ) ), asde_html_permitido() ); ?></a></li>
 			<?php endif; ?>
 			<?php if ( ! empty( $por_revisar['eventos_papel'] ) ) : ?>
-				<li><a href="<?php echo esc_url( $url( 'eventos' ) ); ?>"><?php echo $num( (int) $por_revisar['eventos_papel'], esc_html( asde_t( 'autorización de evento por recoger en papel' ) ), esc_html( asde_t( 'autorizaciones de eventos por recoger en papel' ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></a></li>
+				<li><a href="<?php echo esc_url( $url( 'eventos' ) ); ?>"><?php echo wp_kses( $num( (int) $por_revisar['eventos_papel'], esc_html( asde_t( 'autorización de evento por recoger en papel' ) ), esc_html( asde_t( 'autorizaciones de eventos por recoger en papel' ) ) ), asde_html_permitido() ); ?></a></li>
 			<?php endif; ?>
 			<?php if ( ! empty( $por_revisar['eventos_tareas'] ) ) : ?>
-				<li><a href="<?php echo esc_url( $url( 'eventos' ) ); ?>"><?php echo $num( (int) $por_revisar['eventos_tareas'], esc_html( asde_t( 'tarea de evento vencida o de esta semana' ) ), esc_html( asde_t( 'tareas de eventos vencidas o de esta semana' ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></a></li>
+				<li><a href="<?php echo esc_url( $url( 'eventos' ) ); ?>"><?php echo wp_kses( $num( (int) $por_revisar['eventos_tareas'], esc_html( asde_t( 'tarea de evento vencida o de esta semana' ) ), esc_html( asde_t( 'tareas de eventos vencidas o de esta semana' ) ) ), asde_html_permitido() ); ?></a></li>
 			<?php endif; ?>
 			<?php if ( ! empty( $por_revisar['uniforme_entrega'] ) ) : ?>
-				<li><a href="<?php echo esc_url( $uni( 'por_entregar' ) ); ?>"><?php echo $num( (int) $por_revisar['uniforme_entrega'], esc_html( asde_t( 'uniforme pedido al proveedor por entregar' ) ), esc_html( asde_t( 'uniformes pedidos al proveedor por entregar' ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></a></li>
+				<li><a href="<?php echo esc_url( $uni( 'por_entregar' ) ); ?>"><?php echo wp_kses( $num( (int) $por_revisar['uniforme_entrega'], esc_html( asde_t( 'uniforme pedido al proveedor por entregar' ) ), esc_html( asde_t( 'uniformes pedidos al proveedor por entregar' ) ) ), asde_html_permitido() ); ?></a></li>
 			<?php endif; ?>
 			<?php if ( ! empty( $por_revisar['compras'] ) ) : ?>
-				<li><a href="<?php echo esc_url( $url( 'inventario_compras', array( 'estado' => 'pendiente' ) ) ); ?>"><?php echo $num( (int) $por_revisar['compras'], esc_html( asde_t( 'lista de compra de material pendiente de tu visto bueno' ) ), esc_html( asde_t( 'listas de compra de material pendientes de tu visto bueno' ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></a></li>
+				<li><a href="<?php echo esc_url( $url( 'inventario_compras', array( 'estado' => 'pendiente' ) ) ); ?>"><?php echo wp_kses( $num( (int) $por_revisar['compras'], esc_html( asde_t( 'lista de compra de material pendiente de tu visto bueno' ) ), esc_html( asde_t( 'listas de compra de material pendientes de tu visto bueno' ) ) ), asde_html_permitido() ); ?></a></li>
 			<?php endif; ?>
 		</ul>
 	</section>

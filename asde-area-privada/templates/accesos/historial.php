@@ -77,7 +77,7 @@ $columnas   = array(
 			<thead>
 				<tr>
 					<?php foreach ( $columnas as $col => $etiqueta ) : ?>
-						<th scope="col"<?php echo $tabla->aria_sort( $col ); // phpcs:ignore WordPress.Security.EscapeOutput ?>><?php echo $tabla->cabecera( $col, $etiqueta ); // phpcs:ignore WordPress.Security.EscapeOutput ?></th>
+						<th scope="col"<?php echo wp_kses( $tabla->aria_sort( $col ), asde_html_permitido() ); ?>><?php echo wp_kses( $tabla->cabecera( $col, $etiqueta ), asde_html_permitido() ); ?></th>
 					<?php endforeach; ?>
 					<th scope="col"><?php asde_e( 'Detalle' ); ?></th>
 				</tr>
@@ -90,7 +90,7 @@ $columnas   = array(
 						<td data-label="<?php echo esc_attr( asde_a( 'Qué' ) ); ?>"><?php echo esc_html( asde_t( Auditoria::ACCIONES[ $f['accion'] ] ?? $f['accion'] ) ); ?></td>
 						<td data-label="<?php echo esc_attr( asde_a( 'A quién' ) ); ?>"><?php echo (int) $f['objetivo'] ? esc_html( $cuenta( (int) $f['objetivo'] ) ) : ( '' !== $f['rol'] ? esc_html( sprintf( asde_t( 'Rol %s' ), Roles::label( $f['rol'] ) ) ) : '—' ); ?></td>
 						<td data-label="<?php echo esc_attr( asde_a( 'Permiso' ) ); ?>">
-							<?php echo Catalogo::existe( $f['permiso'] ) ? esc_html( Catalogo::descripcion( $f['permiso'] ) ) : '<span class="asde-muted">—</span>'; // phpcs:ignore WordPress.Security.EscapeOutput ?>
+							<?php echo wp_kses( Catalogo::existe( $f['permiso'] ) ? esc_html( Catalogo::descripcion( $f['permiso'] ) ) : '<span class="asde-muted">—</span>', asde_html_permitido() ); ?>
 							<?php if ( Catalogo::existe( $f['permiso'] ) && Catalogo::sensible( $f['permiso'] ) ) : ?>
 								<span class="asde-badge asde-badge--sensible"><?php asde_e( 'Sensible' ); ?></span>
 							<?php endif; ?>
@@ -106,13 +106,13 @@ $columnas   = array(
 							if ( '' !== $f['motivo'] ) {
 								$detalle[] = $f['motivo'];
 							}
-							echo $detalle ? esc_html( implode( ' · ', $detalle ) ) : '<span class="asde-muted">—</span>'; // phpcs:ignore WordPress.Security.EscapeOutput
+							echo wp_kses( $detalle ? esc_html( implode( ' · ', $detalle ) ) : '<span class="asde-muted">—</span>', asde_html_permitido() );
 							?>
 						</td>
 					</tr>
 				<?php endforeach; ?>
 			</tbody>
 		</table>
-		<?php echo $tabla->paginacion(); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+		<?php echo wp_kses( $tabla->paginacion(), asde_html_permitido() ); ?>
 	<?php endif; ?>
 </section>

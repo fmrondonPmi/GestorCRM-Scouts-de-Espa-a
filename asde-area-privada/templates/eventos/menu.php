@@ -37,7 +37,7 @@ defined( 'ABSPATH' ) || exit;
 
 // La hoja de cocina para imprimir (B3): sustituye al menú.
 if ( 'hoja' === ( $modo ?? 'menu' ) ) {
-	echo \AsdeBalears\AreaPrivada\Frontend\TemplateLoader::render( 'eventos/menu-hoja', array( 'e' => $e, 'hoja' => $hoja, 'url_menu' => $url_menu ) ); // phpcs:ignore WordPress.Security.EscapeOutput -- ya escapado en su plantilla.
+	echo wp_kses( \AsdeBalears\AreaPrivada\Frontend\TemplateLoader::render( 'eventos/menu-hoja', array( 'e' => $e, 'hoja' => $hoja, 'url_menu' => $url_menu ) ), asde_html_permitido() );
 	return;
 }
 
@@ -56,7 +56,7 @@ $fecha         = static fn( string $d ): string => wp_date( 'l d/m/Y', strtotime
 	<?php endif; ?>
 
 	<?php foreach ( $dias as $d ) : ?>
-		<h4><?php echo esc_html( $fecha( $d ) ); ?><?php echo isset( $coste_dias[ $d ] ) ? ' <span class="asde-muted">· ' . esc_html( Calculadora::euros( $coste_dias[ $d ] ) ) . '</span>' : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?></h4>
+		<h4><?php echo esc_html( $fecha( $d ) ); ?><?php echo wp_kses( isset( $coste_dias[ $d ] ) ? ' <span class="asde-muted">· ' . esc_html( Calculadora::euros( $coste_dias[ $d ] ) ) . '</span>' : '', asde_html_permitido() ); ?></h4>
 		<table class="asde-table">
 			<tbody>
 				<?php foreach ( MenuTable::COMIDAS as $c => $nombre_c ) : ?>
@@ -287,7 +287,7 @@ $hay_aviso = static fn( string $k ): bool => isset( $confirmaciones[ $k ] );
 					<tr>
 						<td data-label="<?php echo esc_attr( asde_a( 'Ingrediente' ) ); ?>"><?php echo esc_html( $f['nombre'] ); ?></td>
 						<td data-label="<?php echo esc_attr( asde_a( 'Cantidad' ) ); ?>"><?php echo esc_html( $f['texto'] ); ?></td>
-						<td data-label="<?php echo esc_attr( asde_a( 'Coste' ) ); ?>" class="asde-num"><?php echo null === $f['coste'] ? '<span class="asde-muted">—</span>' : esc_html( Calculadora::euros( $f['coste'] ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></td>
+						<td data-label="<?php echo esc_attr( asde_a( 'Coste' ) ); ?>" class="asde-num"><?php echo wp_kses( null === $f['coste'] ? '<span class="asde-muted">—</span>' : esc_html( Calculadora::euros( $f['coste'] ) ), asde_html_permitido() ); ?></td>
 					</tr>
 				<?php endforeach; ?>
 			</tbody>

@@ -149,12 +149,12 @@ final class InformesView extends View {
 	public function exportar( string $formato = 'xlsx' ): void {
 		$formato = in_array( $formato, self::FORMATOS, true ) ? $formato : 'xlsx';
 		if ( ! current_user_can( self::CAP ) || ! wp_verify_nonce( $this->get( '_wpnonce' ), 'asde_informe_descarga' ) ) {
-			wp_die( esc_html__( 'Enlace de descarga no válido o caducado. Vuelve a generar el informe.', 'asde-area-privada' ), 403 );
+			wp_die( esc_html__( 'Enlace de descarga no válido o caducado. Vuelve a generar el informe.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		$informe = $this->informe_de_la_peticion();
 		$crm     = ClientFactory::reader();
 		if ( ! $informe || ! $crm ) {
-			wp_die( esc_html__( 'Informe no disponible.', 'asde-area-privada' ), 404 );
+			wp_die( esc_html__( 'Informe no disponible.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 404 );
 		}
 		try {
 			$res = ( new Generador( $crm ) )->ejecutar( $informe, Ambito::actual() );
@@ -185,7 +185,7 @@ final class InformesView extends View {
 					'marco'   => '1' === $this->get( 'marco' ),
 				)
 			);
-			echo $pagina; // phpcs:ignore WordPress.Security.EscapeOutput -- plantilla con su salida escapada
+			echo $pagina; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- página completa para imprimir (html y head), cuya plantilla escapa cada valor
 			exit;
 		}
 		if ( 'csv' === $formato ) {
@@ -199,7 +199,7 @@ final class InformesView extends View {
 
 	public function handle_post(): void {
 		if ( ! current_user_can( self::CAP ) ) {
-			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-area-privada' ), 403 );
+			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		$user = wp_get_current_user();
 

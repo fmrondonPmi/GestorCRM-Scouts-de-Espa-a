@@ -143,7 +143,7 @@ final class TiendaProductosView extends TiendaBaseView {
 	/** CSV de ejemplo (se llama antes de pintar la página). */
 	public function ejemplo(): void {
 		if ( ! current_user_can( Servicio::CAP_ADMIN ) ) {
-			wp_die( esc_html__( 'No tienes permiso para ver esto.', 'asde-area-privada' ), 403 );
+			wp_die( esc_html__( 'No tienes permiso para ver esto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		$this->descargar( 'ejemplo-productos.csv', ImportadorProductos::ejemplo() );
 	}
@@ -151,8 +151,11 @@ final class TiendaProductosView extends TiendaBaseView {
 	/** Las filas que no se cargaron, con su motivo, para corregirlas y volver a cargarlas. */
 	public function errores_csv(): void {
 		$resultado = get_transient( self::clave_importacion( sanitize_key( $this->get( 'resultado' ) ) ) );
-		if ( ! current_user_can( Servicio::CAP_ADMIN ) || ! wp_verify_nonce( $this->get( '_wpnonce' ), 'asde_tienda_errores' ) || ! is_array( $resultado ) ) {
-			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-area-privada' ), 403 );
+		if ( ! current_user_can( Servicio::CAP_ADMIN ) ) {
+			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+		}
+		if ( ! wp_verify_nonce( $this->get( '_wpnonce' ), 'asde_tienda_errores' ) || ! is_array( $resultado ) ) {
+			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		$filas = array( array_merge( array( asde_t( 'Fila' ) ), array_map( static fn( $c ) => asde_t( $c[0] ), ImportadorProductos::COLUMNAS ), array( asde_t( 'Motivo del error' ) ) ) );
 		foreach ( $resultado['errores'] as $e ) {
@@ -170,7 +173,7 @@ final class TiendaProductosView extends TiendaBaseView {
 		nocache_headers();
 		header( 'Content-Type: text/csv; charset=UTF-8' );
 		header( 'Content-Disposition: attachment; filename="' . sanitize_file_name( $nombre ) . '"' );
-		echo $csv; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- es un fichero CSV, no HTML (las celdas van a salvo de fórmulas: Generador::celda_segura)
+		echo $csv; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- fichero CSV que se descarga (text/csv), no HTML: escapar lo estropearía
 		exit;
 	}
 
@@ -231,7 +234,7 @@ final class TiendaProductosView extends TiendaBaseView {
 
 	public function handle_post(): void {
 			if ( ! current_user_can( Servicio::CAP_ADMIN ) ) {
-			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-area-privada' ), 403 );
+			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		$accion = $this->post( 'asde_action' );
 		if ( 'productos_importar' === $accion ) {

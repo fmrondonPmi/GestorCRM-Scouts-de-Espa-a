@@ -181,7 +181,7 @@ $revisar = static fn( array $ids ) => add_query_arg(
 						<th scope="col" class="asde-banco-marca"><input type="checkbox" data-asde-banco-todos aria-label="<?php echo esc_attr( asde_a( 'Marcar todos los pendientes de esta página' ) ); ?>"></th>
 					<?php endif; ?>
 					<?php foreach ( $columnas as $col => $etiqueta ) : ?>
-						<th scope="col"<?php echo $tabla->aria_sort( $col ); // phpcs:ignore WordPress.Security.EscapeOutput ?>><?php echo $tabla->cabecera( $col, $etiqueta ); // phpcs:ignore WordPress.Security.EscapeOutput ?></th>
+						<th scope="col"<?php echo wp_kses( $tabla->aria_sort( $col ), asde_html_permitido() ); ?>><?php echo wp_kses( $tabla->cabecera( $col, $etiqueta ), asde_html_permitido() ); ?></th>
 					<?php endforeach; ?>
 					<th scope="col"><?php asde_e( 'Familia' ); ?></th>
 				</tr>
@@ -293,6 +293,6 @@ $revisar = static fn( array $ids ) => add_query_arg(
 		</table>
 		<?php /* v0.31: el contador, debajo de la lista. */ ?>
 		<p class="asde-muted asde-contador"><?php echo esc_html( sprintf( asde_n( '%d movimiento', '%d movimientos', $total ), $total ) ); ?></p>
-		<?php echo $tabla->paginacion(); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+		<?php echo wp_kses( $tabla->paginacion(), asde_html_permitido() ); ?>
 	<?php endif; ?>
 </section>

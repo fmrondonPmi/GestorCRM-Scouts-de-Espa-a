@@ -38,8 +38,8 @@ final class IdiomasPage {
 	public function add_menu(): void {
 		add_submenu_page(
 			self::PADRE,
-			__( 'Idioma y etiquetas', 'asde-area-privada' ),
-			__( 'Idioma y etiquetas', 'asde-area-privada' ),
+			__( 'Idioma y etiquetas', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+			__( 'Idioma y etiquetas', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 			self::CAPABILITY,
 			self::SLUG,
 			array( $this, 'render' )
@@ -52,7 +52,7 @@ final class IdiomasPage {
 
 	public function handle(): void {
 		if ( ! current_user_can( self::CAPABILITY ) ) {
-			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-area-privada' ), 403 );
+			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		check_admin_referer( self::ACCION );
 		$post     = wp_unslash( $_POST ); // phpcs:ignore WordPress.Security.NonceVerification
@@ -128,13 +128,13 @@ final class IdiomasPage {
 	/** Descarga las etiquetas personalizadas en JSON. */
 	public function handle_exportar(): void {
 		if ( ! current_user_can( self::CAPABILITY ) ) {
-			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-area-privada' ), 403 );
+			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		check_admin_referer( self::ACCION . '_exportar' );
 		nocache_headers();
 		header( 'Content-Type: application/json; charset=utf-8' );
 		header( 'Content-Disposition: attachment; filename="etiquetas-area-privada-' . gmdate( 'Y-m-d' ) . '.json"' );
-		echo Traducciones::exportar(); // phpcs:ignore WordPress.Security.EscapeOutput
+		echo Traducciones::exportar(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- descarga JSON, no HTML
 		exit;
 	}
 
@@ -209,13 +209,13 @@ final class IdiomasPage {
 		$base     = array( 'idioma' => $idioma, 's' => $buscar, 'ver' => $filtro );
 		?>
 		<div class="wrap asde-idiomas-admin">
-			<h1><?php esc_html_e( 'Idioma y etiquetas', 'asde-area-privada' ); ?></h1>
+			<h1><?php esc_html_e( 'Idioma y etiquetas', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h1>
 
 			<?php if ( is_array( $aviso ) ) : ?>
 				<div class="notice notice-<?php echo 'success' === $aviso[0] ? 'success' : 'error'; ?>"><p><?php echo esc_html( $aviso[1] ); ?></p></div>
 			<?php endif; ?>
 
-			<h2><?php esc_html_e( 'Idioma del área privada', 'asde-area-privada' ); ?></h2>
+			<h2><?php esc_html_e( 'Idioma del área privada', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h2>
 			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 				<input type="hidden" name="action" value="<?php echo esc_attr( self::ACCION ); ?>">
 				<input type="hidden" name="accion" value="ajustes">
@@ -223,28 +223,28 @@ final class IdiomasPage {
 				<?php wp_nonce_field( self::ACCION ); ?>
 				<table class="form-table" role="presentation">
 					<tr>
-						<th scope="row"><label for="asde-idioma-defecto"><?php esc_html_e( 'Idioma por defecto', 'asde-area-privada' ); ?></label></th>
+						<th scope="row"><label for="asde-idioma-defecto"><?php esc_html_e( 'Idioma por defecto', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label></th>
 						<td>
 							<select id="asde-idioma-defecto" name="por_defecto">
 								<?php foreach ( Idioma::disponibles() as $codigo => $nombre ) : ?>
 									<option value="<?php echo esc_attr( $codigo ); ?>" <?php selected( $ajustes['por_defecto'], $codigo ); ?>><?php echo esc_html( $nombre ); ?></option>
 								<?php endforeach; ?>
 							</select>
-							<p class="description"><?php esc_html_e( 'El idioma en el que se ve el área privada (menús, pantallas, avisos y emails) para quien no ha elegido otro. Los idiomas oficiales de España con lengua propia: castellano, catalán, euskera y gallego.', 'asde-area-privada' ); ?></p>
+							<p class="description"><?php esc_html_e( 'El idioma en el que se ve el área privada (menús, pantallas, avisos y emails) para quien no ha elegido otro. Los idiomas oficiales de España con lengua propia: castellano, catalán, euskera y gallego.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 						</td>
 					</tr>
 					<tr>
-						<th scope="row"><?php esc_html_e( 'Elegir idioma', 'asde-area-privada' ); ?></th>
+						<th scope="row"><?php esc_html_e( 'Elegir idioma', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
 						<td>
-							<label><input type="checkbox" name="elegir" value="1" <?php checked( $ajustes['elegir'] ); ?>> <?php esc_html_e( 'Cada persona puede elegir su idioma (sale un selector en el menú y en las pantallas de acceso; se recuerda en su usuario)', 'asde-area-privada' ); ?></label>
+							<label><input type="checkbox" name="elegir" value="1" <?php checked( $ajustes['elegir'] ); ?>> <?php esc_html_e( 'Cada persona puede elegir su idioma (sale un selector en el menú y en las pantallas de acceso; se recuerda en su usuario)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 						</td>
 					</tr>
 				</table>
-				<p class="submit"><button type="submit" class="button button-primary"><?php esc_html_e( 'Guardar', 'asde-area-privada' ); ?></button></p>
+				<p class="submit"><button type="submit" class="button button-primary"><?php esc_html_e( 'Guardar', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button></p>
 			</form>
 
-			<h2><?php esc_html_e( 'Etiquetas', 'asde-area-privada' ); ?></h2>
-			<p><?php /* translators: 1: ejemplo de marcador de texto, 2: ejemplo de marcador de número */ echo esc_html( sprintf( __( 'Ninguna traducción es perfecta: aquí puedes cambiar cualquier texto del área privada, en cualquier idioma (también el castellano). Lo que escribas manda sobre la traducción que trae el plugin; si lo dejas vacío, vuelve a la del plugin. Los marcadores como %1$s o %2$s son huecos que rellena el sistema (un nombre, un número…): tienen que estar todos, aunque puedes cambiarlos de sitio. Se admiten <strong>, <em> y <code>.', 'asde-area-privada' ), '%s', '%d' ) ); ?></p>
+			<h2><?php esc_html_e( 'Etiquetas', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h2>
+			<p><?php /* translators: 1: ejemplo de marcador de texto, 2: ejemplo de marcador de número */ echo esc_html( sprintf( __( 'Ninguna traducción es perfecta: aquí puedes cambiar cualquier texto del área privada, en cualquier idioma (también el castellano). Lo que escribas manda sobre la traducción que trae el plugin; si lo dejas vacío, vuelve a la del plugin. Los marcadores como %1$s o %2$s son huecos que rellena el sistema (un nombre, un número…): tienen que estar todos, aunque puedes cambiarlos de sitio. Se admiten <strong>, <em> y <code>.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), '%s', '%d' ) ); ?></p>
 
 			<h3 class="nav-tab-wrapper">
 				<?php foreach ( Idioma::disponibles() as $codigo => $nombre ) : ?>
@@ -263,16 +263,16 @@ final class IdiomasPage {
 				<input type="hidden" name="page" value="<?php echo esc_attr( self::SLUG ); ?>">
 				<input type="hidden" name="idioma" value="<?php echo esc_attr( $idioma ); ?>">
 				<p class="search-box" style="float:none;margin:12px 0;">
-					<label class="screen-reader-text" for="asde-et-buscar"><?php esc_html_e( 'Buscar texto', 'asde-area-privada' ); ?></label>
-					<input type="search" id="asde-et-buscar" name="s" value="<?php echo esc_attr( $buscar ); ?>" placeholder="<?php esc_attr_e( 'Buscar un texto…', 'asde-area-privada' ); ?>">
+					<label class="screen-reader-text" for="asde-et-buscar"><?php esc_html_e( 'Buscar texto', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
+					<input type="search" id="asde-et-buscar" name="s" value="<?php echo esc_attr( $buscar ); ?>" placeholder="<?php esc_attr_e( 'Buscar un texto…', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>">
 					<select name="ver">
-						<option value="todas" <?php selected( $filtro, 'todas' ); ?>><?php esc_html_e( 'Todos los textos', 'asde-area-privada' ); ?></option>
-						<option value="personalizadas" <?php selected( $filtro, 'personalizadas' ); ?>><?php esc_html_e( 'Solo los que he personalizado', 'asde-area-privada' ); ?></option>
+						<option value="todas" <?php selected( $filtro, 'todas' ); ?>><?php esc_html_e( 'Todos los textos', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></option>
+						<option value="personalizadas" <?php selected( $filtro, 'personalizadas' ); ?>><?php esc_html_e( 'Solo los que he personalizado', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></option>
 						<?php if ( Idioma::DEFECTO !== $idioma ) : ?>
-							<option value="sin_traducir" <?php selected( $filtro, 'sin_traducir' ); ?>><?php esc_html_e( 'Sin traducción del plugin', 'asde-area-privada' ); ?></option>
+							<option value="sin_traducir" <?php selected( $filtro, 'sin_traducir' ); ?>><?php esc_html_e( 'Sin traducción del plugin', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></option>
 						<?php endif; ?>
 					</select>
-					<button type="submit" class="button"><?php esc_html_e( 'Filtrar', 'asde-area-privada' ); ?></button>
+					<button type="submit" class="button"><?php esc_html_e( 'Filtrar', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 					<span class="description"><?php echo esc_html( sprintf( '%d textos', $l['total'] ) ); ?></span>
 				</p>
 			</form>
@@ -286,16 +286,16 @@ final class IdiomasPage {
 				<table class="widefat striped asde-etiquetas">
 					<thead>
 						<tr>
-							<th style="width:30%"><?php esc_html_e( 'Texto original (castellano)', 'asde-area-privada' ); ?></th>
+							<th style="width:30%"><?php esc_html_e( 'Texto original (castellano)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
 							<?php if ( Idioma::DEFECTO !== $idioma ) : ?>
 								<th style="width:30%"><?php echo esc_html( sprintf( 'Traducción del plugin (%s)', Idioma::nombre( $idioma ) ) ); ?></th>
 							<?php endif; ?>
-							<th><?php esc_html_e( 'Tu texto', 'asde-area-privada' ); ?></th>
+							<th><?php esc_html_e( 'Tu texto', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
 						</tr>
 					</thead>
 					<tbody>
 						<?php if ( ! $l['filas'] ) : ?>
-							<tr><td colspan="3"><?php esc_html_e( 'No hay textos con ese filtro.', 'asde-area-privada' ); ?></td></tr>
+							<tr><td colspan="3"><?php esc_html_e( 'No hay textos con ese filtro.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></td></tr>
 						<?php endif; ?>
 						<?php foreach ( $l['filas'] as $i => $f ) : ?>
 							<tr>
@@ -305,7 +305,7 @@ final class IdiomasPage {
 									<input type="hidden" name="et[<?php echo (int) $i; ?>][clave]" value="<?php echo esc_attr( $f['clave'] ); ?>">
 								</td>
 								<?php if ( Idioma::DEFECTO !== $idioma ) : ?>
-									<td><?php echo '' !== $f['traduccion'] ? esc_html( $f['traduccion'] ) : '<em>' . esc_html__( '(sin traducir: se ve en castellano)', 'asde-area-privada' ) . '</em>'; // phpcs:ignore WordPress.Security.EscapeOutput ?></td>
+									<td><?php echo wp_kses( '' !== $f['traduccion'] ? esc_html( $f['traduccion'] ) : '<em>' . esc_html__( '(sin traducir: se ve en castellano)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . '</em>', asde_html_permitido() ); ?></td>
 								<?php endif; ?>
 								<td>
 									<textarea name="et[<?php echo (int) $i; ?>][texto]" rows="<?php echo (int) max( 2, min( 6, (int) ceil( strlen( $f['clave'] ) / 55 ) ) ); ?>" class="large-text" lang="<?php echo esc_attr( $idioma ); ?>" placeholder="<?php echo esc_attr( '' !== $f['traduccion'] ? $f['traduccion'] : $f['clave'] ); ?>"><?php echo esc_textarea( $f['propia'] ); ?></textarea>
@@ -321,11 +321,11 @@ final class IdiomasPage {
 						<?php endfor; ?>
 					</p>
 				<?php endif; ?>
-				<p class="submit"><button type="submit" class="button button-primary"><?php esc_html_e( 'Guardar las etiquetas de esta página', 'asde-area-privada' ); ?></button></p>
+				<p class="submit"><button type="submit" class="button button-primary"><?php esc_html_e( 'Guardar las etiquetas de esta página', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button></p>
 			</form>
 
-			<h2><?php esc_html_e( 'Copia de seguridad', 'asde-area-privada' ); ?></h2>
-			<p><a class="button" href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=' . self::ACCION . '_exportar' ), self::ACCION . '_exportar' ) ); ?>"><?php esc_html_e( 'Descargar mis etiquetas (.json)', 'asde-area-privada' ); ?></a></p>
+			<h2><?php esc_html_e( 'Copia de seguridad', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h2>
+			<p><a class="button" href="<?php echo esc_url( wp_nonce_url( admin_url( 'admin-post.php?action=' . self::ACCION . '_exportar' ), self::ACCION . '_exportar' ) ); ?>"><?php esc_html_e( 'Descargar mis etiquetas (.json)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a></p>
 			<form method="post" enctype="multipart/form-data" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 				<input type="hidden" name="action" value="<?php echo esc_attr( self::ACCION ); ?>">
 				<input type="hidden" name="accion" value="importar">
@@ -333,12 +333,12 @@ final class IdiomasPage {
 				<?php wp_nonce_field( self::ACCION ); ?>
 				<p>
 					<input type="file" name="fichero" accept=".json,application/json">
-					<button type="submit" class="button"><?php esc_html_e( 'Importar (sustituye a las que hay)', 'asde-area-privada' ); ?></button>
+					<button type="submit" class="button"><?php esc_html_e( 'Importar (sustituye a las que hay)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 				</p>
 			</form>
 
 			<?php if ( ! empty( $propias[ $idioma ] ) ) : ?>
-				<h2><?php esc_html_e( 'Volver a las del plugin', 'asde-area-privada' ); ?></h2>
+				<h2><?php esc_html_e( 'Volver a las del plugin', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h2>
 				<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 					<input type="hidden" name="action" value="<?php echo esc_attr( self::ACCION ); ?>">
 					<input type="hidden" name="accion" value="restablecer">
@@ -346,7 +346,7 @@ final class IdiomasPage {
 					<?php wp_nonce_field( self::ACCION ); ?>
 					<p>
 						<label><input type="checkbox" name="confirmar" value="1"> <?php echo esc_html( sprintf( 'Quitar las %1$d etiquetas que he personalizado en %2$s', count( $propias[ $idioma ] ), Idioma::nombre( $idioma ) ) ); ?></label>
-						<button type="submit" class="button"><?php esc_html_e( 'Quitar', 'asde-area-privada' ); ?></button>
+						<button type="submit" class="button"><?php esc_html_e( 'Quitar', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 					</p>
 				</form>
 			<?php endif; ?>

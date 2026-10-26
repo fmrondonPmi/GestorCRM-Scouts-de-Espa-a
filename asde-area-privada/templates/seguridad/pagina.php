@@ -34,6 +34,6 @@ defined( 'ABSPATH' ) || exit;
 
 <?php if ( $disponible ) : ?>
 	<section class="asde-card asde-wordfence">
-		<?php echo $wordfence; // phpcs:ignore WordPress.Security.EscapeOutput -- HTML generado por Wordfence. ?>
+		<?php echo wp_kses( $wordfence, asde_html_permitido() ); ?>
 	</section>
 <?php endif; ?>

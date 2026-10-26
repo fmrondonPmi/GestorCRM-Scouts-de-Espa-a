@@ -26,7 +26,7 @@ $detalle = array(
 			continue;
 		}
 		?>
-		<label class="asde-choice"><input type="radio" name="forma_pago" value="<?php echo esc_attr( $forma ); ?>" <?php echo $obligatoria ? 'required' : ''; ?>><span><?php echo esc_html( $etiqueta ); ?><?php echo '' !== $detalle[ $forma ] ? ' <span class="asde-muted">· ' . esc_html( $detalle[ $forma ] ) . '</span>' : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?></span></label>
+		<label class="asde-choice"><input type="radio" name="forma_pago" value="<?php echo esc_attr( $forma ); ?>" <?php echo $obligatoria ? 'required' : ''; ?>><span><?php echo esc_html( $etiqueta ); ?><?php echo wp_kses( '' !== $detalle[ $forma ] ? ' <span class="asde-muted">· ' . esc_html( $detalle[ $forma ] ) . '</span>' : '', asde_html_permitido() ); ?></span></label>
 	<?php endforeach; ?>
 	<p class="asde-help"><?php asde_e( 'Indica el nº de pedido en el concepto. Cuando Tesorería reciba el pago, lo verás como pagado.' ); ?></p>
 </fieldset>

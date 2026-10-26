@@ -127,7 +127,7 @@ $estados = array(
 				</tr>
 			</thead>
 			<tbody data-asde-filas>
-				<?php echo $filas; // phpcs:ignore WordPress.Security.EscapeOutput ?>
+				<?php echo wp_kses( $filas, asde_html_permitido() ); ?>
 			</tbody>
 		</table>
 		<p class="asde-usuarios__vacio" data-asde-vacio hidden><?php asde_e( 'Ningún usuario coincide con los filtros.' ); ?></p>

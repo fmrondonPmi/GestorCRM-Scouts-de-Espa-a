@@ -37,7 +37,7 @@ final class GruposInvitacionesPage {
 		if ( ! Organizacion::es_oficina() ) {
 			return;
 		}
-		add_submenu_page( self::PADRE, __( 'Invitar a un grupo', 'asde-area-privada' ), __( 'Invitar a un grupo', 'asde-area-privada' ), self::CAPABILITY, self::SLUG, array( $this, 'render' ) );
+		add_submenu_page( self::PADRE, __( 'Invitar a un grupo', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Invitar a un grupo', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), self::CAPABILITY, self::SLUG, array( $this, 'render' ) );
 	}
 
 	private function aviso( string $tipo, string $texto ): void {
@@ -46,7 +46,7 @@ final class GruposInvitacionesPage {
 
 	public function handle_invitar(): void {
 		if ( ! current_user_can( self::CAPABILITY ) || ! Organizacion::es_oficina() ) {
-			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-area-privada' ), 403 );
+			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		check_admin_referer( self::ACCION );
 		$email = sanitize_email( wp_unslash( $_POST['email'] ?? '' ) ); // phpcs:ignore WordPress.Security.NonceVerification
@@ -64,7 +64,7 @@ final class GruposInvitacionesPage {
 
 	public function handle_anular(): void {
 		if ( ! current_user_can( self::CAPABILITY ) || ! Organizacion::es_oficina() ) {
-			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-area-privada' ), 403 );
+			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		check_admin_referer( self::ANULAR );
 		$id = absint( wp_unslash( $_POST['id'] ?? 0 ) ); // phpcs:ignore WordPress.Security.NonceVerification -- comprobado arriba
@@ -76,7 +76,7 @@ final class GruposInvitacionesPage {
 
 	public function render(): void {
 		if ( ! current_user_can( self::CAPABILITY ) ) {
-			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-area-privada' ), 403 );
+			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		$aviso  = get_transient( self::AVISO . get_current_user_id() );
 		delete_transient( self::AVISO . get_current_user_id() );
@@ -84,30 +84,30 @@ final class GruposInvitacionesPage {
 		$lista  = GrupoInvitaciones::lista();
 		?>
 		<div class="wrap">
-			<h1><?php esc_html_e( 'Invitar a un grupo', 'asde-area-privada' ); ?></h1>
+			<h1><?php esc_html_e( 'Invitar a un grupo', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h1>
 			<?php if ( is_array( $aviso ) ) : ?>
 				<div class="notice notice-<?php echo esc_attr( $aviso[0] ); ?>"><p><?php echo esc_html( $aviso[1] ); ?></p></div>
 			<?php endif; ?>
 			<?php if ( '' !== $enlace ) : ?>
 				<div class="notice notice-info">
-					<p><strong><?php esc_html_e( 'Enlace de la invitación (solo se muestra ahora):', 'asde-area-privada' ); ?></strong></p>
-					<p><input type="text" readonly class="large-text code" value="<?php echo esc_attr( $enlace ); ?>" onfocus="this.select()" aria-label="<?php esc_attr_e( 'Enlace de la invitación', 'asde-area-privada' ); ?>"></p>
+					<p><strong><?php esc_html_e( 'Enlace de la invitación (solo se muestra ahora):', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></strong></p>
+					<p><input type="text" readonly class="large-text code" value="<?php echo esc_attr( $enlace ); ?>" onfocus="this.select()" aria-label="<?php esc_attr_e( 'Enlace de la invitación', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>"></p>
 				</div>
 			<?php endif; ?>
-			<p><?php esc_html_e( 'Cada enlace sirve una sola vez y vale 14 días. El grupo rellena sus datos, comprueba el acceso al CRM y los envía; después los revisas en «Altas de grupos».', 'asde-area-privada' ); ?></p>
+			<p><?php esc_html_e( 'Cada enlace sirve una sola vez y vale 14 días. El grupo rellena sus datos, comprueba el acceso al CRM y los envía; después los revisas en «Altas de grupos».', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 				<input type="hidden" name="action" value="<?php echo esc_attr( self::ACCION ); ?>">
 				<?php wp_nonce_field( self::ACCION ); ?>
 				<p>
-					<label for="asde-ginv-email"><?php esc_html_e( 'Enviar por email (opcional)', 'asde-area-privada' ); ?></label>
+					<label for="asde-ginv-email"><?php esc_html_e( 'Enviar por email (opcional)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 					<input type="email" id="asde-ginv-email" name="email" class="regular-text" autocomplete="off">
-					<button type="submit" class="button button-primary"><?php esc_html_e( 'Crear la invitación', 'asde-area-privada' ); ?></button>
+					<button type="submit" class="button button-primary"><?php esc_html_e( 'Crear la invitación', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 				</p>
 			</form>
 
-			<h2><?php esc_html_e( 'Invitaciones', 'asde-area-privada' ); ?></h2>
+			<h2><?php esc_html_e( 'Invitaciones', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h2>
 			<table class="widefat striped">
-				<thead><tr><th><?php esc_html_e( 'Creada', 'asde-area-privada' ); ?></th><th><?php esc_html_e( 'Caduca', 'asde-area-privada' ); ?></th><th><?php esc_html_e( 'Estado', 'asde-area-privada' ); ?></th><th></th></tr></thead>
+				<thead><tr><th><?php esc_html_e( 'Creada', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th><?php esc_html_e( 'Caduca', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th><?php esc_html_e( 'Estado', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th></th></tr></thead>
 				<tbody>
 				<?php foreach ( $lista as $f ) : ?>
 					<tr>
@@ -120,18 +120,18 @@ final class GruposInvitacionesPage {
 									<input type="hidden" name="action" value="<?php echo esc_attr( self::ANULAR ); ?>">
 									<input type="hidden" name="id" value="<?php echo (int) $f['id']; ?>">
 									<?php wp_nonce_field( self::ANULAR ); ?>
-									<button type="submit" class="button-link button-link-delete"><?php esc_html_e( 'Anular', 'asde-area-privada' ); ?></button>
+									<button type="submit" class="button-link button-link-delete"><?php esc_html_e( 'Anular', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 								</form>
 							<?php endif; ?>
 						</td>
 					</tr>
 				<?php endforeach; ?>
 				<?php if ( ! $lista ) : ?>
-					<tr><td colspan="4"><?php esc_html_e( 'Todavía no hay invitaciones.', 'asde-area-privada' ); ?></td></tr>
+					<tr><td colspan="4"><?php esc_html_e( 'Todavía no hay invitaciones.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></td></tr>
 				<?php endif; ?>
 				</tbody>
 			</table>
-			<p class="description"><?php echo esc_html( sprintf( /* translators: %d: altas por revisar */ _n( 'Hay %d alta de grupo por revisar.', 'Hay %d altas de grupo por revisar.', GrupoSolicitudes::pendientes(), 'asde-area-privada' ), GrupoSolicitudes::pendientes() ) ); ?></p>
+			<p class="description"><?php echo esc_html( sprintf( /* translators: %d: altas por revisar */ _n( 'Hay %d alta de grupo por revisar.', 'Hay %d altas de grupo por revisar.', GrupoSolicitudes::pendientes(), 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), GrupoSolicitudes::pendientes() ) ); ?></p>
 		</div>
 		<?php
 	}

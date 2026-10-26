@@ -70,7 +70,7 @@ final class SinergiaV41Client implements CrmClientInterface, EscritorCrm {
 			if ( empty( $login['id'] ) ) {
 				return ConnectionResult::fail(
 					/* translators: %s: motivo que da el CRM al rechazar el inicio de sesión */
-					sprintf( __( 'El CRM ha rechazado el inicio de sesión: %s', 'asde-area-privada' ), $this->error_text( $login ) ),
+					sprintf( __( 'El CRM ha rechazado el inicio de sesión: %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $this->error_text( $login ) ),
 					array( 'Endpoint: ' . $endpoint )
 				);
 			}
@@ -84,17 +84,17 @@ final class SinergiaV41Client implements CrmClientInterface, EscritorCrm {
 			$warnings = $this->write_permission_warnings( $endpoint, $session );
 
 			if ( ! empty( $login['name_value_list']['user_is_admin']['value'] ) ) {
-				$warnings[] = __( 'El usuario de API es ADMINISTRADOR del CRM. Usa un usuario dedicado con un rol de solo lectura.', 'asde-area-privada' );
+				$warnings[] = __( 'El usuario de API es ADMINISTRADOR del CRM. Usa un usuario dedicado con un rol de solo lectura.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 			}
 
 			$this->post( $endpoint, 'logout', array( 'session' => $session ) );
 			$this->forget_session();
 
-			return new ConnectionResult( true, __( 'Conexión correcta con SinergiaCRM.', 'asde-area-privada' ), $details, $warnings );
+			return new ConnectionResult( true, __( 'Conexión correcta con SinergiaCRM.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $details, $warnings );
 		}
 
 		return ConnectionResult::fail(
-			__( 'No se ha encontrado la API de SinergiaCRM en esa URL. Revisa que sea la dirección base del CRM (p. ej. https://entidad.sinergiacrm.org).', 'asde-area-privada' ),
+			__( 'No se ha encontrado la API de SinergiaCRM en esa URL. Revisa que sea la dirección base del CRM (p. ej. https://entidad.sinergiacrm.org).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 			array( $last_error )
 		);
 	}
@@ -299,7 +299,7 @@ final class SinergiaV41Client implements CrmClientInterface, EscritorCrm {
 			)
 		);
 		if ( ( $data['id'] ?? '' ) !== $id ) {
-			throw new CrmException( esc_html( __( 'El CRM no ha confirmado el cambio.', 'asde-area-privada' ) ) );
+			throw new CrmException( esc_html( __( 'El CRM no ha confirmado el cambio.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) );
 		}
 		return $id;
 	}
@@ -327,7 +327,7 @@ final class SinergiaV41Client implements CrmClientInterface, EscritorCrm {
 		);
 		$id = (string) ( $data['id'] ?? '' );
 		if ( ! Query::is_id( $id ) ) {
-			throw new CrmException( esc_html( __( 'El CRM no ha confirmado la creación del registro.', 'asde-area-privada' ) ) );
+			throw new CrmException( esc_html( __( 'El CRM no ha confirmado la creación del registro.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) );
 		}
 		return $id;
 	}
@@ -413,7 +413,7 @@ final class SinergiaV41Client implements CrmClientInterface, EscritorCrm {
 			}
 			if ( empty( $login['id'] ) ) {
 				/* translators: %s: motivo que da el CRM al rechazar el inicio de sesión */
-				throw new CrmException( esc_html( sprintf( __( 'El CRM ha rechazado el inicio de sesión: %s', 'asde-area-privada' ), $this->error_text( $login ) ) ) );
+				throw new CrmException( esc_html( sprintf( __( 'El CRM ha rechazado el inicio de sesión: %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $this->error_text( $login ) ) ) );
 			}
 			$this->session  = (string) $login['id'];
 			$this->endpoint = $endpoint;
@@ -421,7 +421,7 @@ final class SinergiaV41Client implements CrmClientInterface, EscritorCrm {
 			return $this->session;
 		}
 
-		throw new CrmException( esc_html( __( 'No se ha encontrado la API de SinergiaCRM en la URL configurada.', 'asde-area-privada' ) ) );
+		throw new CrmException( esc_html( __( 'No se ha encontrado la API de SinergiaCRM en la URL configurada.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) );
 	}
 
 	/** La sesión da acceso al CRM: se cachea cifrada y por poco tiempo. */
@@ -494,7 +494,7 @@ final class SinergiaV41Client implements CrmClientInterface, EscritorCrm {
 		return array(
 			sprintf(
 				/* translators: %s: lista de módulos */
-				__( 'El usuario de API tiene permisos de escritura en: %s. Con ellos, desde el área privada se pueden editar las fichas (según el rol de cada usuario).', 'asde-area-privada' ),
+				__( 'El usuario de API tiene permisos de escritura en: %s. Con ellos, desde el área privada se pueden editar las fichas (según el rol de cada usuario).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 				implode( ', ', array_unique( $writable ) )
 			),
 		);
@@ -518,7 +518,7 @@ final class SinergiaV41Client implements CrmClientInterface, EscritorCrm {
 
 		if ( is_wp_error( $response ) ) {
 			/* translators: %s: mensaje de error de la conexión HTTP */
-			return new \WP_Error( 'asde_crm_http', sprintf( __( 'No se puede conectar con el CRM: %s', 'asde-area-privada' ), $response->get_error_message() ) );
+			return new \WP_Error( 'asde_crm_http', sprintf( __( 'No se puede conectar con el CRM: %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $response->get_error_message() ) );
 		}
 
 		$code = (int) wp_remote_retrieve_response_code( $response );
@@ -527,7 +527,7 @@ final class SinergiaV41Client implements CrmClientInterface, EscritorCrm {
 		// No se registra el cuerpo de la respuesta: podría contener datos personales.
 		if ( 200 !== $code || ! is_array( $data ) ) {
 			/* translators: 1: dirección de la API del CRM, 2: código HTTP de la respuesta */
-			return new \WP_Error( 'asde_crm_not_api', sprintf( __( '%1$s respondió HTTP %2$d sin una respuesta válida de la API.', 'asde-area-privada' ), $endpoint, $code ) );
+			return new \WP_Error( 'asde_crm_not_api', sprintf( __( '%1$s respondió HTTP %2$d sin una respuesta válida de la API.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $endpoint, $code ) );
 		}
 		return $data;
 	}
@@ -590,6 +590,6 @@ final class SinergiaV41Client implements CrmClientInterface, EscritorCrm {
 	}
 
 	private function error_text( array $data ): string {
-		return (string) ( $data['description'] ?? $data['name'] ?? __( 'respuesta inesperada', 'asde-area-privada' ) );
+		return (string) ( $data['description'] ?? $data['name'] ?? __( 'respuesta inesperada', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 	}
 }

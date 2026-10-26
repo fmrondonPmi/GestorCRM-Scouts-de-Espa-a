@@ -218,7 +218,7 @@ final class TiendaGestionView extends TiendaBaseView {
 	/** Excel de un informe de ventas (se llama antes de pintar la página). */
 	public function exportar_informe(): void {
 		if ( ! Servicio::puede_informes() || ! wp_verify_nonce( $this->get( '_wpnonce' ), 'asde_tienda_informe' ) ) {
-			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-area-privada' ), 403 );
+			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		$a       = Ambito::actual();
 		$pedidos = $this->del_periodo( $a );
@@ -294,7 +294,7 @@ final class TiendaGestionView extends TiendaBaseView {
 	/** Descarga CSV de la lista (se llama antes de pintar la página). */
 	public function exportar(): void {
 		if ( ! current_user_can( Servicio::CAP_GESTION ) || ! wp_verify_nonce( $this->get( '_wpnonce' ), 'asde_uniformes_csv' ) ) {
-			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-area-privada' ), 403 );
+			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		$todos    = Servicio::de_gestion( Ambito::actual() );
 		$personas = $this->personas( $todos );
@@ -336,7 +336,7 @@ final class TiendaGestionView extends TiendaBaseView {
 
 	public function handle_post(): void {
 		if ( ! current_user_can( Servicio::CAP_GESTION ) ) {
-			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-area-privada' ), 403 );
+			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		$a      = Ambito::actual();
 		$accion = $this->post( 'asde_action' );

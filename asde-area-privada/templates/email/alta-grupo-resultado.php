@@ -28,10 +28,10 @@ $col = Colores::para_email();
 				<tr><td style="padding:28px;font-size:15px;line-height:1.6;">
 					<p style="margin:0 0 16px;"><?php asde_e( 'Hola:' ); ?></p>
 					<?php if ( $aprobada ) : ?>
-						<p style="margin:0 0 16px;"><?php echo sprintf( asde_h( 'La oficina ha revisado el alta de <strong>%s</strong>: <strong>el grupo ya está dado de alta</strong> en el área privada.' ), esc_html( $grupo ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+						<p style="margin:0 0 16px;"><?php echo wp_kses( sprintf( asde_h( 'La oficina ha revisado el alta de <strong>%s</strong>: <strong>el grupo ya está dado de alta</strong> en el área privada.' ), esc_html( $grupo ) ), asde_html_permitido() ); ?></p>
 						<p style="margin:0;"><?php asde_e( 'La primera persona con acceso recibirá un email para activar su cuenta.' ); ?></p>
 					<?php else : ?>
-						<p style="margin:0 0 16px;"><?php echo sprintf( asde_h( 'La oficina ha revisado el alta de <strong>%s</strong> y, con los datos recibidos, <strong>no ha podido darla</strong>.' ), esc_html( $grupo ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+						<p style="margin:0 0 16px;"><?php echo wp_kses( sprintf( asde_h( 'La oficina ha revisado el alta de <strong>%s</strong> y, con los datos recibidos, <strong>no ha podido darla</strong>.' ), esc_html( $grupo ) ), asde_html_permitido() ); ?></p>
 						<p style="margin:0;"><?php asde_e( 'Si crees que es un error o quieres volver a intentarlo, ponte en contacto con la oficina.' ); ?></p>
 					<?php endif; ?>
 				</td></tr>

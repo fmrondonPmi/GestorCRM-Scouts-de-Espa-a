@@ -32,12 +32,12 @@ $num      = ComprasTable::numero( $lista );
 					<?php echo esc_html( $grupo ); ?> · <?php asde_e( 'Área privada' ); ?>
 				</td></tr>
 				<tr><td style="padding:28px;font-size:15px;line-height:1.6;">
-					<p style="margin:0 0 16px;"><?php echo '' !== $nombre ? sprintf( asde_h( 'Hola, %s:' ), esc_html( $nombre ) ) : asde_h( 'Hola:' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+					<p style="margin:0 0 16px;"><?php echo wp_kses( '' !== $nombre ? sprintf( asde_h( 'Hola, %s:' ), esc_html( $nombre ) ) : asde_h( 'Hola:' ), asde_html_permitido() ); ?></p>
 					<?php if ( $aprobada ) : ?>
-						<p style="margin:0 0 16px;"><?php echo sprintf( asde_h( 'Tesorería ha dado el <strong>visto bueno</strong> a tu lista de compra de material <strong>%s</strong>. Ya la puedes descargar en PDF para imprimirla.' ), esc_html( $num ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+						<p style="margin:0 0 16px;"><?php echo wp_kses( sprintf( asde_h( 'Tesorería ha dado el <strong>visto bueno</strong> a tu lista de compra de material <strong>%s</strong>. Ya la puedes descargar en PDF para imprimirla.' ), esc_html( $num ) ), asde_html_permitido() ); ?></p>
 						<p style="margin:0 0 16px;"><?php asde_e( 'Cuando hayas comprado el material, márcala como comprada en el área privada: lo comprado se sumará al inventario.' ); ?></p>
 					<?php else : ?>
-						<p style="margin:0 0 16px;"><?php echo sprintf( asde_h( 'Tesorería <strong>no ha dado el visto bueno</strong> a tu lista de compra de material <strong>%s</strong>: la ha rechazado.' ), esc_html( $num ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+						<p style="margin:0 0 16px;"><?php echo wp_kses( sprintf( asde_h( 'Tesorería <strong>no ha dado el visto bueno</strong> a tu lista de compra de material <strong>%s</strong>: la ha rechazado.' ), esc_html( $num ) ), asde_html_permitido() ); ?></p>
 						<?php if ( '' !== trim( (string) $lista['motivo'] ) ) : ?>
 							<p style="margin:0 0 16px;padding:10px 14px;border-left:4px solid <?php echo esc_attr( $col['primary'] ); ?>;background:<?php echo esc_attr( $col['fondo'] ); ?>;"><strong><?php asde_e( 'Motivo:' ); ?></strong> <?php echo esc_html( $lista['motivo'] ); ?></p>
 						<?php endif; ?>
@@ -54,7 +54,7 @@ $num      = ComprasTable::numero( $lista );
 							'col'   => $col,
 						)
 					);
-					echo $tabla; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- HTML de la plantilla de la tabla, ya escapado en ella
+					echo wp_kses( $tabla, asde_html_permitido() );
 					?>
 					<p style="margin:0 0 24px;text-align:center;">
 						<a href="<?php echo esc_url( $url ); ?>" style="display:inline-block;background:<?php echo esc_attr( $col['primary'] ); ?>;color:<?php echo esc_attr( $col['on_primary'] ); ?>;padding:12px 24px;border-radius:4px;text-decoration:none;font-weight:600;"><?php asde_e( 'Ver la lista' ); ?></a>

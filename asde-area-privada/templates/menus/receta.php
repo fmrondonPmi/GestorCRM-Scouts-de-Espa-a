@@ -46,7 +46,7 @@ $val        = static fn( string $k ) => $borrador[ $k ] ?? $r[ $k ] ?? '';
 		<div class="asde-resumen-alergenos">
 			<p>
 				<strong><?php asde_e( 'Contiene:' ); ?></strong>
-				<?php echo $alergenos['contiene'] ? esc_html( Alergenos::texto( $alergenos['contiene'] ) ) : '<span class="asde-muted">' . esc_html( asde_t( 'ningún alérgeno anotado' ) ) . '</span>'; // phpcs:ignore WordPress.Security.EscapeOutput ?>
+				<?php echo wp_kses( $alergenos['contiene'] ? esc_html( Alergenos::texto( $alergenos['contiene'] ) ) : '<span class="asde-muted">' . esc_html( asde_t( 'ningún alérgeno anotado' ) ) . '</span>', asde_html_permitido() ); ?>
 			</p>
 			<?php if ( $alergenos['trazas'] ) : ?>
 				<p><strong><?php asde_e( 'Puede contener trazas de:' ); ?></strong> <?php echo esc_html( Alergenos::texto( $alergenos['trazas'] ) ); ?></p>

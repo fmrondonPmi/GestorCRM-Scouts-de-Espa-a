@@ -92,5 +92,5 @@ $fecha     = static fn( ?string $f ) => $f ? wp_date( 'd/m/Y', strtotime( $f . (
 <?php endif; ?>
 
 <?php if ( $catalogo ) : ?>
-	<?php echo TemplateLoader::render( 'tienda/catalogo', array( 'catalogo' => $catalogo, 'cfg' => $cfg, 'para' => $para, 'es_socio' => $es_socio ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+	<?php echo wp_kses( TemplateLoader::render( 'tienda/catalogo', array( 'catalogo' => $catalogo, 'cfg' => $cfg, 'para' => $para, 'es_socio' => $es_socio ) ), asde_html_permitido() ); ?>
 <?php endif; ?>

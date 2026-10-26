@@ -43,11 +43,11 @@ $user = static fn( $id ) => ( $u = get_userdata( (int) $id ) ) ? $u->user_login 
 		<?php foreach ( $familia['miembros'] as $n ) : ?>
 			<?php $p = $personas[ $n ] ?? null; ?>
 			<li>
-				<?php echo esc_html( $p ? $p->nombre_completo() : asde_t( 'Nº Scouts de España ' ) . $n ); ?><?php echo $p ? \AsdeBalears\AreaPrivada\Socios\Numeros::compacto( $p ) : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?>
+				<?php echo esc_html( $p ? $p->nombre_completo() : asde_t( 'Nº Scouts de España ' ) . $n ); ?><?php echo wp_kses( $p ? \AsdeBalears\AreaPrivada\Socios\Numeros::compacto( $p ) : '', asde_html_permitido() ); ?>
 				<?php
 				if ( $p ) {
 					foreach ( $p->secciones as $s ) {
-						echo Secciones::badge( $s ); // phpcs:ignore WordPress.Security.EscapeOutput
+						echo wp_kses( Secciones::badge( $s ), asde_html_permitido() );
 					}
 				}
 				?>

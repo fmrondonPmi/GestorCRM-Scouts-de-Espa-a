@@ -178,7 +178,7 @@ $fecha = static function ( ?string $utc ): string {
 						<td data-label="<?php echo esc_attr( asde_a( 'Edad' ) ); ?>"><?php echo null !== $f['edad'] ? esc_html( sprintf( asde_t( '%d años' ), $f['edad'] ) ) : '—'; ?></td>
 						<td data-label="<?php echo esc_attr( asde_a( 'Sección' ) ); ?>">
 							<?php if ( '' !== $f['seccion_final'] ) : ?>
-								<?php echo Secciones::badge( $f['seccion_final'] ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+								<?php echo wp_kses( Secciones::badge( $f['seccion_final'] ), asde_html_permitido() ); ?>
 								<?php if ( '' !== $f['seccion'] ) : ?>
 									<span class="asde-help"><?php asde_e( 'asignada' ); ?></span>
 								<?php endif; ?>

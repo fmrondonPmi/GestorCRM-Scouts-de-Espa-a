@@ -59,8 +59,8 @@ $val   = static fn( string $k ): string => (string) ( $valores[ $k ] ?? '' );
 		<?php else : ?>
 			<ol class="asde-pasos">
 				<li class="is-hecho"><span class="asde-pasos__marca" aria-hidden="true">✓</span> <?php asde_e( 'Solicitado' ); ?> <span class="asde-muted"><?php echo esc_html( $fecha( $p['creado'] ) ); ?></span></li>
-				<li class="<?php echo null !== $p['pago_en'] ? 'is-hecho' : ''; ?>"><span class="asde-pasos__marca" aria-hidden="true"><?php echo null !== $p['pago_en'] ? '✓' : ''; ?></span> <?php asde_e( 'Pagado' ); ?><?php echo null !== $p['pago_en'] ? ' <span class="asde-muted">' . esc_html( $fecha( $p['pago_fecha'] ) ) . '</span>' : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?></li>
-				<li class="<?php echo null !== $p['entregado_en'] ? 'is-hecho' : ''; ?>"><span class="asde-pasos__marca" aria-hidden="true"><?php echo null !== $p['entregado_en'] ? '✓' : ''; ?></span> <?php asde_e( 'Entregado' ); ?><?php echo null !== $p['entregado_en'] ? ' <span class="asde-muted">' . esc_html( $fecha( $p['entregado_en'] ) ) . '</span>' : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?></li>
+				<li class="<?php echo null !== $p['pago_en'] ? 'is-hecho' : ''; ?>"><span class="asde-pasos__marca" aria-hidden="true"><?php echo null !== $p['pago_en'] ? '✓' : ''; ?></span> <?php asde_e( 'Pagado' ); ?><?php echo wp_kses( null !== $p['pago_en'] ? ' <span class="asde-muted">' . esc_html( $fecha( $p['pago_fecha'] ) ) . '</span>' : '', asde_html_permitido() ); ?></li>
+				<li class="<?php echo null !== $p['entregado_en'] ? 'is-hecho' : ''; ?>"><span class="asde-pasos__marca" aria-hidden="true"><?php echo null !== $p['entregado_en'] ? '✓' : ''; ?></span> <?php asde_e( 'Entregado' ); ?><?php echo wp_kses( null !== $p['entregado_en'] ? ' <span class="asde-muted">' . esc_html( $fecha( $p['entregado_en'] ) ) . '</span>' : '', asde_html_permitido() ); ?></li>
 			</ol>
 			<?php if ( null === $p['pago_en'] && $pagar ) : ?>
 				<h3><?php asde_e( 'Cómo pagarlo' ); ?></h3>
@@ -118,10 +118,10 @@ $val   = static fn( string $k ): string => (string) ( $valores[ $k ] ?? '' );
 						<?php endif; ?>
 						<div class="asde-producto__texto">
 							<strong><?php echo esc_html( $prod['nombre'] ); ?></strong>
-							<?php echo '' !== $prod['descripcion'] ? '<span class="asde-muted">' . esc_html( $prod['descripcion'] ) . '</span>' : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?>
-							<?php echo $prod['limite_persona'] > 0 ? '<span class="asde-muted">' . esc_html( sprintf( asde_t( 'Máximo %d por persona' ), $prod['limite_persona'] ) ) . '</span>' : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?>
+							<?php echo wp_kses( '' !== $prod['descripcion'] ? '<span class="asde-muted">' . esc_html( $prod['descripcion'] ) . '</span>' : '', asde_html_permitido() ); ?>
+							<?php echo wp_kses( $prod['limite_persona'] > 0 ? '<span class="asde-muted">' . esc_html( sprintf( asde_t( 'Máximo %d por persona' ), $prod['limite_persona'] ) ) . '</span>' : '', asde_html_permitido() ); ?>
 						</div>
-						<?php echo \AsdeBalears\AreaPrivada\Frontend\TemplateLoader::render( 'tienda/lineas', array( 'prod' => $prod, 'variantes' => $item['variantes'], 'es_socio' => false, 'previas' => array_intersect_key( array_map( 'intval', (array) ( $valores['cant'] ?? array() ) ), array_flip( array_column( $item['variantes'], 'id' ) ) ), 'existencias' => false ) ); // phpcs:ignore WordPress.Security.EscapeOutput -- HTML de una plantilla propia, ya escapado. ?>
+						<?php echo wp_kses( \AsdeBalears\AreaPrivada\Frontend\TemplateLoader::render( 'tienda/lineas', array( 'prod' => $prod, 'variantes' => $item['variantes'], 'es_socio' => false, 'previas' => array_intersect_key( array_map( 'intval', (array) ( $valores['cant'] ?? array() ) ), array_flip( array_column( $item['variantes'], 'id' ) ) ), 'existencias' => false ) ), asde_html_permitido() ); ?>
 					</div>
 				<?php endforeach; ?>
 
@@ -147,7 +147,7 @@ $val   = static fn( string $k ): string => (string) ( $valores[ $k ] ?? '' );
 						'obligatoria' => true,
 					)
 				);
-				echo $forma_pago; // phpcs:ignore WordPress.Security.EscapeOutput -- HTML de una plantilla propia, ya escapado.
+				echo wp_kses( $forma_pago, asde_html_permitido() );
 				?>
 				<p>
 					<label for="asde-tp-nota"><?php asde_e( 'Observaciones (opcional)' ); ?></label>

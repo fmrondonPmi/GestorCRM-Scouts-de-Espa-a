@@ -101,18 +101,18 @@ $org        = Organizacion::nombre();
 			<div class="asde-notice asde-notice--info" role="status"><?php asde_e( 'Solo lectura: la configuración la cambian Secretaría, Coordinación o Tesorería.' ); ?></div>
 		<?php endif; ?>
 		<div class="asde-grid-3">
-			<p><label for="asde-f-cuota"><?php asde_e( 'Cuota asociativa por asociado (€)' ); ?></label><input type="number" id="asde-f-cuota" name="federacion[cuota_asociativa]" step="0.01" min="0" value="<?php echo esc_attr( $fed['cuota_asociativa'] ); ?>"<?php echo $ro; // phpcs:ignore WordPress.Security.EscapeOutput ?>></p>
-			<p><label for="asde-f-medio"><?php asde_e( 'Seguro promedio por asociado (€)' ); ?></label><input type="number" id="asde-f-medio" name="federacion[seguro_promedio]" step="0.01" min="0" value="<?php echo esc_attr( $fed['seguro_promedio'] ); ?>"<?php echo $ro; // phpcs:ignore WordPress.Security.EscapeOutput ?>></p>
-			<p><label for="asde-f-anio"><?php asde_e( 'Año de las primas' ); ?></label><input type="number" id="asde-f-anio" name="federacion[anio_primas]" min="2000" max="2100" value="<?php echo esc_attr( $fed['anio_primas'] ); ?>"<?php echo $ro; // phpcs:ignore WordPress.Security.EscapeOutput ?>></p>
+			<p><label for="asde-f-cuota"><?php asde_e( 'Cuota asociativa por asociado (€)' ); ?></label><input type="number" id="asde-f-cuota" name="federacion[cuota_asociativa]" step="0.01" min="0" value="<?php echo esc_attr( $fed['cuota_asociativa'] ); ?>"<?php echo esc_attr( $ro ); ?>></p>
+			<p><label for="asde-f-medio"><?php asde_e( 'Seguro promedio por asociado (€)' ); ?></label><input type="number" id="asde-f-medio" name="federacion[seguro_promedio]" step="0.01" min="0" value="<?php echo esc_attr( $fed['seguro_promedio'] ); ?>"<?php echo esc_attr( $ro ); ?>></p>
+			<p><label for="asde-f-anio"><?php asde_e( 'Año de las primas' ); ?></label><input type="number" id="asde-f-anio" name="federacion[anio_primas]" min="2000" max="2100" value="<?php echo esc_attr( $fed['anio_primas'] ); ?>"<?php echo esc_attr( $ro ); ?>></p>
 		</div>
 		<fieldset>
 			<legend><?php asde_e( 'Primas del seguro por asociado' ); ?></legend>
 			<p class="asde-grid-3">
-				<span><label for="asde-f-corte"><?php asde_e( 'Edad de corte de los educandos (años)' ); ?></label><input type="number" id="asde-f-corte" name="federacion[edad_corte]" min="1" max="30" value="<?php echo esc_attr( $fed['edad_corte'] ); ?>"<?php echo $ro; // phpcs:ignore WordPress.Security.EscapeOutput ?>></span>
+				<span><label for="asde-f-corte"><?php asde_e( 'Edad de corte de los educandos (años)' ); ?></label><input type="number" id="asde-f-corte" name="federacion[edad_corte]" min="1" max="30" value="<?php echo esc_attr( $fed['edad_corte'] ); ?>"<?php echo esc_attr( $ro ); ?>></span>
 			</p>
 			<div class="asde-grid-3">
 				<?php foreach ( $categorias as $cat => $label ) : ?>
-					<p><label for="asde-f-<?php echo esc_attr( $cat ); ?>"><?php echo esc_html( $label ); ?> (€)</label><input type="number" id="asde-f-<?php echo esc_attr( $cat ); ?>" name="federacion[primas][<?php echo esc_attr( $cat ); ?>]" step="0.01" min="0" value="<?php echo esc_attr( $fed['primas'][ $cat ] ); ?>"<?php echo $ro; // phpcs:ignore WordPress.Security.EscapeOutput ?>></p>
+					<p><label for="asde-f-<?php echo esc_attr( $cat ); ?>"><?php echo esc_html( $label ); ?> (€)</label><input type="number" id="asde-f-<?php echo esc_attr( $cat ); ?>" name="federacion[primas][<?php echo esc_attr( $cat ); ?>]" step="0.01" min="0" value="<?php echo esc_attr( $fed['primas'][ $cat ] ); ?>"<?php echo esc_attr( $ro ); ?>></p>
 				<?php endforeach; ?>
 			</div>
 		</fieldset>

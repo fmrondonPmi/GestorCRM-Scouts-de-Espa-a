@@ -34,8 +34,8 @@ $fuerte = static fn( string $t ): string => '<strong>' . esc_html( $t ) . '</str
 					<?php echo esc_html( $grupo ); ?> · <?php asde_e( 'Menú del evento' ); ?>
 				</td></tr>
 				<tr><td style="padding:28px;font-size:15px;line-height:1.6;">
-					<p style="<?php echo esc_attr( $p ); ?>"><?php echo $saludo ? sprintf( asde_h( 'Hola, %s:' ), esc_html( $saludo ) ) : asde_h( 'Hola:' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
-					<p style="<?php echo esc_attr( $p ); ?>"><?php echo sprintf( asde_h( 'En el menú de %1$s (%2$s) hay platos que llevan un alérgeno de alguien que va al evento y nadie ha confirmado todavía qué se hará.' ), $fuerte( $evento ), esc_html( $numero ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+					<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( $saludo ? sprintf( asde_h( 'Hola, %s:' ), esc_html( $saludo ) ) : asde_h( 'Hola:' ), asde_html_permitido() ); ?></p>
+					<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( sprintf( asde_h( 'En el menú de %1$s (%2$s) hay platos que llevan un alérgeno de alguien que va al evento y nadie ha confirmado todavía qué se hará.' ), $fuerte( $evento ), esc_html( $numero ) ), asde_html_permitido() ); ?></p>
 					<?php if ( $pendientes ) : ?>
 						<ul style="margin:0 0 16px;padding-left:20px;">
 							<?php foreach ( $pendientes as $x ) : ?>
@@ -59,7 +59,7 @@ $fuerte = static fn( string $t ): string => '<strong>' . esc_html( $t ) . '</str
 						<a href="<?php echo esc_url( $url ); ?>" style="display:inline-block;background:<?php echo esc_attr( $col['primary'] ); ?>;color:<?php echo esc_attr( $col['on_primary'] ); ?>;text-decoration:none;font-weight:600;padding:12px 24px;border-radius:4px;"><?php asde_e( 'Ver el menú' ); ?></a>
 					</p>
 					<?php if ( '' !== $contacto ) : ?>
-						<p style="margin:0;font-size:13px;color:<?php echo esc_attr( $col['atenuado'] ); ?>;"><?php echo sprintf( asde_h( '¿Dudas? Escríbenos a %s.' ), '<a href="mailto:' . esc_attr( $contacto ) . '" style="color:' . esc_attr( $col['primary'] ) . ';">' . esc_html( $contacto ) . '</a>' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+						<p style="margin:0;font-size:13px;color:<?php echo esc_attr( $col['atenuado'] ); ?>;"><?php echo wp_kses( sprintf( asde_h( '¿Dudas? Escríbenos a %s.' ), '<a href="mailto:' . esc_attr( $contacto ) . '" style="color:' . esc_attr( $col['primary'] ) . ';">' . esc_html( $contacto ) . '</a>' ), asde_html_permitido() ); ?></p>
 					<?php endif; ?>
 				</td></tr>
 			</table>

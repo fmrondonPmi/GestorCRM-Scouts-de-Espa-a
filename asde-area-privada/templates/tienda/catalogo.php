@@ -53,11 +53,11 @@ $categoria = null;
 					<?php endif; ?>
 					<div class="asde-producto__texto">
 						<strong><?php echo esc_html( $prod['nombre'] ); ?></strong>
-						<?php echo 'socios' === $prod['visibilidad'] ? '<span class="asde-badge">' . esc_html( asde_t( 'Solo socios' ) ) . '</span>' : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?>
-						<?php echo '' !== $prod['descripcion'] ? '<span class="asde-muted">' . esc_html( $prod['descripcion'] ) . '</span>' : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?>
-						<?php echo $prod['limite_persona'] > 0 ? '<span class="asde-muted">' . esc_html( sprintf( asde_t( 'Máximo %d por persona' ), $prod['limite_persona'] ) ) . '</span>' : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?>
+						<?php echo wp_kses( 'socios' === $prod['visibilidad'] ? '<span class="asde-badge">' . esc_html( asde_t( 'Solo socios' ) ) . '</span>' : '', asde_html_permitido() ); ?>
+						<?php echo wp_kses( '' !== $prod['descripcion'] ? '<span class="asde-muted">' . esc_html( $prod['descripcion'] ) . '</span>' : '', asde_html_permitido() ); ?>
+						<?php echo wp_kses( $prod['limite_persona'] > 0 ? '<span class="asde-muted">' . esc_html( sprintf( asde_t( 'Máximo %d por persona' ), $prod['limite_persona'] ) ) . '</span>' : '', asde_html_permitido() ); ?>
 					</div>
-					<?php echo TemplateLoader::render( 'tienda/lineas', array( 'prod' => $prod, 'variantes' => $item['variantes'], 'es_socio' => $es_socio, 'previas' => array(), 'existencias' => true ) ); // phpcs:ignore WordPress.Security.EscapeOutput -- HTML de una plantilla propia, ya escapado. ?>
+					<?php echo wp_kses( TemplateLoader::render( 'tienda/lineas', array( 'prod' => $prod, 'variantes' => $item['variantes'], 'es_socio' => $es_socio, 'previas' => array(), 'existencias' => true ) ), asde_html_permitido() ); ?>
 				</div>
 			<?php endforeach; ?>
 
@@ -70,7 +70,7 @@ $categoria = null;
 					'obligatoria' => true,
 				)
 			);
-			echo $forma_pago; // phpcs:ignore WordPress.Security.EscapeOutput -- HTML de una plantilla propia, ya escapado.
+			echo wp_kses( $forma_pago, asde_html_permitido() );
 			?>
 			<p>
 				<label for="asde-tienda-nota"><?php asde_e( 'Observaciones (opcional)' ); ?></label>

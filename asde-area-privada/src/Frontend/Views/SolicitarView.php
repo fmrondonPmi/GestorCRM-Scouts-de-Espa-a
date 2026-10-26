@@ -61,7 +61,7 @@ final class SolicitarView extends View {
 		if ( 'solicitar' !== $this->post( 'asde_action' ) || is_user_logged_in() ) {
 			return;
 		}
-		if ( ! wp_verify_nonce( $this->post( '_wpnonce' ), 'asde_solicitar' ) ) {
+		if ( ! wp_verify_nonce( $this->post_nonce(), 'asde_solicitar' ) ) {
 			self::$estado = array( 'errores' => array( asde_t( 'La sesión del formulario ha caducado. Vuelve a intentarlo.' ) ) );
 			return;
 		}

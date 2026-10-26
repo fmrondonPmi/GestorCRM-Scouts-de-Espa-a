@@ -60,7 +60,7 @@ final class LibroMayorView extends TesoreriaBaseView {
 	/** Excel: ?hoja=apuntes (todas las cuentas, con su saldo) o ?hoja=resumen (por partida). */
 	public function exportar(): void {
 		if ( ! Cajas::todas_suyas() || ! wp_verify_nonce( $this->get( '_wpnonce' ), 'asde_libro_mayor_excel' ) ) {
-			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-area-privada' ), 403 );
+			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		$periodo = Periodo::de( $this->get( 'periodo' ) );
 		$resumen = 'resumen' === $this->get( 'hoja' );

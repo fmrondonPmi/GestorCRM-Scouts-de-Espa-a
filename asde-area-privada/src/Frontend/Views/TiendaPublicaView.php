@@ -112,7 +112,7 @@ final class TiendaPublicaView extends View {
 		if ( ! in_array( $accion, array( 'tienda_invitado_comprar', 'tienda_invitado_cancelar' ), true ) ) {
 			return;
 		}
-		if ( ! wp_verify_nonce( $this->post( '_wpnonce' ), 'asde_' . $accion ) ) {
+		if ( ! wp_verify_nonce( $this->post_nonce(), 'asde_' . $accion ) ) {
 			self::$estado = array( 'errores' => array( asde_t( 'La sesión del formulario ha caducado. Vuelve a intentarlo.' ) ) );
 			return;
 		}

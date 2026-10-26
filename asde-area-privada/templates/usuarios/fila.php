@@ -66,10 +66,10 @@ if ( $u->has_cap( 'manage_options' ) ) {
 	</td>
 	<td data-label="<?php echo esc_attr( asde_a( 'Persona' ) ); ?>">
 		<?php if ( $persona ) : ?>
-			<?php echo esc_html( $persona['nombre'] ); ?><?php echo Numeros::compacto_asde( $socio ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+			<?php echo esc_html( $persona['nombre'] ); ?><?php echo wp_kses( Numeros::compacto_asde( $socio ), asde_html_permitido() ); ?>
 			<?php echo $persona['activa'] ? '' : '<br><span class="asde-help asde-help--warning">' . esc_html( asde_t( 'Sin membresía activa: no puede entrar' ) ) . '</span>'; ?>
 		<?php elseif ( $reps ) : ?>
-			<?php asde_e( 'Familia de' ); ?> <?php echo esc_html( Contacto::lista( $nombres ) ); ?><?php echo NumeroSocio::orden_tutor( $u->user_login ) > 1 ? ' <span class="asde-help">' . esc_html( asde_t( '(cuenta del 2.º tutor/a)' ) ) . '</span>' : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?>
+			<?php asde_e( 'Familia de' ); ?> <?php echo esc_html( Contacto::lista( $nombres ) ); ?><?php echo wp_kses( NumeroSocio::orden_tutor( $u->user_login ) > 1 ? ' <span class="asde-help">' . esc_html( asde_t( '(cuenta del 2.º tutor/a)' ) ) . '</span>' : '', asde_html_permitido() ); ?>
 		<?php elseif ( $socio ) : ?>
 			<span class="asde-muted"><?php asde_e( 'Nº Scouts de España' ); ?> <?php echo esc_html( $socio ); ?> <?php asde_e( '(no encontrado en el CRM)' ); ?></span>
 		<?php else : ?>
@@ -85,7 +85,7 @@ if ( $u->has_cap( 'manage_options' ) ) {
 	<td data-label="<?php echo esc_attr( asde_a( 'Ámbito' ) ); ?>">
 		<?php
 		foreach ( $secc_u as $s ) {
-			echo Secciones::badge( $s ); // phpcs:ignore WordPress.Security.EscapeOutput
+			echo wp_kses( Secciones::badge( $s ), asde_html_permitido() );
 		}
 		?>
 		<?php if ( $reps ) : ?>

@@ -127,10 +127,10 @@ $singular = array(
 							<?php endif; ?>
 							<td data-label="<?php echo esc_attr( asde_a( 'Pedido' ) ); ?>"><a href="<?php echo esc_url( $detalle ); ?>" data-asde-modal><?php echo esc_html( PedidosTable::numero( $p ) ); ?></a><br><span class="asde-muted"><?php echo esc_html( $fecha( $p['creado'] ) ); ?></span></td>
 							<td data-label="<?php echo esc_attr( asde_a( 'Socio/a' ) ); ?>">
-								<?php echo esc_html( Servicio::comprador( $p, $persona ) ); ?><?php echo $persona ? \AsdeBalears\AreaPrivada\Socios\Numeros::compacto( $persona ) : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?>
+								<?php echo esc_html( Servicio::comprador( $p, $persona ) ); ?><?php echo wp_kses( $persona ? \AsdeBalears\AreaPrivada\Socios\Numeros::compacto( $persona ) : '', asde_html_permitido() ); ?>
 								<?php
 								foreach ( $p['secciones'] as $s ) {
-									echo Secciones::badge( $s ); // phpcs:ignore WordPress.Security.EscapeOutput
+									echo wp_kses( Secciones::badge( $s ), asde_html_permitido() );
 								}
 								?>
 							</td>
@@ -142,18 +142,18 @@ $singular = array(
 							<?php if ( ! $activo ) : ?>
 								<td data-label="<?php echo esc_attr( asde_a( 'Estado' ) ); ?>" colspan="4"><span class="asde-badge asde-badge--uniforme-cancelado"><?php asde_e( 'Cancelado' ); ?></span> <span class="asde-muted"><?php echo esc_html( $p['cancelado_motivo'] ); ?></span></td>
 							<?php else : ?>
-								<td data-label="<?php echo esc_attr( asde_a( 'Pagado' ) ); ?>"><?php echo $marca( null !== $p['pago_en'], null !== $p['pago_en'] ? ( esc_html( asde_t( PedidosTable::METODOS[ $p['pago_metodo'] ] ?? '' ) ) ) . ' ' . $fecha( $p['pago_fecha'] ) : '' ); // phpcs:ignore WordPress.Security.EscapeOutput ?><?php echo null === $p['pago_en'] && Servicio::puede_pagar( $p ) ? ' <a href="' . esc_url( $detalle ) . '" data-asde-modal>Validar</a>' : ''; ?></td>
-								<td data-label="<?php echo esc_attr( asde_a( 'En el pedido' ) ); ?>"><?php echo $marca( null !== $p['pedido_en'], null !== $p['pedido_en'] ? $ref( $p['pedido_ref'] ) : '' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></td>
+								<td data-label="<?php echo esc_attr( asde_a( 'Pagado' ) ); ?>"><?php echo wp_kses( $marca( null !== $p['pago_en'], null !== $p['pago_en'] ? ( esc_html( asde_t( PedidosTable::METODOS[ $p['pago_metodo'] ] ?? '' ) ) ) . ' ' . $fecha( $p['pago_fecha'] ) : '' ), asde_html_permitido() ); ?><?php echo null === $p['pago_en'] && Servicio::puede_pagar( $p ) ? ' <a href="' . esc_url( $detalle ) . '" data-asde-modal>Validar</a>' : ''; ?></td>
+								<td data-label="<?php echo esc_attr( asde_a( 'En el pedido' ) ); ?>"><?php echo wp_kses( $marca( null !== $p['pedido_en'], null !== $p['pedido_en'] ? $ref( $p['pedido_ref'] ) : '' ), asde_html_permitido() ); ?></td>
 								<td data-label="<?php echo esc_attr( asde_a( 'Entregado' ) ); ?>">
 									<?php if ( null !== $p['entregado_en'] ) : ?>
-										<?php echo $marca( true, $fecha( $p['entregado_en'] ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+										<?php echo wp_kses( $marca( true, $fecha( $p['entregado_en'] ) ), asde_html_permitido() ); ?>
 									<?php elseif ( in_array( $p['id'], $entregar, true ) ) : ?>
 										<button type="submit" form="asde-uni-entregar-<?php echo (int) $p['id']; ?>" class="asde-btn-link"><?php asde_e( 'Marcar entregado' ); ?></button>
 									<?php else : ?>
 										<span class="asde-muted">—</span>
 									<?php endif; ?>
 								</td>
-								<td data-label="<?php echo esc_attr( asde_a( 'Recibido' ) ); ?>"><?php echo null !== $p['recibido_en'] ? $marca( true, $fecha( $p['recibido_en'] ) ) : ( null !== $p['entregado_en'] ? '<span class="asde-muted">Sin confirmar</span>' : '<span class="asde-muted">—</span>' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></td>
+								<td data-label="<?php echo esc_attr( asde_a( 'Recibido' ) ); ?>"><?php echo wp_kses( null !== $p['recibido_en'] ? $marca( true, $fecha( $p['recibido_en'] ) ) : ( null !== $p['entregado_en'] ? '<span class="asde-muted">Sin confirmar</span>' : '<span class="asde-muted">—</span>' ), asde_html_permitido() ); ?></td>
 							<?php endif; ?>
 						</tr>
 					<?php endforeach; ?>

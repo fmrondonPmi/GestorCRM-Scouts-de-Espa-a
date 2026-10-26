@@ -191,7 +191,7 @@ final class SepaView extends TesoreriaBaseView {
 
 	public function handle_post(): void {
 		if ( ! current_user_can( self::CAP_CONFIG ) || ! \AsdeBalears\AreaPrivada\Domain\Modulos::activo( \AsdeBalears\AreaPrivada\Domain\Modulos::SEPA ) ) {
-			wp_die( esc_html__( 'No tienes permiso para cambiar las domiciliaciones.', 'asde-area-privada' ), 403 );
+			wp_die( esc_html__( 'No tienes permiso para cambiar las domiciliaciones.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		$ronda  = Config::es_ronda( $this->post( 'ronda' ) ) ? $this->post( 'ronda' ) : Config::ronda_actual();
 		$volver = $this->url( 'sepa', array( 'ronda' => $ronda ) );
@@ -392,7 +392,7 @@ final class SepaView extends TesoreriaBaseView {
 		header( 'Content-Type: application/xml; charset=UTF-8' );
 		header( 'Content-Disposition: attachment; filename="' . Remesas::nombre_fichero( $r ) . '"' );
 		header( 'X-Content-Type-Options: nosniff' );
-		echo $xml; // phpcs:ignore WordPress.Security.EscapeOutput -- XML generado con DOM, ya escapado.
+		echo $xml; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- descarga XML SEPA, no HTML
 		exit;
 	}
 }

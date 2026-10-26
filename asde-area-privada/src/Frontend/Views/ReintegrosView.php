@@ -40,7 +40,7 @@ final class ReintegrosView extends View {
 
 	public function handle_post(): void {
 		if ( ! current_user_can( Servicio::CAP_PEDIR ) && ! Servicio::ve_todos() ) {
-			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-area-privada' ), 403 );
+			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		$accion = $this->post( 'asde_action' );
 		$volver = $this->url( 'reintegros' );

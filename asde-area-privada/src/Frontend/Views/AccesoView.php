@@ -58,7 +58,7 @@ final class AccesoView extends View {
 		if ( 'acceder' !== $this->post( 'asde_action' ) || is_user_logged_in() ) {
 			return;
 		}
-		if ( ! wp_verify_nonce( $this->post( '_wpnonce' ), 'asde_acceso' ) ) {
+		if ( ! wp_verify_nonce( $this->post_nonce(), 'asde_acceso' ) ) {
 			self::$error = asde_t( 'La sesión del formulario ha caducado. Vuelve a intentarlo.' );
 			return;
 		}

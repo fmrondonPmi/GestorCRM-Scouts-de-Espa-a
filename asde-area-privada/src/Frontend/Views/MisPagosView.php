@@ -253,7 +253,7 @@ final class MisPagosView extends View {
 	public function handle_post(): void {
 		$a = Ambito::actual();
 		if ( ! current_user_can( self::CAP ) || ( ! $a->persona && ! $a->representados ) ) {
-			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-area-privada' ), 403 );
+			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		$volver   = $this->url( 'pagos' );
 		$familias = $this->familias( $this->nums( $a ) );

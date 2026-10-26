@@ -34,8 +34,8 @@ $ro     = $editable ? '' : ' disabled';
 	<section class="asde-card">
 		<h3><?php asde_e( 'Importes' ); ?></h3>
 		<div class="asde-grid-2">
-			<p><label for="asde-c-insc"><?php asde_e( 'Inscripción por hijo (€)' ); ?></label><input type="number" id="asde-c-insc" name="cuotas[inscripcion]" step="0.01" min="0" value="<?php echo esc_attr( $cfg['cuotas']['inscripcion'] ); ?>"<?php echo $ro; // phpcs:ignore WordPress.Security.EscapeOutput ?>></p>
-			<p><label for="asde-c-seg"><?php asde_e( 'Seguro por hijo (€)' ); ?></label><input type="number" id="asde-c-seg" name="cuotas[seguro]" step="0.01" min="0" value="<?php echo esc_attr( $cfg['cuotas']['seguro'] ); ?>"<?php echo $ro; // phpcs:ignore WordPress.Security.EscapeOutput ?>></p>
+			<p><label for="asde-c-insc"><?php asde_e( 'Inscripción por hijo (€)' ); ?></label><input type="number" id="asde-c-insc" name="cuotas[inscripcion]" step="0.01" min="0" value="<?php echo esc_attr( $cfg['cuotas']['inscripcion'] ); ?>"<?php echo esc_attr( $ro ); ?>></p>
+			<p><label for="asde-c-seg"><?php asde_e( 'Seguro por hijo (€)' ); ?></label><input type="number" id="asde-c-seg" name="cuotas[seguro]" step="0.01" min="0" value="<?php echo esc_attr( $cfg['cuotas']['seguro'] ); ?>"<?php echo esc_attr( $ro ); ?>></p>
 		</div>
 		<fieldset>
 			<legend><?php asde_e( 'Anualidad familiar según nº de hijos' ); ?></legend>
@@ -44,7 +44,7 @@ $ro     = $editable ? '' : ' disabled';
 				<?php for ( $i = 0; $i < max( 5, count( $tramos ) + 1 ); $i++ ) : ?>
 					<p>
 						<label for="asde-c-anu-<?php echo (int) $i; ?>"><?php echo esc_html( sprintf( asde_n( '%d hijo', '%d hijos', $i + 1 ), $i + 1 ) ); ?></label>
-						<input type="number" id="asde-c-anu-<?php echo (int) $i; ?>" name="cuotas[anualidad][]" step="0.01" min="0" value="<?php echo isset( $tramos[ $i ] ) ? esc_attr( $tramos[ $i ] ) : ''; ?>" placeholder="<?php echo $i >= count( $tramos ) ? esc_attr( sprintf( asde_t( 'igual que %d' ), count( $tramos ) ) ) : ''; ?>"<?php echo $ro; // phpcs:ignore WordPress.Security.EscapeOutput ?>>
+						<input type="number" id="asde-c-anu-<?php echo (int) $i; ?>" name="cuotas[anualidad][]" step="0.01" min="0" value="<?php echo isset( $tramos[ $i ] ) ? esc_attr( $tramos[ $i ] ) : ''; ?>" placeholder="<?php echo $i >= count( $tramos ) ? esc_attr( sprintf( asde_t( 'igual que %d' ), count( $tramos ) ) ) : ''; ?>"<?php echo esc_attr( $ro ); ?>>
 					</p>
 				<?php endfor; ?>
 			</div>
@@ -53,8 +53,8 @@ $ro     = $editable ? '' : ' disabled';
 			<legend><?php asde_e( 'Secciones que pagan cuota' ); ?></legend>
 			<?php foreach ( Secciones::all() as $slug => $s ) : ?>
 				<label class="asde-choice asde-choice--inline">
-					<input type="checkbox" name="secciones_pagan[]" value="<?php echo esc_attr( $slug ); ?>" <?php checked( in_array( $slug, $cfg['secciones_pagan'], true ) ); ?><?php echo $ro; // phpcs:ignore WordPress.Security.EscapeOutput ?>>
-					<span><?php echo Secciones::badge( $slug ); // phpcs:ignore WordPress.Security.EscapeOutput ?></span>
+					<input type="checkbox" name="secciones_pagan[]" value="<?php echo esc_attr( $slug ); ?>" <?php checked( in_array( $slug, $cfg['secciones_pagan'], true ) ); ?><?php echo esc_attr( $ro ); ?>>
+					<span><?php echo wp_kses( Secciones::badge( $slug ), asde_html_permitido() ); ?></span>
 				</label>
 			<?php endforeach; ?>
 		</fieldset>
@@ -86,9 +86,9 @@ $ro     = $editable ? '' : ' disabled';
 			<?php for ( $i = 0; $i < max( 4, count( $plazos ) + 1 ); $i++ ) : ?>
 				<?php $pl = $plazos[ $i ] ?? array( 'nombre' => '', 'fecha' => '', 'porcentaje' => '' ); ?>
 				<div class="asde-grid-3">
-					<p><label for="asde-pl-n-<?php echo (int) $i; ?>"><?php asde_e( 'Plazo' ); ?> <?php echo (int) ( $i + 1 ); ?></label><input type="text" id="asde-pl-n-<?php echo (int) $i; ?>" name="plazos[<?php echo (int) $i; ?>][nombre]" value="<?php echo esc_attr( $pl['nombre'] ); ?>" placeholder="<?php echo esc_attr( asde_a( 'p. ej. Primer plazo' ) ); ?>"<?php echo $ro; // phpcs:ignore WordPress.Security.EscapeOutput ?>></p>
-					<p><label for="asde-pl-f-<?php echo (int) $i; ?>"><?php asde_e( 'Fecha límite' ); ?></label><input type="date" id="asde-pl-f-<?php echo (int) $i; ?>" name="plazos[<?php echo (int) $i; ?>][fecha]" value="<?php echo esc_attr( $pl['fecha'] ); ?>"<?php echo $ro; // phpcs:ignore WordPress.Security.EscapeOutput ?>></p>
-					<p><label for="asde-pl-p-<?php echo (int) $i; ?>"><?php asde_e( '% de la cuota' ); ?></label><input type="number" id="asde-pl-p-<?php echo (int) $i; ?>" name="plazos[<?php echo (int) $i; ?>][porcentaje]" step="0.01" min="0" max="100" value="<?php echo esc_attr( $pl['porcentaje'] ); ?>"<?php echo $ro; // phpcs:ignore WordPress.Security.EscapeOutput ?>></p>
+					<p><label for="asde-pl-n-<?php echo (int) $i; ?>"><?php asde_e( 'Plazo' ); ?> <?php echo (int) ( $i + 1 ); ?></label><input type="text" id="asde-pl-n-<?php echo (int) $i; ?>" name="plazos[<?php echo (int) $i; ?>][nombre]" value="<?php echo esc_attr( $pl['nombre'] ); ?>" placeholder="<?php echo esc_attr( asde_a( 'p. ej. Primer plazo' ) ); ?>"<?php echo esc_attr( $ro ); ?>></p>
+					<p><label for="asde-pl-f-<?php echo (int) $i; ?>"><?php asde_e( 'Fecha límite' ); ?></label><input type="date" id="asde-pl-f-<?php echo (int) $i; ?>" name="plazos[<?php echo (int) $i; ?>][fecha]" value="<?php echo esc_attr( $pl['fecha'] ); ?>"<?php echo esc_attr( $ro ); ?>></p>
+					<p><label for="asde-pl-p-<?php echo (int) $i; ?>"><?php asde_e( '% de la cuota' ); ?></label><input type="number" id="asde-pl-p-<?php echo (int) $i; ?>" name="plazos[<?php echo (int) $i; ?>][porcentaje]" step="0.01" min="0" max="100" value="<?php echo esc_attr( $pl['porcentaje'] ); ?>"<?php echo esc_attr( $ro ); ?>></p>
 				</div>
 			<?php endfor; ?>
 		</div>

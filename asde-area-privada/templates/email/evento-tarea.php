@@ -33,19 +33,19 @@ $fuerte = static fn( string $t ): string => '<strong>' . esc_html( $t ) . '</str
 					<?php echo esc_html( $grupo ); ?> · <?php asde_e( 'Eventos' ); ?>
 				</td></tr>
 				<tr><td style="padding:28px;font-size:15px;line-height:1.6;">
-					<p style="<?php echo esc_attr( $p ); ?>"><?php echo $saludo ? sprintf( asde_h( 'Hola, %s:' ), esc_html( $saludo ) ) : asde_h( 'Hola:' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+					<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( $saludo ? sprintf( asde_h( 'Hola, %s:' ), esc_html( $saludo ) ) : asde_h( 'Hola:' ), asde_html_permitido() ); ?></p>
 					<?php if ( 'tarea_vence' === $tipo ) : ?>
-						<p style="<?php echo esc_attr( $p ); ?>"><?php echo sprintf( asde_h( 'Hoy vence una tarea del calendario de %s:' ), $fuerte( $evento ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+						<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( sprintf( asde_h( 'Hoy vence una tarea del calendario de %s:' ), $fuerte( $evento ) ), asde_html_permitido() ); ?></p>
 					<?php else : ?>
-						<p style="<?php echo esc_attr( $p ); ?>"><?php echo sprintf( asde_h( 'Una tarea del calendario de %1$s vence el %2$s:' ), $fuerte( $evento ), $fuerte( $fecha ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+						<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( sprintf( asde_h( 'Una tarea del calendario de %1$s vence el %2$s:' ), $fuerte( $evento ), $fuerte( $fecha ) ), asde_html_permitido() ); ?></p>
 					<?php endif; ?>
-					<p style="<?php echo esc_attr( $p ); ?>font-size:17px;"><?php echo $fuerte( $tarea ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+					<p style="<?php echo esc_attr( $p ); ?>font-size:17px;"><?php echo wp_kses( $fuerte( $tarea ), asde_html_permitido() ); ?></p>
 					<p style="<?php echo esc_attr( $p ); ?>font-size:13px;color:<?php echo esc_attr( $col['atenuado'] ); ?>;"><?php echo esc_html( $numero ); ?></p>
 					<p style="margin:24px 0;text-align:center;">
 						<a href="<?php echo esc_url( $url ); ?>" style="display:inline-block;background:<?php echo esc_attr( $col['primary'] ); ?>;color:<?php echo esc_attr( $col['on_primary'] ); ?>;text-decoration:none;font-weight:600;padding:12px 24px;border-radius:4px;"><?php asde_e( 'Ver el calendario' ); ?></a>
 					</p>
 					<?php if ( '' !== $contacto ) : ?>
-						<p style="margin:0;font-size:13px;color:<?php echo esc_attr( $col['atenuado'] ); ?>;"><?php echo sprintf( asde_h( '¿Dudas? Escríbenos a %s.' ), '<a href="mailto:' . esc_attr( $contacto ) . '" style="color:' . esc_attr( $col['primary'] ) . ';">' . esc_html( $contacto ) . '</a>' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+						<p style="margin:0;font-size:13px;color:<?php echo esc_attr( $col['atenuado'] ); ?>;"><?php echo wp_kses( sprintf( asde_h( '¿Dudas? Escríbenos a %s.' ), '<a href="mailto:' . esc_attr( $contacto ) . '" style="color:' . esc_attr( $col['primary'] ) . ';">' . esc_html( $contacto ) . '</a>' ), asde_html_permitido() ); ?></p>
 					<?php endif; ?>
 				</td></tr>
 			</table>

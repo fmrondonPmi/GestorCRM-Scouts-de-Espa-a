@@ -198,7 +198,7 @@ final class Justificantes {
 		if ( $imagen ) {
 			header( "Content-Security-Policy: default-src 'none'; img-src 'self' data:; style-src 'unsafe-inline'; sandbox" );
 		}
-		echo $contenido; // phpcs:ignore WordPress.Security.EscapeOutput -- fichero binario (imagen o PDF comprobados al subirlo), con su tipo y nosniff.
+		echo $contenido; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- el justificante tal cual se subió (tipo comprobado arriba), no HTML
 		exit;
 	}
 

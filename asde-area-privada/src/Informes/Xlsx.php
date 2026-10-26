@@ -32,7 +32,7 @@ final class Xlsx {
 		header( 'Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' );
 		header( 'Content-Disposition: attachment; filename="' . $archivo . '"' );
 		header( 'Content-Length: ' . strlen( $datos ) );
-		echo $datos; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- es un fichero .xlsx (binario), no HTML
+		echo $datos; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- descarga Excel (zip), no HTML
 	}
 
 	/**

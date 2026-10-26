@@ -71,7 +71,7 @@ $enlaces   = array(
 		<p><?php asde_e( 'Este evento todavía no tiene tareas.' ); ?></p>
 		<?php if ( $puede_editar && $plantillas ) : ?>
 			<form method="post" class="asde-form">
-				<?php echo $campos( 'tarea_aplicar' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+				<?php echo wp_kses( $campos( 'tarea_aplicar' ), asde_html_permitido() ); ?>
 				<p>
 					<label for="asde-tarea-plantilla"><?php asde_e( 'Plantilla de tareas' ); ?></label>
 					<select id="asde-tarea-plantilla" name="plantilla">
@@ -120,7 +120,7 @@ $enlaces   = array(
 					<div class="asde-tarea__marca">
 						<?php if ( $puede_marcar && ! isset( $auto[ $t['id'] ] ) ) : ?>
 							<form method="post">
-								<?php echo $campos( 'hecha' === $st ? 'tarea_deshecha' : 'tarea_hecha' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+								<?php echo wp_kses( $campos( 'hecha' === $st ? 'tarea_deshecha' : 'tarea_hecha' ), asde_html_permitido() ); ?>
 								<input type="hidden" name="tarea" value="<?php echo (int) $t['id']; ?>">
 								<button type="submit" class="asde-tarea__boton" aria-label="<?php echo esc_attr( 'hecha' === $st ? asde_a( 'Marcar como pendiente' ) : asde_a( 'Marcar como hecha' ) ); ?>" title="<?php echo esc_attr( 'hecha' === $st ? asde_a( 'Marcar como pendiente' ) : asde_a( 'Marcar como hecha' ) ); ?>"><?php echo 'hecha' === $st ? '✓' : ''; ?></button>
 							</form>
@@ -130,7 +130,7 @@ $enlaces   = array(
 					</div>
 					<div class="asde-tarea__cuerpo">
 						<strong class="asde-tarea__titulo"><?php echo esc_html( Plantillas::texto( $t['titulo'] ) ); ?></strong>
-						<?php echo '' !== $t['detalle'] ? '<span class="asde-muted">' . esc_html( Plantillas::texto( $t['detalle'] ) ) . '</span>' : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?>
+						<?php echo wp_kses( '' !== $t['detalle'] ? '<span class="asde-muted">' . esc_html( Plantillas::texto( $t['detalle'] ) ) . '</span>' : '', asde_html_permitido() ); ?>
 						<span class="asde-tarea__meta">
 							<span class="asde-badge asde-badge--tarea-<?php echo esc_attr( $st ); ?>"><?php echo esc_html( $etiquetas[ $st ] ); ?></span>
 							<?php if ( isset( $auto[ $t['id'] ] ) ) : ?>
@@ -146,18 +146,18 @@ $enlaces   = array(
 							<?php if ( null !== $t['fecha_propia'] && ! $t['propia'] ) : ?>
 								<span class="asde-muted">· <?php asde_e( 'fecha propia' ); ?></span>
 							<?php endif; ?>
-							<?php echo '' !== $resp ? '<span>· ' . esc_html( sprintf( asde_t( 'Responsable: %s' ), $resp ) ) . '</span>' : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?>
+							<?php echo wp_kses( '' !== $resp ? '<span>· ' . esc_html( sprintf( asde_t( 'Responsable: %s' ), $resp ) ) . '</span>' : '', asde_html_permitido() ); ?>
 							<?php if ( '' !== $t['enlace'] && isset( $enlaces[ $t['enlace'] ] ) ) : ?>
 								· <a class="asde-solo-pantalla" href="<?php echo esc_url( add_query_arg( 'pestana', $t['enlace'], $url ) ); ?>"><?php echo esc_html( $enlaces[ $t['enlace'] ] ); ?></a>
 							<?php endif; ?>
 						</span>
-						<?php echo '' !== $t['nota'] ? '<span class="asde-tarea__nota">' . esc_html( $t['nota'] ) . '</span>' : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?>
+						<?php echo wp_kses( '' !== $t['nota'] ? '<span class="asde-tarea__nota">' . esc_html( $t['nota'] ) . '</span>' : '', asde_html_permitido() ); ?>
 
 						<?php if ( $puede_marcar && isset( $auto[ $t['id'] ] ) && ! $auto[ $t['id'] ] && null === $t['hecha_en'] ) : ?>
 							<details class="asde-tarea__editar asde-solo-pantalla">
 								<summary><?php asde_e( 'No procede' ); ?></summary>
 								<form method="post" class="asde-form asde-form--compacta">
-									<?php echo $campos( 'tarea_hecha' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+									<?php echo wp_kses( $campos( 'tarea_hecha' ), asde_html_permitido() ); ?>
 									<input type="hidden" name="tarea" value="<?php echo (int) $t['id']; ?>">
 									<p class="asde-form__fila">
 										<label><?php asde_e( 'Observación' ); ?> <input type="text" name="nota" value="<?php echo esc_attr( $t['nota'] ); ?>" maxlength="255" required></label>
@@ -171,7 +171,7 @@ $enlaces   = array(
 							<details class="asde-tarea__editar asde-solo-pantalla">
 								<summary><?php asde_e( 'Cambiar' ); ?></summary>
 								<form method="post" class="asde-form asde-form--compacta">
-									<?php echo $campos( 'tarea_guardar' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+									<?php echo wp_kses( $campos( 'tarea_guardar' ), asde_html_permitido() ); ?>
 									<input type="hidden" name="tarea" value="<?php echo (int) $t['id']; ?>">
 									<p class="asde-form__fila">
 										<label><?php asde_e( 'Responsable' ); ?>
@@ -189,7 +189,7 @@ $enlaces   = array(
 									<p><button type="submit" class="button"><?php asde_e( 'Guardar' ); ?></button></p>
 								</form>
 								<form method="post" data-asde-confirmar="<?php echo esc_attr( asde_js( '¿Quitar esta tarea?' ) ); ?>">
-									<?php echo $campos( 'tarea_quitar' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+									<?php echo wp_kses( $campos( 'tarea_quitar' ), asde_html_permitido() ); ?>
 									<input type="hidden" name="tarea" value="<?php echo (int) $t['id']; ?>">
 									<button type="submit" class="asde-btn-link asde-btn-danger"><?php asde_e( 'Quitar la tarea' ); ?></button>
 								</form>
@@ -206,7 +206,7 @@ $enlaces   = array(
 	<section class="asde-card asde-solo-pantalla">
 		<h3 class="asde-card__title"><?php asde_e( 'Añadir una tarea' ); ?></h3>
 		<form method="post" class="asde-form">
-			<?php echo $campos( 'tarea_anadir' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+			<?php echo wp_kses( $campos( 'tarea_anadir' ), asde_html_permitido() ); ?>
 			<p class="asde-form__fila">
 				<label><?php asde_e( 'Tarea' ); ?> <input type="text" name="titulo" maxlength="200" required></label>
 				<label><?php asde_e( 'Fecha límite' ); ?> <input type="date" name="fecha" required></label>

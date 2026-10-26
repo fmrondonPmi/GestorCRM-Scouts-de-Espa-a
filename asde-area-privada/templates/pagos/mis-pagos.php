@@ -56,7 +56,7 @@ $fecha = static fn( string $f ) => '' !== $f ? wp_date( 'd/m/Y', strtotime( $f )
 							<tr>
 								<td data-label="<?php echo esc_attr( asde_a( 'Plazo' ) ); ?>"><?php echo esc_html( sprintf( asde_t( 'Hasta el %s' ), $fecha( $pl['fecha'] ) ) ); ?></td>
 								<td data-label="<?php echo esc_attr( asde_a( 'Importe' ) ); ?>"><?php echo esc_html( Calculadora::euros( $pl['importe'] ) ); ?></td>
-								<td data-label="<?php echo esc_attr( asde_a( 'Estado' ) ); ?>"><?php echo $pl['cubierto'] ? '✓ ' . esc_html( asde_t( 'Pagado' ) ) : ( $pl['vencido'] ? '<span class="asde-help asde-help--warning">' . esc_html( asde_t( 'Vencido' ) ) . '</span>' : esc_html( asde_t( 'Pendiente' ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></td>
+								<td data-label="<?php echo esc_attr( asde_a( 'Estado' ) ); ?>"><?php echo wp_kses( $pl['cubierto'] ? '✓ ' . esc_html( asde_t( 'Pagado' ) ) : ( $pl['vencido'] ? '<span class="asde-help asde-help--warning">' . esc_html( asde_t( 'Vencido' ) ) . '</span>' : esc_html( asde_t( 'Pendiente' ) ) ), asde_html_permitido() ); ?></td>
 							</tr>
 						<?php endforeach; ?>
 					</tbody>

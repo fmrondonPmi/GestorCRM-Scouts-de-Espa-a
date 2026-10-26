@@ -69,7 +69,7 @@ $ok( count( $todos ) > 150, 'se revisan los ficheros del plugin (' . count( $tod
 $readme = (string) file_get_contents( ASDE_AP_DIR . 'readme.txt' );
 $ok( '' !== $readme && 1 === preg_match( '/^Stable tag:\s*(\S+)/mi', $readme, $st ) && ASDE_AP_VERSION === $st[1] && 1 === preg_match( '/^License:\s*MIT/mi', $readme ), 'readme.txt existe, su «Stable tag» es la versión del plugin y la licencia coincide con la cabecera' );
 $dominio_cab = get_file_data( ASDE_AP_FILE, array( 'd' => 'Text Domain' ) )['d'];
-$ok( basename( rtrim( ASDE_AP_DIR, '/' . chr( 92 ) ) ) === $dominio_cab, 'el dominio de textos de la cabecera es el nombre de la carpeta del plugin' );
+$ok( 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' === $dominio_cab, 'el dominio de textos de la cabecera es el slug del plugin en WordPress.org' );
 
 // ── A. Salida escapada ───────────────────────────────────────────────────────
 echo "\n── A. Textos traducidos que se imprimen\n";

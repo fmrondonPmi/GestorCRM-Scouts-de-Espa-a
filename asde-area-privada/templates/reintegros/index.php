@@ -29,7 +29,7 @@ $fila = static function ( array $r, bool $con_quien ) use ( $url, $fecha, $nombr
 		<td data-label="<?php echo esc_attr( asde_a( 'Reintegro' ) ); ?>">
 			<strong><?php echo esc_html( ReintegrosTable::numero( $r ) ); ?></strong>
 			<span class="asde-badge asde-badge--reintegro-<?php echo esc_attr( $r['estado'] ); ?>"><?php echo esc_html( asde_t( ReintegrosTable::ESTADOS[ $r['estado'] ] ?? '' ) ); ?></span>
-			<?php echo $con_quien ? '<br><span class="asde-muted">' . esc_html( Servicio::nombre( $r['solicitante'] ) ) . '</span>' : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?>
+			<?php echo wp_kses( $con_quien ? '<br><span class="asde-muted">' . esc_html( Servicio::nombre( $r['solicitante'] ) ) . '</span>' : '', asde_html_permitido() ); ?>
 		</td>
 		<td data-label="<?php echo esc_attr( asde_a( 'Qué' ) ); ?>">
 			<?php echo esc_html( $r['concepto'] ); ?><br>
@@ -44,7 +44,7 @@ $fila = static function ( array $r, bool $con_quien ) use ( $url, $fecha, $nombr
 		<td data-label="<?php echo esc_attr( asde_a( 'Importe' ) ); ?>">
 			<?php echo esc_html( Calculadora::euros( $r['importe'] ) ); ?><br>
 			<span class="asde-muted"><?php echo esc_html( asde_t( ReintegrosTable::FORMAS[ $r['forma'] ] ?? '' ) ); ?></span>
-			<?php echo '' !== $iban ? '<br><span class="asde-muted">' . esc_html( $iban ) . '</span>' : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?>
+			<?php echo wp_kses( '' !== $iban ? '<br><span class="asde-muted">' . esc_html( $iban ) . '</span>' : '', asde_html_permitido() ); ?>
 		</td>
 		<td data-label="<?php echo esc_attr( asde_a( 'Acciones' ) ); ?>">
 			<?php if ( '' !== $r['justificante'] ) : ?>

@@ -56,7 +56,7 @@ foreach ( asde_ta( EventosView::PESTANAS ) as $p => $etiqueta ) {
 	<p>
 		<?php
 		foreach ( $e['secciones'] as $s ) {
-			echo Secciones::badge( $s ); // phpcs:ignore WordPress.Security.EscapeOutput
+			echo wp_kses( Secciones::badge( $s ), asde_html_permitido() );
 		}
 		?>
 		<?php if ( Servicio::puede_editar( $e, $ambito ) ) : ?>
@@ -76,5 +76,5 @@ $subnav = \AsdeBalears\AreaPrivada\Frontend\TemplateLoader::render(
 		'activo' => add_query_arg( 'pestana', $pestana, $url ),
 	)
 );
-echo $subnav; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- ya escapado en su plantilla.
-echo $contenido; // phpcs:ignore WordPress.Security.EscapeOutput -- ya escapado en su plantilla.
+echo wp_kses( $subnav, asde_html_permitido() );
+echo wp_kses( $contenido, asde_html_permitido() );

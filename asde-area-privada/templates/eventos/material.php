@@ -32,9 +32,9 @@ $campos  = static function ( int $linea = 0 ) use ( $e ): string {
 	<?php if ( $resumen['lineas'] ) : ?>
 		<p>
 			<?php echo esc_html( sprintf( asde_n( '%d material', '%d materiales', $resumen['lineas'] ), $resumen['lineas'] ) ); ?>
-			<?php echo $resumen['sin_sacar'] ? ' · ' . esc_html( sprintf( asde_n( '%d sin sacar', '%d sin sacar', $resumen['sin_sacar'] ), $resumen['sin_sacar'] ) ) : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?>
-			<?php echo $resumen['por_devolver'] ? ' · ' . esc_html( sprintf( asde_n( '%d por devolver', '%d por devolver', $resumen['por_devolver'] ), $resumen['por_devolver'] ) ) : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?>
-			<?php echo $resumen['con_faltas'] ? ' · <strong>' . esc_html( sprintf( asde_n( '%d con faltas', '%d con faltas', $resumen['con_faltas'] ), $resumen['con_faltas'] ) ) . '</strong>' : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?>
+			<?php echo wp_kses( $resumen['sin_sacar'] ? ' · ' . esc_html( sprintf( asde_n( '%d sin sacar', '%d sin sacar', $resumen['sin_sacar'] ), $resumen['sin_sacar'] ) ) : '', asde_html_permitido() ); ?>
+			<?php echo wp_kses( $resumen['por_devolver'] ? ' · ' . esc_html( sprintf( asde_n( '%d por devolver', '%d por devolver', $resumen['por_devolver'] ), $resumen['por_devolver'] ) ) : '', asde_html_permitido() ); ?>
+			<?php echo wp_kses( $resumen['con_faltas'] ? ' · <strong>' . esc_html( sprintf( asde_n( '%d con faltas', '%d con faltas', $resumen['con_faltas'] ), $resumen['con_faltas'] ) ) . '</strong>' : '', asde_html_permitido() ); ?>
 		</p>
 	<?php endif; ?>
 
@@ -56,12 +56,12 @@ $campos  = static function ( int $linea = 0 ) use ( $e ): string {
 					<tr>
 						<td data-label="<?php echo esc_attr( asde_a( 'Material' ) ); ?>">
 							<?php echo esc_html( $l['descripcion'] ); ?>
-							<?php echo $l['baja'] ? ' <span class="asde-badge asde-badge--pago-atrasado">' . esc_html( asde_t( 'Ya no está en el inventario' ) ) . '</span>' : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?>
+							<?php echo wp_kses( $l['baja'] ? ' <span class="asde-badge asde-badge--pago-atrasado">' . esc_html( asde_t( 'Ya no está en el inventario' ) ) . '</span>' : '', asde_html_permitido() ); ?>
 						</td>
 						<td data-label="<?php echo esc_attr( asde_a( 'Reservado' ) ); ?>">
 							<?php if ( $puede_editar && null === $l['salida_en'] ) : ?>
 								<form method="post" action="<?php echo esc_url( $url_material ); ?>" class="asde-inline asde-solo-pantalla">
-									<?php echo $campos( $l['id'] ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+									<?php echo wp_kses( $campos( $l['id'] ), asde_html_permitido() ); ?>
 									<input type="number" name="cantidad" min="1" max="99999" value="<?php echo (int) $l['cantidad']; ?>" size="5" aria-label="<?php echo esc_attr( sprintf( asde_t( 'Cantidad de %s' ), $l['descripcion'] ) ); ?>">
 									<button type="submit" class="asde-btn-link" name="asde_action" value="material_cantidad"><?php asde_e( 'Cambiar' ); ?></button>
 									<button type="submit" class="asde-btn-link" name="asde_action" value="material_quitar"><?php asde_e( 'Quitar' ); ?></button>
@@ -87,10 +87,10 @@ $campos  = static function ( int $linea = 0 ) use ( $e ): string {
 							<?php if ( null !== $l['salida_en'] ) : ?>
 								<?php echo esc_html( $corta( $l['salida_en'] ) ); ?>
 								<?php $quien = $usuario( $l['salida_por'] ); ?>
-								<?php echo '' !== $quien ? '<span class="asde-muted">· ' . esc_html( $quien ) . '</span>' : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?>
+								<?php echo wp_kses( '' !== $quien ? '<span class="asde-muted">· ' . esc_html( $quien ) . '</span>' : '', asde_html_permitido() ); ?>
 							<?php elseif ( $puede_editar ) : ?>
 								<form method="post" action="<?php echo esc_url( $url_material ); ?>" class="asde-inline asde-solo-pantalla">
-									<?php echo $campos( $l['id'] ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+									<?php echo wp_kses( $campos( $l['id'] ), asde_html_permitido() ); ?>
 									<button type="submit" class="asde-btn-link" name="asde_action" value="material_salida"><?php asde_e( 'Marcar salida' ); ?></button>
 								</form>
 							<?php else : ?>
@@ -100,14 +100,14 @@ $campos  = static function ( int $linea = 0 ) use ( $e ): string {
 						<td data-label="<?php echo esc_attr( asde_a( 'Devolución' ) ); ?>">
 							<?php if ( null !== $l['devuelta_en'] ) : ?>
 								<?php echo esc_html( sprintf( asde_t( '%1$d de %2$d el %3$s' ), (int) $l['devueltas'], $l['cantidad'], $corta( $l['devuelta_en'] ) ) ); ?>
-								<?php echo '' !== $l['incidencia'] ? '<br><span class="asde-muted">' . esc_html( $l['incidencia'] ) . '</span>' : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?>
+								<?php echo wp_kses( '' !== $l['incidencia'] ? '<br><span class="asde-muted">' . esc_html( $l['incidencia'] ) . '</span>' : '', asde_html_permitido() ); ?>
 								<?php if ( $l['sin_devolver'] > 0 ) : ?>
 									<br><span class="asde-badge asde-badge--pago-parcial"><?php echo esc_html( sprintf( asde_n( 'Falta %d unidad', 'Faltan %d unidades', $l['sin_devolver'] ), $l['sin_devolver'] ) ); ?></span>
 									<?php if ( $l['descontado'] ) : ?>
 										<span class="asde-muted"><?php asde_e( 'Descontado del inventario' ); ?></span>
 									<?php elseif ( $puede_editar ) : ?>
 										<form method="post" action="<?php echo esc_url( $url_material ); ?>" class="asde-inline asde-solo-pantalla" data-asde-confirmar="<?php echo esc_attr( asde_a( '¿Descontar del inventario lo que no ha vuelto? Es definitivo.' ) ); ?>">
-											<?php echo $campos( $l['id'] ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+											<?php echo wp_kses( $campos( $l['id'] ), asde_html_permitido() ); ?>
 											<button type="submit" class="asde-btn-link" name="asde_action" value="material_descontar"><?php asde_e( 'Descontar del inventario' ); ?></button>
 										</form>
 									<?php endif; ?>
@@ -115,7 +115,7 @@ $campos  = static function ( int $linea = 0 ) use ( $e ): string {
 							<?php endif; ?>
 							<?php if ( $puede_editar && null !== $l['salida_en'] && ! $l['descontado'] ) : ?>
 								<form method="post" action="<?php echo esc_url( $url_material ); ?>" class="asde-solo-pantalla">
-									<?php echo $campos( $l['id'] ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+									<?php echo wp_kses( $campos( $l['id'] ), asde_html_permitido() ); ?>
 									<label class="screen-reader-text" for="asde-md-<?php echo (int) $l['id']; ?>"><?php asde_e( 'Unidades devueltas' ); ?></label>
 									<input type="number" id="asde-md-<?php echo (int) $l['id']; ?>" name="devueltas" min="0" max="<?php echo (int) $l['cantidad']; ?>" value="<?php echo (int) ( $l['devueltas'] ?? $l['cantidad'] ); ?>" size="5">
 									<input type="text" name="incidencia" maxlength="200" value="<?php echo esc_attr( $l['incidencia'] ); ?>" placeholder="<?php echo esc_attr( asde_a( 'Incidencia (falta, roto…)' ) ); ?>" aria-label="<?php echo esc_attr( asde_a( 'Incidencia' ) ); ?>">
@@ -132,7 +132,7 @@ $campos  = static function ( int $linea = 0 ) use ( $e ): string {
 		</table>
 		<?php if ( $puede_editar && $resumen['sin_sacar'] ) : ?>
 			<form method="post" action="<?php echo esc_url( $url_material ); ?>" class="asde-solo-pantalla">
-				<?php echo $campos(); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+				<?php echo wp_kses( $campos(), asde_html_permitido() ); ?>
 				<p><button type="submit" class="button" name="asde_action" value="material_salida"><?php asde_e( 'Marcar la salida de todo' ); ?></button></p>
 			</form>
 		<?php endif; ?>
@@ -146,7 +146,7 @@ $campos  = static function ( int $linea = 0 ) use ( $e ): string {
 			<p><?php asde_e( 'No hay material con existencias en el inventario.' ); ?> <a href="<?php echo esc_url( $url_inventario ); ?>"><?php asde_e( 'Ir al inventario' ); ?></a></p>
 		<?php else : ?>
 			<form method="post" action="<?php echo esc_url( $url_material ); ?>" class="asde-form">
-				<?php echo $campos(); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+				<?php echo wp_kses( $campos(), asde_html_permitido() ); ?>
 				<input type="hidden" name="asde_action" value="material_anadir">
 				<p class="asde-form__fila asde-form__fila--una-linea">
 					<label for="asde-ma-material"><?php asde_e( 'Material' ); ?> <select id="asde-ma-material" name="material" required>
@@ -162,7 +162,7 @@ $campos  = static function ( int $linea = 0 ) use ( $e ): string {
 		<?php endif; ?>
 		<?php if ( $habitual ) : ?>
 			<form method="post" action="<?php echo esc_url( $url_material ); ?>">
-				<?php echo $campos(); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+				<?php echo wp_kses( $campos(), asde_html_permitido() ); ?>
 				<p class="asde-help"><?php asde_e( 'O carga de una vez el material habitual de este tipo de evento (lo que ya esté reservado se suma).' ); ?></p>
 				<p><button type="submit" class="button asde-button-secundario" name="asde_action" value="material_habitual"><?php asde_e( 'Cargar el material habitual' ); ?></button></p>
 			</form>

@@ -100,7 +100,7 @@ $opciones = static function ( float $importe, ?int $elegido ) use ( $tipos ): st
 								<label class="screen-reader-text" for="asde-tipo-<?php echo (int) $m['id']; ?>"><?php asde_e( 'Tipo' ); ?></label>
 								<span class="asde-banco-tipo">
 									<select id="asde-tipo-<?php echo (int) $m['id']; ?>" name="tipo[<?php echo (int) $m['id']; ?>]" required data-asde-tipo-fila data-asde-signo="<?php echo $ingreso ? 'ingreso' : 'gasto'; ?>">
-										<?php echo $opciones( $m['importe'], $m['tipo_id'] ); // phpcs:ignore WordPress.Security.EscapeOutput -- construido arriba con esc_html/esc_attr ?>
+										<?php echo wp_kses( $opciones( $m['importe'], $m['tipo_id'] ), asde_html_permitido() ); ?>
 									</select>
 									<a class="button asde-button-secundario asde-banco-mas" href="<?php echo esc_url( $url_mas ); ?>" data-asde-banco-tipo-nuevo title="<?php echo esc_attr( asde_a( 'Crear un tipo nuevo' ) ); ?>" aria-label="<?php echo esc_attr( asde_a( 'Crear un tipo nuevo' ) ); ?>">+</a>
 								</span>

@@ -34,8 +34,8 @@ final class ColoresPage {
 	public function add_menu(): void {
 		add_submenu_page(
 			self::PADRE,
-			__( 'Colores', 'asde-area-privada' ),
-			__( 'Colores', 'asde-area-privada' ),
+			__( 'Colores', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+			__( 'Colores', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 			self::CAPABILITY,
 			self::SLUG,
 			array( $this, 'render' )
@@ -82,7 +82,7 @@ final class ColoresPage {
 
 	public function handle_guardar(): void {
 		if ( ! current_user_can( self::CAPABILITY ) ) {
-			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-area-privada' ), 403 );
+			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		check_admin_referer( self::ACCION );
 		$post   = wp_unslash( $_POST ); // phpcs:ignore WordPress.Security.NonceVerification
@@ -125,14 +125,14 @@ final class ColoresPage {
 		$def       = Colores::definiciones();
 		?>
 		<div class="wrap asde-colores">
-			<h1><?php esc_html_e( 'Colores del área privada', 'asde-area-privada' ); ?></h1>
-			<p><?php esc_html_e( 'Elige los colores del área privada. Con el color principal basta: de él salen los fondos suaves, los bordes y el color del texto que va encima. Lo que dejes sin elegir se queda como estaba (por defecto, el color principal del tema Enfold o el morado de siempre).', 'asde-area-privada' ); ?></p>
+			<h1><?php esc_html_e( 'Colores del área privada', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h1>
+			<p><?php esc_html_e( 'Elige los colores del área privada. Con el color principal basta: de él salen los fondos suaves, los bordes y el color del texto que va encima. Lo que dejes sin elegir se queda como estaba (por defecto, el color principal del tema Enfold o el morado de siempre).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 
 			<?php if ( is_array( $aviso ) ) : ?>
 				<div class="notice notice-<?php echo 'success' === $aviso[0] ? 'success' : 'error'; ?>"><p><?php echo esc_html( $aviso[1] ); ?></p></div>
 			<?php endif; ?>
 
-			<h2><?php esc_html_e( 'Modelos de partida', 'asde-area-privada' ); ?></h2>
+			<h2><?php esc_html_e( 'Modelos de partida', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h2>
 			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" class="asde-colores__modelos">
 				<input type="hidden" name="action" value="<?php echo esc_attr( self::ACCION ); ?>">
 				<input type="hidden" name="accion" value="modelo">
@@ -170,13 +170,13 @@ final class ColoresPage {
 						</table>
 					<?php endforeach; ?>
 					<p class="submit">
-						<button type="submit" class="button button-primary"><?php esc_html_e( 'Guardar los colores', 'asde-area-privada' ); ?></button>
-						<button type="submit" name="accion" value="restablecer" class="button" data-asde-confirmar="<?php esc_attr_e( '¿Volver a los colores de siempre?', 'asde-area-privada' ); ?>"><?php esc_html_e( 'Restablecer', 'asde-area-privada' ); ?></button>
+						<button type="submit" class="button button-primary"><?php esc_html_e( 'Guardar los colores', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
+						<button type="submit" name="accion" value="restablecer" class="button" data-asde-confirmar="<?php esc_attr_e( '¿Volver a los colores de siempre?', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>"><?php esc_html_e( 'Restablecer', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 					</p>
 				</form>
 
 				<div class="asde-colores__vista">
-					<h2><?php esc_html_e( 'Vista previa', 'asde-area-privada' ); ?></h2>
+					<h2><?php esc_html_e( 'Vista previa', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h2>
 					<div id="asde-colores-avisos" class="notice notice-warning inline" <?php echo Colores::avisos() ? '' : 'hidden'; ?>>
 						<p><?php echo esc_html( implode( ' ', Colores::avisos() ) ); ?></p>
 					</div>

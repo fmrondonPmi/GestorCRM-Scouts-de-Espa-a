@@ -38,7 +38,7 @@ final class OrganizacionPage {
 	/** Credencial del CRM de la oficina federal (v0.50, doc 50 fase 2): guardar o probar. La contraseña no se vuelve a mostrar. */
 	public function handle_oficina(): void {
 		if ( ! current_user_can( self::CAPABILITY ) ) {
-			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-area-privada' ), 403 );
+			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		check_admin_referer( self::ACCION_OFICINA );
 		$post = wp_unslash( $_POST ); // phpcs:ignore WordPress.Security.NonceVerification
@@ -65,7 +65,7 @@ final class OrganizacionPage {
 	/** Renombra las cuentas existentes al usuario de acceso elegido (v0.14, doc 27). */
 	public function handle_migrar(): void {
 		if ( ! current_user_can( self::CAPABILITY ) ) {
-			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-area-privada' ), 403 );
+			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		check_admin_referer( self::ACCION_MIGRAR );
 		if ( empty( $_POST['confirmar_migracion'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
@@ -88,8 +88,8 @@ final class OrganizacionPage {
 	public function add_menu(): void {
 		add_submenu_page(
 			self::PADRE,
-			__( 'Organización federada', 'asde-area-privada' ),
-			__( 'Organización federada', 'asde-area-privada' ),
+			__( 'Organización federada', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+			__( 'Organización federada', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 			self::CAPABILITY,
 			self::SLUG,
 			array( $this, 'render' )
@@ -104,7 +104,7 @@ final class OrganizacionPage {
 
 	public function handle_guardar(): void {
 		if ( ! current_user_can( self::CAPABILITY ) ) {
-			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-area-privada' ), 403 );
+			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		check_admin_referer( self::ACCION );
 		$post         = wp_unslash( $_POST ); // phpcs:ignore WordPress.Security.NonceVerification
@@ -171,103 +171,103 @@ final class OrganizacionPage {
 		$grupo      = (string) ( array_key_first( Grupos::todos() ) ?? '101' ); // Solo para el ejemplo.
 		?>
 		<div class="wrap asde-organizacion">
-			<h1><?php esc_html_e( 'Organización federada', 'asde-area-privada' ); ?></h1>
-			<p><?php esc_html_e( 'Lo que depende de la organización federada de Scouts de España que usa el sistema: su nombre (sale en los textos del área privada) y el coste federativo con el que empieza cada ronda en la Tesorería de los grupos. El formato del nº de socio local lo fija cada grupo con su provincia en «Datos del grupo» (en el área privada).', 'asde-area-privada' ); ?></p>
+			<h1><?php esc_html_e( 'Organización federada', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h1>
+			<p><?php esc_html_e( 'Lo que depende de la organización federada de Scouts de España que usa el sistema: su nombre (sale en los textos del área privada) y el coste federativo con el que empieza cada ronda en la Tesorería de los grupos. El formato del nº de socio local lo fija cada grupo con su provincia en «Datos del grupo» (en el área privada).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 
 			<?php if ( is_array( $aviso ) ) : ?>
 				<div class="notice notice-<?php echo 'success' === $aviso[0] ? 'success' : 'error'; ?>"><p><?php echo esc_html( $aviso[1] ); ?></p></div>
 			<?php endif; ?>
 			<?php if ( ! Organizacion::configurada() ) : ?>
-				<div class="notice notice-warning"><p><?php esc_html_e( 'Falta elegir la organización federada.', 'asde-area-privada' ); ?></p></div>
+				<div class="notice notice-warning"><p><?php esc_html_e( 'Falta elegir la organización federada.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p></div>
 			<?php endif; ?>
 
 			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 				<input type="hidden" name="action" value="<?php echo esc_attr( self::ACCION ); ?>">
 				<?php wp_nonce_field( self::ACCION ); ?>
 
-				<h2><?php esc_html_e( 'Organización', 'asde-area-privada' ); ?></h2>
+				<h2><?php esc_html_e( 'Organización', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h2>
 				<table class="form-table" role="presentation">
 					<tr>
-						<th scope="row"><label for="asde-org"><?php esc_html_e( 'Organización federada', 'asde-area-privada' ); ?></label></th>
+						<th scope="row"><label for="asde-org"><?php esc_html_e( 'Organización federada', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label></th>
 						<td>
 							<select id="asde-org" name="organizacion" required>
-								<option value=""><?php esc_html_e( '— Elige tu organización —', 'asde-area-privada' ); ?></option>
+								<option value=""><?php esc_html_e( '— Elige tu organización —', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></option>
 								<?php foreach ( Organizacion::FEDERADAS as $clave => list( $nombre, $territorio ) ) : ?>
 									<option value="<?php echo esc_attr( $clave ); ?>" <?php selected( $datos['organizacion'], $clave ); ?>><?php echo esc_html( $nombre . ' · ' . $territorio ); ?></option>
 								<?php endforeach; ?>
 							</select>
 							<p class="description">
-								<?php esc_html_e( 'Las 17 organizaciones federadas de Scouts de España (scout.es). Su nombre sale en los textos: en la pantalla de acceso («Área privada de los grupos de …») y en el coste federativo.', 'asde-area-privada' ); ?>
+								<?php esc_html_e( 'Las 17 organizaciones federadas de Scouts de España (scout.es). Su nombre sale en los textos: en la pantalla de acceso («Área privada de los grupos de …») y en el coste federativo.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>
 								<?php if ( Organizacion::web() ) : ?>
-									<br><?php esc_html_e( 'Web:', 'asde-area-privada' ); ?> <a href="<?php echo esc_url( Organizacion::web() ); ?>" target="_blank" rel="noopener"><?php echo esc_html( Organizacion::web() ); ?></a>
+									<br><?php esc_html_e( 'Web:', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <a href="<?php echo esc_url( Organizacion::web() ); ?>" target="_blank" rel="noopener"><?php echo esc_html( Organizacion::web() ); ?></a>
 								<?php endif; ?>
 							</p>
 						</td>
 					</tr>
 					<tr>
-						<th scope="row"><?php esc_html_e( 'Nº de socio local', 'asde-area-privada' ); ?></th>
-						<td><p class="description"><?php esc_html_e( 'Ya no hay un código de la organización: el nº de socio/a local es provincia (2 cifras, con su 0 inicial) + nº de grupo + 4 cifras, y cada grupo elige su provincia en «Datos del grupo» (área privada).', 'asde-area-privada' ); ?></p></td>
+						<th scope="row"><?php esc_html_e( 'Nº de socio local', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
+						<td><p class="description"><?php esc_html_e( 'Ya no hay un código de la organización: el nº de socio/a local es provincia (2 cifras, con su 0 inicial) + nº de grupo + 4 cifras, y cada grupo elige su provincia en «Datos del grupo» (área privada).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p></td>
 					</tr>
 				</table>
 
-				<h2><?php esc_html_e( 'Manual de uso', 'asde-area-privada' ); ?></h2>
+				<h2><?php esc_html_e( 'Manual de uso', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h2>
 				<table class="form-table" role="presentation">
 					<tr>
-						<th scope="row"><label for="asde-manual"><?php esc_html_e( 'Manual con capturas (ayuda extra)', 'asde-area-privada' ); ?></label></th>
+						<th scope="row"><label for="asde-manual"><?php esc_html_e( 'Manual con capturas (ayuda extra)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label></th>
 						<td>
 							<input type="url" id="asde-manual" name="manual" value="<?php echo esc_attr( Organizacion::manual() ); ?>" class="regular-text code" placeholder="https://…/manual/">
-							<p class="description"><?php esc_html_e( 'La ayuda de cada página y el manual completo de cada rol vienen dentro del plugin, solo con texto, y se abren en la ventana del área privada. Aquí va la carpeta (o la portada, …/manual/index.html) donde publiques el manual con capturas, el zip «manual-de-uso», que se sube a mano: sale al final de la ayuda como «Manual con capturas», en otra pestaña. Vacía: sin ese enlace.', 'asde-area-privada' ); ?></p>
+							<p class="description"><?php esc_html_e( 'La ayuda de cada página y el manual completo de cada rol vienen dentro del plugin, solo con texto, y se abren en la ventana del área privada. Aquí va la carpeta (o la portada, …/manual/index.html) donde publiques el manual con capturas, el zip «manual-de-uso», que se sube a mano: sale al final de la ayuda como «Manual con capturas», en otra pestaña. Vacía: sin ese enlace.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 						</td>
 					</tr>
 				</table>
 
-				<h2><?php esc_html_e( 'Tipo de instalación', 'asde-area-privada' ); ?></h2>
+				<h2><?php esc_html_e( 'Tipo de instalación', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h2>
 				<table class="form-table" role="presentation">
 					<tr>
-						<th scope="row"><?php esc_html_e( 'Esta web es la de…', 'asde-area-privada' ); ?></th>
+						<th scope="row"><?php esc_html_e( 'Esta web es la de…', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
 						<td>
 							<?php $tipo = Organizacion::tipo_instalacion(); ?>
 							<fieldset>
-								<label><input type="radio" name="tipo_instalacion" value="<?php echo esc_attr( Organizacion::TIPO_GRUPO ); ?>" <?php checked( $tipo, Organizacion::TIPO_GRUPO ); ?> <?php disabled( null !== Organizacion::tipo_fijado_en_codigo() ); ?>> <?php esc_html_e( 'Un grupo (o varios grupos)', 'asde-area-privada' ); ?></label><br>
-								<label><input type="radio" name="tipo_instalacion" value="<?php echo esc_attr( Organizacion::TIPO_OFICINA ); ?>" <?php checked( $tipo, Organizacion::TIPO_OFICINA ); ?> <?php disabled( null !== Organizacion::tipo_fijado_en_codigo() ); ?>> <?php esc_html_e( 'La oficina federal', 'asde-area-privada' ); ?></label>
+								<label><input type="radio" name="tipo_instalacion" value="<?php echo esc_attr( Organizacion::TIPO_GRUPO ); ?>" <?php checked( $tipo, Organizacion::TIPO_GRUPO ); ?> <?php disabled( null !== Organizacion::tipo_fijado_en_codigo() ); ?>> <?php esc_html_e( 'Un grupo (o varios grupos)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label><br>
+								<label><input type="radio" name="tipo_instalacion" value="<?php echo esc_attr( Organizacion::TIPO_OFICINA ); ?>" <?php checked( $tipo, Organizacion::TIPO_OFICINA ); ?> <?php disabled( null !== Organizacion::tipo_fijado_en_codigo() ); ?>> <?php esc_html_e( 'La oficina federal', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 							</fieldset>
-							<p class="description"><?php esc_html_e( 'Cambiarlo no borra ningún dato. En una web de la oficina aparecen las invitaciones y las altas de grupos, y la oficina puede consultar los grupos en solo lectura.', 'asde-area-privada' ); ?></p>
+							<p class="description"><?php esc_html_e( 'Cambiarlo no borra ningún dato. En una web de la oficina aparecen las invitaciones y las altas de grupos, y la oficina puede consultar los grupos en solo lectura.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 							<?php if ( null !== Organizacion::tipo_fijado_en_codigo() ) : ?>
-								<p class="description"><?php esc_html_e( 'Lo fija la constante ASDE_AP_MODO de wp-config.php: no se puede cambiar desde aquí.', 'asde-area-privada' ); ?></p>
+								<p class="description"><?php esc_html_e( 'Lo fija la constante ASDE_AP_MODO de wp-config.php: no se puede cambiar desde aquí.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 							<?php endif; ?>
 						</td>
 					</tr>
 				</table>
 
-				<h2><?php esc_html_e( 'Usuario de acceso', 'asde-area-privada' ); ?></h2>
+				<h2><?php esc_html_e( 'Usuario de acceso', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h2>
 				<table class="form-table" role="presentation">
 					<tr>
-						<th scope="row"><?php esc_html_e( 'El usuario de las personas es su…', 'asde-area-privada' ); ?></th>
+						<th scope="row"><?php esc_html_e( 'El usuario de las personas es su…', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
 						<td>
 							<?php $ident = $datos['identificador']; ?>
 							<fieldset>
-								<label><input type="radio" name="identificador" value="<?php echo esc_attr( Organizacion::IDENTIFICADOR_ASDE ); ?>" <?php checked( Organizacion::configurada() ? $ident : Organizacion::IDENTIFICADOR_ASDE, Organizacion::IDENTIFICADOR_ASDE ); ?>> <strong><?php esc_html_e( 'nº de socio/a de Scouts de España', 'asde-area-privada' ); ?></strong> <?php esc_html_e( '(recomendado: siempre existe y es único; p. ej. 118241 y, para las familias, 118241T)', 'asde-area-privada' ); ?></label><br>
-								<label><input type="radio" name="identificador" value="<?php echo esc_attr( Organizacion::IDENTIFICADOR_LOCAL ); ?>" <?php checked( Organizacion::configurada() ? $ident : Organizacion::IDENTIFICADOR_ASDE, Organizacion::IDENTIFICADOR_LOCAL ); ?>> <strong><?php esc_html_e( 'nº de socio/a local/territorial', 'asde-area-privada' ); ?></strong> <?php esc_html_e( '(el de siempre; p. ej. 76840397; hay que mantenerlo correcto en el CRM)', 'asde-area-privada' ); ?></label>
+								<label><input type="radio" name="identificador" value="<?php echo esc_attr( Organizacion::IDENTIFICADOR_ASDE ); ?>" <?php checked( Organizacion::configurada() ? $ident : Organizacion::IDENTIFICADOR_ASDE, Organizacion::IDENTIFICADOR_ASDE ); ?>> <strong><?php esc_html_e( 'nº de socio/a de Scouts de España', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></strong> <?php esc_html_e( '(recomendado: siempre existe y es único; p. ej. 118241 y, para las familias, 118241T)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label><br>
+								<label><input type="radio" name="identificador" value="<?php echo esc_attr( Organizacion::IDENTIFICADOR_LOCAL ); ?>" <?php checked( Organizacion::configurada() ? $ident : Organizacion::IDENTIFICADOR_ASDE, Organizacion::IDENTIFICADOR_LOCAL ); ?>> <strong><?php esc_html_e( 'nº de socio/a local/territorial', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></strong> <?php esc_html_e( '(el de siempre; p. ej. 76840397; hay que mantenerlo correcto en el CRM)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 							</fieldset>
-							<p class="description"><?php esc_html_e( 'Al entrar valen los dos números. El nº territorial se sigue vigilando (formatos antiguos, duplicados, inválidos), se puede corregir desde Personas y cada persona puede verlo en todas las pantallas con «Mostrar nº territorial»; si tiene un problema, el aviso sale siempre. Cambiar esto solo afecta a las cuentas que se creen a partir de ahora: para pasar las que ya existen, usa «Renombrar las cuentas existentes» debajo.', 'asde-area-privada' ); ?></p>
+							<p class="description"><?php esc_html_e( 'Al entrar valen los dos números. El nº territorial se sigue vigilando (formatos antiguos, duplicados, inválidos), se puede corregir desde Personas y cada persona puede verlo en todas las pantallas con «Mostrar nº territorial»; si tiene un problema, el aviso sale siempre. Cambiar esto solo afecta a las cuentas que se creen a partir de ahora: para pasar las que ya existen, usa «Renombrar las cuentas existentes» debajo.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 						</td>
 					</tr>
 				</table>
 
-				<h2><?php esc_html_e( 'Coste federativo por defecto', 'asde-area-privada' ); ?></h2>
-				<p><?php esc_html_e( 'Lo que cada grupo paga a la organización por sus asociados activos. Es con lo que empieza cada ronda en la Tesorería de los grupos (Tesorería → Coste federativo), que lo pueden ajustar. Cambiarlo aquí no toca las rondas que un grupo ya guardó.', 'asde-area-privada' ); ?></p>
+				<h2><?php esc_html_e( 'Coste federativo por defecto', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h2>
+				<p><?php esc_html_e( 'Lo que cada grupo paga a la organización por sus asociados activos. Es con lo que empieza cada ronda en la Tesorería de los grupos (Tesorería → Coste federativo), que lo pueden ajustar. Cambiarlo aquí no toca las rondas que un grupo ya guardó.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 				<table class="form-table" role="presentation">
 					<tr>
-						<th scope="row"><label for="asde-o-cuota"><?php esc_html_e( 'Cuota asociativa por asociado (€)', 'asde-area-privada' ); ?></label></th>
+						<th scope="row"><label for="asde-o-cuota"><?php esc_html_e( 'Cuota asociativa por asociado (€)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label></th>
 						<td><input type="number" id="asde-o-cuota" name="federacion[cuota_asociativa]" step="0.01" min="0" value="<?php echo esc_attr( $fed['cuota_asociativa'] ); ?>" class="small-text"></td>
 					</tr>
 					<tr>
-						<th scope="row"><label for="asde-o-medio"><?php esc_html_e( 'Seguro promedio por asociado (€)', 'asde-area-privada' ); ?></label></th>
+						<th scope="row"><label for="asde-o-medio"><?php esc_html_e( 'Seguro promedio por asociado (€)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label></th>
 						<td><input type="number" id="asde-o-medio" name="federacion[seguro_promedio]" step="0.01" min="0" value="<?php echo esc_attr( $fed['seguro_promedio'] ); ?>" class="small-text"></td>
 					</tr>
 					<tr>
-						<th scope="row"><label for="asde-o-corte"><?php esc_html_e( 'Edad de corte del seguro (años)', 'asde-area-privada' ); ?></label></th>
-						<td><input type="number" id="asde-o-corte" name="federacion[edad_corte]" min="1" max="30" value="<?php echo esc_attr( $fed['edad_corte'] ); ?>" class="small-text"><p class="description"><?php esc_html_e( 'Separa las dos primas de los educandos (en Scouts de Balears, 14).', 'asde-area-privada' ); ?></p></td>
+						<th scope="row"><label for="asde-o-corte"><?php esc_html_e( 'Edad de corte del seguro (años)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label></th>
+						<td><input type="number" id="asde-o-corte" name="federacion[edad_corte]" min="1" max="30" value="<?php echo esc_attr( $fed['edad_corte'] ); ?>" class="small-text"><p class="description"><?php esc_html_e( 'Separa las dos primas de los educandos (en Scouts de Balears, 14).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p></td>
 					</tr>
 					<?php foreach ( $categorias as $cat => $label ) : ?>
 						<tr>
@@ -276,9 +276,9 @@ final class OrganizacionPage {
 						</tr>
 					<?php endforeach; ?>
 					<tr>
-						<th scope="row"><?php esc_html_e( 'Otros conceptos', 'asde-area-privada' ); ?></th>
+						<th scope="row"><?php esc_html_e( 'Otros conceptos', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
 						<td>
-							<p class="description"><?php esc_html_e( 'Cualquier otro importe que cobre la organización: por asociado, por educando, por adulto o una vez por grupo.', 'asde-area-privada' ); ?></p>
+							<p class="description"><?php esc_html_e( 'Cualquier otro importe que cobre la organización: por asociado, por educando, por adulto o una vez por grupo.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 							<?php
 							// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- plantilla propia del plugin: cada valor se escapa dentro de ella.
 							echo TemplateLoader::render(
@@ -295,51 +295,51 @@ final class OrganizacionPage {
 					</tr>
 				</table>
 
-				<?php submit_button( __( 'Guardar la organización', 'asde-area-privada' ) ); ?>
+				<?php submit_button( __( 'Guardar la organización', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>
 			</form>
 
 			<?php if ( Organizacion::es_oficina() ) : ?>
 				<?php $of = Oficina::datos(); ?>
-				<h2><?php esc_html_e( 'Credencial del CRM de la oficina', 'asde-area-privada' ); ?></h2>
-				<p class="description"><?php esc_html_e( 'Con esta credencial el personal de la oficina consulta, en solo lectura, los grupos (uno cada vez). Pide a la oficina un usuario del CRM que solo pueda leer. La contraseña se guarda cifrada y no se vuelve a mostrar.', 'asde-area-privada' ); ?></p>
+				<h2><?php esc_html_e( 'Credencial del CRM de la oficina', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h2>
+				<p class="description"><?php esc_html_e( 'Con esta credencial el personal de la oficina consulta, en solo lectura, los grupos (uno cada vez). Pide a la oficina un usuario del CRM que solo pueda leer. La contraseña se guarda cifrada y no se vuelve a mostrar.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 				<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" autocomplete="off">
 					<input type="hidden" name="action" value="<?php echo esc_attr( self::ACCION_OFICINA ); ?>">
 					<?php wp_nonce_field( self::ACCION_OFICINA ); ?>
 					<table class="form-table" role="presentation">
 						<tr>
-							<th scope="row"><label for="asde-of-usuario"><?php esc_html_e( 'Usuario del CRM', 'asde-area-privada' ); ?></label></th>
+							<th scope="row"><label for="asde-of-usuario"><?php esc_html_e( 'Usuario del CRM', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label></th>
 							<td><input type="text" id="asde-of-usuario" name="usuario" value="<?php echo esc_attr( $of['usuario'] ); ?>" class="regular-text" autocomplete="off"></td>
 						</tr>
 						<tr>
-							<th scope="row"><label for="asde-of-clave"><?php esc_html_e( 'Contraseña', 'asde-area-privada' ); ?></label></th>
+							<th scope="row"><label for="asde-of-clave"><?php esc_html_e( 'Contraseña', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label></th>
 							<td>
 								<input type="password" id="asde-of-clave" name="clave" value="" class="regular-text" autocomplete="new-password" placeholder="<?php echo esc_attr( $of['tiene_clave'] ? '••••••••' : '' ); ?>">
-								<p class="description"><?php echo esc_html( $of['tiene_clave'] ? __( 'Guardada. Déjala vacía para conservarla.', 'asde-area-privada' ) : __( 'Todavía no hay ninguna guardada.', 'asde-area-privada' ) ); ?></p>
+								<p class="description"><?php echo esc_html( $of['tiene_clave'] ? __( 'Guardada. Déjala vacía para conservarla.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : __( 'Todavía no hay ninguna guardada.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?></p>
 							</td>
 						</tr>
 						<?php if ( $of['probado'] ) : ?>
 							<tr>
-								<th scope="row"><?php esc_html_e( 'Última prueba', 'asde-area-privada' ); ?></th>
+								<th scope="row"><?php esc_html_e( 'Última prueba', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
 								<td><?php echo esc_html( wp_date( 'd/m/Y H:i', $of['probado'] ) . ' · ' . $of['mensaje'] ); ?></td>
 							</tr>
 						<?php endif; ?>
 					</table>
 					<p>
-						<button type="submit" class="button button-primary"><?php esc_html_e( 'Guardar la credencial', 'asde-area-privada' ); ?></button>
-						<button type="submit" name="probar" value="1" class="button" <?php disabled( ! $of['tiene_clave'] ); ?>><?php esc_html_e( 'Probar la conexión', 'asde-area-privada' ); ?></button>
-						<button type="submit" name="olvidar" value="1" class="button" <?php disabled( ! $of['tiene_clave'] ); ?>><?php esc_html_e( 'Borrar la credencial', 'asde-area-privada' ); ?></button>
+						<button type="submit" class="button button-primary"><?php esc_html_e( 'Guardar la credencial', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
+						<button type="submit" name="probar" value="1" class="button" <?php disabled( ! $of['tiene_clave'] ); ?>><?php esc_html_e( 'Probar la conexión', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
+						<button type="submit" name="olvidar" value="1" class="button" <?php disabled( ! $of['tiene_clave'] ); ?>><?php esc_html_e( 'Borrar la credencial', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 					</p>
 				</form>
 			<?php endif; ?>
 
 			<?php $plan = MigracionUsuario::plan(); ?>
-			<h2><?php esc_html_e( 'Renombrar las cuentas existentes', 'asde-area-privada' ); ?></h2>
+			<h2><?php esc_html_e( 'Renombrar las cuentas existentes', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h2>
 			<p>
 				<?php
 				echo esc_html(
 					sprintf(
 						/* translators: 1: tipo de número, 2: cuentas ya con él, 3: cuentas a cambiar, 4: cuentas que no se pueden */
-						__( 'Usuario de acceso guardado: %1$s. Cuentas que ya lo usan: %2$d. Cuentas que cambiarían: %3$d. Cuentas que no se pueden cambiar: %4$d.', 'asde-area-privada' ),
+						__( 'Usuario de acceso guardado: %1$s. Cuentas que ya lo usan: %2$d. Cuentas que cambiarían: %3$d. Cuentas que no se pueden cambiar: %4$d.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 						Identidad::etiqueta(),
 						$plan['iguales'],
 						count( $plan['cambios'] ),
@@ -350,8 +350,8 @@ final class OrganizacionPage {
 			</p>
 			<?php if ( $plan['cambios'] ) : ?>
 				<details>
-					<summary><?php esc_html_e( 'Ver qué cambiaría', 'asde-area-privada' ); ?></summary>
-					<table class="widefat striped" style="max-width:520px"><thead><tr><th><?php esc_html_e( 'Usuario actual', 'asde-area-privada' ); ?></th><th><?php esc_html_e( 'Usuario nuevo', 'asde-area-privada' ); ?></th></tr></thead><tbody>
+					<summary><?php esc_html_e( 'Ver qué cambiaría', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></summary>
+					<table class="widefat striped" style="max-width:520px"><thead><tr><th><?php esc_html_e( 'Usuario actual', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th><?php esc_html_e( 'Usuario nuevo', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th></tr></thead><tbody>
 						<?php foreach ( array_slice( $plan['cambios'], 0, 300 ) as $c ) : ?>
 							<tr><td><?php echo esc_html( $c['actual'] ); ?></td><td><?php echo esc_html( $c['nuevo'] ); ?></td></tr>
 						<?php endforeach; ?>
@@ -360,13 +360,13 @@ final class OrganizacionPage {
 				<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 					<input type="hidden" name="action" value="<?php echo esc_attr( self::ACCION_MIGRAR ); ?>">
 					<?php wp_nonce_field( self::ACCION_MIGRAR ); ?>
-					<p class="asde-organizacion__cuidado"><label><input type="checkbox" name="confirmar_migracion" value="1"> <?php esc_html_e( 'Entiendo que se cerrarán las sesiones abiertas de esas cuentas (volverán a entrar con su usuario nuevo o con el de siempre) y que los enlaces pendientes de «he olvidado la contraseña» dejarán de valer.', 'asde-area-privada' ); ?></label></p>
-					<?php submit_button( __( 'Renombrar las cuentas existentes', 'asde-area-privada' ), 'secondary' ); ?>
+					<p class="asde-organizacion__cuidado"><label><input type="checkbox" name="confirmar_migracion" value="1"> <?php esc_html_e( 'Entiendo que se cerrarán las sesiones abiertas de esas cuentas (volverán a entrar con su usuario nuevo o con el de siempre) y que los enlaces pendientes de «he olvidado la contraseña» dejarán de valer.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label></p>
+					<?php submit_button( __( 'Renombrar las cuentas existentes', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 'secondary' ); ?>
 				</form>
 			<?php endif; ?>
 			<?php if ( $plan['imposibles'] ) : ?>
 				<details>
-					<summary><?php esc_html_e( 'Cuentas que no se pueden cambiar (siguen entrando como hasta ahora)', 'asde-area-privada' ); ?></summary>
+					<summary><?php esc_html_e( 'Cuentas que no se pueden cambiar (siguen entrando como hasta ahora)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></summary>
 					<ul>
 						<?php foreach ( array_slice( $plan['imposibles'], 0, 300 ) as $i ) : ?>
 							<li><strong><?php echo esc_html( $i['actual'] ); ?></strong>: <?php echo esc_html( $i['motivo'] ); ?></li>

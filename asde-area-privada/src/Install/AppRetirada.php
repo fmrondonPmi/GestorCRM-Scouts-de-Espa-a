@@ -47,7 +47,7 @@ final class AppRetirada {
 		header( 'Content-Type: text/javascript; charset=utf-8' );
 		header( 'Cache-Control: no-cache' );
 		header( 'X-Robots-Tag: noindex, nofollow' );
-		echo self::contenido(); // phpcs:ignore WordPress.Security.EscapeOutput
+		echo self::contenido(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- JavaScript fijo del plugin, no HTML
 		exit;
 	}
 }

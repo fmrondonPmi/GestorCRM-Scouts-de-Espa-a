@@ -39,7 +39,7 @@ $url_ver = 'resueltos' === $ver ? add_query_arg( 'ver', 'resueltos', $url ) : $u
 		<?php if ( ! $g ) : ?>
 			<p><?php echo 'pendientes' === $ver ? esc_html( asde_t( 'No quedan cambios pendientes de esta persona.' ) ) : esc_html( asde_t( 'No hay cambios resueltos de esta persona.' ) ); ?></p>
 		<?php else : ?>
-			<p class="asde-muted"><a href="<?php echo esc_url( add_query_arg( 'socio', $socio, $url_ficha ) ); ?>" data-asde-modal><?php asde_e( 'Ver la ficha' ); ?></a><?php echo Numeros::compacto( $g['persona'] ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+			<p class="asde-muted"><a href="<?php echo esc_url( add_query_arg( 'socio', $socio, $url_ficha ) ); ?>" data-asde-modal><?php asde_e( 'Ver la ficha' ); ?></a><?php echo wp_kses( Numeros::compacto( $g['persona'] ), asde_html_permitido() ); ?></p>
 		<?php endif; ?>
 
 		<?php if ( $g && 'pendientes' === $ver ) : ?>
@@ -199,7 +199,7 @@ $url_ver = 'resueltos' === $ver ? add_query_arg( 'ver', 'resueltos', $url ) : $u
 						$enlace = add_query_arg( array_filter( array( 'socio' => (string) $num, 'ver' => 'resueltos' === $ver ? 'resueltos' : '' ) ), $url );
 						?>
 						<tr>
-							<td data-label="<?php echo esc_attr( asde_a( 'Persona' ) ); ?>"><a href="<?php echo esc_url( add_query_arg( 'socio', (string) $num, $url_ficha ) ); ?>" data-asde-modal><?php echo esc_html( $fila['persona']->nombre_completo() ); ?></a><?php echo Numeros::compacto( $fila['persona'] ); // phpcs:ignore WordPress.Security.EscapeOutput ?></td>
+							<td data-label="<?php echo esc_attr( asde_a( 'Persona' ) ); ?>"><a href="<?php echo esc_url( add_query_arg( 'socio', (string) $num, $url_ficha ) ); ?>" data-asde-modal><?php echo esc_html( $fila['persona']->nombre_completo() ); ?></a><?php echo wp_kses( Numeros::compacto( $fila['persona'] ), asde_html_permitido() ); ?></td>
 							<td data-label="<?php echo esc_attr( asde_a( 'Cambios' ) ); ?>"><strong><?php echo (int) $n; ?></strong> · <span class="asde-muted"><?php echo esc_html( implode( ', ', array_map( array( Cambios::class, 'etiqueta' ), $datos ) ) ); ?></span></td>
 							<td data-label="<?php echo esc_attr( asde_a( 'Último' ) ); ?>"><?php echo esc_html( $fecha( $fila['ultimo'] ) ); ?></td>
 							<td data-label="">

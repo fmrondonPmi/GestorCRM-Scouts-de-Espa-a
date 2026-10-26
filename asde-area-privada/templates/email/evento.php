@@ -46,46 +46,46 @@ $fuerte  = static fn( string $t ): string => '<strong>' . esc_html( $t ) . '</st
 					<?php echo esc_html( $grupo ); ?> · <?php asde_e( 'Eventos' ); ?>
 				</td></tr>
 				<tr><td style="padding:28px;font-size:15px;line-height:1.6;">
-					<p style="<?php echo esc_attr( $p ); ?>"><?php echo $saludo ? sprintf( asde_h( 'Hola, %s:' ), esc_html( $saludo ) ) : asde_h( 'Hola:' ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+					<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( $saludo ? sprintf( asde_h( 'Hola, %s:' ), esc_html( $saludo ) ) : asde_h( 'Hola:' ), asde_html_permitido() ); ?></p>
 
 					<?php if ( 'publicado' === $tipo ) : ?>
-						<p style="<?php echo esc_attr( $p ); ?>"><?php echo sprintf( asde_h( 'El grupo ha publicado un evento nuevo: %s.' ), $fuerte( $evento ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+						<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( sprintf( asde_h( 'El grupo ha publicado un evento nuevo: %s.' ), $fuerte( $evento ) ), asde_html_permitido() ); ?></p>
 					<?php elseif ( 'confirmada' === $tipo ) : ?>
-						<p style="<?php echo esc_attr( $p ); ?>"><?php echo sprintf( asde_h( 'La inscripción de %1$s en %2$s está confirmada.' ), $fuerte( $quien ), $fuerte( $evento ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+						<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( sprintf( asde_h( 'La inscripción de %1$s en %2$s está confirmada.' ), $fuerte( $quien ), $fuerte( $evento ) ), asde_html_permitido() ); ?></p>
 					<?php elseif ( 'plaza' === $tipo ) : ?>
-						<p style="<?php echo esc_attr( $p ); ?>"><?php echo sprintf( asde_h( 'Se ha liberado una plaza en %1$s para %2$s, que estaba en la lista de espera.' ), $fuerte( $evento ), $fuerte( $quien ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
-						<p style="<?php echo esc_attr( $p ); ?>"><?php echo sprintf( asde_h( 'Confírmala en «Mis eventos» antes del %s. Si no, pasará a la siguiente persona de la lista.' ), $fuerte( $hasta ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+						<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( sprintf( asde_h( 'Se ha liberado una plaza en %1$s para %2$s, que estaba en la lista de espera.' ), $fuerte( $evento ), $fuerte( $quien ) ), asde_html_permitido() ); ?></p>
+						<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( sprintf( asde_h( 'Confírmala en «Mis eventos» antes del %s. Si no, pasará a la siguiente persona de la lista.' ), $fuerte( $hasta ) ), asde_html_permitido() ); ?></p>
 					<?php elseif ( 'recordatorio' === $tipo ) : ?>
-						<p style="<?php echo esc_attr( $p ); ?>"><?php echo sprintf( asde_h( 'Te recordamos que %1$s va a %2$s.' ), $fuerte( $quien ), $fuerte( $evento ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+						<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( sprintf( asde_h( 'Te recordamos que %1$s va a %2$s.' ), $fuerte( $quien ), $fuerte( $evento ) ), asde_html_permitido() ); ?></p>
 					<?php else : ?>
-						<p style="<?php echo esc_attr( $p ); ?>"><?php echo sprintf( asde_h( 'El evento %s se ha cancelado.' ), $fuerte( $evento ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+						<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( sprintf( asde_h( 'El evento %s se ha cancelado.' ), $fuerte( $evento ) ), asde_html_permitido() ); ?></p>
 						<?php if ( '' !== $motivo ) : ?>
-							<p style="<?php echo esc_attr( $p ); ?>"><?php echo sprintf( asde_h( 'Motivo: %s' ), esc_html( $motivo ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+							<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( sprintf( asde_h( 'Motivo: %s' ), esc_html( $motivo ) ), asde_html_permitido() ); ?></p>
 						<?php endif; ?>
 						<p style="<?php echo esc_attr( $atenuar ); ?>"><?php asde_e( 'Si ya habías pagado, Tesorería se pondrá en contacto contigo para la devolución.' ); ?></p>
 					<?php endif; ?>
 
 					<?php if ( '' !== $intro ) : ?>
-						<p style="<?php echo esc_attr( $p ); ?>"><?php echo nl2br( esc_html( $intro ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+						<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( nl2br( esc_html( $intro ) ), asde_html_permitido() ); ?></p>
 					<?php endif; ?>
 
 					<?php if ( 'cancelado' !== $tipo ) : ?>
 						<p style="<?php echo esc_attr( $p ); ?>">
 							<?php echo esc_html( $numero . ' · ' . $cuando ); ?>
 							<?php if ( '' !== $lugar ) : ?>
-								<br><?php echo sprintf( asde_h( 'Lugar: %s' ), esc_html( $lugar ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+								<br><?php echo wp_kses( sprintf( asde_h( 'Lugar: %s' ), esc_html( $lugar ) ), asde_html_permitido() ); ?>
 							<?php endif; ?>
 							<?php if ( in_array( $tipo, array( 'confirmada', 'recordatorio' ), true ) && '' !== $salida ) : ?>
-								<br><?php echo sprintf( asde_h( 'Salida: %s' ), esc_html( $salida ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+								<br><?php echo wp_kses( sprintf( asde_h( 'Salida: %s' ), esc_html( $salida ) ), asde_html_permitido() ); ?>
 							<?php endif; ?>
 							<?php if ( in_array( $tipo, array( 'confirmada', 'recordatorio' ), true ) && '' !== $llegada ) : ?>
-								<br><?php echo sprintf( asde_h( 'Llegada: %s' ), esc_html( $llegada ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+								<br><?php echo wp_kses( sprintf( asde_h( 'Llegada: %s' ), esc_html( $llegada ) ), asde_html_permitido() ); ?>
 							<?php endif; ?>
 						</p>
 					<?php endif; ?>
 
 					<?php if ( 'publicado' === $tipo && '' !== $cierre ) : ?>
-						<p style="<?php echo esc_attr( $p ); ?>"><?php echo sprintf( asde_h( 'La inscripción se hace en «Mis eventos», hasta el %s.' ), $fuerte( $cierre ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+						<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( sprintf( asde_h( 'La inscripción se hace en «Mis eventos», hasta el %s.' ), $fuerte( $cierre ) ), asde_html_permitido() ); ?></p>
 					<?php endif; ?>
 
 					<?php if ( 'recordatorio' === $tipo && $falta ) : ?>
@@ -95,13 +95,13 @@ $fuerte  = static fn( string $t ): string => '<strong>' . esc_html( $t ) . '</st
 								<li><?php asde_e( 'firmar la autorización de participación (en «Mis eventos») o entregarla en papel;' ); ?></li>
 							<?php endif; ?>
 							<?php if ( in_array( 'pago', $falta, true ) && '' !== $importe ) : ?>
-								<li><?php echo sprintf( asde_h( 'pagar %1$s (referencia %2$s).' ), $fuerte( $importe ), esc_html( $referencia ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></li>
+								<li><?php echo wp_kses( sprintf( asde_h( 'pagar %1$s (referencia %2$s).' ), $fuerte( $importe ), esc_html( $referencia ) ), asde_html_permitido() ); ?></li>
 							<?php endif; ?>
 						</ul>
 					<?php endif; ?>
 
 					<?php if ( '' !== $pie ) : ?>
-						<p style="<?php echo esc_attr( $p ); ?>"><?php echo nl2br( esc_html( $pie ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></p>
+						<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( nl2br( esc_html( $pie ) ), asde_html_permitido() ); ?></p>
 					<?php endif; ?>
 
 					<?php if ( $url && 'cancelado' !== $tipo ) : ?>
@@ -111,7 +111,7 @@ $fuerte  = static fn( string $t ): string => '<strong>' . esc_html( $t ) . '</st
 					<?php endif; ?>
 					<p style="margin:0;font-size:13px;color:<?php echo esc_attr( $col['atenuado'] ); ?>;">
 						<?php if ( '' !== $contacto ) : ?>
-							<?php echo sprintf( asde_h( '¿Dudas? Escribe a %s.' ), '<a href="mailto:' . esc_attr( $contacto ) . '" style="color:' . esc_attr( $col['primary'] ) . ';">' . esc_html( $contacto ) . '</a>' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+							<?php echo wp_kses( sprintf( asde_h( '¿Dudas? Escribe a %s.' ), '<a href="mailto:' . esc_attr( $contacto ) . '" style="color:' . esc_attr( $col['primary'] ) . ';">' . esc_html( $contacto ) . '</a>' ), asde_html_permitido() ); ?>
 						<?php else : ?>
 							<?php asde_e( '¿Dudas? Habla con el equipo de la sección.' ); ?>
 						<?php endif; ?>

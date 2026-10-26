@@ -113,7 +113,7 @@ final class PresupuestosView extends TesoreriaBaseView {
 
 	public function handle_post(): void {
 		if ( ! Servicio::puede_entrar() ) {
-			wp_die( esc_html__( 'No tienes permiso para cambiar los presupuestos.', 'asde-area-privada' ), 403 );
+			wp_die( esc_html__( 'No tienes permiso para cambiar los presupuestos.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		check_admin_referer( 'asde_presupuestos' );
 		$ronda   = $this->ronda();
@@ -126,7 +126,7 @@ final class PresupuestosView extends TesoreriaBaseView {
 
 		if ( 'guardar_presupuestos' === $accion ) {
 			if ( ! current_user_can( Servicio::CAP_CONFIG ) ) {
-				wp_die( esc_html__( 'No tienes permiso para cambiar el reparto.', 'asde-area-privada' ), 403 );
+				wp_die( esc_html__( 'No tienes permiso para cambiar el reparto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 			}
 			$antes = Config::de( $ronda )['presupuesto'];
 			Config::guardar( $ronda, array( 'presupuesto' => (array) ( wp_unslash( $_POST )['presupuesto'] ?? array() ) ) ); // phpcs:ignore WordPress.Security.NonceVerification

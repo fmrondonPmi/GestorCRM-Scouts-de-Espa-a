@@ -119,8 +119,8 @@ $pct = $resumen['a_pagar'] > 0 ? round( 100 * $resumen['pagado'] / $resumen['a_p
 							<?php foreach ( $f['miembros'] as $n ) : ?>
 								<?php $p = $personas[ $n ] ?? null; ?>
 								<span class="asde-miembro<?php echo in_array( $n, $c['fuera'], true ) ? ' asde-miembro--fuera' : ''; ?>">
-									<?php echo esc_html( $p ? $p->nombre_completo() : 'Nº ' . $n ); ?><?php echo $p ? \AsdeBalears\AreaPrivada\Socios\Numeros::compacto( $p ) : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?>
-									<?php echo $p && $p->secciones ? Secciones::badge( $p->secciones[0] ) : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?>
+									<?php echo esc_html( $p ? $p->nombre_completo() : 'Nº ' . $n ); ?><?php echo wp_kses( $p ? \AsdeBalears\AreaPrivada\Socios\Numeros::compacto( $p ) : '', asde_html_permitido() ); ?>
+									<?php echo wp_kses( $p && $p->secciones ? Secciones::badge( $p->secciones[0] ) : '', asde_html_permitido() ); ?>
 								</span>
 							<?php endforeach; ?>
 						</td>

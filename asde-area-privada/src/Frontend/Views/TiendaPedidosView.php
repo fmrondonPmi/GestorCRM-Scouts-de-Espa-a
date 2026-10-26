@@ -61,7 +61,7 @@ final class TiendaPedidosView extends TiendaBaseView {
 
 	public function handle_post(): void {
 		if ( ! current_user_can( Servicio::CAP_PEDIR ) ) {
-			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-area-privada' ), 403 );
+			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		$a      = Ambito::actual();
 		$volver = $this->url( 'tienda_pedidos' );

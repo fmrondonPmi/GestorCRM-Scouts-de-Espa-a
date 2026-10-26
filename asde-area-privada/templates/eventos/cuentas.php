@@ -66,7 +66,7 @@ $yo              = get_current_user_id();
 		<details class="asde-accion asde-no-print">
 			<summary><?php asde_e( 'Reabrir las cuentas' ); ?></summary>
 			<form method="post" class="asde-form asde-form--compacta" data-asde-confirmar="<?php echo esc_attr( asde_js( '¿Reabrir las cuentas del evento? Habrá que volver a cerrarlas.' ) ); ?>">
-				<?php echo $campos( 'evento_reabrir_cuentas' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+				<?php echo wp_kses( $campos( 'evento_reabrir_cuentas' ), asde_html_permitido() ); ?>
 				<p class="asde-help"><?php asde_e( 'Se podrá volver a cambiar el evento y sus cuentas. Quién recoge y las observaciones, que se borraron al cerrar, no vuelven.' ); ?></p>
 				<label><?php asde_e( 'Motivo' ); ?> <input type="text" name="motivo" maxlength="255" required></label>
 				<button type="submit" class="button"><?php asde_e( 'Reabrir las cuentas' ); ?></button>
@@ -80,7 +80,7 @@ $yo              = get_current_user_id();
 		<h3 class="asde-card__title"><?php echo esc_html( $abiertas ? asde_t( 'Balance' ) : asde_t( 'Informe final' ) ); ?></h3>
 		<span class="asde-no-print">
 			<button type="button" class="button" data-asde-imprimir-pagina><?php asde_e( 'Imprimir' ); ?></button>
-			<form method="post" class="asde-inline-form" data-asde-sin-carga><?php echo $campos( 'evento_informe' ); // phpcs:ignore WordPress.Security.EscapeOutput ?><button type="submit" class="button"><?php asde_e( 'Descargar CSV' ); ?></button></form>
+			<form method="post" class="asde-inline-form" data-asde-sin-carga><?php echo wp_kses( $campos( 'evento_informe' ), asde_html_permitido() ); ?><button type="submit" class="button"><?php asde_e( 'Descargar CSV' ); ?></button></form>
 		</span>
 	</header>
 	<p class="asde-muted"><?php echo esc_html( sprintf( asde_t( '%1$s · %2$s · a %3$s' ), $balance['evento'], $balance['nombre'], $balance['fecha'] ) ); ?></p>
@@ -220,30 +220,30 @@ $yo              = get_current_user_id();
 						</td>
 						<td data-label="<?php echo esc_attr( asde_a( 'Acciones' ) ); ?>" class="asde-no-print">
 							<?php if ( '' !== $g['justificante'] ) : ?>
-								<form method="post" class="asde-inline-form" target="_blank"><?php echo $campos( 'evento_justificante', $oculto( 'gasto', $g['id'] ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?><button type="submit" class="asde-btn-link"><?php asde_e( 'Ver justificante' ); ?></button></form>
+								<form method="post" class="asde-inline-form" target="_blank"><?php echo wp_kses( $campos( 'evento_justificante', $oculto( 'gasto', $g['id'] ) ), asde_html_permitido() ); ?><button type="submit" class="asde-btn-link"><?php asde_e( 'Ver justificante' ); ?></button></form>
 							<?php endif; ?>
 							<?php if ( $abiertas && ! $anulado ) : ?>
 								<?php if ( GastosTable::por_revisar( $g ) && $economia ) : ?>
-									<form method="post" class="asde-inline-form"><?php echo $campos( 'evento_gasto_validar', $oculto( 'gasto', $g['id'] ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?><button type="submit" class="button button-primary"><?php asde_e( 'Validar' ); ?></button></form>
+									<form method="post" class="asde-inline-form"><?php echo wp_kses( $campos( 'evento_gasto_validar', $oculto( 'gasto', $g['id'] ) ), asde_html_permitido() ); ?><button type="submit" class="button button-primary"><?php asde_e( 'Validar' ); ?></button></form>
 									<details class="asde-accion">
 										<summary><?php asde_e( 'Rechazar' ); ?></summary>
 										<form method="post" class="asde-form asde-form--compacta">
-											<?php echo $campos( 'evento_gasto_rechazar', $oculto( 'gasto', $g['id'] ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+											<?php echo wp_kses( $campos( 'evento_gasto_rechazar', $oculto( 'gasto', $g['id'] ) ), asde_html_permitido() ); ?>
 											<label><?php asde_e( 'Motivo' ); ?> <input type="text" name="motivo" maxlength="255" required></label>
 											<button type="submit" class="button"><?php asde_e( 'Rechazar el gasto' ); ?></button>
 										</form>
 									</details>
 								<?php endif; ?>
 								<?php if ( GastosTable::por_revisar( $g ) && ( $yo === $g['creado_por'] || $economia ) ) : ?>
-									<form method="post" class="asde-inline-form" data-asde-confirmar="<?php echo esc_attr( asde_js( '¿Retirar este gasto? No contará en las cuentas.' ) ); ?>"><?php echo $campos( 'evento_gasto_retirar', $oculto( 'gasto', $g['id'] ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?><button type="submit" class="asde-btn-link"><?php asde_e( 'Retirar' ); ?></button></form>
+									<form method="post" class="asde-inline-form" data-asde-confirmar="<?php echo esc_attr( asde_js( '¿Retirar este gasto? No contará en las cuentas.' ) ); ?>"><?php echo wp_kses( $campos( 'evento_gasto_retirar', $oculto( 'gasto', $g['id'] ) ), asde_html_permitido() ); ?><button type="submit" class="asde-btn-link"><?php asde_e( 'Retirar' ); ?></button></form>
 								<?php endif; ?>
 								<?php if ( GastosTable::por_reembolsar( $g ) && $economia ) : ?>
 									<details class="asde-accion">
 										<summary><?php asde_e( 'Reembolsar' ); ?></summary>
 										<form method="post" class="asde-form asde-form--compacta">
-											<?php echo $campos( 'evento_gasto_reembolsar', $oculto( 'gasto', $g['id'] ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+											<?php echo wp_kses( $campos( 'evento_gasto_reembolsar', $oculto( 'gasto', $g['id'] ) ), asde_html_permitido() ); ?>
 											<label><?php asde_e( 'Fecha' ); ?> <input type="date" name="fecha" value="<?php echo esc_attr( $hoy ); ?>" max="<?php echo esc_attr( $hoy ); ?>" required></label>
-											<label><?php asde_e( 'Forma de pago' ); ?> <?php echo $formas(); // phpcs:ignore WordPress.Security.EscapeOutput ?></label>
+											<label><?php asde_e( 'Forma de pago' ); ?> <?php echo wp_kses( $formas(), asde_html_permitido() ); ?></label>
 											<button type="submit" class="button button-primary"><?php echo esc_html( sprintf( asde_t( 'Reembolsar %s' ), $euros( $g['importe'] ) ) ); ?></button>
 										</form>
 									</details>
@@ -252,7 +252,7 @@ $yo              = get_current_user_id();
 									<details class="asde-accion">
 										<summary><?php asde_e( 'Anular' ); ?></summary>
 										<form method="post" class="asde-form asde-form--compacta">
-											<?php echo $campos( 'evento_gasto_anular', $oculto( 'gasto', $g['id'] ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+											<?php echo wp_kses( $campos( 'evento_gasto_anular', $oculto( 'gasto', $g['id'] ) ), asde_html_permitido() ); ?>
 											<label><?php asde_e( 'Motivo' ); ?> <input type="text" name="motivo" maxlength="255" required></label>
 											<button type="submit" class="button"><?php asde_e( 'Anular' ); ?></button>
 										</form>
@@ -272,16 +272,16 @@ $yo              = get_current_user_id();
 		<h3 class="asde-card__title"><?php asde_e( 'Apuntar un gasto' ); ?></h3>
 		<p class="asde-help"><?php echo esc_html( $economia ? asde_t( 'Lo que apunta Tesorería queda validado.' ) : asde_t( 'Tesorería lo revisa: hasta que lo valide no cuenta en el balance. Si lo pagaste tú, te lo reembolsará.' ) ); ?></p>
 		<form method="post" enctype="multipart/form-data" class="asde-form asde-form--compacta">
-			<?php echo $campos( 'evento_gasto' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+			<?php echo wp_kses( $campos( 'evento_gasto' ), asde_html_permitido() ); ?>
 			<p class="asde-form__fila">
 				<label><?php asde_e( 'Fecha' ); ?> <input type="date" name="fecha" value="<?php echo esc_attr( $hoy ); ?>" max="<?php echo esc_attr( $hoy ); ?>" required></label>
 				<label><?php asde_e( 'Importe (€)' ); ?> <input type="text" name="importe" inputmode="decimal" size="10" required></label>
-				<label><?php asde_e( 'Forma de pago' ); ?> <?php echo $formas(); // phpcs:ignore WordPress.Security.EscapeOutput ?></label>
+				<label><?php asde_e( 'Forma de pago' ); ?> <?php echo wp_kses( $formas(), asde_html_permitido() ); ?></label>
 			</p>
 			<p class="asde-form__fila">
 				<label><?php asde_e( 'Concepto' ); ?> <input type="text" name="concepto" maxlength="120" required placeholder="<?php echo esc_attr( asde_a( 'p. ej. Compra de comida' ) ); ?>"></label>
 				<label><?php asde_e( 'Proveedor' ); ?> <input type="text" name="proveedor" maxlength="120"></label>
-				<label><?php asde_e( 'Partida del presupuesto' ); ?> <?php echo $partida( GastosTable::GASTO ); // phpcs:ignore WordPress.Security.EscapeOutput ?></label>
+				<label><?php asde_e( 'Partida del presupuesto' ); ?> <?php echo wp_kses( $partida( GastosTable::GASTO ), asde_html_permitido() ); ?></label>
 			</p>
 			<fieldset>
 				<legend><?php asde_e( '¿Quién lo pagó?' ); ?></legend>
@@ -322,16 +322,16 @@ $yo              = get_current_user_id();
 			<summary><strong><?php asde_e( 'Apuntar un ingreso (subvención, donación…)' ); ?></strong></summary>
 			<p class="asde-help"><?php asde_e( 'Los pagos de las familias no se apuntan aquí: se registran en la pestaña «Inscripciones».' ); ?></p>
 			<form method="post" class="asde-form asde-form--compacta">
-				<?php echo $campos( 'evento_ingreso' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+				<?php echo wp_kses( $campos( 'evento_ingreso' ), asde_html_permitido() ); ?>
 				<p class="asde-form__fila">
 					<label><?php asde_e( 'Fecha' ); ?> <input type="date" name="fecha" value="<?php echo esc_attr( $hoy ); ?>" max="<?php echo esc_attr( $hoy ); ?>" required></label>
 					<label><?php asde_e( 'Importe (€)' ); ?> <input type="text" name="importe" inputmode="decimal" size="10" required></label>
-					<label><?php asde_e( 'Forma de pago' ); ?> <?php echo $formas(); // phpcs:ignore WordPress.Security.EscapeOutput ?></label>
+					<label><?php asde_e( 'Forma de pago' ); ?> <?php echo wp_kses( $formas(), asde_html_permitido() ); ?></label>
 				</p>
 				<p class="asde-form__fila">
 					<label><?php asde_e( 'Concepto' ); ?> <input type="text" name="concepto" maxlength="120" required></label>
 					<label><?php asde_e( 'De quién' ); ?> <input type="text" name="proveedor" maxlength="120"></label>
-					<label><?php asde_e( 'Partida del presupuesto' ); ?> <?php echo $partida( GastosTable::INGRESO ); // phpcs:ignore WordPress.Security.EscapeOutput ?></label>
+					<label><?php asde_e( 'Partida del presupuesto' ); ?> <?php echo wp_kses( $partida( GastosTable::INGRESO ), asde_html_permitido() ); ?></label>
 				</p>
 				<p><button type="submit" class="button"><?php asde_e( 'Apuntar el ingreso' ); ?></button></p>
 			</form>
@@ -369,14 +369,14 @@ $yo              = get_current_user_id();
 								<details class="asde-accion asde-no-print">
 									<summary><?php asde_e( 'Liquidar' ); ?></summary>
 									<form method="post" class="asde-form asde-form--compacta">
-										<?php echo $campos( 'evento_anticipo_liquidar', $oculto( 'anticipo', $an['id'] ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+										<?php echo wp_kses( $campos( 'evento_anticipo_liquidar', $oculto( 'anticipo', $an['id'] ) ), asde_html_permitido() ); ?>
 										<label><?php asde_e( 'Devuelto (€)' ); ?> <input type="text" name="devuelto" inputmode="decimal" value="<?php echo esc_attr( number_format( max( 0, $an['importe'] - $usado ), 2, ',', '' ) ); ?>" required></label>
 										<label><?php asde_e( 'Nota (obligatoria si no cuadra)' ); ?> <input type="text" name="nota" maxlength="255"></label>
 										<button type="submit" class="button button-primary"><?php asde_e( 'Liquidar el anticipo' ); ?></button>
 									</form>
 								</details>
 								<?php if ( ! $con ) : ?>
-									<form method="post" class="asde-inline-form asde-no-print" data-asde-confirmar="<?php echo esc_attr( asde_js( '¿Anular este anticipo? Hazlo solo si se apuntó por error.' ) ); ?>"><?php echo $campos( 'evento_anticipo_anular', $oculto( 'anticipo', $an['id'] ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?><button type="submit" class="asde-btn-link"><?php asde_e( 'Anular' ); ?></button></form>
+									<form method="post" class="asde-inline-form asde-no-print" data-asde-confirmar="<?php echo esc_attr( asde_js( '¿Anular este anticipo? Hazlo solo si se apuntó por error.' ) ); ?>"><?php echo wp_kses( $campos( 'evento_anticipo_anular', $oculto( 'anticipo', $an['id'] ) ), asde_html_permitido() ); ?><button type="submit" class="asde-btn-link"><?php asde_e( 'Anular' ); ?></button></form>
 								<?php endif; ?>
 							<?php endif; ?>
 						<?php endif; ?>
@@ -392,7 +392,7 @@ $yo              = get_current_user_id();
 				<details class="asde-no-print">
 					<summary><?php asde_e( 'Dar un anticipo' ); ?></summary>
 					<form method="post" class="asde-form asde-form--compacta">
-						<?php echo $campos( 'evento_anticipo' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+						<?php echo wp_kses( $campos( 'evento_anticipo' ), asde_html_permitido() ); ?>
 						<label><?php asde_e( 'A quién' ); ?>
 							<select name="persona">
 								<?php foreach ( $personas as $uid => $nombre ) : ?>
@@ -402,7 +402,7 @@ $yo              = get_current_user_id();
 						</label>
 						<label><?php asde_e( 'Importe (€)' ); ?> <input type="text" name="importe" inputmode="decimal" size="10" required></label>
 						<label><?php asde_e( 'Fecha' ); ?> <input type="date" name="fecha" value="<?php echo esc_attr( $hoy ); ?>" max="<?php echo esc_attr( $hoy ); ?>" required></label>
-						<label><?php asde_e( 'Forma de pago' ); ?> <?php echo $formas(); // phpcs:ignore WordPress.Security.EscapeOutput ?></label>
+						<label><?php asde_e( 'Forma de pago' ); ?> <?php echo wp_kses( $formas(), asde_html_permitido() ); ?></label>
 						<label><?php asde_e( 'Nota' ); ?> <input type="text" name="nota" maxlength="255"></label>
 						<button type="submit" class="button button-primary"><?php asde_e( 'Dar el anticipo' ); ?></button>
 					</form>
@@ -427,7 +427,7 @@ $yo              = get_current_user_id();
 		<?php else : ?>
 			<p><?php asde_e( 'Al cerrar, el balance de hoy queda como informe final, se borran los datos de recogida y las observaciones de las inscripciones y el evento queda en solo lectura. Si después hace falta cambiar algo, Tesorería puede reabrirlas (lo borrado no vuelve).' ); ?></p>
 			<form method="post" data-asde-confirmar="<?php echo esc_attr( asde_js( '¿Cerrar las cuentas del evento? Quién recoge y las observaciones de las inscripciones se borran y no vuelven.' ) ); ?>">
-				<?php echo $campos( 'evento_cerrar' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+				<?php echo wp_kses( $campos( 'evento_cerrar' ), asde_html_permitido() ); ?>
 				<button type="submit" class="button button-primary"><?php asde_e( 'Cerrar las cuentas' ); ?></button>
 			</form>
 		<?php endif; ?>

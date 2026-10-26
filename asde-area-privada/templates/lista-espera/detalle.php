@@ -65,10 +65,10 @@ endif;
 		<dt><?php asde_e( 'Fecha de nacimiento' ); ?></dt>
 		<dd><?php echo esc_html( $dma( $d['nacimiento'] ) ); ?><?php echo null !== $f['edad'] ? ' · ' . esc_html( sprintf( asde_t( '%d años' ), $f['edad'] ) ) : ''; ?></dd>
 		<dt><?php asde_e( 'Sección por edad' ); ?></dt>
-		<dd><?php echo '' !== $f['seccion_edad'] ? Secciones::badge( $f['seccion_edad'] ) : esc_html( asde_t( 'Aún sin edad' ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></dd>
+		<dd><?php echo wp_kses( '' !== $f['seccion_edad'] ? Secciones::badge( $f['seccion_edad'] ) : esc_html( asde_t( 'Aún sin edad' ) ), asde_html_permitido() ); ?></dd>
 		<?php if ( '' !== $f['seccion'] ) : ?>
 			<dt><?php asde_e( 'Sección asignada' ); ?></dt>
-			<dd><?php echo Secciones::badge( $f['seccion'] ); // phpcs:ignore WordPress.Security.EscapeOutput ?></dd>
+			<dd><?php echo wp_kses( Secciones::badge( $f['seccion'] ), asde_html_permitido() ); ?></dd>
 		<?php endif; ?>
 		<dt><?php asde_e( 'Documento' ); ?></dt>
 		<dd><?php echo $gestiona ? esc_html( '' !== $d['documento'] ? $d['documento'] : '—' ) : esc_html( '' !== $d['documento'] ? asde_t( 'Sí (lo ven Secretaría y Coordinación)' ) : '—' ); ?></dd>
@@ -82,11 +82,11 @@ endif;
 		<dd><?php echo esc_html( $d['email'] ); ?></dd>
 		<?php if ( '' !== $d['observaciones'] ) : ?>
 			<dt><?php asde_e( 'Observaciones' ); ?></dt>
-			<dd><?php echo nl2br( esc_html( $d['observaciones'] ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></dd>
+			<dd><?php echo wp_kses( nl2br( esc_html( $d['observaciones'] ) ), asde_html_permitido() ); ?></dd>
 		<?php endif; ?>
 		<?php foreach ( $f['extra'] as $x ) : ?>
 			<dt><?php echo esc_html( $x['etiqueta'] ); ?></dt>
-			<dd><?php echo nl2br( esc_html( $x['valor'] ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></dd>
+			<dd><?php echo wp_kses( nl2br( esc_html( $x['valor'] ) ), asde_html_permitido() ); ?></dd>
 		<?php endforeach; ?>
 		<dt><?php asde_e( 'Se apuntó' ); ?></dt>
 		<dd><?php echo esc_html( $fecha( $f['creada'] ) ); ?><?php echo $f['confirmada_en'] ? ' · ' . esc_html( sprintf( asde_t( 'confirmó el %s' ), $fecha( $f['confirmada_en'] ) ) ) : ''; ?></dd>
@@ -209,7 +209,7 @@ endif;
 					<span class="asde-muted"><?php echo esc_html( $fecha( (string) ( $h['fecha'] ?? '' ), 'd/m/Y H:i' ) ); ?> · <?php echo esc_html( $autores[ (int) ( $h['user'] ?? 0 ) ] ?? '' ); ?></span><br>
 					<strong><?php echo esc_html( $que ); ?></strong>
 					<?php if ( '' !== (string) ( $h['nota'] ?? '' ) ) : ?>
-						<br><?php echo nl2br( esc_html( (string) $h['nota'] ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+						<br><?php echo wp_kses( nl2br( esc_html( (string) $h['nota'] ) ), asde_html_permitido() ); ?>
 					<?php endif; ?>
 				</li>
 			<?php endforeach; ?>

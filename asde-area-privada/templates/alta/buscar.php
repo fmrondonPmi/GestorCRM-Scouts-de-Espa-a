@@ -55,11 +55,11 @@ defined( 'ABSPATH' ) || exit;
 						?>
 						<tr>
 							<td data-label="<?php echo esc_attr( asde_a( 'Nombre' ) ); ?>"><strong><?php echo esc_html( $p->nombre_completo() ); ?></strong></td>
-							<td data-label="<?php echo esc_attr( asde_a( 'Nº socio/a' ) ); ?>"><?php echo \AsdeBalears\AreaPrivada\Socios\Numeros::html( $p, $n ); // phpcs:ignore WordPress.Security.EscapeOutput ?></td>
+							<td data-label="<?php echo esc_attr( asde_a( 'Nº socio/a' ) ); ?>"><?php echo wp_kses( \AsdeBalears\AreaPrivada\Socios\Numeros::html( $p, $n ), asde_html_permitido() ); ?></td>
 							<td data-label="<?php echo esc_attr( asde_a( 'Sección' ) ); ?>">
 								<?php
 								foreach ( $p->secciones as $s ) {
-									echo Secciones::badge( $s ); // phpcs:ignore WordPress.Security.EscapeOutput -- HTML escapado en badge().
+									echo wp_kses( Secciones::badge( $s ), asde_html_permitido() );
 								}
 								?>
 							</td>

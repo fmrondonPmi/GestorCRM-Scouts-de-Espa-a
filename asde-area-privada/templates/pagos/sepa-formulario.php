@@ -60,7 +60,7 @@ $fid = (int) $familia['id'];
 		<legend><?php asde_e( 'Datos del acreedor' ); ?></legend>
 		<p class="asde-muted">
 			<strong><?php echo esc_html( $acreedor['nombre'] ); ?></strong> <?php asde_e( '· Identificador del acreedor' ); ?> <?php echo esc_html( $acreedor['ics'] ); ?>
-			<?php echo '' !== trim( $acreedor['calle'] . $acreedor['poblacion'] ) ? '<br>' . esc_html( trim( $acreedor['calle'] . ', ' . trim( $acreedor['cp'] . ' ' . $acreedor['poblacion'] ), ' ,' ) ) : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?>
+			<?php echo wp_kses( '' !== trim( $acreedor['calle'] . $acreedor['poblacion'] ) ? '<br>' . esc_html( trim( $acreedor['calle'] . ', ' . trim( $acreedor['cp'] . ' ' . $acreedor['poblacion'] ), ' ,' ) ) : '', asde_html_permitido() ); ?>
 		</p>
 	</fieldset>
 

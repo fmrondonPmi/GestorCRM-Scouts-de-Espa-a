@@ -38,7 +38,7 @@ $naturaleza = static function ( string $nombre, string $actual, string $id ): st
 		<label for="asde-bt-nuevo" class="screen-reader-text"><?php asde_e( 'Nombre del tipo nuevo' ); ?></label>
 		<input type="text" id="asde-bt-nuevo" name="nombre" maxlength="80" required placeholder="<?php echo esc_attr( asde_a( 'Nombre del tipo nuevo' ) ); ?>">
 		<label for="asde-bt-nuevo-nat" class="screen-reader-text"><?php asde_e( 'Clase' ); ?></label>
-		<?php echo $naturaleza( 'naturaleza', TiposMovimiento::GASTO, 'asde-bt-nuevo-nat' ); // phpcs:ignore WordPress.Security.EscapeOutput -- construido arriba con esc_* ?>
+		<?php echo wp_kses( $naturaleza( 'naturaleza', TiposMovimiento::GASTO, 'asde-bt-nuevo-nat' ), asde_html_permitido() ); ?>
 		<button type="submit" class="button button-primary"><?php asde_e( 'Crear tipo' ); ?></button>
 	</form>
 
@@ -73,7 +73,7 @@ $naturaleza = static function ( string $nombre, string $actual, string $id ): st
 								<label class="screen-reader-text" for="asde-bt-<?php echo (int) $t['id']; ?>"><?php echo esc_html( sprintf( asde_t( 'Nombre del tipo «%s»' ), $t['nombre'] ) ); ?></label>
 								<input type="text" id="asde-bt-<?php echo (int) $t['id']; ?>" name="nombre" maxlength="80" required value="<?php echo esc_attr( $t['nombre'] ); ?>">
 								<label class="screen-reader-text" for="asde-bt-nat-<?php echo (int) $t['id']; ?>"><?php asde_e( 'Clase' ); ?></label>
-								<?php echo $naturaleza( 'naturaleza', $t['naturaleza'], 'asde-bt-nat-' . (int) $t['id'] ); // phpcs:ignore WordPress.Security.EscapeOutput -- construido arriba con esc_* ?>
+								<?php echo wp_kses( $naturaleza( 'naturaleza', $t['naturaleza'], 'asde-bt-nat-' . (int) $t['id'] ), asde_html_permitido() ); ?>
 								<button type="submit" class="asde-btn-link"><?php asde_e( 'Guardar' ); ?></button>
 							</form>
 						</td>

@@ -74,7 +74,7 @@ final class AccessHooks {
 			$grupo = Grupos::de_usuario( $user );
 			if ( ! $grupo || $grupo['id'] !== self::$grupo_formulario ) {
 				// Mismo mensaje que con la contraseña incorrecta: no revela nada.
-				return new \WP_Error( 'asde_grupo', __( 'Nº de socio/a o email, contraseña o grupo incorrectos.', 'asde-area-privada' ) );
+				return new \WP_Error( 'asde_grupo', __( 'Nº de socio/a o email, contraseña o grupo incorrectos.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			}
 			return self::con_membresia( $user, $grupo );
 		}
@@ -88,10 +88,10 @@ final class AccessHooks {
 				Pages::id( 'acceso' )
 					? sprintf(
 						/* translators: %s: URL de la pantalla de acceso */
-						__( 'Los socios y las familias entran desde <a href="%s">Acceso socios</a>, en el menú de la web.', 'asde-area-privada' ),
+						__( 'Los socios y las familias entran desde <a href="%s">Acceso socios</a>, en el menú de la web.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 						esc_url( Pages::url( 'acceso' ) )
 					)
-					: __( 'Los socios y las familias entran desde "Acceso socios", en el menú de la web.', 'asde-area-privada' )
+					: __( 'Los socios y las familias entran desde "Acceso socios", en el menú de la web.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' )
 			);
 		}
 		return $user;
@@ -136,7 +136,7 @@ final class AccessHooks {
 				'asde_recuperar',
 				sprintf(
 					/* translators: %s: URL de la página de recuperación */
-					__( 'Los socios y las familias recuperan la contraseña desde <a href="%s">esta página</a>.', 'asde-area-privada' ),
+					__( 'Los socios y las familias recuperan la contraseña desde <a href="%s">esta página</a>.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 					esc_url( Pages::url( 'recuperar' ) )
 				)
 			);

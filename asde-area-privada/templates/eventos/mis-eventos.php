@@ -102,10 +102,10 @@ $texto_autorizacion = static function ( array $e, string $nombre ) use ( $autori
 						<div><dt><?php asde_e( 'Llegada' ); ?></dt><dd><?php echo esc_html( $e['llegada'] ); ?></dd></div>
 					<?php endif; ?>
 					<?php if ( '' !== trim( $e['descripcion'] ) ) : ?>
-						<div><dt><?php asde_e( 'Descripción' ); ?></dt><dd><?php echo nl2br( esc_html( $e['descripcion'] ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></dd></div>
+						<div><dt><?php asde_e( 'Descripción' ); ?></dt><dd><?php echo wp_kses( nl2br( esc_html( $e['descripcion'] ) ), asde_html_permitido() ); ?></dd></div>
 					<?php endif; ?>
 					<?php if ( '' !== trim( $e['material'] ) ) : ?>
-						<div><dt><?php asde_e( 'Material personal' ); ?></dt><dd><?php echo nl2br( esc_html( $e['material'] ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?></dd></div>
+						<div><dt><?php asde_e( 'Material personal' ); ?></dt><dd><?php echo wp_kses( nl2br( esc_html( $e['material'] ) ), asde_html_permitido() ); ?></dd></div>
 					<?php endif; ?>
 				</dl>
 			</details>
@@ -131,7 +131,7 @@ $texto_autorizacion = static function ( array $e, string $nombre ) use ( $autori
 				<li class="asde-mis-evento__persona">
 					<p class="asde-mis-evento__quien">
 						<strong><?php echo esc_html( $familia ? $p->nombre_completo() : sprintf( asde_t( '%s (tú)' ), $p->nombre_completo() ) ); ?></strong>
-						<?php echo $seccion ? Secciones::badge( $seccion ) : ''; // phpcs:ignore WordPress.Security.EscapeOutput ?>
+						<?php echo wp_kses( $seccion ? Secciones::badge( $seccion ) : '', asde_html_permitido() ); ?>
 						<?php if ( '' !== $estado ) : ?>
 							<span class="asde-badge asde-badge--inscripcion-<?php echo esc_attr( $estado ); ?>"><?php echo esc_html( asde_t( InscripcionesTable::ESTADOS[ $estado ] ?? $estado ) ); ?></span>
 						<?php endif; ?>
@@ -152,7 +152,7 @@ $texto_autorizacion = static function ( array $e, string $nombre ) use ( $autori
 					<?php if ( $f && 'plaza' === $estado ) : ?>
 						<div class="asde-notice asde-notice--info">
 							<?php echo esc_html( sprintf( asde_t( 'Se ha liberado una plaza. Confírmala antes del %s; si no, pasará a la siguiente persona de la lista de espera.' ), $utc( $f['oferta_hasta'] ) ) ); ?>
-							<?php echo $boton( $e, 'inscripcion_plaza', esc_html( asde_t( 'Confirmar la plaza' ) ), $oculto( 'fila', (string) $f['id'] ), 'button button-primary' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+							<?php echo wp_kses( $boton( $e, 'inscripcion_plaza', esc_html( asde_t( 'Confirmar la plaza' ) ), $oculto( 'fila', (string) $f['id'] ), 'button button-primary' ), asde_html_permitido() ); ?>
 						</div>
 					<?php elseif ( $f && InscripcionesTable::ESPERA === $f['estado'] ) : ?>
 						<p><?php echo esc_html( sprintf( asde_t( 'No quedaban plazas: está en la lista de espera (puesto %d). Si se libera una, os avisaremos por email.' ), (int) ( $puestos[ $f['id'] ] ?? 0 ) ) ); ?></p>
@@ -195,8 +195,8 @@ $texto_autorizacion = static function ( array $e, string $nombre ) use ( $autori
 						<details class="asde-inscribir">
 							<summary class="button button-primary"><?php asde_e( 'Firmar la autorización' ); ?></summary>
 							<form method="post" class="asde-form asde-form--inscribir">
-								<?php echo $campos( $e, 'inscripcion_firmar', $oculto( 'fila', (string) $f['id'] ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
-								<?php echo $texto_autorizacion( $e, $p->nombre_completo() ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+								<?php echo wp_kses( $campos( $e, 'inscripcion_firmar', $oculto( 'fila', (string) $f['id'] ) ), asde_html_permitido() ); ?>
+								<?php echo wp_kses( $texto_autorizacion( $e, $p->nombre_completo() ), asde_html_permitido() ); ?>
 								<label class="asde-check"><input type="checkbox" name="acepto" value="1" required> <?php asde_e( 'He leído la autorización y la firmo.' ); ?></label>
 								<p class="asde-help"><?php asde_e( 'Queda registrado quién la firma, cuándo y qué versión del texto.' ); ?></p>
 								<p><button type="submit" class="button button-primary"><?php asde_e( 'Firmar' ); ?></button></p>
@@ -208,7 +208,7 @@ $texto_autorizacion = static function ( array $e, string $nombre ) use ( $autori
 						<details class="asde-inscribir"<?php echo $v ? ' open' : ''; ?>>
 							<summary class="button button-primary"><?php echo esc_html( $familia ? sprintf( asde_t( 'Inscribir a %s' ), $p->nombre ) : ( $adulta ? asde_t( 'Inscribirme' ) : asde_t( 'Preinscribirme' ) ) ); ?></summary>
 							<form method="post" class="asde-form asde-form--inscribir">
-								<?php echo $campos( $e, 'inscripcion_crear', $extra ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+								<?php echo wp_kses( $campos( $e, 'inscripcion_crear', $extra ), asde_html_permitido() ); ?>
 								<fieldset class="asde-fieldset">
 									<legend><?php asde_e( 'Transporte' ); ?></legend>
 									<?php foreach ( array( 'transporte_ida' => asde_t( 'Ida' ), 'transporte_vuelta' => asde_t( 'Vuelta' ) ) as $k => $etiqueta ) : ?>
@@ -233,7 +233,7 @@ $texto_autorizacion = static function ( array $e, string $nombre ) use ( $autori
 								<label class="asde-check"><input type="checkbox" name="salud" value="1" required<?php checked( ! empty( $v['salud'] ) ); ?>> <?php echo esc_html( $familia ? sprintf( asde_t( 'He revisado la ficha de salud y alimentación de %s y está al día.' ), $p->nombre ) : asde_t( 'He revisado mi ficha de salud y alimentación y está al día.' ) ); ?></label>
 								<p class="asde-help"><a href="<?php echo esc_url( $url_ficha( (string) $num ) ); ?>"><?php asde_e( 'Ver la ficha y proponer cambios' ); ?></a></p>
 								<?php if ( $familia && ! $adulta ) : ?>
-									<?php echo $texto_autorizacion( $e, $p->nombre_completo() ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+									<?php echo wp_kses( $texto_autorizacion( $e, $p->nombre_completo() ), asde_html_permitido() ); ?>
 									<label class="asde-check"><input type="checkbox" name="acepto" value="1" required> <?php asde_e( 'He leído la autorización y la firmo.' ); ?></label>
 									<p class="asde-help"><?php asde_e( 'Al inscribir firmas la autorización: queda registrado quién la firma, cuándo y qué versión del texto.' ); ?></p>
 								<?php elseif ( ! $adulta ) : ?>
@@ -243,13 +243,13 @@ $texto_autorizacion = static function ( array $e, string $nombre ) use ( $autori
 							</form>
 						</details>
 						<?php if ( 'convocatoria' === $e['modalidad'] && ( ! $f || InscripcionesTable::NO_PARTICIPA !== $f['estado'] ) ) : ?>
-							<?php echo $boton( $e, 'inscripcion_no', esc_html( $familia ? sprintf( asde_t( '%s no va' ), $p->nombre ) : asde_t( 'No voy' ) ), $extra, 'asde-btn-link' ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+							<?php echo wp_kses( $boton( $e, 'inscripcion_no', esc_html( $familia ? sprintf( asde_t( '%s no va' ), $p->nombre ) : asde_t( 'No voy' ) ), $extra, 'asde-btn-link' ), asde_html_permitido() ); ?>
 						<?php endif; ?>
 					<?php endif; ?>
 
 					<?php if ( $activa && 'abierta' === $plazo && ! $cancelado ) : ?>
 						<p class="asde-mis-evento__baja">
-							<?php echo $boton( $e, 'inscripcion_baja', esc_html( InscripcionesTable::ESPERA === $f['estado'] ? asde_t( 'Salir de la lista de espera' ) : asde_t( 'Darse de baja' ) ), $oculto( 'fila', (string) $f['id'] ), 'asde-btn-link', esc_attr( asde_js( '¿Dar de baja esta inscripción? Lo que ya se haya pagado lo revisará Tesorería.' ) ) ); // phpcs:ignore WordPress.Security.EscapeOutput ?>
+							<?php echo wp_kses( $boton( $e, 'inscripcion_baja', esc_html( InscripcionesTable::ESPERA === $f['estado'] ? asde_t( 'Salir de la lista de espera' ) : asde_t( 'Darse de baja' ) ), $oculto( 'fila', (string) $f['id'] ), 'asde-btn-link', esc_attr( asde_js( '¿Dar de baja esta inscripción? Lo que ya se haya pagado lo revisará Tesorería.' ) ) ), asde_html_permitido() ); ?>
 						</p>
 					<?php endif; ?>
 				</li>

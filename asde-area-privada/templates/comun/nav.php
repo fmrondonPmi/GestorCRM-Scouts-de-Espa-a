@@ -53,7 +53,7 @@ defined( 'ABSPATH' ) || exit;
 			<a href="<?php echo esc_url( wp_logout_url( home_url( '/' ) ) ); ?>"><?php asde_e( 'Salir' ); ?></a>
 			<?php $selector_idioma = trim( TemplateLoader::render( 'comun/idiomas' ) ); ?>
 			<?php if ( '' !== $selector_idioma ) : ?>
-				· <?php echo $selector_idioma; // phpcs:ignore WordPress.Security.EscapeOutput ?>
+				· <?php echo wp_kses( $selector_idioma, asde_html_permitido() ); ?>
 			<?php endif; ?>
 			<?php if ( Identidad::es_asde() && ( current_user_can( 'asde_manage_users' ) || current_user_can( 'asde_tesoreria_acceso' ) || current_user_can( 'asde_reports' ) || current_user_can( 'asde_approve_changes' ) ) ) : ?>
 				<?php $ver_local = Numeros::ver_local(); ?>
