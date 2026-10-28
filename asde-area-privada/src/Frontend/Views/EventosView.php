@@ -44,7 +44,7 @@ defined( 'ABSPATH' ) || exit;
 final class EventosView extends EventosBaseView {
 
 	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
-	public static function pestanas(): array {
+	public static function pestanas_evento(): array {
 		return array(
 		'resumen'       => __( 'Summary', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 		'calendario'    => __( 'Calendar', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
@@ -144,7 +144,7 @@ final class EventosView extends EventosBaseView {
 	}
 
 	private function evento( array $e, Ambito $a, array $cfg ): string {
-		$pestana = isset( self::pestanas()[ $this->get( 'pestana' ) ] ) ? $this->get( 'pestana' ) : 'resumen';
+		$pestana = isset( self::pestanas_evento()[ $this->get( 'pestana' ) ] ) ? $this->get( 'pestana' ) : 'resumen';
 		if ( Servicio::solo_material( $e, $a ) && ! in_array( $pestana, array( 'resumen', 'material' ), true ) ) {
 			$pestana = 'resumen';
 		}
@@ -446,7 +446,7 @@ final class EventosView extends EventosBaseView {
 			Notices::add( 'error', __( 'You do not have access to that event.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			$this->redirect( $this->url( 'eventos' ) );
 		}
-		$pestana = isset( self::pestanas()[ $this->post( 'pestana' ) ] ) ? $this->post( 'pestana' ) : 'resumen';
+		$pestana = isset( self::pestanas_evento()[ $this->post( 'pestana' ) ] ) ? $this->post( 'pestana' ) : 'resumen';
 		$volver  = $this->url(
 			'eventos',
 			array(

@@ -124,7 +124,7 @@ $fecha = static fn( string $f ): string => wp_date( 'd/m/Y', strtotime( $f . ' U
 
 <section class="asde-card" data-asde-plegable="tienda-informe-pendientes" data-asde-inicio="abierto">
 	<header class="asde-card__header asde-card__header--split">
-		<h3 class="asde-card__title"><?php esc_html_e( 'Pending collection', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h3>
+		<h3 class="asde-card__title"><?php esc_html_e( 'Pending collections', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h3>
 		<span class="asde-actions"><a class="no-transition" href="<?php echo esc_url( $excel['pendientes'] ); ?>" data-asde-descarga><?php esc_html_e( 'Download Excel', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a></span>
 	</header>
 	<?php if ( ! $pendientes ) : ?>

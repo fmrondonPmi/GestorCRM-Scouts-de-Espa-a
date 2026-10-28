@@ -30,7 +30,7 @@ final class Config {
 
 	/**
 	 * Valores por defecto que se GUARDAN en la configuración: en castellano, sin traducir (se traducen al mostrarlos con
-	 * asde_t(); están en Textos::extras()). Antes se guardaban en el idioma de quien guardaba la configuración (doc 59,
+	 * asde_guardado()). Antes se guardaban en el idioma de quien guardaba la configuración (doc 59,
 	 * RC-TES-4).
 	 */
 	public const PLAZO_DEFECTO = 'Cuota anual';

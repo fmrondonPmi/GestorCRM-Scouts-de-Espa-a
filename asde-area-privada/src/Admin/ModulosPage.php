@@ -108,7 +108,7 @@ final class ModulosPage {
 									<th scope="col" title="<?php echo esc_attr( $def[1] ); ?>">
 										<?php echo esc_html( $def[0] ); ?>
 										<?php if ( '' !== $def[3] ) : ?>
-											<br><span class="description"><?php /* translators: %s: module it depends on */ echo esc_html( sprintf( __( '(inside %s)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), asde_t( Modulos::lista()[ $def[3] ][0] ) ) ); ?></span>
+											<br><span class="description"><?php /* translators: %s: module it depends on */ echo esc_html( sprintf( __( '(inside %s)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Modulos::lista()[ $def[3] ][0] ) ); ?></span>
 										<?php endif; ?>
 									</th>
 								<?php endforeach; ?>

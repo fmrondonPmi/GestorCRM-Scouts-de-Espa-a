@@ -24,7 +24,7 @@ defined( 'ABSPATH' ) || exit;
 $estado  = EventosTable::estado_visible( $e );
 $pestanas = array();
 $solo_material = Servicio::solo_material( $e, $ambito );
-foreach ( ( EventosView::pestanas() ) as $p => $etiqueta ) {
+foreach ( ( EventosView::pestanas_evento() ) as $p => $etiqueta ) {
 	if ( $solo_material && ! in_array( $p, array( 'resumen', 'material' ), true ) ) {
 		continue; // v0.43: el Intendente solo ve el resumen y el material.
 	}

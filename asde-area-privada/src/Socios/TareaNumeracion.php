@@ -454,8 +454,8 @@ final class TareaNumeracion {
 		switch ( $t['estado'] ) {
 			case self::EN_CURSO:
 				$texto = 0 === (int) $t['tandas']
-					? sprintf( /* translators: %s: text */ __( 'Starting… %s to correct.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 1 === $pendientes ? sprintf( /* translators: %d: number */ __( '%d record', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $pendientes ) : sprintf( /* translators: %d: number */ __( '%d records', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $pendientes ) )
-					: sprintf( 1 === $pendientes ? /* translators: 1: number, 2: number, 3: text */ __( '%1$d of %2$d left · %3$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : /* translators: 1: number, 2: number, 3: text */ __( '%1$d of %2$d left · %3$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $pendientes, $total, 1 === $hechas ? sprintf( /* translators: %d: number */ __( '%d corrected', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $hechas ) : sprintf( /* translators: %d: number */ __( '%d corrected', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $hechas ) )
+					? sprintf( /* translators: %s: text */ __( 'Starting… %s to correct.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), sprintf( /* translators: %d: number */ _n( '%d record', '%d records', $pendientes, 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $pendientes ) )
+					: sprintf( /* translators: 1: number, 2: number, 3: text */ _n( '%1$d of %2$d left · %3$s', '%1$d of %2$d left · %3$s', $pendientes, 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $pendientes, $total, sprintf( /* translators: %d: number */ _n( '%d corrected', '%d corrected', $hechas, 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $hechas ) )
 						. ( $fallidas ? sprintf( /* translators: %d: number */ __( ' · %d with errors', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $fallidas ) : '' )
 						. ( $hace > 20 ? sprintf( /* translators: %d: number */ __( ' · last activity %d s ago', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $hace ) : '' );
 				if ( '' !== (string) $t['aviso'] ) {

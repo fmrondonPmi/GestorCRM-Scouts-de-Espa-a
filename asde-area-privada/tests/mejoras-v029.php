@@ -144,7 +144,7 @@ $ok( 3 === substr_count( $fhtml, '<section class="ficha">' ) && ! str_contains( 
 $ok( str_contains( $fhtml, '<dd>—</dd>' ), 'un dato vacío sale como «—»' );
 $ok( str_contains( $leer( 'templates/informes/resultado.php' ), 'asde-informe-fichas' ) && str_contains( $leer( 'templates/informes/resultado.php' ), 'name="seccion"' ) && str_contains( $leer( 'templates/informes/editor.php' ), 'name="vista"' ), 'en pantalla, fichas; la sección se elige al verlo; y cualquier informe puede ir en fichas' );
 $tpl = $leer( 'templates/informes/resultado.php' );
-$ok( str_contains( $tpl, "'Descargar Excel'" ) && str_contains( $tpl, 'data-asde-imprimir' ) && ! str_contains( $tpl, 'Descargar CSV' ) && ! str_contains( $tpl, 'window.print()' ), 'resultado: «Descargar Excel» e «Imprimir» con la versión para imprimir' );
+$ok( str_contains( $tpl, "'Download Excel'" ) && str_contains( $tpl, 'data-asde-imprimir' ) && ! str_contains( $tpl, 'Descargar CSV' ) && ! str_contains( $tpl, 'window.print()' ), 'resultado: «Descargar Excel» e «Imprimir» con la versión para imprimir' );
 $ok( in_array( 'xlsx', \AsdeBalears\AreaPrivada\Frontend\Views\InformesView::FORMATOS, true ) && str_contains( $leer( 'src/Frontend/Router.php' ), 'InformesView::FORMATOS' ), 'el Router atiende ?formato=xlsx|imprimir|csv de los informes' );
 
 // ---------------------------------------------------------------------------

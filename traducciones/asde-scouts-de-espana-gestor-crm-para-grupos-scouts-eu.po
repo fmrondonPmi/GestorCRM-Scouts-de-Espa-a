@@ -287,7 +287,9 @@ msgstr "%1$d / %2$d familia"
 #: src/Socios/TareaNumeracion.php:458
 #, php-format
 msgid "%1$d of %2$d left · %3$s"
-msgstr "%1$d geratzen da %2$d(e)tik · %3$s"
+msgid_plural "%1$d of %2$d left · %3$s"
+msgstr[0] "%1$d geratzen da %2$d(e)tik · %3$s"
+msgstr[1] "%1$d geratzen dira %2$d(e)tik · %3$s"
 
 #. translators: 1: number, 2: number, 3: text
 #: templates/eventos/material.php:102
@@ -592,7 +594,9 @@ msgstr[1] "Aukeratutako %d mugimendu familia batekin bateratuta daude jada eta e
 #: src/Socios/TareaNumeracion.php:458
 #, php-format
 msgid "%d corrected"
-msgstr "%d zuzenduta"
+msgid_plural "%d corrected"
+msgstr[0] "%d zuzenduta"
+msgstr[1] "%d zuzenduta"
 
 #. translators: %d: number
 #: src/Socios/TareaNumeracion.php:467
@@ -750,7 +754,7 @@ msgstr[1] "%d material"
 msgid "%d left"
 msgid_plural "%d left"
 msgstr[0] "%d geratzen da"
-msgstr[1] "%d geratzen da"
+msgstr[1] "%d geratzen dira"
 
 #. translators: %d: number
 #: src/Tesoreria/Banco/CsvBanco.php:162
@@ -896,7 +900,9 @@ msgstr[1] "%d errezeta kargatu dira."
 #: src/Socios/TareaNumeracion.php:457
 #, php-format
 msgid "%d record"
-msgstr "%d fitxa"
+msgid_plural "%d records"
+msgstr[0] "%d fitxa"
+msgstr[1] "%d fitxa"
 
 #. translators: %d: number
 #: src/Socios/TareaNumeracion.php:453
@@ -911,12 +917,6 @@ msgid "%d record has something written that could not be understood: check it by
 msgid_plural "%d records have something written that could not be understood: check them by hand."
 msgstr[0] "%d fitxak ulertu ezin izan den zerbait dauka idatzita: berrikusi eskuz."
 msgstr[1] "%d fitxak ulertu ezin izan den zerbait dute idatzita: berrikusi eskuz."
-
-#. translators: %d: number
-#: src/Socios/TareaNumeracion.php:457
-#, php-format
-msgid "%d records"
-msgstr "%d fitxa"
 
 #. translators: %d: number
 #: src/Socios/TareaNumeracion.php:453
@@ -946,7 +946,7 @@ msgstr[1] "%d seme-alaba"
 msgid "%d suggested for this family"
 msgid_plural "%d suggested for this family"
 msgstr[0] "%d familia honetarako iradokia"
-msgstr[1] "%d familia honetarako iradokia"
+msgstr[1] "%d familia honetarako iradokiak"
 
 #. translators: %d: number
 #: src/Frontend/Views/EventosView.php:754
@@ -2490,7 +2490,7 @@ msgstr "Onartu hautatutakoak"
 
 #: src/Idiomas/Guardados.php:69 src/Inventario/ComprasTable.php:38 src/Presupuestos/EstadosTable.php:26 src/Usuarios/Solicitudes.php:35
 msgid "Approved"
-msgstr "Oniritziarekin"
+msgstr "Onartua"
 
 #: src/Fichas/Cambios.php:36
 msgid "Approved and saved in the CRM"
@@ -3207,7 +3207,7 @@ msgstr "Egutegia gorde da."
 
 #: src/Eventos/Config.php:78 src/Eventos/Config.php:84 src/Idiomas/Guardados.php:47
 msgid "Camp"
-msgstr "Kanpamendua"
+msgstr "Kanpaldia"
 
 #: src/Frontend/Views/EventosConfigView.php:80
 msgid "Camp template restored to the original."
@@ -4583,7 +4583,7 @@ msgstr "Desaktibatua"
 
 #: templates/eventos/calendario.php:212 templates/eventos/inscripciones.php:93 templates/pagos/mis-pagos.php:53 templates/pagos/mis-pagos.php:57
 msgid "Deadline"
-msgstr "Muga-data"
+msgstr "Epea"
 
 #: templates/eventos/calendario.php:83
 msgid "Deadlines are calculated from the event's dates (for example, 60 days before the start). If you change the event dates, tasks that are not done and have no date of their own are recalculated."
@@ -7635,7 +7635,7 @@ msgstr "Taldearen eskaeran sartzea Koordinazioak egiten du."
 
 #: src/Eventos/Cuentas.php:548 src/Tesoreria/Banco/TiposMovimiento.php:28 templates/eventos/cuentas.php:100 templates/eventos/cuentas.php:184
 msgid "Income"
-msgstr "Diru-sarrera"
+msgstr "Diru-sarrerak"
 
 #. translators: 1: text, 2: text, 3: text
 #: src/Frontend/Views/BancoView.php:266
@@ -7759,7 +7759,7 @@ msgstr "Epeak:"
 
 #: src/Tesoreria/Banco/TiposMovimiento.php:42 templates/tesoreria/cuotas.php:66 templates/tesoreria/cuotas.php:73 templates/tesoreria/federacion.php:43
 msgid "Insurance"
-msgstr "Asegurua"
+msgstr "Aseguruak"
 
 #: templates/tesoreria/familia.php:80
 msgid "Insurance ("
@@ -10340,7 +10340,7 @@ msgstr ""
 
 #: src/Eventos/GastosTable.php:60 src/Idiomas/Guardados.php:227 src/Informes/Catalogo.php:185 src/Menus/RecetasTable.php:28
 msgid "Other"
-msgstr "Beste bat"
+msgstr "Bestelakoa"
 
 #: src/Caja/LibroMayor.php:163 src/Idiomas/Guardados.php:229
 msgid "Other (cash box)"
@@ -10748,7 +10748,7 @@ msgstr "Ilarrak"
 
 #: src/Eventos/InscripcionesTable.php:53 src/Frontend/Views/TesoreriaView.php:38 src/Frontend/Views/TesoreriaView.php:317 src/Idiomas/Guardados.php:240
 msgid "Pending"
-msgstr "Zain daudenak"
+msgstr "Zain"
 
 #: templates/inventario/compra.php:35
 msgid "Pending Treasury's approval: this list cannot be printed yet."
@@ -10758,9 +10758,13 @@ msgstr "Diruzaintzaren oniritziaren zain: zerrenda hau ezin da oraindik inprimat
 msgid "Pending approval"
 msgstr "Onarpenaren zain"
 
-#: src/Eventos/Cuentas.php:556 src/Frontend/Views/TiendaGestionView.php:253 templates/eventos/cuentas.php:116 templates/tienda/informe.php:127
+#: src/Eventos/Cuentas.php:556 templates/eventos/cuentas.php:116
 msgid "Pending collection"
 msgstr "Kobratzeko zain"
+
+#: src/Frontend/Views/TiendaGestionView.php:253 templates/tienda/informe.php:127
+msgid "Pending collections"
+msgstr "Kobratzeke daudenak"
 
 #: templates/tienda/detalle.php:167
 msgid "Pending confirmation in their private area ("
@@ -10774,8 +10778,12 @@ msgstr "Entregatzeko zain"
 msgid "Pending inclusion in the order"
 msgstr "Eskaeran sartzeko zain"
 
-#: src/Tienda/PedidosTable.php:84 templates/pagos/mis-pagos.php:125
+#: templates/pagos/mis-pagos.php:125
 msgid "Pending payment"
+msgstr "Ordaintzeko zain"
+
+#: src/Tienda/PedidosTable.php:84
+msgid "Pending payments"
 msgstr "Ordaintzeko zain"
 
 #. translators: %s: text

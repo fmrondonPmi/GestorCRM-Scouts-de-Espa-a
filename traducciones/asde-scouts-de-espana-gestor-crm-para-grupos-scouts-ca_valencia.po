@@ -287,7 +287,9 @@ msgstr "%1$d de %2$d famílies"
 #: src/Socios/TareaNumeracion.php:458
 #, php-format
 msgid "%1$d of %2$d left · %3$s"
-msgstr "Queda %1$d de %2$d · %3$s"
+msgid_plural "%1$d of %2$d left · %3$s"
+msgstr[0] "Queda %1$d de %2$d · %3$s"
+msgstr[1] "Queden %1$d de %2$d · %3$s"
 
 #. translators: 1: number, 2: number, 3: text
 #: templates/eventos/material.php:102
@@ -592,7 +594,9 @@ msgstr[1] "%d moviments triats ja estan conciliats amb una família i no surten 
 #: src/Socios/TareaNumeracion.php:458
 #, php-format
 msgid "%d corrected"
-msgstr "%d corregida"
+msgid_plural "%d corrected"
+msgstr[0] "%d corregida"
+msgstr[1] "%d corregides"
 
 #. translators: %d: number
 #: src/Socios/TareaNumeracion.php:467
@@ -628,7 +632,7 @@ msgstr[1] "Queden %d dies"
 msgid "%d deleted"
 msgid_plural "%d deleted"
 msgstr[0] "%d eliminat"
-msgstr[1] "%d eliminat"
+msgstr[1] "%d eliminats"
 
 #. translators: %d: number
 #: templates/tesoreria/familia.php:152
@@ -750,7 +754,7 @@ msgstr[1] "%d materials"
 msgid "%d left"
 msgid_plural "%d left"
 msgstr[0] "Queda %d"
-msgstr[1] "Queda %d"
+msgstr[1] "Queden %d"
 
 #. translators: %d: number
 #: src/Tesoreria/Banco/CsvBanco.php:162
@@ -836,7 +840,7 @@ msgstr[1] "%d comandes en aquest període."
 msgid "%d overdue"
 msgid_plural "%d overdue"
 msgstr[0] "%d vençuda"
-msgstr[1] "%d vençuda"
+msgstr[1] "%d vençudes"
 
 #. translators: %d: number
 #: templates/usuarios/fila.php:92
@@ -896,7 +900,9 @@ msgstr[1] "%d receptes carregades."
 #: src/Socios/TareaNumeracion.php:457
 #, php-format
 msgid "%d record"
-msgstr "%d fitxa"
+msgid_plural "%d records"
+msgstr[0] "%d fitxa"
+msgstr[1] "%d fitxes"
 
 #. translators: %d: number
 #: src/Socios/TareaNumeracion.php:453
@@ -911,12 +917,6 @@ msgid "%d record has something written that could not be understood: check it by
 msgid_plural "%d records have something written that could not be understood: check them by hand."
 msgstr[0] "%d fitxa té alguna cosa escrita que no s'ha pogut entendre: revisa-la a mà."
 msgstr[1] "%d fitxes tenen alguna cosa escrita que no s'ha pogut entendre: revisa-les a mà."
-
-#. translators: %d: number
-#: src/Socios/TareaNumeracion.php:457
-#, php-format
-msgid "%d records"
-msgstr "%d fitxes"
 
 #. translators: %d: number
 #: src/Socios/TareaNumeracion.php:453
@@ -946,7 +946,7 @@ msgstr[1] "%d fills"
 msgid "%d suggested for this family"
 msgid_plural "%d suggested for this family"
 msgstr[0] "%d suggerit per a aquesta família"
-msgstr[1] "%d suggerit per a aquesta família"
+msgstr[1] "%d suggerits per a aquesta família"
 
 #. translators: %d: number
 #: src/Frontend/Views/EventosView.php:754
@@ -2149,7 +2149,7 @@ msgstr "Agenda"
 
 #: src/Eventos/EventosTable.php:75 src/Frontend/Views/PersonasView.php:47 src/Frontend/Views/TesoreriaView.php:36 src/Informes/Catalogo.php:44
 msgid "All"
-msgstr "Totes"
+msgstr "Tots"
 
 #: src/Frontend/Views/TiendaGestionView.php:233
 msgid "All orders"
@@ -2490,7 +2490,7 @@ msgstr "Aprova els seleccionats"
 
 #: src/Idiomas/Guardados.php:69 src/Inventario/ComprasTable.php:38 src/Presupuestos/EstadosTable.php:26 src/Usuarios/Solicitudes.php:35
 msgid "Approved"
-msgstr "Amb el vistiplau"
+msgstr "Aprovada"
 
 #: src/Fichas/Cambios.php:36
 msgid "Approved and saved in the CRM"
@@ -2764,7 +2764,7 @@ msgstr "Torna a la gestió"
 
 #: src/Admin/GruposAltasPage.php:117 templates/accesos/persona.php:28 templates/tienda/producto.php:148
 msgid "Back to the list"
-msgstr "Tornar al llistat"
+msgstr "Tornar a la llista"
 
 #: templates/eventos/menu-hoja.php:21
 msgid "Back to the menu"
@@ -3207,7 +3207,7 @@ msgstr "Calendari desat."
 
 #: src/Eventos/Config.php:78 src/Eventos/Config.php:84 src/Idiomas/Guardados.php:47
 msgid "Camp"
-msgstr "Campament"
+msgstr "Acampada"
 
 #: src/Frontend/Views/EventosConfigView.php:80
 msgid "Camp template restored to the original."
@@ -3279,7 +3279,7 @@ msgstr "Anul·lacions · correccions d'assentament"
 
 #: src/Eventos/EventosTable.php:43 src/Eventos/EventosTable.php:74 src/Fichas/Cambios.php:38 src/Idiomas/Guardados.php:68
 msgid "Cancelled"
-msgstr "Anul·lada"
+msgstr "Cancel·lada"
 
 #. translators: 1: text, 2: text
 #: templates/inventario/compra.php:52
@@ -4583,7 +4583,7 @@ msgstr "Desactivat"
 
 #: templates/eventos/calendario.php:212 templates/eventos/inscripciones.php:93 templates/pagos/mis-pagos.php:53 templates/pagos/mis-pagos.php:57
 msgid "Deadline"
-msgstr "Data límit"
+msgstr "Termini"
 
 #: templates/eventos/calendario.php:83
 msgid "Deadlines are calculated from the event's dates (for example, 60 days before the start). If you change the event dates, tasks that are not done and have no date of their own are recalculated."
@@ -4640,7 +4640,7 @@ msgstr ""
 
 #: templates/informes/lista.php:67 templates/inventario/tipos.php:63 templates/tesoreria/banco-tipos.php:94 templates/tesoreria/familias.php:104
 msgid "Delete"
-msgstr "Esborra"
+msgstr "Elimina"
 
 #. translators: %s: text
 #: templates/lista-espera/detalle.php:177
@@ -7635,7 +7635,7 @@ msgstr "Incloure a la comanda del grup ho fa Coordinació."
 
 #: src/Eventos/Cuentas.php:548 src/Tesoreria/Banco/TiposMovimiento.php:28 templates/eventos/cuentas.php:100 templates/eventos/cuentas.php:184
 msgid "Income"
-msgstr "Ingrés"
+msgstr "Ingressos"
 
 #. translators: 1: text, 2: text, 3: text
 #: src/Frontend/Views/BancoView.php:266
@@ -7759,7 +7759,7 @@ msgstr "Terminis:"
 
 #: src/Tesoreria/Banco/TiposMovimiento.php:42 templates/tesoreria/cuotas.php:66 templates/tesoreria/cuotas.php:73 templates/tesoreria/federacion.php:43
 msgid "Insurance"
-msgstr "Assegurança"
+msgstr "Assegurances"
 
 #: templates/tesoreria/familia.php:80
 msgid "Insurance ("
@@ -9820,7 +9820,7 @@ msgstr "Encara sense fer servir: el primer cobrament anirà com a FRST."
 
 #: src/Frontend/Views/BancoView.php:262 src/Inventario/ListaPdf.php:111 templates/eventos/calendario.php:163 templates/eventos/cuentas.php:406
 msgid "Note"
-msgstr "Observació"
+msgstr "Nota"
 
 #: templates/lista-espera/detalle.php:120 templates/lista-espera/detalle.php:138 templates/tesoreria/banco-revisar.php:135 templates/tesoreria/familia.php:171
 msgid "Note (optional)"
@@ -9846,7 +9846,7 @@ msgstr "Nota: %s"
 
 #: src/Inventario/Importador.php:42 templates/eventos/calendario.php:186 templates/inventario/material.php:118 templates/lista-espera/detalle.php:84
 msgid "Notes"
-msgstr "Observacions"
+msgstr "Notes"
 
 #: templates/lista-espera/publica.php:195 templates/tienda/catalogo.php:76 templates/tienda/publica.php:153
 msgid "Notes (optional)"
@@ -10340,7 +10340,7 @@ msgstr ""
 
 #: src/Eventos/GastosTable.php:60 src/Idiomas/Guardados.php:227 src/Informes/Catalogo.php:185 src/Menus/RecetasTable.php:28
 msgid "Other"
-msgstr "Altra"
+msgstr "Altre"
 
 #: src/Caja/LibroMayor.php:163 src/Idiomas/Guardados.php:229
 msgid "Other (cash box)"
@@ -10748,7 +10748,7 @@ msgstr "Pèsols"
 
 #: src/Eventos/InscripcionesTable.php:53 src/Frontend/Views/TesoreriaView.php:38 src/Frontend/Views/TesoreriaView.php:317 src/Idiomas/Guardados.php:240
 msgid "Pending"
-msgstr "Pendents"
+msgstr "Pendent"
 
 #: templates/inventario/compra.php:35
 msgid "Pending Treasury's approval: this list cannot be printed yet."
@@ -10758,9 +10758,13 @@ msgstr "Pendent del vistiplau de Tresoreria: aquesta llista encara no es pot imp
 msgid "Pending approval"
 msgstr "Pendent d'aprovació"
 
-#: src/Eventos/Cuentas.php:556 src/Frontend/Views/TiendaGestionView.php:253 templates/eventos/cuentas.php:116 templates/tienda/informe.php:127
+#: src/Eventos/Cuentas.php:556 templates/eventos/cuentas.php:116
 msgid "Pending collection"
 msgstr "Pendent de cobrament"
+
+#: src/Frontend/Views/TiendaGestionView.php:253 templates/tienda/informe.php:127
+msgid "Pending collections"
+msgstr "Pendents de cobrament"
 
 #: templates/tienda/detalle.php:167
 msgid "Pending confirmation in their private area ("
@@ -10774,9 +10778,13 @@ msgstr "Pendents de lliurar"
 msgid "Pending inclusion in the order"
 msgstr "Pendents d'incloure a la comanda"
 
-#: src/Tienda/PedidosTable.php:84 templates/pagos/mis-pagos.php:125
+#: templates/pagos/mis-pagos.php:125
 msgid "Pending payment"
 msgstr "Pendent de pagament"
+
+#: src/Tienda/PedidosTable.php:84
+msgid "Pending payments"
+msgstr "Pendents de pagament"
 
 #. translators: %s: text
 #: templates/eventos/cuentas.php:218
@@ -11904,7 +11912,7 @@ msgstr "Recordatori a les famílies (dies abans de l'esdeveniment; 0 = no s'envi
 
 #: templates/accesos/persona.php:81 templates/eventos/config.php:224 templates/eventos/config.php:243 templates/eventos/cuentas.php:238
 msgid "Remove"
-msgstr "Retira"
+msgstr "Treu"
 
 #. translators: %s: text
 #: templates/fichas/ficha.php:227

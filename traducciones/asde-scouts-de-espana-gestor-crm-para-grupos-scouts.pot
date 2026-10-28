@@ -285,7 +285,9 @@ msgstr ""
 #: src/Socios/TareaNumeracion.php:458
 #, php-format
 msgid "%1$d of %2$d left · %3$s"
-msgstr ""
+msgid_plural "%1$d of %2$d left · %3$s"
+msgstr[0] ""
+msgstr[1] ""
 
 #. translators: 1: number, 2: number, 3: text
 #: templates/eventos/material.php:102
@@ -590,7 +592,9 @@ msgstr[1] ""
 #: src/Socios/TareaNumeracion.php:458
 #, php-format
 msgid "%d corrected"
-msgstr ""
+msgid_plural "%d corrected"
+msgstr[0] ""
+msgstr[1] ""
 
 #. translators: %d: number
 #: src/Socios/TareaNumeracion.php:467
@@ -894,7 +898,9 @@ msgstr[1] ""
 #: src/Socios/TareaNumeracion.php:457
 #, php-format
 msgid "%d record"
-msgstr ""
+msgid_plural "%d records"
+msgstr[0] ""
+msgstr[1] ""
 
 #. translators: %d: number
 #: src/Socios/TareaNumeracion.php:453
@@ -909,12 +915,6 @@ msgid "%d record has something written that could not be understood: check it by
 msgid_plural "%d records have something written that could not be understood: check them by hand."
 msgstr[0] ""
 msgstr[1] ""
-
-#. translators: %d: number
-#: src/Socios/TareaNumeracion.php:457
-#, php-format
-msgid "%d records"
-msgstr ""
 
 #. translators: %d: number
 #: src/Socios/TareaNumeracion.php:453
@@ -10756,8 +10756,12 @@ msgstr ""
 msgid "Pending approval"
 msgstr ""
 
-#: src/Eventos/Cuentas.php:556 src/Frontend/Views/TiendaGestionView.php:253 templates/eventos/cuentas.php:116 templates/tienda/informe.php:127
+#: src/Eventos/Cuentas.php:556 templates/eventos/cuentas.php:116
 msgid "Pending collection"
+msgstr ""
+
+#: src/Frontend/Views/TiendaGestionView.php:253 templates/tienda/informe.php:127
+msgid "Pending collections"
 msgstr ""
 
 #: templates/tienda/detalle.php:167
@@ -10772,8 +10776,12 @@ msgstr ""
 msgid "Pending inclusion in the order"
 msgstr ""
 
-#: src/Tienda/PedidosTable.php:84 templates/pagos/mis-pagos.php:125
+#: templates/pagos/mis-pagos.php:125
 msgid "Pending payment"
+msgstr ""
+
+#: src/Tienda/PedidosTable.php:84
+msgid "Pending payments"
 msgstr ""
 
 #. translators: %s: text

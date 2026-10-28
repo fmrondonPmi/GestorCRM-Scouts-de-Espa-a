@@ -250,7 +250,7 @@ final class TiendaGestionView extends TiendaBaseView {
 			$totales  = array( __( 'Total', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $suma[0], round( $suma[1], 2 ), round( $suma[2], 2 ), round( $suma[3], 2 ) );
 			$archivo  = 'ventas-por-forma-de-pago';
 		} elseif ( 'pendientes' === $hoja ) {
-			$titulo   = __( 'Pending collection', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
+			$titulo   = __( 'Pending collections', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 			$personas = $this->personas( Informes::pendientes( $pedidos ) );
 			$filas    = array();
 			$suma     = 0.0;

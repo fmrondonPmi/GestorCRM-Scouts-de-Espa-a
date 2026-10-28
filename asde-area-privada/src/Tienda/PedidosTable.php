@@ -81,7 +81,7 @@ final class PedidosTable {
 	public static function filtros(): array {
 		return array(
 		''                  => __( 'In progress', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
-		self::SIN_PAGAR     => __( 'Pending payment', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::SIN_PAGAR     => __( 'Pending payments', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 		self::POR_PEDIR     => __( 'Pending inclusion in the order', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 		self::POR_ENTREGAR  => __( 'Pending delivery', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 		self::POR_CONFIRMAR => __( 'Delivered, unconfirmed', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),

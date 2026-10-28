@@ -108,6 +108,14 @@ ksort( $textos, SORT_STRING );
 // 2. Del inglés al castellano de cada original.
 $es_de = array(); // inglés (numerado) => [castellano...]
 foreach ( $mapa as $es => $en ) { $es_de[ numerar( $en ) ][] = $es; }
+// Con varios castellanos para un mismo inglés (género, número…), manda el más usado en el código original (uso-es.json).
+$uso = is_file( $salida . 'uso-es.json' ) ? json_decode( (string) file_get_contents( $salida . 'uso-es.json' ), true ) : array();
+foreach ( $es_de as $en => $lista ) {
+	if ( count( $lista ) > 1 ) {
+		usort( $lista, static fn( $x, $y ) => ( $uso[ $y ] ?? 0 ) <=> ( $uso[ $x ] ?? 0 ) );
+		$es_de[ $en ] = $lista;
+	}
+}
 $cat = array();
 foreach ( array( 'ca', 'eu', 'gl' ) as $l ) {
 	$f = $repo . 'idiomas-archivo/' . $l . '.php';
@@ -178,7 +186,17 @@ foreach ( IDIOMAS as $idioma => [ $lang, $nombre ] ) {
 	foreach ( $textos as [ $msgid, $plural, $refs, $coment ] ) {
 		$t0 = $previo[ $msgid ] ?? $buscar( $msgid, $base );
 		$t1 = null;
-		if ( null !== $plural ) { $t1 = $buscar( $plural, $base ); }
+		if ( null !== $plural ) {
+			$t1 = $buscar( $plural, $base );
+			// Singular y plural iguales en inglés pero distintos en castellano («Queda 1» / «Quedan 2»): se toman por orden.
+			if ( $plural === $msgid && count( $es_de[ $msgid ] ?? array() ) >= 2 && ! isset( $previo[ $msgid ] ) ) {
+				$par = $es_de[ $msgid ];
+				sort( $par, SORT_STRING );
+				$f0 = 'es' === $base ? $par[0] : ( $cat[ $base ][ $par[0] ] ?? '' );
+				$f1 = 'es' === $base ? $par[1] : ( $cat[ $base ][ $par[1] ] ?? '' );
+				if ( '' !== $f0 && '' !== $f1 ) { $t0 = numerar_como( $f0, $msgid ); $t1 = numerar_como( $f1, $msgid ); }
+			}
+		}
 		if ( count( $es_de[ $msgid ] ?? array() ) > 1 ) { $conflictos++; }
 		if ( '' !== $coment ) { $po .= '#. ' . $coment . "\n"; }
 		$po .= '#: ' . implode( ' ', array_slice( array_unique( $refs ), 0, 4 ) ) . "\n";
