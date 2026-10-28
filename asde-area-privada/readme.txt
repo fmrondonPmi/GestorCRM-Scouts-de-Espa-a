@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.59.2
+Stable tag: 0.59.3
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -61,6 +61,9 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.59.3 =
+* Review fixes from the WordPress.org plugin team: translation files are no longer bundled; shortcode and template output is escaped with wp_kses; nonce is verified before any other condition in download links; more request input is sanitized.
 
 = 0.59.2 =
 * Code quality: fixes line endings in one file.
@@ -154,6 +157,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * The changelog of versions 0.42.0 and earlier is in changelog.txt, in the plugin folder.
 
 == Upgrade Notice ==
+
+= 0.59.3 =
+No database changes. Catalan, Basque and Galician texts of the private area are no longer included.
 
 = 0.59.2 =
 No database changes.

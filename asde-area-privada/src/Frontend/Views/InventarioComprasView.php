@@ -134,7 +134,7 @@ final class InventarioComprasView extends InventarioBaseView {
 			array(
 				'formato'  => 'pdf',
 				'lista'    => (string) $l['id'],
-				'_wpnonce' => wp_create_nonce( 'asde_inventario_pdf_' . $l['id'] ),
+				'_wpnonce' => wp_create_nonce( 'asde_inventario_pdf_' . ( $l['id'] ?? 0 ) ),
 			)
 		);
 	}
@@ -142,7 +142,10 @@ final class InventarioComprasView extends InventarioBaseView {
 	/** PDF para imprimir (se llama antes de pintar la página). Sin el visto bueno de Tesorería, no. */
 	public function pdf(): void {
 		$l = ComprasTable::obtener( (int) $this->get( 'lista' ) );
-		if ( ! $l || ! current_user_can( Servicio::CAP ) || ! wp_verify_nonce( $this->get( '_wpnonce' ), 'asde_inventario_pdf_' . $l['id'] ) ) {
+		if ( ! wp_verify_nonce( $this->get( '_wpnonce' ), 'asde_inventario_pdf_' . ( $l['id'] ?? 0 ) ) ) {
+			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+		}
+		if ( ! $l || ! current_user_can( Servicio::CAP ) ) {
 			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		if ( ! Servicio::puede_imprimir( $l ) ) {

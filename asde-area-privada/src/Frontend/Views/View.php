@@ -164,7 +164,7 @@ abstract class View {
 
 	/** @return string[] */
 	protected function post_array( string $key ): array {
-		return isset( $_POST[ $key ] ) && is_array( $_POST[ $key ] ) ? array_map( 'strval', array_map( 'wp_unslash', $_POST[ $key ] ) ) : array(); // phpcs:ignore WordPress.Security
+		return isset( $_POST[ $key ] ) && is_array( $_POST[ $key ] ) ? array_map( 'strval', map_deep( wp_unslash( $_POST[ $key ] ), 'sanitize_textarea_field' ) ) : array(); // phpcs:ignore WordPress.Security.NonceVerification.Missing -- el nonce lo comprueba cada handle_post()
 	}
 
 	/** @return array<int, string> Campo del formulario con forma campo[id] => valor (ids > 0 y valores de texto). */
@@ -190,7 +190,7 @@ abstract class View {
 	 */
 	protected function post_cantidades( array &$sin_talla = array() ): array {
 		$out = $this->post_mapa( 'cant' );
-		$lin = isset( $_POST['lin'] ) && is_array( $_POST['lin'] ) ? wp_unslash( $_POST['lin'] ) : array(); // phpcs:ignore WordPress.Security.NonceVerification.Missing,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- el nonce lo comprueba handle_post(); cada valor se sanea aquí y se valida al usarlo
+		$lin = isset( $_POST['lin'] ) && is_array( $_POST['lin'] ) ? map_deep( wp_unslash( $_POST['lin'] ), 'sanitize_text_field' ) : array(); // phpcs:ignore WordPress.Security.NonceVerification.Missing -- el nonce lo comprueba handle_post()
 		foreach ( array_slice( (array) $lin, 0, 200, true ) as $producto => $campos ) {
 			if ( ! absint( $producto ) || ! is_array( $campos ) ) {
 				continue;

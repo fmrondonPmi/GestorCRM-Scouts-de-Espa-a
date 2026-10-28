@@ -157,9 +157,9 @@ $edad  = static function ( string $f ) use ( $hoy ): ?int {
 					<div class="asde-form__columnas">
 						<?php
 						// phpcs:disable WordPress.Security.EscapeOutput -- escapado en $campo.
-						echo $campo( 'first_name', $et['nombre'], 'text', true, ' maxlength="100" autocomplete="off"' );
-						echo $campo( 'last_name', $et['apellidos'], 'text', true, ' maxlength="100" autocomplete="off"' );
-						echo $campo( 'birthdate', $et['nacimiento'], 'date', true, ' min="1900-01-01" max="' . esc_attr( $hoy ) . '"' );
+						echo wp_kses( $campo( 'first_name', $et['nombre'], 'text', true, ' maxlength="100" autocomplete="off"' ), asde_html_permitido() );
+						echo wp_kses( $campo( 'last_name', $et['apellidos'], 'text', true, ' maxlength="100" autocomplete="off"' ), asde_html_permitido() );
+						echo wp_kses( $campo( 'birthdate', $et['nacimiento'], 'date', true, ' min="1900-01-01" max="' . esc_attr( $hoy ) . '"' ), asde_html_permitido() );
 						// phpcs:enable WordPress.Security.EscapeOutput
 						?>
 						<p>
@@ -178,8 +178,8 @@ $edad  = static function ( string $f ) use ( $hoy ): ?int {
 						</p>
 						<?php
 						// phpcs:disable WordPress.Security.EscapeOutput -- escapado en $campo.
-						echo $campo( 'email1', $et['email'], 'email', false, ' maxlength="100" autocomplete="off"' );
-						echo $campo( 'phone_mobile', $et['movil'], 'tel', false, ' maxlength="30" autocomplete="off"' );
+						echo wp_kses( $campo( 'email1', $et['email'], 'email', false, ' maxlength="100" autocomplete="off"' ), asde_html_permitido() );
+						echo wp_kses( $campo( 'phone_mobile', $et['movil'], 'tel', false, ' maxlength="30" autocomplete="off"' ), asde_html_permitido() );
 						// phpcs:enable WordPress.Security.EscapeOutput
 						?>
 					</div>
@@ -193,10 +193,10 @@ $edad  = static function ( string $f ) use ( $hoy ): ?int {
 							<div class="asde-form__columnas">
 								<?php
 								// phpcs:disable WordPress.Security.EscapeOutput -- escapado en $campo.
-								echo $campo( "tutor{$n}_nombre_c", $et['nombre'], 'text', false, ' maxlength="100" autocomplete="off"' );
-								echo $campo( "tutor{$n}_apellidos_c", $et['apellidos'], 'text', false, ' maxlength="100" autocomplete="off"' );
-								echo $campo( "tutor{$n}_email_c", $et['email'], 'email', false, ' maxlength="100" autocomplete="off"' );
-								echo $campo( "tutor{$n}_movil_c", $et['movil'], 'tel', false, ' maxlength="30" autocomplete="off"' );
+								echo wp_kses( $campo( "tutor{$n}_nombre_c", $et['nombre'], 'text', false, ' maxlength="100" autocomplete="off"' ), asde_html_permitido() );
+								echo wp_kses( $campo( "tutor{$n}_apellidos_c", $et['apellidos'], 'text', false, ' maxlength="100" autocomplete="off"' ), asde_html_permitido() );
+								echo wp_kses( $campo( "tutor{$n}_email_c", $et['email'], 'email', false, ' maxlength="100" autocomplete="off"' ), asde_html_permitido() );
+								echo wp_kses( $campo( "tutor{$n}_movil_c", $et['movil'], 'tel', false, ' maxlength="30" autocomplete="off"' ), asde_html_permitido() );
 								// phpcs:enable WordPress.Security.EscapeOutput
 								?>
 							</div>

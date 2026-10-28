@@ -91,7 +91,10 @@ final class CajaView extends TesoreriaBaseView {
 	/** Los apuntes de una caja en Excel (con el periodo elegido). Se llama antes de pintar la página. */
 	public function exportar(): void {
 		$caja = $this->get( 'caja' );
-		if ( ! wp_verify_nonce( $this->get( '_wpnonce' ), 'asde_caja_excel' ) || ! Cajas::puede( $caja ) ) {
+		if ( ! wp_verify_nonce( $this->get( '_wpnonce' ), 'asde_caja_excel' ) ) {
+			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+		}
+		if ( ! Cajas::puede( $caja ) ) {
 			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		$periodo = Periodo::de( $this->get( 'periodo' ) );

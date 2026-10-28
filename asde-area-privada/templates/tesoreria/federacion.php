@@ -121,13 +121,16 @@ $org        = Organizacion::nombre();
 			<p class="asde-help"><?php asde_e( 'Cualquier otro importe que cobre la organización: por asociado, por educando, por adulto o fijo por grupo (p. ej. una cuota de actividades federales o una aportación del grupo).' ); ?></p>
 			<?php
 			// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- plantilla propia del plugin: cada valor se escapa dentro de ella.
-			echo TemplateLoader::render(
+			echo wp_kses(
+				TemplateLoader::render(
 				'comun/conceptos',
 				array(
 					'conceptos' => $fed['conceptos'],
 					'campo'     => 'federacion[conceptos]',
 					'editable'  => $editable,
 				)
+				),
+				asde_html_permitido()
 			);
 			// phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
 			?>

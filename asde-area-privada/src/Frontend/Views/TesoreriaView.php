@@ -277,7 +277,10 @@ final class TesoreriaView extends TesoreriaBaseView {
 	 * totales), petición del usuario.
 	 */
 	public function exportar(): void {
-		if ( ! current_user_can( self::CAP ) || ! wp_verify_nonce( $this->get( '_wpnonce' ), 'asde_tesoreria_csv' ) ) {
+		if ( ! wp_verify_nonce( $this->get( '_wpnonce' ), 'asde_tesoreria_csv' ) ) {
+			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+		}
+		if ( ! current_user_can( self::CAP ) ) {
 			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		$repo = PersonaRepository::make();

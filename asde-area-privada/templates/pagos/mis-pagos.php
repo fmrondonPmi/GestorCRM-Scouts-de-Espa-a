@@ -69,7 +69,8 @@ $fecha = static fn( string $f ) => '' !== $f ? wp_date( 'd/m/Y', strtotime( $f )
 	<?php if ( $s ) : ?>
 		<?php
 		// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- plantilla propia del plugin: cada valor se escapa dentro de ella.
-		echo TemplateLoader::render(
+		echo wp_kses(
+			TemplateLoader::render(
 			'pagos/sepa',
 			array(
 				'familia'  => $c['familia'],
@@ -83,6 +84,8 @@ $fecha = static fn( string $f ) => '' !== $f ? wp_date( 'd/m/Y', strtotime( $f )
 				'texto'    => $sepa['texto'],
 				'url'      => $url,
 			)
+			),
+			asde_html_permitido()
 		);
 		// phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
 		?>

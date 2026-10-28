@@ -158,7 +158,10 @@ final class BancoView extends TesoreriaBaseView {
 	 * filtros del listado; con ?todos=1, de todos los estados. Se llama antes de pintar la página.
 	 */
 	public function exportar(): void {
-		if ( ! current_user_can( self::CAP_CONFIG ) || ! \AsdeBalears\AreaPrivada\Domain\Modulos::activo( \AsdeBalears\AreaPrivada\Domain\Modulos::BANCO ) || ! wp_verify_nonce( $this->get( '_wpnonce' ), 'asde_banco_excel' ) ) {
+		if ( ! wp_verify_nonce( $this->get( '_wpnonce' ), 'asde_banco_excel' ) ) {
+			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+		}
+		if ( ! current_user_can( self::CAP_CONFIG ) || ! \AsdeBalears\AreaPrivada\Domain\Modulos::activo( \AsdeBalears\AreaPrivada\Domain\Modulos::BANCO ) ) {
 			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		$filtros = self::filtros_excel( $_GET ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- el nonce se ha comprobado arriba

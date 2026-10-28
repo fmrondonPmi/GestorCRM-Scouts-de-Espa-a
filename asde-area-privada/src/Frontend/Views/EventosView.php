@@ -337,7 +337,7 @@ final class EventosView extends EventosBaseView {
 			'puede_editar' => MenuEvento::puede_editar( $e, $a ),
 			'puede_partida' => Servicio::puede_editar_presupuesto( $e, $a ),
 			'url_menu'    => $url,
-			'url_csv'     => $this->url( 'eventos', array_filter( array( 'evento' => (string) $e['id'], 'formato' => 'csv', 'dia' => $dia, '_wpnonce' => wp_create_nonce( 'asde_menu_csv_' . $e['id'] ) ) ) ),
+			'url_csv'     => $this->url( 'eventos', array_filter( array( 'evento' => (string) $e['id'], 'formato' => 'csv', 'dia' => $dia, '_wpnonce' => wp_create_nonce( 'asde_menu_csv_' . ( $e['id'] ?? 0 ) ) ) ) ),
 			'url_recetas' => $this->url( 'eventos_recetas' ),
 		);
 	}
@@ -345,7 +345,10 @@ final class EventosView extends EventosBaseView {
 	/** Descarga la lista de la compra del menú (se llama antes de pintar la página). */
 	public function exportar_compra(): void {
 		$e = EventosTable::obtener( (int) $this->get( 'evento' ) );
-		if ( ! $e || ! MenuEvento::puede_ver( $e, Ambito::actual() ) || ! wp_verify_nonce( $this->get( '_wpnonce' ), 'asde_menu_csv_' . $e['id'] ) ) {
+		if ( ! wp_verify_nonce( $this->get( '_wpnonce' ), 'asde_menu_csv_' . ( $e['id'] ?? 0 ) ) ) {
+			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+		}
+		if ( ! $e || ! MenuEvento::puede_ver( $e, Ambito::actual() ) ) {
 			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		$dia = in_array( $this->get( 'dia' ), MenuEvento::dias( $e ), true ) ? $this->get( 'dia' ) : '';

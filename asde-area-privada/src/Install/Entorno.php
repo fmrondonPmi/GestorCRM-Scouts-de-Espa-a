@@ -476,7 +476,7 @@ final class Entorno {
 	}
 
 	public static function litespeed(): bool {
-		$software = isset( $_SERVER['SERVER_SOFTWARE'] ) ? (string) $_SERVER['SERVER_SOFTWARE'] : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput
+		$software = isset( $_SERVER['SERVER_SOFTWARE'] ) ? sanitize_text_field( wp_unslash( $_SERVER['SERVER_SOFTWARE'] ) ) : '';
 		return false !== stripos( $software, 'litespeed' ) || 'litespeed' === PHP_SAPI || isset( $_SERVER['LSWS_EDITION'] );
 	}
 

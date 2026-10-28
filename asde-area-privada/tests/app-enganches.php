@@ -29,8 +29,8 @@ $plugin = (string) file_get_contents( ASDE_AP_DIR . 'src/Plugin.php' );
 $ok( ! str_contains( $plugin, 'Pwa' ) && str_contains( $plugin, 'AppRetirada::register()' ), 'Plugin.php no arranca la PWA; arranca la retirada' );
 $extractor = (string) file_get_contents( ASDE_AP_DIR . 'src/Idiomas/Extractor.php' );
 $ok( ! str_contains( $extractor, 'App móvil' ), 'el extractor de textos ya no tiene el grupo «App móvil» (lo pone la app)' );
-$es = require ASDE_AP_DIR . 'languages/es.php';
-$ok( ! in_array( 'App móvil', $es, true ), 'languages/es.php del principal sin textos de la app' );
+$es = is_readable( ASDE_AP_DIR . 'languages/es.php' ) ? require ASDE_AP_DIR . 'languages/es.php' : array(); // Desde la v0.59.3 los catálogos no van en el paquete.
+$ok( ! in_array( 'App móvil', $es, true ), 'la lista de textos del principal (si la hay) sin textos de la app' );
 
 echo "\n== Parte B · Enganche de plantillas (asde_ap_plantilla) ==\n";
 $falsa = static fn( string $f, string $n ) => 'pwa/prueba-enganche' === $n ? __FILE__ : $f;

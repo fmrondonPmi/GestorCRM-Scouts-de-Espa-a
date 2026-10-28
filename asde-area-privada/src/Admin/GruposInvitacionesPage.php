@@ -91,7 +91,7 @@ final class GruposInvitacionesPage {
 			<?php if ( '' !== $enlace ) : ?>
 				<div class="notice notice-info">
 					<p><strong><?php esc_html_e( 'Enlace de la invitación (solo se muestra ahora):', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></strong></p>
-					<p><input type="text" readonly class="large-text code" value="<?php echo esc_attr( $enlace ); ?>" onfocus="this.select()" aria-label="<?php esc_attr_e( 'Enlace de la invitación', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>"></p>
+					<p><input type="text" readonly class="large-text code" value="<?php echo esc_attr( $enlace ); ?>" aria-label="<?php esc_attr_e( 'Enlace de la invitación', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>"></p>
 				</div>
 			<?php endif; ?>
 			<p><?php esc_html_e( 'Cada enlace sirve una sola vez y vale 14 días. El grupo rellena sus datos, comprueba el acceso al CRM y los envía; después los revisas en «Altas de grupos».', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>

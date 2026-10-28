@@ -51,7 +51,10 @@ final class TiendaProveedorView extends TiendaBaseView {
 	/** El pedido al proveedor en Excel, para enviárselo (se llama antes de pintar la página). */
 	public function exportar(): void {
 		$id = absint( $this->get( 'pedido' ) );
-		if ( ! Proveedor::puede_ver() || ! wp_verify_nonce( $this->get( '_wpnonce' ), 'asde_proveedor_excel_' . $id ) ) {
+		if ( ! wp_verify_nonce( $this->get( '_wpnonce' ), 'asde_proveedor_excel_' . $id ) ) {
+			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+		}
+		if ( ! Proveedor::puede_ver() ) {
 			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		$pp = ProveedorTable::obtener( $id );

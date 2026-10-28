@@ -121,7 +121,10 @@ final class InventarioView extends InventarioBaseView {
 		if ( ! current_user_can( Servicio::CAP ) ) {
 			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
-		if ( ! wp_verify_nonce( $this->get( '_wpnonce' ), 'asde_inventario_errores' ) || ! is_array( $resultado ) ) {
+		if ( ! wp_verify_nonce( $this->get( '_wpnonce' ), 'asde_inventario_errores' ) ) {
+			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+		}
+		if ( ! is_array( $resultado ) ) {
 			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		$filas = array( array_merge( array( asde_t( 'Fila' ) ), array_map( static fn( $c ) => asde_t( $c[0] ), Importador::COLUMNAS ), array( asde_t( 'Motivo del error' ) ) ) );

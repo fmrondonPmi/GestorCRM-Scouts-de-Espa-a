@@ -49,7 +49,7 @@ final class ModulosPage {
 		}
 		check_admin_referer( self::ACCION );
 		$pedidos = isset( $_POST['activos'] ) && is_array( $_POST['activos'] ) ? wp_unslash( $_POST['activos'] ) : array(); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- se sanea abajo: solo números de grupo y claves de módulo conocidos
-		$altas    = isset( $_POST['altas'] ) && is_array( $_POST['altas'] ) ? array_map( 'strval', array_keys( wp_unslash( $_POST['altas'] ) ) ) : array(); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- solo se usan las claves, comparadas con los números de grupo
+		$altas    = isset( $_POST['altas'] ) && is_array( $_POST['altas'] ) ? array_map( 'sanitize_text_field', array_map( 'strval', array_keys( map_deep( wp_unslash( $_POST['altas'] ), 'sanitize_text_field' ) ) ) ) : array();
 		$apagados = array();
 		$con      = array();
 		foreach ( Grupos::todos() as $g ) {

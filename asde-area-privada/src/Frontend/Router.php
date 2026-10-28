@@ -129,7 +129,7 @@ final class Router {
 
 	public function register(): void {
 		foreach ( self::VIEWS as $key => list( $shortcode, $class ) ) {
-			add_shortcode( $shortcode, static fn( $atts = array(), $content = '' ) => self::vista( (string) $key, $class )->render( (string) $content ) );
+			add_shortcode( $shortcode, static fn( $atts = array(), $content = '' ) => wp_kses( self::vista( (string) $key, $class )->render( (string) $content ), asde_html_permitido() ) );
 		}
 		add_action( 'template_redirect', array( $this, 'template_redirect' ), 5 );
 		add_action( 'wp_enqueue_scripts', array( $this, 'assets' ) );
@@ -358,7 +358,7 @@ final class Router {
 		// Colores elegidos en wp-admin → Grupos Scouts → Colores (después del CSS de siempre, para que mande).
 		$colores = Colores::css();
 		if ( '' !== $colores ) {
-			wp_add_inline_style( 'asde-area-privada', $colores );
+			wp_add_inline_style( 'asde-area-privada', wp_strip_all_tags( $colores ) );
 		}
 		// Textos de los JavaScript en el idioma de la persona (asdeT() y asdeI18n).
 		wp_register_script( 'asde-i18n', false, array(), ASDE_AP_VERSION, true );

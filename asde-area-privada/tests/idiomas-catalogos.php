@@ -27,6 +27,14 @@ $ok    = function ( $cond, string $label ) use ( &$fails ) {
 };
 $lista = static fn( array $t, int $n = 5 ): string => implode( ' | ', array_slice( array_map( static fn( $x ) => '«' . $x . '»', $t ), 0, $n ) );
 
+if ( ! is_readable( ASDE_AP_DIR . 'languages/es.php' ) ) {
+	// Desde la v0.59.3 los catálogos no viajan en el paquete (revisión de WordPress.org): están en idiomas-archivo/ del repo.
+	echo "OK   los catálogos no van en el paquete: nada que comprobar
+
+TODO OK (no se ha tocado nada del sitio)
+";
+	return;
+}
 $es = require ASDE_AP_DIR . 'languages/es.php';
 
 echo "== Parte A · La lista de textos (languages/es.php) ==\n";

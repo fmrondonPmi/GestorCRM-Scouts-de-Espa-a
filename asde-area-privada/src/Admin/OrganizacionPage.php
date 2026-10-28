@@ -281,13 +281,16 @@ final class OrganizacionPage {
 							<p class="description"><?php esc_html_e( 'Cualquier otro importe que cobre la organización: por asociado, por educando, por adulto o una vez por grupo.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 							<?php
 							// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- plantilla propia del plugin: cada valor se escapa dentro de ella.
-							echo TemplateLoader::render(
+							echo wp_kses(
+								TemplateLoader::render(
 								'comun/conceptos',
 								array(
 									'conceptos' => $fed['conceptos'],
 									'campo'     => 'federacion[conceptos]',
 									'editable'  => true,
 								)
+								),
+								asde_html_permitido()
 							);
 							// phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
 							?>

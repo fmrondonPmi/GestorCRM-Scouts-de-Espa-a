@@ -209,7 +209,7 @@ $adulto    = $s['adulto'] || ( $p && $p->es_adulto_voluntario() );
 								<fieldset>
 									<legend><?php asde_e( 'Hermanos/as en el grupo (comparten email con la ficha)' ); ?></legend>
 									<?php foreach ( $hermanos as $h ) : ?>
-										<label class="asde-choice"><input type="checkbox" name="hermanos[]" value="<?php echo esc_attr( $h->num_socio_asde ); ?>"><span><?php echo esc_html( $h->nombre_completo() ); ?></span><?php foreach ( $h->secciones as $sec ) { echo Secciones::badge( $sec ); } // phpcs:ignore ?></label>
+										<label class="asde-choice"><input type="checkbox" name="hermanos[]" value="<?php echo esc_attr( $h->num_socio_asde ); ?>"><span><?php echo esc_html( $h->nombre_completo() ); ?></span><?php foreach ( $h->secciones as $sec ) { echo wp_kses( Secciones::badge( $sec ), asde_html_permitido() ); } // phpcs:ignore ?></label>
 									<?php endforeach; ?>
 								</fieldset>
 							</li>

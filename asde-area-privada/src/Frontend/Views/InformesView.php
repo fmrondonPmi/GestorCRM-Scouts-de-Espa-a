@@ -148,7 +148,10 @@ final class InformesView extends View {
 	 */
 	public function exportar( string $formato = 'xlsx' ): void {
 		$formato = in_array( $formato, self::FORMATOS, true ) ? $formato : 'xlsx';
-		if ( ! current_user_can( self::CAP ) || ! wp_verify_nonce( $this->get( '_wpnonce' ), 'asde_informe_descarga' ) ) {
+		if ( ! wp_verify_nonce( $this->get( '_wpnonce' ), 'asde_informe_descarga' ) ) {
+			wp_die( esc_html__( 'Enlace de descarga no válido o caducado. Vuelve a generar el informe.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+		}
+		if ( ! current_user_can( self::CAP ) ) {
 			wp_die( esc_html__( 'Enlace de descarga no válido o caducado. Vuelve a generar el informe.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		$informe = $this->informe_de_la_peticion();
