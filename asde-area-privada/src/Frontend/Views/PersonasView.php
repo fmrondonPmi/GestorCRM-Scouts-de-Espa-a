@@ -39,12 +39,15 @@ final class PersonasView extends View {
 	 */
 	private static ?array $alta = null;
 
-	public const FILTROS = array(
-		'activas'     => 'Con membresía activa',
-		'inactivas'   => 'Sin membresía activa',
-		'todas'       => 'Todas',
-		'incidencias' => 'Activas con incidencias en el nº de socio',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function filtros(): array {
+		return array(
+		'activas'     => __( 'With an active membership', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'inactivas'   => __( 'No active membership', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'todas'       => __( 'All', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'incidencias' => __( 'Active with member number issues', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
 	public function render( string $content = '' ): string {
 		if ( ! current_user_can( self::CAP ) ) {
@@ -60,7 +63,7 @@ final class PersonasView extends View {
 			return $this->layout( 'personas', $this->pantalla_alta() );
 		}
 
-		$filtro = isset( self::FILTROS[ $this->get( 'ver' ) ] ) ? $this->get( 'ver' ) : 'activas';
+		$filtro = isset( self::filtros()[ $this->get( 'ver' ) ] ) ? $this->get( 'ver' ) : 'activas';
 		$q      = mb_strtolower( remove_accents( $this->get( 'q' ) ) );
 
 		try {

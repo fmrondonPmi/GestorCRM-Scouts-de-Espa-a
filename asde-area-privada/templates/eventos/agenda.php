@@ -39,7 +39,7 @@ defined( 'ABSPATH' ) || exit;
 	<form method="get" action="<?php echo esc_url( $url ); ?>" class="asde-filter asde-filter--una-linea">
 		<label for="asde-ev-estado"><?php esc_html_e( 'Show', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 		<select id="asde-ev-estado" name="estado">
-			<?php foreach ( asde_ta( EventosTable::FILTROS ) as $f => $etiqueta ) : ?>
+			<?php foreach ( ( EventosTable::filtros() ) as $f => $etiqueta ) : ?>
 				<option value="<?php echo esc_attr( $f ); ?>" <?php selected( $filtro, $f ); ?>><?php echo esc_html( $etiqueta . ' (' . $cuentas[ $f ] . ')' ); ?></option>
 			<?php endforeach; ?>
 		</select>
@@ -89,7 +89,7 @@ defined( 'ABSPATH' ) || exit;
 							}
 							?>
 						</td>
-						<td data-label="<?php echo esc_attr( esc_attr__( 'Status', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><span class="asde-badge asde-badge--evento-<?php echo esc_attr( $estado ); ?>"><?php echo esc_html( asde_t( EventosTable::ESTADOS[ $estado ] ) ); ?></span></td>
+						<td data-label="<?php echo esc_attr( esc_attr__( 'Status', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><span class="asde-badge asde-badge--evento-<?php echo esc_attr( $estado ); ?>"><?php echo esc_html( ( EventosTable::estados()[ $estado ] ) ); ?></span></td>
 						<td data-label="<?php echo esc_attr( esc_attr__( 'Price', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
 							<?php if ( ! $e['con_coste'] ) : ?>
 								<span class="asde-muted"><?php esc_html_e( 'No cost', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span>

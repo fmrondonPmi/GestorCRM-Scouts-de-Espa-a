@@ -36,8 +36,8 @@ $ocultos = static function ( string $accion ) use ( $f, $nonce ): void {
 	wp_nonce_field( $nonce );
 	echo '<input type="hidden" name="asde_action" value="' . esc_attr( $accion ) . '"><input type="hidden" name="inscripcion" value="' . (int) $f['id'] . '">';
 };
-$estados = asde_ta( Inscripciones::ESTADOS );
-$medios  = asde_ta( Inscripciones::MEDIOS );
+$estados = ( Inscripciones::estados() );
+$medios  = ( Inscripciones::medios() );
 ?>
 <p class="asde-back"><a href="<?php echo esc_url( $volver ); ?>"><?php esc_html_e( '← Waiting list', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a></p>
 <?php if ( Inscripciones::ASOCIADA === $f['estado'] ) : // Doc 59, RC-NUE-1: ya no tiene datos; solo su nº de socio/a y la fecha. ?>

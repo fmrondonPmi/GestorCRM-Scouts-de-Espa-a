@@ -77,7 +77,7 @@ add_filter( 'pre_http_request', $cortar_crm, 2, 3 );
 $P   = array( 'Asde_Prueba_Crm', 'persona' );
 $crm = new Asde_Prueba_Crm( array( $P( 71, 'Ana', 'Material Gil', '1990-01-01', 'Scouters' ), $P( 72, 'Tom', 'Material Luz', '1985-05-05', 'Scouters' ) ), $grupo['crm_id'] );
 Grupo::forzar( $grupo );
-\AsdeBalears\AreaPrivada\Domain\Modulos::guardar( (string) $grupo['numero'], array_keys( \AsdeBalears\AreaPrivada\Domain\Modulos::LISTA ) );
+\AsdeBalears\AreaPrivada\Domain\Modulos::guardar( (string) $grupo['numero'], array_keys( \AsdeBalears\AreaPrivada\Domain\Modulos::lista() ) );
 $crm->activar();
 Escritura::usar_para_pruebas( $crm );
 

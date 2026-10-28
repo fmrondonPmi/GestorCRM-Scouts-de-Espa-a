@@ -53,10 +53,10 @@ final class HistorialPagos {
 					/* translators: 1: importe, 2: nombre del evento */
 					$que = /* translators: 1: text, 2: text */ __( 'Scholarship or adjustment of %1$s · event "%2$s"', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				}
-				$forma   = EventoMovimientos::FORMAS[ $m['forma'] ] ?? '';
+				$forma   = EventoMovimientos::formas()[ $m['forma'] ] ?? '';
 				$detalle = trim(
 					wp_date( 'd/m/Y', strtotime( $m['fecha'] . ' 12:00' ) )
-					. ( '' !== $forma ? ' · ' . asde_t( $forma ) : '' )
+					. ( '' !== $forma ? ' · ' . asde_guardado( $forma ) : '' )
 					. ( '' !== trim( $m['referencia'] . $m['nota'] ) ? ' · ' . trim( $m['referencia'] . ( $m['referencia'] && $m['nota'] ? ' · ' : '' ) . $m['nota'] ) : '' )
 				);
 				$base = array(
@@ -113,7 +113,7 @@ final class HistorialPagos {
 			if ( empty( $p['pago_en'] ) ) {
 				continue;
 			}
-			$metodo = PedidosTable::METODOS[ $p['pago_metodo'] ] ?? '';
+			$metodo = PedidosTable::metodos()[ $p['pago_metodo'] ] ?? '';
 			/* translators: 1: importe, 2: nº del pedido */
 			$que = sprintf( /* translators: 1: text, 2: text */ __( 'Payment of %1$s · uniform order %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Calculadora::euros( (float) ( $p['pago_importe'] ?? $p['total'] ) ), PedidosTable::numero( $p ) );
 			$out[] = array(
@@ -124,7 +124,7 @@ final class HistorialPagos {
 				'quien'   => (int) $p['pago_por'],
 				'detalle' => trim(
 					( $p['pago_fecha'] ? wp_date( 'd/m/Y', strtotime( $p['pago_fecha'] . ' 12:00' ) ) : '' )
-					. ( '' !== $metodo ? ' · ' . asde_t( $metodo ) : '' )
+					. ( '' !== $metodo ? ' · ' . asde_guardado( $metodo ) : '' )
 					. ( '' !== (string) $p['pago_ref'] ? ' · ' . $p['pago_ref'] : '' ),
 					' ·'
 				),

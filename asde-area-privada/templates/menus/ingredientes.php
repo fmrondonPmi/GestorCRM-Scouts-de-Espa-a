@@ -37,21 +37,21 @@ $e = $edicion ?: array( 'id' => 0, 'nombre' => '', 'unidad' => 'g', 'alergenos' 
 		<p>
 			<label for="asde-ing-uni"><?php esc_html_e( 'Usual unit', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 			<select id="asde-ing-uni" name="unidad">
-				<?php foreach ( Escalado::UNIDADES as $k => $u ) : ?>
-					<option value="<?php echo esc_attr( $k ); ?>" <?php selected( $e['unidad'], $k ); ?>><?php echo esc_html( asde_t( $u[0] ) ); ?></option>
+				<?php foreach ( Escalado::unidades() as $k => $u ) : ?>
+					<option value="<?php echo esc_attr( $k ); ?>" <?php selected( $e['unidad'], $k ); ?>><?php echo esc_html(  $u[0]  ); ?></option>
 				<?php endforeach; ?>
 			</select>
 		</p>
 		<fieldset>
 			<legend><?php esc_html_e( 'Contains', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></legend>
-			<?php foreach ( Alergenos::LISTA as $k => $n ) : ?>
-				<label class="asde-choice asde-choice--inline"><input type="checkbox" name="alergenos[]" value="<?php echo esc_attr( $k ); ?>" <?php checked( in_array( $k, $e['alergenos'], true ) ); ?>><span><?php echo esc_html( asde_t( $n ) ); ?></span></label>
+			<?php foreach ( Alergenos::lista() as $k => $n ) : ?>
+				<label class="asde-choice asde-choice--inline"><input type="checkbox" name="alergenos[]" value="<?php echo esc_attr( $k ); ?>" <?php checked( in_array( $k, $e['alergenos'], true ) ); ?>><span><?php echo esc_html(  $n  ); ?></span></label>
 			<?php endforeach; ?>
 		</fieldset>
 		<fieldset>
 			<legend><?php esc_html_e( 'May contain traces of', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></legend>
-			<?php foreach ( Alergenos::LISTA as $k => $n ) : ?>
-				<label class="asde-choice asde-choice--inline"><input type="checkbox" name="trazas[]" value="<?php echo esc_attr( $k ); ?>" <?php checked( in_array( $k, $e['trazas'], true ) ); ?>><span><?php echo esc_html( asde_t( $n ) ); ?></span></label>
+			<?php foreach ( Alergenos::lista() as $k => $n ) : ?>
+				<label class="asde-choice asde-choice--inline"><input type="checkbox" name="trazas[]" value="<?php echo esc_attr( $k ); ?>" <?php checked( in_array( $k, $e['trazas'], true ) ); ?>><span><?php echo esc_html(  $n  ); ?></span></label>
 			<?php endforeach; ?>
 		</fieldset>
 		<label class="asde-choice"><input type="checkbox" name="animal" value="1" <?php checked( $e['animal'] ); ?>><span><?php esc_html_e( 'It is of animal origin (meat, fish, eggs, dairy, honey…)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span></label>
@@ -86,7 +86,7 @@ $e = $edicion ?: array( 'id' => 0, 'nombre' => '', 'unidad' => 'g', 'alergenos' 
 				<?php $comun = IngredientesTable::COMUN === $i['grupo']; ?>
 				<tr<?php echo $i['activo'] ? '' : ' class="asde-fila--cancelada"'; ?>>
 					<td data-label="<?php echo esc_attr( esc_attr__( 'Ingredient', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
-						<?php echo esc_html( $comun ? asde_t( $i['nombre'] ) : $i['nombre'] ); ?>
+						<?php echo esc_html( $comun ? asde_guardado( $i['nombre'] ) : $i['nombre'] ); ?>
 						<?php echo wp_kses( $comun ? ' <span class="asde-badge">' . esc_html( __( 'Library', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) . '</span>' : '', asde_html_permitido() ); ?>
 						<?php echo wp_kses( ! $i['revisado'] ? ' <span class="asde-badge asde-badge--pago-parcial">' . esc_html( __( 'Not reviewed', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) . '</span>' : '', asde_html_permitido() ); ?>
 						<?php echo wp_kses( $i['animal'] ? ' <span class="asde-muted">' . esc_html( __( '(animal origin)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) . '</span>' : '', asde_html_permitido() ); ?>

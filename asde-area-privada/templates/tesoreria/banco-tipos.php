@@ -17,8 +17,8 @@ defined( 'ABSPATH' ) || exit;
 $aqui       = add_query_arg( array_filter( array( 'tipos' => '1', 'volver' => '' !== $volver ? rawurlencode( $volver ) : '' ) ), $url );
 $naturaleza = static function ( string $nombre, string $actual, string $id ): string {
 	$h = '<select name="' . esc_attr( $nombre ) . '" id="' . esc_attr( $id ) . '">';
-	foreach ( TiposMovimiento::NATURALEZAS as $k => $etiqueta ) {
-		$h .= '<option value="' . esc_attr( $k ) . '"' . selected( $actual, $k, false ) . '>' . esc_html( asde_t( $etiqueta ) ) . '</option>';
+	foreach ( TiposMovimiento::naturalezas() as $k => $etiqueta ) {
+		$h .= '<option value="' . esc_attr( $k ) . '"' . selected( $actual, $k, false ) . '>' . esc_html(  $etiqueta  ) . '</option>';
 	}
 	return $h . '</select>';
 };

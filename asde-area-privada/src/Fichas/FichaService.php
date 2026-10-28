@@ -49,7 +49,7 @@ final class FichaService {
 	 * opción. Si el CRM ya tiene otro texto, se conserva como «valor actual».
 	 */
 	public static function con_opciones( string $campo, array $meta, string $valor ): array {
-		$opciones = CamposFicha::OPCIONES[ $campo ] ?? null;
+		$opciones = CamposFicha::opciones()[ $campo ] ?? null;
 		if ( ! $opciones || ! $meta ) {
 			return $meta;
 		}

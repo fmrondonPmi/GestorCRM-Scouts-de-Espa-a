@@ -33,7 +33,7 @@ $fecha    = static fn( ?string $f ) => $f ? wp_date( 'd/m/Y', strtotime( $f . ( 
 $lote     = current_user_can( Servicio::CAP_PEDIDO );
 $marca    = static fn( bool $si, string $detalle = '' ) => $si ? '<span class="asde-check" title="' . esc_attr( $detalle ) . '">✓</span>' . ( '' !== $detalle ? ' <span class="asde-muted">' . esc_html( $detalle ) . '</span>' : '' ) : '<span class="asde-muted">—</span>';
 $entregar = array();
-$ref      = static fn( string $r ): string => PedidosTable::REF_INVENTARIO === $r ? asde_t( PedidosTable::REF_INVENTARIO ) : $r;
+$ref      = static fn( string $r ): string => PedidosTable::REF_INVENTARIO === $r ? asde_guardado( PedidosTable::REF_INVENTARIO ) : $r;
 // Resumen de arriba: «1 pendiente de entregar», «2 pendientes de entregar».
 $singular = array(
 	PedidosTable::SIN_PAGAR     => __( 'pending payment', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
@@ -58,7 +58,7 @@ $singular = array(
 	</p>
 	<ul class="asde-resumen">
 		<?php foreach ( $singular as $f => $uno ) : ?>
-			<li><a href="<?php echo esc_url( add_query_arg( 'estado', $f, $url ) ); ?>"<?php echo $f === $filtro ? ' aria-current="true"' : ''; ?>><strong><?php echo (int) $cuentas[ $f ]; ?></strong> <?php echo esc_html( 1 === (int) $cuentas[ $f ] ? $uno : mb_strtolower( asde_t( PedidosTable::FILTROS[ $f ] ) ) ); ?></a></li>
+			<li><a href="<?php echo esc_url( add_query_arg( 'estado', $f, $url ) ); ?>"<?php echo $f === $filtro ? ' aria-current="true"' : ''; ?>><strong><?php echo (int) $cuentas[ $f ]; ?></strong> <?php echo esc_html( 1 === (int) $cuentas[ $f ] ? $uno : mb_strtolower( ( PedidosTable::filtros()[ $f ] ) ) ); ?></a></li>
 		<?php endforeach; ?>
 		<li><strong><?php echo esc_html( Calculadora::euros( $cobrado ) ); ?></strong> <?php esc_html_e( 'collected ·', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <strong><?php echo esc_html( Calculadora::euros( $pendiente ) ); ?></strong> <?php esc_html_e( 'to collect', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></li>
 	</ul>
@@ -67,7 +67,7 @@ $singular = array(
 	<form method="get" action="<?php echo esc_url( $url ); ?>" class="asde-filter asde-filter--una-linea" data-asde-parcial-form="uniformes-lista">
 		<label for="asde-uni-estado"><?php esc_html_e( 'Show', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 		<select id="asde-uni-estado" name="estado" data-asde-autoenviar>
-			<?php foreach ( asde_ta( PedidosTable::FILTROS ) as $f => $etiqueta ) : ?>
+			<?php foreach ( ( PedidosTable::filtros() ) as $f => $etiqueta ) : ?>
 				<option value="<?php echo esc_attr( $f ); ?>" <?php selected( $filtro, $f ); ?>><?php echo esc_html( $etiqueta . ' (' . $cuentas[ $f ] . ')' ); ?></option>
 			<?php endforeach; ?>
 		</select>
@@ -142,7 +142,7 @@ $singular = array(
 							<?php if ( ! $activo ) : ?>
 								<td data-label="<?php echo esc_attr( esc_attr__( 'Status', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>" colspan="4"><span class="asde-badge asde-badge--uniforme-cancelado"><?php esc_html_e( 'Cancelled', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span> <span class="asde-muted"><?php echo esc_html( $p['cancelado_motivo'] ); ?></span></td>
 							<?php else : ?>
-								<td data-label="<?php echo esc_attr( esc_attr__( 'Paid', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo wp_kses( $marca( null !== $p['pago_en'], null !== $p['pago_en'] ? ( esc_html( asde_t( PedidosTable::METODOS[ $p['pago_metodo'] ] ?? '' ) ) ) . ' ' . $fecha( $p['pago_fecha'] ) : '' ), asde_html_permitido() ); ?><?php echo null === $p['pago_en'] && Servicio::puede_pagar( $p ) ? ' <a href="' . esc_url( $detalle ) . '" data-asde-modal>Validar</a>' : ''; ?></td>
+								<td data-label="<?php echo esc_attr( esc_attr__( 'Paid', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo wp_kses( $marca( null !== $p['pago_en'], null !== $p['pago_en'] ? ( esc_html( ( PedidosTable::metodos()[ $p['pago_metodo'] ] ?? '' ) ) ) . ' ' . $fecha( $p['pago_fecha'] ) : '' ), asde_html_permitido() ); ?><?php echo null === $p['pago_en'] && Servicio::puede_pagar( $p ) ? ' <a href="' . esc_url( $detalle ) . '" data-asde-modal>Validar</a>' : ''; ?></td>
 								<td data-label="<?php echo esc_attr( esc_attr__( 'In the order', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo wp_kses( $marca( null !== $p['pedido_en'], null !== $p['pedido_en'] ? $ref( $p['pedido_ref'] ) : '' ), asde_html_permitido() ); ?></td>
 								<td data-label="<?php echo esc_attr( esc_attr__( 'Delivered', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
 									<?php if ( null !== $p['entregado_en'] ) : ?>

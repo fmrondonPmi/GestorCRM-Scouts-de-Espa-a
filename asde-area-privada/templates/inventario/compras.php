@@ -42,7 +42,7 @@ $fecha = static fn( ?string $f ) => $f ? wp_date( 'd/m/Y', (int) strtotime( $f .
 		<label for="asde-inv-estado"><?php esc_html_e( 'Show', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 		<select id="asde-inv-estado" name="estado" data-asde-autoenviar>
 			<option value=""><?php echo esc_html( __( 'All', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . ' (' . $total . ')' ); ?></option>
-			<?php foreach ( asde_ta( ComprasTable::ESTADOS ) as $e => $etiqueta ) : ?>
+			<?php foreach ( ( ComprasTable::estados() ) as $e => $etiqueta ) : ?>
 				<option value="<?php echo esc_attr( $e ); ?>" <?php selected( $estado, $e ); ?>><?php echo esc_html( $etiqueta . ' (' . $cuenta[ $e ] . ')' ); ?></option>
 			<?php endforeach; ?>
 		</select>
@@ -74,7 +74,7 @@ $fecha = static fn( ?string $f ) => $f ? wp_date( 'd/m/Y', (int) strtotime( $f .
 						<td data-label="<?php echo esc_attr( esc_attr__( 'Equipment items', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>" class="asde-num"><?php echo (int) count( $l['lineas'] ); ?></td>
 						<td data-label="<?php echo esc_attr( esc_attr__( 'Estimated total', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>" class="asde-num"><?php echo esc_html( InventarioComprasView::total( $l ) ); ?></td>
 						<td data-label="<?php echo esc_attr( esc_attr__( 'Status', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
-							<span class="asde-badge asde-badge--compra-<?php echo esc_attr( $l['estado'] ); ?>"><?php echo esc_html( asde_t( ComprasTable::ESTADOS[ $l['estado'] ] ?? $l['estado'] ) ); ?></span>
+							<span class="asde-badge asde-badge--compra-<?php echo esc_attr( $l['estado'] ); ?>"><?php echo esc_html( ( ComprasTable::estados()[ $l['estado'] ] ?? $l['estado'] ) ); ?></span>
 							<?php if ( '' !== $l['motivo'] ) : ?>
 								<br><span class="asde-muted"><?php echo esc_html( $l['motivo'] ); ?></span>
 							<?php endif; ?>

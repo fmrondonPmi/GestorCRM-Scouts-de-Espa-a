@@ -235,13 +235,13 @@ try {
 	$ok( Modulos::activo( Modulos::INVENTARIO, (string) $grupo['numero'] ), 'los demás módulos siguen activos por defecto' );
 	$h = $ver( new InscripcionEsperaView(), array( 'grupo' => $grupo['id'], 'clave' => Enlaces::clave( $grupo ) ) );
 	$ok( str_contains( $h, 'Este enlace no es válido' ) && ! str_contains( $h, 'name="nombre"' ), 'con el módulo apagado, el enlace del grupo no enseña el formulario' );
-	Modulos::guardar( (string) $grupo['numero'], array_keys( Modulos::LISTA ) );
+	Modulos::guardar( (string) $grupo['numero'], array_keys( Modulos::lista() ) );
 	$como( $u_sco );
 	$ok( true === ( Modulos::apagados()[ $grupo['numero'] ][ Modulos::LISTA_ESPERA ] ?? null ) && Modulos::activo( Modulos::LISTA_ESPERA, (string) $grupo['numero'] ) && current_user_can( 'asde_lista_espera' ) && ! current_user_can( 'asde_lista_espera_alta' ), 'encendido en Módulos: el scouter ve la lista, pero no da de alta' );
 	$ok( isset( Menu::grupos( Ambito::actual() )[ Menu::GESTION ]['items']['lista_espera'] ), 'y le sale en el menú' );
-	Modulos::guardar( (string) $grupo['numero'], array_diff( array_keys( Modulos::LISTA ), array( Modulos::INVENTARIO ) ) );
+	Modulos::guardar( (string) $grupo['numero'], array_diff( array_keys( Modulos::lista() ), array( Modulos::INVENTARIO ) ) );
 	$ok( ! Modulos::activo( Modulos::INVENTARIO, (string) $grupo['numero'] ) && Modulos::activo( Modulos::LISTA_ESPERA, (string) $grupo['numero'] ), 'apagar otro módulo no apaga la lista de espera' );
-	Modulos::guardar( (string) $grupo['numero'], array_keys( Modulos::LISTA ) );
+	Modulos::guardar( (string) $grupo['numero'], array_keys( Modulos::lista() ) );
 
 	echo "\n== B · Validación del formulario ==\n";
 	$r = Formulario::validar( array() );
@@ -487,7 +487,7 @@ try {
 
 	$sin_limite();
 	echo "\n== H · Campos propios del formulario (v0.38) ==\n";
-	Modulos::guardar( (string) $grupo['numero'], array_keys( Modulos::LISTA ) );
+	Modulos::guardar( (string) $grupo['numero'], array_keys( Modulos::lista() ) );
 	$num = (string) $grupo['numero'];
 	$como( $u_sco );
 	$campos_scouter = array( 'asde_action' => 'espera_campos', 'campo' => array( array( 'id' => '', 'etiqueta' => 'Cosa del scouter', 'tipo' => 'texto', 'obligatorio' => '0' ) ) );

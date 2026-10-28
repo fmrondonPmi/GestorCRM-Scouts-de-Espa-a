@@ -65,61 +65,64 @@ final class Config {
 	 *   y 10 o más menores (P-154 bis); 'no' = nunca (lo organiza otro, o son adultos);
 	 * - crm: `type` de stic_Events para la copia al CRM (última fase).
 	 */
-	public const TIPOS = array(
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function tipos(): array {
+		return array(
 		'salida'     => array(
-			'nombre'       => 'Salida o excursión',
+			'nombre'       => __( 'Outing or excursion', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 			'coste'        => false,
 			'comunicacion' => 'auto',
 			'crm'          => 'jornada',
 		),
 		'acampada'   => array(
-			'nombre'       => 'Acampada',
+			'nombre'       => __( 'Camp', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 			'coste'        => true,
 			'comunicacion' => 'auto',
 			'crm'          => 'campamento',
 		),
 		'campamento' => array(
-			'nombre'       => 'Campamento',
+			'nombre'       => __( 'Camp', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 			'coste'        => true,
 			'comunicacion' => 'auto',
 			'crm'          => 'campamento',
 		),
 		'ruta'       => array(
-			'nombre'       => 'Ruta o travesía',
+			'nombre'       => __( 'Route or trek', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 			'coste'        => true,
 			'comunicacion' => 'auto',
 			'crm'          => 'campamento',
 		),
 		'grupo'      => array(
-			'nombre'       => 'Actividad de grupo',
+			'nombre'       => __( 'Group activity', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 			'coste'        => false,
 			'comunicacion' => 'auto',
 			'crm'          => 'jornada',
 		),
 		'servicio'   => array(
-			'nombre'       => 'Servicio o voluntariado',
+			'nombre'       => __( 'Service or volunteering', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 			'coste'        => false,
 			'comunicacion' => 'auto',
 			'crm'          => 'jornada',
 		),
 		'externo'    => array(
-			'nombre'       => 'Evento externo',
+			'nombre'       => __( 'External event', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 			'coste'        => true,
 			'comunicacion' => 'no',
 			'crm'          => 'festivalof',
 		),
 		'formacion'  => array(
-			'nombre'       => 'Formación',
+			'nombre'       => __( 'Training', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 			'coste'        => false,
 			'comunicacion' => 'no',
 			'crm'          => 'Curso',
 		),
 	);
+	}
 
 	/** @return array{tipos:array, margen_activo:bool, margen_pct:float, titulaciones:array{director:string[], monitor:string[]}} */
 	public static function defaults(): array {
 		$tipos = array();
-		foreach ( self::TIPOS as $id => $t ) {
+		foreach ( self::tipos() as $id => $t ) {
 			$tipos[ $id ] = $t + array( 'activo' => true );
 		}
 		return array(
@@ -166,7 +169,7 @@ final class Config {
 				'nombre'       => mb_substr( (string) $t['nombre'], 0, 60 ),
 				'coste'        => ! empty( $t['coste'] ),
 				'comunicacion' => 'no' === ( $t['comunicacion'] ?? '' ) ? 'no' : 'auto',
-				'crm'          => mb_substr( (string) ( $t['crm'] ?? ( self::TIPOS[ $id ]['crm'] ?? 'jornada' ) ), 0, 30 ),
+				'crm'          => mb_substr( (string) ( $t['crm'] ?? ( self::tipos()[ $id ]['crm'] ?? 'jornada' ) ), 0, 30 ),
 				'activo'       => ! isset( $t['activo'] ) || (bool) $t['activo'],
 			);
 		}
@@ -226,7 +229,7 @@ final class Config {
 
 	/** El texto de la autorización que se enseña y se firma: el del grupo o, si no tiene, el del plugin (traducido). */
 	public static function autorizacion( array $cfg ): string {
-		return '' !== trim( $cfg['autorizacion_texto'] ) ? $cfg['autorizacion_texto'] : asde_t( self::AUTORIZACION );
+		return '' !== trim( $cfg['autorizacion_texto'] ) ? $cfg['autorizacion_texto'] : asde_guardado( self::AUTORIZACION );
 	}
 
 	/** Versión que se guarda con cada firma: «v3» (o «v3-propio» si el grupo ha escrito el suyo). */
@@ -255,7 +258,7 @@ final class Config {
 
 	/** Nombre de un tipo, también de uno que ya no está en la configuración. */
 	public static function nombre_tipo( array $cfg, string $tipo ): string {
-		return isset( $cfg['tipos'][ $tipo ] ) ? asde_t( $cfg['tipos'][ $tipo ]['nombre'] ) : $tipo;
+		return isset( $cfg['tipos'][ $tipo ] ) ? asde_guardado( $cfg['tipos'][ $tipo ]['nombre'] ) : $tipo;
 	}
 
 	/** Identificador para un tipo nuevo a partir de su nombre. */

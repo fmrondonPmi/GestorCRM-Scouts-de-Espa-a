@@ -133,7 +133,7 @@ $texto_autorizacion = static function ( array $e, string $nombre ) use ( $autori
 						<strong><?php echo esc_html( $familia ? $p->nombre_completo() : sprintf( /* translators: %s: text */ __( '%s (you)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $p->nombre_completo() ) ); ?></strong>
 						<?php echo wp_kses( $seccion ? Secciones::badge( $seccion ) : '', asde_html_permitido() ); ?>
 						<?php if ( '' !== $estado ) : ?>
-							<span class="asde-badge asde-badge--inscripcion-<?php echo esc_attr( $estado ); ?>"><?php echo esc_html( asde_t( InscripcionesTable::ESTADOS[ $estado ] ?? $estado ) ); ?></span>
+							<span class="asde-badge asde-badge--inscripcion-<?php echo esc_attr( $estado ); ?>"><?php echo esc_html( ( InscripcionesTable::estados()[ $estado ] ?? $estado ) ); ?></span>
 						<?php endif; ?>
 					</p>
 
@@ -214,7 +214,7 @@ $texto_autorizacion = static function ( array $e, string $nombre ) use ( $autori
 									<?php foreach ( array( 'transporte_ida' => __( 'Outward', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 'transporte_vuelta' => __( 'Return', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) as $k => $etiqueta ) : ?>
 										<label><?php echo esc_html( $etiqueta ); ?>
 											<select name="<?php echo esc_attr( $k ); ?>">
-												<?php foreach ( asde_ta( InscripcionesTable::TRANSPORTES ) as $t => $txt ) : ?>
+												<?php foreach ( ( InscripcionesTable::transportes() ) as $t => $txt ) : ?>
 													<option value="<?php echo esc_attr( $t ); ?>"<?php selected( (string) ( $v[ $k ] ?? 'grupo' ), $t ); ?>><?php echo esc_html( $txt ); ?></option>
 												<?php endforeach; ?>
 											</select>

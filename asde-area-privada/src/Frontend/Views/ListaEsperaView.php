@@ -45,7 +45,7 @@ final class ListaEsperaView extends View {
 		}
 		$todas   = Inscripciones::listado();
 		$estado  = $this->get( 'estado' );
-		$estado  = '' === $estado || ( self::ACTIVAS !== $estado && 'todas' !== $estado && ! isset( Inscripciones::ESTADOS[ $estado ] ) ) ? self::ACTIVAS : $estado;
+		$estado  = '' === $estado || ( self::ACTIVAS !== $estado && 'todas' !== $estado && ! isset( Inscripciones::estados()[ $estado ] ) ) ? self::ACTIVAS : $estado;
 		$seccion = sanitize_key( $this->get( 'seccion' ) );
 		// Orden de llegada dentro de cada sección, solo entre las que siguen en la lista.
 		$orden = array();

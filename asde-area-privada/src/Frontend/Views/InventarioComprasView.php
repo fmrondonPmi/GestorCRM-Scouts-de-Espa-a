@@ -45,9 +45,9 @@ final class InventarioComprasView extends InventarioBaseView {
 		}
 
 		$todas  = ComprasTable::todas();
-		$estado = isset( ComprasTable::ESTADOS[ $this->get( 'estado' ) ] ) ? $this->get( 'estado' ) : '';
+		$estado = isset( ComprasTable::estados()[ $this->get( 'estado' ) ] ) ? $this->get( 'estado' ) : '';
 		$cuenta = array();
-		foreach ( array_keys( ComprasTable::ESTADOS ) as $e ) {
+		foreach ( array_keys( ComprasTable::estados() ) as $e ) {
 			$cuenta[ $e ] = count( array_filter( $todas, static fn( $l ) => $e === $l['estado'] ) );
 		}
 		return $this->layout(

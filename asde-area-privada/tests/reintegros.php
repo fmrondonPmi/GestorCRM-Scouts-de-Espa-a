@@ -87,7 +87,7 @@ $crm = new Asde_Prueba_Crm(
 );
 Grupo::forzar( $grupo );
 $crm->activar();
-Modulos::guardar( (string) $grupo['numero'], array_merge( array_keys( Modulos::LISTA ) ) ); // Todos encendidos (también Eventos y Reintegros).
+Modulos::guardar( (string) $grupo['numero'], array_merge( array_keys( Modulos::lista() ) ) ); // Todos encendidos (también Eventos y Reintegros).
 
 $ids   = array();
 $crear = static function ( string $login, array $roles, array $meta, string $email = '' ) use ( &$ids, $grupo ): int {
@@ -176,10 +176,10 @@ try {
 	$ok( ! current_user_can( Servicio::CAP_PEDIR ) && ! Servicio::ve_todos() && str_contains( ( new ReintegrosView() )->render(), 'No tienes acceso' ), 'una familia no pide ni ve reintegros' );
 	$como( $u_sc );
 	$ok( isset( Menu::plano( Ambito::actual() )['reintegros'] ), 'el scouter tiene «Reintegros» en el menú' );
-	Modulos::guardar( (string) $grupo['numero'], array_diff( array_keys( Modulos::LISTA ), array( Modulos::REINTEGROS ) ) );
+	Modulos::guardar( (string) $grupo['numero'], array_diff( array_keys( Modulos::lista() ), array( Modulos::REINTEGROS ) ) );
 	$como( $u_sc );
 	$ok( ! current_user_can( Servicio::CAP_PEDIR ) && is_wp_error( Servicio::solicitar( $valido, $fichero ) ), 'con el módulo apagado nadie pide reintegros' );
-	Modulos::guardar( (string) $grupo['numero'], array_keys( Modulos::LISTA ) );
+	Modulos::guardar( (string) $grupo['numero'], array_keys( Modulos::lista() ) );
 	$como( $u_sc );
 
 	echo "\n== Parte B · Pedir: lo que se comprueba ==\n";

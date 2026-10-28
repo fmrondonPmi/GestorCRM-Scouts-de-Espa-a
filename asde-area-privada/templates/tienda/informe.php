@@ -101,7 +101,7 @@ $fecha = static fn( string $f ): string => wp_date( 'd/m/Y', strtotime( $f . ' U
 			<tbody>
 				<?php foreach ( $formas as $forma => $d ) : ?>
 					<tr>
-						<td data-label="<?php echo esc_attr( esc_attr__( 'Payment method', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( '' !== $forma ? asde_t( PedidosTable::FORMAS[ $forma ] ) : __( 'Not stated', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?></td>
+						<td data-label="<?php echo esc_attr( esc_attr__( 'Payment method', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( '' !== $forma ? ( PedidosTable::formas()[ $forma ] ) : __( 'Not stated', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?></td>
 						<td data-label="<?php echo esc_attr( esc_attr__( 'Orders', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo (int) $d['pedidos']; ?></td>
 						<td data-label="<?php echo esc_attr( esc_attr__( 'Amount', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( Calculadora::euros( $d['total'] ) ); ?></td>
 						<td data-label="<?php echo esc_attr( esc_attr__( 'Collected', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( Calculadora::euros( $d['cobrado'] ) ); ?></td>
@@ -145,7 +145,7 @@ $fecha = static fn( string $f ): string => wp_date( 'd/m/Y', strtotime( $f . ' U
 					<tr>
 						<td data-label="<?php echo esc_attr( esc_attr__( 'Order', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><a href="<?php echo esc_url( add_query_arg( 'pedido', $p['id'], $url ) ); ?>" data-asde-modal><?php echo esc_html( PedidosTable::numero( $p ) ); ?></a><br><span class="asde-muted"><?php echo esc_html( $fecha( $p['creado'] ) ); ?></span></td>
 						<td data-label="<?php echo esc_attr( esc_attr__( 'Who', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( Servicio::comprador( $p, $personas[ $p['socio'] ] ?? null ) ); ?></td>
-						<td data-label="<?php echo esc_attr( esc_attr__( 'Payment method', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( asde_t( PedidosTable::FORMAS[ $p['forma_pago'] ] ?? 'Sin indicar' ) ); ?></td>
+						<td data-label="<?php echo esc_attr( esc_attr__( 'Payment method', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( ( PedidosTable::formas()[ $p['forma_pago'] ] ?? 'Sin indicar' ) ); ?></td>
 						<td data-label="<?php echo esc_attr( esc_attr__( 'Days waiting', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo (int) $p['dias']; ?></td>
 						<td data-label="<?php echo esc_attr( esc_attr__( 'Amount', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( Calculadora::euros( Servicio::importe_a_cobrar( $p ) ) ); ?></td>
 					</tr>

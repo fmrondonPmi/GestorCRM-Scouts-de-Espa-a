@@ -21,30 +21,36 @@ final class TiposMovimiento {
 	public const INGRESO = 'ingreso';
 	public const AMBOS   = 'ambos';
 
-	public const NATURALEZAS = array(
-		self::GASTO   => 'Gasto',
-		self::INGRESO => 'Ingreso',
-		self::AMBOS   => 'Gasto o ingreso',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function naturalezas(): array {
+		return array(
+		self::GASTO   => __( 'Expense', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::INGRESO => __( 'Income', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::AMBOS   => __( 'Expense or income', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
 	/** Los de partida (se crean una sola vez por grupo; si se borran, no vuelven). */
-	public const INICIALES = array(
-		array( 'Material y equipamiento', self::GASTO ),
-		array( 'Actividades y campamentos', self::GASTO ),
-		array( 'Alimentación', self::GASTO ),
-		array( 'Transporte', self::GASTO ),
-		array( 'Local: alquiler y suministros', self::GASTO ),
-		array( 'Seguros', self::GASTO ),
-		array( 'Cuotas federativas', self::GASTO ),
-		array( 'Uniformes e insignias', self::GASTO ),
-		array( 'Comisiones bancarias', self::GASTO ),
-		array( 'Otros gastos', self::GASTO ),
-		array( 'Donativos', self::INGRESO ),
-		array( 'Subvenciones', self::INGRESO ),
-		array( 'Lotería y rifas', self::INGRESO ),
-		array( 'Otros ingresos', self::INGRESO ),
-		array( 'Devoluciones', self::AMBOS ),
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function iniciales(): array {
+		return array(
+		array( __( 'Equipment and gear', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), self::GASTO ),
+		array( __( 'Activities and summer camps', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), self::GASTO ),
+		array( __( 'Food', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), self::GASTO ),
+		array( __( 'Transport', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), self::GASTO ),
+		array( __( 'Premises: rent and utilities', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), self::GASTO ),
+		array( __( 'Insurance', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), self::GASTO ),
+		array( __( 'Federation fees', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), self::GASTO ),
+		array( __( 'Uniforms and badges', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), self::GASTO ),
+		array( __( 'Bank fees', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), self::GASTO ),
+		array( __( 'Other expenses', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), self::GASTO ),
+		array( __( 'Donations', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), self::INGRESO ),
+		array( __( 'Grants', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), self::INGRESO ),
+		array( __( 'Lottery and raffles', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), self::INGRESO ),
+		array( __( 'Other income', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), self::INGRESO ),
+		array( __( 'Returns', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), self::AMBOS ),
 	);
+	}
 
 	private const OPCION_SEMBRADOS = 'asde_ap_banco_tipos_sembrados';
 
@@ -84,8 +90,8 @@ final class TiposMovimiento {
 		if ( self::todos() ) {
 			return;
 		}
-		foreach ( self::INICIALES as list( $nombre, $naturaleza ) ) {
-			self::crear( asde_t( $nombre ), $naturaleza );
+		foreach ( self::iniciales() as list( $nombre, $naturaleza ) ) {
+			self::crear(  $nombre , $naturaleza );
 		}
 	}
 
@@ -102,10 +108,10 @@ final class TiposMovimiento {
 			$out[ (int) $f['id'] ] = array(
 				'id'         => (int) $f['id'],
 				'nombre'     => (string) $f['nombre'],
-				'naturaleza' => isset( self::NATURALEZAS[ $f['naturaleza'] ] ) ? (string) $f['naturaleza'] : self::GASTO,
+				'naturaleza' => isset( self::naturalezas()[ $f['naturaleza'] ] ) ? (string) $f['naturaleza'] : self::GASTO,
 			);
 		}
-		$orden = array_flip( array_keys( self::NATURALEZAS ) );
+		$orden = array_flip( array_keys( self::naturalezas() ) );
 		uasort( $out, static fn( $a, $b ) => array( $orden[ $a['naturaleza'] ], self::clave( $a['nombre'] ) ) <=> array( $orden[ $b['naturaleza'] ], self::clave( $b['nombre'] ) ) );
 		return $out;
 	}
@@ -130,7 +136,7 @@ final class TiposMovimiento {
 		if ( '' === $nombre ) {
 			return new \WP_Error( 'asde_banco', __( 'Enter the type name.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
-		if ( ! isset( self::NATURALEZAS[ $naturaleza ] ) ) {
+		if ( ! isset( self::naturalezas()[ $naturaleza ] ) ) {
 			return new \WP_Error( 'asde_banco', __( 'Choose whether it is an expense, an income or both.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( self::por_nombre( $nombre ) ) {
@@ -160,7 +166,7 @@ final class TiposMovimiento {
 		if ( '' === $nombre ) {
 			return new \WP_Error( 'asde_banco', __( 'Enter the type name.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
-		if ( ! isset( self::NATURALEZAS[ $naturaleza ] ) ) {
+		if ( ! isset( self::naturalezas()[ $naturaleza ] ) ) {
 			return new \WP_Error( 'asde_banco', __( 'Choose whether it is an expense, an income or both.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( self::por_nombre( $nombre, $id ) ) {

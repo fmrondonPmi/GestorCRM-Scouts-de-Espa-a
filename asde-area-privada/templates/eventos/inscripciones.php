@@ -61,7 +61,7 @@ $selector = static function ( string $name, array $lista, bool $vacio ) use ( $e
 };
 $formas = static function (): string {
 	$h = '<select name="forma">';
-	foreach ( array_intersect_key( asde_ta( MovimientosTable::FORMAS ), array_flip( MovimientosTable::FORMAS_MANUALES ) ) as $k => $t ) {
+	foreach ( array_intersect_key( ( MovimientosTable::formas() ), array_flip( MovimientosTable::FORMAS_MANUALES ) ) as $k => $t ) {
 		$h .= '<option value="' . esc_attr( $k ) . '">' . esc_html( $t ) . '</option>';
 	}
 	return $h . '</select>';
@@ -89,7 +89,7 @@ $devolver = static function ( array $f, array $c ) use ( $campos, $fila_h, $form
 <section class="asde-card">
 	<h3 class="asde-card__title"><?php esc_html_e( 'Sign-up', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h3>
 	<dl class="asde-datos">
-		<div><dt><?php esc_html_e( 'Mode', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></dt><dd><?php echo esc_html( asde_t( EventosTable::MODALIDADES[ $e['modalidad'] ] ) ); ?></dd></div>
+		<div><dt><?php esc_html_e( 'Mode', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></dt><dd><?php echo esc_html( ( EventosTable::modalidades()[ $e['modalidad'] ] ) ); ?></dd></div>
 		<div><dt><?php esc_html_e( 'Deadline', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></dt><dd>
 			<?php
 			if ( 'abierta' === $plazo ) {
@@ -156,8 +156,8 @@ $devolver = static function ( array $f, array $c ) use ( $campos, $fila_h, $form
 							<?php endif; ?>
 							<br><span class="asde-muted">
 								<?php
-								$ida    = asde_t( InscripcionesTable::TRANSPORTES[ $f['transporte_ida'] ] ?? '—' );
-								$vuelta = asde_t( InscripcionesTable::TRANSPORTES[ $f['transporte_vuelta'] ] ?? '—' );
+								$ida    = ( InscripcionesTable::transportes()[ $f['transporte_ida'] ] ?? '—' );
+								$vuelta = ( InscripcionesTable::transportes()[ $f['transporte_vuelta'] ] ?? '—' );
 								echo esc_html( sprintf( /* translators: 1: text, 2: text */ __( 'Outward: %1$s · Return: %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $ida, $vuelta ) );
 								?>
 							</span>
@@ -174,11 +174,11 @@ $devolver = static function ( array $f, array $c ) use ( $campos, $fila_h, $form
 							<?php endif; ?>
 						</td>
 						<td data-label="<?php echo esc_attr( esc_attr__( 'Status', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
-							<span class="asde-badge asde-badge--inscripcion-<?php echo esc_attr( $f['estado'] ); ?>"><?php echo esc_html( asde_t( InscripcionesTable::ESTADOS[ $f['estado'] ] ) ); ?></span>
+							<span class="asde-badge asde-badge--inscripcion-<?php echo esc_attr( $f['estado'] ); ?>"><?php echo esc_html( ( InscripcionesTable::estados()[ $f['estado'] ] ) ); ?></span>
 							<?php if ( $falta ) : ?>
 								<br><span class="asde-muted"><?php echo esc_html( in_array( 'autorizacion', $falta, true ) && in_array( 'pago', $falta, true ) ? __( 'Authorisation and payment missing', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : ( in_array( 'pago', $falta, true ) ? __( 'Payment missing', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : __( 'Authorisation missing', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) ); ?></span>
 							<?php endif; ?>
-							<br><?php echo esc_html( asde_t( InscripcionesTable::AUTORIZACIONES[ $f['autorizacion'] ] ?? '' ) ); ?>
+							<br><?php echo esc_html( ( InscripcionesTable::autorizaciones()[ $f['autorizacion'] ] ?? '' ) ); ?>
 							<?php if ( in_array( $f['autorizacion'], array( 'web', 'papel' ), true ) ) : ?>
 								<span class="asde-muted"><?php echo esc_html( $cuando( $f['autorizacion_en'] ) ); ?><?php echo 'web' === $f['autorizacion'] ? esc_html( ' · ' . $f['autorizacion_version'] ) : ''; ?></span>
 							<?php elseif ( '' === $f['autorizacion'] && $gestionable ) : ?>
@@ -203,9 +203,9 @@ $devolver = static function ( array $f, array $c ) use ( $campos, $fila_h, $form
 											<li class="<?php echo null !== $m['anulado_en'] ? 'asde-anulado' : ''; ?>">
 												<?php
 												if ( MovimientosTable::PAGO === $m['tipo'] ) {
-													$texto = sprintf( /* translators: 1: text, 2: text, 3: text */ __( '%1$s · payment of %2$s (%3$s)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), wp_date( 'd/m/Y', (int) strtotime( $m['fecha'] ) ), Calculadora::euros( $m['importe'] ), asde_t( MovimientosTable::FORMAS[ $m['forma'] ] ?? $m['forma'] ) );
+													$texto = sprintf( /* translators: 1: text, 2: text, 3: text */ __( '%1$s · payment of %2$s (%3$s)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), wp_date( 'd/m/Y', (int) strtotime( $m['fecha'] ) ), Calculadora::euros( $m['importe'] ), ( MovimientosTable::formas()[ $m['forma'] ] ?? $m['forma'] ) );
 												} elseif ( MovimientosTable::DEVOLUCION === $m['tipo'] ) {
-													$texto = sprintf( /* translators: 1: text, 2: text, 3: text, 4: text */ __( '%1$s · refund of %2$s (%3$s): %4$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), wp_date( 'd/m/Y', (int) strtotime( $m['fecha'] ) ), Calculadora::euros( $m['importe'] ), asde_t( MovimientosTable::FORMAS[ $m['forma'] ] ?? $m['forma'] ), $m['nota'] );
+													$texto = sprintf( /* translators: 1: text, 2: text, 3: text, 4: text */ __( '%1$s · refund of %2$s (%3$s): %4$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), wp_date( 'd/m/Y', (int) strtotime( $m['fecha'] ) ), Calculadora::euros( $m['importe'] ), ( MovimientosTable::formas()[ $m['forma'] ] ?? $m['forma'] ), $m['nota'] );
 												} else {
 													$texto = sprintf( /* translators: 1: text, 2: text, 3: text */ __( '%1$s · adjustment of %2$s: %3$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), wp_date( 'd/m/Y', (int) strtotime( $m['fecha'] ) ), Calculadora::euros( $m['importe'] ), $m['nota'] );
 												}
@@ -318,9 +318,9 @@ $devolver = static function ( array $f, array $c ) use ( $campos, $fila_h, $form
 			<ul class="asde-lista-nombres">
 				<?php foreach ( $fuera as $f ) : ?>
 					<li>
-						<?php echo esc_html( $nombre( $f ) ); ?> · <?php echo esc_html( asde_t( InscripcionesTable::ESTADOS[ $f['estado'] ] ) ); ?>
+						<?php echo esc_html( $nombre( $f ) ); ?> · <?php echo esc_html( ( InscripcionesTable::estados()[ $f['estado'] ] ) ); ?>
 						<?php if ( InscripcionesTable::BAJA === $f['estado'] ) : ?>
-							<span class="asde-muted"><?php echo esc_html( $cuando( $f['baja_en'] ) . ( '' !== $f['baja_motivo'] ? ' · ' . asde_t( $f['baja_motivo'] ) : '' ) ); ?></span>
+							<span class="asde-muted"><?php echo esc_html( $cuando( $f['baja_en'] ) . ( '' !== $f['baja_motivo'] ? ' · ' . asde_guardado( $f['baja_motivo'] ) : '' ) ); ?></span>
 						<?php endif; ?>
 						<?php if ( $e['con_coste'] && ( $cobros[ $f['id'] ]['devuelto'] ?? 0 ) > 0 ) : ?>
 							<span class="asde-muted"><?php echo esc_html( sprintf( /* translators: %s: text */ __( 'Refunded: %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Calculadora::euros( $cobros[ $f['id'] ]['devuelto'] ) ) ); ?></span>
@@ -357,7 +357,7 @@ $devolver = static function ( array $f, array $c ) use ( $campos, $fila_h, $form
 			<?php foreach ( array( 'transporte_ida' => __( 'Outward', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 'transporte_vuelta' => __( 'Return', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) as $k => $etiqueta ) : ?>
 				<label><?php echo esc_html( $etiqueta ); ?>
 					<select name="<?php echo esc_attr( $k ); ?>">
-						<?php foreach ( asde_ta( InscripcionesTable::TRANSPORTES ) as $t => $txt ) : ?>
+						<?php foreach ( ( InscripcionesTable::transportes() ) as $t => $txt ) : ?>
 							<option value="<?php echo esc_attr( $t ); ?>"><?php echo esc_html( $txt ); ?></option>
 						<?php endforeach; ?>
 					</select>

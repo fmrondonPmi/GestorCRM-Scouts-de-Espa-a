@@ -116,7 +116,7 @@ $comun = static function ( string $nombre ): array {
 
 try {
 	echo "== Parte A · Alérgenos y unidades ==\n";
-	$ok( 14 === count( Alergenos::LISTA ), 'el catálogo tiene los 14 alérgenos del Reglamento 1169/2011' );
+	$ok( 14 === count( Alergenos::lista() ), 'el catálogo tiene los 14 alérgenos del Reglamento 1169/2011' );
 	$ok( array( 'gluten', 'huevos' ) === Alergenos::limpiar( 'huevos, gluten, inventado, gluten' ), 'limpiar: solo códigos válidos, sin repetir y en el orden del catálogo' );
 	$ok( array( 'gluten', 'lacteos', 'sesamo' ) === Alergenos::unir( array( array( 'sesamo', 'gluten' ), array( 'lacteos' ) ) ), 'unir: junta varias listas' );
 	$ok( 'Gluten, Huevos' === Alergenos::texto( array( 'gluten', 'huevos' ) ), 'texto: nombres legibles' );
@@ -230,7 +230,7 @@ try {
 
 	echo "\n== Parte H · Permisos y pantallas ==\n";
 	$ok( user_can( $u_sc, Recetario::CAP ) && user_can( $u_coord, Recetario::CAP ) && ! user_can( $u_tutor, Recetario::CAP ), 'scouters y Coordinación tienen el permiso; una familia, no' );
-	$ok( in_array( Recetario::CAP, Modulos::LISTA[ Modulos::EVENTOS ][2], true ), 'el permiso se va con el módulo Eventos (sin módulo propio)' );
+	$ok( in_array( Recetario::CAP, Modulos::lista()[ Modulos::EVENTOS ][2], true ), 'el permiso se va con el módulo Eventos (sin módulo propio)' );
 	$como( $u_tutor );
 	$ok( ! str_contains( $ver( array() ), 'Biblioteca de ejemplo' ), 'una familia no ve el recetario' );
 	$como( $u_sc );

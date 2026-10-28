@@ -32,10 +32,13 @@ final class Config {
 	);
 
 	/** Para quién es cada modelo de ASDE (v0.29, inventario: «si es de chica o chico»). */
-	public const PARA_QUIEN = array(
-		'masculina' => 'chico',
-		'femenina'  => 'chica',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function para_quien(): array {
+		return array(
+		'masculina' => __( 'boy', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'femenina'  => __( 'girl', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
 	public const MAX_INSIGNIAS = 10;
 
@@ -157,7 +160,7 @@ final class Config {
 	/** «Camisa femenina (chica)»: el nombre del modelo y, en los dos de ASDE, para quién es (v0.29). */
 	public static function nombre_modelo( array $cfg, string $modelo ): string {
 		$nombre = (string) ( $cfg['modelos'][ $modelo ]['nombre'] ?? $modelo );
-		return isset( self::PARA_QUIEN[ $modelo ] ) ? sprintf( '%s (%s)', $nombre, asde_t( self::PARA_QUIEN[ $modelo ] ) ) : $nombre;
+		return isset( self::para_quien()[ $modelo ] ) ? sprintf( '%s (%s)', $nombre, ( self::para_quien()[ $modelo ] ) ) : $nombre;
 	}
 
 	/**
@@ -175,8 +178,8 @@ final class Config {
 				return (string) $id;
 			}
 		}
-		foreach ( self::PARA_QUIEN as $id => $quien ) {
-			if ( isset( $cfg['modelos'][ $id ] ) && ( $t === $quien || $t === $clave( asde_t( $quien ) ) ) ) {
+		foreach ( self::para_quien() as $id => $quien ) {
+			if ( isset( $cfg['modelos'][ $id ] ) && ( $t === $quien || $t === $clave( $quien ) ) ) {
 				return $id;
 			}
 		}

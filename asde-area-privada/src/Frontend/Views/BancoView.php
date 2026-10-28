@@ -72,7 +72,7 @@ final class BancoView extends TesoreriaBaseView {
 		}
 
 		$filtros = array(
-			'estado' => isset( BancoTable::ESTADOS[ $this->get( 'estado' ) ] ) ? $this->get( 'estado' ) : ( '' === $this->get( 'estado' ) && ! isset( $_GET['estado'] ) ? BancoTable::PENDIENTE : '' ), // phpcs:ignore WordPress.Security.NonceVerification
+			'estado' => isset( BancoTable::estados()[ $this->get( 'estado' ) ] ) ? $this->get( 'estado' ) : ( '' === $this->get( 'estado' ) && ! isset( $_GET['estado'] ) ? BancoTable::PENDIENTE : '' ), // phpcs:ignore WordPress.Security.NonceVerification
 			'tipo'   => in_array( $this->get( 'tipo' ), array( 'ingresos', 'gastos' ), true ) ? $this->get( 'tipo' ) : '',
 			'q'      => $this->get( 'q' ),
 			'clase'  => 'sin' === $this->get( 'clase' ) || ctype_digit( $this->get( 'clase' ) ) ? $this->get( 'clase' ) : '',
@@ -89,7 +89,7 @@ final class BancoView extends TesoreriaBaseView {
 				'fecha'    => static fn( $m ) => $m['fecha'],
 				'concepto' => static fn( $m ) => trim( $m['ordenante'] . ' ' . $m['concepto'] ),
 				'importe'  => static fn( $m ) => (float) $m['importe'],
-				'estado'   => static fn( $m ) => asde_t( BancoTable::ESTADOS[ $m['estado'] ] ?? $m['estado'] ),
+				'estado'   => static fn( $m ) => ( BancoTable::estados()[ $m['estado'] ] ?? $m['estado'] ),
 			),
 			'fecha',
 			'desc'
@@ -179,7 +179,7 @@ final class BancoView extends TesoreriaBaseView {
 		$tipo   = sanitize_key( (string) ( $src['tipo'] ?? '' ) );
 		$clase  = sanitize_key( (string) ( $src['clase'] ?? '' ) );
 		return array(
-			'estado' => isset( BancoTable::ESTADOS[ $estado ] ) ? $estado : '',
+			'estado' => isset( BancoTable::estados()[ $estado ] ) ? $estado : '',
 			'tipo'   => in_array( $tipo, array( 'ingresos', 'gastos' ), true ) ? $tipo : '',
 			'q'      => sanitize_text_field( (string) ( $src['q'] ?? '' ) ),
 			'clase'  => 'sin' === $clase || ctype_digit( $clase ) ? $clase : '',
@@ -243,10 +243,10 @@ final class BancoView extends TesoreriaBaseView {
 				$fecha( $m['fecha'] ),
 				$fecha( $m['fecha_valor'] ?? null ),
 				$m['ordenante'],
-				'' !== $m['concepto'] ? $m['concepto'] : asde_t( Norma43::CONCEPTOS[ $m['concepto_comun'] ] ?? '' ),
+				'' !== $m['concepto'] ? $m['concepto'] : ( Norma43::conceptos()[ $m['concepto_comun'] ] ?? '' ),
 				trim( $m['referencia1'] . ' ' . $m['referencia2'] ),
 				round( (float) $m['importe'], 2 ),
-				asde_t( BancoTable::ESTADOS[ $m['estado'] ] ?? $m['estado'] ),
+				( BancoTable::estados()[ $m['estado'] ] ?? $m['estado'] ),
 				BancoTable::IGNORADO === $m['estado'] ? ( isset( $tipos[ (int) $m['tipo_id'] ] ) ? $tipos[ (int) $m['tipo_id'] ]['nombre'] : __( 'No type', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) : '',
 				! empty( $m['familia_id'] ) ? trim( (string) ( $familias[ (int) $m['familia_id'] ] ?? '' ) . ( '' !== ( $nombres[ (int) $m['familia_id'] ] ?? '' ) ? ' · ' . $nombres[ (int) $m['familia_id'] ] : '' ) ) : '',
 				! empty( $m['evento_id'] ) ? (string) ( $eventos[ (int) $m['evento_id'] ] ?? '' ) : '',
@@ -487,7 +487,7 @@ final class BancoView extends TesoreriaBaseView {
 		}
 
 		$formato = in_array( $this->post( 'formato' ), array( 'n43', 'csv' ), true ) ? $this->post( 'formato' ) : ( Norma43::parece( $contenido ) ? 'n43' : 'csv' );
-		$cod     = isset( Codificacion::LISTA[ $this->post( 'codificacion' ) ] ) ? $this->post( 'codificacion' ) : 'auto';
+		$cod     = isset( Codificacion::lista()[ $this->post( 'codificacion' ) ] ) ? $this->post( 'codificacion' ) : 'auto';
 		$previa  = array(
 			'formato'      => $formato,
 			'codificacion' => $cod,
@@ -506,7 +506,7 @@ final class BancoView extends TesoreriaBaseView {
 			$this->volver_con_error( __( 'The preview has expired. Upload the file again.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$mapeo = array();
-		foreach ( array_keys( CsvBanco::CAMPOS ) as $campo ) {
+		foreach ( array_keys( CsvBanco::campos() ) as $campo ) {
 			$v = $this->post( 'col_' . $campo );
 			if ( '' !== $v && ctype_digit( $v ) ) {
 				$mapeo[ $campo ] = (int) $v;

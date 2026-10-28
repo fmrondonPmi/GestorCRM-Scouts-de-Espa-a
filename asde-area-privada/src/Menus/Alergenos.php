@@ -12,22 +12,25 @@ defined( 'ABSPATH' ) || exit;
 final class Alergenos {
 
 	/** Código interno => nombre (en castellano; se traduce al mostrarlo). */
-	public const LISTA = array(
-		'gluten'    => 'Gluten',
-		'crustaceos' => 'Crustáceos',
-		'huevos'    => 'Huevos',
-		'pescado'   => 'Pescado',
-		'cacahuetes' => 'Cacahuetes',
-		'soja'      => 'Soja',
-		'lacteos'   => 'Leche y lácteos',
-		'frutos_cascara' => 'Frutos de cáscara',
-		'apio'      => 'Apio',
-		'mostaza'   => 'Mostaza',
-		'sesamo'    => 'Sésamo',
-		'sulfitos'  => 'Sulfitos',
-		'altramuces' => 'Altramuces',
-		'moluscos'  => 'Moluscos',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function lista(): array {
+		return array(
+		'gluten'    => __( 'Gluten', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'crustaceos' => __( 'Crustaceans', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'huevos'    => __( 'Eggs', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'pescado'   => __( 'Fish', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'cacahuetes' => __( 'Peanuts', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'soja'      => __( 'Soy', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'lacteos'   => __( 'Milk and dairy', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'frutos_cascara' => __( 'Tree nuts', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'apio'      => __( 'Celery', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'mostaza'   => __( 'Mustard', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'sesamo'    => __( 'Sesame', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'sulfitos'  => __( 'Sulphites', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'altramuces' => __( 'Lupin', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'moluscos'  => __( 'Molluscs', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
 	/** Intolerancias o dietas habituales => alérgeno que evitan (para la validación de la fase B3). */
 	public const INTOLERANCIAS = array(
@@ -41,12 +44,12 @@ final class Alergenos {
 			$codigos = explode( ',', $codigos );
 		}
 		$codigos = array_map( static fn( $c ) => sanitize_key( (string) $c ), (array) $codigos );
-		return array_values( array_intersect( array_keys( self::LISTA ), $codigos ) );
+		return array_values( array_intersect( array_keys( self::lista() ), $codigos ) );
 	}
 
 	/** Nombre traducido. */
 	public static function nombre( string $codigo ): string {
-		return isset( self::LISTA[ $codigo ] ) ? asde_t( self::LISTA[ $codigo ] ) : $codigo;
+		return isset( self::lista()[ $codigo ] ) ? ( self::lista()[ $codigo ] ) : $codigo;
 	}
 
 	/** «Gluten, Huevos» (traducidos), o '' si no hay. @param string[] $codigos */

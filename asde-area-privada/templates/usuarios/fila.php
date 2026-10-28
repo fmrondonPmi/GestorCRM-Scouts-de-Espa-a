@@ -105,7 +105,7 @@ if ( $u->has_cap( 'manage_options' ) ) {
 		<?php endif; ?>
 		<?php if ( $e ) : ?>
 			<br><span class="asde-muted"><?php esc_html_e( 'Latest email:', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span>
-			<span class="asde-badge asde-badge--email-<?php echo esc_attr( $e['estado'] ); ?>"><?php echo esc_html( asde_t( RegistroEmails::ESTADOS[ $e['estado'] ] ?? $e['estado'] ) ); ?></span>
+			<span class="asde-badge asde-badge--email-<?php echo esc_attr( $e['estado'] ); ?>"><?php echo esc_html( ( RegistroEmails::estados()[ $e['estado'] ] ?? $e['estado'] ) ); ?></span>
 			<span class="asde-muted"><?php echo esc_html( wp_date( 'd/m H:i', strtotime( $e['creado'] . ' UTC' ) ) ); ?></span>
 			<a href="<?php echo esc_url( add_query_arg( 'ver', (int) $e['id'], $url_emails ) ); ?>"><?php esc_html_e( 'View', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a>
 		<?php endif; ?>

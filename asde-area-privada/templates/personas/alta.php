@@ -166,7 +166,7 @@ $edad  = static function ( string $f ) use ( $hoy ): ?int {
 							<label for="asde-alta-stic_gender_c"><?php esc_html_e( 'Gender', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <span class="asde-obligatorio" aria-hidden="true">*</span></label>
 							<select id="asde-alta-stic_gender_c" name="d[stic_gender_c]" required>
 								<option value=""><?php esc_html_e( 'Choose…', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></option>
-								<?php foreach ( asde_ta( Altas::GENEROS ) as $g => $etiqueta ) : ?>
+								<?php foreach ( ( Altas::generos() ) as $g => $etiqueta ) : ?>
 									<option value="<?php echo esc_attr( $g ); ?>" <?php selected( $valor( 'stic_gender_c' ), $g ); ?>><?php echo esc_html( $etiqueta ); ?></option>
 								<?php endforeach; ?>
 							</select>
@@ -234,7 +234,7 @@ $edad  = static function ( string $f ) use ( $hoy ): ?int {
 			$filas  = array(
 				__( 'Name', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' )               => trim( ( $d['first_name'] ?? '' ) . ' ' . ( $d['last_name'] ?? '' ) ),
 				__( 'Date of birth', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' )  => isset( $d['birthdate'] ) ? $dma( $d['birthdate'] ) . ( null !== $anios ? ' · ' . sprintf( /* translators: %d: number */ __( '%d years', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $anios ) : '' ) : '',
-				__( 'Gender', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' )               => asde_ta( Altas::GENEROS )[ $d['stic_gender_c'] ?? '' ] ?? '',
+				__( 'Gender', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' )               => ( Altas::generos() )[ $d['stic_gender_c'] ?? '' ] ?? '',
 				__( 'Document', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' )            => $d['stic_identification_number_c'] ?? __( 'No document', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 				__( 'Email', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' )                => $d['email1'] ?? '',
 				__( 'Mobile', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' )                => $d['phone_mobile'] ?? '',

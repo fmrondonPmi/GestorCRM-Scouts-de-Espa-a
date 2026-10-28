@@ -40,8 +40,8 @@ $columnas   = array(
 		<label for="asde-acc-h-accion"><?php esc_html_e( 'What happened', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 		<select id="asde-acc-h-accion" name="accion" data-asde-autoenviar>
 			<option value=""><?php esc_html_e( 'All', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></option>
-			<?php foreach ( Auditoria::ACCIONES as $k => $etiqueta ) : ?>
-				<option value="<?php echo esc_attr( $k ); ?>" <?php selected( $accion, $k ); ?>><?php echo esc_html( asde_t( $etiqueta ) ); ?></option>
+			<?php foreach ( Auditoria::acciones() as $k => $etiqueta ) : ?>
+				<option value="<?php echo esc_attr( $k ); ?>" <?php selected( $accion, $k ); ?>><?php echo esc_html(  $etiqueta  ); ?></option>
 			<?php endforeach; ?>
 		</select>
 		<label for="asde-acc-h-persona"><?php esc_html_e( 'To whom', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
@@ -87,7 +87,7 @@ $columnas   = array(
 					<tr>
 						<td data-label="<?php echo esc_attr( esc_attr__( 'Date', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( wp_date( 'd/m/Y H:i', strtotime( $f['creado'] . ' UTC' ) ) ); ?></td>
 						<td data-label="<?php echo esc_attr( esc_attr__( 'Who', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( $cuenta( (int) $f['actor'] ) ); ?></td>
-						<td data-label="<?php echo esc_attr( esc_attr__( 'What', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( asde_t( Auditoria::ACCIONES[ $f['accion'] ] ?? $f['accion'] ) ); ?></td>
+						<td data-label="<?php echo esc_attr( esc_attr__( 'What', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( ( Auditoria::acciones()[ $f['accion'] ] ?? $f['accion'] ) ); ?></td>
 						<td data-label="<?php echo esc_attr( esc_attr__( 'To whom', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo (int) $f['objetivo'] ? esc_html( $cuenta( (int) $f['objetivo'] ) ) : ( '' !== $f['rol'] ? esc_html( sprintf( /* translators: %s: text */ __( 'Role %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Roles::label( $f['rol'] ) ) ) : '—' ); ?></td>
 						<td data-label="<?php echo esc_attr( esc_attr__( 'Permission', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
 							<?php echo wp_kses( Catalogo::existe( $f['permiso'] ) ? esc_html( Catalogo::descripcion( $f['permiso'] ) ) : '<span class="asde-muted">—</span>', asde_html_permitido() ); ?>

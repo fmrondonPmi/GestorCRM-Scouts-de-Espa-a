@@ -23,13 +23,16 @@ defined( 'ABSPATH' ) || exit;
 final class Presupuesto {
 
 	/** Cómo se reparte un gasto. */
-	public const REPARTOS = array(
-		'total'               => 'Importe total, entre todos los participantes',
-		'total_seccion'       => 'Importe total, solo entre los de una sección',
-		'participante'        => 'Por persona: cada participante',
-		'participante_equipo' => 'Por persona: participantes y equipo',
-		'equipo'              => 'Por persona: solo el equipo',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function repartos(): array {
+		return array(
+		'total'               => __( 'Total amount, among all the participants', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'total_seccion'       => __( 'Total amount, among those of one section only', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'participante'        => __( 'Per person: each participant', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'participante_equipo' => __( 'Per person: participants and team', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'equipo'              => __( 'Per person: team only', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
 	/** Categorías de gasto de la hoja de presupuestos de ASDE: se sugieren al escribir el concepto de una partida. */
 	public const SUGERIDAS = array( 'Desplazamientos', 'Alimentación', 'Material y actividades', 'Gastos de voluntarios', 'Instalaciones', 'Otros' );

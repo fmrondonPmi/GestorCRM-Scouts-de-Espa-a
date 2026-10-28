@@ -32,17 +32,20 @@ defined( 'ABSPATH' ) || exit;
 final class Automaticos {
 
 	/** origen => etiqueta (es también la partida del libro mayor). */
-	public const ORIGENES = array(
-		'cuota'          => 'Cuotas en efectivo',
-		'evento_cobro'   => 'Eventos: cobros',
-		'evento_devol'   => 'Eventos: devoluciones',
-		'evento_gasto'   => 'Eventos: gastos',
-		'evento_ingreso' => 'Eventos: ingresos',
-		'reembolso'      => 'Eventos: reembolsos',
-		'anticipo'       => 'Anticipos de caja',
-		'tienda'         => 'Tienda',
-		'reintegro'      => 'Reintegros',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function origenes(): array {
+		return array(
+		'cuota'          => __( 'Cash fees', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'evento_cobro'   => __( 'Events: collections', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'evento_devol'   => __( 'Events: refunds', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'evento_gasto'   => __( 'Events: expenses', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'evento_ingreso' => __( 'Events: income', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'reembolso'      => __( 'Events: reimbursements', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'anticipo'       => __( 'Cash advances', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'tienda'         => __( 'Shop', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'reintegro'      => __( 'Reimbursements', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
 	/**
 	 * Apuntes automáticos de la caja del grupo entre dos fechas (incluidas), sin ordenar.

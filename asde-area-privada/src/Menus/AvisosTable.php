@@ -16,12 +16,15 @@ defined( 'ABSPATH' ) || exit;
 final class AvisosTable {
 
 	/** Alternativa elegida al confirmar (lista cerrada: nada de texto libre con datos de salud). */
-	public const ALTERNATIVAS = array(
-		'racion'  => 'Se prepara una ración aparte sin el alérgeno',
-		'cambio'  => 'Se cambia el ingrediente',
-		'plato'   => 'Se sustituye el plato',
-		'familia' => 'Se habla con la familia',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function alternativas(): array {
+		return array(
+		'racion'  => __( 'A separate portion without the allergen is prepared', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'cambio'  => __( 'The ingredient is changed', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'plato'   => __( 'The dish is replaced', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'familia' => __( 'Talk to the family', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
 	public static function table(): string {
 		global $wpdb;

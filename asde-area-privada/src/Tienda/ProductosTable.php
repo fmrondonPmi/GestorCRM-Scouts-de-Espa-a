@@ -27,10 +27,13 @@ final class ProductosTable {
 	public const VIS_TODOS  = 'todos';
 	public const VIS_SOCIOS = 'socios';
 
-	public const VISIBILIDADES = array(
-		self::VIS_TODOS  => 'Todos (también sin iniciar sesión)',
-		self::VIS_SOCIOS => 'Solo socios (con sesión iniciada)',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function visibilidades(): array {
+		return array(
+		self::VIS_TODOS  => __( 'Everyone (also not signed in)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::VIS_SOCIOS => __( 'Members only (signed in)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
 	public const MAX_PRECIO = 9999.99;
 	public const MAX_LIMITE = 99;
@@ -93,7 +96,7 @@ final class ProductosTable {
 		}
 		$vis = (string) ( $d['visibilidad'] ?? self::VIS_TODOS );
 		$vis = '' === $vis ? self::VIS_TODOS : $vis;
-		if ( ! isset( self::VISIBILIDADES[ $vis ] ) ) {
+		if ( ! isset( self::visibilidades()[ $vis ] ) ) {
 			$errores[] = __( 'Visibility must be "everyone" or "members".', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		$precio = self::euros( (string) ( $d['precio'] ?? '' ) );

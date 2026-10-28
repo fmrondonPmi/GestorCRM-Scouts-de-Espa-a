@@ -60,8 +60,8 @@ $imagen = $p ? Config::imagen( $p['imagen'], 'thumbnail' ) : '';
 		<p>
 			<label for="asde-tp-vis"><?php esc_html_e( 'Who sees it and can buy it', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 			<select id="asde-tp-vis" name="visibilidad">
-				<?php foreach ( ProductosTable::VISIBILIDADES as $clave => $etiqueta ) : ?>
-					<option value="<?php echo esc_attr( $clave ); ?>" <?php selected( $val( 'visibilidad', $p['visibilidad'] ?? ProductosTable::VIS_TODOS ), $clave ); ?>><?php echo esc_html( asde_t( $etiqueta ) ); ?></option>
+				<?php foreach ( ProductosTable::visibilidades() as $clave => $etiqueta ) : ?>
+					<option value="<?php echo esc_attr( $clave ); ?>" <?php selected( $val( 'visibilidad', $p['visibilidad'] ?? ProductosTable::VIS_TODOS ), $clave ); ?>><?php echo esc_html(  $etiqueta  ); ?></option>
 				<?php endforeach; ?>
 			</select>
 			<span class="asde-muted"><?php esc_html_e( 'A "members only" product does not appear to anyone who has not signed in, neither in the list nor by its address.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span>

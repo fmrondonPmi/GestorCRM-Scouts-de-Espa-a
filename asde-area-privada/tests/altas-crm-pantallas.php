@@ -290,7 +290,7 @@ try {
 	$guardar = static function ( array $altas ) use ( $grupo ): void {
 		$_POST    = array(
 			'_wpnonce' => wp_create_nonce( ModulosPage::ACCION ),
-			'activos'  => array( (string) $grupo['numero'] => array_keys( Modulos::LISTA ) ),
+			'activos'  => array( (string) $grupo['numero'] => array_keys( Modulos::lista() ) ),
 			'altas'    => $altas,
 		);
 		$_REQUEST = $_POST;
@@ -435,7 +435,7 @@ try {
 	$ok( 1 === count( $para( 'carme.pantalla@example.invalid' ) ) && 1 === preg_match( '/y 1 a la familia/', $avisos ), 'una menor sin cuenta familiar: el aviso va al email de su tutor/a en la ficha del CRM' );
 
 	echo "\n== Parte D · Aviso en Tesorería ==\n";
-	Modulos::guardar( (string) $grupo['numero'], array_keys( Modulos::LISTA ) );
+	Modulos::guardar( (string) $grupo['numero'], array_keys( Modulos::lista() ) );
 	Logger::log( 'crm_baja', 'socio', '990099', array( 'grupo' => 'otro', 'fin' => $hoy, 'motivo' => 'personal' ) );
 	$recientes = array_column( Altas::bajas_recientes(), 'socio' );
 	$ok( in_array( '990073', $recientes, true ) && ! in_array( '990099', $recientes, true ), 'las bajas recientes son solo las del grupo en el que se trabaja' );

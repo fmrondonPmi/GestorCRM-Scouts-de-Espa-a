@@ -40,25 +40,28 @@ final class Modulos {
 	public const POR_DEFECTO_APAGADOS = array( self::LISTA_ESPERA, self::EVENTOS, self::REINTEGROS, self::CAJA );
 
 	/** módulo => [nombre, qué es, capabilities que se quitan si está apagado, módulo del que depende] */
-	public const LISTA = array(
-		self::TESORERIA     => array( 'Tesorería', 'Control de pagos, familias, cuotas y coste federativo.', array( 'asde_tesoreria_acceso', 'asde_tesoreria_config', 'asde_sepa_autorizar' ), '' ),
-		self::BANCO         => array( 'Banco', 'Importar los movimientos de la cuenta, conciliarlos y tipificar los gastos.', array(), self::TESORERIA ),
-		self::SEPA          => array( 'Domiciliaciones SEPA', 'Autorizaciones de las familias y ficheros de adeudos para el banco.', array( 'asde_sepa_autorizar' ), self::TESORERIA ),
-		self::TIENDA        => array( 'Tienda', 'Productos del grupo (uniforme, insignias y más): pedidos, pago y entrega.', array( 'asde_tienda_comprar', 'asde_tienda_gestion', 'asde_tienda_pago', 'asde_tienda_pedido', 'asde_tienda_entrega', 'asde_tienda_admin' ), '' ),
-		self::INVENTARIO    => array( 'Inventario', 'Material del grupo, tipos y listas de compra.', array( 'asde_inventario', 'asde_inventario_aprobar' ), '' ),
-		self::INFORMES      => array( 'Informes', 'Listados con las columnas que se elijan.', array( 'asde_reports' ), '' ),
-		self::SOLICITUDES   => array( 'Solicitudes de acceso', 'El enlace del grupo para pedir el acceso y su revisión.', array( 'asde_aprobar_solicitudes' ), '' ),
-		self::ALTA_SCOUTERS => array( 'Alta de scouters', 'El enlace para que los scouters se den de alta.', array(), '' ),
-		self::LISTA_ESPERA  => array( 'Lista de espera', 'El enlace para apuntarse a la lista de espera, la lista para el equipo y el paso al CRM.', array( 'asde_lista_espera', 'asde_lista_espera_alta' ), '' ),
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function lista(): array {
+		return array(
+		self::TESORERIA     => array( __( 'Treasury', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Payment control, families, fees and federation cost.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), array( 'asde_tesoreria_acceso', 'asde_tesoreria_config', 'asde_sepa_autorizar' ), '' ),
+		self::BANCO         => array( __( 'Bank', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Import the account\'s transactions, reconcile them and classify the expenses.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), array(), self::TESORERIA ),
+		self::SEPA          => array( __( 'SEPA direct debits', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Families\' authorisations and direct debit files for the bank.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), array( 'asde_sepa_autorizar' ), self::TESORERIA ),
+		self::TIENDA        => array( __( 'Shop', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'The group\'s products (uniform, badges and more): orders, payment and delivery.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), array( 'asde_tienda_comprar', 'asde_tienda_gestion', 'asde_tienda_pago', 'asde_tienda_pedido', 'asde_tienda_entrega', 'asde_tienda_admin' ), '' ),
+		self::INVENTARIO    => array( __( 'Inventory', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Group equipment, types and shopping lists.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), array( 'asde_inventario', 'asde_inventario_aprobar' ), '' ),
+		self::INFORMES      => array( __( 'Reports', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Lists with the columns you choose.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), array( 'asde_reports' ), '' ),
+		self::SOLICITUDES   => array( __( 'Access requests', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'The group\'s link to request access and its review.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), array( 'asde_aprobar_solicitudes' ), '' ),
+		self::ALTA_SCOUTERS => array( __( 'Scouter registration', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'The link for scouters to register.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), array(), '' ),
+		self::LISTA_ESPERA  => array( __( 'Waiting list', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'The link to join the waiting list, the list for the team and the handover to the CRM.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), array( 'asde_lista_espera', 'asde_lista_espera_alta' ), '' ),
 		// v0.35 (doc 43): apagado por defecto, como todo módulo nuevo (regla 5).
-		self::EVENTOS       => array( 'Eventos', 'Salidas, acampadas y otras actividades: equipo dirigente, presupuesto, inscripciones, «Mis eventos» y cobros.', array( 'asde_eventos_gestion', 'asde_menus_recetas', 'asde_eventos_grupo', 'asde_eventos_economia', 'asde_eventos_config', 'asde_eventos_inscribir', 'asde_eventos_material' ), '' ),
+		self::EVENTOS       => array( __( 'Events', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Outings, camps and other activities: leadership team, budget, sign-ups, "My events" and payments.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), array( 'asde_eventos_gestion', 'asde_menus_recetas', 'asde_eventos_grupo', 'asde_eventos_economia', 'asde_eventos_config', 'asde_eventos_inscribir', 'asde_eventos_material' ), '' ),
 		// v0.54 (doc 57): solo añade una pestaña a Tesorería (encendido por defecto).
-		self::PRESUPUESTOS  => array( 'Presupuestos', 'Reparto de las cuotas entre el grupo y las secciones y presupuesto de cada una.', array( 'asde_presupuestos_seccion' ), self::TESORERIA ),
+		self::PRESUPUESTOS  => array( __( 'Budgets', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Split of the fees between the group and the sections, and the budget of each.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), array( 'asde_presupuestos_seccion' ), self::TESORERIA ),
 		// v0.47 (doc 53): apagado por defecto, como todo módulo nuevo (regla 5).
-		self::REINTEGROS    => array( 'Reintegros', 'Los scouters piden que les devuelvan un gasto (con el justificante y, si procede, un evento); Tesorería lo aprueba y Tesorería o Coordinación lo marcan pagado.', array( 'asde_reintegros', 'asde_reintegros_aprobar', 'asde_reintegros_pagar' ), '' ),
+		self::REINTEGROS    => array( __( 'Reimbursements', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Scouters ask to be repaid for an expense (with the receipt and, where applicable, an event); Treasury approves it and Treasury or Coordination mark it as paid.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), array( 'asde_reintegros', 'asde_reintegros_aprobar', 'asde_reintegros_pagar' ), '' ),
 		// v0.59 (doc 61): apagado por defecto, como todo módulo nuevo (regla 5).
-		self::CAJA          => array( 'Caja y libro mayor', 'Cajas de efectivo del grupo y de cada sección (apuntes, traspasos y arqueos, con lo cobrado y pagado en efectivo en los demás módulos) y libro mayor del banco y las cajas.', array( 'asde_caja', 'asde_caja_todas' ), self::TESORERIA ),
+		self::CAJA          => array( __( 'Cash and general ledger', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Cash boxes of the group and of each section (entries, transfers and counts, with what is collected and paid in cash in the other modules) and general ledger of the bank and the cash boxes.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), array( 'asde_caja', 'asde_caja_todas' ), self::TESORERIA ),
 	);
+	}
 
 	/** @var array<string, string[]> nº de grupo => capabilities quitadas (por petición). */
 	private static array $quitadas = array();
@@ -70,10 +73,10 @@ final class Modulos {
 	/** ¿Está activo este módulo en el grupo? (por defecto, el grupo en el que se trabaja). */
 	public static function activo( string $modulo, string $grupo = '' ): bool {
 		$grupo = '' !== $grupo ? $grupo : Grupo::numero();
-		if ( ! isset( self::LISTA[ $modulo ] ) ) {
+		if ( ! isset( self::lista()[ $modulo ] ) ) {
 			return true;
 		}
-		$padre = self::LISTA[ $modulo ][3];
+		$padre = self::lista()[ $modulo ][3];
 		if ( '' !== $padre && ! self::activo( $padre, $grupo ) ) {
 			return false;
 		}
@@ -103,9 +106,9 @@ final class Modulos {
 	 */
 	public static function guardar( string $grupo, array $activos ): array {
 		$todos = self::apagados();
-		$off   = array_values( array_diff( array_keys( self::LISTA ), $activos ) );
+		$off   = array_values( array_diff( array_keys( self::lista() ), $activos ) );
 		$fila  = array();
-		foreach ( array_keys( self::LISTA ) as $m ) {
+		foreach ( array_keys( self::lista() ) as $m ) {
 			$apagado_antes = in_array( $m, self::POR_DEFECTO_APAGADOS, true );
 			$encendido     = in_array( $m, $activos, true );
 			if ( $apagado_antes && $encendido ) {
@@ -134,7 +137,7 @@ final class Modulos {
 			return self::$quitadas[ $grupo ];
 		}
 		$caps = array();
-		foreach ( self::LISTA as $m => $def ) {
+		foreach ( self::lista() as $m => $def ) {
 			if ( ! self::activo( $m, $grupo ) ) {
 				$caps = array_merge( $caps, $def[2] );
 			}

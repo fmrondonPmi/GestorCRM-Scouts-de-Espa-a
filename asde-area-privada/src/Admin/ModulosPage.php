@@ -60,7 +60,7 @@ final class ModulosPage {
 			if ( $si ) {
 				$con[] = (string) $g['numero'];
 			}
-			$activos = array_values( array_intersect( array_keys( Modulos::LISTA ), array_map( 'sanitize_key', (array) ( $pedidos[ $g['numero'] ] ?? array() ) ) ) );
+			$activos = array_values( array_intersect( array_keys( Modulos::lista() ), array_map( 'sanitize_key', (array) ( $pedidos[ $g['numero'] ] ?? array() ) ) ) );
 			$off     = Modulos::guardar( (string) $g['numero'], $activos );
 			if ( $off ) {
 				$apagados[ $g['numero'] ] = $off;
@@ -104,11 +104,11 @@ final class ModulosPage {
 						<thead>
 							<tr>
 								<th scope="col"><?php esc_html_e( 'Grupo', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
-								<?php foreach ( Modulos::LISTA as $m => $def ) : ?>
+								<?php foreach ( Modulos::lista() as $m => $def ) : ?>
 									<th scope="col" title="<?php echo esc_attr( asde_t( $def[1] ) ); ?>">
 										<?php echo esc_html( asde_t( $def[0] ) ); ?>
 										<?php if ( '' !== $def[3] ) : ?>
-											<br><span class="description"><?php /* translators: %s: módulo del que depende */ echo esc_html( sprintf( __( '(dentro de %s)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), asde_t( Modulos::LISTA[ $def[3] ][0] ) ) ); ?></span>
+											<br><span class="description"><?php /* translators: %s: módulo del que depende */ echo esc_html( sprintf( __( '(dentro de %s)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), asde_t( Modulos::lista()[ $def[3] ][0] ) ) ); ?></span>
 										<?php endif; ?>
 									</th>
 								<?php endforeach; ?>
@@ -122,7 +122,7 @@ final class ModulosPage {
 							<?php foreach ( $grupos as $g ) : ?>
 								<tr>
 									<th scope="row"><?php echo esc_html( Grupos::etiqueta( $g ) ); ?></th>
-									<?php foreach ( Modulos::LISTA as $m => $def ) : ?>
+									<?php foreach ( Modulos::lista() as $m => $def ) : ?>
 										<?php $id = 'asde-mod-' . $g['numero'] . '-' . $m; ?>
 										<td>
 											<label for="<?php echo esc_attr( $id ); ?>" class="screen-reader-text"><?php echo esc_html( Grupos::etiqueta( $g ) . ' · ' . asde_t( $def[0] ) ); ?></label>

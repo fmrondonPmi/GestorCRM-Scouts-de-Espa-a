@@ -128,7 +128,7 @@ $crm = new Asde_Prueba_Crm(
 Grupo::forzar( $grupo );
 // v0.35: el módulo «Eventos» nace apagado; la prueba lo enciende para el grupo y lo deja como estaba.
 $modulos_antes = get_option( 'asde_ap_modulos', null );
-\AsdeBalears\AreaPrivada\Domain\Modulos::guardar( (string) $grupo['numero'], array_keys( \AsdeBalears\AreaPrivada\Domain\Modulos::LISTA ) );
+\AsdeBalears\AreaPrivada\Domain\Modulos::guardar( (string) $grupo['numero'], array_keys( \AsdeBalears\AreaPrivada\Domain\Modulos::lista() ) );
 $crm->activar();
 Escritura::usar_para_pruebas( $crm );
 

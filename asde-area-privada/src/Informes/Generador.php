@@ -233,7 +233,7 @@ final class Generador {
 			case 'pago_familia':
 				return (string) $pago['familia']['numero'];
 			case 'pago_estado':
-				return asde_t( Calculadora::ETIQUETAS[ $c['estado'] ] ?? $c['estado'] );
+				return ( Calculadora::etiquetas()[ $c['estado'] ] ?? $c['estado'] );
 			case 'pago_a_pagar':
 				return Calculadora::euros( (float) $c['a_pagar'] );
 			case 'pago_pagado':
@@ -273,7 +273,7 @@ final class Generador {
 					'no' => 'No',
 				)[ strtolower( $v ) ] ?? $v;
 			case 'enum':
-				return asde_t( Catalogo::ENUMS[ $campos[0] ][ $v ] ?? $v );
+				return ( Catalogo::enums()[ $campos[0] ][ $v ] ?? $v );
 			case 'seccion':
 				$nombres = array();
 				foreach ( explode( ',', $v ) as $raw ) {
@@ -341,8 +341,8 @@ final class Generador {
 			$partes[] = __( 'only with relevant health data', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		$pago = (string) ( $res['pago'] ?? '' );
-		if ( '' !== $pago && isset( Catalogo::FILTROS_PAGO[ $pago ] ) ) {
-			$partes[] = mb_strtolower( asde_t( Catalogo::FILTROS_PAGO[ $pago ] ) );
+		if ( '' !== $pago && isset( Catalogo::filtros_pago()[ $pago ] ) ) {
+			$partes[] = mb_strtolower( ( Catalogo::filtros_pago()[ $pago ] ) );
 		}
 		$partes[] = wp_date( 'd/m/Y H:i' );
 		return implode( ' · ', $partes );

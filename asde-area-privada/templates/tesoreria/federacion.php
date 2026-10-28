@@ -62,7 +62,7 @@ $org        = Organizacion::nombre();
 					<?php foreach ( $coste['conceptos'] as $c ) : ?>
 						<tr>
 							<td data-label="<?php echo esc_attr( esc_attr__( 'Description', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( $c['nombre'] ); ?></td>
-							<td data-label="<?php echo esc_attr( esc_attr__( 'Applies to', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( 'grupo' === $c['aplica'] ? __( 'Once per group', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : sprintf( '%s × %d', $n( $c['unidad'] ), $c['n'] ) . ' (' . mb_strtolower( Organizacion::APLICA[ $c['aplica'] ] ?? '' ) . ')' ); ?></td>
+							<td data-label="<?php echo esc_attr( esc_attr__( 'Applies to', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( 'grupo' === $c['aplica'] ? __( 'Once per group', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : sprintf( '%s × %d', $n( $c['unidad'] ), $c['n'] ) . ' (' . mb_strtolower( Organizacion::aplica()[ $c['aplica'] ] ?? '' ) . ')' ); ?></td>
 							<td data-label="<?php echo esc_attr( esc_attr__( 'Amount', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( $e( $c['importe'] ) ); ?></td>
 						</tr>
 					<?php endforeach; ?>

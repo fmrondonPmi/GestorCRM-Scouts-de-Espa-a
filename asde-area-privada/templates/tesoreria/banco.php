@@ -81,7 +81,7 @@ $revisar = static fn( array $ids ) => add_query_arg(
 				<p>
 					<label for="asde-codificacion"><?php esc_html_e( 'Character set', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 					<select id="asde-codificacion" name="codificacion">
-						<?php foreach ( asde_ta( Codificacion::LISTA ) as $k => $label ) : ?>
+						<?php foreach ( ( Codificacion::lista() ) as $k => $label ) : ?>
 							<option value="<?php echo esc_attr( $k ); ?>"><?php echo esc_html( $label ); ?></option>
 						<?php endforeach; ?>
 					</select>
@@ -140,7 +140,7 @@ $revisar = static fn( array $ids ) => add_query_arg(
 		<label for="asde-banco-estado" class="screen-reader-text"><?php esc_html_e( 'Show', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 		<select id="asde-banco-estado" name="estado" data-asde-autoenviar>
 			<option value=""><?php esc_html_e( 'All', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></option>
-			<?php foreach ( asde_ta( BancoTable::ESTADOS ) as $k => $label ) : ?>
+			<?php foreach ( ( BancoTable::estados() ) as $k => $label ) : ?>
 				<option value="<?php echo esc_attr( $k ); ?>" <?php selected( $filtros['estado'], $k ); ?>><?php echo esc_html( $label ); ?></option>
 			<?php endforeach; ?>
 		</select>
@@ -205,14 +205,14 @@ $revisar = static fn( array $ids ) => add_query_arg(
 							<?php if ( '' !== $m['ordenante'] ) : ?>
 								<strong><?php echo esc_html( $m['ordenante'] ); ?></strong><br>
 							<?php endif; ?>
-							<?php echo esc_html( '' !== $m['concepto'] ? $m['concepto'] : ( asde_t( Norma43::CONCEPTOS[ $m['concepto_comun'] ] ?? '—' ) ) ); ?>
+							<?php echo esc_html( '' !== $m['concepto'] ? $m['concepto'] : ( ( Norma43::conceptos()[ $m['concepto_comun'] ] ?? '—' ) ) ); ?>
 							<?php if ( '' !== $m['referencia1'] . $m['referencia2'] ) : ?>
 								<br><span class="asde-muted"><?php esc_html_e( 'Ref.:', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <?php echo esc_html( trim( $m['referencia1'] . ' ' . $m['referencia2'] ) ); ?></span>
 							<?php endif; ?>
 						</td>
 						<td data-label="<?php echo esc_attr( esc_attr__( 'Amount', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>" class="asde-importe <?php echo $ingreso ? 'asde-importe--ingreso' : 'asde-importe--gasto'; ?>"><?php echo esc_html( ( $ingreso ? '+' : '' ) . Calculadora::euros( $m['importe'] ) ); ?></td>
 						<td data-label="<?php echo esc_attr( esc_attr__( 'Status', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
-							<span class="asde-badge asde-badge--banco-<?php echo esc_attr( $m['estado'] ); ?>"><?php echo esc_html( asde_t( BancoTable::ESTADOS[ $m['estado'] ] ?? $m['estado'] ) ); ?></span>
+							<span class="asde-badge asde-badge--banco-<?php echo esc_attr( $m['estado'] ); ?>"><?php echo esc_html( ( BancoTable::estados()[ $m['estado'] ] ?? $m['estado'] ) ); ?></span>
 							<?php if ( BancoTable::IGNORADO === $m['estado'] ) : ?>
 								<br><strong><?php echo esc_html( isset( $tipos[ (int) $m['tipo_id'] ] ) ? $tipos[ (int) $m['tipo_id'] ]['nombre'] : __( 'No type', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?></strong>
 								<?php echo '' !== $m['nota'] ? '<br><span class="asde-muted">' . esc_html( $m['nota'] ) . '</span>' : ''; ?>

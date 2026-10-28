@@ -478,7 +478,7 @@ try {
 	$ok( 1 === $res['cobrados'] && 1 === $res['devueltos'] && 258.0 === $tot[ $f1 ]['pagado'] && Remesas::COBRADO === $ls[ $f1 ]['estado'] && Remesas::DEVUELTO === $ls[ $f3 ]['estado'] && ! empty( $r['cobros_en'] ), 'cobros: la familia 1 queda pagada (58 + 200) y la de Rex, marcada como devuelta; la remesa se da por cerrada' );
 	$pago = (array) $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . MovimientosTable::table() . ' WHERE familia_id = %d AND origen = %s', $f1, 'sepa' ), ARRAY_A ); // phpcs:ignore WordPress.DB
 	$ok( $pago && 'domiciliacion' === $pago['metodo'] && $r['numero'] . '-' . $fam1['numero'] === $pago['referencia'] && 200.0 === (float) $pago['importe'] && str_contains( $pago['nota'], $r['numero'] ), 'el cobro es un pago de la familia: forma «Domiciliación SEPA», origen sepa y la referencia de la remesa' );
-	$ok( 'Domiciliación SEPA' === MovimientosTable::METODOS['domiciliacion'] && Calculadora::PAGADO === Calculadora::familia( $fam1, $repo->obtener_varias( $fam1['miembros'] ), $c2, $tot[ $f1 ] )['estado'], 'la familia 1 sale como «pagada» en el control de pagos' );
+	$ok( 'Domiciliación SEPA' === MovimientosTable::metodos()['domiciliacion'] && Calculadora::PAGADO === Calculadora::familia( $fam1, $repo->obtener_varias( $fam1['miembros'] ), $c2, $tot[ $f1 ] )['estado'], 'la familia 1 sale como «pagada» en el control de pagos' );
 	$como( $u_fam );
 	$html = ( new MisPagosView() )->render();
 	$ok( str_contains( $html, 'Domiciliación SEPA' ) && ! str_contains( $html, 'Próximo cargo' ), '«Mis pagos» lista el pago con su forma de pago y ya no anuncia el cargo' );
@@ -560,7 +560,7 @@ try {
 	$c1  = $calc( $f1 );
 	$leo = $res['filas'][0] ?? array();
 	$ok( 1 === count( $res['filas'] ) && 'Leo' === $leo['nombre'] && $familias[ $f1 ]['numero'] === $leo['pago_familia'] && $ronda === $res['ronda'], 'el scouter de Lobatos solo ve a los de su sección (Leo), con su familia' );
-	$ok( asde_t( Calculadora::ETIQUETAS[ $c1['estado'] ] ) === $leo['pago_estado'] && Calculadora::euros( $c1['a_pagar'] ) === $leo['pago_a_pagar'] && Calculadora::euros( $c1['pagado'] ) === $leo['pago_pagado'] && Calculadora::euros( max( 0, $c1['pendiente'] ) ) === $leo['pago_pendiente'] && 2 === count( $c1['pagan'] ), 'estado, cuota, pagado y pendiente como en el control de pagos: la cuota es la de la familia (Leo y su hermana Nora, de otra sección)' );
+	$ok( asde_t( Calculadora::etiquetas()[ $c1['estado'] ] ) === $leo['pago_estado'] && Calculadora::euros( $c1['a_pagar'] ) === $leo['pago_a_pagar'] && Calculadora::euros( $c1['pagado'] ) === $leo['pago_pagado'] && Calculadora::euros( max( 0, $c1['pendiente'] ) ) === $leo['pago_pendiente'] && 2 === count( $c1['pagan'] ), 'estado, cuota, pagado y pendiente como en el control de pagos: la cuota es la de la familia (Leo y su hermana Nora, de otra sección)' );
 	$hechos = array_filter( MovimientosTable::de_familia( $f1, $ronda ), static fn( $m ) => MovimientosTable::PAGO === $m['tipo'] && empty( $m['anulado_en'] ) );
 	$ok( $hechos && count( $hechos ) === count( explode( '; ', $leo['pago_hechos'] ) ) && str_contains( $leo['pago_hechos'], Calculadora::euros( (float) current( $hechos )['importe'] ) ), 'y los pagos hechos (fecha e importe), sin los eliminados' );
 
@@ -600,7 +600,7 @@ try {
 	$ok( str_contains( $lista_inf, 'Pagos de la cuota' ) && str_contains( $editor, 'Cuota y pagos' ) && str_contains( $editor, 'name="pago"' ) && str_contains( $editor, '<option value="' . $ronda . '"' ), 'el scouter ve el informe «Pagos de la cuota» y, en el editor, las columnas y los filtros de pagos (y la ronda)' );
 	$ok( str_contains( $resultado, 'Cuota de la ronda ' . $ronda ) && str_contains( $resultado, '· les falta algo por pagar' ), 'el resultado dice de qué ronda es la cuota y el filtro aplicado' );
 	$mod_antes = get_option( 'asde_ap_modulos', null );
-	Modulos::guardar( $grupo['numero'], array_values( array_diff( array_keys( Modulos::LISTA ), array( Modulos::TESORERIA ) ) ) );
+	Modulos::guardar( $grupo['numero'], array_values( array_diff( array_keys( Modulos::lista() ), array( Modulos::TESORERIA ) ) ) );
 	$amb       = $como( $u_scout );
 	$sin       = ( new Generador( $repo->crm() ) )->ejecutar( $informe( array( 'pago' => 'debe' ), array( 'nombre', 'pago_estado' ) ), $amb );
 	$lista_sin = ( new InformesView() )->render();

@@ -58,7 +58,7 @@ final class Validacion {
 		if ( ! MenuEvento::puede_editar( $e, $a ) ) {
 			return new \WP_Error( 'asde_menus', __( 'You cannot change this event\'s menu.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
-		if ( ! isset( AvisosTable::ALTERNATIVAS[ $alternativa ] ) ) {
+		if ( ! isset( AvisosTable::alternativas()[ $alternativa ] ) ) {
 			return new \WP_Error( 'asde_menus', __( 'Choose what is done with that dish.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		foreach ( MenuEvento::platos( $e ) as $p ) {

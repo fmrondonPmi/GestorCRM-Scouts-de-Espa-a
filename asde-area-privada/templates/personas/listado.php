@@ -79,7 +79,7 @@ $columnas = array(
 	<?php if ( $incid ) : ?>
 		<p class="asde-muted">
 			<?php foreach ( $incid as $estado => $n ) : ?>
-				<?php echo esc_html( asde_t( Numeracion::ETIQUETAS[ $estado ] ) . ': ' . $n ); ?> ·
+				<?php echo esc_html( ( Numeracion::etiquetas()[ $estado ] ) . ': ' . $n ); ?> ·
 			<?php endforeach; ?>
 			<a href="<?php echo esc_url( add_query_arg( 'ver', 'incidencias', $url ) ); ?>"><?php esc_html_e( 'view', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a>
 		</p>
@@ -135,7 +135,7 @@ $columnas = array(
 	<form method="get" action="<?php echo esc_url( $url ); ?>" class="asde-filter asde-filter--una-linea" data-asde-parcial-form="personas-lista">
 		<label for="asde-ver"><?php esc_html_e( 'Show', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 		<select id="asde-ver" name="ver" data-asde-autoenviar>
-			<?php foreach ( asde_ta( PersonasView::FILTROS ) as $k => $label ) : ?>
+			<?php foreach ( ( PersonasView::filtros() ) as $k => $label ) : ?>
 				<option value="<?php echo esc_attr( $k ); ?>" <?php selected( $filtro, $k ); ?>><?php echo esc_html( $label ); ?></option>
 			<?php endforeach; ?>
 		</select>
@@ -184,7 +184,7 @@ $columnas = array(
 							<?php echo $n['numero'] ? '<strong>' . esc_html( $n['numero'] ) . '</strong>' : '—'; ?>
 							<?php if ( Numeracion::OK !== $n['estado'] ) : ?>
 								<br><span class="asde-help<?php echo in_array( $n['estado'], Numeracion::BLOQUEANTES, true ) ? ' asde-help--warning' : ''; ?>">
-									<?php echo esc_html( asde_t( Numeracion::ETIQUETAS[ $n['estado'] ] ) ); ?>
+									<?php echo esc_html( ( Numeracion::etiquetas()[ $n['estado'] ] ) ); ?>
 									<?php echo Numeracion::CORREGIDO === $n['estado'] || Numeracion::INVALIDO === $n['estado'] ? esc_html( sprintf( /* translators: %s: text */ __( ' (in the CRM: %s)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $p->num_socio_local_crm ) ) : ''; ?>
 								</span>
 							<?php endif; ?>

@@ -24,7 +24,7 @@ defined( 'ABSPATH' ) || exit;
 $estado  = EventosTable::estado_visible( $e );
 $pestanas = array();
 $solo_material = Servicio::solo_material( $e, $ambito );
-foreach ( asde_ta( EventosView::PESTANAS ) as $p => $etiqueta ) {
+foreach ( ( EventosView::pestanas() ) as $p => $etiqueta ) {
 	if ( $solo_material && ! in_array( $p, array( 'resumen', 'material' ), true ) ) {
 		continue; // v0.43: el Intendente solo ve el resumen y el material.
 	}
@@ -45,7 +45,7 @@ foreach ( asde_ta( EventosView::PESTANAS ) as $p => $etiqueta ) {
 <section class="asde-card asde-evento">
 	<header class="asde-card__header asde-card__header--split">
 		<h2 class="asde-card__title"><?php echo esc_html( $e['nombre'] ); ?></h2>
-		<span class="asde-badge asde-badge--evento-<?php echo esc_attr( $estado ); ?>"><?php echo esc_html( asde_t( EventosTable::ESTADOS[ $estado ] ) ); ?></span>
+		<span class="asde-badge asde-badge--evento-<?php echo esc_attr( $estado ); ?>"><?php echo esc_html( ( EventosTable::estados()[ $estado ] ) ); ?></span>
 	</header>
 	<p>
 		<strong><?php echo esc_html( EventosTable::numero( $e ) ); ?></strong> · <?php echo esc_html( Config::nombre_tipo( $cfg, $e['tipo'] ) ); ?> · <?php echo esc_html( EventosTable::cuando( $e ) ); ?>

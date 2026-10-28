@@ -20,7 +20,7 @@ defined( 'ABSPATH' ) || exit;
 
 $fecha   = static fn( string $f ) => wp_date( 'd/m/Y', strtotime( $f . ' 12:00' ) );
 $importe = static fn( float $v ) => ( $v > 0 ? '+' : '' ) . Calculadora::euros( $v );
-$texto   = static fn( array $m ) => trim( $m['ordenante'] . ' ' . ( '' !== $m['concepto'] ? $m['concepto'] : asde_t( Norma43::CONCEPTOS[ $m['concepto_comun'] ] ?? '—' ) ) );
+$texto   = static fn( array $m ) => trim( $m['ordenante'] . ' ' . ( '' !== $m['concepto'] ? $m['concepto'] : ( Norma43::conceptos()[ $m['concepto_comun'] ] ?? '—' ) ) );
 ?>
 <?php if ( $hecho ) : ?>
 	<section class="asde-card">
@@ -70,7 +70,7 @@ $texto   = static fn( array $m ) => trim( $m['ordenante'] . ' ' . ( '' !== $m['c
 								<td data-label="<?php echo esc_attr( esc_attr__( 'Date', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( $fecha( $c['fecha'] ) ); ?></td>
 								<td data-label="<?php echo esc_attr( esc_attr__( 'Description', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
 									<?php echo esc_html( $texto( $c ) ); ?>
-									<br><span class="asde-muted"><?php echo esc_html( asde_t( BancoTable::ESTADOS[ $c['estado'] ] ?? $c['estado'] ) ); ?></span>
+									<br><span class="asde-muted"><?php echo esc_html( ( BancoTable::estados()[ $c['estado'] ] ?? $c['estado'] ) ); ?></span>
 								</td>
 								<td data-label="<?php echo esc_attr( esc_attr__( 'Amount', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>" class="asde-importe <?php echo $c['importe'] > 0 ? 'asde-importe--ingreso' : 'asde-importe--gasto'; ?>"><?php echo esc_html( $importe( (float) $c['importe'] ) ); ?></td>
 								<td data-label="">

@@ -24,26 +24,32 @@ final class Informe {
 	 * Presentación (v0.29): en tabla o una ficha por persona (al imprimir, una por página).
 	 * Va en los filtros de la definición guardada, sin cambiar la tabla.
 	 */
-	public const VISTAS = array(
-		'tabla'  => 'Tabla',
-		'fichas' => 'Una ficha por persona (al imprimir, una por página)',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function vistas(): array {
+		return array(
+		'tabla'  => __( 'Table', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'fichas' => __( 'One record per person (one per page when printing)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
-	public const ORDENES = array(
-		'apellidos' => 'Apellidos',
-		'nombre'    => 'Nombre',
-		'edad'      => 'Edad',
-		'seccion'   => 'Sección',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function ordenes(): array {
+		return array(
+		'apellidos' => __( 'Surnames', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'nombre'    => __( 'Name', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'edad'      => __( 'Age', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'seccion'   => __( 'Section', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
 	/** Nombre para mostrar: los informes predefinidos se guardan en castellano y se traducen. */
 	public function titulo(): string {
-		return $this->sistema ? asde_t( $this->nombre ) : $this->nombre;
+		return $this->sistema ? asde_guardado( $this->nombre ) : $this->nombre;
 	}
 
 	/** Descripción para mostrar (ver titulo()). */
 	public function resumen(): string {
-		return $this->sistema ? asde_t( $this->descripcion ) : $this->descripcion;
+		return $this->sistema ? asde_guardado( $this->descripcion ) : $this->descripcion;
 	}
 
 	/** @param string[] $columnas */
@@ -82,9 +88,9 @@ final class Informe {
 			'edad_min'  => $edad( $f['edad_min'] ?? null ),
 			'edad_max'  => $edad( $f['edad_max'] ?? null ),
 			'salud'     => ! empty( $f['salud'] ),
-			'pago'      => isset( Catalogo::FILTROS_PAGO[ (string) ( $f['pago'] ?? '' ) ] ) ? (string) ( $f['pago'] ?? '' ) : '',
+			'pago'      => isset( Catalogo::filtros_pago()[ (string) ( $f['pago'] ?? '' ) ] ) ? (string) ( $f['pago'] ?? '' ) : '',
 			'ronda'     => Config::es_ronda( (string) ( $f['ronda'] ?? '' ) ) ? (string) $f['ronda'] : '',
-			'orden'     => isset( self::ORDENES[ $f['orden'] ?? '' ] ) ? (string) $f['orden'] : 'apellidos',
+			'orden'     => isset( self::ordenes()[ $f['orden'] ?? '' ] ) ? (string) $f['orden'] : 'apellidos',
 			'vista'     => 'fichas' === ( $f['vista'] ?? '' ) ? 'fichas' : 'tabla',
 		);
 	}

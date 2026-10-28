@@ -96,7 +96,7 @@ $publico = add_query_arg( 'grupo', Grupo::numero(), $enlace );
 						<td data-label="<?php echo esc_attr( esc_attr__( 'Email', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( '' !== $s['datos']['email'] ? $s['datos']['email'] : '—' ); ?></td>
 						<td data-label="">
 							<?php if ( $resueltas ) : ?>
-								<span class="asde-badge asde-badge--estado-<?php echo esc_attr( Solicitudes::APROBADA === $s['estado'] ? 'activo' : 'desactivado' ); ?>"><?php echo esc_html( asde_t( Solicitudes::ESTADOS[ $s['estado'] ] ?? $s['estado'] ) ); ?></span>
+								<span class="asde-badge asde-badge--estado-<?php echo esc_attr( Solicitudes::APROBADA === $s['estado'] ? 'activo' : 'desactivado' ); ?>"><?php echo esc_html( ( Solicitudes::estados()[ $s['estado'] ] ?? $s['estado'] ) ); ?></span>
 								<br><a href="<?php echo esc_url( add_query_arg( 'solicitud', $s['id'], $url ) ); ?>" data-asde-modal><?php esc_html_e( 'View', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a>
 							<?php else : ?>
 								<a class="button" href="<?php echo esc_url( add_query_arg( 'solicitud', $s['id'], $url ) ); ?>" data-asde-modal><?php esc_html_e( 'Review', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a>

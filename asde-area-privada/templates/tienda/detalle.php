@@ -41,7 +41,7 @@ $form    = static function ( string $accion, string $boton, string $clase = 'asd
 <section class="asde-card" data-asde-plegable="uniforme-pedido">
 	<header class="asde-card__header asde-card__header--split">
 		<h2 class="asde-card__title"><?php esc_html_e( 'Order', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <?php echo esc_html( PedidosTable::numero( $p ) ); ?></h2>
-		<span class="asde-badge asde-badge--uniforme-<?php echo esc_attr( $estado ); ?>"><?php echo esc_html( asde_t( PedidosTable::ESTADOS[ $estado ] ) ); ?></span>
+		<span class="asde-badge asde-badge--uniforme-<?php echo esc_attr( $estado ); ?>"><?php echo esc_html( ( PedidosTable::estados()[ $estado ] ) ); ?></span>
 	</header>
 	<p>
 		<?php if ( $persona ) : ?>
@@ -80,7 +80,7 @@ $form    = static function ( string $accion, string $boton, string $clase = 'asd
 			<span class="asde-pasos__marca" aria-hidden="true"><?php echo null !== $p['pago_en'] ? '✓' : ''; ?></span>
 			<strong><?php esc_html_e( 'Payment', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></strong> <span class="asde-muted"><?php esc_html_e( '(Treasury)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span>
 			<?php if ( null !== $p['pago_en'] ) : ?>
-				<br><?php echo esc_html( sprintf( /* translators: 1: text, 2: text, 3: text */ __( '%1$s in %2$s on %3$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Calculadora::euros( (float) $p['pago_importe'] ), mb_strtolower( asde_t( PedidosTable::METODOS[ $p['pago_metodo'] ] ?? $p['pago_metodo'] ) ), $fecha( $p['pago_fecha'] ) ) ); ?><?php echo '' !== $p['pago_ref'] ? esc_html( ' · ' . $p['pago_ref'] ) : ''; ?>
+				<br><?php echo esc_html( sprintf( /* translators: 1: text, 2: text, 3: text */ __( '%1$s in %2$s on %3$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Calculadora::euros( (float) $p['pago_importe'] ), mb_strtolower( ( PedidosTable::metodos()[ $p['pago_metodo'] ] ?? $p['pago_metodo'] ) ), $fecha( $p['pago_fecha'] ) ) ); ?><?php echo '' !== $p['pago_ref'] ? esc_html( ' · ' . $p['pago_ref'] ) : ''; ?>
 				<span class="asde-muted"><?php echo esc_html( $cuando( /* translators: 1: text, 2: text */ __( 'Validated by %1$s on %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), /* translators: %2$s: text */ __( 'Validated on %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), (int) $p['pago_por'], $fecha( $p['pago_en'] ) ) ); ?></span>
 				<?php echo wp_kses( Servicio::puede_pagar( $p ) ? $form( 'uniforme_deshacer_pago', esc_html( __( 'Undo', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ), 'asde-btn-link', esc_html( __( 'Undo this order\'s payment?', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) ) : '', asde_html_permitido() ); ?>
 			<?php elseif ( $activo && Servicio::puede_pagar( $p ) ) : ?>
@@ -90,12 +90,12 @@ $form    = static function ( string $accion, string $boton, string $clase = 'asd
 					<input type="hidden" name="pedido" value="<?php echo (int) $p['id']; ?>">
 					<input type="hidden" name="desde" value="detalle">
 					<?php if ( '' !== $p['forma_pago'] ) : ?>
-						<p class="asde-help"><?php echo esc_html( sprintf( /* translators: %s: text */ __( 'Whoever ordered chose to pay with: %s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), asde_t( PedidosTable::FORMAS[ $p['forma_pago'] ] ?? '' ) ) ); ?></p>
+						<p class="asde-help"><?php echo esc_html( sprintf( /* translators: %s: text */ __( 'Whoever ordered chose to pay with: %s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), ( PedidosTable::formas()[ $p['forma_pago'] ] ?? '' ) ) ); ?></p>
 					<?php endif; ?>
 					<p class="asde-form__fila asde-form__fila--una-linea">
 						<label><?php esc_html_e( 'How', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>
 							<select name="metodo">
-								<?php foreach ( asde_ta( PedidosTable::METODOS ) as $m => $etiqueta ) : ?>
+								<?php foreach ( ( PedidosTable::metodos() ) as $m => $etiqueta ) : ?>
 									<option value="<?php echo esc_attr( $m ); ?>" <?php selected( PedidosTable::METODO_DE_FORMA[ $p['forma_pago'] ] ?? 'efectivo', $m ); ?>><?php echo esc_html( $etiqueta ); ?></option>
 								<?php endforeach; ?>
 							</select>
@@ -118,7 +118,7 @@ $form    = static function ( string $accion, string $boton, string $clase = 'asd
 			<span class="asde-pasos__marca" aria-hidden="true"><?php echo null !== $p['pedido_en'] ? '✓' : ''; ?></span>
 			<strong><?php esc_html_e( 'Included in the group\'s order', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></strong> <span class="asde-muted"><?php esc_html_e( '(Coordination)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span>
 			<?php if ( null !== $p['pedido_en'] ) : ?>
-				<br><?php echo esc_html( '«' . ( $del_inv ? asde_t( PedidosTable::REF_INVENTARIO ) : $p['pedido_ref'] ) . '»' ); ?>
+				<br><?php echo esc_html( '«' . ( $del_inv ? asde_guardado( PedidosTable::REF_INVENTARIO ) : $p['pedido_ref'] ) . '»' ); ?>
 				<span class="asde-muted"><?php echo esc_html( $cuando( /* translators: 1: text, 2: text */ __( 'by %1$s on %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), /* translators: %2$s: text */ __( 'on %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), (int) $p['pedido_por'], $fecha( $p['pedido_en'] ) ) ); ?></span>
 				<?php echo wp_kses( ! $del_inv && Servicio::puede_pedir( $p ) ? $form( 'uniforme_deshacer_pedido', esc_html( __( 'Undo', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ), 'asde-btn-link', esc_html( __( 'Remove this order from the group\'s order?', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) ) : '', asde_html_permitido() ); ?>
 			<?php elseif ( $activo && Servicio::puede_pedir( $p ) ) : ?>

@@ -28,11 +28,14 @@ final class BancoTable {
 	public const CONCILIADO = 'conciliado';
 	public const IGNORADO   = 'ignorado';
 
-	public const ESTADOS = array(
-		self::PENDIENTE  => 'Pendiente',
-		self::CONCILIADO => 'Conciliado',
-		self::IGNORADO   => 'Revisado (no es cuota)',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function estados(): array {
+		return array(
+		self::PENDIENTE  => __( 'Pending', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::CONCILIADO => __( 'Reconciled', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::IGNORADO   => __( 'Reviewed (not a fee)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
 	public static function table(): string {
 		global $wpdb;
@@ -285,7 +288,7 @@ final class BancoTable {
 	public static function movimientos( array $filtros = array() ): array {
 		global $wpdb;
 		// Consulta fija: cada filtro opcional va como valor ('' o 0 lo dejan sin efecto), sin montar SQL (v0.26.2, Plugin Check).
-		$estado = isset( self::ESTADOS[ $filtros['estado'] ?? '' ] ) ? (string) $filtros['estado'] : '';
+		$estado = isset( self::estados()[ $filtros['estado'] ?? '' ] ) ? (string) $filtros['estado'] : '';
 		$clase  = (string) ( $filtros['clase'] ?? '' );
 		$sin    = 'sin' === $clase ? 1 : 0;
 		$tipo   = ctype_digit( $clase ) ? (int) $clase : 0;

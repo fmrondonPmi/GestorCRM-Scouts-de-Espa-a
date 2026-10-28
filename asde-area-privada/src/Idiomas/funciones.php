@@ -1,81 +1,21 @@
 <?php
 /**
- * Funciones para pedir un texto del área privada en el idioma de la persona (v0.15, doc 28).
- * El texto que se pasa está en castellano y es también la clave de traducción.
- *
- * Con textos con partes que cambian, se rellenan después con sprintf:
- *   sprintf( asde_t( 'Pedido %s enviado' ), $numero )
+ * Funciones auxiliares de los textos del área privada (doc 62). Los textos usan gettext estándar (__(), esc_html__()…)
+ * con el original en inglés y el dominio del plugin; aquí solo queda la traducción de datos guardados en castellano.
  */
 
-use AsdeBalears\AreaPrivada\Idiomas\Traducciones;
 
 defined( 'ABSPATH' ) || exit;
 
-if ( ! function_exists( 'asde_t' ) ) {
-	/** Texto plano traducido (sin escapar: para escapar tú, o para emails de texto). */
-	function asde_t( string $es ): string {
-		return Traducciones::t( $es );
-	}
-}
-
-if ( ! function_exists( 'asde_h' ) ) {
-	/** Texto traducido para HTML (admite negrita, cursiva, código, saltos de línea y enlaces). */
-	function asde_h( string $es ): string {
-		return Traducciones::h( $es );
-	}
-}
-
-if ( ! function_exists( 'asde_e' ) ) {
-	/** Imprime el texto traducido para HTML. */
-	function asde_e( string $es ): void {
-		echo wp_kses( Traducciones::h( $es ), asde_html_permitido() );
-	}
-}
-
-if ( ! function_exists( 'asde_a' ) ) {
-	/** Texto traducido listo para un atributo HTML (title, placeholder…). */
-	function asde_a( string $es ): string {
-		return esc_attr( Traducciones::t( $es ) );
-	}
-}
-
-if ( ! function_exists( 'asde_js' ) ) {
+if ( ! function_exists( 'asde_guardado' ) ) {
 	/**
-	 * Pregunta traducida para confirmar un envío (sin escapar), con los marcadores %s/%d ya
-	 * rellenos: <code>data-asde-confirmar="&lt;?php echo esc_attr( asde_js( '¿Borrar %s?', $x ) ); ?&gt;"</code>.
-	 * v0.31: area.js la pregunta al enviar; antes era una cadena JSON para un onsubmit en línea,
-	 * y WordPress pide no poner JavaScript en las plantillas.
-	 *
-	 * @param mixed ...$args
+	 * Traduce un texto que el plugin guarda o define en castellano como dato (plantillas, biblioteca de recetas, nombres
+	 * de roles, descripciones de permisos…). Un texto que no es de los conocidos se devuelve tal cual (doc 62).
 	 */
-	function asde_js( string $es, ...$args ): string {
-		$t = Traducciones::t( $es );
-		return $args ? vsprintf( $t, $args ) : $t;
+	function asde_guardado( string $es ): string {
+		return \AsdeBalears\AreaPrivada\Idiomas\Guardados::t( $es );
 	}
 }
-if ( ! function_exists( 'asde_ta' ) ) {
-	/**
-	 * Traduce los valores de texto de una lista de etiquetas (las claves no se tocan): para las constantes con
-	 * etiquetas, que no pueden llamar a funciones. Ej.: <code>foreach ( asde_ta( Clase::ESTADOS ) as $k => $etiqueta )</code>.
-	 *
-	 * @param array<array-key, mixed> $valores
-	 * @return array<array-key, mixed>
-	 */
-	function asde_ta( array $valores ): array {
-		return array_map( static fn( $v ) => is_string( $v ) ? Traducciones::t( $v ) : $v, $valores );
-	}
-}
-
-if ( ! function_exists( 'asde_n' ) ) {
-	/**
-	 * Plantilla traducida según el número (singular si es 1, plural si no), para rellenar después con sprintf:
-	 * <code>sprintf( asde_n( '%d persona', '%d personas', $n ), $n )</code>.
-	 */
-	function asde_n( string $uno, string $varios, int $n ): string {
-		return Traducciones::t( 1 === $n ? $uno : $varios );
-	}
-}
-
 if ( ! function_exists( 'asde_html_permitido' ) ) {
 	/**
 	 * Etiquetas y atributos que pueden salir en el HTML que arma el plugin (los de una entrada de WordPress más

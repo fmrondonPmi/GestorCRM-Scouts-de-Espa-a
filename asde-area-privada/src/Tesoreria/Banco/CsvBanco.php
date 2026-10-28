@@ -18,16 +18,19 @@ defined( 'ABSPATH' ) || exit;
 final class CsvBanco {
 
 	/** Campos que se pueden asignar a columnas. */
-	public const CAMPOS = array(
-		'fecha'       => 'Fecha de la operación',
-		'fecha_valor' => 'Fecha valor',
-		'concepto'    => 'Concepto',
-		'importe'     => 'Importe (con signo)',
-		'cargo'       => 'Cargo / debe',
-		'abono'       => 'Abono / haber',
-		'ordenante'   => 'Ordenante o beneficiario',
-		'referencia'  => 'Referencia',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function campos(): array {
+		return array(
+		'fecha'       => __( 'Date of the operation', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'fecha_valor' => __( 'Value date', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'concepto'    => __( 'Description', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'importe'     => __( 'Amount (signed)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'cargo'       => __( 'Debit', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'abono'       => __( 'Credit', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'ordenante'   => __( 'Payer or beneficiary', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'referencia'  => __( 'Reference', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
 	private const SINONIMOS = array(
 		'fecha'       => array( 'fecha', 'fecha operacion', 'f operacion', 'fecha oper', 'fecha contable', 'f contable', 'fecha movimiento', 'fecha mov', 'data', 'data operacio' ),

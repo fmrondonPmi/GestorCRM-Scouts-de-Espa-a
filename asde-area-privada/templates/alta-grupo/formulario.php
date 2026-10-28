@@ -67,7 +67,7 @@ defined( 'ABSPATH' ) || exit;
 			<label for="asde-ag-rol"><?php esc_html_e( 'Role', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>
 				<select id="asde-ag-rol" name="rol" required>
 					<?php foreach ( GrupoSolicitudes::ROLES as $rol => $etiqueta ) : ?>
-						<option value="<?php echo esc_attr( $rol ); ?>" <?php selected( $valores['rol'], $rol ); ?>><?php echo esc_html( asde_t( $etiqueta ) ); ?></option>
+						<option value="<?php echo esc_attr( $rol ); ?>" <?php selected( $valores['rol'], $rol ); ?>><?php echo esc_html(  $etiqueta  ); ?></option>
 					<?php endforeach; ?>
 				</select>
 			</label>

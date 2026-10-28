@@ -168,7 +168,7 @@ try {
 	update_option( $opcion_semilla, array_values( array_diff( $sembrados, array( '999' ) ) ), false );
 	TiposMovimiento::sembrar();
 	$tipos = TiposMovimiento::todos();
-	$ok( count( TiposMovimiento::INICIALES ) === count( $tipos ) && in_array( 'Comisiones bancarias', array_column( $tipos, 'nombre' ), true ) && in_array( 'Donativos', array_column( $tipos, 'nombre' ), true ), 'la primera vez se crean los tipos de partida (' . count( $tipos ) . ')' );
+	$ok( count( TiposMovimiento::iniciales() ) === count( $tipos ) && in_array( 'Comisiones bancarias', array_column( $tipos, 'nombre' ), true ) && in_array( 'Donativos', array_column( $tipos, 'nombre' ), true ), 'la primera vez se crean los tipos de partida (' . count( $tipos ) . ')' );
 	$ok( TiposMovimiento::GASTO === reset( $tipos )['naturaleza'] && TiposMovimiento::AMBOS === end( $tipos )['naturaleza'], 'salen ordenados: gastos, ingresos y «gasto o ingreso»' );
 	$borrar_todos = array_keys( $tipos );
 	foreach ( $borrar_todos as $tid ) {

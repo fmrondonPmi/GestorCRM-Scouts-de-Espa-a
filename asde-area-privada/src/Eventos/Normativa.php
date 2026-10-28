@@ -37,11 +37,14 @@ final class Normativa {
 	/** Secciones cuyos participantes se cuentan como menores en la previsión (los Rovers suelen ser mayores de edad). */
 	public const SECCIONES_MENORES = array( 'castores', 'lobatos', 'scouts', 'escultas' );
 
-	public const COMUNICACION = array(
-		'auto' => 'Según las noches y los menores (2 o más noches y 10 o más menores)',
-		'si'   => 'Sí, comunicarla siempre',
-		'no'   => 'No (la comunica quien organiza, o no hay menores)',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function comunicacion(): array {
+		return array(
+		'auto' => __( 'Depending on nights and minors (2 or more nights and 10 or more minors)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'si'   => __( 'Yes, always report it', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'no'   => __( 'No (the organiser reports it, or there are no minors)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
 	/** Datos de normativa del evento, con sus valores por defecto. */
 	public static function datos( array $raw ): array {
@@ -56,7 +59,7 @@ final class Normativa {
 			'socorrista'      => ! empty( $raw['socorrista'] ),
 			'dependencia12'   => $entero( $raw['dependencia12'] ?? 0 ),
 			'dependencia3'    => $entero( $raw['dependencia3'] ?? 0 ),
-			'comunicacion'    => isset( self::COMUNICACION[ $raw['comunicacion'] ?? '' ] ) ? (string) $raw['comunicacion'] : 'auto',
+			'comunicacion'    => isset( self::comunicacion()[ $raw['comunicacion'] ?? '' ] ) ? (string) $raw['comunicacion'] : 'auto',
 		);
 	}
 

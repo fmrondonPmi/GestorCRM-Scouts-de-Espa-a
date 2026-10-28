@@ -121,7 +121,7 @@ final class LibroMayor {
 			} else {
 				$salidas -= $m['importe'];
 			}
-			$texto   = trim( $m['ordenante'] . ' ' . ( '' !== $m['concepto'] ? $m['concepto'] : asde_t( Norma43::CONCEPTOS[ $m['concepto_comun'] ] ?? '' ) ) );
+			$texto   = trim( $m['ordenante'] . ' ' . ( '' !== $m['concepto'] ? $m['concepto'] : ( Norma43::conceptos()[ $m['concepto_comun'] ] ?? '' ) ) );
 			$filas[] = array(
 				'fecha'    => $m['fecha'],
 				'concepto' => $texto,
@@ -162,7 +162,7 @@ final class LibroMayor {
 			case CajaTable::MANUAL:
 				return isset( $tipos[ (int) $a['tipo_id'] ] ) ? (string) $tipos[ (int) $a['tipo_id'] ]['nombre'] : __( 'Other (cash box)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 			default:
-				return asde_t( Automaticos::ORIGENES[ $a['origen'] ] ?? 'Otros (caja)' );
+				return ( Automaticos::origenes()[ $a['origen'] ] ?? 'Otros (caja)' );
 		}
 	}
 

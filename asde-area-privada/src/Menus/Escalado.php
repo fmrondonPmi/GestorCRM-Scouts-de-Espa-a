@@ -12,23 +12,26 @@ defined( 'ABSPATH' ) || exit;
 final class Escalado {
 
 	/** Código => [nombre, familia, factor a la unidad base]. */
-	public const UNIDADES = array(
-		'g'    => array( 'g', 'masa', 1 ),
-		'kg'   => array( 'kg', 'masa', 1000 ),
-		'ml'   => array( 'ml', 'volumen', 1 ),
-		'l'    => array( 'l', 'volumen', 1000 ),
-		'ud'   => array( 'unidades', 'ud', 1 ),
-		'cda'  => array( 'cucharadas', 'cda', 1 ),
-		'pizca' => array( 'pizcas', 'pizca', 1 ),
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function unidades(): array {
+		return array(
+		'g'    => array( __( 'g', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 'masa', 1 ),
+		'kg'   => array( __( 'kg', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 'masa', 1000 ),
+		'ml'   => array( __( 'ml', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 'volumen', 1 ),
+		'l'    => array( __( 'l', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 'volumen', 1000 ),
+		'ud'   => array( __( 'units', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 'ud', 1 ),
+		'cda'  => array( __( 'tablespoons', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 'cda', 1 ),
+		'pizca' => array( __( 'pinches', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 'pizca', 1 ),
 	);
+	}
 
 	public static function unidad_valida( string $u ): bool {
-		return isset( self::UNIDADES[ $u ] );
+		return isset( self::unidades()[ $u ] );
 	}
 
 	/** Nombre de la unidad, traducido. */
 	public static function nombre( string $u ): string {
-		return isset( self::UNIDADES[ $u ] ) ? asde_t( self::UNIDADES[ $u ][0] ) : $u;
+		return isset( self::unidades()[ $u ] ) ? ( self::unidades()[ $u ][0] ) : $u;
 	}
 
 	/**
@@ -44,7 +47,7 @@ final class Escalado {
 	 * @return array{0:string, 1:float} [clave de la familia + unidad base, cantidad]
 	 */
 	public static function a_base( float $cantidad, string $unidad ): array {
-		$u = self::UNIDADES[ $unidad ] ?? self::UNIDADES['ud'];
+		$u = self::unidades()[ $unidad ] ?? self::unidades()['ud'];
 		return array( $u[1], $cantidad * $u[2] );
 	}
 

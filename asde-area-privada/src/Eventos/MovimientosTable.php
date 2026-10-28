@@ -28,12 +28,15 @@ final class MovimientosTable {
 	public const DEVOLUCION = 'devolucion';
 
 	/** Formas de pago de un evento (P-146). La domiciliación solo la pone la remesa SEPA (v0.36). */
-	public const FORMAS = array(
-		'efectivo'      => 'Efectivo',
-		'transferencia' => 'Ingreso o transferencia',
-		'bizum'         => 'Bizum',
-		'domiciliacion' => 'Domiciliación SEPA',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function formas(): array {
+		return array(
+		'efectivo'      => __( 'Cash', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'transferencia' => __( 'Deposit or transfer', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'bizum'         => __( 'Bizum', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'domiciliacion' => __( 'SEPA direct debit', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
 	/** Las que Tesorería elige a mano (sin la domiciliación). */
 	public const FORMAS_MANUALES = array( 'efectivo', 'transferencia', 'bizum' );

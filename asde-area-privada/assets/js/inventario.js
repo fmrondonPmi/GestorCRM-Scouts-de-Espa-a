@@ -78,7 +78,7 @@
 		var contar = function () {
 			var n = compra.querySelectorAll( 'input[name="m[]"]:checked' ).length;
 			if ( contador ) {
-				contador.textContent = 0 === n ? '' : ( 1 === n ? asdeT( '1 material marcado' ) : asdeT( '%s materiales marcados', String( n ) ) );
+				contador.textContent = 0 === n ? '' : ( 1 === n ? asdeT( '1 item of equipment ticked' ) : asdeT( '%s items of equipment ticked', String( n ) ) );
 			}
 			return n;
 		};
@@ -92,8 +92,8 @@
 			if ( c.checked && umbral > 0 && cantidad >= umbral ) {
 				var nombre = c.getAttribute( 'data-nombre' ) || '';
 				var pregunta = 1 === cantidad
-					? asdeT( 'Ya hay 1 unidad de «%s» en el inventario. ¿Seguro que hace falta comprar más?', nombre )
-					: asdeT( 'Ya hay %s unidades de «%s» en el inventario. ¿Seguro que hace falta comprar más?', String( cantidad ), nombre );
+					? asdeT( 'There is already 1 unit of "%s" in the inventory. Do more really need to be bought?', nombre )
+					: asdeT( 'There are already %1$s units of "%2$s" in the inventory. Do more really need to be bought?', String( cantidad ), nombre );
 				if ( ! window.confirm( pregunta ) ) {
 					c.checked = false;
 				}
@@ -102,7 +102,7 @@
 		} );
 		compra.addEventListener( 'submit', function ( e ) {
 			// v0.30: sin nada marcado también se puede seguir, para una lista solo de material nuevo.
-			if ( 0 === contar() && ! window.confirm( asdeT( 'No has marcado ningún material del inventario. ¿Preparar una lista solo con material nuevo?' ) ) ) {
+			if ( 0 === contar() && ! window.confirm( asdeT( 'You have not ticked any equipment from the inventory. Prepare a list with new equipment only?' ) ) ) {
 				e.preventDefault();
 			}
 		} );
@@ -138,7 +138,7 @@
 				celda.textContent = euros( p * c );
 				suma += p * c;
 			} );
-			total.textContent = euros( suma ) + ( sinPrecio ? ' ' + asdeT( '+ sin precio' ) : '' );
+			total.textContent = euros( suma ) + ( sinPrecio ? ' ' + asdeT( '+ no price' ) : '' );
 		};
 		nueva.addEventListener( 'input', recalcular );
 		recalcular();

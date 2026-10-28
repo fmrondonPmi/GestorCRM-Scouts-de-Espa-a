@@ -132,7 +132,7 @@ final class MaterialesTable {
 	/** «Camisa femenina (chica), talla M»: la descripción de una camisa que no la tiene. Se guarda en castellano. */
 	public static function descripcion_camisa( array $cfg, string $modelo, string $talla ): string {
 		$nombre = (string) ( $cfg['modelos'][ $modelo ]['nombre'] ?? $modelo );
-		$quien  = Config::PARA_QUIEN[ $modelo ] ?? '';
+		$quien  = Config::para_quien()[ $modelo ] ?? '';
 		return '' !== $quien ? sprintf( '%s (%s), talla %s', $nombre, $quien, $talla ) : sprintf( '%s, talla %s', $nombre, $talla );
 	}
 

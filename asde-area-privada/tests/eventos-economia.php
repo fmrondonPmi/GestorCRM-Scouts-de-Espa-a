@@ -135,7 +135,7 @@ $crm = new Asde_Prueba_Crm(
 	$grupo['crm_id']
 );
 Grupo::forzar( $grupo );
-Modulos::guardar( (string) $grupo['numero'], array_keys( Modulos::LISTA ) ); // Eventos y SEPA, encendidos.
+Modulos::guardar( (string) $grupo['numero'], array_keys( Modulos::lista() ) ); // Eventos y SEPA, encendidos.
 $crm->activar();
 Escritura::usar_para_pruebas( $crm );
 

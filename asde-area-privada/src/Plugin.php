@@ -3,7 +3,6 @@ namespace AsdeBalears\AreaPrivada;
 
 use AsdeBalears\AreaPrivada\Admin\ColoresPage;
 use AsdeBalears\AreaPrivada\Admin\EntornoPage;
-use AsdeBalears\AreaPrivada\Admin\IdiomasPage;
 use AsdeBalears\AreaPrivada\Admin\OrganizacionPage;
 use AsdeBalears\AreaPrivada\Admin\SettingsPage;
 use AsdeBalears\AreaPrivada\Auth\AccessHooks;
@@ -45,7 +44,6 @@ final class Plugin {
 			( new \AsdeBalears\AreaPrivada\Admin\GruposInvitacionesPage() )->register(); // v0.50 (doc 50, fase 5): invitar a un grupo (solo modo Oficina).
 			( new \AsdeBalears\AreaPrivada\Admin\GruposAltasPage() )->register(); // v0.50 (doc 50, fase 6): revisar las altas de grupos (solo modo Oficina).
 			( new ColoresPage() )->register();
-			( new IdiomasPage() )->register();
 			( new EntornoPage() )->register();
 			( new \AsdeBalears\AreaPrivada\Admin\ModulosPage() )->register();
 			( new \AsdeBalears\AreaPrivada\Admin\DuplicadosPage() )->register(); // v0.24: documentos repetidos en el CRM (doc 34, §3.7).

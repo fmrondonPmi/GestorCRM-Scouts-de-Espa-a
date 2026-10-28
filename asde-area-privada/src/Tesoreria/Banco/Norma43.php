@@ -21,27 +21,30 @@ defined( 'ABSPATH' ) || exit;
 final class Norma43 {
 
 	/** Conceptos comunes (posiciones 23-24 del registro 22). */
-	public const CONCEPTOS = array(
-		'01' => 'Talones · reintegros',
-		'02' => 'Abonarés · entregas · ingresos',
-		'03' => 'Domiciliados · recibos · letras',
-		'04' => 'Giros · transferencias · traspasos · cheques',
-		'05' => 'Amortizaciones de préstamos y créditos',
-		'06' => 'Remesas de efectos',
-		'07' => 'Suscripciones · dividendos pasivos · canjes',
-		'08' => 'Dividendos · cupones · amortizaciones',
-		'09' => 'Operaciones de bolsa y valores',
-		'10' => 'Cheques de gasolina',
-		'11' => 'Cajero automático',
-		'12' => 'Tarjetas de crédito o débito',
-		'13' => 'Operaciones con el extranjero',
-		'14' => 'Devoluciones e impagados',
-		'15' => 'Nóminas · seguros sociales',
-		'16' => 'Timbres · corretaje · póliza',
-		'17' => 'Intereses · comisiones · custodia · gastos e impuestos',
-		'98' => 'Anulaciones · correcciones de asiento',
-		'99' => 'Varios',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function conceptos(): array {
+		return array(
+		'01' => __( 'Cheques · withdrawals', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'02' => __( 'Promissory notes · deliveries · deposits', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'03' => __( 'Direct debits · receipts · bills of exchange', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'04' => __( 'Money orders · transfers · transfers between accounts · cheques', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'05' => __( 'Loan and credit repayments', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'06' => __( 'Bills of exchange batches', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'07' => __( 'Subscriptions · unpaid share calls · exchanges', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'08' => __( 'Dividends · coupons · repayments', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'09' => __( 'Stock market and securities transactions', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'10' => __( 'Petrol vouchers', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'11' => __( 'Cash machine', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'12' => __( 'Credit or debit cards', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'13' => __( 'Foreign transactions', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'14' => __( 'Returns and unpaid items', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'15' => __( 'Payroll · social security', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'16' => __( 'Stamps · brokerage · policy', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'17' => __( 'Interest · fees · custody · expenses and taxes', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'98' => __( 'Cancellations · entry corrections', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'99' => __( 'Miscellaneous', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
 	/** Parece Norma 43: la primera línea con datos es una cabecera de cuenta (11) de unas 80 posiciones. */
 	public static function parece( string $contenido ): bool {

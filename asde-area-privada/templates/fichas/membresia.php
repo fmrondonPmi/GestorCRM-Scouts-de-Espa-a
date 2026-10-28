@@ -118,7 +118,7 @@ $desde   = static fn( array $m ): string => sprintf( /* translators: 1: text, 2:
 							<label for="asde-memb-motivo"><?php esc_html_e( 'Reason', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <span class="asde-obligatorio" aria-hidden="true">*</span></label>
 							<select id="asde-memb-motivo" name="motivo" required>
 								<option value=""><?php esc_html_e( 'Choose…', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></option>
-								<?php foreach ( asde_ta( Altas::MOTIVOS_BAJA ) as $m => $etiqueta ) : ?>
+								<?php foreach ( ( Altas::motivos_baja() ) as $m => $etiqueta ) : ?>
 									<option value="<?php echo esc_attr( $m ); ?>" <?php selected( $v( 'motivo' ), $m ); ?>><?php echo esc_html( $etiqueta ); ?></option>
 								<?php endforeach; ?>
 							</select>

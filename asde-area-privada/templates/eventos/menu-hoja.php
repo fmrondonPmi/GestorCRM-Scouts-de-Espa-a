@@ -32,7 +32,7 @@ defined( 'ABSPATH' ) || exit;
 				<?php continue; ?>
 			<?php endif; ?>
 			<?php $hay = true; ?>
-			<h4><?php echo esc_html( wp_date( 'l d/m/Y', strtotime( $pl['dia'] . ' 12:00 UTC' ) ) . ' · ' . asde_t( MenuTable::COMIDAS[ $pl['comida'] ] ?? '' ) . ' · ' . $pl['plato'] ); ?></h4>
+			<h4><?php echo esc_html( wp_date( 'l d/m/Y', strtotime( $pl['dia'] . ' 12:00 UTC' ) ) . ' · ' . ( MenuTable::comidas()[ $pl['comida'] ] ?? '' ) . ' · ' . $pl['plato'] ); ?></h4>
 			<ul>
 				<?php foreach ( $pl['personas'] as $nombre => $d ) : ?>
 					<li>

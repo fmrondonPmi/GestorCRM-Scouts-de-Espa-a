@@ -117,7 +117,7 @@ final class AvisoAlergenos {
 					'plato_id' => $id,
 					'dia'      => $pl['plato']['dia'],
 					'comida'   => $pl['plato']['comida'],
-					'plato'    => IngredientesTable::COMUN === $pl['receta']['grupo'] ? asde_t( $pl['receta']['nombre'] ) : $pl['receta']['nombre'],
+					'plato'    => IngredientesTable::COMUN === $pl['receta']['grupo'] ? asde_guardado( $pl['receta']['nombre'] ) : $pl['receta']['nombre'],
 					'codigo'   => $cod,
 					'alergeno' => Alergenos::nombre( $cod ),
 					'n'        => $d['n'],

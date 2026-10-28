@@ -29,11 +29,14 @@ defined( 'ABSPATH' ) || exit;
  */
 final class TareaNumeracion {
 
-	public const ACCIONES = array(
-		'corregir_todos'      => 'Corregir en el CRM los formatos antiguos',
-		'pasar_todos'         => 'Pasar al CRM los números generados',
-		'resolver_duplicados' => 'Resolver los duplicados',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function acciones(): array {
+		return array(
+		'corregir_todos'      => __( 'Correct the old formats in the CRM', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'pasar_todos'         => __( 'Transfer the generated numbers to the CRM', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'resolver_duplicados' => __( 'Resolve the duplicates', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
 	public const EN_CURSO  = 'en_curso';
 	public const TERMINADA = 'terminada';
@@ -100,7 +103,7 @@ final class TareaNumeracion {
 	 * @return array<string, mixed>|\WP_Error
 	 */
 	public static function crear( string $accion, string $grupo, int $usuario, int $total ) {
-		if ( ! isset( self::ACCIONES[ $accion ] ) || '' === $grupo ) {
+		if ( ! isset( self::acciones()[ $accion ] ) || '' === $grupo ) {
 			return new \WP_Error( 'asde_tarea', __( 'Invalid task.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$previa = self::actual( $grupo, true );
@@ -479,7 +482,7 @@ final class TareaNumeracion {
 
 		return array(
 			'estado'     => (string) $t['estado'],
-			'accion'     => asde_t( self::ACCIONES[ $t['accion'] ] ?? (string) $t['accion'] ),
+			'accion'     => ( self::acciones()[ $t['accion'] ] ?? (string) $t['accion'] ),
 			'total'      => $total,
 			'hechas'     => $hechas,
 			'fallidas'   => $fallidas,

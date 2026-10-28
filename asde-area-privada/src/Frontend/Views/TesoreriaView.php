@@ -30,14 +30,17 @@ defined( 'ABSPATH' ) || exit;
  */
 final class TesoreriaView extends TesoreriaBaseView {
 
-	public const FILTROS = array(
-		''                       => 'Todas',
-		Calculadora::ATRASADO    => 'Con plazos vencidos',
-		Calculadora::PENDIENTE   => 'Pendientes',
-		Calculadora::PARCIAL     => 'Pago parcial',
-		Calculadora::PAGADO      => 'Pagadas',
-		Calculadora::EXENTO      => 'Sin cuota',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function filtros(): array {
+		return array(
+		''                       => __( 'All', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		Calculadora::ATRASADO    => __( 'With overdue instalments', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		Calculadora::PENDIENTE   => __( 'Pending', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		Calculadora::PARCIAL     => __( 'Partial payment', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		Calculadora::PAGADO      => __( 'Paid', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		Calculadora::EXENTO      => __( 'No fee', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
 	public function render( string $content = '' ): string {
 		if ( ! current_user_can( self::CAP ) ) {
@@ -168,7 +171,7 @@ final class TesoreriaView extends TesoreriaBaseView {
 		}
 
 		// Filtros.
-		$estado = isset( self::FILTROS[ $this->get( 'estado' ) ] ) ? $this->get( 'estado' ) : '';
+		$estado = isset( self::filtros()[ $this->get( 'estado' ) ] ) ? $this->get( 'estado' ) : '';
 		$q      = mb_strtolower( remove_accents( $this->get( 'q' ) ) );
 		$lista  = array_filter(
 			$filas,
@@ -302,8 +305,8 @@ final class TesoreriaView extends TesoreriaBaseView {
 			Calculadora::EXENTO    => 'gris',
 		);
 		$por_texto = array();
-		foreach ( Calculadora::ETIQUETAS as $estado => $etiqueta ) {
-			$por_texto[ asde_t( $etiqueta ) ] = $colores[ $estado ] ?? 'gris';
+		foreach ( Calculadora::etiquetas() as $estado => $etiqueta ) {
+			$por_texto[  $etiqueta  ] = $colores[ $estado ] ?? 'gris';
 		}
 		Logger::log( 'tesoreria_exportada', 'ronda', $ronda, array( 'familias' => count( $datos ) ) );
 		/* translators: 1: ronda, 2: fecha */
@@ -347,7 +350,7 @@ final class TesoreriaView extends TesoreriaBaseView {
 				round( (float) $c['a_pagar'], 2 ),
 				round( (float) $c['pagado'], 2 ),
 				round( (float) $c['pendiente'], 2 ),
-				asde_t( Calculadora::ETIQUETAS[ $c['estado'] ] ),
+				( Calculadora::etiquetas()[ $c['estado'] ] ),
 			);
 			$suma['hijos']     += count( $c['pagan'] );
 			$suma['cuota']     += $c['cuota']['total'];

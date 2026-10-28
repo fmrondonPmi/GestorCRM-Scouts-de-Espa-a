@@ -48,12 +48,15 @@ final class Organizacion {
 	);
 
 	/** A quién se aplica cada concepto del coste federativo. */
-	public const APLICA = array(
-		'asociado' => 'Cada asociado',
-		'educando' => 'Cada educando (Castores a Rovers)',
-		'adulto'   => 'Cada adulto (scouters y voluntariado)',
-		'grupo'    => 'Una vez por grupo',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function aplica(): array {
+		return array(
+		'asociado' => __( 'Each member', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'educando' => __( 'Each youth member (Castores to Rovers)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'adulto'   => __( 'Each adult (scouters and volunteers)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'grupo'    => __( 'Once per group', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
 	/** Máximo de «otros conceptos» (para que el formulario no crezca sin fin). */
 	public const MAX_CONCEPTOS = 20;
@@ -313,7 +316,7 @@ final class Organizacion {
 			$conceptos[] = array(
 				'nombre'  => mb_substr( $nombre, 0, 80 ),
 				'importe' => max( -99999, min( 99999, $euros( $c['importe'] ?? 0, true ) ) ), // Negativo: descuento.
-				'aplica'  => isset( self::APLICA[ $aplica ] ) ? $aplica : 'asociado',
+				'aplica'  => isset( self::aplica()[ $aplica ] ) ? $aplica : 'asociado',
 			);
 		}
 		return array(

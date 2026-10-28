@@ -16,7 +16,7 @@ use AsdeBalears\AreaPrivada\Inventario\Importador;
 
 defined( 'ABSPATH' ) || exit;
 
-$columnas = array_map( static fn( $c ) => asde_t( $c[0] ), Importador::COLUMNAS );
+$columnas = array_map( static fn( $c ) =>  $c[0] , Importador::columnas() );
 ?>
 <p class="asde-back asde-solo-pagina"><a href="<?php echo esc_url( $url_lista ); ?>"><?php esc_html_e( '← Inventory', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a></p>
 
@@ -93,7 +93,7 @@ $columnas = array_map( static fn( $c ) => asde_t( $c[0] ), Importador::COLUMNAS 
 			<summary><?php esc_html_e( 'What the file must look like', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></summary>
 			<ul>
 				<li><?php echo esc_html( sprintf( /* translators: %s: text */ __( 'The first row, the column names: %s. In any order; the ones you don\'t use can be removed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), implode( ', ', $columnas ) ) ); ?></li>
-				<li><?php echo esc_html( sprintf( /* translators: %s: text */ __( 'Required: %s. The quantity, a whole number from 0 upwards.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), implode( ', ', array_map( static fn( $c ) => asde_t( Importador::COLUMNAS[ $c ][0] ), Importador::OBLIGATORIAS ) ) ) ); ?></li>
+				<li><?php echo esc_html( sprintf( /* translators: %s: text */ __( 'Required: %s. The quantity, a whole number from 0 upwards.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), implode( ', ', array_map( static fn( $c ) => ( Importador::columnas()[ $c ][0] ), Importador::OBLIGATORIAS ) ) ) ); ?></li>
 				<li><?php esc_html_e( 'The price, with a comma or point for the decimals (12,50). The year of purchase, with four digits or blank.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></li>
 				<li><?php esc_html_e( 'A serial no. that is already in the inventory (or repeated in the file) is not imported again.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></li>
 				<li><?php esc_html_e( 'With no serial no., a row with the same description and the same type as an item already in the inventory (or another row of the file) adds its quantity to that item instead of creating another. Uniform shirts, only if the model and size also match.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></li>

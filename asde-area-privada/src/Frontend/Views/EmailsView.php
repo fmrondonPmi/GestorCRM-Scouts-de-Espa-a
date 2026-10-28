@@ -54,8 +54,8 @@ final class EmailsView extends View {
 			array(
 				'fecha'   => static fn( $f ) => $f['creado'],
 				'usuario' => static fn( $f ) => $f['login'],
-				'tipo'    => static fn( $f ) => asde_t( RegistroEmails::TIPOS[ $f['tipo'] ] ?? $f['tipo'] ),
-				'estado'  => static fn( $f ) => asde_t( RegistroEmails::ESTADOS[ $f['estado'] ] ?? $f['estado'] ),
+				'tipo'    => static fn( $f ) => ( RegistroEmails::tipos()[ $f['tipo'] ] ?? $f['tipo'] ),
+				'estado'  => static fn( $f ) => ( RegistroEmails::estados()[ $f['estado'] ] ?? $f['estado'] ),
 			),
 			'fecha',
 			'desc'
@@ -97,7 +97,7 @@ final class EmailsView extends View {
 						'total'   => $total,
 						'tabla'   => $tabla,
 						'nombres' => $nombres,
-						'estado'  => isset( RegistroEmails::ESTADOS[ $estado ] ) ? $estado : '',
+						'estado'  => isset( RegistroEmails::estados()[ $estado ] ) ? $estado : '',
 						'usuario' => $user_id ? get_userdata( $user_id ) : null,
 						'url'     => $this->url( 'emails' ),
 						'mailpit' => $mailpit,

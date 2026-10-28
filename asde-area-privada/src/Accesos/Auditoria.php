@@ -21,14 +21,17 @@ final class Auditoria {
 	public const ROL_QUITA       = 'rol_quita';
 	public const ROL_RESTAURA    = 'rol_restaura';
 
-	public const ACCIONES = array(
-		self::CONCEDE      => 'Concede un permiso',
-		self::REVOCA       => 'Retira un permiso',
-		self::CADUCA       => 'Caduca un permiso',
-		self::ROL_ANADE    => 'Añade un permiso a un rol',
-		self::ROL_QUITA    => 'Quita un permiso a un rol',
-		self::ROL_RESTAURA => 'Restaura los permisos de un rol',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function acciones(): array {
+		return array(
+		self::CONCEDE      => __( 'Grants a permission', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::REVOCA       => __( 'Withdraws a permission', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::CADUCA       => __( 'A permission expires', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::ROL_ANADE    => __( 'Adds a permission to a role', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::ROL_QUITA    => __( 'Removes a permission from a role', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::ROL_RESTAURA => __( 'Restores the permissions of a role', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
 	public static function table(): string {
 		global $wpdb;

@@ -23,14 +23,17 @@ final class Numeracion {
 	public const INVALIDO  = 'invalido';    // Formato irreconocible.
 	public const FALTA     = 'falta';       // Sin número.
 
-	public const ETIQUETAS = array(
-		self::OK        => 'Correcto',
-		self::CORREGIDO => 'Formato antiguo (corregir en el CRM)',
-		self::GENERADO  => 'Generado: pendiente de pasar al CRM',
-		self::DUPLICADO => 'Duplicado en el CRM',
-		self::INVALIDO  => 'Formato no válido',
-		self::FALTA     => 'Sin número',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function etiquetas(): array {
+		return array(
+		self::OK        => __( 'Correct', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::CORREGIDO => __( 'Old format (correct in the CRM)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::GENERADO  => __( 'Generated: pending transfer to the CRM', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::DUPLICADO => __( 'Duplicate in the CRM', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::INVALIDO  => __( 'Invalid format', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::FALTA     => __( 'No number', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
 	/** Estados con los que el número NO se puede usar como usuario. */
 	public const BLOQUEANTES = array( self::DUPLICADO, self::INVALIDO, self::FALTA );
@@ -160,7 +163,7 @@ final class Numeracion {
 		}
 		$actual = $this->de( $p );
 		if ( ! in_array( $actual['estado'], array( self::FALTA, self::GENERADO, self::INVALIDO ), true ) ) {
-			return new \WP_Error( 'asde_num_socio', sprintf( /* translators: %s: text */ __( 'This person already has a number in the CRM (%s).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), asde_t( self::ETIQUETAS[ $actual['estado'] ] ) ) );
+			return new \WP_Error( 'asde_num_socio', sprintf( /* translators: %s: text */ __( 'This person already has a number in the CRM (%s).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), ( self::etiquetas()[ $actual['estado'] ] ) ) );
 		}
 		if ( self::GENERADO === $actual['estado'] ) {
 			return (string) $actual['numero'];

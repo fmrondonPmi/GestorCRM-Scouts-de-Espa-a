@@ -30,11 +30,14 @@ final class RegistroEmails {
 	public const ERROR     = 'error';
 	public const SIN_EMAIL = 'sin_email';
 
-	public const ESTADOS = array(
-		self::ENVIADO   => 'Enviado',
-		self::ERROR     => 'Error al enviar',
-		self::SIN_EMAIL => 'Sin email en el CRM',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function estados(): array {
+		return array(
+		self::ENVIADO   => __( 'Sent', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::ERROR     => __( 'Error sending', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::SIN_EMAIL => __( 'No email in the CRM', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
 	/** Aviso a quien pidió el acceso cuando se rechaza su solicitud (no tiene usuario). */
 	public const RECHAZO = 'rechazo';
@@ -67,21 +70,24 @@ final class RegistroEmails {
 	/** Resultado de la revisión de un alta de grupo: aprobada o rechazada (v0.50, modo Oficina). */
 	public const ALTA_GRUPO = 'alta_grupo';
 
-	public const TIPOS = array(
-		Invitacion::ALTA      => 'Invitación',
-		Invitacion::RESET     => 'Recuperar contraseña',
-		self::RECHAZO         => 'Solicitud rechazada',
-		self::SEPA            => 'Domiciliación SEPA',
-		self::COMPRA          => 'Lista de compra de material',
-		self::COMPRA_REVISADA => 'Lista de compra revisada',
-		self::REINTEGRO       => 'Reintegro',
-		self::BAJA            => 'Aviso de baja',
-		self::LISTA_ESPERA    => 'Lista de espera',
-		self::EVENTOS         => 'Eventos',
-		self::TIENDA          => 'Tienda',
-		self::INVITACION_GRUPO => 'Invitación de grupo',
-		self::ALTA_GRUPO       => 'Alta de grupo',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function tipos(): array {
+		return array(
+		Invitacion::ALTA      => __( 'Invitation', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		Invitacion::RESET     => __( 'Recover password', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::RECHAZO         => __( 'Request rejected', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::SEPA            => __( 'SEPA direct debit', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::COMPRA          => __( 'Equipment shopping list', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::COMPRA_REVISADA => __( 'Shopping list reviewed', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::REINTEGRO       => __( 'Reimbursement', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::BAJA            => __( 'Withdrawal notice', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::LISTA_ESPERA    => __( 'Waiting list', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::EVENTOS         => __( 'Events', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::TIENDA          => __( 'Shop', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::INVITACION_GRUPO => __( 'Group invitation', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::ALTA_GRUPO       => __( 'Group registration', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
 	public static function table(): string {
 		global $wpdb;
@@ -182,7 +188,7 @@ final class RegistroEmails {
 	public static function listado( int $user_id = 0, string $estado = '' ): array {
 		global $wpdb;
 		// Consulta fija: cada filtro opcional va como valor (0 o '' lo dejan sin efecto) (v0.26.2, Plugin Check).
-		$e = isset( self::ESTADOS[ $estado ] ) ? $estado : '';
+		$e = isset( self::estados()[ $estado ] ) ? $estado : '';
 		return (array) $wpdb->get_results( // phpcs:ignore WordPress.DB
 			$wpdb->prepare(
 				'SELECT * FROM %i WHERE grupo = %s'

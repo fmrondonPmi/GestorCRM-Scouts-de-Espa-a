@@ -13,12 +13,15 @@ final class Codificacion {
 	public const UTF8   = 'UTF-8';
 	public const CP850  = 'CP850';
 	public const WIN    = 'Windows-1252';
-	public const LISTA  = array(
-		'auto'      => 'Automática',
-		self::UTF8  => 'UTF-8',
-		self::CP850 => 'CP850 (la de la Norma 43)',
-		self::WIN   => 'Windows-1252 / ISO-8859-1',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function lista(): array {
+		return array(
+		'auto'      => __( 'Automatic', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::UTF8  => __( 'UTF-8', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::CP850 => __( 'CP850 (that of Norma 43)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::WIN   => __( 'Windows-1252 / ISO-8859-1', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
 	public static function detectar( string $s ): string {
 		if ( str_starts_with( $s, "\xEF\xBB\xBF" ) ) {

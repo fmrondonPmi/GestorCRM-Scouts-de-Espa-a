@@ -32,7 +32,7 @@ $opciones = static function ( float $importe, ?int $elegido ) use ( $tipos ): st
 		$grupos[ $t['naturaleza'] ][] = $t;
 	}
 	foreach ( $grupos as $nat => $lista ) {
-		$h .= '<optgroup label="' . esc_attr( asde_t( TiposMovimiento::NATURALEZAS[ $nat ] ) ) . '" data-naturaleza="' . esc_attr( $nat ) . '">';
+		$h .= '<optgroup label="' . esc_attr( ( TiposMovimiento::naturalezas()[ $nat ] ) ) . '" data-naturaleza="' . esc_attr( $nat ) . '">';
 		foreach ( $lista as $t ) {
 			$h .= '<option value="' . (int) $t['id'] . '"' . selected( $elegido, $t['id'], false ) . '>' . esc_html( $t['nombre'] ) . '</option>';
 		}
@@ -64,7 +64,7 @@ $opciones = static function ( float $importe, ?int $elegido ) use ( $tipos ): st
 					<select id="asde-tipo-todos" data-asde-tipo-todos>
 						<option value=""><?php esc_html_e( 'Choose…', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></option>
 						<?php foreach ( $tipos as $t ) : ?>
-							<option value="<?php echo (int) $t['id']; ?>"><?php echo esc_html( $t['nombre'] . ' (' . mb_strtolower( asde_t( TiposMovimiento::NATURALEZAS[ $t['naturaleza'] ] ) ) . ')' ); ?></option>
+							<option value="<?php echo (int) $t['id']; ?>"><?php echo esc_html( $t['nombre'] . ' (' . mb_strtolower( ( TiposMovimiento::naturalezas()[ $t['naturaleza'] ] ) ) . ')' ); ?></option>
 						<?php endforeach; ?>
 					</select>
 					<span class="asde-help"><?php esc_html_e( 'It is applied to those it fits (an expense type, only on expenses). Afterwards you can change each one\'s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span>
@@ -157,8 +157,8 @@ $opciones = static function ( float $importe, ?int $elegido ) use ( $tipos ): st
 				<p>
 					<label for="asde-bt-mini-clase"><?php esc_html_e( 'Class', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 					<select id="asde-bt-mini-clase" name="naturaleza">
-						<?php foreach ( TiposMovimiento::NATURALEZAS as $k => $etiqueta ) : ?>
-							<option value="<?php echo esc_attr( $k ); ?>"><?php echo esc_html( asde_t( $etiqueta ) ); ?></option>
+						<?php foreach ( TiposMovimiento::naturalezas() as $k => $etiqueta ) : ?>
+							<option value="<?php echo esc_attr( $k ); ?>"><?php echo esc_html(  $etiqueta  ); ?></option>
 						<?php endforeach; ?>
 					</select>
 				</p>

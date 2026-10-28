@@ -59,7 +59,7 @@ $tes_antes    = get_option( 'asde_ap_tesoreria', null );
 $modulos_antes = get_option( 'asde_ap_modulos', null );
 $ids          = array();
 $socios_antes = array_column( (array) $wpdb->get_results( 'SELECT * FROM ' . SociosTable::table(), ARRAY_A ), null, 'num_socio_asde' ); // phpcs:ignore WordPress.DB
-Modulos::guardar( (string) $grupo['numero'], array_keys( Modulos::LISTA ) );
+Modulos::guardar( (string) $grupo['numero'], array_keys( Modulos::lista() ) );
 Modulos::olvidar();
 
 // CRM simulado (fichas inventadas): el ámbito de cada persona se lee de él; el CRM real se corta.
@@ -267,12 +267,12 @@ try {
 	$ok( false === strpos( $html, 'Reparto por sección' ) && false === strpos( $html, 'Añadir una partida' ), 'una familia no ve nada' );
 
 	echo "== Parte F · Módulo apagado ==\n";
-	$otros = array_diff( array_keys( Modulos::LISTA ), array( Modulos::PRESUPUESTOS ) );
+	$otros = array_diff( array_keys( Modulos::lista() ), array( Modulos::PRESUPUESTOS ) );
 	Modulos::guardar( (string) $grupo['numero'], $otros );
 	$como( $u_teso );
 	$ok( ! Servicio::puede_entrar() && array() === Servicio::secciones_para( Ambito::actual() ), 'con el módulo apagado nadie entra' );
 	$ok( ! user_can( $u_lob, Servicio::CAP_SECCION ), 'y la capability desaparece' );
-	Modulos::guardar( (string) $grupo['numero'], array_keys( Modulos::LISTA ) );
+	Modulos::guardar( (string) $grupo['numero'], array_keys( Modulos::lista() ) );
 	$como( $u_teso );
 	$ok( Servicio::puede_entrar() && user_can( $u_lob, Servicio::CAP_SECCION ), 'al encenderlo vuelve' );
 

@@ -318,7 +318,7 @@ try {
 	$ok( str_contains( (string) $correos[0]['subject'], ComprasTable::numero( $l1 ) ) && str_contains( (string) $correos[0]['subject'], 'visto bueno' ) && str_contains( $cuerpo, 'visto bueno' ) && str_contains( $cuerpo, 'lista=' . $l1['id'] ) && str_contains( $cuerpo, 'Hola, Sara:' ) && str_contains( $cuerpo, 'márcala como comprada' ), 'el email dice el estado, saluda por su nombre y lleva el enlace a la lista' );
 	$ok( str_contains( $h, 'Se ha avisado por email a quien la pidió' ), 'Tesorería ve que se le ha avisado' );
 	$reg = $registro( RegistroEmails::COMPRA_REVISADA );
-	$ok( 1 === count( $reg ) && RegistroEmails::ENVIADO === $reg[0]['estado'] && (int) $reg[0]['user_id'] === $u_scout && ! str_contains( (string) $reg[0]['destino'], 'scout-v030@' ) && str_contains( RegistroEmails::vista_previa( $reg[0] ), ComprasTable::numero( $l1 ) ) && 'Lista de compra revisada' === RegistroEmails::TIPOS[ RegistroEmails::COMPRA_REVISADA ], 'queda en el registro de emails (destino enmascarado) y se puede ver cómo era' );
+	$ok( 1 === count( $reg ) && RegistroEmails::ENVIADO === $reg[0]['estado'] && (int) $reg[0]['user_id'] === $u_scout && ! str_contains( (string) $reg[0]['destino'], 'scout-v030@' ) && str_contains( RegistroEmails::vista_previa( $reg[0] ), ComprasTable::numero( $l1 ) ) && 'Lista de compra revisada' === RegistroEmails::tipos()[ RegistroEmails::COMPRA_REVISADA ], 'queda en el registro de emails (destino enmascarado) y se puede ver cómo era' );
 
 	$como( $u_scout );
 	$enviar( new InventarioComprasView(), array( 'asde_action' => 'compra_crear', 'cantidad' => array( $m_pocas => '1' ) ), 'asde_inventario_compra_nueva' );

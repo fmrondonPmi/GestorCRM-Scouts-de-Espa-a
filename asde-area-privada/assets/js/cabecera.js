@@ -49,7 +49,7 @@
 
 	function pintarBoton( oculta ) {
 		boton.setAttribute( 'aria-expanded', oculta ? 'false' : 'true' );
-		texto.textContent = oculta ? asdeT( 'Mostrar cabecera' ) : asdeT( 'Ocultar cabecera' );
+		texto.textContent = oculta ? asdeT( 'Show header' ) : asdeT( 'Hide header' );
 		icono.textContent = oculta ? '▾' : '▴';
 	}
 

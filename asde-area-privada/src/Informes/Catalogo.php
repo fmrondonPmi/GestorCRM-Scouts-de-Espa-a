@@ -24,24 +24,30 @@ defined( 'ABSPATH' ) || exit;
  */
 final class Catalogo {
 
-	public const GRUPOS = array(
-		'identificacion' => 'Identificación',
-		'membresia'      => 'Membresía',
-		'contacto'       => 'Contacto',
-		'tutores'        => 'Familia / tutores',
-		'autorizaciones' => 'Autorizaciones y formación',
-		'pagos'          => 'Cuota y pagos',
-		'salud'          => 'Salud y alimentación',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function grupos(): array {
+		return array(
+		'identificacion' => __( 'Identification', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'membresia'      => __( 'Membership', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'contacto'       => __( 'Contact', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'tutores'        => __( 'Family / guardians', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'autorizaciones' => __( 'Authorisations and training', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'pagos'          => __( 'Fee and payments', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'salud'          => __( 'Health and food', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
 	/** Filtro por lo pagado (v0.25): quién ha pagado la cuota y quién no. */
-	public const FILTROS_PAGO = array(
-		''            => 'Todos',
-		'pagado'      => 'Han pagado toda la cuota',
-		'debe'        => 'Les falta algo por pagar',
-		'vencido'     => 'Con plazos vencidos sin pagar',
-		'sin_familia' => 'Sin familia en Tesorería',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function filtros_pago(): array {
+		return array(
+		''            => __( 'All', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'pagado'      => __( 'Have paid the whole fee', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'debe'        => __( 'Still have something to pay', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'vencido'     => __( 'With overdue instalments unpaid', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'sin_familia' => __( 'No family in Treasury', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
 	/** @return array<string, array{0:string, 1:string, 2:string[], 3:string, 4:string}> */
 	public static function columnas(): array {
@@ -131,52 +137,55 @@ final class Catalogo {
 	);
 
 	/** Etiquetas de valores de desplegables. */
-	public const ENUMS = array(
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function enums(): array {
+		return array(
 		'stic_gender_c'                => array(
-			'masculino' => 'Masculino',
-			'femenino'  => 'Femenino',
-			'nobinario' => 'No binario',
+			'masculino' => __( 'Male', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+			'femenino'  => __( 'Female', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+			'nobinario' => __( 'Non-binary', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 		),
 		'medicos_tratamiento_c'        => array(
-			'No'            => 'No',
-			'SinRelevancia' => 'Sin relevancia o autocontrolado',
-			'Si'            => 'Sí',
+			'No'            => __( 'No', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+			'SinRelevancia' => __( 'Not relevant or self-managed', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+			'Si'            => __( 'Yes', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 		),
 		'alimentacion_regimen_razon_c' => array(
-			'voluntariamente' => 'Voluntariamente',
-			'prescripcion'    => 'Por prescripción médica',
-			'otros'           => 'Otros',
+			'voluntariamente' => __( 'Voluntarily', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+			'prescripcion'    => __( 'By medical prescription', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+			'otros'           => __( 'Others', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 		),
 		'cargoeducativo_c'             => array(
-			'coordinadorgrupoGS'          => 'Coordinador/a de Grupo',
-			'coordinadorseccionGS'        => 'Coordinador/a de sección',
-			'secretariogrupoGS'           => 'Secretario/a de Grupo',
-			'tesorerogrupoGS'             => 'Tesorero/a de Grupo',
-			'scouterseccionGS'            => 'Scouter de sección',
-			'responsablematerialGS'       => 'Responsable de Material',
-			'responsableformacionGS'      => 'Responsable de Formación',
-			'responsablecomunicacionGS'   => 'Responsable de Comunicación / RRSS',
-			'responsableeducacionscoutGS' => 'Responsable de Educación Scout',
+			'coordinadorgrupoGS'          => __( 'Group Coordinator', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+			'coordinadorseccionGS'        => __( 'Section coordinator', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+			'secretariogrupoGS'           => __( 'Group Secretary', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+			'tesorerogrupoGS'             => __( 'Group Treasurer', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+			'scouterseccionGS'            => __( 'Section scouter', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+			'responsablematerialGS'       => __( 'Equipment Officer', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+			'responsableformacionGS'      => __( 'Training Officer', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+			'responsablecomunicacionGS'   => __( 'Communications / Social Media Officer', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+			'responsableeducacionscoutGS' => __( 'Scout Education Officer', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 		),
 		'formacionscout_c'             => array(
-			'ninguno'            => 'Sin formación Scout',
-			'acogida'            => 'Etapa Acogida al Scouter (EAS)',
-			'educador'           => 'Etapa Educador/a Scout (EES)',
-			'coordinador'        => 'Etapa Coordinador/a Scout (ECS)',
-			'acogidaformador'    => 'Etapa Acogida al Formador/a (EAF)',
-			'formadorscouters'   => 'Etapa Formador/a de Scouters (EFS)',
-			'formadorformadores' => 'Etapa Formador/a de Formadores (EFF)',
+			'ninguno'            => __( 'No Scout training', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+			'acogida'            => __( 'Scouter Induction Stage (EAS)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+			'educador'           => __( 'Scout Educator Stage (EES)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+			'coordinador'        => __( 'Scout Coordinator Stage (ECS)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+			'acogidaformador'    => __( 'Trainer Induction Stage (EAF)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+			'formadorscouters'   => __( 'Scouter Trainer Stage (EFS)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+			'formadorformadores' => __( 'Trainers\' Trainer Stage (EFF)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 		),
 		'formaciontiempolibre_c'       => array(
-			'ninguno'         => 'Sin titulación',
-			'monitor'         => 'Monitor/a de Tiempo Libre',
-			'director'        => 'Director/a de Tiempo Libre',
-			'animador'        => 'Animador/a Juvenil',
-			'practicas'       => 'Prácticas de Monitor/a',
-			'monitoranimador' => 'Monitor/a y Animador/a Juvenil',
-			'otro'            => 'Otro',
+			'ninguno'         => __( 'No qualification', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+			'monitor'         => __( 'Leisure-Time Monitor', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+			'director'        => __( 'Leisure-Time Director', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+			'animador'        => __( 'Youth Leader', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+			'practicas'       => __( 'Monitor Training Placement', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+			'monitoranimador' => __( 'Monitor and Youth Leader', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+			'otro'            => __( 'Other', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 		),
 	);
+	}
 
 	/** Lo que ve en un informe quien solo es de Tesorería (v0.37.1, P-167): quién es y sus pagos, de todo el grupo. */
 	private const IDENTIDAD_TESORERIA = array( 'num_local', 'nombre', 'apellidos', 'seccion' );

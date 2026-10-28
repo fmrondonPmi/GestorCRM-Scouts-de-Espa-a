@@ -70,7 +70,7 @@ $crm = new Asde_Prueba_Crm(
 );
 Grupo::forzar( $grupo );
 $crm->activar();
-Modulos::guardar( (string) $grupo['numero'], array_keys( Modulos::LISTA ) );
+Modulos::guardar( (string) $grupo['numero'], array_keys( Modulos::lista() ) );
 
 $ids   = array();
 $crear = static function ( string $login, array $roles, array $meta ) use ( &$ids, $grupo ): int {
@@ -314,10 +314,10 @@ try {
 
 	echo "\n== Parte F · Módulos y cuentas ==\n";
 	Concesiones::conceder( $actor( $u_coord ), $u_sc, 'asde_inventario_aprobar', null, 'Prueba de módulos' );
-	Modulos::guardar( (string) $grupo['numero'], array_diff( array_keys( Modulos::LISTA ), array( Modulos::INVENTARIO ) ) );
+	Modulos::guardar( (string) $grupo['numero'], array_diff( array_keys( Modulos::lista() ), array( Modulos::INVENTARIO ) ) );
 	$como( $u_sc );
 	$ok( ! $tiene( $u_sc, 'asde_inventario_aprobar' ), 'con el módulo apagado, un permiso suelto del módulo tampoco vale' );
-	Modulos::guardar( (string) $grupo['numero'], array_keys( Modulos::LISTA ) );
+	Modulos::guardar( (string) $grupo['numero'], array_keys( Modulos::lista() ) );
 	$como( $u_sc );
 	$ok( $tiene( $u_sc, 'asde_inventario_aprobar' ), 'al encenderlo vuelve a valer' );
 	$u2 = get_userdata( $u_sc );

@@ -23,8 +23,8 @@
 		var n = marcadas().length;
 		if ( aviso ) {
 			aviso.textContent = 0 === n
-				? asdeT( 'Marca en la lista los movimientos que no son cuotas.' )
-				: ( 1 === n ? asdeT( '1 movimiento marcado' ) : asdeT( '%s movimientos marcados', String( n ) ) );
+				? asdeT( 'Tick in the list the transactions that are not fees.' )
+				: ( 1 === n ? asdeT( '1 transaction ticked' ) : asdeT( '%s transactions ticked', String( n ) ) );
 		}
 		return n;
 	}
@@ -59,7 +59,7 @@
 		}
 		e.preventDefault();
 		if ( ! contar() ) {
-			window.alert( asdeT( 'Marca en la lista los movimientos que no son cuotas.' ) );
+			window.alert( asdeT( 'Tick in the list the transactions that are not fees.' ) );
 			return;
 		}
 		var url = new window.URL( form.getAttribute( 'action' ), window.location.href );
@@ -144,13 +144,13 @@
 						return;
 					}
 					// El motivo que da el servidor (p. ej. «Ya hay un tipo…»).
-					error.textContent = r && r.data && r.data.mensaje ? r.data.mensaje : asdeT( 'No se ha podido crear el tipo. Vuelve a intentarlo.' );
+					error.textContent = r && r.data && r.data.mensaje ? r.data.mensaje : asdeT( 'The type could not be created. Try again.' );
 					error.hidden = false;
 					boton.disabled = false;
 				} )
 				.catch( function () {
 					// Sin conexión o una respuesta que no es JSON (p. ej. la sesión ha caducado).
-					error.textContent = asdeT( 'No se ha podido crear el tipo. Vuelve a intentarlo.' );
+					error.textContent = asdeT( 'The type could not be created. Try again.' );
 					error.hidden = false;
 					boton.disabled = false;
 				} );

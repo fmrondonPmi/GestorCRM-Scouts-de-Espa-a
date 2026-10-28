@@ -142,7 +142,7 @@ final class Avisos {
 				'concepto'  => $r['concepto'],
 				'fecha'     => wp_date( 'd/m/Y', strtotime( $r['fecha'] . ' 12:00' ) ),
 				'importe'   => Calculadora::euros( $r['importe'] ),
-				'forma'     => asde_t( ReintegrosTable::FORMAS[ $r['forma'] ] ?? '' ),
+				'forma'     => ( ReintegrosTable::formas()[ $r['forma'] ] ?? '' ),
 				'iban'      => $iban,
 				'evento'    => $evento ? (string) $evento['nombre'] : '',
 				'motivo'    => $r['motivo'],

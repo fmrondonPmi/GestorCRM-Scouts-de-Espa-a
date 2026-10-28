@@ -106,7 +106,7 @@ final class Servicio {
 		if ( $importe <= 0 || $importe >= 100000 ) {
 			return new \WP_Error( 'asde_reintegro', __( 'Enter an amount greater than zero.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
-		if ( ! isset( ReintegrosTable::FORMAS[ $forma ] ) ) {
+		if ( ! isset( ReintegrosTable::formas()[ $forma ] ) ) {
 			return new \WP_Error( 'asde_reintegro', __( 'Choose how you prefer to be paid: in cash or by transfer.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$iban = '';

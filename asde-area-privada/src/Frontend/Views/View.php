@@ -66,7 +66,7 @@ abstract class View {
 		$hojas = array();
 		foreach ( self::HOJAS_USUARIOS as $clave => $nombre ) {
 			$hojas[ $clave ] = array(
-				'nombre' => asde_t( $nombre ),
+				'nombre' => asde_guardado( $nombre ),
 				'url'    => $this->url( $clave ),
 			);
 		}

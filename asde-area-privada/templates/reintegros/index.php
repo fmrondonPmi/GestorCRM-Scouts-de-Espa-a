@@ -28,7 +28,7 @@ $fila = static function ( array $r, bool $con_quien ) use ( $url, $fecha, $nombr
 	<tr>
 		<td data-label="<?php echo esc_attr( esc_attr__( 'Reimbursement', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
 			<strong><?php echo esc_html( ReintegrosTable::numero( $r ) ); ?></strong>
-			<span class="asde-badge asde-badge--reintegro-<?php echo esc_attr( $r['estado'] ); ?>"><?php echo esc_html( asde_t( ReintegrosTable::ESTADOS[ $r['estado'] ] ?? '' ) ); ?></span>
+			<span class="asde-badge asde-badge--reintegro-<?php echo esc_attr( $r['estado'] ); ?>"><?php echo esc_html( ( ReintegrosTable::estados()[ $r['estado'] ] ?? '' ) ); ?></span>
 			<?php echo wp_kses( $con_quien ? '<br><span class="asde-muted">' . esc_html( Servicio::nombre( $r['solicitante'] ) ) . '</span>' : '', asde_html_permitido() ); ?>
 		</td>
 		<td data-label="<?php echo esc_attr( esc_attr__( 'What', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
@@ -43,7 +43,7 @@ $fila = static function ( array $r, bool $con_quien ) use ( $url, $fecha, $nombr
 		</td>
 		<td data-label="<?php echo esc_attr( esc_attr__( 'Amount', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
 			<?php echo esc_html( Calculadora::euros( $r['importe'] ) ); ?><br>
-			<span class="asde-muted"><?php echo esc_html( asde_t( ReintegrosTable::FORMAS[ $r['forma'] ] ?? '' ) ); ?></span>
+			<span class="asde-muted"><?php echo esc_html( ( ReintegrosTable::formas()[ $r['forma'] ] ?? '' ) ); ?></span>
 			<?php echo wp_kses( '' !== $iban ? '<br><span class="asde-muted">' . esc_html( $iban ) . '</span>' : '', asde_html_permitido() ); ?>
 		</td>
 		<td data-label="<?php echo esc_attr( esc_attr__( 'Actions', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
@@ -143,7 +143,7 @@ $tabla = static function ( array $lista, bool $con_quien ) use ( $fila ): void {
 				<label for="asde-rei-just"><?php esc_html_e( 'Ticket or invoice (image or PDF, up to 5 MB)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <input type="file" id="asde-rei-just" name="justificante" accept="image/jpeg,image/png,image/webp,application/pdf" required></label>
 				<label for="asde-rei-forma"><?php esc_html_e( 'How do you prefer to be paid?', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>
 					<select id="asde-rei-forma" name="forma">
-						<?php foreach ( asde_ta( ReintegrosTable::FORMAS ) as $forma => $etiqueta ) : ?>
+						<?php foreach ( ( ReintegrosTable::formas() ) as $forma => $etiqueta ) : ?>
 							<option value="<?php echo esc_attr( $forma ); ?>"><?php echo esc_html( $etiqueta ); ?></option>
 						<?php endforeach; ?>
 					</select>

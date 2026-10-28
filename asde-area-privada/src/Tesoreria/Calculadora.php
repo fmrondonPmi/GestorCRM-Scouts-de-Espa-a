@@ -21,13 +21,16 @@ final class Calculadora {
 	public const ATRASADO  = 'atrasado';
 	public const EXENTO    = 'exento';
 
-	public const ETIQUETAS = array(
-		self::PAGADO    => 'Pagado',
-		self::PARCIAL   => 'Pago parcial',
-		self::PENDIENTE => 'Pendiente',
-		self::ATRASADO  => 'Con plazos vencidos',
-		self::EXENTO    => 'Sin cuota',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function etiquetas(): array {
+		return array(
+		self::PAGADO    => __( 'Paid', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::PARCIAL   => __( 'Partial payment', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::PENDIENTE => __( 'Pending', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::ATRASADO  => __( 'With overdue instalments', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::EXENTO    => __( 'No fee', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
 	/**
 	 * Estado de una familia en una ronda.

@@ -50,7 +50,7 @@
 			var cerrar = document.createElement( 'button' );
 			cerrar.type = 'button';
 			cerrar.className = 'asde-avisos-flotantes__cerrar';
-			cerrar.setAttribute( 'aria-label', asdeT( 'Cerrar' ) );
+			cerrar.setAttribute( 'aria-label', asdeT( 'Close' ) );
 			cerrar.textContent = '×';
 			cerrar.addEventListener( 'click', function () {
 				aviso.remove();

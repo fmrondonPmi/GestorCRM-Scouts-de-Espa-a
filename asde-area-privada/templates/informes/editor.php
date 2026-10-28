@@ -49,7 +49,7 @@ $rondas    = $rondas ?? array();
 		<h3><?php esc_html_e( '1 · What data do you want to see?', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h3>
 		<p class="asde-help"><?php esc_html_e( 'Tick the columns. They will appear in this order.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 		<div class="asde-columnas">
-			<?php foreach ( asde_ta( Catalogo::GRUPOS ) as $grupo => $titulo ) : ?>
+			<?php foreach ( ( Catalogo::grupos() ) as $grupo => $titulo ) : ?>
 				<?php $cols = array_filter( $permitidas, static fn( $c ) => $grupo === $c[1] ); ?>
 				<?php if ( ! $cols ) : ?>
 					<?php continue; ?>
@@ -112,7 +112,7 @@ $rondas    = $rondas ?? array();
 				<p>
 					<label for="asde-inf-pago"><?php esc_html_e( 'According to what has been paid', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 					<select id="asde-inf-pago" name="pago">
-						<?php foreach ( asde_ta( Catalogo::FILTROS_PAGO ) as $k => $label ) : ?>
+						<?php foreach ( ( Catalogo::filtros_pago() ) as $k => $label ) : ?>
 							<option value="<?php echo esc_attr( $k ); ?>" <?php selected( $f['pago'], $k ); ?>><?php echo esc_html( $label ); ?></option>
 						<?php endforeach; ?>
 					</select>
@@ -132,7 +132,7 @@ $rondas    = $rondas ?? array();
 		<p>
 			<label for="asde-inf-orden"><?php esc_html_e( 'Sort by', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 			<select id="asde-inf-orden" name="orden">
-				<?php foreach ( asde_ta( Informe::ORDENES ) as $k => $label ) : ?>
+				<?php foreach ( ( Informe::ordenes() ) as $k => $label ) : ?>
 					<option value="<?php echo esc_attr( $k ); ?>" <?php selected( $f['orden'], $k ); ?>><?php echo esc_html( $label ); ?></option>
 				<?php endforeach; ?>
 			</select>
@@ -141,7 +141,7 @@ $rondas    = $rondas ?? array();
 		<p>
 			<label for="asde-inf-vista"><?php esc_html_e( 'Presentation', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 			<select id="asde-inf-vista" name="vista">
-				<?php foreach ( asde_ta( Informe::VISTAS ) as $k => $label ) : ?>
+				<?php foreach ( ( Informe::vistas() ) as $k => $label ) : ?>
 					<option value="<?php echo esc_attr( $k ); ?>" <?php selected( $f['vista'], $k ); ?>><?php echo esc_html( $label ); ?></option>
 				<?php endforeach; ?>
 			</select>

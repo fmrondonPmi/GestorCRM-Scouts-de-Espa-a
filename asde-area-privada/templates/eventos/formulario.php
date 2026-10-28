@@ -109,7 +109,7 @@ $accion = $e ? add_query_arg(
 			<fieldset>
 				<legend><?php esc_html_e( 'Scope', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></legend>
 				<?php foreach ( $ambitos as $am ) : ?>
-					<label class="asde-choice"><input type="radio" name="ambito" value="<?php echo esc_attr( $am ); ?>" <?php checked( $d['ambito'], $am ); ?>><span><?php echo esc_html( asde_t( EventosTable::AMBITOS[ $am ] ) ); ?></span></label>
+					<label class="asde-choice"><input type="radio" name="ambito" value="<?php echo esc_attr( $am ); ?>" <?php checked( $d['ambito'], $am ); ?>><span><?php echo esc_html( ( EventosTable::ambitos()[ $am ] ) ); ?></span></label>
 				<?php endforeach; ?>
 			</fieldset>
 		<?php else : ?>
@@ -188,8 +188,8 @@ $accion = $e ? add_query_arg(
 		<h3 class="asde-card__title"><?php esc_html_e( 'Sign-up', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h3>
 		<fieldset>
 			<legend><?php esc_html_e( 'Mode', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></legend>
-			<?php foreach ( EventosTable::MODALIDADES as $m => $etiqueta ) : ?>
-				<label class="asde-check"><input type="radio" name="modalidad" value="<?php echo esc_attr( $m ); ?>"<?php checked( $d['modalidad'], $m ); ?>> <?php echo esc_html( asde_t( $etiqueta ) ); ?></label>
+			<?php foreach ( EventosTable::modalidades() as $m => $etiqueta ) : ?>
+				<label class="asde-check"><input type="radio" name="modalidad" value="<?php echo esc_attr( $m ); ?>"<?php checked( $d['modalidad'], $m ); ?>> <?php echo esc_html(  $etiqueta  ); ?></label>
 			<?php endforeach; ?>
 		</fieldset>
 		<p class="asde-form__fila">
@@ -222,7 +222,7 @@ $accion = $e ? add_query_arg(
 		<p>
 			<label for="asde-ev-comunicacion"><?php esc_html_e( 'Report to ASDE Baleares (30 days before)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 			<select id="asde-ev-comunicacion" name="comunicacion">
-				<?php foreach ( asde_ta( Normativa::COMUNICACION ) as $c => $etiqueta ) : ?>
+				<?php foreach ( ( Normativa::comunicacion() ) as $c => $etiqueta ) : ?>
 					<option value="<?php echo esc_attr( $c ); ?>" <?php selected( $d['comunicacion'], $c ); ?>><?php echo esc_html( $etiqueta ); ?></option>
 				<?php endforeach; ?>
 			</select>

@@ -57,7 +57,7 @@ final class RecetasView extends EventosBaseView {
 	private function lista(): string {
 		$archivadas = '1' === $this->get( 'archivadas' );
 		$q          = Conversion::clave( $this->get( 'q' ) );
-		$tipo       = isset( RecetasTable::TIPOS[ $this->get( 'tipo' ) ] ) ? $this->get( 'tipo' ) : '';
+		$tipo       = isset( RecetasTable::tipos()[ $this->get( 'tipo' ) ] ) ? $this->get( 'tipo' ) : '';
 		$todas      = array_values(
 			array_filter(
 				RecetasTable::visibles( $archivadas ),

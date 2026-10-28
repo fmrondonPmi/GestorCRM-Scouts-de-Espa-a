@@ -117,7 +117,7 @@ final class AvisoBaja {
 
 	/** HTML del email (el envío y la vista previa del registro usan la misma plantilla). */
 	public static function html( array $datos, string $saludo, string $persona ): string {
-		$motivo = Altas::MOTIVOS_BAJA[ $datos['motivo'] ?? '' ] ?? '';
+		$motivo = Altas::motivos_baja()[ $datos['motivo'] ?? '' ] ?? '';
 		return TemplateLoader::render(
 			'email/baja',
 			array(
@@ -126,7 +126,7 @@ final class AvisoBaja {
 				'persona'  => $persona,
 				'socio'    => (string) ( $datos['socio'] ?? '' ),
 				'fin'      => (string) ( $datos['fin'] ?? '' ),
-				'motivo'   => '' !== $motivo ? asde_t( $motivo ) : '',
+				'motivo'   => '' !== $motivo ? asde_guardado( $motivo ) : '',
 				'familia'  => (string) ( $datos['familia'] ?? '' ),
 				'grupo'    => (string) ( $datos['grupo'] ?? '' ),
 				'contacto' => (string) ( $datos['contacto'] ?? '' ),

@@ -39,7 +39,7 @@ $hoy     = current_time( 'Y-m-d' );
 $euros   = array( Calculadora::class, 'euros' );
 $formas  = static function (): string {
 	$h = '<select name="forma">';
-	foreach ( asde_ta( GastosTable::FORMAS ) as $k => $t ) {
+	foreach ( ( GastosTable::formas() ) as $k => $t ) {
 		$h .= '<option value="' . esc_attr( $k ) . '">' . esc_html( $t ) . '</option>';
 	}
 	return $h . '</select>';
@@ -187,7 +187,7 @@ $yo              = get_current_user_id();
 							<?php endif; ?>
 							<br><span class="asde-muted">
 								<?php
-								$detalle = array( asde_t( GastosTable::FORMAS[ $g['forma'] ] ?? $g['forma'] ) );
+								$detalle = array( ( GastosTable::formas()[ $g['forma'] ] ?? $g['forma'] ) );
 								if ( $g['partida_id'] && isset( $nombres_partida[ $g['partida_id'] ] ) ) {
 									$detalle[] = sprintf( /* translators: %s: text */ __( 'item: %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $nombres_partida[ $g['partida_id'] ] );
 								}
@@ -208,12 +208,12 @@ $yo              = get_current_user_id();
 						</td>
 						<td data-label="<?php echo esc_attr( esc_attr__( 'Amount', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>" class="asde-num"><?php echo esc_html( $euros( $g['importe'] ) ); ?></td>
 						<td data-label="<?php echo esc_attr( esc_attr__( 'Status', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
-							<span class="asde-badge asde-badge--gasto-<?php echo esc_attr( $estado ); ?>"><?php echo esc_html( $anulado ? __( 'Cancelled', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : asde_t( GastosTable::ESTADOS[ $g['estado'] ] ?? $g['estado'] ) ); ?></span>
+							<span class="asde-badge asde-badge--gasto-<?php echo esc_attr( $estado ); ?>"><?php echo esc_html( $anulado ? __( 'Cancelled', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : ( GastosTable::estados()[ $g['estado'] ] ?? $g['estado'] ) ); ?></span>
 							<?php if ( '' !== $g['motivo'] && ( $anulado || GastosTable::RECHAZADO === $g['estado'] ) ) : ?>
-								<br><span class="asde-muted"><?php echo esc_html( sprintf( /* translators: %s: text */ __( 'Reason: %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), asde_t( (string) $g['motivo'] ) ) ); ?></span>
+								<br><span class="asde-muted"><?php echo esc_html( sprintf( /* translators: %s: text */ __( 'Reason: %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), asde_guardado( (string) $g['motivo'] ) ) ); ?></span>
 							<?php endif; ?>
 							<?php if ( null !== $g['reembolsado_en'] ) : ?>
-								<br><span class="asde-muted"><?php echo esc_html( sprintf( /* translators: 1: text, 2: text */ __( 'Reimbursed on %1$s (%2$s)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $fecha( $g['reembolsado_en'] ), asde_t( GastosTable::FORMAS[ $g['reembolso_forma'] ] ?? $g['reembolso_forma'] ) ) ); ?></span>
+								<br><span class="asde-muted"><?php echo esc_html( sprintf( /* translators: 1: text, 2: text */ __( 'Reimbursed on %1$s (%2$s)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $fecha( $g['reembolsado_en'] ), ( GastosTable::formas()[ $g['reembolso_forma'] ] ?? $g['reembolso_forma'] ) ) ); ?></span>
 							<?php elseif ( GastosTable::por_reembolsar( $g ) ) : ?>
 								<br><span class="asde-muted"><?php echo esc_html( sprintf( /* translators: %s: text */ __( 'Pending reimbursement to %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $quien( $g['persona'] ) ) ); ?></span>
 							<?php endif; ?>
@@ -285,9 +285,9 @@ $yo              = get_current_user_id();
 			</p>
 			<fieldset>
 				<legend><?php esc_html_e( 'Who paid it?', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></legend>
-				<label class="asde-choice"><input type="radio" name="pagado_por" value="<?php echo esc_attr( GastosTable::PAGO_GRUPO ); ?>" checked><span><?php echo esc_html( asde_t( GastosTable::PAGADORES[ GastosTable::PAGO_GRUPO ] ) ); ?></span></label>
+				<label class="asde-choice"><input type="radio" name="pagado_por" value="<?php echo esc_attr( GastosTable::PAGO_GRUPO ); ?>" checked><span><?php echo esc_html( ( GastosTable::pagadores()[ GastosTable::PAGO_GRUPO ] ) ); ?></span></label>
 				<?php if ( $abiertos ) : ?>
-					<label class="asde-choice"><input type="radio" name="pagado_por" value="<?php echo esc_attr( GastosTable::PAGO_ANTICIPO ); ?>"><span><?php echo esc_html( asde_t( GastosTable::PAGADORES[ GastosTable::PAGO_ANTICIPO ] ) ); ?></span></label>
+					<label class="asde-choice"><input type="radio" name="pagado_por" value="<?php echo esc_attr( GastosTable::PAGO_ANTICIPO ); ?>"><span><?php echo esc_html( ( GastosTable::pagadores()[ GastosTable::PAGO_ANTICIPO ] ) ); ?></span></label>
 					<label><?php esc_html_e( 'Advance', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>
 						<select name="anticipo">
 							<?php foreach ( $abiertos as $an ) : ?>
@@ -297,7 +297,7 @@ $yo              = get_current_user_id();
 					</label>
 				<?php endif; ?>
 				<?php if ( ! $economia || $personas ) : ?>
-					<label class="asde-choice"><input type="radio" name="pagado_por" value="<?php echo esc_attr( GastosTable::PAGO_PERSONA ); ?>"><span><?php echo esc_html( $economia ? asde_t( GastosTable::PAGADORES[ GastosTable::PAGO_PERSONA ] ) : __( 'Me, out of my own pocket (Treasury will reimburse me)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?></span></label>
+					<label class="asde-choice"><input type="radio" name="pagado_por" value="<?php echo esc_attr( GastosTable::PAGO_PERSONA ); ?>"><span><?php echo esc_html( $economia ? ( GastosTable::pagadores()[ GastosTable::PAGO_PERSONA ] ) : __( 'Me, out of my own pocket (Treasury will reimburse me)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?></span></label>
 				<?php endif; ?>
 				<?php if ( $economia && $personas ) : ?>
 					<label><?php esc_html_e( 'Who has to be reimbursed', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>
@@ -354,7 +354,7 @@ $yo              = get_current_user_id();
 					?>
 					<li class="<?php echo $anulado ? 'asde-anulado' : ''; ?>">
 						<strong><?php echo esc_html( sprintf( /* translators: 1: number, 2: text */ __( 'No. %1$d · %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $an['id'], $quien( $an['persona'] ) ) ); ?></strong>
-						· <?php echo esc_html( sprintf( /* translators: 1: text, 2: text, 3: text */ __( '%1$s on %2$s (%3$s)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $euros( $an['importe'] ), $fecha( $an['fecha'] ), asde_t( GastosTable::FORMAS[ $an['forma'] ] ?? $an['forma'] ) ) ); ?>
+						· <?php echo esc_html( sprintf( /* translators: 1: text, 2: text, 3: text */ __( '%1$s on %2$s (%3$s)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $euros( $an['importe'] ), $fecha( $an['fecha'] ), ( GastosTable::formas()[ $an['forma'] ] ?? $an['forma'] ) ) ); ?>
 						<?php if ( '' !== $an['nota'] ) : ?>
 							· <span class="asde-muted"><?php echo esc_html( $an['nota'] ); ?></span>
 						<?php endif; ?>

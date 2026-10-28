@@ -402,7 +402,7 @@ try {
 	$ok( null !== $q['pago_en'] && 'tpv' === $q['pago_metodo'] && 10.0 === $q['pago_importe'], 'Tesorería lo marca pagado con el datáfono' );
 	$cfg_df['datafono'] = false;
 	Config::guardar( $cfg_df, $grupo['numero'] );
-	$ok( 'Datáfono / TPV' === PedidosTable::METODOS['tpv'] && 'tpv' === PedidosTable::METODO_DE_FORMA['datafono'], 'el método tiene su nombre y la forma «datáfono» lleva a él' );
+	$ok( 'Datáfono / TPV' === PedidosTable::metodos()['tpv'] && 'tpv' === PedidosTable::METODO_DE_FORMA['datafono'], 'el método tiene su nombre y la forma «datáfono» lleva a él' );
 
 	$ok( $crm->llamadas > 0 && 0 === $cortadas, "todas las consultas al CRM las ha respondido el simulador ({$crm->llamadas}); ninguna ha salido hacia el CRM real" );
 } catch ( Throwable $e ) {

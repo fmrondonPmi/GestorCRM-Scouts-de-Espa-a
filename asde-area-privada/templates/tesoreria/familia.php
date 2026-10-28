@@ -37,7 +37,7 @@ $user = static fn( $id ) => ( $u = get_userdata( (int) $id ) ) ? $u->user_login 
 <section class="asde-card">
 	<header class="asde-card__header asde-card__header--split">
 		<h2 class="asde-card__title"><?php esc_html_e( 'Family', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <?php echo esc_html( $familia['numero'] ); ?> · <?php echo esc_html( $ronda ); ?></h2>
-		<span class="asde-badge asde-badge--pago-<?php echo esc_attr( $c['estado'] ); ?>"><?php echo esc_html( asde_t( Calculadora::ETIQUETAS[ $c['estado'] ] ) ); ?></span>
+		<span class="asde-badge asde-badge--pago-<?php echo esc_attr( $c['estado'] ); ?>"><?php echo esc_html( ( Calculadora::etiquetas()[ $c['estado'] ] ) ); ?></span>
 	</header>
 	<ul class="asde-lista-miembros">
 		<?php foreach ( $familia['miembros'] as $n ) : ?>
@@ -92,7 +92,7 @@ $user = static fn( $id ) => ( $u = get_userdata( (int) $id ) ) ? $u->user_login 
 		<ul>
 			<?php foreach ( $c['plazos'] as $pl ) : ?>
 				<li>
-					<?php echo esc_html( sprintf( /* translators: 1: text, 2: text, 3: text */ __( '%1$s: %2$s until %3$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), asde_t( (string) $pl['nombre'] ), Calculadora::euros( $pl['importe'] ), wp_date( 'd/m/Y', strtotime( $pl['fecha'] . ' 12:00' ) ) ) ); ?>
+					<?php echo esc_html( sprintf( /* translators: 1: text, 2: text, 3: text */ __( '%1$s: %2$s until %3$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), asde_guardado( (string) $pl['nombre'] ), Calculadora::euros( $pl['importe'] ), wp_date( 'd/m/Y', strtotime( $pl['fecha'] . ' 12:00' ) ) ) ); ?>
 					<?php echo $pl['cubierto'] ? '✅' : ( $pl['vencido'] ? '<span class="asde-help asde-help--warning">vencido</span>' : '' ); ?>
 				</li>
 			<?php endforeach; ?>
@@ -162,7 +162,7 @@ $user = static fn( $id ) => ( $u = get_userdata( (int) $id ) ) ? $u->user_login 
 			<p>
 				<label for="asde-pago-metodo"><?php esc_html_e( 'Payment method', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 				<select id="asde-pago-metodo" name="metodo"<?php echo $el ? ' disabled' : ''; ?>>
-					<?php foreach ( asde_ta( MovimientosTable::METODOS ) as $k => $label ) : ?>
+					<?php foreach ( ( MovimientosTable::metodos() ) as $k => $label ) : ?>
 						<option value="<?php echo esc_attr( $k ); ?>"<?php selected( $el ? 'transferencia' : '', $k ); ?>><?php echo esc_html( $label ); ?></option>
 					<?php endforeach; ?>
 				</select>
@@ -218,7 +218,7 @@ $user = static fn( $id ) => ( $u = get_userdata( (int) $id ) ) ? $u->user_login 
 				<?php foreach ( $vigentes as $m ) : ?>
 					<tr>
 						<td data-label="<?php echo esc_attr( esc_attr__( 'Date', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( wp_date( 'd/m/Y', strtotime( $m['fecha'] . ' 12:00' ) ) ); ?></td>
-						<td data-label="<?php echo esc_attr( esc_attr__( 'Type', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( MovimientosTable::PAGO === $m['tipo'] ? __( 'Payment', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . ( $m['metodo'] ? ' · ' . ( asde_t( MovimientosTable::METODOS[ $m['metodo'] ] ?? $m['metodo'] ) ) : '' ) : __( 'Adjustment', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?></td>
+						<td data-label="<?php echo esc_attr( esc_attr__( 'Type', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( MovimientosTable::PAGO === $m['tipo'] ? __( 'Payment', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . ( $m['metodo'] ? ' · ' . ( ( MovimientosTable::metodos()[ $m['metodo'] ] ?? $m['metodo'] ) ) : '' ) : __( 'Adjustment', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?></td>
 						<td data-label="<?php echo esc_attr( esc_attr__( 'Amount', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( Calculadora::euros( (float) $m['importe'] ) ); ?></td>
 						<td data-label="<?php echo esc_attr( esc_attr__( 'Detail', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( trim( $m['referencia'] . ( $m['referencia'] && $m['nota'] ? ' · ' : '' ) . $m['nota'] ) ); ?></td>
 						<td data-label="<?php echo esc_attr( esc_attr__( 'Recorded by', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( $user( $m['registrado_por'] ) ); ?></td>

@@ -179,6 +179,6 @@ $ok( 35.5 === Config::de( '2099-2100' )['presupuesto']['pct_grupo'], 'un % del g
 $ok( 40.0 === Config::de( '2098-2099' )['presupuesto']['pct_grupo'], 'otra ronda no se toca' );
 
 $ok( Modulos::activo( Modulos::PRESUPUESTOS ), 'el módulo Presupuestos está encendido por defecto' );
-$ok( Modulos::LISTA[ Modulos::PRESUPUESTOS ][3] === Modulos::TESORERIA, 'depende de Tesorería' );
+$ok( Modulos::lista()[ Modulos::PRESUPUESTOS ][3] === Modulos::TESORERIA, 'depende de Tesorería' );
 
 echo $fails ? "\n{$fails} FALLOS\n" : "\nTODO OK\n";

@@ -20,7 +20,7 @@ $detalle = array(
 ?>
 <fieldset class="asde-forma-pago">
 	<legend><?php esc_html_e( 'How are you going to pay?', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></legend>
-	<?php foreach ( asde_ta( PedidosTable::FORMAS ) as $forma => $etiqueta ) : ?>
+	<?php foreach ( ( PedidosTable::formas() ) as $forma => $etiqueta ) : ?>
 		<?php
 		if ( ( 'fisico' === $forma && ! $es_socio ) || ( 'datafono' === $forma && empty( $cfg['datafono'] ) ) ) {
 			continue;

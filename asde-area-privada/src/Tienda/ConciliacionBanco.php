@@ -106,7 +106,7 @@ final class ConciliacionBanco {
 			return new \WP_Error( 'asde_tienda', __( 'That income is already reviewed or does not correspond to this order.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$metodo = PedidosTable::METODO_DE_FORMA[ $p['forma_pago'] ] ?? 'transferencia';
-		PedidosTable::marcar_pago( $p['id'], $m['fecha'], isset( PedidosTable::METODOS[ $metodo ] ) ? $metodo : 'transferencia', (float) $m['importe'], 'Banco' . ( '' !== $m['documento'] ? ' ' . $m['documento'] : '' ) );
+		PedidosTable::marcar_pago( $p['id'], $m['fecha'], isset( PedidosTable::metodos()[ $metodo ] ) ? $metodo : 'transferencia', (float) $m['importe'], 'Banco' . ( '' !== $m['documento'] ? ' ' . $m['documento'] : '' ) );
 		Logger::log( 'tienda_banco_pagado', 'tienda', (string) $p['id'], array( 'movimiento' => $mov_id, 'importe' => $m['importe'] ) );
 		$nuevo = PedidosTable::obtener( $p['id'] );
 		if ( $nuevo ) {

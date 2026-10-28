@@ -34,14 +34,17 @@ final class Inscripciones {
 	/** Se incorporó como asociado/a (doc 59, RC-NUE-1): queda solo su nº de socio/a y la fecha; sus datos se han vaciado. */
 	public const ASOCIADA       = 'asociada';
 
-	public const ESTADOS = array(
-		self::SIN_CONFIRMAR  => 'Sin confirmar el email',
-		self::EN_ESPERA      => 'En espera',
-		self::CONTACTADA     => 'Contactada',
-		self::PLAZA_OFRECIDA => 'Plaza ofrecida',
-		self::DESCARTADA     => 'Descartada',
-		self::ASOCIADA       => 'Asociado/a',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function estados(): array {
+		return array(
+		self::SIN_CONFIRMAR  => __( 'Email not confirmed', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::EN_ESPERA      => __( 'Waiting', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::CONTACTADA     => __( 'Contacted', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::PLAZA_OFRECIDA => __( 'Place offered', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::DESCARTADA     => __( 'Discarded', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::ASOCIADA       => __( 'Associate', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
 	/** Estados que puede poner el equipo a mano (el de sin confirmar lo quita solo el email). */
 	public const ESTADOS_ELEGIBLES = array( self::EN_ESPERA, self::CONTACTADA, self::PLAZA_OFRECIDA, self::DESCARTADA );
@@ -49,10 +52,13 @@ final class Inscripciones {
 	/** Cómo se contactó. */
 	public const POR_EMAIL    = 'email';
 	public const POR_TELEFONO = 'telefono';
-	public const MEDIOS       = array(
-		self::POR_EMAIL    => 'Email',
-		self::POR_TELEFONO => 'Teléfono',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function medios(): array {
+		return array(
+		self::POR_EMAIL    => __( 'Email', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::POR_TELEFONO => __( 'Phone', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
 	public const DIAS_CONFIRMAR = 7;
 	public const MESES          = 12;
@@ -267,7 +273,7 @@ final class Inscripciones {
 	 * que se apunta a mano. Si estaba «En espera», pasa a «Contactada».
 	 */
 	public static function registrar_contacto( array $fila, string $medio, string $nota = '', string $asunto = '' ): bool {
-		if ( ! isset( self::MEDIOS[ $medio ] ) || in_array( $fila['estado'], array( self::SIN_CONFIRMAR, self::ASOCIADA ), true ) ) {
+		if ( ! isset( self::medios()[ $medio ] ) || in_array( $fila['estado'], array( self::SIN_CONFIRMAR, self::ASOCIADA ), true ) ) {
 			return false;
 		}
 		$cambios = array(

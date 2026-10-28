@@ -124,7 +124,7 @@ final class Catalogo {
 	/** Lo que da, ya traducido. */
 	public static function descripcion( string $permiso ): string {
 		$d = self::lista()[ $permiso ][2] ?? '';
-		return '' === $d ? $permiso : asde_t( $d );
+		return '' === $d ? $permiso : asde_guardado( $d );
 	}
 
 	public static function sensible( string $permiso ): bool {

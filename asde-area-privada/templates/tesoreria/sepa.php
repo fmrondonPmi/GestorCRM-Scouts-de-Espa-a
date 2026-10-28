@@ -130,7 +130,7 @@ $vista_previa = static function ( array $prep ) use ( $familias, $nombres ): voi
 					<select id="asde-sepa-plazo" name="plazo">
 						<option value="" <?php selected( $plazo, '' ); ?>><?php esc_html_e( 'Everything pending in the round', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></option>
 						<?php foreach ( $plazos as $i => $pl ) : ?>
-							<option value="<?php echo (int) $i; ?>" <?php selected( $plazo, (string) $i ); ?>><?php echo esc_html( sprintf( /* translators: 1: text, 2: text, 3: text */ __( '%1$s (until %2$s, %3$s %%)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), asde_t( (string) $pl['nombre'] ), $fmt_fecha( $pl['fecha'] ), number_format_i18n( (float) $pl['porcentaje'], 0 ) ) ); ?></option>
+							<option value="<?php echo (int) $i; ?>" <?php selected( $plazo, (string) $i ); ?>><?php echo esc_html( sprintf( /* translators: 1: text, 2: text, 3: text */ __( '%1$s (until %2$s, %3$s %%)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), asde_guardado( (string) $pl['nombre'] ), $fmt_fecha( $pl['fecha'] ), number_format_i18n( (float) $pl['porcentaje'], 0 ) ) ); ?></option>
 						<?php endforeach; ?>
 					</select>
 					<span class="asde-help"><?php esc_html_e( 'With an instalment, each family is charged what it is missing up to that instalment (counting what it has already paid).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span>
@@ -237,11 +237,11 @@ $vista_previa = static function ( array $prep ) use ( $familias, $nombres ): voi
 				<?php foreach ( $remesas as $r ) : ?>
 					<tr>
 						<td data-label="<?php echo esc_attr( esc_attr__( 'Batch', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><a href="<?php echo esc_url( add_query_arg( array( 'ronda' => $r['ronda'], 'remesa' => $r['id'] ), $url ) ); ?>"><?php echo esc_html( $r['numero'] ); ?></a></td>
-						<td data-label="<?php echo esc_attr( esc_attr__( 'Round', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( $r['ronda'] . ' · ' . asde_t( (string) $r['plazo'] ) ); ?></td>
+						<td data-label="<?php echo esc_attr( esc_attr__( 'Round', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( $r['ronda'] . ' · ' . asde_guardado( (string) $r['plazo'] ) ); ?></td>
 						<td data-label="<?php echo esc_attr( esc_attr__( 'Collection', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( $fmt_fecha( $r['fecha_cobro'] ) ); ?></td>
 						<td data-label="<?php echo esc_attr( esc_attr__( 'Debit charges', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo (int) $r['adeudos']; ?></td>
 						<td data-label="<?php echo esc_attr( esc_attr__( 'Total', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( Calculadora::euros( $r['total'] ) ); ?></td>
-						<td data-label="<?php echo esc_attr( esc_attr__( 'Status', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( asde_t( Remesas::ESTADOS[ $r['estado'] ] ?? $r['estado'] ) ); ?><?php echo Remesas::ENVIADA === $r['estado'] && $r['cobros_en'] ? ' · cobrada' : ''; ?></td>
+						<td data-label="<?php echo esc_attr( esc_attr__( 'Status', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( ( Remesas::estados()[ $r['estado'] ] ?? $r['estado'] ) ); ?><?php echo Remesas::ENVIADA === $r['estado'] && $r['cobros_en'] ? ' · cobrada' : ''; ?></td>
 					</tr>
 				<?php endforeach; ?>
 			</tbody>

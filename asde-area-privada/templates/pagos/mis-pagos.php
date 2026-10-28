@@ -37,7 +37,7 @@ $fecha = static fn( string $f ) => '' !== $f ? wp_date( 'd/m/Y', strtotime( $f )
 	<section class="asde-card">
 		<header class="asde-card__header asde-card__header--split">
 			<h3 class="asde-card__title"><?php esc_html_e( 'Group fee · round', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <?php echo esc_html( $ronda ); ?></h3>
-			<span class="asde-badge asde-badge--pago-<?php echo esc_attr( $calc['estado'] ); ?>"><?php echo esc_html( asde_t( Calculadora::ETIQUETAS[ $calc['estado'] ] ) ); ?></span>
+			<span class="asde-badge asde-badge--pago-<?php echo esc_attr( $calc['estado'] ); ?>"><?php echo esc_html( ( Calculadora::etiquetas()[ $calc['estado'] ] ) ); ?></span>
 		</header>
 		<?php if ( Calculadora::EXENTO === $calc['estado'] ) : ?>
 			<p><?php esc_html_e( 'There is no fee to pay this year.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>

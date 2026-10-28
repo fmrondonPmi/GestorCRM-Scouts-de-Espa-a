@@ -78,7 +78,7 @@ final class Informes {
 	public static function por_forma( array $pedidos ): array {
 		$out = array();
 		foreach ( self::ventas( $pedidos ) as $p ) {
-			$f = isset( PedidosTable::FORMAS[ $p['forma_pago'] ] ) ? $p['forma_pago'] : '';
+			$f = isset( PedidosTable::formas()[ $p['forma_pago'] ] ) ? $p['forma_pago'] : '';
 			if ( ! isset( $out[ $f ] ) ) {
 				$out[ $f ] = array(
 					'pedidos'   => 0,

@@ -27,30 +27,39 @@ final class GastosTable {
 	public const VALIDADO  = 'validado';
 	public const RECHAZADO = 'rechazado';
 
-	public const ESTADOS = array(
-		self::PROPUESTO => 'Por revisar',
-		self::VALIDADO  => 'Validado',
-		self::RECHAZADO => 'Rechazado',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function estados(): array {
+		return array(
+		self::PROPUESTO => __( 'To review', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::VALIDADO  => __( 'Validated', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::RECHAZADO => __( 'Rejected', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
 	/** Quién lo pagó. */
 	public const PAGO_GRUPO    = 'grupo';
 	public const PAGO_ANTICIPO = 'anticipo';
 	public const PAGO_PERSONA  = 'persona';
 
-	public const PAGADORES = array(
-		self::PAGO_GRUPO    => 'El grupo (cuenta o caja)',
-		self::PAGO_ANTICIPO => 'Con un anticipo de caja',
-		self::PAGO_PERSONA  => 'Alguien del equipo, de su bolsillo (hay que reembolsárselo)',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function pagadores(): array {
+		return array(
+		self::PAGO_GRUPO    => __( 'The group (account or cash box)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::PAGO_ANTICIPO => __( 'With a cash advance', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::PAGO_PERSONA  => __( 'Someone from the team, out of their own pocket (they must be reimbursed)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
-	public const FORMAS = array(
-		'efectivo'      => 'Efectivo',
-		'tarjeta'       => 'Tarjeta',
-		'transferencia' => 'Transferencia',
-		'bizum'         => 'Bizum',
-		'otro'          => 'Otra',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function formas(): array {
+		return array(
+		'efectivo'      => __( 'Cash', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'tarjeta'       => __( 'Card', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'transferencia' => __( 'Transfer', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'bizum'         => __( 'Bizum', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'otro'          => __( 'Other', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
 	public static function table(): string {
 		global $wpdb;

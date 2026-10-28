@@ -53,7 +53,7 @@
 		input.setAttribute( 'aria-autocomplete', 'list' );
 		input.setAttribute( 'aria-expanded', 'false' );
 		input.setAttribute( 'aria-controls', id + '-lista' );
-		input.placeholder = select.getAttribute( 'data-placeholder' ) || asdeT( 'Escribe al menos %s letras…', min );
+		input.placeholder = select.getAttribute( 'data-placeholder' ) || asdeT( 'Enter at least %s letters…', min );
 		var lista = document.createElement( 'ul' );
 		lista.id = id + '-lista';
 		lista.className = 'asde-combobox__lista';
@@ -133,7 +133,7 @@
 			select.value = '';
 			if ( q.length < min ) {
 				cerrar();
-				aviso.textContent = q.length ? asdeT( 'Escribe al menos %s letras.', min ) : '';
+				aviso.textContent = q.length ? asdeT( 'Enter at least %s letters.', min ) : '';
 				return;
 			}
 			var terminos = q.split( /\s+/ );
@@ -146,7 +146,7 @@
 			if ( ! resultados.length ) {
 				var vacio = document.createElement( 'li' );
 				vacio.className = 'asde-combobox__vacio';
-				vacio.textContent = asdeT( 'Nadie coincide con «%s»', input.value.trim() );
+				vacio.textContent = asdeT( 'Nobody matches "%s"', input.value.trim() );
 				lista.appendChild( vacio );
 			}
 			resultados.forEach( function ( o, i ) {
@@ -210,7 +210,7 @@
 			select.form.addEventListener( 'submit', function ( e ) {
 				if ( ! select.value ) {
 					e.preventDefault();
-					input.setCustomValidity( asdeT( 'Elige una opción de la lista.' ) );
+					input.setCustomValidity( asdeT( 'Choose an option from the list.' ) );
 					input.reportValidity();
 				}
 			} );

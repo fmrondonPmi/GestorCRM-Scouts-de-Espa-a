@@ -28,19 +28,22 @@ final class ImportadorProductos {
 	public const MAX_FILAS = 2000;
 
 	/** Columna => [etiqueta del ejemplo, otros nombres que se aceptan en la cabecera]. */
-	public const COLUMNAS = array(
-		'producto'     => array( 'Producto', array( 'producto', 'nombre', 'articulo', 'nombre del producto' ) ),
-		'descripcion'  => array( 'Descripción', array( 'descripcion', 'detalle' ) ),
-		'categoria'    => array( 'Categoría', array( 'categoria', 'tipo', 'familia' ) ),
-		'visibilidad'  => array( 'Visibilidad', array( 'visibilidad', 'visible para', 'visible', 'quien lo ve' ) ),
-		'precio'       => array( 'Precio', array( 'precio', 'pvp', 'importe' ) ),
-		'precio_socio' => array( 'Precio de socio', array( 'precio de socio', 'precio socio', 'precio socios' ) ),
-		'limite'       => array( 'Límite por persona', array( 'limite por persona', 'limite', 'maximo por persona' ) ),
-		'proveedor'    => array( 'Se pide al proveedor', array( 'se pide al proveedor', 'proveedor', 'pedir al proveedor' ) ),
-		'variante'     => array( 'Variante', array( 'variante', 'talla', 'modelo', 'color', 'opcion' ) ),
-		'sku'          => array( 'Referencia', array( 'referencia', 'sku', 'codigo', 'ref' ) ),
-		'existencias'  => array( 'Existencias', array( 'existencias', 'stock', 'cantidad', 'unidades', 'uds' ) ),
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function columnas(): array {
+		return array(
+		'producto'     => array( __( 'Product', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), array( 'producto', 'nombre', 'articulo', 'nombre del producto' ) ),
+		'descripcion'  => array( __( 'Description', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), array( 'descripcion', 'detalle' ) ),
+		'categoria'    => array( __( 'Category', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), array( 'categoria', 'tipo', 'familia' ) ),
+		'visibilidad'  => array( __( 'Visibility', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), array( 'visibilidad', 'visible para', 'visible', 'quien lo ve' ) ),
+		'precio'       => array( __( 'Price', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), array( 'precio', 'pvp', 'importe' ) ),
+		'precio_socio' => array( __( 'Member price', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), array( 'precio de socio', 'precio socio', 'precio socios' ) ),
+		'limite'       => array( __( 'Limit per person', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), array( 'limite por persona', 'limite', 'maximo por persona' ) ),
+		'proveedor'    => array( __( 'Ordered from the supplier', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), array( 'se pide al proveedor', 'proveedor', 'pedir al proveedor' ) ),
+		'variante'     => array( __( 'Variant', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), array( 'variante', 'talla', 'modelo', 'color', 'opcion' ) ),
+		'sku'          => array( __( 'Reference', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), array( 'referencia', 'sku', 'codigo', 'ref' ) ),
+		'existencias'  => array( __( 'Stock', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), array( 'existencias', 'stock', 'cantidad', __( 'units', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 'uds' ) ),
 	);
+	}
 
 	/** Sin estas columnas en la cabecera no se puede cargar. */
 	public const OBLIGATORIAS = array( 'producto' );
@@ -88,7 +91,7 @@ final class ImportadorProductos {
 		$mapa   = self::mapa( array_shift( $lineas ) );
 		$faltan = array_diff( self::OBLIGATORIAS, $mapa );
 		if ( $faltan ) {
-			$nombres = array_map( static fn( $c ) => '«' . asde_t( self::COLUMNAS[ $c ][0] ) . '»', $faltan );
+			$nombres = array_map( static fn( $c ) => '«' . ( self::columnas()[ $c ][0] ) . '»', $faltan );
 			/* translators: %s: columnas que faltan */
 			return new \WP_Error( 'asde_importar', sprintf( /* translators: %s: text */ __( 'The first row must be the header with the column names, and these are missing: %s. Download the example to see what it must look like.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), implode( ', ', $nombres ) ) );
 		}
@@ -97,7 +100,7 @@ final class ImportadorProductos {
 			if ( ! array_filter( $celdas, static fn( $c ) => '' !== trim( (string) $c ) ) ) {
 				continue; // Fila vacía (al final de lo que guarda Excel, sobre todo).
 			}
-			$fila = array_fill_keys( array_keys( self::COLUMNAS ), '' );
+			$fila = array_fill_keys( array_keys( self::columnas() ), '' );
 			foreach ( $mapa as $pos => $col ) {
 				$fila[ $col ] = trim( (string) ( $celdas[ $pos ] ?? '' ) );
 			}
@@ -133,7 +136,7 @@ final class ImportadorProductos {
 			'errores'                => array(),
 		);
 		foreach ( $filas as $n => $fila ) {
-			$fila += array_fill_keys( array_keys( self::COLUMNAS ), '' );
+			$fila += array_fill_keys( array_keys( self::columnas() ), '' );
 			$fallo = static function ( string $motivo ) use ( &$res, $n, $fila ): void {
 				$res['errores'][] = array(
 					'fila'   => (int) $n,
@@ -249,7 +252,7 @@ final class ImportadorProductos {
 
 	/** Fichero de ejemplo (con BOM y «;», como lo abre bien Excel). */
 	public static function ejemplo(): string {
-		$cab   = array_map( static fn( $c ) => asde_t( $c[0] ), self::COLUMNAS );
+		$cab   = array_map( static fn( $c ) =>  $c[0] , self::columnas() );
 		$filas = array(
 			$cab,
 			array( __( 'Group T-shirt', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Cotton T-shirt with the badge', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Clothing', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 'socios', '12,00', '10,00', '3', 'sí', 'S', 'CAM-S', '10' ),
@@ -266,8 +269,8 @@ final class ImportadorProductos {
 		$mapa = array();
 		foreach ( $cabecera as $pos => $nombre ) {
 			$clave = self::normalizar( (string) $nombre );
-			foreach ( self::COLUMNAS as $col => list( $etiqueta, $alias ) ) {
-				if ( ! in_array( $col, $mapa, true ) && ( in_array( $clave, $alias, true ) || self::normalizar( asde_t( $etiqueta ) ) === $clave ) ) {
+			foreach ( self::columnas() as $col => list( $etiqueta, $alias ) ) {
+				if ( ! in_array( $col, $mapa, true ) && ( in_array( $clave, $alias, true ) || self::normalizar(  $etiqueta  ) === $clave ) ) {
 					$mapa[ $pos ] = $col;
 					break;
 				}

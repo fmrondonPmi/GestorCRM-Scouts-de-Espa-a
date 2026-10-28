@@ -16,22 +16,28 @@ defined( 'ABSPATH' ) || exit;
  */
 final class CamposFicha {
 
-	public const GRUPOS = array(
-		'identificacion' => 'Datos personales',
-		'membresia'      => 'Membresía',
-		'contacto'       => 'Contacto',
-		'tutores'        => 'Familia / tutores',
-		'autorizaciones' => 'Autorizaciones y formación',
-		'salud'          => 'Salud',
-		'alimentacion'   => 'Alimentación',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function grupos(): array {
+		return array(
+		'identificacion' => __( 'Personal details', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'membresia'      => __( 'Membership', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'contacto'       => __( 'Contact', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'tutores'        => __( 'Family / guardians', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'autorizaciones' => __( 'Authorisations and training', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'salud'          => __( 'Health', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'alimentacion'   => __( 'Food', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
 	/** Siempre de solo lectura en la ficha. */
-	public const SOLO_LECTURA = array(
-		'numerosocio_c'             => 'Lo asigna Scouts de España.',
-		'numsocioantiguo_enficha_c' => 'Se asigna y corrige desde Personas (numeración).',
-		'stic_relationship_type_c'  => 'Sale de las membresías del CRM.',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function solo_lectura(): array {
+		return array(
+		'numerosocio_c'             => __( 'It is assigned by Scouts de España.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'numsocioantiguo_enficha_c' => __( 'It is assigned and corrected from People (numbering).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'stic_relationship_type_c'  => __( 'It leaves the CRM memberships.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
 	/** Campos de contacto que cada persona puede cambiar de su propia ficha. */
 	public const CONTACTO_PROPIO = array( 'email1', 'phone_mobile', 'phone_home' );
@@ -49,19 +55,22 @@ final class CamposFicha {
 	 *
 	 * @var array<string, array<string, string>> campo => [opción => explicación]
 	 */
-	public const OPCIONES = array(
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function opciones(): array {
+		return array(
 		'alimentacion_regimen_tipo_y__c' => array(
-			'Dieta omnívora'      => 'Incluye alimentos de origen animal y vegetal sin mayores restricciones.',
-			'Dieta vegetariana'   => 'Excluye la carne y el pescado, pero puede permitir derivados como huevos y lácteos (ovolactovegetariana).',
-			'Dieta vegana'        => 'Elimina por completo cualquier producto de origen animal, incluyendo la miel, los lácteos y los huevos.',
-			'Dieta flexitariana'  => 'Se basa principalmente en vegetales, permitiendo el consumo ocasional de carne o pescado.',
+			'Dieta omnívora'      => __( 'It includes foods of animal and plant origin without major restrictions.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+			'Dieta vegetariana'   => __( 'It excludes meat and fish, but may allow derivatives such as eggs and dairy (ovo-lacto-vegetarian).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+			'Dieta vegana'        => __( 'It completely excludes any animal-origin product, including honey, dairy and eggs.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+			'Dieta flexitariana'  => __( 'It is based mainly on plants, allowing the occasional consumption of meat or fish.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 		),
 	);
+	}
 
 	/** @return array<string, array{0:string, 1:string, 2:string}> campo CRM => [etiqueta, grupo, nivel] */
 	public static function todos(): array {
 		static $por_idioma = array(); // Las etiquetas salen traducidas: una lista por idioma.
-		$idioma = \AsdeBalears\AreaPrivada\Idiomas\Idioma::actual();
+		$idioma = determine_locale();
 		if ( isset( $por_idioma[ $idioma ] ) ) {
 			return $por_idioma[ $idioma ];
 		}

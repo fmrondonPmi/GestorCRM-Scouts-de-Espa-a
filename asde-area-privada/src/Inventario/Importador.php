@@ -30,18 +30,21 @@ final class Importador {
 	public const MAX_FILAS = 2000;
 
 	/** Columna => [etiqueta del ejemplo, otros nombres que se aceptan en la cabecera]. */
-	public const COLUMNAS = array(
-		'descripcion' => array( 'Descripción', array( 'descripcion', 'material', 'nombre', 'articulo' ) ),
-		'tipo'        => array( 'Tipo', array( 'tipo', 'tipo de material', 'categoria' ) ),
-		'cantidad'    => array( 'Cantidad', array( 'cantidad', 'unidades', 'uds' ) ),
-		'precio'      => array( 'Precio por unidad', array( 'precio por unidad', 'precio', 'precio unidad', 'precio unitario', 'importe' ) ),
-		'anio'        => array( 'Año de compra', array( 'ano de compra', 'ano', 'anio', 'anio de compra', 'ano compra' ) ),
-		'num_serie'   => array( 'Nº de serie', array( 'n de serie', 'no de serie', 'numero de serie', 'num serie', 'n serie', 'serie' ) ),
-		'notas'       => array( 'Notas', array( 'notas', 'observaciones', 'comentarios' ) ),
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function columnas(): array {
+		return array(
+		'descripcion' => array( __( 'Description', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), array( 'descripcion', 'material', 'nombre', 'articulo' ) ),
+		'tipo'        => array( __( 'Type', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), array( 'tipo', 'tipo de material', 'categoria' ) ),
+		'cantidad'    => array( __( 'Quantity', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), array( 'cantidad', __( 'units', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 'uds' ) ),
+		'precio'      => array( __( 'Price per unit', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), array( 'precio por unidad', 'precio', 'precio unidad', 'precio unitario', 'importe' ) ),
+		'anio'        => array( __( 'Year of purchase', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), array( 'ano de compra', 'ano', 'anio', 'anio de compra', 'ano compra' ) ),
+		'num_serie'   => array( __( 'Serial no.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), array( 'n de serie', 'no de serie', 'numero de serie', 'num serie', 'n serie', 'serie' ) ),
+		'notas'       => array( __( 'Notes', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), array( 'notas', 'observaciones', 'comentarios' ) ),
 		// v0.29: solo para las camisas del uniforme (tipo «Camisa uniforme»): chico o chica, y la talla.
-		'modelo'      => array( 'Modelo (camisas)', array( 'modelo camisas', 'modelo', 'chico chica', 'chica chico', 'genero', 'sexo' ) ),
-		'talla'       => array( 'Talla (camisas)', array( 'talla camisas', 'talla', 'size' ) ),
+		'modelo'      => array( __( 'Model (shirts)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), array( 'modelo camisas', 'modelo', 'chico chica', 'chica chico', 'genero', 'sexo' ) ),
+		'talla'       => array( __( 'Size (shirts)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), array( 'talla camisas', 'talla', 'size' ) ),
 	);
+	}
 
 	/** Sin estas columnas en la cabecera no se puede importar. */
 	public const OBLIGATORIAS = array( 'descripcion', 'cantidad' );
@@ -75,7 +78,7 @@ final class Importador {
 		$mapa     = self::mapa( $cabecera );
 		$faltan   = array_diff( self::OBLIGATORIAS, $mapa );
 		if ( $faltan ) {
-			$nombres = array_map( static fn( $c ) => '«' . asde_t( self::COLUMNAS[ $c ][0] ) . '»', $faltan );
+			$nombres = array_map( static fn( $c ) => '«' . ( self::columnas()[ $c ][0] ) . '»', $faltan );
 			/* translators: %s: columnas que faltan */
 			return new \WP_Error( 'asde_importar', sprintf( /* translators: %s: text */ __( 'The first row must be the header with the column names, and these are missing: %s. Download the example to see what it must look like.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), implode( ', ', $nombres ) ) );
 		}
@@ -142,7 +145,7 @@ final class Importador {
 		};
 
 		foreach ( $filas as $n => $fila ) {
-			$fila += array_fill_keys( array_keys( self::COLUMNAS ), '' );
+			$fila += array_fill_keys( array_keys( self::columnas() ), '' );
 
 			// Tipo: por su nombre (sin mayúsculas ni acentos); el que no existe se crea o es un error.
 			$tipo   = 0;
@@ -226,7 +229,7 @@ final class Importador {
 	/** Fichero de ejemplo (con BOM y «;», como lo abre bien Excel). */
 	public static function ejemplo(): string {
 		$filas = array(
-			array_map( static fn( $c ) => asde_t( $c[0] ), self::COLUMNAS ),
+			array_map( static fn( $c ) =>  $c[0] , self::columnas() ),
 			array( __( '4-person Canadian tent', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Tents', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), '3', '120,00', '2019', 'TC-0001', __( 'At the local, shelf 2', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), '', '' ),
 			array( __( 'Gas stove', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Kitchen', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), '6', '35,50', '', '', '', '', '' ),
 			array( __( '20 m rope', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), '', '10', '', '', '', '', '', '' ),
@@ -286,8 +289,8 @@ final class Importador {
 		$mapa = array();
 		foreach ( $cabecera as $pos => $nombre ) {
 			$clave = trim( (string) preg_replace( '/[^a-z0-9]+/', ' ', mb_strtolower( remove_accents( str_replace( array( 'º', 'ª', '°' ), '', (string) $nombre ) ) ) ) );
-			foreach ( self::COLUMNAS as $col => list( $etiqueta, $alias ) ) {
-				$propia = trim( (string) preg_replace( '/[^a-z0-9]+/', ' ', mb_strtolower( remove_accents( str_replace( 'º', '', asde_t( $etiqueta ) ) ) ) ) );
+			foreach ( self::columnas() as $col => list( $etiqueta, $alias ) ) {
+				$propia = trim( (string) preg_replace( '/[^a-z0-9]+/', ' ', mb_strtolower( remove_accents( str_replace( 'º', '',  $etiqueta  ) ) ) ) );
 				if ( ! in_array( $col, $mapa, true ) && ( in_array( $clave, $alias, true ) || $clave === $propia ) ) {
 					$mapa[ $pos ] = $col;
 					break;

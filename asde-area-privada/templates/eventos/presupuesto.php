@@ -31,7 +31,7 @@ $reparto  = static function ( array $p ): string {
 	if ( PartidasTable::INGRESO === $p['tipo'] ) {
 		return __( 'Deducted from the shared amount', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 	}
-	$texto = asde_t( Presupuesto::REPARTOS[ $p['reparto'] ] ?? $p['reparto'] );
+	$texto = ( Presupuesto::repartos()[ $p['reparto'] ] ?? $p['reparto'] );
 	return '' !== $p['seccion'] ? sprintf( /* translators: 1: text, 2: text */ __( '%1$s (%2$s)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $texto, Secciones::nombre( $p['seccion'] ) ) : $texto;
 };
 ?>
@@ -104,7 +104,7 @@ $reparto  = static function ( array $p ): string {
 				<label><?php esc_html_e( 'Description', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <input type="text" name="concepto" maxlength="160" required list="asde-partidas-sugeridas" placeholder="<?php echo esc_attr( esc_attr__( 'e.g. Bus', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
 					<datalist id="asde-partidas-sugeridas">
 						<?php foreach ( Presupuesto::SUGERIDAS as $sugerida ) : ?>
-							<option value="<?php echo esc_attr( asde_t( $sugerida ) ); ?>"></option>
+							<option value="<?php echo esc_attr( asde_guardado( $sugerida ) ); ?>"></option>
 						<?php endforeach; ?>
 					</datalist></label>
 				<label><?php esc_html_e( 'Amount (€)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <input type="text" name="importe" inputmode="decimal" size="10" required></label>
@@ -112,7 +112,7 @@ $reparto  = static function ( array $p ): string {
 			<p class="asde-form__fila">
 				<label><?php esc_html_e( 'How it is split (the expenses)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>
 					<select name="reparto">
-						<?php foreach ( asde_ta( Presupuesto::REPARTOS ) as $k => $etiqueta ) : ?>
+						<?php foreach ( ( Presupuesto::repartos() ) as $k => $etiqueta ) : ?>
 							<option value="<?php echo esc_attr( $k ); ?>"><?php echo esc_html( $etiqueta ); ?></option>
 						<?php endforeach; ?>
 					</select>

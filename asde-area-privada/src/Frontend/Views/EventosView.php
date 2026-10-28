@@ -43,16 +43,19 @@ defined( 'ABSPATH' ) || exit;
  */
 final class EventosView extends EventosBaseView {
 
-	public const PESTANAS = array(
-		'resumen'       => 'Resumen',
-		'calendario'    => 'Calendario',
-		'equipo'        => 'Equipo',
-		'inscripciones' => 'Inscripciones',
-		'menu'          => 'Menú',
-		'material'      => 'Material',
-		'presupuesto'   => 'Presupuesto',
-		'cuentas'       => 'Cuentas',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function pestanas(): array {
+		return array(
+		'resumen'       => __( 'Summary', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'calendario'    => __( 'Calendar', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'equipo'        => __( 'Team', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'inscripciones' => __( 'Sign-ups', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'menu'          => __( 'Menu', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'material'      => __( 'Equipment', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'presupuesto'   => __( 'Budget', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'cuentas'       => __( 'Accounts', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
 	/** Lo escrito en el formulario cuando no se ha podido guardar (se vuelve a enseñar): evento (0 = nuevo) y datos. */
 	private static ?array $valores = null;
@@ -88,7 +91,7 @@ final class EventosView extends EventosBaseView {
 
 	private function agenda( Ambito $a, array $cfg ): string {
 		$todos   = Servicio::de_agenda( $a );
-		$filtro  = isset( EventosTable::FILTROS[ $this->get( 'estado' ) ] ) ? $this->get( 'estado' ) : '';
+		$filtro  = isset( EventosTable::filtros()[ $this->get( 'estado' ) ] ) ? $this->get( 'estado' ) : '';
 		$seccion = $this->get( 'seccion' );
 		$tipo    = $this->get( 'tipo' );
 		$lista   = array_values(
@@ -103,7 +106,7 @@ final class EventosView extends EventosBaseView {
 			$lista = array_reverse( $lista ); // Lo más reciente primero.
 		}
 		$cuentas = array();
-		foreach ( array_keys( EventosTable::FILTROS ) as $f ) {
+		foreach ( array_keys( EventosTable::filtros() ) as $f ) {
 			$cuentas[ $f ] = count( array_filter( $todos, static fn( $e ) => EventosTable::cumple( $e, $f ) ) );
 		}
 		return $this->tpl(
@@ -141,7 +144,7 @@ final class EventosView extends EventosBaseView {
 	}
 
 	private function evento( array $e, Ambito $a, array $cfg ): string {
-		$pestana = isset( self::PESTANAS[ $this->get( 'pestana' ) ] ) ? $this->get( 'pestana' ) : 'resumen';
+		$pestana = isset( self::pestanas()[ $this->get( 'pestana' ) ] ) ? $this->get( 'pestana' ) : 'resumen';
 		if ( Servicio::solo_material( $e, $a ) && ! in_array( $pestana, array( 'resumen', 'material' ), true ) ) {
 			$pestana = 'resumen';
 		}
@@ -443,7 +446,7 @@ final class EventosView extends EventosBaseView {
 			Notices::add( 'error', __( 'You do not have access to that event.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			$this->redirect( $this->url( 'eventos' ) );
 		}
-		$pestana = isset( self::PESTANAS[ $this->post( 'pestana' ) ] ) ? $this->post( 'pestana' ) : 'resumen';
+		$pestana = isset( self::pestanas()[ $this->post( 'pestana' ) ] ) ? $this->post( 'pestana' ) : 'resumen';
 		$volver  = $this->url(
 			'eventos',
 			array(

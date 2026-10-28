@@ -42,7 +42,7 @@ $columnas = array(
 		<label for="asde-estado-email"><?php esc_html_e( 'Show', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 		<select id="asde-estado-email" name="estado" data-asde-autoenviar>
 			<option value=""><?php esc_html_e( 'All', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></option>
-			<?php foreach ( asde_ta( RegistroEmails::ESTADOS ) as $k => $label ) : ?>
+			<?php foreach ( ( RegistroEmails::estados() ) as $k => $label ) : ?>
 				<option value="<?php echo esc_attr( $k ); ?>" <?php selected( $estado, $k ); ?>><?php echo esc_html( $label ); ?></option>
 			<?php endforeach; ?>
 		</select>
@@ -75,9 +75,9 @@ $columnas = array(
 								<br><span class="asde-muted"><?php echo esc_html( $nombres[ (int) $f['user_id'] ] ); ?></span>
 							<?php endif; ?>
 						</td>
-						<td data-label="<?php echo esc_attr( esc_attr__( 'Type', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( asde_t( RegistroEmails::TIPOS[ $f['tipo'] ] ?? $f['tipo'] ) ); ?></td>
+						<td data-label="<?php echo esc_attr( esc_attr__( 'Type', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( ( RegistroEmails::tipos()[ $f['tipo'] ] ?? $f['tipo'] ) ); ?></td>
 						<td data-label="<?php echo esc_attr( esc_attr__( 'Status', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
-							<span class="asde-badge asde-badge--email-<?php echo esc_attr( $f['estado'] ); ?>"><?php echo esc_html( asde_t( RegistroEmails::ESTADOS[ $f['estado'] ] ?? $f['estado'] ) ); ?></span>
+							<span class="asde-badge asde-badge--email-<?php echo esc_attr( $f['estado'] ); ?>"><?php echo esc_html( ( RegistroEmails::estados()[ $f['estado'] ] ?? $f['estado'] ) ); ?></span>
 							<?php if ( '' !== $f['error'] ) : ?>
 								<br><span class="asde-help asde-help--warning"><?php echo esc_html( $f['error'] ); ?></span>
 							<?php endif; ?>

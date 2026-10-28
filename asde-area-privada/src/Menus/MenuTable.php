@@ -13,12 +13,15 @@ defined( 'ABSPATH' ) || exit;
  */
 final class MenuTable {
 
-	public const COMIDAS = array(
-		'desayuno' => 'Desayuno',
-		'comida'   => 'Comida',
-		'merienda' => 'Merienda',
-		'cena'     => 'Cena',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function comidas(): array {
+		return array(
+		'desayuno' => __( 'Breakfast', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'comida'   => __( 'Lunch', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'merienda' => __( 'Afternoon snack', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'cena'     => __( 'Dinner', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
 	/** Platos como mucho por evento. */
 	public const MAX = 300;

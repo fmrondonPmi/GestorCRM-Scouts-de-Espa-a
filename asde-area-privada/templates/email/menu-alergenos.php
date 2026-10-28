@@ -40,7 +40,7 @@ $fuerte = static fn( string $t ): string => '<strong>' . esc_html( $t ) . '</str
 						<ul style="margin:0 0 16px;padding-left:20px;">
 							<?php foreach ( $pendientes as $x ) : ?>
 								<li>
-									<?php echo esc_html( wp_date( 'l d/m', strtotime( $x['dia'] . ' 12:00 UTC' ) ) . ' · ' . asde_t( MenuTable::COMIDAS[ $x['comida'] ] ?? '' ) . ' · ' . $x['plato'] ); ?>:
+									<?php echo esc_html( wp_date( 'l d/m', strtotime( $x['dia'] . ' 12:00 UTC' ) ) . ' · ' . ( MenuTable::comidas()[ $x['comida'] ] ?? '' ) . ' · ' . $x['plato'] ); ?>:
 									<strong><?php echo esc_html( $x['alergeno'] ); ?></strong>
 									<?php if ( $con_nombres && $x['nombres'] ) : ?>
 										— <?php echo esc_html( implode( ', ', $x['nombres'] ) ); ?>

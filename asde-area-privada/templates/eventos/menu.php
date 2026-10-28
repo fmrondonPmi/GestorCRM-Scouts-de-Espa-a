@@ -41,7 +41,7 @@ if ( 'hoja' === ( $modo ?? 'menu' ) ) {
 	return;
 }
 
-$nombre_receta = static fn( array $r ): string => IngredientesTable::COMUN === $r['grupo'] ? asde_t( $r['nombre'] ) : $r['nombre'];
+$nombre_receta = static fn( array $r ): string => IngredientesTable::COMUN === $r['grupo'] ? asde_guardado( $r['nombre'] ) : $r['nombre'];
 $fecha         = static fn( string $d ): string => wp_date( 'l d/m/Y', strtotime( $d . ' 12:00 UTC' ) );
 ?>
 <section class="asde-card" data-asde-inicio="abierto">
@@ -59,10 +59,10 @@ $fecha         = static fn( string $d ): string => wp_date( 'l d/m/Y', strtotime
 		<h4><?php echo esc_html( $fecha( $d ) ); ?><?php echo wp_kses( isset( $coste_dias[ $d ] ) ? ' <span class="asde-muted">· ' . esc_html( Calculadora::euros( $coste_dias[ $d ] ) ) . '</span>' : '', asde_html_permitido() ); ?></h4>
 		<table class="asde-table">
 			<tbody>
-				<?php foreach ( MenuTable::COMIDAS as $c => $nombre_c ) : ?>
+				<?php foreach ( MenuTable::comidas() as $c => $nombre_c ) : ?>
 					<?php $platos = $por_dia[ $d ][ $c ] ?? array(); ?>
 					<tr>
-						<th scope="row"><?php echo esc_html( asde_t( $nombre_c ) ); ?></th>
+						<th scope="row"><?php echo esc_html(  $nombre_c  ); ?></th>
 						<td>
 							<?php if ( ! $platos ) : ?>
 								<span class="asde-muted"><?php esc_html_e( 'No dishes', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span>
@@ -101,7 +101,7 @@ $fecha         = static fn( string $d ): string => wp_date( 'l d/m/Y', strtotime
 									<input type="hidden" name="asde_action" value="menu_anadir">
 									<input type="hidden" name="dia" value="<?php echo esc_attr( $d ); ?>">
 									<input type="hidden" name="comida" value="<?php echo esc_attr( $c ); ?>">
-									<select name="receta" aria-label="<?php echo esc_attr( sprintf( /* translators: %s: text */ __( 'Recipe for %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), asde_t( $nombre_c ) ) ); ?>">
+									<select name="receta" aria-label="<?php echo esc_attr( sprintf( /* translators: %s: text */ __( 'Recipe for %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),  $nombre_c  ) ); ?>">
 										<option value="0">— <?php esc_html_e( 'Add a dish', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> —</option>
 										<?php foreach ( $recetas as $r ) : ?>
 											<option value="<?php echo (int) $r['id']; ?>"><?php echo esc_html( $nombre_receta( $r ) ); ?></option>
@@ -178,7 +178,7 @@ $hay_aviso = static fn( string $k ): bool => isset( $confirmaciones[ $k ] );
 							<?php endif; ?>
 							<?php if ( $hay_aviso( $k ) ) : ?>
 								<br><span class="asde-badge asde-badge--pago-pagado"><?php esc_html_e( 'Confirmed', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span>
-								<span class="asde-muted"><?php echo esc_html( sprintf( /* translators: 1: text, 2: text, 3: text */ __( '%1$s · for %2$s on %3$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), asde_t( \AsdeBalears\AreaPrivada\Menus\AvisosTable::ALTERNATIVAS[ $confirmaciones[ $k ]['alternativa'] ] ?? '' ), $confirmantes[ $k ] ?? '', wp_date( 'd/m/Y', strtotime( $confirmaciones[ $k ]['creado'] . ' UTC' ) ) ) ); ?></span>
+								<span class="asde-muted"><?php echo esc_html( sprintf( /* translators: 1: text, 2: text, 3: text */ __( '%1$s · for %2$s on %3$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), ( \AsdeBalears\AreaPrivada\Menus\AvisosTable::alternativas()[ $confirmaciones[ $k ]['alternativa'] ] ?? '' ), $confirmantes[ $k ] ?? '', wp_date( 'd/m/Y', strtotime( $confirmaciones[ $k ]['creado'] . ' UTC' ) ) ) ); ?></span>
 							<?php endif; ?>
 							<?php if ( $puede_editar ) : ?>
 								<form method="post" action="<?php echo esc_url( $url_menu ); ?>" class="asde-inline asde-solo-pantalla">
@@ -191,8 +191,8 @@ $hay_aviso = static fn( string $k ): bool => isset( $confirmaciones[ $k ] );
 										<button type="submit" class="asde-btn-link" name="asde_action" value="menu_desconfirmar"><?php esc_html_e( 'Remove the confirmation', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 									<?php else : ?>
 										<select name="alternativa" aria-label="<?php echo esc_attr( esc_attr__( 'What is done', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
-											<?php foreach ( \AsdeBalears\AreaPrivada\Menus\AvisosTable::ALTERNATIVAS as $ak => $an ) : ?>
-												<option value="<?php echo esc_attr( $ak ); ?>"><?php echo esc_html( asde_t( $an ) ); ?></option>
+											<?php foreach ( \AsdeBalears\AreaPrivada\Menus\AvisosTable::alternativas() as $ak => $an ) : ?>
+												<option value="<?php echo esc_attr( $ak ); ?>"><?php echo esc_html(  $an  ); ?></option>
 											<?php endforeach; ?>
 										</select>
 										<button type="submit" class="button asde-button-secundario" name="asde_action" value="menu_confirmar"><?php esc_html_e( 'Confirm', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>

@@ -180,7 +180,7 @@ foreach ( $tipos as $t ) {
 		<select id="asde-caja-a-tipo" name="tipo">
 			<option value="0"><?php esc_html_e( 'No type', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></option>
 			<?php foreach ( $grupos_tipo as $nat => $lista ) : ?>
-				<optgroup label="<?php echo esc_attr( asde_t( TiposMovimiento::NATURALEZAS[ $nat ] ?? $nat ) ); ?>">
+				<optgroup label="<?php echo esc_attr( ( TiposMovimiento::naturalezas()[ $nat ] ?? $nat ) ); ?>">
 					<?php foreach ( $lista as $t ) : ?>
 						<option value="<?php echo (int) $t['id']; ?>"><?php echo esc_html( $t['nombre'] ); ?></option>
 					<?php endforeach; ?>

@@ -82,7 +82,7 @@ $columnas = array(
 				<input type="hidden" name="asde_action" value="mapear">
 				<input type="hidden" name="token" value="<?php echo esc_attr( $token ); ?>">
 				<div class="asde-grid-2">
-					<?php foreach ( asde_ta( CsvBanco::CAMPOS ) as $campo => $etiqueta ) : ?>
+					<?php foreach ( ( CsvBanco::campos() ) as $campo => $etiqueta ) : ?>
 						<p>
 							<label for="asde-col-<?php echo esc_attr( $campo ); ?>"><?php echo esc_html( $etiqueta ); ?></label>
 							<select id="asde-col-<?php echo esc_attr( $campo ); ?>" name="col_<?php echo esc_attr( $campo ); ?>">
@@ -123,7 +123,7 @@ $columnas = array(
 							<?php if ( '' !== $m['ordenante'] ) : ?>
 								<strong><?php echo esc_html( $m['ordenante'] ); ?></strong><br>
 							<?php endif; ?>
-							<?php echo esc_html( '' !== $m['concepto'] ? $m['concepto'] : ( asde_t( Norma43::CONCEPTOS[ $m['concepto_comun'] ] ?? '—' ) ) ); ?>
+							<?php echo esc_html( '' !== $m['concepto'] ? $m['concepto'] : ( ( Norma43::conceptos()[ $m['concepto_comun'] ] ?? '—' ) ) ); ?>
 						</td>
 						<td data-label="<?php echo esc_attr( esc_attr__( 'Amount', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>" class="asde-importe <?php echo $m['importe'] > 0 ? 'asde-importe--ingreso' : 'asde-importe--gasto'; ?>"><?php echo esc_html( ( $m['importe'] > 0 ? '+' : '' ) . Calculadora::euros( $m['importe'] ) ); ?></td>
 						<td data-label="<?php echo esc_attr( esc_attr__( 'On the website', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">

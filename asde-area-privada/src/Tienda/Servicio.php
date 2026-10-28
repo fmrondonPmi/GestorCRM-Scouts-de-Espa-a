@@ -192,7 +192,7 @@ final class Servicio {
 		if ( '' === $forma ) {
 			return $obligatoria ? new \WP_Error( 'asde_tienda', __( 'Choose how you are going to pay.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) : '';
 		}
-		if ( ! isset( PedidosTable::FORMAS[ $forma ] ) ) {
+		if ( ! isset( PedidosTable::formas()[ $forma ] ) ) {
 			return new \WP_Error( 'asde_tienda', __( 'Choose how you are going to pay.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( 'fisico' === $forma && ! $es_socio ) {

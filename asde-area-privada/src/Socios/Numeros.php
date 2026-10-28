@@ -26,13 +26,16 @@ final class Numeros {
 	public const META_VER = 'asde_ver_numero_local';
 
 	/** Texto corto de cada incidencia, para la advertencia. */
-	public const CORTO = array(
-		Numeracion::CORREGIDO => 'formato antiguo',
-		Numeracion::GENERADO  => 'pendiente de pasar al CRM',
-		Numeracion::DUPLICADO => 'duplicado',
-		Numeracion::INVALIDO  => 'no válido',
-		Numeracion::FALTA     => 'sin número',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function corto(): array {
+		return array(
+		Numeracion::CORREGIDO => __( 'old format', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		Numeracion::GENERADO  => __( 'pending transfer to the CRM', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		Numeracion::DUPLICADO => __( 'duplicate', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		Numeracion::INVALIDO  => __( 'invalid', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		Numeracion::FALTA     => __( 'no number', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
 	private static ?Numeracion $numeracion = null;
 	private static ?PersonaRepository $repo = null;
@@ -95,7 +98,7 @@ final class Numeros {
 			return ''; // Las advertencias son para quien gestiona; una familia no tiene nada que corregir.
 		}
 		$n ??= self::de( $p );
-		return Numeracion::OK === $n['estado'] ? '' : ( asde_t( Numeracion::ETIQUETAS[ $n['estado'] ] ?? '' ) );
+		return Numeracion::OK === $n['estado'] ? '' : ( ( Numeracion::etiquetas()[ $n['estado'] ] ?? '' ) );
 	}
 
 	/**
@@ -122,7 +125,7 @@ final class Numeros {
 		}
 		if ( '' !== $aviso ) {
 			/* translators: %s: qué le pasa al nº territorial (duplicado, falta…) */
-			$html .= ' <span class="asde-numeros__aviso" title="' . esc_attr( $aviso ) . '">⚠ ' . esc_html( sprintf( /* translators: %s: text */ __( 'territorial no.: %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), asde_t( self::CORTO[ $n['estado'] ] ?? $aviso ) ) ) . '</span>';
+			$html .= ' <span class="asde-numeros__aviso" title="' . esc_attr( $aviso ) . '">⚠ ' . esc_html( sprintf( /* translators: %s: text */ __( 'territorial no.: %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), ( self::corto()[ $n['estado'] ] ?? $aviso ) ) ) . '</span>';
 		}
 		return $html;
 	}

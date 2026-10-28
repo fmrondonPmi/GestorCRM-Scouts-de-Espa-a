@@ -25,12 +25,15 @@ defined( 'ABSPATH' ) || exit;
 final class InscripcionesTable {
 
 	/** Papeles del equipo. */
-	public const PAPELES = array(
-		'director'  => 'Director/a',
-		'monitor'   => 'Monitor/a',
-		'practicas' => 'En prácticas',
-		'apoyo'     => 'Apoyo (cocina, intendencia, transporte)',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function papeles(): array {
+		return array(
+		'director'  => __( 'Director', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'monitor'   => __( 'Monitor', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'practicas' => __( 'In training', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'apoyo'     => __( 'Support (kitchen, quartermaster, transport)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
 	/** Papel de quien se inscribe para participar (v0.35). */
 	public const PARTICIPANTE = 'participante';
@@ -43,38 +46,50 @@ final class InscripcionesTable {
 	public const BAJA         = 'baja';
 
 	/** Etiquetas de los estados («sin_respuesta» y «plaza» no se guardan: se deducen). */
-	public const ESTADOS = array(
-		'sin_respuesta' => 'Sin respuesta',
-		'pendiente'     => 'Pendiente',
-		'confirmada'    => 'Confirmada',
-		'plaza'         => 'Plaza ofrecida',
-		'espera'        => 'En lista de espera',
-		'no_participa'  => 'No participa',
-		'baja'          => 'Baja',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function estados(): array {
+		return array(
+		'sin_respuesta' => __( 'No answer', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'pendiente'     => __( 'Pending', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'confirmada'    => __( 'Confirmed', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'plaza'         => __( 'Place offered', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'espera'        => __( 'On the waiting list', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'no_participa'  => __( 'Not taking part', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'baja'          => __( 'Withdrawal', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
 	/** Estados que ocupan plaza (con la lista de espera aparte: ocupa la que tiene una plaza ofrecida). */
 	public const ACTIVAS = array( self::PENDIENTE, self::CONFIRMADA );
 
 	/** Cómo está la autorización de participación ('' = falta). */
-	public const AUTORIZACIONES = array(
-		''      => 'Falta la autorización',
-		'web'   => 'Firmada en la web',
-		'papel' => 'Entregada en papel',
-		'no'    => 'No hace falta (mayor de edad)',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function autorizaciones(): array {
+		return array(
+		''      => __( 'Authorisation missing', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'web'   => __( 'Signed on the website', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'papel' => __( 'Handed in on paper', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'no'    => __( 'Not needed (of legal age)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
 	/** Quién hizo la inscripción. */
-	public const COMO = array(
-		'familia' => 'La familia',
-		'propia'  => 'La propia persona',
-		'gestor'  => 'El equipo del grupo',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function como(): array {
+		return array(
+		'familia' => __( 'The family', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'propia'  => __( 'The person themselves', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'gestor'  => __( 'The group\'s team', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
-	public const TRANSPORTES = array(
-		'grupo'  => 'Con el grupo',
-		'propio' => 'Por su cuenta',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function transportes(): array {
+		return array(
+		'grupo'  => __( 'With the group', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'propio' => __( 'On their own', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
 	public static function table(): string {
 		global $wpdb;
@@ -193,7 +208,7 @@ final class InscripcionesTable {
 	/** @return array[] Equipo del evento: director/a primero, después monitores, prácticas y apoyo. */
 	public static function equipo( int $evento_id ): array {
 		global $wpdb;
-		$papeles = array_keys( self::PAPELES );
+		$papeles = array_keys( self::papeles() );
 		$marcas  = implode( ',', array_fill( 0, count( $papeles ), '%s' ) );
 		$filas   = (array) $wpdb->get_results( $wpdb->prepare( "SELECT * FROM %i WHERE evento_id = %d AND grupo = %s AND papel IN ($marcas) ORDER BY id ASC", array_merge( array( self::table(), $evento_id, Grupo::numero() ), $papeles ) ), ARRAY_A ); // phpcs:ignore WordPress.DB
 		$filas   = array_map( array( self::class, 'preparar' ), $filas );
@@ -204,7 +219,7 @@ final class InscripcionesTable {
 	/** @return array<int, string[]> evento => nº Scouts de España de su equipo (para saber qué eventos gestiona alguien). */
 	public static function equipos_del_grupo(): array {
 		global $wpdb;
-		$papeles = array_keys( self::PAPELES );
+		$papeles = array_keys( self::papeles() );
 		$marcas  = implode( ',', array_fill( 0, count( $papeles ), '%s' ) );
 		$filas   = (array) $wpdb->get_results( $wpdb->prepare( "SELECT evento_id, socio FROM %i WHERE grupo = %s AND papel IN ($marcas)", array_merge( array( self::table(), Grupo::numero() ), $papeles ) ), ARRAY_A ); // phpcs:ignore WordPress.DB
 		$out     = array();
@@ -217,7 +232,7 @@ final class InscripcionesTable {
 	/** ¿Tiene el evento personas inscritas (participantes)? Mientras no, el precio se puede volver a validar. */
 	public static function hay_participantes( int $evento_id ): bool {
 		global $wpdb;
-		$papeles = array_keys( self::PAPELES );
+		$papeles = array_keys( self::papeles() );
 		$marcas  = implode( ',', array_fill( 0, count( $papeles ), '%s' ) );
 		return (bool) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM %i WHERE evento_id = %d AND grupo = %s AND papel NOT IN ($marcas)", array_merge( array( self::table(), $evento_id, Grupo::numero() ), $papeles ) ) ); // phpcs:ignore WordPress.DB
 	}

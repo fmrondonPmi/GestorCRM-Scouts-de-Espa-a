@@ -15,7 +15,7 @@ use AsdeBalears\AreaPrivada\Tienda\ImportadorProductos;
 
 defined( 'ABSPATH' ) || exit;
 
-$columnas = array_map( static fn( $c ) => asde_t( $c[0] ), ImportadorProductos::COLUMNAS );
+$columnas = array_map( static fn( $c ) =>  $c[0] , ImportadorProductos::columnas() );
 ?>
 <p class="asde-back asde-solo-pagina"><a href="<?php echo esc_url( $url_lista ); ?>"><?php esc_html_e( '← Shop inventory', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a></p>
 
@@ -88,7 +88,7 @@ $columnas = array_map( static fn( $c ) => asde_t( $c[0] ), ImportadorProductos::
 			<summary><?php esc_html_e( 'What the file must look like', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></summary>
 			<ul>
 				<li><?php echo esc_html( sprintf( /* translators: %s: text */ __( 'The first row, the column names: %s. In any order; the ones you don\'t use can be removed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), implode( ', ', $columnas ) ) ); ?></li>
-				<li><?php echo esc_html( sprintf( /* translators: %s: text */ __( 'Required: %s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), implode( ', ', array_map( static fn( $c ) => asde_t( ImportadorProductos::COLUMNAS[ $c ][0] ), ImportadorProductos::OBLIGATORIAS ) ) ) ); ?></li>
+				<li><?php echo esc_html( sprintf( /* translators: %s: text */ __( 'Required: %s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), implode( ', ', array_map( static fn( $c ) => ( ImportadorProductos::columnas()[ $c ][0] ), ImportadorProductos::OBLIGATORIAS ) ) ) ); ?></li>
 				<li><?php esc_html_e( 'Visibility: "all" or "members". The price, with a comma or point for the decimals (12,50); empty = price to be confirmed. Stock: a whole number or "unlimited".', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></li>
 				<li><?php esc_html_e( 'An existing product (same name) is updated only with the filled cells: an empty cell deletes nothing. An existing variant changes its stock.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></li>
 				<li><?php echo esc_html( sprintf( /* translators: 1: number, 2: number */ __( 'Separated by semicolons or commas, up to %1$d MB and %2$d rows.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), (int) ( ImportadorProductos::MAX_BYTES / MB_IN_BYTES ), ImportadorProductos::MAX_FILAS ) ); ?></li>

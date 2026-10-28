@@ -29,7 +29,7 @@ $campos = static function () use ( $nonce, $l ): void {
 <section class="asde-card asde-inv-compra<?php echo '' === $url_pdf ? ' asde-inv-compra--sin-visto-bueno' : ''; ?>" data-asde-plegable="inventario-compra">
 	<header class="asde-card__header asde-card__header--split">
 		<h2 class="asde-card__title"><?php echo esc_html( sprintf( /* translators: %s: text */ __( 'Shopping list %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $num ) ); ?></h2>
-		<span class="asde-badge asde-badge--compra-<?php echo esc_attr( $l['estado'] ); ?>"><?php echo esc_html( asde_t( ComprasTable::ESTADOS[ $l['estado'] ] ?? $l['estado'] ) ); ?></span>
+		<span class="asde-badge asde-badge--compra-<?php echo esc_attr( $l['estado'] ); ?>"><?php echo esc_html( ( ComprasTable::estados()[ $l['estado'] ] ?? $l['estado'] ) ); ?></span>
 	</header>
 	<?php if ( '' === $url_pdf ) : ?>
 		<p class="asde-inv-sin-imprimir" hidden><?php esc_html_e( 'Pending Treasury\'s approval: this list cannot be printed yet.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>

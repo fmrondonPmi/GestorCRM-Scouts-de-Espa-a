@@ -18,11 +18,14 @@ final class EstadosTable {
 	public const ENVIADO  = 'enviado';
 	public const APROBADO = 'aprobado';
 
-	public const ETIQUETAS = array(
-		self::BORRADOR => 'Borrador',
-		self::ENVIADO  => 'Enviado a Tesorería',
-		self::APROBADO => 'Aprobado',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function etiquetas(): array {
+		return array(
+		self::BORRADOR => __( 'Draft', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::ENVIADO  => __( 'Sent to Treasury', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::APROBADO => __( 'Approved', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
 	public static function table(): string {
 		global $wpdb;

@@ -48,11 +48,14 @@ final class Remesas {
 	public const ENVIADA  = 'enviada';
 	public const ANULADA  = 'anulada';
 
-	public const ESTADOS = array(
-		self::GENERADA => 'Generada',
-		self::ENVIADA  => 'Enviada al banco',
-		self::ANULADA  => 'Anulada',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function estados(): array {
+		return array(
+		self::GENERADA => __( 'Generated', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::ENVIADA  => __( 'Sent to the bank', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::ANULADA  => __( 'Cancelled', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
 	/** Estado de cada adeudo dentro de la remesa. */
 	public const PENDIENTE = 'pendiente';

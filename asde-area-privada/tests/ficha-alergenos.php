@@ -24,7 +24,7 @@ $ok    = function ( $cond, string $label ) use ( &$fails ) {
 
 echo "== Parte A · El catálogo ==\n";
 $ok( array( 'alergenos', 'alimentos', 'intolerancias' ) === array_keys( S::PESTANAS ), 'tres pestañas: los 14 alérgenos, alimentos e intolerancias' );
-$ok( 14 === count( S::PESTANAS['alergenos']['items'] ) && array_keys( Alergenos::LISTA ) === array_merge( ...array_values( S::PESTANAS['alergenos']['items'] ) ), 'la primera lleva los 14 del Reglamento, cada uno con su código' );
+$ok( 14 === count( S::PESTANAS['alergenos']['items'] ) && array_keys( Alergenos::lista() ) === array_merge( ...array_values( S::PESTANAS['alergenos']['items'] ) ), 'la primera lleva los 14 del Reglamento, cada uno con su código' );
 $mal = array();
 foreach ( S::PESTANAS as $p ) {
 	foreach ( $p['items'] as $etiqueta => $codigos ) {

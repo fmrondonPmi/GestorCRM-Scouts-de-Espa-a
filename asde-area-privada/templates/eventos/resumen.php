@@ -50,7 +50,7 @@ $noches = Normativa::noches( $e );
 <section class="asde-card">
 	<h3 class="asde-card__title"><?php esc_html_e( 'Details', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h3>
 	<dl class="asde-datos">
-		<div><dt><?php esc_html_e( 'Scope', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></dt><dd><?php echo esc_html( asde_t( EventosTable::AMBITOS[ $e['ambito'] ] ?? $e['ambito'] ) ); ?></dd></div>
+		<div><dt><?php esc_html_e( 'Scope', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></dt><dd><?php echo esc_html( ( EventosTable::ambitos()[ $e['ambito'] ] ?? $e['ambito'] ) ); ?></dd></div>
 		<div><dt><?php esc_html_e( 'Dates', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></dt><dd><?php echo esc_html( EventosTable::cuando( $e ) ); ?><?php echo $noches ? esc_html( ' · ' . sprintf( /* translators: %d: number */ _n( '%d night', '%d nights', $noches , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $noches ) ) : ''; ?></dd></div>
 		<?php if ( '' !== $e['lugar'] || '' !== $e['mapa'] ) : ?>
 			<div><dt><?php esc_html_e( 'Place', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></dt><dd><?php echo esc_html( $e['lugar'] ); ?><?php echo '' !== $e['mapa'] ? ' <a href="' . esc_url( $e['mapa'] ) . '" target="_blank" rel="noopener">' . esc_html( __( 'View on the map', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) . '</a>' : ''; ?></dd></div>

@@ -29,29 +29,38 @@ final class Cambios {
 	public const CANCELADO = 'cancelado';
 	public const ERROR     = 'error';
 
-	public const ESTADOS = array(
-		self::PENDIENTE => 'Pendiente de aprobación',
-		self::APLICADO  => 'Aprobado y guardado en el CRM',
-		self::RECHAZADO => 'Rechazado',
-		self::CANCELADO => 'Cancelado',
-		self::ERROR     => 'Aprobado, pero el CRM no lo aceptó',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function estados(): array {
+		return array(
+		self::PENDIENTE => __( 'Pending approval', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::APLICADO  => __( 'Approved and saved in the CRM', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::RECHAZADO => __( 'Rejected', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::CANCELADO => __( 'Cancelled', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::ERROR     => __( 'Approved, but the CRM did not accept it', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
 	/**
 	 * Cambios hechos directamente en una ficha (v0.29, «Resueltos»): los motivos con los que
 	 * Escritura::guardar() deja constancia en la auditoría. No están las propuestas aprobadas
 	 * (ya salen como propuestas) ni los nº de socio de la numeración (van aparte, en Personas).
 	 */
-	public const MOTIVOS_DIRECTOS = array(
-		'ficha'            => 'Guardado en la ficha',
-		'documento'        => 'Documento puesto desde la ficha',
-		'solicitud_acceso' => 'Email de una solicitud de acceso',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function motivos_directos(): array {
+		return array(
+		'ficha'            => __( 'Saved on the record', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'documento'        => __( 'Document set from the record', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'solicitud_acceso' => __( 'Email of an access request', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
 	/** Datos que no están en la ficha (CamposFicha) pero se escriben desde la web. */
-	public const ETIQUETAS_EXTRA = array(
-		'stic_identification_number_c' => 'Documento de identidad',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function etiquetas_extra(): array {
+		return array(
+		'stic_identification_number_c' => __( 'Identity document', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
 	public static function table(): string {
 		global $wpdb;
@@ -60,8 +69,8 @@ final class Cambios {
 
 	/** Nombre de un dato de la ficha para mostrarlo («Móvil», «Alergias»…). */
 	public static function etiqueta( string $campo ): string {
-		$def = CamposFicha::todos()[ $campo ][0] ?? self::ETIQUETAS_EXTRA[ $campo ] ?? '';
-		return '' !== $def ? asde_t( $def ) : $campo;
+		$def = CamposFicha::todos()[ $campo ][0] ?? self::etiquetas_extra()[ $campo ] ?? '';
+		return '' !== $def ?  $def  : $campo;
 	}
 
 	public static function install_table(): void {
@@ -142,7 +151,7 @@ final class Cambios {
 	public static function listado( string $estado = self::PENDIENTE, string $socio = '' ): array {
 		global $wpdb;
 		// Consulta fija: cada filtro opcional va como valor («'' = ''» lo deja sin efecto), sin montar SQL (v0.26.2, Plugin Check).
-		$e     = isset( self::ESTADOS[ $estado ] ) ? $estado : '';
+		$e     = isset( self::estados()[ $estado ] ) ? $estado : '';
 		$filas = $wpdb->get_results( // phpcs:ignore WordPress.DB
 			$wpdb->prepare(
 				'SELECT * FROM %i WHERE grupo = %s'
@@ -188,7 +197,7 @@ final class Cambios {
 			$d      = json_decode( (string) $f['detalles'], true );
 			$motivo = is_array( $d ) ? (string) ( $d['motivo'] ?? '' ) : '';
 			$campos = is_array( $d ) ? array_values( array_filter( array_map( 'strval', (array) ( $d['campos'] ?? array() ) ) ) ) : array();
-			if ( ! isset( self::MOTIVOS_DIRECTOS[ $motivo ] ) || ! $campos ) {
+			if ( ! isset( self::motivos_directos()[ $motivo ] ) || ! $campos ) {
 				continue;
 			}
 			// Una persona puede estar en varios grupos (doc 34): un grupo no ve lo que hizo otro.

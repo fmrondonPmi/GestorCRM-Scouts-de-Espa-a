@@ -110,7 +110,7 @@ try {
 	$ok( 1 === count( $de_fam ) && (int) $ing['id'] === (int) $de_fam[0]['id'], 'La familia tiene sus movimientos revisados' );
 	$de_ev = BancoTable::revisados_de_evento( $evento );
 	$ok( 1 === count( $de_ev ) && (int) $gas['id'] === (int) $de_ev[0]['id'], 'El evento tiene sus movimientos revisados' );
-	Modulos::guardar( '999', array_keys( Modulos::LISTA ) );
+	Modulos::guardar( '999', array_keys( Modulos::lista() ) );
 	$hist = HistorialPagos::otros( FamiliasTable::obtener( $fam ) );
 	$banco_h = array_values( array_filter( $hist, static fn( $h ) => 'banco' === $h['modulo'] ) );
 	$ok( 1 === count( $banco_h ) && str_contains( $banco_h[0]['que'], 'Donativos de prueba' ), 'En el historial de la familia sale el ingreso con su tipo' );

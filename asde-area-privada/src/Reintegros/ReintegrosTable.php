@@ -23,22 +23,28 @@ final class ReintegrosTable {
 	public const PAGADO     = 'pagado';
 	public const CANCELADO  = 'cancelado';
 
-	public const ESTADOS = array(
-		self::SOLICITADO => 'Por aprobar',
-		self::APROBADO   => 'Aprobado, por pagar',
-		self::PAGADO     => 'Pagado',
-		self::RECHAZADO  => 'Rechazado',
-		self::CANCELADO  => 'Cancelado',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function estados(): array {
+		return array(
+		self::SOLICITADO => __( 'To approve', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::APROBADO   => __( 'Approved, to be paid', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::PAGADO     => __( 'Paid', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::RECHAZADO  => __( 'Rejected', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::CANCELADO  => __( 'Cancelled', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
 	public const EFECTIVO      = 'efectivo';
 	public const TRANSFERENCIA = 'transferencia';
 
 	/** Cómo prefiere cobrar quien lo pide. */
-	public const FORMAS = array(
-		self::EFECTIVO      => 'En efectivo',
-		self::TRANSFERENCIA => 'Por transferencia',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function formas(): array {
+		return array(
+		self::EFECTIVO      => __( 'In cash', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::TRANSFERENCIA => __( 'By transfer', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
 	public static function table(): string {
 		global $wpdb;

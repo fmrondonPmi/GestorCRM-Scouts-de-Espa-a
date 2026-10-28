@@ -51,10 +51,6 @@ defined( 'ABSPATH' ) || exit;
 			<a class="asde-nav__ayuda" href="<?php echo esc_url( Ayuda::url( Pages::current_key() ?? ( '' !== (string) ( $pagina ?? '' ) ? (string) $pagina : 'area' ) ) ); ?>" data-asde-modal><?php esc_html_e( 'Help', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a> ·
 			<a href="<?php echo esc_url( Pages::url( 'seguridad' ) ); ?>"<?php echo 'seguridad' === ( $pagina ?? '' ) ? ' aria-current="page" class="is-active"' : ''; ?>><?php esc_html_e( 'Security', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a> ·
 			<a href="<?php echo esc_url( wp_logout_url( home_url( '/' ) ) ); ?>"><?php esc_html_e( 'Sign out', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a>
-			<?php $selector_idioma = trim( TemplateLoader::render( 'comun/idiomas' ) ); ?>
-			<?php if ( '' !== $selector_idioma ) : ?>
-				· <?php echo wp_kses( $selector_idioma, asde_html_permitido() ); ?>
-			<?php endif; ?>
 			<?php if ( Identidad::es_asde() && ( current_user_can( 'asde_manage_users' ) || current_user_can( 'asde_tesoreria_acceso' ) || current_user_can( 'asde_reports' ) || current_user_can( 'asde_approve_changes' ) ) ) : ?>
 				<?php $ver_local = Numeros::ver_local(); ?>
 				· <a href="<?php echo esc_url( add_query_arg( array( 'asde_ver_local' => $ver_local ? '0' : '1', '_wpnonce' => wp_create_nonce( 'asde_ver_local' ) ) ) ); ?>" title="<?php echo esc_attr( esc_attr__( 'The territorial no. appears next to the Scouts de España no. on all screens. If there is any problem with it, the notice always appears.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo $ver_local ? esc_html( __( 'Hide territorial no.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) : esc_html( __( 'Show territorial no.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?></a>

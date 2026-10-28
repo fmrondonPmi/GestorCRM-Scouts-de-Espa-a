@@ -51,7 +51,7 @@ $val   = static fn( string $k ): string => (string) ( $valores[ $k ] ?? '' );
 		<?php endforeach; ?>
 		<p>
 			<strong><?php echo esc_html( PedidosTable::numero( $p ) ); ?></strong>
-			<span class="asde-badge asde-badge--uniforme-<?php echo esc_attr( $estado ); ?>"><?php echo esc_html( asde_t( PedidosTable::ESTADOS[ $estado ] ) ); ?></span>
+			<span class="asde-badge asde-badge--uniforme-<?php echo esc_attr( $estado ); ?>"><?php echo esc_html( ( PedidosTable::estados()[ $estado ] ) ); ?></span>
 		</p>
 		<p><?php echo esc_html( Servicio::descripcion( $p['lineas'] ) ); ?> — <strong><?php echo esc_html( null !== $p['pago_importe'] ? Calculadora::euros( $p['pago_importe'] ) : Servicio::importe( $p ) ); ?></strong></p>
 		<?php if ( 'cancelado' === $estado ) : ?>

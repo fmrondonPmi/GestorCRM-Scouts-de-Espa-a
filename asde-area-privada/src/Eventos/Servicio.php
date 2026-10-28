@@ -102,7 +102,7 @@ final class Servicio {
 	/** @return string[] Ámbitos que puede elegir al crear o editar. */
 	public static function ambitos_para( Ambito $a ): array {
 		if ( current_user_can( self::CAP_GRUPO ) ) {
-			return array_keys( EventosTable::AMBITOS );
+			return array_keys( EventosTable::ambitos() );
 		}
 		return current_user_can( self::CAP_GESTION ) ? array( 'secciones' ) : array();
 	}
@@ -250,7 +250,7 @@ final class Servicio {
 		}
 
 		// Inscripción (v0.35): modalidad y plazo (sin «hasta», hasta que empieza el evento).
-		$modalidad = isset( EventosTable::MODALIDADES[ $in['modalidad'] ?? '' ] ) ? (string) $in['modalidad'] : 'abierta';
+		$modalidad = isset( EventosTable::modalidades()[ $in['modalidad'] ?? '' ] ) ? (string) $in['modalidad'] : 'abierta';
 		$dia       = static fn( string $k ): ?string => preg_match( '/^\d{4}-\d{2}-\d{2}$/', (string) ( $in[ $k ] ?? '' ) ) && date_create( (string) $in[ $k ] ) ? (string) $in[ $k ] : null;
 		$desde     = $dia( 'inscripcion_desde' );
 		$hasta     = $dia( 'inscripcion_hasta' );
@@ -406,7 +406,7 @@ final class Servicio {
 		if ( ! self::puede_editar( $e, $a ) ) {
 			return new \WP_Error( 'asde_evento', __( 'You cannot change this event\'s team.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
-		if ( ! isset( InscripcionesTable::PAPELES[ $papel ] ) ) {
+		if ( ! isset( InscripcionesTable::papeles()[ $papel ] ) ) {
 			return new \WP_Error( 'asde_evento', __( 'Choose what they do in the team.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$p = self::candidatos()[ $socio ] ?? null;
@@ -428,10 +428,10 @@ final class Servicio {
 	/** @return true|\WP_Error */
 	public static function cambiar_papel( array $e, Ambito $a, int $fila, string $papel ) {
 		$m = InscripcionesTable::obtener( $fila );
-		if ( ! $m || $m['evento_id'] !== $e['id'] || ! isset( InscripcionesTable::PAPELES[ $m['papel'] ] ) || ! self::puede_editar( $e, $a ) ) {
+		if ( ! $m || $m['evento_id'] !== $e['id'] || ! isset( InscripcionesTable::papeles()[ $m['papel'] ] ) || ! self::puede_editar( $e, $a ) ) {
 			return new \WP_Error( 'asde_evento', __( 'You cannot change this event\'s team.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
-		if ( ! isset( InscripcionesTable::PAPELES[ $papel ] ) ) {
+		if ( ! isset( InscripcionesTable::papeles()[ $papel ] ) ) {
 			return new \WP_Error( 'asde_evento', __( 'Choose what they do in the team.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		InscripcionesTable::cambiar_papel( $fila, $papel );
@@ -442,7 +442,7 @@ final class Servicio {
 	/** @return true|\WP_Error */
 	public static function quitar_equipo( array $e, Ambito $a, int $fila ) {
 		$m = InscripcionesTable::obtener( $fila );
-		if ( ! $m || $m['evento_id'] !== $e['id'] || ! isset( InscripcionesTable::PAPELES[ $m['papel'] ] ) || ! self::puede_editar( $e, $a ) ) {
+		if ( ! $m || $m['evento_id'] !== $e['id'] || ! isset( InscripcionesTable::papeles()[ $m['papel'] ] ) || ! self::puede_editar( $e, $a ) ) {
 			return new \WP_Error( 'asde_evento', __( 'You cannot change this event\'s team.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		InscripcionesTable::quitar( $fila );
@@ -501,7 +501,7 @@ final class Servicio {
 		if ( PartidasTable::INGRESO === $tipo ) {
 			$reparto = 'total';
 			$seccion = '';
-		} elseif ( ! isset( Presupuesto::REPARTOS[ $reparto ] ) ) {
+		} elseif ( ! isset( Presupuesto::repartos()[ $reparto ] ) ) {
 			return new \WP_Error( 'asde_evento', __( 'Choose how the expense is split.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$con_seccion = in_array( $reparto, Presupuesto::CON_SECCION, true ) || 'participante' === $reparto;

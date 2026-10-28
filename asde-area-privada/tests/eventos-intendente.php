@@ -111,7 +111,7 @@ $crm = new Asde_Prueba_Crm(
 	$grupo['crm_id']
 );
 Grupo::forzar( $grupo );
-\AsdeBalears\AreaPrivada\Domain\Modulos::guardar( (string) $grupo['numero'], array_keys( \AsdeBalears\AreaPrivada\Domain\Modulos::LISTA ) );
+\AsdeBalears\AreaPrivada\Domain\Modulos::guardar( (string) $grupo['numero'], array_keys( \AsdeBalears\AreaPrivada\Domain\Modulos::lista() ) );
 $crm->activar();
 Escritura::usar_para_pruebas( $crm );
 \AsdeBalears\AreaPrivada\Menus\Biblioteca::sembrar();
@@ -185,7 +185,7 @@ try {
 	$ok( null !== $def && in_array( Roles::INTENDENTE, Roles::ALL, true ) && get_role( Roles::INTENDENTE ) instanceof WP_Role, 'el rol existe, está en la lista de roles del área privada y se instala en WordPress' );
 	$ok( ! empty( $def[1]['asde_eventos_material'] ) && ! empty( $def[1]['asde_inventario'] ) && empty( $def[1]['asde_eventos_gestion'] ) && empty( $def[1]['asde_view_health'] ) && empty( $def[1]['asde_inventario_aprobar'] ), 'lleva el material y el inventario, pero no gestiona eventos, ni ve la salud, ni da el visto bueno a las compras' );
 	$ok( 'Intendente (responsable de material)' === $def[0] && '' !== Roles::label( Roles::INTENDENTE ), 'tiene etiqueta' );
-	$ok( in_array( 'asde_eventos_material', \AsdeBalears\AreaPrivada\Domain\Modulos::LISTA[ \AsdeBalears\AreaPrivada\Domain\Modulos::EVENTOS ][2], true ), 'la capacidad se da y se quita con el módulo de Eventos' );
+	$ok( in_array( 'asde_eventos_material', \AsdeBalears\AreaPrivada\Domain\Modulos::lista()[ \AsdeBalears\AreaPrivada\Domain\Modulos::EVENTOS ][2], true ), 'la capacidad se da y se quita con el módulo de Eventos' );
 	$ok( AltaService::ROL_POR_CARGO['responsablematerialGS'] === Roles::INTENDENTE && in_array( Roles::INTENDENTE, AltaService::ROLES_RESPONSABILIDAD, true ) && in_array( Roles::INTENDENTE, AltaService::ROLES_PERSONA, true ), 'en el alta, el cargo «Responsable de Material» del CRM sugiere el rol, que es una responsabilidad de un scouter' );
 	$repo = PersonaRepository::make();
 	$ana  = $repo->obtener( '990071' );

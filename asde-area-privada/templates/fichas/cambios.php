@@ -128,7 +128,7 @@ $url_ver = 'resueltos' === $ver ? add_query_arg( 'ver', 'resueltos', $url ) : $u
 								<td data-label="<?php echo esc_attr( esc_attr__( 'Item of data', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( Cambios::etiqueta( $c['campo'] ) ); ?></td>
 								<td data-label="<?php echo esc_attr( esc_attr__( 'New value', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( $mostrar( $c['campo'], $c['nuevo'] ) ); ?></td>
 								<td data-label="<?php echo esc_attr( esc_attr__( 'Result', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
-									<?php echo esc_html( asde_t( Cambios::ESTADOS[ $c['estado'] ] ?? $c['estado'] ) ); ?>
+									<?php echo esc_html( ( Cambios::estados()[ $c['estado'] ] ?? $c['estado'] ) ); ?>
 									<?php if ( '' !== $c['motivo'] ) : ?>
 										<br><span class="asde-muted"><?php echo esc_html( $c['motivo'] ); ?></span>
 									<?php endif; ?>
@@ -151,7 +151,7 @@ $url_ver = 'resueltos' === $ver ? add_query_arg( 'ver', 'resueltos', $url ) : $u
 						<?php foreach ( $g['directos'] as $d ) : ?>
 							<tr>
 								<td data-label="<?php echo esc_attr( esc_attr__( 'Date', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( $fecha( $d['creado'] ) ); ?></td>
-								<td data-label="<?php echo esc_attr( esc_attr__( 'Who', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( $quien( $d['user_id'] ) ); ?><br><span class="asde-muted"><?php echo esc_html( asde_t( Cambios::MOTIVOS_DIRECTOS[ $d['motivo'] ] ) ); ?></span></td>
+								<td data-label="<?php echo esc_attr( esc_attr__( 'Who', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( $quien( $d['user_id'] ) ); ?><br><span class="asde-muted"><?php echo esc_html( ( Cambios::motivos_directos()[ $d['motivo'] ] ) ); ?></span></td>
 								<td data-label="<?php echo esc_attr( esc_attr__( 'Details', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( implode( ', ', array_map( array( Cambios::class, 'etiqueta' ), $d['campos'] ) ) ); ?></td>
 							</tr>
 						<?php endforeach; ?>

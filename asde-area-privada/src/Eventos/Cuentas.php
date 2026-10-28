@@ -606,7 +606,7 @@ final class Cuentas {
 			return $d + array( 'pagado_por' => GastosTable::PAGO_GRUPO );
 		}
 		$pagado = sanitize_key( (string) ( $in['pagado_por'] ?? GastosTable::PAGO_GRUPO ) );
-		if ( ! isset( GastosTable::PAGADORES[ $pagado ] ) ) {
+		if ( ! isset( GastosTable::pagadores()[ $pagado ] ) ) {
 			return new \WP_Error( 'asde_cuentas', __( 'Choose who paid the expense.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$d['pagado_por'] = $pagado;
@@ -663,7 +663,7 @@ final class Cuentas {
 	}
 
 	private static function forma( string $forma ): ?\WP_Error {
-		return isset( GastosTable::FORMAS[ $forma ] ) ? null : new \WP_Error( 'asde_cuentas', __( 'Choose the payment method.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
+		return isset( GastosTable::formas()[ $forma ] ) ? null : new \WP_Error( 'asde_cuentas', __( 'Choose the payment method.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 	}
 
 	private static function cerradas(): \WP_Error {

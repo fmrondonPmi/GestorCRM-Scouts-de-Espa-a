@@ -85,12 +85,12 @@ final class Recetario {
 			return new \WP_Error( 'asde_menus', __( 'That recipe does not exist.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$comun  = IngredientesTable::COMUN === $r['grupo'];
-		$nombre = $comun ? asde_t( $r['nombre'] ) : $r['nombre']; // De la biblioteca: se copia en el idioma de quien la copia.
+		$nombre = $comun ? asde_guardado( $r['nombre'] ) : $r['nombre']; // De la biblioteca: se copia en el idioma de quien la copia.
 		$n      = 1;
 		while ( self::propia_con_nombre( $nombre ) && $n < 50 ) {
 			++$n;
 			/* translators: 1: nombre de la receta, 2: nº de la copia */
-			$nombre = sprintf( /* translators: 1: text, 2: number */ __( '%1$s (copy %2$d)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $comun ? asde_t( $r['nombre'] ) : $r['nombre'], $n );
+			$nombre = sprintf( /* translators: 1: text, 2: number */ __( '%1$s (copy %2$d)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $comun ? asde_guardado( $r['nombre'] ) : $r['nombre'], $n );
 		}
 		$nuevo = RecetasTable::guardar(
 			array(
@@ -98,7 +98,7 @@ final class Recetario {
 				'tipo'          => $r['tipo'],
 				'porciones'     => $r['porciones'],
 				'elaboracion'   => $r['elaboracion'],
-				'observaciones' => Biblioteca::OBSERVACION === $r['observaciones'] ? asde_t( $r['observaciones'] ) : $r['observaciones'],
+				'observaciones' => Biblioteca::OBSERVACION === $r['observaciones'] ? asde_guardado( $r['observaciones'] ) : $r['observaciones'],
 				'ejemplo'       => $r['ejemplo'],
 				'origen_id'     => $r['id'],
 			),
@@ -177,7 +177,7 @@ final class Recetario {
 			$clave = Conversion::clave( $nombre );
 			if ( ! isset( $grupos[ $clave ] ) ) {
 				$tipo            = Conversion::clave( (string) $c[1] );
-				$grupos[ $clave ] = array( 'nombre' => $nombre, 'tipo' => isset( RecetasTable::TIPOS[ $tipo ] ) ? $tipo : 'otro', 'porciones' => (int) $c[2], 'lineas' => array(), 'fila' => $n );
+				$grupos[ $clave ] = array( 'nombre' => $nombre, 'tipo' => isset( RecetasTable::tipos()[ $tipo ] ) ? $tipo : 'otro', 'porciones' => (int) $c[2], 'lineas' => array(), 'fila' => $n );
 			}
 			$unidad = strtolower( trim( (string) $c[5] ) );
 			$ing    = trim( (string) $c[3] );

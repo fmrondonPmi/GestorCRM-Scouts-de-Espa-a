@@ -35,13 +35,16 @@ final class CamposExtra {
 	public const FECHA   = 'fecha';
 	public const CASILLA = 'casilla';
 
-	public const TIPOS = array(
-		self::TEXTO   => 'Texto corto',
-		self::PARRAFO => 'Texto largo',
-		self::NUMERO  => 'Número',
-		self::FECHA   => 'Fecha',
-		self::CASILLA => 'Casilla (sí / no)',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function tipos(): array {
+		return array(
+		self::TEXTO   => __( 'Short text', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::PARRAFO => __( 'Long text', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::NUMERO  => __( 'Number', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::FECHA   => __( 'Date', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::CASILLA => __( 'Checkbox (yes / no)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
 	/** Texto de la casilla de declaración que el grupo ha escrito ('' = el de por defecto). */
 	public static function declaracion_propia( string $numero ): string {
@@ -74,7 +77,7 @@ final class CamposExtra {
 		$lista = is_array( $todo ) && is_array( $todo[ $numero ] ?? null ) ? $todo[ $numero ] : array();
 		$out   = array();
 		foreach ( $lista as $c ) {
-			if ( is_array( $c ) && ! empty( $c['id'] ) && ! empty( $c['etiqueta'] ) && isset( self::TIPOS[ $c['tipo'] ?? '' ] ) ) {
+			if ( is_array( $c ) && ! empty( $c['id'] ) && ! empty( $c['etiqueta'] ) && isset( self::tipos()[ $c['tipo'] ?? '' ] ) ) {
 				$out[] = array(
 					'id'          => (string) $c['id'],
 					'etiqueta'    => (string) $c['etiqueta'],
@@ -110,7 +113,7 @@ final class CamposExtra {
 				$errores[] = __( 'Each field needs its label: it is the text the person signing up will see.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 			}
-			if ( ! isset( self::TIPOS[ $tipo ] ) ) {
+			if ( ! isset( self::tipos()[ $tipo ] ) ) {
 				$errores[] = __( 'Choose the type of each field.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 			}

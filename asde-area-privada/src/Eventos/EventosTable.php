@@ -31,38 +31,50 @@ final class EventosTable {
 	public const CANCELADO = 'cancelado';
 
 	/** Etiquetas de lo que se enseña (estado_visible). */
-	public const ESTADOS = array(
-		'borrador'    => 'Borrador',
-		'por_validar' => 'Presupuesto pendiente de Tesorería',
-		'validado'    => 'Presupuesto validado',
-		'publicado'   => 'Publicado',
-		'en_curso'    => 'En curso',
-		'celebrado'   => 'Celebrado',
-		'cancelado'   => 'Cancelado',
-		'cerrado'     => 'Cuentas cerradas',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function estados(): array {
+		return array(
+		'borrador'    => __( 'Draft', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'por_validar' => __( 'Budget pending Treasury', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'validado'    => __( 'Budget validated', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'publicado'   => __( 'Published', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'en_curso'    => __( 'In progress', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'celebrado'   => __( 'Held', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'cancelado'   => __( 'Cancelled', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'cerrado'     => __( 'Accounts closed', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
 	/** Ámbito del evento (doc 43, apartado 1). */
-	public const AMBITOS = array(
-		'secciones' => 'De sección (una o varias)',
-		'grupo'     => 'De grupo (todas las secciones)',
-		'externo'   => 'Externo (lo organiza otra entidad)',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function ambitos(): array {
+		return array(
+		'secciones' => __( 'Section (one or several)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'grupo'     => __( 'Group-wide (all sections)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'externo'   => __( 'External (organised by another entity)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
 	/** Modalidad de la inscripción (doc 43, apartado 3). */
-	public const MODALIDADES = array(
-		'abierta'      => 'Inscripción abierta: las familias apuntan a quien quiera ir',
-		'convocatoria' => 'Convocatoria: se espera a todos y cada familia responde sí o no',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function modalidades(): array {
+		return array(
+		'abierta'      => __( 'Open sign-up: families sign up whoever wants to go', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'convocatoria' => __( 'Invitation: everyone is expected and each family answers yes or no', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
 	/** Filtros de la agenda. */
-	public const FILTROS = array(
-		''           => 'Próximos y en curso',
-		'pasados'    => 'Ya celebrados',
-		'borradores' => 'Borradores',
-		'cancelados' => 'Cancelados',
-		'todos'      => 'Todos',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function filtros(): array {
+		return array(
+		''           => __( 'Upcoming and ongoing', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'pasados'    => __( 'Already held', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'borradores' => __( 'Drafts', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'cancelados' => __( 'Cancelled', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'todos'      => __( 'All', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
 	public static function table(): string {
 		global $wpdb;
@@ -415,7 +427,7 @@ final class EventosTable {
 		$f['presupuesto']   = is_array( $presupuesto ) ? $presupuesto : null;
 		$f['descripcion']   = (string) $f['descripcion'];
 		$f['material']      = (string) $f['material'];
-		$f['modalidad']     = isset( self::MODALIDADES[ $f['modalidad'] ?? '' ] ) ? (string) $f['modalidad'] : 'abierta';
+		$f['modalidad']     = isset( self::modalidades()[ $f['modalidad'] ?? '' ] ) ? (string) $f['modalidad'] : 'abierta';
 		foreach ( array( 'inscripcion_desde', 'inscripcion_hasta', 'avisado_en', 'recordatorio_en', 'cerrado_en' ) as $k ) {
 			$f[ $k ] = isset( $f[ $k ] ) && '' !== (string) $f[ $k ] && ! str_starts_with( (string) $f[ $k ], '0000' ) ? (string) $f[ $k ] : null;
 		}

@@ -126,12 +126,12 @@ final class Plantillas {
 
 	/** Nombre de una plantilla para enseñarlo (el de la incorporada se traduce). */
 	public static function nombre( string $id, array $p ): string {
-		return self::ACAMPADA === $id && self::incorporada()['nombre'] === $p['nombre'] ? asde_t( $p['nombre'] ) : $p['nombre'];
+		return self::ACAMPADA === $id && self::incorporada()['nombre'] === $p['nombre'] ? asde_guardado( $p['nombre'] ) : $p['nombre'];
 	}
 
 	/** Título y detalle para enseñarlos: los de la plantilla original se traducen y los del grupo se dejan como están. */
 	public static function texto( string $texto ): string {
-		return in_array( $texto, self::textos(), true ) ? asde_t( $texto ) : $texto;
+		return in_array( $texto, self::textos(), true ) ? asde_guardado( $texto ) : $texto;
 	}
 
 	/**

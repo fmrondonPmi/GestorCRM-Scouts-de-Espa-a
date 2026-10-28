@@ -88,7 +88,7 @@ final class AccesoView extends View {
 		$usuario = Identificacion::usuario_para( $login, Grupos::obtener( $grupo ), $clave );
 		if ( is_wp_error( $usuario ) ) {
 			$codigo      = $usuario->get_error_code();
-			self::$error = in_array( $codigo, self::ERRORES_CREDENCIALES, true ) ? asde_t( self::MENSAJE_CREDENCIALES ) : $usuario->get_error_message();
+			self::$error = in_array( $codigo, self::ERRORES_CREDENCIALES, true ) ? asde_guardado( self::MENSAJE_CREDENCIALES ) : $usuario->get_error_message();
 			if ( 'asde_email_varias' !== $codigo ) { // En ese caso la contraseña era correcta.
 				Intentos::fallo( $cuenta );
 			}
@@ -124,7 +124,7 @@ final class AccesoView extends View {
 				self::$pedir_codigo = true;
 				self::$error        = __( 'The verification code is incorrect or has expired. Try again.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 			} elseif ( in_array( $codigo, self::ERRORES_CREDENCIALES, true ) ) {
-				self::$error = asde_t( self::MENSAJE_CREDENCIALES );
+				self::$error = asde_guardado( self::MENSAJE_CREDENCIALES );
 			} else {
 				// Otros avisos (p. ej. de Wordfence): se muestra su texto, sin HTML.
 				self::$error = wp_strip_all_tags( $user->get_error_message() ) ?: __( 'Sign-in was not possible.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );

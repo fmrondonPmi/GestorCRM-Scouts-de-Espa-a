@@ -39,13 +39,13 @@ $pct = $resumen['a_pagar'] > 0 ? round( 100 * $resumen['pagado'] / $resumen['a_p
 	<div class="asde-progreso" role="img" aria-label="<?php echo esc_attr( sprintf( /* translators: %d: number */ __( '%d %% collected', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $pct ) ); ?>"><span style="width:<?php echo (int) min( 100, $pct ); ?>%"></span></div>
 	<p class="asde-muted">
 		<?php foreach ( $resumen['estados'] as $e => $n ) : ?>
-			<span class="asde-badge asde-badge--pago-<?php echo esc_attr( $e ); ?>"><?php echo esc_html( asde_t( Calculadora::ETIQUETAS[ $e ] ) . ': ' . $n ); ?></span>
+			<span class="asde-badge asde-badge--pago-<?php echo esc_attr( $e ); ?>"><?php echo esc_html( ( Calculadora::etiquetas()[ $e ] ) . ': ' . $n ); ?></span>
 		<?php endforeach; ?>
 	</p>
 	<p class="asde-muted">
 		<?php esc_html_e( 'Instalments:', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>
 		<?php foreach ( $cfg['plazos'] as $pl ) : ?>
-			<?php echo esc_html( asde_t( (string) $pl['nombre'] ) . ' (' . sprintf( /* translators: 1: text, 2: text */ __( '%1$s %%, until %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), number_format_i18n( (float) $pl['porcentaje'] ), wp_date( 'd/m/Y', strtotime( $pl['fecha'] . ' 12:00' ) ) ) . ')' ); ?> ·
+			<?php echo esc_html( asde_guardado( (string) $pl['nombre'] ) . ' (' . sprintf( /* translators: 1: text, 2: text */ __( '%1$s %%, until %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), number_format_i18n( (float) $pl['porcentaje'] ), wp_date( 'd/m/Y', strtotime( $pl['fecha'] . ' 12:00' ) ) ) . ')' ); ?> ·
 		<?php endforeach; ?>
 		<?php esc_html_e( 'Reference for transfers: the family no. (e.g.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <?php echo esc_html( ( reset( $lista )['familia']['numero'] ?? 'F684001' ) ); ?>).
 	</p>
@@ -80,7 +80,7 @@ $pct = $resumen['a_pagar'] > 0 ? round( 100 * $resumen['pagado'] / $resumen['a_p
 		<input type="hidden" name="ronda" value="<?php echo esc_attr( $ronda ); ?>">
 		<label for="asde-estado"><?php esc_html_e( 'Show', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 		<select id="asde-estado" name="estado" data-asde-autoenviar>
-			<?php foreach ( asde_ta( TesoreriaView::FILTROS ) as $k => $label ) : ?>
+			<?php foreach ( ( TesoreriaView::filtros() ) as $k => $label ) : ?>
 				<option value="<?php echo esc_attr( $k ); ?>" <?php selected( $estado, $k ); ?>><?php echo esc_html( $label ); ?></option>
 			<?php endforeach; ?>
 		</select>
@@ -132,7 +132,7 @@ $pct = $resumen['a_pagar'] > 0 ? round( 100 * $resumen['pagado'] / $resumen['a_p
 						<td data-label="<?php echo esc_attr( esc_attr__( 'Fee', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><span class="asde-tooltip" title="<?php echo esc_attr( $detalle ); ?>" tabindex="0"><?php echo esc_html( Calculadora::euros( $c['a_pagar'] ) ); ?></span><span class="screen-reader-text"> (<?php echo esc_html( $detalle ); ?>)</span></td>
 						<td data-label="<?php echo esc_attr( esc_attr__( 'Paid', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( Calculadora::euros( $c['pagado'] ) ); ?></td>
 						<td data-label="<?php echo esc_attr( esc_attr__( 'Pending', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( Calculadora::euros( max( 0, $c['pendiente'] ) ) ); ?><?php echo $c['pendiente'] < 0 ? '<br><span class="asde-muted">' . esc_html( sprintf( /* translators: %s: text */ __( 'Credit balance %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Calculadora::euros( -$c['pendiente'] ) ) ) . '</span>' : ''; ?></td>
-						<td data-label="<?php echo esc_attr( esc_attr__( 'Status', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><span class="asde-badge asde-badge--pago-<?php echo esc_attr( $c['estado'] ); ?>"><?php echo esc_html( asde_t( Calculadora::ETIQUETAS[ $c['estado'] ] ) ); ?></span></td>
+						<td data-label="<?php echo esc_attr( esc_attr__( 'Status', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><span class="asde-badge asde-badge--pago-<?php echo esc_attr( $c['estado'] ); ?>"><?php echo esc_html( ( Calculadora::etiquetas()[ $c['estado'] ] ) ); ?></span></td>
 						<td data-label=""><a href="<?php echo esc_url( add_query_arg( array( 'familia' => $id, 'ronda' => $ronda ), $url ) ); ?>" data-asde-recarga><?php esc_html_e( 'View / record payment', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a></td>
 					</tr>
 				<?php endforeach; ?>

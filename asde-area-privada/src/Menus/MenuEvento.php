@@ -58,7 +58,7 @@ final class MenuEvento {
 		if ( ! self::puede_editar( $e, $a ) ) {
 			return new \WP_Error( 'asde_menus', __( 'You cannot change this event\'s menu.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
-		if ( ! in_array( $dia, self::dias( $e ), true ) || ! isset( MenuTable::COMIDAS[ $comida ] ) ) {
+		if ( ! in_array( $dia, self::dias( $e ), true ) || ! isset( MenuTable::comidas()[ $comida ] ) ) {
 			return new \WP_Error( 'asde_menus', __( 'Choose a day of the event and a meal.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$receta = RecetasTable::obtener( $receta_id );
@@ -154,10 +154,10 @@ final class MenuEvento {
 		foreach ( $acum as $a ) {
 			$i                  = $a['ingrediente'];
 			list( $c, $unidad ) = Escalado::legible( $a['base'], $a['familia'] );
-			$nombre             = IngredientesTable::COMUN === $i['grupo'] ? asde_t( $i['nombre'] ) : $i['nombre'];
+			$nombre             = IngredientesTable::COMUN === $i['grupo'] ? asde_guardado( $i['nombre'] ) : $i['nombre'];
 			$coste              = null;
 			// El coste es por la unidad habitual del ingrediente: solo se calcula si es de la misma familia.
-			$u_ing = Escalado::UNIDADES[ $i['unidad'] ] ?? null;
+			$u_ing = Escalado::unidades()[ $i['unidad'] ] ?? null;
 			if ( null !== $i['coste'] && $u_ing && $u_ing[1] === $a['familia'] ) {
 				$coste  = round( $a['base'] / $u_ing[2] * $i['coste'], 2 );
 				$total += $coste;
@@ -203,11 +203,11 @@ final class MenuEvento {
 			return new \WP_Error( 'asde_menus', __( 'The menu has no cost yet: record the cost of the ingredients and add dishes.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		foreach ( PartidasTable::previstas( $e['id'] ) as $p ) {
-			if ( asde_t( self::CONCEPTO_PARTIDA ) === $p['concepto'] || self::CONCEPTO_PARTIDA === $p['concepto'] ) {
+			if ( asde_guardado( self::CONCEPTO_PARTIDA ) === $p['concepto'] || self::CONCEPTO_PARTIDA === $p['concepto'] ) {
 				return new \WP_Error( 'asde_menus', __( 'There is already a menu item in the budget: remove it before proposing another.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			}
 		}
-		return Eventos::anadir_partida( $e, $a, PartidasTable::GASTO, asde_t( self::CONCEPTO_PARTIDA ), 'total', '', $compra['total'] );
+		return Eventos::anadir_partida( $e, $a, PartidasTable::GASTO, asde_guardado( self::CONCEPTO_PARTIDA ), 'total', '', $compra['total'] );
 	}
 
 	/** CSV de la lista de la compra (con la marca de orden de bytes de Excel). */

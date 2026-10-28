@@ -66,7 +66,7 @@ final class HojaCocina {
 			$p[] = array(
 				'dia'      => $pl['plato']['dia'],
 				'comida'   => $pl['plato']['comida'],
-				'plato'    => IngredientesTable::COMUN === $pl['receta']['grupo'] ? asde_t( $pl['receta']['nombre'] ) : $pl['receta']['nombre'],
+				'plato'    => IngredientesTable::COMUN === $pl['receta']['grupo'] ? asde_guardado( $pl['receta']['nombre'] ) : $pl['receta']['nombre'],
 				'personas' => $por,
 			);
 		}

@@ -17,7 +17,7 @@ defined( 'ABSPATH' ) || exit;
 $fila = static function ( string $i, array $c, bool $editable ) use ( $campo ): string {
 	$ro      = $editable ? '' : ' disabled';
 	$opciones = '';
-	foreach ( asde_ta( Organizacion::APLICA ) as $valor => $etiqueta ) {
+	foreach ( ( Organizacion::aplica() ) as $valor => $etiqueta ) {
 		$opciones .= sprintf( '<option value="%s"%s>%s</option>', esc_attr( $valor ), selected( $c['aplica'] ?? 'asociado', $valor, false ), esc_html( $etiqueta ) );
 	}
 	return sprintf(

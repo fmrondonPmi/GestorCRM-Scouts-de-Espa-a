@@ -52,7 +52,7 @@ final class AccesosView extends View {
 	private function hojas( string $activa ): string {
 		$out = '<nav class="asde-hojas" aria-label="' . esc_attr( esc_attr__( 'Access management', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) . '"><ul class="asde-hojas__lista">';
 		foreach ( self::VISTAS as $clave => $nombre ) {
-			$out .= '<li class="asde-hojas__item"><a class="asde-hojas__pestana' . ( $clave === $activa ? ' is-active' : '' ) . '" href="' . esc_url( $this->url( 'accesos', array( 'vista' => $clave ) ) ) . '"' . ( $clave === $activa ? ' aria-current="page"' : '' ) . '>' . esc_html( asde_t( $nombre ) ) . '</a></li>';
+			$out .= '<li class="asde-hojas__item"><a class="asde-hojas__pestana' . ( $clave === $activa ? ' is-active' : '' ) . '" href="' . esc_url( $this->url( 'accesos', array( 'vista' => $clave ) ) ) . '"' . ( $clave === $activa ? ' aria-current="page"' : '' ) . '>' . esc_html(  $nombre  ) . '</a></li>';
 		}
 		return $out . '</ul></nav>';
 	}
@@ -206,7 +206,7 @@ final class AccesosView extends View {
 	// -------------------------------------------------------------- historial
 
 	private function historial(): string {
-		$accion  = isset( Auditoria::ACCIONES[ $this->get( 'accion' ) ] ) ? $this->get( 'accion' ) : '';
+		$accion  = isset( Auditoria::acciones()[ $this->get( 'accion' ) ] ) ? $this->get( 'accion' ) : '';
 		$objetivo = (int) $this->get( 'persona' );
 		$permiso = Catalogo::existe( $this->get( 'permiso' ) ) ? $this->get( 'permiso' ) : '';
 		$periodo = in_array( $this->get( 'periodo' ), array( '30', '365' ), true ) ? (int) $this->get( 'periodo' ) : 0;
@@ -241,7 +241,7 @@ final class AccesosView extends View {
 			array(
 				'fecha'   => static fn( $f ) => $f['creado'],
 				'actor'   => static fn( $f ) => $cuenta( (int) $f['actor'] ),
-				'accion'  => static fn( $f ) => asde_t( Auditoria::ACCIONES[ $f['accion'] ] ?? $f['accion'] ),
+				'accion'  => static fn( $f ) => ( Auditoria::acciones()[ $f['accion'] ] ?? $f['accion'] ),
 				'persona' => static fn( $f ) => (int) $f['objetivo'] ? $cuenta( (int) $f['objetivo'] ) : Roles::label( $f['rol'] ),
 				'permiso' => static fn( $f ) => Catalogo::existe( $f['permiso'] ) ? Catalogo::descripcion( $f['permiso'] ) : $f['permiso'],
 			),

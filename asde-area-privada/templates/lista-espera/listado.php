@@ -50,7 +50,7 @@ $fecha = static function ( ?string $utc ): string {
 
 <?php if ( null !== $campos ) : ?>
 	<?php
-	$tipos  = asde_ta( CamposExtra::TIPOS );
+	$tipos  = ( CamposExtra::tipos() );
 	$filas  = $campos;
 	$libres = max( 2, min( 4, CamposExtra::MAX_CAMPOS - count( $campos ) ) );
 	for ( $i = 0; $i < $libres && count( $filas ) < CamposExtra::MAX_CAMPOS; $i++ ) {
@@ -122,7 +122,7 @@ $fecha = static function ( ?string $utc ): string {
 		<label for="asde-espera-estado"><?php esc_html_e( 'Show', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 		<select id="asde-espera-estado" name="estado" data-asde-autoenviar>
 			<option value="<?php echo esc_attr( ListaEsperaView::ACTIVAS ); ?>" <?php selected( $estado, ListaEsperaView::ACTIVAS ); ?>><?php echo esc_html( __( 'On the list', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . ' (' . $total . ')' ); ?></option>
-			<?php foreach ( asde_ta( Inscripciones::ESTADOS ) as $e => $etiqueta ) : ?>
+			<?php foreach ( ( Inscripciones::estados() ) as $e => $etiqueta ) : ?>
 				<option value="<?php echo esc_attr( $e ); ?>" <?php selected( $estado, $e ); ?>><?php echo esc_html( $etiqueta ); ?></option>
 			<?php endforeach; ?>
 			<option value="todas" <?php selected( $estado, 'todas' ); ?>><?php esc_html_e( 'All', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></option>
@@ -187,9 +187,9 @@ $fecha = static function ( ?string $utc ): string {
 							<?php endif; ?>
 						</td>
 						<td data-label="<?php echo esc_attr( esc_attr__( 'Status', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
-							<?php echo esc_html( asde_ta( Inscripciones::ESTADOS )[ $f['estado'] ] ?? $f['estado'] ); ?>
+							<?php echo esc_html( ( Inscripciones::estados() )[ $f['estado'] ] ?? $f['estado'] ); ?>
 							<?php if ( $f['contactada_en'] ) : ?>
-								<br><span class="asde-help"><?php echo esc_html( sprintf( /* translators: 1: text, 2: text */ __( 'Last contact: %1$s, %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), asde_ta( Inscripciones::MEDIOS )[ $f['contacto_medio'] ] ?? '', $fecha( $f['contactada_en'] ) ) ); ?></span>
+								<br><span class="asde-help"><?php echo esc_html( sprintf( /* translators: 1: text, 2: text */ __( 'Last contact: %1$s, %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), ( Inscripciones::medios() )[ $f['contacto_medio'] ] ?? '', $fecha( $f['contactada_en'] ) ) ); ?></span>
 							<?php endif; ?>
 						</td>
 						<td data-label="<?php echo esc_attr( esc_attr__( 'On the list since', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( $fecha( $f['confirmada_en'] ?: $f['creada'] ) ); ?></td>

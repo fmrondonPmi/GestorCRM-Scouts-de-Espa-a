@@ -34,7 +34,7 @@
 		}
 		var texto = boton.textContent;
 		var hecho = function () {
-			boton.textContent = asdeT( 'Copiado' );
+			boton.textContent = asdeT( 'Copied' );
 			window.setTimeout( function () {
 				boton.textContent = texto;
 			}, 2000 );
@@ -60,7 +60,7 @@
 			barra = document.createElement( 'div' );
 			barra.className = 'asde-progreso';
 			barra.setAttribute( 'role', 'progressbar' );
-			barra.setAttribute( 'aria-label', asdeT( 'Cargando la página' ) );
+			barra.setAttribute( 'aria-label', asdeT( 'Loading the page' ) );
 			document.body.appendChild( barra );
 		}
 		document.documentElement.classList.toggle( 'asde-cargando', si );
@@ -176,7 +176,7 @@
 			var boton = document.createElement( 'button' );
 			boton.type = 'button';
 			boton.className = 'asde-card__plegar';
-			boton.setAttribute( 'aria-label', asdeT( 'Contraer o expandir «%s»', texto ) );
+			boton.setAttribute( 'aria-label', asdeT( 'Collapse or expand "%s"', texto ) );
 			boton.innerHTML = '<span aria-hidden="true">▾</span>';
 			titulo.insertBefore( boton, titulo.firstChild );
 			titulo.addEventListener( 'click', function ( e ) {
@@ -316,8 +316,8 @@
 		dialogo.setAttribute( 'aria-labelledby', 'asde-modal-titulo' );
 		dialogo.innerHTML = '<div class="asde-modal__barra">'
 			+ '<span class="asde-modal__titulo" id="asde-modal-titulo"></span>'
-			+ '<a class="asde-modal__pagina" href="#">' + asdeT( 'Abrir en su página' ) + '</a>'
-			+ '<button type="button" class="asde-modal__cerrar" aria-label="' + asdeEsc( asdeT( 'Cerrar' ) ) + '">×</button>'
+			+ '<a class="asde-modal__pagina" href="#">' + asdeT( 'Open on its page' ) + '</a>'
+			+ '<button type="button" class="asde-modal__cerrar" aria-label="' + asdeEsc( asdeT( 'Close' ) ) + '">×</button>'
 			+ '</div><div class="asde-modal__cuerpo" tabindex="-1"></div>';
 		// Junto al contenido del área (no al final de <body>): así hereda los colores y
 		// la tipografía del tema. Con showModal() se dibuja encima de todo igualmente.
@@ -415,7 +415,7 @@
 		if ( ! dialogo ) {
 			crear();
 		}
-		cuerpo.innerHTML = '<p class="asde-muted asde-modal__cargando">' + asdeT( 'Cargando…' ) + '</p>';
+		cuerpo.innerHTML = '<p class="asde-muted asde-modal__cargando">' + asdeT( 'Loading…' ) + '</p>';
 		titulo.textContent = '';
 		if ( ! dialogo.open ) {
 			dialogo.showModal();

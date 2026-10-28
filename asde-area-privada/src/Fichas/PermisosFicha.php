@@ -80,7 +80,7 @@ final class PermisosFicha {
 	/** Acción permitida por el rol (sin tener en cuenta el CRM). */
 	public function accion_rol( string $campo ): string {
 		$def = CamposFicha::todos()[ $campo ] ?? null;
-		if ( ! $def || isset( CamposFicha::SOLO_LECTURA[ $campo ] ) || ! $this->ve_campo( $campo ) ) {
+		if ( ! $def || isset( CamposFicha::solo_lectura()[ $campo ] ) || ! $this->ve_campo( $campo ) ) {
 			return self::VER;
 		}
 		$grupo = $def[1];
@@ -114,8 +114,8 @@ final class PermisosFicha {
 		if ( \AsdeBalears\AreaPrivada\Auth\SoloLectura::activo() ) { // v0.50: la oficina solo mira.
 			return array( self::VER, __( 'Your account is read-only: nothing can be changed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
-		if ( isset( CamposFicha::SOLO_LECTURA[ $campo ] ) ) {
-			return array( self::VER, asde_t( CamposFicha::SOLO_LECTURA[ $campo ] ) );
+		if ( isset( CamposFicha::solo_lectura()[ $campo ] ) ) {
+			return array( self::VER, ( CamposFicha::solo_lectura()[ $campo ] ) );
 		}
 		$accion = $this->accion_rol( $campo );
 		if ( self::VER === $accion ) {

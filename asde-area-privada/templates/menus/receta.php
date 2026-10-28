@@ -23,8 +23,8 @@ use AsdeBalears\AreaPrivada\Menus\RecetasTable;
 
 defined( 'ABSPATH' ) || exit;
 
-$nombre_ing = static fn( array $i ): string => IngredientesTable::COMUN === $i['grupo'] ? asde_t( $i['nombre'] ) : $i['nombre'];
-$titulo     = $r['id'] ? ( $propia ? $r['nombre'] : asde_t( $r['nombre'] ) ) : __( 'New recipe', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
+$nombre_ing = static fn( array $i ): string => IngredientesTable::COMUN === $i['grupo'] ? asde_guardado( $i['nombre'] ) : $i['nombre'];
+$titulo     = $r['id'] ? ( $propia ? $r['nombre'] : asde_guardado( $r['nombre'] ) ) : __( 'New recipe', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 $val        = static fn( string $k ) => $borrador[ $k ] ?? $r[ $k ] ?? '';
 ?>
 <section class="asde-card" data-asde-inicio="abierto">
@@ -75,8 +75,8 @@ $val        = static fn( string $k ) => $borrador[ $k ] ?? $r[ $k ] ?? '';
 			<p>
 				<label for="asde-rec-tipo"><?php esc_html_e( 'Dish type', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 				<select id="asde-rec-tipo" name="tipo">
-					<?php foreach ( RecetasTable::TIPOS as $k => $n ) : ?>
-						<option value="<?php echo esc_attr( $k ); ?>" <?php selected( (string) $val( 'tipo' ), $k ); ?>><?php echo esc_html( asde_t( $n ) ); ?></option>
+					<?php foreach ( RecetasTable::tipos() as $k => $n ) : ?>
+						<option value="<?php echo esc_attr( $k ); ?>" <?php selected( (string) $val( 'tipo' ), $k ); ?>><?php echo esc_html(  $n  ); ?></option>
 					<?php endforeach; ?>
 				</select>
 			</p>
@@ -108,8 +108,8 @@ $val        = static fn( string $k ) => $borrador[ $k ] ?? $r[ $k ] ?? '';
 							<td data-label="<?php echo esc_attr( esc_attr__( 'Quantity', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><input type="text" inputmode="decimal" name="cant[]" size="8" value="<?php echo '' === $l['cantidad'] ? '' : esc_attr( rtrim( rtrim( number_format( (float) $l['cantidad'], 3, ',', '' ), '0' ), ',' ) ); ?>" aria-label="<?php echo esc_attr( sprintf( /* translators: %d: number */ __( 'Quantity %d', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $n + 1 ) ); ?>"></td>
 							<td data-label="<?php echo esc_attr( esc_attr__( 'Unidad', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
 								<select name="uni[]" aria-label="<?php echo esc_attr( sprintf( /* translators: %d: number */ __( 'Unit %d', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $n + 1 ) ); ?>">
-									<?php foreach ( Escalado::UNIDADES as $k => $u ) : ?>
-										<option value="<?php echo esc_attr( $k ); ?>" <?php selected( (string) $l['unidad'], $k ); ?>><?php echo esc_html( asde_t( $u[0] ) ); ?></option>
+									<?php foreach ( Escalado::unidades() as $k => $u ) : ?>
+										<option value="<?php echo esc_attr( $k ); ?>" <?php selected( (string) $l['unidad'], $k ); ?>><?php echo esc_html(  $u[0]  ); ?></option>
 									<?php endforeach; ?>
 								</select>
 							</td>
@@ -136,7 +136,7 @@ $val        = static fn( string $k ) => $borrador[ $k ] ?? $r[ $k ] ?? '';
 			<?php endforeach; ?>
 		</ul>
 		<?php if ( '' !== $r['observaciones'] ) : ?>
-			<p class="asde-muted"><?php echo esc_html( asde_t( $r['observaciones'] ) ); ?></p>
+			<p class="asde-muted"><?php echo esc_html( asde_guardado( $r['observaciones'] ) ); ?></p>
 		<?php endif; ?>
 	<?php endif; ?>
 </section>

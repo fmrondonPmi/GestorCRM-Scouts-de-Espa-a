@@ -28,13 +28,13 @@ defined( 'ABSPATH' ) || exit;
 		<p class="asde-help"><?php esc_html_e( 'Tick whatever applies. If something is not on the list, write it below and add it.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 		<div class="asde-alerg__tabs" role="tablist" aria-label="<?php echo esc_attr( esc_attr__( 'Categories', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
 			<?php foreach ( SelectorAlergenos::PESTANAS as $k => $p ) : ?>
-				<button type="button" role="tab" id="<?php echo esc_attr( $id . '-tab-' . $k ); ?>" aria-controls="<?php echo esc_attr( $id . '-panel-' . $k ); ?>" aria-selected="false" tabindex="-1" data-pestana="<?php echo esc_attr( $k ); ?>"><?php echo esc_html( asde_t( $p['titulo'] ) ); ?></button>
+				<button type="button" role="tab" id="<?php echo esc_attr( $id . '-tab-' . $k ); ?>" aria-controls="<?php echo esc_attr( $id . '-panel-' . $k ); ?>" aria-selected="false" tabindex="-1" data-pestana="<?php echo esc_attr( $k ); ?>"><?php echo esc_html( asde_guardado( $p['titulo'] ) ); ?></button>
 			<?php endforeach; ?>
 		</div>
 		<?php foreach ( SelectorAlergenos::PESTANAS as $k => $p ) : ?>
 			<div role="tabpanel" id="<?php echo esc_attr( $id . '-panel-' . $k ); ?>" aria-labelledby="<?php echo esc_attr( $id . '-tab-' . $k ); ?>" class="asde-alerg__panel" hidden>
 				<?php foreach ( $p['items'] as $etiqueta_item => $codigos ) : ?>
-					<label class="asde-choice asde-choice--inline"><input type="checkbox" data-valor="<?php echo esc_attr( $etiqueta_item ); ?>" data-clave="<?php echo esc_attr( SelectorAlergenos::clave( $etiqueta_item ) ); ?>" data-clave-t="<?php echo esc_attr( SelectorAlergenos::clave( asde_t( $etiqueta_item ) ) ); ?>"><span><?php echo esc_html( asde_t( $etiqueta_item ) ); ?></span></label>
+					<label class="asde-choice asde-choice--inline"><input type="checkbox" data-valor="<?php echo esc_attr( $etiqueta_item ); ?>" data-clave="<?php echo esc_attr( SelectorAlergenos::clave( $etiqueta_item ) ); ?>" data-clave-t="<?php echo esc_attr( SelectorAlergenos::clave( asde_guardado( $etiqueta_item ) ) ); ?>"><span><?php echo esc_html( asde_guardado( $etiqueta_item ) ); ?></span></label>
 				<?php endforeach; ?>
 			</div>
 		<?php endforeach; ?>

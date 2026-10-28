@@ -38,14 +38,14 @@ $adulto    = $s['adulto'] || ( $p && $p->es_adulto_voluntario() );
 <section class="asde-card">
 	<header class="asde-card__header asde-card__header--split">
 		<h2 class="asde-card__title"><?php esc_html_e( 'Access request', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h2>
-		<span class="asde-badge asde-badge--estado-<?php echo esc_attr( $pendiente ? 'invitado' : ( Solicitudes::APROBADA === $s['estado'] ? 'activo' : 'desactivado' ) ); ?>"><?php echo esc_html( asde_t( Solicitudes::ESTADOS[ $s['estado'] ] ?? $s['estado'] ) ); ?></span>
+		<span class="asde-badge asde-badge--estado-<?php echo esc_attr( $pendiente ? 'invitado' : ( Solicitudes::APROBADA === $s['estado'] ? 'activo' : 'desactivado' ) ); ?>"><?php echo esc_html( ( Solicitudes::estados()[ $s['estado'] ] ?? $s['estado'] ) ); ?></span>
 	</header>
 	<p class="asde-muted">
 		<?php esc_html_e( 'Received on', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <?php echo esc_html( wp_date( 'd/m/Y H:i', strtotime( $s['creada'] . ' UTC' ) ) ); ?>.
 		<?php echo $tutor ? esc_html( __( 'It is requested by their family (mother, father or guardian).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) : esc_html( __( 'It is requested by the member themselves.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>
 		<?php if ( $revisor ) : ?>
 			<?php echo esc_html( sprintf( /* translators: 1: text, 2: text, 3: text */ __( '%1$s by %2$s on %3$s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Solicitudes::APROBADA === $s['estado'] ? __( 'Approved', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : __( 'Rejected', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $revisor->display_name, wp_date( 'd/m/Y', strtotime( $s['revisada_en'] . ' UTC' ) ) ) ); ?>
-			<?php echo '' !== $s['motivo'] ? esc_html( sprintf( /* translators: %s: text */ __( 'Reason: %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), asde_t( (string) $s['motivo'] ) ) ) : ''; ?>
+			<?php echo '' !== $s['motivo'] ? esc_html( sprintf( /* translators: %s: text */ __( 'Reason: %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), asde_guardado( (string) $s['motivo'] ) ) ) : ''; ?>
 		<?php endif; ?>
 	</p>
 

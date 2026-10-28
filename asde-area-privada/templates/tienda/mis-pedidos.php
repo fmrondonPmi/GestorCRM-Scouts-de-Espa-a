@@ -42,7 +42,7 @@ $fecha     = static fn( ?string $f ) => $f ? wp_date( 'd/m/Y', strtotime( $f . (
 				$estado  = PedidosTable::estado( $p );
 				$pasos   = array(
 					array( __( 'Requested', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), true, $fecha( $p['creado'] ) ),
-					array( __( 'Paid', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), null !== $p['pago_en'], null !== $p['pago_en'] ? $fecha( $p['pago_fecha'] ) . ' · ' . ( asde_t( PedidosTable::METODOS[ $p['pago_metodo'] ] ?? '' ) ) : '' ),
+					array( __( 'Paid', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), null !== $p['pago_en'], null !== $p['pago_en'] ? $fecha( $p['pago_fecha'] ) . ' · ' . ( ( PedidosTable::metodos()[ $p['pago_metodo'] ] ?? '' ) ) : '' ),
 					array( __( 'In the group\'s order', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), null !== $p['pedido_en'], $fecha( $p['pedido_en'] ) ),
 					array( __( 'Delivered', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), null !== $p['entregado_en'], $fecha( $p['entregado_en'] ) ),
 					array( __( 'Received', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), null !== $p['recibido_en'], $fecha( $p['recibido_en'] ) ),
@@ -52,7 +52,7 @@ $fecha     = static fn( ?string $f ) => $f ? wp_date( 'd/m/Y', strtotime( $f . (
 					<header class="asde-pedido__cabecera">
 						<strong><?php echo esc_html( PedidosTable::numero( $p ) ); ?></strong>
 						<?php echo $persona ? ' · ' . esc_html( $persona->nombre_completo() ) : ''; ?>
-						<span class="asde-badge asde-badge--uniforme-<?php echo esc_attr( $estado ); ?>"><?php echo esc_html( asde_t( PedidosTable::ESTADOS[ $estado ] ) ); ?></span>
+						<span class="asde-badge asde-badge--uniforme-<?php echo esc_attr( $estado ); ?>"><?php echo esc_html( ( PedidosTable::estados()[ $estado ] ) ); ?></span>
 					</header>
 					<p class="asde-pedido__contenido"><?php echo esc_html( Servicio::descripcion( $p['lineas'] ) ); ?> — <strong><?php echo esc_html( null !== $p['pago_importe'] ? Calculadora::euros( $p['pago_importe'] ) : Servicio::importe( $p ) ); ?></strong></p>
 					<?php if ( 'cancelado' !== $estado && null === $p['pago_en'] && '' !== $p['forma_pago'] ) : ?>

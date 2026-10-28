@@ -26,10 +26,10 @@ $fila = static function ( array $r, bool $propia ) use ( $alergenos ): void {
 	?>
 	<tr<?php echo $r['activa'] ? '' : ' class="asde-fila--cancelada"'; ?>>
 		<td data-label="<?php echo esc_attr( esc_attr__( 'Recipe', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
-			<a href="<?php echo esc_url( Pages::url( 'eventos_recetas', array( 'receta' => (string) $r['id'] ) ) ); ?>"><?php echo esc_html( $propia ? $r['nombre'] : asde_t( $r['nombre'] ) ); ?></a>
+			<a href="<?php echo esc_url( Pages::url( 'eventos_recetas', array( 'receta' => (string) $r['id'] ) ) ); ?>"><?php echo esc_html( $propia ? $r['nombre'] : asde_guardado( $r['nombre'] ) ); ?></a>
 			<?php echo wp_kses( $r['activa'] ? '' : ' <span class="asde-badge">' . esc_html( __( 'Archived', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) . '</span>', asde_html_permitido() ); ?>
 		</td>
-		<td data-label="<?php echo esc_attr( esc_attr__( 'Type', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( asde_t( RecetasTable::TIPOS[ $r['tipo'] ] ?? 'Otro' ) ); ?></td>
+		<td data-label="<?php echo esc_attr( esc_attr__( 'Type', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( ( RecetasTable::tipos()[ $r['tipo'] ] ?? 'Otro' ) ); ?></td>
 		<td data-label="<?php echo esc_attr( esc_attr__( 'Base portions', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo (int) $r['porciones']; ?></td>
 		<td data-label="<?php echo esc_attr( esc_attr__( 'Allergens', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
 			<?php if ( $a['contiene'] ) : ?>
@@ -89,8 +89,8 @@ $cabecera = static function (): void {
 		<label for="asde-rc-tipo"><?php esc_html_e( 'Type', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 		<select id="asde-rc-tipo" name="tipo">
 			<option value=""><?php esc_html_e( 'All', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></option>
-			<?php foreach ( RecetasTable::TIPOS as $k => $n ) : ?>
-				<option value="<?php echo esc_attr( $k ); ?>" <?php selected( $tipo, $k ); ?>><?php echo esc_html( asde_t( $n ) ); ?></option>
+			<?php foreach ( RecetasTable::tipos() as $k => $n ) : ?>
+				<option value="<?php echo esc_attr( $k ); ?>" <?php selected( $tipo, $k ); ?>><?php echo esc_html(  $n  ); ?></option>
 			<?php endforeach; ?>
 		</select>
 		<label for="asde-rc-q" class="screen-reader-text"><?php esc_html_e( 'Search', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>

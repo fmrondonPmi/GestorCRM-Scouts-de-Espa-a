@@ -98,7 +98,7 @@ final class MisPagosView extends View {
 					$pagos[] = array(
 						'fecha'    => (string) $m['fecha'],
 						'concepto' => sprintf( /* translators: 1: text, 2: text */ __( 'Group fee %1$s · family %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $m['ronda'], $f['numero'] ),
-						'metodo'   => asde_t( MovimientosTable::METODOS[ $m['metodo'] ] ?? ( 'banco' === $m['origen'] ? 'Transferencia' : '' ) ),
+						'metodo'   => ( MovimientosTable::metodos()[ $m['metodo'] ] ?? ( 'banco' === $m['origen'] ? 'Transferencia' : '' ) ),
 						'importe'  => (float) $m['importe'],
 						'ref'      => (string) $m['referencia'],
 					);
@@ -117,7 +117,7 @@ final class MisPagosView extends View {
 				$pagos[] = array(
 					'fecha'    => (string) $p['pago_fecha'],
 					'concepto' => $concepto,
-					'metodo'   => asde_t( PedidosTable::METODOS[ $p['pago_metodo'] ] ?? '' ),
+					'metodo'   => ( PedidosTable::metodos()[ $p['pago_metodo'] ] ?? '' ),
 					'importe'  => (float) $p['pago_importe'],
 					'ref'      => (string) $p['pago_ref'],
 				);
@@ -146,7 +146,7 @@ final class MisPagosView extends View {
 					$pagos[]     = array(
 						'fecha'    => (string) $m['fecha'],
 						'concepto' => $devolucion ? sprintf( /* translators: %s: text */ __( '%s · refund', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $concepto ) : $concepto,
-						'metodo'   => asde_t( EventosMovimientos::FORMAS[ $m['forma'] ] ?? '' ),
+						'metodo'   => ( EventosMovimientos::formas()[ $m['forma'] ] ?? '' ),
 						'importe'  => $devolucion ? -(float) $m['importe'] : (float) $m['importe'],
 						'ref'      => (string) $m['referencia'],
 					);

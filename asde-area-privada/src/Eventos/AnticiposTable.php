@@ -18,10 +18,13 @@ final class AnticiposTable {
 	public const ENTREGADO = 'entregado';
 	public const LIQUIDADO = 'liquidado';
 
-	public const ESTADOS = array(
-		self::ENTREGADO => 'Entregado, por liquidar',
-		self::LIQUIDADO => 'Liquidado',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function estados(): array {
+		return array(
+		self::ENTREGADO => __( 'Handed over, to be settled', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::LIQUIDADO => __( 'Settled', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
 	public static function table(): string {
 		global $wpdb;

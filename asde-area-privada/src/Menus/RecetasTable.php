@@ -16,15 +16,18 @@ defined( 'ABSPATH' ) || exit;
  */
 final class RecetasTable {
 
-	public const TIPOS = array(
-		'desayuno' => 'Desayuno',
-		'entrante' => 'Entrante',
-		'primero'  => 'Primer plato',
-		'segundo'  => 'Segundo plato',
-		'postre'   => 'Postre',
-		'merienda' => 'Merienda',
-		'otro'     => 'Otro',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function tipos(): array {
+		return array(
+		'desayuno' => __( 'Breakfast', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'entrante' => __( 'Starter', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'primero'  => __( 'First course', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'segundo'  => __( 'Main course', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'postre'   => __( 'Dessert', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'merienda' => __( 'Afternoon snack', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'otro'     => __( 'Other', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
 	/** Líneas como mucho por receta. */
 	public const MAX_LINEAS = 40;
@@ -153,7 +156,7 @@ final class RecetasTable {
 		}
 		$fila = array(
 			'nombre'        => $nombre,
-			'tipo'          => isset( self::TIPOS[ $d['tipo'] ?? '' ] ) ? (string) $d['tipo'] : 'otro',
+			'tipo'          => isset( self::tipos()[ $d['tipo'] ?? '' ] ) ? (string) $d['tipo'] : 'otro',
 			'porciones'     => $porciones,
 			'elaboracion'   => mb_substr( sanitize_textarea_field( (string) ( $d['elaboracion'] ?? '' ) ), 0, 4000 ),
 			'observaciones' => mb_substr( sanitize_textarea_field( (string) ( $d['observaciones'] ?? '' ) ), 0, 1000 ),

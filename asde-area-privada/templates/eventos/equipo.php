@@ -91,14 +91,14 @@ $r        = $check['ratio'];
 									<input type="hidden" name="fila" value="<?php echo (int) $m['id']; ?>">
 									<label class="screen-reader-text" for="asde-papel-<?php echo (int) $m['id']; ?>"><?php esc_html_e( 'Function in the team', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 									<select id="asde-papel-<?php echo (int) $m['id']; ?>" name="papel">
-										<?php foreach ( asde_ta( InscripcionesTable::PAPELES ) as $papel => $etiqueta ) : ?>
+										<?php foreach ( ( InscripcionesTable::papeles() ) as $papel => $etiqueta ) : ?>
 											<option value="<?php echo esc_attr( $papel ); ?>" <?php selected( $m['papel'], $papel ); ?>><?php echo esc_html( $etiqueta ); ?></option>
 										<?php endforeach; ?>
 									</select>
 									<button type="submit" class="asde-btn-link"><?php esc_html_e( 'Change', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 								</form>
 							<?php else : ?>
-								<?php echo esc_html( asde_t( InscripcionesTable::PAPELES[ $m['papel'] ] ?? $m['papel'] ) ); ?>
+								<?php echo esc_html( ( InscripcionesTable::papeles()[ $m['papel'] ] ?? $m['papel'] ) ); ?>
 							<?php endif; ?>
 						</td>
 						<td data-label="<?php echo esc_attr( esc_attr__( 'Qualification', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( $check['leido'] ? $titulos[ $dato['titulo'] ] : '—' ); ?></td>
@@ -150,7 +150,7 @@ $r        = $check['ratio'];
 					</label>
 					<label><?php esc_html_e( 'Function in the team', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>
 						<select name="papel">
-							<?php foreach ( asde_ta( InscripcionesTable::PAPELES ) as $papel => $etiqueta ) : ?>
+							<?php foreach ( ( InscripcionesTable::papeles() ) as $papel => $etiqueta ) : ?>
 								<option value="<?php echo esc_attr( $papel ); ?>" <?php selected( 'monitor', $papel ); ?>><?php echo esc_html( $etiqueta ); ?></option>
 							<?php endforeach; ?>
 						</select>

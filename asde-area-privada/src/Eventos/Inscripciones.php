@@ -778,7 +778,7 @@ final class Inscripciones {
 
 	/** Transporte, quién recoge y observaciones (cifradas). */
 	private static function leer( array $e, string $num, array $in ): array {
-		$transporte = static fn( string $k ): string => isset( InscripcionesTable::TRANSPORTES[ $in[ $k ] ?? '' ] ) ? (string) $in[ $k ] : '';
+		$transporte = static fn( string $k ): string => isset( InscripcionesTable::transportes()[ $in[ $k ] ?? '' ] ) ? (string) $in[ $k ] : '';
 		$recoge     = mb_substr( trim( sanitize_textarea_field( (string) ( $in['recoge'] ?? '' ) ) ), 0, self::MAX_TEXTO );
 		$obs        = mb_substr( trim( sanitize_textarea_field( (string) ( $in['observaciones'] ?? '' ) ) ), 0, self::MAX_TEXTO );
 		return array(

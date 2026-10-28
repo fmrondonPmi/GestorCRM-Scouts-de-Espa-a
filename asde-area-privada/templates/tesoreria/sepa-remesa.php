@@ -33,10 +33,10 @@ $pendientes = array_filter( $lineas, static fn( $l ) => Remesas::PENDIENTE === $
 <section class="asde-card">
 	<header class="asde-card__header asde-card__header--split">
 		<h2 class="asde-card__title"><?php esc_html_e( 'Batch', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <?php echo esc_html( $r['numero'] ); ?></h2>
-		<span class="asde-badge"><?php echo esc_html( asde_t( Remesas::ESTADOS[ $r['estado'] ] ?? $r['estado'] ) ); ?></span>
+		<span class="asde-badge"><?php echo esc_html( ( Remesas::estados()[ $r['estado'] ] ?? $r['estado'] ) ); ?></span>
 	</header>
 	<ul class="asde-resumen">
-		<li><?php esc_html_e( 'Round', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <strong><?php echo esc_html( $r['ronda'] ); ?></strong> · <?php echo esc_html( asde_t( (string) $r['plazo'] ) ); ?></li>
+		<li><?php esc_html_e( 'Round', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <strong><?php echo esc_html( $r['ronda'] ); ?></strong> · <?php echo esc_html( asde_guardado( (string) $r['plazo'] ) ); ?></li>
 		<li><?php esc_html_e( 'Collection date', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <strong><?php echo esc_html( $fmt_fecha( $r['fecha_cobro'] ) ); ?></strong></li>
 		<li><strong><?php echo esc_html( Remesas::adeudos( (int) $r['adeudos'] ) ); ?></strong> · <strong><?php echo esc_html( Calculadora::euros( $r['total'] ) ); ?></strong></li>
 	</ul>

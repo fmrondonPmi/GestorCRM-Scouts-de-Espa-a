@@ -28,11 +28,14 @@ final class Solicitudes {
 	public const APROBADA  = 'aprobada';
 	public const RECHAZADA = 'rechazada';
 
-	public const ESTADOS = array(
-		self::PENDIENTE => 'Pendiente',
-		self::APROBADA  => 'Aprobada',
-		self::RECHAZADA => 'Rechazada',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function estados(): array {
+		return array(
+		self::PENDIENTE => __( 'Pending', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::APROBADA  => __( 'Approved', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::RECHAZADA => __( 'Rejected', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
 	/** Quién la pide: la propia persona o su familia. */
 	public const SOCIO = 'socio';

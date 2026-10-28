@@ -127,10 +127,10 @@ final class InventarioView extends InventarioBaseView {
 		if ( ! is_array( $resultado ) ) {
 			wp_die( esc_html__( 'Download link not valid or expired.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
-		$filas = array( array_merge( array( __( 'Row', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ), array_map( static fn( $c ) => asde_t( $c[0] ), Importador::COLUMNAS ), array( __( 'Reason for the error', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) ) );
+		$filas = array( array_merge( array( __( 'Row', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ), array_map( static fn( $c ) =>  $c[0] , Importador::columnas() ), array( __( 'Reason for the error', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) ) );
 		foreach ( $resultado['errores'] as $e ) {
 			$datos = array();
-			foreach ( array_keys( Importador::COLUMNAS ) as $col ) {
+			foreach ( array_keys( Importador::columnas() ) as $col ) {
 				$datos[] = (string) ( $e['datos'][ $col ] ?? '' );
 			}
 			$filas[] = array_merge( array( (string) $e['fila'] ), $datos, array( $e['motivo'] ) );

@@ -97,7 +97,7 @@ if ( $solicitud && \AsdeBalears\AreaPrivada\Usuarios\Solicitudes::POR_ENLACE ===
 			<div>
 				<dt><?php esc_html_e( 'Role in the CRM', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></dt>
 				<?php /* v0.25.1: un cargo que no está en la lista se enseña tal cual (antes, error 500). */ ?>
-				<dd><?php echo esc_html( asde_t( Catalogo::ENUMS['cargoeducativo_c'][ $p->cargo ] ?? $p->cargo ) ); ?></dd>
+				<dd><?php echo esc_html( ( Catalogo::enums()['cargoeducativo_c'][ $p->cargo ] ?? $p->cargo ) ); ?></dd>
 			</div>
 		<?php endif; ?>
 		<?php foreach ( $p->tutores as $n => $t ) : ?>
@@ -115,7 +115,7 @@ if ( $solicitud && \AsdeBalears\AreaPrivada\Usuarios\Solicitudes::POR_ENLACE ===
 	<p class="asde-muted"><?php esc_html_e( 'CRM data, read-only: not stored on the website. If something is wrong, correct it in the CRM.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 	<?php if ( $bloqueado ) : ?>
 		<div class="asde-notice asde-notice--warning" role="status">
-			<?php esc_html_e( 'The local member number on this record is', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <strong><?php echo esc_html( mb_strtolower( asde_t( Numeracion::ETIQUETAS[ $numero['estado'] ] ) ) ); ?></strong>
+			<?php esc_html_e( 'The local member number on this record is', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <strong><?php echo esc_html( mb_strtolower( ( Numeracion::etiquetas()[ $numero['estado'] ] ) ) ); ?></strong>
 			<?php esc_html_e( 'and cannot be used as a username. Correct it in the CRM ("Local/territorial member no." field); you can see all the incidents in', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>
 			<a href="<?php echo esc_url( add_query_arg( 'ver', 'incidencias', $url_personas ) ); ?>"><?php esc_html_e( 'People', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a>.
 		</div>

@@ -33,20 +33,26 @@ final class Altas {
 	public const EDAD_ADULTA = 18;
 
 	/** Valores de `stic_gender_c` en el CRM de ASDE (doc 04, §7.7). */
-	public const GENEROS = array(
-		'masculino' => 'Masculino',
-		'femenino'  => 'Femenino',
-		'nobinario' => 'No binario',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function generos(): array {
+		return array(
+		'masculino' => __( 'Male', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'femenino'  => __( 'Female', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'nobinario' => __( 'Non-binary', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
 	/** Motivos de baja (`end_reason`); «cambioseccion» lo pone el cambio de sección. */
-	public const MOTIVOS_BAJA = array(
-		'personal'     => 'Motivos personales',
-		'economy'      => 'Motivos económicos',
-		'disagreement' => 'Desacuerdo',
-		'decease'      => 'Fallecimiento',
-		'other'        => 'Otro motivo',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function motivos_baja(): array {
+		return array(
+		'personal'     => __( 'Personal reasons', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'economy'      => __( 'Financial reasons', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'disagreement' => __( 'Disagreement', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'decease'      => __( 'Death', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'other'        => __( 'Other reason', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
 	/** Campos de la ficha que se pueden rellenar al dar de alta a una persona. */
 	public const CAMPOS_PERSONA = array( 'first_name', 'last_name', 'birthdate', 'stic_gender_c', 'stic_identification_number_c', 'email1', 'phone_mobile', 'tutor1_nombre_c', 'tutor1_apellidos_c', 'tutor1_email_c', 'tutor1_movil_c', 'tutor2_nombre_c', 'tutor2_apellidos_c', 'tutor2_email_c', 'tutor2_movil_c' );
@@ -272,7 +278,7 @@ final class Altas {
 			return $previo;
 		}
 		$fin = self::fecha( $fin );
-		if ( ! isset( self::MOTIVOS_BAJA[ $motivo ] ) || '' === $fin ) {
+		if ( ! isset( self::motivos_baja()[ $motivo ] ) || '' === $fin ) {
 			return new \WP_Error( 'asde_baja', __( 'Choose the date and reason for the withdrawal.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( self::futura( $fin ) ) {
@@ -558,7 +564,7 @@ final class Altas {
 			return new \WP_Error( 'asde_alta_datos', __( 'The date of birth is not valid.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$d['birthdate'] = $nacimiento;
-		if ( ! isset( self::GENEROS[ $d['stic_gender_c'] ] ) ) {
+		if ( ! isset( self::generos()[ $d['stic_gender_c'] ] ) ) {
 			return new \WP_Error( 'asde_alta_datos', __( 'The gender is not valid.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( isset( $d['stic_identification_number_c'] ) ) {

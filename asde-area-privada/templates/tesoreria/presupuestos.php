@@ -137,7 +137,7 @@ $sec = Secciones::all();
 							<td data-label="<?php echo esc_attr( esc_attr__( 'Spent', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( $e( $pr['ejecucion']['gastado'] ) ); ?></td>
 							<td data-label="<?php echo esc_attr( esc_attr__( 'Fundraising target', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( $e( $r['recaudacion'] ) ); ?></td>
 							<td data-label="<?php echo esc_attr( esc_attr__( 'Balance', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><strong<?php echo $r['saldo'] < 0 ? ' class="asde-negativo"' : ''; ?>><?php echo esc_html( $e( $r['saldo'] ) ); ?></strong></td>
-							<td data-label="<?php echo esc_attr( esc_attr__( 'Status', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( asde_t( \AsdeBalears\AreaPrivada\Presupuestos\EstadosTable::ETIQUETAS[ $pr['estado'] ] ) ); ?></td>
+							<td data-label="<?php echo esc_attr( esc_attr__( 'Status', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( ( \AsdeBalears\AreaPrivada\Presupuestos\EstadosTable::etiquetas()[ $pr['estado'] ] ) ); ?></td>
 						</tr>
 					<?php endforeach; ?>
 				</tbody>

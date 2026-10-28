@@ -82,7 +82,7 @@ $crm = new Asde_Prueba_Crm(
 	$grupo['crm_id']
 );
 Grupo::forzar( $grupo );
-\AsdeBalears\AreaPrivada\Domain\Modulos::guardar( (string) $grupo['numero'], array_keys( \AsdeBalears\AreaPrivada\Domain\Modulos::LISTA ) );
+\AsdeBalears\AreaPrivada\Domain\Modulos::guardar( (string) $grupo['numero'], array_keys( \AsdeBalears\AreaPrivada\Domain\Modulos::lista() ) );
 $crm->activar();
 Escritura::usar_para_pruebas( $crm );
 \AsdeBalears\AreaPrivada\Menus\Biblioteca::sembrar();

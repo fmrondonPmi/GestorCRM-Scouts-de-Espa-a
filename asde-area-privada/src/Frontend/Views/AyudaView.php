@@ -24,7 +24,7 @@ final class AyudaView extends View {
 		$manual = Ayuda::manual_para( Ambito::actual() );
 		$datos  = array(
 			'volver'     => self::es_modal() ? '' : $this->url( $this->pagina ),
-			'castellano' => 'es' === Idioma::actual(),
+			'castellano' => str_starts_with( determine_locale(), 'es' ),
 		);
 		if ( Ayuda::pide_completo() ) {
 			$m     = '' !== Ayuda::manual_pedido() ? Ayuda::manual_pedido() : $manual;

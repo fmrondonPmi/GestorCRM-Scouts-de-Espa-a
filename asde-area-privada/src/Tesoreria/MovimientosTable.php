@@ -21,14 +21,17 @@ final class MovimientosTable {
 	public const PAGO   = 'pago';
 	public const AJUSTE = 'ajuste';
 
-	public const METODOS = array(
-		'transferencia' => 'Transferencia',
-		'efectivo'      => 'Efectivo',
-		'bizum'         => 'Bizum',
-		'tarjeta'       => 'Tarjeta',
-		'domiciliacion' => 'Domiciliación SEPA',
-		'otro'          => 'Otro',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function metodos(): array {
+		return array(
+		'transferencia' => __( 'Transfer', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'efectivo'      => __( 'Cash', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'bizum'         => __( 'Bizum', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'tarjeta'       => __( 'Card', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'domiciliacion' => __( 'SEPA direct debit', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'otro'          => __( 'Other', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
 	public static function table(): string {
 		global $wpdb;
@@ -84,7 +87,7 @@ final class MovimientosTable {
 				'tipo'           => $tipo,
 				'fecha'          => $fecha,
 				'importe'        => round( $importe, 2 ),
-				'metodo'         => self::PAGO === $tipo && isset( self::METODOS[ $metodo ] ) ? $metodo : '',
+				'metodo'         => self::PAGO === $tipo && isset( self::metodos()[ $metodo ] ) ? $metodo : '',
 				'referencia'     => mb_substr( sanitize_text_field( $referencia ), 0, 120 ),
 				'nota'           => mb_substr( sanitize_text_field( $nota ), 0, 255 ),
 				'origen'         => in_array( $origen, array( 'manual', 'banco', 'sepa' ), true ) ? $origen : 'manual',

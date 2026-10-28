@@ -52,7 +52,7 @@ final class TiendaGestionView extends TiendaBaseView {
 		$lista    = $this->filtrar( $todos, $personas, $filtro, $seccion, $this->get( 'q' ) );
 
 		$cuentas = array();
-		foreach ( array_keys( PedidosTable::FILTROS ) as $f ) {
+		foreach ( array_keys( PedidosTable::filtros() ) as $f ) {
 			$cuentas[ $f ] = count( array_filter( $todos, static fn( $p ) => PedidosTable::cumple( $p, $f ) ) );
 		}
 		$activos   = array_filter( $todos, static fn( $p ) => null === $p['cancelado_en'] );
@@ -122,7 +122,7 @@ final class TiendaGestionView extends TiendaBaseView {
 	}
 
 	private function filtro(): string {
-		return isset( PedidosTable::FILTROS[ $this->get( 'estado' ) ] ) ? $this->get( 'estado' ) : '';
+		return isset( PedidosTable::filtros()[ $this->get( 'estado' ) ] ) ? $this->get( 'estado' ) : '';
 	}
 
 	/** @param array<string, \AsdeBalears\AreaPrivada\Domain\Persona> $personas */
@@ -239,7 +239,7 @@ final class TiendaGestionView extends TiendaBaseView {
 			$filas  = array();
 			$suma   = array( 0, 0.0, 0.0, 0.0 );
 			foreach ( Informes::por_forma( $pedidos ) as $forma => $d ) {
-				$filas[] = array( '' !== $forma ? asde_t( PedidosTable::FORMAS[ $forma ] ) : __( 'Not stated', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $d['pedidos'], round( $d['total'], 2 ), round( $d['cobrado'], 2 ), round( $d['pendiente'], 2 ) );
+				$filas[] = array( '' !== $forma ? ( PedidosTable::formas()[ $forma ] ) : __( 'Not stated', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $d['pedidos'], round( $d['total'], 2 ), round( $d['cobrado'], 2 ), round( $d['pendiente'], 2 ) );
 				$suma[0] += $d['pedidos'];
 				$suma[1] += $d['total'];
 				$suma[2] += $d['cobrado'];
@@ -257,7 +257,7 @@ final class TiendaGestionView extends TiendaBaseView {
 			foreach ( Informes::pendientes( $pedidos ) as $p ) {
 				$importe = Servicio::importe_a_cobrar( $p );
 				$suma   += $importe;
-				$filas[] = array( PedidosTable::numero( $p ), Servicio::comprador( $p, $personas[ $p['socio'] ] ?? null ), $fecha( $p['creado'] ), asde_t( PedidosTable::FORMAS[ $p['forma_pago'] ] ?? 'Sin indicar' ), (int) $p['dias'], round( $importe, 2 ) );
+				$filas[] = array( PedidosTable::numero( $p ), Servicio::comprador( $p, $personas[ $p['socio'] ] ?? null ), $fecha( $p['creado'] ), ( PedidosTable::formas()[ $p['forma_pago'] ] ?? 'Sin indicar' ), (int) $p['dias'], round( $importe, 2 ) );
 			}
 			$cabecera = array( __( 'Order', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Who', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Date', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Payment method', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Days waiting', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Amount', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			$tipos    = array( 'texto', 'texto', 'texto', 'texto', 'entero', 'euros' );
@@ -328,11 +328,11 @@ final class TiendaGestionView extends TiendaBaseView {
 				$insignias,
 				$num( $p['total'] ) . ( $p['provisional'] ? __( ' + badges to be confirmed', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : '' ),
 				null !== $p['pago_en'] ? $fecha( $p['pago_fecha'] ) . ' · ' . $num( $p['pago_importe'] ) : '',
-				asde_t( PedidosTable::METODOS[ $p['pago_metodo'] ] ?? '' ),
+				( PedidosTable::metodos()[ $p['pago_metodo'] ] ?? '' ),
 				null !== $p['pedido_en'] ? $p['pedido_ref'] : '',
 				$fecha( $p['entregado_en'] ),
 				$fecha( $p['recibido_en'] ),
-				asde_t( PedidosTable::ESTADOS[ PedidosTable::estado( $p ) ] ),
+				( PedidosTable::estados()[ PedidosTable::estado( $p ) ] ),
 			);
 			fputcsv( $out, array_map( array( Generador::class, 'celda_segura' ), $fila ), ';' );
 		}
@@ -422,14 +422,14 @@ final class TiendaGestionView extends TiendaBaseView {
 				$metodo  = sanitize_key( $this->post( 'metodo' ) );
 				$fecha   = $this->post( 'fecha' );
 				$importe = (float) str_replace( ',', '.', $this->post( 'importe' ) );
-				if ( ! isset( PedidosTable::METODOS[ $metodo ] ) || ! preg_match( '/^\d{4}-\d{2}-\d{2}$/', $fecha ) || $fecha > wp_date( 'Y-m-d' ) || $importe < 0 ) {
+				if ( ! isset( PedidosTable::metodos()[ $metodo ] ) || ! preg_match( '/^\d{4}-\d{2}-\d{2}$/', $fecha ) || $fecha > wp_date( 'Y-m-d' ) || $importe < 0 ) {
 					$error = __( 'State how it was paid (cash, deposit, Bizum or card terminal), the date (not later than today) and the amount.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 					break;
 				}
 				PedidosTable::marcar_pago( $p['id'], $fecha, $metodo, $importe, $this->post( 'referencia' ) );
 				Avisos::enviar( (array) PedidosTable::obtener( $p['id'] ), Avisos::PAGADO ); // v0.39: aviso a quien hizo el pedido.
 				Logger::log( 'uniforme_pago', 'uniforme', (string) $p['id'], array( 'metodo' => $metodo, 'importe' => $importe ) );
-				$hecho = sprintf( /* translators: 1: text, 2: text, 3: text */ __( 'Payment of %1$s (%2$s) validated on order %3$s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Calculadora::euros( $importe ), mb_strtolower( asde_t( PedidosTable::METODOS[ $metodo ] ) ), $num );
+				$hecho = sprintf( /* translators: 1: text, 2: text, 3: text */ __( 'Payment of %1$s (%2$s) validated on order %3$s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Calculadora::euros( $importe ), mb_strtolower( ( PedidosTable::metodos()[ $metodo ] ) ), $num );
 				break;
 
 			case 'uniforme_deshacer_pago':

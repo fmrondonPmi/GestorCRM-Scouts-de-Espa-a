@@ -239,7 +239,7 @@ if ( $scouter_p ) {
 	$ok( $p->ve_campo( 'formacionscout_c' ) && $p->ve_campo( 'certificadods_c' ) && $p->ve_campo( 'cargoeducativo_c' ), 'ficha de un scouter adulto: con formación, certificado y cargo' );
 }
 $def = CamposFicha::todos();
-$ok( 'alimentacion' === $def['alimentacion_alergia_c'][1] && 'salud' === $def['alergias_c'][1] && isset( CamposFicha::GRUPOS['alimentacion'] ), 'salud y alimentación en apartados separados' );
+$ok( 'alimentacion' === $def['alimentacion_alergia_c'][1] && 'salud' === $def['alergias_c'][1] && isset( CamposFicha::grupos()['alimentacion'] ), 'salud y alimentación en apartados separados' );
 $ok( PermisosFicha::EDITAR === $perm( $u_coord, $nino )->accion_rol( 'alimentacion_alerg_alimentos_c' ), 'Coordinación también anota en los textos de alimentación' );
 
 // ---------------------------------------------------------------------------

@@ -155,7 +155,7 @@ $control = static function ( string $campo, array $f ) use ( $pendientes ): stri
 			}
 			?>
 			<?php if ( '' !== trim( $p->cargo ) && $perm->ve_campo( 'cargoeducativo_c' ) ) : ?>
-				<span class="asde-muted"><?php echo esc_html( asde_t( Catalogo::ENUMS['cargoeducativo_c'][ $p->cargo ] ?? $p->cargo ) ); ?></span>
+				<span class="asde-muted"><?php echo esc_html( ( Catalogo::enums()['cargoeducativo_c'][ $p->cargo ] ?? $p->cargo ) ); ?></span>
 			<?php endif; ?>
 		</p>
 	</header>
@@ -238,7 +238,7 @@ $control = static function ( string $campo, array $f ) use ( $pendientes ): stri
 	<?php wp_nonce_field( 'asde_ficha_' . $p->num_socio_asde ); ?>
 	<input type="hidden" name="asde_action" value="guardar_ficha">
 	<input type="hidden" name="socio" value="<?php echo esc_attr( $p->num_socio_asde ); ?>">
-	<?php foreach ( asde_ta( CamposFicha::GRUPOS ) as $grupo => $titulo ) : ?>
+	<?php foreach ( ( CamposFicha::grupos() ) as $grupo => $titulo ) : ?>
 		<?php $del_grupo = array_filter( $campos, static fn( $f ) => $f['grupo'] === $grupo ); ?>
 		<?php if ( ! $del_grupo ) : ?>
 			<?php continue; ?>
@@ -293,7 +293,7 @@ if ( '' !== ( $sepa ?? '' ) ) {
 						<td data-label="<?php echo esc_attr( esc_attr__( 'Item of data', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( $f['etiqueta'] ); ?></td>
 						<td data-label="<?php echo esc_attr( esc_attr__( 'New value', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( FichaService::mostrar( $c['nuevo'], $f['meta'] ) ); ?></td>
 						<td data-label="<?php echo esc_attr( esc_attr__( 'Status', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
-							<?php echo esc_html( asde_t( Cambios::ESTADOS[ $c['estado'] ] ?? $c['estado'] ) ); ?>
+							<?php echo esc_html( ( Cambios::estados()[ $c['estado'] ] ?? $c['estado'] ) ); ?>
 							<?php if ( '' !== $c['motivo'] && in_array( $c['estado'], array( Cambios::RECHAZADO, Cambios::ERROR ), true ) ) : ?>
 								<br><span class="asde-help asde-help--warning"><?php echo esc_html( $c['motivo'] ); ?></span>
 							<?php endif; ?>

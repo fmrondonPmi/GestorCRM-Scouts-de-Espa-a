@@ -14,7 +14,7 @@ defined( 'ABSPATH' ) || exit;
 ?>
 <section class="asde-card" data-asde-plegable="email-detalle">
 	<header class="asde-card__header asde-card__header--split">
-		<h2 class="asde-card__title"><?php echo esc_html( ( asde_t( RegistroEmails::TIPOS[ $fila['tipo'] ] ?? $fila['tipo'] ) ) . ' · ' . $fila['login'] ); ?></h2>
+		<h2 class="asde-card__title"><?php echo esc_html( ( ( RegistroEmails::tipos()[ $fila['tipo'] ] ?? $fila['tipo'] ) ) . ' · ' . $fila['login'] ); ?></h2>
 		<a href="<?php echo esc_url( $url ); ?>"><?php esc_html_e( '← Email log', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a>
 	</header>
 	<dl class="asde-datos">
@@ -29,7 +29,7 @@ defined( 'ABSPATH' ) || exit;
 		<div>
 			<dt><?php esc_html_e( 'Status', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></dt>
 			<dd>
-				<span class="asde-badge asde-badge--email-<?php echo esc_attr( $fila['estado'] ); ?>"><?php echo esc_html( asde_t( RegistroEmails::ESTADOS[ $fila['estado'] ] ?? $fila['estado'] ) ); ?></span>
+				<span class="asde-badge asde-badge--email-<?php echo esc_attr( $fila['estado'] ); ?>"><?php echo esc_html( ( RegistroEmails::estados()[ $fila['estado'] ] ?? $fila['estado'] ) ); ?></span>
 				<?php if ( '' !== $fila['error'] ) : ?>
 					<br><span class="asde-help asde-help--warning"><?php echo esc_html( $fila['error'] ); ?></span>
 				<?php endif; ?>

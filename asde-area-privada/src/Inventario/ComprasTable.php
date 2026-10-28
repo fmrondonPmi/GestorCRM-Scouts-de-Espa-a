@@ -31,13 +31,16 @@ final class ComprasTable {
 	public const CANCELADA = 'cancelada';
 	public const COMPRADA  = 'comprada';
 
-	public const ESTADOS = array(
-		self::PENDIENTE => 'Pendiente del visto bueno',
-		self::APROBADA  => 'Con el visto bueno',
-		self::COMPRADA  => 'Comprada',
-		self::RECHAZADA => 'Rechazada',
-		self::CANCELADA => 'Cancelada',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function estados(): array {
+		return array(
+		self::PENDIENTE => __( 'Pending approval', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::APROBADA  => __( 'Approved', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::COMPRADA  => __( 'Bought', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::RECHAZADA => __( 'Rejected', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::CANCELADA => __( 'Cancelled', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
 	public const MAX_LINEAS = 200;
 

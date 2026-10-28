@@ -23,23 +23,29 @@ defined( 'ABSPATH' ) || exit;
  */
 final class PedidosTable {
 
-	public const METODOS = array(
-		'efectivo' => 'Efectivo',
-		'ingreso'  => 'Ingreso en cuenta',
-		'bizum'    => 'Bizum',
-		'tpv'      => 'Datáfono / TPV', // v0.46 (doc 48, T3): cobro con el datáfono del grupo, en persona.
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function metodos(): array {
+		return array(
+		'efectivo' => __( 'Cash', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'ingreso'  => __( 'Deposit into account', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'bizum'    => __( 'Bizum', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'tpv'      => __( 'Card terminal / POS', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), // v0.46 (doc 48, T3): cobro con el datáfono del grupo, en persona.
 	);
+	}
 
 	/**
 	 * v0.39 (doc 48, fase 3): cómo elige pagar quien compra y, entre paréntesis, el método con el que Tesorería
 	 * lo valida. «En físico» (a Tesorería) solo lo puede elegir un socio/a (P-174).
 	 */
-	public const FORMAS = array(
-		'transferencia' => 'Transferencia',
-		'bizum'         => 'Bizum',
-		'fisico'        => 'En físico (a Tesorería)',
-		'datafono'      => 'Datáfono (tarjeta, en persona)', // v0.46: solo si el grupo lo ha activado.
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function formas(): array {
+		return array(
+		'transferencia' => __( 'Transfer', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'bizum'         => __( 'Bizum', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'fisico'        => __( 'In person (to Treasury)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'datafono'      => __( 'Card terminal (card, in person)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), // v0.46: solo si el grupo lo ha activado.
 	);
+	}
 
 	public const METODO_DE_FORMA = array(
 		'transferencia' => 'ingreso',
@@ -71,16 +77,19 @@ final class PedidosTable {
 	public const RECIBIDOS     = 'recibidos';
 	public const CANCELADOS    = 'cancelados';
 
-	public const FILTROS = array(
-		''                  => 'En curso',
-		self::SIN_PAGAR     => 'Pendientes de pago',
-		self::POR_PEDIR     => 'Pendientes de incluir en el pedido',
-		self::POR_ENTREGAR  => 'Pendientes de entregar',
-		self::POR_CONFIRMAR => 'Entregados sin confirmar',
-		self::RECIBIDOS     => 'Recibidos',
-		self::CANCELADOS    => 'Cancelados',
-		'todos'             => 'Todos',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function filtros(): array {
+		return array(
+		''                  => __( 'In progress', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::SIN_PAGAR     => __( 'Pending payment', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::POR_PEDIR     => __( 'Pending inclusion in the order', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::POR_ENTREGAR  => __( 'Pending delivery', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::POR_CONFIRMAR => __( 'Delivered, unconfirmed', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::RECIBIDOS     => __( 'Received', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		self::CANCELADOS    => __( 'Cancelled', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'todos'             => __( 'All', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
 	public static function table(): string {
 		global $wpdb;
@@ -162,7 +171,7 @@ final class PedidosTable {
 				'total'       => round( $total, 2 ),
 				'provisional' => $provisional ? 1 : 0,
 				'nota'        => mb_substr( sanitize_text_field( $nota ), 0, 255 ),
-				'forma_pago'  => isset( self::FORMAS[ $forma_pago ] ) ? $forma_pago : '',
+				'forma_pago'  => isset( self::formas()[ $forma_pago ] ) ? $forma_pago : '',
 				'creado'      => current_time( 'mysql', true ),
 				'creado_por'  => get_current_user_id(),
 			)
@@ -294,14 +303,17 @@ final class PedidosTable {
 		return 'solicitado';
 	}
 
-	public const ESTADOS = array(
-		'solicitado' => 'Solicitado',
-		'pagado'     => 'Pagado',
-		'pedido'     => 'En el pedido',
-		'entregado'  => 'Entregado',
-		'recibido'   => 'Recibido',
-		'cancelado'  => 'Cancelado',
+	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
+	public static function estados(): array {
+		return array(
+		'solicitado' => __( 'Requested', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'pagado'     => __( 'Paid', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'pedido'     => __( 'In the order', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'entregado'  => __( 'Delivered', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'recibido'   => __( 'Received', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'cancelado'  => __( 'Cancelled', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
+	}
 
 	public static function marcar_pago( int $id, string $fecha, string $metodo, float $importe, string $ref ): bool {
 		return self::actualizar(

@@ -95,7 +95,7 @@ $como    = static function ( int $uid ): void {
 	Ambito::olvidar( $uid );
 	Modulos::olvidar();
 };
-$todos_menos = static fn( string ...$quitar ) => array_values( array_diff( array_keys( Modulos::LISTA ), $quitar ) );
+$todos_menos = static fn( string ...$quitar ) => array_values( array_diff( array_keys( Modulos::lista() ), $quitar ) );
 $ver         = static function ( $vista, array $get = array() ): string {
 	$_GET = $get;
 	try {
@@ -109,7 +109,7 @@ try {
 	Grupo::forzar( $falso );
 	echo "== Parte A · Por defecto, todo activo ==\n";
 	$como( $u_teso );
-	$ok( ! array_filter( array_keys( Modulos::LISTA ), static fn( $m ) => Modulos::activo( $m ) === in_array( $m, Modulos::POR_DEFECTO_APAGADOS, true ) ), 'sin guardar nada, todos los módulos están activos (una instalación anterior no cambia) salvo los que nacen apagados (v0.32: la lista de espera)' );
+	$ok( ! array_filter( array_keys( Modulos::lista() ), static fn( $m ) => Modulos::activo( $m ) === in_array( $m, Modulos::POR_DEFECTO_APAGADOS, true ) ), 'sin guardar nada, todos los módulos están activos (una instalación anterior no cambia) salvo los que nacen apagados (v0.32: la lista de espera)' );
 	$ok( current_user_can( 'asde_inventario' ) && current_user_can( 'asde_tesoreria_config' ) && current_user_can( 'asde_mis_pagos' ), 'Tesorería tiene sus permisos de siempre' );
 
 	echo "\n== Parte B · Apagar un módulo ==\n";
@@ -120,7 +120,7 @@ try {
 	$ok( current_user_can( 'asde_tesoreria_config' ) && current_user_can( 'asde_tienda_pago' ), 'los demás módulos siguen igual' );
 	$como( $u_admin );
 	$ok( ! current_user_can( 'asde_inventario' ) && current_user_can( 'manage_options' ), 'también para un administrador mientras trabaja en ese grupo (wp-admin sigue igual)' );
-	$ok( Modulos::activo( Modulos::INVENTARIO, '998' ) && array_merge( Modulos::LISTA[ Modulos::LISTA_ESPERA ][2], Modulos::LISTA[ Modulos::EVENTOS ][2], Modulos::LISTA[ Modulos::REINTEGROS ][2], Modulos::LISTA[ Modulos::CAJA ][2] ) === Modulos::caps_quitadas( '998' ), 'otro grupo no se ve afectado (solo le falta lo que nace apagado: lista de espera y, desde la v0.35, eventos)' );
+	$ok( Modulos::activo( Modulos::INVENTARIO, '998' ) && array_merge( Modulos::lista()[ Modulos::LISTA_ESPERA ][2], Modulos::lista()[ Modulos::EVENTOS ][2], Modulos::lista()[ Modulos::REINTEGROS ][2], Modulos::lista()[ Modulos::CAJA ][2] ) === Modulos::caps_quitadas( '998' ), 'otro grupo no se ve afectado (solo le falta lo que nace apagado: lista de espera y, desde la v0.35, eventos)' );
 	$stored = get_option( 'asde_ap_modulos' );
 	$ok( array( '999' => array( 'inventario' => false, 'lista_espera' => true, 'eventos' => true, 'reintegros' => true, 'caja' => true ) ) === $stored, 'solo se guarda lo que no es el valor por defecto (lo apagado y lo encendido que nace apagado)' );
 
@@ -139,7 +139,7 @@ try {
 	Modulos::guardar( '999', $todos_menos( Modulos::TESORERIA, Modulos::TIENDA, Modulos::EVENTOS ) );
 	$como( $u_teso );
 	$ok( ! current_user_can( 'asde_mis_pagos' ) && ! current_user_can( 'asde_tienda_comprar' ), 'sin Tesorería, Uniformes ni Eventos, «Mis pagos» también se va' );
-	Modulos::guardar( '999', array_keys( Modulos::LISTA ) );
+	Modulos::guardar( '999', array_keys( Modulos::lista() ) );
 	$como( $u_teso );
 	$ok( current_user_can( 'asde_tesoreria_acceso' ) && current_user_can( 'asde_inventario' ) && array( 'lista_espera' => true, 'eventos' => true, 'reintegros' => true, 'caja' => true ) === ( get_option( 'asde_ap_modulos', array() )['999'] ?? null ), 'al activarlos de nuevo vuelve todo, y del grupo solo queda en la opción lo que nace apagado y se ha encendido (lista de espera y eventos)' );
 
@@ -152,14 +152,14 @@ try {
 	Modulos::olvidar();
 	$h = $ver( new SolicitarView(), array( 'grupo' => $real['id'] ) );
 	$ok( ! str_contains( $h, 'value="' . esc_attr( $real['id'] ) . '"' ), 'apagadas, el grupo no se puede elegir para pedir el acceso' );
-	Modulos::guardar( (string) $real['numero'], array_keys( Modulos::LISTA ) );
+	Modulos::guardar( (string) $real['numero'], array_keys( Modulos::lista() ) );
 	$clave = EnlaceScouters::clave( $real );
 	$h     = $ver( new AltaScoutersView(), array( 'grupo' => $real['id'], 'clave' => $clave ) );
 	$ok( str_contains( $h, 'name="documento"' ), 'con el alta de scouters activa, el enlace del grupo abre el formulario' );
 	Modulos::guardar( (string) $real['numero'], $todos_menos( Modulos::ALTA_SCOUTERS ) );
 	$h = $ver( new AltaScoutersView(), array( 'grupo' => $real['id'], 'clave' => $clave ) );
 	$ok( ! str_contains( $h, 'name="documento"' ), 'apagada, el mismo enlace ya no sirve' );
-	Modulos::guardar( (string) $real['numero'], array_keys( Modulos::LISTA ) );
+	Modulos::guardar( (string) $real['numero'], array_keys( Modulos::lista() ) );
 
 	echo "\n== Parte E · Pantalla de wp-admin ==\n";
 	$como( $u_admin );
