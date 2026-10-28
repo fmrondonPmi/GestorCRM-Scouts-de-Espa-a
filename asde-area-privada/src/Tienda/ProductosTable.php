@@ -109,8 +109,8 @@ final class ProductosTable {
 		}
 		$limite = trim( (string) ( $d['limite_persona'] ?? '' ) );
 		if ( '' !== $limite && ( ! preg_match( '/^\d{1,2}$/', $limite ) ) ) {
-			/* translators: %d: límite máximo */
-			$errores[] = sprintf( /* translators: %d: number */ __( 'The limit per person must be a number from 0 to %d (0 = no limit).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), self::MAX_LIMITE );
+			/* translators: %d: maximum limit */
+			$errores[] = sprintf( __( 'The limit per person must be a number from 0 to %d (0 = no limit).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), self::MAX_LIMITE );
 		}
 		if ( $errores ) {
 			return new \WP_Error( 'asde_tienda', implode( ' ', $errores ) );

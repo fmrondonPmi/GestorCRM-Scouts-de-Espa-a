@@ -20,8 +20,8 @@ final class Periodo {
 				'clave'    => $clave,
 				'desde'    => $m[1] . '-01-01',
 				'hasta'    => $m[1] . '-12-31',
-				/* translators: %s: año */
-				'etiqueta' => sprintf( /* translators: %s: text */ __( 'Year %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $m[1] ),
+				/* translators: %s: year */
+				'etiqueta' => sprintf( __( 'Year %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $m[1] ),
 			);
 		}
 		$ronda = 'r' === substr( $clave, 0, 1 ) && Config::es_ronda( substr( $clave, 1 ) ) ? substr( $clave, 1 ) : Config::ronda_actual();
@@ -30,8 +30,8 @@ final class Periodo {
 			'clave'    => 'r' . $ronda,
 			'desde'    => $ini . '-09-01',
 			'hasta'    => ( $ini + 1 ) . '-08-31',
-			/* translators: %s: ronda (2026-2027) */
-			'etiqueta' => sprintf( /* translators: %s: text */ __( 'Round %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $ronda ),
+			/* translators: %s: round (2026-2027) */
+			'etiqueta' => sprintf( __( 'Round %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $ronda ),
 		);
 	}
 

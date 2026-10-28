@@ -33,7 +33,7 @@ $fecha = static fn( string $f ) => '' !== $f ? wp_date( 'd/m/Y', (int) strtotime
 			<dt><?php esc_html_e( 'Direct debit authorisation (SEPA)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></dt>
 			<dd>
 				<?php if ( $mandato ) : ?>
-					<?php /* translators: 1: referencia, 2: fecha */ echo esc_html( sprintf( /* translators: 1: text, 2: text */ __( 'In force · %1$s · signed on %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $mandato['referencia'], $fecha( (string) $mandato['fecha_firma'] ) ) ); ?>
+					<?php /* translators: 1: reference, 2: date */ echo esc_html( sprintf( __( 'In force · %1$s · signed on %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $mandato['referencia'], $fecha( (string) $mandato['fecha_firma'] ) ) ); ?>
 					<?php if ( ! $coincide ) : ?>
 						<br><span class="asde-help asde-help--warning"><?php esc_html_e( '⚠️ The account on this record is not the authorised one: it will not be charged until a new authorisation is signed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span>
 					<?php endif; ?>

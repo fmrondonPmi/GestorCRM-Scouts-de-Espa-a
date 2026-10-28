@@ -128,8 +128,8 @@ final class CamposExtra {
 			);
 		}
 		if ( ! $errores && count( $nuevos ) > self::MAX_CAMPOS ) {
-			/* translators: %d: máximo de campos */
-			$errores[] = sprintf( /* translators: %d: number */ __( 'At most %d own fields.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), self::MAX_CAMPOS );
+			/* translators: %d: maximum number of fields */
+			$errores[] = sprintf( __( 'At most %d own fields.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), self::MAX_CAMPOS );
 		}
 		if ( ! $errores ) {
 			$todo = get_option( self::OPCION, array() );
@@ -166,8 +166,8 @@ final class CamposExtra {
 				case self::NUMERO:
 					$v = trim( $bruto );
 					if ( '' !== $v && ! preg_match( '/^-?\d{1,15}([.,]\d{1,6})?$/', $v ) ) {
-						/* translators: %s: etiqueta del campo */
-						$err[] = sprintf( /* translators: %s: text */ __( '"%s" must be a number.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $c['etiqueta'] );
+						/* translators: %s: field label */
+						$err[] = sprintf( __( '"%s" must be a number.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $c['etiqueta'] );
 						continue 2;
 					}
 					break;
@@ -175,8 +175,8 @@ final class CamposExtra {
 					$v = trim( $bruto );
 					$f = \DateTime::createFromFormat( '!Y-m-d', $v, wp_timezone() );
 					if ( '' !== $v && ( ! $f || $f->format( 'Y-m-d' ) !== $v ) ) {
-						/* translators: %s: etiqueta del campo */
-						$err[] = sprintf( /* translators: %s: text */ __( '"%s" is not a valid date.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $c['etiqueta'] );
+						/* translators: %s: field label */
+						$err[] = sprintf( __( '"%s" is not a valid date.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $c['etiqueta'] );
 						continue 2;
 					}
 					break;
@@ -185,8 +185,8 @@ final class CamposExtra {
 			}
 			if ( '' === $v ) {
 				if ( $c['obligatorio'] ) {
-					/* translators: %s: etiqueta del campo */
-					$err[] = sprintf( /* translators: %s: text */ __( '"%s" still needs to be filled in.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $c['etiqueta'] );
+					/* translators: %s: field label */
+					$err[] = sprintf( __( '"%s" still needs to be filled in.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $c['etiqueta'] );
 				}
 				continue;
 			}

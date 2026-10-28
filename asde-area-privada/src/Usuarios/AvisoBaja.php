@@ -109,10 +109,10 @@ final class AvisoBaja {
 	/** Sin el nombre de la persona: el asunto se guarda en el registro de emails. */
 	public static function asunto( string $para ): string {
 		return self::TESORERIA === $para
-			/* translators: %s: nombre del grupo */
-			? sprintf( /* translators: %s: text */ __( '[%s] Withdrawal of a member in the CRM', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Grupo::nombre() )
-			/* translators: %s: nombre del grupo */
-			: sprintf( /* translators: %s: text */ __( '[%s] Confirmation of withdrawal from the group', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Grupo::nombre() );
+			/* translators: %s: name of the group */
+			? sprintf( __( '[%s] Withdrawal of a member in the CRM', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Grupo::nombre() )
+			/* translators: %s: name of the group */
+			: sprintf( __( '[%s] Confirmation of withdrawal from the group', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Grupo::nombre() );
 	}
 
 	/** HTML del email (el envío y la vista previa del registro usan la misma plantilla). */

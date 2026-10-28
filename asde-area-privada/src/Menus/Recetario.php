@@ -89,8 +89,8 @@ final class Recetario {
 		$n      = 1;
 		while ( self::propia_con_nombre( $nombre ) && $n < 50 ) {
 			++$n;
-			/* translators: 1: nombre de la receta, 2: nº de la copia */
-			$nombre = sprintf( /* translators: 1: text, 2: number */ __( '%1$s (copy %2$d)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $comun ? asde_guardado( $r['nombre'] ) : $r['nombre'], $n );
+			/* translators: 1: name of the recipe, 2: copy number */
+			$nombre = sprintf( __( '%1$s (copy %2$d)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $comun ? asde_guardado( $r['nombre'] ) : $r['nombre'], $n );
 		}
 		$nuevo = RecetasTable::guardar(
 			array(

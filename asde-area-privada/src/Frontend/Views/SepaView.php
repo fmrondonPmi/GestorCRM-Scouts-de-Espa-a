@@ -214,8 +214,8 @@ final class SepaView extends TesoreriaBaseView {
 					$this->redirect( $volver );
 				}
 				$res = Mandatos::pasar_al_crm( $repo );
-				/* translators: 1: autorizaciones pasadas, 2: anuladas limpiadas */
-				Notices::add( $res['errores'] ? 'warning' : 'success', esc_html( sprintf( /* translators: 1: number, 2: number */ __( 'Accounts moved to the CRM records: %1$d. Authorisations cancelled whose account was deleted: %2$d.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $res['pasadas'], $res['borradas'] ) ) );
+				/* translators: 1: authorisations moved, 2: cancelled ones cleaned */
+				Notices::add( $res['errores'] ? 'warning' : 'success', esc_html( sprintf( __( 'Accounts moved to the CRM records: %1$d. Authorisations cancelled whose account was deleted: %2$d.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $res['pasadas'], $res['borradas'] ) ) );
 				foreach ( $res['errores'] as $e ) {
 					Notices::add( 'error', esc_html( $e ) );
 				}

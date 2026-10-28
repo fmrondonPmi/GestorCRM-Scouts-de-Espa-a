@@ -294,8 +294,8 @@ final class Altas {
 		}
 		$alta = max( array_map( static fn( $m ) => (string) $m['start_date'], $activas ) );
 		if ( $fin < $alta ) {
-			/* translators: %s: fecha de alta */
-			return new \WP_Error( 'asde_baja', sprintf( /* translators: %s: text */ __( 'The withdrawal date cannot be earlier than the registration date (%s).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), self::dma( $alta ) ) );
+			/* translators: %s: registration date */
+			return new \WP_Error( 'asde_baja', sprintf( __( 'The withdrawal date cannot be earlier than the registration date (%s).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), self::dma( $alta ) ) );
 		}
 		$op = Operaciones::tomar( 'baja', 'p:' . $p->id );
 		if ( is_wp_error( $op ) ) {
@@ -360,13 +360,13 @@ final class Altas {
 				$actual = (string) Secciones::from_crm( (string) $activas[0]['relationship_type'] );
 				if ( '' !== $actual && ! in_array( $seccion, Secciones::destinos_cambio( $actual ), true ) ) {
 					Operaciones::descartar( $op['id'] );
-					/* translators: 1: sección actual, 2: la siguiente por edad */
-					return new \WP_Error( 'asde_cambio', sprintf( /* translators: 1: text, 2: text */ __( 'From %1$s you can only move to %2$s, the next one by age (only scouters can change to any section).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Secciones::nombre( $actual ), implode( ', ', array_map( array( Secciones::class, 'nombre' ), Secciones::destinos_cambio( $actual ) ) ) ) );
+					/* translators: 1: current section, 2: the next one by age */
+					return new \WP_Error( 'asde_cambio', sprintf( __( 'From %1$s you can only move to %2$s, the next one by age (only scouters can change to any section).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Secciones::nombre( $actual ), implode( ', ', array_map( array( Secciones::class, 'nombre' ), Secciones::destinos_cambio( $actual ) ) ) ) );
 				}
 				if ( $fecha < (string) $activas[0]['start_date'] ) {
 					Operaciones::descartar( $op['id'] );
-					/* translators: %s: fecha de alta */
-					return new \WP_Error( 'asde_cambio', sprintf( /* translators: %s: text */ __( 'The date of the change cannot be earlier than the registration date in the current section (%s).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), self::dma( (string) $activas[0]['start_date'] ) ) );
+					/* translators: %s: registration date */
+					return new \WP_Error( 'asde_cambio', sprintf( __( 'The date of the change cannot be earlier than the registration date in the current section (%s).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), self::dma( (string) $activas[0]['start_date'] ) ) );
 				}
 				$r = Escritura::actualizar_membresia( $p, $activas[0]['id'], self::cierre( $fecha, 'cambioseccion' ), 'cambio de sección' );
 				if ( is_wp_error( $r ) ) {
@@ -421,8 +421,8 @@ final class Altas {
 		}
 		$otras = array_values( array_filter( $c['en_grupo'], static fn( $f ) => $f['persona']->id !== $p->id ) );
 		if ( $otras ) {
-			/* translators: %s: nombre de la otra persona */
-			return new \WP_Error( 'asde_documento_en_grupo', sprintf( /* translators: %s: text */ __( 'Another record in your group already has this document (%s): it would be the same person twice. Check it before continuing.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $otras[0]['persona']->nombre_completo() ) );
+			/* translators: %s: name of the other person */
+			return new \WP_Error( 'asde_documento_en_grupo', sprintf( __( 'Another record in your group already has this document (%s): it would be the same person twice. Check it before continuing.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $otras[0]['persona']->nombre_completo() ) );
 		}
 		if ( ( null === $c['otros'] || $c['otros'] > 0 ) && ! $confirmado_otros ) {
 			return new \WP_Error(
@@ -574,8 +574,8 @@ final class Altas {
 			}
 			$d['stic_identification_number_c'] = $v['documento'];
 		} elseif ( Duplicados::documento_obligatorio( $nacimiento ) ) {
-			/* translators: %d: edad */
-			return new \WP_Error( 'asde_alta_datos', sprintf( /* translators: %d: number */ __( 'The document is required from age %d.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Duplicados::EDAD_DOCUMENTO ) );
+			/* translators: %d: age */
+			return new \WP_Error( 'asde_alta_datos', sprintf( __( 'The document is required from age %d.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Duplicados::EDAD_DOCUMENTO ) );
 		}
 		foreach ( array( 'email1', 'tutor1_email_c', 'tutor2_email_c' ) as $c ) {
 			if ( isset( $d[ $c ] ) && ! is_email( $d[ $c ] ) ) {
@@ -585,8 +585,8 @@ final class Altas {
 		// Menores de 18 (decisión del usuario, P-88): el tutor/a 1 es obligatorio, con su email
 		// (la cuenta familiar y los avisos, como el de una baja, van a ese email).
 		if ( self::tutores_obligatorios( $nacimiento ) && ( ! isset( $d['tutor1_nombre_c'], $d['tutor1_apellidos_c'], $d['tutor1_email_c'] ) ) ) {
-			/* translators: %d: edad */
-			return new \WP_Error( 'asde_alta_datos', sprintf( /* translators: %d: number */ __( 'Under %d years of age, guardian 1 is required: first name, surname and email.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), self::EDAD_ADULTA ) );
+			/* translators: %d: age */
+			return new \WP_Error( 'asde_alta_datos', sprintf( __( 'Under %d years of age, guardian 1 is required: first name, surname and email.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), self::EDAD_ADULTA ) );
 		}
 		return $d;
 	}

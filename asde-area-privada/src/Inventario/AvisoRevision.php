@@ -27,10 +27,10 @@ final class AvisoRevision {
 
 	public static function asunto( array $lista ): string {
 		return ComprasTable::RECHAZADA === $lista['estado']
-			/* translators: 1: nombre del grupo, 2: nº de la lista */
-			? sprintf( /* translators: 1: text, 2: text */ __( '[%1$s] Treasury has rejected your shopping list %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Grupo::nombre(), ComprasTable::numero( $lista ) )
-			/* translators: 1: nombre del grupo, 2: nº de la lista */
-			: sprintf( /* translators: 1: text, 2: text */ __( '[%1$s] Your shopping list %2$s has Treasury\'s approval', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Grupo::nombre(), ComprasTable::numero( $lista ) );
+			/* translators: 1: name of the group, 2: list number */
+			? sprintf( __( '[%1$s] Treasury has rejected your shopping list %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Grupo::nombre(), ComprasTable::numero( $lista ) )
+			/* translators: 1: name of the group, 2: list number */
+			: sprintf( __( '[%1$s] Your shopping list %2$s has Treasury\'s approval', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Grupo::nombre(), ComprasTable::numero( $lista ) );
 	}
 
 	/** HTML del email (el envío y la vista previa del registro usan la misma plantilla). */

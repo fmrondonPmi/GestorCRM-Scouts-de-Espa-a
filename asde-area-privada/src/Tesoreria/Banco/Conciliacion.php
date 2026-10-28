@@ -87,8 +87,8 @@ final class Conciliacion {
 			foreach ( $sug ? array() : $claves as $clave ) {
 				// Todas las palabras de la clave (nombre y primer apellido), enteras.
 				if ( ! array_diff( explode( ' ', self::normalizar( $clave ) ), explode( ' ', $m['texto'] ) ) ) {
-					/* translators: %s: nombre y apellido */
-					$m['motivo'] = sprintf( /* translators: %s: text */ __( 'It is named "%s"', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $clave );
+					/* translators: %s: first name and surname */
+					$m['motivo'] = sprintf( __( 'It is named "%s"', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $clave );
 					break;
 				}
 			}
@@ -216,10 +216,10 @@ final class Conciliacion {
 			return new \WP_Error(
 				'asde_banco',
 				$m['importe'] < 0
-					/* translators: %s: nombre del tipo */
-					? sprintf( /* translators: %s: text */ __( '"%s" is an income type and this transaction is an expense.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $tipo['nombre'] )
-					/* translators: %s: nombre del tipo */
-					: sprintf( /* translators: %s: text */ __( '"%s" is an expense type and this transaction is an income.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $tipo['nombre'] )
+					/* translators: %s: name of the type */
+					? sprintf( __( '"%s" is an income type and this transaction is an expense.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $tipo['nombre'] )
+					/* translators: %s: name of the type */
+					: sprintf( __( '"%s" is an expense type and this transaction is an income.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $tipo['nombre'] )
 			);
 		}
 		if ( $evento_id && ! \AsdeBalears\AreaPrivada\Eventos\EventosTable::obtener( $evento_id ) ) {

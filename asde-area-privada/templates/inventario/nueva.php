@@ -107,17 +107,17 @@ $importe = static function ( string $precio, string $cantidad ): string {
 					?>
 					<tr data-asde-inv-linea data-asde-inv-nuevo>
 						<td data-label="<?php echo esc_attr( esc_attr__( 'Description', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
-							<?php /* translators: %d: nº de la línea */ ?>
+							<?php /* translators: %d: line number */ ?>
 							<label class="screen-reader-text" for="asde-inv-nd-<?php echo (int) $i; ?>"><?php echo esc_html( sprintf( /* translators: %d: number */ __( 'New equipment, line %d', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $i + 1 ) ); ?></label>
 							<input type="text" id="asde-inv-nd-<?php echo (int) $i; ?>" name="nuevo_desc[<?php echo (int) $i; ?>]" value="<?php echo esc_attr( (string) ( $n['descripcion'] ?? '' ) ); ?>" maxlength="255" placeholder="<?php echo esc_attr( esc_attr__( 'What needs to be bought', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>" data-asde-inv-desc>
 						</td>
 						<td data-label="<?php echo esc_attr( esc_attr__( 'To buy', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
-							<?php /* translators: %d: nº de la línea */ ?>
+							<?php /* translators: %d: line number */ ?>
 							<label class="screen-reader-text" for="asde-inv-nc-<?php echo (int) $i; ?>"><?php echo esc_html( sprintf( /* translators: %d: number */ __( 'Units to buy, line %d', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $i + 1 ) ); ?></label>
 							<input type="number" id="asde-inv-nc-<?php echo (int) $i; ?>" name="nuevo_cantidad[<?php echo (int) $i; ?>]" value="<?php echo esc_attr( $cantidad ); ?>" min="0" max="99999" step="1" inputmode="numeric" class="asde-inv-num" data-asde-inv-cantidad>
 						</td>
 						<td data-label="<?php echo esc_attr( esc_attr__( 'Price per unit (€)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
-							<?php /* translators: %d: nº de la línea */ ?>
+							<?php /* translators: %d: line number */ ?>
 							<label class="screen-reader-text" for="asde-inv-np-<?php echo (int) $i; ?>"><?php echo esc_html( sprintf( /* translators: %d: number */ __( 'Estimated price, line %d (optional)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $i + 1 ) ); ?></label>
 							<input type="text" id="asde-inv-np-<?php echo (int) $i; ?>" name="nuevo_precio[<?php echo (int) $i; ?>]" value="<?php echo esc_attr( $precio ); ?>" inputmode="decimal" size="8" placeholder="<?php echo esc_attr( esc_attr__( 'optional', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>" class="asde-inv-num" data-asde-inv-precio>
 						</td>

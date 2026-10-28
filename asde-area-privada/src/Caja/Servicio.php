@@ -260,8 +260,8 @@ final class Servicio {
 		$diferencia = round( $recuento - self::saldo( $caja, $fecha ), 2 );
 		$motivo     = mb_substr( trim( sanitize_text_field( $motivo ) ), 0, 255 );
 		if ( abs( $diferencia ) >= 0.01 && '' === $motivo ) {
-			/* translators: %s: diferencia en euros */
-			return new \WP_Error( 'asde_caja_motivo', sprintf( /* translators: %s: text */ __( 'It does not add up: there is a difference of %s. Enter the reason to save the cash count.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), \AsdeBalears\AreaPrivada\Tesoreria\Calculadora::euros( $diferencia ) ) );
+			/* translators: %s: difference in euros */
+			return new \WP_Error( 'asde_caja_motivo', sprintf( __( 'It does not add up: there is a difference of %s. Enter the reason to save the cash count.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), \AsdeBalears\AreaPrivada\Tesoreria\Calculadora::euros( $diferencia ) ) );
 		}
 		$id = CajaTable::anadir(
 			array(
@@ -358,8 +358,8 @@ final class Servicio {
 		}
 		$inicial = '' !== $caja ? CajaTable::inicial( $caja ) : null;
 		if ( $inicial && $fecha < $inicial['fecha'] ) {
-			/* translators: %s: fecha del saldo inicial */
-			return new \WP_Error( 'asde_caja', sprintf( /* translators: %s: text */ __( 'The date cannot be earlier than the cash box\'s opening balance (%s).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), wp_date( 'd/m/Y', strtotime( $inicial['fecha'] . ' 12:00' ) ) ) );
+			/* translators: %s: date of the opening balance */
+			return new \WP_Error( 'asde_caja', sprintf( __( 'The date cannot be earlier than the cash box\'s opening balance (%s).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), wp_date( 'd/m/Y', strtotime( $inicial['fecha'] . ' 12:00' ) ) ) );
 		}
 		return $fecha;
 	}

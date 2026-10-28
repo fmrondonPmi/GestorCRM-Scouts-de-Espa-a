@@ -141,8 +141,8 @@ final class Escritura {
 		}
 		foreach ( array_keys( $valores ) as $campo ) {
 			if ( in_array( $campo, self::NUNCA_AL_CREAR, true ) || ! preg_match( '/^[a-z0-9_]+$/', $campo ) ) {
-				/* translators: %s: nombre del campo */
-				return new \WP_Error( 'asde_crm_escritura', sprintf( /* translators: %s: text */ __( 'The %s field cannot be written from the website.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $campo ) );
+				/* translators: %s: name of the field */
+				return new \WP_Error( 'asde_crm_escritura', sprintf( __( 'The %s field cannot be written from the website.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $campo ) );
 			}
 		}
 		try {
@@ -182,8 +182,8 @@ final class Escritura {
 		$mal  = array_keys( array_filter( $valores, static fn( $v, $c ) => ! self::iguales( (string) ( $fila[ $c ] ?? '' ), (string) $v ), ARRAY_FILTER_USE_BOTH ) );
 		Logger::log( 'crm_membresia_cambiada', self::MEMBRESIAS, $membresia, array( 'campos' => array_keys( $valores ), 'rechazados' => $mal, 'motivo' => $motivo ) );
 		if ( $mal ) {
-			/* translators: %s: nombres de los campos */
-			return new \WP_Error( 'asde_crm_escritura', sprintf( /* translators: %s: text */ __( 'The CRM did not accept: %s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), implode( ', ', $mal ) ) );
+			/* translators: %s: names of the fields */
+			return new \WP_Error( 'asde_crm_escritura', sprintf( __( 'The CRM did not accept: %s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), implode( ', ', $mal ) ) );
 		}
 		return true;
 	}

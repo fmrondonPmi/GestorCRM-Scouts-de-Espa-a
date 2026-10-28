@@ -61,8 +61,8 @@ final class Importador {
 			return new \WP_Error( 'asde_importar', __( 'The file is empty or could not be read.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( $tam > self::MAX_BYTES ) {
-			/* translators: %d: tamaño máximo en MB */
-			return new \WP_Error( 'asde_importar', sprintf( /* translators: %d: number */ __( 'The file is too large (at most %d MB).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), (int) ( self::MAX_BYTES / MB_IN_BYTES ) ) );
+			/* translators: %d: maximum size in MB */
+			return new \WP_Error( 'asde_importar', sprintf( __( 'The file is too large (at most %d MB).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), (int) ( self::MAX_BYTES / MB_IN_BYTES ) ) );
 		}
 		$texto = (string) file_get_contents( $ruta ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- fichero subido (temporal del servidor), no una URL
 		if ( str_contains( substr( $texto, 0, 4096 ), "\0" ) ) {
@@ -79,8 +79,8 @@ final class Importador {
 		$faltan   = array_diff( self::OBLIGATORIAS, $mapa );
 		if ( $faltan ) {
 			$nombres = array_map( static fn( $c ) => '«' . ( self::columnas()[ $c ][0] ) . '»', $faltan );
-			/* translators: %s: columnas que faltan */
-			return new \WP_Error( 'asde_importar', sprintf( /* translators: %s: text */ __( 'The first row must be the header with the column names, and these are missing: %s. Download the example to see what it must look like.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), implode( ', ', $nombres ) ) );
+			/* translators: %s: missing columns */
+			return new \WP_Error( 'asde_importar', sprintf( __( 'The first row must be the header with the column names, and these are missing: %s. Download the example to see what it must look like.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), implode( ', ', $nombres ) ) );
 		}
 
 		$filas = array();
@@ -98,8 +98,8 @@ final class Importador {
 			return new \WP_Error( 'asde_importar', __( 'The file has only the header: there is no equipment to import.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( count( $filas ) > self::MAX_FILAS ) {
-			/* translators: %d: número máximo de filas */
-			return new \WP_Error( 'asde_importar', sprintf( /* translators: %d: number */ __( 'The file has too many rows (at most %d). Split it into several.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), self::MAX_FILAS ) );
+			/* translators: %d: maximum number of rows */
+			return new \WP_Error( 'asde_importar', sprintf( __( 'The file has too many rows (at most %d). Split it into several.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), self::MAX_FILAS ) );
 		}
 		return array(
 			'filas'    => $filas,
@@ -153,8 +153,8 @@ final class Importador {
 			if ( '' !== $nombre ) {
 				$tipo = TiposTable::por_nombre( $nombre );
 				if ( ! $tipo && ! $crear_tipos ) {
-					/* translators: %s: nombre del tipo */
-					$fallo( $n, $fila, sprintf( /* translators: %s: text */ __( 'The type "%s" does not exist.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $nombre ) );
+					/* translators: %s: name of the type */
+					$fallo( $n, $fila, sprintf( __( 'The type "%s" does not exist.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $nombre ) );
 					continue;
 				}
 			}
@@ -165,10 +165,10 @@ final class Importador {
 					$n,
 					$fila,
 					$series[ $serie ]
-						/* translators: 1: nº de serie, 2: nº de fila */
-						? sprintf( /* translators: 1: text, 2: number */ __( 'The serial no. "%1$s" is already in row %2$d of the file.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $fila['num_serie'], $series[ $serie ] )
-						/* translators: %s: nº de serie */
-						: sprintf( /* translators: %s: text */ __( 'There is already an item with the serial no. "%s" in the inventory.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $fila['num_serie'] )
+						/* translators: 1: serial number, 2: row number */
+						? sprintf( __( 'The serial no. "%1$s" is already in row %2$d of the file.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $fila['num_serie'], $series[ $serie ] )
+						/* translators: %s: serial number */
+						: sprintf( __( 'There is already an item with the serial no. "%s" in the inventory.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $fila['num_serie'] )
 				);
 				continue;
 			}
@@ -193,8 +193,8 @@ final class Importador {
 			if ( '' !== $clave && isset( $iguales[ $clave ] ) ) {
 				// Repetido: suma su cantidad al que ya está (del inventario o de una fila anterior).
 				if ( $datos['cantidad'] > 0 && ! MaterialesTable::sumar( $iguales[ $clave ], $datos['cantidad'] ) ) {
-					/* translators: %d: cantidad máxima */
-					$fallo( $n, $fila, sprintf( /* translators: %d: number */ __( 'There is already an item with this description and type, and adding this quantity to it would take it above %d units.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), MaterialesTable::MAX_CANTIDAD ) );
+					/* translators: %d: maximum quantity */
+					$fallo( $n, $fila, sprintf( __( 'There is already an item with this description and type, and adding this quantity to it would take it above %d units.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), MaterialesTable::MAX_CANTIDAD ) );
 					continue;
 				}
 				++$res['sumados'];

@@ -86,11 +86,11 @@ $edad  = static function ( string $f ) use ( $hoy ): ?int {
 				<p>
 					<label for="asde-alta-doc"><?php esc_html_e( 'ID, foreigner ID or other document', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 					<input type="text" id="asde-alta-doc" name="documento" maxlength="30" required autocomplete="off" spellcheck="false" value="<?php echo esc_attr( $s['escrito'] ); ?>">
-					<span class="asde-help"><?php /* translators: %d: edad */ echo esc_html( sprintf( /* translators: %d: number */ __( 'The document is required from age %d.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Duplicados::EDAD_DOCUMENTO ) ); ?></span>
+					<span class="asde-help"><?php /* translators: %d: age */ echo esc_html( sprintf( __( 'The document is required from age %d.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Duplicados::EDAD_DOCUMENTO ) ); ?></span>
 				</p>
 				<p class="asde-form__acciones">
 					<button type="submit" class="button button-primary"><?php esc_html_e( 'Check and continue', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
-					<button type="submit" class="button asde-button-secundario" name="sin_documento" value="1" formnovalidate><?php /* translators: %d: edad */ echo esc_html( sprintf( /* translators: %d: number */ __( 'Is under %d years old and has no document', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Duplicados::EDAD_DOCUMENTO ) ); ?></button>
+					<button type="submit" class="button asde-button-secundario" name="sin_documento" value="1" formnovalidate><?php /* translators: %d: age */ echo esc_html( sprintf( __( 'Is under %d years old and has no document', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Duplicados::EDAD_DOCUMENTO ) ); ?></button>
 				</p>
 			</form>
 
@@ -103,9 +103,9 @@ $edad  = static function ( string $f ) use ( $hoy ): ?int {
 							<?php $p = $f['persona']; ?>
 							<li>
 								<a href="<?php echo esc_url( add_query_arg( 'socio', $p->num_socio_asde, $url_ficha ) ); ?>" data-asde-modal><?php echo esc_html( $p->nombre_completo() ); ?></a>
-								<span class="asde-muted">· <?php /* translators: %s: nº de socio */ echo esc_html( sprintf( /* translators: %s: text */ __( 'Scouts de España no. %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $p->num_socio_asde ) ); ?> ·</span>
+								<span class="asde-muted">· <?php /* translators: %s: member number */ echo esc_html( sprintf( __( 'Scouts de España no. %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $p->num_socio_asde ) ); ?> ·</span>
 								<?php if ( $f['activa'] ) : ?>
-									<?php /* translators: %s: secciones */ echo esc_html( sprintf( /* translators: %s: text */ __( 'active membership: %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), implode( ', ', array_map( static fn( $sec ) => Secciones::nombre( $sec ), $p->secciones ) ) ) ); ?>
+									<?php /* translators: %s: sections */ echo esc_html( sprintf( __( 'active membership: %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), implode( ', ', array_map( static fn( $sec ) => Secciones::nombre( $sec ), $p->secciones ) ) ) ); ?>
 								<?php else : ?>
 									<strong><?php esc_html_e( 'no active membership', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></strong> ·
 									<a href="<?php echo esc_url( add_query_arg( array( 'socio' => $p->num_socio_asde, 'membresia' => 'nueva' ), $url_ficha ) ); ?>" data-asde-modal><?php esc_html_e( 'Give them a new membership', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a>
@@ -174,7 +174,7 @@ $edad  = static function ( string $f ) use ( $hoy ): ?int {
 						<p>
 							<label for="asde-alta-stic_identification_number_c"><?php esc_html_e( 'ID, foreigner ID or other document', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 							<input type="text" id="asde-alta-stic_identification_number_c" name="d[stic_identification_number_c]" maxlength="30" autocomplete="off" spellcheck="false" value="<?php echo esc_attr( $valor( 'stic_identification_number_c' ) ); ?>">
-							<span class="asde-help"><?php /* translators: %d: edad */ echo esc_html( sprintf( /* translators: %d: number */ __( 'Required from age %d.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Duplicados::EDAD_DOCUMENTO ) ); ?></span>
+							<span class="asde-help"><?php /* translators: %d: age */ echo esc_html( sprintf( __( 'Required from age %d.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Duplicados::EDAD_DOCUMENTO ) ); ?></span>
 						</p>
 						<?php
 						// phpcs:disable WordPress.Security.EscapeOutput -- escapado en $campo.
@@ -186,10 +186,10 @@ $edad  = static function ( string $f ) use ( $hoy ): ?int {
 				</fieldset>
 				<details class="asde-plegable asde-alta-socio__tutores"<?php echo $tutores ? ' open' : ''; ?>>
 					<summary class="asde-plegable__titulo"><h3><?php esc_html_e( 'Legal guardians (if a minor)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h3></summary>
-					<p class="asde-help"><?php /* translators: %d: edad */ echo esc_html( sprintf( /* translators: %d: number */ __( 'Under %d years of age, guardian 1 is required: first name, surname and email.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Altas::EDAD_ADULTA ) ); ?></p>
+					<p class="asde-help"><?php /* translators: %d: age */ echo esc_html( sprintf( __( 'Under %d years of age, guardian 1 is required: first name, surname and email.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Altas::EDAD_ADULTA ) ); ?></p>
 					<?php foreach ( array( 1, 2 ) as $n ) : ?>
 						<fieldset>
-							<legend><?php /* translators: %d: 1 o 2 */ echo esc_html( sprintf( /* translators: %d: number */ __( 'Guardian %d', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $n ) ); ?></legend>
+							<legend><?php /* translators: %d: 1 or 2 */ echo esc_html( sprintf( __( 'Guardian %d', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $n ) ); ?></legend>
 							<div class="asde-form__columnas">
 								<?php
 								// phpcs:disable WordPress.Security.EscapeOutput -- escapado en $campo.
@@ -283,7 +283,7 @@ $edad  = static function ( string $f ) use ( $hoy ): ?int {
 				<?php if ( ! empty( $s['espera_asociada'] ) ) : ?>
 					<?php esc_html_e( 'On the waiting list it remains as "Member" and their data has been deleted.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>
 				<?php endif; ?>
-				<?php /* translators: 1: nombre, 2: sección, 3: fecha */ echo esc_html( sprintf( /* translators: 1: text, 2: text, 3: text */ __( '%1$s is already a member of the group, in %2$s since %3$s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $nombre, Secciones::nombre( $s['seccion'] ), $dma( $s['inicio'] ) ) ); ?></p>
+				<?php /* translators: 1: name, 2: section, 3: date */ echo esc_html( sprintf( __( '%1$s is already a member of the group, in %2$s since %3$s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $nombre, Secciones::nombre( $s['seccion'] ), $dma( $s['inicio'] ) ) ); ?></p>
 			</div>
 			<?php if ( '' !== $r['numero'] ) : ?>
 				<dl class="asde-datos">

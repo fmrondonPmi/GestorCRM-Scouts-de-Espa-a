@@ -97,8 +97,8 @@ final class MaterialesTable {
 		}
 		$cantidad = trim( (string) ( $d['cantidad'] ?? '' ) );
 		if ( ! preg_match( '/^\d{1,5}$/', $cantidad ) ) {
-			/* translators: %d: cantidad máxima */
-			$errores[] = sprintf( /* translators: %d: number */ __( 'The quantity must be a whole number from 0 to %d.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), self::MAX_CANTIDAD );
+			/* translators: %d: maximum quantity */
+			$errores[] = sprintf( __( 'The quantity must be a whole number from 0 to %d.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), self::MAX_CANTIDAD );
 		}
 		$precio = self::euros( (string) ( $d['precio'] ?? '' ) );
 		if ( false === $precio ) {
@@ -107,8 +107,8 @@ final class MaterialesTable {
 		$anio = trim( (string) ( $d['anio'] ?? '' ) );
 		$hoy  = (int) wp_date( 'Y' );
 		if ( '' !== $anio && ( ! preg_match( '/^\d{4}$/', $anio ) || (int) $anio < self::ANIO_MINIMO || (int) $anio > $hoy ) ) {
-			/* translators: 1: primer año admitido, 2: año actual */
-			$errores[] = sprintf( /* translators: 1: number, 2: number */ __( 'The year of purchase must be between %1$d and %2$d (or left blank).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), self::ANIO_MINIMO, $hoy );
+			/* translators: 1: first year allowed, 2: current year */
+			$errores[] = sprintf( __( 'The year of purchase must be between %1$d and %2$d (or left blank).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), self::ANIO_MINIMO, $hoy );
 		}
 		if ( $errores ) {
 			return new \WP_Error( 'asde_inventario', implode( ' ', $errores ) );

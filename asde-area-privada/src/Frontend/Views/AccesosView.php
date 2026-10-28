@@ -232,8 +232,8 @@ final class AccesosView extends View {
 			}
 			$u = get_userdata( $uid );
 			if ( ! $u ) {
-				/* translators: %d: número de cuenta */
-				return sprintf( /* translators: %d: number */ __( 'Account deleted (%d)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $uid );
+				/* translators: %d: account number */
+				return sprintf( __( 'Account deleted (%d)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $uid );
 			}
 			return isset( $nombres[ $uid ] ) ? $nombres[ $uid ] . ' (' . $u->user_login . ')' : $u->user_login;
 		};

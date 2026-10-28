@@ -77,8 +77,8 @@ final class ImportadorProductos {
 			return new \WP_Error( 'asde_importar', __( 'The file is empty or could not be read.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( $tam > self::MAX_BYTES ) {
-			/* translators: %d: tamaño máximo en MB */
-			return new \WP_Error( 'asde_importar', sprintf( /* translators: %d: number */ __( 'The file is too large (at most %d MB).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), (int) ( self::MAX_BYTES / MB_IN_BYTES ) ) );
+			/* translators: %d: maximum size in MB */
+			return new \WP_Error( 'asde_importar', sprintf( __( 'The file is too large (at most %d MB).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), (int) ( self::MAX_BYTES / MB_IN_BYTES ) ) );
 		}
 		$texto = (string) file_get_contents( $ruta ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- fichero subido (temporal del servidor), no una URL
 		if ( str_contains( substr( $texto, 0, 4096 ), "\0" ) ) {
@@ -92,8 +92,8 @@ final class ImportadorProductos {
 		$faltan = array_diff( self::OBLIGATORIAS, $mapa );
 		if ( $faltan ) {
 			$nombres = array_map( static fn( $c ) => '«' . ( self::columnas()[ $c ][0] ) . '»', $faltan );
-			/* translators: %s: columnas que faltan */
-			return new \WP_Error( 'asde_importar', sprintf( /* translators: %s: text */ __( 'The first row must be the header with the column names, and these are missing: %s. Download the example to see what it must look like.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), implode( ', ', $nombres ) ) );
+			/* translators: %s: missing columns */
+			return new \WP_Error( 'asde_importar', sprintf( __( 'The first row must be the header with the column names, and these are missing: %s. Download the example to see what it must look like.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), implode( ', ', $nombres ) ) );
 		}
 		$filas = array();
 		foreach ( $lineas as $i => $celdas ) {
@@ -110,8 +110,8 @@ final class ImportadorProductos {
 			return new \WP_Error( 'asde_importar', __( 'The file has only the header: there is no product to load.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( count( $filas ) > self::MAX_FILAS ) {
-			/* translators: %d: número máximo de filas */
-			return new \WP_Error( 'asde_importar', sprintf( /* translators: %d: number */ __( 'The file has too many rows (at most %d). Split it into several.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), self::MAX_FILAS ) );
+			/* translators: %d: maximum number of rows */
+			return new \WP_Error( 'asde_importar', sprintf( __( 'The file has too many rows (at most %d). Split it into several.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), self::MAX_FILAS ) );
 		}
 		return array(
 			'filas'    => $filas,
@@ -209,8 +209,8 @@ final class ImportadorProductos {
 			if ( $sumar && $previa && '' !== $cant && 0 === $var['ilimitado'] && 0 === $previa['ilimitado'] ) {
 				$var['existencias'] = $previa['existencias'] + $var['existencias'];
 				if ( $var['existencias'] > VariantesTable::MAX_EXISTENCIAS ) {
-					/* translators: %d: cantidad máxima */
-					$fallo( sprintf( /* translators: %d: number */ __( 'Adding this stock would exceed %d units.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), VariantesTable::MAX_EXISTENCIAS ) );
+					/* translators: %d: maximum quantity */
+					$fallo( sprintf( __( 'Adding this stock would exceed %d units.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), VariantesTable::MAX_EXISTENCIAS ) );
 					continue;
 				}
 			}

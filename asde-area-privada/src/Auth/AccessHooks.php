@@ -87,8 +87,8 @@ final class AccessHooks {
 				'asde_usar_acceso',
 				Pages::id( 'acceso' )
 					? sprintf(
-						/* translators: %s: URL de la pantalla de acceso */
-						/* translators: %s: text */ __( 'Members and families sign in from <a href="%s">Member access</a> in the website menu.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+						/* translators: %s: URL of the sign-in screen */
+						__( 'Members and families sign in from <a href="%s">Member access</a> in the website menu.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 						esc_url( Pages::url( 'acceso' ) )
 					)
 					: __( 'Members and families sign in from "Member access" in the website menu.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' )
@@ -135,8 +135,8 @@ final class AccessHooks {
 			$errors->add(
 				'asde_recuperar',
 				sprintf(
-					/* translators: %s: URL de la página de recuperación */
-					/* translators: %s: text */ __( 'Members and families can recover their password from <a href="%s">this page</a>.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+					/* translators: %s: URL of the recovery page */
+					__( 'Members and families can recover their password from <a href="%s">this page</a>.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 					esc_url( Pages::url( 'recuperar' ) )
 				)
 			);

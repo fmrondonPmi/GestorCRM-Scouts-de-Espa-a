@@ -57,12 +57,12 @@ final class Formulario {
 				$e[] = $v['error'];
 			}
 		} elseif ( null !== $edad && Duplicados::documento_obligatorio( $d['nacimiento'] ) ) {
-			/* translators: %d: edad */
-			$e[] = sprintf( /* translators: %d: number */ __( 'The document is required from age %d.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Duplicados::EDAD_DOCUMENTO );
+			/* translators: %d: age */
+			$e[] = sprintf( __( 'The document is required from age %d.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Duplicados::EDAD_DOCUMENTO );
 		}
 		if ( null !== $edad && $edad < Inscripciones::EDAD_ADULTA && ( '' === $d['contacto_nombre'] || '' === $d['contacto_apellidos'] ) ) {
-			/* translators: %d: edad */
-			$e[] = sprintf( /* translators: %d: number */ __( 'Under %d years of age, enter the first name and surname of the mother, father or guardian.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Inscripciones::EDAD_ADULTA );
+			/* translators: %d: age */
+			$e[] = sprintf( __( 'Under %d years of age, enter the first name and surname of the mother, father or guardian.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Inscripciones::EDAD_ADULTA );
 		}
 		$digitos = strlen( (string) preg_replace( '/\D/', '', $d['telefono'] ) );
 		if ( $digitos < 9 || $digitos > 15 ) {

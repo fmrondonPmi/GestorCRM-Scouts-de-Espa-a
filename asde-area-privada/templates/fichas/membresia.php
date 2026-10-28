@@ -50,7 +50,7 @@ $fecha   = static function ( string $etiqueta, string $min = '' ) use ( $v, $hoy
 };
 $desde   = static fn( array $m ): string => sprintf( /* translators: 1: text, 2: text */ __( '%1$s, since %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Secciones::nombre( (string) Secciones::from_crm( (string) $m['relationship_type'] ) ), $dma( (string) $m['start_date'] ) );
 ?>
-<p class="asde-back"><a href="<?php echo esc_url( $url_ficha ); ?>" data-asde-modal><?php /* translators: %s: nombre */ echo esc_html( sprintf( /* translators: %s: text */ __( '← %s\'s record', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $p->nombre_completo() ) ); ?></a></p>
+<p class="asde-back"><a href="<?php echo esc_url( $url_ficha ); ?>" data-asde-modal><?php /* translators: %s: name */ echo esc_html( sprintf( __( '← %s\'s record', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $p->nombre_completo() ) ); ?></a></p>
 <section class="asde-card asde-membresia-crm" data-asde-plegable="ficha-membresia-accion">
 	<h2 class="asde-card__title"><?php echo esc_html( $titulos[ $accion ] . ' · ' . $p->nombre_completo() ); ?></h2>
 
@@ -64,7 +64,7 @@ $desde   = static fn( array $m ): string => sprintf( /* translators: 1: text, 2:
 		<?php if ( 'nueva' === $accion ) : ?>
 			<?php if ( $p->tiene_membresia_activa() ) : ?>
 				<div class="asde-notice asde-notice--info" role="status">
-					<p><?php /* translators: %s: secciones */ echo esc_html( sprintf( /* translators: %s: text */ __( 'Already has an active membership (%s).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), implode( ', ', array_map( array( Secciones::class, 'nombre' ), $p->secciones ) ) ) ); ?>
+					<p><?php /* translators: %s: sections */ echo esc_html( sprintf( __( 'Already has an active membership (%s).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), implode( ', ', array_map( array( Secciones::class, 'nombre' ), $p->secciones ) ) ) ); ?>
 					<a href="<?php echo esc_url( add_query_arg( 'membresia', 'seccion', $url_ficha ) ); ?>" data-asde-modal><?php esc_html_e( 'Change section', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a></p>
 				</div>
 			<?php else : ?>
@@ -98,13 +98,13 @@ $desde   = static fn( array $m ): string => sprintf( /* translators: 1: text, 2:
 					<p><strong><?php esc_html_e( 'What changes with the withdrawal:', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></strong></p>
 					<ul>
 						<?php if ( '' !== $cuenta ) : ?>
-							<li><?php /* translators: %s: usuario */ echo esc_html( sprintf( /* translators: %s: text */ __( 'Their sign-in account (%s) will no longer be able to sign in to the website.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $cuenta ) ); ?></li>
+							<li><?php /* translators: %s: user */ echo esc_html( sprintf( __( 'Their sign-in account (%s) will no longer be able to sign in to the website.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $cuenta ) ); ?></li>
 						<?php endif; ?>
 						<?php if ( $familias ) : ?>
-							<li><?php /* translators: %s: usuarios */ echo esc_html( sprintf( /* translators: %s: text */ __( 'The family accounts that represent them (%s) will no longer see them; if they do not represent anyone else with an active membership, they will not be able to sign in either.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), implode( ', ', $familias ) ) ); ?></li>
+							<li><?php /* translators: %s: users */ echo esc_html( sprintf( __( 'The family accounts that represent them (%s) will no longer see them; if they do not represent anyone else with an active membership, they will not be able to sign in either.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), implode( ', ', $familias ) ) ); ?></li>
 						<?php endif; ?>
 						<?php if ( '' !== $familia ) : ?>
-							<li><?php /* translators: %s: nº de familia */ echo esc_html( sprintf( /* translators: %s: text */ __( 'They stop counting in their family\'s fee (no. %s). Treasury will see it in "Recent withdrawals".', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $familia ) ); ?></li>
+							<li><?php /* translators: %s: family number */ echo esc_html( sprintf( __( 'They stop counting in their family\'s fee (no. %s). Treasury will see it in "Recent withdrawals".', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $familia ) ); ?></li>
 						<?php endif; ?>
 						<li><?php esc_html_e( 'Treasury and the family (or the person themselves, if of legal age) are notified by email. With the reason "Death" the family is not written to.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></li>
 						<li><?php esc_html_e( 'Nothing is deleted: the record and their previous memberships stay in the CRM. If they return, they are given a new membership.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></li>

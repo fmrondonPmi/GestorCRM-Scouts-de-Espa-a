@@ -29,7 +29,7 @@ $hay    = (bool) array_filter( $movs, $ve );
 ?>
 <p class="asde-back asde-solo-pagina"><a href="<?php echo esc_url( $volver ); ?>"><?php esc_html_e( '← Back to the family', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a></p>
 <section class="asde-card asde-banco-elegir" data-asde-banco-elegir data-asde-plegable="familia-banco">
-	<h2 class="asde-card__title"><?php /* translators: %s: nº de familia */ echo esc_html( sprintf( /* translators: %s: text */ __( 'Bank deposits for family %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $familia['numero'] ) ); ?></h2>
+	<h2 class="asde-card__title"><?php /* translators: %s: family number */ echo esc_html( sprintf( __( 'Bank deposits for family %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $familia['numero'] ) ); ?></h2>
 	<p class="asde-muted"><?php esc_html_e( 'The imported bank deposits not yet reconciled. Choose this family\'s: the payment is recorded with its date and amount.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 
 	<form method="get" action="<?php echo esc_url( $url ); ?>" class="asde-form__fila asde-form__fila--compacta" role="search" data-asde-banco-buscador>
@@ -95,7 +95,7 @@ $hay    = (bool) array_filter( $movs, $ve );
 									data-importe="<?php echo esc_attr( number_format( $m['importe'], 2, '.', '' ) ); ?>"
 									data-ref="<?php echo esc_attr( $m['documento'] ); ?>"
 									data-resumen="<?php echo esc_attr( $fecha . ' · +' . $euros . ' · ' . mb_strimwidth( trim( $m['ordenante'] . ' ' . $m['concepto'] ), 0, 90, '…' ) ); ?>"
-									aria-label="<?php /* translators: 1: fecha, 2: importe */ echo esc_attr( sprintf( /* translators: 1: text, 2: text */ __( 'Choose the transaction of %1$s for %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $fecha, $euros ) ); ?>"><?php esc_html_e( 'Choose', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a>
+									aria-label="<?php /* translators: 1: date, 2: amount */ echo esc_attr( sprintf( __( 'Choose the transaction of %1$s for %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $fecha, $euros ) ); ?>"><?php esc_html_e( 'Choose', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a>
 							</td>
 						</tr>
 					<?php endforeach; ?>

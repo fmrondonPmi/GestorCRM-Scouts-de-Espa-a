@@ -155,8 +155,8 @@ final class HojaCocina {
 			Idioma::en(
 				Idioma::de_usuario( $user->ID ),
 				static function () use ( $e, $hoja, $user, $repo, &$asunto, &$html ): void {
-					/* translators: 1: evento */
-					$asunto = sprintf( /* translators: %s: text */ __( 'Kitchen sheet: %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $e['nombre'] );
+					/* translators: 1: event */
+					$asunto = sprintf( __( 'Kitchen sheet: %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $e['nombre'] );
 					$html   = TemplateLoader::render(
 						'email/menu-cocina',
 						array(

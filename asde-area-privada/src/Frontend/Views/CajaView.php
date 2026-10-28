@@ -123,8 +123,8 @@ final class CajaView extends TesoreriaBaseView {
 			$filas,
 			array(
 				'titulo'    => Cajas::nombre( $caja ) . ' · ' . Grupo::nombre(),
-				/* translators: 1: periodo, 2: saldo al empezar, 3: saldo final */
-				'subtitulo' => sprintf( /* translators: 1: text, 2: text, 3: text */ __( '%1$s · at the start %2$s · at the end %3$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $periodo['etiqueta'], \AsdeBalears\AreaPrivada\Tesoreria\Calculadora::euros( $e['inicial'] ), \AsdeBalears\AreaPrivada\Tesoreria\Calculadora::euros( $e['final'] ) ),
+				/* translators: 1: period, 2: balance at the start, 3: final balance */
+				'subtitulo' => sprintf( __( '%1$s · at the start %2$s · at the end %3$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $periodo['etiqueta'], \AsdeBalears\AreaPrivada\Tesoreria\Calculadora::euros( $e['inicial'] ), \AsdeBalears\AreaPrivada\Tesoreria\Calculadora::euros( $e['final'] ) ),
 				'tipos'     => array( 'texto', 'texto', 'texto', 'euros', 'euros', 'euros' ),
 				'totales'   => array( __( 'Total', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), sprintf( /* translators: %d: number */ _n( '%d entry', '%d entries', count( $filas ) , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), count( $filas ) ), '', $e['entradas'], $e['salidas'], $e['final'] ),
 			),

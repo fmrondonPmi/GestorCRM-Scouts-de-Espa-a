@@ -159,12 +159,12 @@ final class Servicio {
 				return new \WP_Error( 'asde_tienda', __( 'The quantity is not valid.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			}
 			if ( $p['limite_persona'] > 0 && ( '' === $socio ? 0 : self::ya_pedidas( $socio, $p['id'] ) ) + $cantidad > $p['limite_persona'] ) {
-				/* translators: 1: producto, 2: máximo por persona */
-				return new \WP_Error( 'asde_tienda', sprintf( /* translators: 2: number, 1: text */ __( 'Only %2$d of "%1$s" can be ordered per person.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $p['nombre'], $p['limite_persona'] ) );
+				/* translators: 1: product, 2: maximum per person */
+				return new \WP_Error( 'asde_tienda', sprintf( __( 'Only %2$d of "%1$s" can be ordered per person.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $p['nombre'], $p['limite_persona'] ) );
 			}
 			if ( ! VariantesTable::hay( $v, $cantidad ) ) {
-				/* translators: %s: producto */
-				return new \WP_Error( 'asde_tienda', sprintf( /* translators: %s: text */ __( 'There are not enough units of "%s" left.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $p['nombre'] ) );
+				/* translators: %s: product */
+				return new \WP_Error( 'asde_tienda', sprintf( __( 'There are not enough units of "%s" left.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $p['nombre'] ) );
 			}
 			$lineas[] = array(
 				'producto'  => $p['id'],
@@ -290,8 +290,8 @@ final class Servicio {
 			}
 			if ( ! VariantesTable::reservar( $l['variante'], $l['cantidad'] ) ) {
 				self::devolver_lineas( $hechas );
-				/* translators: %s: producto */
-				return new \WP_Error( 'asde_tienda', sprintf( /* translators: %s: text */ __( 'There are not enough units of "%s" left.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $l['nombre'] ) );
+				/* translators: %s: product */
+				return new \WP_Error( 'asde_tienda', sprintf( __( 'There are not enough units of "%s" left.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $l['nombre'] ) );
 			}
 			$productos[ $i ]['reservado'] = true;
 			$hechas[]                     = $productos[ $i ];
@@ -427,17 +427,17 @@ final class Servicio {
 		$num = PedidosTable::numero( $p );
 		switch ( $p['forma_pago'] ) {
 			case 'transferencia':
-				/* translators: 1: IBAN, 2: nº de pedido */
-				return '' !== $cfg['iban'] ? array( sprintf( /* translators: 1: text, 2: text */ __( 'Transfer to the account %1$s, stating order no. %2$s as the description.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $cfg['iban'], $num ) ) : array( sprintf( /* translators: %s: text */ __( 'Transfer to the group\'s account, stating order no. %s as the description.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $num ) );
+				/* translators: 1: IBAN, 2: order number */
+				return '' !== $cfg['iban'] ? array( sprintf( __( 'Transfer to the account %1$s, stating order no. %2$s as the description.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $cfg['iban'], $num ) ) : array( sprintf( /* translators: %s: text */ __( 'Transfer to the group\'s account, stating order no. %s as the description.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $num ) );
 			case 'bizum':
-				/* translators: 1: teléfono de Bizum, 2: nº de pedido */
-				return '' !== $cfg['bizum'] ? array( sprintf( /* translators: 1: text, 2: text */ __( 'Bizum to %1$s, stating order no. %2$s as the description.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $cfg['bizum'], $num ) ) : array( sprintf( /* translators: %s: text */ __( 'Bizum to the group\'s phone, stating order no. %s as the description.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $num ) );
+				/* translators: 1: Bizum phone, 2: order number */
+				return '' !== $cfg['bizum'] ? array( sprintf( __( 'Bizum to %1$s, stating order no. %2$s as the description.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $cfg['bizum'], $num ) ) : array( sprintf( /* translators: %s: text */ __( 'Bizum to the group\'s phone, stating order no. %s as the description.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $num ) );
 			case 'fisico':
-				/* translators: %s: nº de pedido */
-				return array( sprintf( /* translators: %s: text */ __( 'Hand the amount in person to Treasury, stating order no. %s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $num ) );
+				/* translators: %s: order number */
+				return array( sprintf( __( 'Hand the amount in person to Treasury, stating order no. %s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $num ) );
 			case 'datafono':
-				/* translators: %s: nº de pedido */
-				return array( sprintf( /* translators: %s: text */ __( 'Pay by card, in person, with the group\'s card terminal on collection, stating order no. %s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $num ) );
+				/* translators: %s: order number */
+				return array( sprintf( __( 'Pay by card, in person, with the group\'s card terminal on collection, stating order no. %s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $num ) );
 		}
 		return array();
 	}

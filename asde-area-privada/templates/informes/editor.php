@@ -120,8 +120,8 @@ $rondas    = $rondas ?? array();
 				<p>
 					<label for="asde-inf-ronda"><?php esc_html_e( 'Fee round', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 					<select id="asde-inf-ronda" name="ronda">
-						<?php /* translators: %s: ronda (2026-2027) */ ?>
-						<option value=""><?php echo esc_html( sprintf( /* translators: %s: text */ __( 'The current one (%s)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Config::ronda_actual() ) ); ?></option>
+						<?php /* translators: %s: round (2026-2027) */ ?>
+						<option value=""><?php echo esc_html( sprintf( __( 'The current one (%s)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Config::ronda_actual() ) ); ?></option>
 						<?php foreach ( $rondas as $r ) : ?>
 							<option value="<?php echo esc_attr( $r ); ?>" <?php selected( $f['ronda'], $r ); ?>><?php echo esc_html( $r ); ?></option>
 						<?php endforeach; ?>

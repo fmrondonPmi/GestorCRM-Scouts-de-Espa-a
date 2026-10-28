@@ -124,8 +124,8 @@ final class Numeros {
 			}
 		}
 		if ( '' !== $aviso ) {
-			/* translators: %s: qué le pasa al nº territorial (duplicado, falta…) */
-			$html .= ' <span class="asde-numeros__aviso" title="' . esc_attr( $aviso ) . '">⚠ ' . esc_html( sprintf( /* translators: %s: text */ __( 'territorial no.: %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), ( self::corto()[ $n['estado'] ] ?? $aviso ) ) ) . '</span>';
+			/* translators: %s: what is wrong with the territorial number (duplicate, missing…) */
+			$html .= ' <span class="asde-numeros__aviso" title="' . esc_attr( $aviso ) . '">⚠ ' . esc_html( sprintf( __( 'territorial no.: %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), ( self::corto()[ $n['estado'] ] ?? $aviso ) ) ) . '</span>';
 		}
 		return $html;
 	}

@@ -262,8 +262,8 @@ final class Cuentas {
 		if ( abs( $diferencia ) >= 0.01 && '' === $nota ) {
 			return new \WP_Error(
 				'asde_cuentas',
-				/* translators: 1: gastos, 2: devuelto, 3: anticipo */
-				sprintf( /* translators: 1: text, 2: text, 3: text */ __( 'The expenses (%1$s) and what was returned (%2$s) do not add up to the advance (%3$s): write a note with the reason for the difference.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), self::euros( $gastado ), self::euros( $devuelto ), self::euros( $an['importe'] ) )
+				/* translators: 1: expenses, 2: returned, 3: advance */
+				sprintf( __( 'The expenses (%1$s) and what was returned (%2$s) do not add up to the advance (%3$s): write a note with the reason for the difference.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), self::euros( $gastado ), self::euros( $devuelto ), self::euros( $an['importe'] ) )
 			);
 		}
 		AnticiposTable::actualizar(
@@ -455,16 +455,16 @@ final class Cuentas {
 			$out[] = __( 'The event has not finished yet.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		if ( $b['por_revisar'] ) {
-			/* translators: %d: gastos */
-			$out[] = sprintf( /* translators: %d: number */ __( 'There are %d expense(s) to review.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $b['por_revisar'] );
+			/* translators: %d: expenses */
+			$out[] = sprintf( __( 'There are %d expense(s) to review.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $b['por_revisar'] );
 		}
 		if ( $b['reembolsos']['n'] ) {
-			/* translators: %d: gastos */
-			$out[] = sprintf( /* translators: %d: number */ __( 'There are %d reimbursement(s) pending.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $b['reembolsos']['n'] );
+			/* translators: %d: expenses */
+			$out[] = sprintf( __( 'There are %d reimbursement(s) pending.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $b['reembolsos']['n'] );
 		}
 		if ( $b['anticipos']['n'] ) {
-			/* translators: %d: anticipos */
-			$out[] = sprintf( /* translators: %d: number */ __( 'There are %d advance(s) to settle.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $b['anticipos']['n'] );
+			/* translators: %d: advances */
+			$out[] = sprintf( __( 'There are %d advance(s) to settle.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $b['anticipos']['n'] );
 		}
 		if ( \AsdeBalears\AreaPrivada\Sepa\Remesas::familias_sin_cobrar_evento( $e['id'] ) ) {
 			$out[] = __( 'There is a SEPA batch for the event whose collections have not been recorded.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );

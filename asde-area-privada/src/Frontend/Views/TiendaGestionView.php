@@ -229,8 +229,8 @@ final class TiendaGestionView extends TiendaBaseView {
 		$hoja = $this->get( 'hoja' );
 		$cfg  = Config::de();
 		$fecha = static fn( ?string $f ) => $f ? wp_date( 'd/m/Y', strtotime( $f . ( strlen( $f ) > 10 ? ' UTC' : '' ) ) ) : '';
-		/* translators: 1: periodo, 2: fecha */
-		$periodo   = ( '' === $desde && '' === $hasta ) ? __( 'All orders', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : trim( ( '' !== $desde ? sprintf( /* translators: %s: text */ __( 'from %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $fecha( $desde ) ) : '' ) . ' ' . ( '' !== $hasta ? sprintf( /* translators: %s: text */ __( 'until %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $fecha( $hasta ) ) : '' ) );
+		/* translators: 1: period, 2: date */
+		$periodo   = ( '' === $desde && '' === $hasta ) ? __( 'All orders', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : trim( ( '' !== $desde ? sprintf( __( 'from %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $fecha( $desde ) ) : '' ) . ' ' . ( '' !== $hasta ? sprintf( /* translators: %s: text */ __( 'until %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $fecha( $hasta ) ) : '' ) );
 		$subtitulo = sprintf( /* translators: 1: text, 2: text */ __( '%1$s · generated on %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $periodo, wp_date( 'd/m/Y' ) );
 		$grupo     = \AsdeBalears\AreaPrivada\Domain\Grupo::nombre();
 
@@ -396,8 +396,8 @@ final class TiendaGestionView extends TiendaBaseView {
 				if ( is_wp_error( $r ) ) {
 					Notices::add( 'error', esc_html( $r->get_error_message() ) );
 				} else {
-					/* translators: %s: nº de pedido */
-					Notices::add( 'success', esc_html( sprintf( /* translators: %s: text */ __( 'Order %s marked as paid with the bank deposit.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), PedidosTable::numero( $pedido ) ) ) );
+					/* translators: %s: order number */
+					Notices::add( 'success', esc_html( sprintf( __( 'Order %s marked as paid with the bank deposit.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), PedidosTable::numero( $pedido ) ) ) );
 				}
 			}
 			$this->redirect( $lista );

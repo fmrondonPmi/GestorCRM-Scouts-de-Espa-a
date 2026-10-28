@@ -106,11 +106,19 @@ function es_literal( $tok ): bool {
 	return is_array( $tok ) && T_CONSTANT_ENCAPSED_STRING === $tok[0];
 }
 
+$admin     = in_array( '--admin', $argv, true ); // wp-admin e instalación: solo los __() con texto en castellano.
 $ficheros = array();
 $it = new RecursiveIteratorIterator( new RecursiveDirectoryIterator( $raiz, FilesystemIterator::SKIP_DOTS ) );
 foreach ( $it as $f ) {
 	$rel = substr( str_replace( '\\', '/', $f->getPathname() ), strlen( $raiz ) );
-	if ( ! str_ends_with( $rel, '.php' ) || ! str_contains( $rel, '/' ) || str_ends_with( $rel, 'uninstall.php' ) ) {
+	if ( ! str_ends_with( $rel, '.php' ) || ( ! $admin && ( ! str_contains( $rel, '/' ) || str_ends_with( $rel, 'uninstall.php' ) ) ) ) {
+		continue;
+	}
+	if ( $admin ) {
+		if ( ! str_starts_with( $rel, 'src/Admin/' ) && 'src/Install/Entorno.php' !== $rel && 'src/Install/Installer.php' !== $rel ) {
+			continue;
+		}
+		$ficheros[] = $rel;
 		continue;
 	}
 	foreach ( EXCLUIDOS as $e ) {

@@ -63,9 +63,9 @@ $pct = $resumen['a_pagar'] > 0 ? round( 100 * $resumen['pagado'] / $resumen['a_p
 					<?php $fin = DateTime::createFromFormat( '!Y-m-d', $b['fin'] ); ?>
 					<li>
 						<a href="<?php echo esc_url( add_query_arg( array( 'familia' => $b['familia'], 'ronda' => $ronda ), $url ) ); ?>"><?php echo esc_html( $b['nombre'] ); ?></a>
-						· <?php /* translators: %s: nº de familia */ echo esc_html( sprintf( /* translators: %s: text */ __( 'family no. %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $b['numero'] ) ); ?>
+						· <?php /* translators: %s: family number */ echo esc_html( sprintf( __( 'family no. %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $b['numero'] ) ); ?>
 						<?php if ( $fin ) : ?>
-							· <?php /* translators: %s: fecha */ echo esc_html( sprintf( /* translators: %s: text */ __( 'withdrawn on %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $fin->format( 'd/m/Y' ) ) ); ?>
+							· <?php /* translators: %s: date */ echo esc_html( sprintf( __( 'withdrawn on %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $fin->format( 'd/m/Y' ) ) ); ?>
 						<?php endif; ?>
 					</li>
 				<?php endforeach; ?>
@@ -126,8 +126,8 @@ $pct = $resumen['a_pagar'] > 0 ? round( 100 * $resumen['pagado'] / $resumen['a_p
 						</td>
 						<?php
 						// v0.31: los hijos que pagan (y el ajuste), como tooltip del importe: la fila no se parte en dos líneas.
-						/* translators: %d: nº de hijos que pagan cuota */
-						$detalle = sprintf( /* translators: %d: number */ _n( '%d child', '%d children', count( $c['pagan'] ) , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), count( $c['pagan'] ) ) . ( $c['ajustes'] ? ' · ' . sprintf( /* translators: %s: text */ __( 'adjustment %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Calculadora::euros( $c['ajustes'] ) ) : '' );
+						/* translators: %d: number of children who pay a fee */
+						$detalle = sprintf( _n( '%d child', '%d children', count( $c['pagan'] ) , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), count( $c['pagan'] ) ) . ( $c['ajustes'] ? ' · ' . sprintf( /* translators: %s: text */ __( 'adjustment %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Calculadora::euros( $c['ajustes'] ) ) : '' );
 						?>
 						<td data-label="<?php echo esc_attr( esc_attr__( 'Fee', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><span class="asde-tooltip" title="<?php echo esc_attr( $detalle ); ?>" tabindex="0"><?php echo esc_html( Calculadora::euros( $c['a_pagar'] ) ); ?></span><span class="screen-reader-text"> (<?php echo esc_html( $detalle ); ?>)</span></td>
 						<td data-label="<?php echo esc_attr( esc_attr__( 'Paid', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( Calculadora::euros( $c['pagado'] ) ); ?></td>

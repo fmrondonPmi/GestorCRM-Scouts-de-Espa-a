@@ -266,8 +266,8 @@ final class Concesiones {
 			$tiene[ $p ] = true;
 		}
 		if ( ! Catalogo::cumple_requisitos( $permiso, $tiene ) ) {
-			/* translators: %s: lo que hace falta antes */
-			return new \WP_Error( 'asde_acc', sprintf( /* translators: %s: text */ __( 'It first needs: %s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Catalogo::texto_requisitos( $permiso ) ) );
+			/* translators: %s: what is needed first */
+			return new \WP_Error( 'asde_acc', sprintf( __( 'It first needs: %s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Catalogo::texto_requisitos( $permiso ) ) );
 		}
 
 		$ahora   = current_time( 'mysql', true );

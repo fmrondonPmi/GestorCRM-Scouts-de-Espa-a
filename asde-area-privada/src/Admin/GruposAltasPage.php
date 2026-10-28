@@ -42,8 +42,8 @@ final class GruposAltasPage {
 		$n = GrupoSolicitudes::pendientes();
 		add_submenu_page(
 			self::PADRE,
-			__( 'Altas de grupos', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
-			__( 'Altas de grupos', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . ( $n ? ' <span class="awaiting-mod">' . (int) $n . '</span>' : '' ),
+			__( 'Group registrations', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+			__( 'Group registrations', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . ( $n ? ' <span class="awaiting-mod">' . (int) $n . '</span>' : '' ),
 			self::CAPABILITY,
 			self::SLUG,
 			array( $this, 'render' )
@@ -60,7 +60,7 @@ final class GruposAltasPage {
 
 	public function handle_aprobar(): void {
 		if ( ! current_user_can( self::CAPABILITY ) || ! Organizacion::es_oficina() ) {
-			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+			wp_die( esc_html__( 'You do not have permission to do this.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		check_admin_referer( self::APROBAR );
 		$id = $this->id_enviado();
@@ -77,7 +77,7 @@ final class GruposAltasPage {
 	/** Vuelve a buscar la ficha de la primera persona con acceso y a mandarle la invitación. */
 	public function handle_reintentar(): void {
 		if ( ! current_user_can( self::CAPABILITY ) || ! Organizacion::es_oficina() ) {
-			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+			wp_die( esc_html__( 'You do not have permission to do this.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		check_admin_referer( self::REINTENTAR );
 		$id     = $this->id_enviado();
@@ -89,7 +89,7 @@ final class GruposAltasPage {
 
 	public function handle_rechazar(): void {
 		if ( ! current_user_can( self::CAPABILITY ) || ! Organizacion::es_oficina() ) {
-			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+			wp_die( esc_html__( 'You do not have permission to do this.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		check_admin_referer( self::RECHAZAR );
 		$hecho = GrupoAltas::rechazar( $this->id_enviado() );
@@ -100,7 +100,7 @@ final class GruposAltasPage {
 
 	public function render(): void {
 		if ( ! current_user_can( self::CAPABILITY ) ) {
-			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+			wp_die( esc_html__( 'You do not have permission to do this.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		$aviso = get_transient( self::AVISO . get_current_user_id() );
 		delete_transient( self::AVISO . get_current_user_id() );
@@ -109,32 +109,32 @@ final class GruposAltasPage {
 		$s     = $s ? GrupoSolicitudes::sin_secretos( $s ) : null;
 		?>
 		<div class="wrap">
-			<h1><?php esc_html_e( 'Altas de grupos', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h1>
+			<h1><?php esc_html_e( 'Group registrations', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h1>
 			<?php if ( is_array( $aviso ) ) : ?>
 				<div class="notice notice-<?php echo esc_attr( $aviso[0] ); ?>"><p><?php echo esc_html( $aviso[1] ); ?></p></div>
 			<?php endif; ?>
 			<?php if ( $s ) : ?>
-				<p><a href="<?php echo esc_url( self::url() ); ?>">← <?php esc_html_e( 'Volver a la lista', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a></p>
+				<p><a href="<?php echo esc_url( self::url() ); ?>">← <?php esc_html_e( 'Back to the list', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a></p>
 				<h2><?php echo esc_html( sprintf( '%s (%s)', $s['nombre'], $s['numero'] ) ); ?></h2>
 				<table class="widefat striped" style="max-width:720px"><tbody>
-					<tr><th scope="row"><?php esc_html_e( 'Estado', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><td><?php echo esc_html( GrupoSolicitudes::ESTADOS[ $s['estado'] ] ?? $s['estado'] ); ?></td></tr>
-					<tr><th scope="row"><?php esc_html_e( 'Sede', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><td><?php echo esc_html( $s['sede'] ); ?></td></tr>
-					<tr><th scope="row"><?php esc_html_e( 'Email del grupo', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><td><?php echo esc_html( $s['email'] ); ?></td></tr>
-					<tr><th scope="row"><?php esc_html_e( 'CIF', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><td><?php echo esc_html( $s['cif'] ); ?></td></tr>
-					<tr><th scope="row"><?php esc_html_e( 'Denominación fiscal', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><td><?php echo esc_html( $s['denominacion'] ); ?></td></tr>
-					<tr><th scope="row"><?php esc_html_e( 'Rol de la primera persona', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><td><?php echo esc_html( GrupoSolicitudes::ROLES[ $s['rol'] ] ?? $s['rol'] ); ?></td></tr>
-					<tr><th scope="row"><?php esc_html_e( 'Acceso al CRM', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><td><?php echo esc_html( $s['verificada'] ? sprintf( /* translators: %s: fecha */ __( 'Credencial guardada y comprobada el %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), get_date_from_gmt( $s['verificada'], 'd/m/Y H:i' ) ) : __( 'Sin comprobar', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?></td></tr>
+					<tr><th scope="row"><?php esc_html_e( 'Status', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><td><?php echo esc_html( GrupoSolicitudes::ESTADOS[ $s['estado'] ] ?? $s['estado'] ); ?></td></tr>
+					<tr><th scope="row"><?php esc_html_e( 'Headquarters', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><td><?php echo esc_html( $s['sede'] ); ?></td></tr>
+					<tr><th scope="row"><?php esc_html_e( 'Group email', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><td><?php echo esc_html( $s['email'] ); ?></td></tr>
+					<tr><th scope="row"><?php esc_html_e( 'Tax ID', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><td><?php echo esc_html( $s['cif'] ); ?></td></tr>
+					<tr><th scope="row"><?php esc_html_e( 'Tax name', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><td><?php echo esc_html( $s['denominacion'] ); ?></td></tr>
+					<tr><th scope="row"><?php esc_html_e( 'Role of the first person', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><td><?php echo esc_html( GrupoSolicitudes::ROLES[ $s['rol'] ] ?? $s['rol'] ); ?></td></tr>
+					<tr><th scope="row"><?php esc_html_e( 'CRM access', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><td><?php echo esc_html( $s['verificada'] ? sprintf( /* translators: %s: date */ __( 'Credential saved and checked on %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), get_date_from_gmt( $s['verificada'], 'd/m/Y H:i' ) ) : __( 'Not checked', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?></td></tr>
 				</tbody></table>
 				<?php if ( GrupoSolicitudes::APROBADA === $s['estado'] ) : ?>
 					<?php if ( GrupoSolicitudes::USUARIO_INVITADO === $s['usuario_estado'] ) : ?>
-						<p><strong><?php esc_html_e( 'Primera persona con acceso:', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></strong> <?php esc_html_e( 'invitación enviada al email del grupo.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
+						<p><strong><?php esc_html_e( 'First person with access:', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></strong> <?php esc_html_e( 'invitation sent to the group\'s email.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 					<?php else : ?>
-						<div class="notice notice-warning inline"><p><?php esc_html_e( 'Falta el primer usuario: la ficha con ese DNI no existe o no está activa en el CRM del grupo. Corrígelo en el CRM y vuelve a intentarlo; mientras, nadie del grupo puede entrar.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p></div>
+						<div class="notice notice-warning inline"><p><?php esc_html_e( 'The first user is missing: the record with that ID number does not exist or is not active in the group\'s CRM. Correct it in the CRM and try again; meanwhile, nobody in the group can sign in.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p></div>
 						<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>">
 							<input type="hidden" name="action" value="<?php echo esc_attr( self::REINTENTAR ); ?>">
 							<input type="hidden" name="id" value="<?php echo (int) $s['id']; ?>">
 							<?php wp_nonce_field( self::REINTENTAR ); ?>
-							<button type="submit" class="button"><?php esc_html_e( 'Buscar la ficha y enviar la invitación', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
+							<button type="submit" class="button"><?php esc_html_e( 'Find the record and send the invitation', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 						</form>
 					<?php endif; ?>
 				<?php endif; ?>
@@ -144,31 +144,31 @@ final class GruposAltasPage {
 						<input type="hidden" name="action" value="<?php echo esc_attr( self::APROBAR ); ?>">
 						<input type="hidden" name="id" value="<?php echo (int) $s['id']; ?>">
 						<?php wp_nonce_field( self::APROBAR ); ?>
-						<button type="submit" class="button button-primary"><?php esc_html_e( 'Aprobar y dar de alta el grupo', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
+						<button type="submit" class="button button-primary"><?php esc_html_e( 'Approve and register the group', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 					</form>
-					<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="display:inline" data-asde-confirmar="<?php echo esc_attr__( '¿Rechazar esta alta? Se borra la credencial guardada y se avisa al grupo (sin el motivo).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>">
+					<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" style="display:inline" data-asde-confirmar="<?php echo esc_attr__( 'Reject this registration? The stored credential is deleted and the group is notified (without the reason).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>">
 						<input type="hidden" name="action" value="<?php echo esc_attr( self::RECHAZAR ); ?>">
 						<input type="hidden" name="id" value="<?php echo (int) $s['id']; ?>">
 						<?php wp_nonce_field( self::RECHAZAR ); ?>
-						<button type="submit" class="button"><?php esc_html_e( 'Rechazar', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
+						<button type="submit" class="button"><?php esc_html_e( 'Reject', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 					</form>
 					</p>
 				<?php endif; ?>
 			<?php else : ?>
 				<?php $lista = GrupoSolicitudes::lista(); ?>
 				<table class="widefat striped">
-					<thead><tr><th><?php esc_html_e( 'Recibida', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th><?php esc_html_e( 'Grupo', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th><?php esc_html_e( 'Estado', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th></th></tr></thead>
+					<thead><tr><th><?php esc_html_e( 'Received', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th><?php esc_html_e( 'Group', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th><?php esc_html_e( 'Status', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th></th></tr></thead>
 					<tbody>
 					<?php foreach ( $lista as $f ) : ?>
 						<tr>
 							<td><?php echo esc_html( get_date_from_gmt( $f['creada'], 'd/m/Y H:i' ) ); ?></td>
 							<td><?php echo esc_html( sprintf( '%s (%s)', $f['nombre'], $f['numero'] ) ); ?></td>
 							<td><?php echo esc_html( GrupoSolicitudes::ESTADOS[ $f['estado'] ] ?? $f['estado'] ); ?></td>
-							<td><a href="<?php echo esc_url( self::url( (int) $f['id'] ) ); ?>"><?php esc_html_e( 'Ver', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a></td>
+							<td><a href="<?php echo esc_url( self::url( (int) $f['id'] ) ); ?>"><?php esc_html_e( 'View', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a></td>
 						</tr>
 					<?php endforeach; ?>
 					<?php if ( ! $lista ) : ?>
-						<tr><td colspan="4"><?php esc_html_e( 'Todavía no ha llegado ningún alta.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></td></tr>
+						<tr><td colspan="4"><?php esc_html_e( 'No registration has arrived yet.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></td></tr>
 					<?php endif; ?>
 					</tbody>
 				</table>
