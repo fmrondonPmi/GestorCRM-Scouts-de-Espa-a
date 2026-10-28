@@ -30,10 +30,10 @@ $dma     = static function ( string $f ): string {
 	return $d ? $d->format( 'd/m/Y' ) : $f;
 };
 $titulos = array(
-	'nueva'     => asde_t( 'Nueva membresía' ),
-	'baja'      => asde_t( 'Dar de baja' ),
-	'seccion'   => asde_t( 'Cambiar de sección' ),
-	'documento' => asde_t( 'Poner el documento' ),
+	'nueva'     => __( 'New membership', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+	'baja'      => __( 'Withdraw', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+	'seccion'   => __( 'Change section', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+	'documento' => __( 'Set the document', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 );
 $comun   = static function ( string $asde_action ) use ( $p ): void {
 	wp_nonce_field( 'asde_membresia_' . $p->num_socio_asde );
@@ -48,9 +48,9 @@ $fecha   = static function ( string $etiqueta, string $min = '' ) use ( $v, $hoy
 		esc_attr( $v( 'fecha', $hoy ) )
 	);
 };
-$desde   = static fn( array $m ): string => sprintf( asde_t( '%1$s, desde el %2$s' ), Secciones::nombre( (string) Secciones::from_crm( (string) $m['relationship_type'] ) ), $dma( (string) $m['start_date'] ) );
+$desde   = static fn( array $m ): string => sprintf( /* translators: 1: text, 2: text */ __( '%1$s, since %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Secciones::nombre( (string) Secciones::from_crm( (string) $m['relationship_type'] ) ), $dma( (string) $m['start_date'] ) );
 ?>
-<p class="asde-back"><a href="<?php echo esc_url( $url_ficha ); ?>" data-asde-modal><?php /* translators: %s: nombre */ echo esc_html( sprintf( asde_t( '← Ficha de %s' ), $p->nombre_completo() ) ); ?></a></p>
+<p class="asde-back"><a href="<?php echo esc_url( $url_ficha ); ?>" data-asde-modal><?php /* translators: %s: nombre */ echo esc_html( sprintf( /* translators: %s: text */ __( '← %s\'s record', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $p->nombre_completo() ) ); ?></a></p>
 <section class="asde-card asde-membresia-crm" data-asde-plegable="ficha-membresia-accion">
 	<h2 class="asde-card__title"><?php echo esc_html( $titulos[ $accion ] . ' · ' . $p->nombre_completo() ); ?></h2>
 
@@ -64,91 +64,91 @@ $desde   = static fn( array $m ): string => sprintf( asde_t( '%1$s, desde el %2$
 		<?php if ( 'nueva' === $accion ) : ?>
 			<?php if ( $p->tiene_membresia_activa() ) : ?>
 				<div class="asde-notice asde-notice--info" role="status">
-					<p><?php /* translators: %s: secciones */ echo esc_html( sprintf( asde_t( 'Ya tiene una membresía activa (%s).' ), implode( ', ', array_map( array( Secciones::class, 'nombre' ), $p->secciones ) ) ) ); ?>
-					<a href="<?php echo esc_url( add_query_arg( 'membresia', 'seccion', $url_ficha ) ); ?>" data-asde-modal><?php asde_e( 'Cambiar de sección' ); ?></a></p>
+					<p><?php /* translators: %s: secciones */ echo esc_html( sprintf( /* translators: %s: text */ __( 'Already has an active membership (%s).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), implode( ', ', array_map( array( Secciones::class, 'nombre' ), $p->secciones ) ) ) ); ?>
+					<a href="<?php echo esc_url( add_query_arg( 'membresia', 'seccion', $url_ficha ) ); ?>" data-asde-modal><?php esc_html_e( 'Change section', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a></p>
 				</div>
 			<?php else : ?>
-				<p class="asde-muted"><?php asde_e( 'Para quien vuelve al grupo: la membresía nueva va en su ficha de siempre, con su mismo nº de socio/a. No se crea otra ficha.' ); ?></p>
+				<p class="asde-muted"><?php esc_html_e( 'For someone returning to the group: the new membership goes on their usual record, with the same member number. No other record is created.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 				<form method="post" action="<?php echo esc_url( $url ); ?>" class="asde-form">
 					<?php $comun( 'membresia_nueva' ); ?>
 					<div class="asde-form__columnas">
 						<p>
-							<label for="asde-memb-seccion"><?php asde_e( 'Sección' ); ?> <span class="asde-obligatorio" aria-hidden="true">*</span></label>
+							<label for="asde-memb-seccion"><?php esc_html_e( 'Section', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <span class="asde-obligatorio" aria-hidden="true">*</span></label>
 							<select id="asde-memb-seccion" name="seccion" required>
-								<option value=""><?php asde_e( 'Elige…' ); ?></option>
+								<option value=""><?php esc_html_e( 'Choose…', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></option>
 								<?php foreach ( Secciones::all() as $slug => $sec ) : ?>
 									<option value="<?php echo esc_attr( $slug ); ?>" <?php selected( $v( 'seccion' ), $slug ); ?>><?php echo esc_html( $sec['nombre'] . ( '' !== $sec['edad'] ? ' (' . $sec['edad'] . ')' : '' ) ); ?></option>
 								<?php endforeach; ?>
 							</select>
 						</p>
-						<?php $fecha( asde_t( 'Fecha de alta' ) ); ?>
+						<?php $fecha( __( 'Registration date', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>
 					</div>
-					<p class="asde-form__acciones"><button type="submit" class="button button-primary"><?php asde_e( 'Dar la membresía en el CRM' ); ?></button></p>
+					<p class="asde-form__acciones"><button type="submit" class="button button-primary"><?php esc_html_e( 'Give the membership in the CRM', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button></p>
 				</form>
 			<?php endif; ?>
 
 		<?php elseif ( 'baja' === $accion ) : ?>
 			<?php if ( ! $activas ) : ?>
-				<div class="asde-notice asde-notice--info" role="status"><p><?php asde_e( 'No tiene ninguna membresía activa.' ); ?></p></div>
+				<div class="asde-notice asde-notice--info" role="status"><p><?php esc_html_e( 'Has no active membership.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p></div>
 			<?php else : ?>
 				<dl class="asde-datos">
-					<div><dt><?php echo esc_html( asde_n( 'Membresía que se cierra', 'Membresías que se cierran', count( $activas ) ) ); ?></dt><dd><?php echo esc_html( implode( ' · ', array_map( $desde, $activas ) ) ); ?></dd></div>
+					<div><dt><?php echo esc_html( _n( 'Membership being closed', 'Memberships being closed', count( $activas ) , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?></dt><dd><?php echo esc_html( implode( ' · ', array_map( $desde, $activas ) ) ); ?></dd></div>
 				</dl>
 				<div class="asde-notice asde-notice--warning" role="status">
-					<p><strong><?php asde_e( 'Qué cambia con la baja:' ); ?></strong></p>
+					<p><strong><?php esc_html_e( 'What changes with the withdrawal:', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></strong></p>
 					<ul>
 						<?php if ( '' !== $cuenta ) : ?>
-							<li><?php /* translators: %s: usuario */ echo esc_html( sprintf( asde_t( 'Su cuenta de acceso (%s) ya no podrá entrar en la web.' ), $cuenta ) ); ?></li>
+							<li><?php /* translators: %s: usuario */ echo esc_html( sprintf( /* translators: %s: text */ __( 'Their sign-in account (%s) will no longer be able to sign in to the website.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $cuenta ) ); ?></li>
 						<?php endif; ?>
 						<?php if ( $familias ) : ?>
-							<li><?php /* translators: %s: usuarios */ echo esc_html( sprintf( asde_t( 'Las cuentas familiares que la representan (%s) dejarán de verla; si no representan a nadie más con membresía activa, tampoco podrán entrar.' ), implode( ', ', $familias ) ) ); ?></li>
+							<li><?php /* translators: %s: usuarios */ echo esc_html( sprintf( /* translators: %s: text */ __( 'The family accounts that represent them (%s) will no longer see them; if they do not represent anyone else with an active membership, they will not be able to sign in either.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), implode( ', ', $familias ) ) ); ?></li>
 						<?php endif; ?>
 						<?php if ( '' !== $familia ) : ?>
-							<li><?php /* translators: %s: nº de familia */ echo esc_html( sprintf( asde_t( 'Deja de contar en la cuota de su familia (nº %s). Tesorería lo verá en «Bajas recientes».' ), $familia ) ); ?></li>
+							<li><?php /* translators: %s: nº de familia */ echo esc_html( sprintf( /* translators: %s: text */ __( 'They stop counting in their family\'s fee (no. %s). Treasury will see it in "Recent withdrawals".', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $familia ) ); ?></li>
 						<?php endif; ?>
-						<li><?php asde_e( 'Se avisa por email a Tesorería y a la familia (o a la propia persona, si es mayor de edad). Con el motivo «Fallecimiento» no se escribe a la familia.' ); ?></li>
-						<li><?php asde_e( 'No se borra nada: la ficha y sus membresías anteriores se quedan en el CRM. Si vuelve, se le da una membresía nueva.' ); ?></li>
+						<li><?php esc_html_e( 'Treasury and the family (or the person themselves, if of legal age) are notified by email. With the reason "Death" the family is not written to.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></li>
+						<li><?php esc_html_e( 'Nothing is deleted: the record and their previous memberships stay in the CRM. If they return, they are given a new membership.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></li>
 					</ul>
 				</div>
-				<form method="post" action="<?php echo esc_url( $url ); ?>" class="asde-form" data-asde-confirmar="<?php echo esc_attr( asde_js( '¿Dar de baja a %s en el CRM?', $p->nombre_completo() ) ); ?>">
+				<form method="post" action="<?php echo esc_url( $url ); ?>" class="asde-form" data-asde-confirmar="<?php echo esc_attr( sprintf( /* translators: %s: text */ __( 'Withdraw %s in the CRM?', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $p->nombre_completo() ) ); ?>">
 					<?php $comun( 'membresia_baja' ); ?>
 					<div class="asde-form__columnas">
-						<?php $fecha( asde_t( 'Fecha de baja' ), max( array_map( static fn( $m ) => (string) $m['start_date'], $activas ) ) ); ?>
+						<?php $fecha( __( 'Withdrawal date', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), max( array_map( static fn( $m ) => (string) $m['start_date'], $activas ) ) ); ?>
 						<p>
-							<label for="asde-memb-motivo"><?php asde_e( 'Motivo' ); ?> <span class="asde-obligatorio" aria-hidden="true">*</span></label>
+							<label for="asde-memb-motivo"><?php esc_html_e( 'Reason', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <span class="asde-obligatorio" aria-hidden="true">*</span></label>
 							<select id="asde-memb-motivo" name="motivo" required>
-								<option value=""><?php asde_e( 'Elige…' ); ?></option>
+								<option value=""><?php esc_html_e( 'Choose…', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></option>
 								<?php foreach ( asde_ta( Altas::MOTIVOS_BAJA ) as $m => $etiqueta ) : ?>
 									<option value="<?php echo esc_attr( $m ); ?>" <?php selected( $v( 'motivo' ), $m ); ?>><?php echo esc_html( $etiqueta ); ?></option>
 								<?php endforeach; ?>
 							</select>
 						</p>
 					</div>
-					<p class="asde-help"><?php asde_e( 'La fecha de baja es el día en que deja de estar en el grupo: desde ese día ya no cuenta como socio/a.' ); ?></p>
-					<p class="asde-form__acciones"><button type="submit" class="button button-primary"><?php asde_e( 'Dar de baja en el CRM' ); ?></button></p>
+					<p class="asde-help"><?php esc_html_e( 'The withdrawal date is the day they stop being in the group: from that day they no longer count as a member.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
+					<p class="asde-form__acciones"><button type="submit" class="button button-primary"><?php esc_html_e( 'Withdraw in the CRM', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button></p>
 				</form>
 			<?php endif; ?>
 
 		<?php elseif ( 'seccion' === $accion ) : ?>
 			<?php if ( 1 !== count( $activas ) ) : ?>
-				<div class="asde-notice asde-notice--info" role="status"><p><?php asde_e( 'Para cambiar de sección tiene que tener una membresía activa (y solo una).' ); ?></p></div>
+				<div class="asde-notice asde-notice--info" role="status"><p><?php esc_html_e( 'To change section, they must have an active membership (and only one).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p></div>
 			<?php else : ?>
 				<?php $actual = (string) Secciones::from_crm( (string) $activas[0]['relationship_type'] ); ?>
 				<dl class="asde-datos">
-					<div><dt><?php asde_e( 'Ahora' ); ?></dt><dd><?php echo esc_html( $desde( $activas[0] ) ); ?></dd></div>
+					<div><dt><?php esc_html_e( 'Now', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></dt><dd><?php echo esc_html( $desde( $activas[0] ) ); ?></dd></div>
 				</dl>
 				<form method="post" action="<?php echo esc_url( $url ); ?>" class="asde-form">
 					<?php $comun( 'membresia_seccion' ); ?>
 					<div class="asde-form__columnas">
 						<p>
-							<label for="asde-memb-seccion"><?php asde_e( 'Sección nueva' ); ?> <span class="asde-obligatorio" aria-hidden="true">*</span></label>
+							<label for="asde-memb-seccion"><?php esc_html_e( 'New section', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <span class="asde-obligatorio" aria-hidden="true">*</span></label>
 							<select id="asde-memb-seccion" name="seccion" required>
 								<?php
 								// v0.31: un educando, solo a la siguiente por edad; un scouter, a cualquiera.
 								$destinos = '' !== $actual ? Secciones::destinos_cambio( $actual ) : array_keys( Secciones::all() );
 								?>
 								<?php if ( count( $destinos ) > 1 ) : ?>
-									<option value=""><?php asde_e( 'Elige…' ); ?></option>
+									<option value=""><?php esc_html_e( 'Choose…', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></option>
 								<?php endif; ?>
 								<?php foreach ( Secciones::all() as $slug => $sec ) : ?>
 									<?php if ( $slug !== $actual && in_array( $slug, $destinos, true ) ) : ?>
@@ -157,41 +157,41 @@ $desde   = static fn( array $m ): string => sprintf( asde_t( '%1$s, desde el %2$
 								<?php endforeach; ?>
 							</select>
 							<?php if ( Secciones::is_educativa( $actual ) ) : ?>
-								<span class="asde-help"><?php asde_e( 'Un educando pasa a la siguiente sección por edad.' ); ?></span>
+								<span class="asde-help"><?php esc_html_e( 'A youth member moves to the next section by age.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span>
 							<?php endif; ?>
 						</p>
-						<?php $fecha( asde_t( 'Fecha del cambio' ), (string) $activas[0]['start_date'] ); ?>
+						<?php $fecha( __( 'Date of the change', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), (string) $activas[0]['start_date'] ); ?>
 					</div>
-					<p class="asde-help"><?php asde_e( 'Se cierra la membresía actual con el motivo «cambio de sección» y se abre otra en la sección nueva, con la misma fecha.' ); ?></p>
-					<p class="asde-form__acciones"><button type="submit" class="button button-primary"><?php asde_e( 'Cambiar de sección en el CRM' ); ?></button></p>
+					<p class="asde-help"><?php esc_html_e( 'The current membership is closed with the reason "change of section" and another is opened in the new section, with the same date.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
+					<p class="asde-form__acciones"><button type="submit" class="button button-primary"><?php esc_html_e( 'Change section in the CRM', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button></p>
 				</form>
 			<?php endif; ?>
 
 		<?php else : ?>
 			<?php if ( null === $documento ) : ?>
-				<div class="asde-notice asde-notice--error" role="alert"><p><?php asde_e( 'No se encuentra esa ficha en el CRM del grupo.' ); ?></p></div>
+				<div class="asde-notice asde-notice--error" role="alert"><p><?php esc_html_e( 'That record cannot be found in the group\'s CRM.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p></div>
 			<?php elseif ( $documento ) : ?>
-				<div class="asde-notice asde-notice--info" role="status"><p><?php asde_e( 'Esta ficha ya tiene un documento. Si está mal, corrígelo en el CRM.' ); ?></p></div>
+				<div class="asde-notice asde-notice--info" role="status"><p><?php esc_html_e( 'This record already has a document. If it is wrong, correct it in the CRM.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p></div>
 			<?php else : ?>
-				<p class="asde-muted"><?php asde_e( 'Para quien aún no lo tenía (por ejemplo, un menor que lo acaba de sacar). Antes de guardarlo se comprueba si ya está en otra ficha de tu grupo o en otro grupo u organización de Scouts de España.' ); ?></p>
+				<p class="asde-muted"><?php esc_html_e( 'For someone who did not have it yet (for example, a minor who has just got it). Before saving it, it is checked whether it is already on another record in your group or in another Scouts de España group or organisation.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 				<?php if ( $estado['confirmar'] ) : ?>
 					<div class="asde-notice asde-notice--warning" role="status"><p><?php echo esc_html( $estado['error'] ); ?></p></div>
 				<?php endif; ?>
 				<form method="post" action="<?php echo esc_url( $url ); ?>" class="asde-form">
 					<?php $comun( 'poner_documento' ); ?>
 					<p>
-						<label for="asde-memb-doc"><?php asde_e( 'DNI, NIE u otro documento' ); ?> <span class="asde-obligatorio" aria-hidden="true">*</span></label>
+						<label for="asde-memb-doc"><?php esc_html_e( 'ID, foreigner ID or other document', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <span class="asde-obligatorio" aria-hidden="true">*</span></label>
 						<input type="text" id="asde-memb-doc" name="documento" maxlength="30" required autocomplete="off" spellcheck="false" value="<?php echo esc_attr( $v( 'documento' ) ); ?>">
 					</p>
 					<?php if ( $estado['confirmar'] ) : ?>
 						<p>
 							<label class="asde-choice">
 								<input type="checkbox" name="confirmo" value="1" required>
-								<span><?php asde_e( 'Es la misma persona: guardar el documento igualmente.' ); ?></span>
+								<span><?php esc_html_e( 'It is the same person: save the document anyway.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span>
 							</label>
 						</p>
 					<?php endif; ?>
-					<p class="asde-form__acciones"><button type="submit" class="button button-primary"><?php asde_e( 'Comprobar y guardar' ); ?></button></p>
+					<p class="asde-form__acciones"><button type="submit" class="button button-primary"><?php esc_html_e( 'Check and save', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button></p>
 				</form>
 			<?php endif; ?>
 		<?php endif; ?>

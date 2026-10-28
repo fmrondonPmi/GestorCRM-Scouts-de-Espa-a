@@ -38,7 +38,7 @@ final class EmailRechazo {
 	}
 
 	public static function asunto(): string {
-		return sprintf( asde_t( '[%s] Sobre tu solicitud de acceso al área privada' ), Grupo::nombre() );
+		return sprintf( /* translators: %s: text */ __( '[%s] About your request for access to the private area', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Grupo::nombre() );
 	}
 
 	/** @return string HTML del email (la vista previa del registro y el envío usan la misma plantilla). */
@@ -65,7 +65,7 @@ final class EmailRechazo {
 			return array(
 				'estado'  => self::SIN_EMAIL,
 				'destino' => '',
-				'error'   => asde_t( 'La solicitud no tiene un email válido al que avisar.' ),
+				'error'   => __( 'The request has no valid email address to notify.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 			);
 		}
 		$contacto = self::contacto();

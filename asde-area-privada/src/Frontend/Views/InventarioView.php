@@ -31,7 +31,7 @@ final class InventarioView extends InventarioBaseView {
 		if ( $id || '1' === $this->get( 'nuevo' ) ) {
 			$m = $id ? MaterialesTable::obtener( $id ) : null;
 			if ( $id && ! $m ) {
-				return $this->denegado( asde_t( 'Ese material no está en el inventario del grupo.' ) );
+				return $this->denegado( __( 'That equipment is not in the group\'s inventory.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			}
 			return $this->layout( 'inventario', $this->subnav( 'inventario' ) . $this->formulario( $m ) );
 		}
@@ -110,7 +110,7 @@ final class InventarioView extends InventarioBaseView {
 	/** CSV de ejemplo para importar (se llama antes de pintar la página). */
 	public function ejemplo(): void {
 		if ( ! current_user_can( Servicio::CAP ) ) {
-			wp_die( esc_html__( 'No tienes permiso para ver esto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+			wp_die( esc_html__( 'You do not have permission to see this.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		$this->descargar( 'ejemplo-inventario.csv', Importador::ejemplo() );
 	}
@@ -119,15 +119,15 @@ final class InventarioView extends InventarioBaseView {
 	public function errores_csv(): void {
 		$resultado = get_transient( self::clave_importacion( sanitize_key( $this->get( 'resultado' ) ) ) );
 		if ( ! current_user_can( Servicio::CAP ) ) {
-			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+			wp_die( esc_html__( 'Download link not valid or expired.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		if ( ! wp_verify_nonce( $this->get( '_wpnonce' ), 'asde_inventario_errores' ) ) {
-			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+			wp_die( esc_html__( 'Download link not valid or expired.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		if ( ! is_array( $resultado ) ) {
-			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+			wp_die( esc_html__( 'Download link not valid or expired.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
-		$filas = array( array_merge( array( asde_t( 'Fila' ) ), array_map( static fn( $c ) => asde_t( $c[0] ), Importador::COLUMNAS ), array( asde_t( 'Motivo del error' ) ) ) );
+		$filas = array( array_merge( array( __( 'Row', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ), array_map( static fn( $c ) => asde_t( $c[0] ), Importador::COLUMNAS ), array( __( 'Reason for the error', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) ) );
 		foreach ( $resultado['errores'] as $e ) {
 			$datos = array();
 			foreach ( array_keys( Importador::COLUMNAS ) as $col ) {
@@ -154,22 +154,22 @@ final class InventarioView extends InventarioBaseView {
 		$f    = $_FILES['fichero'] ?? null; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.NonceVerification.Missing -- el nonce se comprueba arriba; del fichero solo se usa su ruta temporal, comprobada con is_uploaded_file()
 		$err  = is_array( $f ) ? (int) ( $f['error'] ?? UPLOAD_ERR_NO_FILE ) : UPLOAD_ERR_NO_FILE;
 		if ( UPLOAD_ERR_NO_FILE === $err ) {
-			Notices::add( 'error', asde_t( 'Elige el fichero CSV que quieres importar.' ) );
+			Notices::add( 'error', __( 'Choose the CSV file you want to import.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			$this->redirect( $aqui );
 		}
 		$nombre = sanitize_file_name( (string) ( $f['name'] ?? '' ) );
 		if ( UPLOAD_ERR_OK !== $err || ! is_uploaded_file( (string) $f['tmp_name'] ) || (int) $f['size'] > Importador::MAX_BYTES ) {
 			/* translators: %d: tamaño máximo en MB */
-			Notices::add( 'error', esc_html( sprintf( asde_t( 'El fichero no se ha podido subir. Tiene que ser un CSV de hasta %d MB.' ), (int) ( Importador::MAX_BYTES / MB_IN_BYTES ) ) ) );
+			Notices::add( 'error', esc_html( sprintf( /* translators: %d: number */ __( 'The file could not be uploaded. It must be a CSV of up to %d MB.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), (int) ( Importador::MAX_BYTES / MB_IN_BYTES ) ) ) );
 			$this->redirect( $aqui );
 		}
 		if ( ! preg_match( '/\.(csv|txt)$/i', $nombre ) ) {
-			Notices::add( 'error', asde_t( 'El fichero tiene que ser un CSV (.csv). Desde Excel: «Guardar como» → «CSV (delimitado por punto y coma)».' ) );
+			Notices::add( 'error', __( 'The file must be a CSV (.csv). From Excel: "Save as" → "CSV (semicolon delimited)".', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			$this->redirect( $aqui );
 		}
 		$leido = Importador::leer( (string) $f['tmp_name'] );
 		if ( is_wp_error( $leido ) ) {
-			Notices::add( 'error', esc_html( $leido->get_error_message() . ' ' . asde_t( 'No se ha importado nada.' ) ) );
+			Notices::add( 'error', esc_html( $leido->get_error_message() . ' ' . __( 'Nothing has been imported.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) );
 			$this->redirect( $aqui );
 		}
 		$res = Importador::importar( $leido['filas'], '1' === $this->post( 'crear_tipos' ) );
@@ -216,7 +216,7 @@ final class InventarioView extends InventarioBaseView {
 		$lista = $this->url( 'inventario' );
 		$m     = $id ? MaterialesTable::obtener( $id ) : null;
 		if ( $id && ! $m ) {
-			Notices::add( 'error', asde_t( 'Ese material no está en el inventario del grupo.' ) );
+			Notices::add( 'error', __( 'That equipment is not in the group\'s inventory.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			$this->redirect( $lista );
 		}
 
@@ -224,7 +224,7 @@ final class InventarioView extends InventarioBaseView {
 			if ( null === $m['baja_en'] && MaterialesTable::dar_baja( $id, $this->post( 'motivo' ) ) ) {
 				\AsdeBalears\AreaPrivada\Tienda\InventarioTienda::sincronizar( $id );
 				Logger::log( 'inventario_material_baja', 'inventario', (string) $id );
-				Notices::add( 'success', esc_html( sprintf( asde_t( '«%s» dado de baja. Lo puedes recuperar desde «Ver también los dados de baja».' ), $m['descripcion'] ) ) );
+				Notices::add( 'success', esc_html( sprintf( /* translators: %s: text */ __( '"%s" written off. You can recover it from "Also show the written-off ones".', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $m['descripcion'] ) ) );
 			}
 			$this->redirect( $lista );
 		}
@@ -232,12 +232,12 @@ final class InventarioView extends InventarioBaseView {
 			if ( null !== $m['baja_en'] && MaterialesTable::recuperar( $id ) ) {
 				\AsdeBalears\AreaPrivada\Tienda\InventarioTienda::sincronizar( $id );
 				Logger::log( 'inventario_material_recuperado', 'inventario', (string) $id );
-				Notices::add( 'success', esc_html( sprintf( asde_t( '«%s» vuelve a estar en el inventario.' ), $m['descripcion'] ) ) );
+				Notices::add( 'success', esc_html( sprintf( /* translators: %s: text */ __( '"%s" is back in the inventory.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $m['descripcion'] ) ) );
 			}
 			$this->redirect( $this->url( 'inventario', array( 'material' => (string) $id ) ) );
 		}
 		if ( 'material_guardar' !== $accion ) {
-			Notices::add( 'error', asde_t( 'Acción desconocida.' ) );
+			Notices::add( 'error', __( 'Unknown action.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			$this->redirect( $lista );
 		}
 
@@ -257,12 +257,12 @@ final class InventarioView extends InventarioBaseView {
 			\AsdeBalears\AreaPrivada\Tienda\InventarioTienda::sincronizar( $id ); // v0.51: la tienda sigue lo que dice el inventario.
 			$cambiados = array_keys( array_filter( $datos, static fn( $v, $k ) => $v !== $m[ $k ], ARRAY_FILTER_USE_BOTH ) );
 			Logger::log( 'inventario_material_modificado', 'inventario', (string) $id, array( 'campos' => $cambiados ) );
-			Notices::add( 'success', esc_html( sprintf( asde_t( '«%s» guardado.' ), $datos['descripcion'] ) ) );
+			Notices::add( 'success', esc_html( sprintf( /* translators: %s: text */ __( '"%s" saved.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $datos['descripcion'] ) ) );
 		} else {
 			$id = MaterialesTable::crear( $datos );
 			\AsdeBalears\AreaPrivada\Tienda\InventarioTienda::sincronizar( $id );
 			Logger::log( 'inventario_material_creado', 'inventario', (string) $id );
-			Notices::add( 'success', esc_html( sprintf( asde_t( '«%s» añadido al inventario.' ), $datos['descripcion'] ) ) );
+			Notices::add( 'success', esc_html( sprintf( /* translators: %s: text */ __( '"%s" added to the inventory.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $datos['descripcion'] ) ) );
 		}
 		$this->redirect( '1' === $this->post( 'otro' ) ? $this->url( 'inventario', array( 'nuevo' => '1' ) ) : $lista );
 	}

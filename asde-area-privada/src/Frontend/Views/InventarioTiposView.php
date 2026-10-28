@@ -40,7 +40,7 @@ final class InventarioTiposView extends InventarioBaseView {
 	/** Los tipos del grupo para el desplegable: [{id, nombre}], por orden alfabético. */
 	public function json(): void {
 		if ( ! current_user_can( Servicio::CAP ) ) {
-			wp_send_json_error( array( 'mensaje' => asde_t( 'No tienes permiso para ver esto.' ) ), 403 );
+			wp_send_json_error( array( 'mensaje' => __( 'You do not have permission to see this.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ), 403 );
 		}
 		wp_send_json_success( array( 'tipos' => array_values( TiposTable::todos() ) ) );
 	}
@@ -62,7 +62,7 @@ final class InventarioTiposView extends InventarioBaseView {
 					break;
 				}
 				Logger::log( 'inventario_tipo_creado', 'inventario_tipo', (string) $r );
-				Notices::add( 'success', esc_html( sprintf( asde_t( 'Tipo «%s» creado.' ), TiposTable::obtener( $r )['nombre'] ?? '' ) ) );
+				Notices::add( 'success', esc_html( sprintf( /* translators: %s: text */ __( 'Type "%s" created.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), TiposTable::obtener( $r )['nombre'] ?? '' ) ) );
 				break;
 
 			case 'tipo_renombrar':
@@ -72,7 +72,7 @@ final class InventarioTiposView extends InventarioBaseView {
 					break;
 				}
 				Logger::log( 'inventario_tipo_renombrado', 'inventario_tipo', (string) $id );
-				Notices::add( 'success', esc_html( sprintf( asde_t( 'Tipo «%1$s» renombrado a «%2$s».' ), $tipo['nombre'] ?? '', TiposTable::obtener( $id )['nombre'] ?? '' ) ) );
+				Notices::add( 'success', esc_html( sprintf( /* translators: 1: text, 2: text */ __( 'Type "%1$s" renamed to "%2$s".', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $tipo['nombre'] ?? '', TiposTable::obtener( $id )['nombre'] ?? '' ) ) );
 				break;
 
 			case 'tipo_borrar':
@@ -82,11 +82,11 @@ final class InventarioTiposView extends InventarioBaseView {
 					break;
 				}
 				Logger::log( 'inventario_tipo_borrado', 'inventario_tipo', (string) $id );
-				Notices::add( 'success', esc_html( sprintf( asde_t( 'Tipo «%s» borrado.' ), $tipo['nombre'] ?? '' ) ) );
+				Notices::add( 'success', esc_html( sprintf( /* translators: %s: text */ __( 'Type "%s" deleted.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $tipo['nombre'] ?? '' ) ) );
 				break;
 
 			default:
-				Notices::add( 'error', asde_t( 'Acción desconocida.' ) );
+				Notices::add( 'error', __( 'Unknown action.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$this->redirect( $aqui );
 	}

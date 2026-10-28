@@ -16,17 +16,17 @@ use AsdeBalears\AreaPrivada\Menus\SelectorAlergenos;
 
 defined( 'ABSPATH' ) || exit;
 ?>
-<div class="asde-alerg" data-asde-alerg data-maxlen="<?php echo (int) $maxlen; ?>" data-inicial="<?php echo esc_attr( $inicial ); ?>" data-msg-largo="<?php echo esc_attr( asde_a( 'Es demasiado largo para guardarlo en la ficha: quita alguno.' ) ); ?>" data-msg-vacio="<?php echo esc_attr( asde_a( 'Ninguno elegido' ) ); ?>">
+<div class="asde-alerg" data-asde-alerg data-maxlen="<?php echo (int) $maxlen; ?>" data-inicial="<?php echo esc_attr( $inicial ); ?>" data-msg-largo="<?php echo esc_attr( esc_attr__( 'It is too long to be saved on the record: remove some.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>" data-msg-vacio="<?php echo esc_attr( esc_attr__( 'None chosen', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
 	<input type="text" id="<?php echo esc_attr( $id ); ?>" name="<?php echo esc_attr( $name ); ?>" class="asde-alerg__texto" value="<?php echo esc_attr( $valor ); ?>"<?php echo wp_kses( ( (int) $maxlen > 0 ? ' maxlength="' . (int) $maxlen . '"' : '' ) . $extra, asde_html_permitido() ); ?>>
 	<div class="asde-alerg__resumen" hidden>
 		<ul class="asde-alerg__chips" data-asde-alerg-chips aria-live="polite"></ul>
-		<button type="button" class="button asde-button-secundario" data-asde-alerg-abrir aria-haspopup="dialog"><?php asde_e( 'Elegir…' ); ?></button>
+		<button type="button" class="button asde-button-secundario" data-asde-alerg-abrir aria-haspopup="dialog"><?php esc_html_e( 'Choose…', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 	</div>
 
 	<dialog class="asde-alerg__dialogo" aria-labelledby="<?php echo esc_attr( $id ); ?>-titulo">
 		<h3 id="<?php echo esc_attr( $id ); ?>-titulo"><?php echo esc_html( $etiqueta ); ?></h3>
-		<p class="asde-help"><?php asde_e( 'Marca lo que corresponda. Si algo no está en la lista, escríbelo abajo y añádelo.' ); ?></p>
-		<div class="asde-alerg__tabs" role="tablist" aria-label="<?php echo esc_attr( asde_a( 'Categorías' ) ); ?>">
+		<p class="asde-help"><?php esc_html_e( 'Tick whatever applies. If something is not on the list, write it below and add it.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
+		<div class="asde-alerg__tabs" role="tablist" aria-label="<?php echo esc_attr( esc_attr__( 'Categories', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
 			<?php foreach ( SelectorAlergenos::PESTANAS as $k => $p ) : ?>
 				<button type="button" role="tab" id="<?php echo esc_attr( $id . '-tab-' . $k ); ?>" aria-controls="<?php echo esc_attr( $id . '-panel-' . $k ); ?>" aria-selected="false" tabindex="-1" data-pestana="<?php echo esc_attr( $k ); ?>"><?php echo esc_html( asde_t( $p['titulo'] ) ); ?></button>
 			<?php endforeach; ?>
@@ -39,17 +39,17 @@ defined( 'ABSPATH' ) || exit;
 			</div>
 		<?php endforeach; ?>
 		<div class="asde-alerg__propio">
-			<label for="<?php echo esc_attr( $id ); ?>-propio"><?php asde_e( 'Otro (escríbelo)' ); ?></label>
+			<label for="<?php echo esc_attr( $id ); ?>-propio"><?php esc_html_e( 'Other (write it)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 			<span class="asde-alerg__propio-fila">
 				<input type="text" id="<?php echo esc_attr( $id ); ?>-propio" maxlength="<?php echo (int) SelectorAlergenos::MAX_PROPIO; ?>" data-asde-alerg-propio autocomplete="off">
-				<button type="button" class="button asde-button-secundario" data-asde-alerg-anadir><?php asde_e( 'Añadir' ); ?></button>
+				<button type="button" class="button asde-button-secundario" data-asde-alerg-anadir><?php esc_html_e( 'Add', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 			</span>
 			<ul class="asde-alerg__chips" data-asde-alerg-propios aria-live="polite"></ul>
 		</div>
 		<p class="asde-alerg__error" data-asde-alerg-error role="alert" hidden></p>
 		<p class="asde-alerg__botones">
-			<button type="button" class="button" data-asde-alerg-aceptar><?php asde_e( 'Aceptar' ); ?></button>
-			<button type="button" class="asde-btn-link" data-asde-alerg-cancelar><?php asde_e( 'Cancelar' ); ?></button>
+			<button type="button" class="button" data-asde-alerg-aceptar><?php esc_html_e( 'Accept', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
+			<button type="button" class="asde-btn-link" data-asde-alerg-cancelar><?php esc_html_e( 'Cancel', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 		</p>
 	</dialog>
 </div>

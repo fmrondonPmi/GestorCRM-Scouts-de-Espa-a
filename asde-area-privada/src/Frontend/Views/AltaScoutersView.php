@@ -66,7 +66,7 @@ final class AltaScoutersView extends View {
 			return;
 		}
 		if ( ! wp_verify_nonce( $this->post_nonce(), 'asde_alta_scouter' ) ) {
-			self::$estado = array( 'errores' => array( asde_t( 'La sesión del formulario ha caducado. Vuelve a intentarlo.' ) ) );
+			self::$estado = array( 'errores' => array( __( 'The form session has expired. Try again.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) );
 			return;
 		}
 		$grupo = $this->grupo_del_enlace();
@@ -87,7 +87,7 @@ final class AltaScoutersView extends View {
 		);
 		$errores = AltaScouterService::errores( $d['modo'], $d['secciones'], $d['responsabilidades'], $d['email'] );
 		if ( '' === trim( $d['documento'] ) ) {
-			array_unshift( $errores, asde_t( 'Escribe tu DNI o NIE.' ) );
+			array_unshift( $errores, __( 'Enter your ID or foreigner ID number.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( $errores ) {
 			self::$estado = array( 'errores' => $errores );

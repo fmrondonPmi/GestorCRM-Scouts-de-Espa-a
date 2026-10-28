@@ -229,7 +229,7 @@ final class Router {
 			}
 			// v0.50 (doc 50, fase 4): la oficina solo abre Personas, Informes y Usuarios (y su ficha).
 			if ( Ambito::actual()->es_oficina() && ! in_array( $key, Oficina::PAGINAS, true ) ) {
-				Notices::add( 'error', asde_t( 'Tu cuenta de la oficina solo puede consultar Personas, Informes y Usuarios.' ) );
+				Notices::add( 'error', __( 'Your office account can only view People, Reports and Users.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 				wp_safe_redirect( Pages::url( 'area' ) );
 				exit;
 			}
@@ -259,7 +259,7 @@ final class Router {
 			}
 			// Una cuenta de solo lectura no envía ningún otro formulario: se rechaza antes de llegar a la vista.
 			if ( SoloLectura::bloquea( $accion ) ) {
-				Notices::add( 'error', asde_t( 'Tu cuenta es de solo lectura: no se puede cambiar nada.' ) );
+				Notices::add( 'error', __( 'Your account is read-only: nothing can be changed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 				wp_safe_redirect( Pages::url( $key ) );
 				exit;
 			}

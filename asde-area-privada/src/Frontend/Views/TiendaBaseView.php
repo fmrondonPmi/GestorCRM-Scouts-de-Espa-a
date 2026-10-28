@@ -21,19 +21,19 @@ abstract class TiendaBaseView extends View {
 	protected function subnav( string $activo ): string {
 		$items = array();
 		if ( current_user_can( Servicio::CAP_PEDIR ) && Servicio::propios( Ambito::actual() ) ) {
-			$items['tienda_pedidos'] = asde_t( 'Mis pedidos' );
+			$items['tienda_pedidos'] = __( 'My orders', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		if ( current_user_can( Servicio::CAP_GESTION ) ) {
-			$items['tienda_gestion'] = asde_t( 'Gestión de pedidos' );
+			$items['tienda_gestion'] = __( 'Order management', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		if ( \AsdeBalears\AreaPrivada\Tienda\Proveedor::puede_ver() ) {
-			$items['tienda_proveedor'] = asde_t( 'Pedido de camisas' ); // v0.48 (doc 48, T4).
+			$items['tienda_proveedor'] = __( 'Shirt order', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); // v0.48 (doc 48, T4).
 		}
 		if ( current_user_can( Servicio::CAP_ADMIN ) ) {
-			$items['tienda_productos'] = asde_t( 'Inventario de la tienda' );
+			$items['tienda_productos'] = __( 'Shop inventory', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		if ( current_user_can( Servicio::CAP_CONFIG ) ) {
-			$items['tienda_config'] = asde_t( 'Configuración' );
+			$items['tienda_config'] = __( 'Settings', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		return count( $items ) > 1 ? $this->tpl(
 			'tienda/subnav',
@@ -70,7 +70,7 @@ abstract class TiendaBaseView extends View {
 			return $actual;
 		}
 		if ( UPLOAD_ERR_OK !== (int) $f['error'] || (int) $f['size'] > self::MAX_IMAGEN ) {
-			$avisos[] = asde_t( 'Una imagen no se ha podido subir: tiene que ser JPG, PNG, WebP o GIF de hasta 3 MB.' );
+			$avisos[] = __( 'An image could not be uploaded: it must be JPG, PNG, WebP or GIF of up to 3 MB.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 			return $actual;
 		}
 		require_once ABSPATH . 'wp-admin/includes/file.php';
@@ -86,7 +86,7 @@ abstract class TiendaBaseView extends View {
 			)
 		);
 		if ( is_wp_error( $id ) ) {
-			$avisos[] = asde_t( 'Una imagen no se ha podido subir: ' ) . $id->get_error_message();
+			$avisos[] = __( 'An image could not be uploaded: ', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . $id->get_error_message();
 			return $actual;
 		}
 		return (int) $id;

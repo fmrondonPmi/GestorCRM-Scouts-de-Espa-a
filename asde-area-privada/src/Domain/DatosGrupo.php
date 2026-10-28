@@ -55,13 +55,13 @@ final class DatosGrupo {
 		$d      = self::de( $numero );
 		$faltan = array();
 		if ( '' === $d['provincia'] ) {
-			$faltan[] = asde_t( 'la provincia (sin ella no se pueden generar números de socio)' );
+			$faltan[] = __( 'the province (member numbers cannot be generated without it)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		if ( '' === $d['cif'] ) {
-			$faltan[] = asde_t( 'el CIF' );
+			$faltan[] = __( 'the tax ID', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		if ( '' === $d['sede'] || '' === $d['cp'] || '' === $d['poblacion'] ) {
-			$faltan[] = asde_t( 'la dirección completa (calle, código postal y población)' );
+			$faltan[] = __( 'the full address (street, postcode and town)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		return $faltan;
 	}

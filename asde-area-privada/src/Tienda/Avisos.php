@@ -72,7 +72,7 @@ final class Avisos {
 		$repo   = PersonaRepository::make();
 		$email  = Contacto::email( $user, $repo );
 		if ( ! $email ) {
-			RegistroEmails::registrar( $user, RegistroEmails::TIENDA, '', $asunto, RegistroEmails::SIN_EMAIL, asde_t( 'La cuenta no tiene un email al que escribir.' ), $datos );
+			RegistroEmails::registrar( $user, RegistroEmails::TIENDA, '', $asunto, RegistroEmails::SIN_EMAIL, __( 'The account has no email address to write to.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $datos );
 			return false;
 		}
 		$error = RegistroEmails::enviar( $email, $asunto, self::html( $datos, Contacto::saludo( $user, $repo ) ) );
@@ -86,19 +86,19 @@ final class Avisos {
 		$num = $p ? PedidosTable::numero( $p ) : '';
 		switch ( $tipo ) {
 			case self::PAGADO:
-				$plantilla = asde_t( '[%1$s] Pago recibido: pedido %2$s' );
+				$plantilla = /* translators: 1: text, 2: text */ __( '[%1$s] Payment received: order %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 			case self::ENTREGADO:
-				$plantilla = asde_t( '[%1$s] Pedido entregado: %2$s' );
+				$plantilla = /* translators: 1: text, 2: text */ __( '[%1$s] Order delivered: %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 			case self::RECORDATORIO:
-				$plantilla = asde_t( '[%1$s] Recordatorio: el pedido %2$s está sin pagar' );
+				$plantilla = /* translators: 1: text, 2: text */ __( '[%1$s] Reminder: order %2$s is unpaid', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 			case self::CANCELADO:
-				$plantilla = asde_t( '[%1$s] Pedido cancelado: %2$s' );
+				$plantilla = /* translators: 1: text, 2: text */ __( '[%1$s] Order cancelled: %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 			default:
-				$plantilla = asde_t( '[%1$s] Pedido recibido: %2$s' );
+				$plantilla = /* translators: 1: text, 2: text */ __( '[%1$s] Order received: %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		return sprintf( $plantilla, (string) ( $datos['grupo'] ?? Grupo::nombre() ), $num );
 	}
@@ -129,7 +129,7 @@ final class Avisos {
 				'texto_pago'  => $sin_pagar ? $cfg['texto_pago'] : '',
 				'limite'      => $limite,
 				'url'         => '' === $p['socio'] ? Enlace::url_pedido( $p ) : Pages::url( 'tienda_pedidos' ),
-				'boton'       => '' === $p['socio'] ? asde_t( 'Ver mi pedido' ) : asde_t( 'Ver mis pedidos' ),
+				'boton'       => '' === $p['socio'] ? __( 'View my order', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : __( 'View my orders', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 				'contacto'    => EmailRechazo::contacto(),
 			)
 		);

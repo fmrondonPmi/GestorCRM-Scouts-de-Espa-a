@@ -178,7 +178,7 @@ final class Organizacion {
 			$url = esc_url_raw( $url, array( 'https', 'http' ) );
 			// Solo el formato (wp_http_validate_url preguntaría al DNS: sin red, o con un dominio aún sin publicar, fallaría).
 			if ( '' === $url || ! filter_var( $url, FILTER_VALIDATE_URL ) || '' === (string) wp_parse_url( $url, PHP_URL_HOST ) ) {
-				return new \WP_Error( 'asde_organizacion', asde_t( 'La dirección del manual no es válida: escribe una dirección web completa (https://…).' ) );
+				return new \WP_Error( 'asde_organizacion', __( 'The manual\'s address is not valid: enter a full web address (https://…).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			}
 			$url = preg_replace( '~/[^/]*\.html?$~i', '/', strtok( $url, '?#' ) );
 			$url = rtrim( $url, '/' ) . '/';
@@ -219,17 +219,17 @@ final class Organizacion {
 	 */
 	public static function guardar( string $organizacion, string $codigo, array $federacion, ?string $identificador = null ) {
 		if ( ! isset( self::FEDERADAS[ $organizacion ] ) ) {
-			return new \WP_Error( 'asde_organizacion', asde_t( 'Elige la organización federada de la lista.' ) );
+			return new \WP_Error( 'asde_organizacion', __( 'Choose the federated organisation from the list.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		// v0.56: el código ya no se pide; si no se indica, se conserva el que hubiera.
 		$codigo = trim( $codigo );
 		if ( '' === $codigo ) {
 			$codigo = self::codigo_antiguo();
 		} elseif ( ! self::codigo_valido( $codigo ) ) {
-			return new \WP_Error( 'asde_organizacion', asde_t( 'El código de la organización tiene que ser un número de 1 a 3 cifras que no empiece por 0.' ) );
+			return new \WP_Error( 'asde_organizacion', __( 'The organisation code must be a number of 1 to 3 digits that does not start with 0.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( null !== $identificador && ! in_array( $identificador, array( self::IDENTIFICADOR_ASDE, self::IDENTIFICADOR_LOCAL ), true ) ) {
-			return new \WP_Error( 'asde_organizacion', asde_t( 'Elige qué número es el usuario de acceso.' ) );
+			return new \WP_Error( 'asde_organizacion', __( 'Choose which number is the sign-in username.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$antes = get_option( self::OPTION, array() );
 		update_option(
@@ -332,9 +332,9 @@ final class Organizacion {
 	/** Categorías del seguro según la edad de corte (p. ej. «Menores de 14 años»). */
 	public static function categorias_seguro( int $edad_corte ): array {
 		return array(
-			'menores'  => sprintf( asde_t( 'Menores de %d años' ), $edad_corte ),
-			'mayores'  => sprintf( asde_t( 'Educandos de %d años o más' ), $edad_corte ),
-			'scouters' => asde_t( 'Adultos (scouters y voluntariado)' ),
+			'menores'  => sprintf( /* translators: %d: number */ __( 'Under %d years old', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $edad_corte ),
+			'mayores'  => sprintf( /* translators: %d: number */ __( 'Youth members aged %d or over', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $edad_corte ),
+			'scouters' => __( 'Adults (scouters and volunteers)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 		);
 	}
 }

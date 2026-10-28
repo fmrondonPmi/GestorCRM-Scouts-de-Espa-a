@@ -82,7 +82,7 @@ final class Recetario {
 	public static function copiar( int $id ) {
 		$r = RecetasTable::obtener( $id );
 		if ( ! $r ) {
-			return new \WP_Error( 'asde_menus', asde_t( 'Esa receta no existe.' ) );
+			return new \WP_Error( 'asde_menus', __( 'That recipe does not exist.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$comun  = IngredientesTable::COMUN === $r['grupo'];
 		$nombre = $comun ? asde_t( $r['nombre'] ) : $r['nombre']; // De la biblioteca: se copia en el idioma de quien la copia.
@@ -90,7 +90,7 @@ final class Recetario {
 		while ( self::propia_con_nombre( $nombre ) && $n < 50 ) {
 			++$n;
 			/* translators: 1: nombre de la receta, 2: nº de la copia */
-			$nombre = sprintf( asde_t( '%1$s (copia %2$d)' ), $comun ? asde_t( $r['nombre'] ) : $r['nombre'], $n );
+			$nombre = sprintf( /* translators: 1: text, 2: number */ __( '%1$s (copy %2$d)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $comun ? asde_t( $r['nombre'] ) : $r['nombre'], $n );
 		}
 		$nuevo = RecetasTable::guardar(
 			array(
@@ -148,7 +148,7 @@ final class Recetario {
 		$texto = (string) file_get_contents( $ruta ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- fichero temporal subido, ya comprobado
 		$texto = (string) preg_replace( '/^\xEF\xBB\xBF/', '', $texto );
 		if ( '' === trim( $texto ) ) {
-			return new \WP_Error( 'asde_menus', asde_t( 'El fichero está vacío.' ) );
+			return new \WP_Error( 'asde_menus', __( 'The file is empty.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$lineas = preg_split( '/\r\n|\r|\n/', $texto );
 		$sep    = substr_count( (string) $lineas[0], ';' ) >= substr_count( (string) $lineas[0], ',' ) ? ';' : ',';
@@ -160,10 +160,10 @@ final class Recetario {
 		}
 		$cabecera = array_shift( $filas );
 		if ( count( $cabecera ) < 6 || Conversion::clave( (string) $cabecera[0] ) !== Conversion::clave( self::COLUMNAS[0] ) ) {
-			return new \WP_Error( 'asde_menus', asde_t( 'La primera fila tiene que ser la de las columnas: Receta; Tipo; Porciones; Ingrediente; Cantidad; Unidad.' ) );
+			return new \WP_Error( 'asde_menus', __( 'The first row must be the column row: Recipe; Type; Portions; Ingredient; Quantity; Unit.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( count( $filas ) > self::MAX_FILAS ) {
-			return new \WP_Error( 'asde_menus', sprintf( asde_t( 'El fichero tiene demasiadas filas (máximo %d).' ), self::MAX_FILAS ) );
+			return new \WP_Error( 'asde_menus', sprintf( /* translators: %d: number */ __( 'The file has too many rows (maximum %d).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), self::MAX_FILAS ) );
 		}
 		$errores = array();
 		$grupos  = array();
@@ -171,7 +171,7 @@ final class Recetario {
 			$c      = array_pad( $c, 6, '' );
 			$nombre = trim( (string) $c[0] );
 			if ( '' === $nombre ) {
-				$errores[] = array( 'fila' => $n, 'motivo' => asde_t( 'Falta el nombre de la receta.' ) );
+				$errores[] = array( 'fila' => $n, 'motivo' => __( 'The recipe name is missing.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 				continue;
 			}
 			$clave = Conversion::clave( $nombre );
@@ -183,7 +183,7 @@ final class Recetario {
 			$ing    = trim( (string) $c[3] );
 			$cant   = Conversion::numero( (string) $c[4] );
 			if ( '' === $ing || $cant <= 0 || ! Escalado::unidad_valida( $unidad ) ) {
-				$errores[] = array( 'fila' => $n, 'motivo' => asde_t( 'Cada fila necesita ingrediente, una cantidad mayor que cero y una unidad válida (g, kg, ml, l, ud, cda, pizca).' ) );
+				$errores[] = array( 'fila' => $n, 'motivo' => __( 'Each row needs an ingredient, a quantity greater than zero and a valid unit (g, kg, ml, l, unit, tbsp, pinch).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 				continue;
 			}
 			$grupos[ $clave ]['lineas'][] = array( 'ingrediente' => $ing, 'cantidad' => $cant, 'unidad' => $unidad );
@@ -192,11 +192,11 @@ final class Recetario {
 		$nuevos  = 0;
 		foreach ( $grupos as $g ) {
 			if ( self::propia_con_nombre( $g['nombre'] ) ) {
-				$errores[] = array( 'fila' => $g['fila'], 'motivo' => sprintf( asde_t( 'Ya hay una receta «%s» en el grupo: no se ha cargado.' ), $g['nombre'] ) );
+				$errores[] = array( 'fila' => $g['fila'], 'motivo' => sprintf( /* translators: %s: text */ __( 'There is already a recipe "%s" in the group: it has not been loaded.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $g['nombre'] ) );
 				continue;
 			}
 			if ( $g['porciones'] < 1 || $g['porciones'] > 500 || ! $g['lineas'] ) {
-				$errores[] = array( 'fila' => $g['fila'], 'motivo' => sprintf( asde_t( 'La receta «%s» necesita porciones (1 a 500) y al menos un ingrediente válido.' ), $g['nombre'] ) );
+				$errores[] = array( 'fila' => $g['fila'], 'motivo' => sprintf( /* translators: %s: text */ __( 'The recipe "%s" needs portions (1 to 500) and at least one valid ingredient.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $g['nombre'] ) );
 				continue;
 			}
 			$lineas = array();

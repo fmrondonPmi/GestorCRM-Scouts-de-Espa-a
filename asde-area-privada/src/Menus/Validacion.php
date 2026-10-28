@@ -56,10 +56,10 @@ final class Validacion {
 	 */
 	public static function confirmar( array $e, \AsdeBalears\AreaPrivada\Auth\Ambito $a, int $plato_id, string $alergeno, string $alternativa ) {
 		if ( ! MenuEvento::puede_editar( $e, $a ) ) {
-			return new \WP_Error( 'asde_menus', asde_t( 'No puedes cambiar el menú de este evento.' ) );
+			return new \WP_Error( 'asde_menus', __( 'You cannot change this event\'s menu.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( ! isset( AvisosTable::ALTERNATIVAS[ $alternativa ] ) ) {
-			return new \WP_Error( 'asde_menus', asde_t( 'Elige qué se hace con ese plato.' ) );
+			return new \WP_Error( 'asde_menus', __( 'Choose what is done with that dish.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		foreach ( MenuEvento::platos( $e ) as $p ) {
 			if ( $p['plato']['id'] === $plato_id && in_array( $alergeno, array_merge( $p['alergenos']['contiene'], $p['alergenos']['trazas'] ), true ) ) {
@@ -68,7 +68,7 @@ final class Validacion {
 				return true;
 			}
 		}
-		return new \WP_Error( 'asde_menus', asde_t( 'Ese plato no lleva ese alérgeno.' ) );
+		return new \WP_Error( 'asde_menus', __( 'That dish does not contain that allergen.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 	}
 
 	/** @return array<string, array{rol:string, revisada:bool}> Los asistentes: inscritos activos y equipo, por nº. */
@@ -120,7 +120,7 @@ final class Validacion {
 		// «Sí» y un texto que no se entiende → a revisar a mano; «No» sin texto → nada que mirar.
 		$revisar = $i['sin_reconocer'] ? implode( ', ', $i['sin_reconocer'] ) : '';
 		if ( '' === $revisar && ( self::si( $alergia ) || self::si( $intol ) ) && ! $i['codigos'] ) {
-			$revisar = asde_t( '(dice que sí, pero no indica a qué)' );
+			$revisar = __( '(says yes, but does not say to what)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		return array(
 			'codigos'  => $i['codigos'],

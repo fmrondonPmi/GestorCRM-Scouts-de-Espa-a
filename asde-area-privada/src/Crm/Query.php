@@ -40,7 +40,7 @@ final class Query {
 
 	public static function id( string $id ): string {
 		if ( ! self::is_id( $id ) ) {
-			throw new \InvalidArgumentException( esc_html( asde_t( 'Identificador de CRM no válido.' ) ) );
+			throw new \InvalidArgumentException( esc_html( __( 'Invalid CRM identifier.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) );
 		}
 		return "'" . strtolower( $id ) . "'";
 	}
@@ -48,7 +48,7 @@ final class Query {
 	/** @param string[] $ids */
 	public static function ids( array $ids ): string {
 		if ( ! $ids ) {
-			throw new \InvalidArgumentException( esc_html( asde_t( 'Lista de identificadores vacía.' ) ) );
+			throw new \InvalidArgumentException( esc_html( __( 'Empty list of identifiers.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) );
 		}
 		return '(' . implode( ',', array_map( array( self::class, 'id' ), array_values( array_unique( $ids ) ) ) ) . ')';
 	}

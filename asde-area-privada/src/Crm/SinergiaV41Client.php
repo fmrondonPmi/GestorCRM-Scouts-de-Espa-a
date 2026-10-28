@@ -70,31 +70,31 @@ final class SinergiaV41Client implements CrmClientInterface, EscritorCrm {
 			if ( empty( $login['id'] ) ) {
 				return ConnectionResult::fail(
 					/* translators: %s: motivo que da el CRM al rechazar el inicio de sesión */
-					sprintf( __( 'El CRM ha rechazado el inicio de sesión: %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $this->error_text( $login ) ),
+					sprintf( /* translators: %s: text */ __( 'The CRM rejected the sign-in: %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $this->error_text( $login ) ),
 					array( 'Endpoint: ' . $endpoint )
 				);
 			}
 
 			$session  = (string) $login['id'];
 			$details  = array(
-				asde_t( 'API: REST v4_1' ),
+				__( 'API: REST v4_1', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 				'Endpoint: ' . $endpoint,
 				'Usuario CRM: ' . (string) ( $login['name_value_list']['user_name']['value'] ?? $this->username ),
 			);
 			$warnings = $this->write_permission_warnings( $endpoint, $session );
 
 			if ( ! empty( $login['name_value_list']['user_is_admin']['value'] ) ) {
-				$warnings[] = __( 'El usuario de API es ADMINISTRADOR del CRM. Usa un usuario dedicado con un rol de solo lectura.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
+				$warnings[] = __( 'The API user is a CRM ADMINISTRATOR. Use a dedicated user with a read-only role.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 			}
 
 			$this->post( $endpoint, 'logout', array( 'session' => $session ) );
 			$this->forget_session();
 
-			return new ConnectionResult( true, __( 'Conexión correcta con SinergiaCRM.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $details, $warnings );
+			return new ConnectionResult( true, __( 'Connection to SinergiaCRM successful.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $details, $warnings );
 		}
 
 		return ConnectionResult::fail(
-			__( 'No se ha encontrado la API de SinergiaCRM en esa URL. Revisa que sea la dirección base del CRM (p. ej. https://entidad.sinergiacrm.org).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+			__( 'The SinergiaCRM API was not found at that URL. Check that it is the CRM\'s base address (e.g. https://entidad.sinergiacrm.org).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 			array( $last_error )
 		);
 	}
@@ -171,7 +171,7 @@ final class SinergiaV41Client implements CrmClientInterface, EscritorCrm {
 					)
 				);
 				/* translators: %d: número máximo de registros que se leen de una vez */
-				throw new CrmException( esc_html( sprintf( asde_t( 'El CRM tiene más de %d registros visibles para esta conexión y no se pueden leer todos de una vez: el resultado saldría incompleto. Avisa a quien administra el área privada.' ), $hard_limit ) ) );
+				throw new CrmException( esc_html( sprintf( /* translators: %d: number */ __( 'The CRM has more than %d records visible to this connection and they cannot all be read at once: the result would be incomplete. Tell whoever administers the private area.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $hard_limit ) ) );
 			}
 		}
 
@@ -299,7 +299,7 @@ final class SinergiaV41Client implements CrmClientInterface, EscritorCrm {
 			)
 		);
 		if ( ( $data['id'] ?? '' ) !== $id ) {
-			throw new CrmException( esc_html( __( 'El CRM no ha confirmado el cambio.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) );
+			throw new CrmException( esc_html( __( 'The CRM has not confirmed the change.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) );
 		}
 		return $id;
 	}
@@ -327,7 +327,7 @@ final class SinergiaV41Client implements CrmClientInterface, EscritorCrm {
 		);
 		$id = (string) ( $data['id'] ?? '' );
 		if ( ! Query::is_id( $id ) ) {
-			throw new CrmException( esc_html( __( 'El CRM no ha confirmado la creación del registro.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) );
+			throw new CrmException( esc_html( __( 'The CRM has not confirmed the creation of the record.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) );
 		}
 		return $id;
 	}
@@ -413,7 +413,7 @@ final class SinergiaV41Client implements CrmClientInterface, EscritorCrm {
 			}
 			if ( empty( $login['id'] ) ) {
 				/* translators: %s: motivo que da el CRM al rechazar el inicio de sesión */
-				throw new CrmException( esc_html( sprintf( __( 'El CRM ha rechazado el inicio de sesión: %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $this->error_text( $login ) ) ) );
+				throw new CrmException( esc_html( sprintf( /* translators: %s: text */ __( 'The CRM rejected the sign-in: %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $this->error_text( $login ) ) ) );
 			}
 			$this->session  = (string) $login['id'];
 			$this->endpoint = $endpoint;
@@ -421,7 +421,7 @@ final class SinergiaV41Client implements CrmClientInterface, EscritorCrm {
 			return $this->session;
 		}
 
-		throw new CrmException( esc_html( __( 'No se ha encontrado la API de SinergiaCRM en la URL configurada.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) );
+		throw new CrmException( esc_html( __( 'The SinergiaCRM API was not found at the configured URL.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) );
 	}
 
 	/** La sesión da acceso al CRM: se cachea cifrada y por poco tiempo. */
@@ -494,7 +494,7 @@ final class SinergiaV41Client implements CrmClientInterface, EscritorCrm {
 		return array(
 			sprintf(
 				/* translators: %s: lista de módulos */
-				__( 'El usuario de API tiene permisos de escritura en: %s. Con ellos, desde el área privada se pueden editar las fichas (según el rol de cada usuario).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+				/* translators: %s: text */ __( 'The API user has write permissions on: %s. With them, records can be edited from the private area (depending on each user\'s role).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 				implode( ', ', array_unique( $writable ) )
 			),
 		);
@@ -518,7 +518,7 @@ final class SinergiaV41Client implements CrmClientInterface, EscritorCrm {
 
 		if ( is_wp_error( $response ) ) {
 			/* translators: %s: mensaje de error de la conexión HTTP */
-			return new \WP_Error( 'asde_crm_http', sprintf( __( 'No se puede conectar con el CRM: %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $response->get_error_message() ) );
+			return new \WP_Error( 'asde_crm_http', sprintf( /* translators: %s: text */ __( 'Cannot connect to the CRM: %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $response->get_error_message() ) );
 		}
 
 		$code = (int) wp_remote_retrieve_response_code( $response );
@@ -527,7 +527,7 @@ final class SinergiaV41Client implements CrmClientInterface, EscritorCrm {
 		// No se registra el cuerpo de la respuesta: podría contener datos personales.
 		if ( 200 !== $code || ! is_array( $data ) ) {
 			/* translators: 1: dirección de la API del CRM, 2: código HTTP de la respuesta */
-			return new \WP_Error( 'asde_crm_not_api', sprintf( __( '%1$s respondió HTTP %2$d sin una respuesta válida de la API.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $endpoint, $code ) );
+			return new \WP_Error( 'asde_crm_not_api', sprintf( /* translators: 1: text, 2: number */ __( '%1$s answered HTTP %2$d without a valid response from the API.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $endpoint, $code ) );
 		}
 		return $data;
 	}
@@ -590,6 +590,6 @@ final class SinergiaV41Client implements CrmClientInterface, EscritorCrm {
 	}
 
 	private function error_text( array $data ): string {
-		return (string) ( $data['description'] ?? $data['name'] ?? __( 'respuesta inesperada', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
+		return (string) ( $data['description'] ?? $data['name'] ?? __( 'unexpected response', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 	}
 }

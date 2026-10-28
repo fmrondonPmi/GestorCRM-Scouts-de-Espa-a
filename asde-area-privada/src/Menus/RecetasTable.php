@@ -120,11 +120,11 @@ final class RecetasTable {
 		$grupo  = '' !== $grupo ? $grupo : Grupo::numero();
 		$nombre = mb_substr( trim( sanitize_text_field( (string) ( $d['nombre'] ?? '' ) ) ), 0, 160 );
 		if ( '' === $nombre ) {
-			return new \WP_Error( 'asde_menus', asde_t( 'Escribe el nombre de la receta.' ) );
+			return new \WP_Error( 'asde_menus', __( 'Enter the recipe name.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$porciones = (int) ( $d['porciones'] ?? 0 );
 		if ( $porciones < 1 || $porciones > 500 ) {
-			return new \WP_Error( 'asde_menus', asde_t( 'Las porciones base tienen que estar entre 1 y 500.' ) );
+			return new \WP_Error( 'asde_menus', __( 'The base portions must be between 1 and 500.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$limpias = array();
 		foreach ( $lineas as $l ) {
@@ -134,10 +134,10 @@ final class RecetasTable {
 				continue; // Fila vacía del formulario.
 			}
 			if ( ! IngredientesTable::obtener( $ing ) ) {
-				return new \WP_Error( 'asde_menus', asde_t( 'Un ingrediente de la lista ya no existe. Elige otro.' ) );
+				return new \WP_Error( 'asde_menus', __( 'An ingredient on the list no longer exists. Choose another.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			}
 			if ( $cantidad <= 0 || $cantidad > 99999 ) {
-				return new \WP_Error( 'asde_menus', asde_t( 'Cada ingrediente necesita una cantidad mayor que cero.' ) );
+				return new \WP_Error( 'asde_menus', __( 'Each ingredient needs a quantity greater than zero.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			}
 			$limpias[] = array(
 				'ingrediente_id' => $ing,
@@ -146,10 +146,10 @@ final class RecetasTable {
 			);
 		}
 		if ( ! $limpias ) {
-			return new \WP_Error( 'asde_menus', asde_t( 'Añade al menos un ingrediente.' ) );
+			return new \WP_Error( 'asde_menus', __( 'Add at least one ingredient.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( count( $limpias ) > self::MAX_LINEAS ) {
-			return new \WP_Error( 'asde_menus', sprintf( asde_t( 'Una receta puede llevar como mucho %d ingredientes.' ), self::MAX_LINEAS ) );
+			return new \WP_Error( 'asde_menus', sprintf( /* translators: %d: number */ __( 'A recipe can have at most %d ingredients.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), self::MAX_LINEAS ) );
 		}
 		$fila = array(
 			'nombre'        => $nombre,
@@ -161,7 +161,7 @@ final class RecetasTable {
 		if ( $id ) {
 			$actual = self::obtener( $id );
 			if ( ! $actual || $actual['grupo'] !== $grupo ) {
-				return new \WP_Error( 'asde_menus', asde_t( 'Esa receta es de la biblioteca común: cópiala a tu grupo para editarla.' ) );
+				return new \WP_Error( 'asde_menus', __( 'That recipe is from the common library: copy it to your group to edit it.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			}
 			$wpdb->update( self::table(), $fila, array( 'id' => $id ) ); // phpcs:ignore WordPress.DB
 		} else {

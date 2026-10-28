@@ -112,17 +112,17 @@ final class Numeros {
 		if ( Identidad::es_asde() ) {
 			$html = '<strong>' . esc_html( $p->num_socio_asde ) . '</strong>';
 			if ( $mostrar ) {
-				$html .= ' <span class="asde-muted" title="' . asde_a( 'Nº de socio/a local/territorial' ) . '">' . esc_html( asde_t( 'terr.' ) ) . ' ' . esc_html( '' !== $local ? $local : '—' ) . '</span>';
+				$html .= ' <span class="asde-muted" title="' . esc_attr__( 'Local/territorial member no.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . '">' . esc_html( __( 'terr.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) . ' ' . esc_html( '' !== $local ? $local : '—' ) . '</span>';
 			}
 		} else {
 			$html  = '<strong>' . esc_html( '' !== $local ? $local : '—' ) . '</strong>';
 			if ( ! $compacto ) {
-				$html .= ' <span class="asde-muted" title="' . asde_a( 'Nº de socio/a de Scouts de España' ) . '">ASDE ' . esc_html( $p->num_socio_asde ) . '</span>';
+				$html .= ' <span class="asde-muted" title="' . esc_attr__( 'Scouts de España member no.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . '">ASDE ' . esc_html( $p->num_socio_asde ) . '</span>';
 			}
 		}
 		if ( '' !== $aviso ) {
 			/* translators: %s: qué le pasa al nº territorial (duplicado, falta…) */
-			$html .= ' <span class="asde-numeros__aviso" title="' . esc_attr( $aviso ) . '">⚠ ' . esc_html( sprintf( asde_t( 'nº territorial: %s' ), asde_t( self::CORTO[ $n['estado'] ] ?? $aviso ) ) ) . '</span>';
+			$html .= ' <span class="asde-numeros__aviso" title="' . esc_attr( $aviso ) . '">⚠ ' . esc_html( sprintf( /* translators: %s: text */ __( 'territorial no.: %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), asde_t( self::CORTO[ $n['estado'] ] ?? $aviso ) ) ) . '</span>';
 		}
 		return $html;
 	}

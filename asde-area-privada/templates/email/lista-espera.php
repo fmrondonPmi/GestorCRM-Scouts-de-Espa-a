@@ -27,10 +27,10 @@ $col = Colores::para_email(); // Los colores elegidos en wp-admin → Colores (l
 		<tr><td align="center">
 			<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:560px;background:<?php echo esc_attr( $col['tarjeta'] ); ?>;border-radius:6px;overflow:hidden;">
 				<tr><td style="background:<?php echo esc_attr( $col['primary'] ); ?>;color:<?php echo esc_attr( $col['on_primary'] ); ?>;padding:20px 28px;font-size:18px;font-weight:600;">
-					<?php echo esc_html( $grupo ); ?> · <?php asde_e( 'Lista de espera' ); ?>
+					<?php echo esc_html( $grupo ); ?> · <?php esc_html_e( 'Waiting list', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>
 				</td></tr>
 				<tr><td style="padding:28px;font-size:15px;line-height:1.6;">
-					<p style="margin:0 0 16px;"><?php echo wp_kses( '' !== $saludo ? sprintf( asde_h( 'Hola, %s:' ), esc_html( $saludo ) ) : asde_h( 'Hola:' ), asde_html_permitido() ); ?></p>
+					<p style="margin:0 0 16px;"><?php echo wp_kses( '' !== $saludo ? sprintf( /* translators: %s: text */ __( 'Hello, %s:', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), esc_html( $saludo ) ) : __( 'Hello:', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), asde_html_permitido() ); ?></p>
 					<?php foreach ( $parrafos as $parrafo ) : ?>
 						<div style="margin:0 0 16px;"><?php echo wp_kses_post( $parrafo ); ?></div>
 					<?php endforeach; ?>
@@ -38,13 +38,13 @@ $col = Colores::para_email(); // Los colores elegidos en wp-admin → Colores (l
 						<p style="margin:24px 0;text-align:center;">
 							<a href="<?php echo esc_url( $boton_url ); ?>" style="display:inline-block;background:<?php echo esc_attr( $col['primary'] ); ?>;color:<?php echo esc_attr( $col['on_primary'] ); ?>;text-decoration:none;font-weight:600;padding:12px 24px;border-radius:4px;"><?php echo esc_html( $boton_texto ); ?></a>
 						</p>
-						<p style="margin:0 0 16px;font-size:13px;color:<?php echo esc_attr( $col['atenuado'] ); ?>;word-break:break-all;"><?php asde_e( 'Si el botón no funciona, copia esta dirección en el navegador:' ); ?> <?php echo esc_html( $boton_url ); ?></p>
+						<p style="margin:0 0 16px;font-size:13px;color:<?php echo esc_attr( $col['atenuado'] ); ?>;word-break:break-all;"><?php esc_html_e( 'If the button does not work, copy this address into the browser:', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <?php echo esc_html( $boton_url ); ?></p>
 					<?php endif; ?>
 					<?php if ( '' !== $nota ) : ?>
 						<p style="margin:0 0 16px;font-size:13px;color:<?php echo esc_attr( $col['atenuado'] ); ?>;"><?php echo wp_kses_post( $nota ); ?></p>
 					<?php endif; ?>
 					<?php if ( '' !== $contacto ) : ?>
-						<p style="margin:0;font-size:13px;color:<?php echo esc_attr( $col['atenuado'] ); ?>;"><?php echo wp_kses( sprintf( asde_h( '¿Dudas? Escríbenos a %s.' ), '<a href="mailto:' . esc_attr( $contacto ) . '" style="color:' . esc_attr( $col['primary'] ) . ';">' . esc_html( $contacto ) . '</a>' ), asde_html_permitido() ); ?></p>
+						<p style="margin:0;font-size:13px;color:<?php echo esc_attr( $col['atenuado'] ); ?>;"><?php echo wp_kses( sprintf( /* translators: %s: text */ __( 'Questions? Write to us at %s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), '<a href="mailto:' . esc_attr( $contacto ) . '" style="color:' . esc_attr( $col['primary'] ) . ';">' . esc_html( $contacto ) . '</a>' ), asde_html_permitido() ); ?></p>
 					<?php endif; ?>
 				</td></tr>
 			</table>

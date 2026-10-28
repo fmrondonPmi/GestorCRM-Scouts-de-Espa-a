@@ -28,24 +28,24 @@ final class Pain008 {
 	public static function errores( array $cfg, string $fecha_cobro, array $lineas ): array {
 		$e = Config::errores( $cfg );
 		if ( ! preg_match( '/^\d{4}-\d{2}-\d{2}$/', $fecha_cobro ) ) {
-			$e[] = asde_t( 'La fecha de cobro no es válida.' );
+			$e[] = __( 'The collection date is not valid.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		if ( ! $lineas ) {
-			$e[] = asde_t( 'No hay ningún adeudo que incluir.' );
+			$e[] = __( 'There is no direct debit to include.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		foreach ( $lineas as $l ) {
 			$ref = $l['familia_n'] ?? '?';
 			if ( (int) $l['centimos'] <= 0 ) {
-				$e[] = sprintf( asde_t( 'Familia %s: el importe debe ser mayor que 0.' ), $ref );
+				$e[] = sprintf( /* translators: %s: text */ __( 'Family %s: the amount must be greater than 0.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $ref );
 			}
 			if ( ! Iban::es_valido( (string) $l['iban'] ) ) {
-				$e[] = sprintf( asde_t( 'Familia %s: el IBAN de la autorización no es válido (o ya no se conserva).' ), $ref );
+				$e[] = sprintf( /* translators: %s: text */ __( 'Family %s: the IBAN on the authorisation is not valid (or is no longer kept).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $ref );
 			}
 			if ( '' === Texto::limpiar( (string) $l['titular'], 70 ) ) {
-				$e[] = sprintf( asde_t( 'Familia %s: falta el nombre del titular.' ), $ref );
+				$e[] = sprintf( /* translators: %s: text */ __( 'Family %s: the holder\'s name is missing.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $ref );
 			}
 			if ( ! in_array( $l['secuencia'], array( 'FRST', 'RCUR' ), true ) ) {
-				$e[] = sprintf( asde_t( 'Familia %s: tipo de secuencia no válido.' ), $ref );
+				$e[] = sprintf( /* translators: %s: text */ __( 'Family %s: invalid sequence type.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $ref );
 			}
 		}
 		return array_values( array_unique( $e ) );

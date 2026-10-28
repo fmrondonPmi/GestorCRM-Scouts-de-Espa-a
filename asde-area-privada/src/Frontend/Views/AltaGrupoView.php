@@ -110,7 +110,7 @@ final class AltaGrupoView extends View {
 			return;
 		}
 		if ( ! $this->permitida() || ! wp_verify_nonce( $this->post_nonce(), 'asde_alta_grupo' ) ) {
-			self::$estado = array( 'errores' => array( asde_t( 'La sesión del formulario ha caducado. Vuelve a intentarlo.' ) ) );
+			self::$estado = array( 'errores' => array( __( 'The form session has expired. Try again.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) );
 			return;
 		}
 		$invitacion = GrupoInvitaciones::vigente( $this->token() );
@@ -127,7 +127,7 @@ final class AltaGrupoView extends View {
 	private function comprobar( array $invitacion ): void {
 		$numero = Grupos::normalizar_numero( $this->post( 'numero' ) );
 		if ( null === $numero ) {
-			self::$estado = array( 'errores' => array( asde_t( 'El nº de grupo no es válido (hasta tres cifras).' ) ) );
+			self::$estado = array( 'errores' => array( __( 'The group no. is not valid (up to three digits).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) );
 			return;
 		}
 		// Contra el uso del formulario para probar credenciales ajenas: límite por dispositivo y por invitación.
@@ -140,7 +140,7 @@ final class AltaGrupoView extends View {
 		$clave   = $this->post_cruda( 'clave' );
 		// Ya comprobada con este nº y sin escribir otra cosa: no hace falta repetirlo.
 		if ( $previa && $previa['numero'] === $numero && '' === $clave ) {
-			self::$estado = array( 'mensaje' => asde_t( 'Acceso comprobado: el usuario ve el grupo en el CRM.' ) );
+			self::$estado = array( 'mensaje' => __( 'Access checked: the user sees the group in the CRM.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			return;
 		}
 		$r = VerificacionGrupo::comprobar( $numero, $usuario, $clave );
@@ -187,24 +187,24 @@ final class AltaGrupoView extends View {
 		);
 		$errores = array();
 		if ( null === $numero ) {
-			$errores[] = asde_t( 'El nº de grupo no es válido (hasta tres cifras).' );
+			$errores[] = __( 'The group no. is not valid (up to three digits).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		} elseif ( Grupos::por_numero( $numero ) || GrupoSolicitudes::pendiente_con_numero( $numero ) ) {
-			$errores[] = asde_t( 'Ese nº de grupo ya está dado de alta o pendiente de revisar. Si es el vuestro, habla con la oficina.' );
+			$errores[] = __( 'That group no. is already registered or pending review. If it is yours, talk to the office.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		if ( ! $v || $v['numero'] !== $numero ) {
-			$errores[] = asde_t( 'Comprueba primero el acceso al CRM con el botón «Comprobar acceso».' );
+			$errores[] = __( 'First check the CRM access with the "Check access" button.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		if ( '' === trim( $d['nombre'] ) ) {
-			$errores[] = asde_t( 'Escribe el nombre del grupo.' );
+			$errores[] = __( 'Enter the group name.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		if ( ! is_email( $d['email'] ) ) {
-			$errores[] = asde_t( 'Escribe un email válido para el grupo.' );
+			$errores[] = __( 'Enter a valid email address for the group.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		if ( ! isset( GrupoSolicitudes::ROLES[ $d['rol'] ] ) ) {
-			$errores[] = asde_t( 'Elige el rol de la primera persona con acceso.' );
+			$errores[] = __( 'Choose the role of the first person with access.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		if ( '' === trim( $d['persona'] ) || ! preg_match( '/^[A-Z0-9]{6,12}$/', $d['dni'] ) ) {
-			$errores[] = asde_t( 'Escribe el nombre y el DNI o NIE de la primera persona con acceso.' );
+			$errores[] = __( 'Enter the name and ID or foreigner ID number of the first person with access.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		if ( $errores ) {
 			self::$estado = array( 'errores' => $errores );
@@ -212,13 +212,13 @@ final class AltaGrupoView extends View {
 		}
 		// El gasto de la invitación y la solicitud van juntos: gana el primero; si falla guardar, se devuelve la invitación.
 		if ( ! GrupoInvitaciones::consumir( (int) $invitacion['id'] ) ) {
-			self::$estado = array( 'errores' => array( asde_t( 'Este enlace ya se ha usado o ha caducado.' ) ) );
+			self::$estado = array( 'errores' => array( __( 'This link has already been used or has expired.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) );
 			return;
 		}
 		$id = GrupoSolicitudes::crear( (int) $invitacion['id'], $d + array( 'crm_id' => $v['crm_id'], 'usuario' => $v['usuario'], 'clave' => $v['clave'] ) );
 		if ( ! $id ) {
 			GrupoInvitaciones::devolver( (int) $invitacion['id'] );
-			self::$estado = array( 'errores' => array( asde_t( 'No se ha podido guardar la solicitud. Inténtalo de nuevo.' ) ) );
+			self::$estado = array( 'errores' => array( __( 'The request could not be saved. Try again.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) );
 			return;
 		}
 		delete_transient( $this->clave_verificacion( $invitacion ) );

@@ -124,19 +124,19 @@ final class FamiliasTable {
 		global $wpdb;
 		$nums = array_values( array_unique( array_filter( array_map( 'strval', $nums ) ) ) );
 		if ( ! $nums ) {
-			return new \WP_Error( 'asde_familia', asde_t( 'Elige al menos un socio.' ) );
+			return new \WP_Error( 'asde_familia', __( 'Choose at least one member.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		foreach ( $nums as $n ) {
 			if ( self::de_socio( $n ) ) {
-				return new \WP_Error( 'asde_familia', sprintf( asde_t( 'El socio con nº Scouts de España %s ya pertenece a otra familia.' ), $n ) );
+				return new \WP_Error( 'asde_familia', sprintf( /* translators: %s: text */ __( 'The member with Scouts de España no. %s already belongs to another family.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $n ) );
 			}
 		}
 		$grupo = Grupo::numero();
 		if ( '' === $grupo ) {
-			return new \WP_Error( 'asde_familia', asde_t( 'No se sabe en qué Grupo Scout se está trabajando.' ) );
+			return new \WP_Error( 'asde_familia', __( 'It is not known which Scout Group is being worked on.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( ! Bloqueo::tomar( 'asde_num_familia' ) ) {
-			return new \WP_Error( 'asde_familia', asde_t( 'No se ha podido crear la familia. Inténtalo de nuevo.' ) );
+			return new \WP_Error( 'asde_familia', __( 'The family could not be created. Try again.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$ok = false;
 		try {
@@ -160,7 +160,7 @@ final class FamiliasTable {
 			Bloqueo::soltar( 'asde_num_familia' );
 		}
 		if ( ! $id ) {
-			return new \WP_Error( 'asde_familia', asde_t( 'No se ha podido crear la familia. Inténtalo de nuevo.' ) );
+			return new \WP_Error( 'asde_familia', __( 'The family could not be created. Try again.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		foreach ( $nums as $n ) {
 			self::anadir( $id, $n );
@@ -173,7 +173,7 @@ final class FamiliasTable {
 		global $wpdb;
 		$actual = self::de_socio( $num_asde );
 		if ( $actual ) {
-			return $actual['id'] === $familia_id ? true : new \WP_Error( 'asde_familia', sprintf( asde_t( 'Ese socio ya pertenece a la familia %s.' ), $actual['numero'] ) );
+			return $actual['id'] === $familia_id ? true : new \WP_Error( 'asde_familia', sprintf( /* translators: %s: text */ __( 'That member already belongs to family %s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $actual['numero'] ) );
 		}
 		$wpdb->insert(
 			self::table_miembros(),
@@ -208,16 +208,16 @@ final class FamiliasTable {
 	 */
 	public static function por_que_no_borrar( array $f ): string {
 		if ( $f['miembros'] ) {
-			return asde_t( 'Solo se puede eliminar una familia sin socios.' );
+			return __( 'Only a family without members can be deleted.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		if ( MovimientosTable::hay_de_familia( (int) $f['id'] ) ) {
-			return asde_t( 'Tiene pagos registrados: no se puede eliminar.' );
+			return __( 'It has recorded payments: it cannot be deleted.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		if ( \AsdeBalears\AreaPrivada\Sepa\Mandatos::hay_de_familia( (int) $f['id'] ) ) {
-			return asde_t( 'Tiene autorizaciones de domiciliación: no se puede eliminar.' );
+			return __( 'It has direct debit authorisations: it cannot be deleted.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		if ( Banco\BancoTable::hay_de_familia( (int) $f['id'] ) ) {
-			return asde_t( 'Tiene movimientos del banco asignados: no se puede eliminar.' );
+			return __( 'It has bank transactions assigned: it cannot be deleted.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		return '';
 	}
@@ -227,7 +227,7 @@ final class FamiliasTable {
 		global $wpdb;
 		$f = self::obtener( $familia_id );
 		if ( ! $f ) {
-			return new \WP_Error( 'asde_familia', asde_t( 'Esa familia no existe.' ) );
+			return new \WP_Error( 'asde_familia', __( 'That family does not exist.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$motivo = self::por_que_no_borrar( $f );
 		if ( '' !== $motivo ) {

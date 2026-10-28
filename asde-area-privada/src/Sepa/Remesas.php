@@ -124,13 +124,13 @@ final class Remesas {
 	public static function error_fecha( string $fecha, ?\DateTimeImmutable $hoy = null ): string {
 		$d = \DateTimeImmutable::createFromFormat( '!Y-m-d', $fecha, wp_timezone() );
 		if ( ! $d || $d->format( 'Y-m-d' ) !== $fecha ) {
-			return asde_t( 'Elige la fecha de cobro.' );
+			return __( 'Choose the collection date.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		if ( (int) $d->format( 'N' ) >= 6 ) {
-			return asde_t( 'La fecha de cobro tiene que ser un día laborable (de lunes a viernes).' );
+			return __( 'The collection date must be a working day (Monday to Friday).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		if ( $fecha < self::fecha_minima( $hoy ) ) {
-			return sprintf( asde_t( 'La fecha de cobro tiene que ser, como pronto, el %s (%d días hábiles desde hoy): los bancos necesitan ese margen.' ), wp_date( 'd/m/Y', (int) strtotime( self::fecha_minima( $hoy ) ) ), self::DIAS_HABILES_MINIMOS );
+			return sprintf( /* translators: 1: text, 2: number */ __( 'The collection date must be %1$s at the earliest (%2$d working days from today): banks need that margin.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), wp_date( 'd/m/Y', (int) strtotime( self::fecha_minima( $hoy ) ) ), self::DIAS_HABILES_MINIMOS );
 		}
 		return '';
 	}
@@ -164,7 +164,7 @@ final class Remesas {
 		$cuentas = $socios_m ? CuentaCrm::leer( $repo, $socios_m ) : array();
 		$en_curso = self::familias_sin_cobrar( $ronda );
 		$plazos   = array_values( $cfg['plazos'] );
-		$nombre   = '' !== $plazo && isset( $plazos[ (int) $plazo ] ) ? (string) $plazos[ (int) $plazo ]['nombre'] : asde_t( 'Todo lo pendiente' );
+		$nombre   = '' !== $plazo && isset( $plazos[ (int) $plazo ] ) ? (string) $plazos[ (int) $plazo ]['nombre'] : __( 'Everything pending', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 
 		$lineas   = array();
 		$omitidas = array();
@@ -227,7 +227,7 @@ final class Remesas {
 					'familia'   => 0,
 					'familia_n' => \AsdeBalears\AreaPrivada\Eventos\InscripcionesTable::numero( $f ),
 					'centimos'  => (int) round( $c['pendiente'] * 100 ),
-					'motivo'    => asde_t( 'Sin familia en Tesorería' ),
+					'motivo'    => __( 'No family in Treasury', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 				);
 			}
 		}
@@ -235,7 +235,7 @@ final class Remesas {
 			'lineas'       => $lineas,
 			'omitidas'     => $omitidas,
 			'total'        => $total,
-			'plazo_nombre' => mb_substr( sprintf( asde_t( 'Evento %s' ), \AsdeBalears\AreaPrivada\Eventos\EventosTable::numero( $e ) ), 0, 60 ),
+			'plazo_nombre' => mb_substr( sprintf( /* translators: %s: text */ __( 'Event %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), \AsdeBalears\AreaPrivada\Eventos\EventosTable::numero( $e ) ), 0, 60 ),
 		);
 	}
 
@@ -252,13 +252,13 @@ final class Remesas {
 		$local  = $m ? Mandatos::cuenta_local( $m ) : null;
 		$cuenta = $m ? ( $local ?? CuentaCrm::de_familia( $f, (string) $m['iban_huella'], $cuentas ) ) : null;
 		if ( ! $m ) {
-			$omitidas[] = self::omitida( $f, $centimos, asde_t( 'Sin autorización SEPA' ) );
+			$omitidas[] = self::omitida( $f, $centimos, __( 'No SEPA authorisation', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		} elseif ( null !== $en_curso ) {
-			$omitidas[] = self::omitida( $f, $centimos, sprintf( asde_t( 'Ya está en la remesa %s (falta registrar su cobro)' ), $en_curso ) );
+			$omitidas[] = self::omitida( $f, $centimos, sprintf( /* translators: %s: text */ __( 'Already in batch %s (its collection still has to be recorded)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $en_curso ) );
 		} elseif ( ! $cuenta ) {
-			$omitidas[] = self::omitida( $f, $centimos, asde_t( 'La cuenta de su ficha del CRM no es la autorizada (o no está): tiene que firmar la autorización de nuevo' ) );
+			$omitidas[] = self::omitida( $f, $centimos, __( 'The account on their CRM record is not the authorised one (or is missing): they must sign the authorisation again', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		} elseif ( ! Iban::es_valido( $cuenta['iban'] ) || '' === $cuenta['titular'] ) {
-			$omitidas[] = self::omitida( $f, $centimos, asde_t( 'No se puede leer la autorización (pídele que la firme de nuevo)' ) );
+			$omitidas[] = self::omitida( $f, $centimos, __( 'The authorisation cannot be read (ask them to sign it again)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		} else {
 			$lineas[] = array(
 				'mandato'     => $m['id'],
@@ -328,25 +328,25 @@ final class Remesas {
 		global $wpdb;
 		$cfg = Config::de();
 		if ( ! Config::lista( $cfg ) ) {
-			return new \WP_Error( 'asde_sepa', asde_t( 'Faltan datos del acreedor: complétalos en «Datos del acreedor».' ) );
+			return new \WP_Error( 'asde_sepa', __( 'Creditor details are missing: complete them in "Creditor details".', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$fecha_error = self::error_fecha( $fecha_cobro );
 		if ( '' !== $fecha_error ) {
 			return new \WP_Error( 'asde_sepa', $fecha_error );
 		}
 		if ( ! $prep['lineas'] ) {
-			return new \WP_Error( 'asde_sepa', asde_t( 'No hay ningún adeudo que incluir.' ) );
+			return new \WP_Error( 'asde_sepa', __( 'There is no direct debit to include.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$grupo = Grupo::numero();
 		if ( ! Bloqueo::tomar( 'asde_num_remesa' ) ) {
-			return new \WP_Error( 'asde_sepa', asde_t( 'No se ha podido guardar la remesa. Inténtalo de nuevo.' ) );
+			return new \WP_Error( 'asde_sepa', __( 'The batch could not be saved. Try again.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		try {
 			// Nunca dos remesas con los mismos adeudos sin cobrar (dos tesoreros a la vez, una vista previa antigua…).
 			$en_curso      = $evento_id ? self::familias_sin_cobrar_evento( $evento_id ) : self::familias_sin_cobrar( $ronda );
 			$prep['lineas'] = array_values( array_filter( $prep['lineas'], static fn( $l ) => ! isset( $en_curso[ (int) $l['familia'] ] ) ) );
 			if ( ! $prep['lineas'] ) {
-				return new \WP_Error( 'asde_sepa', asde_t( 'Todas esas familias ya están en otra remesa que aún no tiene registrados sus cobros.' ) );
+				return new \WP_Error( 'asde_sepa', __( 'All those families are already in another batch whose collections have not yet been recorded.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			}
 			$prep['total'] = array_sum( array_map( static fn( $l ) => (int) $l['centimos'], $prep['lineas'] ) );
 			$numero = self::siguiente_numero( $grupo );
@@ -383,7 +383,7 @@ final class Remesas {
 			Bloqueo::soltar( 'asde_num_remesa' );
 		}
 		if ( ! $ok || ! $id ) {
-			return new \WP_Error( 'asde_sepa', asde_t( 'No se ha podido guardar la remesa. Inténtalo de nuevo.' ) );
+			return new \WP_Error( 'asde_sepa', __( 'The batch could not be saved. Try again.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$contenido = array(
 			'acreedor' => array_intersect_key( $cfg, array_flip( array( 'nombre', 'ics', 'iban', 'bic', 'calle', 'cp', 'poblacion' ) ) ),
@@ -448,7 +448,7 @@ final class Remesas {
 	public static function xml( array $remesa ) {
 		$c = self::contenido( $remesa );
 		if ( ! $c['lineas'] ) {
-			return new \WP_Error( 'asde_sepa', asde_t( 'Los datos de esta remesa ya no se conservan.' ) );
+			return new \WP_Error( 'asde_sepa', __( 'The data of this batch is no longer kept.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$cfg = array_merge( Config::defaults(), $c['acreedor'] );
 		$con = self::con_cuentas( $c['lineas'] );
@@ -503,7 +503,7 @@ final class Remesas {
 		if ( null === $cuentas ) {
 			return array(
 				'lineas'  => $lineas,
-				'errores' => array( asde_t( 'No se ha podido leer la cuenta de las familias en el CRM: inténtalo más tarde.' ) ),
+				'errores' => array( __( 'The families\' account could not be read in the CRM: try again later.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ),
 			);
 		}
 		$errores = array();
@@ -514,7 +514,7 @@ final class Remesas {
 			$c = isset( $familias[ (int) $l['familia'] ] ) ? CuentaCrm::de_familia( $familias[ (int) $l['familia'] ], (string) ( $l['iban_huella'] ?? '' ), $cuentas ) : null;
 			if ( ! $c ) {
 				/* translators: %s: nº de la familia */
-				$errores[] = sprintf( asde_t( 'Familia %s: la cuenta de su ficha del CRM ya no es la autorizada.' ), $l['familia_n'] );
+				$errores[] = sprintf( /* translators: %s: text */ __( 'Family %s: the account on their CRM record is no longer the authorised one.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $l['familia_n'] );
 				continue;
 			}
 			$lineas[ $i ]['iban']    = $c['iban'];
@@ -528,7 +528,7 @@ final class Remesas {
 
 	/** «1 adeudo», «2 adeudos», en el idioma de quien lo ve (doc 59, RC-SEPA-2). */
 	public static function adeudos( int $n ): string {
-		return sprintf( asde_n( '%d adeudo', '%d adeudos', $n ), $n );
+		return sprintf( /* translators: %d: number */ _n( '%d direct debit', '%d direct debits', $n , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $n );
 	}
 
 	public static function nombre_fichero( array $remesa ): string {
@@ -615,14 +615,14 @@ final class Remesas {
 			'avisos'    => array(),
 		);
 		if ( ! preg_match( '/^\d{4}-\d{2}-\d{2}$/', $fecha ) || $fecha > current_time( 'Y-m-d' ) ) {
-			$res['errores'][] = asde_t( 'La fecha del cobro no es válida (no puede ser posterior a hoy).' );
+			$res['errores'][] = __( 'The collection date is not valid (it cannot be later than today).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 			return $res;
 		}
 		// Dos envíos a la vez (doble clic, dos tesoreros) registrarían cada cobro dos veces: la remesa se relee y se
 		// guarda dentro de un bloqueo con nombre (doc 59, RC-SEPA-1).
 		$bloqueo = 'asde_sepa_cobros_' . $id;
 		if ( ! Bloqueo::tomar( $bloqueo ) ) {
-			$res['errores'][] = asde_t( 'Otra persona está haciendo un cambio en esto ahora mismo. Inténtalo de nuevo en unos segundos.' );
+			$res['errores'][] = __( 'Someone else is making a change to this right now. Try again in a few seconds.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 			return $res;
 		}
 		try {
@@ -637,7 +637,7 @@ final class Remesas {
 		global $wpdb;
 		$r = self::obtener( $id );
 		if ( ! $r || self::ENVIADA !== $r['estado'] ) {
-			$res['errores'][] = asde_t( 'Los cobros solo se registran de una remesa enviada al banco.' );
+			$res['errores'][] = __( 'Collections can only be recorded for a batch sent to the bank.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 			return $res;
 		}
 		$cobradas  = array_map( 'intval', $cobradas );
@@ -655,17 +655,17 @@ final class Remesas {
 					$sobra = 0.0;
 					$mov   = $evento
 						? \AsdeBalears\AreaPrivada\Eventos\Cobros::pagar_familia( $evento, $familia, $l['centimos'] / 100, 'domiciliacion', $fecha, (string) $l['e2e'], 'Remesa SEPA ' . $r['numero'], true, $sobra )
-						: new \WP_Error( 'asde_sepa', asde_t( 'El evento de la remesa ya no existe.' ) );
+						: new \WP_Error( 'asde_sepa', __( 'The batch\'s event no longer exists.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 					if ( ! is_wp_error( $mov ) && $sobra > 0 ) {
 						// El banco ya cobró: se apunta todo y Tesorería decide la devolución (doc 59, RC-EVE-2).
 						/* translators: 1: nº de la familia, 2: importe */
-						$res['avisos'][] = sprintf( asde_t( 'Familia %1$s: el banco ha cobrado %2$s más de lo que quedaba por pagar en el evento. Queda como saldo a devolver: decide en Tesorería si se le devuelve.' ), $l['familia_n'], Calculadora::euros( $sobra ) );
+						$res['avisos'][] = sprintf( /* translators: 1: text, 2: text */ __( 'Family %1$s: the bank has collected %2$s more than was left to pay for the event. It remains as a balance to refund: decide in Treasury whether to refund it.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $l['familia_n'], Calculadora::euros( $sobra ) );
 					}
 				} else {
 					$mov = MovimientosTable::registrar( $familia, $r['ronda'], MovimientosTable::PAGO, $fecha, $l['centimos'] / 100, 'domiciliacion', (string) $l['e2e'], 'Remesa SEPA ' . $r['numero'], 'sepa' );
 				}
 				if ( is_wp_error( $mov ) ) {
-					$res['errores'][] = sprintf( asde_t( 'Familia %s: %s' ), $l['familia_n'], $mov->get_error_message() );
+					$res['errores'][] = sprintf( /* translators: 1: text, 2: text */ __( 'Family %1$s: %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $l['familia_n'], $mov->get_error_message() );
 					continue;
 				}
 				$c['lineas'][ $i ]['estado']    = self::COBRADO;

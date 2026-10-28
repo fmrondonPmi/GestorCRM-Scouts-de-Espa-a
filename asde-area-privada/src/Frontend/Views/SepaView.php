@@ -36,11 +36,11 @@ final class SepaView extends TesoreriaBaseView {
 			return $this->denegado();
 		}
 		if ( ! \AsdeBalears\AreaPrivada\Domain\Modulos::activo( \AsdeBalears\AreaPrivada\Domain\Modulos::SEPA ) ) {
-			return $this->denegado( asde_t( 'Las domiciliaciones SEPA no están activas en tu grupo.' ) );
+			return $this->denegado( __( 'SEPA direct debits are not active in your group.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$repo = PersonaRepository::make();
 		if ( ! $repo ) {
-			return $this->error_crm( 'tesoreria', asde_t( 'La conexión de tu grupo con el CRM no está configurada o no se ha podido comprobar. Un administrador puede revisarla en wp-admin → Grupos Scouts.' ) );
+			return $this->error_crm( 'tesoreria', __( 'Your group\'s connection to the CRM is not set up or could not be checked. An administrator can review it in wp-admin → Scout Groups.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$ronda = $this->ronda();
 		try {
@@ -50,7 +50,7 @@ final class SepaView extends TesoreriaBaseView {
 			}
 			$html = $id ? $this->remesa( $repo, $id, $ronda ) : $this->panel( $repo, $ronda );
 		} catch ( CrmException $e ) {
-			return $this->error_crm( 'tesoreria', asde_t( 'No se ha podido consultar el CRM: ' ) . $e->getMessage() );
+			return $this->error_crm( 'tesoreria', __( 'The CRM could not be queried: ', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . $e->getMessage() );
 		}
 		return $this->layout( 'tesoreria', $this->subnav( 'sepa', $ronda ) . $html );
 	}
@@ -156,13 +156,13 @@ final class SepaView extends TesoreriaBaseView {
 	}
 
 	private static function concepto_evento( array $e ): string {
-		return mb_substr( sprintf( asde_t( 'Evento %1$s · %2$s' ), EventosTable::numero( $e ), $e['nombre'] ), 0, 140 );
+		return mb_substr( sprintf( /* translators: 1: text, 2: text */ __( 'Event %1$s · %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), EventosTable::numero( $e ), $e['nombre'] ), 0, 140 );
 	}
 
 	private function remesa( PersonaRepository $repo, int $id, string $ronda ): string {
 		$r = Remesas::obtener( $id );
 		if ( ! $r ) {
-			return $this->tpl( 'comun/avisos', array( 'avisos' => array( array( 'error', asde_t( 'Esa remesa no existe.' ) ) ) ) ) . $this->panel( $repo, $ronda );
+			return $this->tpl( 'comun/avisos', array( 'avisos' => array( array( 'error', __( 'That batch does not exist.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) ) ) ) . $this->panel( $repo, $ronda );
 		}
 		$lineas   = Remesas::con_cuentas( Remesas::lineas( $r ) )['lineas']; // v0.33: el titular, de la ficha del CRM.
 		$familias = array();
@@ -191,7 +191,7 @@ final class SepaView extends TesoreriaBaseView {
 
 	public function handle_post(): void {
 		if ( ! current_user_can( self::CAP_CONFIG ) || ! \AsdeBalears\AreaPrivada\Domain\Modulos::activo( \AsdeBalears\AreaPrivada\Domain\Modulos::SEPA ) ) {
-			wp_die( esc_html__( 'No tienes permiso para cambiar las domiciliaciones.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+			wp_die( esc_html__( 'You do not have permission to change the direct debits.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		$ronda  = Config::es_ronda( $this->post( 'ronda' ) ) ? $this->post( 'ronda' ) : Config::ronda_actual();
 		$volver = $this->url( 'sepa', array( 'ronda' => $ronda ) );
@@ -210,12 +210,12 @@ final class SepaView extends TesoreriaBaseView {
 				check_admin_referer( 'asde_sepa_cuentas_crm' );
 				$repo = PersonaRepository::make();
 				if ( ! $repo ) {
-					Notices::add( 'error', asde_t( 'La conexión con el CRM no está disponible.' ) );
+					Notices::add( 'error', __( 'The connection to the CRM is not available.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 					$this->redirect( $volver );
 				}
 				$res = Mandatos::pasar_al_crm( $repo );
 				/* translators: 1: autorizaciones pasadas, 2: anuladas limpiadas */
-				Notices::add( $res['errores'] ? 'warning' : 'success', esc_html( sprintf( asde_t( 'Cuentas pasadas a las fichas del CRM: %1$d. Autorizaciones anuladas de las que se ha borrado la cuenta: %2$d.' ), $res['pasadas'], $res['borradas'] ) ) );
+				Notices::add( $res['errores'] ? 'warning' : 'success', esc_html( sprintf( /* translators: 1: number, 2: number */ __( 'Accounts moved to the CRM records: %1$d. Authorisations cancelled whose account was deleted: %2$d.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $res['pasadas'], $res['borradas'] ) ) );
 				foreach ( $res['errores'] as $e ) {
 					Notices::add( 'error', esc_html( $e ) );
 				}
@@ -226,13 +226,13 @@ final class SepaView extends TesoreriaBaseView {
 				check_admin_referer( 'asde_sepa_generar' );
 				$repo = PersonaRepository::make();
 				if ( ! $repo ) {
-					Notices::add( 'error', asde_t( 'La conexión con el CRM no está disponible.' ) );
+					Notices::add( 'error', __( 'The connection to the CRM is not available.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 					$this->redirect( $volver );
 				}
 				try {
 					$prep = Remesas::preparar( $repo, $ronda, $this->post( 'plazo' ) );
 				} catch ( CrmException $e ) {
-					Notices::add( 'error', esc_html( asde_t( 'No se ha podido consultar el CRM: ' ) . $e->getMessage() ) );
+					Notices::add( 'error', esc_html( __( 'The CRM could not be queried: ', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . $e->getMessage() ) );
 					$this->redirect( $volver );
 				}
 				$nueva = Remesas::crear( $prep, $ronda, $this->post( 'fecha' ), $this->post( 'concepto' ), get_current_user_id() );
@@ -241,7 +241,7 @@ final class SepaView extends TesoreriaBaseView {
 					$this->redirect( add_query_arg( array( 'preparar' => '1', 'plazo' => $this->post( 'plazo' ), 'fecha' => $this->post( 'fecha' ), 'concepto' => $this->post( 'concepto' ) ), $volver ) );
 				}
 				$r = Remesas::obtener( $nueva );
-				Notices::add( 'success', sprintf( asde_t( 'Remesa <strong>%s</strong> creada: %s por %s. Descarga el fichero y súbelo al banco; después, márcala como enviada.' ), esc_html( $r['numero'] ), Remesas::adeudos( (int) $r['adeudos'] ), esc_html( Calculadora::euros( $r['total'] ) ) ) );
+				Notices::add( 'success', sprintf( /* translators: 1: text, 2: text, 3: text */ __( 'Batch <strong>%1$s</strong> created: %2$s for %3$s. Download the file and upload it to the bank; then mark it as sent.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), esc_html( $r['numero'] ), Remesas::adeudos( (int) $r['adeudos'] ), esc_html( Calculadora::euros( $r['total'] ) ) ) );
 				$this->redirect( $this->url( 'sepa', array( 'ronda' => $ronda, 'remesa' => (string) $nueva ) ) );
 				break;
 
@@ -251,17 +251,17 @@ final class SepaView extends TesoreriaBaseView {
 				$ev   = $this->eventos_sepa()[ (int) $this->post( 'evento' ) ] ?? null;
 				$repo = PersonaRepository::make();
 				if ( ! $ev ) {
-					Notices::add( 'error', asde_t( 'Ese evento no se puede cobrar por domiciliación.' ) );
+					Notices::add( 'error', __( 'That event cannot be collected by direct debit.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 					$this->redirect( $volver );
 				}
 				if ( ! $repo ) {
-					Notices::add( 'error', asde_t( 'La conexión con el CRM no está disponible.' ) );
+					Notices::add( 'error', __( 'The connection to the CRM is not available.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 					$this->redirect( $volver );
 				}
 				try {
 					$prep = Remesas::preparar_evento( $repo, $ev );
 				} catch ( CrmException $e ) {
-					Notices::add( 'error', esc_html( asde_t( 'No se ha podido consultar el CRM: ' ) . $e->getMessage() ) );
+					Notices::add( 'error', esc_html( __( 'The CRM could not be queried: ', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . $e->getMessage() ) );
 					$this->redirect( $volver );
 				}
 				$concepto = '' !== $this->post( 'concepto' ) ? $this->post( 'concepto' ) : self::concepto_evento( $ev );
@@ -271,7 +271,7 @@ final class SepaView extends TesoreriaBaseView {
 					$this->redirect( add_query_arg( array( 'preparar_evento' => '1', 'evento_sepa' => (string) $ev['id'], 'fecha_evento' => $this->post( 'fecha' ), 'concepto_evento' => $this->post( 'concepto' ) ), $volver ) );
 				}
 				$r = Remesas::obtener( $nueva );
-				Notices::add( 'success', sprintf( asde_t( 'Remesa <strong>%s</strong> creada: %s por %s. Descarga el fichero y súbelo al banco; después, márcala como enviada.' ), esc_html( $r['numero'] ), Remesas::adeudos( (int) $r['adeudos'] ), esc_html( Calculadora::euros( $r['total'] ) ) ) );
+				Notices::add( 'success', sprintf( /* translators: 1: text, 2: text, 3: text */ __( 'Batch <strong>%1$s</strong> created: %2$s for %3$s. Download the file and upload it to the bank; then mark it as sent.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), esc_html( $r['numero'] ), Remesas::adeudos( (int) $r['adeudos'] ), esc_html( Calculadora::euros( $r['total'] ) ) ) );
 				$this->redirect( $this->url( 'sepa', array( 'ronda' => $ronda, 'remesa' => (string) $nueva ) ) );
 				break;
 
@@ -284,13 +284,13 @@ final class SepaView extends TesoreriaBaseView {
 				check_admin_referer( 'asde_sepa_remesa_' . $id );
 				$r = Remesas::obtener( $id );
 				if ( ! $r || Remesas::ANULADA === $r['estado'] ) {
-					Notices::add( 'error', asde_t( 'Esa remesa no existe o está anulada.' ) );
+					Notices::add( 'error', __( 'That batch does not exist or is cancelled.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 				} else {
 					$a = Avisos::preaviso( $r );
 					Logger::log( 'sepa_preaviso_enviado', 'remesa', $r['numero'], $a );
-					Notices::add( 'success', sprintf( asde_t( 'Aviso previo enviado: %d emails a %d familias.' ), (int) $a['enviados'], (int) $a['familias'] ) );
+					Notices::add( 'success', sprintf( /* translators: 1: number, 2: number */ __( 'Advance notice sent: %1$d emails to %2$d families.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), (int) $a['enviados'], (int) $a['familias'] ) );
 					if ( $a['sin_email'] ) {
-						Notices::add( 'warning', sprintf( asde_t( 'A %d familias no se ha podido avisar por email (sin email o sin cuenta): avísalas por otro medio.' ), (int) $a['sin_email'] ) );
+						Notices::add( 'warning', sprintf( /* translators: %d: number */ __( '%d families could not be notified by email (no email or no account): notify them by other means.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), (int) $a['sin_email'] ) );
 					}
 				}
 				$this->redirect( $this->url( 'sepa', array( 'ronda' => $ronda, 'remesa' => (string) $id ) ) );
@@ -299,16 +299,16 @@ final class SepaView extends TesoreriaBaseView {
 			case 'sepa_enviada':
 				check_admin_referer( 'asde_sepa_remesa_' . $id );
 				Remesas::marcar_enviada( $id, get_current_user_id() )
-					? Notices::add( 'success', asde_t( 'Remesa marcada como enviada al banco. Las autorizaciones estrenadas pasan a «recurrentes» (RCUR) para la próxima. Cuando el banco cobre, registra los cobros aquí.' ) )
-					: Notices::add( 'error', asde_t( 'Esa remesa no se puede marcar como enviada.' ) );
+					? Notices::add( 'success', __( 'Batch marked as sent to the bank. The authorisations used for the first time become "recurrent" (RCUR) for the next one. When the bank collects, record the collections here.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) )
+					: Notices::add( 'error', __( 'That batch cannot be marked as sent.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 				$this->redirect( $this->url( 'sepa', array( 'ronda' => $ronda, 'remesa' => (string) $id ) ) );
 				break;
 
 			case 'sepa_anular':
 				check_admin_referer( 'asde_sepa_remesa_' . $id );
 				Remesas::anular( $id, get_current_user_id() )
-					? Notices::add( 'success', asde_t( 'Remesa anulada. Sus familias vuelven a poder incluirse en otra.' ) )
-					: Notices::add( 'error', asde_t( 'Solo se puede anular una remesa que aún no se ha enviado al banco.' ) );
+					? Notices::add( 'success', __( 'Batch cancelled. Its families can be included in another one again.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) )
+					: Notices::add( 'error', __( 'Only a batch that has not yet been sent to the bank can be cancelled.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 				$this->redirect( $volver );
 				break;
 
@@ -322,7 +322,7 @@ final class SepaView extends TesoreriaBaseView {
 					Notices::add( 'warning', esc_html( $a ) );
 				}
 				if ( $res['cobrados'] || $res['devueltos'] ) {
-					Notices::add( 'success', sprintf( asde_t( 'Registrados %d cobros como pagos de las familias%s.' ), (int) $res['cobrados'], $res['devueltos'] ? sprintf( asde_t( ' y %d devoluciones' ), (int) $res['devueltos'] ) : '' ) );
+					Notices::add( 'success', sprintf( /* translators: 1: number, 2: text */ __( '%1$d collections recorded as families\' payments%2$s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), (int) $res['cobrados'], $res['devueltos'] ? sprintf( /* translators: %d: number */ __( ' and %d refunds', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), (int) $res['devueltos'] ) : '' ) );
 				}
 				$this->redirect( $this->url( 'sepa', array( 'ronda' => $ronda, 'remesa' => (string) $id ) ) );
 				break;
@@ -331,15 +331,15 @@ final class SepaView extends TesoreriaBaseView {
 				check_admin_referer( 'asde_sepa_revocar' );
 				$m = Mandatos::obtener( (int) $this->post( 'mandato' ) );
 				if ( $m && Mandatos::revocar( $m['id'], get_current_user_id(), 'Anulada por Tesorería. ' . $this->post( 'motivo' ) ) ) {
-					Notices::add( 'success', sprintf( asde_t( 'Autorización %s anulada.' ), esc_html( $m['referencia'] ) ) );
+					Notices::add( 'success', sprintf( /* translators: %s: text */ __( 'Authorisation %s cancelled.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), esc_html( $m['referencia'] ) ) );
 				} else {
-					Notices::add( 'error', asde_t( 'No se ha podido anular esa autorización.' ) );
+					Notices::add( 'error', __( 'That authorisation could not be cancelled.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 				}
 				$this->redirect( $volver );
 				break;
 
 			default:
-				Notices::add( 'error', asde_t( 'Petición no válida.' ) );
+				Notices::add( 'error', __( 'Invalid request.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 				$this->redirect( $volver );
 		}
 	}
@@ -368,9 +368,9 @@ final class SepaView extends TesoreriaBaseView {
 		Logger::log( 'sepa_configurada', 'grupo', \AsdeBalears\AreaPrivada\Domain\Grupo::numero(), array( 'activo' => $nueva['activo'] ) );
 		$errores = SepaConfig::errores( SepaConfig::de() );
 		if ( $errores ) {
-			Notices::add( 'warning', asde_t( 'Guardado, pero todavía falta algo para poder domiciliar: ' ) . esc_html( implode( ' ', $errores ) ) );
+			Notices::add( 'warning', __( 'Saved, but something is still missing before direct debit can be used: ', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . esc_html( implode( ' ', $errores ) ) );
 		} else {
-			Notices::add( 'success', $nueva['activo'] ? asde_t( 'Datos del acreedor guardados. Las familias ya pueden firmar su autorización en «Mis pagos».' ) : asde_t( 'Datos del acreedor guardados. Las familias aún no ven la opción: marca «Ofrecer la domiciliación a las familias» cuando quieras.' ) );
+			Notices::add( 'success', $nueva['activo'] ? __( 'Creditor details saved. Families can now sign their authorisation in "My payments".', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : __( 'Creditor details saved. Families do not see the option yet: tick "Offer direct debit to families" when you want.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 	}
 
@@ -378,7 +378,7 @@ final class SepaView extends TesoreriaBaseView {
 	private function descargar( int $id ): void {
 		$r = Remesas::obtener( $id );
 		if ( ! $r || Remesas::ANULADA === $r['estado'] ) {
-			Notices::add( 'error', asde_t( 'Esa remesa no existe o está anulada.' ) );
+			Notices::add( 'error', __( 'That batch does not exist or is cancelled.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			$this->redirect( $this->url( 'sepa' ) );
 		}
 		$xml = Remesas::xml( $r );

@@ -104,7 +104,7 @@ final class UsuariosView extends View {
 	/** Toda la lista otra vez, para actualizarla en el navegador sin recargar la página. */
 	public function json(): void {
 		if ( ! current_user_can( self::CAP ) ) {
-			wp_send_json_error( array( 'mensaje' => asde_t( 'No tienes permiso para ver esto.' ) ), 403 );
+			wp_send_json_error( array( 'mensaje' => __( 'You do not have permission to see this.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ), 403 );
 		}
 		$d = $this->datos( $this->pide_refrescar() );
 		wp_send_json_success(
@@ -142,16 +142,16 @@ final class UsuariosView extends View {
 	public function handle_post(): void {
 		if ( ! current_user_can( self::CAP ) ) {
 			if ( Router::pide_json() ) {
-				wp_send_json_error( array( 'mensaje' => asde_t( 'No tienes permiso para hacer esto.' ) ), 403 );
+				wp_send_json_error( array( 'mensaje' => __( 'You do not have permission to do this.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ), 403 );
 			}
-			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+			wp_die( esc_html__( 'You do not have permission to do this.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		$user_id = (int) $this->post( 'user_id' );
 		$user    = get_userdata( $user_id );
 		$volver  = $this->url( 'usuarios' );
 
 		if ( ! $user || ( ! Usuarios::roles_asde( $user ) && Usuarios::DESACTIVADO !== Usuarios::estado( $user ) ) ) {
-			Notices::add( 'error', asde_t( 'Usuario no válido.' ) );
+			Notices::add( 'error', __( 'Invalid user.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			$this->terminar( $volver );
 		}
 
@@ -159,24 +159,24 @@ final class UsuariosView extends View {
 			case 'reenviar':
 				check_admin_referer( 'asde_reenviar_' . $user_id );
 				if ( Usuarios::INVITADO !== Usuarios::estado( $user ) ) {
-					Notices::add( 'error', asde_t( 'Ese usuario no tiene una invitación pendiente.' ) );
+					Notices::add( 'error', __( 'That user does not have a pending invitation.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 					break;
 				}
 				$ok    = Invitacion::enviar( $user );
 				$email = RegistroEmails::ultimos( array( $user_id ) )[ $user_id ] ?? null;
-				$ver   = $email ? sprintf( ' ' . asde_h( '<a href="%s">Ver el email</a>.' ), esc_url( add_query_arg( 'ver', (int) $email['id'], $this->url( 'emails' ) ) ) ) : '';
+				$ver   = $email ? sprintf( ' ' . /* translators: %s: text */ __( '<a href="%s">View the email</a>.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), esc_url( add_query_arg( 'ver', (int) $email['id'], $this->url( 'emails' ) ) ) ) : '';
 				if ( $ok ) {
 					Logger::log( 'invitacion_reenviada', 'user', (string) $user_id );
-					Notices::add( 'success', sprintf( asde_t( 'Invitación reenviada al usuario %s: enviada a %s, el email del CRM.' ), esc_html( $user->user_login ), esc_html( $email['destino'] ?? '' ) ) . $ver );
+					Notices::add( 'success', sprintf( /* translators: 1: text, 2: text */ __( 'Invitation resent to user %1$s: sent to %2$s, the email in the CRM.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), esc_html( $user->user_login ), esc_html( $email['destino'] ?? '' ) ) . $ver );
 				} else {
-					Notices::add( 'error', asde_t( 'No se ha podido enviar el email: ' ) . esc_html( $email['error'] ?? asde_t( 'motivo desconocido' ) ) . $ver );
+					Notices::add( 'error', __( 'The email could not be sent: ', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . esc_html( $email['error'] ?? __( 'unknown reason', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) . $ver );
 				}
 				break;
 
 			case 'desactivar':
 				check_admin_referer( 'asde_desactivar_' . $user_id );
 				if ( $user->has_cap( 'manage_options' ) || get_current_user_id() === $user_id ) {
-					Notices::add( 'error', asde_t( 'No se puede desactivar a un administrador ni a ti mismo.' ) );
+					Notices::add( 'error', __( 'An administrator or yourself cannot be deactivated.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 					break;
 				}
 				// v0.26.1: también se borran su contraseña y su verificación en dos pasos (Usuarios::desactivar).
@@ -192,11 +192,11 @@ final class UsuariosView extends View {
 						'llaves'             => $quitado['llaves'],
 					)
 				);
-				Notices::add( 'success', sprintf( asde_t( 'Acceso desactivado para el usuario %s: se han borrado su contraseña y su verificación en dos pasos. Para devolvérselo, dale de alta de nuevo: le llegará una invitación para elegir otra contraseña.' ), esc_html( $user->user_login ) ) );
+				Notices::add( 'success', sprintf( /* translators: %s: text */ __( 'Access deactivated for user %s: their password and two-step verification have been deleted. To give it back, register them again: they will receive an invitation to choose another password.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), esc_html( $user->user_login ) ) );
 				break;
 
 			default:
-				Notices::add( 'error', asde_t( 'Acción desconocida.' ) );
+				Notices::add( 'error', __( 'Unknown action.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 
 		$this->terminar( $volver, $user_id );

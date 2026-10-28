@@ -117,17 +117,17 @@ final class Servicio {
 	public static function poner_inicial( string $caja, string $fecha, float $importe ) {
 		$banco = CajaTable::BANCO === $caja;
 		if ( $banco ? ! Cajas::todas_suyas() : ! Cajas::puede( $caja ) ) {
-			return new \WP_Error( 'asde_caja', asde_t( 'No puedes llevar esta caja.' ) );
+			return new \WP_Error( 'asde_caja', __( 'You cannot keep this cash box.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$fecha = self::fecha( $fecha );
 		if ( is_wp_error( $fecha ) ) {
 			return $fecha;
 		}
 		if ( ! $banco && $importe < 0 ) {
-			return new \WP_Error( 'asde_caja', asde_t( 'En una caja no puede haber menos de 0 €.' ) );
+			return new \WP_Error( 'asde_caja', __( 'A cash box cannot go below €0.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( CajaTable::inicial( $caja ) ) {
-			return new \WP_Error( 'asde_caja', asde_t( 'Esta caja ya tiene su saldo inicial: para cambiarlo, anula el que hay.' ) );
+			return new \WP_Error( 'asde_caja', __( 'This cash box already has its opening balance: to change it, cancel the existing one.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$id = CajaTable::anadir(
 			array(
@@ -138,7 +138,7 @@ final class Servicio {
 			)
 		);
 		Logger::log( 'caja_inicial', 'caja', $caja, array( 'apunte' => $id ) );
-		return $id ?: new \WP_Error( 'asde_caja', asde_t( 'No se ha podido guardar.' ) );
+		return $id ?: new \WP_Error( 'asde_caja', __( 'It could not be saved.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 	}
 
 	/**
@@ -148,7 +148,7 @@ final class Servicio {
 	 */
 	public static function apuntar( string $caja, string $fecha, string $sentido, float $importe, int $tipo_id, string $concepto, string $nota = '', int $evento_id = 0 ) {
 		if ( ! Cajas::puede( $caja ) ) {
-			return new \WP_Error( 'asde_caja', asde_t( 'No puedes llevar esta caja.' ) );
+			return new \WP_Error( 'asde_caja', __( 'You cannot keep this cash box.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$fecha = self::fecha( $fecha, $caja );
 		if ( is_wp_error( $fecha ) ) {
@@ -157,16 +157,16 @@ final class Servicio {
 		$importe  = round( $importe, 2 );
 		$concepto = mb_substr( trim( sanitize_text_field( $concepto ) ), 0, 190 );
 		if ( $importe <= 0 || ! in_array( $sentido, array( 'entrada', 'salida' ), true ) ) {
-			return new \WP_Error( 'asde_caja', asde_t( 'Indica si entra o sale dinero y el importe (mayor que 0).' ) );
+			return new \WP_Error( 'asde_caja', __( 'State whether money comes in or goes out and the amount (greater than 0).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( '' === $concepto ) {
-			return new \WP_Error( 'asde_caja', asde_t( 'Escribe el concepto.' ) );
+			return new \WP_Error( 'asde_caja', __( 'Enter the description.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$con_signo = 'entrada' === $sentido ? $importe : -$importe;
 		if ( $tipo_id ) {
 			$t = TiposMovimiento::obtener( $tipo_id );
 			if ( ! $t || ! TiposMovimiento::encaja( $t, $con_signo ) ) {
-				return new \WP_Error( 'asde_caja', asde_t( 'Ese tipo no vale para este apunte (un tipo de gasto, solo en una salida; uno de ingreso, en una entrada).' ) );
+				return new \WP_Error( 'asde_caja', __( 'That type is not valid for this entry (an expense type only for an outflow; an income type for an inflow).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			}
 		}
 		$id = CajaTable::anadir(
@@ -182,7 +182,7 @@ final class Servicio {
 			)
 		);
 		Logger::log( 'caja_apunte', 'caja', $caja, array( 'apunte' => $id, 'tipo' => $tipo_id ) );
-		return $id ?: new \WP_Error( 'asde_caja', asde_t( 'No se ha podido guardar.' ) );
+		return $id ?: new \WP_Error( 'asde_caja', __( 'It could not be saved.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 	}
 
 	/**
@@ -193,7 +193,7 @@ final class Servicio {
 	 */
 	public static function traspasar( string $caja, string $hacia, string $fecha, float $importe, string $concepto = '' ) {
 		if ( ! Cajas::puede( $caja ) ) {
-			return new \WP_Error( 'asde_caja', asde_t( 'No puedes llevar esta caja.' ) );
+			return new \WP_Error( 'asde_caja', __( 'You cannot keep this cash box.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$fecha = self::fecha( $fecha, $caja );
 		if ( is_wp_error( $fecha ) ) {
@@ -202,20 +202,20 @@ final class Servicio {
 		$importe  = round( $importe, 2 );
 		$concepto = mb_substr( trim( sanitize_text_field( $concepto ) ), 0, 190 );
 		if ( $importe <= 0 ) {
-			return new \WP_Error( 'asde_caja', asde_t( 'El importe tiene que ser mayor que 0.' ) );
+			return new \WP_Error( 'asde_caja', __( 'The amount must be greater than 0.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$con_banco = in_array( $hacia, array( CajaTable::BANCO, 'desde_banco' ), true );
 		if ( $con_banco && ! Cajas::todas_suyas() ) {
-			return new \WP_Error( 'asde_caja', asde_t( 'Los traspasos con el banco los hace Tesorería.' ) );
+			return new \WP_Error( 'asde_caja', __( 'Transfers with the bank are made by Treasury.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( ! $con_banco && ( ! Cajas::existe( $hacia ) || $hacia === $caja ) ) {
-			return new \WP_Error( 'asde_caja', asde_t( 'Elige a qué caja va el dinero.' ) );
+			return new \WP_Error( 'asde_caja', __( 'Choose which cash box the money goes to.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( ! $con_banco && is_wp_error( self::fecha( $fecha, $hacia ) ) ) {
 			return self::fecha( $fecha, $hacia ); // Tampoco antes del saldo inicial de la caja a la que va.
 		}
 		if ( 'desde_banco' !== $hacia && $importe > self::saldo( $caja, $fecha ) + 0.004 ) {
-			return new \WP_Error( 'asde_caja', asde_t( 'En la caja no hay tanto dinero ese día.' ) );
+			return new \WP_Error( 'asde_caja', __( 'The cash box does not have that much money on that day.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$base = array(
 			'clase'    => CajaTable::TRASPASO,
@@ -236,7 +236,7 @@ final class Servicio {
 			CajaTable::enlazar_par( $id, $otro );
 		}
 		Logger::log( 'caja_traspaso', 'caja', $caja, array( 'apunte' => $id, 'hacia' => $hacia ) );
-		return $id ?: new \WP_Error( 'asde_caja', asde_t( 'No se ha podido guardar.' ) );
+		return $id ?: new \WP_Error( 'asde_caja', __( 'It could not be saved.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 	}
 
 	/**
@@ -247,21 +247,21 @@ final class Servicio {
 	 */
 	public static function arquear( string $caja, string $fecha, float $recuento, string $motivo ) {
 		if ( ! Cajas::puede( $caja ) ) {
-			return new \WP_Error( 'asde_caja', asde_t( 'No puedes llevar esta caja.' ) );
+			return new \WP_Error( 'asde_caja', __( 'You cannot keep this cash box.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$fecha = self::fecha( $fecha, $caja );
 		if ( is_wp_error( $fecha ) ) {
 			return $fecha;
 		}
 		if ( $recuento < 0 ) {
-			return new \WP_Error( 'asde_caja', asde_t( 'Lo contado no puede ser menos de 0 €.' ) );
+			return new \WP_Error( 'asde_caja', __( 'The amount counted cannot be less than €0.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$recuento   = round( $recuento, 2 );
 		$diferencia = round( $recuento - self::saldo( $caja, $fecha ), 2 );
 		$motivo     = mb_substr( trim( sanitize_text_field( $motivo ) ), 0, 255 );
 		if ( abs( $diferencia ) >= 0.01 && '' === $motivo ) {
 			/* translators: %s: diferencia en euros */
-			return new \WP_Error( 'asde_caja_motivo', sprintf( asde_t( 'No cuadra: hay una diferencia de %s. Escribe el motivo para guardar el arqueo.' ), \AsdeBalears\AreaPrivada\Tesoreria\Calculadora::euros( $diferencia ) ) );
+			return new \WP_Error( 'asde_caja_motivo', sprintf( /* translators: %s: text */ __( 'It does not add up: there is a difference of %s. Enter the reason to save the cash count.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), \AsdeBalears\AreaPrivada\Tesoreria\Calculadora::euros( $diferencia ) ) );
 		}
 		$id = CajaTable::anadir(
 			array(
@@ -277,7 +277,7 @@ final class Servicio {
 		return $id ? array(
 			'id'         => $id,
 			'diferencia' => $diferencia,
-		) : new \WP_Error( 'asde_caja', asde_t( 'No se ha podido guardar.' ) );
+		) : new \WP_Error( 'asde_caja', __( 'It could not be saved.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 	}
 
 	/** Anula un apunte propio (y su pareja, si es un traspaso entre cajas), con motivo. @return true|\WP_Error */
@@ -285,14 +285,14 @@ final class Servicio {
 		$a = CajaTable::obtener( $id );
 		$ok = $a && ( CajaTable::BANCO === $a['caja'] ? Cajas::todas_suyas() : Cajas::puede( $a['caja'] ) );
 		if ( ! $ok || null !== $a['anulado_en'] ) {
-			return new \WP_Error( 'asde_caja', asde_t( 'Ese apunte no existe o ya está anulado.' ) );
+			return new \WP_Error( 'asde_caja', __( 'That entry does not exist or is already cancelled.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$motivo = mb_substr( trim( sanitize_text_field( $motivo ) ), 0, 255 );
 		if ( '' === $motivo ) {
-			return new \WP_Error( 'asde_caja', asde_t( 'Escribe el motivo para anular el apunte.' ) );
+			return new \WP_Error( 'asde_caja', __( 'Enter the reason for cancelling the entry.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( ! CajaTable::anular( $id, $motivo ) ) {
-			return new \WP_Error( 'asde_caja', asde_t( 'Ese apunte no existe o ya está anulado.' ) );
+			return new \WP_Error( 'asde_caja', __( 'That entry does not exist or is already cancelled.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		Logger::log( 'caja_anulado', 'caja', (string) $a['caja'], array( 'apunte' => $id ) );
 		return true;
@@ -328,7 +328,7 @@ final class Servicio {
 	public static function asociar_banco( int $id, int $banco_id ) {
 		$a = CajaTable::obtener( $id );
 		if ( ! $a || CajaTable::TRASPASO !== $a['clase'] || CajaTable::BANCO !== $a['destino'] || null !== $a['anulado_en'] || ! Cajas::todas_suyas() ) {
-			return new \WP_Error( 'asde_caja', asde_t( 'Solo un traspaso con el banco se asocia con un movimiento del banco.' ) );
+			return new \WP_Error( 'asde_caja', __( 'Only a transfer with the bank is linked to a bank transaction.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( ! $banco_id ) {
 			CajaTable::poner_banco( $id, 0 );
@@ -337,10 +337,10 @@ final class Servicio {
 		}
 		$m = BancoTable::obtener( $banco_id );
 		if ( ! $m || ( $m['importe'] > 0 ) === ( $a['importe'] > 0 ) ) {
-			return new \WP_Error( 'asde_caja', asde_t( 'Elige un movimiento del banco de signo contrario (si sale de la caja, un ingreso en el banco).' ) );
+			return new \WP_Error( 'asde_caja', __( 'Choose a bank transaction of the opposite sign (if it leaves the cash box, a deposit in the bank).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( ! CajaTable::poner_banco( $id, $banco_id ) ) {
-			return new \WP_Error( 'asde_caja', asde_t( 'Ese movimiento del banco ya está asociado con otro traspaso (o este ya tiene uno).' ) );
+			return new \WP_Error( 'asde_caja', __( 'That bank transaction is already linked to another transfer (or this one already has one).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		Logger::log( 'caja_banco_asociado', 'caja', (string) $a['caja'], array( 'apunte' => $id, 'banco' => $banco_id ) );
 		return true;
@@ -354,12 +354,12 @@ final class Servicio {
 	 */
 	private static function fecha( string $fecha, string $caja = '' ) {
 		if ( ! preg_match( '/^\d{4}-\d{2}-\d{2}$/', $fecha ) || ! date_create( $fecha ) || $fecha > current_time( 'Y-m-d' ) ) {
-			return new \WP_Error( 'asde_caja', asde_t( 'Indica la fecha (no posterior a hoy).' ) );
+			return new \WP_Error( 'asde_caja', __( 'State the date (not later than today).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$inicial = '' !== $caja ? CajaTable::inicial( $caja ) : null;
 		if ( $inicial && $fecha < $inicial['fecha'] ) {
 			/* translators: %s: fecha del saldo inicial */
-			return new \WP_Error( 'asde_caja', sprintf( asde_t( 'La fecha no puede ser anterior al saldo inicial de la caja (%s).' ), wp_date( 'd/m/Y', strtotime( $inicial['fecha'] . ' 12:00' ) ) ) );
+			return new \WP_Error( 'asde_caja', sprintf( /* translators: %s: text */ __( 'The date cannot be earlier than the cash box\'s opening balance (%s).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), wp_date( 'd/m/Y', strtotime( $inicial['fecha'] . ' 12:00' ) ) ) );
 		}
 		return $fecha;
 	}

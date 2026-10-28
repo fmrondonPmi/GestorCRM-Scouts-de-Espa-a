@@ -46,7 +46,7 @@ wp_register_script( 'asde-imprimir', plugins_url( 'assets/js/imprimir.js', ASDE_
 </head>
 <body>
 <?php if ( ! $marco ) : ?>
-	<p class="barra"><button type="button" data-asde-imprimir-pagina><?php asde_e( 'Imprimir' ); ?></button></p>
+	<p class="barra"><button type="button" data-asde-imprimir-pagina><?php esc_html_e( 'Print', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button></p>
 <?php endif; ?>
 <p class="grupo"><?php echo esc_html( Grupo::nombre() ); ?></p>
 <h1><?php echo esc_html( $informe->titulo() ); ?></h1>
@@ -56,17 +56,17 @@ wp_register_script( 'asde-imprimir', plugins_url( 'assets/js/imprimir.js', ASDE_
 <p class="resumen"><?php echo esc_html( $resumen ); ?></p>
 <?php if ( null !== ( $res['ronda'] ?? null ) ) : ?>
 	<?php /* translators: %s: ronda (2026-2027) */ ?>
-	<p class="aviso"><?php echo esc_html( sprintf( asde_t( 'Cuota de la ronda %s, de Tesorería: los importes son los de la familia de cada socio (con sus hermanos).' ), $res['ronda'] ) ); ?></p>
+	<p class="aviso"><?php echo esc_html( sprintf( /* translators: %s: text */ __( 'Fee for round %s, from Treasury: the amounts are those of each member\'s family (with their siblings).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $res['ronda'] ) ); ?></p>
 <?php endif; ?>
 <?php foreach ( $res['avisos'] as $aviso ) : ?>
 	<p class="aviso"><?php echo esc_html( $aviso ); ?></p>
 <?php endforeach; ?>
 <?php if ( $res['salud'] ) : ?>
-	<p class="aviso"><?php asde_e( 'Este informe incluye datos de salud: úsalos solo para la actividad, no los reenvíes y destruye las copias impresas al terminar.' ); ?></p>
+	<p class="aviso"><?php esc_html_e( 'This report includes health data: use it only for the activity, do not forward it and destroy printed copies when finished.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 <?php endif; ?>
 
 <?php if ( ! $res['filas'] ) : ?>
-	<p class="vacio"><?php asde_e( 'No hay socios que cumplan estos filtros.' ); ?></p>
+	<p class="vacio"><?php esc_html_e( 'There are no members matching these filters.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 <?php elseif ( $fichas ) : ?>
 	<?php foreach ( $res['filas'] as $fila ) : ?>
 		<?php $ficha = Generador::ficha( $fila, $res['columnas'] ); ?>
@@ -102,7 +102,7 @@ wp_register_script( 'asde-imprimir', plugins_url( 'assets/js/imprimir.js', ASDE_
 	</table>
 <?php endif; ?>
 <?php /* translators: %s: fecha y hora */ ?>
-<p class="pie"><?php echo esc_html( sprintf( asde_t( 'Impreso desde el área privada el %s.' ), wp_date( 'd/m/Y H:i' ) ) ); ?></p>
+<p class="pie"><?php echo esc_html( sprintf( /* translators: %s: text */ __( 'Printed from the private area on %s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), wp_date( 'd/m/Y H:i' ) ) ); ?></p>
 <?php if ( ! $marco ) { wp_print_scripts( 'asde-imprimir' ); } ?>
 </body>
 </html>

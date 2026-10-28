@@ -32,13 +32,13 @@ $max         = (int) ProductosTable::MAX_LIMITE;
 $texto = static function ( array $v ) use ( $prod, $es_socio, $existencias ): string {
 	$precio = Servicio::precio_variante( $prod, $v, $es_socio );
 	$t      = 'Única' === $v['etiqueta'] ? '' : VariantesTable::etiqueta( $v ) . ' · ';
-	$t     .= null === $precio ? asde_t( 'Precio por confirmar' ) : Calculadora::euros( $precio );
+	$t     .= null === $precio ? __( 'Price to be confirmed', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : Calculadora::euros( $precio );
 	if ( ! VariantesTable::hay( $v ) ) {
-		$t .= ' (' . asde_t( 'Agotado' ) . ')';
+		$t .= ' (' . __( 'Sold out', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . ')';
 	} elseif ( $v['material'] > 0 && $v['existencias'] < 1 ) {
-		$t .= ' (' . asde_t( 'Se encarga al proveedor' ) . ')'; // v0.51: sin existencias en el inventario se vende igualmente y se pide más tarde.
+		$t .= ' (' . __( 'Ordered from the supplier', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . ')'; // v0.51: sin existencias en el inventario se vende igualmente y se pide más tarde.
 	} elseif ( $existencias && 0 === $v['ilimitado'] && $v['existencias'] <= 5 ) {
-		$t .= ' (' . sprintf( asde_n( 'Queda %d', 'Quedan %d', $v['existencias'] ), $v['existencias'] ) . ')';
+		$t .= ' (' . sprintf( /* translators: %d: number */ _n( '%d left', '%d left', $v['existencias'] , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $v['existencias'] ) . ')';
 	}
 	return $t;
 };
@@ -48,7 +48,7 @@ $texto = static function ( array $v ) use ( $prod, $es_socio, $existencias ): st
 	<ul class="asde-producto__variantes">
 		<li>
 			<label for="asde-var-<?php echo (int) $v['id']; ?>"><?php echo esc_html( $texto( $v ) ); ?></label>
-			<input type="number" id="asde-var-<?php echo (int) $v['id']; ?>" name="cant[<?php echo (int) $v['id']; ?>]" value="<?php echo (int) ( $previas[ $v['id'] ] ?? 0 ); ?>" min="0" max="<?php echo (int) $max; ?>" step="1" inputmode="numeric" <?php disabled( ! VariantesTable::hay( $v ) ); ?> aria-label="<?php echo esc_attr( sprintf( asde_t( 'Cantidad: %s' ), $prod['nombre'] ) ); ?>">
+			<input type="number" id="asde-var-<?php echo (int) $v['id']; ?>" name="cant[<?php echo (int) $v['id']; ?>]" value="<?php echo (int) ( $previas[ $v['id'] ] ?? 0 ); ?>" min="0" max="<?php echo (int) $max; ?>" step="1" inputmode="numeric" <?php disabled( ! VariantesTable::hay( $v ) ); ?> aria-label="<?php echo esc_attr( sprintf( /* translators: %s: text */ __( 'Quantity: %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $prod['nombre'] ) ); ?>">
 		</li>
 	</ul>
 <?php else : ?>
@@ -65,11 +65,11 @@ $texto = static function ( array $v ) use ( $prod, $es_socio, $existencias ): st
 			$id_t = 'asde-lt-' . (int) $prod['id'] . '-' . $k;
 			?>
 			<p class="asde-producto__linea"<?php echo $k > 0 && 0 === $cant ? ' data-asde-linea-extra' : ''; ?>>
-				<label for="<?php echo esc_attr( $id_c ); ?>"><?php asde_e( 'Cantidad' ); ?></label>
+				<label for="<?php echo esc_attr( $id_c ); ?>"><?php esc_html_e( 'Quantity', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 				<input type="number" id="<?php echo esc_attr( $id_c ); ?>" name="lin[<?php echo (int) $prod['id']; ?>][cant][]" value="<?php echo (int) $cant; ?>" min="0" max="<?php echo (int) $max; ?>" step="1" inputmode="numeric">
-				<label for="<?php echo esc_attr( $id_t ); ?>"><?php asde_e( 'Talla' ); ?></label>
+				<label for="<?php echo esc_attr( $id_t ); ?>"><?php esc_html_e( 'Size', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 				<select id="<?php echo esc_attr( $id_t ); ?>" name="lin[<?php echo (int) $prod['id']; ?>][var][]">
-					<option value=""><?php asde_e( 'Elige la talla…' ); ?></option>
+					<option value=""><?php esc_html_e( 'Choose the size…', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></option>
 					<?php foreach ( $variantes as $v ) : ?>
 						<option value="<?php echo (int) $v['id']; ?>" <?php selected( $sel, (int) $v['id'] ); ?> <?php disabled( ! VariantesTable::hay( $v ) ); ?>><?php echo esc_html( $texto( $v ) ); ?></option>
 					<?php endforeach; ?>
@@ -77,7 +77,7 @@ $texto = static function ( array $v ) use ( $prod, $es_socio, $existencias ): st
 			</p>
 		<?php endfor; ?>
 		<?php if ( $n > 1 ) : ?>
-			<p><button type="button" class="asde-btn-link" data-asde-linea-mas hidden><?php asde_e( 'Añadir otra talla' ); ?></button></p>
+			<p><button type="button" class="asde-btn-link" data-asde-linea-mas hidden><?php esc_html_e( 'Add another size', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button></p>
 		<?php endif; ?>
 	</div>
 <?php endif; ?>

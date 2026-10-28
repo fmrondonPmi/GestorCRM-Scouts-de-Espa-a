@@ -24,55 +24,55 @@ $texto   = static fn( array $m ) => trim( $m['ordenante'] . ' ' . ( '' !== $m['c
 ?>
 <?php if ( $hecho ) : ?>
 	<section class="asde-card">
-		<h2 class="asde-card__title"><?php asde_e( 'Movimientos asociados' ); ?></h2>
-		<p><?php asde_e( 'Cierra esta ventana para volver al listado: ya sale actualizado.' ); ?></p>
-		<p class="asde-solo-pagina"><a href="<?php echo esc_url( $url ); ?>"><?php asde_e( '← Banco' ); ?></a></p>
+		<h2 class="asde-card__title"><?php esc_html_e( 'Linked transactions', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h2>
+		<p><?php esc_html_e( 'Close this window to go back to the list: it now shows the update.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
+		<p class="asde-solo-pagina"><a href="<?php echo esc_url( $url ); ?>"><?php esc_html_e( '← Bank', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a></p>
 	</section>
 <?php elseif ( ! $mov ) : ?>
 	<section class="asde-card">
-		<h2 class="asde-card__title"><?php asde_e( 'Asociar con otro movimiento' ); ?></h2>
-		<p><?php asde_e( 'Ese movimiento no existe.' ); ?></p>
-		<p class="asde-solo-pagina"><a href="<?php echo esc_url( $volver ); ?>"><?php asde_e( '← Banco' ); ?></a></p>
+		<h2 class="asde-card__title"><?php esc_html_e( 'Link with another transaction', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h2>
+		<p><?php esc_html_e( 'That transaction does not exist.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
+		<p class="asde-solo-pagina"><a href="<?php echo esc_url( $volver ); ?>"><?php esc_html_e( '← Bank', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a></p>
 	</section>
 <?php else : ?>
 	<section class="asde-card asde-banco-asociar" data-asde-no-plegable>
-		<h2 class="asde-card__title"><?php asde_e( 'Asociar con otro movimiento' ); ?></h2>
+		<h2 class="asde-card__title"><?php esc_html_e( 'Link with another transaction', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h2>
 		<p>
 			<strong><?php echo esc_html( $fecha( $mov['fecha'] ) . ' · ' . $importe( (float) $mov['importe'] ) ); ?></strong><br>
 			<?php echo esc_html( $texto( $mov ) ); ?>
 		</p>
 		<?php if ( ! empty( $mov['asociado_id'] ) ) : ?>
-			<div class="asde-notice asde-notice--warning" role="status"><?php asde_e( 'Este movimiento ya está asociado con otro: quita antes esa asociación en el listado.' ); ?></div>
+			<div class="asde-notice asde-notice--warning" role="status"><?php esc_html_e( 'This transaction is already linked to another: remove that link first in the list.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></div>
 		<?php else : ?>
-			<p class="asde-muted"><?php asde_e( 'Por ejemplo, un gasto y el ingreso que lo devuelve. Asociarlos no cambia su estado ni su tipo: sirve para saber que van juntos. Primero salen los de signo contrario y el mismo importe.' ); ?></p>
+			<p class="asde-muted"><?php esc_html_e( 'For example, an expense and the income that repays it. Linking them does not change their status or type: it is used to know they go together. Those of the opposite sign and the same amount come first.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 			<form method="get" action="<?php echo esc_url( $url ); ?>" class="asde-filter asde-filter--una-linea" data-asde-en-ventana>
 				<input type="hidden" name="asociar" value="<?php echo (int) $mov['id']; ?>">
 				<input type="hidden" name="volver" value="<?php echo esc_url( $volver ); ?>">
-				<label for="asde-asociar-q" class="screen-reader-text"><?php asde_e( 'Buscar' ); ?></label>
-				<input type="search" id="asde-asociar-q" name="q" value="<?php echo esc_attr( $q ); ?>" placeholder="<?php echo esc_attr( asde_a( 'Concepto, ordenante o referencia' ) ); ?>">
-				<button type="submit" class="button"><?php asde_e( 'Buscar' ); ?></button>
+				<label for="asde-asociar-q" class="screen-reader-text"><?php esc_html_e( 'Search', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
+				<input type="search" id="asde-asociar-q" name="q" value="<?php echo esc_attr( $q ); ?>" placeholder="<?php echo esc_attr( esc_attr__( 'Description, payer or reference', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
+				<button type="submit" class="button"><?php esc_html_e( 'Search', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 			</form>
 			<?php if ( ! $candidatos ) : ?>
-				<p><?php asde_e( 'No hay ningún movimiento sin asociar con este filtro.' ); ?></p>
+				<p><?php esc_html_e( 'There is no unlinked transaction with this filter.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 			<?php else : ?>
 				<table class="asde-table">
 					<thead>
 						<tr>
-							<th scope="col"><?php asde_e( 'Fecha' ); ?></th>
-							<th scope="col"><?php asde_e( 'Concepto' ); ?></th>
-							<th scope="col"><?php asde_e( 'Importe' ); ?></th>
-							<th scope="col"><span class="screen-reader-text"><?php asde_e( 'Acciones' ); ?></span></th>
+							<th scope="col"><?php esc_html_e( 'Date', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
+							<th scope="col"><?php esc_html_e( 'Description', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
+							<th scope="col"><?php esc_html_e( 'Amount', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
+							<th scope="col"><span class="screen-reader-text"><?php esc_html_e( 'Actions', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span></th>
 						</tr>
 					</thead>
 					<tbody>
 						<?php foreach ( $candidatos as $c ) : ?>
 							<tr<?php echo $c['igual'] ? ' class="asde-banco-asociar__igual"' : ''; ?>>
-								<td data-label="<?php echo esc_attr( asde_a( 'Fecha' ) ); ?>"><?php echo esc_html( $fecha( $c['fecha'] ) ); ?></td>
-								<td data-label="<?php echo esc_attr( asde_a( 'Concepto' ) ); ?>">
+								<td data-label="<?php echo esc_attr( esc_attr__( 'Date', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( $fecha( $c['fecha'] ) ); ?></td>
+								<td data-label="<?php echo esc_attr( esc_attr__( 'Description', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
 									<?php echo esc_html( $texto( $c ) ); ?>
 									<br><span class="asde-muted"><?php echo esc_html( asde_t( BancoTable::ESTADOS[ $c['estado'] ] ?? $c['estado'] ) ); ?></span>
 								</td>
-								<td data-label="<?php echo esc_attr( asde_a( 'Importe' ) ); ?>" class="asde-importe <?php echo $c['importe'] > 0 ? 'asde-importe--ingreso' : 'asde-importe--gasto'; ?>"><?php echo esc_html( $importe( (float) $c['importe'] ) ); ?></td>
+								<td data-label="<?php echo esc_attr( esc_attr__( 'Amount', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>" class="asde-importe <?php echo $c['importe'] > 0 ? 'asde-importe--ingreso' : 'asde-importe--gasto'; ?>"><?php echo esc_html( $importe( (float) $c['importe'] ) ); ?></td>
 								<td data-label="">
 									<form method="post" action="<?php echo esc_url( $url ); ?>">
 										<?php wp_nonce_field( 'asde_banco_mov_' . (int) $mov['id'] ); ?>
@@ -80,7 +80,7 @@ $texto   = static fn( array $m ) => trim( $m['ordenante'] . ' ' . ( '' !== $m['c
 										<input type="hidden" name="mov" value="<?php echo (int) $mov['id']; ?>">
 										<input type="hidden" name="con" value="<?php echo (int) $c['id']; ?>">
 										<input type="hidden" name="volver" value="<?php echo esc_url( $volver ); ?>">
-										<button type="submit" class="button"><?php asde_e( 'Asociar' ); ?></button>
+										<button type="submit" class="button"><?php esc_html_e( 'Link', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 									</form>
 								</td>
 							</tr>
@@ -89,6 +89,6 @@ $texto   = static fn( array $m ) => trim( $m['ordenante'] . ' ' . ( '' !== $m['c
 				</table>
 			<?php endif; ?>
 		<?php endif; ?>
-		<p class="asde-solo-pagina"><a href="<?php echo esc_url( $volver ); ?>"><?php asde_e( '← Banco' ); ?></a></p>
+		<p class="asde-solo-pagina"><a href="<?php echo esc_url( $volver ); ?>"><?php esc_html_e( '← Bank', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a></p>
 	</section>
 <?php endif; ?>

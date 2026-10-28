@@ -128,17 +128,17 @@ final class Oficina {
 		$client   = ClientFactory::para_oficina();
 		$visibles = 0;
 		if ( ! $client ) {
-			$res = ConnectionResult::fail( '' === Settings::url() ? asde_t( 'Falta la URL del CRM.' ) : asde_t( 'Faltan el usuario o la contraseña del CRM de la oficina.' ) );
+			$res = ConnectionResult::fail( '' === Settings::url() ? __( 'The CRM URL is missing.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : __( 'The office\'s CRM username or password is missing.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		} else {
 			$res = $client->ping();
 			if ( $res->ok ) {
 				try {
 					$filas           = $client->list_entries( 'SecurityGroups', '', array( 'id', 'name', 'numgrupo_c', 'tipoasociacion_c' ), array(), 0, 500 )['entries'];
 					$visibles        = count( array_filter( $filas, static fn( $f ) => 'GS' === ( $f['fields']['tipoasociacion_c'] ?? '' ) ) );
-					$res->message    = sprintf( asde_t( 'Conexión correcta. La credencial de la oficina ve %d Grupos Scouts.' ), $visibles );
-					$res->warnings[] = asde_t( 'La web no puede comprobar que esta credencial sea de solo lectura: confírmalo con la oficina en el CRM.' );
+					$res->message    = sprintf( /* translators: %d: number */ __( 'Connection successful. The office credential sees %d Scout Groups.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $visibles );
+					$res->warnings[] = __( 'The website cannot check that this credential is read-only: confirm it with the office in the CRM.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				} catch ( CrmException $e ) {
-					$res = ConnectionResult::fail( asde_t( 'Conexión correcta, pero no se han podido leer los grupos del CRM: ' ) . $e->getMessage(), $res->details );
+					$res = ConnectionResult::fail( __( 'Connection successful, but the CRM groups could not be read: ', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . $e->getMessage(), $res->details );
 				}
 			}
 		}

@@ -19,14 +19,14 @@ if ( ! $es_config && count( $secciones ) < 2 ) {
 ?>
 <form method="get" class="asde-linea" action="<?php echo esc_url( $url ); ?>">
 	<input type="hidden" name="ronda" value="<?php echo esc_attr( $ronda ); ?>">
-	<label for="asde-p-vista"><?php asde_e( 'Ver' ); ?></label>
+	<label for="asde-p-vista"><?php esc_html_e( 'View', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 	<select id="asde-p-vista" name="vista" data-asde-autoenviar>
 		<?php if ( $es_config ) : ?>
-			<option value="resumen" <?php selected( $vista, 'resumen' ); ?>><?php asde_e( 'Resumen de la ronda' ); ?></option>
+			<option value="resumen" <?php selected( $vista, 'resumen' ); ?>><?php esc_html_e( 'Round summary', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></option>
 		<?php endif; ?>
 		<?php foreach ( $secciones as $s ) : ?>
-			<option value="<?php echo esc_attr( $s ); ?>" <?php selected( $vista, $s ); ?>><?php echo esc_html( sprintf( asde_t( 'Presupuesto: %s' ), Servicio::nombre( $s ) ) ); ?></option>
+			<option value="<?php echo esc_attr( $s ); ?>" <?php selected( $vista, $s ); ?>><?php echo esc_html( sprintf( /* translators: %s: text */ __( 'Budget: %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Servicio::nombre( $s ) ) ); ?></option>
 		<?php endforeach; ?>
 	</select>
-	<noscript><button type="submit" class="button"><?php asde_e( 'Ver' ); ?></button></noscript>
+	<noscript><button type="submit" class="button"><?php esc_html_e( 'View', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button></noscript>
 </form>

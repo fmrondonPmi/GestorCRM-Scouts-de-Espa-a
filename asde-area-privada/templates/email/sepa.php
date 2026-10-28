@@ -31,28 +31,28 @@ $aviso = 'preaviso' === $tipo;
 		<tr><td align="center">
 			<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:560px;background:<?php echo esc_attr( $col['tarjeta'] ); ?>;border-radius:6px;overflow:hidden;">
 				<tr><td style="background:<?php echo esc_attr( $col['primary'] ); ?>;color:<?php echo esc_attr( $col['on_primary'] ); ?>;padding:20px 28px;font-size:18px;font-weight:600;">
-					<?php echo esc_html( $grupo ); ?> · <?php asde_e( 'Domiciliación SEPA' ); ?>
+					<?php echo esc_html( $grupo ); ?> · <?php esc_html_e( 'SEPA direct debit', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>
 				</td></tr>
 				<tr><td style="padding:28px;font-size:15px;line-height:1.6;">
-					<p style="margin:0 0 16px;"><?php echo wp_kses( $nombre ? sprintf( asde_h( 'Hola, %s:' ), esc_html( $nombre ) ) : asde_h( 'Hola:' ), asde_html_permitido() ); ?></p>
+					<p style="margin:0 0 16px;"><?php echo wp_kses( $nombre ? sprintf( /* translators: %s: text */ __( 'Hello, %s:', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), esc_html( $nombre ) ) : __( 'Hello:', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), asde_html_permitido() ); ?></p>
 					<?php if ( $aviso ) : ?>
-						<p style="margin:0 0 16px;"><?php echo wp_kses( sprintf( asde_h( 'Te avisamos de que <strong>%1$s</strong> se cargarán <strong>%2$s</strong> en la cuenta <strong>%3$s</strong>, en concepto de «%4$s».' ), esc_html( $fecha ), esc_html( $importe ), esc_html( $iban ), esc_html( $concepto ) ), asde_html_permitido() ); ?></p>
-						<p style="margin:0 0 16px;font-size:13px;color:<?php echo esc_attr( $col['atenuado'] ); ?>;"><?php echo wp_kses( sprintf( asde_h( 'Es un adeudo directo SEPA, con la autorización que firmaste (referencia %s). Puedes ver el cargo y tus pagos en «Mis pagos». Si no estás de acuerdo, avísanos antes de esa fecha.' ), esc_html( $umr ) ), asde_html_permitido() ); ?></p>
+						<p style="margin:0 0 16px;"><?php echo wp_kses( sprintf( /* translators: 1: text, 2: text, 3: text, 4: text */ __( 'We let you know that <strong>%1$s</strong> will be charged <strong>%2$s</strong> to the account <strong>%3$s</strong>, for "%4$s".', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), esc_html( $fecha ), esc_html( $importe ), esc_html( $iban ), esc_html( $concepto ) ), asde_html_permitido() ); ?></p>
+						<p style="margin:0 0 16px;font-size:13px;color:<?php echo esc_attr( $col['atenuado'] ); ?>;"><?php echo wp_kses( sprintf( /* translators: %s: text */ __( 'It is a SEPA direct debit, with the authorisation you signed (reference %s). You can see the charge and your payments in "My payments". If you disagree, let us know before that date.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), esc_html( $umr ) ), asde_html_permitido() ); ?></p>
 					<?php else : ?>
-						<p style="margin:0 0 16px;"><?php echo wp_kses( sprintf( asde_h( 'Hemos guardado tu <strong>autorización de domiciliación SEPA</strong> para los pagos del %s.' ), esc_html( $grupo ) ), asde_html_permitido() ); ?></p>
-						<p style="margin:0 0 16px;"><?php echo wp_kses( sprintf( asde_h( 'Cuenta: <strong>%s</strong>' ), esc_html( $iban ) ), asde_html_permitido() ); ?><br><?php echo wp_kses( sprintf( asde_h( 'Referencia de la autorización: <strong>%s</strong>' ), esc_html( $umr ) ), asde_html_permitido() ); ?></p>
-						<p style="margin:0 0 16px;font-size:13px;color:<?php echo esc_attr( $col['atenuado'] ); ?>;"><?php asde_e( 'Te avisaremos antes de cada cargo, con su fecha y su importe. Puedes ver la autorización, imprimirla o anularla cuando quieras desde «Mis pagos».' ); ?></p>
+						<p style="margin:0 0 16px;"><?php echo wp_kses( sprintf( /* translators: %s: text */ __( 'We have saved your <strong>SEPA direct debit authorisation</strong> for the payments of %s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), esc_html( $grupo ) ), asde_html_permitido() ); ?></p>
+						<p style="margin:0 0 16px;"><?php echo wp_kses( sprintf( /* translators: %s: text */ __( 'Account: <strong>%s</strong>', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), esc_html( $iban ) ), asde_html_permitido() ); ?><br><?php echo wp_kses( sprintf( /* translators: %s: text */ __( 'Authorisation reference: <strong>%s</strong>', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), esc_html( $umr ) ), asde_html_permitido() ); ?></p>
+						<p style="margin:0 0 16px;font-size:13px;color:<?php echo esc_attr( $col['atenuado'] ); ?>;"><?php esc_html_e( 'We will notify you before each charge, with its date and amount. You can see the authorisation, print it or cancel it at any time from "My payments".', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 					<?php endif; ?>
 					<?php if ( $url ) : ?>
 						<p style="margin:0 0 24px;text-align:center;">
-							<a href="<?php echo esc_url( $url ); ?>" style="display:inline-block;background:<?php echo esc_attr( $col['primary'] ); ?>;color:<?php echo esc_attr( $col['on_primary'] ); ?>;text-decoration:none;padding:12px 28px;border-radius:4px;font-weight:600;"><?php asde_e( 'Ir a Mis pagos' ); ?></a>
+							<a href="<?php echo esc_url( $url ); ?>" style="display:inline-block;background:<?php echo esc_attr( $col['primary'] ); ?>;color:<?php echo esc_attr( $col['on_primary'] ); ?>;text-decoration:none;padding:12px 28px;border-radius:4px;font-weight:600;"><?php esc_html_e( 'Go to My payments', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a>
 						</p>
 					<?php endif; ?>
 					<p style="margin:0;font-size:13px;color:<?php echo esc_attr( $col['atenuado'] ); ?>;">
 						<?php if ( '' !== $contacto ) : ?>
-							<?php echo wp_kses( sprintf( asde_h( '¿Dudas? Escribe a %s.' ), '<a href="mailto:' . esc_attr( $contacto ) . '" style="color:' . esc_attr( $col['primary'] ) . ';">' . esc_html( $contacto ) . '</a>' ), asde_html_permitido() ); ?>
+							<?php echo wp_kses( sprintf( /* translators: %s: text */ __( 'Questions? Write to %s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), '<a href="mailto:' . esc_attr( $contacto ) . '" style="color:' . esc_attr( $col['primary'] ) . ';">' . esc_html( $contacto ) . '</a>' ), asde_html_permitido() ); ?>
 						<?php else : ?>
-							<?php asde_e( '¿Dudas? Habla con la Tesorería de tu grupo.' ); ?>
+							<?php esc_html_e( 'Questions? Talk to your group\'s Treasury.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>
 						<?php endif; ?>
 					</p>
 				</td></tr>

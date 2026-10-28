@@ -128,13 +128,13 @@ final class TiposMovimiento {
 	public static function crear( string $nombre, string $naturaleza ) {
 		$nombre = self::limpiar( $nombre );
 		if ( '' === $nombre ) {
-			return new \WP_Error( 'asde_banco', asde_t( 'Escribe el nombre del tipo.' ) );
+			return new \WP_Error( 'asde_banco', __( 'Enter the type name.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( ! isset( self::NATURALEZAS[ $naturaleza ] ) ) {
-			return new \WP_Error( 'asde_banco', asde_t( 'Elige si es un gasto, un ingreso o las dos cosas.' ) );
+			return new \WP_Error( 'asde_banco', __( 'Choose whether it is an expense, an income or both.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( self::por_nombre( $nombre ) ) {
-			return new \WP_Error( 'asde_banco', sprintf( asde_t( 'Ya hay un tipo «%s».' ), $nombre ) );
+			return new \WP_Error( 'asde_banco', sprintf( /* translators: %s: text */ __( 'There is already a type "%s".', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $nombre ) );
 		}
 		global $wpdb;
 		$wpdb->insert(
@@ -155,20 +155,20 @@ final class TiposMovimiento {
 		$tipo   = self::obtener( $id );
 		$nombre = self::limpiar( $nombre );
 		if ( ! $tipo ) {
-			return new \WP_Error( 'asde_banco', asde_t( 'Ese tipo no existe.' ) );
+			return new \WP_Error( 'asde_banco', __( 'That type does not exist.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( '' === $nombre ) {
-			return new \WP_Error( 'asde_banco', asde_t( 'Escribe el nombre del tipo.' ) );
+			return new \WP_Error( 'asde_banco', __( 'Enter the type name.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( ! isset( self::NATURALEZAS[ $naturaleza ] ) ) {
-			return new \WP_Error( 'asde_banco', asde_t( 'Elige si es un gasto, un ingreso o las dos cosas.' ) );
+			return new \WP_Error( 'asde_banco', __( 'Choose whether it is an expense, an income or both.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( self::por_nombre( $nombre, $id ) ) {
-			return new \WP_Error( 'asde_banco', sprintf( asde_t( 'Ya hay un tipo «%s».' ), $nombre ) );
+			return new \WP_Error( 'asde_banco', sprintf( /* translators: %s: text */ __( 'There is already a type "%s".', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $nombre ) );
 		}
 		$usos = self::usos()[ $id ] ?? array( 'gastos' => 0, 'ingresos' => 0 );
 		if ( ( self::INGRESO === $naturaleza && $usos['gastos'] ) || ( self::GASTO === $naturaleza && $usos['ingresos'] ) ) {
-			return new \WP_Error( 'asde_banco', asde_t( 'Hay movimientos de la otra clase con este tipo: déjalo como «Gasto o ingreso» o cámbiales antes el tipo.' ) );
+			return new \WP_Error( 'asde_banco', __( 'There are transactions of the other kind with this type: leave it as "Expense or income" or change their type first.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		global $wpdb;
 		$wpdb->update(
@@ -189,13 +189,13 @@ final class TiposMovimiento {
 	public static function borrar( int $id ) {
 		$tipo = self::obtener( $id );
 		if ( ! $tipo ) {
-			return new \WP_Error( 'asde_banco', asde_t( 'Ese tipo no existe.' ) );
+			return new \WP_Error( 'asde_banco', __( 'That type does not exist.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$usos = self::usos()[ $id ] ?? array( 'gastos' => 0, 'ingresos' => 0 );
 		$n    = $usos['gastos'] + $usos['ingresos'];
 		if ( $n ) {
 			/* translators: 1: nombre del tipo, 2: número de movimientos */
-			return new \WP_Error( 'asde_banco', sprintf( asde_n( 'El tipo «%1$s» lo usa %2$d movimiento del banco: cámbiale el tipo antes de borrarlo.', 'El tipo «%1$s» lo usan %2$d movimientos del banco: cámbiales el tipo antes de borrarlo.', $n ), $tipo['nombre'], $n ) );
+			return new \WP_Error( 'asde_banco', sprintf( /* translators: 1: text, 2: number */ _n( 'The type "%1$s" is used by %2$d bank transaction: change its type before deleting it.', 'The type "%1$s" is used by %2$d bank transactions: change their type before deleting it.', $n , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $tipo['nombre'], $n ) );
 		}
 		global $wpdb;
 		$wpdb->delete(

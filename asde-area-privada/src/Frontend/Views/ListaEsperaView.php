@@ -39,7 +39,7 @@ final class ListaEsperaView extends View {
 		if ( $id ) {
 			$fila = Inscripciones::obtener( $id );
 			if ( ! $fila ) {
-				return $this->denegado( asde_t( 'Esa inscripción ya no está en la lista de espera.' ) );
+				return $this->denegado( __( 'That sign-up is no longer on the waiting list.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			}
 			return $this->layout( 'lista_espera', $this->detalle( $fila ) );
 		}
@@ -110,8 +110,8 @@ final class ListaEsperaView extends View {
 				'autores'     => $autores,
 				'gestiona'    => current_user_can( self::CAP_ALTA ),
 				'altas'       => current_user_can( self::CAP_ALTA ) && current_user_can( 'asde_manage_users' ) && Altas::disponible(),
-				'altas_motivo' => Altas::activo() ? asde_t( 'El usuario del CRM de tu grupo no tiene permiso para crear personas y membresías.' ) : asde_t( 'Las altas en el CRM no están activadas para tu grupo (wp-admin → Grupos Scouts → Módulos).' ),
-				'asunto'      => sprintf( asde_t( 'Lista de espera del %s' ), $grupo ? Grupos::etiqueta( $grupo ) : Grupo::nombre() ),
+				'altas_motivo' => Altas::activo() ? __( 'Your group\'s CRM user does not have permission to create people and memberships.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : __( 'Registrations in the CRM are not enabled for your group (wp-admin → Scout Groups → Modules).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+				'asunto'      => sprintf( /* translators: %s: text */ __( 'Waiting list of %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $grupo ? Grupos::etiqueta( $grupo ) : Grupo::nombre() ),
 				'url'         => $this->url( 'lista_espera', array( 'inscripcion' => (string) $fila['id'] ) ),
 				'volver'      => $this->url( 'lista_espera' ),
 				'url_alta'    => $this->url( 'personas', array( 'alta' => '1' ) ),
@@ -121,7 +121,7 @@ final class ListaEsperaView extends View {
 
 	public function handle_post(): void {
 		if ( ! current_user_can( self::CAP ) ) {
-			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+			wp_die( esc_html__( 'You do not have permission to do this.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		$accion = $this->post( 'asde_action' );
 		if ( 'renovar_enlace_espera' === $accion ) {
@@ -129,7 +129,7 @@ final class ListaEsperaView extends View {
 			if ( current_user_can( self::CAP_ALTA ) && Grupo::actual() ) {
 				Enlaces::renovar( Grupo::actual() );
 				Logger::log( 'enlace_espera_renovado', 'grupo', Grupo::numero() );
-				Notices::add( 'success', asde_t( 'Enlace de la lista de espera renovado: el anterior ya no sirve.' ) );
+				Notices::add( 'success', __( 'Waiting list link renewed: the previous one no longer works.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			}
 			$this->redirect( $this->url( 'lista_espera' ) );
 		}
@@ -156,7 +156,7 @@ final class ListaEsperaView extends View {
 				} else {
 					CamposExtra::guardar_declaracion( Grupo::numero(), $this->post( 'declaracion' ) );
 					Logger::log( 'lista_espera_campos', 'grupo', Grupo::numero() );
-					Notices::add( 'success', asde_t( 'Campos del formulario guardados.' ) );
+					Notices::add( 'success', __( 'Form fields saved.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 				}
 			}
 			$this->redirect( $this->url( 'lista_espera' ) );
@@ -169,36 +169,36 @@ final class ListaEsperaView extends View {
 		$fila   = Inscripciones::obtener( $id );
 		$volver = $this->url( 'lista_espera', array( 'inscripcion' => (string) $id ) );
 		if ( ! $fila ) {
-			Notices::add( 'error', asde_t( 'Esa inscripción ya no está en la lista de espera.' ) );
+			Notices::add( 'error', __( 'That sign-up is no longer on the waiting list.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			$this->redirect( $this->url( 'lista_espera' ) );
 		}
 		$gestiona = current_user_can( self::CAP_ALTA );
 		switch ( $accion ) {
 			case 'espera_estado':
 				Inscripciones::cambiar_estado( $fila, sanitize_key( $this->post( 'estado' ) ), $this->texto( 'nota' ) )
-					? Notices::add( 'success', asde_t( 'Estado cambiado.' ) )
-					: Notices::add( 'error', asde_t( 'No se ha podido cambiar el estado.' ) );
+					? Notices::add( 'success', __( 'Status changed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) )
+					: Notices::add( 'error', __( 'The status could not be changed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 				break;
 
 			case 'espera_contacto':
 				Inscripciones::registrar_contacto( $fila, sanitize_key( $this->post( 'medio' ) ), $this->texto( 'nota' ) )
-					? Notices::add( 'success', asde_t( 'Contacto apuntado.' ) )
-					: Notices::add( 'error', asde_t( 'No se ha podido apuntar el contacto.' ) );
+					? Notices::add( 'success', __( 'Contact recorded.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) )
+					: Notices::add( 'error', __( 'The contact could not be recorded.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 				break;
 
 			case 'espera_email':
 				$asunto = mb_substr( sanitize_text_field( $this->post( 'asunto' ) ), 0, 150 );
 				$texto  = $this->texto( 'mensaje' );
 				if ( '' === $asunto || '' === $texto ) {
-					Notices::add( 'error', asde_t( 'Escribe el asunto y el mensaje.' ) );
+					Notices::add( 'error', __( 'Enter the subject and the message.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 					break;
 				}
 				$r = Avisos::mensaje( $fila, $asunto, $texto );
 				if ( $r['ok'] ) {
 					Inscripciones::registrar_contacto( $fila, Inscripciones::POR_EMAIL, $texto, $asunto );
-					Notices::add( 'success', sprintf( asde_t( 'Email enviado a %s.' ), esc_html( $r['destino'] ) ) );
+					Notices::add( 'success', sprintf( /* translators: %s: text */ __( 'Email sent to %s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), esc_html( $r['destino'] ) ) );
 				} else {
-					Notices::add( 'error', esc_html( asde_t( 'No se ha podido enviar el email: ' ) . $r['error'] ) );
+					Notices::add( 'error', esc_html( __( 'The email could not be sent: ', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . $r['error'] ) );
 				}
 				break;
 
@@ -206,14 +206,14 @@ final class ListaEsperaView extends View {
 				if ( $gestiona ) {
 					$s = sanitize_key( $this->post( 'seccion' ) );
 					Inscripciones::asignar_seccion( $fila, $s )
-						? Notices::add( 'success', '' === $s ? asde_t( 'Sección: la de su edad.' ) : sprintf( asde_t( 'Sección asignada: %s.' ), esc_html( Secciones::nombre( $s ) ) ) )
-						: Notices::add( 'error', asde_t( 'No se ha podido asignar la sección.' ) );
+						? Notices::add( 'success', '' === $s ? __( 'Section: the one for their age.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : sprintf( /* translators: %s: text */ __( 'Assigned section: %s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), esc_html( Secciones::nombre( $s ) ) ) )
+						: Notices::add( 'error', __( 'The section could not be assigned.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 				}
 				break;
 
 			case 'espera_quitar':
 				if ( $gestiona && Inscripciones::borrar( $fila['id'], 'equipo', array( 'user' => get_current_user_id() ) ) ) {
-					Notices::add( 'success', asde_t( 'Inscripción borrada de la lista de espera.' ) );
+					Notices::add( 'success', __( 'Sign-up deleted from the waiting list.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 					$this->redirect( $this->url( 'lista_espera' ) );
 				}
 				break;

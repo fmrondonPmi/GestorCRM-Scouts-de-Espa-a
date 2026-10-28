@@ -140,7 +140,7 @@ abstract class View {
 	}
 
 	protected function denegado( string $mensaje = '' ): string {
-		return $this->layout( '', $this->tpl( 'comun/denegado', array( 'mensaje' => $mensaje ?: asde_t( 'No tienes acceso a esta sección del área privada.' ) ) ) );
+		return $this->layout( '', $this->tpl( 'comun/denegado', array( 'mensaje' => $mensaje ?: __( 'You do not have access to this section of the private area.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) ) );
 	}
 
 	protected function error_crm( string $activo, string $mensaje ): string {

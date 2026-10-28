@@ -74,7 +74,7 @@ final class AccessHooks {
 			$grupo = Grupos::de_usuario( $user );
 			if ( ! $grupo || $grupo['id'] !== self::$grupo_formulario ) {
 				// Mismo mensaje que con la contraseña incorrecta: no revela nada.
-				return new \WP_Error( 'asde_grupo', __( 'Nº de socio/a o email, contraseña o grupo incorrectos.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
+				return new \WP_Error( 'asde_grupo', __( 'Incorrect member number or email, password or group.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			}
 			return self::con_membresia( $user, $grupo );
 		}
@@ -88,10 +88,10 @@ final class AccessHooks {
 				Pages::id( 'acceso' )
 					? sprintf(
 						/* translators: %s: URL de la pantalla de acceso */
-						__( 'Los socios y las familias entran desde <a href="%s">Acceso socios</a>, en el menú de la web.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+						/* translators: %s: text */ __( 'Members and families sign in from <a href="%s">Member access</a> in the website menu.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 						esc_url( Pages::url( 'acceso' ) )
 					)
-					: __( 'Los socios y las familias entran desde "Acceso socios", en el menú de la web.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' )
+					: __( 'Members and families sign in from "Member access" in the website menu.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' )
 			);
 		}
 		return $user;
@@ -111,7 +111,7 @@ final class AccessHooks {
 			return $user;
 		}
 		Ambito::olvidar( $user->ID );
-		$motivo = '' !== $a->error_crm ? asde_t( 'Ahora no se puede comprobar tu membresía en el CRM del grupo. Inténtalo de nuevo en unos minutos.' ) : $a->motivo();
+		$motivo = '' !== $a->error_crm ? __( 'Your membership cannot be checked in the group\'s CRM right now. Try again in a few minutes.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : $a->motivo();
 		return new \WP_Error( self::SIN_MEMBRESIA, $motivo );
 	}
 
@@ -136,7 +136,7 @@ final class AccessHooks {
 				'asde_recuperar',
 				sprintf(
 					/* translators: %s: URL de la página de recuperación */
-					__( 'Los socios y las familias recuperan la contraseña desde <a href="%s">esta página</a>.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+					/* translators: %s: text */ __( 'Members and families can recover their password from <a href="%s">this page</a>.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 					esc_url( Pages::url( 'recuperar' ) )
 				)
 			);

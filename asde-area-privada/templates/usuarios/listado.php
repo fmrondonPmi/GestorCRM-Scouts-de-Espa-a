@@ -25,11 +25,11 @@ use AsdeBalears\AreaPrivada\Usuarios\Usuarios;
 defined( 'ABSPATH' ) || exit;
 
 $columnas = array(
-	'usuario' => asde_t( 'Usuario' ),
-	'persona' => asde_t( 'Persona' ),
-	'roles'   => asde_t( 'Roles' ),
-	'ambito'  => asde_t( 'Ámbito' ),
-	'estado'  => asde_t( 'Estado' ),
+	'usuario' => __( 'Username', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+	'persona' => __( 'Person', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+	'roles'   => __( 'Roles', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+	'ambito'  => __( 'Scope', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+	'estado'  => __( 'Status', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 );
 $ambitos  = array();
 foreach ( Secciones::all() as $slug => $seccion ) {
@@ -53,7 +53,7 @@ $estados = array(
 	data-rol="<?php echo esc_attr( $rol ); ?>">
 	<?php /* v0.25: «Dar acceso» y «Registro de emails» son hojas de la sección (templates/usuarios/hojas.php). */ ?>
 	<header class="asde-card__header">
-		<h2 class="asde-card__title"><?php asde_e( 'Usuarios del área privada' ); ?></h2>
+		<h2 class="asde-card__title"><?php esc_html_e( 'Private area users', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h2>
 	</header>
 
 	<div data-asde-avisos aria-live="polite"></div>
@@ -62,23 +62,23 @@ $estados = array(
 	<?php endif; ?>
 
 	<?php if ( ! $total ) : ?>
-		<p><?php asde_e( 'Todavía no hay usuarios. Empieza por el' ); ?> <a href="<?php echo esc_url( $url_alta ); ?>"><?php asde_e( 'alta de usuarios' ); ?></a>.</p>
+		<p><?php esc_html_e( 'There are no users yet. Start with the', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <a href="<?php echo esc_url( $url_alta ); ?>"><?php esc_html_e( 'user registration', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a>.</p>
 	<?php else : ?>
 		<p class="asde-muted asde-usuarios__total">
-			<span data-asde-total aria-live="polite"><?php echo esc_html( sprintf( asde_n( '%d usuario', '%d usuarios', $total ), $total ) ); ?></span>
-			<button type="button" class="asde-btn-link" data-asde-limpiar hidden><?php asde_e( 'Quitar filtros' ); ?></button>
-			<button type="button" class="asde-btn-link" data-asde-actualizar hidden title="<?php echo esc_attr( asde_a( 'Vuelve a leer la lista y los nombres del CRM, sin recargar la página' ) ); ?>"><?php asde_e( 'Actualizar' ); ?></button>
+			<span data-asde-total aria-live="polite"><?php echo esc_html( sprintf( /* translators: %d: number */ _n( '%d user', '%d users', $total , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $total ) ); ?></span>
+			<button type="button" class="asde-btn-link" data-asde-limpiar hidden><?php esc_html_e( 'Clear filters', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
+			<button type="button" class="asde-btn-link" data-asde-actualizar hidden title="<?php echo esc_attr( esc_attr__( 'Reads the list and the names from the CRM again, without reloading the page', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php esc_html_e( 'Update', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 		</p>
 
 		<?php // En el móvil no se ven los encabezados de la tabla: se ordena desde aquí. ?>
 		<div class="asde-solo-movil asde-orden-movil" data-asde-orden-movil hidden>
-			<label for="asde-orden-usuarios"><?php asde_e( 'Ordenar por' ); ?></label>
+			<label for="asde-orden-usuarios"><?php esc_html_e( 'Sort by', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 			<select id="asde-orden-usuarios" data-orden-col>
 				<?php foreach ( $columnas as $col => $etiqueta ) : ?>
 					<option value="<?php echo esc_attr( $col ); ?>"><?php echo esc_html( $etiqueta ); ?></option>
 				<?php endforeach; ?>
 			</select>
-			<select data-orden-dir aria-label="<?php echo esc_attr( asde_a( 'Sentido' ) ); ?>">
+			<select data-orden-dir aria-label="<?php echo esc_attr( esc_attr__( 'Direction', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
 				<option value="asc">A → Z</option>
 				<option value="desc">Z → A</option>
 			</select>
@@ -90,34 +90,34 @@ $estados = array(
 					<?php foreach ( $columnas as $col => $etiqueta ) : ?>
 						<th scope="col" data-col="<?php echo esc_attr( $col ); ?>"><?php echo esc_html( $etiqueta ); ?></th>
 					<?php endforeach; ?>
-					<th scope="col"><span class="screen-reader-text"><?php asde_e( 'Acciones' ); ?></span></th>
+					<th scope="col"><span class="screen-reader-text"><?php esc_html_e( 'Actions', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span></th>
 				</tr>
 				<tr class="asde-filtros" hidden>
 					<th scope="col">
-						<input type="search" data-filtro="usuario" placeholder="<?php echo esc_attr( asde_a( 'Filtrar usuario…' ) ); ?>" aria-label="<?php echo esc_attr( asde_a( 'Filtrar por usuario' ) ); ?>" autocomplete="off">
+						<input type="search" data-filtro="usuario" placeholder="<?php echo esc_attr( esc_attr__( 'Filter user…', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>" aria-label="<?php echo esc_attr( esc_attr__( 'Filter by user', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>" autocomplete="off">
 					</th>
 					<th scope="col">
-						<input type="search" data-filtro="persona" placeholder="<?php echo esc_attr( asde_a( 'Filtrar nombre…' ) ); ?>" aria-label="<?php echo esc_attr( asde_a( 'Filtrar por persona' ) ); ?>" autocomplete="off">
+						<input type="search" data-filtro="persona" placeholder="<?php echo esc_attr( esc_attr__( 'Filter by name…', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>" aria-label="<?php echo esc_attr( esc_attr__( 'Filter by person', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>" autocomplete="off">
 					</th>
 					<th scope="col">
-						<select data-filtro="roles" aria-label="<?php echo esc_attr( asde_a( 'Filtrar por rol' ) ); ?>">
-							<option value=""><?php asde_e( 'Todos los roles' ); ?></option>
+						<select data-filtro="roles" aria-label="<?php echo esc_attr( esc_attr__( 'Filter by role', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
+							<option value=""><?php esc_html_e( 'All roles', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></option>
 							<?php foreach ( Roles::ALL as $r ) : ?>
 								<option value="<?php echo esc_attr( $r ); ?>"><?php echo esc_html( Roles::label( $r ) ); ?></option>
 							<?php endforeach; ?>
 						</select>
 					</th>
 					<th scope="col">
-						<select data-filtro="ambito" aria-label="<?php echo esc_attr( asde_a( 'Filtrar por ámbito' ) ); ?>">
-							<option value=""><?php asde_e( 'Todos los ámbitos' ); ?></option>
+						<select data-filtro="ambito" aria-label="<?php echo esc_attr( esc_attr__( 'Filter by scope', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
+							<option value=""><?php esc_html_e( 'All scopes', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></option>
 							<?php foreach ( $ambitos as $slug => $nombre ) : ?>
 								<option value="<?php echo esc_attr( $slug ); ?>"><?php echo esc_html( $nombre ); ?></option>
 							<?php endforeach; ?>
 						</select>
 					</th>
 					<th scope="col">
-						<select data-filtro="estado" aria-label="<?php echo esc_attr( asde_a( 'Filtrar por estado' ) ); ?>">
-							<option value=""><?php asde_e( 'Todos los estados' ); ?></option>
+						<select data-filtro="estado" aria-label="<?php echo esc_attr( esc_attr__( 'Filter by status', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
+							<option value=""><?php esc_html_e( 'All statuses', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></option>
 							<?php foreach ( $estados as $slug => $nombre ) : ?>
 								<option value="<?php echo esc_attr( $slug ); ?>"><?php echo esc_html( $nombre ); ?></option>
 							<?php endforeach; ?>
@@ -130,7 +130,7 @@ $estados = array(
 				<?php echo wp_kses( $filas, asde_html_permitido() ); ?>
 			</tbody>
 		</table>
-		<p class="asde-usuarios__vacio" data-asde-vacio hidden><?php asde_e( 'Ningún usuario coincide con los filtros.' ); ?></p>
+		<p class="asde-usuarios__vacio" data-asde-vacio hidden><?php esc_html_e( 'No user matches the filters.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 		<div data-asde-paginacion></div>
 	<?php endif; ?>
 </section>

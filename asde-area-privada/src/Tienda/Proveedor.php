@@ -132,21 +132,21 @@ final class Proveedor {
 	 */
 	public static function crear( string $nombre, array $ids ) {
 		if ( ! self::puede_gestionar() ) {
-			return new \WP_Error( 'asde_proveedor', asde_t( 'Los pedidos al proveedor los hace Coordinación.' ) );
+			return new \WP_Error( 'asde_proveedor', __( 'Supplier orders are placed by Coordination.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$ids      = array_map( 'intval', $ids );
 		$elegidos = array_values( array_filter( self::por_pedir(), static fn( array $p ) => in_array( $p['id'], $ids, true ) ) );
 		if ( ! $elegidos ) {
-			return new \WP_Error( 'asde_proveedor', asde_t( 'Marca los pedidos que quieres incluir (los pagados que aún no están en un pedido).' ) );
+			return new \WP_Error( 'asde_proveedor', __( 'Tick the orders you want to include (the paid ones not yet in an order).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$nombre = trim( sanitize_text_field( $nombre ) );
 		if ( '' === $nombre ) {
 			/* translators: %s: fecha */
-			$nombre = sprintf( asde_t( 'Pedido %s' ), wp_date( 'd/m/Y' ) );
+			$nombre = sprintf( /* translators: %s: text */ __( 'Order %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), wp_date( 'd/m/Y' ) );
 		}
 		$id = ProveedorTable::crear( $nombre, self::lineas_de( $elegidos ), count( $elegidos ) );
 		if ( ! $id ) {
-			return new \WP_Error( 'asde_proveedor', asde_t( 'No se ha podido guardar el pedido.' ) );
+			return new \WP_Error( 'asde_proveedor', __( 'The order could not be saved.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$ids_ok = array_column( $elegidos, 'id' );
 		PedidosTable::marcar_pedido( $ids_ok, $nombre );
@@ -163,11 +163,11 @@ final class Proveedor {
 	 */
 	public static function recibir( int $id, array $recibidas ) {
 		if ( ! self::puede_gestionar() ) {
-			return new \WP_Error( 'asde_proveedor', asde_t( 'Los pedidos al proveedor los hace Coordinación.' ) );
+			return new \WP_Error( 'asde_proveedor', __( 'Supplier orders are placed by Coordination.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$pp = ProveedorTable::obtener( $id );
 		if ( ! $pp || null !== $pp['recibido_en'] ) {
-			return new \WP_Error( 'asde_proveedor', asde_t( 'Ese pedido ya está marcado como recibido.' ) );
+			return new \WP_Error( 'asde_proveedor', __( 'That order is already marked as received.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$sobrante = 0;
 		$faltan   = 0;
@@ -180,7 +180,7 @@ final class Proveedor {
 			$lineas[]      = $l;
 		}
 		if ( ! ProveedorTable::recibir( $id, $lineas ) ) {
-			return new \WP_Error( 'asde_proveedor', asde_t( 'Ese pedido ya está marcado como recibido.' ) );
+			return new \WP_Error( 'asde_proveedor', __( 'That order is already marked as received.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		foreach ( $lineas as $l ) {
 			$extra = (int) $l['recibida'] - (int) $l['cantidad'];

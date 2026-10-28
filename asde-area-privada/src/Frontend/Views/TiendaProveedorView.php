@@ -52,27 +52,27 @@ final class TiendaProveedorView extends TiendaBaseView {
 	public function exportar(): void {
 		$id = absint( $this->get( 'pedido' ) );
 		if ( ! wp_verify_nonce( $this->get( '_wpnonce' ), 'asde_proveedor_excel_' . $id ) ) {
-			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+			wp_die( esc_html__( 'Download link not valid or expired.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		if ( ! Proveedor::puede_ver() ) {
-			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+			wp_die( esc_html__( 'Download link not valid or expired.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		$pp = ProveedorTable::obtener( $id );
 		if ( ! $pp ) {
-			wp_die( esc_html__( 'Ese pedido no existe.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 404 );
+			wp_die( esc_html__( 'That order does not exist.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 404 );
 		}
 		Logger::log( 'tienda_proveedor_excel', 'tienda', (string) $id );
 		$titulo = $pp['nombre'] . ' · ' . Grupo::nombre();
 		Xlsx::descargar(
 			'pedido-proveedor-' . $id . '-' . wp_date( 'Ymd' ) . '.xlsx',
-			asde_t( 'Pedido' ),
-			array( asde_t( 'Producto' ), asde_t( 'Talla o modelo' ), asde_t( 'Cantidad' ) ),
+			__( 'Order', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+			array( __( 'Product', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Size or model', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Quantity', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ),
 			Proveedor::filas_excel( $pp ),
 			array(
 				'titulo'    => $titulo,
-				'subtitulo' => sprintf( asde_t( 'Generado el %s' ), wp_date( 'd/m/Y' ) ),
+				'subtitulo' => sprintf( /* translators: %s: text */ __( 'Generated on %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), wp_date( 'd/m/Y' ) ),
 				'tipos'     => array( 'texto', 'texto', 'entero' ),
-				'totales'   => array( asde_t( 'Total' ), '', array_sum( array_column( $pp['lineas'], 'cantidad' ) ) ),
+				'totales'   => array( __( 'Total', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), '', array_sum( array_column( $pp['lineas'], 'cantidad' ) ) ),
 			)
 		);
 		exit;
@@ -80,14 +80,14 @@ final class TiendaProveedorView extends TiendaBaseView {
 
 	public function handle_post(): void {
 		if ( ! Proveedor::puede_ver() ) {
-			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+			wp_die( esc_html__( 'You do not have permission to do this.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		$accion = $this->post( 'asde_action' );
 		$volver = $this->url( 'tienda_proveedor' );
 		if ( 'proveedor_crear' === $accion ) {
 			check_admin_referer( 'asde_proveedor_crear' );
 			$r = Proveedor::crear( $this->post( 'nombre' ), array_map( 'intval', $this->post_array( 'pedidos' ) ) );
-			is_wp_error( $r ) ? Notices::add( 'error', esc_html( $r->get_error_message() ) ) : Notices::add( 'success', esc_html( asde_t( 'Pedido al proveedor creado. Descárgalo en Excel para enviárselo.' ) ) );
+			is_wp_error( $r ) ? Notices::add( 'error', esc_html( $r->get_error_message() ) ) : Notices::add( 'success', esc_html( __( 'Supplier order created. Download it in Excel to send it to them.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) );
 			$this->redirect( $volver );
 		}
 		if ( 'proveedor_recibir' === $accion ) {
@@ -101,18 +101,18 @@ final class TiendaProveedorView extends TiendaBaseView {
 			if ( is_wp_error( $r ) ) {
 				Notices::add( 'error', esc_html( $r->get_error_message() ) );
 			} else {
-				$m = asde_t( 'Pedido marcado como recibido: ya se pueden entregar los pedidos de los clientes.' );
+				$m = __( 'Order marked as received: customers\' orders can now be delivered.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				if ( $r['sobrante'] > 0 ) {
-					$m .= ' ' . sprintf( asde_n( 'Ha llegado %d unidad de más y se ha sumado a las existencias.', 'Han llegado %d unidades de más y se han sumado a las existencias.', $r['sobrante'] ), $r['sobrante'] );
+					$m .= ' ' . sprintf( /* translators: %d: number */ _n( '%d extra unit has arrived and has been added to the stock.', '%d extra units have arrived and have been added to the stock.', $r['sobrante'] , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $r['sobrante'] );
 				}
 				if ( $r['faltan'] > 0 ) {
-					$m .= ' ' . sprintf( asde_n( 'Falta %d unidad por llegar.', 'Faltan %d unidades por llegar.', $r['faltan'] ), $r['faltan'] );
+					$m .= ' ' . sprintf( /* translators: %d: number */ _n( '%d unit still to arrive.', '%d units still to arrive.', $r['faltan'] , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $r['faltan'] );
 				}
 				Notices::add( 'success', esc_html( $m ) );
 			}
 			$this->redirect( $volver );
 		}
-		Notices::add( 'error', asde_t( 'Acción desconocida.' ) );
+		Notices::add( 'error', __( 'Unknown action.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		$this->redirect( $volver );
 	}
 

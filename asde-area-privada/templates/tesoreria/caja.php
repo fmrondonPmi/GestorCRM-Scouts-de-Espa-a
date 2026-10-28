@@ -42,7 +42,7 @@ foreach ( $tipos as $t ) {
 	<h2><?php echo esc_html( $cajas[ $caja ] ); ?></h2>
 	<form method="get" action="<?php echo esc_url( $url ); ?>" class="asde-filter asde-filter--una-linea">
 		<?php if ( count( $cajas ) > 1 ) : ?>
-			<label for="asde-caja-caja" class="screen-reader-text"><?php asde_e( 'Caja' ); ?></label>
+			<label for="asde-caja-caja" class="screen-reader-text"><?php esc_html_e( 'Cash box', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 			<select id="asde-caja-caja" name="caja" data-asde-autoenviar>
 				<?php foreach ( $cajas as $k => $nombre ) : ?>
 					<option value="<?php echo esc_attr( $k ); ?>" <?php selected( $caja, $k ); ?>><?php echo esc_html( $nombre ); ?></option>
@@ -51,57 +51,57 @@ foreach ( $tipos as $t ) {
 		<?php else : ?>
 			<input type="hidden" name="caja" value="<?php echo esc_attr( $caja ); ?>">
 		<?php endif; ?>
-		<label for="asde-caja-periodo" class="screen-reader-text"><?php asde_e( 'Periodo' ); ?></label>
+		<label for="asde-caja-periodo" class="screen-reader-text"><?php esc_html_e( 'Period', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 		<select id="asde-caja-periodo" name="periodo" data-asde-autoenviar>
 			<?php foreach ( $periodos as $k => $etiqueta ) : ?>
 				<option value="<?php echo esc_attr( $k ); ?>" <?php selected( $periodo['clave'], $k ); ?>><?php echo esc_html( $etiqueta ); ?></option>
 			<?php endforeach; ?>
 		</select>
-		<button type="submit" class="button"><?php asde_e( 'Ver' ); ?></button>
-		<a class="button asde-button-secundario no-transition" href="<?php echo esc_url( $url_excel ); ?>" data-asde-descarga><?php asde_e( 'Descargar Excel' ); ?></a>
+		<button type="submit" class="button"><?php esc_html_e( 'View', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
+		<a class="button asde-button-secundario no-transition" href="<?php echo esc_url( $url_excel ); ?>" data-asde-descarga><?php esc_html_e( 'Download Excel', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a>
 	</form>
 	<dl class="asde-datos">
-		<div><dt><?php asde_e( 'Al empezar' ); ?></dt><dd><?php echo esc_html( $euros( $e['inicial'] ) ); ?></dd></div>
-		<div><dt><?php asde_e( 'Entradas' ); ?></dt><dd class="asde-importe--ingreso">+<?php echo esc_html( $euros( $e['entradas'] ) ); ?></dd></div>
-		<div><dt><?php asde_e( 'Salidas' ); ?></dt><dd class="asde-importe--gasto">−<?php echo esc_html( $euros( $e['salidas'] ) ); ?></dd></div>
-		<div><dt><?php asde_e( 'Al acabar' ); ?></dt><dd><strong><?php echo esc_html( $euros( $e['final'] ) ); ?></strong></dd></div>
-		<div><dt><?php asde_e( 'Último arqueo' ); ?></dt><dd><?php echo $e['arqueo'] ? esc_html( $fecha( $e['arqueo']['fecha'] ) . ' · ' . ( abs( $e['arqueo']['importe'] ) < 0.01 ? asde_t( 'cuadraba' ) : sprintf( asde_t( 'diferencia de %s' ), $euros( $e['arqueo']['importe'] ) ) ) ) : '—'; ?></dd></div>
+		<div><dt><?php esc_html_e( 'At the start', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></dt><dd><?php echo esc_html( $euros( $e['inicial'] ) ); ?></dd></div>
+		<div><dt><?php esc_html_e( 'Inflows', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></dt><dd class="asde-importe--ingreso">+<?php echo esc_html( $euros( $e['entradas'] ) ); ?></dd></div>
+		<div><dt><?php esc_html_e( 'Outflows', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></dt><dd class="asde-importe--gasto">−<?php echo esc_html( $euros( $e['salidas'] ) ); ?></dd></div>
+		<div><dt><?php esc_html_e( 'At the end', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></dt><dd><strong><?php echo esc_html( $euros( $e['final'] ) ); ?></strong></dd></div>
+		<div><dt><?php esc_html_e( 'Last cash count', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></dt><dd><?php echo $e['arqueo'] ? esc_html( $fecha( $e['arqueo']['fecha'] ) . ' · ' . ( abs( $e['arqueo']['importe'] ) < 0.01 ? __( 'balanced', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : sprintf( /* translators: %s: text */ __( 'difference of %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $euros( $e['arqueo']['importe'] ) ) ) ) : '—'; ?></dd></div>
 	</dl>
 	<?php if ( ! $e['saldo_inicial'] ) : ?>
-		<div class="asde-notice asde-notice--warning" role="status"><?php asde_e( 'Esta caja aún no tiene saldo inicial: escribe lo que había en ella el día que empezáis a llevarla aquí. Lo anterior a esa fecha no cuenta.' ); ?></div>
+		<div class="asde-notice asde-notice--warning" role="status"><?php esc_html_e( 'This cash box has no opening balance yet: enter what it held on the day you start keeping it here. Anything before that date does not count.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></div>
 		<form method="post" action="<?php echo esc_url( $url ); ?>" class="asde-form asde-form__fila asde-form__fila--una-linea asde-caja-form">
 			<?php $ocultos(); ?>
 			<input type="hidden" name="asde_action" value="inicial">
-			<label for="asde-caja-ini-fecha"><?php asde_e( 'Saldo inicial el' ); ?></label>
+			<label for="asde-caja-ini-fecha"><?php esc_html_e( 'Opening balance on', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 			<input type="date" id="asde-caja-ini-fecha" name="fecha" value="<?php echo esc_attr( $hoy ); ?>" max="<?php echo esc_attr( $hoy ); ?>" required>
-			<label for="asde-caja-ini-importe" class="screen-reader-text"><?php asde_e( 'Importe (€)' ); ?></label>
-			<input type="text" id="asde-caja-ini-importe" name="importe" inputmode="decimal" placeholder="<?php echo esc_attr( asde_a( 'Importe (€)' ) ); ?>" required>
-			<button type="submit" class="button"><?php asde_e( 'Guardar' ); ?></button>
+			<label for="asde-caja-ini-importe" class="screen-reader-text"><?php esc_html_e( 'Amount (€)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
+			<input type="text" id="asde-caja-ini-importe" name="importe" inputmode="decimal" placeholder="<?php echo esc_attr( esc_attr__( 'Amount (€)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>" required>
+			<button type="submit" class="button"><?php esc_html_e( 'Save', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 		</form>
 	<?php endif; ?>
 </section>
 
 <section class="asde-card" data-asde-plegable="caja-apuntes" data-asde-inicio="abierto">
-	<h3><?php asde_e( 'Apuntes' ); ?> · <?php echo esc_html( $periodo['etiqueta'] ); ?></h3>
+	<h3><?php esc_html_e( 'Entries', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> · <?php echo esc_html( $periodo['etiqueta'] ); ?></h3>
 	<?php if ( ! $e['filas'] ) : ?>
-		<p><?php asde_e( 'No hay apuntes en este periodo.' ); ?></p>
+		<p><?php esc_html_e( 'There are no entries in this period.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 	<?php else : ?>
 		<table class="asde-table asde-table--caja">
 			<thead>
 				<tr>
-					<th scope="col"><?php asde_e( 'Fecha' ); ?></th>
-					<th scope="col"><?php asde_e( 'Concepto' ); ?></th>
-					<th scope="col"><?php asde_e( 'Partida' ); ?></th>
-					<th scope="col"><?php asde_e( 'Importe' ); ?></th>
-					<th scope="col"><?php asde_e( 'Saldo' ); ?></th>
-					<th scope="col"><span class="screen-reader-text"><?php asde_e( 'Acciones' ); ?></span></th>
+					<th scope="col"><?php esc_html_e( 'Date', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
+					<th scope="col"><?php esc_html_e( 'Description', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
+					<th scope="col"><?php esc_html_e( 'Item', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
+					<th scope="col"><?php esc_html_e( 'Amount', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
+					<th scope="col"><?php esc_html_e( 'Balance', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
+					<th scope="col"><span class="screen-reader-text"><?php esc_html_e( 'Actions', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span></th>
 				</tr>
 			</thead>
 			<tbody>
 				<?php foreach ( $e['filas'] as $a ) : ?>
 					<tr>
-						<td data-label="<?php echo esc_attr( asde_a( 'Fecha' ) ); ?>"><?php echo esc_html( $fecha( $a['fecha'] ) ); ?></td>
-						<td data-label="<?php echo esc_attr( asde_a( 'Concepto' ) ); ?>">
+						<td data-label="<?php echo esc_attr( esc_attr__( 'Date', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( $fecha( $a['fecha'] ) ); ?></td>
+						<td data-label="<?php echo esc_attr( esc_attr__( 'Description', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
 							<?php echo esc_html( LibroMayor::concepto_caja( $a ) ); ?>
 							<?php if ( $a['propio'] && CajaTable::MANUAL === $a['clase'] && '' !== $a['nota'] ) : ?>
 								<br><span class="asde-muted"><?php echo esc_html( $a['nota'] ); ?></span>
@@ -109,22 +109,22 @@ foreach ( $tipos as $t ) {
 							<?php if ( CajaTable::TRASPASO === $a['clase'] && CajaTable::BANCO === $a['destino'] ) : ?>
 								<br><span class="asde-banco-asociado">
 									<?php if ( $a['banco_id'] && isset( $bancos[ $a['banco_id'] ] ) ) : ?>
-										↔ <?php asde_e( 'Banco:' ); ?> <?php echo esc_html( $fecha( $bancos[ $a['banco_id'] ]['fecha'] ) . ' · ' . $euros( (float) $bancos[ $a['banco_id'] ]['importe'] ) ); ?>
+										↔ <?php esc_html_e( 'Bank:', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <?php echo esc_html( $fecha( $bancos[ $a['banco_id'] ]['fecha'] ) . ' · ' . $euros( (float) $bancos[ $a['banco_id'] ]['importe'] ) ); ?>
 									<?php else : ?>
-										<?php asde_e( 'Sin asociar con el banco' ); ?>
+										<?php esc_html_e( 'Not linked to the bank', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>
 									<?php endif; ?>
 								</span>
 							<?php endif; ?>
 						</td>
-						<td data-label="<?php echo esc_attr( asde_a( 'Partida' ) ); ?>"><?php echo CajaTable::INICIAL === $a['clase'] ? '—' : esc_html( LibroMayor::partida_caja( $a, $tipos ) ); ?></td>
-						<td data-label="<?php echo esc_attr( asde_a( 'Importe' ) ); ?>" class="asde-importe <?php echo $a['importe'] >= 0 ? 'asde-importe--ingreso' : 'asde-importe--gasto'; ?>"><?php echo esc_html( ( $a['importe'] > 0 ? '+' : '' ) . $euros( $a['importe'] ) ); ?></td>
-						<td data-label="<?php echo esc_attr( asde_a( 'Saldo' ) ); ?>"><?php echo esc_html( $euros( $a['saldo'] ) ); ?></td>
+						<td data-label="<?php echo esc_attr( esc_attr__( 'Item', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo CajaTable::INICIAL === $a['clase'] ? '—' : esc_html( LibroMayor::partida_caja( $a, $tipos ) ); ?></td>
+						<td data-label="<?php echo esc_attr( esc_attr__( 'Amount', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>" class="asde-importe <?php echo $a['importe'] >= 0 ? 'asde-importe--ingreso' : 'asde-importe--gasto'; ?>"><?php echo esc_html( ( $a['importe'] > 0 ? '+' : '' ) . $euros( $a['importe'] ) ); ?></td>
+						<td data-label="<?php echo esc_attr( esc_attr__( 'Balance', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( $euros( $a['saldo'] ) ); ?></td>
 						<td data-label="">
 							<div class="asde-actions">
 								<?php if ( ! $a['propio'] ) : ?>
 									<?php $destino = $enlace( $a ); ?>
 									<?php if ( '' !== $destino ) : ?>
-										<a href="<?php echo esc_url( $destino ); ?>"><?php asde_e( 'Ver en su sitio' ); ?></a>
+										<a href="<?php echo esc_url( $destino ); ?>"><?php esc_html_e( 'View in place', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a>
 									<?php endif; ?>
 								<?php else : ?>
 									<?php if ( $con_banco && CajaTable::TRASPASO === $a['clase'] && CajaTable::BANCO === $a['destino'] ) : ?>
@@ -134,21 +134,21 @@ foreach ( $tipos as $t ) {
 												<input type="hidden" name="asde_action" value="banco">
 												<input type="hidden" name="apunte" value="<?php echo (int) $a['id']; ?>">
 												<input type="hidden" name="banco" value="0">
-												<button type="submit" class="asde-btn-link"><?php asde_e( 'Quitar la asociación' ); ?></button>
+												<button type="submit" class="asde-btn-link"><?php esc_html_e( 'Remove the link', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 											</form>
 										<?php else : ?>
-											<a href="<?php echo esc_url( add_query_arg( 'banco', (int) $a['id'], $url ) ); ?>" data-asde-modal><?php asde_e( 'Asociar con el banco…' ); ?></a>
+											<a href="<?php echo esc_url( add_query_arg( 'banco', (int) $a['id'], $url ) ); ?>" data-asde-modal><?php esc_html_e( 'Link with the bank…', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a>
 										<?php endif; ?>
 									<?php endif; ?>
 									<details class="asde-caja-anular">
-										<summary><?php asde_e( 'Anular…' ); ?></summary>
+										<summary><?php esc_html_e( 'Cancel…', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></summary>
 										<form method="post" action="<?php echo esc_url( $url ); ?>" class="asde-form__fila asde-form__fila--una-linea">
 											<?php $ocultos(); ?>
 											<input type="hidden" name="asde_action" value="anular">
 											<input type="hidden" name="apunte" value="<?php echo (int) $a['id']; ?>">
-											<label class="screen-reader-text" for="asde-caja-anular-<?php echo (int) $a['id']; ?>"><?php asde_e( 'Motivo' ); ?></label>
-											<input type="text" id="asde-caja-anular-<?php echo (int) $a['id']; ?>" name="motivo" maxlength="255" placeholder="<?php echo esc_attr( asde_a( 'Motivo' ) ); ?>" required>
-											<button type="submit" class="button"><?php asde_e( 'Anular' ); ?></button>
+											<label class="screen-reader-text" for="asde-caja-anular-<?php echo (int) $a['id']; ?>"><?php esc_html_e( 'Reason', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
+											<input type="text" id="asde-caja-anular-<?php echo (int) $a['id']; ?>" name="motivo" maxlength="255" placeholder="<?php echo esc_attr( esc_attr__( 'Reason', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>" required>
+											<button type="submit" class="button"><?php esc_html_e( 'Cancel', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 										</form>
 									</details>
 								<?php endif; ?>
@@ -162,23 +162,23 @@ foreach ( $tipos as $t ) {
 </section>
 
 <section class="asde-card" data-asde-plegable="caja-apuntar" data-asde-inicio="abierto">
-	<h3><?php asde_e( 'Apuntar una entrada o una salida' ); ?></h3>
-	<p class="asde-help"><?php asde_e( 'Solo lo que no está en otro sitio (sellos, un donativo en mano…). Los cobros y pagos en efectivo de cuotas, eventos, tienda y reintegros entran solos en la caja del grupo.' ); ?></p>
+	<h3><?php esc_html_e( 'Record an inflow or an outflow', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h3>
+	<p class="asde-help"><?php esc_html_e( 'Only what is not elsewhere (stamps, a donation in hand…). Cash collections and payments of fees, events, shop and reimbursements go into the group\'s cash box by themselves.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 	<form method="post" action="<?php echo esc_url( $url ); ?>" class="asde-form asde-form__fila asde-form__fila--una-linea asde-caja-form">
 		<?php $ocultos(); ?>
 		<input type="hidden" name="asde_action" value="apuntar">
-		<label for="asde-caja-a-fecha" class="screen-reader-text"><?php asde_e( 'Fecha' ); ?></label>
+		<label for="asde-caja-a-fecha" class="screen-reader-text"><?php esc_html_e( 'Date', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 		<input type="date" id="asde-caja-a-fecha" name="fecha" value="<?php echo esc_attr( $hoy ); ?>" max="<?php echo esc_attr( $hoy ); ?>" required>
-		<label for="asde-caja-a-sentido" class="screen-reader-text"><?php asde_e( 'Entrada o salida' ); ?></label>
+		<label for="asde-caja-a-sentido" class="screen-reader-text"><?php esc_html_e( 'Inflow or outflow', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 		<select id="asde-caja-a-sentido" name="sentido">
-			<option value="salida"><?php asde_e( 'Sale' ); ?></option>
-			<option value="entrada"><?php asde_e( 'Entra' ); ?></option>
+			<option value="salida"><?php esc_html_e( 'Goes out', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></option>
+			<option value="entrada"><?php esc_html_e( 'Comes in', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></option>
 		</select>
-		<label for="asde-caja-a-importe" class="screen-reader-text"><?php asde_e( 'Importe (€)' ); ?></label>
-		<input type="text" id="asde-caja-a-importe" name="importe" inputmode="decimal" placeholder="<?php echo esc_attr( asde_a( 'Importe (€)' ) ); ?>" required>
-		<label for="asde-caja-a-tipo" class="screen-reader-text"><?php asde_e( 'Tipo de gasto o ingreso' ); ?></label>
+		<label for="asde-caja-a-importe" class="screen-reader-text"><?php esc_html_e( 'Amount (€)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
+		<input type="text" id="asde-caja-a-importe" name="importe" inputmode="decimal" placeholder="<?php echo esc_attr( esc_attr__( 'Amount (€)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>" required>
+		<label for="asde-caja-a-tipo" class="screen-reader-text"><?php esc_html_e( 'Type of expense or income', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 		<select id="asde-caja-a-tipo" name="tipo">
-			<option value="0"><?php asde_e( 'Sin tipo' ); ?></option>
+			<option value="0"><?php esc_html_e( 'No type', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></option>
 			<?php foreach ( $grupos_tipo as $nat => $lista ) : ?>
 				<optgroup label="<?php echo esc_attr( asde_t( TiposMovimiento::NATURALEZAS[ $nat ] ?? $nat ) ); ?>">
 					<?php foreach ( $lista as $t ) : ?>
@@ -187,51 +187,51 @@ foreach ( $tipos as $t ) {
 				</optgroup>
 			<?php endforeach; ?>
 		</select>
-		<label for="asde-caja-a-concepto" class="screen-reader-text"><?php asde_e( 'Concepto' ); ?></label>
-		<input type="text" id="asde-caja-a-concepto" name="concepto" maxlength="190" placeholder="<?php echo esc_attr( asde_a( 'Concepto' ) ); ?>" required>
-		<button type="submit" class="button"><?php asde_e( 'Apuntar' ); ?></button>
+		<label for="asde-caja-a-concepto" class="screen-reader-text"><?php esc_html_e( 'Description', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
+		<input type="text" id="asde-caja-a-concepto" name="concepto" maxlength="190" placeholder="<?php echo esc_attr( esc_attr__( 'Description', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>" required>
+		<button type="submit" class="button"><?php esc_html_e( 'Record', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 	</form>
 </section>
 
 <section class="asde-card" data-asde-plegable="caja-traspaso" data-asde-inicio="cerrado">
-	<h3><?php asde_e( 'Traspaso' ); ?></h3>
-	<p class="asde-help"><?php asde_e( 'Dinero que pasa de esta caja a otra o al banco (o que se saca del banco para esta caja). No es un gasto ni un ingreso del grupo.' ); ?></p>
+	<h3><?php esc_html_e( 'Transfer between accounts', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h3>
+	<p class="asde-help"><?php esc_html_e( 'Money that moves from this cash box to another or to the bank (or is withdrawn from the bank for this cash box). It is not an expense or income of the group.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 	<form method="post" action="<?php echo esc_url( $url ); ?>" class="asde-form asde-form__fila asde-form__fila--una-linea asde-caja-form">
 		<?php $ocultos(); ?>
 		<input type="hidden" name="asde_action" value="traspasar">
-		<label for="asde-caja-t-fecha" class="screen-reader-text"><?php asde_e( 'Fecha' ); ?></label>
+		<label for="asde-caja-t-fecha" class="screen-reader-text"><?php esc_html_e( 'Date', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 		<input type="date" id="asde-caja-t-fecha" name="fecha" value="<?php echo esc_attr( $hoy ); ?>" max="<?php echo esc_attr( $hoy ); ?>" required>
-		<label for="asde-caja-t-hacia" class="screen-reader-text"><?php asde_e( 'A dónde va' ); ?></label>
+		<label for="asde-caja-t-hacia" class="screen-reader-text"><?php esc_html_e( 'Where it goes', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 		<select id="asde-caja-t-hacia" name="hacia" required>
 			<?php foreach ( $hacia as $k => $nombre ) : ?>
 				<option value="<?php echo esc_attr( $k ); ?>"><?php echo esc_html( '→ ' . $nombre ); ?></option>
 			<?php endforeach; ?>
 			<?php if ( $con_banco ) : ?>
-				<option value="<?php echo esc_attr( CajaTable::BANCO ); ?>"><?php asde_e( 'Ingresarlo en el banco' ); ?></option>
-				<option value="desde_banco"><?php asde_e( 'Sacarlo del banco para esta caja' ); ?></option>
+				<option value="<?php echo esc_attr( CajaTable::BANCO ); ?>"><?php esc_html_e( 'Pay it into the bank', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></option>
+				<option value="desde_banco"><?php esc_html_e( 'Withdraw it from the bank for this cash box', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></option>
 			<?php endif; ?>
 		</select>
-		<label for="asde-caja-t-importe" class="screen-reader-text"><?php asde_e( 'Importe (€)' ); ?></label>
-		<input type="text" id="asde-caja-t-importe" name="importe" inputmode="decimal" placeholder="<?php echo esc_attr( asde_a( 'Importe (€)' ) ); ?>" required>
-		<label for="asde-caja-t-concepto" class="screen-reader-text"><?php asde_e( 'Concepto' ); ?></label>
-		<input type="text" id="asde-caja-t-concepto" name="concepto" maxlength="190" placeholder="<?php echo esc_attr( asde_a( 'Concepto (opcional)' ) ); ?>">
-		<button type="submit" class="button"><?php asde_e( 'Traspasar' ); ?></button>
+		<label for="asde-caja-t-importe" class="screen-reader-text"><?php esc_html_e( 'Amount (€)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
+		<input type="text" id="asde-caja-t-importe" name="importe" inputmode="decimal" placeholder="<?php echo esc_attr( esc_attr__( 'Amount (€)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>" required>
+		<label for="asde-caja-t-concepto" class="screen-reader-text"><?php esc_html_e( 'Description', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
+		<input type="text" id="asde-caja-t-concepto" name="concepto" maxlength="190" placeholder="<?php echo esc_attr( esc_attr__( 'Description (optional)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
+		<button type="submit" class="button"><?php esc_html_e( 'Move funds', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 	</form>
 </section>
 
 <section class="asde-card" data-asde-plegable="caja-arqueo" data-asde-inicio="cerrado">
-	<h3><?php asde_e( 'Arqueo' ); ?></h3>
+	<h3><?php esc_html_e( 'Cash count', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h3>
 	<?php /* translators: %s: saldo de hoy */ ?>
-	<p class="asde-help"><?php echo esc_html( sprintf( asde_t( 'Cuenta el efectivo y escribe cuánto hay. Hoy debería haber %s. Si no cuadra, escribe el motivo: la diferencia queda apuntada como ajuste.' ), $euros( $saldo_hoy ) ) ); ?></p>
+	<p class="asde-help"><?php echo esc_html( sprintf( /* translators: %s: text */ __( 'Count the cash and enter how much there is. Today there should be %s. If it does not add up, enter the reason: the difference is recorded as an adjustment.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $euros( $saldo_hoy ) ) ); ?></p>
 	<form method="post" action="<?php echo esc_url( $url ); ?>" class="asde-form asde-form__fila asde-form__fila--una-linea asde-caja-form">
 		<?php $ocultos(); ?>
 		<input type="hidden" name="asde_action" value="arqueo">
-		<label for="asde-caja-q-fecha" class="screen-reader-text"><?php asde_e( 'Fecha' ); ?></label>
+		<label for="asde-caja-q-fecha" class="screen-reader-text"><?php esc_html_e( 'Date', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 		<input type="date" id="asde-caja-q-fecha" name="fecha" value="<?php echo esc_attr( $hoy ); ?>" max="<?php echo esc_attr( $hoy ); ?>" required>
-		<label for="asde-caja-q-recuento" class="screen-reader-text"><?php asde_e( 'Lo contado (€)' ); ?></label>
-		<input type="text" id="asde-caja-q-recuento" name="recuento" inputmode="decimal" placeholder="<?php echo esc_attr( asde_a( 'Lo contado (€)' ) ); ?>" required>
-		<label for="asde-caja-q-motivo" class="screen-reader-text"><?php asde_e( 'Motivo' ); ?></label>
-		<input type="text" id="asde-caja-q-motivo" name="motivo" maxlength="255" placeholder="<?php echo esc_attr( asde_a( 'Motivo (si no cuadra)' ) ); ?>">
-		<button type="submit" class="button"><?php asde_e( 'Guardar el arqueo' ); ?></button>
+		<label for="asde-caja-q-recuento" class="screen-reader-text"><?php esc_html_e( 'Counted (€)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
+		<input type="text" id="asde-caja-q-recuento" name="recuento" inputmode="decimal" placeholder="<?php echo esc_attr( esc_attr__( 'Counted (€)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>" required>
+		<label for="asde-caja-q-motivo" class="screen-reader-text"><?php esc_html_e( 'Reason', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
+		<input type="text" id="asde-caja-q-motivo" name="motivo" maxlength="255" placeholder="<?php echo esc_attr( esc_attr__( 'Reason (if it does not add up)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
+		<button type="submit" class="button"><?php esc_html_e( 'Save the cash count', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 	</form>
 </section>

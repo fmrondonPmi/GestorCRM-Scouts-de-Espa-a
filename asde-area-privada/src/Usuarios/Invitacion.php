@@ -50,8 +50,8 @@ final class Invitacion {
 	private static function componer_y_enviar( \WP_User $user, string $tipo, ?PersonaRepository $repo, bool $bienvenida ): bool {
 		$dias   = self::RESET === $tipo ? self::DIAS_RESET : self::DIAS;
 		$asunto = self::RESET === $tipo
-			? sprintf( $bienvenida ? asde_t( '[%s] Bienvenida al área privada: elige tu contraseña' ) : asde_t( '[%s] Elige una contraseña nueva' ), Grupo::nombre() )
-			: sprintf( $bienvenida ? asde_t( '[%s] Bienvenida al área privada: activa tu acceso' ) : asde_t( '[%s] Activa tu acceso al área privada' ), Grupo::nombre() );
+			? sprintf( $bienvenida ? /* translators: %s: text */ __( '[%s] Welcome to the private area: choose your password', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : /* translators: %s: text */ __( '[%s] Choose a new password', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Grupo::nombre() )
+			: sprintf( $bienvenida ? /* translators: %s: text */ __( '[%s] Welcome to the private area: activate your access', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : /* translators: %s: text */ __( '[%s] Activate your access to the private area', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Grupo::nombre() );
 		$autor  = wp_get_current_user();
 		$roles  = array_map( array( Roles::class, 'label' ), Usuarios::roles_asde( $user ) );
 		// Para el registro: lo necesario para reconstruir el email, sin datos personales ni el enlace.
@@ -73,8 +73,8 @@ final class Invitacion {
 				$asunto,
 				RegistroEmails::SIN_EMAIL,
 				$origen
-					? sprintf( asde_t( 'La ficha del CRM no tiene email en el campo elegido (%s), o el CRM no ha respondido.' ), $origen['campo'] )
-					: asde_t( 'El usuario no tiene un email del CRM asociado.' ),
+					? sprintf( /* translators: %s: text */ __( 'The CRM record has no email in the chosen field (%s), or the CRM did not respond.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $origen['campo'] )
+					: __( 'The user does not have a CRM email linked.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 				$datos
 			);
 			return false;

@@ -113,7 +113,7 @@ final class TiendaPublicaView extends View {
 			return;
 		}
 		if ( ! wp_verify_nonce( $this->post_nonce(), 'asde_' . $accion ) ) {
-			self::$estado = array( 'errores' => array( asde_t( 'La sesión del formulario ha caducado. Vuelve a intentarlo.' ) ) );
+			self::$estado = array( 'errores' => array( __( 'The form session has expired. Try again.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) );
 			return;
 		}
 		'tienda_invitado_cancelar' === $accion ? $this->cancelar() : $this->comprar();
@@ -126,7 +126,7 @@ final class TiendaPublicaView extends View {
 		}
 		// Campo trampa o enviado en menos de 3 segundos: un programa. Se le contesta como si no hubiera pasado nada.
 		if ( '' !== $this->post( 'web' ) || ! self::sello_valido( $this->post( 'sello' ) ) ) {
-			self::$estado = array( 'errores' => array( asde_t( 'No se ha podido enviar el pedido. Vuelve a intentarlo.' ) ) );
+			self::$estado = array( 'errores' => array( __( 'The order could not be sent. Try again.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) );
 			return;
 		}
 		$sin_talla = array();
@@ -141,14 +141,14 @@ final class TiendaPublicaView extends View {
 		);
 		if ( $sin_talla ) {
 			self::$estado = array(
-				'errores' => array( sprintf( asde_t( 'Elige la talla de «%s».' ), implode( '», «', $sin_talla ) ) ),
+				'errores' => array( sprintf( /* translators: %s: text */ __( 'Choose the size of "%s".', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), implode( '», «', $sin_talla ) ) ),
 				'valores' => $valores,
 			);
 			return;
 		}
 		if ( ! Limite::permitir( 'tienda_publica', self::POR_HORA, HOUR_IN_SECONDS ) ) {
 			self::$estado = array(
-				'errores' => array( asde_t( 'Has hecho varios intentos seguidos. Espera una hora antes de volver a intentarlo.' ) ),
+				'errores' => array( __( 'You have made several attempts in a row. Wait an hour before trying again.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ),
 				'valores' => $valores,
 			);
 			return;
@@ -190,7 +190,7 @@ final class TiendaPublicaView extends View {
 		if ( $ok ) {
 			Grupo::con( $g, static fn() => Logger::log( 'tienda_cancelado', 'tienda', (string) $p['id'], array( 'por' => 'invitado' ) ) );
 		} else {
-			self::$estado = array( 'errores' => array( asde_t( 'Ese pedido ya no se puede cancelar desde aquí. Escribe al grupo.' ) ) );
+			self::$estado = array( 'errores' => array( __( 'That order can no longer be cancelled from here. Write to the group.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) );
 			return;
 		}
 		$this->redirect( Enlace::url_pedido( $p ) );

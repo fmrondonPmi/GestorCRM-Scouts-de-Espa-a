@@ -196,7 +196,7 @@ final class Normativa {
 			$ficha  = $fichas[ $m['socio'] ] ?? null;
 			$titulo = null !== $ficha ? self::titulacion( (string) ( $ficha['formaciontiempolibre_c'] ?? '' ), $cfg ) : '';
 			$cert   = null !== $ficha ? self::certificado( (string) ( $ficha['certificadods_c'] ?? '' ), (string) ( $ficha['certificadods_fecha_c'] ?? '' ), $e ) : '';
-			$nombre = $p ? $p->nombre_completo() : sprintf( asde_t( 'Nº %s' ), $m['socio'] );
+			$nombre = $p ? $p->nombre_completo() : sprintf( /* translators: %s: text */ __( 'No. %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $m['socio'] );
 
 			$datos[ $m['socio'] ] = array(
 				'edad'        => $edad,
@@ -205,45 +205,45 @@ final class Normativa {
 				'certificado' => $cert,
 			);
 			if ( null !== $edad && $edad < 18 ) {
-				$avisos[] = sprintf( asde_t( '%s no tendrá 18 años el día que empieza: el equipo tiene que ser mayor de edad.' ), $nombre );
+				$avisos[] = sprintf( /* translators: %s: text */ __( '%s will not be 18 on the day it starts: the team must be of legal age.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $nombre );
 			}
 			if ( null === $fichas ) {
 				continue;
 			}
 			if ( 'director' === $m['papel'] && 'director' !== $titulo ) {
-				$avisos[] = sprintf( asde_t( 'Según su ficha, %s no tiene la titulación de director/a de tiempo libre.' ), $nombre );
+				$avisos[] = sprintf( /* translators: %s: text */ __( 'According to their record, %s does not have the leisure-time director qualification.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $nombre );
 			}
 			if ( in_array( $m['papel'], array( 'director', 'monitor' ), true ) && '' !== $titulo ) {
 				++$titulados;
 				$mon_tit += (int) ( 'monitor' === $m['papel'] );
 			}
 			if ( 'caducado' === $cert ) {
-				$avisos[] = sprintf( asde_t( 'El certificado de delitos sexuales de %s tendrá más de 12 meses cuando acabe el evento: hay que renovarlo.' ), $nombre );
+				$avisos[] = sprintf( /* translators: %s: text */ __( '%s\'s sexual offences certificate will be more than 12 months old when the event ends: it must be renewed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $nombre );
 			} elseif ( 'sin_fecha' === $cert ) {
-				$avisos[] = sprintf( asde_t( 'En la ficha de %s consta el certificado de delitos sexuales, pero sin fecha: no se puede saber si tiene menos de 12 meses.' ), $nombre );
+				$avisos[] = sprintf( /* translators: %s: text */ __( 'On %s\'s record the sexual offences certificate is shown but without a date: it cannot be known whether it is less than 12 months old.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $nombre );
 			} elseif ( 'no' === $cert ) {
-				$avisos[] = sprintf( asde_t( 'En la ficha de %s no consta el certificado de delitos sexuales.' ), $nombre );
+				$avisos[] = sprintf( /* translators: %s: text */ __( 'On %s\'s record there is no sexual offences certificate.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $nombre );
 			}
 		}
 
 		$directores = (int) ( $papeles['director'] ?? 0 );
 		if ( 0 === $directores ) {
-			$avisos[] = asde_t( 'Falta el director/a de la actividad.' );
+			$avisos[] = __( 'The activity director is missing.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		} elseif ( $directores > 1 ) {
-			$avisos[] = asde_t( 'Hay más de un director/a: la actividad tiene un solo director/a responsable.' );
+			$avisos[] = __( 'There is more than one director: the activity has a single responsible director.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		$monitores = (int) ( $papeles['monitor'] ?? 0 );
 		$n         = self::participantes( $e );
 		$necesita  = self::monitores_necesarios( $n, $e['normativa']['dependencia12'], $e['normativa']['dependencia3'] );
 		if ( $monitores < $necesita['total'] ) {
-			$avisos[] = sprintf( asde_t( 'Con %1$d participantes hacen falta %2$d monitores además del director/a, y hay %3$d.' ), $n, $necesita['total'], $monitores );
+			$avisos[] = sprintf( /* translators: 1: number, 2: number, 3: number */ __( 'With %1$d participants, %2$d monitors are needed besides the director, and there are %3$d.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $n, $necesita['total'], $monitores );
 		}
 		if ( null !== $fichas && $monitores > 0 && $mon_tit * 2 < $monitores ) {
-			$avisos[] = sprintf( asde_t( 'Al menos la mitad de los monitores tiene que tener la titulación de tiempo libre: hay %1$d titulados de %2$d.' ), $mon_tit, $monitores );
+			$avisos[] = sprintf( /* translators: 1: number, 2: number */ __( 'At least half of the monitors must hold the leisure-time qualification: there are %1$d qualified out of %2$d.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $mon_tit, $monitores );
 		}
 		$practicas = (int) ( $papeles['practicas'] ?? 0 );
 		if ( null !== $fichas && $practicas > $titulados ) {
-			$avisos[] = sprintf( asde_t( 'Hay %1$d personas en prácticas y %2$d tituladas: en prácticas no puede haber más que tituladas.' ), $practicas, $titulados );
+			$avisos[] = sprintf( /* translators: 1: number, 2: number */ __( 'There are %1$d people in training and %2$d qualified: there cannot be more in training than qualified.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $practicas, $titulados );
 		}
 		return array(
 			'personas' => $datos,
@@ -268,21 +268,21 @@ final class Normativa {
 		$out = array();
 		if ( $e['con_coste'] ) {
 			if ( null !== $e['validado_en'] ) {
-				$out[] = array( 'ok', asde_t( 'Presupuesto validado por Tesorería: el precio ya es fijo.' ) );
+				$out[] = array( 'ok', __( 'Budget validated by Treasury: the price is now fixed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			} elseif ( null !== $e['validacion_pedida_en'] ) {
-				$out[] = array( 'aviso', asde_t( 'Presupuesto pendiente de que Tesorería lo valide.' ) );
+				$out[] = array( 'aviso', __( 'Budget pending validation by Treasury.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			} else {
-				$out[] = array( 'aviso', asde_t( 'Falta preparar el presupuesto y pedir a Tesorería que lo valide.' ) );
+				$out[] = array( 'aviso', __( 'The budget still has to be prepared and Treasury asked to validate it.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			}
 		} else {
-			$out[] = array( 'info', asde_t( 'Sin coste para las familias.' ) );
+			$out[] = array( 'info', __( 'No cost for families.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 
 		if ( empty( $equipo['leido'] ) ) {
-			$out[] = array( 'aviso', asde_t( 'No se ha podido leer en el CRM la formación y el certificado del equipo: compruébalos más tarde.' ) );
+			$out[] = array( 'aviso', __( 'The team\'s training and certificate could not be read in the CRM: check them later.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( ! empty( $equipo['leido'] ) && ! $equipo['avisos'] ) {
-			$out[] = array( 'ok', asde_t( 'Equipo dirigente: director/a titulado, ratio cubierta y certificados al día.' ) );
+			$out[] = array( 'ok', __( 'Leadership team: qualified director, ratio covered and certificates up to date.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		foreach ( (array) ( $equipo['avisos'] ?? array() ) as $aviso ) {
 			$out[] = array( 'aviso', $aviso );
@@ -291,26 +291,26 @@ final class Normativa {
 		if ( self::requiere_comunicacion( $e ) ) {
 			$limite = self::limite_comunicacion( $e );
 			$cerca  = $limite <= wp_date( 'Y-m-d', strtotime( '+10 days' ) );
-			$out[]  = array( $cerca ? 'aviso' : 'info', sprintf( asde_t( 'Hay que comunicarla a ASDE Baleares antes del %s (30 días antes del inicio).' ), wp_date( 'd/m/Y', EventosTable::marca( $limite ) ) ) );
+			$out[]  = array( $cerca ? 'aviso' : 'info', sprintf( /* translators: %s: text */ __( 'It must be reported to ASDE Baleares before %s (30 days before the start).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), wp_date( 'd/m/Y', EventosTable::marca( $limite ) ) ) );
 		}
 
 		$n = $e['normativa'];
 		if ( ! $n['internacional'] ) {
-			$out[] = array( 'ok', asde_t( 'Cubierta por el seguro de la federación.' ) );
+			$out[] = array( 'ok', __( 'Covered by the federation\'s insurance.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		} elseif ( '' !== trim( $n['seguro_compania'] ) && '' !== trim( $n['seguro_poliza'] ) ) {
-			$out[] = array( 'ok', sprintf( asde_t( 'Actividad internacional con seguro aparte: %1$s, póliza %2$s.' ), $n['seguro_compania'], $n['seguro_poliza'] ) );
+			$out[] = array( 'ok', sprintf( /* translators: 1: text, 2: text */ __( 'International activity with separate insurance: %1$s, policy %2$s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $n['seguro_compania'], $n['seguro_poliza'] ) );
 		} else {
-			$out[] = array( 'aviso', asde_t( 'Actividad internacional: hace falta un seguro aparte (compañía y nº de póliza).' ) );
+			$out[] = array( 'aviso', __( 'International activity: separate insurance is required (company and policy no.).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( $n['riesgo'] ) {
 			$out[] = $n['riesgo_titulado']
-				? array( 'ok', asde_t( 'Las actividades de riesgo (montaña, barrancos, escalada, buceo, náutica) van con personal titulado en esa actividad.' ) )
-				: array( 'aviso', asde_t( 'Hay actividades de riesgo especializado: necesitan personal titulado en esa actividad.' ) );
+				? array( 'ok', __( 'Risk activities (mountain, canyoning, climbing, diving, sailing) go with staff qualified in that activity.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) )
+				: array( 'aviso', __( 'There are specialised-risk activities: they need staff qualified in that activity.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( $n['agua'] ) {
 			$out[] = $n['socorrista']
-				? array( 'ok', asde_t( 'Hay piscina o mar y habrá un socorrista.' ) )
-				: array( 'aviso', asde_t( 'Hay piscina o mar: tiene que haber un socorrista presente.' ) );
+				? array( 'ok', __( 'There is a swimming pool or sea and there will be a lifeguard.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) )
+				: array( 'aviso', __( 'There is a swimming pool or sea: a lifeguard must be present.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		return $out;
 	}

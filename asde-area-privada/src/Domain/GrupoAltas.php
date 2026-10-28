@@ -27,11 +27,11 @@ final class GrupoAltas {
 		global $wpdb;
 		$s = GrupoSolicitudes::obtener( $id );
 		if ( ! $s || GrupoSolicitudes::PENDIENTE !== $s['estado'] ) {
-			return new \WP_Error( 'asde_alta', asde_t( 'Esa solicitud ya no está pendiente.' ) );
+			return new \WP_Error( 'asde_alta', __( 'That request is no longer pending.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$usuario = (string) Crypto::decrypt( (string) $s['usuario_enc'] );
 		if ( '' === $usuario || null === Crypto::decrypt( (string) $s['clave_enc'] ) ) {
-			return new \WP_Error( 'asde_alta', asde_t( 'No se puede descifrar la credencial guardada. Pide al grupo que repita el alta con una invitación nueva.' ) );
+			return new \WP_Error( 'asde_alta', __( 'The stored credential cannot be decrypted. Ask the group to register again with a new invitation.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$grupo = Grupos::alta_desde_solicitud( $s, $usuario );
 		if ( is_wp_error( $grupo ) ) {
@@ -134,15 +134,15 @@ final class GrupoAltas {
 	/** Aviso por email al grupo: genérico, sin motivo del rechazo. @return string '' si salió bien, o el error. */
 	private static function avisar( array $s, bool $aprobada ): string {
 		if ( ! is_email( (string) $s['email'] ) ) {
-			return asde_t( 'La solicitud no tiene un email válido al que avisar.' );
+			return __( 'The request has no valid email address to notify.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		$organizacion = Organizacion::nombre();
 		list( $asunto, $html ) = Idioma::en(
 			Idioma::por_defecto(),
 			static fn() => array(
 				$aprobada
-					? sprintf( asde_t( '[%s] Tu grupo ya está dado de alta' ), $organizacion )
-					: sprintf( asde_t( '[%s] Sobre el alta de tu grupo' ), $organizacion ),
+					? sprintf( /* translators: %s: text */ __( '[%s] Your group is now registered', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $organizacion )
+					: sprintf( /* translators: %s: text */ __( '[%s] About the registration of your group', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $organizacion ),
 				TemplateLoader::render(
 					'email/alta-grupo-resultado',
 					array(

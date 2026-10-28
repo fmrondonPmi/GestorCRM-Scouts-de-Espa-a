@@ -52,7 +52,7 @@ final class PersonasView extends View {
 		}
 		$repo = PersonaRepository::make();
 		if ( ! $repo ) {
-			return $this->error_crm( 'personas', asde_t( 'La conexión de tu grupo con el CRM no está configurada o no se ha podido comprobar. Un administrador puede revisarla en wp-admin → Grupos Scouts.' ) );
+			return $this->error_crm( 'personas', __( 'Your group\'s connection to the CRM is not set up or could not be checked. An administrator can review it in wp-admin → Scout Groups.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 
 		// «Alta de socio/a» (doc 34, fase 3): en la ventana emergente o en su página.
@@ -92,7 +92,7 @@ final class PersonasView extends View {
 			$num      = new Numeracion( $repo );
 			$analisis = $num->analizar( $todas ); // Sincroniza la tabla de equivalencias.
 		} catch ( CrmException $e ) {
-			return $this->error_crm( 'personas', asde_t( 'No se ha podido consultar el CRM: ' ) . $e->getMessage() );
+			return $this->error_crm( 'personas', __( 'The CRM could not be queried: ', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . $e->getMessage() );
 		}
 
 		$resumen = array(
@@ -197,7 +197,7 @@ final class PersonasView extends View {
 
 	public function handle_post(): void {
 		if ( ! current_user_can( self::CAP ) ) {
-			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+			wp_die( esc_html__( 'You do not have permission to do this.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		$accion = $this->post( 'asde_action' );
 		if ( in_array( $accion, AltaSocio::ACCIONES, true ) ) {
@@ -234,7 +234,7 @@ final class PersonasView extends View {
 		$volver = wp_get_referer() ?: $this->url( 'personas' );
 		$repo   = PersonaRepository::make();
 		if ( ! $repo ) {
-			Notices::add( 'error', asde_t( 'La conexión con el CRM no está disponible.' ) );
+			Notices::add( 'error', __( 'The connection to the CRM is not available.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			$this->redirect( $volver );
 		}
 		$num = new Numeracion( $repo );
@@ -247,7 +247,7 @@ final class PersonasView extends View {
 
 		$socio = $this->post( 'socio' );
 		if ( ! in_array( $accion, self::ACCIONES_FICHA, true ) || ! PersonaRepository::es_num_asde( $socio ) ) {
-			Notices::add( 'error', asde_t( 'Petición no válida.' ) );
+			Notices::add( 'error', __( 'Invalid request.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			$this->redirect( $volver );
 		}
 		check_admin_referer( 'asde_numero_' . $accion . '_' . $socio );
@@ -255,7 +255,7 @@ final class PersonasView extends View {
 		try {
 			$p = $repo->obtener( $socio );
 			if ( ! $p ) {
-				Notices::add( 'error', asde_t( 'No se encuentra esa persona en el CRM del grupo.' ) );
+				Notices::add( 'error', __( 'That person cannot be found in the group\'s CRM.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 				$this->redirect( $volver );
 			}
 			$nombre = esc_html( $p->nombre_completo() );
@@ -270,8 +270,8 @@ final class PersonasView extends View {
 					Notices::add(
 						$r['crm'] ? 'success' : 'warning',
 						$r['crm']
-							? sprintf( asde_t( 'Nº de socio/a <strong>%s</strong> asignado a %s y guardado en el CRM.' ), esc_html( $r['numero'] ), $nombre )
-							: sprintf( asde_t( 'Nº de socio/a <strong>%s</strong> asignado a %s, pero no se ha podido guardar en el CRM%s. 📌 Anótalo en el CRM (campo «Nº de socio/a local/territorial»).' ), esc_html( $r['numero'] ), $nombre, $r['error'] ? ': ' . esc_html( $r['error'] ) : asde_t( ' (el usuario del CRM no puede editar fichas)' ) )
+							? sprintf( /* translators: 1: text, 2: text */ __( 'Member no. <strong>%1$s</strong> assigned to %2$s and saved in the CRM.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), esc_html( $r['numero'] ), $nombre )
+							: sprintf( /* translators: 1: text, 2: text, 3: text */ __( 'Member no. <strong>%1$s</strong> assigned to %2$s, but it could not be saved in the CRM%3$s. 📌 Note it in the CRM ("Local/territorial member no." field).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), esc_html( $r['numero'] ), $nombre, $r['error'] ? ': ' . esc_html( $r['error'] ) : __( ' (the CRM user cannot edit records)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) )
 					);
 					break;
 
@@ -280,7 +280,7 @@ final class PersonasView extends View {
 					$r = 'pasar_crm' === $accion ? $num->pasar_al_crm( $p ) : $num->corregir_formato( $p );
 					is_wp_error( $r )
 						? Notices::add( 'error', esc_html( $r->get_error_message() ) )
-						: Notices::add( 'success', sprintf( asde_t( 'Nº de socio/a de %s guardado en el CRM con el formato correcto.' ), $nombre ) );
+						: Notices::add( 'success', sprintf( /* translators: %s: text */ __( 'Member no. of %s saved in the CRM in the correct format.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $nombre ) );
 					break;
 
 				case 'resolver_duplicado':
@@ -289,12 +289,12 @@ final class PersonasView extends View {
 						Notices::add( 'error', esc_html( $r->get_error_message() ) );
 					} else {
 						Logger::log( 'numero_duplicado_resuelto', 'socio', $socio, array( 'numero' => $r ) );
-						Notices::add( 'success', sprintf( asde_t( '%s tiene ahora el nº de socio/a <strong>%s</strong> (guardado en el CRM). La otra ficha conserva el suyo.' ), $nombre, esc_html( $r ) ) );
+						Notices::add( 'success', sprintf( /* translators: 1: text, 2: text */ __( '%1$s now has member no. <strong>%2$s</strong> (saved in the CRM). The other record keeps theirs.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $nombre, esc_html( $r ) ) );
 					}
 					break;
 			}
 		} catch ( CrmException $e ) {
-			Notices::add( 'error', esc_html( asde_t( 'No se ha podido consultar el CRM: ' ) . $e->getMessage() ) );
+			Notices::add( 'error', esc_html( __( 'The CRM could not be queried: ', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . $e->getMessage() ) );
 		}
 		$this->redirect( $volver );
 	}
@@ -306,7 +306,7 @@ final class PersonasView extends View {
 			'personas/alta',
 			array(
 				's'          => $disponible ? ( self::$alta ?? AltaSocio::inicio() ) : null,
-				'motivo'     => Altas::activo() ? asde_t( 'El usuario del CRM de tu grupo no tiene permiso para crear personas y membresías. Un administrador puede revisarlo en wp-admin → Grupos Scouts.' ) : asde_t( 'Las altas en el CRM no están activadas para tu grupo.' ),
+				'motivo'     => Altas::activo() ? __( 'Your group\'s CRM user does not have permission to create people and memberships. An administrator can review it in wp-admin → Scout Groups.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : __( 'Registrations in the CRM are not enabled for your group.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 				'url'        => $this->url( 'personas', array( 'alta' => '1' ) ),
 				'url_ficha'  => $this->url( 'ficha' ),
 				'url_acceso' => $this->url( 'alta' ),
@@ -347,16 +347,16 @@ final class PersonasView extends View {
 		$clave = 'asde_ap_comprobaciones_' . get_current_user_id();
 		$hechas = (int) get_transient( $clave );
 		if ( $hechas >= Duplicados::MAX_POR_HORA ) {
-			return $error( asde_t( 'Has hecho muchas comprobaciones seguidas. Espera un rato y vuelve a intentarlo.' ) );
+			return $error( __( 'You have made many checks in a row. Wait a while and try again.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$dup = Duplicados::make();
 		if ( ! $dup ) {
-			return $error( asde_t( 'La conexión con el CRM no está disponible.' ) );
+			return $error( __( 'The connection to the CRM is not available.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		try {
 			$r = $dup->comprobar( $documento );
 		} catch ( CrmException $e ) {
-			return $error( asde_t( 'No se ha podido consultar el CRM: ' ) . $e->getMessage() );
+			return $error( __( 'The CRM could not be queried: ', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . $e->getMessage() );
 		}
 		if ( $r['ok'] ) {
 			set_transient( $clave, $hechas + 1, HOUR_IN_SECONDS );
@@ -370,13 +370,13 @@ final class PersonasView extends View {
 	 */
 	private function iniciar_tarea( string $accion, Numeracion $num ): void {
 		if ( ! Escritura::disponible() ) {
-			Notices::add( 'error', asde_t( 'Para corregir en el CRM hace falta que el usuario del CRM del grupo pueda editar fichas.' ) );
+			Notices::add( 'error', __( 'To correct in the CRM, the group\'s CRM user must be able to edit records.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			return;
 		}
 		try {
 			$analisis = $num->analizar_todo( true );
 		} catch ( CrmException $e ) {
-			Notices::add( 'error', esc_html( asde_t( 'No se ha podido consultar el CRM: ' ) . $e->getMessage() ) );
+			Notices::add( 'error', esc_html( __( 'The CRM could not be queried: ', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . $e->getMessage() ) );
 			return;
 		}
 		$estado = array(
@@ -391,7 +391,7 @@ final class PersonasView extends View {
 			$total -= count( array_unique( array_map( 'strval', array_column( $afectadas, 'numero' ) ) ) );
 		}
 		if ( $total <= 0 ) {
-			Notices::add( 'info', asde_t( 'No hay fichas con esa incidencia.' ) );
+			Notices::add( 'info', __( 'There are no records with that issue.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			return;
 		}
 		$t = TareaNumeracion::crear( $accion, Grupo::numero(), get_current_user_id(), $total );
@@ -399,6 +399,6 @@ final class PersonasView extends View {
 			Notices::add( 'error', esc_html( $t->get_error_message() ) );
 			return;
 		}
-		Notices::add( 'success', sprintf( asde_t( 'Corrección iniciada en segundo plano: %d fichas. Puedes seguir usando la web con normalidad; el avance se ve en el recuadro de arriba.' ), $total ) );
+		Notices::add( 'success', sprintf( /* translators: %d: number */ __( 'Correction started in the background: %d records. You can keep using the website normally; progress is shown in the box above.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $total ) );
 	}
 }

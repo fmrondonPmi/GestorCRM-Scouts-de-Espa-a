@@ -110,9 +110,9 @@ final class AvisoBaja {
 	public static function asunto( string $para ): string {
 		return self::TESORERIA === $para
 			/* translators: %s: nombre del grupo */
-			? sprintf( asde_t( '[%s] Baja de un socio/a en el CRM' ), Grupo::nombre() )
+			? sprintf( /* translators: %s: text */ __( '[%s] Withdrawal of a member in the CRM', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Grupo::nombre() )
 			/* translators: %s: nombre del grupo */
-			: sprintf( asde_t( '[%s] Confirmación de baja en el grupo' ), Grupo::nombre() );
+			: sprintf( /* translators: %s: text */ __( '[%s] Confirmation of withdrawal from the group', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Grupo::nombre() );
 	}
 
 	/** HTML del email (el envío y la vista previa del registro usan la misma plantilla). */
@@ -145,7 +145,7 @@ final class AvisoBaja {
 		} catch ( CrmException $e ) {
 			$persona = '';
 		}
-		return self::html( $datos, $saludo, '' !== $persona ? $persona : sprintf( asde_t( 'Nº %s' ), (string) ( $datos['socio'] ?? '' ) ) );
+		return self::html( $datos, $saludo, '' !== $persona ? $persona : sprintf( /* translators: %s: text */ __( 'No. %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), (string) ( $datos['socio'] ?? '' ) ) );
 	}
 
 	private static function mandar( ?\WP_User $user, string $email, string $para, string $saludo, Persona $p, array $datos ): bool {

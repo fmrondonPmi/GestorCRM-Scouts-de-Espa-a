@@ -331,7 +331,7 @@ final class SolicitudService {
 			return array(
 				'guardado' => false,
 				'cambiado' => false,
-				'aviso'    => sprintf( asde_t( 'El usuario del CRM del grupo no puede editar fichas: anota a mano el email nuevo en la ficha de %s (%s). La invitación se envía igualmente a ese email.' ), $p->nombre_completo(), $etiqueta ),
+				'aviso'    => sprintf( /* translators: 1: text, 2: text */ __( 'The group\'s CRM user cannot edit records: note the new email by hand on %1$s\'s record (%2$s). The invitation is sent to that email anyway.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $p->nombre_completo(), $etiqueta ),
 			);
 		}
 		$r = Escritura::guardar( $p, array( $campo => $email ), 'solicitud_acceso' );
@@ -339,7 +339,7 @@ final class SolicitudService {
 			return array(
 				'guardado' => false,
 				'cambiado' => false,
-				'aviso'    => sprintf( asde_t( 'El CRM no ha guardado el email nuevo en la ficha de %s (%s): anótalo a mano. La invitación se envía igualmente a ese email.' ), $p->nombre_completo(), $etiqueta ),
+				'aviso'    => sprintf( /* translators: 1: text, 2: text */ __( 'The CRM has not saved the new email on %1$s\'s record (%2$s): note it by hand. The invitation is sent to that email anyway.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $p->nombre_completo(), $etiqueta ),
 			);
 		}
 		return array(
@@ -380,25 +380,25 @@ final class SolicitudService {
 		);
 		$email = EmailCuenta::normalizar( (string) $s['datos']['email'] );
 		if ( Solicitudes::PENDIENTE !== $s['estado'] ) {
-			$res['errores'][] = asde_t( 'Esta solicitud ya está resuelta.' );
+			$res['errores'][] = __( 'This request is already resolved.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 			return $res;
 		}
 		if ( ! is_email( $email ) ) {
-			$res['errores'][] = asde_t( 'La solicitud no tiene un email válido.' );
+			$res['errores'][] = __( 'The request does not have a valid email address.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 			return $res;
 		}
 		$p = $this->repo->obtener( (string) $s['socio'] );
 		if ( ! $p || ! $p->tiene_membresia_activa() ) {
-			$res['errores'][] = asde_t( 'Esa ficha ya no está en el CRM del grupo o no tiene membresía activa.' );
+			$res['errores'][] = __( 'That record is no longer in the group\'s CRM or has no active membership.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 			return $res;
 		}
 		if ( $p->es_adulto_voluntario() ) {
-			$res['errores'][] = asde_t( 'Es scouter o voluntario/a: dale acceso desde «Dar acceso», con sus roles y secciones.' );
+			$res['errores'][] = __( 'They are a scouter or volunteer: give them access from "Give access", with their roles and sections.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 			return $res;
 		}
 		$tipo = $this->comprobar_tipo( $p, (string) $s['tipo'] );
 		if ( self::OK !== $tipo ) {
-			$res['errores'][] = self::ADULTO === $tipo ? asde_t( 'Ya es mayor de edad: tiene que pedir el acceso la propia persona.' ) : asde_t( 'Esa persona no puede tener ese tipo de cuenta.' );
+			$res['errores'][] = self::ADULTO === $tipo ? __( 'They are now of legal age: the person themselves must request access.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : __( 'That person cannot have that type of account.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 			return $res;
 		}
 		$hermanos = array_values( array_filter( array_map( 'strval', (array) ( $opciones['hermanos'] ?? array() ) ), array( PersonaRepository::class, 'es_num_asde' ) ) );
@@ -429,12 +429,12 @@ final class SolicitudService {
 				$existente ??= $existentes[0];
 			} elseif ( self::MODO_NUEVA === $modo ) {
 				if ( count( $existentes ) >= Usuarios::MAX_CUENTAS_FAMILIARES ) {
-					$res['errores'][] = sprintf( asde_t( 'Esta familia ya tiene las dos cuentas de tutor/a (%s). Para cambiar el email de una, marca «Sustituir su email por el de la solicitud» y elige cuál.' ), implode( ' y ', array_map( static fn( \WP_User $c ) => $c->user_login, $existentes ) ) );
+					$res['errores'][] = sprintf( /* translators: %s: text */ __( 'This family already has both guardian accounts (%s). To change the email of one, tick "Replace their email with the one on the request" and choose which.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), implode( ' y ', array_map( static fn( \WP_User $c ) => $c->user_login, $existentes ) ) );
 					return $res;
 				}
 				$crear_otra = true;
 			} else {
-				$res['errores'][] = sprintf( asde_t( 'Ya existe la cuenta familiar %s. Elige si es otro tutor/a (se le crea su propia cuenta) o la misma persona con otro email («Sustituir su email por el de la solicitud»).' ), $existentes[0]->user_login );
+				$res['errores'][] = sprintf( /* translators: %s: text */ __( 'The family account %s already exists. Choose whether it is another guardian (their own account is created) or the same person with another email ("Replace their email with the one on the request").', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $existentes[0]->user_login );
 				return $res;
 			}
 		}
@@ -454,7 +454,7 @@ final class SolicitudService {
 				if ( '' === $elegido && $crear_otra && array_diff( self::CAMPOS[ Solicitudes::TUTOR ], $ajenos ) ) {
 					$campo = array_values( array_diff( self::CAMPOS[ Solicitudes::TUTOR ], $ajenos ) )[0];
 				} else {
-					$res['errores'][] = sprintf( asde_t( 'El campo «%s» del CRM es el email de otra cuenta familiar de esta familia: elige el otro campo, o marca «Sustituir» y elige la cuenta cuyo email cambia.' ), Usuarios::etiqueta_campo_email( $campo ) );
+					$res['errores'][] = sprintf( /* translators: %s: text */ __( 'The CRM field "%s" is the email of another family account in this family: choose the other field, or tick "Replace" and choose the account whose email changes.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Usuarios::etiqueta_campo_email( $campo ) );
 					return $res;
 				}
 			}

@@ -72,14 +72,14 @@ final class Escritura {
 			);
 		}
 		if ( ! self::disponible() ) {
-			return new \WP_Error( 'asde_crm_escritura', asde_t( 'El usuario del CRM de tu grupo no tiene permiso para editar fichas.' ) );
+			return new \WP_Error( 'asde_crm_escritura', __( 'Your group\'s CRM user does not have permission to edit records.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( '' === $p->id ) {
-			return new \WP_Error( 'asde_crm_escritura', asde_t( 'Ficha sin identificador del CRM.' ) );
+			return new \WP_Error( 'asde_crm_escritura', __( 'Record without a CRM identifier.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		foreach ( array_keys( $valores ) as $campo ) {
 			if ( in_array( $campo, self::NO_EDITABLES, true ) || ( 'numsocioantiguo_enficha_c' === $campo && ! $interno ) || ! preg_match( '/^[a-z0-9_]+$/', $campo ) ) {
-				return new \WP_Error( 'asde_crm_escritura', sprintf( asde_t( 'El campo %s no se puede editar desde la web.' ), $campo ) );
+				return new \WP_Error( 'asde_crm_escritura', sprintf( /* translators: %s: text */ __( 'The %s field cannot be edited from the website.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $campo ) );
 			}
 		}
 
@@ -89,7 +89,7 @@ final class Escritura {
 			$leido = $cliente->get_entry( self::MODULO, $p->id, array_keys( $valores ) );
 		} catch ( CrmException $e ) {
 			Logger::log( 'crm_escritura_error', 'socio', $p->num_socio_asde, array( 'campos' => array_keys( $valores ), 'motivo' => $motivo ) );
-			return new \WP_Error( 'asde_crm_escritura', asde_t( 'El CRM no ha guardado los cambios: ' ) . $e->getMessage() );
+			return new \WP_Error( 'asde_crm_escritura', __( 'The CRM has not saved the changes: ', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . $e->getMessage() );
 		}
 
 		$guardados  = array();
@@ -134,22 +134,22 @@ final class Escritura {
 	 */
 	public static function crear( string $modulo, array $valores, string $motivo ) {
 		if ( ! in_array( $modulo, array( self::MODULO, self::MEMBRESIAS ), true ) ) {
-			return new \WP_Error( 'asde_crm_escritura', asde_t( 'Desde la web solo se crean personas y membresías.' ) );
+			return new \WP_Error( 'asde_crm_escritura', __( 'Only people and memberships are created from the website.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( ! self::puede_crear() ) {
-			return new \WP_Error( 'asde_crm_escritura', asde_t( 'El usuario del CRM de tu grupo no tiene permiso para crear personas y membresías.' ) );
+			return new \WP_Error( 'asde_crm_escritura', __( 'Your group\'s CRM user does not have permission to create people and memberships.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		foreach ( array_keys( $valores ) as $campo ) {
 			if ( in_array( $campo, self::NUNCA_AL_CREAR, true ) || ! preg_match( '/^[a-z0-9_]+$/', $campo ) ) {
 				/* translators: %s: nombre del campo */
-				return new \WP_Error( 'asde_crm_escritura', sprintf( asde_t( 'El campo %s no se puede escribir desde la web.' ), $campo ) );
+				return new \WP_Error( 'asde_crm_escritura', sprintf( /* translators: %s: text */ __( 'The %s field cannot be written from the website.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $campo ) );
 			}
 		}
 		try {
 			$id = ClientFactory::reader()->create_entry( $modulo, $valores );
 		} catch ( CrmException $e ) {
 			Logger::log( 'crm_creacion_error', $modulo, '', array( 'campos' => array_keys( $valores ), 'motivo' => $motivo ) );
-			return new \WP_Error( 'asde_crm_escritura', asde_t( 'El CRM no ha creado el registro: ' ) . $e->getMessage() );
+			return new \WP_Error( 'asde_crm_escritura', __( 'The CRM has not created the record: ', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . $e->getMessage() );
 		}
 		Logger::log( 'crm_registro_creado', $modulo, $id, array( 'campos' => array_keys( $valores ), 'motivo' => $motivo ) );
 		return $id;
@@ -164,26 +164,26 @@ final class Escritura {
 	 */
 	public static function actualizar_membresia( Persona $p, string $membresia, array $valores, string $motivo ) {
 		if ( ! self::puede_crear() ) {
-			return new \WP_Error( 'asde_crm_escritura', asde_t( 'El usuario del CRM de tu grupo no tiene permiso para cambiar membresías.' ) );
+			return new \WP_Error( 'asde_crm_escritura', __( 'Your group\'s CRM user does not have permission to change memberships.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$crm = ClientFactory::reader();
 		try {
 			$suyas = array_column( $crm->related( self::MODULO, $p->id, self::ENLACE_MEMBRESIAS, '', array( 'id' ) ), 'id' );
 			if ( ! in_array( $membresia, $suyas, true ) ) {
-				return new \WP_Error( 'asde_crm_escritura', asde_t( 'Esa membresía no es de esta persona.' ) );
+				return new \WP_Error( 'asde_crm_escritura', __( 'That membership does not belong to this person.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			}
 			$crm->set_entry( self::MEMBRESIAS, $membresia, $valores );
 			$leido = $crm->related( self::MODULO, $p->id, self::ENLACE_MEMBRESIAS, '', array_merge( array( 'id' ), array_keys( $valores ) ) );
 		} catch ( CrmException | \InvalidArgumentException $e ) {
 			Logger::log( 'crm_escritura_error', self::MEMBRESIAS, $membresia, array( 'campos' => array_keys( $valores ), 'motivo' => $motivo ) );
-			return new \WP_Error( 'asde_crm_escritura', asde_t( 'El CRM no ha guardado los cambios: ' ) . $e->getMessage() );
+			return new \WP_Error( 'asde_crm_escritura', __( 'The CRM has not saved the changes: ', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . $e->getMessage() );
 		}
 		$fila = array_values( array_filter( $leido, static fn( $e ) => $e['id'] === $membresia ) )[0]['fields'] ?? array();
 		$mal  = array_keys( array_filter( $valores, static fn( $v, $c ) => ! self::iguales( (string) ( $fila[ $c ] ?? '' ), (string) $v ), ARRAY_FILTER_USE_BOTH ) );
 		Logger::log( 'crm_membresia_cambiada', self::MEMBRESIAS, $membresia, array( 'campos' => array_keys( $valores ), 'rechazados' => $mal, 'motivo' => $motivo ) );
 		if ( $mal ) {
 			/* translators: %s: nombres de los campos */
-			return new \WP_Error( 'asde_crm_escritura', sprintf( asde_t( 'El CRM no ha aceptado: %s.' ), implode( ', ', $mal ) ) );
+			return new \WP_Error( 'asde_crm_escritura', sprintf( /* translators: %s: text */ __( 'The CRM did not accept: %s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), implode( ', ', $mal ) ) );
 		}
 		return true;
 	}
@@ -199,10 +199,10 @@ final class Escritura {
 		$propio = (string) ( Grupo::actual()['crm_id'] ?? '' );
 		$valido = ( 'SecurityGroups' === $enlace && '' !== $propio && array( $propio ) === array_values( $ids ) ) || ( self::ENLACE_MEMBRESIAS === $enlace && 1 === count( $ids ) );
 		if ( ! $valido ) {
-			return new \WP_Error( 'asde_crm_escritura', asde_t( 'Ese enlace no se puede hacer desde la web.' ) );
+			return new \WP_Error( 'asde_crm_escritura', __( 'That link cannot be made from the website.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( ! self::puede_crear() ) {
-			return new \WP_Error( 'asde_crm_escritura', asde_t( 'El usuario del CRM de tu grupo no tiene permiso para crear personas y membresías.' ) );
+			return new \WP_Error( 'asde_crm_escritura', __( 'Your group\'s CRM user does not have permission to create people and memberships.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		try {
 			$hecho = ClientFactory::reader()->set_relationship( self::MODULO, $persona, $enlace, $ids );
@@ -210,7 +210,7 @@ final class Escritura {
 			$hecho = false;
 		}
 		Logger::log( $hecho ? 'crm_enlace_creado' : 'crm_escritura_error', self::MODULO, $persona, array( 'enlace' => $enlace, 'motivo' => $motivo ) );
-		return $hecho ? true : new \WP_Error( 'asde_crm_escritura', asde_t( 'El CRM no ha hecho el enlace.' ) );
+		return $hecho ? true : new \WP_Error( 'asde_crm_escritura', __( 'The CRM has not made the link.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 	}
 
 	/** Compara lo guardado con lo leído (el CRM puede devolver 0/1, espacios o entidades HTML). */

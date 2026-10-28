@@ -15,15 +15,15 @@ defined( 'ABSPATH' ) || exit;
 $reset = 'reset' === $tipo;
 ?>
 <section class="asde-card asde-card--narrow">
-	<h2><?php echo $reset ? esc_html( asde_t( 'Elige una contraseña nueva' ) ) : esc_html( asde_t( 'Activa tu cuenta' ) ); ?></h2>
+	<h2><?php echo $reset ? esc_html( __( 'Choose a new password', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) : esc_html( __( 'Activate your account', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?></h2>
 	<p>
-		<?php asde_e( 'Tu usuario es:' ); ?> <strong><?php echo esc_html( $user->user_login ); ?></strong>
+		<?php esc_html_e( 'Your username is:', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <strong><?php echo esc_html( $user->user_login ); ?></strong>
 		<?php if ( \AsdeBalears\AreaPrivada\Usuarios\Usuarios::email_origen( $user->ID ) ) : ?>
-			<br><span class="asde-help"><?php asde_e( 'También podrás entrar con el email al que te ha llegado este enlace.' ); ?></span>
+			<br><span class="asde-help"><?php esc_html_e( 'You will also be able to sign in with the email address this link was sent to.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span>
 		<?php endif; ?>
 	</p>
 	<?php if ( ! $reset ) : ?>
-		<p><?php asde_e( 'Elige una contraseña para entrar en el área privada.' ); ?></p>
+		<p><?php esc_html_e( 'Choose a password to sign in to the private area.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 	<?php endif; ?>
 
 	<?php if ( $error ) : ?>
@@ -37,14 +37,14 @@ $reset = 'reset' === $tipo;
 		<input type="hidden" name="t" value="<?php echo esc_attr( $t ); ?>">
 		<input type="text" name="username" value="<?php echo esc_attr( $user->user_login ); ?>" autocomplete="username" hidden>
 		<p>
-			<label for="asde-pass1"><?php asde_e( 'Contraseña' ); ?></label>
+			<label for="asde-pass1"><?php esc_html_e( 'Password', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 			<input type="password" id="asde-pass1" name="pass1" minlength="<?php echo (int) $longitud; ?>" autocomplete="new-password" required>
-			<span class="asde-help"><?php asde_e( 'Mínimo' ); ?> <?php echo (int) $longitud; ?> <?php asde_e( 'caracteres. Mejor una frase fácil de recordar para ti y difícil de adivinar.' ); ?></span>
+			<span class="asde-help"><?php esc_html_e( 'Minimum', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <?php echo (int) $longitud; ?> <?php esc_html_e( 'characters. Better a phrase that is easy for you to remember and hard to guess.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span>
 		</p>
 		<p>
-			<label for="asde-pass2"><?php asde_e( 'Repite la contraseña' ); ?></label>
+			<label for="asde-pass2"><?php esc_html_e( 'Repeat the password', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 			<input type="password" id="asde-pass2" name="pass2" minlength="<?php echo (int) $longitud; ?>" autocomplete="new-password" required>
 		</p>
-		<p><button type="submit" class="button"><?php echo $reset ? esc_html( asde_t( 'Guardar contraseña' ) ) : esc_html( asde_t( 'Activar mi cuenta' ) ); ?></button></p>
+		<p><button type="submit" class="button"><?php echo $reset ? esc_html( __( 'Save password', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) : esc_html( __( 'Activate my account', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?></button></p>
 	</form>
 </section>

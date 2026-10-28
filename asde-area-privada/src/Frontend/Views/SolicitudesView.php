@@ -32,7 +32,7 @@ final class SolicitudesView extends View {
 		}
 		$servicio = SolicitudService::make();
 		if ( ! $servicio ) {
-			return $this->error_crm( 'solicitudes', asde_t( 'La conexión de tu grupo con el CRM no está configurada o no se ha podido comprobar. Un administrador puede revisarla en wp-admin → Grupos Scouts.' ) );
+			return $this->error_crm( 'solicitudes', __( 'Your group\'s connection to the CRM is not set up or could not be checked. An administrator can review it in wp-admin → Scout Groups.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$ambito = Ambito::actual();
 		try {
@@ -40,7 +40,7 @@ final class SolicitudesView extends View {
 			if ( $id ) {
 				$s = Solicitudes::obtener( $id );
 				if ( ! $s || ! Solicitudes::en_ambito( $s, $ambito ) ) {
-					return $this->denegado( asde_t( 'No tienes acceso a esa solicitud.' ) );
+					return $this->denegado( __( 'You do not have access to that request.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 				}
 				return $this->layout( 'solicitudes', $this->detalle( $servicio, $s ) );
 			}
@@ -68,7 +68,7 @@ final class SolicitudesView extends View {
 				)
 			);
 		} catch ( CrmException $e ) {
-			return $this->error_crm( 'solicitudes', asde_t( 'No se ha podido consultar el CRM: ' ) . $e->getMessage() );
+			return $this->error_crm( 'solicitudes', __( 'The CRM could not be queried: ', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . $e->getMessage() );
 		}
 	}
 
@@ -108,7 +108,7 @@ final class SolicitudesView extends View {
 
 	public function handle_post(): void {
 		if ( ! current_user_can( self::CAP ) ) {
-			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+			wp_die( esc_html__( 'You do not have permission to do this.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		$id     = (int) $this->post( 'solicitud' );
 		$accion = $this->post( 'asde_action' );
@@ -117,7 +117,7 @@ final class SolicitudesView extends View {
 			if ( current_user_can( 'asde_manage_users' ) && Grupo::actual() ) {
 				EnlaceScouters::renovar( Grupo::actual() );
 				Logger::log( 'enlace_scouters_renovado', 'grupo', Grupo::numero() );
-				Notices::add( 'success', asde_t( 'Enlace para scouters renovado: el anterior ya no sirve.' ) );
+				Notices::add( 'success', __( 'Scouters link renewed: the previous one no longer works.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			}
 			$this->redirect( $this->url( 'solicitudes' ) );
 		}
@@ -126,12 +126,12 @@ final class SolicitudesView extends View {
 
 		$s = Solicitudes::obtener( $id );
 		if ( ! $s || ! Solicitudes::en_ambito( $s, Ambito::actual() ) ) {
-			Notices::add( 'error', asde_t( 'No tienes acceso a esa solicitud.' ) );
+			Notices::add( 'error', __( 'You do not have access to that request.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			$this->redirect( $this->url( 'solicitudes' ) );
 		}
 		$servicio = SolicitudService::make();
 		if ( ! $servicio ) {
-			Notices::add( 'error', asde_t( 'La conexión con el CRM no está disponible.' ) );
+			Notices::add( 'error', __( 'The connection to the CRM is not available.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			$this->redirect( $volver );
 		}
 
@@ -141,20 +141,20 @@ final class SolicitudesView extends View {
 				if ( $servicio->rechazar( $s, get_current_user_id(), $this->post( 'motivo' ), $avisar ) ) {
 					$aviso = $servicio->aviso;
 					if ( EmailRechazo::ENVIADO === $aviso['estado'] ) {
-						Notices::add( 'success', sprintf( asde_t( 'Solicitud rechazada. Se ha avisado por email a %s.' ), esc_html( $aviso['destino'] ) ) );
+						Notices::add( 'success', sprintf( /* translators: %s: text */ __( 'Request rejected. %s has been notified by email.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), esc_html( $aviso['destino'] ) ) );
 					} else {
-						Notices::add( 'success', asde_t( 'Solicitud rechazada.' ) . ( $avisar ? '' : asde_t( ' No se ha enviado ningún aviso.' ) ) );
+						Notices::add( 'success', __( 'Request rejected.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . ( $avisar ? '' : __( ' No notice has been sent.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) );
 						if ( $avisar ) {
-							Notices::add( 'warning', esc_html( asde_t( 'No se ha podido avisar por email a quien la pidió: ' ) . $aviso['error'] ) );
+							Notices::add( 'warning', esc_html( __( 'Whoever requested it could not be notified by email: ', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . $aviso['error'] ) );
 						}
 					}
 				} else {
-					Notices::add( 'error', asde_t( 'Esta solicitud ya estaba resuelta.' ) );
+					Notices::add( 'error', __( 'This request was already resolved.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 				}
 				$this->redirect( $this->url( 'solicitudes' ) );
 			}
 			if ( 'aprobar_solicitud' !== $accion ) {
-				Notices::add( 'error', asde_t( 'Petición no válida.' ) );
+				Notices::add( 'error', __( 'Invalid request.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 				$this->redirect( $volver );
 			}
 			$r = $servicio->aprobar(
@@ -168,7 +168,7 @@ final class SolicitudesView extends View {
 				)
 			);
 		} catch ( CrmException $e ) {
-			Notices::add( 'error', esc_html( asde_t( 'No se ha podido consultar el CRM: ' ) . $e->getMessage() ) );
+			Notices::add( 'error', esc_html( __( 'The CRM could not be queried: ', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . $e->getMessage() ) );
 			$this->redirect( $volver );
 		}
 
@@ -182,10 +182,10 @@ final class SolicitudesView extends View {
 			Notices::add(
 				'success',
 				sprintf(
-					asde_t( 'Solicitud aprobada: cuenta <strong>%s</strong>. Se ha enviado la invitación, con la bienvenida, a %s.%s' ),
+					/* translators: 1: text, 2: text, 3: text */ __( 'Request approved: account <strong>%1$s</strong>. The invitation, with the welcome, has been sent to %2$s.%3$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 					esc_html( $r['usuario']->user_login ),
 					esc_html( Contacto::enmascarar( (string) $s['datos']['email'] ) ),
-					$r['email_crm'] ? asde_t( ' El email nuevo ya está en la ficha del CRM.' ) : ''
+					$r['email_crm'] ? __( ' The new email is already on the CRM record.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : ''
 				)
 			);
 			$this->redirect( $this->url( 'solicitudes' ) );

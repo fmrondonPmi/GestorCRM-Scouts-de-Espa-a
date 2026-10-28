@@ -22,30 +22,30 @@ defined( 'ABSPATH' ) || exit;
 $fecha     = static fn( ?string $f ) => $f ? wp_date( 'd/m/Y', strtotime( $f . ( strlen( $f ) > 10 ? ' UTC' : '' ) ) ) : '';
 ?>
 <section class="asde-card">
-	<h2 class="asde-card__title"><?php asde_e( 'Tienda' ); ?></h2>
+	<h2 class="asde-card__title"><?php esc_html_e( 'Shop', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h2>
 	<p>
-		<?php asde_e( 'Elige más abajo lo que quieres comprar. Después, págalo por transferencia, por Bizum o, si eres socio o socia, en físico a Tesorería, indicando el nº de pedido. Cuando Tesorería lo reciba lo verás aquí como pagado; el grupo te lo entregará y, cuando lo tengas, confírmalo aquí.' ); ?>
+		<?php esc_html_e( 'Choose below what you want to buy. Then pay by transfer, by Bizum or, if you are a member, in person to Treasury, stating the order no. When Treasury receives it you will see it here as paid; the group will hand it over to you and, when you have it, confirm it here.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>
 	</p>
 	<?php if ( '' !== trim( $cfg['texto_pago'] ) ) : ?>
 		<div class="asde-notice asde-notice--info"><?php echo wp_kses_post( wpautop( $cfg['texto_pago'] ) ); ?></div>
 	<?php endif; ?>
-	<p class="asde-muted"><?php asde_e( 'Lo que has pagado lo ves en' ); ?> <a href="<?php echo esc_url( $url_pagos ); ?>"><?php asde_e( 'Mis pagos' ); ?></a>.</p>
+	<p class="asde-muted"><?php esc_html_e( 'What you have paid you can see in', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <a href="<?php echo esc_url( $url_pagos ); ?>"><?php esc_html_e( 'My payments', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a>.</p>
 </section>
 
 <?php if ( $pedidos ) : ?>
 	<section class="asde-card">
-		<h3 class="asde-card__title"><?php asde_e( 'Tus pedidos' ); ?></h3>
+		<h3 class="asde-card__title"><?php esc_html_e( 'Your orders', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h3>
 		<div class="asde-pedidos">
 			<?php foreach ( $pedidos as $p ) : ?>
 				<?php
 				$persona = $para[ $p['socio'] ] ?? null;
 				$estado  = PedidosTable::estado( $p );
 				$pasos   = array(
-					array( asde_t( 'Solicitado' ), true, $fecha( $p['creado'] ) ),
-					array( asde_t( 'Pagado' ), null !== $p['pago_en'], null !== $p['pago_en'] ? $fecha( $p['pago_fecha'] ) . ' · ' . ( asde_t( PedidosTable::METODOS[ $p['pago_metodo'] ] ?? '' ) ) : '' ),
-					array( asde_t( 'En el pedido del grupo' ), null !== $p['pedido_en'], $fecha( $p['pedido_en'] ) ),
-					array( asde_t( 'Entregado' ), null !== $p['entregado_en'], $fecha( $p['entregado_en'] ) ),
-					array( asde_t( 'Recibido' ), null !== $p['recibido_en'], $fecha( $p['recibido_en'] ) ),
+					array( __( 'Requested', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), true, $fecha( $p['creado'] ) ),
+					array( __( 'Paid', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), null !== $p['pago_en'], null !== $p['pago_en'] ? $fecha( $p['pago_fecha'] ) . ' · ' . ( asde_t( PedidosTable::METODOS[ $p['pago_metodo'] ] ?? '' ) ) : '' ),
+					array( __( 'In the group\'s order', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), null !== $p['pedido_en'], $fecha( $p['pedido_en'] ) ),
+					array( __( 'Delivered', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), null !== $p['entregado_en'], $fecha( $p['entregado_en'] ) ),
+					array( __( 'Received', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), null !== $p['recibido_en'], $fecha( $p['recibido_en'] ) ),
 				);
 				?>
 				<article class="asde-pedido<?php echo 'cancelado' === $estado ? ' asde-pedido--cancelado' : ''; ?>">
@@ -61,11 +61,11 @@ $fecha     = static fn( ?string $f ) => $f ? wp_date( 'd/m/Y', strtotime( $f . (
 						<?php endforeach; ?>
 					<?php endif; ?>
 					<?php if ( 'cancelado' === $estado ) : ?>
-						<p class="asde-muted"><?php asde_e( 'Cancelado el' ); ?> <?php echo esc_html( $fecha( $p['cancelado_en'] ) ); ?>.</p>
+						<p class="asde-muted"><?php esc_html_e( 'Cancelled on', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <?php echo esc_html( $fecha( $p['cancelado_en'] ) ); ?>.</p>
 					<?php else : ?>
 						<ol class="asde-pasos">
 							<?php foreach ( $pasos as list( $texto, $hecho, $detalle ) ) : ?>
-								<li class="<?php echo $hecho ? 'is-hecho' : ''; ?>"><span class="asde-pasos__marca" aria-hidden="true"><?php echo $hecho ? '✓' : ''; ?></span> <?php echo esc_html( $texto ); ?><?php echo $hecho && '' !== $detalle ? ' <span class="asde-muted">' . esc_html( $detalle ) . '</span>' : ''; ?><span class="screen-reader-text"><?php echo $hecho ? ': sí' : esc_html( asde_t( ': todavía no' ) ); ?></span></li>
+								<li class="<?php echo $hecho ? 'is-hecho' : ''; ?>"><span class="asde-pasos__marca" aria-hidden="true"><?php echo $hecho ? '✓' : ''; ?></span> <?php echo esc_html( $texto ); ?><?php echo $hecho && '' !== $detalle ? ' <span class="asde-muted">' . esc_html( $detalle ) . '</span>' : ''; ?><span class="screen-reader-text"><?php echo $hecho ? ': sí' : esc_html( __( ': not yet', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?></span></li>
 							<?php endforeach; ?>
 						</ol>
 					<?php endif; ?>
@@ -74,15 +74,15 @@ $fecha     = static fn( ?string $f ) => $f ? wp_date( 'd/m/Y', strtotime( $f . (
 							<?php wp_nonce_field( 'asde_uniforme_' . $p['id'] ); ?>
 							<input type="hidden" name="asde_action" value="uniforme_recibido">
 							<input type="hidden" name="pedido" value="<?php echo (int) $p['id']; ?>">
-							<button type="submit" class="button"><?php asde_e( 'Lo he recibido' ); ?></button>
-							<span class="asde-help"><?php asde_e( 'El grupo lo ha marcado como entregado: confírmalo cuando lo tengas.' ); ?></span>
+							<button type="submit" class="button"><?php esc_html_e( 'I have received it', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
+							<span class="asde-help"><?php esc_html_e( 'The group has marked it as delivered: confirm it when you have it.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span>
 						</form>
 					<?php elseif ( Servicio::puede_cancelar_propio( $p, $ambito ) ) : ?>
-						<form method="post" class="asde-pedido__accion" data-asde-confirmar="<?php echo esc_attr( asde_js( '¿Cancelar el pedido %s?', PedidosTable::numero( $p ) ) ); ?>">
+						<form method="post" class="asde-pedido__accion" data-asde-confirmar="<?php echo esc_attr( sprintf( /* translators: %s: text */ __( 'Cancel order %s?', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), PedidosTable::numero( $p ) ) ); ?>">
 							<?php wp_nonce_field( 'asde_uniforme_' . $p['id'] ); ?>
 							<input type="hidden" name="asde_action" value="uniforme_cancelar">
 							<input type="hidden" name="pedido" value="<?php echo (int) $p['id']; ?>">
-							<button type="submit" class="asde-btn-link asde-btn-danger"><?php asde_e( 'Cancelar el pedido' ); ?></button>
+							<button type="submit" class="asde-btn-link asde-btn-danger"><?php esc_html_e( 'Cancel the order', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 						</form>
 					<?php endif; ?>
 				</article>

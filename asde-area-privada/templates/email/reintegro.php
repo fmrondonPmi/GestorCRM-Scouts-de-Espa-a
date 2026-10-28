@@ -28,18 +28,18 @@ $col     = Colores::para_email();
 $p       = 'margin:0 0 16px;';
 $fuerte  = static fn( string $t ): string => '<strong>' . esc_html( $t ) . '</strong>';
 $filas   = array(
-	asde_t( 'Reintegro' )         => $numero,
-	asde_t( 'Quién lo pide' )     => $quien,
-	asde_t( 'Concepto' )          => $concepto,
-	asde_t( 'Fecha del gasto' )   => $fecha,
-	asde_t( 'Importe' )           => $importe,
-	asde_t( 'Cómo quiere cobrarlo' ) => $forma,
+	__( 'Reimbursement', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' )         => $numero,
+	__( 'Who requests it', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' )     => $quien,
+	__( 'Description', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' )          => $concepto,
+	__( 'Date of the expense', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' )   => $fecha,
+	__( 'Amount', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' )           => $importe,
+	__( 'How they want to be paid', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) => $forma,
 );
 if ( '' !== $evento ) {
-	$filas[ asde_t( 'Evento' ) ] = $evento;
+	$filas[ __( 'Event', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ] = $evento;
 }
 if ( '' !== $iban ) {
-	$filas[ asde_t( 'IBAN' ) ] = $iban;
+	$filas[ __( 'IBAN', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ] = $iban;
 }
 ?>
 <!DOCTYPE html>
@@ -50,22 +50,22 @@ if ( '' !== $iban ) {
 		<tr><td align="center">
 			<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:560px;background:<?php echo esc_attr( $col['tarjeta'] ); ?>;border-radius:6px;overflow:hidden;">
 				<tr><td style="background:<?php echo esc_attr( $col['primary'] ); ?>;color:<?php echo esc_attr( $col['on_primary'] ); ?>;padding:20px 28px;font-size:18px;font-weight:600;">
-					<?php echo esc_html( $grupo ); ?> · <?php asde_e( 'Reintegros' ); ?>
+					<?php echo esc_html( $grupo ); ?> · <?php esc_html_e( 'Reimbursements', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>
 				</td></tr>
 				<tr><td style="padding:28px;font-size:15px;line-height:1.6;">
-					<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( $saludo ? sprintf( asde_h( 'Hola, %s:' ), esc_html( $saludo ) ) : asde_h( 'Hola:' ), asde_html_permitido() ); ?></p>
+					<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( $saludo ? sprintf( /* translators: %s: text */ __( 'Hello, %s:', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), esc_html( $saludo ) ) : __( 'Hello:', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), asde_html_permitido() ); ?></p>
 
 					<?php if ( 'aprobado' === $tipo ) : ?>
-						<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( sprintf( asde_h( 'Tesorería ha aprobado tu reintegro %s. En cuanto se pague, te lo avisamos.' ), $fuerte( $numero ) ), asde_html_permitido() ); ?></p>
+						<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( sprintf( /* translators: %s: text */ __( 'Treasury has approved your reimbursement %s. We will let you know as soon as it is paid.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $fuerte( $numero ) ), asde_html_permitido() ); ?></p>
 					<?php elseif ( 'rechazado' === $tipo ) : ?>
-						<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( sprintf( asde_h( 'Tesorería no ha aprobado tu reintegro %s.' ), $fuerte( $numero ) ), asde_html_permitido() ); ?></p>
+						<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( sprintf( /* translators: %s: text */ __( 'Treasury has not approved your reimbursement %s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $fuerte( $numero ) ), asde_html_permitido() ); ?></p>
 						<?php if ( '' !== $motivo ) : ?>
-							<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( sprintf( asde_h( 'Motivo: %s' ), esc_html( $motivo ) ), asde_html_permitido() ); ?></p>
+							<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( sprintf( /* translators: %s: text */ __( 'Reason: %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), esc_html( $motivo ) ), asde_html_permitido() ); ?></p>
 						<?php endif; ?>
 					<?php elseif ( 'pagado' === $tipo ) : ?>
-						<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( sprintf( asde_h( 'Tu reintegro %1$s ya está pagado (%2$s).' ), $fuerte( $numero ), esc_html( $pago ) ), asde_html_permitido() ); ?></p>
+						<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( sprintf( /* translators: 1: text, 2: text */ __( 'Your reimbursement %1$s has been paid (%2$s).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $fuerte( $numero ), esc_html( $pago ) ), asde_html_permitido() ); ?></p>
 					<?php else : ?>
-						<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( sprintf( asde_h( '%1$s pide el reintegro %2$s, que quiere cobrar por transferencia. Hay que aprobarlo y, después, pagarlo.' ), esc_html( $quien ), $fuerte( $numero ) ), asde_html_permitido() ); ?></p>
+						<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( sprintf( /* translators: 1: text, 2: text */ __( '%1$s requests reimbursement %2$s, which they want to receive by bank transfer. It must be approved and then paid.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), esc_html( $quien ), $fuerte( $numero ) ), asde_html_permitido() ); ?></p>
 					<?php endif; ?>
 
 					<table role="presentation" cellspacing="0" cellpadding="4" style="margin:0 0 16px;font-size:14px;">
@@ -78,10 +78,10 @@ if ( '' !== $iban ) {
 					</table>
 
 					<p style="margin:24px 0;text-align:center;">
-						<a href="<?php echo esc_url( $url ); ?>" style="display:inline-block;background:<?php echo esc_attr( $col['primary'] ); ?>;color:<?php echo esc_attr( $col['on_primary'] ); ?>;text-decoration:none;font-weight:600;padding:12px 22px;border-radius:4px;"><?php asde_e( 'Ver los reintegros' ); ?></a>
+						<a href="<?php echo esc_url( $url ); ?>" style="display:inline-block;background:<?php echo esc_attr( $col['primary'] ); ?>;color:<?php echo esc_attr( $col['on_primary'] ); ?>;text-decoration:none;font-weight:600;padding:12px 22px;border-radius:4px;"><?php esc_html_e( 'See the reimbursements', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a>
 					</p>
 					<?php if ( '' !== $contacto ) : ?>
-						<p style="margin:0;font-size:13px;color:<?php echo esc_attr( $col['atenuado'] ); ?>;"><?php echo wp_kses( sprintf( asde_h( '¿Dudas? Escríbenos a %s.' ), '<a href="mailto:' . esc_attr( $contacto ) . '" style="color:' . esc_attr( $col['primary'] ) . ';">' . esc_html( $contacto ) . '</a>' ), asde_html_permitido() ); ?></p>
+						<p style="margin:0;font-size:13px;color:<?php echo esc_attr( $col['atenuado'] ); ?>;"><?php echo wp_kses( sprintf( /* translators: %s: text */ __( 'Questions? Write to us at %s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), '<a href="mailto:' . esc_attr( $contacto ) . '" style="color:' . esc_attr( $col['primary'] ) . ';">' . esc_html( $contacto ) . '</a>' ), asde_html_permitido() ); ?></p>
 					<?php endif; ?>
 				</td></tr>
 			</table>

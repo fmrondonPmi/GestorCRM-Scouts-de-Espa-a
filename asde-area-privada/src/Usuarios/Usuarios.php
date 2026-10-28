@@ -244,17 +244,17 @@ final class Usuarios {
 
 	public static function etiqueta_estado( string $estado ): string {
 		return array(
-			self::INVITADO    => asde_t( 'Invitación pendiente' ),
-			self::ACTIVO      => asde_t( 'Activo' ),
-			self::DESACTIVADO => asde_t( 'Desactivado' ),
+			self::INVITADO    => __( 'Invitation pending', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+			self::ACTIVO      => __( 'Active', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+			self::DESACTIVADO => __( 'Deactivated', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 		)[ $estado ] ?? $estado;
 	}
 
 	public static function etiqueta_campo_email( string $campo ): string {
 		return array(
-			'email1'         => asde_t( 'Email de la ficha' ),
-			'tutor1_email_c' => asde_t( 'Email del Tutor/a 1' ),
-			'tutor2_email_c' => asde_t( 'Email del Tutor/a 2' ),
+			'email1'         => __( 'Record email', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+			'tutor1_email_c' => __( 'Guardian 1\'s email', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+			'tutor2_email_c' => __( 'Guardian 2\'s email', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 		)[ $campo ] ?? $campo;
 	}
 }

@@ -55,13 +55,13 @@ final class EventosConfigView extends EventosBaseView {
 			case 'calendario_guardar':
 				$cfg['calendario_viernes'] = '1' === $this->post( 'calendario_viernes' );
 				$cfg['avisos_tareas']      = '1' === $this->post( 'avisos_tareas' );
-				$aviso = asde_t( 'Calendario guardado.' );
+				$aviso = __( 'Calendar saved.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 
 			case 'plantilla_nueva':
 				$nombre = mb_substr( trim( sanitize_text_field( $this->post( 'nombre' ) ) ), 0, 60 );
 				if ( '' === $nombre || count( $plantillas ) >= Plantillas::MAX_PLANTILLAS ) {
-					Notices::add( 'error', asde_t( 'Escribe el nombre de la plantilla (hay un máximo de plantillas por grupo).' ) );
+					Notices::add( 'error', __( 'Enter the template name (there is a maximum number of templates per group).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 					$this->redirect( $volver );
 				}
 				$nuevo              = Plantillas::id_para( $nombre, $plantillas );
@@ -71,28 +71,28 @@ final class EventosConfigView extends EventosBaseView {
 					'tareas' => $copia,
 				);
 				$volver = $this->url( 'eventos_config', array( 'plantilla' => $nuevo ) );
-				$aviso  = asde_t( 'Plantilla creada.' );
+				$aviso  = __( 'Template created.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 
 			case 'plantilla_restaurar':
 				unset( $guardadas[ Plantillas::ACAMPADA ] );
 				$volver = $this->url( 'eventos_config' );
-				$aviso  = asde_t( 'Plantilla de Acampada restaurada a la original.' );
+				$aviso  = __( 'Camp template restored to the original.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 
 			case 'plantilla_borrar':
 				if ( Plantillas::ACAMPADA === $id || ! isset( $guardadas[ $id ] ) ) {
-					Notices::add( 'error', asde_t( 'Esa plantilla no se puede borrar.' ) );
+					Notices::add( 'error', __( 'That template cannot be deleted.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 					$this->redirect( $volver );
 				}
 				unset( $guardadas[ $id ] );
 				$volver = $this->url( 'eventos_config' );
-				$aviso  = asde_t( 'Plantilla borrada.' );
+				$aviso  = __( 'Template deleted.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 
 			case 'plantilla_guardar':
 				if ( ! isset( $plantillas[ $id ] ) ) {
-					Notices::add( 'error', asde_t( 'Esa plantilla no existe.' ) );
+					Notices::add( 'error', __( 'That template does not exist.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 					$this->redirect( $this->url( 'eventos_config' ) );
 				}
 				$tareas = array();
@@ -122,7 +122,7 @@ final class EventosConfigView extends EventosBaseView {
 					'nombre' => '' !== $nombre ? $nombre : $plantillas[ $id ]['nombre'],
 					'tareas' => $tareas,
 				);
-				$aviso = asde_t( 'Plantilla guardada. Los eventos que ya la aplicaron no cambian.' );
+				$aviso = __( 'Template saved. Events that already applied it do not change.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 
 			default:
@@ -138,7 +138,7 @@ final class EventosConfigView extends EventosBaseView {
 
 	public function handle_post(): void {
 		if ( ! current_user_can( Servicio::CAP_CONFIG ) ) {
-			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+			wp_die( esc_html__( 'You do not have permission to do this.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		check_admin_referer( 'asde_eventos_config' );
 		$cfg = Config::de();
@@ -152,7 +152,7 @@ final class EventosConfigView extends EventosBaseView {
 			$cfg['material_por_tipo'] = $material;
 			Config::guardar( $cfg );
 			Logger::log( 'eventos_configurados', 'grupo', Grupo::numero(), array( 'campos' => array( 'material_por_tipo' ) ) );
-			Notices::add( 'success', asde_t( 'Material habitual guardado.' ) );
+			Notices::add( 'success', __( 'Usual equipment saved.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			$this->redirect( $this->url( 'eventos_config' ) );
 		}
 
@@ -164,7 +164,7 @@ final class EventosConfigView extends EventosBaseView {
 		$cfg['margen_activo'] = '1' === $this->post( 'margen_activo' );
 		$pct                  = (float) str_replace( ',', '.', $this->post( 'margen_pct' ) );
 		if ( $pct < 0 || $pct > 50 ) {
-			Notices::add( 'error', asde_t( 'El margen del fondo de emergencia tiene que estar entre 0 y 50 %.' ) );
+			Notices::add( 'error', __( 'The emergency fund margin must be between 0 and 50 %.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			$this->redirect( $this->url( 'eventos_config' ) );
 		}
 		$cfg['margen_pct'] = round( $pct, 2 );
@@ -181,7 +181,7 @@ final class EventosConfigView extends EventosBaseView {
 		$nuevo = trim( sanitize_text_field( $this->post( 'nuevo_tipo' ) ) );
 		if ( '' !== $nuevo ) {
 			if ( count( $cfg['tipos'] ) >= Config::MAX_TIPOS ) {
-				Notices::add( 'error', sprintf( asde_t( 'Como mucho %d tipos de actividad.' ), Config::MAX_TIPOS ) );
+				Notices::add( 'error', sprintf( /* translators: %d: number */ __( 'At most %d activity types.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Config::MAX_TIPOS ) );
 			} else {
 				$cfg['tipos'][ Config::id_para( $nuevo, $cfg['tipos'] ) ] = array(
 					'nombre'       => mb_substr( $nuevo, 0, 60 ),
@@ -193,7 +193,7 @@ final class EventosConfigView extends EventosBaseView {
 			}
 		}
 		if ( ! Config::tipos_activos( $cfg ) ) {
-			Notices::add( 'error', asde_t( 'Deja al menos un tipo de actividad activo.' ) );
+			Notices::add( 'error', __( 'Leave at least one activity type active.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			$this->redirect( $this->url( 'eventos_config' ) );
 		}
 
@@ -242,7 +242,7 @@ final class EventosConfigView extends EventosBaseView {
 
 		Config::guardar( $cfg );
 		Logger::log( 'eventos_configurados', 'grupo', Grupo::numero(), array( 'campos' => $campos ) );
-		Notices::add( 'success', asde_t( 'Configuración de eventos guardada.' ) );
+		Notices::add( 'success', __( 'Event settings saved.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		$this->redirect( $this->url( 'eventos_config' ) );
 	}
 }

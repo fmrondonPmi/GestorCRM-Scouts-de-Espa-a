@@ -72,8 +72,8 @@ final class CamposFicha {
 				continue; // Se calcula de la fecha de nacimiento.
 			}
 			if ( 'nombre_tutor' === $tipo ) {
-				$campos[ $crm[0] ] = array( sprintf( asde_t( '%s · nombre' ), $etiqueta ), $grupo, $nivel );
-				$campos[ $crm[1] ] = array( sprintf( asde_t( '%s · apellidos' ), $etiqueta ), $grupo, $nivel );
+				$campos[ $crm[0] ] = array( sprintf( /* translators: %s: text */ __( '%s · first name', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $etiqueta ), $grupo, $nivel );
+				$campos[ $crm[1] ] = array( sprintf( /* translators: %s: text */ __( '%s · surnames', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $etiqueta ), $grupo, $nivel );
 				continue;
 			}
 			// En la ficha, la alimentación va en su propio apartado.

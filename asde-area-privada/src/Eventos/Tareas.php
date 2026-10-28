@@ -197,14 +197,14 @@ final class Tareas {
 	 */
 	public static function aplicar( array $e, string $plantilla, Ambito $a ) {
 		if ( ! self::puede_editar( $e, $a ) ) {
-			return new \WP_Error( 'asde_tareas', asde_t( 'No puedes cambiar el calendario de este evento.' ) );
+			return new \WP_Error( 'asde_tareas', __( 'You cannot change this event\'s calendar.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$p = Plantillas::de_grupo()[ $plantilla ] ?? null;
 		if ( ! $p || ! $p['tareas'] ) {
-			return new \WP_Error( 'asde_tareas', asde_t( 'Esa plantilla no existe o no tiene tareas.' ) );
+			return new \WP_Error( 'asde_tareas', __( 'That template does not exist or has no tasks.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( TareasTable::contar( $e['id'] ) > 0 ) {
-			return new \WP_Error( 'asde_tareas', asde_t( 'Este evento ya tiene tareas. Quita las que no quieras o añade las que falten una a una.' ) );
+			return new \WP_Error( 'asde_tareas', __( 'This event already has tasks. Remove the ones you don\'t want or add the missing ones one by one.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$viernes = (bool) Config::de()['calendario_viernes'];
 		$n       = 0;
@@ -258,12 +258,12 @@ final class Tareas {
 	 */
 	public static function marcar( array $e, array $t, bool $hecha, Ambito $a, string $nota = '' ) {
 		if ( ! self::puede_marcar( $e, $a ) || $t['evento_id'] !== $e['id'] ) {
-			return new \WP_Error( 'asde_tareas', asde_t( 'No puedes marcar tareas de este evento.' ) );
+			return new \WP_Error( 'asde_tareas', __( 'You cannot tick off this event\'s tasks.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( $hecha && '' !== $t['auto'] && false === self::comprobar( $e, $t['auto'] ) ) {
 			$nota = '' !== trim( $nota ) ? $nota : $t['nota'];
 			if ( '' === trim( $nota ) ) {
-				return new \WP_Error( 'asde_tareas', asde_t( 'Esta tarea se marca sola cuando se cumple. Si no procede, escribe una observación y ciérrala.' ) );
+				return new \WP_Error( 'asde_tareas', __( 'This task is ticked off by itself when it is done. If it does not apply, write a note and close it.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			}
 			TareasTable::actualizar( $t['id'], array( 'nota' => mb_substr( sanitize_text_field( $nota ), 0, 255 ) ) );
 		}
@@ -280,13 +280,13 @@ final class Tareas {
 	 */
 	public static function guardar( array $e, array $t, string $responsable, string $fecha, string $nota, array $equipo, Ambito $a ) {
 		if ( ! self::puede_editar( $e, $a ) || $t['evento_id'] !== $e['id'] ) {
-			return new \WP_Error( 'asde_tareas', asde_t( 'No puedes cambiar el calendario de este evento.' ) );
+			return new \WP_Error( 'asde_tareas', __( 'You cannot change this event\'s calendar.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( '' !== $responsable && ! in_array( $responsable, $equipo, true ) ) {
-			return new \WP_Error( 'asde_tareas', asde_t( 'El responsable tiene que ser del equipo del evento.' ) );
+			return new \WP_Error( 'asde_tareas', __( 'The person in charge must be on the event team.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( '' !== $fecha && ! self::fecha_valida( $fecha ) ) {
-			return new \WP_Error( 'asde_tareas', asde_t( 'La fecha no es válida.' ) );
+			return new \WP_Error( 'asde_tareas', __( 'The date is not valid.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		TareasTable::actualizar(
 			$t['id'],
@@ -303,15 +303,15 @@ final class Tareas {
 	/** Añade una tarea propia con su fecha. @return int|\WP_Error Id de la tarea. */
 	public static function anadir( array $e, string $titulo, string $fecha, string $detalle, Ambito $a ) {
 		if ( ! self::puede_editar( $e, $a ) ) {
-			return new \WP_Error( 'asde_tareas', asde_t( 'No puedes cambiar el calendario de este evento.' ) );
+			return new \WP_Error( 'asde_tareas', __( 'You cannot change this event\'s calendar.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$titulo = mb_substr( trim( sanitize_text_field( $titulo ) ), 0, 200 );
 		if ( '' === $titulo || ! self::fecha_valida( $fecha ) ) {
-			return new \WP_Error( 'asde_tareas', asde_t( 'Escribe el título de la tarea y su fecha.' ) );
+			return new \WP_Error( 'asde_tareas', __( 'Enter the task title and its date.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( TareasTable::contar( $e['id'] ) >= TareasTable::MAX ) {
 			/* translators: %d: máximo de tareas */
-			return new \WP_Error( 'asde_tareas', sprintf( asde_t( 'Como mucho %d tareas por evento.' ), TareasTable::MAX ) );
+			return new \WP_Error( 'asde_tareas', sprintf( /* translators: %d: number */ __( 'At most %d tasks per event.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), TareasTable::MAX ) );
 		}
 		$id = TareasTable::crear(
 			$e['id'],
@@ -332,7 +332,7 @@ final class Tareas {
 	/** Quita una tarea. @return true|\WP_Error */
 	public static function quitar( array $e, array $t, Ambito $a ) {
 		if ( ! self::puede_editar( $e, $a ) || $t['evento_id'] !== $e['id'] ) {
-			return new \WP_Error( 'asde_tareas', asde_t( 'No puedes cambiar el calendario de este evento.' ) );
+			return new \WP_Error( 'asde_tareas', __( 'You cannot change this event\'s calendar.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		TareasTable::borrar( $t['id'] );
 		Logger::log( 'evento_tarea_quitada', 'evento', (string) $e['id'], array( 'tarea' => $t['id'] ) );

@@ -107,7 +107,7 @@ final class GrupoInvitaciones {
 		list( $asunto, $html ) = Idioma::en(
 			Idioma::por_defecto(),
 			static fn() => array(
-				sprintf( asde_t( '[%s] Invitación para dar de alta tu grupo' ), $organizacion ),
+				sprintf( /* translators: %s: text */ __( '[%s] Invitation to register your group', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $organizacion ),
 				TemplateLoader::render(
 					'email/invitacion-grupo',
 					array(

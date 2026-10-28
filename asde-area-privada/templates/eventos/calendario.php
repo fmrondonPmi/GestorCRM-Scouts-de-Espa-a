@@ -44,60 +44,60 @@ foreach ( $tareas as $t ) {
 	}
 }
 $etiquetas = array(
-	'hecha'     => asde_t( 'Hecha' ),
-	'vencida'   => asde_t( 'Vencida' ),
-	'semana'    => asde_t( 'Esta semana' ),
-	'pronto'    => asde_t( 'Más adelante' ),
-	'sin_fecha' => asde_t( 'Sin fecha' ),
+	'hecha'     => __( 'Done', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+	'vencida'   => __( 'Overdue', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+	'semana'    => __( 'This week', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+	'pronto'    => __( 'Later', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+	'sin_fecha' => __( 'No date', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 );
 $enlaces   = array(
-	'resumen'       => asde_t( 'Resumen' ),
-	'equipo'        => asde_t( 'Equipo' ),
-	'inscripciones' => asde_t( 'Inscripciones' ),
-	'menu'          => asde_t( 'Menú' ),
-	'material'      => asde_t( 'Material' ),
-	'presupuesto'   => asde_t( 'Presupuesto' ),
+	'resumen'       => __( 'Summary', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+	'equipo'        => __( 'Team', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+	'inscripciones' => __( 'Sign-ups', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+	'menu'          => __( 'Menu', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+	'material'      => __( 'Equipment', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+	'presupuesto'   => __( 'Budget', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 );
 ?>
 <section class="asde-card asde-tareas">
 	<header class="asde-card__header asde-card__header--split">
-		<h3 class="asde-card__title"><?php asde_e( 'Calendario de tareas' ); ?></h3>
+		<h3 class="asde-card__title"><?php esc_html_e( 'Task calendar', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h3>
 		<?php if ( $tareas ) : ?>
-			<button type="button" class="button asde-button-secundario asde-solo-pantalla" data-asde-imprimir-pagina><?php asde_e( 'Imprimir' ); ?></button>
+			<button type="button" class="button asde-button-secundario asde-solo-pantalla" data-asde-imprimir-pagina><?php esc_html_e( 'Print', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 		<?php endif; ?>
 	</header>
 
 	<?php if ( ! $tareas ) : ?>
-		<p><?php asde_e( 'Este evento todavía no tiene tareas.' ); ?></p>
+		<p><?php esc_html_e( 'This event has no tasks yet.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 		<?php if ( $puede_editar && $plantillas ) : ?>
 			<form method="post" class="asde-form">
 				<?php echo wp_kses( $campos( 'tarea_aplicar' ), asde_html_permitido() ); ?>
 				<p>
-					<label for="asde-tarea-plantilla"><?php asde_e( 'Plantilla de tareas' ); ?></label>
+					<label for="asde-tarea-plantilla"><?php esc_html_e( 'Task template', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 					<select id="asde-tarea-plantilla" name="plantilla">
 						<?php foreach ( $plantillas as $id => $nombre ) : ?>
 							<option value="<?php echo esc_attr( (string) $id ); ?>" <?php selected( $propuesta, (string) $id ); ?>><?php echo esc_html( $nombre ); ?></option>
 						<?php endforeach; ?>
 					</select>
 				</p>
-				<p class="asde-help"><?php asde_e( 'Las fechas límite se calculan a partir de las del evento (por ejemplo, 60 días antes del inicio). Si cambias las fechas del evento, se recalculan las tareas que no estén hechas ni tengan fecha propia.' ); ?></p>
-				<p><button type="submit" class="button"><?php asde_e( 'Aplicar la plantilla' ); ?></button></p>
+				<p class="asde-help"><?php esc_html_e( 'Deadlines are calculated from the event\'s dates (for example, 60 days before the start). If you change the event dates, tasks that are not done and have no date of their own are recalculated.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
+				<p><button type="submit" class="button"><?php esc_html_e( 'Apply the template', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button></p>
 			</form>
 		<?php elseif ( $puede_editar ) : ?>
-			<p class="asde-muted"><?php asde_e( 'No hay plantillas con tareas. Se crean en Eventos → Configuración → Calendario de tareas, o puedes añadir las tareas una a una.' ); ?></p>
+			<p class="asde-muted"><?php esc_html_e( 'There are no templates with tasks. They are created in Events → Settings → Task calendar, or you can add the tasks one by one.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 		<?php endif; ?>
 	<?php else : ?>
 		<p class="asde-tareas__resumen">
-			<strong><?php echo (int) $cuenta['hecha']; ?></strong> / <?php echo count( $tareas ); ?> <?php asde_e( 'hechas' ); ?>
+			<strong><?php echo (int) $cuenta['hecha']; ?></strong> / <?php echo count( $tareas ); ?> <?php esc_html_e( 'done', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>
 			<?php if ( $cuenta['vencida'] ) : ?>
-				· <span class="asde-badge asde-badge--tarea-vencida"><?php echo esc_html( sprintf( asde_n( '%d vencida', '%d vencidas', $cuenta['vencida'] ), $cuenta['vencida'] ) ); ?></span>
+				· <span class="asde-badge asde-badge--tarea-vencida"><?php echo esc_html( sprintf( /* translators: %d: number */ _n( '%d overdue', '%d overdue', $cuenta['vencida'] , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $cuenta['vencida'] ) ); ?></span>
 			<?php endif; ?>
 			<?php if ( $cuenta['semana'] ) : ?>
-				· <span class="asde-badge asde-badge--tarea-semana"><?php echo esc_html( sprintf( asde_n( '%d esta semana', '%d esta semana', $cuenta['semana'] ), $cuenta['semana'] ) ); ?></span>
+				· <span class="asde-badge asde-badge--tarea-semana"><?php echo esc_html( sprintf( /* translators: %d: number */ _n( '%d this week', '%d this week', $cuenta['semana'] , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $cuenta['semana'] ) ); ?></span>
 			<?php endif; ?>
 		</p>
 		<?php if ( $viernes ) : ?>
-			<p class="asde-help"><?php asde_e( 'Las fechas que caen en sábado o domingo se adelantan al viernes.' ); ?></p>
+			<p class="asde-help"><?php esc_html_e( 'Dates that fall on a Saturday or Sunday are moved forward to the Friday.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 		<?php endif; ?>
 
 		<ul class="asde-tareas__lista">
@@ -109,11 +109,11 @@ $enlaces   = array(
 				$resp    = '' !== $t['responsable'] ? ( isset( $nombres[ $t['responsable'] ] ) ? $nombres[ $t['responsable'] ]->nombre_completo() : $t['responsable'] ) : '';
 				$cuando  = '';
 				if ( 'hecha' === $st ) {
-					$cuando = sprintf( asde_t( 'Hecha el %s' ), wp_date( 'd/m/Y', strtotime( $t['hecha_en'] . ' UTC' ) ) );
+					$cuando = sprintf( /* translators: %s: text */ __( 'Done on %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), wp_date( 'd/m/Y', strtotime( $t['hecha_en'] . ' UTC' ) ) );
 				} elseif ( null !== $d ) {
 					$cuando = $d < 0
-						? sprintf( asde_n( 'Venció hace %d día', 'Venció hace %d días', -$d ), -$d )
-						: ( 0 === $d ? asde_t( 'Vence hoy' ) : sprintf( asde_n( 'Queda %d día', 'Quedan %d días', $d ), $d ) );
+						? sprintf( /* translators: %d: number */ _n( 'Was due %d day ago', 'Was due %d days ago', -$d , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), -$d )
+						: ( 0 === $d ? __( 'Due today', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : sprintf( /* translators: %d: number */ _n( '%d day left', '%d days left', $d , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $d ) );
 				}
 				?>
 				<li class="asde-tarea asde-tarea--<?php echo esc_attr( $st ); ?>">
@@ -122,7 +122,7 @@ $enlaces   = array(
 							<form method="post">
 								<?php echo wp_kses( $campos( 'hecha' === $st ? 'tarea_deshecha' : 'tarea_hecha' ), asde_html_permitido() ); ?>
 								<input type="hidden" name="tarea" value="<?php echo (int) $t['id']; ?>">
-								<button type="submit" class="asde-tarea__boton" aria-label="<?php echo esc_attr( 'hecha' === $st ? asde_a( 'Marcar como pendiente' ) : asde_a( 'Marcar como hecha' ) ); ?>" title="<?php echo esc_attr( 'hecha' === $st ? asde_a( 'Marcar como pendiente' ) : asde_a( 'Marcar como hecha' ) ); ?>"><?php echo 'hecha' === $st ? '✓' : ''; ?></button>
+								<button type="submit" class="asde-tarea__boton" aria-label="<?php echo esc_attr( 'hecha' === $st ? esc_attr__( 'Mark as pending', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : esc_attr__( 'Mark as done', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>" title="<?php echo esc_attr( 'hecha' === $st ? esc_attr__( 'Mark as pending', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : esc_attr__( 'Mark as done', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo 'hecha' === $st ? '✓' : ''; ?></button>
 							</form>
 						<?php else : ?>
 							<span class="asde-tarea__boton" aria-hidden="true"><?php echo 'hecha' === $st ? '✓' : ''; ?></span>
@@ -134,19 +134,19 @@ $enlaces   = array(
 						<span class="asde-tarea__meta">
 							<span class="asde-badge asde-badge--tarea-<?php echo esc_attr( $st ); ?>"><?php echo esc_html( $etiquetas[ $st ] ); ?></span>
 							<?php if ( isset( $auto[ $t['id'] ] ) ) : ?>
-								<span class="asde-badge asde-badge--tarea-auto" title="<?php echo esc_attr( asde_a( 'Se marca sola cuando se cumple lo que mide la aplicación' ) ); ?>"><?php asde_e( 'Automática' ); ?></span>
+								<span class="asde-badge asde-badge--tarea-auto" title="<?php echo esc_attr( esc_attr__( 'It is ticked off by itself when what the application measures is met', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php esc_html_e( 'Automatic', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span>
 							<?php endif; ?>
 							<?php echo esc_html( $fecha( $f ) ); ?>
 							<?php if ( '' !== $cuando ) : ?>
 								<span class="asde-muted">· <?php echo esc_html( $cuando ); ?></span>
 							<?php endif; ?>
 							<?php if ( null !== $t['fecha_aj'] && $t['fecha_aj'] !== $t['fecha_calc'] && null === $t['fecha_propia'] ) : ?>
-								<span class="asde-muted">· <?php echo esc_html( sprintf( asde_t( 'adelantada desde el %s' ), $corta( $t['fecha_calc'] ) ) ); ?></span>
+								<span class="asde-muted">· <?php echo esc_html( sprintf( /* translators: %s: text */ __( 'brought forward from %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $corta( $t['fecha_calc'] ) ) ); ?></span>
 							<?php endif; ?>
 							<?php if ( null !== $t['fecha_propia'] && ! $t['propia'] ) : ?>
-								<span class="asde-muted">· <?php asde_e( 'fecha propia' ); ?></span>
+								<span class="asde-muted">· <?php esc_html_e( 'own date', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span>
 							<?php endif; ?>
-							<?php echo wp_kses( '' !== $resp ? '<span>· ' . esc_html( sprintf( asde_t( 'Responsable: %s' ), $resp ) ) . '</span>' : '', asde_html_permitido() ); ?>
+							<?php echo wp_kses( '' !== $resp ? '<span>· ' . esc_html( sprintf( /* translators: %s: text */ __( 'Person in charge: %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $resp ) ) . '</span>' : '', asde_html_permitido() ); ?>
 							<?php if ( '' !== $t['enlace'] && isset( $enlaces[ $t['enlace'] ] ) ) : ?>
 								· <a class="asde-solo-pantalla" href="<?php echo esc_url( add_query_arg( 'pestana', $t['enlace'], $url ) ); ?>"><?php echo esc_html( $enlaces[ $t['enlace'] ] ); ?></a>
 							<?php endif; ?>
@@ -155,43 +155,43 @@ $enlaces   = array(
 
 						<?php if ( $puede_marcar && isset( $auto[ $t['id'] ] ) && ! $auto[ $t['id'] ] && null === $t['hecha_en'] ) : ?>
 							<details class="asde-tarea__editar asde-solo-pantalla">
-								<summary><?php asde_e( 'No procede' ); ?></summary>
+								<summary><?php esc_html_e( 'Not applicable', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></summary>
 								<form method="post" class="asde-form asde-form--compacta">
 									<?php echo wp_kses( $campos( 'tarea_hecha' ), asde_html_permitido() ); ?>
 									<input type="hidden" name="tarea" value="<?php echo (int) $t['id']; ?>">
 									<p class="asde-form__fila">
-										<label><?php asde_e( 'Observación' ); ?> <input type="text" name="nota" value="<?php echo esc_attr( $t['nota'] ); ?>" maxlength="255" required></label>
-										<button type="submit" class="button"><?php asde_e( 'Cerrar la tarea' ); ?></button>
+										<label><?php esc_html_e( 'Note', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <input type="text" name="nota" value="<?php echo esc_attr( $t['nota'] ); ?>" maxlength="255" required></label>
+										<button type="submit" class="button"><?php esc_html_e( 'Close the task', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 									</p>
-									<p class="asde-help"><?php asde_e( 'Esta tarea se marca sola cuando se cumple. Si no procede, ciérrala con una observación.' ); ?></p>
+									<p class="asde-help"><?php esc_html_e( 'This task is ticked off by itself when it is done. If it does not apply, close it with a note.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 								</form>
 							</details>
 						<?php endif; ?>
 						<?php if ( $puede_editar ) : ?>
 							<details class="asde-tarea__editar asde-solo-pantalla">
-								<summary><?php asde_e( 'Cambiar' ); ?></summary>
+								<summary><?php esc_html_e( 'Change', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></summary>
 								<form method="post" class="asde-form asde-form--compacta">
 									<?php echo wp_kses( $campos( 'tarea_guardar' ), asde_html_permitido() ); ?>
 									<input type="hidden" name="tarea" value="<?php echo (int) $t['id']; ?>">
 									<p class="asde-form__fila">
-										<label><?php asde_e( 'Responsable' ); ?>
+										<label><?php esc_html_e( 'Person in charge', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>
 											<select name="responsable">
-												<option value=""><?php asde_e( 'Sin asignar' ); ?></option>
+												<option value=""><?php esc_html_e( 'Unassigned', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></option>
 												<?php foreach ( $equipo as $m ) : ?>
 													<option value="<?php echo esc_attr( $m['socio'] ); ?>" <?php selected( $t['responsable'], $m['socio'] ); ?>><?php echo esc_html( isset( $nombres[ $m['socio'] ] ) ? $nombres[ $m['socio'] ]->nombre_completo() : $m['socio'] ); ?></option>
 												<?php endforeach; ?>
 											</select>
 										</label>
-										<label><?php asde_e( 'Fecha propia' ); ?> <input type="date" name="fecha" value="<?php echo esc_attr( (string) ( $t['fecha_propia'] ?? '' ) ); ?>"></label>
-										<label><?php asde_e( 'Observaciones' ); ?> <input type="text" name="nota" value="<?php echo esc_attr( $t['nota'] ); ?>" maxlength="255"></label>
+										<label><?php esc_html_e( 'Own date', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <input type="date" name="fecha" value="<?php echo esc_attr( (string) ( $t['fecha_propia'] ?? '' ) ); ?>"></label>
+										<label><?php esc_html_e( 'Notes', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <input type="text" name="nota" value="<?php echo esc_attr( $t['nota'] ); ?>" maxlength="255"></label>
 									</p>
-									<p class="asde-help"><?php asde_e( 'Con fecha propia, la tarea no se mueve si cambian las fechas del evento. Vacía, vuelve a la calculada.' ); ?></p>
-									<p><button type="submit" class="button"><?php asde_e( 'Guardar' ); ?></button></p>
+									<p class="asde-help"><?php esc_html_e( 'With its own date, the task does not move if the event dates change. Empty, it goes back to the calculated one.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
+									<p><button type="submit" class="button"><?php esc_html_e( 'Save', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button></p>
 								</form>
-								<form method="post" data-asde-confirmar="<?php echo esc_attr( asde_js( '¿Quitar esta tarea?' ) ); ?>">
+								<form method="post" data-asde-confirmar="<?php echo esc_attr( __( 'Remove this task?', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
 									<?php echo wp_kses( $campos( 'tarea_quitar' ), asde_html_permitido() ); ?>
 									<input type="hidden" name="tarea" value="<?php echo (int) $t['id']; ?>">
-									<button type="submit" class="asde-btn-link asde-btn-danger"><?php asde_e( 'Quitar la tarea' ); ?></button>
+									<button type="submit" class="asde-btn-link asde-btn-danger"><?php esc_html_e( 'Remove the task', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 								</form>
 							</details>
 						<?php endif; ?>
@@ -204,18 +204,18 @@ $enlaces   = array(
 
 <?php if ( $puede_editar ) : ?>
 	<section class="asde-card asde-solo-pantalla">
-		<h3 class="asde-card__title"><?php asde_e( 'Añadir una tarea' ); ?></h3>
+		<h3 class="asde-card__title"><?php esc_html_e( 'Add a task', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h3>
 		<form method="post" class="asde-form">
 			<?php echo wp_kses( $campos( 'tarea_anadir' ), asde_html_permitido() ); ?>
 			<p class="asde-form__fila">
-				<label><?php asde_e( 'Tarea' ); ?> <input type="text" name="titulo" maxlength="200" required></label>
-				<label><?php asde_e( 'Fecha límite' ); ?> <input type="date" name="fecha" required></label>
+				<label><?php esc_html_e( 'Task', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <input type="text" name="titulo" maxlength="200" required></label>
+				<label><?php esc_html_e( 'Deadline', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <input type="date" name="fecha" required></label>
 			</p>
 			<p>
-				<label for="asde-tarea-detalle"><?php asde_e( 'Detalle (opcional)' ); ?></label>
+				<label for="asde-tarea-detalle"><?php esc_html_e( 'Detail (optional)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 				<input type="text" id="asde-tarea-detalle" name="detalle" maxlength="400">
 			</p>
-			<p><button type="submit" class="button"><?php asde_e( 'Añadir' ); ?></button></p>
+			<p><button type="submit" class="button"><?php esc_html_e( 'Add', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button></p>
 		</form>
 	</section>
 <?php endif; ?>

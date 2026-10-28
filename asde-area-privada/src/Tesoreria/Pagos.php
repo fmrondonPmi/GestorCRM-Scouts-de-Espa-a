@@ -32,16 +32,16 @@ final class Pagos {
 		$m      = MovimientosTable::obtener( $mov_id );
 		$motivo = trim( sanitize_text_field( $motivo ) );
 		if ( ! $m || (int) $m['familia_id'] !== $familia_id || ! FamiliasTable::obtener( $familia_id ) ) {
-			return new \WP_Error( 'asde_mov', asde_t( 'Ese movimiento no es de esta familia.' ) );
+			return new \WP_Error( 'asde_mov', __( 'That transaction does not belong to this family.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( ! empty( $m['anulado_en'] ) ) {
-			return new \WP_Error( 'asde_mov', asde_t( 'Ese movimiento ya estaba eliminado.' ) );
+			return new \WP_Error( 'asde_mov', __( 'That transaction was already deleted.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( '' === $motivo ) {
-			return new \WP_Error( 'asde_mov', asde_t( 'Escribe el motivo: queda en el historial de la familia.' ) );
+			return new \WP_Error( 'asde_mov', __( 'Enter the reason: it is kept in the family\'s history.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( ! MovimientosTable::anular( $mov_id, $motivo ) ) {
-			return new \WP_Error( 'asde_mov', asde_t( 'No se ha podido eliminar el movimiento.' ) );
+			return new \WP_Error( 'asde_mov', __( 'The transaction could not be deleted.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$banco = null;
 		if ( 'banco' === $m['origen'] ) {

@@ -33,101 +33,101 @@ $tutor     = Solicitudes::TUTOR === $s['tipo'];
 $marca     = static fn( ?bool $ok ): string => null === $ok ? '' : ( $ok ? '<span class="asde-ok" title="Coincide">✅</span> ' : '<span class="asde-ko" title="No coincide">⚠️</span> ' );
 $adulto    = $s['adulto'] || ( $p && $p->es_adulto_voluntario() );
 ?>
-<p class="asde-back asde-solo-pagina"><a href="<?php echo esc_url( $url ); ?>"><?php asde_e( '← Solicitudes' ); ?></a></p>
+<p class="asde-back asde-solo-pagina"><a href="<?php echo esc_url( $url ); ?>"><?php esc_html_e( '← Requests', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a></p>
 
 <section class="asde-card">
 	<header class="asde-card__header asde-card__header--split">
-		<h2 class="asde-card__title"><?php asde_e( 'Solicitud de acceso' ); ?></h2>
+		<h2 class="asde-card__title"><?php esc_html_e( 'Access request', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h2>
 		<span class="asde-badge asde-badge--estado-<?php echo esc_attr( $pendiente ? 'invitado' : ( Solicitudes::APROBADA === $s['estado'] ? 'activo' : 'desactivado' ) ); ?>"><?php echo esc_html( asde_t( Solicitudes::ESTADOS[ $s['estado'] ] ?? $s['estado'] ) ); ?></span>
 	</header>
 	<p class="asde-muted">
-		<?php asde_e( 'Recibida el' ); ?> <?php echo esc_html( wp_date( 'd/m/Y H:i', strtotime( $s['creada'] . ' UTC' ) ) ); ?>.
-		<?php echo $tutor ? esc_html( asde_t( 'La pide su familia (madre, padre o tutor/a).' ) ) : esc_html( asde_t( 'La pide el propio socio/a.' ) ); ?>
+		<?php esc_html_e( 'Received on', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <?php echo esc_html( wp_date( 'd/m/Y H:i', strtotime( $s['creada'] . ' UTC' ) ) ); ?>.
+		<?php echo $tutor ? esc_html( __( 'It is requested by their family (mother, father or guardian).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) : esc_html( __( 'It is requested by the member themselves.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>
 		<?php if ( $revisor ) : ?>
-			<?php echo esc_html( sprintf( asde_t( '%s por %s el %s.' ), Solicitudes::APROBADA === $s['estado'] ? asde_t( 'Aprobada' ) : asde_t( 'Rechazada' ), $revisor->display_name, wp_date( 'd/m/Y', strtotime( $s['revisada_en'] . ' UTC' ) ) ) ); ?>
-			<?php echo '' !== $s['motivo'] ? esc_html( sprintf( asde_t( 'Motivo: %s' ), asde_t( (string) $s['motivo'] ) ) ) : ''; ?>
+			<?php echo esc_html( sprintf( /* translators: 1: text, 2: text, 3: text */ __( '%1$s by %2$s on %3$s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Solicitudes::APROBADA === $s['estado'] ? __( 'Approved', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : __( 'Rejected', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $revisor->display_name, wp_date( 'd/m/Y', strtotime( $s['revisada_en'] . ' UTC' ) ) ) ); ?>
+			<?php echo '' !== $s['motivo'] ? esc_html( sprintf( /* translators: %s: text */ __( 'Reason: %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), asde_t( (string) $s['motivo'] ) ) ) : ''; ?>
 		<?php endif; ?>
 	</p>
 
 	<?php if ( ! $p ) : ?>
-		<div class="asde-notice asde-notice--warning" role="status"><?php asde_e( 'La ficha de esta solicitud ya no está en el CRM del grupo (o no tiene membresía activa).' ); ?></div>
+		<div class="asde-notice asde-notice--warning" role="status"><?php esc_html_e( 'The record of this request is no longer in the group\'s CRM (or has no active membership).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></div>
 	<?php else : ?>
 		<table class="asde-table asde-comparar">
-			<thead><tr><th scope="col"><?php asde_e( 'Dato' ); ?></th><th scope="col"><?php asde_e( 'Escrito en la solicitud' ); ?></th><th scope="col"><?php asde_e( 'En el CRM' ); ?></th></tr></thead>
+			<thead><tr><th scope="col"><?php esc_html_e( 'Item of data', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Written on the request', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'In the CRM', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th></tr></thead>
 			<tbody>
 				<tr>
-					<th scope="row"><?php asde_e( 'Socio/a' ); ?></th>
-					<td data-label="<?php echo esc_attr( asde_a( 'Escrito' ) ); ?>">
+					<th scope="row"><?php esc_html_e( 'Member', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
+					<td data-label="<?php echo esc_attr( esc_attr__( 'Written', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
 						<?php
 						$escrito = Solicitudes::POR_NOMBRE === $s['via'] ? $d['nombre_menor'] : ( $tutor ? '' : $d['nombre'] );
 						echo wp_kses( '' !== $escrito ? $marca( $c['nombre_socio'] ) . esc_html( $escrito ) : '<span class="asde-muted">—</span>', asde_html_permitido() );
 						?>
 					</td>
-					<td data-label="<?php echo esc_attr( asde_a( 'CRM' ) ); ?>">
+					<td data-label="<?php echo esc_attr( esc_attr__( 'CRM', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
 						<a href="<?php echo esc_url( $url_ficha ); ?>" data-asde-modal><?php echo esc_html( $p->nombre_completo() ); ?></a><?php echo wp_kses( \AsdeBalears\AreaPrivada\Socios\Numeros::compacto( $p ), asde_html_permitido() ); ?>
 						<?php
 						foreach ( $p->secciones as $sec ) {
 							echo wp_kses( Secciones::badge( $sec ), asde_html_permitido() );
 						}
 						?>
-						<br><span class="asde-help"><?php echo null === $p->edad() ? '' : sprintf( esc_html( asde_t( '%d años' ) ), (int) $p->edad() ); ?></span>
+						<br><span class="asde-help"><?php echo null === $p->edad() ? '' : sprintf( esc_html( /* translators: %d: number */ __( '%d years', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ), (int) $p->edad() ); ?></span>
 					</td>
 				</tr>
 				<tr>
-					<th scope="row"><?php asde_e( 'Comprobación' ); ?></th>
-					<td data-label="<?php echo esc_attr( asde_a( 'Escrito' ) ); ?>" colspan="2">
+					<th scope="row"><?php esc_html_e( 'Check', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
+					<td data-label="<?php echo esc_attr( esc_attr__( 'Written', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>" colspan="2">
 						<?php if ( Solicitudes::POR_ENLACE === $s['via'] ) : ?>
-							<?php asde_e( 'Alta con el enlace para scouters: el DNI o NIE es el de esta ficha de Scouter o Voluntariado.' ); ?>
+							<?php esc_html_e( 'Registration with the scouters\' link: the ID or foreigner ID number is that of this Scouter or Volunteer record.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>
 						<?php elseif ( Solicitudes::POR_NOMBRE === $s['via'] ) : ?>
-							<?php echo wp_kses( $marca( (bool) $c['nacimiento'] ), asde_html_permitido() ); ?> <?php asde_e( 'Fecha de nacimiento y nombre y apellidos (menor de 14 años sin documento en el CRM).' ); ?>
+							<?php echo wp_kses( $marca( (bool) $c['nacimiento'] ), asde_html_permitido() ); ?> <?php esc_html_e( 'Date of birth and first name and surname (under 14 with no document in the CRM).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>
 						<?php else : ?>
-							<?php echo wp_kses( $marca( (bool) $c['nacimiento'] ), asde_html_permitido() ); ?> <?php asde_e( 'El nº de documento y la fecha de nacimiento coinciden con la ficha.' ); ?>
+							<?php echo wp_kses( $marca( (bool) $c['nacimiento'] ), asde_html_permitido() ); ?> <?php esc_html_e( 'The document number and date of birth match the record.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>
 						<?php endif; ?>
 					</td>
 				</tr>
 				<?php if ( Solicitudes::POR_ENLACE === $s['via'] ) : ?>
 					<tr>
-						<th scope="row"><?php asde_e( 'Pide' ); ?></th>
-						<td data-label="<?php echo esc_attr( asde_a( 'Escrito' ) ); ?>" colspan="2">
+						<th scope="row"><?php esc_html_e( 'Asks for', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
+						<td data-label="<?php echo esc_attr( esc_attr__( 'Written', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>" colspan="2">
 							<?php echo esc_html( implode( ', ', array_map( array( \AsdeBalears\AreaPrivada\Install\Roles::class, 'label' ), (array) ( $d['roles_pedidos'] ?? array() ) ) ) ?: '—' ); ?>
 							<?php foreach ( (array) ( $d['secciones_pedidas'] ?? array() ) as $sec ) : ?>
 								<?php echo wp_kses( Secciones::badge( (string) $sec ), asde_html_permitido() ); ?>
 							<?php endforeach; ?>
 							<?php if ( ! empty( $d['cuenta_creada'] ) ) : ?>
-								<br><span class="asde-help"><?php asde_e( 'Su cuenta de scouter ya está creada (le llegó la activación al email de su ficha). Revisa sus secciones y confirma las responsabilidades que pide, o cierra la solicitud si no hay nada que cambiar.' ); ?></span>
+								<br><span class="asde-help"><?php esc_html_e( 'Their scouter account is already created (the activation arrived at the email on their record). Check their sections and confirm the responsibilities they ask for, or close the request if there is nothing to change.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span>
 							<?php elseif ( ! empty( $d['error_alta'] ) ) : ?>
-								<br><span class="asde-help asde-help--warning"><?php echo esc_html( sprintf( asde_t( 'No se pudo crear la cuenta al momento: %s' ), (string) $d['error_alta'] ) ); ?></span>
+								<br><span class="asde-help asde-help--warning"><?php echo esc_html( sprintf( /* translators: %s: text */ __( 'The account could not be created right away: %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), (string) $d['error_alta'] ) ); ?></span>
 							<?php endif; ?>
 						</td>
 					</tr>
 				<?php endif; ?>
 				<tr>
-					<th scope="row"><?php asde_e( 'Quién pide' ); ?></th>
-					<td data-label="<?php echo esc_attr( asde_a( 'Escrito' ) ); ?>"><?php echo wp_kses( ( $tutor ? $marca( $c['tutor'] > 0 ) : '' ) . esc_html( $d['nombre'] ), asde_html_permitido() ); ?></td>
-					<td data-label="<?php echo esc_attr( asde_a( 'CRM' ) ); ?>">
+					<th scope="row"><?php esc_html_e( 'Who requests', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
+					<td data-label="<?php echo esc_attr( esc_attr__( 'Written', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo wp_kses( ( $tutor ? $marca( $c['tutor'] > 0 ) : '' ) . esc_html( $d['nombre'] ), asde_html_permitido() ); ?></td>
+					<td data-label="<?php echo esc_attr( esc_attr__( 'CRM', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
 						<?php if ( $tutor ) : ?>
 							<?php foreach ( array( 1, 2 ) as $n ) : ?>
 								<?php $t = $p->tutores[ $n ] ?? null; ?>
 								<?php if ( $t && '' !== trim( $t['nombre'] . $t['apellidos'] ) ) : ?>
-									<?php asde_e( 'Tutor/a' ); ?> <?php echo (int) $n; ?>: <?php echo esc_html( trim( $t['nombre'] . ' ' . $t['apellidos'] ) ); ?><?php echo $n === $c['tutor'] ? ' <strong>(coincide)</strong>' : ''; ?><br>
+									<?php esc_html_e( 'Guardian', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <?php echo (int) $n; ?>: <?php echo esc_html( trim( $t['nombre'] . ' ' . $t['apellidos'] ) ); ?><?php echo $n === $c['tutor'] ? ' <strong>(coincide)</strong>' : ''; ?><br>
 								<?php endif; ?>
 							<?php endforeach; ?>
 							<?php if ( ! $c['tutor'] ) : ?>
-								<span class="asde-help asde-help--warning"><?php asde_e( 'No coincide con ningún tutor/a de la ficha: confirma con la familia antes de aprobar.' ); ?></span>
+								<span class="asde-help asde-help--warning"><?php esc_html_e( 'It does not match any guardian on the record: confirm with the family before approving.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span>
 							<?php endif; ?>
 						<?php else : ?>
-							<span class="asde-muted"><?php asde_e( 'La propia persona' ); ?></span>
+							<span class="asde-muted"><?php esc_html_e( 'The person themselves', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span>
 						<?php endif; ?>
 					</td>
 				</tr>
 				<tr>
-					<th scope="row"><?php asde_e( 'Email' ); ?></th>
-					<td data-label="<?php echo esc_attr( asde_a( 'Escrito' ) ); ?>"><?php echo wp_kses( ( null !== $c['email_en'] ? $marca( true ) : '' ) . esc_html( $d['email'] ), asde_html_permitido() ); ?></td>
-					<td data-label="<?php echo esc_attr( asde_a( 'CRM' ) ); ?>">
+					<th scope="row"><?php esc_html_e( 'Email', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
+					<td data-label="<?php echo esc_attr( esc_attr__( 'Written', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo wp_kses( ( null !== $c['email_en'] ? $marca( true ) : '' ) . esc_html( $d['email'] ), asde_html_permitido() ); ?></td>
+					<td data-label="<?php echo esc_attr( esc_attr__( 'CRM', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
 						<?php if ( null !== $c['email_en'] ) : ?>
-							<?php asde_e( 'Ya está en la ficha:' ); ?> <?php echo esc_html( Usuarios::etiqueta_campo_email( $c['email_en'] ) ); ?>.
+							<?php esc_html_e( 'Already on the record:', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <?php echo esc_html( Usuarios::etiqueta_campo_email( $c['email_en'] ) ); ?>.
 						<?php else : ?>
-							<span class="asde-help asde-help--warning"><?php asde_e( 'No está en la ficha.' ); ?></span>
+							<span class="asde-help asde-help--warning"><?php esc_html_e( 'It is not on the record.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span>
 							<?php foreach ( SolicitudService::CAMPOS[ $s['tipo'] ] as $campo ) : ?>
 								<br><?php echo esc_html( Usuarios::etiqueta_campo_email( $campo ) ); ?>: <?php echo esc_html( $c['emails'][ $campo ] ?? '—' ); ?>
 							<?php endforeach; ?>
@@ -142,13 +142,13 @@ $adulto    = $s['adulto'] || ( $p && $p->es_adulto_voluntario() );
 <?php if ( $pendiente && $p ) : ?>
 	<section class="asde-card">
 		<?php if ( $adulto ) : ?>
-			<h3><?php asde_e( 'Dar acceso' ); ?></h3>
-			<p><?php asde_e( 'Es scouter o voluntario/a: su acceso lo da Secretaría o Coordinación, eligiendo sus roles y secciones. La invitación irá al email de la solicitud.' ); ?></p>
+			<h3><?php esc_html_e( 'Give access', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h3>
+			<p><?php esc_html_e( 'They are a scouter or volunteer: their access is given by the Secretary\'s office or Coordination, choosing their roles and sections. The invitation will go to the email on the request.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 			<?php if ( current_user_can( 'asde_manage_users' ) ) : ?>
-				<p><a class="button" href="<?php echo esc_url( $url_alta ); ?>" data-asde-modal><?php asde_e( 'Elegir roles y dar acceso' ); ?></a></p>
+				<p><a class="button" href="<?php echo esc_url( $url_alta ); ?>" data-asde-modal><?php esc_html_e( 'Choose roles and give access', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a></p>
 			<?php endif; ?>
 		<?php else : ?>
-			<h3><?php asde_e( 'Aprobar' ); ?></h3>
+			<h3><?php esc_html_e( 'Approve', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h3>
 			<form method="post" class="asde-form">
 				<?php wp_nonce_field( 'asde_solicitud_' . $s['id'] ); ?>
 				<input type="hidden" name="asde_action" value="aprobar_solicitud">
@@ -157,17 +157,17 @@ $adulto    = $s['adulto'] || ( $p && $p->es_adulto_voluntario() );
 					<?php if ( null === $c['email_en'] ) : ?>
 						<li>
 							<?php if ( $tutor ) : ?>
-								<label for="asde-sol-campo"><?php asde_e( 'Se guardará el email en la ficha del CRM como' ); ?></label>
+								<label for="asde-sol-campo"><?php esc_html_e( 'The email will be saved on the CRM record as', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 								<select id="asde-sol-campo" name="campo">
 									<?php foreach ( SolicitudService::CAMPOS[ $s['tipo'] ] as $campo ) : ?>
-										<option value="<?php echo esc_attr( $campo ); ?>" <?php selected( ( $propuesta['campo'] ?? '' ) ?: $c['campo'], $campo ); ?>><?php echo esc_html( Usuarios::etiqueta_campo_email( $campo ) . ( isset( $c['emails'][ $campo ] ) ? ' (ahora: ' . $c['emails'][ $campo ] . ')' : asde_t( ' (ahora vacío)' ) ) ); ?></option>
+										<option value="<?php echo esc_attr( $campo ); ?>" <?php selected( ( $propuesta['campo'] ?? '' ) ?: $c['campo'], $campo ); ?>><?php echo esc_html( Usuarios::etiqueta_campo_email( $campo ) . ( isset( $c['emails'][ $campo ] ) ? ' (ahora: ' . $c['emails'][ $campo ] . ')' : __( ' (now empty)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) ); ?></option>
 									<?php endforeach; ?>
 								</select>
 							<?php else : ?>
-								<?php asde_e( 'Se guardará el email en la ficha del CRM (' ); ?><?php echo esc_html( Usuarios::etiqueta_campo_email( 'email1' ) ); ?><?php echo isset( $c['emails']['email1'] ) ? ', ahora: ' . esc_html( $c['emails']['email1'] ) : ''; ?>).
+								<?php esc_html_e( 'The email will be saved on the CRM record (', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?><?php echo esc_html( Usuarios::etiqueta_campo_email( 'email1' ) ); ?><?php echo isset( $c['emails']['email1'] ) ? ', ahora: ' . esc_html( $c['emails']['email1'] ) : ''; ?>).
 							<?php endif; ?>
 							<?php if ( ! $escritura ) : ?>
-								<br><span class="asde-help asde-help--warning"><?php asde_e( 'El usuario del CRM del grupo no puede editar fichas: tendrás que anotarlo a mano en el CRM.' ); ?></span>
+								<br><span class="asde-help asde-help--warning"><?php esc_html_e( 'The group\'s CRM user cannot edit records: you will have to note it by hand in the CRM.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span>
 							<?php endif; ?>
 						</li>
 					<?php endif; ?>
@@ -175,20 +175,20 @@ $adulto    = $s['adulto'] || ( $p && $p->es_adulto_voluntario() );
 						<?php if ( $familiares ) : ?>
 							<li>
 								<fieldset>
-										<legend><?php asde_e( '¿Quién pide el acceso?' ); ?></legend>
-									<p class="asde-muted"><?php asde_e( 'Esta familia ya tiene' ); ?> <?php echo 1 === count( $familiares ) ? esc_html( asde_t( "una cuenta" ) ) : esc_html( asde_t( "dos cuentas" ) ); ?>: <?php echo wp_kses( implode( ' y ', array_map( static fn( $f ) => '<strong>' . esc_html( $f->user_login ) . '</strong>' . ( '' !== ( $emails_familiares[ $f->user_login ] ?? '' ) ? ' (' . esc_html( $emails_familiares[ $f->user_login ] ) . ')' : '' ), $familiares ) ), asde_html_permitido() ); ?>.</p>
+										<legend><?php esc_html_e( 'Who is requesting access?', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></legend>
+									<p class="asde-muted"><?php esc_html_e( 'This family already has', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <?php echo 1 === count( $familiares ) ? esc_html( __( 'one account', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) : esc_html( __( 'two accounts', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>: <?php echo wp_kses( implode( ' y ', array_map( static fn( $f ) => '<strong>' . esc_html( $f->user_login ) . '</strong>' . ( '' !== ( $emails_familiares[ $f->user_login ] ?? '' ) ? ' (' . esc_html( $emails_familiares[ $f->user_login ] ) . ')' : '' ), $familiares ) ), asde_html_permitido() ); ?>.</p>
 										<?php if ( $propuesta['puede_nueva'] ) : ?>
 											<label class="asde-choice">
 												<input type="radio" name="modo" value="<?php echo esc_attr( SolicitudService::MODO_NUEVA ); ?>" <?php checked( SolicitudService::MODO_NUEVA, $propuesta['modo'] ); ?>>
-												<span><strong><?php asde_e( 'Otro tutor/a' ); ?></strong><?php asde_e( ': se le crea su propia cuenta (' ); ?><?php echo esc_html( NumeroSocio::usuario_tutor( \AsdeBalears\AreaPrivada\Domain\Identidad::convertir( (string) NumeroSocio::socio_de_usuario_tutor( $familiares[0]->user_login ) ), 2 ) ); ?><?php asde_e( '), con su email y su contraseña. Ve a los mismos participantes y la otra cuenta no cambia.' ); ?></span>
+												<span><strong><?php esc_html_e( 'Other guardian', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></strong><?php esc_html_e( ': their own account is created (', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?><?php echo esc_html( NumeroSocio::usuario_tutor( \AsdeBalears\AreaPrivada\Domain\Identidad::convertir( (string) NumeroSocio::socio_de_usuario_tutor( $familiares[0]->user_login ) ), 2 ) ); ?><?php esc_html_e( '), with their email and their password. They see the same participants and the other account does not change.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span>
 											</label>
 										<?php endif; ?>
 										<label class="asde-choice">
 											<input type="radio" name="modo" value="<?php echo esc_attr( SolicitudService::MODO_SUSTITUIR ); ?>" <?php checked( SolicitudService::MODO_SUSTITUIR, $propuesta['modo'] ); ?>>
 											<span>
-												<strong><?php asde_e( 'La misma persona con otro email' ); ?></strong><?php asde_e( ': sustituir el email de la cuenta' ); ?>
+												<strong><?php esc_html_e( 'The same person with another email', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></strong><?php esc_html_e( ': replace the account\'s email', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>
 												<?php if ( count( $familiares ) > 1 ) : ?>
-													<select name="cuenta" aria-label="<?php echo esc_attr( asde_a( 'Cuenta cuyo email se sustituye' ) ); ?>">
+													<select name="cuenta" aria-label="<?php echo esc_attr( esc_attr__( 'Account whose email is replaced', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
 														<?php foreach ( $familiares as $f ) : ?>
 															<option value="<?php echo esc_attr( $f->user_login ); ?>" <?php selected( $propuesta['cuenta'], $f->user_login ); ?>><?php echo esc_html( $f->user_login ); ?></option>
 														<?php endforeach; ?>
@@ -196,18 +196,18 @@ $adulto    = $s['adulto'] || ( $p && $p->es_adulto_voluntario() );
 												<?php else : ?>
 													<strong><?php echo esc_html( $familiares[0]->user_login ); ?></strong><input type="hidden" name="cuenta" value="<?php echo esc_attr( $familiares[0]->user_login ); ?>">
 												<?php endif; ?>
-												<?php asde_e( 'por el de la solicitud. Esa persona entrará con el nuevo email y elegirá una contraseña nueva: la anterior dejará de valer.' ); ?>
+												<?php esc_html_e( 'with the one on the request. That person will sign in with the new email and will choose a new password: the previous one will stop working.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>
 											</span>
 										</label>
 									</fieldset>
 															</li>
 						<?php else : ?>
-							<li><?php asde_e( 'Se creará la cuenta familiar (nº de socio/a del menor + T) y le llegará la invitación con la bienvenida. Si el otro tutor/a quiere la suya, podrá pedirla igual desde el mismo enlace.' ); ?></li>
+							<li><?php esc_html_e( 'The family account will be created (the minor\'s member no. + T) and they will receive the invitation with the welcome. If the other guardian wants their own, they can request it in the same way from the same link.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></li>
 						<?php endif; ?>
 						<?php if ( $hermanos ) : ?>
 							<li>
 								<fieldset>
-									<legend><?php asde_e( 'Hermanos/as en el grupo (comparten email con la ficha)' ); ?></legend>
+									<legend><?php esc_html_e( 'Siblings in the group (they share an email with the record)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></legend>
 									<?php foreach ( $hermanos as $h ) : ?>
 										<label class="asde-choice"><input type="checkbox" name="hermanos[]" value="<?php echo esc_attr( $h->num_socio_asde ); ?>"><span><?php echo esc_html( $h->nombre_completo() ); ?></span><?php foreach ( $h->secciones as $sec ) { echo wp_kses( Secciones::badge( $sec ), asde_html_permitido() ); } // phpcs:ignore ?></label>
 									<?php endforeach; ?>
@@ -215,23 +215,23 @@ $adulto    = $s['adulto'] || ( $p && $p->es_adulto_voluntario() );
 							</li>
 						<?php endif; ?>
 					<?php elseif ( $propia ) : ?>
-						<li><?php asde_e( 'Ya tiene la cuenta' ); ?> <strong><?php echo esc_html( $propia->user_login ); ?></strong> (<?php echo esc_html( Usuarios::etiqueta_estado( Usuarios::estado( $propia ) ) ); ?><?php asde_e( '): pasará a entrar con este email y le llegará un enlace para elegir contraseña.' ); ?></li>
+						<li><?php esc_html_e( 'Already has the account', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <strong><?php echo esc_html( $propia->user_login ); ?></strong> (<?php echo esc_html( Usuarios::etiqueta_estado( Usuarios::estado( $propia ) ) ); ?><?php esc_html_e( '): they will sign in with this email and will receive a link to choose a password.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></li>
 					<?php else : ?>
-						<li><?php asde_e( 'Se creará su cuenta de participante (su nº de socio/a) y le llegará la invitación con la bienvenida.' ); ?></li>
+						<li><?php esc_html_e( 'Their participant account will be created (their member no.) and they will receive the invitation with the welcome.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></li>
 					<?php endif; ?>
 				</ul>
-				<p><button type="submit" class="button"><?php asde_e( 'Aprobar y enviar la invitación' ); ?></button></p>
+				<p><button type="submit" class="button"><?php esc_html_e( 'Approve and send the invitation', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button></p>
 			</form>
 		<?php endif; ?>
 
 		<details class="asde-rechazar">
-			<summary><?php asde_e( 'Rechazar la solicitud' ); ?></summary>
+			<summary><?php esc_html_e( 'Reject the request', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></summary>
 			<form method="post" class="asde-form">
 				<?php wp_nonce_field( 'asde_solicitud_' . $s['id'] ); ?>
 				<input type="hidden" name="asde_action" value="rechazar_solicitud">
 				<input type="hidden" name="solicitud" value="<?php echo (int) $s['id']; ?>">
 				<p>
-					<label for="asde-sol-motivo"><?php asde_e( 'Motivo (solo para el grupo)' ); ?></label>
+					<label for="asde-sol-motivo"><?php esc_html_e( 'Reason (for the group only)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 					<input type="text" id="asde-sol-motivo" name="motivo" maxlength="250">
 				</p>
 				<p>
@@ -239,15 +239,15 @@ $adulto    = $s['adulto'] || ( $p && $p->es_adulto_voluntario() );
 						<input type="checkbox" name="avisar" value="1" checked>
 						<span><?php
 							echo wp_kses( '' !== $contacto
-								? sprintf( wp_kses_post( asde_h( 'Avisar por email a quien la pidió (%1$s). El texto es genérico: no lleva el motivo y le dice que escriba a %2$s.' ) ), esc_html( Contacto::enmascarar( (string) $d['email'] ) ), esc_html( $contacto ) ) 
-								: sprintf( wp_kses_post( asde_h( 'Avisar por email a quien la pidió (%s). El texto es genérico: no lleva el motivo.' ) ), esc_html( Contacto::enmascarar( (string) $d['email'] ) ) ), asde_html_permitido() );
+								? sprintf( wp_kses_post( /* translators: 1: text, 2: text */ __( 'Notify by email whoever requested it (%1$s). The text is generic: it does not include the reason and tells them to write to %2$s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ), esc_html( Contacto::enmascarar( (string) $d['email'] ) ), esc_html( $contacto ) ) 
+								: sprintf( wp_kses_post( /* translators: %s: text */ __( 'Notify by email whoever requested it (%s). The text is generic: it does not include the reason.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ), esc_html( Contacto::enmascarar( (string) $d['email'] ) ) ), asde_html_permitido() );
 							?></span>
 					</label>
 					<?php if ( '' === $contacto ) : ?>
-						<span class="asde-help asde-help--warning"><?php asde_e( 'El grupo no tiene email de contacto: el aviso le dirá que hable con la Secretaría. Se configura en wp-admin → Grupos Scouts.' ); ?></span>
+						<span class="asde-help asde-help--warning"><?php esc_html_e( 'The group has no contact email: the notice will tell them to talk to the Secretary\'s office. It is set in wp-admin → Scout Groups.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span>
 					<?php endif; ?>
 				</p>
-				<p><button type="submit" class="button asde-button-secundario"><?php asde_e( 'Rechazar' ); ?></button></p>
+				<p><button type="submit" class="button asde-button-secundario"><?php esc_html_e( 'Reject', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button></p>
 			</form>
 		</details>
 	</section>

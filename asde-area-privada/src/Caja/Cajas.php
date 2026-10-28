@@ -33,13 +33,13 @@ final class Cajas {
 
 	public static function nombre( string $caja ): string {
 		if ( self::GRUPO === $caja ) {
-			return asde_t( 'Caja del grupo' );
+			return __( 'Group cash box', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		if ( CajaTable::BANCO === $caja ) {
-			return asde_t( 'Banco' );
+			return __( 'Bank', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		/* translators: %s: nombre de la sección */
-		return sprintf( asde_t( 'Caja de %s' ), Secciones::nombre( $caja ) );
+		return sprintf( /* translators: %s: text */ __( 'Cash box of %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Secciones::nombre( $caja ) );
 	}
 
 	public static function activo(): bool {

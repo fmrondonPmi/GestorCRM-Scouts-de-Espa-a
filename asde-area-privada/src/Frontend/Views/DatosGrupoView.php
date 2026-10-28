@@ -27,7 +27,7 @@ final class DatosGrupoView extends View {
 		}
 		$numero = Grupo::numero();
 		if ( '' === $numero || ! Grupos::por_numero( $numero ) ) {
-			return $this->denegado( asde_t( 'No se ha encontrado el grupo.' ) );
+			return $this->denegado( __( 'The group was not found.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$d = DatosGrupo::de( $numero );
 		return $this->layout(
@@ -47,7 +47,7 @@ final class DatosGrupoView extends View {
 
 	public function handle_post(): void {
 		if ( ! current_user_can( self::CAP_EDITAR ) ) {
-			wp_die( esc_html__( 'No tienes permiso para cambiar los datos del grupo.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+			wp_die( esc_html__( 'You do not have permission to change the group\'s details.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		check_admin_referer( 'asde_grupo_datos' );
 		$numero = Grupo::numero();
@@ -66,7 +66,7 @@ final class DatosGrupoView extends View {
 		// Cambiar la provincia de un grupo que ya tenía la suya cambia el principio de todos sus números de socio/a.
 		$cambia_provincia = '' !== $antes['provincia'] && $nuevos['provincia'] !== $antes['provincia'];
 		if ( $cambia_provincia && '1' !== $this->post( 'confirmar_provincia' ) ) {
-			Notices::add( 'error', asde_t( 'No se ha guardado: para cambiar la provincia marca la casilla de confirmación (los números de socio/a del CRM con la provincia anterior dejarán de reconocerse como del grupo).' ) );
+			Notices::add( 'error', __( 'It has not been saved: to change the province, tick the confirmation box (CRM member numbers with the previous province will no longer be recognised as the group\'s).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			$this->redirect( $this->url( 'grupo_datos' ) );
 		}
 
@@ -81,7 +81,7 @@ final class DatosGrupoView extends View {
 		$despues = DatosGrupo::de( $numero );
 		$cambios = array_keys( array_filter( $despues, static fn( $v, $k ) => ( $antes[ $k ] ?? '' ) !== $v, ARRAY_FILTER_USE_BOTH ) );
 		Logger::log( 'grupo_datos_guardados', 'grupo', $numero, array( 'campos' => $cambios ) );
-		Notices::add( 'success', asde_t( 'Datos del grupo guardados.' ) );
+		Notices::add( 'success', __( 'Group details saved.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		$this->redirect( $this->url( 'grupo_datos' ) );
 	}
 }

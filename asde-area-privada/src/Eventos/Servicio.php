@@ -190,16 +190,16 @@ final class Servicio {
 
 		$tipo = sanitize_key( (string) ( $in['tipo'] ?? '' ) );
 		if ( ! isset( Config::tipos_activos( $cfg )[ $tipo ] ) && ! ( $actual && $actual['tipo'] === $tipo ) ) {
-			$errores[] = asde_t( 'Elige el tipo de actividad.' );
+			$errores[] = __( 'Choose the activity type.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		$nombre = $texto( 'nombre', 120 );
 		if ( '' === $nombre ) {
-			$errores[] = asde_t( 'Escribe el nombre del evento.' );
+			$errores[] = __( 'Enter the event name.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 
 		$ambito = sanitize_key( (string) ( $in['ambito'] ?? 'secciones' ) );
 		if ( ! in_array( $ambito, self::ambitos_para( $a ), true ) && ! ( $actual && $actual['ambito'] === $ambito ) ) {
-			$errores[] = asde_t( 'Los eventos de grupo y los externos los crea Coordinación.' );
+			$errores[] = __( 'Group events and external events are created by Coordination.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 			$ambito    = 'secciones';
 		}
 		$elegidas   = array_values( array_intersect( Normativa::secciones_convocables(), array_map( 'sanitize_key', (array) ( $in['secciones'] ?? array() ) ) ) );
@@ -207,28 +207,28 @@ final class Servicio {
 		// Con un evento ya creado, las secciones que tenía se pueden conservar aunque no sean de quien lo edita (p. ej. alguien del equipo).
 		$conservar  = $actual ? $actual['secciones'] : array();
 		if ( array_diff( $elegidas, $permitidas, $conservar ) ) {
-			$errores[] = asde_t( 'Solo puedes convocar a las secciones en las que colaboras.' );
+			$errores[] = __( 'You can only invite the sections you help in.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 			$elegidas  = array_values( array_intersect( $elegidas, array_merge( $permitidas, $conservar ) ) );
 		}
 		if ( 'grupo' === $ambito && ! $elegidas ) {
 			$elegidas = Secciones::EDUCATIVAS;
 		}
 		if ( ! $elegidas ) {
-			$errores[] = asde_t( 'Elige al menos una sección convocada.' );
+			$errores[] = __( 'Choose at least one invited section.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 
 		$fecha  = static fn( string $f, string $h ): ?string => preg_match( '/^\d{4}-\d{2}-\d{2}$/', $f ) && preg_match( '/^\d{2}:\d{2}$/', $h ) && date_create( $f . ' ' . $h ) ? $f . ' ' . $h . ':00' : null;
 		$inicio = $fecha( (string) ( $in['inicio_fecha'] ?? '' ), (string) ( $in['inicio_hora'] ?? '' ) ?: '00:00' );
 		$fin    = $fecha( (string) ( $in['fin_fecha'] ?? '' ), (string) ( $in['fin_hora'] ?? '' ) ?: '23:59' );
 		if ( null === $inicio || null === $fin ) {
-			$errores[] = asde_t( 'Indica la fecha y la hora de inicio y de fin.' );
+			$errores[] = __( 'State the start and end date and time.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		} elseif ( $fin < $inicio ) {
-			$errores[] = asde_t( 'El evento no puede acabar antes de empezar.' );
+			$errores[] = __( 'The event cannot end before it starts.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 
 		$mapa = esc_url_raw( trim( (string) ( $in['mapa'] ?? '' ) ), array( 'http', 'https' ) );
 		if ( '' !== trim( (string) ( $in['mapa'] ?? '' ) ) && '' === $mapa ) {
-			$errores[] = asde_t( 'El enlace al mapa tiene que ser una dirección web (https://…).' );
+			$errores[] = __( 'The map link must be a web address (https://…).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 
 		$plazas = array();
@@ -238,7 +238,7 @@ final class Servicio {
 				'maximas'   => $entero( 'maximas_' . $s, self::MAX_PLAZAS ),
 			);
 			if ( $plazas[ $s ]['maximas'] && $plazas[ $s ]['previstas'] > $plazas[ $s ]['maximas'] ) {
-				$errores[] = sprintf( asde_t( 'En %s hay más participantes previstos que plazas.' ), Secciones::nombre( $s ) );
+				$errores[] = sprintf( /* translators: %s: text */ __( 'In %s there are more expected participants than places.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Secciones::nombre( $s ) );
 			}
 		}
 
@@ -246,7 +246,7 @@ final class Servicio {
 		$edad_min = $edad( 'edad_min' );
 		$edad_max = $edad( 'edad_max' );
 		if ( null !== $edad_min && null !== $edad_max && $edad_min > $edad_max ) {
-			$errores[] = asde_t( 'La edad mínima no puede ser mayor que la máxima.' );
+			$errores[] = __( 'The minimum age cannot be greater than the maximum.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 
 		// Inscripción (v0.35): modalidad y plazo (sin «hasta», hasta que empieza el evento).
@@ -255,9 +255,9 @@ final class Servicio {
 		$desde     = $dia( 'inscripcion_desde' );
 		$hasta     = $dia( 'inscripcion_hasta' );
 		if ( $desde && $hasta && $hasta < $desde ) {
-			$errores[] = asde_t( 'El plazo de inscripción no puede acabar antes de empezar.' );
+			$errores[] = __( 'The sign-up deadline cannot end before it starts.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		} elseif ( $hasta && null !== $inicio && $hasta > substr( $inicio, 0, 10 ) ) {
-			$errores[] = asde_t( 'El plazo de inscripción tiene que acabar antes de que empiece el evento.' );
+			$errores[] = __( 'The sign-up deadline must end before the event starts.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 
 		$normativa = Normativa::datos(
@@ -283,7 +283,7 @@ final class Servicio {
 				$cambia = $cambia || $plazas[ $s ]['previstas'] !== ( $actual['plazas'][ $s ]['previstas'] ?? 0 );
 			}
 			if ( $cambia ) {
-				$errores[] = asde_t( 'El presupuesto ya está validado y el precio es fijo: para cambiar las secciones, los participantes previstos o si tiene coste, pide a Tesorería que reabra el presupuesto.' );
+				$errores[] = __( 'The budget is already validated and the price is fixed: to change the sections, the expected participants or whether it has a cost, ask Treasury to reopen the budget.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 			}
 		}
 
@@ -318,7 +318,7 @@ final class Servicio {
 	/** @return int|\WP_Error Id del evento nuevo. */
 	public static function crear( Ambito $a, array $in ) {
 		if ( ! self::puede_crear( $a ) ) {
-			return new \WP_Error( 'asde_evento', asde_t( 'No puedes crear eventos.' ) );
+			return new \WP_Error( 'asde_evento', __( 'You cannot create events.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$v = self::leer( $in, $a, null );
 		if ( $v['errores'] ) {
@@ -332,7 +332,7 @@ final class Servicio {
 			)
 		);
 		if ( ! $id ) {
-			return new \WP_Error( 'asde_evento', asde_t( 'No se ha podido guardar el evento.' ) );
+			return new \WP_Error( 'asde_evento', __( 'The event could not be saved.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		Logger::log(
 			'evento_creado',
@@ -350,7 +350,7 @@ final class Servicio {
 	/** @return true|\WP_Error */
 	public static function guardar( array $e, Ambito $a, array $in ) {
 		if ( ! self::puede_editar( $e, $a ) ) {
-			return new \WP_Error( 'asde_evento', asde_t( 'No puedes cambiar este evento.' ) );
+			return new \WP_Error( 'asde_evento', __( 'You cannot change this event.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$v = self::leer( $in, $a, $e );
 		if ( $v['errores'] ) {
@@ -404,21 +404,21 @@ final class Servicio {
 	/** @return int|\WP_Error */
 	public static function anadir_equipo( array $e, Ambito $a, string $socio, string $papel ) {
 		if ( ! self::puede_editar( $e, $a ) ) {
-			return new \WP_Error( 'asde_evento', asde_t( 'No puedes cambiar el equipo de este evento.' ) );
+			return new \WP_Error( 'asde_evento', __( 'You cannot change this event\'s team.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( ! isset( InscripcionesTable::PAPELES[ $papel ] ) ) {
-			return new \WP_Error( 'asde_evento', asde_t( 'Elige qué hace en el equipo.' ) );
+			return new \WP_Error( 'asde_evento', __( 'Choose what they do in the team.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$p = self::candidatos()[ $socio ] ?? null;
 		if ( ! $p ) {
-			return new \WP_Error( 'asde_evento', asde_t( 'Elige a un scouter o voluntario/a del grupo.' ) );
+			return new \WP_Error( 'asde_evento', __( 'Choose a scouter or volunteer of the group.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( InscripcionesTable::de_socio( $e['id'], $socio ) ) {
-			return new \WP_Error( 'asde_evento', sprintf( asde_t( '%s ya está en este evento.' ), $p->nombre_completo() ) );
+			return new \WP_Error( 'asde_evento', sprintf( /* translators: %s: text */ __( '%s is already in this event.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $p->nombre_completo() ) );
 		}
 		$id = InscripcionesTable::anadir( $e['id'], $socio, $p->secciones, true, $papel );
 		if ( ! $id ) {
-			return new \WP_Error( 'asde_evento', asde_t( 'No se ha podido guardar.' ) );
+			return new \WP_Error( 'asde_evento', __( 'It could not be saved.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		self::olvidar();
 		Logger::log( 'evento_equipo_anadido', 'evento', (string) $e['id'], array( 'papel' => $papel ) );
@@ -429,10 +429,10 @@ final class Servicio {
 	public static function cambiar_papel( array $e, Ambito $a, int $fila, string $papel ) {
 		$m = InscripcionesTable::obtener( $fila );
 		if ( ! $m || $m['evento_id'] !== $e['id'] || ! isset( InscripcionesTable::PAPELES[ $m['papel'] ] ) || ! self::puede_editar( $e, $a ) ) {
-			return new \WP_Error( 'asde_evento', asde_t( 'No puedes cambiar el equipo de este evento.' ) );
+			return new \WP_Error( 'asde_evento', __( 'You cannot change this event\'s team.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( ! isset( InscripcionesTable::PAPELES[ $papel ] ) ) {
-			return new \WP_Error( 'asde_evento', asde_t( 'Elige qué hace en el equipo.' ) );
+			return new \WP_Error( 'asde_evento', __( 'Choose what they do in the team.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		InscripcionesTable::cambiar_papel( $fila, $papel );
 		Logger::log( 'evento_equipo_papel', 'evento', (string) $e['id'], array( 'papel' => $papel ) );
@@ -443,7 +443,7 @@ final class Servicio {
 	public static function quitar_equipo( array $e, Ambito $a, int $fila ) {
 		$m = InscripcionesTable::obtener( $fila );
 		if ( ! $m || $m['evento_id'] !== $e['id'] || ! isset( InscripcionesTable::PAPELES[ $m['papel'] ] ) || ! self::puede_editar( $e, $a ) ) {
-			return new \WP_Error( 'asde_evento', asde_t( 'No puedes cambiar el equipo de este evento.' ) );
+			return new \WP_Error( 'asde_evento', __( 'You cannot change this event\'s team.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		InscripcionesTable::quitar( $fila );
 		self::olvidar();
@@ -475,7 +475,7 @@ final class Servicio {
 	/** @return true|\WP_Error */
 	public static function guardar_prevision( array $e, Ambito $a, int $equipo, bool $margen_activo, float $margen_pct ) {
 		if ( ! self::puede_editar_presupuesto( $e, $a ) ) {
-			return new \WP_Error( 'asde_evento', asde_t( 'El presupuesto de este evento no se puede cambiar.' ) );
+			return new \WP_Error( 'asde_evento', __( 'This event\'s budget cannot be changed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		EventosTable::guardar(
 			$e['id'],
@@ -492,25 +492,25 @@ final class Servicio {
 	/** @return int|\WP_Error */
 	public static function anadir_partida( array $e, Ambito $a, string $tipo, string $concepto, string $reparto, string $seccion, float $importe ) {
 		if ( ! self::puede_editar_presupuesto( $e, $a ) ) {
-			return new \WP_Error( 'asde_evento', asde_t( 'El presupuesto de este evento no se puede cambiar.' ) );
+			return new \WP_Error( 'asde_evento', __( 'This event\'s budget cannot be changed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$concepto = trim( sanitize_text_field( $concepto ) );
 		if ( '' === $concepto || $importe <= 0 ) {
-			return new \WP_Error( 'asde_evento', asde_t( 'Escribe el concepto y un importe mayor que cero.' ) );
+			return new \WP_Error( 'asde_evento', __( 'Enter the description and an amount greater than zero.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( PartidasTable::INGRESO === $tipo ) {
 			$reparto = 'total';
 			$seccion = '';
 		} elseif ( ! isset( Presupuesto::REPARTOS[ $reparto ] ) ) {
-			return new \WP_Error( 'asde_evento', asde_t( 'Elige cómo se reparte el gasto.' ) );
+			return new \WP_Error( 'asde_evento', __( 'Choose how the expense is split.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$con_seccion = in_array( $reparto, Presupuesto::CON_SECCION, true ) || 'participante' === $reparto;
 		$seccion     = $con_seccion ? sanitize_key( $seccion ) : '';
 		if ( '' !== $seccion && ! in_array( $seccion, $e['secciones'], true ) ) {
-			return new \WP_Error( 'asde_evento', asde_t( 'Esa sección no está convocada.' ) );
+			return new \WP_Error( 'asde_evento', __( 'That section is not invited.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( in_array( $reparto, Presupuesto::CON_SECCION, true ) && '' === $seccion ) {
-			return new \WP_Error( 'asde_evento', asde_t( 'Elige la sección entre la que se reparte.' ) );
+			return new \WP_Error( 'asde_evento', __( 'Choose the section the cost is split among.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$id = PartidasTable::anadir( $e['id'], $tipo, $concepto, $reparto, $seccion, round( $importe, 2 ) );
 		Logger::log(
@@ -533,17 +533,17 @@ final class Servicio {
 	public static function anadir_autobuses( array $e, Ambito $a, int $personas, int $plazas, float $precio ) {
 		$n = Presupuesto::autobuses( $personas, $plazas );
 		if ( $n < 1 || $precio <= 0 ) {
-			return new \WP_Error( 'asde_evento', asde_t( 'Escribe cuántas personas viajan, las plazas de cada autobús y lo que cuesta uno.' ) );
+			return new \WP_Error( 'asde_evento', __( 'Enter how many people are travelling, the places on each bus and what one costs.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		/* translators: 1: nº de autobuses, 2: precio de cada uno */
-		$concepto = sprintf( asde_t( 'Autobuses (%1$d × %2$s)' ), $n, \AsdeBalears\AreaPrivada\Tesoreria\Calculadora::euros( $precio ) );
+		$concepto = sprintf( /* translators: 1: number, 2: text */ __( 'Buses (%1$d × %2$s)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $n, \AsdeBalears\AreaPrivada\Tesoreria\Calculadora::euros( $precio ) );
 		return self::anadir_partida( $e, $a, PartidasTable::GASTO, $concepto, 'total', '', $n * $precio );
 	}
 
 	/** @return true|\WP_Error */
 	public static function quitar_partida( array $e, Ambito $a, int $partida ) {
 		if ( ! self::puede_editar_presupuesto( $e, $a ) || ! PartidasTable::quitar( $partida, $e['id'] ) ) {
-			return new \WP_Error( 'asde_evento', asde_t( 'El presupuesto de este evento no se puede cambiar.' ) );
+			return new \WP_Error( 'asde_evento', __( 'This event\'s budget cannot be changed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		Logger::log( 'evento_partida_quitada', 'evento', (string) $e['id'] );
 		return true;
@@ -552,14 +552,14 @@ final class Servicio {
 	/** @return true|\WP_Error */
 	public static function pedir_validacion( array $e, Ambito $a ) {
 		if ( ! self::puede_pedir_validacion( $e, $a ) ) {
-			return new \WP_Error( 'asde_evento', asde_t( 'Este presupuesto no se puede enviar a Tesorería.' ) );
+			return new \WP_Error( 'asde_evento', __( 'This budget cannot be sent to Treasury.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$calculo = Presupuesto::del_evento( $e );
 		if ( ! $calculo['ok'] ) {
 			return new \WP_Error( 'asde_evento', implode( ' ', $calculo['errores'] ) );
 		}
 		if ( ! PartidasTable::previstas( $e['id'] ) ) {
-			return new \WP_Error( 'asde_evento', asde_t( 'Añade al menos un gasto previsto.' ) );
+			return new \WP_Error( 'asde_evento', __( 'Add at least one planned expense.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		EventosTable::pedir_validacion( $e['id'] );
 		Logger::log( 'evento_presupuesto_enviado', 'evento', (string) $e['id'] );
@@ -569,14 +569,14 @@ final class Servicio {
 	/** Tesorería valida: queda el cálculo y el precio por sección es fijo. @return array|\WP_Error El cálculo. */
 	public static function validar( array $e ) {
 		if ( ! self::puede_validar( $e ) ) {
-			return new \WP_Error( 'asde_evento', asde_t( 'Validar el presupuesto lo hace Tesorería.' ) );
+			return new \WP_Error( 'asde_evento', __( 'Validating the budget is done by Treasury.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$calculo = Presupuesto::del_evento( $e );
 		if ( ! $calculo['ok'] ) {
 			return new \WP_Error( 'asde_evento', implode( ' ', $calculo['errores'] ) );
 		}
 		if ( ! PartidasTable::previstas( $e['id'] ) ) {
-			return new \WP_Error( 'asde_evento', asde_t( 'Añade al menos un gasto previsto.' ) );
+			return new \WP_Error( 'asde_evento', __( 'Add at least one planned expense.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		unset( $calculo['ok'], $calculo['errores'] );
 		EventosTable::validar( $e['id'], $calculo );
@@ -595,7 +595,7 @@ final class Servicio {
 	/** @return true|\WP_Error */
 	public static function reabrir( array $e ) {
 		if ( ! self::puede_reabrir( $e ) ) {
-			return new \WP_Error( 'asde_evento', asde_t( 'Este presupuesto ya no se puede reabrir.' ) );
+			return new \WP_Error( 'asde_evento', __( 'This budget can no longer be reopened.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		EventosTable::reabrir( $e['id'] );
 		Logger::log( 'evento_presupuesto_reabierto', 'evento', (string) $e['id'] );
@@ -612,8 +612,8 @@ final class Servicio {
 			return new \WP_Error(
 				'asde_evento',
 				$e['con_coste'] && null === $e['validado_en'] && EventosTable::BORRADOR === $e['estado']
-					? asde_t( 'Este evento tiene coste: antes de publicarlo, Tesorería tiene que validar su presupuesto.' )
-					: asde_t( 'No puedes publicar este evento.' )
+					? __( 'This event has a cost: before publishing it, Treasury must validate its budget.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' )
+					: __( 'You cannot publish this event.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' )
 			);
 		}
 		EventosTable::publicar( $e['id'] );
@@ -629,7 +629,7 @@ final class Servicio {
 	/** @return true|\WP_Error */
 	public static function despublicar( array $e, Ambito $a ) {
 		if ( ! self::puede_despublicar( $e, $a ) ) {
-			return new \WP_Error( 'asde_evento', asde_t( 'Este evento ya no se puede volver a borrador.' ) );
+			return new \WP_Error( 'asde_evento', __( 'This event can no longer go back to draft.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		EventosTable::despublicar( $e['id'] );
 		Logger::log( 'evento_despublicado', 'evento', (string) $e['id'] );
@@ -639,10 +639,10 @@ final class Servicio {
 	/** @return true|\WP_Error */
 	public static function cancelar( array $e, Ambito $a, string $motivo ) {
 		if ( ! self::puede_cancelar( $e, $a ) ) {
-			return new \WP_Error( 'asde_evento', asde_t( 'No puedes cancelar este evento.' ) );
+			return new \WP_Error( 'asde_evento', __( 'You cannot cancel this event.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( '' === trim( $motivo ) ) {
-			return new \WP_Error( 'asde_evento', asde_t( 'Indica el motivo de la cancelación.' ) );
+			return new \WP_Error( 'asde_evento', __( 'State the reason for the cancellation.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		EventosTable::cancelar( $e['id'], $motivo );
 		Logger::log( 'evento_cancelado', 'evento', (string) $e['id'] );
@@ -655,7 +655,7 @@ final class Servicio {
 	/** @return true|\WP_Error */
 	public static function borrar( array $e, Ambito $a ) {
 		if ( ! self::puede_borrar( $e, $a ) ) {
-			return new \WP_Error( 'asde_evento', asde_t( 'Solo se puede borrar un evento en borrador.' ) );
+			return new \WP_Error( 'asde_evento', __( 'Only a draft event can be deleted.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		PartidasTable::borrar_evento( $e['id'] );
 		InscripcionesTable::borrar_evento( $e['id'] );

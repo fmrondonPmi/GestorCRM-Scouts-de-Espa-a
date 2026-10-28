@@ -71,26 +71,26 @@ final class ImportadorProductos {
 	public static function leer( string $ruta ) {
 		$tam = is_readable( $ruta ) ? (int) filesize( $ruta ) : 0;
 		if ( $tam <= 0 ) {
-			return new \WP_Error( 'asde_importar', asde_t( 'El fichero está vacío o no se ha podido leer.' ) );
+			return new \WP_Error( 'asde_importar', __( 'The file is empty or could not be read.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( $tam > self::MAX_BYTES ) {
 			/* translators: %d: tamaño máximo en MB */
-			return new \WP_Error( 'asde_importar', sprintf( asde_t( 'El fichero es demasiado grande (como mucho %d MB).' ), (int) ( self::MAX_BYTES / MB_IN_BYTES ) ) );
+			return new \WP_Error( 'asde_importar', sprintf( /* translators: %d: number */ __( 'The file is too large (at most %d MB).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), (int) ( self::MAX_BYTES / MB_IN_BYTES ) ) );
 		}
 		$texto = (string) file_get_contents( $ruta ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- fichero subido (temporal del servidor), no una URL
 		if ( str_contains( substr( $texto, 0, 4096 ), "\0" ) ) {
-			return new \WP_Error( 'asde_importar', asde_t( 'El fichero no es un CSV (parece una hoja de Excel u otro formato). Guárdalo como «CSV (delimitado por punto y coma)» y vuelve a intentarlo.' ) );
+			return new \WP_Error( 'asde_importar', __( 'The file is not a CSV (it looks like an Excel sheet or another format). Save it as "CSV (semicolon delimited)" and try again.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$lineas = Importador::filas_csv( Importador::a_utf8( $texto ) );
 		if ( ! $lineas ) {
-			return new \WP_Error( 'asde_importar', asde_t( 'El fichero está vacío o no se ha podido leer.' ) );
+			return new \WP_Error( 'asde_importar', __( 'The file is empty or could not be read.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$mapa   = self::mapa( array_shift( $lineas ) );
 		$faltan = array_diff( self::OBLIGATORIAS, $mapa );
 		if ( $faltan ) {
 			$nombres = array_map( static fn( $c ) => '«' . asde_t( self::COLUMNAS[ $c ][0] ) . '»', $faltan );
 			/* translators: %s: columnas que faltan */
-			return new \WP_Error( 'asde_importar', sprintf( asde_t( 'La primera fila tiene que ser la cabecera con los nombres de las columnas, y faltan: %s. Descarga el ejemplo para ver cómo tiene que ser.' ), implode( ', ', $nombres ) ) );
+			return new \WP_Error( 'asde_importar', sprintf( /* translators: %s: text */ __( 'The first row must be the header with the column names, and these are missing: %s. Download the example to see what it must look like.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), implode( ', ', $nombres ) ) );
 		}
 		$filas = array();
 		foreach ( $lineas as $i => $celdas ) {
@@ -104,11 +104,11 @@ final class ImportadorProductos {
 			$filas[ $i + 2 ] = $fila; // +1 por la cabecera y +1 porque la hoja empieza en la fila 1.
 		}
 		if ( ! $filas ) {
-			return new \WP_Error( 'asde_importar', asde_t( 'El fichero solo tiene la cabecera: no hay ningún producto que cargar.' ) );
+			return new \WP_Error( 'asde_importar', __( 'The file has only the header: there is no product to load.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( count( $filas ) > self::MAX_FILAS ) {
 			/* translators: %d: número máximo de filas */
-			return new \WP_Error( 'asde_importar', sprintf( asde_t( 'El fichero tiene demasiadas filas (como mucho %d). Pártelo en varios.' ), self::MAX_FILAS ) );
+			return new \WP_Error( 'asde_importar', sprintf( /* translators: %d: number */ __( 'The file has too many rows (at most %d). Split it into several.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), self::MAX_FILAS ) );
 		}
 		return array(
 			'filas'    => $filas,
@@ -147,7 +147,7 @@ final class ImportadorProductos {
 			if ( '' !== $fila['visibilidad'] ) {
 				$vis = self::VIS[ mb_strtolower( remove_accents( $fila['visibilidad'] ) ) ] ?? '';
 				if ( '' === $vis ) {
-					$fallo( asde_t( 'La visibilidad tiene que ser «todos» o «socios».' ) );
+					$fallo( __( 'Visibility must be "everyone" or "members".', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 					continue;
 				}
 			}
@@ -207,7 +207,7 @@ final class ImportadorProductos {
 				$var['existencias'] = $previa['existencias'] + $var['existencias'];
 				if ( $var['existencias'] > VariantesTable::MAX_EXISTENCIAS ) {
 					/* translators: %d: cantidad máxima */
-					$fallo( sprintf( asde_t( 'Sumando estas existencias se pasaría de %d unidades.' ), VariantesTable::MAX_EXISTENCIAS ) );
+					$fallo( sprintf( /* translators: %d: number */ __( 'Adding this stock would exceed %d units.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), VariantesTable::MAX_EXISTENCIAS ) );
 					continue;
 				}
 			}
@@ -252,11 +252,11 @@ final class ImportadorProductos {
 		$cab   = array_map( static fn( $c ) => asde_t( $c[0] ), self::COLUMNAS );
 		$filas = array(
 			$cab,
-			array( asde_t( 'Camiseta del grupo' ), asde_t( 'Camiseta de algodón con el escudo' ), asde_t( 'Ropa' ), 'socios', '12,00', '10,00', '3', 'sí', 'S', 'CAM-S', '10' ),
-			array( asde_t( 'Camiseta del grupo' ), '', '', '', '', '', '', '', 'M', 'CAM-M', '8' ),
-			array( asde_t( 'Camiseta del grupo' ), '', '', '', '', '', '', '', 'L', 'CAM-L', '5' ),
-			array( asde_t( 'Taza del grupo' ), '', asde_t( 'Regalos' ), 'todos', '6,50', '', '', '', '', '', '24' ),
-			array( asde_t( 'Pañoleta' ), '', asde_t( 'Uniforme' ), 'socios', '5,00', '', '', 'sí', '', '', 'ilimitado' ),
+			array( __( 'Group T-shirt', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Cotton T-shirt with the badge', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Clothing', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 'socios', '12,00', '10,00', '3', 'sí', 'S', 'CAM-S', '10' ),
+			array( __( 'Group T-shirt', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), '', '', '', '', '', '', '', 'M', 'CAM-M', '8' ),
+			array( __( 'Group T-shirt', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), '', '', '', '', '', '', '', 'L', 'CAM-L', '5' ),
+			array( __( 'Group mug', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), '', __( 'Gifts', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 'todos', '6,50', '', '', '', '', '', '24' ),
+			array( __( 'Neckerchief', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), '', __( 'Uniform', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 'socios', '5,00', '', '', 'sí', '', '', 'ilimitado' ),
 		);
 		return "\xEF\xBB\xBF" . Importador::a_csv( $filas );
 	}

@@ -89,25 +89,25 @@ final class ProductosTable {
 		$errores = array();
 		$nombre  = mb_substr( trim( sanitize_text_field( (string) ( $d['nombre'] ?? '' ) ) ), 0, 120 );
 		if ( '' === $nombre ) {
-			$errores[] = asde_t( 'Escribe el nombre del producto.' );
+			$errores[] = __( 'Enter the product name.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		$vis = (string) ( $d['visibilidad'] ?? self::VIS_TODOS );
 		$vis = '' === $vis ? self::VIS_TODOS : $vis;
 		if ( ! isset( self::VISIBILIDADES[ $vis ] ) ) {
-			$errores[] = asde_t( 'La visibilidad tiene que ser «todos» o «socios».' );
+			$errores[] = __( 'Visibility must be "everyone" or "members".', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		$precio = self::euros( (string) ( $d['precio'] ?? '' ) );
 		if ( false === $precio ) {
-			$errores[] = asde_t( 'El precio no es válido (por ejemplo: 12,50).' );
+			$errores[] = __( 'The price is not valid (for example: 12,50).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		$precio_socio = self::euros( (string) ( $d['precio_socio'] ?? '' ) );
 		if ( false === $precio_socio ) {
-			$errores[] = asde_t( 'El precio de socio no es válido (por ejemplo: 10,00).' );
+			$errores[] = __( 'The member price is not valid (for example: 10,00).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		$limite = trim( (string) ( $d['limite_persona'] ?? '' ) );
 		if ( '' !== $limite && ( ! preg_match( '/^\d{1,2}$/', $limite ) ) ) {
 			/* translators: %d: límite máximo */
-			$errores[] = sprintf( asde_t( 'El límite por persona tiene que ser un número de 0 a %d (0 = sin límite).' ), self::MAX_LIMITE );
+			$errores[] = sprintf( /* translators: %d: number */ __( 'The limit per person must be a number from 0 to %d (0 = no limit).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), self::MAX_LIMITE );
 		}
 		if ( $errores ) {
 			return new \WP_Error( 'asde_tienda', implode( ' ', $errores ) );

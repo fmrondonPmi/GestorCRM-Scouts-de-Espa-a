@@ -66,7 +66,7 @@ final class EventosView extends EventosBaseView {
 
 		if ( '1' === $this->get( 'nuevo' ) ) {
 			if ( ! Servicio::puede_crear( $a ) ) {
-				return $this->denegado( asde_t( 'No puedes crear eventos.' ) );
+				return $this->denegado( __( 'You cannot create events.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			}
 			return $this->layout( 'eventos', $this->formulario( null, $a, $cfg ) );
 		}
@@ -75,7 +75,7 @@ final class EventosView extends EventosBaseView {
 		if ( $id ) {
 			$e = EventosTable::obtener( $id );
 			if ( ! $e || ! Servicio::ve( $e, $a ) ) {
-				return $this->denegado( asde_t( 'No tienes acceso a ese evento.' ) );
+				return $this->denegado( __( 'You do not have access to that event.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			}
 			if ( '1' === $this->get( 'editar' ) && Servicio::puede_editar( $e, $a ) ) {
 				return $this->layout( 'eventos', $this->formulario( $e, $a, $cfg ) );
@@ -346,10 +346,10 @@ final class EventosView extends EventosBaseView {
 	public function exportar_compra(): void {
 		$e = EventosTable::obtener( (int) $this->get( 'evento' ) );
 		if ( ! wp_verify_nonce( $this->get( '_wpnonce' ), 'asde_menu_csv_' . ( $e['id'] ?? 0 ) ) ) {
-			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+			wp_die( esc_html__( 'Download link not valid or expired.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		if ( ! $e || ! MenuEvento::puede_ver( $e, Ambito::actual() ) ) {
-			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+			wp_die( esc_html__( 'Download link not valid or expired.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		$dia = in_array( $this->get( 'dia' ), MenuEvento::dias( $e ), true ) ? $this->get( 'dia' ) : '';
 		Logger::log( 'menu_compra_exportada', 'evento', (string) $e['id'] );
@@ -420,7 +420,7 @@ final class EventosView extends EventosBaseView {
 
 	public function handle_post(): void {
 		if ( ! Servicio::puede_entrar() ) {
-			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+			wp_die( esc_html__( 'You do not have permission to do this.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		$a      = Ambito::actual();
 		$accion = $this->post( 'asde_action' );
@@ -433,14 +433,14 @@ final class EventosView extends EventosBaseView {
 				$this->errores( $id, $in );
 				return;
 			}
-			Notices::add( 'success', esc_html( sprintf( asde_t( 'Evento %s creado como borrador. Añade el equipo y, si tiene coste, el presupuesto.' ), EventosTable::numero( EventosTable::obtener( $id ) ?? array( 'grupo' => '', 'id' => $id ) ) ) ) );
+			Notices::add( 'success', esc_html( sprintf( /* translators: %s: text */ __( 'Event %s created as a draft. Add the team and, if it has a cost, the budget.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), EventosTable::numero( EventosTable::obtener( $id ) ?? array( 'grupo' => '', 'id' => $id ) ) ) ) );
 			$this->redirect( $this->url( 'eventos', array( 'evento' => (string) $id ) ) );
 		}
 
 		$e = EventosTable::obtener( (int) $this->post( 'evento' ) );
 		check_admin_referer( 'asde_evento_' . ( $e['id'] ?? 0 ) );
 		if ( ! $e || ! Servicio::ve( $e, $a ) ) {
-			Notices::add( 'error', asde_t( 'No tienes acceso a ese evento.' ) );
+			Notices::add( 'error', __( 'You do not have access to that event.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			$this->redirect( $this->url( 'eventos' ) );
 		}
 		$pestana = isset( self::PESTANAS[ $this->post( 'pestana' ) ] ) ? $this->post( 'pestana' ) : 'resumen';
@@ -453,12 +453,12 @@ final class EventosView extends EventosBaseView {
 		);
 		$num     = EventosTable::numero( $e );
 		$hecho   = '';
-		$r       = new \WP_Error( 'asde_evento', asde_t( 'Acción desconocida.' ) );
+		$r       = new \WP_Error( 'asde_evento', __( 'Unknown action.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		$cifra   = static fn( string $v ): float => (float) str_replace( ',', '.', $v );
 
 		// v0.36: con las cuentas cerradas el evento es de solo lectura; v0.36.1: Tesorería puede reabrirlas (P-162).
 		if ( null !== $e['cerrado_en'] && ! in_array( $accion, array( 'evento_justificante', 'evento_informe', 'evento_reabrir_cuentas' ), true ) ) {
-			Notices::add( 'error', asde_t( 'Las cuentas de este evento están cerradas: ya no se pueden cambiar.' ) );
+			Notices::add( 'error', __( 'This event\'s accounts are closed: they can no longer be changed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			$this->redirect( $volver );
 		}
 
@@ -469,73 +469,73 @@ final class EventosView extends EventosBaseView {
 					$this->errores( $r, $in, $e['id'] );
 					return;
 				}
-				$hecho   = sprintf( asde_t( 'Evento %s guardado.' ), $num );
+				$hecho   = sprintf( /* translators: %s: text */ __( 'Event %s saved.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $num );
 				$movidas = Tareas::recalcular( EventosTable::obtener( $e['id'] ) ?? $e ); // v0.40: si cambian las fechas, las del calendario.
 				if ( $movidas ) {
-					$hecho .= ' ' . sprintf( asde_n( 'Ha cambiado la fecha de %d tarea del calendario.', 'Han cambiado las fechas de %d tareas del calendario.', $movidas ), $movidas );
+					$hecho .= ' ' . sprintf( /* translators: %d: number */ _n( 'The date of %d calendar task has changed.', 'The dates of %d calendar tasks have changed.', $movidas , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $movidas );
 				}
 				$volver = $this->url( 'eventos', array( 'evento' => (string) $e['id'] ) );
 				break;
 
 			case 'evento_equipo_anadir':
 				$r     = Servicio::anadir_equipo( $e, $a, $this->post( 'socio' ), sanitize_key( $this->post( 'papel' ) ) );
-				$hecho = asde_t( 'Añadido al equipo.' );
+				$hecho = __( 'Added to the team.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 
 			case 'evento_equipo_papel':
 				$r     = Servicio::cambiar_papel( $e, $a, (int) $this->post( 'fila' ), sanitize_key( $this->post( 'papel' ) ) );
-				$hecho = asde_t( 'Equipo actualizado.' );
+				$hecho = __( 'Team updated.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 
 			case 'evento_equipo_quitar':
 				$r     = Servicio::quitar_equipo( $e, $a, (int) $this->post( 'fila' ) );
-				$hecho = asde_t( 'Quitado del equipo.' );
+				$hecho = __( 'Removed from the team.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 
 			case 'evento_prevision':
 				$r     = Servicio::guardar_prevision( $e, $a, (int) $this->post( 'equipo_previsto' ), '1' === $this->post( 'margen_activo' ), (float) str_replace( ',', '.', $this->post( 'margen_pct' ) ) );
-				$hecho = asde_t( 'Previsión guardada: el precio se ha recalculado.' );
+				$hecho = __( 'Forecast saved: the price has been recalculated.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 
 			case 'evento_partida_anadir':
 				$r     = Servicio::anadir_partida( $e, $a, sanitize_key( $this->post( 'tipo' ) ), $this->post( 'concepto' ), sanitize_key( $this->post( 'reparto' ) ), $this->post( 'seccion' ), (float) str_replace( ',', '.', $this->post( 'importe' ) ) );
-				$hecho = asde_t( 'Partida añadida al presupuesto.' );
+				$hecho = __( 'Item added to the budget.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 
 			case 'evento_autobuses':
 				$r     = Servicio::anadir_autobuses( $e, $a, (int) $this->post( 'personas' ), (int) $this->post( 'plazas' ), (float) str_replace( ',', '.', $this->post( 'precio' ) ) );
-				$hecho = asde_t( 'Partida de autobuses añadida al presupuesto.' );
+				$hecho = __( 'Bus item added to the budget.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 
 			case 'evento_partida_quitar':
 				$r     = Servicio::quitar_partida( $e, $a, (int) $this->post( 'partida' ) );
-				$hecho = asde_t( 'Partida quitada del presupuesto.' );
+				$hecho = __( 'Item removed from the budget.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 
 			case 'evento_pedir_validacion':
 				$r     = Servicio::pedir_validacion( $e, $a );
-				$hecho = asde_t( 'Presupuesto enviado a Tesorería para que lo valide.' );
+				$hecho = __( 'Budget sent to Treasury for validation.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 
 			case 'evento_validar':
 				$r = Servicio::validar( $e );
 				if ( ! is_wp_error( $r ) ) {
-					$hecho = sprintf( asde_t( 'Presupuesto del evento %s validado: el precio por sección ya es fijo.' ), $num );
+					$hecho = sprintf( /* translators: %s: text */ __( 'Budget of event %s validated: the price per section is now fixed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $num );
 				}
 				break;
 
 			case 'evento_reabrir':
 				$r     = Servicio::reabrir( $e );
-				$hecho = asde_t( 'Presupuesto reabierto: se puede cambiar y habrá que volver a validarlo.' );
+				$hecho = __( 'Budget reopened: it can be changed and will have to be validated again.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 
 			case 'evento_publicar':
 				$avisar = \AsdeBalears\AreaPrivada\Eventos\Avisos::destinos_validos( $this->post_array( 'avisar' ) );
 				$r      = Servicio::publicar( $e, $a, $avisar );
-				$hecho  = sprintf( asde_t( 'Evento %s publicado.' ), $num ) . ' ' . (
-					array( 'familias' ) === $avisar ? asde_t( 'Se avisará por email a las familias.' ) : (
-						array( 'scouters' ) === $avisar ? asde_t( 'Se avisará por email a los scouters.' ) : (
-							$avisar ? asde_t( 'Se avisará por email a las familias y a los scouters.' ) : asde_t( 'No se ha enviado ningún aviso por email.' )
+				$hecho  = sprintf( /* translators: %s: text */ __( 'Event %s published.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $num ) . ' ' . (
+					array( 'familias' ) === $avisar ? __( 'Families will be notified by email.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : (
+						array( 'scouters' ) === $avisar ? __( 'Scouters will be notified by email.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : (
+							$avisar ? __( 'Families and scouters will be notified by email.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : __( 'No email notice has been sent.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' )
 						)
 					)
 				);
@@ -543,121 +543,121 @@ final class EventosView extends EventosBaseView {
 
 			case 'evento_despublicar':
 				$r     = Servicio::despublicar( $e, $a );
-				$hecho = sprintf( asde_t( 'El evento %s vuelve a ser un borrador.' ), $num );
+				$hecho = sprintf( /* translators: %s: text */ __( 'Event %s is a draft again.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $num );
 				break;
 
 			case 'evento_cancelar':
 				$r     = Servicio::cancelar( $e, $a, $this->post( 'motivo' ) );
-				$hecho = sprintf( asde_t( 'Evento %s cancelado.' ), $num );
+				$hecho = sprintf( /* translators: %s: text */ __( 'Event %s cancelled.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $num );
 				break;
 
 			case 'evento_inscribir':
 				$r = Inscripciones::inscribir_gestor( $e, $a, $this->post( 'socio' ) ?: $this->post( 'otro' ), $in );
 				if ( ! is_wp_error( $r ) ) {
-					$hecho = InscripcionesTable::ESPERA === $r['estado'] ? asde_t( 'No quedaban plazas: queda en la lista de espera.' ) : asde_t( 'Inscripción guardada.' );
+					$hecho = InscripcionesTable::ESPERA === $r['estado'] ? __( 'There were no places left: they remain on the waiting list.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : __( 'Sign-up saved.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				}
 				break;
 
 			case 'evento_papel':
 				$r     = Inscripciones::papel( $e, $a, (int) $this->post( 'fila' ) );
-				$hecho = asde_t( 'Autorización en papel anotada.' );
+				$hecho = __( 'Paper authorisation recorded.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 
 			case 'evento_baja':
 				$r     = Inscripciones::baja( $e, $a, (int) $this->post( 'fila' ), $this->post( 'motivo' ), true );
-				$hecho = asde_t( 'Inscripción dada de baja.' );
+				$hecho = __( 'Sign-up withdrawn.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 
 			case 'evento_pago':
 				$importe = (float) str_replace( ',', '.', $this->post( 'importe' ) );
 				$r       = Cobros::pagar( $e, (int) $this->post( 'fila' ), $importe, sanitize_key( $this->post( 'forma' ) ), $this->post( 'fecha' ), $this->post( 'referencia' ), $this->post( 'nota' ) );
-				$hecho   = sprintf( asde_t( 'Pago de %s registrado.' ), \AsdeBalears\AreaPrivada\Tesoreria\Calculadora::euros( $importe ) );
+				$hecho   = sprintf( /* translators: %s: text */ __( 'Payment of %s recorded.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), \AsdeBalears\AreaPrivada\Tesoreria\Calculadora::euros( $importe ) );
 				break;
 
 			case 'evento_pago_familia':
 				$importe = (float) str_replace( ',', '.', $this->post( 'importe' ) );
 				$r       = Cobros::pagar_familia( $e, (int) $this->post( 'familia' ), $importe, sanitize_key( $this->post( 'forma' ) ), $this->post( 'fecha' ), $this->post( 'referencia' ), $this->post( 'nota' ) );
-				$hecho   = sprintf( asde_t( 'Pago de %s registrado y repartido entre las inscripciones de la familia.' ), \AsdeBalears\AreaPrivada\Tesoreria\Calculadora::euros( $importe ) );
+				$hecho   = sprintf( /* translators: %s: text */ __( 'Payment of %s recorded and split among the family\'s sign-ups.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), \AsdeBalears\AreaPrivada\Tesoreria\Calculadora::euros( $importe ) );
 				break;
 
 			case 'evento_ajuste':
 				$importe = abs( (float) str_replace( ',', '.', $this->post( 'importe' ) ) ) * ( 'recargo' === $this->post( 'sentido' ) ? 1 : -1 );
 				$r       = Cobros::ajustar( $e, (int) $this->post( 'fila' ), $importe, $this->post( 'motivo' ) );
-				$hecho   = asde_t( 'Ajuste guardado: el importe de la inscripción ha cambiado.' );
+				$hecho   = __( 'Adjustment saved: the sign-up amount has changed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 
 			case 'evento_anular':
 				$r     = Cobros::anular( $e, (int) $this->post( 'movimiento' ) );
-				$hecho = asde_t( 'Movimiento anulado.' );
+				$hecho = __( 'Transaction cancelled.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 
 			case 'evento_devolucion':
 				$r     = Cobros::devolver( $e, (int) $this->post( 'fila' ), $cifra( $this->post( 'importe' ) ), sanitize_key( $this->post( 'forma' ) ), $this->post( 'fecha' ), $this->post( 'motivo' ) );
-				$hecho = sprintf( asde_t( 'Devolución de %s anotada.' ), \AsdeBalears\AreaPrivada\Tesoreria\Calculadora::euros( $cifra( $this->post( 'importe' ) ) ) );
+				$hecho = sprintf( /* translators: %s: text */ __( 'Refund of %s recorded.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), \AsdeBalears\AreaPrivada\Tesoreria\Calculadora::euros( $cifra( $this->post( 'importe' ) ) ) );
 				break;
 
 			// v0.36: cuentas del evento.
 			case 'evento_gasto':
 				$fichero = Justificantes::subido();
 				$r       = is_wp_error( $fichero ) ? $fichero : Cuentas::proponer( $e, $a, $in, $fichero );
-				$hecho   = Cobros::puede() ? asde_t( 'Gasto apuntado.' ) : asde_t( 'Gasto enviado a Tesorería para que lo revise.' );
+				$hecho   = Cobros::puede() ? __( 'Expense recorded.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : __( 'Expense sent to Treasury for review.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 
 			case 'evento_ingreso':
 				$r     = Cuentas::ingreso( $e, $in );
-				$hecho = asde_t( 'Ingreso apuntado.' );
+				$hecho = __( 'Income recorded.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 
 			case 'evento_gasto_retirar':
 				$r     = Cuentas::retirar( $e, (int) $this->post( 'gasto' ) );
-				$hecho = asde_t( 'Gasto retirado.' );
+				$hecho = __( 'Expense withdrawn.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 
 			case 'evento_gasto_validar':
 				$r     = Cuentas::validar( $e, (int) $this->post( 'gasto' ) );
-				$hecho = asde_t( 'Gasto validado.' );
+				$hecho = __( 'Expense validated.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 
 			case 'evento_gasto_rechazar':
 				$r     = Cuentas::rechazar( $e, (int) $this->post( 'gasto' ), $this->post( 'motivo' ) );
-				$hecho = asde_t( 'Gasto rechazado.' );
+				$hecho = __( 'Expense rejected.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 
 			case 'evento_gasto_reembolsar':
 				$r     = Cuentas::reembolsar( $e, (int) $this->post( 'gasto' ), $this->post( 'fecha' ), sanitize_key( $this->post( 'forma' ) ) );
-				$hecho = asde_t( 'Reembolso anotado.' );
+				$hecho = __( 'Reimbursement recorded.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 
 			case 'evento_gasto_anular':
 				$r     = Cuentas::anular( $e, (int) $this->post( 'gasto' ), $this->post( 'motivo' ) );
-				$hecho = asde_t( 'Movimiento anulado.' );
+				$hecho = __( 'Transaction cancelled.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 
 			case 'evento_anticipo':
 				$r     = Cuentas::anticipo( $e, (int) $this->post( 'persona' ), $cifra( $this->post( 'importe' ) ), $this->post( 'fecha' ), sanitize_key( $this->post( 'forma' ) ), $this->post( 'nota' ) );
-				$hecho = asde_t( 'Anticipo anotado.' );
+				$hecho = __( 'Advance recorded.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 
 			case 'evento_anticipo_liquidar':
 				$r = Cuentas::liquidar( $e, (int) $this->post( 'anticipo' ), $cifra( $this->post( 'devuelto' ) ), $this->post( 'nota' ) );
 				if ( ! is_wp_error( $r ) ) {
-					$hecho = abs( $r ) >= 0.01 ? sprintf( asde_t( 'Anticipo liquidado, con una diferencia de %s.' ), \AsdeBalears\AreaPrivada\Tesoreria\Calculadora::euros( $r ) ) : asde_t( 'Anticipo liquidado.' );
+					$hecho = abs( $r ) >= 0.01 ? sprintf( /* translators: %s: text */ __( 'Advance settled, with a difference of %s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), \AsdeBalears\AreaPrivada\Tesoreria\Calculadora::euros( $r ) ) : __( 'Advance settled.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				}
 				break;
 
 			case 'evento_anticipo_anular':
 				$r     = Cuentas::anular_anticipo( $e, (int) $this->post( 'anticipo' ) );
-				$hecho = asde_t( 'Anticipo anulado.' );
+				$hecho = __( 'Advance cancelled.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 
 			case 'evento_cerrar':
 				$r     = Cuentas::cerrar( $e );
-				$hecho = sprintf( asde_t( 'Cuentas del evento %s cerradas: el balance queda como informe final.' ), $num );
+				$hecho = sprintf( /* translators: %s: text */ __( 'The accounts of event %s are closed: the balance becomes the final report.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $num );
 				break;
 
 			case 'evento_reabrir_cuentas':
 				$r     = Cuentas::reabrir( $e, $this->post( 'motivo' ) );
-				$hecho = sprintf( asde_t( 'Cuentas del evento %s reabiertas: ya se pueden cambiar. Cuando esté todo, ciérralas de nuevo.' ), $num );
+				$hecho = sprintf( /* translators: %s: text */ __( 'The accounts of event %s are reopened: they can be changed now. When everything is done, close them again.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $num );
 				break;
 
 			case 'evento_justificante':
@@ -670,30 +670,30 @@ final class EventosView extends EventosBaseView {
 
 			case 'tarea_aplicar':
 				$r     = Tareas::aplicar( $e, sanitize_key( $this->post( 'plantilla' ) ), $a );
-				$hecho = is_wp_error( $r ) ? '' : sprintf( asde_n( 'Se ha creado %d tarea.', 'Se han creado %d tareas.', (int) $r ), (int) $r );
+				$hecho = is_wp_error( $r ) ? '' : sprintf( /* translators: %d: number */ _n( '%d task has been created.', '%d tasks have been created.', (int) $r , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), (int) $r );
 				break;
 
 			case 'material_anadir':
 				$r     = Material::anadir( $e, $a, (int) $this->post( 'material' ), (int) $this->post( 'cantidad' ) );
-				$hecho = asde_t( 'Material reservado para el evento.' );
+				$hecho = __( 'Equipment reserved for the event.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 
 			case 'material_cantidad':
 				$r     = Material::cambiar_cantidad( $e, $a, (int) $this->post( 'linea' ), (int) $this->post( 'cantidad' ) );
-				$hecho = asde_t( 'Cantidad cambiada.' );
+				$hecho = __( 'Quantity changed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 
 			case 'material_quitar':
 				$r     = Material::quitar( $e, $a, (int) $this->post( 'linea' ) );
-				$hecho = asde_t( 'Material quitado de la lista del evento.' );
+				$hecho = __( 'Equipment removed from the event list.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 
 			case 'material_habitual':
 				$r = Material::cargar_habitual( $e, $a );
 				if ( ! is_wp_error( $r ) ) {
-					$hecho = sprintf( asde_n( 'Se ha reservado %d material habitual.', 'Se han reservado %d materiales habituales.', $r['anadidas'] ), $r['anadidas'] );
+					$hecho = sprintf( /* translators: %d: number */ _n( '%d usual item has been reserved.', '%d usual items have been reserved.', $r['anadidas'] , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $r['anadidas'] );
 					if ( $r['no_encontradas'] ) {
-						$hecho .= ' ' . sprintf( asde_t( 'No están en el inventario: %s.' ), implode( ', ', $r['no_encontradas'] ) );
+						$hecho .= ' ' . sprintf( /* translators: %s: text */ __( 'They are not in the inventory: %s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), implode( ', ', $r['no_encontradas'] ) );
 					}
 					$r = true;
 				}
@@ -702,90 +702,90 @@ final class EventosView extends EventosBaseView {
 			case 'material_salida':
 				$r = Material::salida( $e, $a, (int) $this->post( 'linea' ) );
 				if ( ! is_wp_error( $r ) ) {
-					$hecho = sprintf( asde_n( 'Salida anotada: %d línea.', 'Salida anotada: %d líneas.', $r ), $r );
+					$hecho = sprintf( /* translators: %d: number */ _n( 'Departure recorded: %d line.', 'Departure recorded: %d lines.', $r , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $r );
 					$r     = true;
 				}
 				break;
 
 			case 'material_devolver':
 				$r     = Material::devolver( $e, $a, (int) $this->post( 'linea' ), (int) $this->post( 'devueltas' ), $this->post( 'incidencia' ) );
-				$hecho = asde_t( 'Devolución anotada.' );
+				$hecho = __( 'Refund recorded.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 
 			case 'material_descontar':
 				$r = Material::descontar_faltantes( $e, $a, (int) $this->post( 'linea' ) );
 				if ( ! is_wp_error( $r ) ) {
-					$hecho = sprintf( asde_n( 'Se ha descontado %d unidad del inventario.', 'Se han descontado %d unidades del inventario.', $r ), $r );
+					$hecho = sprintf( /* translators: %d: number */ _n( '%d unit has been deducted from the inventory.', '%d units have been deducted from the inventory.', $r , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $r );
 					$r     = true;
 				}
 				break;
 
 			case 'menu_anadir':
 				$r     = MenuEvento::anadir( $e, $a, $this->post( 'dia' ), $this->post( 'comida' ), (int) $this->post( 'receta' ), $this->post( 'comensales' ) );
-				$hecho = asde_t( 'Plato añadido al menú.' );
+				$hecho = __( 'Dish added to the menu.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 
 			case 'menu_quitar':
 				$r     = MenuEvento::quitar( $e, $a, (int) $this->post( 'plato' ) );
-				$hecho = asde_t( 'Plato quitado del menú.' );
+				$hecho = __( 'Dish removed from the menu.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 
 			case 'menu_comensales':
 				$r     = MenuEvento::cambiar_comensales( $e, $a, (int) $this->post( 'plato' ), $this->post( 'comensales' ) );
-				$hecho = asde_t( 'Comensales cambiados.' );
+				$hecho = __( 'Diners changed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 
 			case 'menu_confirmar':
 				$r     = Validacion::confirmar( $e, $a, (int) $this->post( 'plato' ), sanitize_key( $this->post( 'alergeno' ) ), sanitize_key( $this->post( 'alternativa' ) ) );
-				$hecho = asde_t( 'Aviso confirmado.' );
+				$hecho = __( 'Notice confirmed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 
 			case 'menu_desconfirmar':
-				$r     = MenuEvento::puede_editar( $e, $a ) && AvisosTable::quitar( $e['id'], (int) $this->post( 'plato' ), sanitize_key( $this->post( 'alergeno' ) ) ) ? true : new \WP_Error( 'asde_menus', asde_t( 'No puedes cambiar el menú de este evento.' ) );
-				$hecho = asde_t( 'La confirmación se ha quitado: el aviso vuelve a estar sin resolver.' );
+				$r     = MenuEvento::puede_editar( $e, $a ) && AvisosTable::quitar( $e['id'], (int) $this->post( 'plato' ), sanitize_key( $this->post( 'alergeno' ) ) ) ? true : new \WP_Error( 'asde_menus', __( 'You cannot change this event\'s menu.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
+				$hecho = __( 'The confirmation has been removed: the notice is unresolved again.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 
 			case 'menu_hoja_enviar':
 				$r = HojaCocina::enviar( $e, $a );
 				if ( ! is_wp_error( $r ) ) {
-					$hecho = sprintf( asde_n( 'Hoja de cocina enviada a %d persona.', 'Hoja de cocina enviada a %d personas.', $r['enviados'] ), $r['enviados'] ) . ( $r['sin_cuenta'] ? ' ' . sprintf( asde_n( '%d persona del equipo de apoyo no tiene cuenta: imprímesela.', '%d personas del equipo de apoyo no tienen cuenta: imprímeselas.', $r['sin_cuenta'] ), $r['sin_cuenta'] ) : '' ) . ( $r['fallidos'] ? ' ' . sprintf( asde_n( 'Ha fallado el envío a %d.', 'Ha fallado el envío a %d.', $r['fallidos'] ), $r['fallidos'] ) : '' );
+					$hecho = sprintf( /* translators: %d: number */ _n( 'Kitchen sheet sent to %d person.', 'Kitchen sheet sent to %d people.', $r['enviados'] , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $r['enviados'] ) . ( $r['sin_cuenta'] ? ' ' . sprintf( /* translators: %d: number */ _n( '%d support team member has no account: print it for them.', '%d support team members have no account: print them for them.', $r['sin_cuenta'] , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $r['sin_cuenta'] ) : '' ) . ( $r['fallidos'] ? ' ' . sprintf( /* translators: %d: number */ _n( 'Sending to %d failed.', 'Sending to %d failed.', $r['fallidos'] , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $r['fallidos'] ) : '' );
 					$r     = true;
 				}
 				break;
 
 			case 'menu_partida':
 				$r     = MenuEvento::proponer_partida( $e, $a );
-				$hecho = asde_t( 'Partida de alimentación añadida al presupuesto.' );
+				$hecho = __( 'Food item added to the budget.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 
 			case 'tarea_hecha':
 			case 'tarea_deshecha':
 				$t     = TareasTable::obtener( (int) $this->post( 'tarea' ) );
-				$r     = $t ? Tareas::marcar( $e, $t, 'tarea_hecha' === $accion, $a, $this->post( 'nota' ) ) : new \WP_Error( 'asde_tareas', asde_t( 'Esa tarea no existe.' ) );
-				$hecho = 'tarea_hecha' === $accion ? asde_t( 'Tarea hecha.' ) : asde_t( 'La tarea vuelve a estar pendiente.' );
+				$r     = $t ? Tareas::marcar( $e, $t, 'tarea_hecha' === $accion, $a, $this->post( 'nota' ) ) : new \WP_Error( 'asde_tareas', __( 'That task does not exist.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
+				$hecho = 'tarea_hecha' === $accion ? __( 'Task done.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : __( 'The task is pending again.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 
 			case 'tarea_guardar':
 				$t     = TareasTable::obtener( (int) $this->post( 'tarea' ) );
-				$r     = $t ? Tareas::guardar( $e, $t, $this->post( 'responsable' ), $this->post( 'fecha' ), $this->post( 'nota' ), array_column( InscripcionesTable::equipo( $e['id'] ), 'socio' ), $a ) : new \WP_Error( 'asde_tareas', asde_t( 'Esa tarea no existe.' ) );
-				$hecho = asde_t( 'Tarea guardada.' );
+				$r     = $t ? Tareas::guardar( $e, $t, $this->post( 'responsable' ), $this->post( 'fecha' ), $this->post( 'nota' ), array_column( InscripcionesTable::equipo( $e['id'] ), 'socio' ), $a ) : new \WP_Error( 'asde_tareas', __( 'That task does not exist.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
+				$hecho = __( 'Task saved.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 
 			case 'tarea_anadir':
 				$r     = Tareas::anadir( $e, $this->post( 'titulo' ), $this->post( 'fecha' ), $this->post( 'detalle' ), $a );
-				$hecho = asde_t( 'Tarea añadida.' );
+				$hecho = __( 'Task added.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 
 			case 'tarea_quitar':
 				$t     = TareasTable::obtener( (int) $this->post( 'tarea' ) );
-				$r     = $t ? Tareas::quitar( $e, $t, $a ) : new \WP_Error( 'asde_tareas', asde_t( 'Esa tarea no existe.' ) );
-				$hecho = asde_t( 'Tarea quitada.' );
+				$r     = $t ? Tareas::quitar( $e, $t, $a ) : new \WP_Error( 'asde_tareas', __( 'That task does not exist.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
+				$hecho = __( 'Task removed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 
 			case 'evento_borrar':
 				$r = Servicio::borrar( $e, $a );
 				if ( ! is_wp_error( $r ) ) {
-					Notices::add( 'success', esc_html( sprintf( asde_t( 'Borrador %s borrado.' ), $num ) ) );
+					Notices::add( 'success', esc_html( sprintf( /* translators: %s: text */ __( 'Draft %s deleted.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $num ) ) );
 					$this->redirect( $this->url( 'eventos' ) );
 				}
 				break;
@@ -805,11 +805,11 @@ final class EventosView extends EventosBaseView {
 	private function ver_justificante( array $e, Ambito $a, int $id ): \WP_Error {
 		$g = GastosTable::obtener( $id );
 		if ( ! Cuentas::puede_ver( $e, $a ) || ! $g || $g['evento_id'] !== $e['id'] || '' === $g['justificante'] ) {
-			return new \WP_Error( 'asde_cuentas', asde_t( 'Ese justificante no existe o no puedes verlo.' ) );
+			return new \WP_Error( 'asde_cuentas', __( 'That receipt does not exist or you cannot see it.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$contenido = Justificantes::leer( $g );
 		if ( null === $contenido || ! isset( Justificantes::TIPOS[ $g['justificante_tipo'] ] ) ) {
-			return new \WP_Error( 'asde_cuentas', asde_t( 'No se ha podido leer el justificante.' ) );
+			return new \WP_Error( 'asde_cuentas', __( 'The receipt could not be read.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		Logger::log( 'evento_justificante_visto', 'evento', (string) $e['id'], array( 'gasto' => $id ) );
 		Justificantes::enviar( $contenido, $g['justificante_tipo'], 'justificante-' . $id );
@@ -819,7 +819,7 @@ final class EventosView extends EventosBaseView {
 	/** El balance (o el informe final, si están cerradas) en CSV. */
 	private function informe_csv( array $e, Ambito $a ): \WP_Error {
 		if ( ! Cuentas::puede_ver( $e, $a ) ) {
-			return new \WP_Error( 'asde_cuentas', asde_t( 'No puedes ver las cuentas de este evento.' ) );
+			return new \WP_Error( 'asde_cuentas', __( 'You cannot see this event\'s accounts.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$balance = null !== $e['cerrado_en'] && is_array( $e['balance'] ) ? $e['balance'] : Cuentas::balance( $e );
 		Logger::log( 'evento_informe', 'evento', (string) $e['id'] );

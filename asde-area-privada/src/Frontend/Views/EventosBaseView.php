@@ -9,12 +9,12 @@ defined( 'ABSPATH' ) || exit;
 abstract class EventosBaseView extends View {
 
 	protected function subnav( string $activo ): string {
-		$items = array( 'eventos' => asde_t( 'Agenda' ) );
+		$items = array( 'eventos' => __( 'Agenda', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		if ( current_user_can( Servicio::CAP_CONFIG ) ) {
-			$items['eventos_config'] = asde_t( 'Configuración' );
+			$items['eventos_config'] = __( 'Settings', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		if ( current_user_can( \AsdeBalears\AreaPrivada\Menus\Recetario::CAP ) ) {
-			$items['eventos_recetas'] = asde_t( 'Recetas' ); // v0.41 (doc 49, B1).
+			$items['eventos_recetas'] = __( 'Recipes', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); // v0.41 (doc 49, B1).
 		}
 		return count( $items ) > 1 ? $this->tpl(
 			'eventos/subnav',

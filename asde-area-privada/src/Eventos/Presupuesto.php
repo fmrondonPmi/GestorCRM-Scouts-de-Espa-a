@@ -63,7 +63,7 @@ final class Presupuesto {
 		$por_persona  = array_fill_keys( array_keys( $previstos ), 0.0 ); // Lo que paga cada participante de esa sección.
 
 		if ( $total_n <= 0 ) {
-			$errores[] = asde_t( 'Indica cuántos participantes se esperan en cada sección convocada: el precio se calcula con ellos.' );
+			$errores[] = __( 'State how many participants are expected in each invited section: the price is calculated from them.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		foreach ( $partidas as $p ) {
 			$importe = (float) $p['importe'];
@@ -75,7 +75,7 @@ final class Presupuesto {
 			switch ( $p['reparto'] ) {
 				case 'total_seccion':
 					if ( ! isset( $previstos[ $p['seccion'] ] ) ) {
-						$errores[] = sprintf( asde_t( 'La partida «%1$s» es solo de %2$s, pero no hay participantes previstos de esa sección.' ), $p['concepto'], Secciones::nombre( (string) $p['seccion'] ) );
+						$errores[] = sprintf( /* translators: 1: text, 2: text */ __( 'The item "%1$s" is only for %2$s, but there are no expected participants from that section.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $p['concepto'], Secciones::nombre( (string) $p['seccion'] ) );
 						break;
 					}
 					$por_seccion[ $p['seccion'] ] += $importe;
@@ -84,7 +84,7 @@ final class Presupuesto {
 				case 'participante':
 					if ( '' !== (string) $p['seccion'] ) {
 						if ( ! isset( $previstos[ $p['seccion'] ] ) ) {
-							$errores[] = sprintf( asde_t( 'La partida «%1$s» es solo de %2$s, pero no hay participantes previstos de esa sección.' ), $p['concepto'], Secciones::nombre( (string) $p['seccion'] ) );
+							$errores[] = sprintf( /* translators: 1: text, 2: text */ __( 'The item "%1$s" is only for %2$s, but there are no expected participants from that section.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $p['concepto'], Secciones::nombre( (string) $p['seccion'] ) );
 							break;
 						}
 						$por_persona[ $p['seccion'] ] += $importe;

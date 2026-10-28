@@ -22,13 +22,13 @@ defined( 'ABSPATH' ) || exit;
 
 	<section class="asde-card" data-asde-no-plegable>
 		<header class="asde-card__header">
-			<h2 class="asde-card__title"><?php asde_e( 'Permisos por rol' ); ?></h2>
+			<h2 class="asde-card__title"><?php esc_html_e( 'Permissions by role', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h2>
 		</header>
-		<p><?php asde_e( 'Cada rol trae estos permisos. Marca o desmarca y guarda: vale para todas las personas con ese rol. Los permisos de acción necesitan el de ver de su módulo.' ); ?>
-			<span class="asde-badge asde-badge--sensible"><?php asde_e( 'Sensible' ); ?></span> <?php asde_e( 'abre datos de salud, dinero o cuentas de acceso.' ); ?>
-			<span class="asde-acc-cambiado" aria-hidden="true">●</span> <?php asde_e( 'cambiado respecto a los permisos de fábrica.' ); ?></p>
+		<p><?php esc_html_e( 'Each role comes with these permissions. Tick or untick and save: it applies to everyone with that role. Action permissions need the view permission of their module.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>
+			<span class="asde-badge asde-badge--sensible"><?php esc_html_e( 'Sensitive', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span> <?php esc_html_e( 'opens health data, money or sign-in accounts.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>
+			<span class="asde-acc-cambiado" aria-hidden="true">●</span> <?php esc_html_e( 'changed from the default permissions.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 		<?php if ( $mis ) : ?>
-			<p class="asde-help"><?php asde_e( 'En tu propio rol solo puedes quitar permisos: añadírtelos tendría que hacerlo otra persona.' ); ?></p>
+			<p class="asde-help"><?php esc_html_e( 'In your own role you can only remove permissions: someone else would have to add them for you.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 		<?php endif; ?>
 	</section>
 
@@ -40,7 +40,7 @@ defined( 'ABSPATH' ) || exit;
 			<table class="asde-table asde-table--matriz">
 				<thead>
 					<tr>
-						<th scope="col"><?php asde_e( 'Permiso' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Permission', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
 						<?php foreach ( $roles as $rol => $r ) : ?>
 							<th scope="col"><?php echo esc_html( $r['nombre'] ); ?></th>
 						<?php endforeach; ?>
@@ -49,11 +49,11 @@ defined( 'ABSPATH' ) || exit;
 				<tbody>
 					<?php foreach ( Catalogo::del_modulo( $modulo ) as $p ) : ?>
 						<tr>
-							<th scope="row" data-label="<?php echo esc_attr( asde_a( 'Permiso' ) ); ?>">
+							<th scope="row" data-label="<?php echo esc_attr( esc_attr__( 'Permission', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
 								<?php echo esc_html( Catalogo::descripcion( $p ) ); ?>
-								<span class="asde-muted">· <?php echo Catalogo::VER === Catalogo::tipo( $p ) ? esc_html( asde_t( 'ver' ) ) : esc_html( asde_t( 'acción' ) ); ?></span>
+								<span class="asde-muted">· <?php echo Catalogo::VER === Catalogo::tipo( $p ) ? esc_html( __( 'view', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) : esc_html( __( 'action', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?></span>
 								<?php if ( Catalogo::sensible( $p ) ) : ?>
-									<span class="asde-badge asde-badge--sensible"><?php asde_e( 'Sensible' ); ?></span>
+									<span class="asde-badge asde-badge--sensible"><?php esc_html_e( 'Sensitive', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span>
 								<?php endif; ?>
 							</th>
 							<?php foreach ( $roles as $rol => $r ) : ?>
@@ -66,9 +66,9 @@ defined( 'ABSPATH' ) || exit;
 									<label>
 										<input type="checkbox" name="perm[<?php echo esc_attr( $rol ); ?>][<?php echo esc_attr( $p ); ?>]" value="1"
 											data-asde-acc-rol="<?php echo esc_attr( $rol ); ?>" data-asde-acc-permiso="<?php echo esc_attr( $p ); ?>"
-											<?php checked( $marcado ); ?><?php echo $bloqueo ? ' disabled title="' . esc_attr( asde_a( 'Es tu rol: no puedes añadirte permisos' ) ) . '"' : ''; ?>>
+											<?php checked( $marcado ); ?><?php echo $bloqueo ? ' disabled title="' . esc_attr( esc_attr__( 'It is your role: you cannot add permissions to yourself', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) . '"' : ''; ?>>
 										<span class="screen-reader-text"><?php echo esc_html( $r['nombre'] . ': ' . Catalogo::descripcion( $p ) ); ?></span>
-										<?php if ( $cambiado ) : ?><span class="asde-acc-cambiado" aria-hidden="true" title="<?php echo esc_attr( asde_a( 'Cambiado respecto a los permisos de fábrica' ) ); ?>">●</span><?php endif; ?>
+										<?php if ( $cambiado ) : ?><span class="asde-acc-cambiado" aria-hidden="true" title="<?php echo esc_attr( esc_attr__( 'Changed from the default permissions', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">●</span><?php endif; ?>
 									</label>
 								</td>
 							<?php endforeach; ?>
@@ -79,22 +79,22 @@ defined( 'ABSPATH' ) || exit;
 		</section>
 	<?php endforeach; ?>
 
-	<p class="asde-form__acciones"><button type="submit" class="button button-primary"><?php asde_e( 'Guardar los permisos' ); ?></button></p>
+	<p class="asde-form__acciones"><button type="submit" class="button button-primary"><?php esc_html_e( 'Save the permissions', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button></p>
 </form>
 
 <section class="asde-card" data-asde-plegable="accesos-restaurar" data-asde-inicio="cerrado">
 	<header class="asde-card__header">
-		<h2 class="asde-card__title"><?php asde_e( 'Volver a los permisos de fábrica' ); ?></h2>
+		<h2 class="asde-card__title"><?php esc_html_e( 'Return to the default permissions', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h2>
 	</header>
-	<form method="post" action="<?php echo esc_url( $url ); ?>" class="asde-filter asde-filter--una-linea" data-asde-confirmar="<?php echo esc_attr( asde_js( '¿Devolver este rol a sus permisos de fábrica? Se pierden los cambios que se hicieron en él.' ) ); ?>">
+	<form method="post" action="<?php echo esc_url( $url ); ?>" class="asde-filter asde-filter--una-linea" data-asde-confirmar="<?php echo esc_attr( __( 'Return this role to its default permissions? The changes made to it are lost.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
 		<?php wp_nonce_field( 'asde_accesos_restaurar' ); ?>
 		<input type="hidden" name="asde_action" value="accesos_restaurar">
-		<label for="asde-acc-restaurar"><?php asde_e( 'Rol' ); ?></label>
+		<label for="asde-acc-restaurar"><?php esc_html_e( 'Role', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 		<select id="asde-acc-restaurar" name="rol">
 			<?php foreach ( $roles as $rol => $r ) : ?>
 				<option value="<?php echo esc_attr( $rol ); ?>"><?php echo esc_html( $r['nombre'] ); ?></option>
 			<?php endforeach; ?>
 		</select>
-		<button type="submit" class="button"><?php asde_e( 'Restaurar' ); ?></button>
+		<button type="submit" class="button"><?php esc_html_e( 'Restore', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 	</form>
 </section>

@@ -43,26 +43,26 @@ $fuerte  = static fn( string $t ): string => '<strong>' . esc_html( $t ) . '</st
 		<tr><td align="center">
 			<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:560px;background:<?php echo esc_attr( $col['tarjeta'] ); ?>;border-radius:6px;overflow:hidden;">
 				<tr><td style="background:<?php echo esc_attr( $col['primary'] ); ?>;color:<?php echo esc_attr( $col['on_primary'] ); ?>;padding:20px 28px;font-size:18px;font-weight:600;">
-					<?php echo esc_html( $grupo ); ?> · <?php asde_e( 'Eventos' ); ?>
+					<?php echo esc_html( $grupo ); ?> · <?php esc_html_e( 'Events', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>
 				</td></tr>
 				<tr><td style="padding:28px;font-size:15px;line-height:1.6;">
-					<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( $saludo ? sprintf( asde_h( 'Hola, %s:' ), esc_html( $saludo ) ) : asde_h( 'Hola:' ), asde_html_permitido() ); ?></p>
+					<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( $saludo ? sprintf( /* translators: %s: text */ __( 'Hello, %s:', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), esc_html( $saludo ) ) : __( 'Hello:', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), asde_html_permitido() ); ?></p>
 
 					<?php if ( 'publicado' === $tipo ) : ?>
-						<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( sprintf( asde_h( 'El grupo ha publicado un evento nuevo: %s.' ), $fuerte( $evento ) ), asde_html_permitido() ); ?></p>
+						<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( sprintf( /* translators: %s: text */ __( 'The group has published a new event: %s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $fuerte( $evento ) ), asde_html_permitido() ); ?></p>
 					<?php elseif ( 'confirmada' === $tipo ) : ?>
-						<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( sprintf( asde_h( 'La inscripción de %1$s en %2$s está confirmada.' ), $fuerte( $quien ), $fuerte( $evento ) ), asde_html_permitido() ); ?></p>
+						<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( sprintf( /* translators: 1: text, 2: text */ __( 'The sign-up of %1$s for %2$s is confirmed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $fuerte( $quien ), $fuerte( $evento ) ), asde_html_permitido() ); ?></p>
 					<?php elseif ( 'plaza' === $tipo ) : ?>
-						<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( sprintf( asde_h( 'Se ha liberado una plaza en %1$s para %2$s, que estaba en la lista de espera.' ), $fuerte( $evento ), $fuerte( $quien ) ), asde_html_permitido() ); ?></p>
-						<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( sprintf( asde_h( 'Confírmala en «Mis eventos» antes del %s. Si no, pasará a la siguiente persona de la lista.' ), $fuerte( $hasta ) ), asde_html_permitido() ); ?></p>
+						<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( sprintf( /* translators: 1: text, 2: text */ __( 'A place has been freed up in %1$s for %2$s, who was on the waiting list.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $fuerte( $evento ), $fuerte( $quien ) ), asde_html_permitido() ); ?></p>
+						<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( sprintf( /* translators: %s: text */ __( 'Confirm it in "My events" before %s. Otherwise it will go to the next person on the list.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $fuerte( $hasta ) ), asde_html_permitido() ); ?></p>
 					<?php elseif ( 'recordatorio' === $tipo ) : ?>
-						<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( sprintf( asde_h( 'Te recordamos que %1$s va a %2$s.' ), $fuerte( $quien ), $fuerte( $evento ) ), asde_html_permitido() ); ?></p>
+						<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( sprintf( /* translators: 1: text, 2: text */ __( 'We remind you that %1$s is going to %2$s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $fuerte( $quien ), $fuerte( $evento ) ), asde_html_permitido() ); ?></p>
 					<?php else : ?>
-						<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( sprintf( asde_h( 'El evento %s se ha cancelado.' ), $fuerte( $evento ) ), asde_html_permitido() ); ?></p>
+						<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( sprintf( /* translators: %s: text */ __( 'The event %s has been cancelled.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $fuerte( $evento ) ), asde_html_permitido() ); ?></p>
 						<?php if ( '' !== $motivo ) : ?>
-							<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( sprintf( asde_h( 'Motivo: %s' ), esc_html( $motivo ) ), asde_html_permitido() ); ?></p>
+							<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( sprintf( /* translators: %s: text */ __( 'Reason: %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), esc_html( $motivo ) ), asde_html_permitido() ); ?></p>
 						<?php endif; ?>
-						<p style="<?php echo esc_attr( $atenuar ); ?>"><?php asde_e( 'Si ya habías pagado, Tesorería se pondrá en contacto contigo para la devolución.' ); ?></p>
+						<p style="<?php echo esc_attr( $atenuar ); ?>"><?php esc_html_e( 'If you had already paid, Treasury will contact you about the refund.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 					<?php endif; ?>
 
 					<?php if ( '' !== $intro ) : ?>
@@ -73,29 +73,29 @@ $fuerte  = static fn( string $t ): string => '<strong>' . esc_html( $t ) . '</st
 						<p style="<?php echo esc_attr( $p ); ?>">
 							<?php echo esc_html( $numero . ' · ' . $cuando ); ?>
 							<?php if ( '' !== $lugar ) : ?>
-								<br><?php echo wp_kses( sprintf( asde_h( 'Lugar: %s' ), esc_html( $lugar ) ), asde_html_permitido() ); ?>
+								<br><?php echo wp_kses( sprintf( /* translators: %s: text */ __( 'Place: %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), esc_html( $lugar ) ), asde_html_permitido() ); ?>
 							<?php endif; ?>
 							<?php if ( in_array( $tipo, array( 'confirmada', 'recordatorio' ), true ) && '' !== $salida ) : ?>
-								<br><?php echo wp_kses( sprintf( asde_h( 'Salida: %s' ), esc_html( $salida ) ), asde_html_permitido() ); ?>
+								<br><?php echo wp_kses( sprintf( /* translators: %s: text */ __( 'Departure: %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), esc_html( $salida ) ), asde_html_permitido() ); ?>
 							<?php endif; ?>
 							<?php if ( in_array( $tipo, array( 'confirmada', 'recordatorio' ), true ) && '' !== $llegada ) : ?>
-								<br><?php echo wp_kses( sprintf( asde_h( 'Llegada: %s' ), esc_html( $llegada ) ), asde_html_permitido() ); ?>
+								<br><?php echo wp_kses( sprintf( /* translators: %s: text */ __( 'Arrival: %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), esc_html( $llegada ) ), asde_html_permitido() ); ?>
 							<?php endif; ?>
 						</p>
 					<?php endif; ?>
 
 					<?php if ( 'publicado' === $tipo && '' !== $cierre ) : ?>
-						<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( sprintf( asde_h( 'La inscripción se hace en «Mis eventos», hasta el %s.' ), $fuerte( $cierre ) ), asde_html_permitido() ); ?></p>
+						<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( sprintf( /* translators: %s: text */ __( 'Sign-up is done in "My events", until %s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $fuerte( $cierre ) ), asde_html_permitido() ); ?></p>
 					<?php endif; ?>
 
 					<?php if ( 'recordatorio' === $tipo && $falta ) : ?>
-						<p style="<?php echo esc_attr( $p ); ?>"><?php asde_e( 'Todavía falta:' ); ?></p>
+						<p style="<?php echo esc_attr( $p ); ?>"><?php esc_html_e( 'Still missing:', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 						<ul style="margin:0 0 16px;padding-left:20px;">
 							<?php if ( in_array( 'autorizacion', $falta, true ) ) : ?>
-								<li><?php asde_e( 'firmar la autorización de participación (en «Mis eventos») o entregarla en papel;' ); ?></li>
+								<li><?php esc_html_e( 'sign the participation authorisation (in "My events") or hand it in on paper;', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></li>
 							<?php endif; ?>
 							<?php if ( in_array( 'pago', $falta, true ) && '' !== $importe ) : ?>
-								<li><?php echo wp_kses( sprintf( asde_h( 'pagar %1$s (referencia %2$s).' ), $fuerte( $importe ), esc_html( $referencia ) ), asde_html_permitido() ); ?></li>
+								<li><?php echo wp_kses( sprintf( /* translators: 1: text, 2: text */ __( 'pay %1$s (reference %2$s).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $fuerte( $importe ), esc_html( $referencia ) ), asde_html_permitido() ); ?></li>
 							<?php endif; ?>
 						</ul>
 					<?php endif; ?>
@@ -106,14 +106,14 @@ $fuerte  = static fn( string $t ): string => '<strong>' . esc_html( $t ) . '</st
 
 					<?php if ( $url && 'cancelado' !== $tipo ) : ?>
 						<p style="margin:0 0 24px;text-align:center;">
-							<a href="<?php echo esc_url( $url ); ?>" style="display:inline-block;background:<?php echo esc_attr( $col['primary'] ); ?>;color:<?php echo esc_attr( $col['on_primary'] ); ?>;text-decoration:none;padding:12px 28px;border-radius:4px;font-weight:600;"><?php asde_e( 'Ir a Mis eventos' ); ?></a>
+							<a href="<?php echo esc_url( $url ); ?>" style="display:inline-block;background:<?php echo esc_attr( $col['primary'] ); ?>;color:<?php echo esc_attr( $col['on_primary'] ); ?>;text-decoration:none;padding:12px 28px;border-radius:4px;font-weight:600;"><?php esc_html_e( 'Go to My events', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a>
 						</p>
 					<?php endif; ?>
 					<p style="margin:0;font-size:13px;color:<?php echo esc_attr( $col['atenuado'] ); ?>;">
 						<?php if ( '' !== $contacto ) : ?>
-							<?php echo wp_kses( sprintf( asde_h( '¿Dudas? Escribe a %s.' ), '<a href="mailto:' . esc_attr( $contacto ) . '" style="color:' . esc_attr( $col['primary'] ) . ';">' . esc_html( $contacto ) . '</a>' ), asde_html_permitido() ); ?>
+							<?php echo wp_kses( sprintf( /* translators: %s: text */ __( 'Questions? Write to %s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), '<a href="mailto:' . esc_attr( $contacto ) . '" style="color:' . esc_attr( $col['primary'] ) . ';">' . esc_html( $contacto ) . '</a>' ), asde_html_permitido() ); ?>
 						<?php else : ?>
-							<?php asde_e( '¿Dudas? Habla con el equipo de la sección.' ); ?>
+							<?php esc_html_e( 'Questions? Talk to the section team.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>
 						<?php endif; ?>
 					</p>
 				</td></tr>

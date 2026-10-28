@@ -59,7 +59,7 @@ final class HojaCocina {
 			}
 			foreach ( $info['dieta'] as $dieta => $d ) {
 				foreach ( $d['nombres'] as $n ) {
-					$por[ $n ]['dieta'][] = 'vegana' === $dieta ? asde_t( 'dieta vegana' ) : asde_t( 'dieta vegetariana' );
+					$por[ $n ]['dieta'][] = 'vegana' === $dieta ? __( 'vegan diet', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : __( 'vegetarian diet', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				}
 			}
 			ksort( $por );
@@ -133,16 +133,16 @@ final class HojaCocina {
 	 */
 	public static function enviar( array $e, Ambito $a ) {
 		if ( ! self::puede_generar( $e, $a ) ) {
-			return new \WP_Error( 'asde_menus', asde_t( 'No puedes generar la hoja de cocina de este evento.' ) );
+			return new \WP_Error( 'asde_menus', __( 'You cannot generate the kitchen sheet for this event.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$hoja = self::componer( $e );
 		if ( 'ok' !== $hoja['estado'] ) {
-			return new \WP_Error( 'asde_menus', asde_t( 'No se ha podido preparar la hoja: falta el menú, los asistentes o la conexión con el CRM.' ) );
+			return new \WP_Error( 'asde_menus', __( 'The sheet could not be prepared: the menu, the attendees or the connection to the CRM is missing.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$dest = self::destinatarios( $e );
 		$apoyo = count( array_filter( InscripcionesTable::equipo( $e['id'] ), static fn( $f ) => 'apoyo' === $f['papel'] ) );
 		if ( ! $dest ) {
-			return new \WP_Error( 'asde_menus', asde_t( 'Nadie del equipo de apoyo tiene cuenta: imprime la hoja y entrégala.' ) );
+			return new \WP_Error( 'asde_menus', __( 'Nobody in the support team has an account: print the sheet and hand it over.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$repo = PersonaRepository::make();
 		$ok   = 0;
@@ -156,7 +156,7 @@ final class HojaCocina {
 				Idioma::de_usuario( $user->ID ),
 				static function () use ( $e, $hoja, $user, $repo, &$asunto, &$html ): void {
 					/* translators: 1: evento */
-					$asunto = sprintf( asde_t( 'Hoja de cocina: %s' ), $e['nombre'] );
+					$asunto = sprintf( /* translators: %s: text */ __( 'Kitchen sheet: %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $e['nombre'] );
 					$html   = TemplateLoader::render(
 						'email/menu-cocina',
 						array(
@@ -170,7 +170,7 @@ final class HojaCocina {
 				}
 			);
 			if ( ! $email ) {
-				RegistroEmails::registrar( $user, RegistroEmails::EVENTOS, '', $asunto, RegistroEmails::SIN_EMAIL, asde_t( 'La cuenta no tiene un email al que escribir.' ), $datos );
+				RegistroEmails::registrar( $user, RegistroEmails::EVENTOS, '', $asunto, RegistroEmails::SIN_EMAIL, __( 'The account has no email address to write to.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $datos );
 				++$mal;
 				continue;
 			}

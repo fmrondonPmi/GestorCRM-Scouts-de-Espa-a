@@ -24,65 +24,65 @@ use AsdeBalears\AreaPrivada\Usuarios\AltaService;
 defined( 'ABSPATH' ) || exit;
 ?>
 <section class="asde-card asde-card--narrow">
-	<h2><?php asde_e( 'Alta de scouters' ); ?></h2>
+	<h2><?php esc_html_e( 'Scouter registration', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h2>
 
 	<?php if ( ! $grupo ) : ?>
-		<div class="asde-notice asde-notice--warning" role="status"><?php asde_e( 'Este enlace no es válido o ya no está en uso. Pide el enlace actual al equipo de coordinación de tu grupo.' ); ?></div>
-		<p><a href="<?php echo esc_url( $url_login ); ?>"><?php asde_e( 'Ir a Acceso socios' ); ?></a></p>
+		<div class="asde-notice asde-notice--warning" role="status"><?php esc_html_e( 'This link is not valid or is no longer in use. Ask your group\'s coordination team for the current link.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></div>
+		<p><a href="<?php echo esc_url( $url_login ); ?>"><?php esc_html_e( 'Go to Member access', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a></p>
 	<?php elseif ( $enviado ) : ?>
 		<div class="asde-notice asde-notice--success" role="status">
-			<strong><?php asde_e( 'Gracias.' ); ?></strong>
-			<?php asde_e( 'Si el DNI o NIE es el de un scouter o voluntario/a del grupo, te llegará un email para activar tu cuenta al email de tu ficha del grupo. Si tu ficha no tiene email, o si has pedido una responsabilidad, el equipo de coordinación revisará tu alta y te escribirá.' ); ?>
+			<strong><?php esc_html_e( 'Thank you.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></strong>
+			<?php esc_html_e( 'If the ID number belongs to a scouter or volunteer of the group, an email to activate your account will be sent to the email address on your group record. If your record has no email, or if you have asked for a responsibility, the coordination team will review your registration and write to you.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>
 		</div>
-		<p><?php asde_e( 'Si ya tienes cuenta, entra con tu nº de socio/a o con tu email; si no recuerdas la contraseña,' ); ?> <a href="<?php echo esc_url( $url_recuperar ); ?>"><?php asde_e( 'pide una nueva' ); ?></a>.</p>
-		<p><a href="<?php echo esc_url( $url_login ); ?>"><?php asde_e( 'Ir a Acceso socios' ); ?></a></p>
+		<p><?php esc_html_e( 'If you already have an account, sign in with your member number or your email; if you don\'t remember the password,', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <a href="<?php echo esc_url( $url_recuperar ); ?>"><?php esc_html_e( 'request a new one', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a>.</p>
+		<p><a href="<?php echo esc_url( $url_login ); ?>"><?php esc_html_e( 'Go to Member access', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a></p>
 	<?php else : ?>
 		<?php if ( $limite ) : ?>
-			<div class="asde-notice asde-notice--error" role="alert"><?php asde_e( 'Has hecho varios intentos seguidos. Espera una hora antes de volver a intentarlo.' ); ?></div>
+			<div class="asde-notice asde-notice--error" role="alert"><?php esc_html_e( 'You have made several attempts in a row. Wait an hour before trying again.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></div>
 		<?php elseif ( $sin_crm ) : ?>
-			<div class="asde-notice asde-notice--error" role="alert"><?php asde_e( 'Ahora no podemos comprobar tus datos. Inténtalo más tarde.' ); ?></div>
+			<div class="asde-notice asde-notice--error" role="alert"><?php esc_html_e( 'We cannot check your details right now. Try again later.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></div>
 		<?php endif; ?>
 		<?php if ( $errores ) : ?>
 			<div class="asde-notice asde-notice--error" role="alert"><?php echo esc_html( implode( ' ', $errores ) ); ?></div>
 		<?php endif; ?>
 
-		<p><?php echo esc_html( sprintf( asde_t( 'Si eres scouter o voluntario/a del %s, date de alta en el área privada. Comprobaremos tu DNI con tu ficha del grupo.' ), Grupos::etiqueta( $grupo ) ) ); ?></p>
+		<p><?php echo esc_html( sprintf( /* translators: %s: text */ __( 'If you are a scouter or volunteer of %s, register in the private area. We will check your ID number against your group record.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Grupos::etiqueta( $grupo ) ) ); ?></p>
 		<form method="post" class="asde-form" novalidate>
 			<?php wp_nonce_field( 'asde_alta_scouter' ); ?>
 			<input type="hidden" name="asde_action" value="alta_scouter">
 			<input type="hidden" name="grupo" value="<?php echo esc_attr( (string) $grupo['id'] ); ?>">
 			<input type="hidden" name="clave" value="<?php echo esc_attr( $clave ); ?>">
 			<input type="hidden" name="sello" value="<?php echo esc_attr( $sello ); ?>">
-			<p class="asde-trampa" aria-hidden="true"><label for="asde-alta-web"><?php asde_e( 'No escribas nada aquí' ); ?></label><input type="text" id="asde-alta-web" name="web" value="" tabindex="-1" autocomplete="off"></p>
+			<p class="asde-trampa" aria-hidden="true"><label for="asde-alta-web"><?php esc_html_e( 'Do not write anything here', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label><input type="text" id="asde-alta-web" name="web" value="" tabindex="-1" autocomplete="off"></p>
 			<p>
-				<label for="asde-alta-doc"><?php asde_e( 'Tu DNI o NIE' ); ?></label>
+				<label for="asde-alta-doc"><?php esc_html_e( 'Your ID or foreigner ID number', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 				<input type="text" id="asde-alta-doc" name="documento" value="<?php echo esc_attr( $valores['documento'] ); ?>" maxlength="20" autocomplete="off" autocapitalize="characters" spellcheck="false" required>
 			</p>
 			<fieldset>
-				<legend><?php asde_e( '¿Cómo colaboras en el grupo?' ); ?></legend>
-				<label class="asde-choice"><input type="radio" name="modo" value="<?php echo esc_attr( A::MODO_SCOUTER ); ?>" <?php checked( $valores['modo'], A::MODO_SCOUTER ); ?>><span><?php asde_e( 'Soy scouter de una o varias secciones' ); ?></span></label>
+				<legend><?php esc_html_e( 'How do you help in the group?', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></legend>
+				<label class="asde-choice"><input type="radio" name="modo" value="<?php echo esc_attr( A::MODO_SCOUTER ); ?>" <?php checked( $valores['modo'], A::MODO_SCOUTER ); ?>><span><?php esc_html_e( 'I am a scouter of one or more sections', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span></label>
 				<div class="asde-subopciones">
 					<?php foreach ( Secciones::EDUCATIVAS as $slug ) : ?>
 						<label class="asde-choice"><input type="checkbox" name="secciones[]" value="<?php echo esc_attr( $slug ); ?>" <?php checked( in_array( $slug, $valores['secciones'], true ) ); ?>><span><?php echo wp_kses( Secciones::badge( $slug ), asde_html_permitido() ); ?></span></label>
 					<?php endforeach; ?>
 				</div>
-				<label class="asde-choice"><input type="radio" name="modo" value="<?php echo esc_attr( A::MODO_SIN_SECCION ); ?>" <?php checked( $valores['modo'], A::MODO_SIN_SECCION ); ?>><span><?php asde_e( 'Soy voluntario/a sin sección (Secretaría, Coordinación, Tesorería o Intendencia)' ); ?></span></label>
+				<label class="asde-choice"><input type="radio" name="modo" value="<?php echo esc_attr( A::MODO_SIN_SECCION ); ?>" <?php checked( $valores['modo'], A::MODO_SIN_SECCION ); ?>><span><?php esc_html_e( 'I am a volunteer without a section (Secretary\'s office, Coordination, Treasury or Quartermaster)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span></label>
 			</fieldset>
 			<fieldset>
-				<legend><?php asde_e( 'Responsabilidades en el equipo del grupo (opcional)' ); ?></legend>
+				<legend><?php esc_html_e( 'Responsibilities in the group\'s team (optional)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></legend>
 				<?php foreach ( AltaService::ROLES_RESPONSABILIDAD as $rol ) : ?>
 					<label class="asde-choice"><input type="checkbox" name="responsabilidades[]" value="<?php echo esc_attr( $rol ); ?>" <?php checked( in_array( $rol, $valores['responsabilidades'], true ) ); ?>><span><?php echo esc_html( Roles::label( $rol ) ); ?></span></label>
 				<?php endforeach; ?>
-				<p class="asde-help"><?php asde_e( 'Las confirma el equipo de coordinación antes de que tengan efecto. Mientras, entras como scouter de tus secciones.' ); ?></p>
+				<p class="asde-help"><?php esc_html_e( 'They are confirmed by the coordination team before they take effect. Meanwhile, you sign in as a scouter of your sections.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 			</fieldset>
 			<p>
-				<label for="asde-alta-email"><?php asde_e( 'Tu email' ); ?></label>
+				<label for="asde-alta-email"><?php esc_html_e( 'Your email', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 				<input type="email" id="asde-alta-email" name="email" value="<?php echo esc_attr( $valores['email'] ); ?>" autocomplete="email" autocapitalize="none" spellcheck="false" required>
-				<span class="asde-help"><?php asde_e( 'La activación se envía al email de tu ficha del grupo. Este solo se usa si tu ficha no tiene email: entonces el equipo de coordinación revisará tu alta.' ); ?></span>
+				<span class="asde-help"><?php esc_html_e( 'The activation is sent to the email address on your group record. This one is only used if your record has no email: the coordination team will then review your registration.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span>
 			</p>
-			<p class="asde-help"><?php asde_e( 'Usamos estos datos solo para comprobar tu alta con tu ficha del grupo. Se guardan cifrados y se borran 30 días después de revisarla.' ); ?></p>
-			<p><button type="submit" class="button"><?php asde_e( 'Darme de alta' ); ?></button></p>
+			<p class="asde-help"><?php esc_html_e( 'We use these details only to check your registration against your group record. They are stored encrypted and deleted 30 days after being reviewed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
+			<p><button type="submit" class="button"><?php esc_html_e( 'Register me', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button></p>
 		</form>
-		<p class="asde-muted"><?php asde_e( '¿Ya tienes cuenta?' ); ?> <a href="<?php echo esc_url( $url_login ); ?>"><?php asde_e( 'Entra aquí' ); ?></a>.</p>
+		<p class="asde-muted"><?php esc_html_e( 'Already have an account?', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <a href="<?php echo esc_url( $url_login ); ?>"><?php esc_html_e( 'Sign in here', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a>.</p>
 	<?php endif; ?>
 </section>

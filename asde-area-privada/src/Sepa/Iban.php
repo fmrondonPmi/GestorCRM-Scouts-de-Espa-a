@@ -31,20 +31,20 @@ final class Iban {
 	public static function error( string $iban ): string {
 		$i = self::normalizar( $iban );
 		if ( '' === $i ) {
-			return asde_t( 'Escribe el IBAN.' );
+			return __( 'Enter the IBAN.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		if ( ! preg_match( '/^[A-Z]{2}\d{2}[A-Z0-9]+$/', $i ) ) {
-			return asde_t( 'El IBAN debe empezar por dos letras del país y dos cifras de control (por ejemplo ES91…).' );
+			return __( 'The IBAN must start with two country letters and two check digits (for example ES91…).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		$pais = substr( $i, 0, 2 );
 		if ( ! isset( self::LONGITUD[ $pais ] ) ) {
-			return asde_t( 'El IBAN no es de un país de la zona SEPA.' );
+			return __( 'The IBAN is not from a SEPA-zone country.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		if ( strlen( $i ) !== self::LONGITUD[ $pais ] ) {
-			return sprintf( asde_t( 'Un IBAN de %s tiene %d caracteres y este tiene %d.' ), $pais, self::LONGITUD[ $pais ], strlen( $i ) );
+			return sprintf( /* translators: 1: text, 2: number, 3: number */ __( 'An IBAN from %1$s has %2$d characters and this one has %3$d.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $pais, self::LONGITUD[ $pais ], strlen( $i ) );
 		}
 		if ( 1 !== self::resto97( substr( $i, 4 ) . substr( $i, 0, 4 ) ) ) {
-			return asde_t( 'Los dígitos de control del IBAN no cuadran: revisa que esté bien escrito.' );
+			return __( 'The IBAN check digits do not match: check that it is written correctly.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		return '';
 	}

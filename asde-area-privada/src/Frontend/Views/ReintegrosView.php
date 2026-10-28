@@ -40,7 +40,7 @@ final class ReintegrosView extends View {
 
 	public function handle_post(): void {
 		if ( ! current_user_can( Servicio::CAP_PEDIR ) && ! Servicio::ve_todos() ) {
-			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+			wp_die( esc_html__( 'You do not have permission to do this.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		$accion = $this->post( 'asde_action' );
 		$volver = $this->url( 'reintegros' );
@@ -59,14 +59,14 @@ final class ReintegrosView extends View {
 				),
 				$fichero
 			);
-			is_wp_error( $r ) ? Notices::add( 'error', esc_html( $r->get_error_message() ) ) : Notices::add( 'success', esc_html( asde_t( 'Reintegro pedido. Tesorería lo revisará y te avisaremos.' ) ) );
+			is_wp_error( $r ) ? Notices::add( 'error', esc_html( $r->get_error_message() ) ) : Notices::add( 'success', esc_html( __( 'Reimbursement requested. Treasury will review it and we will notify you.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) );
 			$this->redirect( $volver );
 		}
 
 		$r = ReintegrosTable::obtener( (int) $this->post( 'reintegro' ) );
 		check_admin_referer( 'asde_reintegro_' . ( $r['id'] ?? 0 ) );
 		if ( ! $r || ! Servicio::puede_ver( $r ) ) {
-			Notices::add( 'error', asde_t( 'No tienes acceso a ese reintegro.' ) );
+			Notices::add( 'error', __( 'You do not have access to that reimbursement.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			$this->redirect( $volver );
 		}
 		$res   = null;
@@ -77,29 +77,29 @@ final class ReintegrosView extends View {
 				break;
 			case 'reintegro_cancelar':
 				$res   = Servicio::cancelar( $r );
-				$hecho = asde_t( 'Reintegro cancelado.' );
+				$hecho = __( 'Reimbursement cancelled.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 			case 'reintegro_aprobar':
 				$res   = Servicio::aprobar( $r );
-				$hecho = asde_t( 'Reintegro aprobado. Queda pendiente de pagar.' );
+				$hecho = __( 'Reimbursement approved. It is pending payment.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 			case 'reintegro_rechazar':
 				$res   = Servicio::rechazar( $r, $this->post( 'motivo' ) );
-				$hecho = asde_t( 'Reintegro rechazado.' );
+				$hecho = __( 'Reimbursement rejected.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 			case 'reintegro_pagar':
 				$res = Servicio::pagar( $r, $this->post( 'fecha' ), $this->post( 'referencia' ) );
 				if ( is_array( $res ) ) {
-					$hecho = asde_t( 'Reintegro marcado como pagado.' );
+					$hecho = __( 'Reimbursement marked as paid.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 					if ( $res['gasto'] ) {
-						$hecho .= ' ' . asde_t( 'Se ha añadido como gasto a las cuentas del evento.' );
+						$hecho .= ' ' . __( 'It has been added as an expense to the event\'s accounts.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 					} elseif ( $res['evento'] ) {
-						$hecho .= ' ' . asde_t( 'No se ha podido añadir a las cuentas del evento (están cerradas): apúntalo a mano si hace falta.' );
+						$hecho .= ' ' . __( 'It could not be added to the event\'s accounts (they are closed): record it by hand if needed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 					}
 				}
 				break;
 			default:
-				$res = new \WP_Error( 'asde_reintegro', asde_t( 'Acción desconocida.' ) );
+				$res = new \WP_Error( 'asde_reintegro', __( 'Unknown action.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		is_wp_error( $res ) ? Notices::add( 'error', esc_html( $res->get_error_message() ) ) : Notices::add( 'success', esc_html( $hecho ) );
 		$this->redirect( $volver );
@@ -114,7 +114,7 @@ final class ReintegrosView extends View {
 	private function ver_justificante( array $r ): \WP_Error {
 		$contenido = '' !== $r['justificante'] ? Justificantes::leer( $r ) : null;
 		if ( null === $contenido || ! isset( Justificantes::TIPOS[ $r['justificante_tipo'] ] ) ) {
-			return new \WP_Error( 'asde_reintegro', asde_t( 'No se ha podido leer el justificante.' ) );
+			return new \WP_Error( 'asde_reintegro', __( 'The receipt could not be read.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		Logger::log( 'reintegro_justificante_visto', 'reintegro', (string) $r['id'] );
 		Justificantes::enviar( $contenido, $r['justificante_tipo'], 'justificante-reintegro-' . $r['id'] );

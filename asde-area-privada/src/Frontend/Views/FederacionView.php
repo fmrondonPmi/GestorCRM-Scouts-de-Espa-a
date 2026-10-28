@@ -35,7 +35,7 @@ final class FederacionView extends TesoreriaBaseView {
 				list( $filas ) = TesoreriaView::estados( $repo, $ronda );
 				$ingresos      = array_sum( array_map( static fn( $f ) => $f['calc']['a_pagar'], $filas ) );
 			} catch ( CrmException $e ) {
-				$error = asde_t( 'No se ha podido consultar el CRM: ' ) . $e->getMessage();
+				$error = __( 'The CRM could not be queried: ', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . $e->getMessage();
 			}
 		}
 
@@ -58,13 +58,13 @@ final class FederacionView extends TesoreriaBaseView {
 
 	public function handle_post(): void {
 		if ( ! current_user_can( self::CAP_CONFIG ) ) {
-			wp_die( esc_html__( 'No tienes permiso para cambiar la configuración de Tesorería.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+			wp_die( esc_html__( 'You do not have permission to change the Treasury settings.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		check_admin_referer( 'asde_federacion' );
 		$ronda = $this->ronda();
 		Config::guardar( $ronda, array( 'federacion' => (array) ( wp_unslash( $_POST )['federacion'] ?? array() ) ) ); // phpcs:ignore WordPress.Security.NonceVerification
 		Logger::log( 'tesoreria_federacion_guardada', 'ronda', $ronda );
-		Notices::add( 'success', sprintf( asde_t( 'Coste federativo de la ronda %s guardado.' ), esc_html( $ronda ) ) );
+		Notices::add( 'success', sprintf( /* translators: %s: text */ __( 'Federation cost of round %s saved.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), esc_html( $ronda ) ) );
 		$this->redirect( $this->url( 'federacion', array( 'ronda' => $ronda ) ) );
 	}
 }

@@ -15,19 +15,19 @@ defined( 'ABSPATH' ) || exit;
 <section class="asde-card" data-asde-plegable="email-detalle">
 	<header class="asde-card__header asde-card__header--split">
 		<h2 class="asde-card__title"><?php echo esc_html( ( asde_t( RegistroEmails::TIPOS[ $fila['tipo'] ] ?? $fila['tipo'] ) ) . ' · ' . $fila['login'] ); ?></h2>
-		<a href="<?php echo esc_url( $url ); ?>"><?php asde_e( '← Registro de emails' ); ?></a>
+		<a href="<?php echo esc_url( $url ); ?>"><?php esc_html_e( '← Email log', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a>
 	</header>
 	<dl class="asde-datos">
-		<div><dt><?php asde_e( 'Fecha' ); ?></dt><dd><?php echo esc_html( wp_date( 'd/m/Y H:i:s', strtotime( $fila['creado'] . ' UTC' ) ) ); ?></dd></div>
+		<div><dt><?php esc_html_e( 'Date', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></dt><dd><?php echo esc_html( wp_date( 'd/m/Y H:i:s', strtotime( $fila['creado'] . ' UTC' ) ) ); ?></dd></div>
 		<?php if ( (int) $fila['user_id'] ) : ?>
-			<div><dt><?php asde_e( 'Usuario' ); ?></dt><dd><a href="<?php echo esc_url( add_query_arg( 'usuario', (int) $fila['user_id'], $url ) ); ?>"><?php echo esc_html( $fila['login'] ); ?></a></dd></div>
+			<div><dt><?php esc_html_e( 'Username', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></dt><dd><a href="<?php echo esc_url( add_query_arg( 'usuario', (int) $fila['user_id'], $url ) ); ?>"><?php echo esc_html( $fila['login'] ); ?></a></dd></div>
 		<?php else : ?>
-			<div><dt><?php asde_e( 'Solicitud' ); ?></dt><dd><?php echo esc_html( $fila['login'] ); ?> <span class="asde-muted"><?php asde_e( '(a quien la pidió; aún no tiene cuenta)' ); ?></span></dd></div>
+			<div><dt><?php esc_html_e( 'Request', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></dt><dd><?php echo esc_html( $fila['login'] ); ?> <span class="asde-muted"><?php esc_html_e( '(to whoever requested it; they do not have an account yet)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span></dd></div>
 		<?php endif; ?>
-		<div><dt><?php asde_e( 'Enviado a' ); ?></dt><dd><?php echo '' !== $fila['destino'] ? esc_html( $fila['destino'] ) : '—'; ?></dd></div>
-		<div><dt><?php asde_e( 'Asunto' ); ?></dt><dd><?php echo esc_html( $fila['asunto'] ); ?></dd></div>
+		<div><dt><?php esc_html_e( 'Sent to', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></dt><dd><?php echo '' !== $fila['destino'] ? esc_html( $fila['destino'] ) : '—'; ?></dd></div>
+		<div><dt><?php esc_html_e( 'Subject', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></dt><dd><?php echo esc_html( $fila['asunto'] ); ?></dd></div>
 		<div>
-			<dt><?php asde_e( 'Estado' ); ?></dt>
+			<dt><?php esc_html_e( 'Status', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></dt>
 			<dd>
 				<span class="asde-badge asde-badge--email-<?php echo esc_attr( $fila['estado'] ); ?>"><?php echo esc_html( asde_t( RegistroEmails::ESTADOS[ $fila['estado'] ] ?? $fila['estado'] ) ); ?></span>
 				<?php if ( '' !== $fila['error'] ) : ?>
@@ -35,21 +35,21 @@ defined( 'ABSPATH' ) || exit;
 				<?php endif; ?>
 			</dd>
 		</div>
-		<div><dt><?php asde_e( 'Enviado por' ); ?></dt><dd><?php echo $autor ? esc_html( $autor->user_login ) : esc_html( asde_t( 'La propia persona (desde «¿Has olvidado tu contraseña?»)' ) ); ?></dd></div>
+		<div><dt><?php esc_html_e( 'Sent by', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></dt><dd><?php echo $autor ? esc_html( $autor->user_login ) : esc_html( __( 'The person themselves (from "Forgot your password?")', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?></dd></div>
 	</dl>
 	<?php if ( $mailpit && RegistroEmails::ENVIADO === $fila['estado'] ) : ?>
-		<div class="asde-notice asde-notice--info" role="status"><strong><?php asde_e( 'Entorno local:' ); ?></strong> <?php asde_e( 'el email real, con su enlace, está en Mailpit:' ); ?> <a href="<?php echo esc_url( $mailpit ); ?>" target="_blank" rel="noopener"><?php echo esc_html( $mailpit ); ?></a>.</div>
+		<div class="asde-notice asde-notice--info" role="status"><strong><?php esc_html_e( 'Local environment:', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></strong> <?php esc_html_e( 'the real email, with its link, is in Mailpit:', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <a href="<?php echo esc_url( $mailpit ); ?>" target="_blank" rel="noopener"><?php echo esc_html( $mailpit ); ?></a>.</div>
 	<?php endif; ?>
 </section>
 
 <section class="asde-card">
-	<h3><?php asde_e( 'Cómo era el email' ); ?></h3>
-	<p class="asde-muted"><?php asde_e( 'Vista reconstruida con la misma plantilla y los mismos datos. El nombre se lee ahora del CRM, y el' ); ?> <strong><?php asde_e( 'enlace personal no se guarda por seguridad' ); ?></strong><?php asde_e( ': aquí aparece sustituido.' ); ?></p>
+	<h3><?php esc_html_e( 'What the email was', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h3>
+	<p class="asde-muted"><?php esc_html_e( 'View rebuilt with the same template and the same data. The name is now read from the CRM, and the', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <strong><?php esc_html_e( 'personal link is not stored for security', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></strong><?php esc_html_e( ': it appears replaced here.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 	<?php if ( RegistroEmails::RECHAZO === $fila['tipo'] ) : ?>
-		<p class="asde-muted"><?php asde_e( 'Es un texto genérico: el motivo que se anotó al rechazar la solicitud es solo para el grupo y no se envía.' ); ?></p>
+		<p class="asde-muted"><?php esc_html_e( 'It is a generic text: the reason noted when rejecting the request is for the group only and is not sent.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 	<?php endif; ?>
 	<?php if ( RegistroEmails::SIN_EMAIL === $fila['estado'] ) : ?>
-		<p><strong><?php asde_e( 'Este email no llegó a enviarse' ); ?></strong> <?php asde_e( 'porque no había dirección de destino en el CRM.' ); ?></p>
+		<p><strong><?php esc_html_e( 'This email was never sent', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></strong> <?php esc_html_e( 'because there was no destination address in the CRM.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 	<?php endif; ?>
-	<iframe class="asde-email-preview" title="<?php echo esc_attr( asde_a( 'Vista del email' ) ); ?>" sandbox="" srcdoc="<?php echo esc_attr( $html ); ?>"></iframe>
+	<iframe class="asde-email-preview" title="<?php echo esc_attr( esc_attr__( 'Email view', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>" sandbox="" srcdoc="<?php echo esc_attr( $html ); ?>"></iframe>
 </section>

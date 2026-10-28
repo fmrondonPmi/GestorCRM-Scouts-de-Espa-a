@@ -100,19 +100,19 @@ final class Config {
 	public static function errores( array $cfg ): array {
 		$e = array();
 		if ( '' === trim( Texto::limpiar( $cfg['nombre'] ) ) ) {
-			$e[] = asde_t( 'Falta el nombre del acreedor (el del grupo o la asociación que cobra).' );
+			$e[] = __( 'The creditor\'s name is missing (the group or association that collects).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		if ( '' === $cfg['ics'] ) {
-			$e[] = asde_t( 'Falta el identificador del acreedor (ICS). Lo da el banco al contratar las domiciliaciones.' );
+			$e[] = __( 'The creditor identifier (ICS) is missing. The bank provides it when direct debits are contracted.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		} elseif ( ! self::ics_formato( $cfg['ics'] ) ) {
-			$e[] = asde_t( 'El identificador del acreedor no tiene el formato correcto (en España, ES + 2 cifras de control + 3 caracteres + NIF: 16 caracteres, p. ej. ES12ZZZG12345678).' );
+			$e[] = __( 'The creditor identifier is not in the right format (in Spain, ES + 2 check digits + 3 characters + tax ID: 16 characters, e.g. ES12ZZZG12345678).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		$err = Iban::error( $cfg['iban'] );
 		if ( '' !== $err ) {
-			$e[] = asde_t( 'IBAN del acreedor: ' ) . $err;
+			$e[] = __( 'Creditor IBAN: ', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . $err;
 		}
 		if ( '' !== $cfg['bic'] && ! preg_match( '/^[A-Z]{6}[A-Z0-9]{2}([A-Z0-9]{3})?$/', $cfg['bic'] ) ) {
-			$e[] = asde_t( 'El BIC no es válido (8 u 11 caracteres). Puedes dejarlo vacío.' );
+			$e[] = __( 'The BIC is not valid (8 or 11 characters). You can leave it empty.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		return $e;
 	}

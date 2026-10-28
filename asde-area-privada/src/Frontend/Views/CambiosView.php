@@ -37,7 +37,7 @@ final class CambiosView extends View {
 		}
 		$repo = PersonaRepository::make();
 		if ( ! $repo ) {
-			return $this->error_crm( 'cambios', asde_t( 'La conexión de tu grupo con el CRM no está configurada o no se ha podido comprobar. Un administrador puede revisarla en wp-admin → Grupos Scouts.' ) );
+			return $this->error_crm( 'cambios', __( 'Your group\'s connection to the CRM is not set up or could not be checked. An administrator can review it in wp-admin → Scout Groups.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$ver   = 'resueltos' === $this->get( 'ver' ) ? 'resueltos' : 'pendientes';
 		$socio = preg_match( '/^\d{1,20}$/', $this->get( 'socio' ) ) ? $this->get( 'socio' ) : '';
@@ -80,7 +80,7 @@ final class CambiosView extends View {
 				}
 			}
 		} catch ( CrmException $e ) {
-			return $this->error_crm( 'cambios', asde_t( 'No se ha podido consultar el CRM: ' ) . $e->getMessage() );
+			return $this->error_crm( 'cambios', __( 'The CRM could not be queried: ', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . $e->getMessage() );
 		}
 		uasort( $grupos, static fn( $a, $b ) => strcmp( $b['ultimo'], $a['ultimo'] ) );
 
@@ -104,7 +104,7 @@ final class CambiosView extends View {
 
 	public function handle_post(): void {
 		if ( ! current_user_can( self::CAP ) ) {
-			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+			wp_die( esc_html__( 'You do not have permission to do this.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		$socio = preg_match( '/^\d{1,20}$/', $this->post( 'socio' ) ) ? $this->post( 'socio' ) : '';
 		$lista = $this->url( 'cambios' );
@@ -117,7 +117,7 @@ final class CambiosView extends View {
 			$p = null;
 		}
 		if ( ! $p || ! $this->puede_revisar( Ambito::actual(), $p ) ) {
-			Notices::add( 'error', asde_t( 'No puedes revisar los cambios de esa persona.' ) );
+			Notices::add( 'error', __( 'You cannot review that person\'s changes.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			$this->redirect( $lista );
 		}
 
@@ -133,44 +133,44 @@ final class CambiosView extends View {
 			)
 		);
 		if ( ! $ids ) {
-			Notices::add( 'error', asde_t( 'Marca los cambios que quieres aprobar o rechazar.' ) );
+			Notices::add( 'error', __( 'Tick the changes you want to approve or reject.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			$this->redirect( $volver );
 		}
 
 		if ( 'rechazar_varios' === $this->post( 'asde_action' ) ) {
 			$motivo = trim( sanitize_text_field( $this->post( 'motivo' ) ) );
 			if ( '' === $motivo ) {
-				Notices::add( 'error', asde_t( 'Indica el motivo del rechazo: se le mostrará a quien lo propuso.' ) );
+				Notices::add( 'error', __( 'State the reason for the rejection: it will be shown to whoever proposed it.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 				$this->redirect( $volver );
 			}
 			$n = 0;
 			foreach ( $ids as $id ) {
 				$n += true === Cambios::rechazar( $id, $motivo ) ? 1 : 0;
 			}
-			Notices::add( 'success', esc_html( sprintf( asde_n( '%d cambio rechazado. Quien lo propuso verá el motivo en la ficha.', '%d cambios rechazados. Quien los propuso verá el motivo en la ficha.', $n ), $n ) ) );
+			Notices::add( 'success', esc_html( sprintf( /* translators: %d: number */ _n( '%d change rejected. Whoever proposed it will see the reason on the record.', '%d changes rejected. Whoever proposed them will see the reason on the record.', $n , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $n ) ) );
 			$this->redirect( $volver );
 		}
 
 		if ( ! Escritura::disponible() ) {
-			Notices::add( 'error', asde_t( 'El usuario del CRM del grupo no puede editar fichas ahora mismo: los cambios no se pueden aprobar hasta que lo tenga.' ) );
+			Notices::add( 'error', __( 'The group\'s CRM user cannot edit records right now: changes cannot be approved until it can.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			$this->redirect( $volver );
 		}
 		try {
 			$campos   = array_map( static fn( int $id ) => (string) Cambios::obtener( $id )['campo'], $ids );
 			$actuales = $repo->valores( $p, $campos );
 		} catch ( CrmException $e ) {
-			Notices::add( 'error', esc_html( asde_t( 'No se ha podido consultar el CRM: ' ) . $e->getMessage() ) );
+			Notices::add( 'error', esc_html( __( 'The CRM could not be queried: ', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . $e->getMessage() ) );
 			$this->redirect( $volver );
 		}
 		// Un cambio cuyo dato del CRM había cambiado ya se avisó al revisarlo ($visto): marcarlo es aplicarlo igualmente.
 		$r = Cambios::aprobar_varios( $ids, $p, $actuales, array_map( 'intval', $this->post_array( 'visto' ) ) );
 		if ( $r['aprobados'] ) {
 			$n = count( $r['aprobados'] );
-			Notices::add( 'success', esc_html( sprintf( asde_n( '%d cambio aprobado y guardado en el CRM.', '%d cambios aprobados y guardados en el CRM.', $n ), $n ) ) );
+			Notices::add( 'success', esc_html( sprintf( /* translators: %d: number */ _n( '%d change approved and saved in the CRM.', '%d changes approved and saved in the CRM.', $n , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $n ) ) );
 		}
 		if ( $r['conflictos'] ) {
 			$n = count( $r['conflictos'] );
-			Notices::add( 'warning', esc_html( sprintf( asde_n( '%d cambio no se ha aplicado: el dato del CRM ha cambiado desde que se propuso. Revísalo y márcalo otra vez si quieres aplicarlo igualmente.', '%d cambios no se han aplicado: el dato del CRM ha cambiado desde que se propusieron. Revísalos y márcalos otra vez si quieres aplicarlos igualmente.', $n ), $n ) ) );
+			Notices::add( 'warning', esc_html( sprintf( /* translators: %d: number */ _n( '%d change was not applied: the CRM value has changed since it was proposed. Review it and tick it again if you want to apply it anyway.', '%d changes were not applied: the CRM value has changed since they were proposed. Review them and tick them again if you want to apply them anyway.', $n , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $n ) ) );
 		}
 		foreach ( array_unique( $r['errores'] ) as $error ) {
 			Notices::add( 'error', esc_html( $error ) );

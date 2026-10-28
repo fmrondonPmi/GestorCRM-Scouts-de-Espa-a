@@ -87,7 +87,7 @@ final class RecetasView extends EventosBaseView {
 
 	private function receta( ?array $r, bool $nueva ): string {
 		if ( ! $nueva && ! $r ) {
-			return $this->denegado( asde_t( 'Esa receta no existe.' ) );
+			return $this->denegado( __( 'That recipe does not exist.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$propia    = $nueva || ( $r && Grupo::numero() === $r['grupo'] );
 		$lineas    = $r ? RecetasTable::lineas( $r['id'] ) : array();
@@ -164,7 +164,7 @@ final class RecetasView extends EventosBaseView {
 			return;
 		}
 		if ( ! current_user_can( Recetario::CAP ) ) {
-			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+			wp_die( esc_html__( 'You do not have permission to do this.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		check_admin_referer( 'asde_menus' );
 		$lista = $this->url( 'eventos_recetas' );
@@ -194,7 +194,7 @@ final class RecetasView extends EventosBaseView {
 					$this->redirect( $this->url( 'eventos_recetas', array( 'receta' => $id ? (string) $id : 'nueva' ) ) );
 				}
 				Logger::log( $id ? 'menu_receta_editada' : 'menu_receta_creada', 'menus', (string) $r );
-				Notices::add( 'success', asde_t( 'Receta guardada.' ) );
+				Notices::add( 'success', __( 'Recipe saved.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 				$this->redirect( $this->url( 'eventos_recetas', array( 'receta' => (string) $r ) ) );
 				break;
 
@@ -204,7 +204,7 @@ final class RecetasView extends EventosBaseView {
 					Notices::add( 'error', esc_html( $r->get_error_message() ) );
 					$this->redirect( $lista );
 				}
-				Notices::add( 'success', asde_t( 'Receta copiada a tu grupo. Ya puedes editarla.' ) );
+				Notices::add( 'success', __( 'Recipe copied to your group. You can now edit it.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 				$this->redirect( $this->url( 'eventos_recetas', array( 'receta' => (string) $r ) ) );
 				break;
 
@@ -213,7 +213,7 @@ final class RecetasView extends EventosBaseView {
 				$id = (int) $this->post( 'receta' );
 				RecetasTable::activar( $id, 'receta_restaurar' === $accion );
 				Logger::log( 'receta_archivar' === $accion ? 'menu_receta_archivada' : 'menu_receta_recuperada', 'menus', (string) $id );
-				Notices::add( 'success', 'receta_archivar' === $accion ? asde_t( 'Receta archivada.' ) : asde_t( 'Receta recuperada.' ) );
+				Notices::add( 'success', 'receta_archivar' === $accion ? __( 'Recipe archived.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : __( 'Recipe recovered.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 				$this->redirect( $lista );
 				break;
 
@@ -236,7 +236,7 @@ final class RecetasView extends EventosBaseView {
 					$this->redirect( $id ? $this->url( 'eventos_recetas', array( 'ingredientes' => '1', 'ingrediente' => (string) $id ) ) : $ing );
 				}
 				Logger::log( $id ? 'menu_ingrediente_editado' : 'menu_ingrediente_creado', 'menus', (string) $r );
-				Notices::add( 'success', asde_t( 'Ingrediente guardado.' ) );
+				Notices::add( 'success', __( 'Ingredient saved.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 				$this->redirect( $ing );
 				break;
 
@@ -245,7 +245,7 @@ final class RecetasView extends EventosBaseView {
 				$id = (int) $this->post( 'ingrediente' );
 				IngredientesTable::activar( $id, 'ingrediente_restaurar' === $accion );
 				Logger::log( 'ingrediente_archivar' === $accion ? 'menu_ingrediente_archivado' : 'menu_ingrediente_recuperado', 'menus', (string) $id );
-				Notices::add( 'success', 'ingrediente_archivar' === $accion ? asde_t( 'Ingrediente archivado.' ) : asde_t( 'Ingrediente recuperado.' ) );
+				Notices::add( 'success', 'ingrediente_archivar' === $accion ? __( 'Ingredient archived.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : __( 'Ingredient recovered.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 				$this->redirect( $ing );
 				break;
 
@@ -260,16 +260,16 @@ final class RecetasView extends EventosBaseView {
 		$f    = $_FILES['fichero'] ?? null; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.NonceVerification.Missing -- el nonce se comprueba en handle_post(); del fichero solo se usa su ruta temporal, comprobada con is_uploaded_file()
 		$err  = is_array( $f ) ? (int) ( $f['error'] ?? UPLOAD_ERR_NO_FILE ) : UPLOAD_ERR_NO_FILE;
 		if ( UPLOAD_ERR_NO_FILE === $err ) {
-			Notices::add( 'error', asde_t( 'Elige el fichero CSV que quieres importar.' ) );
+			Notices::add( 'error', __( 'Choose the CSV file you want to import.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			$this->redirect( $aqui );
 		}
 		if ( UPLOAD_ERR_OK !== $err || ! is_uploaded_file( (string) $f['tmp_name'] ) || (int) $f['size'] > Recetario::MAX_BYTES || ! preg_match( '/\.(csv|txt)$/i', (string) $f['name'] ) ) {
-			Notices::add( 'error', asde_t( 'El fichero no se ha podido subir. Tiene que ser un CSV de hasta 1 MB.' ) );
+			Notices::add( 'error', __( 'The file could not be uploaded. It must be a CSV of up to 1 MB.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			$this->redirect( $aqui );
 		}
 		$r = Recetario::importar( (string) $f['tmp_name'] );
 		if ( is_wp_error( $r ) ) {
-			Notices::add( 'error', esc_html( $r->get_error_message() . ' ' . asde_t( 'No se ha cargado nada.' ) ) );
+			Notices::add( 'error', esc_html( $r->get_error_message() . ' ' . __( 'Nothing has been loaded.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) );
 			$this->redirect( $aqui );
 		}
 		$clave = wp_generate_password( 12, false, false );

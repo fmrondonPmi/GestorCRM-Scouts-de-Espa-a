@@ -33,13 +33,13 @@ final class TiendaGestionView extends TiendaBaseView {
 		}
 		$a = Ambito::actual();
 		if ( '1' === $this->get( 'informe' ) ) {
-			return $this->layout( 'tienda_gestion', Servicio::puede_informes() ? $this->informe( $a ) : $this->denegado( asde_t( 'Los informes de ventas los ven Tesorería, Coordinación y la administración de la tienda.' ) ) );
+			return $this->layout( 'tienda_gestion', Servicio::puede_informes() ? $this->informe( $a ) : $this->denegado( __( 'Sales reports are seen by Treasury, Coordination and the shop administration.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) );
 		}
 		$id = (int) $this->get( 'pedido' );
 		if ( $id ) {
 			$p = PedidosTable::obtener( $id );
 			if ( ! $p || ! Servicio::en_gestion( $p, $a ) ) {
-				return $this->denegado( asde_t( 'No tienes acceso a ese pedido.' ) );
+				return $this->denegado( __( 'You do not have access to that order.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			}
 			return $this->layout( 'tienda_gestion', $this->detalle( $p, $a ) );
 		}
@@ -218,10 +218,10 @@ final class TiendaGestionView extends TiendaBaseView {
 	/** Excel de un informe de ventas (se llama antes de pintar la página). */
 	public function exportar_informe(): void {
 		if ( ! wp_verify_nonce( $this->get( '_wpnonce' ), 'asde_tienda_informe' ) ) {
-			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+			wp_die( esc_html__( 'Download link not valid or expired.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		if ( ! Servicio::puede_informes() ) {
-			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+			wp_die( esc_html__( 'Download link not valid or expired.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		$a       = Ambito::actual();
 		$pedidos = $this->del_periodo( $a );
@@ -230,27 +230,27 @@ final class TiendaGestionView extends TiendaBaseView {
 		$cfg  = Config::de();
 		$fecha = static fn( ?string $f ) => $f ? wp_date( 'd/m/Y', strtotime( $f . ( strlen( $f ) > 10 ? ' UTC' : '' ) ) ) : '';
 		/* translators: 1: periodo, 2: fecha */
-		$periodo   = ( '' === $desde && '' === $hasta ) ? asde_t( 'Todos los pedidos' ) : trim( ( '' !== $desde ? sprintf( asde_t( 'desde el %s' ), $fecha( $desde ) ) : '' ) . ' ' . ( '' !== $hasta ? sprintf( asde_t( 'hasta el %s' ), $fecha( $hasta ) ) : '' ) );
-		$subtitulo = sprintf( asde_t( '%1$s · generado el %2$s' ), $periodo, wp_date( 'd/m/Y' ) );
+		$periodo   = ( '' === $desde && '' === $hasta ) ? __( 'All orders', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : trim( ( '' !== $desde ? sprintf( /* translators: %s: text */ __( 'from %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $fecha( $desde ) ) : '' ) . ' ' . ( '' !== $hasta ? sprintf( /* translators: %s: text */ __( 'until %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $fecha( $hasta ) ) : '' ) );
+		$subtitulo = sprintf( /* translators: 1: text, 2: text */ __( '%1$s · generated on %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $periodo, wp_date( 'd/m/Y' ) );
 		$grupo     = \AsdeBalears\AreaPrivada\Domain\Grupo::nombre();
 
 		if ( 'formas' === $hoja ) {
-			$titulo = asde_t( 'Ventas por forma de pago' );
+			$titulo = __( 'Sales by payment method', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 			$filas  = array();
 			$suma   = array( 0, 0.0, 0.0, 0.0 );
 			foreach ( Informes::por_forma( $pedidos ) as $forma => $d ) {
-				$filas[] = array( '' !== $forma ? asde_t( PedidosTable::FORMAS[ $forma ] ) : asde_t( 'Sin indicar' ), $d['pedidos'], round( $d['total'], 2 ), round( $d['cobrado'], 2 ), round( $d['pendiente'], 2 ) );
+				$filas[] = array( '' !== $forma ? asde_t( PedidosTable::FORMAS[ $forma ] ) : __( 'Not stated', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $d['pedidos'], round( $d['total'], 2 ), round( $d['cobrado'], 2 ), round( $d['pendiente'], 2 ) );
 				$suma[0] += $d['pedidos'];
 				$suma[1] += $d['total'];
 				$suma[2] += $d['cobrado'];
 				$suma[3] += $d['pendiente'];
 			}
-			$cabecera = array( asde_t( 'Forma de pago' ), asde_t( 'Pedidos' ), asde_t( 'Importe' ), asde_t( 'Cobrado' ), asde_t( 'Por cobrar' ) );
+			$cabecera = array( __( 'Payment method', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Orders', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Amount', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Collected', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'To collect', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			$tipos    = array( 'texto', 'entero', 'euros', 'euros', 'euros' );
-			$totales  = array( asde_t( 'Total' ), $suma[0], round( $suma[1], 2 ), round( $suma[2], 2 ), round( $suma[3], 2 ) );
+			$totales  = array( __( 'Total', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $suma[0], round( $suma[1], 2 ), round( $suma[2], 2 ), round( $suma[3], 2 ) );
 			$archivo  = 'ventas-por-forma-de-pago';
 		} elseif ( 'pendientes' === $hoja ) {
-			$titulo   = asde_t( 'Pendientes de cobro' );
+			$titulo   = __( 'Pending collection', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 			$personas = $this->personas( Informes::pendientes( $pedidos ) );
 			$filas    = array();
 			$suma     = 0.0;
@@ -259,12 +259,12 @@ final class TiendaGestionView extends TiendaBaseView {
 				$suma   += $importe;
 				$filas[] = array( PedidosTable::numero( $p ), Servicio::comprador( $p, $personas[ $p['socio'] ] ?? null ), $fecha( $p['creado'] ), asde_t( PedidosTable::FORMAS[ $p['forma_pago'] ] ?? 'Sin indicar' ), (int) $p['dias'], round( $importe, 2 ) );
 			}
-			$cabecera = array( asde_t( 'Pedido' ), asde_t( 'Quién' ), asde_t( 'Fecha' ), asde_t( 'Forma de pago' ), asde_t( 'Días esperando' ), asde_t( 'Importe' ) );
+			$cabecera = array( __( 'Order', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Who', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Date', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Payment method', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Days waiting', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Amount', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			$tipos    = array( 'texto', 'texto', 'texto', 'texto', 'entero', 'euros' );
-			$totales  = array( asde_t( 'Total' ), '', '', '', '', round( $suma, 2 ) );
+			$totales  = array( __( 'Total', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), '', '', '', '', round( $suma, 2 ) );
 			$archivo  = 'pendientes-de-cobro';
 		} else {
-			$titulo  = asde_t( 'Ventas por producto' );
+			$titulo  = __( 'Sales by product', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 			$filas   = array();
 			$suma    = array( 0, 0.0, 0.0 );
 			foreach ( Informes::por_producto( $pedidos, $cfg ) as $d ) {
@@ -273,9 +273,9 @@ final class TiendaGestionView extends TiendaBaseView {
 				$suma[1] += $d['importe'];
 				$suma[2] += $d['pagado'];
 			}
-			$cabecera = array( asde_t( 'Producto' ), asde_t( 'Variante' ), asde_t( 'Unidades' ), asde_t( 'Importe' ), asde_t( 'De ellos, pagado' ) );
+			$cabecera = array( __( 'Product', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Variant', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Units', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Amount', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Of which, paid', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			$tipos    = array( 'texto', 'texto', 'entero', 'euros', 'euros' );
-			$totales  = array( asde_t( 'Total' ), '', $suma[0], round( $suma[1], 2 ), round( $suma[2], 2 ) );
+			$totales  = array( __( 'Total', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), '', $suma[0], round( $suma[1], 2 ), round( $suma[2], 2 ) );
 			$archivo  = 'ventas-por-producto';
 		}
 		Logger::log( 'tienda_informe_exportado', 'grupo', \AsdeBalears\AreaPrivada\Domain\Grupo::numero(), array( 'hoja' => $archivo ) );
@@ -297,10 +297,10 @@ final class TiendaGestionView extends TiendaBaseView {
 	/** Descarga CSV de la lista (se llama antes de pintar la página). */
 	public function exportar(): void {
 		if ( ! wp_verify_nonce( $this->get( '_wpnonce' ), 'asde_uniformes_csv' ) ) {
-			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+			wp_die( esc_html__( 'Download link not valid or expired.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		if ( ! current_user_can( Servicio::CAP_GESTION ) ) {
-			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+			wp_die( esc_html__( 'Download link not valid or expired.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		$todos    = Servicio::de_gestion( Ambito::actual() );
 		$personas = $this->personas( $todos );
@@ -312,7 +312,7 @@ final class TiendaGestionView extends TiendaBaseView {
 		header( 'Content-Disposition: attachment; filename="pedidos-uniforme-' . wp_date( 'Ymd' ) . '.csv"' );
 		$out = fopen( 'php://output', 'w' );
 		fwrite( $out, "\xEF\xBB\xBF" ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fwrite -- php://output (descarga), no es el sistema de ficheros
-		fputcsv( $out, array( asde_t( 'Nº pedido' ), asde_t( 'Socio/a' ), asde_t( 'Sección' ), asde_t( 'Modelo' ), asde_t( 'Talla' ), asde_t( 'Insignias' ), asde_t( 'Importe' ), asde_t( 'Pagado' ), asde_t( 'Método' ), asde_t( 'Pedido del grupo' ), asde_t( 'Entregado' ), asde_t( 'Recibido' ), asde_t( 'Estado' ) ), ';' );
+		fputcsv( $out, array( __( 'Order no.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Member', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Section', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Model', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Size', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Badges', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Amount', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Paid', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Method', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Group order', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Delivered', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Received', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Status', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ), ';' );
 		$num   = static fn( ?float $v ) => null === $v ? '' : number_format( $v, 2, ',', '' );
 		$fecha = static fn( ?string $f ) => $f ? wp_date( 'd/m/Y', strtotime( $f . ( strlen( $f ) > 10 ? ' UTC' : '' ) ) ) : '';
 		foreach ( $lista as $p ) {
@@ -326,7 +326,7 @@ final class TiendaGestionView extends TiendaBaseView {
 				$c ? $c['nombre'] : '',
 				$c ? $c['talla'] : '',
 				$insignias,
-				$num( $p['total'] ) . ( $p['provisional'] ? asde_t( ' + insignias por confirmar' ) : '' ),
+				$num( $p['total'] ) . ( $p['provisional'] ? __( ' + badges to be confirmed', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : '' ),
 				null !== $p['pago_en'] ? $fecha( $p['pago_fecha'] ) . ' · ' . $num( $p['pago_importe'] ) : '',
 				asde_t( PedidosTable::METODOS[ $p['pago_metodo'] ] ?? '' ),
 				null !== $p['pedido_en'] ? $p['pedido_ref'] : '',
@@ -342,7 +342,7 @@ final class TiendaGestionView extends TiendaBaseView {
 
 	public function handle_post(): void {
 		if ( ! current_user_can( Servicio::CAP_GESTION ) ) {
-			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+			wp_die( esc_html__( 'You do not have permission to do this.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		$a      = Ambito::actual();
 		$accion = $this->post( 'asde_action' );
@@ -352,7 +352,7 @@ final class TiendaGestionView extends TiendaBaseView {
 		if ( 'uniforme_incluir_lote' === $accion ) {
 			check_admin_referer( 'asde_uniformes_lote' );
 			if ( ! current_user_can( Servicio::CAP_PEDIDO ) ) {
-				Notices::add( 'error', asde_t( 'Incluir en el pedido del grupo lo hace Coordinación.' ) );
+				Notices::add( 'error', __( 'Including in the group\'s order is done by Coordination.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 				$this->redirect( $lista );
 			}
 			$ids = array_filter(
@@ -363,9 +363,9 @@ final class TiendaGestionView extends TiendaBaseView {
 			$n   = $ids ? PedidosTable::marcar_pedido( $ids, $ref ) : 0;
 			if ( $n ) {
 				Logger::log( 'uniformes_incluidos', 'grupo', \AsdeBalears\AreaPrivada\Domain\Grupo::numero(), array( 'pedidos' => $n, 'ref' => $ref ) );
-				Notices::add( 'success', esc_html( sprintf( asde_n( '%1$d pedido incluido en «%2$s».', '%1$d pedidos incluidos en «%2$s».', $n ), $n, $ref ) ) );
+				Notices::add( 'success', esc_html( sprintf( /* translators: 1: number, 2: text */ _n( '%1$d order included in "%2$s".', '%1$d orders included in "%2$s".', $n , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $n, $ref ) ) );
 			} else {
-				Notices::add( 'error', asde_t( 'Marca los pedidos que quieres incluir (los que aún no están en un pedido).' ) );
+				Notices::add( 'error', __( 'Tick the orders you want to include (those not yet in an order).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			}
 			$this->redirect( $lista );
 		}
@@ -378,7 +378,7 @@ final class TiendaGestionView extends TiendaBaseView {
 			if ( is_wp_error( $r ) ) {
 				Notices::add( 'error', esc_html( $r->get_error_message() ) );
 			} else {
-				Notices::add( 'success', esc_html( asde_t( 'Abono del datáfono conciliado con el ingreso del banco.' ) ) );
+				Notices::add( 'success', esc_html( __( 'Card terminal payout reconciled with the bank deposit.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) );
 			}
 			$this->redirect( $lista );
 		}
@@ -390,14 +390,14 @@ final class TiendaGestionView extends TiendaBaseView {
 			check_admin_referer( 'asde_tienda_banco_' . $pid . '_' . $mid );
 			$pedido = PedidosTable::obtener( $pid );
 			if ( ! $pedido || ! Servicio::en_gestion( $pedido, $a ) || ! Servicio::puede_pagar( $pedido ) ) {
-				Notices::add( 'error', asde_t( 'No tienes permiso para hacer esto con este pedido.' ) );
+				Notices::add( 'error', __( 'You do not have permission to do this with this order.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			} else {
 				$r = ConciliacionBanco::confirmar( $pid, $mid );
 				if ( is_wp_error( $r ) ) {
 					Notices::add( 'error', esc_html( $r->get_error_message() ) );
 				} else {
 					/* translators: %s: nº de pedido */
-					Notices::add( 'success', esc_html( sprintf( asde_t( 'Pedido %s marcado como pagado con el ingreso del banco.' ), PedidosTable::numero( $pedido ) ) ) );
+					Notices::add( 'success', esc_html( sprintf( /* translators: %s: text */ __( 'Order %s marked as paid with the bank deposit.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), PedidosTable::numero( $pedido ) ) ) );
 				}
 			}
 			$this->redirect( $lista );
@@ -406,12 +406,12 @@ final class TiendaGestionView extends TiendaBaseView {
 		$p = PedidosTable::obtener( (int) $this->post( 'pedido' ) );
 		check_admin_referer( 'asde_uniforme_' . ( $p['id'] ?? 0 ) );
 		if ( ! $p || ! Servicio::en_gestion( $p, $a ) ) {
-			Notices::add( 'error', asde_t( 'No tienes acceso a ese pedido.' ) );
+			Notices::add( 'error', __( 'You do not have access to that order.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			$this->redirect( $lista );
 		}
 		$volver = 'detalle' === $this->post( 'desde' ) ? $this->url( 'tienda_gestion', array( 'pedido' => (string) $p['id'] ) ) : $lista;
 		$num    = PedidosTable::numero( $p );
-		$error  = asde_t( 'No tienes permiso para hacer esto con este pedido.' );
+		$error  = __( 'You do not have permission to do this with this order.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		$hecho  = '';
 
 		switch ( $accion ) {
@@ -423,21 +423,21 @@ final class TiendaGestionView extends TiendaBaseView {
 				$fecha   = $this->post( 'fecha' );
 				$importe = (float) str_replace( ',', '.', $this->post( 'importe' ) );
 				if ( ! isset( PedidosTable::METODOS[ $metodo ] ) || ! preg_match( '/^\d{4}-\d{2}-\d{2}$/', $fecha ) || $fecha > wp_date( 'Y-m-d' ) || $importe < 0 ) {
-					$error = asde_t( 'Indica cómo se ha pagado (efectivo, ingreso, Bizum o datáfono), la fecha (no posterior a hoy) y el importe.' );
+					$error = __( 'State how it was paid (cash, deposit, Bizum or card terminal), the date (not later than today) and the amount.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 					break;
 				}
 				PedidosTable::marcar_pago( $p['id'], $fecha, $metodo, $importe, $this->post( 'referencia' ) );
 				Avisos::enviar( (array) PedidosTable::obtener( $p['id'] ), Avisos::PAGADO ); // v0.39: aviso a quien hizo el pedido.
 				Logger::log( 'uniforme_pago', 'uniforme', (string) $p['id'], array( 'metodo' => $metodo, 'importe' => $importe ) );
-				$hecho = sprintf( asde_t( 'Pago de %s (%s) validado en el pedido %s.' ), Calculadora::euros( $importe ), mb_strtolower( asde_t( PedidosTable::METODOS[ $metodo ] ) ), $num );
+				$hecho = sprintf( /* translators: 1: text, 2: text, 3: text */ __( 'Payment of %1$s (%2$s) validated on order %3$s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Calculadora::euros( $importe ), mb_strtolower( asde_t( PedidosTable::METODOS[ $metodo ] ) ), $num );
 				break;
 
 			case 'uniforme_deshacer_pago':
 				if ( Servicio::puede_pagar( $p ) && PedidosTable::deshacer_pago( $p['id'] ) ) {
 					Logger::log( 'uniforme_pago_deshecho', 'uniforme', (string) $p['id'] );
-					$hecho = sprintf( asde_t( 'Pago deshecho en el pedido %s.' ), $num );
+					$hecho = sprintf( /* translators: %s: text */ __( 'Payment undone on order %s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $num );
 					if ( ConciliacionBanco::deshacer( $p ) || ConciliacionBanco::deshacer_datafono( $p ) ) {
-						$hecho .= ' ' . asde_t( 'El ingreso del banco vuelve a estar por conciliar.' ); // v0.40 (fase 5) y v0.46 (datáfono).
+						$hecho .= ' ' . __( 'The bank deposit is pending reconciliation again.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); // v0.40 (fase 5) y v0.46 (datáfono).
 					}
 				}
 				break;
@@ -445,14 +445,14 @@ final class TiendaGestionView extends TiendaBaseView {
 			case 'uniforme_incluir':
 				if ( Servicio::puede_pedir( $p ) && PedidosTable::marcar_pedido( array( $p['id'] ), $this->referencia_pedido() ) ) {
 					Logger::log( 'uniforme_incluido', 'uniforme', (string) $p['id'] );
-					$hecho = sprintf( asde_t( 'Pedido %s incluido en el pedido del grupo.' ), $num );
+					$hecho = sprintf( /* translators: %s: text */ __( 'Order %s included in the group\'s order.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $num );
 				}
 				break;
 
 			case 'uniforme_deshacer_pedido':
 				if ( Servicio::puede_pedir( $p ) && PedidosTable::deshacer_pedido( $p['id'] ) ) {
 					Logger::log( 'uniforme_incluido_deshecho', 'uniforme', (string) $p['id'] );
-					$hecho = sprintf( asde_t( 'El pedido %s ya no consta en el pedido del grupo.' ), $num );
+					$hecho = sprintf( /* translators: %s: text */ __( 'Order %s is no longer part of the group\'s order.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $num );
 				}
 				break;
 
@@ -460,14 +460,14 @@ final class TiendaGestionView extends TiendaBaseView {
 				if ( Servicio::puede_entregar( $p, $a ) && null === $p['entregado_en'] && PedidosTable::marcar_entregado( $p['id'] ) ) {
 					Avisos::enviar( (array) PedidosTable::obtener( $p['id'] ), Avisos::ENTREGADO ); // v0.39.
 					Logger::log( 'uniforme_entregado', 'uniforme', (string) $p['id'] );
-					$hecho = sprintf( asde_t( 'Pedido %s marcado como entregado. Falta que lo confirme el socio/a o su familia.' ), $num );
+					$hecho = sprintf( /* translators: %s: text */ __( 'Order %s marked as delivered. The member or their family still has to confirm it.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $num );
 				}
 				break;
 
 			case 'uniforme_deshacer_entrega':
 				if ( Servicio::puede_entregar( $p, $a ) && PedidosTable::deshacer_entrega( $p['id'] ) ) {
 					Logger::log( 'uniforme_entrega_deshecha', 'uniforme', (string) $p['id'] );
-					$hecho = sprintf( asde_t( 'Entrega deshecha en el pedido %s.' ), $num );
+					$hecho = sprintf( /* translators: %s: text */ __( 'Delivery undone on order %s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $num );
 				}
 				break;
 
@@ -475,18 +475,18 @@ final class TiendaGestionView extends TiendaBaseView {
 				$motivo = $this->post( 'motivo' );
 				if ( Servicio::puede_cancelar_gestion( $p ) ) {
 					if ( '' === trim( $motivo ) ) {
-						$error = asde_t( 'Indica el motivo de la cancelación.' );
+						$error = __( 'State the reason for the cancellation.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 						break;
 					}
 					Servicio::cancelar( $p, $motivo ); // Lo del catálogo vuelve a las existencias.
 					Logger::log( 'uniforme_cancelado', 'uniforme', (string) $p['id'], array( 'por' => 'grupo' ) );
-					$hecho  = sprintf( asde_t( 'Pedido %s cancelado.' ), $num );
+					$hecho  = sprintf( /* translators: %s: text */ __( 'Order %s cancelled.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $num );
 					$volver = $lista;
 				}
 				break;
 
 			default:
-				$error = asde_t( 'Acción desconocida.' );
+				$error = __( 'Unknown action.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 
 		'' !== $hecho ? Notices::add( 'success', esc_html( $hecho ) ) : Notices::add( 'error', esc_html( $error ) );
@@ -496,6 +496,6 @@ final class TiendaGestionView extends TiendaBaseView {
 	/** Nombre del pedido del grupo al proveedor (p. ej. «Pedido 29/09/2026»). */
 	private function referencia_pedido(): string {
 		$ref = trim( sanitize_text_field( $this->post( 'referencia_pedido' ) ) );
-		return '' !== $ref ? mb_substr( $ref, 0, 60 ) : sprintf( asde_t( 'Pedido %s' ), wp_date( 'd/m/Y' ) );
+		return '' !== $ref ? mb_substr( $ref, 0, 60 ) : sprintf( /* translators: %s: text */ __( 'Order %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), wp_date( 'd/m/Y' ) );
 	}
 }

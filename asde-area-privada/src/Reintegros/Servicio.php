@@ -90,7 +90,7 @@ final class Servicio {
 	 */
 	public static function solicitar( array $in, ?array $fichero ) {
 		if ( ! current_user_can( self::CAP_PEDIR ) || ! Modulos::activo( Modulos::REINTEGROS ) ) {
-			return new \WP_Error( 'asde_reintegro', asde_t( 'No tienes permiso para pedir reintegros.' ) );
+			return new \WP_Error( 'asde_reintegro', __( 'You do not have permission to request reimbursements.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$concepto = mb_substr( trim( sanitize_text_field( (string) ( $in['concepto'] ?? '' ) ) ), 0, 120 );
 		$fecha    = (string) ( $in['fecha'] ?? '' );
@@ -98,29 +98,29 @@ final class Servicio {
 		$forma    = sanitize_key( (string) ( $in['forma'] ?? '' ) );
 		$evento   = (int) ( $in['evento'] ?? 0 );
 		if ( '' === $concepto ) {
-			return new \WP_Error( 'asde_reintegro', asde_t( 'Escribe el concepto: qué pagaste.' ) );
+			return new \WP_Error( 'asde_reintegro', __( 'Enter the description: what you paid for.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( ! preg_match( '/^\d{4}-\d{2}-\d{2}$/', $fecha ) || ! date_create( $fecha ) || $fecha > current_time( 'Y-m-d' ) || strtotime( $fecha ) < time() - self::DIAS_MAX * DAY_IN_SECONDS ) {
-			return new \WP_Error( 'asde_reintegro', asde_t( 'La fecha del gasto no puede ser futura ni de hace más de un año.' ) );
+			return new \WP_Error( 'asde_reintegro', __( 'The date of the expense cannot be in the future or more than a year ago.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( $importe <= 0 || $importe >= 100000 ) {
-			return new \WP_Error( 'asde_reintegro', asde_t( 'Escribe un importe mayor que cero.' ) );
+			return new \WP_Error( 'asde_reintegro', __( 'Enter an amount greater than zero.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( ! isset( ReintegrosTable::FORMAS[ $forma ] ) ) {
-			return new \WP_Error( 'asde_reintegro', asde_t( 'Elige cómo prefieres cobrarlo: en efectivo o por transferencia.' ) );
+			return new \WP_Error( 'asde_reintegro', __( 'Choose how you prefer to be paid: in cash or by transfer.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$iban = '';
 		if ( ReintegrosTable::TRANSFERENCIA === $forma ) {
 			$iban = Iban::normalizar( (string) ( $in['iban'] ?? '' ) );
 			if ( ! Iban::es_valido( $iban ) ) {
-				return new \WP_Error( 'asde_reintegro', asde_t( 'Para cobrarlo por transferencia escribe un IBAN válido.' ) );
+				return new \WP_Error( 'asde_reintegro', __( 'To be paid by transfer, enter a valid IBAN.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			}
 		}
 		if ( $evento && ! isset( self::eventos()[ $evento ] ) ) {
-			return new \WP_Error( 'asde_reintegro', asde_t( 'Ese evento no está disponible. Elige otro o déjalo sin evento.' ) );
+			return new \WP_Error( 'asde_reintegro', __( 'That event is not available. Choose another or leave it without an event.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( ! $fichero || '' === (string) $fichero['ruta'] ) {
-			return new \WP_Error( 'asde_reintegro', asde_t( 'Adjunta el justificante: una foto del tique o la factura, o el PDF.' ) );
+			return new \WP_Error( 'asde_reintegro', __( 'Attach the receipt: a photo of the ticket or invoice, or the PDF.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$j = Justificantes::guardar( (string) $fichero['ruta'], (string) $fichero['nombre'] );
 		if ( is_wp_error( $j ) ) {
@@ -137,7 +137,7 @@ final class Servicio {
 			)
 		);
 		if ( ! $id ) {
-			return new \WP_Error( 'asde_reintegro', asde_t( 'No se ha podido guardar el reintegro. Inténtalo de nuevo.' ) );
+			return new \WP_Error( 'asde_reintegro', __( 'The reimbursement could not be saved. Try again.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		Logger::log( 'reintegro_pedido', 'reintegro', (string) $id, array( 'forma' => $forma, 'evento' => (bool) $evento ) );
 		$r = ReintegrosTable::obtener( $id );
@@ -159,10 +159,10 @@ final class Servicio {
 	/** @return true|\WP_Error */
 	public static function aprobar( array $r ) {
 		if ( ! self::puede_aprobar( $r ) ) {
-			return new \WP_Error( 'asde_reintegro', asde_t( 'No puedes aprobar este reintegro (lo aprueba Tesorería, y nadie aprueba el suyo).' ) );
+			return new \WP_Error( 'asde_reintegro', __( 'You cannot approve this reimbursement (Treasury approves it, and nobody approves their own).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( ! ReintegrosTable::cambiar( $r['id'], ReintegrosTable::SOLICITADO, ReintegrosTable::APROBADO, self::revision() ) ) {
-			return new \WP_Error( 'asde_reintegro', asde_t( 'Ese reintegro ya se ha revisado.' ) );
+			return new \WP_Error( 'asde_reintegro', __( 'That reimbursement has already been reviewed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		Logger::log( 'reintegro_aprobado', 'reintegro', (string) $r['id'] );
 		Avisos::a_solicitante( (array) ReintegrosTable::obtener( $r['id'] ), Avisos::APROBADO );
@@ -173,13 +173,13 @@ final class Servicio {
 	public static function rechazar( array $r, string $motivo ) {
 		$motivo = mb_substr( trim( sanitize_text_field( $motivo ) ), 0, 255 );
 		if ( ! current_user_can( self::CAP_APROBAR ) || ReintegrosTable::SOLICITADO !== $r['estado'] || $r['solicitante'] === get_current_user_id() ) {
-			return new \WP_Error( 'asde_reintegro', asde_t( 'No puedes rechazar este reintegro.' ) );
+			return new \WP_Error( 'asde_reintegro', __( 'You cannot reject this reimbursement.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( '' === $motivo ) {
-			return new \WP_Error( 'asde_reintegro', asde_t( 'Indica el motivo del rechazo.' ) );
+			return new \WP_Error( 'asde_reintegro', __( 'State the reason for the rejection.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( ! ReintegrosTable::cambiar( $r['id'], ReintegrosTable::SOLICITADO, ReintegrosTable::RECHAZADO, self::revision() + array( 'motivo' => $motivo, 'iban_enc' => '' ) + Justificantes::SIN_JUSTIFICANTE ) ) {
-			return new \WP_Error( 'asde_reintegro', asde_t( 'Ese reintegro ya se ha revisado.' ) );
+			return new \WP_Error( 'asde_reintegro', __( 'That reimbursement has already been reviewed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$borrado = Justificantes::borrar_si_libre( (string) $r['justificante'] ); // El justificante se borra si nadie más lo usa (doc 59, RC-DEC-3).
 		Logger::log( 'reintegro_rechazado', 'reintegro', (string) $r['id'], array( 'justificante_borrado' => $borrado ) );
@@ -190,10 +190,10 @@ final class Servicio {
 	/** @return true|\WP_Error */
 	public static function cancelar( array $r ) {
 		if ( ! self::puede_cancelar( $r ) ) {
-			return new \WP_Error( 'asde_reintegro', asde_t( 'Ese reintegro ya no se puede cancelar: ya lo ha revisado Tesorería.' ) );
+			return new \WP_Error( 'asde_reintegro', __( 'That reimbursement can no longer be cancelled: Treasury has already reviewed it.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( ! ReintegrosTable::cambiar( $r['id'], ReintegrosTable::SOLICITADO, ReintegrosTable::CANCELADO, array( 'iban_enc' => '' ) + Justificantes::SIN_JUSTIFICANTE ) ) {
-			return new \WP_Error( 'asde_reintegro', asde_t( 'Ese reintegro ya se ha revisado.' ) );
+			return new \WP_Error( 'asde_reintegro', __( 'That reimbursement has already been reviewed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$borrado = Justificantes::borrar_si_libre( (string) $r['justificante'] ); // Doc 59, RC-DEC-3.
 		Logger::log( 'reintegro_cancelado', 'reintegro', (string) $r['id'], array( 'justificante_borrado' => $borrado ) );
@@ -207,10 +207,10 @@ final class Servicio {
 	 */
 	public static function pagar( array $r, string $fecha, string $ref ) {
 		if ( ! self::puede_pagar( $r ) ) {
-			return new \WP_Error( 'asde_reintegro', asde_t( 'No puedes marcar este reintegro como pagado.' ) );
+			return new \WP_Error( 'asde_reintegro', __( 'You cannot mark this reimbursement as paid.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( ! preg_match( '/^\d{4}-\d{2}-\d{2}$/', $fecha ) || ! date_create( $fecha ) || $fecha > current_time( 'Y-m-d' ) ) {
-			return new \WP_Error( 'asde_reintegro', asde_t( 'Indica la fecha del pago (no posterior a hoy).' ) );
+			return new \WP_Error( 'asde_reintegro', __( 'State the payment date (not later than today).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$ref = mb_substr( trim( sanitize_text_field( $ref ) ), 0, 120 );
 		if ( ! ReintegrosTable::cambiar(
@@ -225,7 +225,7 @@ final class Servicio {
 				'iban_enc'   => '',
 			)
 		) ) {
-			return new \WP_Error( 'asde_reintegro', asde_t( 'Ese reintegro ya se ha pagado o ya no está aprobado.' ) );
+			return new \WP_Error( 'asde_reintegro', __( 'That reimbursement has already been paid or is no longer approved.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$gasto = self::gasto_del_evento( $r, $fecha );
 		if ( $gasto ) {

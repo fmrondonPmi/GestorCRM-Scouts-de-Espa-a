@@ -39,10 +39,10 @@ final class BancoView extends TesoreriaBaseView {
 
 	public function render( string $content = '' ): string {
 		if ( ! current_user_can( self::CAP_CONFIG ) ) {
-			return $this->denegado( asde_t( 'El banco solo lo ven Secretaría, Coordinación y Tesorería.' ) );
+			return $this->denegado( __( 'The bank is only seen by the Secretary\'s office, Coordination and Treasury.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( ! \AsdeBalears\AreaPrivada\Domain\Modulos::activo( \AsdeBalears\AreaPrivada\Domain\Modulos::BANCO ) ) {
-			return $this->denegado( asde_t( 'El banco no está activo en tu grupo.' ) );
+			return $this->denegado( __( 'The bank is not active in your group.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$ronda = $this->ronda();
 		TiposMovimiento::sembrar();
@@ -68,7 +68,7 @@ final class BancoView extends TesoreriaBaseView {
 			if ( $previa ) {
 				return $this->layout( 'tesoreria', $this->subnav( 'banco', $ronda ) . $this->render_previa( $token, $previa ) );
 			}
-			Notices::add( 'error', asde_t( 'La vista previa ha caducado. Vuelve a subir el fichero.' ) );
+			Notices::add( 'error', __( 'The preview has expired. Upload the file again.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 
 		$filtros = array(
@@ -159,16 +159,16 @@ final class BancoView extends TesoreriaBaseView {
 	 */
 	public function exportar(): void {
 		if ( ! wp_verify_nonce( $this->get( '_wpnonce' ), 'asde_banco_excel' ) ) {
-			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+			wp_die( esc_html__( 'Download link not valid or expired.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		if ( ! current_user_can( self::CAP_CONFIG ) || ! \AsdeBalears\AreaPrivada\Domain\Modulos::activo( \AsdeBalears\AreaPrivada\Domain\Modulos::BANCO ) ) {
-			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+			wp_die( esc_html__( 'Download link not valid or expired.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		$filtros = self::filtros_excel( $_GET ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- el nonce se ha comprobado arriba
 		$movs    = BancoTable::movimientos( $filtros );
 		Logger::log( 'banco_exportado', 'banco', Grupo::numero(), array( 'movimientos' => count( $movs ) ) );
 		list( $cabecera, $filas, $opciones ) = self::informe_excel( $movs, self::nombres_familias( $movs ) );
-		Xlsx::descargar( 'banco-' . wp_date( 'Ymd' ) . '.xlsx', asde_t( 'Banco' ), $cabecera, $filas, $opciones );
+		Xlsx::descargar( 'banco-' . wp_date( 'Ymd' ) . '.xlsx', __( 'Bank', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $cabecera, $filas, $opciones );
 		exit;
 	}
 
@@ -247,7 +247,7 @@ final class BancoView extends TesoreriaBaseView {
 				trim( $m['referencia1'] . ' ' . $m['referencia2'] ),
 				round( (float) $m['importe'], 2 ),
 				asde_t( BancoTable::ESTADOS[ $m['estado'] ] ?? $m['estado'] ),
-				BancoTable::IGNORADO === $m['estado'] ? ( isset( $tipos[ (int) $m['tipo_id'] ] ) ? $tipos[ (int) $m['tipo_id'] ]['nombre'] : asde_t( 'Sin tipo' ) ) : '',
+				BancoTable::IGNORADO === $m['estado'] ? ( isset( $tipos[ (int) $m['tipo_id'] ] ) ? $tipos[ (int) $m['tipo_id'] ]['nombre'] : __( 'No type', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) : '',
 				! empty( $m['familia_id'] ) ? trim( (string) ( $familias[ (int) $m['familia_id'] ] ?? '' ) . ( '' !== ( $nombres[ (int) $m['familia_id'] ] ?? '' ) ? ' · ' . $nombres[ (int) $m['familia_id'] ] : '' ) ) : '',
 				! empty( $m['evento_id'] ) ? (string) ( $eventos[ (int) $m['evento_id'] ] ?? '' ) : '',
 				$m['nota'],
@@ -259,13 +259,13 @@ final class BancoView extends TesoreriaBaseView {
 				$gastos += $m['importe'];
 			}
 		}
-		$cabecera = array( asde_t( 'Fecha' ), asde_t( 'Fecha valor' ), asde_t( 'Ordenante' ), asde_t( 'Concepto' ), asde_t( 'Referencias' ), asde_t( 'Importe' ), asde_t( 'Estado' ), asde_t( 'Tipo de gasto o ingreso' ), asde_t( 'Familia' ), asde_t( 'Evento' ), asde_t( 'Nota' ), asde_t( 'Asociado con' ) );
+		$cabecera = array( __( 'Date', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Value date', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Payer', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Description', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'References', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Amount', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Status', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Type of expense or income', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Family', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Event', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Note', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Linked with', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		$opciones = array(
-			'titulo'    => asde_t( 'Movimientos del banco' ) . ' · ' . Grupo::nombre(),
+			'titulo'    => __( 'Bank transactions', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . ' · ' . Grupo::nombre(),
 			/* translators: 1: ingresos, 2: gastos, 3: fecha */
-			'subtitulo' => sprintf( asde_t( 'Ingresos %1$s · gastos %2$s · generado el %3$s' ), Calculadora::euros( round( $ingresos, 2 ) ), Calculadora::euros( round( $gastos, 2 ) ), wp_date( 'd/m/Y' ) ),
+			'subtitulo' => sprintf( /* translators: 1: text, 2: text, 3: text */ __( 'Income %1$s · expenses %2$s · generated on %3$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Calculadora::euros( round( $ingresos, 2 ) ), Calculadora::euros( round( $gastos, 2 ) ), wp_date( 'd/m/Y' ) ),
 			'tipos'     => array( 'texto', 'texto', 'texto', 'texto', 'texto', 'euros', 'texto', 'texto', 'texto', 'texto', 'texto', 'texto' ),
-			'totales'   => array( asde_t( 'Total' ), sprintf( asde_n( '%d movimiento', '%d movimientos', count( $filas ) ), count( $filas ) ), '', '', '', round( $ingresos + $gastos, 2 ), '', '', '', '', '', '' ),
+			'totales'   => array( __( 'Total', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), sprintf( /* translators: %d: number */ _n( '%d transaction', '%d transactions', count( $filas ) , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), count( $filas ) ), '', '', '', round( $ingresos + $gastos, 2 ), '', '', '', '', '', '' ),
 		);
 		return array( $cabecera, $filas, $opciones );
 	}
@@ -306,7 +306,7 @@ final class BancoView extends TesoreriaBaseView {
 
 	public function handle_post(): void {
 		if ( ! current_user_can( self::CAP_CONFIG ) || ! \AsdeBalears\AreaPrivada\Domain\Modulos::activo( \AsdeBalears\AreaPrivada\Domain\Modulos::BANCO ) ) {
-			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+			wp_die( esc_html__( 'You do not have permission to do this.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		$accion = $this->post( 'asde_action' );
 		$volver = $this->url_actual( $this->url( 'banco' ) ); // La misma vista (filtros y página) tras conciliar o deshacer.
@@ -339,7 +339,7 @@ final class BancoView extends TesoreriaBaseView {
 				$r = Conciliacion::conciliar( $id, (int) $this->post( 'familia' ), $this->post( 'ronda_pago' ) );
 				is_wp_error( $r )
 					? Notices::add( 'error', esc_html( $r->get_error_message() ) )
-					: Notices::add( 'success', asde_t( 'Ingreso conciliado: se ha registrado el pago en el control de pagos de la familia.' ) );
+					: Notices::add( 'success', __( 'Deposit reconciled: the payment has been recorded in the family\'s payment control.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 				$this->redirect( $volver );
 				break;
 
@@ -353,7 +353,7 @@ final class BancoView extends TesoreriaBaseView {
 						++$hechas;
 					}
 				}
-				Notices::add( 'success', sprintf( asde_t( '%d ingresos conciliados por su referencia de familia.' ), $hechas ) );
+				Notices::add( 'success', sprintf( /* translators: %d: number */ __( '%d deposits reconciled by their family reference.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $hechas ) );
 				$this->redirect( $volver );
 				break;
 
@@ -363,7 +363,7 @@ final class BancoView extends TesoreriaBaseView {
 				$r = Conciliacion::deshacer( $id );
 				is_wp_error( $r )
 					? Notices::add( 'error', esc_html( $r->get_error_message() ) )
-					: Notices::add( 'success', asde_t( 'Movimiento de nuevo pendiente (si tenía un pago, se ha anulado).' ) );
+					: Notices::add( 'success', __( 'Transaction pending again (if it had a payment, it has been cancelled).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 				$this->redirect( $volver );
 				break;
 
@@ -386,13 +386,13 @@ final class BancoView extends TesoreriaBaseView {
 					}
 				}
 				if ( $hechos ) {
-					Notices::add( 'success', esc_html( sprintf( asde_n( '%d movimiento marcado como revisado.', '%d movimientos marcados como revisados.', $hechos ), $hechos ) ) );
+					Notices::add( 'success', esc_html( sprintf( /* translators: %d: number */ _n( '%d transaction marked as reviewed.', '%d transactions marked as reviewed.', $hechos , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $hechos ) ) );
 				}
 				foreach ( $errores as $e ) {
 					Notices::add( 'error', esc_html( $e ) );
 				}
 				if ( ! $tipos ) {
-					Notices::add( 'error', asde_t( 'No has elegido ningún movimiento.' ) );
+					Notices::add( 'error', __( 'You have not chosen any transaction.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 				}
 				$lista = wp_validate_redirect( esc_url_raw( $this->post( 'volver' ) ), $this->url( 'banco' ) );
 				$this->redirect( Router::pide_modal() ? $this->url( 'banco', array( 'revisar' => 'hecho' ) ) : $lista );
@@ -408,7 +408,7 @@ final class BancoView extends TesoreriaBaseView {
 					Notices::add( 'error', esc_html( $r->get_error_message() ) );
 				} else {
 					Logger::log( 'banco_asociado', 'banco', (string) $id, array( 'con' => $con ) );
-					Notices::add( 'success', asde_t( 'Movimientos asociados.' ) );
+					Notices::add( 'success', __( 'Linked transactions.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 				}
 				$lista = wp_validate_redirect( esc_url_raw( $this->post( 'volver' ) ), $this->url( 'banco' ) );
 				$this->redirect( Router::pide_modal() && ! is_wp_error( $r ) ? $this->url( 'banco', array( 'asociar' => 'hecho' ) ) : ( is_wp_error( $r ) ? $this->url( 'banco', array( 'asociar' => $id ) ) : $lista ) );
@@ -420,7 +420,7 @@ final class BancoView extends TesoreriaBaseView {
 				$otro = BancoTable::desasociar( $id );
 				if ( $otro ) {
 					Logger::log( 'banco_desasociado', 'banco', (string) $id, array( 'con' => $otro ) );
-					Notices::add( 'success', asde_t( 'Asociación quitada.' ) );
+					Notices::add( 'success', __( 'Link removed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 				}
 				$this->redirect( $volver );
 				break;
@@ -452,14 +452,14 @@ final class BancoView extends TesoreriaBaseView {
 							)
 						);
 					}
-					Notices::add( 'success', 'tipo_crear' === $accion ? asde_t( 'Tipo creado.' ) : ( 'tipo_cambiar' === $accion ? asde_t( 'Tipo guardado.' ) : asde_t( 'Tipo borrado.' ) ) );
+					Notices::add( 'success', 'tipo_crear' === $accion ? __( 'Type created.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : ( 'tipo_cambiar' === $accion ? __( 'Type saved.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : __( 'Type deleted.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) );
 				}
 				$a_tipos = $this->volver_tipos();
 				$this->redirect( $this->url( 'banco', array( 'tipos' => '1' ) + ( '' !== $a_tipos ? array( 'volver' => rawurlencode( $a_tipos ) ) : array() ) ) );
 				break;
 
 			default:
-				Notices::add( 'error', asde_t( 'Acción desconocida.' ) );
+				Notices::add( 'error', __( 'Unknown action.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 				$this->redirect( $volver );
 		}
 	}
@@ -471,19 +471,19 @@ final class BancoView extends TesoreriaBaseView {
 	private function analizar(): void {
 		$f = $_FILES['fichero'] ?? null; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.NonceVerification.Missing -- el nonce se comprueba antes (check_admin_referer en handle_post); del fichero solo se usan datos validados con is_uploaded_file()
 		if ( ! is_array( $f ) || UPLOAD_ERR_OK !== ( $f['error'] ?? UPLOAD_ERR_NO_FILE ) || ! is_uploaded_file( (string) $f['tmp_name'] ) ) {
-			$this->volver_con_error( UPLOAD_ERR_INI_SIZE === ( $f['error'] ?? 0 ) || UPLOAD_ERR_FORM_SIZE === ( $f['error'] ?? 0 ) ? asde_t( 'El fichero es demasiado grande.' ) : asde_t( 'Elige el fichero de movimientos del banco.' ) );
+			$this->volver_con_error( UPLOAD_ERR_INI_SIZE === ( $f['error'] ?? 0 ) || UPLOAD_ERR_FORM_SIZE === ( $f['error'] ?? 0 ) ? __( 'The file is too large.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : __( 'Choose the bank transactions file.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$nombre = sanitize_file_name( wp_unslash( (string) $f['name'] ) );
 		$ext    = strtolower( pathinfo( $nombre, PATHINFO_EXTENSION ) );
 		if ( (int) $f['size'] > self::MAX_BYTES ) {
-			$this->volver_con_error( asde_t( 'El fichero es demasiado grande (máximo 5 MB).' ) );
+			$this->volver_con_error( __( 'The file is too large (maximum 5 MB).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( ! in_array( $ext, self::EXTENSIONES, true ) ) {
-			$this->volver_con_error( asde_t( 'Formato no admitido: sube el fichero Norma 43 (.n43, .q43, .aeb, .txt) o un CSV.' ) );
+			$this->volver_con_error( __( 'Format not supported: upload the Norma 43 file (.n43, .q43, .aeb, .txt) or a CSV.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$contenido = (string) file_get_contents( (string) $f['tmp_name'] ); // phpcs:ignore WordPress.WP.AlternativeFunctions
 		if ( Codificacion::es_binario( $contenido ) ) {
-			$this->volver_con_error( asde_t( 'Parece un fichero Excel u otro formato binario. Descárgalo del banco como Norma 43 o como CSV.' ) );
+			$this->volver_con_error( __( 'It looks like an Excel file or another binary format. Download it from the bank as Norma 43 or as CSV.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 
 		$formato = in_array( $this->post( 'formato' ), array( 'n43', 'csv' ), true ) ? $this->post( 'formato' ) : ( Norma43::parece( $contenido ) ? 'n43' : 'csv' );
@@ -503,7 +503,7 @@ final class BancoView extends TesoreriaBaseView {
 		$token  = $this->token_valido( $this->post( 'token' ) );
 		$previa = $this->previa( $token );
 		if ( ! $previa ) {
-			$this->volver_con_error( asde_t( 'La vista previa ha caducado. Vuelve a subir el fichero.' ) );
+			$this->volver_con_error( __( 'The preview has expired. Upload the file again.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$mapeo = array();
 		foreach ( array_keys( CsvBanco::CAMPOS ) as $campo ) {
@@ -529,11 +529,11 @@ final class BancoView extends TesoreriaBaseView {
 		$token  = $this->token_valido( $this->post( 'token' ) );
 		$previa = $this->previa( $token );
 		if ( ! $previa ) {
-			$this->volver_con_error( asde_t( 'La vista previa ha caducado. Vuelve a subir el fichero.' ) );
+			$this->volver_con_error( __( 'The preview has expired. Upload the file again.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$lectura = $previa['lectura'];
 		if ( $lectura['errores'] || ! $lectura['movimientos'] ) {
-			$this->volver_con_error( asde_t( 'Este fichero tiene errores y no se puede importar.' ) );
+			$this->volver_con_error( __( 'This file has errors and cannot be imported.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		// Se vuelve a comprobar qué es nuevo: puede haberse importado algo mientras tanto.
 		$lectura['movimientos'] = BancoTable::clasificar( $lectura['movimientos'] );
@@ -553,7 +553,7 @@ final class BancoView extends TesoreriaBaseView {
 				'duplicados' => $r['duplicados'],
 			)
 		);
-		Notices::add( 'success', sprintf( asde_t( 'Importados %d movimientos nuevos%s. El fichero no se ha guardado.' ), $r['nuevos'], $r['duplicados'] ? sprintf( asde_t( ' (%d ya estaban importados y se han ignorado)' ), $r['duplicados'] ) : '' ) );
+		Notices::add( 'success', sprintf( /* translators: 1: number, 2: text */ __( 'Imported %1$d new transactions%2$s. The file has not been saved.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $r['nuevos'], $r['duplicados'] ? sprintf( /* translators: %d: number */ __( ' (%d were already imported and have been ignored)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $r['duplicados'] ) : '' ) );
 		$this->redirect( $this->url( 'banco' ) );
 	}
 

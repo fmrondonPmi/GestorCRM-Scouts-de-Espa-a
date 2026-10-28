@@ -27,7 +27,7 @@ final class EmailsView extends View {
 		if ( $id ) {
 			$fila = RegistroEmails::obtener( $id );
 			if ( ! $fila ) {
-				return $this->denegado( asde_t( 'Ese email no existe o es de otro grupo.' ) );
+				return $this->denegado( __( 'That email address does not exist or belongs to another group.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			}
 			return $this->layout(
 				'usuarios',

@@ -21,13 +21,13 @@ use AsdeBalears\AreaPrivada\Socios\Numeros;
 
 defined( 'ABSPATH' ) || exit;
 ?>
-<nav class="asde-nav" aria-label="<?php echo esc_attr( asde_a( 'Área privada' ) ); ?>">
+<nav class="asde-nav" aria-label="<?php echo esc_attr( esc_attr__( 'Private area', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
 	<?php
 	// v0.15: el menú va por grupos (lo personal/familiar y la gestión del grupo). Con un solo
 	// grupo no hace falta rotularlo. Un tema que sobrescriba esta plantilla puede seguir usando $items.
 	$grupos  = $grupos ?? array();
 	$rotulos = count( $grupos ) > 1;
-	$bloques = $grupos ? array_merge( array( array( 'titulo' => '', 'items' => array( 'area' => $items['area'] ?? asde_t( 'Inicio' ) ) ) ), array_values( $grupos ) ) : array( array( 'titulo' => '', 'items' => $items ) );
+	$bloques = $grupos ? array_merge( array( array( 'titulo' => '', 'items' => array( 'area' => $items['area'] ?? __( 'Home', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) ) ), array_values( $grupos ) ) : array( array( 'titulo' => '', 'items' => $items ) );
 	?>
 	<ul class="asde-nav__tabs">
 		<?php foreach ( $bloques as $i => $bloque ) : ?>
@@ -48,21 +48,21 @@ defined( 'ABSPATH' ) || exit;
 			<?php echo esc_html( $nombre ?: $user->display_name ); ?>
 			<span class="asde-muted">(<?php echo esc_html( $user->user_login ); ?>)</span> ·
 			<?php /* v0.26: la ayuda de esta página (el apartado del manual de su rol), en la ventana emergente. */ ?>
-			<a class="asde-nav__ayuda" href="<?php echo esc_url( Ayuda::url( Pages::current_key() ?? ( '' !== (string) ( $pagina ?? '' ) ? (string) $pagina : 'area' ) ) ); ?>" data-asde-modal><?php asde_e( 'Ayuda' ); ?></a> ·
-			<a href="<?php echo esc_url( Pages::url( 'seguridad' ) ); ?>"<?php echo 'seguridad' === ( $pagina ?? '' ) ? ' aria-current="page" class="is-active"' : ''; ?>><?php asde_e( 'Seguridad' ); ?></a> ·
-			<a href="<?php echo esc_url( wp_logout_url( home_url( '/' ) ) ); ?>"><?php asde_e( 'Salir' ); ?></a>
+			<a class="asde-nav__ayuda" href="<?php echo esc_url( Ayuda::url( Pages::current_key() ?? ( '' !== (string) ( $pagina ?? '' ) ? (string) $pagina : 'area' ) ) ); ?>" data-asde-modal><?php esc_html_e( 'Help', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a> ·
+			<a href="<?php echo esc_url( Pages::url( 'seguridad' ) ); ?>"<?php echo 'seguridad' === ( $pagina ?? '' ) ? ' aria-current="page" class="is-active"' : ''; ?>><?php esc_html_e( 'Security', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a> ·
+			<a href="<?php echo esc_url( wp_logout_url( home_url( '/' ) ) ); ?>"><?php esc_html_e( 'Sign out', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a>
 			<?php $selector_idioma = trim( TemplateLoader::render( 'comun/idiomas' ) ); ?>
 			<?php if ( '' !== $selector_idioma ) : ?>
 				· <?php echo wp_kses( $selector_idioma, asde_html_permitido() ); ?>
 			<?php endif; ?>
 			<?php if ( Identidad::es_asde() && ( current_user_can( 'asde_manage_users' ) || current_user_can( 'asde_tesoreria_acceso' ) || current_user_can( 'asde_reports' ) || current_user_can( 'asde_approve_changes' ) ) ) : ?>
 				<?php $ver_local = Numeros::ver_local(); ?>
-				· <a href="<?php echo esc_url( add_query_arg( array( 'asde_ver_local' => $ver_local ? '0' : '1', '_wpnonce' => wp_create_nonce( 'asde_ver_local' ) ) ) ); ?>" title="<?php echo esc_attr( asde_a( 'El nº territorial sale junto al nº de Scouts de España en todas las pantallas. Si tiene algún problema, el aviso sale siempre.' ) ); ?>"><?php echo $ver_local ? esc_html( asde_t( 'Ocultar nº territorial' ) ) : esc_html( asde_t( 'Mostrar nº territorial' ) ); ?></a>
+				· <a href="<?php echo esc_url( add_query_arg( array( 'asde_ver_local' => $ver_local ? '0' : '1', '_wpnonce' => wp_create_nonce( 'asde_ver_local' ) ) ) ); ?>" title="<?php echo esc_attr( esc_attr__( 'The territorial no. appears next to the Scouts de España no. on all screens. If there is any problem with it, the notice always appears.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo $ver_local ? esc_html( __( 'Hide territorial no.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) : esc_html( __( 'Show territorial no.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?></a>
 			<?php endif; ?>
 			<?php if ( Tema::cabecera_plegable() ) : ?>
-				<button type="button" class="asde-nav__cabecera" aria-controls="header" aria-expanded="true" title="<?php echo esc_attr( asde_a( 'Ocultar o mostrar la cabecera del tema para ganar espacio' ) ); ?>">
+				<button type="button" class="asde-nav__cabecera" aria-controls="header" aria-expanded="true" title="<?php echo esc_attr( esc_attr__( 'Hide or show the theme header to gain space', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
 					<span class="asde-nav__cabecera-icono" aria-hidden="true">▴</span>
-					<span class="asde-nav__cabecera-texto"><?php asde_e( 'Ocultar cabecera' ); ?></span>
+					<span class="asde-nav__cabecera-texto"><?php esc_html_e( 'Hide header', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span>
 				</button>
 			<?php endif; ?>
 		</p>
@@ -73,15 +73,15 @@ defined( 'ABSPATH' ) || exit;
 			<input type="hidden" name="asde_action" value="oficina_cambiar_grupo">
 			<?php wp_nonce_field( 'asde_oficina_grupo' ); ?>
 			<p class="asde-form__fila asde-form__fila--una-linea">
-				<label for="asde-oficina-grupo"><?php asde_e( 'Grupo' ); ?>
+				<label for="asde-oficina-grupo"><?php esc_html_e( 'Group', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>
 					<select id="asde-oficina-grupo" name="grupo" data-asde-autoenviar>
 						<?php foreach ( Grupos::todos() as $numero => $g ) : ?>
 							<option value="<?php echo esc_attr( (string) $numero ); ?>" <?php selected( Grupo::numero(), (string) $numero ); ?>><?php echo esc_html( Grupos::etiqueta( $g ) ); ?></option>
 						<?php endforeach; ?>
 					</select>
 				</label>
-				<noscript><button type="submit" class="button"><?php asde_e( 'Cambiar de grupo' ); ?></button></noscript>
-				<span class="asde-muted"><?php asde_e( 'Oficina · solo lectura' ); ?></span>
+				<noscript><button type="submit" class="button"><?php esc_html_e( 'Change group', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button></noscript>
+				<span class="asde-muted"><?php esc_html_e( 'Office · read-only', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span>
 			</p>
 		</form>
 	<?php endif; ?>

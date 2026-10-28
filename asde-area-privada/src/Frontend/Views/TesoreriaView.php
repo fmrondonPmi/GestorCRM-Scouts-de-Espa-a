@@ -45,7 +45,7 @@ final class TesoreriaView extends TesoreriaBaseView {
 		}
 		$repo = PersonaRepository::make();
 		if ( ! $repo ) {
-			return $this->error_crm( 'tesoreria', asde_t( 'La conexión de tu grupo con el CRM no está configurada o no se ha podido comprobar. Un administrador puede revisarla en wp-admin → Grupos Scouts.' ) );
+			return $this->error_crm( 'tesoreria', __( 'Your group\'s connection to the CRM is not set up or could not be checked. An administrator can review it in wp-admin → Scout Groups.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$ronda = $this->ronda();
 
@@ -57,7 +57,7 @@ final class TesoreriaView extends TesoreriaBaseView {
 				$html = $familia ? $this->detalle( $repo, $familia, $ronda ) : $this->control( $repo, $ronda );
 			}
 		} catch ( CrmException $e ) {
-			return $this->error_crm( 'tesoreria', asde_t( 'No se ha podido consultar el CRM: ' ) . $e->getMessage() );
+			return $this->error_crm( 'tesoreria', __( 'The CRM could not be queried: ', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . $e->getMessage() );
 		}
 		return $this->layout( 'tesoreria', ( self::es_modal() ? '' : $this->subnav( 'tesoreria', $ronda ) ) . $html );
 	}
@@ -75,7 +75,7 @@ final class TesoreriaView extends TesoreriaBaseView {
 	private function elegir_banco( PersonaRepository $repo, int $id, string $ronda ): string {
 		$f = FamiliasTable::obtener( $id );
 		if ( ! $f || ! self::ve_banco() ) {
-			return $this->tpl( 'comun/avisos', array( 'avisos' => array( array( 'error', $f ? asde_t( 'Los movimientos del banco solo los usan Secretaría, Coordinación y Tesorería.' ) : asde_t( 'Esa familia no existe.' ) ) ) ) );
+			return $this->tpl( 'comun/avisos', array( 'avisos' => array( array( 'error', $f ? __( 'Bank transactions are only used by the Secretary\'s office, Coordination and Treasury.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : __( 'That family does not exist.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) ) ) );
 		}
 		$claves = Conciliacion::claves( $repo->obtener_varias( $f['miembros'] ) );
 		return $this->tpl(
@@ -209,7 +209,7 @@ final class TesoreriaView extends TesoreriaBaseView {
 	private function detalle( PersonaRepository $repo, int $id, string $ronda ): string {
 		$f = FamiliasTable::obtener( $id );
 		if ( ! $f ) {
-			return $this->tpl( 'comun/avisos', array( 'avisos' => array( array( 'error', asde_t( 'Esa familia no existe.' ) ) ) ) ) . $this->control( $repo, $ronda );
+			return $this->tpl( 'comun/avisos', array( 'avisos' => array( array( 'error', __( 'That family does not exist.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) ) ) ) . $this->control( $repo, $ronda );
 		}
 		$cfg      = Config::de( $ronda );
 		$personas = $repo->obtener_varias( $f['miembros'] );
@@ -278,14 +278,14 @@ final class TesoreriaView extends TesoreriaBaseView {
 	 */
 	public function exportar(): void {
 		if ( ! wp_verify_nonce( $this->get( '_wpnonce' ), 'asde_tesoreria_csv' ) ) {
-			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+			wp_die( esc_html__( 'Download link not valid or expired.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		if ( ! current_user_can( self::CAP ) ) {
-			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+			wp_die( esc_html__( 'Download link not valid or expired.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		$repo = PersonaRepository::make();
 		if ( ! $repo ) {
-			wp_die( esc_html__( 'CRM no configurado.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 500 );
+			wp_die( esc_html__( 'CRM not configured.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 500 );
 		}
 		$ronda = $this->ronda();
 		try {
@@ -307,18 +307,18 @@ final class TesoreriaView extends TesoreriaBaseView {
 		}
 		Logger::log( 'tesoreria_exportada', 'ronda', $ronda, array( 'familias' => count( $datos ) ) );
 		/* translators: 1: ronda, 2: fecha */
-		$subtitulo = sprintf( asde_t( 'Ronda %1$s · generado el %2$s' ), $ronda, wp_date( 'd/m/Y' ) );
+		$subtitulo = sprintf( /* translators: 1: text, 2: text */ __( 'Round %1$s · generated on %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $ronda, wp_date( 'd/m/Y' ) );
 		Xlsx::descargar(
 			'control-de-pagos-' . $ronda . '-' . wp_date( 'Ymd' ) . '.xlsx',
-			asde_t( 'Control de pagos' ),
-			array( asde_t( 'Nº familia' ), asde_t( 'Socios' ), asde_t( 'Hijos que pagan' ), asde_t( 'Cuota' ), asde_t( 'Ajustes' ), asde_t( 'A pagar' ), asde_t( 'Pagado' ), asde_t( 'Pendiente' ), asde_t( 'Estado' ) ),
+			__( 'Payment control', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+			array( __( 'Family no.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Members', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Children who pay', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Fee', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Settings', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'To pay', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Paid', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Pending', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Status', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ),
 			$datos,
 			array(
-				'titulo'    => asde_t( 'Control de pagos' ) . ' · ' . Grupo::nombre(),
+				'titulo'    => __( 'Payment control', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . ' · ' . Grupo::nombre(),
 				'subtitulo' => $subtitulo,
 				'tipos'     => array( 'texto', 'texto', 'entero', 'euros', 'euros', 'euros', 'euros', 'euros', 'estado' ),
 				'colores'   => $por_texto,
-				'totales'   => array( asde_t( 'Total' ), sprintf( asde_n( '%d familia', '%d familias', count( $datos ) ), count( $datos ) ), $suma['hijos'], round( $suma['cuota'], 2 ), round( $suma['ajustes'], 2 ), round( $suma['a_pagar'], 2 ), round( $suma['pagado'], 2 ), round( $suma['pendiente'], 2 ), '' ),
+				'totales'   => array( __( 'Total', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), sprintf( /* translators: %d: number */ _n( '%d family', '%d families', count( $datos ) , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), count( $datos ) ), $suma['hijos'], round( $suma['cuota'], 2 ), round( $suma['ajustes'], 2 ), round( $suma['a_pagar'], 2 ), round( $suma['pagado'], 2 ), round( $suma['pendiente'], 2 ), '' ),
 			)
 		);
 		exit;
@@ -361,13 +361,13 @@ final class TesoreriaView extends TesoreriaBaseView {
 
 	public function handle_post(): void {
 		if ( ! current_user_can( self::CAP ) ) {
-			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+			wp_die( esc_html__( 'You do not have permission to do this.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		$familia = (int) $this->post( 'familia' );
 		$ronda   = Config::es_ronda( $this->post( 'ronda' ) ) ? $this->post( 'ronda' ) : Config::ronda_actual();
 		$volver  = $this->url( 'tesoreria', array( 'familia' => $familia, 'ronda' => $ronda ) );
 		if ( ! FamiliasTable::obtener( $familia ) ) {
-			Notices::add( 'error', asde_t( 'Familia no válida.' ) );
+			Notices::add( 'error', __( 'Invalid family.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			$this->redirect( $this->url( 'tesoreria' ) );
 		}
 		check_admin_referer( 'asde_mov_' . $familia );
@@ -382,43 +382,43 @@ final class TesoreriaView extends TesoreriaBaseView {
 					$e = Modulos::activo( Modulos::EVENTOS ) ? EventosTable::obtener( $evento ) : null;
 					$f = FamiliasTable::obtener( $familia );
 					if ( ! $e || ! $f || ! in_array( $evento, array_map( static fn( $x ) => $x['evento']['id'], HistorialPagos::eventos_para_cobrar( $f ) ), true ) ) {
-						$r = new \WP_Error( 'x', asde_t( 'Ese evento no está abierto a inscripciones o esta familia no tiene nada pendiente en él.' ) );
+						$r = new \WP_Error( 'x', __( 'That event is not open for sign-ups or this family has nothing pending in it.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 					} elseif ( $banco ) {
-						$r = new \WP_Error( 'x', asde_t( 'El ingreso del banco solo se asocia a la cuota de la ronda. Para un evento, quita el ingreso y escribe el pago.' ) );
+						$r = new \WP_Error( 'x', __( 'The bank deposit is only linked to the round\'s fee. For an event, remove the deposit and record the payment.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 					} elseif ( ! in_array( sanitize_key( $this->post( 'metodo' ) ), \AsdeBalears\AreaPrivada\Eventos\MovimientosTable::FORMAS_MANUALES, true ) ) {
-						$r = new \WP_Error( 'x', asde_t( 'Para un evento, la forma de pago es efectivo, transferencia o Bizum.' ) );
+						$r = new \WP_Error( 'x', __( 'For an event, the payment method is cash, transfer or Bizum.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 					} else {
 						$r = Cobros::pagar_familia( $e, $familia, $importe, sanitize_key( $this->post( 'metodo' ) ), $this->post( 'fecha' ), $this->post( 'referencia' ), $this->post( 'nota' ) );
 					}
 					/* translators: 1: importe, 2: nombre del evento */
-					$ok = $e ? sprintf( asde_t( 'Pago de %1$s registrado en el evento «%2$s». Queda en el historial de pagos de la familia.' ), Calculadora::euros( $importe ), $e['nombre'] ) : '';
+					$ok = $e ? sprintf( /* translators: 1: text, 2: text */ __( 'Payment of %1$s recorded in the event "%2$s". It remains in the family\'s payment history.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Calculadora::euros( $importe ), $e['nombre'] ) : '';
 					break;
 				}
 				if ( $banco ) {
 					// Con un movimiento del banco (v0.20): el pago lleva su fecha y su importe y el movimiento queda conciliado.
 					$mb = BancoTable::obtener( $banco );
 					if ( ! self::ve_banco() ) {
-						$r = new \WP_Error( 'x', asde_t( 'Los movimientos del banco solo los usan Secretaría, Coordinación y Tesorería.' ) );
+						$r = new \WP_Error( 'x', __( 'Bank transactions are only used by the Secretary\'s office, Coordination and Treasury.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 					} else {
 						$r = Conciliacion::conciliar( $banco, $familia, $ronda );
 					}
 					/* translators: 1: importe, 2: fecha */
-					$ok = $mb ? sprintf( asde_t( 'Pago de %1$s registrado con el ingreso del banco del %2$s, que queda conciliado con esta familia.' ), Calculadora::euros( $mb['importe'] ), wp_date( 'd/m/Y', strtotime( $mb['fecha'] . ' 12:00' ) ) ) : '';
+					$ok = $mb ? sprintf( /* translators: 1: text, 2: text */ __( 'Payment of %1$s recorded with the bank deposit of %2$s, which is reconciled with this family.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Calculadora::euros( $mb['importe'] ), wp_date( 'd/m/Y', strtotime( $mb['fecha'] . ' 12:00' ) ) ) : '';
 					break;
 				}
 				$r = MovimientosTable::registrar( $familia, $ronda, MovimientosTable::PAGO, $this->post( 'fecha' ), $importe, sanitize_key( $this->post( 'metodo' ) ), $this->post( 'referencia' ), $this->post( 'nota' ) );
-				$ok = sprintf( asde_t( 'Pago de %s registrado.' ), Calculadora::euros( $importe ) );
+				$ok = sprintf( /* translators: %s: text */ __( 'Payment of %s recorded.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Calculadora::euros( $importe ) );
 				break;
 			case 'registrar_ajuste':
 				$signo = 'descuento' === $this->post( 'sentido' ) ? -1 : 1;
 				$r     = MovimientosTable::registrar( $familia, $ronda, MovimientosTable::AJUSTE, $this->post( 'fecha' ), $signo * abs( $importe ), '', '', $this->post( 'nota' ) );
-				$ok    = sprintf( asde_t( 'Ajuste de %s registrado.' ), Calculadora::euros( $signo * abs( $importe ) ) );
+				$ok    = sprintf( /* translators: %s: text */ __( 'Adjustment of %s recorded.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Calculadora::euros( $signo * abs( $importe ) ) );
 				break;
 			case 'anular': // Hasta la v0.24 se llamaba así.
 			case 'eliminar':
 				// v0.25: con motivo y en el historial; si vino del banco, el ingreso vuelve a quedar por conciliar.
 				// v0.29: solo Tesorería (P-94).
-				$res = Pagos::puede_eliminar() ? Pagos::eliminar( (int) $this->post( 'movimiento' ), $familia, $this->post( 'motivo' ) ) : new \WP_Error( 'asde_pago', asde_t( 'Eliminar un pago o un ajuste lo hace Tesorería.' ) );
+				$res = Pagos::puede_eliminar() ? Pagos::eliminar( (int) $this->post( 'movimiento' ), $familia, $this->post( 'motivo' ) ) : new \WP_Error( 'asde_pago', __( 'Deleting a payment or an adjustment is done by Treasury.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 				if ( is_wp_error( $res ) ) {
 					$r  = $res;
 					$ok = '';
@@ -427,19 +427,19 @@ final class TesoreriaView extends TesoreriaBaseView {
 				$r  = (int) $res['mov']['id'];
 				$ok = MovimientosTable::PAGO === $res['mov']['tipo']
 					/* translators: %s: importe */
-					? sprintf( asde_t( 'Pago de %s eliminado. Queda en el historial de la familia.' ), Calculadora::euros( (float) $res['mov']['importe'] ) )
+					? sprintf( /* translators: %s: text */ __( 'Payment of %s deleted. It remains in the family\'s history.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Calculadora::euros( (float) $res['mov']['importe'] ) )
 					/* translators: %s: importe */
-					: sprintf( asde_t( 'Ajuste de %s eliminado. Queda en el historial de la familia.' ), Calculadora::euros( (float) $res['mov']['importe'] ) );
+					: sprintf( /* translators: %s: text */ __( 'Adjustment of %s removed. It remains in the family\'s history.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Calculadora::euros( (float) $res['mov']['importe'] ) );
 				if ( $res['banco'] ) {
 					/* translators: %s: fecha */
-					$ok .= ' ' . sprintf( asde_t( 'El ingreso del banco del %s vuelve a estar por conciliar.' ), wp_date( 'd/m/Y', strtotime( $res['banco']['fecha'] . ' 12:00' ) ) );
+					$ok .= ' ' . sprintf( /* translators: %s: text */ __( 'The bank deposit of %s is pending reconciliation again.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), wp_date( 'd/m/Y', strtotime( $res['banco']['fecha'] . ' 12:00' ) ) );
 				}
 				if ( 'sepa' === $res['mov']['origen'] ) {
-					$ok .= ' ' . asde_t( 'Venía del cobro de una remesa SEPA: la remesa lo sigue dando por cobrado.' );
+					$ok .= ' ' . __( 'It came from the collection of a SEPA batch: the batch still considers it collected.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				}
 				break;
 			default:
-				$r = new \WP_Error( 'x', asde_t( 'Acción desconocida.' ) );
+				$r = new \WP_Error( 'x', __( 'Unknown action.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 				$ok = '';
 		}
 

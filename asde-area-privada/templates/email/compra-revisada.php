@@ -29,22 +29,22 @@ $num      = ComprasTable::numero( $lista );
 		<tr><td align="center">
 			<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:600px;background:<?php echo esc_attr( $col['tarjeta'] ); ?>;border-radius:6px;overflow:hidden;">
 				<tr><td style="background:<?php echo esc_attr( $col['primary'] ); ?>;color:<?php echo esc_attr( $col['on_primary'] ); ?>;padding:20px 28px;font-size:18px;font-weight:600;">
-					<?php echo esc_html( $grupo ); ?> · <?php asde_e( 'Área privada' ); ?>
+					<?php echo esc_html( $grupo ); ?> · <?php esc_html_e( 'Private area', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>
 				</td></tr>
 				<tr><td style="padding:28px;font-size:15px;line-height:1.6;">
-					<p style="margin:0 0 16px;"><?php echo wp_kses( '' !== $nombre ? sprintf( asde_h( 'Hola, %s:' ), esc_html( $nombre ) ) : asde_h( 'Hola:' ), asde_html_permitido() ); ?></p>
+					<p style="margin:0 0 16px;"><?php echo wp_kses( '' !== $nombre ? sprintf( /* translators: %s: text */ __( 'Hello, %s:', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), esc_html( $nombre ) ) : __( 'Hello:', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), asde_html_permitido() ); ?></p>
 					<?php if ( $aprobada ) : ?>
-						<p style="margin:0 0 16px;"><?php echo wp_kses( sprintf( asde_h( 'Tesorería ha dado el <strong>visto bueno</strong> a tu lista de compra de material <strong>%s</strong>. Ya la puedes descargar en PDF para imprimirla.' ), esc_html( $num ) ), asde_html_permitido() ); ?></p>
-						<p style="margin:0 0 16px;"><?php asde_e( 'Cuando hayas comprado el material, márcala como comprada en el área privada: lo comprado se sumará al inventario.' ); ?></p>
+						<p style="margin:0 0 16px;"><?php echo wp_kses( sprintf( /* translators: %s: text */ __( 'Treasury has <strong>approved</strong> your equipment shopping list <strong>%s</strong>. You can now download it as a PDF to print it.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), esc_html( $num ) ), asde_html_permitido() ); ?></p>
+						<p style="margin:0 0 16px;"><?php esc_html_e( 'When you have bought the equipment, mark it as bought in the private area: what has been bought will be added to the inventory.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 					<?php else : ?>
-						<p style="margin:0 0 16px;"><?php echo wp_kses( sprintf( asde_h( 'Tesorería <strong>no ha dado el visto bueno</strong> a tu lista de compra de material <strong>%s</strong>: la ha rechazado.' ), esc_html( $num ) ), asde_html_permitido() ); ?></p>
+						<p style="margin:0 0 16px;"><?php echo wp_kses( sprintf( /* translators: %s: text */ __( 'Treasury <strong>has not approved</strong> your equipment shopping list <strong>%s</strong>: it has rejected it.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), esc_html( $num ) ), asde_html_permitido() ); ?></p>
 						<?php if ( '' !== trim( (string) $lista['motivo'] ) ) : ?>
-							<p style="margin:0 0 16px;padding:10px 14px;border-left:4px solid <?php echo esc_attr( $col['primary'] ); ?>;background:<?php echo esc_attr( $col['fondo'] ); ?>;"><strong><?php asde_e( 'Motivo:' ); ?></strong> <?php echo esc_html( $lista['motivo'] ); ?></p>
+							<p style="margin:0 0 16px;padding:10px 14px;border-left:4px solid <?php echo esc_attr( $col['primary'] ); ?>;background:<?php echo esc_attr( $col['fondo'] ); ?>;"><strong><?php esc_html_e( 'Reason:', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></strong> <?php echo esc_html( $lista['motivo'] ); ?></p>
 						<?php endif; ?>
-						<p style="margin:0 0 16px;"><?php asde_e( 'Si hace falta, prepara otra lista con los cambios.' ); ?></p>
+						<p style="margin:0 0 16px;"><?php esc_html_e( 'If necessary, prepare another list with the changes.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 					<?php endif; ?>
 					<?php if ( '' !== $revisor ) : ?>
-						<p style="margin:0 0 16px;font-size:14px;color:<?php echo esc_attr( $col['atenuado'] ); ?>;"><?php echo esc_html( sprintf( asde_t( 'La ha revisado %s.' ), $revisor ) ); ?></p>
+						<p style="margin:0 0 16px;font-size:14px;color:<?php echo esc_attr( $col['atenuado'] ); ?>;"><?php echo esc_html( sprintf( /* translators: %s: text */ __( 'It has been reviewed by %s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $revisor ) ); ?></p>
 					<?php endif; ?>
 					<?php
 					$tabla = TemplateLoader::render(
@@ -57,9 +57,9 @@ $num      = ComprasTable::numero( $lista );
 					echo wp_kses( $tabla, asde_html_permitido() );
 					?>
 					<p style="margin:0 0 24px;text-align:center;">
-						<a href="<?php echo esc_url( $url ); ?>" style="display:inline-block;background:<?php echo esc_attr( $col['primary'] ); ?>;color:<?php echo esc_attr( $col['on_primary'] ); ?>;padding:12px 24px;border-radius:4px;text-decoration:none;font-weight:600;"><?php asde_e( 'Ver la lista' ); ?></a>
+						<a href="<?php echo esc_url( $url ); ?>" style="display:inline-block;background:<?php echo esc_attr( $col['primary'] ); ?>;color:<?php echo esc_attr( $col['on_primary'] ); ?>;padding:12px 24px;border-radius:4px;text-decoration:none;font-weight:600;"><?php esc_html_e( 'See the list', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a>
 					</p>
-					<p style="margin:0;font-size:13px;color:<?php echo esc_attr( $col['atenuado'] ); ?>;"><?php asde_e( 'Te llega porque pediste esta lista de compra en el área privada del grupo. Para verla tendrás que iniciar sesión.' ); ?></p>
+					<p style="margin:0;font-size:13px;color:<?php echo esc_attr( $col['atenuado'] ); ?>;"><?php esc_html_e( 'You are receiving this because you requested this shopping list in the group\'s private area. You will need to sign in to see it.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 				</td></tr>
 			</table>
 		</td></tr>

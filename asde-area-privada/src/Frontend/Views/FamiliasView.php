@@ -25,7 +25,7 @@ final class FamiliasView extends TesoreriaBaseView {
 		}
 		$repo = PersonaRepository::make();
 		if ( ! $repo ) {
-			return $this->error_crm( 'tesoreria', asde_t( 'La conexión de tu grupo con el CRM no está configurada o no se ha podido comprobar. Un administrador puede revisarla en wp-admin → Grupos Scouts.' ) );
+			return $this->error_crm( 'tesoreria', __( 'Your group\'s connection to the CRM is not set up or could not be checked. An administrator can review it in wp-admin → Scout Groups.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$ronda = $this->ronda();
 
@@ -46,7 +46,7 @@ final class FamiliasView extends TesoreriaBaseView {
 				}
 			}
 		} catch ( CrmException $e ) {
-			return $this->error_crm( 'tesoreria', asde_t( 'No se ha podido consultar el CRM: ' ) . $e->getMessage() );
+			return $this->error_crm( 'tesoreria', __( 'The CRM could not be queried: ', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . $e->getMessage() );
 		}
 
 		$cfg     = Config::de( $ronda );
@@ -121,7 +121,7 @@ final class FamiliasView extends TesoreriaBaseView {
 
 	public function handle_post(): void {
 		if ( ! current_user_can( self::CAP ) ) {
-			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+			wp_die( esc_html__( 'You do not have permission to do this.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		check_admin_referer( 'asde_familias' );
 		$repo    = PersonaRepository::make();
@@ -141,28 +141,28 @@ final class FamiliasView extends TesoreriaBaseView {
 		switch ( $this->post( 'asde_action' ) ) {
 			case 'crear':
 				$nums = $validar( $this->post_array( 'socios' ) );
-				$r    = $nums ? FamiliasTable::crear( array_map( 'strval', $nums ) ) : new \WP_Error( 'x', asde_t( 'Elige al menos un socio con membresía activa.' ) );
+				$r    = $nums ? FamiliasTable::crear( array_map( 'strval', $nums ) ) : new \WP_Error( 'x', __( 'Choose at least one member with an active membership.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 				if ( ! is_wp_error( $r ) ) {
 					$f = FamiliasTable::obtener( $r );
 					Logger::log( 'familia_creada', 'familia', (string) $r, array( 'socios' => $nums ) );
-					Notices::add( 'success', sprintf( asde_t( 'Familia <strong>%s</strong> creada con %d socio(s).' ), esc_html( $f['numero'] ), count( $nums ) ) );
+					Notices::add( 'success', sprintf( /* translators: 1: text, 2: number */ __( 'Family <strong>%1$s</strong> created with %2$d member(s).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), esc_html( $f['numero'] ), count( $nums ) ) );
 					$volver = $this->url( 'familias', array( 'familia' => $r ) );
 				}
 				break;
 
 			case 'anadir':
 				$nums = $validar( array( $this->post( 'socio' ) ) );
-				$r    = $nums ? FamiliasTable::anadir( $familia, (string) $nums[0] ) : new \WP_Error( 'x', asde_t( 'Ese socio no tiene membresía activa en el grupo.' ) );
+				$r    = $nums ? FamiliasTable::anadir( $familia, (string) $nums[0] ) : new \WP_Error( 'x', __( 'That member does not have an active membership in the group.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 				if ( ! is_wp_error( $r ) ) {
 					Logger::log( 'familia_socio_anadido', 'familia', (string) $familia, array( 'socio' => $nums[0] ) );
-					Notices::add( 'success', asde_t( 'Socio añadido a la familia.' ) );
+					Notices::add( 'success', __( 'Member added to the family.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 				}
 				break;
 
 			case 'quitar':
 				FamiliasTable::quitar( $familia, $this->post( 'socio' ) );
 				Logger::log( 'familia_socio_quitado', 'familia', (string) $familia, array( 'socio' => $this->post( 'socio' ) ) );
-				Notices::add( 'success', asde_t( 'Socio quitado de la familia.' ) );
+				Notices::add( 'success', __( 'Member removed from the family.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 				$r = true;
 				break;
 
@@ -170,13 +170,13 @@ final class FamiliasView extends TesoreriaBaseView {
 				$r = FamiliasTable::borrar( $familia );
 				if ( ! is_wp_error( $r ) ) {
 					Logger::log( 'familia_borrada', 'familia', (string) $familia );
-					Notices::add( 'success', asde_t( 'Familia eliminada.' ) );
+					Notices::add( 'success', __( 'Family removed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 					$volver = $this->url( 'familias' );
 				}
 				break;
 
 			default:
-				$r = new \WP_Error( 'x', asde_t( 'Acción desconocida.' ) );
+				$r = new \WP_Error( 'x', __( 'Unknown action.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 
 		if ( is_wp_error( $r ) ) {

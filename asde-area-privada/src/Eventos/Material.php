@@ -66,17 +66,17 @@ final class Material {
 	/** @return true|\WP_Error */
 	public static function anadir( array $e, Ambito $a, int $material_id, int $cantidad ) {
 		if ( ! self::puede_editar( $e, $a ) ) {
-			return new \WP_Error( 'asde_material', asde_t( 'No puedes cambiar el material de este evento.' ) );
+			return new \WP_Error( 'asde_material', __( 'You cannot change this event\'s equipment.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$m = MaterialesTable::obtener( $material_id );
 		if ( ! $m || null !== $m['baja_en'] ) {
-			return new \WP_Error( 'asde_material', asde_t( 'Ese material ya no está en el inventario.' ) );
+			return new \WP_Error( 'asde_material', __( 'That equipment is no longer in the inventory.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( $cantidad < 1 || $cantidad > self::MAX_UNIDADES ) {
-			return new \WP_Error( 'asde_material', asde_t( 'La cantidad tiene que ser un número entero mayor que cero.' ) );
+			return new \WP_Error( 'asde_material', __( 'The quantity must be a whole number greater than zero.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( MaterialTable::contar( $e['id'] ) >= MaterialTable::MAX ) {
-			return new \WP_Error( 'asde_material', asde_t( 'El evento ya lleva demasiado material.' ) );
+			return new \WP_Error( 'asde_material', __( 'The event already has too much equipment.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		MaterialTable::reservar( $e['id'], $material_id, $m['descripcion'], $cantidad );
 		Logger::log( 'evento_material_anadido', 'evento', (string) $e['id'], array( 'material' => $material_id, 'cantidad' => $cantidad ) );
@@ -87,10 +87,10 @@ final class Material {
 	public static function cambiar_cantidad( array $e, Ambito $a, int $id, int $cantidad ) {
 		$l = MaterialTable::obtener( $id );
 		if ( ! self::puede_editar( $e, $a ) || ! $l || $l['evento_id'] !== $e['id'] || null !== $l['salida_en'] ) {
-			return new \WP_Error( 'asde_material', asde_t( 'No se puede cambiar: el material ya ha salido o no puedes cambiar el del evento.' ) );
+			return new \WP_Error( 'asde_material', __( 'It cannot be changed: the equipment has already gone out or you cannot change the event\'s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( $cantidad < 1 || $cantidad > self::MAX_UNIDADES ) {
-			return new \WP_Error( 'asde_material', asde_t( 'La cantidad tiene que ser un número entero mayor que cero.' ) );
+			return new \WP_Error( 'asde_material', __( 'The quantity must be a whole number greater than zero.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		MaterialTable::actualizar( $id, array( 'cantidad' => $cantidad ) );
 		return true;
@@ -100,7 +100,7 @@ final class Material {
 	public static function quitar( array $e, Ambito $a, int $id ) {
 		$l = MaterialTable::obtener( $id );
 		if ( ! self::puede_editar( $e, $a ) || ! $l || $l['evento_id'] !== $e['id'] || null !== $l['salida_en'] ) {
-			return new \WP_Error( 'asde_material', asde_t( 'No se puede quitar: el material ya ha salido o no puedes cambiar el del evento.' ) );
+			return new \WP_Error( 'asde_material', __( 'It cannot be removed: the equipment has already gone out or you cannot change the event\'s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		MaterialTable::quitar( $id, $e['id'] );
 		return true;
@@ -114,11 +114,11 @@ final class Material {
 	 */
 	public static function cargar_habitual( array $e, Ambito $a ) {
 		if ( ! self::puede_editar( $e, $a ) ) {
-			return new \WP_Error( 'asde_material', asde_t( 'No puedes cambiar el material de este evento.' ) );
+			return new \WP_Error( 'asde_material', __( 'You cannot change this event\'s equipment.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$texto = (string) ( Config::de()['material_por_tipo'][ $e['tipo'] ] ?? '' );
 		if ( '' === trim( $texto ) ) {
-			return new \WP_Error( 'asde_material', asde_t( 'Este tipo de evento no tiene material habitual: se escribe en la configuración de eventos.' ) );
+			return new \WP_Error( 'asde_material', __( 'This type of event has no usual equipment: it is written in the event settings.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$por_nombre = array();
 		foreach ( MaterialesTable::todos() as $m ) {
@@ -161,7 +161,7 @@ final class Material {
 	 */
 	public static function salida( array $e, Ambito $a, int $id = 0 ) {
 		if ( ! self::puede_editar( $e, $a ) ) {
-			return new \WP_Error( 'asde_material', asde_t( 'No puedes cambiar el material de este evento.' ) );
+			return new \WP_Error( 'asde_material', __( 'You cannot change this event\'s equipment.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$n = 0;
 		foreach ( MaterialTable::de_evento( $e['id'] ) as $l ) {
@@ -171,7 +171,7 @@ final class Material {
 			}
 		}
 		if ( ! $n ) {
-			return new \WP_Error( 'asde_material', asde_t( 'No hay material pendiente de sacar.' ) );
+			return new \WP_Error( 'asde_material', __( 'There is no equipment pending to take out.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		Logger::log( 'evento_material_salida', 'evento', (string) $e['id'], array( 'lineas' => $n ) );
 		return $n;
@@ -186,16 +186,16 @@ final class Material {
 	public static function devolver( array $e, Ambito $a, int $id, int $devueltas, string $nota ) {
 		$l = MaterialTable::obtener( $id );
 		if ( ! self::puede_editar( $e, $a ) || ! $l || $l['evento_id'] !== $e['id'] ) {
-			return new \WP_Error( 'asde_material', asde_t( 'No puedes cambiar el material de este evento.' ) );
+			return new \WP_Error( 'asde_material', __( 'You cannot change this event\'s equipment.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( null === $l['salida_en'] ) {
-			return new \WP_Error( 'asde_material', asde_t( 'Ese material todavía no ha salido.' ) );
+			return new \WP_Error( 'asde_material', __( 'That equipment has not gone out yet.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( $l['descontado'] ) {
-			return new \WP_Error( 'asde_material', asde_t( 'Ya se descontó del inventario lo que faltaba: no se puede cambiar la devolución.' ) );
+			return new \WP_Error( 'asde_material', __( 'What was missing has already been deducted from the inventory: the return cannot be changed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( $devueltas < 0 || $devueltas > $l['cantidad'] ) {
-			return new \WP_Error( 'asde_material', sprintf( asde_t( 'Las unidades devueltas van de 0 a %d.' ), $l['cantidad'] ) );
+			return new \WP_Error( 'asde_material', sprintf( /* translators: %d: number */ __( 'The units returned go from 0 to %d.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $l['cantidad'] ) );
 		}
 		MaterialTable::actualizar(
 			$id,
@@ -218,11 +218,11 @@ final class Material {
 	public static function descontar_faltantes( array $e, Ambito $a, int $id ) {
 		$l = MaterialTable::obtener( $id );
 		if ( ! self::puede_editar( $e, $a ) || ! $l || $l['evento_id'] !== $e['id'] || null === $l['devuelta_en'] || $l['descontado'] ) {
-			return new \WP_Error( 'asde_material', asde_t( 'No hay nada que descontar del inventario en esa línea.' ) );
+			return new \WP_Error( 'asde_material', __( 'There is nothing to deduct from the inventory on that line.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$faltan = max( 0, $l['cantidad'] - (int) $l['devueltas'] );
 		if ( ! $faltan ) {
-			return new \WP_Error( 'asde_material', asde_t( 'No hay nada que descontar del inventario en esa línea.' ) );
+			return new \WP_Error( 'asde_material', __( 'There is nothing to deduct from the inventory on that line.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$quitadas = MaterialesTable::restar( $l['material_id'], $faltan );
 		MaterialTable::actualizar( $id, array( 'descontado' => 1 ) );

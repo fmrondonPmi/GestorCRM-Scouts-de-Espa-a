@@ -71,7 +71,7 @@ final class Cobros {
 	public static function pagar( array $e, int $fila, float $importe, string $forma, string $fecha, string $referencia, string $nota ) {
 		$f = self::fila( $e, $fila );
 		if ( ! self::puede() || ! $f || ! in_array( $f['estado'], InscripcionesTable::ACTIVAS, true ) ) {
-			return new \WP_Error( 'asde_cobro', asde_t( 'Los pagos de las inscripciones los registra Tesorería.' ) );
+			return new \WP_Error( 'asde_cobro', __( 'Payments for sign-ups are recorded by Treasury.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( ! self::abiertas( $e ) ) {
 			return self::cerradas();
@@ -82,7 +82,7 @@ final class Cobros {
 		}
 		$cobro = self::de( $f, MovimientosTable::de_inscripciones( array( $f['id'] ) )[ $f['id'] ] ?? array() );
 		if ( $importe > $cobro['pendiente'] + 0.001 ) {
-			return new \WP_Error( 'asde_cobro', sprintf( asde_t( 'Es más de lo que queda por pagar (%s).' ), \AsdeBalears\AreaPrivada\Tesoreria\Calculadora::euros( $cobro['pendiente'] ) ) );
+			return new \WP_Error( 'asde_cobro', sprintf( /* translators: %s: text */ __( 'It is more than what is left to pay (%s).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), \AsdeBalears\AreaPrivada\Tesoreria\Calculadora::euros( $cobro['pendiente'] ) ) );
 		}
 		$id = MovimientosTable::anadir( $e['id'], $f['id'], MovimientosTable::PAGO, $fecha, $importe, $forma, self::texto( $referencia, 120 ), self::texto( $nota, 255 ) );
 		Logger::log(
@@ -113,7 +113,7 @@ final class Cobros {
 	public static function pagar_familia( array $e, int $familia_id, float $importe, string $forma, string $fecha, string $referencia, string $nota, bool $sepa = false, float &$sobra = 0.0 ) {
 		$sobra = 0.0;
 		if ( ! self::puede() ) {
-			return new \WP_Error( 'asde_cobro', asde_t( 'Los pagos de las inscripciones los registra Tesorería.' ) );
+			return new \WP_Error( 'asde_cobro', __( 'Payments for sign-ups are recorded by Treasury.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( ! self::abiertas( $e ) ) {
 			return self::cerradas();
@@ -124,14 +124,14 @@ final class Cobros {
 			$lista = self::de_la_familia( $e, $familia ); // Sin nada pendiente: el cobro del banco va igualmente a sus inscripciones.
 		}
 		if ( ! $lista ) {
-			return new \WP_Error( 'asde_cobro', asde_t( 'Esa familia no tiene nada pendiente en este evento.' ) );
+			return new \WP_Error( 'asde_cobro', __( 'That family has nothing pending in this event.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$error = self::validar( $importe, $forma, $fecha, $sepa );
 		if ( $error ) {
 			return $error;
 		}
 		if ( ! $sepa && $importe > $lista['pendiente'] + 0.001 ) {
-			return new \WP_Error( 'asde_cobro', sprintf( asde_t( 'Es más de lo que queda por pagar (%s).' ), \AsdeBalears\AreaPrivada\Tesoreria\Calculadora::euros( $lista['pendiente'] ) ) );
+			return new \WP_Error( 'asde_cobro', sprintf( /* translators: %s: text */ __( 'It is more than what is left to pay (%s).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), \AsdeBalears\AreaPrivada\Tesoreria\Calculadora::euros( $lista['pendiente'] ) ) );
 		}
 		$lote   = substr( md5( uniqid( 'evento', true ) ), 0, 16 );
 		$resto  = round( $importe, 2 );
@@ -173,7 +173,7 @@ final class Cobros {
 	public static function ajustar( array $e, int $fila, float $importe, string $motivo ) {
 		$f = self::fila( $e, $fila );
 		if ( ! self::puede() || ! $f || ! in_array( $f['estado'], array( InscripcionesTable::PENDIENTE, InscripcionesTable::CONFIRMADA, InscripcionesTable::ESPERA ), true ) ) {
-			return new \WP_Error( 'asde_cobro', asde_t( 'Las becas y los ajustes los hace Tesorería.' ) );
+			return new \WP_Error( 'asde_cobro', __( 'Scholarships and adjustments are made by Treasury.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( ! self::abiertas( $e ) ) {
 			return self::cerradas();
@@ -181,11 +181,11 @@ final class Cobros {
 		$motivo  = self::texto( $motivo, 255 );
 		$importe = round( $importe, 2 );
 		if ( 0.0 === $importe || '' === $motivo ) {
-			return new \WP_Error( 'asde_cobro', asde_t( 'Escribe el importe del ajuste y su motivo.' ) );
+			return new \WP_Error( 'asde_cobro', __( 'Enter the amount of the adjustment and its reason.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$cobro = self::de( $f, MovimientosTable::de_inscripciones( array( $f['id'] ) )[ $f['id'] ] ?? array() );
 		if ( $f['precio'] + $cobro['ajustes'] + $importe < -0.001 ) {
-			return new \WP_Error( 'asde_cobro', asde_t( 'La rebaja no puede ser mayor que el precio.' ) );
+			return new \WP_Error( 'asde_cobro', __( 'The discount cannot be greater than the price.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$id = MovimientosTable::anadir( $e['id'], $f['id'], MovimientosTable::AJUSTE, current_time( 'Y-m-d' ), $importe, '', '', $motivo );
 		Logger::log(
@@ -205,7 +205,7 @@ final class Cobros {
 	public static function anular( array $e, int $movimiento ) {
 		$m = MovimientosTable::obtener( $movimiento );
 		if ( ! self::puede() || ! $m || $m['evento_id'] !== $e['id'] || null !== $m['anulado_en'] ) {
-			return new \WP_Error( 'asde_cobro', asde_t( 'Ese movimiento no se puede anular.' ) );
+			return new \WP_Error( 'asde_cobro', __( 'That transaction cannot be cancelled.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( ! self::abiertas( $e ) ) {
 			return self::cerradas();
@@ -236,14 +236,14 @@ final class Cobros {
 	public static function devolver( array $e, int $fila, float $importe, string $forma, string $fecha, string $motivo ) {
 		$f = self::fila( $e, $fila );
 		if ( ! self::puede() || ! $f ) {
-			return new \WP_Error( 'asde_cobro', asde_t( 'Las devoluciones las hace Tesorería.' ) );
+			return new \WP_Error( 'asde_cobro', __( 'Refunds are made by Treasury.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( ! self::abiertas( $e ) ) {
 			return self::cerradas();
 		}
 		$motivo = self::texto( $motivo, 255 );
 		if ( '' === $motivo ) {
-			return new \WP_Error( 'asde_cobro', asde_t( 'Escribe el motivo de la devolución.' ) );
+			return new \WP_Error( 'asde_cobro', __( 'Enter the reason for the refund.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$error = self::validar( $importe, $forma, $fecha );
 		if ( $error ) {
@@ -251,7 +251,7 @@ final class Cobros {
 		}
 		$cobro = self::de( $f, MovimientosTable::de_inscripciones( array( $f['id'] ) )[ $f['id'] ] ?? array() );
 		if ( $importe > $cobro['neto'] + 0.001 ) {
-			return new \WP_Error( 'asde_cobro', sprintf( asde_t( 'Es más de lo pagado (%s).' ), \AsdeBalears\AreaPrivada\Tesoreria\Calculadora::euros( $cobro['neto'] ) ) );
+			return new \WP_Error( 'asde_cobro', sprintf( /* translators: %s: text */ __( 'It is more than what was paid (%s).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), \AsdeBalears\AreaPrivada\Tesoreria\Calculadora::euros( $cobro['neto'] ) ) );
 		}
 		$id = MovimientosTable::anadir( $e['id'], $f['id'], MovimientosTable::DEVOLUCION, $fecha, $importe, $forma, '', $motivo );
 		Logger::log(
@@ -314,19 +314,19 @@ final class Cobros {
 	}
 
 	private static function cerradas(): \WP_Error {
-		return new \WP_Error( 'asde_cobro', asde_t( 'Las cuentas de este evento están cerradas: ya no se pueden cambiar.' ) );
+		return new \WP_Error( 'asde_cobro', __( 'This event\'s accounts are closed: they can no longer be changed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 	}
 
 	/** @param bool $sepa La domiciliación solo la pone la remesa SEPA del evento. */
 	private static function validar( float $importe, string $forma, string $fecha, bool $sepa = false ): ?\WP_Error {
 		if ( $importe <= 0 ) {
-			return new \WP_Error( 'asde_cobro', asde_t( 'Escribe un importe mayor que cero.' ) );
+			return new \WP_Error( 'asde_cobro', __( 'Enter an amount greater than zero.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( ! in_array( $forma, $sepa ? array( 'domiciliacion' ) : MovimientosTable::FORMAS_MANUALES, true ) ) {
-			return new \WP_Error( 'asde_cobro', asde_t( 'Elige la forma de pago.' ) );
+			return new \WP_Error( 'asde_cobro', __( 'Choose the payment method.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( ! preg_match( '/^\d{4}-\d{2}-\d{2}$/', $fecha ) || ! date_create( $fecha ) || $fecha > current_time( 'Y-m-d' ) ) {
-			return new \WP_Error( 'asde_cobro', asde_t( 'La fecha del pago no puede ser posterior a hoy.' ) );
+			return new \WP_Error( 'asde_cobro', __( 'The payment date cannot be later than today.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		return null;
 	}

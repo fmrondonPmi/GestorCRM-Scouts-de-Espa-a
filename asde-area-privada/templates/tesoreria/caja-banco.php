@@ -20,34 +20,34 @@ $fecha   = static fn( string $f ) => wp_date( 'd/m/Y', strtotime( $f . ' 12:00' 
 $importe = static fn( float $v ) => ( $v > 0 ? '+' : '' ) . Calculadora::euros( $v );
 ?>
 <section class="asde-card asde-banco-asociar" data-asde-no-plegable>
-	<h2 class="asde-card__title"><?php asde_e( 'Asociar con el banco' ); ?></h2>
+	<h2 class="asde-card__title"><?php esc_html_e( 'Link with the bank', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h2>
 	<?php if ( $hecho ) : ?>
-		<p><?php asde_e( 'Cierra esta ventana para volver a la caja: ya sale actualizada.' ); ?></p>
+		<p><?php esc_html_e( 'Close this window to go back to the cash box: it now shows the update.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 	<?php elseif ( ! $apunte ) : ?>
-		<p><?php asde_e( 'Solo un traspaso con el banco se asocia con un movimiento del banco.' ); ?></p>
+		<p><?php esc_html_e( 'Only a transfer with the bank is linked to a bank transaction.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 	<?php elseif ( $apunte['banco_id'] ) : ?>
-		<p><?php asde_e( 'Este traspaso ya está asociado con su movimiento del banco: quita antes la asociación en la caja.' ); ?></p>
+		<p><?php esc_html_e( 'This transfer is already linked to its bank transaction: remove the link first in the cash box.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 	<?php else : ?>
 		<p><strong><?php echo esc_html( $fecha( $apunte['fecha'] ) . ' · ' . $importe( (float) $apunte['importe'] ) ); ?></strong><br><?php echo esc_html( LibroMayor::concepto_caja( $apunte ) ); ?></p>
-		<p class="asde-muted"><?php asde_e( 'Elige el movimiento del banco que corresponde a este traspaso: así el libro mayor no lo cuenta como gasto ni como ingreso. Primero salen los del mismo importe.' ); ?></p>
+		<p class="asde-muted"><?php esc_html_e( 'Choose the bank transaction that corresponds to this transfer: that way the general ledger does not count it as an expense or income. Those of the same amount come first.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 		<?php if ( ! $candidatos ) : ?>
-			<p><?php asde_e( 'No hay ningún movimiento del banco que encaje (de signo contrario y sin otro traspaso). Importa antes el extracto.' ); ?></p>
+			<p><?php esc_html_e( 'No bank transaction fits (of the opposite sign and without another transfer). Import the statement first.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 		<?php else : ?>
 			<table class="asde-table">
 				<thead>
 					<tr>
-						<th scope="col"><?php asde_e( 'Fecha' ); ?></th>
-						<th scope="col"><?php asde_e( 'Concepto' ); ?></th>
-						<th scope="col"><?php asde_e( 'Importe' ); ?></th>
-						<th scope="col"><span class="screen-reader-text"><?php asde_e( 'Acciones' ); ?></span></th>
+						<th scope="col"><?php esc_html_e( 'Date', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Description', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Amount', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
+						<th scope="col"><span class="screen-reader-text"><?php esc_html_e( 'Actions', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span></th>
 					</tr>
 				</thead>
 				<tbody>
 					<?php foreach ( $candidatos as $m ) : ?>
 						<tr<?php echo $m['igual'] ? ' class="asde-banco-asociar__igual"' : ''; ?>>
-							<td data-label="<?php echo esc_attr( asde_a( 'Fecha' ) ); ?>"><?php echo esc_html( $fecha( $m['fecha'] ) ); ?></td>
-							<td data-label="<?php echo esc_attr( asde_a( 'Concepto' ) ); ?>"><?php echo esc_html( trim( $m['ordenante'] . ' ' . ( '' !== $m['concepto'] ? $m['concepto'] : asde_t( Norma43::CONCEPTOS[ $m['concepto_comun'] ] ?? '—' ) ) ) ); ?></td>
-							<td data-label="<?php echo esc_attr( asde_a( 'Importe' ) ); ?>" class="asde-importe <?php echo $m['importe'] > 0 ? 'asde-importe--ingreso' : 'asde-importe--gasto'; ?>"><?php echo esc_html( $importe( (float) $m['importe'] ) ); ?></td>
+							<td data-label="<?php echo esc_attr( esc_attr__( 'Date', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( $fecha( $m['fecha'] ) ); ?></td>
+							<td data-label="<?php echo esc_attr( esc_attr__( 'Description', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( trim( $m['ordenante'] . ' ' . ( '' !== $m['concepto'] ? $m['concepto'] : asde_t( Norma43::CONCEPTOS[ $m['concepto_comun'] ] ?? '—' ) ) ) ); ?></td>
+							<td data-label="<?php echo esc_attr( esc_attr__( 'Amount', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>" class="asde-importe <?php echo $m['importe'] > 0 ? 'asde-importe--ingreso' : 'asde-importe--gasto'; ?>"><?php echo esc_html( $importe( (float) $m['importe'] ) ); ?></td>
 							<td data-label="">
 								<form method="post" action="<?php echo esc_url( $url ); ?>">
 									<?php wp_nonce_field( 'asde_caja' ); ?>
@@ -55,7 +55,7 @@ $importe = static fn( float $v ) => ( $v > 0 ? '+' : '' ) . Calculadora::euros( 
 									<input type="hidden" name="caja" value="<?php echo esc_attr( $apunte['caja'] ); ?>">
 									<input type="hidden" name="apunte" value="<?php echo (int) $apunte['id']; ?>">
 									<input type="hidden" name="banco" value="<?php echo (int) $m['id']; ?>">
-									<button type="submit" class="button"><?php asde_e( 'Asociar' ); ?></button>
+									<button type="submit" class="button"><?php esc_html_e( 'Link', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 								</form>
 							</td>
 						</tr>
@@ -64,5 +64,5 @@ $importe = static fn( float $v ) => ( $v > 0 ? '+' : '' ) . Calculadora::euros( 
 			</table>
 		<?php endif; ?>
 	<?php endif; ?>
-	<p class="asde-solo-pagina"><a href="<?php echo esc_url( $volver ); ?>"><?php asde_e( '← Caja' ); ?></a></p>
+	<p class="asde-solo-pagina"><a href="<?php echo esc_url( $volver ); ?>"><?php esc_html_e( '← Cash box', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a></p>
 </section>

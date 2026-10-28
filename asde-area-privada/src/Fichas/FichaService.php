@@ -139,20 +139,20 @@ final class FichaService {
 			return in_array( $valor, array( '1', 'on', 'true' ), true ) ? '1' : '0';
 		}
 		if ( '' === $valor ) {
-			return ! empty( $meta['requerido'] ) ? new \WP_Error( 'asde_ficha', asde_t( 'es obligatorio.' ) ) : '';
+			return ! empty( $meta['requerido'] ) ? new \WP_Error( 'asde_ficha', __( 'is required.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) : '';
 		}
 		switch ( $tipo ) {
 			case 'date':
 				if ( ! preg_match( '/^(\d{4})-(\d{2})-(\d{2})$/', $valor, $m ) || ! checkdate( (int) $m[2], (int) $m[3], (int) $m[1] ) ) {
-					return new \WP_Error( 'asde_ficha', asde_t( 'fecha no válida.' ) );
+					return new \WP_Error( 'asde_ficha', __( 'invalid date.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 				}
 				return $valor;
 			case 'enum':
 			case 'dynamicenum':
 			case 'radioenum':
-				return array_key_exists( $valor, (array) ( $meta['opciones'] ?? array() ) ) ? $valor : new \WP_Error( 'asde_ficha', asde_t( 'opción no válida.' ) );
+				return array_key_exists( $valor, (array) ( $meta['opciones'] ?? array() ) ) ? $valor : new \WP_Error( 'asde_ficha', __( 'invalid option.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			case 'int':
-				return preg_match( '/^-?\d+$/', $valor ) ? $valor : new \WP_Error( 'asde_ficha', asde_t( 'tiene que ser un número.' ) );
+				return preg_match( '/^-?\d+$/', $valor ) ? $valor : new \WP_Error( 'asde_ficha', __( 'must be a number.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			case 'text':
 				$v = sanitize_textarea_field( $valor );
 				break;
@@ -160,17 +160,17 @@ final class FichaService {
 				$v = sanitize_text_field( $valor );
 		}
 		if ( ( 'email1' === $campo || str_contains( $campo, 'email' ) ) && ! is_email( $v ) ) {
-			return new \WP_Error( 'asde_ficha', asde_t( 'email no válido.' ) );
+			return new \WP_Error( 'asde_ficha', __( 'invalid email.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( 'phone' === $tipo || str_contains( $campo, 'movil' ) ) {
 			if ( ! preg_match( '/^[0-9 +().\-]{6,20}$/', $v ) ) {
-				return new \WP_Error( 'asde_ficha', asde_t( 'teléfono no válido.' ) );
+				return new \WP_Error( 'asde_ficha', __( 'invalid phone number.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			}
 		}
 		$len = (int) ( $meta['len'] ?? 0 );
 		if ( $len > 0 && mb_strlen( $v ) > $len ) {
 			/* translators: %d: número máximo de caracteres del campo */
-			return new \WP_Error( 'asde_ficha', sprintf( asde_t( 'máximo %d caracteres.' ), $len ) );
+			return new \WP_Error( 'asde_ficha', sprintf( /* translators: %d: number */ __( 'maximum %d characters.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $len ) );
 		}
 		return $v;
 	}
@@ -179,10 +179,10 @@ final class FichaService {
 	public static function mostrar( string $valor, array $meta ): string {
 		$tipo = (string) ( $meta['tipo'] ?? '' );
 		if ( '' === $valor ) {
-			return 'bool' === $tipo ? asde_t( 'No' ) : '—';
+			return 'bool' === $tipo ? __( 'No', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : '—';
 		}
 		return match ( true ) {
-			'bool' === $tipo                                                 => Escritura::iguales( $valor, '1' ) ? asde_t( 'Sí' ) : asde_t( 'No' ),
+			'bool' === $tipo                                                 => Escritura::iguales( $valor, '1' ) ? __( 'Yes', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : __( 'No', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 			'date' === $tipo && (bool) preg_match( '/^\d{4}-\d{2}-\d{2}$/', $valor ) => wp_date( 'd/m/Y', strtotime( $valor . ' 12:00' ) ),
 			'multienum' === $tipo                                            => implode( ', ', array_map( static fn( $v ) => $meta['opciones'][ $v ] ?? $v, array_filter( explode( ',', str_replace( '^', '', $valor ) ) ) ) ),
 			isset( $meta['opciones'][ $valor ] )                             => (string) $meta['opciones'][ $valor ],

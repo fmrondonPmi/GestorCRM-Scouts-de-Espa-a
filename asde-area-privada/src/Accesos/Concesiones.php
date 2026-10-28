@@ -231,35 +231,35 @@ final class Concesiones {
 	public static function conceder( \WP_User $actor, int $user_id, string $permiso, ?string $caduca, string $motivo ) {
 		global $wpdb;
 		if ( ! user_can( $actor, Catalogo::CAP_GESTION ) ) {
-			return new \WP_Error( 'asde_acc', asde_t( 'No tienes permiso para repartir accesos.' ) );
+			return new \WP_Error( 'asde_acc', __( 'You do not have permission to assign access.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( $actor->ID === $user_id ) {
-			return new \WP_Error( 'asde_acc', asde_t( 'No puedes concederte permisos a ti mismo: tiene que hacerlo otra persona de Coordinación, Secretaría o Tesorería.' ) );
+			return new \WP_Error( 'asde_acc', __( 'You cannot grant permissions to yourself: another person from Coordination, the Secretary\'s office or Treasury must do it.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( ! Catalogo::existe( $permiso ) ) {
-			return new \WP_Error( 'asde_acc', asde_t( 'Ese permiso no se puede conceder.' ) );
+			return new \WP_Error( 'asde_acc', __( 'That permission cannot be granted.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$destino = get_userdata( $user_id );
 		if ( ! $destino || ! self::es_destino( $destino ) ) {
-			return new \WP_Error( 'asde_acc', asde_t( 'Esa persona no puede recibir permisos sueltos: tiene que ser de gestión, de tu grupo y con la cuenta activa.' ) );
+			return new \WP_Error( 'asde_acc', __( 'That person cannot receive individual permissions: they must be a manager, from your group and with an active account.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$motivo = trim( mb_substr( sanitize_text_field( $motivo ), 0, 255 ) );
 		if ( Catalogo::sensible( $permiso ) && '' === $motivo ) {
-			return new \WP_Error( 'asde_acc', asde_t( 'Un permiso sensible necesita un motivo, para que quede en el historial.' ) );
+			return new \WP_Error( 'asde_acc', __( 'A sensitive permission needs a reason, so that it is kept in the history.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$caduca = '' === (string) $caduca ? null : (string) $caduca;
 		if ( null !== $caduca ) {
 			$d = \DateTime::createFromFormat( 'Y-m-d', $caduca );
 			if ( ! $d || $d->format( 'Y-m-d' ) !== $caduca ) {
-				return new \WP_Error( 'asde_acc', asde_t( 'La fecha de caducidad no es válida.' ) );
+				return new \WP_Error( 'asde_acc', __( 'The expiry date is not valid.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			}
 			if ( $caduca < self::hoy() ) {
-				return new \WP_Error( 'asde_acc', asde_t( 'La fecha de caducidad ya ha pasado.' ) );
+				return new \WP_Error( 'asde_acc', __( 'The expiry date has already passed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			}
 		}
 		$rol = self::del_rol( $destino );
 		if ( ! empty( $rol[ $permiso ] ) ) {
-			return new \WP_Error( 'asde_acc', asde_t( 'Esa persona ya tiene ese permiso por su rol.' ) );
+			return new \WP_Error( 'asde_acc', __( 'That person already has that permission through their role.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$tiene = $rol;
 		foreach ( self::vigentes( $user_id ) as $p ) {
@@ -267,7 +267,7 @@ final class Concesiones {
 		}
 		if ( ! Catalogo::cumple_requisitos( $permiso, $tiene ) ) {
 			/* translators: %s: lo que hace falta antes */
-			return new \WP_Error( 'asde_acc', sprintf( asde_t( 'Antes necesita: %s.' ), Catalogo::texto_requisitos( $permiso ) ) );
+			return new \WP_Error( 'asde_acc', sprintf( /* translators: %s: text */ __( 'It first needs: %s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Catalogo::texto_requisitos( $permiso ) ) );
 		}
 
 		$ahora   = current_time( 'mysql', true );
@@ -302,11 +302,11 @@ final class Concesiones {
 	public static function revocar( \WP_User $actor, int $id, string $motivo = '' ) {
 		global $wpdb;
 		if ( ! user_can( $actor, Catalogo::CAP_GESTION ) ) {
-			return new \WP_Error( 'asde_acc', asde_t( 'No tienes permiso para repartir accesos.' ) );
+			return new \WP_Error( 'asde_acc', __( 'You do not have permission to assign access.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$c = self::obtener( $id );
 		if ( ! $c || self::ACTIVO !== $c['estado'] ) {
-			return new \WP_Error( 'asde_acc', asde_t( 'Esa concesión ya no está activa.' ) );
+			return new \WP_Error( 'asde_acc', __( 'That grant is no longer active.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		self::cerrar( $c, self::REVOCADO, $actor->ID, Auditoria::REVOCA, $motivo );
 		self::depurar_persona( (int) $c['user_id'], $actor->ID, Auditoria::REVOCA, self::REVOCADO );
@@ -338,7 +338,7 @@ final class Concesiones {
 		$ok   = Catalogo::depurar( $base + array_fill_keys( array_column( self::activas_de( $user_id ), 'permiso' ), true ) );
 		foreach ( self::activas_de( $user_id ) as $c ) {
 			if ( empty( $ok[ $c['permiso'] ] ) ) {
-				self::cerrar( $c, $estado, $por, $accion, asde_t( 'Se retira porque le falta el permiso del que depende.' ) );
+				self::cerrar( $c, $estado, $por, $accion, __( 'It is withdrawn because the permission it depends on is missing.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			}
 		}
 	}

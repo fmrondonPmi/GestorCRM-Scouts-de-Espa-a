@@ -27,12 +27,12 @@ $p   = 'margin:0 0 12px;';
 		<tr><td align="center">
 			<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:600px;background:<?php echo esc_attr( $col['tarjeta'] ); ?>;border-radius:6px;overflow:hidden;">
 				<tr><td style="background:<?php echo esc_attr( $col['primary'] ); ?>;color:<?php echo esc_attr( $col['on_primary'] ); ?>;padding:20px 28px;font-size:18px;font-weight:600;">
-					<?php asde_e( 'Hoja de cocina' ); ?> · <?php echo esc_html( $evento ); ?>
+					<?php esc_html_e( 'Kitchen sheet', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> · <?php echo esc_html( $evento ); ?>
 				</td></tr>
 				<tr><td style="padding:28px;font-size:15px;line-height:1.6;">
-					<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( $saludo ? sprintf( asde_h( 'Hola, %s:' ), esc_html( $saludo ) ) : asde_h( 'Hola:' ), asde_html_permitido() ); ?></p>
-					<p style="<?php echo esc_attr( $p ); ?>"><?php echo esc_html( sprintf( asde_t( 'Estas son las personas con alergias, intolerancias o dieta que cruzan con el menú de %1$s (%2$s). Válida a fecha de %3$s: si algo cambia, se volverá a enviar.' ), $numero, $cuando, $hoja['momento'] ) ); ?></p>
-					<p style="<?php echo esc_attr( $p ); ?>color:<?php echo esc_attr( $col['atenuado'] ); ?>;font-size:13px;"><?php asde_e( 'Contiene datos de salud de menores: no lo reenvíes, no lo dejes a la vista y bórralo al acabar el evento.' ); ?></p>
+					<p style="<?php echo esc_attr( $p ); ?>"><?php echo wp_kses( $saludo ? sprintf( /* translators: %s: text */ __( 'Hello, %s:', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), esc_html( $saludo ) ) : __( 'Hello:', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), asde_html_permitido() ); ?></p>
+					<p style="<?php echo esc_attr( $p ); ?>"><?php echo esc_html( sprintf( /* translators: 1: text, 2: text, 3: text */ __( 'These are the people with allergies, intolerances or diets that match the menu of %1$s (%2$s). Valid as of %3$s: if anything changes, it will be sent again.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $numero, $cuando, $hoja['momento'] ) ); ?></p>
+					<p style="<?php echo esc_attr( $p ); ?>color:<?php echo esc_attr( $col['atenuado'] ); ?>;font-size:13px;"><?php esc_html_e( 'Contains health data of minors: do not forward it, do not leave it in sight and delete it when the event ends.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 					<?php foreach ( $hoja['platos'] as $pl ) : ?>
 						<?php if ( ! $pl['personas'] ) : ?>
 							<?php continue; ?>
@@ -47,7 +47,7 @@ $p   = 'margin:0 0 12px;';
 										$partes[] = implode( ', ', array_unique( $d['alergenos'] ) );
 									}
 									if ( ! empty( $d['trazas'] ) ) {
-										$partes[] = sprintf( asde_t( 'trazas de %s' ), implode( ', ', array_unique( $d['trazas'] ) ) );
+										$partes[] = sprintf( /* translators: %s: text */ __( 'traces of %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), implode( ', ', array_unique( $d['trazas'] ) ) );
 									}
 									if ( ! empty( $d['dieta'] ) ) {
 										$partes[] = implode( ', ', array_unique( $d['dieta'] ) );

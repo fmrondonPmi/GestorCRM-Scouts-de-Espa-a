@@ -69,7 +69,7 @@ final class MisPagosView extends View {
 		}
 		$repo = PersonaRepository::make();
 		if ( ! $repo ) {
-			return $this->error_crm( 'pagos', asde_t( 'La conexión de tu grupo con el CRM no está configurada o no se ha podido comprobar.' ) );
+			return $this->error_crm( 'pagos', __( 'Your group\'s connection to the CRM is not set up or could not be checked.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$nums     = $this->nums( $a );
 		$familias = $this->familias( $nums );
@@ -97,7 +97,7 @@ final class MisPagosView extends View {
 					}
 					$pagos[] = array(
 						'fecha'    => (string) $m['fecha'],
-						'concepto' => sprintf( asde_t( 'Cuota del grupo %s · familia %s' ), $m['ronda'], $f['numero'] ),
+						'concepto' => sprintf( /* translators: 1: text, 2: text */ __( 'Group fee %1$s · family %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $m['ronda'], $f['numero'] ),
 						'metodo'   => asde_t( MovimientosTable::METODOS[ $m['metodo'] ] ?? ( 'banco' === $m['origen'] ? 'Transferencia' : '' ) ),
 						'importe'  => (float) $m['importe'],
 						'ref'      => (string) $m['referencia'],
@@ -105,14 +105,14 @@ final class MisPagosView extends View {
 				}
 			}
 		} catch ( CrmException $e ) {
-			return $this->error_crm( 'pagos', asde_t( 'No se ha podido consultar el CRM: ' ) . $e->getMessage() );
+			return $this->error_crm( 'pagos', __( 'The CRM could not be queried: ', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . $e->getMessage() );
 		}
 
 		$nombres    = array_map( static fn( $p ) => $p->nombre, $a->representados ) + ( $a->persona ? array( $a->persona->num_socio_asde => $a->persona->nombre ) : array() );
 		$uniformes  = array_filter( PedidosTable::de_socios( $nums ), static fn( $p ) => null === $p['cancelado_en'] );
 		$pendientes = array();
 		foreach ( $uniformes as $p ) {
-			$concepto = sprintf( asde_t( 'Uniforme %s%s · %s' ), PedidosTable::numero( $p ), count( $nums ) > 1 && isset( $nombres[ $p['socio'] ] ) ? ' (' . $nombres[ $p['socio'] ] . ')' : '', Servicio::descripcion( $p['lineas'] ) );
+			$concepto = sprintf( /* translators: 1: text, 2: text, 3: text */ __( 'Uniform %1$s%2$s · %3$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), PedidosTable::numero( $p ), count( $nums ) > 1 && isset( $nombres[ $p['socio'] ] ) ? ' (' . $nombres[ $p['socio'] ] . ')' : '', Servicio::descripcion( $p['lineas'] ) );
 			if ( null !== $p['pago_en'] ) {
 				$pagos[] = array(
 					'fecha'    => (string) $p['pago_fecha'],
@@ -138,14 +138,14 @@ final class MisPagosView extends View {
 			if ( ! $e ) {
 				continue;
 			}
-			$concepto = sprintf( asde_t( 'Evento %1$s%2$s · %3$s' ), EventosTable::numero( $e ), count( $nums ) > 1 && isset( $nombres[ $f['socio'] ] ) ? ' (' . $nombres[ $f['socio'] ] . ')' : '', $e['nombre'] );
+			$concepto = sprintf( /* translators: 1: text, 2: text, 3: text */ __( 'Event %1$s%2$s · %3$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), EventosTable::numero( $e ), count( $nums ) > 1 && isset( $nombres[ $f['socio'] ] ) ? ' (' . $nombres[ $f['socio'] ] . ')' : '', $e['nombre'] );
 			foreach ( $ev_movs[ $f['id'] ] ?? array() as $m ) {
 				// Pagos y (v0.36) devoluciones, en negativo.
 				if ( in_array( $m['tipo'], array( EventosMovimientos::PAGO, EventosMovimientos::DEVOLUCION ), true ) && null === $m['anulado_en'] ) {
 					$devolucion  = EventosMovimientos::DEVOLUCION === $m['tipo'];
 					$pagos[]     = array(
 						'fecha'    => (string) $m['fecha'],
-						'concepto' => $devolucion ? sprintf( asde_t( '%s · devolución' ), $concepto ) : $concepto,
+						'concepto' => $devolucion ? sprintf( /* translators: %s: text */ __( '%s · refund', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $concepto ) : $concepto,
 						'metodo'   => asde_t( EventosMovimientos::FORMAS[ $m['forma'] ] ?? '' ),
 						'importe'  => $devolucion ? -(float) $m['importe'] : (float) $m['importe'],
 						'ref'      => (string) $m['referencia'],
@@ -229,7 +229,7 @@ final class MisPagosView extends View {
 		$m       = Mandatos::obtener( $id );
 		$familia = $m ? ( $familias[ $m['familia_id'] ] ?? null ) : null;
 		if ( ! $m || ! $familia ) {
-			return $this->denegado( asde_t( 'No tienes acceso a esa autorización.' ) );
+			return $this->denegado( __( 'You do not have access to that authorisation.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$cuenta = Mandatos::ACTIVO === $m['estado'] ? self::cuenta( PersonaRepository::make(), $familia, $m ) : Mandatos::cuenta_local( $m );
 		return $this->layout(
@@ -253,7 +253,7 @@ final class MisPagosView extends View {
 	public function handle_post(): void {
 		$a = Ambito::actual();
 		if ( ! current_user_can( self::CAP ) || ( ! $a->persona && ! $a->representados ) ) {
-			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+			wp_die( esc_html__( 'You do not have permission to do this.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		$volver   = $this->url( 'pagos' );
 		$familias = $this->familias( $this->nums( $a ) );
@@ -263,13 +263,13 @@ final class MisPagosView extends View {
 				$fid = (int) $this->post( 'familia' );
 				check_admin_referer( 'asde_sepa_firmar_' . $fid );
 				$familia = $familias[ $fid ] ?? null;
-				$puede   = $familia ? Mandatos::puede_firmar( $a, $familia ) : asde_t( 'Esa familia no es la tuya.' );
+				$puede   = $familia ? Mandatos::puede_firmar( $a, $familia ) : __( 'That family is not yours.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				if ( true !== $puede ) {
 					Notices::add( 'error', esc_html( (string) $puede ) );
 					$this->redirect( $volver );
 				}
 				if ( ! SepaConfig::lista( SepaConfig::de() ) ) {
-					Notices::add( 'error', asde_t( 'El grupo aún no tiene activadas las domiciliaciones SEPA.' ) );
+					Notices::add( 'error', __( 'The group has not yet enabled SEPA direct debits.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 					$this->redirect( $volver );
 				}
 				$v       = Mandatos::validar(
@@ -286,7 +286,7 @@ final class MisPagosView extends View {
 				);
 				$errores = $v['errores'];
 				if ( '1' !== $this->post( 'acepto' ) ) {
-					$errores[] = asde_t( 'Marca la casilla para firmar la autorización.' );
+					$errores[] = __( 'Tick the box to sign the authorisation.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				}
 				$id = $errores ? 0 : Mandatos::crear( $fid, $v['datos'], get_current_user_id() );
 				if ( is_wp_error( $id ) ) {
@@ -307,7 +307,7 @@ final class MisPagosView extends View {
 				if ( $mandato ) {
 					Avisos::autorizacion( $mandato, wp_get_current_user() );
 				}
-				Notices::add( 'success', sprintf( asde_t( 'Autorización guardada: referencia <strong>%s</strong>. Te hemos enviado un email de confirmación y te avisaremos antes de cada cargo.' ), esc_html( $mandato['referencia'] ?? '' ) ) );
+				Notices::add( 'success', sprintf( /* translators: %s: text */ __( 'Authorisation saved: reference <strong>%s</strong>. We have sent you a confirmation email and we will notify you before each charge.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), esc_html( $mandato['referencia'] ?? '' ) ) );
 				$this->redirect( $volver );
 				break;
 
@@ -317,17 +317,17 @@ final class MisPagosView extends View {
 				$m       = Mandatos::obtener( $mid );
 				$familia = $m ? ( $familias[ $m['familia_id'] ] ?? null ) : null;
 				if ( ! $m || ! $familia || true !== Mandatos::puede_firmar( $a, $familia ) ) {
-					Notices::add( 'error', asde_t( 'No puedes anular esa autorización.' ) );
+					Notices::add( 'error', __( 'You cannot cancel that authorisation.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 				} elseif ( Mandatos::revocar( $mid, get_current_user_id(), 'Anulada por la familia' ) ) {
-					Notices::add( 'success', asde_t( 'Autorización anulada. A partir de ahora no se cobrará nada por domiciliación en esa cuenta.' ) );
+					Notices::add( 'success', __( 'Authorisation cancelled. From now on nothing will be charged by direct debit to that account.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 				} else {
-					Notices::add( 'error', asde_t( 'Esa autorización ya estaba anulada.' ) );
+					Notices::add( 'error', __( 'That authorisation was already cancelled.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 				}
 				$this->redirect( $volver );
 				break;
 
 			default:
-				Notices::add( 'error', asde_t( 'Petición no válida.' ) );
+				Notices::add( 'error', __( 'Invalid request.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 				$this->redirect( $volver );
 		}
 	}

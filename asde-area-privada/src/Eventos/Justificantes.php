@@ -50,7 +50,7 @@ final class Justificantes {
 	 * @return array{justificante:string, justificante_tipo:string, justificante_nombre:string}|\WP_Error
 	 */
 	public static function guardar( string $ruta, string $nombre ) {
-		$error = new \WP_Error( 'asde_justificante', asde_t( 'El justificante tiene que ser una imagen (JPG, PNG o WebP) o un PDF de hasta 5 MB.' ) );
+		$error = new \WP_Error( 'asde_justificante', __( 'The receipt must be an image (JPG, PNG or WebP) or a PDF of up to 5 MB.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		if ( ! is_readable( $ruta ) || filesize( $ruta ) <= 0 || filesize( $ruta ) > self::MAX ) {
 			return $error;
 		}
@@ -62,11 +62,11 @@ final class Justificantes {
 		$dir = self::carpeta();
 		$raw = $fs->get_contents( $ruta );
 		if ( '' === $dir || ! is_string( $raw ) || '' === $raw ) {
-			return new \WP_Error( 'asde_justificante', asde_t( 'No se ha podido guardar el justificante. Inténtalo de nuevo.' ) );
+			return new \WP_Error( 'asde_justificante', __( 'The receipt could not be saved. Try again.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$fichero = bin2hex( random_bytes( 16 ) ) . '.bin';
 		if ( ! $fs->put_contents( $dir . '/' . $fichero, Crypto::encrypt_contexto( $raw, self::contexto( $fichero ) ), self::modo() ) ) {
-			return new \WP_Error( 'asde_justificante', asde_t( 'No se ha podido guardar el justificante. Inténtalo de nuevo.' ) );
+			return new \WP_Error( 'asde_justificante', __( 'The receipt could not be saved. Try again.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		return array(
 			'justificante'        => $fichero,
@@ -170,7 +170,7 @@ final class Justificantes {
 	public static function subido( string $campo = 'justificante' ) {
 		$f = $_FILES[ $campo ] ?? null; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.NonceVerification.Missing -- el nonce se comprueba antes (check_admin_referer en handle_post); del fichero solo se usan datos validados con is_uploaded_file()
 		if ( is_array( $f ) && in_array( $f['error'] ?? 0, array( UPLOAD_ERR_INI_SIZE, UPLOAD_ERR_FORM_SIZE ), true ) ) {
-			return new \WP_Error( 'asde_justificante', asde_t( 'El justificante tiene que ser una imagen (JPG, PNG o WebP) o un PDF de hasta 5 MB.' ) );
+			return new \WP_Error( 'asde_justificante', __( 'The receipt must be an image (JPG, PNG or WebP) or a PDF of up to 5 MB.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( ! is_array( $f ) || UPLOAD_ERR_OK !== ( $f['error'] ?? UPLOAD_ERR_NO_FILE ) || ! is_uploaded_file( (string) $f['tmp_name'] ) ) {
 			return null;

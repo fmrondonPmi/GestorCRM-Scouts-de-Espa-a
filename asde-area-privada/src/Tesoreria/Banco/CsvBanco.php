@@ -61,7 +61,7 @@ final class CsvBanco {
 
 		$lineas = array_values( array_filter( preg_split( '/\r\n|\r|\n/', $texto ), static fn( $l ) => '' !== trim( $l ) ) );
 		if ( ! $lineas ) {
-			$res['errores'][] = asde_t( 'El fichero está vacío.' );
+			$res['errores'][] = __( 'The file is empty.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 			return $res;
 		}
 		$sep = self::separador( array_slice( $lineas, 0, 30 ) );
@@ -86,7 +86,7 @@ final class CsvBanco {
 			}
 		}
 		if ( null === $cab ) {
-			$res['errores'][] = asde_t( 'No se encuentra la fila de títulos de las columnas (Fecha, Concepto, Importe…). ¿Es el CSV de movimientos del banco?' );
+			$res['errores'][] = __( 'The row of column titles (Date, Description, Amount…) cannot be found. Is it the bank transactions CSV?', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 			return $res;
 		}
 
@@ -108,7 +108,7 @@ final class CsvBanco {
 		$res['mapeo'] = $mapeo;
 		if ( ! isset( $mapeo['fecha'] ) || ! ( isset( $mapeo['importe'] ) || isset( $mapeo['cargo'] ) || isset( $mapeo['abono'] ) ) ) {
 			$res['necesita_mapeo'] = true;
-			$res['errores'][]      = asde_t( 'No se han reconocido todas las columnas necesarias (al menos la fecha y el importe, o cargo y abono). Elige a qué corresponde cada columna.' );
+			$res['errores'][]      = __( 'Not all the required columns were recognised (at least the date and the amount, or debit and credit). Choose what each column corresponds to.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 			return $res;
 		}
 		$extra_concepto = array_keys( array_filter( array_map( array( self::class, 'campo_de' ), $titulos ), static fn( $c ) => 'concepto' === $c ) );
@@ -130,7 +130,7 @@ final class CsvBanco {
 				$importe = ( null === $cargo && null === $abono ) ? null : (float) $abono - abs( (float) $cargo );
 			}
 			if ( null === $importe || 0.0 === $importe ) {
-				$res['avisos'][] = sprintf( asde_t( 'Línea %d: sin importe; no se tiene en cuenta.' ), $i + 1 );
+				$res['avisos'][] = sprintf( /* translators: %d: number */ __( 'Line %d: no amount; it is not taken into account.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $i + 1 );
 				continue;
 			}
 			// Concepto: la columna elegida más otras columnas de concepto (p. ej. «Más datos»).
@@ -154,9 +154,9 @@ final class CsvBanco {
 		}
 
 		if ( ! $res['movimientos'] ) {
-			$res['errores'][] = asde_t( 'No se ha encontrado ningún movimiento con fecha e importe válidos. Revisa las columnas elegidas.' );
+			$res['errores'][] = __( 'No transaction with a valid date and amount was found. Check the chosen columns.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		} elseif ( $saltadas > count( $res['movimientos'] ) ) {
-			$res['avisos'][] = sprintf( asde_t( '%d líneas no tienen una fecha válida en la columna de fecha y no se han tenido en cuenta.' ), $saltadas );
+			$res['avisos'][] = sprintf( /* translators: %d: number */ __( '%d lines do not have a valid date in the date column and have not been taken into account.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $saltadas );
 		}
 
 		if ( $res['movimientos'] ) {

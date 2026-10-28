@@ -18,48 +18,48 @@ $fid = (int) $familia['id'];
 	<input type="hidden" name="familia" value="<?php echo absint( $fid ); ?>">
 
 	<fieldset>
-		<legend><?php asde_e( 'Datos del deudor (titular de la cuenta)' ); ?></legend>
+		<legend><?php esc_html_e( 'Debtor details (account holder)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></legend>
 		<p>
-			<label for="asde-sepa-titular-<?php echo absint( $fid ); ?>"><?php asde_e( 'Nombre y apellidos del titular' ); ?></label>
+			<label for="asde-sepa-titular-<?php echo absint( $fid ); ?>"><?php esc_html_e( 'Account holder\'s first name and surname', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 			<input type="text" id="asde-sepa-titular-<?php echo absint( $fid ); ?>" name="titular" maxlength="70" required autocomplete="name" value="<?php echo esc_attr( $campo( 'titular' ) ); ?>">
 		</p>
 		<p>
-			<label for="asde-sepa-iban-<?php echo absint( $fid ); ?>"><?php asde_e( 'IBAN de la cuenta' ); ?></label>
-			<input type="text" id="asde-sepa-iban-<?php echo absint( $fid ); ?>" name="iban" maxlength="40" required inputmode="text" autocapitalize="characters" spellcheck="false" placeholder="<?php echo esc_attr( asde_a( 'ES00 0000 0000 0000 0000 0000' ) ); ?>" value="<?php echo esc_attr( $campo( 'iban' ) ); ?>">
-			<span class="asde-help"><?php asde_e( 'Cuenta española (24 caracteres). Se guarda, con el titular y la entidad, en la ficha de cada miembro de la familia en el CRM de Scouts de España; la web solo guarda tu autorización.' ); ?></span>
+			<label for="asde-sepa-iban-<?php echo absint( $fid ); ?>"><?php esc_html_e( 'Account IBAN', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
+			<input type="text" id="asde-sepa-iban-<?php echo absint( $fid ); ?>" name="iban" maxlength="40" required inputmode="text" autocapitalize="characters" spellcheck="false" placeholder="<?php echo esc_attr( esc_attr__( 'ES00 0000 0000 0000 0000 0000', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>" value="<?php echo esc_attr( $campo( 'iban' ) ); ?>">
+			<span class="asde-help"><?php esc_html_e( 'Spanish account (24 characters). It is stored, with the holder and the bank, on the CRM record of each family member at Scouts de España; the website only stores your authorisation.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span>
 		</p>
 		<p>
-			<label for="asde-sepa-entidad-<?php echo absint( $fid ); ?>"><?php asde_e( 'Entidad (banco, opcional)' ); ?></label>
+			<label for="asde-sepa-entidad-<?php echo absint( $fid ); ?>"><?php esc_html_e( 'Bank (optional)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 			<input type="text" id="asde-sepa-entidad-<?php echo absint( $fid ); ?>" name="entidad" maxlength="70" autocomplete="off" value="<?php echo esc_attr( $campo( 'entidad' ) ); ?>">
 		</p>
 		<p>
-			<label for="asde-sepa-calle-<?php echo absint( $fid ); ?>"><?php asde_e( 'Dirección (calle y número)' ); ?></label>
+			<label for="asde-sepa-calle-<?php echo absint( $fid ); ?>"><?php esc_html_e( 'Address (street and number)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 			<input type="text" id="asde-sepa-calle-<?php echo absint( $fid ); ?>" name="calle" maxlength="70" required autocomplete="street-address" value="<?php echo esc_attr( $campo( 'calle' ) ); ?>">
 		</p>
 		<div class="asde-grid-2">
 			<p>
-				<label for="asde-sepa-cp-<?php echo absint( $fid ); ?>"><?php asde_e( 'Código postal' ); ?></label>
+				<label for="asde-sepa-cp-<?php echo absint( $fid ); ?>"><?php esc_html_e( 'Postcode', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 				<input type="text" id="asde-sepa-cp-<?php echo absint( $fid ); ?>" name="cp" maxlength="10" required autocomplete="postal-code" value="<?php echo esc_attr( $campo( 'cp' ) ); ?>">
 			</p>
 			<p>
-				<label for="asde-sepa-poblacion-<?php echo absint( $fid ); ?>"><?php asde_e( 'Población' ); ?></label>
+				<label for="asde-sepa-poblacion-<?php echo absint( $fid ); ?>"><?php esc_html_e( 'Town', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 				<input type="text" id="asde-sepa-poblacion-<?php echo absint( $fid ); ?>" name="poblacion" maxlength="50" required autocomplete="address-level2" value="<?php echo esc_attr( $campo( 'poblacion' ) ); ?>">
 			</p>
 			<p>
-				<label for="asde-sepa-provincia-<?php echo absint( $fid ); ?>"><?php asde_e( 'Provincia' ); ?></label>
-				<input type="text" id="asde-sepa-provincia-<?php echo absint( $fid ); ?>" name="provincia" maxlength="40" autocomplete="address-level1" value="<?php echo esc_attr( $campo( 'provincia', asde_t( 'Illes Balears' ) ) ); ?>">
+				<label for="asde-sepa-provincia-<?php echo absint( $fid ); ?>"><?php esc_html_e( 'Province', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
+				<input type="text" id="asde-sepa-provincia-<?php echo absint( $fid ); ?>" name="provincia" maxlength="40" autocomplete="address-level1" value="<?php echo esc_attr( $campo( 'provincia', __( 'Illes Balears', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) ); ?>">
 			</p>
 			<p>
-				<label for="asde-sepa-pais-<?php echo absint( $fid ); ?>"><?php asde_e( 'País' ); ?></label>
+				<label for="asde-sepa-pais-<?php echo absint( $fid ); ?>"><?php esc_html_e( 'Country', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 				<input type="text" id="asde-sepa-pais-<?php echo absint( $fid ); ?>" name="pais" maxlength="40" autocomplete="country-name" value="<?php echo esc_attr( $campo( 'pais', 'España' ) ); ?>">
 			</p>
 		</div>
 	</fieldset>
 
 	<fieldset>
-		<legend><?php asde_e( 'Datos del acreedor' ); ?></legend>
+		<legend><?php esc_html_e( 'Creditor details', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></legend>
 		<p class="asde-muted">
-			<strong><?php echo esc_html( $acreedor['nombre'] ); ?></strong> <?php asde_e( '· Identificador del acreedor' ); ?> <?php echo esc_html( $acreedor['ics'] ); ?>
+			<strong><?php echo esc_html( $acreedor['nombre'] ); ?></strong> <?php esc_html_e( '· Creditor identifier', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <?php echo esc_html( $acreedor['ics'] ); ?>
 			<?php echo wp_kses( '' !== trim( $acreedor['calle'] . $acreedor['poblacion'] ) ? '<br>' . esc_html( trim( $acreedor['calle'] . ', ' . trim( $acreedor['cp'] . ' ' . $acreedor['poblacion'] ), ' ,' ) ) : '', asde_html_permitido() ); ?>
 		</p>
 	</fieldset>
@@ -73,8 +73,8 @@ $fid = (int) $familia['id'];
 	<p>
 		<label class="asde-choice">
 			<input type="checkbox" name="acepto" value="1" required>
-			<span><?php asde_e( 'Soy el titular de la cuenta (o estoy autorizado/a a firmar por él o ella) y' ); ?> <strong><?php asde_e( 'firmo esta orden de domiciliación de adeudo directo SEPA' ); ?></strong><?php asde_e( '. La firma electrónica queda registrada con la fecha y la hora.' ); ?></span>
+			<span><?php esc_html_e( 'I am the account holder (or I am authorised to sign on their behalf) and', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <strong><?php esc_html_e( 'I sign this SEPA direct debit mandate', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></strong><?php esc_html_e( '. The electronic signature is recorded with the date and time.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span>
 		</label>
 	</p>
-	<p><button type="submit" class="button"><?php asde_e( 'Firmar la autorización' ); ?></button></p>
+	<p><button type="submit" class="button"><?php esc_html_e( 'Sign the authorisation', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button></p>
 </form>

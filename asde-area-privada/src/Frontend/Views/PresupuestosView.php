@@ -44,7 +44,7 @@ final class PresupuestosView extends TesoreriaBaseView {
 			$vista = (string) ( $secs[0] ?? '' );
 		}
 		if ( '' === $vista ) {
-			return $this->denegado( asde_t( 'No tienes ninguna sección asignada para preparar su presupuesto.' ) );
+			return $this->denegado( __( 'You have no section assigned to prepare its budget.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 
 		$repo    = PersonaRepository::make();
@@ -55,7 +55,7 @@ final class PresupuestosView extends TesoreriaBaseView {
 				list( $filas, $personas ) = TesoreriaView::estados( $repo, $ronda );
 				$reparto                  = Reparto::calcular( $repo->todas( true ), $filas, $personas, $cfg );
 			} catch ( CrmException $e ) {
-				$error = asde_t( 'No se ha podido consultar el CRM: ' ) . $e->getMessage();
+				$error = __( 'The CRM could not be queried: ', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . $e->getMessage();
 			}
 		}
 
@@ -113,7 +113,7 @@ final class PresupuestosView extends TesoreriaBaseView {
 
 	public function handle_post(): void {
 		if ( ! Servicio::puede_entrar() ) {
-			wp_die( esc_html__( 'No tienes permiso para cambiar los presupuestos.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+			wp_die( esc_html__( 'You do not have permission to change the budgets.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		check_admin_referer( 'asde_presupuestos' );
 		$ronda   = $this->ronda();
@@ -126,7 +126,7 @@ final class PresupuestosView extends TesoreriaBaseView {
 
 		if ( 'guardar_presupuestos' === $accion ) {
 			if ( ! current_user_can( Servicio::CAP_CONFIG ) ) {
-				wp_die( esc_html__( 'No tienes permiso para cambiar el reparto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+				wp_die( esc_html__( 'You do not have permission to change the split.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 			}
 			$antes = Config::de( $ronda )['presupuesto'];
 			Config::guardar( $ronda, array( 'presupuesto' => (array) ( wp_unslash( $_POST )['presupuesto'] ?? array() ) ) ); // phpcs:ignore WordPress.Security.NonceVerification
@@ -134,48 +134,48 @@ final class PresupuestosView extends TesoreriaBaseView {
 			if ( $antes !== $despues ) {
 				Logger::log( 'presupuestos_ajustes_guardados', 'ronda', $ronda . ' · % grupo ' . $antes['pct_grupo'] . ' → ' . $despues['pct_grupo'] );
 			}
-			$ok = sprintf( asde_t( 'Reparto de la ronda %s guardado.' ), esc_html( $ronda ) );
+			$ok = sprintf( /* translators: %s: text */ __( 'Split of round %s saved.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), esc_html( $ronda ) );
 		} else {
 			$vista = $seccion;
 			switch ( $accion ) {
 				case 'partida_nueva':
 					$error = Servicio::anadir_partida( $ronda, $seccion, $ambito, $this->post( 'tipo' ), $this->post( 'categoria' ), $this->post( 'concepto' ), $this->post( 'veces' ), $this->post( 'importe' ), $this->post( 'nota' ) );
-					$ok    = asde_t( 'Partida añadida.' );
+					$ok    = __( 'Item added.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 					break;
 				case 'partida_quitar':
 					$error = Servicio::quitar_partida( $ronda, $seccion, $ambito, (int) $this->post( 'id' ) );
-					$ok    = asde_t( 'Partida quitada.' );
+					$ok    = __( 'Item removed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 					break;
 				case 'gasto_nuevo':
 					$error = Servicio::anadir_gasto_real( $ronda, $seccion, $ambito, (int) $this->post( 'partida_id' ), $this->post( 'fecha' ), $this->post( 'concepto' ), $this->post( 'importe' ) );
-					$ok    = asde_t( 'Gasto anotado.' );
+					$ok    = __( 'Expense recorded.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 					break;
 				case 'gasto_quitar':
 					$error = Servicio::quitar_gasto_real( $ronda, $seccion, $ambito, (int) $this->post( 'id' ) );
-					$ok    = asde_t( 'Gasto quitado.' );
+					$ok    = __( 'Expense removed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 					break;
 				case 'proyecto':
 					$error = Servicio::fijar_proyecto( $ronda, $seccion, $ambito, $this->post( 'importe' ) );
-					$ok    = asde_t( 'Objetivo de recaudación guardado.' );
+					$ok    = __( 'Fundraising target saved.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 					break;
 				case 'enviar':
 					$error = Servicio::enviar( $ronda, $seccion, $ambito );
-					$ok    = asde_t( 'Presupuesto enviado a Tesorería.' );
+					$ok    = __( 'Budget sent to Treasury.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 					break;
 				case 'aprobar':
 					$error = Servicio::aprobar( $ronda, $seccion );
-					$ok    = asde_t( 'Presupuesto aprobado.' );
+					$ok    = __( 'Budget approved.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 					break;
 				case 'reabrir':
 					$error = Servicio::reabrir( $ronda, $seccion, $this->post( 'motivo' ) );
-					$ok    = asde_t( 'Presupuesto reabierto: vuelve a ser un borrador.' );
+					$ok    = __( 'Budget reopened: it is a draft again.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 					break;
 				case 'copiar':
 					$error = Servicio::copiar_anterior( $ronda, $seccion, $ambito );
-					$ok    = asde_t( 'Partidas copiadas de la ronda anterior.' );
+					$ok    = __( 'Items copied from the previous round.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 					break;
 				default:
-					$error = asde_t( 'Acción desconocida.' );
+					$error = __( 'Unknown action.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 			}
 		}
 

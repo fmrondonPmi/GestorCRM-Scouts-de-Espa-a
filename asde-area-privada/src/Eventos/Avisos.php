@@ -234,7 +234,7 @@ final class Avisos {
 			return \AsdeBalears\AreaPrivada\Menus\AvisoAlergenos::html( $datos, $saludo ); // v0.43: sin la lista de pendientes (datos de salud): solo el aviso general.
 		}
 		if ( 'cocina' === ( $datos['tipo'] ?? '' ) ) {
-			return '<p>' . esc_html( asde_t( 'Hoja de cocina del evento. Por contener datos de salud, el contenido no se guarda: solo consta que se envió.' ) ) . '</p>'; // v0.41 (B3): nunca se vuelve a componer en la vista previa.
+			return '<p>' . esc_html( __( 'Event kitchen sheet. As it contains health data, the content is not stored: only the fact that it was sent is recorded.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) . '</p>'; // v0.41 (B3): nunca se vuelve a componer en la vista previa.
 		}
 		$tipo_ok = in_array( $datos['tipo'] ?? '', self::TIPOS, true ) ? (string) $datos['tipo'] : 'publicado';
 		if ( '' === $quien && ! empty( $datos['inscripcion'] ) ) {
@@ -307,19 +307,19 @@ final class Avisos {
 	private static function asunto( string $tipo, array $e ): string {
 		switch ( $tipo ) {
 			case 'confirmada':
-				$plantilla = asde_t( '[%1$s] Inscripción confirmada: %2$s' );
+				$plantilla = /* translators: 1: text, 2: text */ __( '[%1$s] Sign-up confirmed: %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 			case 'plaza':
-				$plantilla = asde_t( '[%1$s] Se ha liberado una plaza en %2$s: confírmala' );
+				$plantilla = /* translators: 1: text, 2: text */ __( '[%1$s] A place has been freed up in %2$s: confirm it', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 			case 'recordatorio':
-				$plantilla = asde_t( '[%1$s] Recordatorio: %2$s' );
+				$plantilla = /* translators: 1: text, 2: text */ __( '[%1$s] Reminder: %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 			case 'cancelado':
-				$plantilla = asde_t( '[%1$s] Evento cancelado: %2$s' );
+				$plantilla = /* translators: 1: text, 2: text */ __( '[%1$s] Event cancelled: %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 			default:
-				$plantilla = asde_t( '[%1$s] Nuevo evento: %2$s' );
+				$plantilla = /* translators: 1: text, 2: text */ __( '[%1$s] New event: %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		return sprintf( $plantilla, Grupo::nombre(), $e['nombre'] );
 	}
@@ -353,7 +353,7 @@ final class Avisos {
 		$repo  = PersonaRepository::make();
 		$email = Contacto::email( $user, $repo );
 		if ( ! $email ) {
-			RegistroEmails::registrar( $user, RegistroEmails::EVENTOS, '', $asunto, RegistroEmails::SIN_EMAIL, asde_t( 'La cuenta no tiene un email al que escribir.' ), $datos );
+			RegistroEmails::registrar( $user, RegistroEmails::EVENTOS, '', $asunto, RegistroEmails::SIN_EMAIL, __( 'The account has no email address to write to.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $datos );
 			return false;
 		}
 		$error = RegistroEmails::enviar( $email, $asunto, self::html( $datos, Contacto::saludo( $user, $repo ), $quien ) );

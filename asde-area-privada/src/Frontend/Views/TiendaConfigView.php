@@ -37,14 +37,14 @@ final class TiendaConfigView extends TiendaBaseView {
 
 	public function handle_post(): void {
 		if ( ! current_user_can( Servicio::CAP_CONFIG ) ) {
-			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+			wp_die( esc_html__( 'You do not have permission to do this.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		check_admin_referer( 'asde_tienda_admin' );
 		if ( 'tienda_enlace_renovar' === $this->post( 'asde_action' ) ) {
 			if ( Grupo::actual() ) {
 				Enlace::renovar( Grupo::actual() );
 				Logger::log( 'tienda_enlace_renovado', 'grupo', Grupo::numero() );
-				Notices::add( 'success', asde_t( 'Enlace nuevo creado. El anterior ya no vale.' ) );
+				Notices::add( 'success', __( 'New link created. The previous one is no longer valid.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			}
 			$this->redirect( $this->url( 'tienda_config' ) );
 		}
@@ -61,10 +61,10 @@ final class TiendaConfigView extends TiendaBaseView {
 		$cfg['iban']          = Config::iban( $this->post( 'iban' ) );
 		$cfg['bizum']         = Config::bizum( $this->post( 'bizum' ) );
 		if ( '' !== trim( $this->post( 'iban' ) ) && '' === $cfg['iban'] ) {
-			$avisos[] = asde_t( 'El IBAN no parece válido; no se ha guardado.' );
+			$avisos[] = __( 'The IBAN does not look valid; it has not been saved.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		if ( '' !== trim( $this->post( 'bizum' ) ) && '' === $cfg['bizum'] ) {
-			$avisos[] = asde_t( 'El teléfono de Bizum no parece válido; no se ha guardado.' );
+			$avisos[] = __( 'The Bizum phone number does not look valid; it has not been saved.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 
 		Config::guardar( $cfg );
@@ -72,7 +72,7 @@ final class TiendaConfigView extends TiendaBaseView {
 		foreach ( $avisos as $a ) {
 			Notices::add( 'warning', esc_html( $a ) );
 		}
-		Notices::add( 'success', asde_t( 'Configuración guardada.' ) );
+		Notices::add( 'success', __( 'Settings saved.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		$this->redirect( $this->url( 'tienda_config' ) );
 	}
 }

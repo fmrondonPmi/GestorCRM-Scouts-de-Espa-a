@@ -52,7 +52,7 @@ $fuera  = array_values( array_filter( $filas, static fn( $f ) => in_array( $f['e
 $cuenta = array_count_values( array_column( $filas, 'estado' ) );
 $plazo  = Inscripciones::plazo( $e );
 $selector = static function ( string $name, array $lista, bool $vacio ) use ( $e ): string {
-	$h = '<select name="' . esc_attr( $name ) . '">' . ( $vacio ? '<option value="">' . esc_html( asde_t( '— Elige —' ) ) . '</option>' : '' );
+	$h = '<select name="' . esc_attr( $name ) . '">' . ( $vacio ? '<option value="">' . esc_html( __( '— Choose —', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) . '</option>' : '' );
 	foreach ( $lista as $num => $p ) {
 		$s  = Inscripciones::seccion_de( $e, $p ) ?? $p->seccion_educativa() ?? ( $p->secciones[0] ?? '' );
 		$h .= '<option value="' . esc_attr( (string) $num ) . '">' . esc_html( $p->nombre_completo() . ( '' !== $s ? ' · ' . Secciones::nombre( $s ) : '' ) ) . '</option>';
@@ -68,53 +68,53 @@ $formas = static function (): string {
 };
 // v0.36: devolver a la familia lo pagado (hasta lo pagado y con motivo, P-160). Lo hace Tesorería.
 $devolver = static function ( array $f, array $c ) use ( $campos, $fila_h, $formas, $hoy ): string {
-	return '<details class="asde-accion"><summary>' . esc_html( asde_t( 'Devolver a la familia' ) ) . '</summary>'
+	return '<details class="asde-accion"><summary>' . esc_html( __( 'Refund to the family', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) . '</summary>'
 		. '<form method="post" class="asde-form asde-form--compacta">'
 		. $campos( 'evento_devolucion', $fila_h( $f ) )
-		. '<label>' . esc_html( asde_t( 'Importe (€)' ) ) . ' <input type="text" name="importe" inputmode="decimal" value="' . esc_attr( number_format( $c['neto'], 2, ',', '' ) ) . '" required></label>'
-		. '<label>' . esc_html( asde_t( 'Forma de pago' ) ) . ' ' . $formas() . '</label>'
-		. '<label>' . esc_html( asde_t( 'Fecha' ) ) . ' <input type="date" name="fecha" value="' . esc_attr( $hoy ) . '" max="' . esc_attr( $hoy ) . '" required></label>'
-		. '<label>' . esc_html( asde_t( 'Motivo' ) ) . ' <input type="text" name="motivo" maxlength="255" required></label>'
-		. '<button type="submit" class="button">' . esc_html( asde_t( 'Anotar la devolución' ) ) . '</button>'
+		. '<label>' . esc_html( __( 'Amount (€)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) . ' <input type="text" name="importe" inputmode="decimal" value="' . esc_attr( number_format( $c['neto'], 2, ',', '' ) ) . '" required></label>'
+		. '<label>' . esc_html( __( 'Payment method', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) . ' ' . $formas() . '</label>'
+		. '<label>' . esc_html( __( 'Date', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) . ' <input type="date" name="fecha" value="' . esc_attr( $hoy ) . '" max="' . esc_attr( $hoy ) . '" required></label>'
+		. '<label>' . esc_html( __( 'Reason', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) . ' <input type="text" name="motivo" maxlength="255" required></label>'
+		. '<button type="submit" class="button">' . esc_html( __( 'Record the refund', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) . '</button>'
 		. '</form></details>';
 };
 ?>
 <?php if ( EventosTable::BORRADOR === $e['estado'] ) : ?>
 	<section class="asde-card">
-		<p><?php asde_e( 'Cuando publiques el evento, las familias de las secciones convocadas podrán inscribirse desde «Mis eventos» y les llegará un email.' ); ?></p>
+		<p><?php esc_html_e( 'When you publish the event, the families of the invited sections will be able to sign up from "My events" and will receive an email.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 	</section>
 	<?php return; ?>
 <?php endif; ?>
 
 <section class="asde-card">
-	<h3 class="asde-card__title"><?php asde_e( 'Inscripción' ); ?></h3>
+	<h3 class="asde-card__title"><?php esc_html_e( 'Sign-up', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h3>
 	<dl class="asde-datos">
-		<div><dt><?php asde_e( 'Modalidad' ); ?></dt><dd><?php echo esc_html( asde_t( EventosTable::MODALIDADES[ $e['modalidad'] ] ) ); ?></dd></div>
-		<div><dt><?php asde_e( 'Plazo' ); ?></dt><dd>
+		<div><dt><?php esc_html_e( 'Mode', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></dt><dd><?php echo esc_html( asde_t( EventosTable::MODALIDADES[ $e['modalidad'] ] ) ); ?></dd></div>
+		<div><dt><?php esc_html_e( 'Deadline', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></dt><dd>
 			<?php
 			if ( 'abierta' === $plazo ) {
-				echo esc_html( sprintf( asde_t( 'Abierto hasta el %s' ), wp_date( 'd/m/Y H:i', Inscripciones::cierra( $e ) ) ) );
+				echo esc_html( sprintf( /* translators: %s: text */ __( 'Open until %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), wp_date( 'd/m/Y H:i', Inscripciones::cierra( $e ) ) ) );
 			} elseif ( 'antes' === $plazo ) {
-				echo esc_html( sprintf( asde_t( 'Se abre el %s' ), wp_date( 'd/m/Y', Inscripciones::abre( $e ) ) ) );
+				echo esc_html( sprintf( /* translators: %s: text */ __( 'Opens on %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), wp_date( 'd/m/Y', Inscripciones::abre( $e ) ) ) );
 			} else {
-				asde_e( 'Cerrado: solo inscribe el equipo del evento' );
+				esc_html_e( 'Closed: only the event team signs people up', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 			}
 			?>
 		</dd></div>
-		<div><dt><?php asde_e( 'Plazas' ); ?></dt><dd>
+		<div><dt><?php esc_html_e( 'Places', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></dt><dd>
 			<?php foreach ( $e['secciones'] as $s ) : ?>
 				<?php $max = (int) ( $e['plazas'][ $s ]['maximas'] ?? 0 ); ?>
-				<?php echo wp_kses( Secciones::badge( $s ), asde_html_permitido() ); ?> <?php echo esc_html( $max ? sprintf( asde_t( '%1$d de %2$d plazas ocupadas' ), $ocupadas['seccion'][ $s ] ?? 0, $max ) : sprintf( asde_t( '%d plazas ocupadas' ), $ocupadas['seccion'][ $s ] ?? 0 ) ); ?><br>
+				<?php echo wp_kses( Secciones::badge( $s ), asde_html_permitido() ); ?> <?php echo esc_html( $max ? sprintf( /* translators: 1: number, 2: number */ __( '%1$d of %2$d places taken', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $ocupadas['seccion'][ $s ] ?? 0, $max ) : sprintf( /* translators: %d: number */ __( '%d places taken', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $ocupadas['seccion'][ $s ] ?? 0 ) ); ?><br>
 			<?php endforeach; ?>
 			<?php if ( $e['plazas_max'] ) : ?>
-				<?php echo esc_html( sprintf( asde_t( 'En total: %1$d de %2$d' ), $ocupadas['total'], $e['plazas_max'] ) ); ?>
+				<?php echo esc_html( sprintf( /* translators: 1: number, 2: number */ __( 'In total: %1$d of %2$d', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $ocupadas['total'], $e['plazas_max'] ) ); ?>
 			<?php endif; ?>
 		</dd></div>
-		<div><dt><?php asde_e( 'Estado' ); ?></dt><dd>
+		<div><dt><?php esc_html_e( 'Status', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></dt><dd>
 			<?php
 			echo esc_html(
 				sprintf(
-					asde_t( '%1$d confirmadas, %2$d pendientes, %3$d en la lista de espera y %4$d bajas.' ),
+					/* translators: 1: number, 2: number, 3: number, 4: number */ __( '%1$d confirmed, %2$d pending, %3$d on the waiting list and %4$d withdrawals.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 					$cuenta[ InscripcionesTable::CONFIRMADA ] ?? 0,
 					$cuenta[ InscripcionesTable::PENDIENTE ] ?? 0,
 					$cuenta[ InscripcionesTable::ESPERA ] ?? 0,
@@ -127,19 +127,19 @@ $devolver = static function ( array $f, array $c ) use ( $campos, $fila_h, $form
 </section>
 
 <section class="asde-card">
-	<h3 class="asde-card__title"><?php echo esc_html( sprintf( asde_t( 'Participantes (%d)' ), count( $activas ) ) ); ?></h3>
+	<h3 class="asde-card__title"><?php echo esc_html( sprintf( /* translators: %d: number */ __( 'Participants (%d)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), count( $activas ) ) ); ?></h3>
 	<?php if ( ! $activas ) : ?>
-		<p><?php asde_e( 'Todavía no hay nadie inscrito.' ); ?></p>
+		<p><?php esc_html_e( 'Nobody has signed up yet.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 	<?php else : ?>
 		<table class="asde-table asde-table--inscripciones">
 			<thead>
 				<tr>
-					<th scope="col"><?php asde_e( 'Nombre' ); ?></th>
-					<th scope="col"><?php asde_e( 'Estado' ); ?></th>
+					<th scope="col"><?php esc_html_e( 'Name', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
+					<th scope="col"><?php esc_html_e( 'Status', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
 					<?php if ( $e['con_coste'] ) : ?>
-						<th scope="col"><?php asde_e( 'Pago' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Payment', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
 					<?php endif; ?>
-					<th scope="col"><?php asde_e( 'Acciones' ); ?></th>
+					<th scope="col"><?php esc_html_e( 'Actions', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -149,53 +149,53 @@ $devolver = static function ( array $f, array $c ) use ( $campos, $fila_h, $form
 					$falta = Inscripciones::falta( $f, $c );
 					?>
 					<tr>
-						<td data-label="<?php echo esc_attr( asde_a( 'Nombre' ) ); ?>">
+						<td data-label="<?php echo esc_attr( esc_attr__( 'Name', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
 							<strong><?php echo esc_html( $nombre( $f ) ); ?></strong> <?php echo wp_kses( Secciones::badge( $f['seccion'] ), asde_html_permitido() ); ?>
 							<?php if ( '' !== $f['motivo'] ) : ?>
-								<br><span class="asde-muted"><?php echo esc_html( sprintf( asde_t( 'Excepción: %s' ), $f['motivo'] ) ); ?></span>
+								<br><span class="asde-muted"><?php echo esc_html( sprintf( /* translators: %s: text */ __( 'Exception: %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $f['motivo'] ) ); ?></span>
 							<?php endif; ?>
 							<br><span class="asde-muted">
 								<?php
 								$ida    = asde_t( InscripcionesTable::TRANSPORTES[ $f['transporte_ida'] ] ?? '—' );
 								$vuelta = asde_t( InscripcionesTable::TRANSPORTES[ $f['transporte_vuelta'] ] ?? '—' );
-								echo esc_html( sprintf( asde_t( 'Ida: %1$s · Vuelta: %2$s' ), $ida, $vuelta ) );
+								echo esc_html( sprintf( /* translators: 1: text, 2: text */ __( 'Outward: %1$s · Return: %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $ida, $vuelta ) );
 								?>
 							</span>
 							<?php if ( isset( $datos[ $f['id'] ] ) ) : ?>
 								<details class="asde-inscripcion__datos">
-									<summary><?php asde_e( 'Recogida y observaciones' ); ?></summary>
+									<summary><?php esc_html_e( 'Pick-up and notes', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></summary>
 									<?php if ( '' !== $datos[ $f['id'] ]['recoge'] ) : ?>
-										<p><strong><?php asde_e( 'Recogen:' ); ?></strong> <?php echo wp_kses( nl2br( esc_html( $datos[ $f['id'] ]['recoge'] ) ), asde_html_permitido() ); ?></p>
+										<p><strong><?php esc_html_e( 'Picked up by:', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></strong> <?php echo wp_kses( nl2br( esc_html( $datos[ $f['id'] ]['recoge'] ) ), asde_html_permitido() ); ?></p>
 									<?php endif; ?>
 									<?php if ( '' !== $datos[ $f['id'] ]['observaciones'] ) : ?>
-										<p><strong><?php asde_e( 'Observaciones:' ); ?></strong> <?php echo wp_kses( nl2br( esc_html( $datos[ $f['id'] ]['observaciones'] ) ), asde_html_permitido() ); ?></p>
+										<p><strong><?php esc_html_e( 'Notes:', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></strong> <?php echo wp_kses( nl2br( esc_html( $datos[ $f['id'] ]['observaciones'] ) ), asde_html_permitido() ); ?></p>
 									<?php endif; ?>
 								</details>
 							<?php endif; ?>
 						</td>
-						<td data-label="<?php echo esc_attr( asde_a( 'Estado' ) ); ?>">
+						<td data-label="<?php echo esc_attr( esc_attr__( 'Status', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
 							<span class="asde-badge asde-badge--inscripcion-<?php echo esc_attr( $f['estado'] ); ?>"><?php echo esc_html( asde_t( InscripcionesTable::ESTADOS[ $f['estado'] ] ) ); ?></span>
 							<?php if ( $falta ) : ?>
-								<br><span class="asde-muted"><?php echo esc_html( in_array( 'autorizacion', $falta, true ) && in_array( 'pago', $falta, true ) ? asde_t( 'Falta la autorización y el pago' ) : ( in_array( 'pago', $falta, true ) ? asde_t( 'Falta el pago' ) : asde_t( 'Falta la autorización' ) ) ); ?></span>
+								<br><span class="asde-muted"><?php echo esc_html( in_array( 'autorizacion', $falta, true ) && in_array( 'pago', $falta, true ) ? __( 'Authorisation and payment missing', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : ( in_array( 'pago', $falta, true ) ? __( 'Payment missing', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : __( 'Authorisation missing', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) ); ?></span>
 							<?php endif; ?>
 							<br><?php echo esc_html( asde_t( InscripcionesTable::AUTORIZACIONES[ $f['autorizacion'] ] ?? '' ) ); ?>
 							<?php if ( in_array( $f['autorizacion'], array( 'web', 'papel' ), true ) ) : ?>
 								<span class="asde-muted"><?php echo esc_html( $cuando( $f['autorizacion_en'] ) ); ?><?php echo 'web' === $f['autorizacion'] ? esc_html( ' · ' . $f['autorizacion_version'] ) : ''; ?></span>
 							<?php elseif ( '' === $f['autorizacion'] && $gestionable ) : ?>
-								<form method="post" class="asde-inline-form"><?php echo wp_kses( $campos( 'evento_papel', $fila_h( $f ) ), asde_html_permitido() ); ?><button type="submit" class="asde-btn-link"><?php asde_e( 'Marcar la de papel como recibida' ); ?></button></form>
+								<form method="post" class="asde-inline-form"><?php echo wp_kses( $campos( 'evento_papel', $fila_h( $f ) ), asde_html_permitido() ); ?><button type="submit" class="asde-btn-link"><?php esc_html_e( 'Mark the paper one as received', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button></form>
 							<?php endif; ?>
 						</td>
 						<?php if ( $e['con_coste'] ) : ?>
-							<td data-label="<?php echo esc_attr( asde_a( 'Pago' ) ); ?>">
-								<?php echo esc_html( sprintf( asde_t( '%1$s de %2$s' ), Calculadora::euros( $c['neto'] ), Calculadora::euros( $c['total'] ) ) ); ?>
+							<td data-label="<?php echo esc_attr( esc_attr__( 'Payment', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
+								<?php echo esc_html( sprintf( /* translators: 1: text, 2: text */ __( '%1$s of %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Calculadora::euros( $c['neto'] ), Calculadora::euros( $c['total'] ) ) ); ?>
 								<?php if ( $c['devuelto'] > 0 ) : ?>
-									<br><span class="asde-muted"><?php echo esc_html( sprintf( asde_t( 'Devuelto: %s' ), Calculadora::euros( $c['devuelto'] ) ) ); ?></span>
+									<br><span class="asde-muted"><?php echo esc_html( sprintf( /* translators: %s: text */ __( 'Refunded: %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Calculadora::euros( $c['devuelto'] ) ) ); ?></span>
 								<?php endif; ?>
 								<?php if ( 0.0 !== $c['ajustes'] ) : ?>
-									<br><span class="asde-muted"><?php echo esc_html( sprintf( asde_t( 'Precio %1$s, ajustes %2$s' ), Calculadora::euros( $c['precio'] ), Calculadora::euros( $c['ajustes'] ) ) ); ?></span>
+									<br><span class="asde-muted"><?php echo esc_html( sprintf( /* translators: 1: text, 2: text */ __( 'Price %1$s, adjustments %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Calculadora::euros( $c['precio'] ), Calculadora::euros( $c['ajustes'] ) ) ); ?></span>
 								<?php endif; ?>
 								<?php if ( $economia && isset( $refs[ $f['id'] ] ) ) : ?>
-									<br><span class="asde-muted"><?php echo esc_html( sprintf( asde_t( 'Referencia: %s' ), $refs[ $f['id'] ] ) ); ?></span>
+									<br><span class="asde-muted"><?php echo esc_html( sprintf( /* translators: %s: text */ __( 'Reference: %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $refs[ $f['id'] ] ) ); ?></span>
 								<?php endif; ?>
 								<?php if ( $economia && ! empty( $movs[ $f['id'] ] ) ) : ?>
 									<ul class="asde-movimientos">
@@ -203,18 +203,18 @@ $devolver = static function ( array $f, array $c ) use ( $campos, $fila_h, $form
 											<li class="<?php echo null !== $m['anulado_en'] ? 'asde-anulado' : ''; ?>">
 												<?php
 												if ( MovimientosTable::PAGO === $m['tipo'] ) {
-													$texto = sprintf( asde_t( '%1$s · pago de %2$s (%3$s)' ), wp_date( 'd/m/Y', (int) strtotime( $m['fecha'] ) ), Calculadora::euros( $m['importe'] ), asde_t( MovimientosTable::FORMAS[ $m['forma'] ] ?? $m['forma'] ) );
+													$texto = sprintf( /* translators: 1: text, 2: text, 3: text */ __( '%1$s · payment of %2$s (%3$s)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), wp_date( 'd/m/Y', (int) strtotime( $m['fecha'] ) ), Calculadora::euros( $m['importe'] ), asde_t( MovimientosTable::FORMAS[ $m['forma'] ] ?? $m['forma'] ) );
 												} elseif ( MovimientosTable::DEVOLUCION === $m['tipo'] ) {
-													$texto = sprintf( asde_t( '%1$s · devolución de %2$s (%3$s): %4$s' ), wp_date( 'd/m/Y', (int) strtotime( $m['fecha'] ) ), Calculadora::euros( $m['importe'] ), asde_t( MovimientosTable::FORMAS[ $m['forma'] ] ?? $m['forma'] ), $m['nota'] );
+													$texto = sprintf( /* translators: 1: text, 2: text, 3: text, 4: text */ __( '%1$s · refund of %2$s (%3$s): %4$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), wp_date( 'd/m/Y', (int) strtotime( $m['fecha'] ) ), Calculadora::euros( $m['importe'] ), asde_t( MovimientosTable::FORMAS[ $m['forma'] ] ?? $m['forma'] ), $m['nota'] );
 												} else {
-													$texto = sprintf( asde_t( '%1$s · ajuste de %2$s: %3$s' ), wp_date( 'd/m/Y', (int) strtotime( $m['fecha'] ) ), Calculadora::euros( $m['importe'] ), $m['nota'] );
+													$texto = sprintf( /* translators: 1: text, 2: text, 3: text */ __( '%1$s · adjustment of %2$s: %3$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), wp_date( 'd/m/Y', (int) strtotime( $m['fecha'] ) ), Calculadora::euros( $m['importe'] ), $m['nota'] );
 												}
 												echo esc_html( $texto );
 												?>
 												<?php if ( null !== $m['anulado_en'] ) : ?>
-													<?php asde_e( '(anulado)' ); ?>
+													<?php esc_html_e( '(cancelled)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>
 												<?php elseif ( $abiertas ) : ?>
-													<form method="post" class="asde-inline-form" data-asde-confirmar="<?php echo esc_attr( asde_js( '¿Anular este movimiento? Si es un pago de la familia, se anula entero.' ) ); ?>"><?php echo wp_kses( $campos( 'evento_anular', '<input type="hidden" name="movimiento" value="' . (int) $m['id'] . '">' ), asde_html_permitido() ); ?><button type="submit" class="asde-btn-link"><?php asde_e( 'Anular' ); ?></button></form>
+													<form method="post" class="asde-inline-form" data-asde-confirmar="<?php echo esc_attr( __( 'Cancel this transaction? If it is a payment from the family, it is cancelled in full.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo wp_kses( $campos( 'evento_anular', '<input type="hidden" name="movimiento" value="' . (int) $m['id'] . '">' ), asde_html_permitido() ); ?><button type="submit" class="asde-btn-link"><?php esc_html_e( 'Cancel', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button></form>
 												<?php endif; ?>
 											</li>
 										<?php endforeach; ?>
@@ -222,18 +222,18 @@ $devolver = static function ( array $f, array $c ) use ( $campos, $fila_h, $form
 								<?php endif; ?>
 							</td>
 						<?php endif; ?>
-						<td data-label="<?php echo esc_attr( asde_a( 'Acciones' ) ); ?>">
+						<td data-label="<?php echo esc_attr( esc_attr__( 'Actions', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
 							<?php if ( $economia && $abiertas && $e['con_coste'] && $c['pendiente'] > 0 ) : ?>
 								<details class="asde-accion">
-									<summary><?php asde_e( 'Registrar un pago' ); ?></summary>
+									<summary><?php esc_html_e( 'Record a payment', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></summary>
 									<form method="post" class="asde-form asde-form--compacta">
 										<?php echo wp_kses( $campos( 'evento_pago', $fila_h( $f ) ), asde_html_permitido() ); ?>
-										<label><?php asde_e( 'Importe (€)' ); ?> <input type="text" name="importe" inputmode="decimal" value="<?php echo esc_attr( number_format( $c['pendiente'], 2, ',', '' ) ); ?>" required></label>
-										<label><?php asde_e( 'Forma de pago' ); ?> <?php echo wp_kses( $formas(), asde_html_permitido() ); ?></label>
-										<label><?php asde_e( 'Fecha' ); ?> <input type="date" name="fecha" value="<?php echo esc_attr( $hoy ); ?>" max="<?php echo esc_attr( $hoy ); ?>" required></label>
-										<label><?php asde_e( 'Referencia' ); ?> <input type="text" name="referencia" maxlength="120" value="<?php echo esc_attr( $refs[ $f['id'] ] ?? '' ); ?>"></label>
-										<label><?php asde_e( 'Nota' ); ?> <input type="text" name="nota" maxlength="255"></label>
-										<button type="submit" class="button button-primary"><?php asde_e( 'Registrar el pago' ); ?></button>
+										<label><?php esc_html_e( 'Amount (€)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <input type="text" name="importe" inputmode="decimal" value="<?php echo esc_attr( number_format( $c['pendiente'], 2, ',', '' ) ); ?>" required></label>
+										<label><?php esc_html_e( 'Payment method', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <?php echo wp_kses( $formas(), asde_html_permitido() ); ?></label>
+										<label><?php esc_html_e( 'Date', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <input type="date" name="fecha" value="<?php echo esc_attr( $hoy ); ?>" max="<?php echo esc_attr( $hoy ); ?>" required></label>
+										<label><?php esc_html_e( 'Reference', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <input type="text" name="referencia" maxlength="120" value="<?php echo esc_attr( $refs[ $f['id'] ] ?? '' ); ?>"></label>
+										<label><?php esc_html_e( 'Note', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <input type="text" name="nota" maxlength="255"></label>
+										<button type="submit" class="button button-primary"><?php esc_html_e( 'Record the payment', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 									</form>
 								</details>
 							<?php endif; ?>
@@ -242,23 +242,23 @@ $devolver = static function ( array $f, array $c ) use ( $campos, $fila_h, $form
 							<?php endif; ?>
 							<?php if ( $economia && $abiertas && $e['con_coste'] ) : ?>
 								<details class="asde-accion">
-									<summary><?php asde_e( 'Beca o ajuste' ); ?></summary>
+									<summary><?php esc_html_e( 'Scholarship or adjustment', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></summary>
 									<form method="post" class="asde-form asde-form--compacta">
 										<?php echo wp_kses( $campos( 'evento_ajuste', $fila_h( $f ) ), asde_html_permitido() ); ?>
-										<label><?php asde_e( 'Tipo' ); ?> <select name="sentido"><option value="rebaja" selected><?php asde_e( 'Rebaja o beca' ); ?></option><option value="recargo"><?php asde_e( 'Recargo' ); ?></option></select></label>
-										<label><?php asde_e( 'Importe (€)' ); ?> <input type="text" name="importe" inputmode="decimal" required></label>
-										<label><?php asde_e( 'Motivo' ); ?> <input type="text" name="motivo" maxlength="255" required></label>
-										<button type="submit" class="button"><?php asde_e( 'Guardar el ajuste' ); ?></button>
+										<label><?php esc_html_e( 'Type', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <select name="sentido"><option value="rebaja" selected><?php esc_html_e( 'Discount or scholarship', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></option><option value="recargo"><?php esc_html_e( 'Surcharge', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></option></select></label>
+										<label><?php esc_html_e( 'Amount (€)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <input type="text" name="importe" inputmode="decimal" required></label>
+										<label><?php esc_html_e( 'Reason', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <input type="text" name="motivo" maxlength="255" required></label>
+										<button type="submit" class="button"><?php esc_html_e( 'Save the adjustment', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 									</form>
 								</details>
 							<?php endif; ?>
 							<?php if ( $gestionable ) : ?>
 								<details class="asde-accion">
-									<summary><?php asde_e( 'Dar de baja' ); ?></summary>
+									<summary><?php esc_html_e( 'Withdraw', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></summary>
 									<form method="post" class="asde-form asde-form--compacta">
 										<?php echo wp_kses( $campos( 'evento_baja', $fila_h( $f ) ), asde_html_permitido() ); ?>
-										<label><?php asde_e( 'Motivo' ); ?> <input type="text" name="motivo" maxlength="255" required></label>
-										<button type="submit" class="button"><?php asde_e( 'Dar de baja' ); ?></button>
+										<label><?php esc_html_e( 'Reason', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <input type="text" name="motivo" maxlength="255" required></label>
+										<button type="submit" class="button"><?php esc_html_e( 'Withdraw', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 									</form>
 								</details>
 							<?php endif; ?>
@@ -272,35 +272,35 @@ $devolver = static function ( array $f, array $c ) use ( $campos, $fila_h, $form
 
 <?php if ( $espera ) : ?>
 	<section class="asde-card">
-		<h3 class="asde-card__title"><?php echo esc_html( sprintf( asde_t( 'Lista de espera (%d)' ), count( $espera ) ) ); ?></h3>
+		<h3 class="asde-card__title"><?php echo esc_html( sprintf( /* translators: %d: number */ __( 'Waiting list (%d)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), count( $espera ) ) ); ?></h3>
 		<ol class="asde-lista-espera">
 			<?php foreach ( $espera as $f ) : ?>
 				<li>
 					<?php echo esc_html( $nombre( $f ) ); ?> <?php echo wp_kses( Secciones::badge( $f['seccion'] ), asde_html_permitido() ); ?>
 					<?php if ( Inscripciones::con_oferta( $f ) ) : ?>
-						<span class="asde-badge asde-badge--inscripcion-plaza"><?php echo esc_html( sprintf( asde_t( 'Plaza ofrecida hasta el %s' ), wp_date( 'd/m/Y H:i', (int) strtotime( $f['oferta_hasta'] . ' UTC' ) ) ) ); ?></span>
+						<span class="asde-badge asde-badge--inscripcion-plaza"><?php echo esc_html( sprintf( /* translators: %s: text */ __( 'Place offered until %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), wp_date( 'd/m/Y H:i', (int) strtotime( $f['oferta_hasta'] . ' UTC' ) ) ) ); ?></span>
 					<?php endif; ?>
 					<?php if ( $gestionable ) : ?>
 						<details class="asde-accion">
-							<summary><?php asde_e( 'Sacar de la lista' ); ?></summary>
+							<summary><?php esc_html_e( 'Take off the list', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></summary>
 							<form method="post" class="asde-form asde-form--compacta">
 								<?php echo wp_kses( $campos( 'evento_baja', $fila_h( $f ) ), asde_html_permitido() ); ?>
-								<label><?php asde_e( 'Motivo' ); ?> <input type="text" name="motivo" maxlength="255" required></label>
-								<button type="submit" class="button"><?php asde_e( 'Sacar de la lista' ); ?></button>
+								<label><?php esc_html_e( 'Reason', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <input type="text" name="motivo" maxlength="255" required></label>
+								<button type="submit" class="button"><?php esc_html_e( 'Take off the list', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 							</form>
 						</details>
 					<?php endif; ?>
 				</li>
 			<?php endforeach; ?>
 		</ol>
-		<p class="asde-help"><?php echo esc_html( sprintf( asde_t( 'Cuando se libera una plaza, se ofrece por orden: tienen %d días para confirmarla.' ), Inscripciones::dias_oferta() ) ); ?></p>
+		<p class="asde-help"><?php echo esc_html( sprintf( /* translators: %d: number */ __( 'When a place is freed up, it is offered in order: they have %d days to confirm it.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Inscripciones::dias_oferta() ) ); ?></p>
 	</section>
 <?php endif; ?>
 
 <?php if ( $sin_respuesta ) : ?>
 	<section class="asde-card">
 		<details>
-			<summary><strong><?php echo esc_html( sprintf( 'convocatoria' === $e['modalidad'] ? asde_t( 'Sin respuesta (%d)' ) : asde_t( 'Convocados sin inscribir (%d)' ), count( $sin_respuesta ) ) ); ?></strong></summary>
+			<summary><strong><?php echo esc_html( sprintf( 'convocatoria' === $e['modalidad'] ? /* translators: %d: number */ __( 'No answer (%d)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : /* translators: %d: number */ __( 'Invited but not signed up (%d)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), count( $sin_respuesta ) ) ); ?></strong></summary>
 			<ul class="asde-lista-nombres">
 				<?php foreach ( $sin_respuesta as $p ) : ?>
 					<?php $s = Inscripciones::seccion_de( $e, $p ); ?>
@@ -314,7 +314,7 @@ $devolver = static function ( array $f, array $c ) use ( $campos, $fila_h, $form
 <?php if ( $fuera ) : ?>
 	<section class="asde-card">
 		<details>
-			<summary><strong><?php echo esc_html( sprintf( asde_t( 'Bajas y «no va» (%d)' ), count( $fuera ) ) ); ?></strong></summary>
+			<summary><strong><?php echo esc_html( sprintf( /* translators: %d: number */ __( 'Withdrawals and "not going" (%d)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), count( $fuera ) ) ); ?></strong></summary>
 			<ul class="asde-lista-nombres">
 				<?php foreach ( $fuera as $f ) : ?>
 					<li>
@@ -323,10 +323,10 @@ $devolver = static function ( array $f, array $c ) use ( $campos, $fila_h, $form
 							<span class="asde-muted"><?php echo esc_html( $cuando( $f['baja_en'] ) . ( '' !== $f['baja_motivo'] ? ' · ' . asde_t( $f['baja_motivo'] ) : '' ) ); ?></span>
 						<?php endif; ?>
 						<?php if ( $e['con_coste'] && ( $cobros[ $f['id'] ]['devuelto'] ?? 0 ) > 0 ) : ?>
-							<span class="asde-muted"><?php echo esc_html( sprintf( asde_t( 'Devuelto: %s' ), Calculadora::euros( $cobros[ $f['id'] ]['devuelto'] ) ) ); ?></span>
+							<span class="asde-muted"><?php echo esc_html( sprintf( /* translators: %s: text */ __( 'Refunded: %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Calculadora::euros( $cobros[ $f['id'] ]['devuelto'] ) ) ); ?></span>
 						<?php endif; ?>
 						<?php if ( $e['con_coste'] && ( $cobros[ $f['id'] ]['neto'] ?? 0 ) > 0 ) : ?>
-							<span class="asde-muted"><?php echo esc_html( sprintf( asde_t( 'Había pagado %s: la devolución la decide Tesorería.' ), Calculadora::euros( $cobros[ $f['id'] ]['neto'] ) ) ); ?></span>
+							<span class="asde-muted"><?php echo esc_html( sprintf( /* translators: %s: text */ __( 'They had paid %s: Treasury decides on the refund.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Calculadora::euros( $cobros[ $f['id'] ]['neto'] ) ) ); ?></span>
 							<?php if ( $economia && $abiertas ) : ?>
 								<?php echo wp_kses( $devolver( $f, $cobros[ $f['id'] ] ), asde_html_permitido() ); ?>
 							<?php endif; ?>
@@ -340,21 +340,21 @@ $devolver = static function ( array $f, array $c ) use ( $campos, $fila_h, $form
 
 <?php if ( $gestionable && ( $convocados || $otros ) ) : ?>
 	<section class="asde-card">
-		<h3 class="asde-card__title"><?php asde_e( 'Inscribir a alguien' ); ?></h3>
-		<p class="asde-help"><?php asde_e( 'En nombre de su familia: si es menor, la autorización llega en papel y la marcas aquí cuando la tengas.' ); ?></p>
+		<h3 class="asde-card__title"><?php esc_html_e( 'Sign someone up', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h3>
+		<p class="asde-help"><?php esc_html_e( 'On behalf of their family: if they are a minor, the authorisation arrives on paper and you mark it here when you have it.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 		<form method="post" class="asde-form asde-form--compacta">
 			<?php echo wp_kses( $campos( 'evento_inscribir' ), asde_html_permitido() ); ?>
 			<?php if ( $convocados ) : ?>
-				<label><?php asde_e( 'De las secciones convocadas' ); ?> <?php echo wp_kses( $selector( 'socio', $convocados, true ), asde_html_permitido() ); ?></label>
+				<label><?php esc_html_e( 'Of the invited sections', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <?php echo wp_kses( $selector( 'socio', $convocados, true ), asde_html_permitido() ); ?></label>
 			<?php endif; ?>
 			<?php if ( $otros ) : ?>
 				<details>
-					<summary><?php asde_e( 'Otra persona del grupo (excepción, con motivo)' ); ?></summary>
-					<label><?php asde_e( 'Persona' ); ?> <?php echo wp_kses( $selector( 'otro', $otros, true ), asde_html_permitido() ); ?></label>
-					<label><?php asde_e( 'Motivo de la excepción' ); ?> <input type="text" name="motivo" maxlength="255"></label>
+					<summary><?php esc_html_e( 'Another person from the group (exception, with a reason)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></summary>
+					<label><?php esc_html_e( 'Person', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <?php echo wp_kses( $selector( 'otro', $otros, true ), asde_html_permitido() ); ?></label>
+					<label><?php esc_html_e( 'Reason for the exception', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <input type="text" name="motivo" maxlength="255"></label>
 				</details>
 			<?php endif; ?>
-			<?php foreach ( array( 'transporte_ida' => asde_t( 'Ida' ), 'transporte_vuelta' => asde_t( 'Vuelta' ) ) as $k => $etiqueta ) : ?>
+			<?php foreach ( array( 'transporte_ida' => __( 'Outward', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 'transporte_vuelta' => __( 'Return', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) as $k => $etiqueta ) : ?>
 				<label><?php echo esc_html( $etiqueta ); ?>
 					<select name="<?php echo esc_attr( $k ); ?>">
 						<?php foreach ( asde_ta( InscripcionesTable::TRANSPORTES ) as $t => $txt ) : ?>
@@ -363,30 +363,30 @@ $devolver = static function ( array $f, array $c ) use ( $campos, $fila_h, $form
 					</select>
 				</label>
 			<?php endforeach; ?>
-			<button type="submit" class="button button-primary"><?php asde_e( 'Inscribir' ); ?></button>
+			<button type="submit" class="button button-primary"><?php esc_html_e( 'Sign up', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 		</form>
 	</section>
 <?php endif; ?>
 
 <?php if ( $economia && $familias ) : ?>
 	<section class="asde-card">
-		<h3 class="asde-card__title"><?php asde_e( 'Pago de una familia' ); ?></h3>
-		<p class="asde-help"><?php asde_e( 'Un solo pago para los hermanos: se reparte entre sus inscripciones con algo pendiente, por orden de inscripción.' ); ?></p>
+		<h3 class="asde-card__title"><?php esc_html_e( 'Payment from a family', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h3>
+		<p class="asde-help"><?php esc_html_e( 'A single payment for siblings: it is split among their sign-ups with something pending, in order of sign-up.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 		<form method="post" class="asde-form asde-form--compacta">
 			<?php echo wp_kses( $campos( 'evento_pago_familia' ), asde_html_permitido() ); ?>
-			<label><?php asde_e( 'Familia' ); ?>
+			<label><?php esc_html_e( 'Family', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>
 				<select name="familia">
 					<?php foreach ( $familias as $id => $x ) : ?>
-						<option value="<?php echo (int) $id; ?>"><?php echo esc_html( sprintf( asde_t( '%1$s · %2$d inscripciones · pendiente %3$s' ), $x['familia']['numero'], count( $x['filas'] ), Calculadora::euros( $x['pendiente'] ) ) ); ?></option>
+						<option value="<?php echo (int) $id; ?>"><?php echo esc_html( sprintf( /* translators: 1: text, 2: number, 3: text */ __( '%1$s · %2$d sign-ups · pending %3$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $x['familia']['numero'], count( $x['filas'] ), Calculadora::euros( $x['pendiente'] ) ) ); ?></option>
 					<?php endforeach; ?>
 				</select>
 			</label>
-			<label><?php asde_e( 'Importe (€)' ); ?> <input type="text" name="importe" inputmode="decimal" required></label>
-			<label><?php asde_e( 'Forma de pago' ); ?> <?php echo wp_kses( $formas(), asde_html_permitido() ); ?></label>
-			<label><?php asde_e( 'Fecha' ); ?> <input type="date" name="fecha" value="<?php echo esc_attr( $hoy ); ?>" max="<?php echo esc_attr( $hoy ); ?>" required></label>
-			<label><?php asde_e( 'Referencia' ); ?> <input type="text" name="referencia" maxlength="120"></label>
-			<label><?php asde_e( 'Nota' ); ?> <input type="text" name="nota" maxlength="255"></label>
-			<button type="submit" class="button button-primary"><?php asde_e( 'Registrar el pago' ); ?></button>
+			<label><?php esc_html_e( 'Amount (€)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <input type="text" name="importe" inputmode="decimal" required></label>
+			<label><?php esc_html_e( 'Payment method', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <?php echo wp_kses( $formas(), asde_html_permitido() ); ?></label>
+			<label><?php esc_html_e( 'Date', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <input type="date" name="fecha" value="<?php echo esc_attr( $hoy ); ?>" max="<?php echo esc_attr( $hoy ); ?>" required></label>
+			<label><?php esc_html_e( 'Reference', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <input type="text" name="referencia" maxlength="120"></label>
+			<label><?php esc_html_e( 'Note', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <input type="text" name="nota" maxlength="255"></label>
+			<button type="submit" class="button button-primary"><?php esc_html_e( 'Record the payment', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 		</form>
 	</section>
 <?php endif; ?>

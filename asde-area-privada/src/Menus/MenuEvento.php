@@ -56,21 +56,21 @@ final class MenuEvento {
 	/** @return true|int|\WP_Error Id del plato. */
 	public static function anadir( array $e, Ambito $a, string $dia, string $comida, int $receta_id, string $comensales = '' ) {
 		if ( ! self::puede_editar( $e, $a ) ) {
-			return new \WP_Error( 'asde_menus', asde_t( 'No puedes cambiar el menú de este evento.' ) );
+			return new \WP_Error( 'asde_menus', __( 'You cannot change this event\'s menu.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( ! in_array( $dia, self::dias( $e ), true ) || ! isset( MenuTable::COMIDAS[ $comida ] ) ) {
-			return new \WP_Error( 'asde_menus', asde_t( 'Elige un día del evento y una comida.' ) );
+			return new \WP_Error( 'asde_menus', __( 'Choose a day of the event and a meal.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$receta = RecetasTable::obtener( $receta_id );
 		if ( ! $receta || ! $receta['activa'] ) {
-			return new \WP_Error( 'asde_menus', asde_t( 'Elige una receta del recetario.' ) );
+			return new \WP_Error( 'asde_menus', __( 'Choose a recipe from the recipe book.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$com = '' === trim( $comensales ) ? null : (int) $comensales;
 		if ( null !== $com && ( $com < 1 || $com > 5000 ) ) {
-			return new \WP_Error( 'asde_menus', asde_t( 'Los comensales tienen que estar entre 1 y 5000.' ) );
+			return new \WP_Error( 'asde_menus', __( 'Diners must be between 1 and 5000.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( MenuTable::contar( $e['id'] ) >= MenuTable::MAX ) {
-			return new \WP_Error( 'asde_menus', asde_t( 'El menú ya tiene demasiados platos.' ) );
+			return new \WP_Error( 'asde_menus', __( 'The menu already has too many dishes.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$id = MenuTable::anadir( $e['id'], $dia, $comida, $receta_id, $com );
 		Logger::log( 'menu_comida_anadida', 'evento', (string) $e['id'], array( 'comida' => $comida ) );
@@ -80,7 +80,7 @@ final class MenuEvento {
 	/** @return true|\WP_Error */
 	public static function quitar( array $e, Ambito $a, int $id ) {
 		if ( ! self::puede_editar( $e, $a ) || ! MenuTable::quitar( $id, $e['id'] ) ) {
-			return new \WP_Error( 'asde_menus', asde_t( 'No puedes cambiar el menú de este evento.' ) );
+			return new \WP_Error( 'asde_menus', __( 'You cannot change this event\'s menu.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		AvisosTable::borrar_plato( $id ); // Sus confirmaciones ya no valen.
 		Logger::log( 'menu_comida_quitada', 'evento', (string) $e['id'] );
@@ -91,7 +91,7 @@ final class MenuEvento {
 	public static function cambiar_comensales( array $e, Ambito $a, int $id, string $comensales ) {
 		$com = '' === trim( $comensales ) ? null : (int) $comensales;
 		if ( ! self::puede_editar( $e, $a ) || ! MenuTable::obtener( $id ) || ( null !== $com && ( $com < 1 || $com > 5000 ) ) ) {
-			return new \WP_Error( 'asde_menus', asde_t( 'Los comensales tienen que estar entre 1 y 5000.' ) );
+			return new \WP_Error( 'asde_menus', __( 'Diners must be between 1 and 5000.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		MenuTable::comensales( $id, $e['id'], $com );
 		return true;
@@ -200,11 +200,11 @@ final class MenuEvento {
 	public static function proponer_partida( array $e, Ambito $a ) {
 		$compra = self::compra( $e );
 		if ( $compra['total'] <= 0 ) {
-			return new \WP_Error( 'asde_menus', asde_t( 'El menú todavía no tiene coste: anota el coste de los ingredientes y añade platos.' ) );
+			return new \WP_Error( 'asde_menus', __( 'The menu has no cost yet: record the cost of the ingredients and add dishes.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		foreach ( PartidasTable::previstas( $e['id'] ) as $p ) {
 			if ( asde_t( self::CONCEPTO_PARTIDA ) === $p['concepto'] || self::CONCEPTO_PARTIDA === $p['concepto'] ) {
-				return new \WP_Error( 'asde_menus', asde_t( 'Ya hay una partida del menú en el presupuesto: quítala antes de proponer otra.' ) );
+				return new \WP_Error( 'asde_menus', __( 'There is already a menu item in the budget: remove it before proposing another.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			}
 		}
 		return Eventos::anadir_partida( $e, $a, PartidasTable::GASTO, asde_t( self::CONCEPTO_PARTIDA ), 'total', '', $compra['total'] );
@@ -213,7 +213,7 @@ final class MenuEvento {
 	/** CSV de la lista de la compra (con la marca de orden de bytes de Excel). */
 	public static function csv( array $e, string $dia = '' ): string {
 		$c    = self::compra( $e, $dia );
-		$filas = array( array( asde_t( 'Ingrediente' ), asde_t( 'Cantidad' ), asde_t( 'Unidad' ), asde_t( 'Coste' ) ) );
+		$filas = array( array( __( 'Ingredient', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Quantity', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Unidad', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Cost', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) );
 		foreach ( $c['filas'] as $f ) {
 			$filas[] = array( $f['nombre'], number_format( $f['cantidad'], 2, ',', '' ), Escalado::nombre( $f['unidad'] ), null === $f['coste'] ? '' : number_format( $f['coste'], 2, ',', '' ) );
 		}

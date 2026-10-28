@@ -35,7 +35,7 @@ final class CuotasView extends TesoreriaBaseView {
 
 	public function handle_post(): void {
 		if ( ! current_user_can( self::CAP_CONFIG ) ) {
-			wp_die( esc_html__( 'No tienes permiso para cambiar la configuración de Tesorería.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+			wp_die( esc_html__( 'You do not have permission to change the Treasury settings.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		check_admin_referer( 'asde_cuotas' );
 		$ronda = $this->ronda();
@@ -52,9 +52,9 @@ final class CuotasView extends TesoreriaBaseView {
 		Logger::log( 'tesoreria_cuotas_guardadas', 'ronda', $ronda );
 
 		$suma = Config::suma_plazos( Config::de( $ronda ) );
-		Notices::add( 'success', sprintf( asde_t( 'Cuotas de la ronda %s guardadas.' ), esc_html( $ronda ) ) );
+		Notices::add( 'success', sprintf( /* translators: %s: text */ __( 'Fees of round %s saved.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), esc_html( $ronda ) ) );
 		if ( abs( $suma - 100 ) > 0.01 ) {
-			Notices::add( 'warning', sprintf( asde_t( 'Los plazos suman un %s %%: deberían sumar 100 %%.' ), esc_html( number_format_i18n( $suma, 2 ) ) ) );
+			Notices::add( 'warning', sprintf( /* translators: %s: text */ __( 'The instalments add up to %s %%: they should add up to 100 %%.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), esc_html( number_format_i18n( $suma, 2 ) ) ) );
 		}
 		$this->redirect( $this->url( 'cuotas', array( 'ronda' => $ronda ) ) );
 	}

@@ -56,7 +56,7 @@ final class Contacto {
 			}
 			$nombres = array_map( static fn( $p ) => $p->nombre, $repo->obtener_varias( Usuarios::representados( $user->ID ) ) );
 			if ( $nombres ) {
-				return sprintf( asde_t( 'familia de %s' ), self::lista( $nombres ) );
+				return sprintf( /* translators: %s: text */ __( '%s family', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), self::lista( $nombres ) );
 			}
 		} catch ( CrmException $e ) {
 			return '';
@@ -71,7 +71,7 @@ final class Contacto {
 			return (string) ( $items[0] ?? '' );
 		}
 		$ultimo = array_pop( $items );
-		return implode( ', ', $items ) . ' ' . ( $o ? asde_t( 'o' ) : asde_t( 'y' ) ) . ' ' . $ultimo;
+		return implode( ', ', $items ) . ' ' . ( $o ? __( 'or', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : __( 'and', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) . ' ' . $ultimo;
 	}
 
 	/** Email enmascarado para mostrar sin revelarlo entero: ma***@gm***.com */

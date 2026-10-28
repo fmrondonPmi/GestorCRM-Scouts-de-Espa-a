@@ -146,7 +146,7 @@ final class Pages {
 			$estado = get_post_status( $id );
 			if ( 'trash' === $estado ) {
 				wp_untrash_post( $id );
-				$hecho[] = sprintf( asde_t( 'Página «%s»: recuperada de la papelera.' ), $titulo );
+				$hecho[] = sprintf( /* translators: %s: text */ __( 'Page "%s": recovered from the trash.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $titulo );
 			}
 			if ( 'publish' !== $estado ) {
 				wp_update_post(
@@ -156,7 +156,7 @@ final class Pages {
 					)
 				);
 				if ( 'trash' !== $estado ) {
-					$hecho[] = sprintf( asde_t( 'Página «%s»: publicada (estaba como «%s»).' ), $titulo, $estado );
+					$hecho[] = sprintf( /* translators: 1: text, 2: text */ __( 'Page "%1$s": published (it was "%2$s").', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $titulo, $estado );
 				}
 			}
 			$tag    = self::shortcode( $contenido );
@@ -168,7 +168,7 @@ final class Pages {
 						'post_content' => $contenido . ( '' !== trim( $actual ) ? "\n\n" . $actual : '' ),
 					)
 				);
-				$hecho[] = sprintf( asde_t( 'Página «%s»: le faltaba [%s], que es lo que la hace funcionar; se ha vuelto a poner.' ), $titulo, $tag );
+				$hecho[] = sprintf( /* translators: 1: text, 2: text */ __( 'Page "%1$s": it was missing [%2$s], which is what makes it work; it has been put back.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $titulo, $tag );
 			}
 		}
 		update_option( self::OPTION, $ids, false );
@@ -192,11 +192,11 @@ final class Pages {
 		foreach ( self::DEFINICIONES as $key => list( , $titulo, $contenido ) ) {
 			$id = (int) ( $ids[ $key ] ?? 0 );
 			if ( ! $id || 'page' !== get_post_type( $id ) ) {
-				$problemas[] = sprintf( asde_t( '«%s» no existe' ), $titulo );
+				$problemas[] = sprintf( /* translators: %s: text */ __( '"%s" does not exist', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $titulo );
 			} elseif ( 'publish' !== get_post_status( $id ) ) {
-				$problemas[] = sprintf( asde_t( '«%s» está como «%s»' ), $titulo, get_post_status( $id ) );
+				$problemas[] = sprintf( /* translators: 1: text, 2: text */ __( '"%1$s" is "%2$s"', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $titulo, get_post_status( $id ) );
 			} elseif ( ! has_shortcode( (string) get_post_field( 'post_content', $id ), self::shortcode( $contenido ) ) ) {
-				$problemas[] = sprintf( asde_t( '«%s» no tiene su shortcode' ), $titulo );
+				$problemas[] = sprintf( /* translators: %s: text */ __( '"%s" does not have its shortcode', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $titulo );
 			}
 		}
 		return array(

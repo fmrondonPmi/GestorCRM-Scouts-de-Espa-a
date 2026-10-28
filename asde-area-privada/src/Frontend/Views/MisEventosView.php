@@ -89,13 +89,13 @@ final class MisEventosView extends View {
 	public function handle_post(): void {
 		$a = Ambito::actual();
 		if ( ! current_user_can( Inscripciones::CAP ) || ! Inscripciones::para_quien( $a ) ) {
-			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+			wp_die( esc_html__( 'You do not have permission to do this.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		$e = EventosTable::obtener( (int) $this->post( 'evento' ) );
 		check_admin_referer( 'asde_mis_eventos_' . ( $e['id'] ?? 0 ) );
 		$volver = $this->url( 'mis_eventos' );
 		if ( ! $e ) {
-			Notices::add( 'error', asde_t( 'Ese evento no existe.' ) );
+			Notices::add( 'error', __( 'That event does not exist.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			$this->redirect( $volver );
 		}
 		$in     = wp_unslash( $_POST ); // phpcs:ignore WordPress.Security.NonceVerification -- comprobado arriba.
@@ -103,7 +103,7 @@ final class MisEventosView extends View {
 		$socio  = $this->post( 'socio' );
 		$fila   = (int) $this->post( 'fila' );
 		$hecho  = '';
-		$r      = new \WP_Error( 'asde_inscripcion', asde_t( 'Acción desconocida.' ) );
+		$r      = new \WP_Error( 'asde_inscripcion', __( 'Unknown action.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		switch ( $accion ) {
 			case 'inscripcion_crear':
 				$r = Inscripciones::inscribir( $e, $a, $socio, $in );
@@ -116,24 +116,24 @@ final class MisEventosView extends View {
 					return; // Se vuelve a enseñar el formulario con lo escrito.
 				}
 				$hecho = InscripcionesTable::ESPERA === $r['estado']
-					? asde_t( 'No quedaban plazas: queda en la lista de espera. Si se libera una, te avisaremos por email.' )
-					: ( InscripcionesTable::CONFIRMADA === $r['estado'] ? asde_t( 'Inscripción confirmada.' ) : asde_t( 'Inscripción guardada. Mira abajo lo que falta para confirmarla.' ) );
+					? __( 'There were no places left: they remain on the waiting list. If one is freed up, we will let you know by email.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' )
+					: ( InscripcionesTable::CONFIRMADA === $r['estado'] ? __( 'Sign-up confirmed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : __( 'Sign-up saved. See below what is missing to confirm it.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 				break;
 			case 'inscripcion_no':
 				$r     = Inscripciones::no_participa( $e, $a, $socio );
-				$hecho = asde_t( 'Respuesta guardada: no va a este evento.' );
+				$hecho = __( 'Answer saved: not going to this event.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 			case 'inscripcion_firmar':
 				$r     = Inscripciones::firmar( $e, $a, $fila, '1' === $this->post( 'acepto' ) );
-				$hecho = asde_t( 'Autorización firmada.' );
+				$hecho = __( 'Authorisation signed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 			case 'inscripcion_plaza':
 				$r     = Inscripciones::confirmar_plaza( $e, $a, $fila );
-				$hecho = asde_t( 'Plaza confirmada.' );
+				$hecho = __( 'Place confirmed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 			case 'inscripcion_baja':
 				$r     = Inscripciones::baja( $e, $a, $fila, '', false );
-				$hecho = asde_t( 'Inscripción dada de baja.' );
+				$hecho = __( 'Sign-up withdrawn.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 		}
 		is_wp_error( $r ) ? Notices::add( 'error', esc_html( $r->get_error_message() ) ) : Notices::add( 'success', esc_html( $hecho ) );

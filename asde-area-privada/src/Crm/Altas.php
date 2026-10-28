@@ -129,10 +129,10 @@ final class Altas {
 		}
 		$inicio = self::fecha( $inicio );
 		if ( ! self::seccion_valida( $seccion ) || '' === $inicio ) {
-			return new \WP_Error( 'asde_alta', asde_t( 'Elige la sección y la fecha de alta.' ) );
+			return new \WP_Error( 'asde_alta', __( 'Choose the section and the registration date.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( self::futura( $inicio ) ) {
-			return new \WP_Error( 'asde_alta', asde_t( 'La fecha de alta no puede ser posterior a hoy.' ) );
+			return new \WP_Error( 'asde_alta', __( 'The registration date cannot be later than today.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$doc   = (string) ( $datos['stic_identification_number_c'] ?? '' );
 		$clave = '' !== $doc ? 'doc:' . $doc : 'nombre:' . strtoupper( (string) preg_replace( '/[^0-9A-Za-z]/', '', remove_accents( $datos['first_name'] . $datos['last_name'] ) ) ) . ':' . $datos['birthdate'];
@@ -145,18 +145,18 @@ final class Altas {
 			try {
 				$c = ( new Duplicados( $this->crm ) )->comprobar( $doc );
 			} catch ( CrmException $e ) {
-				return new \WP_Error( 'asde_alta', asde_t( 'No se ha podido consultar el CRM: ' ) . $e->getMessage() );
+				return new \WP_Error( 'asde_alta', __( 'The CRM could not be queried: ', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . $e->getMessage() );
 			}
 			if ( $c['en_grupo'] ) {
-				return new \WP_Error( 'asde_alta_ya_en_grupo', asde_t( 'Ya tiene ficha en tu grupo: no se crea otra. Si no tiene membresía activa, dale una nueva en su ficha.' ), array( 'personas' => array_map( static fn( $f ) => $f['persona']->num_socio_asde, $c['en_grupo'] ) ) );
+				return new \WP_Error( 'asde_alta_ya_en_grupo', __( 'Already has a record in your group: another is not created. If they have no active membership, give them a new one on their record.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), array( 'personas' => array_map( static fn( $f ) => $f['persona']->num_socio_asde, $c['en_grupo'] ) ) );
 			}
 			$otros = $c['otros'];
 			if ( ( null === $otros || $otros > 0 ) && ! $confirmado_otros ) {
 				return new \WP_Error(
 					'asde_alta_confirmar',
 					null === $otros
-						? asde_t( 'No se ha podido comprobar si está dada de alta en otros grupos u organizaciones. Confirma que quieres seguir.' )
-						: asde_t( 'Esta persona ya está dada de alta en otro grupo u organización de Scouts de España. Confirma que quieres darla de alta también en tu grupo.' ),
+						? __( 'It could not be checked whether the person is registered in other groups or organisations. Confirm that you want to continue.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' )
+						: __( 'This person is already registered in another Scouts de España group or organisation. Confirm that you want to register them in your group as well.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 					array( 'otros' => $otros )
 				);
 			}
@@ -172,7 +172,7 @@ final class Altas {
 				// Justo antes de crear se vuelve a mirar el grupo (otra persona pudo darla de alta entretanto).
 				if ( '' !== $doc && $this->en_grupo( $doc ) ) {
 					Operaciones::descartar( $op['id'] );
-					return new \WP_Error( 'asde_alta_ya_en_grupo', asde_t( 'Ya tiene ficha en tu grupo: no se crea otra. Si no tiene membresía activa, dale una nueva en su ficha.' ) );
+					return new \WP_Error( 'asde_alta_ya_en_grupo', __( 'Already has a record in your group: another is not created. If they have no active membership, give them a new one on their record.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 				}
 				$d['persona_id'] = self::o_excepcion( Escritura::crear( Escritura::MODULO, $datos, 'alta' ) );
 				Operaciones::paso( $op['id'], 'persona', $d );
@@ -226,22 +226,22 @@ final class Altas {
 		}
 		$inicio = self::fecha( $inicio );
 		if ( ! self::seccion_valida( $seccion ) || '' === $inicio ) {
-			return new \WP_Error( 'asde_alta', asde_t( 'Elige la sección y la fecha de alta.' ) );
+			return new \WP_Error( 'asde_alta', __( 'Choose the section and the registration date.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( self::futura( $inicio ) ) {
-			return new \WP_Error( 'asde_alta', asde_t( 'La fecha de alta no puede ser posterior a hoy.' ) );
+			return new \WP_Error( 'asde_alta', __( 'The registration date cannot be later than today.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		try {
 			$ficha = $this->ficha( $p->id );
 			if ( ! $ficha ) {
-				return new \WP_Error( 'asde_alta', asde_t( 'No se encuentra esa persona en el CRM del grupo.' ) );
+				return new \WP_Error( 'asde_alta', __( 'That person cannot be found in the group\'s CRM.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			}
 			$activas = $this->activas( $p->id );
 		} catch ( CrmException | \InvalidArgumentException $e ) {
-			return new \WP_Error( 'asde_alta', asde_t( 'No se ha podido consultar el CRM: ' ) . $e->getMessage() );
+			return new \WP_Error( 'asde_alta', __( 'The CRM could not be queried: ', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . $e->getMessage() );
 		}
 		if ( $activas ) {
-			return new \WP_Error( 'asde_alta', asde_t( 'Ya tiene una membresía activa. Para pasarla a otra sección, usa «Cambiar de sección».' ) );
+			return new \WP_Error( 'asde_alta', __( 'Already has an active membership. To move it to another section, use "Change section".', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$op = Operaciones::tomar( 'membresia', 'p:' . $p->id );
 		if ( is_wp_error( $op ) ) {
@@ -273,23 +273,23 @@ final class Altas {
 		}
 		$fin = self::fecha( $fin );
 		if ( ! isset( self::MOTIVOS_BAJA[ $motivo ] ) || '' === $fin ) {
-			return new \WP_Error( 'asde_baja', asde_t( 'Elige la fecha y el motivo de la baja.' ) );
+			return new \WP_Error( 'asde_baja', __( 'Choose the date and reason for the withdrawal.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( self::futura( $fin ) ) {
-			return new \WP_Error( 'asde_baja', asde_t( 'La fecha de baja no puede ser posterior a hoy.' ) );
+			return new \WP_Error( 'asde_baja', __( 'The withdrawal date cannot be later than today.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		try {
 			$activas = $this->activas( $p->id );
 		} catch ( CrmException | \InvalidArgumentException $e ) {
-			return new \WP_Error( 'asde_baja', asde_t( 'No se ha podido consultar el CRM: ' ) . $e->getMessage() );
+			return new \WP_Error( 'asde_baja', __( 'The CRM could not be queried: ', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . $e->getMessage() );
 		}
 		if ( ! $activas ) {
-			return new \WP_Error( 'asde_baja', asde_t( 'No tiene ninguna membresía activa.' ) );
+			return new \WP_Error( 'asde_baja', __( 'Has no active membership.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$alta = max( array_map( static fn( $m ) => (string) $m['start_date'], $activas ) );
 		if ( $fin < $alta ) {
 			/* translators: %s: fecha de alta */
-			return new \WP_Error( 'asde_baja', sprintf( asde_t( 'La fecha de baja no puede ser anterior a la de alta (%s).' ), self::dma( $alta ) ) );
+			return new \WP_Error( 'asde_baja', sprintf( /* translators: %s: text */ __( 'The withdrawal date cannot be earlier than the registration date (%s).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), self::dma( $alta ) ) );
 		}
 		$op = Operaciones::tomar( 'baja', 'p:' . $p->id );
 		if ( is_wp_error( $op ) ) {
@@ -333,10 +333,10 @@ final class Altas {
 		}
 		$fecha = self::fecha( $fecha );
 		if ( ! self::seccion_valida( $seccion ) || '' === $fecha ) {
-			return new \WP_Error( 'asde_cambio', asde_t( 'Elige la sección nueva y la fecha.' ) );
+			return new \WP_Error( 'asde_cambio', __( 'Choose the new section and the date.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( self::futura( $fecha ) ) {
-			return new \WP_Error( 'asde_cambio', asde_t( 'La fecha del cambio no puede ser posterior a hoy.' ) );
+			return new \WP_Error( 'asde_cambio', __( 'The date of the change cannot be later than today.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$op = Operaciones::tomar( 'cambio_seccion', 'p:' . $p->id );
 		if ( is_wp_error( $op ) ) {
@@ -348,19 +348,19 @@ final class Altas {
 				$activas = $this->activas( $p->id );
 				if ( 1 !== count( $activas ) || 0 === strcasecmp( (string) $activas[0]['relationship_type'], Secciones::all()[ $seccion ]['crm'] ) ) {
 					Operaciones::descartar( $op['id'] );
-					return new \WP_Error( 'asde_cambio', 1 !== count( $activas ) ? asde_t( 'Para cambiar de sección tiene que tener una membresía activa (y solo una).' ) : asde_t( 'Ya está en esa sección.' ) );
+					return new \WP_Error( 'asde_cambio', 1 !== count( $activas ) ? __( 'To change section, they must have an active membership (and only one).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : __( 'Already in that section.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 				}
 				// v0.31: un educando solo pasa a la siguiente sección por edad; un scouter, a cualquiera.
 				$actual = (string) Secciones::from_crm( (string) $activas[0]['relationship_type'] );
 				if ( '' !== $actual && ! in_array( $seccion, Secciones::destinos_cambio( $actual ), true ) ) {
 					Operaciones::descartar( $op['id'] );
 					/* translators: 1: sección actual, 2: la siguiente por edad */
-					return new \WP_Error( 'asde_cambio', sprintf( asde_t( 'Desde %1$s solo se puede pasar a %2$s, la siguiente por edad (solo los scouters cambian a cualquier sección).' ), Secciones::nombre( $actual ), implode( ', ', array_map( array( Secciones::class, 'nombre' ), Secciones::destinos_cambio( $actual ) ) ) ) );
+					return new \WP_Error( 'asde_cambio', sprintf( /* translators: 1: text, 2: text */ __( 'From %1$s you can only move to %2$s, the next one by age (only scouters can change to any section).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Secciones::nombre( $actual ), implode( ', ', array_map( array( Secciones::class, 'nombre' ), Secciones::destinos_cambio( $actual ) ) ) ) );
 				}
 				if ( $fecha < (string) $activas[0]['start_date'] ) {
 					Operaciones::descartar( $op['id'] );
 					/* translators: %s: fecha de alta */
-					return new \WP_Error( 'asde_cambio', sprintf( asde_t( 'La fecha del cambio no puede ser anterior a la de alta en la sección actual (%s).' ), self::dma( (string) $activas[0]['start_date'] ) ) );
+					return new \WP_Error( 'asde_cambio', sprintf( /* translators: %s: text */ __( 'The date of the change cannot be earlier than the registration date in the current section (%s).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), self::dma( (string) $activas[0]['start_date'] ) ) );
 				}
 				$r = Escritura::actualizar_membresia( $p, $activas[0]['id'], self::cierre( $fecha, 'cambioseccion' ), 'cambio de sección' );
 				if ( is_wp_error( $r ) ) {
@@ -404,26 +404,26 @@ final class Altas {
 		try {
 			$ficha = $this->ficha( $p->id );
 			if ( ! $ficha ) {
-				return new \WP_Error( 'asde_documento', asde_t( 'No se encuentra esa persona en el CRM del grupo.' ) );
+				return new \WP_Error( 'asde_documento', __( 'That person cannot be found in the group\'s CRM.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			}
 			if ( '' !== trim( (string) ( $ficha['stic_identification_number_c'] ?? '' ) ) ) {
-				return new \WP_Error( 'asde_documento', asde_t( 'Esta ficha ya tiene un documento. Si está mal, corrígelo en el CRM.' ) );
+				return new \WP_Error( 'asde_documento', __( 'This record already has a document. If it is wrong, correct it in the CRM.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			}
 			$c = ( new Duplicados( $this->crm ) )->comprobar( $v['documento'] );
 		} catch ( CrmException | \InvalidArgumentException $e ) {
-			return new \WP_Error( 'asde_documento', asde_t( 'No se ha podido consultar el CRM: ' ) . $e->getMessage() );
+			return new \WP_Error( 'asde_documento', __( 'The CRM could not be queried: ', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . $e->getMessage() );
 		}
 		$otras = array_values( array_filter( $c['en_grupo'], static fn( $f ) => $f['persona']->id !== $p->id ) );
 		if ( $otras ) {
 			/* translators: %s: nombre de la otra persona */
-			return new \WP_Error( 'asde_documento_en_grupo', sprintf( asde_t( 'Otra ficha de tu grupo ya tiene este documento (%s): sería la misma persona dos veces. Revísalo antes de seguir.' ), $otras[0]['persona']->nombre_completo() ) );
+			return new \WP_Error( 'asde_documento_en_grupo', sprintf( /* translators: %s: text */ __( 'Another record in your group already has this document (%s): it would be the same person twice. Check it before continuing.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $otras[0]['persona']->nombre_completo() ) );
 		}
 		if ( ( null === $c['otros'] || $c['otros'] > 0 ) && ! $confirmado_otros ) {
 			return new \WP_Error(
 				'asde_documento_confirmar',
 				null === $c['otros']
-					? asde_t( 'No se ha podido comprobar si este documento está en otros grupos u organizaciones. Confirma que quieres guardarlo.' )
-					: asde_t( 'Este documento ya está dado de alta en otro grupo u organización de Scouts de España. Confirma que es la misma persona y quieres guardarlo.' ),
+					? __( 'It could not be checked whether this document is in other groups or organisations. Confirm that you want to save it.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' )
+					: __( 'This document is already registered in another Scouts de España group or organisation. Confirm that it is the same person and that you want to save it.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 				array( 'otros' => $c['otros'] )
 			);
 		}
@@ -434,7 +434,7 @@ final class Altas {
 		$r = Escritura::guardar( $p, array( 'stic_identification_number_c' => $v['documento'] ), 'documento' );
 		if ( is_wp_error( $r ) || $r['rechazados'] ) {
 			Operaciones::descartar( $op['id'] );
-			return is_wp_error( $r ) ? $r : new \WP_Error( 'asde_documento', asde_t( 'El CRM no ha guardado el documento.' ) );
+			return is_wp_error( $r ) ? $r : new \WP_Error( 'asde_documento', __( 'The CRM has not saved the document.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		Operaciones::terminar( $op['id'], array( 'persona_id' => $p->id ) );
 		return array( 'otros' => $c['otros'] );
@@ -521,10 +521,10 @@ final class Altas {
 	/** ¿Están activas las altas en el grupo y puede crear el usuario del CRM? */
 	private static function previo(): ?\WP_Error {
 		if ( ! self::activo() ) {
-			return new \WP_Error( 'asde_altas_apagadas', asde_t( 'Las altas en el CRM no están activadas para tu grupo.' ) );
+			return new \WP_Error( 'asde_altas_apagadas', __( 'Registrations in the CRM are not enabled for your group.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( ! Escritura::puede_crear() ) {
-			return new \WP_Error( 'asde_altas_permiso', asde_t( 'El usuario del CRM de tu grupo no tiene permiso para crear personas y membresías.' ) );
+			return new \WP_Error( 'asde_altas_permiso', __( 'Your group\'s CRM user does not have permission to create people and memberships.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		return null;
 	}
@@ -544,10 +544,10 @@ final class Altas {
 			}
 		}
 		foreach ( array(
-			'first_name'    => asde_t( 'Falta el nombre.' ),
-			'last_name'     => asde_t( 'Faltan los apellidos.' ),
-			'birthdate'     => asde_t( 'Falta la fecha de nacimiento.' ),
-			'stic_gender_c' => asde_t( 'Falta el género.' ),
+			'first_name'    => __( 'The first name is missing.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+			'last_name'     => __( 'The surname is missing.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+			'birthdate'     => __( 'The date of birth is missing.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+			'stic_gender_c' => __( 'The gender is missing.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 		) as $c => $error ) {
 			if ( ! isset( $d[ $c ] ) ) {
 				return new \WP_Error( 'asde_alta_datos', $error );
@@ -555,11 +555,11 @@ final class Altas {
 		}
 		$nacimiento = self::fecha( $d['birthdate'] );
 		if ( '' === $nacimiento || $nacimiento > wp_date( 'Y-m-d' ) || $nacimiento < '1900-01-01' ) {
-			return new \WP_Error( 'asde_alta_datos', asde_t( 'La fecha de nacimiento no es válida.' ) );
+			return new \WP_Error( 'asde_alta_datos', __( 'The date of birth is not valid.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$d['birthdate'] = $nacimiento;
 		if ( ! isset( self::GENEROS[ $d['stic_gender_c'] ] ) ) {
-			return new \WP_Error( 'asde_alta_datos', asde_t( 'El género no es válido.' ) );
+			return new \WP_Error( 'asde_alta_datos', __( 'The gender is not valid.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( isset( $d['stic_identification_number_c'] ) ) {
 			$v = Duplicados::validar( $d['stic_identification_number_c'] );
@@ -569,18 +569,18 @@ final class Altas {
 			$d['stic_identification_number_c'] = $v['documento'];
 		} elseif ( Duplicados::documento_obligatorio( $nacimiento ) ) {
 			/* translators: %d: edad */
-			return new \WP_Error( 'asde_alta_datos', sprintf( asde_t( 'El documento es obligatorio a partir de los %d años.' ), Duplicados::EDAD_DOCUMENTO ) );
+			return new \WP_Error( 'asde_alta_datos', sprintf( /* translators: %d: number */ __( 'The document is required from age %d.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Duplicados::EDAD_DOCUMENTO ) );
 		}
 		foreach ( array( 'email1', 'tutor1_email_c', 'tutor2_email_c' ) as $c ) {
 			if ( isset( $d[ $c ] ) && ! is_email( $d[ $c ] ) ) {
-				return new \WP_Error( 'asde_alta_datos', asde_t( 'Hay un email que no es válido.' ) );
+				return new \WP_Error( 'asde_alta_datos', __( 'One of the email addresses is not valid.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			}
 		}
 		// Menores de 18 (decisión del usuario, P-88): el tutor/a 1 es obligatorio, con su email
 		// (la cuenta familiar y los avisos, como el de una baja, van a ese email).
 		if ( self::tutores_obligatorios( $nacimiento ) && ( ! isset( $d['tutor1_nombre_c'], $d['tutor1_apellidos_c'], $d['tutor1_email_c'] ) ) ) {
 			/* translators: %d: edad */
-			return new \WP_Error( 'asde_alta_datos', sprintf( asde_t( 'Por debajo de %d años hace falta el tutor/a 1: nombre, apellidos y email.' ), self::EDAD_ADULTA ) );
+			return new \WP_Error( 'asde_alta_datos', sprintf( /* translators: %d: number */ __( 'Under %d years of age, guardian 1 is required: first name, surname and email.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), self::EDAD_ADULTA ) );
 		}
 		return $d;
 	}
@@ -657,7 +657,7 @@ final class Altas {
 		self::o_excepcion( Escritura::relacionar( $persona_id, 'SecurityGroups', array( (string) Grupo::actual()['crm_id'] ), 'alta' ) );
 		$ficha = $this->ficha( $persona_id );
 		if ( ! $ficha ) {
-			throw new CrmException( esc_html( asde_t( 'El CRM no ha dejado la ficha nueva en el grupo.' ) ) );
+			throw new CrmException( esc_html( __( 'The CRM has not left the new record in the group.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) );
 		}
 		return $ficha;
 	}
@@ -682,7 +682,7 @@ final class Altas {
 		if ( ! in_array( $id, array_column( $this->membresias( $persona_id ), 'id' ), true ) ) {
 			self::o_excepcion( Escritura::relacionar( $persona_id, Escritura::ENLACE_MEMBRESIAS, array( $id ), 'alta' ) );
 			if ( ! in_array( $id, array_column( $this->membresias( $persona_id ), 'id' ), true ) ) {
-				throw new CrmException( esc_html( asde_t( 'El CRM no ha enlazado la membresía con la persona.' ) ) );
+				throw new CrmException( esc_html( __( 'The CRM has not linked the membership to the person.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) );
 			}
 		}
 		return $id;
@@ -707,8 +707,8 @@ final class Altas {
 		return new \WP_Error(
 			'asde_alta_a_medias',
 			$hecho
-				? asde_t( 'Se ha quedado a medias. Vuelve a intentarlo: seguirá donde se quedó, sin crear otra ficha. Motivo: ' ) . $e->getMessage()
-				: asde_t( 'No se ha podido hacer: ' ) . $e->getMessage()
+				? __( 'It was left unfinished. Try again: it will continue where it stopped, without creating another record. Reason: ', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . $e->getMessage()
+				: __( 'It could not be done: ', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . $e->getMessage()
 		);
 	}
 }

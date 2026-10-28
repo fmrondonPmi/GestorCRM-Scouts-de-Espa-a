@@ -140,12 +140,12 @@ final class SociosTable {
 			return $existente;
 		}
 		if ( ! NumeroSocio::configurado( $grupo ) ) {
-			return new \WP_Error( 'asde_num_socio', asde_t( 'Falta la provincia del grupo (Datos del grupo): sin ella no se pueden generar números de socio.' ) );
+			return new \WP_Error( 'asde_num_socio', __( 'The group\'s province is missing (Group details): member numbers cannot be generated without it.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 
 		// Evita que dos personas reciban el mismo número.
 		if ( ! \AsdeBalears\AreaPrivada\Domain\Bloqueo::tomar( 'asde_num_socio' ) ) {
-			return new \WP_Error( 'asde_num_socio', asde_t( 'No se ha podido asignar un número de socio. Inténtalo de nuevo.' ) );
+			return new \WP_Error( 'asde_num_socio', __( 'A member number could not be assigned. Try again.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		try {
 			for ( $intento = 0; $intento < 5; $intento++ ) {
@@ -169,7 +169,7 @@ final class SociosTable {
 		} finally {
 			\AsdeBalears\AreaPrivada\Domain\Bloqueo::soltar( 'asde_num_socio' );
 		}
-		return new \WP_Error( 'asde_num_socio', asde_t( 'No se ha podido asignar un número de socio. Inténtalo de nuevo.' ) );
+		return new \WP_Error( 'asde_num_socio', __( 'A member number could not be assigned. Try again.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 	}
 
 	/** Siguiente número libre: máximo entre CRM y esta tabla, + 1. */

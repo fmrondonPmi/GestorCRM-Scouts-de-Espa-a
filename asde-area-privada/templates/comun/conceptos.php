@@ -28,18 +28,18 @@ $fila = static function ( string $i, array $c, bool $editable ) use ( $campo ): 
 		esc_attr( '' === (string) ( $c['nombre'] ?? '' ) ? '' : (string) (float) ( $c['importe'] ?? 0 ) ),
 		$opciones,
 		$ro,
-		asde_a( 'Concepto' ),
-		asde_a( 'Nombre del concepto' ),
-		asde_a( 'Importe (€)' ),
-		asde_a( 'Importe en euros' ),
-		asde_a( 'Se aplica a' )
+		esc_attr__( 'Description', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		esc_attr__( 'Item name', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		esc_attr__( 'Amount (€)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		esc_attr__( 'Amount in euros', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		esc_attr__( 'Applies to', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' )
 	);
 };
 ?>
 <div class="asde-conceptos" data-asde-conceptos data-siguiente="<?php echo (int) count( $conceptos ) + 1; ?>">
 	<table class="asde-table asde-conceptos__tabla">
 		<thead>
-			<tr><th scope="col"><?php asde_e( 'Concepto' ); ?></th><th scope="col"><?php asde_e( 'Importe (€)' ); ?></th><th scope="col"><?php asde_e( 'Se aplica a' ); ?></th></tr>
+			<tr><th scope="col"><?php esc_html_e( 'Description', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Amount (€)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Applies to', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th></tr>
 		</thead>
 		<tbody data-asde-conceptos-filas>
 			<?php foreach ( array_values( $conceptos ) as $i => $c ) : ?>
@@ -49,15 +49,15 @@ $fila = static function ( string $i, array $c, bool $editable ) use ( $campo ): 
 				<?php echo wp_kses( $fila( (string) count( $conceptos ), array(), true ), asde_html_permitido() ); ?>
 			<?php endif; ?>
 			<?php if ( ! $conceptos && ! $editable ) : ?>
-				<tr><td colspan="3" class="asde-muted"><?php asde_e( 'Ningún otro concepto.' ); ?></td></tr>
+				<tr><td colspan="3" class="asde-muted"><?php esc_html_e( 'No other items.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></td></tr>
 			<?php endif; ?>
 		</tbody>
 	</table>
 	<?php if ( $editable ) : ?>
 		<template data-asde-conceptos-plantilla><?php echo wp_kses( $fila( '__i__', array(), true ), asde_html_permitido() ); ?></template>
 		<p class="asde-conceptos__acciones">
-			<button type="button" class="button" data-asde-conceptos-anadir hidden><?php asde_e( 'Añadir concepto' ); ?></button>
-			<span class="asde-help"><?php asde_e( 'Para quitar un concepto, deja su nombre vacío. Un importe negativo es un descuento. Máximo' ); ?> <?php echo (int) Organizacion::MAX_CONCEPTOS; ?>.</span>
+			<button type="button" class="button" data-asde-conceptos-anadir hidden><?php esc_html_e( 'Add item', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
+			<span class="asde-help"><?php esc_html_e( 'To remove an item, leave its name empty. A negative amount is a discount. Maximum', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <?php echo (int) Organizacion::MAX_CONCEPTOS; ?>.</span>
 		</p>
 	<?php endif; ?>
 </div>

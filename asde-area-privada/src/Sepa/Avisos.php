@@ -53,7 +53,7 @@ final class Avisos {
 			Idioma::de_usuario( $firmante->ID ),
 			static fn() => self::enviar(
 				$firmante,
-				asde_t( 'Hemos guardado tu autorización de domiciliación SEPA' ),
+				__( 'We have saved your SEPA direct debit authorisation', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 				array(
 					'tipo'     => 'autorizacion',
 					'grupo'    => Grupo::nombre(),
@@ -107,7 +107,7 @@ final class Avisos {
 					continue;
 				}
 				$hechos[ $l['familia'] . '|' . strtolower( $email ) ] = true;
-				if ( Idioma::en( Idioma::de_usuario( $user->ID ), static fn() => self::enviar( $user, sprintf( asde_t( '[%s] Aviso de cargo el %s' ), Grupo::nombre(), $datos['fecha'] ), $datos, $email ) ) ) {
+				if ( Idioma::en( Idioma::de_usuario( $user->ID ), static fn() => self::enviar( $user, sprintf( /* translators: 1: text, 2: text */ __( '[%1$s] Charge notice for %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Grupo::nombre(), $datos['fecha'] ), $datos, $email ) ) ) {
 					++$res['enviados'];
 					$enviado = true;
 				}
@@ -158,7 +158,7 @@ final class Avisos {
 		$repo  = PersonaRepository::make();
 		$email = $email ?: Contacto::email( $user, $repo );
 		if ( ! $email ) {
-			RegistroEmails::registrar( $user, RegistroEmails::SEPA, '', $asunto, RegistroEmails::SIN_EMAIL, asde_t( 'La cuenta no tiene un email al que escribir.' ), $datos );
+			RegistroEmails::registrar( $user, RegistroEmails::SEPA, '', $asunto, RegistroEmails::SIN_EMAIL, __( 'The account has no email address to write to.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $datos );
 			return false;
 		}
 		$html    = self::html( $datos, Contacto::saludo( $user, $repo ) );

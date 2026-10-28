@@ -67,7 +67,7 @@ final class MigracionUsuario {
 				$out['imposibles'][] = array(
 					'id'     => (int) $u->ID,
 					'actual' => $actual,
-					'motivo' => sprintf( asde_t( 'Ya existe otro usuario %s.' ), $nuevo ),
+					'motivo' => sprintf( /* translators: %s: text */ __( 'Another user %s already exists.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $nuevo ),
 				);
 				continue;
 			}
@@ -167,7 +167,7 @@ final class MigracionUsuario {
 	private static function nuevo_login( \WP_User $u, string $destino, array $mapas, ?string &$motivo ): ?string {
 		$partes = Identidad::partes( (string) $u->user_login );
 		if ( ! $partes ) {
-			$motivo = asde_t( 'Su nombre de usuario no es un nº de socio/a: no se toca.' );
+			$motivo = __( 'Their username is not a member no.: it is left alone.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 			return null;
 		}
 		list( $base, $sufijo ) = $partes;
@@ -223,13 +223,13 @@ final class MigracionUsuario {
 
 		if ( Organizacion::IDENTIFICADOR_ASDE === $destino ) {
 			if ( null === $base_asde ) {
-				$motivo = asde_t( 'No se encuentra el nº de Scouts de España de su ficha (comprueba que está en Personas y vuelve a intentarlo).' );
+				$motivo = __( 'The Scouts de España no. on their record cannot be found (check that it is in People and try again).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				return null;
 			}
 			return $base_asde . $sufijo;
 		}
 		if ( null === $base_local || ! $grupo || ! NumeroSocio::es_valido( $base_local, (string) $grupo['numero'] ) ) {
-			$motivo = asde_t( 'Su ficha no tiene un nº local válido y único (corrígelo en Personas y vuelve a intentarlo).' );
+			$motivo = __( 'Their record does not have a valid, unique local no. (correct it in People and try again).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 			return null;
 		}
 		return $base_local . $sufijo;

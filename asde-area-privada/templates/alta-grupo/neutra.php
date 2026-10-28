@@ -5,6 +5,6 @@
 defined( 'ABSPATH' ) || exit;
 ?>
 <section class="asde-card asde-card--narrow">
-	<h2><?php asde_e( 'Alta de grupo' ); ?></h2>
-	<div class="asde-notice asde-notice--warning" role="status"><?php asde_e( 'Este enlace no es válido o ya no está en uso. Pide una invitación nueva a la oficina.' ); ?></div>
+	<h2><?php esc_html_e( 'Group registration', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h2>
+	<div class="asde-notice asde-notice--warning" role="status"><?php esc_html_e( 'This link is not valid or is no longer in use. Ask the office for a new invitation.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></div>
 </section>

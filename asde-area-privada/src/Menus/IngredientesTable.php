@@ -100,7 +100,7 @@ final class IngredientesTable {
 		$grupo  = '' !== $grupo ? $grupo : Grupo::numero();
 		$nombre = mb_substr( trim( sanitize_text_field( (string) ( $d['nombre'] ?? '' ) ) ), 0, 120 );
 		if ( '' === $nombre ) {
-			return new \WP_Error( 'asde_menus', asde_t( 'Escribe el nombre del ingrediente.' ) );
+			return new \WP_Error( 'asde_menus', __( 'Enter the ingredient name.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$unidad = Escalado::unidad_valida( (string) ( $d['unidad'] ?? '' ) ) ? (string) $d['unidad'] : 'g';
 		$coste  = isset( $d['coste'] ) && '' !== $d['coste'] && null !== $d['coste'] ? max( 0.0, round( is_string( $d['coste'] ) ? Conversion::numero( $d['coste'] ) : (float) $d['coste'], 4 ) ) : null;
@@ -116,14 +116,14 @@ final class IngredientesTable {
 		if ( $id ) {
 			$actual = self::obtener( $id );
 			if ( ! $actual || $actual['grupo'] !== $grupo ) {
-				return new \WP_Error( 'asde_menus', asde_t( 'Ese ingrediente no es del grupo y no se puede cambiar.' ) );
+				return new \WP_Error( 'asde_menus', __( 'That ingredient does not belong to the group and cannot be changed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			}
 			$wpdb->update( self::table(), $fila, array( 'id' => $id ) ); // phpcs:ignore WordPress.DB
 			return $id;
 		}
 		$otro = self::por_nombre( $nombre );
 		if ( $otro && $otro['grupo'] === $grupo ) {
-			return new \WP_Error( 'asde_menus', asde_t( 'Ya hay un ingrediente con ese nombre.' ) );
+			return new \WP_Error( 'asde_menus', __( 'There is already an ingredient with that name.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$wpdb->insert( self::table(), $fila + array( 'grupo' => $grupo, 'creado' => current_time( 'mysql', true ), 'creado_por' => get_current_user_id() ) ); // phpcs:ignore WordPress.DB
 		return (int) $wpdb->insert_id;

@@ -28,9 +28,9 @@ final class AvisoRevision {
 	public static function asunto( array $lista ): string {
 		return ComprasTable::RECHAZADA === $lista['estado']
 			/* translators: 1: nombre del grupo, 2: nº de la lista */
-			? sprintf( asde_t( '[%1$s] Tesorería ha rechazado tu lista de compra %2$s' ), Grupo::nombre(), ComprasTable::numero( $lista ) )
+			? sprintf( /* translators: 1: text, 2: text */ __( '[%1$s] Treasury has rejected your shopping list %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Grupo::nombre(), ComprasTable::numero( $lista ) )
 			/* translators: 1: nombre del grupo, 2: nº de la lista */
-			: sprintf( asde_t( '[%1$s] Tu lista de compra %2$s tiene el visto bueno de Tesorería' ), Grupo::nombre(), ComprasTable::numero( $lista ) );
+			: sprintf( /* translators: 1: text, 2: text */ __( '[%1$s] Your shopping list %2$s has Treasury\'s approval', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Grupo::nombre(), ComprasTable::numero( $lista ) );
 	}
 
 	/** HTML del email (el envío y la vista previa del registro usan la misma plantilla). */
@@ -73,7 +73,7 @@ final class AvisoRevision {
 			static function () use ( $u, $email, $lista, $repo, $datos ): string {
 				$asunto = self::asunto( $lista );
 				if ( ! $email ) {
-					RegistroEmails::registrar( $u, RegistroEmails::COMPRA_REVISADA, '', $asunto, RegistroEmails::SIN_EMAIL, asde_t( 'La cuenta no tiene un email al que escribir.' ), $datos );
+					RegistroEmails::registrar( $u, RegistroEmails::COMPRA_REVISADA, '', $asunto, RegistroEmails::SIN_EMAIL, __( 'The account has no email address to write to.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $datos );
 					return RegistroEmails::SIN_EMAIL;
 				}
 				$error = RegistroEmails::enviar( $email, $asunto, self::html( $lista, Contacto::saludo( $u, $repo ) ) );

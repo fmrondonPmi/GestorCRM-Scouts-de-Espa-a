@@ -83,7 +83,7 @@ final class Avisos {
 			Idioma::de_usuario( $user->ID ),
 			static function () use ( $user, $email, $datos, $repo ): bool {
 				if ( ! $email ) {
-					RegistroEmails::registrar( $user, RegistroEmails::REINTEGRO, '', self::asunto( $datos ), RegistroEmails::SIN_EMAIL, asde_t( 'La cuenta no tiene un email al que escribir.' ), $datos );
+					RegistroEmails::registrar( $user, RegistroEmails::REINTEGRO, '', self::asunto( $datos ), RegistroEmails::SIN_EMAIL, __( 'The account has no email address to write to.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $datos );
 					return false;
 				}
 				return self::mandar( $user, $email, $datos, Contacto::saludo( $user, $repo ) );
@@ -104,16 +104,16 @@ final class Avisos {
 		$num = $r ? ReintegrosTable::numero( $r ) : '';
 		switch ( $datos['tipo'] ?? '' ) {
 			case self::APROBADO:
-				$plantilla = asde_t( '[%1$s] Reintegro aprobado: %2$s' );
+				$plantilla = /* translators: 1: text, 2: text */ __( '[%1$s] Reimbursement approved: %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 			case self::RECHAZADO:
-				$plantilla = asde_t( '[%1$s] Reintegro rechazado: %2$s' );
+				$plantilla = /* translators: 1: text, 2: text */ __( '[%1$s] Reimbursement rejected: %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 			case self::PAGADO:
-				$plantilla = asde_t( '[%1$s] Reintegro pagado: %2$s' );
+				$plantilla = /* translators: 1: text, 2: text */ __( '[%1$s] Reimbursement paid: %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 			default:
-				$plantilla = asde_t( '[%1$s] Reintegro por transferencia pendiente de aprobar: %2$s' );
+				$plantilla = /* translators: 1: text, 2: text */ __( '[%1$s] Transfer reimbursement awaiting approval: %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		return sprintf( $plantilla, (string) ( $datos['grupo'] ?? Grupo::nombre() ), $num );
 	}

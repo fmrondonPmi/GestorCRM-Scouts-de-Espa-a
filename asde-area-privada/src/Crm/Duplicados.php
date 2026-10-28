@@ -67,23 +67,23 @@ final class Duplicados {
 			'error'     => $error,
 		);
 		if ( '' === $doc ) {
-			return $res( false, '', asde_t( 'Escribe el número de documento.' ) );
+			return $res( false, '', __( 'Enter the document number.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( preg_match( '/^\d{8}[A-Z]$/', $doc ) ) {
 			return self::LETRAS[ (int) substr( $doc, 0, 8 ) % 23 ] === $doc[8]
 				? $res( true, self::DNI )
-				: $res( false, self::DNI, asde_t( 'La letra del DNI no corresponde a sus números. Revísalo.' ) );
+				: $res( false, self::DNI, __( 'The letter of the ID number does not match its digits. Check it.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( preg_match( '/^[XYZ]\d{7}[A-Z]$/', $doc ) ) {
 			return self::LETRAS[ (int) ( strpos( 'XYZ', $doc[0] ) . substr( $doc, 1, 7 ) ) % 23 ] === $doc[8]
 				? $res( true, self::NIE )
-				: $res( false, self::NIE, asde_t( 'La letra del NIE no corresponde a sus números. Revísalo.' ) );
+				: $res( false, self::NIE, __( 'The letter of the foreigner ID number does not match its digits. Check it.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( preg_match( '/^\d{7,8}$/', $doc ) ) {
-			return $res( false, self::DNI, asde_t( 'Al DNI le falta la letra.' ) );
+			return $res( false, self::DNI, __( 'The ID number is missing its letter.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( strlen( $doc ) < 5 || strlen( $doc ) > 20 ) {
-			return $res( false, self::OTRO, asde_t( 'El número de documento debe tener entre 5 y 20 letras o cifras.' ) );
+			return $res( false, self::OTRO, __( 'The document number must have between 5 and 20 letters or digits.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		return $res( true, self::OTRO );
 	}

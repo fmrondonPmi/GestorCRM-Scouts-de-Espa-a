@@ -21,7 +21,7 @@ defined( 'ABSPATH' ) || exit;
 
 $ronda = $res['ronda'] ?? null;
 ?>
-<p class="asde-back asde-no-print"><a href="<?php echo esc_url( $url ); ?>"><?php asde_e( '← Volver a informes' ); ?></a></p>
+<p class="asde-back asde-no-print"><a href="<?php echo esc_url( $url ); ?>"><?php esc_html_e( '← Back to reports', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a></p>
 
 <?php /* v0.31: al cambiar la sección se actualiza solo el resultado (parcial.js). */ ?>
 <div data-asde-parcial="informe-resultado">
@@ -29,10 +29,10 @@ $ronda = $res['ronda'] ?? null;
 	<header class="asde-card__header asde-card__header--split">
 		<h2 class="asde-card__title"><?php echo esc_html( $informe->titulo() ); ?></h2>
 		<p class="asde-actions asde-no-print">
-			<a class="button no-transition" href="<?php echo esc_url( $url_excel ); ?>" data-asde-descarga><?php asde_e( 'Descargar Excel' ); ?></a>
+			<a class="button no-transition" href="<?php echo esc_url( $url_excel ); ?>" data-asde-descarga><?php esc_html_e( 'Download Excel', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a>
 			<?php /* v0.29: la versión para imprimir, en la ventana emergente (informes.js); sin JavaScript, en otra pestaña. */ ?>
-			<a class="button asde-button-secundario" href="<?php echo esc_url( $url_print ); ?>" target="_blank" rel="noopener" data-asde-imprimir="<?php echo esc_attr( $informe->titulo() ); ?>"><?php asde_e( 'Imprimir' ); ?></a>
-			<a class="button asde-button-secundario" href="<?php echo esc_url( $url_edit ); ?>"><?php echo $informe->id ? esc_html( asde_t( 'Editar' ) ) : esc_html( asde_t( 'Editar / guardar' ) ); ?></a>
+			<a class="button asde-button-secundario" href="<?php echo esc_url( $url_print ); ?>" target="_blank" rel="noopener" data-asde-imprimir="<?php echo esc_attr( $informe->titulo() ); ?>"><?php esc_html_e( 'Print', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a>
+			<a class="button asde-button-secundario" href="<?php echo esc_url( $url_edit ); ?>"><?php echo $informe->id ? esc_html( __( 'Edit', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) : esc_html( __( 'Edit / save', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?></a>
 		</p>
 	</header>
 	<p class="asde-muted"><?php echo esc_html( Generador::resumen( $informe, $res ) ); ?></p>
@@ -44,29 +44,29 @@ $ronda = $res['ronda'] ?? null;
 					<input type="hidden" name="<?php echo esc_attr( is_array( $v ) ? $k . '[]' : $k ); ?>" value="<?php echo esc_attr( (string) $uno ); ?>">
 				<?php endforeach; ?>
 			<?php endforeach; ?>
-			<label for="asde-inf-seccion"><?php asde_e( 'Sección' ); ?></label>
+			<label for="asde-inf-seccion"><?php esc_html_e( 'Section', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 			<select id="asde-inf-seccion" name="seccion" data-asde-autoenviar>
-				<option value=""><?php echo $informe->filtros['secciones'] && '' === $seccion ? esc_html( asde_t( 'Las del informe' ) ) : esc_html( asde_t( 'Todas' ) ); ?></option>
+				<option value=""><?php echo $informe->filtros['secciones'] && '' === $seccion ? esc_html( __( 'Those of the report', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) : esc_html( __( 'All', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?></option>
 				<?php foreach ( $secciones as $s ) : ?>
 					<option value="<?php echo esc_attr( $s ); ?>" <?php selected( $seccion, $s ); ?>><?php echo esc_html( Secciones::nombre( $s ) ); ?></option>
 				<?php endforeach; ?>
 			</select>
-			<noscript><button type="submit" class="button"><?php asde_e( 'Ver' ); ?></button></noscript>
+			<noscript><button type="submit" class="button"><?php esc_html_e( 'View', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button></noscript>
 		</form>
 	<?php endif; ?>
 	<?php if ( null !== $ronda ) : ?>
 		<?php /* translators: %s: ronda (2026-2027) */ ?>
-		<p class="asde-help"><?php echo esc_html( sprintf( asde_t( 'Cuota de la ronda %s, de Tesorería: los importes son los de la familia de cada socio (con sus hermanos).' ), $ronda ) ); ?></p>
+		<p class="asde-help"><?php echo esc_html( sprintf( /* translators: %s: text */ __( 'Fee for round %s, from Treasury: the amounts are those of each member\'s family (with their siblings).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $ronda ) ); ?></p>
 	<?php endif; ?>
 	<?php foreach ( $res['avisos'] as $aviso ) : ?>
 		<div class="asde-notice asde-notice--warning" role="status"><?php echo esc_html( $aviso ); ?></div>
 	<?php endforeach; ?>
 	<?php if ( $res['salud'] ) : ?>
-		<div class="asde-notice asde-notice--info asde-no-print" role="status"><?php asde_e( 'Este informe incluye' ); ?> <strong><?php asde_e( 'datos de salud' ); ?></strong><?php asde_e( ': úsalos solo para la actividad, no los reenvíes y destruye las copias impresas al terminar. Queda registrado quién lo consulta.' ); ?></div>
+		<div class="asde-notice asde-notice--info asde-no-print" role="status"><?php esc_html_e( 'This report includes', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <strong><?php esc_html_e( 'health data', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></strong><?php esc_html_e( ': use them only for the activity, do not forward them and destroy printed copies when finished. Who consults it is recorded.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></div>
 	<?php endif; ?>
 
 	<?php if ( ! $res['filas'] ) : ?>
-		<p><?php asde_e( 'No hay socios que cumplan estos filtros.' ); ?></p>
+		<p><?php esc_html_e( 'There are no members matching these filters.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 	<?php elseif ( $informe->en_fichas() ) : ?>
 		<?php /* v0.29: una ficha por persona (al imprimir, una por página). */ ?>
 		<div class="asde-informe-fichas">

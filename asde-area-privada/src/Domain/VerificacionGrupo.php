@@ -24,11 +24,11 @@ final class VerificacionGrupo {
 			'crm_id'  => '',
 		);
 		if ( null === Grupos::normalizar_numero( $numero ) || '' === trim( $usuario ) || '' === $clave ) {
-			return $fallo( asde_t( 'Escribe el nº de grupo, el usuario y la contraseña del CRM.' ) );
+			return $fallo( __( 'Enter the group number, the CRM username and the password.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$url = Settings::url();
 		if ( '' === $url ) {
-			return $fallo( asde_t( 'Ahora mismo no se puede comprobar el acceso. Inténtalo más tarde.' ) );
+			return $fallo( __( 'Access cannot be checked right now. Try again later.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		/** Las pruebas automáticas ponen aquí un cliente simulado. @var object|null $cliente */
 		$cliente = apply_filters( 'asde_ap_alta_grupo_cliente', null, $url, $usuario, $clave );
@@ -36,22 +36,22 @@ final class VerificacionGrupo {
 		try {
 			$ping = $cliente->ping();
 			if ( ! $ping->ok ) {
-				return $fallo( asde_t( 'El CRM no acepta ese usuario y contraseña.' ) );
+				return $fallo( __( 'The CRM does not accept that username and password.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			}
 			$filas = $cliente->list_entries( 'SecurityGroups', '', array( 'id', 'name', 'numgrupo_c', 'tipoasociacion_c' ), array(), 0, 200 )['entries'];
 		} catch ( CrmException $e ) {
-			return $fallo( asde_t( 'No se ha podido comprobar el acceso con el CRM. Inténtalo más tarde.' ) );
+			return $fallo( __( 'Access could not be checked with the CRM. Try again later.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$num = (int) $numero;
 		foreach ( $filas as $f ) {
 			if ( 'GS' === ( $f['fields']['tipoasociacion_c'] ?? '' ) && (int) preg_replace( '/\D/', '', (string) ( $f['fields']['numgrupo_c'] ?? '' ) ) === $num ) {
 				return array(
 					'ok'      => true,
-					'mensaje' => asde_t( 'Acceso comprobado: el usuario ve el grupo en el CRM.' ),
+					'mensaje' => __( 'Access checked: the user sees the group in the CRM.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 					'crm_id'  => (string) $f['id'],
 				);
 			}
 		}
-		return $fallo( asde_t( 'El usuario entra, pero no ve ese Grupo Scout en el CRM. Revisa el nº de grupo.' ) );
+		return $fallo( __( 'The user signs in but does not see that Scout Group in the CRM. Check the group number.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 	}
 }

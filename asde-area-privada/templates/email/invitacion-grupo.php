@@ -22,14 +22,14 @@ $col = Colores::para_email();
 		<tr><td align="center">
 			<table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:560px;background:<?php echo esc_attr( $col['tarjeta'] ); ?>;border-radius:6px;overflow:hidden;">
 				<tr><td style="background:<?php echo esc_attr( $col['primary'] ); ?>;color:<?php echo esc_attr( $col['on_primary'] ); ?>;padding:20px 28px;font-size:18px;font-weight:600;">
-					<?php echo esc_html( $organizacion ); ?> · <?php asde_e( 'Área privada' ); ?>
+					<?php echo esc_html( $organizacion ); ?> · <?php esc_html_e( 'Private area', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>
 				</td></tr>
 				<tr><td style="padding:28px;font-size:15px;line-height:1.6;">
-					<p style="margin:0 0 16px;"><?php asde_e( 'Hola:' ); ?></p>
-					<p style="margin:0 0 16px;"><?php echo wp_kses( sprintf( asde_h( 'La oficina de <strong>%s</strong> te invita a dar de alta tu grupo en el área privada.' ), esc_html( $organizacion ) ), asde_html_permitido() ); ?></p>
-					<p style="margin:0 0 24px;text-align:center;"><a href="<?php echo esc_url( $url ); ?>" style="display:inline-block;background:<?php echo esc_attr( $col['primary'] ); ?>;color:<?php echo esc_attr( $col['on_primary'] ); ?>;text-decoration:none;font-weight:600;padding:12px 24px;border-radius:4px;"><?php asde_e( 'Dar de alta el grupo' ); ?></a></p>
-					<p style="margin:0 0 16px;"><?php echo esc_html( sprintf( asde_t( 'El enlace es de un solo uso y vale %d días. Necesitarás el usuario y la contraseña del CRM de tu grupo.' ), $dias ) ); ?></p>
-					<p style="margin:0;font-size:13px;color:<?php echo esc_attr( $col['atenuado'] ); ?>;"><?php asde_e( 'Si no esperabas este correo, puedes ignorarlo.' ); ?></p>
+					<p style="margin:0 0 16px;"><?php esc_html_e( 'Hello:', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
+					<p style="margin:0 0 16px;"><?php echo wp_kses( sprintf( /* translators: %s: text */ __( 'The office of <strong>%s</strong> invites you to register your group in the private area.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), esc_html( $organizacion ) ), asde_html_permitido() ); ?></p>
+					<p style="margin:0 0 24px;text-align:center;"><a href="<?php echo esc_url( $url ); ?>" style="display:inline-block;background:<?php echo esc_attr( $col['primary'] ); ?>;color:<?php echo esc_attr( $col['on_primary'] ); ?>;text-decoration:none;font-weight:600;padding:12px 24px;border-radius:4px;"><?php esc_html_e( 'Register the group', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a></p>
+					<p style="margin:0 0 16px;"><?php echo esc_html( sprintf( /* translators: %d: number */ __( 'The link is single-use and valid for %d days. You will need your group\'s CRM username and password.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $dias ) ); ?></p>
+					<p style="margin:0;font-size:13px;color:<?php echo esc_attr( $col['atenuado'] ); ?>;"><?php esc_html_e( 'If you were not expecting this email, you can ignore it.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 				</td></tr>
 			</table>
 		</td></tr>

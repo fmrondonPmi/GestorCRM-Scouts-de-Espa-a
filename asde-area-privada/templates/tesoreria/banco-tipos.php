@@ -24,34 +24,34 @@ $naturaleza = static function ( string $nombre, string $actual, string $id ): st
 };
 ?>
 <?php if ( '' !== $volver ) : ?>
-	<p class="asde-back"><a href="<?php echo esc_url( $volver ); ?>"><?php asde_e( '← Volver a «Marcar como revisado»' ); ?></a></p>
+	<p class="asde-back"><a href="<?php echo esc_url( $volver ); ?>"><?php esc_html_e( '← Back to "Mark as reviewed"', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a></p>
 <?php else : ?>
-	<p class="asde-back"><a href="<?php echo esc_url( $url ); ?>"><?php asde_e( '← Banco' ); ?></a></p>
+	<p class="asde-back"><a href="<?php echo esc_url( $url ); ?>"><?php esc_html_e( '← Bank', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a></p>
 <?php endif; ?>
 <section class="asde-card">
-	<h2 class="asde-card__title"><?php asde_e( 'Tipos de gasto e ingreso' ); ?></h2>
-	<p class="asde-muted"><?php asde_e( 'Para clasificar los movimientos del banco que no son cuotas de las familias. Cada tipo es de gasto, de ingreso o de las dos cosas (por ejemplo, devoluciones). Un tipo que usa algún movimiento no se puede borrar, pero sí cambiarle el nombre.' ); ?></p>
+	<h2 class="asde-card__title"><?php esc_html_e( 'Expense and income types', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h2>
+	<p class="asde-muted"><?php esc_html_e( 'To classify the bank transactions that are not families\' fees. Each type is for expenses, for income or for both (for example, refunds). A type used by any transaction cannot be deleted, but it can be renamed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 
 	<form method="post" action="<?php echo esc_url( $aqui ); ?>" class="asde-form__fila asde-form__fila--compacta">
 		<?php wp_nonce_field( 'asde_banco_tipos' ); ?>
 		<input type="hidden" name="asde_action" value="tipo_crear">
-		<label for="asde-bt-nuevo" class="screen-reader-text"><?php asde_e( 'Nombre del tipo nuevo' ); ?></label>
-		<input type="text" id="asde-bt-nuevo" name="nombre" maxlength="80" required placeholder="<?php echo esc_attr( asde_a( 'Nombre del tipo nuevo' ) ); ?>">
-		<label for="asde-bt-nuevo-nat" class="screen-reader-text"><?php asde_e( 'Clase' ); ?></label>
+		<label for="asde-bt-nuevo" class="screen-reader-text"><?php esc_html_e( 'Name of the new type', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
+		<input type="text" id="asde-bt-nuevo" name="nombre" maxlength="80" required placeholder="<?php echo esc_attr( esc_attr__( 'Name of the new type', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
+		<label for="asde-bt-nuevo-nat" class="screen-reader-text"><?php esc_html_e( 'Class', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 		<?php echo wp_kses( $naturaleza( 'naturaleza', TiposMovimiento::GASTO, 'asde-bt-nuevo-nat' ), asde_html_permitido() ); ?>
-		<button type="submit" class="button button-primary"><?php asde_e( 'Crear tipo' ); ?></button>
+		<button type="submit" class="button button-primary"><?php esc_html_e( 'Create type', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 	</form>
 
 	<?php if ( ! $tipos ) : ?>
-		<p><?php asde_e( 'Todavía no hay ningún tipo.' ); ?></p>
+		<p><?php esc_html_e( 'There is no type yet.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 	<?php else : ?>
 		<table class="asde-table asde-table--banco-tipos">
 			<thead>
 				<tr>
-					<th scope="col"><?php asde_e( 'Nombre y clase' ); ?></th>
-					<th scope="col" class="asde-num"><?php asde_e( 'Movimientos' ); ?></th>
-					<th scope="col" class="asde-num"><?php asde_e( 'Suma' ); ?></th>
-					<th scope="col"><span class="screen-reader-text"><?php asde_e( 'Acciones' ); ?></span></th>
+					<th scope="col"><?php esc_html_e( 'Name and class', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
+					<th scope="col" class="asde-num"><?php esc_html_e( 'Transactions', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
+					<th scope="col" class="asde-num"><?php esc_html_e( 'Sum', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
+					<th scope="col"><span class="screen-reader-text"><?php esc_html_e( 'Actions', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -65,36 +65,36 @@ $naturaleza = static function ( string $nombre, string $actual, string $id ): st
 					$n = $u['gastos'] + $u['ingresos'];
 					?>
 					<tr>
-						<td data-label="<?php echo esc_attr( asde_a( 'Nombre y clase' ) ); ?>">
+						<td data-label="<?php echo esc_attr( esc_attr__( 'Name and class', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
 							<form method="post" action="<?php echo esc_url( $aqui ); ?>" class="asde-form__fila asde-form__fila--compacta">
 								<?php wp_nonce_field( 'asde_banco_tipos' ); ?>
 								<input type="hidden" name="asde_action" value="tipo_cambiar">
 								<input type="hidden" name="tipo" value="<?php echo (int) $t['id']; ?>">
-								<label class="screen-reader-text" for="asde-bt-<?php echo (int) $t['id']; ?>"><?php echo esc_html( sprintf( asde_t( 'Nombre del tipo «%s»' ), $t['nombre'] ) ); ?></label>
+								<label class="screen-reader-text" for="asde-bt-<?php echo (int) $t['id']; ?>"><?php echo esc_html( sprintf( /* translators: %s: text */ __( 'Name of the type "%s"', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $t['nombre'] ) ); ?></label>
 								<input type="text" id="asde-bt-<?php echo (int) $t['id']; ?>" name="nombre" maxlength="80" required value="<?php echo esc_attr( $t['nombre'] ); ?>">
-								<label class="screen-reader-text" for="asde-bt-nat-<?php echo (int) $t['id']; ?>"><?php asde_e( 'Clase' ); ?></label>
+								<label class="screen-reader-text" for="asde-bt-nat-<?php echo (int) $t['id']; ?>"><?php esc_html_e( 'Class', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 								<?php echo wp_kses( $naturaleza( 'naturaleza', $t['naturaleza'], 'asde-bt-nat-' . (int) $t['id'] ), asde_html_permitido() ); ?>
-								<button type="submit" class="asde-btn-link"><?php asde_e( 'Guardar' ); ?></button>
+								<button type="submit" class="asde-btn-link"><?php esc_html_e( 'Save', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 							</form>
 						</td>
-						<td data-label="<?php echo esc_attr( asde_a( 'Movimientos' ) ); ?>" class="asde-num">
+						<td data-label="<?php echo esc_attr( esc_attr__( 'Transactions', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>" class="asde-num">
 							<?php if ( $n ) : ?>
 								<a href="<?php echo esc_url( add_query_arg( array( 'estado' => 'ignorado', 'clase' => $t['id'] ), $url ) ); ?>"><?php echo (int) $n; ?></a>
 							<?php else : ?>
 								0
 							<?php endif; ?>
 						</td>
-						<td data-label="<?php echo esc_attr( asde_a( 'Suma' ) ); ?>" class="asde-num asde-importe <?php echo $u['total'] >= 0 ? 'asde-importe--ingreso' : 'asde-importe--gasto'; ?>"><?php echo $n ? esc_html( ( $u['total'] > 0 ? '+' : '' ) . Calculadora::euros( $u['total'] ) ) : '<span class="asde-muted">—</span>'; ?></td>
-						<td data-label="<?php echo esc_attr( asde_a( 'Acciones' ) ); ?>">
+						<td data-label="<?php echo esc_attr( esc_attr__( 'Sum', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>" class="asde-num asde-importe <?php echo $u['total'] >= 0 ? 'asde-importe--ingreso' : 'asde-importe--gasto'; ?>"><?php echo $n ? esc_html( ( $u['total'] > 0 ? '+' : '' ) . Calculadora::euros( $u['total'] ) ) : '<span class="asde-muted">—</span>'; ?></td>
+						<td data-label="<?php echo esc_attr( esc_attr__( 'Actions', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
 							<?php if ( ! $n ) : ?>
 								<form method="post" action="<?php echo esc_url( $aqui ); ?>">
 									<?php wp_nonce_field( 'asde_banco_tipos' ); ?>
 									<input type="hidden" name="asde_action" value="tipo_borrar">
 									<input type="hidden" name="tipo" value="<?php echo (int) $t['id']; ?>">
-									<button type="submit" class="asde-btn-link"><?php asde_e( 'Borrar' ); ?></button>
+									<button type="submit" class="asde-btn-link"><?php esc_html_e( 'Delete', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 								</form>
 							<?php else : ?>
-								<span class="asde-muted"><?php asde_e( 'En uso' ); ?></span>
+								<span class="asde-muted"><?php esc_html_e( 'In use', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span>
 							<?php endif; ?>
 						</td>
 					</tr>

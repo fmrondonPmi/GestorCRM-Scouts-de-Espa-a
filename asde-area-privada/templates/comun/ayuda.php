@@ -17,32 +17,32 @@ defined( 'ABSPATH' ) || exit;
 ?>
 <section class="asde-card asde-ayuda<?php echo $completo ? ' asde-ayuda--completo' : ''; ?>" data-asde-no-plegable>
 	<?php if ( '' !== $volver ) : ?>
-		<p class="asde-back"><a href="<?php echo esc_url( $volver ); ?>"><?php asde_e( '← Volver a la página' ); ?></a></p>
+		<p class="asde-back"><a href="<?php echo esc_url( $volver ); ?>"><?php esc_html_e( '← Back to the page', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a></p>
 	<?php endif; ?>
 	<?php if ( ! $castellano ) : ?>
-		<p class="asde-muted asde-ayuda__idioma"><?php asde_e( 'La ayuda y el manual están en castellano.' ); ?></p>
+		<p class="asde-muted asde-ayuda__idioma"><?php esc_html_e( 'The help and the manual are in Spanish.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 	<?php endif; ?>
 	<?php if ( $ayuda ) : ?>
 		<?php echo wp_kses_post( $ayuda['html'] ); ?>
 	<?php elseif ( $completo ) : ?>
-		<h2><?php asde_e( 'Manual de uso' ); ?></h2>
-		<p><?php asde_e( 'No hay un manual para tu cuenta.' ); ?></p>
+		<h2><?php esc_html_e( 'User manual', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h2>
+		<p><?php esc_html_e( 'There is no manual for your account.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 	<?php else : ?>
-		<h2><?php asde_e( 'Ayuda' ); ?></h2>
-		<p><?php asde_e( 'Esta página todavía no tiene una ayuda propia.' ); ?></p>
+		<h2><?php esc_html_e( 'Help', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h2>
+		<p><?php esc_html_e( 'This page does not have its own help yet.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 	<?php endif; ?>
 	<?php if ( '' !== $url_completo || '' !== $extra ) : ?>
 		<div class="asde-ayuda__wiki">
 			<?php if ( '' !== $url_completo ) : ?>
 				<p>
-					<a class="button asde-button-secundario" href="<?php echo esc_url( $url_completo ); ?>" data-asde-modal><?php asde_e( 'Ver el manual completo' ); ?></a>
-					<span class="asde-muted"><?php asde_e( 'Todo lo que puedes hacer en el área privada, en esta misma ventana.' ); ?></span>
+					<a class="button asde-button-secundario" href="<?php echo esc_url( $url_completo ); ?>" data-asde-modal><?php esc_html_e( 'See the full manual', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a>
+					<span class="asde-muted"><?php esc_html_e( 'Everything you can do in the private area, in this same window.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span>
 				</p>
 			<?php endif; ?>
 			<?php if ( '' !== $extra ) : ?>
 				<p>
-					<a href="<?php echo esc_url( $extra ); ?>" target="_blank" rel="noopener"><?php asde_e( 'Manual con capturas' ); ?></a>
-					<span class="asde-muted"><?php asde_e( 'Ayuda extra: el mismo manual con capturas de pantalla, en otra pestaña.' ); ?></span>
+					<a href="<?php echo esc_url( $extra ); ?>" target="_blank" rel="noopener"><?php esc_html_e( 'Manual with screenshots', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a>
+					<span class="asde-muted"><?php esc_html_e( 'Extra help: the same manual with screenshots, in another tab.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span>
 				</p>
 			<?php endif; ?>
 		</div>

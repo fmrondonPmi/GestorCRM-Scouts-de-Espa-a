@@ -37,15 +37,15 @@ final class Formulario {
 		);
 		$e = array();
 		if ( '' === $d['nombre'] ) {
-			$e[] = asde_t( 'Falta el nombre.' );
+			$e[] = __( 'The first name is missing.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		if ( '' === $d['apellidos'] ) {
-			$e[] = asde_t( 'Faltan los apellidos.' );
+			$e[] = __( 'The surname is missing.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		$f    = \DateTime::createFromFormat( '!Y-m-d', $d['nacimiento'], wp_timezone() );
 		$edad = null;
 		if ( ! $f || $f->format( 'Y-m-d' ) !== $d['nacimiento'] || $d['nacimiento'] > wp_date( 'Y-m-d' ) || $d['nacimiento'] < '1900-01-01' ) {
-			$e[] = asde_t( 'La fecha de nacimiento no es válida.' );
+			$e[] = __( 'The date of birth is not valid.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		} else {
 			$edad = (int) $f->diff( new \DateTime( 'today', wp_timezone() ) )->y;
 		}
@@ -58,24 +58,24 @@ final class Formulario {
 			}
 		} elseif ( null !== $edad && Duplicados::documento_obligatorio( $d['nacimiento'] ) ) {
 			/* translators: %d: edad */
-			$e[] = sprintf( asde_t( 'El documento es obligatorio a partir de los %d años.' ), Duplicados::EDAD_DOCUMENTO );
+			$e[] = sprintf( /* translators: %d: number */ __( 'The document is required from age %d.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Duplicados::EDAD_DOCUMENTO );
 		}
 		if ( null !== $edad && $edad < Inscripciones::EDAD_ADULTA && ( '' === $d['contacto_nombre'] || '' === $d['contacto_apellidos'] ) ) {
 			/* translators: %d: edad */
-			$e[] = sprintf( asde_t( 'Por debajo de %d años, escribe el nombre y los apellidos de la madre, el padre o el tutor/a.' ), Inscripciones::EDAD_ADULTA );
+			$e[] = sprintf( /* translators: %d: number */ __( 'Under %d years of age, enter the first name and surname of the mother, father or guardian.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Inscripciones::EDAD_ADULTA );
 		}
 		$digitos = strlen( (string) preg_replace( '/\D/', '', $d['telefono'] ) );
 		if ( $digitos < 9 || $digitos > 15 ) {
-			$e[] = asde_t( 'Escribe un teléfono válido (al menos 9 cifras).' );
+			$e[] = __( 'Enter a valid phone number (at least 9 digits).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		if ( ! is_email( $d['email'] ) ) {
-			$e[] = asde_t( 'Escribe un email válido.' );
+			$e[] = __( 'Enter a valid email address.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		if ( '1' !== (string) ( $in['acepto'] ?? '' ) ) {
-			$e[] = asde_t( 'Para apuntarte tienes que aceptar el tratamiento de los datos.' );
+			$e[] = __( 'To sign up you must accept the processing of your data.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		if ( '1' !== (string) ( $in['declaro'] ?? '' ) ) {
-			$e[] = asde_t( 'Para apuntarte tienes que marcar la declaración de que los datos son veraces y aceptar las condiciones del grupo.' );
+			$e[] = __( 'To sign up you must tick the declaration that the data is truthful and accept the group\'s conditions.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		return array(
 			'datos'   => $d,

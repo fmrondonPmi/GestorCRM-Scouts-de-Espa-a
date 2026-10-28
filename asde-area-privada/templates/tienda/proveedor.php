@@ -18,33 +18,33 @@ defined( 'ABSPATH' ) || exit;
 $fecha = static fn( ?string $f ): string => $f ? wp_date( 'd/m/Y', strtotime( $f . ' UTC' ) ) : '';
 ?>
 <section class="asde-card" data-asde-plegable="proveedor-pedir" data-asde-inicio="abierto">
-	<h2 class="asde-card__title"><?php asde_e( 'Para pedir al proveedor' ); ?></h2>
+	<h2 class="asde-card__title"><?php esc_html_e( 'To order from the supplier', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h2>
 	<p class="asde-muted">
-		<?php asde_e( 'Lo que los clientes ya han pagado y la tienda no tiene en existencias (los productos marcados «se encarga al proveedor»).' ); ?>
-		<?php echo $sin_pagar ? ' ' . esc_html( sprintf( asde_n( 'Además hay %d pedido sin pagar: no entra hasta que se pague.', 'Además hay %d pedidos sin pagar: no entran hasta que se paguen.', $sin_pagar ), $sin_pagar ) ) : ''; ?>
+		<?php esc_html_e( 'What customers have already paid for and the shop does not have in stock (products marked "ordered from the supplier").', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>
+		<?php echo $sin_pagar ? ' ' . esc_html( sprintf( /* translators: %d: number */ _n( 'There is also %d unpaid order: it does not count until it is paid.', 'There are also %d unpaid orders: they do not count until they are paid.', $sin_pagar , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $sin_pagar ) ) : ''; ?>
 	</p>
 	<?php if ( ! $lineas ) : ?>
-		<p><?php asde_e( 'Todavía no hay nada pagado pendiente de pedir.' ); ?></p>
+		<p><?php esc_html_e( 'There is nothing paid pending to order yet.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 	<?php else : ?>
 		<table class="asde-table">
 			<thead>
 				<tr>
-					<th scope="col"><?php asde_e( 'Producto' ); ?></th>
-					<th scope="col"><?php asde_e( 'Talla o modelo' ); ?></th>
-					<th scope="col"><?php asde_e( 'Cantidad' ); ?></th>
+					<th scope="col"><?php esc_html_e( 'Product', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
+					<th scope="col"><?php esc_html_e( 'Size or model', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
+					<th scope="col"><?php esc_html_e( 'Quantity', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
 				</tr>
 			</thead>
 			<tbody>
 				<?php foreach ( $lineas as $l ) : ?>
 					<tr>
-						<td data-label="<?php echo esc_attr( asde_a( 'Producto' ) ); ?>"><?php echo esc_html( $l['nombre'] ); ?></td>
-						<td data-label="<?php echo esc_attr( asde_a( 'Talla o modelo' ) ); ?>"><?php echo esc_html( $l['etiqueta'] ); ?></td>
-						<td data-label="<?php echo esc_attr( asde_a( 'Cantidad' ) ); ?>"><?php echo (int) $l['cantidad']; ?></td>
+						<td data-label="<?php echo esc_attr( esc_attr__( 'Product', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( $l['nombre'] ); ?></td>
+						<td data-label="<?php echo esc_attr( esc_attr__( 'Size or model', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( $l['etiqueta'] ); ?></td>
+						<td data-label="<?php echo esc_attr( esc_attr__( 'Quantity', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo (int) $l['cantidad']; ?></td>
 					</tr>
 				<?php endforeach; ?>
 			</tbody>
 		</table>
-		<p class="asde-muted"><?php echo esc_html( sprintf( asde_n( 'De %d pedido de cliente.', 'De %d pedidos de clientes.', count( $por_pedir ) ), count( $por_pedir ) ) ); ?></p>
+		<p class="asde-muted"><?php echo esc_html( sprintf( /* translators: %d: number */ _n( 'From %d customer order.', 'From %d customer orders.', count( $por_pedir ) , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), count( $por_pedir ) ) ); ?></p>
 		<?php if ( $puede ) : ?>
 			<form method="post" action="<?php echo esc_url( $url ); ?>" class="asde-form">
 				<?php wp_nonce_field( 'asde_proveedor_crear' ); ?>
@@ -53,8 +53,8 @@ $fecha = static fn( ?string $f ): string => $f ? wp_date( 'd/m/Y', strtotime( $f
 					<input type="hidden" name="pedidos[]" value="<?php echo (int) $p['id']; ?>">
 				<?php endforeach; ?>
 				<p class="asde-form__fila asde-form__fila--una-linea">
-					<label><?php asde_e( 'Nombre del pedido' ); ?> <input type="text" name="nombre" maxlength="60" value="<?php echo esc_attr( sprintf( asde_t( 'Pedido %s' ), wp_date( 'd/m/Y' ) ) ); ?>"></label>
-					<button type="submit" class="button"><?php asde_e( 'Crear el pedido al proveedor' ); ?></button>
+					<label><?php esc_html_e( 'Order name', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <input type="text" name="nombre" maxlength="60" value="<?php echo esc_attr( sprintf( /* translators: %s: text */ __( 'Order %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), wp_date( 'd/m/Y' ) ) ); ?>"></label>
+					<button type="submit" class="button"><?php esc_html_e( 'Create the supplier order', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 				</p>
 			</form>
 		<?php endif; ?>
@@ -62,18 +62,18 @@ $fecha = static fn( ?string $f ): string => $f ? wp_date( 'd/m/Y', strtotime( $f
 </section>
 
 <section class="asde-card" data-asde-plegable="proveedor-hechos" data-asde-inicio="abierto">
-	<h2 class="asde-card__title"><?php asde_e( 'Pedidos al proveedor' ); ?></h2>
+	<h2 class="asde-card__title"><?php esc_html_e( 'Supplier orders', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h2>
 	<?php if ( ! $hechos ) : ?>
-		<p class="asde-muted"><?php asde_e( 'Todavía no se ha hecho ningún pedido al proveedor.' ); ?></p>
+		<p class="asde-muted"><?php esc_html_e( 'No supplier order has been placed yet.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 	<?php endif; ?>
 	<?php foreach ( $hechos as $h ) : ?>
 		<?php $llego = null !== $h['recibido_en']; ?>
 		<article class="asde-pedido">
 			<header class="asde-pedido__cabecera">
 				<strong><?php echo esc_html( $h['nombre'] ); ?></strong>
-				<span class="asde-badge asde-badge--uniforme-<?php echo $llego ? 'recibido' : 'pedido'; ?>"><?php echo $llego ? esc_html( sprintf( asde_t( 'Recibido el %s' ), $fecha( $h['recibido_en'] ) ) ) : esc_html( asde_t( 'Pedido, pendiente de recibir' ) ); ?></span>
-				<span class="asde-muted"><?php echo esc_html( sprintf( asde_t( 'Hecho el %1$s · %2$d pedidos de clientes' ), $fecha( $h['creado'] ), $h['pedidos'] ) ); ?></span>
-				<span class="asde-acciones"><a href="<?php echo esc_url( $excel( $h['id'] ) ); ?>" data-asde-sin-carga><?php asde_e( 'Descargar en Excel' ); ?></a></span>
+				<span class="asde-badge asde-badge--uniforme-<?php echo $llego ? 'recibido' : 'pedido'; ?>"><?php echo $llego ? esc_html( sprintf( /* translators: %s: text */ __( 'Received on %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $fecha( $h['recibido_en'] ) ) ) : esc_html( __( 'Ordered, pending receipt', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?></span>
+				<span class="asde-muted"><?php echo esc_html( sprintf( /* translators: 1: text, 2: number */ __( 'Made on %1$s · %2$d customer orders', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $fecha( $h['creado'] ), $h['pedidos'] ) ); ?></span>
+				<span class="asde-acciones"><a href="<?php echo esc_url( $excel( $h['id'] ) ); ?>" data-asde-sin-carga><?php esc_html_e( 'Download in Excel', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a></span>
 			</header>
 			<?php if ( ! $llego && $puede ) : ?>
 				<form method="post" action="<?php echo esc_url( $url ); ?>" class="asde-form">
@@ -84,23 +84,23 @@ $fecha = static fn( ?string $f ): string => $f ? wp_date( 'd/m/Y', strtotime( $f
 			<table class="asde-table">
 				<thead>
 					<tr>
-						<th scope="col"><?php asde_e( 'Producto' ); ?></th>
-						<th scope="col"><?php asde_e( 'Talla o modelo' ); ?></th>
-						<th scope="col"><?php asde_e( 'Pedidas' ); ?></th>
-						<th scope="col"><?php asde_e( 'Recibidas' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Product', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Size or model', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Ordered', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Received', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
 					</tr>
 				</thead>
 				<tbody>
 					<?php foreach ( $h['lineas'] as $l ) : ?>
 						<tr>
-							<td data-label="<?php echo esc_attr( asde_a( 'Producto' ) ); ?>"><?php echo esc_html( $l['nombre'] ); ?></td>
-							<td data-label="<?php echo esc_attr( asde_a( 'Talla o modelo' ) ); ?>"><?php echo esc_html( $l['etiqueta'] ); ?></td>
-							<td data-label="<?php echo esc_attr( asde_a( 'Pedidas' ) ); ?>"><?php echo (int) $l['cantidad']; ?></td>
-							<td data-label="<?php echo esc_attr( asde_a( 'Recibidas' ) ); ?>">
+							<td data-label="<?php echo esc_attr( esc_attr__( 'Product', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( $l['nombre'] ); ?></td>
+							<td data-label="<?php echo esc_attr( esc_attr__( 'Size or model', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( $l['etiqueta'] ); ?></td>
+							<td data-label="<?php echo esc_attr( esc_attr__( 'Ordered', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo (int) $l['cantidad']; ?></td>
+							<td data-label="<?php echo esc_attr( esc_attr__( 'Received', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
 								<?php if ( $llego ) : ?>
 									<?php echo (int) ( $l['recibida'] ?? $l['cantidad'] ); ?>
 								<?php elseif ( $puede ) : ?>
-									<input type="number" name="recibida[<?php echo esc_attr( $l['clave'] ); ?>]" value="<?php echo (int) $l['cantidad']; ?>" min="0" max="99999" step="1" inputmode="numeric" aria-label="<?php echo esc_attr( sprintf( asde_t( 'Recibidas: %s' ), $l['nombre'] . ' ' . $l['etiqueta'] ) ); ?>">
+									<input type="number" name="recibida[<?php echo esc_attr( $l['clave'] ); ?>]" value="<?php echo (int) $l['cantidad']; ?>" min="0" max="99999" step="1" inputmode="numeric" aria-label="<?php echo esc_attr( sprintf( /* translators: %s: text */ __( 'Received: %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $l['nombre'] . ' ' . $l['etiqueta'] ) ); ?>">
 								<?php else : ?>
 									—
 								<?php endif; ?>
@@ -111,8 +111,8 @@ $fecha = static fn( ?string $f ): string => $f ? wp_date( 'd/m/Y', strtotime( $f
 			</table>
 			<?php if ( ! $llego && $puede ) : ?>
 					<p class="asde-form__fila asde-form__fila--una-linea">
-						<button type="submit" class="button"><?php asde_e( 'Marcar como recibido' ); ?></button>
-						<span class="asde-help"><?php asde_e( 'Lo que llegue de más suma a las existencias de la tienda; hasta que llegue, los pedidos de los clientes no se pueden entregar.' ); ?></span>
+						<button type="submit" class="button"><?php esc_html_e( 'Mark as received', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
+						<span class="asde-help"><?php esc_html_e( 'Anything that arrives in excess is added to the shop\'s stock; until it arrives, customers\' orders cannot be delivered.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span>
 					</p>
 				</form>
 			<?php endif; ?>

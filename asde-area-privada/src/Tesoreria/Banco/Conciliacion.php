@@ -44,7 +44,7 @@ final class Conciliacion {
 		if ( $ref && isset( $familias[ $ref ] ) ) {
 			return array(
 				'familia' => $familias[ $ref ],
-				'motivo'  => sprintf( asde_t( 'Referencia %s en el concepto' ), $ref ),
+				'motivo'  => sprintf( /* translators: %s: text */ __( 'Reference %s in the description', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $ref ),
 				'fiable'  => true,
 			);
 		}
@@ -54,7 +54,7 @@ final class Conciliacion {
 				if ( $f['id'] === $id ) {
 					return array(
 						'familia' => $f,
-						'motivo'  => asde_t( 'Mismo ordenante que un pago ya conciliado' ),
+						'motivo'  => __( 'Same payer as an already reconciled payment', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 						'fiable'  => false,
 					);
 				}
@@ -88,7 +88,7 @@ final class Conciliacion {
 				// Todas las palabras de la clave (nombre y primer apellido), enteras.
 				if ( ! array_diff( explode( ' ', self::normalizar( $clave ) ), explode( ' ', $m['texto'] ) ) ) {
 					/* translators: %s: nombre y apellido */
-					$m['motivo'] = sprintf( asde_t( 'Lleva el nombre «%s»' ), $clave );
+					$m['motivo'] = sprintf( /* translators: %s: text */ __( 'It is named "%s"', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $clave );
 					break;
 				}
 			}
@@ -150,23 +150,23 @@ final class Conciliacion {
 	public static function conciliar( int $mov_id, int $familia_id, string $ronda = '' ) {
 		$m = BancoTable::obtener( $mov_id );
 		if ( ! $m ) {
-			return new \WP_Error( 'asde_banco', asde_t( 'Ese movimiento no existe.' ) );
+			return new \WP_Error( 'asde_banco', __( 'That transaction does not exist.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( BancoTable::PENDIENTE !== $m['estado'] ) {
-			return new \WP_Error( 'asde_banco', asde_t( 'Ese movimiento ya está revisado.' ) );
+			return new \WP_Error( 'asde_banco', __( 'That transaction is already reviewed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( $m['importe'] <= 0 ) {
-			return new \WP_Error( 'asde_banco', asde_t( 'Solo se concilian ingresos con las familias.' ) );
+			return new \WP_Error( 'asde_banco', __( 'Only deposits are reconciled with families.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$f = FamiliasTable::obtener( $familia_id );
 		if ( ! $f ) {
-			return new \WP_Error( 'asde_banco', asde_t( 'Esa familia no existe.' ) );
+			return new \WP_Error( 'asde_banco', __( 'That family does not exist.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$ronda = Config::es_ronda( $ronda ) ? $ronda : Config::ronda_de_fecha( $m['fecha'] );
 		// Primero se toma el movimiento (solo si sigue pendiente, en una sola sentencia) y después se registra el pago:
 		// dos conciliaciones a la vez del mismo ingreso no pueden registrar dos pagos (doc 59, RC-TES-1).
 		if ( ! BancoTable::marcar( $mov_id, BancoTable::CONCILIADO, $familia_id, null, BancoTable::PENDIENTE ) ) {
-			return new \WP_Error( 'asde_banco', asde_t( 'Ese movimiento ya está revisado.' ) );
+			return new \WP_Error( 'asde_banco', __( 'That transaction is already reviewed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$pago = MovimientosTable::registrar(
 			$familia_id,
@@ -206,32 +206,32 @@ final class Conciliacion {
 	public static function ignorar( int $mov_id, int $tipo_id, string $nota = '', int $evento_id = 0, int $familia_id = 0 ) {
 		$m = BancoTable::obtener( $mov_id );
 		if ( ! $m || ! in_array( $m['estado'], array( BancoTable::PENDIENTE, BancoTable::IGNORADO ), true ) ) {
-			return new \WP_Error( 'asde_banco', asde_t( 'Ese movimiento no se puede marcar como revisado (puede que ya esté conciliado con una familia).' ) );
+			return new \WP_Error( 'asde_banco', __( 'That transaction cannot be marked as reviewed (it may already be reconciled with a family).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$tipo = TiposMovimiento::obtener( $tipo_id );
 		if ( ! $tipo ) {
-			return new \WP_Error( 'asde_banco', asde_t( 'Elige el tipo de gasto o de ingreso.' ) );
+			return new \WP_Error( 'asde_banco', __( 'Choose the expense or income type.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( ! TiposMovimiento::encaja( $tipo, $m['importe'] ) ) {
 			return new \WP_Error(
 				'asde_banco',
 				$m['importe'] < 0
 					/* translators: %s: nombre del tipo */
-					? sprintf( asde_t( '«%s» es un tipo de ingreso y este movimiento es un gasto.' ), $tipo['nombre'] )
+					? sprintf( /* translators: %s: text */ __( '"%s" is an income type and this transaction is an expense.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $tipo['nombre'] )
 					/* translators: %s: nombre del tipo */
-					: sprintf( asde_t( '«%s» es un tipo de gasto y este movimiento es un ingreso.' ), $tipo['nombre'] )
+					: sprintf( /* translators: %s: text */ __( '"%s" is an expense type and this transaction is an income.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $tipo['nombre'] )
 			);
 		}
 		if ( $evento_id && ! \AsdeBalears\AreaPrivada\Eventos\EventosTable::obtener( $evento_id ) ) {
-			return new \WP_Error( 'asde_banco', asde_t( 'El evento elegido ya no existe: elige otro.' ) );
+			return new \WP_Error( 'asde_banco', __( 'The chosen event no longer exists: choose another.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( $familia_id && ! FamiliasTable::obtener( $familia_id ) ) {
-			return new \WP_Error( 'asde_banco', asde_t( 'La familia elegida ya no existe: elige otra.' ) );
+			return new \WP_Error( 'asde_banco', __( 'The chosen family no longer exists: choose another.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$antes = $m['estado'];
 		if ( ! BancoTable::revisar( $mov_id, $tipo_id, $nota, $evento_id, $familia_id, $antes ) ) {
 			// Otra petición lo ha conciliado o deshecho entretanto (doc 59, RC-TES-1).
-			return new \WP_Error( 'asde_banco', asde_t( 'Ese movimiento no se puede marcar como revisado (puede que ya esté conciliado con una familia).' ) );
+			return new \WP_Error( 'asde_banco', __( 'That transaction cannot be marked as reviewed (it may already be reconciled with a family).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		Logger::log(
 			BancoTable::IGNORADO === $antes ? 'banco_tipo_cambiado' : 'banco_revisado',
@@ -250,11 +250,11 @@ final class Conciliacion {
 	public static function deshacer( int $mov_id ) {
 		$m = BancoTable::obtener( $mov_id );
 		if ( ! $m || BancoTable::PENDIENTE === $m['estado'] ) {
-			return new \WP_Error( 'asde_banco', asde_t( 'Ese movimiento no está revisado.' ) );
+			return new \WP_Error( 'asde_banco', __( 'That transaction is not reviewed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		// Se devuelve a pendiente solo si sigue como se leyó: dos «deshacer» a la vez no anulan dos veces (doc 59, RC-TES-1).
 		if ( ! BancoTable::marcar( $mov_id, BancoTable::PENDIENTE, null, null, $m['estado'] ) ) {
-			return new \WP_Error( 'asde_banco', asde_t( 'Ese movimiento no está revisado.' ) );
+			return new \WP_Error( 'asde_banco', __( 'That transaction is not reviewed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( BancoTable::CONCILIADO === $m['estado'] && $m['pago_id'] ) {
 			MovimientosTable::anular( (int) $m['pago_id'], 'Se deshizo la conciliación con el banco.' ); // Lo que se guarda va en castellano.

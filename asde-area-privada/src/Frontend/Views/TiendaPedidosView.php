@@ -30,7 +30,7 @@ final class TiendaPedidosView extends TiendaBaseView {
 		}
 		if ( ! $para ) {
 			// v0.39: una cuenta sin ninguna persona con membresía activa no tiene a quién pedirle nada.
-			return $this->layout( 'tienda_pedidos', $this->subnav( 'tienda_pedidos' ) . '<section class="asde-card"><p>' . esc_html( asde_t( 'Ahora mismo ninguna persona de tu cuenta tiene la membresía activa, así que no se puede hacer ningún pedido.' ) ) . '</p></section>' );
+			return $this->layout( 'tienda_pedidos', $this->subnav( 'tienda_pedidos' ) . '<section class="asde-card"><p>' . esc_html( __( 'Right now nobody in your account has an active membership, so no order can be placed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) . '</p></section>' );
 		}
 		$cfg   = Config::de();
 		$todos = PedidosTable::de_socios( array_keys( $para ) ); // Una consulta para todas las personas.
@@ -56,12 +56,12 @@ final class TiendaPedidosView extends TiendaBaseView {
 	}
 
 	private function redirigir_gestion(): string {
-		return $this->layout( 'tienda_pedidos', $this->subnav( 'tienda_pedidos' ) . '<section class="asde-card"><p>' . sprintf( asde_t( 'Desde aquí se gestionan los pedidos del grupo: %s.' ), '<a href="' . esc_url( $this->url( 'tienda_gestion' ) ) . '">' . esc_html( asde_t( 'Gestión de pedidos' ) ) . '</a>' ) . '</p></section>' );
+		return $this->layout( 'tienda_pedidos', $this->subnav( 'tienda_pedidos' ) . '<section class="asde-card"><p>' . sprintf( /* translators: %s: text */ __( 'The group\'s orders are managed from here: %s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), '<a href="' . esc_url( $this->url( 'tienda_gestion' ) ) . '">' . esc_html( __( 'Order management', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) . '</a>' ) . '</p></section>' );
 	}
 
 	public function handle_post(): void {
 		if ( ! current_user_can( Servicio::CAP_PEDIR ) ) {
-			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+			wp_die( esc_html__( 'You do not have permission to do this.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		$a      = Ambito::actual();
 		$volver = $this->url( 'tienda_pedidos' );
@@ -71,13 +71,13 @@ final class TiendaPedidosView extends TiendaBaseView {
 			$sin_talla = array();
 			$cantidades = $this->post_cantidades( $sin_talla );
 			$r = $sin_talla
-				? new \WP_Error( 'asde_tienda', sprintf( asde_t( 'Elige la talla de «%s».' ), implode( '», «', $sin_talla ) ) )
+				? new \WP_Error( 'asde_tienda', sprintf( /* translators: %s: text */ __( 'Choose the size of "%s".', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), implode( '», «', $sin_talla ) ) )
 				: Servicio::comprar( $a, $this->post( 'socio' ), $cantidades, $this->post( 'nota' ), $this->post( 'forma_pago' ) );
 			if ( is_wp_error( $r ) ) {
 				Notices::add( 'error', esc_html( $r->get_error_message() ) );
 			} else {
 				$p = PedidosTable::obtener( $r );
-				Notices::add( 'success', sprintf( asde_t( 'Pedido <strong>%1$s</strong> enviado: %2$s. Ahora falta pagarlo: en «Tus pedidos» tienes cómo hacerlo.' ), esc_html( PedidosTable::numero( $p ) ), esc_html( Servicio::importe( $p ) ) ) );
+				Notices::add( 'success', sprintf( /* translators: 1: text, 2: text */ __( 'Order <strong>%1$s</strong> sent: %2$s. It now has to be paid: in "Your orders" you can see how.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), esc_html( PedidosTable::numero( $p ) ), esc_html( Servicio::importe( $p ) ) ) );
 			}
 			$this->redirect( $volver );
 		}
@@ -86,28 +86,28 @@ final class TiendaPedidosView extends TiendaBaseView {
 		check_admin_referer( 'asde_uniforme_' . ( $p['id'] ?? 0 ) );
 		// v0.30: también quien lo pidió (un scouter para alguien de su sección).
 		if ( ! $p || ! ( Servicio::es_propio( $p, $a ) || Servicio::lo_pidio( $p ) ) ) {
-			Notices::add( 'error', asde_t( 'No tienes acceso a ese pedido.' ) );
+			Notices::add( 'error', __( 'You do not have access to that order.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			$this->redirect( $volver );
 		}
 		switch ( $this->post( 'asde_action' ) ) {
 			case 'uniforme_cancelar':
 				if ( Servicio::puede_cancelar_propio( $p, $a ) && Servicio::cancelar( $p, 'Cancelado por el socio/a o su familia' ) ) {
 					Logger::log( 'uniforme_cancelado', 'uniforme', (string) $p['id'], array( 'por' => 'socio' ) );
-					Notices::add( 'success', asde_t( 'Pedido cancelado.' ) );
+					Notices::add( 'success', __( 'Order cancelled.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 				} else {
-					Notices::add( 'error', asde_t( 'Ese pedido ya no se puede cancelar desde aquí: ya consta el pago o está en el pedido del grupo. Habla con el grupo.' ) );
+					Notices::add( 'error', __( 'That order can no longer be cancelled from here: the payment is already recorded or it is in the group\'s order. Talk to the group.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 				}
 				break;
 			case 'uniforme_recibido':
 				if ( Servicio::puede_confirmar( $p, $a ) && PedidosTable::marcar_recibido( $p['id'] ) ) {
 					Logger::log( 'uniforme_recibido', 'uniforme', (string) $p['id'] );
-					Notices::add( 'success', asde_t( '¡Gracias! Queda confirmado que lo has recibido.' ) );
+					Notices::add( 'success', __( 'Thank you! It is confirmed that you have received it.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 				} else {
-					Notices::add( 'error', asde_t( 'Ese pedido aún no consta como entregado.' ) );
+					Notices::add( 'error', __( 'That order is not yet recorded as delivered.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 				}
 				break;
 			default:
-				Notices::add( 'error', asde_t( 'Acción desconocida.' ) );
+				Notices::add( 'error', __( 'Unknown action.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$this->redirect( $volver );
 	}

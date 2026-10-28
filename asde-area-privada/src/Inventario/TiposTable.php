@@ -136,10 +136,10 @@ final class TiposTable {
 	public static function crear( string $nombre ) {
 		$nombre = self::limpiar( $nombre );
 		if ( '' === $nombre ) {
-			return new \WP_Error( 'asde_inventario', asde_t( 'Escribe el nombre del tipo.' ) );
+			return new \WP_Error( 'asde_inventario', __( 'Enter the type name.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( self::por_nombre( $nombre ) ) {
-			return new \WP_Error( 'asde_inventario', sprintf( asde_t( 'Ya hay un tipo «%s».' ), $nombre ) );
+			return new \WP_Error( 'asde_inventario', sprintf( /* translators: %s: text */ __( 'There is already a type "%s".', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $nombre ) );
 		}
 		global $wpdb;
 		$wpdb->insert(
@@ -159,13 +159,13 @@ final class TiposTable {
 	public static function renombrar( int $id, string $nombre ) {
 		$nombre = self::limpiar( $nombre );
 		if ( ! self::obtener( $id ) ) {
-			return new \WP_Error( 'asde_inventario', asde_t( 'Ese tipo no existe.' ) );
+			return new \WP_Error( 'asde_inventario', __( 'That type does not exist.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( '' === $nombre ) {
-			return new \WP_Error( 'asde_inventario', asde_t( 'Escribe el nombre del tipo.' ) );
+			return new \WP_Error( 'asde_inventario', __( 'Enter the type name.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( self::por_nombre( $nombre, $id ) ) {
-			return new \WP_Error( 'asde_inventario', sprintf( asde_t( 'Ya hay un tipo «%s».' ), $nombre ) );
+			return new \WP_Error( 'asde_inventario', sprintf( /* translators: %s: text */ __( 'There is already a type "%s".', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $nombre ) );
 		}
 		global $wpdb;
 		$wpdb->update(
@@ -184,15 +184,15 @@ final class TiposTable {
 	public static function borrar( int $id ) {
 		$tipo = self::obtener( $id );
 		if ( ! $tipo ) {
-			return new \WP_Error( 'asde_inventario', asde_t( 'Ese tipo no existe.' ) );
+			return new \WP_Error( 'asde_inventario', __( 'That type does not exist.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( self::CAMISA === $tipo['especial'] ) {
-			return new \WP_Error( 'asde_inventario', asde_t( 'Es el tipo de las camisas del uniforme: no se puede borrar (lo usa la gestión de uniformes).' ) );
+			return new \WP_Error( 'asde_inventario', __( 'It is the type of the uniform shirts: it cannot be deleted (uniform management uses it).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$usos = MaterialesTable::contar_por_tipo()[ $id ] ?? 0;
 		if ( $usos ) {
 			/* translators: 1: nombre del tipo, 2: número de materiales */
-			return new \WP_Error( 'asde_inventario', sprintf( asde_n( 'El tipo «%1$s» lo usa %2$d material: cámbialo de tipo antes de borrarlo.', 'El tipo «%1$s» lo usan %2$d materiales: cámbialos de tipo antes de borrarlo.', $usos ), $tipo['nombre'], $usos ) );
+			return new \WP_Error( 'asde_inventario', sprintf( /* translators: 1: text, 2: number */ _n( 'The type "%1$s" is used by %2$d item of equipment: change its type before deleting it.', 'The type "%1$s" is used by %2$d items of equipment: change their type before deleting it.', $usos , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $tipo['nombre'], $usos ) );
 		}
 		global $wpdb;
 		$wpdb->delete(

@@ -23,7 +23,7 @@ final class LibroMayorView extends TesoreriaBaseView {
 
 	public function render( string $content = '' ): string {
 		if ( ! Cajas::todas_suyas() ) {
-			return $this->denegado( asde_t( 'El libro mayor lo ven Tesorería, Secretaría y Coordinación, con el módulo de caja activo.' ) );
+			return $this->denegado( __( 'The general ledger is seen by Treasury, the Secretary\'s office and Coordination, with the cash module on.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$ronda   = $this->ronda();
 		$periodo = Periodo::de( '' !== $this->get( 'periodo' ) ? $this->get( 'periodo' ) : 'r' . $ronda );
@@ -60,16 +60,16 @@ final class LibroMayorView extends TesoreriaBaseView {
 	/** Excel: ?hoja=apuntes (todas las cuentas, con su saldo) o ?hoja=resumen (por partida). */
 	public function exportar(): void {
 		if ( ! wp_verify_nonce( $this->get( '_wpnonce' ), 'asde_libro_mayor_excel' ) ) {
-			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+			wp_die( esc_html__( 'Download link not valid or expired.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		if ( ! Cajas::todas_suyas() ) {
-			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+			wp_die( esc_html__( 'Download link not valid or expired.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		$periodo = Periodo::de( $this->get( 'periodo' ) );
 		$resumen = 'resumen' === $this->get( 'hoja' );
 		list( $cabecera, $filas, $opciones ) = $resumen ? self::excel_resumen( LibroMayor::calcular( $periodo ), $periodo ) : self::excel_apuntes( LibroMayor::calcular( $periodo ), $periodo );
 		Logger::log( 'libro_mayor_exportado', 'caja', $periodo['clave'], array( 'hoja' => $resumen ? 'resumen' : 'apuntes' ) );
-		Xlsx::descargar( 'libro-mayor-' . ( $resumen ? 'resumen-' : '' ) . $periodo['clave'] . '-' . wp_date( 'Ymd' ) . '.xlsx', asde_t( 'Libro mayor' ), $cabecera, $filas, $opciones );
+		Xlsx::descargar( 'libro-mayor-' . ( $resumen ? 'resumen-' : '' ) . $periodo['clave'] . '-' . wp_date( 'Ymd' ) . '.xlsx', __( 'General ledger', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $cabecera, $filas, $opciones );
 		exit;
 	}
 
@@ -77,18 +77,18 @@ final class LibroMayorView extends TesoreriaBaseView {
 	public static function excel_apuntes( array $libro, array $periodo ): array {
 		$filas = array();
 		foreach ( $libro['cuentas'] as $c ) {
-			$filas[] = array( $c['nombre'], '', asde_t( 'Saldo al empezar' ), '', '', '', round( $c['inicial'], 2 ) );
+			$filas[] = array( $c['nombre'], '', __( 'Balance at the start', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), '', '', '', round( $c['inicial'], 2 ) );
 			foreach ( $c['filas'] as $f ) {
 				$filas[] = array( $c['nombre'], wp_date( 'd/m/Y', strtotime( $f['fecha'] . ' 12:00' ) ), $f['concepto'], $f['partida'], $f['importe'] > 0 ? round( $f['importe'], 2 ) : '', $f['importe'] < 0 ? round( -$f['importe'], 2 ) : '', round( $f['saldo'], 2 ) );
 			}
 		}
 		return array(
-			array( asde_t( 'Cuenta' ), asde_t( 'Fecha' ), asde_t( 'Concepto' ), asde_t( 'Partida' ), asde_t( 'Entrada' ), asde_t( 'Salida' ), asde_t( 'Saldo' ) ),
+			array( __( 'Account', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Date', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Description', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Item', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Inflow', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Outflow', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Balance', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ),
 			$filas,
 			array(
-				'titulo'    => asde_t( 'Libro mayor' ) . ' · ' . Grupo::nombre(),
+				'titulo'    => __( 'General ledger', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . ' · ' . Grupo::nombre(),
 				/* translators: 1: periodo, 2: fecha */
-				'subtitulo' => sprintf( asde_t( '%1$s · generado el %2$s' ), $periodo['etiqueta'], wp_date( 'd/m/Y' ) ),
+				'subtitulo' => sprintf( /* translators: 1: text, 2: text */ __( '%1$s · generated on %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $periodo['etiqueta'], wp_date( 'd/m/Y' ) ),
 				'tipos'     => array( 'texto', 'texto', 'texto', 'texto', 'euros', 'euros', 'euros' ),
 			),
 		);
@@ -105,14 +105,14 @@ final class LibroMayorView extends TesoreriaBaseView {
 			$sal    += $r['salidas'];
 		}
 		return array(
-			array( asde_t( 'Partida' ), asde_t( 'Entradas' ), asde_t( 'Salidas' ), asde_t( 'Neto' ) ),
+			array( __( 'Item', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Inflows', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Outflows', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Net', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ),
 			$filas,
 			array(
-				'titulo'    => asde_t( 'Libro mayor: resumen por partida' ) . ' · ' . Grupo::nombre(),
+				'titulo'    => __( 'General ledger: summary by item', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . ' · ' . Grupo::nombre(),
 				/* translators: 1: periodo, 2: fecha */
-				'subtitulo' => sprintf( asde_t( '%1$s · generado el %2$s' ), $periodo['etiqueta'], wp_date( 'd/m/Y' ) ),
+				'subtitulo' => sprintf( /* translators: 1: text, 2: text */ __( '%1$s · generated on %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $periodo['etiqueta'], wp_date( 'd/m/Y' ) ),
 				'tipos'     => array( 'texto', 'euros', 'euros', 'euros' ),
-				'totales'   => array( asde_t( 'Total' ), round( $ent, 2 ), round( $sal, 2 ), round( $ent - $sal, 2 ) ),
+				'totales'   => array( __( 'Total', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), round( $ent, 2 ), round( $sal, 2 ), round( $ent - $sal, 2 ) ),
 			),
 		);
 	}

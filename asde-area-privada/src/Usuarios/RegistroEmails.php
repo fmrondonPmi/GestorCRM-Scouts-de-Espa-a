@@ -121,12 +121,12 @@ final class RegistroEmails {
 	public static function enviar( string $email, string $asunto, string $html, array $headers = array( 'Content-Type: text/html; charset=UTF-8' ) ): string {
 		$error   = '';
 		$captura = static function ( $e ) use ( &$error ) {
-			$error = is_wp_error( $e ) ? $e->get_error_message() : asde_t( 'Error desconocido' );
+			$error = is_wp_error( $e ) ? $e->get_error_message() : __( 'Unknown error', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		};
 		add_action( 'wp_mail_failed', $captura );
 		$ok = wp_mail( $email, $asunto, $html, $headers );
 		remove_action( 'wp_mail_failed', $captura );
-		return $ok ? '' : ( $error ?: asde_t( 'El servidor de correo no ha aceptado el email.' ) );
+		return $ok ? '' : ( $error ?: __( 'The mail server did not accept the email.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 	}
 
 	/**
@@ -268,7 +268,7 @@ final class RegistroEmails {
 				'email/alta-grupo-resultado',
 				array(
 					'organizacion' => Organizacion::nombre(),
-					'grupo'        => (string) ( $datos['grupo'] ?? '' ) ?: asde_t( 'tu grupo' ),
+					'grupo'        => (string) ( $datos['grupo'] ?? '' ) ?: __( 'your group', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 					'aprobada'     => ! empty( $datos['aprobada'] ),
 				)
 			);

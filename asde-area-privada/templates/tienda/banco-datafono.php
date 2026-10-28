@@ -17,8 +17,8 @@ if ( ! $abonos ) {
 $fecha = static fn( string $f ): string => wp_date( 'd/m/Y', strtotime( $f . ' 12:00' ) );
 ?>
 <section class="asde-card" data-asde-plegable="tienda-datafono" data-asde-inicio="abierto">
-	<h3 class="asde-card__title"><?php asde_e( 'Ingresos del banco que parecen el abono del datáfono' ); ?></h3>
-	<p class="asde-muted"><?php asde_e( 'El banco abona de una vez lo cobrado con el datáfono, menos su comisión. Estos ingresos cuadran con los cobros de los últimos días. Compruébalos y confirma cada uno: no se concilia nada solo.' ); ?></p>
+	<h3 class="asde-card__title"><?php esc_html_e( 'Bank deposits that look like the card terminal payout', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h3>
+	<p class="asde-muted"><?php esc_html_e( 'The bank pays in one go what was collected with the card terminal, minus its fee. These deposits match the collections of the last few days. Check them and confirm each one: nothing is reconciled by itself.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 	<?php foreach ( $abonos as $a ) : ?>
 		<?php $m = $a['mov']; ?>
 		<form method="post" class="asde-form">
@@ -29,9 +29,9 @@ $fecha = static fn( string $f ): string => wp_date( 'd/m/Y', strtotime( $f . ' 1
 			<p>
 				<strong><?php echo esc_html( $fecha( $m['fecha'] ) ); ?> · <?php echo esc_html( Calculadora::euros( $m['importe'] ) ); ?></strong>
 				<?php if ( $a['exacto'] ) : ?>
-					<span class="asde-badge asde-badge--pago-pagado"><?php asde_e( 'Coincide con lo cobrado' ); ?></span>
+					<span class="asde-badge asde-badge--pago-pagado"><?php esc_html_e( 'Matches what was collected', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span>
 				<?php else : ?>
-					<span class="asde-badge asde-badge--pago-parcial"><?php echo esc_html( sprintf( asde_t( 'Se cobró %s (comisión del banco)' ), Calculadora::euros( $a['suma'] ) ) ); ?></span>
+					<span class="asde-badge asde-badge--pago-parcial"><?php echo esc_html( sprintf( /* translators: %s: text */ __( '%s was collected (bank fee)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Calculadora::euros( $a['suma'] ) ) ); ?></span>
 				<?php endif; ?>
 				<?php echo wp_kses( '' !== (string) $m['concepto'] ? '<br><span class="asde-muted">' . esc_html( $m['concepto'] ) . '</span>' : '', asde_html_permitido() ); ?>
 			</p>
@@ -43,7 +43,7 @@ $fecha = static fn( string $f ): string => wp_date( 'd/m/Y', strtotime( $f . ' 1
 					</li>
 				<?php endforeach; ?>
 			</ul>
-			<p><button type="submit" class="button"><?php asde_e( 'Conciliar este abono' ); ?></button></p>
+			<p><button type="submit" class="button"><?php esc_html_e( 'Reconcile this credit', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button></p>
 		</form>
 	<?php endforeach; ?>
 </section>

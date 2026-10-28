@@ -109,19 +109,19 @@ final class Operaciones {
 		}
 		$antes = self::pendiente( $clave );
 		if ( ! $antes ) {
-			return new \WP_Error( 'asde_operacion', asde_t( 'No se ha podido empezar la operación. Vuelve a intentarlo.' ) );
+			return new \WP_Error( 'asde_operacion', __( 'The operation could not be started. Try again.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( $antes['tipo'] !== $tipo ) {
-			return new \WP_Error( 'asde_operacion_otra', asde_t( 'Hay otra operación a medias con esta persona. Termínala antes.' ) );
+			return new \WP_Error( 'asde_operacion_otra', __( 'There is another unfinished operation with this person. Finish it first.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$abandonada = self::EN_CURSO === $antes['estado'] && time() - strtotime( $antes['actualizado'] . ' UTC' ) > self::ABANDONADA;
 		if ( self::FALLIDA !== $antes['estado'] && ! $abandonada ) {
-			return new \WP_Error( 'asde_operacion_en_curso', asde_t( 'Ya hay un alta en curso para esta persona. Espera a que termine.' ) );
+			return new \WP_Error( 'asde_operacion_en_curso', __( 'A registration is already in progress for this person. Wait for it to finish.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		// Se reanuda solo si nadie la ha tomado entretanto (comparar y cambiar en una sentencia).
 		$tomada = (int) $wpdb->query( $wpdb->prepare( 'UPDATE %i SET estado = %s, usuario = %d, actualizado = %s WHERE id = %d AND estado = %s AND actualizado = %s', self::table(), self::EN_CURSO, get_current_user_id(), $ahora, $antes['id'], $antes['estado'], $antes['actualizado'] ) );
 		if ( ! $tomada ) {
-			return new \WP_Error( 'asde_operacion_en_curso', asde_t( 'Ya hay un alta en curso para esta persona. Espera a que termine.' ) );
+			return new \WP_Error( 'asde_operacion_en_curso', __( 'A registration is already in progress for this person. Wait for it to finish.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		return array(
 			'id'        => $antes['id'],

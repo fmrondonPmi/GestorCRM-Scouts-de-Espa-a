@@ -82,12 +82,12 @@ final class Norma43 {
 				continue;
 			}
 			if ( $fin ) {
-				$res['errores'][] = sprintf( asde_t( 'Línea %d: hay datos después del registro 88 (fin de fichero).' ), $n );
+				$res['errores'][] = sprintf( /* translators: %d: number */ __( 'Line %d: there is data after record 88 (end of file).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $n );
 				break;
 			}
 			if ( strlen( $linea ) > 80 ) {
 				if ( '' !== trim( substr( $linea, 80 ) ) ) {
-					$res['errores'][] = sprintf( asde_t( 'Línea %d: tiene más de 80 posiciones.' ), $n );
+					$res['errores'][] = sprintf( /* translators: %d: number */ __( 'Line %d: it has more than 80 positions.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $n );
 					continue;
 				}
 				$linea = substr( $linea, 0, 80 );
@@ -97,12 +97,12 @@ final class Norma43 {
 
 			if ( '88' === $tipo ) {
 				if ( $cuenta ) {
-					$res['errores'][] = sprintf( asde_t( 'Línea %d: fin de fichero sin el registro 33 de la cuenta %s.' ), $n, $cuenta['cuenta'] );
+					$res['errores'][] = sprintf( /* translators: 1: number, 2: text */ __( 'Line %1$d: end of file without record 33 for account %2$s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $n, $cuenta['cuenta'] );
 				}
 				$declarados = self::campo( $linea, 21, 26 );
 				// La norma no cuenta el propio 88; algunos bancos sí lo cuentan.
 				if ( ! ctype_digit( $declarados ) || ! in_array( (int) $declarados, array( $registros, $registros + 1 ), true ) ) {
-					$res['errores'][] = sprintf( asde_t( 'El registro 88 indica %s registros y el fichero tiene %d: está incompleto o dañado.' ), ltrim( $declarados, '0' ) ?: '0', $registros );
+					$res['errores'][] = sprintf( /* translators: 1: text, 2: number */ __( 'Record 88 states %1$s records and the file has %2$d: it is incomplete or damaged.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), ltrim( $declarados, '0' ) ?: '0', $registros );
 				}
 				$fin = true;
 				continue;
@@ -112,17 +112,17 @@ final class Norma43 {
 			switch ( $tipo ) {
 				case '11':
 					if ( $cuenta ) {
-						$res['errores'][] = sprintf( asde_t( 'Línea %d: empieza una cuenta nueva sin el registro 33 de la anterior.' ), $n );
+						$res['errores'][] = sprintf( /* translators: %d: number */ __( 'Line %d: a new account starts without the previous one\'s record 33.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $n );
 					}
 					$cuenta = self::cabecera( $linea, $cod );
 					if ( null === $cuenta['saldo_inicial'] || null === $cuenta['desde'] || null === $cuenta['hasta'] ) {
-						$res['errores'][] = sprintf( asde_t( 'Línea %d: cabecera de cuenta (11) con fechas o saldo no válidos.' ), $n );
+						$res['errores'][] = sprintf( /* translators: %d: number */ __( 'Line %d: account header (11) with invalid dates or balance.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $n );
 					}
 					break;
 
 				case '22':
 					if ( ! $cuenta ) {
-						$res['errores'][] = sprintf( asde_t( 'Línea %d: movimiento (22) fuera de una cuenta.' ), $n );
+						$res['errores'][] = sprintf( /* translators: %d: number */ __( 'Line %d: transaction (22) outside an account.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $n );
 						break;
 					}
 					if ( $mov ) {
@@ -130,7 +130,7 @@ final class Norma43 {
 					}
 					$mov = self::movimiento( $linea, $n );
 					if ( null === $mov['fecha'] || null === $mov['importe'] || ! in_array( $mov['_signo'], array( '1', '2' ), true ) ) {
-						$res['errores'][] = sprintf( asde_t( 'Línea %d: movimiento con fecha, importe o clave debe/haber no válidos.' ), $n );
+						$res['errores'][] = sprintf( /* translators: %d: number */ __( 'Line %d: transaction with an invalid date, amount or debit/credit key.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $n );
 						$mov = null;
 						break;
 					}
@@ -145,7 +145,7 @@ final class Norma43 {
 
 				case '23':
 					if ( ! $mov ) {
-						$res['errores'][] = sprintf( asde_t( 'Línea %d: complementario (23) sin movimiento.' ), $n );
+						$res['errores'][] = sprintf( /* translators: %d: number */ __( 'Line %d: supplementary record (23) without a transaction.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $n );
 						break;
 					}
 					$codigo = self::campo( $linea, 3, 4 );
@@ -161,7 +161,7 @@ final class Norma43 {
 
 				case '33':
 					if ( ! $cuenta ) {
-						$res['errores'][] = sprintf( asde_t( 'Línea %d: final de cuenta (33) sin cabecera (11).' ), $n );
+						$res['errores'][] = sprintf( /* translators: %d: number */ __( 'Line %d: account footer (33) without a header (11).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $n );
 						break;
 					}
 					if ( $mov ) {
@@ -175,22 +175,22 @@ final class Norma43 {
 					break;
 
 				default:
-					$res['errores'][] = sprintf( asde_t( 'Línea %d: tipo de registro «%s» desconocido. ¿Es un fichero Norma 43?' ), $n, $tipo );
+					$res['errores'][] = sprintf( /* translators: 1: number, 2: text */ __( 'Line %1$d: unknown record type "%2$s". Is it a Norma 43 file?', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $n, $tipo );
 			}
 			if ( count( $res['errores'] ) > 20 ) {
-				$res['errores'][] = asde_t( 'Demasiados errores: se deja de leer el fichero.' );
+				$res['errores'][] = __( 'Too many errors: the file is no longer read.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 			}
 		}
 
 		if ( $cuenta ) {
-			$res['errores'][] = sprintf( asde_t( 'El fichero termina sin el registro 33 (final) de la cuenta %s.' ), $cuenta['cuenta'] );
+			$res['errores'][] = sprintf( /* translators: %s: text */ __( 'The file ends without the final record 33 for account %s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $cuenta['cuenta'] );
 		}
 		if ( ! $fin && ! $res['errores'] ) {
-			$res['avisos'][] = asde_t( 'Falta el registro 88 (fin de fichero); los totales de cada cuenta sí cuadran.' );
+			$res['avisos'][] = __( 'Record 88 (end of file) is missing; the totals of each account do add up.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		if ( ! $res['cuentas'] && ! $res['errores'] ) {
-			$res['errores'][] = asde_t( 'No se ha encontrado ninguna cuenta (registro 11).' );
+			$res['errores'][] = __( 'No account was found (record 11).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		return $res;
 	}
@@ -271,23 +271,23 @@ final class Norma43 {
 	private static function cuadrar( string $l, array $cuenta, int $n ): array {
 		$errores = array();
 		if ( self::campo( $l, 3, 20 ) !== $cuenta['entidad'] . $cuenta['oficina'] . $cuenta['numero'] ) {
-			$errores[] = sprintf( asde_t( 'Línea %d: el registro 33 es de otra cuenta.' ), $n );
+			$errores[] = sprintf( /* translators: %d: number */ __( 'Line %d: record 33 belongs to another account.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $n );
 		}
 		$debe_n  = (int) self::campo( $l, 21, 25 );
 		$debe    = (int) self::campo( $l, 26, 39 );
 		$haber_n = (int) self::campo( $l, 40, 44 );
 		$haber   = (int) self::campo( $l, 45, 58 );
 		if ( $debe_n !== $cuenta['debe_n'] || $debe !== $cuenta['debe_cent'] ) {
-			$errores[] = sprintf( asde_t( 'Cuenta %s: el registro 33 indica %d cargos por %s € y se han leído %d por %s €.' ), $cuenta['cuenta'], $debe_n, self::euros( $debe ), $cuenta['debe_n'], self::euros( $cuenta['debe_cent'] ) );
+			$errores[] = sprintf( /* translators: 1: text, 2: number, 3: text, 4: number, 5: text */ __( 'Account %1$s: record 33 states %2$d debits totalling %3$s € and %4$d totalling %5$s € were read.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $cuenta['cuenta'], $debe_n, self::euros( $debe ), $cuenta['debe_n'], self::euros( $cuenta['debe_cent'] ) );
 		}
 		if ( $haber_n !== $cuenta['haber_n'] || $haber !== $cuenta['haber_cent'] ) {
-			$errores[] = sprintf( asde_t( 'Cuenta %s: el registro 33 indica %d abonos por %s € y se han leído %d por %s €.' ), $cuenta['cuenta'], $haber_n, self::euros( $haber ), $cuenta['haber_n'], self::euros( $cuenta['haber_cent'] ) );
+			$errores[] = sprintf( /* translators: 1: text, 2: number, 3: text, 4: number, 5: text */ __( 'Account %1$s: record 33 states %2$d credits totalling %3$s € and %4$d totalling %5$s € were read.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $cuenta['cuenta'], $haber_n, self::euros( $haber ), $cuenta['haber_n'], self::euros( $cuenta['haber_cent'] ) );
 		}
 		$final = self::importe_con_signo( self::campo( $l, 59, 59 ), self::campo( $l, 60, 73 ) );
 		if ( null !== $final && null !== $cuenta['saldo_inicial'] ) {
 			$esperado = (int) round( $cuenta['saldo_inicial'] * 100 ) + $cuenta['haber_cent'] - $cuenta['debe_cent'];
 			if ( (int) round( $final * 100 ) !== $esperado ) {
-				$errores[] = sprintf( asde_t( 'Cuenta %s: el saldo final (%s €) no es el saldo inicial más abonos menos cargos (%s €).' ), $cuenta['cuenta'], self::euros( (int) round( $final * 100 ) ), self::euros( $esperado ) );
+				$errores[] = sprintf( /* translators: 1: text, 2: text, 3: text */ __( 'Account %1$s: the final balance (%2$s €) is not the opening balance plus credits minus debits (%3$s €).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $cuenta['cuenta'], self::euros( (int) round( $final * 100 ) ), self::euros( $esperado ) );
 			}
 		}
 		return $errores;

@@ -114,7 +114,7 @@ final class AltaSocio {
 
 			case 'alta_crear':
 				if ( ! $altas ) {
-					$s['error'] = asde_t( 'La conexión con el CRM no está disponible.' );
+					$s['error'] = __( 'The connection to the CRM is not available.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 					$s['paso']  = self::REVISAR;
 					return $s;
 				}
@@ -216,14 +216,14 @@ final class AltaSocio {
 		}
 		$s['datos'] = $limpio;
 		if ( ! Secciones::exists( $s['seccion'] ) ) {
-			$s['error'] = asde_t( 'Elige la sección.' );
+			$s['error'] = __( 'Choose the section.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 			return $s;
 		}
 		$f = \DateTime::createFromFormat( '!Y-m-d', $s['inicio'] );
 		if ( ! $f || $f->format( 'Y-m-d' ) !== $s['inicio'] ) {
-			$s['error'] = asde_t( 'La fecha de alta no es válida.' );
+			$s['error'] = __( 'The registration date is not valid.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		} elseif ( $s['inicio'] > wp_date( 'Y-m-d' ) ) {
-			$s['error'] = asde_t( 'La fecha de alta no puede ser posterior a hoy.' );
+			$s['error'] = __( 'The registration date cannot be later than today.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		return $s;
 	}

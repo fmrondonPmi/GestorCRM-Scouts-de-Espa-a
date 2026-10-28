@@ -153,18 +153,18 @@ final class Servicio {
 			$v = VariantesTable::obtener( (int) $id );
 			$p = $v ? ProductosTable::obtener( $v['producto'] ) : null;
 			if ( ! $v || ! $p || 1 !== $v['activo'] || ! ProductosTable::visible_para( $p, $es_socio ) ) {
-				return new \WP_Error( 'asde_tienda', asde_t( 'Alguno de los productos elegidos ya no está disponible. Revisa tu selección.' ) );
+				return new \WP_Error( 'asde_tienda', __( 'One of the chosen products is no longer available. Check your selection.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			}
 			if ( $cantidad > ProductosTable::MAX_LIMITE ) {
-				return new \WP_Error( 'asde_tienda', asde_t( 'La cantidad no es válida.' ) );
+				return new \WP_Error( 'asde_tienda', __( 'The quantity is not valid.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			}
 			if ( $p['limite_persona'] > 0 && ( '' === $socio ? 0 : self::ya_pedidas( $socio, $p['id'] ) ) + $cantidad > $p['limite_persona'] ) {
 				/* translators: 1: producto, 2: máximo por persona */
-				return new \WP_Error( 'asde_tienda', sprintf( asde_t( 'De «%1$s» solo se pueden pedir %2$d por persona.' ), $p['nombre'], $p['limite_persona'] ) );
+				return new \WP_Error( 'asde_tienda', sprintf( /* translators: 2: number, 1: text */ __( 'Only %2$d of "%1$s" can be ordered per person.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $p['nombre'], $p['limite_persona'] ) );
 			}
 			if ( ! VariantesTable::hay( $v, $cantidad ) ) {
 				/* translators: %s: producto */
-				return new \WP_Error( 'asde_tienda', sprintf( asde_t( 'No quedan unidades suficientes de «%s».' ), $p['nombre'] ) );
+				return new \WP_Error( 'asde_tienda', sprintf( /* translators: %s: text */ __( 'There are not enough units of "%s" left.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $p['nombre'] ) );
 			}
 			$lineas[] = array(
 				'producto'  => $p['id'],
@@ -178,7 +178,7 @@ final class Servicio {
 			);
 		}
 		if ( ! $lineas ) {
-			return new \WP_Error( 'asde_tienda', asde_t( 'Elige al menos un producto.' ) );
+			return new \WP_Error( 'asde_tienda', __( 'Choose at least one product.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		return $lineas;
 	}
@@ -190,16 +190,16 @@ final class Servicio {
 	 */
 	public static function forma_valida( string $forma, bool $es_socio, bool $obligatoria ) {
 		if ( '' === $forma ) {
-			return $obligatoria ? new \WP_Error( 'asde_tienda', asde_t( 'Elige cómo vas a pagar.' ) ) : '';
+			return $obligatoria ? new \WP_Error( 'asde_tienda', __( 'Choose how you are going to pay.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) : '';
 		}
 		if ( ! isset( PedidosTable::FORMAS[ $forma ] ) ) {
-			return new \WP_Error( 'asde_tienda', asde_t( 'Elige cómo vas a pagar.' ) );
+			return new \WP_Error( 'asde_tienda', __( 'Choose how you are going to pay.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( 'fisico' === $forma && ! $es_socio ) {
-			return new \WP_Error( 'asde_tienda', asde_t( 'Pagar en físico a Tesorería solo está disponible para socios y socias.' ) );
+			return new \WP_Error( 'asde_tienda', __( 'Paying in person to Treasury is only available to members.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( 'datafono' === $forma && ! Config::de()['datafono'] ) {
-			return new \WP_Error( 'asde_tienda', asde_t( 'El grupo no cobra con datáfono.' ) );
+			return new \WP_Error( 'asde_tienda', __( 'The group does not take card payments.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		return $forma;
 	}
@@ -214,11 +214,11 @@ final class Servicio {
 	public static function comprar( Ambito $a, string $socio, array $cantidades, string $nota, string $forma_pago ) {
 		$cfg = Config::de();
 		if ( ! $cfg['abierto'] ) {
-			return new \WP_Error( 'asde_tienda', asde_t( 'Ahora mismo no se aceptan pedidos.' ) );
+			return new \WP_Error( 'asde_tienda', __( 'Orders are not being accepted right now.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$persona = self::para_quien( $a )[ $socio ] ?? null;
 		if ( ! $persona ) {
-			return new \WP_Error( 'asde_tienda', asde_t( 'No puedes hacer un pedido para esa persona.' ) );
+			return new \WP_Error( 'asde_tienda', __( 'You cannot place an order for that person.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$es_socio = $persona->tiene_membresia_activa();
 		$forma    = self::forma_valida( $forma_pago, $es_socio, true );
@@ -243,13 +243,13 @@ final class Servicio {
 	public static function comprar_invitado( array $datos, array $cantidades, string $nota, string $forma_pago ) {
 		$cfg = Config::de();
 		if ( ! $cfg['abierto'] || ! $cfg['publica'] ) {
-			return new \WP_Error( 'asde_tienda', asde_t( 'Ahora mismo no se aceptan pedidos.' ) );
+			return new \WP_Error( 'asde_tienda', __( 'Orders are not being accepted right now.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$nombre   = mb_substr( trim( sanitize_text_field( (string) ( $datos['nombre'] ?? '' ) ) ), 0, 80 );
 		$email    = sanitize_email( (string) ( $datos['email'] ?? '' ) );
 		$telefono = preg_replace( '/[^0-9+ ]/', '', (string) ( $datos['telefono'] ?? '' ) );
 		if ( mb_strlen( $nombre ) < 2 || ! is_email( $email ) ) {
-			return new \WP_Error( 'asde_tienda', asde_t( 'Escribe tu nombre y un email válido: ahí te mandamos el pedido.' ) );
+			return new \WP_Error( 'asde_tienda', __( 'Enter your name and a valid email: that is where we send the order.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$forma = self::forma_valida( $forma_pago, false, true );
 		if ( is_wp_error( $forma ) ) {
@@ -291,7 +291,7 @@ final class Servicio {
 			if ( ! VariantesTable::reservar( $l['variante'], $l['cantidad'] ) ) {
 				self::devolver_lineas( $hechas );
 				/* translators: %s: producto */
-				return new \WP_Error( 'asde_tienda', sprintf( asde_t( 'No quedan unidades suficientes de «%s».' ), $l['nombre'] ) );
+				return new \WP_Error( 'asde_tienda', sprintf( /* translators: %s: text */ __( 'There are not enough units of "%s" left.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $l['nombre'] ) );
 			}
 			$productos[ $i ]['reservado'] = true;
 			$hechas[]                     = $productos[ $i ];
@@ -305,7 +305,7 @@ final class Servicio {
 		$id     = PedidosTable::crear( $persona ? $persona->num_socio_asde : '', $persona ? $persona->secciones : array(), $persona ? $persona->es_adulto_voluntario() : false, $lineas, $t['total'], $t['provisional'], $nota, $forma, $invitado );
 		if ( ! $id ) {
 			self::devolver_lineas( $hechas );
-			return new \WP_Error( 'asde_tienda', asde_t( 'No se ha podido guardar el pedido.' ) );
+			return new \WP_Error( 'asde_tienda', __( 'The order could not be saved.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		// Lo que sale de las existencias no va al proveedor: queda como incluido.
 		if ( ! array_filter( $productos, static fn( array $l ) => Proveedor::unidades_a_pedir( $l ) > 0 ) ) {
@@ -341,9 +341,9 @@ final class Servicio {
 		}
 		if ( '' === $p['socio'] ) {
 			$i = PedidosTable::invitado( $p );
-			return $i ? sprintf( asde_t( '%s (sin sesión)' ), (string) $i['nombre'] ) : asde_t( 'Compra sin sesión' );
+			return $i ? sprintf( /* translators: %s: text */ __( '%s (not signed in)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), (string) $i['nombre'] ) : __( 'Purchase without signing in', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
-		return sprintf( asde_t( 'Nº %s' ), $p['socio'] );
+		return sprintf( /* translators: %s: text */ __( 'No. %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $p['socio'] );
 	}
 	/**
 	 * Cancela las compras sin sesión que llevan más de «días sin pagar» días sin pagarse (P-179, 14 por defecto; 0 = nunca) y
@@ -428,22 +428,22 @@ final class Servicio {
 		switch ( $p['forma_pago'] ) {
 			case 'transferencia':
 				/* translators: 1: IBAN, 2: nº de pedido */
-				return '' !== $cfg['iban'] ? array( sprintf( asde_t( 'Transferencia a la cuenta %1$s, indicando como concepto el nº de pedido %2$s.' ), $cfg['iban'], $num ) ) : array( sprintf( asde_t( 'Transferencia a la cuenta del grupo, indicando como concepto el nº de pedido %s.' ), $num ) );
+				return '' !== $cfg['iban'] ? array( sprintf( /* translators: 1: text, 2: text */ __( 'Transfer to the account %1$s, stating order no. %2$s as the description.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $cfg['iban'], $num ) ) : array( sprintf( /* translators: %s: text */ __( 'Transfer to the group\'s account, stating order no. %s as the description.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $num ) );
 			case 'bizum':
 				/* translators: 1: teléfono de Bizum, 2: nº de pedido */
-				return '' !== $cfg['bizum'] ? array( sprintf( asde_t( 'Bizum al %1$s, indicando como concepto el nº de pedido %2$s.' ), $cfg['bizum'], $num ) ) : array( sprintf( asde_t( 'Bizum al teléfono del grupo, indicando como concepto el nº de pedido %s.' ), $num ) );
+				return '' !== $cfg['bizum'] ? array( sprintf( /* translators: 1: text, 2: text */ __( 'Bizum to %1$s, stating order no. %2$s as the description.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $cfg['bizum'], $num ) ) : array( sprintf( /* translators: %s: text */ __( 'Bizum to the group\'s phone, stating order no. %s as the description.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $num ) );
 			case 'fisico':
 				/* translators: %s: nº de pedido */
-				return array( sprintf( asde_t( 'Entrega el importe en físico a Tesorería, indicando el nº de pedido %s.' ), $num ) );
+				return array( sprintf( /* translators: %s: text */ __( 'Hand the amount in person to Treasury, stating order no. %s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $num ) );
 			case 'datafono':
 				/* translators: %s: nº de pedido */
-				return array( sprintf( asde_t( 'Paga con tarjeta, en persona, con el datáfono del grupo al recogerlo, indicando el nº de pedido %s.' ), $num ) );
+				return array( sprintf( /* translators: %s: text */ __( 'Pay by card, in person, with the group\'s card terminal on collection, stating order no. %s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $num ) );
 		}
 		return array();
 	}
 
 	public static function importe( array $p ): string {
-		return Calculadora::euros( $p['total'] ) . ( $p['provisional'] ? asde_t( ' + insignias (precio por confirmar)' ) : '' );
+		return Calculadora::euros( $p['total'] ) . ( $p['provisional'] ? __( ' + badges (price to be confirmed)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : '' );
 	}
 
 	// ---------------------------------------------------------------------

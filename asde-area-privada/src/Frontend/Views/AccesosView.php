@@ -50,7 +50,7 @@ final class AccesosView extends View {
 	}
 
 	private function hojas( string $activa ): string {
-		$out = '<nav class="asde-hojas" aria-label="' . esc_attr( asde_a( 'Gestión de accesos' ) ) . '"><ul class="asde-hojas__lista">';
+		$out = '<nav class="asde-hojas" aria-label="' . esc_attr( esc_attr__( 'Access management', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) . '"><ul class="asde-hojas__lista">';
 		foreach ( self::VISTAS as $clave => $nombre ) {
 			$out .= '<li class="asde-hojas__item"><a class="asde-hojas__pestana' . ( $clave === $activa ? ' is-active' : '' ) . '" href="' . esc_url( $this->url( 'accesos', array( 'vista' => $clave ) ) ) . '"' . ( $clave === $activa ? ' aria-current="page"' : '' ) . '>' . esc_html( asde_t( $nombre ) ) . '</a></li>';
 		}
@@ -126,7 +126,7 @@ final class AccesosView extends View {
 		if ( $id ) {
 			$user = get_userdata( $id );
 			if ( ! $user || ! Concesiones::es_destino( $user ) ) {
-				return $this->denegado( asde_t( 'Esa persona no está entre las que reciben permisos sueltos.' ) );
+				return $this->denegado( __( 'That person is not among those who receive individual permissions.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			}
 			return $this->persona( $user );
 		}
@@ -228,12 +228,12 @@ final class AccesosView extends View {
 		$nombres = $this->nombres( $todos_n );
 		$cuenta  = static function ( int $uid ) use ( $nombres ): string {
 			if ( ! $uid ) {
-				return asde_t( 'Automático' );
+				return __( 'Automatic', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 			}
 			$u = get_userdata( $uid );
 			if ( ! $u ) {
 				/* translators: %d: número de cuenta */
-				return sprintf( asde_t( 'Cuenta borrada (%d)' ), $uid );
+				return sprintf( /* translators: %d: number */ __( 'Account deleted (%d)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $uid );
 			}
 			return isset( $nombres[ $uid ] ) ? $nombres[ $uid ] . ' (' . $u->user_login . ')' : $u->user_login;
 		};
@@ -276,7 +276,7 @@ final class AccesosView extends View {
 
 	public function handle_post(): void {
 		if ( ! current_user_can( Catalogo::CAP_GESTION ) ) {
-			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+			wp_die( esc_html__( 'You do not have permission to do this.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		$accion = $this->post( 'asde_action' );
 		$yo     = wp_get_current_user();
@@ -294,7 +294,7 @@ final class AccesosView extends View {
 			foreach ( $r['avisos'] as $a ) {
 				Notices::add( 'warning', esc_html( $a ) );
 			}
-			Notices::add( 'success', $r['cambios'] ? esc_html( sprintf( asde_t( 'Permisos guardados: %d cambios.' ), $r['cambios'] ) ) : esc_html( asde_t( 'No había nada que cambiar.' ) ) );
+			Notices::add( 'success', $r['cambios'] ? esc_html( sprintf( /* translators: %d: number */ __( 'Permissions saved: %d changes.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $r['cambios'] ) ) : esc_html( __( 'There was nothing to change.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) );
 			$this->redirect( $this->url( 'accesos', array( 'vista' => 'matriz' ) ) );
 		}
 
@@ -302,9 +302,9 @@ final class AccesosView extends View {
 			check_admin_referer( 'asde_accesos_restaurar' );
 			$n = PermisosRol::restaurar( $this->post( 'rol' ), $yo );
 			if ( $n < 0 ) {
-				Notices::add( 'error', esc_html( asde_t( 'No puedes restaurar tu propio rol: volvería a darte permisos que se habían quitado. Que lo haga otra persona.' ) ) );
+				Notices::add( 'error', esc_html( __( 'You cannot restore your own role: it would give you back permissions that had been removed. Another person must do it.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) );
 			} else {
-				Notices::add( 'success', $n ? esc_html( asde_t( 'Rol restaurado a los permisos de fábrica.' ) ) : esc_html( asde_t( 'Ese rol ya tenía los permisos de fábrica.' ) ) );
+				Notices::add( 'success', $n ? esc_html( __( 'Role restored to the default permissions.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) : esc_html( __( 'That role already had the default permissions.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) );
 			}
 			$this->redirect( $this->url( 'accesos', array( 'vista' => 'matriz' ) ) );
 		}
@@ -316,11 +316,11 @@ final class AccesosView extends View {
 			check_admin_referer( 'asde_accesos_conceder_' . $uid );
 			$caduca = 'fecha' === $this->post( 'caduca_tipo' ) ? $this->post( 'caduca' ) : null;
 			if ( 'fecha' === $this->post( 'caduca_tipo' ) && '' === (string) $caduca ) {
-				Notices::add( 'error', esc_html( asde_t( 'Elige la fecha hasta la que vale el permiso, o «Sin caducidad».' ) ) );
+				Notices::add( 'error', esc_html( __( 'Choose the date until which the permission is valid, or "No expiry".', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) );
 				$this->redirect( $volver );
 			}
 			$r = Concesiones::conceder( $yo, $uid, $this->post( 'permiso' ), $caduca, $this->post( 'motivo' ) );
-			is_wp_error( $r ) ? Notices::add( 'error', esc_html( $r->get_error_message() ) ) : Notices::add( 'success', esc_html( asde_t( 'Permiso concedido.' ) ) );
+			is_wp_error( $r ) ? Notices::add( 'error', esc_html( $r->get_error_message() ) ) : Notices::add( 'success', esc_html( __( 'Permission granted.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) );
 			$this->redirect( $volver );
 		}
 
@@ -328,11 +328,11 @@ final class AccesosView extends View {
 			$id = (int) $this->post( 'concesion' );
 			check_admin_referer( 'asde_accesos_retirar_' . $id );
 			$r = Concesiones::revocar( $yo, $id, $this->post( 'motivo' ) );
-			is_wp_error( $r ) ? Notices::add( 'error', esc_html( $r->get_error_message() ) ) : Notices::add( 'success', esc_html( asde_t( 'Permiso retirado.' ) ) );
+			is_wp_error( $r ) ? Notices::add( 'error', esc_html( $r->get_error_message() ) ) : Notices::add( 'success', esc_html( __( 'Permission withdrawn.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) );
 			$this->redirect( $volver );
 		}
 
-		Notices::add( 'error', asde_t( 'Petición no válida.' ) );
+		Notices::add( 'error', __( 'Invalid request.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		$this->redirect( $this->url( 'accesos' ) );
 	}
 }

@@ -113,7 +113,7 @@ final class InscripcionEsperaView extends View {
 		if ( ! wp_verify_nonce( $this->post_nonce(), 'asde_' . $accion ) ) {
 			self::$estado = array(
 				'modo'    => 'espera_enlaces' === $accion || 'espera_inscribir' === $accion ? 'formulario' : 'invalido',
-				'errores' => array( asde_t( 'La sesión del formulario ha caducado. Vuelve a intentarlo.' ) ),
+				'errores' => array( __( 'The form session has expired. Try again.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ),
 			);
 			return;
 		}
@@ -159,7 +159,7 @@ final class InscripcionEsperaView extends View {
 		if ( ! Limite::permitir( 'lista_espera', self::POR_HORA, HOUR_IN_SECONDS ) ) {
 			self::$estado = array(
 				'modo'    => 'formulario',
-				'errores' => array( asde_t( 'Has hecho varios intentos seguidos. Espera una hora antes de volver a intentarlo.' ) ),
+				'errores' => array( __( 'You have made several attempts in a row. Wait an hour before trying again.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ),
 			);
 			return;
 		}
@@ -204,7 +204,7 @@ final class InscripcionEsperaView extends View {
 		if ( ! is_email( $email ) ) {
 			self::$estado = array(
 				'modo'    => (string) ( $this->post( 'volver' ) ?: 'formulario' ),
-				'errores' => array( asde_t( 'Escribe un email válido.' ) ),
+				'errores' => array( __( 'Enter a valid email address.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ),
 			);
 			return;
 		}
@@ -251,7 +251,7 @@ final class InscripcionEsperaView extends View {
 			self::$estado = array(
 				'modo'    => 'acceso',
 				'fila'    => $fila,
-				'errores' => array( asde_t( 'Has hecho varios intentos seguidos. Espera una hora antes de volver a intentarlo.' ) ),
+				'errores' => array( __( 'You have made several attempts in a row. Wait an hour before trying again.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ),
 			);
 			return;
 		}
@@ -259,7 +259,7 @@ final class InscripcionEsperaView extends View {
 			self::$estado = array(
 				'modo'    => 'acceso',
 				'fila'    => $fila,
-				'errores' => array( asde_t( 'Ese email no es el de esta inscripción.' ) ),
+				'errores' => array( __( 'That email address is not the one for this sign-up.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ),
 			);
 			return;
 		}
@@ -274,7 +274,7 @@ final class InscripcionEsperaView extends View {
 					'modo'    => 'dentro',
 					'fila'    => $fila,
 					'email'   => $email,
-					'errores' => array( asde_t( 'Marca la casilla para confirmar que quieres borrar tus datos.' ) ),
+					'errores' => array( __( 'Tick the box to confirm that you want to delete your data.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ),
 				);
 				return;
 			}

@@ -188,7 +188,7 @@ final class Catalogo {
 
 	/** Descripción de lo que hay que tener antes (para los mensajes). */
 	public static function texto_requisitos( string $permiso ): string {
-		return implode( ' ' . asde_t( 'o' ) . ' ', array_map( static fn( string $p ) => '«' . self::descripcion( $p ) . '»', self::requiere( $permiso ) ) );
+		return implode( ' ' . __( 'or', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . ' ', array_map( static fn( string $p ) => '«' . self::descripcion( $p ) . '»', self::requiere( $permiso ) ) );
 	}
 
 	/** Textos que se traducen al mostrarlos (los recoge Idiomas\Textos::extras()). @return string[] */

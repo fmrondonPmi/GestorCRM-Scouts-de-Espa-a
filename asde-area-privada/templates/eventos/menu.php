@@ -46,13 +46,13 @@ $fecha         = static fn( string $d ): string => wp_date( 'l d/m/Y', strtotime
 ?>
 <section class="asde-card" data-asde-inicio="abierto">
 	<header class="asde-card__header asde-card__header--split">
-		<h3 class="asde-card__title"><?php asde_e( 'Menú del evento' ); ?></h3>
-		<span class="asde-actions asde-solo-pantalla"><button type="button" class="button asde-button-secundario" data-asde-imprimir-pagina><?php asde_e( 'Imprimir' ); ?></button></span>
+		<h3 class="asde-card__title"><?php esc_html_e( 'Event menu', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h3>
+		<span class="asde-actions asde-solo-pantalla"><button type="button" class="button asde-button-secundario" data-asde-imprimir-pagina><?php esc_html_e( 'Print', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button></span>
 	</header>
-	<p class="asde-muted"><?php echo esc_html( sprintf( asde_n( 'Cuentan %d comensal por defecto (los inscritos y el equipo); cada plato puede llevar los suyos.', 'Cuentan %d comensales por defecto (los inscritos y el equipo); cada plato puede llevar los suyos.', max( 1, $comensales ) ), max( 1, $comensales ) ) ); ?>
-		<?php asde_e( 'Los alérgenos son los de las recetas: aquí no se mira a nadie en concreto.' ); ?></p>
+	<p class="asde-muted"><?php echo esc_html( sprintf( /* translators: %d: number */ _n( '%d diner counts by default (the sign-ups and the team); each dish can have its own.', '%d diners count by default (the sign-ups and the team); each dish can have its own.', max( 1, $comensales ) , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), max( 1, $comensales ) ) ); ?>
+		<?php esc_html_e( 'The allergens are those of the recipes: nobody in particular is checked here.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 	<?php if ( ! $recetas && $puede_editar ) : ?>
-		<div class="asde-notice asde-notice--warning"><?php asde_e( 'Todavía no hay recetas.' ); ?> <a href="<?php echo esc_url( $url_recetas ); ?>"><?php asde_e( 'Ve al recetario' ); ?></a></div>
+		<div class="asde-notice asde-notice--warning"><?php esc_html_e( 'There are no recipes yet.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <a href="<?php echo esc_url( $url_recetas ); ?>"><?php esc_html_e( 'Go to the recipe book', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a></div>
 	<?php endif; ?>
 
 	<?php foreach ( $dias as $d ) : ?>
@@ -65,20 +65,20 @@ $fecha         = static fn( string $d ): string => wp_date( 'l d/m/Y', strtotime
 						<th scope="row"><?php echo esc_html( asde_t( $nombre_c ) ); ?></th>
 						<td>
 							<?php if ( ! $platos ) : ?>
-								<span class="asde-muted"><?php asde_e( 'Sin platos' ); ?></span>
+								<span class="asde-muted"><?php esc_html_e( 'No dishes', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span>
 							<?php endif; ?>
 							<?php foreach ( $platos as $p ) : ?>
 								<div class="asde-menu__plato">
 									<strong><?php echo esc_html( $nombre_receta( $p['receta'] ) ); ?></strong>
-									<span class="asde-muted">· <?php echo esc_html( sprintf( asde_n( '%d comensal', '%d comensales', $p['comensales'] ), $p['comensales'] ) ); ?></span>
+									<span class="asde-muted">· <?php echo esc_html( sprintf( /* translators: %d: number */ _n( '%d diner', '%d diners', $p['comensales'] , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $p['comensales'] ) ); ?></span>
 									<?php if ( $p['alergenos']['contiene'] ) : ?>
-										<span>· <?php echo esc_html( sprintf( asde_t( 'Contiene: %s' ), Alergenos::texto( $p['alergenos']['contiene'] ) ) ); ?></span>
+										<span>· <?php echo esc_html( sprintf( /* translators: %s: text */ __( 'Contains: %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Alergenos::texto( $p['alergenos']['contiene'] ) ) ); ?></span>
 									<?php endif; ?>
 									<?php if ( $p['alergenos']['trazas'] ) : ?>
-										<span class="asde-muted">· <?php echo esc_html( sprintf( asde_t( 'Puede contener: %s' ), Alergenos::texto( $p['alergenos']['trazas'] ) ) ); ?></span>
+										<span class="asde-muted">· <?php echo esc_html( sprintf( /* translators: %s: text */ __( 'May contain: %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Alergenos::texto( $p['alergenos']['trazas'] ) ) ); ?></span>
 									<?php endif; ?>
 									<?php if ( $p['alergenos']['sin_revisar'] ) : ?>
-										<span class="asde-badge asde-badge--pago-parcial"><?php asde_e( 'Ingredientes sin revisar' ); ?></span>
+										<span class="asde-badge asde-badge--pago-parcial"><?php esc_html_e( 'Ingredients not yet reviewed', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span>
 									<?php endif; ?>
 									<?php if ( $puede_editar ) : ?>
 										<form method="post" action="<?php echo esc_url( $url_menu ); ?>" class="asde-inline asde-solo-pantalla">
@@ -86,9 +86,9 @@ $fecha         = static fn( string $d ): string => wp_date( 'l d/m/Y', strtotime
 											<input type="hidden" name="evento" value="<?php echo (int) $e['id']; ?>">
 											<input type="hidden" name="pestana" value="menu">
 											<input type="hidden" name="plato" value="<?php echo (int) $p['plato']['id']; ?>">
-											<input type="number" name="comensales" min="1" max="5000" size="5" value="<?php echo null === $p['plato']['comensales'] ? '' : (int) $p['plato']['comensales']; ?>" placeholder="<?php echo esc_attr( asde_a( 'por defecto' ) ); ?>" aria-label="<?php echo esc_attr( asde_a( 'Comensales de este plato' ) ); ?>">
-											<button type="submit" class="asde-btn-link" name="asde_action" value="menu_comensales"><?php asde_e( 'Cambiar' ); ?></button>
-											<button type="submit" class="asde-btn-link" name="asde_action" value="menu_quitar"><?php asde_e( 'Quitar' ); ?></button>
+											<input type="number" name="comensales" min="1" max="5000" size="5" value="<?php echo null === $p['plato']['comensales'] ? '' : (int) $p['plato']['comensales']; ?>" placeholder="<?php echo esc_attr( esc_attr__( 'default', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>" aria-label="<?php echo esc_attr( esc_attr__( 'Diners for this dish', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
+											<button type="submit" class="asde-btn-link" name="asde_action" value="menu_comensales"><?php esc_html_e( 'Change', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
+											<button type="submit" class="asde-btn-link" name="asde_action" value="menu_quitar"><?php esc_html_e( 'Remove', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 										</form>
 									<?php endif; ?>
 								</div>
@@ -101,13 +101,13 @@ $fecha         = static fn( string $d ): string => wp_date( 'l d/m/Y', strtotime
 									<input type="hidden" name="asde_action" value="menu_anadir">
 									<input type="hidden" name="dia" value="<?php echo esc_attr( $d ); ?>">
 									<input type="hidden" name="comida" value="<?php echo esc_attr( $c ); ?>">
-									<select name="receta" aria-label="<?php echo esc_attr( sprintf( asde_t( 'Receta para %s' ), asde_t( $nombre_c ) ) ); ?>">
-										<option value="0">— <?php asde_e( 'Añadir un plato' ); ?> —</option>
+									<select name="receta" aria-label="<?php echo esc_attr( sprintf( /* translators: %s: text */ __( 'Recipe for %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), asde_t( $nombre_c ) ) ); ?>">
+										<option value="0">— <?php esc_html_e( 'Add a dish', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> —</option>
 										<?php foreach ( $recetas as $r ) : ?>
 											<option value="<?php echo (int) $r['id']; ?>"><?php echo esc_html( $nombre_receta( $r ) ); ?></option>
 										<?php endforeach; ?>
 									</select>
-									<button type="submit" class="button asde-button-secundario"><?php asde_e( 'Añadir' ); ?></button>
+									<button type="submit" class="button asde-button-secundario"><?php esc_html_e( 'Add', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 								</form>
 							<?php endif; ?>
 						</td>
@@ -134,28 +134,28 @@ $nivel_clase = array(
 	'sin_conflictos' => 'asde-badge--pago-pagado',
 );
 $nivel_texto = array(
-	'conflicto'      => asde_t( 'Conflicto' ),
-	'riesgo'         => asde_t( 'Posible riesgo' ),
-	'incompleto'     => asde_t( 'Datos incompletos' ),
-	'sin_conflictos' => asde_t( 'Sin conflictos' ),
+	'conflicto'      => __( 'Conflict', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+	'riesgo'         => __( 'Possible risk', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+	'incompleto'     => __( 'Incomplete details', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+	'sin_conflictos' => __( 'No conflicts', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 );
 $hay_aviso = static fn( string $k ): bool => isset( $confirmaciones[ $k ] );
 ?>
 <section class="asde-card" data-asde-inicio="abierto">
 	<header class="asde-card__header asde-card__header--split">
-		<h3 class="asde-card__title"><?php asde_e( 'Alérgenos del menú' ); ?></h3>
+		<h3 class="asde-card__title"><?php esc_html_e( 'Menu allergens', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h3>
 		<span class="asde-badge <?php echo esc_attr( $nivel_clase[ $nivel ] ?? '' ); ?>"><?php echo esc_html( $nivel_texto[ $nivel ] ?? '' ); ?></span>
 	</header>
 	<?php if ( 'sin_menu' === $validacion['estado'] ) : ?>
-		<p><?php asde_e( 'Añade platos al menú para poder revisar los alérgenos.' ); ?></p>
+		<p><?php esc_html_e( 'Add dishes to the menu so the allergens can be checked.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 	<?php elseif ( 'sin_asistentes' === $validacion['estado'] ) : ?>
-		<p><?php asde_e( 'Todavía no hay inscritos ni equipo en el evento: no hay nadie con quien comparar el menú.' ); ?></p>
+		<p><?php esc_html_e( 'There are no sign-ups or team members in the event yet: there is nobody to compare the menu with.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 	<?php elseif ( 'crm' === $validacion['estado'] ) : ?>
-		<div class="asde-notice asde-notice--warning"><?php asde_e( 'No se ha podido leer las fichas del CRM ahora mismo: no se puede decir que el menú esté libre de alérgenos. Inténtalo de nuevo.' ); ?></div>
+		<div class="asde-notice asde-notice--warning"><?php esc_html_e( 'The CRM records cannot be read right now: it cannot be said that the menu is free of allergens. Try again.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></div>
 	<?php else : ?>
-		<p class="asde-muted"><?php echo esc_html( sprintf( asde_t( 'Comprobado en vivo con las fichas de %1$d personas (inscritos y equipo), a fecha de %2$s. No se guarda nada de lo que dicen las fichas.' ), (int) $validacion['asistentes'], $validacion['momento'] ) ); ?></p>
+		<p class="asde-muted"><?php echo esc_html( sprintf( /* translators: 1: number, 2: text */ __( 'Checked live against the records of %1$d people (sign-ups and team), as of %2$s. Nothing from the records is stored.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), (int) $validacion['asistentes'], $validacion['momento'] ) ); ?></p>
 		<?php if ( 'sin_conflictos' === $nivel ) : ?>
-			<p><?php asde_e( 'Ninguno de los alérgenos del menú afecta a nadie según las fichas.' ); ?></p>
+			<p><?php esc_html_e( 'None of the menu\'s allergens affects anyone according to the records.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 		<?php endif; ?>
 		<?php foreach ( $validacion['platos'] as $plato_id => $p ) : ?>
 			<?php if ( ! $p['conflictos'] && ! $p['riesgos'] && ! $p['dieta'] ) : ?>
@@ -169,16 +169,16 @@ $hay_aviso = static fn( string $k ): bool => isset( $confirmaciones[ $k ] );
 						<li>
 							<span class="asde-badge <?php echo esc_attr( $nivel_clase[ $tipo ] ); ?>"><?php echo esc_html( $nivel_texto[ $tipo ] ); ?></span>
 							<strong><?php echo esc_html( Alergenos::nombre( $cod ) ); ?></strong>:
-							<?php echo esc_html( sprintf( asde_n( '%d persona', '%d personas', (int) $d['n'] ), (int) $d['n'] ) ); ?>
+							<?php echo esc_html( sprintf( /* translators: %d: number */ _n( '%d person', '%d people', (int) $d['n'] , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), (int) $d['n'] ) ); ?>
 							<?php if ( ! empty( $d['ingredientes'] ) ) : ?>
-								<span class="asde-muted">· <?php echo esc_html( sprintf( asde_t( 'por %s' ), implode( ', ', $d['ingredientes'] ) ) ); ?></span>
+								<span class="asde-muted">· <?php echo esc_html( sprintf( /* translators: %s: text */ __( 'by %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), implode( ', ', $d['ingredientes'] ) ) ); ?></span>
 							<?php endif; ?>
 							<?php if ( $ve_quienes && ! empty( $d['nombres'] ) ) : ?>
 								<br><span class="asde-muted"><?php echo esc_html( implode( ', ', $d['nombres'] ) ); ?></span>
 							<?php endif; ?>
 							<?php if ( $hay_aviso( $k ) ) : ?>
-								<br><span class="asde-badge asde-badge--pago-pagado"><?php asde_e( 'Confirmado' ); ?></span>
-								<span class="asde-muted"><?php echo esc_html( sprintf( asde_t( '%1$s · por %2$s el %3$s' ), asde_t( \AsdeBalears\AreaPrivada\Menus\AvisosTable::ALTERNATIVAS[ $confirmaciones[ $k ]['alternativa'] ] ?? '' ), $confirmantes[ $k ] ?? '', wp_date( 'd/m/Y', strtotime( $confirmaciones[ $k ]['creado'] . ' UTC' ) ) ) ); ?></span>
+								<br><span class="asde-badge asde-badge--pago-pagado"><?php esc_html_e( 'Confirmed', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span>
+								<span class="asde-muted"><?php echo esc_html( sprintf( /* translators: 1: text, 2: text, 3: text */ __( '%1$s · for %2$s on %3$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), asde_t( \AsdeBalears\AreaPrivada\Menus\AvisosTable::ALTERNATIVAS[ $confirmaciones[ $k ]['alternativa'] ] ?? '' ), $confirmantes[ $k ] ?? '', wp_date( 'd/m/Y', strtotime( $confirmaciones[ $k ]['creado'] . ' UTC' ) ) ) ); ?></span>
 							<?php endif; ?>
 							<?php if ( $puede_editar ) : ?>
 								<form method="post" action="<?php echo esc_url( $url_menu ); ?>" class="asde-inline asde-solo-pantalla">
@@ -188,14 +188,14 @@ $hay_aviso = static fn( string $k ): bool => isset( $confirmaciones[ $k ] );
 									<input type="hidden" name="plato" value="<?php echo (int) $plato_id; ?>">
 									<input type="hidden" name="alergeno" value="<?php echo esc_attr( $cod ); ?>">
 									<?php if ( $hay_aviso( $k ) ) : ?>
-										<button type="submit" class="asde-btn-link" name="asde_action" value="menu_desconfirmar"><?php asde_e( 'Quitar la confirmación' ); ?></button>
+										<button type="submit" class="asde-btn-link" name="asde_action" value="menu_desconfirmar"><?php esc_html_e( 'Remove the confirmation', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 									<?php else : ?>
-										<select name="alternativa" aria-label="<?php echo esc_attr( asde_a( 'Qué se hace' ) ); ?>">
+										<select name="alternativa" aria-label="<?php echo esc_attr( esc_attr__( 'What is done', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
 											<?php foreach ( \AsdeBalears\AreaPrivada\Menus\AvisosTable::ALTERNATIVAS as $ak => $an ) : ?>
 												<option value="<?php echo esc_attr( $ak ); ?>"><?php echo esc_html( asde_t( $an ) ); ?></option>
 											<?php endforeach; ?>
 										</select>
-										<button type="submit" class="button asde-button-secundario" name="asde_action" value="menu_confirmar"><?php asde_e( 'Confirmar' ); ?></button>
+										<button type="submit" class="button asde-button-secundario" name="asde_action" value="menu_confirmar"><?php esc_html_e( 'Confirm', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 									<?php endif; ?>
 								</form>
 							<?php endif; ?>
@@ -205,9 +205,9 @@ $hay_aviso = static fn( string $k ): bool => isset( $confirmaciones[ $k ] );
 				<?php foreach ( $p['dieta'] as $dieta => $d ) : ?>
 					<li>
 						<span class="asde-badge <?php echo esc_attr( $nivel_clase['riesgo'] ); ?>"><?php echo esc_html( $nivel_texto['riesgo'] ); ?></span>
-						<strong><?php echo esc_html( 'vegana' === $dieta ? asde_t( 'Dieta vegana' ) : asde_t( 'Dieta vegetariana' ) ); ?></strong>:
-						<?php echo esc_html( sprintf( asde_n( '%d persona', '%d personas', (int) $d['n'] ), (int) $d['n'] ) ); ?>
-						<span class="asde-muted">· <?php asde_e( 'el plato lleva ingredientes de origen animal' ); ?></span>
+						<strong><?php echo esc_html( 'vegana' === $dieta ? __( 'Vegan diet', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : __( 'Vegetarian diet', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?></strong>:
+						<?php echo esc_html( sprintf( /* translators: %d: number */ _n( '%d person', '%d people', (int) $d['n'] , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), (int) $d['n'] ) ); ?>
+						<span class="asde-muted">· <?php esc_html_e( 'the dish contains ingredients of animal origin', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span>
 						<?php if ( $ve_quienes && ! empty( $d['nombres'] ) ) : ?>
 							<br><span class="asde-muted"><?php echo esc_html( implode( ', ', $d['nombres'] ) ); ?></span>
 						<?php endif; ?>
@@ -217,7 +217,7 @@ $hay_aviso = static fn( string $k ): bool => isset( $confirmaciones[ $k ] );
 		<?php endforeach; ?>
 		<?php if ( $validacion['revisar'] > 0 ) : ?>
 			<div class="asde-notice asde-notice--warning">
-				<?php echo esc_html( sprintf( asde_n( '%d ficha tiene algo escrito que no se ha podido entender: revísala a mano.', '%d fichas tienen algo escrito que no se ha podido entender: revísalas a mano.', (int) $validacion['revisar'] ), (int) $validacion['revisar'] ) ); ?>
+				<?php echo esc_html( sprintf( /* translators: %d: number */ _n( '%d record has something written that could not be understood: check it by hand.', '%d records have something written that could not be understood: check them by hand.', (int) $validacion['revisar'] , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), (int) $validacion['revisar'] ) ); ?>
 				<?php if ( $ve_quienes ) : ?>
 					<?php foreach ( $validacion['textos_revisar'] as $nombre => $texto ) : ?>
 						<br><strong><?php echo esc_html( $nombre ); ?></strong>: <?php echo esc_html( $texto ); ?>
@@ -227,32 +227,32 @@ $hay_aviso = static fn( string $k ): bool => isset( $confirmaciones[ $k ] );
 		<?php endif; ?>
 		<?php if ( $validacion['incompletos'] > 0 ) : ?>
 			<div class="asde-notice asde-notice--info">
-				<?php echo esc_html( sprintf( asde_n( '%d persona no tiene la ficha de salud y alimentación revisada o rellenada: no se puede asegurar nada de ella.', '%d personas no tienen la ficha de salud y alimentación revisada o rellenada: no se puede asegurar nada de ellas.', (int) $validacion['incompletos'] ), (int) $validacion['incompletos'] ) ); ?>
+				<?php echo esc_html( sprintf( /* translators: %d: number */ _n( '%d person does not have the health and food record checked or filled in: nothing can be guaranteed about them.', '%d people do not have the health and food record checked or filled in: nothing can be guaranteed about them.', (int) $validacion['incompletos'] , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), (int) $validacion['incompletos'] ) ); ?>
 				<?php if ( $ve_quienes && $validacion['nombres_incompletos'] ) : ?>
 					<br><?php echo esc_html( implode( ', ', $validacion['nombres_incompletos'] ) ); ?>
 				<?php endif; ?>
 			</div>
 		<?php endif; ?>
 		<?php if ( ! $ve_quienes ) : ?>
-			<p class="asde-help"><?php asde_e( 'Aquí solo se ven los alérgenos y cuántas personas afectan, sin nombres. Los nombres los ven quienes ya ven la salud del evento y salen en la hoja de cocina.' ); ?></p>
+			<p class="asde-help"><?php esc_html_e( 'Only the allergens and how many people they affect are shown here, without names. The names are seen by those who already see the event\'s health data and appear on the kitchen sheet.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 		<?php endif; ?>
 	<?php endif; ?>
 
 	<?php if ( $puede_hoja && 'ok' === $validacion['estado'] ) : ?>
 		<div class="asde-solo-pantalla">
-			<h4><?php asde_e( 'Hoja de cocina' ); ?></h4>
-			<p class="asde-muted"><?php asde_e( 'Para quien cocina: el nombre de cada persona afectada y su alérgeno, comida por comida. Se genera al momento y no se guarda; por email solo llega al equipo de apoyo con cuenta.' ); ?></p>
+			<h4><?php esc_html_e( 'Kitchen sheet', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h4>
+			<p class="asde-muted"><?php esc_html_e( 'For whoever cooks: the name of each affected person and their allergen, meal by meal. It is generated on the spot and not stored; by email it only reaches the support team with an account.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 			<?php if ( $entrega && $entrega['desfasada'] ) : ?>
-				<div class="asde-notice asde-notice--warning"><?php echo esc_html( sprintf( asde_t( 'La última hoja se entregó el %s y ha cambiado algo desde entonces (inscritos, fichas o menú): vuelve a generarla.' ), wp_date( 'd/m/Y H:i', strtotime( $entrega['cuando'] . ' UTC' ) ) ) ); ?></div>
+				<div class="asde-notice asde-notice--warning"><?php echo esc_html( sprintf( /* translators: %s: text */ __( 'The last sheet was delivered on %s and something has changed since then (sign-ups, records or menu): generate it again.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), wp_date( 'd/m/Y H:i', strtotime( $entrega['cuando'] . ' UTC' ) ) ) ); ?></div>
 			<?php elseif ( $entrega ) : ?>
-				<p class="asde-help"><?php echo esc_html( sprintf( asde_t( 'Última hoja entregada el %s, al día.' ), wp_date( 'd/m/Y H:i', strtotime( $entrega['cuando'] . ' UTC' ) ) ) ); ?></p>
+				<p class="asde-help"><?php echo esc_html( sprintf( /* translators: %s: text */ __( 'Last sheet delivered on %s, up to date.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), wp_date( 'd/m/Y H:i', strtotime( $entrega['cuando'] . ' UTC' ) ) ) ); ?></p>
 			<?php endif; ?>
 			<form method="post" action="<?php echo esc_url( $url_menu ); ?>" class="asde-inline">
 				<?php wp_nonce_field( 'asde_evento_' . $e['id'] ); ?>
 				<input type="hidden" name="evento" value="<?php echo (int) $e['id']; ?>">
 				<input type="hidden" name="pestana" value="menu">
-				<a class="button" href="<?php echo esc_url( $url_hoja ); ?>"><?php asde_e( 'Ver e imprimir la hoja' ); ?></a>
-				<button type="submit" class="button asde-button-secundario" name="asde_action" value="menu_hoja_enviar"><?php asde_e( 'Enviar al equipo de cocina' ); ?></button>
+				<a class="button" href="<?php echo esc_url( $url_hoja ); ?>"><?php esc_html_e( 'View and print the sheet', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a>
+				<button type="submit" class="button asde-button-secundario" name="asde_action" value="menu_hoja_enviar"><?php esc_html_e( 'Send to the kitchen team', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 			</form>
 		</div>
 	<?php endif; ?>
@@ -260,53 +260,53 @@ $hay_aviso = static fn( string $k ): bool => isset( $confirmaciones[ $k ] );
 
 <section class="asde-card" data-asde-inicio="abierto">
 	<header class="asde-card__header asde-card__header--split">
-		<h3 class="asde-card__title"><?php asde_e( 'Lista de la compra' ); ?></h3>
+		<h3 class="asde-card__title"><?php esc_html_e( 'Shopping list', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h3>
 		<span class="asde-actions asde-solo-pantalla">
-			<a class="no-transition" href="<?php echo esc_url( $url_csv ); ?>" data-asde-descarga><?php asde_e( 'Descargar CSV' ); ?></a>
+			<a class="no-transition" href="<?php echo esc_url( $url_csv ); ?>" data-asde-descarga><?php esc_html_e( 'Download CSV', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a>
 		</span>
 	</header>
 	<form method="get" action="<?php echo esc_url( $url ); ?>" class="asde-filter asde-filter--una-linea asde-solo-pantalla">
 		<input type="hidden" name="evento" value="<?php echo (int) $e['id']; ?>">
 		<input type="hidden" name="pestana" value="menu">
-		<label for="asde-mn-dia"><?php asde_e( 'Para' ); ?></label>
+		<label for="asde-mn-dia"><?php esc_html_e( 'For', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 		<select id="asde-mn-dia" name="dia" data-asde-autoenviar>
-			<option value=""><?php asde_e( 'Todo el evento' ); ?></option>
+			<option value=""><?php esc_html_e( 'The whole event', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></option>
 			<?php foreach ( $dias as $d ) : ?>
 				<option value="<?php echo esc_attr( $d ); ?>" <?php selected( $dia, $d ); ?>><?php echo esc_html( $fecha( $d ) ); ?></option>
 			<?php endforeach; ?>
 		</select>
-		<button type="submit" class="button"><?php asde_e( 'Ver' ); ?></button>
+		<button type="submit" class="button"><?php esc_html_e( 'View', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 	</form>
 	<?php if ( ! $compra['filas'] ) : ?>
-		<p><?php asde_e( 'Todavía no hay nada que comprar: añade platos al menú.' ); ?></p>
+		<p><?php esc_html_e( 'There is nothing to buy yet: add dishes to the menu.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 	<?php else : ?>
 		<table class="asde-table">
-			<thead><tr><th scope="col"><?php asde_e( 'Ingrediente' ); ?></th><th scope="col"><?php asde_e( 'Cantidad' ); ?></th><th scope="col" class="asde-num"><?php asde_e( 'Coste' ); ?></th></tr></thead>
+			<thead><tr><th scope="col"><?php esc_html_e( 'Ingredient', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Quantity', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col" class="asde-num"><?php esc_html_e( 'Cost', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th></tr></thead>
 			<tbody>
 				<?php foreach ( $compra['filas'] as $f ) : ?>
 					<tr>
-						<td data-label="<?php echo esc_attr( asde_a( 'Ingrediente' ) ); ?>"><?php echo esc_html( $f['nombre'] ); ?></td>
-						<td data-label="<?php echo esc_attr( asde_a( 'Cantidad' ) ); ?>"><?php echo esc_html( $f['texto'] ); ?></td>
-						<td data-label="<?php echo esc_attr( asde_a( 'Coste' ) ); ?>" class="asde-num"><?php echo wp_kses( null === $f['coste'] ? '<span class="asde-muted">—</span>' : esc_html( Calculadora::euros( $f['coste'] ) ), asde_html_permitido() ); ?></td>
+						<td data-label="<?php echo esc_attr( esc_attr__( 'Ingredient', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( $f['nombre'] ); ?></td>
+						<td data-label="<?php echo esc_attr( esc_attr__( 'Quantity', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( $f['texto'] ); ?></td>
+						<td data-label="<?php echo esc_attr( esc_attr__( 'Cost', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>" class="asde-num"><?php echo wp_kses( null === $f['coste'] ? '<span class="asde-muted">—</span>' : esc_html( Calculadora::euros( $f['coste'] ) ), asde_html_permitido() ); ?></td>
 					</tr>
 				<?php endforeach; ?>
 			</tbody>
-			<tfoot><tr><th scope="row" colspan="2"><?php asde_e( 'Total' ); ?></th><td class="asde-num"><?php echo esc_html( Calculadora::euros( $compra['total'] ) ); ?></td></tr></tfoot>
+			<tfoot><tr><th scope="row" colspan="2"><?php esc_html_e( 'Total', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><td class="asde-num"><?php echo esc_html( Calculadora::euros( $compra['total'] ) ); ?></td></tr></tfoot>
 		</table>
 		<?php if ( $compra['sin_coste'] ) : ?>
-			<p class="asde-help"><?php echo esc_html( sprintf( asde_t( 'Sin coste anotado (no suman): %s.' ), implode( ', ', $compra['sin_coste'] ) ) ); ?></p>
+			<p class="asde-help"><?php echo esc_html( sprintf( /* translators: %s: text */ __( 'No cost recorded (they do not add up): %s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), implode( ', ', $compra['sin_coste'] ) ) ); ?></p>
 		<?php endif; ?>
 	<?php endif; ?>
 </section>
 
 <section class="asde-card asde-solo-pantalla" data-asde-inicio="abierto">
-	<h3 class="asde-card__title"><?php asde_e( 'Coste del menú' ); ?></h3>
+	<h3 class="asde-card__title"><?php esc_html_e( 'Menu cost', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h3>
 	<?php if ( $coste_total <= 0 ) : ?>
-		<p><?php asde_e( 'El menú todavía no tiene coste. Anota el coste de los ingredientes en el recetario y añade platos.' ); ?></p>
+		<p><?php esc_html_e( 'The menu has no cost yet. Record the cost of the ingredients in the recipe book and add dishes.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 	<?php else : ?>
 		<p><strong><?php echo esc_html( Calculadora::euros( $coste_total ) ); ?></strong>
 			<?php if ( $comensales > 0 ) : ?>
-				· <?php echo esc_html( sprintf( asde_t( '%s por comensal' ), Calculadora::euros( round( $coste_total / $comensales, 2 ) ) ) ); ?>
+				· <?php echo esc_html( sprintf( /* translators: %s: text */ __( '%s per diner', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Calculadora::euros( round( $coste_total / $comensales, 2 ) ) ) ); ?>
 			<?php endif; ?>
 		</p>
 		<?php if ( $puede_partida ) : ?>
@@ -314,8 +314,8 @@ $hay_aviso = static fn( string $k ): bool => isset( $confirmaciones[ $k ] );
 				<?php wp_nonce_field( 'asde_evento_' . $e['id'] ); ?>
 				<input type="hidden" name="evento" value="<?php echo (int) $e['id']; ?>">
 				<input type="hidden" name="pestana" value="menu">
-				<p class="asde-help"><?php asde_e( 'Se añade como una partida de gasto «Alimentación» en el presupuesto. Nunca se cambia sola: si el menú cambia, quita la partida y propón otra.' ); ?></p>
-				<p><button type="submit" class="button" name="asde_action" value="menu_partida"><?php asde_e( 'Proponer como partida de Alimentación' ); ?></button></p>
+				<p class="asde-help"><?php esc_html_e( 'It is added as a "Food" expense item in the budget. It never changes by itself: if the menu changes, remove the item and propose another.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
+				<p><button type="submit" class="button" name="asde_action" value="menu_partida"><?php esc_html_e( 'Propose as a Food item', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button></p>
 			</form>
 		<?php endif; ?>
 	<?php endif; ?>

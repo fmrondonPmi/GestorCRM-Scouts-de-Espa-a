@@ -173,10 +173,10 @@ final class AvisoAlergenos {
 				Idioma::de_usuario( $user->ID ),
 				static function () use ( $user, $datos, $pendientes, $con, $repo ): void {
 					/* translators: 1: grupo, 2: evento */
-					$asunto = sprintf( asde_t( '[%1$s] Alérgenos sin resolver en el menú de %2$s' ), (string) $datos['grupo'], (string) $datos['evento'] );
+					$asunto = sprintf( /* translators: 1: text, 2: text */ __( '[%1$s] Unresolved allergens in the menu of %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), (string) $datos['grupo'], (string) $datos['evento'] );
 					$email  = Contacto::email( $user, $repo );
 					if ( ! $email ) {
-						RegistroEmails::registrar( $user, RegistroEmails::EVENTOS, '', $asunto, RegistroEmails::SIN_EMAIL, asde_t( 'La cuenta no tiene un email al que escribir.' ), $datos );
+						RegistroEmails::registrar( $user, RegistroEmails::EVENTOS, '', $asunto, RegistroEmails::SIN_EMAIL, __( 'The account has no email address to write to.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $datos );
 						return;
 					}
 					$html  = self::html( $datos, Contacto::saludo( $user, $repo ), $pendientes, $con );

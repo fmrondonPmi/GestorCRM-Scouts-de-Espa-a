@@ -43,10 +43,10 @@ final class Generador {
 		$cols       = array_values( array_intersect( $informe->columnas, array_keys( $permitidas ) ) );
 		$avisos     = array();
 		if ( count( $cols ) < count( $informe->columnas ) ) {
-			$avisos[] = asde_t( 'Algunas columnas no se muestran porque tu rol no tiene acceso a esos datos.' );
+			$avisos[] = __( 'Some columns are not shown because your role does not have access to that data.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		if ( ! $cols ) {
-			throw new \InvalidArgumentException( esc_html( asde_t( 'Elige al menos una columna.' ) ) );
+			throw new \InvalidArgumentException( esc_html( __( 'Choose at least one column.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) );
 		}
 
 		// Ámbito de secciones.
@@ -55,7 +55,7 @@ final class Generador {
 			$mias      = $ambito->secciones_scouter();
 			$secciones = $secciones ? array_values( array_intersect( $secciones, $mias ) ) : $mias;
 			if ( ! $secciones ) {
-				throw new \InvalidArgumentException( esc_html( asde_t( 'No tienes secciones asignadas (o no coinciden con las del informe). Pide a Secretaría que revise tu alta.' ) ) );
+				throw new \InvalidArgumentException( esc_html( __( 'You have no sections assigned (or they do not match those of the report). Ask the Secretary\'s office to check your registration.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) );
 			}
 		}
 
@@ -78,14 +78,14 @@ final class Generador {
 		$filtro_salud = $informe->filtros['salud'];
 		if ( $filtro_salud && ! $ambito->user->has_cap( 'asde_view_health' ) ) {
 			$filtro_salud = false;
-			$avisos[]     = asde_t( 'El filtro de datos de salud no se aplica porque tu rol no tiene acceso a esos datos.' );
+			$avisos[]     = __( 'The health data filter is not applied because your role does not have access to that data.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 
 		// Cuota y pagos (v0.25): de la ronda elegida o de la actual.
 		$filtro_pago = $informe->filtros['pago'];
 		if ( '' !== $filtro_pago && ! Catalogo::ve_pagos( $ambito ) ) {
 			$filtro_pago = '';
-			$avisos[]    = asde_t( 'El filtro de pagos no se aplica porque tu rol no tiene acceso a Tesorería.' );
+			$avisos[]    = __( 'The payments filter is not applied because your role does not have access to Treasury.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		$ronda = ( '' !== $filtro_pago || Catalogo::incluye_pagos( $cols ) ) ? ( $informe->filtros['ronda'] ?: Config::ronda_actual() ) : null;
 
@@ -226,7 +226,7 @@ final class Generador {
 	/** Valor de una columna de la cuota y los pagos (los importes son los de la familia). */
 	private static function valor_pago( string $col, ?array $pago ): string {
 		if ( null === $pago ) {
-			return 'pago_estado' === $col ? asde_t( 'Sin familia en Tesorería' ) : '';
+			return 'pago_estado' === $col ? __( 'No family in Treasury', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : '';
 		}
 		$c = $pago['calc'];
 		switch ( $col ) {
@@ -328,17 +328,17 @@ final class Generador {
 		$f      = $informe->filtros;
 		$n      = count( $res['filas'] );
 		$partes = array(
-			sprintf( asde_n( '%d socio', '%d socios', $n ), $n ) . ' ' . asde_t( 'con membresía activa' ),
-			$res['secciones'] ? implode( ', ', array_map( array( Secciones::class, 'nombre' ), $res['secciones'] ) ) : asde_t( 'todo el grupo' ),
+			sprintf( /* translators: %d: number */ _n( '%d member', '%d members', $n , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $n ) . ' ' . __( 'with an active membership', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+			$res['secciones'] ? implode( ', ', array_map( array( Secciones::class, 'nombre' ), $res['secciones'] ) ) : __( 'the whole group', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 		);
 		if ( null !== $f['edad_min'] ) {
-			$partes[] = sprintf( asde_t( 'desde %d años' ), $f['edad_min'] );
+			$partes[] = sprintf( /* translators: %d: number */ __( 'from %d years', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $f['edad_min'] );
 		}
 		if ( null !== $f['edad_max'] ) {
-			$partes[] = sprintf( asde_t( 'hasta %d años' ), $f['edad_max'] );
+			$partes[] = sprintf( /* translators: %d: number */ __( 'up to %d years', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $f['edad_max'] );
 		}
 		if ( $f['salud'] ) {
-			$partes[] = asde_t( 'solo con datos de salud relevantes' );
+			$partes[] = __( 'only with relevant health data', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		$pago = (string) ( $res['pago'] ?? '' );
 		if ( '' !== $pago && isset( Catalogo::FILTROS_PAGO[ $pago ] ) ) {

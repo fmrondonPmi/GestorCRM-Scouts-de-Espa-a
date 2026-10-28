@@ -16,16 +16,16 @@ $td = 'padding:6px 8px;border-bottom:1px solid #dddddd;';
 ?>
 <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="font-size:14px;margin:0 0 16px;border-collapse:collapse;">
 	<tr>
-		<th align="left" style="<?php echo esc_attr( $td ); ?>"><?php asde_e( 'Material' ); ?></th>
-		<th align="right" style="<?php echo esc_attr( $td ); ?>"><?php asde_e( 'A comprar' ); ?></th>
-		<th align="right" style="<?php echo esc_attr( $td ); ?>"><?php asde_e( 'Importe' ); ?></th>
+		<th align="left" style="<?php echo esc_attr( $td ); ?>"><?php esc_html_e( 'Equipment', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
+		<th align="right" style="<?php echo esc_attr( $td ); ?>"><?php esc_html_e( 'To buy', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
+		<th align="right" style="<?php echo esc_attr( $td ); ?>"><?php esc_html_e( 'Amount', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
 	</tr>
 	<?php foreach ( $lista['lineas'] as $l ) : ?>
 		<tr>
 			<td style="<?php echo esc_attr( $td ); ?>">
 				<?php echo esc_html( $l['descripcion'] ); ?>
 				<?php if ( empty( $l['material'] ) ) : ?>
-					<br><span style="font-size:12px;color:<?php echo esc_attr( $col['atenuado'] ); ?>;"><?php asde_e( 'Material nuevo (no está en el inventario)' ); ?></span>
+					<br><span style="font-size:12px;color:<?php echo esc_attr( $col['atenuado'] ); ?>;"><?php esc_html_e( 'New equipment (not in the inventory)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span>
 				<?php endif; ?>
 			</td>
 			<td align="right" style="<?php echo esc_attr( $td ); ?>"><?php echo (int) $l['cantidad']; ?></td>
@@ -33,7 +33,7 @@ $td = 'padding:6px 8px;border-bottom:1px solid #dddddd;';
 		</tr>
 	<?php endforeach; ?>
 	<tr>
-		<th align="left" colspan="2" style="padding:8px;"><?php asde_e( 'Total estimado' ); ?></th>
+		<th align="left" colspan="2" style="padding:8px;"><?php esc_html_e( 'Estimated total', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
 		<th align="right" style="padding:8px;"><?php echo esc_html( Calculadora::euros( $lista['total'] ) ); ?></th>
 	</tr>
 </table>

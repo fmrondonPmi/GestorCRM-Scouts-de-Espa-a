@@ -34,7 +34,7 @@ final class TiendaProductosView extends TiendaBaseView {
 		if ( $id || '1' === $this->get( 'nuevo' ) ) {
 			$p = $id ? ProductosTable::obtener( $id ) : null;
 			if ( $id && ! $p ) {
-				return $this->denegado( asde_t( 'Ese producto no está en la tienda del grupo.' ) );
+				return $this->denegado( __( 'That product is not in the group\'s shop.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			}
 			return $this->layout( 'tienda_productos', $this->subnav( 'tienda_productos' ) . $this->formulario( $p ) );
 		}
@@ -143,7 +143,7 @@ final class TiendaProductosView extends TiendaBaseView {
 	/** CSV de ejemplo (se llama antes de pintar la página). */
 	public function ejemplo(): void {
 		if ( ! current_user_can( Servicio::CAP_ADMIN ) ) {
-			wp_die( esc_html__( 'No tienes permiso para ver esto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+			wp_die( esc_html__( 'You do not have permission to see this.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		$this->descargar( 'ejemplo-productos.csv', ImportadorProductos::ejemplo() );
 	}
@@ -152,15 +152,15 @@ final class TiendaProductosView extends TiendaBaseView {
 	public function errores_csv(): void {
 		$resultado = get_transient( self::clave_importacion( sanitize_key( $this->get( 'resultado' ) ) ) );
 		if ( ! current_user_can( Servicio::CAP_ADMIN ) ) {
-			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+			wp_die( esc_html__( 'Download link not valid or expired.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		if ( ! wp_verify_nonce( $this->get( '_wpnonce' ), 'asde_tienda_errores' ) ) {
-			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+			wp_die( esc_html__( 'Download link not valid or expired.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		if ( ! is_array( $resultado ) ) {
-			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+			wp_die( esc_html__( 'Download link not valid or expired.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
-		$filas = array( array_merge( array( asde_t( 'Fila' ) ), array_map( static fn( $c ) => asde_t( $c[0] ), ImportadorProductos::COLUMNAS ), array( asde_t( 'Motivo del error' ) ) ) );
+		$filas = array( array_merge( array( __( 'Row', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ), array_map( static fn( $c ) => asde_t( $c[0] ), ImportadorProductos::COLUMNAS ), array( __( 'Reason for the error', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) ) );
 		foreach ( $resultado['errores'] as $e ) {
 			$datos = array();
 			foreach ( array_keys( ImportadorProductos::COLUMNAS ) as $col ) {
@@ -187,22 +187,22 @@ final class TiendaProductosView extends TiendaBaseView {
 		$f    = $_FILES['fichero'] ?? null; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.NonceVerification.Missing -- el nonce se comprueba arriba; del fichero solo se usa su ruta temporal, comprobada con is_uploaded_file()
 		$err  = is_array( $f ) ? (int) ( $f['error'] ?? UPLOAD_ERR_NO_FILE ) : UPLOAD_ERR_NO_FILE;
 		if ( UPLOAD_ERR_NO_FILE === $err ) {
-			Notices::add( 'error', asde_t( 'Elige el fichero CSV que quieres importar.' ) );
+			Notices::add( 'error', __( 'Choose the CSV file you want to import.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			$this->redirect( $aqui );
 		}
 		$nombre = sanitize_file_name( (string) ( $f['name'] ?? '' ) );
 		if ( UPLOAD_ERR_OK !== $err || ! is_uploaded_file( (string) $f['tmp_name'] ) || (int) $f['size'] > ImportadorProductos::MAX_BYTES ) {
 			/* translators: %d: tamaño máximo en MB */
-			Notices::add( 'error', esc_html( sprintf( asde_t( 'El fichero no se ha podido subir. Tiene que ser un CSV de hasta %d MB.' ), (int) ( ImportadorProductos::MAX_BYTES / MB_IN_BYTES ) ) ) );
+			Notices::add( 'error', esc_html( sprintf( /* translators: %d: number */ __( 'The file could not be uploaded. It must be a CSV of up to %d MB.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), (int) ( ImportadorProductos::MAX_BYTES / MB_IN_BYTES ) ) ) );
 			$this->redirect( $aqui );
 		}
 		if ( ! preg_match( '/\.(csv|txt)$/i', $nombre ) ) {
-			Notices::add( 'error', asde_t( 'El fichero tiene que ser un CSV (.csv). Desde Excel: «Guardar como» → «CSV (delimitado por punto y coma)».' ) );
+			Notices::add( 'error', __( 'The file must be a CSV (.csv). From Excel: "Save as" → "CSV (semicolon delimited)".', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			$this->redirect( $aqui );
 		}
 		$leido = ImportadorProductos::leer( (string) $f['tmp_name'] );
 		if ( is_wp_error( $leido ) ) {
-			Notices::add( 'error', esc_html( $leido->get_error_message() . ' ' . asde_t( 'No se ha cargado nada.' ) ) );
+			Notices::add( 'error', esc_html( $leido->get_error_message() . ' ' . __( 'Nothing has been loaded.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) );
 			$this->redirect( $aqui );
 		}
 		$res = ImportadorProductos::importar( $leido['filas'], '1' === $this->post( 'sumar' ) );
@@ -237,7 +237,7 @@ final class TiendaProductosView extends TiendaBaseView {
 
 	public function handle_post(): void {
 			if ( ! current_user_can( Servicio::CAP_ADMIN ) ) {
-			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+			wp_die( esc_html__( 'You do not have permission to do this.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		$accion = $this->post( 'asde_action' );
 		if ( 'productos_importar' === $accion ) {
@@ -248,24 +248,24 @@ final class TiendaProductosView extends TiendaBaseView {
 		$lista = $this->url( 'tienda_productos' );
 		$p     = $id ? ProductosTable::obtener( $id ) : null;
 		if ( $id && ! $p ) {
-			Notices::add( 'error', asde_t( 'Ese producto no está en la tienda del grupo.' ) );
+			Notices::add( 'error', __( 'That product is not in the group\'s shop.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			$this->redirect( $lista );
 		}
 
 		if ( 'producto_archivar' === $accion && $p ) {
 			ProductosTable::archivar( $id );
 			Logger::log( 'tienda_producto_archivado', 'tienda', (string) $id );
-			Notices::add( 'success', esc_html( sprintf( asde_t( '«%s» archivado. Ya no se vende; lo puedes recuperar desde «Ver también los archivados».' ), $p['nombre'] ) ) );
+			Notices::add( 'success', esc_html( sprintf( /* translators: %s: text */ __( '"%s" archived. It is no longer sold; you can recover it from "Also show the archived ones".', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $p['nombre'] ) ) );
 			$this->redirect( $lista );
 		}
 		if ( 'producto_recuperar' === $accion && $p ) {
 			ProductosTable::archivar( $id, false );
 			Logger::log( 'tienda_producto_recuperado', 'tienda', (string) $id );
-			Notices::add( 'success', esc_html( sprintf( asde_t( '«%s» vuelve a estar en la tienda.' ), $p['nombre'] ) ) );
+			Notices::add( 'success', esc_html( sprintf( /* translators: %s: text */ __( '"%s" is back in the shop.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $p['nombre'] ) ) );
 			$this->redirect( $this->url( 'tienda_productos', array( 'producto' => (string) $id ) ) );
 		}
 		if ( 'producto_guardar' !== $accion ) {
-			Notices::add( 'error', asde_t( 'Acción desconocida.' ) );
+			Notices::add( 'error', __( 'Unknown action.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			$this->redirect( $lista );
 		}
 		$this->guardar( $id, $p );
@@ -314,14 +314,14 @@ final class TiendaProductosView extends TiendaBaseView {
 				$delta = trim( $ajustes[ $vid ] ?? '' );
 				if ( '' !== $delta && $v['material'] > 0 ) {
 					/* translators: %s: etiqueta de la variante */
-					$errores[] = sprintf( asde_t( 'Las existencias de «%s» se cambian en el inventario general, no aquí.' ), $var['etiqueta'] );
+					$errores[] = sprintf( /* translators: %s: text */ __( 'The stock of "%s" is changed in the general inventory, not here.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $var['etiqueta'] );
 				} elseif ( '' !== $delta && 0 === $var['ilimitado'] ) {
 					if ( ! preg_match( '/^[+-]?\d{1,5}$/', $delta ) || 0 === (int) $delta ) {
 						/* translators: %s: etiqueta de la variante */
-						$errores[] = sprintf( asde_t( 'El cambio de existencias de «%s» tiene que ser un número entero (por ejemplo +5 o -2).' ), $var['etiqueta'] );
+						$errores[] = sprintf( /* translators: %s: text */ __( 'The stock change of "%s" must be a whole number (for example +5 or -2).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $var['etiqueta'] );
 					} elseif ( $v['existencias'] + (int) $delta < 0 ) {
 						/* translators: 1: etiqueta de la variante, 2: existencias actuales */
-						$errores[] = sprintf( asde_t( 'No se pueden quitar tantas unidades de «%1$s»: solo hay %2$d.' ), $var['etiqueta'], $v['existencias'] );
+						$errores[] = sprintf( /* translators: 1: text, 2: number */ __( 'That many units of "%1$s" cannot be removed: there are only %2$d.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $var['etiqueta'], $v['existencias'] );
 					} else {
 						$ajustar[ $vid ] = (int) $delta;
 					}
@@ -386,7 +386,7 @@ final class TiendaProductosView extends TiendaBaseView {
 		foreach ( $avisos as $a ) {
 			Notices::add( 'warning', esc_html( $a ) );
 		}
-		Notices::add( 'success', esc_html( sprintf( asde_t( '«%s» guardado.' ), $datos['nombre'] ) ) );
+		Notices::add( 'success', esc_html( sprintf( /* translators: %s: text */ __( '"%s" saved.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $datos['nombre'] ) ) );
 		$this->redirect( '1' === $this->post( 'otro' ) ? $this->url( 'tienda_productos', array( 'nuevo' => '1' ) ) : $this->url( 'tienda_productos', array( 'producto' => (string) $id ) ) );
 	}
 }

@@ -23,10 +23,10 @@ $activa = 'en_curso' === $tarea['estado'];
 	<progress class="asde-tarea__barra" data-campo="barra" max="100" value="<?php echo (int) $tarea['avance']; ?>"><?php echo (int) $tarea['avance']; ?> %</progress>
 	<div class="asde-tarea__acciones">
 		<?php if ( ! $en_personas ) : ?>
-			<a href="<?php echo esc_url( $personas ); ?>"><?php asde_e( 'Ver en Personas' ); ?></a>
+			<a href="<?php echo esc_url( $personas ); ?>"><?php esc_html_e( 'View in People', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a>
 		<?php endif; ?>
-		<button type="button" class="asde-btn-link" data-asde-tarea-accion="recargar"<?php echo $activa || ! $en_personas ? ' hidden' : ''; ?>><?php asde_e( 'Recargar la lista' ); ?></button>
-		<button type="button" class="asde-btn-link" data-asde-tarea-accion="detener"<?php echo $activa ? '' : ' hidden'; ?>><?php asde_e( 'Detener' ); ?></button>
-		<button type="button" class="asde-btn-link" data-asde-tarea-accion="cerrar"<?php echo $activa ? ' hidden' : ''; ?>><?php asde_e( 'Cerrar' ); ?></button>
+		<button type="button" class="asde-btn-link" data-asde-tarea-accion="recargar"<?php echo $activa || ! $en_personas ? ' hidden' : ''; ?>><?php esc_html_e( 'Reload the list', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
+		<button type="button" class="asde-btn-link" data-asde-tarea-accion="detener"<?php echo $activa ? '' : ' hidden'; ?>><?php esc_html_e( 'Stop', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
+		<button type="button" class="asde-btn-link" data-asde-tarea-accion="cerrar"<?php echo $activa ? ' hidden' : ''; ?>><?php esc_html_e( 'Close', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 	</div>
 </div>

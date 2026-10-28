@@ -32,14 +32,14 @@ $g       = '' !== $socio ? ( $grupos[ $socio ] ?? null ) : null;
 $url_ver = 'resueltos' === $ver ? add_query_arg( 'ver', 'resueltos', $url ) : $url;
 ?>
 <?php if ( '' !== $socio ) : ?>
-	<p class="asde-back asde-solo-pagina"><a href="<?php echo esc_url( $url_ver ); ?>"><?php asde_e( '← Cambios propuestos' ); ?></a></p>
+	<p class="asde-back asde-solo-pagina"><a href="<?php echo esc_url( $url_ver ); ?>"><?php esc_html_e( '← Proposed changes', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a></p>
 	<section class="asde-card" data-asde-plegable="cambios-persona">
 		<?php /* translators: %s: nombre de la persona */ ?>
-		<h2 class="asde-card__title"><?php echo $g ? esc_html( sprintf( asde_t( 'Cambios de %s' ), $g['persona']->nombre_completo() ) ) : esc_html( asde_t( 'Cambios propuestos' ) ); ?></h2>
+		<h2 class="asde-card__title"><?php echo $g ? esc_html( sprintf( /* translators: %s: text */ __( 'Changes to %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $g['persona']->nombre_completo() ) ) : esc_html( __( 'Proposed changes', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?></h2>
 		<?php if ( ! $g ) : ?>
-			<p><?php echo 'pendientes' === $ver ? esc_html( asde_t( 'No quedan cambios pendientes de esta persona.' ) ) : esc_html( asde_t( 'No hay cambios resueltos de esta persona.' ) ); ?></p>
+			<p><?php echo 'pendientes' === $ver ? esc_html( __( 'There are no pending changes left for this person.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) : esc_html( __( 'There are no resolved changes for this person.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?></p>
 		<?php else : ?>
-			<p class="asde-muted"><a href="<?php echo esc_url( add_query_arg( 'socio', $socio, $url_ficha ) ); ?>" data-asde-modal><?php asde_e( 'Ver la ficha' ); ?></a><?php echo wp_kses( Numeros::compacto( $g['persona'] ), asde_html_permitido() ); ?></p>
+			<p class="asde-muted"><a href="<?php echo esc_url( add_query_arg( 'socio', $socio, $url_ficha ) ); ?>" data-asde-modal><?php esc_html_e( 'View the record', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a><?php echo wp_kses( Numeros::compacto( $g['persona'] ), asde_html_permitido() ); ?></p>
 		<?php endif; ?>
 
 		<?php if ( $g && 'pendientes' === $ver ) : ?>
@@ -48,7 +48,7 @@ $url_ver = 'resueltos' === $ver ? add_query_arg( 'ver', 'resueltos', $url ) : $u
 			$conflictos = array_filter( $revisables, static fn( $c ) => ! Escritura::iguales( (string) ( $c['actual'] ?? '' ), $c['anterior'] ) );
 			?>
 			<?php if ( ! $escritura ) : ?>
-				<div class="asde-notice asde-notice--warning" role="status"><?php asde_e( 'El usuario del CRM del grupo no puede editar fichas ahora mismo: los cambios no se pueden aprobar hasta que lo tenga.' ); ?></div>
+				<div class="asde-notice asde-notice--warning" role="status"><?php esc_html_e( 'The group\'s CRM user cannot edit records right now: changes cannot be approved until it can.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></div>
 			<?php endif; ?>
 			<form method="post" action="<?php echo esc_url( add_query_arg( 'socio', $socio, $url ) ); ?>" class="asde-form asde-cambios-revisar">
 				<?php wp_nonce_field( 'asde_revisar_socio_' . $socio ); ?>
@@ -58,13 +58,13 @@ $url_ver = 'resueltos' === $ver ? add_query_arg( 'ver', 'resueltos', $url ) : $u
 						<tr>
 							<th scope="col" class="asde-col-marca">
 								<?php if ( $revisables ) : ?>
-									<label class="asde-marcar-todos"><input type="checkbox" data-asde-marcar-todos="cambios[]" <?php checked( ! $conflictos ); ?>> <?php asde_e( 'Todos' ); ?></label>
+									<label class="asde-marcar-todos"><input type="checkbox" data-asde-marcar-todos="cambios[]" <?php checked( ! $conflictos ); ?>> <?php esc_html_e( 'All', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 								<?php endif; ?>
 							</th>
-							<th scope="col"><?php asde_e( 'Dato' ); ?></th>
-							<th scope="col"><?php asde_e( 'Ahora en el CRM' ); ?></th>
-							<th scope="col"><?php asde_e( 'Nuevo valor' ); ?></th>
-							<th scope="col"><?php asde_e( 'Propuesto' ); ?></th>
+							<th scope="col"><?php esc_html_e( 'Item of data', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
+							<th scope="col"><?php esc_html_e( 'Now in the CRM', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
+							<th scope="col"><?php esc_html_e( 'New value', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
+							<th scope="col"><?php esc_html_e( 'Proposed', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
 						</tr>
 					</thead>
 					<tbody>
@@ -75,59 +75,59 @@ $url_ver = 'resueltos' === $ver ? add_query_arg( 'ver', 'resueltos', $url ) : $u
 							$dato      = Cambios::etiqueta( $c['campo'] );
 							?>
 							<tr<?php echo $conflicto ? ' class="asde-fila--aviso"' : ''; ?>>
-								<td data-label="<?php echo esc_attr( asde_a( 'Aprobar' ) ); ?>" class="asde-col-marca">
+								<td data-label="<?php echo esc_attr( esc_attr__( 'Approve', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>" class="asde-col-marca">
 									<?php if ( $propio ) : ?>
-										<span class="asde-muted" title="<?php echo esc_attr( asde_a( 'Propuesto por ti: lo revisa otra persona.' ) ); ?>">—</span>
+										<span class="asde-muted" title="<?php echo esc_attr( esc_attr__( 'Proposed by you: someone else reviews it.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">—</span>
 									<?php else : ?>
 										<?php /* translators: %s: dato de la ficha */ ?>
-										<input type="checkbox" name="cambios[]" value="<?php echo (int) $c['id']; ?>" aria-label="<?php echo esc_attr( sprintf( asde_t( 'Marcar el cambio de «%s»' ), $dato ) ); ?>" <?php checked( ! $conflicto ); ?>>
+										<input type="checkbox" name="cambios[]" value="<?php echo (int) $c['id']; ?>" aria-label="<?php echo esc_attr( sprintf( /* translators: %s: text */ __( 'Tick the change of "%s"', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $dato ) ); ?>" <?php checked( ! $conflicto ); ?>>
 										<?php if ( $conflicto ) : ?>
 											<input type="hidden" name="visto[]" value="<?php echo (int) $c['id']; ?>">
 										<?php endif; ?>
 									<?php endif; ?>
 								</td>
-								<td data-label="<?php echo esc_attr( asde_a( 'Dato' ) ); ?>"><?php echo esc_html( $dato ); ?></td>
-								<td data-label="<?php echo esc_attr( asde_a( 'Ahora en el CRM' ) ); ?>">
+								<td data-label="<?php echo esc_attr( esc_attr__( 'Item of data', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( $dato ); ?></td>
+								<td data-label="<?php echo esc_attr( esc_attr__( 'Now in the CRM', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
 									<?php echo esc_html( $mostrar( $c['campo'], (string) ( $c['actual'] ?? '' ) ) ); ?>
 									<?php if ( $conflicto ) : ?>
-										<br><span class="asde-help asde-help--warning"><?php asde_e( '⚠️ Ha cambiado desde la propuesta (entonces era «' ); ?><?php echo esc_html( $mostrar( $c['campo'], $c['anterior'] ) ); ?>»).</span>
+										<br><span class="asde-help asde-help--warning"><?php esc_html_e( '⚠️ It has changed since the proposal (then it was "', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?><?php echo esc_html( $mostrar( $c['campo'], $c['anterior'] ) ); ?>»).</span>
 									<?php endif; ?>
 								</td>
-								<td data-label="<?php echo esc_attr( asde_a( 'Nuevo valor' ) ); ?>"><strong><?php echo esc_html( $mostrar( $c['campo'], $c['nuevo'] ) ); ?></strong></td>
-								<td data-label="<?php echo esc_attr( asde_a( 'Propuesto' ) ); ?>">
+								<td data-label="<?php echo esc_attr( esc_attr__( 'New value', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><strong><?php echo esc_html( $mostrar( $c['campo'], $c['nuevo'] ) ); ?></strong></td>
+								<td data-label="<?php echo esc_attr( esc_attr__( 'Proposed', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
 									<?php echo esc_html( $fecha( $c['propuesto_en'] ) ); ?><br>
-									<span class="asde-muted"><?php echo $propio ? esc_html( asde_t( 'Propuesto por ti: lo revisa otra persona.' ) ) : esc_html( $quien( (int) $c['propuesto_por'] ) ); ?></span>
+									<span class="asde-muted"><?php echo $propio ? esc_html( __( 'Proposed by you: someone else reviews it.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) : esc_html( $quien( (int) $c['propuesto_por'] ) ); ?></span>
 								</td>
 							</tr>
 						<?php endforeach; ?>
 					</tbody>
 				</table>
 				<?php if ( $revisables ) : ?>
-					<p class="asde-help"><?php asde_e( 'Los cambios marcados se guardan en el CRM de una vez. Los que llevan ⚠️ (el dato del CRM ha cambiado desde la propuesta) vienen sin marcar: márcalos si quieres aplicarlos igualmente.' ); ?></p>
+					<p class="asde-help"><?php esc_html_e( 'The ticked changes are saved in the CRM at once. Those marked ⚠️ (the CRM value has changed since the proposal) come unticked: tick them if you want to apply them anyway.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 					<p class="asde-form__acciones">
-						<button type="submit" name="asde_action" value="aprobar_varios" class="button button-primary" <?php disabled( ! $escritura ); ?>><?php asde_e( 'Aprobar los seleccionados' ); ?></button>
+						<button type="submit" name="asde_action" value="aprobar_varios" class="button button-primary" <?php disabled( ! $escritura ); ?>><?php esc_html_e( 'Approve the selected', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 					</p>
 					<p class="asde-form__fila asde-form__fila--compacta">
-						<label for="asde-cambios-motivo" class="screen-reader-text"><?php asde_e( 'Motivo del rechazo' ); ?></label>
-						<input type="text" id="asde-cambios-motivo" name="motivo" maxlength="255" placeholder="<?php echo esc_attr( asde_a( 'Motivo (si los rechazas)' ) ); ?>">
-						<button type="submit" name="asde_action" value="rechazar_varios" class="asde-btn-link asde-btn-danger"><?php asde_e( 'Rechazar los seleccionados' ); ?></button>
+						<label for="asde-cambios-motivo" class="screen-reader-text"><?php esc_html_e( 'Reason for the rejection', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
+						<input type="text" id="asde-cambios-motivo" name="motivo" maxlength="255" placeholder="<?php echo esc_attr( esc_attr__( 'Reason (if you reject them)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
+						<button type="submit" name="asde_action" value="rechazar_varios" class="asde-btn-link asde-btn-danger"><?php esc_html_e( 'Reject the selected', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 					</p>
 				<?php else : ?>
-					<p class="asde-muted"><?php asde_e( 'Los has propuesto tú: los revisa otra persona.' ); ?></p>
+					<p class="asde-muted"><?php esc_html_e( 'You proposed them: someone else reviews them.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 				<?php endif; ?>
 			</form>
 		<?php elseif ( $g ) : ?>
 			<?php if ( $g['cambios'] ) : ?>
-				<h3><?php asde_e( 'Propuestas revisadas' ); ?></h3>
+				<h3><?php esc_html_e( 'Reviewed proposals', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h3>
 				<table class="asde-table">
-					<thead><tr><th scope="col"><?php asde_e( 'Propuesto' ); ?></th><th scope="col"><?php asde_e( 'Dato' ); ?></th><th scope="col"><?php asde_e( 'Nuevo valor' ); ?></th><th scope="col"><?php asde_e( 'Resultado' ); ?></th></tr></thead>
+					<thead><tr><th scope="col"><?php esc_html_e( 'Proposed', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Item of data', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'New value', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Result', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th></tr></thead>
 					<tbody>
 						<?php foreach ( $g['cambios'] as $c ) : ?>
 							<tr>
-								<td data-label="<?php echo esc_attr( asde_a( 'Propuesto' ) ); ?>"><?php echo esc_html( $fecha( $c['propuesto_en'] ) ); ?><br><span class="asde-muted"><?php echo esc_html( $quien( (int) $c['propuesto_por'] ) ); ?></span></td>
-								<td data-label="<?php echo esc_attr( asde_a( 'Dato' ) ); ?>"><?php echo esc_html( Cambios::etiqueta( $c['campo'] ) ); ?></td>
-								<td data-label="<?php echo esc_attr( asde_a( 'Nuevo valor' ) ); ?>"><?php echo esc_html( $mostrar( $c['campo'], $c['nuevo'] ) ); ?></td>
-								<td data-label="<?php echo esc_attr( asde_a( 'Resultado' ) ); ?>">
+								<td data-label="<?php echo esc_attr( esc_attr__( 'Proposed', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( $fecha( $c['propuesto_en'] ) ); ?><br><span class="asde-muted"><?php echo esc_html( $quien( (int) $c['propuesto_por'] ) ); ?></span></td>
+								<td data-label="<?php echo esc_attr( esc_attr__( 'Item of data', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( Cambios::etiqueta( $c['campo'] ) ); ?></td>
+								<td data-label="<?php echo esc_attr( esc_attr__( 'New value', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( $mostrar( $c['campo'], $c['nuevo'] ) ); ?></td>
+								<td data-label="<?php echo esc_attr( esc_attr__( 'Result', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
 									<?php echo esc_html( asde_t( Cambios::ESTADOS[ $c['estado'] ] ?? $c['estado'] ) ); ?>
 									<?php if ( '' !== $c['motivo'] ) : ?>
 										<br><span class="asde-muted"><?php echo esc_html( $c['motivo'] ); ?></span>
@@ -142,17 +142,17 @@ $url_ver = 'resueltos' === $ver ? add_query_arg( 'ver', 'resueltos', $url ) : $u
 				</table>
 			<?php endif; ?>
 			<?php if ( $g['directos'] ) : ?>
-				<h3><?php asde_e( 'Hechos directamente en la ficha' ); ?></h3>
+				<h3><?php esc_html_e( 'Made directly on the record', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h3>
 				<?php /* translators: %d: días */ ?>
-				<p class="asde-help"><?php echo esc_html( sprintf( asde_t( 'De los últimos %d días. Solo se sabe qué datos se cambiaron, quién y cuándo: los valores no se guardan en la web.' ), $dias ) ); ?></p>
+				<p class="asde-help"><?php echo esc_html( sprintf( /* translators: %d: number */ __( 'From the last %d days. Only which data was changed, by whom and when is known: the values are not stored on the website.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $dias ) ); ?></p>
 				<table class="asde-table">
-					<thead><tr><th scope="col"><?php asde_e( 'Fecha' ); ?></th><th scope="col"><?php asde_e( 'Quién' ); ?></th><th scope="col"><?php asde_e( 'Datos' ); ?></th></tr></thead>
+					<thead><tr><th scope="col"><?php esc_html_e( 'Date', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Who', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Details', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th></tr></thead>
 					<tbody>
 						<?php foreach ( $g['directos'] as $d ) : ?>
 							<tr>
-								<td data-label="<?php echo esc_attr( asde_a( 'Fecha' ) ); ?>"><?php echo esc_html( $fecha( $d['creado'] ) ); ?></td>
-								<td data-label="<?php echo esc_attr( asde_a( 'Quién' ) ); ?>"><?php echo esc_html( $quien( $d['user_id'] ) ); ?><br><span class="asde-muted"><?php echo esc_html( asde_t( Cambios::MOTIVOS_DIRECTOS[ $d['motivo'] ] ) ); ?></span></td>
-								<td data-label="<?php echo esc_attr( asde_a( 'Datos' ) ); ?>"><?php echo esc_html( implode( ', ', array_map( array( Cambios::class, 'etiqueta' ), $d['campos'] ) ) ); ?></td>
+								<td data-label="<?php echo esc_attr( esc_attr__( 'Date', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( $fecha( $d['creado'] ) ); ?></td>
+								<td data-label="<?php echo esc_attr( esc_attr__( 'Who', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( $quien( $d['user_id'] ) ); ?><br><span class="asde-muted"><?php echo esc_html( asde_t( Cambios::MOTIVOS_DIRECTOS[ $d['motivo'] ] ) ); ?></span></td>
+								<td data-label="<?php echo esc_attr( esc_attr__( 'Details', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( implode( ', ', array_map( array( Cambios::class, 'etiqueta' ), $d['campos'] ) ) ); ?></td>
 							</tr>
 						<?php endforeach; ?>
 					</tbody>
@@ -163,32 +163,32 @@ $url_ver = 'resueltos' === $ver ? add_query_arg( 'ver', 'resueltos', $url ) : $u
 <?php else : ?>
 	<section class="asde-card" data-asde-inicio="<?php echo $grupos && 'pendientes' === $ver ? 'abierto' : 'cerrado'; ?>">
 		<header class="asde-card__header asde-card__header--split">
-			<h2 class="asde-card__title"><?php asde_e( 'Cambios propuestos por las familias' ); ?></h2>
+			<h2 class="asde-card__title"><?php esc_html_e( 'Changes proposed by families', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h2>
 			<span class="asde-actions">
-				<a href="<?php echo esc_url( $url ); ?>"<?php echo 'pendientes' === $ver ? ' aria-current="page"' : ''; ?>><?php asde_e( 'Pendientes' ); ?></a>
-				<a href="<?php echo esc_url( add_query_arg( 'ver', 'resueltos', $url ) ); ?>"<?php echo 'resueltos' === $ver ? ' aria-current="page"' : ''; ?>><?php asde_e( 'Resueltos' ); ?></a>
+				<a href="<?php echo esc_url( $url ); ?>"<?php echo 'pendientes' === $ver ? ' aria-current="page"' : ''; ?>><?php esc_html_e( 'Pending', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a>
+				<a href="<?php echo esc_url( add_query_arg( 'ver', 'resueltos', $url ) ); ?>"<?php echo 'resueltos' === $ver ? ' aria-current="page"' : ''; ?>><?php esc_html_e( 'Resolved', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a>
 			</span>
 		</header>
 		<?php if ( 'pendientes' === $ver ) : ?>
-			<p><?php asde_e( 'Al aprobar un cambio se guarda en el CRM. Si el dato del CRM ha cambiado desde que se propuso, se avisa antes de sobrescribirlo. Nadie puede aprobar sus propias propuestas.' ); ?></p>
+			<p><?php esc_html_e( 'When a change is approved it is saved in the CRM. If the CRM value has changed since it was proposed, you are warned before it is overwritten. Nobody can approve their own proposals.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 			<?php if ( ! $escritura ) : ?>
-				<div class="asde-notice asde-notice--warning" role="status"><?php asde_e( 'El usuario del CRM del grupo no puede editar fichas ahora mismo: los cambios no se pueden aprobar hasta que lo tenga.' ); ?></div>
+				<div class="asde-notice asde-notice--warning" role="status"><?php esc_html_e( 'The group\'s CRM user cannot edit records right now: changes cannot be approved until it can.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></div>
 			<?php endif; ?>
 		<?php else : ?>
 			<?php /* translators: %d: días */ ?>
-			<p><?php echo esc_html( sprintf( asde_t( 'Las propuestas ya revisadas y los cambios hechos directamente en las fichas por Secretaría, Coordinación o los scouters (de estos, los de los últimos %d días).' ), $dias ) ); ?></p>
+			<p><?php echo esc_html( sprintf( /* translators: %d: number */ __( 'The proposals already reviewed and the changes made directly on records by the Secretary\'s office, Coordination or the scouters (of these, those of the last %d days).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $dias ) ); ?></p>
 		<?php endif; ?>
 
 		<?php if ( ! $grupos ) : ?>
-			<p><?php echo 'pendientes' === $ver ? esc_html( asde_t( 'No hay cambios pendientes de revisar. 🎉' ) ) : esc_html( asde_t( 'Todavía no hay cambios resueltos.' ) ); ?></p>
+			<p><?php echo 'pendientes' === $ver ? esc_html( __( 'There are no changes pending review. 🎉', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) : esc_html( __( 'There are no resolved changes yet.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?></p>
 		<?php else : ?>
 			<table class="asde-table">
 				<thead>
 					<tr>
-						<th scope="col"><?php asde_e( 'Persona' ); ?></th>
-						<th scope="col"><?php asde_e( 'Cambios' ); ?></th>
-						<th scope="col"><?php echo 'pendientes' === $ver ? esc_html( asde_t( 'Último propuesto' ) ) : esc_html( asde_t( 'Último' ) ); ?></th>
-						<th scope="col"><span class="screen-reader-text"><?php asde_e( 'Acciones' ); ?></span></th>
+						<th scope="col"><?php esc_html_e( 'Person', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
+						<th scope="col"><?php esc_html_e( 'Changes', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
+						<th scope="col"><?php echo 'pendientes' === $ver ? esc_html( __( 'Last proposed', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) : esc_html( __( 'Latest', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?></th>
+						<th scope="col"><span class="screen-reader-text"><?php esc_html_e( 'Actions', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span></th>
 					</tr>
 				</thead>
 				<tbody>
@@ -199,15 +199,15 @@ $url_ver = 'resueltos' === $ver ? add_query_arg( 'ver', 'resueltos', $url ) : $u
 						$enlace = add_query_arg( array_filter( array( 'socio' => (string) $num, 'ver' => 'resueltos' === $ver ? 'resueltos' : '' ) ), $url );
 						?>
 						<tr>
-							<td data-label="<?php echo esc_attr( asde_a( 'Persona' ) ); ?>"><a href="<?php echo esc_url( add_query_arg( 'socio', (string) $num, $url_ficha ) ); ?>" data-asde-modal><?php echo esc_html( $fila['persona']->nombre_completo() ); ?></a><?php echo wp_kses( Numeros::compacto( $fila['persona'] ), asde_html_permitido() ); ?></td>
-							<td data-label="<?php echo esc_attr( asde_a( 'Cambios' ) ); ?>"><strong><?php echo (int) $n; ?></strong> · <span class="asde-muted"><?php echo esc_html( implode( ', ', array_map( array( Cambios::class, 'etiqueta' ), $datos ) ) ); ?></span></td>
-							<td data-label="<?php echo esc_attr( asde_a( 'Último' ) ); ?>"><?php echo esc_html( $fecha( $fila['ultimo'] ) ); ?></td>
+							<td data-label="<?php echo esc_attr( esc_attr__( 'Person', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><a href="<?php echo esc_url( add_query_arg( 'socio', (string) $num, $url_ficha ) ); ?>" data-asde-modal><?php echo esc_html( $fila['persona']->nombre_completo() ); ?></a><?php echo wp_kses( Numeros::compacto( $fila['persona'] ), asde_html_permitido() ); ?></td>
+							<td data-label="<?php echo esc_attr( esc_attr__( 'Changes', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><strong><?php echo (int) $n; ?></strong> · <span class="asde-muted"><?php echo esc_html( implode( ', ', array_map( array( Cambios::class, 'etiqueta' ), $datos ) ) ); ?></span></td>
+							<td data-label="<?php echo esc_attr( esc_attr__( 'Latest', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( $fecha( $fila['ultimo'] ) ); ?></td>
 							<td data-label="">
 								<?php if ( 'pendientes' === $ver ) : ?>
 									<?php /* translators: %d: número de cambios */ ?>
-									<a class="button" href="<?php echo esc_url( $enlace ); ?>" data-asde-modal><?php echo esc_html( sprintf( asde_t( 'Revisar (%d)' ), $n ) ); ?></a>
+									<a class="button" href="<?php echo esc_url( $enlace ); ?>" data-asde-modal><?php echo esc_html( sprintf( /* translators: %d: number */ __( 'Review (%d)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $n ) ); ?></a>
 								<?php else : ?>
-									<a href="<?php echo esc_url( $enlace ); ?>" data-asde-modal><?php asde_e( 'Ver' ); ?></a>
+									<a href="<?php echo esc_url( $enlace ); ?>" data-asde-modal><?php esc_html_e( 'View', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a>
 								<?php endif; ?>
 							</td>
 						</tr>

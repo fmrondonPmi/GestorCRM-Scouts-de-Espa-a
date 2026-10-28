@@ -82,16 +82,16 @@ final class AltaService {
 		$edad = $p->edad();
 
 		if ( ! $p->es_participante() ) {
-			$participante = asde_t( 'No tiene membresía activa en una sección educativa.' );
+			$participante = __( 'Has no active membership in an educational section.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		} elseif ( null === $edad ) {
-			$participante = asde_t( 'No consta su fecha de nacimiento en el CRM.' );
+			$participante = __( 'Their date of birth is not recorded in the CRM.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		} elseif ( $edad < self::EDAD_MINIMA_PARTICIPANTE ) {
-			$participante = sprintf( asde_t( 'Tiene %d años: por debajo de %d años solo accede su familia (cuenta familiar).' ), $edad, self::EDAD_MINIMA_PARTICIPANTE );
+			$participante = sprintf( /* translators: 1: number, 2: number */ __( 'They are %1$d years old: under %2$d years of age only their family has access (family account).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $edad, self::EDAD_MINIMA_PARTICIPANTE );
 		} else {
 			$participante = null;
 		}
 
-		$adulto = $p->es_adulto_voluntario() ? null : asde_t( 'No tiene membresía activa como Scouter o Voluntariado de apoyo.' );
+		$adulto = $p->es_adulto_voluntario() ? null : __( 'Has no active membership as Scouter or Support Volunteer.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 
 		return array(
 			Roles::PARTICIPANTE => $participante,
@@ -106,11 +106,11 @@ final class AltaService {
 	/** null si una cuenta familiar puede representar a esta persona; si no, el motivo. */
 	public function motivo_no_representable( Persona $p ): ?string {
 		if ( ! $p->es_participante() ) {
-			return asde_t( 'No tiene membresía activa en una sección educativa.' );
+			return __( 'Has no active membership in an educational section.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		$edad = $p->edad();
 		if ( null !== $edad && $edad >= 18 ) {
-			return asde_t( 'Es mayor de edad: solo accede la propia persona.' );
+			return __( 'They are of legal age: only the person themselves has access.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		return null;
 	}
@@ -150,13 +150,13 @@ final class AltaService {
 	public function alta_persona( string $num_asde, array $roles, array $secciones = array(), string $campo_email = 'email1', ?string $email = null ): AltaResult {
 		$p = $this->personas->obtener( $num_asde );
 		if ( ! $p ) {
-			return AltaResult::error( asde_t( 'No se encuentra esa persona en el CRM del grupo.' ) );
+			return AltaResult::error( __( 'That person cannot be found in the group\'s CRM.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 
 		$vinculado  = Usuarios::por_socio( $p->num_socio_asde );
 		if ( $vinculado && ! Usuarios::del_grupo_actual( $vinculado ) ) {
 			// La cuenta es de otro grupo de la instalación: no se la lleva este sin avisar (doc 59, RC-USU-1).
-			return AltaResult::error( asde_t( 'La cuenta de la web de esta persona es de otro grupo: no se puede cambiar desde aquí.' ) );
+			return AltaResult::error( __( 'This person\'s website account belongs to another group: it cannot be changed from here.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$ya_scouter = $vinculado && in_array( Roles::SCOUTER, (array) $vinculado->roles, true );
 
@@ -164,7 +164,7 @@ final class AltaService {
 		$roles   = array_values( array_diff( $pedidos, $vinculado ? (array) $vinculado->roles : array() ) );
 		// Sin roles nuevos solo tiene sentido si es scouter y se cambian sus secciones.
 		if ( ! $roles && ! $ya_scouter ) {
-			return AltaResult::error( $pedidos ? asde_t( 'Ya tiene ese rol: no hay nada que cambiar.' ) : asde_t( 'Elige al menos un rol.' ) );
+			return AltaResult::error( $pedidos ? __( 'Already has that role: there is nothing to change.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : __( 'Choose at least one role.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 
 		$eleg    = $this->elegibilidad( $p );
@@ -182,20 +182,20 @@ final class AltaService {
 		if ( $sin_seccion ) {
 			// Voluntario sin sección: solo Tesorería, Secretaría, Coordinación o Intendencia, sin Scouter.
 			if ( count( $secciones ) > 1 ) {
-				$errores[] = asde_t( '«Voluntario sin sección» no se combina con secciones educativas.' );
+				$errores[] = __( '"Volunteer without a section" cannot be combined with educational sections.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 			}
 			if ( $sera_scouter ) {
-				$errores[] = asde_t( 'Un voluntario sin sección no puede tener el rol de Scouter: quítalo o elige sus secciones educativas.' );
+				$errores[] = __( 'A volunteer without a section cannot have the Scouter role: remove it or choose their educational sections.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 			}
 			if ( ! $con_resp ) {
-				$errores[] = asde_t( 'A un voluntario sin sección solo se le puede dar acceso como Tesorería, Secretaría, Coordinación o Intendencia: marca al menos una.' );
+				$errores[] = __( 'A volunteer without a section can only be given access as Treasury, Secretary\'s office, Coordination or Quartermaster: tick at least one.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 			}
 		} else {
 			if ( array_intersect( self::ROLES_RESPONSABILIDAD, $roles ) && ! $sera_scouter ) {
-				$errores[] = asde_t( 'Secretaría, Coordinación, Tesorería e Intendencia son responsabilidades de un scouter: marca también el rol de Scouter, o elige «Voluntario sin sección».' );
+				$errores[] = __( 'Secretary\'s office, Coordination, Treasury and Quartermaster are responsibilities of a scouter: also tick the Scouter role, or choose "Volunteer without a section".', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 			}
 			if ( $sera_scouter && ! $secciones ) {
-				$errores[] = asde_t( 'Indica al menos una sección educativa para el rol de Scouter.' );
+				$errores[] = __( 'State at least one educational section for the Scouter role.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 			}
 		}
 		if ( $errores ) {
@@ -208,11 +208,11 @@ final class AltaService {
 			$emails = $this->emails_persona( $p );
 			if ( null !== $email ) {
 				if ( ! is_email( EmailCuenta::normalizar( $email ) ) ) {
-					return AltaResult::error( asde_t( 'El email de la solicitud no es válido.' ) );
+					return AltaResult::error( __( 'The email on the request is not valid.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 				}
 				$campo_email = (string) self::campo_de_email( $emails, $email );
 			} elseif ( ! isset( $emails[ $campo_email ] ) ) {
-				return AltaResult::error( asde_t( 'La ficha no tiene email en el CRM. Añádelo en el CRM (campo Correo electrónico) y vuelve a intentarlo.' ) );
+				return AltaResult::error( __( 'The record has no email in the CRM. Add it in the CRM (Email field) and try again.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			}
 			$numero = $this->numero_para_usuario( $p );
 			if ( is_wp_error( $numero ) ) {
@@ -273,10 +273,10 @@ final class AltaService {
 
 		$errores = array();
 		if ( ! $base ) {
-			return AltaResult::error( asde_t( 'No se encuentra esa persona en el CRM del grupo.' ) );
+			return AltaResult::error( __( 'That person cannot be found in the group\'s CRM.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( count( $personas ) !== count( $nums ) ) {
-			$errores[] = asde_t( 'Alguno de los participantes elegidos no está en el CRM del grupo.' );
+			$errores[] = __( 'One of the chosen participants is not in the group\'s CRM.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		foreach ( $personas as $p ) {
 			$motivo = $this->motivo_no_representable( $p );
@@ -287,11 +287,11 @@ final class AltaService {
 		$emails = $this->emails_familia( $base );
 		if ( null !== $email ) {
 			if ( ! is_email( EmailCuenta::normalizar( $email ) ) ) {
-				$errores[] = asde_t( 'El email de la solicitud no es válido.' );
+				$errores[] = __( 'The email on the request is not valid.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 			}
 			$campo_email = (string) self::campo_de_email( $emails, $email );
 		} elseif ( ! isset( $emails[ $campo_email ] ) ) {
-			$errores[] = asde_t( 'Elige un email de la ficha del CRM para la cuenta familiar (si no hay ninguno, añádelo en el CRM).' );
+			$errores[] = __( 'Choose an email from the CRM record for the family account (if there is none, add it in the CRM).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		if ( $errores ) {
 			return AltaResult::error( ...$errores );
@@ -302,24 +302,24 @@ final class AltaService {
 		$cuenta  = $cuentas[0] ?? null;
 		if ( array_filter( $cuentas, static fn( \WP_User $c ): bool => ! Usuarios::del_grupo_actual( $c ) ) ) {
 			// Una cuenta familiar de estos menores es de otro grupo de la instalación (doc 59, RC-USU-1).
-			return AltaResult::error( asde_t( 'La cuenta de la web de esta persona es de otro grupo: no se puede cambiar desde aquí.' ) );
+			return AltaResult::error( __( 'This person\'s website account belongs to another group: it cannot be changed from here.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 
 		if ( $otro_tutor ) {
 			// Cuenta propia para el otro tutor/a: representa a los mismos menores que la primera.
 			if ( ! $cuenta ) {
-				return AltaResult::error( asde_t( 'Todavía no hay una cuenta familiar: crea primero la del primer tutor/a.' ) );
+				return AltaResult::error( __( 'There is no family account yet: first create the first guardian\'s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			}
 			if ( count( $cuentas ) >= Usuarios::MAX_CUENTAS_FAMILIARES ) {
-				return AltaResult::error( sprintf( asde_t( 'Esta familia ya tiene las %d cuentas de tutor/a (%s). Para cambiar el email de una, usa «Sustituir su email» al aprobar una solicitud.' ), Usuarios::MAX_CUENTAS_FAMILIARES, implode( ' y ', array_map( static fn( \WP_User $c ) => $c->user_login, $cuentas ) ) ) );
+				return AltaResult::error( sprintf( /* translators: 1: number, 2: text */ __( 'This family already has the %1$d guardian accounts (%2$s). To change the email of one, use "Replace their email" when approving a request.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Usuarios::MAX_CUENTAS_FAMILIARES, implode( ' y ', array_map( static fn( \WP_User $c ) => $c->user_login, $cuentas ) ) ) );
 			}
 			$mail = EmailCuenta::normalizar( (string) ( $email ?? ( $emails[ $campo_email ] ?? '' ) ) );
 			if ( ! is_email( $mail ) ) {
-				return AltaResult::error( asde_t( 'Elige el email del otro tutor/a (si la ficha no lo tiene, añádelo en el CRM).' ) );
+				return AltaResult::error( __( 'Choose the other guardian\'s email (if the record does not have it, add it in the CRM).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			}
 			foreach ( $cuentas as $c ) {
 				if ( EmailCuenta::leer( $c->ID ) === $mail ) {
-					return AltaResult::error( sprintf( asde_t( 'Ese email ya es el de la cuenta familiar %s: es la misma persona.' ), $c->user_login ) );
+					return AltaResult::error( sprintf( /* translators: %s: text */ __( 'That email is already that of the family account %s: it is the same person.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $c->user_login ) );
 				}
 			}
 			$nums = array_values( array_unique( array_merge( $nums, Usuarios::representados( $cuenta->ID ) ) ) );
@@ -332,7 +332,7 @@ final class AltaService {
 				$base_num = is_wp_error( $numero ) ? null : (string) $numero;
 			}
 			if ( null === $base_num ) {
-				return AltaResult::error( asde_t( 'No se puede crear la segunda cuenta: falta un nº de socio/a válido para el usuario.' ) );
+				return AltaResult::error( __( 'The second account cannot be created: a valid member no. for the username is missing.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			}
 			$nueva = $this->crear_usuario( NumeroSocio::usuario_tutor( $base_num, 2 ), Roles::TUTOR );
 			if ( is_wp_error( $nueva ) ) {
@@ -353,7 +353,7 @@ final class AltaService {
 			$nuevos    = array_diff( $nums, Usuarios::representados( $cuenta->ID ) );
 			$novedades = $nuevos || ! in_array( Roles::TUTOR, (array) $cuenta->roles, true );
 			if ( ! $novedades ) {
-				return AltaResult::error( sprintf( asde_t( 'La cuenta familiar %s ya representa a esos participantes: no hay nada que cambiar.' ), $cuenta->user_login ) );
+				return AltaResult::error( sprintf( /* translators: %s: text */ __( 'The family account %s already represents those participants: there is nothing to change.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $cuenta->user_login ) );
 			}
 		} else {
 			$numero = $this->numero_para_usuario( $base );
@@ -412,9 +412,9 @@ final class AltaService {
 			case Numeracion::FALTA:
 				return $this->numeracion->asignar( $p );
 			case Numeracion::DUPLICADO:
-				return new \WP_Error( 'asde_alta', sprintf( asde_t( 'El nº de socio local de %s (%s) está duplicado en el CRM. Corrígelo en el CRM antes de darle acceso.' ), $p->nombre_completo(), $n['numero'] ) );
+				return new \WP_Error( 'asde_alta', sprintf( /* translators: 1: text, 2: text */ __( 'The local member no. of %1$s (%2$s) is duplicated in the CRM. Correct it in the CRM before giving them access.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $p->nombre_completo(), $n['numero'] ) );
 			case Numeracion::INVALIDO:
-				return new \WP_Error( 'asde_alta', sprintf( asde_t( 'El nº de socio local de %s en el CRM ("%s") no tiene un formato válido. Corrígelo en el CRM antes de darle acceso.' ), $p->nombre_completo(), $p->num_socio_local_crm ) );
+				return new \WP_Error( 'asde_alta', sprintf( /* translators: 1: text, 2: text */ __( 'The local member no. of %1$s in the CRM ("%2$s") is not in a valid format. Correct it in the CRM before giving them access.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $p->nombre_completo(), $p->num_socio_local_crm ) );
 			default:
 				return (string) $n['numero'];
 		}
@@ -458,7 +458,7 @@ final class AltaService {
 	 */
 	private function crear_usuario( string $login, string $rol ) {
 		if ( username_exists( $login ) ) {
-			return new \WP_Error( 'asde_alta', sprintf( asde_t( 'Ya existe un usuario web %s que no está vinculado a esta ficha. Revísalo en el listado de usuarios.' ), $login ) );
+			return new \WP_Error( 'asde_alta', sprintf( /* translators: %s: text */ __( 'A web user %s that is not linked to this record already exists. Check it in the user list.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $login ) );
 		}
 		$id = wp_insert_user(
 			array(
@@ -473,7 +473,7 @@ final class AltaService {
 			)
 		);
 		if ( is_wp_error( $id ) ) {
-			return new \WP_Error( 'asde_alta', asde_t( 'No se ha podido crear el usuario: ' ) . $id->get_error_message() );
+			return new \WP_Error( 'asde_alta', __( 'The user could not be created: ', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . $id->get_error_message() );
 		}
 		return get_userdata( $id );
 	}

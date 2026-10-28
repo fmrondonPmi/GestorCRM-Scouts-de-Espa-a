@@ -47,16 +47,16 @@ final class Servicio {
 	}
 
 	public static function nombre( string $seccion ): string {
-		return self::GRUPO === $seccion ? asde_t( 'Grupo' ) : Secciones::nombre( $seccion );
+		return self::GRUPO === $seccion ? __( 'Group', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : Secciones::nombre( $seccion );
 	}
 
 	/** Texto de por qué no se puede cambiar el presupuesto, o '' si se puede. */
 	public static function error_edicion( string $ronda, string $seccion, Ambito $a ): string {
 		if ( ! Config::es_ronda( $ronda ) || ! self::es_ambito_valido( $seccion ) || ! in_array( $seccion, self::secciones_para( $a ), true ) ) {
-			return asde_t( 'No tienes permiso para cambiar este presupuesto.' );
+			return __( 'You do not have permission to change this budget.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		if ( EstadosTable::BORRADOR !== EstadosTable::de( $ronda, $seccion )['estado'] ) {
-			return asde_t( 'El presupuesto está enviado o aprobado: Tesorería tiene que reabrirlo para cambiarlo.' );
+			return __( 'The budget has been sent or approved: Treasury must reopen it to change it.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		return '';
 	}
@@ -130,21 +130,21 @@ final class Servicio {
 		$importe_n = self::numero( $importe );
 
 		if ( $veces_n < 1 || $veces_n > self::MAX_VECES ) {
-			return sprintf( asde_t( '«¿Cuántos?» tiene que ser un número entre 1 y %d.' ), self::MAX_VECES );
+			return sprintf( /* translators: %d: number */ __( '"How many?" must be a number between 1 and %d.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), self::MAX_VECES );
 		}
 		if ( ! self::importe_valido( $importe, true ) ) {
-			return asde_t( 'El importe tiene que ser un número positivo.' );
+			return __( 'The amount must be a positive number.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		if ( PartidasTable::GASTO === $tipo ) {
 			if ( ! in_array( $categoria, Config::de( $ronda )['presupuesto']['categorias'], true ) ) {
-				return asde_t( 'Elige una categoría de la lista.' );
+				return __( 'Choose a category from the list.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 			}
 			$concepto = '' !== $concepto ? $concepto : $categoria;
 		} else {
 			if ( '' === $concepto ) {
-				return asde_t( 'Escribe en qué consiste el ingreso.' );
+				return __( 'Enter what the income consists of.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 			}
-			$categoria = '' !== $categoria && '_' !== $categoria[0] ? $categoria : asde_t( 'Otros ingresos' );
+			$categoria = '' !== $categoria && '_' !== $categoria[0] ? $categoria : __( 'Other income', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 
 		PartidasTable::anadir( $ronda, $seccion, $tipo, $categoria, $concepto, $veces_n, $importe_n, $nota );
@@ -160,7 +160,7 @@ final class Servicio {
 		}
 		$importe_n = self::numero( $importe );
 		if ( ! self::importe_valido( $importe, true ) ) {
-			return asde_t( 'El importe tiene que ser un número positivo.' );
+			return __( 'The amount must be a positive number.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		self::asegurar_proyecto( $ronda, $seccion );
 		foreach ( PartidasTable::de( $ronda, $seccion ) as $p ) {
@@ -170,7 +170,7 @@ final class Servicio {
 				return '';
 			}
 		}
-		return asde_t( 'Esta sección no tiene proyecto de recaudación.' );
+		return __( 'This section has no fundraising project.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 	}
 
 	/** @return string Error, o ''. */
@@ -182,7 +182,7 @@ final class Servicio {
 		foreach ( PartidasTable::de( $ronda, $seccion ) as $p ) {
 			if ( $p['id'] === $id ) {
 				if ( PartidasTable::PROYECTO === $p['categoria'] ) {
-					return asde_t( 'El proyecto de recaudación no se quita: pon su objetivo a 0 si no lo necesitas.' );
+					return __( 'The fundraising project is not removed: set its target to 0 if you don\'t need it.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				}
 				PartidasTable::quitar( $id, $ronda, $seccion );
 				GastosRealesTable::borrar_de_partida( $id ); // Sin partida, sus gastos reales no cuelgan de nada.
@@ -190,7 +190,7 @@ final class Servicio {
 				return '';
 			}
 		}
-		return asde_t( 'Esa partida no existe.' );
+		return __( 'That item does not exist.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 	}
 
 	/** ¿Puede ver y anotar el gasto real de este presupuesto? (en cualquier estado: gastar no cambia lo presupuestado). */
@@ -205,7 +205,7 @@ final class Servicio {
 	 */
 	public static function anadir_gasto_real( string $ronda, string $seccion, Ambito $a, int $partida_id, string $fecha, string $concepto, $importe ): string {
 		if ( ! self::puede_anotar_gasto( $ronda, $seccion, $a ) ) {
-			return asde_t( 'No tienes permiso para cambiar este presupuesto.' );
+			return __( 'You do not have permission to change this budget.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		$partida = null;
 		foreach ( PartidasTable::de( $ronda, $seccion ) as $p ) {
@@ -214,15 +214,15 @@ final class Servicio {
 			}
 		}
 		if ( ! $partida ) {
-			return asde_t( 'Elige una partida de gasto del presupuesto.' );
+			return __( 'Choose an expense item from the budget.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		$fecha_ok = (bool) preg_match( '/^\d{4}-\d{2}-\d{2}$/', $fecha ) && false !== strtotime( $fecha ) && gmdate( 'Y-m-d', (int) strtotime( $fecha ) ) === $fecha;
 		if ( ! $fecha_ok ) {
-			return asde_t( 'La fecha no es válida.' );
+			return __( 'The date is not valid.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		$importe_n = self::numero( $importe );
 		if ( ! self::importe_valido( $importe, false ) ) {
-			return asde_t( 'El importe tiene que ser un número mayor que cero.' );
+			return __( 'The amount must be a number greater than zero.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		$concepto = trim( sanitize_text_field( $concepto ) );
 		GastosRealesTable::anadir( $ronda, $seccion, $partida_id, $fecha, '' !== $concepto ? $concepto : $partida['concepto'], $importe_n );
@@ -233,10 +233,10 @@ final class Servicio {
 	/** @return string Error, o ''. */
 	public static function quitar_gasto_real( string $ronda, string $seccion, Ambito $a, int $id ): string {
 		if ( ! self::puede_anotar_gasto( $ronda, $seccion, $a ) ) {
-			return asde_t( 'No tienes permiso para cambiar este presupuesto.' );
+			return __( 'You do not have permission to change this budget.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		if ( ! GastosRealesTable::quitar( $id, $ronda, $seccion ) ) {
-			return asde_t( 'Ese gasto no existe.' );
+			return __( 'That expense does not exist.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		Logger::log( 'presupuesto_gasto_quitado', 'presupuesto', $seccion . ' ' . $ronda );
 		return '';
@@ -279,10 +279,10 @@ final class Servicio {
 	/** Tesorería, Secretaría o Coordinación lo aprueban (queda bloqueado). @return string Error, o ''. */
 	public static function aprobar( string $ronda, string $seccion ): string {
 		if ( ! self::puede_entrar() || ! current_user_can( self::CAP_CONFIG ) || ! self::es_ambito_valido( $seccion ) || ! Config::es_ronda( $ronda ) ) {
-			return asde_t( 'No tienes permiso para aprobar este presupuesto.' );
+			return __( 'You do not have permission to approve this budget.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		if ( EstadosTable::APROBADO === EstadosTable::de( $ronda, $seccion )['estado'] ) {
-			return asde_t( 'El presupuesto ya está aprobado.' );
+			return __( 'The budget is already approved.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		EstadosTable::poner( $ronda, $seccion, EstadosTable::APROBADO );
 		Logger::log( 'presupuesto_aprobado', 'presupuesto', $seccion . ' ' . $ronda );
@@ -292,14 +292,14 @@ final class Servicio {
 	/** Devuelve un presupuesto enviado o aprobado a borrador, con el motivo en el registro. @return string Error, o ''. */
 	public static function reabrir( string $ronda, string $seccion, string $motivo ): string {
 		if ( ! self::puede_entrar() || ! current_user_can( self::CAP_CONFIG ) || ! self::es_ambito_valido( $seccion ) || ! Config::es_ronda( $ronda ) ) {
-			return asde_t( 'No tienes permiso para reabrir este presupuesto.' );
+			return __( 'You do not have permission to reopen this budget.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		$motivo = trim( sanitize_text_field( $motivo ) );
 		if ( '' === $motivo ) {
-			return asde_t( 'Escribe el motivo para reabrirlo.' );
+			return __( 'Enter the reason for reopening it.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		if ( EstadosTable::BORRADOR === EstadosTable::de( $ronda, $seccion )['estado'] ) {
-			return asde_t( 'El presupuesto ya es un borrador.' );
+			return __( 'The budget is already a draft.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		EstadosTable::poner( $ronda, $seccion, EstadosTable::BORRADOR );
 		Logger::log( 'presupuesto_reabierto', 'presupuesto', $seccion . ' ' . $ronda, array( 'motivo' => mb_substr( $motivo, 0, 200 ) ) );
@@ -333,11 +333,11 @@ final class Servicio {
 			return $error;
 		}
 		if ( self::tiene_partidas( $ronda, $seccion ) ) {
-			return asde_t( 'Este presupuesto ya tiene partidas: solo se puede copiar sobre uno vacío.' );
+			return __( 'This budget already has items: it can only be copied onto an empty one.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		$anterior = PartidasTable::de( self::ronda_anterior( $ronda ), $seccion );
 		if ( ! $anterior ) {
-			return asde_t( 'No hay presupuesto de la ronda anterior para copiar.' );
+			return __( 'There is no budget from the previous round to copy.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		self::asegurar_proyecto( $ronda, $seccion );
 		$actuales = PartidasTable::de( $ronda, $seccion );

@@ -59,7 +59,7 @@ final class Ambito {
 	private function cargar(): void {
 		$repo = PersonaRepository::make();
 		if ( ! $repo ) {
-			$this->error_crm = asde_t( 'La conexión de tu grupo con el CRM no está configurada o no se ha podido comprobar. Un administrador puede revisarla en wp-admin → Grupos Scouts.' );
+			$this->error_crm = __( 'Your group\'s connection to the CRM is not set up or could not be checked. An administrator can review it in wp-admin → Scout Groups.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 			return;
 		}
 		try {
@@ -77,7 +77,7 @@ final class Ambito {
 				}
 			}
 		} catch ( CrmException $e ) {
-			$this->error_crm = asde_t( 'No se ha podido consultar el CRM. Inténtalo de nuevo en unos minutos.' );
+			$this->error_crm = __( 'The CRM could not be queried. Try again in a few minutes.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 	}
 
@@ -116,18 +116,18 @@ final class Ambito {
 		}
 		$roles = Usuarios::roles_asde( $this->user );
 		if ( ! $roles ) {
-			return asde_t( 'Tu usuario no tiene acceso al área privada. Si crees que es un error, contacta con la Secretaría del grupo.' );
+			return __( 'Your user does not have access to the private area. If you think this is a mistake, contact the group\'s Secretary\'s office.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		if ( in_array( Roles::TUTOR, $roles, true ) && ! $this->representados && count( $roles ) === 1 ) {
-			return asde_t( 'Tu cuenta familiar ya no tiene participantes a su cargo (han cumplido 18 años o ya no tienen membresía activa).' );
+			return __( 'Your family account no longer has any participants in its care (they have turned 18 or no longer have an active membership).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		if ( '' === Usuarios::socio( $this->user->ID ) ) {
-			return asde_t( 'Tu usuario no está vinculado a ninguna ficha del CRM. Pide a la Secretaría del grupo que revise tu alta.' );
+			return __( 'Your user is not linked to any CRM record. Ask the group\'s Secretary\'s office to check your registration.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		if ( ! $this->persona ) {
-			return asde_t( 'No se encuentra tu ficha en el CRM del grupo. Contacta con la Secretaría.' );
+			return __( 'Your record cannot be found in the group\'s CRM. Contact the Secretary\'s office.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
-		return asde_t( 'Tu membresía no está activa en el CRM del grupo. Contacta con la Secretaría.' );
+		return __( 'Your membership is not active in the group\'s CRM. Contact the Secretary\'s office.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 	}
 
 	/** Nombre para saludar. */
@@ -136,7 +136,7 @@ final class Ambito {
 			return $this->persona->nombre;
 		}
 		if ( $this->representados ) {
-			return sprintf( asde_t( 'familia de %s' ), Contacto::lista( array_map( static fn( Persona $p ) => $p->nombre, $this->representados ) ) );
+			return sprintf( /* translators: %s: text */ __( '%s family', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Contacto::lista( array_map( static fn( Persona $p ) => $p->nombre, $this->representados ) ) );
 		}
 		return $this->user->display_name;
 	}

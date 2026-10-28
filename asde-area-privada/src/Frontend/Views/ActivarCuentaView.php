@@ -51,7 +51,7 @@ final class ActivarCuentaView extends View {
 			return; // render() mostrará "enlace no válido".
 		}
 		if ( ! wp_verify_nonce( $this->post_nonce(), 'asde_activar_' . $user_id ) ) {
-			self::$error = asde_t( 'La sesión del formulario ha caducado. Vuelve a intentarlo.' );
+			self::$error = __( 'The form session has expired. Try again.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 			return;
 		}
 
@@ -60,15 +60,15 @@ final class ActivarCuentaView extends View {
 		$login = rtrim( $user->user_login, 'Tt' );
 
 		if ( mb_strlen( $pass ) < self::LONGITUD_MINIMA ) {
-			self::$error = sprintf( asde_t( 'La contraseña debe tener al menos %d caracteres.' ), self::LONGITUD_MINIMA );
+			self::$error = sprintf( /* translators: %d: number */ __( 'The password must have at least %d characters.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), self::LONGITUD_MINIMA );
 			return;
 		}
 		if ( $pass !== $pass2 ) {
-			self::$error = asde_t( 'Las dos contraseñas no coinciden.' );
+			self::$error = __( 'The two passwords do not match.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 			return;
 		}
 		if ( strlen( $login ) >= 4 && false !== stripos( $pass, $login ) ) {
-			self::$error = asde_t( 'La contraseña no puede contener tu nº de socio/a.' );
+			self::$error = __( 'The password cannot contain your member no.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 			return;
 		}
 

@@ -52,7 +52,7 @@ final class CamposExtra {
 	/** Texto de la casilla de declaración que verá quien se apunta: el del grupo o, si no hay, el de por defecto. */
 	public static function declaracion( string $numero ): string {
 		$propio = self::declaracion_propia( $numero );
-		return '' !== $propio ? $propio : asde_t( 'Declaro que todos los datos que he introducido son veraces y acepto las condiciones del grupo scout.' );
+		return '' !== $propio ? $propio : __( 'I declare that all the data I have entered is truthful and I accept the Scout group\'s conditions.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 	}
 
 	/** Guarda el texto de la declaración del grupo; vacío o igual al de por defecto = volver al de por defecto. */
@@ -60,7 +60,7 @@ final class CamposExtra {
 		$texto = mb_substr( trim( (string) preg_replace( '/\s+/u', ' ', sanitize_text_field( $texto ) ) ), 0, self::MAX_DECLARACION );
 		$todo  = get_option( self::OPCION_DECLARACION, array() );
 		$todo  = is_array( $todo ) ? $todo : array();
-		if ( '' === $texto || asde_t( 'Declaro que todos los datos que he introducido son veraces y acepto las condiciones del grupo scout.' ) === $texto ) {
+		if ( '' === $texto || __( 'I declare that all the data I have entered is truthful and I accept the Scout group\'s conditions.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) === $texto ) {
 			unset( $todo[ $numero ] );
 		} else {
 			$todo[ $numero ] = $texto;
@@ -107,11 +107,11 @@ final class CamposExtra {
 				continue; // Fila nueva sin rellenar.
 			}
 			if ( '' === $etiqueta ) {
-				$errores[] = asde_t( 'Cada campo necesita su etiqueta: es el texto que verá quien se apunta.' );
+				$errores[] = __( 'Each field needs its label: it is the text the person signing up will see.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 			}
 			if ( ! isset( self::TIPOS[ $tipo ] ) ) {
-				$errores[] = asde_t( 'Elige el tipo de cada campo.' );
+				$errores[] = __( 'Choose the type of each field.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 			}
 			if ( '' === $id || ! isset( $actuales[ $id ] ) ) {
@@ -126,7 +126,7 @@ final class CamposExtra {
 		}
 		if ( ! $errores && count( $nuevos ) > self::MAX_CAMPOS ) {
 			/* translators: %d: máximo de campos */
-			$errores[] = sprintf( asde_t( 'Como máximo, %d campos propios.' ), self::MAX_CAMPOS );
+			$errores[] = sprintf( /* translators: %d: number */ __( 'At most %d own fields.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), self::MAX_CAMPOS );
 		}
 		if ( ! $errores ) {
 			$todo = get_option( self::OPCION, array() );
@@ -155,7 +155,7 @@ final class CamposExtra {
 			$bruto = (string) ( $in[ 'extra_' . $c['id'] ] ?? '' );
 			switch ( $c['tipo'] ) {
 				case self::CASILLA:
-					$v = '1' === $bruto ? asde_t( 'Sí' ) : '';
+					$v = '1' === $bruto ? __( 'Yes', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : '';
 					break;
 				case self::PARRAFO:
 					$v = mb_substr( trim( sanitize_textarea_field( $bruto ) ), 0, self::MAX_RESPUESTA );
@@ -164,7 +164,7 @@ final class CamposExtra {
 					$v = trim( $bruto );
 					if ( '' !== $v && ! preg_match( '/^-?\d{1,15}([.,]\d{1,6})?$/', $v ) ) {
 						/* translators: %s: etiqueta del campo */
-						$err[] = sprintf( asde_t( '«%s» tiene que ser un número.' ), $c['etiqueta'] );
+						$err[] = sprintf( /* translators: %s: text */ __( '"%s" must be a number.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $c['etiqueta'] );
 						continue 2;
 					}
 					break;
@@ -173,7 +173,7 @@ final class CamposExtra {
 					$f = \DateTime::createFromFormat( '!Y-m-d', $v, wp_timezone() );
 					if ( '' !== $v && ( ! $f || $f->format( 'Y-m-d' ) !== $v ) ) {
 						/* translators: %s: etiqueta del campo */
-						$err[] = sprintf( asde_t( '«%s» no es una fecha válida.' ), $c['etiqueta'] );
+						$err[] = sprintf( /* translators: %s: text */ __( '"%s" is not a valid date.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $c['etiqueta'] );
 						continue 2;
 					}
 					break;
@@ -183,7 +183,7 @@ final class CamposExtra {
 			if ( '' === $v ) {
 				if ( $c['obligatorio'] ) {
 					/* translators: %s: etiqueta del campo */
-					$err[] = sprintf( asde_t( 'Falta rellenar «%s».' ), $c['etiqueta'] );
+					$err[] = sprintf( /* translators: %s: text */ __( '"%s" still needs to be filled in.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $c['etiqueta'] );
 				}
 				continue;
 			}

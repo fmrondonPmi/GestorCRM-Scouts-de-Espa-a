@@ -102,10 +102,10 @@ final class Mandatos {
 	public static function texto( array $cfg ): array {
 		$acreedor = '' !== $cfg['nombre'] ? $cfg['nombre'] : Grupo::nombre();
 		return array(
-			sprintf( asde_t( 'Mediante la firma de esta orden de domiciliación, el deudor autoriza (A) a %s a enviar instrucciones a la entidad del deudor para adeudar su cuenta y (B) a la entidad para efectuar los adeudos en su cuenta siguiendo las instrucciones de %s.' ), $acreedor, $acreedor ),
-			asde_t( 'Como parte de sus derechos, el deudor está legitimado al reembolso por su entidad en los términos y condiciones del contrato suscrito con la misma. La solicitud de reembolso deberá efectuarse dentro de las ocho semanas que siguen a la fecha de adeudo en cuenta. Puede obtener información adicional sobre sus derechos en su entidad financiera.' ),
-			sprintf( asde_t( 'Esta autorización sirve para cobrar la cuota y otros pagos del grupo (por ejemplo, las cuotas de cada ronda). Tipo de pago: recurrente. %s comunicará al deudor la fecha y el importe de cada adeudo con al menos %d días de antelación (por email y en «Mis pagos»).' ), $acreedor, (int) $cfg['dias_aviso'] ),
-			asde_t( 'El deudor puede anular esta autorización cuando quiera desde «Mis pagos» o avisando a la Tesorería del grupo.' ),
+			sprintf( /* translators: 1: text, 2: text */ __( 'By signing this direct debit mandate, the debtor authorises (A) %1$s to send instructions to the debtor\'s bank to debit their account and (B) the bank to debit their account in accordance with the instructions of %2$s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $acreedor, $acreedor ),
+			__( 'As part of their rights, the debtor is entitled to a refund from their bank under the terms and conditions of the agreement signed with it. A refund request must be made within eight weeks starting from the date on which your account was debited. You can obtain additional information about your rights from your bank.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+			sprintf( /* translators: 1: text, 2: number */ __( 'This authorisation is used to collect the fee and other payments of the group (for example, the fees for each round). Payment type: recurrent. %1$s will tell the debtor the date and amount of each direct debit at least %2$d days in advance (by email and in "My payments").', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $acreedor, (int) $cfg['dias_aviso'] ),
+			__( 'The debtor can cancel this authorisation at any time from "My payments" or by notifying the group\'s Treasury.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 		);
 	}
 
@@ -120,16 +120,16 @@ final class Mandatos {
 	 */
 	public static function puede_firmar( Ambito $a, array $familia ) {
 		if ( ! user_can( $a->user, 'asde_sepa_autorizar' ) ) {
-			return asde_t( 'Tu cuenta no puede firmar autorizaciones de domiciliación.' );
+			return __( 'Your account cannot sign direct debit authorisations.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		if ( array_intersect( $familia['miembros'], array_map( 'strval', array_keys( $a->representados ) ) ) ) {
 			return true; // Cuenta familiar: madre, padre o tutor/a de alguno de los menores de la familia.
 		}
 		$p = $a->persona;
 		if ( $p && in_array( $p->num_socio_asde, $familia['miembros'], true ) ) {
-			return null !== $p->edad() && $p->edad() >= 18 ? true : asde_t( 'La autorización tiene que firmarla tu madre, padre o tutor/a desde su cuenta: por ser menor de edad no puedes firmarla tú.' );
+			return null !== $p->edad() && $p->edad() >= 18 ? true : __( 'The authorisation must be signed by your mother, father or guardian from their account: as you are a minor you cannot sign it yourself.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
-		return asde_t( 'Esa familia no es la tuya.' );
+		return __( 'That family is not yours.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 	}
 
 	// ---------------------------------------------------------------------
@@ -156,17 +156,17 @@ final class Mandatos {
 			'lugar'     => $texto( $in['lugar'] ?? '', 50 ),
 		);
 		if ( mb_strlen( $d['titular'] ) < 3 || ! str_contains( $d['titular'], ' ' ) ) {
-			$err[] = asde_t( 'Escribe el nombre y los apellidos del titular de la cuenta.' );
+			$err[] = __( 'Enter the first name and surname of the account holder.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		$e = Iban::error( $d['iban'] );
 		if ( '' !== $e ) {
 			$err[] = $e;
 		} elseif ( strlen( $d['iban'] ) > CuentaCrm::MAX_IBAN ) {
 			/* translators: %d: caracteres */
-			$err[] = sprintf( asde_t( 'La ficha del CRM solo admite cuentas de hasta %d caracteres (las españolas tienen 24): usa una cuenta española.' ), CuentaCrm::MAX_IBAN );
+			$err[] = sprintf( /* translators: %d: number */ __( 'The CRM record only accepts accounts of up to %d characters (Spanish ones have 24): use a Spanish account.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), CuentaCrm::MAX_IBAN );
 		}
 		if ( '' === $d['calle'] || '' === $d['cp'] || '' === $d['poblacion'] ) {
-			$err[] = asde_t( 'Escribe la dirección del titular (calle, código postal y población).' );
+			$err[] = __( 'Enter the account holder\'s address (street, postcode and town).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		if ( '' === $d['lugar'] ) {
 			$d['lugar'] = $d['poblacion'];
@@ -187,21 +187,21 @@ final class Mandatos {
 		global $wpdb;
 		$familia = FamiliasTable::obtener( $familia_id );
 		if ( ! $familia ) {
-			return new \WP_Error( 'asde_sepa', asde_t( 'Esa familia no existe.' ) );
+			return new \WP_Error( 'asde_sepa', __( 'That family does not exist.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$cfg = Config::de();
 		if ( ! Config::lista( $cfg ) ) {
-			return new \WP_Error( 'asde_sepa', asde_t( 'El grupo aún no tiene activadas las domiciliaciones SEPA.' ) );
+			return new \WP_Error( 'asde_sepa', __( 'The group has not yet enabled SEPA direct debits.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		// v0.33: primero la cuenta en las fichas del CRM; si el CRM no la guarda, no hay autorización.
 		$repo = PersonaRepository::make();
 		if ( ! $repo ) {
-			return new \WP_Error( 'asde_sepa', asde_t( 'La conexión con el CRM no está disponible.' ) );
+			return new \WP_Error( 'asde_sepa', __( 'The connection to the CRM is not available.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		try {
 			$guardada = CuentaCrm::guardar( $repo, $familia['miembros'], $datos );
 		} catch ( CrmException $e ) {
-			$guardada = new \WP_Error( 'asde_sepa', asde_t( 'El CRM no responde: inténtalo más tarde.' ) );
+			$guardada = new \WP_Error( 'asde_sepa', __( 'The CRM is not responding: try again later.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( is_wp_error( $guardada ) ) {
 			return $guardada;
@@ -225,7 +225,7 @@ final class Mandatos {
 		);
 		$id = (int) $wpdb->insert_id;
 		if ( ! $id ) {
-			return new \WP_Error( 'asde_sepa', asde_t( 'No se ha podido guardar la autorización. Inténtalo de nuevo.' ) );
+			return new \WP_Error( 'asde_sepa', __( 'The authorisation could not be saved. Try again.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$wpdb->update(
 			self::table(),
@@ -290,13 +290,13 @@ final class Mandatos {
 			if ( self::ACTIVO === $m['estado'] ) {
 				$familia = FamiliasTable::obtener( $m['familia_id'] );
 				try {
-					$r = $familia ? CuentaCrm::guardar( $repo, $familia['miembros'], $cuenta ) : new \WP_Error( 'asde_sepa', asde_t( 'Esa familia no existe.' ) );
+					$r = $familia ? CuentaCrm::guardar( $repo, $familia['miembros'], $cuenta ) : new \WP_Error( 'asde_sepa', __( 'That family does not exist.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 				} catch ( CrmException $e ) {
 					$r = new \WP_Error( 'asde_sepa', $e->getMessage() );
 				}
 				if ( is_wp_error( $r ) ) {
 					/* translators: 1: referencia de la autorización, 2: motivo */
-					$res['errores'][] = sprintf( asde_t( '%1$s: %2$s' ), $m['referencia'], $r->get_error_message() );
+					$res['errores'][] = sprintf( /* translators: 1: text, 2: text */ __( '%1$s: %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $m['referencia'], $r->get_error_message() );
 					continue;
 				}
 				++$res['pasadas'];

@@ -87,23 +87,23 @@ final class ConciliacionBanco {
 	 */
 	public static function confirmar( int $pedido_id, int $mov_id ) {
 		if ( ! self::disponible() ) {
-			return new \WP_Error( 'asde_tienda', asde_t( 'El banco solo lo usan Tesorería y quien lleve la configuración de Tesorería, con el módulo Banco activo.' ) );
+			return new \WP_Error( 'asde_tienda', __( 'The bank is only used by Treasury and whoever manages the Treasury settings, with the Bank module on.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$p = PedidosTable::obtener( $pedido_id );
 		$m = BancoTable::obtener( $mov_id );
 		if ( ! $p || ! $m ) {
-			return new \WP_Error( 'asde_tienda', asde_t( 'Ese pedido o ese movimiento ya no existen.' ) );
+			return new \WP_Error( 'asde_tienda', __( 'That order or that transaction no longer exists.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( null !== $p['pago_en'] || null !== $p['cancelado_en'] ) {
-			return new \WP_Error( 'asde_tienda', asde_t( 'Ese pedido ya está pagado o cancelado.' ) );
+			return new \WP_Error( 'asde_tienda', __( 'That order is already paid or cancelled.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( BancoTable::PENDIENTE !== $m['estado'] || $m['importe'] <= 0 || PedidosTable::numero( $p ) !== self::referencia( self::texto( $m ), Grupo::numero() ) ) {
-			return new \WP_Error( 'asde_tienda', asde_t( 'Ese ingreso ya está revisado o no corresponde a este pedido.' ) );
+			return new \WP_Error( 'asde_tienda', __( 'That income is already reviewed or does not correspond to this order.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		// Primero se toma el ingreso (solo si sigue pendiente, en una sola sentencia) y después se paga el pedido: dos
 		// confirmaciones a la vez no pagan dos pedidos con el mismo ingreso (doc 59, RC-TES-6).
 		if ( ! BancoTable::revisar( $mov_id, 0, sprintf( self::NOTA, PedidosTable::numero( $p ) ), 0, 0, BancoTable::PENDIENTE ) ) {
-			return new \WP_Error( 'asde_tienda', asde_t( 'Ese ingreso ya está revisado o no corresponde a este pedido.' ) );
+			return new \WP_Error( 'asde_tienda', __( 'That income is already reviewed or does not correspond to this order.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$metodo = PedidosTable::METODO_DE_FORMA[ $p['forma_pago'] ] ?? 'transferencia';
 		PedidosTable::marcar_pago( $p['id'], $m['fecha'], isset( PedidosTable::METODOS[ $metodo ] ) ? $metodo : 'transferencia', (float) $m['importe'], 'Banco' . ( '' !== $m['documento'] ? ' ' . $m['documento'] : '' ) );
@@ -193,11 +193,11 @@ final class ConciliacionBanco {
 	 */
 	public static function confirmar_datafono( int $mov_id, array $ids ) {
 		if ( ! self::disponible() ) {
-			return new \WP_Error( 'asde_tienda', asde_t( 'El banco solo lo usan Tesorería y quien lleve la configuración de Tesorería, con el módulo Banco activo.' ) );
+			return new \WP_Error( 'asde_tienda', __( 'The bank is only used by Treasury and whoever manages the Treasury settings, with the Bank module on.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$m = BancoTable::obtener( $mov_id );
 		if ( ! $m || BancoTable::PENDIENTE !== $m['estado'] || $m['importe'] <= 0 ) {
-			return new \WP_Error( 'asde_tienda', asde_t( 'Ese ingreso ya está revisado o no existe.' ) );
+			return new \WP_Error( 'asde_tienda', __( 'That income is already reviewed or does not exist.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$set      = self::cobros_del_abono( PedidosTable::tpv_sin_conciliar( Grupo::numero() ), $m );
 		$esperado = array_map( 'intval', array_column( $set, 'id' ) );
@@ -205,11 +205,11 @@ final class ConciliacionBanco {
 		sort( $esperado );
 		sort( $ids );
 		if ( ! $set || $esperado !== $ids ) {
-			return new \WP_Error( 'asde_tienda', asde_t( 'Los cobros con datáfono ya no cuadran con ese ingreso. Revisa la lista.' ) );
+			return new \WP_Error( 'asde_tienda', __( 'The card payments no longer match that deposit. Check the list.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		// Igual que confirmar(): el ingreso se toma antes de marcar los pedidos (doc 59, RC-TES-6).
 		if ( ! BancoTable::revisar( $mov_id, 0, sprintf( self::NOTA_DATAFONO, count( $ids ) ), 0, 0, BancoTable::PENDIENTE ) ) {
-			return new \WP_Error( 'asde_tienda', asde_t( 'Ese ingreso ya está revisado o no existe.' ) );
+			return new \WP_Error( 'asde_tienda', __( 'That income is already reviewed or does not exist.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		PedidosTable::marcar_banco( $ids, $mov_id );
 		Logger::log( 'tienda_banco_datafono', 'tienda', (string) $mov_id, array( 'pedidos' => count( $ids ), 'importe' => $m['importe'] ) );

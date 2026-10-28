@@ -72,16 +72,16 @@ final class Servicio {
 			}
 			$m = $materiales[ $id ] ?? null;
 			if ( ! $m ) {
-				return new \WP_Error( 'asde_inventario', asde_t( 'Algún material de la lista ya no está en el inventario. Vuelve a prepararla.' ) );
+				return new \WP_Error( 'asde_inventario', __( 'Some equipment on the list is no longer in the inventory. Prepare it again.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			}
 			if ( ! preg_match( '/^\d{1,5}$/', $cantidad ) ) {
 				/* translators: %s: descripción del material */
-				return new \WP_Error( 'asde_inventario', sprintf( asde_t( 'La cantidad a comprar de «%s» no es válida.' ), $m['descripcion'] ) );
+				return new \WP_Error( 'asde_inventario', sprintf( /* translators: %s: text */ __( 'The quantity to buy of "%s" is not valid.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $m['descripcion'] ) );
 			}
 			$precio = MaterialesTable::euros( (string) ( $precios[ $id ] ?? '' ) );
 			if ( false === $precio ) {
 				/* translators: %s: descripción del material */
-				return new \WP_Error( 'asde_inventario', sprintf( asde_t( 'El precio de «%s» no es válido (por ejemplo: 12,50).' ), $m['descripcion'] ) );
+				return new \WP_Error( 'asde_inventario', sprintf( /* translators: %s: text */ __( 'The price of "%s" is not valid (for example: 12,50).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $m['descripcion'] ) );
 			}
 			$lineas[] = array(
 				'material'      => $id,
@@ -105,19 +105,19 @@ final class Servicio {
 			}
 			if ( '' === $descripcion ) {
 				/* translators: %d: nº de la línea de material nuevo */
-				return new \WP_Error( 'asde_inventario', sprintf( asde_t( 'Escribe qué material nuevo hay que comprar en la línea %d (o deja en blanco su precio).' ), $n ) );
+				return new \WP_Error( 'asde_inventario', sprintf( /* translators: %d: number */ __( 'Enter what new equipment must be bought on line %d (or leave its price blank).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $n ) );
 			}
 			if ( '' === $cantidad || '0' === $cantidad ) {
 				continue; // Quitado de la lista, como el material del inventario con 0.
 			}
 			if ( ! preg_match( '/^\d{1,5}$/', $cantidad ) ) {
 				/* translators: %s: descripción del material */
-				return new \WP_Error( 'asde_inventario', sprintf( asde_t( 'La cantidad a comprar de «%s» no es válida.' ), $descripcion ) );
+				return new \WP_Error( 'asde_inventario', sprintf( /* translators: %s: text */ __( 'The quantity to buy of "%s" is not valid.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $descripcion ) );
 			}
 			$precio = MaterialesTable::euros( $texto );
 			if ( false === $precio ) {
 				/* translators: %s: descripción del material */
-				return new \WP_Error( 'asde_inventario', sprintf( asde_t( 'El precio de «%s» no es válido (por ejemplo: 12,50).' ), $descripcion ) );
+				return new \WP_Error( 'asde_inventario', sprintf( /* translators: %s: text */ __( 'The price of "%s" is not valid (for example: 12,50).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $descripcion ) );
 			}
 			$lineas[] = array(
 				'material'      => 0, // 0: material nuevo (se da de alta al marcar la lista como comprada).
@@ -130,11 +130,11 @@ final class Servicio {
 			);
 		}
 		if ( ! $lineas ) {
-			return new \WP_Error( 'asde_inventario', asde_t( 'La lista está vacía: indica cuántas unidades quieres comprar de algún material.' ) );
+			return new \WP_Error( 'asde_inventario', __( 'The list is empty: state how many units you want to buy of some item.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( count( $lineas ) > ComprasTable::MAX_LINEAS ) {
 			/* translators: %d: número máximo de líneas */
-			return new \WP_Error( 'asde_inventario', sprintf( asde_t( 'Una lista puede tener como mucho %d materiales.' ), ComprasTable::MAX_LINEAS ) );
+			return new \WP_Error( 'asde_inventario', sprintf( /* translators: %d: number */ __( 'A list can have at most %d items of equipment.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), ComprasTable::MAX_LINEAS ) );
 		}
 		return $lineas;
 	}
@@ -186,7 +186,7 @@ final class Servicio {
 	 */
 	public static function comprar( array $l ) {
 		if ( ! self::puede_marcar_comprada( $l ) || ! ComprasTable::marcar_comprada( $l['id'] ) ) {
-			return new \WP_Error( 'asde_inventario', asde_t( 'Esta lista no se puede marcar como comprada: tiene que tener el visto bueno de Tesorería y no estar ya comprada.' ) );
+			return new \WP_Error( 'asde_inventario', __( 'This list cannot be marked as bought: it must have Treasury\'s approval and not already be bought.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$res    = array(
 			'sumados' => array(),

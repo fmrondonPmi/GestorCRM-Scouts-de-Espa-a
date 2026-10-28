@@ -118,7 +118,7 @@ final class AvisosTareas {
 		$repo   = PersonaRepository::make();
 		$email  = Contacto::email( $user, $repo );
 		if ( ! $email ) {
-			RegistroEmails::registrar( $user, RegistroEmails::EVENTOS, '', $asunto, RegistroEmails::SIN_EMAIL, asde_t( 'La cuenta no tiene un email al que escribir.' ), $datos );
+			RegistroEmails::registrar( $user, RegistroEmails::EVENTOS, '', $asunto, RegistroEmails::SIN_EMAIL, __( 'The account has no email address to write to.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $datos );
 			return false;
 		}
 		$error = RegistroEmails::enviar( $email, $asunto, self::html( $datos, Contacto::saludo( $user, $repo ) ) );
@@ -129,8 +129,8 @@ final class AvisosTareas {
 	/** Asunto en el idioma de quien lo recibe (se llama dentro de Idioma::en). */
 	private static function asunto( array $datos ): string {
 		$plantilla = self::VENCE === $datos['tipo']
-			? asde_t( '[%1$s] Hoy vence una tarea de %2$s' )
-			: asde_t( '[%1$s] Una tarea de %2$s vence pronto' );
+			? /* translators: 1: text, 2: text */ __( '[%1$s] A task of %2$s is due today', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' )
+			: /* translators: 1: text, 2: text */ __( '[%1$s] A task of %2$s is due soon', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		return sprintf( $plantilla, (string) $datos['grupo'], (string) $datos['evento'] );
 	}
 

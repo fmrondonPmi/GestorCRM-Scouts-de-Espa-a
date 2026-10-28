@@ -62,7 +62,7 @@ final class SolicitarView extends View {
 			return;
 		}
 		if ( ! wp_verify_nonce( $this->post_nonce(), 'asde_solicitar' ) ) {
-			self::$estado = array( 'errores' => array( asde_t( 'La sesión del formulario ha caducado. Vuelve a intentarlo.' ) ) );
+			self::$estado = array( 'errores' => array( __( 'The form session has expired. Try again.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) );
 			return;
 		}
 		// Campo trampa o enviado en menos de 3 segundos: un programa, no una persona.
@@ -82,17 +82,17 @@ final class SolicitarView extends View {
 		);
 		$errores = array();
 		if ( ! $grupo || '' === $grupo['crm_id'] || ! \AsdeBalears\AreaPrivada\Domain\Modulos::activo( \AsdeBalears\AreaPrivada\Domain\Modulos::SOLICITUDES, (string) $grupo['numero'] ) ) {
-			$errores[] = asde_t( 'Elige tu Grupo Scout.' );
+			$errores[] = __( 'Choose your Scout Group.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		$fecha = \DateTimeImmutable::createFromFormat( '!Y-m-d', $d['nacimiento'] );
 		if ( ! $fecha || $fecha->format( 'Y-m-d' ) !== $d['nacimiento'] || $fecha > new \DateTimeImmutable( 'today' ) || (int) $fecha->format( 'Y' ) < 1920 ) {
-			$errores[] = asde_t( 'Escribe la fecha de nacimiento del socio/a.' );
+			$errores[] = __( 'Enter the member\'s date of birth.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		if ( ! is_email( $d['email'] ) ) {
-			$errores[] = asde_t( 'Escribe un email válido: ahí te llegará la invitación.' );
+			$errores[] = __( 'Enter a valid email address: the invitation will be sent there.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		if ( mb_strlen( $d['nombre'] ) < 3 ) {
-			$errores[] = asde_t( 'Escribe tu nombre y apellidos.' );
+			$errores[] = __( 'Enter your first name and surname.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		if ( $errores ) {
 			self::$estado = array(

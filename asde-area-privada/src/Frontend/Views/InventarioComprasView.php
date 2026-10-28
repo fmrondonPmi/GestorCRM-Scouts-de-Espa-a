@@ -36,7 +36,7 @@ final class InventarioComprasView extends InventarioBaseView {
 		if ( $id ) {
 			$l = ComprasTable::obtener( $id );
 			if ( ! $l ) {
-				return $this->denegado( asde_t( 'Esa lista de compra no es de tu grupo.' ) );
+				return $this->denegado( __( 'That shopping list does not belong to your group.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			}
 			return $this->layout( 'inventario_compras', $this->detalle( $l ) );
 		}
@@ -143,13 +143,13 @@ final class InventarioComprasView extends InventarioBaseView {
 	public function pdf(): void {
 		$l = ComprasTable::obtener( (int) $this->get( 'lista' ) );
 		if ( ! wp_verify_nonce( $this->get( '_wpnonce' ), 'asde_inventario_pdf_' . ( $l['id'] ?? 0 ) ) ) {
-			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+			wp_die( esc_html__( 'Download link not valid or expired.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		if ( ! $l || ! current_user_can( Servicio::CAP ) ) {
-			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+			wp_die( esc_html__( 'Download link not valid or expired.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		if ( ! Servicio::puede_imprimir( $l ) ) {
-			wp_die( esc_html( asde_t( 'Esta lista de compra todavía no tiene el visto bueno de Tesorería: no se puede imprimir.' ) ), 403 );
+			wp_die( esc_html( __( 'This shopping list does not yet have Treasury\'s approval: it cannot be printed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ), 403 );
 		}
 		$pdf = ListaPdf::generar( $l );
 		ComprasTable::marcar_impresa( $l['id'] );
@@ -211,13 +211,13 @@ final class InventarioComprasView extends InventarioBaseView {
 			$num   = ComprasTable::numero( $l );
 			if ( $aviso['enviados'] && $aviso['contacto'] ) {
 				/* translators: %s: nº de la lista */
-				$texto = sprintf( asde_t( 'Lista %s creada. No hay nadie de Tesorería con email en el área privada: se ha avisado al email de contacto del grupo. Cuando Tesorería le dé el visto bueno, la podrás imprimir.' ), $num );
+				$texto = sprintf( /* translators: %s: text */ __( 'List %s created. There is nobody in Treasury with an email in the private area: the group\'s contact email has been notified. When Treasury approves it, you will be able to print it.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $num );
 			} elseif ( $aviso['enviados'] ) {
-				$texto = sprintf( asde_n( 'Lista %1$s creada y enviada a %2$d persona de Tesorería para que le dé el visto bueno. Cuando lo tenga, la podrás imprimir.', 'Lista %1$s creada y enviada a %2$d personas de Tesorería para que le den el visto bueno. Cuando lo tenga, la podrás imprimir.', $aviso['enviados'] ), $num, $aviso['enviados'] );
+				$texto = sprintf( /* translators: 1: text, 2: number */ _n( 'List %1$s created and sent to %2$d person in Treasury for approval. When it has it, you will be able to print it.', 'List %1$s created and sent to %2$d people in Treasury for approval. When it has it, you will be able to print it.', $aviso['enviados'] , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $num, $aviso['enviados'] );
 			} elseif ( current_user_can( Servicio::CAP_APROBAR ) ) {
-				$texto = sprintf( asde_t( 'Lista %s creada. No había nadie más de Tesorería a quien avisar: puedes darle tú el visto bueno.' ), $num );
+				$texto = sprintf( /* translators: %s: text */ __( 'List %s created. There was nobody else in Treasury to notify: you can approve it yourself.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $num );
 			} else {
-				$texto = sprintf( asde_t( 'Lista %s creada, pero no se ha podido avisar a Tesorería por email: díselo para que le dé el visto bueno.' ), $num );
+				$texto = sprintf( /* translators: %s: text */ __( 'List %s created, but Treasury could not be notified by email: tell them so they approve it.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $num );
 			}
 			Notices::add( $aviso['enviados'] || current_user_can( Servicio::CAP_APROBAR ) ? 'success' : 'warning', esc_html( $texto ) );
 			$this->redirect( add_query_arg( 'lista', (string) $id, $listas ) );
@@ -226,30 +226,30 @@ final class InventarioComprasView extends InventarioBaseView {
 		$l = ComprasTable::obtener( (int) $this->post( 'lista' ) );
 		check_admin_referer( 'asde_inventario_compra_' . ( $l['id'] ?? 0 ) );
 		if ( ! $l ) {
-			Notices::add( 'error', asde_t( 'Esa lista de compra no es de tu grupo.' ) );
+			Notices::add( 'error', __( 'That shopping list does not belong to your group.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			$this->redirect( $listas );
 		}
 		$num   = ComprasTable::numero( $l );
 		$hecho = '';
-		$error = asde_t( 'No se puede hacer esto con esta lista (puede que alguien la haya cambiado mientras tanto).' );
+		$error = __( 'This cannot be done with this list (someone may have changed it in the meantime).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 
 		switch ( $accion ) {
 			case 'compra_aprobar':
 				if ( Servicio::puede_revisar( $l ) && ComprasTable::revisar( $l['id'], true ) ) {
 					Logger::log( 'inventario_compra_aprobada', 'inventario_compra', (string) $l['id'] );
-					$hecho = sprintf( asde_t( 'Lista %s con el visto bueno de Tesorería. Ya se puede imprimir.' ), $num ) . self::aviso_revision( $l['id'] );
+					$hecho = sprintf( /* translators: %s: text */ __( 'List %s approved by Treasury. It can now be printed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $num ) . self::aviso_revision( $l['id'] );
 				}
 				break;
 
 			case 'compra_rechazar':
 				if ( Servicio::puede_revisar( $l ) ) {
 					if ( '' === trim( $this->post( 'motivo' ) ) ) {
-						$error = asde_t( 'Indica el motivo del rechazo: lo verá quien la ha pedido.' );
+						$error = __( 'State the reason for the rejection: whoever requested it will see it.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 						break;
 					}
 					if ( ComprasTable::revisar( $l['id'], false, $this->post( 'motivo' ) ) ) {
 						Logger::log( 'inventario_compra_rechazada', 'inventario_compra', (string) $l['id'] );
-						$hecho = sprintf( asde_t( 'Lista %s rechazada.' ), $num ) . self::aviso_revision( $l['id'] );
+						$hecho = sprintf( /* translators: %s: text */ __( 'List %s rejected.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $num ) . self::aviso_revision( $l['id'] );
 					}
 				}
 				break;
@@ -261,31 +261,31 @@ final class InventarioComprasView extends InventarioBaseView {
 					$error = $r->get_error_message();
 					break;
 				}
-				$hecho = sprintf( asde_t( 'Lista %s marcada como comprada.' ), $num );
+				$hecho = sprintf( /* translators: %s: text */ __( 'List %s marked as bought.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $num );
 				if ( $r['sumados'] ) {
-					$hecho .= ' ' . sprintf( asde_n( 'Se ha sumado lo comprado a %d material del inventario.', 'Se ha sumado lo comprado a %d materiales del inventario.', count( $r['sumados'] ) ), count( $r['sumados'] ) );
+					$hecho .= ' ' . sprintf( /* translators: %d: number */ _n( 'What was bought has been added to %d item of equipment in the inventory.', 'What was bought has been added to %d items of equipment in the inventory.', count( $r['sumados'] ) , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), count( $r['sumados'] ) );
 				}
 				if ( $r['creados'] ) {
-					$hecho .= ' ' . sprintf( asde_n( 'Se ha dado de alta %d material nuevo.', 'Se han dado de alta %d materiales nuevos.', count( $r['creados'] ) ), count( $r['creados'] ) );
+					$hecho .= ' ' . sprintf( /* translators: %d: number */ _n( '%d new item of equipment has been registered.', '%d new items of equipment have been registered.', count( $r['creados'] ) , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), count( $r['creados'] ) );
 				}
 				break;
 
 			case 'compra_deshacer':
 				if ( Servicio::puede_deshacer( $l ) && ComprasTable::deshacer_aprobacion( $l['id'] ) ) {
 					Logger::log( 'inventario_compra_aprobacion_deshecha', 'inventario_compra', (string) $l['id'] );
-					$hecho = sprintf( asde_t( 'Visto bueno deshecho: la lista %s vuelve a estar pendiente.' ), $num );
+					$hecho = sprintf( /* translators: %s: text */ __( 'Approval undone: list %s is pending again.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $num );
 				}
 				break;
 
 			case 'compra_cancelar':
 				if ( Servicio::puede_cancelar( $l ) && ComprasTable::cancelar( $l['id'], $this->post( 'motivo' ) ) ) {
 					Logger::log( 'inventario_compra_cancelada', 'inventario_compra', (string) $l['id'] );
-					$hecho = sprintf( asde_t( 'Lista %s cancelada.' ), $num );
+					$hecho = sprintf( /* translators: %s: text */ __( 'List %s cancelled.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $num );
 				}
 				break;
 
 			default:
-				$error = asde_t( 'Acción desconocida.' );
+				$error = __( 'Unknown action.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		'' !== $hecho ? Notices::add( 'success', esc_html( $hecho ) ) : Notices::add( 'error', esc_html( $error ) );
 		$this->redirect( add_query_arg( 'lista', (string) $l['id'], $listas ) );
@@ -300,11 +300,11 @@ final class InventarioComprasView extends InventarioBaseView {
 		$l = ComprasTable::obtener( $id );
 		switch ( $l ? AvisoRevision::enviar( $l ) : '' ) {
 			case RegistroEmails::ENVIADO:
-				return ' ' . asde_t( 'Se ha avisado por email a quien la pidió.' );
+				return ' ' . __( 'Whoever requested it has been notified by email.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 			case RegistroEmails::SIN_EMAIL:
-				return ' ' . asde_t( 'Quien la pidió no tiene email en el área privada: díselo tú.' );
+				return ' ' . __( 'Whoever requested it has no email in the private area: tell them yourself.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 			case RegistroEmails::ERROR:
-				return ' ' . asde_t( 'No se ha podido enviar el email a quien la pidió: díselo tú.' );
+				return ' ' . __( 'The email to whoever requested it could not be sent: tell them yourself.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 			default:
 				return '';
 		}
@@ -339,6 +339,6 @@ final class InventarioComprasView extends InventarioBaseView {
 
 	/** Total para el resumen del listado (con «+ sin precio» si alguna línea no lo tiene). */
 	public static function total( array $l ): string {
-		return Calculadora::euros( $l['total'] ) . ( ComprasTable::sin_precio( $l ) ? ' ' . asde_t( '+ sin precio' ) : '' );
+		return Calculadora::euros( $l['total'] ) . ( ComprasTable::sin_precio( $l ) ? ' ' . __( '+ no price', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : '' );
 	}
 }

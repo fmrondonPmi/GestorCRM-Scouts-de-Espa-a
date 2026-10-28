@@ -55,21 +55,21 @@ final class Importador {
 	public static function leer( string $ruta ) {
 		$tam = is_readable( $ruta ) ? (int) filesize( $ruta ) : 0;
 		if ( $tam <= 0 ) {
-			return new \WP_Error( 'asde_importar', asde_t( 'El fichero está vacío o no se ha podido leer.' ) );
+			return new \WP_Error( 'asde_importar', __( 'The file is empty or could not be read.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( $tam > self::MAX_BYTES ) {
 			/* translators: %d: tamaño máximo en MB */
-			return new \WP_Error( 'asde_importar', sprintf( asde_t( 'El fichero es demasiado grande (como mucho %d MB).' ), (int) ( self::MAX_BYTES / MB_IN_BYTES ) ) );
+			return new \WP_Error( 'asde_importar', sprintf( /* translators: %d: number */ __( 'The file is too large (at most %d MB).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), (int) ( self::MAX_BYTES / MB_IN_BYTES ) ) );
 		}
 		$texto = (string) file_get_contents( $ruta ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents -- fichero subido (temporal del servidor), no una URL
 		if ( str_contains( substr( $texto, 0, 4096 ), "\0" ) ) {
-			return new \WP_Error( 'asde_importar', asde_t( 'El fichero no es un CSV (parece una hoja de Excel u otro formato). Guárdalo como «CSV (delimitado por punto y coma)» y vuelve a intentarlo.' ) );
+			return new \WP_Error( 'asde_importar', __( 'The file is not a CSV (it looks like an Excel sheet or another format). Save it as "CSV (semicolon delimited)" and try again.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$texto = self::a_utf8( $texto );
 
 		$lineas = self::filas_csv( $texto );
 		if ( ! $lineas ) {
-			return new \WP_Error( 'asde_importar', asde_t( 'El fichero está vacío o no se ha podido leer.' ) );
+			return new \WP_Error( 'asde_importar', __( 'The file is empty or could not be read.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$cabecera = array_shift( $lineas );
 		$mapa     = self::mapa( $cabecera );
@@ -77,7 +77,7 @@ final class Importador {
 		if ( $faltan ) {
 			$nombres = array_map( static fn( $c ) => '«' . asde_t( self::COLUMNAS[ $c ][0] ) . '»', $faltan );
 			/* translators: %s: columnas que faltan */
-			return new \WP_Error( 'asde_importar', sprintf( asde_t( 'La primera fila tiene que ser la cabecera con los nombres de las columnas, y faltan: %s. Descarga el ejemplo para ver cómo tiene que ser.' ), implode( ', ', $nombres ) ) );
+			return new \WP_Error( 'asde_importar', sprintf( /* translators: %s: text */ __( 'The first row must be the header with the column names, and these are missing: %s. Download the example to see what it must look like.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), implode( ', ', $nombres ) ) );
 		}
 
 		$filas = array();
@@ -92,11 +92,11 @@ final class Importador {
 			$filas[ $i + 2 ] = $fila; // +1 por la cabecera y +1 porque la hoja empieza en la fila 1.
 		}
 		if ( ! $filas ) {
-			return new \WP_Error( 'asde_importar', asde_t( 'El fichero solo tiene la cabecera: no hay ningún material que importar.' ) );
+			return new \WP_Error( 'asde_importar', __( 'The file has only the header: there is no equipment to import.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( count( $filas ) > self::MAX_FILAS ) {
 			/* translators: %d: número máximo de filas */
-			return new \WP_Error( 'asde_importar', sprintf( asde_t( 'El fichero tiene demasiadas filas (como mucho %d). Pártelo en varios.' ), self::MAX_FILAS ) );
+			return new \WP_Error( 'asde_importar', sprintf( /* translators: %d: number */ __( 'The file has too many rows (at most %d). Split it into several.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), self::MAX_FILAS ) );
 		}
 		return array(
 			'filas'    => $filas,
@@ -151,7 +151,7 @@ final class Importador {
 				$tipo = TiposTable::por_nombre( $nombre );
 				if ( ! $tipo && ! $crear_tipos ) {
 					/* translators: %s: nombre del tipo */
-					$fallo( $n, $fila, sprintf( asde_t( 'El tipo «%s» no existe.' ), $nombre ) );
+					$fallo( $n, $fila, sprintf( /* translators: %s: text */ __( 'The type "%s" does not exist.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $nombre ) );
 					continue;
 				}
 			}
@@ -163,9 +163,9 @@ final class Importador {
 					$fila,
 					$series[ $serie ]
 						/* translators: 1: nº de serie, 2: nº de fila */
-						? sprintf( asde_t( 'El nº de serie «%1$s» ya está en la fila %2$d del fichero.' ), $fila['num_serie'], $series[ $serie ] )
+						? sprintf( /* translators: 1: text, 2: number */ __( 'The serial no. "%1$s" is already in row %2$d of the file.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $fila['num_serie'], $series[ $serie ] )
 						/* translators: %s: nº de serie */
-						: sprintf( asde_t( 'Ya hay un material con el nº de serie «%s» en el inventario.' ), $fila['num_serie'] )
+						: sprintf( /* translators: %s: text */ __( 'There is already an item with the serial no. "%s" in the inventory.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $fila['num_serie'] )
 				);
 				continue;
 			}
@@ -191,7 +191,7 @@ final class Importador {
 				// Repetido: suma su cantidad al que ya está (del inventario o de una fila anterior).
 				if ( $datos['cantidad'] > 0 && ! MaterialesTable::sumar( $iguales[ $clave ], $datos['cantidad'] ) ) {
 					/* translators: %d: cantidad máxima */
-					$fallo( $n, $fila, sprintf( asde_t( 'Ya hay un material con esta descripción y este tipo, y sumándole esta cantidad pasaría de %d unidades.' ), MaterialesTable::MAX_CANTIDAD ) );
+					$fallo( $n, $fila, sprintf( /* translators: %d: number */ __( 'There is already an item with this description and type, and adding this quantity to it would take it above %d units.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), MaterialesTable::MAX_CANTIDAD ) );
 					continue;
 				}
 				++$res['sumados'];
@@ -227,11 +227,11 @@ final class Importador {
 	public static function ejemplo(): string {
 		$filas = array(
 			array_map( static fn( $c ) => asde_t( $c[0] ), self::COLUMNAS ),
-			array( asde_t( 'Tienda canadiense 4 plazas' ), asde_t( 'Tiendas' ), '3', '120,00', '2019', 'TC-0001', asde_t( 'En el local, estantería 2' ), '', '' ),
-			array( asde_t( 'Hornillo de gas' ), asde_t( 'Cocina' ), '6', '35,50', '', '', '', '', '' ),
-			array( asde_t( 'Cuerda de 20 m' ), '', '10', '', '', '', '', '', '' ),
+			array( __( '4-person Canadian tent', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Tents', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), '3', '120,00', '2019', 'TC-0001', __( 'At the local, shelf 2', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), '', '' ),
+			array( __( 'Gas stove', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Kitchen', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), '6', '35,50', '', '', '', '', '' ),
+			array( __( '20 m rope', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), '', '10', '', '', '', '', '', '' ),
 			// Una camisa del uniforme: sin descripción, se pone sola («Camisa femenina (chica), talla M»).
-			array( '', TiposTable::obtener( TiposTable::camisa() )['nombre'] ?? TiposTable::NOMBRE_CAMISA, '4', '', '', '', '', asde_t( 'chica' ), 'M' ),
+			array( '', TiposTable::obtener( TiposTable::camisa() )['nombre'] ?? TiposTable::NOMBRE_CAMISA, '4', '', '', '', '', __( 'girl', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 'M' ),
 		);
 		return "\xEF\xBB\xBF" . self::a_csv( $filas );
 	}

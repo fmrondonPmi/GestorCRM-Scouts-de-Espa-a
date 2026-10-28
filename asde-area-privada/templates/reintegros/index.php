@@ -19,40 +19,40 @@ defined( 'ABSPATH' ) || exit;
 
 $fecha  = static fn( string $f ): string => wp_date( 'd/m/Y', strtotime( $f . ' 12:00' ) );
 $nombre = static function ( array $r ) use ( $eventos ): string {
-	return $r['evento_id'] ? (string) ( $eventos[ $r['evento_id'] ] ?? asde_t( 'Evento' ) ) : '';
+	return $r['evento_id'] ? (string) ( $eventos[ $r['evento_id'] ] ?? __( 'Event', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) : '';
 };
 /** Una fila de la tabla de reintegros, con lo que se puede hacer con ella. */
 $fila = static function ( array $r, bool $con_quien ) use ( $url, $fecha, $nombre, $hoy ): void {
 	$iban = Servicio::iban( $r );
 	?>
 	<tr>
-		<td data-label="<?php echo esc_attr( asde_a( 'Reintegro' ) ); ?>">
+		<td data-label="<?php echo esc_attr( esc_attr__( 'Reimbursement', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
 			<strong><?php echo esc_html( ReintegrosTable::numero( $r ) ); ?></strong>
 			<span class="asde-badge asde-badge--reintegro-<?php echo esc_attr( $r['estado'] ); ?>"><?php echo esc_html( asde_t( ReintegrosTable::ESTADOS[ $r['estado'] ] ?? '' ) ); ?></span>
 			<?php echo wp_kses( $con_quien ? '<br><span class="asde-muted">' . esc_html( Servicio::nombre( $r['solicitante'] ) ) . '</span>' : '', asde_html_permitido() ); ?>
 		</td>
-		<td data-label="<?php echo esc_attr( asde_a( 'Qué' ) ); ?>">
+		<td data-label="<?php echo esc_attr( esc_attr__( 'What', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
 			<?php echo esc_html( $r['concepto'] ); ?><br>
 			<span class="asde-muted"><?php echo esc_html( $fecha( $r['fecha'] ) ); ?><?php echo '' !== $nombre( $r ) ? ' · ' . esc_html( $nombre( $r ) ) : ''; ?></span>
 			<?php if ( '' !== $r['motivo'] && ReintegrosTable::RECHAZADO === $r['estado'] ) : ?>
-				<br><span class="asde-muted"><?php echo esc_html( sprintf( asde_t( 'Motivo: %s' ), $r['motivo'] ) ); ?></span>
+				<br><span class="asde-muted"><?php echo esc_html( sprintf( /* translators: %s: text */ __( 'Reason: %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $r['motivo'] ) ); ?></span>
 			<?php endif; ?>
 			<?php if ( ReintegrosTable::PAGADO === $r['estado'] && $r['pago_fecha'] ) : ?>
-				<br><span class="asde-muted"><?php echo esc_html( sprintf( asde_t( 'Pagado el %s' ), $fecha( $r['pago_fecha'] ) ) ); ?><?php echo '' !== $r['pago_ref'] ? ' · ' . esc_html( $r['pago_ref'] ) : ''; ?></span>
+				<br><span class="asde-muted"><?php echo esc_html( sprintf( /* translators: %s: text */ __( 'Paid on %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $fecha( $r['pago_fecha'] ) ) ); ?><?php echo '' !== $r['pago_ref'] ? ' · ' . esc_html( $r['pago_ref'] ) : ''; ?></span>
 			<?php endif; ?>
 		</td>
-		<td data-label="<?php echo esc_attr( asde_a( 'Importe' ) ); ?>">
+		<td data-label="<?php echo esc_attr( esc_attr__( 'Amount', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
 			<?php echo esc_html( Calculadora::euros( $r['importe'] ) ); ?><br>
 			<span class="asde-muted"><?php echo esc_html( asde_t( ReintegrosTable::FORMAS[ $r['forma'] ] ?? '' ) ); ?></span>
 			<?php echo wp_kses( '' !== $iban ? '<br><span class="asde-muted">' . esc_html( $iban ) . '</span>' : '', asde_html_permitido() ); ?>
 		</td>
-		<td data-label="<?php echo esc_attr( asde_a( 'Acciones' ) ); ?>">
+		<td data-label="<?php echo esc_attr( esc_attr__( 'Actions', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
 			<?php if ( '' !== $r['justificante'] ) : ?>
 				<form method="post" action="<?php echo esc_url( $url ); ?>" class="asde-inline-form" data-asde-sin-carga target="_blank">
 					<?php wp_nonce_field( 'asde_reintegro_' . $r['id'] ); ?>
 					<input type="hidden" name="asde_action" value="reintegro_justificante">
 					<input type="hidden" name="reintegro" value="<?php echo (int) $r['id']; ?>">
-					<button type="submit" class="asde-btn-link"><?php asde_e( 'Ver justificante' ); ?></button>
+					<button type="submit" class="asde-btn-link"><?php esc_html_e( 'View receipt', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 				</form>
 			<?php endif; ?>
 			<?php if ( Servicio::puede_aprobar( $r ) ) : ?>
@@ -60,15 +60,15 @@ $fila = static function ( array $r, bool $con_quien ) use ( $url, $fecha, $nombr
 					<?php wp_nonce_field( 'asde_reintegro_' . $r['id'] ); ?>
 					<input type="hidden" name="asde_action" value="reintegro_aprobar">
 					<input type="hidden" name="reintegro" value="<?php echo (int) $r['id']; ?>">
-					<button type="submit" class="button"><?php asde_e( 'Aprobar' ); ?></button>
+					<button type="submit" class="button"><?php esc_html_e( 'Approve', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 				</form>
 				<form method="post" action="<?php echo esc_url( $url ); ?>" class="asde-form asde-form--compacta">
 					<?php wp_nonce_field( 'asde_reintegro_' . $r['id'] ); ?>
 					<input type="hidden" name="asde_action" value="reintegro_rechazar">
 					<input type="hidden" name="reintegro" value="<?php echo (int) $r['id']; ?>">
 					<p class="asde-form__fila">
-						<label><?php asde_e( 'Motivo' ); ?> <input type="text" name="motivo" maxlength="255" required></label>
-						<button type="submit" class="asde-btn-link asde-btn-danger"><?php asde_e( 'Rechazar' ); ?></button>
+						<label><?php esc_html_e( 'Reason', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <input type="text" name="motivo" maxlength="255" required></label>
+						<button type="submit" class="asde-btn-link asde-btn-danger"><?php esc_html_e( 'Reject', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 					</p>
 				</form>
 			<?php endif; ?>
@@ -78,18 +78,18 @@ $fila = static function ( array $r, bool $con_quien ) use ( $url, $fecha, $nombr
 					<input type="hidden" name="asde_action" value="reintegro_pagar">
 					<input type="hidden" name="reintegro" value="<?php echo (int) $r['id']; ?>">
 					<p class="asde-form__fila">
-						<label><?php asde_e( 'Fecha del pago' ); ?> <input type="date" name="fecha" value="<?php echo esc_attr( $hoy ); ?>" max="<?php echo esc_attr( $hoy ); ?>" required></label>
-						<label><?php asde_e( 'Referencia (opcional)' ); ?> <input type="text" name="referencia" maxlength="120"></label>
-						<button type="submit" class="button"><?php asde_e( 'Marcar pagado' ); ?></button>
+						<label><?php esc_html_e( 'Payment date', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <input type="date" name="fecha" value="<?php echo esc_attr( $hoy ); ?>" max="<?php echo esc_attr( $hoy ); ?>" required></label>
+						<label><?php esc_html_e( 'Reference (optional)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <input type="text" name="referencia" maxlength="120"></label>
+						<button type="submit" class="button"><?php esc_html_e( 'Mark as paid', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 					</p>
 				</form>
 			<?php endif; ?>
 			<?php if ( Servicio::puede_cancelar( $r ) ) : ?>
-				<form method="post" action="<?php echo esc_url( $url ); ?>" class="asde-inline-form" data-asde-confirmar="<?php echo esc_attr( asde_js( '¿Cancelar el reintegro %s?', ReintegrosTable::numero( $r ) ) ); ?>">
+				<form method="post" action="<?php echo esc_url( $url ); ?>" class="asde-inline-form" data-asde-confirmar="<?php echo esc_attr( sprintf( /* translators: %s: text */ __( 'Cancel reimbursement %s?', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), ReintegrosTable::numero( $r ) ) ); ?>">
 					<?php wp_nonce_field( 'asde_reintegro_' . $r['id'] ); ?>
 					<input type="hidden" name="asde_action" value="reintegro_cancelar">
 					<input type="hidden" name="reintegro" value="<?php echo (int) $r['id']; ?>">
-					<button type="submit" class="asde-btn-link asde-btn-danger"><?php asde_e( 'Cancelar' ); ?></button>
+					<button type="submit" class="asde-btn-link asde-btn-danger"><?php esc_html_e( 'Cancel', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 				</form>
 			<?php endif; ?>
 		</td>
@@ -102,10 +102,10 @@ $tabla = static function ( array $lista, bool $con_quien ) use ( $fila ): void {
 	<table class="asde-table">
 		<thead>
 			<tr>
-				<th scope="col"><?php asde_e( 'Reintegro' ); ?></th>
-				<th scope="col"><?php asde_e( 'Qué' ); ?></th>
-				<th scope="col"><?php asde_e( 'Importe' ); ?></th>
-				<th scope="col"><span class="screen-reader-text"><?php asde_e( 'Acciones' ); ?></span></th>
+				<th scope="col"><?php esc_html_e( 'Reimbursement', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
+				<th scope="col"><?php esc_html_e( 'What', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
+				<th scope="col"><?php esc_html_e( 'Amount', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
+				<th scope="col"><span class="screen-reader-text"><?php esc_html_e( 'Actions', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span></th>
 			</tr>
 		</thead>
 		<tbody>
@@ -119,19 +119,19 @@ $tabla = static function ( array $lista, bool $con_quien ) use ( $fila ): void {
 ?>
 <?php if ( $puede_pedir ) : ?>
 	<section class="asde-card" data-asde-plegable="reintegros-pedir" data-asde-inicio="abierto">
-		<h2 class="asde-card__title"><?php asde_e( 'Pedir un reintegro' ); ?></h2>
-		<p class="asde-muted"><?php asde_e( 'Si has pagado algo del grupo de tu bolsillo, pide aquí que te lo devuelvan. Adjunta el tique o la factura. Lo aprueba Tesorería y lo paga Tesorería o Coordinación.' ); ?></p>
+		<h2 class="asde-card__title"><?php esc_html_e( 'Request a reimbursement', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h2>
+		<p class="asde-muted"><?php esc_html_e( 'If you have paid for something for the group out of your own pocket, request here to be repaid. Attach the ticket or invoice. Treasury approves it and Treasury or Coordination pays it.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 		<form method="post" enctype="multipart/form-data" class="asde-form" action="<?php echo esc_url( $url ); ?>" data-asde-reintegro>
 			<?php wp_nonce_field( 'asde_reintegro_pedir' ); ?>
 			<input type="hidden" name="asde_action" value="reintegro_pedir">
 			<p class="asde-form__fila asde-form__fila--una-linea">
-				<label for="asde-rei-concepto"><?php asde_e( 'Qué pagaste' ); ?> <input type="text" id="asde-rei-concepto" name="concepto" maxlength="120" required></label>
-				<label for="asde-rei-fecha"><?php asde_e( 'Fecha del gasto' ); ?> <input type="date" id="asde-rei-fecha" name="fecha" value="<?php echo esc_attr( $hoy ); ?>" max="<?php echo esc_attr( $hoy ); ?>" required></label>
-				<label for="asde-rei-importe"><?php asde_e( 'Importe (€)' ); ?> <input type="text" id="asde-rei-importe" name="importe" inputmode="decimal" size="8" required></label>
+				<label for="asde-rei-concepto"><?php esc_html_e( 'What you paid for', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <input type="text" id="asde-rei-concepto" name="concepto" maxlength="120" required></label>
+				<label for="asde-rei-fecha"><?php esc_html_e( 'Date of the expense', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <input type="date" id="asde-rei-fecha" name="fecha" value="<?php echo esc_attr( $hoy ); ?>" max="<?php echo esc_attr( $hoy ); ?>" required></label>
+				<label for="asde-rei-importe"><?php esc_html_e( 'Amount (€)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <input type="text" id="asde-rei-importe" name="importe" inputmode="decimal" size="8" required></label>
 				<?php if ( $eventos ) : ?>
-					<label for="asde-rei-evento"><?php asde_e( 'Evento (si es de uno)' ); ?>
+					<label for="asde-rei-evento"><?php esc_html_e( 'Event (if for one)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>
 						<select id="asde-rei-evento" name="evento">
-							<option value=""><?php asde_e( 'Sin evento' ); ?></option>
+							<option value=""><?php esc_html_e( 'No event', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></option>
 							<?php foreach ( $eventos as $id => $nombre_evento ) : ?>
 								<option value="<?php echo (int) $id; ?>"><?php echo esc_html( $nombre_evento ); ?></option>
 							<?php endforeach; ?>
@@ -140,27 +140,27 @@ $tabla = static function ( array $lista, bool $con_quien ) use ( $fila ): void {
 				<?php endif; ?>
 			</p>
 			<p class="asde-form__fila asde-form__fila--una-linea">
-				<label for="asde-rei-just"><?php asde_e( 'Tique o factura (imagen o PDF, hasta 5 MB)' ); ?> <input type="file" id="asde-rei-just" name="justificante" accept="image/jpeg,image/png,image/webp,application/pdf" required></label>
-				<label for="asde-rei-forma"><?php asde_e( '¿Cómo prefieres cobrarlo?' ); ?>
+				<label for="asde-rei-just"><?php esc_html_e( 'Ticket or invoice (image or PDF, up to 5 MB)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <input type="file" id="asde-rei-just" name="justificante" accept="image/jpeg,image/png,image/webp,application/pdf" required></label>
+				<label for="asde-rei-forma"><?php esc_html_e( 'How do you prefer to be paid?', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>
 					<select id="asde-rei-forma" name="forma">
 						<?php foreach ( asde_ta( ReintegrosTable::FORMAS ) as $forma => $etiqueta ) : ?>
 							<option value="<?php echo esc_attr( $forma ); ?>"><?php echo esc_html( $etiqueta ); ?></option>
 						<?php endforeach; ?>
 					</select>
 				</label>
-				<label for="asde-rei-iban" data-asde-iban><?php asde_e( 'IBAN (solo por transferencia)' ); ?> <input type="text" id="asde-rei-iban" name="iban" maxlength="42" autocomplete="off"></label>
-				<button type="submit" class="button"><?php asde_e( 'Pedir el reintegro' ); ?></button>
+				<label for="asde-rei-iban" data-asde-iban><?php esc_html_e( 'IBAN (transfer only)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <input type="text" id="asde-rei-iban" name="iban" maxlength="42" autocomplete="off"></label>
+				<button type="submit" class="button"><?php esc_html_e( 'Request the reimbursement', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 			</p>
-			<p class="asde-help"><?php asde_e( 'Solo lo ven Tesorería y Coordinación, y se borra cuando el reintegro se paga, se rechaza o se cancela.' ); ?></p>
+			<p class="asde-help"><?php esc_html_e( 'Only Treasury and Coordination see it, and it is deleted when the reimbursement is paid, rejected or cancelled.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 		</form>
 	</section>
 <?php endif; ?>
 
 <?php if ( Servicio::ve_todos() ) : ?>
 	<section class="asde-card" data-asde-plegable="reintegros-pendientes" data-asde-inicio="abierto">
-		<h2 class="asde-card__title"><?php asde_e( 'Por aprobar y por pagar' ); ?></h2>
+		<h2 class="asde-card__title"><?php esc_html_e( 'To approve and to pay', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h2>
 		<?php if ( ! $todos ) : ?>
-			<p class="asde-muted"><?php asde_e( 'No hay reintegros pendientes.' ); ?></p>
+			<p class="asde-muted"><?php esc_html_e( 'There are no pending reimbursements.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 		<?php else : ?>
 			<?php $tabla( $todos, true ); ?>
 		<?php endif; ?>
@@ -169,9 +169,9 @@ $tabla = static function ( array $lista, bool $con_quien ) use ( $fila ): void {
 
 <?php if ( $puede_pedir ) : ?>
 	<section class="asde-card" data-asde-plegable="reintegros-mios" data-asde-inicio="abierto">
-		<h2 class="asde-card__title"><?php asde_e( 'Mis reintegros' ); ?></h2>
+		<h2 class="asde-card__title"><?php esc_html_e( 'My reimbursements', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h2>
 		<?php if ( ! $mios ) : ?>
-			<p class="asde-muted"><?php asde_e( 'Todavía no has pedido ningún reintegro.' ); ?></p>
+			<p class="asde-muted"><?php esc_html_e( 'You have not requested any reimbursement yet.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 		<?php else : ?>
 			<?php $tabla( $mios, false ); ?>
 		<?php endif; ?>
@@ -180,7 +180,7 @@ $tabla = static function ( array $lista, bool $con_quien ) use ( $fila ): void {
 
 <?php if ( Servicio::ve_todos() && $historial ) : ?>
 	<section class="asde-card" data-asde-plegable="reintegros-historial" data-asde-inicio="cerrado">
-		<h2 class="asde-card__title"><?php asde_e( 'Historial' ); ?></h2>
+		<h2 class="asde-card__title"><?php esc_html_e( 'History', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h2>
 		<?php $tabla( $historial, true ); ?>
 	</section>
 <?php endif; ?>

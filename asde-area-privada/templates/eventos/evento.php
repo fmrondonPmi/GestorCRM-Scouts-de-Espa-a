@@ -40,7 +40,7 @@ foreach ( asde_ta( EventosView::PESTANAS ) as $p => $etiqueta ) {
 	$pestanas[ add_query_arg( 'pestana', $p, $url ) ] = $etiqueta;
 }
 ?>
-<p class="asde-back"><a href="<?php echo esc_url( $agenda ); ?>"><?php asde_e( '← Agenda' ); ?></a></p>
+<p class="asde-back"><a href="<?php echo esc_url( $agenda ); ?>"><?php esc_html_e( '← Agenda', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a></p>
 
 <section class="asde-card asde-evento">
 	<header class="asde-card__header asde-card__header--split">
@@ -60,11 +60,11 @@ foreach ( asde_ta( EventosView::PESTANAS ) as $p => $etiqueta ) {
 		}
 		?>
 		<?php if ( Servicio::puede_editar( $e, $ambito ) ) : ?>
-			<a class="asde-evento__editar" href="<?php echo esc_url( add_query_arg( 'editar', '1', $url ) ); ?>"><?php asde_e( 'Editar los datos' ); ?></a>
+			<a class="asde-evento__editar" href="<?php echo esc_url( add_query_arg( 'editar', '1', $url ) ); ?>"><?php esc_html_e( 'Edit the details', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a>
 		<?php endif; ?>
 	</p>
 	<?php if ( EventosTable::CANCELADO === $e['estado'] ) : ?>
-		<div class="asde-notice asde-notice--warning"><?php echo esc_html( sprintf( asde_t( 'Cancelado el %1$s. Motivo: %2$s' ), wp_date( 'd/m/Y', strtotime( $e['cancelado_en'] . ' UTC' ) ), $e['cancelado_motivo'] ) ); ?></div>
+		<div class="asde-notice asde-notice--warning"><?php echo esc_html( sprintf( /* translators: 1: text, 2: text */ __( 'Cancelled on %1$s. Reason: %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), wp_date( 'd/m/Y', strtotime( $e['cancelado_en'] . ' UTC' ) ), $e['cancelado_motivo'] ) ); ?></div>
 	<?php endif; ?>
 </section>
 

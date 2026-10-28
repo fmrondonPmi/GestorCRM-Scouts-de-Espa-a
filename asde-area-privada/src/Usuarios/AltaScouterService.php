@@ -52,16 +52,16 @@ final class AltaScouterService {
 	public static function errores( string $modo, array $secciones, array $responsabilidades, string $email ): array {
 		$errores = array();
 		if ( self::MODO_SCOUTER === $modo && ! array_intersect( Secciones::EDUCATIVAS, $secciones ) ) {
-			$errores[] = asde_t( 'Elige al menos una sección en la que colaboras.' );
+			$errores[] = __( 'Choose at least one section you help in.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		if ( self::MODO_SIN_SECCION === $modo && ! array_intersect( AltaService::ROLES_RESPONSABILIDAD, $responsabilidades ) ) {
-			$errores[] = asde_t( 'Sin sección, elige al menos una responsabilidad: Secretaría, Coordinación, Tesorería o Intendencia.' );
+			$errores[] = __( 'Without a section, choose at least one responsibility: Secretary\'s office, Coordination, Treasury or Quartermaster.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		if ( ! in_array( $modo, array( self::MODO_SCOUTER, self::MODO_SIN_SECCION ), true ) ) {
-			$errores[] = asde_t( 'Elige cómo colaboras en el grupo.' );
+			$errores[] = __( 'Choose how you help in the group.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		if ( ! is_email( EmailCuenta::normalizar( $email ) ) ) {
-			$errores[] = asde_t( 'Escribe un email válido.' );
+			$errores[] = __( 'Enter a valid email address.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		return $errores;
 	}
@@ -115,7 +115,7 @@ final class AltaScouterService {
 				$usuario               = $r->usuario->ID;
 				$datos['cuenta_creada'] = $usuario;
 			} else {
-				$datos['error_alta'] = $r ? implode( ' ', $r->errores ) : asde_t( 'CRM no configurado.' );
+				$datos['error_alta'] = $r ? implode( ' ', $r->errores ) : __( 'CRM not configured.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 			}
 		}
 

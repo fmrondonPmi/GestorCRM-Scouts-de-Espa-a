@@ -228,15 +228,15 @@ final class Cambios {
 	public static function aprobar( int $id, Persona $p, string $actual, bool $forzar = false ) {
 		$c = self::obtener( $id );
 		if ( ! $c || self::PENDIENTE !== $c['estado'] || $c['socio'] !== $p->num_socio_asde ) {
-			return new \WP_Error( 'asde_cambio', asde_t( 'Ese cambio ya no está pendiente.' ) );
+			return new \WP_Error( 'asde_cambio', __( 'That change is no longer pending.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( ! $forzar && ! Escritura::iguales( $actual, $c['anterior'] ) ) {
-			return new \WP_Error( 'asde_cambio_conflicto', asde_t( 'El dato del CRM ha cambiado desde que se propuso. Revísalo y confirma si quieres aplicarlo igualmente.' ) );
+			return new \WP_Error( 'asde_cambio_conflicto', __( 'The CRM value has changed since it was proposed. Review it and confirm if you want to apply it anyway.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$r = Escritura::guardar( $p, array( $c['campo'] => $c['nuevo'] ), 'cambio_aprobado_' . $id );
 		if ( is_wp_error( $r ) || ! in_array( $c['campo'], $r['guardados'], true ) ) {
-			self::marcar( $id, self::ERROR, is_wp_error( $r ) ? $r->get_error_message() : asde_t( 'El CRM no ha aceptado el valor.' ) );
-			return is_wp_error( $r ) ? $r : new \WP_Error( 'asde_cambio', asde_t( 'El CRM no ha aceptado el valor.' ) );
+			self::marcar( $id, self::ERROR, is_wp_error( $r ) ? $r->get_error_message() : __( 'The CRM did not accept the value.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
+			return is_wp_error( $r ) ? $r : new \WP_Error( 'asde_cambio', __( 'The CRM did not accept the value.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		self::marcar( $id, self::APLICADO );
 		do_action( 'asde_cambio_aprobado', $id, $p->num_socio_asde, $c['campo'] );
@@ -264,7 +264,7 @@ final class Cambios {
 		foreach ( array_unique( array_map( 'intval', $ids ) ) as $id ) {
 			$c = self::obtener( $id );
 			if ( ! $c || self::PENDIENTE !== $c['estado'] || $c['socio'] !== $p->num_socio_asde ) {
-				$out['errores'][ $id ] = asde_t( 'Ese cambio ya no está pendiente.' );
+				$out['errores'][ $id ] = __( 'That change is no longer pending.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				continue;
 			}
 			if ( ! in_array( $id, $forzar, true ) && ! Escritura::iguales( (string) ( $actuales[ $c['campo'] ] ?? '' ), $c['anterior'] ) ) {
@@ -284,7 +284,7 @@ final class Cambios {
 		$r = Escritura::guardar( $p, $valores, 'cambios_aprobados' );
 		foreach ( $de as $campo => $id ) {
 			if ( is_wp_error( $r ) || ! in_array( $campo, $r['guardados'], true ) ) {
-				$motivo = is_wp_error( $r ) ? $r->get_error_message() : asde_t( 'El CRM no ha aceptado el valor.' );
+				$motivo = is_wp_error( $r ) ? $r->get_error_message() : __( 'The CRM did not accept the value.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				self::marcar( $id, self::ERROR, $motivo );
 				$out['errores'][ $id ] = $motivo;
 				continue;
@@ -299,10 +299,10 @@ final class Cambios {
 	public static function rechazar( int $id, string $motivo ) {
 		$c = self::obtener( $id );
 		if ( ! $c || self::PENDIENTE !== $c['estado'] ) {
-			return new \WP_Error( 'asde_cambio', asde_t( 'Ese cambio ya no está pendiente.' ) );
+			return new \WP_Error( 'asde_cambio', __( 'That change is no longer pending.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( '' === trim( $motivo ) ) {
-			return new \WP_Error( 'asde_cambio', asde_t( 'Indica el motivo del rechazo: se le mostrará a quien lo propuso.' ) );
+			return new \WP_Error( 'asde_cambio', __( 'State the reason for the rejection: it will be shown to whoever proposed it.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		self::marcar( $id, self::RECHAZADO, $motivo );
 		do_action( 'asde_cambio_rechazado', $id, $c['socio'], $c['campo'] );
@@ -313,7 +313,7 @@ final class Cambios {
 	public static function cancelar( int $id ) {
 		$c = self::obtener( $id );
 		if ( ! $c || self::PENDIENTE !== $c['estado'] || (int) $c['propuesto_por'] !== get_current_user_id() ) {
-			return new \WP_Error( 'asde_cambio', asde_t( 'Ese cambio no se puede cancelar.' ) );
+			return new \WP_Error( 'asde_cambio', __( 'That change cannot be cancelled.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		self::marcar( $id, self::CANCELADO, 'Retirado por quien lo propuso.' );
 		return true;

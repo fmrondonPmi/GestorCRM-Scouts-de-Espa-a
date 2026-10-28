@@ -101,11 +101,11 @@ final class TareaNumeracion {
 	 */
 	public static function crear( string $accion, string $grupo, int $usuario, int $total ) {
 		if ( ! isset( self::ACCIONES[ $accion ] ) || '' === $grupo ) {
-			return new \WP_Error( 'asde_tarea', asde_t( 'Tarea no válida.' ) );
+			return new \WP_Error( 'asde_tarea', __( 'Invalid task.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$previa = self::actual( $grupo, true );
 		if ( $previa && self::EN_CURSO === $previa['estado'] ) {
-			return new \WP_Error( 'asde_tarea', asde_t( 'Ya hay una corrección en marcha en tu grupo: espera a que termine o detenla.' ) );
+			return new \WP_Error( 'asde_tarea', __( 'A correction is already running in your group: wait for it to finish or stop it.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$t = array(
 			'id'          => wp_generate_password( 12, false ),
@@ -250,7 +250,7 @@ final class TareaNumeracion {
 		$usuario = get_userdata( (int) $t['usuario'] );
 		if ( ! $datos || ! $usuario || ! user_can( $usuario, self::CAP ) ) {
 			$t['estado'] = self::ERROR;
-			$t['aviso']  = asde_t( 'Quien inició la tarea ya no tiene permiso, o el grupo ya no existe.' );
+			$t['aviso']  = __( 'Whoever started the task no longer has permission, or the group no longer exists.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 			return self::acabar( $t );
 		}
 		$antes = get_current_user_id();
@@ -266,7 +266,7 @@ final class TareaNumeracion {
 		$repo = PersonaRepository::make();
 		if ( ! $repo || ! Escritura::disponible() ) {
 			$t['estado'] = self::ERROR;
-			$t['aviso']  = asde_t( 'El usuario del CRM del grupo ya no puede editar fichas.' );
+			$t['aviso']  = __( 'The group\'s CRM user can no longer edit records.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 			return self::acabar( $t );
 		}
 		$num = new Numeracion( $repo );
@@ -275,7 +275,7 @@ final class TareaNumeracion {
 			$num->analizar( $todas );
 		} catch ( CrmException $e ) {
 			++$t['fallos_crm'];
-			$t['aviso']       = asde_t( 'No se ha podido leer el CRM: ' ) . $e->getMessage();
+			$t['aviso']       = __( 'The CRM could not be read: ', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . $e->getMessage();
 			$t['actualizada'] = time();
 			if ( $t['fallos_crm'] >= self::MAX_FALLOS_CRM ) {
 				$t['estado'] = self::ERROR;
@@ -447,34 +447,34 @@ final class TareaNumeracion {
 		$avance     = $total ? (int) floor( 100 * max( 0, min( $total, $total - $pendientes ) ) / $total ) : 100;
 		$hace       = max( 0, time() - (int) $t['actualizada'] );
 
-		$corregidas = 1 === $hechas ? sprintf( asde_t( '%d ficha corregida' ), $hechas ) : sprintf( asde_t( '%d fichas corregidas' ), $hechas );
+		$corregidas = 1 === $hechas ? sprintf( /* translators: %d: number */ __( '%d record corrected', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $hechas ) : sprintf( /* translators: %d: number */ __( '%d records corrected', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $hechas );
 		switch ( $t['estado'] ) {
 			case self::EN_CURSO:
 				$texto = 0 === (int) $t['tandas']
-					? sprintf( asde_t( 'Empezando… %s por corregir.' ), 1 === $pendientes ? sprintf( asde_t( '%d ficha' ), $pendientes ) : sprintf( asde_t( '%d fichas' ), $pendientes ) )
-					: sprintf( 1 === $pendientes ? asde_t( 'Queda %1$d de %2$d · %3$s' ) : asde_t( 'Quedan %1$d de %2$d · %3$s' ), $pendientes, $total, 1 === $hechas ? sprintf( asde_t( '%d corregida' ), $hechas ) : sprintf( asde_t( '%d corregidas' ), $hechas ) )
-						. ( $fallidas ? sprintf( asde_t( ' · %d con error' ), $fallidas ) : '' )
-						. ( $hace > 20 ? sprintf( asde_t( ' · última actividad hace %d s' ), $hace ) : '' );
+					? sprintf( /* translators: %s: text */ __( 'Starting… %s to correct.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 1 === $pendientes ? sprintf( /* translators: %d: number */ __( '%d record', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $pendientes ) : sprintf( /* translators: %d: number */ __( '%d records', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $pendientes ) )
+					: sprintf( 1 === $pendientes ? /* translators: 1: number, 2: number, 3: text */ __( '%1$d of %2$d left · %3$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : /* translators: 1: number, 2: number, 3: text */ __( '%1$d of %2$d left · %3$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $pendientes, $total, 1 === $hechas ? sprintf( /* translators: %d: number */ __( '%d corrected', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $hechas ) : sprintf( /* translators: %d: number */ __( '%d corrected', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $hechas ) )
+						. ( $fallidas ? sprintf( /* translators: %d: number */ __( ' · %d with errors', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $fallidas ) : '' )
+						. ( $hace > 20 ? sprintf( /* translators: %d: number */ __( ' · last activity %d s ago', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $hace ) : '' );
 				if ( '' !== (string) $t['aviso'] ) {
 					$texto .= ' · ⚠️ ' . $t['aviso'];
 				}
 				break;
 			case self::TERMINADA:
 				$texto = $fallidas
-					? sprintf( asde_t( 'Terminada: %1$s en el CRM; %2$s (el detalle, en Personas).' ), $corregidas, 1 === $fallidas ? asde_t( '1 no se pudo corregir' ) : sprintf( asde_t( '%d no se pudieron corregir' ), $fallidas ) )
-					: sprintf( asde_t( 'Terminada: %s en el CRM.' ), $corregidas );
+					? sprintf( /* translators: 1: text, 2: text */ __( 'Finished: %1$s in the CRM; %2$s (details in People).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $corregidas, 1 === $fallidas ? __( '1 could not be corrected', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : sprintf( /* translators: %d: number */ __( '%d could not be corrected', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $fallidas ) )
+					: sprintf( /* translators: %s: text */ __( 'Finished: %s in the CRM.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $corregidas );
 				$avance = 100;
 				break;
 			case self::CANCELADA:
 				$texto = 1 === $pendientes
-					? sprintf( asde_t( 'Detenida: %s; quedó 1 sin corregir.' ), $corregidas )
-					: sprintf( asde_t( 'Detenida: %1$s; quedaron %2$d sin corregir.' ), $corregidas, $pendientes );
+					? sprintf( /* translators: %s: text */ __( 'Stopped: %s; 1 was left uncorrected.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $corregidas )
+					: sprintf( /* translators: 1: text, 2: number */ __( 'Stopped: %1$s; %2$d were left uncorrected.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $corregidas, $pendientes );
 				break;
 			default:
 				$error = rtrim( (string) $t['aviso'], '.' );
 				$texto = 1 === $pendientes
-					? sprintf( asde_t( 'Detenida por un error: %1$s. %2$s; queda 1.' ), $error, $corregidas )
-					: sprintf( asde_t( 'Detenida por un error: %1$s. %2$s; quedan %3$d.' ), $error, $corregidas, $pendientes );
+					? sprintf( /* translators: 1: text, 2: text */ __( 'Stopped because of an error: %1$s. %2$s; 1 left.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $error, $corregidas )
+					: sprintf( /* translators: 1: text, 2: text, 3: number */ __( 'Stopped because of an error: %1$s. %2$s; %3$d left.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $error, $corregidas, $pendientes );
 		}
 
 		return array(

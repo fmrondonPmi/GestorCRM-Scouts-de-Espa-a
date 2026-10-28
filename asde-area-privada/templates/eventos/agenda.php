@@ -23,76 +23,76 @@ defined( 'ABSPATH' ) || exit;
 ?>
 <section class="asde-card" data-asde-inicio="abierto">
 	<header class="asde-card__header asde-card__header--split">
-		<h2 class="asde-card__title"><?php asde_e( 'Eventos' ); ?></h2>
+		<h2 class="asde-card__title"><?php esc_html_e( 'Events', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h2>
 		<?php if ( $puede_crear ) : ?>
-			<span class="asde-actions"><a class="button" href="<?php echo esc_url( add_query_arg( 'nuevo', '1', $url ) ); ?>"><?php asde_e( 'Nuevo evento' ); ?></a></span>
+			<span class="asde-actions"><a class="button" href="<?php echo esc_url( add_query_arg( 'nuevo', '1', $url ) ); ?>"><?php esc_html_e( 'New event', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a></span>
 		<?php endif; ?>
 	</header>
 	<p class="asde-muted">
-		<?php echo esc_html( $global ? asde_t( 'Todos los eventos del grupo.' ) : asde_t( 'Los eventos de tus secciones y aquellos en cuyo equipo estás.' ) ); ?>
-		<?php asde_e( 'Un evento nace como borrador; si tiene coste, Tesorería valida su presupuesto (y con él, el precio) antes de publicarlo.' ); ?>
+		<?php echo esc_html( $global ? __( 'All the group\'s events.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : __( 'The events of your sections and those whose team you are on.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>
+		<?php esc_html_e( 'An event starts as a draft; if it has a cost, Treasury validates its budget (and with it, the price) before it is published.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>
 	</p>
 	<?php if ( $por_validar ) : ?>
-		<p class="asde-notice asde-notice--info"><?php echo esc_html( sprintf( asde_n( '%d presupuesto espera a que Tesorería lo valide.', '%d presupuestos esperan a que Tesorería los valide.', $por_validar ), $por_validar ) ); ?></p>
+		<p class="asde-notice asde-notice--info"><?php echo esc_html( sprintf( /* translators: %d: number */ _n( '%d budget is waiting for Treasury to validate it.', '%d budgets are waiting for Treasury to validate them.', $por_validar , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $por_validar ) ); ?></p>
 	<?php endif; ?>
 
 	<form method="get" action="<?php echo esc_url( $url ); ?>" class="asde-filter asde-filter--una-linea">
-		<label for="asde-ev-estado"><?php asde_e( 'Mostrar' ); ?></label>
+		<label for="asde-ev-estado"><?php esc_html_e( 'Show', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 		<select id="asde-ev-estado" name="estado">
 			<?php foreach ( asde_ta( EventosTable::FILTROS ) as $f => $etiqueta ) : ?>
 				<option value="<?php echo esc_attr( $f ); ?>" <?php selected( $filtro, $f ); ?>><?php echo esc_html( $etiqueta . ' (' . $cuentas[ $f ] . ')' ); ?></option>
 			<?php endforeach; ?>
 		</select>
-		<label for="asde-ev-seccion"><?php asde_e( 'Sección' ); ?></label>
+		<label for="asde-ev-seccion"><?php esc_html_e( 'Section', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 		<select id="asde-ev-seccion" name="seccion">
-			<option value=""><?php asde_e( 'Todas' ); ?></option>
+			<option value=""><?php esc_html_e( 'All', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></option>
 			<?php foreach ( Secciones::all() as $s => $def ) : ?>
 				<option value="<?php echo esc_attr( $s ); ?>" <?php selected( $seccion, $s ); ?>><?php echo esc_html( $def['nombre'] ); ?></option>
 			<?php endforeach; ?>
 		</select>
-		<label for="asde-ev-tipo"><?php asde_e( 'Tipo' ); ?></label>
+		<label for="asde-ev-tipo"><?php esc_html_e( 'Type', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 		<select id="asde-ev-tipo" name="tipo">
-			<option value=""><?php asde_e( 'Todos' ); ?></option>
+			<option value=""><?php esc_html_e( 'All', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></option>
 			<?php foreach ( $cfg['tipos'] as $t => $def ) : ?>
 				<option value="<?php echo esc_attr( $t ); ?>" <?php selected( $tipo, $t ); ?>><?php echo esc_html( Config::nombre_tipo( $cfg, $t ) ); ?></option>
 			<?php endforeach; ?>
 		</select>
-		<button type="submit" class="button"><?php asde_e( 'Ver' ); ?></button>
+		<button type="submit" class="button"><?php esc_html_e( 'View', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 	</form>
 
 	<?php if ( ! $lista ) : ?>
-		<p><?php asde_e( 'No hay eventos con estos filtros.' ); ?></p>
+		<p><?php esc_html_e( 'There are no events with these filters.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 	<?php else : ?>
 		<table class="asde-table asde-table--eventos">
 			<thead>
 				<tr>
-					<th scope="col"><?php asde_e( 'Evento' ); ?></th>
-					<th scope="col"><?php asde_e( 'Fechas' ); ?></th>
-					<th scope="col"><?php asde_e( 'Secciones' ); ?></th>
-					<th scope="col"><?php asde_e( 'Estado' ); ?></th>
-					<th scope="col"><?php asde_e( 'Precio' ); ?></th>
+					<th scope="col"><?php esc_html_e( 'Event', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
+					<th scope="col"><?php esc_html_e( 'Dates', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
+					<th scope="col"><?php esc_html_e( 'Sections', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
+					<th scope="col"><?php esc_html_e( 'Status', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
+					<th scope="col"><?php esc_html_e( 'Price', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
 				</tr>
 			</thead>
 			<tbody>
 				<?php foreach ( $lista as $e ) : ?>
 					<?php $estado = EventosTable::estado_visible( $e ); ?>
 					<tr<?php echo 'cancelado' === $estado ? ' class="asde-fila--cancelada"' : ''; ?>>
-						<td data-label="<?php echo esc_attr( asde_a( 'Evento' ) ); ?>">
+						<td data-label="<?php echo esc_attr( esc_attr__( 'Event', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
 							<a href="<?php echo esc_url( add_query_arg( 'evento', $e['id'], $url ) ); ?>"><strong><?php echo esc_html( $e['nombre'] ); ?></strong></a>
 							<br><span class="asde-muted"><?php echo esc_html( EventosTable::numero( $e ) . ' · ' . Config::nombre_tipo( $cfg, $e['tipo'] ) ); ?></span>
 						</td>
-						<td data-label="<?php echo esc_attr( asde_a( 'Fechas' ) ); ?>"><?php echo esc_html( EventosTable::cuando( $e ) ); ?></td>
-						<td data-label="<?php echo esc_attr( asde_a( 'Secciones' ) ); ?>">
+						<td data-label="<?php echo esc_attr( esc_attr__( 'Dates', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( EventosTable::cuando( $e ) ); ?></td>
+						<td data-label="<?php echo esc_attr( esc_attr__( 'Sections', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
 							<?php
 							foreach ( $e['secciones'] as $s ) {
 								echo wp_kses( Secciones::badge( $s ), asde_html_permitido() );
 							}
 							?>
 						</td>
-						<td data-label="<?php echo esc_attr( asde_a( 'Estado' ) ); ?>"><span class="asde-badge asde-badge--evento-<?php echo esc_attr( $estado ); ?>"><?php echo esc_html( asde_t( EventosTable::ESTADOS[ $estado ] ) ); ?></span></td>
-						<td data-label="<?php echo esc_attr( asde_a( 'Precio' ) ); ?>">
+						<td data-label="<?php echo esc_attr( esc_attr__( 'Status', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><span class="asde-badge asde-badge--evento-<?php echo esc_attr( $estado ); ?>"><?php echo esc_html( asde_t( EventosTable::ESTADOS[ $estado ] ) ); ?></span></td>
+						<td data-label="<?php echo esc_attr( esc_attr__( 'Price', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
 							<?php if ( ! $e['con_coste'] ) : ?>
-								<span class="asde-muted"><?php asde_e( 'Sin coste' ); ?></span>
+								<span class="asde-muted"><?php esc_html_e( 'No cost', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span>
 							<?php elseif ( ! empty( $e['presupuesto']['precios'] ) ) : ?>
 								<?php
 								echo esc_html(
@@ -107,7 +107,7 @@ defined( 'ABSPATH' ) || exit;
 								);
 								?>
 							<?php else : ?>
-								<span class="asde-muted"><?php asde_e( 'Por validar' ); ?></span>
+								<span class="asde-muted"><?php esc_html_e( 'To validate', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span>
 							<?php endif; ?>
 						</td>
 					</tr>

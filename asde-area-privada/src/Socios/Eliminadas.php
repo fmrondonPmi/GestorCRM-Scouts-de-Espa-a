@@ -51,10 +51,10 @@ final class Eliminadas {
 	 */
 	public static function eliminar( Persona $p, int $user_id ) {
 		if ( '' === Grupo::numero() ) {
-			return new \WP_Error( 'asde_eliminar', asde_t( 'No hay ningún grupo elegido.' ) );
+			return new \WP_Error( 'asde_eliminar', __( 'No group has been chosen.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( $p->tiene_membresia_activa() ) {
-			return new \WP_Error( 'asde_eliminar', asde_t( 'Solo se puede eliminar de la web a quien no tiene ninguna membresía activa. Antes, dale de baja.' ) );
+			return new \WP_Error( 'asde_eliminar', __( 'Only someone with no active membership can be removed from the website. Withdraw them first.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$num = $p->num_socio_asde;
 		$out = array(

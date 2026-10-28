@@ -52,17 +52,17 @@ final class FichaView extends View {
 		$ambito = Ambito::actual();
 		$repo   = PersonaRepository::make();
 		if ( ! $repo ) {
-			return $this->error_crm( 'ficha', asde_t( 'La conexión de tu grupo con el CRM no está configurada o no se ha podido comprobar. Un administrador puede revisarla en wp-admin → Grupos Scouts.' ) );
+			return $this->error_crm( 'ficha', __( 'Your group\'s connection to the CRM is not set up or could not be checked. An administrator can review it in wp-admin → Scout Groups.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$socio = $this->socio( $ambito );
 		try {
 			$p = '' !== $socio ? $repo->obtener( $socio ) : null;
 			if ( ! $p ) {
-				return $this->denegado( asde_t( 'No se encuentra esa ficha en el CRM del grupo.' ) );
+				return $this->denegado( __( 'That record cannot be found in the group\'s CRM.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			}
 			$perm = new PermisosFicha( $ambito, $p );
 			if ( ! $perm->puede_ver() ) {
-				return $this->denegado( asde_t( 'No tienes acceso a esta ficha.' ) );
+				return $this->denegado( __( 'You do not have access to this record.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			}
 			$accion = $this->get( 'membresia' );
 			if ( in_array( $accion, self::MEMBRESIA, true ) ) {
@@ -76,7 +76,7 @@ final class FichaView extends View {
 			$sepa   = $this->sepa( $repo, $ambito, $p, $perm );
 			$desde  = $this->socio_desde( $repo, $p, $perm );
 		} catch ( CrmException $e ) {
-			return $this->error_crm( 'ficha', asde_t( 'No se ha podido consultar el CRM: ' ) . $e->getMessage() );
+			return $this->error_crm( 'ficha', __( 'The CRM could not be queried: ', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . $e->getMessage() );
 		}
 
 		return $this->layout(
@@ -153,7 +153,7 @@ final class FichaView extends View {
 				'mandato'       => $mandato,
 				'coincide'      => $mandato && ( null !== \AsdeBalears\AreaPrivada\Sepa\Mandatos::cuenta_local( $mandato ) || ( $cuenta && hash_equals( (string) $mandato['iban_huella'], CuentaCrm::huella( $iban ) ) ) ),
 				'url_gestion'   => $familiar ? $this->url( 'pagos' ) . ( $familia ? '#sepa-' . (int) $familia['id'] : '' ) : $this->url( 'sepa' ),
-				'texto_gestion' => $familiar ? asde_t( 'Autorizar el cobro o cambiar la cuenta en «Mis pagos»' ) : asde_t( 'Ver las domiciliaciones (Tesorería)' ),
+				'texto_gestion' => $familiar ? __( 'Authorise collection or change the account in "My payments"', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : __( 'View the direct debits (Treasury)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 			)
 		);
 	}
@@ -175,11 +175,11 @@ final class FichaView extends View {
 			$id = (int) $this->post( 'cambio' );
 			check_admin_referer( 'asde_cancelar_cambio_' . $id );
 			$r = Cambios::cancelar( $id );
-			is_wp_error( $r ) ? Notices::add( 'error', esc_html( $r->get_error_message() ) ) : Notices::add( 'success', asde_t( 'Propuesta retirada.' ) );
+			is_wp_error( $r ) ? Notices::add( 'error', esc_html( $r->get_error_message() ) ) : Notices::add( 'success', __( 'Proposal withdrawn.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			$this->redirect( $volver );
 		}
 		if ( 'guardar_ficha' !== $this->post( 'asde_action' ) || ! PersonaRepository::es_num_asde( $socio ) ) {
-			Notices::add( 'error', asde_t( 'Petición no válida.' ) );
+			Notices::add( 'error', __( 'Invalid request.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			$this->redirect( $this->url( 'ficha' ) );
 		}
 		check_admin_referer( 'asde_ficha_' . $socio );
@@ -188,12 +188,12 @@ final class FichaView extends View {
 		try {
 			$p = $repo ? $repo->obtener( $socio ) : null;
 			if ( ! $p ) {
-				Notices::add( 'error', asde_t( 'No se encuentra esa ficha en el CRM del grupo.' ) );
+				Notices::add( 'error', __( 'That record cannot be found in the group\'s CRM.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 				$this->redirect( $this->url( 'ficha' ) );
 			}
 			$perm = new PermisosFicha( $ambito, $p );
 			if ( ! $perm->puede_ver() ) {
-				wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+				wp_die( esc_html__( 'You do not have permission to do this.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 			}
 			$enviado = array();
 			foreach ( $this->post_array( 'campo' ) as $campo => $valor ) {
@@ -205,28 +205,28 @@ final class FichaView extends View {
 			}
 			$r = ( new FichaService( $repo ) )->guardar( $p, $perm, $enviado, $huellas );
 		} catch ( CrmException $e ) {
-			Notices::add( 'error', esc_html( asde_t( 'No se ha podido consultar el CRM: ' ) . $e->getMessage() ) );
+			Notices::add( 'error', esc_html( __( 'The CRM could not be queried: ', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . $e->getMessage() ) );
 			$this->redirect( $volver );
 		}
 
 		$lista = static fn( array $a ) => esc_html( implode( ', ', $a ) );
 		if ( $r['guardados'] ) {
-			Notices::add( 'success', sprintf( asde_t( 'Guardado en el CRM: %s.' ), $lista( $r['guardados'] ) ) );
+			Notices::add( 'success', sprintf( /* translators: %s: text */ __( 'Saved in the CRM: %s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $lista( $r['guardados'] ) ) );
 		}
 		if ( $r['propuestos'] ) {
-			Notices::add( 'success', sprintf( asde_t( 'Cambios enviados para su aprobación: %s. Te avisaremos en esta ficha cuando se revisen.' ), $lista( $r['propuestos'] ) ) );
+			Notices::add( 'success', sprintf( /* translators: %s: text */ __( 'Changes sent for approval: %s. We will notify you on this record when they are reviewed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $lista( $r['propuestos'] ) ) );
 		}
 		if ( $r['rechazados'] ) {
-			Notices::add( 'error', sprintf( asde_t( 'El CRM no ha aceptado: %s. Puede que el usuario del CRM no tenga permiso sobre esos campos.' ), $lista( $r['rechazados'] ) ) );
+			Notices::add( 'error', sprintf( /* translators: %s: text */ __( 'The CRM did not accept: %s. The CRM user may not have permission on those fields.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $lista( $r['rechazados'] ) ) );
 		}
 		if ( $r['conflictos'] ) {
-			Notices::add( 'warning', sprintf( asde_t( 'No se ha cambiado %s porque alguien lo modificó en el CRM mientras editabas. Revisa el valor actual y vuelve a intentarlo.' ), $lista( $r['conflictos'] ) ) );
+			Notices::add( 'warning', sprintf( /* translators: %s: text */ __( '%s has not been changed because someone modified it in the CRM while you were editing. Check the current value and try again.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $lista( $r['conflictos'] ) ) );
 		}
 		foreach ( $r['errores'] as $e ) {
 			Notices::add( 'error', esc_html( $e ) );
 		}
 		if ( ! array_filter( $r ) ) {
-			Notices::add( 'info', asde_t( 'No había ningún cambio que guardar.' ) );
+			Notices::add( 'info', __( 'There was no change to save.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$this->redirect( $volver );
 	}
@@ -243,7 +243,7 @@ final class FichaView extends View {
 			'p'         => $p,
 			'accion'    => $accion,
 			'altas'     => null !== $altas,
-			'motivo'    => Altas::activo() ? asde_t( 'El usuario del CRM de tu grupo no tiene permiso para crear personas y membresías. Un administrador puede revisarlo en wp-admin → Grupos Scouts.' ) : asde_t( 'Las altas en el CRM no están activadas para tu grupo.' ),
+			'motivo'    => Altas::activo() ? __( 'Your group\'s CRM user does not have permission to create people and memberships. An administrator can review it in wp-admin → Scout Groups.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : __( 'Registrations in the CRM are not enabled for your group.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 			'estado'    => self::$membresia ?? array(
 				'error'     => '',
 				'valores'   => array(),
@@ -292,10 +292,10 @@ final class FichaView extends View {
 	/** Una acción sobre la membresía: si sale bien, vuelve a la ficha con el aviso; si no, se vuelve a pintar el formulario. */
 	private function membresia_post( string $accion, string $socio ): void {
 		if ( ! current_user_can( 'asde_manage_users' ) ) {
-			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+			wp_die( esc_html__( 'You do not have permission to do this.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		if ( ! PersonaRepository::es_num_asde( $socio ) ) {
-			Notices::add( 'error', asde_t( 'Petición no válida.' ) );
+			Notices::add( 'error', __( 'Invalid request.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			$this->redirect( $this->url( 'personas' ) );
 		}
 		check_admin_referer( 'asde_membresia_' . $socio );
@@ -316,17 +316,17 @@ final class FichaView extends View {
 		$repo  = PersonaRepository::make();
 		$altas = Altas::disponible() ? Altas::make() : null;
 		if ( ! $repo || ! $altas ) {
-			$fallo( Altas::activo() ? asde_t( 'La conexión con el CRM no está disponible.' ) : asde_t( 'Las altas en el CRM no están activadas para tu grupo.' ) );
+			$fallo( Altas::activo() ? __( 'The connection to the CRM is not available.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : __( 'Registrations in the CRM are not enabled for your group.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			return;
 		}
 		try {
 			$p = $repo->obtener( $socio );
 		} catch ( CrmException $e ) {
-			$fallo( asde_t( 'No se ha podido consultar el CRM: ' ) . $e->getMessage() );
+			$fallo( __( 'The CRM could not be queried: ', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . $e->getMessage() );
 			return;
 		}
 		if ( ! $p ) {
-			Notices::add( 'error', asde_t( 'No se encuentra esa ficha en el CRM del grupo.' ) );
+			Notices::add( 'error', __( 'That record cannot be found in the group\'s CRM.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			$this->redirect( $this->url( 'personas' ) );
 		}
 		$nombre = esc_html( $p->nombre_completo() );
@@ -335,7 +335,7 @@ final class FichaView extends View {
 			case 'membresia_nueva':
 				$r = $altas->nueva_membresia( $p, $valores['seccion'], $valores['fecha'] );
 				/* translators: 1: nombre, 2: sección, 3: fecha */
-				$ok = sprintf( asde_t( 'Membresía nueva en el CRM: %1$s, en %2$s desde el %3$s.' ), $nombre, esc_html( Secciones::nombre( $valores['seccion'] ) ), $fecha );
+				$ok = sprintf( /* translators: 1: text, 2: text, 3: text */ __( 'New membership in the CRM: %1$s, in %2$s from %3$s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $nombre, esc_html( Secciones::nombre( $valores['seccion'] ) ), $fecha );
 				break;
 			case 'membresia_baja':
 				$familia = self::familia( $p );
@@ -343,44 +343,44 @@ final class FichaView extends View {
 				$tutores = (bool) Usuarios::tutores_de( $p->num_socio_asde );
 				$r       = $altas->baja( $p, $valores['fecha'], $valores['motivo'] );
 				/* translators: 1: nombre, 2: fecha */
-				$ok = sprintf( asde_t( '%1$s ha quedado de baja en el CRM desde el %2$s.' ), $nombre, $fecha );
+				$ok = sprintf( /* translators: 1: text, 2: text */ __( '%1$s has been withdrawn in the CRM as of %2$s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $nombre, $fecha );
 				if ( $cuenta ) {
-					$ok .= ' ' . asde_t( 'Su cuenta de acceso a la web ya no puede entrar.' );
+					$ok .= ' ' . __( 'Their website sign-in account can no longer sign in.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				}
 				if ( $tutores ) {
-					$ok .= ' ' . asde_t( 'Las cuentas familiares que la representan ya no la ven; si no representan a nadie más con membresía activa, tampoco pueden entrar.' );
+					$ok .= ' ' . __( 'The family accounts that represent them no longer see them; if they do not represent anyone else with an active membership, they cannot sign in either.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				}
 				if ( '' !== $familia ) {
 					/* translators: %s: nº de familia */
-					$ok .= ' ' . sprintf( asde_t( 'Deja de contar en la cuota de la familia nº %s: Tesorería lo verá en «Bajas recientes».' ), esc_html( $familia ) );
+					$ok .= ' ' . sprintf( /* translators: %s: text */ __( 'They stop counting in the fee of family no. %s: Treasury will see it in "Recent withdrawals".', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), esc_html( $familia ) );
 				}
 				if ( is_array( $r ) ) {
 					// P-90: aviso por email a Tesorería y a la familia (nunca bloquea la baja ya hecha).
 					$av  = AvisoBaja::enviar( $p, '' !== $valores['fecha'] ? $valores['fecha'] : wp_date( 'Y-m-d' ), $valores['motivo'], $familia );
 					/* translators: 1: emails a Tesorería, 2: emails a la familia */
-					$ok .= ' ' . sprintf( asde_t( 'Avisos por email: %1$d a Tesorería y %2$d a la familia.' ), $av['tesoreria'], $av['familia'] );
+					$ok .= ' ' . sprintf( /* translators: 1: number, 2: number */ __( 'Email notices: %1$d to Treasury and %2$d to the family.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $av['tesoreria'], $av['familia'] );
 					if ( $av['familia_omitida'] ) {
-						$ok .= ' ' . asde_t( 'Por el motivo de la baja, a la familia no se le ha escrito.' );
+						$ok .= ' ' . __( 'Because of the reason for the withdrawal, the family has not been written to.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 					} elseif ( $av['sin_email_familia'] ) {
-						$ok .= ' ' . asde_t( 'No hay ningún email de la familia al que avisar.' );
+						$ok .= ' ' . __( 'There is no family email address to notify.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 					}
 					if ( $av['errores'] ) {
 						/* translators: %d: emails que no han salido */
-						$ok .= ' ' . sprintf( asde_t( '%d no se han podido enviar (mira Usuarios → Emails).' ), $av['errores'] );
+						$ok .= ' ' . sprintf( /* translators: %d: number */ __( '%d could not be sent (see Users → Emails).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $av['errores'] );
 					}
 				}
 				break;
 			case 'membresia_seccion':
 				$r = $altas->cambio_seccion( $p, $valores['seccion'], $valores['fecha'] );
 				/* translators: 1: nombre, 2: sección nueva, 3: fecha */
-				$ok = sprintf( asde_t( '%1$s pasa a %2$s desde el %3$s. La membresía anterior queda cerrada con el motivo «cambio de sección».' ), $nombre, esc_html( Secciones::nombre( $valores['seccion'] ) ), $fecha );
+				$ok = sprintf( /* translators: 1: text, 2: text, 3: text */ __( '%1$s moves to %2$s as of %3$s. The previous membership is closed with the reason "change of section".', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $nombre, esc_html( Secciones::nombre( $valores['seccion'] ) ), $fecha );
 				break;
 			default: // poner_documento
 				$r = $altas->poner_documento( $p, $valores['documento'], '1' === $this->post( 'confirmo' ) );
 				/* translators: %s: nombre */
-				$ok = sprintf( asde_t( 'Documento guardado en la ficha de %s.' ), $nombre );
+				$ok = sprintf( /* translators: %s: text */ __( 'Document saved on %s\'s record.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $nombre );
 				if ( is_array( $r ) && ( null === $r['otros'] || $r['otros'] > 0 ) ) {
-					$ok .= ' ' . asde_t( 'Ese documento también está dado de alta en otro grupo u organización de Scouts de España.' );
+					$ok .= ' ' . __( 'That document is also registered in another Scouts de España group or organisation.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				}
 		}
 		if ( is_wp_error( $r ) ) {
@@ -394,18 +394,18 @@ final class FichaView extends View {
 	/** «Eliminar de la web» (v0.35.1): solo Secretaría y Coordinación, y a quien no tiene membresía activa. */
 	private function eliminar_post( string $socio ): void {
 		if ( ! current_user_can( 'asde_manage_users' ) || ! PersonaRepository::es_num_asde( $socio ) ) {
-			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+			wp_die( esc_html__( 'You do not have permission to do this.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		check_admin_referer( 'asde_eliminar_' . $socio );
 		$repo = PersonaRepository::make();
 		try {
 			$p = $repo ? $repo->obtener( $socio ) : null;
 		} catch ( CrmException $e ) {
-			Notices::add( 'error', esc_html( asde_t( 'No se ha podido consultar el CRM: ' ) . $e->getMessage() ) );
+			Notices::add( 'error', esc_html( __( 'The CRM could not be queried: ', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . $e->getMessage() ) );
 			$this->redirect( $this->url( 'ficha', array( 'socio' => $socio ) ) );
 		}
 		if ( ! $p ) {
-			Notices::add( 'error', asde_t( 'No se encuentra esa ficha en el CRM del grupo.' ) );
+			Notices::add( 'error', __( 'That record cannot be found in the group\'s CRM.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			$this->redirect( $this->url( 'personas' ) );
 		}
 		$r = \AsdeBalears\AreaPrivada\Socios\Eliminadas::eliminar( $p, get_current_user_id() );
@@ -414,17 +414,17 @@ final class FichaView extends View {
 			$this->redirect( $this->url( 'ficha', array( 'socio' => $socio ) ) );
 		}
 		/* translators: %s: nombre */
-		$ok = sprintf( asde_t( '%s ya no sale en la web. En el CRM no ha cambiado nada.' ), esc_html( $p->nombre_completo() ) );
+		$ok = sprintf( /* translators: %s: text */ __( '%s no longer appears on the website. Nothing has changed in the CRM.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), esc_html( $p->nombre_completo() ) );
 		if ( '' !== $r['familia'] ) {
 			/* translators: %s: nº de familia */
-			$ok .= ' ' . sprintf( asde_t( 'Ha salido de la familia nº %s.' ), esc_html( $r['familia'] ) );
+			$ok .= ' ' . sprintf( /* translators: %s: text */ __( 'Has left family no. %s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), esc_html( $r['familia'] ) );
 		}
 		if ( $r['cuenta'] ) {
-			$ok .= ' ' . asde_t( 'Su cuenta de acceso se ha desactivado.' );
+			$ok .= ' ' . __( 'Their sign-in account has been deactivated.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		if ( $r['familiares'] ) {
 			/* translators: 1: cuentas familiares, 2: de ellas, desactivadas */
-			$ok .= ' ' . sprintf( asde_t( 'Ya no está en %1$d cuenta(s) familiar(es); %2$d se han desactivado porque no representan a nadie más.' ), $r['familiares'], $r['desactivadas'] );
+			$ok .= ' ' . sprintf( /* translators: 1: number, 2: number */ __( 'No longer in %1$d family account(s); %2$d were deactivated because they do not represent anyone else.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $r['familiares'], $r['desactivadas'] );
 		}
 		Notices::add( 'success', $ok );
 		$this->redirect( $this->url( 'personas', array( 'ver' => 'inactivas' ) ) );

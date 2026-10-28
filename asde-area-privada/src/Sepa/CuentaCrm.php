@@ -83,7 +83,7 @@ final class CuentaCrm {
 	 */
 	public static function guardar( PersonaRepository $repo, array $socios, array $datos ) {
 		if ( ! Escritura::disponible() ) {
-			return new \WP_Error( 'asde_sepa_crm', asde_t( 'La cuenta se guarda en la ficha del CRM y el usuario del CRM de tu grupo no tiene permiso para editar fichas. Avisa a la Tesorería del grupo.' ) );
+			return new \WP_Error( 'asde_sepa_crm', __( 'The account is saved on the CRM record and your group\'s CRM user does not have permission to edit records. Notify the group\'s Treasury.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$valores = array(
 			self::IBAN    => Iban::normalizar( $datos['iban'] ),
@@ -94,7 +94,7 @@ final class CuentaCrm {
 		}
 		$personas = $repo->obtener_varias( $socios );
 		if ( ! $personas ) {
-			return new \WP_Error( 'asde_sepa_crm', asde_t( 'No se encuentran en el CRM las fichas de la familia.' ) );
+			return new \WP_Error( 'asde_sepa_crm', __( 'The family\'s records cannot be found in the CRM.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		foreach ( $personas as $p ) {
 			$r = Escritura::guardar( $p, $valores, 'Autorización de domiciliación SEPA' );
@@ -102,7 +102,7 @@ final class CuentaCrm {
 				return $r;
 			}
 			if ( $r['rechazados'] ) {
-				return new \WP_Error( 'asde_sepa_crm', asde_t( 'El CRM no ha guardado la cuenta en la ficha. Inténtalo más tarde o avisa a la Tesorería del grupo.' ) );
+				return new \WP_Error( 'asde_sepa_crm', __( 'The CRM has not saved the account on the record. Try again later or notify the group\'s Treasury.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			}
 		}
 		return true;

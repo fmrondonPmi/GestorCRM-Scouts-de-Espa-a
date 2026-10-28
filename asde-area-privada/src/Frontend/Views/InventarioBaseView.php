@@ -15,9 +15,9 @@ abstract class InventarioBaseView extends View {
 			'tienda/subnav',
 			array(
 				'items'  => array(
-					'inventario'         => asde_t( 'Material' ),
-					'inventario_tipos'   => asde_t( 'Tipos de material' ),
-					'inventario_compras' => asde_t( 'Listas de compra' ) . ( $pendientes ? ' (' . $pendientes . ')' : '' ),
+					'inventario'         => __( 'Equipment', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+					'inventario_tipos'   => __( 'Equipment types', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+					'inventario_compras' => __( 'Shopping lists', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . ( $pendientes ? ' (' . $pendientes . ')' : '' ),
 				),
 				'activo' => $activo,
 			)
@@ -26,7 +26,7 @@ abstract class InventarioBaseView extends View {
 
 	protected function denegar_post(): void {
 		if ( ! current_user_can( Servicio::CAP ) ) {
-			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+			wp_die( esc_html__( 'You do not have permission to do this.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 	}
 

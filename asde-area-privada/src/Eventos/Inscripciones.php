@@ -212,13 +212,13 @@ final class Inscripciones {
 	public static function inscribir( array $e, Ambito $a, string $num, array $in ) {
 		$p = self::para_quien( $a )[ $num ] ?? null;
 		if ( ! current_user_can( self::CAP ) || ! $p ) {
-			return new \WP_Error( 'asde_inscripcion', asde_t( 'No puedes inscribir a esa persona.' ) );
+			return new \WP_Error( 'asde_inscripcion', __( 'You cannot sign that person up.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( 'abierta' !== self::plazo( $e ) ) {
-			return new \WP_Error( 'asde_inscripcion', asde_t( 'La inscripción de este evento no está abierta.' ) );
+			return new \WP_Error( 'asde_inscripcion', __( 'Sign-up for this event is not open.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( ! self::convocada( $e, $p ) ) {
-			return new \WP_Error( 'asde_inscripcion', asde_t( 'Este evento no es para su sección o su edad.' ) );
+			return new \WP_Error( 'asde_inscripcion', __( 'This event is not for their section or age.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$error = self::ya_esta( $e, $num );
 		if ( $error ) {
@@ -228,13 +228,13 @@ final class Inscripciones {
 		$adulta  = self::adulta_en( $e, $p );
 		$edad    = Normativa::edad_en( $p, $e );
 		if ( ! $familia && ! $adulta && ( null === $edad || $edad < self::edad_cuenta_propia() ) ) {
-			return new \WP_Error( 'asde_inscripcion', asde_t( 'Te tiene que inscribir tu familia desde su cuenta.' ) );
+			return new \WP_Error( 'asde_inscripcion', __( 'Your family has to sign you up from their account.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( empty( $in['salud'] ) ) {
-			return new \WP_Error( 'asde_inscripcion', asde_t( 'Confirma que has revisado la ficha de salud y alimentación y que está al día.' ) );
+			return new \WP_Error( 'asde_inscripcion', __( 'Confirm that you have checked the health and food record and that it is up to date.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( $familia && ! $adulta && empty( $in['acepto'] ) ) {
-			return new \WP_Error( 'asde_inscripcion', asde_t( 'Para inscribir hay que aceptar la autorización de participación.' ) );
+			return new \WP_Error( 'asde_inscripcion', __( 'To sign up you must accept the participation authorisation.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$datos = self::leer( $e, $num, $in ) + array( 'salud_revisada' => current_time( 'mysql', true ) );
 		if ( $adulta ) {
@@ -249,7 +249,7 @@ final class Inscripciones {
 	public static function no_participa( array $e, Ambito $a, string $num ) {
 		$p = self::para_quien( $a )[ $num ] ?? null;
 		if ( ! current_user_can( self::CAP ) || ! $p || 'convocatoria' !== $e['modalidad'] || 'abierta' !== self::plazo( $e ) || ! self::convocada( $e, $p ) ) {
-			return new \WP_Error( 'asde_inscripcion', asde_t( 'Ahora no se puede responder a esta convocatoria.' ) );
+			return new \WP_Error( 'asde_inscripcion', __( 'This invitation cannot be answered right now.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$error = self::ya_esta( $e, $num );
 		if ( $error ) {
@@ -268,7 +268,7 @@ final class Inscripciones {
 			)
 		);
 		if ( ! $id ) {
-			return new \WP_Error( 'asde_inscripcion', asde_t( 'No se ha podido guardar la respuesta.' ) );
+			return new \WP_Error( 'asde_inscripcion', __( 'The answer could not be saved.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		Logger::log( 'inscripcion_no_participa', 'evento', (string) $e['id'], array( 'inscripcion' => $id ) );
 		return true;
@@ -278,10 +278,10 @@ final class Inscripciones {
 	public static function firmar( array $e, Ambito $a, int $fila, bool $acepto ) {
 		$f = self::fila( $e, $fila );
 		if ( ! current_user_can( self::CAP ) || ! $f || ! isset( $a->representados[ $f['socio'] ] ) || '' !== $f['autorizacion'] || ! in_array( $f['estado'], array( InscripcionesTable::PENDIENTE, InscripcionesTable::ESPERA ), true ) || ! self::gestionable( $e ) ) {
-			return new \WP_Error( 'asde_inscripcion', asde_t( 'Esta autorización no se puede firmar.' ) );
+			return new \WP_Error( 'asde_inscripcion', __( 'This authorisation cannot be signed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( ! $acepto ) {
-			return new \WP_Error( 'asde_inscripcion', asde_t( 'Para firmar hay que aceptar la autorización de participación.' ) );
+			return new \WP_Error( 'asde_inscripcion', __( 'To sign you must accept the participation authorisation.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$firma = self::firma();
 		InscripcionesTable::actualizar( $f['id'], $firma );
@@ -302,7 +302,7 @@ final class Inscripciones {
 	public static function confirmar_plaza( array $e, Ambito $a, int $fila ) {
 		$f = self::fila( $e, $fila );
 		if ( ! current_user_can( self::CAP ) || ! $f || ! isset( self::para_quien( $a )[ $f['socio'] ] ) || ! self::con_oferta( $f ) ) {
-			return new \WP_Error( 'asde_inscripcion', asde_t( 'Esa plaza ya no está disponible.' ) );
+			return new \WP_Error( 'asde_inscripcion', __( 'That place is no longer available.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		InscripcionesTable::actualizar(
 			$f['id'],
@@ -329,23 +329,23 @@ final class Inscripciones {
 	 */
 	public static function inscribir_gestor( array $e, Ambito $a, string $num, array $in ) {
 		if ( ! Servicio::en_gestion( $e, $a ) ) {
-			return new \WP_Error( 'asde_inscripcion', asde_t( 'No puedes inscribir en este evento.' ) );
+			return new \WP_Error( 'asde_inscripcion', __( 'You cannot sign people up to this event.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( ! self::gestionable( $e ) ) {
-			return new \WP_Error( 'asde_inscripcion', asde_t( 'Solo se puede inscribir en un evento publicado que aún no ha acabado.' ) );
+			return new \WP_Error( 'asde_inscripcion', __( 'You can only sign up to a published event that has not yet ended.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$repo = PersonaRepository::make();
 		try {
 			$p = $repo && '' !== $num ? $repo->obtener( $num ) : null;
 		} catch ( CrmException $ex ) {
-			return new \WP_Error( 'asde_inscripcion', asde_t( 'No se ha podido consultar el CRM: inténtalo dentro de un rato.' ) );
+			return new \WP_Error( 'asde_inscripcion', __( 'The CRM could not be queried: try again in a while.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( ! $p || ! $p->tiene_membresia_activa() ) {
-			return new \WP_Error( 'asde_inscripcion', asde_t( 'Elige a una persona del grupo.' ) );
+			return new \WP_Error( 'asde_inscripcion', __( 'Choose a person from the group.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$motivo = mb_substr( trim( sanitize_text_field( (string) ( $in['motivo'] ?? '' ) ) ), 0, 255 );
 		if ( ! self::convocada( $e, $p ) && '' === $motivo ) {
-			return new \WP_Error( 'asde_inscripcion', asde_t( 'No es de una sección convocada o no tiene la edad del evento: escribe el motivo de la excepción.' ) );
+			return new \WP_Error( 'asde_inscripcion', __( 'Not from an invited section or not the event\'s age: enter the reason for the exception.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$error = self::ya_esta( $e, $num );
 		if ( $error ) {
@@ -362,7 +362,7 @@ final class Inscripciones {
 	public static function papel( array $e, Ambito $a, int $fila ) {
 		$f = self::fila( $e, $fila );
 		if ( ! $f || ! Servicio::en_gestion( $e, $a ) || '' !== $f['autorizacion'] || ! in_array( $f['estado'], array( InscripcionesTable::PENDIENTE, InscripcionesTable::ESPERA ), true ) ) {
-			return new \WP_Error( 'asde_inscripcion', asde_t( 'No se puede marcar esta autorización.' ) );
+			return new \WP_Error( 'asde_inscripcion', __( 'This authorisation cannot be ticked off.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		InscripcionesTable::actualizar(
 			$f['id'],
@@ -392,22 +392,22 @@ final class Inscripciones {
 	public static function baja( array $e, Ambito $a, int $fila, string $motivo, bool $gestion ) {
 		$f = self::fila( $e, $fila );
 		if ( ! $f || ! in_array( $f['estado'], array( InscripcionesTable::PENDIENTE, InscripcionesTable::CONFIRMADA, InscripcionesTable::ESPERA ), true ) ) {
-			return new \WP_Error( 'asde_inscripcion', asde_t( 'Esta inscripción no se puede dar de baja.' ) );
+			return new \WP_Error( 'asde_inscripcion', __( 'This sign-up cannot be withdrawn.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$motivo = mb_substr( trim( sanitize_text_field( $motivo ) ), 0, 255 );
 		if ( $gestion ) {
 			if ( ! Servicio::en_gestion( $e, $a ) || ! self::gestionable( $e ) ) {
-				return new \WP_Error( 'asde_inscripcion', asde_t( 'No puedes dar de baja en este evento.' ) );
+				return new \WP_Error( 'asde_inscripcion', __( 'You cannot withdraw people from this event.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			}
 			if ( '' === $motivo ) {
-				return new \WP_Error( 'asde_inscripcion', asde_t( 'Indica el motivo de la baja.' ) );
+				return new \WP_Error( 'asde_inscripcion', __( 'State the reason for the withdrawal.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			}
 		} else {
 			if ( ! current_user_can( self::CAP ) || ! isset( self::para_quien( $a )[ $f['socio'] ] ) ) {
-				return new \WP_Error( 'asde_inscripcion', asde_t( 'Esta inscripción no se puede dar de baja.' ) );
+				return new \WP_Error( 'asde_inscripcion', __( 'This sign-up cannot be withdrawn.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			}
 			if ( 'abierta' !== self::plazo( $e ) ) {
-				return new \WP_Error( 'asde_inscripcion', asde_t( 'El plazo de inscripción ya se ha cerrado: para la baja, habla con el equipo del evento.' ) );
+				return new \WP_Error( 'asde_inscripcion', __( 'The sign-up deadline has closed: to withdraw, talk to the event team.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			}
 		}
 		InscripcionesTable::actualizar(
@@ -712,7 +712,7 @@ final class Inscripciones {
 		// pueden llevarse la última plaza (doc 59, RC-EVE-1).
 		$bloqueo = self::BLOQUEO . $e['id'];
 		if ( ! Bloqueo::tomar( $bloqueo ) ) {
-			return new \WP_Error( 'asde_inscripcion', asde_t( 'Otra persona está haciendo un cambio en esto ahora mismo. Inténtalo de nuevo en unos segundos.' ) );
+			return new \WP_Error( 'asde_inscripcion', __( 'Someone else is making a change to this right now. Try again in a few seconds.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		try {
 			$filas   = array_filter( InscripcionesTable::participantes( $e['id'] ), static fn( array $f ) => $f['socio'] !== $p->num_socio_asde );
@@ -741,7 +741,7 @@ final class Inscripciones {
 			Bloqueo::soltar( $bloqueo );
 		}
 		if ( ! $id ) {
-			return new \WP_Error( 'asde_inscripcion', asde_t( 'No se ha podido guardar la inscripción.' ) );
+			return new \WP_Error( 'asde_inscripcion', __( 'The sign-up could not be saved.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		Logger::log(
 			$espera ? 'inscripcion_espera' : 'inscripcion_creada',
@@ -758,7 +758,7 @@ final class Inscripciones {
 		if ( ! $espera ) {
 			self::recalcular( $e, $id );
 		}
-		return InscripcionesTable::obtener( $id ) ?? new \WP_Error( 'asde_inscripcion', asde_t( 'No se ha podido guardar la inscripción.' ) );
+		return InscripcionesTable::obtener( $id ) ?? new \WP_Error( 'asde_inscripcion', __( 'The sign-up could not be saved.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 	}
 
 	/** Error si la persona ya está en el evento (inscrita, en la lista de espera o en el equipo). */
@@ -768,12 +768,12 @@ final class Inscripciones {
 			return null;
 		}
 		if ( InscripcionesTable::PARTICIPANTE !== $previa['papel'] ) {
-			return new \WP_Error( 'asde_inscripcion', asde_t( 'Está en el equipo de este evento.' ) );
+			return new \WP_Error( 'asde_inscripcion', __( 'Is on this event\'s team.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( in_array( $previa['estado'], array( InscripcionesTable::BAJA, InscripcionesTable::NO_PARTICIPA ), true ) ) {
 			return null;
 		}
-		return new \WP_Error( 'asde_inscripcion', asde_t( 'Ya está inscrito/a en este evento.' ) );
+		return new \WP_Error( 'asde_inscripcion', __( 'Already signed up to this event.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 	}
 
 	/** Transporte, quién recoge y observaciones (cifradas). */

@@ -59,19 +59,19 @@ final class AccesoView extends View {
 			return;
 		}
 		if ( ! wp_verify_nonce( $this->post_nonce(), 'asde_acceso' ) ) {
-			self::$error = asde_t( 'La sesión del formulario ha caducado. Vuelve a intentarlo.' );
+			self::$error = __( 'The form session has expired. Try again.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 			return;
 		}
 		$grupo = $this->post( 'grupo' );
 		if ( ! Grupos::obtener( $grupo ) ) {
-			self::$error = asde_t( 'Elige tu Grupo Scout.' );
+			self::$error = __( 'Choose your Scout Group.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 			return;
 		}
 		$login = Identificacion::normalizar( $this->post( 'usuario' ) );
 		// El límite de intentos es por cuenta, no por lo escrito: el nº de Scouts de España y el local son la misma cuenta.
 		$cuenta = Identificacion::canonico( $login );
 		if ( Intentos::bloqueado( $cuenta ) ) {
-			self::$error = asde_t( 'Demasiados intentos fallidos. Espera unos minutos antes de volver a intentarlo o recupera tu contraseña.' );
+			self::$error = __( 'Too many failed attempts. Wait a few minutes before trying again or recover your password.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 			return;
 		}
 		// Código de verificación: Wordfence lo lee de $_POST['wfls-token']. Si viene
@@ -111,7 +111,7 @@ final class AccesoView extends View {
 			$codigo = $user->get_error_code();
 			if ( 'wfls_twofactor_required' === $codigo ) {
 				self::$pedir_codigo = true;
-				self::$error        = asde_t( 'Tienes activada la verificación en dos pasos: escribe el código de 6 cifras de tu app y vuelve a escribir la contraseña.' );
+				self::$error        = __( 'You have two-step verification turned on: enter the 6-digit code from your app and type the password again.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				return; // No es un fallo: la contraseña era correcta.
 			}
 			if ( AccessHooks::SIN_MEMBRESIA === $codigo ) {
@@ -122,12 +122,12 @@ final class AccesoView extends View {
 			}
 			if ( 'wfls_twofactor_failed' === $codigo ) {
 				self::$pedir_codigo = true;
-				self::$error        = asde_t( 'El código de verificación no es correcto o ha caducado. Vuelve a intentarlo.' );
+				self::$error        = __( 'The verification code is incorrect or has expired. Try again.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 			} elseif ( in_array( $codigo, self::ERRORES_CREDENCIALES, true ) ) {
 				self::$error = asde_t( self::MENSAJE_CREDENCIALES );
 			} else {
 				// Otros avisos (p. ej. de Wordfence): se muestra su texto, sin HTML.
-				self::$error = wp_strip_all_tags( $user->get_error_message() ) ?: asde_t( 'No se ha podido iniciar sesión.' );
+				self::$error = wp_strip_all_tags( $user->get_error_message() ) ?: __( 'Sign-in was not possible.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 			}
 			Intentos::fallo( $cuenta );
 			return;

@@ -22,74 +22,74 @@ $nombres   = static function ( int $id ) use ( $familias, $personas ): string {
 	return $f ? implode( ', ', array_map( static fn( $num ) => isset( $personas[ $num ] ) ? $personas[ $num ]->nombre : $num, $f['miembros'] ) ) : '';
 };
 $estado_l  = array(
-	Remesas::PENDIENTE => asde_t( 'Pendiente' ),
-	Remesas::COBRADO   => asde_t( 'Cobrado' ),
-	Remesas::DEVUELTO  => asde_t( 'Devuelto' ),
+	Remesas::PENDIENTE => __( 'Pending', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+	Remesas::COBRADO   => __( 'Collected', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+	Remesas::DEVUELTO  => __( 'Returned', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 );
 $pendientes = array_filter( $lineas, static fn( $l ) => Remesas::PENDIENTE === $l['estado'] );
 ?>
-<p class="asde-back"><a href="<?php echo esc_url( $url ); ?>"><?php asde_e( '← Domiciliaciones' ); ?></a></p>
+<p class="asde-back"><a href="<?php echo esc_url( $url ); ?>"><?php esc_html_e( '← Direct debits', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a></p>
 
 <section class="asde-card">
 	<header class="asde-card__header asde-card__header--split">
-		<h2 class="asde-card__title"><?php asde_e( 'Remesa' ); ?> <?php echo esc_html( $r['numero'] ); ?></h2>
+		<h2 class="asde-card__title"><?php esc_html_e( 'Batch', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <?php echo esc_html( $r['numero'] ); ?></h2>
 		<span class="asde-badge"><?php echo esc_html( asde_t( Remesas::ESTADOS[ $r['estado'] ] ?? $r['estado'] ) ); ?></span>
 	</header>
 	<ul class="asde-resumen">
-		<li><?php asde_e( 'Ronda' ); ?> <strong><?php echo esc_html( $r['ronda'] ); ?></strong> · <?php echo esc_html( asde_t( (string) $r['plazo'] ) ); ?></li>
-		<li><?php asde_e( 'Fecha de cobro' ); ?> <strong><?php echo esc_html( $fmt_fecha( $r['fecha_cobro'] ) ); ?></strong></li>
+		<li><?php esc_html_e( 'Round', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <strong><?php echo esc_html( $r['ronda'] ); ?></strong> · <?php echo esc_html( asde_t( (string) $r['plazo'] ) ); ?></li>
+		<li><?php esc_html_e( 'Collection date', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <strong><?php echo esc_html( $fmt_fecha( $r['fecha_cobro'] ) ); ?></strong></li>
 		<li><strong><?php echo esc_html( Remesas::adeudos( (int) $r['adeudos'] ) ); ?></strong> · <strong><?php echo esc_html( Calculadora::euros( $r['total'] ) ); ?></strong></li>
 	</ul>
 	<p class="asde-muted">
-		<?php asde_e( 'Creada el' ); ?> <?php echo esc_html( $fmt_dt( $r['creada'] ) ); ?>.
-		<?php echo esc_html( $r['avisada_en'] ? sprintf( asde_t( 'Familias avisadas el %s. ' ), $fmt_dt( $r['avisada_en'] ) ) : asde_t( 'Todavía no se ha avisado a las familias. ' ) ); ?>
-		<?php echo $r['enviada_en'] ? esc_html( sprintf( asde_t( 'Enviada al banco el %s. ' ), $fmt_dt( $r['enviada_en'] ) ) ) : ''; ?>
-		<?php echo $r['descargas'] ? esc_html( sprintf( asde_n( 'Descargada %d vez.', 'Descargada %d veces.', (int) $r['descargas'] ), (int) $r['descargas'] ) ) : ''; ?>
+		<?php esc_html_e( 'Created on', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <?php echo esc_html( $fmt_dt( $r['creada'] ) ); ?>.
+		<?php echo esc_html( $r['avisada_en'] ? sprintf( /* translators: %s: text */ __( 'Families notified on %s. ', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $fmt_dt( $r['avisada_en'] ) ) : __( 'Families have not been notified yet. ', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>
+		<?php echo $r['enviada_en'] ? esc_html( sprintf( /* translators: %s: text */ __( 'Sent to the bank on %s. ', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $fmt_dt( $r['enviada_en'] ) ) ) : ''; ?>
+		<?php echo $r['descargas'] ? esc_html( sprintf( /* translators: %d: number */ _n( 'Downloaded %d time.', 'Downloaded %d times.', (int) $r['descargas'] , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), (int) $r['descargas'] ) ) : ''; ?>
 	</p>
 
 	<?php if ( Remesas::ANULADA === $r['estado'] ) : ?>
-		<div class="asde-notice asde-notice--info" role="status"><?php asde_e( 'Remesa anulada. Sus datos se han borrado.' ); ?></div>
+		<div class="asde-notice asde-notice--info" role="status"><?php esc_html_e( 'Batch cancelled. Its data has been deleted.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></div>
 	<?php elseif ( ! $lineas ) : ?>
-		<div class="asde-notice asde-notice--info" role="status"><?php asde_e( 'Los datos de los adeudos de esta remesa ya no se conservan (se borran 14 meses después de la fecha de cobro).' ); ?></div>
+		<div class="asde-notice asde-notice--info" role="status"><?php esc_html_e( 'The data of this batch\'s direct debits is no longer kept (it is deleted 14 months after the collection date).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></div>
 	<?php else : ?>
 		<div class="asde-actions">
 			<form method="post" data-asde-sin-carga>
 				<?php wp_nonce_field( 'asde_sepa_remesa_' . (int) $r['id'] ); ?>
 				<input type="hidden" name="asde_action" value="sepa_descargar">
 				<input type="hidden" name="remesa" value="<?php echo (int) $r['id']; ?>">
-				<button type="submit" class="button"><?php asde_e( 'Descargar el fichero XML' ); ?></button>
+				<button type="submit" class="button"><?php esc_html_e( 'Download the XML file', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 			</form>
-			<form method="post" data-asde-confirmar="<?php echo esc_attr( asde_js( 'Se enviará un email a las cuentas de cada familia con la fecha y el importe del cargo. ¿Continuar?' ) ); ?>">
+			<form method="post" data-asde-confirmar="<?php echo esc_attr( __( 'An email will be sent to each family\'s accounts with the date and amount of the charge. Continue?', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
 				<?php wp_nonce_field( 'asde_sepa_remesa_' . (int) $r['id'] ); ?>
 				<input type="hidden" name="asde_action" value="sepa_avisar">
 				<input type="hidden" name="remesa" value="<?php echo (int) $r['id']; ?>">
-				<button type="submit" class="button asde-button-secundario"><?php echo $r['avisada_en'] ? esc_html( asde_t( 'Volver a avisar a las familias' ) ) : esc_html( asde_t( 'Avisar a las familias por email' ) ); ?></button>
+				<button type="submit" class="button asde-button-secundario"><?php echo $r['avisada_en'] ? esc_html( __( 'Notify the families again', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) : esc_html( __( 'Notify families by email', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?></button>
 			</form>
 			<?php if ( Remesas::GENERADA === $r['estado'] ) : ?>
-				<form method="post" data-asde-confirmar="<?php echo esc_attr( asde_js( '¿Confirmas que has subido el fichero al banco?' ) ); ?>">
+				<form method="post" data-asde-confirmar="<?php echo esc_attr( __( 'Do you confirm that you have uploaded the file to the bank?', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
 					<?php wp_nonce_field( 'asde_sepa_remesa_' . (int) $r['id'] ); ?>
 					<input type="hidden" name="asde_action" value="sepa_enviada">
 					<input type="hidden" name="remesa" value="<?php echo (int) $r['id']; ?>">
-					<button type="submit" class="button asde-button-secundario"><?php asde_e( 'Marcar como enviada al banco' ); ?></button>
+					<button type="submit" class="button asde-button-secundario"><?php esc_html_e( 'Mark as sent to the bank', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 				</form>
-				<form method="post" data-asde-confirmar="<?php echo esc_attr( asde_js( '¿Anular la remesa? Se borrarán sus datos.' ) ); ?>">
+				<form method="post" data-asde-confirmar="<?php echo esc_attr( __( 'Cancel the batch? Its data will be deleted.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
 					<?php wp_nonce_field( 'asde_sepa_remesa_' . (int) $r['id'] ); ?>
 					<input type="hidden" name="asde_action" value="sepa_anular">
 					<input type="hidden" name="remesa" value="<?php echo (int) $r['id']; ?>">
 					<input type="hidden" name="ronda" value="<?php echo esc_attr( $r['ronda'] ); ?>">
-					<button type="submit" class="asde-btn-link"><?php asde_e( 'Anular' ); ?></button>
+					<button type="submit" class="asde-btn-link"><?php esc_html_e( 'Cancel', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 				</form>
 			<?php endif; ?>
 		</div>
 		<?php if ( Remesas::GENERADA === $r['estado'] ) : ?>
-			<p class="asde-help"><?php asde_e( 'El fichero lleva las cuentas de las familias sin cifrar: guárdalo solo el tiempo necesario y bórralo del ordenador después de subirlo al banco.' ); ?></p>
+			<p class="asde-help"><?php esc_html_e( 'The file carries the families\' accounts unencrypted: keep it only as long as necessary and delete it from the computer after uploading it to the bank.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 		<?php endif; ?>
 	<?php endif; ?>
 </section>
 
 <?php if ( $lineas ) : ?>
 	<section class="asde-card">
-		<h3><?php asde_e( 'Adeudos' ); ?></h3>
+		<h3><?php esc_html_e( 'Debit charges', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h3>
 		<?php $puede_cobros = Remesas::ENVIADA === $r['estado'] && $pendientes; ?>
 		<?php if ( $puede_cobros ) : ?>
 			<form method="post" class="asde-form">
@@ -101,28 +101,28 @@ $pendientes = array_filter( $lineas, static fn( $l ) => Remesas::PENDIENTE === $
 		<table class="asde-table">
 			<thead>
 				<tr>
-					<th scope="col"><?php asde_e( 'Familia' ); ?></th>
-					<th scope="col"><?php asde_e( 'Socios' ); ?></th>
-					<th scope="col"><?php asde_e( 'Titular · cuenta' ); ?></th>
-					<th scope="col"><?php asde_e( 'Secuencia' ); ?></th>
-					<th scope="col"><?php asde_e( 'Importe' ); ?></th>
-					<th scope="col"><?php asde_e( 'Estado' ); ?></th>
-					<?php if ( $puede_cobros ) : ?><th scope="col"><?php asde_e( 'Cobrado' ); ?></th><th scope="col"><?php asde_e( 'Devuelto' ); ?></th><?php endif; ?>
+					<th scope="col"><?php esc_html_e( 'Family', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
+					<th scope="col"><?php esc_html_e( 'Members', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
+					<th scope="col"><?php esc_html_e( 'Holder · account', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
+					<th scope="col"><?php esc_html_e( 'Sequence', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
+					<th scope="col"><?php esc_html_e( 'Amount', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
+					<th scope="col"><?php esc_html_e( 'Status', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
+					<?php if ( $puede_cobros ) : ?><th scope="col"><?php esc_html_e( 'Collected', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Returned', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><?php endif; ?>
 				</tr>
 			</thead>
 			<tbody>
 				<?php foreach ( $lineas as $l ) : ?>
 					<tr>
-						<td data-label="<?php echo esc_attr( asde_a( 'Familia' ) ); ?>"><a href="<?php echo esc_url( add_query_arg( array( 'familia' => (int) $l['familia'], 'ronda' => $r['ronda'] ), $url_fam ) ); ?>"><?php echo esc_html( $l['familia_n'] ); ?></a></td>
-						<td data-label="<?php echo esc_attr( asde_a( 'Socios' ) ); ?>"><?php echo esc_html( $nombres( (int) $l['familia'] ) ); ?></td>
-						<td data-label="<?php echo esc_attr( asde_a( 'Titular' ) ); ?>"><?php echo esc_html( ( '' !== (string) ( $l['titular'] ?? '' ) ? $l['titular'] : '—' ) . ' · ' . ( $l['iban_mask'] ?? '' ) ); ?></td>
-						<td data-label="<?php echo esc_attr( asde_a( 'Secuencia' ) ); ?>"><?php echo esc_html( $l['secuencia'] ); ?></td>
-						<td data-label="<?php echo esc_attr( asde_a( 'Importe' ) ); ?>"><?php echo esc_html( Calculadora::euros( $l['centimos'] / 100 ) ); ?></td>
-						<td data-label="<?php echo esc_attr( asde_a( 'Estado' ) ); ?>"><?php echo esc_html( $estado_l[ $l['estado'] ] ?? $l['estado'] ); ?></td>
+						<td data-label="<?php echo esc_attr( esc_attr__( 'Family', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><a href="<?php echo esc_url( add_query_arg( array( 'familia' => (int) $l['familia'], 'ronda' => $r['ronda'] ), $url_fam ) ); ?>"><?php echo esc_html( $l['familia_n'] ); ?></a></td>
+						<td data-label="<?php echo esc_attr( esc_attr__( 'Members', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( $nombres( (int) $l['familia'] ) ); ?></td>
+						<td data-label="<?php echo esc_attr( esc_attr__( 'Holder', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( ( '' !== (string) ( $l['titular'] ?? '' ) ? $l['titular'] : '—' ) . ' · ' . ( $l['iban_mask'] ?? '' ) ); ?></td>
+						<td data-label="<?php echo esc_attr( esc_attr__( 'Sequence', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( $l['secuencia'] ); ?></td>
+						<td data-label="<?php echo esc_attr( esc_attr__( 'Amount', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( Calculadora::euros( $l['centimos'] / 100 ) ); ?></td>
+						<td data-label="<?php echo esc_attr( esc_attr__( 'Status', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( $estado_l[ $l['estado'] ] ?? $l['estado'] ); ?></td>
 						<?php if ( $puede_cobros ) : ?>
 							<?php if ( Remesas::PENDIENTE === $l['estado'] ) : ?>
-								<td data-label="<?php echo esc_attr( asde_a( 'Cobrado' ) ); ?>"><input type="checkbox" name="cobrada[]" value="<?php echo (int) $l['familia']; ?>" checked aria-label="Cobrado a <?php echo esc_attr( $l['familia_n'] ); ?>"></td>
-								<td data-label="<?php echo esc_attr( asde_a( 'Devuelto' ) ); ?>"><input type="checkbox" name="devuelta[]" value="<?php echo (int) $l['familia']; ?>" aria-label="Devuelto a <?php echo esc_attr( $l['familia_n'] ); ?>"></td>
+								<td data-label="<?php echo esc_attr( esc_attr__( 'Collected', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><input type="checkbox" name="cobrada[]" value="<?php echo (int) $l['familia']; ?>" checked aria-label="Cobrado a <?php echo esc_attr( $l['familia_n'] ); ?>"></td>
+								<td data-label="<?php echo esc_attr( esc_attr__( 'Returned', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><input type="checkbox" name="devuelta[]" value="<?php echo (int) $l['familia']; ?>" aria-label="Devuelto a <?php echo esc_attr( $l['familia_n'] ); ?>"></td>
 							<?php else : ?>
 								<td></td><td></td>
 							<?php endif; ?>
@@ -133,11 +133,11 @@ $pendientes = array_filter( $lineas, static fn( $l ) => Remesas::PENDIENTE === $
 		</table>
 		<?php if ( $puede_cobros ) : ?>
 				<p>
-					<label for="asde-sepa-cobro-fecha"><?php asde_e( 'Fecha en que el banco cobró' ); ?></label>
+					<label for="asde-sepa-cobro-fecha"><?php esc_html_e( 'Date the bank collected', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 					<input type="date" id="asde-sepa-cobro-fecha" name="fecha" value="<?php echo esc_attr( min( $r['fecha_cobro'], current_time( 'Y-m-d' ) ) ); ?>" max="<?php echo esc_attr( current_time( 'Y-m-d' ) ); ?>">
-					<span class="asde-help"><?php asde_e( 'Marca «Cobrado» en los que ya han salido de la cuenta (pasan a ser pagos de la familia) y «Devuelto» en los que el banco ha devuelto; los que dejes sin marcar seguirán pendientes.' ); ?></span>
+					<span class="asde-help"><?php esc_html_e( 'Tick "Collected" on those that have already left the account (they become the family\'s payments) and "Returned" on those the bank has returned; those you leave unticked remain pending.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span>
 				</p>
-				<p><button type="submit" class="button"><?php asde_e( 'Registrar los cobros' ); ?></button></p>
+				<p><button type="submit" class="button"><?php esc_html_e( 'Record the collections', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button></p>
 			</form>
 		<?php endif; ?>
 	</section>

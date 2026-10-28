@@ -166,7 +166,7 @@ final class BancoTable {
 		} catch ( \Throwable $e ) {
 			// Un fallo inesperado (p. ej. al cifrar) no deja la transacción abierta ni el lote a medias.
 			$wpdb->query( 'ROLLBACK' );
-			return new \WP_Error( 'asde_banco', asde_t( 'Error al guardar los movimientos: no se ha importado nada.' ) );
+			return new \WP_Error( 'asde_banco', __( 'Error saving the transactions: nothing has been imported.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 	}
 
@@ -197,7 +197,7 @@ final class BancoTable {
 		$lote = (int) $wpdb->insert_id;
 		if ( ! $ok || ! $lote ) {
 			$wpdb->query( 'ROLLBACK' );
-			return new \WP_Error( 'asde_banco', asde_t( 'No se ha podido guardar la importación.' ) );
+			return new \WP_Error( 'asde_banco', __( 'The import could not be saved.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 
 		$nuevos = 0;
@@ -233,7 +233,7 @@ final class BancoTable {
 			);
 			if ( false === $r ) {
 				$wpdb->query( 'ROLLBACK' );
-				return new \WP_Error( 'asde_banco', asde_t( 'Error al guardar los movimientos: no se ha importado nada.' ) );
+				return new \WP_Error( 'asde_banco', __( 'Error saving the transactions: nothing has been imported.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			}
 			$nuevos += (int) $r;
 		}
@@ -481,18 +481,18 @@ final class BancoTable {
 		$ma = self::obtener( $a );
 		$mb = self::obtener( $b );
 		if ( ! $ma || ! $mb || $a === $b ) {
-			return new \WP_Error( 'asde_banco_asociar', asde_t( 'Elige otro movimiento del banco del grupo.' ) );
+			return new \WP_Error( 'asde_banco_asociar', __( 'Choose another bank transaction of the group.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( ! empty( $ma['asociado_id'] ) || ! empty( $mb['asociado_id'] ) ) {
-			return new \WP_Error( 'asde_banco_asociar', asde_t( 'Uno de los dos ya está asociado con otro movimiento: quita antes esa asociación.' ) );
+			return new \WP_Error( 'asde_banco_asociar', __( 'One of the two is already linked to another transaction: remove that link first.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$poner = static fn( int $id, int $con ) => (int) $wpdb->query( $wpdb->prepare( 'UPDATE %i SET asociado_id = %d WHERE id = %d AND grupo = %s AND asociado_id IS NULL', self::table(), $con, $id, Grupo::numero() ) ); // phpcs:ignore WordPress.DB
 		if ( 1 !== $poner( $a, $b ) ) {
-			return new \WP_Error( 'asde_banco_asociar', asde_t( 'Uno de los dos ya está asociado con otro movimiento: quita antes esa asociación.' ) );
+			return new \WP_Error( 'asde_banco_asociar', __( 'One of the two is already linked to another transaction: remove that link first.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( 1 !== $poner( $b, $a ) ) {
 			$wpdb->query( $wpdb->prepare( 'UPDATE %i SET asociado_id = NULL WHERE id = %d AND grupo = %s AND asociado_id = %d', self::table(), $a, Grupo::numero(), $b ) ); // phpcs:ignore WordPress.DB
-			return new \WP_Error( 'asde_banco_asociar', asde_t( 'Uno de los dos ya está asociado con otro movimiento: quita antes esa asociación.' ) );
+			return new \WP_Error( 'asde_banco_asociar', __( 'One of the two is already linked to another transaction: remove that link first.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		return true;
 	}

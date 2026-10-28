@@ -14,7 +14,7 @@ if ( ! Idioma::se_puede_elegir() ) {
 }
 $actual = Idioma::actual();
 ?>
-<span class="asde-idiomas" role="group" aria-label="<?php echo esc_attr( asde_t( 'Idioma' ) ); ?>">
+<span class="asde-idiomas" role="group" aria-label="<?php echo esc_attr( __( 'Language', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
 	<?php foreach ( Idioma::disponibles() as $codigo => $nombre ) : ?>
 		<?php if ( $codigo === $actual ) : ?>
 			<strong lang="<?php echo esc_attr( $codigo ); ?>" aria-current="true"><?php echo esc_html( $nombre ); ?></strong>

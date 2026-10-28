@@ -17,7 +17,7 @@
 defined( 'ABSPATH' ) || exit;
 ?>
 <div class="asde-libro" data-asde-libro>
-	<nav class="asde-hojas" aria-label="<?php echo esc_attr( asde_a( 'Hojas de Usuarios' ) ); ?>" data-asde-hojas>
+	<nav class="asde-hojas" aria-label="<?php echo esc_attr( esc_attr__( 'Users sheets', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>" data-asde-hojas>
 		<ul class="asde-hojas__lista">
 			<?php foreach ( $hojas as $clave => $h ) : ?>
 				<li class="asde-hojas__item">

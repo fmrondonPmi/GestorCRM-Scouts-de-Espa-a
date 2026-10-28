@@ -77,7 +77,7 @@ final class MaterialesTable {
 		$descripcion = mb_substr( trim( sanitize_text_field( (string) ( $d['descripcion'] ?? '' ) ) ), 0, 255 );
 		$tipo        = (int) ( $d['tipo'] ?? 0 );
 		if ( $tipo && ! TiposTable::obtener( $tipo ) ) {
-			$errores[] = asde_t( 'El tipo elegido ya no existe: elige otro.' );
+			$errores[] = __( 'The chosen type no longer exists: choose another.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		// Camisas del uniforme (v0.29): modelo y talla de la configuración de uniformes; sin descripción, se pone sola.
 		$modelo = '';
@@ -87,28 +87,28 @@ final class MaterialesTable {
 			$modelo = Config::modelo_de( (string) ( $d['modelo'] ?? '' ), $cfg );
 			$talla  = '' !== $modelo ? Config::talla_de( $cfg, $modelo, (string) ( $d['talla'] ?? '' ) ) : '';
 			if ( '' === $talla ) {
-				$errores[] = asde_t( 'Las camisas del uniforme necesitan el modelo (chico o chica) y una talla de ese modelo.' );
+				$errores[] = __( 'The uniform shirts need the model (boy or girl) and a size of that model.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 			} elseif ( '' === $descripcion ) {
 				$descripcion = self::descripcion_camisa( $cfg, $modelo, $talla );
 			}
 		}
 		if ( '' === $descripcion ) {
-			$errores[] = asde_t( 'Escribe la descripción del material.' );
+			$errores[] = __( 'Enter the description of the equipment.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		$cantidad = trim( (string) ( $d['cantidad'] ?? '' ) );
 		if ( ! preg_match( '/^\d{1,5}$/', $cantidad ) ) {
 			/* translators: %d: cantidad máxima */
-			$errores[] = sprintf( asde_t( 'La cantidad tiene que ser un número entero de 0 a %d.' ), self::MAX_CANTIDAD );
+			$errores[] = sprintf( /* translators: %d: number */ __( 'The quantity must be a whole number from 0 to %d.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), self::MAX_CANTIDAD );
 		}
 		$precio = self::euros( (string) ( $d['precio'] ?? '' ) );
 		if ( false === $precio ) {
-			$errores[] = asde_t( 'El precio no es válido (por ejemplo: 12,50).' );
+			$errores[] = __( 'The price is not valid (for example: 12,50).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		$anio = trim( (string) ( $d['anio'] ?? '' ) );
 		$hoy  = (int) wp_date( 'Y' );
 		if ( '' !== $anio && ( ! preg_match( '/^\d{4}$/', $anio ) || (int) $anio < self::ANIO_MINIMO || (int) $anio > $hoy ) ) {
 			/* translators: 1: primer año admitido, 2: año actual */
-			$errores[] = sprintf( asde_t( 'El año de compra tiene que estar entre %1$d y %2$d (o dejarlo en blanco).' ), self::ANIO_MINIMO, $hoy );
+			$errores[] = sprintf( /* translators: 1: number, 2: number */ __( 'The year of purchase must be between %1$d and %2$d (or left blank).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), self::ANIO_MINIMO, $hoy );
 		}
 		if ( $errores ) {
 			return new \WP_Error( 'asde_inventario', implode( ' ', $errores ) );

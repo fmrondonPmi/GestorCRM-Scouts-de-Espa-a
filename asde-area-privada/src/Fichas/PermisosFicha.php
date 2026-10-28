@@ -112,20 +112,20 @@ final class PermisosFicha {
 	 */
 	public function accion( string $campo, array $meta ): array {
 		if ( \AsdeBalears\AreaPrivada\Auth\SoloLectura::activo() ) { // v0.50: la oficina solo mira.
-			return array( self::VER, asde_t( 'Tu cuenta es de solo lectura: no se puede cambiar nada.' ) );
+			return array( self::VER, __( 'Your account is read-only: nothing can be changed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( isset( CamposFicha::SOLO_LECTURA[ $campo ] ) ) {
 			return array( self::VER, asde_t( CamposFicha::SOLO_LECTURA[ $campo ] ) );
 		}
 		$accion = $this->accion_rol( $campo );
 		if ( self::VER === $accion ) {
-			return array( self::VER, asde_t( 'Tu rol no permite cambiar este dato.' ) );
+			return array( self::VER, __( 'Your role does not allow changing this item.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( ! Escritura::disponible() ) {
-			return array( self::VER, asde_t( 'El usuario del CRM del grupo no tiene permiso para editar fichas.' ) );
+			return array( self::VER, __( 'The group\'s CRM user does not have permission to edit records.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( ! $meta || ! empty( $meta['calculado'] ) || 'multienum' === ( $meta['tipo'] ?? '' ) || ! self::tipo_editable( (string) ( $meta['tipo'] ?? '' ) ) ) {
-			return array( self::VER, asde_t( 'Este campo no se puede editar desde la web.' ) );
+			return array( self::VER, __( 'This field cannot be edited from the website.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		return array( $accion, '' );
 	}

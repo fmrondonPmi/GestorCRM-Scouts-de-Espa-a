@@ -59,7 +59,7 @@ final class Cuentas {
 	public static function proponer( array $e, Ambito $a, array $in, ?array $fichero ) {
 		$teso = Cobros::puede();
 		if ( ! $teso && ! Servicio::en_gestion( $e, $a ) ) {
-			return new \WP_Error( 'asde_cuentas', asde_t( 'No puedes apuntar gastos en este evento.' ) );
+			return new \WP_Error( 'asde_cuentas', __( 'You cannot record expenses in this event.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( ! self::abiertas( $e ) ) {
 			return self::cerradas();
@@ -69,7 +69,7 @@ final class Cuentas {
 			return $d;
 		}
 		if ( ! $fichero || '' === (string) $fichero['ruta'] ) {
-			return new \WP_Error( 'asde_cuentas', asde_t( 'Adjunta el justificante del gasto (una foto del tique o la factura, o el PDF).' ) );
+			return new \WP_Error( 'asde_cuentas', __( 'Attach the receipt for the expense (a photo of the ticket or invoice, or the PDF).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$j = Justificantes::guardar( (string) $fichero['ruta'], (string) $fichero['nombre'] );
 		if ( is_wp_error( $j ) ) {
@@ -97,7 +97,7 @@ final class Cuentas {
 	 */
 	public static function ingreso( array $e, array $in ) {
 		if ( ! Cobros::puede() ) {
-			return new \WP_Error( 'asde_cuentas', asde_t( 'Los ingresos los apunta Tesorería.' ) );
+			return new \WP_Error( 'asde_cuentas', __( 'Income is recorded by Treasury.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( ! self::abiertas( $e ) ) {
 			return self::cerradas();
@@ -115,7 +115,7 @@ final class Cuentas {
 	public static function retirar( array $e, int $id ) {
 		$g = self::gasto( $e, $id );
 		if ( ! $g || ! GastosTable::por_revisar( $g ) || ( get_current_user_id() !== $g['creado_por'] && ! Cobros::puede() ) ) {
-			return new \WP_Error( 'asde_cuentas', asde_t( 'Ese gasto ya no se puede retirar.' ) );
+			return new \WP_Error( 'asde_cuentas', __( 'That expense can no longer be withdrawn.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( ! self::abiertas( $e ) ) {
 			return self::cerradas();
@@ -131,7 +131,7 @@ final class Cuentas {
 	public static function validar( array $e, int $id ) {
 		$g = self::gasto( $e, $id );
 		if ( ! Cobros::puede() || ! $g || ! GastosTable::por_revisar( $g ) ) {
-			return new \WP_Error( 'asde_cuentas', asde_t( 'Ese gasto no está por revisar.' ) );
+			return new \WP_Error( 'asde_cuentas', __( 'That expense is not pending review.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( ! self::abiertas( $e ) ) {
 			return self::cerradas();
@@ -146,10 +146,10 @@ final class Cuentas {
 		$g      = self::gasto( $e, $id );
 		$motivo = self::texto( $motivo, 255 );
 		if ( ! Cobros::puede() || ! $g || ! GastosTable::por_revisar( $g ) ) {
-			return new \WP_Error( 'asde_cuentas', asde_t( 'Ese gasto no está por revisar.' ) );
+			return new \WP_Error( 'asde_cuentas', __( 'That expense is not pending review.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( '' === $motivo ) {
-			return new \WP_Error( 'asde_cuentas', asde_t( 'Escribe el motivo del rechazo.' ) );
+			return new \WP_Error( 'asde_cuentas', __( 'Enter the reason for the rejection.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( ! self::abiertas( $e ) ) {
 			return self::cerradas();
@@ -172,7 +172,7 @@ final class Cuentas {
 	public static function reembolsar( array $e, int $id, string $fecha, string $forma ) {
 		$g = self::gasto( $e, $id );
 		if ( ! Cobros::puede() || ! $g || ! GastosTable::por_reembolsar( $g ) ) {
-			return new \WP_Error( 'asde_cuentas', asde_t( 'Ese gasto no está pendiente de reembolso.' ) );
+			return new \WP_Error( 'asde_cuentas', __( 'That expense is not pending reimbursement.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( ! self::abiertas( $e ) ) {
 			return self::cerradas();
@@ -198,10 +198,10 @@ final class Cuentas {
 		$g      = self::gasto( $e, $id );
 		$motivo = self::texto( $motivo, 255 );
 		if ( ! Cobros::puede() || ! $g || ! GastosTable::vale( $g ) || null !== $g['reembolsado_en'] ) {
-			return new \WP_Error( 'asde_cuentas', asde_t( 'Ese movimiento no se puede anular.' ) );
+			return new \WP_Error( 'asde_cuentas', __( 'That transaction cannot be cancelled.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( '' === $motivo ) {
-			return new \WP_Error( 'asde_cuentas', asde_t( 'Escribe el motivo de la anulación.' ) );
+			return new \WP_Error( 'asde_cuentas', __( 'Enter the reason for the cancellation.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( ! self::abiertas( $e ) ) {
 			return self::cerradas();
@@ -218,13 +218,13 @@ final class Cuentas {
 	/** @return int|\WP_Error Id del anticipo. */
 	public static function anticipo( array $e, int $persona, float $importe, string $fecha, string $forma, string $nota ) {
 		if ( ! Cobros::puede() ) {
-			return new \WP_Error( 'asde_cuentas', asde_t( 'Los anticipos los da Tesorería.' ) );
+			return new \WP_Error( 'asde_cuentas', __( 'Advances are given by Treasury.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( ! self::abiertas( $e ) ) {
 			return self::cerradas();
 		}
 		if ( ! isset( self::personas( $e )[ $persona ] ) ) {
-			return new \WP_Error( 'asde_cuentas', asde_t( 'Elige a alguien del equipo del evento (con cuenta en la web).' ) );
+			return new \WP_Error( 'asde_cuentas', __( 'Choose someone from the event team (with an account on the website).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$error = self::importe( $importe ) ?? self::fecha( $fecha ) ?? self::forma( $forma );
 		if ( $error ) {
@@ -244,17 +244,17 @@ final class Cuentas {
 	public static function liquidar( array $e, int $id, float $devuelto, string $nota ) {
 		$an = AnticiposTable::obtener( $id );
 		if ( ! Cobros::puede() || ! $an || $an['evento_id'] !== $e['id'] || ! AnticiposTable::abierto( $an ) ) {
-			return new \WP_Error( 'asde_cuentas', asde_t( 'Ese anticipo no está por liquidar.' ) );
+			return new \WP_Error( 'asde_cuentas', __( 'That advance is not pending settlement.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( ! self::abiertas( $e ) ) {
 			return self::cerradas();
 		}
 		if ( $devuelto < 0 ) {
-			return new \WP_Error( 'asde_cuentas', asde_t( 'Lo devuelto no puede ser negativo.' ) );
+			return new \WP_Error( 'asde_cuentas', __( 'The amount returned cannot be negative.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$gastos = array_filter( GastosTable::de_evento( $e['id'] ), static fn( $g ) => $g['anticipo_id'] === $id && GastosTable::PAGO_ANTICIPO === $g['pagado_por'] );
 		if ( array_filter( $gastos, array( GastosTable::class, 'por_revisar' ) ) ) {
-			return new \WP_Error( 'asde_cuentas', asde_t( 'Hay gastos de este anticipo por revisar: valídalos o recházalos antes de liquidarlo.' ) );
+			return new \WP_Error( 'asde_cuentas', __( 'There are expenses of this advance to review: validate or reject them before settling it.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$gastado    = round( array_sum( array_column( array_filter( $gastos, array( GastosTable::class, 'vale' ) ), 'importe' ) ), 2 );
 		$diferencia = round( $an['importe'] - $gastado - $devuelto, 2 );
@@ -263,7 +263,7 @@ final class Cuentas {
 			return new \WP_Error(
 				'asde_cuentas',
 				/* translators: 1: gastos, 2: devuelto, 3: anticipo */
-				sprintf( asde_t( 'Los gastos (%1$s) y lo devuelto (%2$s) no suman el anticipo (%3$s): escribe una nota con el motivo de la diferencia.' ), self::euros( $gastado ), self::euros( $devuelto ), self::euros( $an['importe'] ) )
+				sprintf( /* translators: 1: text, 2: text, 3: text */ __( 'The expenses (%1$s) and what was returned (%2$s) do not add up to the advance (%3$s): write a note with the reason for the difference.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), self::euros( $gastado ), self::euros( $devuelto ), self::euros( $an['importe'] ) )
 			);
 		}
 		AnticiposTable::actualizar(
@@ -292,14 +292,14 @@ final class Cuentas {
 	public static function anular_anticipo( array $e, int $id ) {
 		$an = AnticiposTable::obtener( $id );
 		if ( ! Cobros::puede() || ! $an || $an['evento_id'] !== $e['id'] || ! AnticiposTable::abierto( $an ) ) {
-			return new \WP_Error( 'asde_cuentas', asde_t( 'Ese anticipo no se puede anular.' ) );
+			return new \WP_Error( 'asde_cuentas', __( 'That advance cannot be cancelled.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( ! self::abiertas( $e ) ) {
 			return self::cerradas();
 		}
 		foreach ( GastosTable::de_evento( $e['id'] ) as $g ) {
 			if ( $g['anticipo_id'] === $id && null === $g['anulado_en'] && GastosTable::RECHAZADO !== $g['estado'] ) {
-				return new \WP_Error( 'asde_cuentas', asde_t( 'El anticipo tiene gastos: liquídalo.' ) );
+				return new \WP_Error( 'asde_cuentas', __( 'The advance has expenses: settle it.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			}
 		}
 		AnticiposTable::actualizar(
@@ -401,7 +401,7 @@ final class Cuentas {
 		foreach ( array( GastosTable::GASTO, GastosTable::INGRESO ) as $tipo ) {
 			if ( ! empty( $real[0][ $tipo ] ) ) {
 				$lineas[] = array(
-					'concepto' => GastosTable::GASTO === $tipo ? asde_t( 'Gastos sin partida del presupuesto' ) : asde_t( 'Ingresos sin partida del presupuesto' ),
+					'concepto' => GastosTable::GASTO === $tipo ? __( 'Expenses with no budget item', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : __( 'Income with no budget item', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 					'tipo'     => $tipo,
 					'previsto' => 0.0,
 					'real'     => (float) $real[0][ $tipo ],
@@ -444,30 +444,30 @@ final class Cuentas {
 	/** @return string[] Por qué no se pueden cerrar todavía las cuentas ([] = se pueden cerrar). */
 	public static function por_cerrar( array $e, ?array $balance = null ): array {
 		if ( ! Cobros::puede() ) {
-			return array( asde_t( 'Las cuentas las cierra Tesorería.' ) );
+			return array( __( 'The accounts are closed by Treasury.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( ! self::abiertas( $e ) ) {
-			return array( asde_t( 'Las cuentas ya están cerradas.' ) );
+			return array( __( 'The accounts are already closed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$b   = $balance ?? self::balance( $e );
 		$out = array();
 		if ( EventosTable::CANCELADO !== $e['estado'] && ( EventosTable::PUBLICADO !== $e['estado'] || current_datetime()->getTimestamp() <= EventosTable::marca( $e['fin'] ) ) ) {
-			$out[] = asde_t( 'El evento todavía no ha terminado.' );
+			$out[] = __( 'The event has not finished yet.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		if ( $b['por_revisar'] ) {
 			/* translators: %d: gastos */
-			$out[] = sprintf( asde_t( 'Hay %d gasto(s) por revisar.' ), $b['por_revisar'] );
+			$out[] = sprintf( /* translators: %d: number */ __( 'There are %d expense(s) to review.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $b['por_revisar'] );
 		}
 		if ( $b['reembolsos']['n'] ) {
 			/* translators: %d: gastos */
-			$out[] = sprintf( asde_t( 'Hay %d reembolso(s) pendiente(s).' ), $b['reembolsos']['n'] );
+			$out[] = sprintf( /* translators: %d: number */ __( 'There are %d reimbursement(s) pending.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $b['reembolsos']['n'] );
 		}
 		if ( $b['anticipos']['n'] ) {
 			/* translators: %d: anticipos */
-			$out[] = sprintf( asde_t( 'Hay %d anticipo(s) por liquidar.' ), $b['anticipos']['n'] );
+			$out[] = sprintf( /* translators: %d: number */ __( 'There are %d advance(s) to settle.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $b['anticipos']['n'] );
 		}
 		if ( \AsdeBalears\AreaPrivada\Sepa\Remesas::familias_sin_cobrar_evento( $e['id'] ) ) {
-			$out[] = asde_t( 'Hay una remesa SEPA del evento sin registrar sus cobros.' );
+			$out[] = __( 'There is a SEPA batch for the event whose collections have not been recorded.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		return $out;
 	}
@@ -486,7 +486,7 @@ final class Cuentas {
 			return new \WP_Error( 'asde_cuentas', implode( ' ', $faltan ) );
 		}
 		if ( ! EventosTable::cerrar( $e['id'], $balance ) ) {
-			return new \WP_Error( 'asde_cuentas', asde_t( 'No se han podido cerrar las cuentas. Inténtalo de nuevo.' ) );
+			return new \WP_Error( 'asde_cuentas', __( 'The accounts could not be closed. Try again.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$borrados = InscripcionesTable::borrar_datos_evento( $e['id'] );
 		Logger::log(
@@ -510,17 +510,17 @@ final class Cuentas {
 	 */
 	public static function reabrir( array $e, string $motivo ) {
 		if ( ! Cobros::puede() ) {
-			return new \WP_Error( 'asde_cuentas', asde_t( 'Las cuentas las reabre Tesorería.' ) );
+			return new \WP_Error( 'asde_cuentas', __( 'The accounts are reopened by Treasury.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( self::abiertas( $e ) ) {
-			return new \WP_Error( 'asde_cuentas', asde_t( 'Las cuentas de este evento no están cerradas.' ) );
+			return new \WP_Error( 'asde_cuentas', __( 'This event\'s accounts are not closed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$motivo = self::texto( $motivo, 255 );
 		if ( '' === $motivo ) {
-			return new \WP_Error( 'asde_cuentas', asde_t( 'Escribe el motivo para reabrir las cuentas.' ) );
+			return new \WP_Error( 'asde_cuentas', __( 'Enter the reason for reopening the accounts.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( ! EventosTable::reabrir_cuentas( $e['id'] ) ) {
-			return new \WP_Error( 'asde_cuentas', asde_t( 'No se han podido reabrir las cuentas. Inténtalo de nuevo.' ) );
+			return new \WP_Error( 'asde_cuentas', __( 'The accounts could not be reopened. Try again.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		Logger::log(
 			'evento_cuentas_reabiertas',
@@ -539,26 +539,26 @@ final class Cuentas {
 	public static function filas_csv( array $b ): array {
 		$n    = static fn( $v ): string => number_format( (float) $v, 2, ',', '' );
 		$rows = array(
-			array( asde_t( 'Evento' ), $b['evento'] . ' · ' . $b['nombre'] ),
-			array( asde_t( 'Fecha del informe' ), $b['fecha'] ),
+			array( __( 'Event', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $b['evento'] . ' · ' . $b['nombre'] ),
+			array( __( 'Report date', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $b['fecha'] ),
 			array(),
-			array( asde_t( 'Partida' ), asde_t( 'Tipo' ), asde_t( 'Previsto' ), asde_t( 'Real' ) ),
+			array( __( 'Item', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Type', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Planned', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Actual', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ),
 		);
 		foreach ( $b['lineas'] as $l ) {
-			$rows[] = array( $l['concepto'], GastosTable::GASTO === $l['tipo'] ? asde_t( 'Gasto' ) : asde_t( 'Ingreso' ), $n( $l['previsto'] ), $n( $l['real'] ) );
+			$rows[] = array( $l['concepto'], GastosTable::GASTO === $l['tipo'] ? __( 'Expense', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : __( 'Income', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $n( $l['previsto'] ), $n( $l['real'] ) );
 		}
 		return array_merge(
 			$rows,
 			array(
 				array(),
-				array( asde_t( 'Cobrado a las familias' ), $n( $b['cobros']['pagado'] ) ),
-				array( asde_t( 'Devuelto a las familias' ), $n( $b['cobros']['devuelto'] ) ),
-				array( asde_t( 'Pendiente de cobro' ), $n( $b['cobros']['pendiente'] ) ),
-				array( asde_t( 'Otros ingresos' ), $n( $b['ingresos'] ) ),
-				array( asde_t( 'Gastos' ), $n( $b['gastos'] ) ),
-				array( asde_t( 'Fondo de emergencia: recaudado' ), $n( $b['fondo']['recaudado'] ) ),
-				array( asde_t( 'Fondo de emergencia: usado' ), $n( $b['fondo']['usado'] ) ),
-				array( asde_t( 'Resultado (lo asume el grupo)' ), $n( $b['resultado'] ) ),
+				array( __( 'Collected from families', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $n( $b['cobros']['pagado'] ) ),
+				array( __( 'Refunded to families', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $n( $b['cobros']['devuelto'] ) ),
+				array( __( 'Pending collection', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $n( $b['cobros']['pendiente'] ) ),
+				array( __( 'Other income', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $n( $b['ingresos'] ) ),
+				array( __( 'Expenses', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $n( $b['gastos'] ) ),
+				array( __( 'Emergency fund: collected', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $n( $b['fondo']['recaudado'] ) ),
+				array( __( 'Emergency fund: used', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $n( $b['fondo']['usado'] ) ),
+				array( __( 'Result (borne by the group)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $n( $b['resultado'] ) ),
 			)
 		);
 	}
@@ -586,7 +586,7 @@ final class Cuentas {
 			return $error;
 		}
 		if ( '' === $concepto ) {
-			return new \WP_Error( 'asde_cuentas', asde_t( 'Escribe el concepto.' ) );
+			return new \WP_Error( 'asde_cuentas', __( 'Enter the description.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$partida = (int) ( $in['partida'] ?? 0 );
 		if ( $partida && ! in_array( $partida, array_map( 'intval', array_column( array_filter( PartidasTable::previstas( $e['id'] ), static fn( $p ) => $tipo === $p['tipo'] ), 'id' ) ), true ) ) {
@@ -607,7 +607,7 @@ final class Cuentas {
 		}
 		$pagado = sanitize_key( (string) ( $in['pagado_por'] ?? GastosTable::PAGO_GRUPO ) );
 		if ( ! isset( GastosTable::PAGADORES[ $pagado ] ) ) {
-			return new \WP_Error( 'asde_cuentas', asde_t( 'Elige quién pagó el gasto.' ) );
+			return new \WP_Error( 'asde_cuentas', __( 'Choose who paid the expense.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$d['pagado_por'] = $pagado;
 		$d['con_fondo']  = ! empty( $in['con_fondo'] ) ? 1 : 0;
@@ -615,13 +615,13 @@ final class Cuentas {
 			// Quien gestiona el evento apunta lo que pagó él; Tesorería elige a quién reembolsar.
 			$persona = $teso ? (int) ( $in['persona'] ?? 0 ) : get_current_user_id();
 			if ( $teso && ! isset( self::personas( $e )[ $persona ] ) ) {
-				return new \WP_Error( 'asde_cuentas', asde_t( 'Elige a quién hay que reembolsarle el gasto (alguien del equipo con cuenta en la web).' ) );
+				return new \WP_Error( 'asde_cuentas', __( 'Choose who must be reimbursed for the expense (someone from the team with an account on the website).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			}
 			$d['persona'] = $persona;
 		} elseif ( GastosTable::PAGO_ANTICIPO === $pagado ) {
 			$an = AnticiposTable::obtener( (int) ( $in['anticipo'] ?? 0 ) );
 			if ( ! $an || $an['evento_id'] !== $e['id'] || ! AnticiposTable::abierto( $an ) ) {
-				return new \WP_Error( 'asde_cuentas', asde_t( 'Elige el anticipo con el que se pagó (uno entregado y sin liquidar).' ) );
+				return new \WP_Error( 'asde_cuentas', __( 'Choose the advance it was paid with (one given and not yet settled).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			}
 			$d['anticipo_id'] = $an['id'];
 		}
@@ -653,21 +653,21 @@ final class Cuentas {
 
 	private static function fecha( string $fecha ): ?\WP_Error {
 		if ( ! preg_match( '/^\d{4}-\d{2}-\d{2}$/', $fecha ) || ! date_create( $fecha ) || $fecha > current_time( 'Y-m-d' ) ) {
-			return new \WP_Error( 'asde_cuentas', asde_t( 'La fecha no puede ser posterior a hoy.' ) );
+			return new \WP_Error( 'asde_cuentas', __( 'The date cannot be later than today.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		return null;
 	}
 
 	private static function importe( float $importe ): ?\WP_Error {
-		return $importe > 0 && $importe < 100000 ? null : new \WP_Error( 'asde_cuentas', asde_t( 'Escribe un importe mayor que cero.' ) );
+		return $importe > 0 && $importe < 100000 ? null : new \WP_Error( 'asde_cuentas', __( 'Enter an amount greater than zero.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 	}
 
 	private static function forma( string $forma ): ?\WP_Error {
-		return isset( GastosTable::FORMAS[ $forma ] ) ? null : new \WP_Error( 'asde_cuentas', asde_t( 'Elige la forma de pago.' ) );
+		return isset( GastosTable::FORMAS[ $forma ] ) ? null : new \WP_Error( 'asde_cuentas', __( 'Choose the payment method.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 	}
 
 	private static function cerradas(): \WP_Error {
-		return new \WP_Error( 'asde_cuentas', asde_t( 'Las cuentas de este evento están cerradas: ya no se pueden cambiar.' ) );
+		return new \WP_Error( 'asde_cuentas', __( 'This event\'s accounts are closed: they can no longer be changed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 	}
 
 	private static function texto( string $t, int $max ): string {

@@ -15,16 +15,16 @@ defined( 'ABSPATH' ) || exit;
 ?>
 <section class="asde-card" data-asde-inicio="abierto">
 	<header class="asde-card__header asde-card__header--split">
-		<h3 class="asde-card__title"><?php asde_e( 'Hoja de cocina' ); ?></h3>
+		<h3 class="asde-card__title"><?php esc_html_e( 'Kitchen sheet', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h3>
 		<span class="asde-actions asde-solo-pantalla">
-			<button type="button" class="button" data-asde-imprimir-pagina><?php asde_e( 'Imprimir' ); ?></button>
-			<a href="<?php echo esc_url( $url_menu ); ?>"><?php asde_e( 'Volver al menú' ); ?></a>
+			<button type="button" class="button" data-asde-imprimir-pagina><?php esc_html_e( 'Print', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
+			<a href="<?php echo esc_url( $url_menu ); ?>"><?php esc_html_e( 'Back to the menu', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a>
 		</span>
 	</header>
-	<p><strong><?php echo esc_html( $e['nombre'] ); ?></strong> · <?php echo esc_html( sprintf( asde_t( 'Válida a fecha de %s' ), $hoja['momento'] ) ); ?></p>
-	<div class="asde-notice asde-notice--warning"><?php asde_e( 'Contiene datos de salud de menores: no la dejes a la vista, no la compartas y destrúyela al acabar el evento.' ); ?></div>
+	<p><strong><?php echo esc_html( $e['nombre'] ); ?></strong> · <?php echo esc_html( sprintf( /* translators: %s: text */ __( 'Valid as of %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $hoja['momento'] ) ); ?></p>
+	<div class="asde-notice asde-notice--warning"><?php esc_html_e( 'Contains health data of minors: do not leave it in sight, do not share it and destroy it when the event ends.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></div>
 	<?php if ( 'ok' !== $hoja['estado'] ) : ?>
-		<p><?php asde_e( 'No se ha podido preparar la hoja: falta el menú, los asistentes o la conexión con el CRM.' ); ?></p>
+		<p><?php esc_html_e( 'The sheet could not be prepared: the menu, the attendees or the connection to the CRM is missing.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 	<?php else : ?>
 		<?php $hay = false; ?>
 		<?php foreach ( $hoja['platos'] as $pl ) : ?>
@@ -43,7 +43,7 @@ defined( 'ABSPATH' ) || exit;
 							$partes[] = implode( ', ', array_unique( $d['alergenos'] ) );
 						}
 						if ( ! empty( $d['trazas'] ) ) {
-							$partes[] = sprintf( asde_t( 'trazas de %s' ), implode( ', ', array_unique( $d['trazas'] ) ) );
+							$partes[] = sprintf( /* translators: %s: text */ __( 'traces of %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), implode( ', ', array_unique( $d['trazas'] ) ) );
 						}
 						if ( ! empty( $d['dieta'] ) ) {
 							$partes[] = implode( ', ', array_unique( $d['dieta'] ) );
@@ -55,10 +55,10 @@ defined( 'ABSPATH' ) || exit;
 			</ul>
 		<?php endforeach; ?>
 		<?php if ( ! $hay ) : ?>
-			<p><?php asde_e( 'Nadie tiene alergias, intolerancias ni dieta que crucen con este menú.' ); ?></p>
+			<p><?php esc_html_e( 'Nobody has allergies, intolerances or a diet that match this menu.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 		<?php endif; ?>
 		<?php if ( ! empty( $hoja['revisar'] ) ) : ?>
-			<h4><?php asde_e( 'A revisar a mano (no se ha entendido lo escrito en su ficha)' ); ?></h4>
+			<h4><?php esc_html_e( 'To check by hand (what is written on their record was not understood)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h4>
 			<ul>
 				<?php foreach ( $hoja['revisar'] as $nombre => $texto ) : ?>
 					<li><strong><?php echo esc_html( $nombre ); ?></strong>: <?php echo esc_html( $texto ); ?></li>

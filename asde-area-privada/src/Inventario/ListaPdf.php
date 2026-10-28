@@ -32,7 +32,7 @@ final class ListaPdf {
 
 	public static function generar( array $lista ): string {
 		$num   = ComprasTable::numero( $lista );
-		$pdf   = new Pdf( sprintf( asde_t( 'Lista de compra %s' ), $num ) );
+		$pdf   = new Pdf( sprintf( /* translators: %s: text */ __( 'Shopping list %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $num ) );
 		$fecha = static fn( ?string $f ) => $f ? wp_date( 'd/m/Y', (int) strtotime( $f . ' UTC' ) ) : '';
 		$x0    = self::MARGEN;
 		$x1    = Pdf::ANCHO - self::MARGEN;
@@ -46,15 +46,15 @@ final class ListaPdf {
 			$y += 8;
 		}
 		$y += 24;
-		$pdf->texto( $x0, $y, asde_t( 'Lista de compra de material' ), 18, true );
+		$pdf->texto( $x0, $y, __( 'Equipment shopping list', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 18, true );
 		$pdf->texto( $x1, $y, $num, 14, true, 'derecha' );
 		$y += 20;
 		$datos = array(
-			sprintf( asde_t( 'Creada el %1$s por %2$s.' ), $fecha( $lista['creado'] ), Servicio::usuario( $lista['creado_por'] ) ?: '—' ),
-			sprintf( asde_t( 'Visto bueno de Tesorería: %1$s, el %2$s.' ), Servicio::usuario( $lista['revisado_por'] ) ?: '—', $fecha( $lista['revisado_en'] ) ),
+			sprintf( /* translators: 1: text, 2: text */ __( 'Created on %1$s by %2$s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $fecha( $lista['creado'] ), Servicio::usuario( $lista['creado_por'] ) ?: '—' ),
+			sprintf( /* translators: 1: text, 2: text */ __( 'Treasury approval: %1$s, on %2$s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Servicio::usuario( $lista['revisado_por'] ) ?: '—', $fecha( $lista['revisado_en'] ) ),
 		);
 		if ( ComprasTable::COMPRADA === $lista['estado'] ) {
-			$datos[] = sprintf( asde_t( 'Comprada: la marcó %1$s el %2$s. Lo comprado se sumó al inventario.' ), Servicio::usuario( (int) $lista['comprada_por'] ) ?: '—', $fecha( $lista['comprada_en'] ) );
+			$datos[] = sprintf( /* translators: 1: text, 2: text */ __( 'Bought: marked by %1$s on %2$s. What was bought was added to the inventory.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Servicio::usuario( (int) $lista['comprada_por'] ) ?: '—', $fecha( $lista['comprada_en'] ) );
 		}
 		foreach ( $datos as $linea ) {
 			$pdf->texto( $x0, $y, $linea, 10 );
@@ -63,13 +63,13 @@ final class ListaPdf {
 		$y += 8;
 
 		$cabecera = array(
-			'descripcion'   => asde_t( 'Material' ),
-			'tipo'          => asde_t( 'Tipo' ),
-			'num_serie'     => asde_t( 'Nº de serie' ),
-			'en_inventario' => asde_t( 'En inventario' ),
-			'cantidad'      => asde_t( 'A comprar' ),
-			'precio'        => asde_t( 'Precio' ),
-			'importe'       => asde_t( 'Importe' ),
+			'descripcion'   => __( 'Equipment', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+			'tipo'          => __( 'Type', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+			'num_serie'     => __( 'Serial no.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+			'en_inventario' => __( 'In inventory', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+			'cantidad'      => __( 'To buy', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+			'precio'        => __( 'Price', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+			'importe'       => __( 'Amount', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 		);
 		$y = self::fila( $pdf, $y, $cabecera, true );
 
@@ -77,7 +77,7 @@ final class ListaPdf {
 			$nuevo  = empty( $l['material'] );
 			$celdas = array(
 				'descripcion'   => $l['descripcion'],
-				'tipo'          => $nuevo ? asde_t( 'Material nuevo' ) : $l['tipo'],
+				'tipo'          => $nuevo ? __( 'New equipment', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : $l['tipo'],
 				'num_serie'     => $l['num_serie'],
 				'en_inventario' => $nuevo ? '—' : (string) $l['en_inventario'],
 				'cantidad'      => (string) $l['cantidad'],
@@ -98,17 +98,17 @@ final class ListaPdf {
 		}
 		$y += 16;
 		$unidades = array_sum( array_column( $lista['lineas'], 'cantidad' ) );
-		$pdf->texto( $x0, $y, sprintf( asde_n( '%d material', '%d materiales', count( $lista['lineas'] ) ), count( $lista['lineas'] ) ) . ' · ' . sprintf( asde_n( '%d unidad', '%d unidades', $unidades ), $unidades ), 10 );
-		$pdf->texto( $x1, $y, sprintf( asde_t( 'Total estimado: %s' ), Calculadora::euros( $lista['total'] ) ), 12, true, 'derecha' );
+		$pdf->texto( $x0, $y, sprintf( /* translators: %d: number */ _n( '%d item of equipment', '%d items of equipment', count( $lista['lineas'] ) , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), count( $lista['lineas'] ) ) . ' · ' . sprintf( /* translators: %d: number */ _n( '%d unit', '%d units', $unidades , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $unidades ), 10 );
+		$pdf->texto( $x1, $y, sprintf( /* translators: %s: text */ __( 'Estimated total: %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Calculadora::euros( $lista['total'] ) ), 12, true, 'derecha' );
 		if ( ComprasTable::sin_precio( $lista ) ) {
 			$y += 14;
-			$pdf->texto( $x1, $y, asde_t( 'Sin contar el material que no tiene precio.' ), 8.5, false, 'derecha', 0.35 );
+			$pdf->texto( $x1, $y, __( 'Not counting equipment with no price.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 8.5, false, 'derecha', 0.35 );
 		}
 
 		// Nota.
 		if ( '' !== trim( $lista['nota'] ) ) {
 			$y += 26;
-			$pdf->texto( $x0, $y, asde_t( 'Nota' ), 10, true );
+			$pdf->texto( $x0, $y, __( 'Note', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 10, true );
 			foreach ( $pdf->cortar( $lista['nota'], $x1 - $x0, 10 ) as $linea ) {
 				$y += 13;
 				if ( $y > Pdf::ALTO - self::PIE ) {
@@ -125,7 +125,7 @@ final class ListaPdf {
 			$pdf->ir_a( $i );
 			$pdf->linea( $x0, Pdf::ALTO - 34, $x1, Pdf::ALTO - 34, 0.4, 0.6 );
 			$pdf->texto( $x0, Pdf::ALTO - 22, $num . ' · ' . Grupo::nombre(), 8, false, 'izquierda', 0.35 );
-			$pdf->texto( $x1, Pdf::ALTO - 22, sprintf( asde_t( 'Página %1$d de %2$d' ), $i + 1, $total ), 8, false, 'derecha', 0.35 );
+			$pdf->texto( $x1, Pdf::ALTO - 22, sprintf( /* translators: 1: number, 2: number */ __( 'Page %1$d of %2$d', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $i + 1, $total ), 8, false, 'derecha', 0.35 );
 		}
 		return $pdf->salida();
 	}

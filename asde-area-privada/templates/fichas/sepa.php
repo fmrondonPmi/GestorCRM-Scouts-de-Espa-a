@@ -20,32 +20,32 @@ defined( 'ABSPATH' ) || exit;
 $fecha = static fn( string $f ) => '' !== $f ? wp_date( 'd/m/Y', (int) strtotime( $f ) ) : '';
 ?>
 <section class="asde-card asde-ficha-sepa" data-asde-plegable="ficha-sepa">
-	<h3 class="asde-card__title"><?php asde_e( 'Datos bancarios y domiciliación SEPA' ); ?></h3>
+	<h3 class="asde-card__title"><?php esc_html_e( 'Bank details and SEPA direct debit', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h3>
 	<dl class="asde-datos">
 		<?php if ( $cuenta ) : ?>
-			<div><dt><?php asde_e( 'Cuenta (IBAN)' ); ?></dt><dd><?php echo esc_html( Iban::enmascarar( $cuenta['iban'] ) ); ?></dd></div>
-			<div><dt><?php asde_e( 'Titular' ); ?></dt><dd><?php echo esc_html( '' !== $cuenta['titular'] ? $cuenta['titular'] : '—' ); ?></dd></div>
-			<div><dt><?php asde_e( 'Entidad' ); ?></dt><dd><?php echo esc_html( '' !== $cuenta['entidad'] ? $cuenta['entidad'] : '—' ); ?></dd></div>
+			<div><dt><?php esc_html_e( 'Account (IBAN)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></dt><dd><?php echo esc_html( Iban::enmascarar( $cuenta['iban'] ) ); ?></dd></div>
+			<div><dt><?php esc_html_e( 'Holder', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></dt><dd><?php echo esc_html( '' !== $cuenta['titular'] ? $cuenta['titular'] : '—' ); ?></dd></div>
+			<div><dt><?php esc_html_e( 'Entity', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></dt><dd><?php echo esc_html( '' !== $cuenta['entidad'] ? $cuenta['entidad'] : '—' ); ?></dd></div>
 		<?php else : ?>
-			<div><dt><?php asde_e( 'Cuenta (IBAN)' ); ?></dt><dd><?php asde_e( 'Sin datos bancarios en la ficha' ); ?></dd></div>
+			<div><dt><?php esc_html_e( 'Account (IBAN)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></dt><dd><?php esc_html_e( 'No bank details on the record', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></dd></div>
 		<?php endif; ?>
 		<div>
-			<dt><?php asde_e( 'Autorización de cobro (SEPA)' ); ?></dt>
+			<dt><?php esc_html_e( 'Direct debit authorisation (SEPA)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></dt>
 			<dd>
 				<?php if ( $mandato ) : ?>
-					<?php /* translators: 1: referencia, 2: fecha */ echo esc_html( sprintf( asde_t( 'Vigente · %1$s · firmada el %2$s' ), $mandato['referencia'], $fecha( (string) $mandato['fecha_firma'] ) ) ); ?>
+					<?php /* translators: 1: referencia, 2: fecha */ echo esc_html( sprintf( /* translators: 1: text, 2: text */ __( 'In force · %1$s · signed on %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $mandato['referencia'], $fecha( (string) $mandato['fecha_firma'] ) ) ); ?>
 					<?php if ( ! $coincide ) : ?>
-						<br><span class="asde-help asde-help--warning"><?php asde_e( '⚠️ La cuenta de esta ficha no es la autorizada: no se cobrará hasta que se firme una autorización nueva.' ); ?></span>
+						<br><span class="asde-help asde-help--warning"><?php esc_html_e( '⚠️ The account on this record is not the authorised one: it will not be charged until a new authorisation is signed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span>
 					<?php endif; ?>
 				<?php elseif ( $familia ) : ?>
-					<?php asde_e( 'Sin autorización: la familia paga por transferencia.' ); ?>
+					<?php esc_html_e( 'No authorisation: the family pays by transfer.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>
 				<?php else : ?>
-					<?php asde_e( 'No está en ninguna familia de Tesorería.' ); ?>
+					<?php esc_html_e( 'Not in any Treasury family.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>
 				<?php endif; ?>
 			</dd>
 		</div>
 	</dl>
-	<p class="asde-help"><?php asde_e( 'Los datos bancarios se guardan en la ficha del CRM de Scouts de España (en la de cada miembro de la familia). Para ponerlos o cambiarlos, la madre, el padre, el tutor/a o el propio asociado mayor de edad firma una autorización en «Mis pagos».' ); ?></p>
+	<p class="asde-help"><?php esc_html_e( 'Bank details are stored on the Scouts de España CRM record (on that of each family member). To set or change them, the mother, father, guardian or the adult member themselves signs an authorisation in "My payments".', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 	<?php if ( '' !== $url_gestion ) : ?>
 		<p><a href="<?php echo esc_url( $url_gestion ); ?>"><?php echo esc_html( $texto_gestion ); ?></a></p>
 	<?php endif; ?>

@@ -131,7 +131,7 @@ final class LibroMayor {
 			);
 		}
 		return array(
-			'nombre'      => asde_t( 'Banco' ),
+			'nombre'      => __( 'Bank', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 			'inicial'     => $inicial ?? round( $saldo, 2 ),
 			'entradas'    => round( $entradas, 2 ),
 			'salidas'     => round( $salidas, 2 ),
@@ -144,12 +144,12 @@ final class LibroMayor {
 	/** Partida de un movimiento del banco: cuotas (conciliado), su tipo (revisado) o sin revisar. */
 	public static function partida_banco( array $m, array $tipos ): string {
 		if ( BancoTable::CONCILIADO === $m['estado'] ) {
-			return asde_t( 'Cuotas (banco)' );
+			return __( 'Fees (bank)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		if ( BancoTable::IGNORADO === $m['estado'] ) {
-			return isset( $tipos[ (int) $m['tipo_id'] ] ) ? (string) $tipos[ (int) $m['tipo_id'] ]['nombre'] : asde_t( 'Revisado sin tipo' );
+			return isset( $tipos[ (int) $m['tipo_id'] ] ) ? (string) $tipos[ (int) $m['tipo_id'] ]['nombre'] : __( 'Reviewed with no type', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
-		return asde_t( 'Sin revisar' );
+		return __( 'Not reviewed', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 	}
 
 	/** Partida de un apunte de caja: traspasos, diferencias de arqueo, su tipo (a mano) o su origen (automático). */
@@ -158,9 +158,9 @@ final class LibroMayor {
 			case CajaTable::TRASPASO:
 				return self::TRASPASOS;
 			case CajaTable::ARQUEO:
-				return asde_t( 'Diferencias de arqueo' );
+				return __( 'Cash count differences', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 			case CajaTable::MANUAL:
-				return isset( $tipos[ (int) $a['tipo_id'] ] ) ? (string) $tipos[ (int) $a['tipo_id'] ]['nombre'] : asde_t( 'Otros (caja)' );
+				return isset( $tipos[ (int) $a['tipo_id'] ] ) ? (string) $tipos[ (int) $a['tipo_id'] ]['nombre'] : __( 'Other (cash box)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 			default:
 				return asde_t( Automaticos::ORIGENES[ $a['origen'] ] ?? 'Otros (caja)' );
 		}
@@ -170,15 +170,15 @@ final class LibroMayor {
 	public static function concepto_caja( array $a ): string {
 		switch ( $a['clase'] ) {
 			case CajaTable::TRASPASO:
-				$con = CajaTable::BANCO === $a['destino'] ? asde_t( 'Banco' ) : Cajas::nombre( (string) $a['destino'] );
+				$con = CajaTable::BANCO === $a['destino'] ? __( 'Bank', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : Cajas::nombre( (string) $a['destino'] );
 				/* translators: %s: la caja o el banco del otro lado del traspaso */
-				$texto = $a['importe'] < 0 ? sprintf( asde_t( 'Traspaso a %s' ), $con ) : sprintf( asde_t( 'Traspaso desde %s' ), $con );
+				$texto = $a['importe'] < 0 ? sprintf( /* translators: %s: text */ __( 'Transfer to %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $con ) : sprintf( /* translators: %s: text */ __( 'Transfer from %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $con );
 				return trim( $texto . ( '' !== $a['concepto'] ? ' · ' . $a['concepto'] : '' ) );
 			case CajaTable::ARQUEO:
 				/* translators: %s: importe contado */
-				return trim( sprintf( asde_t( 'Arqueo: contado %s' ), \AsdeBalears\AreaPrivada\Tesoreria\Calculadora::euros( (float) $a['recuento'] ) ) . ( '' !== $a['nota'] ? ' · ' . $a['nota'] : '' ) );
+				return trim( sprintf( /* translators: %s: text */ __( 'Cash count: counted %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), \AsdeBalears\AreaPrivada\Tesoreria\Calculadora::euros( (float) $a['recuento'] ) ) . ( '' !== $a['nota'] ? ' · ' . $a['nota'] : '' ) );
 			case CajaTable::INICIAL:
-				return asde_t( 'Saldo inicial' );
+				return __( 'Opening balance', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 			default:
 				return (string) $a['concepto'];
 		}

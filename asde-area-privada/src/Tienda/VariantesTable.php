@@ -83,11 +83,11 @@ final class VariantesTable {
 		}
 		if ( ! preg_match( '/^\d{1,5}$/', $cantidad ) ) {
 			/* translators: %d: cantidad máxima */
-			$errores[] = sprintf( asde_t( 'Las existencias tienen que ser un número entero de 0 a %d (o «ilimitado»).' ), self::MAX_EXISTENCIAS );
+			$errores[] = sprintf( /* translators: %d: number */ __( 'Stock must be a whole number from 0 to %d (or "unlimited").', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), self::MAX_EXISTENCIAS );
 		}
 		$precio = ProductosTable::euros( (string) ( $d['precio'] ?? '' ) );
 		if ( false === $precio ) {
-			$errores[] = asde_t( 'El precio de la variante no es válido (por ejemplo: 12,50).' );
+			$errores[] = __( 'The variant\'s price is not valid (for example: 12,50).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		if ( $errores ) {
 			return new \WP_Error( 'asde_tienda', implode( ' ', $errores ) );
@@ -223,7 +223,7 @@ final class VariantesTable {
 
 	/** Etiqueta para mostrar («Única» se traduce; las demás son del grupo y se dejan como están). */
 	public static function etiqueta( array $v ): string {
-		return 'Única' === $v['etiqueta'] ? asde_t( 'Única' ) : $v['etiqueta'];
+		return 'Única' === $v['etiqueta'] ? __( 'Single', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : $v['etiqueta'];
 	}
 
 	// ---------------------------------------------------------------------

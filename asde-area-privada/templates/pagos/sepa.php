@@ -28,58 +28,58 @@ $fecha  = static fn( string $f ) => '' !== $f ? wp_date( 'd/m/Y', (int) strtotim
 ?>
 <section class="asde-card" id="sepa-<?php echo (int) $familia['id']; ?>">
 	<header class="asde-card__header asde-card__header--split">
-		<h3 class="asde-card__title"><?php asde_e( 'Domiciliación SEPA · familia' ); ?> <?php echo esc_html( $familia['numero'] ); ?></h3>
+		<h3 class="asde-card__title"><?php esc_html_e( 'SEPA direct debit · family', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <?php echo esc_html( $familia['numero'] ); ?></h3>
 		<?php if ( $mandato ) : ?>
-			<span class="asde-badge asde-badge--pago-pagado"><?php asde_e( 'Autorizada' ); ?></span>
+			<span class="asde-badge asde-badge--pago-pagado"><?php esc_html_e( 'Authorised', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span>
 		<?php else : ?>
-			<span class="asde-badge asde-badge--pago-pendiente"><?php asde_e( 'Sin autorizar' ); ?></span>
+			<span class="asde-badge asde-badge--pago-pendiente"><?php esc_html_e( 'Not authorised', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span>
 		<?php endif; ?>
 	</header>
 
 	<?php if ( $proximos ) : ?>
 		<div class="asde-notice asde-notice--info" role="status">
-			<strong><?php asde_e( 'Próximo cargo:' ); ?></strong>
+			<strong><?php esc_html_e( 'Next charge:', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></strong>
 			<?php foreach ( $proximos as $p ) : ?>
-				<br><?php echo esc_html( sprintf( asde_t( '%s · %s en la cuenta %s (autorización %s)' ), $fecha( $p['fecha'] ), Calculadora::euros( $p['centimos'] / 100 ), '' !== $p['iban'] ? $p['iban'] : 'autorizada', $p['umr'] ) ); ?>
+				<br><?php echo esc_html( sprintf( /* translators: 1: text, 2: text, 3: text, 4: text */ __( '%1$s · %2$s on account %3$s (authorisation %4$s)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $fecha( $p['fecha'] ), Calculadora::euros( $p['centimos'] / 100 ), '' !== $p['iban'] ? $p['iban'] : 'autorizada', $p['umr'] ) ); ?>
 			<?php endforeach; ?>
 		</div>
 	<?php endif; ?>
 
 	<?php if ( $mandato ) : ?>
-		<p><?php asde_e( 'Has autorizado a' ); ?> <strong><?php echo esc_html( $acreedor['nombre'] ?: asde_t( 'el grupo' ) ); ?></strong> <?php asde_e( 'a cobrar los pagos del grupo por adeudo directo SEPA en la cuenta' ); ?> <strong><?php echo esc_html( $mandato['iban_mask'] ); ?></strong>.</p>
+		<p><?php esc_html_e( 'You have authorised', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <strong><?php echo esc_html( $acreedor['nombre'] ?: __( 'the group', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?></strong> <?php esc_html_e( 'to collect the group\'s payments by SEPA direct debit from the account', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <strong><?php echo esc_html( $mandato['iban_mask'] ); ?></strong>.</p>
 		<ul class="asde-resumen">
-			<li><?php asde_e( 'Referencia:' ); ?> <strong><?php echo esc_html( $mandato['referencia'] ); ?></strong></li>
-			<li><?php asde_e( 'Firmada el' ); ?> <strong><?php echo esc_html( $fecha( $mandato['fecha_firma'] ) ); ?></strong></li>
+			<li><?php esc_html_e( 'Reference:', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <strong><?php echo esc_html( $mandato['referencia'] ); ?></strong></li>
+			<li><?php esc_html_e( 'Signed on', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <strong><?php echo esc_html( $fecha( $mandato['fecha_firma'] ) ); ?></strong></li>
 			<?php if ( is_array( $cuenta ) && '' !== $cuenta['titular'] ) : ?>
-				<li><?php asde_e( 'Titular:' ); ?> <strong><?php echo esc_html( $cuenta['titular'] ); ?></strong></li>
+				<li><?php esc_html_e( 'Holder:', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <strong><?php echo esc_html( $cuenta['titular'] ); ?></strong></li>
 			<?php endif; ?>
 		</ul>
 		<?php if ( null === $cuenta ) : ?>
-			<p class="asde-help asde-help--warning"><?php asde_e( '⚠️ La cuenta que figura en la ficha del CRM ya no es la que autorizaste: hasta que firmes una autorización nueva no se cobrará nada por domiciliación.' ); ?></p>
+			<p class="asde-help asde-help--warning"><?php esc_html_e( '⚠️ The account on the CRM record is no longer the one you authorised: until you sign a new authorisation nothing will be charged by direct debit.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 		<?php endif; ?>
-		<p class="asde-help"><?php asde_e( 'Los datos de la cuenta se guardan en la ficha de cada miembro de la familia en el CRM de Scouts de España; aquí solo se enseña enmascarada.' ); ?></p>
+		<p class="asde-help"><?php esc_html_e( 'The account details are stored on the CRM record of each family member at Scouts de España; here it is only shown masked.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 		<div class="asde-actions">
-			<a class="button" href="<?php echo esc_url( add_query_arg( 'autorizacion', (int) $mandato['id'], $url ) ); ?>"><?php asde_e( 'Ver e imprimir la autorización' ); ?></a>
+			<a class="button" href="<?php echo esc_url( add_query_arg( 'autorizacion', (int) $mandato['id'], $url ) ); ?>"><?php esc_html_e( 'View and print the authorisation', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a>
 			<?php if ( true === $puede ) : ?>
-				<form method="post" data-asde-confirmar="<?php echo esc_attr( asde_js( '¿Anular la autorización? A partir de ahora no se cobrará nada por esta cuenta.' ) ); ?>">
+				<form method="post" data-asde-confirmar="<?php echo esc_attr( __( 'Cancel the authorisation? From now on nothing will be charged to this account.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
 					<?php wp_nonce_field( 'asde_sepa_anular_' . (int) $mandato['id'] ); ?>
 					<input type="hidden" name="asde_action" value="sepa_anular">
 					<input type="hidden" name="mandato" value="<?php echo (int) $mandato['id']; ?>">
-					<button type="submit" class="button asde-button-secundario"><?php asde_e( 'Anular la autorización' ); ?></button>
+					<button type="submit" class="button asde-button-secundario"><?php esc_html_e( 'Cancel the authorisation', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 				</form>
 			<?php endif; ?>
 		</div>
 		<?php if ( true === $puede && $lista ) : ?>
 			<details class="asde-rechazar" <?php echo $v ? 'open' : ''; ?>>
-				<summary><?php asde_e( 'Cambiar de cuenta o de titular (firmar otra autorización)' ); ?></summary>
+				<summary><?php esc_html_e( 'Change account or holder (sign another authorisation)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></summary>
 				<?php include __DIR__ . '/sepa-formulario.php'; ?>
 			</details>
 		<?php endif; ?>
 	<?php else : ?>
-		<p><?php asde_e( 'Si prefieres no pagar por transferencia, puedes' ); ?> <strong><?php asde_e( 'autorizar el cobro por domiciliación bancaria (adeudo directo SEPA)' ); ?></strong><?php asde_e( ': el grupo cobrará la cuota de esta familia en tu cuenta, siempre avisándote antes con la fecha y el importe. Puedes anularla cuando quieras.' ); ?></p>
+		<p><?php esc_html_e( 'If you prefer not to pay by transfer, you can', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <strong><?php esc_html_e( 'authorise collection by bank direct debit (SEPA direct debit)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></strong><?php esc_html_e( ': the group will collect this family\'s fee from your account, always notifying you beforehand with the date and amount. You can cancel it at any time.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 		<?php if ( true === $puede ) : ?>
 			<details class="asde-rechazar" <?php echo $v ? 'open' : ''; ?>>
-				<summary><?php asde_e( 'Rellenar la autorización' ); ?></summary>
+				<summary><?php esc_html_e( 'Fill in the authorisation', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></summary>
 				<?php include __DIR__ . '/sepa-formulario.php'; ?>
 			</details>
 		<?php else : ?>

@@ -27,7 +27,7 @@ final class CajaView extends TesoreriaBaseView {
 	public function render( string $content = '' ): string {
 		$cajas = Cajas::visibles();
 		if ( ! $cajas ) {
-			return $this->denegado( asde_t( 'La caja no está activa en tu grupo o no llevas ninguna caja.' ) );
+			return $this->denegado( __( 'The cash box is not active in your group or you do not keep any cash box.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$ronda = $this->ronda();
 		if ( '' !== $this->get( 'banco' ) ) {
@@ -92,10 +92,10 @@ final class CajaView extends TesoreriaBaseView {
 	public function exportar(): void {
 		$caja = $this->get( 'caja' );
 		if ( ! wp_verify_nonce( $this->get( '_wpnonce' ), 'asde_caja_excel' ) ) {
-			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+			wp_die( esc_html__( 'Download link not valid or expired.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		if ( ! Cajas::puede( $caja ) ) {
-			wp_die( esc_html__( 'Enlace de descarga no válido o caducado.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+			wp_die( esc_html__( 'Download link not valid or expired.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		$periodo = Periodo::de( $this->get( 'periodo' ) );
 		list( $cabecera, $filas, $opciones ) = self::excel( $caja, $periodo, Servicio::extracto( $caja, $periodo ) );
@@ -119,21 +119,21 @@ final class CajaView extends TesoreriaBaseView {
 			);
 		}
 		return array(
-			array( asde_t( 'Fecha' ), asde_t( 'Concepto' ), asde_t( 'Partida' ), asde_t( 'Entrada' ), asde_t( 'Salida' ), asde_t( 'Saldo' ) ),
+			array( __( 'Date', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Description', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Item', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Inflow', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Outflow', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Balance', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ),
 			$filas,
 			array(
 				'titulo'    => Cajas::nombre( $caja ) . ' · ' . Grupo::nombre(),
 				/* translators: 1: periodo, 2: saldo al empezar, 3: saldo final */
-				'subtitulo' => sprintf( asde_t( '%1$s · al empezar %2$s · al acabar %3$s' ), $periodo['etiqueta'], \AsdeBalears\AreaPrivada\Tesoreria\Calculadora::euros( $e['inicial'] ), \AsdeBalears\AreaPrivada\Tesoreria\Calculadora::euros( $e['final'] ) ),
+				'subtitulo' => sprintf( /* translators: 1: text, 2: text, 3: text */ __( '%1$s · at the start %2$s · at the end %3$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $periodo['etiqueta'], \AsdeBalears\AreaPrivada\Tesoreria\Calculadora::euros( $e['inicial'] ), \AsdeBalears\AreaPrivada\Tesoreria\Calculadora::euros( $e['final'] ) ),
 				'tipos'     => array( 'texto', 'texto', 'texto', 'euros', 'euros', 'euros' ),
-				'totales'   => array( asde_t( 'Total' ), sprintf( asde_n( '%d apunte', '%d apuntes', count( $filas ) ), count( $filas ) ), '', $e['entradas'], $e['salidas'], $e['final'] ),
+				'totales'   => array( __( 'Total', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), sprintf( /* translators: %d: number */ _n( '%d entry', '%d entries', count( $filas ) , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), count( $filas ) ), '', $e['entradas'], $e['salidas'], $e['final'] ),
 			),
 		);
 	}
 
 	public function handle_post(): void {
 		if ( ! Cajas::visibles() ) {
-			wp_die( esc_html__( 'No tienes permiso para hacer esto.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
+			wp_die( esc_html__( 'You do not have permission to do this.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}
 		check_admin_referer( 'asde_caja' );
 		$caja    = $this->post( 'caja' );
@@ -151,27 +151,27 @@ final class CajaView extends TesoreriaBaseView {
 		switch ( $this->post( 'asde_action' ) ) {
 			case 'inicial':
 				$r  = Servicio::poner_inicial( $caja, $this->post( 'fecha' ), $importe( $this->post( 'importe' ) ) );
-				$ok = asde_t( 'Saldo inicial guardado.' );
+				$ok = __( 'Opening balance saved.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				if ( CajaTable::BANCO === $caja ) {
 					$volver = $this->url( 'libro_mayor', array_filter( array( 'periodo' => $this->post( 'periodo' ) ) ) );
 				}
 				break;
 			case 'apuntar':
 				$r  = Servicio::apuntar( $caja, $this->post( 'fecha' ), $this->post( 'sentido' ), $importe( $this->post( 'importe' ) ), (int) $this->post( 'tipo' ), $this->post( 'concepto' ), $this->post( 'nota' ) );
-				$ok = asde_t( 'Apunte guardado.' );
+				$ok = __( 'Entry saved.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 			case 'traspasar':
 				$r  = Servicio::traspasar( $caja, $this->post( 'hacia' ), $this->post( 'fecha' ), $importe( $this->post( 'importe' ) ), $this->post( 'concepto' ) );
-				$ok = asde_t( 'Traspaso guardado.' );
+				$ok = __( 'Transfer saved.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 			case 'arqueo':
 				$r  = Servicio::arquear( $caja, $this->post( 'fecha' ), $importe( $this->post( 'recuento' ) ), $this->post( 'motivo' ) );
-				$ok = ! is_wp_error( $r ) && abs( $r['diferencia'] ) < 0.01 ? asde_t( 'Arqueo guardado: la caja cuadra.' ) : asde_t( 'Arqueo guardado con la diferencia como ajuste.' );
+				$ok = ! is_wp_error( $r ) && abs( $r['diferencia'] ) < 0.01 ? __( 'Cash count saved: the cash box balances.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : __( 'Cash count saved with the difference as an adjustment.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 			case 'anular':
 				$a  = CajaTable::obtener( (int) $this->post( 'apunte' ) );
 				$r  = Servicio::anular( (int) $this->post( 'apunte' ), $this->post( 'motivo' ) );
-				$ok = asde_t( 'Apunte anulado.' );
+				$ok = __( 'Entry cancelled.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				if ( $a && CajaTable::BANCO === $a['caja'] ) {
 					$volver = $this->url( 'libro_mayor', array_filter( array( 'periodo' => $this->post( 'periodo' ) ) ) );
 				}
@@ -179,13 +179,13 @@ final class CajaView extends TesoreriaBaseView {
 			case 'banco':
 				$id = (int) $this->post( 'apunte' );
 				$r  = Servicio::asociar_banco( $id, (int) $this->post( 'banco' ) );
-				$ok = (int) $this->post( 'banco' ) ? asde_t( 'Traspaso asociado con su movimiento del banco.' ) : asde_t( 'Asociación quitada.' );
+				$ok = (int) $this->post( 'banco' ) ? __( 'Transfer linked to its bank transaction.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : __( 'Link removed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				if ( Router::pide_modal() ) {
 					$volver = $this->url( 'caja', array( 'banco' => $id, 'hecho' => is_wp_error( $r ) ? '' : '1' ) );
 				}
 				break;
 			default:
-				$r = new \WP_Error( 'asde_caja', asde_t( 'Acción desconocida.' ) );
+				$r = new \WP_Error( 'asde_caja', __( 'Unknown action.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( is_wp_error( $r ) ) {
 			Notices::add( 'error', esc_html( $r->get_error_message() ) );

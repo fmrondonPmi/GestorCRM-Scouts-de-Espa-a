@@ -128,7 +128,7 @@ final class Tabla {
 			'<a href="%s" class="asde-orden%s" title="%s">%s <span class="asde-orden__flecha" aria-hidden="true">%s</span></a>',
 			esc_url( $url ),
 			$activa ? ' is-active' : '',
-			esc_attr( sprintf( asde_t( 'Ordenar por %s (%s)' ), mb_strtolower( $etiqueta ), 'asc' === $dir ? asde_t( 'ascendente' ) : asde_t( 'descendente' ) ) ),
+			esc_attr( sprintf( /* translators: 1: text, 2: text */ __( 'Sort by %1$s (%2$s)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), mb_strtolower( $etiqueta ), 'asc' === $dir ? __( 'ascending', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : __( 'descending', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) ),
 			esc_html( $etiqueta ),
 			$flecha
 		);

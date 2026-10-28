@@ -11,23 +11,23 @@
 defined( 'ABSPATH' ) || exit;
 ?>
 <section class="asde-card">
-	<h2><?php asde_e( 'Seguridad de la cuenta' ); ?></h2>
+	<h2><?php esc_html_e( 'Account security', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h2>
 	<?php if ( ! $disponible ) : ?>
-		<p><?php asde_e( 'La verificación en dos pasos no está disponible ahora mismo.' ); ?></p>
+		<p><?php esc_html_e( 'Two-step verification is not available right now.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 	<?php else : ?>
 		<?php if ( $activo ) : ?>
-			<div class="asde-notice asde-notice--success" role="status"><?php asde_e( 'Tienes la verificación en dos pasos' ); ?> <strong><?php asde_e( 'activada' ); ?></strong><?php asde_e( '. ¡Bien hecho!' ); ?></div>
+			<div class="asde-notice asde-notice--success" role="status"><?php esc_html_e( 'You have two-step verification', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <strong><?php esc_html_e( 'turned on', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></strong><?php esc_html_e( '. Well done!', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></div>
 		<?php elseif ( $pendiente ) : ?>
 			<div class="asde-notice asde-notice--warning" role="status">
-				<?php asde_e( 'Para tu rol la verificación en dos pasos es' ); ?> <strong><?php asde_e( 'obligatoria' ); ?></strong><?php echo $limite && $limite > time() ? esc_html( ' ' . sprintf( asde_t( 'a partir del %s' ), wp_date( 'd/m/Y', $limite ) ) ) : ''; ?><?php asde_e( '. Después de esa fecha no podrás entrar sin ella.' ); ?>
+				<?php esc_html_e( 'For your role, two-step verification is', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <strong><?php esc_html_e( 'mandatory', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></strong><?php echo $limite && $limite > time() ? esc_html( ' ' . sprintf( /* translators: %s: text */ __( 'as of %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), wp_date( 'd/m/Y', $limite ) ) ) : ''; ?><?php esc_html_e( '. After that date you will not be able to sign in without it.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>
 			</div>
 		<?php endif; ?>
-		<p><?php asde_e( 'La verificación en dos pasos protege los datos del grupo: además de tu contraseña, al entrar te pedirá un código de 6 cifras de una app en tu móvil.' ); ?></p>
+		<p><?php esc_html_e( 'Two-step verification protects the group\'s data: besides your password, when signing in it will ask for a 6-digit code from an app on your phone.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 		<ol>
-			<li><?php asde_e( 'Instala en tu móvil una app de autenticación (Google Authenticator, Microsoft Authenticator, Authy…).' ); ?></li>
-			<li><?php asde_e( 'Escanea con ella el código QR de abajo.' ); ?></li>
-			<li><?php asde_e( 'Escribe el código de 6 cifras que te muestra la app y pulsa «Activate».' ); ?></li>
-			<li><?php asde_e( 'Guarda los' ); ?> <strong><?php asde_e( 'códigos de recuperación' ); ?></strong> <?php asde_e( 'en un lugar seguro: te servirán si pierdes el móvil.' ); ?></li>
+			<li><?php esc_html_e( 'Install an authenticator app on your phone (Google Authenticator, Microsoft Authenticator, Authy…).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></li>
+			<li><?php esc_html_e( 'Scan the QR code below with it.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></li>
+			<li><?php esc_html_e( 'Enter the 6-digit code the app shows you and press "Activate".', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></li>
+			<li><?php esc_html_e( 'Keep the', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <strong><?php esc_html_e( 'recovery codes', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></strong> <?php esc_html_e( 'in a safe place: you will need them if you lose your phone.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></li>
 		</ol>
 	<?php endif; ?>
 </section>
