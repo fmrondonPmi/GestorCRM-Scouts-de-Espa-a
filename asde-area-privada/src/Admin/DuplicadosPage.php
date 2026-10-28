@@ -101,7 +101,7 @@ final class DuplicadosPage {
 					<p>
 						<?php
 						/* translators: %d: duplicate documents */
-						echo esc_html( sprintf( _n( '%d documento está en más de una ficha:', '%d documentos están en más de una ficha:', count( $lista ), 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), count( $lista ) ) );
+						echo esc_html( sprintf( /* translators: %d: number */ _n( '%d documento está en más de una ficha:', '%d documentos están en más de una ficha:', count( $lista ), 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), count( $lista ) ) );
 						?>
 					</p>
 					<table class="widefat striped">

@@ -211,7 +211,7 @@ final class InventarioComprasView extends InventarioBaseView {
 			$num   = ComprasTable::numero( $l );
 			if ( $aviso['enviados'] && $aviso['contacto'] ) {
 				/* translators: %s: list number */
-				$texto = sprintf( __( 'List %s created. There is nobody in Treasury with an email in the private area: the group\'s contact email has been notified. When Treasury approves it, you will be able to print it.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $num );
+				$texto = sprintf( /* translators: %s: text */ __( 'List %s created. There is nobody in Treasury with an email in the private area: the group\'s contact email has been notified. When Treasury approves it, you will be able to print it.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $num );
 			} elseif ( $aviso['enviados'] ) {
 				$texto = sprintf( /* translators: 1: text, 2: number */ _n( 'List %1$s created and sent to %2$d person in Treasury for approval. When it has it, you will be able to print it.', 'List %1$s created and sent to %2$d people in Treasury for approval. When it has it, you will be able to print it.', $aviso['enviados'] , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $num, $aviso['enviados'] );
 			} elseif ( current_user_can( Servicio::CAP_APROBAR ) ) {

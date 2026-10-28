@@ -160,7 +160,7 @@ final class InventarioView extends InventarioBaseView {
 		$nombre = sanitize_file_name( (string) ( $f['name'] ?? '' ) );
 		if ( UPLOAD_ERR_OK !== $err || ! is_uploaded_file( (string) $f['tmp_name'] ) || (int) $f['size'] > Importador::MAX_BYTES ) {
 			/* translators: %d: maximum size in MB */
-			Notices::add( 'error', esc_html( sprintf( __( 'The file could not be uploaded. It must be a CSV of up to %d MB.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), (int) ( Importador::MAX_BYTES / MB_IN_BYTES ) ) ) );
+			Notices::add( 'error', esc_html( sprintf( /* translators: %d: number */ __( 'The file could not be uploaded. It must be a CSV of up to %d MB.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), (int) ( Importador::MAX_BYTES / MB_IN_BYTES ) ) ) );
 			$this->redirect( $aqui );
 		}
 		if ( ! preg_match( '/\.(csv|txt)$/i', $nombre ) ) {

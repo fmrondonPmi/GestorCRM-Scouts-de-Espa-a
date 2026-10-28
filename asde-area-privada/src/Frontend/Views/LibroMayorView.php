@@ -88,7 +88,7 @@ final class LibroMayorView extends TesoreriaBaseView {
 			array(
 				'titulo'    => __( 'General ledger', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . ' · ' . Grupo::nombre(),
 				/* translators: 1: period, 2: date */
-				'subtitulo' => sprintf( __( '%1$s · generated on %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $periodo['etiqueta'], wp_date( 'd/m/Y' ) ),
+				'subtitulo' => sprintf( /* translators: 1: text, 2: text */ __( '%1$s · generated on %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $periodo['etiqueta'], wp_date( 'd/m/Y' ) ),
 				'tipos'     => array( 'texto', 'texto', 'texto', 'texto', 'euros', 'euros', 'euros' ),
 			),
 		);
@@ -110,7 +110,7 @@ final class LibroMayorView extends TesoreriaBaseView {
 			array(
 				'titulo'    => __( 'General ledger: summary by item', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . ' · ' . Grupo::nombre(),
 				/* translators: 1: period, 2: date */
-				'subtitulo' => sprintf( __( '%1$s · generated on %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $periodo['etiqueta'], wp_date( 'd/m/Y' ) ),
+				'subtitulo' => sprintf( /* translators: 1: text, 2: text */ __( '%1$s · generated on %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $periodo['etiqueta'], wp_date( 'd/m/Y' ) ),
 				'tipos'     => array( 'texto', 'euros', 'euros', 'euros' ),
 				'totales'   => array( __( 'Total', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), round( $ent, 2 ), round( $sal, 2 ), round( $ent - $sal, 2 ) ),
 			),

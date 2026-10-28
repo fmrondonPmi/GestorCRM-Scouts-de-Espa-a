@@ -222,7 +222,7 @@ foreach ( $tipos as $t ) {
 <section class="asde-card" data-asde-plegable="caja-arqueo" data-asde-inicio="cerrado">
 	<h3><?php esc_html_e( 'Cash count', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h3>
 	<?php /* translators: %s: today's balance */ ?>
-	<p class="asde-help"><?php echo esc_html( sprintf( __( 'Count the cash and enter how much there is. Today there should be %s. If it does not add up, enter the reason: the difference is recorded as an adjustment.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $euros( $saldo_hoy ) ) ); ?></p>
+	<p class="asde-help"><?php echo esc_html( sprintf( /* translators: %s: text */ __( 'Count the cash and enter how much there is. Today there should be %s. If it does not add up, enter the reason: the difference is recorded as an adjustment.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $euros( $saldo_hoy ) ) ); ?></p>
 	<form method="post" action="<?php echo esc_url( $url ); ?>" class="asde-form asde-form__fila asde-form__fila--una-linea asde-caja-form">
 		<?php $ocultos(); ?>
 		<input type="hidden" name="asde_action" value="arqueo">

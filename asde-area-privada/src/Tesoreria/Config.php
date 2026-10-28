@@ -35,23 +35,17 @@ final class Config {
 	 */
 	public const PLAZO_DEFECTO = 'Cuota anual';
 
-	/** Proyecto de recaudación de cada sección (v0.54). */
-	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
-	public static function proyectos_defecto(): array {
-		return array(
-		'castores' => __( 'Dyke', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
-		'lobatos'  => __( 'Hunt', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
-		'scouts'   => __( 'Adventure', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
-		'escultas' => __( 'Company', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
-		'rovers'   => __( 'Overdrafts and Interventions', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+	/** Proyecto de recaudación de cada sección (v0.54): se guarda en castellano (se traduce al mostrarlo con asde_guardado()). */
+	public const PROYECTOS_DEFECTO = array(
+		'castores' => 'Dique',
+		'lobatos'  => 'Cacería',
+		'scouts'   => 'Aventura',
+		'escultas' => 'Empresa',
+		'rovers'   => 'Descubierta e Intervención',
 	);
-	}
 
-	/** Categorías de los gastos de los presupuestos (v0.55; el grupo puede cambiarlas). */
-	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
-	public static function categorias_defecto(): array {
-		return array( __( 'Summer camp', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Camp', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Excursion', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Day outing', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Equipment', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Training', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Special activity', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Others', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
-	}
+	/** Categorías de los gastos de los presupuestos (v0.55; el grupo puede cambiarlas): también se guardan en castellano. */
+	public const CATEGORIAS_DEFECTO = array( 'Campamento de verano', 'Acampada', 'Excursión', 'Salida de día', 'Material', 'Formación', 'Actividad especial', 'Otros' );
 
 	public static function defaults_ronda( string $ronda ): array {
 		$anio = (int) substr( $ronda, 0, 4 );
@@ -81,9 +75,9 @@ final class Config {
 		return array(
 			'pct_grupo'   => 40.0,
 			'pct_seccion' => array(),
-			'proyectos'   => self::proyectos_defecto(),
+			'proyectos'   => self::PROYECTOS_DEFECTO,
 			// v0.55: categorías de los gastos de los presupuestos (el grupo puede cambiarlas).
-			'categorias'  => self::categorias_defecto(),
+			'categorias'  => self::CATEGORIAS_DEFECTO,
 		);
 	}
 

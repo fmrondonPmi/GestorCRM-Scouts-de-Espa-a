@@ -237,7 +237,7 @@ define( 'ASDE_AP_ENCRYPTION_KEY', '...' ); // clave propia para cifrar las contr
 		$alta = null === $g;
 		?>
 		<div class="card" style="max-width:720px;margin-top:20px;">
-			<h2><?php /* translators: %s: group number */ echo $alta ? esc_html__( 'Add group', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : esc_html( sprintf( __( 'Edit group %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $g['numero'] ) ); ?></h2>
+			<h2><?php /* translators: %s: group number */ echo $alta ? esc_html__( 'Add group', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : esc_html( sprintf( /* translators: %s: text */ __( 'Edit group %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $g['numero'] ) ); ?></h2>
 			<form method="post" action="<?php echo esc_url( admin_url( 'admin-post.php' ) ); ?>" autocomplete="off">
 				<input type="hidden" name="action" value="<?php echo esc_attr( self::ACCION_GUARDAR ); ?>">
 				<input type="hidden" name="alta" value="<?php echo $alta ? '1' : '0'; ?>">
@@ -298,7 +298,7 @@ define( 'ASDE_AP_ENCRYPTION_KEY', '...' ); // clave propia para cifrar las contr
 		}
 		if ( $g['probado'] ) {
 			/* translators: %s: date and time of the last connection test */
-			echo '<br><span class="description">' . esc_html( sprintf( __( 'Tested on %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), wp_date( 'd/m/Y H:i', (int) $g['probado'] ) ) ) . '</span>';
+			echo '<br><span class="description">' . esc_html( sprintf( /* translators: %s: text */ __( 'Tested on %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), wp_date( 'd/m/Y H:i', (int) $g['probado'] ) ) ) . '</span>';
 		}
 	}
 

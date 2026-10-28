@@ -57,7 +57,7 @@ $columnas = array(
 	<header class="asde-card__header asde-card__header--split">
 		<h2><?php esc_html_e( 'People in the group', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h2>
 		<?php /* translators: 1: people with an active membership, 2: without an active membership */ ?>
-		<span class="asde-card__si-plegada asde-muted"><?php echo esc_html( sprintf( __( '%1$d with an active membership · %2$d without an active membership', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), (int) $resumen['activas'], (int) $resumen['inactivas'] ) ); ?></span>
+		<span class="asde-card__si-plegada asde-muted"><?php echo esc_html( sprintf( /* translators: 1: number, 2: number */ __( '%1$d with an active membership · %2$d without an active membership', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), (int) $resumen['activas'], (int) $resumen['inactivas'] ) ); ?></span>
 		<?php if ( $altas ) : ?>
 			<?php /* Doc 34, fase 3: persona nueva con su primera membresía; el primer paso comprueba si ya tiene ficha. */ ?>
 			<a class="button" href="<?php echo esc_url( add_query_arg( 'alta', '1', $url ) ); ?>" data-asde-modal><?php esc_html_e( 'Member registration', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a>

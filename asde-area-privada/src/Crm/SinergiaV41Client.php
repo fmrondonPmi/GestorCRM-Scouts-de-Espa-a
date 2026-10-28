@@ -70,7 +70,7 @@ final class SinergiaV41Client implements CrmClientInterface, EscritorCrm {
 			if ( empty( $login['id'] ) ) {
 				return ConnectionResult::fail(
 					/* translators: %s: reason the CRM gives for rejecting the sign-in */
-					sprintf( __( 'The CRM rejected the sign-in: %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $this->error_text( $login ) ),
+					sprintf( /* translators: %s: text */ __( 'The CRM rejected the sign-in: %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $this->error_text( $login ) ),
 					array( 'Endpoint: ' . $endpoint )
 				);
 			}
@@ -171,7 +171,7 @@ final class SinergiaV41Client implements CrmClientInterface, EscritorCrm {
 					)
 				);
 				/* translators: %d: maximum number of records read at once */
-				throw new CrmException( esc_html( sprintf( __( 'The CRM has more than %d records visible to this connection and they cannot all be read at once: the result would be incomplete. Tell whoever administers the private area.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $hard_limit ) ) );
+				throw new CrmException( esc_html( sprintf( /* translators: %d: number */ __( 'The CRM has more than %d records visible to this connection and they cannot all be read at once: the result would be incomplete. Tell whoever administers the private area.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $hard_limit ) ) );
 			}
 		}
 
@@ -413,7 +413,7 @@ final class SinergiaV41Client implements CrmClientInterface, EscritorCrm {
 			}
 			if ( empty( $login['id'] ) ) {
 				/* translators: %s: reason the CRM gives for rejecting the sign-in */
-				throw new CrmException( esc_html( sprintf( __( 'The CRM rejected the sign-in: %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $this->error_text( $login ) ) ) );
+				throw new CrmException( esc_html( sprintf( /* translators: %s: text */ __( 'The CRM rejected the sign-in: %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $this->error_text( $login ) ) ) );
 			}
 			$this->session  = (string) $login['id'];
 			$this->endpoint = $endpoint;
@@ -518,7 +518,7 @@ final class SinergiaV41Client implements CrmClientInterface, EscritorCrm {
 
 		if ( is_wp_error( $response ) ) {
 			/* translators: %s: HTTP connection error message */
-			return new \WP_Error( 'asde_crm_http', sprintf( __( 'Cannot connect to the CRM: %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $response->get_error_message() ) );
+			return new \WP_Error( 'asde_crm_http', sprintf( /* translators: %s: text */ __( 'Cannot connect to the CRM: %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $response->get_error_message() ) );
 		}
 
 		$code = (int) wp_remote_retrieve_response_code( $response );
@@ -527,7 +527,7 @@ final class SinergiaV41Client implements CrmClientInterface, EscritorCrm {
 		// No se registra el cuerpo de la respuesta: podría contener datos personales.
 		if ( 200 !== $code || ! is_array( $data ) ) {
 			/* translators: 1: CRM API address, 2: HTTP response code */
-			return new \WP_Error( 'asde_crm_not_api', sprintf( __( '%1$s answered HTTP %2$d without a valid response from the API.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $endpoint, $code ) );
+			return new \WP_Error( 'asde_crm_not_api', sprintf( /* translators: 1: text, 2: number */ __( '%1$s answered HTTP %2$d without a valid response from the API.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $endpoint, $code ) );
 		}
 		return $data;
 	}

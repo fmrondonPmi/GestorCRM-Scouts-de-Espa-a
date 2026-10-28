@@ -27,10 +27,6 @@ echo "== Parte A · La PWA ya no está aquí ==\n";
 $ok( ! is_dir( ASDE_AP_DIR . 'src/Pwa' ) && ! is_dir( ASDE_AP_DIR . 'assets/pwa' ) && ! is_dir( ASDE_AP_DIR . 'templates/pwa' ) && ! file_exists( ASDE_AP_DIR . 'src/Admin/PwaPage.php' ), 'sin src/Pwa, assets/pwa, templates/pwa ni la pantalla «App móvil»' );
 $plugin = (string) file_get_contents( ASDE_AP_DIR . 'src/Plugin.php' );
 $ok( ! str_contains( $plugin, 'Pwa' ) && str_contains( $plugin, 'AppRetirada::register()' ), 'Plugin.php no arranca la PWA; arranca la retirada' );
-$extractor = (string) file_get_contents( ASDE_AP_DIR . 'src/Idiomas/Extractor.php' );
-$ok( ! str_contains( $extractor, 'App móvil' ), 'el extractor de textos ya no tiene el grupo «App móvil» (lo pone la app)' );
-$es = is_readable( ASDE_AP_DIR . 'languages/es.php' ) ? require ASDE_AP_DIR . 'languages/es.php' : array(); // Desde la v0.59.3 los catálogos no van en el paquete.
-$ok( ! in_array( 'App móvil', $es, true ), 'la lista de textos del principal (si la hay) sin textos de la app' );
 
 echo "\n== Parte B · Enganche de plantillas (asde_ap_plantilla) ==\n";
 $falsa = static fn( string $f, string $n ) => 'pwa/prueba-enganche' === $n ? __FILE__ : $f;
@@ -61,16 +57,6 @@ try {
 	remove_filter( 'asde_ap_entorno', $pieza );
 }
 $ok( defined( 'ASDE_APP_VERSION' ) === isset( Entorno::comprobar()['pwa'] ), 'la pieza «App móvil» está solo si el plugin de la app está activo' );
-
-echo "\n== Parte D · Catálogos de otro plugin (asde_ap_catalogo / asde_ap_textos) ==\n";
-if ( defined( 'ASDE_APP_VERSION' ) ) {
-	$ok( false !== has_filter( 'asde_ap_catalogo' ) && false !== has_filter( 'asde_ap_textos' ), 'la app activa se engancha a los dos filtros de catálogos' );
-	$ok( 'App móvil' === ( Traducciones::textos()['Instalar la app'] ?? '' ), '«Idioma y etiquetas» ve los textos de la app (grupo «App móvil»)' );
-	$propio = \AsdeBalears\AreaPrivadaApp\Idiomas::propio( 'ca' )['Instalar la app'] ?? '';
-	$ok( '' !== $propio && 'Instalar la app' !== $propio && Traducciones::t( 'Instalar la app', 'ca' ) === $propio, 'su traducción al catalán llega por el filtro' );
-} else {
-	$ok( ! isset( Traducciones::textos()['Instalar la app'] ), 'sin la app, sus textos no salen en «Idioma y etiquetas»' );
-}
 
 echo "\n== Parte E · Retirada de las apps instaladas sin el plugin de la app ==\n";
 $sw = home_url( '/asde-sw.js' );

@@ -201,7 +201,7 @@ final class TiposMovimiento {
 		$n    = $usos['gastos'] + $usos['ingresos'];
 		if ( $n ) {
 			/* translators: 1: name of the type, 2: number of transactions */
-			return new \WP_Error( 'asde_banco', sprintf( _n( 'The type "%1$s" is used by %2$d bank transaction: change its type before deleting it.', 'The type "%1$s" is used by %2$d bank transactions: change their type before deleting it.', $n , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $tipo['nombre'], $n ) );
+			return new \WP_Error( 'asde_banco', sprintf( /* translators: 1: text, 2: number */ _n( 'The type "%1$s" is used by %2$d bank transaction: change its type before deleting it.', 'The type "%1$s" is used by %2$d bank transactions: change their type before deleting it.', $n , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $tipo['nombre'], $n ) );
 		}
 		global $wpdb;
 		$wpdb->delete(

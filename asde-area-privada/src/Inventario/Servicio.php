@@ -76,12 +76,12 @@ final class Servicio {
 			}
 			if ( ! preg_match( '/^\d{1,5}$/', $cantidad ) ) {
 				/* translators: %s: equipment description */
-				return new \WP_Error( 'asde_inventario', sprintf( __( 'The quantity to buy of "%s" is not valid.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $m['descripcion'] ) );
+				return new \WP_Error( 'asde_inventario', sprintf( /* translators: %s: text */ __( 'The quantity to buy of "%s" is not valid.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $m['descripcion'] ) );
 			}
 			$precio = MaterialesTable::euros( (string) ( $precios[ $id ] ?? '' ) );
 			if ( false === $precio ) {
 				/* translators: %s: equipment description */
-				return new \WP_Error( 'asde_inventario', sprintf( __( 'The price of "%s" is not valid (for example: 12,50).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $m['descripcion'] ) );
+				return new \WP_Error( 'asde_inventario', sprintf( /* translators: %s: text */ __( 'The price of "%s" is not valid (for example: 12,50).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $m['descripcion'] ) );
 			}
 			$lineas[] = array(
 				'material'      => $id,
@@ -105,19 +105,19 @@ final class Servicio {
 			}
 			if ( '' === $descripcion ) {
 				/* translators: %d: line number of the new equipment */
-				return new \WP_Error( 'asde_inventario', sprintf( __( 'Enter what new equipment must be bought on line %d (or leave its price blank).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $n ) );
+				return new \WP_Error( 'asde_inventario', sprintf( /* translators: %d: number */ __( 'Enter what new equipment must be bought on line %d (or leave its price blank).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $n ) );
 			}
 			if ( '' === $cantidad || '0' === $cantidad ) {
 				continue; // Quitado de la lista, como el material del inventario con 0.
 			}
 			if ( ! preg_match( '/^\d{1,5}$/', $cantidad ) ) {
 				/* translators: %s: equipment description */
-				return new \WP_Error( 'asde_inventario', sprintf( __( 'The quantity to buy of "%s" is not valid.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $descripcion ) );
+				return new \WP_Error( 'asde_inventario', sprintf( /* translators: %s: text */ __( 'The quantity to buy of "%s" is not valid.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $descripcion ) );
 			}
 			$precio = MaterialesTable::euros( $texto );
 			if ( false === $precio ) {
 				/* translators: %s: equipment description */
-				return new \WP_Error( 'asde_inventario', sprintf( __( 'The price of "%s" is not valid (for example: 12,50).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $descripcion ) );
+				return new \WP_Error( 'asde_inventario', sprintf( /* translators: %s: text */ __( 'The price of "%s" is not valid (for example: 12,50).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $descripcion ) );
 			}
 			$lineas[] = array(
 				'material'      => 0, // 0: material nuevo (se da de alta al marcar la lista como comprada).
@@ -134,7 +134,7 @@ final class Servicio {
 		}
 		if ( count( $lineas ) > ComprasTable::MAX_LINEAS ) {
 			/* translators: %d: maximum number of lines */
-			return new \WP_Error( 'asde_inventario', sprintf( __( 'A list can have at most %d items of equipment.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), ComprasTable::MAX_LINEAS ) );
+			return new \WP_Error( 'asde_inventario', sprintf( /* translators: %d: number */ __( 'A list can have at most %d items of equipment.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), ComprasTable::MAX_LINEAS ) );
 		}
 		return $lineas;
 	}

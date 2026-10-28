@@ -172,11 +172,11 @@ final class LibroMayor {
 			case CajaTable::TRASPASO:
 				$con = CajaTable::BANCO === $a['destino'] ? __( 'Bank', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : Cajas::nombre( (string) $a['destino'] );
 				/* translators: %s: the cash box or bank on the other side of the transfer */
-				$texto = $a['importe'] < 0 ? sprintf( __( 'Transfer to %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $con ) : sprintf( /* translators: %s: text */ __( 'Transfer from %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $con );
+				$texto = $a['importe'] < 0 ? sprintf( /* translators: %s: text */ __( 'Transfer to %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $con ) : sprintf( /* translators: %s: text */ __( 'Transfer from %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $con );
 				return trim( $texto . ( '' !== $a['concepto'] ? ' · ' . $a['concepto'] : '' ) );
 			case CajaTable::ARQUEO:
 				/* translators: %s: amount counted */
-				return trim( sprintf( __( 'Cash count: counted %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), \AsdeBalears\AreaPrivada\Tesoreria\Calculadora::euros( (float) $a['recuento'] ) ) . ( '' !== $a['nota'] ? ' · ' . $a['nota'] : '' ) );
+				return trim( sprintf( /* translators: %s: text */ __( 'Cash count: counted %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), \AsdeBalears\AreaPrivada\Tesoreria\Calculadora::euros( (float) $a['recuento'] ) ) . ( '' !== $a['nota'] ? ' · ' . $a['nota'] : '' ) );
 			case CajaTable::INICIAL:
 				return __( 'Opening balance', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 			default:

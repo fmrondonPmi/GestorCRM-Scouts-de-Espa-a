@@ -560,7 +560,7 @@ try {
 	$c1  = $calc( $f1 );
 	$leo = $res['filas'][0] ?? array();
 	$ok( 1 === count( $res['filas'] ) && 'Leo' === $leo['nombre'] && $familias[ $f1 ]['numero'] === $leo['pago_familia'] && $ronda === $res['ronda'], 'el scouter de Lobatos solo ve a los de su sección (Leo), con su familia' );
-	$ok( asde_t( Calculadora::etiquetas()[ $c1['estado'] ] ) === $leo['pago_estado'] && Calculadora::euros( $c1['a_pagar'] ) === $leo['pago_a_pagar'] && Calculadora::euros( $c1['pagado'] ) === $leo['pago_pagado'] && Calculadora::euros( max( 0, $c1['pendiente'] ) ) === $leo['pago_pendiente'] && 2 === count( $c1['pagan'] ), 'estado, cuota, pagado y pendiente como en el control de pagos: la cuota es la de la familia (Leo y su hermana Nora, de otra sección)' );
+	$ok( Calculadora::etiquetas()[ $c1['estado'] ] === $leo['pago_estado'] && Calculadora::euros( $c1['a_pagar'] ) === $leo['pago_a_pagar'] && Calculadora::euros( $c1['pagado'] ) === $leo['pago_pagado'] && Calculadora::euros( max( 0, $c1['pendiente'] ) ) === $leo['pago_pendiente'] && 2 === count( $c1['pagan'] ), 'estado, cuota, pagado y pendiente como en el control de pagos: la cuota es la de la familia (Leo y su hermana Nora, de otra sección)' );
 	$hechos = array_filter( MovimientosTable::de_familia( $f1, $ronda ), static fn( $m ) => MovimientosTable::PAGO === $m['tipo'] && empty( $m['anulado_en'] ) );
 	$ok( $hechos && count( $hechos ) === count( explode( '; ', $leo['pago_hechos'] ) ) && str_contains( $leo['pago_hechos'], Calculadora::euros( (float) current( $hechos )['importe'] ) ), 'y los pagos hechos (fecha e importe), sin los eliminados' );
 
@@ -570,10 +570,10 @@ try {
 	$todos  = ( new Generador( $repo->crm() ) )->ejecutar( $informe( array() ), $amb );
 	$estado = array_column( $todos['filas'], 'pago_estado', 'nombre' );
 	$filtra = static fn( string $f ) => array_column( ( new Generador( $repo->crm() ) )->ejecutar( $informe( array( 'pago' => $f ) ), $amb )['filas'], 'nombre' );
-	$deben  = array_keys( array_filter( $estado, static fn( $e ) => in_array( $e, array( asde_t( 'Pendiente' ), asde_t( 'Pago parcial' ), asde_t( 'Con plazos vencidos' ) ), true ) ) );
-	$ok( count( $todos['filas'] ) === count( $crm->personas ) && asde_t( 'Sin familia en Tesorería' ) === $estado['Eva'] && '' === array_column( $todos['filas'], 'pago_pagado', 'nombre' )['Eva'], 'Coordinación ve a todo el grupo; quien no está en ninguna familia lo dice' );
+	$deben  = array_keys( array_filter( $estado, static fn( $e ) => in_array( $e, array( 'Pendiente', 'Pago parcial', 'Con plazos vencidos' ), true ) ) );
+	$ok( count( $todos['filas'] ) === count( $crm->personas ) && 'Sin familia en Tesorería' === $estado['Eva'] && '' === array_column( $todos['filas'], 'pago_pagado', 'nombre' )['Eva'], 'Coordinación ve a todo el grupo; quien no está en ninguna familia lo dice' );
 	$ok( $deben && $filtra( 'debe' ) === array_values( array_intersect( array_keys( $estado ), $deben ) ) && ! in_array( 'Eva', $filtra( 'debe' ), true ), '«Les falta algo por pagar»: solo los de familias con algo pendiente (' . implode( ', ', $deben ) . ')' );
-	$ok( $filtra( 'pagado' ) === array_keys( array_filter( $estado, static fn( $e ) => asde_t( 'Pagado' ) === $e ) ) && array( 'Eva', 'Ana' ) === array_values( array_intersect( array( 'Eva', 'Ana' ), $filtra( 'sin_familia' ) ) ), '«Han pagado toda la cuota» y «Sin familia en Tesorería»' );
+	$ok( $filtra( 'pagado' ) === array_keys( array_filter( $estado, static fn( $e ) => 'Pagado' === $e ) ) && array( 'Eva', 'Ana' ) === array_values( array_intersect( array( 'Eva', 'Ana' ), $filtra( 'sin_familia' ) ) ), '«Han pagado toda la cuota» y «Sin familia en Tesorería»' );
 	get_userdata( $u_teso )->remove_role( Roles::COORDINACION );
 
 	$avisos_php = array();

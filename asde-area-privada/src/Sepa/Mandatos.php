@@ -163,7 +163,7 @@ final class Mandatos {
 			$err[] = $e;
 		} elseif ( strlen( $d['iban'] ) > CuentaCrm::MAX_IBAN ) {
 			/* translators: %d: characters */
-			$err[] = sprintf( __( 'The CRM record only accepts accounts of up to %d characters (Spanish ones have 24): use a Spanish account.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), CuentaCrm::MAX_IBAN );
+			$err[] = sprintf( /* translators: %d: number */ __( 'The CRM record only accepts accounts of up to %d characters (Spanish ones have 24): use a Spanish account.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), CuentaCrm::MAX_IBAN );
 		}
 		if ( '' === $d['calle'] || '' === $d['cp'] || '' === $d['poblacion'] ) {
 			$err[] = __( 'Enter the account holder\'s address (street, postcode and town).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
@@ -296,7 +296,7 @@ final class Mandatos {
 				}
 				if ( is_wp_error( $r ) ) {
 					/* translators: 1: authorisation reference, 2: reason */
-					$res['errores'][] = sprintf( __( '%1$s: %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $m['referencia'], $r->get_error_message() );
+					$res['errores'][] = sprintf( /* translators: 1: text, 2: text */ __( '%1$s: %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $m['referencia'], $r->get_error_message() );
 					continue;
 				}
 				++$res['pasadas'];

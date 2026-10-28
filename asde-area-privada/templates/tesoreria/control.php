@@ -127,7 +127,7 @@ $pct = $resumen['a_pagar'] > 0 ? round( 100 * $resumen['pagado'] / $resumen['a_p
 						<?php
 						// v0.31: los hijos que pagan (y el ajuste), como tooltip del importe: la fila no se parte en dos líneas.
 						/* translators: %d: number of children who pay a fee */
-						$detalle = sprintf( _n( '%d child', '%d children', count( $c['pagan'] ) , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), count( $c['pagan'] ) ) . ( $c['ajustes'] ? ' · ' . sprintf( /* translators: %s: text */ __( 'adjustment %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Calculadora::euros( $c['ajustes'] ) ) : '' );
+						$detalle = sprintf( /* translators: %d: number */ _n( '%d child', '%d children', count( $c['pagan'] ) , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), count( $c['pagan'] ) ) . ( $c['ajustes'] ? ' · ' . sprintf( /* translators: %s: text */ __( 'adjustment %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Calculadora::euros( $c['ajustes'] ) ) : '' );
 						?>
 						<td data-label="<?php echo esc_attr( esc_attr__( 'Fee', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><span class="asde-tooltip" title="<?php echo esc_attr( $detalle ); ?>" tabindex="0"><?php echo esc_html( Calculadora::euros( $c['a_pagar'] ) ); ?></span><span class="screen-reader-text"> (<?php echo esc_html( $detalle ); ?>)</span></td>
 						<td data-label="<?php echo esc_attr( esc_attr__( 'Paid', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( Calculadora::euros( $c['pagado'] ) ); ?></td>

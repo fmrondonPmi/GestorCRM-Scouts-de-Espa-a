@@ -76,7 +76,7 @@ final class Automaticos {
 			$filas = (array) $wpdb->get_results( $wpdb->prepare( 'SELECT m.id, m.fecha, m.importe, m.familia_id, m.ronda, f.numero FROM %i m INNER JOIN %i f ON f.id = m.familia_id WHERE f.grupo = %s AND m.tipo = %s AND m.metodo = %s AND m.anulado_en IS NULL AND m.fecha BETWEEN %s AND %s', MovimientosTable::table(), FamiliasTable::table(), $g, MovimientosTable::PAGO, 'efectivo', $desde, $hasta ), ARRAY_A );
 			foreach ( $filas as $f ) {
 				/* translators: %s: family number */
-				$add( $f['fecha'], (float) $f['importe'], 'cuota', (int) $f['id'], sprintf( __( 'Fee of the %s family', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $f['numero'] ), 0, 'tesoreria', array( 'familia' => (int) $f['familia_id'], 'ronda' => $f['ronda'] ) );
+				$add( $f['fecha'], (float) $f['importe'], 'cuota', (int) $f['id'], sprintf( /* translators: %s: text */ __( 'Fee of the %s family', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $f['numero'] ), 0, 'tesoreria', array( 'familia' => (int) $f['familia_id'], 'ronda' => $f['ronda'] ) );
 			}
 		}
 
@@ -92,7 +92,7 @@ final class Automaticos {
 			foreach ( $filas as $f ) {
 				$cobro = EventoMovimientos::PAGO === $f['tipo'];
 				/* translators: %s: name of the event */
-				$add( $f['fecha'], ( $cobro ? 1 : -1 ) * abs( (float) $f['importe'] ), $cobro ? 'evento_cobro' : 'evento_devol', (int) $f['id'], trim( sprintf( $cobro ? __( 'Collection · %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : /* translators: %s: text */ __( 'Refund · %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $ev( (int) $f['evento_id'] ) ), ' ·' ), (int) $f['evento_id'], 'eventos', $enlace( (int) $f['evento_id'] ) );
+				$add( $f['fecha'], ( $cobro ? 1 : -1 ) * abs( (float) $f['importe'] ), $cobro ? 'evento_cobro' : 'evento_devol', (int) $f['id'], trim( sprintf( $cobro ? /* translators: %s: text */ __( 'Collection · %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : /* translators: %s: text */ __( 'Refund · %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $ev( (int) $f['evento_id'] ) ), ' ·' ), (int) $f['evento_id'], 'eventos', $enlace( (int) $f['evento_id'] ) );
 			}
 
 			// Gastos e ingresos validados que pagó o cobró el grupo en efectivo; los reembolsos en efectivo, con su fecha.
@@ -116,14 +116,14 @@ final class Automaticos {
 			$filas = (array) $wpdb->get_results( $wpdb->prepare( 'SELECT id, evento_id, fecha, importe, estado, devuelto, liquidado_en FROM %i WHERE grupo = %s AND forma = %s AND anulado_en IS NULL AND ( fecha BETWEEN %s AND %s OR ( estado = %s AND devuelto > 0 AND DATE( liquidado_en ) BETWEEN %s AND %s ) )', AnticiposTable::table(), $g, 'efectivo', $desde, $hasta, AnticiposTable::LIQUIDADO, $desde, $hasta ), ARRAY_A );
 			foreach ( $filas as $f ) {
 				/* translators: %s: name of the event */
-				$texto = trim( sprintf( __( 'Cash advance · %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $ev( (int) $f['evento_id'] ) ), ' ·' );
+				$texto = trim( sprintf( /* translators: %s: text */ __( 'Cash advance · %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $ev( (int) $f['evento_id'] ) ), ' ·' );
 				if ( $f['fecha'] >= $desde && $f['fecha'] <= $hasta ) {
 					$add( $f['fecha'], -abs( (float) $f['importe'] ), 'anticipo', (int) $f['id'], $texto, (int) $f['evento_id'], 'eventos', $enlace( (int) $f['evento_id'] ) );
 				}
 				$liq = $f['liquidado_en'] ? wp_date( 'Y-m-d', strtotime( $f['liquidado_en'] . ' UTC' ) ) : '';
 				if ( AnticiposTable::LIQUIDADO === $f['estado'] && (float) $f['devuelto'] > 0 && '' !== $liq && $liq >= $desde && $liq <= $hasta ) {
 					/* translators: %s: name of the event */
-					$add( $liq, abs( (float) $f['devuelto'] ), 'anticipo', (int) $f['id'], trim( sprintf( __( 'Returned from the advance · %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $ev( (int) $f['evento_id'] ) ), ' ·' ), (int) $f['evento_id'], 'eventos', $enlace( (int) $f['evento_id'] ) );
+					$add( $liq, abs( (float) $f['devuelto'] ), 'anticipo', (int) $f['id'], trim( sprintf( /* translators: %s: text */ __( 'Returned from the advance · %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $ev( (int) $f['evento_id'] ) ), ' ·' ), (int) $f['evento_id'], 'eventos', $enlace( (int) $f['evento_id'] ) );
 				}
 			}
 		}
@@ -132,7 +132,7 @@ final class Automaticos {
 			$filas = (array) $wpdb->get_results( $wpdb->prepare( 'SELECT id, pago_fecha, pago_importe, total FROM %i WHERE grupo = %s AND pago_metodo = %s AND pago_fecha IS NOT NULL AND cancelado_en IS NULL AND pago_fecha BETWEEN %s AND %s', PedidosTable::table(), $g, 'efectivo', $desde, $hasta ), ARRAY_A );
 			foreach ( $filas as $f ) {
 				/* translators: %d: order number */
-				$add( (string) $f['pago_fecha'], (float) ( null !== $f['pago_importe'] ? $f['pago_importe'] : $f['total'] ), 'tienda', (int) $f['id'], sprintf( __( 'Shop order no. %d', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), (int) $f['id'] ), 0, 'tienda_gestion', array( 'pedido' => (int) $f['id'] ) );
+				$add( (string) $f['pago_fecha'], (float) ( null !== $f['pago_importe'] ? $f['pago_importe'] : $f['total'] ), 'tienda', (int) $f['id'], sprintf( /* translators: %d: number */ __( 'Shop order no. %d', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), (int) $f['id'] ), 0, 'tienda_gestion', array( 'pedido' => (int) $f['id'] ) );
 			}
 		}
 
@@ -140,7 +140,7 @@ final class Automaticos {
 			$filas = (array) $wpdb->get_results( $wpdb->prepare( 'SELECT id, concepto, importe, evento_id, pago_fecha FROM %i WHERE grupo = %s AND estado = %s AND forma = %s AND pago_fecha BETWEEN %s AND %s', ReintegrosTable::table(), $g, ReintegrosTable::PAGADO, ReintegrosTable::EFECTIVO, $desde, $hasta ), ARRAY_A );
 			foreach ( $filas as $f ) {
 				/* translators: %s: description of the reimbursement */
-				$add( (string) $f['pago_fecha'], -abs( (float) $f['importe'] ), 'reintegro', (int) $f['id'], sprintf( __( 'Reimbursement · %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $f['concepto'] ), (int) $f['evento_id'], 'reintegros', array() );
+				$add( (string) $f['pago_fecha'], -abs( (float) $f['importe'] ), 'reintegro', (int) $f['id'], sprintf( /* translators: %s: text */ __( 'Reimbursement · %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $f['concepto'] ), (int) $f['evento_id'], 'reintegros', array() );
 			}
 		}
 

@@ -193,7 +193,7 @@ final class TiendaProductosView extends TiendaBaseView {
 		$nombre = sanitize_file_name( (string) ( $f['name'] ?? '' ) );
 		if ( UPLOAD_ERR_OK !== $err || ! is_uploaded_file( (string) $f['tmp_name'] ) || (int) $f['size'] > ImportadorProductos::MAX_BYTES ) {
 			/* translators: %d: maximum size in MB */
-			Notices::add( 'error', esc_html( sprintf( __( 'The file could not be uploaded. It must be a CSV of up to %d MB.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), (int) ( ImportadorProductos::MAX_BYTES / MB_IN_BYTES ) ) ) );
+			Notices::add( 'error', esc_html( sprintf( /* translators: %d: number */ __( 'The file could not be uploaded. It must be a CSV of up to %d MB.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), (int) ( ImportadorProductos::MAX_BYTES / MB_IN_BYTES ) ) ) );
 			$this->redirect( $aqui );
 		}
 		if ( ! preg_match( '/\.(csv|txt)$/i', $nombre ) ) {
@@ -314,14 +314,14 @@ final class TiendaProductosView extends TiendaBaseView {
 				$delta = trim( $ajustes[ $vid ] ?? '' );
 				if ( '' !== $delta && $v['material'] > 0 ) {
 					/* translators: %s: variant label */
-					$errores[] = sprintf( __( 'The stock of "%s" is changed in the general inventory, not here.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $var['etiqueta'] );
+					$errores[] = sprintf( /* translators: %s: text */ __( 'The stock of "%s" is changed in the general inventory, not here.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $var['etiqueta'] );
 				} elseif ( '' !== $delta && 0 === $var['ilimitado'] ) {
 					if ( ! preg_match( '/^[+-]?\d{1,5}$/', $delta ) || 0 === (int) $delta ) {
 						/* translators: %s: variant label */
-						$errores[] = sprintf( __( 'The stock change of "%s" must be a whole number (for example +5 or -2).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $var['etiqueta'] );
+						$errores[] = sprintf( /* translators: %s: text */ __( 'The stock change of "%s" must be a whole number (for example +5 or -2).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $var['etiqueta'] );
 					} elseif ( $v['existencias'] + (int) $delta < 0 ) {
 						/* translators: 1: variant label, 2: current stock */
-						$errores[] = sprintf( __( 'That many units of "%1$s" cannot be removed: there are only %2$d.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $var['etiqueta'], $v['existencias'] );
+						$errores[] = sprintf( /* translators: 1: text, 2: number */ __( 'That many units of "%1$s" cannot be removed: there are only %2$d.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $var['etiqueta'], $v['existencias'] );
 					} else {
 						$ajustar[ $vid ] = (int) $delta;
 					}

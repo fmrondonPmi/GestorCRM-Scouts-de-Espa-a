@@ -39,7 +39,7 @@ final class Cajas {
 			return __( 'Bank', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		/* translators: %s: name of the section */
-		return sprintf( __( 'Cash box of %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Secciones::nombre( $caja ) );
+		return sprintf( /* translators: %s: text */ __( 'Cash box of %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Secciones::nombre( $caja ) );
 	}
 
 	public static function activo(): bool {

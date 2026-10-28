@@ -1,22 +1,14 @@
 <?php
 /**
- * Pruebas de la v0.15 (entorno LOCAL): los catálogos de idiomas que trae el plugin.
- * Ejecutar desde app/public del site Local:
+ * Pruebas de las traducciones del repo (doc 62): el .pot recoge todos los textos del código, y los .po de es_ES,
+ * gl_ES, eu, ca y ca_valencia conservan los marcadores y las etiquetas de cada original.
  *
  *   wp eval-file <ruta completa>/wp-content/plugins/asde-area-privada/tests/idiomas-catalogos.php
  *
- * Comprueba que languages/es.php está al día con el código, que catalán, euskera y gallego
- * traducen todos los textos con los mismos marcadores y etiquetas, y que los JavaScript piden sus
- * textos con asdeT(). No toca nada del sitio.
+ * Lee traducciones/ del repo (C:/Proyectos/GestorCRM/traducciones; otra ruta con ASDE_REPO_TRADUCCIONES). Si no está,
+ * no comprueba nada. Solo lee: no cambia nada del sitio.
  */
 defined( 'ABSPATH' ) || exit;
-
-use AsdeBalears\AreaPrivada\Frontend\Menu;
-use AsdeBalears\AreaPrivada\Frontend\Views\AccesoView;
-use AsdeBalears\AreaPrivada\Idiomas\Idioma;
-use AsdeBalears\AreaPrivada\Idiomas\Textos;
-use AsdeBalears\AreaPrivada\Idiomas\TextosJs;
-use AsdeBalears\AreaPrivada\Idiomas\Traducciones;
 
 $fails = 0;
 $ok    = function ( $cond, string $label ) use ( &$fails ) {
@@ -25,103 +17,116 @@ $ok    = function ( $cond, string $label ) use ( &$fails ) {
 	}
 	echo ( $cond ? 'OK   ' : 'FAIL ' ), $label, "\n";
 };
-$lista = static fn( array $t, int $n = 5 ): string => implode( ' | ', array_slice( array_map( static fn( $x ) => '«' . $x . '»', $t ), 0, $n ) );
 
-if ( ! is_readable( ASDE_AP_DIR . 'languages/es.php' ) ) {
-	// Desde la v0.59.3 los catálogos no viajan en el paquete (revisión de WordPress.org): están en idiomas-archivo/ del repo.
-	echo "OK   los catálogos no van en el paquete: nada que comprobar
+$dom = 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts';
+$dir = rtrim( (string) ( getenv( 'ASDE_REPO_TRADUCCIONES' ) ?: 'C:/Proyectos/GestorCRM/traducciones' ), '/\\' ) . '/';
 
-TODO OK (no se ha tocado nada del sitio)
-";
+/** @return array<string, array{0:string, 1:string[]}> msgid => [msgid_plural, msgstr[]] */
+$leer = static function ( string $ruta ): array {
+	$out = array();
+	foreach ( preg_split( '/\n\n+/', str_replace( "\r\n", "\n", (string) file_get_contents( $ruta ) ) ) as $bloque ) {
+		if ( ! preg_match( '/^msgid\s+((?:".*"\n)+)(?:msgid_plural\s+((?:".*"\n)+))?((?:msgstr(?:\[\d\])?\s+(?:".*"\n?)+)+)/m', $bloque . "\n", $m ) ) {
+			continue;
+		}
+		$dec = static fn( string $x ): string => (string) json_decode( '"' . implode( '', array_map( static fn( $l ) => substr( trim( $l ), 1, -1 ), explode( "\n", trim( $x ) ) ) ) . '"' );
+		$id  = $dec( $m[1] );
+		if ( '' === $id ) {
+			continue;
+		}
+		preg_match_all( '/msgstr(?:\[\d\])?\s+((?:".*"\n?)+)/', $m[3], $mm );
+		$out[ $id ] = array( '' !== $m[2] ? $dec( $m[2] ) : '', array_map( $dec, $mm[1] ) );
+	}
+	return $out;
+};
+$marcadores = static function ( string $s ): array {
+	preg_match_all( '/%(?:(\d+)\$)?([sdfu])/', str_replace( '%%', '', $s ), $m, PREG_SET_ORDER );
+	$r = array();
+	foreach ( $m as $i => $x ) {
+		$r[] = ( '' !== $x[1] ? $x[1] : (string) ( $i + 1 ) ) . $x[2];
+	}
+	sort( $r );
+	return $r;
+};
+$etiquetas = static function ( string $s ): array {
+	preg_match_all( '/<[^>]+>/', $s, $m );
+	sort( $m[0] );
+	return $m[0];
+};
+
+if ( ! is_file( $dir . $dom . '.pot' ) ) {
+	echo "OK   (sin traducciones/ en esta máquina: nada que comprobar)\n";
+	echo "\nTODO OK (el sitio queda como estaba)\n";
 	return;
 }
-$es = require ASDE_AP_DIR . 'languages/es.php';
 
-echo "== Parte A · La lista de textos (languages/es.php) ==\n";
-$codigo = Textos::todos( ASDE_AP_DIR );
-$sobran = array_diff_key( $es, $codigo );
-$faltan = array_diff_key( $codigo, $es );
-$ok( ! $faltan, 'están todos los textos del código' . ( $faltan ? ': faltan ' . count( $faltan ) . ' (' . $lista( array_keys( $faltan ) ) . '); regenérala con herramientas/generar-es.php' : '' ) );
-$ok( ! $sobran, 'y ninguno que el código ya no use' . ( $sobran ? ': sobran ' . $lista( array_keys( $sobran ) ) : '' ) );
-$ok( count( $es ) > 1500, 'son más de 1.500 textos (' . count( $es ) . ')' );
-
-echo "\n== Parte B · Catalán, euskera y gallego ==\n";
-$permitidas = Traducciones::etiquetas_permitidas();
-$etiquetas  = static function ( string $t ): array {
-	preg_match_all( '/<\/?([a-z]+)/i', $t, $m );
-	$o = array_map( 'strtolower', $m[1] );
-	sort( $o );
-	return $o;
-};
-foreach ( array( 'ca', 'eu', 'gl' ) as $cod ) {
-	$fichero = ASDE_AP_DIR . "languages/$cod.php";
-	$cat     = is_readable( $fichero ) ? require $fichero : null;
-	$ok( is_array( $cat ), "$cod: el catálogo existe" );
-	if ( ! is_array( $cat ) ) {
-		continue;
-	}
-	$sin  = array_keys( array_filter( $es, static fn( $g, $t ) => '' === trim( (string) ( $cat[ $t ] ?? '' ) ), ARRAY_FILTER_USE_BOTH ) );
-	$fuera = array_keys( array_diff_key( $cat, $es ) );
-	$marca = array();
-	$html  = array();
-	foreach ( $cat as $orig => $trad ) {
-		if ( ! Traducciones::mismos_marcadores( (string) $orig, (string) $trad ) ) {
-			$marca[] = $orig;
-		}
-		if ( $etiquetas( (string) $orig ) !== $etiquetas( (string) $trad ) || wp_kses( (string) $trad, $permitidas ) !== (string) $trad ) {
-			$html[] = $orig;
-		}
-	}
-	$ok( ! $sin, "$cod: traduce todos los textos" . ( $sin ? ' (faltan ' . count( $sin ) . ': ' . $lista( $sin ) . ')' : ' (' . count( $cat ) . ')' ) );
-	$ok( ! $fuera, "$cod: sin textos que ya no existen" . ( $fuera ? ': ' . $lista( $fuera ) : '' ) );
-	$ok( ! $marca, "$cod: cada traducción conserva los marcadores (%s, %d, %1\$s…)" . ( $marca ? ': ' . $lista( $marca ) : '' ) );
-	$ok( ! $html, "$cod: y las mismas etiquetas HTML, todas permitidas" . ( $html ? ': ' . $lista( $html ) : '' ) );
-}
-
-echo "\n== Parte C · JavaScript ==\n";
-$en_js = array();
-$sueltos = array();
-foreach ( glob( ASDE_AP_DIR . 'assets/js/*.js' ) as $f ) {
-	$js = (string) file_get_contents( $f );
-	preg_match_all( "/asdeT\(\s*'((?:[^'\\\\]|\\\\.)*)'/", $js, $m );
-	foreach ( $m[1] as $t ) {
-		$en_js[ stripslashes( $t ) ] = basename( $f );
-	}
-	// Literales con letras de castellano que no pasan por asdeT() (sin contar comentarios).
-	$sin_coment = preg_replace( array( '#/\*.*?\*/#s', '#^\s*//.*$#m' ), '', $js );
-	$sin_asdet  = preg_replace( "/asdeT\(\s*'(?:[^'\\\\]|\\\\.)*'/", '', $sin_coment );
-	preg_match_all( "/'([^'\\n]*[áéíóúñ¿¡][^'\\n]*)'/u", $sin_asdet, $s );
-	foreach ( $s[1] as $t ) {
-		$sueltos[] = basename( $f ) . ': ' . $t;
-	}
-}
-$no_lista = array_diff( array_keys( $en_js ), TextosJs::LISTA );
-$sin_uso  = array_diff( TextosJs::LISTA, array_keys( $en_js ) );
-$ok( count( $en_js ) > 25 && ! $no_lista, 'todo lo que piden los JS con asdeT() está en TextosJs::LISTA' . ( $no_lista ? ': ' . $lista( $no_lista ) : '' ) );
-$ok( ! $sin_uso, 'y la lista no tiene textos que ningún JS use' . ( $sin_uso ? ': ' . $lista( $sin_uso ) : '' ) );
-$ok( ! $sueltos, 'no quedan textos en castellano escritos a mano en los JS' . ( $sueltos ? ': ' . $lista( $sueltos ) : '' ) );
-
-echo "\n== Parte D · En uso ==\n";
 try {
-	Traducciones::olvidar();
-	Idioma::forzar( 'ca' );
-	$ok( 'Les meves dades' === asde_t( 'Mis datos' ) && 'Inici' === Menu::plano( null )['area'], 'en catalán: «Mis datos» es «Les meves dades» y el menú empieza por «Inici»' );
-	$ok( '1 persona' === sprintf( asde_n( '%d persona', '%d personas', 1 ), 1 ) && '3 persones' === sprintf( asde_n( '%d persona', '%d personas', 3 ), 3 ), 'los plurales: «1 persona», «3 persones»' );
-	Idioma::forzar( 'eu' );
-	$js = TextosJs::script();
-	$ok( str_contains( $js, '"Cerrar":"Itxi"' ) && str_contains( $js, 'window.asdeT=' ), 'los JS reciben sus textos en euskera («Cerrar» → «Itxi»)' );
-	Idioma::forzar( 'gl' );
-	wp_set_current_user( 0 );
-	$h = ( new AccesoView() )->render();
-	$ok( str_contains( $h, 'Contrasinal' ) && str_contains( $h, 'Entrar' ) && ! str_contains( $h, '>Contraseña<' ), 'la pantalla de acceso sale en gallego («Contrasinal»)' );
-	Idioma::forzar( 'es' );
-	$ok( 'Mis datos' === asde_t( 'Mis datos' ), 'y en castellano, el texto de siempre' );
+	echo "== Parte A · El .pot recoge los textos del código ==\n";
+	$pot = $leer( $dir . $dom . '.pot' );
+	$ok( count( $pot ) > 4000, 'el .pot tiene más de 4.000 textos (' . count( $pot ) . ')' );
+	$en_codigo = array();
+	$it = new RecursiveIteratorIterator( new RecursiveDirectoryIterator( ASDE_AP_DIR, FilesystemIterator::SKIP_DOTS ) );
+	foreach ( $it as $f ) {
+		$p = str_replace( '\\', '/', $f->getPathname() );
+		if ( ! str_ends_with( $p, '.php' ) || str_contains( $p, '/tests/' ) || str_contains( $p, '/herramientas/' ) ) {
+			continue;
+		}
+		$tk = token_get_all( (string) file_get_contents( $p ) );
+		for ( $i = 0, $n = count( $tk ); $i < $n; $i++ ) {
+			if ( ! is_array( $tk[ $i ] ) || T_STRING !== $tk[ $i ][0] || ! in_array( $tk[ $i ][1], array( '__', '_e', 'esc_html__', 'esc_html_e', 'esc_attr__', 'esc_attr_e', '_n' ), true ) ) {
+				continue;
+			}
+			$j = $i + 1;
+			while ( isset( $tk[ $j ] ) && is_array( $tk[ $j ] ) && T_WHITESPACE === $tk[ $j ][0] ) {
+				++$j;
+			}
+			++$j;
+			while ( isset( $tk[ $j ] ) && is_array( $tk[ $j ] ) && T_WHITESPACE === $tk[ $j ][0] ) {
+				++$j;
+			}
+			if ( isset( $tk[ $j ] ) && is_array( $tk[ $j ] ) && T_CONSTANT_ENCAPSED_STRING === $tk[ $j ][0] && "'" === $tk[ $j ][1][0] ) {
+				$en_codigo[ str_replace( array( '\\\\', "\\'" ), array( '\\', "'" ), substr( $tk[ $j ][1], 1, -1 ) ) ] = $p;
+			}
+		}
+	}
+	$faltan = array_diff_key( $en_codigo, $pot );
+	$ok( ! $faltan, 'todo texto del código está en el .pot (se regenera con herramientas/generar-po.php)' . ( $faltan ? ': ' . implode( ' | ', array_slice( array_keys( $faltan ), 0, 3 ) ) : '' ) );
+
+	echo "\n== Parte B · Los .po conservan marcadores y etiquetas ==\n";
+	foreach ( array( 'es_ES' => 0.99, 'gl_ES' => 0.95, 'eu' => 0.95, 'ca' => 0.95, 'ca_valencia' => 0.95 ) as $idioma => $minimo ) {
+		$ruta = $dir . $dom . '-' . $idioma . '.po';
+		if ( ! is_file( $ruta ) ) {
+			$ok( false, "existe $idioma.po" );
+			continue;
+		}
+		$po = $leer( $ruta );
+		$traducidos = 0;
+		$mal        = array();
+		foreach ( $po as $id => $d ) {
+			[ $plural, $strs ] = $d;
+			if ( '' === implode( '', $strs ) ) {
+				continue;
+			}
+			++$traducidos;
+			foreach ( $strs as $k => $t ) {
+				if ( '' === $t ) {
+					continue;
+				}
+				$origen = ( 1 === $k && '' !== $plural ) ? $plural : $id;
+				if ( $marcadores( $origen ) !== $marcadores( $t ) || $etiquetas( $origen ) !== $etiquetas( $t ) ) {
+					$mal[] = $id;
+				}
+			}
+		}
+		$ok( count( $po ) === count( $pot ), "$idioma.po tiene los mismos textos que el .pot" );
+		$ok( $traducidos / max( 1, count( $po ) ) >= $minimo, sprintf( '%s.po: %d%% traducido (mínimo %d%%)', $idioma, 100 * $traducidos / max( 1, count( $po ) ), 100 * $minimo ) );
+		$ok( ! $mal, "$idioma.po: mismos marcadores y mismas etiquetas HTML que el original" . ( $mal ? ' — mal: ' . implode( ' | ', array_slice( $mal, 0, 3 ) ) : '' ) );
+	}
+
+	echo "\n== Parte C · Los .po del repo no se cuelan en el paquete ==\n";
+	$ok( ! is_dir( ASDE_AP_DIR . 'languages' ) || array() === glob( ASDE_AP_DIR . 'languages/*.{po,mo,pot}', GLOB_BRACE ), 'languages/ del plugin sin ficheros de traducción' );
 } catch ( Throwable $e ) {
 	++$fails;
 	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";
-} finally {
-	Idioma::forzar( null );
-	Traducciones::olvidar();
 }
 
-echo $fails ? "\n$fails FALLOS\n" : "\nTODO OK (no se ha tocado nada del sitio)\n";
+echo $fails ? "\n$fails FALLOS\n" : "\nTODO OK (el sitio queda como estaba)\n";

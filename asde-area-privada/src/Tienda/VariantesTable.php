@@ -83,7 +83,7 @@ final class VariantesTable {
 		}
 		if ( ! preg_match( '/^\d{1,5}$/', $cantidad ) ) {
 			/* translators: %d: maximum quantity */
-			$errores[] = sprintf( __( 'Stock must be a whole number from 0 to %d (or "unlimited").', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), self::MAX_EXISTENCIAS );
+			$errores[] = sprintf( /* translators: %d: number */ __( 'Stock must be a whole number from 0 to %d (or "unlimited").', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), self::MAX_EXISTENCIAS );
 		}
 		$precio = ProductosTable::euros( (string) ( $d['precio'] ?? '' ) );
 		if ( false === $precio ) {

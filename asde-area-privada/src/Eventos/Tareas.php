@@ -311,7 +311,7 @@ final class Tareas {
 		}
 		if ( TareasTable::contar( $e['id'] ) >= TareasTable::MAX ) {
 			/* translators: %d: maximum number of tasks */
-			return new \WP_Error( 'asde_tareas', sprintf( __( 'At most %d tasks per event.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), TareasTable::MAX ) );
+			return new \WP_Error( 'asde_tareas', sprintf( /* translators: %d: number */ __( 'At most %d tasks per event.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), TareasTable::MAX ) );
 		}
 		$id = TareasTable::crear(
 			$e['id'],

@@ -56,7 +56,7 @@ wp_register_script( 'asde-imprimir', plugins_url( 'assets/js/imprimir.js', ASDE_
 <p class="resumen"><?php echo esc_html( $resumen ); ?></p>
 <?php if ( null !== ( $res['ronda'] ?? null ) ) : ?>
 	<?php /* translators: %s: round (2026-2027) */ ?>
-	<p class="aviso"><?php echo esc_html( sprintf( __( 'Fee for round %s, from Treasury: the amounts are those of each member\'s family (with their siblings).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $res['ronda'] ) ); ?></p>
+	<p class="aviso"><?php echo esc_html( sprintf( /* translators: %s: text */ __( 'Fee for round %s, from Treasury: the amounts are those of each member\'s family (with their siblings).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $res['ronda'] ) ); ?></p>
 <?php endif; ?>
 <?php foreach ( $res['avisos'] as $aviso ) : ?>
 	<p class="aviso"><?php echo esc_html( $aviso ); ?></p>
@@ -102,7 +102,7 @@ wp_register_script( 'asde-imprimir', plugins_url( 'assets/js/imprimir.js', ASDE_
 	</table>
 <?php endif; ?>
 <?php /* translators: %s: date and time */ ?>
-<p class="pie"><?php echo esc_html( sprintf( __( 'Printed from the private area on %s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), wp_date( 'd/m/Y H:i' ) ) ); ?></p>
+<p class="pie"><?php echo esc_html( sprintf( /* translators: %s: text */ __( 'Printed from the private area on %s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), wp_date( 'd/m/Y H:i' ) ) ); ?></p>
 <?php if ( ! $marco ) { wp_print_scripts( 'asde-imprimir' ); } ?>
 </body>
 </html>

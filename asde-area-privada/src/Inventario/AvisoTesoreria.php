@@ -45,7 +45,7 @@ final class AvisoTesoreria {
 
 	public static function asunto( array $lista ): string {
 		/* translators: 1: name of the group, 2: list number */
-		return sprintf( __( '[%1$s] Shopping list %2$s awaiting your approval', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Grupo::nombre(), ComprasTable::numero( $lista ) );
+		return sprintf( /* translators: 1: text, 2: text */ __( '[%1$s] Shopping list %2$s awaiting your approval', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Grupo::nombre(), ComprasTable::numero( $lista ) );
 	}
 
 	/** HTML del email (el envío y la vista previa del registro usan la misma plantilla). */

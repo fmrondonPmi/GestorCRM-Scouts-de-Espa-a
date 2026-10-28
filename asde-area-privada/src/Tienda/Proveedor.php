@@ -142,7 +142,7 @@ final class Proveedor {
 		$nombre = trim( sanitize_text_field( $nombre ) );
 		if ( '' === $nombre ) {
 			/* translators: %s: date */
-			$nombre = sprintf( __( 'Order %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), wp_date( 'd/m/Y' ) );
+			$nombre = sprintf( /* translators: %s: text */ __( 'Order %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), wp_date( 'd/m/Y' ) );
 		}
 		$id = ProveedorTable::crear( $nombre, self::lineas_de( $elegidos ), count( $elegidos ) );
 		if ( ! $id ) {

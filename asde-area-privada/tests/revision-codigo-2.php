@@ -108,16 +108,16 @@ try {
 	$wpdb->update( Solicitudes::table(), array( 'revisada_en' => gmdate( 'Y-m-d H:i:s', time() - 31 * DAY_IN_SECONDS ) ), array( 'id' => $vieja ) ); // phpcs:ignore WordPress.DB
 	Solicitudes::purgar();
 	$ok( '' === Solicitudes::obtener( $vieja )['datos']['email'] && 'reciente.rc2@example.invalid' === Solicitudes::obtener( $reciente )['datos']['email'], 'a los 30 días de rechazarla, purgar() vacía lo escrito (la pendiente reciente conserva lo suyo)' );
-	$ok( ! isset( \AsdeBalears\AreaPrivada\Idiomas\Traducciones::catalogo( 'ca' )['Cuota anual'] ) || ( 'Nadie la revisó en 90 días: rechazada automáticamente.' !== Idioma::en( 'ca', static fn() => asde_t( Solicitudes::MOTIVO_CADUCADA ) ) ), 'el motivo se traduce al mostrarlo' ); // Sin catálogos en el paquete (v0.59.3) no hay nada que traducir.
+	$ok( 'Nadie la revisó en 90 días: rechazada automáticamente.' !== Idioma::en( 'ca', static fn() => asde_guardado( Solicitudes::MOTIVO_CADUCADA ) ) && 'Nadie la revisó en 90 días: rechazada automáticamente.' === asde_guardado( Solicitudes::MOTIVO_CADUCADA ), 'el motivo se traduce al mostrarlo' );
 
 	echo "\n== Parte B · RC-USU-3: textos de «sin sección» con Intendencia ==\n";
 	$f = (string) file_get_contents( dirname( __DIR__ ) . '/templates/alta-scouters/formulario.php' );
 	$l = (string) file_get_contents( dirname( __DIR__ ) . '/templates/solicitudes/listado.php' );
-	$ok( str_contains( $f, "asde_e( 'Soy voluntario/a sin sección (Secretaría, Coordinación, Tesorería o Intendencia)' )" ), 'la etiqueta del formulario de alta de scouters nombra Intendencia' );
-	$ok( str_contains( $l, '(Secretaría, Coordinación, Tesorería, Intendencia)' ), 'la ayuda del listado de solicitudes también' );
+	$ok( str_contains( $f, 'I am a volunteer without a section (Secretary\\\'s office, Coordination, Treasury or Quartermaster)' ), 'la etiqueta del formulario de alta de scouters nombra Intendencia' );
+	$ok( str_contains( $l, 'Treasury, Quartermaster) they ask for' ), 'la ayuda del listado de solicitudes también' );
 	foreach ( array( 'ca', 'eu', 'gl' ) as $idioma ) {
-		$t = Idioma::en( $idioma, static fn() => asde_t( 'Soy voluntario/a sin sección (Secretaría, Coordinación, Tesorería o Intendencia)' ) );
-		$ok( ! isset( \AsdeBalears\AreaPrivada\Idiomas\Traducciones::catalogo( $idioma )['Cuota anual'] ) || ( 'Soy voluntario/a sin sección (Secretaría, Coordinación, Tesorería o Intendencia)' !== $t ), "y está traducida ($idioma)" ); // Sin catálogos en el paquete (v0.59.3) no hay nada que traducir.
+		$t = Idioma::en( $idioma, static fn() => __( 'I am a volunteer without a section (Secretary\'s office, Coordination, Treasury or Quartermaster)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
+		$ok( 'Soy voluntario/a sin sección (Secretaría, Coordinación, Tesorería o Intendencia)' !== $t, "y está traducida ($idioma)" );
 	}
 
 	$ok( 0 === $cortadas, 'ninguna consulta ha salido hacia el CRM real' );

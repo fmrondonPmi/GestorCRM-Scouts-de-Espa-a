@@ -77,7 +77,7 @@ $total_s = array_sum( array_column( $libro['resumen'], 'salidas' ) );
 	<?php elseif ( $banco && $banco_inicial ) : ?>
 		<details class="asde-caja-anular">
 			<?php /* translators: 1: date, 2: amount */ ?>
-			<summary><?php echo esc_html( sprintf( __( 'Bank opening balance: %2$s on %1$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $fecha( $banco_inicial['fecha'] ), $euros( (float) $banco_inicial['importe'] ) ) ); ?></summary>
+			<summary><?php echo esc_html( sprintf( /* translators: 2: text, 1: text */ __( 'Bank opening balance: %2$s on %1$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $fecha( $banco_inicial['fecha'] ), $euros( (float) $banco_inicial['importe'] ) ) ); ?></summary>
 			<form method="post" action="<?php echo esc_url( $url_caja ); ?>" class="asde-form__fila asde-form__fila--una-linea">
 				<?php wp_nonce_field( 'asde_caja' ); ?>
 				<input type="hidden" name="asde_action" value="anular">

@@ -75,7 +75,7 @@ $ok( 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' === $dominio_cab, 'el
 echo "\n── A. Textos traducidos que se imprimen\n";
 $inseguros = array();
 $escapan   = array_flip( array( 'esc_html', 'esc_attr', 'esc_js', 'esc_url', 'esc_textarea', 'esc_url_raw', 'wp_kses_post', 'wp_kses', 'absint', 'intval', 'number_format_i18n', 'wp_json_encode', 'sanitize_text_field', 'sanitize_key' ) );
-$objetivo  = array_flip( array( 'asde_t', 'asde_a', 'asde_h', 'asde_js' ) );
+$objetivo  = array_flip( array( '__', '_n', 'asde_guardado' ) );
 foreach ( $todos as $fichero ) {
 	if ( str_contains( $fichero, '/templates/email/' ) ) {
 		continue; // Los emails llevan su propio phpcs:ignore (HTML de correo con estilos en línea).
@@ -124,7 +124,7 @@ foreach ( $todos as $fichero ) {
 		}
 	}
 }
-$ok( ! $inseguros, 'ningún asde_t/asde_a/asde_h/asde_js se imprime sin escapar (esc_html, esc_attr, wp_kses_post…)' . ( $inseguros ? ': ' . implode( ', ', array_slice( $inseguros, 0, 8 ) ) : '' ) );
+$ok( ! $inseguros, 'ningún __()/_n()/asde_guardado() se imprime sin escapar (esc_html, esc_attr, wp_kses_post…)' . ( $inseguros ? ': ' . implode( ', ', array_slice( $inseguros, 0, 8 ) ) : '' ) );
 
 // ── B. Comentarios «translators:» y marcadores numerados ─────────────────────
 echo "\n── B. Marcadores en los textos traducibles de WordPress\n";

@@ -536,7 +536,7 @@ final class Servicio {
 			return new \WP_Error( 'asde_evento', __( 'Enter how many people are travelling, the places on each bus and what one costs.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		/* translators: 1: number of buses, 2: price of each */
-		$concepto = sprintf( __( 'Buses (%1$d × %2$s)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $n, \AsdeBalears\AreaPrivada\Tesoreria\Calculadora::euros( $precio ) );
+		$concepto = sprintf( /* translators: 1: number, 2: text */ __( 'Buses (%1$d × %2$s)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $n, \AsdeBalears\AreaPrivada\Tesoreria\Calculadora::euros( $precio ) );
 		return self::anadir_partida( $e, $a, PartidasTable::GASTO, $concepto, 'total', '', $n * $precio );
 	}
 

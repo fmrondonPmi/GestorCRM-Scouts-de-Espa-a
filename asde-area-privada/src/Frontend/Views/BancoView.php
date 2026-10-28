@@ -263,7 +263,7 @@ final class BancoView extends TesoreriaBaseView {
 		$opciones = array(
 			'titulo'    => __( 'Bank transactions', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . ' · ' . Grupo::nombre(),
 			/* translators: 1: income, 2: expenses, 3: date */
-			'subtitulo' => sprintf( __( 'Income %1$s · expenses %2$s · generated on %3$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Calculadora::euros( round( $ingresos, 2 ) ), Calculadora::euros( round( $gastos, 2 ) ), wp_date( 'd/m/Y' ) ),
+			'subtitulo' => sprintf( /* translators: 1: text, 2: text, 3: text */ __( 'Income %1$s · expenses %2$s · generated on %3$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Calculadora::euros( round( $ingresos, 2 ) ), Calculadora::euros( round( $gastos, 2 ) ), wp_date( 'd/m/Y' ) ),
 			'tipos'     => array( 'texto', 'texto', 'texto', 'texto', 'texto', 'euros', 'texto', 'texto', 'texto', 'texto', 'texto', 'texto' ),
 			'totales'   => array( __( 'Total', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), sprintf( /* translators: %d: number */ _n( '%d transaction', '%d transactions', count( $filas ) , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), count( $filas ) ), '', '', '', round( $ingresos + $gastos, 2 ), '', '', '', '', '', '' ),
 		);

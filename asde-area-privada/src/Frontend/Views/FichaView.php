@@ -335,7 +335,7 @@ final class FichaView extends View {
 			case 'membresia_nueva':
 				$r = $altas->nueva_membresia( $p, $valores['seccion'], $valores['fecha'] );
 				/* translators: 1: name, 2: section, 3: date */
-				$ok = sprintf( __( 'New membership in the CRM: %1$s, in %2$s from %3$s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $nombre, esc_html( Secciones::nombre( $valores['seccion'] ) ), $fecha );
+				$ok = sprintf( /* translators: 1: text, 2: text, 3: text */ __( 'New membership in the CRM: %1$s, in %2$s from %3$s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $nombre, esc_html( Secciones::nombre( $valores['seccion'] ) ), $fecha );
 				break;
 			case 'membresia_baja':
 				$familia = self::familia( $p );
@@ -343,7 +343,7 @@ final class FichaView extends View {
 				$tutores = (bool) Usuarios::tutores_de( $p->num_socio_asde );
 				$r       = $altas->baja( $p, $valores['fecha'], $valores['motivo'] );
 				/* translators: 1: name, 2: date */
-				$ok = sprintf( __( '%1$s has been withdrawn in the CRM as of %2$s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $nombre, $fecha );
+				$ok = sprintf( /* translators: 1: text, 2: text */ __( '%1$s has been withdrawn in the CRM as of %2$s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $nombre, $fecha );
 				if ( $cuenta ) {
 					$ok .= ' ' . __( 'Their website sign-in account can no longer sign in.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				}
@@ -352,13 +352,13 @@ final class FichaView extends View {
 				}
 				if ( '' !== $familia ) {
 					/* translators: %s: family number */
-					$ok .= ' ' . sprintf( __( 'They stop counting in the fee of family no. %s: Treasury will see it in "Recent withdrawals".', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), esc_html( $familia ) );
+					$ok .= ' ' . sprintf( /* translators: %s: text */ __( 'They stop counting in the fee of family no. %s: Treasury will see it in "Recent withdrawals".', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), esc_html( $familia ) );
 				}
 				if ( is_array( $r ) ) {
 					// P-90: aviso por email a Tesorería y a la familia (nunca bloquea la baja ya hecha).
 					$av  = AvisoBaja::enviar( $p, '' !== $valores['fecha'] ? $valores['fecha'] : wp_date( 'Y-m-d' ), $valores['motivo'], $familia );
 					/* translators: 1: emails to Treasury, 2: emails to the family */
-					$ok .= ' ' . sprintf( __( 'Email notices: %1$d to Treasury and %2$d to the family.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $av['tesoreria'], $av['familia'] );
+					$ok .= ' ' . sprintf( /* translators: 1: number, 2: number */ __( 'Email notices: %1$d to Treasury and %2$d to the family.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $av['tesoreria'], $av['familia'] );
 					if ( $av['familia_omitida'] ) {
 						$ok .= ' ' . __( 'Because of the reason for the withdrawal, the family has not been written to.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 					} elseif ( $av['sin_email_familia'] ) {
@@ -366,19 +366,19 @@ final class FichaView extends View {
 					}
 					if ( $av['errores'] ) {
 						/* translators: %d: emails that were not sent */
-						$ok .= ' ' . sprintf( __( '%d could not be sent (see Users → Emails).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $av['errores'] );
+						$ok .= ' ' . sprintf( /* translators: %d: number */ __( '%d could not be sent (see Users → Emails).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $av['errores'] );
 					}
 				}
 				break;
 			case 'membresia_seccion':
 				$r = $altas->cambio_seccion( $p, $valores['seccion'], $valores['fecha'] );
 				/* translators: 1: name, 2: new section, 3: date */
-				$ok = sprintf( __( '%1$s moves to %2$s as of %3$s. The previous membership is closed with the reason "change of section".', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $nombre, esc_html( Secciones::nombre( $valores['seccion'] ) ), $fecha );
+				$ok = sprintf( /* translators: 1: text, 2: text, 3: text */ __( '%1$s moves to %2$s as of %3$s. The previous membership is closed with the reason "change of section".', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $nombre, esc_html( Secciones::nombre( $valores['seccion'] ) ), $fecha );
 				break;
 			default: // poner_documento
 				$r = $altas->poner_documento( $p, $valores['documento'], '1' === $this->post( 'confirmo' ) );
 				/* translators: %s: name */
-				$ok = sprintf( __( 'Document saved on %s\'s record.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $nombre );
+				$ok = sprintf( /* translators: %s: text */ __( 'Document saved on %s\'s record.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $nombre );
 				if ( is_array( $r ) && ( null === $r['otros'] || $r['otros'] > 0 ) ) {
 					$ok .= ' ' . __( 'That document is also registered in another Scouts de España group or organisation.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				}
@@ -414,17 +414,17 @@ final class FichaView extends View {
 			$this->redirect( $this->url( 'ficha', array( 'socio' => $socio ) ) );
 		}
 		/* translators: %s: name */
-		$ok = sprintf( __( '%s no longer appears on the website. Nothing has changed in the CRM.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), esc_html( $p->nombre_completo() ) );
+		$ok = sprintf( /* translators: %s: text */ __( '%s no longer appears on the website. Nothing has changed in the CRM.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), esc_html( $p->nombre_completo() ) );
 		if ( '' !== $r['familia'] ) {
 			/* translators: %s: family number */
-			$ok .= ' ' . sprintf( __( 'Has left family no. %s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), esc_html( $r['familia'] ) );
+			$ok .= ' ' . sprintf( /* translators: %s: text */ __( 'Has left family no. %s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), esc_html( $r['familia'] ) );
 		}
 		if ( $r['cuenta'] ) {
 			$ok .= ' ' . __( 'Their sign-in account has been deactivated.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
 		if ( $r['familiares'] ) {
 			/* translators: 1: family accounts, 2: of which, deactivated */
-			$ok .= ' ' . sprintf( __( 'No longer in %1$d family account(s); %2$d were deactivated because they do not represent anyone else.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $r['familiares'], $r['desactivadas'] );
+			$ok .= ' ' . sprintf( /* translators: 1: number, 2: number */ __( 'No longer in %1$d family account(s); %2$d were deactivated because they do not represent anyone else.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $r['familiares'], $r['desactivadas'] );
 		}
 		Notices::add( 'success', $ok );
 		$this->redirect( $this->url( 'personas', array( 'ver' => 'inactivas' ) ) );

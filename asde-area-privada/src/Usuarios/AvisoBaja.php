@@ -110,9 +110,9 @@ final class AvisoBaja {
 	public static function asunto( string $para ): string {
 		return self::TESORERIA === $para
 			/* translators: %s: name of the group */
-			? sprintf( __( '[%s] Withdrawal of a member in the CRM', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Grupo::nombre() )
+			? sprintf( /* translators: %s: text */ __( '[%s] Withdrawal of a member in the CRM', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Grupo::nombre() )
 			/* translators: %s: name of the group */
-			: sprintf( __( '[%s] Confirmation of withdrawal from the group', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Grupo::nombre() );
+			: sprintf( /* translators: %s: text */ __( '[%s] Confirmation of withdrawal from the group', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Grupo::nombre() );
 	}
 
 	/** HTML del email (el envío y la vista previa del registro usan la misma plantilla). */

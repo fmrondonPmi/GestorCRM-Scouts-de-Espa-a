@@ -22,6 +22,8 @@ final class Idioma {
 
 	private static ?string $sugerido = null;
 
+	private static bool $forzado = false;
+
 	/** Idioma de esta petición, para el atributo `lang` de HTML («es-ES»). */
 	public static function actual(): string {
 		return str_replace( '_', '-', determine_locale() );
@@ -40,6 +42,17 @@ final class Idioma {
 	/** Idioma de WordPress que corresponde a un código (también los antiguos de dos letras). */
 	public static function normalizar( string $codigo ): string {
 		return self::ANTIGUOS[ $codigo ] ?? $codigo;
+	}
+
+	/** Fuerza un idioma hasta que se vuelva a llamar (null: deja de forzarlo). Lo usan las pruebas. */
+	public static function forzar( ?string $codigo ): void {
+		if ( self::$forzado ) {
+			restore_previous_locale();
+			self::$forzado = false;
+		}
+		if ( null !== $codigo && self::es_valido( $codigo ) && switch_to_locale( self::normalizar( $codigo ) ) ) {
+			self::$forzado = true;
+		}
 	}
 
 	/**

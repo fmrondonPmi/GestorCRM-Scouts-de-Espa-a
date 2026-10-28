@@ -56,7 +56,7 @@ $ronda = $res['ronda'] ?? null;
 	<?php endif; ?>
 	<?php if ( null !== $ronda ) : ?>
 		<?php /* translators: %s: round (2026-2027) */ ?>
-		<p class="asde-help"><?php echo esc_html( sprintf( __( 'Fee for round %s, from Treasury: the amounts are those of each member\'s family (with their siblings).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $ronda ) ); ?></p>
+		<p class="asde-help"><?php echo esc_html( sprintf( /* translators: %s: text */ __( 'Fee for round %s, from Treasury: the amounts are those of each member\'s family (with their siblings).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $ronda ) ); ?></p>
 	<?php endif; ?>
 	<?php foreach ( $res['avisos'] as $aviso ) : ?>
 		<div class="asde-notice asde-notice--warning" role="status"><?php echo esc_html( $aviso ); ?></div>

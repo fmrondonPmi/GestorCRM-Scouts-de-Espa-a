@@ -121,6 +121,7 @@ msgstr " · esdeveniment «%s»"
 msgid " · last activity %d s ago"
 msgstr " · última activitat fa %d s"
 
+#. translators: 1: text, 2: text
 #: src/Accesos/PermisosRol.php:173
 #, php-format
 msgid "\"%1$s\" first needs: %2$s."
@@ -156,11 +157,13 @@ msgstr "«%s» no existeix"
 msgid "\"%s\" does not have its shortcode"
 msgstr "«%s» no té el seu shortcode"
 
+#. translators: %s: text
 #: src/Tesoreria/Banco/Conciliacion.php:222
 #, php-format
 msgid "\"%s\" is an expense type and this transaction is an income."
 msgstr "«%s» és un tipus de despesa i aquest moviment és un ingrés."
 
+#. translators: %s: text
 #: src/Tesoreria/Banco/Conciliacion.php:220
 #, php-format
 msgid "\"%s\" is an income type and this transaction is an expense."
@@ -178,11 +181,13 @@ msgstr "«%s» torna a ser a l'inventari."
 msgid "\"%s\" is back in the shop."
 msgstr "«%s» torna a ser a la botiga."
 
+#. translators: %s: text
 #: src/ListaEspera/CamposExtra.php:179
 #, php-format
 msgid "\"%s\" is not a valid date."
 msgstr "«%s» no és una data vàlida."
 
+#. translators: %s: text
 #: src/ListaEspera/CamposExtra.php:170
 #, php-format
 msgid "\"%s\" must be a number."
@@ -194,6 +199,7 @@ msgstr "«%s» ha de ser un número."
 msgid "\"%s\" saved."
 msgstr "«%s» desat."
 
+#. translators: %s: text
 #: src/ListaEspera/CamposExtra.php:189
 #, php-format
 msgid "\"%s\" still needs to be filled in."
@@ -303,6 +309,7 @@ msgid_plural "%1$d orders included in \"%2$s\"."
 msgstr[0] "%1$d comanda inclosa a «%2$s»."
 msgstr[1] "%1$d comandes incloses a «%2$s»."
 
+#. translators: 1: number, 2: number
 #: templates/personas/listado.php:60
 #, php-format
 msgid "%1$d with an active membership · %2$d without an active membership"
@@ -320,6 +327,7 @@ msgstr "%1$s %%, fins al %2$s"
 msgid "%1$s (%2$s)"
 msgstr "%1$s (%2$s)"
 
+#. translators: 1: text, 2: number
 #: src/Menus/Recetario.php:93
 #, php-format
 msgid "%1$s (copy %2$d)"
@@ -331,6 +339,7 @@ msgstr "%1$s (còpia %2$d)"
 msgid "%1$s (until %2$s, %3$s %%)"
 msgstr "%1$s (fins al %2$s, %3$s %%)"
 
+#. translators: 1: text, 2: number
 #: src/Crm/SinergiaV41Client.php:530
 #, php-format
 msgid "%1$s answered HTTP %2$d without a valid response from the API."
@@ -342,6 +351,7 @@ msgstr "%1$s ha respost HTTP %2$d sense una resposta vàlida de l'API."
 msgid "%1$s by %2$s on %3$s."
 msgstr "%1$s per %2$s el %3$s."
 
+#. translators: 1: text, 2: text
 #: src/Frontend/Views/FichaView.php:346
 #, php-format
 msgid "%1$s has been withdrawn in the CRM as of %2$s."
@@ -382,6 +392,7 @@ msgstr "%1$s ja és soci/sòcia del grup, a %2$s des del %3$s."
 msgid "%1$s is already on the waiting list of %2$s. We have sent you an email with the link to see your details."
 msgstr "%1$s ja està a la llista d'espera del %2$s. T'hem enviat un email amb l'enllaç per veure les teves dades."
 
+#. translators: 1: text, 2: text, 3: text
 #: src/Frontend/Views/FichaView.php:376
 #, php-format
 msgid "%1$s moves to %2$s as of %3$s. The previous membership is closed with the reason \"change of section\"."
@@ -447,6 +458,7 @@ msgstr "%1$s · %2$s · a %3$s"
 msgid "%1$s · adjustment of %2$s: %3$s"
 msgstr "%1$s · ajust de %2$s: %3$s"
 
+#. translators: 1: text, 2: text, 3: text
 #: src/Frontend/Views/CajaView.php:127
 #, php-format
 msgid "%1$s · at the start %2$s · at the end %3$s"
@@ -490,6 +502,7 @@ msgid_plural "%1$s: %2$d rows read."
 msgstr[0] "%1$s: %2$d fila llegida."
 msgstr[1] "%1$s: %2$d files llegides."
 
+#. translators: 1: text, 2: text
 #: src/Sepa/Mandatos.php:299
 #, php-format
 msgid "%1$s: %2$s"
@@ -559,6 +572,7 @@ msgid_plural "%d changes were not applied: the CRM value has changed since they 
 msgstr[0] "%d canvi no s'ha aplicat: la dada del CRM ha canviat des que es va proposar. Revisa-ho i marca'l una altra vegada si vols aplicar-lo igualment."
 msgstr[1] "%d canvis no s'han aplicat: la dada del CRM ha canviat des que es van proposar. Revisa'ls i marca'ls una altra vegada si vols aplicar-los igualment."
 
+#. translators: %d: number
 #: templates/tesoreria/control.php:130
 #, php-format
 msgid "%d child"
@@ -586,6 +600,7 @@ msgstr "%d corregida"
 msgid "%d could not be corrected"
 msgstr "%d no s'han pogut corregir"
 
+#. translators: %d: number
 #: src/Frontend/Views/FichaView.php:369
 #, php-format
 msgid "%d could not be sent (see Users → Emails)."
@@ -607,6 +622,7 @@ msgid_plural "%d days left"
 msgstr[0] "Queda %d dia"
 msgstr[1] "Queden %d dies"
 
+#. translators: %d: number
 #: templates/tesoreria/familia.php:312
 #, php-format
 msgid "%d deleted"
@@ -652,6 +668,7 @@ msgid_plural "%d direct debits"
 msgstr[0] "%d càrrec"
 msgstr[1] "%d càrrecs"
 
+#. translators: %d: number
 #: src/Admin/DuplicadosPage.php:104
 #, php-format
 msgid "%d documento está en más de una ficha:"
@@ -1105,6 +1122,7 @@ msgstr "%s no hi va"
 msgid "%s items of equipment ticked"
 msgstr "%s materials marcats"
 
+#. translators: %s: text
 #: src/Frontend/Views/FichaView.php:417
 #, php-format
 msgid "%s no longer appears on the website. Nothing has changed in the CRM."
@@ -1581,6 +1599,7 @@ msgstr ""
 msgid "A lifeguard will be present"
 msgstr "Hi haurà un socorrista present"
 
+#. translators: %d: number
 #: src/Inventario/Servicio.php:137
 #, php-format
 msgid "A list can have at most %d items of equipment."
@@ -1734,7 +1753,7 @@ msgstr "Accés desactivat per a l'usuari %s: s'han esborrat la seva contrasenya 
 msgid "Access history"
 msgstr "Historial d'accessos"
 
-#: src/Frontend/Views/AccesosView.php:53 src/Idiomas/Guardados.php:155
+#: src/Frontend/Views/AccesosView.php:53 src/Idiomas/Guardados.php:164
 msgid "Access management"
 msgstr "Gestió d'accessos"
 
@@ -1742,7 +1761,7 @@ msgstr "Gestió d'accessos"
 msgid "Access request"
 msgstr "Sol·licitud d'accés"
 
-#: src/Domain/Modulos.php:52 src/Idiomas/Guardados.php:281 templates/area/inicio.php:170 templates/solicitudes/listado.php:25
+#: src/Domain/Modulos.php:52 src/Idiomas/Guardados.php:292 templates/area/inicio.php:170 templates/solicitudes/listado.php:25
 msgid "Access requests"
 msgstr "Sol·licituds d'accés"
 
@@ -1796,6 +1815,7 @@ msgstr "Compte (IBAN)"
 msgid "Account IBAN"
 msgstr "IBAN del compte"
 
+#. translators: %d: number
 #: src/Frontend/Views/AccesosView.php:236
 #, php-format
 msgid "Account deleted (%d)"
@@ -1809,7 +1829,7 @@ msgstr "Email del compte (desat xifrat)"
 msgid "Account holder's first name and surname"
 msgstr "Nom i cognoms del titular"
 
-#: src/Idiomas/Guardados.php:274 templates/area/inicio.php:193 templates/seguridad/pagina.php:14
+#: src/Idiomas/Guardados.php:285 templates/area/inicio.php:193 templates/seguridad/pagina.php:14
 msgid "Account security"
 msgstr "Seguretat del compte"
 
@@ -1837,6 +1857,7 @@ msgstr "Comptes tancats"
 msgid "Accounts closed on %1$s by %2$s: this is the final report. To change anything, Treasury must reopen them."
 msgstr "Comptes tancats el %1$s per %2$s: aquest és l'informe final. Per canviar alguna cosa, Tresoreria els ha de reobrir."
 
+#. translators: 1: number, 2: number
 #: src/Frontend/Views/SepaView.php:218
 #, php-format
 msgid "Accounts moved to the CRM records: %1$d. Authorisations cancelled whose account was deleted: %2$d."
@@ -1964,7 +1985,7 @@ msgstr ""
 msgid "Add item"
 msgstr "Afegeix un concepte"
 
-#: src/Idiomas/Guardados.php:65
+#: src/Idiomas/Guardados.php:66
 msgid "Add notes to health data"
 msgstr "Anotar a les dades de salut"
 
@@ -2012,6 +2033,7 @@ msgstr "Afegir variants"
 msgid "Added to the team."
 msgstr "Afegit a l'equip."
 
+#. translators: %d: number
 #: src/Tienda/ImportadorProductos.php:213
 #, php-format
 msgid "Adding this stock would exceed %d units."
@@ -2045,11 +2067,13 @@ msgstr "Ajust de %s registrat"
 msgid "Adjustment of %s recorded."
 msgstr "Ajust de %s registrat."
 
+#. translators: %s: text
 #: templates/tesoreria/familia.php:274
 #, php-format
 msgid "Adjustment of %s removed"
 msgstr "Ajust de %s eliminat"
 
+#. translators: %s: text
 #: src/Frontend/Views/TesoreriaView.php:435
 #, php-format
 msgid "Adjustment of %s removed. It remains in the family's history."
@@ -2095,7 +2119,7 @@ msgstr "Bestreta liquidada."
 msgid "Advances are given by Treasury."
 msgstr "Les bestretes les dona Tresoreria."
 
-#: src/Tesoreria/Config.php:44
+#: src/Idiomas/Guardados.php:79
 msgid "Adventure"
 msgstr "Aventura"
 
@@ -2183,11 +2207,11 @@ msgstr "Al·lèrgens"
 msgid "Allergies"
 msgstr "Al·lèrgies"
 
-#: src/Idiomas/Guardados.php:57
+#: src/Idiomas/Guardados.php:58
 msgid "Allergies and food"
 msgstr "Al·lèrgies i alimentació"
 
-#: src/Idiomas/Guardados.php:61
+#: src/Idiomas/Guardados.php:62
 msgid "Almond"
 msgstr "Ametlla"
 
@@ -2366,7 +2390,7 @@ msgstr "Un paràgraf opcional al principi i un altre al final de cada email (fin
 msgid "Annual family fee by number of children"
 msgstr "Anualitat familiar segons el nombre de fills"
 
-#: src/Idiomas/Guardados.php:114 templates/tesoreria/cuotas.php:66 templates/tesoreria/cuotas.php:74
+#: src/Idiomas/Guardados.php:118 templates/tesoreria/cuotas.php:66 templates/tesoreria/cuotas.php:74
 msgid "Annual fee"
 msgstr "Anualitat"
 
@@ -2382,6 +2406,7 @@ msgstr "Un altre tutor/a amb el seu propi compte"
 msgid "Another person from the group (exception, with a reason)"
 msgstr "Una altra persona del grup (excepció, amb motiu)"
 
+#. translators: %s: text
 #: src/Crm/Altas.php:425
 #, php-format
 msgid "Another record in your group already has this document (%s): it would be the same person twice. Check it before continuing."
@@ -2443,15 +2468,15 @@ msgstr ""
 msgid "Approve and send the invitation"
 msgstr "Aprova i envia la invitació"
 
-#: src/Idiomas/Guardados.php:70
+#: src/Idiomas/Guardados.php:71
 msgid "Approve or reject access requests"
 msgstr "Aprovar o rebutjar sol·licituds d'accés"
 
-#: src/Idiomas/Guardados.php:71
+#: src/Idiomas/Guardados.php:72
 msgid "Approve reimbursements"
 msgstr "Aprovar reintegraments"
 
-#: src/Idiomas/Guardados.php:69
+#: src/Idiomas/Guardados.php:70
 msgid "Approve the changes proposed by families"
 msgstr "Aprovar els canvis que proposen les famílies"
 
@@ -2463,7 +2488,7 @@ msgstr "Aprova les famílies i els socis que demanen entrar amb l'enllaç del gr
 msgid "Approve the selected"
 msgstr "Aprova els seleccionats"
 
-#: src/Idiomas/Guardados.php:68 src/Inventario/ComprasTable.php:38 src/Presupuestos/EstadosTable.php:26 src/Usuarios/Solicitudes.php:35
+#: src/Idiomas/Guardados.php:69 src/Inventario/ComprasTable.php:38 src/Presupuestos/EstadosTable.php:26 src/Usuarios/Solicitudes.php:35
 msgid "Approved"
 msgstr "Amb el vistiplau"
 
@@ -2517,7 +2542,7 @@ msgstr "Com a scouter veus els socis de les teves seccions."
 msgid "As it will appear in the families' bank (without accents)."
 msgstr "Com apareixerà al banc de les famílies (sense accents)."
 
-#: src/Idiomas/Guardados.php:101
+#: src/Idiomas/Guardados.php:105
 msgid "As mother, father or legal guardian, I authorise their participation in this Scout group activity, organised under the responsibility of its team of scouters, and I declare that I have read the information about the activity. I also authorise, in an emergency and if I cannot be reached, the team to take the medical, surgical or transfer decisions indicated by the health personnel."
 msgstr "Com a mare, pare o tutor/a legal, autoritzo la seva participació en aquesta activitat del grup escolta, organitzada sota la responsabilitat del seu equip de scouters, i declaro que he llegit la informació de l'activitat. Autoritzo també que, en cas d'urgència i si no se'm pot localitzar, l'equip prengui les decisions mèdiques, quirúrgiques o de trasllat que indiqui el personal sanitari."
 
@@ -2529,11 +2554,11 @@ msgstr "Com a part dels seus drets, el deutor està legitimat per al reembossame
 msgid "Ascending"
 msgstr "Ascendent"
 
-#: src/Idiomas/Guardados.php:229
+#: src/Idiomas/Guardados.php:239
 msgid "Ask sections and quartermasters for a budget chargeable to the camp"
 msgstr "Demanar pressupost a seccions i intendències imputables a l'acampada"
 
-#: src/Idiomas/Guardados.php:228
+#: src/Idiomas/Guardados.php:238
 msgid "Ask the bus companies for a quote and pre-book"
 msgstr "Demanar pressupost als autobusos i prereservar"
 
@@ -2549,7 +2574,7 @@ msgstr "Assigna"
 msgid "Assign no."
 msgstr "Assigna núm."
 
-#: src/Idiomas/Guardados.php:74
+#: src/Idiomas/Guardados.php:75
 msgid "Assign section, register in the CRM and delete"
 msgstr "Assignar secció, donar d'alta al CRM i esborrar"
 
@@ -2601,11 +2626,13 @@ msgstr "Almenys la meitat dels monitors ha de tenir la titulació de lleure: hi 
 msgid "At most %d activity types."
 msgstr "Com a màxim %d tipus d'activitat."
 
+#. translators: %d: number
 #: src/ListaEspera/CamposExtra.php:132
 #, php-format
 msgid "At most %d own fields."
 msgstr "Com a màxim, %d camps propis."
 
+#. translators: %d: number
 #: src/Eventos/Tareas.php:314
 #, php-format
 msgid "At most %d tasks per event."
@@ -2675,7 +2702,7 @@ msgstr "Autorització desada: referència <strong>%s</strong>. T'hem enviat un e
 msgid "Authorisation signed."
 msgstr "Autorització signada."
 
-#: src/Idiomas/Guardados.php:75
+#: src/Idiomas/Guardados.php:76
 msgid "Authorisations"
 msgstr "Autoritzacions"
 
@@ -2715,7 +2742,7 @@ msgstr "Assegurança mitjana ("
 msgid "Average insurance per member (€)"
 msgstr "Assegurança mitjana per associat (€)"
 
-#: src/Idiomas/Guardados.php:54
+#: src/Idiomas/Guardados.php:55
 msgid "Avocado"
 msgstr "Alvocat"
 
@@ -2759,11 +2786,11 @@ msgstr ""
 msgid "Badges"
 msgstr "Insígnies"
 
-#: src/Idiomas/Guardados.php:240
+#: src/Idiomas/Guardados.php:250
 msgid "Baked chicken with potatoes"
 msgstr "Pollastre al forn amb patates"
 
-#: src/Idiomas/Guardados.php:197
+#: src/Idiomas/Guardados.php:207
 msgid "Baked hake with lemon"
 msgstr "Lluç al forn amb llimona"
 
@@ -2783,7 +2810,7 @@ msgstr "Saldo en començar"
 msgid "Balance not counting the project's fundraising"
 msgstr "Saldo sense comptar la recaptació del projecte"
 
-#: src/Idiomas/Guardados.php:238
+#: src/Idiomas/Guardados.php:248
 msgid "Banana"
 msgstr "Plàtan"
 
@@ -2836,6 +2863,7 @@ msgstr "Les dades bancàries es desen a la fitxa del CRM de Scouts de España (a
 msgid "Bank fees"
 msgstr "Comissions bancàries"
 
+#. translators: 2: text, 1: text
 #: templates/tesoreria/libro-mayor.php:80
 #, php-format
 msgid "Bank opening balance: %2$s on %1$s"
@@ -2857,7 +2885,7 @@ msgstr "Els moviments del banc només els fan servir Secretaria, Coordinació i 
 msgid "Bank:"
 msgstr "Banc:"
 
-#: src/Idiomas/Guardados.php:95
+#: src/Idiomas/Guardados.php:99
 msgid "Barley"
 msgstr "Ordi"
 
@@ -2903,7 +2931,7 @@ msgstr "Remeses"
 msgid "Because of the reason for the withdrawal, the family has not been written to."
 msgstr "Pel motiu de la baixa, no s'ha escrit a la família."
 
-#: src/Idiomas/Guardados.php:94
+#: src/Idiomas/Guardados.php:98
 msgid "Beef"
 msgstr "Carn de vedella"
 
@@ -2911,7 +2939,7 @@ msgstr "Carn de vedella"
 msgid "Bills of exchange batches"
 msgstr "Remeses d'efectes"
 
-#: src/Idiomas/Guardados.php:150
+#: src/Idiomas/Guardados.php:159
 msgid "Biscuits"
 msgstr "Galetes"
 
@@ -2919,6 +2947,7 @@ msgstr "Galetes"
 msgid "Bizum"
 msgstr "Bizum"
 
+#. translators: 1: text, 2: text
 #: src/Tienda/Servicio.php:434
 #, php-format
 msgid "Bizum to %1$s, stating order no. %2$s as the description."
@@ -2930,7 +2959,7 @@ msgstr "Bizum al %1$s, indicant com a concepte el núm. de comanda %2$s."
 msgid "Bizum to the group's phone, stating order no. %s as the description."
 msgstr "Bizum al telèfon del grup, indicant com a concepte el núm. de comanda %s."
 
-#: src/Idiomas/Guardados.php:262
+#: src/Idiomas/Guardados.php:272
 msgid "Book the camp site"
 msgstr "Reservar el lloc d'acampada"
 
@@ -2948,11 +2977,11 @@ msgstr "Comprada"
 msgid "Bought: marked by %1$s on %2$s. What was bought was added to the inventory."
 msgstr "Comprada: la va marcar %1$s el %2$s. El que es va comprar es va sumar a l'inventari."
 
-#: src/Idiomas/Guardados.php:221
+#: src/Idiomas/Guardados.php:231
 msgid "Bread"
 msgstr "Pa"
 
-#: src/Idiomas/Guardados.php:222
+#: src/Idiomas/Guardados.php:232
 msgid "Breadcrumbs"
 msgstr "Pa ratllat"
 
@@ -3036,7 +3065,7 @@ msgstr "Pressupost: %s"
 msgid "Budgeted in expenses"
 msgstr "Pressupostat en despeses"
 
-#: src/Domain/Modulos.php:58 src/Frontend/Views/TesoreriaBaseView.php:32 src/Frontend/Views/TesoreriaBaseView.php:41 src/Idiomas/Guardados.php:246
+#: src/Domain/Modulos.php:58 src/Frontend/Views/TesoreriaBaseView.php:32 src/Frontend/Views/TesoreriaBaseView.php:41 src/Idiomas/Guardados.php:256
 msgid "Budgets"
 msgstr "Pressupostos"
 
@@ -3052,6 +3081,7 @@ msgstr "Partida d'autobusos afegida al pressupost."
 msgid "Buses"
 msgstr "Autobusos"
 
+#. translators: 1: number, 2: text
 #: src/Eventos/Servicio.php:539
 #, php-format
 msgid "Buses (%1$d × %2$s)"
@@ -3061,11 +3091,11 @@ msgstr "Autobusos (%1$d × %2$s)"
 msgid "Buy"
 msgstr "Comprar"
 
-#: src/Idiomas/Guardados.php:102
+#: src/Idiomas/Guardados.php:106
 msgid "Buy food and pack it"
 msgstr "Comprar el menjar i embalar-lo"
 
-#: src/Idiomas/Guardados.php:103
+#: src/Idiomas/Guardados.php:107
 msgid "Buy in the shop"
 msgstr "Comprar a la botiga"
 
@@ -3073,7 +3103,7 @@ msgstr "Comprar a la botiga"
 msgid "By"
 msgstr "Per"
 
-#: src/Idiomas/Guardados.php:241
+#: src/Idiomas/Guardados.php:251
 msgid "By branch: Castores, Lobatos, Scouts, Escultas, Rovers and Scouters."
 msgstr "Per branca: Castors, Llops, Scouts, Escultes, Rovers i Scouters."
 
@@ -3151,7 +3181,7 @@ msgstr "Columnes del CSV"
 msgid "CSV file"
 msgstr "Fitxer CSV"
 
-#: src/Idiomas/Guardados.php:82
+#: src/Idiomas/Guardados.php:85
 msgid "Caffeine"
 msgstr "Cafeïna"
 
@@ -3159,7 +3189,7 @@ msgstr "Cafeïna"
 msgid "Calculate"
 msgstr "Calcula"
 
-#: src/Idiomas/Guardados.php:86
+#: src/Idiomas/Guardados.php:89
 msgid "Calculates the total and the total per youth member."
 msgstr "Calcula el total i el total per educand."
 
@@ -3175,7 +3205,7 @@ msgstr "Calendari"
 msgid "Calendar saved."
 msgstr "Calendari desat."
 
-#: src/Eventos/Config.php:78 src/Eventos/Config.php:84 src/Idiomas/Guardados.php:47 src/Tesoreria/Config.php:53
+#: src/Eventos/Config.php:78 src/Eventos/Config.php:84 src/Idiomas/Guardados.php:47
 msgid "Camp"
 msgstr "Campament"
 
@@ -3247,7 +3277,7 @@ msgstr "Anul·la per canviar-lo"
 msgid "Cancellations · entry corrections"
 msgstr "Anul·lacions · correccions d'assentament"
 
-#: src/Eventos/EventosTable.php:43 src/Eventos/EventosTable.php:74 src/Fichas/Cambios.php:38 src/Idiomas/Guardados.php:67
+#: src/Eventos/EventosTable.php:43 src/Eventos/EventosTable.php:74 src/Fichas/Cambios.php:38 src/Idiomas/Guardados.php:68
 msgid "Cancelled"
 msgstr "Anul·lada"
 
@@ -3295,6 +3325,7 @@ msgstr "Cancel·lat. Motiu: %s"
 msgid "Cancel…"
 msgstr "Anul·la…"
 
+#. translators: %s: text
 #: src/Crm/SinergiaV41Client.php:521
 #, php-format
 msgid "Cannot connect to the CRM: %s"
@@ -3324,7 +3355,7 @@ msgid_plural "Careful: there are already %d units in the inventory. Do more real
 msgstr[0] "Compte: a l'inventari ja hi ha %d unitat. Segur que cal comprar-ne més?"
 msgstr[1] "Compte: a l'inventari ja hi ha %d unitats. Segur que cal comprar-ne més?"
 
-#: src/Idiomas/Guardados.php:320
+#: src/Idiomas/Guardados.php:331
 msgid "Carrot"
 msgstr "Pastanaga"
 
@@ -3332,6 +3363,7 @@ msgstr "Pastanaga"
 msgid "Cash"
 msgstr "Efectiu"
 
+#. translators: %s: text
 #: src/Caja/Automaticos.php:119
 #, php-format
 msgid "Cash advance · %s"
@@ -3345,10 +3377,11 @@ msgstr "Bestretes de caixa"
 msgid "Cash and general ledger"
 msgstr "Caixa i llibre major"
 
-#: src/Frontend/Views/TesoreriaBaseView.php:49 src/Idiomas/Guardados.php:83 templates/tesoreria/caja.php:45
+#: src/Frontend/Views/TesoreriaBaseView.php:49 src/Idiomas/Guardados.php:86 templates/tesoreria/caja.php:45
 msgid "Cash box"
 msgstr "Caixa"
 
+#. translators: %s: text
 #: src/Caja/Cajas.php:42
 #, php-format
 msgid "Cash box of %s"
@@ -3374,6 +3407,7 @@ msgstr "Arqueig desat amb la diferència com a ajust."
 msgid "Cash count saved: the cash box balances."
 msgstr "Arqueig desat: la caixa quadra."
 
+#. translators: %s: text
 #: src/Caja/LibroMayor.php:179
 #, php-format
 msgid "Cash count: counted %s"
@@ -3387,7 +3421,7 @@ msgstr "Quotes en efectiu"
 msgid "Cash machine"
 msgstr "Caixer automàtic"
 
-#: src/Idiomas/Guardados.php:64
+#: src/Idiomas/Guardados.php:65
 msgid "Cashew"
 msgstr "Anacard"
 
@@ -3423,7 +3457,7 @@ msgstr "Canvia"
 msgid "Change account or holder (sign another authorisation)"
 msgstr "Canvia de compte o de titular (signa una altra autorització)"
 
-#: src/Idiomas/Guardados.php:87
+#: src/Idiomas/Guardados.php:90
 msgid "Change fees, deadlines and federation cost"
 msgstr "Canviar quotes, terminis i cost federatiu"
 
@@ -3451,7 +3485,7 @@ msgstr "Canvia de secció al CRM"
 msgid "Change stock"
 msgstr "Canviar existències"
 
-#: src/Idiomas/Guardados.php:88
+#: src/Idiomas/Guardados.php:91
 msgid "Change the group's details (name, tax ID, address and province)"
 msgstr "Canviar les dades del grup (nom, CIF, adreça i província)"
 
@@ -3489,6 +3523,7 @@ msgstr "Canvis proposats en aquesta fitxa"
 msgid "Changes sent for approval: %s. We will notify you on this record when they are reviewed."
 msgstr "Canvis enviats per a la seva aprovació: %s. T'avisarem en aquesta fitxa quan es revisin."
 
+#. translators: %s: text
 #: templates/fichas/cambios.php:38
 #, php-format
 msgid "Changes to %s"
@@ -3530,11 +3565,11 @@ msgstr "Comprova i desa"
 msgid "Check that emails arrive:"
 msgstr ""
 
-#: src/Idiomas/Guardados.php:104
+#: src/Idiomas/Guardados.php:108
 msgid "Check that there are enough scouters with a food handler certificate"
 msgstr "Comprovar que hi ha prou scouters amb titulació de manipulador d'aliments"
 
-#: src/Idiomas/Guardados.php:265
+#: src/Idiomas/Guardados.php:275
 msgid "Check the attendees' medical allergies, medicines and the menu"
 msgstr "Revisar al·lèrgies mèdiques dels assistents, medicines i menú"
 
@@ -3542,15 +3577,15 @@ msgstr "Revisar al·lèrgies mèdiques dels assistents, medicines i menú"
 msgid "Check the details. On confirming, their record and membership are created in the Scouts de España CRM, and the CRM gives them their member no."
 msgstr "Revisa les dades. En confirmar es creen la seva fitxa i la seva membresia al CRM de Scouts de España, i el CRM li dona el número de soci/sòcia."
 
-#: src/Idiomas/Guardados.php:267
+#: src/Idiomas/Guardados.php:277
 msgid "Check the number of qualifications available / needed"
 msgstr "Revisar el nombre de títols disponibles / necessaris"
 
-#: src/Idiomas/Guardados.php:266
+#: src/Idiomas/Guardados.php:276
 msgid "Check the typical allergies of the group's youth members."
 msgstr "Revisar al·lèrgies típiques dels educands del grup."
 
-#: src/Idiomas/Guardados.php:141
+#: src/Idiomas/Guardados.php:148
 msgid "Check whether there is a special activity and book it"
 msgstr "Estudiar si hi ha activitat especial i encarregar-la"
 
@@ -3580,7 +3615,7 @@ msgstr "Llista de comprovació"
 msgid "Checks"
 msgstr "Comprovacions"
 
-#: src/Idiomas/Guardados.php:79
+#: src/Idiomas/Guardados.php:81
 msgid "Cheese sandwich"
 msgstr "Entrepà de formatge"
 
@@ -3588,15 +3623,15 @@ msgstr "Entrepà de formatge"
 msgid "Cheques · withdrawals"
 msgstr "Talons · reintegraments"
 
-#: src/Idiomas/Guardados.php:239
+#: src/Idiomas/Guardados.php:249
 msgid "Chicken"
 msgstr "Pollastre"
 
-#: src/Idiomas/Guardados.php:205
+#: src/Idiomas/Guardados.php:215
 msgid "Chicken drumsticks"
 msgstr "Cuixes de pollastre"
 
-#: src/Idiomas/Guardados.php:152
+#: src/Idiomas/Guardados.php:161
 msgid "Chickpeas"
 msgstr "Cigrons"
 
@@ -3608,7 +3643,7 @@ msgstr "Fills"
 msgid "Children who pay"
 msgstr "Fills que paguen"
 
-#: src/Idiomas/Guardados.php:100
+#: src/Idiomas/Guardados.php:104
 msgid "Chocolate and cocoa"
 msgstr "Xocolata i cacau"
 
@@ -3668,7 +3703,7 @@ msgstr "Tria un email de la fitxa del CRM per al compte familiar (si no n'hi ha 
 msgid "Choose an expense item from the budget."
 msgstr "Tria una partida de despesa del pressupost."
 
-#: src/Idiomas/Guardados.php:129 src/Idiomas/TextosJs.php:27
+#: src/Idiomas/Guardados.php:135 src/Idiomas/TextosJs.php:27
 msgid "Choose an option from the list."
 msgstr "Tria una opció de la llista."
 
@@ -3708,7 +3743,7 @@ msgstr "Tria almenys una secció en què col·labores."
 msgid "Choose below what you want to buy. Then pay by transfer, by Bizum or, if you are a member, in person to Treasury, stating the order no. When Treasury receives it you will see it here as paid; the group will hand it over to you and, when you have it, confirm it here."
 msgstr "Tria més avall el que vols comprar. Després, paga-ho per transferència, per Bizum o, si ets soci o sòcia, en físic a Tresoreria, indicant el nº de comanda. Quan Tresoreria ho rebi ho veuràs aquí com a pagat; el grup t'ho lliurarà i, quan ho tinguis, confirma-ho aquí."
 
-#: src/Idiomas/Guardados.php:128
+#: src/Idiomas/Guardados.php:134
 msgid "Choose cook, quartermaster and helpers"
 msgstr "Triar cuiner, intendent i ajudants"
 
@@ -3892,7 +3927,7 @@ msgstr "Tria el teu grup…"
 msgid "Choose…"
 msgstr "Tria…"
 
-#: src/Idiomas/Guardados.php:116
+#: src/Idiomas/Guardados.php:120
 msgid "Citrus fruits"
 msgstr "Cítrics"
 
@@ -3940,11 +3975,11 @@ msgstr "Tancat: només inscriu l'equip de l'esdeveniment"
 msgid "Clothing"
 msgstr "Roba"
 
-#: src/Idiomas/Guardados.php:81
+#: src/Idiomas/Guardados.php:83
 msgid "Cocoa powder"
 msgstr "Cacau en pols"
 
-#: src/Idiomas/Guardados.php:97
+#: src/Idiomas/Guardados.php:101
 msgid "Coeliac disease"
 msgstr "Celiaquia"
 
@@ -3953,12 +3988,12 @@ msgid "Collapse all"
 msgstr "Plega-ho tot"
 
 #. translators: %s: text
-#: src/Idiomas/Guardados.php:107 src/Idiomas/TextosJs.php:53
+#: src/Idiomas/Guardados.php:111 src/Idiomas/TextosJs.php:53
 #, php-format
 msgid "Collapse or expand \"%s\""
 msgstr "Plega o desplega «%s»"
 
-#: src/Idiomas/Guardados.php:255
+#: src/Idiomas/Guardados.php:265
 msgid "Collect authorisations, youth member totals and send data to the sections"
 msgstr "Recollir autoritzacions, totals d'educands i enviar dades a les seccions"
 
@@ -3992,6 +4027,7 @@ msgstr "Cobrament"
 msgid "Collection date"
 msgstr "Data de cobrament"
 
+#. translators: %s: text
 #: src/Caja/Automaticos.php:95
 #, php-format
 msgid "Collection · %s"
@@ -4031,11 +4067,11 @@ msgstr "Surt de"
 msgid "Communications / Social Media Officer"
 msgstr "Responsable de Comunicació / XXSS"
 
-#: src/Tesoreria/Config.php:45
+#: src/Idiomas/Guardados.php:136
 msgid "Company"
 msgstr "Empresa"
 
-#: src/Idiomas/Guardados.php:105
+#: src/Idiomas/Guardados.php:109
 msgid "Configure events (margins and templates)"
 msgstr "Configurar els esdeveniments (marges i plantilles)"
 
@@ -4185,11 +4221,11 @@ msgstr "Conté:"
 msgid "Contains: %s"
 msgstr "Conté: %s"
 
-#: src/Idiomas/Guardados.php:108
+#: src/Idiomas/Guardados.php:112
 msgid "Coordination"
 msgstr "Coordinació"
 
-#: src/Idiomas/Guardados.php:109 src/Idiomas/TextosJs.php:16
+#: src/Idiomas/Guardados.php:113 src/Idiomas/TextosJs.php:16
 msgid "Copied"
 msgstr "Copiat"
 
@@ -4205,7 +4241,7 @@ msgstr "Copia l'enllaç"
 msgid "Copy to my group"
 msgstr "Copia al meu grup"
 
-#: src/Idiomas/Guardados.php:110 src/Socios/Numeracion.php:29
+#: src/Idiomas/Guardados.php:114 src/Socios/Numeracion.php:29
 msgid "Correct"
 msgstr "Correcte"
 
@@ -4267,6 +4303,7 @@ msgstr "Compten com a director/a"
 msgid "Count as monitor"
 msgstr "Compten com a monitor/a"
 
+#. translators: %s: text
 #: templates/tesoreria/caja.php:225
 #, php-format
 msgid "Count the cash and enter how much there is. Today there should be %s. If it does not add up, enter the reason: the difference is recorded as an adjustment."
@@ -4300,7 +4337,7 @@ msgstr "Crea un tipus nou"
 msgid "Create a shopping list with the ticked items"
 msgstr "Crea una llista de compra amb els marcats"
 
-#: src/Idiomas/Guardados.php:112
+#: src/Idiomas/Guardados.php:116
 msgid "Create and manage the events of their sections"
 msgstr "Crear i gestionar els esdeveniments de les seves seccions"
 
@@ -4494,7 +4531,7 @@ msgstr "Dates"
 msgid "Dates that fall on a Saturday or Sunday are moved forward to the Friday."
 msgstr "Les dates que cauen en dissabte o diumenge s'avancen al divendres."
 
-#: src/Tesoreria/Config.php:53
+#: src/Idiomas/Guardados.php:280
 msgid "Day outing"
 msgstr "Sortida de dia"
 
@@ -4671,7 +4708,7 @@ msgstr "Elimina…"
 msgid "Deleting a payment or an adjustment is done by Treasury."
 msgstr "Eliminar un pagament o un ajust ho fa Tresoreria."
 
-#: src/Idiomas/Guardados.php:131
+#: src/Idiomas/Guardados.php:138
 msgid "Deliver orders"
 msgstr "Lliurar comandes"
 
@@ -4895,6 +4932,7 @@ msgstr "Document"
 msgid "Document number (ID or foreigner ID)"
 msgstr "Núm. de document (DNI o NIE)"
 
+#. translators: %s: text
 #: src/Frontend/Views/FichaView.php:381
 #, php-format
 msgid "Document saved on %s's record."
@@ -4994,11 +5032,11 @@ msgstr "Esborrany %s esborrat."
 msgid "Drafts"
 msgstr "Esborranys"
 
-#: src/Idiomas/Guardados.php:126
+#: src/Idiomas/Guardados.php:132
 msgid "Draw up the general camp timetable and send it to the group"
 msgstr "Elaborar l'horari general d'acampada i enviar-lo al grup"
 
-#: src/Idiomas/Guardados.php:127
+#: src/Idiomas/Guardados.php:133
 msgid "Draw up the menu"
 msgstr "Elaborar el menú"
 
@@ -5022,7 +5060,7 @@ msgstr ""
 msgid "Duplicate in the CRM"
 msgstr "Duplicat al CRM"
 
-#: src/Tesoreria/Config.php:42
+#: src/Idiomas/Guardados.php:127
 msgid "Dyke"
 msgstr "Dic"
 
@@ -5112,6 +5150,7 @@ msgstr "Edita %s"
 msgid "Edit / save"
 msgstr "Edita / desa"
 
+#. translators: %s: text
 #: src/Admin/SettingsPage.php:240
 #, php-format
 msgid "Edit group %s"
@@ -5121,7 +5160,7 @@ msgstr ""
 msgid "Edit report"
 msgstr "Edita l'informe"
 
-#: src/Idiomas/Guardados.php:125
+#: src/Idiomas/Guardados.php:131
 msgid "Edit the contact details of their section"
 msgstr "Editar les dades de contacte de la seva secció"
 
@@ -5137,15 +5176,15 @@ msgstr "Edita els socis de la família"
 msgid "Edit the ingredient"
 msgstr "Edita l'ingredient"
 
-#: src/Idiomas/Guardados.php:123
+#: src/Idiomas/Guardados.php:129
 msgid "Edit the menu recipe book"
 msgstr "Editar el receptari dels menús"
 
-#: src/Idiomas/Guardados.php:124
+#: src/Idiomas/Guardados.php:130
 msgid "Edit the records of the whole group"
 msgstr "Editar les fitxes de tot el grup"
 
-#: src/Idiomas/Guardados.php:162
+#: src/Idiomas/Guardados.php:171
 msgid "Egg"
 msgstr "Ou"
 
@@ -5161,7 +5200,7 @@ msgstr "Email"
 msgid "Email for the invitation (also works for signing in)"
 msgstr "Email per a la invitació (també serveix per entrar)"
 
-#: src/Idiomas/Guardados.php:259 templates/usuarios/emails.php:28
+#: src/Idiomas/Guardados.php:269 templates/usuarios/emails.php:28
 msgid "Email log"
 msgstr "Registre d'emails"
 
@@ -5169,6 +5208,7 @@ msgstr "Registre d'emails"
 msgid "Email not confirmed"
 msgstr "Sense confirmar l'email"
 
+#. translators: 1: number, 2: number
 #: src/Frontend/Views/FichaView.php:361
 #, php-format
 msgid "Email notices: %1$d to Treasury and %2$d to the family."
@@ -5236,7 +5276,7 @@ msgstr "Les files buides s'ignoren. Per afegir més camps, desa i torna a obrir 
 msgid "Ends"
 msgstr "Acaba"
 
-#: src/Idiomas/Guardados.php:169
+#: src/Idiomas/Guardados.php:178
 msgid "Enter a price per person and day OR a total price, never both."
 msgstr "Introduir preu per persona i dia O preu total, mai els dos."
 
@@ -5261,13 +5301,13 @@ msgid "Enter an amount greater than zero."
 msgstr "Escriu un import més gran que zero."
 
 #. translators: %s: text
-#: src/Idiomas/Guardados.php:134 src/Idiomas/TextosJs.php:25
+#: src/Idiomas/Guardados.php:141 src/Idiomas/TextosJs.php:25
 #, php-format
 msgid "Enter at least %s letters."
 msgstr "Escriu almenys %s lletres."
 
 #. translators: %s: text
-#: src/Idiomas/Guardados.php:135 src/Idiomas/TextosJs.php:24
+#: src/Idiomas/Guardados.php:142 src/Idiomas/TextosJs.php:24
 #, php-format
 msgid "Enter at least %s letters…"
 msgstr "Escriu almenys %s lletres…"
@@ -5400,6 +5440,7 @@ msgstr "Escriu el nom de la plantilla (hi ha un màxim de plantilles per grup)."
 msgid "Enter the type name."
 msgstr "Escriu el nom del tipus."
 
+#. translators: %d: number
 #: src/Inventario/Servicio.php:108
 #, php-format
 msgid "Enter what new equipment must be bought on line %d (or leave its price blank)."
@@ -5441,7 +5482,7 @@ msgstr "Apunt anul·lat."
 msgid "Entry saved."
 msgstr "Apunt desat."
 
-#: src/Frontend/Views/EventosView.php:54 src/Frontend/Views/InventarioBaseView.php:18 src/Inventario/ListaPdf.php:66 src/Tesoreria/Config.php:53
+#: src/Frontend/Views/EventosView.php:54 src/Frontend/Views/InventarioBaseView.php:18 src/Idiomas/Guardados.php:202 src/Inventario/ListaPdf.php:66
 msgid "Equipment"
 msgstr "Material"
 
@@ -5453,7 +5494,7 @@ msgstr "Responsable de Material"
 msgid "Equipment and gear"
 msgstr "Material i equipament"
 
-#: src/Idiomas/Guardados.php:172 templates/inventario/lista.php:31
+#: src/Idiomas/Guardados.php:181 templates/inventario/lista.php:31
 msgid "Equipment inventory"
 msgstr "Inventari de material"
 
@@ -5473,11 +5514,11 @@ msgstr "Material reservat per a l'esdeveniment."
 msgid "Equipment shopping list"
 msgstr "Llista de compra de material"
 
-#: src/Idiomas/Guardados.php:184 templates/inventario/compras.php:25
+#: src/Idiomas/Guardados.php:193 templates/inventario/compras.php:25
 msgid "Equipment shopping lists"
 msgstr "Llistes de compra de material"
 
-#: src/Frontend/Views/InventarioBaseView.php:19 src/Idiomas/Guardados.php:289 templates/inventario/tipos.php:17
+#: src/Frontend/Views/InventarioBaseView.php:19 src/Idiomas/Guardados.php:300 templates/inventario/tipos.php:17
 msgid "Equipment types"
 msgstr "Tipus de material"
 
@@ -5497,19 +5538,19 @@ msgstr "Error en enviar"
 msgid "Escultas"
 msgstr "Escoltes"
 
-#: src/Idiomas/Guardados.php:139
+#: src/Idiomas/Guardados.php:146
 msgid "Estimate the camp budget"
 msgstr "Estimar el pressupost d'acampada"
 
-#: src/Idiomas/Guardados.php:140
+#: src/Idiomas/Guardados.php:147
 msgid "Estimate the meals budget"
 msgstr "Estimar el pressupost de menjars"
 
-#: src/Idiomas/Guardados.php:137
+#: src/Idiomas/Guardados.php:144
 msgid "Estimate the number of qualifications available / needed"
 msgstr "Estimar el nombre de títols disponibles / necessaris"
 
-#: src/Idiomas/Guardados.php:138
+#: src/Idiomas/Guardados.php:145
 msgid "Estimate the number of youth members and scouters"
 msgstr "Estimar el nombre d'educands i scouters"
 
@@ -5533,7 +5574,7 @@ msgstr "Total estimat:"
 msgid "Estimated total: %s"
 msgstr "Total estimat: %s"
 
-#: src/Idiomas/Guardados.php:142
+#: src/Idiomas/Guardados.php:149
 msgid "Evaluate the camp"
 msgstr "Avaluar l'acampada"
 
@@ -5627,7 +5668,7 @@ msgstr "Les inscripcions als esdeveniments es veuen a"
 msgid "Event:"
 msgstr "Esdeveniment:"
 
-#: src/Domain/Modulos.php:56 src/Frontend/Menu.php:77 src/Idiomas/Guardados.php:143 src/Usuarios/RegistroEmails.php:85
+#: src/Domain/Modulos.php:56 src/Frontend/Menu.php:77 src/Idiomas/Guardados.php:150 src/Usuarios/RegistroEmails.php:85
 msgid "Events"
 msgstr "Esdeveniments"
 
@@ -5687,7 +5728,7 @@ msgstr "Exemple"
 msgid "Example library"
 msgstr "Biblioteca d'exemples"
 
-#: src/Idiomas/Guardados.php:252
+#: src/Idiomas/Guardados.php:262
 msgid "Example recipe: check the allergens of the brands you use before relying on it."
 msgstr "Recepta d'exemple: comprova els al·lèrgens de les marques que facis servir abans de refiar-te'n."
 
@@ -5713,7 +5754,7 @@ msgstr "Excel del resum"
 msgid "Exception: %s"
 msgstr "Excepció: %s"
 
-#: src/Tesoreria/Config.php:53
+#: src/Idiomas/Guardados.php:151
 msgid "Excursion"
 msgstr "Excursió"
 
@@ -5759,6 +5800,7 @@ msgstr "Tipus de despesa i ingrés"
 msgid "Expense categories"
 msgstr "Categories de despesa"
 
+#. translators: 1: text, 2: text
 #: src/Tesoreria/HistorialPagos.php:96
 #, php-format
 msgid "Expense of %1$s · %2$s"
@@ -5834,7 +5876,7 @@ msgstr "Esdeveniment extern"
 msgid "Extra help: the same manual with screenshots, in another tab."
 msgstr "Ajuda extra: el mateix manual amb captures de pantalla, en una altra pestanya."
 
-#: src/Frontend/Views/TesoreriaBaseView.php:26 src/Idiomas/Guardados.php:144 templates/eventos/resumen.php:104 templates/tesoreria/familias.php:28
+#: src/Frontend/Views/TesoreriaBaseView.php:26 src/Idiomas/Guardados.php:152 templates/eventos/resumen.php:104 templates/tesoreria/familias.php:28
 msgid "Families"
 msgstr "Famílies"
 
@@ -5880,7 +5922,7 @@ msgstr "Autoritzacions de les famílies"
 msgid "Families' authorisations and direct debit files for the bank."
 msgstr "Autoritzacions de les famílies i fitxers de rebuts per al banc."
 
-#: src/Idiomas/Guardados.php:106
+#: src/Idiomas/Guardados.php:110
 msgid "Families' contacts"
 msgstr "Contactes de les famílies"
 
@@ -5910,6 +5952,7 @@ msgstr "Família"
 msgid "Family %1$s: %2$s"
 msgstr "Família %1$s: %2$s"
 
+#. translators: 1: text, 2: text
 #: src/Sepa/Remesas.php:665
 #, php-format
 msgid "Family %1$s: the bank has collected %2$s more than was left to pay for the event. It remains as a balance to refund: decide in Treasury whether to refund it."
@@ -5927,6 +5970,7 @@ msgstr "Família %s: tipus de seqüència no vàlid."
 msgid "Family %s: the IBAN on the authorisation is not valid (or is no longer kept)."
 msgstr "Família %s: l'IBAN de l'autorització no és vàlid (o ja no es conserva)."
 
+#. translators: %s: text
 #: src/Sepa/Remesas.php:520
 #, php-format
 msgid "Family %s: the account on their CRM record is no longer the authorised one."
@@ -6018,7 +6062,7 @@ msgstr "Família: núm. o cognom (3 lletres)…"
 msgid "Federated organisation"
 msgstr ""
 
-#: src/Frontend/Views/TesoreriaBaseView.php:28 src/Idiomas/Guardados.php:111
+#: src/Frontend/Views/TesoreriaBaseView.php:28 src/Idiomas/Guardados.php:115
 msgid "Federation cost"
 msgstr "Cost federatiu"
 
@@ -6060,17 +6104,19 @@ msgstr "Ajust de quota"
 msgid "Fee and payments"
 msgstr "Quota i pagaments"
 
+#. translators: %s: text
 #: templates/informes/imprimir.php:59 templates/informes/resultado.php:59
 #, php-format
 msgid "Fee for round %s, from Treasury: the amounts are those of each member's family (with their siblings)."
 msgstr "Quota de la ronda %s, de Tresoreria: els imports són els de la família de cada soci/sòcia (amb els seus germans)."
 
+#. translators: %s: text
 #: src/Caja/Automaticos.php:79
 #, php-format
 msgid "Fee of the %s family"
 msgstr "Quota de la família %s"
 
-#: src/Idiomas/Guardados.php:220
+#: src/Idiomas/Guardados.php:230
 msgid "Fee payments"
 msgstr "Pagaments de la quota"
 
@@ -6090,7 +6136,7 @@ msgstr "Quota a pagar"
 msgid "Fees (bank)"
 msgstr "Quotes (banc)"
 
-#: src/Frontend/Views/TesoreriaBaseView.php:27 src/Idiomas/Guardados.php:115
+#: src/Frontend/Views/TesoreriaBaseView.php:27 src/Idiomas/Guardados.php:119
 msgid "Fees and instalments"
 msgstr "Quotes i terminis"
 
@@ -6162,7 +6208,7 @@ msgstr "Filtra l'usuari…"
 msgid "Final balance"
 msgstr "Saldo final"
 
-#: src/Idiomas/Guardados.php:261
+#: src/Idiomas/Guardados.php:271
 msgid "Final bus booking"
 msgstr "Reserva final de l'autobús"
 
@@ -6234,11 +6280,11 @@ msgstr "Corregeix"
 msgid "Fixed items per group"
 msgstr "Conceptes fixos per grup"
 
-#: src/Fichas/CamposFicha.php:28 src/Idiomas/Guardados.php:58 src/Tesoreria/Banco/TiposMovimiento.php:39
+#: src/Fichas/CamposFicha.php:28 src/Idiomas/Guardados.php:59 src/Tesoreria/Banco/TiposMovimiento.php:39
 msgid "Food"
 msgstr "Alimentació"
 
-#: src/Idiomas/Guardados.php:59
+#: src/Idiomas/Guardados.php:60
 msgid "Food (event menu)"
 msgstr "Alimentació (menú de l'esdeveniment)"
 
@@ -6254,7 +6300,7 @@ msgstr "Intolerància alimentària"
 msgid "Food item added to the budget."
 msgstr "Partida d'alimentació afegida al pressupost."
 
-#: src/Idiomas/Guardados.php:60
+#: src/Idiomas/Guardados.php:61
 msgid "Foods"
 msgstr "Aliments"
 
@@ -6286,7 +6332,7 @@ msgstr "Per a %d porcions"
 msgid "For an event, the payment method is cash, transfer or Bizum."
 msgstr "Per a un esdeveniment, la forma de pagament és efectiu, transferència o Bizum."
 
-#: src/Idiomas/Guardados.php:223
+#: src/Idiomas/Guardados.php:233
 msgid "For camps and activities with food."
 msgstr "Per a campaments i activitats amb menjar."
 
@@ -6402,7 +6448,7 @@ msgstr "Format no admès: puja el fitxer Norma 43 (.n43, .q43, .aeb, .txt) o un 
 msgid "Format:"
 msgstr "Format:"
 
-#: src/Idiomas/Guardados.php:291
+#: src/Idiomas/Guardados.php:302
 msgid "Fried tomato sauce"
 msgstr "Tomàquet fregit"
 
@@ -6416,6 +6462,7 @@ msgstr "Des de"
 msgid "From %1$d to %2$d years"
 msgstr "De %1$d a %2$d anys"
 
+#. translators: 1: text, 2: text
 #: src/Crm/Altas.php:364
 #, php-format
 msgid "From %1$s you can only move to %2$s, the next one by age (only scouters can change to any section)."
@@ -6453,10 +6500,11 @@ msgstr "Des d'aquell dia ja no compta com a soci/sòcia del grup ni en les quote
 msgid "From the families' fee, each youth member's registration and insurance are set aside: with that money the group pays the federation cost of all members. Of the rest (the annual fee), a percentage goes to the group's funds and the remainder to the budget of each member's section. It is calculated with the round's expected fees and the CRM's active members."
 msgstr "De la quota de les famílies s'aparta la inscripció i l'assegurança de cada educand: amb aquests diners el grup paga el cost federatiu de tots els associats. De la resta (l'anualitat), un percentatge va a la caixa del grup i la resta al pressupost de la secció de cada associat. Es calcula amb les quotes previstes de la ronda i els socis actius del CRM."
 
-#: src/Idiomas/Guardados.php:121
+#: src/Idiomas/Guardados.php:125
 msgid "From the group's inventory"
 msgstr "De l'inventari del grup"
 
+#. translators: %d: number
 #: templates/fichas/cambios.php:147
 #, php-format
 msgid "From the last %d days. Only which data was changed, by whom and when is known: the values are not stored on the website."
@@ -6466,7 +6514,7 @@ msgstr "Dels últims %d dies. Només se sap quines dades es van canviar, qui i q
 msgid "From the private area, give access to the Secretary's office and Coordination (People → Give access); from there, they give access to the rest and approve the access requests."
 msgstr ""
 
-#: src/Idiomas/Guardados.php:120
+#: src/Idiomas/Guardados.php:124
 msgid "From the shop's stock"
 msgstr "De les existències de la botiga"
 
@@ -6474,7 +6522,7 @@ msgstr "De les existències de la botiga"
 msgid "From whom"
 msgstr "De qui"
 
-#: src/Idiomas/Guardados.php:147
+#: src/Idiomas/Guardados.php:156
 msgid "Fructose"
 msgstr "Fructosa"
 
@@ -6506,7 +6554,7 @@ msgstr "Objectiu de recaptació desat."
 msgid "G07123456"
 msgstr "G07123456"
 
-#: src/Idiomas/Guardados.php:55
+#: src/Idiomas/Guardados.php:56
 msgid "Garlic"
 msgstr "All"
 
@@ -6514,7 +6562,7 @@ msgstr "All"
 msgid "Gas stove"
 msgstr "Fogonet de gas"
 
-#: src/Idiomas/Guardados.php:256
+#: src/Idiomas/Guardados.php:266
 msgid "Gather information on the food in stock at the equipment store"
 msgstr "Recopilar informació sobre el menjar en estoc al local de material"
 
@@ -6522,7 +6570,7 @@ msgstr "Recopilar informació sobre el menjar en estoc al local de material"
 msgid "Gender"
 msgstr "Gènere"
 
-#: src/Frontend/Views/LibroMayorView.php:72 src/Frontend/Views/LibroMayorView.php:89 src/Frontend/Views/TesoreriaBaseView.php:52 src/Idiomas/Guardados.php:180
+#: src/Frontend/Views/LibroMayorView.php:72 src/Frontend/Views/LibroMayorView.php:89 src/Frontend/Views/TesoreriaBaseView.php:52 src/Idiomas/Guardados.php:189
 msgid "General ledger"
 msgstr "Llibre major"
 
@@ -6576,7 +6624,7 @@ msgstr "Regals"
 msgid "Give a new no."
 msgstr "Dona núm. nou"
 
-#: src/Idiomas/Guardados.php:117 templates/alta/buscar.php:19 templates/alta/buscar.php:81 templates/personas/listado.php:212
+#: src/Idiomas/Guardados.php:121 templates/alta/buscar.php:19 templates/alta/buscar.php:81 templates/personas/listado.php:212
 msgid "Give access"
 msgstr "Dona accés"
 
@@ -6600,7 +6648,7 @@ msgstr "Dona el vistiplau"
 msgid "Give the advance"
 msgstr "Dona la bestreta"
 
-#: src/Idiomas/Guardados.php:118
+#: src/Idiomas/Guardados.php:122
 msgid "Give the go-ahead to shopping lists"
 msgstr "Donar el vistiplau a les llistes de compra"
 
@@ -6620,7 +6668,7 @@ msgstr "Dona accés al web"
 msgid "Gluten"
 msgstr "Gluten"
 
-#: src/Idiomas/Guardados.php:275
+#: src/Idiomas/Guardados.php:286
 msgid "Gluten sensitivity"
 msgstr "Sensibilitat al gluten"
 
@@ -6694,7 +6742,7 @@ msgstr "Subvencions"
 msgid "Grants a permission"
 msgstr "Concedeix un permís"
 
-#: src/Idiomas/Guardados.php:249
+#: src/Idiomas/Guardados.php:259
 msgid "Grated cheese"
 msgstr "Formatge ratllat"
 
@@ -6740,7 +6788,7 @@ msgstr "Caixa del grup"
 msgid "Group contact email"
 msgstr ""
 
-#: src/Frontend/Menu.php:112 src/Frontend/Menu.php:114 src/Frontend/Menu.php:116 src/Idiomas/Guardados.php:119
+#: src/Frontend/Menu.php:112 src/Frontend/Menu.php:114 src/Frontend/Menu.php:116 src/Idiomas/Guardados.php:123
 msgid "Group details"
 msgstr "Dades del grup"
 
@@ -6806,7 +6854,7 @@ msgstr "Comanda del grup"
 msgid "Group recipes"
 msgstr "Receptes del grup"
 
-#: src/Idiomas/Guardados.php:62 src/Usuarios/RegistroEmails.php:88 templates/alta-grupo/formulario.php:19 templates/alta-grupo/neutra.php:8
+#: src/Idiomas/Guardados.php:63 src/Usuarios/RegistroEmails.php:88 templates/alta-grupo/formulario.php:19 templates/alta-grupo/neutra.php:8
 msgid "Group registration"
 msgstr "Alta de grup"
 
@@ -6836,7 +6884,7 @@ msgstr "Tutor/a"
 msgid "Guardian %d"
 msgstr "Tutor/a %d"
 
-#: src/Idiomas/Guardados.php:296 templates/email/invitacion.php:40
+#: src/Idiomas/Guardados.php:307 templates/email/invitacion.php:40
 msgid "Guardian / Father / Mother"
 msgstr "Tutor / Pare / Mare"
 
@@ -6876,20 +6924,21 @@ msgstr "Email del Tutor/a 2"
 msgid "Guardian's or member's name, description, amount…"
 msgstr "Nom del tutor o del soci, concepte, import…"
 
-#: src/Idiomas/Guardados.php:297
+#: src/Idiomas/Guardados.php:308
 msgid "Guardians and their phones and emails."
 msgstr "Tutors i els seus telèfons i emails."
 
-#: src/Idiomas/Guardados.php:196
+#: src/Idiomas/Guardados.php:206
 msgid "Hake"
 msgstr "Lluç"
 
+#. translators: %s: text
 #: src/Tienda/Servicio.php:437
 #, php-format
 msgid "Hand the amount in person to Treasury, stating order no. %s."
 msgstr "Lliura l'import en físic a Tresoreria, indicant el núm. de comanda %s."
 
-#: src/Idiomas/Guardados.php:130
+#: src/Idiomas/Guardados.php:137
 msgid "Hand the letter in at the local meeting and send it by email"
 msgstr "Lliurar la carta a la reunió local i enviar-la per correu electrònic"
 
@@ -6913,6 +6962,7 @@ msgstr "Està donat/da de baixa d'aquest esdeveniment."
 msgid "Has it been bought yet?"
 msgstr "Ja s'ha comprat?"
 
+#. translators: %s: text
 #: src/Frontend/Views/FichaView.php:420
 #, php-format
 msgid "Has left family no. %s."
@@ -6950,7 +7000,7 @@ msgid_plural "Hay %d altas de grupo por revisar."
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/Idiomas/Guardados.php:76
+#: src/Idiomas/Guardados.php:77
 msgid "Hazelnut"
 msgstr "Avellana"
 
@@ -7020,11 +7070,11 @@ msgstr "Amaga o mostra la capçalera del tema per guanyar espai"
 msgid "Hide territorial no."
 msgstr "Amaga el núm. territorial"
 
-#: src/Idiomas/Guardados.php:160
+#: src/Idiomas/Guardados.php:169
 msgid "Histamine"
 msgstr "Histamina"
 
-#: src/Idiomas/Guardados.php:161 templates/lista-espera/detalle.php:186 templates/reintegros/index.php:183
+#: src/Idiomas/Guardados.php:170 templates/lista-espera/detalle.php:186 templates/reintegros/index.php:183
 msgid "History"
 msgstr "Historial"
 
@@ -7046,7 +7096,7 @@ msgstr "Titular:"
 msgid "Holder: %s"
 msgstr "Titular: %s"
 
-#: src/Frontend/Menu.php:137 src/Idiomas/Guardados.php:166 templates/comun/nav.php:30
+#: src/Frontend/Menu.php:137 src/Idiomas/Guardados.php:175 templates/comun/nav.php:30
 msgid "Home"
 msgstr "Inici"
 
@@ -7054,7 +7104,7 @@ msgstr "Inici"
 msgid "Home phone"
 msgstr "Telèfon de casa"
 
-#: src/Idiomas/Guardados.php:198
+#: src/Idiomas/Guardados.php:208
 msgid "Honey"
 msgstr "Mel"
 
@@ -7102,7 +7152,7 @@ msgstr "Com pagar els esdeveniments (compte del grup, Bizum…)"
 msgid "How to pay it"
 msgstr "Com pagar-ho"
 
-#: src/Tesoreria/Config.php:43
+#: src/Idiomas/Guardados.php:84
 msgid "Hunt"
 msgstr "Cacera"
 
@@ -7388,6 +7438,7 @@ msgstr "Si no marques res, l'esdeveniment es publica i no s'envia cap correu."
 msgid "If you turn off the freed-place notice, the place is still offered, but the family does not receive the email: they will have to look in the application."
 msgstr "Si desactives l'avís de plaça alliberada, la plaça se segueix oferint, però la família no rep l'email: ho haurà de mirar a l'aplicació."
 
+#. translators: %d: number
 #: src/ListaEspera/Avisos.php:188
 #, php-format
 msgid "If you want to stay on the list, sign in and press \"Keep my data\": we will keep it for %d more months."
@@ -7413,7 +7464,7 @@ msgstr "Malalties"
 msgid "Image release"
 msgstr "Cessió d'imatge"
 
-#: src/Idiomas/Guardados.php:99
+#: src/Idiomas/Guardados.php:103
 msgid "Image release and medication consent."
 msgstr "Cessió d'imatge i consentiment de medicació."
 
@@ -7586,6 +7637,7 @@ msgstr "Incloure a la comanda del grup ho fa Coordinació."
 msgid "Income"
 msgstr "Ingrés"
 
+#. translators: 1: text, 2: text, 3: text
 #: src/Frontend/Views/BancoView.php:266
 #, php-format
 msgid "Income %1$s · expenses %2$s · generated on %3$s"
@@ -7625,7 +7677,7 @@ msgstr "Ingressos sense partida del pressupost"
 msgid "Incomplete details"
 msgstr "Dades incompletes"
 
-#: src/Auth/AccessHooks.php:77 src/Idiomas/Guardados.php:215
+#: src/Auth/AccessHooks.php:77 src/Idiomas/Guardados.php:225
 msgid "Incorrect member number or email, password or group."
 msgstr "Número de soci/sòcia o email, contrasenya o grup incorrectes."
 
@@ -7649,7 +7701,7 @@ msgstr "Entrada o sortida"
 msgid "Inflows"
 msgstr "Entrades"
 
-#: src/Idiomas/Guardados.php:165 src/Menus/MenuEvento.php:216 templates/eventos/menu.php:284 templates/eventos/menu.php:288
+#: src/Idiomas/Guardados.php:174 src/Menus/MenuEvento.php:216 templates/eventos/menu.php:284 templates/eventos/menu.php:288
 msgid "Ingredient"
 msgstr "Ingredient"
 
@@ -7755,7 +7807,7 @@ msgstr "Activitat internacional amb assegurança a part: %1$s, pòlissa %2$s."
 msgid "International activity: separate insurance is required (company and policy no.)."
 msgstr "Activitat internacional: cal una assegurança a part (companyia i núm. de pòlissa)."
 
-#: src/Idiomas/Guardados.php:168
+#: src/Idiomas/Guardados.php:177
 msgid "Intolerances"
 msgstr "Intoleràncies"
 
@@ -7787,7 +7839,7 @@ msgstr "Tasca no vàlida."
 msgid "Invalid user."
 msgstr "Usuari no vàlid."
 
-#: src/Domain/Modulos.php:50 src/Frontend/Menu.php:86 src/Idiomas/Guardados.php:170 templates/area/inicio.php:179
+#: src/Domain/Modulos.php:50 src/Frontend/Menu.php:86 src/Idiomas/Guardados.php:179 templates/area/inicio.php:179
 msgid "Inventory"
 msgstr "Inventari"
 
@@ -7908,6 +7960,7 @@ msgstr "No s'ha pogut fer: "
 msgid "It could not be saved."
 msgstr "No s'ha pogut desar."
 
+#. translators: %s: text
 #: src/Caja/Servicio.php:264
 #, php-format
 msgid "It does not add up: there is a difference of %s. Enter the reason to save the cash count."
@@ -7927,6 +7980,7 @@ msgstr "Exclou la carn i el peix, però pot permetre derivats com ous i làctics
 msgid "It first needs: %s"
 msgstr "Abans necessita: %s"
 
+#. translators: %s: text
 #: src/Accesos/Concesiones.php:270
 #, php-format
 msgid "It first needs: %s."
@@ -8024,6 +8078,7 @@ msgstr "És més del que queda per pagar (%s)."
 msgid "It is more than what was paid (%s)."
 msgstr "És més del que es va pagar (%s)."
 
+#. translators: %s: text
 #: src/Tesoreria/Banco/Conciliacion.php:91
 #, php-format
 msgid "It is named \"%s\""
@@ -8199,7 +8254,7 @@ msgstr "Es va incorporar com a associat/ada el %s. Les seves dades de la llista 
 msgid "Joins as a member"
 msgstr "S'incorpora com a associat/ada"
 
-#: src/Idiomas/Guardados.php:186
+#: src/Idiomas/Guardados.php:195
 msgid "Keep all the cash boxes and see the general ledger"
 msgstr "Portar totes les caixes d'efectiu i veure el llibre major"
 
@@ -8221,7 +8276,7 @@ msgstr "Mantén les meves dades %d mesos més"
 msgid "Keep the"
 msgstr "Desa els"
 
-#: src/Idiomas/Guardados.php:185
+#: src/Idiomas/Guardados.php:194
 msgid "Keep the cash box of their sections"
 msgstr "Portar la caixa d'efectiu de les seves seccions"
 
@@ -8245,12 +8300,13 @@ msgid_plural "Kitchen sheet sent to %d people."
 msgstr[0] "Full de cuina enviat a %d persona."
 msgstr[1] "Full de cuina enviat a %d persones."
 
+#. translators: %s: text
 #: src/Menus/HojaCocina.php:159
 #, php-format
 msgid "Kitchen sheet: %s"
 msgstr "Full de cuina: %s"
 
-#: src/Idiomas/Guardados.php:173
+#: src/Idiomas/Guardados.php:182
 msgid "Kiwi"
 msgstr "Kiwi"
 
@@ -8262,7 +8318,7 @@ msgstr "Kraal"
 msgid "Label"
 msgstr "Etiqueta"
 
-#: src/Idiomas/Guardados.php:174
+#: src/Idiomas/Guardados.php:183
 msgid "Lactose"
 msgstr "Lactosa"
 
@@ -8348,7 +8404,7 @@ msgstr "Vols tornar a deixar l'esdeveniment com a esborrany?"
 msgid "Leave the waiting list"
 msgstr "Surt de la llista d'espera"
 
-#: src/Idiomas/Guardados.php:247
+#: src/Idiomas/Guardados.php:257
 msgid "Leek"
 msgstr "Porro"
 
@@ -8384,11 +8440,11 @@ msgstr "Titulacions de lleure"
 msgid "Leisure-time training"
 msgstr "Formació en lleure"
 
-#: src/Idiomas/Guardados.php:181
+#: src/Idiomas/Guardados.php:190
 msgid "Lemon"
 msgstr "Llimona"
 
-#: src/Idiomas/Guardados.php:178
+#: src/Idiomas/Guardados.php:187
 msgid "Lentils"
 msgstr "Llenties"
 
@@ -8546,6 +8602,7 @@ msgstr "Llista %s cancel·lada."
 msgid "List %s created, but Treasury could not be notified by email: tell them so they approve it."
 msgstr "Llista %s creada, però no s'ha pogut avisar Tresoreria per email: digues-l'hi perquè li doni el vistiplau."
 
+#. translators: %s: text
 #: src/Frontend/Views/InventarioComprasView.php:214
 #, php-format
 msgid "List %s created. There is nobody in Treasury with an email in the private area: the group's contact email has been notified. When Treasury approves it, you will be able to print it."
@@ -8617,15 +8674,15 @@ msgstr "Resultat de la càrrega"
 msgid "Load the usual equipment"
 msgstr "Carrega el material habitual"
 
-#: src/Idiomas/Guardados.php:92
+#: src/Idiomas/Guardados.php:96
 msgid "Load the van"
 msgstr "Carregar la furgoneta"
 
-#: src/Idiomas/Guardados.php:90 src/Idiomas/TextosJs.php:17
+#: src/Idiomas/Guardados.php:94 src/Idiomas/TextosJs.php:17
 msgid "Loading the page"
 msgstr "Carregant la pàgina"
 
-#: src/Idiomas/Guardados.php:91 src/Idiomas/TextosJs.php:18
+#: src/Idiomas/Guardados.php:95 src/Idiomas/TextosJs.php:18
 msgid "Loading…"
 msgstr "Carregant…"
 
@@ -8657,11 +8714,11 @@ msgstr "Núm. de soci/sòcia local/territorial"
 msgid "Long text"
 msgstr "Text llarg"
 
-#: src/Idiomas/Guardados.php:199
+#: src/Idiomas/Guardados.php:209
 msgid "Look at the allergen notices in the Menu tab and confirm them or change the menu."
 msgstr "Mira els avisos d'al·lèrgens de la pestanya Menú i confirma'ls o canvia el menú."
 
-#: src/Idiomas/Guardados.php:80
+#: src/Idiomas/Guardados.php:82
 msgid "Look up evaluations of similar activities and review them"
 msgstr "Cercar avaluacions d'activitats similars i revisar-les"
 
@@ -8677,11 +8734,11 @@ msgstr "Dinar"
 msgid "Lupin"
 msgstr "Tramussos"
 
-#: src/Idiomas/Guardados.php:188
+#: src/Idiomas/Guardados.php:197
 msgid "Macaroni"
 msgstr "Macarrons"
 
-#: src/Idiomas/Guardados.php:189
+#: src/Idiomas/Guardados.php:198
 msgid "Macaroni with tomato"
 msgstr "Macarrons amb tomàquet"
 
@@ -8699,7 +8756,7 @@ msgstr "Fet el %1$s · %2$d comandes de clients"
 msgid "Main course"
 msgstr "Segon plat"
 
-#: src/Idiomas/Guardados.php:193
+#: src/Idiomas/Guardados.php:203
 msgid "Maize"
 msgstr "Blat de moro"
 
@@ -8715,7 +8772,7 @@ msgstr "Ramat"
 msgid "Manage access"
 msgstr "Gestiona l'accés"
 
-#: src/Idiomas/Guardados.php:153
+#: src/Idiomas/Guardados.php:162
 msgid "Manage event equipment"
 msgstr "Gestionar el material dels esdeveniments"
 
@@ -8727,11 +8784,11 @@ msgstr "Gestiona famílies"
 msgid "Manage the expense and income types"
 msgstr "Gestiona els tipus de despesa i ingrés"
 
-#: src/Idiomas/Guardados.php:154
+#: src/Idiomas/Guardados.php:163
 msgid "Manage the group's events and external events"
 msgstr "Gestionar els esdeveniments del grup i els externs"
 
-#: src/Idiomas/Guardados.php:53
+#: src/Idiomas/Guardados.php:54
 msgid "Manage the shop's products and settings"
 msgstr "Administrar productes i configuració de la botiga"
 
@@ -8809,11 +8866,11 @@ msgstr "Marca la sortida de tot"
 msgid "Mark list %s as bought? The quantities will be added to the inventory and new equipment will be registered. This cannot be undone."
 msgstr "Vols marcar la llista %s com a comprada? Les quantitats se sumaran a l'inventari i el material nou es donarà d'alta. No es pot desfer."
 
-#: src/Idiomas/Guardados.php:190
+#: src/Idiomas/Guardados.php:199
 msgid "Mark orders as paid"
 msgstr "Marcar com a pagades les comandes"
 
-#: src/Idiomas/Guardados.php:191
+#: src/Idiomas/Guardados.php:200
 msgid "Mark reimbursements as paid"
 msgstr "Marcar com a pagats els reintegraments"
 
@@ -8873,7 +8930,7 @@ msgstr "Pot contenir: %s"
 msgid "Me, out of my own pocket (Treasury will reimburse me)"
 msgstr "Jo, de la meva butxaca (Tresoreria m'ho reemborsarà)"
 
-#: src/Idiomas/Guardados.php:56
+#: src/Idiomas/Guardados.php:57
 msgid "Meatballs in tomato sauce"
 msgstr "Mandonguilles en salsa de tomàquet"
 
@@ -9035,7 +9092,7 @@ msgstr "Missatge"
 msgid "Method"
 msgstr "Mètode"
 
-#: src/Idiomas/Guardados.php:175
+#: src/Idiomas/Guardados.php:184
 msgid "Milk"
 msgstr "Llet"
 
@@ -9043,11 +9100,11 @@ msgstr "Llet"
 msgid "Milk and dairy"
 msgstr "Llet i làctics"
 
-#: src/Idiomas/Guardados.php:176
+#: src/Idiomas/Guardados.php:185
 msgid "Milk with cocoa and biscuits"
 msgstr "Llet amb cacau i galetes"
 
-#: src/Idiomas/Guardados.php:285
+#: src/Idiomas/Guardados.php:296
 msgid "Minced beef"
 msgstr "Vedella picada"
 
@@ -9143,7 +9200,7 @@ msgstr "Passar els comptes al CRM"
 msgid "Move the authorisations' accounts to the CRM records? They are written to the record of each family member and deleted from the website."
 msgstr "Vols passar els comptes de les autoritzacions a les fitxes del CRM? S'escriuen a la fitxa de cada membre de la família i s'esborren del web."
 
-#: src/Idiomas/Guardados.php:194
+#: src/Idiomas/Guardados.php:204
 msgid "Mussels"
 msgstr "Musclos"
 
@@ -9155,7 +9212,7 @@ msgstr "Mostassa"
 msgid "My details"
 msgstr "Les meves dades"
 
-#: src/Frontend/Menu.php:46 src/Idiomas/Guardados.php:200 templates/area/inicio.php:153 templates/eventos/mis-eventos.php:50
+#: src/Frontend/Menu.php:46 src/Idiomas/Guardados.php:210 templates/area/inicio.php:153 templates/eventos/mis-eventos.php:50
 msgid "My events"
 msgstr "Els meus esdeveniments"
 
@@ -9163,11 +9220,11 @@ msgstr "Els meus esdeveniments"
 msgid "My family"
 msgstr "La meva família"
 
-#: src/Frontend/Menu.php:57 src/Frontend/Views/TiendaBaseView.php:24 src/Idiomas/Guardados.php:202 templates/area/inicio.php:159
+#: src/Frontend/Menu.php:57 src/Frontend/Views/TiendaBaseView.php:24 src/Idiomas/Guardados.php:212 templates/area/inicio.php:159
 msgid "My orders"
 msgstr "Les meves comandes"
 
-#: src/Frontend/Menu.php:49 src/Idiomas/Guardados.php:201 templates/area/inicio.php:156 templates/eventos/mis-eventos.php:52
+#: src/Frontend/Menu.php:49 src/Idiomas/Guardados.php:211 templates/area/inicio.php:156 templates/eventos/mis-eventos.php:52
 msgid "My payments"
 msgstr "Els meus pagaments"
 
@@ -9221,7 +9278,7 @@ msgstr "Nom o referència"
 msgid "Name or username"
 msgstr "Nom o usuari"
 
-#: src/Idiomas/Guardados.php:213
+#: src/Idiomas/Guardados.php:223
 msgid "Name, age and contact of the members."
 msgstr "Nom, edat i contacte dels socis."
 
@@ -9293,6 +9350,7 @@ msgstr "Enllaç nou creat. L'anterior ja no val."
 msgid "New membership"
 msgstr "Membresia nova"
 
+#. translators: 1: text, 2: text, 3: text
 #: src/Frontend/Views/FichaView.php:338
 #, php-format
 msgid "New membership in the CRM: %1$s, in %2$s from %3$s."
@@ -9440,7 +9498,7 @@ msgstr "Sense conflictes"
 msgid "No connection to the CRM for this group."
 msgstr ""
 
-#: src/Idiomas/Guardados.php:276 templates/eventos/agenda.php:95
+#: src/Idiomas/Guardados.php:287 templates/eventos/agenda.php:95
 msgid "No cost"
 msgstr "Sense cost"
 
@@ -9454,7 +9512,7 @@ msgstr "Sense cost per a les famílies."
 msgid "No cost recorded (they do not add up): %s."
 msgstr "Sense cost anotat (no sumen): %s."
 
-#: src/Idiomas/Guardados.php:277
+#: src/Idiomas/Guardados.php:288
 msgid "No cost: first scouter shirt"
 msgstr "Sense cost: primera camisa de scouter"
 
@@ -9528,6 +9586,7 @@ msgstr ""
 msgid "No limit"
 msgstr "Sense límit"
 
+#. translators: 1: number, 2: number
 #: src/Frontend/Views/FichaView.php:427
 #, php-format
 msgid "No longer in %1$d family account(s); %2$d were deactivated because they do not represent anyone else."
@@ -9638,12 +9697,12 @@ msgid "Nobody in the support team has an account: print the sheet and hand it ov
 msgstr "Ningú de l'equip de suport té compte: imprimeix el full i lliura'l."
 
 #. translators: %s: text
-#: src/Idiomas/Guardados.php:206 src/Idiomas/TextosJs.php:26
+#: src/Idiomas/Guardados.php:216 src/Idiomas/TextosJs.php:26
 #, php-format
 msgid "Nobody matches \"%s\""
 msgstr "Ningú coincideix amb «%s»"
 
-#: src/Idiomas/Guardados.php:207
+#: src/Idiomas/Guardados.php:217
 msgid "Nobody reviewed it in 90 days: automatically rejected."
 msgstr "Ningú no la va revisar en 90 dies: rebutjada automàticament."
 
@@ -9743,7 +9802,7 @@ msgstr "Sense rellevància o autocontrolat"
 msgid "Not reviewed"
 msgstr "Sense revisar"
 
-#: src/Frontend/Views/TiendaGestionView.php:242 src/Idiomas/Guardados.php:278 templates/tienda/informe.php:104
+#: src/Frontend/Views/TiendaGestionView.php:242 src/Idiomas/Guardados.php:289 templates/tienda/informe.php:104
 msgid "Not stated"
 msgstr "Sense indicar"
 
@@ -9869,7 +9928,7 @@ msgstr "Número"
 msgid "Numbers that already existed without the leading 0 (e.g. 76840390) remain valid as they are; new ones are generated with the full province."
 msgstr "Els números que ja existien sense el 0 inicial (p. ex. 76840390) continuen sent vàlids tal com són; els nous es generen amb la província completa."
 
-#: src/Idiomas/Guardados.php:149
+#: src/Idiomas/Guardados.php:158
 msgid "Nuts"
 msgstr "Fruits secs"
 
@@ -9877,7 +9936,7 @@ msgstr "Fruits secs"
 msgid "OK"
 msgstr "Val"
 
-#: src/Idiomas/Guardados.php:77
+#: src/Idiomas/Guardados.php:78
 msgid "Oats"
 msgstr "Civada"
 
@@ -9903,7 +9962,7 @@ msgstr "Data certificat DS"
 msgid "Offer direct debit to families (appears in \"My payments\")"
 msgstr "Ofereix la domiciliació a les famílies (apareix a «Els meus pagaments»)"
 
-#: src/Idiomas/Guardados.php:216
+#: src/Idiomas/Guardados.php:226
 msgid "Office"
 msgstr "Oficina"
 
@@ -9915,7 +9974,7 @@ msgstr ""
 msgid "Office · read-only"
 msgstr "Oficina · només lectura"
 
-#: src/Idiomas/Guardados.php:234
+#: src/Idiomas/Guardados.php:244
 msgid "Oily fish"
 msgstr "Peix blau"
 
@@ -10003,7 +10062,7 @@ msgstr "Hi ha un correu electrònic que no és vàlid."
 msgid "One of the two is already linked to another transaction: remove that link first."
 msgstr "Un dels dos ja està associat amb un altre moviment: treu abans aquesta associació."
 
-#: src/Idiomas/Guardados.php:299
+#: src/Idiomas/Guardados.php:310
 msgid "One page per member with their mobile, their guardian and the guardian's mobile, the image release, allergies, food and illnesses. Choose the section when viewing it."
 msgstr "Una pàgina per soci/sòcia amb el mòbil, el tutor/a i el seu mòbil, la cessió d'imatge, les al·lèrgies, l'alimentació i les malalties. Tria la secció en veure'l."
 
@@ -10019,10 +10078,11 @@ msgstr "Una fitxa per persona (en imprimir, una per pàgina)"
 msgid "One row for each ingredient of each recipe, with the columns: Recipe; Type; Portions; Ingredient; Quantity; Unit. The units are g, kg, ml, l, unit, tbsp and pinch. Ingredients that do not exist are created with no allergens and unreviewed: record them afterwards in \"Ingredients\". No recipe that already exists is overwritten."
 msgstr "Una fila per cada ingredient de cada recepta, amb les columnes: Receta; Tipo; Porciones; Ingrediente; Cantidad; Unidad. Les unitats són g, kg, ml, l, ud, cda i pizca. Els ingredients que no existeixin es creen sense al·lèrgens i sense revisar: anota'ls després a «Ingredients». No es trepitja cap recepta que ja existeixi."
 
-#: src/Idiomas/Guardados.php:96
+#: src/Idiomas/Guardados.php:100
 msgid "Onion"
 msgstr "Ceba"
 
+#. translators: 2: number, 1: text
 #: src/Tienda/Servicio.php:163
 #, php-format
 msgid "Only %2$d of \"%1$s\" can be ordered per person."
@@ -10186,6 +10246,7 @@ msgstr "La comanda %s ja no consta a la comanda del grup."
 msgid "Order %s marked as delivered. The member or their family still has to confirm it."
 msgstr "Comanda %s marcada com a lliurada. Falta que la confirmi el soci/sòcia o la seva família."
 
+#. translators: %s: text
 #: src/Frontend/Views/TiendaGestionView.php:400
 #, php-format
 msgid "Order %s marked as paid with the bank deposit."
@@ -10277,11 +10338,11 @@ msgstr "Les comandes de socis i famílies que es fan a la botiga i no es paguen:
 msgid "Organisation"
 msgstr ""
 
-#: src/Eventos/GastosTable.php:60 src/Idiomas/Guardados.php:217 src/Informes/Catalogo.php:185 src/Menus/RecetasTable.php:28
+#: src/Eventos/GastosTable.php:60 src/Idiomas/Guardados.php:227 src/Informes/Catalogo.php:185 src/Menus/RecetasTable.php:28
 msgid "Other"
 msgstr "Altra"
 
-#: src/Caja/LibroMayor.php:163 src/Idiomas/Guardados.php:219
+#: src/Caja/LibroMayor.php:163 src/Idiomas/Guardados.php:229
 msgid "Other (cash box)"
 msgstr "Altres (caixa)"
 
@@ -10317,7 +10378,7 @@ msgstr "Altres conceptes"
 msgid "Other reason"
 msgstr "Un altre motiu"
 
-#: src/Idiomas/Guardados.php:218 src/Informes/Catalogo.php:156 src/Tesoreria/Config.php:53
+#: src/Idiomas/Guardados.php:228 src/Informes/Catalogo.php:156
 msgid "Others"
 msgstr "Altres"
 
@@ -10359,7 +10420,7 @@ msgstr "Anada: %1$s · Tornada: %2$s"
 msgid "Overall balance"
 msgstr "Balanç"
 
-#: src/Tesoreria/Config.php:46
+#: src/Idiomas/Guardados.php:126
 msgid "Overdrafts and Interventions"
 msgstr "Descoberta i Intervenció"
 
@@ -10445,11 +10506,11 @@ msgstr "Pagat el %s"
 msgid "Paper authorisation recorded."
 msgstr "Autorització en paper anotada."
 
-#: src/Idiomas/Guardados.php:236
+#: src/Idiomas/Guardados.php:246
 msgid "Paprika"
 msgstr "Pebre vermell"
 
-#: src/Idiomas/Guardados.php:264
+#: src/Idiomas/Guardados.php:274
 msgid "Parents' meeting"
 msgstr "Reunió de pares"
 
@@ -10461,7 +10522,7 @@ msgstr "Part de les quotes dels educands"
 msgid "Partial payment"
 msgstr "Pagament parcial"
 
-#: src/Idiomas/Guardados.php:224
+#: src/Idiomas/Guardados.php:234
 msgid "Participant"
 msgstr "Participant"
 
@@ -10513,6 +10574,7 @@ msgstr ""
 msgid "Password saved. You can now sign in with your member number (or your email) and the password you have just chosen."
 msgstr "Contrasenya desada. Ja pots entrar amb el teu número de soci/sòcia (o el teu email) i la contrasenya que acabes de triar."
 
+#. translators: %s: text
 #: src/Tienda/Servicio.php:440
 #, php-format
 msgid "Pay by card, in person, with the group's card terminal on collection, stating order no. %s."
@@ -10588,31 +10650,37 @@ msgstr "Pagament de"
 msgid "Payment of %1$s (%2$s) validated on order %3$s."
 msgstr "Pagament de %1$s (%2$s) validat a la comanda %3$s."
 
+#. translators: 1: text, 2: text
 #: src/Frontend/Views/TesoreriaView.php:397
 #, php-format
 msgid "Payment of %1$s recorded in the event \"%2$s\". It remains in the family's payment history."
 msgstr "Pagament de %1$s registrat a l'esdeveniment «%2$s». Queda a l'historial de pagaments de la família."
 
+#. translators: 1: text, 2: text
 #: src/Frontend/Views/TesoreriaView.php:409
 #, php-format
 msgid "Payment of %1$s recorded with the bank deposit of %2$s, which is reconciled with this family."
 msgstr "Pagament de %1$s registrat amb l'ingrés del banc del %2$s, que queda conciliat amb aquesta família."
 
+#. translators: 1: text, 2: text
 #: src/Tesoreria/HistorialPagos.php:48
 #, php-format
 msgid "Payment of %1$s · event \"%2$s\""
 msgstr "Pagament de %1$s · esdeveniment «%2$s»"
 
+#. translators: 1: text, 2: text
 #: src/Tesoreria/HistorialPagos.php:118
 #, php-format
 msgid "Payment of %1$s · uniform order %2$s"
 msgstr "Pagament de %1$s · comanda d'uniforme %2$s"
 
+#. translators: %s: text
 #: templates/tesoreria/familia.php:271
 #, php-format
 msgid "Payment of %s deleted"
 msgstr "Pagament de %s eliminat"
 
+#. translators: %s: text
 #: src/Frontend/Views/TesoreriaView.php:433
 #, php-format
 msgid "Payment of %s deleted. It remains in the family's history."
@@ -10666,7 +10734,7 @@ msgstr "Pagaments, comanda al proveïdor i lliuraments de les camises del grup."
 msgid "Payroll · social security"
 msgstr "Nòmines · assegurances socials"
 
-#: src/Idiomas/Guardados.php:195
+#: src/Idiomas/Guardados.php:205
 msgid "Peach"
 msgstr "Préssec"
 
@@ -10674,11 +10742,11 @@ msgstr "Préssec"
 msgid "Peanuts"
 msgstr "Cacauets"
 
-#: src/Idiomas/Guardados.php:157
+#: src/Idiomas/Guardados.php:166
 msgid "Peas"
 msgstr "Pèsols"
 
-#: src/Eventos/InscripcionesTable.php:53 src/Frontend/Views/TesoreriaView.php:38 src/Frontend/Views/TesoreriaView.php:317 src/Idiomas/Guardados.php:230
+#: src/Eventos/InscripcionesTable.php:53 src/Frontend/Views/TesoreriaView.php:38 src/Frontend/Views/TesoreriaView.php:317 src/Idiomas/Guardados.php:240
 msgid "Pending"
 msgstr "Pendents"
 
@@ -10730,7 +10798,7 @@ msgstr "Pendent de revisar"
 msgid "People"
 msgstr "Persones"
 
-#: src/Idiomas/Guardados.php:233
+#: src/Idiomas/Guardados.php:243
 msgid "People and records"
 msgstr "Persones i fitxes"
 
@@ -10742,7 +10810,7 @@ msgstr "Persones autoritzades a recollir-lo/la (nom i DNI)"
 msgid "People in a family withdrawn in the CRM from the website in the last 30 days: they no longer count in their family's fee."
 msgstr "Persones d'alguna família donades de baixa al CRM des del web en els darrers 30 dies: ja no compten en la quota de la seva família."
 
-#: src/Idiomas/Guardados.php:232 templates/area/inicio.php:188 templates/personas/listado.php:58
+#: src/Idiomas/Guardados.php:242 templates/area/inicio.php:188 templates/personas/listado.php:58
 msgid "People in the group"
 msgstr "Persones del grup"
 
@@ -10782,7 +10850,7 @@ msgstr "Permís concedit."
 msgid "Permission withdrawn."
 msgstr "Permís retirat."
 
-#: src/Idiomas/Guardados.php:231 templates/accesos/matriz.php:25
+#: src/Idiomas/Guardados.php:241 templates/accesos/matriz.php:25
 msgid "Permissions by role"
 msgstr "Permisos per rol"
 
@@ -10842,7 +10910,7 @@ msgstr "Recollida i observacions"
 msgid "Picked up by:"
 msgstr "La recullen:"
 
-#: src/Idiomas/Guardados.php:237
+#: src/Idiomas/Guardados.php:247
 msgid "Pistachio"
 msgstr "Festuc"
 
@@ -10872,7 +10940,7 @@ msgstr "Plaça oferta fins al %s"
 msgid "Place the order"
 msgstr "Fer la comanda"
 
-#: src/Idiomas/Guardados.php:158
+#: src/Idiomas/Guardados.php:167
 msgid "Place the shirt order with the supplier"
 msgstr "Fer la comanda de camises al proveïdor"
 
@@ -10916,7 +10984,7 @@ msgstr "Ingressos previstos"
 msgid "Policy no."
 msgstr "Núm. de pòlissa"
 
-#: src/Idiomas/Guardados.php:93
+#: src/Idiomas/Guardados.php:97
 msgid "Pork"
 msgstr "Carn de porc"
 
@@ -10936,11 +11004,11 @@ msgstr "Possibles germans/es (comparteixen un email al CRM). Marca'ls si són de
 msgid "Postcode"
 msgstr "Codi postal"
 
-#: src/Idiomas/Guardados.php:225
+#: src/Idiomas/Guardados.php:235
 msgid "Potato"
 msgstr "Patata"
 
-#: src/Idiomas/Guardados.php:292
+#: src/Idiomas/Guardados.php:303
 msgid "Potato omelette"
 msgstr "Truita de patates"
 
@@ -10948,7 +11016,7 @@ msgstr "Truita de patates"
 msgid "Practical information"
 msgstr "Informació pràctica"
 
-#: src/Idiomas/Guardados.php:151
+#: src/Idiomas/Guardados.php:160
 msgid "Prawns"
 msgstr "Gambes"
 
@@ -10976,7 +11044,7 @@ msgstr "Elaboració"
 msgid "Prepare a list from the inventory"
 msgstr "Prepara una llista des de l'inventari"
 
-#: src/Idiomas/Guardados.php:243
+#: src/Idiomas/Guardados.php:253
 msgid "Prepare the budget of their sections"
 msgstr "Preparar el pressupost de les seves seccions"
 
@@ -11040,7 +11108,7 @@ msgstr "Preu de «%s»"
 msgid "Price of one bus (€)"
 msgstr "Preu d'un autobús (€)"
 
-#: src/Idiomas/Guardados.php:242
+#: src/Idiomas/Guardados.php:252
 msgid "Price per camper and day × campers (youth members + scouters) × days."
 msgstr "Preu per acampat i dia × acampats (educands + scouters) × dies."
 
@@ -11070,16 +11138,17 @@ msgstr "Imprimeix"
 msgid "Print or save as PDF"
 msgstr "Imprimeix o desa com a PDF"
 
-#: src/Idiomas/Guardados.php:315 src/Idiomas/TextosJs.php:55
+#: src/Idiomas/Guardados.php:326 src/Idiomas/TextosJs.php:55
 msgid "Print version"
 msgstr "Versió per imprimir"
 
+#. translators: %s: text
 #: templates/informes/imprimir.php:105
 #, php-format
 msgid "Printed from the private area on %s."
 msgstr "Imprès des de l'àrea privada el %s."
 
-#: src/Frontend/Visibilidad.php:83 src/Idiomas/Guardados.php:323 templates/comun/nav.php:24 templates/email/alta-grupo-resultado.php:26
+#: src/Frontend/Visibilidad.php:83 src/Idiomas/Guardados.php:334 templates/comun/nav.php:24 templates/email/alta-grupo-resultado.php:26
 msgid "Private area"
 msgstr "Àrea privada"
 
@@ -11109,7 +11178,7 @@ msgstr "Àrea privada dels grups de %s."
 msgid "Private area of the Scout Groups."
 msgstr "Àrea privada dels Grups Escoltes."
 
-#: src/Idiomas/Guardados.php:302 templates/usuarios/listado.php:56
+#: src/Idiomas/Guardados.php:313 templates/usuarios/listado.php:56
 msgid "Private area users"
 msgstr "Usuaris de l'àrea privada"
 
@@ -11117,7 +11186,7 @@ msgstr "Usuaris de l'àrea privada"
 msgid "Private health insurance"
 msgstr "Assegurança mèdica privada"
 
-#: src/Idiomas/Guardados.php:268
+#: src/Idiomas/Guardados.php:278
 msgid "Produce group reports"
 msgstr "Treure informes del grup"
 
@@ -11181,15 +11250,15 @@ msgstr "Vols publicar l'esdeveniment? El veuran els scouters de les seccions con
 msgid "Published"
 msgstr "Publicat"
 
-#: src/Idiomas/Guardados.php:177
+#: src/Idiomas/Guardados.php:186
 msgid "Pulses"
 msgstr "Llegums"
 
-#: src/Idiomas/Guardados.php:84
+#: src/Idiomas/Guardados.php:87
 msgid "Pumpkin"
 msgstr "Carabassa"
 
-#: src/Idiomas/Guardados.php:113
+#: src/Idiomas/Guardados.php:117
 msgid "Pumpkin cream soup"
 msgstr "Crema de carabassa"
 
@@ -11201,7 +11270,7 @@ msgstr "Compra sense sessió"
 msgid "Qualification"
 msgstr "Titulació"
 
-#: src/Idiomas/Guardados.php:298
+#: src/Idiomas/Guardados.php:309
 msgid "Qualifications needed = youth members ÷ the autonomous community's ratio, rounded up."
 msgstr "Títols necessaris = educands ÷ ràtio de la Comunitat Autònoma, arrodonit cap amunt."
 
@@ -11209,7 +11278,7 @@ msgstr "Títols necessaris = educands ÷ ràtio de la Comunitat Autònoma, arrod
 msgid "Quantities according to diners"
 msgstr "Quantitats segons els comensals"
 
-#: src/Frontend/Views/TiendaProveedorView.php:69 src/Idiomas/Guardados.php:89 src/Inventario/Importador.php:38 src/Menus/MenuEvento.php:216
+#: src/Frontend/Views/TiendaProveedorView.php:69 src/Idiomas/Guardados.php:93 src/Inventario/Importador.php:38 src/Menus/MenuEvento.php:216
 msgid "Quantity"
 msgstr "Quantitat"
 
@@ -11235,11 +11304,11 @@ msgstr "Quantitat de %s"
 msgid "Quantity: %s"
 msgstr "Quantitat: %s"
 
-#: src/Idiomas/Guardados.php:167
+#: src/Idiomas/Guardados.php:176
 msgid "Quartermaster (equipment officer)"
 msgstr "Intendent (responsable de material)"
 
-#: src/Idiomas/Guardados.php:244
+#: src/Idiomas/Guardados.php:254
 msgid "Quartermasters and sections to prepare the camping equipment"
 msgstr "Preparar les intendències i seccions el material d'acampada"
 
@@ -11377,7 +11446,7 @@ msgstr "Rebudes: %s"
 msgid "Recent withdrawals"
 msgstr "Baixes recents"
 
-#: src/Idiomas/Guardados.php:251 templates/menus/recetas.php:28 templates/menus/recetas.php:68
+#: src/Idiomas/Guardados.php:261 templates/menus/recetas.php:28 templates/menus/recetas.php:68
 msgid "Recipe"
 msgstr "Recepta"
 
@@ -11411,7 +11480,7 @@ msgstr "Recepta recuperada."
 msgid "Recipe saved."
 msgstr "Recepta desada."
 
-#: src/Frontend/Views/EventosBaseView.php:17 src/Idiomas/Guardados.php:253 templates/menus/ingredientes.php:80 templates/menus/ingredientes.php:96
+#: src/Frontend/Views/EventosBaseView.php:17 src/Idiomas/Guardados.php:263 templates/menus/ingredientes.php:80 templates/menus/ingredientes.php:96
 msgid "Recipes"
 msgstr "Receptes"
 
@@ -11521,7 +11590,7 @@ msgstr "Apunta l'ingrés"
 msgid "Record the payment"
 msgstr "Registra el pagament"
 
-#: src/Idiomas/Guardados.php:66
+#: src/Idiomas/Guardados.php:67
 msgid "Record the people in charge and the budget."
 msgstr "Anota els responsables i el pressupost."
 
@@ -11563,7 +11632,7 @@ msgstr "Recupera"
 msgid "Recover in the inventory"
 msgstr "Recupera a l'inventari"
 
-#: src/Idiomas/Guardados.php:257 src/Usuarios/RegistroEmails.php:77 templates/recuperar/formulario.php:15
+#: src/Idiomas/Guardados.php:267 src/Usuarios/RegistroEmails.php:77 templates/recuperar/formulario.php:15
 msgid "Recover password"
 msgstr "Recupera la contrasenya"
 
@@ -11625,6 +11694,7 @@ msgstr "Referències"
 msgid "Refund"
 msgstr "Devolució"
 
+#. translators: 1: text, 2: text
 #: src/Tesoreria/HistorialPagos.php:51
 #, php-format
 msgid "Refund of %1$s · event \"%2$s\""
@@ -11780,12 +11850,13 @@ msgstr "Reintegrament rebutjat."
 msgid "Reimbursement requested. Treasury will review it and we will notify you."
 msgstr "Reintegrament demanat. Tresoreria el revisarà i t'avisarem."
 
+#. translators: %s: text
 #: src/Caja/Automaticos.php:143
 #, php-format
 msgid "Reimbursement · %s"
 msgstr "Reintegrament · %s"
 
-#: src/Caja/Automaticos.php:46 src/Domain/Modulos.php:60 src/Frontend/Menu.php:91 src/Idiomas/Guardados.php:260
+#: src/Caja/Automaticos.php:46 src/Domain/Modulos.php:60 src/Frontend/Menu.php:91 src/Idiomas/Guardados.php:270
 msgid "Reimbursements"
 msgstr "Reintegraments"
 
@@ -11809,7 +11880,7 @@ msgstr "Rebutja els seleccionats"
 msgid "Reject this registration? The stored credential is deleted and the group is notified (without the reason)."
 msgstr ""
 
-#: src/Eventos/GastosTable.php:35 src/Fichas/Cambios.php:37 src/Idiomas/Guardados.php:254 src/Inventario/ComprasTable.php:40
+#: src/Eventos/GastosTable.php:35 src/Fichas/Cambios.php:37 src/Idiomas/Guardados.php:264 src/Inventario/ComprasTable.php:40
 msgid "Rejected"
 msgstr "Rebutjat"
 
@@ -11933,7 +12004,7 @@ msgstr "Repeteix la contrasenya"
 msgid "Repeated"
 msgstr "Repetida"
 
-#: src/Frontend/Views/InformesView.php:198 src/Idiomas/Guardados.php:163 templates/informes/lista.php:27 templates/informes/lista.php:36
+#: src/Frontend/Views/InformesView.php:198 src/Idiomas/Guardados.php:172 templates/informes/lista.php:27 templates/informes/lista.php:36
 msgid "Report"
 msgstr "Informe"
 
@@ -11965,7 +12036,7 @@ msgstr "Comunicació a ASDE Balears (30 dies abans)"
 msgid "Reporting"
 msgstr "Comunicació"
 
-#: src/Domain/Modulos.php:51 src/Frontend/Menu.php:73 src/Idiomas/Guardados.php:164 templates/area/inicio.php:176
+#: src/Domain/Modulos.php:51 src/Frontend/Menu.php:73 src/Idiomas/Guardados.php:173 templates/area/inicio.php:176
 msgid "Reports"
 msgstr "Informes"
 
@@ -11977,7 +12048,7 @@ msgstr "Sol·licitud"
 msgid "Request a reimbursement"
 msgstr "Demanar un reintegrament"
 
-#: src/Idiomas/Guardados.php:280 templates/acceso/formulario.php:75 templates/recuperar/formulario.php:37 templates/solicitudes/formulario.php:33
+#: src/Idiomas/Guardados.php:291 templates/acceso/formulario.php:75 templates/recuperar/formulario.php:37 templates/solicitudes/formulario.php:33
 msgid "Request access"
 msgstr "Sol·licita l'accés"
 
@@ -11997,7 +12068,7 @@ msgstr "Demana l'accés a la Secretaria del teu grup, amb el nom del soci/sòcia
 msgid "Request approved: account <strong>%1$s</strong>. The invitation, with the welcome, has been sent to %2$s.%3$s"
 msgstr "Sol·licitud aprovada: compte <strong>%1$s</strong>. S'ha enviat la invitació, amb la benvinguda, a %2$s.%3$s"
 
-#: src/Idiomas/Guardados.php:227
+#: src/Idiomas/Guardados.php:237
 msgid "Request reimbursement of an expense"
 msgstr "Demanar el reintegrament d'una despesa"
 
@@ -12153,6 +12224,7 @@ msgstr "Tornar als permisos de fàbrica"
 msgid "Returned"
 msgstr "Retornat"
 
+#. translators: %s: text
 #: src/Caja/Automaticos.php:126
 #, php-format
 msgid "Returned from the advance · %s"
@@ -12200,11 +12272,11 @@ msgstr "Moviments revisats"
 msgid "Reviewed with no type"
 msgstr "Revisat sense tipus"
 
-#: src/Idiomas/Guardados.php:72
+#: src/Idiomas/Guardados.php:73
 msgid "Rice"
 msgstr "Arròs"
 
-#: src/Idiomas/Guardados.php:73
+#: src/Idiomas/Guardados.php:74
 msgid "Rice with tomato and egg"
 msgstr "Arròs amb tomàquet i ou"
 
@@ -12254,11 +12326,13 @@ msgstr "Rols, seccions i compte familiar"
 msgid "Round"
 msgstr "Ronda"
 
+#. translators: 1: text, 2: text
 #: src/Frontend/Views/TesoreriaView.php:313
 #, php-format
 msgid "Round %1$s · generated on %2$s"
 msgstr "Ronda %1$s · generat el %2$s"
 
+#. translators: %s: text
 #: src/Caja/Periodo.php:34
 #, php-format
 msgid "Round %s"
@@ -12317,7 +12391,7 @@ msgstr "Les files amb la mateixa descripció formen un producte de la botiga, am
 msgid "Run the <a href=\"%s\">background tasks diagnostic</a> (on LiteSpeed/Hostinger \"noabort\" is usually needed)."
 msgstr ""
 
-#: src/Idiomas/Guardados.php:98
+#: src/Idiomas/Guardados.php:102
 msgid "Rye"
 msgstr "Sègol"
 
@@ -12333,7 +12407,7 @@ msgstr "Ordre de domiciliació de càrrec directe SEPA"
 msgid "SEPA direct debit · family"
 msgstr "Domiciliació SEPA · família"
 
-#: src/Domain/Modulos.php:48 src/Idiomas/Guardados.php:122 templates/tesoreria/sepa.php:75
+#: src/Domain/Modulos.php:48 src/Idiomas/Guardados.php:128 templates/tesoreria/sepa.php:75
 msgid "SEPA direct debits"
 msgstr "Domiciliacions SEPA"
 
@@ -12357,7 +12431,7 @@ msgstr "Vendes per producte"
 msgid "Sales reports are seen by Treasury, Coordination and the shop administration."
 msgstr "Els informes de vendes els veuen Tresoreria, Coordinació i l'administració de la botiga."
 
-#: src/Idiomas/Guardados.php:269
+#: src/Idiomas/Guardados.php:279
 msgid "Salt"
 msgstr "Sal"
 
@@ -12499,6 +12573,7 @@ msgstr "Escaneja amb ella el codi QR de sota."
 msgid "Scholarship or adjustment"
 msgstr "Beca o ajust"
 
+#. translators: 1: text, 2: text
 #: src/Tesoreria/HistorialPagos.php:54
 #, php-format
 msgid "Scholarship or adjustment of %1$s · event \"%2$s\""
@@ -12554,7 +12629,7 @@ msgstr "Secció Scout"
 msgid "Scout training"
 msgstr "Formació Scout"
 
-#: src/Idiomas/Guardados.php:270
+#: src/Idiomas/Guardados.php:281
 msgid "Scouter / Volunteer"
 msgstr "Scouter / Voluntari"
 
@@ -12566,7 +12641,7 @@ msgstr "Etapa d'Acollida al Scouter (EAS)"
 msgid "Scouter Trainer Stage (EFS)"
 msgstr "Etapa Formador/a de Scouters (EFS)"
 
-#: src/Domain/Modulos.php:53 src/Idiomas/Guardados.php:63 templates/alta-scouters/formulario.php:27
+#: src/Domain/Modulos.php:53 src/Idiomas/Guardados.php:64 templates/alta-scouters/formulario.php:27
 msgid "Scouter registration"
 msgstr "Alta de scouters"
 
@@ -12619,7 +12694,7 @@ msgstr "Núm. Scouts de España %s"
 msgid "Scouts de España no. (username)"
 msgstr "Núm. Scouts de España (usuari)"
 
-#: src/Idiomas/Guardados.php:192
+#: src/Idiomas/Guardados.php:201
 msgid "Seafood"
 msgstr "Marisc"
 
@@ -12663,7 +12738,7 @@ msgstr "Cerca soci"
 msgid "Search the records of a group for those with the same ID, foreigner ID or other document (written in any form: with a hyphen, in lower case…). They are usually the same person registered twice before registrations from the website; they must be merged in the CRM. Read-only: nothing is changed."
 msgstr ""
 
-#: src/Idiomas/Guardados.php:148
+#: src/Idiomas/Guardados.php:157
 msgid "Seasonal fruit"
 msgstr "Fruita de temporada"
 
@@ -12671,7 +12746,7 @@ msgstr "Fruita de temporada"
 msgid "Second reminder (days before the event; 0 = not sent; less than the first)"
 msgstr "Segon recordatori (dies abans de l'esdeveniment; 0 = no s'envia; menys que el primer)"
 
-#: src/Idiomas/Guardados.php:273
+#: src/Idiomas/Guardados.php:284
 msgid "Secretary's office"
 msgstr "Secretaria"
 
@@ -12703,7 +12778,7 @@ msgstr "Secció per edat"
 msgid "Section coordinator"
 msgstr "Coordinador/a de secció"
 
-#: src/Idiomas/Guardados.php:183
+#: src/Idiomas/Guardados.php:192
 msgid "Section list"
 msgstr "Llistat de secció"
 
@@ -12739,15 +12814,15 @@ msgstr "Seguretat"
 msgid "Security and advanced settings"
 msgstr ""
 
-#: src/Idiomas/Guardados.php:314
+#: src/Idiomas/Guardados.php:325
 msgid "See \"My events\" and sign up"
 msgstr "Veure «Els meus esdeveniments» i inscriure's"
 
-#: src/Idiomas/Guardados.php:305
+#: src/Idiomas/Guardados.php:316
 msgid "See People and Users and give access to the area"
 msgstr "Veure Persones i Usuaris i donar accés a l'àrea"
 
-#: src/Idiomas/Guardados.php:306
+#: src/Idiomas/Guardados.php:317
 msgid "See Treasury (families, payments and bank)"
 msgstr "Veure Tresoreria (famílies, pagaments i banc)"
 
@@ -12755,11 +12830,11 @@ msgstr "Veure Tresoreria (famílies, pagaments i banc)"
 msgid "See all the users of the private area"
 msgstr "Veure tots els usuaris de l'àrea privada"
 
-#: src/Idiomas/Guardados.php:313
+#: src/Idiomas/Guardados.php:324
 msgid "See and edit the equipment inventory"
 msgstr "Veure i editar l'inventari de material"
 
-#: src/Idiomas/Guardados.php:311
+#: src/Idiomas/Guardados.php:322
 msgid "See health data"
 msgstr "Veure les dades de salut"
 
@@ -12779,11 +12854,11 @@ msgstr "Mostra la llista"
 msgid "See the menu"
 msgstr "Veure el menú"
 
-#: src/Idiomas/Guardados.php:309
+#: src/Idiomas/Guardados.php:320
 msgid "See the records of the people in their section"
 msgstr "Veure les fitxes de les persones de la seva secció"
 
-#: src/Idiomas/Guardados.php:310
+#: src/Idiomas/Guardados.php:321
 msgid "See the records of the whole group"
 msgstr "Veure les fitxes de tot el grup"
 
@@ -12791,11 +12866,11 @@ msgstr "Veure les fitxes de tot el grup"
 msgid "See the reimbursements"
 msgstr "Veure els reintegraments"
 
-#: src/Idiomas/Guardados.php:307
+#: src/Idiomas/Guardados.php:318
 msgid "See the shop management"
 msgstr "Veure la gestió de la botiga"
 
-#: src/Idiomas/Guardados.php:308
+#: src/Idiomas/Guardados.php:319
 msgid "See the waiting list and get in touch"
 msgstr "Veure la llista d'espera i contactar"
 
@@ -12840,11 +12915,11 @@ msgstr "Envia'm l'enllaç"
 msgid "Send request"
 msgstr "Envia la sol·licitud"
 
-#: src/Idiomas/Guardados.php:133
+#: src/Idiomas/Guardados.php:140
 msgid "Send the camp form to the OF (Federated Organisation)"
 msgstr "Enviar la fitxa de l'acampada a l'OF (Organització Federada)"
 
-#: src/Idiomas/Guardados.php:132
+#: src/Idiomas/Guardados.php:139
 msgid "Send the letter by post"
 msgstr "Enviar la carta per correu postal"
 
@@ -12982,15 +13057,15 @@ msgstr "Comparteix amb la resta de l'equip"
 msgid "Shared"
 msgstr "Compartit"
 
-#: src/Frontend/Views/TiendaBaseView.php:30 src/Idiomas/Guardados.php:226
+#: src/Frontend/Views/TiendaBaseView.php:30 src/Idiomas/Guardados.php:236
 msgid "Shirt order"
 msgstr "Comanda de camises"
 
-#: src/Caja/Automaticos.php:45 src/Domain/Modulos.php:49 src/Frontend/Menu.php:57 src/Idiomas/Guardados.php:287
+#: src/Caja/Automaticos.php:45 src/Domain/Modulos.php:49 src/Frontend/Menu.php:57 src/Idiomas/Guardados.php:298
 msgid "Shop"
 msgstr "Botiga"
 
-#: src/Frontend/Views/TiendaBaseView.php:33 src/Idiomas/Guardados.php:171 templates/tienda/productos.php:24
+#: src/Frontend/Views/TiendaBaseView.php:33 src/Idiomas/Guardados.php:180 templates/tienda/productos.php:24
 msgid "Shop inventory"
 msgstr "Inventari de la botiga"
 
@@ -13002,10 +13077,11 @@ msgstr "Enllaç de la botiga"
 msgid "Shop link (share it wherever you like):"
 msgstr "Enllaç de la botiga (comparteix-lo on vulguis):"
 
-#: src/Frontend/Menu.php:81 src/Idiomas/Guardados.php:156 templates/area/inicio.php:167
+#: src/Frontend/Menu.php:81 src/Idiomas/Guardados.php:165 templates/area/inicio.php:167
 msgid "Shop management"
 msgstr "Gestió de la botiga"
 
+#. translators: %d: number
 #: src/Caja/Automaticos.php:135
 #, php-format
 msgid "Shop order no. %d"
@@ -13037,7 +13113,7 @@ msgstr "Llista de compra revisada"
 msgid "Shopping lists"
 msgstr "Llistes de compra"
 
-#: src/Idiomas/Guardados.php:145
+#: src/Idiomas/Guardados.php:153
 msgid "Short records"
 msgstr "Fitxes reduïdes"
 
@@ -13049,7 +13125,7 @@ msgstr "Text curt"
 msgid "Show"
 msgstr "Mostra"
 
-#: src/Idiomas/Guardados.php:204 src/Idiomas/TextosJs.php:22
+#: src/Idiomas/Guardados.php:214 src/Idiomas/TextosJs.php:22
 msgid "Show header"
 msgstr "Mostra la capçalera"
 
@@ -13062,7 +13138,7 @@ msgid "Showing"
 msgstr "Mostrant"
 
 #. translators: 1: text, 2: text, 3: text
-#: src/Idiomas/Guardados.php:203 src/Idiomas/TextosJs.php:36
+#: src/Idiomas/Guardados.php:213 src/Idiomas/TextosJs.php:36
 #, php-format
 msgid "Showing %1$s–%2$s of %3$s"
 msgstr "Mostrant %1$s–%2$s de %3$s"
@@ -13245,7 +13321,7 @@ msgstr "Es va apuntar"
 msgid "Signed up more than once with a different email"
 msgstr "Apuntada més d'una vegada amb un email diferent"
 
-#: src/Idiomas/Guardados.php:324 src/Tienda/VariantesTable.php:226 templates/inventario/material.php:114
+#: src/Idiomas/Guardados.php:335 src/Tienda/VariantesTable.php:226 templates/inventario/material.php:114
 msgid "Single"
 msgstr "Única"
 
@@ -13261,7 +13337,7 @@ msgstr "Talla (camises)"
 msgid "Size or model"
 msgstr "Talla o model"
 
-#: src/Idiomas/Guardados.php:248
+#: src/Idiomas/Guardados.php:258
 msgid "Sliced cheese"
 msgstr "Formatge en llesques"
 
@@ -13297,7 +13373,7 @@ msgstr "Algú de l'equip, de la seva butxaca (se li ha de reemborsar)"
 msgid "Someone in the group"
 msgstr "Algú del grup"
 
-#: src/Idiomas/Guardados.php:282
+#: src/Idiomas/Guardados.php:293
 msgid "Sorbitol"
 msgstr "Sorbitol"
 
@@ -13323,7 +13399,7 @@ msgstr "Soja"
 msgid "Spanish account (24 characters). It is stored, with the holder and the bank, on the CRM record of each family member at Scouts de España; the website only stores your authorisation."
 msgstr "Compte espanyol (24 caràcters). Es desa, amb el titular i l'entitat, a la fitxa de cada membre de la família al CRM de Scouts de España; el web només desa la teva autorització."
 
-#: src/Tesoreria/Config.php:53
+#: src/Idiomas/Guardados.php:51
 msgid "Special activity"
 msgstr "Activitat especial"
 
@@ -13349,7 +13425,7 @@ msgstr "Repartiment de la ronda %s desat."
 msgid "Split of the fees between the group and the sections, and the budget of each."
 msgstr "Repartiment de les quotes entre el grup i les seccions i pressupost de cadascuna."
 
-#: src/Idiomas/Guardados.php:85
+#: src/Idiomas/Guardados.php:88
 msgid "Squid and octopus"
 msgstr "Calamar i pop"
 
@@ -13453,7 +13529,7 @@ msgstr "Estat canviat."
 msgid "Status: %s"
 msgstr "Estat: %s"
 
-#: src/Idiomas/Guardados.php:179
+#: src/Idiomas/Guardados.php:188
 msgid "Stewed lentils"
 msgstr "Llenties estofades"
 
@@ -13483,6 +13559,7 @@ msgstr "Existències"
 msgid "Stock market and securities transactions"
 msgstr "Operacions de borsa i valors"
 
+#. translators: %d: number
 #: src/Tienda/VariantesTable.php:86
 #, php-format
 msgid "Stock must be a whole number from 0 to %d (or \"unlimited\")."
@@ -13516,7 +13593,7 @@ msgstr "Aturada: %1$s; en van quedar %2$d sense corregir."
 msgid "Stopped: %s; 1 was left uncorrected."
 msgstr "Aturada: %s; en va quedar 1 sense corregir."
 
-#: src/Idiomas/Guardados.php:146
+#: src/Idiomas/Guardados.php:155
 msgid "Strawberry"
 msgstr "Maduixa"
 
@@ -13524,7 +13601,7 @@ msgstr "Maduixa"
 msgid "Subject"
 msgstr "Assumpte"
 
-#: src/Idiomas/Guardados.php:245
+#: src/Idiomas/Guardados.php:255
 msgid "Submit the activity plan"
 msgstr "Presentar el pla d'activitats"
 
@@ -13560,7 +13637,7 @@ msgstr "Resum"
 msgid "Summary by item"
 msgstr "Resum per partida"
 
-#: src/Tesoreria/Config.php:53
+#: src/Idiomas/Guardados.php:92
 msgid "Summer camp"
 msgstr "Campament d'estiu"
 
@@ -13600,7 +13677,7 @@ msgstr "Cognoms de la persona de contacte"
 msgid "Surnames"
 msgstr "Cognoms"
 
-#: src/Idiomas/Guardados.php:279
+#: src/Idiomas/Guardados.php:290
 msgid "Synchronise with the CRM"
 msgstr "Sincronitzar amb el CRM"
 
@@ -13712,6 +13789,7 @@ msgstr ""
 msgid "Test the connection"
 msgstr ""
 
+#. translators: %s: text
 #: src/Admin/SettingsPage.php:301
 #, php-format
 msgid "Tested on %s"
@@ -13893,6 +13971,7 @@ msgstr "Aquesta partida no existeix."
 msgid "That link cannot be made from the website."
 msgstr "Aquest enllaç no es pot fer des del web."
 
+#. translators: 1: text, 2: number
 #: src/Frontend/Views/TiendaProductosView.php:324
 #, php-format
 msgid "That many units of \"%1$s\" cannot be removed: there are only %2$d."
@@ -14098,12 +14177,13 @@ msgstr "Aquest usuari no té cap invitació pendent."
 msgid "The %s field cannot be edited from the website."
 msgstr "El camp %s no es pot editar des del web."
 
+#. translators: %s: text
 #: src/Crm/Escritura.php:145
 #, php-format
 msgid "The %s field cannot be written from the website."
 msgstr "El camp %s no es pot escriure des del web."
 
-#: src/Idiomas/Guardados.php:187
+#: src/Idiomas/Guardados.php:196
 msgid "The 14 allergens"
 msgstr "Els 14 al·lèrgens"
 
@@ -14161,6 +14241,7 @@ msgstr "El CRM no ha acceptat el número."
 msgid "The CRM did not accept the value."
 msgstr "El CRM no ha acceptat el valor."
 
+#. translators: %s: text
 #: src/Crm/Escritura.php:186
 #, php-format
 msgid "The CRM did not accept: %s."
@@ -14186,6 +14267,7 @@ msgstr "El CRM no desa en quina secció col·labora cada scouter: indica-ho aqu�
 msgid "The CRM field \"%s\" is the email of another family account in this family: choose the other field, or tick \"Replace\" and choose the account whose email changes."
 msgstr "El camp «%s» del CRM és l'email d'un altre compte familiar d'aquesta família: tria l'altre camp, o marca «Substituir» i tria el compte l'email del qual canvia."
 
+#. translators: %d: number
 #: src/Crm/SinergiaV41Client.php:174
 #, php-format
 msgid "The CRM has more than %d records visible to this connection and they cannot all be read at once: the result would be incomplete. Tell whoever administers the private area."
@@ -14251,6 +14333,7 @@ msgstr "El CRM no respon: torna-ho a provar més tard."
 msgid "The CRM record has no email in the chosen field (%s), or the CRM did not respond."
 msgstr "La fitxa del CRM no té email al camp triat (%s), o el CRM no ha respost."
 
+#. translators: %d: number
 #: src/Sepa/Mandatos.php:166
 #, php-format
 msgid "The CRM record only accepts accounts of up to %d characters (Spanish ones have 24): use a Spanish account."
@@ -14260,6 +14343,7 @@ msgstr "La fitxa del CRM només admet comptes de fins a %d caràcters (les espan
 msgid "The CRM records cannot be read right now: it cannot be said that the menu is free of allergens. Try again."
 msgstr "No s'han pogut llegir les fitxes del CRM ara mateix: no es pot dir que el menú estigui lliure d'al·lèrgens. Torna-ho a provar."
 
+#. translators: %s: text
 #: src/Crm/SinergiaV41Client.php:73 src/Crm/SinergiaV41Client.php:416
 #, php-format
 msgid "The CRM rejected the sign-in: %s"
@@ -14375,7 +14459,7 @@ msgstr "Comptes de l'esdeveniment %s tancats: el balanç queda com a informe fin
 msgid "The accounts of event %s are reopened: they can be changed now. When everything is done, close them again."
 msgstr "Comptes de l'esdeveniment %s reoberts: ja es poden canviar. Quan estigui tot, torna'ls a tancar."
 
-#: src/Idiomas/Guardados.php:211 src/Idiomas/TextosJs.php:46
+#: src/Idiomas/Guardados.php:221 src/Idiomas/TextosJs.php:46
 msgid "The action could not be completed. Reload the page to see how it has ended up."
 msgstr "No s'ha pogut completar l'acció. Recarrega la pàgina per veure com ha quedat."
 
@@ -14443,6 +14527,7 @@ msgstr "L'ingrés del banc només s'associa a la quota de la ronda. Per a un esd
 msgid "The bank deposit is pending reconciliation again."
 msgstr "L'ingrés del banc torna a estar per conciliar."
 
+#. translators: %s: text
 #: src/Frontend/Views/TesoreriaView.php:438
 #, php-format
 msgid "The bank deposit of %s is pending reconciliation again."
@@ -14578,7 +14663,7 @@ msgstr "L'email de contacte no és vàlid."
 msgid "The correct format (7 + group + 4 digits) will be saved in the CRM for all old-format numbers (including those of records without an active membership). It is done in the background: you can keep using the website. Continue?"
 msgstr "Es desarà al CRM el format correcte (7 + grup + 4 xifres) de tots els números amb format antic (també els de fitxes sense membresia activa). Es fa en segon pla: podràs continuar utilitzant el web. Vols continuar?"
 
-#: src/Idiomas/Guardados.php:271 src/Idiomas/TextosJs.php:28
+#: src/Idiomas/Guardados.php:282 src/Idiomas/TextosJs.php:28
 msgid "The correction will be stopped. What has already been corrected stays corrected. Stop?"
 msgstr "S'aturarà la correcció. Allò ja corregit es queda corregit. Vols aturar-la?"
 
@@ -14604,11 +14689,13 @@ msgstr "Falta el nom del creditor (el del grup o l'associació que cobra)."
 msgid "The current membership is closed with the reason \"change of section\" and another is opened in the new section, with the same date."
 msgstr "Es tanca la membresia actual amb el motiu «canvi de secció» i se n'obre una altra a la secció nova, amb la mateixa data."
 
+#. translators: %s: text
 #: templates/informes/editor.php:124
 #, php-format
 msgid "The current one (%s)"
 msgstr "L'actual (%s)"
 
+#. translators: 1: text, 2: text, 3: text
 #: src/ListaEspera/Avisos.php:186
 #, php-format
 msgid "The data of <strong>%1$s</strong> on the waiting list of <strong>%2$s</strong> will be deleted on <strong>%3$s</strong>."
@@ -14630,6 +14717,7 @@ msgstr "Les dades d'aquesta inscripció ja no es conserven (es van esborrar o va
 msgid "The date and amount (or the debit and credit) are required. The choice is remembered for the next files with the same columns."
 msgstr "Calen la data i l'import (o el càrrec i l'abonament). L'elecció es recorda per als pròxims fitxers amb les mateixes columnes."
 
+#. translators: %s: text
 #: src/Caja/Servicio.php:362
 #, php-format
 msgid "The date cannot be earlier than the cash box's opening balance (%s)."
@@ -14659,6 +14747,7 @@ msgstr "Falta la data de naixement."
 msgid "The date of birth is not valid."
 msgstr "La data de naixement no és vàlida."
 
+#. translators: %s: text
 #: src/Crm/Altas.php:369
 #, php-format
 msgid "The date of the change cannot be earlier than the registration date in the current section (%s)."
@@ -14684,6 +14773,7 @@ msgstr "La rebaixa no pot ser més gran que el preu."
 msgid "The dish is replaced"
 msgstr "Es substitueix el plat"
 
+#. translators: %d: number
 #: src/Crm/Altas.php:578 src/ListaEspera/Formulario.php:61 templates/personas/alta.php:89
 #, php-format
 msgid "The document is required from age %d."
@@ -14767,6 +14857,7 @@ msgstr "Els participants previstos de cada secció es canvien a «Edita les dade
 msgid "The expected participants of each section are used to calculate the price and the monitor ratio. Places are the maximum (0 = no limit)."
 msgstr "Els participants previstos de cada secció serveixen per calcular el preu i la ràtio de monitors. Les places són el màxim (0 = sense límit)."
 
+#. translators: 1: text, 2: text, 3: text
 #: src/Eventos/Cuentas.php:266
 #, php-format
 msgid "The expenses (%1$s) and what was returned (%2$s) do not add up to the advance (%3$s): write a note with the reason for the difference."
@@ -14845,6 +14936,7 @@ msgstr ""
 msgid "The file carries the families' accounts unencrypted: keep it only as long as necessary and delete it from the computer after uploading it to the bank."
 msgstr "El fitxer porta els comptes de les famílies sense xifrar: desa'l només el temps necessari i esborra'l de l'ordinador després de pujar-lo al banc."
 
+#. translators: %d: number
 #: src/Frontend/Views/InventarioView.php:163 src/Frontend/Views/TiendaProductosView.php:196
 #, php-format
 msgid "The file could not be uploaded. It must be a CSV of up to %d MB."
@@ -14868,6 +14960,7 @@ msgstr "El fitxer només té la capçalera: no hi ha cap material per importar."
 msgid "The file has only the header: there is no product to load."
 msgstr "El fitxer només té la capçalera: no hi ha cap producte per carregar."
 
+#. translators: %d: number
 #: src/Inventario/Importador.php:102 src/Tienda/ImportadorProductos.php:114
 #, php-format
 msgid "The file has too many rows (at most %d). Split it into several."
@@ -14891,6 +14984,7 @@ msgstr "El fitxer és buit."
 msgid "The file is not a CSV (it looks like an Excel sheet or another format). Save it as \"CSV (semicolon delimited)\" and try again."
 msgstr "El fitxer no és un CSV (sembla un full d'Excel o un altre format). Desa'l com a «CSV (delimitat per punt i coma)» i torna-ho a provar."
 
+#. translators: %d: number
 #: src/Inventario/Importador.php:65 src/Tienda/ImportadorProductos.php:81
 #, php-format
 msgid "The file is too large (at most %d MB)."
@@ -14924,6 +15018,7 @@ msgstr "La primera persona amb accés rebrà un email per activar el seu compte.
 msgid "The first row must be the column row: Recipe; Type; Portions; Ingredient; Quantity; Unit."
 msgstr "La primera fila ha de ser la de les columnes: Receta; Tipo; Porciones; Ingrediente; Cantidad; Unidad."
 
+#. translators: %s: text
 #: src/Inventario/Importador.php:83 src/Tienda/ImportadorProductos.php:96
 #, php-format
 msgid "The first row must be the header with the column names, and these are missing: %s. Download the example to see what it must look like."
@@ -15153,6 +15248,7 @@ msgstr "La lletra del DNI no correspon als seus números. Revisa-ho."
 msgid "The letter of the foreigner ID number does not match its digits. Check it."
 msgstr "La lletra del NIE no correspon als seus números. Revisa-ho."
 
+#. translators: %d: number
 #: src/Tienda/ProductosTable.php:113
 #, php-format
 msgid "The limit per person must be a number from 0 to %d (0 = no limit)."
@@ -15178,6 +15274,7 @@ msgstr "L'enllaç és personal, d'un sol ús i caduca en 24 hores."
 msgid "The link is single-use and valid for %d days. You will need your group's CRM username and password."
 msgstr "L'enllaç és d'un sol ús i val %d dies. Necessitaràs l'usuari i la contrasenya del CRM del teu grup."
 
+#. translators: %d: number
 #: src/ListaEspera/Avisos.php:127
 #, php-format
 msgid "The link is valid for %d days. If it was not you, ignore this email: the sign-up will be deleted by itself."
@@ -15187,7 +15284,7 @@ msgstr "L'enllaç val %d dies. Si no has estat tu, ignora aquest correu: la insc
 msgid "The link to join the waiting list, the list for the team and the handover to the CRM."
 msgstr "L'enllaç per apuntar-se a la llista d'espera, la llista per a l'equip i el pas al CRM."
 
-#: src/Idiomas/Guardados.php:210 src/Idiomas/TextosJs.php:45
+#: src/Idiomas/Guardados.php:220 src/Idiomas/TextosJs.php:45
 msgid "The list could not be updated. Reload the page."
 msgstr "No s'ha pogut actualitzar la llista. Recarrega la pàgina."
 
@@ -15277,7 +15374,7 @@ msgstr "El número d'aquesta fitxa no té format antic."
 msgid "The numbers generated from the website will be saved in the CRM. It is done in the background. Continue?"
 msgstr "Es desaran al CRM els números generats des del web. Es fa en segon pla. Vols continuar?"
 
-#: src/Idiomas/Guardados.php:209
+#: src/Idiomas/Guardados.php:219
 msgid "The offered place was not confirmed in time"
 msgstr "No es va confirmar a temps la plaça oferta"
 
@@ -15409,12 +15506,13 @@ msgstr "El preu es calcula amb els participants previstos i, un cop validat, ja 
 msgid "The price is not valid (for example: 12,50)."
 msgstr "El preu no és vàlid (per exemple: 12,50)."
 
+#. translators: %s: text
 #: src/Inventario/Servicio.php:84 src/Inventario/Servicio.php:120
 #, php-format
 msgid "The price of \"%s\" is not valid (for example: 12,50)."
 msgstr "El preu de «%s» no és vàlid (per exemple: 12,50)."
 
-#: src/Idiomas/Guardados.php:272
+#: src/Idiomas/Guardados.php:283
 msgid "The price of one or two buses can be recorded."
 msgstr "Es pot anotar el preu d'un o de dos autobusos."
 
@@ -15422,6 +15520,7 @@ msgstr "Es pot anotar el preu d'un o de dos autobusos."
 msgid "The price, with a comma or point for the decimals (12,50). The year of purchase, with four digits or blank."
 msgstr "El preu, amb coma o punt per als decimals (12,50). L'any de compra, amb quatre xifres o en blanc."
 
+#. translators: %d: number
 #: templates/fichas/cambios.php:179
 #, php-format
 msgid "The proposals already reviewed and the changes made directly on records by the Secretary's office, Coordination or the scouters (of these, those of the last %d days)."
@@ -15431,6 +15530,7 @@ msgstr "Les propostes ja revisades i els canvis fets directament a les fitxes pe
 msgid "The quantity is not valid."
 msgstr "La quantitat no és vàlida."
 
+#. translators: %d: number
 #: src/Inventario/MaterialesTable.php:101
 #, php-format
 msgid "The quantity must be a whole number from 0 to %d."
@@ -15440,6 +15540,7 @@ msgstr "La quantitat ha de ser un nombre enter de 0 a %d."
 msgid "The quantity must be a whole number greater than zero."
 msgstr "La quantitat ha de ser un nombre enter més gran que zero."
 
+#. translators: %s: text
 #: src/Inventario/Servicio.php:79 src/Inventario/Servicio.php:115
 #, php-format
 msgid "The quantity to buy of \"%s\" is not valid."
@@ -15531,6 +15632,7 @@ msgstr "No es pot crear el segon compte: falta un núm. de soci/sòcia vàlid pe
 msgid "The section could not be assigned."
 msgstr "No s'ha pogut assignar la secció."
 
+#. translators: 1: text, 2: number
 #: src/Inventario/Importador.php:169
 #, php-format
 msgid "The serial no. \"%1$s\" is already in row %2$d of the file."
@@ -15566,6 +15668,7 @@ msgstr "La inscripció no té un email vàlid."
 msgid "The sign-up of %1$s for %2$s is confirmed."
 msgstr "La inscripció de %1$s a %2$s està confirmada."
 
+#. translators: 1: text, 2: text
 #: src/ListaEspera/Avisos.php:138
 #, php-format
 msgid "The sign-up of <strong>%1$s</strong> on the waiting list of <strong>%2$s</strong> is confirmed. We will contact you when a place is available."
@@ -15575,11 +15678,13 @@ msgstr "La inscripció de <strong>%1$s</strong> a la llista d'espera del <strong
 msgid "The status could not be changed."
 msgstr "No s'ha pogut canviar l'estat."
 
+#. translators: %s: text
 #: src/Frontend/Views/TiendaProductosView.php:321
 #, php-format
 msgid "The stock change of \"%s\" must be a whole number (for example +5 or -2)."
 msgstr "El canvi d'existències de «%s» ha de ser un nombre enter (per exemple +5 o -2)."
 
+#. translators: %s: text
 #: src/Frontend/Views/TiendaProductosView.php:317
 #, php-format
 msgid "The stock of \"%s\" is changed in the general inventory, not here."
@@ -15629,6 +15734,7 @@ msgstr "Els moviments d'aquest filtre (amb «Tots», tots els registres)"
 msgid "The two passwords do not match."
 msgstr "Les dues contrasenyes no coincideixen."
 
+#. translators: 1: text, 2: number
 #: src/Tesoreria/Banco/TiposMovimiento.php:204
 #, php-format
 msgid "The type \"%1$s\" is used by %2$d bank transaction: change its type before deleting it."
@@ -15636,6 +15742,7 @@ msgid_plural "The type \"%1$s\" is used by %2$d bank transactions: change their 
 msgstr[0] "El tipus «%1$s» l'utilitza %2$d moviment del banc: canvia-li el tipus abans d'esborrar-lo."
 msgstr[1] "El tipus «%1$s» l'utilitzen %2$d moviments del banc: canvia'ls el tipus abans d'esborrar-lo."
 
+#. translators: 1: text, 2: number
 #: src/Inventario/TiposTable.php:195
 #, php-format
 msgid "The type \"%1$s\" is used by %2$d item of equipment: change its type before deleting it."
@@ -15643,12 +15750,13 @@ msgid_plural "The type \"%1$s\" is used by %2$d items of equipment: change their
 msgstr[0] "El tipus «%1$s» l'utilitza %2$d material: canvia-li el tipus abans d'esborrar-lo."
 msgstr[1] "El tipus «%1$s» l'utilitzen %2$d materials: canvia'ls el tipus abans d'esborrar-lo."
 
+#. translators: %s: text
 #: src/Inventario/Importador.php:157
 #, php-format
 msgid "The type \"%s\" does not exist."
 msgstr "El tipus «%s» no existeix."
 
-#: src/Idiomas/Guardados.php:212 src/Idiomas/TextosJs.php:59
+#: src/Idiomas/Guardados.php:222 src/Idiomas/TextosJs.php:59
 msgid "The type could not be created. Try again."
 msgstr "No s'ha pogut crear el tipus. Torna-ho a provar."
 
@@ -15706,6 +15814,7 @@ msgstr "La web no pot comprovar que aquesta credencial sigui de només lectura: 
 msgid "The whole event"
 msgstr "Tot l'esdeveniment"
 
+#. translators: %s: text
 #: src/Crm/Altas.php:298
 #, php-format
 msgid "The withdrawal date cannot be earlier than the registration date (%s)."
@@ -15719,6 +15828,7 @@ msgstr "La data de baixa no pot ser posterior a avui."
 msgid "The withdrawal date is the day they stop being in the group: from that day they no longer count as a member."
 msgstr "La data de baixa és el dia en què deixa d'estar al grup: des d'aquell dia ja no compta com a soci/sòcia."
 
+#. translators: 1: number, 2: number
 #: src/Inventario/MaterialesTable.php:111
 #, php-format
 msgid "The year of purchase must be between %1$d and %2$d (or left blank)."
@@ -15793,6 +15903,7 @@ msgstr "Hi ha %1$d persones en pràctiques i %2$d titulades: en pràctiques no n
 msgid "There are %1$d · other events %2$d"
 msgstr "Hi ha %1$d · altres esdeveniments %2$d"
 
+#. translators: %d: number
 #: src/Eventos/Cuentas.php:467
 #, php-format
 msgid "There are %d advance(s) to settle."
@@ -15804,6 +15915,7 @@ msgstr "Hi ha %d bestreta(es) per liquidar."
 msgid "There are %d expense(s) to review."
 msgstr "Hi ha %d despesa(es) per revisar."
 
+#. translators: %d: number
 #: src/Eventos/Cuentas.php:463
 #, php-format
 msgid "There are %d reimbursement(s) pending."
@@ -15816,7 +15928,7 @@ msgid "There are %d youth members whose fee does not cover the registration and 
 msgstr "Hi ha %d educands la quota dels quals no arriba a la inscripció i l'assegurança (beques o ajustos): no aporten res a la seva secció i el que falta ho posa el grup."
 
 #. translators: 1: text, 2: text
-#: src/Idiomas/Guardados.php:316 src/Idiomas/TextosJs.php:50
+#: src/Idiomas/Guardados.php:327 src/Idiomas/TextosJs.php:50
 #, php-format
 msgid "There are already %1$s units of \"%2$s\" in the inventory. Do more really need to be bought?"
 msgstr "A l'inventari ja hi ha %1$s unitats de «%2$s». Segur que cal comprar-ne més?"
@@ -15985,6 +16097,7 @@ msgstr "No hi ha comandes sense pagar en aquest període."
 msgid "There are no users yet. Start with the"
 msgstr "Encara no hi ha usuaris. Comença per l'"
 
+#. translators: %s: text
 #: src/Tienda/Servicio.php:167 src/Tienda/Servicio.php:294
 #, php-format
 msgid "There are not enough units of \"%s\" left."
@@ -16023,7 +16136,7 @@ msgid "There is a swimming pool or sea: a lifeguard must be present."
 msgstr "Hi ha piscina o mar: hi ha d'haver un socorrista present."
 
 #. translators: %s: text
-#: src/Idiomas/Guardados.php:317 src/Idiomas/TextosJs.php:49
+#: src/Idiomas/Guardados.php:328 src/Idiomas/TextosJs.php:49
 #, php-format
 msgid "There is already 1 unit of \"%s\" in the inventory. Do more really need to be bought?"
 msgstr "A l'inventari ja hi ha 1 unitat de «%s». Segur que cal comprar-ne més?"
@@ -16048,11 +16161,13 @@ msgstr "Ja hi ha un tipus «%s»."
 msgid "There is already an ingredient with that name."
 msgstr "Ja hi ha un ingredient amb aquest nom."
 
+#. translators: %s: text
 #: src/Inventario/Importador.php:171
 #, php-format
 msgid "There is already an item with the serial no. \"%s\" in the inventory."
 msgstr "Ja hi ha un material amb el núm. de sèrie «%s» a l'inventari."
 
+#. translators: %d: number
 #: src/Inventario/Importador.php:197
 #, php-format
 msgid "There is already an item with this description and type, and adding this quantity to it would take it above %d units."
@@ -16238,6 +16353,7 @@ msgstr "Són avisos per no oblidar res: no impedeixen publicar. L'únic obligato
 msgid "These are the people with allergies, intolerances or diets that match the menu of %1$s (%2$s). Valid as of %3$s: if anything changes, it will be sent again."
 msgstr "Aquestes són les persones amb al·lèrgies, intoleràncies o dieta que creuen amb el menú de %1$s (%2$s). Vàlida a data de %3$s: si alguna cosa canvia, es tornarà a enviar."
 
+#. translators: %s: text
 #: src/ListaEspera/Avisos.php:169
 #, php-format
 msgid "These are the sign-ups with this email on the waiting list of <strong>%s</strong>:"
@@ -16343,6 +16459,7 @@ msgstr "No té membresia activa: deixa de sortir a Persones, surt de la seva fam
 msgid "They have not confirmed their email yet: they do not go on the list until they do. If they don't confirm within %d days, it is deleted by itself."
 msgstr "Encara no ha confirmat el seu email: no entra a la llista fins que ho faci. Si no el confirma en %d dies, s'esborra sola."
 
+#. translators: %s: text
 #: src/Frontend/Views/FichaView.php:355
 #, php-format
 msgid "They stop counting in the fee of family no. %s: Treasury will see it in \"Recent withdrawals\"."
@@ -16841,11 +16958,11 @@ msgstr "Per validar"
 msgid "To whom"
 msgstr "A qui"
 
-#: src/Idiomas/Guardados.php:293
+#: src/Idiomas/Guardados.php:304
 msgid "Toast with oil and tomato"
 msgstr "Torrades amb oli i tomàquet"
 
-#: src/Idiomas/Guardados.php:290
+#: src/Idiomas/Guardados.php:301
 msgid "Tomato"
 msgstr "Tomàquet"
 
@@ -16915,7 +17032,7 @@ msgstr "Etapa d'Acollida al Formador/a (EAF)"
 msgid "Trainers' Trainer Stage (EFF)"
 msgstr "Etapa Formador/a de Formadors (EFF)"
 
-#: src/Eventos/Config.php:114 src/Tesoreria/Config.php:53
+#: src/Eventos/Config.php:114 src/Idiomas/Guardados.php:154
 msgid "Training"
 msgstr "Formació"
 
@@ -16943,7 +17060,7 @@ msgstr "Moviments"
 msgid "Transactions of the round"
 msgstr "Moviments de la ronda"
 
-#: src/Eventos/GastosTable.php:58 src/Idiomas/Guardados.php:294 src/Tesoreria/MovimientosTable.php:27 src/Tienda/PedidosTable.php:43
+#: src/Eventos/GastosTable.php:58 src/Idiomas/Guardados.php:305 src/Tesoreria/MovimientosTable.php:27 src/Tienda/PedidosTable.php:43
 msgid "Transfer"
 msgstr "Transferència"
 
@@ -16973,6 +17090,7 @@ msgstr "Traspàs desat."
 msgid "Transfer the generated numbers to the CRM"
 msgstr "Passa al CRM els números generats"
 
+#. translators: %s: text
 #: src/Caja/LibroMayor.php:175
 #, php-format
 msgid "Transfer to %s"
@@ -16982,6 +17100,7 @@ msgstr "Traspàs a %s"
 msgid "Transfer to the CRM"
 msgstr "Passa al CRM"
 
+#. translators: 1: text, 2: text
 #: src/Tienda/Servicio.php:431
 #, php-format
 msgid "Transfer to the account %1$s, stating order no. %2$s as the description."
@@ -16993,6 +17112,7 @@ msgstr "Transferència al compte %1$s, indicant com a concepte el núm. de coman
 msgid "Transfer to the group's account, stating order no. %s as the description."
 msgstr "Transferència al compte del grup, indicant com a concepte el núm. de comanda %s."
 
+#. translators: %s: text
 #: templates/tesoreria/banco.php:225
 #, php-format
 msgid "Transfer: %s"
@@ -17006,7 +17126,7 @@ msgstr "Els traspassos amb el banc els fa Tresoreria."
 msgid "Transport"
 msgstr "Transport"
 
-#: src/Domain/Modulos.php:46 src/Frontend/Menu.php:99 src/Idiomas/Guardados.php:286 templates/area/inicio.php:185
+#: src/Domain/Modulos.php:46 src/Frontend/Menu.php:99 src/Idiomas/Guardados.php:297 templates/area/inicio.php:185
 msgid "Treasury"
 msgstr "Tresoreria"
 
@@ -17098,7 +17218,7 @@ msgstr "La verificació en dos passos protegeix les dades del grup: a més de la
 msgid "Two-step verification."
 msgstr "Verificació en dos passos."
 
-#: src/Eventos/Cuentas.php:545 src/Idiomas/Guardados.php:288 src/Inventario/Importador.php:37 src/Inventario/ListaPdf.php:67
+#: src/Eventos/Cuentas.php:545 src/Idiomas/Guardados.php:299 src/Inventario/Importador.php:37 src/Inventario/ListaPdf.php:67
 msgid "Type"
 msgstr "Tipus"
 
@@ -17148,11 +17268,13 @@ msgstr "UTF-8"
 msgid "Unassigned"
 msgstr "Sense assignar"
 
+#. translators: %d: number
 #: src/ListaEspera/Formulario.php:65
 #, php-format
 msgid "Under %d years of age, enter the first name and surname of the mother, father or guardian."
 msgstr "Per sota dels %d anys, escriu el nom i els cognoms de la mare, el pare o el tutor/a."
 
+#. translators: %d: number
 #: src/Crm/Altas.php:589 templates/personas/alta.php:189
 #, php-format
 msgid "Under %d years of age, guardian 1 is required: first name, surname and email."
@@ -17188,7 +17310,7 @@ msgstr "Vols desfer-ho?"
 msgid "Unidad"
 msgstr "Unitat"
 
-#: src/Idiomas/Guardados.php:300 src/Tienda/ImportadorProductos.php:262 templates/pagos/mis-pagos.php:131 templates/tienda/detalle.php:167
+#: src/Idiomas/Guardados.php:311 src/Tienda/ImportadorProductos.php:262 templates/pagos/mis-pagos.php:131 templates/tienda/detalle.php:167
 msgid "Uniform"
 msgstr "Uniforme"
 
@@ -17272,7 +17394,7 @@ msgstr "Fins a %d anys"
 msgid "Up to 3 digits (e.g. 684). It is the key to everything about the group and cannot be changed afterwards."
 msgstr ""
 
-#: src/Idiomas/Guardados.php:159
+#: src/Idiomas/Guardados.php:168
 msgid "Up to 5 expenses."
 msgstr "Fins a 5 despeses."
 
@@ -17292,11 +17414,11 @@ msgstr "Actualitza"
 msgid "Update now"
 msgstr "Actualitza ara"
 
-#: src/Idiomas/Guardados.php:52
+#: src/Idiomas/Guardados.php:53
 msgid "Update the details before sending the record."
 msgstr "Actualitza les dades abans d'enviar la fitxa."
 
-#: src/Idiomas/Guardados.php:51 src/Idiomas/TextosJs.php:44
+#: src/Idiomas/Guardados.php:52 src/Idiomas/TextosJs.php:44
 msgid "Updating…"
 msgstr "Actualitzant…"
 
@@ -17304,7 +17426,7 @@ msgstr "Actualitzant…"
 msgid "Upload it to the bank (Colonya Directa: \"Direct debit batches\") and mark it as"
 msgstr "Puja-la al banc (Colonya Directa: «Remeses de càrrecs») i marca-la com a"
 
-#: src/Idiomas/Guardados.php:283
+#: src/Idiomas/Guardados.php:294
 msgid "Upload photos of the camp to the group website"
 msgstr "Pujar fotos de l'acampada a la web del grup"
 
@@ -17320,11 +17442,11 @@ msgstr "Manual d'ús"
 msgid "Username"
 msgstr "Usuari"
 
-#: src/Frontend/Menu.php:102 src/Idiomas/Guardados.php:301 templates/area/inicio.php:190
+#: src/Frontend/Menu.php:102 src/Idiomas/Guardados.php:312 templates/area/inicio.php:190
 msgid "Users"
 msgstr "Usuaris"
 
-#: src/Idiomas/Guardados.php:303
+#: src/Idiomas/Guardados.php:314
 msgid "Users and requests"
 msgstr "Usuaris i sol·licituds"
 
@@ -17358,7 +17480,7 @@ msgstr "Vàlid a data de %s"
 msgid "Validate"
 msgstr "Valida"
 
-#: src/Idiomas/Guardados.php:304
+#: src/Idiomas/Guardados.php:315
 msgid "Validate budgets and keep the accounts"
 msgstr "Validar pressupostos i portar els comptes"
 
@@ -17462,7 +17584,7 @@ msgstr "Veure i imprimir l'autorització"
 msgid "View and print the sheet"
 msgstr "Veure i imprimir el full"
 
-#: src/Idiomas/Guardados.php:312
+#: src/Idiomas/Guardados.php:323
 msgid "View camp site"
 msgstr "Veure el lloc d'acampada"
 
@@ -17574,7 +17696,7 @@ msgstr "Administrador/a WP"
 msgid "Waiting"
 msgstr "En espera"
 
-#: src/Domain/Modulos.php:54 src/Frontend/Menu.php:96 src/Idiomas/Guardados.php:182 src/Usuarios/RegistroEmails.php:84
+#: src/Domain/Modulos.php:54 src/Frontend/Menu.php:96 src/Idiomas/Guardados.php:191 src/Usuarios/RegistroEmails.php:84
 msgid "Waiting list"
 msgstr "Llista d'espera"
 
@@ -17594,7 +17716,7 @@ msgstr "Enllaç de la llista d'espera renovat: l'anterior ja no serveix."
 msgid "Waiting list of %s"
 msgstr "Llista d'espera del %s"
 
-#: src/Idiomas/Guardados.php:214
+#: src/Idiomas/Guardados.php:224
 msgid "Walnut"
 msgstr "Nou"
 
@@ -17650,6 +17772,7 @@ msgstr "Hem comprovat la teva sol·licitud d'accés i ja està aprovada. Des de 
 msgid "We have received a request to choose a new password for the user <strong>%s</strong> (with which you can also sign in using this email address)."
 msgstr "Hem rebut una petició per triar una contrasenya nova per a l'usuari <strong>%s</strong> (amb el qual també pots entrar fent servir aquesta adreça d'email)."
 
+#. translators: 1: text, 2: text
 #: src/ListaEspera/Avisos.php:121
 #, php-format
 msgid "We have received the sign-up of <strong>%1$s</strong> on the waiting list of <strong>%2$s</strong>."
@@ -17691,6 +17814,7 @@ msgstr "T'hem enviat un email per confirmar la inscripció. Fins que no premis e
 msgid "We keep your data until"
 msgstr "Desem les teves dades fins al"
 
+#. translators: %s: text
 #: src/ListaEspera/Avisos.php:140
 #, php-format
 msgid "We keep your data, encrypted, until %s. We will notify you beforehand so you can keep it."
@@ -17852,7 +17976,7 @@ msgstr "El que has pagat ho veus a"
 msgid "What you paid for"
 msgstr "Què vas pagar"
 
-#: src/Idiomas/Guardados.php:295
+#: src/Idiomas/Guardados.php:306
 msgid "Wheat"
 msgstr "Blat"
 
@@ -17934,7 +18058,7 @@ msgstr "Quins avisos envia l'àrea privada a les famílies i a les persones insc
 msgid "Which values of the leisure-time training on the record count as a director qualification (also valid as monitor) or as a monitor qualification. If you tick none, it is deduced from the text (\"director\", \"monitor\")."
 msgstr "Quins valors de la formació en lleure de la fitxa compten com a títol de director/a (també val com a monitor/a) o de monitor/a. Si no en marques cap, es dedueix del text («director», «monitor»)."
 
-#: src/Idiomas/Guardados.php:235
+#: src/Idiomas/Guardados.php:245
 msgid "White fish"
 msgstr "Peix blanc"
 
@@ -17950,7 +18074,7 @@ msgstr "Qui va concedir o retirar cada permís, a qui i quan, i els que han cadu
 msgid "Who has access, give access to a member or their family, invitations, withdrawals and the email log."
 msgstr "Qui hi té accés, donar accés a un soci/sòcia o a la seva família, invitacions, baixes i el registre d'emails."
 
-#: src/Idiomas/Guardados.php:250
+#: src/Idiomas/Guardados.php:260
 msgid "Who has paid the round's fee and how much each family still owes."
 msgstr "Qui ha pagat la quota de la ronda i quant li falta a cada família."
 
@@ -18151,7 +18275,7 @@ msgstr "Avís de baixa"
 msgid "Withdrawals and \"not going\" (%d)"
 msgstr "Baixes i «no hi va» (%d)"
 
-#: src/Idiomas/Guardados.php:263
+#: src/Idiomas/Guardados.php:273
 msgid "Withdrawn"
 msgstr "Retirada"
 
@@ -18171,11 +18295,11 @@ msgstr "Sense dates, la inscripció s'obre en publicar i es tanca quan comença 
 msgid "Working day, at the earliest"
 msgstr "Dia laborable, com a molt aviat el"
 
-#: src/Idiomas/Guardados.php:136
+#: src/Idiomas/Guardados.php:143
 msgid "Write a camp post on the group website"
 msgstr "Escriure un post de l'acampada a la web del grup"
 
-#: src/Idiomas/Guardados.php:258
+#: src/Idiomas/Guardados.php:268
 msgid "Write the letter and photocopy it"
 msgstr "Redactar la carta i fotocopiar-la"
 
@@ -18203,6 +18327,7 @@ msgstr "Donat de baixa el %1$s per %2$s."
 msgid "Written on the request"
 msgstr "Escrit a la sol·licitud"
 
+#. translators: %s: text
 #: src/Caja/Periodo.php:24
 #, php-format
 msgid "Year %s"
@@ -18220,7 +18345,7 @@ msgstr "Any de compra (opcional)"
 msgid "Year of the premiums"
 msgstr "Any de les primes"
 
-#: src/Fichas/FichaService.php:185 src/Idiomas/Guardados.php:284 src/Informes/Catalogo.php:151 src/ListaEspera/CamposExtra.php:161
+#: src/Fichas/FichaService.php:185 src/Idiomas/Guardados.php:295 src/Informes/Catalogo.php:151 src/ListaEspera/CamposExtra.php:161
 msgid "Yes"
 msgstr "Sí"
 
@@ -18232,11 +18357,11 @@ msgstr "Sí (ho veuen Secretaria i Coordinació)"
 msgid "Yes, always report it"
 msgstr "Sí, comunicar-la sempre"
 
-#: src/Idiomas/Guardados.php:318
+#: src/Idiomas/Guardados.php:329
 msgid "Yoghurt"
 msgstr "Iogurt"
 
-#: src/Idiomas/Guardados.php:319
+#: src/Idiomas/Guardados.php:330
 msgid "Yoghurt with fruit"
 msgstr "Iogurt amb fruita"
 
@@ -18276,6 +18401,7 @@ msgstr "Només pots convocar les seccions en què col·labores."
 msgid "You can only sign up to a published event that has not yet ended."
 msgstr "Només es pot inscriure en un esdeveniment publicat que encara no ha acabat."
 
+#. translators: 1: text, 2: text
 #: src/ListaEspera/Avisos.php:204
 #, php-format
 msgid "You can reply to this email. You are on the waiting list of %1$s: <a href=\"%2$s\">see my details</a>."
@@ -18285,6 +18411,7 @@ msgstr "Pots respondre a aquest correu. Ets a la llista d'espera del %1$s: <a hr
 msgid "You can use {grupo} and {ronda}. The family no. is added at the end."
 msgstr "Pots fer servir {grupo} i {ronda}. Al final s'afegeix el núm. de família."
 
+#. translators: 1: text, 2: text
 #: src/Accesos/PermisosRol.php:162
 #, php-format
 msgid "You cannot add \"%1$s\" to the role %2$s: it is yours and it would be granting the permission to yourself."
@@ -18518,7 +18645,7 @@ msgstr "No has triat cap moviment."
 msgid "You have not requested any reimbursement yet."
 msgstr "Encara no has demanat cap reintegrament."
 
-#: src/Idiomas/Guardados.php:208 src/Idiomas/TextosJs.php:51
+#: src/Idiomas/Guardados.php:218 src/Idiomas/TextosJs.php:51
 msgid "You have not ticked any equipment from the inventory. Prepare a list with new equipment only?"
 msgstr "No has marcat cap material de l'inventari. Vols preparar una llista només amb material nou?"
 
@@ -18788,6 +18915,7 @@ msgstr "[%1$s] Recordatori: %2$s"
 msgid "[%1$s] Reminder: order %2$s is unpaid"
 msgstr "[%1$s] Recordatori: la comanda %2$s està sense pagar"
 
+#. translators: 1: text, 2: text
 #: src/Inventario/AvisoTesoreria.php:48
 #, php-format
 msgid "[%1$s] Shopping list %2$s awaiting your approval"
@@ -18805,16 +18933,19 @@ msgstr "[%1$s] Inscripció confirmada: %2$s"
 msgid "[%1$s] Transfer reimbursement awaiting approval: %2$s"
 msgstr "[%1$s] Reintegrament per transferència pendent d'aprovar: %2$s"
 
+#. translators: 1: text, 2: text
 #: src/Inventario/AvisoRevision.php:31
 #, php-format
 msgid "[%1$s] Treasury has rejected your shopping list %2$s"
 msgstr "[%1$s] Tresoreria ha rebutjat la teva llista de compra %2$s"
 
+#. translators: 1: text, 2: text
 #: src/Menus/AvisoAlergenos.php:176
 #, php-format
 msgid "[%1$s] Unresolved allergens in the menu of %2$s"
 msgstr "[%1$s] Al·lèrgens sense resoldre al menú de %2$s"
 
+#. translators: 1: text, 2: text
 #: src/Inventario/AvisoRevision.php:33
 #, php-format
 msgid "[%1$s] Your shopping list %2$s has Treasury's approval"
@@ -18844,11 +18975,13 @@ msgstr "[%s] Activa el teu accés a l'àrea privada"
 msgid "[%s] Choose a new password"
 msgstr "[%s] Tria una contrasenya nova"
 
+#. translators: %s: text
 #: src/ListaEspera/Avisos.php:118
 #, php-format
 msgid "[%s] Confirm your sign-up on the waiting list"
 msgstr "[%s] Confirma la inscripció a la llista d'espera"
 
+#. translators: %s: text
 #: src/Usuarios/AvisoBaja.php:115
 #, php-format
 msgid "[%s] Confirmation of withdrawal from the group"
@@ -18860,6 +18993,7 @@ msgstr "[%s] Confirmació de baixa al grup"
 msgid "[%s] Invitation to register your group"
 msgstr "[%s] Invitació per donar d'alta el teu grup"
 
+#. translators: %s: text
 #: src/ListaEspera/Avisos.php:135
 #, php-format
 msgid "[%s] Sign-up on the waiting list confirmed"
@@ -18877,6 +19011,7 @@ msgstr "[%s] Benvinguda a l'àrea privada: activa el teu accés"
 msgid "[%s] Welcome to the private area: choose your password"
 msgstr "[%s] Benvinguda a l'àrea privada: tria la teva contrasenya"
 
+#. translators: %s: text
 #: src/Usuarios/AvisoBaja.php:113
 #, php-format
 msgid "[%s] Withdrawal of a member in the CRM"
@@ -18888,11 +19023,13 @@ msgstr "[%s] Baixa d'un soci/sòcia al CRM"
 msgid "[%s] Your group is now registered"
 msgstr "[%s] El teu grup ja està donat d'alta"
 
+#. translators: %s: text
 #: src/ListaEspera/Avisos.php:183
 #, php-format
 msgid "[%s] Your waiting list data expires soon"
 msgstr "[%s] Les teves dades de la llista d'espera caduquen aviat"
 
+#. translators: %s: text
 #: src/ListaEspera/Avisos.php:166
 #, php-format
 msgid "[%s] Your waiting list links"
@@ -19178,6 +19315,7 @@ msgstr "per"
 msgid "from %d years"
 msgstr "des de %d anys"
 
+#. translators: %s: text
 #: src/Frontend/Views/TiendaGestionView.php:233
 #, php-format
 msgid "from %s"
@@ -19283,6 +19421,7 @@ msgstr ""
 msgid "mandatory"
 msgstr "obligatòria"
 
+#. translators: %d: number
 #: src/Fichas/FichaService.php:173
 #, php-format
 msgid "maximum %d characters."
@@ -19608,6 +19747,7 @@ msgstr "cullerades"
 msgid "terr."
 msgstr "terr."
 
+#. translators: %s: text
 #: src/Socios/Numeros.php:128
 #, php-format
 msgid "territorial no.: %s"
@@ -19763,7 +19903,7 @@ msgstr "fins a %d anys"
 msgid "up to that instalment"
 msgstr "fins a aquest termini"
 
-#: src/Idiomas/Guardados.php:321 src/Idiomas/TextosJs.php:30
+#: src/Idiomas/Guardados.php:332 src/Idiomas/TextosJs.php:30
 msgid "user"
 msgstr "usuari"
 
@@ -19771,7 +19911,7 @@ msgstr "usuari"
 msgid "user registration"
 msgstr "alta d'usuaris"
 
-#: src/Idiomas/Guardados.php:322 src/Idiomas/TextosJs.php:31
+#: src/Idiomas/Guardados.php:333 src/Idiomas/TextosJs.php:31
 msgid "users"
 msgstr "usuaris"
 

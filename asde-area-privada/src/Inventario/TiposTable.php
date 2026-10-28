@@ -192,7 +192,7 @@ final class TiposTable {
 		$usos = MaterialesTable::contar_por_tipo()[ $id ] ?? 0;
 		if ( $usos ) {
 			/* translators: 1: name of the type, 2: number of equipment items */
-			return new \WP_Error( 'asde_inventario', sprintf( _n( 'The type "%1$s" is used by %2$d item of equipment: change its type before deleting it.', 'The type "%1$s" is used by %2$d items of equipment: change their type before deleting it.', $usos , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $tipo['nombre'], $usos ) );
+			return new \WP_Error( 'asde_inventario', sprintf( /* translators: 1: text, 2: number */ _n( 'The type "%1$s" is used by %2$d item of equipment: change its type before deleting it.', 'The type "%1$s" is used by %2$d items of equipment: change their type before deleting it.', $usos , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $tipo['nombre'], $usos ) );
 		}
 		global $wpdb;
 		$wpdb->delete(

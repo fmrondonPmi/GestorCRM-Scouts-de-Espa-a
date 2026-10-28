@@ -45,13 +45,13 @@ final class HistorialPagos {
 				$importe = Calculadora::euros( (float) $m['importe'] );
 				if ( EventoMovimientos::PAGO === $m['tipo'] ) {
 					/* translators: 1: amount, 2: name of the event */
-					$que = __( 'Payment of %1$s · event "%2$s"', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
+					$que = /* translators: 1: text, 2: text */ __( 'Payment of %1$s · event "%2$s"', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				} elseif ( EventoMovimientos::DEVOLUCION === $m['tipo'] ) {
 					/* translators: 1: amount, 2: name of the event */
-					$que = __( 'Refund of %1$s · event "%2$s"', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
+					$que = /* translators: 1: text, 2: text */ __( 'Refund of %1$s · event "%2$s"', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				} else {
 					/* translators: 1: amount, 2: name of the event */
-					$que = __( 'Scholarship or adjustment of %1$s · event "%2$s"', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
+					$que = /* translators: 1: text, 2: text */ __( 'Scholarship or adjustment of %1$s · event "%2$s"', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				}
 				$forma   = EventoMovimientos::formas()[ $m['forma'] ] ?? '';
 				$detalle = trim(
@@ -93,7 +93,7 @@ final class HistorialPagos {
 			$tipo   = isset( $tipos[ (int) $m['tipo_id'] ] ) ? $tipos[ (int) $m['tipo_id'] ]['nombre'] : __( 'No type', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 			$evento = ! empty( $m['evento_id'] ) ? EventosTable::obtener( (int) $m['evento_id'] ) : null;
 			/* translators: 1: amount, 2: type of the transaction */
-			$que    = sprintf( $m['importe'] < 0 ? __( 'Expense of %1$s · %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : /* translators: 1: text, 2: text */ __( 'Income of %1$s · %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Calculadora::euros( abs( (float) $m['importe'] ) ), $tipo );
+			$que    = sprintf( $m['importe'] < 0 ? /* translators: 1: text, 2: text */ __( 'Expense of %1$s · %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : /* translators: 1: text, 2: text */ __( 'Income of %1$s · %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Calculadora::euros( abs( (float) $m['importe'] ) ), $tipo );
 			$out[]  = array(
 				'cuando'  => (string) ( $m['revisado_en'] ?: $m['creado'] ),
 				'accion'  => 'registrado',
@@ -115,7 +115,7 @@ final class HistorialPagos {
 			}
 			$metodo = PedidosTable::metodos()[ $p['pago_metodo'] ] ?? '';
 			/* translators: 1: amount, 2: order number */
-			$que = sprintf( __( 'Payment of %1$s · uniform order %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Calculadora::euros( (float) ( $p['pago_importe'] ?? $p['total'] ) ), PedidosTable::numero( $p ) );
+			$que = sprintf( /* translators: 1: text, 2: text */ __( 'Payment of %1$s · uniform order %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Calculadora::euros( (float) ( $p['pago_importe'] ?? $p['total'] ) ), PedidosTable::numero( $p ) );
 			$out[] = array(
 				'cuando'  => (string) $p['pago_en'],
 				'accion'  => 'registrado',

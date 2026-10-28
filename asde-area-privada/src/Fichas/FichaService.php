@@ -170,7 +170,7 @@ final class FichaService {
 		$len = (int) ( $meta['len'] ?? 0 );
 		if ( $len > 0 && mb_strlen( $v ) > $len ) {
 			/* translators: %d: maximum number of characters of the field */
-			return new \WP_Error( 'asde_ficha', sprintf( __( 'maximum %d characters.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $len ) );
+			return new \WP_Error( 'asde_ficha', sprintf( /* translators: %d: number */ __( 'maximum %d characters.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $len ) );
 		}
 		return $v;
 	}

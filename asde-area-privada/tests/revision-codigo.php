@@ -199,17 +199,17 @@ try {
 	echo "== Parte D · RC-USU-2 y RC-USU-3: textos de Usuarios ==\n";
 	$ok( 'Ana, Bea y Ciro' === Contacto::lista( array( 'Ana', 'Bea', 'Ciro' ) ) && 'Ana o Bea' === Contacto::lista( array( 'Ana', 'Bea' ), true ) && 'Ana' === Contacto::lista( array( 'Ana' ) ), 'listas en castellano: «A, B y C» y «A o B»' );
 	$en = static fn( string $idioma, bool $o = false ): string => Idioma::en( $idioma, static fn() => Contacto::lista( array( 'Ana', 'Bea' ), $o ) );
-	$ok( ! isset( \AsdeBalears\AreaPrivada\Idiomas\Traducciones::catalogo( 'ca' )['Cuota anual'] ) || ( 'Ana i Bea' === $en( 'ca' ) && 'Ana eta Bea' === $en( 'eu' ) && 'Ana e Bea' === $en( 'gl' ) && 'Ana ou Bea' === $en( 'gl', true ) ), 'y en catalán, euskera y gallego, con su conector (antes salía «y» en todos)' ); // Sin catálogos en el paquete (v0.59.3) no hay nada que traducir.
+	$ok( ( 'Ana i Bea' === $en( 'ca' ) && 'Ana eta Bea' === $en( 'eu' ) && 'Ana e Bea' === $en( 'gl' ) && 'Ana ou Bea' === $en( 'gl', true ) ), 'y en catalán, euskera y gallego, con su conector (antes salía «y» en todos)' );
 	$err = AltaScouterService::errores( AltaScouterService::MODO_SIN_SECCION, array(), array(), 'voluntaria@example.invalid' );
 	$ok( 1 === count( $err ) && str_contains( $err[0], 'Intendencia' ) && array() === AltaScouterService::errores( AltaScouterService::MODO_SIN_SECCION, array(), array( Roles::INTENDENTE ), 'voluntaria@example.invalid' ), 'sin sección: el error nombra también Intendencia, que vale como responsabilidad' );
 
 	echo "== Parte E · RC-TES-4 y RC-TES-5: Tesorería ==\n";
 	$en_ca = Idioma::en( 'ca', static fn() => TesoreriaConfig::defaults_ronda( '2026-2027' ) );
 	$ok( 'Cuota anual' === $en_ca['plazos'][0]['nombre'] && 'Dique' === $en_ca['presupuesto']['proyectos']['castores'] && 'Campamento de verano' === $en_ca['presupuesto']['categorias'][0], 'los valores por defecto de una ronda salen en castellano aunque quien la configura use el catalán (lo que se guarda no se traduce)' );
-	$ok( ! isset( \AsdeBalears\AreaPrivada\Idiomas\Traducciones::catalogo( 'ca' )['Cuota anual'] ) || ( 'Cuota anual' !== Idioma::en( 'ca', static fn() => asde_t( 'Cuota anual' ) ) && 'Dique' !== Idioma::en( 'eu', static fn() => asde_t( 'Dique' ) ) ), 'y se traducen al mostrarlos' ); // Sin catálogos en el paquete (v0.59.3) no hay nada que traducir.
+	$ok( ( 'Cuota anual' !== Idioma::en( 'ca', static fn() => asde_guardado( 'Cuota anual' ) ) && 'Dique' !== Idioma::en( 'eu', static fn() => asde_guardado( 'Dique' ) ) ), 'y se traducen al mostrarlos' );
 	$ok( 'F6841000' === Conciliacion::referencia( 'Cuota F6841000 hijos', '684' ) && 'F68412345' === Conciliacion::referencia( 'pago f-684-12345', '684' ), 'la referencia de familia se reconoce también desde la familia 1000 (F6841000)' );
 	$ok( 'F684001' === Conciliacion::referencia( 'Cuota F-684-001', '684' ) && null === Conciliacion::referencia( 'F6841000', '999' ) && null === Conciliacion::referencia( 'F68400', '684' ), 'las de 3 cifras siguen igual, y solo las del grupo' );
-	$ok( ! isset( \AsdeBalears\AreaPrivada\Idiomas\Traducciones::catalogo( 'ca' )['Cuota anual'] ) || ( '1 adeudo' === Remesas::adeudos( 1 ) && '3 adeudos' === Remesas::adeudos( 3 ) && '3 adeudos' !== Idioma::en( 'ca', static fn() => Remesas::adeudos( 3 ) ) ), 'RC-SEPA-2: «1 adeudo» / «3 adeudos», traducido en otro idioma' ); // Sin catálogos en el paquete (v0.59.3) no hay nada que traducir.
+	$ok( ( '1 adeudo' === Remesas::adeudos( 1 ) && '3 adeudos' === Remesas::adeudos( 3 ) && '3 adeudos' !== Idioma::en( 'ca', static fn() => Remesas::adeudos( 3 ) ) ), 'RC-SEPA-2: «1 adeudo» / «3 adeudos», traducido en otro idioma' );
 
 	echo "== Parte F · RC-CRM-2: refrescar la instantánea de otro grupo deja el grupo que hubiera ==\n";
 	// Dos grupos ficticios, solo en memoria: el 997 (con su CRM simulado y dos fichas) se refresca y el 998 es el que

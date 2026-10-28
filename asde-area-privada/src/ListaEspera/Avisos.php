@@ -115,16 +115,16 @@ final class Avisos {
 	private static function de_confirmar( array $fila, bool $vista = false ): callable {
 		return static fn( string $grupo ): array => array(
 			/* translators: %s: name of the group */
-			sprintf( __( '[%s] Confirm your sign-up on the waiting list', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $grupo ),
+			sprintf( /* translators: %s: text */ __( '[%s] Confirm your sign-up on the waiting list', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $grupo ),
 			array(
 				/* translators: 1: name of the person signed up, 2: name of the group */
-				sprintf( __( 'We have received the sign-up of <strong>%1$s</strong> on the waiting list of <strong>%2$s</strong>.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), esc_html( self::nombre( $fila ) ), esc_html( $grupo ) ),
+				sprintf( /* translators: 1: text, 2: text */ __( 'We have received the sign-up of <strong>%1$s</strong> on the waiting list of <strong>%2$s</strong>.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), esc_html( self::nombre( $fila ) ), esc_html( $grupo ) ),
 				esc_html( __( 'For it to go on the list, confirm that this email address is yours:', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ),
 			),
 			self::enlace( Enlaces::url_confirmar( $fila ), $vista ),
 			__( 'Confirm the sign-up', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 			/* translators: %d: days */
-			esc_html( sprintf( __( 'The link is valid for %d days. If it was not you, ignore this email: the sign-up will be deleted by itself.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Inscripciones::DIAS_CONFIRMAR ) ),
+			esc_html( sprintf( /* translators: %d: number */ __( 'The link is valid for %d days. If it was not you, ignore this email: the sign-up will be deleted by itself.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Inscripciones::DIAS_CONFIRMAR ) ),
 		);
 	}
 
@@ -132,12 +132,12 @@ final class Avisos {
 	private static function de_confirmada( array $fila, bool $vista = false ): callable {
 		return static fn( string $grupo ): array => array(
 			/* translators: %s: name of the group */
-			sprintf( __( '[%s] Sign-up on the waiting list confirmed', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $grupo ),
+			sprintf( /* translators: %s: text */ __( '[%s] Sign-up on the waiting list confirmed', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $grupo ),
 			array(
 				/* translators: 1: name of the person signed up, 2: name of the group */
-				sprintf( __( 'The sign-up of <strong>%1$s</strong> on the waiting list of <strong>%2$s</strong> is confirmed. We will contact you when a place is available.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), esc_html( self::nombre( $fila ) ), esc_html( $grupo ) ),
+				sprintf( /* translators: 1: text, 2: text */ __( 'The sign-up of <strong>%1$s</strong> on the waiting list of <strong>%2$s</strong> is confirmed. We will contact you when a place is available.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), esc_html( self::nombre( $fila ) ), esc_html( $grupo ) ),
 				/* translators: %s: date */
-				esc_html( sprintf( __( 'We keep your data, encrypted, until %s. We will notify you beforehand so you can keep it.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), self::fecha( (string) $fila['caduca'] ) ) ),
+				esc_html( sprintf( /* translators: %s: text */ __( 'We keep your data, encrypted, until %s. We will notify you beforehand so you can keep it.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), self::fecha( (string) $fila['caduca'] ) ) ),
 			),
 			self::enlace( Enlaces::url_acceso( $fila ), $vista ),
 			__( 'View my details', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
@@ -163,10 +163,10 @@ final class Avisos {
 			}
 			return array(
 				/* translators: %s: name of the group */
-				sprintf( __( '[%s] Your waiting list links', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $grupo ),
+				sprintf( /* translators: %s: text */ __( '[%s] Your waiting list links', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $grupo ),
 				array(
 					/* translators: %s: name of the group */
-					sprintf( __( 'These are the sign-ups with this email on the waiting list of <strong>%s</strong>:', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), esc_html( $grupo ) ),
+					sprintf( /* translators: %s: text */ __( 'These are the sign-ups with this email on the waiting list of <strong>%s</strong>:', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), esc_html( $grupo ) ),
 					'<ul style="margin:0;padding-left:20px;">' . $items . '</ul>',
 				),
 				'',
@@ -180,12 +180,12 @@ final class Avisos {
 	private static function de_caducidad( array $fila, bool $vista = false ): callable {
 		return static fn( string $grupo ): array => array(
 			/* translators: %s: name of the group */
-			sprintf( __( '[%s] Your waiting list data expires soon', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $grupo ),
+			sprintf( /* translators: %s: text */ __( '[%s] Your waiting list data expires soon', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $grupo ),
 			array(
 				/* translators: 1: name of the person signed up, 2: name of the group, 3: date */
-				sprintf( __( 'The data of <strong>%1$s</strong> on the waiting list of <strong>%2$s</strong> will be deleted on <strong>%3$s</strong>.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), esc_html( self::nombre( $fila ) ), esc_html( $grupo ), esc_html( self::fecha( (string) $fila['caduca'] ) ) ),
+				sprintf( /* translators: 1: text, 2: text, 3: text */ __( 'The data of <strong>%1$s</strong> on the waiting list of <strong>%2$s</strong> will be deleted on <strong>%3$s</strong>.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), esc_html( self::nombre( $fila ) ), esc_html( $grupo ), esc_html( self::fecha( (string) $fila['caduca'] ) ) ),
 				/* translators: %d: months */
-				esc_html( sprintf( __( 'If you want to stay on the list, sign in and press "Keep my data": we will keep it for %d more months.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Inscripciones::MESES ) ),
+				esc_html( sprintf( /* translators: %d: number */ __( 'If you want to stay on the list, sign in and press "Keep my data": we will keep it for %d more months.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Inscripciones::MESES ) ),
 			),
 			self::enlace( Enlaces::url_acceso( $fila ), $vista ),
 			__( 'Keep my data', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
@@ -201,7 +201,7 @@ final class Avisos {
 			'',
 			'',
 			/* translators: 1: name of the group, 2: link */
-			sprintf( __( 'You can reply to this email. You are on the waiting list of %1$s: <a href="%2$s">see my details</a>.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), esc_html( $grupo ), esc_url( self::enlace( Enlaces::url_acceso( $fila ), $vista ) ) ),
+			sprintf( /* translators: 1: text, 2: text */ __( 'You can reply to this email. You are on the waiting list of %1$s: <a href="%2$s">see my details</a>.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), esc_html( $grupo ), esc_url( self::enlace( Enlaces::url_acceso( $fila ), $vista ) ) ),
 		);
 	}
 

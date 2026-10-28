@@ -159,7 +159,7 @@ final class PermisosRol {
 					if ( $despues[ $p ] && ! $antes[ $p ] ) {
 						$despues[ $p ] = false;
 						/* translators: 1: permission, 2: role */
-						$avisos[] = sprintf( __( 'You cannot add "%1$s" to the role %2$s: it is yours and it would be granting the permission to yourself.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Catalogo::descripcion( $p ), Roles::label( $rol ) );
+						$avisos[] = sprintf( /* translators: 1: text, 2: text */ __( 'You cannot add "%1$s" to the role %2$s: it is yours and it would be granting the permission to yourself.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Catalogo::descripcion( $p ), Roles::label( $rol ) );
 					}
 				}
 			}
@@ -170,7 +170,7 @@ final class PermisosRol {
 					if ( empty( $prueba[ $p ] ) ) {
 						$despues[ $p ] = false;
 						/* translators: 1: permission, 2: what is needed first */
-						$avisos[] = sprintf( __( '"%1$s" first needs: %2$s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Catalogo::descripcion( $p ), Catalogo::texto_requisitos( $p ) );
+						$avisos[] = sprintf( /* translators: 1: text, 2: text */ __( '"%1$s" first needs: %2$s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Catalogo::descripcion( $p ), Catalogo::texto_requisitos( $p ) );
 					}
 				}
 			}

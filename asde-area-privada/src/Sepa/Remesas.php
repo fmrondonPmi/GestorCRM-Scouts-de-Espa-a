@@ -517,7 +517,7 @@ final class Remesas {
 			$c = isset( $familias[ (int) $l['familia'] ] ) ? CuentaCrm::de_familia( $familias[ (int) $l['familia'] ], (string) ( $l['iban_huella'] ?? '' ), $cuentas ) : null;
 			if ( ! $c ) {
 				/* translators: %s: family number */
-				$errores[] = sprintf( __( 'Family %s: the account on their CRM record is no longer the authorised one.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $l['familia_n'] );
+				$errores[] = sprintf( /* translators: %s: text */ __( 'Family %s: the account on their CRM record is no longer the authorised one.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $l['familia_n'] );
 				continue;
 			}
 			$lineas[ $i ]['iban']    = $c['iban'];
@@ -662,7 +662,7 @@ final class Remesas {
 					if ( ! is_wp_error( $mov ) && $sobra > 0 ) {
 						// El banco ya cobró: se apunta todo y Tesorería decide la devolución (doc 59, RC-EVE-2).
 						/* translators: 1: family number, 2: amount */
-						$res['avisos'][] = sprintf( __( 'Family %1$s: the bank has collected %2$s more than was left to pay for the event. It remains as a balance to refund: decide in Treasury whether to refund it.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $l['familia_n'], Calculadora::euros( $sobra ) );
+						$res['avisos'][] = sprintf( /* translators: 1: text, 2: text */ __( 'Family %1$s: the bank has collected %2$s more than was left to pay for the event. It remains as a balance to refund: decide in Treasury whether to refund it.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $l['familia_n'], Calculadora::euros( $sobra ) );
 					}
 				} else {
 					$mov = MovimientosTable::registrar( $familia, $r['ronda'], MovimientosTable::PAGO, $fecha, $l['centimos'] / 100, 'domiciliacion', (string) $l['e2e'], 'Remesa SEPA ' . $r['numero'], 'sepa' );

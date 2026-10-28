@@ -268,10 +268,10 @@ foreach ( $historial as $h ) {
 	$euros  = Calculadora::euros( (float) $m['importe'] );
 	if ( MovimientosTable::PAGO === $m['tipo'] ) {
 		/* translators: %s: amount */
-		$que = $elim ? sprintf( __( 'Payment of %s deleted', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $euros ) : sprintf( /* translators: %s: text */ __( 'Payment of %s recorded', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $euros );
+		$que = $elim ? sprintf( /* translators: %s: text */ __( 'Payment of %s deleted', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $euros ) : sprintf( /* translators: %s: text */ __( 'Payment of %s recorded', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $euros );
 	} else {
 		/* translators: %s: amount */
-		$que = $elim ? sprintf( __( 'Adjustment of %s removed', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $euros ) : sprintf( /* translators: %s: text */ __( 'Adjustment of %s recorded', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $euros );
+		$que = $elim ? sprintf( /* translators: %s: text */ __( 'Adjustment of %s removed', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $euros ) : sprintf( /* translators: %s: text */ __( 'Adjustment of %s recorded', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $euros );
 	}
 	$lineas[] = array(
 		'cuando'   => $h['cuando'],
@@ -306,10 +306,10 @@ usort( $lineas, static fn( $a, $b ) => strcmp( $b['cuando'], $a['cuando'] ) ?: (
 					<?php
 					$eliminados = count( array_filter( $lineas, static fn( $h ) => $h['eliminado'] ) );
 					/* translators: %d: history entries */
-					echo esc_html( sprintf( _n( '%d entry', '%d entries', count( $lineas ) , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), count( $lineas ) ) );
+					echo esc_html( sprintf( /* translators: %d: number */ _n( '%d entry', '%d entries', count( $lineas ) , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), count( $lineas ) ) );
 					if ( $eliminados ) {
 						/* translators: %d: deleted transactions */
-						echo ' · ' . esc_html( sprintf( _n( '%d deleted', '%d deleted', $eliminados , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $eliminados ) );
+						echo ' · ' . esc_html( sprintf( /* translators: %d: number */ _n( '%d deleted', '%d deleted', $eliminados , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $eliminados ) );
 					}
 					?>
 				</span>

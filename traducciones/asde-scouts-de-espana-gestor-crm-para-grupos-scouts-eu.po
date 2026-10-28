@@ -121,6 +121,7 @@ msgstr " · ekitaldia «%s»"
 msgid " · last activity %d s ago"
 msgstr " · azken jarduera duela %d s"
 
+#. translators: 1: text, 2: text
 #: src/Accesos/PermisosRol.php:173
 #, php-format
 msgid "\"%1$s\" first needs: %2$s."
@@ -156,11 +157,13 @@ msgstr "«%s» ez dago"
 msgid "\"%s\" does not have its shortcode"
 msgstr "«%s» ez du bere shortcode-a"
 
+#. translators: %s: text
 #: src/Tesoreria/Banco/Conciliacion.php:222
 #, php-format
 msgid "\"%s\" is an expense type and this transaction is an income."
 msgstr "«%s» gastu mota bat da eta mugimendu hau diru-sarrera bat da."
 
+#. translators: %s: text
 #: src/Tesoreria/Banco/Conciliacion.php:220
 #, php-format
 msgid "\"%s\" is an income type and this transaction is an expense."
@@ -178,11 +181,13 @@ msgstr "«%s» inbentarioan dago berriro."
 msgid "\"%s\" is back in the shop."
 msgstr "«%s» berriro dago dendan."
 
+#. translators: %s: text
 #: src/ListaEspera/CamposExtra.php:179
 #, php-format
 msgid "\"%s\" is not a valid date."
 msgstr "«%s» ez da baliozko data."
 
+#. translators: %s: text
 #: src/ListaEspera/CamposExtra.php:170
 #, php-format
 msgid "\"%s\" must be a number."
@@ -194,6 +199,7 @@ msgstr "«%s» zenbaki bat izan behar da."
 msgid "\"%s\" saved."
 msgstr "«%s» gorde da."
 
+#. translators: %s: text
 #: src/ListaEspera/CamposExtra.php:189
 #, php-format
 msgid "\"%s\" still needs to be filled in."
@@ -303,6 +309,7 @@ msgid_plural "%1$d orders included in \"%2$s\"."
 msgstr[0] "%1$d eskaera sartu da «%2$s» barruan."
 msgstr[1] "%1$d eskaera sartu dira «%2$s» barruan."
 
+#. translators: 1: number, 2: number
 #: templates/personas/listado.php:60
 #, php-format
 msgid "%1$d with an active membership · %2$d without an active membership"
@@ -320,6 +327,7 @@ msgstr "%% %1$s, %2$s arte"
 msgid "%1$s (%2$s)"
 msgstr "%1$s (%2$s)"
 
+#. translators: 1: text, 2: number
 #: src/Menus/Recetario.php:93
 #, php-format
 msgid "%1$s (copy %2$d)"
@@ -331,6 +339,7 @@ msgstr "%1$s (%2$d. kopia)"
 msgid "%1$s (until %2$s, %3$s %%)"
 msgstr "%1$s (%2$s arte, %% %3$s)"
 
+#. translators: 1: text, 2: number
 #: src/Crm/SinergiaV41Client.php:530
 #, php-format
 msgid "%1$s answered HTTP %2$d without a valid response from the API."
@@ -342,6 +351,7 @@ msgstr "%1$s(e)k HTTP %2$d erantzun du APIaren erantzun baliozkorik gabe."
 msgid "%1$s by %2$s on %3$s."
 msgstr "%1$s, %2$s(r)en eskutik, %3$s(e)an."
 
+#. translators: 1: text, 2: text
 #: src/Frontend/Views/FichaView.php:346
 #, php-format
 msgid "%1$s has been withdrawn in the CRM as of %2$s."
@@ -382,6 +392,7 @@ msgstr "%1$s taldeko bazkidea da orain, %2$s atalean %3$s(e)tik."
 msgid "%1$s is already on the waiting list of %2$s. We have sent you an email with the link to see your details."
 msgstr "%1$s dagoeneko %2$s(r)en itxaron-zerrendan dago. Email bat bidali dizugu zure datuak ikusteko estekarekin."
 
+#. translators: 1: text, 2: text, 3: text
 #: src/Frontend/Views/FichaView.php:376
 #, php-format
 msgid "%1$s moves to %2$s as of %3$s. The previous membership is closed with the reason \"change of section\"."
@@ -447,6 +458,7 @@ msgstr "%1$s · %2$s · %3$s(e)an"
 msgid "%1$s · adjustment of %2$s: %3$s"
 msgstr "%1$s · %2$s(e)ko doikuntza: %3$s"
 
+#. translators: 1: text, 2: text, 3: text
 #: src/Frontend/Views/CajaView.php:127
 #, php-format
 msgid "%1$s · at the start %2$s · at the end %3$s"
@@ -490,6 +502,7 @@ msgid_plural "%1$s: %2$d rows read."
 msgstr[0] "%1$s: %2$d errenkada irakurrita."
 msgstr[1] "%1$s: %2$d errenkada irakurrita."
 
+#. translators: 1: text, 2: text
 #: src/Sepa/Mandatos.php:299
 #, php-format
 msgid "%1$s: %2$s"
@@ -559,6 +572,7 @@ msgid_plural "%d changes were not applied: the CRM value has changed since they 
 msgstr[0] "%d aldaketa ez da aplikatu: CRMko datua proposatu zenetik aldatu da. Berrikusi eta markatu berriro hala ere aplikatu nahi baduzu."
 msgstr[1] "%d aldaketa ez dira aplikatu: CRMko datua proposatu zirenetik aldatu da. Berrikusi eta markatu berriro hala ere aplikatu nahi badituzu."
 
+#. translators: %d: number
 #: templates/tesoreria/control.php:130
 #, php-format
 msgid "%d child"
@@ -586,6 +600,7 @@ msgstr "%d zuzenduta"
 msgid "%d could not be corrected"
 msgstr "%d ezin izan dira zuzendu"
 
+#. translators: %d: number
 #: src/Frontend/Views/FichaView.php:369
 #, php-format
 msgid "%d could not be sent (see Users → Emails)."
@@ -607,6 +622,7 @@ msgid_plural "%d days left"
 msgstr[0] "%d egun geratzen da"
 msgstr[1] "%d egun geratzen dira"
 
+#. translators: %d: number
 #: templates/tesoreria/familia.php:312
 #, php-format
 msgid "%d deleted"
@@ -652,6 +668,7 @@ msgid_plural "%d direct debits"
 msgstr[0] "%d karga"
 msgstr[1] "%d karga"
 
+#. translators: %d: number
 #: src/Admin/DuplicadosPage.php:104
 #, php-format
 msgid "%d documento está en más de una ficha:"
@@ -1105,6 +1122,7 @@ msgstr "%s ez da joango"
 msgid "%s items of equipment ticked"
 msgstr "%s material markatuta"
 
+#. translators: %s: text
 #: src/Frontend/Views/FichaView.php:417
 #, php-format
 msgid "%s no longer appears on the website. Nothing has changed in the CRM."
@@ -1581,6 +1599,7 @@ msgstr ""
 msgid "A lifeguard will be present"
 msgstr "Sorospen-langile bat egongo da"
 
+#. translators: %d: number
 #: src/Inventario/Servicio.php:137
 #, php-format
 msgid "A list can have at most %d items of equipment."
@@ -1734,7 +1753,7 @@ msgstr "%s erabiltzailearen sarbidea desaktibatu da: haren pasahitza eta bi urra
 msgid "Access history"
 msgstr "Sarbideen historia"
 
-#: src/Frontend/Views/AccesosView.php:53 src/Idiomas/Guardados.php:155
+#: src/Frontend/Views/AccesosView.php:53 src/Idiomas/Guardados.php:164
 msgid "Access management"
 msgstr "Sarbideen kudeaketa"
 
@@ -1742,7 +1761,7 @@ msgstr "Sarbideen kudeaketa"
 msgid "Access request"
 msgstr "Sarbide-eskaera"
 
-#: src/Domain/Modulos.php:52 src/Idiomas/Guardados.php:281 templates/area/inicio.php:170 templates/solicitudes/listado.php:25
+#: src/Domain/Modulos.php:52 src/Idiomas/Guardados.php:292 templates/area/inicio.php:170 templates/solicitudes/listado.php:25
 msgid "Access requests"
 msgstr "Sarbide-eskaerak"
 
@@ -1796,6 +1815,7 @@ msgstr "Kontua (IBAN)"
 msgid "Account IBAN"
 msgstr "Kontuaren IBANa"
 
+#. translators: %d: number
 #: src/Frontend/Views/AccesosView.php:236
 #, php-format
 msgid "Account deleted (%d)"
@@ -1809,7 +1829,7 @@ msgstr "Kontuaren emaila (zifratuta gordeta)"
 msgid "Account holder's first name and surname"
 msgstr "Titularraren izen-abizenak"
 
-#: src/Idiomas/Guardados.php:274 templates/area/inicio.php:193 templates/seguridad/pagina.php:14
+#: src/Idiomas/Guardados.php:285 templates/area/inicio.php:193 templates/seguridad/pagina.php:14
 msgid "Account security"
 msgstr "Kontuaren segurtasuna"
 
@@ -1837,6 +1857,7 @@ msgstr "Kontuak itxita"
 msgid "Accounts closed on %1$s by %2$s: this is the final report. To change anything, Treasury must reopen them."
 msgstr "Kontuak %1$s(e)an itxi zituen %2$s(e)k: hau da azken txostena. Zerbait aldatzeko, Diruzaintzak berriro ireki behar ditu."
 
+#. translators: 1: number, 2: number
 #: src/Frontend/Views/SepaView.php:218
 #, php-format
 msgid "Accounts moved to the CRM records: %1$d. Authorisations cancelled whose account was deleted: %2$d."
@@ -1964,7 +1985,7 @@ msgstr ""
 msgid "Add item"
 msgstr "Gehitu kontzeptu bat"
 
-#: src/Idiomas/Guardados.php:65
+#: src/Idiomas/Guardados.php:66
 msgid "Add notes to health data"
 msgstr "Osasun-datuetan oharrak idatzi"
 
@@ -2012,6 +2033,7 @@ msgstr "Gehitu aldaerak"
 msgid "Added to the team."
 msgstr "Taldera gehituta."
 
+#. translators: %d: number
 #: src/Tienda/ImportadorProductos.php:213
 #, php-format
 msgid "Adding this stock would exceed %d units."
@@ -2045,11 +2067,13 @@ msgstr "%s(e)ko doikuntza erregistratua"
 msgid "Adjustment of %s recorded."
 msgstr "%s(r)en doikuntza erregistratu da."
 
+#. translators: %s: text
 #: templates/tesoreria/familia.php:274
 #, php-format
 msgid "Adjustment of %s removed"
 msgstr "%s(e)ko doikuntza ezabatua"
 
+#. translators: %s: text
 #: src/Frontend/Views/TesoreriaView.php:435
 #, php-format
 msgid "Adjustment of %s removed. It remains in the family's history."
@@ -2095,7 +2119,7 @@ msgstr "Aurrerakina likidatuta."
 msgid "Advances are given by Treasury."
 msgstr "Aurrerakinak Diruzaintzak ematen ditu."
 
-#: src/Tesoreria/Config.php:44
+#: src/Idiomas/Guardados.php:79
 msgid "Adventure"
 msgstr "Abentura"
 
@@ -2183,11 +2207,11 @@ msgstr "Alergenoak"
 msgid "Allergies"
 msgstr "Alergiak"
 
-#: src/Idiomas/Guardados.php:57
+#: src/Idiomas/Guardados.php:58
 msgid "Allergies and food"
 msgstr "Alergiak eta elikadura"
 
-#: src/Idiomas/Guardados.php:61
+#: src/Idiomas/Guardados.php:62
 msgid "Almond"
 msgstr "Almendra"
 
@@ -2366,7 +2390,7 @@ msgstr "Aukerako paragrafo bat hasieran eta beste bat amaieran, email bakoitzean
 msgid "Annual family fee by number of children"
 msgstr "Familiaren urteko kuota seme-alaba kopuruaren arabera"
 
-#: src/Idiomas/Guardados.php:114 templates/tesoreria/cuotas.php:66 templates/tesoreria/cuotas.php:74
+#: src/Idiomas/Guardados.php:118 templates/tesoreria/cuotas.php:66 templates/tesoreria/cuotas.php:74
 msgid "Annual fee"
 msgstr "Urteko kuota"
 
@@ -2382,6 +2406,7 @@ msgstr "Beste tutore bat bere kontuarekin"
 msgid "Another person from the group (exception, with a reason)"
 msgstr "Taldeko beste pertsona bat (salbuespena, arrazoiarekin)"
 
+#. translators: %s: text
 #: src/Crm/Altas.php:425
 #, php-format
 msgid "Another record in your group already has this document (%s): it would be the same person twice. Check it before continuing."
@@ -2443,15 +2468,15 @@ msgstr ""
 msgid "Approve and send the invitation"
 msgstr "Onartu eta bidali gonbidapena"
 
-#: src/Idiomas/Guardados.php:70
+#: src/Idiomas/Guardados.php:71
 msgid "Approve or reject access requests"
 msgstr "Sarbide-eskaerak onartu edo baztertu"
 
-#: src/Idiomas/Guardados.php:71
+#: src/Idiomas/Guardados.php:72
 msgid "Approve reimbursements"
 msgstr "Dirua itzultzeko eskaerak onartu"
 
-#: src/Idiomas/Guardados.php:69
+#: src/Idiomas/Guardados.php:70
 msgid "Approve the changes proposed by families"
 msgstr "Familiek proposatzen dituzten aldaketak onartu"
 
@@ -2463,7 +2488,7 @@ msgstr "Onartu taldearen estekarekin sartzea eskatzen duten familiak eta bazkide
 msgid "Approve the selected"
 msgstr "Onartu hautatutakoak"
 
-#: src/Idiomas/Guardados.php:68 src/Inventario/ComprasTable.php:38 src/Presupuestos/EstadosTable.php:26 src/Usuarios/Solicitudes.php:35
+#: src/Idiomas/Guardados.php:69 src/Inventario/ComprasTable.php:38 src/Presupuestos/EstadosTable.php:26 src/Usuarios/Solicitudes.php:35
 msgid "Approved"
 msgstr "Oniritziarekin"
 
@@ -2517,7 +2542,7 @@ msgstr "Scouter gisa zure atalen bazkideak ikusten dituzu."
 msgid "As it will appear in the families' bank (without accents)."
 msgstr "Familien bankuan agertuko den bezala (azentu-markarik gabe)."
 
-#: src/Idiomas/Guardados.php:101
+#: src/Idiomas/Guardados.php:105
 msgid "As mother, father or legal guardian, I authorise their participation in this Scout group activity, organised under the responsibility of its team of scouters, and I declare that I have read the information about the activity. I also authorise, in an emergency and if I cannot be reached, the team to take the medical, surgical or transfer decisions indicated by the health personnel."
 msgstr "Ama, aita edo legezko tutore gisa, baimena ematen dut talde eskautaren jarduera honetan parte hartzeko, bere scouter-taldearen ardurapean antolatua, eta adierazten dut jardueraren informazioa irakurri dudala. Era berean, baimena ematen dut, larrialdiren bat gertatuz gero eta ni aurkitu ezin banaute, taldeak osasun-langileek adierazten dituzten erabaki mediko, kirurgiko edo lekualdatzekoak har ditzan."
 
@@ -2529,11 +2554,11 @@ msgstr "Bere eskubideen barruan, zordunak bere erakundeak itzultzea eskatzeko le
 msgid "Ascending"
 msgstr "Goranzkoa"
 
-#: src/Idiomas/Guardados.php:229
+#: src/Idiomas/Guardados.php:239
 msgid "Ask sections and quartermasters for a budget chargeable to the camp"
 msgstr "Kanpaldiari egotz dakizkiokeen sekzioei eta intendentziei aurrekontua eskatu"
 
-#: src/Idiomas/Guardados.php:228
+#: src/Idiomas/Guardados.php:238
 msgid "Ask the bus companies for a quote and pre-book"
 msgstr "Autobusei aurrekontua eskatu eta aurrez erreserbatu"
 
@@ -2549,7 +2574,7 @@ msgstr "Esleitu"
 msgid "Assign no."
 msgstr "Esleitu zk."
 
-#: src/Idiomas/Guardados.php:74
+#: src/Idiomas/Guardados.php:75
 msgid "Assign section, register in the CRM and delete"
 msgstr "Atala esleitu, CRMan alta eman eta ezabatu"
 
@@ -2601,11 +2626,13 @@ msgstr "Begiraleen erdiek gutxienez aisialdiko titulazioa izan behar dute: %2$d(
 msgid "At most %d activity types."
 msgstr "Gehienez %d jarduera mota."
 
+#. translators: %d: number
 #: src/ListaEspera/CamposExtra.php:132
 #, php-format
 msgid "At most %d own fields."
 msgstr "Gehienez, %d eremu propio."
 
+#. translators: %d: number
 #: src/Eventos/Tareas.php:314
 #, php-format
 msgid "At most %d tasks per event."
@@ -2675,7 +2702,7 @@ msgstr "Baimena gorde da: erreferentzia <strong>%s</strong>. Berrespen-emaila bi
 msgid "Authorisation signed."
 msgstr "Baimena sinatuta."
 
-#: src/Idiomas/Guardados.php:75
+#: src/Idiomas/Guardados.php:76
 msgid "Authorisations"
 msgstr "Baimenak"
 
@@ -2715,7 +2742,7 @@ msgstr "Batez besteko asegurua ("
 msgid "Average insurance per member (€)"
 msgstr "Elkartekide bakoitzeko batez besteko asegurua (€)"
 
-#: src/Idiomas/Guardados.php:54
+#: src/Idiomas/Guardados.php:55
 msgid "Avocado"
 msgstr "Aguakatea"
 
@@ -2759,11 +2786,11 @@ msgstr ""
 msgid "Badges"
 msgstr "Insigniak"
 
-#: src/Idiomas/Guardados.php:240
+#: src/Idiomas/Guardados.php:250
 msgid "Baked chicken with potatoes"
 msgstr "Oilaskoa labean patatekin"
 
-#: src/Idiomas/Guardados.php:197
+#: src/Idiomas/Guardados.php:207
 msgid "Baked hake with lemon"
 msgstr "Legatza labean limoiarekin"
 
@@ -2783,7 +2810,7 @@ msgstr "Saldoa hasieran"
 msgid "Balance not counting the project's fundraising"
 msgstr "Proiektuaren dirubilketa kontatu gabeko saldoa"
 
-#: src/Idiomas/Guardados.php:238
+#: src/Idiomas/Guardados.php:248
 msgid "Banana"
 msgstr "Banana"
 
@@ -2836,6 +2863,7 @@ msgstr "Banku-datuak Scouts de Españako CRMko fitxan gordetzen dira (familiako 
 msgid "Bank fees"
 msgstr "Banku-komisioak"
 
+#. translators: 2: text, 1: text
 #: templates/tesoreria/libro-mayor.php:80
 #, php-format
 msgid "Bank opening balance: %2$s on %1$s"
@@ -2857,7 +2885,7 @@ msgstr "Bankuko mugimenduak Idazkaritzak, Koordinazioak eta Diruzaintzak bakarri
 msgid "Bank:"
 msgstr "Bankua:"
 
-#: src/Idiomas/Guardados.php:95
+#: src/Idiomas/Guardados.php:99
 msgid "Barley"
 msgstr "Garagarra"
 
@@ -2903,7 +2931,7 @@ msgstr "Remesak"
 msgid "Because of the reason for the withdrawal, the family has not been written to."
 msgstr "Bajaren arrazoia dela eta, ez zaio familiari idatzi."
 
-#: src/Idiomas/Guardados.php:94
+#: src/Idiomas/Guardados.php:98
 msgid "Beef"
 msgstr "Behi-haragia"
 
@@ -2911,7 +2939,7 @@ msgstr "Behi-haragia"
 msgid "Bills of exchange batches"
 msgstr "Efektu-remesak"
 
-#: src/Idiomas/Guardados.php:150
+#: src/Idiomas/Guardados.php:159
 msgid "Biscuits"
 msgstr "Galletak"
 
@@ -2919,6 +2947,7 @@ msgstr "Galletak"
 msgid "Bizum"
 msgstr "Bizum"
 
+#. translators: 1: text, 2: text
 #: src/Tienda/Servicio.php:434
 #, php-format
 msgid "Bizum to %1$s, stating order no. %2$s as the description."
@@ -2930,7 +2959,7 @@ msgstr "Bizuma %1$s zenbakira, kontzeptu gisa %2$s eskaera-zenbakia adieraziz."
 msgid "Bizum to the group's phone, stating order no. %s as the description."
 msgstr "Bizuma taldearen telefonora, kontzeptu gisa %s eskaera-zenbakia adieraziz."
 
-#: src/Idiomas/Guardados.php:262
+#: src/Idiomas/Guardados.php:272
 msgid "Book the camp site"
 msgstr "Kanpaldiko lekua erreserbatu"
 
@@ -2948,11 +2977,11 @@ msgstr "Erosita"
 msgid "Bought: marked by %1$s on %2$s. What was bought was added to the inventory."
 msgstr "Erosita: %1$s(e)k markatu zuen, %2$s. Erositakoa inbentarioari gehitu zitzaion."
 
-#: src/Idiomas/Guardados.php:221
+#: src/Idiomas/Guardados.php:231
 msgid "Bread"
 msgstr "Ogia"
 
-#: src/Idiomas/Guardados.php:222
+#: src/Idiomas/Guardados.php:232
 msgid "Breadcrumbs"
 msgstr "Ogi-papurra"
 
@@ -3036,7 +3065,7 @@ msgstr "Aurrekontua: %s"
 msgid "Budgeted in expenses"
 msgstr "Gastuetan aurrekontatua"
 
-#: src/Domain/Modulos.php:58 src/Frontend/Views/TesoreriaBaseView.php:32 src/Frontend/Views/TesoreriaBaseView.php:41 src/Idiomas/Guardados.php:246
+#: src/Domain/Modulos.php:58 src/Frontend/Views/TesoreriaBaseView.php:32 src/Frontend/Views/TesoreriaBaseView.php:41 src/Idiomas/Guardados.php:256
 msgid "Budgets"
 msgstr "Aurrekontuak"
 
@@ -3052,6 +3081,7 @@ msgstr "Autobusen partida aurrekontuan gehitu da."
 msgid "Buses"
 msgstr "Autobusak"
 
+#. translators: 1: number, 2: text
 #: src/Eventos/Servicio.php:539
 #, php-format
 msgid "Buses (%1$d × %2$s)"
@@ -3061,11 +3091,11 @@ msgstr "Autobusak (%1$d × %2$s)"
 msgid "Buy"
 msgstr "Erosi"
 
-#: src/Idiomas/Guardados.php:102
+#: src/Idiomas/Guardados.php:106
 msgid "Buy food and pack it"
 msgstr "Janaria erosi eta paketatu"
 
-#: src/Idiomas/Guardados.php:103
+#: src/Idiomas/Guardados.php:107
 msgid "Buy in the shop"
 msgstr "Dendan erosi"
 
@@ -3073,7 +3103,7 @@ msgstr "Dendan erosi"
 msgid "By"
 msgstr "Nork"
 
-#: src/Idiomas/Guardados.php:241
+#: src/Idiomas/Guardados.php:251
 msgid "By branch: Castores, Lobatos, Scouts, Escultas, Rovers and Scouters."
 msgstr "Adarka: Kastoreak, Otsokumeak, Scoutak, Eskultak, Roverrak eta Scouterrak."
 
@@ -3151,7 +3181,7 @@ msgstr "CSVaren zutabeak"
 msgid "CSV file"
 msgstr "CSV fitxategia"
 
-#: src/Idiomas/Guardados.php:82
+#: src/Idiomas/Guardados.php:85
 msgid "Caffeine"
 msgstr "Kafeina"
 
@@ -3159,7 +3189,7 @@ msgstr "Kafeina"
 msgid "Calculate"
 msgstr "Kalkulatu"
 
-#: src/Idiomas/Guardados.php:86
+#: src/Idiomas/Guardados.php:89
 msgid "Calculates the total and the total per youth member."
 msgstr "Kalkulatu guztira eta hezigaiko guztira."
 
@@ -3175,7 +3205,7 @@ msgstr "Egutegia"
 msgid "Calendar saved."
 msgstr "Egutegia gorde da."
 
-#: src/Eventos/Config.php:78 src/Eventos/Config.php:84 src/Idiomas/Guardados.php:47 src/Tesoreria/Config.php:53
+#: src/Eventos/Config.php:78 src/Eventos/Config.php:84 src/Idiomas/Guardados.php:47
 msgid "Camp"
 msgstr "Kanpamendua"
 
@@ -3247,7 +3277,7 @@ msgstr "Ezeztatu aldatzeko"
 msgid "Cancellations · entry corrections"
 msgstr "Ezeztapenak · idazpen-zuzenketak"
 
-#: src/Eventos/EventosTable.php:43 src/Eventos/EventosTable.php:74 src/Fichas/Cambios.php:38 src/Idiomas/Guardados.php:67
+#: src/Eventos/EventosTable.php:43 src/Eventos/EventosTable.php:74 src/Fichas/Cambios.php:38 src/Idiomas/Guardados.php:68
 msgid "Cancelled"
 msgstr "Ezeztatua"
 
@@ -3295,6 +3325,7 @@ msgstr "Bertan behera. Arrazoia: %s"
 msgid "Cancel…"
 msgstr "Ezeztatu…"
 
+#. translators: %s: text
 #: src/Crm/SinergiaV41Client.php:521
 #, php-format
 msgid "Cannot connect to the CRM: %s"
@@ -3324,7 +3355,7 @@ msgid_plural "Careful: there are already %d units in the inventory. Do more real
 msgstr[0] "Kontuz: inbentarioan dagoeneko %d unitate dago. Ziur gehiago erosi behar dela?"
 msgstr[1] "Kontuz: inbentarioan dagoeneko %d unitate daude. Ziur gehiago erosi behar dela?"
 
-#: src/Idiomas/Guardados.php:320
+#: src/Idiomas/Guardados.php:331
 msgid "Carrot"
 msgstr "Azenarioa"
 
@@ -3332,6 +3363,7 @@ msgstr "Azenarioa"
 msgid "Cash"
 msgstr "Eskudirua"
 
+#. translators: %s: text
 #: src/Caja/Automaticos.php:119
 #, php-format
 msgid "Cash advance · %s"
@@ -3345,10 +3377,11 @@ msgstr "Kutxako aurrerakinak"
 msgid "Cash and general ledger"
 msgstr "Kutxa eta liburu nagusia"
 
-#: src/Frontend/Views/TesoreriaBaseView.php:49 src/Idiomas/Guardados.php:83 templates/tesoreria/caja.php:45
+#: src/Frontend/Views/TesoreriaBaseView.php:49 src/Idiomas/Guardados.php:86 templates/tesoreria/caja.php:45
 msgid "Cash box"
 msgstr "Kutxa"
 
+#. translators: %s: text
 #: src/Caja/Cajas.php:42
 #, php-format
 msgid "Cash box of %s"
@@ -3374,6 +3407,7 @@ msgstr "Kutxa-zenbaketa gordeta, aldea doikuntza gisa."
 msgid "Cash count saved: the cash box balances."
 msgstr "Kutxa-zenbaketa gordeta: kutxa bat dator."
 
+#. translators: %s: text
 #: src/Caja/LibroMayor.php:179
 #, php-format
 msgid "Cash count: counted %s"
@@ -3387,7 +3421,7 @@ msgstr "Eskudiruzko kuotak"
 msgid "Cash machine"
 msgstr "Kutxazain automatikoa"
 
-#: src/Idiomas/Guardados.php:64
+#: src/Idiomas/Guardados.php:65
 msgid "Cashew"
 msgstr "Anakardoa"
 
@@ -3423,7 +3457,7 @@ msgstr "Aldatu"
 msgid "Change account or holder (sign another authorisation)"
 msgstr "Aldatu kontua edo titularra (sinatu beste baimen bat)"
 
-#: src/Idiomas/Guardados.php:87
+#: src/Idiomas/Guardados.php:90
 msgid "Change fees, deadlines and federation cost"
 msgstr "Kuotak, epeak eta kostu federatiboa aldatu"
 
@@ -3451,7 +3485,7 @@ msgstr "Aldatu atalez CRMan"
 msgid "Change stock"
 msgstr "Aldatu izakinak"
 
-#: src/Idiomas/Guardados.php:88
+#: src/Idiomas/Guardados.php:91
 msgid "Change the group's details (name, tax ID, address and province)"
 msgstr "Taldearen datuak aldatu (izena, IFK, helbidea eta probintzia)"
 
@@ -3489,6 +3523,7 @@ msgstr "Fitxa honetan proposatutako aldaketak"
 msgid "Changes sent for approval: %s. We will notify you on this record when they are reviewed."
 msgstr "Aldaketak onartzeko bidali dira: %s. Fitxa honetan abisatuko dizugu berrikusten direnean."
 
+#. translators: %s: text
 #: templates/fichas/cambios.php:38
 #, php-format
 msgid "Changes to %s"
@@ -3530,11 +3565,11 @@ msgstr "Egiaztatu eta gorde"
 msgid "Check that emails arrive:"
 msgstr ""
 
-#: src/Idiomas/Guardados.php:104
+#: src/Idiomas/Guardados.php:108
 msgid "Check that there are enough scouters with a food handler certificate"
 msgstr "Egiaztatu elikagaien manipulatzaile titulua duten scouter nahikoak daudela"
 
-#: src/Idiomas/Guardados.php:265
+#: src/Idiomas/Guardados.php:275
 msgid "Check the attendees' medical allergies, medicines and the menu"
 msgstr "Bertaratuen alergia medikoak, sendagaiak eta menua berrikusi"
 
@@ -3542,15 +3577,15 @@ msgstr "Bertaratuen alergia medikoak, sendagaiak eta menua berrikusi"
 msgid "Check the details. On confirming, their record and membership are created in the Scouts de España CRM, and the CRM gives them their member no."
 msgstr "Berrikusi datuak. Berrestean, bere fitxa eta kidetza sortzen dira Scouts de Españako CRMan, eta CRMak bazkide-zenbakia ematen dio."
 
-#: src/Idiomas/Guardados.php:267
+#: src/Idiomas/Guardados.php:277
 msgid "Check the number of qualifications available / needed"
 msgstr "Eskuragarri dauden / beharrezko tituluen kopurua berrikusi"
 
-#: src/Idiomas/Guardados.php:266
+#: src/Idiomas/Guardados.php:276
 msgid "Check the typical allergies of the group's youth members."
 msgstr "Taldeko hezigaien alergia tipikoak berrikusi."
 
-#: src/Idiomas/Guardados.php:141
+#: src/Idiomas/Guardados.php:148
 msgid "Check whether there is a special activity and book it"
 msgstr "Jarduera berezirik ba ote dagoen aztertu eta enkargatu"
 
@@ -3580,7 +3615,7 @@ msgstr "Egiaztapen-zerrenda"
 msgid "Checks"
 msgstr "Egiaztapenak"
 
-#: src/Idiomas/Guardados.php:79
+#: src/Idiomas/Guardados.php:81
 msgid "Cheese sandwich"
 msgstr "Gazta-ogitartekoa"
 
@@ -3588,15 +3623,15 @@ msgstr "Gazta-ogitartekoa"
 msgid "Cheques · withdrawals"
 msgstr "Txekeak · dirua ateratzea"
 
-#: src/Idiomas/Guardados.php:239
+#: src/Idiomas/Guardados.php:249
 msgid "Chicken"
 msgstr "Oilaskoa"
 
-#: src/Idiomas/Guardados.php:205
+#: src/Idiomas/Guardados.php:215
 msgid "Chicken drumsticks"
 msgstr "Oilasko-izterrak"
 
-#: src/Idiomas/Guardados.php:152
+#: src/Idiomas/Guardados.php:161
 msgid "Chickpeas"
 msgstr "Garbantzuak"
 
@@ -3608,7 +3643,7 @@ msgstr "Seme-alabak"
 msgid "Children who pay"
 msgstr "Ordaintzen duten seme-alabak"
 
-#: src/Idiomas/Guardados.php:100
+#: src/Idiomas/Guardados.php:104
 msgid "Chocolate and cocoa"
 msgstr "Txokolatea eta kakaoa"
 
@@ -3668,7 +3703,7 @@ msgstr "Aukeratu CRMko fitxako email bat familia-konturako (ez badago bat ere, g
 msgid "Choose an expense item from the budget."
 msgstr "Aukeratu aurrekontuko gastu-partida bat."
 
-#: src/Idiomas/Guardados.php:129 src/Idiomas/TextosJs.php:27
+#: src/Idiomas/Guardados.php:135 src/Idiomas/TextosJs.php:27
 msgid "Choose an option from the list."
 msgstr "Aukeratu zerrendako aukera bat."
 
@@ -3708,7 +3743,7 @@ msgstr "Aukeratu laguntzen duzun atal bat gutxienez."
 msgid "Choose below what you want to buy. Then pay by transfer, by Bizum or, if you are a member, in person to Treasury, stating the order no. When Treasury receives it you will see it here as paid; the group will hand it over to you and, when you have it, confirm it here."
 msgstr "Aukeratu behean erosi nahi duzuna. Gero, ordaindu transferentzia bidez, Bizum bidez edo, bazkidea bazara, Diruzaintzan eskudirutan, eskaeraren zenbakia adieraziz. Diruzaintzak jasotzen duenean, hemen ordainduta agertuko da; taldeak emango dizu eta, eskuratzen duzunean, berretsi hemen."
 
-#: src/Idiomas/Guardados.php:128
+#: src/Idiomas/Guardados.php:134
 msgid "Choose cook, quartermaster and helpers"
 msgstr "Sukaldaria, intendentea eta laguntzaileak aukeratu"
 
@@ -3892,7 +3927,7 @@ msgstr "Aukeratu zure taldea…"
 msgid "Choose…"
 msgstr "Aukeratu…"
 
-#: src/Idiomas/Guardados.php:116
+#: src/Idiomas/Guardados.php:120
 msgid "Citrus fruits"
 msgstr "Zitrikoak"
 
@@ -3940,11 +3975,11 @@ msgstr "Itxita: ekitaldiaren taldeak bakarrik ematen du izena"
 msgid "Clothing"
 msgstr "Arropa"
 
-#: src/Idiomas/Guardados.php:81
+#: src/Idiomas/Guardados.php:83
 msgid "Cocoa powder"
 msgstr "Kakao hautsa"
 
-#: src/Idiomas/Guardados.php:97
+#: src/Idiomas/Guardados.php:101
 msgid "Coeliac disease"
 msgstr "Zeliakia"
 
@@ -3953,12 +3988,12 @@ msgid "Collapse all"
 msgstr "Tolestu guztia"
 
 #. translators: %s: text
-#: src/Idiomas/Guardados.php:107 src/Idiomas/TextosJs.php:53
+#: src/Idiomas/Guardados.php:111 src/Idiomas/TextosJs.php:53
 #, php-format
 msgid "Collapse or expand \"%s\""
 msgstr "Tolestu edo zabaldu «%s»"
 
-#: src/Idiomas/Guardados.php:255
+#: src/Idiomas/Guardados.php:265
 msgid "Collect authorisations, youth member totals and send data to the sections"
 msgstr "Baimenak eta hezigaien guztizkoak jaso eta datuak sekzioei bidali"
 
@@ -3992,6 +4027,7 @@ msgstr "Kobrantza"
 msgid "Collection date"
 msgstr "Kobrantza-data"
 
+#. translators: %s: text
 #: src/Caja/Automaticos.php:95
 #, php-format
 msgid "Collection · %s"
@@ -4031,11 +4067,11 @@ msgstr "Hemendik dator:"
 msgid "Communications / Social Media Officer"
 msgstr "Komunikazio / Sare sozialen arduraduna"
 
-#: src/Tesoreria/Config.php:45
+#: src/Idiomas/Guardados.php:136
 msgid "Company"
 msgstr "Enpresa"
 
-#: src/Idiomas/Guardados.php:105
+#: src/Idiomas/Guardados.php:109
 msgid "Configure events (margins and templates)"
 msgstr "Ekitaldiak konfiguratu (marjinak eta txantiloiak)"
 
@@ -4185,11 +4221,11 @@ msgstr "Dauka:"
 msgid "Contains: %s"
 msgstr "Dauka: %s"
 
-#: src/Idiomas/Guardados.php:108
+#: src/Idiomas/Guardados.php:112
 msgid "Coordination"
 msgstr "Koordinazioa"
 
-#: src/Idiomas/Guardados.php:109 src/Idiomas/TextosJs.php:16
+#: src/Idiomas/Guardados.php:113 src/Idiomas/TextosJs.php:16
 msgid "Copied"
 msgstr "Kopiatuta"
 
@@ -4205,7 +4241,7 @@ msgstr "Kopiatu esteka"
 msgid "Copy to my group"
 msgstr "Kopiatu nire taldera"
 
-#: src/Idiomas/Guardados.php:110 src/Socios/Numeracion.php:29
+#: src/Idiomas/Guardados.php:114 src/Socios/Numeracion.php:29
 msgid "Correct"
 msgstr "Zuzena"
 
@@ -4267,6 +4303,7 @@ msgstr "Zuzendari gisa balio dute"
 msgid "Count as monitor"
 msgstr "Begirale gisa balio dute"
 
+#. translators: %s: text
 #: templates/tesoreria/caja.php:225
 #, php-format
 msgid "Count the cash and enter how much there is. Today there should be %s. If it does not add up, enter the reason: the difference is recorded as an adjustment."
@@ -4300,7 +4337,7 @@ msgstr "Sortu mota berri bat"
 msgid "Create a shopping list with the ticked items"
 msgstr "Sortu erosketa-zerrenda bat markatutakoekin"
 
-#: src/Idiomas/Guardados.php:112
+#: src/Idiomas/Guardados.php:116
 msgid "Create and manage the events of their sections"
 msgstr "Bere atalen ekitaldiak sortu eta kudeatu"
 
@@ -4494,7 +4531,7 @@ msgstr "Datak"
 msgid "Dates that fall on a Saturday or Sunday are moved forward to the Friday."
 msgstr "Larunbat edo igande egunean erortzen diren datak ostiralera aurreratzen dira."
 
-#: src/Tesoreria/Config.php:53
+#: src/Idiomas/Guardados.php:280
 msgid "Day outing"
 msgstr "Eguneko irteera"
 
@@ -4671,7 +4708,7 @@ msgstr "Ezabatu…"
 msgid "Deleting a payment or an adjustment is done by Treasury."
 msgstr "Ordainketa edo doikuntza bat ezabatzea Diruzaintzak egiten du."
 
-#: src/Idiomas/Guardados.php:131
+#: src/Idiomas/Guardados.php:138
 msgid "Deliver orders"
 msgstr "Eskaerak entregatu"
 
@@ -4895,6 +4932,7 @@ msgstr "Dokumentua"
 msgid "Document number (ID or foreigner ID)"
 msgstr "Dokumentu-zenbakia (NAN edo AIZ)"
 
+#. translators: %s: text
 #: src/Frontend/Views/FichaView.php:381
 #, php-format
 msgid "Document saved on %s's record."
@@ -4994,11 +5032,11 @@ msgstr "%s zirriborroa ezabatuta."
 msgid "Drafts"
 msgstr "Zirriborroak"
 
-#: src/Idiomas/Guardados.php:126
+#: src/Idiomas/Guardados.php:132
 msgid "Draw up the general camp timetable and send it to the group"
 msgstr "Kanpaldiaren ordutegi orokorra egin eta taldeari bidali"
 
-#: src/Idiomas/Guardados.php:127
+#: src/Idiomas/Guardados.php:133
 msgid "Draw up the menu"
 msgstr "Menua prestatu"
 
@@ -5022,7 +5060,7 @@ msgstr ""
 msgid "Duplicate in the CRM"
 msgstr "CRMan bikoiztua"
 
-#: src/Tesoreria/Config.php:42
+#: src/Idiomas/Guardados.php:127
 msgid "Dyke"
 msgstr "Dike"
 
@@ -5112,6 +5150,7 @@ msgstr "Editatu %s"
 msgid "Edit / save"
 msgstr "Editatu / gorde"
 
+#. translators: %s: text
 #: src/Admin/SettingsPage.php:240
 #, php-format
 msgid "Edit group %s"
@@ -5121,7 +5160,7 @@ msgstr ""
 msgid "Edit report"
 msgstr "Editatu txostena"
 
-#: src/Idiomas/Guardados.php:125
+#: src/Idiomas/Guardados.php:131
 msgid "Edit the contact details of their section"
 msgstr "Bere atalaren harremanetarako datuak editatu"
 
@@ -5137,15 +5176,15 @@ msgstr "Editatu familiaren bazkideak"
 msgid "Edit the ingredient"
 msgstr "Editatu osagaia"
 
-#: src/Idiomas/Guardados.php:123
+#: src/Idiomas/Guardados.php:129
 msgid "Edit the menu recipe book"
 msgstr "Menuen errezetategia editatu"
 
-#: src/Idiomas/Guardados.php:124
+#: src/Idiomas/Guardados.php:130
 msgid "Edit the records of the whole group"
 msgstr "Talde osoko fitxak editatu"
 
-#: src/Idiomas/Guardados.php:162
+#: src/Idiomas/Guardados.php:171
 msgid "Egg"
 msgstr "Arrautza"
 
@@ -5161,7 +5200,7 @@ msgstr "Emaila"
 msgid "Email for the invitation (also works for signing in)"
 msgstr "Gonbidapenerako emaila (sartzeko ere balio du)"
 
-#: src/Idiomas/Guardados.php:259 templates/usuarios/emails.php:28
+#: src/Idiomas/Guardados.php:269 templates/usuarios/emails.php:28
 msgid "Email log"
 msgstr "Emailen erregistroa"
 
@@ -5169,6 +5208,7 @@ msgstr "Emailen erregistroa"
 msgid "Email not confirmed"
 msgstr "Emaila berretsi gabe"
 
+#. translators: 1: number, 2: number
 #: src/Frontend/Views/FichaView.php:361
 #, php-format
 msgid "Email notices: %1$d to Treasury and %2$d to the family."
@@ -5236,7 +5276,7 @@ msgstr "Errenkada hutsak ez dira kontuan hartzen. Eremu gehiago gehitzeko, gorde
 msgid "Ends"
 msgstr "Amaiera"
 
-#: src/Idiomas/Guardados.php:169
+#: src/Idiomas/Guardados.php:178
 msgid "Enter a price per person and day OR a total price, never both."
 msgstr "Sartu pertsona eta eguneko prezioa EDO guztizko prezioa, ez biak."
 
@@ -5261,13 +5301,13 @@ msgid "Enter an amount greater than zero."
 msgstr "Idatzi zero baino handiagoa den zenbateko bat."
 
 #. translators: %s: text
-#: src/Idiomas/Guardados.php:134 src/Idiomas/TextosJs.php:25
+#: src/Idiomas/Guardados.php:141 src/Idiomas/TextosJs.php:25
 #, php-format
 msgid "Enter at least %s letters."
 msgstr "Idatzi gutxienez %s letra."
 
 #. translators: %s: text
-#: src/Idiomas/Guardados.php:135 src/Idiomas/TextosJs.php:24
+#: src/Idiomas/Guardados.php:142 src/Idiomas/TextosJs.php:24
 #, php-format
 msgid "Enter at least %s letters…"
 msgstr "Idatzi gutxienez %s letra…"
@@ -5400,6 +5440,7 @@ msgstr "Idatzi txantiloiaren izena (taldeko txantiloi kopuruak muga bat du)."
 msgid "Enter the type name."
 msgstr "Idatzi motaren izena."
 
+#. translators: %d: number
 #: src/Inventario/Servicio.php:108
 #, php-format
 msgid "Enter what new equipment must be bought on line %d (or leave its price blank)."
@@ -5441,7 +5482,7 @@ msgstr "Idazpena ezeztatuta."
 msgid "Entry saved."
 msgstr "Idazpena gordeta."
 
-#: src/Frontend/Views/EventosView.php:54 src/Frontend/Views/InventarioBaseView.php:18 src/Inventario/ListaPdf.php:66 src/Tesoreria/Config.php:53
+#: src/Frontend/Views/EventosView.php:54 src/Frontend/Views/InventarioBaseView.php:18 src/Idiomas/Guardados.php:202 src/Inventario/ListaPdf.php:66
 msgid "Equipment"
 msgstr "Materiala"
 
@@ -5453,7 +5494,7 @@ msgstr "Materialaren arduraduna"
 msgid "Equipment and gear"
 msgstr "Materiala eta ekipamendua"
 
-#: src/Idiomas/Guardados.php:172 templates/inventario/lista.php:31
+#: src/Idiomas/Guardados.php:181 templates/inventario/lista.php:31
 msgid "Equipment inventory"
 msgstr "Materialaren inbentarioa"
 
@@ -5473,11 +5514,11 @@ msgstr "Materiala ekitaldirako erreserbatu da."
 msgid "Equipment shopping list"
 msgstr "Material-erosketako zerrenda"
 
-#: src/Idiomas/Guardados.php:184 templates/inventario/compras.php:25
+#: src/Idiomas/Guardados.php:193 templates/inventario/compras.php:25
 msgid "Equipment shopping lists"
 msgstr "Material-erosketako zerrendak"
 
-#: src/Frontend/Views/InventarioBaseView.php:19 src/Idiomas/Guardados.php:289 templates/inventario/tipos.php:17
+#: src/Frontend/Views/InventarioBaseView.php:19 src/Idiomas/Guardados.php:300 templates/inventario/tipos.php:17
 msgid "Equipment types"
 msgstr "Material-motak"
 
@@ -5497,19 +5538,19 @@ msgstr "Errorea bidaltzean"
 msgid "Escultas"
 msgstr "Eskultak"
 
-#: src/Idiomas/Guardados.php:139
+#: src/Idiomas/Guardados.php:146
 msgid "Estimate the camp budget"
 msgstr "Kanpaldiaren aurrekontua kalkulatu"
 
-#: src/Idiomas/Guardados.php:140
+#: src/Idiomas/Guardados.php:147
 msgid "Estimate the meals budget"
 msgstr "Otorduen aurrekontua kalkulatu"
 
-#: src/Idiomas/Guardados.php:137
+#: src/Idiomas/Guardados.php:144
 msgid "Estimate the number of qualifications available / needed"
 msgstr "Eskuragarri dauden / beharrezko tituluen kopurua kalkulatu"
 
-#: src/Idiomas/Guardados.php:138
+#: src/Idiomas/Guardados.php:145
 msgid "Estimate the number of youth members and scouters"
 msgstr "Hezigaien eta scouter kopurua kalkulatu"
 
@@ -5533,7 +5574,7 @@ msgstr "Guztira (estimatua):"
 msgid "Estimated total: %s"
 msgstr "Guztira (estimatua): %s"
 
-#: src/Idiomas/Guardados.php:142
+#: src/Idiomas/Guardados.php:149
 msgid "Evaluate the camp"
 msgstr "Kanpaldia ebaluatu"
 
@@ -5627,7 +5668,7 @@ msgstr "Ekitaldietako izen-emateak hemen ikusten dira:"
 msgid "Event:"
 msgstr "Ekitaldia:"
 
-#: src/Domain/Modulos.php:56 src/Frontend/Menu.php:77 src/Idiomas/Guardados.php:143 src/Usuarios/RegistroEmails.php:85
+#: src/Domain/Modulos.php:56 src/Frontend/Menu.php:77 src/Idiomas/Guardados.php:150 src/Usuarios/RegistroEmails.php:85
 msgid "Events"
 msgstr "Ekitaldiak"
 
@@ -5687,7 +5728,7 @@ msgstr "Adibidea"
 msgid "Example library"
 msgstr "Adibideen liburutegia"
 
-#: src/Idiomas/Guardados.php:252
+#: src/Idiomas/Guardados.php:262
 msgid "Example recipe: check the allergens of the brands you use before relying on it."
 msgstr "Adibide gisako errezeta: egiaztatu erabiltzen dituzun marketako alergenoak horretaz fidatu aurretik."
 
@@ -5713,7 +5754,7 @@ msgstr "Laburpenaren Excela"
 msgid "Exception: %s"
 msgstr "Salbuespena: %s"
 
-#: src/Tesoreria/Config.php:53
+#: src/Idiomas/Guardados.php:151
 msgid "Excursion"
 msgstr "Ibilaldia"
 
@@ -5759,6 +5800,7 @@ msgstr "Gastu eta diru-sarrera motak"
 msgid "Expense categories"
 msgstr "Gastu-kategoriak"
 
+#. translators: 1: text, 2: text
 #: src/Tesoreria/HistorialPagos.php:96
 #, php-format
 msgid "Expense of %1$s · %2$s"
@@ -5834,7 +5876,7 @@ msgstr "Kanpoko ekitaldia"
 msgid "Extra help: the same manual with screenshots, in another tab."
 msgstr "Laguntza gehigarria: eskuliburu bera pantaila-argazkiekin, beste fitxa batean."
 
-#: src/Frontend/Views/TesoreriaBaseView.php:26 src/Idiomas/Guardados.php:144 templates/eventos/resumen.php:104 templates/tesoreria/familias.php:28
+#: src/Frontend/Views/TesoreriaBaseView.php:26 src/Idiomas/Guardados.php:152 templates/eventos/resumen.php:104 templates/tesoreria/familias.php:28
 msgid "Families"
 msgstr "Familiak"
 
@@ -5880,7 +5922,7 @@ msgstr "Familien baimenak"
 msgid "Families' authorisations and direct debit files for the bank."
 msgstr "Familien baimenak eta bankurako zordunketa-fitxategiak."
 
-#: src/Idiomas/Guardados.php:106
+#: src/Idiomas/Guardados.php:110
 msgid "Families' contacts"
 msgstr "Familien kontaktuak"
 
@@ -5910,6 +5952,7 @@ msgstr "Familia"
 msgid "Family %1$s: %2$s"
 msgstr "%1$s familia: %2$s"
 
+#. translators: 1: text, 2: text
 #: src/Sepa/Remesas.php:665
 #, php-format
 msgid "Family %1$s: the bank has collected %2$s more than was left to pay for the event. It remains as a balance to refund: decide in Treasury whether to refund it."
@@ -5927,6 +5970,7 @@ msgstr "%s familia: sekuentzia mota baliogabea."
 msgid "Family %s: the IBAN on the authorisation is not valid (or is no longer kept)."
 msgstr "%s familia: baimenaren IBANa ez da baliozkoa (edo ez da jada gordetzen)."
 
+#. translators: %s: text
 #: src/Sepa/Remesas.php:520
 #, php-format
 msgid "Family %s: the account on their CRM record is no longer the authorised one."
@@ -6018,7 +6062,7 @@ msgstr "Familia: zk. edo abizena (3 letra)…"
 msgid "Federated organisation"
 msgstr ""
 
-#: src/Frontend/Views/TesoreriaBaseView.php:28 src/Idiomas/Guardados.php:111
+#: src/Frontend/Views/TesoreriaBaseView.php:28 src/Idiomas/Guardados.php:115
 msgid "Federation cost"
 msgstr "Kostu federatiboa"
 
@@ -6060,17 +6104,19 @@ msgstr "Kuota-doikuntza"
 msgid "Fee and payments"
 msgstr "Kuota eta ordainketak"
 
+#. translators: %s: text
 #: templates/informes/imprimir.php:59 templates/informes/resultado.php:59
 #, php-format
 msgid "Fee for round %s, from Treasury: the amounts are those of each member's family (with their siblings)."
 msgstr "%s txandako kuota, Diruzaintzakoa: zenbatekoak bazkide bakoitzaren familiarenak dira (anai-arrebak barne)."
 
+#. translators: %s: text
 #: src/Caja/Automaticos.php:79
 #, php-format
 msgid "Fee of the %s family"
 msgstr "%s familiaren kuota"
 
-#: src/Idiomas/Guardados.php:220
+#: src/Idiomas/Guardados.php:230
 msgid "Fee payments"
 msgstr "Kuotaren ordainketak"
 
@@ -6090,7 +6136,7 @@ msgstr "Ordaintzeko kuota"
 msgid "Fees (bank)"
 msgstr "Kuotak (bankua)"
 
-#: src/Frontend/Views/TesoreriaBaseView.php:27 src/Idiomas/Guardados.php:115
+#: src/Frontend/Views/TesoreriaBaseView.php:27 src/Idiomas/Guardados.php:119
 msgid "Fees and instalments"
 msgstr "Kuotak eta epeak"
 
@@ -6162,7 +6208,7 @@ msgstr "Iragazi erabiltzailea…"
 msgid "Final balance"
 msgstr "Azken saldoa"
 
-#: src/Idiomas/Guardados.php:261
+#: src/Idiomas/Guardados.php:271
 msgid "Final bus booking"
 msgstr "Autobusaren azken erreserba"
 
@@ -6234,11 +6280,11 @@ msgstr "Zuzendu"
 msgid "Fixed items per group"
 msgstr "Taldeko kontzeptu finkoak"
 
-#: src/Fichas/CamposFicha.php:28 src/Idiomas/Guardados.php:58 src/Tesoreria/Banco/TiposMovimiento.php:39
+#: src/Fichas/CamposFicha.php:28 src/Idiomas/Guardados.php:59 src/Tesoreria/Banco/TiposMovimiento.php:39
 msgid "Food"
 msgstr "Elikadura"
 
-#: src/Idiomas/Guardados.php:59
+#: src/Idiomas/Guardados.php:60
 msgid "Food (event menu)"
 msgstr "Elikadura (ekitaldiaren menua)"
 
@@ -6254,7 +6300,7 @@ msgstr "Elikagaien intolerantzia"
 msgid "Food item added to the budget."
 msgstr "Elikadura-partida aurrekontuari gehitu zaio."
 
-#: src/Idiomas/Guardados.php:60
+#: src/Idiomas/Guardados.php:61
 msgid "Foods"
 msgstr "Elikagaiak"
 
@@ -6286,7 +6332,7 @@ msgstr "%d zatirentzat"
 msgid "For an event, the payment method is cash, transfer or Bizum."
 msgstr "Ekitaldi baterako, ordainketa-modua eskudirua, transferentzia edo Bizum da."
 
-#: src/Idiomas/Guardados.php:223
+#: src/Idiomas/Guardados.php:233
 msgid "For camps and activities with food."
 msgstr "Kanpamenduetarako eta otorduak dituzten jardueretarako."
 
@@ -6402,7 +6448,7 @@ msgstr "Formatu ez onartua: igo 43 Arauaren fitxategia (.n43, .q43, .aeb, .txt) 
 msgid "Format:"
 msgstr "Formatua:"
 
-#: src/Idiomas/Guardados.php:291
+#: src/Idiomas/Guardados.php:302
 msgid "Fried tomato sauce"
 msgstr "Tomate frijitua"
 
@@ -6416,6 +6462,7 @@ msgstr "Noiztik"
 msgid "From %1$d to %2$d years"
 msgstr "%1$d urtetik %2$d urtera"
 
+#. translators: 1: text, 2: text
 #: src/Crm/Altas.php:364
 #, php-format
 msgid "From %1$s you can only move to %2$s, the next one by age (only scouters can change to any section)."
@@ -6453,10 +6500,11 @@ msgstr "Egun horretatik aurrera ez da taldeko bazkidetzat hartzen ez kuotetan ko
 msgid "From the families' fee, each youth member's registration and insurance are set aside: with that money the group pays the federation cost of all members. Of the rest (the annual fee), a percentage goes to the group's funds and the remainder to the budget of each member's section. It is calculated with the round's expected fees and the CRM's active members."
 msgstr "Familien kuotatik hezigai bakoitzaren izen-ematea eta asegurua bereizten dira: diru horrekin taldeak bazkide guztien kostu federatiboa ordaintzen du. Gainerakotik (urteko kuota), ehuneko bat taldearen kutxara doa eta beste guztia bazkide bakoitzaren atalaren aurrekontura. Txandako aurreikusitako kuotekin eta CRMko bazkide aktiboekin kalkulatzen da."
 
-#: src/Idiomas/Guardados.php:121
+#: src/Idiomas/Guardados.php:125
 msgid "From the group's inventory"
 msgstr "Taldearen inbentariokoa"
 
+#. translators: %d: number
 #: templates/fichas/cambios.php:147
 #, php-format
 msgid "From the last %d days. Only which data was changed, by whom and when is known: the values are not stored on the website."
@@ -6466,7 +6514,7 @@ msgstr "Azken %d egunetakoak. Zein datu aldatu ziren, nork aldatu zituen eta noi
 msgid "From the private area, give access to the Secretary's office and Coordination (People → Give access); from there, they give access to the rest and approve the access requests."
 msgstr ""
 
-#: src/Idiomas/Guardados.php:120
+#: src/Idiomas/Guardados.php:124
 msgid "From the shop's stock"
 msgstr "Dendaren izakinetatik"
 
@@ -6474,7 +6522,7 @@ msgstr "Dendaren izakinetatik"
 msgid "From whom"
 msgstr "Norengandik"
 
-#: src/Idiomas/Guardados.php:147
+#: src/Idiomas/Guardados.php:156
 msgid "Fructose"
 msgstr "Fruktosa"
 
@@ -6506,7 +6554,7 @@ msgstr "Dirubilketa-helburua gordeta."
 msgid "G07123456"
 msgstr "G07123456"
 
-#: src/Idiomas/Guardados.php:55
+#: src/Idiomas/Guardados.php:56
 msgid "Garlic"
 msgstr "Baratxuria"
 
@@ -6514,7 +6562,7 @@ msgstr "Baratxuria"
 msgid "Gas stove"
 msgstr "Gas-sukaldetxoa"
 
-#: src/Idiomas/Guardados.php:256
+#: src/Idiomas/Guardados.php:266
 msgid "Gather information on the food in stock at the equipment store"
 msgstr "Material lokaleko izakinetan dagoen janariari buruzko informazioa bildu"
 
@@ -6522,7 +6570,7 @@ msgstr "Material lokaleko izakinetan dagoen janariari buruzko informazioa bildu"
 msgid "Gender"
 msgstr "Generoa"
 
-#: src/Frontend/Views/LibroMayorView.php:72 src/Frontend/Views/LibroMayorView.php:89 src/Frontend/Views/TesoreriaBaseView.php:52 src/Idiomas/Guardados.php:180
+#: src/Frontend/Views/LibroMayorView.php:72 src/Frontend/Views/LibroMayorView.php:89 src/Frontend/Views/TesoreriaBaseView.php:52 src/Idiomas/Guardados.php:189
 msgid "General ledger"
 msgstr "Liburu nagusia"
 
@@ -6576,7 +6624,7 @@ msgstr "Opariak"
 msgid "Give a new no."
 msgstr "Eman zenbaki berria"
 
-#: src/Idiomas/Guardados.php:117 templates/alta/buscar.php:19 templates/alta/buscar.php:81 templates/personas/listado.php:212
+#: src/Idiomas/Guardados.php:121 templates/alta/buscar.php:19 templates/alta/buscar.php:81 templates/personas/listado.php:212
 msgid "Give access"
 msgstr "Eman sarbidea"
 
@@ -6600,7 +6648,7 @@ msgstr "Eman oniritzia"
 msgid "Give the advance"
 msgstr "Eman aurrerakina"
 
-#: src/Idiomas/Guardados.php:118
+#: src/Idiomas/Guardados.php:122
 msgid "Give the go-ahead to shopping lists"
 msgstr "Erosketa-zerrendei oniritzia eman"
 
@@ -6620,7 +6668,7 @@ msgstr "Eman web-sarbidea"
 msgid "Gluten"
 msgstr "Glutena"
 
-#: src/Idiomas/Guardados.php:275
+#: src/Idiomas/Guardados.php:286
 msgid "Gluten sensitivity"
 msgstr "Glutenarekiko sentikortasuna"
 
@@ -6694,7 +6742,7 @@ msgstr "Diru-laguntzak"
 msgid "Grants a permission"
 msgstr "Baimen bat ematen du"
 
-#: src/Idiomas/Guardados.php:249
+#: src/Idiomas/Guardados.php:259
 msgid "Grated cheese"
 msgstr "Gazta birrindua"
 
@@ -6740,7 +6788,7 @@ msgstr "Taldearen kutxa"
 msgid "Group contact email"
 msgstr ""
 
-#: src/Frontend/Menu.php:112 src/Frontend/Menu.php:114 src/Frontend/Menu.php:116 src/Idiomas/Guardados.php:119
+#: src/Frontend/Menu.php:112 src/Frontend/Menu.php:114 src/Frontend/Menu.php:116 src/Idiomas/Guardados.php:123
 msgid "Group details"
 msgstr "Taldearen datuak"
 
@@ -6806,7 +6854,7 @@ msgstr "Taldearen eskaera"
 msgid "Group recipes"
 msgstr "Taldearen errezetak"
 
-#: src/Idiomas/Guardados.php:62 src/Usuarios/RegistroEmails.php:88 templates/alta-grupo/formulario.php:19 templates/alta-grupo/neutra.php:8
+#: src/Idiomas/Guardados.php:63 src/Usuarios/RegistroEmails.php:88 templates/alta-grupo/formulario.php:19 templates/alta-grupo/neutra.php:8
 msgid "Group registration"
 msgstr "Taldearen alta"
 
@@ -6836,7 +6884,7 @@ msgstr "Tutorea"
 msgid "Guardian %d"
 msgstr "%d. tutorea"
 
-#: src/Idiomas/Guardados.php:296 templates/email/invitacion.php:40
+#: src/Idiomas/Guardados.php:307 templates/email/invitacion.php:40
 msgid "Guardian / Father / Mother"
 msgstr "Tutorea / Aita / Ama"
 
@@ -6876,20 +6924,21 @@ msgstr "2. tutorearen emaila"
 msgid "Guardian's or member's name, description, amount…"
 msgstr "Tutorearen edo bazkidearen izena, kontzeptua, zenbatekoa…"
 
-#: src/Idiomas/Guardados.php:297
+#: src/Idiomas/Guardados.php:308
 msgid "Guardians and their phones and emails."
 msgstr "Tutoreak eta haien telefonoak eta emailak."
 
-#: src/Idiomas/Guardados.php:196
+#: src/Idiomas/Guardados.php:206
 msgid "Hake"
 msgstr "Legatza"
 
+#. translators: %s: text
 #: src/Tienda/Servicio.php:437
 #, php-format
 msgid "Hand the amount in person to Treasury, stating order no. %s."
 msgstr "Eman zenbatekoa eskuz Diruzaintzari, %s eskaera-zenbakia adieraziz."
 
-#: src/Idiomas/Guardados.php:130
+#: src/Idiomas/Guardados.php:137
 msgid "Hand the letter in at the local meeting and send it by email"
 msgstr "Gutuna tokiko bileran eman eta posta elektronikoz bidali"
 
@@ -6913,6 +6962,7 @@ msgstr "Ekitaldi honetan baja emanda dago."
 msgid "Has it been bought yet?"
 msgstr "Erosita dago jada?"
 
+#. translators: %s: text
 #: src/Frontend/Views/FichaView.php:420
 #, php-format
 msgid "Has left family no. %s."
@@ -6950,7 +7000,7 @@ msgid_plural "Hay %d altas de grupo por revisar."
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/Idiomas/Guardados.php:76
+#: src/Idiomas/Guardados.php:77
 msgid "Hazelnut"
 msgstr "Hurra"
 
@@ -7020,11 +7070,11 @@ msgstr "Ezkutatu edo erakutsi gaiaren goiburua leku gehiago izateko"
 msgid "Hide territorial no."
 msgstr "Ezkutatu lurralde-zenbakia"
 
-#: src/Idiomas/Guardados.php:160
+#: src/Idiomas/Guardados.php:169
 msgid "Histamine"
 msgstr "Histamina"
 
-#: src/Idiomas/Guardados.php:161 templates/lista-espera/detalle.php:186 templates/reintegros/index.php:183
+#: src/Idiomas/Guardados.php:170 templates/lista-espera/detalle.php:186 templates/reintegros/index.php:183
 msgid "History"
 msgstr "Historia"
 
@@ -7046,7 +7096,7 @@ msgstr "Titularra:"
 msgid "Holder: %s"
 msgstr "Titularra: %s"
 
-#: src/Frontend/Menu.php:137 src/Idiomas/Guardados.php:166 templates/comun/nav.php:30
+#: src/Frontend/Menu.php:137 src/Idiomas/Guardados.php:175 templates/comun/nav.php:30
 msgid "Home"
 msgstr "Hasiera"
 
@@ -7054,7 +7104,7 @@ msgstr "Hasiera"
 msgid "Home phone"
 msgstr "Etxeko telefonoa"
 
-#: src/Idiomas/Guardados.php:198
+#: src/Idiomas/Guardados.php:208
 msgid "Honey"
 msgstr "Eztia"
 
@@ -7102,7 +7152,7 @@ msgstr "Ekitaldiak nola ordaindu (taldearen kontua, Bizum…)"
 msgid "How to pay it"
 msgstr "Nola ordaindu"
 
-#: src/Tesoreria/Config.php:43
+#: src/Idiomas/Guardados.php:84
 msgid "Hunt"
 msgstr "Ehiza"
 
@@ -7388,6 +7438,7 @@ msgstr "Ezer markatzen ez baduzu, ekitaldia argitaratzen da eta ez da posta elek
 msgid "If you turn off the freed-place notice, the place is still offered, but the family does not receive the email: they will have to look in the application."
 msgstr "Plaza libre egotearen abisua desaktibatzen baduzu, plaza eskaintzen jarraitzen da, baina familiak ez du emailik jasoko: aplikazioan begiratu beharko du."
 
+#. translators: %d: number
 #: src/ListaEspera/Avisos.php:188
 #, php-format
 msgid "If you want to stay on the list, sign in and press \"Keep my data\": we will keep it for %d more months."
@@ -7413,7 +7464,7 @@ msgstr "Gaixotasunak"
 msgid "Image release"
 msgstr "Irudi-lagapena"
 
-#: src/Idiomas/Guardados.php:99
+#: src/Idiomas/Guardados.php:103
 msgid "Image release and medication consent."
 msgstr "Irudi-lagapena eta medikazioaren onarpena."
 
@@ -7586,6 +7637,7 @@ msgstr "Taldearen eskaeran sartzea Koordinazioak egiten du."
 msgid "Income"
 msgstr "Diru-sarrera"
 
+#. translators: 1: text, 2: text, 3: text
 #: src/Frontend/Views/BancoView.php:266
 #, php-format
 msgid "Income %1$s · expenses %2$s · generated on %3$s"
@@ -7625,7 +7677,7 @@ msgstr "Aurrekontuko partida gabeko diru-sarrerak"
 msgid "Incomplete details"
 msgstr "Datu osatugabeak"
 
-#: src/Auth/AccessHooks.php:77 src/Idiomas/Guardados.php:215
+#: src/Auth/AccessHooks.php:77 src/Idiomas/Guardados.php:225
 msgid "Incorrect member number or email, password or group."
 msgstr "Bazkide-zenbakia edo emaila, pasahitza edo taldea okerrak dira."
 
@@ -7649,7 +7701,7 @@ msgstr "Sarrera edo irteera"
 msgid "Inflows"
 msgstr "Sarrerak"
 
-#: src/Idiomas/Guardados.php:165 src/Menus/MenuEvento.php:216 templates/eventos/menu.php:284 templates/eventos/menu.php:288
+#: src/Idiomas/Guardados.php:174 src/Menus/MenuEvento.php:216 templates/eventos/menu.php:284 templates/eventos/menu.php:288
 msgid "Ingredient"
 msgstr "Osagaia"
 
@@ -7755,7 +7807,7 @@ msgstr "Nazioarteko jarduera, aparteko aseguruarekin: %1$s, %2$s poliza."
 msgid "International activity: separate insurance is required (company and policy no.)."
 msgstr "Nazioarteko jarduera: aparteko asegurua behar da (konpainia eta poliza-zenbakia)."
 
-#: src/Idiomas/Guardados.php:168
+#: src/Idiomas/Guardados.php:177
 msgid "Intolerances"
 msgstr "Intolerantziak"
 
@@ -7787,7 +7839,7 @@ msgstr "Zeregin baliogabea."
 msgid "Invalid user."
 msgstr "Erabiltzaile baliogabea."
 
-#: src/Domain/Modulos.php:50 src/Frontend/Menu.php:86 src/Idiomas/Guardados.php:170 templates/area/inicio.php:179
+#: src/Domain/Modulos.php:50 src/Frontend/Menu.php:86 src/Idiomas/Guardados.php:179 templates/area/inicio.php:179
 msgid "Inventory"
 msgstr "Inbentarioa"
 
@@ -7908,6 +7960,7 @@ msgstr "Ezin izan da egin: "
 msgid "It could not be saved."
 msgstr "Ezin izan da gorde."
 
+#. translators: %s: text
 #: src/Caja/Servicio.php:264
 #, php-format
 msgid "It does not add up: there is a difference of %s. Enter the reason to save the cash count."
@@ -7927,6 +7980,7 @@ msgstr "Haragia eta arraina kentzen ditu, baina eratorriak onar ditzake, hala no
 msgid "It first needs: %s"
 msgstr "Aurretik hau behar du: %s"
 
+#. translators: %s: text
 #: src/Accesos/Concesiones.php:270
 #, php-format
 msgid "It first needs: %s."
@@ -8024,6 +8078,7 @@ msgstr "Ordaintzeko geratzen dena baino gehiago da (%s)."
 msgid "It is more than what was paid (%s)."
 msgstr "Ordaindutakoa baino gehiago da (%s)."
 
+#. translators: %s: text
 #: src/Tesoreria/Banco/Conciliacion.php:91
 #, php-format
 msgid "It is named \"%s\""
@@ -8199,7 +8254,7 @@ msgstr "%s(e)an sartu zen bazkide gisa. Itxaron-zerrendako bere datuak ezabatu d
 msgid "Joins as a member"
 msgstr "Bazkide gisa sartzen da"
 
-#: src/Idiomas/Guardados.php:186
+#: src/Idiomas/Guardados.php:195
 msgid "Keep all the cash boxes and see the general ledger"
 msgstr "Eskudiru-kutxa guztiak eraman eta liburu nagusia ikusi"
 
@@ -8221,7 +8276,7 @@ msgstr "Mantendu nire datuak %d hilabete gehiagoz"
 msgid "Keep the"
 msgstr "Gorde itzazu"
 
-#: src/Idiomas/Guardados.php:185
+#: src/Idiomas/Guardados.php:194
 msgid "Keep the cash box of their sections"
 msgstr "Bere atalen eskudiru-kutxa eraman"
 
@@ -8245,12 +8300,13 @@ msgid_plural "Kitchen sheet sent to %d people."
 msgstr[0] "Sukaldeko orria %d pertsonari bidali zaio."
 msgstr[1] "Sukaldeko orria %d pertsonari bidali zaie."
 
+#. translators: %s: text
 #: src/Menus/HojaCocina.php:159
 #, php-format
 msgid "Kitchen sheet: %s"
 msgstr "Sukaldeko orria: %s"
 
-#: src/Idiomas/Guardados.php:173
+#: src/Idiomas/Guardados.php:182
 msgid "Kiwi"
 msgstr "Kiwia"
 
@@ -8262,7 +8318,7 @@ msgstr "Kraal"
 msgid "Label"
 msgstr "Etiketa"
 
-#: src/Idiomas/Guardados.php:174
+#: src/Idiomas/Guardados.php:183
 msgid "Lactose"
 msgstr "Laktosa"
 
@@ -8348,7 +8404,7 @@ msgstr "Ekitaldia zirriborro gisa utzi berriro?"
 msgid "Leave the waiting list"
 msgstr "Irten itxaron-zerrendatik"
 
-#: src/Idiomas/Guardados.php:247
+#: src/Idiomas/Guardados.php:257
 msgid "Leek"
 msgstr "Porrua"
 
@@ -8384,11 +8440,11 @@ msgstr "Aisialdiko titulazioak"
 msgid "Leisure-time training"
 msgstr "Aisialdiko prestakuntza"
 
-#: src/Idiomas/Guardados.php:181
+#: src/Idiomas/Guardados.php:190
 msgid "Lemon"
 msgstr "Limoia"
 
-#: src/Idiomas/Guardados.php:178
+#: src/Idiomas/Guardados.php:187
 msgid "Lentils"
 msgstr "Dilistak"
 
@@ -8546,6 +8602,7 @@ msgstr "%s zerrenda ezeztatu da."
 msgid "List %s created, but Treasury could not be notified by email: tell them so they approve it."
 msgstr "%s zerrenda sortu da, baina ezin izan zaio Diruzaintzari emailez abisatu: esaiozu oniritzia eman diezaion."
 
+#. translators: %s: text
 #: src/Frontend/Views/InventarioComprasView.php:214
 #, php-format
 msgid "List %s created. There is nobody in Treasury with an email in the private area: the group's contact email has been notified. When Treasury approves it, you will be able to print it."
@@ -8617,15 +8674,15 @@ msgstr "Kargaren emaitza"
 msgid "Load the usual equipment"
 msgstr "Kargatu ohiko materiala"
 
-#: src/Idiomas/Guardados.php:92
+#: src/Idiomas/Guardados.php:96
 msgid "Load the van"
 msgstr "Furgoneta kargatu"
 
-#: src/Idiomas/Guardados.php:90 src/Idiomas/TextosJs.php:17
+#: src/Idiomas/Guardados.php:94 src/Idiomas/TextosJs.php:17
 msgid "Loading the page"
 msgstr "Orria kargatzen"
 
-#: src/Idiomas/Guardados.php:91 src/Idiomas/TextosJs.php:18
+#: src/Idiomas/Guardados.php:95 src/Idiomas/TextosJs.php:18
 msgid "Loading…"
 msgstr "Kargatzen…"
 
@@ -8657,11 +8714,11 @@ msgstr "Bazkide-zenbaki lokala/lurraldekoa"
 msgid "Long text"
 msgstr "Testu luzea"
 
-#: src/Idiomas/Guardados.php:199
+#: src/Idiomas/Guardados.php:209
 msgid "Look at the allergen notices in the Menu tab and confirm them or change the menu."
 msgstr "Begiratu Menua fitxako alergeno-oharrak eta berretsi edo aldatu menua."
 
-#: src/Idiomas/Guardados.php:80
+#: src/Idiomas/Guardados.php:82
 msgid "Look up evaluations of similar activities and review them"
 msgstr "Antzeko jardueren ebaluazioak bilatu eta berrikusi"
 
@@ -8677,11 +8734,11 @@ msgstr "Bazkaria"
 msgid "Lupin"
 msgstr "Lupinuak"
 
-#: src/Idiomas/Guardados.php:188
+#: src/Idiomas/Guardados.php:197
 msgid "Macaroni"
 msgstr "Makarroiak"
 
-#: src/Idiomas/Guardados.php:189
+#: src/Idiomas/Guardados.php:198
 msgid "Macaroni with tomato"
 msgstr "Makarroiak tomatearekin"
 
@@ -8699,7 +8756,7 @@ msgstr "%1$s(e)an egina · bezeroen %2$d eskaera"
 msgid "Main course"
 msgstr "Bigarren platera"
 
-#: src/Idiomas/Guardados.php:193
+#: src/Idiomas/Guardados.php:203
 msgid "Maize"
 msgstr "Artoa"
 
@@ -8715,7 +8772,7 @@ msgstr "Artaldea"
 msgid "Manage access"
 msgstr "Kudeatu sarbidea"
 
-#: src/Idiomas/Guardados.php:153
+#: src/Idiomas/Guardados.php:162
 msgid "Manage event equipment"
 msgstr "Ekitaldietako materiala kudeatu"
 
@@ -8727,11 +8784,11 @@ msgstr "Kudeatu familiak"
 msgid "Manage the expense and income types"
 msgstr "Kudeatu gastu eta diru-sarrera motak"
 
-#: src/Idiomas/Guardados.php:154
+#: src/Idiomas/Guardados.php:163
 msgid "Manage the group's events and external events"
 msgstr "Taldeko eta kanpoko ekitaldiak kudeatu"
 
-#: src/Idiomas/Guardados.php:53
+#: src/Idiomas/Guardados.php:54
 msgid "Manage the shop's products and settings"
 msgstr "Produktuak eta dendaren konfigurazioa administratu"
 
@@ -8809,11 +8866,11 @@ msgstr "Markatu guztiaren irteera"
 msgid "Mark list %s as bought? The quantities will be added to the inventory and new equipment will be registered. This cannot be undone."
 msgstr "%s zerrenda erosita gisa markatu? Kopuruak inbentarioari gehituko zaizkio eta material berriari alta emango zaio. Ezin da desegin."
 
-#: src/Idiomas/Guardados.php:190
+#: src/Idiomas/Guardados.php:199
 msgid "Mark orders as paid"
 msgstr "Eskaerak ordainduta gisa markatu"
 
-#: src/Idiomas/Guardados.php:191
+#: src/Idiomas/Guardados.php:200
 msgid "Mark reimbursements as paid"
 msgstr "Dirua itzultzeko eskaerak ordainduta gisa markatu"
 
@@ -8873,7 +8930,7 @@ msgstr "Izan lezake: %s"
 msgid "Me, out of my own pocket (Treasury will reimburse me)"
 msgstr "Nik, nire poltsikotik (Diruzaintzak itzuliko dit)"
 
-#: src/Idiomas/Guardados.php:56
+#: src/Idiomas/Guardados.php:57
 msgid "Meatballs in tomato sauce"
 msgstr "Albondigak tomate-saltsan"
 
@@ -9035,7 +9092,7 @@ msgstr "Mezua"
 msgid "Method"
 msgstr "Modua"
 
-#: src/Idiomas/Guardados.php:175
+#: src/Idiomas/Guardados.php:184
 msgid "Milk"
 msgstr "Esnea"
 
@@ -9043,11 +9100,11 @@ msgstr "Esnea"
 msgid "Milk and dairy"
 msgstr "Esnea eta esnekiak"
 
-#: src/Idiomas/Guardados.php:176
+#: src/Idiomas/Guardados.php:185
 msgid "Milk with cocoa and biscuits"
 msgstr "Esnea kakaoarekin eta galletekin"
 
-#: src/Idiomas/Guardados.php:285
+#: src/Idiomas/Guardados.php:296
 msgid "Minced beef"
 msgstr "Xehatutako txahala"
 
@@ -9143,7 +9200,7 @@ msgstr "Kontuak CRMra pasatu"
 msgid "Move the authorisations' accounts to the CRM records? They are written to the record of each family member and deleted from the website."
 msgstr "Baimenen kontuak CRMko fitxetara pasatu nahi dituzu? Familiako kide bakoitzaren fitxan idazten dira eta webetik ezabatzen dira."
 
-#: src/Idiomas/Guardados.php:194
+#: src/Idiomas/Guardados.php:204
 msgid "Mussels"
 msgstr "Muskuiluak"
 
@@ -9155,7 +9212,7 @@ msgstr "Mostaza"
 msgid "My details"
 msgstr "Nire datuak"
 
-#: src/Frontend/Menu.php:46 src/Idiomas/Guardados.php:200 templates/area/inicio.php:153 templates/eventos/mis-eventos.php:50
+#: src/Frontend/Menu.php:46 src/Idiomas/Guardados.php:210 templates/area/inicio.php:153 templates/eventos/mis-eventos.php:50
 msgid "My events"
 msgstr "Nire ekitaldiak"
 
@@ -9163,11 +9220,11 @@ msgstr "Nire ekitaldiak"
 msgid "My family"
 msgstr "Nire familia"
 
-#: src/Frontend/Menu.php:57 src/Frontend/Views/TiendaBaseView.php:24 src/Idiomas/Guardados.php:202 templates/area/inicio.php:159
+#: src/Frontend/Menu.php:57 src/Frontend/Views/TiendaBaseView.php:24 src/Idiomas/Guardados.php:212 templates/area/inicio.php:159
 msgid "My orders"
 msgstr "Nire eskaerak"
 
-#: src/Frontend/Menu.php:49 src/Idiomas/Guardados.php:201 templates/area/inicio.php:156 templates/eventos/mis-eventos.php:52
+#: src/Frontend/Menu.php:49 src/Idiomas/Guardados.php:211 templates/area/inicio.php:156 templates/eventos/mis-eventos.php:52
 msgid "My payments"
 msgstr "Nire ordainketak"
 
@@ -9221,7 +9278,7 @@ msgstr "Izena edo erreferentzia"
 msgid "Name or username"
 msgstr "Izena edo erabiltzailea"
 
-#: src/Idiomas/Guardados.php:213
+#: src/Idiomas/Guardados.php:223
 msgid "Name, age and contact of the members."
 msgstr "Bazkideen izena, adina eta kontaktua."
 
@@ -9293,6 +9350,7 @@ msgstr "Esteka berria sortu da. Aurrekoak ez du balio jada."
 msgid "New membership"
 msgstr "Kidetza berria"
 
+#. translators: 1: text, 2: text, 3: text
 #: src/Frontend/Views/FichaView.php:338
 #, php-format
 msgid "New membership in the CRM: %1$s, in %2$s from %3$s."
@@ -9440,7 +9498,7 @@ msgstr "Gatazkarik gabe"
 msgid "No connection to the CRM for this group."
 msgstr ""
 
-#: src/Idiomas/Guardados.php:276 templates/eventos/agenda.php:95
+#: src/Idiomas/Guardados.php:287 templates/eventos/agenda.php:95
 msgid "No cost"
 msgstr "Kosturik gabe"
 
@@ -9454,7 +9512,7 @@ msgstr "Kosturik gabe familientzat."
 msgid "No cost recorded (they do not add up): %s."
 msgstr "Kostua idatzi gabe (ez dute batzen): %s."
 
-#: src/Idiomas/Guardados.php:277
+#: src/Idiomas/Guardados.php:288
 msgid "No cost: first scouter shirt"
 msgstr "Kosturik gabe: scouterraren lehen alkandora"
 
@@ -9528,6 +9586,7 @@ msgstr ""
 msgid "No limit"
 msgstr "Mugarik gabe"
 
+#. translators: 1: number, 2: number
 #: src/Frontend/Views/FichaView.php:427
 #, php-format
 msgid "No longer in %1$d family account(s); %2$d were deactivated because they do not represent anyone else."
@@ -9638,12 +9697,12 @@ msgid "Nobody in the support team has an account: print the sheet and hand it ov
 msgstr "Laguntza-taldeko inork ez du konturik: inprimatu orria eta entregatu."
 
 #. translators: %s: text
-#: src/Idiomas/Guardados.php:206 src/Idiomas/TextosJs.php:26
+#: src/Idiomas/Guardados.php:216 src/Idiomas/TextosJs.php:26
 #, php-format
 msgid "Nobody matches \"%s\""
 msgstr "Inork ez du «%s» bezalakorik"
 
-#: src/Idiomas/Guardados.php:207
+#: src/Idiomas/Guardados.php:217
 msgid "Nobody reviewed it in 90 days: automatically rejected."
 msgstr "Inork ez zuen 90 egunetan berrikusi: automatikoki baztertua."
 
@@ -9743,7 +9802,7 @@ msgstr "Garrantzirik gabe edo autokontrolatua"
 msgid "Not reviewed"
 msgstr "Berrikusi gabe"
 
-#: src/Frontend/Views/TiendaGestionView.php:242 src/Idiomas/Guardados.php:278 templates/tienda/informe.php:104
+#: src/Frontend/Views/TiendaGestionView.php:242 src/Idiomas/Guardados.php:289 templates/tienda/informe.php:104
 msgid "Not stated"
 msgstr "Adierazi gabe"
 
@@ -9869,7 +9928,7 @@ msgstr "Zenbakia"
 msgid "Numbers that already existed without the leading 0 (e.g. 76840390) remain valid as they are; new ones are generated with the full province."
 msgstr "Hasierako 0 gabe lehendik zeuden zenbakiak (adib. 76840390) baliozkoak dira dauden bezala; berriak probintzia osoarekin sortzen dira."
 
-#: src/Idiomas/Guardados.php:149
+#: src/Idiomas/Guardados.php:158
 msgid "Nuts"
 msgstr "Fruitu lehorrak"
 
@@ -9877,7 +9936,7 @@ msgstr "Fruitu lehorrak"
 msgid "OK"
 msgstr "Balio du"
 
-#: src/Idiomas/Guardados.php:77
+#: src/Idiomas/Guardados.php:78
 msgid "Oats"
 msgstr "Olatua"
 
@@ -9903,7 +9962,7 @@ msgstr "SD ziurtagiriaren data"
 msgid "Offer direct debit to families (appears in \"My payments\")"
 msgstr "Eskaini helbideratzea familiei («Nire ordainketak» atalean agertzen da)"
 
-#: src/Idiomas/Guardados.php:216
+#: src/Idiomas/Guardados.php:226
 msgid "Office"
 msgstr "Bulegoa"
 
@@ -9915,7 +9974,7 @@ msgstr ""
 msgid "Office · read-only"
 msgstr "Bulegoa · irakurtzeko soilik"
 
-#: src/Idiomas/Guardados.php:234
+#: src/Idiomas/Guardados.php:244
 msgid "Oily fish"
 msgstr "Arrain urdina"
 
@@ -10003,7 +10062,7 @@ msgstr "Baliozkoa ez den posta elektroniko bat dago."
 msgid "One of the two is already linked to another transaction: remove that link first."
 msgstr "Bietako bat beste mugimendu batekin lotuta dago jada: kendu lehenik lotura hori."
 
-#: src/Idiomas/Guardados.php:299
+#: src/Idiomas/Guardados.php:310
 msgid "One page per member with their mobile, their guardian and the guardian's mobile, the image release, allergies, food and illnesses. Choose the section when viewing it."
 msgstr "Orrialde bat bazkide bakoitzeko: mugikorra, tutorea eta haren mugikorra, irudiaren lagapena, alergiak, elikadura eta gaixotasunak. Aukeratu atala ikustean."
 
@@ -10019,10 +10078,11 @@ msgstr "Fitxa bat pertsonako (inprimatzean, bat orrialdeko)"
 msgid "One row for each ingredient of each recipe, with the columns: Recipe; Type; Portions; Ingredient; Quantity; Unit. The units are g, kg, ml, l, unit, tbsp and pinch. Ingredients that do not exist are created with no allergens and unreviewed: record them afterwards in \"Ingredients\". No recipe that already exists is overwritten."
 msgstr "Lerro bat errezeta bakoitzaren osagai bakoitzeko, zutabe hauekin: Receta; Tipo; Porciones; Ingrediente; Cantidad; Unidad. Unitateak g, kg, ml, l, ud, cda eta pizca dira. Existitzen ez diren osagaiak alergenorik gabe eta berrikusi gabe sortzen dira: idatzi geroago «Osagaiak» atalean. Ez da lehendik dagoen errezetarik gainidazten."
 
-#: src/Idiomas/Guardados.php:96
+#: src/Idiomas/Guardados.php:100
 msgid "Onion"
 msgstr "Tipula"
 
+#. translators: 2: number, 1: text
 #: src/Tienda/Servicio.php:163
 #, php-format
 msgid "Only %2$d of \"%1$s\" can be ordered per person."
@@ -10186,6 +10246,7 @@ msgstr "%s eskaera ez dago jada taldearen eskaeran."
 msgid "Order %s marked as delivered. The member or their family still has to confirm it."
 msgstr "%s eskaera entregatutzat markatu da. Bazkideak edo bere familiak berretsi behar du."
 
+#. translators: %s: text
 #: src/Frontend/Views/TiendaGestionView.php:400
 #, php-format
 msgid "Order %s marked as paid with the bank deposit."
@@ -10277,11 +10338,11 @@ msgstr "Dendan egiten diren eta ordaintzen ez diren bazkideen eta familien eskae
 msgid "Organisation"
 msgstr ""
 
-#: src/Eventos/GastosTable.php:60 src/Idiomas/Guardados.php:217 src/Informes/Catalogo.php:185 src/Menus/RecetasTable.php:28
+#: src/Eventos/GastosTable.php:60 src/Idiomas/Guardados.php:227 src/Informes/Catalogo.php:185 src/Menus/RecetasTable.php:28
 msgid "Other"
 msgstr "Beste bat"
 
-#: src/Caja/LibroMayor.php:163 src/Idiomas/Guardados.php:219
+#: src/Caja/LibroMayor.php:163 src/Idiomas/Guardados.php:229
 msgid "Other (cash box)"
 msgstr "Besteak (kutxa)"
 
@@ -10317,7 +10378,7 @@ msgstr "Beste kontzeptu batzuk"
 msgid "Other reason"
 msgstr "Beste arrazoi bat"
 
-#: src/Idiomas/Guardados.php:218 src/Informes/Catalogo.php:156 src/Tesoreria/Config.php:53
+#: src/Idiomas/Guardados.php:228 src/Informes/Catalogo.php:156
 msgid "Others"
 msgstr "Besteak"
 
@@ -10359,7 +10420,7 @@ msgstr "Joanera: %1$s · Itzulera: %2$s"
 msgid "Overall balance"
 msgstr "Balantzea"
 
-#: src/Tesoreria/Config.php:46
+#: src/Idiomas/Guardados.php:126
 msgid "Overdrafts and Interventions"
 msgstr "Aurkikuntza eta Esku-hartzea"
 
@@ -10445,11 +10506,11 @@ msgstr "%s(a)n ordainduta"
 msgid "Paper authorisation recorded."
 msgstr "Paperezko baimena erregistratuta."
 
-#: src/Idiomas/Guardados.php:236
+#: src/Idiomas/Guardados.php:246
 msgid "Paprika"
 msgstr "Piper-hautsa"
 
-#: src/Idiomas/Guardados.php:264
+#: src/Idiomas/Guardados.php:274
 msgid "Parents' meeting"
 msgstr "Gurasoen bilera"
 
@@ -10461,7 +10522,7 @@ msgstr "Hezigaien kuoten zatia"
 msgid "Partial payment"
 msgstr "Ordainketa partziala"
 
-#: src/Idiomas/Guardados.php:224
+#: src/Idiomas/Guardados.php:234
 msgid "Participant"
 msgstr "Partaidea"
 
@@ -10513,6 +10574,7 @@ msgstr ""
 msgid "Password saved. You can now sign in with your member number (or your email) and the password you have just chosen."
 msgstr "Pasahitza gorde da. Orain sar zaitezke zure bazkide-zenbakiarekin (edo emailarekin) eta hautatu berri duzun pasahitzarekin."
 
+#. translators: %s: text
 #: src/Tienda/Servicio.php:440
 #, php-format
 msgid "Pay by card, in person, with the group's card terminal on collection, stating order no. %s."
@@ -10588,31 +10650,37 @@ msgstr "Ordainketaren xedea"
 msgid "Payment of %1$s (%2$s) validated on order %3$s."
 msgstr "%1$s(r)en (%2$s) ordainketa balioztatu da %3$s eskaeran."
 
+#. translators: 1: text, 2: text
 #: src/Frontend/Views/TesoreriaView.php:397
 #, php-format
 msgid "Payment of %1$s recorded in the event \"%2$s\". It remains in the family's payment history."
 msgstr "%1$s(r)en ordainketa erregistratu da «%2$s» ekitaldian. Familiaren ordainketa-historian geratzen da."
 
+#. translators: 1: text, 2: text
 #: src/Frontend/Views/TesoreriaView.php:409
 #, php-format
 msgid "Payment of %1$s recorded with the bank deposit of %2$s, which is reconciled with this family."
 msgstr "%1$s(e)ko ordainketa erregistratu da %2$s(e)ko bankuko diru-sarrerarekin, eta familia honekin bateratuta geratzen da."
 
+#. translators: 1: text, 2: text
 #: src/Tesoreria/HistorialPagos.php:48
 #, php-format
 msgid "Payment of %1$s · event \"%2$s\""
 msgstr "%1$s(e)ko ordainketa · «%2$s» ekitaldia"
 
+#. translators: 1: text, 2: text
 #: src/Tesoreria/HistorialPagos.php:118
 #, php-format
 msgid "Payment of %1$s · uniform order %2$s"
 msgstr "%1$s(e)ko ordainketa · uniforme-eskaera %2$s"
 
+#. translators: %s: text
 #: templates/tesoreria/familia.php:271
 #, php-format
 msgid "Payment of %s deleted"
 msgstr "%s(e)ko ordainketa ezabatua"
 
+#. translators: %s: text
 #: src/Frontend/Views/TesoreriaView.php:433
 #, php-format
 msgid "Payment of %s deleted. It remains in the family's history."
@@ -10666,7 +10734,7 @@ msgstr "Ordainketak, hornitzaileari egindako eskaera eta taldeko alkandoren entr
 msgid "Payroll · social security"
 msgstr "Nominak · gizarte-aseguruak"
 
-#: src/Idiomas/Guardados.php:195
+#: src/Idiomas/Guardados.php:205
 msgid "Peach"
 msgstr "Mertxika"
 
@@ -10674,11 +10742,11 @@ msgstr "Mertxika"
 msgid "Peanuts"
 msgstr "Kakahueteak"
 
-#: src/Idiomas/Guardados.php:157
+#: src/Idiomas/Guardados.php:166
 msgid "Peas"
 msgstr "Ilarrak"
 
-#: src/Eventos/InscripcionesTable.php:53 src/Frontend/Views/TesoreriaView.php:38 src/Frontend/Views/TesoreriaView.php:317 src/Idiomas/Guardados.php:230
+#: src/Eventos/InscripcionesTable.php:53 src/Frontend/Views/TesoreriaView.php:38 src/Frontend/Views/TesoreriaView.php:317 src/Idiomas/Guardados.php:240
 msgid "Pending"
 msgstr "Zain daudenak"
 
@@ -10730,7 +10798,7 @@ msgstr "Berrikusteko zain"
 msgid "People"
 msgstr "Pertsonak"
 
-#: src/Idiomas/Guardados.php:233
+#: src/Idiomas/Guardados.php:243
 msgid "People and records"
 msgstr "Pertsonak eta fitxak"
 
@@ -10742,7 +10810,7 @@ msgstr "Jasotzeko baimena duten pertsonak (izena eta NAN)"
 msgid "People in a family withdrawn in the CRM from the website in the last 30 days: they no longer count in their family's fee."
 msgstr "Azken 30 egunetan webetik CRMan baja eman zaien familiaren bateko pertsonak: ez dira gehiago kontatzen beren familiaren kuotan."
 
-#: src/Idiomas/Guardados.php:232 templates/area/inicio.php:188 templates/personas/listado.php:58
+#: src/Idiomas/Guardados.php:242 templates/area/inicio.php:188 templates/personas/listado.php:58
 msgid "People in the group"
 msgstr "Taldeko pertsonak"
 
@@ -10782,7 +10850,7 @@ msgstr "Baimena eman da."
 msgid "Permission withdrawn."
 msgstr "Baimena kendu da."
 
-#: src/Idiomas/Guardados.php:231 templates/accesos/matriz.php:25
+#: src/Idiomas/Guardados.php:241 templates/accesos/matriz.php:25
 msgid "Permissions by role"
 msgstr "Baimenak rolaren arabera"
 
@@ -10842,7 +10910,7 @@ msgstr "Jasotzea eta oharrak"
 msgid "Picked up by:"
 msgstr "Jasotzen dute:"
 
-#: src/Idiomas/Guardados.php:237
+#: src/Idiomas/Guardados.php:247
 msgid "Pistachio"
 msgstr "Pistatxoa"
 
@@ -10872,7 +10940,7 @@ msgstr "Plaza eskainita %s arte"
 msgid "Place the order"
 msgstr "Egin eskaera"
 
-#: src/Idiomas/Guardados.php:158
+#: src/Idiomas/Guardados.php:167
 msgid "Place the shirt order with the supplier"
 msgstr "Elastikoen eskaera hornitzaileari egin"
 
@@ -10916,7 +10984,7 @@ msgstr "Aurreikusitako diru-sarrerak"
 msgid "Policy no."
 msgstr "Polizaren zenbakia"
 
-#: src/Idiomas/Guardados.php:93
+#: src/Idiomas/Guardados.php:97
 msgid "Pork"
 msgstr "Txerri-haragia"
 
@@ -10936,11 +11004,11 @@ msgstr "Seguruenik anai-arrebak (CRMan email bera dute). Markatu familia berekoa
 msgid "Postcode"
 msgstr "Posta-kodea"
 
-#: src/Idiomas/Guardados.php:225
+#: src/Idiomas/Guardados.php:235
 msgid "Potato"
 msgstr "Patata"
 
-#: src/Idiomas/Guardados.php:292
+#: src/Idiomas/Guardados.php:303
 msgid "Potato omelette"
 msgstr "Patata-tortilla"
 
@@ -10948,7 +11016,7 @@ msgstr "Patata-tortilla"
 msgid "Practical information"
 msgstr "Informazio praktikoa"
 
-#: src/Idiomas/Guardados.php:151
+#: src/Idiomas/Guardados.php:160
 msgid "Prawns"
 msgstr "Ganbak"
 
@@ -10976,7 +11044,7 @@ msgstr "Prestaketa"
 msgid "Prepare a list from the inventory"
 msgstr "Prestatu zerrenda bat inbentariotik"
 
-#: src/Idiomas/Guardados.php:243
+#: src/Idiomas/Guardados.php:253
 msgid "Prepare the budget of their sections"
 msgstr "Bere atalen aurrekontua prestatu"
 
@@ -11040,7 +11108,7 @@ msgstr "«%s» materialaren prezioa"
 msgid "Price of one bus (€)"
 msgstr "Autobus baten prezioa (€)"
 
-#: src/Idiomas/Guardados.php:242
+#: src/Idiomas/Guardados.php:252
 msgid "Price per camper and day × campers (youth members + scouters) × days."
 msgstr "Kanpatuko eta eguneko prezioa × kanpatuak (hezigaiak + scouterrak) × egunak."
 
@@ -11070,16 +11138,17 @@ msgstr "Inprimatu"
 msgid "Print or save as PDF"
 msgstr "Inprimatu edo gorde PDF gisa"
 
-#: src/Idiomas/Guardados.php:315 src/Idiomas/TextosJs.php:55
+#: src/Idiomas/Guardados.php:326 src/Idiomas/TextosJs.php:55
 msgid "Print version"
 msgstr "Inprimatzeko bertsioa"
 
+#. translators: %s: text
 #: templates/informes/imprimir.php:105
 #, php-format
 msgid "Printed from the private area on %s."
 msgstr "Eremu pribatutik inprimatua: %s."
 
-#: src/Frontend/Visibilidad.php:83 src/Idiomas/Guardados.php:323 templates/comun/nav.php:24 templates/email/alta-grupo-resultado.php:26
+#: src/Frontend/Visibilidad.php:83 src/Idiomas/Guardados.php:334 templates/comun/nav.php:24 templates/email/alta-grupo-resultado.php:26
 msgid "Private area"
 msgstr "Eremu pribatua"
 
@@ -11109,7 +11178,7 @@ msgstr "%s(r)en taldeen eremu pribatua."
 msgid "Private area of the Scout Groups."
 msgstr "Eskaut Taldeen eremu pribatua."
 
-#: src/Idiomas/Guardados.php:302 templates/usuarios/listado.php:56
+#: src/Idiomas/Guardados.php:313 templates/usuarios/listado.php:56
 msgid "Private area users"
 msgstr "Eremu pribatuko erabiltzaileak"
 
@@ -11117,7 +11186,7 @@ msgstr "Eremu pribatuko erabiltzaileak"
 msgid "Private health insurance"
 msgstr "Osasun-aseguru pribatua"
 
-#: src/Idiomas/Guardados.php:268
+#: src/Idiomas/Guardados.php:278
 msgid "Produce group reports"
 msgstr "Taldearen txostenak atera"
 
@@ -11181,15 +11250,15 @@ msgstr "Ekitaldia argitaratu? Deitutako ataletako scouterrek ikusiko dute."
 msgid "Published"
 msgstr "Argitaratua"
 
-#: src/Idiomas/Guardados.php:177
+#: src/Idiomas/Guardados.php:186
 msgid "Pulses"
 msgstr "Lekaleak"
 
-#: src/Idiomas/Guardados.php:84
+#: src/Idiomas/Guardados.php:87
 msgid "Pumpkin"
 msgstr "Kalabaza"
 
-#: src/Idiomas/Guardados.php:113
+#: src/Idiomas/Guardados.php:117
 msgid "Pumpkin cream soup"
 msgstr "Kalabaza-krema"
 
@@ -11201,7 +11270,7 @@ msgstr "Saiorik gabeko erosketa"
 msgid "Qualification"
 msgstr "Titulazioa"
 
-#: src/Idiomas/Guardados.php:298
+#: src/Idiomas/Guardados.php:309
 msgid "Qualifications needed = youth members ÷ the autonomous community's ratio, rounded up."
 msgstr "Beharrezko tituluak = hezigaiak ÷ Autonomia Erkidegoko ratioa, goranzko biribilketarekin."
 
@@ -11209,7 +11278,7 @@ msgstr "Beharrezko tituluak = hezigaiak ÷ Autonomia Erkidegoko ratioa, goranzko
 msgid "Quantities according to diners"
 msgstr "Kantitateak otordukoen arabera"
 
-#: src/Frontend/Views/TiendaProveedorView.php:69 src/Idiomas/Guardados.php:89 src/Inventario/Importador.php:38 src/Menus/MenuEvento.php:216
+#: src/Frontend/Views/TiendaProveedorView.php:69 src/Idiomas/Guardados.php:93 src/Inventario/Importador.php:38 src/Menus/MenuEvento.php:216
 msgid "Quantity"
 msgstr "Kopurua"
 
@@ -11235,11 +11304,11 @@ msgstr "%s kantitatea"
 msgid "Quantity: %s"
 msgstr "Kopurua: %s"
 
-#: src/Idiomas/Guardados.php:167
+#: src/Idiomas/Guardados.php:176
 msgid "Quartermaster (equipment officer)"
 msgstr "Intendentea (materialaren arduraduna)"
 
-#: src/Idiomas/Guardados.php:244
+#: src/Idiomas/Guardados.php:254
 msgid "Quartermasters and sections to prepare the camping equipment"
 msgstr "Intendentziek eta sekzioek kanpaldiko materiala prestatu"
 
@@ -11377,7 +11446,7 @@ msgstr "Jasoak: %s"
 msgid "Recent withdrawals"
 msgstr "Azken bajak"
 
-#: src/Idiomas/Guardados.php:251 templates/menus/recetas.php:28 templates/menus/recetas.php:68
+#: src/Idiomas/Guardados.php:261 templates/menus/recetas.php:28 templates/menus/recetas.php:68
 msgid "Recipe"
 msgstr "Errezeta"
 
@@ -11411,7 +11480,7 @@ msgstr "Errezeta berreskuratu da."
 msgid "Recipe saved."
 msgstr "Errezeta gorde da."
 
-#: src/Frontend/Views/EventosBaseView.php:17 src/Idiomas/Guardados.php:253 templates/menus/ingredientes.php:80 templates/menus/ingredientes.php:96
+#: src/Frontend/Views/EventosBaseView.php:17 src/Idiomas/Guardados.php:263 templates/menus/ingredientes.php:80 templates/menus/ingredientes.php:96
 msgid "Recipes"
 msgstr "Errezetak"
 
@@ -11521,7 +11590,7 @@ msgstr "Erregistratu diru-sarrera"
 msgid "Record the payment"
 msgstr "Erregistratu ordainketa"
 
-#: src/Idiomas/Guardados.php:66
+#: src/Idiomas/Guardados.php:67
 msgid "Record the people in charge and the budget."
 msgstr "Idatzi arduradunak eta aurrekontua."
 
@@ -11563,7 +11632,7 @@ msgstr "Berreskuratu"
 msgid "Recover in the inventory"
 msgstr "Berreskuratu inbentarioan"
 
-#: src/Idiomas/Guardados.php:257 src/Usuarios/RegistroEmails.php:77 templates/recuperar/formulario.php:15
+#: src/Idiomas/Guardados.php:267 src/Usuarios/RegistroEmails.php:77 templates/recuperar/formulario.php:15
 msgid "Recover password"
 msgstr "Berreskuratu pasahitza"
 
@@ -11625,6 +11694,7 @@ msgstr "Erreferentziak"
 msgid "Refund"
 msgstr "Itzulketa"
 
+#. translators: 1: text, 2: text
 #: src/Tesoreria/HistorialPagos.php:51
 #, php-format
 msgid "Refund of %1$s · event \"%2$s\""
@@ -11780,12 +11850,13 @@ msgstr "Itzulketa ukatu da."
 msgid "Reimbursement requested. Treasury will review it and we will notify you."
 msgstr "Itzulketa eskatuta. Diruzaintzak berrikusiko du eta abisatuko dizugu."
 
+#. translators: %s: text
 #: src/Caja/Automaticos.php:143
 #, php-format
 msgid "Reimbursement · %s"
 msgstr "Itzulketa · %s"
 
-#: src/Caja/Automaticos.php:46 src/Domain/Modulos.php:60 src/Frontend/Menu.php:91 src/Idiomas/Guardados.php:260
+#: src/Caja/Automaticos.php:46 src/Domain/Modulos.php:60 src/Frontend/Menu.php:91 src/Idiomas/Guardados.php:270
 msgid "Reimbursements"
 msgstr "Itzulketak"
 
@@ -11809,7 +11880,7 @@ msgstr "Ukatu hautatutakoak"
 msgid "Reject this registration? The stored credential is deleted and the group is notified (without the reason)."
 msgstr ""
 
-#: src/Eventos/GastosTable.php:35 src/Fichas/Cambios.php:37 src/Idiomas/Guardados.php:254 src/Inventario/ComprasTable.php:40
+#: src/Eventos/GastosTable.php:35 src/Fichas/Cambios.php:37 src/Idiomas/Guardados.php:264 src/Inventario/ComprasTable.php:40
 msgid "Rejected"
 msgstr "Ukatua"
 
@@ -11933,7 +12004,7 @@ msgstr "Errepikatu pasahitza"
 msgid "Repeated"
 msgstr "Errepikatua"
 
-#: src/Frontend/Views/InformesView.php:198 src/Idiomas/Guardados.php:163 templates/informes/lista.php:27 templates/informes/lista.php:36
+#: src/Frontend/Views/InformesView.php:198 src/Idiomas/Guardados.php:172 templates/informes/lista.php:27 templates/informes/lista.php:36
 msgid "Report"
 msgstr "Txostena"
 
@@ -11965,7 +12036,7 @@ msgstr "ASDE Baleares-i jakinarazpena (30 egun lehenago)"
 msgid "Reporting"
 msgstr "Jakinarazpena"
 
-#: src/Domain/Modulos.php:51 src/Frontend/Menu.php:73 src/Idiomas/Guardados.php:164 templates/area/inicio.php:176
+#: src/Domain/Modulos.php:51 src/Frontend/Menu.php:73 src/Idiomas/Guardados.php:173 templates/area/inicio.php:176
 msgid "Reports"
 msgstr "Txostenak"
 
@@ -11977,7 +12048,7 @@ msgstr "Eskaera"
 msgid "Request a reimbursement"
 msgstr "Itzulketa bat eskatu"
 
-#: src/Idiomas/Guardados.php:280 templates/acceso/formulario.php:75 templates/recuperar/formulario.php:37 templates/solicitudes/formulario.php:33
+#: src/Idiomas/Guardados.php:291 templates/acceso/formulario.php:75 templates/recuperar/formulario.php:37 templates/solicitudes/formulario.php:33
 msgid "Request access"
 msgstr "Eskatu sarbidea"
 
@@ -11997,7 +12068,7 @@ msgstr "Eskatu sarbidea zure taldeko Idazkaritzari, bazkidearen izenarekin eta b
 msgid "Request approved: account <strong>%1$s</strong>. The invitation, with the welcome, has been sent to %2$s.%3$s"
 msgstr "Eskaera onartu da: <strong>%1$s</strong> kontua. Gonbidapena, ongi etorriarekin, %2$s(r)i bidali zaio.%3$s"
 
-#: src/Idiomas/Guardados.php:227
+#: src/Idiomas/Guardados.php:237
 msgid "Request reimbursement of an expense"
 msgstr "Gastu baten diru-itzulketa eskatu"
 
@@ -12153,6 +12224,7 @@ msgstr "Jatorrizko baimenetara itzuli"
 msgid "Returned"
 msgstr "Itzulia"
 
+#. translators: %s: text
 #: src/Caja/Automaticos.php:126
 #, php-format
 msgid "Returned from the advance · %s"
@@ -12200,11 +12272,11 @@ msgstr "Berrikusitako mugimenduak"
 msgid "Reviewed with no type"
 msgstr "Motarik gabe berrikusia"
 
-#: src/Idiomas/Guardados.php:72
+#: src/Idiomas/Guardados.php:73
 msgid "Rice"
 msgstr "Arroza"
 
-#: src/Idiomas/Guardados.php:73
+#: src/Idiomas/Guardados.php:74
 msgid "Rice with tomato and egg"
 msgstr "Arroza tomatearekin eta arrautzarekin"
 
@@ -12254,11 +12326,13 @@ msgstr "Rolak, atalak eta familia-kontua"
 msgid "Round"
 msgstr "Txanda"
 
+#. translators: 1: text, 2: text
 #: src/Frontend/Views/TesoreriaView.php:313
 #, php-format
 msgid "Round %1$s · generated on %2$s"
 msgstr "Txanda: %1$s · sortua: %2$s"
 
+#. translators: %s: text
 #: src/Caja/Periodo.php:34
 #, php-format
 msgid "Round %s"
@@ -12317,7 +12391,7 @@ msgstr "Deskribapen bera duten lerroek denda-produktu bat osatzen dute, bakoitza
 msgid "Run the <a href=\"%s\">background tasks diagnostic</a> (on LiteSpeed/Hostinger \"noabort\" is usually needed)."
 msgstr ""
 
-#: src/Idiomas/Guardados.php:98
+#: src/Idiomas/Guardados.php:102
 msgid "Rye"
 msgstr "Zekalea"
 
@@ -12333,7 +12407,7 @@ msgstr "SEPA zuzeneko kargu-helbideratzearen agindua"
 msgid "SEPA direct debit · family"
 msgstr "SEPA helbideratzea · familia"
 
-#: src/Domain/Modulos.php:48 src/Idiomas/Guardados.php:122 templates/tesoreria/sepa.php:75
+#: src/Domain/Modulos.php:48 src/Idiomas/Guardados.php:128 templates/tesoreria/sepa.php:75
 msgid "SEPA direct debits"
 msgstr "SEPA helbideratzeak"
 
@@ -12357,7 +12431,7 @@ msgstr "Salmentak produktuaren arabera"
 msgid "Sales reports are seen by Treasury, Coordination and the shop administration."
 msgstr "Salmenten txostenak Diruzaintzak, Koordinazioak eta dendaren administrazioak ikusten dituzte."
 
-#: src/Idiomas/Guardados.php:269
+#: src/Idiomas/Guardados.php:279
 msgid "Salt"
 msgstr "Gatza"
 
@@ -12499,6 +12573,7 @@ msgstr "Eskaneatu beheko QR kodea berarekin."
 msgid "Scholarship or adjustment"
 msgstr "Beka edo doikuntza"
 
+#. translators: 1: text, 2: text
 #: src/Tesoreria/HistorialPagos.php:54
 #, php-format
 msgid "Scholarship or adjustment of %1$s · event \"%2$s\""
@@ -12554,7 +12629,7 @@ msgstr "Eskaut atala"
 msgid "Scout training"
 msgstr "Eskaut prestakuntza"
 
-#: src/Idiomas/Guardados.php:270
+#: src/Idiomas/Guardados.php:281
 msgid "Scouter / Volunteer"
 msgstr "Scouter / Boluntarioa"
 
@@ -12566,7 +12641,7 @@ msgstr "Scouterraren Harrera Etapa (EAS)"
 msgid "Scouter Trainer Stage (EFS)"
 msgstr "Scouterren Prestatzailearen Etapa (EFS)"
 
-#: src/Domain/Modulos.php:53 src/Idiomas/Guardados.php:63 templates/alta-scouters/formulario.php:27
+#: src/Domain/Modulos.php:53 src/Idiomas/Guardados.php:64 templates/alta-scouters/formulario.php:27
 msgid "Scouter registration"
 msgstr "Scouterren alta"
 
@@ -12619,7 +12694,7 @@ msgstr "Scouts de Españako zk. %s"
 msgid "Scouts de España no. (username)"
 msgstr "Scouts de Españako zk. (erabiltzailea)"
 
-#: src/Idiomas/Guardados.php:192
+#: src/Idiomas/Guardados.php:201
 msgid "Seafood"
 msgstr "Itsaskiak"
 
@@ -12663,7 +12738,7 @@ msgstr "Bilatu bazkidea"
 msgid "Search the records of a group for those with the same ID, foreigner ID or other document (written in any form: with a hyphen, in lower case…). They are usually the same person registered twice before registrations from the website; they must be merged in the CRM. Read-only: nothing is changed."
 msgstr ""
 
-#: src/Idiomas/Guardados.php:148
+#: src/Idiomas/Guardados.php:157
 msgid "Seasonal fruit"
 msgstr "Sasoiko fruta"
 
@@ -12671,7 +12746,7 @@ msgstr "Sasoiko fruta"
 msgid "Second reminder (days before the event; 0 = not sent; less than the first)"
 msgstr "Bigarren gogorarazpena (ekitaldiaren aurreko egunak; 0 = ez da bidaltzen; lehenengoa baino gutxiago)"
 
-#: src/Idiomas/Guardados.php:273
+#: src/Idiomas/Guardados.php:284
 msgid "Secretary's office"
 msgstr "Idazkaritza"
 
@@ -12703,7 +12778,7 @@ msgstr "Adinaren araberako atala"
 msgid "Section coordinator"
 msgstr "Atalaren koordinatzailea"
 
-#: src/Idiomas/Guardados.php:183
+#: src/Idiomas/Guardados.php:192
 msgid "Section list"
 msgstr "Atalaren zerrenda"
 
@@ -12739,15 +12814,15 @@ msgstr "Segurtasuna"
 msgid "Security and advanced settings"
 msgstr ""
 
-#: src/Idiomas/Guardados.php:314
+#: src/Idiomas/Guardados.php:325
 msgid "See \"My events\" and sign up"
 msgstr "«Nire ekitaldiak» ikusi eta izena eman"
 
-#: src/Idiomas/Guardados.php:305
+#: src/Idiomas/Guardados.php:316
 msgid "See People and Users and give access to the area"
 msgstr "Pertsonak eta Erabiltzaileak ikusi eta eremurako sarbidea eman"
 
-#: src/Idiomas/Guardados.php:306
+#: src/Idiomas/Guardados.php:317
 msgid "See Treasury (families, payments and bank)"
 msgstr "Diruzaintza ikusi (familiak, ordainketak eta banku-kontua)"
 
@@ -12755,11 +12830,11 @@ msgstr "Diruzaintza ikusi (familiak, ordainketak eta banku-kontua)"
 msgid "See all the users of the private area"
 msgstr "Ikusi eremu pribatuko erabiltzaile guztiak"
 
-#: src/Idiomas/Guardados.php:313
+#: src/Idiomas/Guardados.php:324
 msgid "See and edit the equipment inventory"
 msgstr "Material-inbentarioa ikusi eta editatu"
 
-#: src/Idiomas/Guardados.php:311
+#: src/Idiomas/Guardados.php:322
 msgid "See health data"
 msgstr "Osasun-datuak ikusi"
 
@@ -12779,11 +12854,11 @@ msgstr "Ikusi zerrenda"
 msgid "See the menu"
 msgstr "Ikusi menua"
 
-#: src/Idiomas/Guardados.php:309
+#: src/Idiomas/Guardados.php:320
 msgid "See the records of the people in their section"
 msgstr "Bere atalaren pertsonen fitxak ikusi"
 
-#: src/Idiomas/Guardados.php:310
+#: src/Idiomas/Guardados.php:321
 msgid "See the records of the whole group"
 msgstr "Talde osoko fitxak ikusi"
 
@@ -12791,11 +12866,11 @@ msgstr "Talde osoko fitxak ikusi"
 msgid "See the reimbursements"
 msgstr "Ikusi itzulketak"
 
-#: src/Idiomas/Guardados.php:307
+#: src/Idiomas/Guardados.php:318
 msgid "See the shop management"
 msgstr "Dendaren kudeaketa ikusi"
 
-#: src/Idiomas/Guardados.php:308
+#: src/Idiomas/Guardados.php:319
 msgid "See the waiting list and get in touch"
 msgstr "Itxaron-zerrenda ikusi eta harremanetan jarri"
 
@@ -12840,11 +12915,11 @@ msgstr "Bidali iezadazu esteka"
 msgid "Send request"
 msgstr "Bidali eskaera"
 
-#: src/Idiomas/Guardados.php:133
+#: src/Idiomas/Guardados.php:140
 msgid "Send the camp form to the OF (Federated Organisation)"
 msgstr "Kanpaldiaren fitxa OFri (Erakunde Federatua) bidali"
 
-#: src/Idiomas/Guardados.php:132
+#: src/Idiomas/Guardados.php:139
 msgid "Send the letter by post"
 msgstr "Gutuna posta bidez bidali"
 
@@ -12982,15 +13057,15 @@ msgstr "Partekatu taldeko gainerakoekin"
 msgid "Shared"
 msgstr "Partekatua"
 
-#: src/Frontend/Views/TiendaBaseView.php:30 src/Idiomas/Guardados.php:226
+#: src/Frontend/Views/TiendaBaseView.php:30 src/Idiomas/Guardados.php:236
 msgid "Shirt order"
 msgstr "Alkandora eskaera"
 
-#: src/Caja/Automaticos.php:45 src/Domain/Modulos.php:49 src/Frontend/Menu.php:57 src/Idiomas/Guardados.php:287
+#: src/Caja/Automaticos.php:45 src/Domain/Modulos.php:49 src/Frontend/Menu.php:57 src/Idiomas/Guardados.php:298
 msgid "Shop"
 msgstr "Denda"
 
-#: src/Frontend/Views/TiendaBaseView.php:33 src/Idiomas/Guardados.php:171 templates/tienda/productos.php:24
+#: src/Frontend/Views/TiendaBaseView.php:33 src/Idiomas/Guardados.php:180 templates/tienda/productos.php:24
 msgid "Shop inventory"
 msgstr "Dendaren inbentarioa"
 
@@ -13002,10 +13077,11 @@ msgstr "Dendaren esteka"
 msgid "Shop link (share it wherever you like):"
 msgstr "Dendaren esteka (partekatu nahi duzun lekuan):"
 
-#: src/Frontend/Menu.php:81 src/Idiomas/Guardados.php:156 templates/area/inicio.php:167
+#: src/Frontend/Menu.php:81 src/Idiomas/Guardados.php:165 templates/area/inicio.php:167
 msgid "Shop management"
 msgstr "Dendaren kudeaketa"
 
+#. translators: %d: number
 #: src/Caja/Automaticos.php:135
 #, php-format
 msgid "Shop order no. %d"
@@ -13037,7 +13113,7 @@ msgstr "Berrikusitako erosketa-zerrenda"
 msgid "Shopping lists"
 msgstr "Erosketa-zerrendak"
 
-#: src/Idiomas/Guardados.php:145
+#: src/Idiomas/Guardados.php:153
 msgid "Short records"
 msgstr "Fitxa laburrak"
 
@@ -13049,7 +13125,7 @@ msgstr "Testu laburra"
 msgid "Show"
 msgstr "Erakutsi"
 
-#: src/Idiomas/Guardados.php:204 src/Idiomas/TextosJs.php:22
+#: src/Idiomas/Guardados.php:214 src/Idiomas/TextosJs.php:22
 msgid "Show header"
 msgstr "Erakutsi goiburua"
 
@@ -13062,7 +13138,7 @@ msgid "Showing"
 msgstr "Erakusten"
 
 #. translators: 1: text, 2: text, 3: text
-#: src/Idiomas/Guardados.php:203 src/Idiomas/TextosJs.php:36
+#: src/Idiomas/Guardados.php:213 src/Idiomas/TextosJs.php:36
 #, php-format
 msgid "Showing %1$s–%2$s of %3$s"
 msgstr "%1$s–%2$s erakusten, guztira %3$s"
@@ -13245,7 +13321,7 @@ msgstr "Izena eman zuen"
 msgid "Signed up more than once with a different email"
 msgstr "Izena behin baino gehiagotan eman du, email desberdinekin"
 
-#: src/Idiomas/Guardados.php:324 src/Tienda/VariantesTable.php:226 templates/inventario/material.php:114
+#: src/Idiomas/Guardados.php:335 src/Tienda/VariantesTable.php:226 templates/inventario/material.php:114
 msgid "Single"
 msgstr "Bakarra"
 
@@ -13261,7 +13337,7 @@ msgstr "Neurria (alkandorak)"
 msgid "Size or model"
 msgstr "Neurria edo eredua"
 
-#: src/Idiomas/Guardados.php:248
+#: src/Idiomas/Guardados.php:258
 msgid "Sliced cheese"
 msgstr "Gazta xerra"
 
@@ -13297,7 +13373,7 @@ msgstr "Taldeko norbait, bere poltsikotik (itzuli egin behar zaio)"
 msgid "Someone in the group"
 msgstr "Taldeko norbait"
 
-#: src/Idiomas/Guardados.php:282
+#: src/Idiomas/Guardados.php:293
 msgid "Sorbitol"
 msgstr "Sorbitola"
 
@@ -13323,7 +13399,7 @@ msgstr "Soja"
 msgid "Spanish account (24 characters). It is stored, with the holder and the bank, on the CRM record of each family member at Scouts de España; the website only stores your authorisation."
 msgstr "Espainiako kontua (24 karaktere). Titularrarekin eta erakundearekin batera gordetzen da, Scouts de Españako CRMko familiako kide bakoitzaren fitxan; webak zure baimena soilik gordetzen du."
 
-#: src/Tesoreria/Config.php:53
+#: src/Idiomas/Guardados.php:51
 msgid "Special activity"
 msgstr "Jarduera berezia"
 
@@ -13349,7 +13425,7 @@ msgstr "%s txandako banaketa gordeta."
 msgid "Split of the fees between the group and the sections, and the budget of each."
 msgstr "Kuoten banaketa taldearen eta atalen artean, eta atal bakoitzaren aurrekontua."
 
-#: src/Idiomas/Guardados.php:85
+#: src/Idiomas/Guardados.php:88
 msgid "Squid and octopus"
 msgstr "Txipiroia eta olagarroa"
 
@@ -13453,7 +13529,7 @@ msgstr "Egoera aldatu da."
 msgid "Status: %s"
 msgstr "Egoera: %s"
 
-#: src/Idiomas/Guardados.php:179
+#: src/Idiomas/Guardados.php:188
 msgid "Stewed lentils"
 msgstr "Dilista gisatuak"
 
@@ -13483,6 +13559,7 @@ msgstr "Izakinak"
 msgid "Stock market and securities transactions"
 msgstr "Burtsa- eta balore-eragiketak"
 
+#. translators: %d: number
 #: src/Tienda/VariantesTable.php:86
 #, php-format
 msgid "Stock must be a whole number from 0 to %d (or \"unlimited\")."
@@ -13516,7 +13593,7 @@ msgstr "Gelditua: %1$s; %2$d zuzendu gabe geratu dira."
 msgid "Stopped: %s; 1 was left uncorrected."
 msgstr "Gelditua: %s; 1 zuzendu gabe geratu da."
 
-#: src/Idiomas/Guardados.php:146
+#: src/Idiomas/Guardados.php:155
 msgid "Strawberry"
 msgstr "Marrubia"
 
@@ -13524,7 +13601,7 @@ msgstr "Marrubia"
 msgid "Subject"
 msgstr "Gaia"
 
-#: src/Idiomas/Guardados.php:245
+#: src/Idiomas/Guardados.php:255
 msgid "Submit the activity plan"
 msgstr "Jardueren plana aurkeztu"
 
@@ -13560,7 +13637,7 @@ msgstr "Laburpena"
 msgid "Summary by item"
 msgstr "Partidaren araberako laburpena"
 
-#: src/Tesoreria/Config.php:53
+#: src/Idiomas/Guardados.php:92
 msgid "Summer camp"
 msgstr "Udako kanpamendua"
 
@@ -13600,7 +13677,7 @@ msgstr "Kontaktu-pertsonaren abizenak"
 msgid "Surnames"
 msgstr "Abizenak"
 
-#: src/Idiomas/Guardados.php:279
+#: src/Idiomas/Guardados.php:290
 msgid "Synchronise with the CRM"
 msgstr "CRMrekin sinkronizatu"
 
@@ -13712,6 +13789,7 @@ msgstr ""
 msgid "Test the connection"
 msgstr ""
 
+#. translators: %s: text
 #: src/Admin/SettingsPage.php:301
 #, php-format
 msgid "Tested on %s"
@@ -13893,6 +13971,7 @@ msgstr "Partida hori ez da existitzen."
 msgid "That link cannot be made from the website."
 msgstr "Lotura hori ezin da webetik egin."
 
+#. translators: 1: text, 2: number
 #: src/Frontend/Views/TiendaProductosView.php:324
 #, php-format
 msgid "That many units of \"%1$s\" cannot be removed: there are only %2$d."
@@ -14098,12 +14177,13 @@ msgstr "Erabiltzaile horrek ez du gonbidapenik zain."
 msgid "The %s field cannot be edited from the website."
 msgstr "%s eremua ezin da webetik editatu."
 
+#. translators: %s: text
 #: src/Crm/Escritura.php:145
 #, php-format
 msgid "The %s field cannot be written from the website."
 msgstr "%s eremua ezin da webetik idatzi."
 
-#: src/Idiomas/Guardados.php:187
+#: src/Idiomas/Guardados.php:196
 msgid "The 14 allergens"
 msgstr "14 alergenoak"
 
@@ -14161,6 +14241,7 @@ msgstr "CRMak ez du zenbakia onartu."
 msgid "The CRM did not accept the value."
 msgstr "CRMak ez du balioa onartu."
 
+#. translators: %s: text
 #: src/Crm/Escritura.php:186
 #, php-format
 msgid "The CRM did not accept: %s."
@@ -14186,6 +14267,7 @@ msgstr "CRMak ez du gordetzen scouter bakoitza zein atalean aritzen den: adieraz
 msgid "The CRM field \"%s\" is the email of another family account in this family: choose the other field, or tick \"Replace\" and choose the account whose email changes."
 msgstr "CRMko «%s» eremua familia honen beste familia-kontu baten emaila da: aukeratu beste eremua, edo markatu «Ordezkatu» eta aukeratu emaila aldatzen zaion kontua."
 
+#. translators: %d: number
 #: src/Crm/SinergiaV41Client.php:174
 #, php-format
 msgid "The CRM has more than %d records visible to this connection and they cannot all be read at once: the result would be incomplete. Tell whoever administers the private area."
@@ -14251,6 +14333,7 @@ msgstr "CRMak ez du erantzuten: saiatu berriro geroago."
 msgid "The CRM record has no email in the chosen field (%s), or the CRM did not respond."
 msgstr "CRMko fitxak ez du emailik aukeratutako eremuan (%s), edo CRMak ez du erantzun."
 
+#. translators: %d: number
 #: src/Sepa/Mandatos.php:166
 #, php-format
 msgid "The CRM record only accepts accounts of up to %d characters (Spanish ones have 24): use a Spanish account."
@@ -14260,6 +14343,7 @@ msgstr "CRMko fitxak gehienez %d karaktereko kontuak onartzen ditu (espainiarrek
 msgid "The CRM records cannot be read right now: it cannot be said that the menu is free of allergens. Try again."
 msgstr "Ezin izan dira CRMko fitxak irakurri orain: ezin da esan menua alergenorik gabe dagoenik. Saiatu berriro."
 
+#. translators: %s: text
 #: src/Crm/SinergiaV41Client.php:73 src/Crm/SinergiaV41Client.php:416
 #, php-format
 msgid "The CRM rejected the sign-in: %s"
@@ -14375,7 +14459,7 @@ msgstr "%s ekitaldiaren kontuak itxita: balantzea azken txosten gisa geratzen da
 msgid "The accounts of event %s are reopened: they can be changed now. When everything is done, close them again."
 msgstr "%s ekitaldiaren kontuak berriro irekita: aldatu daitezke jada. Dena prest dagoenean, itxi berriro."
 
-#: src/Idiomas/Guardados.php:211 src/Idiomas/TextosJs.php:46
+#: src/Idiomas/Guardados.php:221 src/Idiomas/TextosJs.php:46
 msgid "The action could not be completed. Reload the page to see how it has ended up."
 msgstr "Ezin izan da ekintza osatu. Birkargatu orria nola geratu den ikusteko."
 
@@ -14443,6 +14527,7 @@ msgstr "Banku-sarrera txandako kuotari soilik lotzen zaio. Ekitaldi baterako, ke
 msgid "The bank deposit is pending reconciliation again."
 msgstr "Bankuko sarrera berriro dago adiskidetzeko."
 
+#. translators: %s: text
 #: src/Frontend/Views/TesoreriaView.php:438
 #, php-format
 msgid "The bank deposit of %s is pending reconciliation again."
@@ -14578,7 +14663,7 @@ msgstr "Harremanetarako emaila ez da baliozkoa."
 msgid "The correct format (7 + group + 4 digits) will be saved in the CRM for all old-format numbers (including those of records without an active membership). It is done in the background: you can keep using the website. Continue?"
 msgstr "Formatu zaharra duten zenbaki guztien formatu zuzena (7 + taldea + 4 zifra) CRMan gordeko da (kidetza aktiborik gabeko fitxenak ere bai). Atzeko planoan egiten da: webak erabiltzen jarrai dezakezu. Jarraitu nahi duzu?"
 
-#: src/Idiomas/Guardados.php:271 src/Idiomas/TextosJs.php:28
+#: src/Idiomas/Guardados.php:282 src/Idiomas/TextosJs.php:28
 msgid "The correction will be stopped. What has already been corrected stays corrected. Stop?"
 msgstr "Zuzenketa geldituko da. Zuzenduta dagoena zuzenduta geratzen da. Gelditu nahi duzu?"
 
@@ -14604,11 +14689,13 @@ msgstr "Hartzekodunaren izena falta da (kobratzen duen taldearena edo elkarteare
 msgid "The current membership is closed with the reason \"change of section\" and another is opened in the new section, with the same date."
 msgstr "Uneko kidetza «atal-aldaketa» arrazoiarekin ixten da eta beste bat irekitzen da atal berrian, data berarekin."
 
+#. translators: %s: text
 #: templates/informes/editor.php:124
 #, php-format
 msgid "The current one (%s)"
 msgstr "Oraingoa (%s)"
 
+#. translators: 1: text, 2: text, 3: text
 #: src/ListaEspera/Avisos.php:186
 #, php-format
 msgid "The data of <strong>%1$s</strong> on the waiting list of <strong>%2$s</strong> will be deleted on <strong>%3$s</strong>."
@@ -14630,6 +14717,7 @@ msgstr "Izen-emate honen datuak ez dira gehiago gordetzen (ezabatu egin ziren ed
 msgid "The date and amount (or the debit and credit) are required. The choice is remembered for the next files with the same columns."
 msgstr "Data eta zenbatekoa behar dira (edo kargua eta abonua). Aukera gogoratu egiten da zutabe berberak dituzten hurrengo fitxategietarako."
 
+#. translators: %s: text
 #: src/Caja/Servicio.php:362
 #, php-format
 msgid "The date cannot be earlier than the cash box's opening balance (%s)."
@@ -14659,6 +14747,7 @@ msgstr "Jaiotze-data falta da."
 msgid "The date of birth is not valid."
 msgstr "Jaiotze-data ez da baliozkoa."
 
+#. translators: %s: text
 #: src/Crm/Altas.php:369
 #, php-format
 msgid "The date of the change cannot be earlier than the registration date in the current section (%s)."
@@ -14684,6 +14773,7 @@ msgstr "Beherapena ezin da prezioa baino handiagoa izan."
 msgid "The dish is replaced"
 msgstr "Platera ordezten da"
 
+#. translators: %d: number
 #: src/Crm/Altas.php:578 src/ListaEspera/Formulario.php:61 templates/personas/alta.php:89
 #, php-format
 msgid "The document is required from age %d."
@@ -14767,6 +14857,7 @@ msgstr "Atal bakoitzeko aurreikusitako parte-hartzaileak «Editatu datuak» atal
 msgid "The expected participants of each section are used to calculate the price and the monitor ratio. Places are the maximum (0 = no limit)."
 msgstr "Atal bakoitzeko aurreikusitako parte-hartzaileek prezioa eta begiraleen ratioa kalkulatzeko balio dute. Plazak gehienekoa dira (0 = mugarik gabe)."
 
+#. translators: 1: text, 2: text, 3: text
 #: src/Eventos/Cuentas.php:266
 #, php-format
 msgid "The expenses (%1$s) and what was returned (%2$s) do not add up to the advance (%3$s): write a note with the reason for the difference."
@@ -14845,6 +14936,7 @@ msgstr ""
 msgid "The file carries the families' accounts unencrypted: keep it only as long as necessary and delete it from the computer after uploading it to the bank."
 msgstr "Fitxategiak familien kontuak zifratu gabe ditu: gorde behar den denbora soilik eta ezabatu ordenagailutik bankura igo ondoren."
 
+#. translators: %d: number
 #: src/Frontend/Views/InventarioView.php:163 src/Frontend/Views/TiendaProductosView.php:196
 #, php-format
 msgid "The file could not be uploaded. It must be a CSV of up to %d MB."
@@ -14868,6 +14960,7 @@ msgstr "Fitxategiak goiburua baino ez du: ez dago inportatzeko materialik."
 msgid "The file has only the header: there is no product to load."
 msgstr "Fitxategiak goiburua soilik du: ez dago kargatzeko produkturik."
 
+#. translators: %d: number
 #: src/Inventario/Importador.php:102 src/Tienda/ImportadorProductos.php:114
 #, php-format
 msgid "The file has too many rows (at most %d). Split it into several."
@@ -14891,6 +14984,7 @@ msgstr "Fitxategia hutsik dago."
 msgid "The file is not a CSV (it looks like an Excel sheet or another format). Save it as \"CSV (semicolon delimited)\" and try again."
 msgstr "Fitxategia ez da CSV bat (Excel orri bat edo beste formatu bat dirudi). Gorde «CSV (puntu eta komaz mugatua)» gisa eta saiatu berriro."
 
+#. translators: %d: number
 #: src/Inventario/Importador.php:65 src/Tienda/ImportadorProductos.php:81
 #, php-format
 msgid "The file is too large (at most %d MB)."
@@ -14924,6 +15018,7 @@ msgstr "Sarbidea duen lehen pertsonak emaila jasoko du bere kontua aktibatzeko."
 msgid "The first row must be the column row: Recipe; Type; Portions; Ingredient; Quantity; Unit."
 msgstr "Lehen lerroak zutabeen lerroa izan behar du: Receta; Tipo; Porciones; Ingrediente; Cantidad; Unidad."
 
+#. translators: %s: text
 #: src/Inventario/Importador.php:83 src/Tienda/ImportadorProductos.php:96
 #, php-format
 msgid "The first row must be the header with the column names, and these are missing: %s. Download the example to see what it must look like."
@@ -15153,6 +15248,7 @@ msgstr "NANaren letra ez dator bat bere zenbakiekin. Berrikusi."
 msgid "The letter of the foreigner ID number does not match its digits. Check it."
 msgstr "AIZren letra ez dator bat bere zenbakiekin. Berrikusi."
 
+#. translators: %d: number
 #: src/Tienda/ProductosTable.php:113
 #, php-format
 msgid "The limit per person must be a number from 0 to %d (0 = no limit)."
@@ -15178,6 +15274,7 @@ msgstr "Esteka pertsonala da, erabilera bakarrekoa eta 24 ordutan iraungitzen da
 msgid "The link is single-use and valid for %d days. You will need your group's CRM username and password."
 msgstr "Esteka aldi bakarrerako da eta %d egunez balio du. Zure taldeko CRMaren erabiltzailea eta pasahitza beharko dituzu."
 
+#. translators: %d: number
 #: src/ListaEspera/Avisos.php:127
 #, php-format
 msgid "The link is valid for %d days. If it was not you, ignore this email: the sign-up will be deleted by itself."
@@ -15187,7 +15284,7 @@ msgstr "Esteka %d egunez da baliozkoa. Zu izan ez bazara, ez ikusi egin mezu hon
 msgid "The link to join the waiting list, the list for the team and the handover to the CRM."
 msgstr "Itxaron-zerrendan izena emateko esteka, ekipoarentzako zerrenda eta CRMrako urratsa."
 
-#: src/Idiomas/Guardados.php:210 src/Idiomas/TextosJs.php:45
+#: src/Idiomas/Guardados.php:220 src/Idiomas/TextosJs.php:45
 msgid "The list could not be updated. Reload the page."
 msgstr "Ezin izan da zerrenda eguneratu. Birkargatu orria."
 
@@ -15277,7 +15374,7 @@ msgstr "Fitxa honen zenbakiak ez du formatu zaharrik."
 msgid "The numbers generated from the website will be saved in the CRM. It is done in the background. Continue?"
 msgstr "Webetik sortutako zenbakiak CRMan gordeko dira. Atzeko planoan egiten da. Jarraitu nahi duzu?"
 
-#: src/Idiomas/Guardados.php:209
+#: src/Idiomas/Guardados.php:219
 msgid "The offered place was not confirmed in time"
 msgstr "Eskainitako plaza ez zen garaiz berretsi"
 
@@ -15409,12 +15506,13 @@ msgstr "Prezioa aurreikusitako parte-hartzaileekin kalkulatzen da eta, behin bal
 msgid "The price is not valid (for example: 12,50)."
 msgstr "Prezioa ez da baliozkoa (adibidez: 12,50)."
 
+#. translators: %s: text
 #: src/Inventario/Servicio.php:84 src/Inventario/Servicio.php:120
 #, php-format
 msgid "The price of \"%s\" is not valid (for example: 12,50)."
 msgstr "«%s» materialaren prezioa ez da baliozkoa (adibidez: 12,50)."
 
-#: src/Idiomas/Guardados.php:272
+#: src/Idiomas/Guardados.php:283
 msgid "The price of one or two buses can be recorded."
 msgstr "Autobus baten edo biren prezioa idatz daiteke."
 
@@ -15422,6 +15520,7 @@ msgstr "Autobus baten edo biren prezioa idatz daiteke."
 msgid "The price, with a comma or point for the decimals (12,50). The year of purchase, with four digits or blank."
 msgstr "Prezioa, hamartarretarako koma edo puntuarekin (12,50). Erosketa-urtea, lau zifrarekin edo hutsik."
 
+#. translators: %d: number
 #: templates/fichas/cambios.php:179
 #, php-format
 msgid "The proposals already reviewed and the changes made directly on records by the Secretary's office, Coordination or the scouters (of these, those of the last %d days)."
@@ -15431,6 +15530,7 @@ msgstr "Jada berrikusitako proposamenak eta Idazkaritzak, Koordinazioak edo scou
 msgid "The quantity is not valid."
 msgstr "Kopurua ez da baliozkoa."
 
+#. translators: %d: number
 #: src/Inventario/MaterialesTable.php:101
 #, php-format
 msgid "The quantity must be a whole number from 0 to %d."
@@ -15440,6 +15540,7 @@ msgstr "Kopuruak 0 eta %d arteko zenbaki osoa izan behar du."
 msgid "The quantity must be a whole number greater than zero."
 msgstr "Kantitatea zero baino handiagoa den zenbaki oso bat izan behar da."
 
+#. translators: %s: text
 #: src/Inventario/Servicio.php:79 src/Inventario/Servicio.php:115
 #, php-format
 msgid "The quantity to buy of \"%s\" is not valid."
@@ -15531,6 +15632,7 @@ msgstr "Ezin da bigarren kontua sortu: erabiltzailearentzako bazkide-zenbaki bal
 msgid "The section could not be assigned."
 msgstr "Ezin izan da atala esleitu."
 
+#. translators: 1: text, 2: number
 #: src/Inventario/Importador.php:169
 #, php-format
 msgid "The serial no. \"%1$s\" is already in row %2$d of the file."
@@ -15566,6 +15668,7 @@ msgstr "Izen-emateak ez du baliozko emailik."
 msgid "The sign-up of %1$s for %2$s is confirmed."
 msgstr "%1$s(r)en izen-ematea %2$s ekitaldian berretsita dago."
 
+#. translators: 1: text, 2: text
 #: src/ListaEspera/Avisos.php:138
 #, php-format
 msgid "The sign-up of <strong>%1$s</strong> on the waiting list of <strong>%2$s</strong> is confirmed. We will contact you when a place is available."
@@ -15575,11 +15678,13 @@ msgstr "<strong>%1$s</strong>(r)en izen-ematea <strong>%2$s</strong>(r)en itxaro
 msgid "The status could not be changed."
 msgstr "Ezin izan da egoera aldatu."
 
+#. translators: %s: text
 #: src/Frontend/Views/TiendaProductosView.php:321
 #, php-format
 msgid "The stock change of \"%s\" must be a whole number (for example +5 or -2)."
 msgstr "«%s» izakinen aldaketak zenbaki osoa izan behar du (adibidez +5 edo -2)."
 
+#. translators: %s: text
 #: src/Frontend/Views/TiendaProductosView.php:317
 #, php-format
 msgid "The stock of \"%s\" is changed in the general inventory, not here."
@@ -15629,6 +15734,7 @@ msgstr "Iragazki honetako mugimenduak («Guztiak» aukeratuta, erregistro guztia
 msgid "The two passwords do not match."
 msgstr "Bi pasahitzak ez datoz bat."
 
+#. translators: 1: text, 2: number
 #: src/Tesoreria/Banco/TiposMovimiento.php:204
 #, php-format
 msgid "The type \"%1$s\" is used by %2$d bank transaction: change its type before deleting it."
@@ -15636,6 +15742,7 @@ msgid_plural "The type \"%1$s\" is used by %2$d bank transactions: change their 
 msgstr[0] "«%1$s» mota bankuko %2$d mugimenduk erabiltzen du: aldatu haren mota ezabatu aurretik."
 msgstr[1] "«%1$s» mota bankuko %2$d mugimenduk erabiltzen dute: aldatu haien mota ezabatu aurretik."
 
+#. translators: 1: text, 2: number
 #: src/Inventario/TiposTable.php:195
 #, php-format
 msgid "The type \"%1$s\" is used by %2$d item of equipment: change its type before deleting it."
@@ -15643,12 +15750,13 @@ msgid_plural "The type \"%1$s\" is used by %2$d items of equipment: change their
 msgstr[0] "«%1$s» mota %2$d materialek erabiltzen du: aldatu haren mota ezabatu aurretik."
 msgstr[1] "«%1$s» mota %2$d materialek erabiltzen dute: aldatu haien mota ezabatu aurretik."
 
+#. translators: %s: text
 #: src/Inventario/Importador.php:157
 #, php-format
 msgid "The type \"%s\" does not exist."
 msgstr "«%s» mota ez dago."
 
-#: src/Idiomas/Guardados.php:212 src/Idiomas/TextosJs.php:59
+#: src/Idiomas/Guardados.php:222 src/Idiomas/TextosJs.php:59
 msgid "The type could not be created. Try again."
 msgstr "Ezin izan da mota sortu. Saiatu berriro."
 
@@ -15706,6 +15814,7 @@ msgstr "Webguneak ezin du egiaztatu kredentzial hau irakurtzeko soilik denik: be
 msgid "The whole event"
 msgstr "Ekitaldi osoa"
 
+#. translators: %s: text
 #: src/Crm/Altas.php:298
 #, php-format
 msgid "The withdrawal date cannot be earlier than the registration date (%s)."
@@ -15719,6 +15828,7 @@ msgstr "Baja-data ezin da gaur baino geroagokoa izan."
 msgid "The withdrawal date is the day they stop being in the group: from that day they no longer count as a member."
 msgstr "Baja-data taldean egoteari uzten dion eguna da: egun horretatik aurrera ez da bazkidetzat hartzen."
 
+#. translators: 1: number, 2: number
 #: src/Inventario/MaterialesTable.php:111
 #, php-format
 msgid "The year of purchase must be between %1$d and %2$d (or left blank)."
@@ -15793,6 +15903,7 @@ msgstr "%1$d pertsona daude praktiketan eta %2$d titulatu: praktiketan ezin da t
 msgid "There are %1$d · other events %2$d"
 msgstr "%1$d dago · beste ekitaldiak %2$d"
 
+#. translators: %d: number
 #: src/Eventos/Cuentas.php:467
 #, php-format
 msgid "There are %d advance(s) to settle."
@@ -15804,6 +15915,7 @@ msgstr "Likidatzeko %d aurrerakin daude."
 msgid "There are %d expense(s) to review."
 msgstr "Berrikusteko %d gastu daude."
 
+#. translators: %d: number
 #: src/Eventos/Cuentas.php:463
 #, php-format
 msgid "There are %d reimbursement(s) pending."
@@ -15816,7 +15928,7 @@ msgid "There are %d youth members whose fee does not cover the registration and 
 msgstr "%d hezigairen kuota ez da iristen izen-ematera eta asegurura (bekak edo doikuntzak): ez diote ezer ematen beren atalari, eta falta dena taldeak jartzen du."
 
 #. translators: 1: text, 2: text
-#: src/Idiomas/Guardados.php:316 src/Idiomas/TextosJs.php:50
+#: src/Idiomas/Guardados.php:327 src/Idiomas/TextosJs.php:50
 #, php-format
 msgid "There are already %1$s units of \"%2$s\" in the inventory. Do more really need to be bought?"
 msgstr "Inbentarioan dagoeneko %1$s unitate daude «%2$s» materialetik. Ziur gehiago erosi behar dela?"
@@ -15985,6 +16097,7 @@ msgstr "Ez dago ordaindu gabeko eskaerarik aldi honetan."
 msgid "There are no users yet. Start with the"
 msgstr "Oraindik ez dago erabiltzailerik. Hasi hemendik:"
 
+#. translators: %s: text
 #: src/Tienda/Servicio.php:167 src/Tienda/Servicio.php:294
 #, php-format
 msgid "There are not enough units of \"%s\" left."
@@ -16023,7 +16136,7 @@ msgid "There is a swimming pool or sea: a lifeguard must be present."
 msgstr "Igerilekua edo itsasoa dago: sorospen-langile batek egon behar du."
 
 #. translators: %s: text
-#: src/Idiomas/Guardados.php:317 src/Idiomas/TextosJs.php:49
+#: src/Idiomas/Guardados.php:328 src/Idiomas/TextosJs.php:49
 #, php-format
 msgid "There is already 1 unit of \"%s\" in the inventory. Do more really need to be bought?"
 msgstr "Inbentarioan dagoeneko unitate 1 dago «%s» materialetik. Ziur gehiago erosi behar dela?"
@@ -16048,11 +16161,13 @@ msgstr "Badago «%s» izeneko mota bat."
 msgid "There is already an ingredient with that name."
 msgstr "Badago izen hori duen osagai bat."
 
+#. translators: %s: text
 #: src/Inventario/Importador.php:171
 #, php-format
 msgid "There is already an item with the serial no. \"%s\" in the inventory."
 msgstr "Badago «%s» serie-zenbakia duen material bat inbentarioan."
 
+#. translators: %d: number
 #: src/Inventario/Importador.php:197
 #, php-format
 msgid "There is already an item with this description and type, and adding this quantity to it would take it above %d units."
@@ -16238,6 +16353,7 @@ msgstr "Ezer ez ahazteko oharrak dira: ez dute argitaratzea eragozten. Derrigorr
 msgid "These are the people with allergies, intolerances or diets that match the menu of %1$s (%2$s). Valid as of %3$s: if anything changes, it will be sent again."
 msgstr "Hauek dira %1$s ekitaldiaren menuarekin (%2$s) bat datozen alergia, intolerantzia edo dieta dutenak. %3$s egunean baliozkoa: zerbait aldatzen bada, berriro bidaliko da."
 
+#. translators: %s: text
 #: src/ListaEspera/Avisos.php:169
 #, php-format
 msgid "These are the sign-ups with this email on the waiting list of <strong>%s</strong>:"
@@ -16343,6 +16459,7 @@ msgstr "Ez du kidetza aktiborik: Pertsonak atalean ez da gehiago agertuko, bere 
 msgid "They have not confirmed their email yet: they do not go on the list until they do. If they don't confirm within %d days, it is deleted by itself."
 msgstr "Oraindik ez du bere emaila berretsi: berretsi arte ez da zerrendan sartzen. %d egunetan berresten ez badu, bere kabuz ezabatzen da."
 
+#. translators: %s: text
 #: src/Frontend/Views/FichaView.php:355
 #, php-format
 msgid "They stop counting in the fee of family no. %s: Treasury will see it in \"Recent withdrawals\"."
@@ -16841,11 +16958,11 @@ msgstr "Balioztatzeko"
 msgid "To whom"
 msgstr "Nori"
 
-#: src/Idiomas/Guardados.php:293
+#: src/Idiomas/Guardados.php:304
 msgid "Toast with oil and tomato"
 msgstr "Ogi txigortua olioarekin eta tomatearekin"
 
-#: src/Idiomas/Guardados.php:290
+#: src/Idiomas/Guardados.php:301
 msgid "Tomato"
 msgstr "Tomatea"
 
@@ -16915,7 +17032,7 @@ msgstr "Prestatzailearen Harrera Etapa (EAF)"
 msgid "Trainers' Trainer Stage (EFF)"
 msgstr "Prestatzaileen Prestatzailearen Etapa (EFF)"
 
-#: src/Eventos/Config.php:114 src/Tesoreria/Config.php:53
+#: src/Eventos/Config.php:114 src/Idiomas/Guardados.php:154
 msgid "Training"
 msgstr "Prestakuntza"
 
@@ -16943,7 +17060,7 @@ msgstr "Mugimenduak"
 msgid "Transactions of the round"
 msgstr "Txandako mugimenduak"
 
-#: src/Eventos/GastosTable.php:58 src/Idiomas/Guardados.php:294 src/Tesoreria/MovimientosTable.php:27 src/Tienda/PedidosTable.php:43
+#: src/Eventos/GastosTable.php:58 src/Idiomas/Guardados.php:305 src/Tesoreria/MovimientosTable.php:27 src/Tienda/PedidosTable.php:43
 msgid "Transfer"
 msgstr "Transferentzia"
 
@@ -16973,6 +17090,7 @@ msgstr "Lekualdaketa gordeta."
 msgid "Transfer the generated numbers to the CRM"
 msgstr "Pasatu CRMra sortutako zenbakiak"
 
+#. translators: %s: text
 #: src/Caja/LibroMayor.php:175
 #, php-format
 msgid "Transfer to %s"
@@ -16982,6 +17100,7 @@ msgstr "%s(r)ako lekualdaketa"
 msgid "Transfer to the CRM"
 msgstr "Pasatu CRMra"
 
+#. translators: 1: text, 2: text
 #: src/Tienda/Servicio.php:431
 #, php-format
 msgid "Transfer to the account %1$s, stating order no. %2$s as the description."
@@ -16993,6 +17112,7 @@ msgstr "Transferentzia %1$s kontura, kontzeptu gisa %2$s eskaera-zenbakia adiera
 msgid "Transfer to the group's account, stating order no. %s as the description."
 msgstr "Transferentzia taldearen kontura, kontzeptu gisa %s eskaera-zenbakia adieraziz."
 
+#. translators: %s: text
 #: templates/tesoreria/banco.php:225
 #, php-format
 msgid "Transfer: %s"
@@ -17006,7 +17126,7 @@ msgstr "Bankuarekiko lekualdaketak Diruzaintzak egiten ditu."
 msgid "Transport"
 msgstr "Garraioa"
 
-#: src/Domain/Modulos.php:46 src/Frontend/Menu.php:99 src/Idiomas/Guardados.php:286 templates/area/inicio.php:185
+#: src/Domain/Modulos.php:46 src/Frontend/Menu.php:99 src/Idiomas/Guardados.php:297 templates/area/inicio.php:185
 msgid "Treasury"
 msgstr "Diruzaintza"
 
@@ -17098,7 +17218,7 @@ msgstr "Bi urratseko egiaztapenak taldearen datuak babesten ditu: zure pasahitza
 msgid "Two-step verification."
 msgstr "Bi urratseko egiaztapena."
 
-#: src/Eventos/Cuentas.php:545 src/Idiomas/Guardados.php:288 src/Inventario/Importador.php:37 src/Inventario/ListaPdf.php:67
+#: src/Eventos/Cuentas.php:545 src/Idiomas/Guardados.php:299 src/Inventario/Importador.php:37 src/Inventario/ListaPdf.php:67
 msgid "Type"
 msgstr "Mota"
 
@@ -17148,11 +17268,13 @@ msgstr "UTF-8"
 msgid "Unassigned"
 msgstr "Esleitu gabe"
 
+#. translators: %d: number
 #: src/ListaEspera/Formulario.php:65
 #, php-format
 msgid "Under %d years of age, enter the first name and surname of the mother, father or guardian."
 msgstr "%d urtetik behera, idatzi amaren, aitaren edo tutorearen izena eta abizenak."
 
+#. translators: %d: number
 #: src/Crm/Altas.php:589 templates/personas/alta.php:189
 #, php-format
 msgid "Under %d years of age, guardian 1 is required: first name, surname and email."
@@ -17188,7 +17310,7 @@ msgstr "Desegin nahi duzu?"
 msgid "Unidad"
 msgstr "Unitatea"
 
-#: src/Idiomas/Guardados.php:300 src/Tienda/ImportadorProductos.php:262 templates/pagos/mis-pagos.php:131 templates/tienda/detalle.php:167
+#: src/Idiomas/Guardados.php:311 src/Tienda/ImportadorProductos.php:262 templates/pagos/mis-pagos.php:131 templates/tienda/detalle.php:167
 msgid "Uniform"
 msgstr "Uniformea"
 
@@ -17272,7 +17394,7 @@ msgstr "%d urte arte"
 msgid "Up to 3 digits (e.g. 684). It is the key to everything about the group and cannot be changed afterwards."
 msgstr ""
 
-#: src/Idiomas/Guardados.php:159
+#: src/Idiomas/Guardados.php:168
 msgid "Up to 5 expenses."
 msgstr "5 gastu arte."
 
@@ -17292,11 +17414,11 @@ msgstr "Eguneratu"
 msgid "Update now"
 msgstr "Eguneratu orain"
 
-#: src/Idiomas/Guardados.php:52
+#: src/Idiomas/Guardados.php:53
 msgid "Update the details before sending the record."
 msgstr "Eguneratu datuak fitxa bidali aurretik."
 
-#: src/Idiomas/Guardados.php:51 src/Idiomas/TextosJs.php:44
+#: src/Idiomas/Guardados.php:52 src/Idiomas/TextosJs.php:44
 msgid "Updating…"
 msgstr "Eguneratzen…"
 
@@ -17304,7 +17426,7 @@ msgstr "Eguneratzen…"
 msgid "Upload it to the bank (Colonya Directa: \"Direct debit batches\") and mark it as"
 msgstr "Igo bankura (Colonya Directa: «Kargu-remesak») eta markatu honela:"
 
-#: src/Idiomas/Guardados.php:283
+#: src/Idiomas/Guardados.php:294
 msgid "Upload photos of the camp to the group website"
 msgstr "Kanpaldiko argazkiak taldearen webgunera igo"
 
@@ -17320,11 +17442,11 @@ msgstr "Erabilera-eskuliburua"
 msgid "Username"
 msgstr "Erabiltzailea"
 
-#: src/Frontend/Menu.php:102 src/Idiomas/Guardados.php:301 templates/area/inicio.php:190
+#: src/Frontend/Menu.php:102 src/Idiomas/Guardados.php:312 templates/area/inicio.php:190
 msgid "Users"
 msgstr "Erabiltzaileak"
 
-#: src/Idiomas/Guardados.php:303
+#: src/Idiomas/Guardados.php:314
 msgid "Users and requests"
 msgstr "Erabiltzaileak eta eskaerak"
 
@@ -17358,7 +17480,7 @@ msgstr "%s datan baliozkoa"
 msgid "Validate"
 msgstr "Balioztatu"
 
-#: src/Idiomas/Guardados.php:304
+#: src/Idiomas/Guardados.php:315
 msgid "Validate budgets and keep the accounts"
 msgstr "Aurrekontuak balioztatu eta kontuak eraman"
 
@@ -17462,7 +17584,7 @@ msgstr "Ikusi eta inprimatu baimena"
 msgid "View and print the sheet"
 msgstr "Ikusi eta inprimatu orria"
 
-#: src/Idiomas/Guardados.php:312
+#: src/Idiomas/Guardados.php:323
 msgid "View camp site"
 msgstr "Kanpaldiko lekua ikusi"
 
@@ -17574,7 +17696,7 @@ msgstr "WP administratzailea"
 msgid "Waiting"
 msgstr "Zain"
 
-#: src/Domain/Modulos.php:54 src/Frontend/Menu.php:96 src/Idiomas/Guardados.php:182 src/Usuarios/RegistroEmails.php:84
+#: src/Domain/Modulos.php:54 src/Frontend/Menu.php:96 src/Idiomas/Guardados.php:191 src/Usuarios/RegistroEmails.php:84
 msgid "Waiting list"
 msgstr "Itxaron-zerrenda"
 
@@ -17594,7 +17716,7 @@ msgstr "Itxaron-zerrendaren esteka berritu da: aurrekoak ez du jada balio."
 msgid "Waiting list of %s"
 msgstr "%s(r)en itxaron-zerrenda"
 
-#: src/Idiomas/Guardados.php:214
+#: src/Idiomas/Guardados.php:224
 msgid "Walnut"
 msgstr "Intxaurra"
 
@@ -17650,6 +17772,7 @@ msgstr "Zure sarbide-eskaera egiaztatu dugu eta onartuta dago. Eremu pribatutik 
 msgid "We have received a request to choose a new password for the user <strong>%s</strong> (with which you can also sign in using this email address)."
 msgstr "<strong>%s</strong> erabiltzailearentzat pasahitz berri bat aukeratzeko eskaera jaso dugu (email-helbide hau erabiliz ere sartu zaitezke)."
 
+#. translators: 1: text, 2: text
 #: src/ListaEspera/Avisos.php:121
 #, php-format
 msgid "We have received the sign-up of <strong>%1$s</strong> on the waiting list of <strong>%2$s</strong>."
@@ -17691,6 +17814,7 @@ msgstr "Email bat bidali dizugu izen-ematea berresteko. Bere esteka sakatzen ez 
 msgid "We keep your data until"
 msgstr "Zure datuak noiz arte gordetzen ditugun"
 
+#. translators: %s: text
 #: src/ListaEspera/Avisos.php:140
 #, php-format
 msgid "We keep your data, encrypted, until %s. We will notify you beforehand so you can keep it."
@@ -17852,7 +17976,7 @@ msgstr "Ordaindu duzuna hemen ikusten duzu:"
 msgid "What you paid for"
 msgstr "Zer ordaindu zenuen"
 
-#: src/Idiomas/Guardados.php:295
+#: src/Idiomas/Guardados.php:306
 msgid "Wheat"
 msgstr "Garia"
 
@@ -17934,7 +18058,7 @@ msgstr "Eremu pribatuak familiei eta izena emandako pertsonei zer abisu bidaltze
 msgid "Which values of the leisure-time training on the record count as a director qualification (also valid as monitor) or as a monitor qualification. If you tick none, it is deduced from the text (\"director\", \"monitor\")."
 msgstr "Fitxako aisialdiko prestakuntzaren zein balio diren zuzendari-titulu (begirale gisa ere balio du) edo begirale-titulu. Bat ere markatzen ez baduzu, testutik ondorioztatzen da («director», «monitor»)."
 
-#: src/Idiomas/Guardados.php:235
+#: src/Idiomas/Guardados.php:245
 msgid "White fish"
 msgstr "Arrain zuria"
 
@@ -17950,7 +18074,7 @@ msgstr "Nork eman edo kendu zuen baimen bakoitza, norri eta noiz, eta bere kabuz
 msgid "Who has access, give access to a member or their family, invitations, withdrawals and the email log."
 msgstr "Nork duen sarbidea, bazkide bati edo bere familiari sarbidea ematea, gonbidapenak, bajak eta emailen erregistroa."
 
-#: src/Idiomas/Guardados.php:250
+#: src/Idiomas/Guardados.php:260
 msgid "Who has paid the round's fee and how much each family still owes."
 msgstr "Nork ordaindu duen txandako kuota eta familia bakoitzari zenbat falta zaion."
 
@@ -18151,7 +18275,7 @@ msgstr "Baja-abisua"
 msgid "Withdrawals and \"not going\" (%d)"
 msgstr "Bajak eta «ez da joango» (%d)"
 
-#: src/Idiomas/Guardados.php:263
+#: src/Idiomas/Guardados.php:273
 msgid "Withdrawn"
 msgstr "Kendua"
 
@@ -18171,11 +18295,11 @@ msgstr "Datarik gabe, izen-ematea argitaratzean irekitzen da eta ekitaldia haste
 msgid "Working day, at the earliest"
 msgstr "Lanegun bat, gutxienez"
 
-#: src/Idiomas/Guardados.php:136
+#: src/Idiomas/Guardados.php:143
 msgid "Write a camp post on the group website"
 msgstr "Kanpaldiari buruzko mezu bat idatzi taldearen webgunean"
 
-#: src/Idiomas/Guardados.php:258
+#: src/Idiomas/Guardados.php:268
 msgid "Write the letter and photocopy it"
 msgstr "Gutuna idatzi eta fotokopiatu"
 
@@ -18203,6 +18327,7 @@ msgstr "Baja-data: %1$s. Nork: %2$s."
 msgid "Written on the request"
 msgstr "Eskaeran idatzia"
 
+#. translators: %s: text
 #: src/Caja/Periodo.php:24
 #, php-format
 msgid "Year %s"
@@ -18220,7 +18345,7 @@ msgstr "Erosketa-urtea (aukerakoa)"
 msgid "Year of the premiums"
 msgstr "Primen urtea"
 
-#: src/Fichas/FichaService.php:185 src/Idiomas/Guardados.php:284 src/Informes/Catalogo.php:151 src/ListaEspera/CamposExtra.php:161
+#: src/Fichas/FichaService.php:185 src/Idiomas/Guardados.php:295 src/Informes/Catalogo.php:151 src/ListaEspera/CamposExtra.php:161
 msgid "Yes"
 msgstr "Bai"
 
@@ -18232,11 +18357,11 @@ msgstr "Bai (Idazkaritzak eta Koordinazioak ikusten dute)"
 msgid "Yes, always report it"
 msgstr "Bai, beti jakinarazi"
 
-#: src/Idiomas/Guardados.php:318
+#: src/Idiomas/Guardados.php:329
 msgid "Yoghurt"
 msgstr "Jogurta"
 
-#: src/Idiomas/Guardados.php:319
+#: src/Idiomas/Guardados.php:330
 msgid "Yoghurt with fruit"
 msgstr "Jogurta fruitarekin"
 
@@ -18276,6 +18401,7 @@ msgstr "Laguntzen duzun atalei soilik dei diezaiekezu."
 msgid "You can only sign up to a published event that has not yet ended."
 msgstr "Argitaratuta dagoen eta oraindik amaitu ez den ekitaldi batean bakarrik eman daiteke izena."
 
+#. translators: 1: text, 2: text
 #: src/ListaEspera/Avisos.php:204
 #, php-format
 msgid "You can reply to this email. You are on the waiting list of %1$s: <a href=\"%2$s\">see my details</a>."
@@ -18285,6 +18411,7 @@ msgstr "Mezu honi erantzun diezaiokezu. %1$s(r)en itxaron-zerrendan zaude: <a hr
 msgid "You can use {grupo} and {ronda}. The family no. is added at the end."
 msgstr "{grupo} eta {ronda} erabil ditzakezu. Amaieran familia-zenbakia gehitzen da."
 
+#. translators: 1: text, 2: text
 #: src/Accesos/PermisosRol.php:162
 #, php-format
 msgid "You cannot add \"%1$s\" to the role %2$s: it is yours and it would be granting the permission to yourself."
@@ -18518,7 +18645,7 @@ msgstr "Ez duzu mugimendurik aukeratu."
 msgid "You have not requested any reimbursement yet."
 msgstr "Oraindik ez duzu itzulketarik eskatu."
 
-#: src/Idiomas/Guardados.php:208 src/Idiomas/TextosJs.php:51
+#: src/Idiomas/Guardados.php:218 src/Idiomas/TextosJs.php:51
 msgid "You have not ticked any equipment from the inventory. Prepare a list with new equipment only?"
 msgstr "Ez duzu inbentarioko materialik markatu. Material berriarekin bakarrik zerrenda bat prestatu?"
 
@@ -18788,6 +18915,7 @@ msgstr "[%1$s] Oroigarria: %2$s"
 msgid "[%1$s] Reminder: order %2$s is unpaid"
 msgstr "[%1$s] Gogorarazpena: %2$s eskaera ordaindu gabe dago"
 
+#. translators: 1: text, 2: text
 #: src/Inventario/AvisoTesoreria.php:48
 #, php-format
 msgid "[%1$s] Shopping list %2$s awaiting your approval"
@@ -18805,16 +18933,19 @@ msgstr "[%1$s] Izen-ematea berretsita: %2$s"
 msgid "[%1$s] Transfer reimbursement awaiting approval: %2$s"
 msgstr "[%1$s] Transferentzia bidezko itzulketa onartzeke: %2$s"
 
+#. translators: 1: text, 2: text
 #: src/Inventario/AvisoRevision.php:31
 #, php-format
 msgid "[%1$s] Treasury has rejected your shopping list %2$s"
 msgstr "[%1$s] Diruzaintzak zure %2$s erosketa-zerrenda ukatu du"
 
+#. translators: 1: text, 2: text
 #: src/Menus/AvisoAlergenos.php:176
 #, php-format
 msgid "[%1$s] Unresolved allergens in the menu of %2$s"
 msgstr "[%1$s] Ebatzi gabeko alergenoak %2$s ekitaldiaren menuan"
 
+#. translators: 1: text, 2: text
 #: src/Inventario/AvisoRevision.php:33
 #, php-format
 msgid "[%1$s] Your shopping list %2$s has Treasury's approval"
@@ -18844,11 +18975,13 @@ msgstr "[%s] Aktibatu eremu pribaturako zure sarbidea"
 msgid "[%s] Choose a new password"
 msgstr "[%s] Aukeratu pasahitz berri bat"
 
+#. translators: %s: text
 #: src/ListaEspera/Avisos.php:118
 #, php-format
 msgid "[%s] Confirm your sign-up on the waiting list"
 msgstr "[%s] Berretsi itxaron-zerrendako izen-ematea"
 
+#. translators: %s: text
 #: src/Usuarios/AvisoBaja.php:115
 #, php-format
 msgid "[%s] Confirmation of withdrawal from the group"
@@ -18860,6 +18993,7 @@ msgstr "[%s] Taldeko bajaren baieztapena"
 msgid "[%s] Invitation to register your group"
 msgstr "[%s] Zure taldea alta emateko gonbidapena"
 
+#. translators: %s: text
 #: src/ListaEspera/Avisos.php:135
 #, php-format
 msgid "[%s] Sign-up on the waiting list confirmed"
@@ -18877,6 +19011,7 @@ msgstr "[%s] Ongi etorri eremu pribatura: aktibatu zure sarbidea"
 msgid "[%s] Welcome to the private area: choose your password"
 msgstr "[%s] Ongi etorri eremu pribatura: aukeratu zure pasahitza"
 
+#. translators: %s: text
 #: src/Usuarios/AvisoBaja.php:113
 #, php-format
 msgid "[%s] Withdrawal of a member in the CRM"
@@ -18888,11 +19023,13 @@ msgstr "[%s] Bazkide baten baja CRMan"
 msgid "[%s] Your group is now registered"
 msgstr "[%s] Zure taldea alta emanda dago jada"
 
+#. translators: %s: text
 #: src/ListaEspera/Avisos.php:183
 #, php-format
 msgid "[%s] Your waiting list data expires soon"
 msgstr "[%s] Itxaron-zerrendako zure datuak laster iraungiko dira"
 
+#. translators: %s: text
 #: src/ListaEspera/Avisos.php:166
 #, php-format
 msgid "[%s] Your waiting list links"
@@ -19178,6 +19315,7 @@ msgstr "honek:"
 msgid "from %d years"
 msgstr "%d urtetik aurrera"
 
+#. translators: %s: text
 #: src/Frontend/Views/TiendaGestionView.php:233
 #, php-format
 msgid "from %s"
@@ -19283,6 +19421,7 @@ msgstr ""
 msgid "mandatory"
 msgstr "derrigorrezkoa"
 
+#. translators: %d: number
 #: src/Fichas/FichaService.php:173
 #, php-format
 msgid "maximum %d characters."
@@ -19608,6 +19747,7 @@ msgstr "koilarakadak"
 msgid "terr."
 msgstr "lurr."
 
+#. translators: %s: text
 #: src/Socios/Numeros.php:128
 #, php-format
 msgid "territorial no.: %s"
@@ -19763,7 +19903,7 @@ msgstr "%d urtera arte"
 msgid "up to that instalment"
 msgstr "epe horretara arte"
 
-#: src/Idiomas/Guardados.php:321 src/Idiomas/TextosJs.php:30
+#: src/Idiomas/Guardados.php:332 src/Idiomas/TextosJs.php:30
 msgid "user"
 msgstr "erabiltzaile"
 
@@ -19771,7 +19911,7 @@ msgstr "erabiltzaile"
 msgid "user registration"
 msgstr "erabiltzaileen alta"
 
-#: src/Idiomas/Guardados.php:322 src/Idiomas/TextosJs.php:31
+#: src/Idiomas/Guardados.php:333 src/Idiomas/TextosJs.php:31
 msgid "users"
 msgstr "erabiltzaile"
 

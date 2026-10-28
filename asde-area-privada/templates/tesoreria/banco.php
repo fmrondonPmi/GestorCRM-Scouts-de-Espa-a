@@ -222,7 +222,7 @@ $revisar = static fn( array $ids ) => add_query_arg(
 							<?php endif; ?>
 							<?php if ( isset( $traspasos[ (int) $m['id'] ] ) ) : ?>
 								<?php /* translators: %s: name of the cash box */ ?>
-								<br><span class="asde-banco-asociado">↔ <?php echo esc_html( sprintf( __( 'Transfer: %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), \AsdeBalears\AreaPrivada\Caja\Cajas::nombre( (string) $traspasos[ (int) $m['id'] ]['caja'] ) ) ); ?></span>
+								<br><span class="asde-banco-asociado">↔ <?php echo esc_html( sprintf( /* translators: %s: text */ __( 'Transfer: %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), \AsdeBalears\AreaPrivada\Caja\Cajas::nombre( (string) $traspasos[ (int) $m['id'] ]['caja'] ) ) ); ?></span>
 							<?php endif; ?>
 							<?php if ( ! empty( $m['asociado_id'] ) ) : ?>
 								<?php $otro = $asociados[ (int) $m['asociado_id'] ] ?? null; ?>
