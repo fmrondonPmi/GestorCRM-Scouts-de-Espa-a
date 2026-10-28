@@ -66,7 +66,7 @@ $ok( ! $en_linea, 'ningún onclick/onsubmit/onchange en el PHP' . ( $en_linea ? 
 $ok( ! $etiquetas, 'ningún <script> ni <style> escrito en el PHP' . ( $etiquetas ? ': ' . implode( ', ', $etiquetas ) : '' ) );
 $area = $leer( 'assets/js/area.js' );
 $ok( str_contains( $area, 'data-asde-confirmar' ) && str_contains( $area, 'data-asde-autoenviar' ) && str_contains( $area, 'data-asde-imprimir-pagina' ), 'area.js atiende confirmar, autoenviar e imprimir' );
-$ok( 'Hola' === asde_js( 'Hola' ) && '¿Borrar A?' === asde_js( '¿Borrar %s?', 'A' ), 'asde_js() da el texto sin escapar (se escapa con esc_attr)' );
+$ok( ! function_exists( 'asde_js' ), 'asde_js() ya no existe (los confirmar usan sprintf( __() ) con data-asde-confirmar)' );
 $ok( is_file( ASDE_AP_DIR . 'assets/css/admin.css' ) && is_file( ASDE_AP_DIR . 'assets/js/admin.js' ) && str_contains( $leer( 'src/Plugin.php' ), 'Admin\\Recursos' ), 'wp-admin: CSS y JS comunes encolados (Admin\\Recursos)' );
 $sin = array();
 foreach ( array( 'src/Audit/Logger.php', 'src/Auth/Intentos.php', 'src/Auth/Limite.php', 'src/Install/AppRetirada.php', 'src/Sepa/Mandatos.php', 'src/Idiomas/Idioma.php' ) as $rel ) {

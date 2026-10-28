@@ -306,7 +306,7 @@ usort( $lineas, static fn( $a, $b ) => strcmp( $b['cuando'], $a['cuando'] ) ?: (
 					<?php
 					$eliminados = count( array_filter( $lineas, static fn( $h ) => $h['eliminado'] ) );
 					/* translators: %d: history entries */
-					echo esc_html( sprintf( /* translators: %d: number */ _n( '%d entry', '%d entries', count( $lineas ) , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), count( $lineas ) ) );
+					echo esc_html( sprintf( /* translators: %d: number */ _n( '%d history entry', '%d history entries', count( $lineas ) , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), count( $lineas ) ) );
 					if ( $eliminados ) {
 						/* translators: %d: deleted transactions */
 						echo ' · ' . esc_html( sprintf( /* translators: %d: number */ _n( '%d deleted', '%d deleted', $eliminados , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $eliminados ) );

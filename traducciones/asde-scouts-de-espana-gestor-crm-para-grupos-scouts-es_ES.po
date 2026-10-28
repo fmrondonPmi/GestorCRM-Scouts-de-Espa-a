@@ -681,7 +681,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %d: number
-#: src/Frontend/Views/CajaView.php:129 templates/tesoreria/familia.php:309
+#: src/Frontend/Views/CajaView.php:129
 #, php-format
 msgid "%d entry"
 msgid_plural "%d entries"
@@ -723,6 +723,14 @@ msgid "%d freed-up place to confirm"
 msgid_plural "%d freed-up places to confirm"
 msgstr[0] "%d plaza que se ha liberado por confirmar"
 msgstr[1] "%d plazas que se han liberado por confirmar"
+
+#. translators: %d: number
+#: templates/tesoreria/familia.php:309
+#, php-format
+msgid "%d history entry"
+msgid_plural "%d history entries"
+msgstr[0] "%d anotación"
+msgstr[1] "%d anotaciones"
 
 #. translators: %d: number
 #: templates/area/inicio.php:92
@@ -12056,7 +12064,7 @@ msgstr "Solicitud"
 msgid "Request a reimbursement"
 msgstr "Pedir un reintegro"
 
-#: src/Idiomas/Guardados.php:291 templates/acceso/formulario.php:75 templates/recuperar/formulario.php:37 templates/solicitudes/formulario.php:33
+#: src/Idiomas/Guardados.php:291 templates/solicitudes/formulario.php:33
 msgid "Request access"
 msgstr "Solicitar acceso"
 
@@ -12107,6 +12115,10 @@ msgstr "Solicitud enviada."
 #: templates/reintegros/index.php:152
 msgid "Request the reimbursement"
 msgstr "Pedir el reintegro"
+
+#: templates/acceso/formulario.php:75 templates/recuperar/formulario.php:37
+msgid "Request your access"
+msgstr "Solicita el acceso"
 
 #: src/Tienda/PedidosTable.php:309 templates/tienda/mis-pedidos.php:44 templates/tienda/publica.php:61
 msgid "Requested"

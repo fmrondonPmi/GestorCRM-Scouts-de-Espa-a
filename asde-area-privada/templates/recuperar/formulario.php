@@ -34,7 +34,7 @@ defined( 'ABSPATH' ) || exit;
 		</form>
 		<p>
 			<a href="<?php echo esc_url( $login ); ?>"><?php esc_html_e( 'Sign in again', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a><br>
-			<span class="asde-muted"><?php esc_html_e( 'Don\'t have an account yet?', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <a href="<?php echo esc_url( $solicitar ); ?>"><?php esc_html_e( 'Request access', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a>.</span>
+			<span class="asde-muted"><?php esc_html_e( 'Don\'t have an account yet?', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <a href="<?php echo esc_url( $solicitar ); ?>"><?php esc_html_e( 'Request your access', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a>.</span>
 		</p>
 	<?php endif; ?>
 </section>

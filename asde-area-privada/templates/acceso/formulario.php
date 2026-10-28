@@ -72,7 +72,7 @@ $ejemplo = \AsdeBalears\AreaPrivada\Domain\NumeroSocio::ejemplo_tutor();
 		</form>
 		<p class="asde-muted">
 			<a href="<?php echo esc_url( $url_recuperar ); ?>"><?php esc_html_e( 'Forgot your password?', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a><br>
-			<?php esc_html_e( 'Don\'t have an account yet?', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <a href="<?php echo esc_url( $url_solicitar ); ?>"><?php esc_html_e( 'Request access', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a><?php esc_html_e( ': we check your details against the group\'s and send you an invitation by email.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>
+			<?php esc_html_e( 'Don\'t have an account yet?', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <a href="<?php echo esc_url( $url_solicitar ); ?>"><?php esc_html_e( 'Request your access', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a><?php esc_html_e( ': we check your details against the group\'s and send you an invitation by email.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>
 		</p>
 	<?php endif; ?>
 </section>

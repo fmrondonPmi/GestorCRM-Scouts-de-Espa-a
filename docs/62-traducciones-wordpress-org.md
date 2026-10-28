@@ -23,7 +23,7 @@ Petición del usuario: que las traducciones del plugin se gestionen en **transla
 | 2 | Conversión del código: `a-gettext.php` (5.959 llamadas), `constantes-a-metodos.php` (74 constantes → métodos), dinámicas resueltas, `Guardados`, `TextosJs` | ✅ (sin probar en WordPress) |
 | 3 | Selector, etiquetas propias y `IdiomasPage` retirados; `Idioma` ahora es una capa sobre `switch_to_locale()` | ✅ (sin probar) |
 | 4 | `herramientas/generar-po.php` → `.pot`, cinco `.po` y `.mo` (4.609 textos; ca/eu/gl sin los 158 de wp-admin) | ✅ |
-| 5 | Adaptar pruebas (cargan es_ES), `estilo-wordpress.php`, skills, CLAUDE.md, manuales | pendiente |
+| 5 | Pruebas adaptadas (`idiomas`, `idiomas-catalogos`, `estilo-wordpress` nuevas; mu-plugin de Local), `CLAUDE.md` y skill `traducir-textos` | ✅ batería del plugin principal: 3.454 OK, 0 fallos |
 
 ## Puntos a confirmar
 
@@ -31,3 +31,10 @@ Petición del usuario: que las traducciones del plugin se gestionen en **transla
 - Textos distintos en castellano que coinciden en inglés (p. ej. «Cerrar» / «Cerrado»): se desambiguan con `_x()` o con otro inglés.
 - La app móvil (otro repo) usaba los filtros `asde_ap_catalogo` y `asde_ap_textos`; desaparecen con este cambio.
 
+
+## Hallazgos de la puesta en marcha
+
+- `switch_to_locale()` solo cambia a idiomas **instalados** en el sitio: los emails a quien tenga un idioma no instalado salen en el del sitio. En producción hay que instalar los paquetes de idioma (ca, eu, gl_ES, valenciano) en Ajustes → Generales.
+- Cuando varios castellanos compartían inglés (59 grupos, casi todos género o número), el `.po` toma el más usado del código original (`traducciones/uso-es.json`); los que importaban se han separado con inglés propio (p. ej. «Pending collections»). Si sale alguno mal, usar `_x()` con contexto.
+- La app móvil (plugin aparte, descartado) usa `asde_t()` y los filtros `asde_ap_catalogo`/`asde_ap_textos`, que ya no existen: sus pruebas `app-plugin` y `pwa-*` fallan en Local.
+- El `.po` de catalán, euskera y gallego no trae los 158 textos de wp-admin (nunca estuvieron traducidos).
