@@ -1,4 +1,4 @@
-# 62 · Traducciones con translate.wordpress.org (plan, 2026-10-28)
+﻿# 62 · Traducciones con translate.wordpress.org (plan, 2026-10-28)
 
 Petición del usuario: que las traducciones del plugin se gestionen en **translate.wordpress.org** (GlotPress) con cinco idiomas: **castellano (es_ES), gallego (gl_ES), euskera (eu), catalán (ca) y valenciano (variante `valencia` de `ca`)**.
 
@@ -19,10 +19,10 @@ Petición del usuario: que las traducciones del plugin se gestionen en **transla
 
 | # | Fase | Estado |
 |---|---|---|
-| 1 | Mapa castellano → inglés de los 4.583 textos (`traducciones/es-en.json`) | pendiente |
-| 2 | Herramienta de conversión del código (`herramientas/a-gettext.php`) + constantes + `TextosJs` | pendiente |
-| 3 | Retirar selector, etiquetas e `Idioma`; emails con `switch_to_user_locale` | pendiente |
-| 4 | Generar `.pot` y los cinco `.po` (+ `.mo` para pruebas) | pendiente |
+| 1 | Mapa castellano → inglés de los 4.583 textos (`traducciones/es-en.json`, +162 de wp-admin) | ✅ |
+| 2 | Conversión del código: `a-gettext.php` (5.959 llamadas), `constantes-a-metodos.php` (74 constantes → métodos), dinámicas resueltas, `Guardados`, `TextosJs` | ✅ (sin probar en WordPress) |
+| 3 | Selector, etiquetas propias y `IdiomasPage` retirados; `Idioma` ahora es una capa sobre `switch_to_locale()` | ✅ (sin probar) |
+| 4 | `herramientas/generar-po.php` → `.pot`, cinco `.po` y `.mo` (4.609 textos; ca/eu/gl sin los 158 de wp-admin) | ✅ |
 | 5 | Adaptar pruebas (cargan es_ES), `estilo-wordpress.php`, skills, CLAUDE.md, manuales | pendiente |
 
 ## Puntos a confirmar
@@ -30,3 +30,4 @@ Petición del usuario: que las traducciones del plugin se gestionen en **transla
 - Código de WordPress del valenciano (`ca_valencia` / `ca@valencia`): comprobarlo en la lista de idiomas de translate.wordpress.org (`/locale/ca/valencia/`) antes de generar el `.po`. Hasta que haya traductores, el valenciano se parte del catalán.
 - Textos distintos en castellano que coinciden en inglés (p. ej. «Cerrar» / «Cerrado»): se desambiguan con `_x()` o con otro inglés.
 - La app móvil (otro repo) usaba los filtros `asde_ap_catalogo` y `asde_ap_textos`; desaparecen con este cambio.
+

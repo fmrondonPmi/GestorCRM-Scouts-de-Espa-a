@@ -15,3 +15,6 @@ desktop.ini
 .idea/
 *.log
 *.tmp
+
+# Traducciones compiladas para pruebas (se generan con herramientas/generar-po.php --mo)
+traducciones/mo/
