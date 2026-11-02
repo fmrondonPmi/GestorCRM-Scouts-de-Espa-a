@@ -131,7 +131,7 @@ final class GruposInvitacionesPage {
 				<?php endif; ?>
 				</tbody>
 			</table>
-			<p class="description"><?php echo esc_html( sprintf( /* translators: %d: group registrations to review */ _n( 'Hay %d alta de grupo por revisar.', 'Hay %d altas de grupo por revisar.', GrupoSolicitudes::pendientes(), 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), GrupoSolicitudes::pendientes() ) ); ?></p>
+			<p class="description"><?php echo esc_html( sprintf( /* translators: %d: group registrations to review */ _n( 'There is %d group registration to review.', 'There are %d group registrations to review.', GrupoSolicitudes::pendientes(), 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), GrupoSolicitudes::pendientes() ) ); ?></p>
 		</div>
 		<?php
 	}

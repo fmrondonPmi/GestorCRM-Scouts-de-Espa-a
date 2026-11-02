@@ -158,6 +158,18 @@ final class EventosView extends EventosBaseView {
 		$nombres = $this->personas( array_column( $equipo, 'socio' ) );
 		// La formación y el certificado se leen en vivo del CRM (una consulta) en el resumen y en el equipo.
 		$check   = in_array( $pestana, array( 'resumen', 'equipo' ), true ) ? Servicio::comprobar_equipo( $e, $equipo, $nombres ) : null;
+		// v0.60: a quién se puede volver a mandar el aviso (el equipo y las personas inscritas), con su nombre del CRM.
+		$reenviar = array();
+		if ( 'resumen' === $pestana && Servicio::puede_reenviar( $e, $a ) ) {
+			$nums    = array_values( array_unique( array_merge( array_map( 'strval', array_column( $equipo, 'socio' ) ), array_map( 'strval', array_column( $filas, 'socio' ) ) ) ) );
+			$quienes = $this->personas( $nums );
+			foreach ( array_map( 'strval', array_column( $equipo, 'socio' ) ) as $n ) {
+				$reenviar[ __( 'Event team', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ][ $n ] = isset( $quienes[ $n ] ) ? $quienes[ $n ]->nombre_completo() : $n;
+			}
+			foreach ( array_diff( array_map( 'strval', array_column( $filas, 'socio' ) ), array_map( 'strval', array_column( $equipo, 'socio' ) ) ) as $n ) {
+				$reenviar[ __( 'Signed up', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ][ $n ] = isset( $quienes[ $n ] ) ? $quienes[ $n ]->nombre_completo() : $n;
+			}
+		}
 		$vars    = array(
 			'e'        => $e,
 			'cfg'      => $cfg,
@@ -165,6 +177,7 @@ final class EventosView extends EventosBaseView {
 			'equipo'   => $equipo,
 			'nombres'  => $nombres,
 			'check'    => $check,
+			'reenviar' => $reenviar,
 			'gestiona' => Servicio::en_gestion( $e, $a ),
 			'url'      => $this->url( 'eventos', array( 'evento' => (string) $e['id'] ) ),
 		);
@@ -542,6 +555,24 @@ final class EventosView extends EventosBaseView {
 						)
 					)
 				);
+				break;
+
+			case 'evento_reenviar':
+				if ( ! Servicio::puede_reenviar( $e, $a ) ) {
+					$r = new \WP_Error( 'asde_evento', __( 'You cannot resend notices for this event.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
+					break;
+				}
+				$destino = sanitize_key( $this->post( 'destino' ) );
+				$r       = \AsdeBalears\AreaPrivada\Eventos\Avisos::reenviar( $e, $destino, $this->post( 'persona' ), '1' === $this->post( 'solo_sin_inscribir' ) );
+				if ( ! is_wp_error( $r ) ) {
+					if ( $r['programado'] ) {
+						$hecho = 'scouters' === $destino ? __( 'The notice will be sent to the event team in a few moments.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : __( 'The notice will be sent to the families in a few moments.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
+					} elseif ( $r['enviados'] ) {
+						$hecho = __( 'Notice sent.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
+					} else {
+						$r = new \WP_Error( 'asde_evento', __( 'The notice could not be sent: that person has no active account or no email address (see the email log).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
+					}
+				}
 				break;
 
 			case 'evento_despublicar':

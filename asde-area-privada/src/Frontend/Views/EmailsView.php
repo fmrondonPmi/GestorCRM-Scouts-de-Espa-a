@@ -49,12 +49,17 @@ final class EmailsView extends View {
 
 		$user_id = (int) $this->get( 'usuario' );
 		$estado  = $this->get( 'estado' );
-		$filas   = RegistroEmails::listado( $user_id, $estado );
+		$tipo    = $this->get( 'tipo' );
+		$texto   = $this->get( 'buscar' );
+		$desde   = $this->get( 'desde' );
+		$hasta   = $this->get( 'hasta' );
+		$filas   = RegistroEmails::listado( $user_id, $estado, $tipo, $texto, $desde, $hasta );
 		$tabla   = new Tabla(
 			array(
 				'fecha'   => static fn( $f ) => $f['creado'],
 				'usuario' => static fn( $f ) => $f['login'],
 				'tipo'    => static fn( $f ) => ( RegistroEmails::tipos()[ $f['tipo'] ] ?? $f['tipo'] ),
+				'asunto'  => static fn( $f ) => $f['asunto'],
 				'estado'  => static fn( $f ) => ( RegistroEmails::estados()[ $f['estado'] ] ?? $f['estado'] ),
 			),
 			'fecha',
@@ -98,6 +103,10 @@ final class EmailsView extends View {
 						'tabla'   => $tabla,
 						'nombres' => $nombres,
 						'estado'  => isset( RegistroEmails::estados()[ $estado ] ) ? $estado : '',
+						'tipo'    => isset( RegistroEmails::tipos()[ $tipo ] ) ? $tipo : '',
+						'texto'   => $texto,
+						'desde'   => preg_match( '/^\d{4}-\d{2}-\d{2}$/', $desde ) ? $desde : '',
+						'hasta'   => preg_match( '/^\d{4}-\d{2}-\d{2}$/', $hasta ) ? $hasta : '',
 						'usuario' => $user_id ? get_userdata( $user_id ) : null,
 						'url'     => $this->url( 'emails' ),
 						'mailpit' => $mailpit,

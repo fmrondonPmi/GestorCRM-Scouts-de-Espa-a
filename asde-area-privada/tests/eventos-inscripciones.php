@@ -427,6 +427,50 @@ try {
 	Servicio::despublicar( $ev( $id_b ), $a_co );
 	Servicio::publicar( $ev( $id_b ), $a_co, array( 'familias' ) );
 	$ok( false !== wp_next_scheduled( Avisos::HOOK, array( $grupo['numero'], $id_b, 'publicado', 'familias' ) ), 'avisar solo a las familias programa el aviso con ese destino' );
+	// v0.60: el equipo del evento también es «scouters», aunque no sea de las secciones convocadas (antes se quedaba sin email).
+	$a_co = $como( $u_coord );
+	$ok( ! is_wp_error( Servicio::anadir_equipo( $ev( $id_b ), $a_co, '990063', 'monitor' ) ), 'Gil (Scouters) entra en el equipo del evento de Escultas y Rovers' );
+	$ok( Servicio::puede_reenviar( $ev( $id_b ), $a_co ) && ! Servicio::puede_reenviar( $ev( $id_b ), $como( $u_fam1 ) ), 'reenviar el aviso lo puede hacer quien gestiona el evento publicado, no una familia' );
+	$a_co       = $como( $u_coord );
+	$capturados = array();
+	$ds         = Avisos::destinatarios_publicado( $ev( $id_b ), \AsdeBalears\AreaPrivada\Crm\PersonaRepository::make(), array( 'scouters' ) );
+	$ok( array( '990063' ) === array_map( 'strval', array_keys( $ds ) ),'los destinatarios «scouters» son el equipo del evento (Gil), no las familias' );
+	$res = Avisos::reenvio_masivo( $grupo['numero'], $id_b, 'scouters' );
+	$ok( 1 === $res['enviados'] && array( $correo( 'prueba-ins-esc' ) ) === $a_quien( 'Nuevo evento' ), 'reenviar al equipo escribe a Gil' );
+	$capturados = array();
+	$res        = Avisos::reenvio_masivo( $grupo['numero'], $id_b, 'familias' );
+	$esperados  = array( $correo( 'prueba-ins-fam2' ), $correo( 'prueba-ins-max' ), $correo( 'prueba-ins-rita' ) );
+	sort( $esperados );
+	$ok( 3 === $res['enviados'] && $esperados === $a_quien( 'Nuevo evento' ), 'reenviar a las familias escribe a las cuentas convocadas (familia de Max e Ivo, Max y Rita), no al equipo' );
+	$capturados = array();
+	$r          = Avisos::reenviar( $ev( $id_b ), 'persona', '990053' );
+	$ok( ! is_wp_error( $r ) && 2 === $r['enviados'] && array( $correo( 'prueba-ins-fam2' ), $correo( 'prueba-ins-max' ) ) === $a_quien( 'Nuevo evento' ), 'reenviar a una persona (Max) escribe a sus cuentas: la suya y la de su familia' );
+	$capturados = array();
+	$r          = Avisos::reenviar( $ev( $id_b ), 'persona', '990058' );
+	$ok( is_wp_error( $r ) && ! $capturados, 'reenviar a quien no es del equipo, ni está inscrito ni convocado, no manda nada' );
+	$r = Avisos::reenviar( $ev( $id_b ), 'persona', '' );
+	$ok( is_wp_error( $r ), 'reenviar a una persona sin elegirla da error' );
+	$r = Avisos::reenviar( $ev( $id_b ), 'todos' );
+	$ok( is_wp_error( $r ), 'un destino desconocido da error' );
+	$r = Avisos::reenviar( $ev( $id_b ), 'scouters' );
+	$ok( ! is_wp_error( $r ) && $r['programado'], 'reenviar a un grupo se programa en segundo plano' );
+	$sinpub = $ev( $id_b );
+	$sinpub['estado'] = EventosTable::BORRADOR;
+	$ok( is_wp_error( Avisos::reenviar( $sinpub, 'scouters' ) ), 'un evento que no está publicado no admite reenvío' );
+	$h = $enviar( new EventosView(), array( 'asde_action' => 'evento_reenviar', 'evento' => (string) $id_b, 'pestana' => 'resumen', 'destino' => 'persona', 'persona' => '990063' ), 'asde_evento_' . $id_b );
+	$ok( ! str_contains( $h, 'Error' ) && ! str_contains( $h, 'error' ), 'desde la pantalla del evento se reenvía a una persona' );
+	$h = $pintar( new EventosView(), array( 'evento' => (string) $id_b ) );
+	$ok( str_contains( $h, 'data-asde-reenviar-abrir' ) && str_contains( $h, 'name="destino"' ) && str_contains( $h, 'Gil' ), 'la pantalla del evento ofrece reenviar, con el equipo y los inscritos para elegir' );
+	$programados = static fn(): int => array_sum( array_map( static fn( $hooks ) => is_array( $hooks ) && isset( $hooks[ Avisos::REENVIO ] ) ? count( $hooks[ Avisos::REENVIO ] ) : 0, (array) _get_cron_array() ) );
+	$antes_prog  = $programados();
+	$como( $u_lob ); // Scouter de otras secciones: no gestiona este evento.
+	$enviar( new EventosView(), array( 'asde_action' => 'evento_reenviar', 'evento' => (string) $id_b, 'pestana' => 'resumen', 'destino' => 'scouters' ), 'asde_evento_' . $id_b );
+	$ok( $antes_prog === $programados(), 'quien no gestiona el evento no puede reenviar desde la pantalla: no se programa nada' );
+	$como( $u_coord );
+	$enviar( new EventosView(), array( 'asde_action' => 'evento_reenviar', 'evento' => (string) $id_b, 'pestana' => 'resumen', 'destino' => 'familias', 'solo_sin_inscribir' => '1' ), 'asde_evento_' . $id_b );
+	$ok( $programados() > $antes_prog, 'Coordinación sí: queda programado el reenvío a las familias' );
+	$capturados = array();
+
 	$a_f2 = $como( $u_fam2 );
 	$ok( 2 === Inscripciones::pendientes( $a_f2 )['responder'], 'la familia de Max e Ivo tiene dos convocatorias por responder' );
 	$a_max = $como( $u_max );
@@ -626,6 +670,7 @@ try {
 			wp_unschedule_hook( Avisos::HOOK ); // v0.52: el aviso de publicar lleva también los destinatarios.
 		}
 	}
+	wp_unschedule_hook( Avisos::REENVIO ); // v0.60: los reenvíos programados por la prueba.
 	$lista = implode( ',', array_map( 'intval', $ids ) ) ?: '0';
 	$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . EventosTable::table() . ' WHERE id > %d', $ev_antes ) ); // phpcs:ignore WordPress.DB
 	$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . InscripcionesTable::table() . ' WHERE id > %d', $ins_antes ) ); // phpcs:ignore WordPress.DB

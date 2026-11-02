@@ -1,6 +1,7 @@
 <?php
 namespace AsdeBalears\AreaPrivada\Eventos;
 
+use AsdeBalears\AreaPrivada\Audit\Logger;
 use AsdeBalears\AreaPrivada\Crm\CrmException;
 use AsdeBalears\AreaPrivada\Crm\PersonaRepository;
 use AsdeBalears\AreaPrivada\Domain\Grupo;
@@ -40,6 +41,9 @@ final class Avisos {
 	/** Enganche genérico para los avisos push: ( string $tipo, int $evento_id, int[] $user_ids ). */
 	public const PUSH = 'asde_ap_evento_aviso';
 
+	/** WP-Cron: reenvío del aviso de publicación (grupo, evento, destino, solo sin inscribir, marca de tiempo). */
+	public const REENVIO = 'asde_ap_eventos_reenvio';
+
 	public const TIPOS = array( 'publicado', 'confirmada', 'plaza', 'recordatorio', 'cancelado' );
 
 	/** A quién se avisa al publicar (v0.52): familias (y asociados menores con cuenta) o scouters (y voluntariado). */
@@ -47,6 +51,7 @@ final class Avisos {
 
 	public static function register(): void {
 		add_action( self::HOOK, array( self::class, 'masivo' ), 10, 4 );
+		add_action( self::REENVIO, array( self::class, 'reenvio_masivo' ), 10, 4 );
 	}
 
 	/**
@@ -112,11 +117,7 @@ final class Avisos {
 				if ( EventosTable::PUBLICADO !== $e['estado'] || null !== $e['avisado_en'] ) {
 					return $res; // Ya avisado (p. ej. se volvió a borrador y se publicó otra vez).
 				}
-				foreach ( $repo->todas() as $p ) {
-					if ( Inscripciones::convocada( $e, $p ) ) {
-						$personas[ $p->num_socio_asde ] = $p;
-					}
-				}
+				$personas = self::destinatarios_publicado( $e, $repo, $destinos );
 				EventosTable::marcar_aviso( $e['id'], 'avisado_en' );
 			} elseif ( 'cancelado' === $tipo ) {
 				if ( EventosTable::CANCELADO !== $e['estado'] ) {
@@ -136,17 +137,148 @@ final class Avisos {
 			return $res; // Sin el CRM no se sabe a quién escribir: no se marca y se puede repetir.
 		}
 		$datos = self::datos( $e, $tipo );
-		if ( 'publicado' === $tipo && self::DESTINOS !== $destinos ) {
-			// Solo a las familias (o a los scouters): los adultos voluntarios por un lado y el resto por otro.
-			$adultos  = array_filter( $personas, static fn( Persona $p ) => $p->es_adulto_voluntario() );
-			$personas = in_array( 'scouters', $destinos, true ) ? $adultos : array_diff_key( $personas, $adultos );
-		}
 		$cuentas = self::cuentas( $personas, $e );
 		foreach ( $cuentas as $user ) {
 			++$res['cuentas'];
 			$res['enviados'] += (int) Idioma::en( Idioma::de_usuario( $user->ID ), static fn() => self::enviar( $user, self::asunto( $tipo, $e ), $datos, '' ) );
 		}
 		self::push( $tipo, $e, $cuentas );
+		return $res;
+	}
+
+	/**
+	 * A quién llega el aviso de un evento publicado: «familias» son las personas convocadas que no son adultas
+	 * voluntarias (y sus cuentas familiares); «scouters» son las adultas voluntarias convocadas **y el equipo del
+	 * evento** (director/a, monitores, prácticas, apoyo), que puede no ser de las secciones convocadas (v0.60: antes
+	 * solo se avisaba a quien lo era y el equipo se quedaba sin email).
+	 *
+	 * @param string[] $destinos familias y/o scouters.
+	 * @return array<string, Persona> nº Scouts de España => persona.
+	 * @throws CrmException Si el CRM no responde.
+	 */
+	public static function destinatarios_publicado( array $e, PersonaRepository $repo, array $destinos ): array {
+		$familias = array();
+		$scouters = array();
+		foreach ( $repo->todas() as $p ) {
+			if ( ! Inscripciones::convocada( $e, $p ) ) {
+				continue;
+			}
+			if ( $p->es_adulto_voluntario() ) {
+				$scouters[ $p->num_socio_asde ] = $p;
+			} else {
+				$familias[ $p->num_socio_asde ] = $p;
+			}
+		}
+		if ( in_array( 'scouters', $destinos, true ) ) {
+			$equipo = array_diff( array_map( 'strval', array_column( InscripcionesTable::equipo( $e['id'] ), 'socio' ) ), array_keys( $scouters ) );
+			if ( $equipo ) {
+				foreach ( $repo->obtener_varias( array_values( $equipo ) ) as $num => $p ) {
+					$scouters[ (string) $num ] = $p;
+				}
+			}
+		}
+		return ( in_array( 'familias', $destinos, true ) ? $familias : array() ) + ( in_array( 'scouters', $destinos, true ) ? $scouters : array() );
+	}
+
+	/**
+	 * Vuelve a mandar el aviso de un evento publicado (v0.60): a las familias, al equipo de scouters o a una persona
+	 * concreta. A una persona sale en el momento; a un grupo se programa en segundo plano (WP-Cron).
+	 *
+	 * @param string $destino familias, scouters o persona.
+	 * @param string $socio   Solo con «persona»: su nº Scouts de España (del equipo, de los inscritos o de las convocadas).
+	 * @param bool   $solo_sin_inscribir Solo familias: sin las que ya tienen inscripción activa.
+	 * @return array{cuentas:int, enviados:int, programado:bool}|\WP_Error
+	 */
+	public static function reenviar( array $e, string $destino, string $socio = '', bool $solo_sin_inscribir = false ) {
+		if ( EventosTable::PUBLICADO !== $e['estado'] ) {
+			return new \WP_Error( 'asde_evento', __( 'Notices can only be resent for a published event.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
+		}
+		if ( ! Config::aviso_activo( 'publicado' ) ) {
+			return new \WP_Error( 'asde_evento', __( 'The "event published" notice is switched off in the events settings.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
+		}
+		if ( ! in_array( $destino, array( 'familias', 'scouters', 'persona' ), true ) ) {
+			return new \WP_Error( 'asde_evento', __( 'Choose who to send the notice to.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
+		}
+		if ( 'persona' !== $destino ) {
+			wp_schedule_single_event( time(), self::REENVIO, array( (string) $e['grupo'], (int) $e['id'], $destino, $solo_sin_inscribir ? '1' : '0', time() ) );
+			Logger::log( 'evento_aviso_reenviado', 'evento', (string) $e['id'], array( 'destino' => $destino ) );
+			return array(
+				'cuentas'    => 0,
+				'enviados'   => 0,
+				'programado' => true,
+			);
+		}
+		$repo = PersonaRepository::make();
+		if ( ! $repo ) {
+			return new \WP_Error( 'asde_evento', __( 'The CRM is not available right now.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
+		}
+		try {
+			$p = '' !== $socio ? $repo->obtener( $socio ) : null;
+		} catch ( CrmException $ex ) {
+			return new \WP_Error( 'asde_evento', __( 'The CRM is not available right now.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
+		}
+		$conocida = $p && ( in_array( $socio, array_map( 'strval', array_column( InscripcionesTable::equipo( $e['id'] ), 'socio' ) ), true ) || InscripcionesTable::de_socio( $e['id'], $socio ) || Inscripciones::convocada( $e, $p ) );
+		if ( ! $conocida ) {
+			return new \WP_Error( 'asde_evento', __( 'That person is not on the team, signed up or invited to this event.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
+		}
+		$res     = array(
+			'cuentas'    => 0,
+			'enviados'   => 0,
+			'programado' => false,
+		);
+		$datos   = self::datos( $e, 'publicado' );
+		$cuentas = self::cuentas( array( $socio => $p ), $e );
+		foreach ( $cuentas as $user ) {
+			++$res['cuentas'];
+			$res['enviados'] += (int) Idioma::en( Idioma::de_usuario( $user->ID ), static fn() => self::enviar( $user, self::asunto( 'publicado', $e ), $datos, '' ) );
+		}
+		self::push( 'publicado', $e, $cuentas );
+		Logger::log( 'evento_aviso_reenviado', 'evento', (string) $e['id'], array( 'destino' => 'persona' ) );
+		return $res;
+	}
+
+	/** WP-Cron: reenvío a un grupo de personas (familias o equipo). @return array{cuentas:int, enviados:int} */
+	public static function reenvio_masivo( string $grupo, int $evento_id, string $destino, string $solo_sin_inscribir = '0' ): array {
+		$g = Grupos::por_numero( $grupo );
+		if ( ! $g ) {
+			return array(
+				'cuentas'  => 0,
+				'enviados' => 0,
+			);
+		}
+		return Grupo::con( $g, static fn() => self::reenvio_en_grupo( $evento_id, $destino, '1' === $solo_sin_inscribir ) );
+	}
+
+	/** @return array{cuentas:int, enviados:int} */
+	private static function reenvio_en_grupo( int $evento_id, string $destino, bool $solo_sin_inscribir ): array {
+		$res  = array(
+			'cuentas'  => 0,
+			'enviados' => 0,
+		);
+		$e    = EventosTable::obtener( $evento_id );
+		$repo = PersonaRepository::make();
+		if ( ! $e || ! $repo || EventosTable::PUBLICADO !== $e['estado'] || ! Config::aviso_activo( 'publicado' ) || ! in_array( $destino, self::DESTINOS, true ) ) {
+			return $res;
+		}
+		try {
+			$personas = self::destinatarios_publicado( $e, $repo, array( $destino ) );
+		} catch ( CrmException $ex ) {
+			return $res;
+		}
+		if ( $solo_sin_inscribir ) {
+			foreach ( InscripcionesTable::participantes( $e['id'] ) as $f ) {
+				if ( in_array( $f['estado'], InscripcionesTable::ACTIVAS, true ) ) {
+					unset( $personas[ $f['socio'] ] );
+				}
+			}
+		}
+		$datos   = self::datos( $e, 'publicado' );
+		$cuentas = self::cuentas( $personas, $e );
+		foreach ( $cuentas as $user ) {
+			++$res['cuentas'];
+			$res['enviados'] += (int) Idioma::en( Idioma::de_usuario( $user->ID ), static fn() => self::enviar( $user, self::asunto( 'publicado', $e ), $datos, '' ) );
+		}
+		self::push( 'publicado', $e, $cuentas );
 		return $res;
 	}
 

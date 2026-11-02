@@ -99,7 +99,7 @@ msgstr " de la teva secció"
 msgid " with these filters"
 msgstr " amb aquests filtres"
 
-#: templates/accesos/historial.php:74 templates/usuarios/emails.php:56
+#: templates/accesos/historial.php:74 templates/usuarios/emails.php:77
 msgid " with this filter"
 msgstr " amb aquest filtre"
 
@@ -289,7 +289,7 @@ msgstr "%1$d de %2$d famílies"
 msgid "%1$d of %2$d left · %3$s"
 msgid_plural "%1$d of %2$d left · %3$s"
 msgstr[0] "Queda %1$d de %2$d · %3$s"
-msgstr[1] "Queden %1$d de %2$d · %3$s"
+msgstr[1] "Queda %1$d de %2$d · %3$s"
 
 #. translators: 1: number, 2: number, 3: text
 #: templates/eventos/material.php:102
@@ -596,7 +596,7 @@ msgstr[1] "%d moviments triats ja estan conciliats amb una família i no surten 
 msgid "%d corrected"
 msgid_plural "%d corrected"
 msgstr[0] "%d corregida"
-msgstr[1] "%d corregides"
+msgstr[1] "%d corregida"
 
 #. translators: %d: number
 #: src/Socios/TareaNumeracion.php:467
@@ -632,7 +632,7 @@ msgstr[1] "Queden %d dies"
 msgid "%d deleted"
 msgid_plural "%d deleted"
 msgstr[0] "%d eliminat"
-msgstr[1] "%d eliminats"
+msgstr[1] "%d eliminat"
 
 #. translators: %d: number
 #: templates/tesoreria/familia.php:152
@@ -675,10 +675,10 @@ msgstr[1] "%d càrrecs"
 #. translators: %d: number
 #: src/Admin/DuplicadosPage.php:104
 #, php-format
-msgid "%d documento está en más de una ficha:"
-msgid_plural "%d documentos están en más de una ficha:"
-msgstr[0] ""
-msgstr[1] ""
+msgid "%d document is in more than one record:"
+msgid_plural "%d documents are in more than one record:"
+msgstr[0] "%d document és en més d'una fitxa:"
+msgstr[1] "%d document és en més d'una fitxa:"
 
 #. translators: %d: number
 #: src/Frontend/Views/CajaView.php:129
@@ -762,7 +762,7 @@ msgstr[1] "%d materials"
 msgid "%d left"
 msgid_plural "%d left"
 msgstr[0] "Queda %d"
-msgstr[1] "Queden %d"
+msgstr[1] "Queda %d"
 
 #. translators: %d: number
 #: src/Tesoreria/Banco/CsvBanco.php:162
@@ -848,7 +848,7 @@ msgstr[1] "%d comandes en aquest període."
 msgid "%d overdue"
 msgid_plural "%d overdue"
 msgstr[0] "%d vençuda"
-msgstr[1] "%d vençudes"
+msgstr[1] "%d vençuda"
 
 #. translators: %d: number
 #: templates/usuarios/fila.php:92
@@ -954,10 +954,10 @@ msgstr[1] "%d fills"
 msgid "%d suggested for this family"
 msgid_plural "%d suggested for this family"
 msgstr[0] "%d suggerit per a aquesta família"
-msgstr[1] "%d suggerits per a aquesta família"
+msgstr[1] "%d suggerit per a aquesta família"
 
 #. translators: %d: number
-#: src/Frontend/Views/EventosView.php:754
+#: src/Frontend/Views/EventosView.php:785
 #, php-format
 msgid "%d support team member has no account: print it for them."
 msgid_plural "%d support team members have no account: print them for them."
@@ -973,7 +973,7 @@ msgstr[0] "%d tasca"
 msgstr[1] "%d tasques"
 
 #. translators: %d: number
-#: src/Frontend/Views/EventosView.php:676
+#: src/Frontend/Views/EventosView.php:707
 #, php-format
 msgid "%d task has been created."
 msgid_plural "%d tasks have been created."
@@ -1021,7 +1021,7 @@ msgstr[0] "%d unitat"
 msgstr[1] "%d unitats"
 
 #. translators: %d: number
-#: src/Frontend/Views/EventosView.php:721
+#: src/Frontend/Views/EventosView.php:752
 #, php-format
 msgid "%d unit has been deducted from the inventory."
 msgid_plural "%d units have been deducted from the inventory."
@@ -1053,7 +1053,7 @@ msgstr[0] "%d usuari"
 msgstr[1] "%d usuaris"
 
 #. translators: %d: number
-#: src/Frontend/Views/EventosView.php:697
+#: src/Frontend/Views/EventosView.php:728
 #, php-format
 msgid "%d usual item has been reserved."
 msgid_plural "%d usual items have been reserved."
@@ -1113,7 +1113,7 @@ msgid "%s has not been changed because someone modified it in the CRM while you 
 msgstr "No s'ha canviat %s perquè algú l'ha modificat al CRM mentre editaves. Revisa el valor actual i torna-ho a provar."
 
 #. translators: %s: text
-#: src/Eventos/Servicio.php:417
+#: src/Eventos/Servicio.php:422
 #, php-format
 msgid "%s is already in this event."
 msgstr "%s ja és en aquest esdeveniment."
@@ -1969,7 +1969,7 @@ msgstr "Afegeix una altra talla"
 msgid "Add at least one ingredient."
 msgstr "Afegeix almenys un ingredient."
 
-#: src/Eventos/Servicio.php:562 src/Eventos/Servicio.php:579
+#: src/Eventos/Servicio.php:567 src/Eventos/Servicio.php:584
 msgid "Add at least one planned expense."
 msgstr "Afegeix almenys una despesa prevista."
 
@@ -2037,7 +2037,7 @@ msgstr "Afegeix a l'equip"
 msgid "Add variants"
 msgstr "Afegir variants"
 
-#: src/Frontend/Views/EventosView.php:485
+#: src/Frontend/Views/EventosView.php:498
 msgid "Added to the team."
 msgstr "Afegit a l'equip."
 
@@ -2087,7 +2087,7 @@ msgstr "Ajust de %s eliminat"
 msgid "Adjustment of %s removed. It remains in the family's history."
 msgstr "Ajust de %s eliminat. Queda a l'historial de la família."
 
-#: src/Frontend/Views/EventosView.php:589
+#: src/Frontend/Views/EventosView.php:620
 msgid "Adjustment saved: the sign-up amount has changed."
 msgstr "Ajust desat: l'import de la inscripció ha canviat."
 
@@ -2099,7 +2099,7 @@ msgstr "Adults (scouters i voluntariat)"
 msgid "Advance"
 msgstr "Bestreta"
 
-#: src/Frontend/Views/EventosView.php:653
+#: src/Frontend/Views/EventosView.php:684
 msgid "Advance cancelled."
 msgstr "Bestreta anul·lada."
 
@@ -2109,17 +2109,17 @@ msgstr "Bestreta anul·lada."
 msgid "Advance notice sent: %1$d emails to %2$d families."
 msgstr "Avís previ enviat: %1$d emails a %2$d famílies."
 
-#: src/Frontend/Views/EventosView.php:641
+#: src/Frontend/Views/EventosView.php:672
 msgid "Advance recorded."
 msgstr "Bestreta anotada."
 
 #. translators: %s: text
-#: src/Frontend/Views/EventosView.php:647
+#: src/Frontend/Views/EventosView.php:678
 #, php-format
 msgid "Advance settled, with a difference of %s."
 msgstr "Bestreta liquidada, amb una diferència de %s."
 
-#: src/Frontend/Views/EventosView.php:647
+#: src/Frontend/Views/EventosView.php:678
 msgid "Advance settled."
 msgstr "Bestreta liquidada."
 
@@ -2762,7 +2762,7 @@ msgstr "BIC (opcional)"
 msgid "Back to Member access"
 msgstr "Torna a Accés socis"
 
-#: templates/eventos/resumen.php:127
+#: templates/eventos/resumen.php:157
 msgid "Back to draft"
 msgstr "Torna a esborrany"
 
@@ -3018,7 +3018,7 @@ msgid "Budget of each section and of the group"
 msgstr "Pressupost de cada secció i del grup"
 
 #. translators: %s: text
-#: src/Frontend/Views/EventosView.php:526
+#: src/Frontend/Views/EventosView.php:539
 #, php-format
 msgid "Budget of event %s validated: the price per section is now fixed."
 msgstr "Pressupost de l'esdeveniment %s validat: el preu per secció ja és fix."
@@ -3031,7 +3031,7 @@ msgstr "Pressupost pendent de Tresoreria"
 msgid "Budget pending validation by Treasury."
 msgstr "Pressupost pendent que Tresoreria el validi."
 
-#: src/Frontend/Views/EventosView.php:532
+#: src/Frontend/Views/EventosView.php:545
 msgid "Budget reopened: it can be changed and will have to be validated again."
 msgstr "Pressupost reobert: es pot canviar i caldrà tornar-lo a validar."
 
@@ -3039,7 +3039,7 @@ msgstr "Pressupost reobert: es pot canviar i caldrà tornar-lo a validar."
 msgid "Budget reopened: it is a draft again."
 msgstr "Pressupost reobert: torna a ser un esborrany."
 
-#: src/Frontend/Views/EventosView.php:520
+#: src/Frontend/Views/EventosView.php:533
 msgid "Budget sent to Treasury for validation."
 msgstr "Pressupost enviat a Tresoreria perquè el validi."
 
@@ -3081,7 +3081,7 @@ msgstr "Pressupostos"
 msgid "Budgets ·"
 msgstr "Pressupostos ·"
 
-#: src/Frontend/Views/EventosView.php:510
+#: src/Frontend/Views/EventosView.php:523
 msgid "Bus item added to the budget."
 msgstr "Partida d'autobusos afegida al pressupost."
 
@@ -3090,7 +3090,7 @@ msgid "Buses"
 msgstr "Autobusos"
 
 #. translators: 1: number, 2: text
-#: src/Eventos/Servicio.php:539
+#: src/Eventos/Servicio.php:544
 #, php-format
 msgid "Buses (%1$d × %2$s)"
 msgstr "Autobusos (%1$d × %2$s)"
@@ -3249,11 +3249,11 @@ msgstr "Vols anul·lar l'autorització? A partir d'ara no es cobrarà res per aq
 msgid "Cancel the batch? Its data will be deleted."
 msgstr "Vols anul·lar la remesa? S'esborraran les seves dades."
 
-#: templates/eventos/resumen.php:141 templates/eventos/resumen.php:142
+#: templates/eventos/resumen.php:171 templates/eventos/resumen.php:172
 msgid "Cancel the event"
 msgstr "Cancel·la l'esdeveniment"
 
-#: templates/eventos/resumen.php:142
+#: templates/eventos/resumen.php:172
 msgid "Cancel the event? This cannot be undone."
 msgstr "Vols cancel·lar l'esdeveniment? No es pot desfer."
 
@@ -3699,7 +3699,7 @@ msgstr "Tria una recepta del receptari."
 msgid "Choose a report or create a new one by selecting the columns you need. The data is read from the CRM at that moment and includes only members with an active membership"
 msgstr "Tria un informe o crea'n un de nou seleccionant les columnes que necessites. Les dades es llegeixen del CRM en el moment i només inclouen socis amb membresia activa"
 
-#: src/Eventos/Servicio.php:414
+#: src/Eventos/Servicio.php:419
 msgid "Choose a scouter or volunteer of the group."
 msgstr "Tria un scouter o voluntari/ària del grup."
 
@@ -3723,7 +3723,7 @@ msgstr "Tria un altre moviment del banc del grup."
 msgid "Choose at least one column."
 msgstr "Tria almenys una columna."
 
-#: src/Eventos/Servicio.php:217
+#: src/Eventos/Servicio.php:222
 msgid "Choose at least one invited section."
 msgstr "Tria almenys una secció convocada."
 
@@ -3755,7 +3755,7 @@ msgstr "Tria més avall el que vols comprar. Després, paga-ho per transferènci
 msgid "Choose cook, quartermaster and helpers"
 msgstr "Triar cuiner, intendent i ajudants"
 
-#: src/Eventos/Servicio.php:505
+#: src/Eventos/Servicio.php:510
 msgid "Choose how the expense is split."
 msgstr "Tria com es reparteix la despesa."
 
@@ -3783,7 +3783,7 @@ msgstr "Tria algú de l'equip de l'esdeveniment (amb compte al web)."
 msgid "Choose the CSV file you want to import."
 msgstr "Tria el fitxer CSV que vols importar."
 
-#: src/Eventos/Servicio.php:193
+#: src/Eventos/Servicio.php:198
 msgid "Choose the activity type."
 msgstr "Tria el tipus d'activitat."
 
@@ -3855,7 +3855,7 @@ msgstr "Tria el rol de la primera persona amb accés."
 msgid "Choose the section and the registration date."
 msgstr "Tria la secció i la data d'alta."
 
-#: src/Eventos/Servicio.php:513
+#: src/Eventos/Servicio.php:518
 msgid "Choose the section the cost is split among."
 msgstr "Tria la secció entre la qual es reparteix."
 
@@ -3891,7 +3891,7 @@ msgstr "Tria el tipus…"
 msgid "Choose what is done with that dish."
 msgstr "Tria què es fa amb aquest plat."
 
-#: src/Eventos/Servicio.php:410 src/Eventos/Servicio.php:435
+#: src/Eventos/Servicio.php:415 src/Eventos/Servicio.php:440
 msgid "Choose what they do in the team."
 msgstr "Tria què fa a l'equip."
 
@@ -3923,6 +3923,10 @@ msgstr "Tria a qui s'ha de reemborsar la despesa (algú de l'equip amb compte al
 msgid "Choose who paid the expense."
 msgstr "Tria qui va pagar la despesa."
 
+#: src/Eventos/Avisos.php:200
+msgid "Choose who to send the notice to."
+msgstr "Tria a qui enviar l'avís."
+
 #: src/Frontend/Views/AccesoView.php:67 src/Frontend/Views/SolicitarView.php:85
 msgid "Choose your Scout Group."
 msgstr "Tria el teu Grup Escolta."
@@ -3947,7 +3951,7 @@ msgstr "Clan"
 msgid "Class"
 msgstr "Classe"
 
-#: templates/usuarios/listado.php:69
+#: templates/usuarios/emails.php:69 templates/usuarios/listado.php:69
 msgid "Clear filters"
 msgstr "Treu els filtres"
 
@@ -4678,7 +4682,7 @@ msgstr "Elimina l'ajust"
 msgid "Delete the credential"
 msgstr ""
 
-#: templates/eventos/resumen.php:130
+#: templates/eventos/resumen.php:160
 msgid "Delete the draft"
 msgstr "Esborra l'esborrany"
 
@@ -4696,7 +4700,7 @@ msgstr "Vols esborrar l'informe «%s»?"
 msgid "Delete the template"
 msgstr "Esborra la plantilla"
 
-#: templates/eventos/resumen.php:130
+#: templates/eventos/resumen.php:160
 msgid "Delete this draft with its team and budget? This cannot be undone."
 msgstr "Vols esborrar aquest esborrany amb el seu equip i el seu pressupost? No es pot desfer."
 
@@ -4739,7 +4743,7 @@ msgid "Departure (place and time)"
 msgstr "Sortida (punt i hora)"
 
 #. translators: %d: number
-#: src/Frontend/Views/EventosView.php:708
+#: src/Frontend/Views/EventosView.php:739
 #, php-format
 msgid "Departure recorded: %d line."
 msgid_plural "Departure recorded: %d lines."
@@ -4840,7 +4844,7 @@ msgstr "Diferència (quotes − cost amb taula)"
 msgid "Diners"
 msgstr "Comensals"
 
-#: src/Frontend/Views/EventosView.php:738
+#: src/Frontend/Views/EventosView.php:769
 msgid "Diners changed."
 msgstr "Comensals canviats."
 
@@ -4908,11 +4912,11 @@ msgstr "Rebaixa o beca"
 msgid "Discounts, scholarships or surcharges that change what the family must pay this round."
 msgstr "Descomptes, beques o recàrrecs que canvien el que ha de pagar la família en aquesta ronda."
 
-#: src/Frontend/Views/EventosView.php:728
+#: src/Frontend/Views/EventosView.php:759
 msgid "Dish added to the menu."
 msgstr "Plat afegit al menú."
 
-#: src/Frontend/Views/EventosView.php:733
+#: src/Frontend/Views/EventosView.php:764
 msgid "Dish removed from the menu."
 msgstr "Plat tret del menú."
 
@@ -5031,7 +5035,7 @@ msgid "Draft"
 msgstr "Esborrany"
 
 #. translators: %s: text
-#: src/Frontend/Views/EventosView.php:791
+#: src/Frontend/Views/EventosView.php:822
 #, php-format
 msgid "Draft %s deleted."
 msgstr "Esborrany %s esborrat."
@@ -5208,7 +5212,7 @@ msgstr "Email"
 msgid "Email for the invitation (also works for signing in)"
 msgstr "Email per a la invitació (també serveix per entrar)"
 
-#: src/Idiomas/Guardados.php:269 templates/usuarios/emails.php:28
+#: src/Idiomas/Guardados.php:269 templates/usuarios/emails.php:33
 msgid "Email log"
 msgstr "Registre d'emails"
 
@@ -5324,7 +5328,7 @@ msgstr "Escriu almenys %s lletres…"
 msgid "Enter at least 3 characters."
 msgstr "Escriu almenys 3 caràcters."
 
-#: src/Eventos/Servicio.php:536
+#: src/Eventos/Servicio.php:541
 msgid "Enter how many people are travelling, the places on each bus and what one costs."
 msgstr "Escriu quantes persones viatgen, les places de cada autobús i el que costa un."
 
@@ -5344,7 +5348,7 @@ msgstr "Escriu l'adreça del titular (carrer, codi postal i població)."
 msgid "Enter the amount of the adjustment and its reason."
 msgstr "Escriu l'import de l'ajust i el motiu."
 
-#: src/Eventos/Servicio.php:499
+#: src/Eventos/Servicio.php:504
 msgid "Enter the description and an amount greater than zero."
 msgstr "Escriu el concepte i un import més gran que zero."
 
@@ -5364,7 +5368,7 @@ msgstr "Escriu el concepte: què vas pagar."
 msgid "Enter the document number."
 msgstr "Escriu el número de document."
 
-#: src/Eventos/Servicio.php:197
+#: src/Eventos/Servicio.php:202
 msgid "Enter the event name."
 msgstr "Escriu el nom de l'esdeveniment."
 
@@ -5510,11 +5514,11 @@ msgstr "Inventari de material"
 msgid "Equipment items"
 msgstr "Materials"
 
-#: src/Frontend/Views/EventosView.php:691
+#: src/Frontend/Views/EventosView.php:722
 msgid "Equipment removed from the event list."
 msgstr "Material tret de la llista de l'esdeveniment."
 
-#: src/Frontend/Views/EventosView.php:681
+#: src/Frontend/Views/EventosView.php:712
 msgid "Equipment reserved for the event."
 msgstr "Material reservat per a l'esdeveniment."
 
@@ -5615,31 +5619,31 @@ msgid "Event %s"
 msgstr "Esdeveniment %s"
 
 #. translators: %s: text
-#: src/Frontend/Views/EventosView.php:554
+#: src/Frontend/Views/EventosView.php:585
 #, php-format
 msgid "Event %s cancelled."
 msgstr "Esdeveniment %s cancel·lat."
 
 #. translators: %s: text
-#: src/Frontend/Views/EventosView.php:439
+#: src/Frontend/Views/EventosView.php:452
 #, php-format
 msgid "Event %s created as a draft. Add the team and, if it has a cost, the budget."
 msgstr "Esdeveniment %s creat com a esborrany. Afegeix l'equip i, si té cost, el pressupost."
 
 #. translators: %s: text
-#: src/Frontend/Views/EventosView.php:549
+#: src/Frontend/Views/EventosView.php:580
 #, php-format
 msgid "Event %s is a draft again."
 msgstr "L'esdeveniment %s torna a ser un esborrany."
 
 #. translators: %s: text
-#: src/Frontend/Views/EventosView.php:538
+#: src/Frontend/Views/EventosView.php:551
 #, php-format
 msgid "Event %s published."
 msgstr "Esdeveniment %s publicat."
 
 #. translators: %s: text
-#: src/Frontend/Views/EventosView.php:475
+#: src/Frontend/Views/EventosView.php:488
 #, php-format
 msgid "Event %s saved."
 msgstr "Esdeveniment %s desat."
@@ -5656,7 +5660,7 @@ msgstr "Esdeveniment cancel·lat"
 msgid "Event equipment"
 msgstr "Material de l'esdeveniment"
 
-#: src/Eventos/Avisos.php:237
+#: src/Eventos/Avisos.php:369
 msgid "Event kitchen sheet. As it contains health data, the content is not stored: only the fact that it was sent is recorded."
 msgstr "Full de cuina de l'esdeveniment. Com que conté dades de salut, el contingut no es desa: només consta que es va enviar."
 
@@ -5671,6 +5675,10 @@ msgstr "Configuració d'esdeveniments desada."
 #: templates/pagos/mis-pagos.php:133
 msgid "Event sign-ups can be seen in"
 msgstr "Les inscripcions als esdeveniments es veuen a"
+
+#: src/Frontend/Views/EventosView.php:167
+msgid "Event team"
+msgstr "Equip de l'esdeveniment"
 
 #: templates/tesoreria/banco.php:220
 msgid "Event:"
@@ -5704,9 +5712,9 @@ msgstr "Esdeveniments: devolucions"
 msgid "Events: reimbursements"
 msgstr "Esdeveniments: reemborsaments"
 
-#: templates/usuarios/emails.php:30
-msgid "Every invitation, password recovery or rejected-request notice sent by the private area, with its result."
-msgstr "Cada invitació, recuperació de contrasenya o avís de sol·licitud rebutjada que envia l'àrea privada, amb el seu resultat."
+#: templates/usuarios/emails.php:35
+msgid "Every email sent by the private area, from any module (invitations, events, shop, direct debits, equipment, waiting list…), with its result."
+msgstr "Tots els emails que envia l'àrea privada, de qualsevol mòdul (invitacions, esdeveniments, botiga, domiciliacions, material, llista d'espera…), amb el seu resultat."
 
 #: src/Tienda/ProductosTable.php:33
 msgid "Everyone (also not signed in)"
@@ -5818,11 +5826,11 @@ msgstr "Despesa de %1$s · %2$s"
 msgid "Expense or income"
 msgstr "Despesa o ingrés"
 
-#: src/Frontend/Views/EventosView.php:606 src/Frontend/Views/PresupuestosView.php:151
+#: src/Frontend/Views/EventosView.php:637 src/Frontend/Views/PresupuestosView.php:151
 msgid "Expense recorded."
 msgstr "Despesa apuntada."
 
-#: src/Frontend/Views/EventosView.php:626
+#: src/Frontend/Views/EventosView.php:657
 msgid "Expense rejected."
 msgstr "Despesa rebutjada."
 
@@ -5830,15 +5838,15 @@ msgstr "Despesa rebutjada."
 msgid "Expense removed."
 msgstr "Despesa treta."
 
-#: src/Frontend/Views/EventosView.php:606
+#: src/Frontend/Views/EventosView.php:637
 msgid "Expense sent to Treasury for review."
 msgstr "Despesa enviada a Tresoreria perquè la revisi."
 
-#: src/Frontend/Views/EventosView.php:621
+#: src/Frontend/Views/EventosView.php:652
 msgid "Expense validated."
 msgstr "Despesa validada."
 
-#: src/Frontend/Views/EventosView.php:616
+#: src/Frontend/Views/EventosView.php:647
 msgid "Expense withdrawn."
 msgstr "Despesa retirada."
 
@@ -5884,7 +5892,7 @@ msgstr "Esdeveniment extern"
 msgid "Extra help: the same manual with screenshots, in another tab."
 msgstr "Ajuda extra: el mateix manual amb captures de pantalla, en una altra pestanya."
 
-#: src/Frontend/Views/TesoreriaBaseView.php:26 src/Idiomas/Guardados.php:152 templates/eventos/resumen.php:104 templates/tesoreria/familias.php:28
+#: src/Frontend/Views/TesoreriaBaseView.php:26 src/Idiomas/Guardados.php:152 templates/eventos/resumen.php:104 templates/eventos/resumen.php:137
 msgid "Families"
 msgstr "Famílies"
 
@@ -5896,7 +5904,7 @@ msgstr "Famílies ("
 msgid "Families and members request access with this link. When their document and date of birth are checked against the CRM record, the request appears here for you to approve."
 msgstr "Les famílies i els socis demanen l'accés amb aquest enllaç. En comprovar el seu document i la seva data de naixement amb la fitxa del CRM, la sol·licitud apareix aquí perquè l'aprovis."
 
-#: src/Frontend/Views/EventosView.php:541
+#: src/Frontend/Views/EventosView.php:554
 msgid "Families and scouters will be notified by email."
 msgstr "S'avisarà per email les famílies i els scouters."
 
@@ -5914,7 +5922,7 @@ msgstr "Encara no s'ha avisat les famílies. "
 msgid "Families notified on %s. "
 msgstr "Famílies avisades el %s. "
 
-#: src/Frontend/Views/EventosView.php:539
+#: src/Frontend/Views/EventosView.php:552
 msgid "Families will be notified by email."
 msgstr "S'avisarà per email les famílies."
 
@@ -6304,7 +6312,7 @@ msgstr "Al·lèrgia alimentària"
 msgid "Food intolerance"
 msgstr "Intolerància alimentària"
 
-#: src/Frontend/Views/EventosView.php:761
+#: src/Frontend/Views/EventosView.php:792
 msgid "Food item added to the budget."
 msgstr "Partida d'alimentació afegida al pressupost."
 
@@ -6424,7 +6432,7 @@ msgstr "Per al teu rol la verificació en dos passos és"
 msgid "Forecast"
 msgstr "Previsió"
 
-#: src/Frontend/Views/EventosView.php:500
+#: src/Frontend/Views/EventosView.php:513
 msgid "Forecast saved: the price has been recalculated."
 msgstr "Previsió desada: el preu s'ha recalculat."
 
@@ -6812,7 +6820,7 @@ msgstr "Email del grup"
 msgid "Group equipment, types and shopping lists."
 msgstr "Material del grup, tipus i llistes de compra."
 
-#: src/Eventos/Servicio.php:202
+#: src/Eventos/Servicio.php:207
 msgid "Group events and external events are created by Coordination."
 msgstr "Els esdeveniments de grup i els externs els crea Coordinació."
 
@@ -6999,14 +7007,6 @@ msgstr "No té usuari propi."
 #: src/Informes/Catalogo.php:45
 msgid "Have paid the whole fee"
 msgstr "Han pagat tota la quota"
-
-#. translators: %d: group registrations to review
-#: src/Admin/GruposInvitacionesPage.php:134
-#, php-format
-msgid "Hay %d alta de grupo por revisar."
-msgid_plural "Hay %d altas de grupo por revisar."
-msgstr[0] ""
-msgstr[1] ""
 
 #: src/Idiomas/Guardados.php:77
 msgid "Hazelnut"
@@ -7515,7 +7515,7 @@ msgid "Imported %1$d new transactions%2$s. The file has not been saved."
 msgstr "Importats %1$d moviments nous%2$s. El fitxer no s'ha desat."
 
 #. translators: %s: text
-#: src/Eventos/Servicio.php:241
+#: src/Eventos/Servicio.php:246
 #, php-format
 msgid "In %s there are more expected participants than places."
 msgstr "A %s hi ha més participants previstos que places."
@@ -7673,7 +7673,7 @@ msgstr "Ingrés de %1$s · %2$s"
 msgid "Income only"
 msgstr "Només ingressos"
 
-#: src/Frontend/Views/EventosView.php:611
+#: src/Frontend/Views/EventosView.php:642
 msgid "Income recorded."
 msgstr "Ingrés apuntat."
 
@@ -8214,7 +8214,7 @@ msgstr "Es generarà en donar-li accés."
 msgid "Item"
 msgstr "Partida"
 
-#: src/Frontend/Views/EventosView.php:505
+#: src/Frontend/Views/EventosView.php:518
 msgid "Item added to the budget."
 msgstr "Partida afegida al pressupost."
 
@@ -8230,7 +8230,7 @@ msgstr "Nom del concepte"
 msgid "Item of data"
 msgstr "Dada"
 
-#: src/Frontend/Views/EventosView.php:515
+#: src/Frontend/Views/EventosView.php:528
 msgid "Item removed from the budget."
 msgstr "Partida treta del pressupost."
 
@@ -8301,7 +8301,7 @@ msgid "Kitchen sheet"
 msgstr "Full de cuina"
 
 #. translators: %d: number
-#: src/Frontend/Views/EventosView.php:754
+#: src/Frontend/Views/EventosView.php:785
 #, php-format
 msgid "Kitchen sheet sent to %d person."
 msgid_plural "Kitchen sheet sent to %d people."
@@ -8404,7 +8404,7 @@ msgstr "Deixa el percentatge d'una secció buit perquè faci servir el del grup.
 msgid "Leave at least one activity type active."
 msgstr "Deixa almenys un tipus d'activitat actiu."
 
-#: templates/eventos/resumen.php:127
+#: templates/eventos/resumen.php:157
 msgid "Leave the event as a draft again?"
 msgstr "Vols tornar a deixar l'esdeveniment com a esborrany?"
 
@@ -8702,7 +8702,7 @@ msgstr "Amortitzacions de préstecs i crèdits"
 msgid "Lobatos"
 msgstr "Llobatons"
 
-#: templates/usuarios/email.php:41 templates/usuarios/emails.php:34
+#: templates/usuarios/email.php:41 templates/usuarios/emails.php:39
 msgid "Local environment:"
 msgstr "Entorn local:"
 
@@ -9544,7 +9544,7 @@ msgstr "Sense document"
 msgid "No email in the CRM"
 msgstr "Sense email al CRM"
 
-#: src/Frontend/Views/EventosView.php:541
+#: src/Frontend/Views/EventosView.php:554
 msgid "No email notice has been sent."
 msgstr "No s'ha enviat cap avís per email."
 
@@ -9884,13 +9884,21 @@ msgstr "Encara no s'ha reservat res per a aquest esdeveniment."
 msgid "Nothing is deleted: the record and their previous memberships stay in the CRM. If they return, they are given a new membership."
 msgstr "No s'esborra res: la fitxa i les seves membresies anteriors es queden al CRM. Si torna, se li dona una membresia nova."
 
-#: src/Frontend/Views/EventosView.php:743
+#: src/Frontend/Views/EventosView.php:774
 msgid "Notice confirmed."
 msgstr "Avís confirmat."
+
+#: src/Frontend/Views/EventosView.php:571
+msgid "Notice sent."
+msgstr "Avís enviat."
 
 #: templates/eventos/config.php:115
 msgid "Notices"
 msgstr "Avisos"
+
+#: src/Eventos/Avisos.php:194
+msgid "Notices can only be resent for a published event."
+msgstr "Els avisos només es poden reenviar en un esdeveniment publicat."
 
 #: templates/eventos/resumen.php:103
 msgid "Notify by email that it has been published?"
@@ -10078,6 +10086,10 @@ msgstr "Una pàgina per soci/sòcia amb el mòbil, el tutor/a i el seu mòbil, l
 msgid "One per line. They are the ones chosen when adding an expense to a budget."
 msgstr "Una per línia. Són les que es trien en afegir una despesa a un pressupost."
 
+#: templates/eventos/resumen.php:139
+msgid "One person"
+msgstr "Una persona"
+
 #: src/Informes/Informe.php:31
 msgid "One record per person (one per page when printing)"
 msgstr "Una fitxa per persona (en imprimir, una per pàgina)"
@@ -10104,7 +10116,7 @@ msgstr "Només el veuen Tresoreria i Coordinació, i s'esborra quan el reintegra
 msgid "Only a batch that has not yet been sent to the bank can be cancelled."
 msgstr "Només es pot anul·lar una remesa que encara no s'ha enviat al banc."
 
-#: src/Eventos/Servicio.php:658
+#: src/Eventos/Servicio.php:663
 msgid "Only a draft event can be deleted."
 msgstr "Només es pot esborrar un esdeveniment en esborrany."
 
@@ -10124,6 +10136,10 @@ msgstr "Només es concilien ingressos amb les famílies."
 msgid "Only events with open sign-up in which this family has something pending appear. For an event: cash, transfer or Bizum, and no bank deposit."
 msgstr "Només surten els esdeveniments amb la inscripció oberta en què aquesta família té alguna cosa pendent. Per a un esdeveniment: efectiu, transferència o Bizum, i sense ingrés del banc."
 
+#: templates/eventos/resumen.php:141
+msgid "Only families who have not signed up yet"
+msgstr "Només les famílies que encara no s'han inscrit"
+
 #: templates/inventario/material.php:92
 msgid "Only for the type \"Uniform shirt\": uniform management assigns these shirts to orders and deducts them from here. If you don't write the description, it is filled in automatically."
 msgstr "Només per al tipus «Camisa uniforme»: la gestió d'uniformes assigna aquestes camises a les comandes i les descompta d'aquí. Si no escrius la descripció, es posa sola."
@@ -10132,7 +10148,7 @@ msgstr "Només per al tipus «Camisa uniforme»: la gestió d'uniformes assigna 
 msgid "Only members with relevant health or food data"
 msgstr "Només socis amb dades de salut o alimentació rellevants"
 
-#: templates/usuarios/emails.php:51
+#: templates/usuarios/emails.php:72
 msgid "Only of the user"
 msgstr "Només de l'usuari"
 
@@ -10510,7 +10526,7 @@ msgstr "Pagat"
 msgid "Paid on %s"
 msgstr "Pagat el %s"
 
-#: src/Frontend/Views/EventosView.php:566
+#: src/Frontend/Views/EventosView.php:597
 msgid "Paper authorisation recorded."
 msgstr "Autorització en paper anotada."
 
@@ -10701,13 +10717,13 @@ msgid "Payment of %s recorded"
 msgstr "Pagament de %s registrat"
 
 #. translators: %s: text
-#: src/Frontend/Views/EventosView.php:583
+#: src/Frontend/Views/EventosView.php:614
 #, php-format
 msgid "Payment of %s recorded and split among the family's sign-ups."
 msgstr "Pagament de %s registrat i repartit entre les inscripcions de la família."
 
 #. translators: %s: text
-#: src/Frontend/Views/EventosView.php:577 src/Frontend/Views/TesoreriaView.php:413
+#: src/Frontend/Views/EventosView.php:608 src/Frontend/Views/TesoreriaView.php:413
 #, php-format
 msgid "Payment of %s recorded."
 msgstr "Pagament de %s registrat."
@@ -11304,7 +11320,7 @@ msgstr "Quantitat"
 msgid "Quantity %d"
 msgstr "Quantitat %d"
 
-#: src/Frontend/Views/EventosView.php:686
+#: src/Frontend/Views/EventosView.php:717
 msgid "Quantity changed."
 msgstr "Quantitat canviada."
 
@@ -11717,12 +11733,12 @@ msgid "Refund of %1$s · event \"%2$s\""
 msgstr "Devolució de %1$s · esdeveniment «%2$s»"
 
 #. translators: %s: text
-#: src/Frontend/Views/EventosView.php:599
+#: src/Frontend/Views/EventosView.php:630
 #, php-format
 msgid "Refund of %s recorded."
 msgstr "Devolució de %s anotada."
 
-#: src/Frontend/Views/EventosView.php:715
+#: src/Frontend/Views/EventosView.php:746
 msgid "Refund recorded."
 msgstr "Devolució anotada."
 
@@ -11854,7 +11870,7 @@ msgstr "Reintegrament cancel·lat."
 msgid "Reimbursement marked as paid."
 msgstr "Reintegrament marcat com a pagat."
 
-#: src/Frontend/Views/EventosView.php:631
+#: src/Frontend/Views/EventosView.php:662
 msgid "Reimbursement recorded."
 msgstr "Reemborsament anotat."
 
@@ -11976,7 +11992,7 @@ msgstr "Vols treure aquesta persona de l'equip?"
 msgid "Remove this task?"
 msgstr "Treure aquesta tasca?"
 
-#: src/Frontend/Views/EventosView.php:495
+#: src/Frontend/Views/EventosView.php:508
 msgid "Removed from the team."
 msgstr "Tret de l'equip."
 
@@ -12163,6 +12179,14 @@ msgstr "Obligatòries: %s. La quantitat, un nombre enter de 0 en endavant."
 #: templates/usuarios/fila.php:120
 msgid "Resend invitation"
 msgstr "Reenvia la invitació"
+
+#: templates/eventos/resumen.php:152
+msgid "Resend notices / invitations"
+msgstr "Reenvia avisos / invitacions"
+
+#: templates/eventos/resumen.php:147
+msgid "Resend the notice"
+msgstr "Reenvia l'avís"
 
 #: templates/eventos/material.php:159
 msgid "Reserve"
@@ -12669,6 +12693,10 @@ msgstr "Alta de scouters"
 msgid "Scouters"
 msgstr "Scouters"
 
+#: templates/eventos/resumen.php:138
+msgid "Scouters (event team)"
+msgstr "Scouters (equip de l'esdeveniment)"
+
 #: src/Domain/Modulos.php:60
 msgid "Scouters ask to be repaid for an expense (with the receipt and, where applicable, an event); Treasury approves it and Treasury or Coordination mark it as paid."
 msgstr "Els scouters demanen que els tornin una despesa (amb el justificant i, si escau, un esdeveniment); Tresoreria l'aprova i Tresoreria o Coordinació el marquen com a pagat."
@@ -12677,7 +12705,7 @@ msgstr "Els scouters demanen que els tornin una despesa (amb el justificant i, s
 msgid "Scouters link renewed: the previous one no longer works."
 msgstr "Enllaç per a scouters renovat: l'anterior ja no serveix."
 
-#: src/Frontend/Views/EventosView.php:540
+#: src/Frontend/Views/EventosView.php:553
 msgid "Scouters will be notified by email."
 msgstr "S'avisarà per email els scouters."
 
@@ -12906,6 +12934,10 @@ msgstr ""
 msgid "See who has access to the group's area."
 msgstr "Consulta qui té accés a l'àrea del grup."
 
+#: templates/eventos/resumen.php:149
+msgid "Send"
+msgstr "Envia"
+
 #: src/Admin/GruposInvitacionesPage.php:102
 msgid "Send by email (optional)"
 msgstr ""
@@ -12960,7 +12992,7 @@ msgid "Send to the kitchen team"
 msgstr "Envia a l'equip de cuina"
 
 #. translators: %d: number
-#: src/Frontend/Views/EventosView.php:754
+#: src/Frontend/Views/EventosView.php:785
 #, php-format
 msgid "Sending to %d failed."
 msgid_plural "Sending to %d failed."
@@ -12971,7 +13003,7 @@ msgstr[1] "Ha fallat l'enviament a %d."
 msgid "Sensitive"
 msgstr "Sensible"
 
-#: src/Usuarios/RegistroEmails.php:36 templates/usuarios/emails.php:30
+#: src/Usuarios/RegistroEmails.php:36 templates/usuarios/emails.php:35
 msgid "Sent"
 msgstr "Enviat"
 
@@ -12979,7 +13011,7 @@ msgstr "Enviat"
 msgid "Sent by"
 msgstr "Enviat per"
 
-#: templates/usuarios/email.php:27 templates/usuarios/emails.php:64 templates/usuarios/emails.php:85
+#: templates/usuarios/email.php:27 templates/usuarios/emails.php:85 templates/usuarios/emails.php:107
 msgid "Sent to"
 msgstr "Enviat a"
 
@@ -13297,7 +13329,7 @@ msgstr "La inscripció s'obre el %s"
 msgid "Sign-up opens on %s."
 msgstr "La inscripció s'obre el %s."
 
-#: src/Frontend/Views/EventosView.php:560
+#: src/Frontend/Views/EventosView.php:591
 msgid "Sign-up saved."
 msgstr "Inscripció desada."
 
@@ -13309,7 +13341,7 @@ msgstr "Inscripció desada. Mira a sota què falta per confirmar-la."
 msgid "Sign-up until (optional)"
 msgstr "Inscripció fins a (opcional)"
 
-#: src/Frontend/Views/EventosView.php:571 src/Frontend/Views/MisEventosView.php:136
+#: src/Frontend/Views/EventosView.php:602 src/Frontend/Views/MisEventosView.php:136
 msgid "Sign-up withdrawn."
 msgstr "Inscripció donada de baixa."
 
@@ -13333,7 +13365,7 @@ msgstr "Signada el"
 msgid "Signed on the website"
 msgstr "Signada al web"
 
-#: templates/lista-espera/detalle.php:91
+#: src/Frontend/Views/EventosView.php:170 templates/lista-espera/detalle.php:91
 msgid "Signed up"
 msgstr "Es va apuntar"
 
@@ -13507,7 +13539,7 @@ msgstr "Indica el núm. de comanda al concepte. Quan Tresoreria rebi el pagament
 msgid "State the payment date (not later than today)."
 msgstr "Indica la data del pagament (no posterior a avui)."
 
-#: src/Eventos/Servicio.php:645 src/Frontend/Views/TiendaGestionView.php:478
+#: src/Eventos/Servicio.php:650 src/Frontend/Views/TiendaGestionView.php:478
 msgid "State the reason for the cancellation."
 msgstr "Indica el motiu de la cancel·lació."
 
@@ -13527,7 +13559,7 @@ msgstr "Indica el motiu del rebuig: el veurà qui l'ha demanada."
 msgid "State the reason for the withdrawal."
 msgstr "Indica el motiu de la baixa."
 
-#: src/Eventos/Servicio.php:224
+#: src/Eventos/Servicio.php:229
 msgid "State the start and end date and time."
 msgstr "Indica la data i l'hora d'inici i de final."
 
@@ -13617,9 +13649,13 @@ msgstr "Aturada: %s; en va quedar 1 sense corregir."
 msgid "Strawberry"
 msgstr "Maduixa"
 
-#: templates/lista-espera/detalle.php:105 templates/usuarios/email.php:28
+#: templates/lista-espera/detalle.php:105 templates/usuarios/email.php:28 templates/usuarios/emails.php:27 templates/usuarios/emails.php:100
 msgid "Subject"
 msgstr "Assumpte"
+
+#: templates/usuarios/emails.php:66
+msgid "Subject, username or address"
+msgstr "Assumpte, usuari o adreça"
 
 #: src/Idiomas/Guardados.php:255
 msgid "Submit the activity plan"
@@ -13725,7 +13761,7 @@ msgstr "Parla amb la Secretaria del teu grup, dient-li el nom del soci/sòcia i 
 msgid "Task"
 msgstr "Tasca"
 
-#: src/Frontend/Views/EventosView.php:779
+#: src/Frontend/Views/EventosView.php:810
 msgid "Task added."
 msgstr "Tasca afegida."
 
@@ -13733,15 +13769,15 @@ msgstr "Tasca afegida."
 msgid "Task calendar"
 msgstr "Calendari de tasques"
 
-#: src/Frontend/Views/EventosView.php:768
+#: src/Frontend/Views/EventosView.php:799
 msgid "Task done."
 msgstr "Tasca feta."
 
-#: src/Frontend/Views/EventosView.php:785
+#: src/Frontend/Views/EventosView.php:816
 msgid "Task removed."
 msgstr "Tasca treta."
 
-#: src/Frontend/Views/EventosView.php:774
+#: src/Frontend/Views/EventosView.php:805
 msgid "Task saved."
 msgstr "Tasca desada."
 
@@ -13769,7 +13805,7 @@ msgstr "Denominació fiscal (opcional)"
 msgid "Team"
 msgstr "Equip"
 
-#: src/Frontend/Views/EventosView.php:490
+#: src/Frontend/Views/EventosView.php:503
 msgid "Team updated."
 msgstr "Equip actualitzat."
 
@@ -14067,6 +14103,10 @@ msgstr "Aquesta persona no pot rebre permisos solts: ha de ser de gestió, del t
 msgid "That person is not among those who receive individual permissions."
 msgstr "Aquesta persona no és entre les que reben permisos solts."
 
+#: src/Eventos/Avisos.php:222
+msgid "That person is not on the team, signed up or invited to this event."
+msgstr "Aquesta persona no és a l'equip, ni està inscrita ni convocada a aquest esdeveniment."
+
 #: src/Eventos/Inscripciones.php:305
 msgid "That place is no longer available."
 msgstr "Aquesta plaça ja no està disponible."
@@ -14075,7 +14115,7 @@ msgstr "Aquesta plaça ja no està disponible."
 msgid "That product is not in the group's shop."
 msgstr "Aquest producte no és a la botiga del grup."
 
-#: src/Frontend/Views/EventosView.php:811
+#: src/Frontend/Views/EventosView.php:842
 msgid "That receipt does not exist or you cannot see it."
 msgstr "Aquest justificant no existeix o no el pots veure."
 
@@ -14123,7 +14163,7 @@ msgstr "Aquesta sol·licitud ja no està pendent."
 msgid "That role already had the default permissions."
 msgstr "Aquest rol ja tenia els permisos de fàbrica."
 
-#: src/Eventos/Servicio.php:510
+#: src/Eventos/Servicio.php:515
 msgid "That section is not invited."
 msgstr "Aquesta secció no està convocada."
 
@@ -14135,7 +14175,7 @@ msgstr "Aquesta llista de compra no és del teu grup."
 msgid "That sign-up is no longer on the waiting list."
 msgstr "Aquesta inscripció ja no és a la llista d'espera."
 
-#: src/Frontend/Views/EventosView.php:767 src/Frontend/Views/EventosView.php:773 src/Frontend/Views/EventosView.php:784
+#: src/Frontend/Views/EventosView.php:798 src/Frontend/Views/EventosView.php:804 src/Frontend/Views/EventosView.php:815
 msgid "That task does not exist."
 msgstr "Aquesta tasca no existeix."
 
@@ -14190,6 +14230,10 @@ msgstr "Aquest tipus no val per a aquest apunt (un tipus de despesa, només en u
 #: src/Frontend/Views/UsuariosView.php:162
 msgid "That user does not have a pending invitation."
 msgstr "Aquest usuari no té cap invitació pendent."
+
+#: src/Eventos/Avisos.php:197
+msgid "The \"event published\" notice is switched off in the events settings."
+msgstr "L'avís d'«esdeveniment publicat» està desactivat a la configuració d'esdeveniments."
 
 #. translators: %s: text
 #: src/Crm/Escritura.php:82
@@ -14343,6 +14387,10 @@ msgstr "El CRM no ha desat l'email nou a la fitxa de %1$s (%2$s): anota'l a mà.
 msgid "The CRM has not yet given them a member no. You will see it on their record when it has."
 msgstr "El CRM encara no li ha posat el número de soci/sòcia. El veuràs a la seva fitxa quan el tingui."
 
+#: src/Eventos/Avisos.php:213 src/Eventos/Avisos.php:218
+msgid "The CRM is not available right now."
+msgstr "El CRM no està disponible ara mateix."
+
 #: src/Sepa/Mandatos.php:204
 msgid "The CRM is not responding: try again later."
 msgstr "El CRM no respon: torna-ho a provar més tard."
@@ -14431,7 +14479,7 @@ msgstr "No s'ha pogut crear el compte al moment: %s"
 msgid "The account details are stored on the CRM record of each family member at Scouts de España; here it is only shown masked."
 msgstr "Les dades del compte es desen a la fitxa de cada membre de la família al CRM de Scouts de España; aquí el compte només es mostra emmascarat."
 
-#: src/Eventos/Avisos.php:356 src/Eventos/AvisosTareas.php:121 src/Inventario/AvisoRevision.php:76 src/Menus/AvisoAlergenos.php:179
+#: src/Eventos/Avisos.php:488 src/Eventos/AvisosTareas.php:121 src/Inventario/AvisoRevision.php:76 src/Menus/AvisoAlergenos.php:179
 msgid "The account has no email address to write to."
 msgstr "El compte no té cap email al qual escriure."
 
@@ -14468,13 +14516,13 @@ msgid "The accounts could not be reopened. Try again."
 msgstr "No s'han pogut reobrir els comptes. Torna-ho a provar."
 
 #. translators: %s: text
-#: src/Frontend/Views/EventosView.php:658
+#: src/Frontend/Views/EventosView.php:689
 #, php-format
 msgid "The accounts of event %s are closed: the balance becomes the final report."
 msgstr "Comptes de l'esdeveniment %s tancats: el balanç queda com a informe final."
 
 #. translators: %s: text
-#: src/Frontend/Views/EventosView.php:663
+#: src/Frontend/Views/EventosView.php:694
 #, php-format
 msgid "The accounts of event %s are reopened: they can be changed now. When everything is done, close them again."
 msgstr "Comptes de l'esdeveniment %s reoberts: ja es poden canviar. Quan estigui tot, torna'ls a tancar."
@@ -14601,7 +14649,7 @@ msgstr "El pressupost ja és un esborrany."
 msgid "The budget is already approved."
 msgstr "El pressupost ja està aprovat."
 
-#: src/Eventos/Servicio.php:286
+#: src/Eventos/Servicio.php:291
 msgid "The budget is already validated and the price is fixed: to change the sections, the expected participants or whether it has a cost, ask Treasury to reopen the budget."
 msgstr "El pressupost ja està validat i el preu és fix: per canviar les seccions, els participants previstos o si té cost, demana a Tresoreria que reobri el pressupost."
 
@@ -14663,7 +14711,7 @@ msgstr "La data de cobrament ha de ser, com a molt aviat, el %1$s (%2$d dies hà
 msgid "The collection date must be a working day (Monday to Friday)."
 msgstr "La data de cobrament ha de ser un dia laborable (de dilluns a divendres)."
 
-#: src/Frontend/Views/EventosView.php:748
+#: src/Frontend/Views/EventosView.php:779
 msgid "The confirmation has been removed: the notice is unresolved again."
 msgstr "La confirmació s'ha tret: l'avís torna a estar sense resoldre."
 
@@ -14752,7 +14800,7 @@ msgid "The date is not valid."
 msgstr "La data no és vàlida."
 
 #. translators: %d: number
-#: src/Frontend/Views/EventosView.php:478
+#: src/Frontend/Views/EventosView.php:491
 #, php-format
 msgid "The date of %d calendar task has changed."
 msgid_plural "The dates of %d calendar tasks have changed."
@@ -14853,11 +14901,11 @@ msgstr "L'esdeveniment ja porta massa material."
 msgid "The event and its accounts can be changed again. Who picks up and the notes, which were deleted on closing, do not come back."
 msgstr "Es podrà tornar a canviar l'esdeveniment i els seus comptes. Qui recull i les observacions, que es van esborrar en tancar, no tornen."
 
-#: src/Eventos/Servicio.php:226
+#: src/Eventos/Servicio.php:231
 msgid "The event cannot end before it starts."
 msgstr "L'esdeveniment no pot acabar abans de començar."
 
-#: src/Eventos/Servicio.php:335
+#: src/Eventos/Servicio.php:340
 msgid "The event could not be saved."
 msgstr "No s'ha pogut desar l'esdeveniment."
 
@@ -15336,7 +15384,7 @@ msgstr "El servidor de correu no ha acceptat l'email."
 msgid "The manual's address is not valid: enter a full web address (https://…)."
 msgstr "L'adreça del manual no és vàlida: escriu una adreça web completa (https://…)."
 
-#: src/Eventos/Servicio.php:231
+#: src/Eventos/Servicio.php:236
 msgid "The map link must be a web address (https://…)."
 msgstr "L'enllaç al mapa ha de ser una adreça web (https://…)."
 
@@ -15370,13 +15418,25 @@ msgstr "El menú encara no té cost. Anota el cost dels ingredients al receptari
 msgid "The menu has no cost yet: record the cost of the ingredients and add dishes."
 msgstr "El menú encara no té cost: anota el cost dels ingredients i afegeix plats."
 
-#: src/Eventos/Servicio.php:249
+#: src/Eventos/Servicio.php:254
 msgid "The minimum age cannot be greater than the maximum."
 msgstr "L'edat mínima no pot ser més gran que la màxima."
 
 #: src/Usuarios/Listado.php:96
 msgid "The names could not be read from the CRM: only the member numbers are shown."
 msgstr "No s'han pogut llegir els noms del CRM: es mostren només els números de soci."
+
+#: src/Frontend/Views/EventosView.php:573
+msgid "The notice could not be sent: that person has no active account or no email address (see the email log)."
+msgstr "No s'ha pogut enviar l'avís: aquesta persona no té compte activa o adreça d'email (mira el registre d'emails)."
+
+#: src/Frontend/Views/EventosView.php:569
+msgid "The notice will be sent to the event team in a few moments."
+msgstr "L'avís s'enviarà a l'equip de l'esdeveniment d'aquí a uns moments."
+
+#: src/Frontend/Views/EventosView.php:569
+msgid "The notice will be sent to the families in a few moments."
+msgstr "L'avís s'enviarà a les famílies d'aquí a uns moments."
 
 #: src/Admin/SettingsPage.php:250
 msgid "The number cannot be changed: to use another, withdraw the group and add it again."
@@ -15566,7 +15626,7 @@ msgstr "La quantitat ha de ser un nombre enter més gran que zero."
 msgid "The quantity to buy of \"%s\" is not valid."
 msgstr "La quantitat a comprar de «%s» no és vàlida."
 
-#: src/Frontend/Views/EventosView.php:815 src/Frontend/Views/ReintegrosView.php:117
+#: src/Frontend/Views/EventosView.php:846 src/Frontend/Views/ReintegrosView.php:117
 msgid "The receipt could not be read."
 msgstr "No s'ha pogut llegir el justificant."
 
@@ -15636,6 +15696,10 @@ msgstr "No es troba la fila de títols de les columnes (Data, Concepte, Import�
 msgid "The rule requires 14 days unless another period is agreed: here it is agreed and appears on the authorisation."
 msgstr "La norma demana 14 dies llevat que es pacti un altre termini: aquí es pacta i surt a l'autorització."
 
+#: templates/eventos/resumen.php:142
+msgid "The same email as when the event was published is sent. Every email is recorded in the email log."
+msgstr "S'envia el mateix email que en publicar l'esdeveniment. Cada email queda anotat al registre d'emails."
+
 #: templates/solicitudes/detalle.php:189
 msgid "The same person with another email"
 msgstr "La mateixa persona amb un altre email"
@@ -15666,7 +15730,7 @@ msgstr "No s'ha pogut preparar el full: falta el menú, els assistents o la conn
 msgid "The sign-up could not be saved."
 msgstr "No s'ha pogut desar la inscripció."
 
-#: src/Eventos/Servicio.php:258
+#: src/Eventos/Servicio.php:263
 msgid "The sign-up deadline cannot end before it starts."
 msgstr "El termini d'inscripció no pot acabar abans de començar."
 
@@ -15674,7 +15738,7 @@ msgstr "El termini d'inscripció no pot acabar abans de començar."
 msgid "The sign-up deadline has closed: to withdraw, talk to the event team."
 msgstr "El termini d'inscripció ja s'ha tancat: per a la baixa, parla amb l'equip de l'esdeveniment."
 
-#: src/Eventos/Servicio.php:260
+#: src/Eventos/Servicio.php:265
 msgid "The sign-up deadline must end before the event starts."
 msgstr "El termini d'inscripció ha d'acabar abans que comenci l'esdeveniment."
 
@@ -15718,7 +15782,7 @@ msgstr "No es pot desxifrar la credencial desada. Demana al grup que repeteixi l
 msgid "The surname is missing."
 msgstr "Falten els cognoms."
 
-#: src/Frontend/Views/EventosView.php:768
+#: src/Frontend/Views/EventosView.php:799
 msgid "The task is pending again."
 msgstr "La tasca torna a estar pendent."
 
@@ -16049,7 +16113,7 @@ msgstr "No hi ha receptes amb aquest filtre."
 msgid "There are no recipes yet."
 msgstr "Encara no hi ha receptes."
 
-#: templates/usuarios/emails.php:56
+#: templates/usuarios/emails.php:77
 msgid "There are no recorded emails"
 msgstr "No hi ha emails registrats"
 
@@ -16138,6 +16202,14 @@ msgstr "Hi ha activitats de risc especialitzat: necessiten personal titulat en a
 #: src/Tesoreria/Banco/TiposMovimiento.php:177
 msgid "There are transactions of the other kind with this type: leave it as \"Expense or income\" or change their type first."
 msgstr "Hi ha moviments de l'altra classe amb aquest tipus: deixa'l com a «Despesa o ingrés» o canvia'ls abans el tipus."
+
+#. translators: %d: group registrations to review
+#: src/Admin/GruposInvitacionesPage.php:134
+#, php-format
+msgid "There is %d group registration to review."
+msgid_plural "There are %d group registrations to review."
+msgstr[0] "Hi ha %d alta de grup per revisar."
+msgstr[1] "Hi ha %d alta de grup per revisar."
 
 #: src/Eventos/Cuentas.php:470
 msgid "There is a SEPA batch for the event whose collections have not been recorded."
@@ -16355,7 +16427,7 @@ msgstr "No hi havia res a canviar."
 msgid "There were no places left: they are on the waiting list (position %d). If one is freed up, we will let you know by email."
 msgstr "No quedaven places: és a la llista d'espera (lloc %d). Si se n'allibera una, us avisarem per correu."
 
-#: src/Frontend/Views/EventosView.php:560
+#: src/Frontend/Views/EventosView.php:591
 msgid "There were no places left: they remain on the waiting list."
 msgstr "No quedaven places: queda a la llista d'espera."
 
@@ -16420,7 +16492,7 @@ msgid "They are confirmed by the coordination team before they take effect. Mean
 msgstr "Les confirma l'equip de coordinació abans que tinguin efecte. Mentrestant, entres com a scouter de les teves seccions."
 
 #. translators: %s: text
-#: src/Frontend/Views/EventosView.php:699
+#: src/Frontend/Views/EventosView.php:730
 #, php-format
 msgid "They are not in the inventory: %s."
 msgstr "No són a l'inventari: %s."
@@ -16512,11 +16584,11 @@ msgstr "Aquesta autorització serveix per cobrar la quota i altres pagaments del
 msgid "This budget already has items: it can only be copied onto an empty one."
 msgstr "Aquest pressupost ja té partides: només es pot copiar sobre un de buit."
 
-#: src/Eventos/Servicio.php:598
+#: src/Eventos/Servicio.php:603
 msgid "This budget can no longer be reopened."
 msgstr "Aquest pressupost ja no es pot reobrir."
 
-#: src/Eventos/Servicio.php:555
+#: src/Eventos/Servicio.php:560
 msgid "This budget cannot be sent to Treasury."
 msgstr "Aquest pressupost no es pot enviar a Tresoreria."
 
@@ -16548,11 +16620,11 @@ msgstr "Aquest email no es va arribar a enviar"
 msgid "This event already has tasks. Remove the ones you don't want or add the missing ones one by one."
 msgstr "Aquest esdeveniment ja té tasques. Treu les que no vulguis o afegeix les que falten una a una."
 
-#: src/Eventos/Servicio.php:632
+#: src/Eventos/Servicio.php:637
 msgid "This event can no longer go back to draft."
 msgstr "Aquest esdeveniment ja no pot tornar a esborrany."
 
-#: src/Eventos/Servicio.php:615
+#: src/Eventos/Servicio.php:620
 msgid "This event has a cost: before publishing it, Treasury must validate its budget."
 msgstr "Aquest esdeveniment té cost: abans de publicar-lo, Tresoreria n'ha de validar el pressupost."
 
@@ -16568,7 +16640,7 @@ msgstr "Aquest esdeveniment encara no té tasques."
 msgid "This event is not for their section or age."
 msgstr "Aquest esdeveniment no és per a la seva secció o la seva edat."
 
-#: src/Eventos/Cobros.php:317 src/Eventos/Cuentas.php:670 src/Frontend/Views/EventosView.php:464
+#: src/Eventos/Cobros.php:317 src/Eventos/Cuentas.php:670 src/Frontend/Views/EventosView.php:477
 msgid "This event's accounts are closed: they can no longer be changed."
 msgstr "Els comptes d'aquest esdeveniment estan tancats: ja no es poden canviar."
 
@@ -16576,7 +16648,7 @@ msgstr "Els comptes d'aquest esdeveniment estan tancats: ja no es poden canviar.
 msgid "This event's accounts are not closed."
 msgstr "Els comptes d'aquest esdeveniment no estan tancats."
 
-#: src/Eventos/Servicio.php:478 src/Eventos/Servicio.php:495 src/Eventos/Servicio.php:546
+#: src/Eventos/Servicio.php:483 src/Eventos/Servicio.php:500 src/Eventos/Servicio.php:551
 msgid "This event's budget cannot be changed."
 msgstr "El pressupost d'aquest esdeveniment no es pot canviar."
 
@@ -16834,6 +16906,10 @@ msgstr "Marca el que correspongui. Si alguna cosa no és a la llista, escriu-la 
 msgid "Ticket or invoice (image or PDF, up to 5 MB)"
 msgstr "Tiquet o factura (imatge o PDF, fins a 5 MB)"
 
+#: templates/usuarios/emails.php:63
+msgid "To"
+msgstr "Fins a"
+
 #: templates/activar/con-sesion.php:7
 msgid "To activate another account, sign out first."
 msgstr "Per activar un altre compte, tanca primer la teva sessió."
@@ -17060,7 +17136,7 @@ msgstr "Formació"
 msgid "Training Officer"
 msgstr "Responsable de Formació"
 
-#: src/Frontend/Views/EventosView.php:594 src/Frontend/Views/EventosView.php:636
+#: src/Frontend/Views/EventosView.php:625 src/Frontend/Views/EventosView.php:667
 msgid "Transaction cancelled."
 msgstr "Moviment anul·lat."
 
@@ -17374,7 +17450,7 @@ msgstr "Unitats tornades"
 msgid "Units to buy, line %d"
 msgstr "Unitats a comprar, línia %d"
 
-#: src/Frontend/Views/AltaUsuariosView.php:197 src/Frontend/Views/BancoView.php:462 src/Frontend/Views/CajaView.php:188 src/Frontend/Views/EventosView.php:459
+#: src/Frontend/Views/AltaUsuariosView.php:197 src/Frontend/Views/BancoView.php:462 src/Frontend/Views/CajaView.php:188 src/Frontend/Views/EventosView.php:472
 msgid "Unknown action."
 msgstr "Acció desconeguda."
 
@@ -17458,7 +17534,7 @@ msgstr ""
 msgid "User manual"
 msgstr "Manual d'ús"
 
-#: templates/alta/detalle.php:129 templates/usuarios/email.php:23 templates/usuarios/emails.php:21 templates/usuarios/emails.php:72
+#: templates/alta/detalle.php:129 templates/usuarios/email.php:23 templates/usuarios/emails.php:25 templates/usuarios/emails.php:93
 msgid "Username"
 msgstr "Usuari"
 
@@ -17548,7 +17624,7 @@ msgstr "Validat el %2$s: el preu per secció ja és fix."
 msgid "Validated price"
 msgstr "Preu validat"
 
-#: src/Eventos/Servicio.php:572
+#: src/Eventos/Servicio.php:577
 msgid "Validating the budget is done by Treasury."
 msgstr "El pressupost el valida Tresoreria."
 
@@ -17608,7 +17684,7 @@ msgstr "Veure i imprimir el full"
 msgid "View camp site"
 msgstr "Veure el lloc d'acampada"
 
-#: templates/usuarios/emails.php:86
+#: templates/usuarios/emails.php:108
 msgid "View email"
 msgstr "Veure l'email"
 
@@ -18122,6 +18198,10 @@ msgstr "Qui ho demana"
 msgid "Who sees it and can buy it"
 msgstr "Qui el veu i el pot comprar"
 
+#: templates/eventos/resumen.php:136
+msgid "Who should receive the notice again?"
+msgstr "Qui ha de rebre de nou l'avís?"
+
 #: templates/lista-espera/publica.php:174
 msgid "Who wants to join the group"
 msgstr "Qui vol entrar al grup"
@@ -18413,7 +18493,7 @@ msgstr "T'arriba perquè vas demanar aquesta llista de compra a l'àrea privada 
 msgid "You can also sign in by typing this email address instead of the username."
 msgstr "També pots entrar escrivint aquesta adreça d'email en lloc de l'usuari."
 
-#: src/Eventos/Servicio.php:210
+#: src/Eventos/Servicio.php:215
 msgid "You can only invite the sections you help in."
 msgstr "Només pots convocar les seccions en què col·labores."
 
@@ -18445,7 +18525,7 @@ msgstr "No pots aprovar aquest reintegrament (l'aprova Tresoreria, i ningú no a
 msgid "You cannot cancel that authorisation."
 msgstr "No pots anul·lar aquesta autorització."
 
-#: src/Eventos/Servicio.php:642
+#: src/Eventos/Servicio.php:647
 msgid "You cannot cancel this event."
 msgstr "No pots cancel·lar aquest esdeveniment."
 
@@ -18457,19 +18537,19 @@ msgstr "No pots canviar el calendari d'aquest esdeveniment."
 msgid "You cannot change this event's equipment."
 msgstr "No pots canviar el material d'aquest esdeveniment."
 
-#: src/Frontend/Views/EventosView.php:747 src/Menus/MenuEvento.php:59 src/Menus/MenuEvento.php:83 src/Menus/Validacion.php:59
+#: src/Frontend/Views/EventosView.php:778 src/Menus/MenuEvento.php:59 src/Menus/MenuEvento.php:83 src/Menus/Validacion.php:59
 msgid "You cannot change this event's menu."
 msgstr "No pots canviar el menú d'aquest esdeveniment."
 
-#: src/Eventos/Servicio.php:407 src/Eventos/Servicio.php:432 src/Eventos/Servicio.php:446
+#: src/Eventos/Servicio.php:412 src/Eventos/Servicio.php:437 src/Eventos/Servicio.php:451
 msgid "You cannot change this event's team."
 msgstr "No pots canviar l'equip d'aquest esdeveniment."
 
-#: src/Eventos/Servicio.php:353
+#: src/Eventos/Servicio.php:358
 msgid "You cannot change this event."
 msgstr "No pots canviar aquest esdeveniment."
 
-#: src/Eventos/Servicio.php:321 src/Frontend/Views/EventosView.php:72
+#: src/Eventos/Servicio.php:326 src/Frontend/Views/EventosView.php:72
 msgid "You cannot create events."
 msgstr "No pots crear esdeveniments."
 
@@ -18501,7 +18581,7 @@ msgstr "No pots marcar aquest reintegrament com a pagat."
 msgid "You cannot place an order for that person."
 msgstr "No pots fer una comanda per a aquesta persona."
 
-#: src/Eventos/Servicio.php:616
+#: src/Eventos/Servicio.php:621
 msgid "You cannot publish this event."
 msgstr "No pots publicar aquest esdeveniment."
 
@@ -18513,6 +18593,10 @@ msgstr "No pots apuntar despeses en aquest esdeveniment."
 msgid "You cannot reject this reimbursement."
 msgstr "No pots rebutjar aquest reintegrament."
 
+#: src/Frontend/Views/EventosView.php:562
+msgid "You cannot resend notices for this event."
+msgstr "No pots reenviar avisos d'aquest esdeveniment."
+
 #: src/Frontend/Views/AccesosView.php:305
 msgid "You cannot restore your own role: it would give you back permissions that had been removed. Another person must do it."
 msgstr "No pots restaurar el teu propi rol: tornaria a donar-te permisos que s'havien tret. Que ho faci una altra persona."
@@ -18521,7 +18605,7 @@ msgstr "No pots restaurar el teu propi rol: tornaria a donar-te permisos que s'h
 msgid "You cannot review that person's changes."
 msgstr "No pots revisar els canvis d'aquesta persona."
 
-#: src/Frontend/Views/EventosView.php:825
+#: src/Frontend/Views/EventosView.php:856
 msgid "You cannot see this event's accounts."
 msgstr "No pots veure els comptes d'aquest esdeveniment."
 
@@ -18545,7 +18629,7 @@ msgstr "No pots donar de baixa en aquest esdeveniment."
 msgid "You do not have access to that authorisation."
 msgstr "No tens accés a aquesta autorització."
 
-#: src/Frontend/Views/EventosView.php:81 src/Frontend/Views/EventosView.php:446
+#: src/Frontend/Views/EventosView.php:81 src/Frontend/Views/EventosView.php:459
 msgid "You do not have access to that event."
 msgstr "No tens accés a aquest esdeveniment."
 
@@ -18846,7 +18930,7 @@ msgid "Youth members without a family who share an email in the CRM. Review and 
 msgstr "Educands sense família que comparteixen algun email al CRM. Revisa i confirma cadascuna."
 
 #. translators: 1: text, 2: text
-#: src/Eventos/Avisos.php:313
+#: src/Eventos/Avisos.php:445
 #, php-format
 msgid "[%1$s] A place has been freed up in %2$s: confirm it"
 msgstr "[%1$s] S'ha alliberat una plaça a %2$s: confirma-la"
@@ -18870,13 +18954,13 @@ msgid "[%1$s] Charge notice for %2$s"
 msgstr "[%1$s] Avís de càrrec el %2$s"
 
 #. translators: 1: text, 2: text
-#: src/Eventos/Avisos.php:319
+#: src/Eventos/Avisos.php:451
 #, php-format
 msgid "[%1$s] Event cancelled: %2$s"
 msgstr "[%1$s] Esdeveniment cancel·lat: %2$s"
 
 #. translators: 1: text, 2: text
-#: src/Eventos/Avisos.php:322
+#: src/Eventos/Avisos.php:454
 #, php-format
 msgid "[%1$s] New event: %2$s"
 msgstr "[%1$s] Esdeveniment nou: %2$s"
@@ -18924,7 +19008,7 @@ msgid "[%1$s] Reimbursement rejected: %2$s"
 msgstr "[%1$s] Reintegrament rebutjat: %2$s"
 
 #. translators: 1: text, 2: text
-#: src/Eventos/Avisos.php:316
+#: src/Eventos/Avisos.php:448
 #, php-format
 msgid "[%1$s] Reminder: %2$s"
 msgstr "[%1$s] Recordatori: %2$s"
@@ -18942,7 +19026,7 @@ msgid "[%1$s] Shopping list %2$s awaiting your approval"
 msgstr "[%1$s] Llista de compra %2$s pendent del teu vistiplau"
 
 #. translators: 1: text, 2: text
-#: src/Eventos/Avisos.php:310
+#: src/Eventos/Avisos.php:442
 #, php-format
 msgid "[%1$s] Sign-up confirmed: %2$s"
 msgstr "[%1$s] Inscripció confirmada: %2$s"
@@ -19266,7 +19350,7 @@ msgstr "p. ex. Grup Escolta Myotragus 684"
 msgid "e.g. sleeping bag, mat, torch, uniform…"
 msgstr "p. ex. sac de dormir, aïllant, llanterna, uniforme…"
 
-#: templates/usuarios/emails.php:34
+#: templates/usuarios/emails.php:39
 msgid "emails do not go out to the internet (so they do not reach real families). They are collected in Mailpit:"
 msgstr "els emails no surten a internet (així no arriben a famílies reals). Es recullen a Mailpit:"
 
@@ -19447,7 +19531,7 @@ msgstr "obligatòria"
 msgid "maximum %d characters."
 msgstr "màxim %d caràcters."
 
-#: templates/usuarios/emails.php:30
+#: templates/usuarios/emails.php:35
 msgid "means the mail server accepted it; if it does not arrive, they should check their spam folder or the Secretary's office should check the email in the CRM."
 msgstr "vol dir que el servidor de correu l'ha acceptat; si no arriba, que revisin la carpeta de correu brossa o que la Secretaria comprovi l'email al CRM."
 
@@ -19731,7 +19815,7 @@ msgstr "files no carregades"
 msgid "same as %d"
 msgstr "igual que %d"
 
-#: templates/usuarios/emails.php:51
+#: templates/usuarios/emails.php:72
 msgid "see all"
 msgstr "veure'ls tots"
 
@@ -19990,7 +20074,7 @@ msgstr "baixa el %s"
 msgid "years). \"Adults\" includes support scouters and volunteers. Only members with an active membership count."
 msgstr "anys). «Adults» inclou scouters i voluntariat de suport. Només compten els socis amb membresia activa."
 
-#: src/Usuarios/RegistroEmails.php:277
+#: src/Usuarios/RegistroEmails.php:300
 msgid "your group"
 msgstr "el teu grup"
 
@@ -20034,7 +20118,7 @@ msgstr "— Tria la província —"
 msgid "— Choose your organisation —"
 msgstr ""
 
-#: templates/eventos/equipo.php:145 templates/eventos/inscripciones.php:55
+#: templates/eventos/equipo.php:145 templates/eventos/inscripciones.php:55 templates/eventos/resumen.php:140
 msgid "— Choose —"
 msgstr "— Tria —"
 

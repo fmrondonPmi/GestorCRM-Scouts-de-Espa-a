@@ -141,6 +141,11 @@ final class Servicio {
 		return EventosTable::BORRADOR === $e['estado'] && ( ! $e['con_coste'] || null !== $e['validado_en'] ) && self::en_gestion( $e, $a );
 	}
 
+	/** Volver a mandar el aviso de publicación (v0.60): evento publicado y abierto, a quien lo gestiona. */
+	public static function puede_reenviar( array $e, Ambito $a ): bool {
+		return EventosTable::PUBLICADO === $e['estado'] && null === ( $e['cerrado_en'] ?? null ) && self::en_gestion( $e, $a );
+	}
+
 	public static function puede_despublicar( array $e, Ambito $a ): bool {
 		return EventosTable::PUBLICADO === $e['estado'] && self::en_gestion( $e, $a ) && ! InscripcionesTable::hay_participantes( $e['id'] );
 	}

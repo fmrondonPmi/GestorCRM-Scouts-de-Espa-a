@@ -7,6 +7,10 @@
  * @var AsdeBalears\AreaPrivada\Frontend\Tabla $tabla
  * @var array<int, string>                     $nombres user_id => nombre (del CRM)
  * @var string                                 $estado  Filtro ('' = todos)
+ * @var string                                 $tipo    Filtro por tipo/módulo ('' = todos)
+ * @var string                                 $texto   Búsqueda en asunto, usuario y destino
+ * @var string                                 $desde   Y-m-d o ''
+ * @var string                                 $hasta   Y-m-d o ''
  * @var WP_User|null                           $usuario Filtro por usuario
  * @var string                                 $url
  * @var string                                 $mailpit URL de Mailpit (solo en local)
@@ -20,6 +24,7 @@ $columnas = array(
 	'fecha'   => __( 'Date', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	'usuario' => __( 'Username', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	'tipo'    => __( 'Type', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+	'asunto'  => __( 'Subject', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	'estado'  => __( 'Status', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 );
 ?>
@@ -27,7 +32,7 @@ $columnas = array(
 	<header class="asde-card__header">
 		<h2 class="asde-card__title"><?php esc_html_e( 'Email log', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h2>
 	</header>
-	<p><?php esc_html_e( 'Every invitation, password recovery or rejected-request notice sent by the private area, with its result.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <strong><?php esc_html_e( 'Sent', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></strong> <?php esc_html_e( 'means the mail server accepted it; if it does not arrive, they should check their spam folder or the Secretary\'s office should check the email in the CRM.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
+	<p><?php esc_html_e( 'Every email sent by the private area, from any module (invitations, events, shop, direct debits, equipment, waiting list…), with its result.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <strong><?php esc_html_e( 'Sent', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></strong> <?php esc_html_e( 'means the mail server accepted it; if it does not arrive, they should check their spam folder or the Secretary\'s office should check the email in the CRM.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 
 	<?php if ( $mailpit ) : ?>
 		<div class="asde-notice asde-notice--info" role="status">
@@ -39,21 +44,37 @@ $columnas = array(
 		<?php if ( $usuario ) : ?>
 			<input type="hidden" name="usuario" value="<?php echo (int) $usuario->ID; ?>">
 		<?php endif; ?>
-		<label for="asde-estado-email"><?php esc_html_e( 'Show', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
+		<label for="asde-tipo-email"><?php esc_html_e( 'Type', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
+		<select id="asde-tipo-email" name="tipo" data-asde-autoenviar>
+			<option value=""><?php esc_html_e( 'All', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></option>
+			<?php foreach ( ( RegistroEmails::tipos() ) as $k => $label ) : ?>
+				<option value="<?php echo esc_attr( $k ); ?>" <?php selected( $tipo, $k ); ?>><?php echo esc_html( $label ); ?></option>
+			<?php endforeach; ?>
+		</select>
+		<label for="asde-estado-email"><?php esc_html_e( 'Status', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 		<select id="asde-estado-email" name="estado" data-asde-autoenviar>
 			<option value=""><?php esc_html_e( 'All', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></option>
 			<?php foreach ( ( RegistroEmails::estados() ) as $k => $label ) : ?>
 				<option value="<?php echo esc_attr( $k ); ?>" <?php selected( $estado, $k ); ?>><?php echo esc_html( $label ); ?></option>
 			<?php endforeach; ?>
 		</select>
-		<noscript><button type="submit" class="button"><?php esc_html_e( 'Filter', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button></noscript>
+		<label for="asde-desde-email"><?php esc_html_e( 'From', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
+		<input type="date" id="asde-desde-email" name="desde" value="<?php echo esc_attr( $desde ); ?>">
+		<label for="asde-hasta-email"><?php esc_html_e( 'To', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
+		<input type="date" id="asde-hasta-email" name="hasta" value="<?php echo esc_attr( $hasta ); ?>">
+		<label for="asde-buscar-email" class="screen-reader-text"><?php esc_html_e( 'Search', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
+		<input type="search" id="asde-buscar-email" name="buscar" value="<?php echo esc_attr( $texto ); ?>" placeholder="<?php echo esc_attr( esc_attr__( 'Subject, username or address', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
+		<button type="submit" class="button"><?php esc_html_e( 'Filter', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
+		<?php if ( $tipo || $estado || $desde || $hasta || '' !== $texto ) : ?>
+			<a href="<?php echo esc_url( $usuario ? add_query_arg( 'usuario', (int) $usuario->ID, $url ) : $url ); ?>"><?php esc_html_e( 'Clear filters', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a>
+		<?php endif; ?>
 		<?php if ( $usuario ) : ?>
 			<span class="asde-muted"><?php esc_html_e( 'Only of the user', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <strong><?php echo esc_html( $usuario->user_login ); ?></strong> · <a href="<?php echo esc_url( $url ); ?>"><?php esc_html_e( 'see all', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a></span>
 		<?php endif; ?>
 	</form>
 
 	<?php if ( ! $filas ) : ?>
-		<p><?php esc_html_e( 'There are no recorded emails', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?><?php echo $estado || $usuario ? esc_html( __( ' with this filter', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) : ''; ?>.</p>
+		<p><?php esc_html_e( 'There are no recorded emails', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?><?php echo $estado || $tipo || $usuario || $desde || $hasta || '' !== $texto ? esc_html( __( ' with this filter', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) : ''; ?>.</p>
 	<?php else : ?>
 		<table class="asde-table">
 			<thead>
@@ -76,6 +97,7 @@ $columnas = array(
 							<?php endif; ?>
 						</td>
 						<td data-label="<?php echo esc_attr( esc_attr__( 'Type', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( ( RegistroEmails::tipos()[ $f['tipo'] ] ?? $f['tipo'] ) ); ?></td>
+						<td data-label="<?php echo esc_attr( esc_attr__( 'Subject', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( $f['asunto'] ); ?></td>
 						<td data-label="<?php echo esc_attr( esc_attr__( 'Status', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
 							<span class="asde-badge asde-badge--email-<?php echo esc_attr( $f['estado'] ); ?>"><?php echo esc_html( ( RegistroEmails::estados()[ $f['estado'] ] ?? $f['estado'] ) ); ?></span>
 							<?php if ( '' !== $f['error'] ) : ?>

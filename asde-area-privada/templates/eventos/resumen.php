@@ -123,6 +123,36 @@ if ( Servicio::puede_publicar( $e, $ambito ) ) {
 } elseif ( EventosTable::BORRADOR === $e['estado'] && $e['con_coste'] && null === $e['validado_en'] && Servicio::en_gestion( $e, $ambito ) ) {
 	$acciones[] = '<span class="asde-help">' . esc_html( __( 'To publish it, Treasury must first validate the budget ("Budget" tab).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) . '</span>';
 }
+if ( Servicio::puede_reenviar( $e, $ambito ) && Config::aviso_activo( 'publicado', (string) $e['grupo'] ) ) {
+	// v0.60: volver a mandar el aviso de publicación a las familias, al equipo de scouters o a una persona concreta.
+	$opciones = '';
+	foreach ( (array) ( $reenviar ?? array() ) as $grupo_opc => $personas_opc ) {
+		$opciones .= '<optgroup label="' . esc_attr( $grupo_opc ) . '">';
+		foreach ( $personas_opc as $num_opc => $nombre_opc ) {
+			$opciones .= '<option value="' . esc_attr( (string) $num_opc ) . '">' . esc_html( $nombre_opc ) . '</option>';
+		}
+		$opciones .= '</optgroup>';
+	}
+	$campos_reenvio = '<fieldset class="asde-publicar__destinos"><legend>' . esc_html( __( 'Who should receive the notice again?', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) . '</legend>'
+		. '<label class="asde-choice"><input type="radio" name="destino" value="familias" checked data-asde-reenviar-destino><span>' . esc_html( __( 'Families', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) . '</span></label>'
+		. '<label class="asde-choice"><input type="radio" name="destino" value="scouters" data-asde-reenviar-destino><span>' . esc_html( __( 'Scouters (event team)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) . '</span></label>'
+		. '<label class="asde-choice"><input type="radio" name="destino" value="persona" data-asde-reenviar-destino><span>' . esc_html( __( 'One person', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) . '</span></label>'
+		. '<p data-asde-reenviar-persona><label>' . esc_html( __( 'Person', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) . ' <select name="persona"><option value="">' . esc_html( __( '— Choose —', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) . '</option>' . $opciones . '</select></label></p>'
+		. '<p data-asde-reenviar-pendientes><label class="asde-choice"><input type="checkbox" name="solo_sin_inscribir" value="1" checked><span>' . esc_html( __( 'Only families who have not signed up yet', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) . '</span></label></p>'
+		. '<p class="asde-help">' . esc_html( __( 'The same email as when the event was published is sent. Every email is recorded in the email log.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) . '</p></fieldset>';
+	$form_reenviar  = sprintf(
+		'<form method="post" class="asde-form asde-publicar">%s<input type="hidden" name="asde_action" value="evento_reenviar"><input type="hidden" name="evento" value="%d"><input type="hidden" name="pestana" value="resumen"><h3 id="asde-reenviar-titulo">%s</h3>%s<p class="asde-form__acciones"><button type="submit" class="button button-primary">%s</button> <button type="button" class="button asde-button-secundario" data-asde-cerrar hidden>%s</button></p></form>',
+		wp_nonce_field( 'asde_evento_' . $e['id'], '_wpnonce', true, false ),
+		(int) $e['id'],
+		esc_html( __( 'Resend the notice', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ),
+		$campos_reenvio,
+		esc_html( __( 'Send', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ),
+		esc_html( __( 'Cancel', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) )
+	);
+	$acciones[]     = '<button type="button" class="button" data-asde-reenviar-abrir hidden>' . esc_html( __( 'Resend notices / invitations', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) . '</button>'
+		. '<dialog class="asde-modal asde-modal--mini" aria-labelledby="asde-reenviar-titulo" data-asde-reenviar-dialogo>' . $form_reenviar . '</dialog>'
+		. '<noscript>' . $form_reenviar . '</noscript>';
+}
 if ( Servicio::puede_despublicar( $e, $ambito ) ) {
 	$acciones[] = $form( 'evento_despublicar', __( 'Back to draft', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 'asde-btn-link', __( 'Leave the event as a draft again?', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 }

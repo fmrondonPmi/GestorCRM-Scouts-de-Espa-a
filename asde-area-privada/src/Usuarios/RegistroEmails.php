@@ -185,25 +185,48 @@ final class RegistroEmails {
 	}
 
 	/** @return array[] Todos los del grupo (más recientes primero), opcionalmente de un usuario o un estado. */
-	public static function listado( int $user_id = 0, string $estado = '' ): array {
+	public static function listado( int $user_id = 0, string $estado = '', string $tipo = '', string $texto = '', string $desde = '', string $hasta = '' ): array {
 		global $wpdb;
 		// Consulta fija: cada filtro opcional va como valor (0 o '' lo dejan sin efecto) (v0.26.2, Plugin Check).
-		$e = isset( self::estados()[ $estado ] ) ? $estado : '';
+		$e     = isset( self::estados()[ $estado ] ) ? $estado : '';
+		$t     = isset( self::tipos()[ $tipo ] ) ? $tipo : '';
+		$q     = '' !== $texto ? '%' . $wpdb->esc_like( $texto ) . '%' : '';
+		$desde = self::dia_utc( $desde, 0 ) ?: '1970-01-01 00:00:00'; // Sin fecha, sin límite (una cadena vacía no vale como DATETIME).
+		$hasta = self::dia_utc( $hasta, 1 ) ?: '9999-12-31 23:59:59';
 		return (array) $wpdb->get_results( // phpcs:ignore WordPress.DB
 			$wpdb->prepare(
 				'SELECT * FROM %i WHERE grupo = %s'
 				. ' AND ( %d = 0 OR user_id = %d )'
 				. " AND ( %s = '' OR estado = %s )"
-				. ' ORDER BY id DESC LIMIT 2000',
+				. " AND ( %s = '' OR tipo = %s )"
+				. " AND ( %s = '' OR asunto LIKE %s OR destino LIKE %s OR login LIKE %s )"
+				. ' AND creado >= %s AND creado < %s'
+				. ' ORDER BY id DESC LIMIT 5000',
 				self::table(),
 				Grupo::numero(),
 				$user_id,
 				$user_id,
 				$e,
-				$e
+				$e,
+				$t,
+				$t,
+				$q,
+				$q,
+				$q,
+				$q,
+				$desde,
+				$hasta
 			),
 			ARRAY_A
 		);
+	}
+
+	/** Un día (Y-m-d, hora del sitio) como instante UTC de su comienzo (+$dias días); '' si no es una fecha. */
+	private static function dia_utc( string $dia, int $dias ): string {
+		if ( ! preg_match( '/^\d{4}-\d{2}-\d{2}$/', $dia ) || ! strtotime( $dia ) ) {
+			return '';
+		}
+		return get_gmt_from_date( gmdate( 'Y-m-d', strtotime( $dia . ' UTC' ) + $dias * DAY_IN_SECONDS ) . ' 00:00:00' );
 	}
 
 	/**

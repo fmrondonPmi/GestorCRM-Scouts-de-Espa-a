@@ -204,6 +204,16 @@ try {
 		$fila   = RegistroEmails::ultimos( array( $uid2 ) )[ $uid2 ] ?? null;
 		$ok( ! $sin && $fila && RegistroEmails::SIN_EMAIL === $fila['estado'], 'sin email en el CRM → «sin email», sin enviar nada' );
 		$ok( 3 === count( RegistroEmails::listado( $uid ) ) + count( RegistroEmails::listado( $uid2 ) ), 'listado del registro por usuario' );
+		// v0.60: el registro es el historial de todos los emails; se filtra por tipo, estado, texto y fechas.
+		$hoy   = wp_date( 'Y-m-d' );
+		$ayer  = wp_date( 'Y-m-d', time() - DAY_IN_SECONDS );
+		$manana = wp_date( 'Y-m-d', time() + DAY_IN_SECONDS );
+		$ok( 1 === count( RegistroEmails::listado( $uid, '', Invitacion::RESET ) ) && 1 === count( RegistroEmails::listado( $uid, RegistroEmails::ERROR ) ), 'filtros del historial: por tipo y por estado' );
+		$ok( 2 === count( RegistroEmails::listado( $uid, '', 'tipo-que-no-existe' ) ), 'un tipo desconocido no filtra (se ignora)' );
+		$asunto_u = (string) ( RegistroEmails::ultimos( array( $uid ) )[ $uid ]['asunto'] ?? '' );
+		$ok( '' !== $asunto_u && count( RegistroEmails::listado( $uid, '', '', substr( $asunto_u, 0, 12 ) ) ) >= 1 && ! RegistroEmails::listado( $uid, '', '', 'texto-que-no-sale-nunca-xyz' ), 'filtro por texto (asunto, usuario o destino)' );
+		$ok( count( RegistroEmails::listado( $uid, '', '', '', $hoy, $hoy ) ) === 2 && ! RegistroEmails::listado( $uid, '', '', '', $manana, '' ) && ! RegistroEmails::listado( $uid, '', '', '', '', $ayer ), 'filtro por fechas: hoy sí, desde mañana y hasta ayer no (día completo, hora del sitio)' );
+		$ok( 2 === count( RegistroEmails::listado( $uid, '', '', '', 'no-es-una-fecha', '31/12/2030' ) ), 'una fecha mal escrita no filtra' );
 		Grupo::forzar( array( 'id' => '999', 'numero' => '999', 'nombre' => 'Otro', 'crm_id' => '' ) );
 		$ok( ! RegistroEmails::listado( $uid ) && null === RegistroEmails::obtener( (int) $fila['id'] ), 'otro grupo no ve el registro de emails de este' );
 		Grupo::forzar( null );
