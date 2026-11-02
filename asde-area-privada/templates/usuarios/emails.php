@@ -63,7 +63,7 @@ $columnas = array(
 		<label for="asde-hasta-email"><?php esc_html_e( 'To', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 		<input type="date" id="asde-hasta-email" name="hasta" value="<?php echo esc_attr( $hasta ); ?>">
 		<label for="asde-buscar-email" class="screen-reader-text"><?php esc_html_e( 'Search', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
-		<input type="search" id="asde-buscar-email" name="buscar" value="<?php echo esc_attr( $texto ); ?>" placeholder="<?php echo esc_attr( esc_attr__( 'Subject, username or address', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
+		<input type="search" id="asde-buscar-email" name="buscar" size="28" value="<?php echo esc_attr( $texto ); ?>" placeholder="<?php echo esc_attr( esc_attr__( 'Subject, username or address', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
 		<button type="submit" class="button"><?php esc_html_e( 'Filter', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 		<?php if ( $tipo || $estado || $desde || $hasta || '' !== $texto ) : ?>
 			<a href="<?php echo esc_url( $usuario ? add_query_arg( 'usuario', (int) $usuario->ID, $url ) : $url ); ?>"><?php esc_html_e( 'Clear filters', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a>
