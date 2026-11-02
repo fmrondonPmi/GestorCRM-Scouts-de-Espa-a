@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.60.0
+Stable tag: 0.60.1
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -61,6 +61,9 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.60.1 =
+* Fixed language: the private area is always shown in Spanish, whatever the site language, so English and Spanish are no longer mixed when the site has no Spanish language pack. The direct-install package ships its Spanish translation file (languages/*-es_ES.mo); the WordPress.org package does not and follows the site language. The filter asde_ap_idioma_fijo can change or disable it.
 
 = 0.60.0 =
 * Translations now use the standard WordPress mechanism: all texts are written in English with the plugin text domain and are translated by the community on translate.wordpress.org (Spanish, Galician, Basque, Catalan and Valencian). The private area follows the site language; the per-person language selector and the custom label editor are removed. Emails go out in the recipient's language when that language is installed on the site.
@@ -162,6 +165,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * The changelog of versions 0.42.0 and earlier is in changelog.txt, in the plugin folder.
 
 == Upgrade Notice ==
+
+= 0.60.1 =
+No database changes. The private area is shown in Spanish regardless of the site language.
 
 = 0.60.0 =
 No database changes. The per-person language choice and custom labels are removed: the private area uses the site language. Install the Catalan, Basque, Galician and Valencian language packs on the site to send emails in those languages.

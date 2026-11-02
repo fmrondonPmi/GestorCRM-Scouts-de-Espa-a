@@ -677,8 +677,8 @@ msgstr[1] "%d càrrecs"
 #, php-format
 msgid "%d document is in more than one record:"
 msgid_plural "%d documents are in more than one record:"
-msgstr[0] "%d document és en més d'una fitxa:"
-msgstr[1] "%d document és en més d'una fitxa:"
+msgstr[0] ""
+msgstr[1] ""
 
 #. translators: %d: number
 #: src/Frontend/Views/CajaView.php:129
@@ -3925,7 +3925,7 @@ msgstr "Tria qui va pagar la despesa."
 
 #: src/Eventos/Avisos.php:200
 msgid "Choose who to send the notice to."
-msgstr "Tria a qui enviar l'avís."
+msgstr ""
 
 #: src/Frontend/Views/AccesoView.php:67 src/Frontend/Views/SolicitarView.php:85
 msgid "Choose your Scout Group."
@@ -5678,7 +5678,7 @@ msgstr "Les inscripcions als esdeveniments es veuen a"
 
 #: src/Frontend/Views/EventosView.php:167
 msgid "Event team"
-msgstr "Equip de l'esdeveniment"
+msgstr ""
 
 #: templates/tesoreria/banco.php:220
 msgid "Event:"
@@ -5714,7 +5714,7 @@ msgstr "Esdeveniments: reemborsaments"
 
 #: templates/usuarios/emails.php:35
 msgid "Every email sent by the private area, from any module (invitations, events, shop, direct debits, equipment, waiting list…), with its result."
-msgstr "Tots els emails que envia l'àrea privada, de qualsevol mòdul (invitacions, esdeveniments, botiga, domiciliacions, material, llista d'espera…), amb el seu resultat."
+msgstr ""
 
 #: src/Tienda/ProductosTable.php:33
 msgid "Everyone (also not signed in)"
@@ -9890,7 +9890,7 @@ msgstr "Avís confirmat."
 
 #: src/Frontend/Views/EventosView.php:571
 msgid "Notice sent."
-msgstr "Avís enviat."
+msgstr ""
 
 #: templates/eventos/config.php:115
 msgid "Notices"
@@ -9898,7 +9898,7 @@ msgstr "Avisos"
 
 #: src/Eventos/Avisos.php:194
 msgid "Notices can only be resent for a published event."
-msgstr "Els avisos només es poden reenviar en un esdeveniment publicat."
+msgstr ""
 
 #: templates/eventos/resumen.php:103
 msgid "Notify by email that it has been published?"
@@ -10088,7 +10088,7 @@ msgstr "Una per línia. Són les que es trien en afegir una despesa a un pressup
 
 #: templates/eventos/resumen.php:139
 msgid "One person"
-msgstr "Una persona"
+msgstr ""
 
 #: src/Informes/Informe.php:31
 msgid "One record per person (one per page when printing)"
@@ -10138,7 +10138,7 @@ msgstr "Només surten els esdeveniments amb la inscripció oberta en què aquest
 
 #: templates/eventos/resumen.php:141
 msgid "Only families who have not signed up yet"
-msgstr "Només les famílies que encara no s'han inscrit"
+msgstr ""
 
 #: templates/inventario/material.php:92
 msgid "Only for the type \"Uniform shirt\": uniform management assigns these shirts to orders and deducts them from here. If you don't write the description, it is filled in automatically."
@@ -12182,11 +12182,11 @@ msgstr "Reenvia la invitació"
 
 #: templates/eventos/resumen.php:152
 msgid "Resend notices / invitations"
-msgstr "Reenvia avisos / invitacions"
+msgstr ""
 
 #: templates/eventos/resumen.php:147
 msgid "Resend the notice"
-msgstr "Reenvia l'avís"
+msgstr ""
 
 #: templates/eventos/material.php:159
 msgid "Reserve"
@@ -12695,7 +12695,7 @@ msgstr "Scouters"
 
 #: templates/eventos/resumen.php:138
 msgid "Scouters (event team)"
-msgstr "Scouters (equip de l'esdeveniment)"
+msgstr ""
 
 #: src/Domain/Modulos.php:60
 msgid "Scouters ask to be repaid for an expense (with the receipt and, where applicable, an event); Treasury approves it and Treasury or Coordination mark it as paid."
@@ -12936,7 +12936,7 @@ msgstr "Consulta qui té accés a l'àrea del grup."
 
 #: templates/eventos/resumen.php:149
 msgid "Send"
-msgstr "Envia"
+msgstr ""
 
 #: src/Admin/GruposInvitacionesPage.php:102
 msgid "Send by email (optional)"
@@ -13655,7 +13655,7 @@ msgstr "Assumpte"
 
 #: templates/usuarios/emails.php:66
 msgid "Subject, username or address"
-msgstr "Assumpte, usuari o adreça"
+msgstr ""
 
 #: src/Idiomas/Guardados.php:255
 msgid "Submit the activity plan"
@@ -14105,7 +14105,7 @@ msgstr "Aquesta persona no és entre les que reben permisos solts."
 
 #: src/Eventos/Avisos.php:222
 msgid "That person is not on the team, signed up or invited to this event."
-msgstr "Aquesta persona no és a l'equip, ni està inscrita ni convocada a aquest esdeveniment."
+msgstr ""
 
 #: src/Eventos/Inscripciones.php:305
 msgid "That place is no longer available."
@@ -14233,7 +14233,7 @@ msgstr "Aquest usuari no té cap invitació pendent."
 
 #: src/Eventos/Avisos.php:197
 msgid "The \"event published\" notice is switched off in the events settings."
-msgstr "L'avís d'«esdeveniment publicat» està desactivat a la configuració d'esdeveniments."
+msgstr ""
 
 #. translators: %s: text
 #: src/Crm/Escritura.php:82
@@ -14389,7 +14389,7 @@ msgstr "El CRM encara no li ha posat el número de soci/sòcia. El veuràs a la 
 
 #: src/Eventos/Avisos.php:213 src/Eventos/Avisos.php:218
 msgid "The CRM is not available right now."
-msgstr "El CRM no està disponible ara mateix."
+msgstr ""
 
 #: src/Sepa/Mandatos.php:204
 msgid "The CRM is not responding: try again later."
@@ -15428,15 +15428,15 @@ msgstr "No s'han pogut llegir els noms del CRM: es mostren només els números d
 
 #: src/Frontend/Views/EventosView.php:573
 msgid "The notice could not be sent: that person has no active account or no email address (see the email log)."
-msgstr "No s'ha pogut enviar l'avís: aquesta persona no té compte activa o adreça d'email (mira el registre d'emails)."
+msgstr ""
 
 #: src/Frontend/Views/EventosView.php:569
 msgid "The notice will be sent to the event team in a few moments."
-msgstr "L'avís s'enviarà a l'equip de l'esdeveniment d'aquí a uns moments."
+msgstr ""
 
 #: src/Frontend/Views/EventosView.php:569
 msgid "The notice will be sent to the families in a few moments."
-msgstr "L'avís s'enviarà a les famílies d'aquí a uns moments."
+msgstr ""
 
 #: src/Admin/SettingsPage.php:250
 msgid "The number cannot be changed: to use another, withdraw the group and add it again."
@@ -15698,7 +15698,7 @@ msgstr "La norma demana 14 dies llevat que es pacti un altre termini: aquí es p
 
 #: templates/eventos/resumen.php:142
 msgid "The same email as when the event was published is sent. Every email is recorded in the email log."
-msgstr "S'envia el mateix email que en publicar l'esdeveniment. Cada email queda anotat al registre d'emails."
+msgstr ""
 
 #: templates/solicitudes/detalle.php:189
 msgid "The same person with another email"
@@ -16208,8 +16208,8 @@ msgstr "Hi ha moviments de l'altra classe amb aquest tipus: deixa'l com a «Desp
 #, php-format
 msgid "There is %d group registration to review."
 msgid_plural "There are %d group registrations to review."
-msgstr[0] "Hi ha %d alta de grup per revisar."
-msgstr[1] "Hi ha %d alta de grup per revisar."
+msgstr[0] ""
+msgstr[1] ""
 
 #: src/Eventos/Cuentas.php:470
 msgid "There is a SEPA batch for the event whose collections have not been recorded."
@@ -16908,7 +16908,7 @@ msgstr "Tiquet o factura (imatge o PDF, fins a 5 MB)"
 
 #: templates/usuarios/emails.php:63
 msgid "To"
-msgstr "Fins a"
+msgstr ""
 
 #: templates/activar/con-sesion.php:7
 msgid "To activate another account, sign out first."
@@ -18200,7 +18200,7 @@ msgstr "Qui el veu i el pot comprar"
 
 #: templates/eventos/resumen.php:136
 msgid "Who should receive the notice again?"
-msgstr "Qui ha de rebre de nou l'avís?"
+msgstr ""
 
 #: templates/lista-espera/publica.php:174
 msgid "Who wants to join the group"
@@ -18595,7 +18595,7 @@ msgstr "No pots rebutjar aquest reintegrament."
 
 #: src/Frontend/Views/EventosView.php:562
 msgid "You cannot resend notices for this event."
-msgstr "No pots reenviar avisos d'aquest esdeveniment."
+msgstr ""
 
 #: src/Frontend/Views/AccesosView.php:305
 msgid "You cannot restore your own role: it would give you back permissions that had been removed. Another person must do it."

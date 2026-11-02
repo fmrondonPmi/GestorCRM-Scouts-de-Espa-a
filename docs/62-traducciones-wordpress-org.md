@@ -38,3 +38,12 @@ Petición del usuario: que las traducciones del plugin se gestionen en **transla
 - Cuando varios castellanos compartían inglés (59 grupos, casi todos género o número), el `.po` toma el más usado del código original (`traducciones/uso-es.json`); los que importaban se han separado con inglés propio (p. ej. «Pending collections»). Si sale alguno mal, usar `_x()` con contexto.
 - La app móvil (plugin aparte, descartado) usa `asde_t()` y los filtros `asde_ap_catalogo`/`asde_ap_textos`, que ya no existen: sus pruebas `app-plugin` y `pwa-*` fallan en Local.
 - El `.po` de catalán, euskera y gallego no trae los 158 textos de wp-admin (nunca estuvieron traducidos).
+
+## Idioma fijo en castellano (v0.60.1, 2026-11-02)
+
+En producción el sitio está en inglés y no tiene instalado el paquete de idioma del plugin (translate.wordpress.org aún no lo sirve), así que el área salía en inglés mezclado con los datos guardados en castellano. Decisión del usuario: **castellano fijo**.
+
+- `Idioma::fijo()` (por defecto `es_ES`, filtro `asde_ap_idioma_fijo`; vacío = seguir a WordPress). Si el paquete lleva `languages/<dominio>-es_ES.mo` (`Idioma::fijo_activo()`), el plugin lo carga él mismo (`Idioma::registrar()` al cargar el plugin, filtro `override_load_textdomain` y `override_unload_textdomain`), lee el `.mo` con `WP_Translation_File` (`TraduccionesFijas`) y no cambia de idioma (`Idioma::en()`/`forzar()` no hacen nada; los emails salen en castellano).
+- `construir-zip.ps1` incluye ese `.mo` por defecto (instalación directa); con `-SinIdioma` hace el paquete de WordPress.org, sin ficheros de traducción. Hay que ejecutar antes `php herramientas/generar-po.php --mo`.
+- El resto de WordPress (login, menús de wp-admin) sigue el idioma del sitio: para que también salga en castellano, instalar el paquete es_ES de WordPress.
+- Prueba: `tests/idiomas.php`, parte E.

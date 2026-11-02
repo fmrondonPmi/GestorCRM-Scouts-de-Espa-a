@@ -130,6 +130,43 @@ try {
 		}
 	}
 	$ok( ! $con_ficheros, 'el paquete del plugin no lleva ficheros de traducción (los pone translate.wordpress.org)' . ( $con_ficheros ? ': ' . implode( ', ', $con_ficheros ) : '' ) );
+
+		echo "\n== Parte E · Idioma fijo en castellano (v0.60.1) ==\n";
+		$ok( ! Idioma::fijo_activo() && 'Entrar' === __( 'Sign in', ASDE_T_DOM ), 'sin languages/*.mo en el paquete (WordPress.org) se sigue el idioma de WordPress' );
+		$carpeta = ASDE_AP_DIR . 'languages/';
+		$mo      = $carpeta . ASDE_T_DOM . '-es_ES.mo';
+		$creada  = ! is_dir( $carpeta );
+		if ( $creada ) {
+			mkdir( $carpeta );
+		}
+		copy( 'C:/Proyectos/GestorCRM/traducciones/mo/' . ASDE_T_DOM . '-es_ES.mo', $mo );
+		$en_ingles = static fn() => 'en_US';
+		try {
+			$ok( Idioma::fijo_activo() && 'es_ES' === Idioma::fijo(), 'con el .mo del castellano en el paquete, el idioma fijo está activo' );
+			// Aunque el sitio esté en otro idioma, el área sale en castellano.
+			Idioma::registrar(); // Como al cargar el plugin: engancha los filtros y carga el .mo del paquete.
+			add_filter( 'locale', $en_ingles, 99 );
+			unload_textdomain( ASDE_T_DOM ); // Con idioma fijo no descarga.
+			$ok( 'Entrar' === __( 'Sign in', ASDE_T_DOM ) && 'es-ES' === Idioma::actual(), 'con el sitio en inglés, el área sale en castellano' );
+			$ca = Idioma::en( 'ca', static fn() => __( 'Sign in', ASDE_T_DOM ) );
+			$ok( 'Entrar' === $ca, 'un email «en catalán» sale en castellano (no se cambia de idioma)' );
+			$ok( 'es_ES' === Idioma::de_usuario( 0 ), 'el idioma de un destinatario es el fijo' );
+			add_filter( 'asde_ap_idioma_fijo', '__return_empty_string' );
+			$ok( '' === Idioma::fijo() && ! Idioma::fijo_activo(), 'con el filtro asde_ap_idioma_fijo a vacío, se vuelve al idioma de WordPress' );
+			remove_filter( 'asde_ap_idioma_fijo', '__return_empty_string' );
+		} finally {
+			remove_filter( 'locale', $en_ingles, 99 );
+			remove_filter( 'asde_ap_idioma_fijo', '__return_empty_string' );
+			unlink( $mo );
+			remove_filter( 'override_load_textdomain', array( Idioma::class, 'cargar_fijo' ), 10 );
+			remove_filter( 'override_unload_textdomain', array( Idioma::class, 'no_descargar' ), 10 );
+			if ( $creada ) {
+				rmdir( $carpeta );
+			}
+			unload_textdomain( ASDE_T_DOM );
+			load_textdomain( ASDE_T_DOM, 'C:/Proyectos/GestorCRM/traducciones/mo/' . ASDE_T_DOM . '-es_ES.mo' ); // Como estaba (el Local carga el .mo del repo).
+		}
+		$ok( ! Idioma::fijo_activo() && 'Entrar' === __( 'Sign in', ASDE_T_DOM ), 'al quitar el .mo del paquete, vuelve el comportamiento normal' );
 } catch ( Throwable $e ) {
 	++$fails;
 	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";
