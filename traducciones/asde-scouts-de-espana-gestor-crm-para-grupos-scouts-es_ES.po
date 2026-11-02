@@ -289,7 +289,7 @@ msgstr "%1$d de %2$d familias"
 msgid "%1$d of %2$d left · %3$s"
 msgid_plural "%1$d of %2$d left · %3$s"
 msgstr[0] "Queda %1$d de %2$d · %3$s"
-msgstr[1] "Queda %1$d de %2$d · %3$s"
+msgstr[1] "Quedan %1$d de %2$d · %3$s"
 
 #. translators: 1: number, 2: number, 3: text
 #: templates/eventos/material.php:102
@@ -596,7 +596,7 @@ msgstr[1] "%d movimientos elegidos ya están conciliados con una familia y no sa
 msgid "%d corrected"
 msgid_plural "%d corrected"
 msgstr[0] "%d corregida"
-msgstr[1] "%d corregida"
+msgstr[1] "%d corregidas"
 
 #. translators: %d: number
 #: src/Socios/TareaNumeracion.php:467
@@ -632,7 +632,7 @@ msgstr[1] "Quedan %d días"
 msgid "%d deleted"
 msgid_plural "%d deleted"
 msgstr[0] "%d eliminado"
-msgstr[1] "%d eliminado"
+msgstr[1] "%d eliminados"
 
 #. translators: %d: number
 #: templates/tesoreria/familia.php:152
@@ -762,7 +762,7 @@ msgstr[1] "%d materiales"
 msgid "%d left"
 msgid_plural "%d left"
 msgstr[0] "Queda %d"
-msgstr[1] "Queda %d"
+msgstr[1] "Quedan %d"
 
 #. translators: %d: number
 #: src/Tesoreria/Banco/CsvBanco.php:162
@@ -848,7 +848,7 @@ msgstr[1] "%d pedidos en este periodo."
 msgid "%d overdue"
 msgid_plural "%d overdue"
 msgstr[0] "%d vencida"
-msgstr[1] "%d vencida"
+msgstr[1] "%d vencidas"
 
 #. translators: %d: number
 #: templates/usuarios/fila.php:92
@@ -954,7 +954,7 @@ msgstr[1] "%d hijos"
 msgid "%d suggested for this family"
 msgid_plural "%d suggested for this family"
 msgstr[0] "%d sugerido para esta familia"
-msgstr[1] "%d sugerido para esta familia"
+msgstr[1] "%d sugeridos para esta familia"
 
 #. translators: %d: number
 #: src/Frontend/Views/EventosView.php:785

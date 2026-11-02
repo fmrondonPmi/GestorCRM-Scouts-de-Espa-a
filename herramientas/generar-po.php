@@ -147,6 +147,13 @@ function leer_po( string $ruta ): array {
 			$val = json_decode( preg_replace( '/"\s*\n\s*"/', '', trim( $x[1] ) ) ) ?? '';
 			if ( '' !== $val ) { $out[ $id ] = $val; }
 		}
+		// La forma plural también se respeta (clave «[1]texto»): así no se pierden los plurales corregidos a mano.
+		if ( preg_match( '/msgstr\[1\]\s+((?:".*?"\s*
+?)+)/s', $m[3], $x1 ) ) {
+			$val1 = json_decode( preg_replace( '/"\s*
+\s*"/', '', trim( $x1[1] ) ) ) ?? '';
+			if ( '' !== $val1 ) { $out[ '[1]' . $id ] = $val1; }
+		}
 	}
 	return $out;
 }
@@ -197,6 +204,7 @@ foreach ( IDIOMAS as $idioma => [ $lang, $nombre ] ) {
 				if ( '' !== $f0 && '' !== $f1 ) { $t0 = numerar_como( $f0, $msgid ); $t1 = numerar_como( $f1, $msgid ); }
 			}
 		}
+		if ( null !== $plural && isset( $previo[ '[1]' . $msgid ] ) ) { $t1 = $previo[ '[1]' . $msgid ]; } // El plural ya escrito en el .po se respeta.
 		if ( count( $es_de[ $msgid ] ?? array() ) > 1 ) { $conflictos++; }
 		if ( '' !== $coment ) { $po .= '#. ' . $coment . "\n"; }
 		$po .= '#: ' . implode( ' ', array_slice( array_unique( $refs ), 0, 4 ) ) . "\n";

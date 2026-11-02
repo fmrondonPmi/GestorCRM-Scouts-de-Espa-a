@@ -289,7 +289,7 @@ msgstr "%1$d de %2$d famílies"
 msgid "%1$d of %2$d left · %3$s"
 msgid_plural "%1$d of %2$d left · %3$s"
 msgstr[0] "Queda %1$d de %2$d · %3$s"
-msgstr[1] "Queda %1$d de %2$d · %3$s"
+msgstr[1] "Queden %1$d de %2$d · %3$s"
 
 #. translators: 1: number, 2: number, 3: text
 #: templates/eventos/material.php:102
@@ -596,7 +596,7 @@ msgstr[1] "%d moviments triats ja estan conciliats amb una família i no surten 
 msgid "%d corrected"
 msgid_plural "%d corrected"
 msgstr[0] "%d corregida"
-msgstr[1] "%d corregida"
+msgstr[1] "%d corregides"
 
 #. translators: %d: number
 #: src/Socios/TareaNumeracion.php:467
@@ -632,7 +632,7 @@ msgstr[1] "Queden %d dies"
 msgid "%d deleted"
 msgid_plural "%d deleted"
 msgstr[0] "%d eliminat"
-msgstr[1] "%d eliminat"
+msgstr[1] "%d eliminats"
 
 #. translators: %d: number
 #: templates/tesoreria/familia.php:152
@@ -762,7 +762,7 @@ msgstr[1] "%d materials"
 msgid "%d left"
 msgid_plural "%d left"
 msgstr[0] "Queda %d"
-msgstr[1] "Queda %d"
+msgstr[1] "Queden %d"
 
 #. translators: %d: number
 #: src/Tesoreria/Banco/CsvBanco.php:162
@@ -848,7 +848,7 @@ msgstr[1] "%d comandes en aquest període."
 msgid "%d overdue"
 msgid_plural "%d overdue"
 msgstr[0] "%d vençuda"
-msgstr[1] "%d vençuda"
+msgstr[1] "%d vençudes"
 
 #. translators: %d: number
 #: templates/usuarios/fila.php:92
@@ -954,7 +954,7 @@ msgstr[1] "%d fills"
 msgid "%d suggested for this family"
 msgid_plural "%d suggested for this family"
 msgstr[0] "%d suggerit per a aquesta família"
-msgstr[1] "%d suggerit per a aquesta família"
+msgstr[1] "%d suggerits per a aquesta família"
 
 #. translators: %d: number
 #: src/Frontend/Views/EventosView.php:785
