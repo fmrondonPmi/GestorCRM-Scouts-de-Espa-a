@@ -3203,3 +3203,52 @@ dialog.asde-modal--mini .asde-publicar h3 {
 	cursor: pointer;
 	white-space: nowrap;
 }
+
+/* v0.60.2 · Menú del evento: la ventana «Nuevo plato» (crear una receta y añadirla a la comida). Filas en una línea; en el móvil bajan. */
+dialog.asde-menu-nueva {
+	width: min(560px, calc(100vw - 24px));
+	max-height: calc(100vh - 24px);
+	overflow: auto;
+}
+.asde-menu-nueva__form {
+	padding: 16px 20px 20px;
+}
+.asde-menu-nueva__form h3,
+.asde-menu-nueva__form h4 {
+	margin: 0 0 8px;
+}
+.asde-menu-nueva__fila {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 6px;
+	align-items: center;
+	margin-bottom: 6px;
+}
+.asde-menu-nueva__fila input[name="nombre"] {
+	flex: 1 1 10em;
+	min-width: 0;
+}
+.asde-menu-nueva__fila select[name="tipo"] {
+	flex: 0 1 9em;
+	min-width: 0;
+}
+.asde-menu-nueva__fila input[name="porciones"] {
+	flex: 0 0 5em;
+	width: 5em;
+}
+.asde-menu-nueva__linea select[name="ing[]"] {
+	flex: 1 1 8em;
+	min-width: 0;
+}
+.asde-menu-nueva__linea input[name="cant[]"] {
+	flex: 0 0 5em;
+	width: 5em;
+}
+.asde-menu-nueva__linea select[name="uni[]"] {
+	flex: 0 0 5.5em;
+	min-width: 0;
+}
+.asde-menu-nueva__form textarea {
+	width: 100%;
+	box-sizing: border-box;
+}

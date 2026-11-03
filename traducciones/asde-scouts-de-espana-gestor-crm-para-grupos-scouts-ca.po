@@ -20271,3 +20271,20 @@ msgstr "✓ Els totals de cada compte (registre 33) i el nombre de registres (88
 msgid "🔒 All the data on this record is read-only for you."
 msgstr "🔒 Totes les dades d'aquesta fitxa són de només lectura per a tu."
 
+msgid "Add another ingredient"
+msgstr "Afegeix un altre ingredient"
+
+msgid "Create the recipe and add it to the menu"
+msgstr "Crea la recepta i afegeix-la al menú"
+
+msgid "Create the recipe here and then add it to the menu."
+msgstr "Crea la recepta aquí i després afegeix-la al menú."
+
+msgid "New dish"
+msgstr "Plat nou"
+
+msgid "New dish (create a recipe)"
+msgstr "Plat nou (crea una recepta)"
+
+msgid "Recipe created and added to the menu."
+msgstr "Recepta creada i afegida al menú."

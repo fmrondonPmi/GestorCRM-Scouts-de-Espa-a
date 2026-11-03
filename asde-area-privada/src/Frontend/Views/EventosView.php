@@ -355,6 +355,9 @@ final class EventosView extends EventosBaseView {
 			'url_menu'    => $url,
 			'url_csv'     => $this->url( 'eventos', array_filter( array( 'evento' => (string) $e['id'], 'formato' => 'csv', 'dia' => $dia, '_wpnonce' => wp_create_nonce( 'asde_menu_csv_' . ( $e['id'] ?? 0 ) ) ) ) ),
 			'url_recetas' => $this->url( 'eventos_recetas' ),
+			'puede_nueva' => MenuEvento::puede_crear_receta( $e, $a ),
+			'ingredientes' => array_values( array_filter( \AsdeBalears\AreaPrivada\Menus\IngredientesTable::visibles(), static fn( $i ) => $i['activo'] ) ),
+			'url_ing'     => $this->url( 'eventos_recetas', array( 'ingredientes' => '1' ) ),
 		);
 	}
 
@@ -755,8 +758,38 @@ final class EventosView extends EventosBaseView {
 				break;
 
 			case 'menu_anadir':
+				// Sin JavaScript no hay ventana: «Nuevo» lleva al formulario de recetas.
+				if ( 'nuevo' === $this->post( 'receta' ) ) {
+					Notices::add( 'info', esc_html__( 'Create the recipe here and then add it to the menu.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
+					$this->redirect( $this->url( 'eventos_recetas', array( 'receta' => 'nueva' ) ) );
+				}
 				$r     = MenuEvento::anadir( $e, $a, $this->post( 'dia' ), $this->post( 'comida' ), (int) $this->post( 'receta' ), $this->post( 'comensales' ) );
 				$hecho = __( 'Dish added to the menu.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
+				break;
+
+			case 'menu_receta_nueva':
+				// v0.60.2: receta nueva desde el menú (ventana «Nuevo»): se crea en la biblioteca del grupo y se añade al menú.
+				$lineas = array();
+				$cants  = $this->post_array( 'cant' );
+				$unis   = $this->post_array( 'uni' );
+				foreach ( $this->post_array( 'ing' ) as $n => $i ) {
+					$lineas[] = array( 'ingrediente_id' => (int) $i, 'cantidad' => \AsdeBalears\AreaPrivada\Menus\Conversion::numero( (string) ( $cants[ $n ] ?? '' ) ), 'unidad' => (string) ( $unis[ $n ] ?? 'g' ) );
+				}
+				$r     = MenuEvento::crear_y_anadir(
+					$e,
+					$a,
+					$this->post( 'dia' ),
+					$this->post( 'comida' ),
+					array(
+						'nombre'        => $this->post( 'nombre' ),
+						'tipo'          => $this->post( 'tipo' ),
+						'porciones'     => (int) $this->post( 'porciones' ),
+						'elaboracion'   => $this->post( 'elaboracion' ),
+						'observaciones' => $this->post( 'observaciones' ),
+					),
+					array_slice( $lineas, 0, RecetasTable::MAX_LINEAS + 20 )
+				);
+				$hecho = __( 'Recipe created and added to the menu.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 
 			case 'menu_quitar':

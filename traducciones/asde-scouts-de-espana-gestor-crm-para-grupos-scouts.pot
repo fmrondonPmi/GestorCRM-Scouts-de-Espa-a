@@ -20269,3 +20269,20 @@ msgstr ""
 msgid "🔒 All the data on this record is read-only for you."
 msgstr ""
 
+msgid "Add another ingredient"
+msgstr ""
+
+msgid "Create the recipe and add it to the menu"
+msgstr ""
+
+msgid "Create the recipe here and then add it to the menu."
+msgstr ""
+
+msgid "New dish"
+msgstr ""
+
+msgid "New dish (create a recipe)"
+msgstr ""
+
+msgid "Recipe created and added to the menu."
+msgstr ""

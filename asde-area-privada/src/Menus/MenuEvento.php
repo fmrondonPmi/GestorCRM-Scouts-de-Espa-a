@@ -77,6 +77,37 @@ final class MenuEvento {
 		return $id;
 	}
 
+	/** Quien edita el menú y puede dar de alta recetas (permiso del recetario). */
+	public static function puede_crear_receta( array $e, Ambito $a ): bool {
+		return self::puede_editar( $e, $a ) && current_user_can( Recetario::CAP );
+	}
+
+	/**
+	 * Crea una receta del grupo y la añade al menú de una comida (v0.60.2: la ventana «Nuevo» del menú).
+	 * Todo se comprueba antes de crear, para no dejar una receta suelta si el plato no cabe.
+	 *
+	 * @param array   $datos  nombre, tipo, porciones, elaboracion, observaciones.
+	 * @param array[] $lineas ingrediente_id, cantidad, unidad.
+	 * @return int|\WP_Error Id del plato.
+	 */
+	public static function crear_y_anadir( array $e, Ambito $a, string $dia, string $comida, array $datos, array $lineas ) {
+		if ( ! self::puede_crear_receta( $e, $a ) ) {
+			return new \WP_Error( 'asde_menus', __( 'You cannot change this event\'s menu.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
+		}
+		if ( ! in_array( $dia, self::dias( $e ), true ) || ! isset( MenuTable::comidas()[ $comida ] ) ) {
+			return new \WP_Error( 'asde_menus', __( 'Choose a day of the event and a meal.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
+		}
+		if ( MenuTable::contar( $e['id'] ) >= MenuTable::MAX ) {
+			return new \WP_Error( 'asde_menus', __( 'The menu already has too many dishes.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
+		}
+		$receta = RecetasTable::guardar( $datos, $lineas );
+		if ( is_wp_error( $receta ) ) {
+			return $receta;
+		}
+		Logger::log( 'menu_receta_creada', 'menus', (string) $receta );
+		return self::anadir( $e, $a, $dia, $comida, $receta );
+	}
+
 	/** @return true|\WP_Error */
 	public static function quitar( array $e, Ambito $a, int $id ) {
 		if ( ! self::puede_editar( $e, $a ) || ! MenuTable::quitar( $id, $e['id'] ) ) {

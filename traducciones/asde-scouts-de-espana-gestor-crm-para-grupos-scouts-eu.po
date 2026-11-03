@@ -20271,3 +20271,20 @@ msgstr "✓ Kontu bakoitzaren guztizkoak (33. erregistroa) eta erregistro kopuru
 msgid "🔒 All the data on this record is read-only for you."
 msgstr "🔒 Fitxa honetako datu guztiak irakurtzeko soilik dira zuretzat."
 
+msgid "Add another ingredient"
+msgstr "Gehitu beste osagai bat"
+
+msgid "Create the recipe and add it to the menu"
+msgstr "Sortu errezeta eta gehitu menuan"
+
+msgid "Create the recipe here and then add it to the menu."
+msgstr "Sortu errezeta hemen eta gero gehitu menuan."
+
+msgid "New dish"
+msgstr "Plater berria"
+
+msgid "New dish (create a recipe)"
+msgstr "Plater berria (sortu errezeta bat)"
+
+msgid "Recipe created and added to the menu."
+msgstr "Errezeta sortu eta menuan gehitu da."

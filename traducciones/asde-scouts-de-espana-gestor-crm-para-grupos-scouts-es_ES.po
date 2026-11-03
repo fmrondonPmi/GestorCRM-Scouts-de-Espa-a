@@ -20271,3 +20271,20 @@ msgstr "✓ Los totales de cada cuenta (registro 33) y el nº de registros (88) 
 msgid "🔒 All the data on this record is read-only for you."
 msgstr "🔒 Todos los datos de esta ficha son de solo lectura para ti."
 
+msgid "Add another ingredient"
+msgstr "Añadir otro ingrediente"
+
+msgid "Create the recipe and add it to the menu"
+msgstr "Crear la receta y añadirla al menú"
+
+msgid "Create the recipe here and then add it to the menu."
+msgstr "Crea aquí la receta y después añádela al menú."
+
+msgid "New dish"
+msgstr "Plato nuevo"
+
+msgid "New dish (create a recipe)"
+msgstr "Nuevo plato (crear una receta)"
+
+msgid "Recipe created and added to the menu."
+msgstr "Receta creada y añadida al menú."

@@ -13,6 +13,9 @@
  * @var array<string, float>  $coste_dias
  * @var string                $dia           Día de la lista de la compra ('' = todo el evento)
  * @var bool                  $puede_editar
+ * @var bool                  $puede_nueva    Puede crear una receta desde el menú (v0.60.2)
+ * @var array[]               $ingredientes   Los que se pueden elegir en la receta nueva
+ * @var string                $url_ing
  * @var bool                  $puede_partida
  * @var string                $url_menu
  * @var string                $url_csv
@@ -93,8 +96,8 @@ $fecha         = static fn( string $d ): string => wp_date( 'l d/m/Y', strtotime
 									<?php endif; ?>
 								</div>
 							<?php endforeach; ?>
-							<?php if ( $puede_editar && $recetas ) : ?>
-								<form method="post" action="<?php echo esc_url( $url_menu ); ?>" class="asde-inline asde-solo-pantalla">
+							<?php if ( $puede_editar && ( $recetas || $puede_nueva ) ) : ?>
+								<form method="post" action="<?php echo esc_url( $url_menu ); ?>" class="asde-inline asde-solo-pantalla" data-asde-menu-anadir data-asde-destino="<?php echo esc_attr( $fecha( $d ) . ' · ' . $nombre_c ); ?>">
 									<?php wp_nonce_field( 'asde_evento_' . $e['id'] ); ?>
 									<input type="hidden" name="evento" value="<?php echo (int) $e['id']; ?>">
 									<input type="hidden" name="pestana" value="menu">
@@ -103,6 +106,9 @@ $fecha         = static fn( string $d ): string => wp_date( 'l d/m/Y', strtotime
 									<input type="hidden" name="comida" value="<?php echo esc_attr( $c ); ?>">
 									<select name="receta" aria-label="<?php echo esc_attr( sprintf( /* translators: %s: text */ __( 'Recipe for %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),  $nombre_c  ) ); ?>">
 										<option value="0">— <?php esc_html_e( 'Add a dish', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> —</option>
+										<?php if ( $puede_nueva ) : ?>
+											<option value="nuevo" data-asde-menu-nuevo>+ <?php esc_html_e( 'New dish (create a recipe)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></option>
+										<?php endif; ?>
 										<?php foreach ( $recetas as $r ) : ?>
 											<option value="<?php echo (int) $r['id']; ?>"><?php echo esc_html( $nombre_receta( $r ) ); ?></option>
 										<?php endforeach; ?>
@@ -117,6 +123,58 @@ $fecha         = static fn( string $d ): string => wp_date( 'l d/m/Y', strtotime
 		</table>
 	<?php endforeach; ?>
 </section>
+
+<?php if ( $puede_nueva ) : ?>
+	<?php // v0.60.2: ventana «Nuevo» del desplegable de platos: crea la receta y la añade a la comida elegida (sin JavaScript, el desplegable lleva al recetario). ?>
+	<dialog class="asde-modal asde-modal--mini asde-menu-nueva" aria-labelledby="asde-menu-nueva-titulo" data-asde-menu-nueva>
+		<form method="post" action="<?php echo esc_url( $url_menu ); ?>" class="asde-form asde-menu-nueva__form">
+			<?php wp_nonce_field( 'asde_evento_' . $e['id'] ); ?>
+			<input type="hidden" name="evento" value="<?php echo (int) $e['id']; ?>">
+			<input type="hidden" name="pestana" value="menu">
+			<input type="hidden" name="asde_action" value="menu_receta_nueva">
+			<input type="hidden" name="dia" value="" data-asde-menu-dia>
+			<input type="hidden" name="comida" value="" data-asde-menu-comida>
+			<h3 id="asde-menu-nueva-titulo"><?php esc_html_e( 'New dish', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h3>
+			<p class="asde-muted" data-asde-menu-destino></p>
+			<div class="asde-menu-nueva__fila">
+				<input type="text" name="nombre" maxlength="160" required aria-label="<?php echo esc_attr( esc_attr__( 'Name', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>" placeholder="<?php echo esc_attr( esc_attr__( 'Name', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
+				<select name="tipo" aria-label="<?php echo esc_attr( esc_attr__( 'Dish type', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
+					<?php foreach ( \AsdeBalears\AreaPrivada\Menus\RecetasTable::tipos() as $k => $n ) : ?>
+						<option value="<?php echo esc_attr( $k ); ?>" <?php selected( 'primero', $k ); ?>><?php echo esc_html( $n ); ?></option>
+					<?php endforeach; ?>
+				</select>
+				<input type="number" name="porciones" min="1" max="500" required value="<?php echo (int) max( 1, $comensales ); ?>" aria-label="<?php echo esc_attr( esc_attr__( 'Base portions (how many people the quantities are for)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>" title="<?php echo esc_attr( esc_attr__( 'Base portions (how many people the quantities are for)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
+			</div>
+			<h4><?php esc_html_e( 'Ingredients', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h4>
+			<div data-asde-menu-lineas>
+				<?php for ( $n = 1; $n <= 3; $n++ ) : ?>
+					<div class="asde-menu-nueva__fila asde-menu-nueva__linea" data-asde-menu-linea>
+						<select name="ing[]" aria-label="<?php echo esc_attr( sprintf( /* translators: %d: number */ __( 'Ingredient %d', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $n ) ); ?>" data-asde-menu-ing>
+							<option value="0">—</option>
+							<?php foreach ( $ingredientes as $i ) : ?>
+								<option value="<?php echo (int) $i['id']; ?>" data-alergenos="<?php echo esc_attr( implode( '|', array_map( array( Alergenos::class, 'nombre' ), (array) $i['alergenos'] ) ) ); ?>"><?php echo esc_html( $nombre_receta( $i ) ); ?></option>
+							<?php endforeach; ?>
+						</select>
+						<input type="text" inputmode="decimal" name="cant[]" size="6" aria-label="<?php echo esc_attr( sprintf( /* translators: %d: number */ __( 'Quantity %d', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $n ) ); ?>" placeholder="<?php echo esc_attr( esc_attr__( 'Quantity', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
+						<select name="uni[]" aria-label="<?php echo esc_attr( sprintf( /* translators: %d: number */ __( 'Unit %d', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $n ) ); ?>">
+							<?php foreach ( \AsdeBalears\AreaPrivada\Menus\Escalado::unidades() as $k => $u ) : ?>
+								<option value="<?php echo esc_attr( $k ); ?>"><?php echo esc_html( $u[0] ); ?></option>
+							<?php endforeach; ?>
+						</select>
+					</div>
+				<?php endfor; ?>
+			</div>
+			<button type="button" class="asde-btn-link" data-asde-menu-mas hidden>+ <?php esc_html_e( 'Add another ingredient', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
+			<p class="asde-menu-nueva__resumen" data-asde-menu-resumen data-sin="<?php echo esc_attr( esc_attr__( 'no allergen recorded', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><strong><?php esc_html_e( 'Contains:', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></strong> <span data-asde-menu-resumen-texto><?php esc_html_e( 'no allergen recorded', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span></p>
+			<p class="asde-help"><?php esc_html_e( 'If an ingredient is missing, create it first in "Ingredients" with its allergens.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <a href="<?php echo esc_url( $url_ing ); ?>" target="_blank" rel="noopener"><?php esc_html_e( 'Go to ingredients', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a></p>
+			<textarea name="elaboracion" rows="2" maxlength="4000" aria-label="<?php echo esc_attr( esc_attr__( 'Preparation', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>" placeholder="<?php echo esc_attr( esc_attr__( 'Preparation', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"></textarea>
+			<p class="asde-form__acciones">
+				<button type="submit" class="button button-primary"><?php esc_html_e( 'Create the recipe and add it to the menu', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
+				<button type="button" class="button asde-button-secundario" data-asde-cerrar><?php esc_html_e( 'Cancel', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
+			</p>
+		</form>
+	</dialog>
+<?php endif; ?>
 
 <?php
 $nombres_plato = array();
