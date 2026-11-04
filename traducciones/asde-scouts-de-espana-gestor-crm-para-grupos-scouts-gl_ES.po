@@ -330,7 +330,7 @@ msgid "%1$s (%2$s)"
 msgstr "%1$s (%2$s)"
 
 #. translators: 1: text, 2: number
-#: src/Menus/Recetario.php:93
+#: src/Menus/Recetario.php:129
 #, php-format
 msgid "%1$s (copy %2$d)"
 msgstr "%1$s (copia %2$d)"
@@ -389,7 +389,7 @@ msgid "%1$s is already a member of the group, in %2$s since %3$s."
 msgstr "%1$s xa é socio/a do grupo, en %2$s desde o %3$s."
 
 #. translators: 1: text, 2: text
-#: templates/lista-espera/publica.php:96
+#: templates/lista-espera/publica.php:101
 #, php-format
 msgid "%1$s is already on the waiting list of %2$s. We have sent you an email with the link to see your details."
 msgstr "%1$s xa está na lista de espera do %2$s. Enviámosche un email coa ligazón para ver os teus datos."
@@ -467,7 +467,7 @@ msgid "%1$s · at the start %2$s · at the end %3$s"
 msgstr "%1$s · ao empezar %2$s · ao acabar %3$s"
 
 #. translators: 1: text, 2: text, 3: text
-#: templates/eventos/menu.php:181
+#: templates/eventos/menu.php:240
 #, php-format
 msgid "%1$s · for %2$s on %3$s"
 msgstr "%1$s · por %2$s o %3$s"
@@ -649,7 +649,7 @@ msgid "%d deposits reconciled by their family reference."
 msgstr "%d ingresos conciliados pola súa referencia de familia."
 
 #. translators: %d: number
-#: templates/eventos/menu.php:73
+#: templates/eventos/menu.php:76
 #, php-format
 msgid "%d diner"
 msgid_plural "%d diners"
@@ -657,7 +657,7 @@ msgstr[0] "%d comensal"
 msgstr[1] "%d comensais"
 
 #. translators: %d: number
-#: templates/eventos/menu.php:52
+#: templates/eventos/menu.php:55
 #, php-format
 msgid "%d diner counts by default (the sign-ups and the team); each dish can have its own."
 msgid_plural "%d diners count by default (the sign-ups and the team); each dish can have its own."
@@ -859,7 +859,7 @@ msgstr[0] "%d participante"
 msgstr[1] "%d participantes"
 
 #. translators: %d: number
-#: templates/email/menu-alergenos.php:48 templates/eventos/menu.php:172 templates/eventos/menu.php:209 templates/personas/listado.php:240
+#: templates/email/menu-alergenos.php:48 templates/eventos/menu.php:231 templates/eventos/menu.php:268 templates/personas/listado.php:240
 #, php-format
 msgid "%d person"
 msgid_plural "%d people"
@@ -867,7 +867,7 @@ msgstr[0] "%d persoa"
 msgstr[1] "%d persoas"
 
 #. translators: %d: number
-#: templates/eventos/menu.php:230
+#: templates/eventos/menu.php:289
 #, php-format
 msgid "%d person does not have the health and food record checked or filled in: nothing can be guaranteed about them."
 msgid_plural "%d people do not have the health and food record checked or filled in: nothing can be guaranteed about them."
@@ -919,7 +919,7 @@ msgid "%d record corrected"
 msgstr "%d ficha corrixida"
 
 #. translators: %d: number
-#: templates/eventos/menu.php:220
+#: templates/eventos/menu.php:279
 #, php-format
 msgid "%d record has something written that could not be understood: check it by hand."
 msgid_plural "%d records have something written that could not be understood: check them by hand."
@@ -933,12 +933,20 @@ msgid "%d records corrected"
 msgstr "%d fichas corrixidas"
 
 #. translators: %d: number
-#: templates/lista-espera/listado.php:200
+#: templates/lista-espera/listado.php:205
 #, php-format
 msgid "%d sign-up"
 msgid_plural "%d sign-ups"
 msgstr[0] "%d inscrición"
 msgstr[1] "%d inscricións"
+
+#. translators: %d: number
+#: src/Frontend/Views/ListaEsperaView.php:161
+#, php-format
+msgid "%d sign-up that was waiting for confirmation is now on the list."
+msgid_plural "%d sign-ups that were waiting for confirmation are now on the list."
+msgstr[0] "%d inscrición que agardaba confirmación xa está na lista."
+msgstr[1] "%d inscricións que agardaban confirmación xa están na lista."
 
 #. translators: %d: number
 #: templates/tesoreria/cuotas.php:46
@@ -957,7 +965,7 @@ msgstr[0] "%d suxerido para esta familia"
 msgstr[1] "%d suxeridos para esta familia"
 
 #. translators: %d: number
-#: src/Frontend/Views/EventosView.php:785
+#: src/Frontend/Views/EventosView.php:818
 #, php-format
 msgid "%d support team member has no account: print it for them."
 msgid_plural "%d support team members have no account: print them for them."
@@ -973,7 +981,7 @@ msgstr[0] "%d tarefa"
 msgstr[1] "%d tarefas"
 
 #. translators: %d: number
-#: src/Frontend/Views/EventosView.php:707
+#: src/Frontend/Views/EventosView.php:710
 #, php-format
 msgid "%d task has been created."
 msgid_plural "%d tasks have been created."
@@ -1021,7 +1029,7 @@ msgstr[0] "%d unidade"
 msgstr[1] "%d unidades"
 
 #. translators: %d: number
-#: src/Frontend/Views/EventosView.php:752
+#: src/Frontend/Views/EventosView.php:755
 #, php-format
 msgid "%d unit has been deducted from the inventory."
 msgid_plural "%d units have been deducted from the inventory."
@@ -1053,7 +1061,7 @@ msgstr[0] "%d usuario"
 msgstr[1] "%d usuarios"
 
 #. translators: %d: number
-#: src/Frontend/Views/EventosView.php:728
+#: src/Frontend/Views/EventosView.php:731
 #, php-format
 msgid "%d usual item has been reserved."
 msgid_plural "%d usual items have been reserved."
@@ -1137,7 +1145,7 @@ msgid "%s no longer appears on the website. Nothing has changed in the CRM."
 msgstr "%s xa non sae na web. No CRM non cambiou nada."
 
 #. translators: %s: text
-#: templates/eventos/menu.php:309
+#: templates/eventos/menu.php:368
 #, php-format
 msgid "%s per diner"
 msgstr "%s por comensal"
@@ -1228,7 +1236,7 @@ msgstr ""
 msgid "(Recommended, BEFORE registering the groups) Add your own key to wp-config.php to encrypt the CRM passwords. For example, this key, generated at random just now (it is not stored anywhere):"
 msgstr ""
 
-#: src/ListaEspera/Avisos.php:98
+#: src/ListaEspera/Avisos.php:106
 msgid "(The text of the message is not stored in the email log.)"
 msgstr "(O texto da mensaxe non se garda no rexistro de emails.)"
 
@@ -1315,7 +1323,7 @@ msgstr "(ábreo con Excel ou LibreOffice, substitúe as filas de exemplo polo te
 msgid "(open it with Excel or LibreOffice, replace the example rows with your products and save it as CSV)"
 msgstr "(ábreo con Excel ou LibreOffice, substitúe as filas de exemplo polos teus produtos e gárdao como CSV)"
 
-#: templates/lista-espera/publica.php:205
+#: templates/lista-espera/publica.php:210
 msgid "(optional)"
 msgstr "(opcional)"
 
@@ -1927,7 +1935,7 @@ msgstr "Gasto real"
 msgid "Actually spent"
 msgstr "Gastado de verdade"
 
-#: templates/eventos/calendario.php:218 templates/eventos/equipo.php:158 templates/eventos/menu.php:110 templates/fichas/alergenos.php:45
+#: templates/eventos/calendario.php:218 templates/eventos/equipo.php:158 templates/eventos/menu.php:116 templates/fichas/alergenos.php:45
 msgid "Add"
 msgstr "Engadir"
 
@@ -1937,7 +1945,7 @@ msgstr "Engadir"
 msgid "Add \"%s\" to the shopping list"
 msgstr "Engadir «%s» á lista da compra"
 
-#: templates/eventos/menu.php:105
+#: templates/eventos/menu.php:108
 msgid "Add a dish"
 msgstr "Engadir un prato"
 
@@ -1956,6 +1964,10 @@ msgstr "Engadir unha partida"
 #: templates/inventario/material.php:124
 msgid "Add and create another"
 msgstr "Engadir e crear outro"
+
+#: templates/eventos/menu.php:168
+msgid "Add another ingredient"
+msgstr "Engadir outro ingrediente"
 
 #: templates/inventario/nueva.php:131
 msgid "Add another line"
@@ -1977,7 +1989,7 @@ msgstr "Engade polo menos un gasto previsto."
 msgid "Add budget item"
 msgstr "Engadir partida"
 
-#: templates/eventos/menu.php:150
+#: templates/eventos/menu.php:209
 msgid "Add dishes to the menu so the allergens can be checked."
 msgstr "Engade pratos ao menú para poder revisar os alérxenos."
 
@@ -2037,7 +2049,7 @@ msgstr "Engadir ao equipo"
 msgid "Add variants"
 msgstr "Engadir variantes"
 
-#: src/Frontend/Views/EventosView.php:498
+#: src/Frontend/Views/EventosView.php:501
 msgid "Added to the team."
 msgstr "Engadido ao equipo."
 
@@ -2087,7 +2099,7 @@ msgstr "Axuste de %s eliminado"
 msgid "Adjustment of %s removed. It remains in the family's history."
 msgstr "Axuste de %s eliminado. Queda no historial da familia."
 
-#: src/Frontend/Views/EventosView.php:620
+#: src/Frontend/Views/EventosView.php:623
 msgid "Adjustment saved: the sign-up amount has changed."
 msgstr "Axuste gardado: o importe da inscrición cambiou."
 
@@ -2099,7 +2111,7 @@ msgstr "Adultos (scouters e voluntariado)"
 msgid "Advance"
 msgstr "Anticipo"
 
-#: src/Frontend/Views/EventosView.php:684
+#: src/Frontend/Views/EventosView.php:687
 msgid "Advance cancelled."
 msgstr "Anticipo anulado."
 
@@ -2109,17 +2121,17 @@ msgstr "Anticipo anulado."
 msgid "Advance notice sent: %1$d emails to %2$d families."
 msgstr "Aviso previo enviado: %1$d emails a %2$d familias."
 
-#: src/Frontend/Views/EventosView.php:672
+#: src/Frontend/Views/EventosView.php:675
 msgid "Advance recorded."
 msgstr "Anticipo anotado."
 
 #. translators: %s: text
-#: src/Frontend/Views/EventosView.php:678
+#: src/Frontend/Views/EventosView.php:681
 #, php-format
 msgid "Advance settled, with a difference of %s."
 msgstr "Anticipo liquidado, cunha diferenza de %s."
 
-#: src/Frontend/Views/EventosView.php:678
+#: src/Frontend/Views/EventosView.php:681
 msgid "Advance settled."
 msgstr "Anticipo liquidado."
 
@@ -2278,7 +2290,7 @@ msgstr "Xa está na remesa %s (falta rexistrar o seu cobro)"
 msgid "Already in that section."
 msgstr "Xa está nesa sección."
 
-#: templates/lista-espera/publica.php:42
+#: templates/lista-espera/publica.php:43
 msgid "Already on the list? Get your links"
 msgstr "Xa estás na lista? Recibe as túas ligazóns"
 
@@ -2601,7 +2613,7 @@ msgid "Assigned section: %s"
 msgstr "Sección asignada: %s"
 
 #. translators: %s: text
-#: src/Frontend/Views/ListaEsperaView.php:209
+#: src/Frontend/Views/ListaEsperaView.php:214
 #, php-format
 msgid "Assigned section: %s."
 msgstr "Sección asignada: %s."
@@ -2627,6 +2639,10 @@ msgstr "Cota asociativa por asociado (€)"
 #, php-format
 msgid "At least half of the monitors must hold the leisure-time qualification: there are %1$d qualified out of %2$d."
 msgstr "Polo menos a metade dos monitores ten que ter a titulación de tempo libre: hai %1$d titulados de %2$d."
+
+#: src/Frontend/Views/TiendaConfigView.php:61
+msgid "At least one payment method is needed; transfer has been kept."
+msgstr "Fai falta polo menos unha forma de pago; mantívose a transferencia."
 
 #. translators: %d: number
 #: src/Frontend/Views/EventosConfigView.php:184
@@ -2905,7 +2921,7 @@ msgstr ""
 msgid "Base portions"
 msgstr "Racións base"
 
-#: templates/menus/receta.php:84
+#: templates/eventos/menu.php:146 templates/menus/receta.php:84
 msgid "Base portions (how many people the quantities are for)"
 msgstr "Racións base (para cantas persoas son as cantidades)"
 
@@ -3018,7 +3034,7 @@ msgid "Budget of each section and of the group"
 msgstr "Orzamento de cada sección e do grupo"
 
 #. translators: %s: text
-#: src/Frontend/Views/EventosView.php:539
+#: src/Frontend/Views/EventosView.php:542
 #, php-format
 msgid "Budget of event %s validated: the price per section is now fixed."
 msgstr "Orzamento do evento %s validado: o prezo por sección xa é fixo."
@@ -3031,7 +3047,7 @@ msgstr "Orzamento pendente de Tesouraría"
 msgid "Budget pending validation by Treasury."
 msgstr "Orzamento pendente de que Tesouraría o valide."
 
-#: src/Frontend/Views/EventosView.php:545
+#: src/Frontend/Views/EventosView.php:548
 msgid "Budget reopened: it can be changed and will have to be validated again."
 msgstr "Orzamento reaberto: pódese cambiar e haberá que volver validalo."
 
@@ -3039,7 +3055,7 @@ msgstr "Orzamento reaberto: pódese cambiar e haberá que volver validalo."
 msgid "Budget reopened: it is a draft again."
 msgstr "Orzamento reaberto: volve ser un borrador."
 
-#: src/Frontend/Views/EventosView.php:533
+#: src/Frontend/Views/EventosView.php:536
 msgid "Budget sent to Treasury for validation."
 msgstr "Orzamento enviado a Tesouraría para que o valide."
 
@@ -3081,7 +3097,7 @@ msgstr "Orzamentos"
 msgid "Budgets ·"
 msgstr "Orzamentos ·"
 
-#: src/Frontend/Views/EventosView.php:523
+#: src/Frontend/Views/EventosView.php:526
 msgid "Bus item added to the budget."
 msgstr "Partida de autobuses engadida ao orzamento."
 
@@ -3193,7 +3209,7 @@ msgstr "Ficheiro CSV"
 msgid "Caffeine"
 msgstr "Cafeína"
 
-#: templates/menus/receta.php:151
+#: templates/menus/receta.php:157
 msgid "Calculate"
 msgstr "Calcular"
 
@@ -3457,7 +3473,7 @@ msgstr "Apio"
 msgid "Certificate"
 msgstr "Certificado"
 
-#: templates/eventos/calendario.php:172 templates/eventos/equipo.php:98 templates/eventos/material.php:66 templates/eventos/menu.php:90
+#: templates/eventos/calendario.php:172 templates/eventos/equipo.php:98 templates/eventos/material.php:66 templates/eventos/menu.php:93
 msgid "Change"
 msgstr "Cambiar"
 
@@ -3602,7 +3618,7 @@ msgid "Checkbox (yes / no)"
 msgstr "Caixa (si / non)"
 
 #. translators: 1: number, 2: text
-#: templates/eventos/menu.php:156
+#: templates/eventos/menu.php:215
 #, php-format
 msgid "Checked live against the records of %1$d people (sign-ups and team), as of %2$s. Nothing from the records is stored."
 msgstr "Comprobado en directo coas fichas de %1$d persoas (inscritos e equipo), a data de %2$s. Non se garda nada do que din as fichas."
@@ -3667,7 +3683,7 @@ msgstr "Escolle un movemento do banco de signo contrario (se sae da caixa, un in
 msgid "Choose a category from the list."
 msgstr "Escolle unha categoría da lista."
 
-#: src/Menus/MenuEvento.php:62
+#: src/Menus/MenuEvento.php:62 src/Menus/MenuEvento.php:98
 msgid "Choose a day of the event and a meal."
 msgstr "Elixe un día do evento e unha comida."
 
@@ -3779,7 +3795,7 @@ msgstr "Elixir roles e dar acceso"
 msgid "Choose someone from the event team (with an account on the website)."
 msgstr "Escolle a alguén do equipo do evento (con conta na web)."
 
-#: src/Frontend/Views/InventarioView.php:157 src/Frontend/Views/RecetasView.php:263 src/Frontend/Views/TiendaProductosView.php:190
+#: src/Frontend/Views/InventarioView.php:157 src/Frontend/Views/RecetasView.php:289 src/Frontend/Views/TiendaProductosView.php:190
 msgid "Choose the CSV file you want to import."
 msgstr "Elixe o ficheiro CSV que queres importar."
 
@@ -4087,7 +4103,7 @@ msgstr "Empresa"
 msgid "Configure events (margins and templates)"
 msgstr "Configurar os eventos (marxes e modelos)"
 
-#: templates/eventos/menu.php:198 templates/tienda/banco-sugerencias.php:30 templates/tienda/banco-sugerencias.php:56
+#: templates/eventos/menu.php:257 templates/tienda/banco-sugerencias.php:30 templates/tienda/banco-sugerencias.php:56
 msgid "Confirm"
 msgstr "Confirmar"
 
@@ -4109,17 +4125,17 @@ msgstr "Confirma que o recibiches"
 msgid "Confirm the place"
 msgstr "Confirmar a praza"
 
-#: src/ListaEspera/Avisos.php:125 templates/lista-espera/publica.php:90
+#: src/ListaEspera/Avisos.php:133 templates/lista-espera/publica.php:95
 msgid "Confirm the sign-up"
 msgstr "Confirmar a inscrición"
 
 #. translators: 1: text, 2: text
-#: templates/lista-espera/publica.php:84
+#: templates/lista-espera/publica.php:89
 #, php-format
 msgid "Confirm the sign-up of <strong>%1$s</strong> on the waiting list of <strong>%2$s</strong>."
 msgstr "Confirma a inscrición de <strong>%1$s</strong> na lista de espera do <strong>%2$s</strong>."
 
-#: src/Eventos/InscripcionesTable.php:54 templates/eventos/menu.php:180
+#: src/Eventos/InscripcionesTable.php:54 templates/eventos/menu.php:239
 msgid "Confirmed"
 msgstr "Confirmada"
 
@@ -4135,7 +4151,7 @@ msgstr "Confirmado por %1$s o %2$s"
 msgid "Confirmed on %2$s"
 msgstr "Confirmado o %2$s"
 
-#: templates/eventos/menu.php:137
+#: templates/eventos/menu.php:196
 msgid "Conflict"
 msgstr "Conflito"
 
@@ -4175,7 +4191,7 @@ msgstr "Conexión correcta con SinergiaCRM."
 msgid "Consent to administer medication"
 msgstr "Consentimento para administrar medicación"
 
-#: src/Fichas/CamposFicha.php:24 src/Informes/Catalogo.php:32 templates/lista-espera/publica.php:185
+#: src/Fichas/CamposFicha.php:24 src/Informes/Catalogo.php:32 templates/lista-espera/publica.php:190
 msgid "Contact"
 msgstr "Contacto"
 
@@ -4191,15 +4207,15 @@ msgstr "Contacto por teléfono"
 msgid "Contact email"
 msgstr "Email de contacto"
 
-#: templates/lista-espera/detalle.php:76 templates/lista-espera/publica.php:125
+#: templates/lista-espera/detalle.php:76 templates/lista-espera/publica.php:130
 msgid "Contact person"
 msgstr "Persoa de contacto"
 
-#: templates/lista-espera/publica.php:187
+#: templates/lista-espera/publica.php:192
 msgid "Contact person's first name"
 msgstr "Nome da persoa de contacto"
 
-#: src/Frontend/Views/ListaEsperaView.php:185
+#: src/Frontend/Views/ListaEsperaView.php:190
 msgid "Contact recorded."
 msgstr "Contacto apuntado."
 
@@ -4207,7 +4223,7 @@ msgstr "Contacto apuntado."
 msgid "Contacted"
 msgstr "Contactada"
 
-#: templates/menus/ingredientes.php:46 templates/menus/ingredientes.php:78 templates/menus/ingredientes.php:94
+#: templates/menus/ingrediente-modal.php:30 templates/menus/ingredientes.php:46 templates/menus/ingredientes.php:78 templates/menus/ingredientes.php:94
 msgid "Contains"
 msgstr "Contén"
 
@@ -4223,12 +4239,12 @@ msgstr "Contén datos de saúde de menores: non a deixes á vista, non a compart
 msgid "Contains ingredients of animal origin (not suitable for vegetarian or vegan diets)."
 msgstr "Leva ingredientes de orixe animal (non é apta para dietas vexetarianas nin veganas)."
 
-#: templates/menus/receta.php:48
+#: templates/eventos/menu.php:169 templates/menus/receta.php:48
 msgid "Contains:"
 msgstr "Contén:"
 
 #. translators: %s: text
-#: templates/eventos/menu.php:75
+#: templates/eventos/menu.php:78
 #, php-format
 msgid "Contains: %s"
 msgstr "Contén: %s"
@@ -4245,7 +4261,7 @@ msgstr "Copiado"
 msgid "Copy the items from the previous round"
 msgstr "Copiar as partidas da rolda anterior"
 
-#: templates/lista-espera/listado.php:38 templates/solicitudes/listado.php:39 templates/solicitudes/listado.php:49
+#: templates/lista-espera/listado.php:39 templates/solicitudes/listado.php:39 templates/solicitudes/listado.php:49
 msgid "Copy the link"
 msgstr "Copiar a ligazón"
 
@@ -4283,7 +4299,7 @@ msgstr "Corríxeas e volve cargar só esas filas (as demais xa están na tenda).
 msgid "Correction started in the background: %d records. You can keep using the website normally; progress is shown in the box above."
 msgstr "Corrección iniciada en segundo plano: %d fichas. Podes seguir usando a web con normalidade; o avance vese no cadro de arriba."
 
-#: src/Menus/MenuEvento.php:216 templates/eventos/menu.php:284 templates/eventos/menu.php:290
+#: src/Menus/MenuEvento.php:247 templates/eventos/menu.php:343 templates/eventos/menu.php:349
 msgid "Cost"
 msgstr "Custo"
 
@@ -4291,7 +4307,7 @@ msgstr "Custo"
 msgid "Cost per participant"
 msgstr "Custo por participante"
 
-#: templates/menus/ingredientes.php:60
+#: templates/menus/ingrediente-modal.php:27 templates/menus/ingredientes.php:60
 msgid "Cost per usual unit, in euros (optional)"
 msgstr "Custo por unidade habitual, en euros (opcional)"
 
@@ -4337,7 +4353,7 @@ msgstr "Cuberta polo seguro da federación."
 msgid "Create a family with the ticked ones"
 msgstr "Crear familia cos marcados"
 
-#: templates/tienda/config.php:60
+#: templates/tienda/config.php:67
 msgid "Create a new link"
 msgstr "Crear unha ligazón nova"
 
@@ -4384,6 +4400,14 @@ msgstr ""
 #: templates/alta/detalle.php:372
 msgid "Create the other guardian's account and send invitation"
 msgstr "Crear a conta do outro titor/a e enviar a invitación"
+
+#: templates/eventos/menu.php:172
+msgid "Create the recipe and add it to the menu"
+msgstr "Crear a receita e engadila ao menú"
+
+#: src/Frontend/Views/EventosView.php:763
+msgid "Create the recipe here and then add it to the menu."
+msgstr "Crea aquí a receita e despois engádea ao menú."
 
 #: templates/tienda/proveedor.php:57
 msgid "Create the supplier order"
@@ -4511,7 +4535,7 @@ msgstr "Data"
 msgid "Date and place of signing"
 msgstr "Data e localidade da sinatura"
 
-#: src/Informes/Catalogo.php:61 templates/lista-espera/detalle.php:65 templates/lista-espera/publica.php:120 templates/lista-espera/publica.php:177
+#: src/Informes/Catalogo.php:61 templates/lista-espera/detalle.php:65 templates/lista-espera/publica.php:125 templates/lista-espera/publica.php:182
 msgid "Date of birth"
 msgstr "Data de nacemento"
 
@@ -4555,7 +4579,7 @@ msgstr "Días"
 msgid "Days of notice before each charge"
 msgstr "Días de aviso antes de cada cargo"
 
-#: templates/tienda/config.php:40
+#: templates/tienda/config.php:47
 msgid "Days to cancel an unpaid order (0 = never)"
 msgstr "Días para cancelar un pedido sen pagar (0 = nunca)"
 
@@ -4563,11 +4587,11 @@ msgstr "Días para cancelar un pedido sen pagar (0 = nunca)"
 msgid "Days to confirm a place offered from the waiting list"
 msgstr "Días para confirmar unha praza ofrecida da lista de espera"
 
-#: templates/tienda/config.php:50
+#: templates/tienda/config.php:57
 msgid "Days to pay a purchase made without signing in before cancelling it (0 = never)"
 msgstr "Días para pagar unha compra sen sesión antes de cancelala (0 = nunca)"
 
-#: templates/tienda/config.php:36
+#: templates/tienda/config.php:43
 msgid "Days to remind about payment (0 = do not remind)"
 msgstr "Días para lembrar o pagamento (0 = non lembrar)"
 
@@ -4670,7 +4694,7 @@ msgstr "Eliminar a familia %s? Non ten socios. Non se pode desfacer."
 msgid "Delete from the list"
 msgstr "Borrar da lista"
 
-#: templates/lista-espera/publica.php:158
+#: templates/lista-espera/publica.php:163
 msgid "Delete my data"
 msgstr "Borrar os meus datos"
 
@@ -4743,7 +4767,7 @@ msgid "Departure (place and time)"
 msgstr "Saída (punto e hora)"
 
 #. translators: %d: number
-#: src/Frontend/Views/EventosView.php:739
+#: src/Frontend/Views/EventosView.php:742
 #, php-format
 msgid "Departure recorded: %d line."
 msgid_plural "Departure recorded: %d lines."
@@ -4840,19 +4864,19 @@ msgstr "Detectar automaticamente"
 msgid "Difference (fees − cost by table)"
 msgstr "Diferenza (cotas − custo con táboa)"
 
-#: templates/menus/receta.php:149
+#: templates/menus/receta.php:155
 msgid "Diners"
 msgstr "Comensais"
 
-#: src/Frontend/Views/EventosView.php:769
+#: src/Frontend/Views/EventosView.php:802
 msgid "Diners changed."
 msgstr "Comensais cambiados."
 
-#: templates/eventos/menu.php:89
+#: templates/eventos/menu.php:92
 msgid "Diners for this dish"
 msgstr "Comensais deste prato"
 
-#: src/Menus/MenuEvento.php:70 src/Menus/MenuEvento.php:94
+#: src/Menus/MenuEvento.php:70 src/Menus/MenuEvento.php:125
 msgid "Diners must be between 1 and 5000."
 msgstr "Os comensais teñen que estar entre 1 e 5000."
 
@@ -4912,15 +4936,15 @@ msgstr "Rebaixa ou bolsa"
 msgid "Discounts, scholarships or surcharges that change what the family must pay this round."
 msgstr "Descontos, bolsas ou recargos que cambian o que debe pagar a familia nesta rolda."
 
-#: src/Frontend/Views/EventosView.php:759
+#: src/Frontend/Views/EventosView.php:767
 msgid "Dish added to the menu."
 msgstr "Prato engadido ao menú."
 
-#: src/Frontend/Views/EventosView.php:764
+#: src/Frontend/Views/EventosView.php:797
 msgid "Dish removed from the menu."
 msgstr "Prato quitado do menú."
 
-#: templates/menus/receta.php:76
+#: templates/eventos/menu.php:141 templates/menus/receta.php:76
 msgid "Dish type"
 msgstr "Tipo de prato"
 
@@ -4928,7 +4952,11 @@ msgstr "Tipo de prato"
 msgid "Dividends · coupons · repayments"
 msgstr "Dividendos · cupóns · amortizacións"
 
-#: templates/alta-grupo/formulario.php:36 templates/alta-scouters/formulario.php:56 templates/lista-espera/publica.php:172 templates/solicitudes/formulario.php:84
+#: templates/lista-espera/listado.php:116
+msgid "Do not ask to confirm the email when signing up"
+msgstr "Non pedir que se confirme o email ao apuntarse"
+
+#: templates/alta-grupo/formulario.php:36 templates/alta-scouters/formulario.php:56 templates/lista-espera/publica.php:177 templates/solicitudes/formulario.php:84
 msgid "Do not write anything here"
 msgstr "Non escribas nada aquí"
 
@@ -4936,7 +4964,7 @@ msgstr "Non escribas nada aquí"
 msgid "Do you confirm that you have uploaded the file to the bank?"
 msgstr "Confirmas que subiches o ficheiro ao banco?"
 
-#: src/Admin/DuplicadosPage.php:108 templates/lista-espera/detalle.php:73 templates/lista-espera/publica.php:122 templates/personas/alta.php:44
+#: src/Admin/DuplicadosPage.php:108 templates/lista-espera/detalle.php:73 templates/lista-espera/publica.php:127 templates/personas/alta.php:44
 msgid "Document"
 msgstr "Documento"
 
@@ -4977,12 +5005,12 @@ msgid "Done:"
 msgstr ""
 
 #. translators: %s: text
-#: templates/lista-espera/publica.php:115
+#: templates/lista-espera/publica.php:120
 #, php-format
 msgid "Done: we keep your data until %s."
 msgstr "Feito: gardamos os teus datos ata o %s."
 
-#: templates/eventos/cuentas.php:83 templates/eventos/menu.php:265 templates/tienda/gestion.php:52
+#: templates/eventos/cuentas.php:83 templates/eventos/menu.php:324 templates/tienda/gestion.php:52
 msgid "Download CSV"
 msgstr "Descargar CSV"
 
@@ -5035,7 +5063,7 @@ msgid "Draft"
 msgstr "Borrador"
 
 #. translators: %s: text
-#: src/Frontend/Views/EventosView.php:822
+#: src/Frontend/Views/EventosView.php:855
 #, php-format
 msgid "Draft %s deleted."
 msgstr "Borrador %s borrado."
@@ -5128,7 +5156,7 @@ msgstr "Cada asociado"
 msgid "Each role comes with these permissions. Tick or untick and save: it applies to everyone with that role. Action permissions need the view permission of their module."
 msgstr "Cada rol trae estes permisos. Marca ou desmarca e garda: vale para todas as persoas con ese rol. Os permisos de acción necesitan o de ver do seu módulo."
 
-#: src/Menus/Recetario.php:186
+#: src/Menus/Recetario.php:222
 msgid "Each row needs an ingredient, a quantity greater than zero and a valid unit (g, kg, ml, l, unit, tbsp, pinch)."
 msgstr "Cada fila necesita ingrediente, unha cantidade maior que cero e unha unidade válida (g, kg, ml, l, ud, cda, pizca)."
 
@@ -5235,7 +5263,7 @@ msgid "Email of the other guardian"
 msgstr "Email do outro titor/a"
 
 #. translators: %s: text
-#: src/Frontend/Views/ListaEsperaView.php:199
+#: src/Frontend/Views/ListaEsperaView.php:204
 #, php-format
 msgid "Email sent to %s."
 msgstr "Email enviado a %s."
@@ -5279,7 +5307,7 @@ msgid "Empty list of identifiers."
 msgstr "Lista de identificadores baleira."
 
 #. translators: %d: number
-#: templates/lista-espera/listado.php:114
+#: templates/lista-espera/listado.php:119
 #, php-format
 msgid "Empty rows are ignored. To add more fields, save and reopen this box. Maximum %d fields."
 msgstr "As filas baleiras ignóranse. Para engadir máis campos, garda e volve abrir este cadro. Máximo %d campos."
@@ -5296,7 +5324,7 @@ msgstr "Introducir prezo por persoa e día OU prezo total, nunca ambos."
 msgid "Enter a valid email address for the group."
 msgstr "Escribe un email válido para o grupo."
 
-#: src/Frontend/Views/InscripcionEsperaView.php:207 src/ListaEspera/Formulario.php:72 src/Usuarios/AltaScouterService.php:64
+#: src/Frontend/Views/InscripcionEsperaView.php:225 src/ListaEspera/Formulario.php:72 src/Usuarios/AltaScouterService.php:64
 msgid "Enter a valid email address."
 msgstr "Escribe un email válido."
 
@@ -5436,7 +5464,7 @@ msgstr "Escribe o motivo: queda no historial da familia."
 msgid "Enter the recipe name."
 msgstr "Escribe o nome da receita."
 
-#: src/Frontend/Views/ListaEsperaView.php:193
+#: src/Frontend/Views/ListaEsperaView.php:198
 msgid "Enter the subject and the message."
 msgstr "Escribe o asunto e a mensaxe."
 
@@ -5514,11 +5542,11 @@ msgstr "Inventario de material"
 msgid "Equipment items"
 msgstr "Materiais"
 
-#: src/Frontend/Views/EventosView.php:722
+#: src/Frontend/Views/EventosView.php:725
 msgid "Equipment removed from the event list."
 msgstr "Material quitado da lista do evento."
 
-#: src/Frontend/Views/EventosView.php:712
+#: src/Frontend/Views/EventosView.php:715
 msgid "Equipment reserved for the event."
 msgstr "Material reservado para o evento."
 
@@ -5619,31 +5647,31 @@ msgid "Event %s"
 msgstr "Evento %s"
 
 #. translators: %s: text
-#: src/Frontend/Views/EventosView.php:585
+#: src/Frontend/Views/EventosView.php:588
 #, php-format
 msgid "Event %s cancelled."
 msgstr "Evento %s cancelado."
 
 #. translators: %s: text
-#: src/Frontend/Views/EventosView.php:452
+#: src/Frontend/Views/EventosView.php:455
 #, php-format
 msgid "Event %s created as a draft. Add the team and, if it has a cost, the budget."
 msgstr "Evento %s creado como borrador. Engade o equipo e, se ten custo, o orzamento."
 
 #. translators: %s: text
-#: src/Frontend/Views/EventosView.php:580
+#: src/Frontend/Views/EventosView.php:583
 #, php-format
 msgid "Event %s is a draft again."
 msgstr "O evento %s volve ser un borrador."
 
 #. translators: %s: text
-#: src/Frontend/Views/EventosView.php:551
+#: src/Frontend/Views/EventosView.php:554
 #, php-format
 msgid "Event %s published."
 msgstr "Evento %s publicado."
 
 #. translators: %s: text
-#: src/Frontend/Views/EventosView.php:488
+#: src/Frontend/Views/EventosView.php:491
 #, php-format
 msgid "Event %s saved."
 msgstr "Evento %s gardado."
@@ -5664,7 +5692,7 @@ msgstr "Material do evento"
 msgid "Event kitchen sheet. As it contains health data, the content is not stored: only the fact that it was sent is recorded."
 msgstr "Folla de cociña do evento. Por conter datos de saúde, o contido non se garda: só consta que se enviou."
 
-#: templates/email/menu-alergenos.php:34 templates/eventos/menu.php:49
+#: templates/email/menu-alergenos.php:34 templates/eventos/menu.php:52
 msgid "Event menu"
 msgstr "Menú do evento"
 
@@ -5826,11 +5854,11 @@ msgstr "Gasto de %1$s · %2$s"
 msgid "Expense or income"
 msgstr "Gasto ou ingreso"
 
-#: src/Frontend/Views/EventosView.php:637 src/Frontend/Views/PresupuestosView.php:151
+#: src/Frontend/Views/EventosView.php:640 src/Frontend/Views/PresupuestosView.php:151
 msgid "Expense recorded."
 msgstr "Gasto apuntado."
 
-#: src/Frontend/Views/EventosView.php:657
+#: src/Frontend/Views/EventosView.php:660
 msgid "Expense rejected."
 msgstr "Gasto rexeitado."
 
@@ -5838,15 +5866,15 @@ msgstr "Gasto rexeitado."
 msgid "Expense removed."
 msgstr "Gasto quitado."
 
-#: src/Frontend/Views/EventosView.php:637
+#: src/Frontend/Views/EventosView.php:640
 msgid "Expense sent to Treasury for review."
 msgstr "Gasto enviado a Tesouraría para que o revise."
 
-#: src/Frontend/Views/EventosView.php:652
+#: src/Frontend/Views/EventosView.php:655
 msgid "Expense validated."
 msgstr "Gasto validado."
 
-#: src/Frontend/Views/EventosView.php:647
+#: src/Frontend/Views/EventosView.php:650
 msgid "Expense withdrawn."
 msgstr "Gasto retirado."
 
@@ -5904,7 +5932,7 @@ msgstr "Familias ("
 msgid "Families and members request access with this link. When their document and date of birth are checked against the CRM record, the request appears here for you to approve."
 msgstr "As familias e os socios piden o acceso con esta ligazón. Ao comprobar o seu documento e a súa data de nacemento coa ficha do CRM, a solicitude aparece aquí para que a aproves."
 
-#: src/Frontend/Views/EventosView.php:554
+#: src/Frontend/Views/EventosView.php:557
 msgid "Families and scouters will be notified by email."
 msgstr "Avisarase por email ás familias e aos scouters."
 
@@ -5922,7 +5950,11 @@ msgstr "Aínda non se avisou ás familias. "
 msgid "Families notified on %s. "
 msgstr "Familias avisadas o %s. "
 
-#: src/Frontend/Views/EventosView.php:552
+#: templates/tienda/config.php:27
+msgid "Families only see the methods you tick. \"In person\" is only offered to members, and the card terminal is marked as paid by Treasury on collection."
+msgstr "As familias só ven as formas que marques. «En persoa» só se ofrece a socios e socias, e o datáfono márcao como pagado Tesouraría ao cobrar."
+
+#: src/Frontend/Views/EventosView.php:555
 msgid "Families will be notified by email."
 msgstr "Avisarase por email ás familias."
 
@@ -6312,7 +6344,7 @@ msgstr "Alerxia alimentaria"
 msgid "Food intolerance"
 msgstr "Intolerancia alimentaria"
 
-#: src/Frontend/Views/EventosView.php:792
+#: src/Frontend/Views/EventosView.php:825
 msgid "Food item added to the budget."
 msgstr "Partida de alimentación engadida ao orzamento."
 
@@ -6328,18 +6360,18 @@ msgstr "Alimentos que producen alerxia"
 msgid "Foods with intolerance"
 msgstr "Alimentos con intolerancia"
 
-#: templates/eventos/menu.php:271
+#: templates/eventos/menu.php:330
 msgid "For"
 msgstr "Para"
 
 #. translators: %d: number
-#: templates/menus/receta.php:154 templates/menus/receta.php:160
+#: templates/menus/receta.php:160 templates/menus/receta.php:166
 #, php-format
 msgid "For %d diners"
 msgstr "Para %d comensais"
 
 #. translators: %d: number
-#: templates/menus/receta.php:154 templates/menus/receta.php:159
+#: templates/menus/receta.php:160 templates/menus/receta.php:165
 #, php-format
 msgid "For %d portions"
 msgstr "Para %d racións"
@@ -6372,7 +6404,7 @@ msgstr "Por exemplo: Tenda canadense 4 prazas"
 msgid "For example: Day outing"
 msgstr "Por exemplo: Saída dun día"
 
-#: templates/tienda/config.php:28
+#: templates/tienda/config.php:35
 msgid "For example: in cash at the meeting place on Saturdays, or by deposit into account ES00 0000… stating the order no."
 msgstr "Por exemplo: en efectivo no local os sábados, ou por ingreso na conta ES00 0000… indicando o nº de pedido."
 
@@ -6392,7 +6424,7 @@ msgstr "Por exemplo: rexistrado dúas veces"
 msgid "For families"
 msgstr "Para as familias"
 
-#: src/ListaEspera/Avisos.php:122
+#: src/ListaEspera/Avisos.php:130
 msgid "For it to go on the list, confirm that this email address is yours:"
 msgstr "Para que entre na lista, confirma que este email é teu:"
 
@@ -6408,7 +6440,7 @@ msgstr "Para quen aínda non o tiña (por exemplo, un menor que o acaba de sacar
 msgid "For transactions that are not families' fees: expenses (equipment, transport, fees…) or income (donations, grants…). The type is used to know what money is spent on and where it comes from."
 msgstr "Para os movementos que non son cotas das familias: gastos (material, transporte, comisións…) ou ingresos (donativos, subvencións…). O tipo serve para saber en que se gasta e de onde entra o diñeiro."
 
-#: templates/eventos/menu.php:244
+#: templates/eventos/menu.php:303
 msgid "For whoever cooks: the name of each affected person and their allergen, meal by meal. It is generated on the spot and not stored; by email it only reaches the support team with an account."
 msgstr "Para quen cociña: o nome de cada persoa afectada e o seu alérxeno, comida por comida. Xérase no momento e non se garda; por email só chega ao equipo de apoio con conta."
 
@@ -6432,7 +6464,7 @@ msgstr "Para o teu rol a verificación en dous pasos é"
 msgid "Forecast"
 msgstr "Previsión"
 
-#: src/Frontend/Views/EventosView.php:513
+#: src/Frontend/Views/EventosView.php:516
 msgid "Forecast saved: the price has been recalculated."
 msgstr "Previsión gardada: o prezo recalculouse."
 
@@ -6444,11 +6476,11 @@ msgstr "Operacións co estranxeiro"
 msgid "Forgot your password?"
 msgstr "Esqueceches o contrasinal?"
 
-#: src/Frontend/Views/ListaEsperaView.php:159
+#: src/Frontend/Views/ListaEsperaView.php:164
 msgid "Form fields saved."
 msgstr "Campos do formulario gardados."
 
-#: templates/lista-espera/listado.php:66
+#: templates/lista-espera/listado.php:67
 msgid "Form's own fields"
 msgstr "Campos propios do formulario"
 
@@ -6598,11 +6630,11 @@ msgstr "Libro maior: resumo por partida"
 msgid "Generate / repair the environment"
 msgstr ""
 
-#: templates/lista-espera/listado.php:45 templates/solicitudes/listado.php:54
+#: templates/lista-espera/listado.php:46 templates/solicitudes/listado.php:54
 msgid "Generate a new link"
 msgstr "Xerar unha ligazón nova"
 
-#: templates/lista-espera/listado.php:42 templates/solicitudes/listado.php:51
+#: templates/lista-espera/listado.php:43 templates/solicitudes/listado.php:51
 msgid "Generate a new link? The one you already passed on will stop working."
 msgstr "Xerar unha ligazón nova? A que xa pasaches deixará de servir."
 
@@ -6712,7 +6744,7 @@ msgstr "Ir a Os meus pagos"
 msgid "Go to Treasury"
 msgstr "Ir a Tesouraría"
 
-#: templates/menus/receta.php:88
+#: templates/menus/receta.php:90
 msgid "Go to ingredients"
 msgstr "Ir a ingredientes"
 
@@ -6728,7 +6760,7 @@ msgstr "Ir ao inventario"
 msgid "Go to the private area"
 msgstr "Ir á área privada"
 
-#: templates/eventos/menu.php:55
+#: templates/eventos/menu.php:58
 msgid "Go to the recipe book"
 msgstr "Ir ao recetario"
 
@@ -6788,7 +6820,7 @@ msgstr "Camiseta do grupo"
 msgid "Group Treasurer"
 msgstr "Tesoureiro/a de Grupo"
 
-#: templates/tienda/config.php:23
+#: templates/tienda/config.php:30
 msgid "Group account (IBAN) for transfers"
 msgstr "Conta do grupo (IBAN) para as transferencias"
 
@@ -7148,7 +7180,7 @@ msgstr "Cantos?"
 msgid "How they want to be paid"
 msgstr "Como quere cobralo"
 
-#: templates/tienda/config.php:27
+#: templates/tienda/config.php:34
 msgid "How to pay (families see it when ordering)"
 msgstr "Como pagar (veno as familias ao pedir)"
 
@@ -7165,7 +7197,7 @@ msgid "Hunt"
 msgstr "Cacería"
 
 #. translators: 1: text, 2: number
-#: templates/lista-espera/publica.php:217
+#: templates/lista-espera/publica.php:222
 #, php-format
 msgid "I accept that %1$s stores this data, encrypted, to manage the waiting list for %2$d months (or until I register or delete it). Only the group's team sees it."
 msgstr "Acepto que o %1$s garde estes datos, cifrados, para xestionar a lista de espera durante %2$d meses (ou ata que me dea de alta ou os borre). Só os ve o equipo do grupo."
@@ -7190,7 +7222,7 @@ msgstr "Son o socio/a (a partir dos 14 anos)"
 msgid "I am their mother, father or guardian (members who are minors)"
 msgstr "Son a súa nai, pai ou titor/a (socios menores de idade)"
 
-#: src/ListaEspera/CamposExtra.php:58 src/ListaEspera/CamposExtra.php:66 templates/lista-espera/listado.php:111
+#: src/ListaEspera/CamposExtra.php:58 src/ListaEspera/CamposExtra.php:66 templates/lista-espera/listado.php:112
 msgid "I declare that all the data I have entered is truthful and I accept the Scout group's conditions."
 msgstr "Declaro que todos os datos que introducín son veraces e acepto as condicións do grupo scout."
 
@@ -7204,7 +7236,7 @@ msgstr "Revisei a ficha de saúde e alimentación de %s e está ao día."
 msgid "I have checked my health and food record and it is up to date."
 msgstr "Revisei a miña ficha de saúde e alimentación e está ao día."
 
-#: templates/menus/ingredientes.php:58
+#: templates/menus/ingrediente-modal.php:36 templates/menus/ingredientes.php:58
 msgid "I have checked the allergens of this ingredient"
 msgstr "Revisei os alérxenos deste ingrediente"
 
@@ -7228,7 +7260,7 @@ msgstr "asino esta orde de domiciliación de adebedo directo SEPA"
 msgid "I understand that the open sessions of those accounts will be closed (they will sign in again with their new username or the usual one) and that pending \"I forgot my password\" links will stop working."
 msgstr ""
 
-#: templates/lista-espera/publica.php:157
+#: templates/lista-espera/publica.php:162
 msgid "I want to delete my data and leave the waiting list. This cannot be undone."
 msgstr "Quero borrar os meus datos e saír da lista de espera. Non se pode desfacer."
 
@@ -7248,7 +7280,7 @@ msgstr "IBAN (só por transferencia)"
 msgid "ID / foreigner ID"
 msgstr "DNI / NIE"
 
-#: templates/alta-grupo/formulario.php:66 templates/lista-espera/publica.php:179
+#: templates/alta-grupo/formulario.php:66 templates/lista-espera/publica.php:184
 msgid "ID or foreigner ID"
 msgstr "DNI ou NIE"
 
@@ -7265,7 +7297,7 @@ msgid "Identity document"
 msgstr "Documento de identidade"
 
 #. translators: %s: text
-#: templates/lista-espera/publica.php:81
+#: templates/lista-espera/publica.php:86
 #, php-format
 msgid "If %s is on any waiting list, we have sent you an email with your links."
 msgstr "Se %s está nalgunha lista de espera, enviámosche un email coas túas ligazóns."
@@ -7278,12 +7310,12 @@ msgstr "Se cambio a provincia, entendo que os números de socio/a do CRM coa pro
 msgid "If a deadline falls on a Saturday or Sunday, move it forward to the Friday"
 msgstr "Se unha data límite cae en sábado ou domingo, adiantala ao venres"
 
-#: templates/menus/receta.php:88
+#: templates/menus/receta.php:90
 msgid "If an ingredient is missing, create it first in \"Ingredients\" with its allergens."
 msgstr "Se falta un ingrediente, créao antes en «Ingredientes» cos seus alérxenos."
 
 #. translators: %d: number
-#: templates/lista-espera/publica.php:77
+#: templates/lista-espera/publica.php:82
 #, php-format
 msgid "If it doesn't arrive, check your spam folder. The link is valid for %d days."
 msgstr "Se non che chega, mira no cartafol de spam. A ligazón vale %d días."
@@ -7344,7 +7376,7 @@ msgstr "Se os datos son correctos, dentro duns minutos recibirás un email cunha
 msgid "If the encryption key changes (or the WordPress salts, if there is no key of your own), the groups' passwords must be typed again."
 msgstr ""
 
-#: templates/tienda/config.php:59
+#: templates/tienda/config.php:66
 msgid "If the link has been shared where it should not have, create a new one: the previous one stops working (save the changes on this screen first)."
 msgstr "Se a ligazón se compartiu onde non debía, crea unha nova: a anterior deixa de valer (garda antes os cambios desta pantalla)."
 
@@ -7352,7 +7384,7 @@ msgstr "Se a ligazón se compartiu onde non debía, crea unha nova: a anterior d
 msgid "If the link has reached someone it should not have."
 msgstr "Se a ligazón chegou a quen non debía."
 
-#: templates/lista-espera/listado.php:46
+#: templates/lista-espera/listado.php:47
 msgid "If the link has reached someone it should not have. The personal links of each sign-up remain valid."
 msgstr "Se a ligazón chegou a quen non debía. As ligazóns persoais de cada inscrición seguen valendo."
 
@@ -7361,7 +7393,7 @@ msgid "If the other guardian (mother, father…) wants to sign in with their own
 msgstr "Se o outro titor/a (nai, pai…) quere entrar co seu propio email e o seu propio contrasinal, créaselle unha segunda conta ("
 
 #. translators: %d: number
-#: templates/lista-espera/publica.php:186
+#: templates/lista-espera/publica.php:191
 #, php-format
 msgid "If they are under %d years old, the details of the mother, father or guardian."
 msgstr "Se é menor de %d anos, os datos da nai, do pai ou do titor/a."
@@ -7394,7 +7426,7 @@ msgstr "Se es socio/a dun grupo"
 msgid "If you are a scouter or volunteer of %s, register in the private area. We will check your ID number against your group record."
 msgstr "Se es scouter ou voluntario/a do %s, dáte de alta na área privada. Comprobaremos o teu DNI coa túa ficha do grupo."
 
-#: src/ListaEspera/Avisos.php:174
+#: src/ListaEspera/Avisos.php:199
 msgid "If you did not request these links, you can ignore this email."
 msgstr "Se non pediches ti estas ligazóns, podes ignorar este correo."
 
@@ -7402,7 +7434,7 @@ msgstr "Se non pediches ti estas ligazóns, podes ignorar este correo."
 msgid "If you did not request this access, you can ignore this email."
 msgstr "Se non pediches ti este acceso, podes ignorar este correo."
 
-#: src/ListaEspera/Avisos.php:192
+#: src/ListaEspera/Avisos.php:217
 msgid "If you do nothing, they will be deleted on that day and you will leave the list."
 msgstr "Se non fas nada, borraranse ese día e sairás da lista."
 
@@ -7434,6 +7466,10 @@ msgstr "Se o pos, os socios con sesión iniciada pagan este prezo en vez do xera
 msgid "If you think this is a mistake or want to try again, contact the office."
 msgstr "Se pensas que é un erro ou queres tentalo de novo, ponte en contacto coa oficina."
 
+#: templates/lista-espera/listado.php:117
+msgid "If you tick it, the person signing up goes straight onto the list and receives an email that only informs them of the sign-up: they do not have to press any link. When you save, the sign-ups waiting for confirmation also move to the list. Without confirmation, nobody checks that the email belongs to whoever signs up."
+msgstr "Se o marcas, quen se apunta entra directamente na lista e recibe un email que só o informa da inscrición: non ten que premer ningunha ligazón. Ao gardar, as inscricións que agardaban confirmación pasan tamén á lista. Sen confirmar, ninguén comproba que o email sexa de quen se apunta."
+
 #: templates/informes/editor.php:92
 msgid "If you tick none:"
 msgstr "Se non marcas ningunha:"
@@ -7447,7 +7483,7 @@ msgid "If you turn off the freed-place notice, the place is still offered, but t
 msgstr "Se desactivas o aviso de praza liberada, a praza segue ofrecéndose, pero a familia non recibe o email: terá que miralo na aplicación."
 
 #. translators: %d: number
-#: src/ListaEspera/Avisos.php:188
+#: src/ListaEspera/Avisos.php:213
 #, php-format
 msgid "If you want to stay on the list, sign in and press \"Keep my data\": we will keep it for %d more months."
 msgstr "Se queres seguir na lista, entra e preme «Manter os meus datos»: gardarémolos %d meses máis."
@@ -7524,7 +7560,7 @@ msgstr "En %s hai máis participantes previstos que prazas."
 msgid "In a group event with no sections ticked, all the educational sections are invited."
 msgstr "Nun evento de grupo sen seccións marcadas convócanse todas as seccións educativas."
 
-#: templates/lista-espera/listado.php:67
+#: templates/lista-espera/listado.php:68
 msgid "In addition to the data that is always requested, your group can add questions to the waiting list form. Each field needs its label (the text the person signing up will see) and you choose its type and whether it is required. Answers are stored encrypted with the key of the signing-up person's email and are deleted with the sign-up. Removing or changing a field does not alter what has already been answered."
 msgstr "Ademais dos datos que sempre se piden, o teu grupo pode engadir preguntas ao formulario da lista de espera. Cada campo necesita a súa etiqueta (o texto que verá quen se apunta) e escóllese o seu tipo e se é obrigatorio. As respostas gárdanse cifradas coa clave do email de quen se apunta e bórranse coa inscrición. Quitar ou cambiar un campo non altera o que xa contestaron."
 
@@ -7673,7 +7709,7 @@ msgstr "Ingreso de %1$s · %2$s"
 msgid "Income only"
 msgstr "Só ingresos"
 
-#: src/Frontend/Views/EventosView.php:642
+#: src/Frontend/Views/EventosView.php:645
 msgid "Income recorded."
 msgstr "Ingreso apuntado."
 
@@ -7681,7 +7717,7 @@ msgstr "Ingreso apuntado."
 msgid "Income with no budget item"
 msgstr "Ingresos sen partida do orzamento"
 
-#: templates/eventos/menu.php:139
+#: templates/eventos/menu.php:198
 msgid "Incomplete details"
 msgstr "Datos incompletos"
 
@@ -7709,39 +7745,39 @@ msgstr "Entrada ou saída"
 msgid "Inflows"
 msgstr "Entradas"
 
-#: src/Idiomas/Guardados.php:174 src/Menus/MenuEvento.php:216 templates/eventos/menu.php:284 templates/eventos/menu.php:288
+#: src/Idiomas/Guardados.php:174 src/Menus/MenuEvento.php:247 templates/eventos/menu.php:343 templates/eventos/menu.php:347
 msgid "Ingredient"
 msgstr "Ingrediente"
 
 #. translators: %d: number
-#: templates/menus/receta.php:101
+#: templates/eventos/menu.php:152 templates/menus/receta.php:104
 #, php-format
 msgid "Ingredient %d"
 msgstr "Ingrediente %d"
 
-#: src/Frontend/Views/RecetasView.php:248
+#: src/Frontend/Views/RecetasView.php:274
 msgid "Ingredient archived."
 msgstr "Ingrediente arquivado."
 
-#: src/Frontend/Views/RecetasView.php:248
+#: src/Frontend/Views/RecetasView.php:274
 msgid "Ingredient recovered."
 msgstr "Ingrediente recuperado."
 
-#: src/Frontend/Views/RecetasView.php:239
+#: src/Frontend/Views/RecetasView.php:265
 msgid "Ingredient saved."
 msgstr "Ingrediente gardado."
 
-#: templates/menus/ingredientes.php:23 templates/menus/receta.php:87 templates/menus/recetas.php:83
+#: templates/eventos/menu.php:148 templates/menus/ingredientes.php:23 templates/menus/receta.php:87 templates/menus/recetas.php:83
 msgid "Ingredients"
 msgstr "Ingredientes"
 
 #. translators: %d: number
-#: templates/menus/receta.php:132
+#: templates/menus/receta.php:135
 #, php-format
 msgid "Ingredients (for %d portions)"
 msgstr "Ingredientes (para %d racións)"
 
-#: templates/eventos/menu.php:81 templates/menus/recetas.php:44
+#: templates/eventos/menu.php:84 templates/menus/recetas.php:44
 msgid "Ingredients not yet reviewed"
 msgstr "Ingredientes sen revisar"
 
@@ -8046,7 +8082,7 @@ msgstr "É un adebedo directo SEPA, coa autorización que asinaches (referencia 
 msgid "It is a generic text: the reason noted when rejecting the request is for the group only and is not sent."
 msgstr "É un texto xenérico: o motivo que se anotou ao rexeitar a solicitude é só para o grupo e non se envía."
 
-#: templates/eventos/menu.php:317
+#: templates/eventos/menu.php:376
 msgid "It is added as a \"Food\" expense item in the budget. It never changes by itself: if the menu changes, remove the item and propose another."
 msgstr "Engádese como partida de gasto «Alimentación» no orzamento. Nunca cambia soa: se o menú cambia, quita a partida e propón outra."
 
@@ -8108,7 +8144,7 @@ msgstr "Non se sabe en que Grupo Scout se está a traballar."
 msgid "It is not on the record."
 msgstr "Non está na ficha."
 
-#: templates/menus/ingredientes.php:57
+#: templates/menus/ingrediente-modal.php:35 templates/menus/ingredientes.php:57
 msgid "It is of animal origin (meat, fish, eggs, dairy, honey…)"
 msgstr "É de orixe animal (carne, peixe, ovos, lácteos, mel…)"
 
@@ -8214,7 +8250,7 @@ msgstr "Xerarase ao darlle acceso."
 msgid "Item"
 msgstr "Partida"
 
-#: src/Frontend/Views/EventosView.php:518
+#: src/Frontend/Views/EventosView.php:521
 msgid "Item added to the budget."
 msgstr "Partida engadida ao orzamento."
 
@@ -8230,7 +8266,7 @@ msgstr "Nome do concepto"
 msgid "Item of data"
 msgstr "Dato"
 
-#: src/Frontend/Views/EventosView.php:528
+#: src/Frontend/Views/EventosView.php:531
 msgid "Item removed from the budget."
 msgstr "Partida quitada do orzamento."
 
@@ -8242,12 +8278,12 @@ msgstr "Partida quitada."
 msgid "Items copied from the previous round."
 msgstr "Partidas copiadas da rolda anterior."
 
-#: templates/lista-espera/publica.php:219
+#: templates/lista-espera/publica.php:224
 msgid "Join the waiting list"
 msgstr "Apuntarme á lista de espera"
 
 #. translators: %s: text
-#: templates/lista-espera/publica.php:165
+#: templates/lista-espera/publica.php:170
 #, php-format
 msgid "Join the waiting list of %s. We will let you know when a place is available."
 msgstr "Apúntate á lista de espera do %s. Avisarémoste cando haxa praza."
@@ -8258,7 +8294,7 @@ msgstr "Apúntate á lista de espera do %s. Avisarémoste cando haxa praza."
 msgid "Joined as a member on %s. Their waiting list data has been deleted."
 msgstr "Incorporouse como asociado/a o %s. Os seus datos da lista de espera borráronse."
 
-#: templates/lista-espera/detalle.php:170 templates/lista-espera/listado.php:174
+#: templates/lista-espera/detalle.php:170 templates/lista-espera/listado.php:179
 msgid "Joins as a member"
 msgstr "Incorpórase como asociado/a"
 
@@ -8270,12 +8306,12 @@ msgstr "Levar todas as caixas de efectivo e ver o libro maior"
 msgid "Keep me signed in on this device"
 msgstr "Manter a sesión iniciada neste dispositivo"
 
-#: src/ListaEspera/Avisos.php:191
+#: src/ListaEspera/Avisos.php:216
 msgid "Keep my data"
 msgstr "Manter os meus datos"
 
 #. translators: %d: number
-#: templates/lista-espera/publica.php:148
+#: templates/lista-espera/publica.php:153
 #, php-format
 msgid "Keep my data for %d more months"
 msgstr "Manter os meus datos %d meses máis"
@@ -8288,7 +8324,7 @@ msgstr "Garda os"
 msgid "Keep the cash box of their sections"
 msgstr "Levar a caixa de efectivo das súas seccións"
 
-#: src/ListaEspera/Avisos.php:144
+#: src/ListaEspera/Avisos.php:152 src/ListaEspera/Avisos.php:169
 msgid "Keep this email. To see your details we will ask for this email address; from there you can keep or delete them whenever you want."
 msgstr "Garda este correo. Para ver os teus datos pediremos este email; desde aí podes mantelos ou borralos cando queiras."
 
@@ -8296,12 +8332,12 @@ msgstr "Garda este correo. Para ver os teus datos pediremos este email; desde a�
 msgid "Kitchen"
 msgstr "Cociña"
 
-#: templates/email/menu-cocina.php:30 templates/eventos/menu-hoja.php:18 templates/eventos/menu.php:243
+#: templates/email/menu-cocina.php:30 templates/eventos/menu-hoja.php:18 templates/eventos/menu.php:302
 msgid "Kitchen sheet"
 msgstr "Folla de cociña"
 
 #. translators: %d: number
-#: src/Frontend/Views/EventosView.php:785
+#: src/Frontend/Views/EventosView.php:818
 #, php-format
 msgid "Kitchen sheet sent to %d person."
 msgid_plural "Kitchen sheet sent to %d people."
@@ -8322,7 +8358,7 @@ msgstr "Kiwi"
 msgid "Kraal"
 msgstr "Kraal"
 
-#: templates/lista-espera/listado.php:74 templates/lista-espera/listado.php:83 templates/lista-espera/listado.php:85
+#: templates/lista-espera/listado.php:75 templates/lista-espera/listado.php:84 templates/lista-espera/listado.php:86
 msgid "Label"
 msgstr "Etiqueta"
 
@@ -8345,7 +8381,7 @@ msgid "Last change on %1$s by %2$s."
 msgstr "Último cambio o %1$s por %2$s."
 
 #. translators: 1: text, 2: text
-#: templates/lista-espera/listado.php:192
+#: templates/lista-espera/listado.php:197
 #, php-format
 msgid "Last contact: %1$s, %2$s"
 msgstr "Último contacto: %1$s, %2$s"
@@ -8359,7 +8395,7 @@ msgid "Last proposed"
 msgstr "Último proposto"
 
 #. translators: %s: text
-#: templates/eventos/menu.php:248
+#: templates/eventos/menu.php:307
 #, php-format
 msgid "Last sheet delivered on %s, up to date."
 msgstr "Última folla entregada o %s, ao día."
@@ -8540,7 +8576,7 @@ msgstr "Liña %d: movemento con data, importe ou clave debe/haber non válidos."
 msgid "Link"
 msgstr "Asociar"
 
-#: templates/tienda/config.php:54
+#: templates/tienda/config.php:61
 msgid "Link in the website menu (text; empty = no link)"
 msgstr "Ligazón no menú da web (texto; baleiro = sen ligazón)"
 
@@ -8929,7 +8965,7 @@ msgid "May contain traces of:"
 msgstr "Pode conter trazas de:"
 
 #. translators: %s: text
-#: templates/eventos/menu.php:78 templates/menus/recetas.php:41
+#: templates/eventos/menu.php:81 templates/menus/recetas.php:41
 #, php-format
 msgid "May contain: %s"
 msgstr "Pode conter: %s"
@@ -8967,7 +9003,7 @@ msgid "Member no."
 msgstr "Nº socio/a"
 
 #. translators: %s: text
-#: templates/lista-espera/detalle.php:45 templates/lista-espera/listado.php:162
+#: templates/lista-espera/detalle.php:45 templates/lista-espera/listado.php:167
 #, php-format
 msgid "Member no. %s"
 msgstr "Asociado/a nº %s"
@@ -9084,11 +9120,11 @@ msgstr "Membresía no CRM"
 msgid "Menu"
 msgstr "Menú"
 
-#: templates/eventos/menu.php:146
+#: templates/eventos/menu.php:205
 msgid "Menu allergens"
 msgstr "Alérxenos do menú"
 
-#: templates/eventos/menu.php:303
+#: templates/eventos/menu.php:362
 msgid "Menu cost"
 msgstr "Custo do menú"
 
@@ -9192,7 +9228,7 @@ msgstr "Prácticas de Monitor/a"
 msgid "Monitor and Youth Leader"
 msgstr "Monitor/a e Animador/a Xuvenil"
 
-#: templates/lista-espera/publica.php:199
+#: templates/lista-espera/publica.php:204
 msgid "More data requested by the group"
 msgstr "Máis datos que pide o grupo"
 
@@ -9318,6 +9354,14 @@ msgstr "Nova remesa · rolda"
 msgid "New credentials: the connection still needs to be tested."
 msgstr "Credenciais novas: falta probar a conexión."
 
+#: templates/eventos/menu.php:137
+msgid "New dish"
+msgstr "Prato novo"
+
+#: templates/eventos/menu.php:110
+msgid "New dish (create a recipe)"
+msgstr "Prato novo (crear unha receita)"
+
 #: src/Inventario/ListaPdf.php:80 templates/inventario/compra.php:76
 msgid "New equipment"
 msgstr "Material novo"
@@ -9346,7 +9390,7 @@ msgstr "Novo evento"
 msgid "New event: when published, to the invited people"
 msgstr "Evento novo: ao publicalo, ás persoas convocadas"
 
-#: templates/menus/ingredientes.php:32
+#: templates/eventos/menu.php:167 templates/menus/ingrediente-modal.php:19 templates/menus/ingredientes.php:32 templates/menus/receta.php:89
 msgid "New ingredient"
 msgstr "Ingrediente novo"
 
@@ -9464,7 +9508,7 @@ msgstr "Aínda non se anotou ningún gasto real."
 msgid "No advance has been given."
 msgstr "Non se deu ningún anticipo."
 
-#: templates/lista-espera/detalle.php:68 templates/lista-espera/listado.php:136 templates/lista-espera/listado.php:186
+#: templates/lista-espera/detalle.php:68 templates/lista-espera/listado.php:141 templates/lista-espera/listado.php:191
 msgid "No age yet"
 msgstr "Aínda sen idade"
 
@@ -9498,7 +9542,7 @@ msgstr "Non hai ningún movemento do banco que encaixe (de signo contrario e sen
 msgid "No batch has been created yet."
 msgstr "Aínda non se creou ningunha remesa."
 
-#: templates/eventos/menu.php:140
+#: templates/eventos/menu.php:199
 msgid "No conflicts"
 msgstr "Sen conflitos"
 
@@ -9515,7 +9559,7 @@ msgid "No cost for families."
 msgstr "Sen custo para as familias."
 
 #. translators: %s: text
-#: templates/eventos/menu.php:297
+#: templates/eventos/menu.php:356
 #, php-format
 msgid "No cost recorded (they do not add up): %s."
 msgstr "Sen custo anotado (non suman): %s."
@@ -9532,7 +9576,7 @@ msgstr "Sen data"
 msgid "No deposit matches the search."
 msgstr "Ningún ingreso coincide coa busca."
 
-#: templates/eventos/menu.php:68
+#: templates/eventos/menu.php:71
 msgid "No dishes"
 msgstr "Sen pratos"
 
@@ -9544,7 +9588,7 @@ msgstr "Sen documento"
 msgid "No email in the CRM"
 msgstr "Sen email no CRM"
 
-#: src/Frontend/Views/EventosView.php:554
+#: src/Frontend/Views/EventosView.php:557
 msgid "No email notice has been sent."
 msgstr "Non se enviou ningún aviso por email."
 
@@ -9730,7 +9774,7 @@ msgstr "Ningún elixido"
 msgid "None has been saved yet."
 msgstr ""
 
-#: templates/eventos/menu.php:158
+#: templates/eventos/menu.php:217
 msgid "None of the menu's allergens affects anyone according to the records."
 msgstr "Ningún dos alérxenos do menú afecta a ninguén segundo as fichas."
 
@@ -9856,7 +9900,7 @@ msgstr "Nota: %s"
 msgid "Notes"
 msgstr "Notas"
 
-#: templates/lista-espera/publica.php:195 templates/tienda/catalogo.php:76 templates/tienda/publica.php:153
+#: templates/lista-espera/publica.php:200 templates/tienda/catalogo.php:76 templates/tienda/publica.php:153
 msgid "Notes (optional)"
 msgstr "Observacións (opcional)"
 
@@ -9872,7 +9916,7 @@ msgstr "Observacións:"
 msgid "Nothing has been imported."
 msgstr "Non se importou nada."
 
-#: src/Frontend/Views/RecetasView.php:272 src/Frontend/Views/TiendaProductosView.php:205
+#: src/Frontend/Views/RecetasView.php:298 src/Frontend/Views/TiendaProductosView.php:205
 msgid "Nothing has been loaded."
 msgstr "Non se cargou nada."
 
@@ -9884,11 +9928,11 @@ msgstr "Aínda non se reservou nada para este evento."
 msgid "Nothing is deleted: the record and their previous memberships stay in the CRM. If they return, they are given a new membership."
 msgstr "Non se borra nada: a ficha e as súas membresías anteriores quedan no CRM. Se volve, dáselle unha membresía nova."
 
-#: src/Frontend/Views/EventosView.php:774
+#: src/Frontend/Views/EventosView.php:807
 msgid "Notice confirmed."
 msgstr "Aviso confirmado."
 
-#: src/Frontend/Views/EventosView.php:571
+#: src/Frontend/Views/EventosView.php:574
 msgid "Notice sent."
 msgstr ""
 
@@ -10022,11 +10066,11 @@ msgstr "En nome da súa familia: se é menor, a autorización chega en papel e m
 msgid "On sale"
 msgstr "En venda"
 
-#: templates/lista-espera/listado.php:124
+#: templates/lista-espera/listado.php:129
 msgid "On the list"
 msgstr "Na lista"
 
-#: templates/lista-espera/listado.php:153 templates/lista-espera/listado.php:195 templates/lista-espera/publica.php:135
+#: templates/lista-espera/listado.php:158 templates/lista-espera/listado.php:200 templates/lista-espera/publica.php:140
 msgid "On the list since"
 msgstr "Na lista desde"
 
@@ -10160,7 +10204,7 @@ msgstr "Desde a web só se crean persoas e membresías."
 msgid "Only someone with no active membership can be removed from the website. Withdraw them first."
 msgstr "Só se pode eliminar da web a quen non ten ningunha membresía activa. Antes, dálle de baixa."
 
-#: templates/eventos/menu.php:237
+#: templates/eventos/menu.php:296
 msgid "Only the allergens and how many people they affect are shown here, without names. The names are seen by those who already see the event's health data and appear on the kitchen sheet."
 msgstr "Aquí só se ven os alérxenos e a cantas persoas afectan, sen nomes. Os nomes vénos quen xa ve a saúde do evento e saen na folla de cociña."
 
@@ -10184,7 +10228,7 @@ msgstr "Abrir na súa páxina"
 msgid "Open sign-up: families sign up whoever wants to go"
 msgstr "Inscrición aberta: as familias apuntan a quen queira ir"
 
-#: templates/tienda/config.php:48
+#: templates/tienda/config.php:55
 msgid "Open the public shop (purchase without signing in)"
 msgstr "Abrir a tenda pública (compra sen sesión)"
 
@@ -10216,7 +10260,7 @@ msgstr "Ábrese o %s"
 msgid "Opens the \"Member registration\" with all their details. If they have a document, it is first checked in the CRM (if they already have a record in the group, the registration stops). When the registration is finished, the sign-up becomes \"Member\" with their member no. and their details are deleted."
 msgstr "Abre a «Alta de socio/a» con todos os seus datos. Se ten documento, primeiro compróbase no CRM (se xa ten ficha no grupo, a alta detense). Ao terminar a alta, a inscrición queda como «Asociado/a» co seu nº de socio/a e os seus datos bórranse."
 
-#: templates/lista-espera/listado.php:96
+#: templates/lista-espera/listado.php:97
 msgid "Optional"
 msgstr "Opcional"
 
@@ -10302,7 +10346,7 @@ msgstr "Nome do pedido"
 msgid "Order no."
 msgstr "Nº pedido"
 
-#: templates/lista-espera/listado.php:148
+#: templates/lista-espera/listado.php:153
 msgid "Order of arrival in their section"
 msgstr "Orde de chegada na súa sección"
 
@@ -10354,7 +10398,7 @@ msgstr "Acéptanse pedidos (se non, as familias ven que están pechados)"
 msgid "Orders are not being accepted right now."
 msgstr "Agora mesmo non se aceptan pedidos."
 
-#: templates/tienda/config.php:34
+#: templates/tienda/config.php:41
 msgid "Orders from members and families placed in the shop and not paid: they are reminded by email and, if you say so, are cancelled automatically and what they ordered goes back to the shop. It counts from the day of the order; with 0 it is not done."
 msgstr "Os pedidos de socios e familias que se fan na tenda e non se pagan: lémbraselles por email e, se o indicas, cancélanse sós e o que pediron volve á tenda. Conta desde o día do pedido; con 0 non se fai."
 
@@ -10526,7 +10570,7 @@ msgstr "Pagado"
 msgid "Paid on %s"
 msgstr "Pagado o %s"
 
-#: src/Frontend/Views/EventosView.php:597
+#: src/Frontend/Views/EventosView.php:600
 msgid "Paper authorisation recorded."
 msgstr "Autorización en papel anotada."
 
@@ -10582,7 +10626,7 @@ msgstr "Texto da autorización de participación"
 msgid "Pass it on to the group's scouters and volunteers. They register with their ID or foreigner ID number, choose their sections and the activation arrives at the email on their record. The responsibilities (Secretary's office, Coordination, Treasury, Quartermaster) they ask for, registrations without a section and those of people with no email on their record appear here for you to review."
 msgstr "Pásallo aos scouters e ao voluntariado do grupo. Danse de alta co seu DNI ou NIE, elixen as súas seccións e a activación chégalles ao email da súa ficha. As responsabilidades (Secretaría, Coordinación, Tesouraría, Intendencia) que pidan, as altas sen sección e as de quen non ten email na ficha aparecen aquí para que as revises."
 
-#: templates/lista-espera/listado.php:34
+#: templates/lista-espera/listado.php:35
 msgid "Pass this link to whoever wants to join the group. They leave their details, confirm their email and appear here. Their data is stored encrypted and deleted on registration, on request or after 12 months (unless they say they keep it)."
 msgstr "Pasa esta ligazón a quen queira entrar no grupo. Deixa os seus datos, confirma o seu email e aparece aquí. Os seus datos gárdanse cifrados e bórranse ao darlle de alta, se o pide ou aos 12 meses (salvo que diga que os mantén)."
 
@@ -10656,6 +10700,10 @@ msgstr "Prazos de pago"
 msgid "Payment method"
 msgstr "Forma de pago"
 
+#: templates/tienda/config.php:22
+msgid "Payment methods the group accepts"
+msgstr "Formas de pago que acepta o grupo"
+
 #: templates/eventos/inscripciones.php:179
 msgid "Payment missing"
 msgstr "Falta o pago"
@@ -10717,13 +10765,13 @@ msgid "Payment of %s recorded"
 msgstr "Pagamento de %s rexistrado"
 
 #. translators: %s: text
-#: src/Frontend/Views/EventosView.php:614
+#: src/Frontend/Views/EventosView.php:617
 #, php-format
 msgid "Payment of %s recorded and split among the family's sign-ups."
 msgstr "Pago de %s rexistrado e repartido entre as inscricións da familia."
 
 #. translators: %s: text
-#: src/Frontend/Views/EventosView.php:608 src/Frontend/Views/TesoreriaView.php:413
+#: src/Frontend/Views/EventosView.php:611 src/Frontend/Views/TesoreriaView.php:413
 #, php-format
 msgid "Payment of %s recorded."
 msgstr "Pago de %s rexistrado."
@@ -10926,7 +10974,7 @@ msgstr "Motivos persoais"
 msgid "Petrol vouchers"
 msgstr "Cheques de gasolina"
 
-#: src/ListaEspera/Inscripciones.php:59 templates/lista-espera/detalle.php:79 templates/lista-espera/publica.php:127 templates/lista-espera/publica.php:189
+#: src/ListaEspera/Inscripciones.php:59 templates/lista-espera/detalle.php:79 templates/lista-espera/publica.php:132 templates/lista-espera/publica.php:194
 msgid "Phone"
 msgstr "Teléfono"
 
@@ -11024,7 +11072,7 @@ msgstr "Carne de porco"
 msgid "Position"
 msgstr "Cargo"
 
-#: templates/eventos/menu.php:138
+#: templates/eventos/menu.php:197
 msgid "Possible risk"
 msgstr "Posible risco"
 
@@ -11068,7 +11116,7 @@ msgstr "Local: aluguer e subministracións"
 msgid "Premium"
 msgstr "Prima"
 
-#: templates/menus/receta.php:122
+#: templates/eventos/menu.php:170 templates/menus/receta.php:125
 msgid "Preparation"
 msgstr "Elaboración"
 
@@ -11240,7 +11288,7 @@ msgstr "Abonarés · entregas · ingresos"
 msgid "Proposal withdrawn."
 msgstr "Proposta retirada."
 
-#: templates/eventos/menu.php:318
+#: templates/eventos/menu.php:377
 msgid "Propose as a Food item"
 msgstr "Propoñer como partida de Alimentación"
 
@@ -11266,7 +11314,7 @@ msgstr "Provincia"
 msgid "Province %1$s · group %2$s · incremental 0001 → %3$s"
 msgstr "Provincia %1$s · grupo %2$s · incremental 0001 → %3$s"
 
-#: templates/tienda/config.php:46
+#: templates/tienda/config.php:53
 msgid "Public shop"
 msgstr "Tenda pública"
 
@@ -11306,21 +11354,21 @@ msgstr "Titulación"
 msgid "Qualifications needed = youth members ÷ the autonomous community's ratio, rounded up."
 msgstr "Títulos necesarios = educandos ÷ ratio da Comunidade Autónoma, redondeado cara arriba."
 
-#: templates/menus/receta.php:146
+#: templates/menus/receta.php:152
 msgid "Quantities according to diners"
 msgstr "Cantidades segundo os comensais"
 
-#: src/Frontend/Views/TiendaProveedorView.php:69 src/Idiomas/Guardados.php:93 src/Inventario/Importador.php:38 src/Menus/MenuEvento.php:216
+#: src/Frontend/Views/TiendaProveedorView.php:69 src/Idiomas/Guardados.php:93 src/Inventario/Importador.php:38 src/Menus/MenuEvento.php:247
 msgid "Quantity"
 msgstr "Cantidade"
 
 #. translators: %d: number
-#: templates/menus/receta.php:108
+#: templates/eventos/menu.php:158 templates/menus/receta.php:111
 #, php-format
 msgid "Quantity %d"
 msgstr "Cantidade %d"
 
-#: src/Frontend/Views/EventosView.php:717
+#: src/Frontend/Views/EventosView.php:720
 msgid "Quantity changed."
 msgstr "Cantidade cambiada."
 
@@ -11482,7 +11530,7 @@ msgstr "Baixas recentes"
 msgid "Recipe"
 msgstr "Receita"
 
-#: src/Frontend/Views/RecetasView.php:216
+#: src/Frontend/Views/RecetasView.php:242
 msgid "Recipe archived."
 msgstr "Receita arquivada."
 
@@ -11490,12 +11538,16 @@ msgstr "Receita arquivada."
 msgid "Recipe book"
 msgstr "Recetario"
 
-#: src/Frontend/Views/RecetasView.php:207
+#: src/Frontend/Views/RecetasView.php:233
 msgid "Recipe copied to your group. You can now edit it."
 msgstr "Receita copiada ao teu grupo. Xa a podes editar."
 
+#: src/Frontend/Views/EventosView.php:792
+msgid "Recipe created and added to the menu."
+msgstr "Receita creada e engadida ao menú."
+
 #. translators: %s: text
-#: templates/eventos/menu.php:104
+#: templates/eventos/menu.php:107
 #, php-format
 msgid "Recipe for %s"
 msgstr "Receita para %s"
@@ -11504,11 +11556,11 @@ msgstr "Receita para %s"
 msgid "Recipe name"
 msgstr "Nome da receita"
 
-#: src/Frontend/Views/RecetasView.php:216
+#: src/Frontend/Views/RecetasView.php:242
 msgid "Recipe recovered."
 msgstr "Receita recuperada."
 
-#: src/Frontend/Views/RecetasView.php:197
+#: src/Frontend/Views/RecetasView.php:223
 msgid "Recipe saved."
 msgstr "Receita gardada."
 
@@ -11733,12 +11785,12 @@ msgid "Refund of %1$s · event \"%2$s\""
 msgstr "Devolución de %1$s · evento «%2$s»"
 
 #. translators: %s: text
-#: src/Frontend/Views/EventosView.php:630
+#: src/Frontend/Views/EventosView.php:633
 #, php-format
 msgid "Refund of %s recorded."
 msgstr "Devolución de %s anotada."
 
-#: src/Frontend/Views/EventosView.php:746
+#: src/Frontend/Views/EventosView.php:749
 msgid "Refund recorded."
 msgstr "Devolución anotada."
 
@@ -11830,7 +11882,7 @@ msgstr "Alta:"
 msgid "Registrations in the CRM"
 msgstr ""
 
-#: src/Frontend/Views/ListaEsperaView.php:113
+#: src/Frontend/Views/ListaEsperaView.php:114
 msgid "Registrations in the CRM are not enabled for your group (wp-admin → Scout Groups → Modules)."
 msgstr "As altas no CRM non están activadas para o teu grupo (wp-admin → Grupos Scouts → Módulos)."
 
@@ -11870,7 +11922,7 @@ msgstr "Reintegro cancelado."
 msgid "Reimbursement marked as paid."
 msgstr "Reintegro marcado como pagado."
 
-#: src/Frontend/Views/EventosView.php:662
+#: src/Frontend/Views/EventosView.php:665
 msgid "Reimbursement recorded."
 msgstr "Reembolso anotado."
 
@@ -11952,7 +12004,7 @@ msgstr "Eliminar da web"
 msgid "Remove link"
 msgstr "Quitar a asociación"
 
-#: templates/eventos/menu.php:191
+#: templates/eventos/menu.php:250
 msgid "Remove the confirmation"
 msgstr "Quitar a confirmación"
 
@@ -11992,7 +12044,7 @@ msgstr "Quitar esta persoa do equipo?"
 msgid "Remove this task?"
 msgstr "Quitar esta tarefa?"
 
-#: src/Frontend/Views/EventosView.php:508
+#: src/Frontend/Views/EventosView.php:511
 msgid "Removed from the team."
 msgstr "Quitado do equipo."
 
@@ -12032,7 +12084,7 @@ msgstr "Reabrir as contas do evento? Haberá que volver pechalas."
 msgid "Repeat the password"
 msgstr "Repite o contrasinal"
 
-#: templates/lista-espera/detalle.php:58 templates/lista-espera/listado.php:167
+#: templates/lista-espera/detalle.php:58 templates/lista-espera/listado.php:172
 msgid "Repeated"
 msgstr "Repetida"
 
@@ -12154,12 +12206,12 @@ msgstr "Solicitudes"
 msgid "Requests: %s"
 msgstr "Pide: %s"
 
-#: templates/lista-espera/listado.php:76 templates/lista-espera/listado.php:94 templates/lista-espera/listado.php:95 templates/lista-espera/listado.php:97
+#: templates/lista-espera/listado.php:77 templates/lista-espera/listado.php:95 templates/lista-espera/listado.php:96 templates/lista-espera/listado.php:98
 msgid "Required"
 msgstr "Obrigatorio"
 
 #. translators: %d: number
-#: templates/lista-espera/publica.php:181 templates/personas/alta.php:177
+#: templates/lista-espera/publica.php:186 templates/personas/alta.php:177
 #, php-format
 msgid "Required from age %d."
 msgstr "Obrigatorio a partir dos %d anos."
@@ -12547,7 +12599,7 @@ msgstr ""
 msgid "Save the creditor details"
 msgstr "Gardar os datos do acredor"
 
-#: templates/lista-espera/listado.php:115
+#: templates/lista-espera/listado.php:120
 msgid "Save the fields"
 msgstr "Gardar os campos"
 
@@ -12555,7 +12607,7 @@ msgstr "Gardar os campos"
 msgid "Save the group details"
 msgstr "Gardar os datos do grupo"
 
-#: templates/menus/ingredientes.php:63
+#: templates/menus/ingrediente-modal.php:39 templates/menus/ingredientes.php:63
 msgid "Save the ingredient"
 msgstr "Gardar o ingrediente"
 
@@ -12571,7 +12623,7 @@ msgstr ""
 msgid "Save the permissions"
 msgstr "Gardar os permisos"
 
-#: templates/menus/receta.php:129
+#: templates/menus/receta.php:132
 msgid "Save the recipe"
 msgstr "Gardar a receita"
 
@@ -12705,7 +12757,7 @@ msgstr "Os scouters piden que lles devolvan un gasto (co xustificante e, se proc
 msgid "Scouters link renewed: the previous one no longer works."
 msgstr "Ligazón para scouters renovada: a anterior xa non serve."
 
-#: src/Frontend/Views/EventosView.php:553
+#: src/Frontend/Views/EventosView.php:556
 msgid "Scouters will be notified by email."
 msgstr "Avisarase por email aos scouters."
 
@@ -12838,7 +12890,7 @@ msgstr "Scouter de sección"
 msgid "Section: the one for their age"
 msgstr "Sección: a da súa idade"
 
-#: src/Frontend/Views/ListaEsperaView.php:209
+#: src/Frontend/Views/ListaEsperaView.php:214
 msgid "Section: the one for their age."
 msgstr "Sección: a da súa idade."
 
@@ -12955,7 +13007,7 @@ msgstr "Enviar email"
 msgid "Send me a test email (%s)"
 msgstr ""
 
-#: templates/lista-espera/publica.php:51
+#: templates/lista-espera/publica.php:52
 msgid "Send me my links"
 msgstr "Envíame as miñas ligazóns"
 
@@ -12987,12 +13039,12 @@ msgstr "Enviar a Tesouraría"
 msgid "Send to Treasury for validation"
 msgstr "Enviar a Tesouraría para validar"
 
-#: templates/eventos/menu.php:255
+#: templates/eventos/menu.php:314
 msgid "Send to the kitchen team"
 msgstr "Enviar ao equipo de cociña"
 
 #. translators: %d: number
-#: src/Frontend/Views/EventosView.php:785
+#: src/Frontend/Views/EventosView.php:818
 #, php-format
 msgid "Sending to %d failed."
 msgid_plural "Sending to %d failed."
@@ -13075,7 +13127,7 @@ msgstr "Poñer o documento"
 msgid "Settings"
 msgstr "Configuración"
 
-#: src/Frontend/Views/TiendaConfigView.php:75
+#: src/Frontend/Views/TiendaConfigView.php:83
 msgid "Settings saved."
 msgstr "Configuración gardada."
 
@@ -13121,11 +13173,11 @@ msgstr "Tenda"
 msgid "Shop inventory"
 msgstr "Inventario da tenda"
 
-#: templates/tienda/config.php:58
+#: templates/tienda/config.php:65
 msgid "Shop link"
 msgstr "Ligazón da tenda"
 
-#: templates/tienda/config.php:58
+#: templates/tienda/config.php:65
 msgid "Shop link (share it wherever you like):"
 msgstr "Ligazón da tenda (compártea onde queiras):"
 
@@ -13147,7 +13199,7 @@ msgstr "Pedidos da tenda"
 msgid "Shop · settings"
 msgstr "Tenda · configuración"
 
-#: templates/eventos/menu.php:263
+#: templates/eventos/menu.php:322
 msgid "Shopping list"
 msgstr "Lista da compra"
 
@@ -13245,7 +13297,7 @@ msgstr "Inscribir"
 msgid "Sign up %s"
 msgstr "Inscribir a %s"
 
-#: templates/lista-espera/publica.php:78
+#: templates/lista-espera/publica.php:83
 msgid "Sign up another person"
 msgstr "Apuntar a outra persoa"
 
@@ -13279,11 +13331,11 @@ msgstr "Inscrición pechada"
 msgid "Sign-up confirmed"
 msgstr "Inscrición confirmada"
 
-#: src/Frontend/Views/MisEventosView.php:120 templates/lista-espera/publica.php:95
+#: src/Frontend/Views/MisEventosView.php:120 templates/lista-espera/publica.php:100
 msgid "Sign-up confirmed."
 msgstr "Inscrición confirmada."
 
-#: src/Frontend/Views/ListaEsperaView.php:216
+#: src/Frontend/Views/ListaEsperaView.php:221
 msgid "Sign-up deleted from the waiting list."
 msgstr "Inscrición borrada da lista de espera."
 
@@ -13306,7 +13358,7 @@ msgid "Sign-up is done in \"My events\", until %s."
 msgstr "A inscrición faise en «Os meus eventos», ata o %s."
 
 #. translators: %s: text
-#: templates/lista-espera/publica.php:117
+#: templates/lista-espera/publica.php:122
 #, php-format
 msgid "Sign-up on the waiting list of <strong>%s</strong>."
 msgstr "Inscrición na lista de espera do <strong>%s</strong>."
@@ -13329,7 +13381,7 @@ msgstr "A inscrición ábrese o %s"
 msgid "Sign-up opens on %s."
 msgstr "A inscrición ábrese o %s."
 
-#: src/Frontend/Views/EventosView.php:591
+#: src/Frontend/Views/EventosView.php:594
 msgid "Sign-up saved."
 msgstr "Inscrición gardada."
 
@@ -13341,7 +13393,7 @@ msgstr "Inscrición gardada. Mira abaixo o que falta para confirmala."
 msgid "Sign-up until (optional)"
 msgstr "Inscrición ata (opcional)"
 
-#: src/Frontend/Views/EventosView.php:602 src/Frontend/Views/MisEventosView.php:136
+#: src/Frontend/Views/EventosView.php:605 src/Frontend/Views/MisEventosView.php:136
 msgid "Sign-up withdrawn."
 msgstr "Inscrición dada de baixa."
 
@@ -13369,7 +13421,7 @@ msgstr "Asinada na web"
 msgid "Signed up"
 msgstr "Apuntouse"
 
-#: templates/lista-espera/listado.php:167
+#: templates/lista-espera/listado.php:172
 msgid "Signed up more than once with a different email"
 msgstr "Apuntada máis dunha vez con distinto email"
 
@@ -13434,12 +13486,12 @@ msgid "Sort by"
 msgstr "Ordenar por"
 
 #. translators: 1: text, 2: text
-#: src/Frontend/Tabla.php:131 src/Idiomas/TextosJs.php:32
+#: src/Frontend/Tabla.php:138 src/Idiomas/TextosJs.php:32
 #, php-format
 msgid "Sort by %1$s (%2$s)"
 msgstr "Ordenar por %1$s (%2$s)"
 
-#: templates/lista-espera/listado.php:148 templates/lista-espera/listado.php:159
+#: templates/lista-espera/listado.php:153 templates/lista-espera/listado.php:164
 msgid "Sort order"
 msgstr "Orde"
 
@@ -13571,7 +13623,7 @@ msgstr "Indica se entra ou sae diñeiro e o importe (maior que 0)."
 msgid "Status"
 msgstr "Estado"
 
-#: src/Frontend/Views/ListaEsperaView.php:179
+#: src/Frontend/Views/ListaEsperaView.php:184
 msgid "Status changed."
 msgstr "Estado cambiado."
 
@@ -13725,11 +13777,11 @@ msgstr "Voluntariado de apoio"
 msgid "Surcharge"
 msgstr "Recargo"
 
-#: templates/lista-espera/publica.php:188
+#: templates/lista-espera/publica.php:193
 msgid "Surname of the contact person"
 msgstr "Apelidos da persoa de contacto"
 
-#: src/Informes/Catalogo.php:59 src/Informes/Informe.php:38 templates/lista-espera/publica.php:176 templates/personas/alta.php:133
+#: src/Informes/Catalogo.php:59 src/Informes/Informe.php:38 templates/lista-espera/publica.php:181 templates/personas/alta.php:133
 msgid "Surnames"
 msgstr "Apelidos"
 
@@ -13761,7 +13813,7 @@ msgstr "Fala coa Secretaría do teu grupo, dicíndolle o nome do socio/a e a tú
 msgid "Task"
 msgstr "Tarefa"
 
-#: src/Frontend/Views/EventosView.php:810
+#: src/Frontend/Views/EventosView.php:843
 msgid "Task added."
 msgstr "Tarefa engadida."
 
@@ -13769,15 +13821,15 @@ msgstr "Tarefa engadida."
 msgid "Task calendar"
 msgstr "Calendario de tarefas"
 
-#: src/Frontend/Views/EventosView.php:799
+#: src/Frontend/Views/EventosView.php:832
 msgid "Task done."
 msgstr "Tarefa feita."
 
-#: src/Frontend/Views/EventosView.php:816
+#: src/Frontend/Views/EventosView.php:849
 msgid "Task removed."
 msgstr "Tarefa quitada."
 
-#: src/Frontend/Views/EventosView.php:805
+#: src/Frontend/Views/EventosView.php:838
 msgid "Task saved."
 msgstr "Tarefa gardada."
 
@@ -13805,7 +13857,7 @@ msgstr "Denominación fiscal (opcional)"
 msgid "Team"
 msgstr "Equipo"
 
-#: src/Frontend/Views/EventosView.php:503
+#: src/Frontend/Views/EventosView.php:506
 msgid "Team updated."
 msgstr "Equipo actualizado."
 
@@ -13851,7 +13903,7 @@ msgstr ""
 msgid "Tested on %s"
 msgstr ""
 
-#: templates/lista-espera/listado.php:110
+#: templates/lista-espera/listado.php:111
 msgid "Text of the declaration box"
 msgstr "Texto da caixa de declaración"
 
@@ -13863,7 +13915,7 @@ msgstr "Grazas por todo o compartido!"
 msgid "Thank you! It is confirmed that you have received it."
 msgstr "Grazas! Queda confirmado que o recibiches."
 
-#: templates/alta-scouters/formulario.php:34 templates/lista-espera/publica.php:74
+#: templates/alta-scouters/formulario.php:34 templates/lista-espera/publica.php:75
 msgid "Thank you."
 msgstr "Grazas."
 
@@ -13925,7 +13977,7 @@ msgstr "Ese email é o de varias contas e o contrasinal vale para todas. Escribe
 msgid "That email address does not exist or belongs to another group."
 msgstr "Ese email non existe ou é doutro grupo."
 
-#: src/Frontend/Views/InscripcionEsperaView.php:262
+#: src/Frontend/Views/InscripcionEsperaView.php:280
 msgid "That email address is not the one for this sign-up."
 msgstr "Ese email non é o desta inscrición."
 
@@ -14115,11 +14167,11 @@ msgstr "Esa praza xa non está dispoñible."
 msgid "That product is not in the group's shop."
 msgstr "Ese produto non está na tenda do grupo."
 
-#: src/Frontend/Views/EventosView.php:842
+#: src/Frontend/Views/EventosView.php:875
 msgid "That receipt does not exist or you cannot see it."
 msgstr "Ese xustificante non existe ou non podes velo."
 
-#: src/Frontend/Views/RecetasView.php:90 src/Menus/Recetario.php:85
+#: src/Frontend/Views/RecetasView.php:90 src/Menus/Recetario.php:121
 msgid "That recipe does not exist."
 msgstr "Esa receita non existe."
 
@@ -14171,11 +14223,11 @@ msgstr "Esa sección non está convocada."
 msgid "That shopping list does not belong to your group."
 msgstr "Esa lista da compra non é do teu grupo."
 
-#: src/Frontend/Views/ListaEsperaView.php:42 src/Frontend/Views/ListaEsperaView.php:172
+#: src/Frontend/Views/ListaEsperaView.php:42 src/Frontend/Views/ListaEsperaView.php:177
 msgid "That sign-up is no longer on the waiting list."
 msgstr "Esa inscrición xa non está na lista de espera."
 
-#: src/Frontend/Views/EventosView.php:798 src/Frontend/Views/EventosView.php:804 src/Frontend/Views/EventosView.php:815
+#: src/Frontend/Views/EventosView.php:831 src/Frontend/Views/EventosView.php:837 src/Frontend/Views/EventosView.php:848
 msgid "That task does not exist."
 msgstr "Esa tarefa non existe."
 
@@ -14273,7 +14325,7 @@ msgstr "O usuario de API é ADMINISTRADOR do CRM. Usa un usuario dedicado cun ro
 msgid "The BIC is not valid (8 or 11 characters). You can leave it empty."
 msgstr "O BIC non é válido (8 ou 11 caracteres). Podes deixalo baleiro."
 
-#: src/Frontend/Views/TiendaConfigView.php:67
+#: src/Frontend/Views/TiendaConfigView.php:75
 msgid "The Bizum phone number does not look valid; it has not been saved."
 msgstr "O teléfono de Bizum non parece válido; non se gardou."
 
@@ -14407,7 +14459,7 @@ msgstr "A ficha do CRM non ten email no campo elixido (%s), ou o CRM non respond
 msgid "The CRM record only accepts accounts of up to %d characters (Spanish ones have 24): use a Spanish account."
 msgstr "A ficha do CRM só admite contas de ata %d caracteres (as españolas teñen 24): usa unha conta española."
 
-#: templates/eventos/menu.php:154
+#: templates/eventos/menu.php:213
 msgid "The CRM records cannot be read right now: it cannot be said that the menu is free of allergens. Try again."
 msgstr "Non se puideron ler as fichas do CRM agora mesmo: non se pode dicir que o menú estea libre de alérxenos. Téntao de novo."
 
@@ -14429,7 +14481,7 @@ msgstr "O dato do CRM cambiou desde que se propuxo. Revísao e confirma se quere
 msgid "The IBAN check digits do not match: check that it is written correctly."
 msgstr "Os díxitos de control do IBAN non cadran: revisa que estea ben escrito."
 
-#: src/Frontend/Views/TiendaConfigView.php:64
+#: src/Frontend/Views/TiendaConfigView.php:72
 msgid "The IBAN does not look valid; it has not been saved."
 msgstr "O IBAN non parece válido; non se gardou."
 
@@ -14516,13 +14568,13 @@ msgid "The accounts could not be reopened. Try again."
 msgstr "Non se puideron reabrir as contas. Téntao de novo."
 
 #. translators: %s: text
-#: src/Frontend/Views/EventosView.php:689
+#: src/Frontend/Views/EventosView.php:692
 #, php-format
 msgid "The accounts of event %s are closed: the balance becomes the final report."
 msgstr "Contas do evento %s pechadas: o balance queda como informe final."
 
 #. translators: %s: text
-#: src/Frontend/Views/EventosView.php:694
+#: src/Frontend/Views/EventosView.php:697
 #, php-format
 msgid "The accounts of event %s are reopened: they can be changed now. When everything is done, close them again."
 msgstr "Contas do evento %s reabertas: xa se poden cambiar. Cando estea todo, pécheas de novo."
@@ -14543,7 +14595,7 @@ msgstr "Falta o director/a da actividade."
 msgid "The advance has expenses: settle it."
 msgstr "O anticipo ten gastos: liquídao."
 
-#: templates/eventos/menu.php:53
+#: templates/eventos/menu.php:56
 msgid "The allergens are those of the recipes: nobody in particular is checked here."
 msgstr "Os alérxenos son os das receitas: aquí non se mira a ninguén en concreto."
 
@@ -14711,7 +14763,7 @@ msgstr "A data de cobro ten que ser, como pronto, o %1$s (%2$d días hábiles de
 msgid "The collection date must be a working day (Monday to Friday)."
 msgstr "A data de cobro ten que ser un día laborable (de luns a venres)."
 
-#: src/Frontend/Views/EventosView.php:779
+#: src/Frontend/Views/EventosView.php:812
 msgid "The confirmation has been removed: the notice is unresolved again."
 msgstr "A confirmación quitouse: o aviso volve estar sen resolver."
 
@@ -14719,7 +14771,7 @@ msgstr "A confirmación quitouse: o aviso volve estar sen resolver."
 msgid "The connection to the CRM is not available."
 msgstr "A conexión co CRM non está dispoñible."
 
-#: src/Frontend/Views/ListaEsperaView.php:186
+#: src/Frontend/Views/ListaEsperaView.php:191
 msgid "The contact could not be recorded."
 msgstr "Non se puido apuntar o contacto."
 
@@ -14764,7 +14816,7 @@ msgid "The current one (%s)"
 msgstr "A actual (%s)"
 
 #. translators: 1: text, 2: text, 3: text
-#: src/ListaEspera/Avisos.php:186
+#: src/ListaEspera/Avisos.php:211
 #, php-format
 msgid "The data of <strong>%1$s</strong> on the waiting list of <strong>%2$s</strong> will be deleted on <strong>%3$s</strong>."
 msgstr "Os datos de <strong>%1$s</strong> na lista de espera do <strong>%2$s</strong> borraranse o <strong>%3$s</strong>."
@@ -14777,7 +14829,7 @@ msgstr "Os datos desta remesa xa non se conservan."
 msgid "The data of this batch's direct debits is no longer kept (it is deleted 14 months after the collection date)."
 msgstr "Os datos dos adebedos desta remesa xa non se conservan (bórranse 14 meses despois da data de cobro)."
 
-#: src/ListaEspera/Avisos.php:104
+#: src/ListaEspera/Avisos.php:112
 msgid "The data of this sign-up is no longer kept (it was deleted or they became a member): the text of the email cannot be rebuilt."
 msgstr "Os datos desta inscrición xa non se conservan (borráronse ou pasou a asociado/a): non se pode reconstruír o texto do email."
 
@@ -14800,7 +14852,7 @@ msgid "The date is not valid."
 msgstr "A data non é válida."
 
 #. translators: %d: number
-#: src/Frontend/Views/EventosView.php:491
+#: src/Frontend/Views/EventosView.php:494
 #, php-format
 msgid "The date of %d calendar task has changed."
 msgid_plural "The dates of %d calendar tasks have changed."
@@ -14859,7 +14911,7 @@ msgstr "O número de documento debe ter entre 5 e 20 letras ou cifras."
 msgid "The email cannot be checked right now because the CRM is not responding. Sign in with your member number or try again later."
 msgstr "Agora non se pode comprobar o email porque o CRM non responde. Entra co teu número de socio/a ou téntao máis tarde."
 
-#: src/Frontend/Views/ListaEsperaView.php:201 src/Frontend/Views/UsuariosView.php:172
+#: src/Frontend/Views/ListaEsperaView.php:206 src/Frontend/Views/UsuariosView.php:172
 msgid "The email could not be sent: "
 msgstr "Non se puido enviar o email: "
 
@@ -14879,7 +14931,7 @@ msgstr "Gardarase o email na ficha do CRM ("
 msgid "The email will be saved on the CRM record as"
 msgstr "Gardarase o email na ficha do CRM como"
 
-#: templates/lista-espera/publica.php:48
+#: templates/lista-espera/publica.php:49
 msgid "The email you signed up with"
 msgstr "O email co que te apuntaches"
 
@@ -15010,7 +15062,7 @@ msgstr "O ficheiro leva as contas das familias sen cifrar: gárdao só o tempo n
 msgid "The file could not be uploaded. It must be a CSV of up to %d MB."
 msgstr "Non se puido subir o ficheiro. Ten que ser un CSV de ata %d MB."
 
-#: src/Frontend/Views/RecetasView.php:267
+#: src/Frontend/Views/RecetasView.php:293
 msgid "The file could not be uploaded. It must be a CSV of up to 1 MB."
 msgstr "Non se puido subir o ficheiro. Ten que ser un CSV de ata 1 MB."
 
@@ -15035,7 +15087,7 @@ msgid "The file has too many rows (at most %d). Split it into several."
 msgstr "O ficheiro ten demasiadas filas (como moito %d). Divídeo en varios."
 
 #. translators: %d: number
-#: src/Menus/Recetario.php:166
+#: src/Menus/Recetario.php:202
 #, php-format
 msgid "The file has too many rows (maximum %d)."
 msgstr "O ficheiro ten demasiadas filas (máximo %d)."
@@ -15044,7 +15096,7 @@ msgstr "O ficheiro ten demasiadas filas (máximo %d)."
 msgid "The file is empty or could not be read."
 msgstr "O ficheiro está baleiro ou non se puido ler."
 
-#: src/Menus/Recetario.php:151 src/Tesoreria/Banco/CsvBanco.php:67
+#: src/Menus/Recetario.php:187 src/Tesoreria/Banco/CsvBanco.php:67
 msgid "The file is empty."
 msgstr "O ficheiro está baleiro."
 
@@ -15082,7 +15134,7 @@ msgstr "A primeira persoa con acceso"
 msgid "The first person with access will receive an email to activate their account."
 msgstr "A primeira persoa con acceso recibirá un email para activar a súa conta."
 
-#: src/Menus/Recetario.php:163
+#: src/Menus/Recetario.php:199
 msgid "The first row must be the column row: Recipe; Type; Portions; Ingredient; Quantity; Unit."
 msgstr "A primeira fila ten que ser a das columnas: Receta; Tipo; Porciones; Ingrediente; Cantidad; Unidad."
 
@@ -15135,8 +15187,8 @@ msgid "The group bears it."
 msgstr "Asúmeo o grupo."
 
 #: src/Tienda/Servicio.php:202
-msgid "The group does not take card payments."
-msgstr "O grupo non cobra con datáfono."
+msgid "The group does not accept this payment method."
+msgstr "O grupo non acepta esta forma de pago."
 
 #. translators: %d: number
 #: templates/area/inicio.php:75
@@ -15178,7 +15230,7 @@ msgstr "O nº de grupo debe ter ata 3 cifras (p. ex. 684)."
 msgid "The group was not found."
 msgstr "Non se atopou o grupo."
 
-#: templates/tienda/config.php:24
+#: templates/tienda/config.php:31
 msgid "The group's Bizum phone"
 msgstr "Teléfono de Bizum do grupo"
 
@@ -15266,6 +15318,10 @@ msgstr "Non se puido gardar a importación."
 msgid "The imported bank deposits not yet reconciled. Choose this family's: the payment is recorded with its date and amount."
 msgstr "Os ingresos importados do banco que aínda non están conciliados. Escolle o desta familia: o pagamento rexístrase coa súa data e o seu importe."
 
+#: templates/menus/ingrediente-modal.php:15
+msgid "The ingredient could not be saved. Try again."
+msgstr "Non se puido gardar o ingrediente. Téntao de novo."
+
 #: src/Menus/AvisosTable.php:23
 msgid "The ingredient is changed"
 msgstr "Cámbiase o ingrediente"
@@ -15303,7 +15359,7 @@ msgid "The last correction could not correct 1 record"
 msgstr "A última corrección non puido corrixir 1 ficha"
 
 #. translators: %s: text
-#: templates/eventos/menu.php:246
+#: templates/eventos/menu.php:305
 #, php-format
 msgid "The last sheet was delivered on %s and something has changed since then (sign-ups, records or menu): generate it again."
 msgstr "A última folla entregouse o %s e cambiou algo desde entón (inscritos, fichas ou menú): volve xerala."
@@ -15343,7 +15399,7 @@ msgid "The link is single-use and valid for %d days. You will need your group's 
 msgstr "A ligazón é dun só uso e vale %d días. Necesitarás o usuario e o contrasinal do CRM do teu grupo."
 
 #. translators: %d: number
-#: src/ListaEspera/Avisos.php:127
+#: src/ListaEspera/Avisos.php:135
 #, php-format
 msgid "The link is valid for %d days. If it was not you, ignore this email: the sign-up will be deleted by itself."
 msgstr "A ligazón vale %d días. Se non fuches ti, ignora este correo: a inscrición borrarase soa."
@@ -15406,15 +15462,15 @@ msgstr "O socio con nº Scouts de España %s xa pertence a outra familia."
 msgid "The member's. If they are a minor and have no ID number, leave it blank."
 msgstr "O do socio/a. Se é menor e non ten DNI, déixao en branco."
 
-#: src/Menus/MenuEvento.php:73
+#: src/Menus/MenuEvento.php:73 src/Menus/MenuEvento.php:101
 msgid "The menu already has too many dishes."
 msgstr "O menú xa ten demasiados pratos."
 
-#: templates/eventos/menu.php:305
+#: templates/eventos/menu.php:364
 msgid "The menu has no cost yet. Record the cost of the ingredients in the recipe book and add dishes."
 msgstr "O menú aínda non ten custo. Anota o custo dos ingredientes no recetario e engade pratos."
 
-#: src/Menus/MenuEvento.php:203
+#: src/Menus/MenuEvento.php:234
 msgid "The menu has no cost yet: record the cost of the ingredients and add dishes."
 msgstr "O menú aínda non ten custo: anota o custo dos ingredientes e engade pratos."
 
@@ -15426,15 +15482,15 @@ msgstr "A idade mínima non pode ser maior que a máxima."
 msgid "The names could not be read from the CRM: only the member numbers are shown."
 msgstr "Non se puideron ler os nomes do CRM: amósanse só os números de socio."
 
-#: src/Frontend/Views/EventosView.php:573
+#: src/Frontend/Views/EventosView.php:576
 msgid "The notice could not be sent: that person has no active account or no email address (see the email log)."
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:569
+#: src/Frontend/Views/EventosView.php:572
 msgid "The notice will be sent to the event team in a few moments."
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:569
+#: src/Frontend/Views/EventosView.php:572
 msgid "The notice will be sent to the families in a few moments."
 msgstr ""
 
@@ -15558,7 +15614,7 @@ msgstr "O filtro de pagamentos non se aplica porque o teu rol non ten acceso a T
 msgid "The person in charge must be on the event team."
 msgstr "O responsable ten que ser do equipo do evento."
 
-#: templates/lista-espera/listado.php:112
+#: templates/lista-espera/listado.php:113
 msgid "The person signing up must tick this box to continue. Leave it empty to use the default text (the one shown in grey)."
 msgstr "Quen se apunta ten que marcar esta caixa para continuar. Déixao baleiro para usar o texto por defecto (o que se ve en gris)."
 
@@ -15626,7 +15682,7 @@ msgstr "A cantidade ten que ser un número enteiro maior que cero."
 msgid "The quantity to buy of \"%s\" is not valid."
 msgstr "A cantidade que hai que comprar de «%s» non é válida."
 
-#: src/Frontend/Views/EventosView.php:846 src/Frontend/Views/ReintegrosView.php:117
+#: src/Frontend/Views/EventosView.php:879 src/Frontend/Views/ReintegrosView.php:117
 msgid "The receipt could not be read."
 msgstr "Non se puido ler o xustificante."
 
@@ -15639,12 +15695,12 @@ msgid "The receipt must be an image (JPG, PNG or WebP) or a PDF of up to 5 MB."
 msgstr "O xustificante ten que ser unha imaxe (JPG, PNG ou WebP) ou un PDF de ata 5 MB."
 
 #. translators: %s: text
-#: src/Menus/Recetario.php:199
+#: src/Menus/Recetario.php:235
 #, php-format
 msgid "The recipe \"%s\" needs portions (1 to 500) and at least one valid ingredient."
 msgstr "A receita «%s» necesita racións (1 a 500) e polo menos un ingrediente válido."
 
-#: src/Menus/Recetario.php:174
+#: src/Menus/Recetario.php:210
 msgid "The recipe name is missing."
 msgstr "Falta o nome da receita."
 
@@ -15712,7 +15768,7 @@ msgstr "O mesmo tipo para todos"
 msgid "The second account cannot be created: a valid member no. for the username is missing."
 msgstr "Non se pode crear a segunda conta: falta un nº de socio/a válido para o usuario."
 
-#: src/Frontend/Views/ListaEsperaView.php:210
+#: src/Frontend/Views/ListaEsperaView.php:215
 msgid "The section could not be assigned."
 msgstr "Non se puido asignar a sección."
 
@@ -15742,9 +15798,19 @@ msgstr "O prazo de inscrición xa se pechou: para a baixa, fala co equipo do eve
 msgid "The sign-up deadline must end before the event starts."
 msgstr "O prazo de inscrición ten que rematar antes de que comece o evento."
 
-#: src/ListaEspera/Avisos.php:218
+#: src/ListaEspera/Avisos.php:243
 msgid "The sign-up does not have a valid email address."
 msgstr "A inscrición non ten un email válido."
+
+#. translators: %s: text
+#: templates/lista-espera/publica.php:77
+#, php-format
+msgid "The sign-up is already on the list. We have sent you an email at %s with the sign-up details; you do not need to do anything else."
+msgstr "A inscrición xa está na lista. Enviámosche un email a %s cos datos da inscrición; non tes que facer nada máis."
+
+#: templates/lista-espera/publica.php:77
+msgid "The sign-up is already on the list. We have sent you an email with the sign-up details; you do not need to do anything else."
+msgstr "A inscrición xa está na lista. Enviámosche un email cos datos da inscrición; non tes que facer nada máis."
 
 #. translators: 1: text, 2: text
 #: templates/email/evento.php:54
@@ -15753,12 +15819,12 @@ msgid "The sign-up of %1$s for %2$s is confirmed."
 msgstr "A inscrición de %1$s en %2$s está confirmada."
 
 #. translators: 1: text, 2: text
-#: src/ListaEspera/Avisos.php:138
+#: src/ListaEspera/Avisos.php:163
 #, php-format
 msgid "The sign-up of <strong>%1$s</strong> on the waiting list of <strong>%2$s</strong> is confirmed. We will contact you when a place is available."
 msgstr "A inscrición de <strong>%1$s</strong> na lista de espera do <strong>%2$s</strong> está confirmada. Poñerémonos en contacto contigo cando haxa praza."
 
-#: src/Frontend/Views/ListaEsperaView.php:180
+#: src/Frontend/Views/ListaEsperaView.php:185
 msgid "The status could not be changed."
 msgstr "Non se puido cambiar o estado."
 
@@ -15782,7 +15848,7 @@ msgstr "Non se pode descifrar a credencial gardada. Pide ao grupo que repita a a
 msgid "The surname is missing."
 msgstr "Faltan os apelidos."
 
-#: src/Frontend/Views/EventosView.php:799
+#: src/Frontend/Views/EventosView.php:832
 msgid "The task is pending again."
 msgstr "A tarefa volve estar pendente."
 
@@ -15894,7 +15960,7 @@ msgstr "O código de verificación non é correcto ou caducou. Téntao de novo."
 msgid "The website cannot check that this credential is read-only: confirm it with the office in the CRM."
 msgstr "A web non pode comprobar que esta credencial sexa de só lectura: confírmao coa oficina no CRM."
 
-#: templates/eventos/menu.php:273
+#: templates/eventos/menu.php:332
 msgid "The whole event"
 msgstr "Todo o evento"
 
@@ -16109,7 +16175,7 @@ msgstr "Non hai produtos con ese filtro. Empeza con «Engadir produto» ou, se x
 msgid "There are no recipes with that filter."
 msgstr "Non hai receitas con ese filtro."
 
-#: templates/eventos/menu.php:55
+#: templates/eventos/menu.php:58
 msgid "There are no recipes yet."
 msgstr "Aínda non hai receitas."
 
@@ -16153,7 +16219,7 @@ msgstr "Aínda non hai informes gardados."
 msgid "There are no shopping lists with this filter."
 msgstr "Non hai listas da compra con este filtro."
 
-#: templates/eventos/menu.php:152
+#: templates/eventos/menu.php:211
 msgid "There are no sign-ups or team members in the event yet: there is nobody to compare the menu with."
 msgstr "Aínda non hai inscritos nin equipo no evento: non hai ninguén con quen comparar o menú."
 
@@ -16233,12 +16299,12 @@ msgstr "Hai piscina ou mar: ten que haber un socorrista presente."
 msgid "There is already 1 unit of \"%s\" in the inventory. Do more really need to be bought?"
 msgstr "Xa hai 1 unidade de «%s» no inventario. Seguro que fai falta comprar máis?"
 
-#: src/Menus/MenuEvento.php:207
+#: src/Menus/MenuEvento.php:238
 msgid "There is already a menu item in the budget: remove it before proposing another."
 msgstr "Xa hai unha partida do menú no orzamento: quítaa antes de propoñer outra."
 
 #. translators: %s: text
-#: src/Menus/Recetario.php:195
+#: src/Menus/Recetario.php:231
 #, php-format
 msgid "There is already a recipe \"%s\" in the group: it has not been loaded."
 msgstr "Xa hai unha receita «%s» no grupo: non se cargou."
@@ -16377,7 +16443,7 @@ msgstr "Non hai ningún movemento sen asociar con este filtro."
 msgid "There is nobody on the team yet."
 msgstr "Aínda non hai ninguén no equipo."
 
-#: templates/lista-espera/listado.php:143
+#: templates/lista-espera/listado.php:148
 msgid "There is nobody on the waiting list with this filter."
 msgstr "Non hai ninguén na lista de espera con este filtro."
 
@@ -16397,7 +16463,7 @@ msgstr "Aínda non hai nada á venda."
 msgid "There is nothing paid pending to order yet."
 msgstr "Aínda non hai nada pagado pendente de pedir."
 
-#: templates/eventos/menu.php:281
+#: templates/eventos/menu.php:340
 msgid "There is nothing to buy yet: add dishes to the menu."
 msgstr "Aínda non hai nada que comprar: engade pratos ao menú."
 
@@ -16427,7 +16493,7 @@ msgstr "Non había nada que cambiar."
 msgid "There were no places left: they are on the waiting list (position %d). If one is freed up, we will let you know by email."
 msgstr "Non quedaban prazas: está na lista de espera (posto %d). Se se libera unha, avisarémosvos por correo."
 
-#: src/Frontend/Views/EventosView.php:591
+#: src/Frontend/Views/EventosView.php:594
 msgid "There were no places left: they remain on the waiting list."
 msgstr "Non quedaban prazas: queda na lista de espera."
 
@@ -16446,7 +16512,7 @@ msgid "These are the people with allergies, intolerances or diets that match the
 msgstr "Estas son as persoas con alerxias, intolerancias ou dieta que cruzan co menú de %1$s (%2$s). Válida a data de %3$s: se algo cambia, volverase enviar."
 
 #. translators: %s: text
-#: src/ListaEspera/Avisos.php:169
+#: src/ListaEspera/Avisos.php:194
 #, php-format
 msgid "These are the sign-ups with this email on the waiting list of <strong>%s</strong>:"
 msgstr "Estas son as inscricións con este email na lista de espera do <strong>%s</strong>:"
@@ -16492,7 +16558,7 @@ msgid "They are confirmed by the coordination team before they take effect. Mean
 msgstr "Confírmaas o equipo de coordinación antes de que teñan efecto. Mentres, entras como scouter das túas seccións."
 
 #. translators: %s: text
-#: src/Frontend/Views/EventosView.php:730
+#: src/Frontend/Views/EventosView.php:733
 #, php-format
 msgid "They are not in the inventory: %s."
 msgstr "Non están no inventario: %s."
@@ -16640,7 +16706,7 @@ msgstr "Este evento aínda non ten tarefas."
 msgid "This event is not for their section or age."
 msgstr "Este evento non é para a súa sección ou a súa idade."
 
-#: src/Eventos/Cobros.php:317 src/Eventos/Cuentas.php:670 src/Frontend/Views/EventosView.php:477
+#: src/Eventos/Cobros.php:317 src/Eventos/Cuentas.php:670 src/Frontend/Views/EventosView.php:480
 msgid "This event's accounts are closed: they can no longer be changed."
 msgstr "As contas deste evento están pechadas: xa non se poden cambiar."
 
@@ -16722,7 +16788,7 @@ msgstr "Esta ligazón non é válida ou caducou."
 msgid "This link is not valid or is no longer in use. Ask the office for a new invitation."
 msgstr "Esta ligazón non é válida ou xa non está en uso. Pide un convite novo á oficina."
 
-#: templates/lista-espera/publica.php:65
+#: templates/lista-espera/publica.php:66
 msgid "This link is not valid or is no longer in use. Ask your Scout group for the current link."
 msgstr "Esta ligazón non é válida ou xa non está en uso. Pide a ligazón actual ao teu grupo scout."
 
@@ -16731,7 +16797,7 @@ msgid "This link is not valid or is no longer in use. Ask your group's coordinat
 msgstr "Esta ligazón non é válida ou xa non está en uso. Pide a ligazón actual ao equipo de coordinación do teu grupo."
 
 #. translators: %d: number
-#: templates/lista-espera/publica.php:69
+#: templates/lista-espera/publica.php:70
 #, php-format
 msgid "This link is not valid or the sign-up is no longer on the list (it is deleted when you register in the group, on request or after %d months)."
 msgstr "Esta ligazón non é válida ou a inscrición xa non está na lista (bórrase ao darse de alta no grupo, ao pedilo ou aos %d meses)."
@@ -16862,7 +16928,7 @@ msgstr "Marcar todos os pendentes desta páxina"
 msgid "Tick in the list the transactions that are not fees."
 msgstr "Marca na listaxe os movementos que non son cotas."
 
-#: src/Frontend/Views/InscripcionEsperaView.php:277
+#: src/Frontend/Views/InscripcionEsperaView.php:295
 msgid "Tick the box to confirm that you want to delete your data."
 msgstr "Marca a caixa para confirmar que queres borrar os teus datos."
 
@@ -16918,7 +16984,7 @@ msgstr "Para activar outra conta, pecha antes a túa sesión."
 msgid "To activate your account and choose your password, press the button:"
 msgstr "Para activar a túa conta e escoller o teu contrasinal, preme o botón:"
 
-#: templates/menus/receta.php:120
+#: templates/menus/receta.php:123
 msgid "To add more ingredients, save and reopen the recipe: empty rows always appear."
 msgstr "Para engadir máis ingredientes, garda e volve abrir a receita: sempre saen filas baleiras."
 
@@ -16962,7 +17028,7 @@ msgstr "Por cobrar"
 msgid "To confirm the sign-up the following is missing:"
 msgstr "Para confirmar a inscrición falta:"
 
-#: templates/lista-espera/publica.php:140
+#: templates/lista-espera/publica.php:145
 msgid "To correct any data, write to your group or delete the sign-up and sign up again with the group's link."
 msgstr "Para corrixir algún dato, escribe ao teu grupo ou borra a inscrición e volve apuntarte coa ligazón do grupo."
 
@@ -17012,7 +17078,7 @@ msgstr "Por revisar"
 msgid "To save the report give it a name and choose at least one column."
 msgstr "Para gardar o informe ponlle un nome e escolle polo menos unha columna."
 
-#: templates/lista-espera/publica.php:100
+#: templates/lista-espera/publica.php:105
 msgid "To see your waiting list data, enter the email address you signed up with."
 msgstr "Para ver os teus datos da lista de espera, escribe o email co que te apuntaches."
 
@@ -17136,7 +17202,7 @@ msgstr "Formación"
 msgid "Training Officer"
 msgstr "Responsable de Formación"
 
-#: src/Frontend/Views/EventosView.php:625 src/Frontend/Views/EventosView.php:667
+#: src/Frontend/Views/EventosView.php:628 src/Frontend/Views/EventosView.php:670
 msgid "Transaction cancelled."
 msgstr "Movemento anulado."
 
@@ -17402,7 +17468,7 @@ msgstr "Queres desfacer o pago deste pedido?"
 msgid "Undo?"
 msgstr "Desfacer?"
 
-#: src/Domain/Secciones.php:30 src/Menus/MenuEvento.php:216 templates/menus/receta.php:90 templates/menus/receta.php:109
+#: src/Domain/Secciones.php:30 src/Menus/MenuEvento.php:247 templates/menus/receta.php:93 templates/menus/receta.php:112
 msgid "Unidad"
 msgstr "Unidade"
 
@@ -17425,7 +17491,7 @@ msgid "Uniforms and badges"
 msgstr "Uniformes e insignias"
 
 #. translators: %d: number
-#: templates/menus/receta.php:110
+#: templates/eventos/menu.php:159 templates/menus/receta.php:113
 #, php-format
 msgid "Unit %d"
 msgstr "Unidade %d"
@@ -17450,7 +17516,7 @@ msgstr "Unidades devoltas"
 msgid "Units to buy, line %d"
 msgstr "Unidades que hai que comprar, liña %d"
 
-#: src/Frontend/Views/AltaUsuariosView.php:197 src/Frontend/Views/BancoView.php:462 src/Frontend/Views/CajaView.php:188 src/Frontend/Views/EventosView.php:472
+#: src/Frontend/Views/AltaUsuariosView.php:197 src/Frontend/Views/BancoView.php:462 src/Frontend/Views/CajaView.php:188 src/Frontend/Views/EventosView.php:475
 msgid "Unknown action."
 msgstr "Acción descoñecida."
 
@@ -17462,7 +17528,7 @@ msgstr "Email descoñecido."
 msgid "Unknown error"
 msgstr "Erro descoñecido"
 
-#: templates/tienda/config.php:33
+#: templates/tienda/config.php:40
 msgid "Unpaid orders"
 msgstr "Pedidos sen pagar"
 
@@ -17558,7 +17624,7 @@ msgstr "Material habitual de cada tipo de evento"
 msgid "Usual equipment saved."
 msgstr "Material habitual gardado."
 
-#: templates/menus/ingredientes.php:38
+#: templates/menus/ingrediente-modal.php:22 templates/menus/ingredientes.php:38
 msgid "Usual unit"
 msgstr "Unidade habitual"
 
@@ -17648,11 +17714,11 @@ msgstr "Variantes"
 msgid "Variants and stock"
 msgstr "Variantes e existencias"
 
-#: templates/eventos/menu.php:208
+#: templates/eventos/menu.php:267
 msgid "Vegan diet"
 msgstr "Dieta vegana"
 
-#: templates/eventos/menu.php:208
+#: templates/eventos/menu.php:267
 msgid "Vegetarian diet"
 msgstr "Dieta vexetariana"
 
@@ -17660,7 +17726,7 @@ msgstr "Dieta vexetariana"
 msgid "Verification code"
 msgstr "Código de verificación"
 
-#: src/Admin/GruposAltasPage.php:167 templates/eventos/agenda.php:60 templates/eventos/menu.php:278 templates/fichas/cambios.php:210
+#: src/Admin/GruposAltasPage.php:167 templates/eventos/agenda.php:60 templates/eventos/menu.php:337 templates/fichas/cambios.php:210
 msgid "View"
 msgstr "Ver"
 
@@ -17676,7 +17742,7 @@ msgstr "Ver accesos"
 msgid "View and print the authorisation"
 msgstr "Ver e imprimir a autorización"
 
-#: templates/eventos/menu.php:254
+#: templates/eventos/menu.php:313
 msgid "View and print the sheet"
 msgstr "Ver e imprimir a folla"
 
@@ -17696,7 +17762,7 @@ msgstr "Ver en Persoas"
 msgid "View in place"
 msgstr "Ver no seu sitio"
 
-#: src/ListaEspera/Avisos.php:143 templates/lista-espera/publica.php:110
+#: src/ListaEspera/Avisos.php:151 src/ListaEspera/Avisos.php:168 templates/lista-espera/publica.php:115
 msgid "View my details"
 msgstr "Ver os meus datos"
 
@@ -17802,12 +17868,12 @@ msgstr "Lista de espera"
 msgid "Waiting list (%d)"
 msgstr "Lista de espera (%d)"
 
-#: src/Frontend/Views/ListaEsperaView.php:132
+#: src/Frontend/Views/ListaEsperaView.php:133
 msgid "Waiting list link renewed: the previous one no longer works."
 msgstr "Ligazón da lista de espera renovada: a anterior xa non serve."
 
 #. translators: %s: text
-#: src/Frontend/Views/ListaEsperaView.php:114
+#: src/Frontend/Views/ListaEsperaView.php:115
 #, php-format
 msgid "Waiting list of %s"
 msgstr "Lista de espera do %s"
@@ -17827,10 +17893,6 @@ msgid "Was due %d day ago"
 msgid_plural "Was due %d days ago"
 msgstr[0] "Venceu hai %d día"
 msgstr[1] "Venceu hai %d días"
-
-#: templates/tienda/config.php:21
-msgid "We accept payment by card terminal (card, in person; marked by Treasury on collection)"
-msgstr "Aceptamos pagar con datáfono (tarxeta, en persoa; márcao a Tesouraría ao cobrar)"
 
 #: templates/solicitudes/formulario.php:37
 msgid "We already had your request."
@@ -17869,10 +17931,16 @@ msgid "We have received a request to choose a new password for the user <strong>
 msgstr "Recibimos unha petición para escoller un contrasinal novo para o usuario <strong>%s</strong> (co que tamén podes entrar usando este enderezo de email)."
 
 #. translators: 1: text, 2: text
-#: src/ListaEspera/Avisos.php:121
+#: src/ListaEspera/Avisos.php:129
 #, php-format
 msgid "We have received the sign-up of <strong>%1$s</strong> on the waiting list of <strong>%2$s</strong>."
 msgstr "Recibimos a inscrición de <strong>%1$s</strong> na lista de espera do <strong>%2$s</strong>."
+
+#. translators: 1: text, 2: text
+#: src/ListaEspera/Avisos.php:146
+#, php-format
+msgid "We have received the sign-up of <strong>%1$s</strong> on the waiting list of <strong>%2$s</strong>. It is already on the list and we will contact you when a place is available."
+msgstr "Recibimos a inscrición de <strong>%1$s</strong> na lista de espera do <strong>%2$s</strong>. Xa está na lista e porémonos en contacto contigo cando haxa praza."
 
 #. translators: %s: text
 #: templates/email/tienda.php:51
@@ -17897,21 +17965,21 @@ msgid "We have saved your SEPA direct debit authorisation"
 msgstr "Gardamos a túa autorización de domiciliación SEPA"
 
 #. translators: %s: text
-#: templates/lista-espera/publica.php:75
+#: templates/lista-espera/publica.php:79
 #, php-format
 msgid "We have sent you an email at %s to confirm the sign-up. Until you press its link, it does not go on the list."
 msgstr "Enviámosche un email a %s para confirmar a inscrición. Ata que non premas a súa ligazón, non entra na lista."
 
-#: templates/lista-espera/publica.php:75
+#: templates/lista-espera/publica.php:79
 msgid "We have sent you an email to confirm the sign-up. Until you press its link, it does not go on the list."
 msgstr "Enviámosche un email para confirmar a inscrición. Ata que non premas a súa ligazón, non entra na lista."
 
-#: templates/lista-espera/publica.php:137
+#: templates/lista-espera/publica.php:142
 msgid "We keep your data until"
 msgstr "Gardamos os teus datos ata"
 
 #. translators: %s: text
-#: src/ListaEspera/Avisos.php:140
+#: src/ListaEspera/Avisos.php:148 src/ListaEspera/Avisos.php:165
 #, php-format
 msgid "We keep your data, encrypted, until %s. We will notify you beforehand so you can keep it."
 msgstr "Gardamos os teus datos, cifrados, ata o %s. Antes avisarémoste para que poidas mantelos."
@@ -17950,9 +18018,13 @@ msgstr "Usamos estes datos só para comprobar a túa alta coa túa ficha do grup
 msgid "We will notify you before each charge, with its date and amount. You can see the authorisation, print it or cancel it at any time from \"My payments\"."
 msgstr "Avisarémosche antes de cada cargo, coa súa data e o seu importe. Podes ver a autorización, imprimila ou anulala cando queiras desde «Os meus pagos»."
 
-#: templates/lista-espera/publica.php:193
+#: templates/lista-espera/publica.php:198
 msgid "We will send you an email to confirm it. It is also your key to see your data later."
 msgstr "Enviarémosche un email para confirmalo. É tamén a túa clave para ver os teus datos máis adiante."
+
+#: templates/lista-espera/publica.php:198
+msgid "We will send you an email with the sign-up details. It is also your key to see your data later."
+msgstr "Enviarémosche un email cos datos da inscrición. É tamén a túa clave para ver os teus datos máis adiante."
 
 #: templates/alta/buscar.php:46 templates/alta/buscar.php:67 templates/fichas/ficha.php:164 templates/personas/listado.php:52
 msgid "Web access"
@@ -18016,7 +18088,7 @@ msgstr "Que pasou"
 msgid "What is charged"
 msgstr "Que se cobra"
 
-#: templates/eventos/menu.php:193
+#: templates/eventos/menu.php:252
 msgid "What is done"
 msgstr "Que se fai"
 
@@ -18202,7 +18274,7 @@ msgstr "Quen o ve e o pode comprar"
 msgid "Who should receive the notice again?"
 msgstr ""
 
-#: templates/lista-espera/publica.php:174
+#: templates/lista-espera/publica.php:179
 msgid "Who wants to join the group"
 msgstr "Quen quere entrar no grupo"
 
@@ -18314,7 +18386,7 @@ msgstr "Co grupo"
 msgid "With the prices of each order. What is \"to be confirmed\" (price not fixed) adds no amount."
 msgstr "Cos prezos de cada pedido. O que está «por confirmar» (prezo sen fixar) non suma importe."
 
-#: templates/tienda/config.php:47
+#: templates/tienda/config.php:54
 msgid "With the public shop, anyone with the link can buy without signing in whatever the group has on sale \"for everyone\" (never \"members only\"), paying by transfer or Bizum. Their data is stored encrypted and deleted 90 days after the order is delivered or cancelled."
 msgstr "Coa tenda pública, calquera persoa coa ligazón pode comprar sen iniciar sesión o que o grupo teña á venda «para todos» (nunca o «só socios»), pagando por transferencia ou Bizum. Os seus datos gárdanse cifrados e bórranse aos 90 días de entregar ou cancelar o pedido."
 
@@ -18502,7 +18574,7 @@ msgid "You can only sign up to a published event that has not yet ended."
 msgstr "Só se pode inscribir nun evento publicado que aínda non rematou."
 
 #. translators: 1: text, 2: text
-#: src/ListaEspera/Avisos.php:204
+#: src/ListaEspera/Avisos.php:229
 #, php-format
 msgid "You can reply to this email. You are on the waiting list of %1$s: <a href=\"%2$s\">see my details</a>."
 msgstr "Podes responder a este correo. Estás na lista de espera do %1$s: <a href=\"%2$s\">ver os meus datos</a>."
@@ -18537,7 +18609,7 @@ msgstr "Non podes cambiar o calendario deste evento."
 msgid "You cannot change this event's equipment."
 msgstr "Non podes cambiar o material deste evento."
 
-#: src/Frontend/Views/EventosView.php:778 src/Menus/MenuEvento.php:59 src/Menus/MenuEvento.php:83 src/Menus/Validacion.php:59
+#: src/Frontend/Views/EventosView.php:811 src/Menus/MenuEvento.php:59 src/Menus/MenuEvento.php:95 src/Menus/MenuEvento.php:114
 msgid "You cannot change this event's menu."
 msgstr "Non podes cambiar o menú deste evento."
 
@@ -18593,7 +18665,7 @@ msgstr "Non podes apuntar gastos neste evento."
 msgid "You cannot reject this reimbursement."
 msgstr "Non podes rexeitar este reintegro."
 
-#: src/Frontend/Views/EventosView.php:562
+#: src/Frontend/Views/EventosView.php:565
 msgid "You cannot resend notices for this event."
 msgstr ""
 
@@ -18605,7 +18677,7 @@ msgstr "Non podes restaurar o teu propio rol: volvería darche permisos que se q
 msgid "You cannot review that person's changes."
 msgstr "Non podes revisar os cambios desa persoa."
 
-#: src/Frontend/Views/EventosView.php:856
+#: src/Frontend/Views/EventosView.php:889
 msgid "You cannot see this event's accounts."
 msgstr "Non podes ver as contas deste evento."
 
@@ -18629,7 +18701,7 @@ msgstr "Non podes dar de baixa neste evento."
 msgid "You do not have access to that authorisation."
 msgstr "Non tes acceso a esa autorización."
 
-#: src/Frontend/Views/EventosView.php:81 src/Frontend/Views/EventosView.php:459
+#: src/Frontend/Views/EventosView.php:81 src/Frontend/Views/EventosView.php:462
 msgid "You do not have access to that event."
 msgstr "Non tes acceso a ese evento."
 
@@ -18725,7 +18797,7 @@ msgstr "Déronche acceso á área privada do %s."
 msgid "You have made many checks in a row. Wait a while and try again."
 msgstr "Fixeches moitas comprobacións seguidas. Agarda un pouco e volve intentalo."
 
-#: src/Frontend/Views/InscripcionEsperaView.php:162 src/Frontend/Views/InscripcionEsperaView.php:254 src/Frontend/Views/TiendaPublicaView.php:151 templates/alta-grupo/formulario.php:23
+#: src/Frontend/Views/InscripcionEsperaView.php:163 src/Frontend/Views/InscripcionEsperaView.php:272 src/Frontend/Views/TiendaPublicaView.php:151 templates/alta-grupo/formulario.php:23
 msgid "You have made several attempts in a row. Wait an hour before trying again."
 msgstr "Fixeches varios intentos seguidos. Agarda unha hora antes de tentalo de novo."
 
@@ -18789,7 +18861,7 @@ msgstr "A túa conta non pode asinar autorizacións de domiciliación."
 msgid "Your account is read-only: nothing can be changed."
 msgstr "A túa conta é de só lectura: non se pode cambiar nada."
 
-#: templates/lista-espera/publica.php:162
+#: templates/lista-espera/publica.php:167
 msgid "Your data has been deleted and you are no longer on the waiting list."
 msgstr "Os teus datos borráronse e xa non estás na lista de espera."
 
@@ -18797,7 +18869,7 @@ msgstr "Os teus datos borráronse e xa non estás na lista de espera."
 msgid "Your details"
 msgstr "Os teus datos"
 
-#: templates/alta-scouters/formulario.php:79 templates/lista-espera/publica.php:107 templates/solicitudes/formulario.php:126
+#: templates/alta-scouters/formulario.php:79 templates/lista-espera/publica.php:112 templates/solicitudes/formulario.php:126
 msgid "Your email"
 msgstr "O teu email"
 
@@ -18825,7 +18897,7 @@ msgstr "A túa ficha do grupo: consulta os teus datos e actualiza o teu email e 
 msgid "Your group's CRM user does not have permission to change memberships."
 msgstr "O usuario do CRM do teu grupo non ten permiso para cambiar membresías."
 
-#: src/Crm/Altas.php:533 src/Crm/Escritura.php:140 src/Crm/Escritura.php:205 src/Frontend/Views/ListaEsperaView.php:113
+#: src/Crm/Altas.php:533 src/Crm/Escritura.php:140 src/Crm/Escritura.php:205 src/Frontend/Views/ListaEsperaView.php:114
 msgid "Your group's CRM user does not have permission to create people and memberships."
 msgstr "O usuario do CRM do teu grupo non ten permiso para crear persoas e membresías."
 
@@ -19080,7 +19152,7 @@ msgid "[%s] Choose a new password"
 msgstr "[%s] Escolle un contrasinal novo"
 
 #. translators: %s: text
-#: src/ListaEspera/Avisos.php:118
+#: src/ListaEspera/Avisos.php:126
 #, php-format
 msgid "[%s] Confirm your sign-up on the waiting list"
 msgstr "[%s] Confirma a inscrición na lista de espera"
@@ -19098,10 +19170,16 @@ msgid "[%s] Invitation to register your group"
 msgstr "[%s] Convite para dar de alta o teu grupo"
 
 #. translators: %s: text
-#: src/ListaEspera/Avisos.php:135
+#: src/ListaEspera/Avisos.php:160
 #, php-format
 msgid "[%s] Sign-up on the waiting list confirmed"
 msgstr "[%s] Inscrición confirmada na lista de espera"
+
+#. translators: %s: text
+#: src/ListaEspera/Avisos.php:143
+#, php-format
+msgid "[%s] Sign-up on the waiting list received"
+msgstr "[%s] Inscrición recibida na lista de espera"
 
 #. translators: %s: text
 #: src/Usuarios/Invitacion.php:54
@@ -19128,13 +19206,13 @@ msgid "[%s] Your group is now registered"
 msgstr "[%s] O teu grupo xa está dado de alta"
 
 #. translators: %s: text
-#: src/ListaEspera/Avisos.php:183
+#: src/ListaEspera/Avisos.php:208
 #, php-format
 msgid "[%s] Your waiting list data expires soon"
 msgstr "[%s] Os teus datos da lista de espera caducan pronto"
 
 #. translators: %s: text
-#: src/ListaEspera/Avisos.php:166
+#: src/ListaEspera/Avisos.php:191
 #, php-format
 msgid "[%s] Your waiting list links"
 msgstr "[%s] As túas ligazóns da lista de espera"
@@ -19192,11 +19270,11 @@ msgstr "e non ten DNI, escribe o seu nome e apelidos tal como constan no grupo."
 msgid "as of %s"
 msgstr "a partir do %s"
 
-#: src/Frontend/Tabla.php:131 src/Idiomas/TextosJs.php:34
+#: src/Frontend/Tabla.php:138 src/Idiomas/TextosJs.php:34
 msgid "ascending"
 msgstr "ascendente"
 
-#: templates/lista-espera/listado.php:183
+#: templates/lista-espera/listado.php:188
 msgid "assigned"
 msgstr "asignada"
 
@@ -19237,7 +19315,7 @@ msgid "by %1$s on %2$s"
 msgstr "por %1$s o %2$s"
 
 #. translators: %s: text
-#: templates/eventos/menu.php:174
+#: templates/eventos/menu.php:233
 #, php-format
 msgid "by %s"
 msgstr "por %s"
@@ -19296,7 +19374,7 @@ msgstr "confirmou o %s"
 msgid "contact email"
 msgstr "email de contacto"
 
-#: templates/eventos/menu.php:89
+#: templates/eventos/menu.php:92
 msgid "default"
 msgstr "por defecto"
 
@@ -19304,7 +19382,7 @@ msgstr "por defecto"
 msgid "delivered, unconfirmed"
 msgstr "entregado sen confirmar"
 
-#: src/Frontend/Tabla.php:131 src/Idiomas/TextosJs.php:33
+#: src/Frontend/Tabla.php:138 src/Idiomas/TextosJs.php:33
 msgid "descending"
 msgstr "descendente"
 
@@ -19589,7 +19667,7 @@ msgstr "sen membresía activa"
 msgid "no active membership: does not count"
 msgstr "sen membresía activa: non conta"
 
-#: templates/menus/receta.php:49
+#: templates/eventos/menu.php:169 templates/menus/receta.php:49
 msgid "no allergen recorded"
 msgstr "ningún alérxeno anotado"
 
@@ -19857,7 +19935,7 @@ msgstr "terr."
 msgid "territorial no.: %s"
 msgstr "nº territorial: %s"
 
-#: templates/eventos/menu.php:210
+#: templates/eventos/menu.php:269
 msgid "the dish contains ingredients of animal origin"
 msgstr "o prato leva ingredientes de orixe animal"
 
@@ -19947,7 +20025,7 @@ msgstr "activada"
 msgid "two accounts"
 msgstr "dúas contas"
 
-#: src/ListaEspera/Avisos.php:161
+#: src/ListaEspera/Avisos.php:186
 msgid "unconfirmed: the link confirms it"
 msgstr "sen confirmar: a ligazón confírmaa"
 
@@ -20271,62 +20349,3 @@ msgstr "✓ Os totais de cada conta (rexistro 33) e o nº de rexistros (88) cadr
 msgid "🔒 All the data on this record is read-only for you."
 msgstr "🔒 Todos os datos desta ficha son de só lectura para ti."
 
-msgid "Add another ingredient"
-msgstr "Engadir outro ingrediente"
-
-msgid "Create the recipe and add it to the menu"
-msgstr "Crear a receita e engadila ao menú"
-
-msgid "Create the recipe here and then add it to the menu."
-msgstr "Crea aquí a receita e despois engádea ao menú."
-
-msgid "New dish"
-msgstr "Prato novo"
-
-msgid "New dish (create a recipe)"
-msgstr "Prato novo (crear unha receita)"
-
-msgid "Recipe created and added to the menu."
-msgstr "Receita creada e engadida ao menú."
-
-msgid "The ingredient could not be saved. Try again."
-msgstr "Non se puido gardar o ingrediente. Téntao de novo."
-
-#: src/ListaEspera/Avisos.php
-#, php-format
-msgid "[%s] Sign-up on the waiting list received"
-msgstr "[%s] Inscrición recibida na lista de espera"
-
-#: src/ListaEspera/Avisos.php
-#, php-format
-msgid "We have received the sign-up of <strong>%1$s</strong> on the waiting list of <strong>%2$s</strong>. It is already on the list and we will contact you when a place is available."
-msgstr "Recibimos a inscrición de <strong>%1$s</strong> na lista de espera do <strong>%2$s</strong>. Xa está na lista e porémonos en contacto contigo cando haxa praza."
-
-#: templates/lista-espera/publica.php
-#, php-format
-msgid "The sign-up is already on the list. We have sent you an email at %s with the sign-up details; you do not need to do anything else."
-msgstr "A inscrición xa está na lista. Enviámosche un email a %s cos datos da inscrición; non tes que facer nada máis."
-
-#: templates/lista-espera/publica.php
-msgid "The sign-up is already on the list. We have sent you an email with the sign-up details; you do not need to do anything else."
-msgstr "A inscrición xa está na lista. Enviámosche un email cos datos da inscrición; non tes que facer nada máis."
-
-#: templates/lista-espera/publica.php
-msgid "We will send you an email with the sign-up details. It is also your key to see your data later."
-msgstr "Enviarémosche un email cos datos da inscrición. É tamén a túa clave para ver os teus datos máis adiante."
-
-#: templates/lista-espera/listado.php
-msgid "Do not ask to confirm the email when signing up"
-msgstr "Non pedir que se confirme o email ao apuntarse"
-
-#: templates/lista-espera/listado.php
-msgid "If you tick it, the person signing up goes straight onto the list and receives an email that only informs them of the sign-up: they do not have to press any link. When you save, the sign-ups waiting for confirmation also move to the list. Without confirmation, nobody checks that the email belongs to whoever signs up."
-msgstr "Se o marcas, quen se apunta entra directamente na lista e recibe un email que só o informa da inscrición: non ten que premer ningunha ligazón. Ao gardar, as inscricións que agardaban confirmación pasan tamén á lista. Sen confirmar, ninguén comproba que o email sexa de quen se apunta."
-
-#. translators: %d: number
-#: src/Frontend/Views/ListaEsperaView.php
-#, php-format
-msgid "%d sign-up that was waiting for confirmation is now on the list."
-msgid_plural "%d sign-ups that were waiting for confirmation are now on the list."
-msgstr[0] "%d inscrición que agardaba confirmación xa está na lista."
-msgstr[1] "%d inscricións que agardaban confirmación xa están na lista."

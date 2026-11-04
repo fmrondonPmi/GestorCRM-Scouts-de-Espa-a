@@ -198,8 +198,8 @@ final class Servicio {
 		if ( 'fisico' === $forma && ! $es_socio ) {
 			return new \WP_Error( 'asde_tienda', __( 'Paying in person to Treasury is only available to members.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
-		if ( 'datafono' === $forma && ! Config::de()['datafono'] ) {
-			return new \WP_Error( 'asde_tienda', __( 'The group does not take card payments.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
+		if ( ! in_array( $forma, Config::de()['formas'], true ) ) {
+			return new \WP_Error( 'asde_tienda', __( 'The group does not accept this payment method.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		return $forma;
 	}

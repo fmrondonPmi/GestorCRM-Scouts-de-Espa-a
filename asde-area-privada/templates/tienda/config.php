@@ -18,7 +18,14 @@ defined( 'ABSPATH' ) || exit;
 	<section class="asde-card">
 		<h2 class="asde-card__title"><?php esc_html_e( 'Shop · settings', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h2>
 		<label class="asde-choice"><input type="checkbox" name="abierto" value="1" <?php checked( $cfg['abierto'] ); ?>><span><?php esc_html_e( 'Orders are accepted (otherwise families see that they are closed)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span></label>
-		<label class="asde-choice"><input type="checkbox" name="datafono" value="1" <?php checked( $cfg['datafono'] ); ?>><span><?php esc_html_e( 'We accept payment by card terminal (card, in person; marked by Treasury on collection)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span></label>
+		<fieldset class="asde-forma-pago">
+			<legend><?php esc_html_e( 'Payment methods the group accepts', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></legend>
+			<input type="hidden" name="formas_form" value="1">
+			<?php foreach ( \AsdeBalears\AreaPrivada\Tienda\PedidosTable::formas() as $forma => $etiqueta ) : ?>
+				<label class="asde-choice"><input type="checkbox" name="formas[]" value="<?php echo esc_attr( $forma ); ?>" <?php checked( in_array( $forma, $cfg['formas'], true ) ); ?>><span><?php echo esc_html( $etiqueta ); ?></span></label>
+			<?php endforeach; ?>
+			<p class="asde-help"><?php esc_html_e( 'Families only see the methods you tick. "In person" is only offered to members, and the card terminal is marked as paid by Treasury on collection.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
+		</fieldset>
 		<p class="asde-form__fila">
 			<label for="asde-uc-iban"><?php esc_html_e( 'Group account (IBAN) for transfers', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <input type="text" id="asde-uc-iban" name="iban" value="<?php echo esc_attr( $cfg['iban'] ); ?>" maxlength="42" autocomplete="off" placeholder="ES00 0000 0000 0000 0000 0000"></label>
 			<label for="asde-uc-bizum"><?php esc_html_e( 'The group\'s Bizum phone', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <input type="text" id="asde-uc-bizum" name="bizum" value="<?php echo esc_attr( $cfg['bizum'] ); ?>" maxlength="20" inputmode="tel" autocomplete="off"></label>

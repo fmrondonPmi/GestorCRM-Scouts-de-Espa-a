@@ -53,7 +53,15 @@ final class TiendaConfigView extends TiendaBaseView {
 		$cfg['abierto']       = '1' === $this->post( 'abierto' );
 		$cfg['texto_pago']    = mb_substr( sanitize_textarea_field( $this->post( 'texto_pago' ) ), 0, 600 );
 		$cfg['publica']       = '1' === $this->post( 'publica' );
-		$cfg['datafono']      = '1' === $this->post( 'datafono' );
+		// Un navegador no manda nada si se desmarcan todas las casillas: el campo oculto dice que el formulario traía la lista.
+		if ( '1' === $this->post( 'formas_form' ) ) {
+			$cfg['formas'] = Config::formas_validas( $this->post_array( 'formas' ) );
+			if ( ! $cfg['formas'] ) {
+				$cfg['formas'] = array( 'transferencia' );
+				$avisos[]      = __( 'At least one payment method is needed; transfer has been kept.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
+			}
+			$cfg['datafono'] = in_array( 'datafono', $cfg['formas'], true );
+		}
 		$cfg['menu_tienda']   = mb_substr( sanitize_text_field( $this->post( 'menu_tienda' ) ), 0, 40 );
 		$cfg['dias_sin_pagar'] = min( 90, max( 0, (int) $this->post( 'dias_sin_pagar' ) ) );
 		$cfg['dias_aviso_socios']    = min( 90, max( 0, (int) $this->post( 'dias_aviso_socios' ) ) );

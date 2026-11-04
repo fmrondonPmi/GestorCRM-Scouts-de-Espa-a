@@ -65,6 +65,8 @@ final class Config {
 			'menu_tienda'       => '',
 			// v0.46 (doc 48, T3): el grupo cobra con datáfono (en persona); apagado por defecto.
 			'datafono'          => false,
+			// v0.62: formas de pago que acepta el grupo (transferencia, bizum, fisico, datafono); por defecto las tres de siempre.
+			'formas'            => array( 'transferencia', 'bizum', 'fisico' ),
 			'dias_sin_pagar'    => 14,
 			// v0.40 (fase 5): pedidos de socios sin pagar: recordatorio a los N días y cancelación a los M (0 = nunca).
 			'dias_aviso_socios'    => 7,
@@ -116,11 +118,27 @@ final class Config {
 		$cfg['bizum']          = self::bizum( (string) $cfg['bizum'] );
 		$cfg['publica']        = (bool) $cfg['publica'];
 		$cfg['menu_tienda']    = mb_substr( trim( (string) $cfg['menu_tienda'] ), 0, 40 );
-		$cfg['datafono']       = (bool) $cfg['datafono'];
+		// Los grupos que ya tenían el datáfono activado lo conservan al estrenar la lista de formas.
+		if ( ! array_key_exists( 'formas', $c ) && ! empty( $c['datafono'] ) ) {
+			$cfg['formas'][] = 'datafono';
+		}
+		$cfg['formas']         = self::formas_validas( (array) $cfg['formas'] );
+		$cfg['datafono']       = in_array( 'datafono', $cfg['formas'], true );
 		$cfg['dias_sin_pagar'] = min( 90, max( 0, (int) $cfg['dias_sin_pagar'] ) );
 		$cfg['dias_aviso_socios']    = min( 90, max( 0, (int) $cfg['dias_aviso_socios'] ) );
 		$cfg['dias_cancelar_socios'] = min( 180, max( 0, (int) $cfg['dias_cancelar_socios'] ) );
 		return $cfg;
+	}
+
+	/**
+	 * Se queda con las formas de pago que existen, sin repetir y en el orden de la tienda.
+	 *
+	 * @param array<int|string, mixed> $formas Claves de forma de pago.
+	 * @return string[]
+	 */
+	public static function formas_validas( array $formas ): array {
+		$formas = array_map( 'strval', $formas );
+		return array_values( array_filter( array_keys( PedidosTable::formas() ), static fn( $f ) => in_array( $f, $formas, true ) ) );
 	}
 
 	/** IBAN en mayúsculas y con espacios cada cuatro cifras, o '' si no tiene pinta de IBAN. */

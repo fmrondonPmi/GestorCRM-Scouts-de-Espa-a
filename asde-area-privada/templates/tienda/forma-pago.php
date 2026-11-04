@@ -22,7 +22,7 @@ $detalle = array(
 	<legend><?php esc_html_e( 'How are you going to pay?', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></legend>
 	<?php foreach ( ( PedidosTable::formas() ) as $forma => $etiqueta ) : ?>
 		<?php
-		if ( ( 'fisico' === $forma && ! $es_socio ) || ( 'datafono' === $forma && empty( $cfg['datafono'] ) ) ) {
+		if ( ( 'fisico' === $forma && ! $es_socio ) || ! in_array( $forma, $cfg['formas'], true ) ) {
 			continue;
 		}
 		?>

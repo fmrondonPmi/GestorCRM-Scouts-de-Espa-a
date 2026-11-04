@@ -20,6 +20,7 @@ use AsdeBalears\AreaPrivada\Auth\Ambito;
 use AsdeBalears\AreaPrivada\Domain\Grupo;
 use AsdeBalears\AreaPrivada\Domain\Grupos;
 use AsdeBalears\AreaPrivada\Frontend\Notices;
+use AsdeBalears\AreaPrivada\Frontend\Views\TiendaConfigView;
 use AsdeBalears\AreaPrivada\Frontend\Views\TiendaGestionView;
 use AsdeBalears\AreaPrivada\Frontend\Views\TiendaPedidosView;
 use AsdeBalears\AreaPrivada\Frontend\Views\View;
@@ -378,7 +379,7 @@ try {
 	$ok( is_wp_error( Servicio::forma_valida( 'datafono', true, true ) ) && is_wp_error( Servicio::forma_valida( 'datafono', false, true ) ), 'con el datáfono sin activar no se admite como forma de pago' );
 	$como( $u_fam );
 	$ok( ! str_contains( ( new TiendaPedidosView() )->render(), 'value="datafono"' ), 'y ni se ofrece' );
-	$cfg_df['datafono'] = true;
+	$cfg_df['formas'][] = 'datafono';
 	Config::guardar( $cfg_df, $grupo['numero'] );
 	$ok( 'datafono' === Servicio::forma_valida( 'datafono', false, true ) && 'datafono' === Servicio::forma_valida( 'datafono', true, true ), 'activado, lo pueden elegir socios y quien compra sin sesión' );
 	$ok( str_contains( ( new TiendaPedidosView() )->render(), 'value="datafono"' ), 'y se ofrece al comprar' );
@@ -400,9 +401,36 @@ try {
 	$enviar( new TiendaGestionView(), array( 'asde_action' => 'uniforme_pago', 'pedido' => (string) $pd['id'], 'metodo' => 'tpv', 'fecha' => wp_date( 'Y-m-d' ), 'importe' => '10', 'referencia' => 'Ticket 5' ), 'asde_uniforme_' . $pd['id'] );
 	$q = PedidosTable::obtener( $pd['id'] );
 	$ok( null !== $q['pago_en'] && 'tpv' === $q['pago_metodo'] && 10.0 === $q['pago_importe'], 'Tesorería lo marca pagado con el datáfono' );
-	$cfg_df['datafono'] = false;
+	$cfg_df['formas'] = array( 'transferencia', 'bizum', 'fisico' );
 	Config::guardar( $cfg_df, $grupo['numero'] );
 	$ok( 'Datáfono / TPV' === PedidosTable::metodos()['tpv'] && 'tpv' === PedidosTable::METODO_DE_FORMA['datafono'], 'el método tiene su nombre y la forma «datáfono» lleva a él' );
+
+	echo "\n== Parte M · Formas de pago que acepta el grupo (v0.62) ==\n";
+	$cfg_fp = Config::de( $grupo['numero'] );
+	$ok( array( 'transferencia', 'bizum', 'fisico' ) === $cfg_fp['formas'], 'por defecto: transferencia, Bizum y en físico' );
+	$ok( array( 'bizum', 'datafono' ) === Config::formas_validas( array( 'datafono', 'inventada', 'bizum', 'bizum' ) ), 'las formas se limpian: sin inventadas ni repetidas y en el orden de la tienda' );
+	$cfg_fp['formas'] = array( 'transferencia' );
+	Config::guardar( $cfg_fp, $grupo['numero'] );
+	$ok( 'transferencia' === Servicio::forma_valida( 'transferencia', true, true ), 'solo transferencia: la transferencia vale' );
+	$ok( is_wp_error( Servicio::forma_valida( 'bizum', true, true ) ) && is_wp_error( Servicio::forma_valida( 'fisico', true, true ) ), 'y el Bizum y el pago en físico se rechazan aunque existan' );
+	$como( $u_coord );
+	$enviar( new TiendaConfigView(), array( 'asde_action' => 'tienda_config', 'abierto' => '1', 'formas_form' => '1', 'formas' => array( 'bizum', 'datafono' ) ), 'asde_tienda_admin' );
+	$ok( array( 'bizum', 'datafono' ) === Config::de( $grupo['numero'] )['formas'], 'Coordinación elige las formas de pago desde la configuración' );
+	$enviar( new TiendaConfigView(), array( 'asde_action' => 'tienda_config', 'abierto' => '1', 'formas_form' => '1' ), 'asde_tienda_admin' );
+	$ok( array( 'transferencia' ) === Config::de( $grupo['numero'] )['formas'], 'si se desmarcan todas, se queda la transferencia' );
+	$enviar( new TiendaConfigView(), array( 'asde_action' => 'tienda_config', 'abierto' => '1' ), 'asde_tienda_admin' );
+	$ok( array( 'transferencia' ) === Config::de( $grupo['numero'] )['formas'], 'un envío sin el campo de formas no las toca' );
+	$como( $u_fam );
+	$html_fp = ( new TiendaPedidosView() )->render();
+	$ok( str_contains( $html_fp, 'value="transferencia"' ) && ! str_contains( $html_fp, 'value="bizum"' ) && ! str_contains( $html_fp, 'value="fisico"' ), 'al comprar solo se ofrecen las que acepta el grupo' );
+	$antes = $ultimo()['id'];
+	$enviar( new TiendaPedidosView(), array( 'asde_action' => 'tienda_comprar', 'socio' => '990021', 'forma_pago' => 'bizum', 'lin' => array( $camiseta => array( 'cant' => array( '1' ), 'var' => array( (string) $v_cam['M'] ) ) ) ), 'asde_tienda_comprar' );
+	$ok( $ultimo()['id'] === $antes, 'un pedido con una forma que el grupo no acepta no se crea' );
+	$cfg_fp['formas'] = array( 'transferencia', 'bizum', 'fisico' );
+	Config::guardar( $cfg_fp, $grupo['numero'] );
+	Config::guardar( array( 'datafono' => true ), $grupo['numero'] );
+	$ok( array( 'transferencia', 'bizum', 'fisico', 'datafono' ) === Config::de( $grupo['numero'] )['formas'], 'un grupo con el datáfono ya activado lo conserva al estrenar la lista' );
+	Config::guardar( $cfg_fp, $grupo['numero'] );
 
 	$ok( $crm->llamadas > 0 && 0 === $cortadas, "todas las consultas al CRM las ha respondido el simulador ({$crm->llamadas}); ninguna ha salido hacia el CRM real" );
 } catch ( Throwable $e ) {

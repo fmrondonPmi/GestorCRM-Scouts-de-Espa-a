@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.61.0
+Stable tag: 0.62.0
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -61,6 +61,9 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.62.0 =
+* Shop: each group chooses which payment methods it accepts (transfer, Bizum, in person, card terminal) in the shop settings; families only see those. Groups that already had the card terminal on keep it.
 
 = 0.61.0 =
 * Waiting list: new option in the form's own fields box, "Do not ask to confirm the email when signing up". When on, the person goes straight onto the list and receives an email that only informs them of the sign-up (with the link to see their data); nothing needs confirming. Sign-ups already waiting for confirmation move to the list when it is turned on. Off by default: the email is confirmed as before.
@@ -168,6 +171,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * The changelog of versions 0.42.0 and earlier is in changelog.txt, in the plugin folder.
 
 == Upgrade Notice ==
+
+= 0.62.0 =
+Shop: payment methods are now chosen per group (settings screen). Existing groups keep transfer, Bizum and in person (plus the card terminal if it was on). No database changes.
 
 = 0.61.0 =
 Waiting list: optional sign-up without confirming the email (off by default). No database changes.
