@@ -289,7 +289,7 @@ msgstr "%1$d / %2$d familia"
 msgid "%1$d of %2$d left · %3$s"
 msgid_plural "%1$d of %2$d left · %3$s"
 msgstr[0] "%1$d geratzen da %2$d(e)tik · %3$s"
-msgstr[1] "%1$d geratzen da %2$d(e)tik · %3$s"
+msgstr[1] "%1$d geratzen dira %2$d(e)tik · %3$s"
 
 #. translators: 1: number, 2: number, 3: text
 #: templates/eventos/material.php:102
@@ -677,8 +677,8 @@ msgstr[1] "%d karga"
 #, php-format
 msgid "%d document is in more than one record:"
 msgid_plural "%d documents are in more than one record:"
-msgstr[0] "Dokumentu %d fitxa bat baino gehiagotan dago:"
-msgstr[1] "Dokumentu %d fitxa bat baino gehiagotan dago:"
+msgstr[0] ""
+msgstr[1] ""
 
 #. translators: %d: number
 #: src/Frontend/Views/CajaView.php:129
@@ -762,7 +762,7 @@ msgstr[1] "%d material"
 msgid "%d left"
 msgid_plural "%d left"
 msgstr[0] "%d geratzen da"
-msgstr[1] "%d geratzen da"
+msgstr[1] "%d geratzen dira"
 
 #. translators: %d: number
 #: src/Tesoreria/Banco/CsvBanco.php:162
@@ -954,7 +954,7 @@ msgstr[1] "%d seme-alaba"
 msgid "%d suggested for this family"
 msgid_plural "%d suggested for this family"
 msgstr[0] "%d familia honetarako iradokia"
-msgstr[1] "%d familia honetarako iradokia"
+msgstr[1] "%d familia honetarako iradokiak"
 
 #. translators: %d: number
 #: src/Frontend/Views/EventosView.php:785
@@ -3925,7 +3925,7 @@ msgstr "Aukeratu nork ordaindu zuen gastua."
 
 #: src/Eventos/Avisos.php:200
 msgid "Choose who to send the notice to."
-msgstr "Aukeratu nori bidali abisua."
+msgstr ""
 
 #: src/Frontend/Views/AccesoView.php:67 src/Frontend/Views/SolicitarView.php:85
 msgid "Choose your Scout Group."
@@ -5678,7 +5678,7 @@ msgstr "Ekitaldietako izen-emateak hemen ikusten dira:"
 
 #: src/Frontend/Views/EventosView.php:167
 msgid "Event team"
-msgstr "Ekitaldiaren taldea"
+msgstr ""
 
 #: templates/tesoreria/banco.php:220
 msgid "Event:"
@@ -5714,7 +5714,7 @@ msgstr "Ekitaldiak: itzulketak"
 
 #: templates/usuarios/emails.php:35
 msgid "Every email sent by the private area, from any module (invitations, events, shop, direct debits, equipment, waiting list…), with its result."
-msgstr "Eremu pribatuak bidaltzen dituen email guztiak, edozein modulutakoak (gonbidapenak, ekitaldiak, denda, zuzeneko zorduntzak, materiala, itxaron-zerrenda…), emaitzarekin."
+msgstr ""
 
 #: src/Tienda/ProductosTable.php:33
 msgid "Everyone (also not signed in)"
@@ -9890,7 +9890,7 @@ msgstr "Oharra berretsi da."
 
 #: src/Frontend/Views/EventosView.php:571
 msgid "Notice sent."
-msgstr "Abisua bidali da."
+msgstr ""
 
 #: templates/eventos/config.php:115
 msgid "Notices"
@@ -9898,7 +9898,7 @@ msgstr "Abisuak"
 
 #: src/Eventos/Avisos.php:194
 msgid "Notices can only be resent for a published event."
-msgstr "Abisuak argitaratutako ekitaldi batean bakarrik birbidal daitezke."
+msgstr ""
 
 #: templates/eventos/resumen.php:103
 msgid "Notify by email that it has been published?"
@@ -10088,7 +10088,7 @@ msgstr "Bat lerroko. Aurrekontu bati gastu bat gehitzean aukeratzen direnak dira
 
 #: templates/eventos/resumen.php:139
 msgid "One person"
-msgstr "Pertsona bat"
+msgstr ""
 
 #: src/Informes/Informe.php:31
 msgid "One record per person (one per page when printing)"
@@ -10138,7 +10138,7 @@ msgstr "Izen-ematea irekita duten eta familia honek zerbait zain duen ekitaldiak
 
 #: templates/eventos/resumen.php:141
 msgid "Only families who have not signed up yet"
-msgstr "Oraindik izena eman ez duten familiak soilik"
+msgstr ""
 
 #: templates/inventario/material.php:92
 msgid "Only for the type \"Uniform shirt\": uniform management assigns these shirts to orders and deducts them from here. If you don't write the description, it is filled in automatically."
@@ -12182,11 +12182,11 @@ msgstr "Bidali berriro gonbidapena"
 
 #: templates/eventos/resumen.php:152
 msgid "Resend notices / invitations"
-msgstr "Birbidali abisuak / gonbidapenak"
+msgstr ""
 
 #: templates/eventos/resumen.php:147
 msgid "Resend the notice"
-msgstr "Birbidali abisua"
+msgstr ""
 
 #: templates/eventos/material.php:159
 msgid "Reserve"
@@ -12695,7 +12695,7 @@ msgstr "Scouterrak"
 
 #: templates/eventos/resumen.php:138
 msgid "Scouters (event team)"
-msgstr "Scouterrak (ekitaldiaren taldea)"
+msgstr ""
 
 #: src/Domain/Modulos.php:60
 msgid "Scouters ask to be repaid for an expense (with the receipt and, where applicable, an event); Treasury approves it and Treasury or Coordination mark it as paid."
@@ -12936,7 +12936,7 @@ msgstr "Kontsultatu nork duen taldearen eremurako sarbidea."
 
 #: templates/eventos/resumen.php:149
 msgid "Send"
-msgstr "Bidali"
+msgstr ""
 
 #: src/Admin/GruposInvitacionesPage.php:102
 msgid "Send by email (optional)"
@@ -13655,7 +13655,7 @@ msgstr "Gaia"
 
 #: templates/usuarios/emails.php:66
 msgid "Subject, username or address"
-msgstr "Gaia, erabiltzailea edo helbidea"
+msgstr ""
 
 #: src/Idiomas/Guardados.php:255
 msgid "Submit the activity plan"
@@ -14105,7 +14105,7 @@ msgstr "Pertsona hori ez dago baimen soltuak jasotzen dituztenen artean."
 
 #: src/Eventos/Avisos.php:222
 msgid "That person is not on the team, signed up or invited to this event."
-msgstr "Pertsona hori ez dago taldean, ez da izena emanda eta ez dago ekitaldi honetara deituta."
+msgstr ""
 
 #: src/Eventos/Inscripciones.php:305
 msgid "That place is no longer available."
@@ -14233,7 +14233,7 @@ msgstr "Erabiltzaile horrek ez du gonbidapenik zain."
 
 #: src/Eventos/Avisos.php:197
 msgid "The \"event published\" notice is switched off in the events settings."
-msgstr "«Ekitaldia argitaratu da» abisua desaktibatuta dago ekitaldien konfigurazioan."
+msgstr ""
 
 #. translators: %s: text
 #: src/Crm/Escritura.php:82
@@ -14389,7 +14389,7 @@ msgstr "CRMak oraindik ez dio bazkide-zenbakia jarri. Bere fitxan ikusiko duzu d
 
 #: src/Eventos/Avisos.php:213 src/Eventos/Avisos.php:218
 msgid "The CRM is not available right now."
-msgstr "CRMa ez dago eskuragarri orain."
+msgstr ""
 
 #: src/Sepa/Mandatos.php:204
 msgid "The CRM is not responding: try again later."
@@ -15428,15 +15428,15 @@ msgstr "Ezin izan dira CRMko izenak irakurri: bazkide-zenbakiak soilik erakusten
 
 #: src/Frontend/Views/EventosView.php:573
 msgid "The notice could not be sent: that person has no active account or no email address (see the email log)."
-msgstr "Ezin izan da abisua bidali: pertsona horrek ez du kontu aktiborik edo email helbiderik (ikusi emailen erregistroa)."
+msgstr ""
 
 #: src/Frontend/Views/EventosView.php:569
 msgid "The notice will be sent to the event team in a few moments."
-msgstr "Abisua ekitaldiaren taldeari bidaliko zaio une batzuen buruan."
+msgstr ""
 
 #: src/Frontend/Views/EventosView.php:569
 msgid "The notice will be sent to the families in a few moments."
-msgstr "Abisua familiei bidaliko zaie une batzuen buruan."
+msgstr ""
 
 #: src/Admin/SettingsPage.php:250
 msgid "The number cannot be changed: to use another, withdraw the group and add it again."
@@ -15698,7 +15698,7 @@ msgstr "Arauak 14 egun eskatzen ditu beste epe bat hitzartzen ez bada: hemen hit
 
 #: templates/eventos/resumen.php:142
 msgid "The same email as when the event was published is sent. Every email is recorded in the email log."
-msgstr "Ekitaldia argitaratzean bidalitako email bera bidaltzen da. Email bakoitza emailen erregistroan geratzen da."
+msgstr ""
 
 #: templates/solicitudes/detalle.php:189
 msgid "The same person with another email"
@@ -16208,8 +16208,8 @@ msgstr "Mota hau duten beste klaseko mugimenduak daude: utzi «Gastua edo diru-s
 #, php-format
 msgid "There is %d group registration to review."
 msgid_plural "There are %d group registrations to review."
-msgstr[0] "Talde-alta %d dago berrikusteko."
-msgstr[1] "Talde-alta %d dago berrikusteko."
+msgstr[0] ""
+msgstr[1] ""
 
 #: src/Eventos/Cuentas.php:470
 msgid "There is a SEPA batch for the event whose collections have not been recorded."
@@ -16908,7 +16908,7 @@ msgstr "Tiketa edo faktura (irudia edo PDFa, 5 MB arte)"
 
 #: templates/usuarios/emails.php:63
 msgid "To"
-msgstr "Noiz arte"
+msgstr ""
 
 #: templates/activar/con-sesion.php:7
 msgid "To activate another account, sign out first."
@@ -18200,7 +18200,7 @@ msgstr "Nork ikusten eta erosi dezakeen"
 
 #: templates/eventos/resumen.php:136
 msgid "Who should receive the notice again?"
-msgstr "Nork jaso behar du abisua berriro?"
+msgstr ""
 
 #: templates/lista-espera/publica.php:174
 msgid "Who wants to join the group"
@@ -18595,7 +18595,7 @@ msgstr "Ezin duzu itzulketa hau ukatu."
 
 #: src/Frontend/Views/EventosView.php:562
 msgid "You cannot resend notices for this event."
-msgstr "Ezin dituzu ekitaldi honen abisuak birbidali."
+msgstr ""
 
 #: src/Frontend/Views/AccesosView.php:305
 msgid "You cannot restore your own role: it would give you back permissions that had been removed. Another person must do it."
