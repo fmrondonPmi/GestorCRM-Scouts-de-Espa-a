@@ -52,7 +52,7 @@ $adulto    = $s['adulto'] || ( $p && $p->es_adulto_voluntario() );
 	<?php if ( ! $p ) : ?>
 		<div class="asde-notice asde-notice--warning" role="status"><?php esc_html_e( 'The record of this request is no longer in the group\'s CRM (or has no active membership).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></div>
 	<?php else : ?>
-		<table class="asde-table asde-comparar">
+		<table class="asde-table asde-comparar" data-asde-sin-paginar="comparacion campo a campo de una ficha">
 			<thead><tr><th scope="col"><?php esc_html_e( 'Item of data', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Written on the request', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'In the CRM', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th></tr></thead>
 			<tbody>
 				<tr>

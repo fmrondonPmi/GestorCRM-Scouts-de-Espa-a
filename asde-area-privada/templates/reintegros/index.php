@@ -99,7 +99,7 @@ $fila = static function ( array $r, bool $con_quien ) use ( $url, $fecha, $nombr
 /** La tabla de una lista de reintegros. */
 $tabla = static function ( array $lista, bool $con_quien ) use ( $fila ): void {
 	?>
-	<table class="asde-table">
+	<table class="asde-table" data-asde-paginar>
 		<thead>
 			<tr>
 				<th scope="col"><?php esc_html_e( 'Reimbursement', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>

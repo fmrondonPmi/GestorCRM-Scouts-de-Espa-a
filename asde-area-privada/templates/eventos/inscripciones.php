@@ -131,7 +131,7 @@ $devolver = static function ( array $f, array $c ) use ( $campos, $fila_h, $form
 	<?php if ( ! $activas ) : ?>
 		<p><?php esc_html_e( 'Nobody has signed up yet.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 	<?php else : ?>
-		<table class="asde-table asde-table--inscripciones">
+		<table class="asde-table asde-table--inscripciones" data-asde-paginar>
 			<thead>
 				<tr>
 					<th scope="col"><?php esc_html_e( 'Name', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>

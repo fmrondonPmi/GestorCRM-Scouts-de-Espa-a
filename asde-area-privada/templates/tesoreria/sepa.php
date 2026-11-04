@@ -44,7 +44,7 @@ $nombres   = static function ( array $f ) use ( $personas ): string {
 $vista_previa = static function ( array $prep ) use ( $familias, $nombres ): void {
 	?>
 	<?php if ( $prep['lineas'] ) : ?>
-		<table class="asde-table">
+		<table class="asde-table" data-asde-paginar>
 			<thead><tr><th scope="col"><?php esc_html_e( 'Family', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Members', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Holder · account', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Sequence', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Amount', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th></tr></thead>
 			<tbody>
 				<?php foreach ( $prep['lineas'] as $l ) : ?>
@@ -231,7 +231,7 @@ $vista_previa = static function ( array $prep ) use ( $familias, $nombres ): voi
 	<?php if ( ! $remesas ) : ?>
 		<p class="asde-muted"><?php esc_html_e( 'No batch has been created yet.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 	<?php else : ?>
-		<table class="asde-table">
+		<table class="asde-table" data-asde-paginar>
 			<thead><tr><th scope="col"><?php esc_html_e( 'Batch', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Round · instalment', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Collection', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Debit charges', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Total', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Status', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th></tr></thead>
 			<tbody>
 				<?php foreach ( $remesas as $r ) : ?>
@@ -259,7 +259,7 @@ $vista_previa = static function ( array $prep ) use ( $familias, $nombres ): voi
 	?>
 	<p><?php echo (int) $con; ?> <?php esc_html_e( 'of', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <?php echo (int) count( $familias ); ?> <?php esc_html_e( 'families have a valid authorisation.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 	<?php if ( $familias ) : ?>
-		<table class="asde-table">
+		<table class="asde-table" data-asde-paginar>
 			<thead><tr><th scope="col"><?php esc_html_e( 'Family', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Members', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Authorisation', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><span class="screen-reader-text"><?php esc_html_e( 'Actions', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span></th></tr></thead>
 			<tbody>
 				<?php foreach ( $familias as $id => $f ) : ?>

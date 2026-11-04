@@ -51,7 +51,7 @@ $columnas = array(
 	<?php endif; ?>
 
 	<?php if ( $lectura['cuentas'] ) : ?>
-		<table class="asde-table">
+		<table class="asde-table" data-asde-paginar>
 			<thead><tr><th scope="col"><?php esc_html_e( 'Account', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Period', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Opening balance', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Credits', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Charges', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Final balance', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Transactions', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th></tr></thead>
 			<tbody>
 				<?php foreach ( $lectura['cuentas'] as $c ) : ?>
@@ -107,7 +107,7 @@ $columnas = array(
 		<?php if ( $posibles ) : ?>
 			<p class="asde-help asde-help--warning"><?php echo (int) $posibles; ?> <?php esc_html_e( 'new ones match another already imported one in account, date and amount (the same transaction from another format?). They will be imported; if they are surplus, mark them as reviewed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 		<?php endif; ?>
-		<table class="asde-table">
+		<table class="asde-table" data-asde-paginada="servidor">
 			<thead>
 				<tr>
 					<?php foreach ( $columnas as $col => $etiqueta ) : ?>

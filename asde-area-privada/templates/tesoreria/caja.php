@@ -86,7 +86,7 @@ foreach ( $tipos as $t ) {
 	<?php if ( ! $e['filas'] ) : ?>
 		<p><?php esc_html_e( 'There are no entries in this period.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 	<?php else : ?>
-		<table class="asde-table asde-table--caja">
+		<table class="asde-table asde-table--caja" data-asde-paginar>
 			<thead>
 				<tr>
 					<th scope="col"><?php esc_html_e( 'Date', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>

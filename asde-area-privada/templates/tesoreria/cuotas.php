@@ -62,7 +62,7 @@ $ro     = $editable ? '' : ' disabled';
 
 	<section class="asde-card">
 		<h3><?php esc_html_e( 'Result', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h3>
-		<table class="asde-table asde-table--resumen">
+		<table class="asde-table asde-table--resumen" data-asde-sin-paginar="resumen por secciones o categorias (pocas filas fijas)">
 			<thead><tr><th scope="col"><?php esc_html_e( 'Children', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Sign-up', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Insurance', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Annual fee', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Total', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th></tr></thead>
 			<tbody>
 				<?php for ( $h = 1; $h <= 5; $h++ ) : ?>

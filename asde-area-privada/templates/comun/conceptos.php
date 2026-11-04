@@ -37,7 +37,7 @@ $fila = static function ( string $i, array $c, bool $editable ) use ( $campo ): 
 };
 ?>
 <div class="asde-conceptos" data-asde-conceptos data-siguiente="<?php echo (int) count( $conceptos ) + 1; ?>">
-	<table class="asde-table asde-conceptos__tabla">
+	<table class="asde-table asde-conceptos__tabla" data-asde-paginar>
 		<thead>
 			<tr><th scope="col"><?php esc_html_e( 'Description', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Amount (€)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Applies to', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th></tr>
 		</thead>

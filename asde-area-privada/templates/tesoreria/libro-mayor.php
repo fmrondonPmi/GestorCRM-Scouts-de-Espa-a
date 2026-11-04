@@ -39,7 +39,7 @@ $total_s = array_sum( array_column( $libro['resumen'], 'salidas' ) );
 		<a class="button asde-button-secundario no-transition" href="<?php echo esc_url( $url_resumen ); ?>" data-asde-descarga><?php esc_html_e( 'Excel of the summary', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a>
 	</form>
 	<p class="asde-help"><?php esc_html_e( 'The bank and each cash box, with their balance at the start and end of the period, and the summary by item. Transfers between the group\'s accounts appear in each account, but not in the summary.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
-	<table class="asde-table asde-table--resumen">
+	<table class="asde-table asde-table--resumen" data-asde-sin-paginar="resumen por secciones o categorias (pocas filas fijas)">
 		<thead>
 			<tr>
 				<th scope="col"><?php esc_html_e( 'Account', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
@@ -97,7 +97,7 @@ $total_s = array_sum( array_column( $libro['resumen'], 'salidas' ) );
 	<?php if ( ! $libro['resumen'] ) : ?>
 		<p><?php esc_html_e( 'There are no entries in this period.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 	<?php else : ?>
-		<table class="asde-table asde-table--resumen">
+		<table class="asde-table asde-table--resumen" data-asde-sin-paginar="resumen por secciones o categorias (pocas filas fijas)">
 			<thead>
 				<tr>
 					<th scope="col"><?php esc_html_e( 'Item', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
@@ -132,7 +132,7 @@ $total_s = array_sum( array_column( $libro['resumen'], 'salidas' ) );
 		<?php if ( ! $c['filas'] ) : ?>
 			<p><?php esc_html_e( 'There are no entries in this period.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 		<?php else : ?>
-			<table class="asde-table asde-table--caja">
+			<table class="asde-table asde-table--caja" data-asde-paginar>
 				<thead>
 					<tr>
 						<th scope="col"><?php esc_html_e( 'Date', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>

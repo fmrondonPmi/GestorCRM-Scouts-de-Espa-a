@@ -103,7 +103,7 @@ $cabecera = static function (): void {
 	<?php if ( ! $propias ) : ?>
 		<p><?php esc_html_e( 'There are no group recipes yet. Copy one from the example library, add a new one or load several from a CSV.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 	<?php else : ?>
-		<table class="asde-table">
+		<table class="asde-table" data-asde-paginar>
 			<?php $cabecera(); ?>
 			<tbody><?php foreach ( $propias as $r ) { $fila( $r, true ); } ?></tbody>
 		</table>
@@ -116,7 +116,7 @@ $cabecera = static function (): void {
 	<?php if ( ! $comunes ) : ?>
 		<p><?php esc_html_e( 'There are no recipes with that filter.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 	<?php else : ?>
-		<table class="asde-table">
+		<table class="asde-table" data-asde-paginar>
 			<?php $cabecera(); ?>
 			<tbody><?php foreach ( $comunes as $r ) { $fila( $r, false ); } ?></tbody>
 		</table>

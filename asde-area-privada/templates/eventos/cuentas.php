@@ -86,7 +86,7 @@ $yo              = get_current_user_id();
 	<p class="asde-muted"><?php echo esc_html( sprintf( /* translators: 1: text, 2: text, 3: text */ __( '%1$s · %2$s · to %3$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $balance['evento'], $balance['nombre'], $balance['fecha'] ) ); ?></p>
 
 	<?php if ( $balance['lineas'] ) : ?>
-		<table class="asde-table asde-table--cuentas">
+		<table class="asde-table asde-table--cuentas" data-asde-paginar>
 			<thead>
 				<tr>
 					<th scope="col"><?php esc_html_e( 'Item', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
@@ -134,7 +134,7 @@ $yo              = get_current_user_id();
 	<section class="asde-card" data-asde-plegable="evento-banco" data-asde-inicio="cerrado">
 		<h3 class="asde-card__title"><?php esc_html_e( 'Linked bank transactions', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h3>
 		<p class="asde-muted"><?php esc_html_e( 'Treasury linked them when marking them as reviewed in the bank. They are only a reference: they do not change the balance above.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
-		<table class="asde-table">
+		<table class="asde-table" data-asde-paginar>
 			<thead><tr><th scope="col"><?php esc_html_e( 'Date', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Type', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col" class="asde-num"><?php esc_html_e( 'Amount', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th></tr></thead>
 			<tbody>
 				<?php foreach ( $banco as $b ) : ?>
@@ -162,7 +162,7 @@ $yo              = get_current_user_id();
 	<?php if ( ! $gastos ) : ?>
 		<p><?php esc_html_e( 'No expenses or income have been recorded yet.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 	<?php else : ?>
-		<table class="asde-table asde-table--cuentas">
+		<table class="asde-table asde-table--cuentas" data-asde-paginar>
 			<thead>
 				<tr>
 					<th scope="col"><?php esc_html_e( 'Date', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>

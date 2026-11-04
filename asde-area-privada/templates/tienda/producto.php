@@ -95,7 +95,7 @@ $imagen = $p ? Config::imagen( $p['imagen'], 'thumbnail' ) : '';
 		<h3 class="asde-card__title"><?php esc_html_e( 'Variants and stock', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h3>
 		<p class="asde-muted"><?php esc_html_e( 'A variant is what is bought: a size, a colour… If the product has no variants, leave a single one ("Single"). The stock of variants linked to the general inventory is changed there; for the others it is added or subtracted in "Change stock" (+5, -2) and recorded. "No limit" does not count units (what is ordered from the supplier).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 		<?php if ( $variantes ) : ?>
-			<table class="asde-table asde-table--tienda-variantes">
+			<table class="asde-table asde-table--tienda-variantes" data-asde-sin-paginar="editor de variantes del producto">
 				<thead>
 					<tr>
 						<th scope="col"><?php esc_html_e( 'Variant', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>

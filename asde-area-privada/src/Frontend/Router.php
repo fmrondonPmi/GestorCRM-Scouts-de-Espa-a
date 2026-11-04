@@ -91,7 +91,7 @@ final class Router {
 		'cuotas'    => array( 'asde_cuotas', CuotasView::class ),
 		'federacion' => array( 'asde_coste_federativo', FederacionView::class ),
 		'banco'     => array( 'asde_banco', BancoView::class ),
-		'presupuestos' => array( 'asde_presupuestos', PresupuestosView::class ), // v0.54 (doc 57).
+		'presupuestos' => array( 'asde_presupuestos', PresupuestosView::class ), // v0.54 (doc 64).
 		'caja'         => array( 'asde_caja', CajaView::class ), // v0.59 (doc 61).
 		'libro_mayor'  => array( 'asde_libro_mayor', LibroMayorView::class ), // v0.59 (doc 61).
 		'grupo_datos'  => array( 'asde_grupo_datos', DatosGrupoView::class ), // v0.56 (doc 58).
@@ -338,6 +338,19 @@ final class Router {
 		// Textos de los JavaScript en el idioma de la persona (asdeT() y asdeI18n).
 		wp_register_script( 'asde-i18n', false, array(), ASDE_AP_VERSION, true );
 		wp_add_inline_script( 'asde-i18n', TextosJs::script() );
+		// v0.61 (doc 64): los grids sin paginación en el servidor se paginan en el navegador (table[data-asde-paginar]).
+		wp_enqueue_script( 'asde-grids', plugins_url( 'assets/js/grids.js', ASDE_AP_FILE ), array( 'asde-i18n' ), ASDE_AP_VERSION, true );
+		wp_add_inline_script(
+			'asde-grids',
+			'window.asdeGrids=' . wp_json_encode(
+				array(
+					'elegido' => Tabla::por_pagina_elegida(),
+					'ajax'    => admin_url( 'admin-ajax.php' ),
+					'nonce'   => is_user_logged_in() ? wp_create_nonce( 'asde_ap_por_pagina' ) : '',
+				)
+			) . ';',
+			'before'
+		);
 		if ( 'informes' === $key ) {
 			wp_enqueue_script( 'asde-informes', plugins_url( 'assets/js/informes.js', ASDE_AP_FILE ), array( 'asde-i18n' ), ASDE_AP_VERSION, true );
 		}

@@ -49,7 +49,7 @@ $fecha = static fn( string $f ) => '' !== $f ? wp_date( 'd/m/Y', strtotime( $f )
 				<li><strong><?php echo esc_html( Calculadora::euros( max( 0, $calc['pendiente'] ) ) ); ?></strong> <?php esc_html_e( 'pending', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></li>
 			</ul>
 			<?php if ( $calc['plazos'] && $calc['a_pagar'] > 0 ) : ?>
-				<table class="asde-table">
+				<table class="asde-table" data-asde-paginar>
 					<thead><tr><th scope="col"><?php esc_html_e( 'Deadline', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Amount', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Status', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th></tr></thead>
 					<tbody>
 						<?php foreach ( $calc['plazos'] as $pl ) : ?>
@@ -97,7 +97,7 @@ $fecha = static fn( string $f ) => '' !== $f ? wp_date( 'd/m/Y', strtotime( $f )
 	<?php if ( ! $pagos ) : ?>
 		<p><?php esc_html_e( 'There are no recorded payments yet.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 	<?php else : ?>
-		<table class="asde-table">
+		<table class="asde-table" data-asde-paginar>
 			<thead>
 				<tr>
 					<th scope="col"><?php esc_html_e( 'Date', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>

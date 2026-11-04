@@ -84,7 +84,7 @@ $ronda = $res['ronda'] ?? null;
 		</div>
 	<?php else : ?>
 		<div class="asde-table-wrap">
-			<table class="asde-table asde-table--informe">
+			<table class="asde-table asde-table--informe" data-asde-paginar>
 				<thead>
 					<tr>
 						<?php foreach ( $res['columnas'] as $label ) : ?>

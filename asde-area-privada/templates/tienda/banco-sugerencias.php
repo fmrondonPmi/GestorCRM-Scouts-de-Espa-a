@@ -21,7 +21,7 @@ $fecha = static fn( string $f ): string => wp_date( 'd/m/Y', strtotime( $f . ' 1
 <section class="asde-card" data-asde-plegable="tienda-banco" data-asde-inicio="abierto">
 	<h3 class="asde-card__title"><?php esc_html_e( 'Bank deposits that look like order payments', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h3>
 	<p class="asde-muted"><?php esc_html_e( 'These bank deposits carry in the description the number of an order that is still unpaid. Check them and confirm each one: nothing is marked by itself.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
-	<table class="asde-table">
+	<table class="asde-table" data-asde-paginar>
 		<thead>
 			<tr>
 				<th scope="col"><?php esc_html_e( 'Order', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>

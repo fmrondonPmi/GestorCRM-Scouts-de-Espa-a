@@ -37,7 +37,7 @@ defined( 'ABSPATH' ) || exit;
 			<header class="asde-card__header">
 				<h2 class="asde-card__title"><?php echo esc_html( asde_guardado( $nombre_modulo ) ); ?></h2>
 			</header>
-			<table class="asde-table asde-table--matriz">
+			<table class="asde-table asde-table--matriz" data-asde-sin-paginar="matriz fija de roles y permisos">
 				<thead>
 					<tr>
 						<th scope="col"><?php esc_html_e( 'Permission', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>

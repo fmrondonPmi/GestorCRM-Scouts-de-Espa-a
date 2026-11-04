@@ -29,7 +29,7 @@ defined( 'ABSPATH' ) || exit;
 	<?php if ( ! $familia['miembros'] ) : ?>
 		<p><?php esc_html_e( 'The family has no members.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 	<?php else : ?>
-		<table class="asde-table">
+		<table class="asde-table" data-asde-sin-paginar="editor de los datos de una familia">
 			<tbody>
 				<?php foreach ( $familia['miembros'] as $n ) : ?>
 					<?php $p = $personas[ $n ] ?? null; ?>

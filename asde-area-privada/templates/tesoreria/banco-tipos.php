@@ -45,7 +45,7 @@ $naturaleza = static function ( string $nombre, string $actual, string $id ): st
 	<?php if ( ! $tipos ) : ?>
 		<p><?php esc_html_e( 'There is no type yet.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 	<?php else : ?>
-		<table class="asde-table asde-table--banco-tipos">
+		<table class="asde-table asde-table--banco-tipos" data-asde-paginar>
 			<thead>
 				<tr>
 					<th scope="col"><?php esc_html_e( 'Name and class', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>

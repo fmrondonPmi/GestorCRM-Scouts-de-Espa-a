@@ -26,7 +26,7 @@ $fecha = static fn( ?string $f ): string => $f ? wp_date( 'd/m/Y', strtotime( $f
 	<?php if ( ! $lineas ) : ?>
 		<p><?php esc_html_e( 'There is nothing paid pending to order yet.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 	<?php else : ?>
-		<table class="asde-table">
+		<table class="asde-table" data-asde-paginar>
 			<thead>
 				<tr>
 					<th scope="col"><?php esc_html_e( 'Product', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
@@ -81,7 +81,7 @@ $fecha = static fn( ?string $f ): string => $f ? wp_date( 'd/m/Y', strtotime( $f
 					<input type="hidden" name="asde_action" value="proveedor_recibir">
 					<input type="hidden" name="pedido_proveedor" value="<?php echo (int) $h['id']; ?>">
 			<?php endif; ?>
-			<table class="asde-table">
+			<table class="asde-table" data-asde-paginar>
 				<thead>
 					<tr>
 						<th scope="col"><?php esc_html_e( 'Product', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>

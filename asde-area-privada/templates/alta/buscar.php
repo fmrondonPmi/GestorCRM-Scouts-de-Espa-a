@@ -36,7 +36,7 @@ defined( 'ABSPATH' ) || exit;
 				<?php echo esc_html( sprintf( /* translators: %d: number */ _n( '%d member found', '%d members found', count( $resultados ) , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), count( $resultados ) ) ); ?>
 				<?php echo count( $resultados ) >= 30 ? esc_html( __( ' (the first 30 are shown: narrow down your search)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) : ''; ?>
 			</p>
-			<table class="asde-table">
+			<table class="asde-table" data-asde-paginar>
 				<thead>
 					<tr>
 						<th scope="col"><?php esc_html_e( 'Name', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>

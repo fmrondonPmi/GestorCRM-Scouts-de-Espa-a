@@ -33,7 +33,7 @@ defined( 'ABSPATH' ) || exit;
 	<section class="asde-card">
 		<h3 class="asde-card__title"><?php esc_html_e( 'Activity types', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h3>
 		<p class="asde-muted"><?php esc_html_e( 'Each type gives the values a new event starts with: whether it has a cost and whether it is reported to ASDE Baleares (activities of 2 or more nights with 10 or more minors).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
-		<table class="asde-table asde-table--tipos">
+		<table class="asde-table asde-table--tipos" data-asde-paginar>
 			<thead>
 				<tr>
 					<th scope="col"><?php esc_html_e( 'Name', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
@@ -214,7 +214,7 @@ defined( 'ABSPATH' ) || exit;
 			<label for="asde-plantilla-nombre"><?php esc_html_e( 'Template name', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 			<input type="text" id="asde-plantilla-nombre" name="nombre" value="<?php echo esc_attr( Plantillas::nombre( $plantilla, $pl ) ); ?>" maxlength="60">
 		</p>
-		<table class="asde-table asde-table--plantilla">
+		<table class="asde-table asde-table--plantilla" data-asde-sin-paginar="editor de la plantilla del evento">
 			<thead>
 				<tr>
 					<th scope="col"><?php esc_html_e( 'Task', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>

@@ -161,7 +161,7 @@ $columnas = array(
 
 	<div data-asde-parcial="personas-lista">
 	<?php if ( $lista ) : ?>
-		<table class="asde-table">
+		<table class="asde-table" data-asde-paginada="servidor">
 			<thead>
 				<tr>
 					<?php foreach ( $columnas as $col => $etiqueta ) : ?>

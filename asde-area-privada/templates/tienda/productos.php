@@ -46,7 +46,7 @@ defined( 'ABSPATH' ) || exit;
 	<?php if ( ! $productos ) : ?>
 		<p><?php esc_html_e( 'There are no products with that filter. Start with "Add product" or, if you already have them in a spreadsheet, with "Load from CSV".', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 	<?php else : ?>
-		<table class="asde-table asde-table--tienda-productos">
+		<table class="asde-table asde-table--tienda-productos" data-asde-paginar>
 			<thead>
 				<tr>
 					<th scope="col"><?php esc_html_e( 'Product', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>

@@ -41,7 +41,7 @@ $campos  = static function ( int $linea = 0 ) use ( $e ): string {
 	<?php if ( ! $lineas ) : ?>
 		<p><?php esc_html_e( 'Nothing has been reserved for this event yet.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 	<?php else : ?>
-		<table class="asde-table">
+		<table class="asde-table" data-asde-paginar>
 			<thead>
 				<tr>
 					<th scope="col"><?php esc_html_e( 'Equipment', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>

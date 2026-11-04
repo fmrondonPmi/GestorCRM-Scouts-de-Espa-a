@@ -53,7 +53,7 @@ $url_ver = 'resueltos' === $ver ? add_query_arg( 'ver', 'resueltos', $url ) : $u
 			<form method="post" action="<?php echo esc_url( add_query_arg( 'socio', $socio, $url ) ); ?>" class="asde-form asde-cambios-revisar">
 				<?php wp_nonce_field( 'asde_revisar_socio_' . $socio ); ?>
 				<input type="hidden" name="socio" value="<?php echo esc_attr( $socio ); ?>">
-				<table class="asde-table asde-table--cambios">
+				<table class="asde-table asde-table--cambios" data-asde-paginar>
 					<thead>
 						<tr>
 							<th scope="col" class="asde-col-marca">
@@ -119,7 +119,7 @@ $url_ver = 'resueltos' === $ver ? add_query_arg( 'ver', 'resueltos', $url ) : $u
 		<?php elseif ( $g ) : ?>
 			<?php if ( $g['cambios'] ) : ?>
 				<h3><?php esc_html_e( 'Reviewed proposals', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h3>
-				<table class="asde-table">
+				<table class="asde-table" data-asde-paginar>
 					<thead><tr><th scope="col"><?php esc_html_e( 'Proposed', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Item of data', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'New value', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Result', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th></tr></thead>
 					<tbody>
 						<?php foreach ( $g['cambios'] as $c ) : ?>
@@ -145,7 +145,7 @@ $url_ver = 'resueltos' === $ver ? add_query_arg( 'ver', 'resueltos', $url ) : $u
 				<h3><?php esc_html_e( 'Made directly on the record', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h3>
 				<?php /* translators: %d: days */ ?>
 				<p class="asde-help"><?php echo esc_html( sprintf( /* translators: %d: number */ __( 'From the last %d days. Only which data was changed, by whom and when is known: the values are not stored on the website.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $dias ) ); ?></p>
-				<table class="asde-table">
+				<table class="asde-table" data-asde-paginar>
 					<thead><tr><th scope="col"><?php esc_html_e( 'Date', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Who', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Details', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th></tr></thead>
 					<tbody>
 						<?php foreach ( $g['directos'] as $d ) : ?>
@@ -182,7 +182,7 @@ $url_ver = 'resueltos' === $ver ? add_query_arg( 'ver', 'resueltos', $url ) : $u
 		<?php if ( ! $grupos ) : ?>
 			<p><?php echo 'pendientes' === $ver ? esc_html( __( 'There are no changes pending review. 🎉', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) : esc_html( __( 'There are no resolved changes yet.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?></p>
 		<?php else : ?>
-			<table class="asde-table">
+			<table class="asde-table" data-asde-paginar>
 				<thead>
 					<tr>
 						<th scope="col"><?php esc_html_e( 'Person', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>

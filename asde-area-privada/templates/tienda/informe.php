@@ -46,7 +46,7 @@ $fecha = static fn( string $f ): string => wp_date( 'd/m/Y', strtotime( $f . ' U
 	<?php if ( ! $productos ) : ?>
 		<p><?php esc_html_e( 'There are no sales in this period.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 	<?php else : ?>
-		<table class="asde-table">
+		<table class="asde-table" data-asde-paginar>
 			<thead>
 				<tr>
 					<th scope="col"><?php esc_html_e( 'Product', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
@@ -88,7 +88,7 @@ $fecha = static fn( string $f ): string => wp_date( 'd/m/Y', strtotime( $f . ' U
 	<?php if ( ! $formas ) : ?>
 		<p><?php esc_html_e( 'There are no sales in this period.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 	<?php else : ?>
-		<table class="asde-table">
+		<table class="asde-table" data-asde-paginar>
 			<thead>
 				<tr>
 					<th scope="col"><?php esc_html_e( 'Payment method', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
@@ -130,7 +130,7 @@ $fecha = static fn( string $f ): string => wp_date( 'd/m/Y', strtotime( $f . ' U
 	<?php if ( ! $pendientes ) : ?>
 		<p><?php esc_html_e( 'There are no unpaid orders in this period.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 	<?php else : ?>
-		<table class="asde-table">
+		<table class="asde-table" data-asde-paginar>
 			<thead>
 				<tr>
 					<th scope="col"><?php esc_html_e( 'Order', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>

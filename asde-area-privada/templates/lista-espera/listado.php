@@ -68,7 +68,7 @@ $fecha = static function ( ?string $utc ): string {
 		<form method="post" class="asde-form">
 			<?php wp_nonce_field( 'asde_espera_campos' ); ?>
 			<input type="hidden" name="asde_action" value="espera_campos">
-			<table class="asde-table">
+			<table class="asde-table" data-asde-paginar>
 				<thead>
 					<tr>
 						<th scope="col"><?php esc_html_e( 'Label', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
@@ -142,7 +142,7 @@ $fecha = static function ( ?string $utc ): string {
 	<?php if ( ! $lista ) : ?>
 		<p class="asde-muted"><?php esc_html_e( 'There is nobody on the waiting list with this filter.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 	<?php else : ?>
-		<table class="asde-table asde-espera-tabla">
+		<table class="asde-table asde-espera-tabla" data-asde-paginar>
 			<thead>
 				<tr>
 					<th scope="col"><abbr title="<?php echo esc_attr( esc_attr__( 'Order of arrival in their section', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php esc_html_e( 'Sort order', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></abbr></th>

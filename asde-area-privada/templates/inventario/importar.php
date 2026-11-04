@@ -39,7 +39,7 @@ $columnas = array_map( static fn( $c ) =>  $c[0] , Importador::columnas() );
 		<?php if ( $resultado['errores'] ) : ?>
 			<h3 class="asde-card__title"><?php esc_html_e( 'Rows that were not imported', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h3>
 			<p class="asde-muted"><?php esc_html_e( 'Correct them and import only those rows again (the others are already in the inventory). You can download them as a CSV with the reason for each.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
-			<table class="asde-table asde-table--inv-errores">
+			<table class="asde-table asde-table--inv-errores" data-asde-paginar>
 				<thead>
 					<tr>
 						<th scope="col" class="asde-num"><?php esc_html_e( 'Row', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>

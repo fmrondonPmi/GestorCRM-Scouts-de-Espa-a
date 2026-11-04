@@ -55,7 +55,7 @@ $texto   = static fn( array $m ) => trim( $m['ordenante'] . ' ' . ( '' !== $m['c
 			<?php if ( ! $candidatos ) : ?>
 				<p><?php esc_html_e( 'There is no unlinked transaction with this filter.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 			<?php else : ?>
-				<table class="asde-table">
+				<table class="asde-table" data-asde-paginar>
 					<thead>
 						<tr>
 							<th scope="col"><?php esc_html_e( 'Date', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>

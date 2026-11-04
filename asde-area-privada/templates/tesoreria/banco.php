@@ -94,7 +94,7 @@ $revisar = static fn( array $ids ) => add_query_arg(
 
 	<?php if ( $lotes ) : ?>
 		<h3><?php esc_html_e( 'Latest imports', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h3>
-		<table class="asde-table">
+		<table class="asde-table" data-asde-paginar>
 			<thead><tr><th scope="col"><?php esc_html_e( 'Date', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'File', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Account', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Period', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Transactions', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'By', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th></tr></thead>
 			<tbody>
 				<?php foreach ( $lotes as $l ) : ?>
@@ -174,7 +174,7 @@ $revisar = static fn( array $ids ) => add_query_arg(
 				<span class="asde-muted" data-asde-banco-marcados><?php esc_html_e( 'Tick in the list the transactions that are not fees.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span>
 			</form>
 		<?php endif; ?>
-		<table class="asde-table asde-table--banco">
+		<table class="asde-table asde-table--banco" data-asde-paginada="servidor">
 			<thead>
 				<tr>
 					<?php if ( $hay_pendientes ) : ?>

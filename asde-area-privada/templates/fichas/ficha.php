@@ -283,7 +283,7 @@ if ( '' !== ( $sepa ?? '' ) ) {
 <?php if ( $cambios ) : ?>
 	<section class="asde-card" data-asde-plegable="ficha-cambios">
 		<h3><?php esc_html_e( 'Changes proposed on this record', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h3>
-		<table class="asde-table">
+		<table class="asde-table" data-asde-paginar>
 			<thead><tr><th scope="col"><?php esc_html_e( 'Date', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Item of data', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'New value', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Status', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><span class="screen-reader-text"><?php esc_html_e( 'Actions', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span></th></tr></thead>
 			<tbody>
 				<?php foreach ( array_slice( $cambios, 0, 20 ) as $c ) : ?>

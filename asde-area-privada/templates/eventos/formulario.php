@@ -153,7 +153,7 @@ $accion = $e ? add_query_arg(
 	<section class="asde-card">
 		<h3 class="asde-card__title"><?php esc_html_e( 'Participants and places', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h3>
 		<p class="asde-help"><?php esc_html_e( 'The expected participants of each section are used to calculate the price and the monitor ratio. Places are the maximum (0 = no limit).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
-		<table class="asde-table asde-table--plazas">
+		<table class="asde-table asde-table--plazas" data-asde-sin-paginar="editor de plazas por seccion (pocas filas fijas)">
 			<thead>
 				<tr>
 					<th scope="col"><?php esc_html_e( 'Section', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>

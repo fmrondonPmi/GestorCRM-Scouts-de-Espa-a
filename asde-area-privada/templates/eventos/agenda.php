@@ -63,7 +63,7 @@ defined( 'ABSPATH' ) || exit;
 	<?php if ( ! $lista ) : ?>
 		<p><?php esc_html_e( 'There are no events with these filters.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 	<?php else : ?>
-		<table class="asde-table asde-table--eventos">
+		<table class="asde-table asde-table--eventos" data-asde-paginar>
 			<thead>
 				<tr>
 					<th scope="col"><?php esc_html_e( 'Event', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>

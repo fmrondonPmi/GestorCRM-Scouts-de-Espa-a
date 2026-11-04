@@ -60,7 +60,7 @@ $fecha         = static fn( string $d ): string => wp_date( 'l d/m/Y', strtotime
 
 	<?php foreach ( $dias as $d ) : ?>
 		<h4><?php echo esc_html( $fecha( $d ) ); ?><?php echo wp_kses( isset( $coste_dias[ $d ] ) ? ' <span class="asde-muted">· ' . esc_html( Calculadora::euros( $coste_dias[ $d ] ) ) . '</span>' : '', asde_html_permitido() ); ?></h4>
-		<table class="asde-table">
+		<table class="asde-table" data-asde-sin-paginar="rejilla fija de dias y comidas">
 			<tbody>
 				<?php foreach ( MenuTable::comidas() as $c => $nombre_c ) : ?>
 					<?php $platos = $por_dia[ $d ][ $c ] ?? array(); ?>
@@ -339,7 +339,7 @@ $hay_aviso = static fn( string $k ): bool => isset( $confirmaciones[ $k ] );
 	<?php if ( ! $compra['filas'] ) : ?>
 		<p><?php esc_html_e( 'There is nothing to buy yet: add dishes to the menu.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 	<?php else : ?>
-		<table class="asde-table">
+		<table class="asde-table" data-asde-paginar>
 			<thead><tr><th scope="col"><?php esc_html_e( 'Ingredient', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Quantity', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col" class="asde-num"><?php esc_html_e( 'Cost', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th></tr></thead>
 			<tbody>
 				<?php foreach ( $compra['filas'] as $f ) : ?>

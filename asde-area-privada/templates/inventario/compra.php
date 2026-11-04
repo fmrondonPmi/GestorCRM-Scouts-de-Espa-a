@@ -53,7 +53,7 @@ $campos = static function () use ( $nonce, $l ): void {
 		<?php endif; ?>
 	</ul>
 
-	<table class="asde-table asde-table--inv-compra">
+	<table class="asde-table asde-table--inv-compra" data-asde-paginar>
 		<thead>
 			<tr>
 				<th scope="col"><?php esc_html_e( 'Equipment', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>

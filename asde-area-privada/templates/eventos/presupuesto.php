@@ -55,7 +55,7 @@ $reparto  = static function ( array $p ): string {
 	<?php endif; ?>
 
 	<?php if ( $partidas ) : ?>
-		<table class="asde-table asde-table--partidas">
+		<table class="asde-table asde-table--partidas" data-asde-sin-paginar="editor de partidas del presupuesto">
 			<thead>
 				<tr>
 					<th scope="col"><?php esc_html_e( 'Description', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
@@ -173,7 +173,7 @@ $reparto  = static function ( array $p ): string {
 		</ul>
 	<?php endif; ?>
 	<?php if ( ! empty( $calculo['precios'] ) ) : ?>
-		<table class="asde-table asde-table--precios">
+		<table class="asde-table asde-table--precios" data-asde-paginar>
 			<thead>
 				<tr>
 					<th scope="col"><?php esc_html_e( 'Section', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>

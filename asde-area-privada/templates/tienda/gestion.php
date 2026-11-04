@@ -91,7 +91,7 @@ $singular = array(
 			<?php wp_nonce_field( 'asde_uniformes_lote' ); ?>
 			<input type="hidden" name="asde_action" value="uniforme_incluir_lote">
 			<input type="hidden" name="volver" value="<?php echo esc_url( $volver ); ?>">
-			<table class="asde-table asde-table--uniformes">
+			<table class="asde-table asde-table--uniformes" data-asde-paginar>
 				<thead>
 					<tr>
 						<?php if ( $lote ) : ?>

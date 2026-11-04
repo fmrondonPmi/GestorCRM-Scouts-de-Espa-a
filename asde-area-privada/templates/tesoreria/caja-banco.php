@@ -33,7 +33,7 @@ $importe = static fn( float $v ) => ( $v > 0 ? '+' : '' ) . Calculadora::euros( 
 		<?php if ( ! $candidatos ) : ?>
 			<p><?php esc_html_e( 'No bank transaction fits (of the opposite sign and without another transfer). Import the statement first.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 		<?php else : ?>
-			<table class="asde-table">
+			<table class="asde-table" data-asde-paginar>
 				<thead>
 					<tr>
 						<th scope="col"><?php esc_html_e( 'Date', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>

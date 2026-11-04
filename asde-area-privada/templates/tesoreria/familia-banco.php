@@ -58,7 +58,7 @@ $hay    = (bool) array_filter( $movs, $ve );
 		?>
 		<div class="asde-banco-elegir__grupo" data-asde-banco-grupo<?php echo array_filter( $lista, $ve ) ? '' : ' hidden'; ?>>
 			<h3><?php echo esc_html( $titulo ); ?></h3>
-			<table class="asde-table asde-table--banco-elegir">
+			<table class="asde-table asde-table--banco-elegir" data-asde-paginar>
 				<thead>
 					<tr>
 						<th scope="col"><?php esc_html_e( 'Date', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>

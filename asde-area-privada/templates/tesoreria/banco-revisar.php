@@ -70,7 +70,7 @@ $opciones = static function ( float $importe, ?int $elegido ) use ( $tipos ): st
 					<span class="asde-help"><?php esc_html_e( 'It is applied to those it fits (an expense type, only on expenses). Afterwards you can change each one\'s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span>
 				</p>
 			<?php endif; ?>
-			<table class="asde-table asde-table--banco-revisar">
+			<table class="asde-table asde-table--banco-revisar" data-asde-paginar>
 				<thead>
 					<tr>
 						<th scope="col"><?php esc_html_e( 'Date', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>

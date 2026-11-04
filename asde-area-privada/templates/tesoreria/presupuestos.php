@@ -32,7 +32,7 @@ $sec = Secciones::all();
 	<?php $t = $reparto['total']; $g = $reparto['grupo']; ?>
 	<section class="asde-card" data-asde-plegable="presupuestos-resumen" data-asde-inicio="abierto">
 		<h3><?php esc_html_e( 'Fees, federation cost and what is left', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h3>
-		<table class="asde-table asde-table--resumen">
+		<table class="asde-table asde-table--resumen" data-asde-sin-paginar="tabla de datos fijos / resumen sin bucle">
 			<tbody>
 				<tr><th scope="row"><?php esc_html_e( 'Expected fees from families', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><td><?php echo esc_html( $e( $t['cuota'] ) ); ?></td></tr>
 				<tr><th scope="row"><?php esc_html_e( 'Registration and insurance (they pay the federation cost)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><td>− <?php echo esc_html( $e( $t['inscripcion'] ) ); ?></td></tr>
@@ -57,7 +57,7 @@ $sec = Secciones::all();
 			<label for="asde-p-pct"><?php esc_html_e( '% for the group\'s funds (default)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 			<input type="number" id="asde-p-pct" name="presupuesto[pct_grupo]" step="0.01" min="0" max="100" value="<?php echo esc_attr( $pct( (float) $pre['pct_grupo'] ) ); ?>">
 		</p>
-		<table class="asde-table asde-table--resumen">
+		<table class="asde-table asde-table--resumen" data-asde-sin-paginar="resumen por secciones o categorias (pocas filas fijas)">
 			<thead>
 				<tr>
 					<th scope="col"><?php esc_html_e( 'Section', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
@@ -94,7 +94,7 @@ $sec = Secciones::all();
 	<?php if ( $reparto ) : ?>
 		<section class="asde-card" data-asde-plegable="presupuestos-grupo" data-asde-inicio="abierto">
 			<h3><?php esc_html_e( 'Group funds', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h3>
-			<table class="asde-table asde-table--resumen">
+			<table class="asde-table asde-table--resumen" data-asde-sin-paginar="tabla de datos fijos / resumen sin bucle">
 				<tbody>
 					<tr><th scope="row"><?php esc_html_e( 'Part of the youth members\' fees', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><td><?php echo esc_html( $e( $g['a_grupo'] ) ); ?></td></tr>
 					<tr><th scope="row"><?php esc_html_e( 'Families\' registration and insurance', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><td>+ <?php echo esc_html( $e( $g['inscripcion'] ) ); ?></td></tr>
@@ -115,7 +115,7 @@ $sec = Secciones::all();
 	<?php if ( ! empty( $presupuestos ) ) : ?>
 		<section class="asde-card" data-asde-plegable="presupuestos-estados" data-asde-inicio="abierto">
 			<h3><?php esc_html_e( 'Budget of each section and of the group', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h3>
-			<table class="asde-table asde-table--resumen">
+			<table class="asde-table asde-table--resumen" data-asde-sin-paginar="resumen por secciones o categorias (pocas filas fijas)">
 				<thead>
 					<tr>
 						<th scope="col"><?php esc_html_e( 'Budget', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>

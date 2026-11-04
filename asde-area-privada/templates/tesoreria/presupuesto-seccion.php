@@ -59,7 +59,7 @@ $campos  = static function ( string $accion, array $extra = array() ) use ( $ron
 
 <section class="asde-card" data-asde-plegable="presupuesto-saldo" data-asde-inicio="abierto">
 	<h3><?php esc_html_e( 'Accounts', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h3>
-	<table class="asde-table asde-table--resumen">
+	<table class="asde-table asde-table--resumen" data-asde-sin-paginar="tabla de datos fijos / resumen sin bucle">
 		<tbody>
 			<tr><th scope="row"><?php esc_html_e( 'Available from the fees', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><td><?php echo esc_html( $e( $resultado['disponible'] ) ); ?></td></tr>
 			<tr><th scope="row"><?php esc_html_e( 'Planned income', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><td>+ <?php echo esc_html( $e( $resultado['ingresos'] ) ); ?></td></tr>
@@ -79,7 +79,7 @@ $campos  = static function ( string $accion, array $extra = array() ) use ( $ron
 <section class="asde-card" data-asde-plegable="presupuesto-gastos" data-asde-inicio="abierto">
 	<h3><?php esc_html_e( 'Expenses', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h3>
 	<?php if ( $gastos ) : ?>
-		<table class="asde-table asde-table--resumen">
+		<table class="asde-table asde-table--resumen" data-asde-sin-paginar="resumen por secciones o categorias (pocas filas fijas)">
 			<thead><tr><th scope="col"><?php esc_html_e( 'Category', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Description', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'How many?', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Amount of each', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Total', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Spent', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Left', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"></th></tr></thead>
 			<tbody>
 				<?php foreach ( $gastos as $p ) : ?>
@@ -109,7 +109,7 @@ $campos  = static function ( string $accion, array $extra = array() ) use ( $ron
 <section class="asde-card" data-asde-plegable="presupuesto-ingresos" data-asde-inicio="abierto">
 	<h3><?php esc_html_e( 'Income', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h3>
 	<?php if ( $ingres ) : ?>
-		<table class="asde-table asde-table--resumen">
+		<table class="asde-table asde-table--resumen" data-asde-sin-paginar="editor de importes por partida">
 			<thead><tr><th scope="col"><?php esc_html_e( 'Description', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'How many?', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Amount of each', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Total', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"></th></tr></thead>
 			<tbody>
 				<?php foreach ( $ingres as $p ) : ?>
@@ -141,7 +141,7 @@ $campos  = static function ( string $accion, array $extra = array() ) use ( $ron
 
 <section class="asde-card" data-asde-plegable="presupuesto-real" data-asde-inicio="cerrado">
 	<h3><?php esc_html_e( 'Actual expense', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h3>
-	<table class="asde-table asde-table--resumen">
+	<table class="asde-table asde-table--resumen" data-asde-sin-paginar="tabla de datos fijos / resumen sin bucle">
 		<tbody>
 			<tr><th scope="row"><?php esc_html_e( 'Budgeted in expenses', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><td><?php echo esc_html( $e( $ejecucion['presupuestado'] ) ); ?></td></tr>
 			<tr><th scope="row"><?php esc_html_e( 'Actually spent', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><td><?php echo esc_html( $e( $ejecucion['gastado'] ) ); ?></td></tr>
@@ -149,7 +149,7 @@ $campos  = static function ( string $accion, array $extra = array() ) use ( $ron
 		</tbody>
 	</table>
 	<?php if ( $gastos_reales ) : ?>
-		<table class="asde-table asde-table--resumen">
+		<table class="asde-table asde-table--resumen" data-asde-sin-paginar="resumen por secciones o categorias (pocas filas fijas)">
 			<thead><tr><th scope="col"><?php esc_html_e( 'Date', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Description', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Item', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Amount', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"></th></tr></thead>
 			<tbody>
 				<?php

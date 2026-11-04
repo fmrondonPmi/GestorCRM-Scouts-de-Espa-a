@@ -70,7 +70,7 @@ $fila_persona = static function ( $p ) {
 		<?php if ( ! $familias ) : ?>
 			<p><?php echo esc_html( sprintf( /* translators: %s: text */ __( 'No family matches "%s".', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $q ) ); ?></p>
 		<?php else : ?>
-		<table class="asde-table">
+		<table class="asde-table" data-asde-paginar>
 			<thead>
 				<tr>
 					<th scope="col"><?php esc_html_e( 'Family no.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>

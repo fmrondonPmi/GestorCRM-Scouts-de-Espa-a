@@ -89,7 +89,7 @@ $val        = static fn( string $k ) => $borrador[ $k ] ?? $r[ $k ] ?? '';
 				<button type="button" class="asde-btn-link" data-asde-ing-nuevo hidden>+ <?php esc_html_e( 'New ingredient', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 				<noscript><?php esc_html_e( 'If an ingredient is missing, create it first in "Ingredients" with its allergens.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <a href="<?php echo esc_url( $url_ing ); ?>"><?php esc_html_e( 'Go to ingredients', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a></noscript>
 			</p>
-			<table class="asde-table">
+			<table class="asde-table" data-asde-sin-paginar="editor de lineas de la receta (se anaden filas en pantalla)">
 				<thead><tr><th scope="col"><?php esc_html_e( 'Ingredient', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Quantity', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Unidad', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th></tr></thead>
 				<tbody>
 					<?php
@@ -156,7 +156,7 @@ $val        = static fn( string $k ) => $borrador[ $k ] ?? $r[ $k ] ?? '';
 			<input type="number" id="asde-rec-com" name="comensales" min="1" max="5000" value="<?php echo (int) $comensales; ?>">
 			<button type="submit" class="button"><?php esc_html_e( 'Calculate', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 		</form>
-		<table class="asde-table">
+		<table class="asde-table" data-asde-paginar>
 			<thead><tr><th scope="col"><?php esc_html_e( 'Ingredient', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php echo esc_html( sprintf( /* translators: %d: number */ __( 'For %d portions', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), (int) $r['porciones'] ) ); ?></th><th scope="col"><?php echo esc_html( sprintf( /* translators: %d: number */ __( 'For %d diners', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), (int) $comensales ) ); ?></th></tr></thead>
 			<tbody>
 				<?php foreach ( $escaladas as $l ) : ?>

@@ -36,7 +36,7 @@ $fecha = static fn( string $f ): string => wp_date( 'd/m/Y', strtotime( $f . ' 1
 		<header class="asde-card__header">
 			<h2 class="asde-card__title"><?php echo esc_html( asde_guardado( $nombre_modulo ) ); ?></h2>
 		</header>
-		<table class="asde-table">
+		<table class="asde-table" data-asde-paginar>
 			<thead>
 				<tr>
 					<th scope="col"><?php esc_html_e( 'Permission', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>

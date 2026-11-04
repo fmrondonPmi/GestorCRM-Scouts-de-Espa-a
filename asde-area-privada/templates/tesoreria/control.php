@@ -95,7 +95,7 @@ $pct = $resumen['a_pagar'] > 0 ? round( 100 * $resumen['pagado'] / $resumen['a_p
 	<?php if ( ! $lista ) : ?>
 		<p><?php esc_html_e( 'There are no families', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?><?php echo '' !== $estado || '' !== $q ? esc_html( __( ' with these filters', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) : ''; ?>. <a href="<?php echo esc_url( $url_fam ); ?>"><?php esc_html_e( 'Manage families', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a></p>
 	<?php else : ?>
-		<table class="asde-table">
+		<table class="asde-table" data-asde-paginar>
 			<thead>
 				<tr>
 					<th scope="col"><?php esc_html_e( 'Family', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>

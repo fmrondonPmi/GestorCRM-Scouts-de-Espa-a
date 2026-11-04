@@ -39,7 +39,7 @@ $org        = Organizacion::nombre();
 <?php if ( $coste ) : ?>
 	<section class="asde-card">
 		<h3><?php esc_html_e( 'Calculation with the CRM\'s active members (today)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h3>
-		<table class="asde-table asde-table--resumen">
+		<table class="asde-table asde-table--resumen" data-asde-sin-paginar="resumen por secciones o categorias (pocas filas fijas)">
 			<thead><tr><th scope="col"><?php esc_html_e( 'Insurance', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <?php echo (int) $fed['anio_primas']; ?></th><th scope="col"><?php esc_html_e( 'Associates', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Premium', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Amount', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th></tr></thead>
 			<tbody>
 				<?php foreach ( $categorias as $cat => $label ) : ?>
@@ -56,7 +56,7 @@ $org        = Organizacion::nombre();
 		</table>
 
 		<?php if ( $coste['conceptos'] ) : ?>
-			<table class="asde-table asde-table--resumen">
+			<table class="asde-table asde-table--resumen" data-asde-sin-paginar="resumen por secciones o categorias (pocas filas fijas)">
 				<thead><tr><th scope="col"><?php esc_html_e( 'Other items', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Applies to', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Amount', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th></tr></thead>
 				<tbody>
 					<?php foreach ( $coste['conceptos'] as $c ) : ?>
@@ -71,7 +71,7 @@ $org        = Organizacion::nombre();
 			</table>
 		<?php endif; ?>
 
-		<table class="asde-table asde-table--resumen">
+		<table class="asde-table asde-table--resumen" data-asde-sin-paginar="tabla de datos fijos / resumen sin bucle">
 			<tbody>
 				<tr><th scope="row"><?php esc_html_e( 'Association fee (', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?><?php echo esc_html( $n( (float) $fed['cuota_asociativa'] ) ); ?> × <?php echo (int) $coste['total_socios']; ?>)</th><td><?php echo esc_html( $e( $coste['cuota_asociativa'] ) ); ?></td></tr>
 				<tr><th scope="row"><?php esc_html_e( 'Insurance by premium table', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><td><?php echo esc_html( $e( $coste['seguro_tabla'] ) ); ?></td></tr>

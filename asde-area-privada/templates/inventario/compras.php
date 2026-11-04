@@ -54,7 +54,7 @@ $fecha = static fn( ?string $f ) => $f ? wp_date( 'd/m/Y', (int) strtotime( $f .
 	<?php if ( ! $listas ) : ?>
 		<p><?php esc_html_e( 'There are no shopping lists with this filter.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 	<?php else : ?>
-		<table class="asde-table asde-table--inv-compras">
+		<table class="asde-table asde-table--inv-compras" data-asde-paginar>
 			<thead>
 				<tr>
 					<th scope="col"><?php esc_html_e( 'List', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>

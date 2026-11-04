@@ -23,7 +23,7 @@ $valor = static fn( string $v ): string => '' !== $v ? $v : '–';
 	<?php endif; ?>
 
 	<?php if ( ! $editable ) : ?>
-		<table class="asde-table asde-table--resumen">
+		<table class="asde-table asde-table--resumen" data-asde-sin-paginar="tabla de datos fijos / resumen sin bucle">
 			<tbody>
 				<tr><th scope="row"><?php esc_html_e( 'Group name', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><td><?php echo esc_html( $valor( $d['nombre'] ) ); ?></td></tr>
 				<tr><th scope="row"><?php esc_html_e( 'Group no.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><td><?php echo esc_html( $d['numero'] ); ?></td></tr>

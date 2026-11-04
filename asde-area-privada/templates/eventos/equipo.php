@@ -49,7 +49,7 @@ $r        = $check['ratio'];
 	<?php if ( ! $equipo ) : ?>
 		<p><?php esc_html_e( 'There is nobody on the team yet.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 	<?php else : ?>
-		<table class="asde-table asde-table--equipo">
+		<table class="asde-table asde-table--equipo" data-asde-paginar>
 			<thead>
 				<tr>
 					<th scope="col"><?php esc_html_e( 'Person', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>

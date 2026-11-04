@@ -29,7 +29,7 @@ defined( 'ABSPATH' ) || exit;
 	<?php if ( ! $tipos ) : ?>
 		<p><?php esc_html_e( 'There is no type yet.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 	<?php else : ?>
-		<table class="asde-table asde-table--inv-tipos">
+		<table class="asde-table asde-table--inv-tipos" data-asde-paginar>
 			<thead>
 				<tr>
 					<th scope="col"><?php esc_html_e( 'Name', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>

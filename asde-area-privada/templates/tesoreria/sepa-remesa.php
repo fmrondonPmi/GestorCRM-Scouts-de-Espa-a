@@ -98,7 +98,7 @@ $pendientes = array_filter( $lineas, static fn( $l ) => Remesas::PENDIENTE === $
 				<input type="hidden" name="remesa" value="<?php echo (int) $r['id']; ?>">
 				<input type="hidden" name="ronda" value="<?php echo esc_attr( $r['ronda'] ); ?>">
 		<?php endif; ?>
-		<table class="asde-table">
+		<table class="asde-table" data-asde-paginar>
 			<thead>
 				<tr>
 					<th scope="col"><?php esc_html_e( 'Family', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>

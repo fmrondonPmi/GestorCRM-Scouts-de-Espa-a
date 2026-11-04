@@ -61,7 +61,7 @@ $publico = add_query_arg( 'grupo', Grupo::numero(), $enlace );
 	<?php if ( ! $lista ) : ?>
 		<p class="asde-muted"><?php echo $resueltas ? esc_html( __( 'There are no resolved requests yet.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) : esc_html( __( 'There are no pending requests.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?></p>
 	<?php else : ?>
-		<table class="asde-table">
+		<table class="asde-table" data-asde-paginar>
 			<thead>
 				<tr>
 					<th scope="col"><?php esc_html_e( 'Date', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>

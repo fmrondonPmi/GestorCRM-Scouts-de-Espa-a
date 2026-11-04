@@ -64,7 +64,7 @@ $buscar = $normal( trim( $q ) );
 	<?php else : ?>
 		<form method="get" action="<?php echo esc_url( $url_compra ); ?>" data-asde-inv-compra data-umbral="<?php echo (int) $umbral; ?>">
 			<input type="hidden" name="nueva" value="1">
-			<table class="asde-table asde-table--inventario">
+			<table class="asde-table asde-table--inventario" data-asde-paginar>
 				<thead>
 					<tr>
 						<th scope="col"><span class="screen-reader-text"><?php esc_html_e( 'Add to the shopping list', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span></th>

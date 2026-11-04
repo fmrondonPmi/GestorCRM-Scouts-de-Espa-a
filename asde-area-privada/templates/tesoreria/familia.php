@@ -74,7 +74,7 @@ $user = static fn( $id ) => ( $u = get_userdata( (int) $id ) ) ? $u->user_login 
 		<h3><?php esc_html_e( 'Round fee', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h3>
 		<span class="asde-plegable__resumen asde-plegable__resumen--cerrado"><?php echo esc_html( sprintf( /* translators: 1: text, 2: text, 3: text, 4: text */ __( 'To pay %1$s · paid %2$s · %3$s %4$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Calculadora::euros( $c['a_pagar'] ), Calculadora::euros( $c['pagado'] ), $c['pendiente'] < 0 ? mb_strtolower( __( 'Credit balance', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) : mb_strtolower( __( 'Pending', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ), Calculadora::euros( abs( $c['pendiente'] ) ) ) ); ?></span>
 	</summary>
-	<table class="asde-table asde-table--resumen">
+	<table class="asde-table asde-table--resumen" data-asde-sin-paginar="tabla de datos fijos / resumen sin bucle">
 		<tbody>
 			<tr><th scope="row"><?php esc_html_e( 'Registration (', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?><?php echo (int) count( $c['pagan'] ); ?> × <?php echo esc_html( Calculadora::euros( (float) $cfg['cuotas']['inscripcion'] ) ); ?>)</th><td><?php echo esc_html( Calculadora::euros( $c['cuota']['inscripcion'] ) ); ?></td></tr>
 			<tr><th scope="row"><?php esc_html_e( 'Insurance (', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?><?php echo (int) count( $c['pagan'] ); ?> × <?php echo esc_html( Calculadora::euros( (float) $cfg['cuotas']['seguro'] ) ); ?>)</th><td><?php echo esc_html( Calculadora::euros( $c['cuota']['seguro'] ) ); ?></td></tr>
@@ -203,7 +203,7 @@ $user = static fn( $id ) => ( $u = get_userdata( (int) $id ) ) ? $u->user_login 
 	<?php if ( ! $vigentes ) : ?>
 		<p><?php echo $movimientos ? esc_html( __( 'No transaction is left: the deleted ones are in the history.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) : esc_html( __( 'There are no transactions yet.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?></p>
 	<?php else : ?>
-		<table class="asde-table">
+		<table class="asde-table" data-asde-paginar>
 			<thead>
 				<tr>
 					<th scope="col"><?php esc_html_e( 'Date', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
@@ -315,7 +315,7 @@ usort( $lineas, static fn( $a, $b ) => strcmp( $b['cuando'], $a['cuando'] ) ?: (
 				</span>
 			</summary>
 			<p class="asde-help"><?php esc_html_e( 'Everything this family has paid: the round\'s fee, events and uniforms, with who recorded it and when. Deleted items do not count.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
-			<table class="asde-table asde-historial">
+			<table class="asde-table asde-historial" data-asde-paginar>
 				<thead>
 					<tr>
 						<th scope="col"><?php esc_html_e( 'When', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>

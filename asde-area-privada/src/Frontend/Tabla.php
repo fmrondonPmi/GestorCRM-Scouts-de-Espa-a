@@ -51,6 +51,13 @@ final class Tabla {
 		return in_array( $pedido, self::POR_PAGINA, true ) ? $pedido : self::POR_PAGINA_DEFECTO;
 	}
 
+	/** Tamaño que la persona ha elegido de verdad (0 si nunca ha elegido: los grids de móvil usan entonces 5 en vez de 10). */
+	public static function por_pagina_elegida(): int {
+		$user_id = get_current_user_id();
+		$pedido  = $user_id ? (int) get_user_meta( $user_id, self::META_POR_PAGINA, true ) : 0;
+		return in_array( $pedido, self::POR_PAGINA, true ) ? $pedido : 0;
+	}
+
 	/** Recuerda el tamaño elegido; cualquier otro valor se ignora. */
 	public static function guardar_por_pagina( int $n ): void {
 		$user_id = get_current_user_id();

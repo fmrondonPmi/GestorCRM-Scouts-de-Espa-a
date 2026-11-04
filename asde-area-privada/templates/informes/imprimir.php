@@ -82,7 +82,7 @@ wp_register_script( 'asde-imprimir', plugins_url( 'assets/js/imprimir.js', ASDE_
 		</section>
 	<?php endforeach; ?>
 <?php else : ?>
-	<table>
+	<table data-asde-sin-paginar="version para imprimir">
 		<thead>
 			<tr>
 				<?php foreach ( $res['columnas'] as $label ) : ?>

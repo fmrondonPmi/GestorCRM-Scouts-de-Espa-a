@@ -3271,3 +3271,12 @@ dialog.asde-menu-nueva {
 	flex: 0 0 5em;
 	width: 5em;
 }
+
+/* v0.61 · Grids paginados en el navegador (doc 64) (assets/js/grids.js): las filas fuera de la página se ocultan, aunque la tabla pase a tarjetas en el móvil. */
+#top .asde-ap table.asde-table tr.asde-grid-oculta,
+.asde-ap tr.asde-grid-oculta {
+	display: none !important;
+}
+.asde-ap .asde-grid-paginas .asde-paginacion {
+	margin-top: 8px;
+}

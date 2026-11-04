@@ -71,7 +71,7 @@ $e = $edicion ?: array( 'id' => 0, 'nombre' => '', 'unidad' => 'g', 'alergenos' 
 		<label class="asde-choice asde-choice--inline"><input type="checkbox" name="archivados" value="1" <?php checked( $archivados ); ?>><span><?php esc_html_e( 'Also show the archived ones', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span></label>
 		<button type="submit" class="button"><?php esc_html_e( 'View', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 	</form>
-	<table class="asde-table">
+	<table class="asde-table" data-asde-paginar>
 		<thead>
 			<tr>
 				<th scope="col"><?php esc_html_e( 'Ingredient', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>

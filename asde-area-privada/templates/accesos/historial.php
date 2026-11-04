@@ -73,7 +73,7 @@ $columnas   = array(
 	<?php if ( ! $filas ) : ?>
 		<p><?php esc_html_e( 'There is nothing in the history', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?><?php echo $filtrado ? esc_html( __( ' with this filter', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) : ''; ?>.</p>
 	<?php else : ?>
-		<table class="asde-table">
+		<table class="asde-table" data-asde-paginada="servidor">
 			<thead>
 				<tr>
 					<?php foreach ( $columnas as $col => $etiqueta ) : ?>

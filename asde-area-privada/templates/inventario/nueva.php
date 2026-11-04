@@ -40,7 +40,7 @@ $importe = static function ( string $precio, string $cantidad ): string {
 		<?php if ( ! $materiales ) : ?>
 			<p><?php esc_html_e( 'You have not ticked any equipment from the inventory. You can prepare the list with new equipment only (below) or go back to the inventory and tick what needs to be bought.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 		<?php else : ?>
-			<table class="asde-table asde-table--inv-nueva">
+			<table class="asde-table asde-table--inv-nueva" data-asde-sin-paginar="editor de alta (se anaden filas en pantalla)">
 				<thead>
 					<tr>
 						<th scope="col"><?php esc_html_e( 'Equipment', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
@@ -88,7 +88,7 @@ $importe = static function ( string $precio, string $cantidad ): string {
 		<?php // v0.30 (P-63): material que todavía no está en el inventario; se da de alta al marcar la lista como comprada. ?>
 		<h3 class="asde-card__title" id="asde-inv-nuevos"><?php esc_html_e( 'New equipment (not in the inventory)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h3>
 		<p class="asde-muted"><?php esc_html_e( 'If something needs to be bought that is not yet in the inventory, write it here. When the list is marked as bought, it will be registered in the inventory.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
-		<table class="asde-table asde-table--inv-nueva asde-table--inv-nuevo">
+		<table class="asde-table asde-table--inv-nueva asde-table--inv-nuevo" data-asde-sin-paginar="editor de alta (se anaden filas en pantalla)">
 			<thead>
 				<tr>
 					<th scope="col"><?php esc_html_e( 'Description', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>

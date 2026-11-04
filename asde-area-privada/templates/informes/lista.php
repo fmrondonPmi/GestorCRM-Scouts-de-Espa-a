@@ -21,7 +21,7 @@ defined( 'ABSPATH' ) || exit;
 	<?php if ( ! $informes ) : ?>
 		<p><?php esc_html_e( 'There are no saved reports yet.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 	<?php else : ?>
-		<table class="asde-table">
+		<table class="asde-table" data-asde-paginar>
 			<thead>
 				<tr>
 					<th scope="col"><?php esc_html_e( 'Report', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
