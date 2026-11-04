@@ -48,6 +48,8 @@ final class Roles {
 					'asde_mis_pagos'         => true,
 					'asde_inventario'        => true, // Inventario de material (v0.19, doc 32).
 					'asde_lista_espera'      => true, // Lista de espera (v0.32, doc 39): ver, contactar y cambiar el estado.
+					'asde_seguimiento'        => true, // Mi sección (v0.63, doc 65): progresión personal de sus secciones.
+					'asde_seguimiento_editar' => true,
 					'asde_eventos_inscribir' => true, // Eventos (v0.35, doc 43): «Mis eventos».
 					// Crea y gestiona los eventos de sus secciones y aquellos en cuyo equipo está.
 					'asde_eventos_gestion'   => true,
@@ -111,6 +113,7 @@ final class Roles {
 					'asde_inventario'        => true,
 					'asde_lista_espera'      => true,
 					'asde_lista_espera_alta' => true,
+					'asde_seguimiento'       => true, // Mi sección (v0.63, doc 65): solo lectura de todas las secciones.
 					'asde_eventos_inscribir' => true,
 					// Eventos: además, los de grupo y los externos, y la configuración.
 					'asde_eventos_gestion'   => true,

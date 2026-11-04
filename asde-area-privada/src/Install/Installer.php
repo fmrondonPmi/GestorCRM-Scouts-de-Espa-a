@@ -108,6 +108,7 @@ final class Installer {
 		\AsdeBalears\AreaPrivada\Presupuestos\GastosRealesTable::install_table();
 		\AsdeBalears\AreaPrivada\Crm\Operaciones::install_table();
 		\AsdeBalears\AreaPrivada\ListaEspera\Inscripciones::install_table();
+		\AsdeBalears\AreaPrivada\Seguimiento\Revisiones::install_table(); // v0.63 (doc 65): revisiones de la progresión personal.
 		// v0.35: eventos (doc 43).
 		\AsdeBalears\AreaPrivada\Eventos\EventosTable::install_table();
 		\AsdeBalears\AreaPrivada\Eventos\InscripcionesTable::install_table();

@@ -128,7 +128,7 @@ msgid "\"%1$s\" first needs: %2$s."
 msgstr "«%1$s» necesita antes: %2$s."
 
 #. translators: 1: text, 2: text
-#: src/Frontend/Pages.php:197
+#: src/Frontend/Pages.php:199
 #, php-format
 msgid "\"%1$s\" is \"%2$s\""
 msgstr "«%1$s» está como «%2$s»"
@@ -146,13 +146,13 @@ msgid "\"%s\" archived. It is no longer sold; you can recover it from \"Also sho
 msgstr "«%s» archivado. Ya no se vende; lo puedes recuperar desde «Ver también los archivados»."
 
 #. translators: %s: text
-#: src/Frontend/Pages.php:195
+#: src/Frontend/Pages.php:197
 #, php-format
 msgid "\"%s\" does not exist"
 msgstr "«%s» no existe"
 
 #. translators: %s: text
-#: src/Frontend/Pages.php:199
+#: src/Frontend/Pages.php:201
 #, php-format
 msgid "\"%s\" does not have its shortcode"
 msgstr "«%s» no tiene su shortcode"
@@ -276,6 +276,12 @@ msgstr "%1$d gastos y %2$d ingresos."
 #, php-format
 msgid "%1$d monitors are needed besides the director (%2$d support monitors for dependency) and there are %3$d."
 msgstr "Hacen falta %1$d monitores además del director/a (%2$d de apoyo por dependencia) y hay %3$d."
+
+#. translators: 1: year, 2: total years
+#: templates/mi-seccion/listado.php:76
+#, php-format
+msgid "%1$d of %2$d"
+msgstr "%1$d de %2$d"
 
 #. translators: 1: number, 2: number
 #: templates/tesoreria/familias.php:118
@@ -527,6 +533,12 @@ msgstr "%1$s: por %2$s"
 #, php-format
 msgid "%d %% collected"
 msgstr "%d %% cobrado"
+
+#. translators: %d: number of aspects
+#: templates/mi-seccion/ficha.php:82
+#, php-format
+msgid "%d achieved"
+msgstr "%d conseguidos"
 
 #. translators: %d: number
 #: templates/tesoreria/banco.php:107
@@ -859,7 +871,7 @@ msgstr[0] "%d participante"
 msgstr[1] "%d participantes"
 
 #. translators: %d: number
-#: templates/email/menu-alergenos.php:48 templates/eventos/menu.php:231 templates/eventos/menu.php:268 templates/personas/listado.php:240
+#: templates/email/menu-alergenos.php:48 templates/eventos/menu.php:231 templates/eventos/menu.php:268 templates/mi-seccion/listado.php:33
 #, php-format
 msgid "%d person"
 msgid_plural "%d people"
@@ -932,6 +944,14 @@ msgstr[1] "%d fichas tienen algo escrito que no se ha podido entender: revísala
 msgid "%d records corrected"
 msgstr "%d fichas corregidas"
 
+#. translators: %d: number of reviews
+#: templates/mi-seccion/ficha.php:78
+#, php-format
+msgid "%d review"
+msgid_plural "%d reviews"
+msgstr[0] "%d revisión"
+msgstr[1] "%d revisiones"
+
 #. translators: %d: number
 #: templates/lista-espera/listado.php:205
 #, php-format
@@ -955,6 +975,12 @@ msgid "%d son"
 msgid_plural "%d sons"
 msgstr[0] "%d hijo"
 msgstr[1] "%d hijos"
+
+#. translators: %d: number of people
+#: templates/mi-seccion/listado.php:35
+#, php-format
+msgid "%d stage changes proposed"
+msgstr "%d cambios de etapa propuestos"
 
 #. translators: %d: number
 #: templates/tesoreria/familia.php:153
@@ -1003,6 +1029,12 @@ msgid "%d to refund"
 msgid_plural "%d to refund"
 msgstr[0] "%d por devolver"
 msgstr[1] "%d por devolver"
+
+#. translators: %d: number of people
+#: templates/mi-seccion/listado.php:34
+#, php-format
+msgid "%d to review"
+msgstr "%d por revisar"
 
 #. translators: %d: number
 #: src/Frontend/Views/BancoView.php:268 templates/tesoreria/banco.php:295
@@ -1413,6 +1445,10 @@ msgstr "). Al guardar los cambios la solicitud se da por resuelta; el email de s
 msgid "): they will sign in with this email and will receive a link to choose a password."
 msgstr "): pasará a entrar con este email y le llegará un enlace para elegir contraseña."
 
+#: templates/mi-seccion/listado.php:98
+msgid "* Outside the usual age range of the section (it can be adjusted to each person's maturity)."
+msgstr "* Fuera de la edad habitual de la sección (se puede ajustar a la madurez de cada persona)."
+
 #: templates/informes/lista.php:17
 msgid "+ New report"
 msgstr "+ Nuevo informe"
@@ -1729,7 +1765,7 @@ msgstr "ASDE Scouts de España · Gestor CRM para Grupos Scouts"
 msgid "Accept"
 msgstr "Aceptar"
 
-#: src/Frontend/Menu.php:105
+#: src/Frontend/Menu.php:108
 msgid "Access"
 msgstr "Accesos"
 
@@ -1777,7 +1813,7 @@ msgstr "Gestión de accesos"
 msgid "Access request"
 msgstr "Solicitud de acceso"
 
-#: src/Domain/Modulos.php:52 src/Idiomas/Guardados.php:292 templates/area/inicio.php:170 templates/solicitudes/listado.php:25
+#: src/Domain/Modulos.php:53 src/Idiomas/Guardados.php:292 templates/area/inicio.php:170 templates/solicitudes/listado.php:25
 msgid "Access requests"
 msgstr "Solicitudes de acceso"
 
@@ -1882,6 +1918,10 @@ msgstr "Cuentas pasadas a las fichas del CRM: %1$d. Autorizaciones anuladas de l
 #: src/Admin/OrganizacionPage.php:372
 msgid "Accounts that cannot be changed (they keep signing in as before)"
 msgstr "Cuentas que no se pueden cambiar (siguen entrando como hasta ahora)"
+
+#: src/Seguimiento/Catalogo.php:49
+msgid "Achieved"
+msgstr "Conseguido"
 
 #: src/Admin/SettingsPage.php:174 templates/accesos/persona.php:44 templates/accesos/personas.php:51 templates/alta/buscar.php:47
 msgid "Actions"
@@ -2406,6 +2446,10 @@ msgstr "Un ingrediente de la lista ya no existe. Elige otro."
 msgid "An optional paragraph at the start and another at the end of each email (up to %d characters). They appear the same in all languages: write them in your families' language."
 msgstr "Un párrafo opcional al principio y otro al final de cada email (hasta %d caracteres). Salen igual en todos los idiomas: escríbelos en el idioma de tus familias."
 
+#: src/Seguimiento/Catalogo.php:40
+msgid "Animation"
+msgstr "Animación"
+
 #: templates/tesoreria/cuotas.php:41
 msgid "Annual family fee by number of children"
 msgstr "Anualidad familiar según nº de hijos"
@@ -2585,6 +2629,10 @@ msgstr "Pedir presupuesto a los autobuses y prereservar"
 #: templates/solicitudes/detalle.php:90
 msgid "Asks for"
 msgstr "Pide"
+
+#: templates/mi-seccion/listado.php:68 templates/mi-seccion/listado.php:87
+msgid "Aspects"
+msgstr "Aspectos"
 
 #: templates/lista-espera/detalle.php:158
 msgid "Assign"
@@ -2838,7 +2886,7 @@ msgstr "Saldo sin contar la recaudación del proyecto"
 msgid "Banana"
 msgstr "Plátano"
 
-#: src/Caja/Cajas.php:39 src/Caja/LibroMayor.php:134 src/Caja/LibroMayor.php:173 src/Domain/Modulos.php:47
+#: src/Caja/Cajas.php:39 src/Caja/LibroMayor.php:134 src/Caja/LibroMayor.php:173 src/Domain/Modulos.php:48
 msgid "Bank"
 msgstr "Banco"
 
@@ -3089,7 +3137,7 @@ msgstr "Presupuesto: %s"
 msgid "Budgeted in expenses"
 msgstr "Presupuestado en gastos"
 
-#: src/Domain/Modulos.php:58 src/Frontend/Views/TesoreriaBaseView.php:32 src/Frontend/Views/TesoreriaBaseView.php:41 src/Idiomas/Guardados.php:256
+#: src/Domain/Modulos.php:61 src/Frontend/Views/TesoreriaBaseView.php:32 src/Frontend/Views/TesoreriaBaseView.php:41 src/Idiomas/Guardados.php:256
 msgid "Budgets"
 msgstr "Presupuestos"
 
@@ -3397,7 +3445,7 @@ msgstr "Anticipo de caja · %s"
 msgid "Cash advances"
 msgstr "Anticipos de caja"
 
-#: src/Domain/Modulos.php:62
+#: src/Domain/Modulos.php:65
 msgid "Cash and general ledger"
 msgstr "Caja y libro mayor"
 
@@ -3411,7 +3459,7 @@ msgstr "Caja"
 msgid "Cash box of %s"
 msgstr "Caja de %s"
 
-#: src/Domain/Modulos.php:62
+#: src/Domain/Modulos.php:65
 msgid "Cash boxes of the group and of each section (entries, transfers and counts, with what is collected and paid in cash in the other modules) and general ledger of the bank and the cash boxes."
 msgstr "Cajas de efectivo del grupo y de cada sección (apuntes, traspasos y arqueos, con lo cobrado y pagado en efectivo en los demás módulos) y libro mayor del banco y las cajas."
 
@@ -3496,6 +3544,10 @@ msgstr "Cámbialo solo si las eñes o los acentos salen mal en la vista previa."
 #: templates/fichas/ficha.php:265
 msgid "Change pending approval: \""
 msgstr "Cambio pendiente de aprobación: «"
+
+#: templates/mi-seccion/listado.php:81
+msgid "Change proposed"
+msgstr "Cambio propuesto"
 
 #: templates/fichas/ficha.php:215 templates/fichas/membresia.php:35 templates/fichas/membresia.php:68
 msgid "Change section"
@@ -4510,6 +4562,10 @@ msgstr "Abonos"
 #: src/Menus/Alergenos.php:19
 msgid "Crustaceans"
 msgstr "Crustáceos"
+
+#: templates/mi-seccion/ficha.php:37
+msgid "Current stage"
+msgstr "Etapa actual"
 
 #: templates/tesoreria/cuotas.php:96
 msgid "Current sum:"
@@ -5712,7 +5768,7 @@ msgstr ""
 msgid "Event:"
 msgstr "Evento:"
 
-#: src/Domain/Modulos.php:56 src/Frontend/Menu.php:77 src/Idiomas/Guardados.php:150 src/Usuarios/RegistroEmails.php:85
+#: src/Domain/Modulos.php:59 src/Frontend/Menu.php:77 src/Idiomas/Guardados.php:150 src/Usuarios/RegistroEmails.php:85
 msgid "Events"
 msgstr "Eventos"
 
@@ -5966,7 +6022,7 @@ msgstr "Familias con cuota"
 msgid "Families' authorisations"
 msgstr "Autorizaciones de las familias"
 
-#: src/Domain/Modulos.php:48
+#: src/Domain/Modulos.php:49
 msgid "Families' authorisations and direct debit files for the bank."
 msgstr "Autorizaciones de las familias y ficheros de adeudos para el banco."
 
@@ -6841,7 +6897,7 @@ msgstr "Caja del grupo"
 msgid "Group contact email"
 msgstr "Email de contacto del grupo"
 
-#: src/Frontend/Menu.php:112 src/Frontend/Menu.php:114 src/Frontend/Menu.php:116 src/Idiomas/Guardados.php:123
+#: src/Frontend/Menu.php:115 src/Frontend/Menu.php:117 src/Frontend/Menu.php:119 src/Idiomas/Guardados.php:123
 msgid "Group details"
 msgstr "Datos del grupo"
 
@@ -6853,7 +6909,7 @@ msgstr "Datos del grupo guardados."
 msgid "Group email"
 msgstr "Email del grupo"
 
-#: src/Domain/Modulos.php:50
+#: src/Domain/Modulos.php:51
 msgid "Group equipment, types and shopping lists."
 msgstr "Material del grupo, tipos y listas de compra."
 
@@ -6879,7 +6935,7 @@ msgstr "Arcas del grupo"
 msgid "Group invitation"
 msgstr "Invitación de grupo"
 
-#: src/Frontend/Menu.php:128 templates/area/inicio.php:216
+#: src/Frontend/Menu.php:131 templates/area/inicio.php:216
 msgid "Group management"
 msgstr "Gestión del grupo"
 
@@ -7141,7 +7197,7 @@ msgstr "Titular:"
 msgid "Holder: %s"
 msgstr "Titular: %s"
 
-#: src/Frontend/Menu.php:137 src/Idiomas/Guardados.php:175 templates/comun/nav.php:30
+#: src/Frontend/Menu.php:140 src/Idiomas/Guardados.php:175 templates/comun/nav.php:30
 msgid "Home"
 msgstr "Inicio"
 
@@ -7541,7 +7597,7 @@ msgstr "Importar desde CSV"
 msgid "Import result"
 msgstr "Resultado de la importación"
 
-#: src/Domain/Modulos.php:47
+#: src/Domain/Modulos.php:48
 msgid "Import the account's transactions, reconcile them and classify the expenses."
 msgstr "Importar los movimientos de la cuenta, conciliarlos y tipificar los gastos."
 
@@ -7838,6 +7894,10 @@ msgstr "Seguro por hijo (€)"
 msgid "Insurance premiums per member"
 msgstr "Primas del seguro por asociado"
 
+#: src/Seguimiento/Catalogo.php:38
+msgid "Integration"
+msgstr "Integración"
+
 #: src/Tesoreria/Banco/Norma43.php:43
 msgid "Interest · fees · custody · expenses and taxes"
 msgstr "Intereses · comisiones · custodia · gastos e impuestos"
@@ -7888,7 +7948,7 @@ msgstr "Tarea no válida."
 msgid "Invalid user."
 msgstr "Usuario no válido."
 
-#: src/Domain/Modulos.php:50 src/Frontend/Menu.php:86 src/Idiomas/Guardados.php:179 templates/area/inicio.php:179
+#: src/Domain/Modulos.php:51 src/Frontend/Menu.php:86 src/Idiomas/Guardados.php:179 templates/area/inicio.php:179
 msgid "Inventory"
 msgstr "Inventario"
 
@@ -8399,6 +8459,10 @@ msgstr "Última página"
 msgid "Last proposed"
 msgstr "Último propuesto"
 
+#: templates/mi-seccion/listado.php:67 templates/mi-seccion/listado.php:84
+msgid "Last review"
+msgstr "Última revisión"
+
 #. translators: %s: text
 #: templates/eventos/menu.php:307
 #, php-format
@@ -8691,7 +8755,7 @@ msgstr "Listados de todo el grupo con las columnas que elijas."
 msgid "Lists of your section with the columns you choose."
 msgstr "Listados de tu sección con las columnas que elijas."
 
-#: src/Domain/Modulos.php:51
+#: src/Domain/Modulos.php:52
 msgid "Lists with the columns you choose."
 msgstr "Listados con las columnas que se elijan."
 
@@ -9269,7 +9333,7 @@ msgstr "Mis datos"
 msgid "My events"
 msgstr "Mis eventos"
 
-#: src/Frontend/Menu.php:43 src/Frontend/Menu.php:122
+#: src/Frontend/Menu.php:43 src/Frontend/Menu.php:125
 msgid "My family"
 msgstr "Mi familia"
 
@@ -9285,7 +9349,11 @@ msgstr "Mis pagos"
 msgid "My reimbursements"
 msgstr "Mis reintegros"
 
-#: src/Frontend/Menu.php:122
+#: src/Domain/Modulos.php:57 src/Frontend/Menu.php:99 templates/mi-seccion/listado.php:30
+msgid "My section"
+msgstr "Mi sección"
+
+#: src/Frontend/Menu.php:125
 msgid "My space"
 msgstr "Mi espacio"
 
@@ -9342,6 +9410,10 @@ msgstr "Pañoleta"
 #: src/Frontend/Views/LibroMayorView.php:108 templates/tesoreria/libro-mayor.php:106 templates/tesoreria/libro-mayor.php:115 templates/tesoreria/presupuestos.php:67
 msgid "Net"
 msgstr "Neto"
+
+#: templates/mi-seccion/listado.php:85
+msgid "Never"
+msgstr "Nunca"
 
 #: templates/tesoreria/banco-previa.php:135
 msgid "New"
@@ -9763,6 +9835,10 @@ msgstr "Nadie del equipo de apoyo tiene cuenta: imprime la hoja y entrégala."
 msgid "Nobody matches \"%s\""
 msgstr "Nadie coincide con «%s»"
 
+#: templates/mi-seccion/listado.php:59
+msgid "Nobody matches this filter."
+msgstr "Nadie coincide con este filtro."
+
 #: src/Idiomas/Guardados.php:217
 msgid "Nobody reviewed it in 90 days: automatically rejected."
 msgstr "Nadie la revisó en 90 días: rechazada automáticamente."
@@ -9879,6 +9955,10 @@ msgstr "Sin probar"
 msgid "Not used yet: the first collection will go as FRST."
 msgstr "Aún sin usar: el primer cobro irá como FRST."
 
+#: src/Seguimiento/Catalogo.php:47
+msgid "Not yet"
+msgstr "Todavía no"
+
 #: src/Frontend/Views/BancoView.php:262 src/Inventario/ListaPdf.php:111 templates/eventos/calendario.php:163 templates/eventos/cuentas.php:406
 msgid "Note"
 msgstr "Nota"
@@ -9886,6 +9966,10 @@ msgstr "Nota"
 #: templates/lista-espera/detalle.php:120 templates/lista-espera/detalle.php:138 templates/tesoreria/banco-revisar.php:136 templates/tesoreria/familia.php:171
 msgid "Note (optional)"
 msgstr "Nota (opcional)"
+
+#: templates/mi-seccion/ficha.php:61
+msgid "Note (optional, stored encrypted)"
+msgstr "Nota (opcional, se guarda cifrada)"
 
 #: templates/eventos/cuentas.php:374
 msgid "Note (required if it doesn't add up)"
@@ -10090,6 +10174,10 @@ msgstr "En lista de espera"
 #: templates/personas/alta.php:284
 msgid "On the waiting list it remains as \"Member\" and their data has been deleted."
 msgstr "En la lista de espera queda como «Asociado/a» y sus datos se han borrado."
+
+#: src/Seguimiento/Catalogo.php:48
+msgid "On the way"
+msgstr "En camino"
 
 #: templates/tesoreria/banco-previa.php:28 templates/tesoreria/banco-previa.php:129
 msgid "On the website"
@@ -10475,7 +10563,7 @@ msgstr "Salidas"
 msgid "Outing or excursion"
 msgstr "Salida o excursión"
 
-#: src/Domain/Modulos.php:56
+#: src/Domain/Modulos.php:59
 msgid "Outings, camps and other activities: leadership team, budget, sign-ups, \"My events\" and payments."
 msgstr "Salidas, acampadas y otras actividades: equipo dirigente, presupuesto, inscripciones, «Mis eventos» y cobros."
 
@@ -10540,19 +10628,19 @@ msgid "PDF to print"
 msgstr "PDF para imprimir"
 
 #. translators: 1: text, 2: text
-#: src/Frontend/Pages.php:171
+#: src/Frontend/Pages.php:173
 #, php-format
 msgid "Page \"%1$s\": it was missing [%2$s], which is what makes it work; it has been put back."
 msgstr "Página «%1$s»: le faltaba [%2$s], que es lo que la hace funcionar; se ha vuelto a poner."
 
 #. translators: 1: text, 2: text
-#: src/Frontend/Pages.php:159
+#: src/Frontend/Pages.php:161
 #, php-format
 msgid "Page \"%1$s\": published (it was \"%2$s\")."
 msgstr "Página «%1$s»: publicada (estaba como «%2$s»)."
 
 #. translators: %s: text
-#: src/Frontend/Pages.php:149
+#: src/Frontend/Pages.php:151
 #, php-format
 msgid "Page \"%s\": recovered from the trash."
 msgstr "Página «%s»: recuperada de la papelera."
@@ -10631,6 +10719,10 @@ msgstr "Participantes con dependencia reconocida: escribe solo cuántos (sin nom
 msgid "Participants: %d (the places or, if there are none, the expected ones)."
 msgstr "Participantes: %d (las plazas o, si no hay, los previstos)."
 
+#: src/Seguimiento/Catalogo.php:39
+msgid "Participation"
+msgstr "Participación"
+
 #: templates/eventos/config.php:100
 msgid "Participation authorisation text"
 msgstr "Texto de la autorización de participación"
@@ -10689,7 +10781,7 @@ msgstr "Control de pagos"
 msgid "Payment control ·"
 msgstr "Control de pagos ·"
 
-#: src/Domain/Modulos.php:46
+#: src/Domain/Modulos.php:47
 msgid "Payment control, families, fees and federation cost."
 msgstr "Control de pagos, familias, cuotas y coste federativo."
 
@@ -10978,6 +11070,14 @@ msgstr "Material personal"
 #: templates/eventos/formulario.php:209
 msgid "Personal equipment (what each participant brings)"
 msgstr "Material personal (lo que lleva cada participante)"
+
+#: templates/mi-seccion/ficha.php:66
+msgid "Personal goal chosen by the person"
+msgstr "Objetivo personal elegido por la persona"
+
+#: src/Domain/Modulos.php:57
+msgid "Personal progression of the people in each section: stage, aspects, goals and review history."
+msgstr "Progresión personal de las personas de cada sección: etapa, aspectos, objetivos e historial de revisiones."
 
 #: src/Crm/Altas.php:49
 msgid "Personal reasons"
@@ -11300,6 +11400,10 @@ msgstr "Abonarés · entregas · ingresos"
 #: src/Frontend/Views/FichaView.php:178
 msgid "Proposal withdrawn."
 msgstr "Propuesta retirada."
+
+#: templates/mi-seccion/ficha.php:71
+msgid "Propose a change to the next stage"
+msgstr "Proponer el cambio a la siguiente etapa"
 
 #: templates/eventos/menu.php:377
 msgid "Propose as a Food item"
@@ -11953,7 +12057,7 @@ msgstr "Reintegro pedido. Tesorería lo revisará y te avisaremos."
 msgid "Reimbursement · %s"
 msgstr "Reintegro · %s"
 
-#: src/Caja/Automaticos.php:46 src/Domain/Modulos.php:60 src/Frontend/Menu.php:91 src/Idiomas/Guardados.php:270
+#: src/Caja/Automaticos.php:46 src/Domain/Modulos.php:63 src/Frontend/Menu.php:91 src/Idiomas/Guardados.php:270
 msgid "Reimbursements"
 msgstr "Reintegros"
 
@@ -12133,7 +12237,7 @@ msgstr "Comunicación a ASDE Baleares (30 días antes)"
 msgid "Reporting"
 msgstr "Comunicación"
 
-#: src/Domain/Modulos.php:51 src/Frontend/Menu.php:73 src/Idiomas/Guardados.php:173 templates/area/inicio.php:176
+#: src/Domain/Modulos.php:52 src/Frontend/Menu.php:73 src/Idiomas/Guardados.php:173 templates/area/inicio.php:176
 msgid "Reports"
 msgstr "Informes"
 
@@ -12357,6 +12461,10 @@ msgstr "Revisar"
 msgid "Review (%d)"
 msgstr "Revisar (%d)"
 
+#: src/Frontend/Views/MiSeccionView.php:126
+msgid "Review saved."
+msgstr "Revisión guardada."
+
 #: templates/area/inicio.php:173
 msgid "Review the changes families request on the records."
 msgstr "Revisa los cambios que piden las familias en las fichas."
@@ -12516,7 +12624,7 @@ msgstr "Orden de domiciliación de adeudo directo SEPA"
 msgid "SEPA direct debit · family"
 msgstr "Domiciliación SEPA · familia"
 
-#: src/Domain/Modulos.php:48 src/Idiomas/Guardados.php:128 templates/tesoreria/sepa.php:75
+#: src/Domain/Modulos.php:49 src/Idiomas/Guardados.php:128 templates/tesoreria/sepa.php:75
 msgid "SEPA direct debits"
 msgstr "Domiciliaciones SEPA"
 
@@ -12587,6 +12695,10 @@ msgstr "Guardar contraseña"
 #: templates/informes/editor.php:159
 msgid "Save report"
 msgstr "Guardar informe"
+
+#: templates/mi-seccion/ficha.php:73
+msgid "Save review"
+msgstr "Guardar revisión"
 
 #: templates/eventos/inscripciones.php:251
 msgid "Save the adjustment"
@@ -12750,7 +12862,7 @@ msgstr "Etapa Acogida al Scouter (EAS)"
 msgid "Scouter Trainer Stage (EFS)"
 msgstr "Etapa Formador/a de Scouters (EFS)"
 
-#: src/Domain/Modulos.php:53 src/Idiomas/Guardados.php:64 templates/alta-scouters/formulario.php:27
+#: src/Domain/Modulos.php:54 src/Idiomas/Guardados.php:64 templates/alta-scouters/formulario.php:27
 msgid "Scouter registration"
 msgstr "Alta de scouters"
 
@@ -12762,7 +12874,7 @@ msgstr "Scouters"
 msgid "Scouters (event team)"
 msgstr ""
 
-#: src/Domain/Modulos.php:60
+#: src/Domain/Modulos.php:63
 msgid "Scouters ask to be repaid for an expense (with the receipt and, where applicable, an event); Treasury approves it and Treasury or Coordination mark it as paid."
 msgstr "Los scouters piden que les devuelvan un gasto (con el justificante y, si procede, un evento); Tesorería lo aprueba y Tesorería o Coordinación lo marcan pagado."
 
@@ -12987,6 +13099,10 @@ msgstr "Ver los reintegros"
 msgid "See the shop management"
 msgstr "Ver la gestión de la tienda"
 
+#: templates/mi-seccion/ficha.php:55
+msgid "See the three stages and add a note"
+msgstr "Ver las tres etapas y añadir una nota"
+
 #: src/Idiomas/Guardados.php:319
 msgid "See the waiting list and get in touch"
 msgstr "Ver la lista de espera y contactar"
@@ -13182,7 +13298,7 @@ msgstr "Compartido"
 msgid "Shirt order"
 msgstr "Pedido de camisas"
 
-#: src/Caja/Automaticos.php:45 src/Domain/Modulos.php:49 src/Frontend/Menu.php:57 src/Idiomas/Guardados.php:298
+#: src/Caja/Automaticos.php:45 src/Domain/Modulos.php:50 src/Frontend/Menu.php:57 src/Idiomas/Guardados.php:298
 msgid "Shop"
 msgstr "Tienda"
 
@@ -13542,13 +13658,17 @@ msgstr "Reparto por sección"
 msgid "Split of round %s saved."
 msgstr "Reparto de la ronda %s guardado."
 
-#: src/Domain/Modulos.php:58
+#: src/Domain/Modulos.php:61
 msgid "Split of the fees between the group and the sections, and the budget of each."
 msgstr "Reparto de las cuotas entre el grupo y las secciones y presupuesto de cada una."
 
 #: src/Idiomas/Guardados.php:88
 msgid "Squid and octopus"
 msgstr "Calamar y pulpo"
+
+#: templates/mi-seccion/listado.php:48 templates/mi-seccion/listado.php:66 templates/mi-seccion/listado.php:78
+msgid "Stage"
+msgstr "Etapa"
 
 #: src/Tesoreria/Banco/Norma43.php:42
 msgid "Stamps · brokerage · policy"
@@ -15281,7 +15401,7 @@ msgstr "Los datos del grupo se escriben una sola vez, aquí: se usan en las domi
 msgid "The group's equipment and gear, and the shopping lists."
 msgstr "El material y el equipamiento del grupo, y las listas de compra."
 
-#: src/Domain/Modulos.php:52
+#: src/Domain/Modulos.php:53
 msgid "The group's link to request access and its review."
 msgstr "El enlace del grupo para pedir el acceso y su revisión."
 
@@ -15299,7 +15419,7 @@ msgstr "Las salidas, acampadas y campamentos del grupo a los que estás convocad
 msgid "The group's outings, camps and summer camps you are invited to. Sign up from here: when you sign up a minor you sign their <strong>participation authorisation</strong>."
 msgstr "Las salidas, acampadas y campamentos del grupo a los que estáis convocados. Inscribe desde aquí: al inscribir a un menor firmas su <strong>autorización de participación</strong>."
 
-#: src/Domain/Modulos.php:49
+#: src/Domain/Modulos.php:50
 msgid "The group's products (uniform, badges and more): orders, payment and delivery."
 msgstr "Productos del grupo (uniforme, insignias y más): pedidos, pago y entrega."
 
@@ -15395,7 +15515,7 @@ msgstr "La letra del NIE no corresponde a sus números. Revísalo."
 msgid "The limit per person must be a number from 0 to %d (0 = no limit)."
 msgstr "El límite por persona tiene que ser un número de 0 a %d (0 = sin límite)."
 
-#: src/Domain/Modulos.php:53
+#: src/Domain/Modulos.php:54
 msgid "The link for scouters to register."
 msgstr "El enlace para que los scouters se den de alta."
 
@@ -15421,7 +15541,7 @@ msgstr "El enlace es de un solo uso y vale %d días. Necesitarás el usuario y l
 msgid "The link is valid for %d days. If it was not you, ignore this email: the sign-up will be deleted by itself."
 msgstr "El enlace vale %d días. Si no has sido tú, ignora este correo: la inscripción se borrará sola."
 
-#: src/Domain/Modulos.php:54
+#: src/Domain/Modulos.php:55
 msgid "The link to join the waiting list, the list for the team and the handover to the CRM."
 msgstr "El enlace para apuntarse a la lista de espera, la lista para el equipo y el paso al CRM."
 
@@ -15672,6 +15792,10 @@ msgstr "Se puede anotar el precio de uno o de dos autobuses."
 #: templates/inventario/importar.php:97
 msgid "The price, with a comma or point for the decimals (12,50). The year of purchase, with four digits or blank."
 msgstr "El precio, con coma o punto para los decimales (12,50). El año de compra, con cuatro cifras o en blanco."
+
+#: templates/mi-seccion/listado.php:31
+msgid "The programme asks for a review at least every quarter. The stage describes where each person is; it is not a prize and people are not compared."
+msgstr "El programa pide una revisión al menos cada trimestre. La etapa describe dónde está cada persona; no es un premio y no se compara a las personas."
 
 #. translators: %d: number
 #: templates/fichas/cambios.php:179
@@ -17305,7 +17429,7 @@ msgstr "Los traspasos con el banco los hace Tesorería."
 msgid "Transport"
 msgstr "Transporte"
 
-#: src/Domain/Modulos.php:46 src/Frontend/Menu.php:99 src/Idiomas/Guardados.php:297 templates/area/inicio.php:185
+#: src/Domain/Modulos.php:47 src/Frontend/Menu.php:102 src/Idiomas/Guardados.php:297 templates/area/inicio.php:185
 msgid "Treasury"
 msgstr "Tesorería"
 
@@ -17621,7 +17745,7 @@ msgstr "Manual de uso"
 msgid "Username"
 msgstr "Usuario"
 
-#: src/Frontend/Menu.php:102 src/Idiomas/Guardados.php:312 templates/area/inicio.php:190
+#: src/Frontend/Menu.php:105 src/Idiomas/Guardados.php:312 templates/area/inicio.php:190
 msgid "Users"
 msgstr "Usuarios"
 
@@ -17875,7 +17999,7 @@ msgstr "Administrador/a WP"
 msgid "Waiting"
 msgstr "En espera"
 
-#: src/Domain/Modulos.php:54 src/Frontend/Menu.php:96 src/Idiomas/Guardados.php:191 src/Usuarios/RegistroEmails.php:84
+#: src/Domain/Modulos.php:55 src/Frontend/Menu.php:96 src/Idiomas/Guardados.php:191 src/Usuarios/RegistroEmails.php:84
 msgid "Waiting list"
 msgstr "Lista de espera"
 
@@ -18520,11 +18644,21 @@ msgstr "Dado de baja el %1$s por %2$s."
 msgid "Written on the request"
 msgstr "Escrito en la solicitud"
 
+#. translators: 1: year, 2: total years
+#: templates/mi-seccion/ficha.php:29
+#, php-format
+msgid "Year %1$d of %2$d"
+msgstr "Año %1$d de %2$d"
+
 #. translators: %s: text
 #: src/Caja/Periodo.php:24
 #, php-format
 msgid "Year %s"
 msgstr "Año %s"
+
+#: templates/mi-seccion/listado.php:65 templates/mi-seccion/listado.php:75
+msgid "Year in the section"
+msgstr "Año en la sección"
 
 #: src/Inventario/Importador.php:40 templates/inventario/lista.php:75 templates/inventario/lista.php:113
 msgid "Year of purchase"
@@ -18798,6 +18932,10 @@ msgstr "No tienes permiso para pedir reintegros."
 msgid "You do not have permission to see this."
 msgstr "No tienes permiso para ver esto."
 
+#: templates/mi-seccion/ficha.php:43
+msgid "You do not need to achieve everything to change stage: the team decides. Changing the stage starts the aspects from scratch."
+msgstr "No hace falta conseguirlo todo para cambiar de etapa: lo decide el equipo. Al cambiar de etapa, los aspectos empiezan de cero."
+
 #: templates/pagos/sepa.php:49
 msgid "You have authorised"
 msgstr "Has autorizado a"
@@ -18878,7 +19016,7 @@ msgstr "Tu DNI o NIE"
 msgid "Your account cannot sign direct debit authorisations."
 msgstr "Tu cuenta no puede firmar autorizaciones de domiciliación."
 
-#: src/Fichas/PermisosFicha.php:115 src/Frontend/Router.php:237
+#: src/Fichas/PermisosFicha.php:115 src/Frontend/Router.php:239
 msgid "Your account is read-only: nothing can be changed."
 msgstr "Tu cuenta es de solo lectura: no se puede cambiar nada."
 
@@ -18950,7 +19088,7 @@ msgstr "Ahora no se puede comprobar tu membresía en el CRM del grupo. Inténtal
 msgid "Your membership is not active in the group's CRM. Contact the Secretary's office."
 msgstr "Tu membresía no está activa en el CRM del grupo. Contacta con la Secretaría."
 
-#: src/Frontend/Router.php:207
+#: src/Frontend/Router.php:209
 msgid "Your office account can only view People, Reports and Users."
 msgstr "Tu cuenta de la oficina solo puede consultar Personas, Informes y Usuarios."
 
@@ -19754,7 +19892,7 @@ msgstr "abre datos de salud, dinero o cuentas de acceso."
 msgid "optional"
 msgstr "opcional"
 
-#: src/Accesos/Catalogo.php:191 src/Usuarios/Contacto.php:74
+#: src/Accesos/Catalogo.php:195 src/Usuarios/Contacto.php:74
 msgid "or"
 msgstr "o"
 

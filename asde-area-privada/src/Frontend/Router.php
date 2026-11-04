@@ -19,6 +19,7 @@ use AsdeBalears\AreaPrivada\Frontend\Views\ReintegrosView;
 use AsdeBalears\AreaPrivada\Frontend\Views\TiendaProveedorView;
 use AsdeBalears\AreaPrivada\Frontend\Views\RecetasView;
 use AsdeBalears\AreaPrivada\Frontend\Views\ListaEsperaView;
+use AsdeBalears\AreaPrivada\Frontend\Views\MiSeccionView;
 use AsdeBalears\AreaPrivada\Frontend\Views\AltaUsuariosView;
 use AsdeBalears\AreaPrivada\Frontend\Views\AreaPrivadaView;
 use AsdeBalears\AreaPrivada\Frontend\Views\AyudaView;
@@ -59,7 +60,7 @@ use AsdeBalears\AreaPrivada\Socios\TareaNumeracion;
 final class Router {
 
 	/** Páginas que se pueden abrir en la ventana emergente. */
-	public const MODALES = array( 'ficha', 'alta', 'solicitudes', 'tienda_gestion', 'inventario', 'inventario_tipos', 'inventario_compras', 'banco', 'tesoreria', 'personas', 'cambios', 'caja' );
+	public const MODALES = array( 'ficha', 'alta', 'solicitudes', 'tienda_gestion', 'inventario', 'inventario_tipos', 'inventario_compras', 'banco', 'tesoreria', 'personas', 'cambios', 'caja', 'mi_seccion' );
 
 	/** La pide la ventana emergente del área (assets/js/area.js). */
 	public static function pide_modal(): bool {
@@ -115,6 +116,7 @@ final class Router {
 		'inventario_tipos'   => array( 'asde_inventario_tipos', InventarioTiposView::class ),
 		'inventario_compras' => array( 'asde_inventario_compras', InventarioComprasView::class ),
 		'lista_espera'       => array( 'asde_lista_espera', ListaEsperaView::class ),
+		'mi_seccion'         => array( 'asde_mi_seccion', MiSeccionView::class ), // v0.63 (doc 65).
 		'inscripcion_espera' => array( 'asde_inscripcion_espera', InscripcionEsperaView::class ),
 		'tienda_publica'     => array( 'asde_tienda_publica', TiendaPublicaView::class ),
 		// v0.35: eventos (doc 43).

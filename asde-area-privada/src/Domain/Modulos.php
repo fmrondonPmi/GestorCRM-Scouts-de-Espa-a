@@ -35,9 +35,10 @@ final class Modulos {
 	public const REINTEGROS    = 'reintegros';
 	public const PRESUPUESTOS  = 'presupuestos';
 	public const CAJA          = 'caja';
+	public const MI_SECCION    = 'mi_seccion';
 
 	/** Módulos que nacen apagados (v0.32): cambian lo que ve el grupo y se encienden a mano. */
-	public const POR_DEFECTO_APAGADOS = array( self::LISTA_ESPERA, self::EVENTOS, self::REINTEGROS, self::CAJA );
+	public const POR_DEFECTO_APAGADOS = array( self::LISTA_ESPERA, self::EVENTOS, self::REINTEGROS, self::CAJA, self::MI_SECCION );
 
 	/** módulo => [nombre, qué es, capabilities que se quitan si está apagado, módulo del que depende] */
 	/** Etiquetas traducidas al idioma de WordPress (doc 62). @return array<array-key, mixed> */
@@ -52,6 +53,8 @@ final class Modulos {
 		self::SOLICITUDES   => array( __( 'Access requests', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'The group\'s link to request access and its review.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), array( 'asde_aprobar_solicitudes' ), '' ),
 		self::ALTA_SCOUTERS => array( __( 'Scouter registration', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'The link for scouters to register.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), array(), '' ),
 		self::LISTA_ESPERA  => array( __( 'Waiting list', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'The link to join the waiting list, the list for the team and the handover to the CRM.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), array( 'asde_lista_espera', 'asde_lista_espera_alta' ), '' ),
+		// v0.63 (doc 65): apagado por defecto, como todo módulo nuevo (regla 5).
+		self::MI_SECCION    => array( __( 'My section', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Personal progression of the people in each section: stage, aspects, goals and review history.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), array( 'asde_seguimiento', 'asde_seguimiento_editar' ), '' ),
 		// v0.35 (doc 43): apagado por defecto, como todo módulo nuevo (regla 5).
 		self::EVENTOS       => array( __( 'Events', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), __( 'Outings, camps and other activities: leadership team, budget, sign-ups, "My events" and payments.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), array( 'asde_eventos_gestion', 'asde_menus_recetas', 'asde_eventos_grupo', 'asde_eventos_economia', 'asde_eventos_config', 'asde_eventos_inscribir', 'asde_eventos_material' ), '' ),
 		// v0.54 (doc 57): solo añade una pestaña a Tesorería (encendido por defecto).

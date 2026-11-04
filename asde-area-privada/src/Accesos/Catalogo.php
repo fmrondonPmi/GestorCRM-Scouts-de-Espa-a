@@ -42,6 +42,7 @@ final class Catalogo {
 		'tienda'       => 'Tienda',
 		'inventario'   => 'Inventario',
 		'lista_espera' => 'Lista de espera',
+		'mi_seccion'   => 'Mi sección',
 		'eventos'      => 'Eventos',
 		'reintegros'   => 'Reintegros',
 	);
@@ -88,6 +89,9 @@ final class Catalogo {
 
 			'asde_lista_espera'         => array( 'lista_espera', self::VER, 'Ver la lista de espera y contactar', false, array() ),
 			'asde_lista_espera_alta'    => array( 'lista_espera', self::ACCION, 'Asignar sección, dar de alta en el CRM y borrar', true, array( 'asde_lista_espera' ) ),
+
+			'asde_seguimiento'          => array( 'mi_seccion', self::VER, 'Ver la progresión personal de la sección', false, array() ),
+			'asde_seguimiento_editar'   => array( 'mi_seccion', self::ACCION, 'Revisar la progresión personal de las personas de la sección', true, array( 'asde_seguimiento' ) ),
 
 			'asde_eventos_inscribir'    => array( 'eventos', self::VER, 'Ver «Mis eventos» e inscribirse', false, array() ),
 			'asde_eventos_gestion'      => array( 'eventos', self::ACCION, 'Crear y gestionar los eventos de sus secciones', false, array( 'asde_eventos_inscribir' ) ),

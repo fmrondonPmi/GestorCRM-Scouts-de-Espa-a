@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.62.1
+Stable tag: 0.63.0
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -61,6 +61,9 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.63.0 =
+* New module "My section" (off by default; switch it on in Scout Groups → Modules): scouters follow the personal progression of the people in their section (stage and aspects from the Scouts of Spain Educational Programme, personal goal, encrypted notes and review history). Coordination can read it. New table, capabilities and page.
 
 = 0.62.1 =
 * Treasury: the family number in Families opens a window with that family's transactions (read-only). "Recent withdrawals" can be marked as seen, and then stop warning Treasury. "Mark as reviewed": the family field is now the same type-ahead selector as when reconciling (from 3 letters), also inside the pop-up window.
@@ -174,6 +177,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * The changelog of versions 0.42.0 and earlier is in changelog.txt, in the plugin folder.
 
 == Upgrade Notice ==
+
+= 0.63.0 =
+New "My section" module (off by default): progression tracking for scouters. Adds one database table (created on update).
 
 = 0.62.1 =
 Treasury: family transactions in a window, "Mark as seen" for recent withdrawals and a type-ahead family selector when marking bank transactions as reviewed. No database changes.

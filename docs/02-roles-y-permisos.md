@@ -170,6 +170,8 @@ asde_manage_users                 # alta/baja/vinculación de usuarios
 | Capability | Roles | Qué permite |
 |---|---|---|
 | `asde_lista_espera` | Scouter, Secretaría, Coordinación, Tesorería | Ver la lista de espera del grupo (toda, con filtro por sección, P-124) y el enlace para apuntarse; enviar un email, apuntar un contacto y cambiar el estado. El documento no lo ven. |
+| `asde_seguimiento` | Scouter (sus secciones), Coordinación (todas) | **«Mi sección» (v0.63, doc 65)**: ver la progresión personal de las personas de la sección. Módulo apagado por defecto. |
+| `asde_seguimiento_editar` | Scouter | Además: guardar revisiones (etapa, aspectos, objetivo personal, notas). Coordinación solo lee. |
 | `asde_lista_espera_alta` | Secretaría, Coordinación | Además: ver el documento, asignar la sección, renovar el enlace del grupo, borrar una inscripción y **dar de alta en el CRM** desde ella (con «Alta de socio/a», que necesita también `asde_manage_users` y las altas en el CRM activas). |
 
 - Módulo **«Lista de espera»** en wp-admin → Grupos Scouts → Módulos, **apagado por defecto** (regla 5): `Domain\Modulos::POR_DEFECTO_APAGADOS`; encendido se guarda `[lista_espera => true]` en `asde_ap_modulos`. Apagado, nadie del grupo tiene esas dos capabilities y el enlace del grupo no enseña el formulario (los enlaces personales siguen sirviendo para ver o borrar los datos).

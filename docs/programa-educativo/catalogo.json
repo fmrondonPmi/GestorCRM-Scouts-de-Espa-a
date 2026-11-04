@@ -1,0 +1,2794 @@
+{
+ "fuente": "Programa Educativo de Scouts de España (2018, rev. agosto 2020), 4.2 Compromisos educativos, pp. 27-67. Transcripción literal de imágenes; revisar antes de usar.",
+ "compromisos": [
+  {
+   "id": "social",
+   "nombre": "Compromiso social",
+   "secciones": {
+    "castores": {
+     "paginas": "27-28",
+     "bloques": [
+      {
+       "bloque": "NORMAS CÍVICAS, SOCIALES, CONVIVENCIA",
+       "objetivos": [
+        {
+         "objetivo": "Conocer y relacionarse de forma constructiva con adultos más próximos y con sus iguales",
+         "contenidos": [
+          "Conocimiento, identificación y respeto de los diferentes tipos de familia y las personas que componen la unidad familiar"
+         ],
+         "indicadores": [
+          "Conoce a las personas que componen la familia y muestra respeto hacia ellas"
+         ]
+        },
+        {
+         "objetivo": "Ayudar y compartir",
+         "contenidos": [
+          "Respeto de las normas de la colonia y de las decisiones tomadas democráticamente"
+         ],
+         "indicadores": [
+          "Identifica las personas de una unidad familiar diversa"
+         ]
+        },
+        {
+         "objetivo": "Aceptar las orientaciones de adultos, apreciando los valores del Escultismo",
+         "contenidos": [
+          "Valoración de la importancia de las normas en la colonia y en otros contextos sociales cercanos"
+         ],
+         "indicadores": [
+          "Se relaciona de forma constructiva con iguales y personas adultas"
+         ]
+        },
+        {
+         "objetivo": "Asumir como propias las normas sociales y convivencia",
+         "contenidos": [
+          "La generosidad: compartir"
+         ],
+         "indicadores": [
+          "Utiliza formas de relación con iguales y personas adultas"
+         ]
+        },
+        {
+         "objetivo": "Conocer los Derechos de la Infancia",
+         "contenidos": [
+          "Aplicación de formas, normas y gestos elementales de relación y convivencia con todo tipo de personas sin diferenciación",
+          "Conocimiento de los Derechos de la Infancia",
+          "Iniciación en la Convención de los Derechos de la Infancia"
+         ],
+         "indicadores": [
+          "Tiene una actitud solidaria de respeto y tolerancia",
+          "Participa en el establecimiento y respeta las normas y decisiones de la colonia",
+          "Comparte con sus iguales sus cosas",
+          "Conoce la existencia de la Convención de los Derechos de la Infancia"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "VOLUNTARIADO Y COOPERACIÓN",
+       "objetivos": [
+        {
+         "objetivo": "Colaborar en las necesidades de la colonia mediante una serie de pautas marcadas inicialmente por personas adultas",
+         "contenidos": [
+          "Colaboración en el entorno atendiendo a las necesidades",
+          "La buena acción como herramienta de servicio"
+         ],
+         "indicadores": [
+          "Detecta y colabora con las necesidades de la colonia",
+          "Utiliza la buena acción en su vida"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "AUTONOMÍA, INICIATIVA Y RESPONSABILIDAD PERSONAL",
+       "objetivos": [
+        {
+         "objetivo": "Desenvolverse en situaciones cotidianas con autonomía atendiendo a pautas concretas y sencillas",
+         "contenidos": [
+          "Organización y cuidado de su material"
+         ],
+         "indicadores": [
+          "Coloca su material y participa en la preparación y recogida de material de la colonia"
+         ]
+        },
+        {
+         "objetivo": "Hacerse valer de forma autónoma",
+         "contenidos": [
+          "Conocimiento de sus capacidades, potencialidades y limitaciones",
+          "Asunción e interés por pequeñas tareas",
+          "Finalización de las tareas que ha comenzado",
+          "Iniciativa propia ante las rutinas diarias"
+         ],
+         "indicadores": [
+          "Conoce sus capacidades, potencialidades y limitaciones",
+          "Realiza pequeñas tareas con las que se compromete o se le encomiendan",
+          "Toma la iniciativa ante las rutinas"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "HABILIDADES SOCIALES",
+       "objetivos": [
+        {
+         "objetivo": "Expresar sus opiniones con orden y claridad",
+         "contenidos": [
+          "Utilización del cuerpo como medio de expresión y comunicación"
+         ],
+         "indicadores": [
+          "Expone sus ideas al resto de la colonia"
+         ]
+        },
+        {
+         "objetivo": "Respetar los turnos de palabra y las opiniones de las demás personas",
+         "contenidos": [
+          "Exposición de sus propias ideas y opiniones"
+         ],
+         "indicadores": [
+          "Existe concordancia entre lo que expresa verbalmente y lo que comunica con su cuerpo"
+         ]
+        },
+        {
+         "objetivo": "Emplear el diálogo como solución de conflictos",
+         "contenidos": [
+          "Actitud de escucha al resto de la colonia",
+          "Uso del turno de palabra",
+          "Valoración del diálogo para la solución de conflictos y rechazo de la violencia"
+         ],
+         "indicadores": [
+          "Escucha al resto de personas cuando están hablando",
+          "Pide y respeta el turno de palabra",
+          "Resuelve conflictos mediante el uso de la palabra y rechaza la violencia"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "EDUCACIÓN VIAL",
+       "objetivos": [
+        {
+         "objetivo": "Conocer y respetar las normas básicas de ciudad para la circulación a pie y vehículos sin motor",
+         "contenidos": [
+          "Interpretación y respeto a los semáforos, agentes de tráfico y principales señales",
+          "Elección de los momentos y vías más adecuados para circular",
+          "Diferenciación de los medios de transporte y las vías públicas por las que circulan",
+          "Uso adecuado de patines, monopatines, patinetes y bicicleta en la vía pública",
+          "Critica el uso incorrecto de la vía pública"
+         ],
+         "indicadores": [
+          "Conoce el significado del semáforo y las señales de agentes de tráfico y las principales señales verticales",
+          "Circula por la vía pública en los momentos y espacios adecuados",
+          "Sigue las normas de circulación acorde al vehículo con el que se desplaza",
+          "Rechaza comportamientos inadecuados"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "EDUCACIÓN PARA LA IGUALDAD DE OPORTUNIDADES",
+       "objetivos": [
+        {
+         "objetivo": "Participar con independencia de las diferencias individuales",
+         "contenidos": [
+          "Análisis de los estereotipos de género vinculados con los colores, los juguetes y los oficios",
+          "El aspecto físico y las diferencias entre unas personas y otras",
+          "Posibilidades y limitaciones corporales: cognitivas y motrices",
+          "Trato igualitario a todas las personas con independencia de las diferencias externas",
+          "Conocimiento de otras culturas y sus costumbres"
+         ],
+         "indicadores": [
+          "Tiene un comportamiento no discriminatorio ante personas con diversidad sensorial, cognitiva y motriz, de otra cultura o de otro sexo",
+          "Juega con juegos, colores y oficios con independencia de los roles tradicionales de género",
+          "Juega con todas las personas",
+          "Conoce costumbres de su cultura y de otras culturas"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "ORIENTACIÓN ACADÉMICA E INSERCIÓN LABORAL",
+       "objetivos": [
+        {
+         "objetivo": "Conocer los diferentes oficios y sus principales funciones",
+         "contenidos": [
+          "Conocimiento y representación de cada uno de los oficios"
+         ],
+         "indicadores": [
+          "Muestra una actitud abierta y sabe representar los diferentes oficios",
+          "Tiene una actitud participativa en los órganos de decisión de la colonia"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "TECNOLOGÍAS DE LA INFORMACIÓN Y LA COMUNICACIÓN",
+       "objetivos": [
+        {
+         "objetivo": "Iniciarse en el uso responsable de los medios de información y comunicación",
+         "contenidos": [
+          "Las horas y la lectura del reloj analógico y digital",
+          "Identificación de los principales medios de comunicación",
+          "Manejo elemental de aparatos tecnológicos cercanos: teléfono, televisión, ordenador, tabletas, cámaras digitales y videoconsolas"
+         ],
+         "indicadores": [
+          "Conoce las horas de reloj",
+          "Diferencia unos medios de comunicación de otros",
+          "Sabe utilizar a nivel básico elementos tecnológicos a su alcance: teléfono, televisión, ordenador, tabletas, cámaras digitales y videoconsolas"
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    "lobatos": {
+     "paginas": "29-30",
+     "bloques": [
+      {
+       "bloque": "NORMAS CÍVICAS, SOCIALES, CONVIVENCIA",
+       "objetivos": [
+        {
+         "objetivo": "Analizar y comportarse conforme las normas de convivencia y los valores del Escultismo en las relaciones con otras personas (familia, colegio, etc.)",
+         "contenidos": [
+          "Respeto con los acuerdos y decisiones tomados en el grupo y alcanzados a través del diálogo entre todas las personas implicadas"
+         ],
+         "indicadores": [
+          "Respeta las decisiones tomadas democráticamente por las demás personas y las normas"
+         ]
+        },
+        {
+         "objetivo": "Mantener una actitud abierta y de colaboración hacia las personas y su entorno",
+         "contenidos": [
+          "La paz y los comportamientos pacíficos en el trato con las demás personas"
+         ],
+         "indicadores": [
+          "Se comporta de manera positiva y pacífica ante el resto de la manada"
+         ]
+        },
+        {
+         "objetivo": "Profundizar en el conocimiento de los Derechos de la Infancia",
+         "contenidos": [
+          "El conflicto y la autonomía en la resolución de situaciones problemáticas",
+          "Utilización de las reglas para la organización de situaciones colectivas del juego",
+          "Detección de situaciones insolidarias",
+          "Los derechos de la infancia",
+          "Conocimiento de los Derechos de la Infancia y disposición para exigir su cumplimiento"
+         ],
+         "indicadores": [
+          "Intenta dar soluciones a los conflictos de la manada",
+          "Utiliza las reglas para la organización del juego",
+          "Soluciona problemas de manera autónoma",
+          "Tiene mayor conocimiento sobre los Derechos de la Infancia y vela por su cumplimiento"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "VOLUNTARIADO Y COOPERACIÓN",
+       "objetivos": [
+        {
+         "objetivo": "Ayudar en el entorno social mediante una serie de pautas marcadas inicialmente por personas adultas",
+         "contenidos": [
+          "Ayuda en el entorno social guiada por personas adultas",
+          "La buena acción como herramienta de servicio"
+         ],
+         "indicadores": [
+          "Ayuda en el entorno social mediante las pautas que le marcan personas adultas",
+          "Utiliza la buena acción en su vida"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "AUTONOMÍA, INICIATIVA Y RESPONSABILIDAD PERSONAL",
+       "objetivos": [
+        {
+         "objetivo": "Desarrollar tareas de forma autónoma en su vida diaria, con el seguimiento de personas adultas",
+         "contenidos": [
+          "Organización adecuada de su tiempo y sus tareas",
+          "Compromiso con aquello que es capaz de realizar"
+         ],
+         "indicadores": [
+          "Es responsable con las actividades que se compromete",
+          "Es puntual en la llegada a las actividades"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "AUTONOMÍA, INICIATIVA Y RESPONSABILIDAD PERSONAL",
+       "objetivos": [
+        {
+         "objetivo": "Asumir responsabilidades individuales adecuadas a su edad",
+         "contenidos": [
+          "Responsabilidad y constancia con los compromisos adquiridos",
+          "Desarrollo de tareas de forma autónoma en su vida diaria",
+          "Asunción de responsabilidades individuales adecuadas a su edad"
+         ],
+         "indicadores": [
+          "Planifica su tiempo en función de las cosas que tiene que realizar",
+          "Desarrolla tareas de forma autónoma en su vida diaria",
+          "Asume responsabilidades individuales adecuadas a su edad"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "HABILIDADES SOCIALES",
+       "objetivos": [
+        {
+         "objetivo": "Expresar las opiniones con coherencia",
+         "contenidos": [
+          "Participación en las actividades con el resto de la manada"
+         ],
+         "indicadores": [
+          "Se relaciona correctamente con todas las personas de la manada"
+         ]
+        },
+        {
+         "objetivo": "Respetar turnos de palabra",
+         "contenidos": [
+          "Escucha activa"
+         ],
+         "indicadores": [
+          "Escucha atentamente y comprende las ideas de las demás personas"
+         ]
+        },
+        {
+         "objetivo": "Escuchar al resto de la manada",
+         "contenidos": [
+          "Expresión de sus propias ideas y opiniones aportando argumentos para las mismas"
+         ],
+         "indicadores": [
+          "Explica y argumenta sus ideas"
+         ]
+        },
+        {
+         "objetivo": "Desarrollar la empatía",
+         "contenidos": [
+          "Respeto de los turnos de palabra en conversaciones colectivas"
+         ],
+         "indicadores": [
+          "Es capaz de respetar el turno de palabra"
+         ]
+        },
+        {
+         "objetivo": "Desarrollar habilidades en la resolución de conflictos",
+         "contenidos": [
+          "Atención a las opiniones de las demás personas",
+          "Empatía",
+          "Habilidades para la resolución de conflictos"
+         ],
+         "indicadores": [
+          "Expresa las opiniones con coherencia",
+          "Muestra una actitud empática adecuada a su edad",
+          "Resuelve los conflictos de forma pacífica y asertiva"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "EDUCACIÓN VIAL",
+       "objetivos": [
+        {
+         "objetivo": "Identificar los vehículos prioritarios, vehículos públicos y privados",
+         "contenidos": [
+          "Identificación de los vehículos prioritarios, vehículos públicos y privados"
+         ],
+         "indicadores": [
+          "Identifica los vehículos prioritarios, vehículos públicos y privados"
+         ]
+        },
+        {
+         "objetivo": "Aplicar las normas de circulación a pie y en vehículos sin motor en entornos urbanos y periurbanos (rutas en carretera)",
+         "contenidos": [
+          "Conoce y respeta las principales señales de peligro y obligación",
+          "Uso del trasporte público y respeto del resto de usuarios/as",
+          "Cautela y respeto en el uso de vehículos sin motor",
+          "Conocimiento y aplicación de las principales normas de circulación durante la realización de rutas"
+         ],
+         "indicadores": [
+          "Respeta las señales durante la circulación a pie y en medios de transporte sin motor",
+          "Es prudente durante la circulación a pie, con vehículos sin motor y en rutas",
+          "Respeta al resto de personas que transitan la vía y usan los transportes públicos"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "EDUCACIÓN PARA LA IGUALDAD DE OPORTUNIDADES",
+       "objetivos": [
+        {
+         "objetivo": "Reconocer y respetar la diversidad cultural, de género, familiar y de capacidades en las relaciones que establece dentro de la manada y entornos cercanos",
+         "contenidos": [
+          "Ruptura de los estereotipos de género vinculados a los juegos, deportes, aficiones, etc.",
+          "Detección de situaciones de discriminación por género, cultura o diversidad sensorial, cognitiva o motriz",
+          "Conocimiento de otras culturas.",
+          "Trato respetuoso y educado a personas de otro sexo, cultura o con diversidad sensorial, cognitiva o motriz"
+         ],
+         "indicadores": [
+          "Rechaza estereotipos de género vinculados a la ropa, deportes, aficiones y las tareas de casa y de la manada",
+          "Identifica situaciones de discriminación hacia su persona o hacia otras personas",
+          "Conoce otras culturas",
+          "Se relaciona correctamente con todas las personas sin importar las diferencias"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "ORIENTACIÓN ACADÉMICA E INSERCIÓN LABORAL",
+       "objetivos": [
+        {
+         "objetivo": "Identificar características y peculiaridades de cada uno de los oficios",
+         "contenidos": [
+          "Identificación de las peculiaridades de cada oficio a grandes rasgos"
+         ],
+         "indicadores": [
+          "Mantiene una actitud abierta frente a la diversidad de oficios",
+          "Muestra una actitud participativa en los órganos de decisión de la manada"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "TECNOLOGÍAS DE LA INFORMACIÓN Y LA COMUNICACIÓN",
+       "objetivos": [
+        {
+         "objetivo": "Usar de forma responsable los medios de comunicación e información",
+         "contenidos": [
+          "Características del lenguaje publicitario",
+          "Responsabilidad en el uso de ordenadores y videoconsolas.",
+          "Manejo de elementos tecnológicos cercanos: calculadora, ordenador, teléfono inteligente, cámaras de fotografía y videojuegos",
+          "Uso correcto de internet y herramientas básicas: correo electrónico y buscador"
+         ],
+         "indicadores": [
+          "Da un uso adecuado a las TIC que están a su alcance",
+          "Conoce y utiliza internet para buscar información y de manera eficaz",
+          "Usa de manera educativa los juegos para ordenador y videoconsola",
+          "Maneja los elementos tecnológicos cercanos"
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    "scouts": {
+     "paginas": "31-33",
+     "bloques": [
+      {
+       "bloque": "NORMAS CÍVICAS, SOCIALES, CONVIVENCIA",
+       "objetivos": [
+        {
+         "objetivo": "Analizar las actitudes, costumbres y normas de convivencia de los contextos cercanos (familia, colegio, grupo)",
+         "contenidos": [
+          "Análisis de actitudes de convivencia y cooperación dentro de la patrulla"
+         ],
+         "indicadores": [
+          "Colabora dentro de la patrulla y de la sección scout"
+         ]
+        },
+        {
+         "objetivo": "Mostrar una actitud de respeto y colaboración con sus iguales",
+         "contenidos": [
+          "Respeto a las normas comúnmente aceptadas en los diversos ambientes en que vive, siendo receptivo ante las orientaciones de las demás personas"
+         ],
+         "indicadores": [
+          "Respeta las normas comúnmente aceptadas"
+         ]
+        },
+        {
+         "objetivo": "Adoptar una actitud crítica hacia las distintas expresiones de violencia en el mundo",
+         "contenidos": [
+          "Aceptación de normas de comportamiento a las que debe ajustarse: disculparse, escuchar, atender a otras personas, respetar un orden, pedir las cosas, saber ceder..."
+         ],
+         "indicadores": [
+          "Participa activamente y con responsabilidad en la toma de decisiones de la sección"
+         ]
+        },
+        {
+         "objetivo": "Comportarse conforme a los valores del Escultismo",
+         "contenidos": [
+          "El proceso de toma de decisiones, la democracia y el consenso"
+         ],
+         "indicadores": [
+          "Respeta las decisiones tomadas, aunque no sean propuestas por la propia persona"
+         ]
+        },
+        {
+         "objetivo": "Conocer los Derechos Humanos",
+         "contenidos": [
+          "La guerra y otras situaciones de conflicto armado",
+          "Las formas de violencia: homofobia, acoso escolar, xenofobia, física, psicológica",
+          "Marco simbólico: Ley y Promesa",
+          "Los derechos humanos, los Derechos de la Infancia y las situaciones de incumplimiento de los mismos"
+         ],
+         "indicadores": [
+          "Demuestra compañerismo con todas las personas scouts",
+          "Analiza situaciones donde se incumplen sus derechos",
+          "Analiza y se interesa en las situaciones de violencia y guerra en su entorno más cercano",
+          "Conoce qué son los derechos humanos"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "VOLUNTARIADO Y COOPERACIÓN",
+       "objetivos": [
+        {
+         "objetivo": "Poner al servicio de sus iguales capacidades y destrezas personales",
+         "contenidos": [
+          "Distinción del concepto de desarrollo"
+         ],
+         "indicadores": [
+          "Distingue el concepto de desarrollo"
+         ]
+        },
+        {
+         "objetivo": "Analizar las causas y consecuencias de un Mundo desigualmente desarrollado",
+         "contenidos": [
+          "Análisis de causas y consecuencias de un mundo desigualmente desarrollado"
+         ],
+         "indicadores": [
+          "Conoce la situación de las personas en los países en vías de desarrollo"
+         ]
+        },
+        {
+         "objetivo": "Trabajar la ayuda y compañerismo en base a las capacidades de cada cual",
+         "contenidos": [
+          "La buena acción como herramienta de servicio"
+         ],
+         "indicadores": [
+          "Utiliza la buena acción en su vida diaria y en su vida scout"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "AUTONOMÍA, INICIATIVA Y RESPONSABILIDAD PERSONAL",
+       "objetivos": [
+        {
+         "objetivo": "Asumir y desarrollar responsabilidades personales y grupales dentro de la patrulla, de la aventura o de su entorno, mostrando confianza en su persona",
+         "contenidos": [
+          "Ejecución responsable y voluntaria ante tareas de la patrulla o de la aventura",
+          "Organización autónoma y responsable de sus tiempos, tareas y su material",
+          "Conocimiento de sus fortalezas e intereses poniéndolos al servicio de la sección en las especialidades",
+          "Servicio de la sección scout en las especialidades"
+         ],
+         "indicadores": [
+          "Reconoce sus habilidades",
+          "Ejecuta su cargo dentro de la patrulla",
+          "Ejecuta tareas para la aventura o la sección de principio a fin",
+          "Muestra orden y cuidado con su material",
+          "Desarrolla especialidades y las pone al servicio de la sección"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "HABILIDADES SOCIALES",
+       "objetivos": [
+        {
+         "objetivo": "Mostrar empatía hacia las demás personas y respeto cuando existen diferencias de opinión",
+         "contenidos": [
+          "Actitud de apertura a las demás personas"
+         ],
+         "indicadores": [
+          "Muestra habilidades sociales y de comunicación en sus relaciones con las demás personas"
+         ]
+        },
+        {
+         "objetivo": "Participar en debates y actividades de grupo/asociativas",
+         "contenidos": [
+          "La empatía, la comprensión y el respeto por las ideas y creencias de las demás personas",
+          "Valoración de la responsabilidad y el diálogo para solucionar problemas de convivencia",
+          "Aceptación de normas de comportamiento a las que debe ajustarse: disculparse, escuchar, atender a otras personas, respetar un orden, pedir las cosas, saber ceder...",
+          "Participación en actividades de grupo y asociativas"
+         ],
+         "indicadores": [
+          "Utiliza el dialogo para resolver conflictos y problemas de convivencia",
+          "Acepta las normas de comportamiento a las que debe ajustarse",
+          "Se relaciona con scouts ajenos a su grupo"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "EDUCACIÓN VIAL",
+       "objetivos": [
+        {
+         "objetivo": "Conocer las normas de circulación y de seguridad vial básicas de vehículos teniéndolas en cuenta a la hora de circular a pie, en bicicleta y durante rutas",
+         "contenidos": [
+          "Elección y uso del medio de transporte más adecuado para cada desplazamiento",
+          "Comprensión de los mensajes de las señales de tráfico",
+          "Discriminación y rechazo de situaciones y actitudes que puedan provocar accidentes",
+          "Conocimiento de los pasos a seguir en un accidente de tráfico",
+          "Puesta en marcha de las pautas y normas de circulación durante una ruta en carretera",
+          "Elementos de orientación en rutas: hitos, señalización de GR y PR"
+         ],
+         "indicadores": [
+          "Diseña el recorrido más adecuado utilizando diversos medios de transporte",
+          "Reconoce las señales de tráfico más básicas",
+          "Reconoce actitudes que entrañan peligro",
+          "Conoce el protocolo PAS (proteger, avisar, socorrer)",
+          "Sabe cómo señalizar y circular en una marcha en carretera y lo pone en práctica",
+          "Conoce y sabe utilizar los elementos de señalización de rutas de senderismo"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "EDUCACIÓN PARA LA IGUALDAD DE OPORTUNIDADES",
+       "objetivos": [
+        {
+         "objetivo": "Mostrar aceptación por las diferencias entre sus iguales y rechazo hacia las actitudes discriminatorias",
+         "contenidos": [
+          "Valoración de la diversidad como enriquecimiento y rechazo de las actitudes violentas o de discriminación",
+          "Conocimiento y análisis vinculados con la igualdad de oportunidades: diversidad sensorial, cognitiva o motriz, interculturalidad, orientación sexual, sexo, género, etnia, prejuicios, estereotipos",
+          "Diferenciación y análisis de los comportamientos y actitudes adecuadas o inadecuadas tanto a nivel individual como grupal",
+          "Respeto a las demás personas sin tener en cuenta los estereotipos"
+         ],
+         "indicadores": [
+          "Identifica y rechaza actitudes de discriminación: sexismo, racismo, etc.",
+          "Utiliza un lenguaje adecuado sin discriminación de ningún tipo",
+          "Aprecia a las demás personas y acepta sus diferencias",
+          "Conoce los requisitos educativos para las principales ocupaciones"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "ORIENTACIÓN PARA LA INSERCIÓN LABORAL",
+       "objetivos": [
+        {
+         "objetivo": "Reconocer la importancia de la formación para su futuro laboral",
+         "contenidos": [
+          "El valor del estudio como implicación/ participación en la sociedad",
+          "Manejo de la información relativa a estudios y profesiones",
+          "Conocimiento de los intereses, las aptitudes y los logros personales",
+          "Estrategias de planificación y desarrollo de pequeños proyectos"
+         ],
+         "indicadores": [
+          "Es responsable en su formación académica",
+          "Manifiesta sus ambiciones más cercanas",
+          "Es capaz de realizar estrategias de planificación y desarrollo de pequeños proyectos"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "TECNOLOGÍAS DE LA INFORMACIÓN Y LA COMUNICACIÓN",
+       "objetivos": [
+        {
+         "objetivo": "Reflexionar sobre los modos y hábitos de consumo y desarrollar frente a éstos una capacidad crítica basada en los valores del Escultismo",
+         "contenidos": [
+          "Análisis del lenguaje publicitario y de los medios de comunicación",
+          "Manejo de herramientas de internet: redes sociales, blogs, chats, juegos on-line, YouTube",
+          "Utilización de programas de ofimática para la realización de sus tareas",
+          "Búsqueda eficaz de información a través de internet",
+          "Uso responsable del teléfono inteligente, tableta, ordenador y video consolas y rechazo de actitudes dependientes",
+          "Respeto en el uso de imágenes y videos que se cuelgan en internet",
+          "Cuidado del lenguaje"
+         ],
+         "indicadores": [
+          "Sabe utilizar herramientas de internet: redes sociales, blogs, chats, juegos on-line, YouTube",
+          "Realiza documentos con herramientas ofimáticas",
+          "Localiza información en internet que le sirve para una tarea dada",
+          "Utiliza el móvil cuando es necesario",
+          "Muestra respeto con las demás personas en la red, rechazando especialmente el acoso en la red"
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    "escultas": {
+     "paginas": "34-37",
+     "bloques": [
+      {
+       "bloque": "NORMAS CÍVICAS, SOCIALES, CONVIVENCIA",
+       "objetivos": [
+        {
+         "objetivo": "Desarrollar una actitud crítica en el cumplimiento de las normas sociales, cívicas y éticas.",
+         "contenidos": [
+          "Crítica y compromiso ante situaciones de intolerancia, inmigración, violencia (homofobia, xenofobia, violencia de género, prostitución, acoso escolar, etc)"
+         ],
+         "indicadores": [
+          "Es crítico ante situaciones de intolerancia, inmigración y violencia"
+         ]
+        },
+        {
+         "objetivo": "Conocer las instituciones y documentos que rigen los valores de nuestra sociedad",
+         "contenidos": [
+          "Las leyes y los derechos humanos: la Constitución, el Estatuto de autonomía."
+         ],
+         "indicadores": [
+          "Conoce leyes, la Declaración Universal de los Derechos Humanos, la Constitución y Estatuto de Autonomía"
+         ]
+        },
+        {
+         "objetivo": "Mostrar interés por la convivencia con las demás personas y la resolución pacífica de conflictos",
+         "contenidos": [
+          "Instituciones sociales del entorno: finalidades, servicios que ofrecen, actividades, y personas que trabajan en ellas",
+          "Valoración del diálogo y el intercambio de opiniones como herramienta más importante en la solución de problemas de convivencia",
+          "Análisis a través de los medios de comunicación de las situaciones de conflicto armado en todo el mundo",
+          "La Ley y la Promesa como forma de vida",
+          "Participación democrática en los órganos decisorios de la unidad",
+          "El terrorismo y los movimientos no pacíficos armados",
+          "Los sistemas económicos presentes en la sociedad actual y otras formas de economía alternativa y solidaria",
+          "Deuda externa y sus consecuencias",
+          "Crítica de informaciones recibidas a través de los distintos medios de comunicación"
+         ],
+         "indicadores": [
+          "Conoce y distingue diferentes instituciones sociales del entorno",
+          "Valora el intercambio de opiniones como herramienta más importante en la solución de problemas de convivencia",
+          "Conoce y se manifiesta ante el tema de situaciones de conflicto armado del terrorismo y otros movimientos no pacifistas",
+          "Se compromete en la construcción de la paz en su vida diaria",
+          "Valora críticamente las informaciones recibidas en los medios de comunicación",
+          "Participa democráticamente en los órganos decisorios de la unidad",
+          "Conoce la ley y es fiel a su promesa en su día a día"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "VOLUNTARIADO Y COOPERACIÓN",
+       "objetivos": [
+        {
+         "objetivo": "Desarrollar actitudes de servicio y apoyo a las demás personas mostrando interés por el desarrollo personal y social",
+         "contenidos": [
+          "Disposición personal de servicio y apoyo positiva ante las necesidades existentes en su entorno próximo y sociedad"
+         ],
+         "indicadores": [
+          "Muestra actitudes de servicio y apoyo en su entorno próximo y en la sociedad"
+         ]
+        },
+        {
+         "objetivo": "Conocer las diferentes organizaciones internacionales",
+         "contenidos": [
+          "Interés por los diversos ritmos de desarrollo entre los países",
+          "Interés por las instituciones de servicio social y sus miembros",
+          "Conocimiento e interés por las grandes organizaciones internacionales: ONU, UNESCO, FAO, UNICEF"
+         ],
+         "indicadores": [
+          "Se interesa por el progreso social de países desarrollados, en vías de desarrollo y subdesarrollados",
+          "Se implica en materia de solidaridad, ONG y desarrollo",
+          "Conoce y muestra interés por las grandes organizaciones internacionales: ONU, UNESCO, FAO, UNICEF",
+          "Analiza el trabajo de las ONGs"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "AUTONOMÍA, INICIATIVA Y RESPONSABILIDAD PERSONAL",
+       "objetivos": [
+        {
+         "objetivo": "Planificar de forma autónoma el tiempo personal",
+         "contenidos": [
+          "Planificación del tiempo personal (descanso, ocio, estudio, relación con las demás personas) de manera autónoma"
+         ],
+         "indicadores": [
+          "Se planifica su día a día"
+         ]
+        },
+        {
+         "objetivo": "Asumir voluntariamente, desarrollar y finalizar responsabilidades, compromisos y tareas dentro de la unidad",
+         "contenidos": [
+          "Responsabilidad ante los compromisos personales, públicos o privados"
+         ],
+         "indicadores": [
+          "Se compromete ante aquellas responsabilidades que asume"
+         ]
+        },
+        {
+         "objetivo": "Proponerse y lograr retos personales",
+         "contenidos": [
+          "Liderazgo comisiones de proyectos."
+         ],
+         "indicadores": [
+          "Asume responsabilidades que es capaz de cumplir"
+         ]
+        },
+        {
+         "objetivo": "Adquirir nuevas competencias",
+         "contenidos": [
+          "Consecución progresiva de retos personales y competencias"
+         ],
+         "indicadores": [
+          "Lidera proyectos"
+         ]
+        },
+        {
+         "objetivo": "Aceptar positivamente sus posibilidades y sus limitaciones",
+         "contenidos": [
+          "Aceptación de las propias posibilidades y limitaciones"
+         ],
+         "indicadores": [
+          "Acepta sus propias posibilidades y limitaciones",
+          "Se propone y plantea retos de progresión personal",
+          "Muestra interés por mejorar su conocimiento personal"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "HABILIDADES SOCIALES",
+       "objetivos": [
+        {
+         "objetivo": "Analizar las opiniones de las demás personas, mostrando empatía, asertividad y coherencia a la hora de plantear las propias",
+         "contenidos": [
+          "La comunicación y la asertividad.",
+          "Desarrollo de habilidades sociales que permitan integrarse socialmente y vivir en grupo",
+          "Exposición de las propias ideas con lenguaje claro, coherente y fluido",
+          "Puesta en práctica de actitudes cooperativas para el funcionamiento de la unidad: proponer ideas, escucha activa, empatía, asertividad, responsabilidad, coordinación y ayuda",
+          "El liderazgo y la dirección de grupos",
+          "Implicación en los diferentes proyectos"
+         ],
+         "indicadores": [
+          "Muestra asertividad y se comunica con sus iguales de la unidad",
+          "Desarrolla habilidades sociales para integrarse socialmente",
+          "Manifiesta libre y argumenta sus opiniones",
+          "Muestra actitudes para la cooperación dentro de la unidad",
+          "Modera debates dando turnos de palabra",
+          "Se implica en el desarrollo de proyectos"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "EDUCACIÓN VIAL",
+       "objetivos": [
+        {
+         "objetivo": "Adoptar una actitud crítica ante las conductas imprudentes en relación a la circulación vial, especialmente de motos y ciclomotores",
+         "contenidos": [
+          "Distinción de las prioridades de señalización"
+         ],
+         "indicadores": [
+          "Conoce los distintos tipos de señalización y su orden de prioridad"
+         ]
+        },
+        {
+         "objetivo": "Conocer las principales formas de auxilio en carretera y accidentes",
+         "contenidos": [
+          "Conducción de la moto y vehículos sin motor de manera responsable y respetuosa por la vía",
+          "Análisis de situaciones de riesgo como persona que conduce o acompañante de una moto y otros vehículos",
+          "Predisposición a la colaboración en caso de accidente",
+          "Primeros auxilios aplicados a la intervención en accidentes: PAS, PLS, RCP (ver compromiso para la salud*)"
+         ],
+         "indicadores": [
+          "Tiene conocimientos básicos de las normas de seguridad y protocolos de actuación en un accidente",
+          "Rechaza aquellas situaciones que puedan entrañar un riesgo propio y ajeno",
+          "Rechaza el consumo de alcohol y otras drogas previo a la conducción de un vehículo",
+          "Conoce el comportamiento adecuado de la persona que conduce y lo pone en práctica",
+          "Muestra interés en las distintas prácticas de primeros auxilios y presenta predisposición a colaborar siempre que sea necesario, tenga dominio del tema y las autoridades sanitarias estén avisadas"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "ED. PARA LA IGUALDAD DE OPORTUNIDADES",
+       "objetivos": [
+        {
+         "objetivo": "Analizar críticamente los estereotipos sociales en relación a la cultura, género, orientación sexual, clase social o diversidad sensorial, cognitiva o motriz interviniendo en su prevención",
+         "contenidos": [
+          "Análisis de las diferentes creencias y confesiones religiosas y su vinculación con la cultura",
+          "Conocimiento de la importancia de la identidad sexual y análisis de los estereotipos presentes en la sociedad en relación al cuerpo y la orientación sexual",
+          "Sensibilidad ante las discriminaciones raciales, sexuales, religiosas, sociales, personales y las basadas en prejuicios",
+          "Actitud crítica ante los estereotipos y modelos sociales",
+          "Interés por intervenir para la eliminación de estereotipos y situaciones de discriminación"
+         ],
+         "indicadores": [
+          "Analiza diferentes creencias y religiones teniendo en cuenta la cultura",
+          "Conoce la importancia de la identidad sexual y la orientación sexual",
+          "Se posiciona críticamente ante los estereotipos y modelos sociales",
+          "Muestra interés por intervenir en la eliminación de estereotipos y situaciones de discriminación",
+          "Tiene un comportamiento no discriminatorio.",
+          "Conoce y está abierto ante la realidad de los diferentes colectivos institucionalizados y otros colectivos desfavorecidos.",
+          "Sabe reconocer las barreras arquitectónicas y tiene disposición a su eliminación en su entorno inmediato"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "ORIENTACIÓN PARA LA INSERCIÓN LABORAL",
+       "objetivos": [
+        {
+         "objetivo": "Preocuparse e interesarse por las diferentes opciones académicas y laborales que se plantean",
+         "contenidos": [
+          "Respeto y valoración de las diferentes ocupaciones, independientemente de su rentabilidad material",
+          "Actitud positiva ante el trabajo y del estudio",
+          "Razones del por qué la gente trabaja y las fuentes de satisfacción y descontento en el trabajo",
+          "Lugares de información sobre estudios y profesiones",
+          "Uso adecuado de las tics aplicadas al acceso al mercado laboral y al estudio",
+          "Derechos laborales",
+          "Estrategias de planificación y desarrollo de pequeños proyectos",
+          "Conocimiento e interés por la iniciativa emprendedora"
+         ],
+         "indicadores": [
+          "Se interesa por descubrir y analizar las informaciones sobre el trabajo, respetando todo tipo de ocupaciones",
+          "Es responsable en la propia autoformación",
+          "Tiene una posición activa respecto a su futuro tanto académico como profesional",
+          "Tiene conocimiento sobre los derechos laborales",
+          "Es capaz de realizar estrategias de planificación y desarrollo de pequeños proyectos"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "TECNOLOGÍAS DE LA INFORMACIÓN Y LA COMUNICACIÓN",
+       "objetivos": [
+        {
+         "objetivo": "Analizar de forma crítica la información de los medios de comunicación y de la publicidad",
+         "contenidos": [
+          "Análisis crítico de la información de los medios de comunicación y de la publicidad"
+         ],
+         "indicadores": [
+          "Critica y analiza la información de los medios de comunicación y la publicidad"
+         ]
+        },
+        {
+         "objetivo": "Razonar los problemas asociados a la dependencia de las TICs",
+         "contenidos": [
+          "Crítica con el uso irrespetuoso de imágenes y grabaciones"
+         ],
+         "indicadores": [
+          "Rechaza actitudes irrespetuosas en el uso de imágenes y videos"
+         ]
+        },
+        {
+         "objetivo": "Aplicar protocolos de seguridad y privacidad de sus redes sociales",
+         "contenidos": [
+          "Análisis de los problemas asociados a la dependencia de las TICs"
+         ],
+         "indicadores": [
+          "Conoce los problemas asociados al uso abusivo de redes sociales y del teléfono inteligente"
+         ]
+        },
+        {
+         "objetivo": "Elaborar documentos, presentaciones a través de herramientas informáticas",
+         "contenidos": [
+          "Aplicación de protocolos de seguridad y privacidad de sus redes sociales"
+         ],
+         "indicadores": [
+          "Conoce estrategias para mantener sus datos seguros en internet"
+         ]
+        },
+        {
+         "objetivo": "Utilizar internet de forma eficaz",
+         "contenidos": [
+          "Elaboración de documentos, presentaciones y hojas de cálculo a través de herramientas informáticas",
+          "Búsqueda eficaz de información a través de internet"
+         ],
+         "indicadores": [
+          "Organiza información a través de documentos, presentaciones y hojas de cálculo",
+          "Localiza la información que busca con agilidad a través de internet"
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    "rovers": {
+     "paginas": "38-40",
+     "bloques": [
+      {
+       "bloque": "NORMAS CÍVICAS, SOCIALES, CONVIVENCIA",
+       "objetivos": [
+        {
+         "objetivo": "Vivir conforme a los principios y actitudes ético-cívicos que rigen la vida y la convivencia en una sociedad plural (respeto a personas y cosas, solidaridad, justicia, paz, libertad...)",
+         "contenidos": [
+          "Análisis de lo que puede suponer la participación ciudadana en un sistema democrático como el nuestro, más allá del voto"
+         ],
+         "indicadores": [
+          "Es capaz de analizar críticamente y con sensibilidad las noticias sobre la realidad mundial"
+         ]
+        },
+        {
+         "objetivo": "Analizar críticamente su entorno conforme a los valores recogidos en el Escultismo y nuestro compromiso social",
+         "contenidos": [
+          "Crítica y rechazo ante conductas violentas que se presenten",
+          "Valoración de la responsabilidad y diálogo para solucionar problemas de convivencia",
+          "Reconocimiento y sensibilidad ante los problemas de nuestro entorno poniendo especial interés en el fenómeno migratorio, refugio y exilio",
+          "Crítica y responsabilidad ante su papel y participación en un sistema democrático",
+          "Distinción y análisis del fenómeno de Nacionalismo y sus distintas manifestaciones",
+          "Análisis del movimiento pacifista: líderes y manifestaciones",
+          "Análisis de lo que suponen los diferentes sistemas económicos y políticos",
+          "Análisis del cumplimiento de los Derechos Humanos en el mundo"
+         ],
+         "indicadores": [
+          "Toma conciencia de los grupos y organizaciones que actúan en contra del bienestar de la mayoría y de los que luchan por la igualdad de derechos de las personas",
+          "Rechaza y es crítico ante actitudes y comportamientos violentos de cualquier índole",
+          "Reconoce las distintas situaciones de refugio, inmigración, violencia y exilio, siendo sensible a ellas",
+          "Es capaz de solucionar conflictos de manera no violenta",
+          "Participa democráticamente en la asamblea de clan y en el grupo",
+          "Es capaz de decidir y jugar un papel de participación en el sistema democrático",
+          "Muestra una actitud crítica ante las situaciones de vulneración de los Derechos Humanos",
+          "Conoce y distingue diferentes sistemas políticos económicos"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "VOLUNTARIADO Y COOPERACIÓN",
+       "objetivos": [
+        {
+         "objetivo": "Manifestar una actitud de apertura, respeto y ayuda a la sociedad poniendo todos los conocimientos, habilidades y valores personales a su servicio",
+         "contenidos": [
+          "Colaboración con ONG relacionadas con los compromisos que tiene como scout",
+          "Participación en la sociedad civil",
+          "Interés por los programas de cooperación internacional",
+          "El servicio a las demás personas y a la sociedad",
+          "Realización de un proyecto del Reconocimiento Scout del Mundo"
+         ],
+         "indicadores": [
+          "Colabora con ONG o colectivos relacionados con los valores scout",
+          "Participa de forma activa en la sociedad",
+          "Muestra interés por los programas de cooperación internacional",
+          "Muestra una actitud de servicio a las demás personas dentro y fuera del grupo",
+          "Consigue el Reconocimiento Scout del Mundo"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "AUTONOMÍA, INICIATIVA Y RESPONSABILIDAD PERSONAL",
+       "objetivos": [
+        {
+         "objetivo": "Proponer y responsabilizarse del desarrollo de proyectos, actividades o funciones, de forma totalmente autónoma, en el compromiso personal y de clan",
+         "contenidos": [
+          "Desarrollo y evaluación de proyectos personales, plan de avance individual o planes de vida",
+          "Análisis de sus fortalezas y debilidades para el desarrollo de proyectos personales",
+          "Reconocimiento de los logros personales y grupales",
+          "Liderazgo de proyectos y comisiones de proyecto"
+         ],
+         "indicadores": [
+          "Elabora su proyecto personal, plan de avance, etc. en función de sus debilidades y fortalezas",
+          "Evalúa sus proyectos y realiza propuestas de mejora",
+          "Organiza y lidera proyectos del clan",
+          "Es responsable y consecuente con sus actos"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "HABILIDADES SOCIALES",
+       "objetivos": [
+        {
+         "objetivo": "Analizar críticamente las opiniones de las demás personas expresando las propias de forma coherente, argumentada, con empatía, asertividad y buscando puntos de vista diferentes",
+         "contenidos": [
+          "Puesta en marcha de actitudes asertivas a partir de sus diferentes componentes (saber decir no, hacer peticiones asertivas y hacer críticas constructivas)",
+          "Tipologías de liderazgo y técnicas de comunicación para liderar proyectos del clan",
+          "Toma de decisiones en grupo e individualmente a través de diferentes técnicas y estructuras de debate y decisión",
+          "Exposición elaborada de temas de interés teniendo en cuenta diversos puntos de vista",
+          "Cooperación con el resto de personas del clan como estrategia de desarrollo de proyectos",
+          "Análisis, evaluación e interpretación de roles diferentes dentro de un equipo de trabajo, identificando las necesidades de este"
+         ],
+         "indicadores": [
+          "Escucha la opinión de las demás personas y muestra la suya con asertividad",
+          "Conoce y aplica estilos de liderazgo",
+          "Utiliza diversas técnicas para debatir y tomar decisiones en grupo",
+          "Desarrolla un tema a sus iguales con claridad y aportando información variada y constatada",
+          "Trabaja en equipo con todas las personas del clan"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "EDUCACIÓN VIAL",
+       "objetivos": [
+        {
+         "objetivo": "Conocer y hacer respetar las normas de circulación a pie, bicicleta, moto y en ruta mostrando rechazo a las actitudes imprudentes",
+         "contenidos": [
+          "Conocimiento de comportamientos que no supongan riesgos y deriven en accidentes de circulación",
+          "Conocimiento de la influencia del alcohol, otras drogas y medicamentos en la conducción y sus consecuencias",
+          "Obligaciones de colaboración y ayuda en casos de accidentes",
+          "Pautas de actuación ante un accidente",
+          "Circulación responsable ante cualquier vehículo sin motor y a motor"
+         ],
+         "indicadores": [
+          "Evita aquellos comportamientos que puedan derivar en accidentes de circulación",
+          "Conoce la influencia del alcohol y otras drogas en la conducción y sus consecuencias",
+          "Conoce sus obligaciones de colaboración y ayuda en caso de accidente",
+          "Conoce lo que se debe hacer y lo que no en un accidente y lo pone en práctica",
+          "Circula de forma responsable con el vehículo"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "EDUCACIÓN PARA LA IGUALDAD DE OPORTUNIDADES",
+       "objetivos": [
+        {
+         "objetivo": "Superar los prejuicios y las discriminaciones culturales, de género, de orientación sexual, clase social o diversidad sensorial, cognitiva o motriz, posicionándose claramente frente a ellos y potenciando la igualdad entre los colectivos sociales",
+         "contenidos": [
+          "Posicionamiento crítico y actuación ante las situaciones de migración, reconversión, asimilación cultural, exclusión social, xenofobia, etc.",
+          "Respeto e igualdad en las relaciones interpersonales, independientemente del sexo, identidad y orientación sexual de las personas",
+          "Análisis crítico de las desigualdades sociales y los colectivos",
+          "Desarrollo de acciones encaminadas a la integración social en el grupo",
+          "Análisis e intervención para la mejora de los problemas y barreras existentes en la integración de colectivos con diversidad sensorial, cognitiva o motriz"
+         ],
+         "indicadores": [
+          "Entiende y enjuicia algunos de los hechos significativos de la realidad de España (paro, marginación, migraciones, reconversión...)",
+          "Muestra una actitud abierta, tolerante y respetuosa hacia las distintas orientaciones y vivencias de la sexualidad, las personas con diversidad sensorial, cognitiva o motriz o las diferentes manifestaciones culturales y religiosas",
+          "Toma conciencia de los grupos y organizaciones que actúan a favor del bienestar y de los que luchan por la igualdad de los derechos de las personas",
+          "Es capaz de realizar un programa de integración social"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "ORIENTACIÓN PARA LA INSERCIÓN LABORAL",
+       "objetivos": [
+        {
+         "objetivo": "Reflexionar sobre sus posibilidades académicas y laborales conforme a sus intereses y objetivos a largo plazo",
+         "contenidos": [
+          "Oferta de Tiempo Libre en nuestro entorno",
+          "El estudio y/o trabajo como implicación en la sociedad.",
+          "Puntos de información sobre la oferta pública y privada de empleo",
+          "Conocimiento de los recursos del entorno relacionados con el empleo, ocio y voluntariado",
+          "Actitud de responsabilidad en los estudios y/o trabajo",
+          "Distintas formas de empleo: autoempleo, cooperativismo"
+         ],
+         "indicadores": [
+          "Conoce y sabe buscar la oferta de tiempo libre en su entorno",
+          "Conoce la legislación actual sobre contratos",
+          "Identifica recursos privados y públicos en los diferentes ámbitos de la vida (ocio, estudios voluntariado y empleo...)",
+          "Muestra una actitud crítica ante la competitividad en el estudio y acceso al mercado laboral",
+          "Recoge datos acerca de las ofertas de ocio y educación presente en la sociedad, incluyendo el Escultismo"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "TECNOLOGÍAS DE LA INFORMACIÓN Y LA COMUNICACIÓN",
+       "objetivos": [
+        {
+         "objetivo": "Elaborar información a través de distintos tipos de medios",
+         "contenidos": [
+          "Elaboración de información utilizando diferentes tipos de medios (periódico, cómic, guion radiofónico, montajes audiovisuales, etc.)"
+         ],
+         "indicadores": [
+          "Analiza críticamente y con sensibilidad las noticias sobre la realidad mundial"
+         ]
+        },
+        {
+         "objetivo": "Analizar la dependencia de las TICs y sus consecuencias",
+         "contenidos": [
+          "Análisis de la dependencia de las TIC y sus consecuencias"
+         ],
+         "indicadores": [
+          "Usa las TIC sin hacer un abuso de ellas y sin dejar de lado otro tipo de actividades"
+         ]
+        },
+        {
+         "objetivo": "Conocer la protección de datos y la legislación vinculada",
+         "contenidos": [
+          "La protección de datos y la legislación vinculada"
+         ],
+         "indicadores": []
+        },
+        {
+         "objetivo": "Desarrollar una actitud crítica ante los medios de comunicación",
+         "contenidos": [
+          "Posicionamiento y actuación ante las noticias, los medios de comunicación y la publicidad"
+         ],
+         "indicadores": []
+        }
+       ]
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "ambiental",
+   "nombre": "Compromiso ambiental",
+   "secciones": {
+    "castores": {
+     "paginas": "42",
+     "bloques": [
+      {
+       "bloque": "CONOCIMIENTO DEL ENTORNO",
+       "objetivos": [
+        {
+         "objetivo": "Descubrir el entorno a través de los sentidos y las experiencias vividas en él",
+         "contenidos": [
+          "La flora y fauna de su entorno próximo y sus ciclos vitales",
+          "Experimentación del entorno natural a través de los sentidos"
+         ],
+         "indicadores": [
+          "Conoce el proceso de crecimiento de la vegetación",
+          "Respeta las plantas",
+          "Respeta el hábitat de la fauna cercana",
+          "Utiliza diferentes sentidos para explorar su entorno con distintas finalidades",
+          "Muestra interés y curiosidad por el entorno que le rodea"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "EDUCACIÓN AMBIENTAL Y SOSTENIBILIDAD",
+       "objetivos": [
+        {
+         "objetivo": "Disfrutar de la Naturaleza descubriendo en ella la necesidad de protegerla y cuidarla",
+         "contenidos": [
+          "El contacto con la naturaleza mediante su disfrute, cuidado y protección",
+          "Tipos de contaminación y el impacto ambiental que producen",
+          "Las tres R: reducir, reciclar y reutilizar",
+          "Los tipos de envases y sus funciones",
+          "Los objetivos del Programa Mundial del Medio Ambiente"
+         ],
+         "indicadores": [
+          "Disfruta en las actividades que desarrolla en contacto con la naturaleza",
+          "Muestra una actitud de cuidado hacia la naturaleza",
+          "Se interesa por el impacto ambiental que producimos en nuestras acciones diarias",
+          "Distingue tipos de contaminación",
+          "Separa los residuos según los contenedores de los que dispone",
+          "Evita el gasto innecesario de agua, luz, envases, etc.",
+          "Da un segundo uso a objetos de la vida cotidiana",
+          "Consigue completar el Programa Mundial del Medio Ambiente"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "TÉCNICAS SCOUT AMBIENTALES",
+       "objetivos": [
+        {
+         "objetivo": "Desarrollar la autonomía con respecto al material básico de acampada",
+         "contenidos": [
+          "Cuidado del material (ropa, mochila…)"
+         ],
+         "indicadores": [
+          "Sabe qué ropa lleva en su mochila y el lugar adecuado para ponerla"
+         ]
+        },
+        {
+         "objetivo": "Familiarizarse con las técnicas básicas de campismo",
+         "contenidos": [
+          "Técnicas de pionerismo:\n- Cabuyería: nudos básicos comunes\n- Construcciones scout\n- Tienda de campaña\n- Senderismo"
+         ],
+         "indicadores": [
+          "Se preocupa por tener su material ordenado",
+          "Participa en el doblado de su saco, con ayuda",
+          "Tiene interés por el aprendizaje de nudos y su utilidad",
+          "Muestra autonomía en el atado de zapatos",
+          "Colabora en las construcciones y aparcelamiento de su zona de acampada",
+          "Utiliza de manera correcta y con respeto las construcciones del campamento",
+          "Participa en el montaje de su tienda de campaña",
+          "Sigue señales básicas en un itinerario de senderismo",
+          "Disfruta del recorrido en ruta"
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    "lobatos": {
+     "paginas": "43",
+     "bloques": [
+      {
+       "bloque": "CONOCIMIENTO DEL ENTORNO",
+       "objetivos": [
+        {
+         "objetivo": "Conocer el entorno mediante los sentidos",
+         "contenidos": [
+          "Flora y fauna autóctona del entorno en que se encuentra",
+          "Interacción con el entorno a través de los sentidos"
+         ],
+         "indicadores": [
+          "Distingue animales y plantas de la región en la que realiza actividades",
+          "Utiliza sus sentidos para desenvolverse en el entorno con habilidad"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "EDUCACIÓN AMBIENTAL Y SOSTENIBILIDAD",
+       "objetivos": [
+        {
+         "objetivo": "Descubrir, a través de sus experiencias, la importancia del Medio Ambiente participando en su conservación",
+         "contenidos": [
+          "El disfrute, cuidado y protección de la naturaleza",
+          "Las 3Rs: reducir, reciclar y reutilizar",
+          "El impacto y la contaminación ambiental que producen sus acciones",
+          "Los objetivos del Programa Mundial del Medio Ambiente"
+         ],
+         "indicadores": [
+          "Disfruta de las actividades que desarrolla en contacto con la naturaleza",
+          "Lleva a cabo acciones de cuidado y protección en su entorno natural cercano",
+          "Separa por iniciativa propia los residuos según los contenedores de los que dispone",
+          "Evita el gasto innecesario de agua, luz, envases, etc. por iniciativa propia",
+          "Aprovecha los materiales en las actividades sin desperdiciarlos",
+          "Utiliza distintos métodos para reutilizar materiales",
+          "Identifica acciones que producen contaminación",
+          "Reconoce y/o evita acciones que provocan impacto ambiental",
+          "Consigue completar el Programa Mundial del Medio Ambiente"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "TÉCNICAS SCOUT AMBIENTALES",
+       "objetivos": [
+        {
+         "objetivo": "Conocer técnicas básicas de campismo y vida en la naturaleza",
+         "contenidos": [
+          "Técnicas de pionerismo:\n- Cabuyería: aprendizaje del uso, función y realización de nudos simples.\n- La mochila.\n- Tienda de campaña y material de acampada.\n- Construcciones scout.\n- Orientación: puntos cardinales, planos, orientación en la naturaleza (musgo, troncos…).\n- Senderismo: técnicas de marcaje de senderos.\n- Comunicaciones: uso de códigos básicos (morse, pistas)."
+         ],
+         "indicadores": [
+          "Realiza distintos tipos de nudos",
+          "Integra los nudos aprendidos en distintas tareas cotidianas",
+          "Prepara con autonomía su mochila colocando el material donde corresponde",
+          "Monta su tienda de campaña con ayuda de sus scouters",
+          "Cuida y utiliza de manera correcta el material de acampada",
+          "Participa con la manada en la realización de cubiles",
+          "Realiza con la ayuda de sus scouters construcciones sencillas: vallas, mochilero, elementos de ambientación…",
+          "Conoce los puntos cardinales y sabe orientarse en un plano dado",
+          "Genera un plano a partir de un recorrido realizado o un entorno conocido",
+          "Se orienta mediante la lectura de los elementos naturales",
+          "Identifica marcas de señalización en senderos",
+          "Interpreta códigos sencillos: morse, pistas…"
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    "scouts": {
+     "paginas": "44-45",
+     "bloques": [
+      {
+       "bloque": "CONOCIMIENTO DEL ENTORNO",
+       "objetivos": [
+        {
+         "objetivo": "Conocer todos los elementos de su entorno natural próximo",
+         "contenidos": [
+          "Características de la flora y fauna autóctona del entorno en que se encuentra",
+          "Herramientas de investigación del medio natural",
+          "Accidentes geográficos, reservas y espacios naturales"
+         ],
+         "indicadores": [
+          "Investiga sobre la fauna y flora del lugar en el que realiza actividades",
+          "Identifica diferentes accidentes geográficos sobre el terreno"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "EDUCACIÓN AMBIENTAL Y SOSTENIBILIDAD",
+       "objetivos": [
+        {
+         "objetivo": "Disfrutar del Medio Ambiente, valorando la importancia de llevar a cabo acciones para su protección, conservación y enriquecimiento",
+         "contenidos": [
+          "El reciclado y la protección de la naturaleza",
+          "Técnicas e instrumentos de protección de la flora y la fauna",
+          "Los efectos de la contaminación sobre el entorno natural y social",
+          "Desarrollo sostenible y uso de los recursos naturales (aire, agua, energía…) como bienes preciados y escasos",
+          "Los objetivos del Programa Mundial del Medio Ambiente"
+         ],
+         "indicadores": [
+          "Facilita a otras personas la separación de desperdicios y el reciclaje (creando contenedores de reciclaje, ayudando a las personas más pequeñas, animando a sus iguales…)",
+          "Pone en práctica técnicas de protección de flora y fauna (confección de comederos para aves, cajas nido, participa en una reforestación, etc.)",
+          "Analiza las repercusiones de la contaminación ambiental en los entornos natural y social",
+          "Evita y/o denuncia acciones que generan impacto en el entorno",
+          "Evita y/o denuncia acciones que generan impacto en el entorno",
+          "Realiza acciones que protegen, conservan y/o enriquecen el Medio Ambiente",
+          "Adopta una actitud de cuidado y respeto hacia los recursos naturales (ahorro de agua, luz...) procurando concienciar de ello en su entorno",
+          "Identifica los efectos positivos de un desarrollo sostenible",
+          "Planifica actividades de ocio de forma sostenible y responsable desde la perspectiva ambiental",
+          "Consigue completar el Programa Mundial del Medio Ambiente"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "TÉCNICAS SCOUT AMBIENTALES",
+       "objetivos": [
+        {
+         "objetivo": "Desarrollar las habilidades y destrezas propias de las técnicas scouts",
+         "contenidos": [
+          "Aprendizaje del uso, función y realización de nudos y amarres",
+          "La tienda de campaña y material de acampada",
+          "Construcciones scout y herramientas básicas de campismo",
+          "Orientación en la naturaleza (mapas, planos, brújula, estrellas…)",
+          "Transmisión de mensajes a través de códigos",
+          "Nociones básicas de cocina trampera y manejo seguro de los utensilios"
+         ],
+         "indicadores": [
+          "Usa distintos nudos y amarres de manera efectiva",
+          "Monta con su patrulla la tienda de campaña de manera correcta y autónoma",
+          "Distingue los elementos de la tienda de campaña y las normas básicas de montaje: dirección de la puerta, tensores, ángulo de piquetas...",
+          "Cuida su material personal y utiliza de manera correcta el material de acampada",
+          "Prepara su mochila colocando el material donde corresponde y regula los anclajes para cargar el peso en la cadera",
+          "Diseña y ejecuta construcciones (puerta, platero, valla, zapatero, banco, columpio…)",
+          "Usa y cuida correctamente las herramientas de construcción básicas bajo la supervisión de sus scouters",
+          "Genera un plano con cierto grado de detalle",
+          "Se orienta con un mapa o plano en una zona desconocida",
+          "Utiliza la brújula",
+          "Se orienta con referentes naturales (osa mayor, norte-musgo de los árboles, sol, luna…) y distingue la estrella polar",
+          "Se sirve de técnicas de señalización de ruta (símbolos y colores de GR y PR, mojones…)",
+          "Interpreta y reproduce códigos (morse, banderas, códigos secretos, ...)",
+          "Sabe manejar los utensilios de cocina con seguridad y supervisión de personas adultas (sartén, bombonas de camping gas…)",
+          "Elabora cocina trampera"
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    "escultas": {
+     "paginas": "46-47",
+     "bloques": [
+      {
+       "bloque": "CONOCIMIENTO DEL ENTORNO",
+       "objetivos": [
+        {
+         "objetivo": "Ser personas activas conocedoras del entorno medioambiental para llegar a ser agentes de cambio",
+         "contenidos": [
+          "Flora y fauna de la CCAA",
+          "Técnicas de recogida, clasificación, archivo y consulta de datos, imágenes y sonidos del entorno",
+          "Red de comunicaciones de la CCAA y lugares de acampada propios para hacer marchas",
+          "Conocimiento de la actualidad medioambiental por los diversos medios de comunicación",
+          "Interpretación de los indicadores y los sucesos atmosféricos"
+         ],
+         "indicadores": [
+          "Diferencia plantas y animales autóctonos de su CCAA",
+          "Muestra una actitud de respeto hacia todas las formas de vida",
+          "Realiza un vídeo de al menos una de las actividades de la ronda solar",
+          "Busca información sobre datos medioambientales: zonas de acampada, rutas/tracks, flora/fauna…",
+          "Conoce los lugares de acampada de su CC.AA. y la manera de acceder a ellos",
+          "Demuestra que tiene información en temas de actualidad medioambiental",
+          "Asocia los indicadores meteorológicos (temperatura, humedad...) y los interpreta"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "EDUCACIÓN AMBIENTAL Y SOSTENIBILIDAD",
+       "objetivos": [
+        {
+         "objetivo": "Apreciar y disfrutar de la naturaleza participando en la protección y mejora del Medio Ambiente",
+         "contenidos": [
+          "El cambio climático y otras formas de destrucción del equilibrio medioambiental",
+          "Uso adecuado de energías renovables en su vida cotidiana",
+          "Campamento sostenible. Utilización adecuada de la energía",
+          "Gusto por conocer las posibilidades de uso de los materiales y sustancias presentes en el entorno",
+          "Protección y cuidado del entorno (riesgo medioambiental)",
+          "Los objetivos del Programa Mundial del Medio Ambiente"
+         ],
+         "indicadores": [
+          "Analiza críticamente las causas y consecuencias del cambio climático",
+          "Combate la destrucción del Medio Ambiente a través de distintas acciones colectivas (prevención de la destrucción del suelo, recuperación de la flora y fauna…)",
+          "Promueve el conocimiento y uso de las energías renovables, en la medida de lo posible, en su vida cotidiana",
+          "Es consciente de la necesidad del consumo austero de las energías",
+          "Utiliza los materiales y sustancias del entorno en determinadas situaciones (técnicas scouts, campamentos...)",
+          "Conoce qué actitudes generan contaminación en las actividades scouts y reduce o elimina su impacto",
+          "Analiza críticamente situaciones de riesgo medioambiental o que puedan suponer un impacto negativo para el Medio Ambiente",
+          "Pone en práctica acciones de reciclaje, reutilización y de reducción habitualmente",
+          "Participa en proyectos de concienciación sobre las tres R´s",
+          "Consigue completar el Programa Mundial del Medio Ambiente"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "TÉCNICAS SCOUTS AMBIENTALES",
+       "objetivos": [
+        {
+         "objetivo": "Aplicar las habilidades y destrezas propias de las técnicas scouts",
+         "contenidos": [
+          "Técnicas de pionerismo:\n- Uso de herramientas\n- Material de acampada\n- Cabuyería: nudos y amarres\n- Montaje de las infraestructuras de campamento\n- Construcciones scouts.\n- Normas de seguridad y cuidado del Medio Ambiente\n- Legislación en materia de acampada de la región",
+          "Cocina trampera",
+          "Transmisión de mensajes a través de códigos",
+          "Técnicas de orientación:\n- Diferentes tipos de mapas y escalas\n- Manejo de brújula, orientación por señales naturales, GPS…\n- Planificación de itinerarios utilizando diversos instrumentos"
+         ],
+         "indicadores": [
+          "Usa las herramientas de forma adecuada y segura para la actividad que va a realizar",
+          "Elige el material adecuado de acampada y lo mantiene en buen estado",
+          "Realiza construcciones con las técnicas propias de pionerismo tales como una mesa, un mástil, una atalaya, un vivac de supervivencia...",
+          "Participa en el montaje de infraestructuras de campamento con ayuda de sus iguales",
+          "Colabora en la realización y mantenimiento de las construcciones del campamento general y de su zona de acampada",
+          "Integra las construcciones del campamento en el entorno en el que se encuentra",
+          "Conoce las normas básicas de acampada (orientación de tienda, lugar, uso de jabón, desperdicios, pernocta, fuego...)",
+          "Conoce la existencia de la ley de acampadas de su comunidad autónoma",
+          "Aplica las técnicas de cocina trampera en las actividades de sección",
+          "Interpreta y reproduce códigos (morse, mensajes...) en actividades propias de la sección",
+          "Interpreta y explica el mapa de una travesía",
+          "Utiliza técnicas de orientación en el entorno natural útiles tanto para el día como para la noche",
+          "Se guía mediante brújula y/o GPS en un espacio marcado",
+          "Realiza una guía de una travesía (recorrido, desniveles, puntos conflictivos...)"
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    "rovers": {
+     "paginas": "48-49",
+     "bloques": [
+      {
+       "bloque": "CONOCIMIENTO DEL ENTORNO",
+       "objetivos": [
+        {
+         "objetivo": "Ser personas activas promoviendo el cuidado del entorno medioambiental para llegar a ser agentes de cambio",
+         "contenidos": [
+          "Conocimiento de la vegetación, fauna, entorno de la CCAA",
+          "Conocimiento y colaboración con entidades medioambientales de su entorno"
+         ],
+         "indicadores": [
+          "Identifica ejemplares diversos de animales, plantas, rocas, minerales y fósiles con la ayuda de claves o guías",
+          "Promueve una actitud de respeto hacia todas las formas de vida",
+          "Reconoce y localiza los rasgos físicos más significativos (clima, relieve, vegetación y aguas) en el entorno de una marcha",
+          "Reconoce las transformaciones en el paisaje geográfico producidas por la acción humana",
+          "Conoce cuáles son las entidades que trabajan para la conservación y cuidado del Medio Ambiente de su entorno",
+          "Planea acciones de colaboración con entidades medioambientales"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "EDUCACIÓN AMBIENTAL Y SOSTENIBILIDAD",
+       "objetivos": [
+        {
+         "objetivo": "Apreciar y respetar la naturaleza, velando por su conservación, mejora y desarrollo sostenible",
+         "contenidos": [
+          "Uso racional de los recursos y la promoción de energías alternativas",
+          "Las estrategias para el consumo sostenible",
+          "Actitud crítica y activa hacia los factores que atentan contra el Medio Ambiente (desperdicios en entornos cercanos, vertederos ilegales, deforestación, incendios provocados, explotaciones masivas de recursos, etc.) y su actuación ante el daño medioambiental",
+          "Los objetivos del Programa Mundial del Medio Ambiente"
+         ],
+         "indicadores": [
+          "Establece alternativas y pautas de actuación, individuales y colectivas, para promover un uso más racional de los recursos y energías",
+          "Promueve la necesidad del consumo austero de las energías",
+          "Es consciente de las estrategias de consumo ecológico, justo y sostenible (huertos urbanos, grupos de consumo, etc.)",
+          "Participa y/o diseña campañas para la protección y cuidado del entorno natural",
+          "Conoce los mecanismos de denuncia de las situaciones de riesgo medioambiental",
+          "Denuncia situaciones de riesgo o impacto medioambiental negativo",
+          "Denuncia situaciones de riesgo o impacto medioambiental negativo"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "TÉCNICAS SCOUT AMBIENTALES",
+       "objetivos": [
+        {
+         "objetivo": "Desenvolverse con soltura en un medio desconocido usando técnicas scout ambientales",
+         "contenidos": [
+          "Técnicas de Orientación:\n- La red de comunicación rural de aquellos lugares útiles para acampar o hacer rutas\n- Marchas y rutas del clan",
+          "Técnicas de pionerismo:\n- Supervivencia\n- Cabuyería\n- Construcciones scouts\n- Material de acampada\n- Legislación en materia de acampada de la región"
+         ],
+         "indicadores": [
+          "Se desenvuelve de manera autónoma en un medio natural usando diferentes herramientas: elementos naturales, mapa, brújula, páginas web, apps, etc.",
+          "Sabe usar un GPS: toma de coordenadas y seguimiento de coordenadas, elaboración de tracks…",
+          "Planifica una ruta de forma precisa (itinerario, horarios, paradas, etc.)",
+          "Guía en una ruta a otras personas con claridad",
+          "Pernocta en un medio natural aplicando las técnicas adquiridas",
+          "Aplica correctamente los diferentes tipos de cuerda según la actividad",
+          "Construye correctamente y mantiene las construcciones generales del campamento",
+          "Es responsable en el mantenimiento y autogestión del material de acampada",
+          "Se ajusta a la ley de acampadas de la comunidad autónoma donde acampe"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "salud",
+   "nombre": "Compromiso para la salud",
+   "secciones": {
+    "castores": {
+     "paginas": "51-52",
+     "bloques": [
+      {
+       "bloque": "MOTRICIDAD Y ACTIVIDAD FÍSICA",
+       "objetivos": [
+        {
+         "objetivo": "Desarrollar una psicomotricidad que repercuta positivamente en las situaciones cotidianas",
+         "contenidos": [
+          "Autonomía para vestirse, desvestirse, comer, etc. de manera adecuada",
+          "Esfuerzo por mejorar la motricidad corporal gruesa (correr, saltar, reptar, lanzar, recibir, girar…) y la motricidad fina (recortar, colorear…)",
+          "Imitación de formas organizadas de movimiento de manera natural (danzas, juegos, ritmos…)"
+         ],
+         "indicadores": [
+          "Se viste y desviste correctamente de forma autónoma",
+          "Come sin ayuda y de manera correcta",
+          "Progresa en la realización de actividades, juegos y manualidades",
+          "Se mueve y baila coordinadamente según diferentes tipos de juegos o música"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "EXPRESIÓN Y CREATIVIDAD",
+       "objetivos": [
+        {
+         "objetivo": "Desarrollar la creatividad y la capacidad de libre expresión",
+         "contenidos": [
+          "Análisis y descripción de objetos y situaciones tras conocerlos mediante los sentidos",
+          "Utilización del cuerpo como instrumento expresivo de forma espontánea y desinhibida",
+          "Exposición de sus ideas, opiniones y gustos personales de manera clara y desinhibida"
+         ],
+         "indicadores": [
+          "Describe objetos y lugares de manera adecuada",
+          "Interpreta situaciones con naturalidad",
+          "Demuestra naturalidad y espontaneidad en su comportamiento",
+          "Participa en veladas, danzas, etc. e interacciona en pequeños y grandes grupos",
+          "Expresa sus opiniones y sus gustos"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "HIGIENE",
+       "objetivos": [
+        {
+         "objetivo": "Adquirir unos hábitos de cuidado e higiene autónomos, mantener y cuidar el orden de las cosas colaborando con las demás personas",
+         "contenidos": [
+          "Limpieza de cubiertos y otros utensilios de comida",
+          "Adquisición de hábitos de cuidados e higiene diaria autónomos (cuidado de la ropa y los objetos personales, limpieza de dientes, ducharse e ir al baño sin ayuda…)",
+          "Participación en las tareas de limpieza y orden cotidianas"
+         ],
+         "indicadores": [
+          "Lava el plato, vaso/taza y cubiertos después de cada comida",
+          "Se asea y ducha sin ayuda",
+          "Se lava los dientes después de cada comida",
+          "Se lava las manos antes y después de comer",
+          "Emplea adecuadamente utensilios de limpieza",
+          "Mantiene limpio su entorno cercano (ordena la tienda, recoge su zona, limpia los restos después de un taller…)"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "ALIMENTACIÓN",
+       "objetivos": [
+        {
+         "objetivo": "Desarrollar el interés y el gusto por comer de todo de manera correcta y autónoma",
+         "contenidos": [
+          "Interés por conocer todo tipo de alimentos valorando si les gusta o no después de probarlos",
+          "Puesta en práctica de hábitos saludables al comer (comer despacio, masticar bien la comida…)"
+         ],
+         "indicadores": [
+          "Prueba todo tipo de alimentos y se esfuerza en comer de todo, incluido lo que no le gusta",
+          "Come de manera adecuada: sin prisas, masticando, sin jugar con la comida, sin levantarse de la mesa..."
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "PRIMEROS AUXILIOS",
+       "objetivos": [
+        {
+         "objetivo": "Adquirir hábitos básicos de prevención de accidentes e interiorizar modelos de actuación ante los mismos",
+         "contenidos": [
+          "Mantenimiento de la calma ante pequeños accidentes y conocimiento del protocolo de actuación ante un accidente",
+          "Hábitos y normas básicas de prevención de accidentes"
+         ],
+         "indicadores": [
+          "Se muestra tranquilo ante una pequeña herida",
+          "Avisa, en caso de accidente, a la persona responsable en dicho momento",
+          "Diferencia entre un terreno seguro y no seguro a la hora de jugar",
+          "Cumple normas básicas de seguridad al jugar"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "PREVENCIÓN A ADICCIONES",
+       "objetivos": [
+        {
+         "objetivo": "Valorar los beneficios y los perjuicios de una decisión y saber tomarla sin la influencia de las demás personas",
+         "contenidos": [
+          "Capacidad de tomar pequeñas decisiones en función de lo que quiere y no de lo que elijan las demás personas"
+         ],
+         "indicadores": [
+          "Sabe tomar una decisión sin dejarse llevar por sus iguales o personas adultas"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "EDUCACIÓN AFECTIVO-SEXUAL",
+       "objetivos": [
+        {
+         "objetivo": "Familiarizarse con las partes del cuerpo humano",
+         "contenidos": [
+          "Exploración e interés ante el conocimiento del propio cuerpo y el de las demás personas",
+          "Reconocimiento de las propias emociones y las causas que las provocan"
+         ],
+         "indicadores": [
+          "Se interesa por conocer su cuerpo y el de las demás personas, sus partes, funcionamiento, quien puede acceder a su cuerpo, etc",
+          "Identifica las diferencias externas entre sexos",
+          "Convive e interacciona de forma igualitaria con sus iguales de ambos sexos"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "EDUCACIÓN EMOCIONAL",
+       "objetivos": [
+        {
+         "objetivo": "Familiarizase con las emociones básicas",
+         "contenidos": [
+          "Reconocimiento de las propias emociones y las causas que las provocan"
+         ],
+         "indicadores": [
+          "Reconoce en sí mismo las emociones básicas y razona las causas que las provocan"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "AUTOESTIMA",
+       "objetivos": [
+        {
+         "objetivo": "Adoptar una actitud positiva y de autosuperación de sus metas intentando mejorar de manera continua",
+         "contenidos": [
+          "Seguridad y capacidad de dormir fuera de casa",
+          "Actitud de autosuperación y valoración positiva de sus logros como fuente para crear una buena autoestima",
+          "Autoevaluar las propias acciones y la interacción con sus iguales"
+         ],
+         "indicadores": [
+          "Es capaz de dormir fuera de su casa",
+          "Se esfuerza por mejorar",
+          "Valora positivamente los logros que consigue",
+          "Evalúa el comportamiento, forma de actuar, manera de resolver un conflicto y progresión personal propio y de sus iguales"
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    "lobatos": {
+     "paginas": "53-54",
+     "bloques": [
+      {
+       "bloque": "MOTRICIDAD Y ACTIVIDAD FÍSICA",
+       "objetivos": [
+        {
+         "objetivo": "Mejorar la psicomotricidad y desarrollar el gusto por distintas actividades físicas",
+         "contenidos": [
+          "Mejora de la motricidad general a través de juegos, dinámicas, talleres, danzas… grupales e individuales",
+          "Gusto por participar en distintas actividades físicas (deportes, actividades en la naturaleza, juegos…)"
+         ],
+         "indicadores": [
+          "Se desenvuelve adecuadamente en distintas actividades grupales e individuales (juegos, dinámicas, talleres, danzas...)",
+          "Disfruta participando en distintos tipos de actividades físicas"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "EXPRESIÓN Y CREATIVIDAD",
+       "objetivos": [
+        {
+         "objetivo": "Desarrollar la creatividad y la capacidad de libre expresión, familiarizándose con diferentes recursos artístico-expresivos para lograrlo",
+         "contenidos": [
+          "Interés por conocer, emplear y compartir las danzas como forma de expresión",
+          "Uso creativo de distintos recursos artístico-expresivos (dibujo, construcción, baile…)",
+          "Superación del miedo a mostrar sus creaciones a las demás personas"
+         ],
+         "indicadores": [
+          "Se interesa por aprender nuevas danzas, ponerlas en práctica y enseñárselas a otras personas",
+          "Usa distintos recursos artístico-expresivos (un dibujo, una construcción, un baile...) de forma creativa",
+          "Muestra sus creaciones a las demás personas"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "HIGIENE",
+       "objetivos": [
+        {
+         "objetivo": "Mantener unos hábitos de limpieza, cuidado e higiene con autonomía e iniciativa propia",
+         "contenidos": [
+          "Interés por mantener una buena limpieza de cubiertos y otros utensilios de comida",
+          "Consolidación de hábitos de cuidado e higiene y puesta en práctica con autonomía e iniciativa propia (cuidado de la ropa y los objetos personales, limpieza de dientes, ducharse y asearse, cuidado de pies en las rutas, protección solar…)",
+          "Iniciativa propia en las tareas de limpieza cotidianas"
+         ],
+         "indicadores": [
+          "Mantiene sus cubiertos y otros utensilios de comida limpios por iniciativa propia",
+          "Ordena y cuida su ropa y objetos personales adecuadamente y por iniciativa propia",
+          "Es independiente al ir al baño, asearse, peinarse, lavarse los dientes...y lo hace por iniciativa propia",
+          "Se preocupa por mantener un cuidado adecuado tanto de ropa y calzado como de aseo personal, especialmente en las rutas, cambiándose de calcetines, evitando la humedad o la exposición al sol, rutinas de higiene…"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "ALIMENTACIÓN",
+       "objetivos": [
+        {
+         "objetivo": "Poner en práctica y valorar la importancia de una alimentación equilibrada sabiendo identificar los distintos tipos de alimentos tomándolos en el momento adecuado",
+         "contenidos": [
+          "Identificación del grupo al que pertenecen los distintos alimentos que come en acampadas y salidas",
+          "Interés por llevar una alimentación equilibrada y puesta en práctica en su día a día",
+          "Valoración de la importancia de hidratarse al realizar diferentes actividades (marchas, juegos…) y puesta en práctica adecuada"
+         ],
+         "indicadores": [
+          "Es capaz de expresar a qué grupo de alimentos pertenece el plato que va a comerse",
+          "Analiza la dieta que ha seguido durante varios días (un fin de semana de acampada, una semana de campamento...) interesándose por ver si está equilibrada",
+          "Elabora un sencillo menú de varios días (alguna convivencia, acampada...) que resulte equilibrado",
+          "Expresa el por qué es importante hidratarnos adecuadamente al realizar diferentes actividades y se preocupa de ponerlo en práctica adecuadamente (beber cada cierto tiempo, en una marcha racionar el agua...)"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "PRIMEROS AUXILIOS",
+       "objetivos": [
+        {
+         "objetivo": "Desarrollar el sentido crítico y analítico en relación con la seguridad poniéndolo en práctica a la hora de jugar",
+         "contenidos": [
+          "Prevención de situaciones de juego peligrosas analizando las zonas de juego, sus conductas y las de las demás personas al jugar"
+         ],
+         "indicadores": [
+          "Elige de forma razonada zonas de juego seguras y utiliza objetos en cualquier actividad de manera responsable prestando atención a la seguridad (tirar piedras, escalar...)"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "PREVENCIÓN A ADICCIONES",
+       "objetivos": [
+        {
+         "objetivo": "Tomar pequeñas decisiones cotidianas sin la influencia de las demás personas",
+         "contenidos": [
+          "Capacidad de tomar pequeñas decisiones con convicción en sus ideas y preferencias"
+         ],
+         "indicadores": [
+          "Toma sus propias decisiones en juegos, talleres, etc. sin dejarse arrastrar por lo que hagan las demás personas, diciendo NO ante las presiones"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "EDUCACIÓN AFECTIVO-SEXUAL",
+       "objetivos": [
+        {
+         "objetivo": "Aceptar su identidad sexual y de género y la de las demás personas",
+         "contenidos": [
+          "Aceptación y vivencia de su propia identidad sexual y de género y la de las demás personas"
+         ],
+         "indicadores": [
+          "Asume con naturalidad su identidad sexual y de género y respeta la de las demás personas"
+         ]
+        },
+        {
+         "objetivo": "Desarrollar una actitud de respeto de la intimidad de las demás personas",
+         "contenidos": [
+          "Respeto a la intimidad de las demás personas"
+         ],
+         "indicadores": [
+          "Muestra respeto hacia la intimidad de las demás personas (cuando se cambian, están en el baño, etc.)"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "EDUCACIÓN EMOCIONAL",
+       "objetivos": [
+        {
+         "objetivo": "Reconocer sus propias emociones y las de las demás personas y a identificar las posibles causas que las provocan",
+         "contenidos": [
+          "Reconocimiento de las emociones propias y de las demás personas y las causas que las provocan"
+         ],
+         "indicadores": [
+          "Reconoce sus propias emociones, las de las demás personas (a través del comportamiento que muestran) y razona las causas que las provocan"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "AUTOESTIMA",
+       "objetivos": [
+        {
+         "objetivo": "Aceptar y analizar de manera adecuada las críticas constructivas e intentar mejorar asumiendo sus limitaciones",
+         "contenidos": [
+          "Análisis realista de sus propias capacidades y actitud de autosuperación",
+          "Adquisición de hábitos positivos de interacción con las demás personas",
+          "Aceptación de críticas constructivas por parte de las demás personas como medio de automejora y mantenimiento de un equilibrio emocional saludable",
+          "Formar un autoconcepto propio tanto de su personalidad como de sus propias acciones"
+         ],
+         "indicadores": [
+          "Analiza sus propias capacidades siendo realista y esforzándose por autosuperarse",
+          "Expresa sus ideas sin hacer daño a las demás personas (asertividad)",
+          "Acepta las críticas constructivas que le hacen las demás personas y las tiene en cuenta para mejorar",
+          "Muestra capacidad de exteriorización de su propia imagen personal y realiza una descripción propia y de las personas que hay en su entorno"
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    "scouts": {
+     "paginas": "55-57",
+     "bloques": [
+      {
+       "bloque": "MOTRICIDAD Y ACTIVIDAD FÍSICA",
+       "objetivos": [
+        {
+         "objetivo": "Interesarse por la mejora de la psicomotricidad a través de distintos tipos de actividades físicas, una actitud de autosuperación y el razonamiento de los efectos en la salud de distintos factores",
+         "contenidos": [
+          "Análisis y valoración de los efectos de distintos factores que inciden en la salud (descanso, ejercicio físico regular, ruido…)",
+          "Interés por conocer, participar y enseñar a sus iguales nuevas actividades físicas, tanto individuales como en grupo",
+          "Valoración de la competitividad sana y positiva y promoción de la misma al participar en distintos tipos de competiciones",
+          "Esfuerzo por mejorar motrizmente en situaciones muy variadas (individuales y grupales, de equilibrio, puntería, velocidad…)"
+         ],
+         "indicadores": [
+          "Analiza y valora los efectos que tienen en la salud un buen descanso, hacer ejercicio regularmente, una adecuada alimentación, unos niveles de ruido controlados, etc.",
+          "Se interesa por conocer, participar y enseñar a sus iguales distintos tipos de actividades físicas",
+          "Valora la necesidad de una competitividad sana y positiva, esforzándose al participar en distintos tipos de actividades por que así sea",
+          "Se esfuerza por mejorar sus habilidades motrices en situaciones muy variadas"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "EXPRESIÓN Y CREATIVIDAD",
+       "objetivos": [
+        {
+         "objetivo": "Desarrollar la creatividad y la capacidad de libre expresión y aplicación en diferentes contextos (debates, juegos, talleres, etc.)",
+         "contenidos": [
+          "Desinhibición y espontaneidad al expresarse",
+          "Valoración y esfuerzo por expresar sus ideas, emociones, etc. abiertamente sin miedo al rechazo",
+          "Uso creativo de los recursos y estrategias a su disposición en distintos tipos de juegos y actividades"
+         ],
+         "indicadores": [
+          "Muestra desinhibición y espontaneidad al expresarse",
+          "Valora la importancia de expresarse abiertamente sin miedo al rechazo, esforzándose por hacerlo",
+          "Muestra creatividad al participar en distintos tipos de juegos y actividades"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "HIGIENE",
+       "objetivos": [
+        {
+         "objetivo": "Mantener su higiene personal y cuidar el entorno que les rodea",
+         "contenidos": [
+          "Mantenimiento de una buena higiene personal",
+          "Esfuerzo por mantener su entorno en unas condiciones adecuadas en cuanto a la salud"
+         ],
+         "indicadores": [
+          "Mantiene una buena higiene personal",
+          "Mantiene su entorno (local, tienda, zona, etc.) en unas condiciones adecuadas (limpio y ordenado, bien ventilado, etc.)"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "ALIMENTACIÓN",
+       "objetivos": [
+        {
+         "objetivo": "Conocer diferentes riesgos relacionados con la alimentación y desarrollar hábitos de actuación con los que mantener una alimentación saludable",
+         "contenidos": [
+          "Interés por seguir una alimentación saludable en su día a día",
+          "Conocimiento de los riesgos de enfermedades metabólicas, diabetes, alergias alimentarias y otros trastornos (obesidad, colesterol, anorexia…) y medidas básicas para hacerles frente en actividades cotidianas",
+          "Análisis y valoración de alimentos por su valor nutricional (cantidad y tipo de nutrientes, calorías vacías…)"
+         ],
+         "indicadores": [
+          "Se interesa por llevar una alimentación saludable y variada, poniendo estas ideas en práctica en su día a día",
+          "Conoce distintas enfermedades relacionadas con la alimentación, los riesgos que suponen para la salud y las repercusiones que tienen en el estilo de vida",
+          "Conoce y previene problemas derivados de intolerancias y alergias alimentarias en sus actividades cotidianas (celiaquía, intolerancia a la lactosa, etc.)",
+          "Conoce y previene en sus actividades cotidianas enfermedades relacionadas con la alimentación (anorexia, obesidad, etc.) y actúa de forma positiva cuando ya están presentes",
+          "Es capaz de analizar el valor nutricional de los alimentos, valora aquellos que consume por estos factores y no solo por estética, gustos, etc., adoptando una actitud crítica con los alimentos con grandes cantidades de calorías vacías"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "PRIMEROS AUXILIOS",
+       "objetivos": [
+        {
+         "objetivo": "Familiarizarse con técnicas y protocolos básicos de primeros auxilios",
+         "contenidos": [
+          "Técnicas y protocolos de actuación básicos en primeros auxilios"
+         ],
+         "indicadores": [
+          "Se interesa por aprender técnicas y protocolos básicos de primeros auxilios (análisis de consciencia, verificación de respiración, posición lateral de seguridad, formas de contacto con el centro médico, realización de curas básicas, etc.)"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "PREVENCIÓN A ADICCIONES",
+       "objetivos": [
+        {
+         "objetivo": "Conocer y analizar diferentes aspectos del consumo de drogas y los efectos que tienen para la salud adquiriendo nociones de consumo responsable",
+         "contenidos": [
+          "Análisis de las principales causas que propician el consumo de drogas y nociones básicas de consumo responsable y sus consecuencias a corto y largo plazo",
+          "Conocimiento de distintos tipos de drogas y sus efectos en el organismo y razonamiento de los riesgos que suponen para la salud",
+          "Desarrollo de una opinión propia y crítica respecto a las drogas, mostrando coherencia en sus actuaciones",
+          "Análisis crítico de las repercusiones del consumo de alcohol y otras drogas en distintos aspectos de la vida cotidiana (accidentes de tráfico, relaciones sociales, laborales…)"
+         ],
+         "indicadores": [
+          "Analiza y razona las principales causas que propician el consumo de drogas",
+          "Entiende las nociones básicas de consumo responsable",
+          "Conoce distintos tipos de drogas y los efectos que producen en el organismo (café, tabaco, alcohol, etc.). Razona los riesgos que suponen para su salud y la de las demás personas el consumo de drogas",
+          "Tiene una opinión propia y crítica respecto a las drogas y actúa coherentemente de acuerdo a esta",
+          "Analiza y razona las repercusiones del consumo de distintas drogas en los aspectos de su vida cotidiana"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "EDUCACIÓN AFECTIVO-SEXUAL",
+       "objetivos": [
+        {
+         "objetivo": "Familiarizarse con la sexualidad humana, los cambios que implica la pubertad y las nociones de sexo seguro, mostrando respeto y naturalidad",
+         "contenidos": [
+          "Análisis y aceptación de los cambios de la pubertad como algo natural",
+          "Aceptación y vivencia de su propia identidad sexual y de género y respeto a la de las demás personas",
+          "Respeto a la intimidad de las demás personas",
+          "Familiarización con la función reproductiva y el desarrollo sexual del cuerpo humano",
+          "Razonamiento de las consecuencias de distintas situaciones asociadas a las relaciones sexuales de riesgo y las repercusiones que tienen en su calidad de vida.",
+          "Conocimiento de distintos mecanismos de prevención de embarazos no deseados y de infecciones de transmisión sexual (ITS)."
+         ],
+         "indicadores": [
+          "Analiza los cambios propios de la pubertad y los acepta como algo natural",
+          "Acepta su propia identidad sexual y de género viviéndola sin miedo y respeta las de las demás personas",
+          "Muestra respeto con la intimidad de las demás personas (cuando se cambian, están en el baño, etc.)",
+          "Entiende los procesos de desarrollo sexuales y el proceso reproductivo humano",
+          "Razona las consecuencias de distintas situaciones asociadas a las relaciones sexuales de riesgo (embarazos no deseados e infecciones de transmisión sexual) y las repercusiones que tienen en su calidad de vida.",
+          "Conoce distintos mecanismos válidos de prevención de embarazos no deseados y de infecciones de transmisión sexual (ITS)."
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "EDUCACIÓN EMOCIONAL",
+       "objetivos": [
+        {
+         "objetivo": "Comprender y tener en cuenta en sus interacciones sociales la influencia de las emociones y estados de ánimo en la forma de actuar de las personas.",
+         "contenidos": [
+          "Influencia básica de las emociones y los estados de ánimo en la forma de actuar de las personas."
+         ],
+         "indicadores": [
+          "Es consciente de la influencia que tienen las emociones y los estados de ánimo en su forma de actuar y en la de las demás personas, teniendo esto en cuenta en sus interacciones sociales."
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "AUTOESTIMA",
+       "objetivos": [
+        {
+         "objetivo": "Analizar de manera realista sus propias capacidades, aceptándolas y esforzándose por mejorar en lo posible.",
+         "contenidos": [
+          "Análisis realista de sus propias capacidades."
+         ],
+         "indicadores": [
+          "Analiza sus propias capacidades siendo realista, las acepta e intenta mejorar en todas aquellas en que es posible."
+         ]
+        },
+        {
+         "objetivo": "Valorar la importancia de medir a las personas por su forma de ser y actuar en lugar de por factores que no puede cambiar.",
+         "contenidos": [
+          "Aceptación de las cualidades que no puede cambiar (atributos físicos…) y esfuerzo por mejorar personalmente aquellas que sí."
+         ],
+         "indicadores": [
+          "Valora a las demás personas por sus acciones no por su apariencia."
+         ]
+        },
+        {
+         "objetivo": "Desarrollar el sentido crítico en cuanto a las interacciones sociales, aprendiendo a actuar de manera positiva.",
+         "contenidos": [
+          "Valoración de las demás personas en función de los atributos y cualidades que dependen de la persona (forma de actuar, valores que demuestra…).",
+          "Análisis crítico de los procesos de presión grupal y conocimiento de técnicas para hacerles frente.",
+          "Actitud constructiva en su interacción con las demás personas"
+         ],
+         "indicadores": [
+          "Identifica y analiza procesos de presión grupal, mostrándose crítico y aplicando técnicas para hacerles frente.",
+          "Trata de ser una persona constructiva al interactuar con las demás personas."
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    "escultas": {
+     "paginas": "58-60",
+     "bloques": [
+      {
+       "bloque": "MOTRICIDAD Y ACTIVIDAD FÍSICA",
+       "objetivos": [
+        {
+         "objetivo": "Valorar la actividad física como una opción saludable en la que invertir el tiempo de ocio, desarrollando el gusto por participar en una amplia variedad de ellas tanto conocidas como novedosas",
+         "contenidos": [
+          "Interés por participar en diferentes actividades físicas y conocer nuevas",
+          "Valoración de las actividades físicas como forma saludable de disfrute y uso activo del tiempo de ocio"
+         ],
+         "indicadores": [
+          "Participa en diferentes actividades físicas y muestra interés por conocer nuevas",
+          "Analiza y valora los beneficios que aportan las actividades físicas en su calidad de vida"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "EXPRESIÓN Y CREATIVIDAD",
+       "objetivos": [
+        {
+         "objetivo": "Valorar la importancia de exteriorizar sus sentimientos y problemas adecuadamente, de expresarse abiertamente con naturalidad y de manera asertiva y de actuar conforme a estas ideas en su día a día",
+         "contenidos": [
+          "Valoración y esfuerzo por dar su opinión abiertamente y de expresarse de forma asertiva",
+          "Valoración de la importancia de exteriorizar sus sentimientos y problemas de manera saludable y actuación en consecuencia",
+          "Naturalidad en su relación con las demás personas sin dejarse influir por las presiones grupales"
+         ],
+         "indicadores": [
+          "Valora la necesidad de opinar abiertamente y expresarse asertivamente, esforzándose por hacerlo en su día a día",
+          "Valora la importancia de exteriorizar sus sentimientos y problemas de manera saludable y se esfuerza por actuar conforme a estas ideas",
+          "Se muestra natural al relacionarse con las demás personas sin dejarse influir por las presiones grupales"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "HIGIENE",
+       "objetivos": [
+        {
+         "objetivo": "Promover hábitos de salud y de organización en su entorno más cercano",
+         "contenidos": [
+          "Promoción en su entorno cercano de hábitos saludables de higiene y de organización"
+         ],
+         "indicadores": [
+          "Promociona hábitos saludables de higiene y de organización en su entorno"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "ALIMENTACIÓN",
+       "objetivos": [
+        {
+         "objetivo": "Desarrollar una actitud crítica, responsable y autónoma en relación con la alimentación",
+         "contenidos": [
+          "Creación de un menú saludable (con tipo de alimentos y sus cantidades aproximadas) e interés por llevarlo a la práctica",
+          "Análisis de los riesgos y problemas de una dieta desequilibrada"
+         ],
+         "indicadores": [
+          "Crea su propio menú saludable prestando atención a las cantidades y la presencia adecuada de los diferentes tipos de alimentos",
+          "Se esfuerza por llevar a la práctica una dieta saludable que previamente ha creado",
+          "Analiza los riesgos y problemas que conlleva una dieta poco saludable (rendimiento escolar, deportivo, emocional, etc.)"
+         ]
+        },
+        {
+         "objetivo": "Familiarizarse con los distintos trastornos de la alimentación y aprender a atajarlos en su entorno más cercano",
+         "contenidos": [
+          "Conocimiento de distintos tipos de trastornos alimenticios, consciencia de las presiones estéticas y comerciales que las promueven y opinión crítica ante ello",
+          "Familiarización con los recursos de la comunidad con los que hacer frente a los trastornos alimenticios"
+         ],
+         "indicadores": [
+          "Conoce distintos tipos de trastornos alimenticios y muestra una opinión crítica ante ellos",
+          "Es consciente de las presiones estéticas y comerciales que influyen en la aparición de distintos trastornos alimenticios y muestra una opinión crítica ante ellos",
+          "Conoce la finalidad y la forma de uso de distintos recursos de su comunidad que pueden ayudar a superar un trastorno alimenticio"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "PRIMEROS AUXILIOS",
+       "objetivos": [
+        {
+         "objetivo": "Conocer tipos de medicamentos básicos aprendiendo a no abusar de ellos y usarlos racionalmente",
+         "contenidos": [
+          "Conocimiento de distintos tipos de medicamentos básicos y precaución ante el abuso de estos"
+         ],
+         "indicadores": [
+          "Conoce las características y usos de diferentes medicamentos presentes en un botiquín básico y razona la necesidad de no abusar de ellos"
+         ]
+        },
+        {
+         "objetivo": "Adquirir patrones de actuación adecuados ante diferentes tipos de accidentes",
+         "contenidos": [
+          "Conocimiento de las normas básicas de seguridad y familiarización con los protocolos de actuación frente a un accidente (doméstico, de tráfico, en el campo, etc.)"
+         ],
+         "indicadores": [
+          "Conoce las normas básicas de seguridad y es capaz de aplicar los protocolos de actuación frente a distintos tipos de accidentes (domésticos, de tráfico, en el campo, etc.)"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "PREVENCIÓN A ADICCIONES",
+       "objetivos": [
+        {
+         "objetivo": "Conocer y analizar con madurez diferentes aspectos del consumo de drogas y los efectos que tienen para la salud adquiriendo nociones de consumo responsable",
+         "contenidos": [
+          "Análisis de las principales causas que propician el consumo de drogas y nociones básicas de consumo responsable",
+          "Conocimiento de distintos tipos de drogas y sus efectos en el organismo y razonamiento de los riesgos que suponen para la salud",
+          "Desarrollo de una opinión propia y crítica respecto a las drogas, mostrando coherencia en sus actuaciones",
+          "Análisis crítico de las repercusiones del consumo de alcohol y otras drogas en distintos aspectos de la vida cotidiana (accidentes de tráfico, relaciones sociales, laborales…)"
+         ],
+         "indicadores": [
+          "Razona las principales causas que propician el consumo de drogas y asume nociones básicas de consumo responsable",
+          "Conoce distintos tipos de drogas y sus efectos en el organismo, razonando los riesgos que suponen para la salud",
+          "Demuestra tener una opinión propia y crítica respecto a las drogas, actuando coherentemente con esta",
+          "Razona las repercusiones del consumo de distintas drogas (tabaco, alcohol, etc.) en distintos aspectos de su día a día"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "EDUCACIÓN AFECTIVO-SEXUAL",
+       "objetivos": [
+        {
+         "objetivo": "Aceptar los cambios de la pubertad como algo natural y necesario",
+         "contenidos": [
+          "Análisis de las principales causas que propician el consumo de drogas y nociones básicas de consumo responsable"
+         ],
+         "indicadores": [
+          "Razona las principales causas que propician el consumo de drogas y asume nociones básicas de consumo responsable"
+         ]
+        },
+        {
+         "objetivo": "Conoce la finalidad y la forma de uso de distintos recursos de su comunidad que pueden ayudar a superar un trastorno alimenticio",
+         "contenidos": [
+          "Conocimiento de distintos tipos de drogas y sus efectos en el organismo y razonamiento de los riesgos que suponen para la salud",
+          "Aceptación y vivencia de la propia sexualidad de manera sana, libre, natural y responsable",
+          "Conocimiento y respeto por los distintos tipos de identidades y orientaciones sexuales",
+          "Conocimiento de la terminología relacionada con el sexo y los aparatos genitales así como de las prácticas y mitos sexuales promovidos por la sociedad (p. ej. marcha atrás)",
+          "Actitud crítica y de rechazo ante relaciones tóxicas que se pueden dar en distintos tipos de relaciones"
+         ],
+         "indicadores": [
+          "Conoce distintos tipos de drogas y sus efectos en el organismo, razonando los riesgos que suponen para la salud",
+          "Acepta la sexualidad como algo natural y la vive de manera sana, responsable y libre",
+          "Conoce distintos tipos de identidades y orientaciones sexuales y muestra respeto por todas ellas",
+          "Maneja sus emociones de manera adecuada y saludable sin negarlas ni dejarse arrastrar por ellas"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "EDUCACIÓN EMOCIONAL",
+       "objetivos": [
+        {
+         "objetivo": "Manejar sus emociones de manera saludable e inteligente a nivel personal y social",
+         "contenidos": [
+          "Manejo de las emociones de manera inteligente"
+         ],
+         "indicadores": [
+          "Maneja sus emociones de manera adecuada y saludable sin negarlas ni dejarse arrastrar por ellas",
+          "Analiza la influencia de las emociones de las demás personas en los comportamientos que muestran y los tiene en cuenta en sus interacciones en el grupo"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "AUTOESTIMA",
+       "objetivos": [
+        {
+         "objetivo": "Adquirir la costumbre de ser autocrítico, aceptar de manera constructiva las capacidades que no puede cambiar y esforzarse por mejorar aquellas que sí",
+         "contenidos": [
+          "Análisis realista de sus capacidades, cualidades, atributos… aceptación y valoración constructiva de las mismas y esfuerzo por mejorar en lo posible"
+         ],
+         "indicadores": [
+          "Analiza de manera realista sus capacidades, cualidades, atributos, etc. aceptándolos y valorándolos constructivamente y esforzándose por mejorar en lo posible"
+         ]
+        },
+        {
+         "objetivo": "Valorar la importancia que tiene la autoestima en la salud emocional, comprender las repercusiones de distintos factores en la formación de una buena autoestima y adquirir hábitos que permitan desarrollar una adecuada autoestima",
+         "contenidos": [
+          "Valoración de la importancia de tener una buena autoestima y esfuerzo por mejorar la de las personas a su alrededor",
+          "Análisis y actitud crítica ante las imágenes corporales irrealistas de TV, cine, anuncios…",
+          "Valoración de su cuerpo en función de criterios de salud por encima de criterios estéticos"
+         ],
+         "indicadores": [
+          "Comprende y valora la importancia de tener una buena autoestima y se esfuerza por mejorar la de las personas de su entorno",
+          "Muestra una actitud crítica al analizar las imágenes y estereotipos corporales irrealistas presentes en la TV, el cine, los anuncios, etc.",
+          "Valora su cuerpo a través de criterios de salud antes que mediante criterios simplemente estéticos"
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    "rovers": {
+     "paginas": "61-62",
+     "bloques": [
+      {
+       "bloque": "MOTRICIDAD Y ACTIVIDAD FÍSICA",
+       "objetivos": [
+        {
+         "objetivo": "Adquirir mayor interés por promover la actividad física saludable en su entorno",
+         "contenidos": [
+          "Promoción de la actividad física saludable en su entorno a través de distintos tipos de actividades"
+         ],
+         "indicadores": [
+          "Promueve la actividad física saludable en su entorno a través de distintos tipos de actividades"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "EXPRESIÓN Y CREATIVIDAD",
+       "objetivos": [
+        {
+         "objetivo": "Desarrollar el interés por promover en sus relaciones sociales la exteriorización adecuada de sentimientos y problemas y la expresión libre, asertiva, natural y creativa",
+         "contenidos": [
+          "Valoración y esfuerzo por dar su opinión abiertamente, expresarse de forma asertiva y promover estas ideas en sus interacciones sociales",
+          "Valoración de la importancia de exteriorizar los sentimientos y problemas de manera saludable y esfuerzo por actuar en consecuencia y promover esta dinámica en sus interacciones sociales",
+          "Naturalidad en su relación con las demás personas sin dejarse influenciar por la presión grupal y social"
+         ],
+         "indicadores": [
+          "Valora la necesidad de opinar abiertamente y expresarse asertivamente, esforzándose por hacerlo y promover esta dinámica en su entorno",
+          "Valora la importancia de exteriorizar los sentimientos y problemas de manera saludable, esforzándose por actuar conforme a estas ideas y promover esta dinámica en su entorno",
+          "Se muestra natural al relacionarse con las demás personas sin dejarse influenciar por la presión grupal y social"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "HIGIENE",
+       "objetivos": [
+        {
+         "objetivo": "Promover hábitos saludables de higiene y de organización en su entorno",
+         "contenidos": [
+          "Promoción de hábitos saludables de higiene y de organización en su entorno"
+         ],
+         "indicadores": [
+          "Promociona hábitos saludables de higiene y de organización en su entorno"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "ALIMENTACIÓN",
+       "objetivos": [
+        {
+         "objetivo": "Adaptar a su estilo de vida unos hábitos de alimentación saludable",
+         "contenidos": [
+          "Adecuación de la alimentación a su estilo de vida, buscando que sea saludable y coherente con el resto de sus valores",
+          "Valoración de los productos alimentarios por su valor nutricional y opinión crítica ante los mitos alimentarios presentes en la publicidad y en la práctica diaria de las personas"
+         ],
+         "indicadores": [
+          "Adapta su alimentación a su estilo de vida de manera realista, preocupándose por que sea saludable y sostenible",
+          "Muestra una actitud crítica ante los distintos productos alimentarios y los valora por su valor nutricional además de por su sabor, apariencia, etc. interesándose además por desmitificar falsas creencias sociales sobre alimentación"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "PRIMEROS AUXILIOS",
+       "objetivos": [
+        {
+         "objetivo": "Utilizar tanto los servicios y recursos sanitarios como los medicamentos de manera racional y responsable",
+         "contenidos": [
+          "Conocimiento de los distintos recursos sanitarios de su entorno y uso de los mismos de manera racional"
+         ],
+         "indicadores": [
+          "Conoce los distintos recursos sanitarios de su entorno y es capaz de hacer uso de ellos de manera racional"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "PREVENCIÓN A ADICCIONES",
+       "objetivos": [
+        {
+         "objetivo": "Concienciar a las demás personas y promover un consumo responsable de drogas desarrollando una opinión crítica respecto a estas",
+         "contenidos": [
+          "Concienciación de las personas cercanas en relación al consumo de drogas y promoción de modelos de consumo responsable",
+          "Desarrollo de una opinión propia y crítica respecto a las drogas, mostrando coherencia en sus actuaciones"
+         ],
+         "indicadores": [
+          "Conciencia a su entorno cercano sobre las drogas y promociona modelos de consumo responsable",
+          "Muestra una opinión crítica propia respecto a las drogas actuando coherentemente con estas"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "EDUCACIÓN AFECTIVO-SEXUAL",
+       "objetivos": [
+        {
+         "objetivo": "Aceptar su propia sexualidad viviéndola de manera sana, libre, natural y responsable",
+         "contenidos": [
+          "Aceptación y vivencia de la propia sexualidad de manera sana, libre, natural y responsable"
+         ],
+         "indicadores": [
+          "Acepta la sexualidad como algo natural y la vive de manera sana, responsable y libre"
+         ]
+        },
+        {
+         "objetivo": "Promover en su entorno valores de respeto y responsabilidad en relación con temas afectivo-sexuales",
+         "contenidos": [
+          "Promoción en su entorno del uso de distintos mecanismos de prevención de embarazos no deseados y de infecciones de transmisión sexual (ITS)",
+          "Fomento en su entorno de valores de respeto en relación a los tipos de orientación sexual"
+         ],
+         "indicadores": [
+          "Promociona en su entorno el uso de distintos mecanismos válidos de prevención de embarazos no deseados y de infecciones de transmisión sexual (ITS)",
+          "Fomenta en su entorno valores de respeto en relación a los distintos tipos de orientación sexual",
+          "Analiza la influencia de las emociones de las demás personas en los comportamientos que muestran y los tiene en cuenta en sus interacciones con ellas y se esfuerza por promocionar en su entorno esta dinámica de actuación"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "EDUCACIÓN EMOCIONAL",
+       "objetivos": [
+        {
+         "objetivo": "Mejorar el manejo de las emociones de manera saludable e inteligente a nivel personal y social fomentando a la vez estas dinámicas de actuación en su entorno",
+         "contenidos": [
+          "Manejo de las emociones de forma inteligente y fomento en su entorno de conductas positivas"
+         ],
+         "indicadores": [
+          "Maneja sus emociones de manera adecuada y saludable sin negarlas ni dejarse arrastrar por ellas y se esfuerza por promocionar en su entorno esta dinámica de actuación"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "AUTOESTIMA",
+       "objetivos": [
+        {
+         "objetivo": "Adquirir el hábito de analizar regularmente su estilo de vida en relación a la salud buscando mejorarlo, aceptando críticas constructivas",
+         "contenidos": [
+          "Reflexión crítica sobre su estilo de vida en relación con la salud (sedentarismo, alimentación, higiene…) y actitud de mejora"
+         ],
+         "indicadores": [
+          "Reflexiona sobre su estilo de vida en relación a la salud (vida activa, tipo de alimentación, higiene, etc.) teniendo una actitud crítica y buscando mejorar"
+         ]
+        },
+        {
+         "objetivo": "Desarrollar una actitud crítica y razonada frente a los modelos corporales irrealistas, promoviendo modelos saludables en su entorno",
+         "contenidos": [
+          "Análisis y actitud crítica ante las imágenes corporales irrealistas de TV, cine, anuncios… y promoción de modelos saludables y realistas en su entorno cercano"
+         ],
+         "indicadores": [
+          "Muestra una actitud crítica al analizar las imágenes y estereotipos corporales irreales presentes en la TV, el cine, los anuncios, etc. y se preocupa de promocionar modelos saludables y realistas en su entorno cercano"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "espiritual",
+   "nombre": "Compromiso espiritual",
+   "secciones": {
+    "castores": {
+     "paginas": "64",
+     "bloques": [
+      {
+       "bloque": "Persona",
+       "objetivos": [
+        {
+         "objetivo": "Desarrollar la autorregulación emocional a partir de la percepción y conocimiento de sus sentimientos y emociones",
+         "contenidos": [
+          "Diferenciación de lo corporal y lo espiritual (sentimientos, emociones, etc.)",
+          "La meditación y la reflexión"
+         ],
+         "indicadores": [
+          "Reflexiona con frases y textos sencillos"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "Valores",
+       "objetivos": [
+        {
+         "objetivo": "Interiorizar valores que favorezcan las relaciones interpersonales en el entorno cercano (familia, amigos, escuela…)",
+         "contenidos": [
+          "El valor de la generosidad",
+          "La verdad",
+          "Actitud crítica ante lo bueno y lo malo",
+          "Los valores que subyacen en la Ley y la Promesa de la colonia, los consejos de Malak"
+         ],
+         "indicadores": [
+          "Dice siempre la verdad",
+          "Valora las consecuencias de decir la verdad",
+          "Distingue entre lo bueno y lo malo",
+          "Comparte sus cosas con las demás personas"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "Entorno y creencias",
+       "objetivos": [
+        {
+         "objetivo": "Observar con curiosidad el entorno (familiar, sociocultural y natural), reconociendo en él pistas para potenciar las primeras creencias",
+         "contenidos": [
+          "La curiosidad ante el mundo y la vida",
+          "Contemplación de la naturaleza"
+         ],
+         "indicadores": [
+          "Se interesa por el origen de la vida y lo asume en la medida de sus posibilidades",
+          "Disfruta de la observación de la naturaleza en diferentes situaciones"
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    "lobatos": {
+     "paginas": "64",
+     "bloques": [
+      {
+       "bloque": "Persona",
+       "objetivos": [
+        {
+         "objetivo": "Establecer vínculos de amistad con su grupo de iguales",
+         "contenidos": [
+          "Establecer el valor de la amistad"
+         ],
+         "indicadores": [
+          "Muestra coherencia con cada estado de ánimo y la emoción que expresa físicamente"
+         ]
+        },
+        {
+         "objetivo": "Reconocer las emociones en su propia persona y en sus iguales",
+         "contenidos": [
+          "Relacionar las emociones con cada estado de ánimo existente en las personas."
+         ],
+         "indicadores": [
+          "Establece vínculos de amistad con el resto de la manada"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "Valores",
+       "objetivos": [
+        {
+         "objetivo": "Profundizar en los valores que favorecen las relaciones interpersonales en su entorno cercano, haciendo hincapié en el grupo de iguales",
+         "contenidos": [
+          "El valor de la amistad",
+          "El perdón",
+          "La buena acción",
+          "Los valores que subyacen en la Ley y la Promesa de la Manada, las Máximas de Baloo",
+          "Actitud crítica ante lo bueno y lo malo"
+         ],
+         "indicadores": [
+          "Muestra una actitud coherente con sus valores y principios personales",
+          "Reconoce diferentes valores y cualidades personales",
+          "Establece vínculos de amistad con el resto de la manada",
+          "Pide perdón y sabe perdonar",
+          "Practica habitualmente la buena acción",
+          "Ayuda a las demás personas"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "Entorno y creencias",
+       "objetivos": [
+        {
+         "objetivo": "Conocer, analizar y respetar las creencias y diferentes puntos de vista espirituales de su entorno",
+         "contenidos": [
+          "Sociedad, cultura y creencias",
+          "Celebraciones religiosas, sociales y culturales",
+          "Simbología y formas de expresión propia de las religiones y movimientos sociales que se desarrollan en su entorno"
+         ],
+         "indicadores": [
+          "Conoce y distingue diferentes tipos de celebraciones",
+          "Se interesa por las creencias y religiones que se desarrollan en su entorno",
+          "Conoce e identifica diferentes signos y símbolos religiosos y sociales de su entorno más próximo",
+          "Muestra respeto ante las diferentes manifestaciones religiosas, culturales, sociales y filosóficas"
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    "scouts": {
+     "paginas": "65",
+     "bloques": [
+      {
+       "bloque": "Persona",
+       "objetivos": [
+        {
+         "objetivo": "Iniciar el establecimiento de una escala de valores personal a partir del análisis crítico de los valores y creencias familiares y sociales recibidas",
+         "contenidos": [
+          "Las creencias en el espacio personal",
+          "Análisis de los valores recibidos",
+          "Escala de valores propia"
+         ],
+         "indicadores": [
+          "Reflexiona sobre los valores recibidos",
+          "Medita y reflexiona sobre diferentes maneras de vivir",
+          "Comienza a desarrollar su propia escala de valores"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "Valores",
+       "objetivos": [
+        {
+         "objetivo": "Comprender y asumir los valores trascendentes que se desprenden de los elementos básicos del Escultismo",
+         "contenidos": [
+          "Valores que subyacen de la Promesa y la Ley Scout",
+          "Virtudes: lealtad, abnegación y pureza",
+          "Los principios scouts"
+         ],
+         "indicadores": [
+          "Entiende los valores que subyacen de la Promesa, Ley y virtudes scouts y los pone en práctica",
+          "Pone en práctica los principios scouts"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "Entorno y creencias",
+       "objetivos": [
+        {
+         "objetivo": "Descubrir los sentimientos, actitudes religiosas y/o creencias basados en los diferentes hechos e instituciones presentes en su entorno familiar y sociocultural",
+         "contenidos": [
+          "Las creencias en el espacio social",
+          "Simbología y formas de expresión propia de las religiones y movimientos sociales que se desarrollan en su entorno, así como de su trascendencia",
+          "Los valores positivos que transmiten los líderes espirituales y sociales",
+          "Análisis de la importancia que tienen las creencias en nuestra sociedad y cultura"
+         ],
+         "indicadores": [
+          "Comenta con su entorno el significado que tienen las creencias espirituales en su vida",
+          "Se interesa y establece relaciones de respeto entre sus propias creencias espirituales y las de su entorno",
+          "Conoce, distingue y respeta las diferentes formas de expresión social y religiosa que se desarrollan en su entorno",
+          "Conoce y se interesa por los valores que transmiten sus diferentes líderes espirituales y sociales",
+          "Reconoce y valora la importancia de creencias en nuestra sociedad y cultura"
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    "escultas": {
+     "paginas": "66",
+     "bloques": [
+      {
+       "bloque": "Personal",
+       "objetivos": [
+        {
+         "objetivo": "Afianzar la escala personal de valores desde un análisis crítico y la influencia del entorno sociocultural",
+         "contenidos": [
+          "Compromiso y elección espiritual"
+         ],
+         "indicadores": [
+          "Muestra sensibilidad por la reflexión e interiorización"
+         ]
+        },
+        {
+         "objetivo": "Comprometerse a vivir en consecuencia con las creencias espirituales/religiosas que ha asumido",
+         "contenidos": [
+          "Creencias en el espacio personal",
+          "Dimensión espiritual de la persona",
+          "Cuestionamiento personal",
+          "El desarrollo autónomo de valores"
+         ],
+         "indicadores": [
+          "Personaliza e interioriza sus propias creencias de manera coherente",
+          "Asume positivamente y cumple las normas morales basadas en los valores de sus creencias personales",
+          "Muestra una actitud de superación personal ante los problemas de la vida cotidiana",
+          "Muestra actitud crítica con sus creencias personales y es capaz de analizar si éstas pueden llegar a coartar la forma de vivir la vida de otras personas",
+          "Se preocupa por el autoconocimiento",
+          "Interioriza y comparte las experiencias vividas, siendo protagonista de su propio desarrollo como persona"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "Valores",
+       "objetivos": [
+        {
+         "objetivo": "Analizar la ética y la moral como conjunto de valores que se establecen en la persona y en la sociedad",
+         "contenidos": [
+          "Actitud de servicio a las demás personas",
+          "Sentimiento de pertenencia en el grupo de iguales: la unidad",
+          "Ética y moral",
+          "Valores que subyacen de la Promesa, la Ley Scout, los principios scouts y las virtudes scouts"
+         ],
+         "indicadores": [
+          "Tiene disposición de entrega hacia las demás personas",
+          "Interioriza y comparte las experiencias vividas con su grupo de iguales",
+          "Se interesa y se plantea cuestiones de ética y moral en relación con su vida"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "Entorno y creencias",
+       "objetivos": [
+        {
+         "objetivo": "Reflexionar sobre las distintas creencias y hechos religiosos (en el entorno y en la historia), respetándolos y dialogando sobre los distintos sentimientos y opiniones que de estos surjan",
+         "contenidos": [
+          "Expresiones comunitarias (espirituales o religiosas)",
+          "Personajes históricos que han vivido y promovido la unidad entre las personas",
+          "Creencia en el espacio social"
+         ],
+         "indicadores": [
+          "Evita prejuicios ante manifestaciones distintas de las suyas",
+          "Conoce diferentes expresiones culturales, religiosas y espirituales; muestra interés por ellas",
+          "Comparte con las demás personas sus propias creencias con una actitud tolerante y abierta",
+          "Participa activamente en los encuentros y celebraciones de su Comunidad de pertenencia",
+          "Conoce, distingue y tiene una actitud crítica ante el fenómeno de las sectas",
+          "Analiza los valores presentes en la Declaración de los Derechos Humanos"
+         ]
+        }
+       ]
+      }
+     ]
+    },
+    "rovers": {
+     "paginas": "67",
+     "bloques": [
+      {
+       "bloque": "Personal",
+       "objetivos": [
+        {
+         "objetivo": "Aceptar reflexivamente y aplicar de manera objetiva en la vida cotidiana las opciones que mejor favorezcan el propio plan vital",
+         "contenidos": [
+          "El sentido de la vida: preguntas y respuestas",
+          "El sentido de la vida y su concreción en un plan vital"
+         ],
+         "indicadores": [
+          "Tiene conciencia de la importancia de la vivencia espiritual y de sus implicaciones y manifestaciones"
+         ]
+        },
+        {
+         "objetivo": "Analizar los interrogantes profundos del ser humano y buscar respuestas permaneciendo abierto/a a las diferentes creencias",
+         "contenidos": [
+          "La soledad y la meditación como momentos de búsqueda",
+          "Creencias personales: existencia de Dios, agnosticismo y ateísmo",
+          "Plan de vida y valores fundamentales"
+         ],
+         "indicadores": [
+          "Asume como propia la responsabilidad de tomar una postura personal ante la existencia o no de una realidad trascendente superior (Dios)",
+          "Busca respuestas a las preguntas sobre el sentido de la vida",
+          "Interpreta y busca encuadrar sus acciones dentro de un plan de vida basado en una reflexión profunda y trascendente",
+          "Asume su responsabilidad como eje principal de su vida"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "Valores",
+       "objetivos": [
+        {
+         "objetivo": "Ser consciente del grado de identificación con los sistemas de valores inherentes a la religión y/o creencias personales, valorando y dialogando con los distintos enfoques ético-morales, sistemas de creencias y confesiones",
+         "contenidos": [
+          "Valores universales que subyacen en los textos espirituales",
+          "Dilemas éticos de la vida (pena de muerte, drogas, aborto, eutanasia, suicidio, etc.)",
+          "El compromiso",
+          "El servicio",
+          "Valores que subyacen de la Promesa, la Ley Scout, los principios scouts y las virtudes scouts"
+         ],
+         "indicadores": [
+          "Muestra interés por los textos espirituales más relevantes y los valores universales que subyacen",
+          "Resuelve los conflictos de valores de manera reflexiva, identificando aquellos que son la base de sus creencias",
+          "Vive como valores fundamentales del roverismo el compromiso y el servicio"
+         ]
+        }
+       ]
+      },
+      {
+       "bloque": "Entorno y creencias",
+       "objetivos": [
+        {
+         "objetivo": "Vivir conforme a los principios y actitudes ético-cívicos que rigen la vida y la convivencia en la sociedad pluralista (respeto a personas y cosas, solidaridad, justicia, paz, libertad…)",
+         "contenidos": [
+          "La moral individual y social",
+          "La libertad de culto y elección personal",
+          "La defensa de los Derechos Humanos"
+         ],
+         "indicadores": [
+          "Defiende un espacio de libertad en el que tienen cabida todas las personas y sus respectivas creencias",
+          "Defiende los Derechos Humanos en su entorno, denunciando las injusticias y privaciones de derechos fundamentales de las personas"
+         ]
+        }
+       ]
+      }
+     ]
+    }
+   }
+  }
+ ]
+}

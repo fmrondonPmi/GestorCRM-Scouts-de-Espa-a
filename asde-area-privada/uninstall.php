@@ -37,6 +37,11 @@ if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->prefix . 'asd
 	$wpdb->query( "DELETE FROM {$wpdb->prefix}asde_lista_espera" ); // phpcs:ignore WordPress.DB
 }
 
+// Mi sección (v0.63): objetivo y notas van cifrados; al desinstalar se vacía la tabla.
+if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->prefix . 'asde_seguimiento' ) ) ) { // phpcs:ignore WordPress.DB
+	$wpdb->query( "DELETE FROM {$wpdb->prefix}asde_seguimiento" ); // phpcs:ignore WordPress.DB
+}
+
 // Reintegros (v0.47): el IBAN de quien cobra por transferencia va cifrado; al desinstalar se vacía.
 if ( $wpdb->get_var( $wpdb->prepare( 'SHOW TABLES LIKE %s', $wpdb->prefix . 'asde_reintegros' ) ) ) { // phpcs:ignore WordPress.DB
 	$wpdb->query( "UPDATE {$wpdb->prefix}asde_reintegros SET iban_enc = ''" ); // phpcs:ignore WordPress.DB

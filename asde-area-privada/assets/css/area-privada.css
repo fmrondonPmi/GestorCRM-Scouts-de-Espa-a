@@ -3280,3 +3280,15 @@ dialog.asde-menu-nueva {
 .asde-ap .asde-grid-paginas .asde-paginacion {
 	margin-top: 8px;
 }
+
+/* v0.63 (doc 65): Mi sección, seguimiento de la progresión personal. */
+.asde-seguimiento-puntos{display:inline-flex;gap:3px}
+.asde-seguimiento-punto{width:14px;height:14px;border-radius:4px;background:var(--asde-neutral-bg);display:block}
+.asde-seguimiento-punto--1{background:var(--asde-warn)}
+.asde-seguimiento-punto--2{background:var(--asde-ok)}
+.asde-seguimiento-tarde{color:var(--asde-error);font-weight:600}
+.asde-ap fieldset.asde-seguimiento__aspecto{border:0;border-top:1px solid var(--asde-border);border-radius:0;margin:0;padding:12px 0;background:none}
+.asde-seguimiento__aspecto legend{float:left;width:100%;font-size:12px;text-transform:uppercase;letter-spacing:.4px;color:var(--asde-muted);padding:0;margin-bottom:4px}
+.asde-seguimiento__aspecto legend+*{clear:both}
+.asde-seguimiento__estados{display:flex;flex-wrap:wrap;gap:6px 16px}
+.asde-seguimiento__aspecto textarea{width:100%}

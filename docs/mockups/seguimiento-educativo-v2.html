@@ -1,0 +1,245 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mock-up v2 · Mi sección (progresión personal)</title>
+<style>
+:root{--p:#632599;--tint:#f3ecf9;--g:#7ab317;--b:#d9d4e0;--t:#2b2b2b;--m:#6b6b6b;--ok:#2e7d32;--okbg:#e6f4e7;--wip:#b26a00;--wipbg:#fff3df;--no:#9a9a9a;--bg:#f6f5f8;--warn:#c0392b}
+*{box-sizing:border-box}
+body{margin:0;font:15px/1.45 system-ui,Segoe UI,Roboto,sans-serif;color:var(--t);background:var(--bg)}
+.nota{background:#fff8e1;border-bottom:1px solid #f0d98a;padding:10px 16px;font-size:13px}
+.wrap{max-width:1040px;margin:0 auto;padding:16px}
+h2{margin:0;color:var(--g);text-transform:uppercase;letter-spacing:.5px;font-size:22px}
+.muted{color:var(--m);font-size:13px}
+.cab-pag{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin-bottom:12px}
+.chip{display:inline-block;padding:2px 10px;border-radius:12px;font-size:12px;font-weight:700;background:#f2c500;color:#1a1a1a}
+button,.btn{font:inherit;cursor:pointer}
+.btn{padding:8px 14px;border-radius:6px;border:1px solid var(--p);background:var(--p);color:#fff}
+.btn.sec{background:#fff;color:var(--p)}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+/* resumen */
+.res{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px}
+.res .k{background:#fff;border:1px solid var(--b);border-radius:10px;padding:10px 14px;text-align:left;cursor:pointer}
+.res .k.on{outline:2px solid var(--p)}
+.res .k b{font-size:26px;display:block;line-height:1.1}
+.res .k span{font-size:13px;color:var(--m)}
+.res .k.aviso b{color:var(--warn)}
+/* barra de filtros: una línea */
+.filtros{display:flex;gap:8px;align-items:center;margin-bottom:12px}
+.filtros input{flex:1;min-width:0;padding:8px 10px;border:1px solid var(--b);border-radius:6px;font:inherit}
+select{padding:8px;border:1px solid var(--b);border-radius:6px;font:inherit;background:#fff}
+.vista{display:inline-flex;border:1px solid var(--p);border-radius:6px;overflow:hidden}
+.vista button{border:0;background:#fff;color:var(--p);padding:8px 12px}
+.vista button.on{background:var(--p);color:#fff}
+/* lista */
+.card{background:#fff;border:1px solid var(--b);border-radius:10px}
+.fila{display:grid;grid-template-columns:minmax(150px,1.5fr) 1fr 1.1fr 1.2fr 24px;gap:10px;align-items:center;padding:11px 16px;border-bottom:1px solid #ece9f0;cursor:pointer}
+.fila:last-child{border-bottom:0}
+.fila:hover{background:var(--tint)}
+.fila.cab{cursor:default;font-size:12px;text-transform:uppercase;letter-spacing:.5px;color:var(--m);font-weight:600}
+.fila.cab:hover{background:none}
+.nom{font-weight:700;color:var(--p)}
+.nom small{display:block;font-weight:400;color:var(--m)}
+.etapa{display:inline-flex;align-items:center;gap:7px;font-size:14px}
+.pts{display:inline-flex;gap:3px}
+.pts i{width:11px;height:11px;border-radius:50%;border:2px solid var(--p);display:block}
+.pts i.on{background:var(--p)}
+.rev{font-size:13px}
+.rev.tarde{color:var(--warn);font-weight:600}
+.mini{display:flex;gap:3px}
+.mini i{width:14px;height:14px;border-radius:4px;background:#e3dfe9;display:block}
+.mini i.w{background:#f2c36b}.mini i.o{background:var(--g)}
+.prop{font-size:12px;background:var(--wipbg);color:var(--wip);border:1px solid #f0c47a;border-radius:10px;padding:1px 8px;margin-left:6px;white-space:nowrap}
+.pag{display:flex;justify-content:space-between;align-items:center;padding:10px 16px;font-size:13px;color:var(--m)}
+/* cuadrícula */
+.grid{overflow-x:auto}
+table.mx{border-collapse:collapse;width:100%;min-width:760px}
+table.mx th{font-size:11px;text-transform:uppercase;letter-spacing:.4px;color:var(--m);padding:8px 4px;border-bottom:2px solid var(--b);text-align:center}
+table.mx th:first-child,table.mx td:first-child{text-align:left;padding-left:14px}
+table.mx td{padding:6px 4px;border-bottom:1px solid #ece9f0;text-align:center}
+.cel{width:30px;height:30px;border-radius:8px;border:2px solid #cfc9d8;background:#fff;cursor:pointer;padding:0}
+.cel.w{background:#f2c36b;border-color:#e1a63a}.cel.o{background:var(--g);border-color:#5f9110}
+.leyenda{display:flex;gap:14px;flex-wrap:wrap;font-size:13px;color:var(--m);padding:10px 16px}
+.leyenda i{display:inline-block;width:12px;height:12px;border-radius:4px;vertical-align:-1px;margin-right:4px;border:2px solid #cfc9d8}
+/* ficha */
+.velo{position:fixed;inset:0;background:rgba(30,20,45,.55);display:none;align-items:flex-start;justify-content:center;padding:24px 12px;overflow:auto;z-index:10}
+.velo.on{display:flex}
+.modal{background:#fff;border-radius:12px;width:min(900px,100%);box-shadow:0 20px 50px rgba(0,0,0,.35)}
+.mh{display:flex;align-items:center;gap:10px;padding:14px 20px;background:var(--tint);border-radius:12px 12px 0 0}
+.mh h3{margin:0;color:var(--p);font-size:20px}
+.mh .sp{flex:1}
+.x{background:none;border:0;font-size:26px;line-height:1;color:var(--m)}
+.mb{padding:16px 20px 20px}
+.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:6px}
+.step{border:2px solid var(--b);border-radius:10px;padding:8px 12px;text-align:left;background:#fff}
+.step b{display:block}
+.step small{color:var(--m)}
+.step.hecha{background:#f1f8f1;border-color:#b9dcbc}
+.step.act{border-color:var(--p);background:var(--tint)}
+.step.sig{border-style:dashed;color:var(--m)}
+.asp{border-top:1px solid #ece9f0;padding:12px 0}
+.asp:first-of-type{border-top:0}
+.asp h4{margin:0 0 2px;font-size:12px;text-transform:uppercase;letter-spacing:.4px;color:var(--m)}
+.asp p{margin:0 0 8px;font-size:16px}
+.fl{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.seg{display:inline-flex;border:1px solid var(--b);border-radius:8px;overflow:hidden}
+.seg button{border:0;background:#fff;padding:7px 13px;color:var(--m);border-right:1px solid var(--b)}
+.seg button:last-child{border-right:0}
+.seg button.on.n{background:#eee;color:#444;font-weight:600}
+.seg button.on.w{background:var(--wipbg);color:var(--wip);font-weight:700}
+.seg button.on.o{background:var(--okbg);color:var(--ok);font-weight:700}
+.lnk{background:none;border:0;color:var(--p);font-size:13px;padding:4px 2px;text-decoration:underline}
+.otras{display:none;background:var(--bg);border-radius:8px;padding:8px 12px;margin-top:8px;font-size:14px}
+.otras.on{display:block}
+.otras div{padding:2px 0}
+.nt{display:none;width:100%;margin-top:8px;padding:7px 9px;border:1px solid var(--b);border-radius:6px;font:inherit;font-size:14px}
+.nt.on{display:block}
+.obj{background:var(--bg);border-radius:10px;padding:12px 14px;margin-top:12px}
+.obj label{font-size:12px;text-transform:uppercase;letter-spacing:.4px;color:var(--m);display:block;margin-bottom:4px}
+.obj input{width:100%;padding:8px 10px;border:1px solid var(--b);border-radius:6px;font:inherit}
+.pie{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin-top:16px}
+.pie .sp{flex:1}
+.hist{font-size:13px;color:var(--m);margin-top:10px}
+.sep{margin:30px 0 8px;font-weight:700;color:var(--p)}
+@media (max-width:640px){
+  .wrap{padding:10px}
+  .res{grid-template-columns:1fr 1fr}
+  .filtros select{max-width:120px}
+  .fila{grid-template-columns:1fr auto;gap:4px 10px}
+  .fila.cab{display:none}
+  .fila .c-rev,.fila .c-mini{grid-column:1/-1}
+  .steps{grid-template-columns:1fr}
+  .velo{padding:0}.modal{border-radius:0;min-height:100%}
+  .mh{border-radius:0}
+  .seg button{padding:9px 10px}
+}
+</style>
+</head>
+<body>
+<div class="nota"><b>MOCK-UP v2 (2026-11-04) — datos inventados.</b> Propuesta tras leer todo el Programa Educativo: lo que se evalúa por persona es la <b>progresión personal</b> (8 aspectos × 3 etapas: Integración → Participación → Animación; pp. 88-100 del PDF), no los 166 objetivos de los compromisos. Textos de Manada tomados literalmente de la p. 97. Los números de arriba son pulsables; pulsa una fila para abrir la ficha.</div>
+
+<div class="wrap">
+  <div class="cab-pag">
+    <h2>Mi sección</h2><span class="chip">Lobatos · Manada</span>
+    <span class="muted">Ronda 2026-27 · 8 personas</span>
+  </div>
+
+  <div class="res" id="res"></div>
+
+  <div class="filtros">
+    <input id="q" type="search" placeholder="Buscar por nombre…">
+    <select id="fe"><option value="">Todas las etapas</option><option value="1">Integración</option><option value="2">Participación</option><option value="3">Animación</option></select>
+    <div class="vista"><button id="v-lista" class="on">Lista</button><button id="v-grid">Cuadrícula</button></div>
+  </div>
+
+  <div id="lista" class="card"></div>
+  <div id="grid" class="card" style="display:none"></div>
+
+  <p class="muted" style="margin-top:10px">Sin rankings ni comparaciones entre personas (el programa lo desaconseja, p. 89): orden alfabético y la «etapa» describe dónde está cada cual, no un premio. Se recomienda revisar al menos cada trimestre (p. 89).</p>
+</div>
+
+<div class="velo" id="velo"><div class="modal" id="modal"></div></div>
+
+<script>
+const ASP=[
+ {c:'Relaciones',t:'Relaciones sociales con la sección',e:['Conoce al resto de la manada, sus scouters y asiste con regularidad','Juega con todas las personas de la manada y participa activamente en sus actividades','Acoge y ayuda a las personas nuevas de la manada']},
+ {c:'Tradiciones',t:'Marco simbólico y las tradiciones de la sección',e:['Conoce las tradiciones de la manada','Participa en las tradiciones de la manada','Explica al resto las tradiciones de la manada']},
+ {c:'Cacería',t:'Participación en el proyecto de la sección (la cacería)',e:['Muestra interés por la cacería','Participa en las actividades y las fases de la cacería','Realiza propuestas para alguna de las fases o actividades de la cacería']},
+ {c:'Naturaleza',t:'Vida en la naturaleza',e:['Disfruta y experimenta en el medio natural','Se desenvuelve con autonomía en el medio natural','Trasmite al resto de la manada el gusto, la experimentación y la vivencia en el medio natural']},
+ {c:'Rastros',t:'Objetivos personales: rastros',e:['Reconoce cuáles son los rastros que domina y los que más le cuestan','Desarrolla habilidades de los rastros que más domina','Mejora en los rastros en los que no destaca']},
+ {c:'Compromisos',t:'Compromisos educativos',e:['Muestra interés por las actividades de la manada','Le gusta aprender cosas nuevas de la manada','Disfruta enseñando al resto de la manada lo que ha aprendido']},
+ {c:'Autonomía',t:'Autonomía personal',e:['Reconoce cuáles son sus tareas diarias y las realiza con una supervisión mínima','Realiza sus tareas diarias por iniciativa propia','Ayuda al resto de la manada a llevar a cabo las tareas diarias']},
+ {c:'Valores',t:'Conocimiento y vivencia de los valores del Escultismo (Ley, máximas de Baloo)',e:['Conoce la Ley de la manada y las máximas de Baloo','Se compromete con la manada y se esfuerza por cumplir las máximas de Baloo y la Ley','Explica al resto de la manada el significado de las máximas de Baloo, la Ley y la Promesa']}
+];
+const ETAPAS=['Integración','Participación','Animación'];
+// st: estado de cada aspecto en la etapa actual (0 aún no, 1 en camino, 2 lo logra)
+let P=[
+ {n:'Aitana Bauzà',edad:8,anio:1,et:1,dias:20,st:[2,1,1,0,0,1,0,0],obj:'Rastro del Agua',prop:false},
+ {n:'Biel Colom',edad:9,anio:2,et:2,dias:110,st:[2,2,1,1,1,2,0,1],obj:'Rastro del Bosque',prop:false},
+ {n:'Carla Mas',edad:10,anio:3,et:3,dias:35,st:[2,2,2,2,1,2,2,1],obj:'Mejorar en el Rastro de los Nudos',prop:false},
+ {n:'Dani Ferrer',edad:9,anio:2,et:2,dias:15,st:[2,2,2,2,2,2,2,1],obj:'Rastro del Fuego',prop:true},
+ {n:'Elena Vidal',edad:8,anio:1,et:1,dias:130,st:[1,0,0,0,0,1,0,0],obj:'',prop:false},
+ {n:'Gerard Riera',edad:10,anio:3,et:2,dias:60,st:[2,2,1,2,1,1,1,0],obj:'Rastro de la Cocina',prop:false},
+ {n:'Irene Pons',edad:9,anio:2,et:1,dias:95,st:[2,2,2,1,1,2,1,1],obj:'Rastro del Agua',prop:false},
+ {n:'Joan Serra',edad:11,anio:3,et:3,dias:25,st:[2,2,2,2,2,2,2,2],obj:'Rastro de los Animales',prop:false}
+];
+const $=s=>document.querySelector(s);
+const LET=['n','w','o'], NOM=['Aún no','En camino','Lo logra'];
+let filtroK='',vista='lista';
+const tarde=p=>p.dias>90;
+const fecha=d=>d===0?'hoy':'hace '+(d<31?d+' días':Math.round(d/30)+' meses');
+function mini(p){return '<span class="mini">'+p.st.map(s=>'<i class="'+LET[s]+'"></i>').join('')+'</span>'}
+function pts(e){return '<span class="pts">'+[1,2,3].map(i=>'<i class="'+(i<=e?'on':'')+'"></i>').join('')+'</span>'}
+function visibles(){
+  const q=$('#q').value.toLowerCase(),fe=$('#fe').value;
+  return P.map((p,i)=>({p,i})).filter(({p})=>(!q||p.n.toLowerCase().includes(q))&&(!fe||p.et==fe)&&(filtroK!=='rev'||tarde(p))&&(filtroK!=='prop'||p.prop));
+}
+function resumen(){
+  const c=e=>P.filter(p=>p.et===e).length;
+  $('#res').innerHTML=
+   '<div class="k aviso '+(filtroK==='rev'?'on':'')+'" data-k="rev"><b>'+P.filter(tarde).length+'</b><span>Toca revisar (más de 3 meses)</span></div>'+
+   '<div class="k '+(filtroK==='prop'?'on':'')+'" data-k="prop"><b>'+P.filter(p=>p.prop).length+'</b><span>Propuestas de cambio de etapa</span></div>'+
+   '<div class="k"><b>'+c(1)+' · '+c(2)+' · '+c(3)+'</b><span>Integración · Participación · Animación</span></div>'+
+   '<div class="k '+(filtroK===''?'on':'')+'" data-k=""><b>'+P.length+'</b><span>Personas en la sección</span></div>';
+  document.querySelectorAll('.res .k[data-k]').forEach(k=>k.onclick=()=>{filtroK=(filtroK===k.dataset.k?'':k.dataset.k);pintar()});
+}
+function pintarLista(){
+  const v=visibles();
+  let h='<div class="fila cab"><div>Nombre</div><div>Etapa</div><div>Última revisión</div><div>Etapa actual: aspectos</div><div></div></div>';
+  h+=v.map(({p,i})=>'<div class="fila" data-i="'+i+'"><div class="nom">'+p.n+'<small>'+p.edad+' años · '+p.anio+'.º año en la sección</small></div>'+
+   '<div class="etapa">'+pts(p.et)+' '+ETAPAS[p.et-1]+(p.prop?'<span class="prop">Propuesto: '+ETAPAS[p.et]+'</span>':'')+'</div>'+
+   '<div class="c-rev rev '+(tarde(p)?'tarde':'')+'">'+(tarde(p)?'⚠ ':'')+fecha(p.dias)+'</div>'+
+   '<div class="c-mini">'+mini(p)+'</div><div>›</div></div>').join('')||'<div class="pag">Nadie coincide con el filtro.</div>';
+  h+='<div class="pag"><span>1-'+v.length+' de '+v.length+'</span><span>10 por página ▾</span></div>';
+  $('#lista').innerHTML=h;
+  document.querySelectorAll('.fila[data-i]').forEach(f=>f.onclick=()=>abrir(+f.dataset.i));
+}
+function pintarGrid(){
+  const v=visibles();
+  let h='<div class="grid"><table class="mx"><thead><tr><th>Persona · etapa</th>'+ASP.map(a=>'<th title="'+a.t+'">'+a.c+'</th>').join('')+'</tr></thead><tbody>';
+  h+=v.map(({p,i})=>'<tr><td><span class="nom" style="cursor:pointer" data-o="'+i+'">'+p.n+'</span> <span class="muted">· '+ETAPAS[p.et-1]+'</span></td>'+
+    p.st.map((s,j)=>'<td><button class="cel '+LET[s]+'" data-i="'+i+'" data-j="'+j+'" title="'+ASP[j].t+': '+NOM[s]+'"></button></td>').join('')+'</tr>').join('');
+  h+='</tbody></table></div><div class="leyenda"><span><i style="background:#fff"></i>Aún no</span><span><i style="background:#f2c36b;border-color:#e1a63a"></i>En camino</span><span><i style="background:var(--g);border-color:#5f9110"></i>Lo logra</span><span>Un clic cambia el estado del aspecto en la etapa actual de cada persona.</span></div>';
+  $('#grid').innerHTML=h;
+  document.querySelectorAll('.cel').forEach(c=>c.onclick=()=>{const p=P[+c.dataset.i];p.st[+c.dataset.j]=(p.st[+c.dataset.j]+1)%3;p.dias=0;pintar()});
+  document.querySelectorAll('[data-o]').forEach(n=>n.onclick=()=>abrir(+n.dataset.o));
+}
+function pintar(){resumen();pintarLista();pintarGrid();
+  $('#lista').style.display=vista==='lista'?'':'none';$('#grid').style.display=vista==='grid'?'':'none';
+  $('#v-lista').classList.toggle('on',vista==='lista');$('#v-grid').classList.toggle('on',vista==='grid');}
+$('#q').oninput=pintar;$('#fe').onchange=pintar;
+$('#v-lista').onclick=()=>{vista='lista';pintar()};$('#v-grid').onclick=()=>{vista='grid';pintar()};
+
+// Ficha
+let cur=null;
+function abrir(i){cur=i;ficha();$('#velo').classList.add('on')}
+function ficha(){
+  const p=P[cur],e=p.et;
+  const logr=p.st.filter(s=>s===2).length;
+  let h='<div class="mh"><h3>'+p.n+'</h3><span class="chip">Lobatos</span><span class="muted">'+p.edad+' años · '+p.anio+'.º año</span><span class="sp"></span><button class="x" id="cerrar" aria-label="Cerrar">×</button></div><div class="mb">';
+  h+='<div class="steps">'+ETAPAS.map((n,k)=>{const c=k+1<e?'hecha':k+1===e?'act':'sig';return '<div class="step '+c+'"><b>'+(k+1<e?'✓ ':'')+n+'</b><small>'+(k+1<e?'Distintivo entregado':k+1===e?'Etapa actual · '+logr+' de 8 conseguidos':'Siguiente')+'</small></div>'}).join('')+'</div>';
+  h+='<p class="muted" style="margin:6px 0 4px">Estás valorando la etapa de <b>'+ETAPAS[e-1]+'</b>. No hace falta lograr todo para pasar de etapa: cuenta el criterio del equipo (p. 95).</p>';
+  h+=ASP.map((a,j)=>'<div class="asp"><h4>'+a.t+'</h4><p>'+a.e[e-1]+'</p><div class="fl">'+
+    '<span class="seg">'+NOM.map((n,s)=>'<button class="'+LET[s]+(p.st[j]===s?' on':'')+'" data-j="'+j+'" data-s="'+s+'">'+n+'</button>').join('')+'</span>'+
+    '<button class="lnk" data-ver="'+j+'">Ver las 3 etapas</button><button class="lnk" data-nt="'+j+'">Añadir nota</button></div>'+
+    '<div class="otras" id="ot'+j+'">'+a.e.map((t,k)=>'<div><b>'+ETAPAS[k]+':</b> '+t+'</div>').join('')+'</div>'+
+    '<input class="nt" id="nt'+j+'" placeholder="Nota (opcional; se guarda cifrada)"></div>').join('');
+  h+='<div class="obj"><label>Objetivo personal elegido por la persona (rastro)</label><input value="'+p.obj+'" placeholder="Aún sin elegir"></div>';
+  h+='<div class="pie"><button class="btn" id="guardar">Guardar revisión</button>'+(e<3?'<button class="btn sec" id="prop">'+(p.prop?'Quitar propuesta de ':'Proponer paso a ')+ETAPAS[e]+'</button>':'<span class="muted">Última etapa de la sección.</span>')+'<span class="sp"></span><span class="muted" id="msg"></span></div>';
+  h+='<div class="hist">Última revisión '+fecha(p.dias)+' · 3 revisiones esta ronda. <button class="lnk">Ver historial</button></div></div>';
+  $('#modal').innerHTML=h;
+  $('#cerrar').onclick=cerrar;
+  document.querySelectorAll('.seg button').forEach(b=>b.onclick=()=>{P[cur].st[+b.dataset.j]=+b.dataset.s;const y=$('#velo').scrollTop;ficha();$('#velo').scrollTop=y;});
+  document.querySelectorAll('[data-ver]').forEach(b=>b.onclick=()=>$('#ot'+b.dataset.ver).classList.toggle('on'));
+  document.querySelectorAll('[data-nt]').forEach(b=>b.onclick=()=>$('#nt'+b.dataset.nt).classList.toggle('on'));
+  $('#guardar').onclick=()=>{P[cur].dias=0;$('#msg').textContent='Revisión guardada ✓';pintar()};
+  const pr=$('#prop');if(pr)pr.onclick=()=>{P[cur].prop=!P[cur].prop;ficha();pintar()};
+}
+function cerrar(){$('#velo').classList.remove('on')}
+$('#velo').onclick=e=>{if(e.target.id==='velo')cerrar()};
+document.addEventListener('keydown',e=>{if(e.key==='Escape')cerrar()});
+pintar();
+</script>
+</body>
+</html>

@@ -64,6 +64,8 @@ final class Pages {
 		'lista_espera'       => array( 'lista-de-espera', 'Lista de espera', '[asde_lista_espera]', 'area' ),
 		// v0.39 (doc 48, fase 4): la tienda pública, para comprar sin iniciar sesión.
 		'tienda_publica'     => array( 'tienda', 'Tienda', '[asde_tienda_publica]', 'area' ),
+		// v0.63: seguimiento de la progresión personal (doc 65).
+		'mi_seccion'         => array( 'mi-seccion', 'Mi sección', '[asde_mi_seccion]', 'area' ),
 		'inscripcion_espera' => array( 'inscripcion-lista-de-espera', 'Inscripción en la lista de espera', '[asde_inscripcion_espera]', 'area' ),
 		// v0.35: eventos (doc 43).
 		'eventos'            => array( 'eventos', 'Eventos', '[asde_eventos]', 'area' ),

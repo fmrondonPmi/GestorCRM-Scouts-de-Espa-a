@@ -1,0 +1,348 @@
+{
+ "castores": [
+  {
+   "t": "Relaciones sociales con la sección",
+   "e": [
+    "Conoce al resto de la colonia y sus scouters y asiste con regularidad",
+    "Juega con todas las personas de la colonia y asiste con regularidad y alegría",
+    "Acoge a las personas nuevas de la colonia"
+   ]
+  },
+  {
+   "t": "Marco simbólico y las tradiciones de la sección",
+   "e": [
+    "Conoce las tradiciones de la colonia",
+    "Participa en las tradiciones de la colonia",
+    "Explica al resto las tradiciones de la colonia"
+   ]
+  },
+  {
+   "t": "Participación en el proyecto de la sección (pedagogía del proyecto)",
+   "e": [
+    "Se interesa por la construcción del dique",
+    "Participa en las actividades de la construcción del dique",
+    "Realiza propuestas para alguna de las fases o actividades de la construcción del dique"
+   ]
+  },
+  {
+   "t": "Vida en la naturaleza",
+   "e": [
+    "Muestra interés por las actividades en la naturaleza",
+    "Disfruta de las actividades en la naturaleza",
+    "Trasmite al resto de la colonia el interés por las actividades en la naturaleza"
+   ]
+  },
+  {
+   "t": "Objetivos personales: colas",
+   "e": [
+    "Conoce cada una de las colas de castor (su color y significado)",
+    "Reconoce cuáles son las colas de castor en las que debe mejorar",
+    "Mejora los objetivos relacionados con las colas de castor que más le cuestan"
+   ]
+  },
+  {
+   "t": "Compromisos educativos",
+   "e": [
+    "Muestra interés por las actividades de la colonia",
+    "Le gusta aprender cosas nuevas.",
+    "Disfruta enseñando al resto de la colonia lo que ha aprendido"
+   ]
+  },
+  {
+   "t": "Autonomía personal",
+   "e": [
+    "Muestra interés por hacer las cosas de forma autónoma",
+    "Lleva a cabo pequeñas tareas de forma autónoma",
+    "Se desenvuelve en sus tareas diarias dentro de la colonia."
+   ]
+  },
+  {
+   "t": "Compartir",
+   "e": [
+    "Conoce el significado del lema de la colonia: compartir",
+    "Comparte con el resto de la colonia",
+    "Transmite el significado de \"compartir\" al resto de la colonia"
+   ]
+  },
+  {
+   "t": "Conocimiento y vivencia de los valores del Escultismo (Ley, consejos de Malak)",
+   "e": [
+    "Conoce la Ley de la colonia y los consejos de malak",
+    "Se compromete con la Colonia y se esfuerza por cumplir los consejos de Malak y la Ley de la colonia",
+    "Explica al resto de la colonia el significado de los consejos de Malak, la Ley de la colonia y la Promesa"
+   ]
+  }
+ ],
+ "lobatos": [
+  {
+   "t": "Relaciones sociales con la sección",
+   "e": [
+    "Conoce al resto de la manada, sus scouters y asiste con regularidad",
+    "Juega con todas las personas de la manada y participa activamente en sus actividades",
+    "Acoge y ayuda a las personas nuevas de la manada"
+   ]
+  },
+  {
+   "t": "Marco simbólico y las tradiciones de la sección",
+   "e": [
+    "Conoce las tradiciones de la manada.",
+    "Participa en las tradiciones de la manada.",
+    "Explica al resto las tradiciones de la manada."
+   ]
+  },
+  {
+   "t": "Participación en el proyecto de la sección (pedagogía del proyecto)",
+   "e": [
+    "Muestra interés por la cacería",
+    "Participa en las actividades y las fases de la cacería",
+    "Realiza propuestas para alguna de las fases o actividades de la cacería"
+   ]
+  },
+  {
+   "t": "Vida en la naturaleza",
+   "e": [
+    "Disfruta y experimenta en el medio natural",
+    "Se desenvuelve con autonomía en el medio natural",
+    "Trasmite al resto de la manada el gusto la experimentación y la vivencia en el medio natural"
+   ]
+  },
+  {
+   "t": "Objetivos personales: rastros",
+   "e": [
+    "Reconoce cuales son los rastros que domina y los que más le cuestan",
+    "Desarrolla habilidades de los rastros que más domina",
+    "Mejora en los rastros en los que no destaca"
+   ]
+  },
+  {
+   "t": "Compromisos educativos",
+   "e": [
+    "Muestra interés por las actividades de la manada",
+    "Le gusta aprender cosas nuevas de la manada",
+    "Disfruta enseñando al resto de la manada lo que ha aprendido"
+   ]
+  },
+  {
+   "t": "Autonomía personal",
+   "e": [
+    "Reconoce cuáles son sus tareas diarias y las realiza con una supervisión mínima/con el empujón de su scouter",
+    "Realiza sus tareas diarias por iniciativa propia",
+    "Ayuda al resto de la manada a llevar a cabo las tareas diarias"
+   ]
+  },
+  {
+   "t": "Conocimiento y vivencia de los valores del Escultismo (Ley, máximas de Baloo)",
+   "e": [
+    "Conoce la Ley de la manada y las máximas de Baloo",
+    "Se compromete con la manada y se esfuerza por cumplir las máximas de Baloo y la Ley de la manada",
+    "Explica al resto de la manada el significado las máximas de Baloo, la Ley y la Promesa"
+   ]
+  }
+ ],
+ "scouts": [
+  {
+   "t": "Relaciones sociales con la sección",
+   "e": [
+    "Se interesa por el resto de personas de la patrulla y de la sección scout y por asistir a sus actividades",
+    "Se relaciona con todas las personas de la patrulla y de la sección scout y participa activamente en sus actividades",
+    "Ayuda a integrarse al resto de personas de la patrulla y dinamiza sus actividades"
+   ]
+  },
+  {
+   "t": "Marco simbólico y las tradiciones de la sección",
+   "e": [
+    "Conoce y asume las tradiciones de la patrulla y la sección scout",
+    "Se interesa por participar en las tradiciones de la patrulla y la sección scout",
+    "Introduce al resto en las tradiciones de la sección scout"
+   ]
+  },
+  {
+   "t": "Participación en el proyecto de la sección (pedagogía del proyecto)",
+   "e": [
+    "Conoce las fases de la aventura",
+    "Participa en cada una de las fases de la aventura",
+    "Lleva la iniciativa en alguna de las fases o comisiones de la aventura"
+   ]
+  },
+  {
+   "t": "Vida en la naturaleza",
+   "e": [
+    "Conoce técnicas scout básicas",
+    "Utiliza técnicas scout básicas",
+    "Enseña al resto de la patrulla técnicas scout sencillas"
+   ]
+  },
+  {
+   "t": "Objetivos personales: especialidades",
+   "e": [
+    "Conoce las diferentes especialidades que existen en la sección scout",
+    "Se especializa en algún campo según sus intereses",
+    "Lleva a cabo actividades para el resto de la sección scout en relación a su especialidad"
+   ]
+  },
+  {
+   "t": "Compromisos educativos",
+   "e": [
+    "Le interesa ampliar sus conocimientos",
+    "Pone en práctica lo aprendido",
+    "Enseña y guía a las demás personas para que aprendan"
+   ]
+  },
+  {
+   "t": "Vida en la patrulla",
+   "e": [
+    "Se identifica con su patrulla",
+    "Asume y cumple las responsabilidades dentro de la patrulla (cargo)",
+    "Contribuye a dinamizar su patrulla"
+   ]
+  },
+  {
+   "t": "Conocimiento y vivencia de los valores del Escultismo (Ley, promesa, virtudes)",
+   "e": [
+    "Conoce los artículos de la Ley y la Promesa Scout",
+    "Se compromete con los valores y la Ley y la Promesa Scout",
+    "Explica al resto de la sección scout el significado de la Ley y la Promesa Scout en su día a día"
+   ]
+  }
+ ],
+ "escultas": [
+  {
+   "t": "Relaciones sociales con la sección",
+   "e": [
+    "Se interesa por el resto de la unidad y por asistir a sus actividades y reuniones",
+    "Se relaciona con sus iguales y participa activamente en sus actividades y reuniones",
+    "Ayuda a integrarse al resto de escultas y dinamiza sus actividades y reuniones"
+   ]
+  },
+  {
+   "t": "Marco simbólico y las tradiciones de la sección",
+   "e": [
+    "Conoce y asume las tradiciones de la unidad",
+    "Se interesa por participar en las tradiciones de la unidad",
+    "Introduce al resto de Escultas en las tradiciones de la unidad"
+   ]
+  },
+  {
+   "t": "Participación en el proyecto de la sección (pedagogía del proyecto)",
+   "e": [
+    "Conoce y participa en el proceso de elaboración de la empresa",
+    "Participa en la elaboración de la empresa, asumiendo responsabilidades",
+    "Organiza la elaboración de la empresa de la unidad"
+   ]
+  },
+  {
+   "t": "Vida en la naturaleza",
+   "e": [
+    "Conoce técnicas scout avanzadas",
+    "Utiliza técnicas scout avanzadas",
+    "Enseña al resto de Escultas técnicas scout avanzadas"
+   ]
+  },
+  {
+   "t": "Objetivos personales",
+   "e": [
+    "Analiza en qué aspectos puede mejorar",
+    "Se plantea objetivos a corto y medio plazo y se interesa por cumplirlos",
+    "Evalúa sus logros en relación a los objetivos que se propone"
+   ]
+  },
+  {
+   "t": "Compromisos educativos",
+   "e": [
+    "Participa de manera activa en las actividades relacionadas con algún compromiso educativo",
+    "Se especializa en algún compromiso educativo",
+    "Colabora con sus scouters en la preparación de alguna actividad relacionada con los compromisos"
+   ]
+  },
+  {
+   "t": "Unidad",
+   "e": [
+    "Colabora en actividades de la unidad",
+    "Coopera con la unidad en el logro de objetivos comunes",
+    "Valora la importancia de la cooperación dentro de la unidad"
+   ]
+  },
+  {
+   "t": "Conocimiento y vivencia de los valores del Escultismo (Ley, promesa, virtudes)",
+   "e": [
+    "Analiza los valores del Escultismo",
+    "Reflexiona críticamente sobre los valores del Escultismo",
+    "Valora y asume los valores del Escultismo"
+   ]
+  }
+ ],
+ "rovers": [
+  {
+   "t": "Relaciones sociales con la sección",
+   "e": [
+    "Se interesa por el resto del clan y por asistir a sus actividades y reuniones",
+    "Se relaciona con todas las personas del clan y participa activamente en sus actividades y reuniones",
+    "Ayuda a integrarse al resto del clan y dinamiza sus actividades y reuniones"
+   ]
+  },
+  {
+   "t": "Relaciones sociales con el grupo scout",
+   "e": [
+    "Se interesa por conocer a todo el grupo",
+    "Conoce a la mayoría del grupo y las tradiciones grupales",
+    "Participa en el mantenimiento de las tradiciones de grupo y reflexiona de forma crítica acerca de las mismas"
+   ]
+  },
+  {
+   "t": "Conocimiento y puesta en práctica del marco simbólico y las tradiciones de la sección y/o grupo scout",
+   "e": [
+    "Conoce y asume las tradiciones del clan",
+    "Se interesa por participar en las tradiciones del clan",
+    "Introduce al resto de rovers en las tradiciones del clan"
+   ]
+  },
+  {
+   "t": "Participación en el proyecto de la sección (pedagogía del proyecto)",
+   "e": [
+    "Participa activamente en cada una de las fases del proyecto",
+    "Se responsabiliza de alguna de las comisiones del proyecto",
+    "Coordina la elaboración del proyecto y reflexiona y/o anima a que se finalicen todas las etapas del proyecto además de estar atento a posibles errores"
+   ]
+  },
+  {
+   "t": "Vida en la naturaleza",
+   "e": [
+    "Se interesa por diferentes formas de participar en el cuidado del entorno",
+    "Se implica de forma activa en proyectos y actividades que tengan que ver con el cuidado del entorno",
+    "Planifica y lleva a cabo sus actividades en el medio natural teniendo en cuenta criterios de sostenibilidad e impacto ambiental"
+   ]
+  },
+  {
+   "t": "Objetivos personales: PAI",
+   "e": [
+    "Conoce lo que es el PAI y lo elabora",
+    "Pone en marcha su PAI evaluando su puesta en práctica",
+    "Redefine su PAI en función de una evaluación y lo pone en marcha"
+   ]
+  },
+  {
+   "t": "Compromisos educativos",
+   "e": [
+    "Amplia los conocimientos y reflexiones en alguno de los compromisos educativos",
+    "Profundiza en los compromisos educativos",
+    "Prepara actividades o proyectos en relación a alguno de los compromisos"
+   ]
+  },
+  {
+   "t": "Servicio",
+   "e": [
+    "Conoce la idea de servicio en el clan",
+    "Determina su idea de servicio y su puesta en práctica",
+    "Pone en marcha su idea de servicio a través del RS"
+   ]
+  },
+  {
+   "t": "Conocimiento y vivencia de los valores del Escultismo (Ley, promesa, virtudes)",
+   "e": [
+    "Es ejemplo a seguir de los valores scout",
+    "Vive los valores scout dentro y fuera del grupo",
+    "Vive los valores scout y los fomenta en sus círculos cercanos"
+   ]
+  }
+ ]
+}

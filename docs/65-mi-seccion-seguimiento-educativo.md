@@ -1,6 +1,6 @@
-# 65 · «Mi sección»: seguimiento educativo (propuesta, sin implementar)
+# 65 · «Mi sección»: seguimiento educativo (implementado en la v0.63.0)
 
-Estado (2026-11-04): **solo propuesta y mock-up**. No hay código. Pendiente de aprobar el diseño y de leer el PDF del programa educativo.
+Estado (2026-11-04): **implementado en la v0.63.0** con el diseño v2 y las decisiones del final de este documento (módulo `mi_seccion`, apagado por defecto). Clases: `Seguimiento\Catalogo` (+ `data/progresion.json`), `Seguimiento\Revisiones` (tabla `asde_seguimiento`, solo se añaden filas), `Frontend\Views\MiSeccionView`, plantillas `templates/mi-seccion/`; capabilities `asde_seguimiento` (scouters y Coordinación) y `asde_seguimiento_editar` (scouters); prueba `tests/mi-seccion.php`. **Pendiente**: la cuadrícula editable del mock-up v2 (la v0.63 trae lista con un cuadradito por aspecto y ficha), captura del manual y consulta de los 166 objetivos de los compromisos (`docs/programa-educativo/catalogo.json`).
 
 - Mock-up: [`docs/mockups/seguimiento-educativo.html`](mockups/seguimiento-educativo.html) (datos inventados; los ámbitos y objetivos son **marcadores provisionales**).
 - Petición del usuario (2026-11-04): una sección nueva (**no un módulo**), solo para scouters con sección asignada.
@@ -73,3 +73,29 @@ Sin implementar. Sigue las reglas de `CLAUDE.md` y la skill `modulo-nuevo`.
 3. Se convierte el programa educativo en el catálogo de ámbitos y objetivos.
 4. Se actualiza el mock-up con los ámbitos reales y se vuelve a aprobar.
 5. Se implementa, con pruebas, traducciones y manual.
+
+
+## Catálogo del PDF (2026-11-04)
+
+Transcrito en `docs/programa-educativo/catalogo.json` (datos) y `catalogo.md` (lectura): 4 compromisos (social, ambiental, salud, espiritual) × 5 secciones, 166 objetivos con contenidos e indicadores. Hallazgos que cambian el diseño:
+
+- Los «ámbitos» son los 4 compromisos; las pestañas del mock-up pasan a ser 4.
+- El PDF asigna objetivos por **sección**, no por año: no existe «año recomendado». El filtro «Este año» y esa columna carecen de base salvo que se decidan aparte.
+- Unidad de seguimiento posible: el objetivo (o su indicador de evaluación).
+- Pendiente: revisar la transcripción (aviso de la p. 59) y leer pp. 88-100 (progresión y evaluación) para la escala de estados.
+
+## Propuesta v2 (2026-11-04, tras leer todo el programa)
+
+Mock-up: `docs/mockups/seguimiento-educativo-v2.html`. Transcripción completa del PDF: `docs/programa-educativo/programa-educativo.md`.
+
+- **Qué se hace seguimiento**: la **progresión personal** (pp. 88-100): por sección, 8-9 aspectos (relaciones, marco simbólico, proyecto, naturaleza, objetivos personales, compromisos educativos, autonomía/vida de patrulla/unidad/servicio, valores) × 3 etapas (Integración, Participación, Animación), cada celda con su indicador literal. Los 166 objetivos de los compromisos quedan como **consulta** (el propio programa dice que las guías largas no se usaron, p. 88).
+- **Principios del programa que condicionan la interfaz** (p. 89): protagonizada por la persona, formativa sin comparar ni meritocracia, flexible (pasar de etapa no exige cumplirlo todo), continua (revisión al menos trimestral). Por eso: sin rankings, orden alfabético, estados «Aún no / En camino / Lo logra», propuesta de cambio de etapa en lugar de cálculo automático, distintivo de etapa entregado al inicio de la etapa (p. 91).
+- **Pantallas**: listado + cuadrícula de la sección (un clic cambia un aspecto), ficha con las tres etapas, objetivo personal (rastro/cola/especialidad/PAI) y notas cifradas.
+- **Edad**: tramos 6-8, 8-11, 11-14, 14-17, 17-21, flexibilizables por la maduración (p. 82): el año calculado por edad es solo orientativo.
+
+## Decisiones del usuario (2026-11-04)
+
+1. **Qué se sigue**: la progresión personal (8-9 aspectos × 3 etapas); los 166 objetivos solo como consulta.
+2. **Quién ve**: los scouters de esa sección ven y editan su sección; Coordinación solo lee.
+3. **Histórico**: se conserva siempre, por nº de socio y con fecha de cada revisión; no se borra.
+4. **Notas**: entran en la primera versión, cifradas (Crypto) y ligadas al nº de socio.
