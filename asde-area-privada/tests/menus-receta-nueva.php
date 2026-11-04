@@ -217,7 +217,7 @@ try {
 		array( 'asde_action' => 'menu_receta_nueva', 'evento' => (string) $e['id'], 'pestana' => 'menu', 'dia' => $ini, 'comida' => 'comida', 'nombre' => 'Arroz por POST de prueba', 'tipo' => 'segundo', 'porciones' => '12', 'ing' => array( (string) $sal['id'], '0' ), 'cant' => array( '2,5', '' ), 'uni' => array( 'g', 'g' ) ),
 		'asde_evento_' . $e['id']
 	);
-	$ok( $contar_recetas() === $antes + 1 && str_contains( $notas, 'Recipe created and added to the menu.' ), 'por POST con su nonce se crea y se avisa' );
+	$ok( $contar_recetas() === $antes + 1 && str_contains( $notas, __( 'Recipe created and added to the menu.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ), 'por POST con su nonce se crea y se avisa' );
 	$ok( 2 === count( MenuEvento::platos( $e, $ini ) ), 'el plato nuevo está en el menú (con el anterior)' );
 	$cant = null;
 	foreach ( RecetasTable::visibles() as $r ) {
@@ -241,7 +241,7 @@ try {
 
 	// Sin JavaScript, «Nuevo» manda al recetario.
 	$notas = $enviar( array( 'asde_action' => 'menu_anadir', 'evento' => (string) $e['id'], 'pestana' => 'menu', 'dia' => $ini, 'comida' => 'cena', 'receta' => 'nuevo' ), 'asde_evento_' . $e['id'] );
-	$ok( $contar_recetas() === $antes && str_contains( $notas, 'Create the recipe here' ), 'sin JavaScript, «Nuevo» no añade nada y avisa de ir al recetario' );
+	$ok( $contar_recetas() === $antes && str_contains( $notas, __( 'Create the recipe here and then add it to the menu.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ), 'sin JavaScript, «Nuevo» no añade nada y avisa de ir al recetario' );
 
 	$como( $u_teso );
 	$h = $pintar( array( 'evento' => (string) $e['id'], 'pestana' => 'menu' ) );
