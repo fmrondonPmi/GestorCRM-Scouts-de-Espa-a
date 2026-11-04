@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.60.0
+Stable tag: 0.61.0
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -61,6 +61,9 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.61.0 =
+* Waiting list: new option in the form's own fields box, "Do not ask to confirm the email when signing up". When on, the person goes straight onto the list and receives an email that only informs them of the sign-up (with the link to see their data); nothing needs confirming. Sign-ups already waiting for confirmation move to the list when it is turned on. Off by default: the email is confirmed as before.
 
 = 0.60.0 =
 * Translations now use the standard WordPress mechanism: all texts are written in English with the plugin text domain and are translated by the community on translate.wordpress.org (Spanish, Galician, Basque, Catalan and Valencian). The private area follows the site language; the per-person language selector and the custom label editor are removed. Emails go out in the recipient's language when that language is installed on the site.
@@ -162,6 +165,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * The changelog of versions 0.42.0 and earlier is in changelog.txt, in the plugin folder.
 
 == Upgrade Notice ==
+
+= 0.61.0 =
+Waiting list: optional sign-up without confirming the email (off by default). No database changes.
 
 = 0.60.0 =
 No database changes. The per-person language choice and custom labels are removed: the private area uses the site language. Install the Catalan, Basque, Galician and Valencian language packs on the site to send emails in those languages.

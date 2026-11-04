@@ -20271,3 +20271,41 @@ msgstr "✓ Os totais de cada conta (rexistro 33) e o nº de rexistros (88) cadr
 msgid "🔒 All the data on this record is read-only for you."
 msgstr "🔒 Todos os datos desta ficha son de só lectura para ti."
 
+#: src/ListaEspera/Avisos.php
+#, php-format
+msgid "[%s] Sign-up on the waiting list received"
+msgstr "[%s] Inscrición recibida na lista de espera"
+
+#: src/ListaEspera/Avisos.php
+#, php-format
+msgid "We have received the sign-up of <strong>%1$s</strong> on the waiting list of <strong>%2$s</strong>. It is already on the list and we will contact you when a place is available."
+msgstr "Recibimos a inscrición de <strong>%1$s</strong> na lista de espera do <strong>%2$s</strong>. Xa está na lista e porémonos en contacto contigo cando haxa praza."
+
+#: templates/lista-espera/publica.php
+#, php-format
+msgid "The sign-up is already on the list. We have sent you an email at %s with the sign-up details; you do not need to do anything else."
+msgstr "A inscrición xa está na lista. Enviámosche un email a %s cos datos da inscrición; non tes que facer nada máis."
+
+#: templates/lista-espera/publica.php
+msgid "The sign-up is already on the list. We have sent you an email with the sign-up details; you do not need to do anything else."
+msgstr "A inscrición xa está na lista. Enviámosche un email cos datos da inscrición; non tes que facer nada máis."
+
+#: templates/lista-espera/publica.php
+msgid "We will send you an email with the sign-up details. It is also your key to see your data later."
+msgstr "Enviarémosche un email cos datos da inscrición. É tamén a túa clave para ver os teus datos máis adiante."
+
+#: templates/lista-espera/listado.php
+msgid "Do not ask to confirm the email when signing up"
+msgstr "Non pedir que se confirme o email ao apuntarse"
+
+#: templates/lista-espera/listado.php
+msgid "If you tick it, the person signing up goes straight onto the list and receives an email that only informs them of the sign-up: they do not have to press any link. When you save, the sign-ups waiting for confirmation also move to the list. Without confirmation, nobody checks that the email belongs to whoever signs up."
+msgstr "Se o marcas, quen se apunta entra directamente na lista e recibe un email que só o informa da inscrición: non ten que premer ningunha ligazón. Ao gardar, as inscricións que agardaban confirmación pasan tamén á lista. Sen confirmar, ninguén comproba que o email sexa de quen se apunta."
+
+#. translators: %d: number
+#: src/Frontend/Views/ListaEsperaView.php
+#, php-format
+msgid "%d sign-up that was waiting for confirmation is now on the list."
+msgid_plural "%d sign-ups that were waiting for confirmation are now on the list."
+msgstr[0] "%d inscrición que agardaba confirmación xa está na lista."
+msgstr[1] "%d inscricións que agardaban confirmación xa están na lista."

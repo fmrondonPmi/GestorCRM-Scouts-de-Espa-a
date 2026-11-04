@@ -26,6 +26,11 @@ final class Avisos {
 		return self::enviar( $fila, 'confirmar', self::de_confirmar( $fila ) );
 	}
 
+	/** Grupos que no piden confirmar el email: solo se informa de que se ha apuntado. @return array{ok:bool, destino:string, error:string} */
+	public static function recibida( array $fila ): array {
+		return self::enviar( $fila, 'recibida', self::de_recibida( $fila ) );
+	}
+
 	/** @return array{ok:bool, destino:string, error:string} */
 	public static function confirmada( array $fila ): array {
 		return self::enviar( $fila, 'confirmada', self::de_confirmada( $fila ) );
@@ -87,6 +92,9 @@ final class Avisos {
 						case 'confirmada':
 							$contenido = self::de_confirmada( $fila, true );
 							break;
+						case 'recibida':
+							$contenido = self::de_recibida( $fila, true );
+							break;
 						case 'caducidad':
 							$contenido = self::de_caducidad( $fila, true );
 							break;
@@ -125,6 +133,23 @@ final class Avisos {
 			__( 'Confirm the sign-up', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 			/* translators: %d: days */
 			esc_html( sprintf( /* translators: %d: number */ __( 'The link is valid for %d days. If it was not you, ignore this email: the sign-up will be deleted by itself.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Inscripciones::DIAS_CONFIRMAR ) ),
+		);
+	}
+
+	/** @return callable fn( string $grupo ): array — ver enviar(). */
+	private static function de_recibida( array $fila, bool $vista = false ): callable {
+		return static fn( string $grupo ): array => array(
+			/* translators: %s: name of the group */
+			sprintf( /* translators: %s: text */ __( '[%s] Sign-up on the waiting list received', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $grupo ),
+			array(
+				/* translators: 1: name of the person signed up, 2: name of the group */
+				sprintf( /* translators: 1: text, 2: text */ __( 'We have received the sign-up of <strong>%1$s</strong> on the waiting list of <strong>%2$s</strong>. It is already on the list and we will contact you when a place is available.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), esc_html( self::nombre( $fila ) ), esc_html( $grupo ) ),
+				/* translators: %s: date */
+				esc_html( sprintf( /* translators: %s: text */ __( 'We keep your data, encrypted, until %s. We will notify you beforehand so you can keep it.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), self::fecha( (string) $fila['caduca'] ) ) ),
+			),
+			self::enlace( Enlaces::url_acceso( $fila ), $vista ),
+			__( 'View my details', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+			esc_html( __( 'Keep this email. To see your details we will ask for this email address; from there you can keep or delete them whenever you want.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ),
 		);
 	}
 

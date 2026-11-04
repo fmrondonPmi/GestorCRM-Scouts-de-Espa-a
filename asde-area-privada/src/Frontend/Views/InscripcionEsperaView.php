@@ -67,6 +67,7 @@ final class InscripcionEsperaView extends View {
 			'email'   => (string) ( $e['email'] ?? '' ),
 			'aviso'   => (string) ( $e['aviso'] ?? '' ),
 			'destino' => (string) ( $e['destino'] ?? '' ),
+			'directa' => ! empty( $e['directa'] ),
 		);
 		if ( '' === $vars['modo'] ) {
 			if ( '' !== $this->get( 'confirmar' ) ) {
@@ -167,19 +168,36 @@ final class InscripcionEsperaView extends View {
 		$d['idioma'] = Idioma::actual();
 		$numero      = (string) $grupo['numero'];
 		$repetida    = Inscripciones::repetida( $numero, $d );
+		// El grupo puede apuntar sin pedir que se confirme el email: entra en la lista y se le informa.
+		$directa = Inscripciones::sin_confirmacion( $numero );
 		if ( $repetida ) {
 			// La misma persona con el mismo email (P-129): no se repite; se le reenvía lo suyo.
-			Inscripciones::SIN_CONFIRMAR === $repetida['estado'] ? Avisos::confirmar( $repetida ) : Avisos::enlaces( array( $repetida ) );
+			if ( Inscripciones::SIN_CONFIRMAR === $repetida['estado'] ) {
+				if ( $directa && Inscripciones::confirmar( $repetida['id'] ) ) {
+					$repetida = Inscripciones::por_id( $repetida['id'] ) ?? $repetida;
+					Avisos::recibida( $repetida );
+				} else {
+					Avisos::confirmar( $repetida );
+				}
+			} else {
+				Avisos::enlaces( array( $repetida ) );
+			}
 		} else {
 			$id   = Inscripciones::crear( $numero, $d, $extra['respuestas'] );
 			$fila = $id ? Inscripciones::por_id( $id ) : null;
 			if ( $fila ) {
-				Avisos::confirmar( $fila );
+				if ( $directa && Inscripciones::confirmar( $fila['id'] ) ) {
+					$fila = Inscripciones::por_id( $fila['id'] ) ?? $fila;
+					Avisos::recibida( $fila );
+				} else {
+					Avisos::confirmar( $fila );
+				}
 			}
 		}
 		self::$estado = array(
 			'modo'    => 'enviado',
 			'destino' => Contacto::enmascarar( $d['email'] ),
+			'directa' => $directa,
 		);
 	}
 

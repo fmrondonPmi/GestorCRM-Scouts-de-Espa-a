@@ -13,6 +13,7 @@
  * @var bool             $renovar Puede generar un enlace nuevo
  * @var array[]|null     $campos  Campos propios del formulario (null si no puede editarlos)
  * @var string           $declaracion Texto propio de la casilla de declaración ('' = el de por defecto)
+ * @var bool             $sin_confirmar El grupo apunta sin pedir que se confirme el email
  * @var bool             $altas    Puede dar de alta en el CRM («Se incorpora como asociado/a», doc 59, RC-NUE-1)
  * @var string           $url_alta Personas → Alta de socio/a
  */
@@ -110,6 +111,10 @@ $fecha = static function ( ?string $utc ): string {
 				<label for="asde-espera-declaracion"><?php esc_html_e( 'Text of the declaration box', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 				<textarea id="asde-espera-declaracion" name="declaracion" rows="3" maxlength="<?php echo (int) CamposExtra::MAX_DECLARACION; ?>" placeholder="<?php echo esc_attr( esc_attr__( 'I declare that all the data I have entered is truthful and I accept the Scout group\'s conditions.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_textarea( $declaracion ); ?></textarea>
 				<span class="asde-help"><?php esc_html_e( 'The person signing up must tick this box to continue. Leave it empty to use the default text (the one shown in grey).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span>
+			</p>
+			<p>
+				<label class="asde-choice"><input type="checkbox" name="sin_confirmar" value="1" <?php checked( ! empty( $sin_confirmar ) ); ?>><span><?php esc_html_e( 'Do not ask to confirm the email when signing up', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span></label>
+				<span class="asde-help"><?php esc_html_e( 'If you tick it, the person signing up goes straight onto the list and receives an email that only informs them of the sign-up: they do not have to press any link. When you save, the sign-ups waiting for confirmation also move to the list. Without confirmation, nobody checks that the email belongs to whoever signs up.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span>
 			</p>
 			<p class="asde-help"><?php echo esc_html( sprintf( /* translators: %d: number */ __( 'Empty rows are ignored. To add more fields, save and reopen this box. Maximum %d fields.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), CamposExtra::MAX_CAMPOS ) ); ?></p>
 			<p><button type="submit" class="button button-primary"><?php esc_html_e( 'Save the fields', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button></p>

@@ -83,6 +83,7 @@ final class ListaEsperaView extends View {
 					'renovar' => current_user_can( self::CAP_ALTA ),
 					'campos'  => current_user_can( self::CAP_ALTA ) ? CamposExtra::del_grupo( Grupo::numero() ) : null,
 					'declaracion' => CamposExtra::declaracion_propia( Grupo::numero() ),
+					'sin_confirmar' => Inscripciones::sin_confirmacion( Grupo::numero() ),
 				)
 			)
 		);
@@ -155,6 +156,10 @@ final class ListaEsperaView extends View {
 					Notices::add( 'error', esc_html( implode( ' ', $errores ) ) );
 				} else {
 					CamposExtra::guardar_declaracion( Grupo::numero(), $this->post( 'declaracion' ) );
+					$pasadas = Inscripciones::guardar_sin_confirmacion( Grupo::numero(), '1' === $this->post( 'sin_confirmar' ) );
+					if ( $pasadas ) {
+						Notices::add( 'success', sprintf( /* translators: %d: number */ _n( '%d sign-up that was waiting for confirmation is now on the list.', '%d sign-ups that were waiting for confirmation are now on the list.', $pasadas, 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $pasadas ) );
+					}
 					Logger::log( 'lista_espera_campos', 'grupo', Grupo::numero() );
 					Notices::add( 'success', __( 'Form fields saved.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 				}

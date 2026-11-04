@@ -196,6 +196,47 @@ final class Inscripciones {
 		return (int) $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(*) FROM %i WHERE grupo = %s AND estado = %s', self::table(), Grupo::numero(), self::EN_ESPERA ) ); // phpcs:ignore WordPress.DB
 	}
 
+	/** Opción (grupo => true) de los grupos que apuntan sin pedir que se confirme el email. */
+	public const OPCION_SIN_CONFIRMAR = 'asde_ap_espera_sin_confirmar';
+
+	/** ¿El grupo apunta directamente, sin pedir que se confirme el email? (por defecto no) */
+	public static function sin_confirmacion( string $numero ): bool {
+		$todo = get_option( self::OPCION_SIN_CONFIRMAR, array() );
+		return is_array( $todo ) && ! empty( $todo[ $numero ] );
+	}
+
+	/**
+	 * Guarda el interruptor del grupo. Al activarlo, las inscripciones que esperaban confirmación
+	 * pasan a «en espera» y reciben el email de inscripción recibida.
+	 *
+	 * @return int Inscripciones pasadas a la lista.
+	 */
+	public static function guardar_sin_confirmacion( string $numero, bool $si ): int {
+		global $wpdb;
+		$todo = get_option( self::OPCION_SIN_CONFIRMAR, array() );
+		$todo = is_array( $todo ) ? $todo : array();
+		if ( $si ) {
+			$todo[ $numero ] = true;
+		} else {
+			unset( $todo[ $numero ] );
+		}
+		update_option( self::OPCION_SIN_CONFIRMAR, $todo, false );
+		$pasadas = 0;
+		if ( $si ) {
+			$ids = (array) $wpdb->get_col( $wpdb->prepare( 'SELECT id FROM %i WHERE grupo = %s AND estado = %s', self::table(), $numero, self::SIN_CONFIRMAR ) ); // phpcs:ignore WordPress.DB
+			foreach ( $ids as $id ) {
+				if ( self::confirmar( (int) $id ) ) {
+					$fila = self::por_id( (int) $id );
+					if ( $fila ) {
+						Avisos::recibida( $fila );
+					}
+					++$pasadas;
+				}
+			}
+		}
+		return $pasadas;
+	}
+
 	/** El email se ha confirmado: entra en la lista y empieza a contar el plazo. */
 	public static function confirmar( int $id ): bool {
 		global $wpdb;

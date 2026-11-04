@@ -72,3 +72,12 @@ renovación. La auditoría guarda solo el id y la acción.
   con el mismo email no se repite (se reenvía el email); con otro email, se apunta y sale marcada
   como «Repetida» en la lista.
 - **P-130** Las observaciones no van al CRM (no hay campo): Secretaría las lee antes del alta.
+- **P-131 (v0.61.0)** Interruptor por grupo «No pedir que se confirme el email al apuntarse» (opción
+  `asde_ap_espera_sin_confirmar`, grupo => true; por defecto apagado, en el cuadro de campos propios,
+  lo cambian Secretaría y Coordinación). Encendido: `InscripcionEsperaView::inscribir()` crea la
+  inscripción y la confirma al instante (entra «En espera», empieza a contar la caducidad) y envía el
+  email `recibida` (mismo diseño que «confirmada», sin pedir nada; en el registro de emails se
+  reconstruye igual). Al encenderlo, las «sin confirmar» del grupo pasan a la lista y reciben ese
+  email (decisión del usuario, 2026-11-04). Riesgo asumido: nadie comprueba que el email sea de quien
+  se apunta; siguen el campo trampa, el sello de tiempo y el límite por dispositivo. Apagarlo no toca
+  lo ya apuntado. Una repetida «sin confirmar» con el interruptor encendido también se confirma.
