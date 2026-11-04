@@ -119,7 +119,8 @@ $opciones = static function ( float $importe, ?int $elegido ) use ( $tipos ): st
 							<?php if ( $familias ) : ?>
 								<td data-label="<?php echo esc_attr( esc_attr__( 'Family', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
 									<label class="screen-reader-text" for="asde-familia-<?php echo (int) $m['id']; ?>"><?php esc_html_e( 'Family', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
-									<select id="asde-familia-<?php echo (int) $m['id']; ?>" name="familia[<?php echo (int) $m['id']; ?>]">
+									<?php // v0.62.1: el mismo desplegable predictivo que al conciliar (combobox.js): con 3 letras lista las familias. Opcional: vacío = ninguna. ?>
+										<select id="asde-familia-<?php echo (int) $m['id']; ?>" name="familia[<?php echo (int) $m['id']; ?>]" class="asde-combobox" data-min="3" data-placeholder="<?php echo esc_attr( esc_attr__( 'Family: no. or surname (3 letters)…', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
 										<option value=""><?php esc_html_e( 'None', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></option>
 										<?php foreach ( $familias as $fid => $etiqueta ) : ?>
 											<option value="<?php echo (int) $fid; ?>" <?php selected( (int) ( $m['familia_id'] ?? 0 ), (int) $fid ); ?>><?php echo esc_html( $etiqueta ); ?></option>

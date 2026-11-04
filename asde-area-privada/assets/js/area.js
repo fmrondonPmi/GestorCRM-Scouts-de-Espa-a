@@ -367,6 +367,9 @@
 		if ( window.asdeAlta ) {
 			window.asdeAlta.iniciar( cuerpo );
 		}
+		if ( window.asdeCombobox ) {
+			window.asdeCombobox.iniciar( cuerpo ); // v0.62.1: «Marcar como revisado» (familia) en la ventana.
+		}
 		cuerpo.scrollTop = 0;
 		cuerpo.focus( { preventScroll: true } );
 		irA( url.indexOf( '#' ) > -1 ? url.slice( url.indexOf( '#' ) + 1 ) : '' );

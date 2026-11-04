@@ -74,7 +74,8 @@
 		caja.appendChild( select );
 		// La lista cuelga del <body> para quedar siempre por encima (el tema crea
 		// capas que taparían una lista dentro del contenido, p. ej. el pie).
-		document.body.appendChild( lista );
+		// Dentro de un <dialog> modal, lo del <body> queda por debajo (capa superior): cuelga del propio <dialog>.
+		( select.closest( 'dialog' ) || document.body ).appendChild( lista );
 		abiertos.push( { lista: lista, caja: caja } );
 
 		var activa = -1;
@@ -82,8 +83,11 @@
 
 		function colocar() {
 			var r = input.getBoundingClientRect();
-			lista.style.left = ( r.left + window.scrollX ) + 'px';
-			lista.style.top = ( r.bottom + window.scrollY + 2 ) + 'px';
+			// En una ventana emergente (<dialog> modal) la lista cuelga de ella y va fija a la pantalla.
+			var fija = !! lista.closest( 'dialog' );
+			lista.style.position = fija ? 'fixed' : '';
+			lista.style.left = ( r.left + ( fija ? 0 : window.scrollX ) ) + 'px';
+			lista.style.top = ( r.bottom + ( fija ? 0 : window.scrollY ) + 2 ) + 'px';
 			lista.style.width = r.width + 'px';
 		}
 		window.addEventListener( 'resize', function () {
@@ -91,11 +95,12 @@
 				colocar();
 			}
 		} );
+		// En fase de captura: el desplazamiento del cuerpo de la ventana emergente no sube hasta window.
 		window.addEventListener( 'scroll', function () {
 			if ( ! lista.hidden ) {
 				colocar();
 			}
-		}, { passive: true } );
+		}, { passive: true, capture: true } );
 
 		function cerrar() {
 			lista.hidden = true;
