@@ -14,6 +14,7 @@
  * @var string      $email        Email ya comprobado (dentro)
  * @var string      $aviso        mantenidos|''
  * @var string      $destino      Email enmascarado al que se ha escrito
+ * @var bool        $directa      El grupo no pide confirmar el email: ya está en la lista
  * @var string      $nombre_grupo Grupo de la inscripción
  */
 // phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound, WordPress.WP.GlobalVariablesOverride.Prohibited -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
@@ -72,7 +73,11 @@ $ya_estas = static function ( string $volver ): void {
 	<?php elseif ( 'enviado' === $modo ) : ?>
 		<div class="asde-notice asde-notice--success" role="status">
 			<strong><?php esc_html_e( 'Thank you.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></strong>
-			<?php echo esc_html( '' !== $destino ? sprintf( /* translators: %s: text */ __( 'We have sent you an email at %s to confirm the sign-up. Until you press its link, it does not go on the list.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $destino ) : __( 'We have sent you an email to confirm the sign-up. Until you press its link, it does not go on the list.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>
+			<?php if ( $directa ) : ?>
+				<?php echo esc_html( '' !== $destino ? sprintf( /* translators: %s: text */ __( 'The sign-up is already on the list. We have sent you an email at %s with the sign-up details; you do not need to do anything else.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $destino ) : __( 'The sign-up is already on the list. We have sent you an email with the sign-up details; you do not need to do anything else.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>
+			<?php else : ?>
+				<?php echo esc_html( '' !== $destino ? sprintf( /* translators: %s: text */ __( 'We have sent you an email at %s to confirm the sign-up. Until you press its link, it does not go on the list.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $destino ) : __( 'We have sent you an email to confirm the sign-up. Until you press its link, it does not go on the list.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>
+			<?php endif; ?>
 		</div>
 		<p class="asde-help"><?php echo esc_html( sprintf( /* translators: %d: number */ __( 'If it doesn\'t arrive, check your spam folder. The link is valid for %d days.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Inscripciones::DIAS_CONFIRMAR ) ); ?></p>
 		<p><a href="<?php echo esc_url( add_query_arg( array( 'grupo' => rawurlencode( (string) $grupo['id'] ), 'clave' => rawurlencode( $clave ) ) ) ); ?>"><?php esc_html_e( 'Sign up another person', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a></p>
@@ -190,7 +195,7 @@ $ya_estas = static function ( string $volver ): void {
 				<p>
 					<label for="asde-espera-email-n"><?php esc_html_e( 'Email', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 					<input type="email" id="asde-espera-email-n" name="email" value="<?php echo esc_attr( $v( 'email' ) ); ?>" autocomplete="email" autocapitalize="none" spellcheck="false" required>
-					<span class="asde-help"><?php esc_html_e( 'We will send you an email to confirm it. It is also your key to see your data later.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span>
+					<span class="asde-help"><?php echo esc_html( Inscripciones::sin_confirmacion( (string) $grupo['numero'] ) ? __( 'We will send you an email with the sign-up details. It is also your key to see your data later.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : __( 'We will send you an email to confirm it. It is also your key to see your data later.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?></span>
 				</p>
 				<p><label for="asde-espera-obs"><?php esc_html_e( 'Notes (optional)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label><textarea id="asde-espera-obs" name="observaciones" rows="3" maxlength="<?php echo (int) Formulario::MAX_OBSERVACIONES; ?>"><?php echo esc_textarea( $v( 'observaciones' ) ); ?></textarea></p>
 			</fieldset>

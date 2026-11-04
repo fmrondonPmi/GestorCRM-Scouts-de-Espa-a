@@ -68,6 +68,7 @@ $modulos_antes = get_option( 'asde_ap_modulos', null );
 $enlace_antes  = get_option( Enlaces::OPCION, null );
 $campos_antes  = get_option( CamposExtra::OPCION, null );
 $decl_antes    = get_option( CamposExtra::OPCION_DECLARACION, null );
+$sinc_antes    = get_option( Inscripciones::OPCION_SIN_CONFIRMAR, null );
 $socios_antes  = array_column( (array) $wpdb->get_results( 'SELECT * FROM ' . SociosTable::table(), ARRAY_A ), null, 'num_socio_asde' ); // phpcs:ignore WordPress.DB
 
 // v0.35.1: la prueba cuenta con «Altas en el CRM» apagadas en el grupo (el Local puede tenerlas encendidas).
@@ -570,6 +571,53 @@ try {
 
 	$logs = (string) wp_json_encode( $wpdb->get_results( $wpdb->prepare( "SELECT accion, detalles FROM %i WHERE id > %d AND accion LIKE 'lista\\_espera%%'", Logger::table(), $log_antes ), ARRAY_A ) );
 	$ok( str_contains( $logs, 'lista_espera_inscripcion' ) && ! str_contains( $logs, 'Prova' ) && ! str_contains( $logs, 'example.invalid' ) && ! str_contains( $logs, '22222222J' ), 'la auditoría guarda las acciones, sin nombres, emails ni documentos' );
+	echo "\n== I · Apuntarse sin pedir que se confirme el email (v0.61.0) ==\n";
+	$num = (string) $grupo['numero'];
+	$sin_cambio = array( 'asde_action' => 'espera_campos', 'campo' => array() );
+	update_option( CamposExtra::OPCION, array(), false ); // Sin campos propios (los deja la sección H).
+	$como( $u_sec );
+	$ok( false === Inscripciones::sin_confirmacion( $num ), 'por defecto se pide confirmar el email' );
+	$h = $ver( new ListaEsperaView() );
+	$ok( str_contains( $h, 'name="sin_confirmar"' ) && ! str_contains( $h, "checked='checked'><span>No pedir" ), 'Secretaría ve la casilla, desmarcada' );
+	wp_set_current_user( 0 );
+	$publica( $form( array( 'nombre' => 'Pendi', 'email' => 'pendi.espera@example.invalid', 'sello' => $sello() ) ), 'espera_inscribir' );
+	$pen = $fila_de( 'Pendi' );
+	$ok( $pen && Inscripciones::SIN_CONFIRMAR === $pen['estado'], 'con el interruptor apagado: queda sin confirmar, como siempre' );
+	$como( $u_sco );
+	$enviar( new ListaEsperaView(), $sin_cambio + array( 'sin_confirmar' => '1' ), 'asde_espera_campos' );
+	$ok( false === Inscripciones::sin_confirmacion( $num ), 'un scouter no puede cambiar el interruptor' );
+	$como( $u_sec );
+	$enviar( new ListaEsperaView(), $sin_cambio + array( 'sin_confirmar' => '1' ), 'asde_espera_campos' );
+	$ok( true === Inscripciones::sin_confirmacion( $num ), 'Secretaría lo activa' );
+	$pen = Inscripciones::por_id( (int) $pen['id'] );
+	$ok( Inscripciones::EN_ESPERA === $pen['estado'] && $pen['caduca'], 'al activarlo, la que esperaba confirmación pasa a la lista' );
+	$ok( str_contains( (string) $ultimo()['subject'], 'Inscripción recibida' ) && 'pendi.espera@example.invalid' === $ultimo()['to'], 'y recibe el email de inscripción recibida' );
+	$h = $ver( new ListaEsperaView() );
+	$ok( str_contains( $h, "checked='checked'><span>No pedir" ), 'la casilla sale marcada' );
+	wp_set_current_user( 0 );
+	$antes = $max_id( Inscripciones::table() );
+	list( , , $h ) = $publica( $form( array( 'nombre' => 'Nuria', 'email' => 'nuria.espera@example.invalid', 'sello' => $sello() ) ), 'espera_inscribir' );
+	$nur = $fila_de( 'Nuria' );
+	$ok( $nur && Inscripciones::EN_ESPERA === $nur['estado'] && $nur['confirmada_en'] && $nur['caduca'] && $antes < (int) $nur['id'], 'sin confirmar: entra directamente en la lista' );
+	$ok( str_contains( $h, 'ya está en la lista' ) && ! str_contains( $h, 'Hasta que no pulses' ), 'y la pantalla no pide confirmar nada' );
+	$c = $ultimo();
+	$ok( str_contains( (string) $c['subject'], 'Inscripción recibida' ) && 'nuria.espera@example.invalid' === $c['to'] && $enlace_de( $c, 'espera' ) && ! $enlace_de( $c, 'confirmar' ), 'el email solo informa y lleva el enlace a sus datos (no el de confirmar)' );
+	$antes = $max_id( Inscripciones::table() );
+	$publica( $form( array( 'nombre' => 'Nuria', 'email' => 'nuria.espera@example.invalid', 'sello' => $sello() ) ), 'espera_inscribir' );
+	$ok( $antes === $max_id( Inscripciones::table() ) && Inscripciones::EN_ESPERA === $fila_de( 'Nuria' )['estado'], 'apuntarse otra vez no la repite' );
+	$h = $ver( new InscripcionEsperaView(), array( 'grupo' => $grupo['id'], 'clave' => Enlaces::clave( $grupo ) ) );
+	$ok( str_contains( $h, 'con los datos de la inscripción' ) && ! str_contains( $h, 'para confirmarlo' ), 'el formulario ya no dice que se enviará un email para confirmar' );
+	$vista = '';
+	$reg   = (array) $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM %i WHERE id > %d AND tipo = %s AND asunto LIKE %s ORDER BY id DESC LIMIT 1', RegistroEmails::table(), $ema_antes, RegistroEmails::LISTA_ESPERA, '%recibida%' ), ARRAY_A );
+	$vista = $reg ? RegistroEmails::vista_previa( $reg ) : '';
+	$ok( str_contains( $vista, 'Ya está en la lista' ) && str_contains( $vista, 'ENLACE-PERSONAL-NO-GUARDADO' ), 'el registro de emails puede volver a mostrar este email' );
+	$como( $u_sec );
+	$enviar( new ListaEsperaView(), $sin_cambio, 'asde_espera_campos' );
+	$ok( false === Inscripciones::sin_confirmacion( $num ), 'Secretaría lo apaga' );
+	wp_set_current_user( 0 );
+	$publica( $form( array( 'nombre' => 'Otro', 'email' => 'otro.espera@example.invalid', 'sello' => $sello() ) ), 'espera_inscribir' );
+	$ok( Inscripciones::SIN_CONFIRMAR === ( $fila_de( 'Otro' )['estado'] ?? '' ), 'apagado: vuelve a pedir la confirmación' );
+
 } catch ( Throwable $e ) {
 	++$fails;
 	echo 'FAIL excepcion: ', $e->getMessage(), ' (', basename( $e->getFile() ), ':', $e->getLine(), ")\n";
@@ -594,6 +642,7 @@ try {
 	null === $enlace_antes ? delete_option( Enlaces::OPCION ) : update_option( Enlaces::OPCION, $enlace_antes, false );
 	null === $campos_antes ? delete_option( CamposExtra::OPCION ) : update_option( CamposExtra::OPCION, $campos_antes, false );
 	null === $decl_antes ? delete_option( CamposExtra::OPCION_DECLARACION ) : update_option( CamposExtra::OPCION_DECLARACION, $decl_antes, false );
+	null === $sinc_antes ? delete_option( Inscripciones::OPCION_SIN_CONFIRMAR ) : update_option( Inscripciones::OPCION_SIN_CONFIRMAR, $sinc_antes, false );
 	Modulos::olvidar();
 	Permisos::olvidar( $grupo['numero'] );
 	delete_transient( 'asde_ap_recuento_federal_' . $grupo['numero'] );
