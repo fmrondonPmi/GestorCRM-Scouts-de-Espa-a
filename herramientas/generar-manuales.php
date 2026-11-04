@@ -31,46 +31,46 @@
 $raiz    = dirname( __DIR__ ) . '/manual';
 $fuentes = $raiz . '/fuentes';
 $plugin  = dirname( __DIR__ ) . '/asde-area-privada';
-$version = '0.59';
-$fecha   = 'octubre de 2026';
+$version = '0.62';
+$fecha   = 'noviembre de 2026';
 $errores = 0;
 
 $manuales = array(
 	'administracion' => array(
 		'titulo'   => 'Manual de gestión del CRM y de la web',
 		'perfil'   => 'Administración de WordPress',
-		'entrada'  => 'Para quien instala y mantiene la web: la conexión de cada grupo con SinergiaCRM, la organización federada y el usuario de acceso, la instalación, los módulos de cada grupo (y las altas en el CRM), los documentos repetidos, el tema, los colores, los idiomas y las etiquetas, y qué datos se leen del CRM y cuáles guarda la web.',
-		'apartados' => array( 'admin-perfil', 'admin-crm', 'admin-grupos', 'admin-modulos', 'admin-duplicados', 'admin-organizacion', 'admin-oficina', 'admin-entorno', 'admin-app', 'admin-tema', 'admin-colores', 'admin-idiomas', 'admin-datos', 'admin-diagnostico', 'preguntas-admin' ),
+		'entrada'  => 'Para quien instala y mantiene la web: la conexión de cada grupo con SinergiaCRM, la organización federada y el usuario de acceso, la instalación, los módulos de cada grupo (y las altas en el CRM), los documentos repetidos, el tema, los colores, y qué datos se leen del CRM y cuáles guarda la web.',
+		'apartados' => array( 'admin-perfil', 'admin-crm', 'admin-grupos', 'admin-modulos', 'admin-duplicados', 'admin-organizacion', 'admin-oficina', 'admin-entorno', 'admin-app', 'admin-tema', 'admin-colores', 'admin-datos', 'admin-diagnostico', 'preguntas-admin' ),
 	),
 	'oficina'       => array(
 		'titulo'   => 'Manual para la oficina federal',
 		'perfil'   => 'Personal de la oficina (consulta en solo lectura)',
 		'entrada'  => 'Cómo consulta la oficina federal los grupos: elegir el grupo, ver las personas y sus fichas, los informes con datos de las personas asociadas y las cuentas de acceso, siempre en solo lectura y con cada consulta anotada.',
-		'apartados' => array( 'oficina-perfil', 'entrar-socios', 'primera-vez', 'seguridad-opcional', 'oficina-inicio', 'oficina-consulta', 'idioma' ),
+		'apartados' => array( 'oficina-perfil', 'entrar-socios', 'primera-vez', 'seguridad-opcional', 'oficina-inicio', 'oficina-consulta' ),
 	),
 	'familias'      => array(
 		'titulo'   => 'Manual para familias',
 		'perfil'   => 'Madres, padres y tutores',
 		'entrada'  => 'Cómo entrar en el área privada del grupo con la cuenta familiar, ver y corregir las fichas de tus hijos, inscribirlos en las salidas y acampadas, consultar los pagos, firmar la domiciliación SEPA y pedir el uniforme.',
-		'apartados' => array( 'familias-perfil', 'entrar-familias', 'solicitar', 'primera-vez', 'instalar-app', 'familias-inicio', 'familias-fichas', 'mis-eventos', 'mis-pagos', 'mis-pagos-sepa', 'uniforme-pedir', 'idioma', 'grupo-datos', 'seguridad-opcional', 'preguntas-familias' ),
+		'apartados' => array( 'familias-perfil', 'entrar-familias', 'solicitar', 'primera-vez', 'instalar-app', 'familias-inicio', 'familias-fichas', 'mis-eventos', 'mis-pagos', 'mis-pagos-sepa', 'uniforme-pedir', 'grupo-datos', 'seguridad-opcional', 'preguntas-familias' ),
 	),
 	'participantes' => array(
 		'titulo'   => 'Manual para asociados menores de edad',
 		'perfil'   => 'Educandos de 14 a 17 años con cuenta propia',
 		'entrada'  => 'Si tienes entre 14 y 17 años y eres socio/a del grupo, puedes tener tu propia cuenta: consultar tu ficha, tener al día tu email y tus teléfonos, preinscribirte en las actividades, ver tus pagos y pedir tu uniforme.',
-		'apartados' => array( 'participantes-perfil', 'entrar-socios', 'solicitar', 'primera-vez', 'instalar-app', 'participantes-inicio', 'participantes-ficha', 'mis-eventos', 'participantes-pagos', 'uniforme-pedir', 'idioma', 'grupo-datos', 'seguridad-opcional', 'preguntas-participantes' ),
+		'apartados' => array( 'participantes-perfil', 'entrar-socios', 'solicitar', 'primera-vez', 'instalar-app', 'participantes-inicio', 'participantes-ficha', 'mis-eventos', 'participantes-pagos', 'uniforme-pedir', 'grupo-datos', 'seguridad-opcional', 'preguntas-participantes' ),
 	),
 	'scouters'      => array(
 		'titulo'   => 'Manual para scouters',
 		'perfil'   => 'Scouters y voluntariado con sección',
 		'entrada'  => 'Lo que hace un scouter con su sección en el área privada: las fichas de sus educandos, los cambios que proponen las familias, las solicitudes de acceso, los informes (también quién ha pagado la cuota), los pagos y las familias, y los pedidos de uniforme. Y lo suyo: sus datos, sus pagos y su propio uniforme.',
-		'apartados' => array( 'scouters-perfil', 'scouters-alta', 'entrar-socios', 'primera-vez', 'instalar-app', 'seguridad-opcional', 'scouters-inicio', 'ventana', 'scouters-fichas', 'cambios', 'scouters-solicitudes', 'informes', 'scouters-tesoreria', 'scouters-uniformes', 'eventos', 'inventario', 'lista-espera', 'reintegros', 'idioma', 'grupo-datos', 'preguntas-scouters' ),
+		'apartados' => array( 'scouters-perfil', 'scouters-alta', 'entrar-socios', 'primera-vez', 'instalar-app', 'seguridad-opcional', 'scouters-inicio', 'ventana', 'scouters-fichas', 'cambios', 'scouters-solicitudes', 'informes', 'scouters-tesoreria', 'scouters-uniformes', 'eventos', 'inventario', 'lista-espera', 'reintegros', 'grupo-datos', 'preguntas-scouters' ),
 	),
 	'coordinacion'  => array(
 		'titulo'   => 'Manual del equipo de coordinación',
 		'perfil'   => 'Tesorería, Secretaría y Coordinación',
 		'entrada'  => 'Todo lo que lleva el equipo del grupo: personas y números de socio, altas, bajas y cambios de sección en el CRM, dar acceso, solicitudes, los usuarios (con sus hojas: usuarios, dar acceso y registro de emails), fichas y cambios, informes, la Tesorería completa (cuotas, coste federativo, banco y domiciliaciones SEPA) y los uniformes, del pago a la entrega.',
-		'apartados' => array( 'coordinacion-perfil', 'entrar-socios', 'primera-vez', 'instalar-app', 'seguridad-opcional', 'coordinacion-inicio', 'ventana', 'personas', 'altas-crm', 'alta', 'solicitudes', 'usuarios', 'accesos', 'coordinacion-fichas', 'cambios', 'informes', 'tesoreria', 'uniformes-gestion', 'eventos', 'inventario', 'lista-espera', 'reintegros', 'idioma', 'grupo-datos', 'preguntas-coordinacion' ),
+		'apartados' => array( 'coordinacion-perfil', 'entrar-socios', 'primera-vez', 'instalar-app', 'seguridad-opcional', 'coordinacion-inicio', 'ventana', 'personas', 'altas-crm', 'alta', 'solicitudes', 'usuarios', 'accesos', 'coordinacion-fichas', 'cambios', 'informes', 'tesoreria', 'uniformes-gestion', 'eventos', 'inventario', 'lista-espera', 'reintegros', 'grupo-datos', 'preguntas-coordinacion' ),
 	),
 );
 
@@ -183,9 +183,6 @@ foreach ( $manuales as $slug => $m ) {
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>' . $m['titulo'] . ' · Área privada de los Grupos Scouts</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@600;700&family=JetBrains+Mono:wght@500&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap">
 <link rel="stylesheet" href="manual.css">
 </head>
 <body>
@@ -246,9 +243,6 @@ $portada = '<!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Manuales del área privada de los Grupos Scouts</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@600;700&family=JetBrains+Mono:wght@500&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap">
 <link rel="stylesheet" href="manual.css">
 </head>
 <body>

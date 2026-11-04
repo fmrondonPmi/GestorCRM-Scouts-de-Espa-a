@@ -270,3 +270,9 @@ Solo textos (las capturas **no** se han rehecho todavía: las de informes, Perso
 - `fuentes/solicitudes.html`: las solicitudes sin revisar en 90 días se rechazan solas con el email de siempre; Intendencia entre las responsabilidades. `scouters-alta.html`: Intendencia. `reintegros.html` y `eventos.html`: el justificante se borra al rechazar, cancelar o retirar.
 - Datos reales fuera: los ejemplos del nº de socio/a (`grupo-datos.html`, `admin-organizacion.html`) y del nº de pedido (`uniformes-gestion.html`) usaban el grupo 684; ahora el 999 inventado.
 - Sin capturas nuevas. El generador pasa a la versión 0.57; regenerada la ayuda del plugin. Paquete `manual-de-uso-0.57.0.zip` y copia en `app/public/temporal/` de Local (y en `C:\DriveFMR\UtilsMadeByme\`, a petición del usuario). **No se ha publicado nada.**
+
+## Versión 5.4 · formas de pago de la tienda por grupo (v0.62.0, 2026-11-04)
+
+- Cada grupo elige qué formas de pago acepta la tienda. Textos en `fuentes/uniforme-pedir.html`, `uniformes-gestion.html` (configuración y cobros con datáfono) y `scouters-uniformes.html`; capturas: rehecha la `38-uniformes-config`.
+- **Herramientas** (`manual-capturas.php`): arreglado el volcado, que moría en silencio porque usaba la constante `Modulos::LISTA`, que ya no existe (ahora `Modulos::lista()`); el datáfono se activa con `$tcfg['formas'][] = 'datafono'`; lleva un registro de errores en `capt-error.log`. Trampa: con `SIN_VOLCADO=1` hay que volver a ejecutar `manual-envolver.php` con `PHPRC` puesto (necesita GD), si no la captura sale con «Falta …». Un volcado cortado deja usuarios `99*`, familias y tipos de banco duplicados en el Local: hay que borrarlos antes de repetir.
+- El generador pasa a la versión 0.62; regenerada la ayuda del plugin. Paquetes `manual-de-uso-0.62.0.zip` y `asde-area-privada-0.62.0.zip`, copia en `app/public/temporal/` de Local y en `C:\DriveFMR\UtilsMadeByme\`. **No se ha publicado nada.**

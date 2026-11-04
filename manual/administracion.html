@@ -4,18 +4,15 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>Manual de gestión del CRM y de la web · Área privada de los Grupos Scouts</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Semi+Condensed:wght@600;700&family=JetBrains+Mono:wght@500&family=Source+Sans+3:ital,wght@0,400;0,600;0,700;1,400&display=swap">
 <link rel="stylesheet" href="manual.css">
 </head>
 <body>
 <header class="portada">
 	<div class="portada__dentro">
-		<p class="antetitulo">Manual de uso · versión 0.59 · octubre de 2026 · <a class="portada__volver" href="index.html">Todos los manuales</a></p>
+		<p class="antetitulo">Manual de uso · versión 0.62 · noviembre de 2026 · <a class="portada__volver" href="index.html">Todos los manuales</a></p>
 		<h1>Manual de gestión del CRM y de la web</h1>
 		<p class="portada__perfil">Administración de WordPress</p>
-		<p class="entrada">Para quien instala y mantiene la web: la conexión de cada grupo con SinergiaCRM, la organización federada y el usuario de acceso, la instalación, los módulos de cada grupo (y las altas en el CRM), los documentos repetidos, el tema, los colores, los idiomas y las etiquetas, y qué datos se leen del CRM y cuáles guarda la web.</p>
+		<p class="entrada">Para quien instala y mantiene la web: la conexión de cada grupo con SinergiaCRM, la organización federada y el usuario de acceso, la instalación, los módulos de cada grupo (y las altas en el CRM), los documentos repetidos, el tema, los colores, y qué datos se leen del CRM y cuáles guarda la web.</p>
 		<p class="demo"><strong>Todas las capturas son de un WordPress de demostración con un CRM simulado y datos inventados:</strong> el «Grupo Scout Ejemplo» (grupo 999), personas que no existen y emails <span class="mono">@example.invalid</span>. En tu grupo verás tus datos del CRM.</p>
 	</div>
 	<div class="secciones-franja" aria-hidden="true">
@@ -45,9 +42,6 @@
 <li class="sub"><a href="#admin-app-servidor">Comprobar el servidor</a></li>
 <li><a href="#tema">El tema de la web</a></li>
 <li><a href="#colores">Colores</a></li>
-<li><a href="#idiomas">Idioma y etiquetas</a></li>
-<li class="sub"><a href="#idiomas-ajustes">Ajustes</a></li>
-<li class="sub"><a href="#etiquetas">Personalizar los textos (etiquetas)</a></li>
 <li><a href="#datos">Qué datos guarda la web</a></li>
 <li><a href="#diagnostico">Diagnóstico de tareas en segundo plano</a></li>
 <li><a href="#preguntas">Preguntas frecuentes</a></li>
@@ -69,7 +63,6 @@
 <li><a href="#admin-app">La app móvil</a></li>
 <li><a href="#tema">El tema de la web</a></li>
 <li><a href="#colores">Colores</a></li>
-<li><a href="#idiomas">Idioma y etiquetas</a></li>
 <li><a href="#datos">Qué datos guarda la web</a></li>
 <li><a href="#diagnostico">Diagnóstico de tareas en segundo plano</a></li>
 <li><a href="#preguntas">Preguntas frecuentes</a></li>
@@ -88,7 +81,6 @@
 				<tr><td><a href="#organizacion">Organización federada</a></td><td>La organización, el código del nº de socio, qué número es el usuario de acceso y el coste federativo por defecto.</td></tr>
 				<tr><td><a href="#entorno">Instalación y entorno</a></td><td>Comprobar y reparar todo lo que necesita el área (tablas, páginas, menú…) y el tema.</td></tr>
 				<tr><td><a href="#colores">Colores</a></td><td>Los colores del área privada y de sus emails.</td></tr>
-				<tr><td><a href="#idiomas">Idioma y etiquetas</a></td><td>El idioma del área, si cada persona puede elegirlo y los textos personalizados.</td></tr>
 			</tbody>
 		</table>
 	</div>
@@ -247,10 +239,10 @@
 	<p><strong>Desde la versión 0.18 la app es un plugin aparte:</strong> «ASDE Scouts de España - App móvil del Gestor CRM». Se sube después del Gestor CRM, como cualquier plugin (<em>Plugins → Añadir nuevo → Subir plugin</em>), y se activa; sin él, el área privada funciona igual pero no se puede instalar en el móvil (y las apps que ya estuvieran instaladas se retiran solas). Al actualizar desde la 0.17 los ajustes de la app se conservan. Si alguna vez hay que quitarla, basta con <strong>desactivarla</strong>: borrarla desde <em>Plugins</em> borra también sus ajustes y los avisos activados en los móviles.</p>
 	<ul>
 		<li><strong>Activa:</strong> la casilla enciende o apaga la app. Apagada, desaparecen el manifiesto y el aviso de instalación, y las apps ya instaladas se retiran solas en su próxima visita (puede tardar hasta 24 horas). Cada persona conserva el icono de su pantalla de inicio hasta que lo borre.</li>
-		<li><strong>Nombre bajo el icono:</strong> hasta 12 caracteres; vacío, «Área privada» en el idioma de cada persona. Solo afecta a las apps que se instalen después.</li>
+		<li><strong>Nombre bajo el icono:</strong> hasta 12 caracteres; vacío, «Área privada». Solo afecta a las apps que se instalen después.</li>
 		<li><strong>Icono:</strong> la app usa el «Icono del sitio» de WordPress (<em>Apariencia → Personalizar → Identidad del sitio</em>, imagen cuadrada de <strong>512 × 512 px</strong>). Sin él, lleva un icono genérico (una tienda de campaña morada).</li>
 		<li><strong>Color:</strong> el de la barra del móvil y la pantalla «Sin conexión» es el color principal de la pantalla «Colores».</li>
-		<li><strong>Textos:</strong> el aviso de instalación, la barra inferior y «Sin conexión» están en los cuatro idiomas y se pueden cambiar en «Idioma y etiquetas» (grupo «App móvil»).</li>
+		<li><strong>Textos:</strong> el aviso de instalación, la barra inferior y «Sin conexión» salen en castellano, como el resto del área.</li>
 	</ul>
 	<h3 id="admin-app-servidor">Comprobar el servidor</h3>
 	<p>El botón <strong>«Comprobar el servidor»</strong> hace que el sitio se pida a sí mismo las tres direcciones de la app y dice, una por una, si están bien. Avisa si responde una caché (LiteSpeed Cache, un CDN, un proxy…), si el tipo de contenido o la cabecera <code>Cache-Control: no-cache</code> no son los correctos, o si el contenido llega distinto del que genera el plugin (por ejemplo, minificado). Si alguna sale cacheada, los móviles no se enterarían de las actualizaciones: hay que excluir esa dirección de la caché. No cambia nada del sitio.</p>
@@ -295,33 +287,6 @@
 	<div class="nota"><p><strong>Sin tocar nada,</strong> el área usa el color principal del tema Enfold (o el morado de siempre con otro tema).</p></div>
 </section>
 
-<section id="idiomas">
-	<h2>Idioma y etiquetas</h2>
-	<p class="resumen">El área privada está en <strong>castellano, catalán, euskera y gallego</strong>. En <strong>Grupos Scouts → Idioma y etiquetas</strong> se elige el idioma, si cada persona puede cambiarlo y se puede <strong>personalizar cualquier texto</strong> en cualquier idioma.</p>
-	<figure class="captura captura--larga"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/wp-admin/admin.php?page=asde-area-privada-idiomas&amp;idioma=ca</span></div><div class="navegador__vista" data-ampliar tabindex="0"><img src="capturas/64-idiomas.png" width="1280" height="1800" alt="Pantalla Idioma y etiquetas: el idioma por defecto, la casilla para dejar elegir y la tabla de textos en catalán con su traducción y el campo para el texto propio" loading="lazy"></div></div><figcaption><span>Arriba, los ajustes; debajo, una pestaña por idioma con la tabla de textos: el original en castellano, la traducción del plugin y el texto propio.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
-	<h3 id="idiomas-ajustes">Ajustes</h3>
-	<ul>
-		<li><strong>Idioma por defecto</strong> del área: el que ve quien no ha elegido otro.</li>
-		<li><strong>Dejar que cada persona elija su idioma</strong> (marcado al instalar): sale un selector junto a «Salir» y encima de las pantallas de entrar, activar la cuenta, recuperar la contraseña y pedir el acceso. La elección se guarda en la cuenta de cada uno; sin sesión, en el navegador.</li>
-		<li>Los <strong>emails</strong> salen en el idioma de quien los recibe. La invitación tras una solicitud, en el idioma en que se pidió.</li>
-	</ul>
-	<figure class="captura"><div class="navegador"><div class="navegador__barra"><span class="navegador__url">/area-privada/</span></div><div class="navegador__vista" data-ampliar><img src="capturas/62-inicio-catalan.png" width="1280" height="1263" alt="Inicio del área privada de un scouter en catalán" loading="lazy"></div></div><figcaption><span>El inicio de un scouter en catalán.</span><button class="ampliar" type="button">Ampliar</button></figcaption></figure>
-	<h3 id="etiquetas">Personalizar los textos (etiquetas)</h3>
-	<p>Ninguna traducción es perfecta, y cada grupo tiene su forma de llamar a las cosas. Por eso cualquier texto se puede cambiar:</p>
-	<ol class="pasos">
-		<li><div>Elige la pestaña del idioma. Busca el texto (también busca en las traducciones) o filtra entre <em>todos</em>, <em>personalizados</em> y <em>sin traducir</em>.</div></li>
-		<li><div>Escribe el <strong>texto propio</strong> y guarda. Desde ese momento manda sobre la traducción del plugin.</div></li>
-		<li><div>Para volver al del plugin, deja el campo vacío. «Restablecer» borra todos los textos propios de un idioma.</div></li>
-	</ol>
-	<ul>
-		<li>Se puede personalizar también el <strong>castellano</strong> (por ejemplo, «Tutor / Padre / Madre» por «Familia»).</li>
-		<li>Los huecos de los datos (<code>%s</code>, <code>%d</code>, <code>%1$s</code>) tienen que seguir en el texto: si falta alguno, ese texto no se guarda. Se admite solo HTML básico: negrita, cursiva, código, saltos de línea y enlaces.</li>
-		<li><strong>«Descargar mis etiquetas (.json)»</strong> y la importación permiten pasar los textos propios de una web a otra. Cada cambio queda en la auditoría.</li>
-		<li>Lo que escribe la gente (motivos, conceptos, nombres de informes, el catálogo de uniformes) no se traduce: se ve tal como se escribió. Las pantallas de wp-admin del plugin siguen en castellano.</li>
-	</ul>
-	<div class="ojo"><p><strong>Revisa las traducciones.</strong> El catalán, el euskera y el gallego del plugin son una primera versión. Conviene que alguien de cada idioma revise lo más visible (el menú, el inicio, la pantalla de acceso y los emails) y lo corrija aquí.</p></div>
-</section>
-
 <section id="datos">
 	<h2>Qué datos guarda la web</h2>
 	<p class="resumen">Los datos personales viven en el CRM. La web guarda lo justo para funcionar, y lo sensible, cifrado con la clave del sitio.</p>
@@ -341,7 +306,7 @@
 		</table>
 	</div>
 	<ul>
-		<li>Al <strong>desinstalar</strong> el plugin se borran sus ajustes (también los colores, el idioma y las etiquetas).</li>
+		<li>Al <strong>desinstalar</strong> el plugin se borran sus ajustes (también los colores).</li>
 		<li>Lo cifrado se protege con la clave <span class="mono">ASDE_AP_ENCRYPTION_KEY</span> de <span class="mono">wp-config.php</span> o, si no está, con las claves de WordPress del mismo fichero. Si se cambian, lo cifrado deja de poder leerse: guárdalas bien.</li>
 	</ul>
 </section>
@@ -361,8 +326,7 @@
 	<details class="pregunta"><summary>«Probar conexión» falla.</summary><div><p>Revisa la URL (la dirección base del CRM, sin rutas), el usuario y la contraseña. Si el mensaje dice que el usuario no ve el grupo, pide a ASDE permisos sobre ese grupo. La contraseña no se vuelve a mostrar: si dudas, escríbela de nuevo.</p></div></details>
 	<details class="pregunta"><summary>Las fichas salen todas en solo lectura.</summary><div><p>El usuario de API del grupo no tiene permiso de edición en el CRM. Con permiso de lectura el área funciona, pero no se puede guardar nada. «Probar conexión» dice en qué módulos puede escribir.</p></div></details>
 	<details class="pregunta"><summary>¿Puedo usar otro tema que no sea Enfold?</summary><div><p>Sí. Elige uno que permita páginas a ancho completo, sin barra lateral ni barra de título, y revisa las pantallas del área antes de cambiarlo en una web en uso.</p></div></details>
-	<details class="pregunta"><summary>Una traducción no suena bien.</summary><div><p>Cámbiala en «Idioma y etiquetas», en la pestaña de ese idioma: tu texto manda sobre el del plugin y se conserva al actualizar.</p></div></details>
-	<details class="pregunta"><summary>Queremos que todo salga en catalán.</summary><div><p>Elige el catalán como idioma por defecto. Si además no quieres que cada persona pueda cambiarlo, desmarca «Dejar que cada persona elija su idioma».</p></div></details>
+	<details class="pregunta"><summary>¿En qué idioma sale el área privada?</summary><div><p>Siempre en castellano, sea cual sea el idioma de WordPress. Ya no hay selector de idioma ni pantalla «Idioma y etiquetas». Lo que escribe la gente se ve tal como se escribió.</p></div></details>
 	<details class="pregunta"><summary>¿Los colores se pueden poner por grupo?</summary><div><p>No: valen para toda la web. Si la web lleva varios grupos, todos comparten los colores.</p></div></details>
 	<details class="pregunta"><summary>Quiero pasar a usar el nº de Scouts de España como usuario.</summary><div><p>En «Organización federada», elige ese usuario de acceso y, debajo, revisa y confirma el renombrado de las cuentas existentes. Las personas pueden seguir entrando con el número de siempre.</p></div></details>
 	<details class="pregunta"><summary>¿Cómo instalo una versión nueva?</summary><div><p>En Plugins, sube el zip de la versión nueva («Subir plugin» y «Reemplazar el actual»). Después mira «Instalación y entorno»: lo nuevo se crea solo y la pantalla avisa si falta algo. La ayuda del área privada (solo texto) viene en el plugin; este manual con capturas es aparte: si lo tienes publicado, sube también el de la misma versión (ver <a href="#manual-de-uso">Manual de uso</a>).</p></div></details>
@@ -383,7 +347,7 @@
 			</ul>
 		</section>
 
-		<p class="pie">Manual de gestión del CRM y de la web del plugin «ASDE Scouts de España – Gestor CRM para Grupos Scouts», versión 0.59 (octubre de 2026). Capturas hechas en un WordPress de demostración con un CRM simulado y datos inventados.</p>
+		<p class="pie">Manual de gestión del CRM y de la web del plugin «ASDE Scouts de España – Gestor CRM para Grupos Scouts», versión 0.62 (noviembre de 2026). Capturas hechas en un WordPress de demostración con un CRM simulado y datos inventados.</p>
 	</main>
 </div>
 
