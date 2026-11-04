@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mock-up · Seguimiento educativo</title>
+<style>
+:root{--p:#632599;--tint:#f3ecf9;--g:#7ab317;--b:#d9d4e0;--t:#2b2b2b;--m:#6b6b6b;--ok:#2e7d32;--wip:#b26a00;--no:#8a8a8a;--bg:#f6f5f8}
+*{box-sizing:border-box}
+body{margin:0;font:15px/1.45 system-ui,Segoe UI,Roboto,sans-serif;color:var(--t);background:var(--bg)}
+.nota{background:#fff8e1;border-bottom:1px solid #f0d98a;padding:10px 16px;font-size:13px}
+.nota b{color:#8a5a00}
+.wrap{max-width:1000px;margin:0 auto;padding:16px}
+nav.sub{display:flex;gap:6px;overflow-x:auto;margin-bottom:14px;padding-bottom:4px}
+nav.sub a{white-space:nowrap;padding:7px 12px;border:1px solid var(--b);border-radius:6px;background:#fff;color:var(--p);text-decoration:none;font-size:14px}
+nav.sub a.on{background:var(--p);color:#fff;border-color:var(--p)}
+.card{background:#fff;border:1px solid var(--b);border-radius:8px;padding:16px 18px;margin-bottom:14px}
+h2{margin:0 0 6px;color:var(--g);text-transform:uppercase;letter-spacing:.5px;font-size:22px}
+.muted{color:var(--m);font-size:13px}
+.chip{display:inline-block;padding:2px 9px;border-radius:12px;font-size:12px;font-weight:600}
+.s-lobatos{background:#f2c500;color:#1a1a1a}
+.filtros{display:flex;gap:8px;align-items:center;margin:10px 0 12px}
+.filtros input{flex:1;min-width:0;padding:8px 10px;border:1px solid var(--b);border-radius:6px;font:inherit}
+button,.btn{font:inherit;cursor:pointer}
+.btn{padding:8px 14px;border-radius:6px;border:1px solid var(--p);background:var(--p);color:#fff}
+.btn.sec{background:#fff;color:var(--p)}
+table{width:100%;border-collapse:collapse}
+th{font-size:12px;text-transform:uppercase;letter-spacing:.5px;text-align:left;padding:8px;border-bottom:2px solid var(--b);color:var(--m)}
+td{padding:9px 8px;border-bottom:1px solid #ece9f0;vertical-align:middle}
+tbody tr.fila{cursor:pointer}
+tbody tr.fila:hover{background:var(--tint)}
+.nombre{font-weight:600;color:var(--p)}
+.anio{display:inline-flex;align-items:center;gap:6px}
+.pts{display:inline-flex;gap:3px}
+.pts i{width:11px;height:11px;border-radius:50%;border:2px solid var(--p);display:block}
+.pts i.on{background:var(--p)}
+.barra{height:8px;background:#ebe6f1;border-radius:5px;overflow:hidden;min-width:90px}
+.barra span{display:block;height:100%;background:var(--g)}
+.prog{display:flex;align-items:center;gap:8px}
+.prog small{white-space:nowrap;color:var(--m)}
+.pag{display:flex;justify-content:space-between;align-items:center;margin-top:10px;font-size:13px;color:var(--m)}
+/* Modal */
+.velo{position:fixed;inset:0;background:rgba(30,20,45,.55);display:none;align-items:flex-start;justify-content:center;padding:28px 12px;overflow:auto;z-index:10}
+.velo.on{display:flex}
+.modal{background:#fff;border-radius:10px;width:min(920px,100%);box-shadow:0 20px 50px rgba(0,0,0,.35)}
+.modal .barra-m{display:flex;align-items:center;gap:10px;padding:12px 18px;background:var(--tint);border-radius:10px 10px 0 0;color:var(--p);font-weight:600}
+.modal .barra-m span{flex:1}
+.x{background:none;border:0;font-size:24px;line-height:1;color:var(--m)}
+.cuerpo{padding:16px 20px 22px}
+.cab{display:flex;flex-wrap:wrap;gap:6px 14px;align-items:center;margin-bottom:12px}
+.cab h3{margin:0;font-size:20px;color:var(--p)}
+.resumen{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0 14px}
+.resumen div{background:var(--bg);border-radius:8px;padding:8px 12px}
+.resumen b{display:block;font-size:20px}
+.tabs{display:flex;gap:4px;overflow-x:auto;border-bottom:2px solid var(--b);margin-bottom:12px}
+.tabs button{border:0;background:none;padding:9px 13px;white-space:nowrap;color:var(--m);border-bottom:3px solid transparent;margin-bottom:-2px}
+.tabs button.on{color:var(--p);font-weight:700;border-color:var(--p)}
+.tabs small{display:inline-block;margin-left:5px;background:var(--tint);color:var(--p);border-radius:10px;padding:0 7px;font-size:11px}
+.panel{display:none}.panel.on{display:block}
+.filtro-anio{display:flex;gap:8px;align-items:center;margin-bottom:8px;font-size:13px}
+select{padding:6px 8px;border:1px solid var(--b);border-radius:6px;font:inherit;background:#fff}
+.est{border:1px solid var(--b);background:#fff;border-radius:16px;padding:4px 11px;font-size:13px;white-space:nowrap}
+.est.no{color:var(--no)}
+.est.wip{background:#fff3df;border-color:#f0c47a;color:var(--wip)}
+.est.ok{background:#e6f4e7;border-color:#9fd3a3;color:var(--ok)}
+td.obj small{display:block;color:var(--m)}
+input.nt{width:100%;padding:6px 8px;border:1px solid var(--b);border-radius:6px;font:inherit;font-size:13px}
+.pie{display:flex;gap:10px;align-items:center;margin-top:14px}
+.aviso{font-size:12px;color:var(--m);margin-top:6px}
+.sep{margin:26px 0 8px;font-weight:700;color:var(--p)}
+@media (max-width:600px){
+  .wrap{padding:10px}
+  table.resp thead{display:none}
+  table.resp,table.resp tbody,table.resp tr,table.resp td{display:block;width:100%}
+  table.resp tr{border:1px solid var(--b);border-radius:8px;margin-bottom:8px;padding:6px 4px}
+  table.resp td{border:0;padding:4px 8px}
+  table.resp td[data-label]::before{content:attr(data-label)": ";color:var(--m);font-size:12px}
+  .resumen{grid-template-columns:1fr}
+  .velo{padding:0}.modal{border-radius:0;min-height:100%}
+}
+</style>
+</head>
+<body>
+<div class="nota"><b>MOCK-UP, no es el diseño final.</b> Datos inventados. <b>Los nombres de los ámbitos y los objetivos son provisionales</b>: no he podido leer el PDF del programa educativo (la sesión está en la nube y no ve <code>C:\Claude\…</code>), así que al diseñar de verdad se sustituirán por los del PDF. Aquí se valida la disposición: listado, año calculado por edad, ventana con una pestaña por ámbito y marcado del seguimiento.</div>
+
+<div class="wrap">
+  <nav class="sub"><a>Inicio</a><a>Personas</a><a>Agenda</a><a class="on">Mi sección</a><a>Informes</a></nav>
+
+  <!-- PANTALLA 1 -->
+  <div class="sep">PANTALLA 1 · Listado de «Mi sección» (solo scouters con sección asignada)</div>
+  <section class="card">
+    <h2>Mi sección · Lobatos</h2>
+    <p class="muted">Tus asociados de la sección. El año se calcula por la edad que cumplen en la ronda (Lobatos: 8, 9 y 10 años → 1.º, 2.º y 3.º). Pulsa en una persona para abrir su seguimiento.</p>
+    <form class="filtros" onsubmit="return false">
+      <input type="search" placeholder="Buscar por nombre o nº de socio…" aria-label="Buscar">
+      <select aria-label="Año"><option>Todos los años</option><option>1.º año</option><option>2.º año</option><option>3.º año</option></select>
+    </form>
+    <table class="resp" id="lista">
+      <thead><tr><th>Nombre</th><th>Edad</th><th>Año en la sección</th><th>Progreso del programa</th></tr></thead>
+      <tbody></tbody>
+    </table>
+    <div class="pag"><span>Mostrando 1–6 de 6</span><span>Filas: 10 ▾</span></div>
+  </section>
+
+  <p class="muted">Aviso de la sección con edades de borde: a los 8 años puede ser 3.º de Castores o 1.º de Lobatos; <b>manda la sección asignada en el CRM</b>, no solo la edad.</p>
+</div>
+
+<!-- PANTALLA 2: ventana modal -->
+<div class="velo" id="velo" role="dialog" aria-modal="true" aria-labelledby="mt">
+  <div class="modal">
+    <div class="barra-m"><span id="mt">Seguimiento educativo</span><a class="muted" href="#" style="font-weight:400">Abrir en su página</a><button class="x" aria-label="Cerrar" id="cerrar">×</button></div>
+    <div class="cuerpo">
+      <div class="cab">
+        <h3 id="mn">Nombre</h3>
+        <span class="chip s-lobatos">Lobatos</span>
+        <span class="muted" id="ma"></span>
+      </div>
+      <div class="resumen">
+        <div><span class="muted">Conseguidos</span><b id="r-ok">0</b></div>
+        <div><span class="muted">En curso</span><b id="r-wip">0</b></div>
+        <div><span class="muted">Sin empezar</span><b id="r-no">0</b></div>
+      </div>
+      <div class="tabs" role="tablist" id="tabs"></div>
+      <div id="paneles"></div>
+      <div class="pie">
+        <button class="btn" id="guardar">Guardar seguimiento</button>
+        <span class="aviso">Pulsa el estado de cada objetivo para cambiarlo: sin empezar → en curso → conseguido. Se guarda quién y cuándo.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+// Datos inventados. Ámbitos y objetivos: PROVISIONALES hasta leer el PDF.
+var AMBITOS=[
+ {n:'Ámbito 1',obj:['Objetivo 1.1 (texto del programa educativo)','Objetivo 1.2 (texto del programa educativo)','Objetivo 1.3 (texto del programa educativo)','Objetivo 1.4 (texto del programa educativo)']},
+ {n:'Ámbito 2',obj:['Objetivo 2.1 (texto del programa educativo)','Objetivo 2.2 (texto del programa educativo)','Objetivo 2.3 (texto del programa educativo)']},
+ {n:'Ámbito 3',obj:['Objetivo 3.1 (texto del programa educativo)','Objetivo 3.2 (texto del programa educativo)','Objetivo 3.3 (texto del programa educativo)','Objetivo 3.4 (texto del programa educativo)']},
+ {n:'Ámbito 4',obj:['Objetivo 4.1 (texto del programa educativo)','Objetivo 4.2 (texto del programa educativo)','Objetivo 4.3 (texto del programa educativo)']},
+ {n:'Ámbito 5',obj:['Objetivo 5.1 (texto del programa educativo)','Objetivo 5.2 (texto del programa educativo)','Objetivo 5.3 (texto del programa educativo)']}
+];
+var GENTE=[
+ {n:'Lucía Ejemplo Uno',s:'990101',e:10,a:3},{n:'Mateo Ejemplo Dos',s:'990102',e:10,a:3},
+ {n:'Noa Ejemplo Tres',s:'990103',e:9,a:2},{n:'Hugo Ejemplo Cuatro',s:'990104',e:9,a:2},
+ {n:'Alma Ejemplo Cinco',s:'990105',e:8,a:1},{n:'Leo Ejemplo Seis',s:'990106',e:8,a:1}
+];
+var ST=['no','wip','ok'],TX={no:'Sin empezar',wip:'En curso',ok:'Conseguido'};
+var estado={};
+function sem(p){return (p*7+3)}
+GENTE.forEach(function(g,gi){estado[g.s]=AMBITOS.map(function(am,ai){return am.obj.map(function(_,oi){var v=(gi*3+ai*2+oi)%7;return v<g.a+1?'ok':(v<g.a+3?'wip':'no')})})});
+function pct(g){var t=0,k=0;estado[g.s].forEach(function(a){a.forEach(function(x){t++;if(x==='ok')k++})});return Math.round(100*k/t)}
+var tb=document.querySelector('#lista tbody');
+GENTE.forEach(function(g){
+  var tr=document.createElement('tr');tr.className='fila';tr.tabIndex=0;
+  var pts='';for(var i=1;i<=3;i++)pts+='<i class="'+(i<=g.a?'on':'')+'"></i>';
+  tr.innerHTML='<td data-label="Nombre"><span class="nombre">'+g.n+'</span> <span class="muted">nº '+g.s+'</span></td>'
+   +'<td data-label="Edad">'+g.e+' años</td>'
+   +'<td data-label="Año"><span class="anio"><span class="pts" aria-hidden="true">'+pts+'</span><b>'+g.a+'.º año</b></span></td>'
+   +'<td data-label="Progreso"><div class="prog"><div class="barra"><span style="width:'+pct(g)+'%"></span></div><small>'+pct(g)+' %</small></div></td>';
+  tr.onclick=function(){abrir(g)};tr.onkeydown=function(e){if(e.key==='Enter')abrir(g)};
+  tb.appendChild(tr);
+});
+var cur=null;
+function abrir(g){
+  cur=g;
+  document.getElementById('mn').textContent=g.n;
+  document.getElementById('ma').textContent=g.e+' años · '+g.a+'.º año de Lobatos · nº '+g.s;
+  pintar(0);
+  document.getElementById('velo').classList.add('on');
+}
+function pintar(activa){
+  var tabs=document.getElementById('tabs'),pan=document.getElementById('paneles');
+  tabs.innerHTML='';pan.innerHTML='';
+  AMBITOS.forEach(function(am,ai){
+    var ok=estado[cur.s][ai].filter(function(x){return x==='ok'}).length;
+    var b=document.createElement('button');b.setAttribute('role','tab');b.className=ai===activa?'on':'';
+    b.innerHTML=am.n+'<small>'+ok+'/'+am.obj.length+'</small>';
+    b.onclick=function(){pintar(ai)};tabs.appendChild(b);
+    var p=document.createElement('div');p.className='panel'+(ai===activa?' on':'');
+    var h='<div class="filtro-anio"><label>Mostrar objetivos de</label><select><option>Todos los años</option><option>Este año ('+cur.a+'.º)</option></select></div>'
+      +'<table class="resp"><thead><tr><th style="width:44%">Objetivo</th><th>Estado</th><th>Fecha</th><th>Nota (opcional)</th></tr></thead><tbody>';
+    am.obj.forEach(function(o,oi){
+      var s=estado[cur.s][ai][oi];
+      h+='<tr><td class="obj" data-label="Objetivo">'+o+'<small>Año recomendado: '+(1+(oi%3))+'.º</small></td>'
+       +'<td data-label="Estado"><button type="button" class="est '+s+'" data-a="'+ai+'" data-o="'+oi+'">'+TX[s]+'</button></td>'
+       +'<td data-label="Fecha" class="muted">'+(s==='no'?'—':'14/10/2026')+'</td>'
+       +'<td data-label="Nota"><input class="nt" placeholder="Ej.: lo trabajó en la salida de octubre" aria-label="Nota"></td></tr>';
+    });
+    h+='</tbody></table>';p.innerHTML=h;pan.appendChild(p);
+  });
+  pan.querySelectorAll('.est').forEach(function(b){b.onclick=function(){
+    var a=+b.dataset.a,o=+b.dataset.o,s=estado[cur.s][a][o];
+    estado[cur.s][a][o]=ST[(ST.indexOf(s)+1)%3];pintar(a);
+  }});
+  resumen();
+}
+function resumen(){
+  var c={ok:0,wip:0,no:0};
+  estado[cur.s].forEach(function(a){a.forEach(function(x){c[x]++})});
+  ['ok','wip','no'].forEach(function(k){document.getElementById('r-'+k).textContent=c[k]});
+}
+document.getElementById('cerrar').onclick=function(){document.getElementById('velo').classList.remove('on')};
+document.getElementById('guardar').onclick=function(){alert('Mock-up: aquí se guardaría el seguimiento.')};
+document.addEventListener('keydown',function(e){if(e.key==='Escape')document.getElementById('velo').classList.remove('on')});
+</script>
+</body>
+</html>
