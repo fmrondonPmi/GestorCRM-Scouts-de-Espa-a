@@ -218,3 +218,10 @@ El desplegable de la v0.20 no dejaba buscar tecleando. Ahora:
 - **Historial de la ronda** (plegable y recordado): cada registro y cada eliminación, lo más reciente primero, con quién, el origen (a mano, con un ingreso del banco, con el cobro de una remesa) y el motivo de lo eliminado (`Pagos::historial()`).
 - Quién puede eliminar: quien registra pagos (como el «Anular» de antes). Supuesto **P-94** (doc 09).
 - Pruebas: `tests/banco-gestion.php`, parte F (sin motivo no se elimina, ni desde otra familia; el ingreso vuelve a pendiente; el registro de actividad; eliminarlo dos veces; el aviso de la remesa; el orden del historial y la ficha). Comprobado en el navegador en un WordPress aparte con datos inventados (doc 10).
+
+## v0.62.1 · Movimientos de una familia, «Marcar como visto» y selector de familia (petición del usuario, 2026-11-04)
+
+- **Familias → nº de familia**: es un enlace (`data-asde-modal`) que abre en una ventana los movimientos de la familia, **solo para verlos** (`TesoreriaView::movimientos()`, `?familia=ID&movimientos=1`, plantilla `tesoreria/familia-movimientos.php`): pagos y ajustes vigentes de todas las rondas y los pagos de eventos, uniformes y banco. Registrar o eliminar sigue en la ficha de Tesorería (enlace al pie). Supuesto: se ven todas las rondas, no solo la actual.
+- **Bajas recientes (Control de pagos) → «Marcar como visto»**: la baja deja de avisar. Lo marca cualquiera con el permiso de Tesorería y vale para **todo Tesorería del grupo** (opción `asde_ap_bajas_vistas`: grupo → «socio|fecha de baja»; solo nº de socio y fecha, caduca a los 90 días). La baja sigue en la auditoría. Acción `baja_vista` con nonce `asde_baja_vista`. Supuesto: la marca es compartida, no por usuario.
+- **Banco → Marcar como revisado**: la familia usa el desplegable predictivo de la conciliación (`combobox.js`, 3 letras). El combobox ahora funciona dentro de una ventana (`<dialog>`: la lista cuelga del propio dialog y va fija a la pantalla).
+- Pruebas: `tests/altas-crm-pantallas.php`, parte D (botón, marcar, solo esa baja, la auditoría la conserva).

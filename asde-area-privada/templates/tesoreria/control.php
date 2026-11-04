@@ -67,6 +67,15 @@ $pct = $resumen['a_pagar'] > 0 ? round( 100 * $resumen['pagado'] / $resumen['a_p
 						<?php if ( $fin ) : ?>
 							· <?php /* translators: %s: date */ echo esc_html( sprintf( __( 'withdrawn on %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $fin->format( 'd/m/Y' ) ) ); ?>
 						<?php endif; ?>
+						<?php // v0.62.1: «Ya visto»: la baja deja de avisar (a todo Tesorería). ?>
+						<form method="post" action="<?php echo esc_url( $url ); ?>" class="asde-inline-form">
+							<?php wp_nonce_field( 'asde_baja_vista' ); ?>
+							<input type="hidden" name="asde_action" value="baja_vista">
+							<input type="hidden" name="socio" value="<?php echo esc_attr( $b['socio'] ); ?>">
+							<input type="hidden" name="fin" value="<?php echo esc_attr( $b['fin'] ); ?>">
+							<input type="hidden" name="ronda" value="<?php echo esc_attr( $ronda ); ?>">
+							<button type="submit" class="asde-btn-link"><?php esc_html_e( 'Mark as seen', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
+						</form>
 					</li>
 				<?php endforeach; ?>
 			</ul>

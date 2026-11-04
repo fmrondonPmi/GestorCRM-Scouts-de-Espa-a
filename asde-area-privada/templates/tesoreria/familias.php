@@ -13,6 +13,7 @@
  * @var AsdeBalears\AreaPrivada\Domain\Persona[]                   $sin_fam_adultos Scouters/voluntariado sin familia
  * @var string                                                     $siguiente
  * @var string                                                     $url
+ * @var string                                                     $url_mov  Tesorería: de ahí sale la ventana con los movimientos de una familia (v0.62.1)
  */
 // phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound, WordPress.WP.GlobalVariablesOverride.Prohibited -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
 use AsdeBalears\AreaPrivada\Domain\Secciones;
@@ -82,7 +83,8 @@ $fila_persona = static function ( $p ) {
 			<tbody>
 				<?php foreach ( $familias as $id => $f ) : ?>
 					<tr>
-						<td data-label="<?php echo esc_attr( esc_attr__( 'Family no.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><strong><?php echo esc_html( $f['numero'] ); ?></strong></td>
+						<td data-label="<?php echo esc_attr( esc_attr__( 'Family no.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php // v0.62.1: el nº de familia abre en una ventana sus movimientos. ?>
+							<a href="<?php echo esc_url( add_query_arg( array( 'familia' => $id, 'movimientos' => '1' ), $url_mov ) ); ?>" data-asde-modal title="<?php echo esc_attr( esc_attr__( 'See the family\'s transactions', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><strong><?php echo esc_html( $f['numero'] ); ?></strong></a></td>
 						<td data-label="<?php echo esc_attr( esc_attr__( 'Members', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
 							<?php if ( ! $f['miembros'] ) : ?>
 								<span class="asde-muted"><?php esc_html_e( 'No members', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span>

@@ -112,6 +112,31 @@ final class Altas {
 		return array_values( $out );
 	}
 
+	/** Opción con las bajas que Tesorería ya vio: grupo => clave «socio|fin» => marca de tiempo (v0.62.1). Solo guarda nº de socio y fecha. */
+	private const OPCION_BAJAS_VISTAS = 'asde_ap_bajas_vistas';
+
+	private static function clave_baja( string $socio, string $fin ): string {
+		return $socio . '|' . $fin;
+	}
+
+	/** ¿Alguien de Tesorería ya marcó esta baja como vista (en el grupo actual)? */
+	public static function baja_vista( string $socio, string $fin ): bool {
+		$todas = (array) get_option( self::OPCION_BAJAS_VISTAS, array() );
+		return isset( $todas[ Grupo::numero() ][ self::clave_baja( $socio, $fin ) ] );
+	}
+
+	/** Marca la baja como vista. Caduca sola: las marcas de más de 90 días se descartan (la baja ya no sale pasados 30). */
+	public static function marcar_baja_vista( string $socio, string $fin ): void {
+		$todas = (array) get_option( self::OPCION_BAJAS_VISTAS, array() );
+		$g     = Grupo::numero();
+		$corte = time() - 90 * DAY_IN_SECONDS;
+		$mias  = array_filter( (array) ( $todas[ $g ] ?? array() ), static fn( $t ) => (int) $t >= $corte );
+
+		$mias[ self::clave_baja( $socio, $fin ) ] = time();
+		$todas[ $g ]                              = $mias;
+		update_option( self::OPCION_BAJAS_VISTAS, $todas, false );
+	}
+
 	// ---------------------------------------------------------------------
 	// Persona nueva
 	// ---------------------------------------------------------------------

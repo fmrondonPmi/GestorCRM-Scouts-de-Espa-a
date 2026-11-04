@@ -62,6 +62,7 @@ $log_antes     = $max_id( Logger::table() );
 $ops_antes     = $max_id( Operaciones::table() );
 $ema_antes     = $max_id( RegistroEmails::table() );
 $opcion_antes  = get_option( Altas::OPCION, null );
+$vistas_antes  = get_option( 'asde_ap_bajas_vistas', null );
 $modulos_antes = get_option( 'asde_ap_modulos', null );
 $socios_antes  = array_column( (array) $wpdb->get_results( 'SELECT * FROM ' . SociosTable::table(), ARRAY_A ), null, 'num_socio_asde' ); // phpcs:ignore WordPress.DB
 $familias      = array();
@@ -443,6 +444,14 @@ try {
 	$h = $ver( new TesoreriaView() );
 	$ok( str_contains( $h, 'Bajas recientes' ) && str_contains( $h, 'Mia Pantalla Tres' ) && str_contains( $h, 'familia nº ' . $num_fam ) && str_contains( $h, 'familia=' . (int) $f_mia ), 'Tesorería → Control de pagos avisa de la baja, con su familia (enlazada)' );
 
+	// v0.62.1: «Marcar como visto» en las bajas recientes (lo ve todo Tesorería; solo desaparece esa baja).
+	$ok( str_contains( $h, 'name="asde_action" value="baja_vista"' ) && str_contains( $h, 'name="socio" value="990073"' ), 'cada baja reciente trae su botón «Marcar como visto»' );
+	$ok( ! Altas::baja_vista( '990073', $hoy ), 'antes de marcarla, la baja no está vista' );
+	Altas::marcar_baja_vista( '990073', $hoy );
+	$h = $ver( new TesoreriaView() );
+	$ok( Altas::baja_vista( '990073', $hoy ) && ! Altas::baja_vista( '990073', '2000-01-01' ) && ! str_contains( $h, 'Mia Pantalla Tres' ), 'marcada como vista, deja de avisar en Tesorería (y solo esa baja)' );
+	$ok( in_array( '990073', array_column( Altas::bajas_recientes(), 'socio' ), true ), 'la baja sigue en la auditoría (solo se oculta el aviso)' );
+
 	$ok( 0 === $cortadas, 'ninguna petición ha salido hacia el CRM real' );
 } catch ( Throwable $e ) {
 	++$fails;
@@ -461,6 +470,7 @@ try {
 	$_POST = array();
 	View::en_modal( false );
 	null === $opcion_antes ? delete_option( Altas::OPCION ) : update_option( Altas::OPCION, $opcion_antes, false );
+	null === $vistas_antes ? delete_option( 'asde_ap_bajas_vistas' ) : update_option( 'asde_ap_bajas_vistas', $vistas_antes, false );
 	null === $modulos_antes ? delete_option( 'asde_ap_modulos' ) : update_option( 'asde_ap_modulos', $modulos_antes, false );
 	Modulos::olvidar();
 	Permisos::olvidar( $grupo['numero'] );

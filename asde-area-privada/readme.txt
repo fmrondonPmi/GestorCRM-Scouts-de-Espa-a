@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.62.0
+Stable tag: 0.62.1
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -61,6 +61,9 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.62.1 =
+* Treasury: the family number in Families opens a window with that family's transactions (read-only). "Recent withdrawals" can be marked as seen, and then stop warning Treasury. "Mark as reviewed": the family field is now the same type-ahead selector as when reconciling (from 3 letters), also inside the pop-up window.
 
 = 0.62.0 =
 * Shop: each group chooses which payment methods it accepts (transfer, Bizum, in person, card terminal) in the shop settings; families only see those. Groups that already had the card terminal on keep it.
@@ -171,6 +174,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * The changelog of versions 0.42.0 and earlier is in changelog.txt, in the plugin folder.
 
 == Upgrade Notice ==
+
+= 0.62.1 =
+Treasury: family transactions in a window, "Mark as seen" for recent withdrawals and a type-ahead family selector when marking bank transactions as reviewed. No database changes.
 
 = 0.62.0 =
 Shop: payment methods are now chosen per group (settings screen). Existing groups keep transfer, Bizum and in person (plus the card terminal if it was on). No database changes.

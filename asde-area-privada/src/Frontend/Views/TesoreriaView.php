@@ -56,6 +56,8 @@ final class TesoreriaView extends TesoreriaBaseView {
 			$familia = (int) $this->get( 'familia' );
 			if ( $familia && '' !== $this->get( 'elegir_banco' ) ) {
 				$html = $this->elegir_banco( $repo, $familia, $ronda );
+			} elseif ( $familia && '' !== $this->get( 'movimientos' ) ) {
+				$html = $this->movimientos( $familia, $ronda );
 			} else {
 				$html = $familia ? $this->detalle( $repo, $familia, $ronda ) : $this->control( $repo, $ronda );
 			}
@@ -159,6 +161,9 @@ final class TesoreriaView extends TesoreriaBaseView {
 		// Bajas dadas desde la web (doc 34, fase 3) de personas de alguna familia: dejan de contar en su cuota.
 		$bajas = array();
 		foreach ( Altas::bajas_recientes() as $b ) {
+			if ( Altas::baja_vista( $b['socio'], $b['fin'] ) ) {
+				continue; // v0.62.1: Tesorería ya la marcó como vista.
+			}
 			$id = $mapa[ $b['socio'] ] ?? 0;
 			// Con todas las familias: la baja que deja a una sin asociados activos también se avisa (v0.58.1).
 			if ( $id && isset( $todas[ $id ] ) ) {
@@ -205,6 +210,27 @@ final class TesoreriaView extends TesoreriaBaseView {
 				'url'       => $this->url( 'tesoreria' ),
 				'url_fam'   => $this->url( 'familias' ),
 				'url_csv'   => $this->url( 'tesoreria', array( 'ronda' => $ronda, 'formato' => 'xlsx', '_wpnonce' => wp_create_nonce( 'asde_tesoreria_csv' ) ) ),
+			)
+		);
+	}
+
+	/**
+	 * v0.62.1 · Los movimientos de una familia, solo para verlos (se abre en una ventana desde «Familias»:
+	 * el nº de familia es un enlace). Quien registra o elimina pagos lo hace en la ficha de Tesorería.
+	 */
+	private function movimientos( int $id, string $ronda ): string {
+		$f = FamiliasTable::obtener( $id );
+		if ( ! $f ) {
+			return $this->tpl( 'comun/avisos', array( 'avisos' => array( array( 'error', __( 'That family does not exist.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) ) ) );
+		}
+		return $this->tpl(
+			'tesoreria/familia-movimientos',
+			array(
+				'familia'     => $f,
+				'ronda'       => $ronda,
+				'movimientos' => MovimientosTable::de_familia_todas( $id ),
+				'otros'       => array_values( array_filter( HistorialPagos::otros( $f ), static fn( $o ) => 'eliminado' !== $o['accion'] ) ),
+				'url_ficha'   => $this->url( 'tesoreria', array( 'familia' => $id, 'ronda' => $ronda ) ),
 			)
 		);
 	}
@@ -369,6 +395,21 @@ final class TesoreriaView extends TesoreriaBaseView {
 		$familia = (int) $this->post( 'familia' );
 		$ronda   = Config::es_ronda( $this->post( 'ronda' ) ) ? $this->post( 'ronda' ) : Config::ronda_actual();
 		$volver  = $this->url( 'tesoreria', array( 'familia' => $familia, 'ronda' => $ronda ) );
+		if ( 'baja_vista' === $this->post( 'asde_action' ) ) {
+			// v0.62.1: «Ya visto» en «Bajas recientes» del control de pagos (la baja deja de avisar a Tesorería).
+			check_admin_referer( 'asde_baja_vista' );
+			$socio = sanitize_text_field( $this->post( 'socio' ) );
+			$fin   = sanitize_text_field( $this->post( 'fin' ) );
+			foreach ( Altas::bajas_recientes() as $b ) {
+				if ( $b['socio'] === $socio && $b['fin'] === $fin ) {
+					Altas::marcar_baja_vista( $socio, $fin );
+					Logger::log( 'tesoreria_baja_vista', 'socio', $socio, array( 'fin' => $fin ) );
+					Notices::add( 'success', esc_html__( 'Withdrawal marked as seen.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
+					break;
+				}
+			}
+			$this->redirect( $this->url( 'tesoreria', array( 'ronda' => $ronda ) ) );
+		}
 		if ( ! FamiliasTable::obtener( $familia ) ) {
 			Notices::add( 'error', __( 'Invalid family.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			$this->redirect( $this->url( 'tesoreria' ) );

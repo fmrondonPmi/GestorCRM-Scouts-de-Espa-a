@@ -103,6 +103,7 @@ final class FamiliasView extends TesoreriaBaseView {
 					'sin_fam_adultos' => array_values( array_filter( $sin_fam, static fn( Persona $p ) => ! array_intersect( $p->secciones, $cfg['secciones_pagan'] ) ) ),
 					'siguiente'   => FamiliasTable::siguiente_numero( \AsdeBalears\AreaPrivada\Domain\Grupo::actual()['numero'] ?? '' ),
 					'url'         => $this->url( 'familias' ),
+					'url_mov'     => $this->url( 'tesoreria' ),
 				)
 			);
 		}

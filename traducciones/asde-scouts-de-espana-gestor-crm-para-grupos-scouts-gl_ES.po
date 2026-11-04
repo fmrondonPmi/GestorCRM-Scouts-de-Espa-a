@@ -95,7 +95,7 @@ msgstr " e como vai a cota do grupo deste ano"
 msgid " of your section"
 msgstr " da túa sección"
 
-#: templates/tesoreria/control.php:96
+#: templates/tesoreria/control.php:105
 msgid " with these filters"
 msgstr " con estes filtros"
 
@@ -266,7 +266,7 @@ msgid "%1$d expected out of %2$d places"
 msgstr "%1$d previstos de %2$d prazas"
 
 #. translators: 1: number, 2: number
-#: templates/tesoreria/banco-revisar.php:143
+#: templates/tesoreria/banco-revisar.php:144
 #, php-format
 msgid "%1$d expenses and %2$d income."
 msgstr "%1$d gastos e %2$d ingresos."
@@ -278,7 +278,7 @@ msgid "%1$d monitors are needed besides the director (%2$d support monitors for 
 msgstr "Fan falta %1$d monitores ademais do director/a (%2$d de apoio por dependencia) e hai %3$d."
 
 #. translators: 1: number, 2: number
-#: templates/tesoreria/familias.php:116
+#: templates/tesoreria/familias.php:118
 #, php-format
 msgid "%1$d of %2$d families"
 msgstr "%1$d de %2$d familias"
@@ -575,7 +575,7 @@ msgstr[0] "%d cambio non se aplicou: o dato do CRM cambiou desde que se propuxo.
 msgstr[1] "%d cambios non se aplicaron: o dato do CRM cambiou desde que se propuxeron. Revísaos e márcaos outra vez se queres aplicalos igualmente."
 
 #. translators: %d: number
-#: templates/tesoreria/control.php:130
+#: templates/tesoreria/control.php:139
 #, php-format
 msgid "%d child"
 msgid_plural "%d children"
@@ -709,7 +709,7 @@ msgid "%d families could not be notified by email (no email or no account): noti
 msgstr "A %d familias non se puido avisar por email (sen email ou sen conta): avísaas por outro medio."
 
 #. translators: %d: number
-#: src/Frontend/Views/TesoreriaView.php:324
+#: src/Frontend/Views/TesoreriaView.php:350
 #, php-format
 msgid "%d family"
 msgid_plural "%d families"
@@ -1389,7 +1389,7 @@ msgstr ""
 msgid ") or the email address your invitation was sent to."
 msgstr ") ou o email ao que che chegou a invitación."
 
-#: templates/tesoreria/familias.php:29
+#: templates/tesoreria/familias.php:30
 msgid ") serves as a reference in transfers. Only member numbers are stored on the website: names are read from the CRM."
 msgstr ") serve de referencia nas transferencias. Na web só se gardan números de socio: os nomes lense do CRM."
 
@@ -1603,7 +1603,7 @@ msgstr "Xa hai unha corrección en marcha no teu grupo: agarda a que remate ou d
 msgid "A correction is running in the background: its progress is shown in the box above. While it lasts, other corrections for all records cannot be launched."
 msgstr "Hai unha corrección en marcha en segundo plano: o seu avance vese no cadro de arriba. Mentres dure, non se poden lanzar outras correccións para todas as fichas."
 
-#: templates/tesoreria/familias.php:29
+#: templates/tesoreria/familias.php:30
 msgid "A family groups siblings (and, if wanted, their scouter parents) to calculate the fee with a sibling discount. Its number (the next will be"
 msgstr "Unha familia agrupa irmáns (e, se se quere, aos seus pais scouters) para calcular a cota con desconto por irmáns. O seu número (o próximo será"
 
@@ -2071,7 +2071,7 @@ msgstr "Enderezo (rúa e número)"
 msgid "Adds a permission to a role"
 msgstr "Engade un permiso a un rol"
 
-#: templates/tesoreria/familia.php:221
+#: templates/tesoreria/familia-movimientos.php:22 templates/tesoreria/familia.php:221
 msgid "Adjustment"
 msgstr "Axuste"
 
@@ -2082,7 +2082,7 @@ msgid "Adjustment of %s recorded"
 msgstr "Axuste de %s rexistrado"
 
 #. translators: %s: text
-#: src/Frontend/Views/TesoreriaView.php:418
+#: src/Frontend/Views/TesoreriaView.php:459
 #, php-format
 msgid "Adjustment of %s recorded."
 msgstr "Axuste de %s rexistrado."
@@ -2094,7 +2094,7 @@ msgid "Adjustment of %s removed"
 msgstr "Axuste de %s eliminado"
 
 #. translators: %s: text
-#: src/Frontend/Views/TesoreriaView.php:435
+#: src/Frontend/Views/TesoreriaView.php:476
 #, php-format
 msgid "Adjustment of %s removed. It remains in the family's history."
 msgstr "Axuste de %s eliminado. Queda no historial da familia."
@@ -2215,7 +2215,7 @@ msgstr "Todas esas familias xa están noutra remesa que aínda non ten rexistrad
 msgid "All types"
 msgstr "Todos os tipos"
 
-#: templates/tesoreria/familias.php:125
+#: templates/tesoreria/familias.php:127
 msgid "All youth members with an active membership have a family. 👍"
 msgstr "Todos os educandos con membresía activa teñen familia. 👍"
 
@@ -2239,7 +2239,7 @@ msgstr "Améndoa"
 msgid "Already has a record in your group: another is not created."
 msgstr "Xa ten ficha no teu grupo: non se crea outra."
 
-#: src/Crm/Altas.php:157 src/Crm/Altas.php:181
+#: src/Crm/Altas.php:182 src/Crm/Altas.php:206
 msgid "Already has a record in your group: another is not created. If they have no active membership, give them a new one on their record."
 msgstr "Xa ten ficha no teu grupo: non se crea outra. Se non ten membresía activa, dálle unha nova na súa ficha."
 
@@ -2248,7 +2248,7 @@ msgstr "Xa ten ficha no teu grupo: non se crea outra. Se non ten membresía acti
 msgid "Already has an active membership (%s)."
 msgstr "Xa ten unha membresía activa (%s)."
 
-#: src/Crm/Altas.php:250
+#: src/Crm/Altas.php:275
 msgid "Already has an active membership. To move it to another section, use \"Change section\"."
 msgstr "Xa ten unha membresía activa. Para pasala a outra sección, usa «Cambiar de sección»."
 
@@ -2286,7 +2286,7 @@ msgstr "Xa importado"
 msgid "Already in batch %s (its collection still has to be recorded)"
 msgstr "Xa está na remesa %s (falta rexistrar o seu cobro)"
 
-#: src/Crm/Altas.php:357
+#: src/Crm/Altas.php:382
 msgid "Already in that section."
 msgstr "Xa está nesa sección."
 
@@ -2310,7 +2310,7 @@ msgstr "Xa revisado: cámbiaselle o tipo."
 msgid "Already signed up to this event."
 msgstr "Xa está inscrito/a neste evento."
 
-#: templates/tesoreria/familias.php:141
+#: templates/tesoreria/familias.php:143
 msgid "Also add a scouter or volunteer (e.g. the father or mother)"
 msgstr "Engadir tamén un scouter ou voluntario (p. ex. o pai ou a nai)"
 
@@ -2427,7 +2427,7 @@ msgid "Another person from the group (exception, with a reason)"
 msgstr "Outra persoa do grupo (excepción, con motivo)"
 
 #. translators: %s: text
-#: src/Crm/Altas.php:425
+#: src/Crm/Altas.php:450
 #, php-format
 msgid "Another record in your group already has this document (%s): it would be the same person twice. Check it before continuing."
 msgstr "Outra ficha do teu grupo xa ten este documento (%s): sería a mesma persoa dúas veces. Revísao antes de seguir."
@@ -2901,7 +2901,7 @@ msgstr "Informe do banco"
 msgid "Bank transactions"
 msgstr "Movementos do banco"
 
-#: src/Frontend/Views/TesoreriaView.php:81 src/Frontend/Views/TesoreriaView.php:404
+#: src/Frontend/Views/TesoreriaView.php:83 src/Frontend/Views/TesoreriaView.php:445
 msgid "Bank transactions are only used by the Secretary's office, Coordination and Treasury."
 msgstr "Os movementos do banco só os usan Secretaría, Coordinación e Tesouraría."
 
@@ -3173,7 +3173,7 @@ msgstr "Acceso ao CRM"
 msgid "CRM data, read-only: not stored on the website. If something is wrong, correct it in the CRM."
 msgstr "Datos do CRM, só lectura: non se gardan na web. Se algo é incorrecto, corríxeo no CRM."
 
-#: src/Frontend/Views/TesoreriaView.php:291 src/Usuarios/AltaScouterService.php:118
+#: src/Frontend/Views/TesoreriaView.php:317 src/Usuarios/AltaScouterService.php:118
 msgid "CRM not configured."
 msgstr "CRM non configurado."
 
@@ -3663,7 +3663,7 @@ msgstr "Grao de bico"
 msgid "Children"
 msgstr "Fillos"
 
-#: src/Frontend/Views/TesoreriaView.php:317 templates/tesoreria/control.php:34
+#: src/Frontend/Views/TesoreriaView.php:343 templates/tesoreria/control.php:34
 msgid "Children who pay"
 msgstr "Fillos que pagan"
 
@@ -3743,7 +3743,7 @@ msgstr "Escolle polo menos unha columna."
 msgid "Choose at least one invited section."
 msgstr "Escolle polo menos unha sección convocada."
 
-#: src/Frontend/Views/FamiliasView.php:144
+#: src/Frontend/Views/FamiliasView.php:145
 msgid "Choose at least one member with an active membership."
 msgstr "Escolle polo menos un socio con membresía activa."
 
@@ -3823,7 +3823,7 @@ msgstr "Escolle a data de cobro."
 msgid "Choose the colours of the private area. The main colour is enough: the soft backgrounds, borders and the colour of the text on top come from it. Anything you leave unchosen stays as it was (by default, the main colour of the Enfold theme or the usual purple)."
 msgstr ""
 
-#: src/Crm/Altas.php:282
+#: src/Crm/Altas.php:307
 msgid "Choose the date and reason for the withdrawal."
 msgstr "Escolle a data e o motivo da baixa."
 
@@ -3847,7 +3847,7 @@ msgstr "Escolle a organización federada da lista."
 msgid "Choose the group…"
 msgstr "Escolle o grupo…"
 
-#: src/Crm/Altas.php:342
+#: src/Crm/Altas.php:367
 msgid "Choose the new section and the date."
 msgstr "Escolle a sección nova e a data."
 
@@ -3867,7 +3867,7 @@ msgstr "Escolle a provincia da lista."
 msgid "Choose the role of the first person with access."
 msgstr "Elixe o rol da primeira persoa con acceso."
 
-#: src/Crm/Altas.php:138 src/Crm/Altas.php:235
+#: src/Crm/Altas.php:163 src/Crm/Altas.php:260
 msgid "Choose the section and the registration date."
 msgstr "Escolle a sección e a data de alta."
 
@@ -3963,7 +3963,7 @@ msgstr "Cítricos"
 msgid "Clan"
 msgstr "Clan"
 
-#: templates/tesoreria/banco-revisar.php:158 templates/tesoreria/banco-tipos.php:40 templates/tesoreria/banco-tipos.php:75
+#: templates/tesoreria/banco-revisar.php:159 templates/tesoreria/banco-tipos.php:40 templates/tesoreria/banco-tipos.php:75
 msgid "Class"
 msgstr "Clase"
 
@@ -4349,7 +4349,7 @@ msgstr "País"
 msgid "Covered by the federation's insurance."
 msgstr "Cuberta polo seguro da federación."
 
-#: templates/tesoreria/familias.php:152
+#: templates/tesoreria/familias.php:154
 msgid "Create a family with the ticked ones"
 msgstr "Crear familia cos marcados"
 
@@ -4369,7 +4369,7 @@ msgstr "Crear unha lista da compra cos marcados"
 msgid "Create and manage the events of their sections"
 msgstr "Crear e xestionar os eventos das súas seccións"
 
-#: templates/tesoreria/familias.php:50
+#: templates/tesoreria/familias.php:51
 msgid "Create family"
 msgstr "Crear familia"
 
@@ -4421,7 +4421,7 @@ msgstr "Crear o modelo"
 msgid "Create them first"
 msgstr "Créaos primeiro"
 
-#: templates/inventario/tipos.php:26 templates/tesoreria/banco-revisar.php:167 templates/tesoreria/banco-tipos.php:42
+#: templates/inventario/tipos.php:26 templates/tesoreria/banco-revisar.php:168 templates/tesoreria/banco-tipos.php:42
 msgid "Create type"
 msgstr "Crear tipo"
 
@@ -4454,7 +4454,7 @@ msgid "Credit balance"
 msgstr "Saldo a favor"
 
 #. translators: %s: text
-#: templates/tesoreria/control.php:134
+#: templates/tesoreria/control.php:143
 #, php-format
 msgid "Credit balance %s"
 msgstr "Saldo a favor %s"
@@ -4674,7 +4674,7 @@ msgstr ""
 msgid "Defined in wp-config.php (%s); it cannot be changed here."
 msgstr ""
 
-#: templates/informes/lista.php:67 templates/inventario/tipos.php:63 templates/tesoreria/banco-tipos.php:94 templates/tesoreria/familias.php:104
+#: templates/informes/lista.php:67 templates/inventario/tipos.php:63 templates/tesoreria/banco-tipos.php:94 templates/tesoreria/familias.php:106
 msgid "Delete"
 msgstr "Eliminar"
 
@@ -4685,7 +4685,7 @@ msgid "Delete %s from the waiting list? Their data is deleted and this cannot be
 msgstr "Queres borrar a %s da lista de espera? Os seus datos bórranse e non se pode desfacer."
 
 #. translators: %s: text
-#: templates/tesoreria/familia-editar.php:88 templates/tesoreria/familias.php:99
+#: templates/tesoreria/familia-editar.php:88 templates/tesoreria/familias.php:101
 #, php-format
 msgid "Delete family %s? It has no members. This cannot be undone."
 msgstr "Eliminar a familia %s? Non ten socios. Non se pode desfacer."
@@ -4740,7 +4740,7 @@ msgstr "Borrar este modelo? Os eventos que xa o aplicaron non cambian."
 msgid "Delete…"
 msgstr "Eliminar…"
 
-#: src/Frontend/Views/TesoreriaView.php:424
+#: src/Frontend/Views/TesoreriaView.php:465
 msgid "Deleting a payment or an adjustment is done by Treasury."
 msgstr "Eliminar un pagamento ou un axuste faino Tesouraría."
 
@@ -5924,7 +5924,7 @@ msgstr "Axuda extra: o mesmo manual con capturas de pantalla, noutra lapela."
 msgid "Families"
 msgstr "Familias"
 
-#: templates/tesoreria/familias.php:57
+#: templates/tesoreria/familias.php:58
 msgid "Families ("
 msgstr "Familias ("
 
@@ -6036,6 +6036,11 @@ msgstr "Familia %s: o importe debe ser maior que 0."
 msgid "Family %s: the holder's name is missing."
 msgstr "Familia %s: falta o nome do titular."
 
+#: templates/tesoreria/familia-movimientos.php:41
+#, php-format
+msgid "Family %s: transactions"
+msgstr "Familia %s: movementos"
+
 #: templates/pagos/autorizacion.php:46
 msgid "Family (Treasury)"
 msgstr "Familia (Tesouraría)"
@@ -6045,12 +6050,12 @@ msgid "Family / guardians"
 msgstr "Familia / titores"
 
 #. translators: 1: text, 2: number
-#: src/Frontend/Views/FamiliasView.php:148
+#: src/Frontend/Views/FamiliasView.php:149
 #, php-format
 msgid "Family <strong>%1$s</strong> created with %2$d member(s)."
 msgstr "Familia <strong>%1$s</strong> creada con %2$d socio(s)."
 
-#: templates/tesoreria/familias.php:78 templates/tesoreria/familias.php:95
+#: templates/tesoreria/familias.php:79 templates/tesoreria/familias.php:97
 msgid "Family account"
 msgstr "Conta familiar"
 
@@ -6076,15 +6081,15 @@ msgstr "Conta familiar: irmáns/ás e email"
 msgid "Family email (for the invitation, for signing in and for recovering the password)"
 msgstr "Email da familia (para a invitación, para entrar e para recuperar o contrasinal)"
 
-#: src/Frontend/Views/TesoreriaView.php:317 templates/tesoreria/familias.php:76 templates/tesoreria/familias.php:85
+#: src/Frontend/Views/TesoreriaView.php:343 templates/tesoreria/familias.php:77 templates/tesoreria/familias.php:86
 msgid "Family no."
 msgstr "Nº familia"
 
-#: templates/tesoreria/control.php:89
+#: templates/tesoreria/control.php:98
 msgid "Family no. or name"
 msgstr "Nº de familia ou nome"
 
-#: templates/tesoreria/familias.php:65
+#: templates/tesoreria/familias.php:66
 msgid "Family no., name or member no."
 msgstr "Nº de familia, nome ou nº de socio"
 
@@ -6098,11 +6103,11 @@ msgstr "Familia de"
 msgid "Family of %s"
 msgstr "Familia de %s"
 
-#: src/Frontend/Views/FamiliasView.php:173
+#: src/Frontend/Views/FamiliasView.php:174
 msgid "Family removed."
 msgstr "Familia eliminada."
 
-#: templates/tesoreria/banco.php:245
+#: templates/tesoreria/banco-revisar.php:123 templates/tesoreria/banco.php:245
 msgid "Family: no. or surname (3 letters)…"
 msgstr "Familia: nº ou apelido (3 letras)…"
 
@@ -6140,7 +6145,7 @@ msgstr "Custo federativo ·"
 msgid "Federation fees"
 msgstr "Cotas federativas"
 
-#: src/Frontend/Views/TesoreriaView.php:317 templates/tesoreria/control.php:103 templates/tesoreria/control.php:132 templates/tesoreria/presupuestos.php:65
+#: src/Frontend/Views/TesoreriaView.php:343 templates/tesoreria/control.php:112 templates/tesoreria/control.php:141 templates/tesoreria/presupuestos.php:65
 msgid "Fee"
 msgstr "Cota"
 
@@ -6376,7 +6381,7 @@ msgstr "Para %d comensais"
 msgid "For %d portions"
 msgstr "Para %d racións"
 
-#: src/Frontend/Views/TesoreriaView.php:392
+#: src/Frontend/Views/TesoreriaView.php:433
 msgid "For an event, the payment method is cash, transfer or Bizum."
 msgstr "Para un evento, a forma de pago é efectivo, transferencia ou Bizum."
 
@@ -6408,7 +6413,7 @@ msgstr "Por exemplo: Saída dun día"
 msgid "For example: in cash at the meeting place on Saturdays, or by deposit into account ES00 0000… stating the order no."
 msgstr "Por exemplo: en efectivo no local os sábados, ou por ingreso na conta ES00 0000… indicando o nº de pedido."
 
-#: templates/tesoreria/banco-revisar.php:136
+#: templates/tesoreria/banco-revisar.php:137
 msgid "For example: invoice 2026/031 from the sports shop"
 msgstr "Por exemplo: factura 2026/031 da tenda de deportes"
 
@@ -6511,7 +6516,7 @@ msgid "From %1$d to %2$d years"
 msgstr "De %1$d a %2$d anos"
 
 #. translators: 1: text, 2: text
-#: src/Crm/Altas.php:364
+#: src/Crm/Altas.php:389
 #, php-format
 msgid "From %1$s you can only move to %2$s, the next one by age (only scouters can change to any section)."
 msgstr "Desde %1$s só se pode pasar a %2$s, a seguinte por idade (só os scouters cambian a calquera sección)."
@@ -7028,7 +7033,7 @@ msgstr "Non ten membresía activa como Scouter ou Voluntariado de apoio."
 msgid "Has no active membership in an educational section."
 msgstr "Non ten membresía activa nunha sección educativa."
 
-#: src/Crm/Altas.php:293 templates/fichas/membresia.php:92
+#: src/Crm/Altas.php:318 templates/fichas/membresia.php:92
 msgid "Has no active membership."
 msgstr "Non ten ningunha membresía activa."
 
@@ -7859,7 +7864,7 @@ msgstr "Intolerancias"
 msgid "Invalid CRM identifier."
 msgstr "Identificador de CRM non válido."
 
-#: src/Frontend/Views/TesoreriaView.php:373
+#: src/Frontend/Views/TesoreriaView.php:414
 msgid "Invalid family."
 msgstr "Familia non válida."
 
@@ -7944,7 +7949,7 @@ msgstr "Está no equipo deste evento."
 msgid "Is under %d years old and has no document"
 msgstr "Ten menos de %d anos e non ten documento"
 
-#: src/Frontend/Views/TesoreriaView.php:441
+#: src/Frontend/Views/TesoreriaView.php:482
 msgid "It came from the collection of a SEPA batch: the batch still considers it collected."
 msgstr "Viña do cobro dunha remesa SEPA: a remesa segue dándoo por cobrado."
 
@@ -7980,7 +7985,7 @@ msgstr "Elimina por completo calquera produto de orixe animal, incluíndo o mel,
 msgid "It could not be added to the event's accounts (they are closed): record it by hand if needed."
 msgstr "Non se puido engadir ás contas do evento (están pechadas): apúntao a man se fai falta."
 
-#: src/Crm/Altas.php:164
+#: src/Crm/Altas.php:189
 msgid "It could not be checked whether the person is registered in other groups or organisations. Confirm that you want to continue."
 msgstr "Non se puido comprobar se está dada de alta noutros grupos ou organizacións. Confirma que queres seguir."
 
@@ -7992,11 +7997,11 @@ msgstr "Non se puido comprobar se está noutros grupos ou organizacións: quero 
 msgid "It could not be checked whether they are registered in other groups or organisations. You can continue anyway."
 msgstr "Non se puido comprobar se está dada de alta noutros grupos ou organizacións. Podes seguir igualmente."
 
-#: src/Crm/Altas.php:431
+#: src/Crm/Altas.php:456
 msgid "It could not be checked whether this document is in other groups or organisations. Confirm that you want to save it."
 msgstr "Non se puido comprobar se este documento está noutros grupos ou organizacións. Confirma que queres gardalo."
 
-#: src/Crm/Altas.php:717
+#: src/Crm/Altas.php:742
 msgid "It could not be done: "
 msgstr "Non se puido facer: "
 
@@ -8234,7 +8239,7 @@ msgstr "Comeza por ES e son 16 caracteres."
 msgid "It stays with the group."
 msgstr "Queda no grupo."
 
-#: src/Crm/Altas.php:716
+#: src/Crm/Altas.php:741
 msgid "It was left unfinished. Try again: it will continue where it stopped, without creating another record. Reason: "
 msgstr "Quedou a medias. Volve intentalo: seguirá onde quedou, sen crear outra ficha. Motivo: "
 
@@ -8820,11 +8825,11 @@ msgstr "Xestionar o acceso"
 msgid "Manage event equipment"
 msgstr "Xestionar o material dos eventos"
 
-#: templates/tesoreria/control.php:96
+#: templates/tesoreria/control.php:105
 msgid "Manage families"
 msgstr "Xestionar familias"
 
-#: templates/tesoreria/banco-revisar.php:144
+#: templates/tesoreria/banco-revisar.php:145
 msgid "Manage the expense and income types"
 msgstr "Xestionar os tipos de gasto e ingreso"
 
@@ -8887,6 +8892,10 @@ msgstr "Marcar como revisado"
 #: templates/tesoreria/banco.php:173
 msgid "Mark as reviewed…"
 msgstr "Marcar como revisados…"
+
+#: templates/tesoreria/control.php:77
+msgid "Mark as seen"
+msgstr "Marcar como visto"
 
 #: templates/tesoreria/sepa-remesa.php:73
 msgid "Mark as sent to the bank"
@@ -8994,7 +9003,7 @@ msgstr "Socio/a"
 msgid "Member access"
 msgstr "Acceso socios"
 
-#: src/Frontend/Views/FamiliasView.php:158
+#: src/Frontend/Views/FamiliasView.php:159
 msgid "Member added to the family."
 msgstr "Socio engadido á familia."
 
@@ -9050,7 +9059,7 @@ msgstr "Prezo de socio (€, opcional)"
 msgid "Member registration"
 msgstr "Alta de socio/a"
 
-#: src/Frontend/Views/FamiliasView.php:165
+#: src/Frontend/Views/FamiliasView.php:166
 msgid "Member removed from the family."
 msgstr "Socio quitado da familia."
 
@@ -9070,7 +9079,7 @@ msgstr "Datos do socio/a"
 msgid "Member's first name and surname"
 msgstr "Nome e apelidos do socio/a"
 
-#: src/Frontend/Views/TesoreriaView.php:317 templates/tesoreria/control.php:102 templates/tesoreria/control.php:118 templates/tesoreria/familias.php:77
+#: src/Frontend/Views/TesoreriaView.php:343 templates/tesoreria/control.php:111 templates/tesoreria/control.php:127 templates/tesoreria/familias.php:78
 msgid "Members"
 msgstr "Socios"
 
@@ -9292,7 +9301,7 @@ msgstr "Nome e clase"
 msgid "Name in the shop (size, colour…)"
 msgstr "Nome na tenda (talla, cor…)"
 
-#: templates/inventario/tipos.php:24 templates/inventario/tipos.php:25 templates/tesoreria/banco-revisar.php:154 templates/tesoreria/banco-tipos.php:38
+#: templates/inventario/tipos.php:24 templates/inventario/tipos.php:25 templates/tesoreria/banco-revisar.php:155 templates/tesoreria/banco-tipos.php:38
 msgid "Name of the new type"
 msgstr "Nome do tipo novo"
 
@@ -9436,7 +9445,7 @@ msgstr "Tarefa nova"
 msgid "New template"
 msgstr "Modelo novo"
 
-#: templates/eventos/config.php:62 templates/tesoreria/banco-revisar.php:150
+#: templates/eventos/config.php:62 templates/tesoreria/banco-revisar.php:151
 msgid "New type"
 msgstr "Novo tipo"
 
@@ -9613,7 +9622,7 @@ msgid "No family in Treasury"
 msgstr "Sen familia en Tesouraría"
 
 #. translators: %s: text
-#: templates/tesoreria/familias.php:71
+#: templates/tesoreria/familias.php:72
 #, php-format
 msgid "No family matches \"%s\"."
 msgstr "Ningunha familia coincide con «%s»."
@@ -9622,7 +9631,7 @@ msgstr "Ningunha familia coincide con «%s»."
 msgid "No fee"
 msgstr "Sen cota"
 
-#: templates/tesoreria/familias.php:127
+#: templates/tesoreria/familias.php:129
 msgid "No fee is calculated for them until they are in a family. Tick those who form a family and create it."
 msgstr "Non se lles calcula cota ata que estean nunha familia. Marca os que forman unha familia e créaa."
 
@@ -9648,7 +9657,7 @@ msgstr "Xa non está en %1$d conta(s) familiar(es); %2$d desactiváronse porque 
 msgid "No longer in the inventory"
 msgstr "Xa non está no inventario"
 
-#: templates/tesoreria/familias.php:88
+#: templates/tesoreria/familias.php:90
 msgid "No members"
 msgstr "Sen socios"
 
@@ -9762,7 +9771,7 @@ msgstr "Ninguén a revisou en 90 días: rexeitada automaticamente."
 msgid "Non-binary"
 msgstr "Non binario"
 
-#: templates/informes/editor.php:61 templates/tesoreria/banco-revisar.php:112 templates/tesoreria/banco-revisar.php:123
+#: templates/informes/editor.php:61 templates/tesoreria/banco-revisar.php:112 templates/tesoreria/banco-revisar.php:124
 msgid "None"
 msgstr "Ningunha"
 
@@ -9874,7 +9883,7 @@ msgstr "Aínda sen usar: o primeiro cobro irá como FRST."
 msgid "Note"
 msgstr "Nota"
 
-#: templates/lista-espera/detalle.php:120 templates/lista-espera/detalle.php:138 templates/tesoreria/banco-revisar.php:135 templates/tesoreria/familia.php:171
+#: templates/lista-espera/detalle.php:120 templates/lista-espera/detalle.php:138 templates/tesoreria/banco-revisar.php:136 templates/tesoreria/familia.php:171
 msgid "Note (optional)"
 msgstr "Nota (opcional)"
 
@@ -10114,7 +10123,7 @@ msgstr "Algún dos participantes elixidos non está no CRM do grupo."
 msgid "One of the chosen products is no longer available. Check your selection."
 msgstr "Algún dos produtos elixidos xa non está dispoñible. Revisa a túa selección."
 
-#: src/Crm/Altas.php:582
+#: src/Crm/Altas.php:607
 msgid "One of the email addresses is not valid."
 msgstr "Hai un correo electrónico que non é válido."
 
@@ -10227,6 +10236,10 @@ msgstr "Abrir na súa páxina"
 #: src/Eventos/EventosTable.php:62
 msgid "Open sign-up: families sign up whoever wants to go"
 msgstr "Inscrición aberta: as familias apuntan a quen queira ir"
+
+#: templates/tesoreria/familia-movimientos.php:69
+msgid "Open the family's payment file"
+msgstr "Abrir a ficha de pagamentos da familia"
 
 #: templates/tienda/config.php:55
 msgid "Open the public shop (purchase without signing in)"
@@ -10560,7 +10573,7 @@ msgstr "Páxina %s"
 msgid "Pagination"
 msgstr "Paxinación"
 
-#: src/Frontend/Views/TesoreriaView.php:40 src/Frontend/Views/TesoreriaView.php:317 src/Frontend/Views/TiendaGestionView.php:315 src/Informes/Catalogo.php:93
+#: src/Frontend/Views/TesoreriaView.php:40 src/Frontend/Views/TesoreriaView.php:343 src/Frontend/Views/TiendaGestionView.php:315 src/Informes/Catalogo.php:93
 msgid "Paid"
 msgstr "Pagado"
 
@@ -10664,11 +10677,11 @@ msgstr "Ordenante ou beneficiario"
 msgid "Paying in person to Treasury is only available to members."
 msgstr "Pagar en físico á Tesouraría só está dispoñible para socios e socias."
 
-#: templates/eventos/inscripciones.php:140 templates/eventos/inscripciones.php:189 templates/tesoreria/familia.php:221 templates/tienda/detalle.php:81
+#: templates/eventos/inscripciones.php:140 templates/eventos/inscripciones.php:189 templates/tesoreria/familia-movimientos.php:22 templates/tesoreria/familia.php:221
 msgid "Payment"
 msgstr "Pago"
 
-#: src/Frontend/Views/TesoreriaBaseView.php:25 src/Frontend/Views/TesoreriaView.php:316 src/Frontend/Views/TesoreriaView.php:320
+#: src/Frontend/Views/TesoreriaBaseView.php:25 src/Frontend/Views/TesoreriaView.php:342 src/Frontend/Views/TesoreriaView.php:346
 msgid "Payment control"
 msgstr "Control de pagos"
 
@@ -10723,13 +10736,13 @@ msgid "Payment of %1$s (%2$s) validated on order %3$s."
 msgstr "Pago de %1$s (%2$s) validado no pedido %3$s."
 
 #. translators: 1: text, 2: text
-#: src/Frontend/Views/TesoreriaView.php:397
+#: src/Frontend/Views/TesoreriaView.php:438
 #, php-format
 msgid "Payment of %1$s recorded in the event \"%2$s\". It remains in the family's payment history."
 msgstr "Pago de %1$s rexistrado no evento «%2$s». Queda no historial de pagos da familia."
 
 #. translators: 1: text, 2: text
-#: src/Frontend/Views/TesoreriaView.php:409
+#: src/Frontend/Views/TesoreriaView.php:450
 #, php-format
 msgid "Payment of %1$s recorded with the bank deposit of %2$s, which is reconciled with this family."
 msgstr "Pagamento de %1$s rexistrado co ingreso do banco do %2$s, que queda conciliado con esta familia."
@@ -10753,7 +10766,7 @@ msgid "Payment of %s deleted"
 msgstr "Pagamento de %s eliminado"
 
 #. translators: %s: text
-#: src/Frontend/Views/TesoreriaView.php:433
+#: src/Frontend/Views/TesoreriaView.php:474
 #, php-format
 msgid "Payment of %s deleted. It remains in the family's history."
 msgstr "Pagamento de %s eliminado. Queda no historial da familia."
@@ -10771,7 +10784,7 @@ msgid "Payment of %s recorded and split among the family's sign-ups."
 msgstr "Pago de %s rexistrado e repartido entre as inscricións da familia."
 
 #. translators: %s: text
-#: src/Frontend/Views/EventosView.php:611 src/Frontend/Views/TesoreriaView.php:413
+#: src/Frontend/Views/EventosView.php:611 src/Frontend/Views/TesoreriaView.php:454
 #, php-format
 msgid "Payment of %s recorded."
 msgstr "Pago de %s rexistrado."
@@ -10818,7 +10831,7 @@ msgstr "Cacahuetes"
 msgid "Peas"
 msgstr "Chícharos"
 
-#: src/Eventos/InscripcionesTable.php:53 src/Frontend/Views/TesoreriaView.php:38 src/Frontend/Views/TesoreriaView.php:317 src/Idiomas/Guardados.php:240
+#: src/Eventos/InscripcionesTable.php:53 src/Frontend/Views/TesoreriaView.php:38 src/Frontend/Views/TesoreriaView.php:343 src/Idiomas/Guardados.php:240
 msgid "Pending"
 msgstr "Pendente"
 
@@ -11886,7 +11899,7 @@ msgstr ""
 msgid "Registrations in the CRM are not enabled for your group (wp-admin → Scout Groups → Modules)."
 msgstr "As altas no CRM non están activadas para o teu grupo (wp-admin → Grupos Scouts → Módulos)."
 
-#: src/Crm/Altas.php:530 src/Frontend/Views/FichaView.php:246 src/Frontend/Views/FichaView.php:319 src/Frontend/Views/PersonasView.php:312
+#: src/Crm/Altas.php:555 src/Frontend/Views/FichaView.php:246 src/Frontend/Views/FichaView.php:319 src/Frontend/Views/PersonasView.php:312
 msgid "Registrations in the CRM are not enabled for your group."
 msgstr "As altas no CRM non están activadas para o teu grupo."
 
@@ -12418,12 +12431,12 @@ msgstr "Roles"
 msgid "Roles, sections and family account"
 msgstr "Roles, seccións e conta familiar"
 
-#: templates/tesoreria/banco.php:251 templates/tesoreria/sepa-remesa.php:39 templates/tesoreria/sepa.php:240 templates/tesoreria/subnav.php:33
+#: templates/tesoreria/banco.php:251 templates/tesoreria/familia-movimientos.php:51 templates/tesoreria/familia-movimientos.php:61 templates/tesoreria/sepa-remesa.php:39
 msgid "Round"
 msgstr "Rolda"
 
 #. translators: 1: text, 2: text
-#: src/Frontend/Views/TesoreriaView.php:313
+#: src/Frontend/Views/TesoreriaView.php:339
 #, php-format
 msgid "Round %1$s · generated on %2$s"
 msgstr "Rolda %1$s · xerado o %2$s"
@@ -12942,6 +12955,10 @@ msgstr "Ver os datos de saúde"
 msgid "See the calendar"
 msgstr "Ver o calendario"
 
+#: templates/tesoreria/familias.php:87
+msgid "See the family's transactions"
+msgstr "Ver os movementos da familia"
+
 #: templates/comun/ayuda.php:38
 msgid "See the full manual"
 msgstr "Ver o manual completo"
@@ -13123,7 +13140,7 @@ msgstr "Configurala agora"
 msgid "Set the document"
 msgstr "Poñer o documento"
 
-#: src/Frontend/Views/EventosBaseView.php:14 src/Frontend/Views/TesoreriaView.php:317 src/Frontend/Views/TiendaBaseView.php:36 templates/tesoreria/familia.php:83
+#: src/Frontend/Views/EventosBaseView.php:14 src/Frontend/Views/TesoreriaView.php:343 src/Frontend/Views/TiendaBaseView.php:36 templates/tesoreria/familia.php:83
 msgid "Settings"
 msgstr "Configuración"
 
@@ -13725,7 +13742,7 @@ msgstr "Suxeridos para esta familia"
 msgid "Suggested:"
 msgstr "Suxerida:"
 
-#: templates/tesoreria/familias.php:34
+#: templates/tesoreria/familias.php:35
 msgid "Suggestions ("
 msgstr "Suxestións ("
 
@@ -14015,7 +14032,7 @@ msgstr "Ese evento non existe."
 msgid "That event is not available. Choose another or leave it without an event."
 msgstr "Ese evento non está dispoñible. Escolle outro ou déixao sen evento."
 
-#: src/Frontend/Views/TesoreriaView.php:388
+#: src/Frontend/Views/TesoreriaView.php:429
 msgid "That event is not open for sign-ups or this family has nothing pending in it."
 msgstr "Ese evento non está aberto a inscricións ou esta familia non ten nada pendente nel."
 
@@ -14035,7 +14052,7 @@ msgstr "Ese gasto non está pendente de reembolso."
 msgid "That expense is not pending review."
 msgstr "Ese gasto non está por revisar."
 
-#: src/Frontend/Views/TesoreriaView.php:81 src/Frontend/Views/TesoreriaView.php:215 src/Sepa/Mandatos.php:190 src/Sepa/Mandatos.php:293
+#: src/Frontend/Views/TesoreriaView.php:83 src/Frontend/Views/TesoreriaView.php:224 src/Frontend/Views/TesoreriaView.php:241 src/Sepa/Mandatos.php:190
 msgid "That family does not exist."
 msgstr "Esa familia non existe."
 
@@ -14091,7 +14108,7 @@ msgstr "Non se poden quitar tantas unidades de «%1$s»: só hai %2$d."
 msgid "That member already belongs to family %s."
 msgstr "Ese socio xa pertence á familia %s."
 
-#: src/Frontend/Views/FamiliasView.php:155
+#: src/Frontend/Views/FamiliasView.php:156
 msgid "That member does not have an active membership in the group."
 msgstr "Ese socio non ten membresía activa no grupo."
 
@@ -14139,7 +14156,7 @@ msgstr "Ese permiso non se pode conceder."
 msgid "That person already has that permission through their role."
 msgstr "Esa persoa xa ten ese permiso polo seu rol."
 
-#: src/Crm/Altas.php:243 src/Crm/Altas.php:413 src/Frontend/Views/PersonasView.php:261 src/Usuarios/AltaService.php:153
+#: src/Crm/Altas.php:268 src/Crm/Altas.php:438 src/Frontend/Views/PersonasView.php:261 src/Usuarios/AltaService.php:153
 msgid "That person cannot be found in the group's CRM."
 msgstr "Non se atopa esa persoa no CRM do grupo."
 
@@ -14337,7 +14354,7 @@ msgstr "Falta a URL do CRM."
 msgid "The CRM could not be queried. Try again in a few minutes."
 msgstr "Non se puido consultar o CRM. Téntao de novo dentro duns minutos."
 
-#: src/Crm/Altas.php:154 src/Crm/Altas.php:247 src/Crm/Altas.php:290 src/Crm/Altas.php:420
+#: src/Crm/Altas.php:179 src/Crm/Altas.php:272 src/Crm/Altas.php:315 src/Crm/Altas.php:445
 msgid "The CRM could not be queried: "
 msgstr "Non se puido consultar o CRM: "
 
@@ -14401,11 +14418,11 @@ msgstr "O CRM non confirmou a creación do rexistro."
 msgid "The CRM has not created the record: "
 msgstr "O CRM non creou o rexistro: "
 
-#: src/Crm/Altas.php:666
+#: src/Crm/Altas.php:691
 msgid "The CRM has not left the new record in the group."
 msgstr "O CRM non deixou a ficha nova no grupo."
 
-#: src/Crm/Altas.php:691
+#: src/Crm/Altas.php:716
 msgid "The CRM has not linked the membership to the person."
 msgstr "O CRM non ligou a membresía coa persoa."
 
@@ -14425,7 +14442,7 @@ msgstr "O CRM non gardou a conta na ficha. Téntao máis tarde ou avisa á Tesou
 msgid "The CRM has not saved the changes: "
 msgstr "O CRM non gardou os cambios: "
 
-#: src/Crm/Altas.php:443
+#: src/Crm/Altas.php:468
 msgid "The CRM has not saved the document."
 msgstr "O CRM non gardou o documento."
 
@@ -14639,7 +14656,7 @@ msgstr "A autorización ten que asinala a túa nai, pai ou titor/a desde a súa 
 msgid "The bank and each cash box, with their balance at the start and end of the period, and the summary by item. Transfers between the group's accounts appear in each account, but not in the summary."
 msgstr "O banco e cada caixa de efectivo, co seu saldo ao empezar e ao acabar o período, e o resumo por partida. Os traspasos entre contas do grupo saen en cada conta, pero non no resumo."
 
-#: src/Frontend/Views/TesoreriaView.php:390
+#: src/Frontend/Views/TesoreriaView.php:431
 msgid "The bank deposit is only linked to the round's fee. For an event, remove the deposit and record the payment."
 msgstr "O ingreso do banco só se asocia á cota da rolda. Para un evento, quita o ingreso e escribe o pago."
 
@@ -14648,7 +14665,7 @@ msgid "The bank deposit is pending reconciliation again."
 msgstr "O ingreso do banco volve estar por conciliar."
 
 #. translators: %s: text
-#: src/Frontend/Views/TesoreriaView.php:438
+#: src/Frontend/Views/TesoreriaView.php:479
 #, php-format
 msgid "The bank deposit of %s is pending reconciliation again."
 msgstr "O ingreso do banco do %s volve estar por conciliar."
@@ -14859,21 +14876,21 @@ msgid_plural "The dates of %d calendar tasks have changed."
 msgstr[0] "Cambiou a data de %d tarefa do calendario."
 msgstr[1] "Cambiaron as datas de %d tarefas do calendario."
 
-#: src/Crm/Altas.php:555
+#: src/Crm/Altas.php:580
 msgid "The date of birth is missing."
 msgstr "Falta a data de nacemento."
 
-#: src/Crm/Altas.php:564 src/ListaEspera/Formulario.php:48
+#: src/Crm/Altas.php:589 src/ListaEspera/Formulario.php:48
 msgid "The date of birth is not valid."
 msgstr "A data de nacemento non é válida."
 
 #. translators: %s: text
-#: src/Crm/Altas.php:369
+#: src/Crm/Altas.php:394
 #, php-format
 msgid "The date of the change cannot be earlier than the registration date in the current section (%s)."
 msgstr "A data do cambio non pode ser anterior á de alta na sección actual (%s)."
 
-#: src/Crm/Altas.php:345
+#: src/Crm/Altas.php:370
 msgid "The date of the change cannot be later than today."
 msgstr "A data do cambio non pode ser posterior a hoxe."
 
@@ -14894,7 +14911,7 @@ msgid "The dish is replaced"
 msgstr "Substitúese o prato"
 
 #. translators: %d: number
-#: src/Crm/Altas.php:578 src/ListaEspera/Formulario.php:61 templates/personas/alta.php:89
+#: src/Crm/Altas.php:603 src/ListaEspera/Formulario.php:61 templates/personas/alta.php:89
 #, php-format
 msgid "The document is required from age %d."
 msgstr "O documento é obrigatorio a partir dos %d anos."
@@ -15122,7 +15139,7 @@ msgstr "O ficheiro é demasiado grande."
 msgid "The file must be a CSV (.csv). From Excel: \"Save as\" → \"CSV (semicolon delimited)\"."
 msgstr "O ficheiro ten que ser un CSV (.csv). Desde Excel: «Gardar como» → «CSV (delimitado por punto e coma)»."
 
-#: src/Crm/Altas.php:553 src/ListaEspera/Formulario.php:40
+#: src/Crm/Altas.php:578 src/ListaEspera/Formulario.php:40
 msgid "The first name is missing."
 msgstr "Falta o nome."
 
@@ -15162,11 +15179,11 @@ msgstr "A sesión do formulario caducou. Téntao de novo."
 msgid "The fundraising project is not removed: set its target to 0 if you don't need it."
 msgstr "O proxecto de recadación non se quita: pon o seu obxectivo a 0 se non o necesitas."
 
-#: src/Crm/Altas.php:556
+#: src/Crm/Altas.php:581
 msgid "The gender is missing."
 msgstr "Falta o xénero."
 
-#: src/Crm/Altas.php:568
+#: src/Crm/Altas.php:593
 msgid "The gender is not valid."
 msgstr "O xénero non é válido."
 
@@ -15712,7 +15729,7 @@ msgstr "A ficha non ten email no CRM. Engádeo no CRM (campo Correo electrónico
 msgid "The record of this request is no longer in the group's CRM (or has no active membership)."
 msgstr "A ficha desta solicitude xa non está no CRM do grupo (ou non ten membresía activa)."
 
-#: src/Crm/Altas.php:141 src/Crm/Altas.php:238 src/Frontend/AltaSocio.php:226
+#: src/Crm/Altas.php:166 src/Crm/Altas.php:263 src/Frontend/AltaSocio.php:226
 msgid "The registration date cannot be later than today."
 msgstr "A data de alta non pode ser posterior a hoxe."
 
@@ -15844,7 +15861,7 @@ msgstr "As existencias de «%s» cámbianse no inventario xeral, non aquí."
 msgid "The stored credential cannot be decrypted. Ask the group to register again with a new invitation."
 msgstr "Non se pode descifrar a credencial gardada. Pide ao grupo que repita a alta cun convite novo."
 
-#: src/Crm/Altas.php:554 src/ListaEspera/Formulario.php:43
+#: src/Crm/Altas.php:579 src/ListaEspera/Formulario.php:43
 msgid "The surname is missing."
 msgstr "Faltan os apelidos."
 
@@ -15965,12 +15982,12 @@ msgid "The whole event"
 msgstr "Todo o evento"
 
 #. translators: %s: text
-#: src/Crm/Altas.php:298
+#: src/Crm/Altas.php:323
 #, php-format
 msgid "The withdrawal date cannot be earlier than the registration date (%s)."
 msgstr "A data de baixa non pode ser anterior á de alta (%s)."
 
-#: src/Crm/Altas.php:285
+#: src/Crm/Altas.php:310
 msgid "The withdrawal date cannot be later than today."
 msgstr "A data de baixa non pode ser posterior a hoxe."
 
@@ -16119,11 +16136,11 @@ msgstr "Aínda non hai tipos de gasto nin de ingreso."
 msgid "There are no expenses yet."
 msgstr "Aínda non hai gastos."
 
-#: templates/tesoreria/control.php:96
+#: templates/tesoreria/control.php:105
 msgid "There are no families"
 msgstr "Non hai familias"
 
-#: templates/tesoreria/familias.php:59
+#: templates/tesoreria/familias.php:60
 msgid "There are no families yet. Start with the suggestions or create one with the members without a family below."
 msgstr "Aínda non hai familias. Comeza polas suxestións ou crea unha cos socios sen familia de abaixo."
 
@@ -16231,7 +16248,7 @@ msgstr "Non hai modelos con tarefas. Créanse en Eventos → Configuración → 
 msgid "There are no transactions with this filter."
 msgstr "Non hai movementos con este filtro."
 
-#: templates/tesoreria/familia.php:204
+#: templates/tesoreria/familia-movimientos.php:44 templates/tesoreria/familia.php:204
 msgid "There are no transactions yet."
 msgstr "Aínda non hai movementos."
 
@@ -16674,7 +16691,7 @@ msgstr "Esta caixa aínda non ten saldo inicial: escribe o que había nela o dí
 msgid "This data is stored encrypted and only the office sees it. After sending, you will be notified when it is reviewed."
 msgstr "Estes datos gárdanse cifrados e só os ve a oficina. Despois de enviar, recibirás un aviso cando se revisen."
 
-#: src/Crm/Altas.php:432
+#: src/Crm/Altas.php:457
 msgid "This document is already registered in another Scouts de España group or organisation. Confirm that it is the same person and that you want to save it."
 msgstr "Este documento xa está dado de alta noutro grupo ou organización de Scouts de España. Confirma que é a mesma persoa e que queres gardalo."
 
@@ -16828,7 +16845,7 @@ msgstr "Esta persoa xa ten número no CRM (%s)."
 msgid "This person is already registered in another Scouts de España group or organisation."
 msgstr "Esta persoa xa está dada de alta noutro grupo ou organización de Scouts de España."
 
-#: src/Crm/Altas.php:165
+#: src/Crm/Altas.php:190
 msgid "This person is already registered in another Scouts de España group or organisation. Confirm that you want to register them in your group as well."
 msgstr "Esta persoa xa está dada de alta noutro grupo ou organización de Scouts de España. Confirma que queres dala de alta tamén no teu grupo."
 
@@ -16836,7 +16853,7 @@ msgstr "Esta persoa xa está dada de alta noutro grupo ou organización de Scout
 msgid "This person's website account belongs to another group: it cannot be changed from here."
 msgstr "A conta da web desta persoa é doutro grupo: non se pode cambiar desde aquí."
 
-#: src/Crm/Altas.php:416 templates/fichas/membresia.php:174
+#: src/Crm/Altas.php:441 templates/fichas/membresia.php:174
 msgid "This record already has a document. If it is wrong, correct it in the CRM."
 msgstr "Esta ficha xa ten un documento. Se está mal, corríxeo no CRM."
 
@@ -17008,7 +17025,7 @@ msgstr "Para cobralo por transferencia escribe un IBAN válido."
 msgid "To buy"
 msgstr "A comprar"
 
-#: src/Crm/Altas.php:357 templates/fichas/membresia.php:134
+#: src/Crm/Altas.php:382 templates/fichas/membresia.php:134
 msgid "To change section, they must have an active membership (and only one)."
 msgstr "Para cambiar de sección ten que ter unha membresía activa (e só unha)."
 
@@ -17048,7 +17065,7 @@ msgstr "Para dar un anticipo, a persoa ten que estar no equipo do evento e ter c
 msgid "To order from the supplier"
 msgstr "Para pedir ao provedor"
 
-#: src/Frontend/Views/TesoreriaView.php:317 templates/tesoreria/familia.php:85
+#: src/Frontend/Views/TesoreriaView.php:343 templates/tesoreria/familia.php:85
 msgid "To pay"
 msgstr "A pagar"
 
@@ -17136,7 +17153,7 @@ msgstr "Demasiados erros: déixase de ler o ficheiro."
 msgid "Too many failed attempts. Wait a few minutes before trying again or recover your password."
 msgstr "Demasiados intentos fallidos. Agarda uns minutos antes de tentalo de novo ou recupera o teu contrasinal."
 
-#: src/Frontend/Views/BancoView.php:268 src/Frontend/Views/CajaView.php:129 src/Frontend/Views/LibroMayorView.php:115 src/Frontend/Views/TesoreriaView.php:324
+#: src/Frontend/Views/BancoView.php:268 src/Frontend/Views/CajaView.php:129 src/Frontend/Views/LibroMayorView.php:115 src/Frontend/Views/TesoreriaView.php:350
 msgid "Total"
 msgstr "Total"
 
@@ -17437,7 +17454,7 @@ msgid "Under %d years of age, enter the first name and surname of the mother, fa
 msgstr "Por debaixo de %d anos, escribe o nome e os apelidos da nai, do pai ou do titor/a."
 
 #. translators: %d: number
-#: src/Crm/Altas.php:589 templates/personas/alta.php:189
+#: src/Crm/Altas.php:614 templates/personas/alta.php:189
 #, php-format
 msgid "Under %d years of age, guardian 1 is required: first name, surname and email."
 msgstr "Por debaixo de %d anos fai falta o titor/a 1: nome, apelidos e email."
@@ -17730,7 +17747,7 @@ msgstr "Código de verificación"
 msgid "View"
 msgstr "Ver"
 
-#: templates/tesoreria/control.php:136
+#: templates/tesoreria/control.php:145
 msgid "View / record payment"
 msgstr "Ver / rexistrar pago"
 
@@ -18437,6 +18454,10 @@ msgstr "Baixa"
 msgid "Withdrawal date"
 msgstr "Data de baixa"
 
+#: src/Frontend/Views/TesoreriaView.php:407
+msgid "Withdrawal marked as seen."
+msgstr "Baixa marcada como vista."
+
 #: src/Usuarios/RegistroEmails.php:83
 msgid "Withdrawal notice"
 msgstr "Aviso de baixa"
@@ -18897,7 +18918,7 @@ msgstr "A túa ficha do grupo: consulta os teus datos e actualiza o teu email e 
 msgid "Your group's CRM user does not have permission to change memberships."
 msgstr "O usuario do CRM do teu grupo non ten permiso para cambiar membresías."
 
-#: src/Crm/Altas.php:533 src/Crm/Escritura.php:140 src/Crm/Escritura.php:205 src/Frontend/Views/ListaEsperaView.php:114
+#: src/Crm/Altas.php:558 src/Crm/Escritura.php:140 src/Crm/Escritura.php:205 src/Frontend/Views/ListaEsperaView.php:114
 msgid "Your group's CRM user does not have permission to create people and memberships."
 msgstr "O usuario do CRM do teu grupo non ten permiso para crear persoas e membresías."
 
@@ -18993,11 +19014,11 @@ msgstr "Educandos de %d anos ou máis"
 msgid "Youth members by their age today (cut-off at"
 msgstr "Educandos segundo a súa idade hoxe (corte en"
 
-#: templates/tesoreria/familias.php:123
+#: templates/tesoreria/familias.php:125
 msgid "Youth members without a family ("
 msgstr "Educandos sen familia ("
 
-#: templates/tesoreria/familias.php:35
+#: templates/tesoreria/familias.php:36
 msgid "Youth members without a family who share an email in the CRM. Review and confirm each one."
 msgstr "Educandos sen familia que comparten algún email no CRM. Revisa e confirma cada unha."
 
@@ -19239,7 +19260,7 @@ msgid "active membership: %s"
 msgstr "membresía activa: %s"
 
 #. translators: %s: text
-#: templates/tesoreria/control.php:130
+#: templates/tesoreria/control.php:139
 #, php-format
 msgid "adjustment %s"
 msgstr "axuste %s"
