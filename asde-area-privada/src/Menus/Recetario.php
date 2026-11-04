@@ -18,6 +18,42 @@ final class Recetario {
 	/** Filas como mucho de un CSV. */
 	public const MAX_FILAS = 1000;
 
+	/**
+	 * Crea un ingrediente del grupo desde la ventana «Nuevo ingrediente» de una receta (v0.60.2).
+	 * Solo lo básico: nombre, unidad, qué contiene, origen animal, revisado y coste; las trazas se anotan después en «Ingredientes».
+	 *
+	 * @param array $in nombre, unidad, alergenos[], animal, revisado, coste.
+	 * @return array ok + id, nombre, unidad y alergenos (nombres traducidos) o, si falla, ok = false y mensaje.
+	 */
+	public static function crear_ingrediente( array $in ): array {
+		if ( ! current_user_can( self::CAP ) ) {
+			return array( 'ok' => false, 'mensaje' => __( 'You do not have permission to do this.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
+		}
+		$coste = isset( $in['coste'] ) ? trim( (string) $in['coste'] ) : '';
+		$id    = IngredientesTable::guardar(
+			array(
+				'nombre'    => (string) ( $in['nombre'] ?? '' ),
+				'unidad'    => (string) ( $in['unidad'] ?? '' ),
+				'alergenos' => isset( $in['alergenos'] ) && is_array( $in['alergenos'] ) ? $in['alergenos'] : array(),
+				'animal'    => '1' === (string) ( $in['animal'] ?? '' ),
+				'revisado'  => '1' === (string) ( $in['revisado'] ?? '' ),
+				'coste'     => '' === $coste ? null : Conversion::numero( $coste ),
+			)
+		);
+		if ( is_wp_error( $id ) ) {
+			return array( 'ok' => false, 'mensaje' => $id->get_error_message() );
+		}
+		Logger::log( 'menu_ingrediente_creado', 'menus', (string) $id );
+		$i = IngredientesTable::obtener( $id );
+		return array(
+			'ok'        => true,
+			'id'        => (int) $id,
+			'nombre'    => (string) ( $i['nombre'] ?? '' ),
+			'unidad'    => (string) ( $i['unidad'] ?? 'g' ),
+			'alergenos' => array_map( array( Alergenos::class, 'nombre' ), (array) ( $i['alergenos'] ?? array() ) ),
+		);
+	}
+
 	public const MAX_BYTES = 1048576;
 
 	/** Columnas del CSV de recetas (una fila por ingrediente de cada receta). */

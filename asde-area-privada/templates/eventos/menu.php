@@ -164,9 +164,9 @@ $fecha         = static fn( string $d ): string => wp_date( 'l d/m/Y', strtotime
 					</div>
 				<?php endfor; ?>
 			</div>
+			<button type="button" class="asde-btn-link" data-asde-ing-nuevo hidden>+ <?php esc_html_e( 'New ingredient', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 			<button type="button" class="asde-btn-link" data-asde-menu-mas hidden>+ <?php esc_html_e( 'Add another ingredient', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 			<p class="asde-menu-nueva__resumen" data-asde-menu-resumen data-sin="<?php echo esc_attr( esc_attr__( 'no allergen recorded', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><strong><?php esc_html_e( 'Contains:', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></strong> <span data-asde-menu-resumen-texto><?php esc_html_e( 'no allergen recorded', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span></p>
-			<p class="asde-help"><?php esc_html_e( 'If an ingredient is missing, create it first in "Ingredients" with its allergens.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <a href="<?php echo esc_url( $url_ing ); ?>" target="_blank" rel="noopener"><?php esc_html_e( 'Go to ingredients', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a></p>
 			<textarea name="elaboracion" rows="2" maxlength="4000" aria-label="<?php echo esc_attr( esc_attr__( 'Preparation', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>" placeholder="<?php echo esc_attr( esc_attr__( 'Preparation', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"></textarea>
 			<p class="asde-form__acciones">
 				<button type="submit" class="button button-primary"><?php esc_html_e( 'Create the recipe and add it to the menu', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
@@ -174,6 +174,7 @@ $fecha         = static fn( string $d ): string => wp_date( 'l d/m/Y', strtotime
 			</p>
 		</form>
 	</dialog>
+	<?php echo \AsdeBalears\AreaPrivada\Frontend\TemplateLoader::render( 'menus/ingrediente-modal', array( 'url_envio' => $url_recetas ) ); // phpcs:ignore WordPress.Security.EscapeOutput -- ya escapado en su plantilla. ?>
 <?php endif; ?>
 
 <?php

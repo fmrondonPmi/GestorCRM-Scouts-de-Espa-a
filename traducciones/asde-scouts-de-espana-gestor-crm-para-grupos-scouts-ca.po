@@ -20288,3 +20288,6 @@ msgstr "Plat nou (crea una recepta)"
 
 msgid "Recipe created and added to the menu."
 msgstr "Recepta creada i afegida al menú."
+
+msgid "The ingredient could not be saved. Try again."
+msgstr "No s'ha pogut desar l'ingredient. Torna-ho a provar."

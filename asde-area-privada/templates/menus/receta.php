@@ -85,7 +85,10 @@ $val        = static fn( string $k ) => $borrador[ $k ] ?? $r[ $k ] ?? '';
 				<input type="number" id="asde-rec-porc" name="porciones" min="1" max="500" required value="<?php echo (int) $val( 'porciones' ); ?>">
 			</p>
 			<h3><?php esc_html_e( 'Ingredients', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h3>
-			<p class="asde-help"><?php esc_html_e( 'If an ingredient is missing, create it first in "Ingredients" with its allergens.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <a href="<?php echo esc_url( $url_ing ); ?>"><?php esc_html_e( 'Go to ingredients', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a></p>
+			<p class="asde-help">
+				<button type="button" class="asde-btn-link" data-asde-ing-nuevo hidden>+ <?php esc_html_e( 'New ingredient', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
+				<noscript><?php esc_html_e( 'If an ingredient is missing, create it first in "Ingredients" with its allergens.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <a href="<?php echo esc_url( $url_ing ); ?>"><?php esc_html_e( 'Go to ingredients', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a></noscript>
+			</p>
 			<table class="asde-table">
 				<thead><tr><th scope="col"><?php esc_html_e( 'Ingredient', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Quantity', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th><th scope="col"><?php esc_html_e( 'Unidad', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th></tr></thead>
 				<tbody>
@@ -140,6 +143,9 @@ $val        = static fn( string $k ) => $borrador[ $k ] ?? $r[ $k ] ?? '';
 		<?php endif; ?>
 	<?php endif; ?>
 </section>
+<?php if ( $propia ) : ?>
+	<?php echo \AsdeBalears\AreaPrivada\Frontend\TemplateLoader::render( 'menus/ingrediente-modal', array( 'url_envio' => $url_lista ) ); // phpcs:ignore WordPress.Security.EscapeOutput -- ya escapado en su plantilla. ?>
+<?php endif; ?>
 
 <?php if ( $r['id'] && $escaladas ) : ?>
 	<section class="asde-card" data-asde-inicio="abierto">

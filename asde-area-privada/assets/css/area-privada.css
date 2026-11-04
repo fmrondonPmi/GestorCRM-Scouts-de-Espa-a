@@ -3252,3 +3252,22 @@ dialog.asde-menu-nueva {
 	width: 100%;
 	box-sizing: border-box;
 }
+
+/* v0.60.2 · La ventana «Nuevo ingrediente» dentro de una receta (apilada sobre «Nuevo plato» en el menú del evento). */
+.asde-ing-nuevo__alergenos {
+	border: 0;
+	margin: 0 0 8px;
+	padding: 0;
+}
+.asde-ing-nuevo__alergenos legend {
+	font-weight: 600;
+	padding: 0;
+}
+.asde-ing-nuevo .asde-menu-nueva__fila select[name="unidad"] {
+	flex: 0 1 7em;
+	min-width: 0;
+}
+.asde-ing-nuevo .asde-menu-nueva__fila input[name="coste"] {
+	flex: 0 0 5em;
+	width: 5em;
+}

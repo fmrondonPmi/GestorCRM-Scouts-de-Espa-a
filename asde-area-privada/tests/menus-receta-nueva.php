@@ -246,6 +246,43 @@ try {
 	$como( $u_teso );
 	$h = $pintar( array( 'evento' => (string) $e['id'], 'pestana' => 'menu' ) );
 	$ok( ! str_contains( $h, 'value="nuevo"' ), 'quien no edita el menú no ve «Nuevo»' );
+
+	echo "\n== Parte E · Nuevo ingrediente desde la receta (v0.60.2) ==\n";
+	$a = $como( $u_lob );
+	$nonce_menus = wp_create_nonce( 'asde_menus' );
+	$ing_antes_n = (int) $wpdb->get_var( 'SELECT COUNT(*) FROM ' . IngredientesTable::table() ); // phpcs:ignore WordPress.DB
+	$r = \AsdeBalears\AreaPrivada\Frontend\Views\RecetasView::respuesta_ingrediente( $nonce_menus, array( 'nombre' => 'Calabacín de prueba', 'unidad' => 'kg', 'alergenos' => array( 'gluten', 'huevos' ), 'animal' => '1', 'revisado' => '1', 'coste' => '1,25' ) );
+	$ok( 200 === $r['status'] && true === $r['cuerpo']['success'] && $r['cuerpo']['data']['id'] > 0, 'crear el ingrediente responde con su id' );
+	$ing = IngredientesTable::por_nombre( 'Calabacín de prueba' );
+	$ok( $ing && Grupo::numero() === $ing['grupo'] && 'kg' === $ing['unidad'] && array( 'gluten', 'huevos' ) === $ing['alergenos'] && $ing['animal'] && $ing['revisado'] && abs( (float) $ing['coste'] - 1.25 ) < 0.0001, 'queda en la biblioteca del grupo con unidad, alérgenos, origen, revisado y coste' );
+	$ok( ( $r['cuerpo']['data']['nombre'] ?? '' ) === 'Calabacín de prueba' && in_array( \AsdeBalears\AreaPrivada\Menus\Alergenos::nombre( 'gluten' ), (array) $r['cuerpo']['data']['alergenos'], true ), 'la respuesta lleva el nombre y los alérgenos (para el desplegable)' );
+	$r2 = \AsdeBalears\AreaPrivada\Frontend\Views\RecetasView::respuesta_ingrediente( $nonce_menus, array( 'nombre' => 'Calabacín de prueba', 'unidad' => 'g' ) );
+	$ok( false === $r2['cuerpo']['success'] && '' !== $r2['cuerpo']['data']['mensaje'], 'el mismo nombre dos veces se rechaza con su mensaje' );
+	$r3 = \AsdeBalears\AreaPrivada\Frontend\Views\RecetasView::respuesta_ingrediente( $nonce_menus, array( 'nombre' => '  ', 'unidad' => 'g' ) );
+	$ok( false === $r3['cuerpo']['success'], 'sin nombre se rechaza' );
+	$r4 = \AsdeBalears\AreaPrivada\Frontend\Views\RecetasView::respuesta_ingrediente( 'nonce-equivocado', array( 'nombre' => 'Sin nonce de prueba', 'unidad' => 'g' ) );
+	$ok( 403 === $r4['status'] && false === $r4['cuerpo']['success'] && ! IngredientesTable::por_nombre( 'Sin nonce de prueba' ), 'con un nonce que no vale: 403 y no se crea nada' );
+	$obj_lob->add_cap( \AsdeBalears\AreaPrivada\Menus\Recetario::CAP, false );
+	wp_set_current_user( 0 );
+	$a = $como( $u_lob );
+	$r5 = \AsdeBalears\AreaPrivada\Frontend\Views\RecetasView::respuesta_ingrediente( wp_create_nonce( 'asde_menus' ), array( 'nombre' => 'Sin permiso de prueba', 'unidad' => 'g' ) );
+	$ok( 403 === $r5['status'] && ! IngredientesTable::por_nombre( 'Sin permiso de prueba' ), 'sin el permiso del recetario: 403 y no se crea nada' );
+	$obj_lob->remove_cap( \AsdeBalears\AreaPrivada\Menus\Recetario::CAP );
+	wp_set_current_user( 0 );
+	$a = $como( $u_lob );
+	$ok( (int) $wpdb->get_var( 'SELECT COUNT(*) FROM ' . IngredientesTable::table() ) === $ing_antes_n + 1, 'en total, un solo ingrediente nuevo' ); // phpcs:ignore WordPress.DB
+	$con_nuevo = MenuEvento::crear_y_anadir( $e, $a, $ini, 'desayuno', array( 'nombre' => 'Receta con ingrediente nuevo de prueba', 'porciones' => 4 ), array( array( 'ingrediente_id' => (int) $ing['id'], 'cantidad' => 2, 'unidad' => 'kg' ) ) );
+	$ok( is_int( $con_nuevo ), 'el ingrediente nuevo se puede usar en una receta del menú' );
+	$h = $pintar( array( 'evento' => (string) $e['id'], 'pestana' => 'menu' ) );
+	$ok( 1 === substr_count( $h, 'data-asde-ing-dialogo' ) && str_contains( $h, 'value="ingrediente_crear_json"' ) && str_contains( $h, 'data-asde-ing-nuevo' ), 'la ventana «Nuevo plato» trae el botón y la ventana de ingrediente (una sola)' );
+	$ok( str_contains( $h, 'Calabacín de prueba' ), 'y el desplegable de ingredientes ya incluye el nuevo' );
+	$_GET = array( 'receta' => 'nueva' );
+	try {
+		$hr = ( new \AsdeBalears\AreaPrivada\Frontend\Views\RecetasView() )->render();
+	} finally {
+		$_GET = array();
+	}
+	$ok( str_contains( $hr, 'data-asde-ing-nuevo' ) && str_contains( $hr, 'data-asde-ing-dialogo' ), 'el formulario de receta del recetario también trae el botón y la ventana' );
 } finally {
 	remove_filter( 'wp_redirect', $redirigir, 1 );
 	remove_filter( 'send_auth_cookies', '__return_false' );

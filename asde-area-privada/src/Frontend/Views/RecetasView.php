@@ -158,8 +158,34 @@ final class RecetasView extends EventosBaseView {
 	// Acciones
 	// ---------------------------------------------------------------------
 
+	/**
+	 * La respuesta a la ventana «Nuevo ingrediente» (se pide por fetch desde la receta que se está rellenando).
+	 * Nonce y permiso como el resto de acciones del recetario; no redirige ni recarga.
+	 *
+	 * @param string $nonce El de «asde_menus».
+	 * @return array{status:int, cuerpo:array}
+	 */
+	public static function respuesta_ingrediente( string $nonce, array $in ): array {
+		if ( ! current_user_can( Recetario::CAP ) ) {
+			return array( 'status' => 403, 'cuerpo' => array( 'success' => false, 'data' => array( 'mensaje' => __( 'You do not have permission to do this.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) ) );
+		}
+		if ( ! wp_verify_nonce( $nonce, 'asde_menus' ) ) {
+			return array( 'status' => 403, 'cuerpo' => array( 'success' => false, 'data' => array( 'mensaje' => __( 'The form session has expired. Try again.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) ) );
+		}
+		$r = Recetario::crear_ingrediente( $in );
+		if ( empty( $r['ok'] ) ) {
+			return array( 'status' => 200, 'cuerpo' => array( 'success' => false, 'data' => array( 'mensaje' => (string) $r['mensaje'] ) ) );
+		}
+		unset( $r['ok'] );
+		return array( 'status' => 200, 'cuerpo' => array( 'success' => true, 'data' => $r ) );
+	}
+
 	public function handle_post(): void {
 		$accion = $this->post( 'asde_action' );
+		if ( 'ingrediente_crear_json' === $accion ) {
+			$r = self::respuesta_ingrediente( $this->post( '_wpnonce' ), wp_unslash( $_POST ) ); // phpcs:ignore WordPress.Security.NonceVerification,WordPress.Security.ValidatedSanitizedInput -- el nonce se comprueba dentro; cada campo se sanea al guardarlo.
+			wp_send_json( $r['cuerpo'], $r['status'] );
+		}
 		if ( ! in_array( $accion, array( 'receta_guardar', 'receta_copiar', 'receta_archivar', 'receta_restaurar', 'ingrediente_guardar', 'ingrediente_archivar', 'ingrediente_restaurar', 'recetas_importar' ), true ) ) {
 			return;
 		}

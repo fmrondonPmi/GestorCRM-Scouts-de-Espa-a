@@ -20288,3 +20288,6 @@ msgstr "Prato novo (crear unha receita)"
 
 msgid "Recipe created and added to the menu."
 msgstr "Receita creada e engadida ao menú."
+
+msgid "The ingredient could not be saved. Try again."
+msgstr "Non se puido gardar o ingrediente. Téntao de novo."

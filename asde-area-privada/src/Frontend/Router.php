@@ -379,6 +379,9 @@ final class Router {
 		if ( 'eventos' === $key ) {
 			wp_enqueue_script( 'asde-eventos', plugins_url( 'assets/js/eventos.js', ASDE_AP_FILE ), array(), ASDE_AP_VERSION, true ); // v0.52: la ventana de publicar.
 		}
+		if ( in_array( $key, array( 'eventos', 'eventos_recetas' ), true ) ) {
+			wp_enqueue_script( 'asde-ingrediente-nuevo', plugins_url( 'assets/js/ingrediente-nuevo.js', ASDE_AP_FILE ), array(), ASDE_AP_VERSION, true ); // v0.60.2: «Nuevo ingrediente» dentro de una receta.
+		}
 		if ( 'accesos' === $key ) {
 			wp_enqueue_script( 'asde-accesos', plugins_url( 'assets/js/accesos.js', ASDE_AP_FILE ), array(), ASDE_AP_VERSION, true ); // v0.53 (doc 56): la matriz marca lo que necesita cada permiso.
 		}

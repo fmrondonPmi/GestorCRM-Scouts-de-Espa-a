@@ -20286,3 +20286,6 @@ msgstr ""
 
 msgid "Recipe created and added to the menu."
 msgstr ""
+
+msgid "The ingredient could not be saved. Try again."
+msgstr ""

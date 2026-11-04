@@ -20288,3 +20288,6 @@ msgstr "Plater berria (sortu errezeta bat)"
 
 msgid "Recipe created and added to the menu."
 msgstr "Errezeta sortu eta menuan gehitu da."
+
+msgid "The ingredient could not be saved. Try again."
+msgstr "Ezin izan da osagaia gorde. Saiatu berriro."

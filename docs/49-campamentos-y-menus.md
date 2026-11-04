@@ -321,3 +321,11 @@ Pruebas nuevas por fase (`tests/eventos-calendario.php`, `tests/menus-recetas.ph
 - Sin JavaScript: «Nuevo» envía `receta=nuevo` y el servidor lleva al formulario del recetario con un aviso (la receta se crea allí y se añade luego).
 - Un ingrediente que no exista se crea antes en «Ingredientes» (no se crean desde la ventana: llevan alérgenos que hay que revisar). Si el alta falla por un dato, se vuelve al menú con el aviso y hay que repetir lo escrito (no hay borrador, a diferencia del recetario).
 - Prueba: `tests/menus-receta-nueva.php`.
+
+### 10.2 Nuevo ingrediente desde la receta (rama `Menu-Nueva-Receta`, sin versión subida)
+
+- En el formulario de una receta (la ventana «Nuevo plato» del menú del evento y el alta del recetario) el aviso «si falta un ingrediente, créalo antes…» se cambia por un botón **«+ Nuevo ingrediente»** que abre otra ventana (`templates/menus/ingrediente-modal.php`, JS `assets/js/ingrediente-nuevo.js`): nombre, unidad, coste, qué contiene, origen animal y revisado. Las trazas se anotan después en «Ingredientes» (para no alargar la ventana).
+- Se envía por `fetch` (acción `ingrediente_crear_json` en `RecetasView::handle_post`, que devuelve JSON y no recarga) con el nonce `asde_menus` y el permiso `asde_menus_recetas`, como el resto del recetario (`RecetasView::respuesta_ingrediente()` → `Recetario::crear_ingrediente()` → `IngredientesTable::guardar`). Auditoría `menu_ingrediente_creado`.
+- Al guardar, el ingrediente se añade a todos los desplegables de ingredientes de la página y se elige en la primera fila vacía de la receta (o en una nueva): **no se pierde nada de lo escrito**. En la ventana «Nuevo plato» la de ingrediente se apila encima (`showModal()`); al cerrarla el foco va a la cantidad del ingrediente nuevo, o al botón si se cancela.
+- Sin JavaScript el botón no sale: en el formulario del recetario queda el texto con el enlace a «Ingredientes» (dentro de `<noscript>`); la ventana «Nuevo plato» solo existe con JavaScript.
+- Prueba: Parte E de `tests/menus-receta-nueva.php`.
