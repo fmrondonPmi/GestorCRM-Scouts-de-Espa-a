@@ -161,6 +161,7 @@ try {
 	$ok( str_contains( $h, 'name="director"' ) && str_contains( $h, 'Eva Asistente Coll' ) && ! str_contains( $h, 'Leo Asistente Ruiz' ), 'el equipo se elige entre los adultos del grupo (no entre los menores)' );
 	$ok( preg_match( '/value="acampada"[^>]*data-coste="1"/', $h ) && preg_match( '/value="salida"[^>]*data-coste="0"/', $h ), 'cada tipo lleva si nace con coste (el JS marca la casilla al elegirlo)' );
 	$ok( ! str_contains( $h, 'asde-asistente__copiar' ), 'sin eventos anteriores no se ofrece copiar' );
+	$ok( str_contains( $h, 'data-inicial="1"' ) && str_contains( $h, '<button type="button" data-ir="1"' ), 'empieza en el paso 1 y los pasos de arriba son botones (se manejan con teclado)' );
 	$como( $u_coord );
 	$h = $pintar( array( 'nuevo' => '1' ) );
 	$ok( str_contains( $h, 'name="ambito" value="grupo"' ) && str_contains( $h, 'name="ambito" value="externo"' ), 'Coordinación elige también grupo y externo' );
@@ -174,6 +175,7 @@ try {
 	$papeles = array_column( $equipo, 'papel', 'socio' );
 	$ok( 2 === count( $equipo ) && 'director' === ( $papeles['990035'] ?? '' ) && 'monitor' === ( $papeles['990034'] ?? '' ), 'el equipo elegido entra con el evento: Eva director/a y Tom monitor (a Eva no se la repite como monitor)' );
 	$ok( str_contains( $avisos, 'created as a draft' ) || str_contains( $avisos, 'creado como borrador' ), 'el aviso dice que hay un borrador y lo que falta' );
+	$ok( ! str_contains( $avisos, 'asde-notice--warning' ), 'quien es director/a y está marcado también como monitor no da ningún aviso' );
 	$log = (int) $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(*) FROM ' . Logger::table() . " WHERE id > %d AND accion IN ( 'evento_creado', 'evento_equipo_anadido' )", $log_antes ) ); // phpcs:ignore WordPress.DB
 	$ok( $log >= 3, 'la auditoría anota el evento y cada miembro del equipo' );
 
@@ -189,9 +191,11 @@ try {
 	$antes   = $max_id( EventosTable::table() );
 	$avisos3 = $enviar( $campos( array( 'ambito' => 'grupo', 'nombre' => 'Un evento de grupo' ) ) );
 	$ok( $max_id( EventosTable::table() ) === $antes && ( str_contains( $avisos3, 'Coordination' ) || str_contains( $avisos3, 'Coordinación' ) ), 'un scouter no crea eventos de grupo' );
-	$enviar( $campos( array( 'secciones' => array(), 'nombre' => 'Sin sección escrita' ) ) );
+	$enviar( $campos( array( 'secciones' => array(), 'nombre' => 'Sin sección escrita', 'director' => '990035', 'monitor' => array( '990034' ) ) ) );
 	$h = $pintar( array( 'nuevo' => '1' ) );
 	$ok( $max_id( EventosTable::table() ) === $antes && str_contains( $h, 'value="Sin sección escrita"' ) && str_contains( $h, 'value="Casa de colonias de prueba"' ), 'sin sección no se crea, y al volver a enseñar el asistente están los datos escritos' );
+	$ok( preg_match( '/<option value="990035"\s+selected/', $h ) && preg_match( '/value="990034"\s+checked/', $h ) && ! preg_match( '/value="990033"\s+checked/', $h ), 'tras el error siguen elegidos el director/a y los monitores' );
+	$ok( str_contains( $h, 'data-inicial="6"' ), 'tras el error el asistente se abre en el último paso, con el aviso encima' );
 
 	echo "\n== Parte D · Copiar un evento anterior ==\n";
 	( new ReflectionProperty( EventosView::class, 'valores' ) )->setValue( null, null ); // En la web cada petición empieza limpia.
@@ -203,7 +207,7 @@ try {
 	$ok( str_contains( $h, 'value="Acampada del asistente"' ) && str_contains( $h, 'Una acampada para probar' ), 'la copia trae el nombre y los textos' );
 	$ok( str_contains( $h, 'name="previstas_lobatos" value="24"' ), 'la copia trae los participantes previstos' );
 	$ok( str_contains( $h, 'name="inicio_fecha" value="' . $ini2 . '"' ), 'la copia lleva las fechas un año después' );
-	$ok( str_contains( $h, 'name="director"' ) && ! str_contains( $h, 'selected' ), 'el equipo no se copia' );
+	$ok( str_contains( $h, 'name="director"' ) && ! preg_match( '/<option value="\d+"\s+selected/', $h ) && ! preg_match( '/name="monitor\[\]"[^>]*checked/', $h ) && 1 === preg_match( '/data-inicial="1"/', $h ), 'el equipo no se copia: nadie queda elegido y se empieza en el paso 1' );
 	$como( $u_otro );
 	$h = $pintar( array( 'nuevo' => '1', 'copiar' => (string) $e['id'] ) );
 	$ok( ! str_contains( $h, 'value="Acampada del asistente"' ), 'no se copia un evento que quien crea no puede ver (alguien de otra sección y fuera del equipo)' );
@@ -226,6 +230,7 @@ try {
 	foreach ( array( 'evento', 'secciones', 'fechas', 'lugar', 'participantes', 'coste' ) as $r ) {
 		$ok( str_contains( $tpl, 'data-r="' . $r . '"' ), "el resumen tiene su casilla «$r»" );
 	}
+	$ok( str_contains( $js, 'c.disabled = ! respuesta( r )' ) && str_contains( $js, 'aria-current' ) && str_contains( $js, 'if ( desplazar )' ), 'un «No» desactiva sus datos (no se envían), el paso actual se marca para lectores de pantalla y la carga no desplaza la página' );
 	$ok( ! preg_match( '/<script|onclick=|<style/', $tpl ) && ! str_contains( $js, 'innerHTML' ), 'sin script, onclick ni style en la plantilla, ni innerHTML en el JS' );
 	$ok( str_contains( (string) file_get_contents( ASDE_AP_DIR . 'src/Frontend/Router.php' ), 'asistente.js' ), 'el JS se carga en «Nuevo evento»' );
 } finally {

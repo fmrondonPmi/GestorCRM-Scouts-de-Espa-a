@@ -42,13 +42,14 @@ $pasos  = array(
 	6 => __( 'Review', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 );
 $datos  = sprintf(
-	'data-noches="%d" data-menores="%d" data-dias="%d" data-por-monitor="%d" data-menores-secciones="%s" data-lang="%s"',
+	'data-noches="%d" data-menores="%d" data-dias="%d" data-por-monitor="%d" data-menores-secciones="%s" data-lang="%s" data-inicial="%d"',
 	Normativa::NOCHES_COMUNICACION,
 	Normativa::MENORES_COMUNICACION,
 	Normativa::DIAS_COMUNICACION,
 	Normativa::PARTICIPANTES_MONITOR,
 	esc_attr( implode( ',', Normativa::SECCIONES_MENORES ) ),
-	esc_attr( determine_locale() )
+	esc_attr( determine_locale() ),
+	null === $v ? 1 : count( $pasos ) // Tras un error se vuelve a enseñar el asistente en el último paso, con el aviso arriba.
 );
 ?>
 <p class="asde-back"><a href="<?php echo esc_url( $url ); ?>"><?php esc_html_e( '← Agenda', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a></p>
@@ -61,7 +62,7 @@ $datos  = sprintf(
 	<h2 class="asde-card__title"><?php esc_html_e( 'New event', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h2>
 	<ol class="asde-asistente__pasos" data-asde-pasos hidden>
 		<?php foreach ( $pasos as $n => $nombre ) : ?>
-			<li data-ir="<?php echo (int) $n; ?>"><b><?php echo (int) $n; ?></b> <span><?php echo esc_html( $nombre ); ?></span></li>
+			<li><button type="button" data-ir="<?php echo (int) $n; ?>"><b><?php echo (int) $n; ?></b> <span><?php echo esc_html( $nombre ); ?></span></button></li>
 		<?php endforeach; ?>
 	</ol>
 
@@ -155,14 +156,14 @@ $datos  = sprintf(
 				<select id="asde-as-director" name="director">
 					<option value=""><?php esc_html_e( 'Choose later', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></option>
 					<?php foreach ( $candidatos as $num => $p ) : ?>
-						<option value="<?php echo esc_attr( (string) $num ); ?>"><?php echo esc_html( $p->nombre_completo() ); ?></option>
+						<option value="<?php echo esc_attr( (string) $num ); ?>" <?php selected( (string) ( $v['director'] ?? '' ), (string) $num ); ?>><?php echo esc_html( $p->nombre_completo() ); ?></option>
 					<?php endforeach; ?>
 				</select>
 			</p>
 			<fieldset>
 				<legend><?php esc_html_e( 'Monitors', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></legend>
 				<?php foreach ( $candidatos as $num => $p ) : ?>
-					<label class="asde-chip"><input type="checkbox" name="monitor[]" value="<?php echo esc_attr( (string) $num ); ?>"><span><?php echo esc_html( $p->nombre_completo() ); ?></span></label>
+					<label class="asde-chip"><input type="checkbox" name="monitor[]" value="<?php echo esc_attr( (string) $num ); ?>" <?php checked( in_array( (string) $num, array_map( 'strval', (array) ( $v['monitor'] ?? array() ) ), true ) ); ?>><span><?php echo esc_html( $p->nombre_completo() ); ?></span></label>
 				<?php endforeach; ?>
 			</fieldset>
 		<?php endif; ?>

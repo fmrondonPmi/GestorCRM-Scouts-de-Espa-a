@@ -476,10 +476,11 @@ final class EventosView extends EventosBaseView {
 			}
 			$nuevo = EventosTable::obtener( $id ) ?? array( 'grupo' => '', 'id' => $id );
 			// Del asistente (paso «Cuántos»): el director/a y los monitores elegidos entran en el equipo.
-			$equipo = array(
-					'director' => array( (string) ( $in['director'] ?? '' ) ),
-					'monitor'  => array_map( 'strval', (array) ( $in['monitor'] ?? array() ) ),
-				);
+			$director = (string) ( $in['director'] ?? '' );
+			$equipo   = array(
+				'director' => array( $director ),
+				'monitor'  => array_diff( array_map( 'strval', (array) ( $in['monitor'] ?? array() ) ), array( $director ) ),
+			);
 			foreach ( $equipo as $papel => $socios ) {
 				foreach ( array_unique( array_filter( $socios ) ) as $socio ) {
 					$r = Servicio::anadir_equipo( $nuevo, $a, sanitize_text_field( $socio ), $papel );

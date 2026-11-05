@@ -94,7 +94,7 @@
 		var p = participantes().total;
 		var por = parseInt( form.dataset.porMonitor, 10 );
 		var base = p > 0 ? Math.max( 1, Math.floor( p / por ) + ( p % por >= por / 2 ? 1 : 0 ) ) : 0;
-		var apoyo = Math.ceil( numero( 'dependencia12' ) / 3 ) + numero( 'dependencia3' );
+		var apoyo = respuesta( 'dependencia' ) ? Math.ceil( numero( 'dependencia12' ) / 3 ) + numero( 'dependencia3' ) : 0;
 		poner( 'participantes', p );
 		poner( 'monitores', base + apoyo );
 		mostrar( '[data-ratio]', p > 0 );
@@ -105,9 +105,12 @@
 		return '1' === valor( nombre );
 	}
 	function preguntas() {
-		var radios = [ 'internacional', 'agua', 'riesgo', 'dependencia' ];
-		radios.forEach( function ( r ) {
+		// Un «No» oculta los datos de su pregunta y los desactiva, para que no se envíen ni cuenten.
+		[ 'internacional', 'agua', 'riesgo', 'dependencia' ].forEach( function ( r ) {
 			mostrar( '[data-sub="' + r + '"]', respuesta( r ) );
+			Array.prototype.forEach.call( form.querySelectorAll( '[data-sub="' + r + '"] input' ), function ( c ) {
+				c.disabled = ! respuesta( r );
+			} );
 		} );
 		var n = noches();
 		var comunica = 'si' === valor( 'comunicacion' ) || ( 'no' !== valor( 'comunicacion' ) && n >= parseInt( form.dataset.noches, 10 ) && participantes().menores >= parseInt( form.dataset.menores, 10 ) );
@@ -153,13 +156,18 @@
 		} );
 	}
 
-	function ir( n ) {
+	function ir( n, desplazar ) {
 		actual = Math.min( pasos.length, Math.max( 1, n ) );
 		pasos.forEach( function ( p, i ) {
 			p.hidden = i + 1 !== actual;
 		} );
 		migas.forEach( function ( m, i ) {
-			m.className = i + 1 < actual ? 'asde-hecho' : ( i + 1 === actual ? 'asde-actual' : '' );
+			m.parentNode.className = i + 1 < actual ? 'asde-hecho' : ( i + 1 === actual ? 'asde-actual' : '' );
+			if ( i + 1 === actual ) {
+				m.setAttribute( 'aria-current', 'step' );
+			} else {
+				m.removeAttribute( 'aria-current' );
+			}
 		} );
 		atras.hidden = 1 === actual;
 		adelante.hidden = pasos.length === actual;
@@ -170,7 +178,9 @@
 		if ( pasos.length === actual ) {
 			resumen();
 		}
-		form.scrollIntoView( { block: 'start' } );
+		if ( desplazar ) {
+			form.scrollIntoView( { block: 'start' } );
+		}
 	}
 
 	// Un paso se da por bueno si sus campos obligatorios están bien y hay alguna sección elegida.
@@ -198,16 +208,16 @@
 	form.querySelector( '[data-asde-pasos]' ).hidden = false;
 	adelante.addEventListener( 'click', function () {
 		if ( valido() ) {
-			ir( actual + 1 );
+			ir( actual + 1, true );
 		}
 	} );
 	atras.addEventListener( 'click', function () {
-		ir( actual - 1 );
+		ir( actual - 1, true );
 	} );
 	migas.forEach( function ( m, i ) {
 		m.addEventListener( 'click', function () {
 			if ( i + 1 < actual || valido() ) {
-				ir( i + 1 );
+				ir( i + 1, true );
 			}
 		} );
 	} );
@@ -237,5 +247,5 @@
 		ratio();
 		preguntas();
 	} );
-	ir( 1 );
+	ir( parseInt( form.dataset.inicial, 10 ) || 1, false );
 }() );

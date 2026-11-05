@@ -3321,3 +3321,5 @@ dialog.asde-menu-nueva {
 .asde-asistente [hidden]{display:none!important}
 .asde-asistente__plazas{align-items:center;border-bottom:1px solid var(--asde-border);padding:6px 0}
 .asde-asistente__plazas>span{flex:0 0 110px}
+.asde-asistente__pasos button{background:none;border:0;padding:0;font:inherit;color:inherit;cursor:pointer;width:100%}
+.asde-asistente__pasos button:focus-visible{outline:2px solid var(--asde-primary);outline-offset:2px}
