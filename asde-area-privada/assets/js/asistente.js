@@ -71,7 +71,8 @@
 		campo( 'fin_fecha' ).min = valor( 'inicio_fecha' );
 	}
 
-	// Paso 3: las secciones que van, los participantes y los monitores que hacen falta (la misma regla que Normativa).
+	// Paso 3: las secciones que van, los participantes y los monitores que hacen falta. Las cifras de la regla vienen de
+	// Normativa (data-*); aquí solo está su fórmula, la misma que Normativa::monitores_necesarios.
 	function participantes() {
 		var van = secciones().map( function ( c ) {
 			return c.value;
@@ -93,8 +94,8 @@
 	function ratio() {
 		var p = participantes().total;
 		var por = parseInt( form.dataset.porMonitor, 10 );
-		var base = p > 0 ? Math.max( 1, Math.floor( p / por ) + ( p % por >= por / 2 ? 1 : 0 ) ) : 0;
-		var apoyo = respuesta( 'dependencia' ) ? Math.ceil( numero( 'dependencia12' ) / 3 ) + numero( 'dependencia3' ) : 0;
+		var base = p > 0 ? Math.max( 1, Math.floor( p / por ) + ( p % por >= parseInt( form.dataset.restoMonitor, 10 ) ? 1 : 0 ) ) : 0;
+		var apoyo = respuesta( 'dependencia' ) ? Math.ceil( numero( 'dependencia12' ) / parseInt( form.dataset.dependencia12, 10 ) ) + numero( 'dependencia3' ) : 0;
 		poner( 'participantes', p );
 		poner( 'monitores', base + apoyo );
 		mostrar( '[data-ratio]', p > 0 );

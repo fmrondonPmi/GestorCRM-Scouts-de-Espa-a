@@ -29,6 +29,10 @@ final class Normativa {
 	public const NOCHES_COMUNICACION  = 2;
 	public const MENORES_COMUNICACION = 10;
 	public const PARTICIPANTES_MONITOR = 10;
+	/** Con este resto (o más) al dividir los participantes por PARTICIPANTES_MONITOR, se suma un monitor más. */
+	public const RESTO_MONITOR = 5;
+	/** Participantes con dependencia grado I o II por cada monitor de apoyo (el grado III suma uno cada uno). */
+	public const DEPENDENCIA12_POR_APOYO = 3;
 	public const MESES_CERTIFICADO    = 12;
 
 	/** Campos de la ficha que se leen para comprobar el equipo. */
@@ -108,8 +112,8 @@ final class Normativa {
 	 * @return array{base:int, apoyo:int, total:int}
 	 */
 	public static function monitores_necesarios( int $participantes, int $dependencia12 = 0, int $dependencia3 = 0 ): array {
-		$base  = $participantes > 0 ? max( 1, intdiv( $participantes, self::PARTICIPANTES_MONITOR ) + ( $participantes % self::PARTICIPANTES_MONITOR >= 5 ? 1 : 0 ) ) : 0;
-		$apoyo = (int) ceil( $dependencia12 / 3 ) + $dependencia3;
+		$base  = $participantes > 0 ? max( 1, intdiv( $participantes, self::PARTICIPANTES_MONITOR ) + ( $participantes % self::PARTICIPANTES_MONITOR >= self::RESTO_MONITOR ? 1 : 0 ) ) : 0;
+		$apoyo = (int) ceil( $dependencia12 / self::DEPENDENCIA12_POR_APOYO ) + $dependencia3;
 		return array(
 			'base'  => $base,
 			'apoyo' => $apoyo,

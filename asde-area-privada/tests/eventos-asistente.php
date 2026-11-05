@@ -23,6 +23,7 @@ use AsdeBalears\AreaPrivada\Eventos\Config;
 use AsdeBalears\AreaPrivada\Eventos\EventosTable;
 use AsdeBalears\AreaPrivada\Eventos\Formulario;
 use AsdeBalears\AreaPrivada\Eventos\InscripcionesTable;
+use AsdeBalears\AreaPrivada\Eventos\Normativa;
 use AsdeBalears\AreaPrivada\Eventos\Servicio;
 use AsdeBalears\AreaPrivada\Frontend\Notices;
 use AsdeBalears\AreaPrivada\Frontend\Views\EventosView;
@@ -187,6 +188,20 @@ try {
 	$enviar( $campos( array( 'nombre' => 'Con un socio que no existe', 'director' => '999999' ) ) );
 	$ok( $max_id( EventosTable::table() ) === $antes + 1 && 0 === count( InscripcionesTable::equipo( $max_id( EventosTable::table() ) ) ), 'una persona que no es del grupo no entra al equipo, pero el evento se crea' );
 
+	// El equipo entra en lote: los candidatos se leen y se ordenan una vez, no una por persona.
+	$enviar( $campos( array( 'nombre' => 'Equipo en lote' ) ) );
+	$lote    = $ultimo();
+	$ambito  = $como( $u_lob );
+	$antes   = $crm->llamadas;
+	Servicio::candidatos();
+	$una     = $crm->llamadas - $antes;
+	$antes   = $crm->llamadas;
+	$fallos  = Servicio::anadir_equipo_varios( $lote, $ambito, array( 'director' => array( '990035', '990035' ), 'monitor' => array( '990035', '990034', '999999' ) ) );
+	$lotes   = $crm->llamadas - $antes;
+	$papeles = array_column( InscripcionesTable::equipo( $lote['id'] ), 'papel', 'socio' );
+	$ok( array( '990035' => 'director', '990034' => 'monitor' ) === $papeles && 1 === count( $fallos ), 'en lote: Eva queda solo de directora (no se repite como monitora), Tom de monitor y quien no es del grupo da un solo error' );
+	$ok( $una > 0 && $lotes === $una, "añadir 3 personas al equipo lee a los candidatos una sola vez ($lotes lectura frente a $una de una sola consulta)" );
+
 	echo "\n== Parte C · Errores: no se crea nada y se conserva lo escrito ==\n";
 	$antes   = $max_id( EventosTable::table() );
 	$avisos3 = $enviar( $campos( array( 'ambito' => 'grupo', 'nombre' => 'Un evento de grupo' ) ) );
@@ -222,6 +237,22 @@ try {
 	$d3 = Formulario::valores( $e, array( 'nombre' => 'Escrito', 'agua' => '1', 'secciones' => array( 'scouts' ) ), $cfg, array( 'lobatos' ) );
 	$ok( 'Escrito' === $d3['nombre'] && true === $d3['agua'] && false === $d3['con_coste'] && array( 'scouts' ) === $d3['secciones'], 'lo escrito gana al evento; las casillas que no llegan valen «no»' );
 
+	// El JS usa las cifras de Normativa (data-*): su fórmula, con esas cifras, coincide con la del servidor.
+	$h = $pintar( array( 'nuevo' => '1' ) );
+	preg_match( '/data-por-monitor="(\d+)" data-resto-monitor="(\d+)" data-dependencia12="(\d+)"/', $h, $c );
+	$ok( array( Normativa::PARTICIPANTES_MONITOR, Normativa::RESTO_MONITOR, Normativa::DEPENDENCIA12_POR_APOYO ) === array_map( 'intval', array_slice( $c, 1 ) ), 'las cifras de la regla de monitores salen de Normativa y llegan al JS' );
+	$igual = true;
+	for ( $p = 0; $p <= 300; $p++ ) {
+		for ( $d = 0; $d <= 9; $d++ ) {
+			$base  = $p > 0 ? max( 1, intdiv( $p, (int) $c[1] ) + ( $p % (int) $c[1] >= (int) $c[2] ? 1 : 0 ) ) : 0;
+			$igual = $igual && $base + (int) ceil( $d / (int) $c[3] ) + 2 === Normativa::monitores_necesarios( $p, $d, 2 )['total'];
+		}
+	}
+	$ok( $igual, 'la fórmula del JS con las cifras de data-* da lo mismo que Normativa::monitores_necesarios (0 a 300 participantes, 0 a 9 con dependencia)' );
+	$como( $u_lob );
+	$h = $pintar( array( 'evento' => (string) $e['id'], 'editar' => '1' ) );
+	$ok( str_contains( $h, 'value="evento_guardar"' ) && str_contains( $h, 'name="evento" value="' . $e['id'] . '"' ) && ! str_contains( $h, 'evento_crear' ) && ! str_contains( $h, 'asde_evento_nuevo' ), 'el formulario de editar solo edita: ya no lleva la rama de crear' );
+
 	$js  = (string) file_get_contents( ASDE_AP_DIR . 'assets/js/asistente.js' );
 	$tpl = (string) file_get_contents( ASDE_AP_DIR . 'templates/eventos/asistente.php' );
 	foreach ( array( 'coste', 'comunicacion', 'internacional', 'agua', 'riesgo', 'dependencia' ) as $a ) {
@@ -230,6 +261,7 @@ try {
 	foreach ( array( 'evento', 'secciones', 'fechas', 'lugar', 'participantes', 'coste' ) as $r ) {
 		$ok( str_contains( $tpl, 'data-r="' . $r . '"' ), "el resumen tiene su casilla «$r»" );
 	}
+	$ok( ! preg_match( '/\/ 3|\/ 2\b|>= 5/', $js ), 'el JS no repite cifras de la regla (monitores, dependencia): las lee de data-*' );
 	$ok( str_contains( $js, 'c.disabled = ! respuesta( r )' ) && str_contains( $js, 'aria-current' ) && str_contains( $js, 'if ( desplazar )' ), 'un «No» desactiva sus datos (no se envían), el paso actual se marca para lectores de pantalla y la carga no desplaza la página' );
 	$ok( ! preg_match( '/<script|onclick=|<style/', $tpl ) && ! str_contains( $js, 'innerHTML' ), 'sin script, onclick ni style en la plantilla, ni innerHTML en el JS' );
 	$ok( str_contains( (string) file_get_contents( ASDE_AP_DIR . 'src/Frontend/Router.php' ), 'asistente.js' ), 'el JS se carga en «Nuevo evento»' );

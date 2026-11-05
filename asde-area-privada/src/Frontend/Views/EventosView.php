@@ -148,19 +148,18 @@ final class EventosView extends EventosBaseView {
 		);
 	}
 
-	private function formulario( ?array $e, Ambito $a, array $cfg ): string {
+	private function formulario( array $e, Ambito $a, array $cfg ): string {
 		return $this->tpl(
 			'eventos/formulario',
 			array(
 				'e'          => $e,
-				'v'          => null !== self::$valores && self::$valores['evento'] === ( $e['id'] ?? 0 ) ? self::$valores['datos'] : null,
+				'v'          => null !== self::$valores && self::$valores['evento'] === $e['id'] ? self::$valores['datos'] : null,
 				'cfg'        => $cfg,
-				'tipo'       => sanitize_key( $this->get( 'tipo' ) ),
-				'secciones'  => array_values( array_unique( array_merge( Servicio::secciones_para( $a ), $e ? $e['secciones'] : array() ) ) ),
-				'ambitos'    => array_values( array_unique( array_merge( Servicio::ambitos_para( $a ), $e ? array( $e['ambito'] ) : array() ) ) ),
-				'validado'   => $e && null !== $e['validado_en'],
+				'secciones'  => array_values( array_unique( array_merge( Servicio::secciones_para( $a ), $e['secciones'] ) ) ),
+				'ambitos'    => array_values( array_unique( array_merge( Servicio::ambitos_para( $a ), array( $e['ambito'] ) ) ) ),
+				'validado'   => null !== $e['validado_en'],
 				'url'        => $this->url( 'eventos' ),
-				'volver'     => $e ? $this->url( 'eventos', array( 'evento' => (string) $e['id'] ) ) : $this->url( 'eventos' ),
+				'volver'     => $this->url( 'eventos', array( 'evento' => (string) $e['id'] ) ),
 			)
 		);
 	}
@@ -476,18 +475,12 @@ final class EventosView extends EventosBaseView {
 			}
 			$nuevo = EventosTable::obtener( $id ) ?? array( 'grupo' => '', 'id' => $id );
 			// Del asistente (paso «Cuántos»): el director/a y los monitores elegidos entran en el equipo.
-			$director = (string) ( $in['director'] ?? '' );
-			$equipo   = array(
-				'director' => array( $director ),
-				'monitor'  => array_diff( array_map( 'strval', (array) ( $in['monitor'] ?? array() ) ), array( $director ) ),
+			$equipo = array(
+				'director' => array( (string) ( $in['director'] ?? '' ) ),
+				'monitor'  => (array) ( $in['monitor'] ?? array() ),
 			);
-			foreach ( $equipo as $papel => $socios ) {
-				foreach ( array_unique( array_filter( $socios ) ) as $socio ) {
-					$r = Servicio::anadir_equipo( $nuevo, $a, sanitize_text_field( $socio ), $papel );
-					if ( is_wp_error( $r ) ) {
-						Notices::add( 'warning', esc_html( $r->get_error_message() ) );
-					}
-				}
+			foreach ( Servicio::anadir_equipo_varios( $nuevo, $a, $equipo ) as $error ) {
+				Notices::add( 'warning', esc_html( $error->get_error_message() ) );
 			}
 			Notices::add( 'success', esc_html( sprintf( /* translators: %s: text */ __( 'Event %s created as a draft. Check what is left to do: the team, the budget if it has a cost, the menu and the calendar.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), EventosTable::numero( $nuevo ) ) ) );
 			$this->redirect( $this->url( 'eventos', array( 'evento' => (string) $id ) ) );

@@ -1,11 +1,10 @@
 <?php
 /**
- * Formulario de un evento (crear o editar).
+ * Formulario para editar un evento (crear es el asistente: asistente.php, doc 66).
  *
- * @var ?array    $e         El evento que se edita (null al crear)
+ * @var array     $e         El evento que se edita
  * @var ?array    $v         Lo escrito, si no se ha podido guardar
  * @var array     $cfg
- * @var string    $tipo      Tipo elegido al crear (?tipo=)
  * @var string[]  $secciones Secciones que puede convocar
  * @var string[]  $ambitos   Ámbitos que puede elegir
  * @var bool      $validado  Presupuesto validado: secciones, previstos y coste no se cambian
@@ -22,26 +21,24 @@ use AsdeBalears\AreaPrivada\Eventos\Normativa;
 defined( 'ABSPATH' ) || exit;
 
 $tipos = Formulario::tipos( $cfg, $e );
-$d     = Formulario::valores( $e, $v, $cfg, $secciones, $tipo );
-$accion = $e ? add_query_arg(
+$d     = Formulario::valores( $e, $v, $cfg, $secciones );
+$accion = add_query_arg(
 	array(
 		'evento' => $e['id'],
 		'editar' => '1',
 	),
 	$url
-) : add_query_arg( 'nuevo', '1', $url );
+);
 ?>
-<p class="asde-back"><a href="<?php echo esc_url( $volver ); ?>"><?php echo esc_html( $e ? '← ' . $e['nombre'] : __( '← Agenda', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?></a></p>
+<p class="asde-back"><a href="<?php echo esc_url( $volver ); ?>"><?php echo esc_html( '← ' . $e['nombre'] ); ?></a></p>
 
 <form method="post" class="asde-form asde-form--evento" action="<?php echo esc_url( $accion ); ?>">
-	<?php wp_nonce_field( $e ? 'asde_evento_' . $e['id'] : 'asde_evento_nuevo' ); ?>
-	<input type="hidden" name="asde_action" value="<?php echo $e ? 'evento_guardar' : 'evento_crear'; ?>">
-	<?php if ( $e ) : ?>
-		<input type="hidden" name="evento" value="<?php echo (int) $e['id']; ?>">
-	<?php endif; ?>
+	<?php wp_nonce_field( 'asde_evento_' . $e['id'] ); ?>
+	<input type="hidden" name="asde_action" value="evento_guardar">
+	<input type="hidden" name="evento" value="<?php echo (int) $e['id']; ?>">
 
 	<section class="asde-card">
-		<h2 class="asde-card__title"><?php echo esc_html( $e ? sprintf( /* translators: %s: text */ __( 'Edit %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), EventosTable::numero( $e ) ) : __( 'New event', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?></h2>
+		<h2 class="asde-card__title"><?php echo esc_html( sprintf( /* translators: %s: text */ __( 'Edit %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), EventosTable::numero( $e ) ) ); ?></h2>
 		<p class="asde-form__fila">
 			<label><?php esc_html_e( 'Activity type', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>
 				<select name="tipo" required>
@@ -196,7 +193,7 @@ $accion = $e ? add_query_arg(
 	</section>
 
 	<p>
-		<button type="submit" class="button button-primary"><?php echo esc_html( $e ? __( 'Save the changes', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : __( 'Create the event (draft)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?></button>
+		<button type="submit" class="button button-primary"><?php esc_html_e( 'Save the changes', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 		<a href="<?php echo esc_url( $volver ); ?>"><?php esc_html_e( 'Cancel', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a>
 	</p>
 </form>

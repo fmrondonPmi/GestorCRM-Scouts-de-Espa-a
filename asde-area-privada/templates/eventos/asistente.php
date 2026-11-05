@@ -42,11 +42,13 @@ $pasos  = array(
 	6 => __( 'Review', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 );
 $datos  = sprintf(
-	'data-noches="%d" data-menores="%d" data-dias="%d" data-por-monitor="%d" data-menores-secciones="%s" data-lang="%s" data-inicial="%d"',
+	'data-noches="%d" data-menores="%d" data-dias="%d" data-por-monitor="%d" data-resto-monitor="%d" data-dependencia12="%d" data-menores-secciones="%s" data-lang="%s" data-inicial="%d"',
 	Normativa::NOCHES_COMUNICACION,
 	Normativa::MENORES_COMUNICACION,
 	Normativa::DIAS_COMUNICACION,
 	Normativa::PARTICIPANTES_MONITOR,
+	Normativa::RESTO_MONITOR,
+	Normativa::DEPENDENCIA12_POR_APOYO,
 	esc_attr( implode( ',', Normativa::SECCIONES_MENORES ) ),
 	esc_attr( determine_locale() ),
 	null === $v ? 1 : count( $pasos ) // Tras un error se vuelve a enseñar el asistente en el último paso, con el aviso arriba.

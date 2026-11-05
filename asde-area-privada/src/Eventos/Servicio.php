@@ -406,15 +406,41 @@ final class Servicio {
 		return $out;
 	}
 
-	/** @return int|\WP_Error */
-	public static function anadir_equipo( array $e, Ambito $a, string $socio, string $papel ) {
+	/**
+	 * Añade a varias personas al equipo de golpe (el asistente de crear): los candidatos se leen y se ordenan una sola vez.
+	 * Si alguien sale en dos papeles, vale el primero (el director/a no se repite como monitor).
+	 *
+	 * @param array<string, string[]> $por_papel papel => nºs de socio/a.
+	 * @return \WP_Error[] Lo que no se ha podido añadir.
+	 */
+	public static function anadir_equipo_varios( array $e, Ambito $a, array $por_papel ): array {
+		$candidatos = self::candidatos();
+		$errores    = array();
+		$vistos     = array();
+		foreach ( $por_papel as $papel => $socios ) {
+			foreach ( array_diff( array_unique( array_filter( array_map( 'sanitize_text_field', array_map( 'strval', $socios ) ) ) ), $vistos ) as $socio ) {
+				$vistos[] = $socio;
+				$r        = self::anadir_equipo( $e, $a, $socio, (string) $papel, $candidatos );
+				if ( is_wp_error( $r ) ) {
+					$errores[] = $r;
+				}
+			}
+		}
+		return $errores;
+	}
+
+	/**
+	 * @param ?array $candidatos Los de self::candidatos() si ya se tienen (varias altas seguidas).
+	 * @return int|\WP_Error
+	 */
+	public static function anadir_equipo( array $e, Ambito $a, string $socio, string $papel, ?array $candidatos = null ) {
 		if ( ! self::puede_editar( $e, $a ) ) {
 			return new \WP_Error( 'asde_evento', __( 'You cannot change this event\'s team.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( ! isset( InscripcionesTable::papeles()[ $papel ] ) ) {
 			return new \WP_Error( 'asde_evento', __( 'Choose what they do in the team.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
-		$p = self::candidatos()[ $socio ] ?? null;
+		$p = ( $candidatos ?? self::candidatos() )[ $socio ] ?? null;
 		if ( ! $p ) {
 			return new \WP_Error( 'asde_evento', __( 'Choose a scouter or volunteer of the group.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
