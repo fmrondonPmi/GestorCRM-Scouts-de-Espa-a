@@ -394,6 +394,9 @@ final class Router {
 		if ( 'eventos' === $key ) {
 			wp_enqueue_script( 'asde-eventos', plugins_url( 'assets/js/eventos.js', ASDE_AP_FILE ), array(), ASDE_AP_VERSION, true ); // v0.52: la ventana de publicar.
 		}
+		if ( 'eventos' === $key && isset( $_GET['nuevo'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification -- solo decide qué script se carga.
+			wp_enqueue_script( 'asde-asistente', plugins_url( 'assets/js/asistente.js', ASDE_AP_FILE ), array(), ASDE_AP_VERSION, true ); // v0.64: el asistente de «Nuevo evento».
+		}
 		if ( in_array( $key, array( 'eventos', 'eventos_recetas' ), true ) ) {
 			wp_enqueue_script( 'asde-ingrediente-nuevo', plugins_url( 'assets/js/ingrediente-nuevo.js', ASDE_AP_FILE ), array(), ASDE_AP_VERSION, true ); // v0.60.2: «Nuevo ingrediente» dentro de una receta.
 		}

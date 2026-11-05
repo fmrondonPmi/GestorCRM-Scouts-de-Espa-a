@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.63.0
+Stable tag: 0.64.0
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -61,6 +61,9 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.64.0 =
+* Events: "New event" is now a six-step assistant (what, when and where, how many, money and rules, sign-up, review). It asks yes/no questions, only shows the fields that are needed, lists what you will have to do (budget, report to ASDE Baleares with its deadline, insurance, lifeguard), lets you pick the director and monitors, and can copy a previous event with the dates moved one year on. Nothing is saved until the last step. Editing an event keeps the usual form. No database changes.
 
 = 0.63.0 =
 * New module "My section" (off by default; switch it on in Scout Groups → Modules): scouters follow the personal progression of the people in their section (stage and aspects from the Scouts of Spain Educational Programme, personal goal, encrypted notes and review history). Coordination can read it. New table, capabilities and page.
@@ -177,6 +180,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * The changelog of versions 0.42.0 and earlier is in changelog.txt, in the plugin folder.
 
 == Upgrade Notice ==
+
+= 0.64.0 =
+Step-by-step assistant to create events, with a "copy a previous event" option. No database changes.
 
 = 0.63.0 =
 New "My section" module (off by default): progression tracking for scouters. Adds one database table (created on update).

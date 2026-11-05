@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mock-up · Asistente para crear un evento</title>
+<style>
+	:root { --morado:#65269a; --morado-claro:#f1e9f8; --verde:#8ab51f; --texto:#2b2b2b; --gris:#6b6b6b; --borde:#ddd; --aviso:#fff4d6; --ok:#e6f4e0; --fondo:#fff; }
+	@media (prefers-color-scheme: dark) { :root { --texto:#eee; --gris:#aaa; --borde:#444; --fondo:#1b1b1f; --morado-claro:#2b2033; --aviso:#3a321a; --ok:#1f3320; --morado:#b58ae0; } }
+	* { box-sizing:border-box; }
+	body { margin:0; font:16px/1.5 system-ui, sans-serif; color:var(--texto); background:var(--fondo); }
+	main { max-width:760px; margin:0 auto; padding:16px; }
+	h1 { font-size:1.4rem; margin:.2rem 0 1rem; color:var(--morado); }
+	h2 { font-size:1.15rem; margin:.2rem 0 .2rem; }
+	.nota { background:var(--morado-claro); border-radius:8px; padding:8px 12px; font-size:.85rem; margin-bottom:14px; }
+	.pasos { display:flex; gap:6px; list-style:none; padding:0; margin:0 0 16px; counter-reset:p; }
+	.pasos li { flex:1; text-align:center; font-size:.78rem; color:var(--gris); border-top:4px solid var(--borde); padding-top:4px; }
+	.pasos li.hecho { border-color:var(--verde); color:var(--texto); }
+	.pasos li.actual { border-color:var(--morado); color:var(--morado); font-weight:700; }
+	@media (max-width:520px) { .pasos li span { display:none; } }
+	.paso { display:none; } .paso.activo { display:block; }
+	.ayuda { color:var(--gris); font-size:.9rem; margin:0 0 12px; }
+	label { display:block; font-weight:600; margin:10px 0 2px; }
+	input, select, textarea { width:100%; padding:9px; font:inherit; border:1px solid var(--borde); border-radius:6px; background:var(--fondo); color:var(--texto); }
+	.fila { display:flex; gap:10px; flex-wrap:wrap; } .fila > * { flex:1 1 140px; }
+	.tarjetas { display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:8px; }
+	.tarjeta { border:2px solid var(--borde); border-radius:10px; padding:10px; cursor:pointer; }
+	.tarjeta.sel { border-color:var(--morado); background:var(--morado-claro); }
+	.tarjeta b { display:block; } .tarjeta small { color:var(--gris); }
+	.chips { display:flex; gap:8px; flex-wrap:wrap; }
+	.chip { border:2px solid var(--borde); border-radius:20px; padding:6px 14px; cursor:pointer; font-weight:600; }
+	.chip.sel { border-color:var(--morado); background:var(--morado); color:#fff; }
+	table { width:100%; border-collapse:collapse; margin:8px 0; } th, td { text-align:left; padding:6px; border-bottom:1px solid var(--borde); } td input { width:90px; }
+	.panel { border-radius:10px; padding:10px 14px; margin:14px 0; } .panel.aviso { background:var(--aviso); } .panel.ok { background:var(--ok); }
+	.panel ul { margin:.3rem 0 0; padding-left:1.2rem; }
+	.si-no { display:flex; justify-content:space-between; align-items:center; gap:10px; border-bottom:1px solid var(--borde); padding:8px 0; }
+	.si-no span { font-weight:600; } .si-no small { display:block; color:var(--gris); font-weight:400; }
+	.si-no .chips { flex:none; } .si-no .chip { padding:3px 12px; }
+	.sub { display:none; margin:4px 0 8px 12px; } .sub.ver { display:block; }
+	.acciones { display:flex; justify-content:space-between; margin-top:20px; gap:10px; }
+	button { font:inherit; padding:10px 18px; border-radius:6px; border:1px solid var(--morado); background:var(--fondo); color:var(--morado); cursor:pointer; }
+	button.principal { background:var(--morado); color:#fff; }
+	.resumen dt { color:var(--gris); font-size:.85rem; margin-top:8px; } .resumen dd { margin:0; font-weight:600; }
+	.resumen a { font-weight:400; font-size:.85rem; margin-left:8px; }
+</style>
+</head>
+<body>
+<main>
+	<h1>Nuevo evento</h1>
+	<p class="nota"><b>Mock-up (no es la web real).</b> Los datos son inventados. Prueba a cambiar el tipo, las secciones, las fechas y las respuestas del paso 4 para ver cómo se adapta el asistente.</p>
+
+	<ol class="pasos" id="pasos"></ol>
+
+	<!-- 1 -->
+	<section class="paso activo" data-paso="1">
+		<h2>¿Qué vais a hacer?</h2>
+		<p class="ayuda">Elige el tipo: te propondremos el resto de pasos.</p>
+		<div class="tarjetas" data-grupo="tipo">
+			<div class="tarjeta" data-v="salida"><b>Salida de día</b><small>Sin pernocta</small></div>
+			<div class="tarjeta sel" data-v="acampada"><b>Acampada</b><small>1 a 3 noches</small></div>
+			<div class="tarjeta" data-v="campamento"><b>Campamento</b><small>4 noches o más</small></div>
+			<div class="tarjeta" data-v="otro"><b>Otro</b><small>Actividad externa, de grupo…</small></div>
+		</div>
+		<label for="nombre">Nombre</label>
+		<input id="nombre" value="Acampada de otoño" placeholder="Ej.: Campamento de verano">
+		<label>¿Quién va? <small style="font-weight:400">(secciones convocadas)</small></label>
+		<div class="chips" data-grupo="secciones" data-multi>
+			<span class="chip" data-v="Castores">Castores</span><span class="chip sel" data-v="Lobatos">Lobatos</span><span class="chip sel" data-v="Scouts">Scouts</span><span class="chip" data-v="Escultas">Escultas</span><span class="chip" data-v="Rovers">Rovers</span>
+		</div>
+		<p class="ayuda" style="margin-top:6px">Como scouter, solo ves tus secciones. Coordinación puede elegir «todo el grupo».</p>
+		<p class="ayuda">¿Se parece a uno anterior? <a href="#">Copiar de «Campamento de verano 2026»</a> (fechas desplazadas un año, sin inscritos ni pagos).</p>
+	</section>
+
+	<!-- 2 -->
+	<section class="paso" data-paso="2">
+		<h2>¿Cuándo y dónde?</h2>
+		<div class="fila"><div><label for="ini">Empieza</label><input id="ini" type="date" value="2026-11-20"></div><div><label for="ih">Hora</label><input id="ih" type="time" value="18:00"></div><div><label for="fin">Termina</label><input id="fin" type="date" value="2026-11-22"></div><div><label for="fh">Hora</label><input id="fh" type="time" value="13:00"></div></div>
+		<p class="ayuda" id="duracion"></p>
+		<label for="lugar">Lugar</label><input id="lugar" value="Casa de colonias Es Pinaret">
+		<label for="mapa">Enlace del mapa <small style="font-weight:400">(opcional)</small></label><input id="mapa" placeholder="https://">
+		<div class="fila"><div><label for="salida">Salida (lugar y hora)</label><input id="salida" value="Local, 18:00"></div><div><label for="llegada">Vuelta (lugar y hora)</label><input id="llegada" value="Local, 13:30"></div></div>
+	</section>
+
+	<!-- 3 -->
+	<section class="paso" data-paso="3">
+		<h2>¿Cuántos sois?</h2>
+		<p class="ayuda">Con estas cifras se calcula el precio y cuántos monitores necesitáis. Si luego se apuntan más, no pasa nada: el precio ya no cambia.</p>
+		<table>
+			<thead><tr><th>Sección</th><th>Previstos</th><th>Plazas máx.</th></tr></thead>
+			<tbody id="tabla-plazas"></tbody>
+		</table>
+		<div class="fila"><div><label>Edad mínima <small style="font-weight:400">(opcional)</small></label><input type="number" min="0"></div><div><label>Edad máxima <small style="font-weight:400">(opcional)</small></label><input type="number" min="0"></div></div>
+		<label>Equipo del evento <small style="font-weight:400">(se puede completar después)</small></label>
+		<div class="fila"><select><option>Director/a…</option><option>Sol Scouter</option><option>Cora Coordinación</option></select><select><option>Monitores…</option><option>Teo Tesorería</option><option>Ines Intendencia</option></select></div>
+		<div class="panel" id="ratio"></div>
+	</section>
+
+	<!-- 4 -->
+	<section class="paso" data-paso="4">
+		<h2>Dinero y normativa</h2>
+		<p class="ayuda">Responde sí o no. Solo te pediremos datos cuando haga falta.</p>
+		<div class="si-no"><span>¿Las familias pagan?<small>El precio sale del presupuesto y lo valida Tesorería antes de publicar.</small></span><div class="chips" data-si="coste"><span class="chip sel" data-v="1">Sí</span><span class="chip" data-v="0">No</span></div></div>
+		<div class="si-no"><span>¿Es fuera de España?<small>Necesita un seguro aparte.</small></span><div class="chips" data-si="inter"><span class="chip" data-v="1">Sí</span><span class="chip sel" data-v="0">No</span></div></div>
+		<div class="sub" id="sub-inter"><div class="fila"><input placeholder="Compañía de seguros"><input placeholder="Nº de póliza"></div></div>
+		<div class="si-no"><span>¿Hay piscina o mar?</span><div class="chips" data-si="agua"><span class="chip" data-v="1">Sí</span><span class="chip sel" data-v="0">No</span></div></div>
+		<div class="sub" id="sub-agua"><label style="font-weight:400"><input type="checkbox" style="width:auto"> Habrá socorrista</label></div>
+		<div class="si-no"><span>¿Actividades de riesgo especializado?<small>Alta montaña, barrancos, escalada, buceo, vela.</small></span><div class="chips" data-si="riesgo"><span class="chip" data-v="1">Sí</span><span class="chip sel" data-v="0">No</span></div></div>
+		<div class="sub" id="sub-riesgo"><label style="font-weight:400"><input type="checkbox" style="width:auto"> Con personal titulado en esa actividad</label></div>
+		<div class="si-no"><span>¿Hay participantes con dependencia reconocida?<small>Solo cuántos, sin nombres.</small></span><div class="chips" data-si="dep"><span class="chip" data-v="1">Sí</span><span class="chip sel" data-v="0">No</span></div></div>
+		<div class="sub" id="sub-dep"><div class="fila"><input type="number" min="0" placeholder="Grado I o II"><input type="number" min="0" placeholder="Grado III"></div></div>
+		<div class="panel aviso" id="tendras"></div>
+	</section>
+
+	<!-- 5 -->
+	<section class="paso" data-paso="5">
+		<h2>Inscripción y mensaje a las familias</h2>
+		<label>¿Cómo se apuntan?</label>
+		<div class="tarjetas" data-grupo="modalidad">
+			<div class="tarjeta sel" data-v="abierta"><b>Abierta</b><small>Las familias se apuntan si quieren</small></div>
+			<div class="tarjeta" data-v="convocatoria"><b>Convocatoria</b><small>Se convoca a todos y responden sí o no</small></div>
+		</div>
+		<div class="fila"><div><label>Se abre el <small style="font-weight:400">(opcional)</small></label><input type="date"></div><div><label>Se cierra el <small style="font-weight:400">(opcional)</small></label><input type="date"></div></div>
+		<p class="ayuda">Sin fechas: abre al publicar y cierra cuando empieza el evento.</p>
+		<label>Texto para las familias</label><textarea rows="4" placeholder="Qué haremos, cómo se llega, qué hay que saber…"></textarea>
+		<label>Material personal <small style="font-weight:400">(lo que trae cada participante)</small></label><textarea rows="3" placeholder="Saco, esterilla, linterna, uniforme…"></textarea>
+	</section>
+
+	<!-- 6 -->
+	<section class="paso" data-paso="6">
+		<h2>Revisa y crea el borrador</h2>
+		<p class="ayuda">Todavía no se publica nada: se crea un <b>borrador</b>. Puedes cambiar cualquier cosa desde su ficha.</p>
+		<dl class="resumen" id="resumen"></dl>
+		<div class="panel ok"><b>Después de crearlo te llevo a su ficha con la lista de lo que falta:</b>
+			<ul><li>Presupuesto (si las familias pagan) y validación de Tesorería</li><li>Equipo dirigente completo</li><li>Menú y lista de la compra</li><li>Calendario de tareas con las fechas ya calculadas</li><li>Aviso a ASDE Baleares, si te toca</li></ul></div>
+	</section>
+
+	<div class="acciones"><button id="atras" type="button">← Atrás</button><button id="adelante" class="principal" type="button">Siguiente →</button></div>
+</main>
+<script>
+const NOMBRES = ['Qué', 'Cuándo y dónde', 'Cuántos', 'Dinero y normativa', 'Inscripción', 'Revisar'];
+let paso = 1;
+const $ = (s, r = document) => r.querySelector(s), $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const sel = (g) => $$('[data-grupo="' + g + '"] .sel').map(e => e.dataset.v);
+function pintarPasos() {
+	$('#pasos').innerHTML = NOMBRES.map((n, i) => '<li class="' + (i + 1 < paso ? 'hecho' : i + 1 === paso ? 'actual' : '') + '"><b>' + (i + 1) + '</b> <span>' + n + '</span></li>').join('');
+	$$('.paso').forEach(p => p.classList.toggle('activo', +p.dataset.paso === paso));
+	$('#atras').style.visibility = paso === 1 ? 'hidden' : 'visible';
+	$('#adelante').textContent = paso === 6 ? 'Crear el borrador' : 'Siguiente →';
+	if (paso === 3) plazas(); if (paso === 4) tendras(); if (paso === 6) resumen();
+}
+function dias() { const a = new Date($('#ini').value), b = new Date($('#fin').value); return Math.round((b - a) / 864e5); }
+function duracion() { const n = dias(); $('#duracion').textContent = isNaN(n) || n < 0 ? '' : n === 0 ? 'Actividad de un día, sin pernocta.' : n + (n === 1 ? ' noche' : ' noches') + ' fuera.'; }
+function plazas() {
+	const act = sel('secciones'), ya = {}; $$('#tabla-plazas tr').forEach(t => ya[t.dataset.s] = [t.children[1].firstChild.value, t.children[2].firstChild.value]);
+	$('#tabla-plazas').innerHTML = act.map(s => '<tr data-s="' + s + '"><td>' + s + '</td><td><input type="number" min="0" value="' + (ya[s] ? ya[s][0] : 12) + '"></td><td><input type="number" min="0" value="' + (ya[s] ? ya[s][1] : 0) + '"></td></tr>').join('');
+	$('#tabla-plazas').oninput = ratio; ratio();
+}
+function total() { return $$('#tabla-plazas tr').reduce((t, r) => t + (+r.children[1].firstChild.value || 0), 0); }
+function ratio() { const t = total(), m = Math.max(2, Math.ceil(t / 10)); $('#ratio').className = 'panel ok'; $('#ratio').innerHTML = '<b>' + t + ' participantes previstos</b> → necesitáis al menos <b>' + m + ' monitores</b> (1 por cada 10).'; }
+function tendras() {
+	const n = dias(), t = total(), l = [];
+	if ($('[data-si=coste] .sel').dataset.v === '1') l.push('Hacer el <b>presupuesto</b> y pedir a Tesorería que lo valide (sin eso no se puede publicar).');
+	if (n >= 2 && t >= 10) l.push('<b>Avisar a ASDE Baleares</b> con 30 días de antelación: ' + n + ' noches y ' + t + ' menores previstos. Como tarde, el <b>' + new Date(new Date($('#ini').value) - 30 * 864e5).toLocaleDateString('es') + '</b>.');
+	if ($('[data-si=inter] .sel').dataset.v === '1') l.push('Contratar un <b>seguro aparte</b> (actividad internacional).');
+	if ($('[data-si=agua] .sel').dataset.v === '1') l.push('Prever <b>socorrista</b> o actividad en agua con las medidas de seguridad.');
+	if ($('[data-si=riesgo] .sel').dataset.v === '1') l.push('Asegurar <b>personal titulado</b> para la actividad de riesgo.');
+	if ($('[data-si=dep] .sel').dataset.v === '1') l.push('Más <b>monitores de apoyo</b> por la dependencia.');
+	$('#tendras').innerHTML = l.length ? '<b>Con lo que has dicho, tendrás que:</b><ul><li>' + l.join('</li><li>') + '</li></ul>' : 'Con lo que has dicho no hay trámites especiales.';
+}
+function resumen() {
+	const f = [['Evento', sel('tipo')[0] + ' · ' + $('#nombre').value, 1], ['Secciones', sel('secciones').join(', '), 1], ['Fechas', $('#ini').value + ' ' + $('#ih').value + ' → ' + $('#fin').value + ' ' + $('#fh').value, 2], ['Lugar', $('#lugar').value, 2], ['Participantes previstos', total(), 3], ['Las familias pagan', $('[data-si=coste] .sel').dataset.v === '1' ? 'Sí' : 'No', 4], ['Inscripción', sel('modalidad')[0], 5]];
+	$('#resumen').innerHTML = f.map(x => '<dt>' + x[0] + '</dt><dd>' + x[1] + ' <a href="#" data-ir="' + x[2] + '">Cambiar</a></dd>').join('');
+	$$('[data-ir]').forEach(a => a.onclick = e => { e.preventDefault(); paso = +a.dataset.ir; pintarPasos(); });
+}
+document.addEventListener('click', e => {
+	const t = e.target.closest('.tarjeta, .chip'); if (!t) return;
+	const g = t.parentElement; if (g.hasAttribute('data-multi')) t.classList.toggle('sel'); else { $$('.sel', g).forEach(x => x.classList.remove('sel')); t.classList.add('sel'); }
+	if (g.dataset.si) $('#sub-' + g.dataset.si)?.classList.toggle('ver', t.dataset.v === '1');
+	if (g.dataset.grupo === 'tipo') { const v = t.dataset.v, f = { salida: ['2026-11-21', '2026-11-21'], acampada: ['2026-11-20', '2026-11-22'], campamento: ['2027-07-16', '2027-07-26'], otro: ['2026-11-20', '2026-11-20'] }[v]; $('#ini').value = f[0]; $('#fin').value = f[1]; duracion(); }
+	if (g.dataset.si === 'coste') tendras();
+});
+['#ini', '#fin'].forEach(s => $(s).addEventListener('input', duracion));
+$('#atras').onclick = () => { paso = Math.max(1, paso - 1); pintarPasos(); };
+$('#adelante').onclick = () => { if (paso === 6) { alert('En la web real: se crea el borrador y te lleva a su ficha.'); return; } paso++; pintarPasos(); window.scrollTo(0, 0); };
+duracion(); pintarPasos();
+</script>
+</body>
+</html>

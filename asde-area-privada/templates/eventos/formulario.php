@@ -16,65 +16,13 @@
 use AsdeBalears\AreaPrivada\Domain\Secciones;
 use AsdeBalears\AreaPrivada\Eventos\Config;
 use AsdeBalears\AreaPrivada\Eventos\EventosTable;
+use AsdeBalears\AreaPrivada\Eventos\Formulario;
 use AsdeBalears\AreaPrivada\Eventos\Normativa;
 
 defined( 'ABSPATH' ) || exit;
 
-$tipos = Config::tipos_activos( $cfg );
-if ( $e && ! isset( $tipos[ $e['tipo'] ] ) && isset( $cfg['tipos'][ $e['tipo'] ] ) ) {
-	$tipos[ $e['tipo'] ] = $cfg['tipos'][ $e['tipo'] ];
-}
-$tipo_inicial = $e ? $e['tipo'] : ( isset( $tipos[ $tipo ] ) ? $tipo : (string) array_key_first( $tipos ) );
-
-// Valores: lo escrito (si hubo un error), los del evento o los del tipo.
-$d = array(
-	'tipo'            => $tipo_inicial,
-	'nombre'          => $e['nombre'] ?? '',
-	'ambito'          => $e['ambito'] ?? 'secciones',
-	'secciones'       => $e['secciones'] ?? ( 1 === count( $secciones ) ? $secciones : array() ),
-	'inicio_fecha'    => $e ? substr( $e['inicio'], 0, 10 ) : '',
-	'inicio_hora'     => $e ? substr( $e['inicio'], 11, 5 ) : '10:00',
-	'fin_fecha'       => $e ? substr( $e['fin'], 0, 10 ) : '',
-	'fin_hora'        => $e ? substr( $e['fin'], 11, 5 ) : '18:00',
-	'lugar'           => $e['lugar'] ?? '',
-	'mapa'            => $e['mapa'] ?? '',
-	'salida'          => $e['salida'] ?? '',
-	'llegada'         => $e['llegada'] ?? '',
-	'descripcion'     => $e['descripcion'] ?? '',
-	'material'        => $e['material'] ?? '',
-	'plazas_max'      => $e && $e['plazas_max'] ? (string) $e['plazas_max'] : '',
-	'edad_min'        => null !== ( $e['edad_min'] ?? null ) ? (string) $e['edad_min'] : '',
-	'edad_max'        => null !== ( $e['edad_max'] ?? null ) ? (string) $e['edad_max'] : '',
-	'con_coste'       => $e ? $e['con_coste'] : ! empty( $tipos[ $tipo_inicial ]['coste'] ),
-	'comunicacion'    => $e ? $e['normativa']['comunicacion'] : ( $tipos[ $tipo_inicial ]['comunicacion'] ?? 'auto' ),
-	'internacional'   => $e['normativa']['internacional'] ?? false,
-	'seguro_compania' => $e['normativa']['seguro_compania'] ?? '',
-	'seguro_poliza'   => $e['normativa']['seguro_poliza'] ?? '',
-	'riesgo'          => $e['normativa']['riesgo'] ?? false,
-	'riesgo_titulado' => $e['normativa']['riesgo_titulado'] ?? false,
-	'agua'            => $e['normativa']['agua'] ?? false,
-	'socorrista'      => $e['normativa']['socorrista'] ?? false,
-	'dependencia12'   => (string) ( $e['normativa']['dependencia12'] ?? 0 ),
-	'dependencia3'    => (string) ( $e['normativa']['dependencia3'] ?? 0 ),
-	'modalidad'       => $e['modalidad'] ?? 'abierta',
-	'inscripcion_desde' => (string) ( $e['inscripcion_desde'] ?? '' ),
-	'inscripcion_hasta' => (string) ( $e['inscripcion_hasta'] ?? '' ),
-);
-foreach ( $secciones as $s ) {
-	$d[ 'previstas_' . $s ] = (string) ( $e['plazas'][ $s ]['previstas'] ?? 0 );
-	$d[ 'maximas_' . $s ]   = (string) ( $e['plazas'][ $s ]['maximas'] ?? 0 );
-}
-if ( null !== $v ) {
-	foreach ( array( 'internacional', 'riesgo', 'riesgo_titulado', 'agua', 'socorrista', 'con_coste' ) as $casilla ) {
-		$d[ $casilla ] = ! empty( $v[ $casilla ] );
-	}
-	$d['secciones'] = array_map( 'strval', (array) ( $v['secciones'] ?? array() ) );
-	foreach ( $d as $k => $valor ) {
-		if ( is_string( $valor ) && isset( $v[ $k ] ) && is_scalar( $v[ $k ] ) ) {
-			$d[ $k ] = (string) $v[ $k ];
-		}
-	}
-}
+$tipos = Formulario::tipos( $cfg, $e );
+$d     = Formulario::valores( $e, $v, $cfg, $secciones, $tipo );
 $accion = $e ? add_query_arg(
 	array(
 		'evento' => $e['id'],

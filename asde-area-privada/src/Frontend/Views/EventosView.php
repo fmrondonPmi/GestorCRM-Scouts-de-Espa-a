@@ -71,7 +71,7 @@ final class EventosView extends EventosBaseView {
 			if ( ! Servicio::puede_crear( $a ) ) {
 				return $this->denegado( __( 'You cannot create events.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			}
-			return $this->layout( 'eventos', $this->formulario( null, $a, $cfg ) );
+			return $this->layout( 'eventos', $this->asistente( $a, $cfg ) );
 		}
 
 		$id = (int) $this->get( 'evento' );
@@ -121,6 +121,28 @@ final class EventosView extends EventosBaseView {
 				'global'     => Servicio::vision_global( $a ),
 				'por_validar' => Servicio::pendientes( $a )['validar'],
 				'puede_crear' => Servicio::puede_crear( $a ),
+				'url'        => $this->url( 'eventos' ),
+			)
+		);
+	}
+
+	/** Asistente para crear un evento por pasos (doc 66); `?copiar=<id>` parte de un evento anterior con las fechas un año después. */
+	private function asistente( Ambito $a, array $cfg ): string {
+		$copia  = EventosTable::obtener( (int) $this->get( 'copiar' ) );
+		$copia  = $copia && Servicio::ve( $copia, $a ) ? $copia : null;
+		$todos  = Servicio::de_agenda( $a );
+		usort( $todos, static fn( array $x, array $y ) => strcmp( $y['inicio'], $x['inicio'] ) );
+		return $this->tpl(
+			'eventos/asistente',
+			array(
+				'copia'      => $copia,
+				'v'          => null !== self::$valores && ! self::$valores['evento'] ? self::$valores['datos'] : null,
+				'cfg'        => $cfg,
+				'tipo'       => sanitize_key( $this->get( 'tipo' ) ),
+				'secciones'  => Servicio::secciones_para( $a ),
+				'ambitos'    => Servicio::ambitos_para( $a ),
+				'candidatos' => Servicio::candidatos(),
+				'anteriores' => array_slice( $todos, 0, 6 ),
 				'url'        => $this->url( 'eventos' ),
 			)
 		);
@@ -452,7 +474,21 @@ final class EventosView extends EventosBaseView {
 				$this->errores( $id, $in );
 				return;
 			}
-			Notices::add( 'success', esc_html( sprintf( /* translators: %s: text */ __( 'Event %s created as a draft. Add the team and, if it has a cost, the budget.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), EventosTable::numero( EventosTable::obtener( $id ) ?? array( 'grupo' => '', 'id' => $id ) ) ) ) );
+			$nuevo = EventosTable::obtener( $id ) ?? array( 'grupo' => '', 'id' => $id );
+			// Del asistente (paso «Cuántos»): el director/a y los monitores elegidos entran en el equipo.
+			$equipo = array(
+					'director' => array( (string) ( $in['director'] ?? '' ) ),
+					'monitor'  => array_map( 'strval', (array) ( $in['monitor'] ?? array() ) ),
+				);
+			foreach ( $equipo as $papel => $socios ) {
+				foreach ( array_unique( array_filter( $socios ) ) as $socio ) {
+					$r = Servicio::anadir_equipo( $nuevo, $a, sanitize_text_field( $socio ), $papel );
+					if ( is_wp_error( $r ) ) {
+						Notices::add( 'warning', esc_html( $r->get_error_message() ) );
+					}
+				}
+			}
+			Notices::add( 'success', esc_html( sprintf( /* translators: %s: text */ __( 'Event %s created as a draft. Check what is left to do: the team, the budget if it has a cost, the menu and the calendar.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), EventosTable::numero( $nuevo ) ) ) );
 			$this->redirect( $this->url( 'eventos', array( 'evento' => (string) $id ) ) );
 		}
 

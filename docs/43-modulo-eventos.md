@@ -4,6 +4,8 @@
 
 > **De dónde viene (2026-10-15):** este módulo se hizo en una **sesión de Claude Code en la nube** sobre el `main` de GitHub, que estaba en la v0.18 (allí fueron la v0.19.0 y la v0.19.1, este documento era el 32 y sus preguntas, P-61…P-76). A petición del usuario se integró en la línea de la v0.34 como **v0.35.0** (rama `Eventos`): doc 43, preguntas **P-139…P-154**, módulo **«Eventos» apagado por defecto** en wp-admin → Módulos (como los demás desde la v0.32) y adaptado a lo que cambió desde la v0.18 (ver «Integración en la v0.35»). El **inventario** que este plan proponía como fase propia **ya existe** en esta línea (doc 32, desde la v0.19): el material de un evento se hará sobre él.
 
+> **v0.64.0 (2026-11-05):** «Nuevo evento» pasó a ser un asistente de seis pasos; ver el doc 66. Editar un evento sigue con el formulario de este documento.
+
 ## Petición del usuario (2026-10-15)
 
 > «Iniciamos con el módulo de eventos. Primero define: tipos de eventos a realizar, secciones que pueden participar, gestión económica del evento, gestión de inscripción de participación, inventario asociado a un evento. Planifica primero.»
