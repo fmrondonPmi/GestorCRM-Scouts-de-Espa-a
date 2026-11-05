@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.64.0
+Stable tag: 0.64.1
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -61,6 +61,9 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.64.1 =
+* Memberships: the registration and withdrawal dates are compared by day only. If the CRM sends a date with a time, a registration dated today now counts as active and a withdrawal dated today ends the membership (before, the text with a time compared as later than today). No database changes.
 
 = 0.64.0 =
 * Events: "New event" is now a six-step assistant (what, when and where, how many, money and rules, sign-up, review). It asks yes/no questions, only shows the fields that are needed, lists what you will have to do (budget, report to ASDE Baleares with its deadline, insurance, lifeguard), lets you pick the director and monitors, and can copy a previous event with the dates moved one year on. Nothing is saved until the last step. Editing an event keeps the usual form. No database changes.
@@ -180,6 +183,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * The changelog of versions 0.42.0 and earlier is in changelog.txt, in the plugin folder.
 
 == Upgrade Notice ==
+
+= 0.64.1 =
+Fixes how registration and withdrawal dates dated today are validated. No database changes.
 
 = 0.64.0 =
 Step-by-step assistant to create events, with a "copy a previous event" option. No database changes.

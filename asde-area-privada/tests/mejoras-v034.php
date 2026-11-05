@@ -56,6 +56,11 @@ $ok( '' === Altas::socio_desde( array( $m( '2015-09-01', '2017-06-30' ) ), $hoy 
 // Fallo visto por el usuario: activa o no, como el CRM (por las fechas, no por el estado).
 $ok( Altas::activa( $m( '2024-09-01', '', 'baja' ), $hoy ) && Altas::activa( $m( '2024-09-01', '2026-12-31', 'baja' ), $hoy ) && ! Altas::activa( $m( '2024-09-01', $hoy ), $hoy ) && ! Altas::activa( $m( '2024-09-01', '2026-10-01', 'activo' ), $hoy ), 'una membresía está activa por sus fechas, como en el CRM: en «baja» sin fecha (o con fecha futura) sigue activa; con la baja de hoy, no' );
 $ok( '2024-09-01' === Altas::socio_desde( array( $m( '2024-09-01', '', 'baja' ) ), $hoy ), 'y «Socio/a desde» la cuenta igual' );
+// El día de hoy cuenta aunque el CRM mande la fecha con hora: solo importa el día (el texto con hora sería «posterior» a hoy).
+$h = ' 00:00:00';
+$ok( Altas::activa( $m( $hoy . $h ), $hoy ) && Altas::activa( $m( '2024-09-01' . $h, $hoy . $h ), '2024-10-01' ), 'un alta de hoy cuenta como activa aunque la fecha traiga hora' );
+$ok( ! Altas::activa( $m( '2024-09-01' . $h, $hoy . $h ), $hoy ) && Altas::activa( $m( '2024-09-01' . $h, '2026-10-16' . $h ), $hoy ) && ! Altas::activa( $m( '2026-10-16' . $h ), $hoy ), 'una baja de hoy la termina aunque la fecha traiga hora; la de mañana no, y un alta de mañana tampoco empieza hoy' );
+$ok( $hoy === Altas::socio_desde( array( $m( $hoy . $h ) ), $hoy ) && '2018-09-12' === Altas::socio_desde( array( $m( '2021-09-15' . $h ), $m( '2018-09-12' . $h, '2021-09-15' . $h ) ), $hoy ), '«Socio/a desde» también con fechas con hora' );
 
 // ---------------------------------------------------------------------------
 // Preparación: grupo, CRM simulado y cuentas.

@@ -317,7 +317,7 @@ final class Altas {
 		if ( ! $activas ) {
 			return new \WP_Error( 'asde_baja', __( 'Has no active membership.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
-		$alta = max( array_map( static fn( $m ) => (string) $m['start_date'], $activas ) );
+		$alta = max( array_map( static fn( $m ) => self::dia( $m['start_date'] ?? '' ), $activas ) );
 		if ( $fin < $alta ) {
 			/* translators: %s: registration date */
 			return new \WP_Error( 'asde_baja', sprintf( /* translators: %s: text */ __( 'The withdrawal date cannot be earlier than the registration date (%s).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), self::dma( $alta ) ) );
@@ -388,10 +388,10 @@ final class Altas {
 					/* translators: 1: current section, 2: the next one by age */
 					return new \WP_Error( 'asde_cambio', sprintf( /* translators: 1: text, 2: text */ __( 'From %1$s you can only move to %2$s, the next one by age (only scouters can change to any section).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Secciones::nombre( $actual ), implode( ', ', array_map( array( Secciones::class, 'nombre' ), Secciones::destinos_cambio( $actual ) ) ) ) );
 				}
-				if ( $fecha < (string) $activas[0]['start_date'] ) {
+				if ( $fecha < self::dia( $activas[0]['start_date'] ?? '' ) ) {
 					Operaciones::descartar( $op['id'] );
 					/* translators: %s: registration date */
-					return new \WP_Error( 'asde_cambio', sprintf( /* translators: %s: text */ __( 'The date of the change cannot be earlier than the registration date in the current section (%s).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), self::dma( (string) $activas[0]['start_date'] ) ) );
+					return new \WP_Error( 'asde_cambio', sprintf( /* translators: %s: text */ __( 'The date of the change cannot be earlier than the registration date in the current section (%s).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), self::dma( self::dia( $activas[0]['start_date'] ?? '' ) ) ) );
 				}
 				$r = Escritura::actualizar_membresia( $p, $activas[0]['id'], self::cierre( $fecha, 'cambioseccion' ), 'cambio de sección' );
 				if ( is_wp_error( $r ) ) {
@@ -512,8 +512,8 @@ final class Altas {
 	 * tenía ninguna activa. Ahora la baja de la web la encuentra y le pone la fecha.
 	 */
 	public static function activa( array $m, string $hoy ): bool {
-		$inicio = (string) ( $m['start_date'] ?? '' );
-		$fin    = (string) ( $m['end_date'] ?? '' );
+		$inicio = self::dia( $m['start_date'] ?? '' );
+		$fin    = self::dia( $m['end_date'] ?? '' );
 		return ( '' === $inicio || $inicio <= $hoy ) && ( '' === $fin || $fin > $hoy );
 	}
 
@@ -527,17 +527,18 @@ final class Altas {
 	 * @param string                      $hoy        Y-m-d
 	 */
 	public static function socio_desde( array $membresias, string $hoy ): string {
-		$activas = array_filter( $membresias, static fn( $m ) => '' !== (string) $m['start_date'] && self::activa( $m, $hoy ) );
+		$activas = array_filter( $membresias, static fn( $m ) => '' !== self::dia( $m['start_date'] ?? '' ) && self::activa( $m, $hoy ) );
 		if ( ! $activas ) {
 			return '';
 		}
-		$desde = min( array_map( 'strval', array_column( $activas, 'start_date' ) ) );
+		$desde = min( array_map( array( self::class, 'dia' ), array_column( $activas, 'start_date' ) ) );
 		do {
 			$antes  = $desde;
 			$enlaza = gmdate( 'Y-m-d', (int) strtotime( $desde . ' -1 day' ) );
 			foreach ( $membresias as $m ) {
-				$inicio = (string) $m['start_date'];
-				if ( '' !== $inicio && $inicio < $desde && '' !== (string) $m['end_date'] && (string) $m['end_date'] >= $enlaza ) {
+				$inicio = self::dia( $m['start_date'] ?? '' );
+				$fin    = self::dia( $m['end_date'] ?? '' );
+				if ( '' !== $inicio && $inicio < $desde && '' !== $fin && $fin >= $enlaza ) {
 					$desde = $inicio;
 				}
 			}
@@ -620,6 +621,16 @@ final class Altas {
 	public static function tutores_obligatorios( string $nacimiento ): bool {
 		$f = \DateTime::createFromFormat( '!Y-m-d', $nacimiento, wp_timezone() );
 		return $f && $f->diff( new \DateTime( 'today', wp_timezone() ) )->y < self::EDAD_ADULTA;
+	}
+
+	/**
+	 * Solo el día (AAAA-MM-DD) de una fecha del CRM. Si llega con hora («2026-11-05 00:00:00»), compararla como texto con
+	 * «hoy» (sin hora) la da por posterior: un alta de hoy no contaría como activa y una baja de hoy seguiría vigente.
+	 *
+	 * @param mixed $fecha
+	 */
+	private static function dia( $fecha ): string {
+		return substr( trim( (string) $fecha ), 0, 10 );
 	}
 
 	/** Fecha AAAA-MM-DD válida (o hoy si viene vacía); '' si no es válida. */
