@@ -16345,8 +16345,8 @@ msgstr "Hi ha"
 #. translators: 1: number, 2: number
 #: src/Eventos/Normativa.php:249
 #, php-format
-msgid "There are %1$d people in training and %2$d qualified: there cannot be more in training than qualified."
-msgstr "Hi ha %1$d persones en pràctiques i %2$d titulades: en pràctiques no n'hi pot haver més que de titulades."
+msgid "There are %1$d people in training and %2$d qualified: those in training cannot exceed 50%% of the qualified."
+msgstr "Hi ha %1$d persones en pràctiques i %2$d titulades: les persones en pràctiques no poden superar el 50 %% de les titulades."
 
 #. translators: 1: number, 2: number
 #: templates/eventos/material.php:76

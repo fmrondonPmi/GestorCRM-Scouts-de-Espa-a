@@ -926,7 +926,7 @@
     "Han cambiado las fechas de %d tareas del calendario.": "The dates of %d calendar tasks have changed.",
     "Hasta %d años": "Up to %d years",
     "Hasta 5 gastos.": "Up to 5 expenses.",
-    "Hay %1$d personas en prácticas y %2$d tituladas: en prácticas no puede haber más que tituladas.": "There are %1$d people in training and %2$d qualified: there cannot be more in training than qualified.",
+    "Hay %1$d personas en prácticas y %2$d tituladas: las personas en prácticas no pueden superar el 50 %% de las tituladas.": "There are %1$d people in training and %2$d qualified: those in training cannot exceed 50%% of the qualified.",
     "Hay %1$d · otros eventos %2$d": "There are %1$d · other events %2$d",
     "Hay %d anticipo(s) por liquidar.": "There are %d advance(s) to settle.",
     "Hay %d gasto(s) por revisar.": "There are %d expense(s) to review.",

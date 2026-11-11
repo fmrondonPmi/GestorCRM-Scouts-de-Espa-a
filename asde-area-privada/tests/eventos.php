@@ -355,6 +355,27 @@ try {
 	$equipo = InscripcionesTable::equipo( $id_lob );
 	$ok( 3 === count( $equipo ) && 'apoyo' === ( array_column( $equipo, 'papel', 'socio' )['990034'] ?? '' ), 'se quitan los de prácticas y Tom pasa a apoyo' );
 	$ok( in_array( 'Falta el director/a de la actividad.', Normativa::comprobar_equipo( EventosTable::obtener( $id_lob ), array(), array(), array(), Config::de() )['avisos'], true ), 'sin nadie en el equipo: «Falta el director/a»' );
+	// La titulación solo se exige con 10+ menores y 2+ noches; con menos, es una sugerencia.
+	$e_dos   = EventosTable::obtener( $id_lob );
+	$e_una   = array_merge( $e_dos, array( 'fin' => $dia( '+46 days' ) . ' 12:00:00' ) );
+	$fichas  = \AsdeBalears\AreaPrivada\Crm\PersonaRepository::make()->campos_varias( array_column( $equipo, 'socio' ), Normativa::CAMPOS_EQUIPO );
+	$c_dos   = Normativa::comprobar_equipo( $e_dos, $equipo, array(), $fichas, Config::de() );
+	$c_una   = Normativa::comprobar_equipo( $e_una, $equipo, array(), $fichas, Config::de() );
+	$ok( Normativa::titulacion_exigible( $e_dos ) && $c_dos['exigible'] && str_contains( implode( ' | ', $c_dos['avisos'] ), 'monitores' ) && ! $c_dos['sugerencias'], '2 noches y 10+ menores: la ratio de monitores es un aviso (se exige), sin sugerencias' );
+	$ok( 1 === Normativa::noches( $e_una ) && ! Normativa::titulacion_exigible( $e_una ) && ! $c_una['exigible'] && ! str_contains( implode( ' | ', $c_una['avisos'] ), 'monitores' ) && str_contains( implode( ' | ', $c_una['sugerencias'] ), 'monitores' ), '1 noche (aunque haya 10+ menores): la ratio pasa a sugerencia y no a aviso' );
+	// Ratio con titulados y prácticas: 40 personas = director + 4 monitores; 3 titulados + 1 en prácticas + 4 sin título es correcto.
+	$mk   = static fn( string $s, string $papel ): array => array( 'socio' => $s, 'papel' => $papel );
+	$ficha = static fn( string $f ): array => array( 'formaciontiempolibre_c' => $f, 'certificadods_c' => '1', 'certificadods_fecha_c' => $dia( '-1 months' ) );
+	$e_40  = array_merge( $e_dos, array( 'plazas_max' => 40, 'inscritos' => null, 'normativa' => array_merge( $e_dos['normativa'], array( 'dependencia12' => 0, 'dependencia3' => 0 ) ) ) );
+	$eq_ok = array( $mk( 'd', 'director' ), $mk( 'm1', 'monitor' ), $mk( 'm2', 'monitor' ), $mk( 'm3', 'monitor' ), $mk( 'p1', 'practicas' ), $mk( 'n1', 'monitor' ), $mk( 'n2', 'monitor' ), $mk( 'n3', 'apoyo' ), $mk( 'n4', 'apoyo' ) );
+	$fi_ok = array( 'd' => $ficha( 'Director de tiempo libre' ), 'm1' => $ficha( 'Monitor de tiempo libre' ), 'm2' => $ficha( 'Monitor de tiempo libre' ), 'm3' => $ficha( 'Monitor de tiempo libre' ), 'p1' => $ficha( '' ), 'n1' => $ficha( '' ), 'n2' => $ficha( '' ), 'n3' => $ficha( '' ), 'n4' => $ficha( '' ) );
+	$c_ok  = Normativa::comprobar_equipo( $e_40, $eq_ok, array(), $fi_ok, Config::de() );
+	$ok( 4 === $c_ok['ratio']['necesarios'] && 4 === $c_ok['ratio']['monitores'] && ! $c_ok['avisos'], '40 personas: director + 3 titulados + 1 en prácticas cubren la ratio; los 4 sin título no cuentan ni estorban' );
+	$eq_mal = array( $mk( 'd', 'director' ), $mk( 'm1', 'monitor' ), $mk( 'p1', 'practicas' ), $mk( 'p2', 'practicas' ), $mk( 'p3', 'practicas' ) );
+	$fi_mal = $fi_ok + array( 'p2' => $ficha( '' ), 'p3' => $ficha( '' ) );
+	$c_mal  = Normativa::comprobar_equipo( $e_40, $eq_mal, array(), $fi_mal, Config::de() );
+	$tx_mal = implode( ' | ', $c_mal['avisos'] );
+	$ok( str_contains( $tx_mal, '3 personas en prácticas y 2 tituladas' ) && 2 === $c_mal['ratio']['monitores'], 'las personas en prácticas no pueden superar el 50 % de los titulados (aviso) y solo cuenta hasta ese tope para la ratio' );
 
 	echo "\n== Parte G · Presupuesto y validación de Tesorería (P-147) ==\n";
 	$a_lob = $como( $u_lob );

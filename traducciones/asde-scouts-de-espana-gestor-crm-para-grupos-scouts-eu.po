@@ -16345,8 +16345,8 @@ msgstr "Badaude"
 #. translators: 1: number, 2: number
 #: src/Eventos/Normativa.php:249
 #, php-format
-msgid "There are %1$d people in training and %2$d qualified: there cannot be more in training than qualified."
-msgstr "%1$d pertsona daude praktiketan eta %2$d titulatu: praktiketan ezin da titulatuak baino gehiago egon."
+msgid "There are %1$d people in training and %2$d qualified: those in training cannot exceed 50%% of the qualified."
+msgstr "%1$d pertsona daude praktiketan eta %2$d titulatu: praktiketan daudenek ezin dute titulatuen %% 50 gainditu."
 
 #. translators: 1: number, 2: number
 #: templates/eventos/material.php:76

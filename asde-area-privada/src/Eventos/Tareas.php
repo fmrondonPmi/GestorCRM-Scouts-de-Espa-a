@@ -128,7 +128,11 @@ final class Tareas {
 				$e['inscritos'] = Inscripciones::recuento( $e, $filas );
 				$papeles   = array_count_values( array_column( InscripcionesTable::equipo( $e['id'] ), 'papel' ) );
 				$necesita  = Normativa::monitores_necesarios( Normativa::participantes( $e ), $e['normativa']['dependencia12'], $e['normativa']['dependencia3'] );
-				return 1 === (int) ( $papeles['director'] ?? 0 ) && (int) ( $papeles['monitor'] ?? 0 ) >= $necesita['total'];
+				if ( 1 !== (int) ( $papeles['director'] ?? 0 ) ) {
+						return false;
+					}
+					// La ratio de monitores solo se exige con 10+ menores y 2+ noches; si no, es una sugerencia.
+					return ! Normativa::titulacion_exigible( $e ) || (int) ( $papeles['monitor'] ?? 0 ) + (int) ( $papeles['practicas'] ?? 0 ) >= $necesita['total'];
 			case 'titulos':
 				return null === $check ? null : ( ! empty( $check['leido'] ) && ! $check['avisos'] );
 			case 'autorizaciones':

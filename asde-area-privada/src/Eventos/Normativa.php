@@ -12,8 +12,10 @@ defined( 'ABSPATH' ) || exit;
  * bloquea**: la responsabilidad es de la entidad organizadora.
  *
  * - Equipo dirigente: un director/a titulado y monitores, todos mayores de edad y con el
- *   certificado de delitos sexuales de menos de 12 meses el día que acaba el evento; al
- *   menos la mitad de los monitores, titulados; en prácticas, no más que los titulados.
+ *   certificado de delitos sexuales de menos de 12 meses el día que acaba el evento. La
+ *   ratio la cubren los monitores titulados y las personas en prácticas (no más del 50 % de
+ *   los titulados); los monitores sin título pueden estar, pero no cuentan para la ratio.
+ *   La titulación solo se exige con 10 o más menores y 2 o más noches; si no, se sugiere.
  * - Ratio: además del director/a, 1 monitor/a por cada 10 participantes y otro si sobra
  *   una fracción de 5 o más; + 1 de apoyo por cada 3 con dependencia de grado I o II y 1
  *   por participante con grado III (solo se escribe el número, sin nombres).
@@ -130,6 +132,14 @@ final class Normativa {
 		return self::noches( $e ) >= self::NOCHES_COMUNICACION && ( $menores ?? self::menores_previstos( $e ) ) >= self::MENORES_COMUNICACION;
 	}
 
+	/**
+	 * ¿Se exige la titulación del equipo (director/a titulado, ratio cubierta con titulados y prácticas)?
+	 * Solo con 10 o más menores y 2 o más noches; con menos, son sugerencias (no se exige).
+	 */
+	public static function titulacion_exigible( array $e, ?int $menores = null ): bool {
+		return self::noches( $e ) >= self::NOCHES_COMUNICACION && ( $menores ?? self::menores_previstos( $e ) ) >= self::MENORES_COMUNICACION;
+	}
+
 	/** Último día para comunicarlo (Y-m-d): 30 días antes del inicio. */
 	public static function limite_comunicacion( array $e ): string {
 		$d = date_create( substr( $e['inicio'], 0, 10 ), wp_timezone() );
@@ -189,10 +199,20 @@ final class Normativa {
 	 * @param array[]                               $equipo   Filas del equipo (InscripcionesTable::equipo).
 	 * @param array<string, Persona>                $personas nº => ficha (instantánea).
 	 * @param array<string, array<string, string>>|null $fichas nº => formación y certificado (en vivo); null si el CRM no ha respondido.
-	 * @return array{personas: array<string, array{edad:?int, menor:bool, titulo:string, certificado:string}>, avisos: string[], ratio: array{participantes:int, necesarios:int, apoyo:int, monitores:int}, leido:bool}
+	 * @return array{personas: array<string, array{edad:?int, menor:bool, titulo:string, certificado:string}>, avisos: string[], sugerencias: string[], exigible: bool, ratio: array{participantes:int, necesarios:int, apoyo:int, monitores:int}, leido:bool}
 	 */
 	public static function comprobar_equipo( array $e, array $equipo, array $personas, ?array $fichas, array $cfg ): array {
 		$avisos    = array();
+		$sugeridos = array();
+		$exigible  = self::titulacion_exigible( $e );
+		// Lo de la titulación: aviso si se exige (10+ menores y 2+ noches); si no, sugerencia.
+		$tit_aviso = static function ( string $texto ) use ( &$avisos, &$sugeridos, $exigible ): void {
+			if ( $exigible ) {
+				$avisos[] = $texto;
+			} else {
+				$sugeridos[] = $texto;
+			}
+		};
 		$datos     = array();
 		$papeles   = array_count_values( array_column( $equipo, 'papel' ) );
 		$titulados = 0;
@@ -218,7 +238,7 @@ final class Normativa {
 				continue;
 			}
 			if ( 'director' === $m['papel'] && 'director' !== $titulo ) {
-				$avisos[] = sprintf( /* translators: %s: text */ __( 'According to their record, %s does not have the leisure-time director qualification.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $nombre );
+				$tit_aviso( sprintf( /* translators: %s: text */ __( 'According to their record, %s does not have the leisure-time director qualification.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $nombre ) );
 			}
 			if ( in_array( $m['papel'], array( 'director', 'monitor' ), true ) && '' !== $titulo ) {
 				++$titulados;
@@ -239,22 +259,25 @@ final class Normativa {
 		} elseif ( $directores > 1 ) {
 			$avisos[] = __( 'There is more than one director: the activity has a single responsible director.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
-		$monitores = (int) ( $papeles['monitor'] ?? 0 );
 		$n         = self::participantes( $e );
 		$necesita  = self::monitores_necesarios( $n, $e['normativa']['dependencia12'], $e['normativa']['dependencia3'] );
-		if ( $monitores < $necesita['total'] ) {
-			$avisos[] = sprintf( /* translators: 1: number, 2: number, 3: number */ __( 'With %1$d participants, %2$d monitors are needed besides the director, and there are %3$d.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $n, $necesita['total'], $monitores );
-		}
-		if ( null !== $fichas && $monitores > 0 && $mon_tit * 2 < $monitores ) {
-			$avisos[] = sprintf( /* translators: 1: number, 2: number */ __( 'At least half of the monitors must hold the leisure-time qualification: there are %1$d qualified out of %2$d.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $mon_tit, $monitores );
-		}
 		$practicas = (int) ( $papeles['practicas'] ?? 0 );
-		if ( null !== $fichas && $practicas > $titulados ) {
-			$avisos[] = sprintf( /* translators: 1: number, 2: number */ __( 'There are %1$d people in training and %2$d qualified: there cannot be more in training than qualified.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $practicas, $titulados );
+		// Cuentan para la ratio los monitores titulados y las personas en prácticas (hasta el 50 % de los titulados);
+		// los monitores sin título no cuentan (pueden estar, pero no cubren la ratio). Sin leer el CRM no se sabe quién es titulado.
+		$monitores = null !== $fichas
+			? $mon_tit + min( $practicas, intdiv( $titulados, 2 ) )
+			: (int) ( $papeles['monitor'] ?? 0 ) + $practicas;
+		if ( $monitores < $necesita['total'] ) {
+			$tit_aviso( sprintf( /* translators: 1: number, 2: number, 3: number */ __( 'With %1$d participants, %2$d monitors are needed besides the director, and there are %3$d.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $n, $necesita['total'], $monitores ) );
+		}
+		if ( null !== $fichas && $practicas * 2 > $titulados ) {
+			$tit_aviso( sprintf( /* translators: 1: number, 2: number */ __( 'There are %1$d people in training and %2$d qualified: those in training cannot exceed 50%% of the qualified.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $practicas, $titulados ) );
 		}
 		return array(
 			'personas' => $datos,
 			'avisos'   => $avisos,
+			'sugerencias' => $sugeridos,
+			'exigible' => $exigible,
 			'ratio'    => array(
 				'participantes' => $n,
 				'necesarios'    => $necesita['total'],
@@ -293,6 +316,9 @@ final class Normativa {
 		}
 		foreach ( (array) ( $equipo['avisos'] ?? array() ) as $aviso ) {
 			$out[] = array( 'aviso', $aviso );
+		}
+		foreach ( (array) ( $equipo['sugerencias'] ?? array() ) as $sugerencia ) {
+			$out[] = array( 'info', __( 'Suggestion: ', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . $sugerencia );
 		}
 
 		if ( self::requiere_comunicacion( $e ) ) {

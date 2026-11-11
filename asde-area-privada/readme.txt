@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.64.1
+Stable tag: 0.64.2
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -61,6 +61,9 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.64.2 =
+* Events: the team's qualification rules now depend on the size and length of the event. They are required only with 10 or more minors and 2 or more nights; otherwise they appear as suggestions. The monitor ratio is covered by qualified monitors plus people in training (no more than 50% of the qualified); monitors without a qualification do not count towards it. No database changes.
 
 = 0.64.1 =
 * Memberships: the registration and withdrawal dates are compared by day only. If the CRM sends a date with a time, a registration dated today now counts as active and a withdrawal dated today ends the membership (before, the text with a time compared as later than today). No database changes.
@@ -183,6 +186,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * The changelog of versions 0.42.0 and earlier is in changelog.txt, in the plugin folder.
 
 == Upgrade Notice ==
+
+= 0.64.2 =
+Qualification checks for the event team are only required with 10+ minors and 2+ nights. No database changes.
 
 = 0.64.1 =
 Fixes how registration and withdrawal dates dated today are validated. No database changes.

@@ -122,10 +122,13 @@ $r        = $check['ratio'];
 		<?php echo esc_html( sprintf( /* translators: %d: number */ __( 'Participants: %d (the places or, if there are none, the expected ones).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $r['participantes'] ) ); ?>
 		<?php echo esc_html( sprintf( /* translators: 1: number, 2: number, 3: number */ __( '%1$d monitors are needed besides the director (%2$d support monitors for dependency) and there are %3$d.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $r['necesarios'], $r['apoyo'], $r['monitores'] ) ); ?>
 	</p>
-	<?php if ( $check['avisos'] ) : ?>
+	<?php if ( $check['avisos'] || ! empty( $check['sugerencias'] ) ) : ?>
 		<ul class="asde-comprobacion">
 			<?php foreach ( $check['avisos'] as $aviso ) : ?>
 				<li class="asde-comprobacion--aviso"><span class="asde-comprobacion__marca" aria-hidden="true">!</span> <?php echo esc_html( $aviso ); ?></li>
+			<?php endforeach; ?>
+			<?php foreach ( (array) ( $check['sugerencias'] ?? array() ) as $sugerencia ) : ?>
+				<li class="asde-comprobacion--info"><span class="asde-comprobacion__marca" aria-hidden="true">i</span> <?php echo esc_html( __( 'Suggestion: ', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . $sugerencia ); ?></li>
 			<?php endforeach; ?>
 		</ul>
 	<?php endif; ?>
