@@ -31,6 +31,7 @@ final class InscripcionesTable {
 		'director'  => __( 'Director', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 		'monitor'   => __( 'Monitor', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 		'practicas' => __( 'In training', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'sin_titulacion' => __( 'Scouter without qualification', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), // v0.64.6: forma parte del equipo pero no cubre la ratio.
 		'apoyo'     => __( 'Support (kitchen, quartermaster, transport)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	);
 	}

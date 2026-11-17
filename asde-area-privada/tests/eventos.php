@@ -377,6 +377,20 @@ try {
 	$tx_mal = implode( ' | ', $c_mal['avisos'] );
 	$ok( str_contains( $tx_mal, '3 personas en prácticas y 2 tituladas' ) && 2 === $c_mal['ratio']['monitores'], 'las personas en prácticas no pueden superar el 50 % de los titulados (aviso) y solo cuenta hasta ese tope para la ratio' );
 
+	// v0.64.6: «Scouter sin titulación» es una función más del equipo: está en el equipo pero no cubre la ratio.
+	$ok( isset( InscripcionesTable::papeles()['sin_titulacion'] ) && 'Scouter sin titulación' === InscripcionesTable::papeles()['sin_titulacion'], 'entre las funciones del equipo está «Scouter sin titulación»' );
+	$c_sin = Normativa::comprobar_equipo( $e_40, array_merge( $eq_ok, array( $mk( 's1', 'sin_titulacion' ), $mk( 's2', 'sin_titulacion' ) ) ), array(), $fi_ok + array( 's1' => $ficha( '' ), 's2' => $ficha( 'Monitor de tiempo libre' ) ), Config::de() );
+	$ok( 4 === $c_sin['ratio']['monitores'] && ! $c_sin['avisos'], 'un scouter sin titulación en el equipo no cubre la ratio (ni siquiera con título en la ficha) y no da avisos' );
+	$a_eq = $como( $u_lob );
+	$enviar( new EventosView(), array( 'asde_action' => 'evento_equipo_anadir', 'evento' => (string) $id_lob, 'socio' => '990039', 'papel' => 'sin_titulacion', 'pestana' => 'equipo' ), 'asde_evento_' . $id_lob );
+	$sin_tit = array_values( array_filter( InscripcionesTable::equipo( $id_lob ), static fn( $m ) => 'sin_titulacion' === $m['papel'] ) );
+	$ok( 1 === count( $sin_tit ) && '990039' === $sin_tit[0]['socio'], 'se añade al equipo con esa función desde la pestaña Equipo' );
+	$h = $pintar( new EventosView(), array( 'evento' => (string) $id_lob, 'pestana' => 'equipo' ) );
+	$ok( str_contains( $h, 'Scouter sin titulación' ), 'y la pestaña Equipo la enseña' );
+	foreach ( $sin_tit as $m ) {
+		$enviar( new EventosView(), array( 'asde_action' => 'evento_equipo_quitar', 'evento' => (string) $id_lob, 'fila' => (string) $m['id'], 'pestana' => 'equipo' ), 'asde_evento_' . $id_lob );
+	}
+
 	echo "\n== Parte G · Presupuesto y validación de Tesorería (P-147) ==\n";
 	$a_lob = $como( $u_lob );
 	foreach ( array( array( 'gasto', 'Autobús', 'total', '', '300' ), array( 'gasto', 'Albergue', 'participante_equipo', '', '12' ), array( 'gasto', 'Comida', 'participante_equipo', '', '15' ), array( 'ingreso', 'Aportación del grupo', 'total', '', '100' ) ) as list( $tipo, $concepto, $reparto, $sec, $imp ) ) {

@@ -1151,7 +1151,7 @@ msgid "%s (you)"
 msgstr ""
 
 #. translators: %s: text
-#: src/Auth/Ambito.php:152 src/Usuarios/Contacto.php:59
+#: src/Auth/Ambito.php:192 src/Usuarios/Contacto.php:59
 #, php-format
 msgid "%s family"
 msgstr ""
@@ -2806,7 +2806,7 @@ msgstr ""
 msgid "Authorisation for %1$s to take part in \"%2$s\" (%3$s)."
 msgstr ""
 
-#: src/Eventos/InscripcionesTable.php:69 templates/eventos/inscripciones.php:179
+#: src/Eventos/InscripcionesTable.php:70 templates/eventos/inscripciones.php:179
 msgid "Authorisation missing"
 msgstr ""
 
@@ -4251,7 +4251,7 @@ msgstr ""
 msgid "Confirm the sign-up of <strong>%1$s</strong> on the waiting list of <strong>%2$s</strong>."
 msgstr ""
 
-#: src/Eventos/InscripcionesTable.php:54 templates/eventos/menu.php:239
+#: src/Eventos/InscripcionesTable.php:55 templates/eventos/menu.php:239
 msgid "Confirmed"
 msgstr ""
 
@@ -7157,7 +7157,7 @@ msgstr ""
 msgid "Hand the letter in at the local meeting and send it by email"
 msgstr ""
 
-#: src/Eventos/InscripcionesTable.php:71
+#: src/Eventos/InscripcionesTable.php:72
 msgid "Handed in on paper"
 msgstr ""
 
@@ -9753,7 +9753,7 @@ msgstr ""
 msgid "No age yet"
 msgstr ""
 
-#: src/Eventos/InscripcionesTable.php:52
+#: src/Eventos/InscripcionesTable.php:53
 msgid "No answer"
 msgstr ""
 
@@ -10079,7 +10079,7 @@ msgstr ""
 msgid "Not loaded"
 msgstr ""
 
-#: src/Eventos/InscripcionesTable.php:72
+#: src/Eventos/InscripcionesTable.php:73
 msgid "Not needed (of legal age)"
 msgstr ""
 
@@ -10103,7 +10103,7 @@ msgstr ""
 msgid "Not stated"
 msgstr ""
 
-#: src/Eventos/InscripcionesTable.php:57
+#: src/Eventos/InscripcionesTable.php:58
 msgid "Not taking part"
 msgstr ""
 
@@ -10331,7 +10331,7 @@ msgstr ""
 msgid "On the list since"
 msgstr ""
 
-#: src/Eventos/InscripcionesTable.php:56
+#: src/Eventos/InscripcionesTable.php:57
 msgid "On the waiting list"
 msgstr ""
 
@@ -10347,7 +10347,7 @@ msgstr ""
 msgid "On the website"
 msgstr ""
 
-#: src/Eventos/InscripcionesTable.php:90
+#: src/Eventos/InscripcionesTable.php:91
 msgid "On their own"
 msgstr ""
 
@@ -11087,7 +11087,7 @@ msgstr ""
 msgid "Peas"
 msgstr ""
 
-#: src/Eventos/InscripcionesTable.php:53 src/Frontend/Views/TesoreriaView.php:38 src/Frontend/Views/TesoreriaView.php:343 src/Idiomas/Guardados.php:240
+#: src/Eventos/InscripcionesTable.php:54 src/Frontend/Views/TesoreriaView.php:38 src/Frontend/Views/TesoreriaView.php:343 src/Idiomas/Guardados.php:240
 msgid "Pending"
 msgstr ""
 
@@ -11283,7 +11283,7 @@ msgstr ""
 msgid "Place freed up for whoever is on the waiting list"
 msgstr ""
 
-#: src/Eventos/InscripcionesTable.php:55 src/ListaEspera/Inscripciones.php:43
+#: src/Eventos/InscripcionesTable.php:56 src/ListaEspera/Inscripciones.php:43
 msgid "Place offered"
 msgstr ""
 
@@ -13050,6 +13050,10 @@ msgstr ""
 msgid "Scouter registration"
 msgstr ""
 
+#: src/Eventos/InscripcionesTable.php:34
+msgid "Scouter without qualification"
+msgstr ""
+
 #: src/Domain/Secciones.php:32 templates/eventos/resumen.php:105
 msgid "Scouters"
 msgstr ""
@@ -13738,7 +13742,7 @@ msgstr ""
 msgid "Signed on"
 msgstr ""
 
-#: src/Eventos/InscripcionesTable.php:70
+#: src/Eventos/InscripcionesTable.php:71
 msgid "Signed on the website"
 msgstr ""
 
@@ -14106,7 +14110,7 @@ msgstr ""
 msgid "Supplier orders are placed by Coordination."
 msgstr ""
 
-#: src/Eventos/InscripcionesTable.php:34
+#: src/Eventos/InscripcionesTable.php:35
 msgid "Support (kitchen, quartermaster, transport)"
 msgstr ""
 
@@ -14678,7 +14682,7 @@ msgstr ""
 msgid "The CRM URL is missing."
 msgstr ""
 
-#: src/Auth/Ambito.php:93
+#: src/Auth/Ambito.php:109
 msgid "The CRM could not be queried. Try again in a few minutes."
 msgstr ""
 
@@ -15356,7 +15360,7 @@ msgstr ""
 msgid "The families' account could not be read in the CRM: try again later."
 msgstr ""
 
-#: src/Eventos/InscripcionesTable.php:80
+#: src/Eventos/InscripcionesTable.php:81
 msgid "The family"
 msgstr ""
 
@@ -15659,7 +15663,7 @@ msgstr ""
 msgid "The group's recipes, with their ingredients. The allergens of each recipe come from those of its ingredients: they are not written by hand. There is no data about any person here."
 msgstr ""
 
-#: src/Eventos/InscripcionesTable.php:82
+#: src/Eventos/InscripcionesTable.php:83
 msgid "The group's team"
 msgstr ""
 
@@ -15987,7 +15991,7 @@ msgstr ""
 msgid "The person signing up must tick this box to continue. Leave it empty to use the default text (the one shown in grey)."
 msgstr ""
 
-#: src/Eventos/InscripcionesTable.php:81 templates/solicitudes/detalle.php:119
+#: src/Eventos/InscripcionesTable.php:82 templates/solicitudes/detalle.php:119
 msgid "The person themselves"
 msgstr ""
 
@@ -18765,7 +18769,7 @@ msgstr ""
 msgid "With staff qualified in that activity"
 msgstr ""
 
-#: src/Eventos/InscripcionesTable.php:89
+#: src/Eventos/InscripcionesTable.php:90
 msgid "With the group"
 msgstr ""
 
@@ -18828,7 +18832,7 @@ msgstr ""
 msgid "Withdraw this sign-up? Whatever has already been paid will be reviewed by Treasury."
 msgstr ""
 
-#: src/Eventos/InscripcionesTable.php:58
+#: src/Eventos/InscripcionesTable.php:59
 msgid "Withdrawal"
 msgstr ""
 
@@ -19302,7 +19306,7 @@ msgstr ""
 msgid "Your email"
 msgstr ""
 
-#: src/Auth/Ambito.php:135
+#: src/Auth/Ambito.php:175
 msgid "Your family account no longer has any participants in its care (they have turned 18 or no longer have an active membership)."
 msgstr ""
 
@@ -19346,7 +19350,7 @@ msgstr ""
 msgid "Your group's connection to the CRM is not set up or could not be checked."
 msgstr ""
 
-#: src/Auth/Ambito.php:63 src/Frontend/Views/AltaUsuariosView.php:37 src/Frontend/Views/CambiosView.php:40 src/Frontend/Views/FamiliasView.php:28
+#: src/Auth/Ambito.php:72 src/Frontend/Views/AltaUsuariosView.php:37 src/Frontend/Views/CambiosView.php:40 src/Frontend/Views/FamiliasView.php:28
 msgid "Your group's connection to the CRM is not set up or could not be checked. An administrator can review it in wp-admin → Scout Groups."
 msgstr ""
 
@@ -19354,7 +19358,7 @@ msgstr ""
 msgid "Your membership cannot be checked in the group's CRM right now. Try again in a few minutes."
 msgstr ""
 
-#: src/Auth/Ambito.php:143
+#: src/Auth/Ambito.php:183
 msgid "Your membership is not active in the group's CRM. Contact the Secretary's office."
 msgstr ""
 
@@ -19366,7 +19370,7 @@ msgstr ""
 msgid "Your orders"
 msgstr ""
 
-#: src/Auth/Ambito.php:141
+#: src/Auth/Ambito.php:181
 msgid "Your record cannot be found in the group's CRM. Contact the Secretary's office."
 msgstr ""
 
@@ -19384,11 +19388,11 @@ msgstr ""
 msgid "Your section:"
 msgstr ""
 
-#: src/Auth/Ambito.php:132
+#: src/Auth/Ambito.php:172
 msgid "Your user does not have access to the private area. If you think this is a mistake, contact the group's Secretary's office."
 msgstr ""
 
-#: src/Auth/Ambito.php:138
+#: src/Auth/Ambito.php:178
 msgid "Your user is not linked to any CRM record. Ask the group's Secretary's office to check your registration."
 msgstr ""
 

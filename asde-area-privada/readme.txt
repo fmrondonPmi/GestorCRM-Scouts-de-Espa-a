@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.64.5
+Stable tag: 0.64.6
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -61,6 +61,9 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.64.6 =
+* Events, team: a new function "Scouter without qualification" in the Team tab. The person is on the team (can manage the event, does not pay) but does not count towards the monitor ratio.
 
 = 0.64.5 =
 * Events: a person who has both a scouter account and a family account under the same email now sees their children in "My events" when signing in with the scouter account, and can sign them up (and sign the authorisation) from there. Only event sign-ups are affected.
@@ -197,6 +200,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * The changelog of versions 0.42.0 and earlier is in changelog.txt, in the plugin folder.
 
 == Upgrade Notice ==
+
+= 0.64.6 =
+New team function "Scouter without qualification" for events. No database changes.
 
 = 0.64.5 =
 Scouters who also have a family account (same email) can sign up their children to events from their scouter account. No database changes.
