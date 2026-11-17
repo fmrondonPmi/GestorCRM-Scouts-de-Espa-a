@@ -115,9 +115,17 @@ final class Servicio {
 		return EventosTable::CANCELADO !== $e['estado'] && null === ( $e['cerrado_en'] ?? null ) && self::en_gestion( $e, $a );
 	}
 
-	/** El presupuesto se puede cambiar: es un borrador y Tesorería aún no lo ha validado. */
+	/** El presupuesto se puede cambiar mientras el evento es un borrador: el visto bueno de Tesorería no lo cierra (v0.63.3); se cierra al publicar. */
 	public static function presupuesto_abierto( array $e ): bool {
-		return EventosTable::BORRADOR === $e['estado'] && null === $e['validado_en'];
+		return EventosTable::BORRADOR === $e['estado'];
+	}
+
+	/** Si el presupuesto tenía el visto bueno y cambia, se quita y vuelve a estar pendiente de Tesorería. */
+	private static function retirar_visto_bueno( array $e ): void {
+		if ( EventosTable::BORRADOR === $e['estado'] && null !== $e['validado_en'] ) {
+			EventosTable::quitar_visto_bueno( $e['id'] );
+			Logger::log( 'evento_visto_bueno_retirado', 'evento', (string) $e['id'] );
+		}
 	}
 
 	public static function puede_editar_presupuesto( array $e, Ambito $a ): bool {
@@ -128,11 +136,12 @@ final class Servicio {
 		return $e['con_coste'] && self::presupuesto_abierto( $e ) && null === $e['validacion_pedida_en'] && self::en_gestion( $e, $a );
 	}
 
+	/** Tesorería da el visto bueno y fija la cuota de cada sección (se puede repetir para cambiar las cuotas mientras es borrador). */
 	public static function puede_validar( array $e ): bool {
 		return $e['con_coste'] && self::presupuesto_abierto( $e ) && current_user_can( self::CAP_ECONOMIA );
 	}
 
-	/** Reabrir el presupuesto validado: solo en borrador y mientras no haya nadie inscrito (el precio es fijo para quien se inscribe). */
+	/** Quitar el visto bueno: solo en borrador y mientras no haya nadie inscrito. */
 	public static function puede_reabrir( array $e ): bool {
 		return EventosTable::BORRADOR === $e['estado'] && null !== $e['validado_en'] && current_user_can( self::CAP_ECONOMIA ) && ! InscripcionesTable::hay_participantes( $e['id'] );
 	}
@@ -168,7 +177,7 @@ final class Servicio {
 		$validar = 0;
 		if ( current_user_can( self::CAP_ECONOMIA ) ) {
 			foreach ( EventosTable::todos() as $e ) {
-				$validar += (int) ( self::puede_validar( $e ) && null !== $e['validacion_pedida_en'] );
+				$validar += (int) ( self::puede_validar( $e ) && null !== $e['validacion_pedida_en'] && null === $e['validado_en'] );
 			}
 		}
 		return array( 'validar' => $validar );
@@ -281,14 +290,15 @@ final class Servicio {
 		);
 		$con_coste = $si( 'con_coste' );
 
-		// Con el presupuesto validado, el precio es fijo: no se pueden cambiar las secciones, los participantes previstos ni si tiene coste.
-		if ( $actual && null !== $actual['validado_en'] ) {
+		// Con el evento publicado, el precio es fijo: no se pueden cambiar las secciones, los participantes previstos ni si tiene coste.
+		// En borrador sí (v0.63.3): el visto bueno de Tesorería se quita y hay que darlo otra vez (Servicio::guardar).
+		if ( $actual && null !== $actual['validado_en'] && EventosTable::BORRADOR !== $actual['estado'] ) {
 			$cambia = $elegidas !== $actual['secciones'] || $con_coste !== $actual['con_coste'];
 			foreach ( $elegidas as $s ) {
 				$cambia = $cambia || $plazas[ $s ]['previstas'] !== ( $actual['plazas'][ $s ]['previstas'] ?? 0 );
 			}
 			if ( $cambia ) {
-				$errores[] = __( 'The budget is already validated and the price is fixed: to change the sections, the expected participants or whether it has a cost, ask Treasury to reopen the budget.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
+				$errores[] = __( 'The event is already published and the price is fixed: the sections, the expected participants and whether it has a cost can no longer be changed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 			}
 		}
 
@@ -369,6 +379,11 @@ final class Servicio {
 		}
 		EventosTable::guardar( $e['id'], $v['datos'] );
 		Logger::log( 'evento_editado', 'evento', (string) $e['id'], array( 'campos' => $cambios ) );
+		// v0.63.3: lo que cambia el precio (secciones, participantes previstos, si tiene coste) quita el visto bueno.
+		$afecta = in_array( 'secciones', $cambios, true ) || in_array( 'con_coste', $cambios, true ) || array_column( (array) $v['datos']['plazas'], 'previstas' ) !== array_column( $e['plazas'], 'previstas' );
+		if ( $afecta ) {
+			self::retirar_visto_bueno( $e );
+		}
 		$nuevo = EventosTable::obtener( $e['id'] );
 		if ( $nuevo ) {
 			Inscripciones::revisar( $nuevo ); // Si hay más plazas, se ofrecen a la lista de espera.
@@ -516,6 +531,7 @@ final class Servicio {
 				'margen_pct'      => min( 50.0, max( 0.0, $margen_pct ) ),
 			)
 		);
+		self::retirar_visto_bueno( $e );
 		Logger::log( 'evento_presupuesto_guardado', 'evento', (string) $e['id'], array( 'campos' => array( 'equipo_previsto', 'margen_activo', 'margen_pct' ) ) );
 		return true;
 	}
@@ -544,6 +560,7 @@ final class Servicio {
 			return new \WP_Error( 'asde_evento', __( 'Choose the section the cost is split among.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		$id = PartidasTable::anadir( $e['id'], $tipo, $concepto, $reparto, $seccion, round( $importe, 2 ) );
+		self::retirar_visto_bueno( $e );
 		Logger::log(
 			'evento_partida_anadida',
 			'evento',
@@ -576,6 +593,7 @@ final class Servicio {
 		if ( ! self::puede_editar_presupuesto( $e, $a ) || ! PartidasTable::quitar( $partida, $e['id'] ) ) {
 			return new \WP_Error( 'asde_evento', __( 'This event\'s budget cannot be changed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
+		self::retirar_visto_bueno( $e );
 		Logger::log( 'evento_partida_quitada', 'evento', (string) $e['id'] );
 		return true;
 	}
@@ -585,7 +603,7 @@ final class Servicio {
 		if ( ! self::puede_pedir_validacion( $e, $a ) ) {
 			return new \WP_Error( 'asde_evento', __( 'This budget cannot be sent to Treasury.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
-		$calculo = Presupuesto::del_evento( $e );
+		$calculo = Presupuesto::del_evento( array_merge( $e, array( 'cuotas' => array() ) ) ); // Las cuotas las fija Tesorería: aquí solo se comprueba que el cálculo sale.
 		if ( ! $calculo['ok'] ) {
 			return new \WP_Error( 'asde_evento', implode( ' ', $calculo['errores'] ) );
 		}
@@ -597,12 +615,29 @@ final class Servicio {
 		return true;
 	}
 
-	/** Tesorería valida: queda el cálculo y el precio por sección es fijo. @return array|\WP_Error El cálculo. */
-	public static function validar( array $e ) {
+	/**
+	 * Tesorería da el visto bueno y fija la cuota de cada sección (v0.63.3): queda el cálculo, pero el presupuesto
+	 * no se cierra; la cuota queda fija al publicar el evento.
+	 *
+	 * @param array<string, mixed> $cuotas Cuota de cada sección escrita a mano (vacía: la sugerida, o la anterior).
+	 * @return array|\WP_Error El cálculo.
+	 */
+	public static function validar( array $e, array $cuotas = array() ) {
 		if ( ! self::puede_validar( $e ) ) {
-			return new \WP_Error( 'asde_evento', __( 'Validating the budget is done by Treasury.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
+			return new \WP_Error( 'asde_evento', __( 'Giving the budget the go-ahead is done by Treasury.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
-		$calculo = Presupuesto::del_evento( $e );
+		$limpias = array();
+		foreach ( $cuotas as $s => $v ) {
+			$v = is_scalar( $v ) ? trim( str_replace( ',', '.', (string) $v ) ) : '';
+			if ( '' !== $v ) {
+				if ( ! is_numeric( $v ) || (float) $v < 0 ) {
+					return new \WP_Error( 'asde_evento', __( 'The price of each section must be a number.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
+				}
+				$limpias[ sanitize_key( (string) $s ) ] = round( (float) $v, 2 );
+			}
+		}
+		$e['cuotas'] = $limpias ?: $e['cuotas'];
+		$calculo     = Presupuesto::del_evento( $e );
 		if ( ! $calculo['ok'] ) {
 			return new \WP_Error( 'asde_evento', implode( ' ', $calculo['errores'] ) );
 		}
@@ -612,7 +647,7 @@ final class Servicio {
 		unset( $calculo['ok'], $calculo['errores'] );
 		EventosTable::validar( $e['id'], $calculo );
 		Logger::log(
-			'evento_presupuesto_validado',
+			'evento_presupuesto_validado', // Desde la v0.63.3 es el «visto bueno» de Tesorería.
 			'evento',
 			(string) $e['id'],
 			array(
@@ -623,12 +658,12 @@ final class Servicio {
 		return $calculo;
 	}
 
-	/** @return true|\WP_Error */
+	/** Quitar el visto bueno: el presupuesto vuelve a estar pendiente de Tesorería. @return true|\WP_Error */
 	public static function reabrir( array $e ) {
 		if ( ! self::puede_reabrir( $e ) ) {
-			return new \WP_Error( 'asde_evento', __( 'This budget can no longer be reopened.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
+			return new \WP_Error( 'asde_evento', __( 'The go-ahead can no longer be withdrawn from this budget.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
-		EventosTable::reabrir( $e['id'] );
+		EventosTable::quitar_visto_bueno( $e['id'] );
 		Logger::log( 'evento_presupuesto_reabierto', 'evento', (string) $e['id'] );
 		return true;
 	}
@@ -643,7 +678,7 @@ final class Servicio {
 			return new \WP_Error(
 				'asde_evento',
 				$e['con_coste'] && null === $e['validado_en'] && EventosTable::BORRADOR === $e['estado']
-					? __( 'This event has a cost: before publishing it, Treasury must validate its budget.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' )
+					? __( 'This event has a cost: before publishing it, Treasury must give its budget the go-ahead.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' )
 					: __( 'You cannot publish this event.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' )
 			);
 		}

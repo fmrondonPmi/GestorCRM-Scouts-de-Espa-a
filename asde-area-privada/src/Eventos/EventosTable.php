@@ -36,7 +36,7 @@ final class EventosTable {
 		return array(
 		'borrador'    => __( 'Draft', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 		'por_validar' => __( 'Budget pending Treasury', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
-		'validado'    => __( 'Budget validated', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
+		'validado'    => __( 'Budget approved', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 		'publicado'   => __( 'Published', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 		'en_curso'    => __( 'In progress', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 		'celebrado'   => __( 'Held', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
@@ -112,6 +112,7 @@ final class EventosTable {
 				margen_activo tinyint(1) NOT NULL DEFAULT 1,
 				margen_pct decimal(5,2) NOT NULL DEFAULT 5.00,
 				presupuesto text NULL,
+				cuotas text NULL,
 				validacion_pedida_por bigint(20) unsigned NOT NULL DEFAULT 0,
 				validacion_pedida_en datetime NULL,
 				validado_por bigint(20) unsigned NOT NULL DEFAULT 0,
@@ -252,19 +253,36 @@ final class EventosTable {
 		);
 	}
 
-	/** Tesorería valida el presupuesto: queda guardado el cálculo y el precio por sección ya no cambia. */
+	/**
+	 * Tesorería da el visto bueno al presupuesto (v0.63.3): queda guardado el cálculo con la cuota de cada sección.
+	 * No cierra nada: el presupuesto se puede seguir cambiando (y entonces el visto bueno se quita) hasta que se
+	 * publica el evento.
+	 */
 	public static function validar( int $id, array $calculo ): bool {
 		return self::actualizar(
 			$id,
 			array(
 				'presupuesto'  => (string) wp_json_encode( $calculo ),
+				'cuotas'       => (string) wp_json_encode( (object) array_map( 'floatval', array_diff_key( (array) ( $calculo['precios'] ?? array() ), (array) ( $calculo['no_pagan'] ?? array() ) ) ) ),
 				'validado_por' => get_current_user_id(),
 				'validado_en'  => current_time( 'mysql', true ),
 			)
 		);
 	}
 
-	/** Vuelve a abrir el presupuesto (solo en borrador): se puede cambiar y hay que validarlo otra vez. */
+	/** Quita el visto bueno (por un cambio en el presupuesto): vuelve a estar pendiente de Tesorería. Se conservan las cuotas escritas. */
+	public static function quitar_visto_bueno( int $id ): bool {
+		return self::actualizar(
+			$id,
+			array(
+				'presupuesto'  => null,
+				'validado_por' => 0,
+				'validado_en'  => null,
+			)
+		);
+	}
+
+	/** Vuelve a abrir el presupuesto: sin visto bueno y sin petición a Tesorería. */
 	public static function reabrir( int $id ): bool {
 		return self::actualizar(
 			$id,
@@ -425,6 +443,8 @@ final class EventosTable {
 		$f['margen_pct']    = (float) $f['margen_pct'];
 		$presupuesto        = json_decode( (string) $f['presupuesto'], true );
 		$f['presupuesto']   = is_array( $presupuesto ) ? $presupuesto : null;
+		$cuotas             = json_decode( (string) ( $f['cuotas'] ?? '' ), true );
+		$f['cuotas']        = is_array( $cuotas ) ? array_map( 'floatval', $cuotas ) : array();
 		$f['descripcion']   = (string) $f['descripcion'];
 		$f['material']      = (string) $f['material'];
 		$f['modalidad']     = isset( self::modalidades()[ $f['modalidad'] ?? '' ] ) ? (string) $f['modalidad'] : 'abierta';
@@ -436,6 +456,13 @@ final class EventosTable {
 		}
 		$balance      = json_decode( (string) ( $f['balance'] ?? '' ), true );
 		$f['balance'] = is_array( $balance ) ? $balance : null;
+		// v0.63.3: un borrador validado con el cálculo antiguo (sin «no_pagan») ya no vale: los scouters pagaban y la cuota era automática.
+		// Se trata como pendiente de visto bueno hasta que Tesorería lo dé otra vez (no se toca la base de datos).
+		if ( self::BORRADOR === $f['estado'] && null !== $f['validado_en'] && is_array( $f['presupuesto'] ) && ! array_key_exists( 'no_pagan', $f['presupuesto'] ) ) {
+			$f['presupuesto']  = null;
+			$f['validado_en']  = null;
+			$f['validado_por'] = 0;
+		}
 		return $f;
 	}
 

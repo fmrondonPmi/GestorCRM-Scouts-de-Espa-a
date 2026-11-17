@@ -640,3 +640,16 @@ Lo que hay que **comprobar al programar** (no es una pregunta para el usuario):
 - **Salida** (quién y cuándo, una línea o todas) y **devolución** (unidades devueltas y una incidencia corta; se puede corregir). Lo que no vuelve se puede **descontar del inventario** con un paso aparte, explícito y de una sola vez (`MaterialesTable::restar`, atómico, sin bajar de cero). El gasto de reposición se apunta en las cuentas del evento a mano.
 - Sin datos personales: solo el id de la cuenta de quien saca y devuelve. Auditoría `evento_material_*`. Se borra con el evento (borrador). La tarea «Preparar … el material de acampada» del calendario enlaza a la pestaña.
 - **Decisiones propias frente al plan de 2026-10-15:** no se hace el rol «Responsable de material», las caducidades ni el material por sección (el inventario actual no los tiene); eso queda para cuando el inventario los pida. Pruebas: `tests/eventos-material.php` (56).
+
+## v0.63.3 · Visto bueno, cuota manual y scouters que no pagan (2026-11-17)
+
+Petición del usuario tras revisar un campamento con 60 personas previstas (45 pagan y 15 son Scouters):
+
+- **La sección Scouters no paga** (`Presupuesto::NO_PAGAN`, decisión: regla fija). Su precio es 0 y su coste se reparte entre las secciones que sí pagan (el Voluntariado de apoyo sí paga). Ejemplo: 3.290 € / 45 = 73,11 €; con el 5 % y al euro superior, 77 € sugeridos.
+- **La cuota la escribe Tesorería** por sección, con el sugerido a la vista. No puede ser menor que el coste; lo que pase del coste es el fondo de emergencia. Se guarda en la columna nueva `cuotas` (JSON sección → importe) de `asde_eventos`.
+- **«Validado» pasa a «visto bueno»** y ya no cierra el presupuesto: mientras el evento es un borrador se pueden seguir cambiando partidas, previsión, secciones y participantes previstos. Cualquier cambio quita el visto bueno (`Servicio::retirar_visto_bueno`, registro `evento_visto_bueno_retirado`) y el presupuesto vuelve a «pendiente de Tesorería». Tesorería también puede quitarlo («Quitar el visto bueno») y volver a darlo con otras cuotas.
+- **El precio queda fijo al publicar**: el cálculo guardado con el visto bueno es el que usan las inscripciones; un evento publicado ya no cambia secciones, participantes previstos ni si tiene coste.
+- **Borradores aprobados con el cálculo antiguo** (sin la clave `no_pagan` en el cálculo guardado) se tratan como pendientes de visto bueno (`EventosTable::preparar`, sin tocar la base de datos): hay que volver a darlo para publicarlos.
+- La pantalla de Presupuesto enseña siempre el cálculo de hoy (borrador) o el guardado (publicado).
+- Pruebas: `tests/eventos.php` (flujo completo, cuota manual, cuota menor que el coste, cambios que quitan el visto bueno, borrador antiguo).
+- Pendiente: traducciones de los 35 textos nuevos a ca/eu/gl/valencià (solo están en castellano).

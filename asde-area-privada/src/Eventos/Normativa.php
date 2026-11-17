@@ -298,11 +298,11 @@ final class Normativa {
 		$out = array();
 		if ( $e['con_coste'] ) {
 			if ( null !== $e['validado_en'] ) {
-				$out[] = array( 'ok', __( 'Budget validated by Treasury: the price is now fixed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
+				$out[] = array( 'ok', EventosTable::BORRADOR === $e['estado'] ? __( 'Budget approved by Treasury: the price will be fixed when the event is published.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : __( 'Budget approved by Treasury: the price is fixed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			} elseif ( null !== $e['validacion_pedida_en'] ) {
-				$out[] = array( 'aviso', __( 'Budget pending validation by Treasury.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
+				$out[] = array( 'aviso', __( 'Budget pending Treasury\'s go-ahead.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			} else {
-				$out[] = array( 'aviso', __( 'The budget still has to be prepared and Treasury asked to validate it.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
+				$out[] = array( 'aviso', __( 'The budget still has to be prepared and sent to Treasury for its go-ahead.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 			}
 		} else {
 			$out[] = array( 'info', __( 'No cost for families.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );

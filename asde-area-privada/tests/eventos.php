@@ -389,9 +389,21 @@ try {
 	$c = Presupuesto::del_evento( $e );
 	// (300 − 100 + 27 × 3) / 20 + 27 = 41,05 → × 1,05 = 43,10 → 44 €.
 	$ok( 3 === $e['equipo_previsto'] && $c['ok'] && 44.0 === $c['precios']['lobatos'], 'con 3 del equipo y 20 Lobatos: (300 − 100 + 27 × 3) / 20 + 27 = 41,05 € → con el 5 %, 44 €' );
-	$ok( ! Servicio::puede_validar( $e ) && ! Servicio::puede_publicar( $e, $a_lob ), 'el scouter no valida el presupuesto ni puede publicar un evento con coste sin validar' );
+	$ok( ! Servicio::puede_validar( $e ) && ! Servicio::puede_publicar( $e, $a_lob ), 'el scouter no da el visto bueno al presupuesto ni puede publicar un evento con coste sin él' );
+
+	// v0.63.3: la sección Scouters no paga y su coste se reparte entre las que sí pagan; la cuota se fija a mano.
+	$gastos3290 = array( array( 'tipo' => PartidasTable::GASTO, 'reparto' => 'total', 'seccion' => '', 'concepto' => 'Todo', 'importe' => 3290.0 ) );
+	$previstos  = array( 'castores' => 7, 'lobatos' => 12, 'scouts' => 12, 'escultas' => 8, 'rovers' => 3, 'scouters' => 15, 'voluntariado' => 3 );
+	$cs         = Presupuesto::calcular( $gastos3290, $previstos, 15, 5.0 );
+	$ok( $cs['ok'] && 45 === $cs['participantes'] && 15 === ( $cs['no_pagan']['scouters'] ?? 0 ), 'Scouters (15) no cuenta como participante que paga: pagan 45' );
+	$ok( 73.11 === $cs['costes']['lobatos'] && 77.0 === $cs['sugeridos']['lobatos'] && 77.0 === $cs['precios']['lobatos'], '3.290 € entre 45 = 73,11 €; con el 5 % y al euro superior, 77 € sugeridos (y es la cuota si Tesorería no escribe otra)' );
+	$ok( 0.0 === $cs['precios']['scouters'] && 0.0 === $cs['costes']['scouters'], 'la sección Scouters no paga: precio 0' );
+	$cs2 = Presupuesto::calcular( $gastos3290, $previstos, 15, 5.0, array_fill_keys( array( 'castores', 'lobatos', 'scouts', 'escultas', 'rovers', 'voluntariado' ), 78 ) );
+	$ok( $cs2['ok'] && 78.0 === $cs2['precios']['scouts'] && 3510.0 === $cs2['recaudacion'] && 220.0 === $cs2['fondo'], 'con una cuota escrita de 78 €: recaudación 3.510 € y lo que pasa del coste (220 €) es el fondo de emergencia' );
+	$cs3 = Presupuesto::calcular( $gastos3290, $previstos, 15, 5.0, array( 'lobatos' => 60 ) );
+	$ok( ! $cs3['ok'] && str_contains( implode( ' ', $cs3['errores'] ), 'no puede ser menor que su coste' ), 'una cuota menor que el coste no vale' );
 	$h = $enviar( new EventosView(), array( 'asde_action' => 'evento_publicar', 'evento' => (string) $id_lob ), 'asde_evento_' . $id_lob );
-	$ok( EventosTable::BORRADOR === EventosTable::obtener( $id_lob )['estado'] && str_contains( $h, 'Tesorería tiene que validar' ), 'si lo intenta, se le explica que falta la validación de Tesorería' );
+	$ok( EventosTable::BORRADOR === EventosTable::obtener( $id_lob )['estado'] && str_contains( $h, 'Tesorería tiene que dar el visto bueno' ), 'si lo intenta, se le explica que falta el visto bueno de Tesorería' );
 	// Lo que ya hubiera pendiente en el sitio (otros eventos) no cuenta: se compara con lo de antes.
 	$pend_antes = Servicio::pendientes( $como( $u_teso ) )['validar'];
 	$a_lob      = $como( $u_lob );
@@ -403,19 +415,51 @@ try {
 	$ok( 1 === preg_match( '/<strong>' . ( $pend_antes + 1 ) . '<\/strong> presupuestos? de eventos? por validar/', ( new AreaPrivadaView() )->render() ), 'y en el inicio, en «Pendiente de revisar»' );
 	$h = $enviar( new EventosView(), array( 'asde_action' => 'evento_validar', 'evento' => (string) $id_lob, 'pestana' => 'presupuesto' ), 'asde_evento_' . $id_lob );
 	$e = EventosTable::obtener( $id_lob );
-	$ok( null !== $e['validado_en'] && 44.0 === (float) ( $e['presupuesto']['precios']['lobatos'] ?? 0 ) && 'validado' === EventosTable::estado_visible( $e ) && str_contains( $h, 'ya es fijo' ), 'Tesorería lo valida: el precio de 44 € queda guardado' );
+	$ok( null !== $e['validado_en'] && 44.0 === (float) ( $e['presupuesto']['precios']['lobatos'] ?? 0 ) && 'validado' === EventosTable::estado_visible( $e ) && str_contains( $h, 'quedará fijo al publicar' ), 'Tesorería da el visto bueno: el precio sugerido de 44 € queda guardado, pero no se cierra (se fija al publicar)' );
 	$ok( $pend_antes === Servicio::pendientes( $a_teso )['validar'], 'y deja de estar pendiente' );
 	$a_lob = $como( $u_lob );
-	$h     = $enviar( new EventosView(), array( 'asde_action' => 'evento_partida_anadir', 'evento' => (string) $id_lob, 'tipo' => 'gasto', 'concepto' => 'Tarde', 'reparto' => 'total', 'seccion' => '', 'importe' => '10', 'pestana' => 'presupuesto' ), 'asde_evento_' . $id_lob );
-	$ok( 3 + 1 === count( PartidasTable::previstas( $id_lob ) ) && str_contains( $h, 'no se puede cambiar' ), 'validado, ya no se añaden partidas' );
-	$h = $enviar( new EventosView(), array( 'asde_action' => 'evento_guardar', 'evento' => (string) $id_lob ) + $formulario( array( 'lugar' => 'Otro albergue', 'previstas_lobatos' => '30', 'maximas_lobatos' => '24' ) ), 'asde_evento_' . $id_lob );
-	$ok( 20 === EventosTable::obtener( $id_lob )['plazas']['lobatos']['previstas'] && str_contains( $h, 'reabra el presupuesto' ), 'ni se cambian los participantes previstos (el precio es fijo)' );
-	$h = $enviar( new EventosView(), array( 'asde_action' => 'evento_guardar', 'evento' => (string) $id_lob ) + $formulario( array( 'lugar' => 'Albergue definitivo', 'maximas_lobatos' => '24' ) ), 'asde_evento_' . $id_lob );
+	// v0.63.3: el visto bueno no cierra el presupuesto. Cualquier cambio lo quita y Tesorería lo vuelve a dar.
+	$h = $enviar( new EventosView(), array( 'asde_action' => 'evento_partida_anadir', 'evento' => (string) $id_lob, 'tipo' => 'gasto', 'concepto' => 'Tarde', 'reparto' => 'total', 'seccion' => '', 'importe' => '10', 'pestana' => 'presupuesto' ), 'asde_evento_' . $id_lob );
+	$e = EventosTable::obtener( $id_lob );
+	$ok( 4 + 1 === count( PartidasTable::previstas( $id_lob ) ) && null === $e['validado_en'] && null !== $e['validacion_pedida_en'] && 'por_validar' === EventosTable::estado_visible( $e ), 'con el visto bueno dado todavía se añaden partidas; eso lo quita y vuelve a estar pendiente de Tesorería' );
+	foreach ( PartidasTable::previstas( $id_lob ) as $pt ) {
+		if ( 'Tarde' === $pt['concepto'] ) {
+			$enviar( new EventosView(), array( 'asde_action' => 'evento_partida_quitar', 'evento' => (string) $id_lob, 'partida' => (string) $pt['id'], 'pestana' => 'presupuesto' ), 'asde_evento_' . $id_lob );
+		}
+	}
+	$ok( 4 === count( PartidasTable::previstas( $id_lob ) ), 'se quita la partida de prueba' );
+	$a_teso = $como( $u_teso );
+	$enviar( new EventosView(), array( 'asde_action' => 'evento_validar', 'evento' => (string) $id_lob, 'pestana' => 'presupuesto' ), 'asde_evento_' . $id_lob );
+	$a_lob = $como( $u_lob );
+	$h     = $enviar( new EventosView(), array( 'asde_action' => 'evento_guardar', 'evento' => (string) $id_lob ) + $formulario( array( 'lugar' => 'Otro albergue', 'previstas_lobatos' => '22', 'maximas_lobatos' => '24' ) ), 'asde_evento_' . $id_lob );
+	$e = EventosTable::obtener( $id_lob );
+	$ok( 22 === $e['plazas']['lobatos']['previstas'] && null === $e['validado_en'], 'con el visto bueno dado también se cambian los participantes previstos; eso lo quita' );
+	$enviar( new EventosView(), array( 'asde_action' => 'evento_guardar', 'evento' => (string) $id_lob ) + $formulario( array( 'lugar' => 'Otro albergue', 'previstas_lobatos' => '20', 'maximas_lobatos' => '24' ) ), 'asde_evento_' . $id_lob );
+	// La cuota la fija Tesorería a mano: no puede ser menor que el coste y lo que pase del coste es fondo de emergencia.
+	$a_teso = $como( $u_teso );
+	$h = $enviar( new EventosView(), array( 'asde_action' => 'evento_validar', 'evento' => (string) $id_lob, 'cuota' => array( 'lobatos' => '30' ), 'pestana' => 'presupuesto' ), 'asde_evento_' . $id_lob );
+	$ok( null === EventosTable::obtener( $id_lob )['validado_en'] && str_contains( $h, 'no puede ser menor que su coste' ), 'una cuota menor que el coste se rechaza' );
+	$enviar( new EventosView(), array( 'asde_action' => 'evento_validar', 'evento' => (string) $id_lob, 'cuota' => array( 'lobatos' => '46,50' ), 'pestana' => 'presupuesto' ), 'asde_evento_' . $id_lob );
+	$e = EventosTable::obtener( $id_lob );
+	$ok( null !== $e['validado_en'] && 46.5 === (float) $e['presupuesto']['precios']['lobatos'] && 46.5 === (float) ( $e['cuotas']['lobatos'] ?? 0 ) && $e['presupuesto']['fondo'] > 100, 'Tesorería escribe una cuota de 46,50 €: queda guardada y lo que pasa del coste es el fondo de emergencia (' . ( $e['presupuesto']['fondo'] ?? '-' ) . ' €)' );
+	$enviar( new EventosView(), array( 'asde_action' => 'evento_validar', 'evento' => (string) $id_lob, 'cuota' => array( 'lobatos' => '44' ), 'pestana' => 'presupuesto' ), 'asde_evento_' . $id_lob );
+	$ok( 44.0 === (float) ( EventosTable::obtener( $id_lob )['presupuesto']['precios']['lobatos'] ?? 0 ), 'y se puede cambiar otra vez mientras sea borrador (vuelve a 44 €)' );
+	// Un borrador validado con el cálculo antiguo (sin «no_pagan»: los scouters pagaban) vuelve a estar pendiente.
+	$crudo = (string) $wpdb->get_var( $wpdb->prepare( 'SELECT presupuesto FROM %i WHERE id = %d', EventosTable::table(), $id_lob ) ); // phpcs:ignore WordPress.DB
+	$viejo = (array) json_decode( $crudo, true );
+	unset( $viejo['no_pagan'] );
+	$wpdb->update( EventosTable::table(), array( 'presupuesto' => (string) wp_json_encode( $viejo ) ), array( 'id' => $id_lob ) ); // phpcs:ignore WordPress.DB
+	$e = EventosTable::obtener( $id_lob );
+	$ok( null === $e['validado_en'] && null === $e['presupuesto'] && ! Servicio::puede_publicar( $e, $como( $u_lob ) ), 'un borrador con el visto bueno del cálculo antiguo (sin «no_pagan») vuelve a estar pendiente y no se puede publicar' );
+	$wpdb->update( EventosTable::table(), array( 'presupuesto' => $crudo ), array( 'id' => $id_lob ) ); // phpcs:ignore WordPress.DB
+	$ok( null !== EventosTable::obtener( $id_lob )['validado_en'], 'restaurado para el resto de la prueba' );
+	$a_lob = $como( $u_lob );
+	$h     = $enviar( new EventosView(), array( 'asde_action' => 'evento_guardar', 'evento' => (string) $id_lob ) + $formulario( array( 'lugar' => 'Albergue definitivo', 'maximas_lobatos' => '24' ) ), 'asde_evento_' . $id_lob );
 	$ok( 'Albergue definitivo' === EventosTable::obtener( $id_lob )['lugar'], 'pero el lugar y lo demás sí' );
 	$a_teso = $como( $u_teso );
 	$enviar( new EventosView(), array( 'asde_action' => 'evento_reabrir', 'evento' => (string) $id_lob, 'pestana' => 'presupuesto' ), 'asde_evento_' . $id_lob );
 	$e = EventosTable::obtener( $id_lob );
-	$ok( null === $e['validado_en'] && null === $e['presupuesto'] && null === $e['validacion_pedida_en'] && Servicio::presupuesto_abierto( $e ), 'Tesorería lo reabre (no hay nadie inscrito): vuelve a ser editable' );
+	$ok( null === $e['validado_en'] && null === $e['presupuesto'] && null !== $e['validacion_pedida_en'] && Servicio::presupuesto_abierto( $e ), 'Tesorería quita el visto bueno: vuelve a estar pendiente (sigue pedido)' );
 	$enviar( new EventosView(), array( 'asde_action' => 'evento_validar', 'evento' => (string) $id_lob, 'pestana' => 'presupuesto' ), 'asde_evento_' . $id_lob );
 	$ok( null !== EventosTable::obtener( $id_lob )['validado_en'], 'y lo vuelve a validar (también sin que se lo pidan)' );
 
@@ -485,7 +529,7 @@ try {
 			'pestana' => 'presupuesto',
 		)
 	);
-	$ok( str_contains( $h, 'Añadir una partida' ) && ! str_contains( $h, 'Validar el presupuesto' ), 'la pestaña Presupuesto del scouter: añadir partidas, sin el botón de validar' );
+	$ok( str_contains( $h, 'Añadir una partida' ) && ! str_contains( $h, 'Dar el visto bueno' ), 'la pestaña Presupuesto del scouter: añadir partidas, sin el botón de dar el visto bueno' );
 	$h = $pintar(
 		new EventosView(),
 		array(
@@ -512,7 +556,7 @@ try {
 			'pestana' => 'presupuesto',
 		)
 	);
-	$ok( str_contains( $h, 'Validar el presupuesto' ), 'Tesorería ve el botón de validar' );
+	$ok( str_contains( $h, 'Dar el visto bueno' ), 'Tesorería ve el botón de dar el visto bueno' );
 	$ok( str_contains( $pintar( new EventosConfigView() ), 'Fondo de emergencia' ), 'Tesorería entra en la configuración (margen)' );
 	$a_lob = $como( $u_lob );
 	$ok( str_contains( $pintar( new EventosConfigView() ), 'No tienes acceso' ) && 'Eventos' === ( Menu::grupos( $a_lob )[ Menu::GESTION ]['items']['eventos'] ?? '' ), 'el scouter no configura; en su menú, «Eventos»' );

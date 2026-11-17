@@ -227,10 +227,7 @@ final class EventosView extends EventosBaseView {
 				'eventos/presupuesto',
 				$vars + array(
 					'partidas' => PartidasTable::previstas( $e['id'] ),
-					'calculo'  => null !== $e['presupuesto'] ? $e['presupuesto'] + array(
-						'ok'      => true,
-						'errores' => array(),
-					) : Presupuesto::del_evento( $e ),
+					'calculo'  => Presupuesto::del_evento( $e ), // Siempre con los datos de hoy: el visto bueno ya no congela el presupuesto (v0.63.3).
 				)
 			);
 		}
@@ -563,19 +560,19 @@ final class EventosView extends EventosBaseView {
 
 			case 'evento_pedir_validacion':
 				$r     = Servicio::pedir_validacion( $e, $a );
-				$hecho = __( 'Budget sent to Treasury for validation.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
+				$hecho = __( 'Budget sent to Treasury for its go-ahead.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 
 			case 'evento_validar':
-				$r = Servicio::validar( $e );
+				$r = Servicio::validar( $e, $this->post_array( 'cuota' ) );
 				if ( ! is_wp_error( $r ) ) {
-					$hecho = sprintf( /* translators: %s: text */ __( 'Budget of event %s validated: the price per section is now fixed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $num );
+					$hecho = sprintf( /* translators: %s: text */ __( 'Budget of event %s approved: the price of each section will be fixed when the event is published.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $num );
 				}
 				break;
 
 			case 'evento_reabrir':
 				$r     = Servicio::reabrir( $e );
-				$hecho = __( 'Budget reopened: it can be changed and will have to be validated again.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
+				$hecho = __( 'Go-ahead withdrawn: the budget is pending Treasury again.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 				break;
 
 			case 'evento_publicar':

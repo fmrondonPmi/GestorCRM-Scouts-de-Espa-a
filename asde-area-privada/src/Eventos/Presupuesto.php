@@ -11,14 +11,18 @@ defined( 'ABSPATH' ) || exit;
  * 1. Cada gasto previsto dice cómo se reparte (REPARTOS). Lo que cuesta el equipo
  *    (scouters y voluntariado) se reparte entre los participantes: el equipo no paga.
  * 2. Los ingresos previstos (subvención, aportación del grupo) se restan de lo común.
- * 3. Coste por participante de cada sección = lo común ÷ participantes previstos de todas
- *    las secciones + lo de su sección ÷ participantes previstos de esa sección + lo que
- *    se paga por persona.
- * 4. Precio = coste × (1 + margen del fondo de emergencia), redondeado al euro hacia
- *    arriba. Lo que sobra (margen y redondeo) es el fondo de emergencia de la actividad.
+ * 3. Coste por participante de cada sección = lo común ÷ participantes previstos de las
+ *    secciones que pagan + lo de su sección ÷ participantes previstos de esa sección + lo
+ *    que se paga por persona. La sección Scouters no paga (NO_PAGAN): su coste se reparte
+ *    entre quienes sí pagan.
+ * 4. Precio sugerido = coste × (1 + margen del fondo de emergencia), redondeado al euro hacia
+ *    arriba. La cuota de cada sección la fija Tesorería a mano (v0.63.3); si es mayor que el
+ *    coste, lo que sobra (margen y redondeo) es el fondo de emergencia de la actividad. No
+ *    puede ser menor que el coste.
  *
- * Se calcula con los participantes previstos y, al validarlo Tesorería, queda fijo
- * (P-145 bis): lo que sobre o falte lo asume el grupo.
+ * Se calcula con los participantes previstos. Tesorería da su visto bueno, que no cierra nada
+ * (cualquier cambio posterior lo quita); la cuota queda fija al publicar el evento (P-145 bis):
+ * lo que sobre o falte lo asume el grupo.
  */
 final class Presupuesto {
 
@@ -45,6 +49,9 @@ final class Presupuesto {
 		return $personas > 0 && $plazas > 0 ? (int) ceil( $personas / $plazas ) : 0;
 	}
 
+	/** Secciones que no pagan: su coste lo reparten las que sí pagan (v0.63.3, petición del 2026-11-17). */
+	public const NO_PAGAN = array( 'scouters' );
+
 	/** Repartos que necesitan una sección (en «participante», es opcional). */
 	public const CON_SECCION = array( 'total_seccion' );
 
@@ -53,10 +60,13 @@ final class Presupuesto {
 	 * @param array<string, int> $previstos sección => participantes previstos (solo las convocadas).
 	 * @param int                $equipo    Personas del equipo previstas.
 	 * @param float              $margen    Porcentaje del fondo de emergencia (0 si está apagado).
-	 * @return array{ok:bool, errores:string[], precios:array<string,float>, costes:array<string,float>, previstos:array<string,int>, participantes:int, equipo:int, margen:float, gastos:float, ingresos:float, recaudacion:float, fondo:float}
+	 * @param array<string, float> $cuotas  Cuota fijada a mano por sección (la que falte, la sugerida).
+	 * @return array{ok:bool, errores:string[], precios:array<string,float>, sugeridos:array<string,float>, costes:array<string,float>, previstos:array<string,int>, no_pagan:array<string,int>, participantes:int, equipo:int, margen:float, gastos:float, ingresos:float, recaudacion:float, fondo:float}
 	 */
-	public static function calcular( array $partidas, array $previstos, int $equipo, float $margen ): array {
+	public static function calcular( array $partidas, array $previstos, int $equipo, float $margen, array $cuotas = array() ): array {
 		$previstos = array_filter( array_map( 'intval', $previstos ), static fn( int $n ) => $n > 0 );
+		$no_pagan  = array_intersect_key( $previstos, array_flip( self::NO_PAGAN ) );
+		$previstos = array_diff_key( $previstos, $no_pagan ); // Desde aquí, solo las secciones que pagan.
 		$total_n   = array_sum( $previstos );
 		$errores   = array();
 		$comun     = 0.0;
@@ -116,27 +126,40 @@ final class Presupuesto {
 			}
 		}
 
-		$costes  = array();
-		$precios = array();
-		$fondo   = 0.0;
-		$recauda = 0.0;
+		$costes    = array();
+		$precios   = array();
+		$sugeridos = array();
+		$fondo     = 0.0;
+		$recauda   = 0.0;
 		if ( $total_n > 0 ) {
 			$comun_cabeza = $comun / $total_n;
 			foreach ( $previstos as $s => $n ) {
 				$coste        = max( 0.0, $comun_cabeza + $por_seccion[ $s ] / $n + $por_persona[ $s ] );
 				$costes[ $s ] = round( $coste, 2 );
 				// round() antes de ceil(): 45,0000001 por la coma flotante no debe pasar a 46.
-				$precios[ $s ] = (float) ceil( round( $coste * ( 1 + $margen / 100 ), 2 ) );
-				$recauda      += $precios[ $s ] * $n;
-				$fondo        += ( $precios[ $s ] - $coste ) * $n;
+				$sugeridos[ $s ] = (float) ceil( round( $coste * ( 1 + $margen / 100 ), 2 ) );
+				$cuota           = isset( $cuotas[ $s ] ) && '' !== (string) $cuotas[ $s ] ? round( (float) $cuotas[ $s ], 2 ) : $sugeridos[ $s ];
+				if ( $cuota + 0.004 < $costes[ $s ] ) {
+					$errores[] = sprintf( /* translators: 1: section, 2: amount, 3: amount */ __( 'The price of %1$s (%2$s) cannot be lower than its cost (%3$s).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Secciones::nombre( (string) $s ), number_format_i18n( $cuota, 2 ) . ' €', number_format_i18n( $costes[ $s ], 2 ) . ' €' );
+				}
+				$precios[ $s ] = $cuota;
+				$recauda      += $cuota * $n;
+				$fondo        += ( $cuota - $coste ) * $n;
 			}
+		}
+		// Quien no paga entra gratis en su inscripción: precio 0.
+		foreach ( array_keys( $no_pagan ) as $s ) {
+			$costes[ $s ]  = 0.0;
+			$precios[ $s ] = 0.0;
 		}
 		return array(
 			'ok'            => ! $errores,
 			'errores'       => $errores,
 			'precios'       => $precios,
+			'sugeridos'     => $sugeridos,
 			'costes'        => $costes,
 			'previstos'     => $previstos,
+			'no_pagan'      => $no_pagan,
 			'participantes' => $total_n,
 			'equipo'        => $equipo,
 			'margen'        => round( $margen, 2 ),
@@ -187,6 +210,6 @@ final class Presupuesto {
 
 	/** Cálculo con los datos de hoy del evento. */
 	public static function del_evento( array $e ): array {
-		return self::calcular( PartidasTable::previstas( $e['id'] ), self::previstos( $e ), (int) $e['equipo_previsto'], self::margen( $e ) );
+		return self::calcular( PartidasTable::previstas( $e['id'] ), self::previstos( $e ), (int) $e['equipo_previsto'], self::margen( $e ), (array) ( $e['cuotas'] ?? array() ) );
 	}
 }

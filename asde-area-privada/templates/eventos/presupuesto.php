@@ -46,12 +46,26 @@ $reparto  = static function ( array $p ): string {
 	<h3 class="asde-card__title"><?php esc_html_e( 'Budget', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h3>
 	<?php if ( null !== $e['validado_en'] ) : ?>
 		<p class="asde-notice asde-notice--success">
-			<?php echo esc_html( sprintf( '' !== $quien( $e['validado_por'] ) ? /* translators: 1: text, 2: text */ __( 'Validated by %1$s on %2$s: the price per section is now fixed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : /* translators: %2$s: text */ __( 'Validated on %2$s: the price per section is now fixed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $quien( $e['validado_por'] ), wp_date( 'd/m/Y', strtotime( $e['validado_en'] . ' UTC' ) ) ) ); ?>
+			<?php
+			$publicado = \AsdeBalears\AreaPrivada\Eventos\EventosTable::BORRADOR !== $e['estado'];
+			echo esc_html(
+				sprintf(
+					'' !== $quien( $e['validado_por'] )
+						? ( $publicado ? /* translators: 1: text, 2: text */ __( 'Approved by %1$s on %2$s: the price of each section is fixed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : /* translators: 1: text, 2: text */ __( 'Approved by %1$s on %2$s: the price of each section will be fixed when the event is published.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) )
+						: ( $publicado ? /* translators: %2$s: text */ __( 'Approved on %2$s: the price of each section is fixed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : /* translators: %2$s: text */ __( 'Approved on %2$s: the price of each section will be fixed when the event is published.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ),
+					$quien( $e['validado_por'] ),
+					wp_date( 'd/m/Y', strtotime( $e['validado_en'] . ' UTC' ) )
+				)
+			);
+			?>
 		</p>
+		<?php if ( $editable ) : ?>
+			<p class="asde-help"><?php esc_html_e( 'You can still change the budget: if you do, the go-ahead is withdrawn and Treasury has to give it again.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
+		<?php endif; ?>
 	<?php elseif ( null !== $e['validacion_pedida_en'] ) : ?>
-		<p class="asde-notice asde-notice--info"><?php echo esc_html( sprintf( /* translators: %s: text */ __( 'Sent to Treasury on %s: it still needs to be validated.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), wp_date( 'd/m/Y', strtotime( $e['validacion_pedida_en'] . ' UTC' ) ) ) ); ?></p>
+		<p class="asde-notice asde-notice--info"><?php echo esc_html( sprintf( /* translators: %s: text */ __( 'Sent to Treasury on %s: it still needs its go-ahead.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), wp_date( 'd/m/Y', strtotime( $e['validacion_pedida_en'] . ' UTC' ) ) ) ); ?></p>
 	<?php else : ?>
-		<p class="asde-muted"><?php esc_html_e( 'Enter the planned expenses and how each one is split. Each section\'s price comes from the cost (the team\'s, split among the participants) plus the emergency fund margin, rounded to the euro. When it is ready, send it to Treasury to validate.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
+		<p class="asde-muted"><?php esc_html_e( 'Enter the planned expenses and how each one is split. Treasury sets each section\'s price from the cost (the team\'s, split among those who pay) plus the emergency fund margin. When it is ready, send it to Treasury for its go-ahead.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 	<?php endif; ?>
 
 	<?php if ( $partidas ) : ?>
@@ -164,7 +178,7 @@ $reparto  = static function ( array $p ): string {
 <?php endif; ?>
 
 <section class="asde-card">
-	<h3 class="asde-card__title"><?php echo esc_html( null !== $e['validado_en'] ? __( 'Validated price', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : __( 'Resulting price', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?></h3>
+	<h3 class="asde-card__title"><?php echo esc_html( null !== $e['validado_en'] ? __( 'Approved price', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : __( 'Resulting price', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?></h3>
 	<?php if ( ! empty( $calculo['errores'] ) ) : ?>
 		<ul class="asde-comprobacion">
 			<?php foreach ( $calculo['errores'] as $error ) : ?>
@@ -173,26 +187,53 @@ $reparto  = static function ( array $p ): string {
 		</ul>
 	<?php endif; ?>
 	<?php if ( ! empty( $calculo['precios'] ) ) : ?>
+		<?php
+		$fija_cuota = Servicio::puede_validar( $e ); // Tesorería escribe la cuota de cada sección (v0.63.3).
+		if ( $fija_cuota ) :
+			?>
+			<form method="post" class="asde-form" data-asde-confirmar="<?php echo esc_attr( esc_attr__( 'Give the budget the go-ahead? You can still change it until the event is published.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
+				<?php echo wp_kses( $campos( 'evento_validar' ), asde_html_permitido() ); ?>
+		<?php endif; ?>
 		<table class="asde-table asde-table--precios" data-asde-paginar>
 			<thead>
 				<tr>
 					<th scope="col"><?php esc_html_e( 'Section', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
 					<th scope="col"><?php esc_html_e( 'Expected participants', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
 					<th scope="col"><?php esc_html_e( 'Cost per participant', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
+					<?php if ( $fija_cuota ) : ?>
+						<th scope="col"><?php esc_html_e( 'Suggested price', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
+					<?php endif; ?>
 					<th scope="col"><?php esc_html_e( 'Price', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
 				</tr>
 			</thead>
 			<tbody>
 				<?php foreach ( $calculo['precios'] as $s => $precio ) : ?>
+					<?php $no_paga = isset( ( $calculo['no_pagan'] ?? array() )[ $s ] ); ?>
 					<tr>
 						<td data-label="<?php echo esc_attr( esc_attr__( 'Section', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo wp_kses( Secciones::badge( (string) $s ), asde_html_permitido() ); ?></td>
-						<td data-label="<?php echo esc_attr( esc_attr__( 'Expected participants', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo (int) ( $calculo['previstos'][ $s ] ?? 0 ); ?></td>
-						<td data-label="<?php echo esc_attr( esc_attr__( 'Cost per participant', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( Calculadora::euros( (float) ( $calculo['costes'][ $s ] ?? 0 ) ) ); ?></td>
-						<td data-label="<?php echo esc_attr( esc_attr__( 'Price', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><strong><?php echo esc_html( Calculadora::euros( (float) $precio ) ); ?></strong></td>
+						<td data-label="<?php echo esc_attr( esc_attr__( 'Expected participants', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo (int) ( $no_paga ? $calculo['no_pagan'][ $s ] : ( $calculo['previstos'][ $s ] ?? 0 ) ); ?></td>
+						<?php if ( $no_paga ) : ?>
+							<td colspan="<?php echo $fija_cuota ? 3 : 2; ?>" data-label="<?php echo esc_attr( esc_attr__( 'Price', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php esc_html_e( 'Does not pay: their cost is split among those who do', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></td>
+						<?php else : ?>
+							<td data-label="<?php echo esc_attr( esc_attr__( 'Cost per participant', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( Calculadora::euros( (float) ( $calculo['costes'][ $s ] ?? 0 ) ) ); ?></td>
+							<?php if ( $fija_cuota ) : ?>
+								<td data-label="<?php echo esc_attr( esc_attr__( 'Suggested price', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( Calculadora::euros( (float) ( $calculo['sugeridos'][ $s ] ?? 0 ) ) ); ?></td>
+								<td data-label="<?php echo esc_attr( esc_attr__( 'Price', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><input type="text" name="cuota[<?php echo esc_attr( (string) $s ); ?>]" value="<?php echo esc_attr( number_format( (float) $precio, 2, ',', '' ) ); ?>" inputmode="decimal" size="7" aria-label="<?php echo esc_attr( sprintf( /* translators: %s: section */ __( 'Price for %s (€)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Secciones::nombre( (string) $s ) ) ); ?>"></td>
+							<?php else : ?>
+								<td data-label="<?php echo esc_attr( esc_attr__( 'Price', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><strong><?php echo esc_html( Calculadora::euros( (float) $precio ) ); ?></strong></td>
+							<?php endif; ?>
+						<?php endif; ?>
 					</tr>
 				<?php endforeach; ?>
 			</tbody>
 		</table>
+		<?php if ( $fija_cuota ) : ?>
+			<p class="asde-form__fila">
+				<button type="submit" class="button button-primary"><?php echo esc_html( null !== $e['validado_en'] ? __( 'Save the prices and keep the go-ahead', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : __( 'Give the go-ahead', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?></button>
+				<span class="asde-help"><?php esc_html_e( 'The price of each section cannot be lower than its cost; anything above the cost is the emergency fund.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span>
+			</p>
+			</form>
+		<?php endif; ?>
 		<dl class="asde-datos">
 			<div><dt><?php esc_html_e( 'Planned expenses', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></dt><dd><?php echo esc_html( Calculadora::euros( (float) $calculo['gastos'] ) ); ?></dd></div>
 			<?php if ( (float) $calculo['ingresos'] > 0 ) : ?>
@@ -200,21 +241,21 @@ $reparto  = static function ( array $p ): string {
 			<?php endif; ?>
 			<div><dt><?php esc_html_e( 'Expected revenue', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></dt><dd><?php echo esc_html( Calculadora::euros( (float) $calculo['recaudacion'] ) ); ?></dd></div>
 			<div><dt><?php esc_html_e( 'Planned emergency fund', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></dt><dd><?php echo esc_html( Calculadora::euros( (float) $calculo['fondo'] ) ); ?> <span class="asde-muted"><?php echo esc_html( (float) $calculo['margen'] > 0 ? sprintf( /* translators: %s: text */ __( '(%s %% margin and rounding)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), number_format_i18n( (float) $calculo['margen'], 2 ) ) : __( '(rounding only: margin off)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?></span></dd></div>
+			<?php if ( ! empty( $calculo['no_pagan'] ) ) : ?>
+				<div><dt><?php esc_html_e( 'Sections that do not pay', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></dt><dd><?php echo esc_html( sprintf( /* translators: 1: sections, 2: number */ __( '%1$s (%2$d expected): their cost is spread among the sections that pay.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), implode( ', ', array_map( static fn( $s ) => Secciones::nombre( (string) $s ), array_keys( $calculo['no_pagan'] ) ) ), array_sum( $calculo['no_pagan'] ) ) ); ?></dd></div>
+			<?php endif; ?>
 			<div><dt><?php esc_html_e( 'Team', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></dt><dd><?php echo esc_html( sprintf( /* translators: %d: number */ _n( '%d person who does not pay: their cost is spread across the price.', '%d people who do not pay: their cost is spread across the price.', (int) $calculo['equipo'] , 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), (int) $calculo['equipo'] ) ); ?></dd></div>
 		</dl>
-		<p class="asde-help"><?php esc_html_e( 'The price is calculated with the expected participants and, once validated, does not change: any surplus or shortfall is borne by the group.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
+		<p class="asde-help"><?php esc_html_e( 'The price is calculated with the expected participants and is fixed when the event is published: any surplus or shortfall is borne by the group.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 	<?php endif; ?>
 
 	<?php
 	$botones = array();
 	if ( Servicio::puede_pedir_validacion( $e, $ambito ) ) {
-		$botones[] = '<form method="post" class="asde-inline-form">' . $campos( 'evento_pedir_validacion' ) . '<button type="submit" class="button">' . esc_html( __( 'Send to Treasury for validation', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) . '</button></form>';
-	}
-	if ( Servicio::puede_validar( $e ) ) {
-		$botones[] = '<form method="post" class="asde-inline-form" data-asde-confirmar="' . esc_attr( __( 'Validate the budget? The price per section will be fixed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) . '">' . $campos( 'evento_validar' ) . '<button type="submit" class="button button-primary">' . esc_html( __( 'Validate the budget', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) . '</button></form>';
+		$botones[] = '<form method="post" class="asde-inline-form">' . $campos( 'evento_pedir_validacion' ) . '<button type="submit" class="button">' . esc_html( __( 'Send to Treasury for its go-ahead', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) . '</button></form>';
 	}
 	if ( Servicio::puede_reabrir( $e ) ) {
-		$botones[] = '<form method="post" class="asde-inline-form" data-asde-confirmar="' . esc_attr( __( 'Reopen the budget? It will have to be validated again before publishing.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) . '">' . $campos( 'evento_reabrir' ) . '<button type="submit" class="asde-btn-link">' . esc_html( __( 'Reopen the budget', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) . '</button></form>';
+		$botones[] = '<form method="post" class="asde-inline-form" data-asde-confirmar="' . esc_attr( __( 'Withdraw the go-ahead? The budget will be pending Treasury again.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) . '">' . $campos( 'evento_reabrir' ) . '<button type="submit" class="asde-btn-link">' . esc_html( __( 'Withdraw the go-ahead', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) . '</button></form>';
 	}
 	?>
 	<?php if ( $botones ) : ?>
