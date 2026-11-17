@@ -1,6 +1,7 @@
 <?php
 namespace AsdeBalears\AreaPrivada\Auth;
 
+use AsdeBalears\AreaPrivada\Audit\Logger;
 use AsdeBalears\AreaPrivada\Crm\CrmException;
 use AsdeBalears\AreaPrivada\Crm\PersonaRepository;
 use AsdeBalears\AreaPrivada\Domain\Organizacion;
@@ -65,7 +66,10 @@ final class Ambito {
 		try {
 			$socio = Usuarios::socio( $this->user->ID );
 			$reps  = Usuarios::representados( $this->user->ID );
-			$todas = $repo->obtener_varias( array_filter( array_merge( array( $socio ), $reps ) ) );
+			// v0.63.2: una cuenta familiar representa también a los demás menores de su familia de Tesorería
+			// (hermanos que Secretaría ya agrupó, aunque no compartan email en el CRM).
+			$extra = $reps && in_array( Roles::TUTOR, (array) $this->user->roles, true ) ? Usuarios::companeros_de_familia( $reps ) : array();
+			$todas = $repo->obtener_varias( array_filter( array_merge( array( $socio ), $reps, $extra ) ) );
 
 			$this->persona = $socio ? ( $todas[ $socio ] ?? null ) : null;
 			foreach ( $reps as $n ) {
@@ -74,6 +78,15 @@ final class Ambito {
 					$this->representados[ $n ] = $p;
 				} else {
 					$this->retirados[] = $n;
+				}
+			}
+			foreach ( $extra as $n ) {
+				$p = $todas[ $n ] ?? null;
+				// Solo menores con membresía activa: los adultos de una familia (padres scouters) no se añaden.
+				if ( $p && $p->es_participante() && ! ( null !== $p->edad() && $p->edad() >= 18 ) ) {
+					Usuarios::anadir_meta_multiple( $this->user->ID, Usuarios::META_REPRESENTADO, array( $n ) );
+					$this->representados[ $n ] = $p;
+					Logger::log( 'tutela_ampliada_familia', 'user', (string) $this->user->ID, array( 'socio' => $n ) );
 				}
 			}
 		} catch ( CrmException $e ) {

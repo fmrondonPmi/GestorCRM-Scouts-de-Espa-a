@@ -335,6 +335,28 @@ try {
 			$ok( is_wp_error( FamiliasTable::borrar( $fam_tes['id'] ) ), 'no se borra una familia con socios o pagos' );
 		}
 		$ok( Ambito::de( $fam )->puede_acceder() && isset( Ambito::de( $fam )->representados[ $nino->num_socio_asde ] ), 'ámbito: la familia ve al menor' );
+
+		// v0.63.2: los demás menores de la familia de Tesorería pasan solos a la cuenta familiar, aunque no compartan email.
+		$eva = $ficha( '990018' );
+		if ( $fam_tes && $eva ) {
+			$ok( true === FamiliasTable::anadir( $fam_tes['id'], $eva->num_socio_asde ) && true === FamiliasTable::anadir( $fam_tes['id'], $adulto->num_socio_asde ), 'preparación: Secretaría agrupa en la familia a una menor (sin email compartido) y a un adulto' );
+			$ok( ! in_array( $eva->num_socio_asde, Usuarios::representados( $fam->ID ), true ), 'antes de entrar, la cuenta solo representa al menor' );
+			Ambito::olvidar( $fam->ID );
+			$amb = Ambito::de( get_userdata( $fam->ID ) );
+			$ok( isset( $amb->representados[ $eva->num_socio_asde ] ) && isset( $amb->representados[ $nino->num_socio_asde ] ), 'ámbito: la cuenta ve también a la menor de su familia de Tesorería' );
+			$ok( in_array( $eva->num_socio_asde, Usuarios::representados( $fam->ID ), true ), 'el vínculo queda guardado en la cuenta' );
+			$ok( ! isset( $amb->representados[ $adulto->num_socio_asde ] ) && ! in_array( $adulto->num_socio_asde, Usuarios::representados( $fam->ID ), true ), 'un adulto de la familia (padre/madre scouter) no se añade como representado' );
+			$ok( 1 === (int) $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(*) FROM ' . Logger::table() . ' WHERE accion = %s AND objeto_id = %s', 'tutela_ampliada_familia', (string) $fam->ID ) ), 'queda en el registro (tutela_ampliada_familia), una sola vez' ); // phpcs:ignore WordPress.DB
+			Ambito::olvidar( $fam->ID );
+			Ambito::de( get_userdata( $fam->ID ) );
+			$ok( 1 === (int) $wpdb->get_var( $wpdb->prepare( 'SELECT COUNT(*) FROM ' . Logger::table() . ' WHERE accion = %s AND objeto_id = %s', 'tutela_ampliada_familia', (string) $fam->ID ) ), 'la siguiente vez no se vuelve a registrar' ); // phpcs:ignore WordPress.DB
+			// Se deja como estaba para el resto de la prueba.
+			Usuarios::quitar_representado( $fam->ID, $eva->num_socio_asde );
+			FamiliasTable::quitar( $fam_tes['id'], $eva->num_socio_asde );
+			FamiliasTable::quitar( $fam_tes['id'], $adulto->num_socio_asde );
+			Ambito::olvidar( $fam->ID );
+			$ok( array( $nino->num_socio_asde ) === Usuarios::representados( $fam->ID ), 'sin la menor en la familia, la cuenta vuelve a representar solo al menor' );
+		}
 		$r2 = $alta->alta_tutor( $nino->num_socio_asde, array(), 'email1' );
 		$ok( ! $r2->ok, 'misma cuenta y mismo menor → nada que cambiar', $r2 );
 

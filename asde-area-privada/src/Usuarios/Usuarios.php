@@ -5,6 +5,7 @@ use AsdeBalears\AreaPrivada\Domain\Grupo;
 use AsdeBalears\AreaPrivada\Domain\Grupos;
 use AsdeBalears\AreaPrivada\Install\Roles;
 use AsdeBalears\AreaPrivada\Integraciones\Wordfence;
+use AsdeBalears\AreaPrivada\Tesoreria\FamiliasTable;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -163,6 +164,26 @@ final class Usuarios {
 	/** @return string[] Nº Scouts de España de los representados. */
 	public static function representados( int $user_id ): array {
 		return array_values( array_unique( array_map( 'strval', (array) get_user_meta( $user_id, self::META_REPRESENTADO ) ) ) );
+	}
+
+	/**
+	 * Otros miembros de la familia de Tesorería de estos socios, que no están ya en la lista (v0.63.2): los
+	 * hermanos/as que Secretaría ya agrupó en una familia, aunque no compartan email en el CRM.
+	 *
+	 * @param string[] $nums Nº Scouts de España.
+	 * @return string[]
+	 */
+	public static function companeros_de_familia( array $nums ): array {
+		$extra = array();
+		foreach ( $nums as $n ) {
+			$familia = FamiliasTable::de_socio( (string) $n );
+			foreach ( $familia ? $familia['miembros'] : array() as $m ) {
+				if ( ! in_array( $m, $nums, true ) ) {
+					$extra[ $m ] = $m;
+				}
+			}
+		}
+		return array_values( $extra );
 	}
 
 	/** Añade valores a un meta de varias filas sin duplicar. */
