@@ -180,7 +180,9 @@ final class Identificacion {
 				sprintf(
 					/* translators: %s: text */ __( 'That email address belongs to several accounts and the password works for all of them. Enter the member number of the account you want to sign in with: %s.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 					Contacto::lista( array_map( static fn( \WP_User $u ) => $u->user_login, $validas ), true )
-				)
+				),
+				// v0.64.3: la pantalla de acceso ofrece elegir entre estas cuentas (la contraseña ya es correcta).
+				array( 'cuentas' => array_map( static fn( \WP_User $u ) => $u->user_login, $validas ) )
 			);
 		}
 		return ( $validas[0] ?? $cuentas[0] )->user_login;

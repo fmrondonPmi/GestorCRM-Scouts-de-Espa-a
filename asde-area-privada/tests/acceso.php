@@ -218,9 +218,11 @@ try {
 		throw new RuntimeException( 'asde-redirect:' . $destino );
 	};
 	add_filter( 'wp_redirect', $redirigir, 1 );
-	$error_prop = new ReflectionProperty( AccesoView::class, 'error' );
-	$enviar     = static function ( string $usuario, string $clave ) use ( $grupo, $error_prop ): string {
+	$error_prop  = new ReflectionProperty( AccesoView::class, 'error' );
+	$elegir_prop = new ReflectionProperty( AccesoView::class, 'elegir' );
+	$enviar      = static function ( string $usuario, string $clave ) use ( $grupo, $error_prop, $elegir_prop ): string {
 		wp_set_current_user( 0 );
+		$elegir_prop->setValue( null, null );
 		$error_prop->setValue( null, '' );
 		$_POST = array(
 			'asde_action' => 'acceder',
@@ -246,9 +248,55 @@ try {
 	$ok( AccesoView::MENSAJE_CREDENCIALES === $enviar( $marta, 'contraseña-incorrecta' ), 'contraseña incorrecta → «Nº de socio/a o email, contraseña o grupo incorrectos.»' );
 	$ok( AccesoView::MENSAJE_CREDENCIALES === $enviar( 'nadie@example.invalid', 'x' ), 'email desconocido → el mismo mensaje (no revela si existe)' );
 	wp_set_password( $claves['prueba-acc-1'], $ids['prueba-acc-2t'] );
-	$varias = $enviar( $marta, $claves['prueba-acc-1'] );
+	$varias = $enviar( $marta, $claves['prueba-acc-1'] ); // La contraseña de la cuenta familiar se restaura al acabar los pasos de elegir cuenta.
+	// v0.64.3: con la misma contraseña en las dos cuentas ya no es un error: se ofrece elegir cuenta.
+	$estado = $elegir_prop->getValue();
+	$ok( '' === $varias && 0 === get_current_user_id() && is_array( $estado ) && array( 'prueba-acc-1', 'prueba-acc-2t' ) === array_keys( $estado['cuentas'] ), 'misma contraseña en las dos cuentas → no entra todavía y ofrece elegir entre las dos' );
+	$html_elegir = ( new AccesoView() )->render();
+	$ok( str_contains( $html_elegir, 'name="cuenta"' ) && str_contains( $html_elegir, 'value="prueba-acc-2t"' ) && str_contains( $html_elegir, 'name="token"' ) && ! str_contains( $html_elegir, $claves['prueba-acc-1'] ) && ! str_contains( $html_elegir, 'name="clave"' ), 'el desplegable lleva las dos cuentas y la contraseña no va en el HTML' );
+	$guardado = (string) get_transient( 'asde_acc_' . $estado['token'] );
+	$ok( '' !== $guardado && ! str_contains( $guardado, $claves['prueba-acc-1'] ) && ! str_contains( $guardado, 'prueba-acc' ), 'el acceso a medias se guarda cifrado (ni la contraseña ni las cuentas en claro)' );
+	$paso2 = static function ( string $token, string $cuenta, string $nonce = 'asde_acceso_elegir' ) use ( $error_prop, $elegir_prop ): string {
+		wp_set_current_user( 0 );
+		$error_prop->setValue( null, '' );
+		$elegir_prop->setValue( null, null );
+		$_POST = array(
+			'asde_action' => 'elegir_cuenta',
+			'_wpnonce'    => wp_create_nonce( $nonce ),
+			'token'       => $token,
+			'cuenta'      => $cuenta,
+		);
+		try {
+			( new AccesoView() )->handle_post();
+		} catch ( RuntimeException $e ) {
+			return $e->getMessage();
+		} finally {
+			$_POST = array();
+		}
+		return (string) $error_prop->getValue();
+	};
+	$token = (string) $estado['token'];
+	$ok( '' !== $paso2( $token, 'prueba-acc-3' ) && 0 === get_current_user_id() && is_array( $elegir_prop->getValue() ), 'elegir una cuenta que no está en la lista → no entra y se vuelve a ofrecer la lista' );
+	$ok( '' !== $paso2( $token, 'prueba-acc-2t', 'otro_nonce' ) && 0 === get_current_user_id(), 'sin el nonce del formulario → no entra' );
+	$res = $paso2( $token, 'prueba-acc-2t' );
+	$ok( str_starts_with( $res, 'asde-redirect:' . Pages::url( 'area' ) ) && get_current_user_id() === $ids['prueba-acc-2t'], 'elegir la cuenta familiar → entra en la cuenta familiar y va al área privada' );
+	$fila = $wpdb->get_row( $wpdb->prepare( 'SELECT * FROM ' . Logger::table() . ' WHERE id > %d AND accion = %s AND objeto_id = %s ORDER BY id DESC LIMIT 1', $log_antes, 'acceso', (string) $ids['prueba-acc-2t'] ), ARRAY_A ); // phpcs:ignore WordPress.DB
+	$ok( $fila && ! str_contains( (string) $fila['detalles'], '@' ), 'auditoría: consta el acceso, sin guardar el email' );
+	$ok( false === get_transient( 'asde_acc_' . $token ), 'el acceso a medias es de un solo uso: se borra al entrar' );
+	$ok( '' !== $paso2( $token, 'prueba-acc-1' ) && 0 === get_current_user_id(), 'reutilizar el mismo paso (token ya usado) → no entra: hay que empezar de nuevo' );
+	$ok( '' !== $paso2( 'inventado', 'prueba-acc-1' ) && 0 === get_current_user_id(), 'un token inventado → no entra' );
+	// La otra cuenta, con otra pasada completa.
+	$enviar( $marta, $claves['prueba-acc-1'] );
+	$estado = $elegir_prop->getValue();
+	$res    = $paso2( (string) $estado['token'], 'prueba-acc-1' );
+	$ok( str_starts_with( $res, 'asde-redirect:' ) && get_current_user_id() === $ids['prueba-acc-1'], 'elegir la cuenta de scouter → entra en la de scouter' );
+	// Caducidad: si el acceso a medias ya no está guardado, no se entra.
+	$enviar( $marta, $claves['prueba-acc-1'] );
+	$estado = $elegir_prop->getValue();
+	delete_transient( 'asde_acc_' . $estado['token'] );
+	$ok( '' !== $paso2( (string) $estado['token'], 'prueba-acc-1' ) && 0 === get_current_user_id(), 'el acceso a medias caduca (se borra a los 5 minutos): hay que empezar de nuevo' );
+	$elegir_prop->setValue( null, null );
 	wp_set_password( $claves['prueba-acc-2t'], $ids['prueba-acc-2t'] );
-	$ok( str_contains( $varias, 'varias cuentas' ) && str_contains( $varias, 'prueba-acc-1 o prueba-acc-2t' ) && 0 === get_current_user_id(), 'misma contraseña en las dos cuentas → no entra y pide el nº de socio/a' );
 	$crm_caido = true;
 	$ok( str_contains( $enviar( 'pendiente.prueba@example.invalid', 'x' ), 'el CRM no responde' ), 'CRM caído (y hacía falta) → mensaje claro' );
 	$crm_caido = false;
