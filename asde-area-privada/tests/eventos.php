@@ -391,15 +391,15 @@ try {
 	$ok( 3 === $e['equipo_previsto'] && $c['ok'] && 44.0 === $c['precios']['lobatos'], 'con 3 del equipo y 20 Lobatos: (300 − 100 + 27 × 3) / 20 + 27 = 41,05 € → con el 5 %, 44 €' );
 	$ok( ! Servicio::puede_validar( $e ) && ! Servicio::puede_publicar( $e, $a_lob ), 'el scouter no da el visto bueno al presupuesto ni puede publicar un evento con coste sin él' );
 
-	// v0.63.3: la sección Scouters no paga y su coste se reparte entre las que sí pagan; la cuota se fija a mano.
+	// v0.63.3 y v0.64.4: las secciones Scouters y Voluntariado de apoyo no pagan y su coste se reparte entre las que sí pagan; la cuota se fija a mano.
 	$gastos3290 = array( array( 'tipo' => PartidasTable::GASTO, 'reparto' => 'total', 'seccion' => '', 'concepto' => 'Todo', 'importe' => 3290.0 ) );
 	$previstos  = array( 'castores' => 7, 'lobatos' => 12, 'scouts' => 12, 'escultas' => 8, 'rovers' => 3, 'scouters' => 15, 'voluntariado' => 3 );
 	$cs         = Presupuesto::calcular( $gastos3290, $previstos, 15, 5.0 );
-	$ok( $cs['ok'] && 45 === $cs['participantes'] && 15 === ( $cs['no_pagan']['scouters'] ?? 0 ), 'Scouters (15) no cuenta como participante que paga: pagan 45' );
-	$ok( 73.11 === $cs['costes']['lobatos'] && 77.0 === $cs['sugeridos']['lobatos'] && 77.0 === $cs['precios']['lobatos'], '3.290 € entre 45 = 73,11 €; con el 5 % y al euro superior, 77 € sugeridos (y es la cuota si Tesorería no escribe otra)' );
-	$ok( 0.0 === $cs['precios']['scouters'] && 0.0 === $cs['costes']['scouters'], 'la sección Scouters no paga: precio 0' );
-	$cs2 = Presupuesto::calcular( $gastos3290, $previstos, 15, 5.0, array_fill_keys( array( 'castores', 'lobatos', 'scouts', 'escultas', 'rovers', 'voluntariado' ), 78 ) );
-	$ok( $cs2['ok'] && 78.0 === $cs2['precios']['scouts'] && 3510.0 === $cs2['recaudacion'] && 220.0 === $cs2['fondo'], 'con una cuota escrita de 78 €: recaudación 3.510 € y lo que pasa del coste (220 €) es el fondo de emergencia' );
+	$ok( $cs['ok'] && 42 === $cs['participantes'] && 15 === ( $cs['no_pagan']['scouters'] ?? 0 ) && 3 === ( $cs['no_pagan']['voluntariado'] ?? 0 ), 'Scouters (15) y Voluntariado de apoyo (3) no cuentan como participantes que pagan: pagan 42' );
+	$ok( 78.33 === $cs['costes']['lobatos'] && 83.0 === $cs['sugeridos']['lobatos'] && 83.0 === $cs['precios']['lobatos'], '3.290 € entre 42 = 78,33 €; con el 5 % y al euro superior, 83 € sugeridos (y es la cuota si Tesorería no escribe otra)' );
+	$ok( 0.0 === $cs['precios']['scouters'] && 0.0 === $cs['costes']['scouters'] && 0.0 === $cs['precios']['voluntariado'], 'las secciones Scouters y Voluntariado de apoyo no pagan: precio 0' );
+	$cs2 = Presupuesto::calcular( $gastos3290, $previstos, 15, 5.0, array_fill_keys( array( 'castores', 'lobatos', 'scouts', 'escultas', 'rovers' ), 84 ) );
+	$ok( $cs2['ok'] && 84.0 === $cs2['precios']['scouts'] && 3528.0 === $cs2['recaudacion'] && 238.0 === $cs2['fondo'], 'con una cuota escrita de 84 €: recaudación 3.528 € y lo que pasa del coste (238 €) es el fondo de emergencia' );
 	$cs3 = Presupuesto::calcular( $gastos3290, $previstos, 15, 5.0, array( 'lobatos' => 60 ) );
 	$ok( ! $cs3['ok'] && str_contains( implode( ' ', $cs3['errores'] ), 'no puede ser menor que su coste' ), 'una cuota menor que el coste no vale' );
 	$h = $enviar( new EventosView(), array( 'asde_action' => 'evento_publicar', 'evento' => (string) $id_lob ), 'asde_evento_' . $id_lob );

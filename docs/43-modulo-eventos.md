@@ -653,3 +653,5 @@ Petición del usuario tras revisar un campamento con 60 personas previstas (45 p
 - La pantalla de Presupuesto enseña siempre el cálculo de hoy (borrador) o el guardado (publicado).
 - Pruebas: `tests/eventos.php` (flujo completo, cuota manual, cuota menor que el coste, cambios que quitan el visto bueno, borrador antiguo).
 - Pendiente: traducciones de los 35 textos nuevos a ca/eu/gl/valencià (solo están en castellano).
+
+**v0.64.4 (2026-11-17):** el Voluntariado de apoyo tampoco paga (`Presupuesto::NO_PAGAN` = Scouters y Voluntariado de apoyo). En el ejemplo del campamento pagan 42: 3.290 € / 42 = 78,33 €, 83 € sugeridos con el 5 %.

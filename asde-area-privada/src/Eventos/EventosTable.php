@@ -458,7 +458,7 @@ final class EventosTable {
 		$f['balance'] = is_array( $balance ) ? $balance : null;
 		// v0.63.3: un borrador validado con el cálculo antiguo (sin «no_pagan») ya no vale: los scouters pagaban y la cuota era automática.
 		// Se trata como pendiente de visto bueno hasta que Tesorería lo dé otra vez (no se toca la base de datos).
-		if ( self::BORRADOR === $f['estado'] && null !== $f['validado_en'] && is_array( $f['presupuesto'] ) && ! array_key_exists( 'no_pagan', $f['presupuesto'] ) ) {
+		if ( self::BORRADOR === $f['estado'] && null !== $f['validado_en'] && is_array( $f['presupuesto'] ) && ( ! array_key_exists( 'no_pagan', $f['presupuesto'] ) || array_intersect( Presupuesto::NO_PAGAN, array_keys( (array) ( $f['presupuesto']['previstos'] ?? array() ) ) ) ) ) {
 			$f['presupuesto']  = null;
 			$f['validado_en']  = null;
 			$f['validado_por'] = 0;

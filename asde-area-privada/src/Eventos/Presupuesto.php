@@ -13,7 +13,7 @@ defined( 'ABSPATH' ) || exit;
  * 2. Los ingresos previstos (subvención, aportación del grupo) se restan de lo común.
  * 3. Coste por participante de cada sección = lo común ÷ participantes previstos de las
  *    secciones que pagan + lo de su sección ÷ participantes previstos de esa sección + lo
- *    que se paga por persona. La sección Scouters no paga (NO_PAGAN): su coste se reparte
+ *    que se paga por persona. Las secciones Scouters y Voluntariado de apoyo no pagan (NO_PAGAN): su coste se reparte
  *    entre quienes sí pagan.
  * 4. Precio sugerido = coste × (1 + margen del fondo de emergencia), redondeado al euro hacia
  *    arriba. La cuota de cada sección la fija Tesorería a mano (v0.63.3); si es mayor que el
@@ -50,7 +50,7 @@ final class Presupuesto {
 	}
 
 	/** Secciones que no pagan: su coste lo reparten las que sí pagan (v0.63.3, petición del 2026-11-17). */
-	public const NO_PAGAN = array( 'scouters' );
+	public const NO_PAGAN = array( 'scouters', 'voluntariado' ); // El Voluntariado de apoyo se añadió en la v0.64.4.
 
 	/** Repartos que necesitan una sección (en «participante», es opcional). */
 	public const CON_SECCION = array( 'total_seccion' );
