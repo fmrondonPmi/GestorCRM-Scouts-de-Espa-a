@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.64.2
+Stable tag: 0.64.3
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -61,6 +61,11 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.64.3 =
+* Sign-in: when the same email address belongs to several accounts (for example a scouter who is also a guardian) and the password works for all of them, the sign-in now shows a list to choose the account. The password is kept encrypted on the server for 5 minutes and the step can be used only once.
+* Family accounts now also represent the other minors of their Treasury family, even if their records do not share an email. Adults in the family are never added.
+* Events, budget: the Scouters section no longer pays (its cost is spread among the sections that do). Treasury sets each section's price by hand (never below the cost; anything above is the emergency fund). "Validated" becomes "approved": it no longer closes the budget, which can be changed while the event is a draft (a change withdraws the approval). The price is fixed when the event is published. Drafts approved with the old calculation go back to pending approval.
 
 = 0.64.2 =
 * Events: the team's qualification rules now depend on the size and length of the event. They are required only with 10 or more minors and 2 or more nights; otherwise they appear as suggestions. The monitor ratio is covered by qualified monitors plus people in training (no more than 50% of the qualified); monitors without a qualification do not count towards it. No database changes.
@@ -186,6 +191,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * The changelog of versions 0.42.0 and earlier is in changelog.txt, in the plugin folder.
 
 == Upgrade Notice ==
+
+= 0.64.3 =
+Account selector at sign-in, family accounts see all their Treasury family minors, and a new event budget flow (Scouters do not pay, manual prices, approval instead of validation). Adds one column (created on update).
 
 = 0.64.2 =
 Qualification checks for the event team are only required with 10+ minors and 2+ nights. No database changes.

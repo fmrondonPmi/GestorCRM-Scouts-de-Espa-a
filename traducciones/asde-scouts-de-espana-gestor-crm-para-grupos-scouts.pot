@@ -215,7 +215,7 @@ msgstr ""
 msgid "\"How many?\" must be a number between 1 and %d."
 msgstr ""
 
-#: templates/eventos/presupuesto.php:130
+#: templates/eventos/presupuesto.php:144
 msgid "\"Per person: participants and team\" is what each person costs (hostel, food): the team's is split among the participants. \"Team only\" is what one scouter costs (e.g. their place at an external event)."
 msgstr ""
 
@@ -327,6 +327,12 @@ msgstr ""
 msgid "%1$s %%, until %2$s"
 msgstr ""
 
+#. translators: 1: sections, 2: number
+#: templates/eventos/presupuesto.php:245
+#, php-format
+msgid "%1$s (%2$d expected): their cost is spread among the sections that pay."
+msgstr ""
+
 #. translators: 1: text, 2: text
 #: templates/eventos/presupuesto.php:35
 #, php-format
@@ -358,7 +364,7 @@ msgid "%1$s by %2$s on %3$s."
 msgstr ""
 
 #. translators: 1: number of participants, 2: number of monitors
-#: templates/eventos/asistente.php:170
+#: templates/eventos/asistente.php:173
 #, php-format
 msgid "%1$s expected participants: you need a director and at least %2$s monitors."
 msgstr ""
@@ -899,7 +905,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %d: number
-#: templates/eventos/presupuesto.php:203
+#: templates/eventos/presupuesto.php:247
 #, php-format
 msgid "%d person who does not pay: their cost is spread across the price."
 msgid_plural "%d people who do not pay: their cost is spread across the price."
@@ -995,7 +1001,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %d: number
-#: src/Frontend/Views/EventosView.php:854
+#: src/Frontend/Views/EventosView.php:845
 #, php-format
 msgid "%d support team member has no account: print it for them."
 msgid_plural "%d support team members have no account: print them for them."
@@ -1011,7 +1017,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %d: number
-#: src/Frontend/Views/EventosView.php:746
+#: src/Frontend/Views/EventosView.php:737
 #, php-format
 msgid "%d task has been created."
 msgid_plural "%d tasks have been created."
@@ -1065,7 +1071,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %d: number
-#: src/Frontend/Views/EventosView.php:791
+#: src/Frontend/Views/EventosView.php:782
 #, php-format
 msgid "%d unit has been deducted from the inventory."
 msgid_plural "%d units have been deducted from the inventory."
@@ -1097,7 +1103,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %d: number
-#: src/Frontend/Views/EventosView.php:767
+#: src/Frontend/Views/EventosView.php:758
 #, php-format
 msgid "%d usual item has been reserved."
 msgid_plural "%d usual items have been reserved."
@@ -1145,7 +1151,7 @@ msgid "%s (you)"
 msgstr ""
 
 #. translators: %s: text
-#: src/Auth/Ambito.php:139 src/Usuarios/Contacto.php:59
+#: src/Auth/Ambito.php:152 src/Usuarios/Contacto.php:59
 #, php-format
 msgid "%s family"
 msgstr ""
@@ -1157,7 +1163,7 @@ msgid "%s has not been changed because someone modified it in the CRM while you 
 msgstr ""
 
 #. translators: %s: text
-#: src/Eventos/Servicio.php:422
+#: src/Eventos/Servicio.php:463
 #, php-format
 msgid "%s is already in this event."
 msgstr ""
@@ -1199,7 +1205,7 @@ msgid "%s was collected (bank fee)"
 msgstr ""
 
 #. translators: %s: text
-#: src/Eventos/Normativa.php:211
+#: src/Eventos/Normativa.php:235
 #, php-format
 msgid "%s will not be 18 on the day it starts: the team must be of legal age."
 msgstr ""
@@ -1229,7 +1235,7 @@ msgid "%s's record"
 msgstr ""
 
 #. translators: %s: text
-#: src/Eventos/Normativa.php:224
+#: src/Eventos/Normativa.php:248
 #, php-format
 msgid "%s's sexual offences certificate will be more than 12 months old when the event ends: it must be renewed."
 msgstr ""
@@ -1247,7 +1253,7 @@ msgid "(%1$s, %2$s and %3$s)"
 msgstr ""
 
 #. translators: %s: text
-#: templates/eventos/presupuesto.php:202
+#: templates/eventos/presupuesto.php:243
 #, php-format
 msgid "(%s %% margin and rounding)"
 msgstr ""
@@ -1385,7 +1391,7 @@ msgstr ""
 msgid "(recommended: it always exists and is unique; e.g. 118241 and, for families, 118241T)"
 msgstr ""
 
-#: templates/eventos/presupuesto.php:202
+#: templates/eventos/presupuesto.php:243
 msgid "(rounding only: margin off)"
 msgstr ""
 
@@ -1651,7 +1657,7 @@ msgstr ""
 msgid "A group (or several groups)"
 msgstr ""
 
-#: templates/eventos/asistente.php:185 templates/eventos/formulario.php:189
+#: templates/eventos/asistente.php:188 templates/eventos/formulario.php:186
 msgid "A lifeguard will be present"
 msgstr ""
 
@@ -1669,7 +1675,7 @@ msgstr ""
 msgid "A number is only assigned to people with an active membership."
 msgstr ""
 
-#: templates/eventos/asistente.php:122
+#: templates/eventos/asistente.php:125
 msgid "A one-day activity, with no overnight stay."
 msgstr ""
 
@@ -1836,7 +1842,7 @@ msgid "Access updated: %1$s. Roles: %2$s."
 msgstr ""
 
 #. translators: %s: text
-#: src/Eventos/Normativa.php:217
+#: src/Eventos/Normativa.php:241
 #, php-format
 msgid "According to their record, %s does not have the leisure-time director qualification."
 msgstr ""
@@ -1845,7 +1851,7 @@ msgstr ""
 msgid "According to what has been paid"
 msgstr ""
 
-#: src/Frontend/Views/LibroMayorView.php:86 templates/tesoreria/banco-previa.php:55 templates/tesoreria/banco-previa.php:59 templates/tesoreria/banco.php:98
+#: src/Frontend/Views/AccesoView.php:253 src/Frontend/Views/LibroMayorView.php:86 templates/acceso/elegir-cuenta.php:33 templates/tesoreria/banco-previa.php:55
 msgid "Account"
 msgstr ""
 
@@ -1943,7 +1949,7 @@ msgstr ""
 msgid "Activate your account"
 msgstr ""
 
-#: src/Usuarios/Usuarios.php:248 templates/eventos/config.php:42 templates/eventos/config.php:56
+#: src/Usuarios/Usuarios.php:269 templates/eventos/config.php:42 templates/eventos/config.php:56
 msgid "Active"
 msgstr ""
 
@@ -1963,7 +1969,7 @@ msgstr ""
 msgid "Activities and summer camps"
 msgstr ""
 
-#: templates/eventos/formulario.php:46
+#: templates/eventos/formulario.php:43
 msgid "Activity type"
 msgstr ""
 
@@ -1983,7 +1989,7 @@ msgstr ""
 msgid "Actually spent"
 msgstr ""
 
-#: templates/eventos/calendario.php:218 templates/eventos/equipo.php:158 templates/eventos/menu.php:116 templates/fichas/alergenos.php:45
+#: templates/eventos/calendario.php:218 templates/eventos/equipo.php:161 templates/eventos/menu.php:116 templates/fichas/alergenos.php:45
 msgid "Add"
 msgstr ""
 
@@ -2005,7 +2011,7 @@ msgstr ""
 msgid "Add a task"
 msgstr ""
 
-#: templates/eventos/presupuesto.php:95 templates/tesoreria/presupuesto-seccion.php:198
+#: templates/eventos/presupuesto.php:109 templates/tesoreria/presupuesto-seccion.php:198
 msgid "Add an item"
 msgstr ""
 
@@ -2029,7 +2035,7 @@ msgstr ""
 msgid "Add at least one ingredient."
 msgstr ""
 
-#: src/Eventos/Servicio.php:567 src/Eventos/Servicio.php:584
+#: src/Eventos/Servicio.php:611 src/Eventos/Servicio.php:645
 msgid "Add at least one planned expense."
 msgstr ""
 
@@ -2065,11 +2071,11 @@ msgstr ""
 msgid "Add recipe"
 msgstr ""
 
-#: templates/eventos/presupuesto.php:147
+#: templates/eventos/presupuesto.php:161
 msgid "Add the bus item"
 msgstr ""
 
-#: templates/eventos/presupuesto.php:129
+#: templates/eventos/presupuesto.php:143
 msgid "Add the item"
 msgstr ""
 
@@ -2089,7 +2095,7 @@ msgstr ""
 msgid "Add to the shopping list"
 msgstr ""
 
-#: templates/eventos/equipo.php:136
+#: templates/eventos/equipo.php:139
 msgid "Add to the team"
 msgstr ""
 
@@ -2097,7 +2103,7 @@ msgstr ""
 msgid "Add variants"
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:537
+#: src/Frontend/Views/EventosView.php:528
 msgid "Added to the team."
 msgstr ""
 
@@ -2147,7 +2153,7 @@ msgstr ""
 msgid "Adjustment of %s removed. It remains in the family's history."
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:659
+#: src/Frontend/Views/EventosView.php:650
 msgid "Adjustment saved: the sign-up amount has changed."
 msgstr ""
 
@@ -2159,7 +2165,7 @@ msgstr ""
 msgid "Advance"
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:723
+#: src/Frontend/Views/EventosView.php:714
 msgid "Advance cancelled."
 msgstr ""
 
@@ -2169,17 +2175,17 @@ msgstr ""
 msgid "Advance notice sent: %1$d emails to %2$d families."
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:711
+#: src/Frontend/Views/EventosView.php:702
 msgid "Advance recorded."
 msgstr ""
 
 #. translators: %s: text
-#: src/Frontend/Views/EventosView.php:717
+#: src/Frontend/Views/EventosView.php:708
 #, php-format
 msgid "Advance settled, with a difference of %s."
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:717
+#: src/Frontend/Views/EventosView.php:708
 msgid "Advance settled."
 msgstr ""
 
@@ -2191,7 +2197,7 @@ msgstr ""
 msgid "Adventure"
 msgstr ""
 
-#: templates/eventos/asistente.php:243
+#: templates/eventos/asistente.php:246
 msgid "After creating it you will see its page with what is left to do:"
 msgstr ""
 
@@ -2498,7 +2504,7 @@ msgstr ""
 msgid "Answer saved: not going to this event."
 msgstr ""
 
-#: templates/eventos/asistente.php:177
+#: templates/eventos/asistente.php:180
 msgid "Answer yes or no. We only ask for more when it is needed."
 msgstr ""
 
@@ -2522,7 +2528,7 @@ msgstr ""
 msgid "Apply"
 msgstr ""
 
-#: templates/eventos/config.php:26 templates/eventos/presupuesto.php:159
+#: templates/eventos/config.php:26 templates/eventos/presupuesto.php:173
 msgid "Apply the emergency fund margin"
 msgstr ""
 
@@ -2576,6 +2582,34 @@ msgstr ""
 msgid "Approved and saved in the CRM"
 msgstr ""
 
+#. translators: 1: text, 2: text
+#: templates/eventos/presupuesto.php:54
+#, php-format
+msgid "Approved by %1$s on %2$s: the price of each section is fixed."
+msgstr ""
+
+#. translators: 1: text, 2: text
+#: templates/eventos/presupuesto.php:54
+#, php-format
+msgid "Approved by %1$s on %2$s: the price of each section will be fixed when the event is published."
+msgstr ""
+
+#. translators: %2$s: text
+#: templates/eventos/presupuesto.php:55
+#, php-format
+msgid "Approved on %2$s: the price of each section is fixed."
+msgstr ""
+
+#. translators: %2$s: text
+#: templates/eventos/presupuesto.php:55
+#, php-format
+msgid "Approved on %2$s: the price of each section will be fixed when the event is published."
+msgstr ""
+
+#: templates/eventos/presupuesto.php:181
+msgid "Approved price"
+msgstr ""
+
 #: src/Fichas/Cambios.php:39
 msgid "Approved, but the CRM did not accept it"
 msgstr ""
@@ -2600,11 +2634,11 @@ msgstr ""
 msgid "Archived"
 msgstr ""
 
-#: templates/eventos/asistente.php:188
+#: templates/eventos/asistente.php:191
 msgid "Are there participants with recognised dependency?"
 msgstr ""
 
-#: templates/eventos/asistente.php:186
+#: templates/eventos/asistente.php:189
 msgid "Are there specialised-risk activities?"
 msgstr ""
 
@@ -2612,7 +2646,7 @@ msgstr ""
 msgid "Arrival"
 msgstr ""
 
-#: templates/eventos/asistente.php:131 templates/eventos/formulario.php:97
+#: templates/eventos/asistente.php:134 templates/eventos/formulario.php:94
 msgid "Arrival (place and time)"
 msgstr ""
 
@@ -2706,12 +2740,6 @@ msgstr ""
 msgid "Association fee per member (€)"
 msgstr ""
 
-#. translators: 1: number, 2: number
-#: src/Eventos/Normativa.php:245
-#, php-format
-msgid "At least half of the monitors must hold the leisure-time qualification: there are %1$d qualified out of %2$d."
-msgstr ""
-
 #: src/Frontend/Views/TiendaConfigView.php:61
 msgid "At least one payment method is needed; transfer has been kept."
 msgstr ""
@@ -2729,7 +2757,7 @@ msgid "At most %d own fields."
 msgstr ""
 
 #. translators: %d: number
-#: src/Eventos/Tareas.php:314
+#: src/Eventos/Tareas.php:318
 #, php-format
 msgid "At most %d tasks per event."
 msgstr ""
@@ -3089,6 +3117,18 @@ msgstr ""
 msgid "Budget"
 msgstr ""
 
+#: src/Eventos/EventosTable.php:39
+msgid "Budget approved"
+msgstr ""
+
+#: src/Eventos/Normativa.php:301
+msgid "Budget approved by Treasury: the price is fixed."
+msgstr ""
+
+#: src/Eventos/Normativa.php:301
+msgid "Budget approved by Treasury: the price will be fixed when the event is published."
+msgstr ""
+
 #: src/Frontend/Views/PresupuestosView.php:167
 msgid "Budget approved."
 msgstr ""
@@ -3106,29 +3146,25 @@ msgid "Budget of each section and of the group"
 msgstr ""
 
 #. translators: %s: text
-#: src/Frontend/Views/EventosView.php:578
+#: src/Frontend/Views/EventosView.php:569
 #, php-format
-msgid "Budget of event %s validated: the price per section is now fixed."
+msgid "Budget of event %s approved: the price of each section will be fixed when the event is published."
 msgstr ""
 
 #: src/Eventos/EventosTable.php:38
 msgid "Budget pending Treasury"
 msgstr ""
 
-#: src/Eventos/Normativa.php:276
-msgid "Budget pending validation by Treasury."
-msgstr ""
-
-#: src/Frontend/Views/EventosView.php:584
-msgid "Budget reopened: it can be changed and will have to be validated again."
+#: src/Eventos/Normativa.php:303
+msgid "Budget pending Treasury's go-ahead."
 msgstr ""
 
 #: src/Frontend/Views/PresupuestosView.php:171
 msgid "Budget reopened: it is a draft again."
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:572
-msgid "Budget sent to Treasury for validation."
+#: src/Frontend/Views/EventosView.php:563
+msgid "Budget sent to Treasury for its go-ahead."
 msgstr ""
 
 #: src/Frontend/Views/PresupuestosView.php:163
@@ -3141,14 +3177,6 @@ msgstr ""
 
 #: templates/tesoreria/presupuesto-seccion.php:232
 msgid "Budget status"
-msgstr ""
-
-#: src/Eventos/EventosTable.php:39
-msgid "Budget validated"
-msgstr ""
-
-#: src/Eventos/Normativa.php:274
-msgid "Budget validated by Treasury: the price is now fixed."
 msgstr ""
 
 #. translators: %s: text
@@ -3169,16 +3197,16 @@ msgstr ""
 msgid "Budgets ·"
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:562
+#: src/Frontend/Views/EventosView.php:553
 msgid "Bus item added to the budget."
 msgstr ""
 
-#: templates/eventos/presupuesto.php:135
+#: templates/eventos/presupuesto.php:149
 msgid "Buses"
 msgstr ""
 
 #. translators: 1: number, 2: text
-#: src/Eventos/Servicio.php:544
+#: src/Eventos/Servicio.php:587
 #, php-format
 msgid "Buses (%1$d × %2$s)"
 msgstr ""
@@ -3309,7 +3337,7 @@ msgstr ""
 msgid "Camp template restored to the original."
 msgstr ""
 
-#: src/Admin/GruposInvitacionesPage.php:123 src/Admin/SettingsPage.php:277 templates/eventos/asistente.php:257 templates/eventos/cuentas.php:253
+#: src/Admin/GruposInvitacionesPage.php:123 src/Admin/SettingsPage.php:277 templates/eventos/asistente.php:260 templates/eventos/cuentas.php:253
 msgid "Cancel"
 msgstr ""
 
@@ -3791,7 +3819,7 @@ msgstr ""
 msgid "Choose a report or create a new one by selecting the columns you need. The data is read from the CRM at that moment and includes only members with an active membership"
 msgstr ""
 
-#: src/Eventos/Servicio.php:419
+#: src/Eventos/Servicio.php:460
 msgid "Choose a scouter or volunteer of the group."
 msgstr ""
 
@@ -3815,7 +3843,7 @@ msgstr ""
 msgid "Choose at least one column."
 msgstr ""
 
-#: src/Eventos/Servicio.php:222
+#: src/Eventos/Servicio.php:231
 msgid "Choose at least one invited section."
 msgstr ""
 
@@ -3847,7 +3875,7 @@ msgstr ""
 msgid "Choose cook, quartermaster and helpers"
 msgstr ""
 
-#: src/Eventos/Servicio.php:510
+#: src/Eventos/Servicio.php:552
 msgid "Choose how the expense is split."
 msgstr ""
 
@@ -3863,8 +3891,12 @@ msgstr ""
 msgid "Choose how you prefer to be paid: in cash or by transfer."
 msgstr ""
 
-#: templates/eventos/asistente.php:156
+#: templates/eventos/asistente.php:159
 msgid "Choose later"
+msgstr ""
+
+#: src/Frontend/Views/AccesoView.php:285
+msgid "Choose one of the accounts in the list."
 msgstr ""
 
 #: templates/solicitudes/detalle.php:148
@@ -3879,7 +3911,7 @@ msgstr ""
 msgid "Choose the CSV file you want to import."
 msgstr ""
 
-#: src/Eventos/Servicio.php:198
+#: src/Eventos/Servicio.php:207
 msgid "Choose the activity type."
 msgstr ""
 
@@ -3951,7 +3983,7 @@ msgstr ""
 msgid "Choose the section and the registration date."
 msgstr ""
 
-#: src/Eventos/Servicio.php:518
+#: src/Eventos/Servicio.php:560
 msgid "Choose the section the cost is split among."
 msgstr ""
 
@@ -3987,7 +4019,7 @@ msgstr ""
 msgid "Choose what is done with that dish."
 msgstr ""
 
-#: src/Eventos/Servicio.php:415 src/Eventos/Servicio.php:440
+#: src/Eventos/Servicio.php:456 src/Eventos/Servicio.php:481
 msgid "Choose what they do in the team."
 msgstr ""
 
@@ -4023,8 +4055,12 @@ msgstr ""
 msgid "Choose who to send the notice to."
 msgstr ""
 
-#: src/Frontend/Views/AccesoView.php:67 src/Frontend/Views/SolicitarView.php:85
+#: src/Frontend/Views/AccesoView.php:96 src/Frontend/Views/SolicitarView.php:85
 msgid "Choose your Scout Group."
+msgstr ""
+
+#: templates/acceso/elegir-cuenta.php:20
+msgid "Choose your account"
 msgstr ""
 
 #: templates/acceso/formulario.php:45
@@ -4329,6 +4365,10 @@ msgstr ""
 msgid "Contains: %s"
 msgstr ""
 
+#: templates/acceso/elegir-cuenta.php:47
+msgid "Continue"
+msgstr ""
+
 #: src/Idiomas/Guardados.php:112
 msgid "Coordination"
 msgstr ""
@@ -4338,7 +4378,7 @@ msgid "Copied"
 msgstr ""
 
 #. translators: %s: text
-#: templates/eventos/asistente.php:101
+#: templates/eventos/asistente.php:104
 #, php-format
 msgid "Copied from \"%s\" (dates one year later)"
 msgstr ""
@@ -4389,7 +4429,7 @@ msgstr ""
 msgid "Cost"
 msgstr ""
 
-#: templates/eventos/presupuesto.php:181 templates/eventos/presupuesto.php:190
+#: templates/eventos/presupuesto.php:202 templates/eventos/presupuesto.php:218
 msgid "Cost per participant"
 msgstr ""
 
@@ -4397,7 +4437,7 @@ msgstr ""
 msgid "Cost per usual unit, in euros (optional)"
 msgstr ""
 
-#: templates/eventos/formulario.php:163
+#: templates/eventos/formulario.php:160
 msgid "Cost, insurance and regulations"
 msgstr ""
 
@@ -4431,7 +4471,7 @@ msgstr ""
 msgid "Country"
 msgstr ""
 
-#: src/Eventos/Normativa.php:302
+#: src/Eventos/Normativa.php:332
 msgid "Covered by the federation's insurance."
 msgstr ""
 
@@ -4475,7 +4515,7 @@ msgstr ""
 msgid "Create the equipment types that do not exist yet (otherwise those rows are not imported)"
 msgstr ""
 
-#: templates/eventos/asistente.php:256 templates/eventos/formulario.php:199
+#: templates/eventos/asistente.php:259
 msgid "Create the event (draft)"
 msgstr ""
 
@@ -4491,7 +4531,7 @@ msgstr ""
 msgid "Create the recipe and add it to the menu"
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:799
+#: src/Frontend/Views/EventosView.php:790
 msgid "Create the recipe here and then add it to the menu."
 msgstr ""
 
@@ -4649,7 +4689,7 @@ msgstr ""
 msgid "Date the bank collected"
 msgstr ""
 
-#: templates/eventos/agenda.php:70 templates/eventos/agenda.php:84 templates/eventos/asistente.php:237 templates/eventos/resumen.php:54
+#: templates/eventos/agenda.php:70 templates/eventos/agenda.php:84 templates/eventos/asistente.php:240 templates/eventos/resumen.php:54
 msgid "Dates"
 msgstr ""
 
@@ -4703,7 +4743,7 @@ msgstr ""
 msgid "Deactivate the access of user %s? All their private area roles will be removed."
 msgstr ""
 
-#: src/Usuarios/Usuarios.php:249
+#: src/Usuarios/Usuarios.php:270
 msgid "Deactivated"
 msgstr ""
 
@@ -4852,12 +4892,12 @@ msgstr ""
 msgid "Delivery undone on order %s."
 msgstr ""
 
-#: templates/eventos/asistente.php:130 templates/eventos/formulario.php:96
+#: templates/eventos/asistente.php:133 templates/eventos/formulario.php:93
 msgid "Departure (place and time)"
 msgstr ""
 
 #. translators: %d: number
-#: src/Frontend/Views/EventosView.php:778
+#: src/Frontend/Views/EventosView.php:769
 #, php-format
 msgid "Departure recorded: %d line."
 msgid_plural "Departure recorded: %d lines."
@@ -4874,7 +4914,7 @@ msgstr ""
 msgid "Depending on nights and minors"
 msgstr ""
 
-#: src/Eventos/Normativa.php:43
+#: src/Eventos/Normativa.php:49
 msgid "Depending on nights and minors (2 or more nights and 10 or more minors)"
 msgstr ""
 
@@ -4918,7 +4958,7 @@ msgstr ""
 msgid "Description of the treatment"
 msgstr ""
 
-#: templates/eventos/asistente.php:221 templates/eventos/formulario.php:153
+#: templates/eventos/asistente.php:224 templates/eventos/formulario.php:150
 msgid "Description or circular"
 msgstr ""
 
@@ -4958,7 +4998,7 @@ msgstr ""
 msgid "Diners"
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:838
+#: src/Frontend/Views/EventosView.php:829
 msgid "Diners changed."
 msgstr ""
 
@@ -4998,7 +5038,7 @@ msgstr ""
 msgid "Direction"
 msgstr ""
 
-#: src/Eventos/InscripcionesTable.php:31 templates/eventos/asistente.php:154 templates/eventos/equipo.php:29
+#: src/Eventos/InscripcionesTable.php:31 templates/eventos/asistente.php:157 templates/eventos/equipo.php:29
 msgid "Director"
 msgstr ""
 
@@ -5026,11 +5066,11 @@ msgstr ""
 msgid "Discounts, scholarships or surcharges that change what the family must pay this round."
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:803
+#: src/Frontend/Views/EventosView.php:794
 msgid "Dish added to the menu."
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:833
+#: src/Frontend/Views/EventosView.php:824
 msgid "Dish removed from the menu."
 msgstr ""
 
@@ -5042,7 +5082,7 @@ msgstr ""
 msgid "Dividends · coupons · repayments"
 msgstr ""
 
-#: templates/eventos/asistente.php:178 templates/eventos/asistente.php:240
+#: templates/eventos/asistente.php:181 templates/eventos/asistente.php:243
 msgid "Do families pay?"
 msgstr ""
 
@@ -5076,8 +5116,12 @@ msgstr ""
 msgid "Document set from the record"
 msgstr ""
 
-#: templates/eventos/asistente.php:101
+#: templates/eventos/asistente.php:104
 msgid "Does it look like a previous one? Copy it"
+msgstr ""
+
+#: templates/eventos/presupuesto.php:216
+msgid "Does not pay: their cost is split among those who do"
 msgstr ""
 
 #: templates/acceso/formulario.php:75 templates/recuperar/formulario.php:37
@@ -5161,7 +5205,7 @@ msgid "Draft"
 msgstr ""
 
 #. translators: %s: text
-#: src/Frontend/Views/EventosView.php:891
+#: src/Frontend/Views/EventosView.php:882
 #, php-format
 msgid "Draft %s deleted."
 msgstr ""
@@ -5279,7 +5323,7 @@ msgid "Edit"
 msgstr ""
 
 #. translators: %s: text
-#: templates/eventos/formulario.php:44
+#: templates/eventos/formulario.php:41
 #, php-format
 msgid "Edit %s"
 msgstr ""
@@ -5384,7 +5428,7 @@ msgstr ""
 msgid "Emergency fund"
 msgstr ""
 
-#: templates/eventos/presupuesto.php:157
+#: templates/eventos/presupuesto.php:171
 msgid "Emergency fund margin (%)"
 msgstr ""
 
@@ -5410,7 +5454,7 @@ msgstr ""
 msgid "Empty rows are ignored. To add more fields, save and reopen this box. Maximum %d fields."
 msgstr ""
 
-#: templates/eventos/asistente.php:118 templates/eventos/formulario.php:88
+#: templates/eventos/asistente.php:121 templates/eventos/formulario.php:85
 msgid "Ends"
 msgstr ""
 
@@ -5454,7 +5498,7 @@ msgstr ""
 msgid "Enter at least 3 characters."
 msgstr ""
 
-#: src/Eventos/Servicio.php:541
+#: src/Eventos/Servicio.php:584
 msgid "Enter how many people are travelling, the places on each bus and what one costs."
 msgstr ""
 
@@ -5474,7 +5518,7 @@ msgstr ""
 msgid "Enter the amount of the adjustment and its reason."
 msgstr ""
 
-#: src/Eventos/Servicio.php:504
+#: src/Eventos/Servicio.php:546
 msgid "Enter the description and an amount greater than zero."
 msgstr ""
 
@@ -5494,7 +5538,7 @@ msgstr ""
 msgid "Enter the document number."
 msgstr ""
 
-#: src/Eventos/Servicio.php:202
+#: src/Eventos/Servicio.php:211
 msgid "Enter the event name."
 msgstr ""
 
@@ -5522,8 +5566,8 @@ msgstr ""
 msgid "Enter the name and ID or foreigner ID number of the first person with access."
 msgstr ""
 
-#: templates/eventos/presupuesto.php:54
-msgid "Enter the planned expenses and how each one is split. Each section's price comes from the cost (the team's, split among the participants) plus the emergency fund margin, rounded to the euro. When it is ready, send it to Treasury to validate."
+#: templates/eventos/presupuesto.php:68
+msgid "Enter the planned expenses and how each one is split. Treasury sets each section's price from the cost (the team's, split among those who pay) plus the emergency fund margin. When it is ready, send it to Treasury for its go-ahead."
 msgstr ""
 
 #: src/Tienda/ProductosTable.php:95
@@ -5566,7 +5610,7 @@ msgstr ""
 msgid "Enter the subject and the message."
 msgstr ""
 
-#: src/Eventos/Tareas.php:310
+#: src/Eventos/Tareas.php:314
 msgid "Enter the task title and its date."
 msgstr ""
 
@@ -5640,11 +5684,11 @@ msgstr ""
 msgid "Equipment items"
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:761
+#: src/Frontend/Views/EventosView.php:752
 msgid "Equipment removed from the event list."
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:751
+#: src/Frontend/Views/EventosView.php:742
 msgid "Equipment reserved for the event."
 msgstr ""
 
@@ -5745,31 +5789,31 @@ msgid "Event %s"
 msgstr ""
 
 #. translators: %s: text
-#: src/Frontend/Views/EventosView.php:624
+#: src/Frontend/Views/EventosView.php:615
 #, php-format
 msgid "Event %s cancelled."
 msgstr ""
 
 #. translators: %s: text
-#: src/Frontend/Views/EventosView.php:491
+#: src/Frontend/Views/EventosView.php:482
 #, php-format
 msgid "Event %s created as a draft. Check what is left to do: the team, the budget if it has a cost, the menu and the calendar."
 msgstr ""
 
 #. translators: %s: text
-#: src/Frontend/Views/EventosView.php:619
+#: src/Frontend/Views/EventosView.php:610
 #, php-format
 msgid "Event %s is a draft again."
 msgstr ""
 
 #. translators: %s: text
-#: src/Frontend/Views/EventosView.php:590
+#: src/Frontend/Views/EventosView.php:581
 #, php-format
 msgid "Event %s published."
 msgstr ""
 
 #. translators: %s: text
-#: src/Frontend/Views/EventosView.php:527
+#: src/Frontend/Views/EventosView.php:518
 #, php-format
 msgid "Event %s saved."
 msgstr ""
@@ -5802,11 +5846,11 @@ msgstr ""
 msgid "Event sign-ups can be seen in"
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:189
+#: src/Frontend/Views/EventosView.php:188
 msgid "Event team"
 msgstr ""
 
-#: templates/eventos/asistente.php:152
+#: templates/eventos/asistente.php:155
 msgid "Event team (optional: you can complete it later)."
 msgstr ""
 
@@ -5916,25 +5960,25 @@ msgstr ""
 msgid "Expected fees from families (round"
 msgstr ""
 
-#: templates/eventos/asistente.php:142 templates/eventos/asistente.php:239 templates/eventos/formulario.php:108 templates/eventos/formulario.php:116
+#: templates/eventos/asistente.php:145 templates/eventos/asistente.php:242 templates/eventos/formulario.php:105 templates/eventos/formulario.php:113
 msgid "Expected participants"
 msgstr ""
 
 #. translators: %s: text
-#: templates/eventos/formulario.php:120
+#: templates/eventos/formulario.php:117
 #, php-format
 msgid "Expected participants of %s"
 msgstr ""
 
-#: templates/eventos/presupuesto.php:201
+#: templates/eventos/presupuesto.php:242
 msgid "Expected revenue"
 msgstr ""
 
-#: templates/eventos/presupuesto.php:156
+#: templates/eventos/presupuesto.php:170
 msgid "Expected team members"
 msgstr ""
 
-#: src/Eventos/Cuentas.php:548 src/Tesoreria/Banco/TiposMovimiento.php:27 templates/eventos/presupuesto.php:100 templates/tesoreria/presupuesto-seccion.php:205
+#: src/Eventos/Cuentas.php:548 src/Tesoreria/Banco/TiposMovimiento.php:27 templates/eventos/presupuesto.php:114 templates/tesoreria/presupuesto-seccion.php:205
 msgid "Expense"
 msgstr ""
 
@@ -5952,15 +5996,15 @@ msgstr ""
 msgid "Expense of %1$s · %2$s"
 msgstr ""
 
-#: src/Tesoreria/Banco/TiposMovimiento.php:29 templates/eventos/presupuesto.php:99
+#: src/Tesoreria/Banco/TiposMovimiento.php:29 templates/eventos/presupuesto.php:113
 msgid "Expense or income"
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:676 src/Frontend/Views/PresupuestosView.php:151
+#: src/Frontend/Views/EventosView.php:667 src/Frontend/Views/PresupuestosView.php:151
 msgid "Expense recorded."
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:696
+#: src/Frontend/Views/EventosView.php:687
 msgid "Expense rejected."
 msgstr ""
 
@@ -5968,15 +6012,15 @@ msgstr ""
 msgid "Expense removed."
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:676
+#: src/Frontend/Views/EventosView.php:667
 msgid "Expense sent to Treasury for review."
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:691
+#: src/Frontend/Views/EventosView.php:682
 msgid "Expense validated."
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:686
+#: src/Frontend/Views/EventosView.php:677
 msgid "Expense withdrawn."
 msgstr ""
 
@@ -6034,7 +6078,7 @@ msgstr ""
 msgid "Families and members request access with this link. When their document and date of birth are checked against the CRM record, the request appears here for you to approve."
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:593
+#: src/Frontend/Views/EventosView.php:584
 msgid "Families and scouters will be notified by email."
 msgstr ""
 
@@ -6056,7 +6100,7 @@ msgstr ""
 msgid "Families only see the methods you tick. \"In person\" is only offered to members, and the card terminal is marked as paid by Treasury on collection."
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:591
+#: src/Frontend/Views/EventosView.php:582
 msgid "Families will be notified by email."
 msgstr ""
 
@@ -6451,7 +6495,7 @@ msgstr ""
 msgid "Food intolerance"
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:861
+#: src/Frontend/Views/EventosView.php:852
 msgid "Food item added to the budget."
 msgstr ""
 
@@ -6527,7 +6571,7 @@ msgstr ""
 msgid "For example: recorded twice"
 msgstr ""
 
-#: templates/eventos/formulario.php:151
+#: templates/eventos/formulario.php:148
 msgid "For families"
 msgstr ""
 
@@ -6567,11 +6611,11 @@ msgstr ""
 msgid "For your role, two-step verification is"
 msgstr ""
 
-#: templates/eventos/presupuesto.php:152
+#: templates/eventos/presupuesto.php:166
 msgid "Forecast"
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:552
+#: src/Frontend/Views/EventosView.php:543
 msgid "Forecast saved: the price has been recalculated."
 msgstr ""
 
@@ -6681,7 +6725,7 @@ msgstr ""
 msgid "Fructose"
 msgstr ""
 
-#: templates/eventos/equipo.php:56 templates/eventos/equipo.php:87 templates/eventos/equipo.php:92 templates/eventos/equipo.php:151
+#: templates/eventos/equipo.php:56 templates/eventos/equipo.php:87 templates/eventos/equipo.php:92 templates/eventos/equipo.php:154
 msgid "Function in the team"
 msgstr ""
 
@@ -6803,6 +6847,14 @@ msgstr ""
 msgid "Give the advance"
 msgstr ""
 
+#: templates/eventos/presupuesto.php:194
+msgid "Give the budget the go-ahead? You can still change it until the event is published."
+msgstr ""
+
+#: templates/eventos/presupuesto.php:232
+msgid "Give the go-ahead"
+msgstr ""
+
 #: src/Idiomas/Guardados.php:122
 msgid "Give the go-ahead to shopping lists"
 msgstr ""
@@ -6817,6 +6869,10 @@ msgstr ""
 
 #: templates/personas/alta.php:305
 msgid "Give website access"
+msgstr ""
+
+#: src/Eventos/Servicio.php:627
+msgid "Giving the budget the go-ahead is done by Treasury."
 msgstr ""
 
 #: src/Menus/Alergenos.php:18
@@ -6873,6 +6929,10 @@ msgstr ""
 
 #: templates/eventos/material.php:170
 msgid "Go to the settings"
+msgstr ""
+
+#: src/Frontend/Views/EventosView.php:575
+msgid "Go-ahead withdrawn: the budget is pending Treasury again."
 msgstr ""
 
 #: templates/tesoreria/caja.php:174
@@ -6959,7 +7019,7 @@ msgstr ""
 msgid "Group equipment, types and shopping lists."
 msgstr ""
 
-#: src/Eventos/Servicio.php:207
+#: src/Eventos/Servicio.php:216
 msgid "Group events and external events are created by Coordination."
 msgstr ""
 
@@ -7055,7 +7115,7 @@ msgstr ""
 msgid "Guardian 1 · mobile"
 msgstr ""
 
-#: src/Usuarios/Usuarios.php:256
+#: src/Usuarios/Usuarios.php:277
 msgid "Guardian 1's email"
 msgstr ""
 
@@ -7071,7 +7131,7 @@ msgstr ""
 msgid "Guardian 2 · mobile"
 msgstr ""
 
-#: src/Usuarios/Usuarios.php:257
+#: src/Usuarios/Usuarios.php:278
 msgid "Guardian 2's email"
 msgstr ""
 
@@ -7217,7 +7277,7 @@ msgstr ""
 msgid "Hide territorial no."
 msgstr ""
 
-#: templates/eventos/asistente.php:186
+#: templates/eventos/asistente.php:189
 msgid "High mountain, canyoning, climbing, diving, sailing."
 msgstr ""
 
@@ -7267,7 +7327,7 @@ msgstr ""
 msgid "How are you going to pay?"
 msgstr ""
 
-#: templates/eventos/asistente.php:210
+#: templates/eventos/asistente.php:213
 msgid "How do they sign up?"
 msgstr ""
 
@@ -7279,11 +7339,11 @@ msgstr ""
 msgid "How do you prefer to be paid?"
 msgstr ""
 
-#: templates/eventos/presupuesto.php:62 templates/eventos/presupuesto.php:73
+#: templates/eventos/presupuesto.php:76 templates/eventos/presupuesto.php:87
 msgid "How it is split"
 msgstr ""
 
-#: templates/eventos/presupuesto.php:113
+#: templates/eventos/presupuesto.php:127
 msgid "How it is split (the expenses)"
 msgstr ""
 
@@ -7291,7 +7351,7 @@ msgstr ""
 msgid "How many"
 msgstr ""
 
-#: templates/eventos/asistente.php:137
+#: templates/eventos/asistente.php:140
 msgid "How many are you?"
 msgstr ""
 
@@ -7674,12 +7734,12 @@ msgid "Imported %1$d new transactions%2$s. The file has not been saved."
 msgstr ""
 
 #. translators: %s: text
-#: src/Eventos/Servicio.php:246
+#: src/Eventos/Servicio.php:255
 #, php-format
 msgid "In %s there are more expected participants than places."
 msgstr ""
 
-#: templates/eventos/asistente.php:96 templates/eventos/formulario.php:80
+#: templates/eventos/asistente.php:99 templates/eventos/formulario.php:77
 msgid "In a group event with no sections ticked, all the educational sections are invited."
 msgstr ""
 
@@ -7810,7 +7870,7 @@ msgstr ""
 msgid "Income %1$s · expenses %2$s · generated on %3$s"
 msgstr ""
 
-#: templates/eventos/presupuesto.php:101
+#: templates/eventos/presupuesto.php:115
 msgid "Income (grant, group contribution)"
 msgstr ""
 
@@ -7832,7 +7892,7 @@ msgstr ""
 msgid "Income only"
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:681
+#: src/Frontend/Views/EventosView.php:672
 msgid "Income recorded."
 msgstr ""
 
@@ -7940,7 +8000,7 @@ msgstr ""
 msgid "Insurance by table"
 msgstr ""
 
-#: src/Informes/Catalogo.php:121 templates/eventos/asistente.php:181 templates/eventos/formulario.php:180
+#: src/Informes/Catalogo.php:121 templates/eventos/asistente.php:184 templates/eventos/formulario.php:177
 msgid "Insurance company"
 msgstr ""
 
@@ -7964,17 +8024,17 @@ msgstr ""
 msgid "Interest · fees · custody · expenses and taxes"
 msgstr ""
 
-#: templates/eventos/formulario.php:178
+#: templates/eventos/formulario.php:175
 msgid "International (all or part outside Spain): needs separate insurance"
 msgstr ""
 
 #. translators: 1: text, 2: text
-#: src/Eventos/Normativa.php:304
+#: src/Eventos/Normativa.php:334
 #, php-format
 msgid "International activity with separate insurance: %1$s, policy %2$s."
 msgstr ""
 
-#: src/Eventos/Normativa.php:306
+#: src/Eventos/Normativa.php:336
 msgid "International activity: separate insurance is required (company and policy no.)."
 msgstr ""
 
@@ -8030,7 +8090,7 @@ msgstr ""
 msgid "Invitation link (shown only now):"
 msgstr ""
 
-#: src/Usuarios/Usuarios.php:247
+#: src/Usuarios/Usuarios.php:268
 msgid "Invitation pending"
 msgstr ""
 
@@ -8058,11 +8118,11 @@ msgstr ""
 msgid "Invited but not signed up (%d)"
 msgstr ""
 
-#: templates/eventos/asistente.php:236 templates/eventos/formulario.php:68
+#: templates/eventos/asistente.php:239 templates/eventos/formulario.php:65
 msgid "Invited sections"
 msgstr ""
 
-#: templates/eventos/asistente.php:179
+#: templates/eventos/asistente.php:182
 msgid "Is it outside Spain?"
 msgstr ""
 
@@ -8070,7 +8130,7 @@ msgstr ""
 msgid "Is on this event's team."
 msgstr ""
 
-#: templates/eventos/asistente.php:184
+#: templates/eventos/asistente.php:187
 msgid "Is there a swimming pool or sea?"
 msgstr ""
 
@@ -8131,7 +8191,7 @@ msgstr ""
 msgid "It could not be checked whether this document is in other groups or organisations. Confirm that you want to save it."
 msgstr ""
 
-#: src/Crm/Altas.php:742
+#: src/Crm/Altas.php:753
 msgid "It could not be done: "
 msgstr ""
 
@@ -8165,11 +8225,11 @@ msgstr ""
 msgid "It first needs: %s."
 msgstr ""
 
-#: templates/eventos/formulario.php:166
+#: templates/eventos/formulario.php:163
 msgid "It has a cost for families (budget validated)."
 msgstr ""
 
-#: templates/eventos/formulario.php:168
+#: templates/eventos/formulario.php:165
 msgid "It has a cost for families (the price comes from the budget, which Treasury validates)"
 msgstr ""
 
@@ -8344,12 +8404,12 @@ msgid "It looks like an Excel file or another binary format. Download it from th
 msgstr ""
 
 #. translators: %s: text
-#: src/Eventos/Normativa.php:297
+#: src/Eventos/Normativa.php:327
 #, php-format
 msgid "It must be reported to ASDE Baleares before %s (30 days before the start)."
 msgstr ""
 
-#: templates/eventos/asistente.php:179
+#: templates/eventos/asistente.php:182
 msgid "It needs separate insurance."
 msgstr ""
 
@@ -8373,7 +8433,7 @@ msgstr ""
 msgid "It stays with the group."
 msgstr ""
 
-#: src/Crm/Altas.php:741
+#: src/Crm/Altas.php:752
 msgid "It was left unfinished. Try again: it will continue where it stopped, without creating another record. Reason: "
 msgstr ""
 
@@ -8389,7 +8449,7 @@ msgstr ""
 msgid "Item"
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:557
+#: src/Frontend/Views/EventosView.php:548
 msgid "Item added to the budget."
 msgstr ""
 
@@ -8405,7 +8465,7 @@ msgstr ""
 msgid "Item of data"
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:567
+#: src/Frontend/Views/EventosView.php:558
 msgid "Item removed from the budget."
 msgstr ""
 
@@ -8476,7 +8536,7 @@ msgid "Kitchen sheet"
 msgstr ""
 
 #. translators: %d: number
-#: src/Frontend/Views/EventosView.php:854
+#: src/Frontend/Views/EventosView.php:845
 #, php-format
 msgid "Kitchen sheet sent to %d person."
 msgid_plural "Kitchen sheet sent to %d people."
@@ -8571,7 +8631,7 @@ msgstr ""
 msgid "Leadership team"
 msgstr ""
 
-#: src/Eventos/Normativa.php:288
+#: src/Eventos/Normativa.php:315
 msgid "Leadership team: qualified director, ratio covered and certificates up to date."
 msgstr ""
 
@@ -8947,11 +9007,11 @@ msgstr ""
 msgid "Maize"
 msgstr ""
 
-#: templates/eventos/asistente.php:200
+#: templates/eventos/asistente.php:203
 msgid "Make sure there is qualified staff for the risk activity."
 msgstr ""
 
-#: templates/eventos/asistente.php:196
+#: templates/eventos/asistente.php:199
 msgid "Make the budget and ask Treasury to validate it (it cannot be published without it)."
 msgstr ""
 
@@ -8995,7 +9055,7 @@ msgstr ""
 msgid "Manual with screenshots (extra help)"
 msgstr ""
 
-#: templates/eventos/asistente.php:127 templates/eventos/formulario.php:93
+#: templates/eventos/asistente.php:130 templates/eventos/formulario.php:90
 msgid "Map link (optional)"
 msgstr ""
 
@@ -9099,7 +9159,7 @@ msgstr ""
 msgid "Maximum %d per person"
 msgstr ""
 
-#: templates/eventos/asistente.php:148 templates/eventos/formulario.php:131
+#: templates/eventos/asistente.php:151 templates/eventos/formulario.php:128
 msgid "Maximum age (optional)"
 msgstr ""
 
@@ -9319,7 +9379,7 @@ msgstr ""
 msgid "Minimum"
 msgstr ""
 
-#: templates/eventos/asistente.php:147 templates/eventos/formulario.php:130
+#: templates/eventos/asistente.php:150 templates/eventos/formulario.php:127
 msgid "Minimum age (optional)"
 msgstr ""
 
@@ -9339,7 +9399,7 @@ msgstr ""
 msgid "Mobile"
 msgstr ""
 
-#: templates/eventos/formulario.php:138 templates/eventos/inscripciones.php:92
+#: templates/eventos/formulario.php:135 templates/eventos/inscripciones.php:92
 msgid "Mode"
 msgstr ""
 
@@ -9363,7 +9423,7 @@ msgstr ""
 msgid "Molluscs"
 msgstr ""
 
-#: templates/eventos/asistente.php:40 templates/eventos/asistente.php:176
+#: templates/eventos/asistente.php:40 templates/eventos/asistente.php:179
 msgid "Money and rules"
 msgstr ""
 
@@ -9387,7 +9447,7 @@ msgstr ""
 msgid "Monitor and Youth Leader"
 msgstr ""
 
-#: templates/eventos/asistente.php:163
+#: templates/eventos/asistente.php:166
 msgid "Monitors"
 msgstr ""
 
@@ -9553,7 +9613,7 @@ msgstr ""
 msgid "New equipment, line %d"
 msgstr ""
 
-#: templates/eventos/agenda.php:28 templates/eventos/asistente.php:61 templates/eventos/formulario.php:44
+#: templates/eventos/agenda.php:28 templates/eventos/asistente.php:64
 msgid "New event"
 msgstr ""
 
@@ -9635,7 +9695,7 @@ msgstr ""
 msgid "Next steps"
 msgstr ""
 
-#: templates/eventos/asistente.php:255
+#: templates/eventos/asistente.php:258
 msgid "Next →"
 msgstr ""
 
@@ -9644,7 +9704,7 @@ msgid "Nickname"
 msgstr ""
 
 #. translators: %s: number of nights
-#: templates/eventos/asistente.php:123
+#: templates/eventos/asistente.php:126
 #, php-format
 msgid "Nights away: %s."
 msgstr ""
@@ -9653,7 +9713,7 @@ msgstr ""
 msgid "No"
 msgstr ""
 
-#: src/Eventos/Normativa.php:45
+#: src/Eventos/Normativa.php:51
 msgid "No (the organiser reports it, or there are no minors)"
 msgstr ""
 
@@ -9735,7 +9795,7 @@ msgstr ""
 msgid "No cost"
 msgstr ""
 
-#: src/Eventos/Normativa.php:281 templates/eventos/formulario.php:166
+#: src/Eventos/Normativa.php:308 templates/eventos/formulario.php:163
 msgid "No cost for families."
 msgstr ""
 
@@ -9769,7 +9829,7 @@ msgstr ""
 msgid "No email in the CRM"
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:593
+#: src/Frontend/Views/EventosView.php:584
 msgid "No email notice has been sent."
 msgstr ""
 
@@ -9906,7 +9966,7 @@ msgid "No. %1$s will be saved on %2$s's CRM record. Continue?"
 msgstr ""
 
 #. translators: %s: text
-#: src/Eventos/Normativa.php:202 src/Tienda/Servicio.php:346 src/Usuarios/AvisoBaja.php:148 templates/eventos/equipo.php:77
+#: src/Eventos/Normativa.php:226 src/Tienda/Servicio.php:346 src/Usuarios/AvisoBaja.php:148 templates/eventos/equipo.php:77
 #, php-format
 msgid "No. %s"
 msgstr ""
@@ -10121,15 +10181,15 @@ msgstr ""
 msgid "Nothing is deleted: the record and their previous memberships stay in the CRM. If they return, they are given a new membership."
 msgstr ""
 
-#: templates/eventos/asistente.php:233
+#: templates/eventos/asistente.php:236
 msgid "Nothing is published yet: a draft is created and you can change anything from its page."
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:843
+#: src/Frontend/Views/EventosView.php:834
 msgid "Notice confirmed."
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:610
+#: src/Frontend/Views/EventosView.php:601
 msgid "Notice sent."
 msgstr ""
 
@@ -10244,13 +10304,13 @@ msgid "Olive oil"
 msgstr ""
 
 #. translators: %s: text
-#: src/Eventos/Normativa.php:226
+#: src/Eventos/Normativa.php:250
 #, php-format
 msgid "On %s's record the sexual offences certificate is shown but without a date: it cannot be known whether it is less than 12 months old."
 msgstr ""
 
 #. translators: %s: text
-#: src/Eventos/Normativa.php:228
+#: src/Eventos/Normativa.php:252
 #, php-format
 msgid "On %s's record there is no sexual offences certificate."
 msgstr ""
@@ -10315,7 +10375,7 @@ msgstr ""
 msgid "One of the chosen products is no longer available. Check your selection."
 msgstr ""
 
-#: src/Crm/Altas.php:607
+#: src/Crm/Altas.php:608
 msgid "One of the email addresses is not valid."
 msgstr ""
 
@@ -10361,7 +10421,7 @@ msgstr ""
 msgid "Only a batch that has not yet been sent to the bank can be cancelled."
 msgstr ""
 
-#: src/Eventos/Servicio.php:663
+#: src/Eventos/Servicio.php:724
 msgid "Only a draft event can be deleted."
 msgstr ""
 
@@ -10775,7 +10835,7 @@ msgstr ""
 msgid "Paid on %s"
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:636
+#: src/Frontend/Views/EventosView.php:627
 msgid "Paper authorisation recorded."
 msgstr ""
 
@@ -10805,7 +10865,7 @@ msgstr ""
 msgid "Participants (%d)"
 msgstr ""
 
-#: templates/eventos/formulario.php:102
+#: templates/eventos/formulario.php:99
 msgid "Participants and places"
 msgstr ""
 
@@ -10813,7 +10873,7 @@ msgstr ""
 msgid "Participants of the account"
 msgstr ""
 
-#: templates/eventos/formulario.php:191
+#: templates/eventos/formulario.php:188
 msgid "Participants with recognised dependency: write only how many (no names). The regulations require more support monitors."
 msgstr ""
 
@@ -10974,13 +11034,13 @@ msgid "Payment of %s recorded"
 msgstr ""
 
 #. translators: %s: text
-#: src/Frontend/Views/EventosView.php:653
+#: src/Frontend/Views/EventosView.php:644
 #, php-format
 msgid "Payment of %s recorded and split among the family's sign-ups."
 msgstr ""
 
 #. translators: %s: text
-#: src/Frontend/Views/EventosView.php:647 src/Frontend/Views/TesoreriaView.php:454
+#: src/Frontend/Views/EventosView.php:638 src/Frontend/Views/TesoreriaView.php:454
 #, php-format
 msgid "Payment of %s recorded."
 msgstr ""
@@ -11103,7 +11163,7 @@ msgstr ""
 msgid "People in the group"
 msgstr ""
 
-#: templates/eventos/presupuesto.php:142
+#: templates/eventos/presupuesto.php:156
 msgid "People travelling"
 msgstr ""
 
@@ -11111,15 +11171,15 @@ msgstr ""
 msgid "People's username is their…"
 msgstr ""
 
-#: src/Eventos/Presupuesto.php:31
+#: src/Eventos/Presupuesto.php:35
 msgid "Per person: each participant"
 msgstr ""
 
-#: src/Eventos/Presupuesto.php:32
+#: src/Eventos/Presupuesto.php:36
 msgid "Per person: participants and team"
 msgstr ""
 
-#: src/Eventos/Presupuesto.php:33
+#: src/Eventos/Presupuesto.php:37
 msgid "Per person: team only"
 msgstr ""
 
@@ -11171,7 +11231,7 @@ msgstr ""
 msgid "Personal equipment"
 msgstr ""
 
-#: templates/eventos/asistente.php:225 templates/eventos/formulario.php:157
+#: templates/eventos/asistente.php:228 templates/eventos/formulario.php:154
 msgid "Personal equipment (what each participant brings)"
 msgstr ""
 
@@ -11211,7 +11271,7 @@ msgstr ""
 msgid "Pistachio"
 msgstr ""
 
-#: templates/eventos/asistente.php:126 templates/eventos/asistente.php:238 templates/eventos/formulario.php:92 templates/eventos/resumen.php:56
+#: templates/eventos/asistente.php:129 templates/eventos/asistente.php:241 templates/eventos/formulario.php:89 templates/eventos/resumen.php:56
 msgid "Place"
 msgstr ""
 
@@ -11247,25 +11307,25 @@ msgstr ""
 msgid "Place: %s"
 msgstr ""
 
-#: templates/eventos/asistente.php:143 templates/eventos/formulario.php:109 templates/eventos/formulario.php:123 templates/eventos/inscripciones.php:104
+#: templates/eventos/asistente.php:146 templates/eventos/formulario.php:106 templates/eventos/formulario.php:120 templates/eventos/inscripciones.php:104
 msgid "Places"
 msgstr ""
 
 #. translators: %s: text
-#: templates/eventos/formulario.php:123
+#: templates/eventos/formulario.php:120
 #, php-format
 msgid "Places of %s"
 msgstr ""
 
-#: templates/eventos/presupuesto.php:143
+#: templates/eventos/presupuesto.php:157
 msgid "Places on each bus"
 msgstr ""
 
-#: templates/eventos/asistente.php:199
+#: templates/eventos/asistente.php:202
 msgid "Plan a lifeguard or the water-safety measures."
 msgstr ""
 
-#: templates/eventos/asistente.php:201
+#: templates/eventos/asistente.php:204
 msgid "Plan extra support monitors because of the dependency."
 msgstr ""
 
@@ -11273,19 +11333,19 @@ msgstr ""
 msgid "Planned"
 msgstr ""
 
-#: templates/eventos/presupuesto.php:202
+#: templates/eventos/presupuesto.php:243
 msgid "Planned emergency fund"
 msgstr ""
 
-#: templates/eventos/presupuesto.php:197 templates/tesoreria/presupuesto-seccion.php:66
+#: templates/eventos/presupuesto.php:238 templates/tesoreria/presupuesto-seccion.php:66
 msgid "Planned expenses"
 msgstr ""
 
-#: templates/eventos/presupuesto.php:199 templates/tesoreria/presupuesto-seccion.php:65
+#: templates/eventos/presupuesto.php:240 templates/tesoreria/presupuesto-seccion.php:65
 msgid "Planned income"
 msgstr ""
 
-#: src/Informes/Catalogo.php:122 templates/eventos/asistente.php:182 templates/eventos/formulario.php:181
+#: src/Informes/Catalogo.php:122 templates/eventos/asistente.php:185 templates/eventos/formulario.php:178
 msgid "Policy no."
 msgstr ""
 
@@ -11403,13 +11463,19 @@ msgstr ""
 msgid "Price (€)"
 msgstr ""
 
+#. translators: %s: section
+#: templates/eventos/presupuesto.php:221
+#, php-format
+msgid "Price for %s (€)"
+msgstr ""
+
 #. translators: %s: text
 #: templates/inventario/nueva.php:78
 #, php-format
 msgid "Price of \"%s\""
 msgstr ""
 
-#: templates/eventos/presupuesto.php:144
+#: templates/eventos/presupuesto.php:158
 msgid "Price of one bus (€)"
 msgstr ""
 
@@ -11597,7 +11663,7 @@ msgstr ""
 msgid "Quantity %d"
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:756
+#: src/Frontend/Views/EventosView.php:747
 msgid "Quantity changed."
 msgstr ""
 
@@ -11771,7 +11837,7 @@ msgstr ""
 msgid "Recipe copied to your group. You can now edit it."
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:828
+#: src/Frontend/Views/EventosView.php:819
 msgid "Recipe created and added to the menu."
 msgstr ""
 
@@ -11867,7 +11933,7 @@ msgstr ""
 msgid "Record an inflow or an outflow"
 msgstr ""
 
-#: src/Usuarios/Usuarios.php:255
+#: src/Usuarios/Usuarios.php:276
 msgid "Record email"
 msgstr ""
 
@@ -12014,12 +12080,12 @@ msgid "Refund of %1$s · event \"%2$s\""
 msgstr ""
 
 #. translators: %s: text
-#: src/Frontend/Views/EventosView.php:669
+#: src/Frontend/Views/EventosView.php:660
 #, php-format
 msgid "Refund of %s recorded."
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:785
+#: src/Frontend/Views/EventosView.php:776
 msgid "Refund recorded."
 msgstr ""
 
@@ -12115,7 +12181,7 @@ msgstr ""
 msgid "Registrations in the CRM are not enabled for your group (wp-admin → Scout Groups → Modules)."
 msgstr ""
 
-#: src/Crm/Altas.php:555 src/Frontend/Views/FichaView.php:246 src/Frontend/Views/FichaView.php:319 src/Frontend/Views/PersonasView.php:312
+#: src/Crm/Altas.php:556 src/Frontend/Views/FichaView.php:246 src/Frontend/Views/FichaView.php:319 src/Frontend/Views/PersonasView.php:312
 msgid "Registrations in the CRM are not enabled for your group."
 msgstr ""
 
@@ -12151,7 +12217,7 @@ msgstr ""
 msgid "Reimbursement marked as paid."
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:701
+#: src/Frontend/Views/EventosView.php:692
 msgid "Reimbursement recorded."
 msgstr ""
 
@@ -12273,7 +12339,7 @@ msgstr ""
 msgid "Remove this task?"
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:547
+#: src/Frontend/Views/EventosView.php:538
 msgid "Removed from the team."
 msgstr ""
 
@@ -12295,14 +12361,6 @@ msgstr ""
 
 #: templates/eventos/cuentas.php:67 templates/eventos/cuentas.php:72
 msgid "Reopen the accounts"
-msgstr ""
-
-#: templates/eventos/presupuesto.php:217
-msgid "Reopen the budget"
-msgstr ""
-
-#: templates/eventos/presupuesto.php:217
-msgid "Reopen the budget? It will have to be validated again before publishing."
 msgstr ""
 
 #: templates/eventos/cuentas.php:68
@@ -12338,7 +12396,7 @@ msgid "Report date"
 msgstr ""
 
 #. translators: %s: date
-#: templates/eventos/asistente.php:197
+#: templates/eventos/asistente.php:200
 #, php-format
 msgid "Report it to ASDE Baleares 30 days before: it has enough nights and minors. At the latest on %s."
 msgstr ""
@@ -12347,7 +12405,7 @@ msgstr ""
 msgid "Report not available."
 msgstr ""
 
-#: templates/eventos/formulario.php:171
+#: templates/eventos/formulario.php:168
 msgid "Report to ASDE Baleares (30 days before)"
 msgstr ""
 
@@ -12535,7 +12593,7 @@ msgstr ""
 msgid "Result = what was collected from families (minus refunds) + other income − validated expenses. Expenses pending review do not count until Treasury validates them."
 msgstr ""
 
-#: templates/eventos/presupuesto.php:167
+#: templates/eventos/presupuesto.php:181
 msgid "Resulting price"
 msgstr ""
 
@@ -12579,7 +12637,7 @@ msgstr ""
 msgid "Review (%d)"
 msgstr ""
 
-#: templates/eventos/asistente.php:232
+#: templates/eventos/asistente.php:235
 msgid "Review and create the draft"
 msgstr ""
 
@@ -12623,7 +12681,7 @@ msgstr ""
 msgid "Right now nobody in your account has an active membership, so no order can be placed."
 msgstr ""
 
-#: src/Eventos/Normativa.php:310
+#: src/Eventos/Normativa.php:340
 msgid "Risk activities (mountain, canyoning, climbing, diving, sailing) go with staff qualified in that activity."
 msgstr ""
 
@@ -12790,7 +12848,7 @@ msgstr ""
 msgid "Save and add another"
 msgstr ""
 
-#: templates/eventos/presupuesto.php:160
+#: templates/eventos/presupuesto.php:174
 msgid "Save and recalculate"
 msgstr ""
 
@@ -12830,7 +12888,7 @@ msgstr ""
 msgid "Save the cash count"
 msgstr ""
 
-#: templates/eventos/formulario.php:199
+#: templates/eventos/formulario.php:196
 msgid "Save the changes"
 msgstr ""
 
@@ -12868,6 +12926,10 @@ msgstr ""
 
 #: templates/accesos/matriz.php:82
 msgid "Save the permissions"
+msgstr ""
+
+#: templates/eventos/presupuesto.php:232
+msgid "Save the prices and keep the go-ahead"
 msgstr ""
 
 #: templates/menus/receta.php:132
@@ -12926,7 +12988,7 @@ msgstr ""
 msgid "Scholarships and adjustments are made by Treasury."
 msgstr ""
 
-#: templates/eventos/asistente.php:82 templates/eventos/formulario.php:58 templates/eventos/resumen.php:53 templates/usuarios/fila.php:85
+#: templates/eventos/asistente.php:85 templates/eventos/formulario.php:55 templates/eventos/resumen.php:53 templates/usuarios/fila.php:85
 msgid "Scope"
 msgstr ""
 
@@ -13004,7 +13066,7 @@ msgstr ""
 msgid "Scouters link renewed: the previous one no longer works."
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:592
+#: src/Frontend/Views/EventosView.php:583
 msgid "Scouters will be notified by email."
 msgstr ""
 
@@ -13105,7 +13167,7 @@ msgstr ""
 msgid "Section"
 msgstr ""
 
-#: templates/eventos/presupuesto.php:120
+#: templates/eventos/presupuesto.php:134
 msgid "Section (if only one)"
 msgstr ""
 
@@ -13143,6 +13205,10 @@ msgstr ""
 
 #: templates/eventos/agenda.php:71 templates/eventos/agenda.php:85 templates/informes/editor.php:82
 msgid "Sections"
+msgstr ""
+
+#: templates/eventos/presupuesto.php:245
+msgid "Sections that do not pay"
 msgstr ""
 
 #: templates/tesoreria/cuotas.php:53
@@ -13290,8 +13356,8 @@ msgstr ""
 msgid "Send to Treasury"
 msgstr ""
 
-#: templates/eventos/presupuesto.php:211
-msgid "Send to Treasury for validation"
+#: templates/eventos/presupuesto.php:255
+msgid "Send to Treasury for its go-ahead"
 msgstr ""
 
 #: templates/eventos/menu.php:314
@@ -13299,7 +13365,7 @@ msgid "Send to the kitchen team"
 msgstr ""
 
 #. translators: %d: number
-#: src/Frontend/Views/EventosView.php:854
+#: src/Frontend/Views/EventosView.php:845
 #, php-format
 msgid "Sending to %d failed."
 msgid_plural "Sending to %d failed."
@@ -13327,9 +13393,9 @@ msgid "Sent to Treasury"
 msgstr ""
 
 #. translators: %s: text
-#: templates/eventos/presupuesto.php:52
+#: templates/eventos/presupuesto.php:66
 #, php-format
-msgid "Sent to Treasury on %s: it still needs to be validated."
+msgid "Sent to Treasury on %s: it still needs its go-ahead."
 msgstr ""
 
 #: src/Sepa/Remesas.php:55
@@ -13570,15 +13636,15 @@ msgstr ""
 msgid "Sign-in username saved: %1$s. Accounts already using it: %2$d. Accounts that would change: %3$d. Accounts that cannot be changed: %4$d."
 msgstr ""
 
-#: src/Frontend/Views/AccesoView.php:130
+#: src/Frontend/Views/AccesoView.php:177
 msgid "Sign-in was not possible."
 msgstr ""
 
-#: templates/eventos/asistente.php:41 templates/eventos/formulario.php:136 templates/eventos/inscripciones.php:90 templates/tesoreria/cuotas.php:66
+#: templates/eventos/asistente.php:41 templates/eventos/formulario.php:133 templates/eventos/inscripciones.php:90 templates/tesoreria/cuotas.php:66
 msgid "Sign-up"
 msgstr ""
 
-#: templates/eventos/asistente.php:208
+#: templates/eventos/asistente.php:211
 msgid "Sign-up and message for families"
 msgstr ""
 
@@ -13602,7 +13668,7 @@ msgstr ""
 msgid "Sign-up for this event is not open."
 msgstr ""
 
-#: templates/eventos/asistente.php:216 templates/eventos/formulario.php:144
+#: templates/eventos/asistente.php:219 templates/eventos/formulario.php:141
 msgid "Sign-up from (optional)"
 msgstr ""
 
@@ -13640,7 +13706,7 @@ msgstr ""
 msgid "Sign-up opens on %s."
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:630
+#: src/Frontend/Views/EventosView.php:621
 msgid "Sign-up saved."
 msgstr ""
 
@@ -13648,11 +13714,11 @@ msgstr ""
 msgid "Sign-up saved. See below what is missing to confirm it."
 msgstr ""
 
-#: templates/eventos/asistente.php:217 templates/eventos/formulario.php:145
+#: templates/eventos/asistente.php:220 templates/eventos/formulario.php:142
 msgid "Sign-up until (optional)"
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:641 src/Frontend/Views/MisEventosView.php:136
+#: src/Frontend/Views/EventosView.php:632 src/Frontend/Views/MisEventosView.php:136
 msgid "Sign-up withdrawn."
 msgstr ""
 
@@ -13676,7 +13742,7 @@ msgstr ""
 msgid "Signed on the website"
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:192 templates/lista-espera/detalle.php:91
+#: src/Frontend/Views/EventosView.php:191 templates/lista-espera/detalle.php:91
 msgid "Signed up"
 msgstr ""
 
@@ -13800,6 +13866,10 @@ msgstr ""
 msgid "Stamps · brokerage · policy"
 msgstr ""
 
+#: templates/acceso/elegir-cuenta.php:49
+msgid "Start again"
+msgstr ""
+
 #: templates/eventos/config.php:288
 msgid "Start with a copy of the Camp tasks"
 msgstr ""
@@ -13822,7 +13892,7 @@ msgstr ""
 msgid "Starting… %s to correct."
 msgstr ""
 
-#: templates/eventos/asistente.php:116 templates/eventos/formulario.php:86
+#: templates/eventos/asistente.php:119 templates/eventos/formulario.php:83
 msgid "Starts"
 msgstr ""
 
@@ -13834,7 +13904,7 @@ msgstr ""
 msgid "State how it was paid (cash, deposit, Bizum or card terminal), the date (not later than today) and the amount."
 msgstr ""
 
-#: src/Eventos/Presupuesto.php:69
+#: src/Eventos/Presupuesto.php:79
 msgid "State how many participants are expected in each invited section: the price is calculated from them."
 msgstr ""
 
@@ -13854,7 +13924,7 @@ msgstr ""
 msgid "State the payment date (not later than today)."
 msgstr ""
 
-#: src/Eventos/Servicio.php:650 src/Frontend/Views/TiendaGestionView.php:478
+#: src/Eventos/Servicio.php:711 src/Frontend/Views/TiendaGestionView.php:478
 msgid "State the reason for the cancellation."
 msgstr ""
 
@@ -13874,7 +13944,7 @@ msgstr ""
 msgid "State the reason for the withdrawal."
 msgstr ""
 
-#: src/Eventos/Servicio.php:229
+#: src/Eventos/Servicio.php:238
 msgid "State the start and end date and time."
 msgstr ""
 
@@ -13984,8 +14054,16 @@ msgstr ""
 msgid "Suggested for this family"
 msgstr ""
 
+#: templates/eventos/presupuesto.php:204 templates/eventos/presupuesto.php:220
+msgid "Suggested price"
+msgstr ""
+
 #: templates/tesoreria/banco.php:237 templates/tesoreria/familia-banco.php:87
 msgid "Suggested:"
+msgstr ""
+
+#: src/Eventos/Normativa.php:321 templates/eventos/equipo.php:131
+msgid "Suggestion: "
 msgstr ""
 
 #: templates/tesoreria/familias.php:35
@@ -14060,7 +14138,7 @@ msgstr ""
 msgid "Take off the list"
 msgstr ""
 
-#: templates/eventos/asistente.php:198
+#: templates/eventos/asistente.php:201
 msgid "Take out separate insurance (international activity)."
 msgstr ""
 
@@ -14080,7 +14158,7 @@ msgstr ""
 msgid "Task"
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:879
+#: src/Frontend/Views/EventosView.php:870
 msgid "Task added."
 msgstr ""
 
@@ -14088,15 +14166,15 @@ msgstr ""
 msgid "Task calendar"
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:868
+#: src/Frontend/Views/EventosView.php:859
 msgid "Task done."
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:885
+#: src/Frontend/Views/EventosView.php:876
 msgid "Task removed."
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:874
+#: src/Frontend/Views/EventosView.php:865
 msgid "Task saved."
 msgstr ""
 
@@ -14120,11 +14198,11 @@ msgstr ""
 msgid "Tax name (optional)"
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:51 templates/eventos/calendario.php:55 templates/eventos/presupuesto.php:203
+#: src/Frontend/Views/EventosView.php:51 templates/eventos/calendario.php:55 templates/eventos/presupuesto.php:247
 msgid "Team"
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:542
+#: src/Frontend/Views/EventosView.php:533
 msgid "Team updated."
 msgstr ""
 
@@ -14434,7 +14512,7 @@ msgstr ""
 msgid "That product is not in the group's shop."
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:911
+#: src/Frontend/Views/EventosView.php:902
 msgid "That receipt does not exist or you cannot see it."
 msgstr ""
 
@@ -14482,7 +14560,7 @@ msgstr ""
 msgid "That role already had the default permissions."
 msgstr ""
 
-#: src/Eventos/Servicio.php:515
+#: src/Eventos/Servicio.php:557
 msgid "That section is not invited."
 msgstr ""
 
@@ -14494,7 +14572,7 @@ msgstr ""
 msgid "That sign-up is no longer on the waiting list."
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:867 src/Frontend/Views/EventosView.php:873 src/Frontend/Views/EventosView.php:884
+#: src/Frontend/Views/EventosView.php:858 src/Frontend/Views/EventosView.php:864 src/Frontend/Views/EventosView.php:875
 msgid "That task does not exist."
 msgstr ""
 
@@ -14502,7 +14580,7 @@ msgstr ""
 msgid "That template cannot be deleted."
 msgstr ""
 
-#: src/Eventos/Tareas.php:204
+#: src/Eventos/Tareas.php:208
 msgid "That template does not exist or has no tasks."
 msgstr ""
 
@@ -14574,7 +14652,7 @@ msgstr ""
 msgid "The 17 federated organisations of Scouts de España (scout.es). Its name appears in the texts: on the sign-in screen (\"Private area of the groups of …\") and in the federation cost."
 msgstr ""
 
-#: templates/acceso/formulario.php:67
+#: templates/acceso/elegir-cuenta.php:44 templates/acceso/formulario.php:67
 msgid "The 6 digits from your authenticator app or, if you have lost your phone, one of your recovery codes."
 msgstr ""
 
@@ -14600,7 +14678,7 @@ msgstr ""
 msgid "The CRM URL is missing."
 msgstr ""
 
-#: src/Auth/Ambito.php:80
+#: src/Auth/Ambito.php:93
 msgid "The CRM could not be queried. Try again in a few minutes."
 msgstr ""
 
@@ -14668,11 +14746,11 @@ msgstr ""
 msgid "The CRM has not created the record: "
 msgstr ""
 
-#: src/Crm/Altas.php:691
+#: src/Crm/Altas.php:702
 msgid "The CRM has not left the new record in the group."
 msgstr ""
 
-#: src/Crm/Altas.php:716
+#: src/Crm/Altas.php:727
 msgid "The CRM has not linked the membership to the person."
 msgstr ""
 
@@ -14835,13 +14913,13 @@ msgid "The accounts could not be reopened. Try again."
 msgstr ""
 
 #. translators: %s: text
-#: src/Frontend/Views/EventosView.php:728
+#: src/Frontend/Views/EventosView.php:719
 #, php-format
 msgid "The accounts of event %s are closed: the balance becomes the final report."
 msgstr ""
 
 #. translators: %s: text
-#: src/Frontend/Views/EventosView.php:733
+#: src/Frontend/Views/EventosView.php:724
 #, php-format
 msgid "The accounts of event %s are reopened: they can be changed now. When everything is done, close them again."
 msgstr ""
@@ -14854,7 +14932,7 @@ msgstr ""
 msgid "The activation is sent to the email address on your group record. This one is only used if your record has no email: the coordination team will then review your registration."
 msgstr ""
 
-#: src/Eventos/Normativa.php:234
+#: src/Eventos/Normativa.php:258
 msgid "The activity director is missing."
 msgstr ""
 
@@ -14968,19 +15046,15 @@ msgstr ""
 msgid "The budget is already approved."
 msgstr ""
 
-#: src/Eventos/Servicio.php:291
-msgid "The budget is already validated and the price is fixed: to change the sections, the expected participants or whether it has a cost, ask Treasury to reopen the budget."
-msgstr ""
-
-#: templates/eventos/formulario.php:70
+#: templates/eventos/formulario.php:67
 msgid "The budget is validated: the sections and expected participants cannot be changed (Treasury can reopen it)."
 msgstr ""
 
-#: src/Eventos/Normativa.php:278
-msgid "The budget still has to be prepared and Treasury asked to validate it."
+#: src/Eventos/Normativa.php:305
+msgid "The budget still has to be prepared and sent to Treasury for its go-ahead."
 msgstr ""
 
-#: templates/eventos/asistente.php:245
+#: templates/eventos/asistente.php:248
 msgid "The budget, if families pay, and Treasury's validation"
 msgstr ""
 
@@ -15034,7 +15108,7 @@ msgstr ""
 msgid "The collection date must be a working day (Monday to Friday)."
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:848
+#: src/Frontend/Views/EventosView.php:839
 msgid "The confirmation has been removed: the notice is unresolved again."
 msgstr ""
 
@@ -15104,7 +15178,7 @@ msgstr ""
 msgid "The data of this sign-up is no longer kept (it was deleted or they became a member): the text of the email cannot be rebuilt."
 msgstr ""
 
-#: templates/eventos/asistente.php:102
+#: templates/eventos/asistente.php:105
 msgid "The data, place and texts are copied and the dates move one year on. Sign-ups, payments and the team are not copied."
 msgstr ""
 
@@ -15122,23 +15196,23 @@ msgstr ""
 msgid "The date cannot be later than today."
 msgstr ""
 
-#: src/Eventos/Tareas.php:289 src/Presupuestos/Servicio.php:221
+#: src/Eventos/Tareas.php:293 src/Presupuestos/Servicio.php:221
 msgid "The date is not valid."
 msgstr ""
 
 #. translators: %d: number
-#: src/Frontend/Views/EventosView.php:530
+#: src/Frontend/Views/EventosView.php:521
 #, php-format
 msgid "The date of %d calendar task has changed."
 msgid_plural "The dates of %d calendar tasks have changed."
 msgstr[0] ""
 msgstr[1] ""
 
-#: src/Crm/Altas.php:580
+#: src/Crm/Altas.php:581
 msgid "The date of birth is missing."
 msgstr ""
 
-#: src/Crm/Altas.php:589 src/ListaEspera/Formulario.php:48
+#: src/Crm/Altas.php:590 src/ListaEspera/Formulario.php:48
 msgid "The date of birth is not valid."
 msgstr ""
 
@@ -15169,7 +15243,7 @@ msgid "The dish is replaced"
 msgstr ""
 
 #. translators: %d: number
-#: src/Crm/Altas.php:603 src/ListaEspera/Formulario.php:61 templates/personas/alta.php:89
+#: src/Crm/Altas.php:604 src/ListaEspera/Formulario.php:61 templates/personas/alta.php:89
 #, php-format
 msgid "The document is required from age %d."
 msgstr ""
@@ -15228,11 +15302,11 @@ msgstr ""
 msgid "The event and its accounts can be changed again. Who picks up and the notes, which were deleted on closing, do not come back."
 msgstr ""
 
-#: src/Eventos/Servicio.php:231
+#: src/Eventos/Servicio.php:240
 msgid "The event cannot end before it starts."
 msgstr ""
 
-#: src/Eventos/Servicio.php:340
+#: src/Eventos/Servicio.php:350
 msgid "The event could not be saved."
 msgstr ""
 
@@ -15240,19 +15314,23 @@ msgstr ""
 msgid "The event has not finished yet."
 msgstr ""
 
+#: src/Eventos/Servicio.php:301
+msgid "The event is already published and the price is fixed: the sections, the expected participants and whether it has a cost can no longer be changed."
+msgstr ""
+
 #: templates/eventos/agenda.php:32
 msgid "The events of your sections and those whose team you are on."
 msgstr ""
 
-#: templates/eventos/asistente.php:138
+#: templates/eventos/asistente.php:141
 msgid "The expected participants give the price and the monitors you need. If more sign up later, the price does not change. Places are the maximum (0 = no limit)."
 msgstr ""
 
-#: templates/eventos/presupuesto.php:161
+#: templates/eventos/presupuesto.php:175
 msgid "The expected participants of each section are changed in \"Edit the details\"."
 msgstr ""
 
-#: templates/eventos/formulario.php:103
+#: templates/eventos/formulario.php:100
 msgid "The expected participants of each section are used to calculate the price and the monitor ratio. Places are the maximum (0 = no limit)."
 msgstr ""
 
@@ -15401,7 +15479,7 @@ msgstr ""
 msgid "The file must be a CSV (.csv). From Excel: \"Save as\" → \"CSV (semicolon delimited)\"."
 msgstr ""
 
-#: src/Crm/Altas.php:578 src/ListaEspera/Formulario.php:40
+#: src/Crm/Altas.php:579 src/ListaEspera/Formulario.php:40
 msgid "The first name is missing."
 msgstr ""
 
@@ -15433,11 +15511,11 @@ msgstr ""
 msgid "The first user is missing: the record with that ID number does not exist or is not active in the group's CRM. Correct it in the CRM and try again; meanwhile, nobody in the group can sign in."
 msgstr ""
 
-#: src/Frontend/Views/AccesoView.php:62 src/Frontend/Views/ActivarCuentaView.php:54 src/Frontend/Views/AltaGrupoView.php:113 src/Frontend/Views/AltaScoutersView.php:69
+#: src/Frontend/Views/AccesoView.php:91 src/Frontend/Views/AccesoView.php:270 src/Frontend/Views/ActivarCuentaView.php:54 src/Frontend/Views/AltaGrupoView.php:113
 msgid "The form session has expired. Try again."
 msgstr ""
 
-#: templates/eventos/asistente.php:246
+#: templates/eventos/asistente.php:249
 msgid "The full event team"
 msgstr ""
 
@@ -15445,16 +15523,20 @@ msgstr ""
 msgid "The fundraising project is not removed: set its target to 0 if you don't need it."
 msgstr ""
 
-#: src/Crm/Altas.php:581
+#: src/Crm/Altas.php:582
 msgid "The gender is missing."
 msgstr ""
 
-#: src/Crm/Altas.php:593
+#: src/Crm/Altas.php:594
 msgid "The gender is not valid."
 msgstr ""
 
 #: src/Frontend/Views/LibroMayorView.php:26
 msgid "The general ledger is seen by Treasury, the Secretary's office and Coordination, with the cash module on."
+msgstr ""
+
+#: src/Eventos/Servicio.php:664
+msgid "The go-ahead can no longer be withdrawn from this budget."
 msgstr ""
 
 #: templates/alta-grupo/formulario.php:38
@@ -15626,7 +15708,7 @@ msgid "The invitation will arrive here, and with it you will be able to sign in.
 msgstr ""
 
 #. translators: 1: text, 2: text
-#: src/Eventos/Presupuesto.php:81 src/Eventos/Presupuesto.php:90
+#: src/Eventos/Presupuesto.php:91 src/Eventos/Presupuesto.php:100
 #, php-format
 msgid "The item \"%1$s\" is only for %2$s, but there are no expected participants from that section."
 msgstr ""
@@ -15723,7 +15805,7 @@ msgstr ""
 msgid "The manual's address is not valid: enter a full web address (https://…)."
 msgstr ""
 
-#: src/Eventos/Servicio.php:236
+#: src/Eventos/Servicio.php:245
 msgid "The map link must be a web address (https://…)."
 msgstr ""
 
@@ -15749,7 +15831,7 @@ msgstr ""
 msgid "The menu already has too many dishes."
 msgstr ""
 
-#: templates/eventos/asistente.php:247
+#: templates/eventos/asistente.php:250
 msgid "The menu and the shopping list"
 msgstr ""
 
@@ -15761,7 +15843,7 @@ msgstr ""
 msgid "The menu has no cost yet: record the cost of the ingredients and add dishes."
 msgstr ""
 
-#: src/Eventos/Servicio.php:254
+#: src/Eventos/Servicio.php:263
 msgid "The minimum age cannot be greater than the maximum."
 msgstr ""
 
@@ -15769,15 +15851,15 @@ msgstr ""
 msgid "The names could not be read from the CRM: only the member numbers are shown."
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:612
+#: src/Frontend/Views/EventosView.php:603
 msgid "The notice could not be sent: that person has no active account or no email address (see the email log)."
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:608
+#: src/Frontend/Views/EventosView.php:599
 msgid "The notice will be sent to the event team in a few moments."
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:608
+#: src/Frontend/Views/EventosView.php:599
 msgid "The notice will be sent to the families in a few moments."
 msgstr ""
 
@@ -15897,7 +15979,7 @@ msgstr ""
 msgid "The payments filter is not applied because your role does not have access to Treasury."
 msgstr ""
 
-#: src/Eventos/Tareas.php:286
+#: src/Eventos/Tareas.php:290
 msgid "The person in charge must be on the event team."
 msgstr ""
 
@@ -15921,12 +16003,12 @@ msgstr ""
 msgid "The preview has expired. Upload the file again."
 msgstr ""
 
-#: templates/eventos/asistente.php:178
+#: templates/eventos/asistente.php:181
 msgid "The price comes from the budget, which Treasury validates before publishing."
 msgstr ""
 
-#: templates/eventos/presupuesto.php:205
-msgid "The price is calculated with the expected participants and, once validated, does not change: any surplus or shortfall is borne by the group."
+#: templates/eventos/presupuesto.php:249
+msgid "The price is calculated with the expected participants and is fixed when the event is published: any surplus or shortfall is borne by the group."
 msgstr ""
 
 #: src/Inventario/MaterialesTable.php:105 src/Tienda/ProductosTable.php:104
@@ -15937,6 +16019,20 @@ msgstr ""
 #: src/Inventario/Servicio.php:84 src/Inventario/Servicio.php:120
 #, php-format
 msgid "The price of \"%s\" is not valid (for example: 12,50)."
+msgstr ""
+
+#. translators: 1: section, 2: amount, 3: amount
+#: src/Eventos/Presupuesto.php:143
+#, php-format
+msgid "The price of %1$s (%2$s) cannot be lower than its cost (%3$s)."
+msgstr ""
+
+#: templates/eventos/presupuesto.php:233
+msgid "The price of each section cannot be lower than its cost; anything above the cost is the emergency fund."
+msgstr ""
+
+#: src/Eventos/Servicio.php:634
+msgid "The price of each section must be a number."
 msgstr ""
 
 #: src/Idiomas/Guardados.php:283
@@ -15977,7 +16073,7 @@ msgstr ""
 msgid "The quantity to buy of \"%s\" is not valid."
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:915 src/Frontend/Views/ReintegrosView.php:117
+#: src/Frontend/Views/EventosView.php:906 src/Frontend/Views/ReintegrosView.php:117
 msgid "The receipt could not be read."
 msgstr ""
 
@@ -16077,11 +16173,15 @@ msgstr ""
 msgid "The sheet could not be prepared: the menu, the attendees or the connection to the CRM is missing."
 msgstr ""
 
+#: src/Frontend/Views/AccesoView.php:277
+msgid "The sign-in has expired. Enter your details again."
+msgstr ""
+
 #: src/Eventos/Inscripciones.php:744 src/Eventos/Inscripciones.php:761
 msgid "The sign-up could not be saved."
 msgstr ""
 
-#: src/Eventos/Servicio.php:263
+#: src/Eventos/Servicio.php:272
 msgid "The sign-up deadline cannot end before it starts."
 msgstr ""
 
@@ -16089,7 +16189,7 @@ msgstr ""
 msgid "The sign-up deadline has closed: to withdraw, talk to the event team."
 msgstr ""
 
-#: src/Eventos/Servicio.php:265
+#: src/Eventos/Servicio.php:274
 msgid "The sign-up deadline must end before the event starts."
 msgstr ""
 
@@ -16139,15 +16239,15 @@ msgstr ""
 msgid "The stored credential cannot be decrypted. Ask the group to register again with a new invitation."
 msgstr ""
 
-#: src/Crm/Altas.php:579 src/ListaEspera/Formulario.php:43
+#: src/Crm/Altas.php:580 src/ListaEspera/Formulario.php:43
 msgid "The surname is missing."
 msgstr ""
 
-#: templates/eventos/asistente.php:248
+#: templates/eventos/asistente.php:251
 msgid "The task calendar, with the dates already worked out"
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:868
+#: src/Frontend/Views/EventosView.php:859
 msgid "The task is pending again."
 msgstr ""
 
@@ -16155,7 +16255,7 @@ msgstr ""
 msgid "The tax ID must have 9 characters (letters and digits), e.g. G07123456."
 msgstr ""
 
-#: src/Eventos/Normativa.php:285 templates/eventos/equipo.php:46
+#: src/Eventos/Normativa.php:312 templates/eventos/equipo.php:46
 msgid "The team's training and certificate could not be read in the CRM: check them later."
 msgstr ""
 
@@ -16251,7 +16351,7 @@ msgstr ""
 msgid "The variant's price is not valid (for example: 12,50)."
 msgstr ""
 
-#: src/Frontend/Views/AccesoView.php:125
+#: src/Frontend/Views/AccesoView.php:172
 msgid "The verification code is incorrect or has expired. Try again."
 msgstr ""
 
@@ -16341,9 +16441,9 @@ msgid "There are"
 msgstr ""
 
 #. translators: 1: number, 2: number
-#: src/Eventos/Normativa.php:249
+#: src/Eventos/Normativa.php:274
 #, php-format
-msgid "There are %1$d people in training and %2$d qualified: there cannot be more in training than qualified."
+msgid "There are %1$d people in training and %2$d qualified: those in training cannot exceed 50%% of the qualified."
 msgstr ""
 
 #. translators: 1: number, 2: number
@@ -16438,7 +16538,7 @@ msgstr ""
 msgid "There are no members matching these filters."
 msgstr ""
 
-#: templates/eventos/equipo.php:138
+#: templates/eventos/equipo.php:141
 msgid "There are no more scouters or volunteers of the group to add."
 msgstr ""
 
@@ -16462,7 +16562,7 @@ msgstr ""
 msgid "There are no people with that filter."
 msgstr ""
 
-#: templates/eventos/presupuesto.php:89
+#: templates/eventos/presupuesto.php:103
 msgid "There are no planned expenses yet."
 msgstr ""
 
@@ -16556,11 +16656,11 @@ msgstr ""
 msgid "There are several records in your group with this document: they would have to be merged in the CRM."
 msgstr ""
 
-#: templates/eventos/formulario.php:183
+#: templates/eventos/formulario.php:180
 msgid "There are specialised-risk activities (high mountain, canyoning, climbing, diving, sailing)"
 msgstr ""
 
-#: src/Eventos/Normativa.php:311
+#: src/Eventos/Normativa.php:341
 msgid "There are specialised-risk activities: they need staff qualified in that activity."
 msgstr ""
 
@@ -16580,15 +16680,15 @@ msgstr[1] ""
 msgid "There is a SEPA batch for the event whose collections have not been recorded."
 msgstr ""
 
-#: templates/eventos/formulario.php:187
+#: templates/eventos/formulario.php:184
 msgid "There is a swimming pool or sea"
 msgstr ""
 
-#: src/Eventos/Normativa.php:315
+#: src/Eventos/Normativa.php:345
 msgid "There is a swimming pool or sea and there will be a lifeguard."
 msgstr ""
 
-#: src/Eventos/Normativa.php:316
+#: src/Eventos/Normativa.php:346
 msgid "There is a swimming pool or sea: a lifeguard must be present."
 msgstr ""
 
@@ -16646,7 +16746,7 @@ msgstr ""
 msgid "There is currently no open event for you or your family. When the group publishes one, you will receive an email."
 msgstr ""
 
-#: src/Eventos/Normativa.php:236
+#: src/Eventos/Normativa.php:260
 msgid "There is more than one director: the activity has a single responsible director."
 msgstr ""
 
@@ -16792,7 +16892,7 @@ msgstr ""
 msgid "There were no places left: they are on the waiting list (position %d). If one is freed up, we will let you know by email."
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:630
+#: src/Frontend/Views/EventosView.php:621
 msgid "There were no places left: they remain on the waiting list."
 msgstr ""
 
@@ -16857,7 +16957,7 @@ msgid "They are confirmed by the coordination team before they take effect. Mean
 msgstr ""
 
 #. translators: %s: text
-#: src/Frontend/Views/EventosView.php:769
+#: src/Frontend/Views/EventosView.php:760
 #, php-format
 msgid "They are not in the inventory: %s."
 msgstr ""
@@ -16949,11 +17049,7 @@ msgstr ""
 msgid "This budget already has items: it can only be copied onto an empty one."
 msgstr ""
 
-#: src/Eventos/Servicio.php:603
-msgid "This budget can no longer be reopened."
-msgstr ""
-
-#: src/Eventos/Servicio.php:560
+#: src/Eventos/Servicio.php:604
 msgid "This budget cannot be sent to Treasury."
 msgstr ""
 
@@ -16977,20 +17073,24 @@ msgstr ""
 msgid "This document is already registered in another Scouts de España group or organisation. Confirm that it is the same person and that you want to save it."
 msgstr ""
 
+#: templates/acceso/elegir-cuenta.php:21
+msgid "This email address has more than one account. Choose the one you want to sign in with now; you can sign in again with the other one whenever you need it."
+msgstr ""
+
 #: templates/usuarios/email.php:52
 msgid "This email was never sent"
 msgstr ""
 
-#: src/Eventos/Tareas.php:207
+#: src/Eventos/Tareas.php:211
 msgid "This event already has tasks. Remove the ones you don't want or add the missing ones one by one."
 msgstr ""
 
-#: src/Eventos/Servicio.php:637
+#: src/Eventos/Servicio.php:698
 msgid "This event can no longer go back to draft."
 msgstr ""
 
-#: src/Eventos/Servicio.php:620
-msgid "This event has a cost: before publishing it, Treasury must validate its budget."
+#: src/Eventos/Servicio.php:681
+msgid "This event has a cost: before publishing it, Treasury must give its budget the go-ahead."
 msgstr ""
 
 #: templates/eventos/presupuesto.php:40
@@ -17005,7 +17105,7 @@ msgstr ""
 msgid "This event is not for their section or age."
 msgstr ""
 
-#: src/Eventos/Cobros.php:317 src/Eventos/Cuentas.php:670 src/Frontend/Views/EventosView.php:516
+#: src/Eventos/Cobros.php:317 src/Eventos/Cuentas.php:670 src/Frontend/Views/EventosView.php:507
 msgid "This event's accounts are closed: they can no longer be changed."
 msgstr ""
 
@@ -17013,7 +17113,7 @@ msgstr ""
 msgid "This event's accounts are not closed."
 msgstr ""
 
-#: src/Eventos/Servicio.php:483 src/Eventos/Servicio.php:500 src/Eventos/Servicio.php:551
+#: src/Eventos/Servicio.php:524 src/Eventos/Servicio.php:542 src/Eventos/Servicio.php:594
 msgid "This event's budget cannot be changed."
 msgstr ""
 
@@ -17179,7 +17279,7 @@ msgstr ""
 msgid "This task is ticked off by itself when it is done. If it does not apply, close it with a note."
 msgstr ""
 
-#: src/Eventos/Tareas.php:266
+#: src/Eventos/Tareas.php:270
 msgid "This task is ticked off by itself when it is done. If it does not apply, write a note and close it."
 msgstr ""
 
@@ -17431,7 +17531,7 @@ msgstr ""
 msgid "Too many errors: the file is no longer read."
 msgstr ""
 
-#: src/Frontend/Views/AccesoView.php:74
+#: src/Frontend/Views/AccesoView.php:103 src/Frontend/Views/AccesoView.php:291
 msgid "Too many failed attempts. Wait a few minutes before trying again or recover your password."
 msgstr ""
 
@@ -17451,11 +17551,11 @@ msgstr ""
 msgid "Total amount of the annual fee. From the last tier with an amount, the annual fee no longer increases (cap)."
 msgstr ""
 
-#: src/Eventos/Presupuesto.php:29
+#: src/Eventos/Presupuesto.php:33
 msgid "Total amount, among all the participants"
 msgstr ""
 
-#: src/Eventos/Presupuesto.php:30
+#: src/Eventos/Presupuesto.php:34
 msgid "Total amount, among those of one section only"
 msgstr ""
 
@@ -17463,7 +17563,7 @@ msgstr ""
 msgid "Total of other items"
 msgstr ""
 
-#: templates/eventos/formulario.php:129
+#: templates/eventos/formulario.php:126
 msgid "Total places (0 = no limit)"
 msgstr ""
 
@@ -17501,7 +17601,7 @@ msgstr ""
 msgid "Training Officer"
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:664 src/Frontend/Views/EventosView.php:706
+#: src/Frontend/Views/EventosView.php:655 src/Frontend/Views/EventosView.php:697
 msgid "Transaction cancelled."
 msgstr ""
 
@@ -17736,7 +17836,7 @@ msgid "Under %d years of age, enter the first name and surname of the mother, fa
 msgstr ""
 
 #. translators: %d: number
-#: src/Crm/Altas.php:614 templates/personas/alta.php:189
+#: src/Crm/Altas.php:615 templates/personas/alta.php:189
 #, php-format
 msgid "Under %d years of age, guardian 1 is required: first name, surname and email."
 msgstr ""
@@ -17815,7 +17915,7 @@ msgstr ""
 msgid "Units to buy, line %d"
 msgstr ""
 
-#: src/Frontend/Views/AltaUsuariosView.php:197 src/Frontend/Views/BancoView.php:462 src/Frontend/Views/CajaView.php:188 src/Frontend/Views/EventosView.php:511
+#: src/Frontend/Views/AltaUsuariosView.php:197 src/Frontend/Views/BancoView.php:462 src/Frontend/Views/CajaView.php:188 src/Frontend/Views/EventosView.php:502
 msgid "Unknown action."
 msgstr ""
 
@@ -17945,14 +18045,6 @@ msgstr ""
 msgid "Validate budgets and keep the accounts"
 msgstr ""
 
-#: templates/eventos/presupuesto.php:214
-msgid "Validate the budget"
-msgstr ""
-
-#: templates/eventos/presupuesto.php:214
-msgid "Validate the budget? The price per section will be fixed."
-msgstr ""
-
 #: templates/tienda/detalle.php:106
 msgid "Validate the payment"
 msgstr ""
@@ -17967,30 +18059,10 @@ msgstr ""
 msgid "Validated by %1$s on %2$s"
 msgstr ""
 
-#. translators: 1: text, 2: text
-#: templates/eventos/presupuesto.php:49
-#, php-format
-msgid "Validated by %1$s on %2$s: the price per section is now fixed."
-msgstr ""
-
 #. translators: %2$s: text
 #: templates/tienda/detalle.php:84
 #, php-format
 msgid "Validated on %2$s"
-msgstr ""
-
-#. translators: %2$s: text
-#: templates/eventos/presupuesto.php:49
-#, php-format
-msgid "Validated on %2$s: the price per section is now fixed."
-msgstr ""
-
-#: templates/eventos/presupuesto.php:167
-msgid "Validated price"
-msgstr ""
-
-#: src/Eventos/Servicio.php:577
-msgid "Validating the budget is done by Treasury."
 msgstr ""
 
 #: src/Frontend/Views/BancoView.php:262 src/Tesoreria/Banco/CsvBanco.php:25
@@ -18021,7 +18093,7 @@ msgstr ""
 msgid "Vegetarian diet"
 msgstr ""
 
-#: templates/acceso/formulario.php:63 templates/acceso/formulario.php:65
+#: templates/acceso/elegir-cuenta.php:42 templates/acceso/formulario.php:63 templates/acceso/formulario.php:65
 msgid "Verification code"
 msgstr ""
 
@@ -18359,7 +18431,7 @@ msgstr ""
 msgid "What activity it is for, where it will be bought…"
 msgstr ""
 
-#: templates/eventos/asistente.php:70
+#: templates/eventos/asistente.php:73
 msgid "What are you going to do?"
 msgstr ""
 
@@ -18473,7 +18545,7 @@ msgstr ""
 msgid "When and where"
 msgstr ""
 
-#: templates/eventos/asistente.php:114
+#: templates/eventos/asistente.php:117
 msgid "When and where?"
 msgstr ""
 
@@ -18561,7 +18633,7 @@ msgstr ""
 msgid "Who has to be reimbursed"
 msgstr ""
 
-#: templates/eventos/asistente.php:91
+#: templates/eventos/asistente.php:94
 msgid "Who is going? (invited sections)"
 msgstr ""
 
@@ -18597,7 +18669,7 @@ msgstr ""
 msgid "Who wants to join the group, the section that corresponds to their age and their passage to the CRM."
 msgstr ""
 
-#: templates/eventos/equipo.php:160
+#: templates/eventos/equipo.php:163
 msgid "Whoever is on the team can manage the event. The team does not pay: its cost is spread across the participants' price."
 msgstr ""
 
@@ -18628,13 +18700,13 @@ msgid "Windows-1252 / ISO-8859-1"
 msgstr ""
 
 #. translators: 1: number, 2: number, 3: number
-#: src/Eventos/Normativa.php:242
+#: src/Eventos/Normativa.php:271
 #, php-format
 msgid "With %1$d participants, %2$d monitors are needed besides the director, and there are %3$d."
 msgstr ""
 
 #. translators: 2: number, 1: number, 3: number
-#: templates/eventos/presupuesto.php:146
+#: templates/eventos/presupuesto.php:160
 #, php-format
 msgid "With %2$d places, %1$d person needs %3$d bus."
 msgid_plural "With %2$d places, %1$d people need %3$d buses."
@@ -18661,11 +18733,11 @@ msgstr ""
 msgid "With an instalment, each family is charged what it is missing up to that instalment (counting what it has already paid)."
 msgstr ""
 
-#: templates/eventos/asistente.php:190 templates/eventos/formulario.php:193
+#: templates/eventos/asistente.php:193 templates/eventos/formulario.php:190
 msgid "With grade I or II"
 msgstr ""
 
-#: templates/eventos/asistente.php:191 templates/eventos/formulario.php:194
+#: templates/eventos/asistente.php:194 templates/eventos/formulario.php:191
 msgid "With grade III"
 msgstr ""
 
@@ -18689,7 +18761,7 @@ msgstr ""
 msgid "With overdue instalments unpaid"
 msgstr ""
 
-#: templates/eventos/asistente.php:187 templates/eventos/formulario.php:185
+#: templates/eventos/asistente.php:190 templates/eventos/formulario.php:182
 msgid "With staff qualified in that activity"
 msgstr ""
 
@@ -18713,7 +18785,7 @@ msgstr ""
 msgid "With those details access cannot be given from here."
 msgstr ""
 
-#: templates/eventos/asistente.php:194
+#: templates/eventos/asistente.php:197
 msgid "With what you have said, you will have to:"
 msgstr ""
 
@@ -18738,6 +18810,14 @@ msgstr ""
 
 #: templates/tesoreria/caja.php:211
 msgid "Withdraw it from the bank for this cash box"
+msgstr ""
+
+#: templates/eventos/presupuesto.php:258
+msgid "Withdraw the go-ahead"
+msgstr ""
+
+#: templates/eventos/presupuesto.php:258
+msgid "Withdraw the go-ahead? The budget will be pending Treasury again."
 msgstr ""
 
 #: templates/eventos/cuentas.php:238
@@ -18782,11 +18862,11 @@ msgstr ""
 msgid "Without a section, choose at least one responsibility: Secretary's office, Coordination, Treasury or Quartermaster."
 msgstr ""
 
-#: templates/eventos/asistente.php:219
+#: templates/eventos/asistente.php:222
 msgid "Without dates, sign-up opens on publishing and closes when the event starts."
 msgstr ""
 
-#: templates/eventos/formulario.php:147
+#: templates/eventos/formulario.php:144
 msgid "Without dates, sign-up opens on publishing and closes when the event starts. After the deadline, only the team signs people up. If there are no places left, new sign-ups go on the waiting list."
 msgstr ""
 
@@ -18798,7 +18878,7 @@ msgstr ""
 msgid "Write a camp post on the group website"
 msgstr ""
 
-#: templates/eventos/asistente.php:188
+#: templates/eventos/asistente.php:191
 msgid "Write only how many (no names)."
 msgstr ""
 
@@ -18866,7 +18946,7 @@ msgstr ""
 msgid "Yes (the Secretary's office and Coordination see it)"
 msgstr ""
 
-#: src/Eventos/Normativa.php:44
+#: src/Eventos/Normativa.php:50
 msgid "Yes, always report it"
 msgstr ""
 
@@ -18906,7 +18986,7 @@ msgstr ""
 msgid "You can also sign in by typing this email address instead of the username."
 msgstr ""
 
-#: src/Eventos/Servicio.php:215
+#: src/Eventos/Servicio.php:224
 msgid "You can only invite the sections you help in."
 msgstr ""
 
@@ -18918,6 +18998,10 @@ msgstr ""
 #: src/ListaEspera/Avisos.php:229
 #, php-format
 msgid "You can reply to this email. You are on the waiting list of %1$s: <a href=\"%2$s\">see my details</a>."
+msgstr ""
+
+#: templates/eventos/presupuesto.php:63
+msgid "You can still change the budget: if you do, the go-ahead is withdrawn and Treasury has to give it again."
 msgstr ""
 
 #: templates/tesoreria/sepa.php:112
@@ -18938,11 +19022,11 @@ msgstr ""
 msgid "You cannot cancel that authorisation."
 msgstr ""
 
-#: src/Eventos/Servicio.php:647
+#: src/Eventos/Servicio.php:708
 msgid "You cannot cancel this event."
 msgstr ""
 
-#: src/Eventos/Tareas.php:200 src/Eventos/Tareas.php:283 src/Eventos/Tareas.php:306 src/Eventos/Tareas.php:335
+#: src/Eventos/Tareas.php:204 src/Eventos/Tareas.php:287 src/Eventos/Tareas.php:310 src/Eventos/Tareas.php:339
 msgid "You cannot change this event's calendar."
 msgstr ""
 
@@ -18950,19 +19034,19 @@ msgstr ""
 msgid "You cannot change this event's equipment."
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:847 src/Menus/MenuEvento.php:59 src/Menus/MenuEvento.php:95 src/Menus/MenuEvento.php:114
+#: src/Frontend/Views/EventosView.php:838 src/Menus/MenuEvento.php:59 src/Menus/MenuEvento.php:95 src/Menus/MenuEvento.php:114
 msgid "You cannot change this event's menu."
 msgstr ""
 
-#: src/Eventos/Servicio.php:412 src/Eventos/Servicio.php:437 src/Eventos/Servicio.php:451
+#: src/Eventos/Servicio.php:453 src/Eventos/Servicio.php:478 src/Eventos/Servicio.php:492
 msgid "You cannot change this event's team."
 msgstr ""
 
-#: src/Eventos/Servicio.php:358
+#: src/Eventos/Servicio.php:368
 msgid "You cannot change this event."
 msgstr ""
 
-#: src/Eventos/Servicio.php:326 src/Frontend/Views/EventosView.php:72
+#: src/Eventos/Servicio.php:336 src/Frontend/Views/EventosView.php:72
 msgid "You cannot create events."
 msgstr ""
 
@@ -18994,7 +19078,7 @@ msgstr ""
 msgid "You cannot place an order for that person."
 msgstr ""
 
-#: src/Eventos/Servicio.php:621
+#: src/Eventos/Servicio.php:682
 msgid "You cannot publish this event."
 msgstr ""
 
@@ -19006,7 +19090,7 @@ msgstr ""
 msgid "You cannot reject this reimbursement."
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:601
+#: src/Frontend/Views/EventosView.php:592
 msgid "You cannot resend notices for this event."
 msgstr ""
 
@@ -19018,7 +19102,7 @@ msgstr ""
 msgid "You cannot review that person's changes."
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:925
+#: src/Frontend/Views/EventosView.php:916
 msgid "You cannot see this event's accounts."
 msgstr ""
 
@@ -19030,7 +19114,7 @@ msgstr ""
 msgid "You cannot sign that person up."
 msgstr ""
 
-#: src/Eventos/Tareas.php:261
+#: src/Eventos/Tareas.php:265
 msgid "You cannot tick off this event's tasks."
 msgstr ""
 
@@ -19042,7 +19126,7 @@ msgstr ""
 msgid "You do not have access to that authorisation."
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:81 src/Frontend/Views/EventosView.php:498
+#: src/Frontend/Views/EventosView.php:81 src/Frontend/Views/EventosView.php:489
 msgid "You do not have access to that event."
 msgstr ""
 
@@ -19182,7 +19266,7 @@ msgstr ""
 msgid "You have two-step verification"
 msgstr ""
 
-#: src/Frontend/Views/AccesoView.php:114
+#: src/Frontend/Views/AccesoView.php:161
 msgid "You have two-step verification turned on: enter the 6-digit code from your app and type the password again."
 msgstr ""
 
@@ -19218,7 +19302,7 @@ msgstr ""
 msgid "Your email"
 msgstr ""
 
-#: src/Auth/Ambito.php:122
+#: src/Auth/Ambito.php:135
 msgid "Your family account no longer has any participants in its care (they have turned 18 or no longer have an active membership)."
 msgstr ""
 
@@ -19242,7 +19326,7 @@ msgstr ""
 msgid "Your group's CRM user does not have permission to change memberships."
 msgstr ""
 
-#: src/Crm/Altas.php:558 src/Crm/Escritura.php:140 src/Crm/Escritura.php:205 src/Frontend/Views/ListaEsperaView.php:114
+#: src/Crm/Altas.php:559 src/Crm/Escritura.php:140 src/Crm/Escritura.php:205 src/Frontend/Views/ListaEsperaView.php:114
 msgid "Your group's CRM user does not have permission to create people and memberships."
 msgstr ""
 
@@ -19262,7 +19346,7 @@ msgstr ""
 msgid "Your group's connection to the CRM is not set up or could not be checked."
 msgstr ""
 
-#: src/Auth/Ambito.php:62 src/Frontend/Views/AltaUsuariosView.php:37 src/Frontend/Views/CambiosView.php:40 src/Frontend/Views/FamiliasView.php:28
+#: src/Auth/Ambito.php:63 src/Frontend/Views/AltaUsuariosView.php:37 src/Frontend/Views/CambiosView.php:40 src/Frontend/Views/FamiliasView.php:28
 msgid "Your group's connection to the CRM is not set up or could not be checked. An administrator can review it in wp-admin → Scout Groups."
 msgstr ""
 
@@ -19270,7 +19354,7 @@ msgstr ""
 msgid "Your membership cannot be checked in the group's CRM right now. Try again in a few minutes."
 msgstr ""
 
-#: src/Auth/Ambito.php:130
+#: src/Auth/Ambito.php:143
 msgid "Your membership is not active in the group's CRM. Contact the Secretary's office."
 msgstr ""
 
@@ -19282,7 +19366,7 @@ msgstr ""
 msgid "Your orders"
 msgstr ""
 
-#: src/Auth/Ambito.php:128
+#: src/Auth/Ambito.php:141
 msgid "Your record cannot be found in the group's CRM. Contact the Secretary's office."
 msgstr ""
 
@@ -19300,11 +19384,11 @@ msgstr ""
 msgid "Your section:"
 msgstr ""
 
-#: src/Auth/Ambito.php:119
+#: src/Auth/Ambito.php:132
 msgid "Your user does not have access to the private area. If you think this is a mistake, contact the group's Secretary's office."
 msgstr ""
 
-#: src/Auth/Ambito.php:125
+#: src/Auth/Ambito.php:138
 msgid "Your user is not linked to any CRM record. Ask the group's Secretary's office to check your registration."
 msgstr ""
 
@@ -19623,7 +19707,7 @@ msgstr ""
 msgid "assigned"
 msgstr ""
 
-#: templates/eventos/asistente.php:117 templates/eventos/asistente.php:119 templates/eventos/formulario.php:87 templates/eventos/formulario.php:89
+#: templates/eventos/asistente.php:120 templates/eventos/asistente.php:122 templates/eventos/formulario.php:84 templates/eventos/formulario.php:86
 msgid "at"
 msgstr ""
 
@@ -19749,11 +19833,11 @@ msgstr ""
 msgid "duplicate"
 msgstr ""
 
-#: templates/eventos/asistente.php:78 templates/eventos/formulario.php:53
+#: templates/eventos/asistente.php:81 templates/eventos/formulario.php:50
 msgid "e.g. Autumn camp"
 msgstr ""
 
-#: templates/eventos/presupuesto.php:104
+#: templates/eventos/presupuesto.php:118
 msgid "e.g. Bus"
 msgstr ""
 
@@ -19769,7 +19853,7 @@ msgstr ""
 msgid "e.g. Grupo Scout Myotragus 684"
 msgstr ""
 
-#: templates/eventos/asistente.php:226 templates/eventos/formulario.php:158
+#: templates/eventos/asistente.php:229 templates/eventos/formulario.php:155
 msgid "e.g. sleeping bag, mat, torch, uniform…"
 msgstr ""
 
@@ -20154,7 +20238,7 @@ msgstr ""
 msgid "per page"
 msgstr ""
 
-#: templates/eventos/presupuesto.php:74
+#: templates/eventos/presupuesto.php:88
 msgid "per person"
 msgstr ""
 
@@ -20529,7 +20613,7 @@ msgstr ""
 msgid "· You help in:"
 msgstr ""
 
-#: templates/eventos/presupuesto.php:122
+#: templates/eventos/presupuesto.php:136
 msgid "— All —"
 msgstr ""
 
@@ -20541,7 +20625,7 @@ msgstr ""
 msgid "— Choose your organisation —"
 msgstr ""
 
-#: templates/eventos/equipo.php:145 templates/eventos/inscripciones.php:55 templates/eventos/resumen.php:140
+#: templates/eventos/equipo.php:148 templates/eventos/inscripciones.php:55 templates/eventos/resumen.php:140
 msgid "— Choose —"
 msgstr ""
 
@@ -20558,11 +20642,11 @@ msgstr ""
 msgid "← %s's record"
 msgstr ""
 
-#: templates/eventos/asistente.php:54 templates/eventos/evento.php:43 templates/eventos/formulario.php:34
+#: templates/eventos/asistente.php:57 templates/eventos/evento.php:43
 msgid "← Agenda"
 msgstr ""
 
-#: templates/eventos/asistente.php:254
+#: templates/eventos/asistente.php:257
 msgid "← Back"
 msgstr ""
 

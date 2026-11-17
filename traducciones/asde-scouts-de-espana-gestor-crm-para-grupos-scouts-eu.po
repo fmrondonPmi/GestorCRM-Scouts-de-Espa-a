@@ -217,7 +217,7 @@ msgstr "«%s» materialari baja eman zaio. «Ikusi baja emandakoak ere» aukerat
 msgid "\"How many?\" must be a number between 1 and %d."
 msgstr "«Zenbat?» 1 eta %d arteko zenbakia izan behar da."
 
-#: templates/eventos/presupuesto.php:130
+#: templates/eventos/presupuesto.php:144
 msgid "\"Per person: participants and team\" is what each person costs (hostel, food): the team's is split among the participants. \"Team only\" is what one scouter costs (e.g. their place at an external event)."
 msgstr "«Pertsonako: parte-hartzaileak eta taldea» pertsona bakoitzak balio duena da (aterpetxea, janaria): taldearena parte-hartzaileen artean banatzen da. «Taldea soilik» scouter batek balio duena da (adib. bere plaza kanpoko ekitaldi batean)."
 
@@ -281,7 +281,7 @@ msgstr "%1$d begirale behar dira zuzendariaz gain (%2$d laguntzakoak mendekotasu
 #: templates/mi-seccion/listado.php:76
 #, php-format
 msgid "%1$d of %2$d"
-msgstr "%2$d guztitik %1$d"
+msgstr ""
 
 #. translators: 1: number, 2: number
 #: templates/tesoreria/familias.php:118
@@ -329,6 +329,12 @@ msgstr "%1$d kidetza aktiboarekin · %2$d kidetza aktiborik gabe"
 msgid "%1$s %%, until %2$s"
 msgstr "%% %1$s, %2$s arte"
 
+#. translators: 1: sections, 2: number
+#: templates/eventos/presupuesto.php:245
+#, php-format
+msgid "%1$s (%2$d expected): their cost is spread among the sections that pay."
+msgstr ""
+
 #. translators: 1: text, 2: text
 #: templates/eventos/presupuesto.php:35
 #, php-format
@@ -360,10 +366,10 @@ msgid "%1$s by %2$s on %3$s."
 msgstr "%1$s, %2$s(r)en eskutik, %3$s(e)an."
 
 #. translators: 1: number of participants, 2: number of monitors
-#: templates/eventos/asistente.php:170
+#: templates/eventos/asistente.php:173
 #, php-format
 msgid "%1$s expected participants: you need a director and at least %2$s monitors."
-msgstr "%1$s parte-hartzaile aurreikusita: zuzendari bat eta gutxienez %2$s begirale behar dituzue."
+msgstr ""
 
 #. translators: 1: text, 2: text
 #: src/Frontend/Views/FichaView.php:346
@@ -544,7 +550,7 @@ msgstr "%% %d kobratuta"
 #: templates/mi-seccion/ficha.php:82
 #, php-format
 msgid "%d achieved"
-msgstr "%d lortuta"
+msgstr ""
 
 #. translators: %d: number
 #: templates/tesoreria/banco.php:107
@@ -901,7 +907,7 @@ msgstr[0] "Diruzaintzako %d pertsonari abisatu zitzaion emailez."
 msgstr[1] "Diruzaintzako %d pertsonari abisatu zitzaien emailez."
 
 #. translators: %d: number
-#: templates/eventos/presupuesto.php:203
+#: templates/eventos/presupuesto.php:247
 #, php-format
 msgid "%d person who does not pay: their cost is spread across the price."
 msgid_plural "%d people who do not pay: their cost is spread across the price."
@@ -986,7 +992,7 @@ msgstr[1] "%d seme-alaba"
 #: templates/mi-seccion/listado.php:35
 #, php-format
 msgid "%d stage changes proposed"
-msgstr "%d etapa-aldaketa proposatu"
+msgstr ""
 
 #. translators: %d: number
 #: templates/tesoreria/familia.php:153
@@ -997,7 +1003,7 @@ msgstr[0] "%d familia honetarako iradokia"
 msgstr[1] "%d familia honetarako iradokiak"
 
 #. translators: %d: number
-#: src/Frontend/Views/EventosView.php:854
+#: src/Frontend/Views/EventosView.php:845
 #, php-format
 msgid "%d support team member has no account: print it for them."
 msgid_plural "%d support team members have no account: print them for them."
@@ -1013,7 +1019,7 @@ msgstr[0] "zeregin %d"
 msgstr[1] "%d zeregin"
 
 #. translators: %d: number
-#: src/Frontend/Views/EventosView.php:746
+#: src/Frontend/Views/EventosView.php:737
 #, php-format
 msgid "%d task has been created."
 msgid_plural "%d tasks have been created."
@@ -1040,7 +1046,7 @@ msgstr[1] "%d itzultzeko"
 #: templates/mi-seccion/listado.php:34
 #, php-format
 msgid "%d to review"
-msgstr "%d berrikusteko"
+msgstr ""
 
 #. translators: %d: number
 #: src/Frontend/Views/BancoView.php:268 templates/tesoreria/banco.php:295
@@ -1067,7 +1073,7 @@ msgstr[0] "%d unitate"
 msgstr[1] "%d unitate"
 
 #. translators: %d: number
-#: src/Frontend/Views/EventosView.php:791
+#: src/Frontend/Views/EventosView.php:782
 #, php-format
 msgid "%d unit has been deducted from the inventory."
 msgid_plural "%d units have been deducted from the inventory."
@@ -1099,7 +1105,7 @@ msgstr[0] "%d erabiltzaile"
 msgstr[1] "%d erabiltzaile"
 
 #. translators: %d: number
-#: src/Frontend/Views/EventosView.php:767
+#: src/Frontend/Views/EventosView.php:758
 #, php-format
 msgid "%d usual item has been reserved."
 msgid_plural "%d usual items have been reserved."
@@ -1147,7 +1153,7 @@ msgid "%s (you)"
 msgstr "%s (zu)"
 
 #. translators: %s: text
-#: src/Auth/Ambito.php:139 src/Usuarios/Contacto.php:59
+#: src/Auth/Ambito.php:152 src/Usuarios/Contacto.php:59
 #, php-format
 msgid "%s family"
 msgstr "%s(r)en familia"
@@ -1159,7 +1165,7 @@ msgid "%s has not been changed because someone modified it in the CRM while you 
 msgstr "%s ez da aldatu norbaitek CRMan aldatu duelako zu editatzen ari zinen bitartean. Berrikusi uneko balioa eta saiatu berriro."
 
 #. translators: %s: text
-#: src/Eventos/Servicio.php:422
+#: src/Eventos/Servicio.php:463
 #, php-format
 msgid "%s is already in this event."
 msgstr "%s dagoeneko ekitaldi honetan dago."
@@ -1201,7 +1207,7 @@ msgid "%s was collected (bank fee)"
 msgstr "%s kobratu zen (bankuaren komisioa)"
 
 #. translators: %s: text
-#: src/Eventos/Normativa.php:211
+#: src/Eventos/Normativa.php:235
 #, php-format
 msgid "%s will not be 18 on the day it starts: the team must be of legal age."
 msgstr "%s(e)k ez ditu 18 urte izango hasten den egunean: taldeak adinez nagusia izan behar du."
@@ -1231,7 +1237,7 @@ msgid "%s's record"
 msgstr "%s(r)en fitxa"
 
 #. translators: %s: text
-#: src/Eventos/Normativa.php:224
+#: src/Eventos/Normativa.php:248
 #, php-format
 msgid "%s's sexual offences certificate will be more than 12 months old when the event ends: it must be renewed."
 msgstr "%s(r)en sexu-delituen ziurtagiriak 12 hilabete baino gehiago izango ditu ekitaldia amaitzean: berritu egin behar da."
@@ -1249,7 +1255,7 @@ msgid "(%1$s, %2$s and %3$s)"
 msgstr "(%1$s, %2$s eta %3$s)"
 
 #. translators: %s: text
-#: templates/eventos/presupuesto.php:202
+#: templates/eventos/presupuesto.php:243
 #, php-format
 msgid "(%s %% margin and rounding)"
 msgstr "(%s %%eko marjina eta biribiltzea)"
@@ -1387,7 +1393,7 @@ msgstr "(automatikoki ezagutuak; alda ditzakezu)"
 msgid "(recommended: it always exists and is unique; e.g. 118241 and, for families, 118241T)"
 msgstr ""
 
-#: templates/eventos/presupuesto.php:202
+#: templates/eventos/presupuesto.php:243
 msgid "(rounding only: margin off)"
 msgstr "(biribiltzea soilik: marjina desaktibatuta)"
 
@@ -1453,7 +1459,7 @@ msgstr "): email honekin sartzen hasiko da eta pasahitza aukeratzeko esteka bat 
 
 #: templates/mi-seccion/listado.php:98
 msgid "* Outside the usual age range of the section (it can be adjusted to each person's maturity)."
-msgstr "* Atalaren ohiko adinetik kanpo (pertsona bakoitzaren heldutasunera egokitu daiteke)."
+msgstr ""
 
 #: templates/informes/lista.php:17
 msgid "+ New report"
@@ -1653,7 +1659,7 @@ msgstr "Familia batek anai-arrebak biltzen ditu (eta, nahi izanez gero, haien gu
 msgid "A group (or several groups)"
 msgstr ""
 
-#: templates/eventos/asistente.php:185 templates/eventos/formulario.php:189
+#: templates/eventos/asistente.php:188 templates/eventos/formulario.php:186
 msgid "A lifeguard will be present"
 msgstr "Sorospen-langile bat egongo da"
 
@@ -1671,9 +1677,9 @@ msgstr "Ezin izan da bazkide-zenbakirik esleitu. Saiatu berriro."
 msgid "A number is only assigned to people with an active membership."
 msgstr "Kidetza aktiboa duten pertsonei soilik esleitzen zaie zenbakia."
 
-#: templates/eventos/asistente.php:122
+#: templates/eventos/asistente.php:125
 msgid "A one-day activity, with no overnight stay."
-msgstr "Egun bateko jarduera, gaua kanpoan eman gabe."
+msgstr ""
 
 #: src/Accesos/Auditoria.php:29
 msgid "A permission expires"
@@ -1838,7 +1844,7 @@ msgid "Access updated: %1$s. Roles: %2$s."
 msgstr "Sarbidea eguneratu da: %1$s. Rolak: %2$s."
 
 #. translators: %s: text
-#: src/Eventos/Normativa.php:217
+#: src/Eventos/Normativa.php:241
 #, php-format
 msgid "According to their record, %s does not have the leisure-time director qualification."
 msgstr "Bere fitxaren arabera, %s(e)k ez du aisialdiko zuzendari-titulaziorik."
@@ -1847,7 +1853,7 @@ msgstr "Bere fitxaren arabera, %s(e)k ez du aisialdiko zuzendari-titulaziorik."
 msgid "According to what has been paid"
 msgstr "Ordaindutakoaren arabera"
 
-#: src/Frontend/Views/LibroMayorView.php:86 templates/tesoreria/banco-previa.php:55 templates/tesoreria/banco-previa.php:59 templates/tesoreria/banco.php:98
+#: src/Frontend/Views/AccesoView.php:253 src/Frontend/Views/LibroMayorView.php:86 templates/acceso/elegir-cuenta.php:33 templates/tesoreria/banco-previa.php:55
 msgid "Account"
 msgstr "Kontua"
 
@@ -1931,7 +1937,7 @@ msgstr ""
 
 #: src/Seguimiento/Catalogo.php:49
 msgid "Achieved"
-msgstr "Lortuta"
+msgstr ""
 
 #: src/Admin/SettingsPage.php:174 templates/accesos/persona.php:44 templates/accesos/personas.php:51 templates/alta/buscar.php:47
 msgid "Actions"
@@ -1945,7 +1951,7 @@ msgstr "Aktibatu nire kontua"
 msgid "Activate your account"
 msgstr "Aktibatu zure kontua"
 
-#: src/Usuarios/Usuarios.php:248 templates/eventos/config.php:42 templates/eventos/config.php:56
+#: src/Usuarios/Usuarios.php:269 templates/eventos/config.php:42 templates/eventos/config.php:56
 msgid "Active"
 msgstr "Aktiboa"
 
@@ -1965,7 +1971,7 @@ msgstr "Zenbaki-gertakariak dituzten aktiboak"
 msgid "Activities and summer camps"
 msgstr "Jarduerak eta kanpaldiak"
 
-#: templates/eventos/formulario.php:46
+#: templates/eventos/formulario.php:43
 msgid "Activity type"
 msgstr "Jarduera mota"
 
@@ -1985,7 +1991,7 @@ msgstr "Benetako gastua"
 msgid "Actually spent"
 msgstr "Benetan gastatua"
 
-#: templates/eventos/calendario.php:218 templates/eventos/equipo.php:158 templates/eventos/menu.php:116 templates/fichas/alergenos.php:45
+#: templates/eventos/calendario.php:218 templates/eventos/equipo.php:161 templates/eventos/menu.php:116 templates/fichas/alergenos.php:45
 msgid "Add"
 msgstr "Gehitu"
 
@@ -2007,7 +2013,7 @@ msgstr "Gehitu bazkide bat"
 msgid "Add a task"
 msgstr "Gehitu zeregin bat"
 
-#: templates/eventos/presupuesto.php:95 templates/tesoreria/presupuesto-seccion.php:198
+#: templates/eventos/presupuesto.php:109 templates/tesoreria/presupuesto-seccion.php:198
 msgid "Add an item"
 msgstr "Gehitu partida bat"
 
@@ -2017,7 +2023,7 @@ msgstr "Gehitu eta sortu beste bat"
 
 #: templates/eventos/menu.php:168
 msgid "Add another ingredient"
-msgstr "Gehitu beste osagai bat"
+msgstr ""
 
 #: templates/inventario/nueva.php:131
 msgid "Add another line"
@@ -2031,7 +2037,7 @@ msgstr "Gehitu beste neurri bat"
 msgid "Add at least one ingredient."
 msgstr "Gehitu gutxienez osagai bat."
 
-#: src/Eventos/Servicio.php:567 src/Eventos/Servicio.php:584
+#: src/Eventos/Servicio.php:611 src/Eventos/Servicio.php:645
 msgid "Add at least one planned expense."
 msgstr "Gehitu gutxienez aurreikusitako gastu bat."
 
@@ -2067,11 +2073,11 @@ msgstr "Gehitu produktua"
 msgid "Add recipe"
 msgstr "Gehitu errezeta bat"
 
-#: templates/eventos/presupuesto.php:147
+#: templates/eventos/presupuesto.php:161
 msgid "Add the bus item"
 msgstr "Gehitu autobusen partida"
 
-#: templates/eventos/presupuesto.php:129
+#: templates/eventos/presupuesto.php:143
 msgid "Add the item"
 msgstr "Gehitu partida"
 
@@ -2091,7 +2097,7 @@ msgstr "Gehitu inbentariora"
 msgid "Add to the shopping list"
 msgstr "Gehitu erosketa-zerrendara"
 
-#: templates/eventos/equipo.php:136
+#: templates/eventos/equipo.php:139
 msgid "Add to the team"
 msgstr "Gehitu taldera"
 
@@ -2099,7 +2105,7 @@ msgstr "Gehitu taldera"
 msgid "Add variants"
 msgstr "Gehitu aldaerak"
 
-#: src/Frontend/Views/EventosView.php:537
+#: src/Frontend/Views/EventosView.php:528
 msgid "Added to the team."
 msgstr "Taldera gehituta."
 
@@ -2149,7 +2155,7 @@ msgstr "%s(e)ko doikuntza ezabatua"
 msgid "Adjustment of %s removed. It remains in the family's history."
 msgstr "%s(e)ko doikuntza ezabatu da. Familiaren historian geratzen da."
 
-#: src/Frontend/Views/EventosView.php:659
+#: src/Frontend/Views/EventosView.php:650
 msgid "Adjustment saved: the sign-up amount has changed."
 msgstr "Doikuntza gordeta: izen-ematearen zenbatekoa aldatu da."
 
@@ -2161,7 +2167,7 @@ msgstr "Helduak (scouterrak eta boluntarioak)"
 msgid "Advance"
 msgstr "Aurrerakina"
 
-#: src/Frontend/Views/EventosView.php:723
+#: src/Frontend/Views/EventosView.php:714
 msgid "Advance cancelled."
 msgstr "Aurrerakina ezeztatuta."
 
@@ -2171,17 +2177,17 @@ msgstr "Aurrerakina ezeztatuta."
 msgid "Advance notice sent: %1$d emails to %2$d families."
 msgstr "Aurretiazko oharra bidali da: %1$d email %2$d familiari."
 
-#: src/Frontend/Views/EventosView.php:711
+#: src/Frontend/Views/EventosView.php:702
 msgid "Advance recorded."
 msgstr "Aurrerakina erregistratuta."
 
 #. translators: %s: text
-#: src/Frontend/Views/EventosView.php:717
+#: src/Frontend/Views/EventosView.php:708
 #, php-format
 msgid "Advance settled, with a difference of %s."
 msgstr "Aurrerakina likidatuta. Aldea: %s."
 
-#: src/Frontend/Views/EventosView.php:717
+#: src/Frontend/Views/EventosView.php:708
 msgid "Advance settled."
 msgstr "Aurrerakina likidatuta."
 
@@ -2193,9 +2199,9 @@ msgstr "Aurrerakinak Diruzaintzak ematen ditu."
 msgid "Adventure"
 msgstr "Abentura"
 
-#: templates/eventos/asistente.php:243
+#: templates/eventos/asistente.php:246
 msgid "After creating it you will see its page with what is left to do:"
-msgstr "Sortu ondoren bere fitxa ikusiko duzu, egiteke dagoenarekin:"
+msgstr ""
 
 #: src/Menus/MenuTable.php:21 src/Menus/RecetasTable.php:27
 msgid "Afternoon snack"
@@ -2462,7 +2468,7 @@ msgstr "Aukerako paragrafo bat hasieran eta beste bat amaieran, email bakoitzean
 
 #: src/Seguimiento/Catalogo.php:40
 msgid "Animation"
-msgstr "Animazioa"
+msgstr ""
 
 #: templates/tesoreria/cuotas.php:41
 msgid "Annual family fee by number of children"
@@ -2500,9 +2506,9 @@ msgstr "Badago jada %s beste erabiltzaile bat."
 msgid "Answer saved: not going to this event."
 msgstr "Erantzuna gordeta: ez da ekitaldi honetara joango."
 
-#: templates/eventos/asistente.php:177
+#: templates/eventos/asistente.php:180
 msgid "Answer yes or no. We only ask for more when it is needed."
-msgstr "Erantzun baiezko edo ezezkoa. Datu gehiago behar direnean bakarrik eskatuko dizkizugu."
+msgstr ""
 
 #: templates/tesoreria/federacion.php:121
 msgid "Any other amount the organisation charges: per member, per youth member, per adult or fixed per group (e.g. a fee for federal activities or a group contribution)."
@@ -2524,7 +2530,7 @@ msgstr "Hauei aplikatzen zaie"
 msgid "Apply"
 msgstr "Aplikatu"
 
-#: templates/eventos/config.php:26 templates/eventos/presupuesto.php:159
+#: templates/eventos/config.php:26 templates/eventos/presupuesto.php:173
 msgid "Apply the emergency fund margin"
 msgstr "Aplikatu larrialdi-funtsaren marjina"
 
@@ -2578,6 +2584,34 @@ msgstr "Onartua"
 msgid "Approved and saved in the CRM"
 msgstr "Onartu eta CRMan gorde da"
 
+#. translators: 1: text, 2: text
+#: templates/eventos/presupuesto.php:54
+#, php-format
+msgid "Approved by %1$s on %2$s: the price of each section is fixed."
+msgstr ""
+
+#. translators: 1: text, 2: text
+#: templates/eventos/presupuesto.php:54
+#, php-format
+msgid "Approved by %1$s on %2$s: the price of each section will be fixed when the event is published."
+msgstr ""
+
+#. translators: %2$s: text
+#: templates/eventos/presupuesto.php:55
+#, php-format
+msgid "Approved on %2$s: the price of each section is fixed."
+msgstr ""
+
+#. translators: %2$s: text
+#: templates/eventos/presupuesto.php:55
+#, php-format
+msgid "Approved on %2$s: the price of each section will be fixed when the event is published."
+msgstr ""
+
+#: templates/eventos/presupuesto.php:181
+msgid "Approved price"
+msgstr ""
+
 #: src/Fichas/Cambios.php:39
 msgid "Approved, but the CRM did not accept it"
 msgstr "Onartu da, baina CRMak ez du onartu"
@@ -2602,19 +2636,19 @@ msgstr "Produktu hau artxibatu? Salgai egotea utziko du (berreskura daiteke)."
 msgid "Archived"
 msgstr "Artxibatua"
 
-#: templates/eventos/asistente.php:188
+#: templates/eventos/asistente.php:191
 msgid "Are there participants with recognised dependency?"
-msgstr "Mendekotasun aitortua duten parte-hartzailerik badago?"
+msgstr ""
 
-#: templates/eventos/asistente.php:186
+#: templates/eventos/asistente.php:189
 msgid "Are there specialised-risk activities?"
-msgstr "Arrisku espezializatuko jarduerarik badago?"
+msgstr ""
 
 #: templates/eventos/mis-eventos.php:102 templates/eventos/resumen.php:62
 msgid "Arrival"
 msgstr "Iritsiera"
 
-#: templates/eventos/asistente.php:131 templates/eventos/formulario.php:97
+#: templates/eventos/asistente.php:134 templates/eventos/formulario.php:94
 msgid "Arrival (place and time)"
 msgstr "Iritsiera (lekua eta ordua)"
 
@@ -2658,7 +2692,7 @@ msgstr "Eskatzen du"
 
 #: templates/mi-seccion/listado.php:68 templates/mi-seccion/listado.php:87
 msgid "Aspects"
-msgstr "Alderdiak"
+msgstr ""
 
 #: templates/lista-espera/detalle.php:158
 msgid "Assign"
@@ -2708,15 +2742,9 @@ msgstr "Elkarte-kuota ("
 msgid "Association fee per member (€)"
 msgstr "Elkartekide bakoitzeko elkarte-kuota (€)"
 
-#. translators: 1: number, 2: number
-#: src/Eventos/Normativa.php:245
-#, php-format
-msgid "At least half of the monitors must hold the leisure-time qualification: there are %1$d qualified out of %2$d."
-msgstr "Begiraleen erdiek gutxienez aisialdiko titulazioa izan behar dute: %2$d(e)tik %1$d titulatu daude."
-
 #: src/Frontend/Views/TiendaConfigView.php:61
 msgid "At least one payment method is needed; transfer has been kept."
-msgstr "Gutxienez ordainketa modu bat behar da; transferentzia mantendu da."
+msgstr ""
 
 #. translators: %d: number
 #: src/Frontend/Views/EventosConfigView.php:184
@@ -2731,7 +2759,7 @@ msgid "At most %d own fields."
 msgstr "Gehienez, %d eremu propio."
 
 #. translators: %d: number
-#: src/Eventos/Tareas.php:314
+#: src/Eventos/Tareas.php:318
 #, php-format
 msgid "At most %d tasks per event."
 msgstr "Gehienez %d zeregin ekitaldiko."
@@ -3091,6 +3119,18 @@ msgstr "Gosaria"
 msgid "Budget"
 msgstr "Aurrekontua"
 
+#: src/Eventos/EventosTable.php:39
+msgid "Budget approved"
+msgstr ""
+
+#: src/Eventos/Normativa.php:301
+msgid "Budget approved by Treasury: the price is fixed."
+msgstr ""
+
+#: src/Eventos/Normativa.php:301
+msgid "Budget approved by Treasury: the price will be fixed when the event is published."
+msgstr ""
+
 #: src/Frontend/Views/PresupuestosView.php:167
 msgid "Budget approved."
 msgstr "Aurrekontua onartuta."
@@ -3108,30 +3148,26 @@ msgid "Budget of each section and of the group"
 msgstr "Atal bakoitzaren eta taldearen aurrekontua"
 
 #. translators: %s: text
-#: src/Frontend/Views/EventosView.php:578
+#: src/Frontend/Views/EventosView.php:569
 #, php-format
-msgid "Budget of event %s validated: the price per section is now fixed."
-msgstr "%s ekitaldiaren aurrekontua balioztatuta: atal bakoitzeko prezioa finkoa da jada."
+msgid "Budget of event %s approved: the price of each section will be fixed when the event is published."
+msgstr ""
 
 #: src/Eventos/EventosTable.php:38
 msgid "Budget pending Treasury"
 msgstr "Aurrekontua Diruzaintzaren zain"
 
-#: src/Eventos/Normativa.php:276
-msgid "Budget pending validation by Treasury."
-msgstr "Aurrekontua Diruzaintzak balioztatzeko zain."
-
-#: src/Frontend/Views/EventosView.php:584
-msgid "Budget reopened: it can be changed and will have to be validated again."
-msgstr "Aurrekontua berriro irekita: alda daiteke eta berriro balioztatu beharko da."
+#: src/Eventos/Normativa.php:303
+msgid "Budget pending Treasury's go-ahead."
+msgstr ""
 
 #: src/Frontend/Views/PresupuestosView.php:171
 msgid "Budget reopened: it is a draft again."
 msgstr "Aurrekontua berriro irekita: zirriborro bihurtu da."
 
-#: src/Frontend/Views/EventosView.php:572
-msgid "Budget sent to Treasury for validation."
-msgstr "Aurrekontua Diruzaintzara bidalia, balioztatzeko."
+#: src/Frontend/Views/EventosView.php:563
+msgid "Budget sent to Treasury for its go-ahead."
+msgstr ""
 
 #: src/Frontend/Views/PresupuestosView.php:163
 msgid "Budget sent to Treasury."
@@ -3144,14 +3180,6 @@ msgstr "Aurrekontua Diruzaintzara bidalita: blokeatuta dago onartu edo berriro i
 #: templates/tesoreria/presupuesto-seccion.php:232
 msgid "Budget status"
 msgstr "Aurrekontuaren egoera"
-
-#: src/Eventos/EventosTable.php:39
-msgid "Budget validated"
-msgstr "Aurrekontua balioztatuta"
-
-#: src/Eventos/Normativa.php:274
-msgid "Budget validated by Treasury: the price is now fixed."
-msgstr "Diruzaintzak balioztatutako aurrekontua: prezioa finkoa da jada."
 
 #. translators: %s: text
 #: templates/tesoreria/presupuesto-seccion.php:45 templates/tesoreria/presupuestos-selector.php:28
@@ -3171,16 +3199,16 @@ msgstr "Aurrekontuak"
 msgid "Budgets ·"
 msgstr "Aurrekontuak ·"
 
-#: src/Frontend/Views/EventosView.php:562
+#: src/Frontend/Views/EventosView.php:553
 msgid "Bus item added to the budget."
 msgstr "Autobusen partida aurrekontuan gehitu da."
 
-#: templates/eventos/presupuesto.php:135
+#: templates/eventos/presupuesto.php:149
 msgid "Buses"
 msgstr "Autobusak"
 
 #. translators: 1: number, 2: text
-#: src/Eventos/Servicio.php:544
+#: src/Eventos/Servicio.php:587
 #, php-format
 msgid "Buses (%1$d × %2$s)"
 msgstr "Autobusak (%1$d × %2$s)"
@@ -3311,7 +3339,7 @@ msgstr "Kanpaldia"
 msgid "Camp template restored to the original."
 msgstr "Kanpaldiaren txantiloia jatorrizkora leheneratu da."
 
-#: src/Admin/GruposInvitacionesPage.php:123 src/Admin/SettingsPage.php:277 templates/eventos/asistente.php:257 templates/eventos/cuentas.php:253
+#: src/Admin/GruposInvitacionesPage.php:123 src/Admin/SettingsPage.php:277 templates/eventos/asistente.php:260 templates/eventos/cuentas.php:253
 msgid "Cancel"
 msgstr "Ezeztatu"
 
@@ -3573,7 +3601,7 @@ msgstr "Onarpenaren zain dagoen aldaketa: «"
 
 #: templates/mi-seccion/listado.php:81
 msgid "Change proposed"
-msgstr "Aldaketa proposatua"
+msgstr ""
 
 #: templates/fichas/ficha.php:215 templates/fichas/membresia.php:35 templates/fichas/membresia.php:68
 msgid "Change section"
@@ -3793,7 +3821,7 @@ msgstr "Aukeratu errezeta bat errezetategitik."
 msgid "Choose a report or create a new one by selecting the columns you need. The data is read from the CRM at that moment and includes only members with an active membership"
 msgstr "Aukeratu txosten bat edo sortu berri bat behar dituzun zutabeak hautatuz. Datuak CRMtik irakurtzen dira unean bertan eta kidetza aktiboa duten bazkideak soilik hartzen dituzte barne"
 
-#: src/Eventos/Servicio.php:419
+#: src/Eventos/Servicio.php:460
 msgid "Choose a scouter or volunteer of the group."
 msgstr "Aukeratu taldeko scouter edo boluntario bat."
 
@@ -3817,7 +3845,7 @@ msgstr "Aukeratu taldearen bankuko beste mugimendu bat."
 msgid "Choose at least one column."
 msgstr "Aukeratu gutxienez zutabe bat."
 
-#: src/Eventos/Servicio.php:222
+#: src/Eventos/Servicio.php:231
 msgid "Choose at least one invited section."
 msgstr "Aukeratu gutxienez deitutako atal bat."
 
@@ -3849,7 +3877,7 @@ msgstr "Aukeratu behean erosi nahi duzuna. Gero, ordaindu transferentzia bidez, 
 msgid "Choose cook, quartermaster and helpers"
 msgstr "Sukaldaria, intendentea eta laguntzaileak aukeratu"
 
-#: src/Eventos/Servicio.php:510
+#: src/Eventos/Servicio.php:552
 msgid "Choose how the expense is split."
 msgstr "Aukeratu gastua nola banatzen den."
 
@@ -3865,9 +3893,13 @@ msgstr "Aukeratu nola laguntzen duzun taldean."
 msgid "Choose how you prefer to be paid: in cash or by transfer."
 msgstr "Aukeratu nola kobratu nahi duzun: eskudirutan edo transferentzia bidez."
 
-#: templates/eventos/asistente.php:156
+#: templates/eventos/asistente.php:159
 msgid "Choose later"
-msgstr "Geroago aukeratu"
+msgstr ""
+
+#: src/Frontend/Views/AccesoView.php:285
+msgid "Choose one of the accounts in the list."
+msgstr "Aukeratu zerrendako konturen bat."
 
 #: templates/solicitudes/detalle.php:148
 msgid "Choose roles and give access"
@@ -3881,7 +3913,7 @@ msgstr "Aukeratu ekitaldiaren taldeko norbait (webean kontua duena)."
 msgid "Choose the CSV file you want to import."
 msgstr "Aukeratu inportatu nahi duzun CSV fitxategia."
 
-#: src/Eventos/Servicio.php:198
+#: src/Eventos/Servicio.php:207
 msgid "Choose the activity type."
 msgstr "Aukeratu jarduera mota."
 
@@ -3953,7 +3985,7 @@ msgstr "Aukeratu sarbidea duen lehen pertsonaren rola."
 msgid "Choose the section and the registration date."
 msgstr "Aukeratu atala eta alta-data."
 
-#: src/Eventos/Servicio.php:518
+#: src/Eventos/Servicio.php:560
 msgid "Choose the section the cost is split among."
 msgstr "Aukeratu zein atalen artean banatzen den."
 
@@ -3989,7 +4021,7 @@ msgstr "Aukeratu mota…"
 msgid "Choose what is done with that dish."
 msgstr "Aukeratu zer egiten den plater honekin."
 
-#: src/Eventos/Servicio.php:415 src/Eventos/Servicio.php:440
+#: src/Eventos/Servicio.php:456 src/Eventos/Servicio.php:481
 msgid "Choose what they do in the team."
 msgstr "Aukeratu zer egiten duen taldean."
 
@@ -4025,9 +4057,13 @@ msgstr "Aukeratu nork ordaindu zuen gastua."
 msgid "Choose who to send the notice to."
 msgstr ""
 
-#: src/Frontend/Views/AccesoView.php:67 src/Frontend/Views/SolicitarView.php:85
+#: src/Frontend/Views/AccesoView.php:96 src/Frontend/Views/SolicitarView.php:85
 msgid "Choose your Scout Group."
 msgstr "Aukeratu zure Eskaut Taldea."
+
+#: templates/acceso/elegir-cuenta.php:20
+msgid "Choose your account"
+msgstr "Aukeratu zure kontua"
 
 #: templates/acceso/formulario.php:45
 msgid "Choose your group…"
@@ -4331,6 +4367,10 @@ msgstr "Dauka:"
 msgid "Contains: %s"
 msgstr "Dauka: %s"
 
+#: templates/acceso/elegir-cuenta.php:47
+msgid "Continue"
+msgstr "Jarraitu"
+
 #: src/Idiomas/Guardados.php:112
 msgid "Coordination"
 msgstr "Koordinazioa"
@@ -4340,10 +4380,10 @@ msgid "Copied"
 msgstr "Kopiatuta"
 
 #. translators: %s: text
-#: templates/eventos/asistente.php:101
+#: templates/eventos/asistente.php:104
 #, php-format
 msgid "Copied from \"%s\" (dates one year later)"
-msgstr "«%s» ekitaldiaren kopia (datak urtebete geroago)"
+msgstr ""
 
 #: templates/tesoreria/presupuesto-seccion.php:226
 msgid "Copy the items from the previous round"
@@ -4391,7 +4431,7 @@ msgstr "Zuzenketa atzeko planoan hasi da: %d fitxa. Webak normal erabiltzen jarr
 msgid "Cost"
 msgstr "Kostua"
 
-#: templates/eventos/presupuesto.php:181 templates/eventos/presupuesto.php:190
+#: templates/eventos/presupuesto.php:202 templates/eventos/presupuesto.php:218
 msgid "Cost per participant"
 msgstr "Parte-hartzaile bakoitzeko kostua"
 
@@ -4399,7 +4439,7 @@ msgstr "Parte-hartzaile bakoitzeko kostua"
 msgid "Cost per usual unit, in euros (optional)"
 msgstr "Ohiko unitateko kostua, eurotan (aukerakoa)"
 
-#: templates/eventos/formulario.php:163
+#: templates/eventos/formulario.php:160
 msgid "Cost, insurance and regulations"
 msgstr "Kostua, asegurua eta araudia"
 
@@ -4433,7 +4473,7 @@ msgstr "Zenbatutakoa (€)"
 msgid "Country"
 msgstr "Herrialdea"
 
-#: src/Eventos/Normativa.php:302
+#: src/Eventos/Normativa.php:332
 msgid "Covered by the federation's insurance."
 msgstr "Federazioaren aseguruak estaltzen du."
 
@@ -4477,7 +4517,7 @@ msgstr "Sortu remesa eta prestatu fitxategia"
 msgid "Create the equipment types that do not exist yet (otherwise those rows are not imported)"
 msgstr "Sortu oraindik ez dauden material-motak (bestela, errenkada horiek ez dira inportatzen)"
 
-#: templates/eventos/asistente.php:256 templates/eventos/formulario.php:199
+#: templates/eventos/asistente.php:259
 msgid "Create the event (draft)"
 msgstr "Sortu ekitaldia (zirriborroa)"
 
@@ -4491,11 +4531,11 @@ msgstr "Sortu beste tutorearen kontua eta bidali gonbidapena"
 
 #: templates/eventos/menu.php:172
 msgid "Create the recipe and add it to the menu"
-msgstr "Sortu errezeta eta gehitu menuan"
+msgstr ""
 
-#: src/Frontend/Views/EventosView.php:799
+#: src/Frontend/Views/EventosView.php:790
 msgid "Create the recipe here and then add it to the menu."
-msgstr "Sortu errezeta hemen eta gero gehitu menuan."
+msgstr ""
 
 #: templates/tienda/proveedor.php:57
 msgid "Create the supplier order"
@@ -4601,7 +4641,7 @@ msgstr "Krustazeoak"
 
 #: templates/mi-seccion/ficha.php:37
 msgid "Current stage"
-msgstr "Uneko etapa"
+msgstr ""
 
 #: templates/tesoreria/cuotas.php:96
 msgid "Current sum:"
@@ -4651,7 +4691,7 @@ msgstr "Eragiketaren data"
 msgid "Date the bank collected"
 msgstr "Bankuak kobratu zuen data"
 
-#: templates/eventos/agenda.php:70 templates/eventos/agenda.php:84 templates/eventos/asistente.php:237 templates/eventos/resumen.php:54
+#: templates/eventos/agenda.php:70 templates/eventos/agenda.php:84 templates/eventos/asistente.php:240 templates/eventos/resumen.php:54
 msgid "Dates"
 msgstr "Datak"
 
@@ -4705,7 +4745,7 @@ msgstr "Desaktibatu"
 msgid "Deactivate the access of user %s? All their private area roles will be removed."
 msgstr "%s erabiltzailearen sarbidea desaktibatu nahi duzu? Eremu pribatuko rol guztiak kenduko zaizkio."
 
-#: src/Usuarios/Usuarios.php:249
+#: src/Usuarios/Usuarios.php:270
 msgid "Deactivated"
 msgstr "Desaktibatua"
 
@@ -4854,12 +4894,12 @@ msgstr "Berretsi gabe entregatuak"
 msgid "Delivery undone on order %s."
 msgstr "Entrega desegin da %s eskaeran."
 
-#: templates/eventos/asistente.php:130 templates/eventos/formulario.php:96
+#: templates/eventos/asistente.php:133 templates/eventos/formulario.php:93
 msgid "Departure (place and time)"
 msgstr "Irteera (lekua eta ordua)"
 
 #. translators: %d: number
-#: src/Frontend/Views/EventosView.php:778
+#: src/Frontend/Views/EventosView.php:769
 #, php-format
 msgid "Departure recorded: %d line."
 msgid_plural "Departure recorded: %d lines."
@@ -4876,7 +4916,7 @@ msgstr "Irteera: %s"
 msgid "Depending on nights and minors"
 msgstr "Gauen eta adingabeen arabera"
 
-#: src/Eventos/Normativa.php:43
+#: src/Eventos/Normativa.php:49
 msgid "Depending on nights and minors (2 or more nights and 10 or more minors)"
 msgstr "Gauen eta adingabeen arabera (2 gau edo gehiago eta 10 adingabe edo gehiago)"
 
@@ -4920,7 +4960,7 @@ msgstr "Nahastearen deskribapena"
 msgid "Description of the treatment"
 msgstr "Tratamenduaren deskribapena"
 
-#: templates/eventos/asistente.php:221 templates/eventos/formulario.php:153
+#: templates/eventos/asistente.php:224 templates/eventos/formulario.php:150
 msgid "Description or circular"
 msgstr "Deskribapena edo zirkularra"
 
@@ -4960,7 +5000,7 @@ msgstr "Aldea (kuotak − kostua taularekin)"
 msgid "Diners"
 msgstr "Otorduko kideak"
 
-#: src/Frontend/Views/EventosView.php:838
+#: src/Frontend/Views/EventosView.php:829
 msgid "Diners changed."
 msgstr "Otorduko kopurua aldatu da."
 
@@ -5000,7 +5040,7 @@ msgstr "Helbideratuak · ordainagiriak · letrak"
 msgid "Direction"
 msgstr "Norabidea"
 
-#: src/Eventos/InscripcionesTable.php:31 templates/eventos/asistente.php:154 templates/eventos/equipo.php:29
+#: src/Eventos/InscripcionesTable.php:31 templates/eventos/asistente.php:157 templates/eventos/equipo.php:29
 msgid "Director"
 msgstr "Zuzendaria"
 
@@ -5028,11 +5068,11 @@ msgstr "Beherapena edo beka"
 msgid "Discounts, scholarships or surcharges that change what the family must pay this round."
 msgstr "Txanda honetan familiak ordaindu behar duena aldatzen duten deskontuak, bekak edo errekarguak."
 
-#: src/Frontend/Views/EventosView.php:803
+#: src/Frontend/Views/EventosView.php:794
 msgid "Dish added to the menu."
 msgstr "Platera menuari gehitu zaio."
 
-#: src/Frontend/Views/EventosView.php:833
+#: src/Frontend/Views/EventosView.php:824
 msgid "Dish removed from the menu."
 msgstr "Platera menutik kendu da."
 
@@ -5044,13 +5084,13 @@ msgstr "Plater mota"
 msgid "Dividends · coupons · repayments"
 msgstr "Dibidenduak · kupoiak · amortizazioak"
 
-#: templates/eventos/asistente.php:178 templates/eventos/asistente.php:240
+#: templates/eventos/asistente.php:181 templates/eventos/asistente.php:243
 msgid "Do families pay?"
-msgstr "Familiek ordaintzen dute?"
+msgstr ""
 
 #: templates/lista-espera/listado.php:116
 msgid "Do not ask to confirm the email when signing up"
-msgstr "Ez eskatu emaila baieztatzea izena ematean"
+msgstr ""
 
 #: templates/alta-grupo/formulario.php:36 templates/alta-scouters/formulario.php:56 templates/lista-espera/publica.php:177 templates/solicitudes/formulario.php:84
 msgid "Do not write anything here"
@@ -5078,9 +5118,13 @@ msgstr "Dokumentua gordeta dago fitxan: %s."
 msgid "Document set from the record"
 msgstr "Fitxatik jarritako dokumentua"
 
-#: templates/eventos/asistente.php:101
+#: templates/eventos/asistente.php:104
 msgid "Does it look like a previous one? Copy it"
-msgstr "Aurreko baten antzekoa da? Kopiatu"
+msgstr ""
+
+#: templates/eventos/presupuesto.php:216
+msgid "Does not pay: their cost is split among those who do"
+msgstr ""
 
 #: templates/acceso/formulario.php:75 templates/recuperar/formulario.php:37
 msgid "Don't have an account yet?"
@@ -5163,7 +5207,7 @@ msgid "Draft"
 msgstr "Zirriborroa"
 
 #. translators: %s: text
-#: src/Frontend/Views/EventosView.php:891
+#: src/Frontend/Views/EventosView.php:882
 #, php-format
 msgid "Draft %s deleted."
 msgstr "%s zirriborroa ezabatuta."
@@ -5281,7 +5325,7 @@ msgid "Edit"
 msgstr "Editatu"
 
 #. translators: %s: text
-#: templates/eventos/formulario.php:44
+#: templates/eventos/formulario.php:41
 #, php-format
 msgid "Edit %s"
 msgstr "Editatu %s"
@@ -5386,7 +5430,7 @@ msgstr "Emailaren ikuspegia"
 msgid "Emergency fund"
 msgstr "Larrialdi-funtsa"
 
-#: templates/eventos/presupuesto.php:157
+#: templates/eventos/presupuesto.php:171
 msgid "Emergency fund margin (%)"
 msgstr "Larrialdi-funtsaren marjina (%)"
 
@@ -5412,7 +5456,7 @@ msgstr "Identifikatzaile-zerrenda hutsik."
 msgid "Empty rows are ignored. To add more fields, save and reopen this box. Maximum %d fields."
 msgstr "Errenkada hutsak ez dira kontuan hartzen. Eremu gehiago gehitzeko, gorde eta ireki berriro koadro hau. Gehienez %d eremu."
 
-#: templates/eventos/asistente.php:118 templates/eventos/formulario.php:88
+#: templates/eventos/asistente.php:121 templates/eventos/formulario.php:85
 msgid "Ends"
 msgstr "Amaiera"
 
@@ -5456,7 +5500,7 @@ msgstr "Idatzi gutxienez %s letra…"
 msgid "Enter at least 3 characters."
 msgstr "Idatzi gutxienez 3 karaktere."
 
-#: src/Eventos/Servicio.php:541
+#: src/Eventos/Servicio.php:584
 msgid "Enter how many people are travelling, the places on each bus and what one costs."
 msgstr "Idatzi zenbat pertsona doazen, autobus bakoitzaren plazak eta bakoitzak zenbat balio duen."
 
@@ -5476,7 +5520,7 @@ msgstr "Idatzi titularraren helbidea (kalea, posta-kodea eta herria)."
 msgid "Enter the amount of the adjustment and its reason."
 msgstr "Idatzi doikuntzaren zenbatekoa eta arrazoia."
 
-#: src/Eventos/Servicio.php:504
+#: src/Eventos/Servicio.php:546
 msgid "Enter the description and an amount greater than zero."
 msgstr "Idatzi kontzeptua eta zero baino handiagoa den zenbatekoa."
 
@@ -5496,7 +5540,7 @@ msgstr "Idatzi kontzeptua: zer ordaindu zenuen."
 msgid "Enter the document number."
 msgstr "Idatzi dokumentu-zenbakia."
 
-#: src/Eventos/Servicio.php:202
+#: src/Eventos/Servicio.php:211
 msgid "Enter the event name."
 msgstr "Idatzi ekitaldiaren izena."
 
@@ -5524,9 +5568,9 @@ msgstr "Idatzi bazkidearen jaiotze-data."
 msgid "Enter the name and ID or foreigner ID number of the first person with access."
 msgstr "Idatzi sarbidea duen lehen pertsonaren izena eta NAN edo AIZ zenbakia."
 
-#: templates/eventos/presupuesto.php:54
-msgid "Enter the planned expenses and how each one is split. Each section's price comes from the cost (the team's, split among the participants) plus the emergency fund margin, rounded to the euro. When it is ready, send it to Treasury to validate."
-msgstr "Idatzi aurreikusitako gastuak eta bakoitza nola banatzen den. Atal bakoitzaren prezioa kostutik ateratzen da (taldearena, parte-hartzaileen artean banatuta) gehi larrialdi-funtsaren marjina, eurora biribilduta. Prest dagoenean, bidali Diruzaintzara balioztatzeko."
+#: templates/eventos/presupuesto.php:68
+msgid "Enter the planned expenses and how each one is split. Treasury sets each section's price from the cost (the team's, split among those who pay) plus the emergency fund margin. When it is ready, send it to Treasury for its go-ahead."
+msgstr ""
 
 #: src/Tienda/ProductosTable.php:95
 msgid "Enter the product name."
@@ -5568,7 +5612,7 @@ msgstr "Idatzi errezetaren izena."
 msgid "Enter the subject and the message."
 msgstr "Idatzi gaia eta mezua."
 
-#: src/Eventos/Tareas.php:310
+#: src/Eventos/Tareas.php:314
 msgid "Enter the task title and its date."
 msgstr "Idatzi zereginaren izenburua eta bere data."
 
@@ -5642,11 +5686,11 @@ msgstr "Materialaren inbentarioa"
 msgid "Equipment items"
 msgstr "Materialak"
 
-#: src/Frontend/Views/EventosView.php:761
+#: src/Frontend/Views/EventosView.php:752
 msgid "Equipment removed from the event list."
 msgstr "Materiala ekitaldiaren zerrendatik kendu da."
 
-#: src/Frontend/Views/EventosView.php:751
+#: src/Frontend/Views/EventosView.php:742
 msgid "Equipment reserved for the event."
 msgstr "Materiala ekitaldirako erreserbatu da."
 
@@ -5747,31 +5791,31 @@ msgid "Event %s"
 msgstr "%s ekitaldia"
 
 #. translators: %s: text
-#: src/Frontend/Views/EventosView.php:624
+#: src/Frontend/Views/EventosView.php:615
 #, php-format
 msgid "Event %s cancelled."
 msgstr "%s ekitaldia bertan behera utzita."
 
 #. translators: %s: text
-#: src/Frontend/Views/EventosView.php:491
+#: src/Frontend/Views/EventosView.php:482
 #, php-format
 msgid "Event %s created as a draft. Check what is left to do: the team, the budget if it has a cost, the menu and the calendar."
-msgstr "%s ekitaldia zirriborro gisa sortu da. Begiratu zer falta den: taldea, aurrekontua kostua badu, menua eta egutegia."
+msgstr ""
 
 #. translators: %s: text
-#: src/Frontend/Views/EventosView.php:619
+#: src/Frontend/Views/EventosView.php:610
 #, php-format
 msgid "Event %s is a draft again."
 msgstr "%s ekitaldia zirriborro bihurtu da berriro."
 
 #. translators: %s: text
-#: src/Frontend/Views/EventosView.php:590
+#: src/Frontend/Views/EventosView.php:581
 #, php-format
 msgid "Event %s published."
 msgstr "%s ekitaldia argitaratuta."
 
 #. translators: %s: text
-#: src/Frontend/Views/EventosView.php:527
+#: src/Frontend/Views/EventosView.php:518
 #, php-format
 msgid "Event %s saved."
 msgstr "%s ekitaldia gordeta."
@@ -5804,13 +5848,13 @@ msgstr "Ekitaldien konfigurazioa gordeta."
 msgid "Event sign-ups can be seen in"
 msgstr "Ekitaldietako izen-emateak hemen ikusten dira:"
 
-#: src/Frontend/Views/EventosView.php:189
+#: src/Frontend/Views/EventosView.php:188
 msgid "Event team"
 msgstr ""
 
-#: templates/eventos/asistente.php:152
+#: templates/eventos/asistente.php:155
 msgid "Event team (optional: you can complete it later)."
-msgstr "Ekitaldiaren taldea (aukerakoa: geroago osa dezakezu)."
+msgstr ""
 
 #: templates/tesoreria/banco.php:220
 msgid "Event:"
@@ -5918,25 +5962,25 @@ msgstr "Familien aurreikusitako kuotak"
 msgid "Expected fees from families (round"
 msgstr "Familien espero diren kuotak (txanda"
 
-#: templates/eventos/asistente.php:142 templates/eventos/asistente.php:239 templates/eventos/formulario.php:108 templates/eventos/formulario.php:116
+#: templates/eventos/asistente.php:145 templates/eventos/asistente.php:242 templates/eventos/formulario.php:105 templates/eventos/formulario.php:113
 msgid "Expected participants"
 msgstr "Aurreikusitako parte-hartzaileak"
 
 #. translators: %s: text
-#: templates/eventos/formulario.php:120
+#: templates/eventos/formulario.php:117
 #, php-format
 msgid "Expected participants of %s"
 msgstr "%s: aurreikusitako parte-hartzaileak"
 
-#: templates/eventos/presupuesto.php:201
+#: templates/eventos/presupuesto.php:242
 msgid "Expected revenue"
 msgstr "Aurreikusitako bilketa"
 
-#: templates/eventos/presupuesto.php:156
+#: templates/eventos/presupuesto.php:170
 msgid "Expected team members"
 msgstr "Taldeko aurreikusitako pertsonak"
 
-#: src/Eventos/Cuentas.php:548 src/Tesoreria/Banco/TiposMovimiento.php:27 templates/eventos/presupuesto.php:100 templates/tesoreria/presupuesto-seccion.php:205
+#: src/Eventos/Cuentas.php:548 src/Tesoreria/Banco/TiposMovimiento.php:27 templates/eventos/presupuesto.php:114 templates/tesoreria/presupuesto-seccion.php:205
 msgid "Expense"
 msgstr "Gastua"
 
@@ -5954,15 +5998,15 @@ msgstr "Gastu-kategoriak"
 msgid "Expense of %1$s · %2$s"
 msgstr "%1$s gastua · %2$s"
 
-#: src/Tesoreria/Banco/TiposMovimiento.php:29 templates/eventos/presupuesto.php:99
+#: src/Tesoreria/Banco/TiposMovimiento.php:29 templates/eventos/presupuesto.php:113
 msgid "Expense or income"
 msgstr "Gastua edo diru-sarrera"
 
-#: src/Frontend/Views/EventosView.php:676 src/Frontend/Views/PresupuestosView.php:151
+#: src/Frontend/Views/EventosView.php:667 src/Frontend/Views/PresupuestosView.php:151
 msgid "Expense recorded."
 msgstr "Gastua erregistratuta."
 
-#: src/Frontend/Views/EventosView.php:696
+#: src/Frontend/Views/EventosView.php:687
 msgid "Expense rejected."
 msgstr "Gastua ukatuta."
 
@@ -5970,15 +6014,15 @@ msgstr "Gastua ukatuta."
 msgid "Expense removed."
 msgstr "Gastua kenduta."
 
-#: src/Frontend/Views/EventosView.php:676
+#: src/Frontend/Views/EventosView.php:667
 msgid "Expense sent to Treasury for review."
 msgstr "Gastua Diruzaintzara bidalita, berrikusteko."
 
-#: src/Frontend/Views/EventosView.php:691
+#: src/Frontend/Views/EventosView.php:682
 msgid "Expense validated."
 msgstr "Gastua balioztatuta."
 
-#: src/Frontend/Views/EventosView.php:686
+#: src/Frontend/Views/EventosView.php:677
 msgid "Expense withdrawn."
 msgstr "Gastua kenduta."
 
@@ -6036,7 +6080,7 @@ msgstr "Familiak ("
 msgid "Families and members request access with this link. When their document and date of birth are checked against the CRM record, the request appears here for you to approve."
 msgstr "Familiek eta bazkideek esteka honekin eskatzen dute sarbidea. Bere dokumentua eta jaiotze-data CRMko fitxarekin egiaztatzean, eskaera hemen agertzen da zuk onar dezazun."
 
-#: src/Frontend/Views/EventosView.php:593
+#: src/Frontend/Views/EventosView.php:584
 msgid "Families and scouters will be notified by email."
 msgstr "Familiei eta scouterrei emailez abisatuko zaie."
 
@@ -6056,9 +6100,9 @@ msgstr "Familiei abisatu zitzaien: %s. "
 
 #: templates/tienda/config.php:27
 msgid "Families only see the methods you tick. \"In person\" is only offered to members, and the card terminal is marked as paid by Treasury on collection."
-msgstr "Familiek markatzen dituzun moduak soilik ikusten dituzte. «Pertsonalki» bazkideei soilik eskaintzen zaie, eta datafonoa Diruzaintzak ordaindutzat markatzen du kobratzean."
+msgstr ""
 
-#: src/Frontend/Views/EventosView.php:591
+#: src/Frontend/Views/EventosView.php:582
 msgid "Families will be notified by email."
 msgstr "Familiei emailez abisatuko zaie."
 
@@ -6143,7 +6187,7 @@ msgstr "%s familia: titularraren izena falta da."
 #: templates/tesoreria/familia-movimientos.php:41
 #, php-format
 msgid "Family %s: transactions"
-msgstr "%s familia: mugimenduak"
+msgstr ""
 
 #: templates/pagos/autorizacion.php:46
 msgid "Family (Treasury)"
@@ -6453,7 +6497,7 @@ msgstr "Elikagaien alergia"
 msgid "Food intolerance"
 msgstr "Elikagaien intolerantzia"
 
-#: src/Frontend/Views/EventosView.php:861
+#: src/Frontend/Views/EventosView.php:852
 msgid "Food item added to the budget."
 msgstr "Elikadura-partida aurrekontuari gehitu zaio."
 
@@ -6529,7 +6573,7 @@ msgstr "Adibidez: eskaeraren iristea, zenbaketa…"
 msgid "For example: recorded twice"
 msgstr "Adibidez: bi aldiz erregistratua"
 
-#: templates/eventos/formulario.php:151
+#: templates/eventos/formulario.php:148
 msgid "For families"
 msgstr "Familientzat"
 
@@ -6569,11 +6613,11 @@ msgstr "Zure familiarentzat"
 msgid "For your role, two-step verification is"
 msgstr "Zure rolarentzat bi urratseko egiaztapena"
 
-#: templates/eventos/presupuesto.php:152
+#: templates/eventos/presupuesto.php:166
 msgid "Forecast"
 msgstr "Aurreikuspena"
 
-#: src/Frontend/Views/EventosView.php:552
+#: src/Frontend/Views/EventosView.php:543
 msgid "Forecast saved: the price has been recalculated."
 msgstr "Aurreikuspena gordeta: prezioa birkalkulatu da."
 
@@ -6683,7 +6727,7 @@ msgstr "Norengandik"
 msgid "Fructose"
 msgstr "Fruktosa"
 
-#: templates/eventos/equipo.php:56 templates/eventos/equipo.php:87 templates/eventos/equipo.php:92 templates/eventos/equipo.php:151
+#: templates/eventos/equipo.php:56 templates/eventos/equipo.php:87 templates/eventos/equipo.php:92 templates/eventos/equipo.php:154
 msgid "Function in the team"
 msgstr "Eginkizuna"
 
@@ -6805,6 +6849,14 @@ msgstr "Eman oniritzia"
 msgid "Give the advance"
 msgstr "Eman aurrerakina"
 
+#: templates/eventos/presupuesto.php:194
+msgid "Give the budget the go-ahead? You can still change it until the event is published."
+msgstr ""
+
+#: templates/eventos/presupuesto.php:232
+msgid "Give the go-ahead"
+msgstr ""
+
 #: src/Idiomas/Guardados.php:122
 msgid "Give the go-ahead to shopping lists"
 msgstr "Erosketa-zerrendei oniritzia eman"
@@ -6820,6 +6872,10 @@ msgstr "Eman kidetza berri bat"
 #: templates/personas/alta.php:305
 msgid "Give website access"
 msgstr "Eman web-sarbidea"
+
+#: src/Eventos/Servicio.php:627
+msgid "Giving the budget the go-ahead is done by Treasury."
+msgstr ""
 
 #: src/Menus/Alergenos.php:18
 msgid "Gluten"
@@ -6876,6 +6932,10 @@ msgstr "Joan errezetategira"
 #: templates/eventos/material.php:170
 msgid "Go to the settings"
 msgstr "Joan konfiguraziora"
+
+#: src/Frontend/Views/EventosView.php:575
+msgid "Go-ahead withdrawn: the budget is pending Treasury again."
+msgstr ""
 
 #: templates/tesoreria/caja.php:174
 msgid "Goes out"
@@ -6961,7 +7021,7 @@ msgstr "Taldearen emaila"
 msgid "Group equipment, types and shopping lists."
 msgstr "Taldearen materiala, motak eta erosketa-zerrendak."
 
-#: src/Eventos/Servicio.php:207
+#: src/Eventos/Servicio.php:216
 msgid "Group events and external events are created by Coordination."
 msgstr "Taldeko ekitaldiak eta kanpokoak Koordinazioak sortzen ditu."
 
@@ -7057,7 +7117,7 @@ msgstr "1. tutorea · emaila"
 msgid "Guardian 1 · mobile"
 msgstr "1. tutorea · mugikorra"
 
-#: src/Usuarios/Usuarios.php:256
+#: src/Usuarios/Usuarios.php:277
 msgid "Guardian 1's email"
 msgstr "1. tutorearen emaila"
 
@@ -7073,7 +7133,7 @@ msgstr "2. tutorea · emaila"
 msgid "Guardian 2 · mobile"
 msgstr "2. tutorea · mugikorra"
 
-#: src/Usuarios/Usuarios.php:257
+#: src/Usuarios/Usuarios.php:278
 msgid "Guardian 2's email"
 msgstr "2. tutorearen emaila"
 
@@ -7219,9 +7279,9 @@ msgstr "Ezkutatu edo erakutsi gaiaren goiburua leku gehiago izateko"
 msgid "Hide territorial no."
 msgstr "Ezkutatu lurralde-zenbakia"
 
-#: templates/eventos/asistente.php:186
+#: templates/eventos/asistente.php:189
 msgid "High mountain, canyoning, climbing, diving, sailing."
-msgstr "Goi mendia, ibaiertzak, eskalada, urpekaritza, bela."
+msgstr ""
 
 #: src/Idiomas/Guardados.php:169
 msgid "Histamine"
@@ -7269,9 +7329,9 @@ msgstr "Nola"
 msgid "How are you going to pay?"
 msgstr "Nola ordainduko duzu?"
 
-#: templates/eventos/asistente.php:210
+#: templates/eventos/asistente.php:213
 msgid "How do they sign up?"
-msgstr "Nola ematen dute izena?"
+msgstr ""
 
 #: templates/alta-scouters/formulario.php:62
 msgid "How do you help in the group?"
@@ -7281,21 +7341,21 @@ msgstr "Nola laguntzen duzu taldean?"
 msgid "How do you prefer to be paid?"
 msgstr "Nola nahiago duzu kobratzea?"
 
-#: templates/eventos/presupuesto.php:62 templates/eventos/presupuesto.php:73
+#: templates/eventos/presupuesto.php:76 templates/eventos/presupuesto.php:87
 msgid "How it is split"
 msgstr "Nola banatzen den"
 
-#: templates/eventos/presupuesto.php:113
+#: templates/eventos/presupuesto.php:127
 msgid "How it is split (the expenses)"
 msgstr "Nola banatzen den (gastuak)"
 
 #: templates/eventos/asistente.php:39
 msgid "How many"
-msgstr "Zenbat"
+msgstr ""
 
-#: templates/eventos/asistente.php:137
+#: templates/eventos/asistente.php:140
 msgid "How many are you?"
-msgstr "Zenbat zarete?"
+msgstr ""
 
 #: templates/tesoreria/presupuesto-seccion.php:83 templates/tesoreria/presupuesto-seccion.php:90 templates/tesoreria/presupuesto-seccion.php:113 templates/tesoreria/presupuesto-seccion.php:119
 msgid "How many?"
@@ -7593,7 +7653,7 @@ msgstr "Akatsa dela uste baduzu edo berriro saiatu nahi baduzu, jarri harremanet
 
 #: templates/lista-espera/listado.php:117
 msgid "If you tick it, the person signing up goes straight onto the list and receives an email that only informs them of the sign-up: they do not have to press any link. When you save, the sign-ups waiting for confirmation also move to the list. Without confirmation, nobody checks that the email belongs to whoever signs up."
-msgstr "Markatzen baduzu, izena ematen duena zuzenean sartzen da zerrendan eta izen-ematearen berri ematen dion email bat jasotzen du: ez du inolako estekarik sakatu behar. Gordetzean, baieztapenaren zain zeuden izen-emateak ere zerrendara pasatzen dira. Baieztatu gabe, inork ez du egiaztatzen emaila izena ematen duenarena denik."
+msgstr ""
 
 #: templates/informes/editor.php:92
 msgid "If you tick none:"
@@ -7676,12 +7736,12 @@ msgid "Imported %1$d new transactions%2$s. The file has not been saved."
 msgstr "%1$d mugimendu berri inportatu dira%2$s. Fitxategia ez da gorde."
 
 #. translators: %s: text
-#: src/Eventos/Servicio.php:246
+#: src/Eventos/Servicio.php:255
 #, php-format
 msgid "In %s there are more expected participants than places."
 msgstr "%s(e)n plazak baino aurreikusitako parte-hartzaile gehiago daude."
 
-#: templates/eventos/asistente.php:96 templates/eventos/formulario.php:80
+#: templates/eventos/asistente.php:99 templates/eventos/formulario.php:77
 msgid "In a group event with no sections ticked, all the educational sections are invited."
 msgstr "Atalik markatu gabeko taldeko ekitaldi batean, hezkuntza-atal guztiei deitzen zaie."
 
@@ -7812,7 +7872,7 @@ msgstr "Diru-sarrerak"
 msgid "Income %1$s · expenses %2$s · generated on %3$s"
 msgstr "Sarrerak %1$s · gastuak %2$s · %3$s egunean sortua"
 
-#: templates/eventos/presupuesto.php:101
+#: templates/eventos/presupuesto.php:115
 msgid "Income (grant, group contribution)"
 msgstr "Diru-sarrera (dirulaguntza, taldearen ekarpena)"
 
@@ -7834,7 +7894,7 @@ msgstr "%1$s sarrera · %2$s"
 msgid "Income only"
 msgstr "Sarrerak soilik"
 
-#: src/Frontend/Views/EventosView.php:681
+#: src/Frontend/Views/EventosView.php:672
 msgid "Income recorded."
 msgstr "Diru-sarrera erregistratuta."
 
@@ -7942,7 +8002,7 @@ msgstr "Asegurua prima-taularen arabera"
 msgid "Insurance by table"
 msgstr "Asegurua taularen arabera"
 
-#: src/Informes/Catalogo.php:121 templates/eventos/asistente.php:181 templates/eventos/formulario.php:180
+#: src/Informes/Catalogo.php:121 templates/eventos/asistente.php:184 templates/eventos/formulario.php:177
 msgid "Insurance company"
 msgstr "Aseguru-konpainia"
 
@@ -7960,23 +8020,23 @@ msgstr "Elkartekide bakoitzeko aseguru-primak"
 
 #: src/Seguimiento/Catalogo.php:38
 msgid "Integration"
-msgstr "Integrazioa"
+msgstr ""
 
 #: src/Tesoreria/Banco/Norma43.php:43
 msgid "Interest · fees · custody · expenses and taxes"
 msgstr "Interesak · komisioak · zaintza · gastuak eta zergak"
 
-#: templates/eventos/formulario.php:178
+#: templates/eventos/formulario.php:175
 msgid "International (all or part outside Spain): needs separate insurance"
 msgstr "Nazioartekoa (osorik edo zati bat Espainiatik kanpo): aparteko asegurua behar du"
 
 #. translators: 1: text, 2: text
-#: src/Eventos/Normativa.php:304
+#: src/Eventos/Normativa.php:334
 #, php-format
 msgid "International activity with separate insurance: %1$s, policy %2$s."
 msgstr "Nazioarteko jarduera, aparteko aseguruarekin: %1$s, %2$s poliza."
 
-#: src/Eventos/Normativa.php:306
+#: src/Eventos/Normativa.php:336
 msgid "International activity: separate insurance is required (company and policy no.)."
 msgstr "Nazioarteko jarduera: aparteko asegurua behar da (konpainia eta poliza-zenbakia)."
 
@@ -8032,7 +8092,7 @@ msgstr ""
 msgid "Invitation link (shown only now):"
 msgstr ""
 
-#: src/Usuarios/Usuarios.php:247
+#: src/Usuarios/Usuarios.php:268
 msgid "Invitation pending"
 msgstr "Gonbidapena zain"
 
@@ -8060,21 +8120,21 @@ msgstr ""
 msgid "Invited but not signed up (%d)"
 msgstr "Izenik eman gabeko deituak (%d)"
 
-#: templates/eventos/asistente.php:236 templates/eventos/formulario.php:68
+#: templates/eventos/asistente.php:239 templates/eventos/formulario.php:65
 msgid "Invited sections"
 msgstr "Deitutako atalak"
 
-#: templates/eventos/asistente.php:179
+#: templates/eventos/asistente.php:182
 msgid "Is it outside Spain?"
-msgstr "Espainiatik kanpora da?"
+msgstr ""
 
 #: src/Eventos/Inscripciones.php:771
 msgid "Is on this event's team."
 msgstr "Ekitaldi honen taldean dago."
 
-#: templates/eventos/asistente.php:184
+#: templates/eventos/asistente.php:187
 msgid "Is there a swimming pool or sea?"
-msgstr "Igerilekurik edo itsasorik badago?"
+msgstr ""
 
 #: templates/personas/alta.php:93
 #, php-format
@@ -8133,7 +8193,7 @@ msgstr "Ezin izan da egiaztatu beste talde edo erakunde batzuetan alta emanda da
 msgid "It could not be checked whether this document is in other groups or organisations. Confirm that you want to save it."
 msgstr "Ezin izan da egiaztatu dokumentu hau beste talde edo erakunde batzuetan dagoen. Berretsi gorde nahi duzula."
 
-#: src/Crm/Altas.php:742
+#: src/Crm/Altas.php:753
 msgid "It could not be done: "
 msgstr "Ezin izan da egin: "
 
@@ -8167,11 +8227,11 @@ msgstr "Aurretik hau behar du: %s"
 msgid "It first needs: %s."
 msgstr "Aurretik hau behar du: %s."
 
-#: templates/eventos/formulario.php:166
+#: templates/eventos/formulario.php:163
 msgid "It has a cost for families (budget validated)."
 msgstr "Kostua du familientzat (aurrekontua balioztatuta)."
 
-#: templates/eventos/formulario.php:168
+#: templates/eventos/formulario.php:165
 msgid "It has a cost for families (the price comes from the budget, which Treasury validates)"
 msgstr "Kostua du familientzat (prezioa aurrekontutik ateratzen da, eta Diruzaintzak balioztatzen du)"
 
@@ -8346,14 +8406,14 @@ msgid "It looks like an Excel file or another binary format. Download it from th
 msgstr "Excel fitxategia edo beste formatu bitar bat dirudi. Deskargatu bankutik 43 Arau gisa edo CSV gisa."
 
 #. translators: %s: text
-#: src/Eventos/Normativa.php:297
+#: src/Eventos/Normativa.php:327
 #, php-format
 msgid "It must be reported to ASDE Baleares before %s (30 days before the start)."
 msgstr "ASDE Baleares-i jakinarazi behar zaio %s baino lehen (hasi baino 30 egun lehenago)."
 
-#: templates/eventos/asistente.php:179
+#: templates/eventos/asistente.php:182
 msgid "It needs separate insurance."
-msgstr "Aparteko asegurua behar du."
+msgstr ""
 
 #: src/Admin/SettingsPage.php:291
 msgid "It reads no CRM data until the test finds the group."
@@ -8375,7 +8435,7 @@ msgstr "ESrekin hasten da eta 16 karaktere ditu."
 msgid "It stays with the group."
 msgstr "Taldean geratzen da."
 
-#: src/Crm/Altas.php:741
+#: src/Crm/Altas.php:752
 msgid "It was left unfinished. Try again: it will continue where it stopped, without creating another record. Reason: "
 msgstr "Erdibidean geratu da. Saiatu berriro: utzi zuen tokitik jarraituko du, beste fitxarik sortu gabe. Arrazoia: "
 
@@ -8391,7 +8451,7 @@ msgstr "Sarbidea ematean sortuko da."
 msgid "Item"
 msgstr "Partida"
 
-#: src/Frontend/Views/EventosView.php:557
+#: src/Frontend/Views/EventosView.php:548
 msgid "Item added to the budget."
 msgstr "Partida aurrekontura gehituta."
 
@@ -8407,7 +8467,7 @@ msgstr "Kontzeptuaren izena"
 msgid "Item of data"
 msgstr "Datua"
 
-#: src/Frontend/Views/EventosView.php:567
+#: src/Frontend/Views/EventosView.php:558
 msgid "Item removed from the budget."
 msgstr "Partida aurrekontutik kenduta."
 
@@ -8478,7 +8538,7 @@ msgid "Kitchen sheet"
 msgstr "Sukaldeko orria"
 
 #. translators: %d: number
-#: src/Frontend/Views/EventosView.php:854
+#: src/Frontend/Views/EventosView.php:845
 #, php-format
 msgid "Kitchen sheet sent to %d person."
 msgid_plural "Kitchen sheet sent to %d people."
@@ -8537,7 +8597,7 @@ msgstr "Azken proposatua"
 
 #: templates/mi-seccion/listado.php:67 templates/mi-seccion/listado.php:84
 msgid "Last review"
-msgstr "Azken berrikuspena"
+msgstr ""
 
 #. translators: %s: text
 #: templates/eventos/menu.php:307
@@ -8573,7 +8633,7 @@ msgstr "Azken inportazioak"
 msgid "Leadership team"
 msgstr "Talde zuzendaria"
 
-#: src/Eventos/Normativa.php:288
+#: src/Eventos/Normativa.php:315
 msgid "Leadership team: qualified director, ratio covered and certificates up to date."
 msgstr "Talde zuzendaria: zuzendari titulatua, ratioa beteta eta ziurtagiriak egunean."
 
@@ -8949,13 +9009,13 @@ msgstr "Bigarren platera"
 msgid "Maize"
 msgstr "Artoa"
 
-#: templates/eventos/asistente.php:200
+#: templates/eventos/asistente.php:203
 msgid "Make sure there is qualified staff for the risk activity."
-msgstr "Ziurtatu arriskuko jarduerarako langile titulatua dagoela."
+msgstr ""
 
-#: templates/eventos/asistente.php:196
+#: templates/eventos/asistente.php:199
 msgid "Make the budget and ask Treasury to validate it (it cannot be published without it)."
-msgstr "Aurrekontua egin eta Diruzaintzari balidatzeko eskatu (hori gabe ezin da argitaratu)."
+msgstr ""
 
 #: src/Crm/Altas.php:39 src/Informes/Catalogo.php:144
 msgid "Male"
@@ -8997,7 +9057,7 @@ msgstr "Eskuliburua argazkiekin"
 msgid "Manual with screenshots (extra help)"
 msgstr ""
 
-#: templates/eventos/asistente.php:127 templates/eventos/formulario.php:93
+#: templates/eventos/asistente.php:130 templates/eventos/formulario.php:90
 msgid "Map link (optional)"
 msgstr "Maparako esteka (aukerakoa)"
 
@@ -9043,7 +9103,7 @@ msgstr "Markatu berrikusita gisa…"
 
 #: templates/tesoreria/control.php:77
 msgid "Mark as seen"
-msgstr "Markatu ikusitzat"
+msgstr ""
 
 #: templates/tesoreria/sepa-remesa.php:73
 msgid "Mark as sent to the bank"
@@ -9101,7 +9161,7 @@ msgstr "Kobratutakoarekin bat dator"
 msgid "Maximum %d per person"
 msgstr "Gehienez %d pertsonako"
 
-#: templates/eventos/asistente.php:148 templates/eventos/formulario.php:131
+#: templates/eventos/asistente.php:151 templates/eventos/formulario.php:128
 msgid "Maximum age (optional)"
 msgstr "Gehieneko adina (aukerakoa)"
 
@@ -9321,7 +9381,7 @@ msgstr "Nirea · partekatua"
 msgid "Minimum"
 msgstr "Gutxienez"
 
-#: templates/eventos/asistente.php:147 templates/eventos/formulario.php:130
+#: templates/eventos/asistente.php:150 templates/eventos/formulario.php:127
 msgid "Minimum age (optional)"
 msgstr "Gutxieneko adina (aukerakoa)"
 
@@ -9341,7 +9401,7 @@ msgstr "Hainbat"
 msgid "Mobile"
 msgstr "Mugikorra"
 
-#: templates/eventos/formulario.php:138 templates/eventos/inscripciones.php:92
+#: templates/eventos/formulario.php:135 templates/eventos/inscripciones.php:92
 msgid "Mode"
 msgstr "Modalitatea"
 
@@ -9365,9 +9425,9 @@ msgstr ""
 msgid "Molluscs"
 msgstr "Moluskuak"
 
-#: templates/eventos/asistente.php:40 templates/eventos/asistente.php:176
+#: templates/eventos/asistente.php:40 templates/eventos/asistente.php:179
 msgid "Money and rules"
-msgstr "Dirua eta araudia"
+msgstr ""
 
 #: src/Tesoreria/Banco/Norma43.php:30
 msgid "Money orders · transfers · transfers between accounts · cheques"
@@ -9389,9 +9449,9 @@ msgstr "Monitore-praktikak"
 msgid "Monitor and Youth Leader"
 msgstr "Monitorea eta Gazte Animatzailea"
 
-#: templates/eventos/asistente.php:163
+#: templates/eventos/asistente.php:166
 msgid "Monitors"
-msgstr "Begiraleak"
+msgstr ""
 
 #: templates/lista-espera/publica.php:204
 msgid "More data requested by the group"
@@ -9443,7 +9503,7 @@ msgstr "Nire itzulketak"
 
 #: src/Domain/Modulos.php:57 src/Frontend/Menu.php:99 templates/mi-seccion/listado.php:30
 msgid "My section"
-msgstr "Nire atala"
+msgstr ""
 
 #: src/Frontend/Menu.php:125
 msgid "My space"
@@ -9505,7 +9565,7 @@ msgstr "Garbia"
 
 #: templates/mi-seccion/listado.php:85
 msgid "Never"
-msgstr "Inoiz ez"
+msgstr ""
 
 #: templates/tesoreria/banco-previa.php:135
 msgid "New"
@@ -9529,11 +9589,11 @@ msgstr "Kredentzial berriak: konexioa probatzea falta da."
 
 #: templates/eventos/menu.php:137
 msgid "New dish"
-msgstr "Plater berria"
+msgstr ""
 
 #: templates/eventos/menu.php:110
 msgid "New dish (create a recipe)"
-msgstr "Plater berria (sortu errezeta bat)"
+msgstr ""
 
 #: src/Inventario/ListaPdf.php:80 templates/inventario/compra.php:76
 msgid "New equipment"
@@ -9555,7 +9615,7 @@ msgstr "Material-mota berriak: %s."
 msgid "New equipment, line %d"
 msgstr "Material berria, %d. lerroa"
 
-#: templates/eventos/agenda.php:28 templates/eventos/asistente.php:61 templates/eventos/formulario.php:44
+#: templates/eventos/agenda.php:28 templates/eventos/asistente.php:64
 msgid "New event"
 msgstr "Ekitaldi berria"
 
@@ -9637,25 +9697,25 @@ msgstr "Hurrengo orria"
 msgid "Next steps"
 msgstr ""
 
-#: templates/eventos/asistente.php:255
+#: templates/eventos/asistente.php:258
 msgid "Next →"
-msgstr "Hurrengoa →"
+msgstr ""
 
 #: src/Informes/Catalogo.php:60
 msgid "Nickname"
 msgstr "Ezizena"
 
 #. translators: %s: number of nights
-#: templates/eventos/asistente.php:123
+#: templates/eventos/asistente.php:126
 #, php-format
 msgid "Nights away: %s."
-msgstr "Kanpoko gauak: %s."
+msgstr ""
 
 #: src/Fichas/FichaService.php:182 src/Fichas/FichaService.php:185 src/Informes/Catalogo.php:149 templates/eventos/asistente.php:32
 msgid "No"
 msgstr "Ez"
 
-#: src/Eventos/Normativa.php:45
+#: src/Eventos/Normativa.php:51
 msgid "No (the organiser reports it, or there are no minors)"
 msgstr "Ez (antolatzaileak jakinarazten du, edo ez dago adingaberik)"
 
@@ -9737,7 +9797,7 @@ msgstr ""
 msgid "No cost"
 msgstr "Kosturik gabe"
 
-#: src/Eventos/Normativa.php:281 templates/eventos/formulario.php:166
+#: src/Eventos/Normativa.php:308 templates/eventos/formulario.php:163
 msgid "No cost for families."
 msgstr "Kosturik gabe familientzat."
 
@@ -9771,7 +9831,7 @@ msgstr "Dokumenturik gabe"
 msgid "No email in the CRM"
 msgstr "CRMan emailik gabe"
 
-#: src/Frontend/Views/EventosView.php:593
+#: src/Frontend/Views/EventosView.php:584
 msgid "No email notice has been sent."
 msgstr "Ez da emailezko abisurik bidali."
 
@@ -9908,7 +9968,7 @@ msgid "No. %1$s will be saved on %2$s's CRM record. Continue?"
 msgstr "%1$s zenbakia %2$s(r)en CRMko fitxan gordeko da. Jarraitu nahi duzu?"
 
 #. translators: %s: text
-#: src/Eventos/Normativa.php:202 src/Tienda/Servicio.php:346 src/Usuarios/AvisoBaja.php:148 templates/eventos/equipo.php:77
+#: src/Eventos/Normativa.php:226 src/Tienda/Servicio.php:346 src/Usuarios/AvisoBaja.php:148 templates/eventos/equipo.php:77
 #, php-format
 msgid "No. %s"
 msgstr "%s zk."
@@ -9939,7 +9999,7 @@ msgstr "Inork ez du «%s» bezalakorik"
 
 #: templates/mi-seccion/listado.php:59
 msgid "Nobody matches this filter."
-msgstr "Inork ez du iragazki honekin bat egiten."
+msgstr ""
 
 #: src/Idiomas/Guardados.php:217
 msgid "Nobody reviewed it in 90 days: automatically rejected."
@@ -10059,7 +10119,7 @@ msgstr "Oraindik erabili gabe: lehen kobrantza FRST gisa joango da."
 
 #: src/Seguimiento/Catalogo.php:47
 msgid "Not yet"
-msgstr "Oraindik ez"
+msgstr ""
 
 #: src/Frontend/Views/BancoView.php:262 src/Inventario/ListaPdf.php:111 templates/eventos/calendario.php:163 templates/eventos/cuentas.php:406
 msgid "Note"
@@ -10071,7 +10131,7 @@ msgstr "Oharra (aukerakoa)"
 
 #: templates/mi-seccion/ficha.php:61
 msgid "Note (optional, stored encrypted)"
-msgstr "Oharra (aukerakoa, zifratuta gordetzen da)"
+msgstr ""
 
 #: templates/eventos/cuentas.php:374
 msgid "Note (required if it doesn't add up)"
@@ -10123,15 +10183,15 @@ msgstr "Oraindik ez da ezer erreserbatu ekitaldi honetarako."
 msgid "Nothing is deleted: the record and their previous memberships stay in the CRM. If they return, they are given a new membership."
 msgstr "Ez da ezer ezabatzen: fitxa eta aurreko kidetzak CRMan geratzen dira. Itzultzen bada, kidetza berri bat ematen zaio."
 
-#: templates/eventos/asistente.php:233
+#: templates/eventos/asistente.php:236
 msgid "Nothing is published yet: a draft is created and you can change anything from its page."
-msgstr "Oraindik ez da ezer argitaratzen: zirriborro bat sortzen da eta edozer alda dezakezu bere fitxatik."
+msgstr ""
 
-#: src/Frontend/Views/EventosView.php:843
+#: src/Frontend/Views/EventosView.php:834
 msgid "Notice confirmed."
 msgstr "Oharra berretsi da."
 
-#: src/Frontend/Views/EventosView.php:610
+#: src/Frontend/Views/EventosView.php:601
 msgid "Notice sent."
 msgstr ""
 
@@ -10246,13 +10306,13 @@ msgid "Olive oil"
 msgstr "Oliba-olioa"
 
 #. translators: %s: text
-#: src/Eventos/Normativa.php:226
+#: src/Eventos/Normativa.php:250
 #, php-format
 msgid "On %s's record the sexual offences certificate is shown but without a date: it cannot be known whether it is less than 12 months old."
 msgstr "%s(r)en fitxan sexu-delituen ziurtagiria ageri da, baina datarik gabe: ezin da jakin 12 hilabete baino gutxiago duen."
 
 #. translators: %s: text
-#: src/Eventos/Normativa.php:228
+#: src/Eventos/Normativa.php:252
 #, php-format
 msgid "On %s's record there is no sexual offences certificate."
 msgstr "%s(r)en fitxan ez da ageri sexu-delituen ziurtagiria."
@@ -10283,7 +10343,7 @@ msgstr "Itxaron-zerrendan «Bazkide» gisa geratzen da eta bere datuak ezabatu d
 
 #: src/Seguimiento/Catalogo.php:48
 msgid "On the way"
-msgstr "Bidean"
+msgstr ""
 
 #: templates/tesoreria/banco-previa.php:28 templates/tesoreria/banco-previa.php:129
 msgid "On the website"
@@ -10317,7 +10377,7 @@ msgstr "Aukeratutako partaideren bat ez dago taldearen CRMan."
 msgid "One of the chosen products is no longer available. Check your selection."
 msgstr "Aukeratutako produktuetako batzuk ez daude eskuragarri jada. Berrikusi zure hautaketa."
 
-#: src/Crm/Altas.php:607
+#: src/Crm/Altas.php:608
 msgid "One of the email addresses is not valid."
 msgstr "Baliozkoa ez den posta elektroniko bat dago."
 
@@ -10363,7 +10423,7 @@ msgstr "Diruzaintzak eta Koordinazioak bakarrik ikusten dute, eta itzulketa orda
 msgid "Only a batch that has not yet been sent to the bank can be cancelled."
 msgstr "Oraindik bankura bidali ez den remesa bat soilik ezeztatu daiteke."
 
-#: src/Eventos/Servicio.php:663
+#: src/Eventos/Servicio.php:724
 msgid "Only a draft event can be deleted."
 msgstr "Zirriborro egoeran dagoen ekitaldia soilik ezaba daiteke."
 
@@ -10433,7 +10493,7 @@ msgstr "Izen-ematea irekita: familiek joan nahi duena apuntatzen dute"
 
 #: templates/tesoreria/familia-movimientos.php:69
 msgid "Open the family's payment file"
-msgstr "Ireki familiaren ordainketen fitxa"
+msgstr ""
 
 #: templates/tienda/config.php:55
 msgid "Open the public shop (purchase without signing in)"
@@ -10777,7 +10837,7 @@ msgstr "Ordainduta"
 msgid "Paid on %s"
 msgstr "%s(a)n ordainduta"
 
-#: src/Frontend/Views/EventosView.php:636
+#: src/Frontend/Views/EventosView.php:627
 msgid "Paper authorisation recorded."
 msgstr "Paperezko baimena erregistratuta."
 
@@ -10807,7 +10867,7 @@ msgstr "Partaidea"
 msgid "Participants (%d)"
 msgstr "Parte-hartzaileak (%d)"
 
-#: templates/eventos/formulario.php:102
+#: templates/eventos/formulario.php:99
 msgid "Participants and places"
 msgstr "Parte-hartzaileak eta plazak"
 
@@ -10815,7 +10875,7 @@ msgstr "Parte-hartzaileak eta plazak"
 msgid "Participants of the account"
 msgstr "Kontuaren partaideak"
 
-#: templates/eventos/formulario.php:191
+#: templates/eventos/formulario.php:188
 msgid "Participants with recognised dependency: write only how many (no names). The regulations require more support monitors."
 msgstr "Mendekotasun aitortua duten parte-hartzaileak: idatzi zenbat diren soilik (izenik gabe). Araudiak laguntzako begirale gehiago eskatzen ditu."
 
@@ -10827,7 +10887,7 @@ msgstr "Parte-hartzaileak: %d (plazak edo, ez badago, aurreikusitakoak)."
 
 #: src/Seguimiento/Catalogo.php:39
 msgid "Participation"
-msgstr "Parte-hartzea"
+msgstr ""
 
 #: templates/eventos/config.php:100
 msgid "Participation authorisation text"
@@ -10913,7 +10973,7 @@ msgstr "Ordainketa-modua"
 
 #: templates/tienda/config.php:22
 msgid "Payment methods the group accepts"
-msgstr "Taldeak onartzen dituen ordainketa moduak"
+msgstr ""
 
 #: templates/eventos/inscripciones.php:179
 msgid "Payment missing"
@@ -10976,13 +11036,13 @@ msgid "Payment of %s recorded"
 msgstr "%s(e)ko ordainketa erregistratua"
 
 #. translators: %s: text
-#: src/Frontend/Views/EventosView.php:653
+#: src/Frontend/Views/EventosView.php:644
 #, php-format
 msgid "Payment of %s recorded and split among the family's sign-ups."
 msgstr "%s(e)ko ordainketa erregistratuta eta familiaren izen-emateen artean banatuta."
 
 #. translators: %s: text
-#: src/Frontend/Views/EventosView.php:647 src/Frontend/Views/TesoreriaView.php:454
+#: src/Frontend/Views/EventosView.php:638 src/Frontend/Views/TesoreriaView.php:454
 #, php-format
 msgid "Payment of %s recorded."
 msgstr "%s(r)en ordainketa erregistratu da."
@@ -11105,7 +11165,7 @@ msgstr "Azken 30 egunetan webetik CRMan baja eman zaien familiaren bateko pertso
 msgid "People in the group"
 msgstr "Taldeko pertsonak"
 
-#: templates/eventos/presupuesto.php:142
+#: templates/eventos/presupuesto.php:156
 msgid "People travelling"
 msgstr "Bidaiatzen duten pertsonak"
 
@@ -11113,15 +11173,15 @@ msgstr "Bidaiatzen duten pertsonak"
 msgid "People's username is their…"
 msgstr ""
 
-#: src/Eventos/Presupuesto.php:31
+#: src/Eventos/Presupuesto.php:35
 msgid "Per person: each participant"
 msgstr "Pertsonako: parte-hartzaile bakoitzak"
 
-#: src/Eventos/Presupuesto.php:32
+#: src/Eventos/Presupuesto.php:36
 msgid "Per person: participants and team"
 msgstr "Pertsonako: parte-hartzaileak eta taldea"
 
-#: src/Eventos/Presupuesto.php:33
+#: src/Eventos/Presupuesto.php:37
 msgid "Per person: team only"
 msgstr "Pertsonako: taldea soilik"
 
@@ -11173,17 +11233,17 @@ msgstr "Datu pertsonalak"
 msgid "Personal equipment"
 msgstr "Material pertsonala"
 
-#: templates/eventos/asistente.php:225 templates/eventos/formulario.php:157
+#: templates/eventos/asistente.php:228 templates/eventos/formulario.php:154
 msgid "Personal equipment (what each participant brings)"
 msgstr "Material pertsonala (parte-hartzaile bakoitzak eramaten duena)"
 
 #: templates/mi-seccion/ficha.php:66
 msgid "Personal goal chosen by the person"
-msgstr "Pertsonak berak aukeratutako helburu pertsonala"
+msgstr ""
 
 #: src/Domain/Modulos.php:57
 msgid "Personal progression of the people in each section: stage, aspects, goals and review history."
-msgstr "Atal bakoitzeko pertsonen progresio pertsonala: etapa, alderdiak, helburuak eta berrikuspenen historia."
+msgstr ""
 
 #: src/Crm/Altas.php:49
 msgid "Personal reasons"
@@ -11213,7 +11273,7 @@ msgstr "Jasotzen dute:"
 msgid "Pistachio"
 msgstr "Pistatxoa"
 
-#: templates/eventos/asistente.php:126 templates/eventos/asistente.php:238 templates/eventos/formulario.php:92 templates/eventos/resumen.php:56
+#: templates/eventos/asistente.php:129 templates/eventos/asistente.php:241 templates/eventos/formulario.php:89 templates/eventos/resumen.php:56
 msgid "Place"
 msgstr "Lekua"
 
@@ -11249,45 +11309,45 @@ msgstr "Elastikoen eskaera hornitzaileari egin"
 msgid "Place: %s"
 msgstr "Lekua: %s"
 
-#: templates/eventos/asistente.php:143 templates/eventos/formulario.php:109 templates/eventos/formulario.php:123 templates/eventos/inscripciones.php:104
+#: templates/eventos/asistente.php:146 templates/eventos/formulario.php:106 templates/eventos/formulario.php:120 templates/eventos/inscripciones.php:104
 msgid "Places"
 msgstr "Plazak"
 
 #. translators: %s: text
-#: templates/eventos/formulario.php:123
+#: templates/eventos/formulario.php:120
 #, php-format
 msgid "Places of %s"
 msgstr "%s: plazak"
 
-#: templates/eventos/presupuesto.php:143
+#: templates/eventos/presupuesto.php:157
 msgid "Places on each bus"
 msgstr "Autobus bakoitzaren plazak"
 
-#: templates/eventos/asistente.php:199
+#: templates/eventos/asistente.php:202
 msgid "Plan a lifeguard or the water-safety measures."
-msgstr "Aurreikusi itsas-zaindaria edo uretako segurtasun-neurriak."
+msgstr ""
 
-#: templates/eventos/asistente.php:201
+#: templates/eventos/asistente.php:204
 msgid "Plan extra support monitors because of the dependency."
-msgstr "Aurreikusi laguntza-begirale gehiago mendekotasunagatik."
+msgstr ""
 
 #: src/Eventos/Cuentas.php:545 templates/eventos/cuentas.php:93 templates/eventos/cuentas.php:101
 msgid "Planned"
 msgstr "Aurreikusia"
 
-#: templates/eventos/presupuesto.php:202
+#: templates/eventos/presupuesto.php:243
 msgid "Planned emergency fund"
 msgstr "Aurreikusitako larrialdi-funtsa"
 
-#: templates/eventos/presupuesto.php:197 templates/tesoreria/presupuesto-seccion.php:66
+#: templates/eventos/presupuesto.php:238 templates/tesoreria/presupuesto-seccion.php:66
 msgid "Planned expenses"
 msgstr "Aurreikusitako gastuak"
 
-#: templates/eventos/presupuesto.php:199 templates/tesoreria/presupuesto-seccion.php:65
+#: templates/eventos/presupuesto.php:240 templates/tesoreria/presupuesto-seccion.php:65
 msgid "Planned income"
 msgstr "Aurreikusitako diru-sarrerak"
 
-#: src/Informes/Catalogo.php:122 templates/eventos/asistente.php:182 templates/eventos/formulario.php:181
+#: src/Informes/Catalogo.php:122 templates/eventos/asistente.php:185 templates/eventos/formulario.php:178
 msgid "Policy no."
 msgstr "Polizaren zenbakia"
 
@@ -11405,13 +11465,19 @@ msgstr "Prezioa %1$s, doikuntzak %2$s"
 msgid "Price (€)"
 msgstr "Prezioa (€)"
 
+#. translators: %s: section
+#: templates/eventos/presupuesto.php:221
+#, php-format
+msgid "Price for %s (€)"
+msgstr ""
+
 #. translators: %s: text
 #: templates/inventario/nueva.php:78
 #, php-format
 msgid "Price of \"%s\""
 msgstr "«%s» materialaren prezioa"
 
-#: templates/eventos/presupuesto.php:144
+#: templates/eventos/presupuesto.php:158
 msgid "Price of one bus (€)"
 msgstr "Autobus baten prezioa (€)"
 
@@ -11517,7 +11583,7 @@ msgstr "Proposamena kendu da."
 
 #: templates/mi-seccion/ficha.php:71
 msgid "Propose a change to the next stage"
-msgstr "Hurrengo etapara aldatzea proposatu"
+msgstr ""
 
 #: templates/eventos/menu.php:377
 msgid "Propose as a Food item"
@@ -11599,7 +11665,7 @@ msgstr "Kopurua"
 msgid "Quantity %d"
 msgstr "%d. kantitatea"
 
-#: src/Frontend/Views/EventosView.php:756
+#: src/Frontend/Views/EventosView.php:747
 msgid "Quantity changed."
 msgstr "Kantitatea aldatu da."
 
@@ -11773,9 +11839,9 @@ msgstr "Errezetategia"
 msgid "Recipe copied to your group. You can now edit it."
 msgstr "Errezeta zure taldera kopiatu da. Editatu dezakezu."
 
-#: src/Frontend/Views/EventosView.php:828
+#: src/Frontend/Views/EventosView.php:819
 msgid "Recipe created and added to the menu."
-msgstr "Errezeta sortu eta menuan gehitu da."
+msgstr ""
 
 #. translators: %s: text
 #: templates/eventos/menu.php:107
@@ -11869,7 +11935,7 @@ msgstr "Erregistratu diru-sarrera bat (diru-laguntza, dohaintza…)"
 msgid "Record an inflow or an outflow"
 msgstr "Idatzi sarrera edo irteera bat"
 
-#: src/Usuarios/Usuarios.php:255
+#: src/Usuarios/Usuarios.php:276
 msgid "Record email"
 msgstr "Fitxako emaila"
 
@@ -12016,12 +12082,12 @@ msgid "Refund of %1$s · event \"%2$s\""
 msgstr "%1$s(e)ko itzulketa · «%2$s» ekitaldia"
 
 #. translators: %s: text
-#: src/Frontend/Views/EventosView.php:669
+#: src/Frontend/Views/EventosView.php:660
 #, php-format
 msgid "Refund of %s recorded."
 msgstr "Itzulketa erregistratuta: %s."
 
-#: src/Frontend/Views/EventosView.php:785
+#: src/Frontend/Views/EventosView.php:776
 msgid "Refund recorded."
 msgstr "Itzulketa idatzi da."
 
@@ -12117,7 +12183,7 @@ msgstr ""
 msgid "Registrations in the CRM are not enabled for your group (wp-admin → Scout Groups → Modules)."
 msgstr "CRMko altak ez daude aktibatuta zure talderako (wp-admin → Grupos Scouts → Módulos)."
 
-#: src/Crm/Altas.php:555 src/Frontend/Views/FichaView.php:246 src/Frontend/Views/FichaView.php:319 src/Frontend/Views/PersonasView.php:312
+#: src/Crm/Altas.php:556 src/Frontend/Views/FichaView.php:246 src/Frontend/Views/FichaView.php:319 src/Frontend/Views/PersonasView.php:312
 msgid "Registrations in the CRM are not enabled for your group."
 msgstr "CRMko altak ez daude aktibatuta zure taldearentzat."
 
@@ -12153,7 +12219,7 @@ msgstr "Itzulketa utzi da."
 msgid "Reimbursement marked as paid."
 msgstr "Itzulketa ordainduta markatu da."
 
-#: src/Frontend/Views/EventosView.php:701
+#: src/Frontend/Views/EventosView.php:692
 msgid "Reimbursement recorded."
 msgstr "Itzulketa erregistratuta."
 
@@ -12275,7 +12341,7 @@ msgstr "Pertsona hau taldetik kendu?"
 msgid "Remove this task?"
 msgstr "Zeregin hau kendu?"
 
-#: src/Frontend/Views/EventosView.php:547
+#: src/Frontend/Views/EventosView.php:538
 msgid "Removed from the team."
 msgstr "Taldetik kenduta."
 
@@ -12298,14 +12364,6 @@ msgstr "Berriro ireki"
 #: templates/eventos/cuentas.php:67 templates/eventos/cuentas.php:72
 msgid "Reopen the accounts"
 msgstr "Ireki berriro kontuak"
-
-#: templates/eventos/presupuesto.php:217
-msgid "Reopen the budget"
-msgstr "Ireki berriro aurrekontua"
-
-#: templates/eventos/presupuesto.php:217
-msgid "Reopen the budget? It will have to be validated again before publishing."
-msgstr "Aurrekontua berriro ireki? Argitaratu aurretik berriro balioztatu beharko da."
 
 #: templates/eventos/cuentas.php:68
 msgid "Reopen the event's accounts? They will have to be closed again."
@@ -12340,16 +12398,16 @@ msgid "Report date"
 msgstr "Txostenaren data"
 
 #. translators: %s: date
-#: templates/eventos/asistente.php:197
+#: templates/eventos/asistente.php:200
 #, php-format
 msgid "Report it to ASDE Baleares 30 days before: it has enough nights and minors. At the latest on %s."
-msgstr "ASDE Balearrei jakinarazi 30 egun lehenago: gau eta adingabe nahikorik du. Beranduenez %s."
+msgstr ""
 
 #: src/Frontend/Views/InformesView.php:160
 msgid "Report not available."
 msgstr "Txostena ez dago eskuragarri."
 
-#: templates/eventos/formulario.php:171
+#: templates/eventos/formulario.php:168
 msgid "Report to ASDE Baleares (30 days before)"
 msgstr "ASDE Baleares-i jakinarazpena (30 egun lehenago)"
 
@@ -12537,7 +12595,7 @@ msgstr "Emaitza (taldeak bere gain hartzen du)"
 msgid "Result = what was collected from families (minus refunds) + other income − validated expenses. Expenses pending review do not count until Treasury validates them."
 msgstr "Emaitza = familiei kobratutakoa (itzulitakoa kenduta) + beste diru-sarrerak − balioztatutako gastuak. Berrikusteko dauden gastuak ez dira kontuan hartzen Diruzaintzak balioztatu arte."
 
-#: templates/eventos/presupuesto.php:167
+#: templates/eventos/presupuesto.php:181
 msgid "Resulting price"
 msgstr "Ateratzen den prezioa"
 
@@ -12581,13 +12639,13 @@ msgstr "Berrikusi"
 msgid "Review (%d)"
 msgstr "Berrikusi (%d)"
 
-#: templates/eventos/asistente.php:232
+#: templates/eventos/asistente.php:235
 msgid "Review and create the draft"
-msgstr "Berrikusi eta sortu zirriborroa"
+msgstr ""
 
 #: src/Frontend/Views/MiSeccionView.php:126
 msgid "Review saved."
-msgstr "Berrikuspena gorde da."
+msgstr ""
 
 #: templates/area/inicio.php:173
 msgid "Review the changes families request on the records."
@@ -12625,7 +12683,7 @@ msgstr "Arroza tomatearekin eta arrautzarekin"
 msgid "Right now nobody in your account has an active membership, so no order can be placed."
 msgstr "Une honetan zure kontuko inork ez du kidetasun aktiborik, beraz ezin da eskaerarik egin."
 
-#: src/Eventos/Normativa.php:310
+#: src/Eventos/Normativa.php:340
 msgid "Risk activities (mountain, canyoning, climbing, diving, sailing) go with staff qualified in that activity."
 msgstr "Arriskuko jarduerek (mendia, arroilak, eskalada, urpekaritza, nautika) jarduera horretan titulatutako langileak dituzte."
 
@@ -12792,7 +12850,7 @@ msgstr ""
 msgid "Save and add another"
 msgstr "Gorde eta beste bat gehitu"
 
-#: templates/eventos/presupuesto.php:160
+#: templates/eventos/presupuesto.php:174
 msgid "Save and recalculate"
 msgstr "Gorde eta birkalkulatu"
 
@@ -12822,7 +12880,7 @@ msgstr "Gorde txostena"
 
 #: templates/mi-seccion/ficha.php:73
 msgid "Save review"
-msgstr "Berrikuspena gorde"
+msgstr ""
 
 #: templates/eventos/inscripciones.php:251
 msgid "Save the adjustment"
@@ -12832,7 +12890,7 @@ msgstr "Gorde doikuntza"
 msgid "Save the cash count"
 msgstr "Gorde kutxa-zenbaketa"
 
-#: templates/eventos/formulario.php:199
+#: templates/eventos/formulario.php:196
 msgid "Save the changes"
 msgstr "Gorde aldaketak"
 
@@ -12871,6 +12929,10 @@ msgstr ""
 #: templates/accesos/matriz.php:82
 msgid "Save the permissions"
 msgstr "Baimenak gorde"
+
+#: templates/eventos/presupuesto.php:232
+msgid "Save the prices and keep the go-ahead"
+msgstr ""
 
 #: templates/menus/receta.php:132
 msgid "Save the recipe"
@@ -12928,7 +12990,7 @@ msgstr "%1$s(e)ko beka edo doikuntza · «%2$s» ekitaldia"
 msgid "Scholarships and adjustments are made by Treasury."
 msgstr "Bekak eta doikuntzak Diruzaintzak egiten ditu."
 
-#: templates/eventos/asistente.php:82 templates/eventos/formulario.php:58 templates/eventos/resumen.php:53 templates/usuarios/fila.php:85
+#: templates/eventos/asistente.php:85 templates/eventos/formulario.php:55 templates/eventos/resumen.php:53 templates/usuarios/fila.php:85
 msgid "Scope"
 msgstr "Eremua"
 
@@ -13006,7 +13068,7 @@ msgstr "Scouterrek gastu baten itzulketa eskatzen dute (egiaztagiriarekin eta, h
 msgid "Scouters link renewed: the previous one no longer works."
 msgstr "Scouterrentzako esteka berritu da: aurrekoak ez du jada balio."
 
-#: src/Frontend/Views/EventosView.php:592
+#: src/Frontend/Views/EventosView.php:583
 msgid "Scouters will be notified by email."
 msgstr "Scouterrei emailez abisatuko zaie."
 
@@ -13107,7 +13169,7 @@ msgstr "Idazkaritza, Koordinazioa, Diruzaintza eta Intendentzia scouter baten ar
 msgid "Section"
 msgstr "Atala"
 
-#: templates/eventos/presupuesto.php:120
+#: templates/eventos/presupuesto.php:134
 msgid "Section (if only one)"
 msgstr "Atala (bakarrarena bada)"
 
@@ -13146,6 +13208,10 @@ msgstr "Atala: bere adinari dagokiona."
 #: templates/eventos/agenda.php:71 templates/eventos/agenda.php:85 templates/informes/editor.php:82
 msgid "Sections"
 msgstr "Atalak"
+
+#: templates/eventos/presupuesto.php:245
+msgid "Sections that do not pay"
+msgstr ""
 
 #: templates/tesoreria/cuotas.php:53
 msgid "Sections that pay a fee"
@@ -13193,7 +13259,7 @@ msgstr "Ikusi egutegia"
 
 #: templates/tesoreria/familias.php:87
 msgid "See the family's transactions"
-msgstr "Ikusi familiaren mugimenduak"
+msgstr ""
 
 #: templates/comun/ayuda.php:38
 msgid "See the full manual"
@@ -13225,7 +13291,7 @@ msgstr "Dendaren kudeaketa ikusi"
 
 #: templates/mi-seccion/ficha.php:55
 msgid "See the three stages and add a note"
-msgstr "Hiru etapak ikusi eta ohar bat gehitu"
+msgstr ""
 
 #: src/Idiomas/Guardados.php:319
 msgid "See the waiting list and get in touch"
@@ -13292,16 +13358,16 @@ msgstr "Alta bidali"
 msgid "Send to Treasury"
 msgstr "Bidali Diruzaintzara"
 
-#: templates/eventos/presupuesto.php:211
-msgid "Send to Treasury for validation"
-msgstr "Bidali Diruzaintzara balioztatzeko"
+#: templates/eventos/presupuesto.php:255
+msgid "Send to Treasury for its go-ahead"
+msgstr ""
 
 #: templates/eventos/menu.php:314
 msgid "Send to the kitchen team"
 msgstr "Bidali sukaldeko taldeari"
 
 #. translators: %d: number
-#: src/Frontend/Views/EventosView.php:854
+#: src/Frontend/Views/EventosView.php:845
 #, php-format
 msgid "Sending to %d failed."
 msgid_plural "Sending to %d failed."
@@ -13329,10 +13395,10 @@ msgid "Sent to Treasury"
 msgstr "Diruzaintzara bidalita"
 
 #. translators: %s: text
-#: templates/eventos/presupuesto.php:52
+#: templates/eventos/presupuesto.php:66
 #, php-format
-msgid "Sent to Treasury on %s: it still needs to be validated."
-msgstr "Diruzaintzara bidalia (%s): balioztatzea falta da."
+msgid "Sent to Treasury on %s: it still needs its go-ahead."
+msgstr ""
 
 #: src/Sepa/Remesas.php:55
 msgid "Sent to the bank"
@@ -13572,17 +13638,17 @@ msgstr ""
 msgid "Sign-in username saved: %1$s. Accounts already using it: %2$d. Accounts that would change: %3$d. Accounts that cannot be changed: %4$d."
 msgstr ""
 
-#: src/Frontend/Views/AccesoView.php:130
+#: src/Frontend/Views/AccesoView.php:177
 msgid "Sign-in was not possible."
 msgstr "Ezin izan da saioa hasi."
 
-#: templates/eventos/asistente.php:41 templates/eventos/formulario.php:136 templates/eventos/inscripciones.php:90 templates/tesoreria/cuotas.php:66
+#: templates/eventos/asistente.php:41 templates/eventos/formulario.php:133 templates/eventos/inscripciones.php:90 templates/tesoreria/cuotas.php:66
 msgid "Sign-up"
 msgstr "Izen-ematea"
 
-#: templates/eventos/asistente.php:208
+#: templates/eventos/asistente.php:211
 msgid "Sign-up and message for families"
-msgstr "Izen-ematea eta familientzako mezua"
+msgstr ""
 
 #: templates/eventos/mis-eventos.php:73
 msgid "Sign-up closed"
@@ -13604,7 +13670,7 @@ msgstr "Izen-ematea itxaron-zerrendatik ezabatu da."
 msgid "Sign-up for this event is not open."
 msgstr "Ekitaldi honetako izen-ematea ez dago irekita."
 
-#: templates/eventos/asistente.php:216 templates/eventos/formulario.php:144
+#: templates/eventos/asistente.php:219 templates/eventos/formulario.php:141
 msgid "Sign-up from (optional)"
 msgstr "Izen-ematea noiztik (aukerakoa)"
 
@@ -13642,7 +13708,7 @@ msgstr "Izen-ematea %s(e)an irekitzen da"
 msgid "Sign-up opens on %s."
 msgstr "Izen-ematea %s(e)an irekitzen da."
 
-#: src/Frontend/Views/EventosView.php:630
+#: src/Frontend/Views/EventosView.php:621
 msgid "Sign-up saved."
 msgstr "Izen-ematea gordeta."
 
@@ -13650,11 +13716,11 @@ msgstr "Izen-ematea gordeta."
 msgid "Sign-up saved. See below what is missing to confirm it."
 msgstr "Izen-ematea gordeta. Begiratu behean zer falta den berresteko."
 
-#: templates/eventos/asistente.php:217 templates/eventos/formulario.php:145
+#: templates/eventos/asistente.php:220 templates/eventos/formulario.php:142
 msgid "Sign-up until (optional)"
 msgstr "Izen-ematea noiz arte (aukerakoa)"
 
-#: src/Frontend/Views/EventosView.php:641 src/Frontend/Views/MisEventosView.php:136
+#: src/Frontend/Views/EventosView.php:632 src/Frontend/Views/MisEventosView.php:136
 msgid "Sign-up withdrawn."
 msgstr "Izen-emateari baja emanda."
 
@@ -13678,7 +13744,7 @@ msgstr "Sinatua:"
 msgid "Signed on the website"
 msgstr "Webean sinatua"
 
-#: src/Frontend/Views/EventosView.php:192 templates/lista-espera/detalle.php:91
+#: src/Frontend/Views/EventosView.php:191 templates/lista-espera/detalle.php:91
 msgid "Signed up"
 msgstr "Izena eman zuen"
 
@@ -13796,11 +13862,15 @@ msgstr "Txipiroia eta olagarroa"
 
 #: templates/mi-seccion/listado.php:48 templates/mi-seccion/listado.php:66 templates/mi-seccion/listado.php:78
 msgid "Stage"
-msgstr "Etapa"
+msgstr ""
 
 #: src/Tesoreria/Banco/Norma43.php:42
 msgid "Stamps · brokerage · policy"
 msgstr "Zigiluak · artekaritza · poliza"
+
+#: templates/acceso/elegir-cuenta.php:49
+msgid "Start again"
+msgstr "Hasi berriro"
 
 #: templates/eventos/config.php:288
 msgid "Start with a copy of the Camp tasks"
@@ -13824,7 +13894,7 @@ msgstr ""
 msgid "Starting… %s to correct."
 msgstr "Hasten… %s zuzentzeko."
 
-#: templates/eventos/asistente.php:116 templates/eventos/formulario.php:86
+#: templates/eventos/asistente.php:119 templates/eventos/formulario.php:83
 msgid "Starts"
 msgstr "Hasiera"
 
@@ -13836,7 +13906,7 @@ msgstr "Adierazi gutxienez hezkuntza-atal bat Scouter rolerako."
 msgid "State how it was paid (cash, deposit, Bizum or card terminal), the date (not later than today) and the amount."
 msgstr "Adierazi nola ordaindu den (eskudirua, sarrera, Bizum edo datafonoa), data (gaurkoa baino geroagokoa ez) eta zenbatekoa."
 
-#: src/Eventos/Presupuesto.php:69
+#: src/Eventos/Presupuesto.php:79
 msgid "State how many participants are expected in each invited section: the price is calculated from them."
 msgstr "Adierazi deitutako atal bakoitzean zenbat parte-hartzaile espero diren: prezioa haiekin kalkulatzen da."
 
@@ -13856,7 +13926,7 @@ msgstr "Adierazi eskaera-zenbakia kontzeptuan. Diruzaintzak ordainketa jasotzen 
 msgid "State the payment date (not later than today)."
 msgstr "Adierazi ordainketaren data (gaurkoa baino geroagokoa ez)."
 
-#: src/Eventos/Servicio.php:650 src/Frontend/Views/TiendaGestionView.php:478
+#: src/Eventos/Servicio.php:711 src/Frontend/Views/TiendaGestionView.php:478
 msgid "State the reason for the cancellation."
 msgstr "Adierazi ezeztatzearen arrazoia."
 
@@ -13876,7 +13946,7 @@ msgstr "Adierazi ukatzeko arrazoia: eskatu duenak ikusiko du."
 msgid "State the reason for the withdrawal."
 msgstr "Adierazi bajaren arrazoia."
 
-#: src/Eventos/Servicio.php:229
+#: src/Eventos/Servicio.php:238
 msgid "State the start and end date and time."
 msgstr "Adierazi hasierako eta amaierako data eta ordua."
 
@@ -13986,9 +14056,17 @@ msgstr "Harpidetzak · dibidendu pasiboak · trukeak"
 msgid "Suggested for this family"
 msgstr "Familia honetarako iradokiak"
 
+#: templates/eventos/presupuesto.php:204 templates/eventos/presupuesto.php:220
+msgid "Suggested price"
+msgstr ""
+
 #: templates/tesoreria/banco.php:237 templates/tesoreria/familia-banco.php:87
 msgid "Suggested:"
 msgstr "Iradokia:"
+
+#: src/Eventos/Normativa.php:321 templates/eventos/equipo.php:131
+msgid "Suggestion: "
+msgstr ""
 
 #: templates/tesoreria/familias.php:35
 msgid "Suggestions ("
@@ -14062,9 +14140,9 @@ msgstr "Taula"
 msgid "Take off the list"
 msgstr "Atera zerrendatik"
 
-#: templates/eventos/asistente.php:198
+#: templates/eventos/asistente.php:201
 msgid "Take out separate insurance (international activity)."
-msgstr "Aparteko asegurua kontratatu (nazioarteko jarduera)."
+msgstr ""
 
 #: src/Informes/Catalogo.php:114
 msgid "Takes medication"
@@ -14082,7 +14160,7 @@ msgstr "Hitz egin zure taldeko Idazkaritzarekin, bazkidearen izena eta berarekin
 msgid "Task"
 msgstr "Zeregina"
 
-#: src/Frontend/Views/EventosView.php:879
+#: src/Frontend/Views/EventosView.php:870
 msgid "Task added."
 msgstr "Zeregina gehitu da."
 
@@ -14090,15 +14168,15 @@ msgstr "Zeregina gehitu da."
 msgid "Task calendar"
 msgstr "Zereginen egutegia"
 
-#: src/Frontend/Views/EventosView.php:868
+#: src/Frontend/Views/EventosView.php:859
 msgid "Task done."
 msgstr "Zeregina eginda."
 
-#: src/Frontend/Views/EventosView.php:885
+#: src/Frontend/Views/EventosView.php:876
 msgid "Task removed."
 msgstr "Zeregina kendu da."
 
-#: src/Frontend/Views/EventosView.php:874
+#: src/Frontend/Views/EventosView.php:865
 msgid "Task saved."
 msgstr "Zeregina gorde da."
 
@@ -14122,11 +14200,11 @@ msgstr "Izen fiskala"
 msgid "Tax name (optional)"
 msgstr "Izen fiskala (aukerakoa)"
 
-#: src/Frontend/Views/EventosView.php:51 templates/eventos/calendario.php:55 templates/eventos/presupuesto.php:203
+#: src/Frontend/Views/EventosView.php:51 templates/eventos/calendario.php:55 templates/eventos/presupuesto.php:247
 msgid "Team"
 msgstr "Taldea"
 
-#: src/Frontend/Views/EventosView.php:542
+#: src/Frontend/Views/EventosView.php:533
 msgid "Team updated."
 msgstr "Taldea eguneratuta."
 
@@ -14436,7 +14514,7 @@ msgstr "Plaza hori ez dago eskuragarri."
 msgid "That product is not in the group's shop."
 msgstr "Produktu hori ez dago taldearen dendan."
 
-#: src/Frontend/Views/EventosView.php:911
+#: src/Frontend/Views/EventosView.php:902
 msgid "That receipt does not exist or you cannot see it."
 msgstr "Egiaztagiri hori ez dago edo ezin duzu ikusi."
 
@@ -14484,7 +14562,7 @@ msgstr "Eskaera hori ez dago jada zain."
 msgid "That role already had the default permissions."
 msgstr "Rol horrek jatorrizko baimenak zituen jada."
 
-#: src/Eventos/Servicio.php:515
+#: src/Eventos/Servicio.php:557
 msgid "That section is not invited."
 msgstr "Atal horri ez zaio deitu."
 
@@ -14496,7 +14574,7 @@ msgstr "Erosketa-zerrenda hori ez da zure taldekoa."
 msgid "That sign-up is no longer on the waiting list."
 msgstr "Izen-emate hori ez dago jada itxaron-zerrendan."
 
-#: src/Frontend/Views/EventosView.php:867 src/Frontend/Views/EventosView.php:873 src/Frontend/Views/EventosView.php:884
+#: src/Frontend/Views/EventosView.php:858 src/Frontend/Views/EventosView.php:864 src/Frontend/Views/EventosView.php:875
 msgid "That task does not exist."
 msgstr "Zeregin hori ez dago."
 
@@ -14504,7 +14582,7 @@ msgstr "Zeregin hori ez dago."
 msgid "That template cannot be deleted."
 msgstr "Txantiloi hori ezin da ezabatu."
 
-#: src/Eventos/Tareas.php:204
+#: src/Eventos/Tareas.php:208
 msgid "That template does not exist or has no tasks."
 msgstr "Txantiloi hori ez dago edo ez du zereginik."
 
@@ -14576,7 +14654,7 @@ msgstr "14 alergenoak"
 msgid "The 17 federated organisations of Scouts de España (scout.es). Its name appears in the texts: on the sign-in screen (\"Private area of the groups of …\") and in the federation cost."
 msgstr ""
 
-#: templates/acceso/formulario.php:67
+#: templates/acceso/elegir-cuenta.php:44 templates/acceso/formulario.php:67
 msgid "The 6 digits from your authenticator app or, if you have lost your phone, one of your recovery codes."
 msgstr "Zure autentifikazio-aplikazioaren 6 zifrak edo, mugikorra galdu baduzu, zure berreskuratze-kodeetako bat."
 
@@ -14602,7 +14680,7 @@ msgstr "Bizumeko telefonoa ez dirudi baliozkoa; ez da gorde."
 msgid "The CRM URL is missing."
 msgstr "CRMaren URLa falta da."
 
-#: src/Auth/Ambito.php:80
+#: src/Auth/Ambito.php:93
 msgid "The CRM could not be queried. Try again in a few minutes."
 msgstr "Ezin izan da CRMa kontsultatu. Saiatu berriro minutu batzuk barru."
 
@@ -14670,11 +14748,11 @@ msgstr "CRMak ez du erregistroaren sorrera berretsi."
 msgid "The CRM has not created the record: "
 msgstr "CRMak ez du erregistroa sortu: "
 
-#: src/Crm/Altas.php:691
+#: src/Crm/Altas.php:702
 msgid "The CRM has not left the new record in the group."
 msgstr "CRMak ez du fitxa berria taldean utzi."
 
-#: src/Crm/Altas.php:716
+#: src/Crm/Altas.php:727
 msgid "The CRM has not linked the membership to the person."
 msgstr "CRMak ez du kidetza pertsonarekin lotu."
 
@@ -14837,13 +14915,13 @@ msgid "The accounts could not be reopened. Try again."
 msgstr "Ezin izan dira kontuak berriro ireki. Saiatu berriro."
 
 #. translators: %s: text
-#: src/Frontend/Views/EventosView.php:728
+#: src/Frontend/Views/EventosView.php:719
 #, php-format
 msgid "The accounts of event %s are closed: the balance becomes the final report."
 msgstr "%s ekitaldiaren kontuak itxita: balantzea azken txosten gisa geratzen da."
 
 #. translators: %s: text
-#: src/Frontend/Views/EventosView.php:733
+#: src/Frontend/Views/EventosView.php:724
 #, php-format
 msgid "The accounts of event %s are reopened: they can be changed now. When everything is done, close them again."
 msgstr "%s ekitaldiaren kontuak berriro irekita: aldatu daitezke jada. Dena prest dagoenean, itxi berriro."
@@ -14856,7 +14934,7 @@ msgstr "Ezin izan da ekintza osatu. Birkargatu orria nola geratu den ikusteko."
 msgid "The activation is sent to the email address on your group record. This one is only used if your record has no email: the coordination team will then review your registration."
 msgstr "Aktibazioa taldeko zure fitxako emailera bidaltzen da. Hau zure fitxak emailik ez badu soilik erabiltzen da: orduan koordinazio-taldeak zure alta berrikusiko du."
 
-#: src/Eventos/Normativa.php:234
+#: src/Eventos/Normativa.php:258
 msgid "The activity director is missing."
 msgstr "Jardueraren zuzendaria falta da."
 
@@ -14970,21 +15048,17 @@ msgstr "Aurrekontua dagoeneko zirriborroa da."
 msgid "The budget is already approved."
 msgstr "Aurrekontua dagoeneko onartuta dago."
 
-#: src/Eventos/Servicio.php:291
-msgid "The budget is already validated and the price is fixed: to change the sections, the expected participants or whether it has a cost, ask Treasury to reopen the budget."
-msgstr "Aurrekontua balioztatuta dago eta prezioa finkoa da: atalak, aurreikusitako parte-hartzaileak edo kostua duen aldatzeko, eskatu Diruzaintzari aurrekontua berriro irekitzeko."
-
-#: templates/eventos/formulario.php:70
+#: templates/eventos/formulario.php:67
 msgid "The budget is validated: the sections and expected participants cannot be changed (Treasury can reopen it)."
 msgstr "Aurrekontua balioztatuta dago: atalak eta aurreikusitako parte-hartzaileak ezin dira aldatu (Diruzaintzak berriro ireki dezake)."
 
-#: src/Eventos/Normativa.php:278
-msgid "The budget still has to be prepared and Treasury asked to validate it."
-msgstr "Aurrekontua prestatu eta Diruzaintzari balioztatzeko eskatu behar da."
+#: src/Eventos/Normativa.php:305
+msgid "The budget still has to be prepared and sent to Treasury for its go-ahead."
+msgstr ""
 
-#: templates/eventos/asistente.php:245
+#: templates/eventos/asistente.php:248
 msgid "The budget, if families pay, and Treasury's validation"
-msgstr "Aurrekontua, familiek ordaintzen badute, eta Diruzaintzaren balidazioa"
+msgstr ""
 
 #: src/Tienda/ConciliacionBanco.php:208
 msgid "The card payments no longer match that deposit. Check the list."
@@ -15036,7 +15110,7 @@ msgstr "Kobrantza-data %1$s baino lehenago ezin da izan (gaurtik %2$d lanegun): 
 msgid "The collection date must be a working day (Monday to Friday)."
 msgstr "Kobrantza-data lanegun bat izan behar da (astelehenetik ostiralera)."
 
-#: src/Frontend/Views/EventosView.php:848
+#: src/Frontend/Views/EventosView.php:839
 msgid "The confirmation has been removed: the notice is unresolved again."
 msgstr "Berrespena kendu da: oharra berriro ebatzi gabe dago."
 
@@ -15106,9 +15180,9 @@ msgstr "Remesa honetako karguen datuak ez dira jada gordetzen (kobrantza-datatik
 msgid "The data of this sign-up is no longer kept (it was deleted or they became a member): the text of the email cannot be rebuilt."
 msgstr "Izen-emate honen datuak ez dira gehiago gordetzen (ezabatu egin ziren edo bazkide bihurtu zen): ezin da emailaren testua berreraiki."
 
-#: templates/eventos/asistente.php:102
+#: templates/eventos/asistente.php:105
 msgid "The data, place and texts are copied and the dates move one year on. Sign-ups, payments and the team are not copied."
-msgstr "Datuak, lekua eta testuak kopiatzen dira, eta datak urtebete geroagora pasatzen dira. Izen-emateak, ordainketak eta taldea ez dira kopiatzen."
+msgstr ""
 
 #: templates/tesoreria/banco-previa.php:97
 msgid "The date and amount (or the debit and credit) are required. The choice is remembered for the next files with the same columns."
@@ -15124,23 +15198,23 @@ msgstr "Data ezin da kutxaren hasierako saldoarena (%s) baino lehenagokoa izan."
 msgid "The date cannot be later than today."
 msgstr "Data ezin da gaurkoa baino geroagokoa izan."
 
-#: src/Eventos/Tareas.php:289 src/Presupuestos/Servicio.php:221
+#: src/Eventos/Tareas.php:293 src/Presupuestos/Servicio.php:221
 msgid "The date is not valid."
 msgstr "Data ez da baliozkoa."
 
 #. translators: %d: number
-#: src/Frontend/Views/EventosView.php:530
+#: src/Frontend/Views/EventosView.php:521
 #, php-format
 msgid "The date of %d calendar task has changed."
 msgid_plural "The dates of %d calendar tasks have changed."
 msgstr[0] "Egutegiko %d zereginen data aldatu da."
 msgstr[1] "Egutegiko %d zereginen datak aldatu dira."
 
-#: src/Crm/Altas.php:580
+#: src/Crm/Altas.php:581
 msgid "The date of birth is missing."
 msgstr "Jaiotze-data falta da."
 
-#: src/Crm/Altas.php:589 src/ListaEspera/Formulario.php:48
+#: src/Crm/Altas.php:590 src/ListaEspera/Formulario.php:48
 msgid "The date of birth is not valid."
 msgstr "Jaiotze-data ez da baliozkoa."
 
@@ -15171,7 +15245,7 @@ msgid "The dish is replaced"
 msgstr "Platera ordezten da"
 
 #. translators: %d: number
-#: src/Crm/Altas.php:603 src/ListaEspera/Formulario.php:61 templates/personas/alta.php:89
+#: src/Crm/Altas.php:604 src/ListaEspera/Formulario.php:61 templates/personas/alta.php:89
 #, php-format
 msgid "The document is required from age %d."
 msgstr "Dokumentua derrigorrezkoa da %d urtetik aurrera."
@@ -15230,11 +15304,11 @@ msgstr "Ekitaldiak material gehiegi darama jada."
 msgid "The event and its accounts can be changed again. Who picks up and the notes, which were deleted on closing, do not come back."
 msgstr "Ekitaldia eta haren kontuak berriro aldatu ahal izango dira. Nork jasotzen duen eta oharrak, ixtean ezabatu zirenak, ez dira itzultzen."
 
-#: src/Eventos/Servicio.php:231
+#: src/Eventos/Servicio.php:240
 msgid "The event cannot end before it starts."
 msgstr "Ekitaldia ezin da hasi baino lehen amaitu."
 
-#: src/Eventos/Servicio.php:340
+#: src/Eventos/Servicio.php:350
 msgid "The event could not be saved."
 msgstr "Ezin izan da ekitaldia gorde."
 
@@ -15242,19 +15316,23 @@ msgstr "Ezin izan da ekitaldia gorde."
 msgid "The event has not finished yet."
 msgstr "Ekitaldia ez da oraindik amaitu."
 
+#: src/Eventos/Servicio.php:301
+msgid "The event is already published and the price is fixed: the sections, the expected participants and whether it has a cost can no longer be changed."
+msgstr ""
+
 #: templates/eventos/agenda.php:32
 msgid "The events of your sections and those whose team you are on."
 msgstr "Zure ataletako ekitaldiak eta zu taldean zauden horiek."
 
-#: templates/eventos/asistente.php:138
+#: templates/eventos/asistente.php:141
 msgid "The expected participants give the price and the monitors you need. If more sign up later, the price does not change. Places are the maximum (0 = no limit)."
-msgstr "Aurreikusitako parte-hartzaileek prezioa eta behar dituzuen begiraleak ematen dituzte. Gero gehiagok izena ematen badute, prezioa ez da aldatzen. Plazak gehienekoa dira (0 = mugarik ez)."
+msgstr ""
 
-#: templates/eventos/presupuesto.php:161
+#: templates/eventos/presupuesto.php:175
 msgid "The expected participants of each section are changed in \"Edit the details\"."
 msgstr "Atal bakoitzeko aurreikusitako parte-hartzaileak «Editatu datuak» atalean aldatzen dira."
 
-#: templates/eventos/formulario.php:103
+#: templates/eventos/formulario.php:100
 msgid "The expected participants of each section are used to calculate the price and the monitor ratio. Places are the maximum (0 = no limit)."
 msgstr "Atal bakoitzeko aurreikusitako parte-hartzaileek prezioa eta begiraleen ratioa kalkulatzeko balio dute. Plazak gehienekoa dira (0 = mugarik gabe)."
 
@@ -15403,7 +15481,7 @@ msgstr "Fitxategia handiegia da."
 msgid "The file must be a CSV (.csv). From Excel: \"Save as\" → \"CSV (semicolon delimited)\"."
 msgstr "Fitxategiak CSV bat (.csv) izan behar du. Exceletik: «Gorde honela» → «CSV (puntu eta komaz mugatua)»."
 
-#: src/Crm/Altas.php:578 src/ListaEspera/Formulario.php:40
+#: src/Crm/Altas.php:579 src/ListaEspera/Formulario.php:40
 msgid "The first name is missing."
 msgstr "Izena falta da."
 
@@ -15435,29 +15513,33 @@ msgstr "Lehen errenkadan, zutabeen izenak: %s. Edozein ordenatan; erabiltzen ez 
 msgid "The first user is missing: the record with that ID number does not exist or is not active in the group's CRM. Correct it in the CRM and try again; meanwhile, nobody in the group can sign in."
 msgstr ""
 
-#: src/Frontend/Views/AccesoView.php:62 src/Frontend/Views/ActivarCuentaView.php:54 src/Frontend/Views/AltaGrupoView.php:113 src/Frontend/Views/AltaScoutersView.php:69
+#: src/Frontend/Views/AccesoView.php:91 src/Frontend/Views/AccesoView.php:270 src/Frontend/Views/ActivarCuentaView.php:54 src/Frontend/Views/AltaGrupoView.php:113
 msgid "The form session has expired. Try again."
 msgstr "Formularioaren saioa iraungi da. Saiatu berriro."
 
-#: templates/eventos/asistente.php:246
+#: templates/eventos/asistente.php:249
 msgid "The full event team"
-msgstr "Ekitaldiaren talde osoa"
+msgstr ""
 
 #: src/Presupuestos/Servicio.php:185
 msgid "The fundraising project is not removed: set its target to 0 if you don't need it."
 msgstr "Dirubilketa-proiektua ez da kentzen: jarri bere helburua 0an behar ez baduzu."
 
-#: src/Crm/Altas.php:581
+#: src/Crm/Altas.php:582
 msgid "The gender is missing."
 msgstr "Generoa falta da."
 
-#: src/Crm/Altas.php:593
+#: src/Crm/Altas.php:594
 msgid "The gender is not valid."
 msgstr "Generoa ez da baliozkoa."
 
 #: src/Frontend/Views/LibroMayorView.php:26
 msgid "The general ledger is seen by Treasury, the Secretary's office and Coordination, with the cash module on."
 msgstr "Liburu nagusia Diruzaintzak, Idazkaritzak eta Koordinazioak ikusten dute, kutxa modulua aktibo dagoenean."
+
+#: src/Eventos/Servicio.php:664
+msgid "The go-ahead can no longer be withdrawn from this budget."
+msgstr ""
 
 #: templates/alta-grupo/formulario.php:38
 msgid "The group"
@@ -15473,7 +15555,7 @@ msgstr "Taldeak bere gain hartzen du."
 
 #: src/Tienda/Servicio.php:202
 msgid "The group does not accept this payment method."
-msgstr "Taldeak ez du ordainketa modu hau onartzen."
+msgstr ""
 
 #. translators: %d: number
 #: templates/area/inicio.php:75
@@ -15605,7 +15687,7 @@ msgstr "Bankutik inportatutako eta oraindik bateratu gabeko diru-sarrerak. Auker
 
 #: templates/menus/ingrediente-modal.php:15
 msgid "The ingredient could not be saved. Try again."
-msgstr "Ezin izan da osagaia gorde. Saiatu berriro."
+msgstr ""
 
 #: src/Menus/AvisosTable.php:23
 msgid "The ingredient is changed"
@@ -15628,7 +15710,7 @@ msgid "The invitation will arrive here, and with it you will be able to sign in.
 msgstr "Hemen iritsiko zaizu gonbidapena, eta horrekin sartu ahalko zara. Taldeak beste bat badu, eskaera onartzean fitxan eguneratuko da."
 
 #. translators: 1: text, 2: text
-#: src/Eventos/Presupuesto.php:81 src/Eventos/Presupuesto.php:90
+#: src/Eventos/Presupuesto.php:91 src/Eventos/Presupuesto.php:100
 #, php-format
 msgid "The item \"%1$s\" is only for %2$s, but there are no expected participants from that section."
 msgstr "«%1$s» partida %2$s atalarena da soilik, baina ez dago atal horretako parte-hartzailerik aurreikusita."
@@ -15725,7 +15807,7 @@ msgstr "Posta-zerbitzariak ez du emaila onartu."
 msgid "The manual's address is not valid: enter a full web address (https://…)."
 msgstr "Eskuliburuaren helbidea ez da baliozkoa: idatzi web-helbide osoa (https://…)."
 
-#: src/Eventos/Servicio.php:236
+#: src/Eventos/Servicio.php:245
 msgid "The map link must be a web address (https://…)."
 msgstr "Maparako estekak web helbide bat izan behar du (https://…)."
 
@@ -15751,9 +15833,9 @@ msgstr "Bazkidearena. Adingabea bada eta NANik ez badu, utzi hutsik."
 msgid "The menu already has too many dishes."
 msgstr "Menuak plater gehiegi ditu jada."
 
-#: templates/eventos/asistente.php:247
+#: templates/eventos/asistente.php:250
 msgid "The menu and the shopping list"
-msgstr "Menua eta erosketa-zerrenda"
+msgstr ""
 
 #: templates/eventos/menu.php:364
 msgid "The menu has no cost yet. Record the cost of the ingredients in the recipe book and add dishes."
@@ -15763,7 +15845,7 @@ msgstr "Menuak ez du kostua oraindik. Idatzi osagaien kostua errezetategian eta 
 msgid "The menu has no cost yet: record the cost of the ingredients and add dishes."
 msgstr "Menuak ez du kostua oraindik: idatzi osagaien kostua eta gehitu platerak."
 
-#: src/Eventos/Servicio.php:254
+#: src/Eventos/Servicio.php:263
 msgid "The minimum age cannot be greater than the maximum."
 msgstr "Gutxieneko adina ezin da gehienekoa baino handiagoa izan."
 
@@ -15771,15 +15853,15 @@ msgstr "Gutxieneko adina ezin da gehienekoa baino handiagoa izan."
 msgid "The names could not be read from the CRM: only the member numbers are shown."
 msgstr "Ezin izan dira CRMko izenak irakurri: bazkide-zenbakiak soilik erakusten dira."
 
-#: src/Frontend/Views/EventosView.php:612
+#: src/Frontend/Views/EventosView.php:603
 msgid "The notice could not be sent: that person has no active account or no email address (see the email log)."
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:608
+#: src/Frontend/Views/EventosView.php:599
 msgid "The notice will be sent to the event team in a few moments."
 msgstr ""
 
-#: src/Frontend/Views/EventosView.php:608
+#: src/Frontend/Views/EventosView.php:599
 msgid "The notice will be sent to the families in a few moments."
 msgstr ""
 
@@ -15899,7 +15981,7 @@ msgstr "Familian erregistratu zen ordainketa ezeztatuko da."
 msgid "The payments filter is not applied because your role does not have access to Treasury."
 msgstr "Ordainketen iragazkia ez da aplikatzen, zure rolak ez duelako Diruzaintzarako sarbiderik."
 
-#: src/Eventos/Tareas.php:286
+#: src/Eventos/Tareas.php:290
 msgid "The person in charge must be on the event team."
 msgstr "Arduradunak ekitaldiaren taldekoa izan behar du."
 
@@ -15923,13 +16005,13 @@ msgstr "Posta-kodeak 5 zifra izan behar ditu."
 msgid "The preview has expired. Upload the file again."
 msgstr "Aurrebista iraungi da. Igo berriro fitxategia."
 
-#: templates/eventos/asistente.php:178
+#: templates/eventos/asistente.php:181
 msgid "The price comes from the budget, which Treasury validates before publishing."
-msgstr "Prezioa aurrekontutik ateratzen da, eta Diruzaintzak balidatzen du argitaratu aurretik."
+msgstr ""
 
-#: templates/eventos/presupuesto.php:205
-msgid "The price is calculated with the expected participants and, once validated, does not change: any surplus or shortfall is borne by the group."
-msgstr "Prezioa aurreikusitako parte-hartzaileekin kalkulatzen da eta, behin balioztatuta, ez da aldatzen: soberan edo falta dena taldeak hartzen du bere gain."
+#: templates/eventos/presupuesto.php:249
+msgid "The price is calculated with the expected participants and is fixed when the event is published: any surplus or shortfall is borne by the group."
+msgstr ""
 
 #: src/Inventario/MaterialesTable.php:105 src/Tienda/ProductosTable.php:104
 msgid "The price is not valid (for example: 12,50)."
@@ -15941,6 +16023,20 @@ msgstr "Prezioa ez da baliozkoa (adibidez: 12,50)."
 msgid "The price of \"%s\" is not valid (for example: 12,50)."
 msgstr "«%s» materialaren prezioa ez da baliozkoa (adibidez: 12,50)."
 
+#. translators: 1: section, 2: amount, 3: amount
+#: src/Eventos/Presupuesto.php:143
+#, php-format
+msgid "The price of %1$s (%2$s) cannot be lower than its cost (%3$s)."
+msgstr ""
+
+#: templates/eventos/presupuesto.php:233
+msgid "The price of each section cannot be lower than its cost; anything above the cost is the emergency fund."
+msgstr ""
+
+#: src/Eventos/Servicio.php:634
+msgid "The price of each section must be a number."
+msgstr ""
+
 #: src/Idiomas/Guardados.php:283
 msgid "The price of one or two buses can be recorded."
 msgstr "Autobus baten edo biren prezioa idatz daiteke."
@@ -15951,7 +16047,7 @@ msgstr "Prezioa, hamartarretarako koma edo puntuarekin (12,50). Erosketa-urtea, 
 
 #: templates/mi-seccion/listado.php:31
 msgid "The programme asks for a review at least every quarter. The stage describes where each person is; it is not a prize and people are not compared."
-msgstr "Programak hiruhilekoan behin gutxienez berrikustea eskatzen du. Etapak pertsona bakoitza non dagoen deskribatzen du; ez da saria eta pertsonak ez dira alderatzen."
+msgstr ""
 
 #. translators: %d: number
 #: templates/fichas/cambios.php:179
@@ -15979,7 +16075,7 @@ msgstr "Kantitatea zero baino handiagoa den zenbaki oso bat izan behar da."
 msgid "The quantity to buy of \"%s\" is not valid."
 msgstr "«%s» materialetik erosteko kopurua ez da baliozkoa."
 
-#: src/Frontend/Views/EventosView.php:915 src/Frontend/Views/ReintegrosView.php:117
+#: src/Frontend/Views/EventosView.php:906 src/Frontend/Views/ReintegrosView.php:117
 msgid "The receipt could not be read."
 msgstr "Ezin izan da egiaztagiria irakurri."
 
@@ -16079,11 +16175,15 @@ msgstr "«%1$s» serie-zenbakia fitxategiaren %2$d. errenkadan dago jada."
 msgid "The sheet could not be prepared: the menu, the attendees or the connection to the CRM is missing."
 msgstr "Ezin izan da orria prestatu: menua, bertaratuak edo CRMrako konexioa falta dira."
 
+#: src/Frontend/Views/AccesoView.php:277
+msgid "The sign-in has expired. Enter your details again."
+msgstr "Sarbidea iraungi da. Idatzi berriro zure datuak."
+
 #: src/Eventos/Inscripciones.php:744 src/Eventos/Inscripciones.php:761
 msgid "The sign-up could not be saved."
 msgstr "Ezin izan da izen-ematea gorde."
 
-#: src/Eventos/Servicio.php:263
+#: src/Eventos/Servicio.php:272
 msgid "The sign-up deadline cannot end before it starts."
 msgstr "Izena emateko epea ezin da hasi baino lehen amaitu."
 
@@ -16091,7 +16191,7 @@ msgstr "Izena emateko epea ezin da hasi baino lehen amaitu."
 msgid "The sign-up deadline has closed: to withdraw, talk to the event team."
 msgstr "Izena emateko epea itxita dago: baja emateko, hitz egin ekitaldiaren taldearekin."
 
-#: src/Eventos/Servicio.php:265
+#: src/Eventos/Servicio.php:274
 msgid "The sign-up deadline must end before the event starts."
 msgstr "Izena emateko epeak ekitaldia hasi baino lehen amaitu behar du."
 
@@ -16103,11 +16203,11 @@ msgstr "Izen-emateak ez du baliozko emailik."
 #: templates/lista-espera/publica.php:77
 #, php-format
 msgid "The sign-up is already on the list. We have sent you an email at %s with the sign-up details; you do not need to do anything else."
-msgstr "Izen-ematea dagoeneko zerrendan dago. %s helbidera email bat bidali dizugu izen-ematearen datuekin; ez duzu ezer gehiago egin beharrik."
+msgstr ""
 
 #: templates/lista-espera/publica.php:77
 msgid "The sign-up is already on the list. We have sent you an email with the sign-up details; you do not need to do anything else."
-msgstr "Izen-ematea dagoeneko zerrendan dago. Email bat bidali dizugu izen-ematearen datuekin; ez duzu ezer gehiago egin beharrik."
+msgstr ""
 
 #. translators: 1: text, 2: text
 #: templates/email/evento.php:54
@@ -16141,15 +16241,15 @@ msgstr "«%s» produktuaren izakinak inbentario orokorrean aldatzen dira, ez hem
 msgid "The stored credential cannot be decrypted. Ask the group to register again with a new invitation."
 msgstr "Ezin da gordetako kredentziala deszifratu. Eskatu taldeari alta errepikatzeko gonbidapen berri batekin."
 
-#: src/Crm/Altas.php:579 src/ListaEspera/Formulario.php:43
+#: src/Crm/Altas.php:580 src/ListaEspera/Formulario.php:43
 msgid "The surname is missing."
 msgstr "Abizenak falta dira."
 
-#: templates/eventos/asistente.php:248
+#: templates/eventos/asistente.php:251
 msgid "The task calendar, with the dates already worked out"
-msgstr "Zereginen egutegia, datak kalkulatuta dituela"
+msgstr ""
 
-#: src/Frontend/Views/EventosView.php:868
+#: src/Frontend/Views/EventosView.php:859
 msgid "The task is pending again."
 msgstr "Zeregina berriro dago egiteke."
 
@@ -16157,7 +16257,7 @@ msgstr "Zeregina berriro dago egiteke."
 msgid "The tax ID must have 9 characters (letters and digits), e.g. G07123456."
 msgstr "IFKk 9 karaktere izan behar ditu (letrak eta zenbakiak), adib. G07123456."
 
-#: src/Eventos/Normativa.php:285 templates/eventos/equipo.php:46
+#: src/Eventos/Normativa.php:312 templates/eventos/equipo.php:46
 msgid "The team's training and certificate could not be read in the CRM: check them later."
 msgstr "Ezin izan dira CRMan taldearen prestakuntza eta ziurtagiria irakurri: egiaztatu geroago."
 
@@ -16253,7 +16353,7 @@ msgstr "Erabiltzailea bere bazkide-zenbakia izango da, automatikoki sortuko dena
 msgid "The variant's price is not valid (for example: 12,50)."
 msgstr "Aldaeraren prezioa ez da baliozkoa (adibidez: 12,50)."
 
-#: src/Frontend/Views/AccesoView.php:125
+#: src/Frontend/Views/AccesoView.php:172
 msgid "The verification code is incorrect or has expired. Try again."
 msgstr "Egiaztapen-kodea ez da zuzena edo iraungi da. Saiatu berriro."
 
@@ -16343,10 +16443,10 @@ msgid "There are"
 msgstr "Badaude"
 
 #. translators: 1: number, 2: number
-#: src/Eventos/Normativa.php:249
+#: src/Eventos/Normativa.php:274
 #, php-format
 msgid "There are %1$d people in training and %2$d qualified: those in training cannot exceed 50%% of the qualified."
-msgstr "%1$d pertsona daude praktiketan eta %2$d titulatu: praktiketan daudenek ezin dute titulatuen %% 50 gainditu."
+msgstr ""
 
 #. translators: 1: number, 2: number
 #: templates/eventos/material.php:76
@@ -16440,7 +16540,7 @@ msgstr ""
 msgid "There are no members matching these filters."
 msgstr "Ez dago iragazki hauek betetzen dituen bazkiderik."
 
-#: templates/eventos/equipo.php:138
+#: templates/eventos/equipo.php:141
 msgid "There are no more scouters or volunteers of the group to add."
 msgstr "Ez da geratzen gehitzeko taldeko scouterrik ez boluntariorik."
 
@@ -16464,7 +16564,7 @@ msgstr "Ez dago eskaera zain daudenik."
 msgid "There are no people with that filter."
 msgstr "Ez dago pertsonarik iragazki horrekin."
 
-#: templates/eventos/presupuesto.php:89
+#: templates/eventos/presupuesto.php:103
 msgid "There are no planned expenses yet."
 msgstr "Oraindik ez dago aurreikusitako gasturik."
 
@@ -16558,11 +16658,11 @@ msgstr "«%s» produktuaren unitate nahikorik ez dago."
 msgid "There are several records in your group with this document: they would have to be merged in the CRM."
 msgstr "Zure taldean hainbat fitxak dute dokumentu hau: CRMan bateratu beharko lirateke."
 
-#: templates/eventos/formulario.php:183
+#: templates/eventos/formulario.php:180
 msgid "There are specialised-risk activities (high mountain, canyoning, climbing, diving, sailing)"
 msgstr "Arrisku espezializatuko jarduerak daude (goi-mendia, arroilak, eskalada, urpekaritza, nautika)"
 
-#: src/Eventos/Normativa.php:311
+#: src/Eventos/Normativa.php:341
 msgid "There are specialised-risk activities: they need staff qualified in that activity."
 msgstr "Arrisku espezializatuko jarduerak daude: jarduera horretan titulatutako langileak behar dituzte."
 
@@ -16582,15 +16682,15 @@ msgstr[1] ""
 msgid "There is a SEPA batch for the event whose collections have not been recorded."
 msgstr "Ekitaldiaren SEPA remesa bat dago, bere kobrantzak erregistratu gabe."
 
-#: templates/eventos/formulario.php:187
+#: templates/eventos/formulario.php:184
 msgid "There is a swimming pool or sea"
 msgstr "Igerilekua edo itsasoa dago"
 
-#: src/Eventos/Normativa.php:315
+#: src/Eventos/Normativa.php:345
 msgid "There is a swimming pool or sea and there will be a lifeguard."
 msgstr "Igerilekua edo itsasoa dago eta sorospen-langile bat egongo da."
 
-#: src/Eventos/Normativa.php:316
+#: src/Eventos/Normativa.php:346
 msgid "There is a swimming pool or sea: a lifeguard must be present."
 msgstr "Igerilekua edo itsasoa dago: sorospen-langile batek egon behar du."
 
@@ -16648,7 +16748,7 @@ msgstr "Beste eragiketa bat dago erdibidean pertsona honekin. Amaitu lehenago."
 msgid "There is currently no open event for you or your family. When the group publishes one, you will receive an email."
 msgstr "Une honetan ez dago ekitaldi irekirik zuretzat edo zure familiarentzat. Taldeak bat argitaratzen duenean, mezu elektroniko bat jasoko duzu."
 
-#: src/Eventos/Normativa.php:236
+#: src/Eventos/Normativa.php:260
 msgid "There is more than one director: the activity has a single responsible director."
 msgstr "Zuzendari bat baino gehiago dago: jarduerak zuzendari arduradun bakarra du."
 
@@ -16794,7 +16894,7 @@ msgstr "Ez zegoen ezer aldatzeko."
 msgid "There were no places left: they are on the waiting list (position %d). If one is freed up, we will let you know by email."
 msgstr "Ez zegoen plazarik: itxaron-zerrendan dago (%d. postua). Bat libratzen bada, posta elektronikoz abisatuko dizuegu."
 
-#: src/Frontend/Views/EventosView.php:630
+#: src/Frontend/Views/EventosView.php:621
 msgid "There were no places left: they remain on the waiting list."
 msgstr "Ez zegoen plazarik: itxaron-zerrendan geratzen da."
 
@@ -16859,7 +16959,7 @@ msgid "They are confirmed by the coordination team before they take effect. Mean
 msgstr "Koordinazio-taldeak berresten ditu indarrean jarri aurretik. Bitartean, zure ataletako scouter gisa sartzen zara."
 
 #. translators: %s: text
-#: src/Frontend/Views/EventosView.php:769
+#: src/Frontend/Views/EventosView.php:760
 #, php-format
 msgid "They are not in the inventory: %s."
 msgstr "Ez daude inventarioan: %s."
@@ -16951,11 +17051,7 @@ msgstr "Baimen honek taldearen kuota eta bestelako ordainketak kobratzeko balio 
 msgid "This budget already has items: it can only be copied onto an empty one."
 msgstr "Aurrekontu honek badu jada partidarik: huts baten gainean soilik kopia daiteke."
 
-#: src/Eventos/Servicio.php:603
-msgid "This budget can no longer be reopened."
-msgstr "Aurrekontu hau ezin da jada berriro ireki."
-
-#: src/Eventos/Servicio.php:560
+#: src/Eventos/Servicio.php:604
 msgid "This budget cannot be sent to Treasury."
 msgstr "Aurrekontu hau ezin da Diruzaintzara bidali."
 
@@ -16979,21 +17075,25 @@ msgstr "Datu hauek zifratuta gordetzen dira eta bulegoak soilik ikusten ditu. Bi
 msgid "This document is already registered in another Scouts de España group or organisation. Confirm that it is the same person and that you want to save it."
 msgstr "Dokumentu honek alta emanda du dagoeneko Scouts de Españako beste talde edo erakunde batean. Berretsi pertsona bera dela eta gorde nahi duzula."
 
+#: templates/acceso/elegir-cuenta.php:21
+msgid "This email address has more than one account. Choose the one you want to sign in with now; you can sign in again with the other one whenever you need it."
+msgstr "Posta elektroniko honek kontu bat baino gehiago ditu. Aukeratu zein kontuarekin sartu nahi duzun orain; besteaz berriro sartu ahal izango zara behar duzunean."
+
 #: templates/usuarios/email.php:52
 msgid "This email was never sent"
 msgstr "Email hau ez zen bidaltzera iritsi"
 
-#: src/Eventos/Tareas.php:207
+#: src/Eventos/Tareas.php:211
 msgid "This event already has tasks. Remove the ones you don't want or add the missing ones one by one."
 msgstr "Ekitaldi honek badu zereginik. Kendu nahi ez dituzunak edo gehitu falta direnak banan-banan."
 
-#: src/Eventos/Servicio.php:637
+#: src/Eventos/Servicio.php:698
 msgid "This event can no longer go back to draft."
 msgstr "Ekitaldi hau ezin da jada zirriborrora itzuli."
 
-#: src/Eventos/Servicio.php:620
-msgid "This event has a cost: before publishing it, Treasury must validate its budget."
-msgstr "Ekitaldi honek kostua du: argitaratu aurretik, Diruzaintzak aurrekontua balioztatu behar du."
+#: src/Eventos/Servicio.php:681
+msgid "This event has a cost: before publishing it, Treasury must give its budget the go-ahead."
+msgstr ""
 
 #: templates/eventos/presupuesto.php:40
 msgid "This event has no cost for families. If it does, tick it in \"Edit the details\" and prepare the budget here."
@@ -17007,7 +17107,7 @@ msgstr "Ekitaldi honek ez du oraindik zereginik."
 msgid "This event is not for their section or age."
 msgstr "Ekitaldi hau ez da bere atalarentzat edo adinarentzat."
 
-#: src/Eventos/Cobros.php:317 src/Eventos/Cuentas.php:670 src/Frontend/Views/EventosView.php:516
+#: src/Eventos/Cobros.php:317 src/Eventos/Cuentas.php:670 src/Frontend/Views/EventosView.php:507
 msgid "This event's accounts are closed: they can no longer be changed."
 msgstr "Ekitaldi honen kontuak itxita daude: ezin dira jada aldatu."
 
@@ -17015,7 +17115,7 @@ msgstr "Ekitaldi honen kontuak itxita daude: ezin dira jada aldatu."
 msgid "This event's accounts are not closed."
 msgstr "Ekitaldi honen kontuak ez daude itxita."
 
-#: src/Eventos/Servicio.php:483 src/Eventos/Servicio.php:500 src/Eventos/Servicio.php:551
+#: src/Eventos/Servicio.php:524 src/Eventos/Servicio.php:542 src/Eventos/Servicio.php:594
 msgid "This event's budget cannot be changed."
 msgstr "Ekitaldi honen aurrekontua ezin da aldatu."
 
@@ -17181,7 +17281,7 @@ msgstr "Izen-emate honi ezin zaio baja eman."
 msgid "This task is ticked off by itself when it is done. If it does not apply, close it with a note."
 msgstr "Zeregin hau berez markatzen da betetzen denean. Egokia ez bada, itxi ezazu oharrekin."
 
-#: src/Eventos/Tareas.php:266
+#: src/Eventos/Tareas.php:270
 msgid "This task is ticked off by itself when it is done. If it does not apply, write a note and close it."
 msgstr "Zeregin hau berez markatzen da betetzen denean. Egokia ez bada, idatzi ohar bat eta itxi."
 
@@ -17433,7 +17533,7 @@ msgstr "Tomatea"
 msgid "Too many errors: the file is no longer read."
 msgstr "Akats gehiegi: fitxategia irakurtzeari uzten zaio."
 
-#: src/Frontend/Views/AccesoView.php:74
+#: src/Frontend/Views/AccesoView.php:103 src/Frontend/Views/AccesoView.php:291
 msgid "Too many failed attempts. Wait a few minutes before trying again or recover your password."
 msgstr "Saiakera huts gehiegi. Itxaron minutu batzuk berriro saiatu aurretik edo berreskuratu zure pasahitza."
 
@@ -17453,11 +17553,11 @@ msgstr "Guztira (prima-taularekin)"
 msgid "Total amount of the annual fee. From the last tier with an amount, the annual fee no longer increases (cap)."
 msgstr "Urteko kuotaren zenbateko osoa. Zenbatekoa duen azken tartetik aurrera, urteko kuota ez da gehiago handitzen (muga)."
 
-#: src/Eventos/Presupuesto.php:29
+#: src/Eventos/Presupuesto.php:33
 msgid "Total amount, among all the participants"
 msgstr "Zenbateko osoa, parte-hartzaile guztien artean"
 
-#: src/Eventos/Presupuesto.php:30
+#: src/Eventos/Presupuesto.php:34
 msgid "Total amount, among those of one section only"
 msgstr "Zenbateko osoa, atal bateko parte-hartzaileen artean soilik"
 
@@ -17465,7 +17565,7 @@ msgstr "Zenbateko osoa, atal bateko parte-hartzaileen artean soilik"
 msgid "Total of other items"
 msgstr "Beste kontzeptuen guztizkoa"
 
-#: templates/eventos/formulario.php:129
+#: templates/eventos/formulario.php:126
 msgid "Total places (0 = no limit)"
 msgstr "Plazak guztira (0 = mugarik gabe)"
 
@@ -17503,7 +17603,7 @@ msgstr "Prestakuntza"
 msgid "Training Officer"
 msgstr "Prestakuntzako arduraduna"
 
-#: src/Frontend/Views/EventosView.php:664 src/Frontend/Views/EventosView.php:706
+#: src/Frontend/Views/EventosView.php:655 src/Frontend/Views/EventosView.php:697
 msgid "Transaction cancelled."
 msgstr "Mugimendua ezeztatu da."
 
@@ -17738,7 +17838,7 @@ msgid "Under %d years of age, enter the first name and surname of the mother, fa
 msgstr "%d urtetik behera, idatzi amaren, aitaren edo tutorearen izena eta abizenak."
 
 #. translators: %d: number
-#: src/Crm/Altas.php:614 templates/personas/alta.php:189
+#: src/Crm/Altas.php:615 templates/personas/alta.php:189
 #, php-format
 msgid "Under %d years of age, guardian 1 is required: first name, surname and email."
 msgstr "%d urtetik behera 1. tutorea behar da: izena, abizenak eta emaila."
@@ -17817,7 +17917,7 @@ msgstr "Itzulitako unitateak"
 msgid "Units to buy, line %d"
 msgstr "Erosteko unitateak, %d. lerroa"
 
-#: src/Frontend/Views/AltaUsuariosView.php:197 src/Frontend/Views/BancoView.php:462 src/Frontend/Views/CajaView.php:188 src/Frontend/Views/EventosView.php:511
+#: src/Frontend/Views/AltaUsuariosView.php:197 src/Frontend/Views/BancoView.php:462 src/Frontend/Views/CajaView.php:188 src/Frontend/Views/EventosView.php:502
 msgid "Unknown action."
 msgstr "Ekintza ezezaguna."
 
@@ -17947,14 +18047,6 @@ msgstr "Balioztatu"
 msgid "Validate budgets and keep the accounts"
 msgstr "Aurrekontuak balioztatu eta kontuak eraman"
 
-#: templates/eventos/presupuesto.php:214
-msgid "Validate the budget"
-msgstr "Balioztatu aurrekontua"
-
-#: templates/eventos/presupuesto.php:214
-msgid "Validate the budget? The price per section will be fixed."
-msgstr "Aurrekontua balioztatu? Atal bakoitzeko prezioa finko geratuko da."
-
 #: templates/tienda/detalle.php:106
 msgid "Validate the payment"
 msgstr "Balioztatu ordainketa"
@@ -17969,31 +18061,11 @@ msgstr "Balioztatua"
 msgid "Validated by %1$s on %2$s"
 msgstr "%1$s(e)k balioztatua %2$s(e)an"
 
-#. translators: 1: text, 2: text
-#: templates/eventos/presupuesto.php:49
-#, php-format
-msgid "Validated by %1$s on %2$s: the price per section is now fixed."
-msgstr "%1$s(e)k balioztatua: %2$s. Atal bakoitzeko prezioa finkoa da jada."
-
 #. translators: %2$s: text
 #: templates/tienda/detalle.php:84
 #, php-format
 msgid "Validated on %2$s"
 msgstr "%2$s(e)an balioztatua"
-
-#. translators: %2$s: text
-#: templates/eventos/presupuesto.php:49
-#, php-format
-msgid "Validated on %2$s: the price per section is now fixed."
-msgstr "Balioztatua: %2$s. Atal bakoitzeko prezioa finkoa da jada."
-
-#: templates/eventos/presupuesto.php:167
-msgid "Validated price"
-msgstr "Balioztatutako prezioa"
-
-#: src/Eventos/Servicio.php:577
-msgid "Validating the budget is done by Treasury."
-msgstr "Aurrekontua Diruzaintzak balioztatzen du."
 
 #: src/Frontend/Views/BancoView.php:262 src/Tesoreria/Banco/CsvBanco.php:25
 msgid "Value date"
@@ -18023,7 +18095,7 @@ msgstr "Dieta begaua"
 msgid "Vegetarian diet"
 msgstr "Dieta begetarianoa"
 
-#: templates/acceso/formulario.php:63 templates/acceso/formulario.php:65
+#: templates/acceso/elegir-cuenta.php:42 templates/acceso/formulario.php:63 templates/acceso/formulario.php:65
 msgid "Verification code"
 msgstr "Egiaztapen-kodea"
 
@@ -18241,7 +18313,7 @@ msgstr "<strong>%1$s</strong>(r)en izen-ematea jaso dugu <strong>%2$s</strong>(r
 #: src/ListaEspera/Avisos.php:146
 #, php-format
 msgid "We have received the sign-up of <strong>%1$s</strong> on the waiting list of <strong>%2$s</strong>. It is already on the list and we will contact you when a place is available."
-msgstr "<strong>%1$s</strong>(r)en izen-ematea jaso dugu <strong>%2$s</strong> taldearen itxaron-zerrendan. Dagoeneko zerrendan dago eta zurekin harremanetan jarriko gara plaza dagoenean."
+msgstr ""
 
 #. translators: %s: text
 #: templates/email/tienda.php:51
@@ -18325,7 +18397,7 @@ msgstr "Email bat bidaliko dizugu berresteko. Zure datuak geroago ikusteko gakoa
 
 #: templates/lista-espera/publica.php:198
 msgid "We will send you an email with the sign-up details. It is also your key to see your data later."
-msgstr "Izen-ematearen datuekin email bat bidaliko dizugu. Zure datuak geroago ikusteko gakoa ere bada."
+msgstr ""
 
 #: templates/alta/buscar.php:46 templates/alta/buscar.php:67 templates/fichas/ficha.php:164 templates/personas/listado.php:52
 msgid "Web access"
@@ -18361,9 +18433,9 @@ msgstr "Diruzaintzak erregistratzen duena balioztatuta geratzen da."
 msgid "What activity it is for, where it will be bought…"
 msgstr "Zein jardueratarako den, non erosiko den…"
 
-#: templates/eventos/asistente.php:70
+#: templates/eventos/asistente.php:73
 msgid "What are you going to do?"
-msgstr "Zer egingo duzue?"
+msgstr ""
 
 #: templates/fichas/membresia.php:98
 msgid "What changes with the withdrawal:"
@@ -18473,11 +18545,11 @@ msgstr "Plaza bat libratzen denean, ordenan eskaintzen da: %d egun dituzte berre
 
 #: templates/eventos/asistente.php:38
 msgid "When and where"
-msgstr "Noiz eta non"
+msgstr ""
 
-#: templates/eventos/asistente.php:114
+#: templates/eventos/asistente.php:117
 msgid "When and where?"
-msgstr "Noiz eta non?"
+msgstr ""
 
 #: templates/eventos/cuentas.php:428
 msgid "When closed, today's balance becomes the final report, the collection data and the notes on the sign-ups are deleted and the event becomes read-only. If something needs changing afterwards, Treasury can reopen them (what was deleted does not come back)."
@@ -18563,9 +18635,9 @@ msgstr "Nork ordaindu duen txandako kuota eta familia bakoitzari zenbat falta za
 msgid "Who has to be reimbursed"
 msgstr "Nori itzuli behar zaion"
 
-#: templates/eventos/asistente.php:91
+#: templates/eventos/asistente.php:94
 msgid "Who is going? (invited sections)"
-msgstr "Nor doa? (deitutako atalak)"
+msgstr ""
 
 #: templates/solicitudes/detalle.php:178 templates/solicitudes/formulario.php:97
 msgid "Who is requesting access?"
@@ -18599,7 +18671,7 @@ msgstr "Nor sartu nahi den taldean"
 msgid "Who wants to join the group, the section that corresponds to their age and their passage to the CRM."
 msgstr "Nor sartu nahi den taldean, adinagatik dagokion atala eta CRMrako urratsa."
 
-#: templates/eventos/equipo.php:160
+#: templates/eventos/equipo.php:163
 msgid "Whoever is on the team can manage the event. The team does not pay: its cost is spread across the participants' price."
 msgstr "Taldean dagoenak ekitaldia kudea dezake. Taldeak ez du ordaintzen: haren kostua parte-hartzaileen prezioan banatzen da."
 
@@ -18630,13 +18702,13 @@ msgid "Windows-1252 / ISO-8859-1"
 msgstr "Windows-1252 / ISO-8859-1"
 
 #. translators: 1: number, 2: number, 3: number
-#: src/Eventos/Normativa.php:242
+#: src/Eventos/Normativa.php:271
 #, php-format
 msgid "With %1$d participants, %2$d monitors are needed besides the director, and there are %3$d."
 msgstr "%1$d parte-hartzailerekin %2$d begirale behar dira zuzendariaz gain, eta %3$d daude."
 
 #. translators: 2: number, 1: number, 3: number
-#: templates/eventos/presupuesto.php:146
+#: templates/eventos/presupuesto.php:160
 #, php-format
 msgid "With %2$d places, %1$d person needs %3$d bus."
 msgid_plural "With %2$d places, %1$d people need %3$d buses."
@@ -18663,11 +18735,11 @@ msgstr "Kidetza aktiboarekin"
 msgid "With an instalment, each family is charged what it is missing up to that instalment (counting what it has already paid)."
 msgstr "Epe batekin, familia bakoitzari epe horretara arte falta zaiona kobratzen zaio (dagoeneko ordaindutakoa kontuan hartuta)."
 
-#: templates/eventos/asistente.php:190 templates/eventos/formulario.php:193
+#: templates/eventos/asistente.php:193 templates/eventos/formulario.php:190
 msgid "With grade I or II"
 msgstr "I. edo II. graduarekin"
 
-#: templates/eventos/asistente.php:191 templates/eventos/formulario.php:194
+#: templates/eventos/asistente.php:194 templates/eventos/formulario.php:191
 msgid "With grade III"
 msgstr "III. graduarekin"
 
@@ -18691,7 +18763,7 @@ msgstr "Epe iraungiekin"
 msgid "With overdue instalments unpaid"
 msgstr "Epe iraungiak ordaindu gabe"
 
-#: templates/eventos/asistente.php:187 templates/eventos/formulario.php:185
+#: templates/eventos/asistente.php:190 templates/eventos/formulario.php:182
 msgid "With staff qualified in that activity"
 msgstr "Jarduera horretan titulatutako langileekin"
 
@@ -18715,9 +18787,9 @@ msgstr ""
 msgid "With those details access cannot be given from here."
 msgstr "Datu horiekin ezin da hemendik sarbiderik eman."
 
-#: templates/eventos/asistente.php:194
+#: templates/eventos/asistente.php:197
 msgid "With what you have said, you will have to:"
-msgstr "Esandakoarekin, honako hau egin beharko duzu:"
+msgstr ""
 
 #: src/Admin/SettingsPage.php:199 templates/eventos/inscripciones.php:257 templates/eventos/inscripciones.php:261 templates/eventos/mis-eventos.php:252
 msgid "Withdraw"
@@ -18742,6 +18814,14 @@ msgstr "Eman baja CRMan"
 msgid "Withdraw it from the bank for this cash box"
 msgstr "Atera bankutik kutxa honetarako"
 
+#: templates/eventos/presupuesto.php:258
+msgid "Withdraw the go-ahead"
+msgstr ""
+
+#: templates/eventos/presupuesto.php:258
+msgid "Withdraw the go-ahead? The budget will be pending Treasury again."
+msgstr ""
+
 #: templates/eventos/cuentas.php:238
 msgid "Withdraw this expense? It will not count in the accounts."
 msgstr "Gastu hau kendu nahi duzu? Ez da kontuetan kontatuko."
@@ -18760,7 +18840,7 @@ msgstr "Baja-data"
 
 #: src/Frontend/Views/TesoreriaView.php:407
 msgid "Withdrawal marked as seen."
-msgstr "Baja ikusitzat markatu da."
+msgstr ""
 
 #: src/Usuarios/RegistroEmails.php:83
 msgid "Withdrawal notice"
@@ -18784,11 +18864,11 @@ msgstr "Baimen bat kentzen du"
 msgid "Without a section, choose at least one responsibility: Secretary's office, Coordination, Treasury or Quartermaster."
 msgstr "Atalik gabe, aukeratu gutxienez erantzukizun bat: Idazkaritza, Koordinazioa, Diruzaintza edo Intendentzia."
 
-#: templates/eventos/asistente.php:219
+#: templates/eventos/asistente.php:222
 msgid "Without dates, sign-up opens on publishing and closes when the event starts."
-msgstr "Datarik gabe, izen-ematea argitaratzean irekitzen da eta ekitaldia hastean ixten da."
+msgstr ""
 
-#: templates/eventos/formulario.php:147
+#: templates/eventos/formulario.php:144
 msgid "Without dates, sign-up opens on publishing and closes when the event starts. After the deadline, only the team signs people up. If there are no places left, new sign-ups go on the waiting list."
 msgstr "Datarik gabe, izen-ematea argitaratzean irekitzen da eta ekitaldia hastean ixten da. Epea igarota, taldeak bakarrik ematen du izena. Plazarik geratzen ez bada, izen-emate berriak itxaron-zerrendan sartzen dira."
 
@@ -18800,9 +18880,9 @@ msgstr "Lanegun bat, gutxienez"
 msgid "Write a camp post on the group website"
 msgstr "Kanpaldiari buruzko mezu bat idatzi taldearen webgunean"
 
-#: templates/eventos/asistente.php:188
+#: templates/eventos/asistente.php:191
 msgid "Write only how many (no names)."
-msgstr "Idatzi zenbat diren bakarrik (izenik gabe)."
+msgstr ""
 
 #: src/Idiomas/Guardados.php:268
 msgid "Write the letter and photocopy it"
@@ -18836,7 +18916,7 @@ msgstr "Eskaeran idatzia"
 #: templates/mi-seccion/ficha.php:29
 #, php-format
 msgid "Year %1$d of %2$d"
-msgstr "%1$d. urtea (%2$d guztitik)"
+msgstr ""
 
 #. translators: %s: text
 #: src/Caja/Periodo.php:24
@@ -18846,7 +18926,7 @@ msgstr "%s urtea"
 
 #: templates/mi-seccion/listado.php:65 templates/mi-seccion/listado.php:75
 msgid "Year in the section"
-msgstr "Urtea atalean"
+msgstr ""
 
 #: src/Inventario/Importador.php:40 templates/inventario/lista.php:75 templates/inventario/lista.php:113
 msgid "Year of purchase"
@@ -18868,7 +18948,7 @@ msgstr "Bai"
 msgid "Yes (the Secretary's office and Coordination see it)"
 msgstr "Bai (Idazkaritzak eta Koordinazioak ikusten dute)"
 
-#: src/Eventos/Normativa.php:44
+#: src/Eventos/Normativa.php:50
 msgid "Yes, always report it"
 msgstr "Bai, beti jakinarazi"
 
@@ -18908,7 +18988,7 @@ msgstr "Taldearen eremu pribatuan erosketa-zerrenda hau eskatu zenuelako jaso du
 msgid "You can also sign in by typing this email address instead of the username."
 msgstr "Erabiltzailearen ordez email-helbide hau idatzita ere sar zaitezke."
 
-#: src/Eventos/Servicio.php:215
+#: src/Eventos/Servicio.php:224
 msgid "You can only invite the sections you help in."
 msgstr "Laguntzen duzun atalei soilik dei diezaiekezu."
 
@@ -18921,6 +19001,10 @@ msgstr "Argitaratuta dagoen eta oraindik amaitu ez den ekitaldi batean bakarrik 
 #, php-format
 msgid "You can reply to this email. You are on the waiting list of %1$s: <a href=\"%2$s\">see my details</a>."
 msgstr "Mezu honi erantzun diezaiokezu. %1$s(r)en itxaron-zerrendan zaude: <a href=\"%2$s\">ikusi nire datuak</a>."
+
+#: templates/eventos/presupuesto.php:63
+msgid "You can still change the budget: if you do, the go-ahead is withdrawn and Treasury has to give it again."
+msgstr ""
 
 #: templates/tesoreria/sepa.php:112
 msgid "You can use {grupo} and {ronda}. The family no. is added at the end."
@@ -18940,11 +19024,11 @@ msgstr "Ezin duzu itzulketa hau onartu (Diruzaintzak onartzen du, eta inork ez d
 msgid "You cannot cancel that authorisation."
 msgstr "Ezin duzu baimen hori ezeztatu."
 
-#: src/Eventos/Servicio.php:647
+#: src/Eventos/Servicio.php:708
 msgid "You cannot cancel this event."
 msgstr "Ezin duzu ekitaldi hau bertan behera utzi."
 
-#: src/Eventos/Tareas.php:200 src/Eventos/Tareas.php:283 src/Eventos/Tareas.php:306 src/Eventos/Tareas.php:335
+#: src/Eventos/Tareas.php:204 src/Eventos/Tareas.php:287 src/Eventos/Tareas.php:310 src/Eventos/Tareas.php:339
 msgid "You cannot change this event's calendar."
 msgstr "Ezin duzu ekitaldi honen egutegia aldatu."
 
@@ -18952,19 +19036,19 @@ msgstr "Ezin duzu ekitaldi honen egutegia aldatu."
 msgid "You cannot change this event's equipment."
 msgstr "Ezin duzu ekitaldi honen materiala aldatu."
 
-#: src/Frontend/Views/EventosView.php:847 src/Menus/MenuEvento.php:59 src/Menus/MenuEvento.php:95 src/Menus/MenuEvento.php:114
+#: src/Frontend/Views/EventosView.php:838 src/Menus/MenuEvento.php:59 src/Menus/MenuEvento.php:95 src/Menus/MenuEvento.php:114
 msgid "You cannot change this event's menu."
 msgstr "Ezin duzu ekitaldi honen menua aldatu."
 
-#: src/Eventos/Servicio.php:412 src/Eventos/Servicio.php:437 src/Eventos/Servicio.php:451
+#: src/Eventos/Servicio.php:453 src/Eventos/Servicio.php:478 src/Eventos/Servicio.php:492
 msgid "You cannot change this event's team."
 msgstr "Ezin duzu ekitaldi honen taldea aldatu."
 
-#: src/Eventos/Servicio.php:358
+#: src/Eventos/Servicio.php:368
 msgid "You cannot change this event."
 msgstr "Ezin duzu ekitaldi hau aldatu."
 
-#: src/Eventos/Servicio.php:326 src/Frontend/Views/EventosView.php:72
+#: src/Eventos/Servicio.php:336 src/Frontend/Views/EventosView.php:72
 msgid "You cannot create events."
 msgstr "Ezin duzu ekitaldirik sortu."
 
@@ -18996,7 +19080,7 @@ msgstr "Ezin duzu itzulketa hau ordainduta markatu."
 msgid "You cannot place an order for that person."
 msgstr "Ezin duzu pertsona horrentzat eskaerarik egin."
 
-#: src/Eventos/Servicio.php:621
+#: src/Eventos/Servicio.php:682
 msgid "You cannot publish this event."
 msgstr "Ezin duzu ekitaldi hau argitaratu."
 
@@ -19008,7 +19092,7 @@ msgstr "Ezin duzu gasturik erregistratu ekitaldi honetan."
 msgid "You cannot reject this reimbursement."
 msgstr "Ezin duzu itzulketa hau ukatu."
 
-#: src/Frontend/Views/EventosView.php:601
+#: src/Frontend/Views/EventosView.php:592
 msgid "You cannot resend notices for this event."
 msgstr ""
 
@@ -19020,7 +19104,7 @@ msgstr "Ezin duzu zure rola lehengoratu: kendutako baimenak berriro emango lizki
 msgid "You cannot review that person's changes."
 msgstr "Ezin dituzu pertsona horren aldaketak berrikusi."
 
-#: src/Frontend/Views/EventosView.php:925
+#: src/Frontend/Views/EventosView.php:916
 msgid "You cannot see this event's accounts."
 msgstr "Ezin dituzu ekitaldi honen kontuak ikusi."
 
@@ -19032,7 +19116,7 @@ msgstr "Ezin duzu ekitaldi honetan izena eman."
 msgid "You cannot sign that person up."
 msgstr "Ezin diozu pertsona horri izena eman."
 
-#: src/Eventos/Tareas.php:261
+#: src/Eventos/Tareas.php:265
 msgid "You cannot tick off this event's tasks."
 msgstr "Ezin dituzu ekitaldi honen zereginak markatu."
 
@@ -19044,7 +19128,7 @@ msgstr "Ezin duzu ekitaldi honetan baja eman."
 msgid "You do not have access to that authorisation."
 msgstr "Ez duzu baimen horretarako sarbiderik."
 
-#: src/Frontend/Views/EventosView.php:81 src/Frontend/Views/EventosView.php:498
+#: src/Frontend/Views/EventosView.php:81 src/Frontend/Views/EventosView.php:489
 msgid "You do not have access to that event."
 msgstr "Ez duzu ekitaldi horretarako sarbiderik."
 
@@ -19122,7 +19206,7 @@ msgstr "Ez duzu baimenik hori ikusteko."
 
 #: templates/mi-seccion/ficha.php:43
 msgid "You do not need to achieve everything to change stage: the team decides. Changing the stage starts the aspects from scratch."
-msgstr "Etapa aldatzeko ez da dena lortu behar: taldeak erabakitzen du. Etapa aldatzean, alderdiak hutsetik hasten dira."
+msgstr ""
 
 #: templates/pagos/sepa.php:49
 msgid "You have authorised"
@@ -19184,7 +19268,7 @@ msgstr "Zure ekitaldietan gauzak dituzu zain:"
 msgid "You have two-step verification"
 msgstr "Bi urratseko egiaztapena duzu"
 
-#: src/Frontend/Views/AccesoView.php:114
+#: src/Frontend/Views/AccesoView.php:161
 msgid "You have two-step verification turned on: enter the 6-digit code from your app and type the password again."
 msgstr "Bi urratseko egiaztapena aktibatuta duzu: idatzi zure aplikazioaren 6 zifrako kodea eta idatzi berriro pasahitza."
 
@@ -19220,7 +19304,7 @@ msgstr "Zure datuak"
 msgid "Your email"
 msgstr "Zure emaila"
 
-#: src/Auth/Ambito.php:122
+#: src/Auth/Ambito.php:135
 msgid "Your family account no longer has any participants in its care (they have turned 18 or no longer have an active membership)."
 msgstr "Zure familia-kontuak ez du jada partaiderik bere kargura (18 urte bete dituzte edo ez dute jada kidetza aktiborik)."
 
@@ -19244,7 +19328,7 @@ msgstr "Zure taldeko fitxa: kontsultatu zure datuak eta eguneratu zure emaila et
 msgid "Your group's CRM user does not have permission to change memberships."
 msgstr "Zure taldeko CRMko erabiltzaileak ez du kidetzak aldatzeko baimenik."
 
-#: src/Crm/Altas.php:558 src/Crm/Escritura.php:140 src/Crm/Escritura.php:205 src/Frontend/Views/ListaEsperaView.php:114
+#: src/Crm/Altas.php:559 src/Crm/Escritura.php:140 src/Crm/Escritura.php:205 src/Frontend/Views/ListaEsperaView.php:114
 msgid "Your group's CRM user does not have permission to create people and memberships."
 msgstr "Zure taldeko CRMko erabiltzaileak ez du pertsonak eta kidetzak sortzeko baimenik."
 
@@ -19264,7 +19348,7 @@ msgstr "Zure taldeko CRMko erabiltzaileak ez du fitxak editatzeko baimenik: datu
 msgid "Your group's connection to the CRM is not set up or could not be checked."
 msgstr "Zure taldearen eta CRMaren arteko konexioa ez dago konfiguratuta edo ezin izan da egiaztatu."
 
-#: src/Auth/Ambito.php:62 src/Frontend/Views/AltaUsuariosView.php:37 src/Frontend/Views/CambiosView.php:40 src/Frontend/Views/FamiliasView.php:28
+#: src/Auth/Ambito.php:63 src/Frontend/Views/AltaUsuariosView.php:37 src/Frontend/Views/CambiosView.php:40 src/Frontend/Views/FamiliasView.php:28
 msgid "Your group's connection to the CRM is not set up or could not be checked. An administrator can review it in wp-admin → Scout Groups."
 msgstr "Zure taldearen eta CRMaren arteko konexioa ez dago konfiguratuta edo ezin izan da egiaztatu. Administratzaile batek wp-admin → Grupos Scouts atalean berrikus dezake."
 
@@ -19272,7 +19356,7 @@ msgstr "Zure taldearen eta CRMaren arteko konexioa ez dago konfiguratuta edo ezi
 msgid "Your membership cannot be checked in the group's CRM right now. Try again in a few minutes."
 msgstr "Orain ezin da zure bazkidetza egiaztatu taldearen CRMan. Saiatu berriro minutu batzuk barru."
 
-#: src/Auth/Ambito.php:130
+#: src/Auth/Ambito.php:143
 msgid "Your membership is not active in the group's CRM. Contact the Secretary's office."
 msgstr "Zure kidetza ez dago aktibo taldearen CRMan. Jarri harremanetan Idazkaritzarekin."
 
@@ -19284,7 +19368,7 @@ msgstr "Zure bulego-kontuak Pertsonak, Txostenak eta Erabiltzaileak soilik konts
 msgid "Your orders"
 msgstr "Zure eskaerak"
 
-#: src/Auth/Ambito.php:128
+#: src/Auth/Ambito.php:141
 msgid "Your record cannot be found in the group's CRM. Contact the Secretary's office."
 msgstr "Zure fitxa ez da aurkitzen taldearen CRMan. Jarri harremanetan Idazkaritzarekin."
 
@@ -19302,11 +19386,11 @@ msgstr "Zure rolak ez du datu hau aldatzen uzten."
 msgid "Your section:"
 msgstr "Zure atala:"
 
-#: src/Auth/Ambito.php:119
+#: src/Auth/Ambito.php:132
 msgid "Your user does not have access to the private area. If you think this is a mistake, contact the group's Secretary's office."
 msgstr "Zure erabiltzaileak ez du eremu pribaturako sarbiderik. Akatsa dela uste baduzu, jarri harremanetan taldeko Idazkaritzarekin."
 
-#: src/Auth/Ambito.php:125
+#: src/Auth/Ambito.php:138
 msgid "Your user is not linked to any CRM record. Ask the group's Secretary's office to check your registration."
 msgstr "Zure erabiltzailea ez dago CRMko fitxa batekin lotuta. Eskatu taldeko Idazkaritzari zure alta berrikusteko."
 
@@ -19526,7 +19610,7 @@ msgstr "[%s] Izen-ematea berretsi da itxaron-zerrendan"
 #: src/ListaEspera/Avisos.php:143
 #, php-format
 msgid "[%s] Sign-up on the waiting list received"
-msgstr "[%s] Izen-ematea jaso da itxaron-zerrendan"
+msgstr ""
 
 #. translators: %s: text
 #: src/Usuarios/Invitacion.php:54
@@ -19625,7 +19709,7 @@ msgstr "goranzko"
 msgid "assigned"
 msgstr "esleituta"
 
-#: templates/eventos/asistente.php:117 templates/eventos/asistente.php:119 templates/eventos/formulario.php:87 templates/eventos/formulario.php:89
+#: templates/eventos/asistente.php:120 templates/eventos/asistente.php:122 templates/eventos/formulario.php:84 templates/eventos/formulario.php:86
 msgid "at"
 msgstr "ordua"
 
@@ -19751,11 +19835,11 @@ msgstr "eginda"
 msgid "duplicate"
 msgstr "bikoiztua"
 
-#: templates/eventos/asistente.php:78 templates/eventos/formulario.php:53
+#: templates/eventos/asistente.php:81 templates/eventos/formulario.php:50
 msgid "e.g. Autumn camp"
 msgstr "adib. Udazkeneko kanpaldia"
 
-#: templates/eventos/presupuesto.php:104
+#: templates/eventos/presupuesto.php:118
 msgid "e.g. Bus"
 msgstr "adib. Autobusa"
 
@@ -19771,7 +19855,7 @@ msgstr "adib. Janari erosketa"
 msgid "e.g. Grupo Scout Myotragus 684"
 msgstr "adib. Myotragus 684 Eskaut Taldea"
 
-#: templates/eventos/asistente.php:226 templates/eventos/formulario.php:158
+#: templates/eventos/asistente.php:229 templates/eventos/formulario.php:155
 msgid "e.g. sleeping bag, mat, torch, uniform…"
 msgstr "adib. lo-zakua, esterilla, linterna, uniformea…"
 
@@ -20156,7 +20240,7 @@ msgstr "pertsona itxaron-zerrendan kontaktatu gabe"
 msgid "per page"
 msgstr "orriko"
 
-#: templates/eventos/presupuesto.php:74
+#: templates/eventos/presupuesto.php:88
 msgid "per person"
 msgstr "pertsonako"
 
@@ -20531,7 +20615,7 @@ msgstr "· Transferentziarako erreferentzia:"
 msgid "· You help in:"
 msgstr "· Hemen laguntzen duzu:"
 
-#: templates/eventos/presupuesto.php:122
+#: templates/eventos/presupuesto.php:136
 msgid "— All —"
 msgstr "— Guztiak —"
 
@@ -20543,7 +20627,7 @@ msgstr "— Aukeratu probintzia —"
 msgid "— Choose your organisation —"
 msgstr ""
 
-#: templates/eventos/equipo.php:145 templates/eventos/inscripciones.php:55 templates/eventos/resumen.php:140
+#: templates/eventos/equipo.php:148 templates/eventos/inscripciones.php:55 templates/eventos/resumen.php:140
 msgid "— Choose —"
 msgstr "— Aukeratu —"
 
@@ -20560,13 +20644,13 @@ msgstr ""
 msgid "← %s's record"
 msgstr "← %s: fitxa"
 
-#: templates/eventos/asistente.php:54 templates/eventos/evento.php:43 templates/eventos/formulario.php:34
+#: templates/eventos/asistente.php:57 templates/eventos/evento.php:43
 msgid "← Agenda"
 msgstr "← Agenda"
 
-#: templates/eventos/asistente.php:254
+#: templates/eventos/asistente.php:257
 msgid "← Back"
-msgstr "← Atzera"
+msgstr ""
 
 #: templates/tesoreria/banco-tipos.php:27
 msgid "← Back to \"Mark as reviewed\""
