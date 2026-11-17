@@ -655,3 +655,5 @@ Petición del usuario tras revisar un campamento con 60 personas previstas (45 p
 - Pendiente: traducciones de los 35 textos nuevos a ca/eu/gl/valencià (solo están en castellano).
 
 **v0.64.4 (2026-11-17):** el Voluntariado de apoyo tampoco paga (`Presupuesto::NO_PAGAN` = Scouters y Voluntariado de apoyo). En el ejemplo del campamento pagan 42: 3.290 € / 42 = 78,33 €, 83 € sugeridos con el 5 %.
+
+**v0.64.5 (2026-11-17):** una persona con cuenta de scouter y cuenta familiar **con el mismo email** veía los eventos de sus hijos solo al entrar con la familiar. `Ambito::$vinculados` (en memoria, no se guarda) recoge los menores de las otras cuentas familiares activas del grupo con el mismo email (`EmailCuenta`), solo si la cuenta que entra no es de tutor; `Ambito::representa()` y las inscripciones de «Mis eventos» (inscribir, firmar, no participa, pendientes) lo tienen en cuenta. No cambia Mis pagos, Tienda, SEPA ni la ficha (siguen con la cuenta familiar). Prueba: `tests/eventos-inscripciones.php` (parte C).

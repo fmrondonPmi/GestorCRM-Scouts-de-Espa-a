@@ -48,7 +48,7 @@ $texto_autorizacion = static function ( array $e, string $nombre ) use ( $autori
 ?>
 <section class="asde-card">
 	<h2 class="asde-card__title"><?php esc_html_e( 'My events', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h2>
-	<p><?php echo wp_kses_post( $ambito->representados ? __( 'The group\'s outings, camps and summer camps you are invited to. Sign up from here: when you sign up a minor you sign their <strong>participation authorisation</strong>.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : __( 'The group\'s outings, camps and summer camps you are invited to. Sign up from here.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?></p>
+	<p><?php echo wp_kses_post( ( $ambito->representados || $ambito->vinculados ) ? __( 'The group\'s outings, camps and summer camps you are invited to. Sign up from here: when you sign up a minor you sign their <strong>participation authorisation</strong>.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : __( 'The group\'s outings, camps and summer camps you are invited to. Sign up from here.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?></p>
 	<p class="asde-muted"><?php esc_html_e( 'What must be paid and what has been paid for each event you can also see in', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <a href="<?php echo esc_url( $url_pagos ); ?>"><?php esc_html_e( 'My payments', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a>.</p>
 </section>
 
@@ -116,7 +116,7 @@ $texto_autorizacion = static function ( array $e, string $nombre ) use ( $autori
 				<?php
 				$p        = $x['persona'];
 				$f        = $x['fila'];
-				$familia  = isset( $ambito->representados[ $num ] );
+				$familia  = $ambito->representa( $num );
 				$adulta   = Inscripciones::adulta_en( $e, $p );
 				$estado   = $f ? Inscripciones::estado( $f ) : ( 'convocatoria' === $e['modalidad'] && 'abierta' === $plazo ? 'sin_respuesta' : '' );
 				$seccion  = Inscripciones::seccion_de( $e, $p );

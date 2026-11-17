@@ -56,7 +56,7 @@ final class Inscripciones {
 
 	/** Personas cuyas inscripciones lleva esta cuenta: ella misma (si es socia activa) y los menores que representa. @return array<string, Persona> */
 	public static function para_quien( Ambito $a ): array {
-		$out = $a->representados;
+		$out = $a->representados + $a->vinculados;
 		if ( $a->persona && $a->socio_activo() ) {
 			$out = array( $a->persona->num_socio_asde => $a->persona ) + $out;
 		}
@@ -224,7 +224,7 @@ final class Inscripciones {
 		if ( $error ) {
 			return $error;
 		}
-		$familia = isset( $a->representados[ $num ] );
+		$familia = $a->representa( $num );
 		$adulta  = self::adulta_en( $e, $p );
 		$edad    = Normativa::edad_en( $p, $e );
 		if ( ! $familia && ! $adulta && ( null === $edad || $edad < self::edad_cuenta_propia() ) ) {
@@ -264,7 +264,7 @@ final class Inscripciones {
 				'seccion'   => (string) self::seccion_de( $e, $p ),
 				'precio'    => 0,
 				'estado'    => InscripcionesTable::NO_PARTICIPA,
-				'como'      => isset( $a->representados[ $num ] ) ? 'familia' : 'propia',
+				'como'      => $a->representa( $num ) ? 'familia' : 'propia',
 			)
 		);
 		if ( ! $id ) {
@@ -277,7 +277,7 @@ final class Inscripciones {
 	/** La familia firma la autorización de una preinscripción (o de una inscripción del equipo). @return true|\WP_Error */
 	public static function firmar( array $e, Ambito $a, int $fila, bool $acepto ) {
 		$f = self::fila( $e, $fila );
-		if ( ! current_user_can( self::CAP ) || ! $f || ! isset( $a->representados[ $f['socio'] ] ) || '' !== $f['autorizacion'] || ! in_array( $f['estado'], array( InscripcionesTable::PENDIENTE, InscripcionesTable::ESPERA ), true ) || ! self::gestionable( $e ) ) {
+		if ( ! current_user_can( self::CAP ) || ! $f || ! $a->representa( $f['socio'] ) || '' !== $f['autorizacion'] || ! in_array( $f['estado'], array( InscripcionesTable::PENDIENTE, InscripcionesTable::ESPERA ), true ) || ! self::gestionable( $e ) ) {
 			return new \WP_Error( 'asde_inscripcion', __( 'This authorisation cannot be signed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
 		if ( ! $acepto ) {
@@ -556,7 +556,7 @@ final class Inscripciones {
 			}
 			$tiene[ $f['evento_id'] . '|' . $f['socio'] ] = true;
 			$out['plaza']  += (int) self::con_oferta( $f );
-			$out['firmar'] += (int) ( isset( $a->representados[ $f['socio'] ] ) && '' === $f['autorizacion'] && in_array( $f['estado'], array( InscripcionesTable::PENDIENTE, InscripcionesTable::ESPERA ), true ) );
+			$out['firmar'] += (int) ( $a->representa( $f['socio'] ) && '' === $f['autorizacion'] && in_array( $f['estado'], array( InscripcionesTable::PENDIENTE, InscripcionesTable::ESPERA ), true ) );
 		}
 		foreach ( $eventos as $e ) {
 			if ( 'convocatoria' !== $e['modalidad'] || 'abierta' !== self::plazo( $e ) ) {
@@ -646,7 +646,7 @@ final class Inscripciones {
 		if ( ! current_user_can( self::CAP ) || ! self::para_quien( $a ) ) {
 			return false;
 		}
-		if ( $a->representados || ( $a->persona && $a->persona->es_participante() ) ) {
+		if ( $a->representados || $a->vinculados || ( $a->persona && $a->persona->es_participante() ) ) {
 			return true;
 		}
 		return (bool) self::mis_eventos( $a );
@@ -664,7 +664,7 @@ final class Inscripciones {
 
 	/** ¿Puede esta cuenta inscribir a esta persona ella sola? (la familia, o la propia persona de 14 años o más). */
 	public static function puede_inscribirse_sola( Ambito $a, array $e, Persona $p ): bool {
-		if ( isset( $a->representados[ $p->num_socio_asde ] ) ) {
+		if ( $a->representa( $p->num_socio_asde ) ) {
 			return true;
 		}
 		$edad = Normativa::edad_en( $p, $e );

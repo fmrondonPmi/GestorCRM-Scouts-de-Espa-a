@@ -8,6 +8,7 @@ use AsdeBalears\AreaPrivada\Domain\Organizacion;
 use AsdeBalears\AreaPrivada\Domain\Persona;
 use AsdeBalears\AreaPrivada\Install\Roles;
 use AsdeBalears\AreaPrivada\Usuarios\Contacto;
+use AsdeBalears\AreaPrivada\Usuarios\EmailCuenta;
 use AsdeBalears\AreaPrivada\Usuarios\Usuarios;
 
 defined( 'ABSPATH' ) || exit;
@@ -31,6 +32,14 @@ final class Ambito {
 
 	/** @var array<string, Persona> Menores representados válidos (nº Scouts de España => Persona). */
 	public array $representados = array();
+
+	/**
+	 * v0.64.5: menores de otra cuenta familiar de la misma persona (la misma cuenta de email), para quien entra con su
+	 * cuenta de scouter u otra y no con la familiar. Solo se usa para las inscripciones de «Mis eventos»; no se guarda.
+	 *
+	 * @var array<string, Persona>
+	 */
+	public array $vinculados = array();
 
 	/** @var string[] Representados que ya no cumplen (mayores de edad, sin membresía o fuera del grupo). */
 	public array $retirados = array();
@@ -69,7 +78,8 @@ final class Ambito {
 			// v0.63.2: una cuenta familiar representa también a los demás menores de su familia de Tesorería
 			// (hermanos que Secretaría ya agrupó, aunque no compartan email en el CRM).
 			$extra = $reps && in_array( Roles::TUTOR, (array) $this->user->roles, true ) ? Usuarios::companeros_de_familia( $reps ) : array();
-			$todas = $repo->obtener_varias( array_filter( array_merge( array( $socio ), $reps, $extra ) ) );
+			$vinc  = in_array( Roles::TUTOR, (array) $this->user->roles, true ) ? array() : $this->representados_de_cuentas_hermanas();
+			$todas = $repo->obtener_varias( array_filter( array_merge( array( $socio ), $reps, $extra, $vinc ) ) );
 
 			$this->persona = $socio ? ( $todas[ $socio ] ?? null ) : null;
 			foreach ( $reps as $n ) {
@@ -78,6 +88,12 @@ final class Ambito {
 					$this->representados[ $n ] = $p;
 				} else {
 					$this->retirados[] = $n;
+				}
+			}
+			foreach ( $vinc as $n ) {
+				$p = $todas[ $n ] ?? null;
+				if ( $p && $p->es_participante() && ! ( null !== $p->edad() && $p->edad() >= 18 ) ) {
+					$this->vinculados[ $n ] = $p;
 				}
 			}
 			foreach ( $extra as $n ) {
@@ -92,6 +108,30 @@ final class Ambito {
 		} catch ( CrmException $e ) {
 			$this->error_crm = __( 'The CRM could not be queried. Try again in a few minutes.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 		}
+	}
+
+	/**
+	 * Menores que representan las otras cuentas familiares con el mismo email que esta cuenta (p. ej. la de scouter y la
+	 * familiar de la misma persona), del grupo actual y activas. @return string[] Nº Scouts de España.
+	 */
+	private function representados_de_cuentas_hermanas(): array {
+		$email = EmailCuenta::leer( $this->user->ID );
+		if ( null === $email ) {
+			return array();
+		}
+		$nums = array();
+		foreach ( EmailCuenta::usuarios( $email ) as $u ) {
+			if ( $u->ID === $this->user->ID || ! in_array( Roles::TUTOR, (array) $u->roles, true ) || ! Usuarios::del_grupo_actual( $u ) || Usuarios::DESACTIVADO === Usuarios::estado( $u ) ) {
+				continue;
+			}
+			$nums = array_merge( $nums, Usuarios::representados( $u->ID ) );
+		}
+		return array_values( array_diff( array_unique( $nums ), Usuarios::representados( $this->user->ID ) ) );
+	}
+
+	/** ¿Representa a esta persona (menor) en las inscripciones? La cuenta familiar, o la misma persona con otra cuenta suya. */
+	public function representa( string $num ): bool {
+		return isset( $this->representados[ $num ] ) || isset( $this->vinculados[ $num ] );
 	}
 
 	public function es_admin(): bool {

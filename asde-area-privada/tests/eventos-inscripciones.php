@@ -42,6 +42,7 @@ use AsdeBalears\AreaPrivada\Install\Roles;
 use AsdeBalears\AreaPrivada\Socios\SociosTable;
 use AsdeBalears\AreaPrivada\Tesoreria\FamiliasTable;
 use AsdeBalears\AreaPrivada\Usuarios\RegistroEmails;
+use AsdeBalears\AreaPrivada\Usuarios\EmailCuenta;
 use AsdeBalears\AreaPrivada\Usuarios\Usuarios;
 
 global $wpdb;
@@ -326,6 +327,24 @@ try {
 	$h    = $pintar( new MisEventosView() );
 	$ok( str_contains( $h, 'Acampada de inscripciones' ) && str_contains( $h, 'Inscribir a Leo' ) && str_contains( $h, 'Inscribir a Nora' ) && str_contains( $h, '21,00 €' ) && str_contains( $h, '37,00 €' ), 've el evento, a sus dos menores con su botón de inscribir y el precio de cada sección' );
 	$ok( str_contains( $h, 'autorizo su participación' ) && str_contains( $h, 'name="acepto"' ), 'el formulario lleva el texto de la autorización y la casilla para firmarla' );
+
+	// v0.64.5: una persona con cuenta de scouter y cuenta familiar (mismo email) ve a sus menores al entrar con la de scouter.
+	$comun = 'comun.ins@example.invalid';
+	$ok( ! isset( Inscripciones::para_quien( $como( $u_esc ) )['990051'] ), 'antes de compartir el email, el scouter no ve a los menores de otra cuenta' );
+	EmailCuenta::guardar( $u_esc, $comun );
+	EmailCuenta::guardar( $u_fam1, $comun );
+	$a_es = $como( $u_esc );
+	$ok( array( '990051', '990052' ) === array_map( 'strval', array_keys( $a_es->vinculados ) ) && array() === $a_es->representados && $a_es->representa( '990051' ) && ! $a_es->representa( '990053' ), 'con el mismo email en las dos cuentas, el scouter «representa» a los menores de la familiar (y a nadie más)' );
+	$ok( isset( Inscripciones::para_quien( $a_es )['990051'], Inscripciones::para_quien( $a_es )['990063'] ), 'puede inscribir a sus menores y a sí mismo' );
+	$ok( isset( Menu::grupos( $a_es )[ Menu::PERSONAL ]['items']['mis_eventos'] ), '«Mis eventos» sale en su menú como scouter' );
+	$h = $pintar( new MisEventosView() );
+	$ok( str_contains( $h, 'Inscribir a Leo' ) && str_contains( $h, 'Inscribir a Nora' ) && str_contains( $h, 'name="acepto"' ), 'en «Mis eventos» sale «Inscribir a …» con la autorización de la familia' );
+	$ok( empty( Ambito::de( get_userdata( $u_fam3 ) )->vinculados ) && Inscripciones::puede_inscribirse_sola( $a_es, $ev( $id_a ), Ambito::de( get_userdata( $u_fam1 ) )->representados['990051'] ), 'otra familia no se ve afectada y la inscripción va como de familia' );
+	EmailCuenta::guardar( $u_fam1, null );
+	$a_es = $como( $u_esc );
+	$ok( array() === $a_es->vinculados && ! isset( Inscripciones::para_quien( $a_es )['990051'] ), 'sin el email compartido, deja de verlos' );
+	EmailCuenta::guardar( $u_esc, null );
+	$como( $u_fam1 );
 
 	echo "\n== Parte D · La familia inscribe (y firma) ==\n";
 	$base = array(
