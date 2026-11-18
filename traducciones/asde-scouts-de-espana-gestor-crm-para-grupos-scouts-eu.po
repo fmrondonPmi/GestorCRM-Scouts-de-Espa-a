@@ -295,7 +295,7 @@ msgstr "%1$d / %2$d familia"
 msgid "%1$d of %2$d left · %3$s"
 msgid_plural "%1$d of %2$d left · %3$s"
 msgstr[0] "%1$d geratzen da %2$d(e)tik · %3$s"
-msgstr[1] "%1$d geratzen da %2$d(e)tik · %3$s"
+msgstr[1] "%1$d geratzen dira %2$d(e)tik · %3$s"
 
 #. translators: 1: number, 2: number, 3: text
 #: templates/eventos/material.php:102
@@ -786,7 +786,7 @@ msgstr[1] "%d material"
 msgid "%d left"
 msgid_plural "%d left"
 msgstr[0] "%d geratzen da"
-msgstr[1] "%d geratzen da"
+msgstr[1] "%d geratzen dira"
 
 #. translators: %d: number
 #: src/Tesoreria/Banco/CsvBanco.php:162
@@ -1000,7 +1000,7 @@ msgstr "%d etapa-aldaketa proposatuta"
 msgid "%d suggested for this family"
 msgid_plural "%d suggested for this family"
 msgstr[0] "%d familia honetarako iradokia"
-msgstr[1] "%d familia honetarako iradokia"
+msgstr[1] "%d familia honetarako iradokiak"
 
 #. translators: %d: number
 #: src/Frontend/Views/EventosView.php:845

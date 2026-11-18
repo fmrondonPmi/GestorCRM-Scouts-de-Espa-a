@@ -13,6 +13,9 @@
  */
 defined( 'ABSPATH' ) || exit;
 
+require_once __DIR__ . '/lib/AislarLocal.php';
+asde_test_identificador_local();
+
 require_once __DIR__ . '/lib/CrmSimulado.php';
 require_once ABSPATH . 'wp-admin/includes/user.php';
 

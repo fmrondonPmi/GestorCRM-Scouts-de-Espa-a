@@ -13,6 +13,9 @@
  */
 defined( 'ABSPATH' ) || exit;
 
+require_once __DIR__ . '/lib/AislarLocal.php';
+asde_test_identificador_local();
+
 use AsdeBalears\AreaPrivada\Domain\Grupo;
 use AsdeBalears\AreaPrivada\Domain\Grupos;
 use AsdeBalears\AreaPrivada\Domain\NumeroSocio;

@@ -291,7 +291,7 @@ try {
 	$e = array( 'inicio' => $dia( '+20 days' ) . ' 10:00:00', 'fin' => $dia( '+22 days' ) . ' 17:00:00' );
 	$t = array( 'hecha_en' => null, 'fecha_propia' => null, 'fecha_aj' => $dia( '-3 days' ), 'fecha_calc' => $dia( '-3 days' ) );
 	$ok( 'vencida' === Tareas::estado( $t ) && -3 === Tareas::dias( $t ), 'una fecha pasada: vencida, hace 3 días' );
-	$t['fecha_aj'] = $dia( 'today' );
+	$t['fecha_aj'] = $dia( 'now' );
 	$ok( 'semana' === Tareas::estado( $t ) && 0 === Tareas::dias( $t ), 'la de hoy: esta semana, vence hoy' );
 	$t['fecha_aj'] = $dia( '+7 days' );
 	$ok( 'semana' === Tareas::estado( $t ), 'dentro de 7 días: todavía esta semana' );

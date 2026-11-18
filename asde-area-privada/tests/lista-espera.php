@@ -11,6 +11,8 @@
 defined( 'ABSPATH' ) || exit;
 
 require_once __DIR__ . '/lib/CrmSimulado.php';
+require_once __DIR__ . '/lib/AislarLocal.php';
+asde_test_apartar_usuarios_local();
 require_once ABSPATH . 'wp-admin/includes/user.php';
 
 use AsdeBalears\AreaPrivada\Audit\Logger;
@@ -591,7 +593,7 @@ try {
 	$ok( true === Inscripciones::sin_confirmacion( $num ), 'Secretaría lo activa' );
 	$pen = Inscripciones::por_id( (int) $pen['id'] );
 	$ok( Inscripciones::EN_ESPERA === $pen['estado'] && $pen['caduca'], 'al activarlo, la que esperaba confirmación pasa a la lista' );
-	$ok( str_contains( (string) $ultimo()['subject'], 'Inscripción recibida' ) && 'pendi.espera@example.invalid' === $ultimo()['to'], 'y recibe el email de inscripción recibida' );
+	$ok( str_contains( (string) $ultimo()['subject'], 'Inscripción en la lista de espera recibida' ) && 'pendi.espera@example.invalid' === $ultimo()['to'], 'y recibe el email de inscripción recibida' );
 	$h = $ver( new ListaEsperaView() );
 	$ok( str_contains( $h, "checked='checked'><span>No pedir" ), 'la casilla sale marcada' );
 	wp_set_current_user( 0 );
@@ -601,7 +603,7 @@ try {
 	$ok( $nur && Inscripciones::EN_ESPERA === $nur['estado'] && $nur['confirmada_en'] && $nur['caduca'] && $antes < (int) $nur['id'], 'sin confirmar: entra directamente en la lista' );
 	$ok( str_contains( $h, 'ya está en la lista' ) && ! str_contains( $h, 'Hasta que no pulses' ), 'y la pantalla no pide confirmar nada' );
 	$c = $ultimo();
-	$ok( str_contains( (string) $c['subject'], 'Inscripción recibida' ) && 'nuria.espera@example.invalid' === $c['to'] && $enlace_de( $c, 'espera' ) && ! $enlace_de( $c, 'confirmar' ), 'el email solo informa y lleva el enlace a sus datos (no el de confirmar)' );
+	$ok( str_contains( (string) $c['subject'], 'Inscripción en la lista de espera recibida' ) && 'nuria.espera@example.invalid' === $c['to'] && $enlace_de( $c, 'espera' ) && ! $enlace_de( $c, 'confirmar' ), 'el email solo informa y lleva el enlace a sus datos (no el de confirmar)' );
 	$antes = $max_id( Inscripciones::table() );
 	$publica( $form( array( 'nombre' => 'Nuria', 'email' => 'nuria.espera@example.invalid', 'sello' => $sello() ) ), 'espera_inscribir' );
 	$ok( $antes === $max_id( Inscripciones::table() ) && Inscripciones::EN_ESPERA === $fila_de( 'Nuria' )['estado'], 'apuntarse otra vez no la repite' );
