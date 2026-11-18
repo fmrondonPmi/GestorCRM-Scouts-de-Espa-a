@@ -329,6 +329,29 @@ final class PedidosTable {
 		);
 	}
 
+	/**
+	 * Como marcar_pago(), pero solo si el pedido sigue sin pagar y sin cancelar, en una sola sentencia (v0.64.13): dos pagos
+	 * a la vez del mismo pedido no se pisan. Devuelve false si ya estaba pagado o cancelado.
+	 */
+	public static function marcar_pago_si_pendiente( int $id, string $fecha, string $metodo, float $importe, string $ref ): bool {
+		global $wpdb;
+		$n = $wpdb->query( // phpcs:ignore WordPress.DB
+			$wpdb->prepare(
+				'UPDATE %i SET pago_fecha = %s, pago_metodo = %s, pago_importe = %f, pago_ref = %s, pago_por = %d, pago_en = %s WHERE id = %d AND grupo = %s AND pago_en IS NULL AND cancelado_en IS NULL',
+				self::table(),
+				$fecha,
+				$metodo,
+				round( $importe, 2 ),
+				mb_substr( sanitize_text_field( $ref ), 0, 120 ),
+				get_current_user_id(),
+				current_time( 'mysql', true ),
+				$id,
+				Grupo::numero()
+			)
+		);
+		return 1 === (int) $n;
+	}
+
 	public static function deshacer_pago( int $id ): bool {
 		return self::actualizar(
 			$id,

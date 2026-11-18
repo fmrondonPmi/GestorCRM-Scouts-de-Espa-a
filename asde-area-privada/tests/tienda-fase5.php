@@ -352,6 +352,12 @@ try {
 	$_POST    = array();
 	$_REQUEST = array();
 	$ok( null === PedidosTable::por_id( $a )['pago_en'] && BancoTable::PENDIENTE === BancoTable::obtener( (int) $m_otro['id'] )['estado'], 'si se deshace el pago, el ingreso asociado a mano vuelve a estar por conciliar' );
+	// v0.64.13 (code-review): el pago del pedido es condicionado y el importe distinto hay que confirmarlo en el servidor.
+	$ok( false === PedidosTable::marcar_pago_si_pendiente( $c, '2026-10-13', 'transferencia', 1.0, 'x' ) && null !== PedidosTable::por_id( $c )['pago_en'], 'pagar otra vez un pedido ya pagado no lo pisa (la sentencia solo actualiza si sigue sin pagar)' );
+	$ped_y = (int) $por[ $num_y ]['pedido']['id'];
+	$mov_y = (int) $por[ $num_y ]['mov']['id'];
+	$r_dist = ConciliacionBanco::asociar( $ped_y, $mov_y );
+	$ok( is_wp_error( $r_dist ) && str_contains( $r_dist->get_error_message(), 'confírmalo' ) && null === PedidosTable::por_id( $ped_y )['pago_en'] && BancoTable::PENDIENTE === BancoTable::obtener( $mov_y )['estado'], 'un ingreso de 8 € no paga un pedido de 10 € sin que el servidor reciba la confirmación del importe distinto' );
 	$como( 0 );
 
 	echo "\n== Parte D2 · Abono del datáfono en el banco (v0.46) ==\n";

@@ -138,7 +138,7 @@ final class ConciliacionBanco {
 	 *
 	 * @return true|\WP_Error
 	 */
-	public static function asociar( int $pedido_id, int $mov_id ) {
+	public static function asociar( int $pedido_id, int $mov_id, bool $importe_distinto = false ) {
 		if ( ! self::disponible() ) {
 			return new \WP_Error( 'asde_tienda', __( 'The bank is only used by Treasury and whoever manages the Treasury settings, with the Bank module on.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
@@ -153,19 +153,32 @@ final class ConciliacionBanco {
 		if ( BancoTable::PENDIENTE !== $m['estado'] || $m['importe'] <= 0 ) {
 			return new \WP_Error( 'asde_tienda', __( 'That income is already reviewed or does not exist.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
+		$a_cobrar = Servicio::importe_a_cobrar( $p );
+		if ( $a_cobrar <= 0 ) {
+			return new \WP_Error( 'asde_tienda', __( 'That order has nothing to pay.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
+		}
+		// v0.64.13: el importe distinto lo confirma quien asocia (lo manda el formulario), no solo el JavaScript.
+		if ( ! $importe_distinto && abs( (float) $m['importe'] - $a_cobrar ) >= 0.005 ) {
+			return new \WP_Error( 'asde_tienda', __( 'The amount of the deposit is not the amount of the order: confirm it to continue.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
+		}
 		return self::aplicar( $p, $m );
 	}
 
 	/** Toma el ingreso y paga el pedido con él (lo comparten confirmar() y asociar()). @return true|\WP_Error */
 	private static function aplicar( array $p, array $m ) {
 		$mov_id = (int) $m['id'];
-		// Primero se toma el ingreso (solo si sigue pendiente, en una sola sentencia) y después se paga el pedido: dos
-		// confirmaciones a la vez no pagan dos pedidos con el mismo ingreso (doc 59, RC-TES-6).
+		// v0.64.13: primero se paga el pedido, pero solo si sigue sin pagar (una sola sentencia), y después se toma el ingreso (solo si
+		// sigue pendiente, también en una sola sentencia): ni dos ingresos pagan el mismo pedido ni dos pedidos toman el mismo ingreso
+		// (doc 59, RC-TES-6). Si el ingreso ya no está, el pago del pedido se deshace.
+		$metodo = PedidosTable::METODO_DE_FORMA[ $p['forma_pago'] ] ?? 'transferencia';
+		$ref    = 'Banco' . ( '' !== $m['documento'] ? ' ' . $m['documento'] : '' );
+		if ( ! PedidosTable::marcar_pago_si_pendiente( $p['id'], $m['fecha'], isset( PedidosTable::metodos()[ $metodo ] ) ? $metodo : 'transferencia', (float) $m['importe'], $ref ) ) {
+			return new \WP_Error( 'asde_tienda', __( 'That order is already paid or cancelled.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
+		}
 		if ( ! BancoTable::revisar( $mov_id, 0, sprintf( self::NOTA, PedidosTable::numero( $p ) ), 0, 0, BancoTable::PENDIENTE ) ) {
+			PedidosTable::deshacer_pago( $p['id'] );
 			return new \WP_Error( 'asde_tienda', __( 'That income is already reviewed or does not correspond to this order.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
-		$metodo = PedidosTable::METODO_DE_FORMA[ $p['forma_pago'] ] ?? 'transferencia';
-		PedidosTable::marcar_pago( $p['id'], $m['fecha'], isset( PedidosTable::metodos()[ $metodo ] ) ? $metodo : 'transferencia', (float) $m['importe'], 'Banco' . ( '' !== $m['documento'] ? ' ' . $m['documento'] : '' ) );
 		Logger::log( 'tienda_banco_pagado', 'tienda', (string) $p['id'], array( 'movimiento' => $mov_id, 'importe' => $m['importe'] ) );
 		$nuevo = PedidosTable::obtener( $p['id'] );
 		if ( $nuevo ) {

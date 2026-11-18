@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.64.12
+Stable tag: 0.64.13
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -61,6 +61,9 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.64.13 =
+* Shop / bank: associating a deposit with an order by hand can no longer pay the same order twice at once, asks the server for confirmation when the amount differs from the order's and refuses orders with nothing to pay.
 
 = 0.64.12 =
 * Translations: fixed six plural texts that showed the singular form ("Queda 3" instead of "Quedan 3", "1 corregida" with several…).
@@ -221,6 +224,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * The changelog of versions 0.42.0 and earlier is in changelog.txt, in the plugin folder.
 
 == Upgrade Notice ==
+
+= 0.64.13 =
+Safer payment of shop orders from the bank. No database changes.
 
 = 0.64.12 =
 Fixes plural texts. No database changes.

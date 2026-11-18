@@ -10967,7 +10967,7 @@ msgstr ""
 msgid "Pay it into the bank"
 msgstr ""
 
-#: templates/tesoreria/banco-pedido.php:77
+#: templates/tesoreria/banco-pedido.php:80
 msgid "Pay this one"
 msgstr ""
 
@@ -14458,11 +14458,11 @@ msgstr ""
 msgid "That group no. is already registered or pending review. If it is yours, talk to the office."
 msgstr ""
 
-#: src/Tienda/ConciliacionBanco.php:101 src/Tienda/ConciliacionBanco.php:165
+#: src/Tienda/ConciliacionBanco.php:101 src/Tienda/ConciliacionBanco.php:180
 msgid "That income is already reviewed or does not correspond to this order."
 msgstr ""
 
-#: src/Tienda/ConciliacionBanco.php:154 src/Tienda/ConciliacionBanco.php:259 src/Tienda/ConciliacionBanco.php:271 templates/tesoreria/banco-pedido.php:33
+#: src/Tienda/ConciliacionBanco.php:154 src/Tienda/ConciliacionBanco.php:272 src/Tienda/ConciliacionBanco.php:284 templates/tesoreria/banco-pedido.php:33
 msgid "That income is already reviewed or does not exist."
 msgstr ""
 
@@ -14514,11 +14514,15 @@ msgstr ""
 msgid "That order does not exist."
 msgstr ""
 
+#: src/Tienda/ConciliacionBanco.php:158
+msgid "That order has nothing to pay."
+msgstr ""
+
 #: src/Tienda/Proveedor.php:170 src/Tienda/Proveedor.php:183
 msgid "That order is already marked as received."
 msgstr ""
 
-#: src/Tienda/ConciliacionBanco.php:98 src/Tienda/ConciliacionBanco.php:151
+#: src/Tienda/ConciliacionBanco.php:98 src/Tienda/ConciliacionBanco.php:151 src/Tienda/ConciliacionBanco.php:176
 msgid "That order is already paid or cancelled."
 msgstr ""
 
@@ -15018,6 +15022,10 @@ msgstr ""
 msgid "The amount of the deposit is not the amount of the order. Mark the order as paid with this deposit anyway?"
 msgstr ""
 
+#: src/Tienda/ConciliacionBanco.php:162
+msgid "The amount of the deposit is not the amount of the order: confirm it to continue."
+msgstr ""
+
 #: src/Eventos/Cuentas.php:253
 msgid "The amount returned cannot be negative."
 msgstr ""
@@ -15068,7 +15076,7 @@ msgstr ""
 msgid "The bank is only seen by the Secretary's office, Coordination and Treasury."
 msgstr ""
 
-#: src/Tienda/ConciliacionBanco.php:90 src/Tienda/ConciliacionBanco.php:143 src/Tienda/ConciliacionBanco.php:255
+#: src/Tienda/ConciliacionBanco.php:90 src/Tienda/ConciliacionBanco.php:143 src/Tienda/ConciliacionBanco.php:268
 msgid "The bank is only used by Treasury and whoever manages the Treasury settings, with the Bank module on."
 msgstr ""
 
@@ -15112,7 +15120,7 @@ msgstr ""
 msgid "The budget, if families pay, and Treasury's validation"
 msgstr ""
 
-#: src/Tienda/ConciliacionBanco.php:267
+#: src/Tienda/ConciliacionBanco.php:280
 msgid "The card payments no longer match that deposit. Check the list."
 msgstr ""
 

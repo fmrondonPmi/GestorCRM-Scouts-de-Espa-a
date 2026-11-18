@@ -148,10 +148,8 @@ function leer_po( string $ruta ): array {
 			if ( '' !== $val ) { $out[ $id ] = $val; }
 		}
 		// La forma plural también se respeta (clave «[1]texto»): así no se pierden los plurales corregidos a mano.
-		if ( preg_match( '/msgstr\[1\]\s+((?:"(?:[^"\\\\]|\\\\.)*"\s*
-?)+)/s', $m[3], $x1 ) ) {
-			$val1 = json_decode( preg_replace( '/"\s*
-\s*"/', '', trim( $x1[1] ) ) ) ?? '';
+		if ( preg_match( '/msgstr\[1\]\s+((?:"(?:[^"\\\\]|\\\\.)*"\s*\n?)+)/s', $m[3], $x1 ) ) {
+			$val1 = json_decode( preg_replace( '/"\s*\n\s*"/', '', trim( $x1[1] ) ) ) ?? '';
 			if ( '' !== $val1 ) { $out[ '[1]' . $id ] = $val1; }
 		}
 	}
@@ -189,7 +187,7 @@ foreach ( IDIOMAS as $idioma => [ $lang, $nombre ] ) {
 	$base = 'ca_valencia' === $idioma ? 'ca' : $lang;
 	$previo = leer_po( $salida . DOM . '-' . $idioma . '.po' );
 	$po = $cabecera( $idioma, $nombre, $lang );
-	$traducidos = 0; $conflictos = 0;
+	$traducidos = 0; $conflictos = 0; $cambios = array();
 	foreach ( $textos as [ $msgid, $plural, $refs, $coment ] ) {
 		$t0 = $previo[ $msgid ] ?? $buscar( $msgid, $base );
 		$t1 = null;
@@ -205,6 +203,9 @@ foreach ( IDIOMAS as $idioma => [ $lang, $nombre ] ) {
 			}
 		}
 		if ( null !== $plural && isset( $previo[ '[1]' . $msgid ] ) ) { $t1 = $previo[ '[1]' . $msgid ]; } // El plural ya escrito en el .po se respeta.
+		// Guarda (v0.64.13): lo ya escrito en el .po no debe cambiar al regenerarlo (en la 0.64.11 seis plurales perdieron su forma plural).
+		if ( isset( $previo[ $msgid ] ) && $previo[ $msgid ] !== $t0 ) { $cambios[] = $msgid; }
+		if ( null !== $plural && isset( $previo[ '[1]' . $msgid ] ) && $previo[ '[1]' . $msgid ] !== $t1 ) { $cambios[] = '[1]' . $msgid; }
 		if ( count( $es_de[ $msgid ] ?? array() ) > 1 ) { $conflictos++; }
 		if ( '' !== $coment ) { $po .= '#. ' . $coment . "\n"; }
 		$po .= '#: ' . implode( ' ', array_slice( array_unique( $refs ), 0, 4 ) ) . "\n";
@@ -217,6 +218,11 @@ foreach ( IDIOMAS as $idioma => [ $lang, $nombre ] ) {
 			$po .= po_campo( 'msgstr', $t0 ?? '' ) . "\n";
 		}
 		if ( null !== $t0 ) { $traducidos++; }
+	}
+	if ( $cambios && ! in_array( '--forzar', $argv, true ) ) {
+		fwrite( STDERR, "$idioma: se cambiarían " . count( $cambios ) . " traducciones ya escritas (p. ej. «" . $cambios[0] . "»): no se escribe nada. Usa --forzar si es lo que quieres.
+" );
+		exit( 1 );
 	}
 	file_put_contents( $salida . DOM . '-' . $idioma . '.po', $po );
 	$resumen[] = sprintf( '%-12s %d/%d traducidos (%d con varios castellanos)', $idioma, $traducidos, count( $textos ), $conflictos );

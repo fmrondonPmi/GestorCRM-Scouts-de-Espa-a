@@ -10969,7 +10969,7 @@ msgstr "Paga con tarxeta, en persoa, co datáfono do grupo ao recollelo, indican
 msgid "Pay it into the bank"
 msgstr "Ingresalo no banco"
 
-#: templates/tesoreria/banco-pedido.php:77
+#: templates/tesoreria/banco-pedido.php:80
 msgid "Pay this one"
 msgstr "Pagar este"
 
@@ -14460,11 +14460,11 @@ msgstr "Ese grupo non existe."
 msgid "That group no. is already registered or pending review. If it is yours, talk to the office."
 msgstr "Ese nº de grupo xa está dado de alta ou pendente de revisar. Se é o voso, falade coa oficina."
 
-#: src/Tienda/ConciliacionBanco.php:101 src/Tienda/ConciliacionBanco.php:165
+#: src/Tienda/ConciliacionBanco.php:101 src/Tienda/ConciliacionBanco.php:180
 msgid "That income is already reviewed or does not correspond to this order."
 msgstr "Ese ingreso xa está revisado ou non corresponde a este pedido."
 
-#: src/Tienda/ConciliacionBanco.php:154 src/Tienda/ConciliacionBanco.php:259 src/Tienda/ConciliacionBanco.php:271 templates/tesoreria/banco-pedido.php:33
+#: src/Tienda/ConciliacionBanco.php:154 src/Tienda/ConciliacionBanco.php:272 src/Tienda/ConciliacionBanco.php:284 templates/tesoreria/banco-pedido.php:33
 msgid "That income is already reviewed or does not exist."
 msgstr "Ese ingreso xa está revisado ou non existe."
 
@@ -14516,11 +14516,15 @@ msgstr "Ese pedido xa non se pode cancelar desde aquí: xa consta o pago ou est�
 msgid "That order does not exist."
 msgstr "Ese pedido non existe."
 
+#: src/Tienda/ConciliacionBanco.php:158
+msgid "That order has nothing to pay."
+msgstr "Ese pedido non ten nada que cobrar."
+
 #: src/Tienda/Proveedor.php:170 src/Tienda/Proveedor.php:183
 msgid "That order is already marked as received."
 msgstr "Ese pedido xa está marcado como recibido."
 
-#: src/Tienda/ConciliacionBanco.php:98 src/Tienda/ConciliacionBanco.php:151
+#: src/Tienda/ConciliacionBanco.php:98 src/Tienda/ConciliacionBanco.php:151 src/Tienda/ConciliacionBanco.php:176
 msgid "That order is already paid or cancelled."
 msgstr "Ese pedido xa está pagado ou cancelado."
 
@@ -15020,6 +15024,10 @@ msgstr "O importe ten que ser maior que 0."
 msgid "The amount of the deposit is not the amount of the order. Mark the order as paid with this deposit anyway?"
 msgstr "O importe do ingreso non é o do pedido. Queres marcar o pedido como pagado con este ingreso igualmente?"
 
+#: src/Tienda/ConciliacionBanco.php:162
+msgid "The amount of the deposit is not the amount of the order: confirm it to continue."
+msgstr "O importe do ingreso non é o do pedido: confírmao para continuar."
+
 #: src/Eventos/Cuentas.php:253
 msgid "The amount returned cannot be negative."
 msgstr "O devolto non pode ser negativo."
@@ -15070,7 +15078,7 @@ msgstr "O banco non está activo no teu grupo."
 msgid "The bank is only seen by the Secretary's office, Coordination and Treasury."
 msgstr "O banco só o ven Secretaría, Coordinación e Tesouraría."
 
-#: src/Tienda/ConciliacionBanco.php:90 src/Tienda/ConciliacionBanco.php:143 src/Tienda/ConciliacionBanco.php:255
+#: src/Tienda/ConciliacionBanco.php:90 src/Tienda/ConciliacionBanco.php:143 src/Tienda/ConciliacionBanco.php:268
 msgid "The bank is only used by Treasury and whoever manages the Treasury settings, with the Bank module on."
 msgstr "O banco só o usan Tesouraría e quen leve a configuración de Tesouraría, co módulo Banco activo."
 
@@ -15114,7 +15122,7 @@ msgstr "Aínda hai que preparar o orzamento e envialo a Tesouraría para o seu v
 msgid "The budget, if families pay, and Treasury's validation"
 msgstr "O orzamento, se pagan as familias, e a validación de Tesouraría"
 
-#: src/Tienda/ConciliacionBanco.php:267
+#: src/Tienda/ConciliacionBanco.php:280
 msgid "The card payments no longer match that deposit. Check the list."
 msgstr "Os cobros con datáfono xa non cadran con ese ingreso. Revisa a lista."
 

@@ -64,3 +64,7 @@ Todo desplegable que liste **datos** (personas, familias, eventos, grupos, provi
 - Las opciones se leen al momento (un ingrediente creado desde la ventana entra en la lista) y el campo refleja los cambios de valor hechos por otros scripts (`select.value = …` + `change`).
 - Filas que se copian con `cloneNode` (ingredientes del menú y de la receta): `window.asdeCombobox.reiniciar( fila )` antes de vaciar la copia y `iniciar( fila )` al añadirla.
 - Prueba: `tests/estilo-wordpress.php`, parte G.
+
+### Generador de .po: plurales perdidos (v0.64.13)
+
+`herramientas/generar-po.php` tenía dos expresiones regulares con un salto de línea escrito **literalmente** dentro de la cadena (`"\s*` + salto + `?)+)`). En un checkout de Windows (CRLF) ese salto pasa a ser `\r\n` y ya no casa con el `.po` (LF): el generador no leía la forma plural (`msgstr[1]`) de lo ya escrito y, en las entradas cuyo singular y plural coinciden en inglés, volvía a escribir el singular (en la 0.64.11 «Quedan %d» salió «Queda %d»). Ahora usan `\n` escapado. Además, si al regenerar fuera a cambiar una traducción ya escrita, el generador se detiene sin escribir nada (`--forzar` para permitirlo).

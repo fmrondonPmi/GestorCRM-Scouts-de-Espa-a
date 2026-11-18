@@ -73,6 +73,9 @@ $fecha = static fn( string $f ) => wp_date( 'd/m/Y', strtotime( $f . ( strlen( $
 									<input type="hidden" name="asde_action" value="pagar_pedido">
 									<input type="hidden" name="mov" value="<?php echo (int) $mov['id']; ?>">
 									<input type="hidden" name="pedido" value="<?php echo (int) $p['id']; ?>">
+									<?php if ( ! $igual ) : // v0.64.13: quien pulsa ya ha confirmado el importe distinto (el servidor lo exige). ?>
+										<input type="hidden" name="importe_distinto" value="1">
+									<?php endif; ?>
 									<input type="hidden" name="volver" value="<?php echo esc_url( $volver ); ?>">
 									<button type="submit" class="button"><?php esc_html_e( 'Pay this one', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 								</form>

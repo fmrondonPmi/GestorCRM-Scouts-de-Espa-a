@@ -444,7 +444,7 @@ final class BancoView extends TesoreriaBaseView {
 				// v0.64.8: el ingreso es el pago de un pedido de la tienda elegido a mano.
 				$id = (int) $this->post( 'mov' );
 				check_admin_referer( 'asde_banco_mov_' . $id );
-				$r = \AsdeBalears\AreaPrivada\Tienda\ConciliacionBanco::asociar( (int) $this->post( 'pedido' ), $id );
+				$r = \AsdeBalears\AreaPrivada\Tienda\ConciliacionBanco::asociar( (int) $this->post( 'pedido' ), $id, '1' === $this->post( 'importe_distinto' ) );
 				is_wp_error( $r )
 					? Notices::add( 'error', esc_html( $r->get_error_message() ) )
 					: Notices::add( 'success', __( 'Order marked as paid with this deposit.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );

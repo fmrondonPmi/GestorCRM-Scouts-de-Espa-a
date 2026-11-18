@@ -10969,7 +10969,7 @@ msgstr "Ordaindu txartelaz, pertsonalki, taldeko datafonoarekin jasotzean, eskae
 msgid "Pay it into the bank"
 msgstr "Sartu bankuan"
 
-#: templates/tesoreria/banco-pedido.php:77
+#: templates/tesoreria/banco-pedido.php:80
 msgid "Pay this one"
 msgstr "Hau ordaindu"
 
@@ -14460,11 +14460,11 @@ msgstr "Talde hori ez dago."
 msgid "That group no. is already registered or pending review. If it is yours, talk to the office."
 msgstr "Taldearen zenbaki hori alta emanda dago edo berrikusteke dago. Zuena bada, hitz egin bulegoarekin."
 
-#: src/Tienda/ConciliacionBanco.php:101 src/Tienda/ConciliacionBanco.php:165
+#: src/Tienda/ConciliacionBanco.php:101 src/Tienda/ConciliacionBanco.php:180
 msgid "That income is already reviewed or does not correspond to this order."
 msgstr "Sarrera hau berrikusita dago jada edo ez dagokio eskaera honi."
 
-#: src/Tienda/ConciliacionBanco.php:154 src/Tienda/ConciliacionBanco.php:259 src/Tienda/ConciliacionBanco.php:271 templates/tesoreria/banco-pedido.php:33
+#: src/Tienda/ConciliacionBanco.php:154 src/Tienda/ConciliacionBanco.php:272 src/Tienda/ConciliacionBanco.php:284 templates/tesoreria/banco-pedido.php:33
 msgid "That income is already reviewed or does not exist."
 msgstr "Sarrera hori jada berrikusita dago edo ez da existitzen."
 
@@ -14516,11 +14516,15 @@ msgstr "Eskaera hau ezin da hemendik ezeztatu jada: ordainketa dagoeneko agertze
 msgid "That order does not exist."
 msgstr "Eskaera hori ez da existitzen."
 
+#: src/Tienda/ConciliacionBanco.php:158
+msgid "That order has nothing to pay."
+msgstr "Eskaera horrek ez du kobratzeko ezer."
+
 #: src/Tienda/Proveedor.php:170 src/Tienda/Proveedor.php:183
 msgid "That order is already marked as received."
 msgstr "Eskaera hori jada jasotzat markatuta dago."
 
-#: src/Tienda/ConciliacionBanco.php:98 src/Tienda/ConciliacionBanco.php:151
+#: src/Tienda/ConciliacionBanco.php:98 src/Tienda/ConciliacionBanco.php:151 src/Tienda/ConciliacionBanco.php:176
 msgid "That order is already paid or cancelled."
 msgstr "Eskaera hori ordainduta edo ezeztatuta dago jada."
 
@@ -15020,6 +15024,10 @@ msgstr "Zenbatekoak 0 baino handiagoa izan behar du."
 msgid "The amount of the deposit is not the amount of the order. Mark the order as paid with this deposit anyway?"
 msgstr "Sarreraren zenbatekoa ez da eskaeraren zenbatekoa. Eskaera sarrera honekin ordainduta bezala markatu nahi duzu hala ere?"
 
+#: src/Tienda/ConciliacionBanco.php:162
+msgid "The amount of the deposit is not the amount of the order: confirm it to continue."
+msgstr "Sarreraren zenbatekoa ez da eskaeraren zenbatekoa: berretsi jarraitzeko."
+
 #: src/Eventos/Cuentas.php:253
 msgid "The amount returned cannot be negative."
 msgstr "Itzulitakoa ezin da negatiboa izan."
@@ -15070,7 +15078,7 @@ msgstr "Bankua ez dago aktibo zure taldean."
 msgid "The bank is only seen by the Secretary's office, Coordination and Treasury."
 msgstr "Bankua Idazkaritzak, Koordinazioak eta Diruzaintzak soilik ikusten dute."
 
-#: src/Tienda/ConciliacionBanco.php:90 src/Tienda/ConciliacionBanco.php:143 src/Tienda/ConciliacionBanco.php:255
+#: src/Tienda/ConciliacionBanco.php:90 src/Tienda/ConciliacionBanco.php:143 src/Tienda/ConciliacionBanco.php:268
 msgid "The bank is only used by Treasury and whoever manages the Treasury settings, with the Bank module on."
 msgstr "Bankua Diruzaintzak eta Diruzaintzaren konfigurazioa daramana soilik erabil dezakete, Banku modulua aktibo dagoenean."
 
@@ -15114,7 +15122,7 @@ msgstr "Aurrekontua oraindik prestatu eta Diruzaintzari bidali behar zaio onirit
 msgid "The budget, if families pay, and Treasury's validation"
 msgstr "Aurrekontua, familiek ordaintzen badute, eta Diruzaintzaren balidazioa"
 
-#: src/Tienda/ConciliacionBanco.php:267
+#: src/Tienda/ConciliacionBanco.php:280
 msgid "The card payments no longer match that deposit. Check the list."
 msgstr "Datafonoko kobrantzak jada ez datoz bat sarrera horrekin. Berrikusi zerrenda."
 
