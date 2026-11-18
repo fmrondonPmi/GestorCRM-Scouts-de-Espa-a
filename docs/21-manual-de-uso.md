@@ -219,6 +219,18 @@ Solo textos, sin capturas nuevas: apartado nuevo `lista-espera.html` (`#lista-es
 - **Fase 5 de la tienda:** en `uniformes-gestion.html`, «Pagos que llegan al banco», «Ventas e informes» y los plazos de «Pedidos sin pagar»; en `uniforme-pedir.html`, el recordatorio y la cancelación automática. Capturas nuevas `106-tienda-banco`, `107-tienda-informes` y `108-tienda-config-sin-pagar`; rehechas `36b`, `37`, `38`, `56` y `100` (cabecera «Pedidos de la tienda»).
 - **Herramientas** (`manual-capturas.php`, fuera del repo): renombradas las vistas de Uniformes a las de la tienda; el volcado crea productos, un pedido con varias líneas, una compra sin sesión, una acampada con el calendario aplicado y deja todo como estaba (aparta los productos y eventos reales del grupo mientras dura). Paquete `manual-de-uso-0.40.0.zip`; no se ha publicado nada.
 
+## Versión 4.11 · hasta la v0.64.13 (2026-11-19)
+
+Textos (los cinco manuales y la ayuda del plugin, regenerada):
+
+- **Entrar** (`entrar-socios`, `entrar-familias`, `preguntas-scouters`): con el mismo email en dos cuentas sale la pantalla «Elige tu cuenta» con un desplegable (ya no pide el nº de socio/a). Captura nueva **133-acceso-elegir**.
+- **Eventos**: el presupuesto lleva el **visto bueno** de Tesorería (no lo cierra; el precio queda fijo al publicar), los scouters y el voluntariado de apoyo no pagan, precio sugerido y fijado a mano; función «Scouter sin titulación»; plazas de Scouters y Voluntariado de apoyo = equipo del evento; columna «Inscritos» en la agenda y «Inscritos: N» en la ficha.
+- **Mis eventos**: la cuenta familiar representa a toda la familia de Tesorería y el scouter con hijos en el grupo los inscribe desde su cuenta.
+- **Tienda** (`uniformes-gestion`): «Marcar entregado» pide confirmación, «Deshacer» quita la entrega, y «Pagar un pedido de la tienda…» asocia a mano un ingreso del banco a un pedido.
+- **Ventana** (`ventana`): los desplegables de datos o de más de 10 opciones se buscan escribiendo.
+
+Herramientas (fuera del repo): `manual-capturas.php` (volcado `acceso-elegir`) y `manual-envolver.php` (captura 133). Solo se hizo la captura 133. Quedan por rehacer, si se quiere verlas en el manual: la agenda de eventos (columna «Inscritos»), la ventana «Pagar un pedido de la tienda» y la lista de gestión de pedidos (botón «Deshacer»).
+
 ## Versión 4.10 · lote de mejoras (v0.29.0, 2026-10-11)
 
 Solo textos (las capturas **no** se han rehecho todavía: las de informes, Personas, la ficha, cambios propuestos, gestión de uniformes e inventario enseñan aún las pantallas de la v0.28; ofrecido al usuario). Cambia la ayuda del plugin (se regenera con el manual).
