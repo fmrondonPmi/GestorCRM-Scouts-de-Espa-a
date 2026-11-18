@@ -178,6 +178,7 @@ final class InscripcionesTable {
 	public static function anadir( int $evento_id, string $socio, array $secciones, bool $adulto, string $papel ): int {
 		global $wpdb;
 		self::$cuentas_equipo = null;
+		self::$inscritos      = null;
 		if ( self::de_socio( $evento_id, $socio ) ) {
 			return 0;
 		}
@@ -199,6 +200,7 @@ final class InscripcionesTable {
 
 	public static function cambiar_papel( int $id, string $papel ): bool {
 		global $wpdb;
+		self::$inscritos = null;
 		self::$cuentas_equipo = null;
 		return false !== $wpdb->update(
 			self::table(),
@@ -213,12 +215,14 @@ final class InscripcionesTable {
 	/** Al cerrar las cuentas (P-150): borra lo cifrado de todas las inscripciones del evento (quién recoge, observaciones). @return int Cuántas tenían algo. */
 	public static function borrar_datos_evento( int $evento_id ): int {
 		global $wpdb;
+		self::$inscritos = null;
 		return (int) $wpdb->query( $wpdb->prepare( 'UPDATE %i SET datos_enc = NULL WHERE evento_id = %d AND grupo = %s AND datos_enc IS NOT NULL', self::table(), $evento_id, Grupo::numero() ) ); // phpcs:ignore WordPress.DB
 	}
 
 	/** Quita a alguien del equipo (no es un justificante de nada: se borra la fila). */
 	public static function quitar( int $id ): bool {
 		global $wpdb;
+		self::$inscritos = null;
 		self::$cuentas_equipo = null;
 		return (bool) $wpdb->delete(
 			self::table(),
@@ -288,6 +292,7 @@ final class InscripcionesTable {
 	 */
 	public static function inscribir( int $evento_id, string $socio, array $datos ): int {
 		global $wpdb;
+		self::$inscritos = null;
 		$previa = self::de_socio( $evento_id, $socio );
 		if ( $previa && self::PARTICIPANTE !== $previa['papel'] ) {
 			return 0;
@@ -348,6 +353,7 @@ final class InscripcionesTable {
 	/** Cambia columnas de un participante. */
 	public static function actualizar( int $id, array $datos ): bool {
 		global $wpdb;
+		self::$inscritos = null;
 		$fila = array_intersect_key( $datos, array_flip( self::COLUMNAS ) );
 		if ( ! $fila ) {
 			return false;
@@ -361,6 +367,38 @@ final class InscripcionesTable {
 				'grupo' => Grupo::numero(),
 				'papel' => self::PARTICIPANTE,
 			)
+		);
+	}
+
+	/** @var array<int, array{inscritos:int, confirmados:int}>|null Inscritos por evento (una consulta por petición). */
+	private static ?array $inscritos = null;
+
+	/**
+	 * Cuántas personas están inscritas en un evento (v0.64.9): las inscripciones activas (pendientes y confirmadas), da igual si
+	 * la autorización se firmó en la web o se entregó en papel. No cuentan la lista de espera, las bajas ni quien no participa.
+	 *
+	 * @return array{inscritos:int, confirmados:int}
+	 */
+	public static function inscritos( int $evento_id ): array {
+		global $wpdb;
+		if ( null === self::$inscritos ) {
+			self::$inscritos = array();
+			$estados         = self::ACTIVAS;
+			$marcas          = implode( ',', array_fill( 0, count( $estados ), '%s' ) );
+			$filas           = (array) $wpdb->get_results( $wpdb->prepare( "SELECT evento_id, estado, COUNT(*) AS n FROM %i WHERE grupo = %s AND papel = %s AND estado IN ($marcas) GROUP BY evento_id, estado", array_merge( array( self::table(), Grupo::numero(), self::PARTICIPANTE ), $estados ) ), ARRAY_A ); // phpcs:ignore WordPress.DB
+			foreach ( $filas as $f ) {
+				$e = (int) $f['evento_id'];
+				self::$inscritos[ $e ] ??= array(
+					'inscritos'   => 0,
+					'confirmados' => 0,
+				);
+				self::$inscritos[ $e ]['inscritos']   += (int) $f['n'];
+				self::$inscritos[ $e ]['confirmados'] += self::CONFIRMADA === $f['estado'] ? (int) $f['n'] : 0;
+			}
+		}
+		return self::$inscritos[ $evento_id ] ?? array(
+			'inscritos'   => 0,
+			'confirmados' => 0,
 		);
 	}
 
@@ -399,6 +437,7 @@ final class InscripcionesTable {
 	/** Borra todas las filas de un evento (al borrar un borrador). */
 	public static function borrar_evento( int $evento_id ): void {
 		global $wpdb;
+		self::$inscritos = null;
 		self::$cuentas_equipo = null;
 		$wpdb->delete(
 			self::table(),

@@ -70,6 +70,7 @@ defined( 'ABSPATH' ) || exit;
 					<th scope="col"><?php esc_html_e( 'Dates', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
 					<th scope="col"><?php esc_html_e( 'Sections', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
 					<th scope="col"><?php esc_html_e( 'Status', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
+					<th scope="col"><?php esc_html_e( 'Enrolled', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
 					<th scope="col"><?php esc_html_e( 'Price', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
 				</tr>
 			</thead>
@@ -90,6 +91,7 @@ defined( 'ABSPATH' ) || exit;
 							?>
 						</td>
 						<td data-label="<?php echo esc_attr( esc_attr__( 'Status', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><span class="asde-badge asde-badge--evento-<?php echo esc_attr( $estado ); ?>"><?php echo esc_html( ( EventosTable::estados()[ $estado ] ) ); ?></span></td>
+						<td data-label="<?php echo esc_attr( esc_attr__( 'Enrolled', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo EventosTable::PUBLICADO === $e['estado'] ? '<strong>' . (int) \AsdeBalears\AreaPrivada\Eventos\InscripcionesTable::inscritos( (int) $e['id'] )['inscritos'] . '</strong>' : '<span class="asde-muted">—</span>'; // v0.64.9: da igual si firmaron en la web o en papel. ?></td>
 						<td data-label="<?php echo esc_attr( esc_attr__( 'Price', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
 							<?php if ( ! $e['con_coste'] ) : ?>
 								<span class="asde-muted"><?php esc_html_e( 'No cost', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span>

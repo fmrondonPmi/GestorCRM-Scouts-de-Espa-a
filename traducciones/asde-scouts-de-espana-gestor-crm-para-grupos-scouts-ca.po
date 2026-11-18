@@ -3418,7 +3418,7 @@ msgid "Cancelled on"
 msgstr "Cancel·lada el"
 
 #. translators: 1: text, 2: text
-#: templates/eventos/evento.php:67
+#: templates/eventos/evento.php:70
 #, php-format
 msgid "Cancelled on %1$s. Reason: %2$s"
 msgstr "Cancel·lat el %1$s. Motiu: %2$s"
@@ -4695,7 +4695,7 @@ msgstr "Data de l'operació"
 msgid "Date the bank collected"
 msgstr "Data en què el banc va cobrar"
 
-#: templates/eventos/agenda.php:70 templates/eventos/agenda.php:84 templates/eventos/asistente.php:240 templates/eventos/resumen.php:54
+#: templates/eventos/agenda.php:70 templates/eventos/agenda.php:85 templates/eventos/asistente.php:240 templates/eventos/resumen.php:54
 msgid "Dates"
 msgstr "Dates"
 
@@ -5352,7 +5352,7 @@ msgstr "Edita l'informe"
 msgid "Edit the contact details of their section"
 msgstr "Editar les dades de contacte de la seva secció"
 
-#: templates/eventos/evento.php:63
+#: templates/eventos/evento.php:66
 msgid "Edit the details"
 msgstr "Edita les dades"
 
@@ -5463,6 +5463,14 @@ msgstr "Les files buides s'ignoren. Per afegir més camps, desa i torna a obrir 
 #: templates/eventos/asistente.php:121 templates/eventos/formulario.php:85
 msgid "Ends"
 msgstr "Acaba"
+
+#: templates/eventos/agenda.php:73 templates/eventos/agenda.php:94
+msgid "Enrolled"
+msgstr "Inscrits"
+
+#: templates/eventos/evento.php:53
+msgid "Enrolled:"
+msgstr "Inscrits:"
 
 #: src/Idiomas/Guardados.php:178
 msgid "Enter a price per person and day OR a total price, never both."
@@ -9801,7 +9809,7 @@ msgstr "Sense conflictes"
 msgid "No connection to the CRM for this group."
 msgstr ""
 
-#: src/Idiomas/Guardados.php:287 templates/eventos/agenda.php:95
+#: src/Idiomas/Guardados.php:287 templates/eventos/agenda.php:97
 msgid "No cost"
 msgstr "Sense cost"
 
@@ -11483,7 +11491,7 @@ msgstr "Vista prèvia:"
 msgid "Previous page"
 msgstr "Pàgina anterior"
 
-#: src/Inventario/ListaPdf.php:71 src/Tienda/ImportadorProductos.php:38 templates/eventos/agenda.php:73 templates/eventos/agenda.php:93
+#: src/Inventario/ListaPdf.php:71 src/Tienda/ImportadorProductos.php:38 templates/eventos/agenda.php:74 templates/eventos/agenda.php:95
 msgid "Price"
 msgstr "Preu"
 
@@ -13241,7 +13249,7 @@ msgstr "Secció: la de la seva edat"
 msgid "Section: the one for their age."
 msgstr "Secció: la de la seva edat."
 
-#: templates/eventos/agenda.php:71 templates/eventos/agenda.php:85 templates/informes/editor.php:82
+#: templates/eventos/agenda.php:71 templates/eventos/agenda.php:86 templates/informes/editor.php:82
 msgid "Sections"
 msgstr "Seccions"
 
@@ -17561,7 +17569,7 @@ msgstr "Al grup"
 msgid "To the section"
 msgstr "A la secció"
 
-#: templates/eventos/agenda.php:110
+#: templates/eventos/agenda.php:112
 msgid "To validate"
 msgstr "Per validar"
 

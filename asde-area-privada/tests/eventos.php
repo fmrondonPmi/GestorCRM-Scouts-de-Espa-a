@@ -413,6 +413,21 @@ try {
 	$a_pl = $como( $u_coord );
 	$h    = $pintar( new EventosView(), array( 'evento' => (string) $id_pl, 'editar' => '1' ) );
 	$ok( str_contains( $h, 'readonly' ) && str_contains( $h, 'son las personas del equipo' ), 'en el formulario del evento esas plazas no se escriben: salen fijas y con la explicación' );
+	// v0.64.9: en un evento publicado se ve cuántas personas se han inscrito (web o papel; no la espera ni las bajas).
+	$ok( 0 === InscripcionesTable::inscritos( $id_pl )['inscritos'], 'sin inscripciones, 0 inscritos' );
+	InscripcionesTable::inscribir( $id_pl, '990041', array( 'estado' => InscripcionesTable::CONFIRMADA, 'autorizacion' => 'web', 'adulto' => 0 ) );
+	InscripcionesTable::inscribir( $id_pl, '990042', array( 'estado' => InscripcionesTable::PENDIENTE, 'autorizacion' => 'papel', 'adulto' => 0 ) );
+	InscripcionesTable::inscribir( $id_pl, '990043', array( 'estado' => InscripcionesTable::ESPERA, 'adulto' => 0 ) );
+	InscripcionesTable::inscribir( $id_pl, '990044', array( 'estado' => InscripcionesTable::BAJA, 'adulto' => 0 ) );
+	$ok( 2 === InscripcionesTable::inscritos( $id_pl )['inscritos'] && 1 === InscripcionesTable::inscritos( $id_pl )['confirmados'], 'cuenta a quien firmó en la web y a quien entregó el papel (no la lista de espera ni las bajas)' );
+	$wpdb->update( EventosTable::table(), array( 'estado' => EventosTable::PUBLICADO ), array( 'id' => $id_pl ) ); // phpcs:ignore WordPress.DB
+	$h = $pintar( new EventosView(), array( 'evento' => (string) $id_pl ) );
+	$ok( str_contains( $h, 'Inscritos:' ), 'la pantalla del evento publicado enseña los inscritos' );
+	$h = $pintar( new EventosView(), array() );
+	$ok( str_contains( $h, '<th scope="col">Inscritos</th>' ), 'y la agenda tiene la columna «Inscritos»' );
+	$wpdb->update( EventosTable::table(), array( 'estado' => EventosTable::BORRADOR ), array( 'id' => $id_pl ) ); // phpcs:ignore WordPress.DB
+	$h = $pintar( new EventosView(), array( 'evento' => (string) $id_pl ) );
+	$ok( ! str_contains( $h, 'Inscritos:' ), 'el borrador no los enseña' );
 	InscripcionesTable::borrar_evento( $id_pl );
 	$wpdb->delete( EventosTable::table(), array( 'id' => $id_pl ) ); // phpcs:ignore WordPress.DB
 	$c_sin = Normativa::comprobar_equipo( $e_40, array_merge( $eq_ok, array( $mk( 's1', 'sin_titulacion' ), $mk( 's2', 'sin_titulacion' ) ) ), array(), $fi_ok + array( 's1' => $ficha( '' ), 's2' => $ficha( 'Monitor de tiempo libre' ) ), Config::de() );

@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.64.8
+Stable tag: 0.64.9
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -61,6 +61,9 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.64.9 =
+* Events: published events now show how many people have enrolled, in the agenda (new "Enrolled" column) and on the event page. It counts pending and confirmed enrolments, whether the authorisation was signed on the web or handed in on paper; the waiting list and withdrawals are not counted.
 
 = 0.64.8 =
 * Shop and bank: in Treasury → Bank, a pending income can now be linked by hand to an unpaid shop order ("Pay a shop order…"): the order is marked as paid with the date and amount of the income, and undoing the payment returns the income to pending. Until now this only worked when the bank description carried the order number.
@@ -208,6 +211,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * The changelog of versions 0.42.0 and earlier is in changelog.txt, in the plugin folder.
 
 == Upgrade Notice ==
+
+= 0.64.9 =
+Published events show how many people have enrolled. No database changes.
 
 = 0.64.8 =
 Link bank incomes to shop orders by hand; confirm and undo deliveries. No database changes.

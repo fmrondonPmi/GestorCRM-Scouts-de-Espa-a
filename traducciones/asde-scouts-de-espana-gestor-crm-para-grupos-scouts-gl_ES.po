@@ -3418,7 +3418,7 @@ msgid "Cancelled on"
 msgstr "Cancelado o"
 
 #. translators: 1: text, 2: text
-#: templates/eventos/evento.php:67
+#: templates/eventos/evento.php:70
 #, php-format
 msgid "Cancelled on %1$s. Reason: %2$s"
 msgstr "Cancelado o %1$s. Motivo: %2$s"
@@ -4695,7 +4695,7 @@ msgstr "Data da operación"
 msgid "Date the bank collected"
 msgstr "Data na que o banco cobrou"
 
-#: templates/eventos/agenda.php:70 templates/eventos/agenda.php:84 templates/eventos/asistente.php:240 templates/eventos/resumen.php:54
+#: templates/eventos/agenda.php:70 templates/eventos/agenda.php:85 templates/eventos/asistente.php:240 templates/eventos/resumen.php:54
 msgid "Dates"
 msgstr "Datas"
 
@@ -5352,7 +5352,7 @@ msgstr "Editar informe"
 msgid "Edit the contact details of their section"
 msgstr "Editar os datos de contacto da súa sección"
 
-#: templates/eventos/evento.php:63
+#: templates/eventos/evento.php:66
 msgid "Edit the details"
 msgstr "Editar os datos"
 
@@ -5463,6 +5463,14 @@ msgstr "As filas baleiras ignóranse. Para engadir máis campos, garda e volve a
 #: templates/eventos/asistente.php:121 templates/eventos/formulario.php:85
 msgid "Ends"
 msgstr "Remata"
+
+#: templates/eventos/agenda.php:73 templates/eventos/agenda.php:94
+msgid "Enrolled"
+msgstr "Inscritos"
+
+#: templates/eventos/evento.php:53
+msgid "Enrolled:"
+msgstr "Inscritos:"
 
 #: src/Idiomas/Guardados.php:178
 msgid "Enter a price per person and day OR a total price, never both."
@@ -9801,7 +9809,7 @@ msgstr "Sen conflitos"
 msgid "No connection to the CRM for this group."
 msgstr ""
 
-#: src/Idiomas/Guardados.php:287 templates/eventos/agenda.php:95
+#: src/Idiomas/Guardados.php:287 templates/eventos/agenda.php:97
 msgid "No cost"
 msgstr "Sen custo"
 
@@ -11483,7 +11491,7 @@ msgstr "Vista previa:"
 msgid "Previous page"
 msgstr "Páxina anterior"
 
-#: src/Inventario/ListaPdf.php:71 src/Tienda/ImportadorProductos.php:38 templates/eventos/agenda.php:73 templates/eventos/agenda.php:93
+#: src/Inventario/ListaPdf.php:71 src/Tienda/ImportadorProductos.php:38 templates/eventos/agenda.php:74 templates/eventos/agenda.php:95
 msgid "Price"
 msgstr "Prezo"
 
@@ -13241,7 +13249,7 @@ msgstr "Sección: a da súa idade"
 msgid "Section: the one for their age."
 msgstr "Sección: a da súa idade."
 
-#: templates/eventos/agenda.php:71 templates/eventos/agenda.php:85 templates/informes/editor.php:82
+#: templates/eventos/agenda.php:71 templates/eventos/agenda.php:86 templates/informes/editor.php:82
 msgid "Sections"
 msgstr "Seccións"
 
@@ -17561,7 +17569,7 @@ msgstr "Ao grupo"
 msgid "To the section"
 msgstr "Á sección"
 
-#: templates/eventos/agenda.php:110
+#: templates/eventos/agenda.php:112
 msgid "To validate"
 msgstr "Por validar"
 

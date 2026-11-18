@@ -49,6 +49,9 @@ foreach ( ( EventosView::pestanas_evento() ) as $p => $etiqueta ) {
 	</header>
 	<p>
 		<strong><?php echo esc_html( EventosTable::numero( $e ) ); ?></strong> · <?php echo esc_html( Config::nombre_tipo( $cfg, $e['tipo'] ) ); ?> · <?php echo esc_html( EventosTable::cuando( $e ) ); ?>
+			<?php if ( EventosTable::PUBLICADO === $e['estado'] ) : ?>
+				· <strong><?php esc_html_e( 'Enrolled:', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></strong> <?php echo (int) \AsdeBalears\AreaPrivada\Eventos\InscripcionesTable::inscritos( (int) $e['id'] )['inscritos']; // v0.64.9: da igual si firmaron en la web o en papel. ?>
+			<?php endif; ?>
 		<?php if ( '' !== $e['lugar'] ) : ?>
 			· <?php echo esc_html( $e['lugar'] ); ?>
 		<?php endif; ?>
