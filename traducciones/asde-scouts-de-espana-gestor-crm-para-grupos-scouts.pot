@@ -423,7 +423,7 @@ msgid "%1$s now has member no. <strong>%2$s</strong> (saved in the CRM). The oth
 msgstr ""
 
 #. translators: 1: text, 2: text
-#: src/Idiomas/TextosJs.php:29 templates/eventos/inscripciones.php:190
+#: src/Idiomas/TextosJs.php:32 templates/eventos/inscripciones.php:190
 #, php-format
 msgid "%1$s of %2$s"
 msgstr ""
@@ -633,7 +633,7 @@ msgid "%d could not be sent (see Users → Emails)."
 msgstr ""
 
 #. translators: %d: number
-#: templates/fichas/ficha.php:180
+#: templates/fichas/ficha.php:181
 #, php-format
 msgid "%d day"
 msgid_plural "%d days"
@@ -763,7 +763,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %d: number
-#: templates/fichas/ficha.php:249
+#: templates/fichas/ficha.php:250
 #, php-format
 msgid "%d item of data"
 msgid_plural "%d items of data"
@@ -817,7 +817,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %d: number
-#: templates/fichas/ficha.php:180
+#: templates/fichas/ficha.php:181
 #, php-format
 msgid "%d month"
 msgid_plural "%d months"
@@ -1119,7 +1119,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %d: number
-#: templates/fichas/ficha.php:180
+#: templates/fichas/ficha.php:181
 #, php-format
 msgid "%d year"
 msgid_plural "%d years"
@@ -1127,7 +1127,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %d: number
-#: templates/alta/buscar.php:66 templates/alta/detalle.php:307 templates/fichas/ficha.php:173 templates/lista-espera/detalle.php:66
+#: templates/alta/buscar.php:66 templates/alta/detalle.php:307 templates/fichas/ficha.php:174 templates/lista-espera/detalle.php:66
 #, php-format
 msgid "%d years"
 msgstr ""
@@ -1175,7 +1175,7 @@ msgid "%s is not going"
 msgstr ""
 
 #. translators: %s: text
-#: src/Idiomas/Guardados.php:41 src/Idiomas/TextosJs.php:48
+#: src/Idiomas/Guardados.php:41 src/Idiomas/TextosJs.php:51
 #, php-format
 msgid "%s items of equipment ticked"
 msgstr ""
@@ -1192,8 +1192,14 @@ msgstr ""
 msgid "%s per diner"
 msgstr ""
 
+#. translators: %s: number
+#: src/Idiomas/TextosJs.php:30
+#, php-format
+msgid "%s results"
+msgstr ""
+
 #. translators: %s: text
-#: src/Idiomas/Guardados.php:42 src/Idiomas/TextosJs.php:57
+#: src/Idiomas/Guardados.php:42 src/Idiomas/TextosJs.php:60
 #, php-format
 msgid "%s transactions ticked"
 msgstr ""
@@ -1247,7 +1253,7 @@ msgid "%s's shop"
 msgstr ""
 
 #. translators: 1: text, 2: text, 3: text
-#: templates/fichas/ficha.php:180
+#: templates/fichas/ficha.php:181
 #, php-format
 msgid "(%1$s, %2$s and %3$s)"
 msgstr ""
@@ -1379,7 +1385,7 @@ msgstr ""
 msgid "(paid %1$s, refunded %2$s)"
 msgstr ""
 
-#: templates/fichas/ficha.php:258
+#: templates/fichas/ficha.php:259
 msgid "(read-only:"
 msgstr ""
 
@@ -1419,7 +1425,7 @@ msgstr ""
 msgid "(to whoever requested it; they do not have an account yet)"
 msgstr ""
 
-#: templates/fichas/ficha.php:260
+#: templates/fichas/ficha.php:261
 msgid "(will be reviewed)"
 msgstr ""
 
@@ -1463,7 +1469,7 @@ msgstr ""
 msgid "+ New report"
 msgstr ""
 
-#: src/Frontend/Views/InventarioComprasView.php:342 src/Idiomas/TextosJs.php:52
+#: src/Frontend/Views/InventarioComprasView.php:342 src/Idiomas/TextosJs.php:55
 msgid "+ no price"
 msgstr ""
 
@@ -1539,11 +1545,15 @@ msgstr ""
 msgid "1 could not be corrected"
 msgstr ""
 
-#: src/Idiomas/Guardados.php:43 src/Idiomas/TextosJs.php:47
+#: src/Idiomas/Guardados.php:43 src/Idiomas/TextosJs.php:50
 msgid "1 item of equipment ticked"
 msgstr ""
 
-#: src/Idiomas/Guardados.php:44 src/Idiomas/TextosJs.php:56
+#: src/Idiomas/TextosJs.php:29
+msgid "1 result"
+msgstr ""
+
+#: src/Idiomas/Guardados.php:44 src/Idiomas/TextosJs.php:59
 msgid "1 transaction ticked"
 msgstr ""
 
@@ -1953,7 +1963,7 @@ msgstr ""
 msgid "Active"
 msgstr ""
 
-#: templates/fichas/ficha.php:203
+#: templates/fichas/ficha.php:204
 msgid "Active membership:"
 msgstr ""
 
@@ -3593,7 +3603,7 @@ msgstr ""
 msgid "Change it only if accented letters or ñ look wrong in the preview."
 msgstr ""
 
-#: templates/fichas/ficha.php:265
+#: templates/fichas/ficha.php:266
 msgid "Change pending approval: \""
 msgstr ""
 
@@ -3601,7 +3611,7 @@ msgstr ""
 msgid "Change proposed"
 msgstr ""
 
-#: templates/fichas/ficha.php:215 templates/fichas/membresia.php:35 templates/fichas/membresia.php:68
+#: templates/fichas/ficha.php:216 templates/fichas/membresia.php:35 templates/fichas/membresia.php:68
 msgid "Change section"
 msgstr ""
 
@@ -3633,7 +3643,7 @@ msgstr ""
 msgid "Changes"
 msgstr ""
 
-#: templates/fichas/ficha.php:193
+#: templates/fichas/ficha.php:194
 msgid "Changes are saved directly in the CRM. 🔒 = read-only (hover over it to see why)."
 msgstr ""
 
@@ -3641,7 +3651,7 @@ msgstr ""
 msgid "Changes proposed by families"
 msgstr ""
 
-#: templates/fichas/ficha.php:285
+#: templates/fichas/ficha.php:286
 msgid "Changes proposed on this record"
 msgstr ""
 
@@ -4131,12 +4141,12 @@ msgstr ""
 msgid "Coeliac disease"
 msgstr ""
 
-#: templates/fichas/ficha.php:139
+#: templates/fichas/ficha.php:140
 msgid "Collapse all"
 msgstr ""
 
 #. translators: %s: text
-#: src/Idiomas/Guardados.php:111 src/Idiomas/TextosJs.php:53
+#: src/Idiomas/Guardados.php:111 src/Idiomas/TextosJs.php:56
 #, php-format
 msgid "Collapse or expand \"%s\""
 msgstr ""
@@ -5960,7 +5970,7 @@ msgstr ""
 msgid "Excursion"
 msgstr ""
 
-#: templates/fichas/ficha.php:140
+#: templates/fichas/ficha.php:141
 msgid "Expand all"
 msgstr ""
 
@@ -6471,7 +6481,7 @@ msgstr ""
 msgid "First name and surname, member number, email or ID number"
 msgstr ""
 
-#: src/Idiomas/TextosJs.php:37 templates/comun/paginacion.php:30
+#: src/Idiomas/TextosJs.php:40 templates/comun/paginacion.php:30
 msgid "First page"
 msgstr ""
 
@@ -7916,7 +7926,7 @@ msgstr ""
 msgid "Incomplete details"
 msgstr ""
 
-#: src/Auth/AccessHooks.php:77 src/Idiomas/Guardados.php:225
+#: src/Auth/AccessHooks.php:82 src/Idiomas/Guardados.php:225
 msgid "Incorrect member number or email, password or group."
 msgstr ""
 
@@ -8597,7 +8607,7 @@ msgstr ""
 msgid "Last contact: %1$s, %2$s"
 msgstr ""
 
-#: src/Idiomas/TextosJs.php:40 templates/comun/paginacion.php:42
+#: src/Idiomas/TextosJs.php:43 templates/comun/paginacion.php:42
 msgid "Last page"
 msgstr ""
 
@@ -9229,7 +9239,7 @@ msgstr ""
 msgid "Member added to the family."
 msgstr ""
 
-#: src/Informes/Catalogo.php:56 templates/alta/buscar.php:43 templates/alta/buscar.php:58 templates/fichas/ficha.php:170
+#: src/Informes/Catalogo.php:56 templates/alta/buscar.php:43 templates/alta/buscar.php:58 templates/fichas/ficha.php:171
 msgid "Member no."
 msgstr ""
 
@@ -9285,7 +9295,7 @@ msgstr ""
 msgid "Member removed from the family."
 msgstr ""
 
-#: templates/fichas/ficha.php:177
+#: templates/fichas/ficha.php:178
 msgid "Member since"
 msgstr ""
 
@@ -9306,17 +9316,17 @@ msgid "Members"
 msgstr ""
 
 #. translators: %s: URL of the recovery page
-#: src/Auth/AccessHooks.php:139
+#: src/Auth/AccessHooks.php:144
 #, php-format
 msgid "Members and families can recover their password from <a href=\"%s\">this page</a>."
 msgstr ""
 
-#: src/Auth/AccessHooks.php:94
+#: src/Auth/AccessHooks.php:99
 msgid "Members and families sign in from \"Member access\" in the website menu."
 msgstr ""
 
 #. translators: %s: URL of the sign-in screen
-#: src/Auth/AccessHooks.php:91
+#: src/Auth/AccessHooks.php:96
 #, php-format
 msgid "Members and families sign in from <a href=\"%s\">Member access</a> in the website menu."
 msgstr ""
@@ -9343,7 +9353,7 @@ msgid_plural "Memberships being closed"
 msgstr[0] ""
 msgstr[1] ""
 
-#: templates/fichas/ficha.php:200
+#: templates/fichas/ficha.php:201
 msgid "Membership in the CRM"
 msgstr ""
 
@@ -9403,7 +9413,7 @@ msgstr ""
 msgid "Minor"
 msgstr ""
 
-#: templates/fichas/ficha.php:128
+#: templates/fichas/ficha.php:129
 msgid "Minors in your care"
 msgstr ""
 
@@ -9645,7 +9655,7 @@ msgstr ""
 msgid "New link created. The previous one is no longer valid."
 msgstr ""
 
-#: templates/fichas/ficha.php:218 templates/fichas/membresia.php:33
+#: templates/fichas/ficha.php:219 templates/fichas/membresia.php:33
 msgid "New membership"
 msgstr ""
 
@@ -9703,7 +9713,7 @@ msgstr ""
 msgid "Next free member no."
 msgstr ""
 
-#: src/Idiomas/TextosJs.php:39 templates/comun/paginacion.php:41
+#: src/Idiomas/TextosJs.php:42 templates/comun/paginacion.php:41
 msgid "Next page"
 msgstr ""
 
@@ -9745,7 +9755,7 @@ msgstr ""
 msgid "No account was found (record 11)."
 msgstr ""
 
-#: src/Frontend/Views/PersonasView.php:46 templates/fichas/ficha.php:154 templates/fichas/ficha.php:210 templates/personas/listado.php:75
+#: src/Frontend/Views/PersonasView.php:46 templates/fichas/ficha.php:155 templates/fichas/ficha.php:211 templates/personas/listado.php:75
 msgid "No active membership"
 msgstr ""
 
@@ -10844,12 +10854,12 @@ msgid "Page %1$d of %2$d"
 msgstr ""
 
 #. translators: %s: text
-#: src/Idiomas/TextosJs.php:41 templates/comun/paginacion.php:38
+#: src/Idiomas/TextosJs.php:44 templates/comun/paginacion.php:38
 #, php-format
 msgid "Page %s"
 msgstr ""
 
-#: src/Idiomas/TextosJs.php:35 templates/comun/paginacion.php:25
+#: src/Idiomas/TextosJs.php:38 templates/comun/paginacion.php:25
 msgid "Pagination"
 msgstr ""
 
@@ -11485,7 +11495,7 @@ msgstr ""
 msgid "Preview:"
 msgstr ""
 
-#: src/Idiomas/TextosJs.php:38 templates/comun/paginacion.php:31
+#: src/Idiomas/TextosJs.php:41 templates/comun/paginacion.php:31
 msgid "Previous page"
 msgstr ""
 
@@ -11541,7 +11551,7 @@ msgstr ""
 msgid "Price: %s"
 msgstr ""
 
-#: src/Idiomas/TextosJs.php:54 templates/eventos/calendario.php:66 templates/eventos/cuentas.php:82 templates/eventos/material.php:28
+#: src/Idiomas/TextosJs.php:57 templates/eventos/calendario.php:66 templates/eventos/cuentas.php:82 templates/eventos/material.php:28
 msgid "Print"
 msgstr ""
 
@@ -11549,7 +11559,7 @@ msgstr ""
 msgid "Print or save as PDF"
 msgstr ""
 
-#: src/Idiomas/Guardados.php:326 src/Idiomas/TextosJs.php:55
+#: src/Idiomas/Guardados.php:326 src/Idiomas/TextosJs.php:58
 msgid "Print version"
 msgstr ""
 
@@ -12326,12 +12336,12 @@ msgid "Remove"
 msgstr ""
 
 #. translators: %s: text
-#: templates/fichas/ficha.php:227
+#: templates/fichas/ficha.php:228
 #, php-format
 msgid "Remove %s from the website? They stop appearing in People, leave their family and their sign-in accounts are deactivated. Nothing changes in the CRM."
 msgstr ""
 
-#: templates/fichas/ficha.php:231
+#: templates/fichas/ficha.php:232
 msgid "Remove from the website"
 msgstr ""
 
@@ -12667,7 +12677,7 @@ msgstr ""
 msgid "Returns and unpaid items"
 msgstr ""
 
-#: templates/eventos/asistente.php:42 templates/fichas/ficha.php:311 templates/inventario/compras.php:86 templates/personas/alta.php:46
+#: templates/eventos/asistente.php:42 templates/fichas/ficha.php:312 templates/inventario/compras.php:86 templates/personas/alta.php:46
 msgid "Review"
 msgstr ""
 
@@ -12900,7 +12910,7 @@ msgstr ""
 msgid "Save changes"
 msgstr ""
 
-#: templates/fichas/ficha.php:273
+#: templates/fichas/ficha.php:274
 msgid "Save changes in the CRM"
 msgstr ""
 
@@ -13122,7 +13132,7 @@ msgstr ""
 msgid "Scouts"
 msgstr ""
 
-#: src/Admin/OrganizacionPage.php:249 src/Domain/Identidad.php:43 src/Socios/Numeros.php:123 templates/fichas/ficha.php:170
+#: src/Admin/OrganizacionPage.php:249 src/Domain/Identidad.php:43 src/Socios/Numeros.php:123 templates/fichas/ficha.php:171
 msgid "Scouts de España member no."
 msgstr ""
 
@@ -13359,7 +13369,7 @@ msgstr ""
 msgid "Send by email (optional)"
 msgstr ""
 
-#: templates/fichas/ficha.php:273
+#: templates/fichas/ficha.php:274
 msgid "Send changes for approval"
 msgstr ""
 
@@ -13484,7 +13494,7 @@ msgstr ""
 msgid "Set it up now"
 msgstr ""
 
-#: templates/fichas/ficha.php:220 templates/fichas/membresia.php:36
+#: templates/fichas/ficha.php:221 templates/fichas/membresia.php:36
 msgid "Set the document"
 msgstr ""
 
@@ -13590,7 +13600,7 @@ msgstr ""
 msgid "Short text"
 msgstr ""
 
-#: src/Idiomas/TextosJs.php:42 templates/comun/paginacion.php:51 templates/eventos/agenda.php:40 templates/inventario/compras.php:42
+#: src/Idiomas/TextosJs.php:45 templates/comun/paginacion.php:51 templates/eventos/agenda.php:40 templates/inventario/compras.php:42
 msgid "Show"
 msgstr ""
 
@@ -13607,7 +13617,7 @@ msgid "Showing"
 msgstr ""
 
 #. translators: 1: text, 2: text, 3: text
-#: src/Idiomas/Guardados.php:213 src/Idiomas/TextosJs.php:36
+#: src/Idiomas/Guardados.php:213 src/Idiomas/TextosJs.php:39
 #, php-format
 msgid "Showing %1$s–%2$s of %3$s"
 msgstr ""
@@ -13855,7 +13865,7 @@ msgid "Sort by"
 msgstr ""
 
 #. translators: 1: text, 2: text
-#: src/Frontend/Tabla.php:138 src/Idiomas/TextosJs.php:32
+#: src/Frontend/Tabla.php:138 src/Idiomas/TextosJs.php:35
 #, php-format
 msgid "Sort by %1$s (%2$s)"
 msgstr ""
@@ -14968,7 +14978,7 @@ msgstr ""
 msgid "The accounts of event %s are reopened: they can be changed now. When everything is done, close them again."
 msgstr ""
 
-#: src/Idiomas/Guardados.php:221 src/Idiomas/TextosJs.php:46
+#: src/Idiomas/Guardados.php:221 src/Idiomas/TextosJs.php:49
 msgid "The action could not be completed. Reload the page to see how it has ended up."
 msgstr ""
 
@@ -15114,7 +15124,7 @@ msgstr ""
 msgid "The cash box is not active in your group or you do not keep any cash box."
 msgstr ""
 
-#: templates/fichas/ficha.php:191
+#: templates/fichas/ficha.php:192
 msgid "The changes you make will be reviewed by the Secretary's office or a scouter of their section before being saved in the CRM."
 msgstr ""
 
@@ -15172,7 +15182,7 @@ msgstr ""
 msgid "The correct format (7 + group + 4 digits) will be saved in the CRM for all old-format numbers (including those of records without an active membership). It is done in the background: you can keep using the website. Continue?"
 msgstr ""
 
-#: src/Idiomas/Guardados.php:282 src/Idiomas/TextosJs.php:28
+#: src/Idiomas/Guardados.php:282 src/Idiomas/TextosJs.php:31
 msgid "The correction will be stopped. What has already been corrected stays corrected. Stop?"
 msgstr ""
 
@@ -15821,7 +15831,7 @@ msgstr ""
 msgid "The link to join the waiting list, the list for the team and the handover to the CRM."
 msgstr ""
 
-#: src/Idiomas/Guardados.php:220 src/Idiomas/TextosJs.php:45
+#: src/Idiomas/Guardados.php:220 src/Idiomas/TextosJs.php:48
 msgid "The list could not be updated. Reload the page."
 msgstr ""
 
@@ -16357,7 +16367,7 @@ msgstr[1] ""
 msgid "The type \"%s\" does not exist."
 msgstr ""
 
-#: src/Idiomas/Guardados.php:222 src/Idiomas/TextosJs.php:59
+#: src/Idiomas/Guardados.php:222 src/Idiomas/TextosJs.php:62
 msgid "The type could not be created. Try again."
 msgstr ""
 
@@ -16529,7 +16539,7 @@ msgid "There are %d youth members whose fee does not cover the registration and 
 msgstr ""
 
 #. translators: 1: text, 2: text
-#: src/Idiomas/Guardados.php:327 src/Idiomas/TextosJs.php:50
+#: src/Idiomas/Guardados.php:327 src/Idiomas/TextosJs.php:53
 #, php-format
 msgid "There are already %1$s units of \"%2$s\" in the inventory. Do more really need to be bought?"
 msgstr ""
@@ -16745,7 +16755,7 @@ msgid "There is a swimming pool or sea: a lifeguard must be present."
 msgstr ""
 
 #. translators: %s: text
-#: src/Idiomas/Guardados.php:328 src/Idiomas/TextosJs.php:49
+#: src/Idiomas/Guardados.php:328 src/Idiomas/TextosJs.php:52
 #, php-format
 msgid "There is already 1 unit of \"%s\" in the inventory. Do more really need to be bought?"
 msgstr ""
@@ -17062,7 +17072,7 @@ msgstr ""
 msgid "They had paid %s: Treasury decides on the refund."
 msgstr ""
 
-#: templates/fichas/ficha.php:232
+#: templates/fichas/ficha.php:233
 msgid "They have no active membership: they stop appearing in People, leave their family and their sign-in accounts are deactivated. Nothing changes in the CRM; if they have an active membership again, they appear again."
 msgstr ""
 
@@ -17379,7 +17389,7 @@ msgstr ""
 msgid "Tick all the pending ones on this page"
 msgstr ""
 
-#: src/Idiomas/TextosJs.php:58 templates/tesoreria/banco.php:182
+#: src/Idiomas/TextosJs.php:61 templates/tesoreria/banco.php:182
 msgid "Tick in the list the transactions that are not fees."
 msgstr ""
 
@@ -17877,6 +17887,10 @@ msgstr ""
 msgid "Type saved."
 msgstr ""
 
+#: src/Idiomas/TextosJs.php:28
+msgid "Type to search…"
+msgstr ""
+
 #: src/Tesoreria/Banco/Codificacion.php:20
 msgid "UTF-8"
 msgstr ""
@@ -18035,7 +18049,7 @@ msgstr ""
 msgid "Update the details before sending the record."
 msgstr ""
 
-#: src/Idiomas/Guardados.php:52 src/Idiomas/TextosJs.php:44
+#: src/Idiomas/Guardados.php:52 src/Idiomas/TextosJs.php:47
 msgid "Updating…"
 msgstr ""
 
@@ -18453,7 +18467,7 @@ msgstr ""
 msgid "We will send you an email with the sign-up details. It is also your key to see your data later."
 msgstr ""
 
-#: templates/alta/buscar.php:46 templates/alta/buscar.php:67 templates/fichas/ficha.php:164 templates/personas/listado.php:52
+#: templates/alta/buscar.php:46 templates/alta/buscar.php:67 templates/fichas/ficha.php:165 templates/personas/listado.php:52
 msgid "Web access"
 msgstr ""
 
@@ -19306,7 +19320,7 @@ msgstr ""
 msgid "You have not requested any reimbursement yet."
 msgstr ""
 
-#: src/Idiomas/Guardados.php:218 src/Idiomas/TextosJs.php:51
+#: src/Idiomas/Guardados.php:218 src/Idiomas/TextosJs.php:54
 msgid "You have not ticked any equipment from the inventory. Prepare a list with new equipment only?"
 msgstr ""
 
@@ -19342,7 +19356,7 @@ msgstr ""
 msgid "Your account cannot sign direct debit authorisations."
 msgstr ""
 
-#: src/Fichas/PermisosFicha.php:115 src/Frontend/Router.php:239
+#: src/Fichas/PermisosFicha.php:115 src/Frontend/Router.php:254
 msgid "Your account is read-only: nothing can be changed."
 msgstr ""
 
@@ -19394,7 +19408,7 @@ msgstr ""
 msgid "Your group's CRM user does not have permission to edit records."
 msgstr ""
 
-#: templates/fichas/ficha.php:187
+#: templates/fichas/ficha.php:188
 msgid "Your group's CRM user does not have permission to edit records: all the data is"
 msgstr ""
 
@@ -19406,7 +19420,7 @@ msgstr ""
 msgid "Your group's connection to the CRM is not set up or could not be checked. An administrator can review it in wp-admin → Scout Groups."
 msgstr ""
 
-#: src/Auth/AccessHooks.php:114
+#: src/Auth/AccessHooks.php:119
 msgid "Your membership cannot be checked in the group's CRM right now. Try again in a few minutes."
 msgstr ""
 
@@ -19414,7 +19428,7 @@ msgstr ""
 msgid "Your membership is not active in the group's CRM. Contact the Secretary's office."
 msgstr ""
 
-#: src/Frontend/Router.php:209
+#: src/Frontend/Router.php:224
 msgid "Your office account can only view People, Reports and Users."
 msgstr ""
 
@@ -19755,7 +19769,7 @@ msgstr ""
 msgid "as of %s"
 msgstr ""
 
-#: src/Frontend/Tabla.php:138 src/Idiomas/TextosJs.php:34
+#: src/Frontend/Tabla.php:138 src/Idiomas/TextosJs.php:37
 msgid "ascending"
 msgstr ""
 
@@ -19813,7 +19827,7 @@ msgstr ""
 msgid "cancelled"
 msgstr ""
 
-#: templates/fichas/ficha.php:210
+#: templates/fichas/ficha.php:211
 msgid "cannot sign in to the website or count in the fees."
 msgstr ""
 
@@ -19867,7 +19881,7 @@ msgstr ""
 msgid "delivered, unconfirmed"
 msgstr ""
 
-#: src/Frontend/Tabla.php:138 src/Idiomas/TextosJs.php:33
+#: src/Frontend/Tabla.php:138 src/Idiomas/TextosJs.php:36
 msgid "descending"
 msgstr ""
 
@@ -20290,7 +20304,7 @@ msgstr ""
 msgid "people on the waiting list not yet contacted"
 msgstr ""
 
-#: src/Idiomas/TextosJs.php:43 templates/comun/paginacion.php:57
+#: src/Idiomas/TextosJs.php:46 templates/comun/paginacion.php:57
 msgid "per page"
 msgstr ""
 
@@ -20318,7 +20332,7 @@ msgstr ""
 msgid "products updated"
 msgstr ""
 
-#: templates/fichas/ficha.php:187
+#: templates/fichas/ficha.php:188
 msgid "read-only"
 msgstr ""
 
@@ -20570,7 +20584,7 @@ msgstr ""
 msgid "up to that instalment"
 msgstr ""
 
-#: src/Idiomas/Guardados.php:332 src/Idiomas/TextosJs.php:30
+#: src/Idiomas/Guardados.php:332 src/Idiomas/TextosJs.php:33
 msgid "user"
 msgstr ""
 
@@ -20578,7 +20592,7 @@ msgstr ""
 msgid "user registration"
 msgstr ""
 
-#: src/Idiomas/Guardados.php:333 src/Idiomas/TextosJs.php:31
+#: src/Idiomas/Guardados.php:333 src/Idiomas/TextosJs.php:34
 msgid "users"
 msgstr ""
 
@@ -20766,7 +20780,7 @@ msgstr ""
 msgid "← Order management"
 msgstr ""
 
-#: templates/fichas/ficha.php:165 templates/personas/alta.php:35
+#: templates/fichas/ficha.php:166 templates/personas/alta.php:35
 msgid "← People"
 msgstr ""
 
@@ -20834,7 +20848,7 @@ msgstr ""
 msgid "✓ The totals of each account (record 33) and the number of records (88) match the transactions read."
 msgstr ""
 
-#: templates/fichas/ficha.php:189
+#: templates/fichas/ficha.php:190
 msgid "🔒 All the data on this record is read-only for you."
 msgstr ""
 

@@ -321,4 +321,29 @@ $ok( ! $atributos, 'los JS escriben los textos de los atributos HTML con asdeEsc
 $script = \AsdeBalears\AreaPrivada\Idiomas\TextosJs::script();
 $ok( str_contains( $script, 'window.asdeEsc=' ) && str_contains( $script, '/[&<>"\']/g' ), 'TextosJs::script() define asdeEsc(), que escapa & < > " y \'' );
 
+// ---------------------------------------------------------------------------
+// G. Desplegables predictivos (v0.64.11): toda lista de datos (personas, familias, eventos, grupos, material,
+// ingredientes…) o de más de 10 opciones se puede buscar escribiendo; los fijos de hasta 10 siguen siendo <select>.
+// ---------------------------------------------------------------------------
+$predictivos = array(
+	'templates/accesos/historial.php', 'templates/eventos/asistente.php', 'templates/eventos/calendario.php', 'templates/eventos/cuentas.php',
+	'templates/eventos/equipo.php', 'templates/eventos/material.php', 'templates/eventos/menu.php', 'templates/menus/receta.php',
+	'templates/reintegros/index.php', 'templates/tesoreria/banco-revisar.php', 'templates/tesoreria/familia.php', 'templates/tesoreria/sepa.php',
+	'templates/tesoreria/presupuesto-seccion.php', 'templates/grupo/datos.php', 'templates/acceso/formulario.php',
+	'templates/solicitudes/formulario.php', 'templates/comun/nav.php', 'templates/eventos/inscripciones.php', 'templates/eventos/resumen.php',
+);
+$sin_combo = array();
+foreach ( $predictivos as $rel_p ) {
+	if ( ! str_contains( (string) file_get_contents( ASDE_AP_DIR . $rel_p ), 'class="asde-combobox"' ) ) {
+		$sin_combo[] = $rel_p;
+	}
+}
+$ok( ! $sin_combo, 'las pantallas con listas de datos usan el desplegable predictivo (class="asde-combobox")' . ( $sin_combo ? ': ' . implode( ', ', $sin_combo ) : '' ) );
+$router = (string) file_get_contents( ASDE_AP_DIR . 'src/Frontend/Router.php' );
+$ok( str_contains( $router, "wp_enqueue_script( 'asde-combobox'" ) && ! str_contains( $router, "array( 'familias', 'banco' ), true ) ) {\n\t\t\twp_enqueue_script( 'asde-combobox'" ), 'combobox.js se carga en todas las pantallas (no solo en familias y banco)' );
+$combo = (string) file_get_contents( ASDE_AP_DIR . 'assets/js/combobox.js' );
+$ok( str_contains( $combo, 'function automatico(' ) && str_contains( $combo, 'options.length > 11' ), 'combobox.js vuelve predictivo solo cualquier lista de más de 10 opciones' );
+$ok( str_contains( $combo, 'reiniciar: reiniciar' ) && str_contains( (string) file_get_contents( ASDE_AP_DIR . 'assets/js/eventos.js' ), 'asdeCombobox.reiniciar' ) && str_contains( (string) file_get_contents( ASDE_AP_DIR . 'assets/js/ingrediente-nuevo.js' ), 'asdeCombobox.reiniciar' ), 'las filas que se copian (ingredientes) vuelven a preparar su desplegable predictivo' );
+$ok( ! str_contains( $combo, "' resultado'" ), 'combobox.js no lleva textos fijos en castellano (el aviso de resultados va traducido)' );
+
 echo $fails ? "\n$fails FALLOS\n" : "\nTODO OK (solo lectura de ficheros)\n";

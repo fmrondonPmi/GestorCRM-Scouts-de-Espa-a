@@ -45,7 +45,7 @@ $formas  = static function (): string {
 	return $h . '</select>';
 };
 $partida = static function ( string $tipo ) use ( $partidas ): string {
-	$h = '<select name="partida"><option value="0">' . esc_html( __( '— None —', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) . '</option>';
+	$h = '<select name="partida" class="asde-combobox" data-min="1"><option value="0">' . esc_html( __( '— None —', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) . '</option>';
 	foreach ( $partidas as $p ) {
 		if ( $tipo === $p['tipo'] ) {
 			$h .= '<option value="' . (int) $p['id'] . '">' . esc_html( $p['concepto'] ) . '</option>';
@@ -289,7 +289,7 @@ $yo              = get_current_user_id();
 				<?php if ( $abiertos ) : ?>
 					<label class="asde-choice"><input type="radio" name="pagado_por" value="<?php echo esc_attr( GastosTable::PAGO_ANTICIPO ); ?>"><span><?php echo esc_html( ( GastosTable::pagadores()[ GastosTable::PAGO_ANTICIPO ] ) ); ?></span></label>
 					<label><?php esc_html_e( 'Advance', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>
-						<select name="anticipo">
+						<select class="asde-combobox" data-min="1" name="anticipo">
 							<?php foreach ( $abiertos as $an ) : ?>
 								<option value="<?php echo (int) $an['id']; ?>"><?php echo esc_html( sprintf( /* translators: 1: number, 2: text, 3: text */ __( 'No. %1$d · %2$s · %3$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $an['id'], $quien( $an['persona'] ), $euros( $an['importe'] ) ) ); ?></option>
 							<?php endforeach; ?>
@@ -301,7 +301,7 @@ $yo              = get_current_user_id();
 				<?php endif; ?>
 				<?php if ( $economia && $personas ) : ?>
 					<label><?php esc_html_e( 'Who has to be reimbursed', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>
-						<select name="persona">
+						<select class="asde-combobox" data-min="2" name="persona">
 							<?php foreach ( $personas as $uid => $nombre ) : ?>
 								<option value="<?php echo (int) $uid; ?>"><?php echo esc_html( $nombre ); ?></option>
 							<?php endforeach; ?>
@@ -394,7 +394,7 @@ $yo              = get_current_user_id();
 					<form method="post" class="asde-form asde-form--compacta">
 						<?php echo wp_kses( $campos( 'evento_anticipo' ), asde_html_permitido() ); ?>
 						<label><?php esc_html_e( 'To whom', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>
-							<select name="persona">
+							<select class="asde-combobox" data-min="2" name="persona">
 								<?php foreach ( $personas as $uid => $nombre ) : ?>
 									<option value="<?php echo (int) $uid; ?>"><?php echo esc_html( $nombre ); ?></option>
 								<?php endforeach; ?>

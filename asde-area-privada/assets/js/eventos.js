@@ -137,6 +137,9 @@
 				return;
 			}
 			var nueva = filas[ filas.length - 1 ].cloneNode( true );
+			if ( window.asdeCombobox ) {
+				window.asdeCombobox.reiniciar( nueva ); // Los desplegables predictivos se vuelven a preparar al final.
+			}
 			nueva.querySelector( 'select' ).selectedIndex = 0;
 			nueva.querySelector( 'input' ).value = '';
 			var n = filas.length + 1;
@@ -144,6 +147,9 @@
 			numerar( nueva.querySelector( 'input' ), n );
 			numerar( nueva.querySelectorAll( 'select' )[ 1 ], n );
 			lineas.appendChild( nueva );
+			if ( window.asdeCombobox ) {
+				window.asdeCombobox.iniciar( nueva );
+			}
 		} );
 		lineas.addEventListener( 'change', actualizarResumen );
 

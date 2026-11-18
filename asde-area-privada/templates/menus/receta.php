@@ -101,7 +101,7 @@ $val        = static fn( string $k ) => $borrador[ $k ] ?? $r[ $k ] ?? '';
 						?>
 						<tr>
 							<td data-label="<?php echo esc_attr( esc_attr__( 'Ingredient', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
-								<select name="ing[]" aria-label="<?php echo esc_attr( sprintf( /* translators: %d: number */ __( 'Ingredient %d', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $n + 1 ) ); ?>">
+								<select class="asde-combobox" data-min="1" name="ing[]" aria-label="<?php echo esc_attr( sprintf( /* translators: %d: number */ __( 'Ingredient %d', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $n + 1 ) ); ?>">
 									<option value="0">—</option>
 									<?php foreach ( $ingredientes as $i ) : ?>
 										<option value="<?php echo (int) $i['id']; ?>" <?php selected( (int) $l['ingrediente_id'], $i['id'] ); ?>><?php echo esc_html( $nombre_ing( $i ) ); ?></option>

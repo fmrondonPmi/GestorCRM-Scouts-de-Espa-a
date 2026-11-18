@@ -364,9 +364,8 @@ final class Router {
 			wp_enqueue_script( 'asde-alta', plugins_url( 'assets/js/alta.js', ASDE_AP_FILE ), array( 'asde-i18n' ), ASDE_AP_VERSION, true );
 			wp_enqueue_script( 'asde-area', plugins_url( 'assets/js/area.js', ASDE_AP_FILE ), array( 'asde-i18n', 'asde-ficha', 'asde-alta' ), ASDE_AP_VERSION, true );
 		}
-		if ( in_array( $key, array( 'familias', 'banco' ), true ) ) {
-			wp_enqueue_script( 'asde-combobox', plugins_url( 'assets/js/combobox.js', ASDE_AP_FILE ), array( 'asde-i18n' ), ASDE_AP_VERSION, true );
-		}
+		// v0.64.11: los desplegables de datos (personas, eventos, grupos…) son predictivos en todas las pantallas, también las públicas.
+		wp_enqueue_script( 'asde-combobox', plugins_url( 'assets/js/combobox.js', ASDE_AP_FILE ), array( 'asde-i18n' ), ASDE_AP_VERSION, true );
 		if ( 'tesoreria' === $key ) {
 			wp_enqueue_script( 'asde-tesoreria', plugins_url( 'assets/js/tesoreria.js', ASDE_AP_FILE ), array( 'asde-i18n' ), ASDE_AP_VERSION, true );
 			// v0.25: la ficha de una familia se actualiza sin recargar la página (pagos, conciliar, eliminar).

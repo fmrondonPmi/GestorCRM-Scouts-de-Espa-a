@@ -144,7 +144,7 @@ $r        = $check['ratio'];
 				<?php echo wp_kses( $campos( 'evento_equipo_anadir' ), asde_html_permitido() ); ?>
 				<p class="asde-form__fila">
 					<label><?php esc_html_e( 'Person', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>
-						<select name="socio" required>
+						<select class="asde-combobox" data-min="2" name="socio" required>
 							<option value=""><?php esc_html_e( '— Choose —', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></option>
 							<?php foreach ( $candidatos as $n => $p ) : ?>
 								<option value="<?php echo esc_attr( $n ); ?>"><?php echo esc_html( $p->nombre_completo() . ' · ' . implode( ', ', array_map( array( Secciones::class, 'nombre' ), $p->secciones ) ) ); ?></option>

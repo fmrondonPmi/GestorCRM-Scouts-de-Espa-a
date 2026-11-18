@@ -50,7 +50,7 @@ $valor = static fn( string $v ): string => '' !== $v ? $v : '–';
 				<p><label for="asde-g-poblacion"><?php esc_html_e( 'Town', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label><input type="text" id="asde-g-poblacion" name="poblacion" maxlength="80" value="<?php echo esc_attr( $d['poblacion'] ); ?>"></p>
 				<p>
 					<label for="asde-g-provincia"><?php esc_html_e( 'Province', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
-					<select id="asde-g-provincia" name="provincia">
+					<select class="asde-combobox" data-min="1" id="asde-g-provincia" name="provincia">
 						<option value=""><?php esc_html_e( '— Choose the province —', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></option>
 						<?php foreach ( Provincias::todas() as $codigo => $nombre ) : ?>
 							<option value="<?php echo esc_attr( $codigo ); ?>" <?php selected( $d['provincia'], $codigo ); ?>><?php echo esc_html( $codigo . ' · ' . $nombre ); ?></option>

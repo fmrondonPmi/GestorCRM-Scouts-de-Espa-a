@@ -70,7 +70,7 @@ defined( 'ABSPATH' ) || exit;
 			<?php wp_nonce_field( 'asde_oficina_grupo' ); ?>
 			<p class="asde-form__fila asde-form__fila--una-linea">
 				<label for="asde-oficina-grupo"><?php esc_html_e( 'Group', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>
-					<select id="asde-oficina-grupo" name="grupo" data-asde-autoenviar>
+					<select class="asde-combobox" data-min="1" id="asde-oficina-grupo" name="grupo" data-asde-autoenviar>
 						<?php foreach ( Grupos::todos() as $numero => $g ) : ?>
 							<option value="<?php echo esc_attr( (string) $numero ); ?>" <?php selected( Grupo::numero(), (string) $numero ); ?>><?php echo esc_html( Grupos::etiqueta( $g ) ); ?></option>
 						<?php endforeach; ?>

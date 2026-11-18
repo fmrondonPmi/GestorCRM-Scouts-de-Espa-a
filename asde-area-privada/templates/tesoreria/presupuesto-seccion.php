@@ -178,7 +178,7 @@ $campos  = static function ( string $accion, array $extra = array() ) use ( $ron
 			<div class="asde-grid-3">
 				<p>
 					<label for="asde-pg-partida"><?php esc_html_e( 'Item', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
-					<select id="asde-pg-partida" name="partida_id">
+					<select class="asde-combobox" data-min="1" id="asde-pg-partida" name="partida_id">
 						<?php foreach ( $gastos as $p ) : ?>
 							<option value="<?php echo (int) $p['id']; ?>"><?php echo esc_html( asde_guardado( (string) $p['concepto'] ) ); ?></option>
 						<?php endforeach; ?>

@@ -113,7 +113,7 @@ $user = static fn( $id ) => ( $u = get_userdata( (int) $id ) ) ? $u->user_login 
 				<?php /* v0.37: el pago puede ser de la cuota o de un evento con la inscripción abierta. */ ?>
 				<p>
 					<label for="asde-pago-evento"><?php esc_html_e( 'Payment of', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
-					<select id="asde-pago-evento" name="evento">
+					<select class="asde-combobox" data-min="1" id="asde-pago-evento" name="evento">
 						<option value=""><?php echo esc_html( sprintf( /* translators: %s: text */ __( 'Round %s fee', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $ronda ) ); ?></option>
 						<?php foreach ( $eventos as $ev ) : ?>
 							<option value="<?php echo (int) $ev['evento']['id']; ?>"><?php echo esc_html( sprintf( /* translators: 1: text, 2: text */ __( 'Event "%1$s" (pending %2$s)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $ev['evento']['nombre'], Calculadora::euros( $ev['pendiente'] ) ) ); ?></option>

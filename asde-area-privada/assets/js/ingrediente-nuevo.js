@@ -65,9 +65,15 @@
 				} else {
 					var ultima = selects[ selects.length - 1 ].closest( 'tr' );
 					var copia = ultima.cloneNode( true );
+					if ( window.asdeCombobox ) {
+						window.asdeCombobox.reiniciar( copia );
+					}
 					copia.querySelector( 'select[name="ing[]"]' ).selectedIndex = 0;
 					copia.querySelector( 'input[name="cant[]"]' ).value = '';
 					ultima.parentNode.appendChild( copia );
+					if ( window.asdeCombobox ) {
+						window.asdeCombobox.iniciar( copia );
+					}
 				}
 				selects = receta.querySelectorAll( 'select[name="ing[]"]' );
 				destino = selects[ selects.length - 1 ];

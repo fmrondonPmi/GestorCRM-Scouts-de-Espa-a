@@ -143,12 +143,12 @@ function leer_po( string $ruta ): array {
 		if ( ! preg_match( '/^msgid\s+(".*?")\s*\n(?:msgid_plural\s+(".*?")\s*\n)?(msgstr(?:\[0\])?\s+.*)$/ms', $bloque, $m ) ) { continue; }
 		$id = json_decode( preg_replace( '/"\s*\n\s*"/', '', $m[1] ) ) ?? '';
 		if ( '' === $id ) { continue; }
-		if ( preg_match( '/msgstr(?:\[0\])?\s+((?:".*?"\s*\n?)+)/s', $m[3], $x ) ) {
+		if ( preg_match( '/msgstr(?:\[0\])?\s+((?:"(?:[^"\\\\]|\\\\.)*"\s*\n?)+)/s', $m[3], $x ) ) {
 			$val = json_decode( preg_replace( '/"\s*\n\s*"/', '', trim( $x[1] ) ) ) ?? '';
 			if ( '' !== $val ) { $out[ $id ] = $val; }
 		}
 		// La forma plural también se respeta (clave «[1]texto»): así no se pierden los plurales corregidos a mano.
-		if ( preg_match( '/msgstr\[1\]\s+((?:".*?"\s*
+		if ( preg_match( '/msgstr\[1\]\s+((?:"(?:[^"\\\\]|\\\\.)*"\s*
 ?)+)/s', $m[3], $x1 ) ) {
 			$val1 = json_decode( preg_replace( '/"\s*
 \s*"/', '', trim( $x1[1] ) ) ) ?? '';
@@ -229,11 +229,11 @@ if ( $con_mo ) {
 		$po = (string) file_get_contents( $salida . DOM . '-' . $idioma . '.po' );
 		$entradas = array();
 		foreach ( preg_split( '/\n\n+/', $po ) as $bloque ) {
-			if ( ! preg_match( '/^msgid\s+((?:".*?"\s*\n)+)(?:msgid_plural\s+((?:".*?"\s*\n)+))?((?:msgstr(?:\[\d\])?\s+(?:".*?"\s*\n?)+)+)/ms', $bloque . "\n", $m ) ) { continue; }
+			if ( ! preg_match( '/^msgid\s+((?:"(?:[^"\\\\]|\\\\.)*"\s*\n)+)(?:msgid_plural\s+((?:"(?:[^"\\\\]|\\\\.)*"\s*\n)+))?((?:msgstr(?:\[\d\])?\s+(?:"(?:[^"\\\\]|\\\\.)*"\s*\n?)+)+)/ms', $bloque . "\n", $m ) ) { continue; }
 			$dec = static fn( string $x ): string => (string) json_decode( '"' . implode( '', array_map( static fn( $l ) => substr( trim( $l ), 1, -1 ), preg_split( '/\n/', trim( $x ) ) ) ) . '"' );
 			$id = $dec( $m[1] );
 			$strs = array();
-			preg_match_all( '/msgstr(?:\[\d\])?\s+((?:".*?"\s*\n?)+)/s', $m[3], $mm );
+			preg_match_all( '/msgstr(?:\[\d\])?\s+((?:"(?:[^"\\\\]|\\\\.)*"\s*\n?)+)/s', $m[3], $mm );
 			foreach ( $mm[1] as $x ) { $strs[] = $dec( $x ); }
 			if ( '' !== $m[2] ) { $id .= "\0" . $dec( $m[2] ); }
 			if ( '' === implode( '', $strs ) && '' !== $id ) { continue; }

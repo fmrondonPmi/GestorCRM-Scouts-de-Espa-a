@@ -47,3 +47,20 @@ En producción el sitio está en inglés y no tiene instalado el paquete de idio
 - `construir-zip.ps1` incluye ese `.mo` por defecto (instalación directa); con `-SinIdioma` hace el paquete de WordPress.org, sin ficheros de traducción. Hay que ejecutar antes `php herramientas/generar-po.php --mo`.
 - El resto de WordPress (login, menús de wp-admin) sigue el idioma del sitio: para que también salga en castellano, instalar el paquete es_ES de WordPress.
 - Prueba: `tests/idiomas.php`, parte E.
+
+## Traducciones completas y desplegables predictivos (v0.64.11, 2026-11-18)
+
+- Los cinco `.po` (es_ES, ca, ca_valencia, gl_ES, eu) quedan al 100 %: el asistente de eventos, el presupuesto y las pantallas de administración salían con textos en inglés. El castellano se rellenó a mano; ca/eu/gl con la terminología de los catálogos existentes («visto bueno» / «vistiplau» / «oniritzia», «scouters», «inscripció»…). El valenciano parte del catalán.
+- **Error del generador corregido**: `herramientas/generar-po.php` cortaba, al leer un `.po`, las traducciones con comillas escapadas (`\"`), y las vaciaba en la siguiente ejecución (en las tres de `<a href="%s">…`). Las expresiones de `leer_po()` ahora aceptan `\"`.
+- Dos textos que estaban escritos a mano en castellano en plantillas (`Sí` de las casillas de la ficha y `Sin membresía activa` del listado de personas) ya pasan por `__()`.
+- Los avisos de `combobox.js` («Escribe para buscar…», «1 resultado», «%s resultados») van en `TextosJs`.
+
+### Regla: listas de datos = desplegable predictivo
+
+Todo desplegable que liste **datos** (personas, familias, eventos, grupos, provincias, material, recetas, ingredientes, partidas…) o tenga **más de 10 opciones** es predictivo (`select.asde-combobox`, `assets/js/combobox.js`, `data-min` = letras mínimas: 1 para listas cortas —enseña la lista entera al entrar en el campo— y 2 o 3 para personas). Solo los valores fijos y conocidos, de hasta 10, siguen siendo `<select>`.
+
+- Red de seguridad: `combobox.js` convierte solo cualquier `<select>` de más de 10 opciones (menos los de selección múltiple, los desactivados, los filtros `data-asde-autoenviar` y los marcados `data-asde-sin-combo`).
+- Se carga en todas las pantallas del área privada (antes solo en familias y banco).
+- Las opciones se leen al momento (un ingrediente creado desde la ventana entra en la lista) y el campo refleja los cambios de valor hechos por otros scripts (`select.value = …` + `change`).
+- Filas que se copian con `cloneNode` (ingredientes del menú y de la receta): `window.asdeCombobox.reiniciar( fila )` antes de vaciar la copia y `iniciar( fila )` al añadirla.
+- Prueba: `tests/estilo-wordpress.php`, parte G.

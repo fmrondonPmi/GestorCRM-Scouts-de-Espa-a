@@ -182,7 +182,7 @@ $vista_previa = static function ( array $prep ) use ( $familias, $nombres ): voi
 				<div class="asde-grid-2">
 					<p class="asde-grid-span">
 						<label for="asde-sepa-evento"><?php esc_html_e( 'Event', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
-						<select id="asde-sepa-evento" name="evento_sepa">
+						<select class="asde-combobox" data-min="1" id="asde-sepa-evento" name="evento_sepa">
 							<?php foreach ( $eventos as $id => $ev ) : ?>
 								<option value="<?php echo (int) $id; ?>" <?php selected( $ev_id, (int) $id ); ?>><?php echo esc_html( EventosTable::numero( $ev ) . ' · ' . $ev['nombre'] . ' · ' . EventosTable::cuando( $ev ) ); ?></option>
 							<?php endforeach; ?>

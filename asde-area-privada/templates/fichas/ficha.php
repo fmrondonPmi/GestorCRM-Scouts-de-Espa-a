@@ -80,10 +80,11 @@ $control = static function ( string $campo, array $f ) use ( $pendientes ): stri
 			return $huella . sprintf( '<input type="date" id="%s" name="%s" value="%s"%s>', esc_attr( $id ), esc_attr( $name ), esc_attr( $v ), $extra );
 		case 'bool':
 			return $huella . sprintf(
-				'<input type="hidden" name="%1$s" value="0"><label class="asde-choice"><input type="checkbox" id="%2$s" name="%1$s" value="1"%3$s><span>Sí</span></label>',
+				'<input type="hidden" name="%1$s" value="0"><label class="asde-choice"><input type="checkbox" id="%2$s" name="%1$s" value="1"%3$s><span>%4$s</span></label>',
 				esc_attr( $name ),
 				esc_attr( $id ),
-				Escritura::iguales( $v, '1' ) ? ' checked' : ''
+				Escritura::iguales( $v, '1' ) ? ' checked' : '',
+				esc_html__( 'Yes', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' )
 			);
 		case 'enum':
 		case 'dynamicenum':

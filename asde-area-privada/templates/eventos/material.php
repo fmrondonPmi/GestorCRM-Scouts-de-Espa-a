@@ -149,7 +149,7 @@ $campos  = static function ( int $linea = 0 ) use ( $e ): string {
 				<?php echo wp_kses( $campos(), asde_html_permitido() ); ?>
 				<input type="hidden" name="asde_action" value="material_anadir">
 				<p class="asde-form__fila asde-form__fila--una-linea">
-					<label for="asde-ma-material"><?php esc_html_e( 'Equipment', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <select id="asde-ma-material" name="material" required>
+					<label for="asde-ma-material"><?php esc_html_e( 'Equipment', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <select class="asde-combobox" data-min="1" id="asde-ma-material" name="material" required>
 						<option value="">—</option>
 						<?php foreach ( $reservable as $m ) : ?>
 							<option value="<?php echo (int) $m['id']; ?>"><?php echo esc_html( $m['descripcion'] . ' (' . (int) $m['cantidad'] . ')' ); ?></option>

@@ -155,7 +155,7 @@ $datos  = sprintf(
 			<p class="asde-help"><?php esc_html_e( 'Event team (optional: you can complete it later).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 			<p>
 				<label for="asde-as-director"><?php esc_html_e( 'Director', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
-				<select id="asde-as-director" name="director">
+				<select class="asde-combobox" data-min="1" id="asde-as-director" name="director">
 					<option value=""><?php esc_html_e( 'Choose later', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></option>
 					<?php foreach ( $candidatos as $num => $p ) : ?>
 						<option value="<?php echo esc_attr( (string) $num ); ?>" <?php selected( (string) ( $v['director'] ?? '' ), (string) $num ); ?>><?php echo esc_html( $p->nombre_completo() ); ?></option>

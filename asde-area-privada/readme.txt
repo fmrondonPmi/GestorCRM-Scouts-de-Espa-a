@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.64.10
+Stable tag: 0.64.11
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -61,6 +61,10 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.64.11 =
+* Translations: every text of the private area is now translated into Spanish, Catalan, Valencian, Galician and Basque (the event wizard and the administration screens showed some English). Two labels written only in Spanish now go through the translation system.
+* Search lists: every drop-down that lists data (people, families, events, groups, provinces, equipment, ingredients, recipes, budget items…) or has more than 10 options is now predictive: type a few letters and pick from the matches. Short fixed lists stay as they were.
 
 = 0.64.10 =
 * Sign-in: fixed choosing an account when the member numbers are numeric ("Choose one of the accounts in the list" appeared even after picking one). Someone with a scouter account and a family account can now sign in with either.
@@ -214,6 +218,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * The changelog of versions 0.42.0 and earlier is in changelog.txt, in the plugin folder.
 
 == Upgrade Notice ==
+
+= 0.64.11 =
+Complete translations and predictive search lists. No database changes.
 
 = 0.64.10 =
 Fixes choosing between two accounts at sign-in. No database changes.

@@ -52,7 +52,7 @@ $fuera  = array_values( array_filter( $filas, static fn( $f ) => in_array( $f['e
 $cuenta = array_count_values( array_column( $filas, 'estado' ) );
 $plazo  = Inscripciones::plazo( $e );
 $selector = static function ( string $name, array $lista, bool $vacio ) use ( $e ): string {
-	$h = '<select name="' . esc_attr( $name ) . '">' . ( $vacio ? '<option value="">' . esc_html( __( '— Choose —', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) . '</option>' : '' );
+	$h = '<select name="' . esc_attr( $name ) . '" class="asde-combobox" data-min="2">' . ( $vacio ? '<option value="">' . esc_html( __( '— Choose —', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) . '</option>' : '' );
 	foreach ( $lista as $num => $p ) {
 		$s  = Inscripciones::seccion_de( $e, $p ) ?? $p->seccion_educativa() ?? ( $p->secciones[0] ?? '' );
 		$h .= '<option value="' . esc_attr( (string) $num ) . '">' . esc_html( $p->nombre_completo() . ( '' !== $s ? ' · ' . Secciones::nombre( $s ) : '' ) ) . '</option>';
@@ -375,7 +375,7 @@ $devolver = static function ( array $f, array $c ) use ( $campos, $fila_h, $form
 		<form method="post" class="asde-form asde-form--compacta">
 			<?php echo wp_kses( $campos( 'evento_pago_familia' ), asde_html_permitido() ); ?>
 			<label><?php esc_html_e( 'Family', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>
-				<select name="familia">
+				<select class="asde-combobox" data-min="2" name="familia">
 					<?php foreach ( $familias as $id => $x ) : ?>
 						<option value="<?php echo (int) $id; ?>"><?php echo esc_html( sprintf( /* translators: 1: text, 2: number, 3: text */ __( '%1$s · %2$d sign-ups · pending %3$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $x['familia']['numero'], count( $x['filas'] ), Calculadora::euros( $x['pendiente'] ) ) ); ?></option>
 					<?php endforeach; ?>

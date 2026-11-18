@@ -40,7 +40,7 @@ $ejemplo = \AsdeBalears\AreaPrivada\Domain\NumeroSocio::ejemplo_tutor();
 			<input type="hidden" name="redirect_to" value="<?php echo esc_attr( $redirect_to ); ?>">
 			<p>
 				<label for="asde-acc-grupo"><?php esc_html_e( 'Scout Group', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
-				<select id="asde-acc-grupo" name="grupo" required>
+				<select class="asde-combobox" data-min="1" id="asde-acc-grupo" name="grupo" required>
 					<?php if ( count( $grupos ) > 1 ) : ?>
 						<option value=""><?php esc_html_e( 'Choose your group…', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></option>
 					<?php endif; ?>

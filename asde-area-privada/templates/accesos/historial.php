@@ -45,7 +45,7 @@ $columnas   = array(
 			<?php endforeach; ?>
 		</select>
 		<label for="asde-acc-h-persona"><?php esc_html_e( 'To whom', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
-		<select id="asde-acc-h-persona" name="persona" data-asde-autoenviar>
+		<select class="asde-combobox" data-min="2" id="asde-acc-h-persona" name="persona" data-asde-autoenviar>
 			<option value="0"><?php esc_html_e( 'All', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></option>
 			<?php foreach ( $personas as $id => $texto ) : ?>
 				<option value="<?php echo (int) $id; ?>" <?php selected( $persona, $id ); ?>><?php echo esc_html( $texto ); ?></option>

@@ -104,7 +104,7 @@ $fecha         = static fn( string $d ): string => wp_date( 'l d/m/Y', strtotime
 									<input type="hidden" name="asde_action" value="menu_anadir">
 									<input type="hidden" name="dia" value="<?php echo esc_attr( $d ); ?>">
 									<input type="hidden" name="comida" value="<?php echo esc_attr( $c ); ?>">
-									<select name="receta" aria-label="<?php echo esc_attr( sprintf( /* translators: %s: text */ __( 'Recipe for %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),  $nombre_c  ) ); ?>">
+									<select class="asde-combobox" data-min="1" name="receta" aria-label="<?php echo esc_attr( sprintf( /* translators: %s: text */ __( 'Recipe for %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),  $nombre_c  ) ); ?>">
 										<option value="0">— <?php esc_html_e( 'Add a dish', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> —</option>
 										<?php if ( $puede_nueva ) : ?>
 											<option value="nuevo" data-asde-menu-nuevo>+ <?php esc_html_e( 'New dish (create a recipe)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></option>
@@ -149,7 +149,7 @@ $fecha         = static fn( string $d ): string => wp_date( 'l d/m/Y', strtotime
 			<div data-asde-menu-lineas>
 				<?php for ( $n = 1; $n <= 3; $n++ ) : ?>
 					<div class="asde-menu-nueva__fila asde-menu-nueva__linea" data-asde-menu-linea>
-						<select name="ing[]" aria-label="<?php echo esc_attr( sprintf( /* translators: %d: number */ __( 'Ingredient %d', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $n ) ); ?>" data-asde-menu-ing>
+						<select class="asde-combobox" data-min="1" name="ing[]" aria-label="<?php echo esc_attr( sprintf( /* translators: %d: number */ __( 'Ingredient %d', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $n ) ); ?>" data-asde-menu-ing>
 							<option value="0">—</option>
 							<?php foreach ( $ingredientes as $i ) : ?>
 								<option value="<?php echo (int) $i['id']; ?>" data-alergenos="<?php echo esc_attr( implode( '|', array_map( array( Alergenos::class, 'nombre' ), (array) $i['alergenos'] ) ) ); ?>"><?php echo esc_html( $nombre_receta( $i ) ); ?></option>

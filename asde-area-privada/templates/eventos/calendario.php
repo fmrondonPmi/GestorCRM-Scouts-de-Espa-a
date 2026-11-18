@@ -175,7 +175,7 @@ $enlaces   = array(
 									<input type="hidden" name="tarea" value="<?php echo (int) $t['id']; ?>">
 									<p class="asde-form__fila">
 										<label><?php esc_html_e( 'Person in charge', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>
-											<select name="responsable">
+											<select class="asde-combobox" data-min="1" name="responsable">
 												<option value=""><?php esc_html_e( 'Unassigned', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></option>
 												<?php foreach ( $equipo as $m ) : ?>
 													<option value="<?php echo esc_attr( $m['socio'] ); ?>" <?php selected( $t['responsable'], $m['socio'] ); ?>><?php echo esc_html( isset( $nombres[ $m['socio'] ] ) ? $nombres[ $m['socio'] ]->nombre_completo() : $m['socio'] ); ?></option>

@@ -108,7 +108,7 @@ $opciones = static function ( float $importe, ?int $elegido ) use ( $tipos ): st
 							<?php if ( $eventos ) : ?>
 								<td data-label="<?php echo esc_attr( esc_attr__( 'Event', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
 									<label class="screen-reader-text" for="asde-evento-<?php echo (int) $m['id']; ?>"><?php esc_html_e( 'Event', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
-									<select id="asde-evento-<?php echo (int) $m['id']; ?>" name="evento[<?php echo (int) $m['id']; ?>]">
+									<select class="asde-combobox" data-min="1" id="asde-evento-<?php echo (int) $m['id']; ?>" name="evento[<?php echo (int) $m['id']; ?>]">
 										<option value=""><?php esc_html_e( 'None', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></option>
 										<?php foreach ( $eventos as $eid => $nombre ) : ?>
 											<option value="<?php echo (int) $eid; ?>" <?php selected( (int) ( $m['evento_id'] ?? 0 ), (int) $eid ); ?>><?php echo esc_html( $nombre ); ?></option>

@@ -84,7 +84,7 @@ $con_nombre = S::PEDIR_NOMBRE === $resultado || '' !== $valores['nombre_menor'];
 				<p class="asde-trampa" aria-hidden="true"><label for="asde-sol-web"><?php esc_html_e( 'Do not write anything here', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label><input type="text" id="asde-sol-web" name="web" value="" tabindex="-1" autocomplete="off"></p>
 				<p>
 					<label for="asde-sol-grupo"><?php esc_html_e( 'Scout Group', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
-					<select id="asde-sol-grupo" name="grupo" required>
+					<select class="asde-combobox" data-min="1" id="asde-sol-grupo" name="grupo" required>
 						<?php if ( count( $grupos ) > 1 ) : ?>
 							<option value=""><?php esc_html_e( 'Choose the group…', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></option>
 						<?php endif; ?>

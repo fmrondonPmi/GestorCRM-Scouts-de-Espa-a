@@ -130,7 +130,7 @@ $tabla = static function ( array $lista, bool $con_quien ) use ( $fila ): void {
 				<label for="asde-rei-importe"><?php esc_html_e( 'Amount (€)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <input type="text" id="asde-rei-importe" name="importe" inputmode="decimal" size="8" required></label>
 				<?php if ( $eventos ) : ?>
 					<label for="asde-rei-evento"><?php esc_html_e( 'Event (if for one)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>
-						<select id="asde-rei-evento" name="evento">
+						<select class="asde-combobox" data-min="1" id="asde-rei-evento" name="evento">
 							<option value=""><?php esc_html_e( 'No event', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></option>
 							<?php foreach ( $eventos as $id => $nombre_evento ) : ?>
 								<option value="<?php echo (int) $id; ?>"><?php echo esc_html( $nombre_evento ); ?></option>

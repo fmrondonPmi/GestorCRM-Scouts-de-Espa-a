@@ -197,7 +197,7 @@ $columnas = array(
 									echo wp_kses( Secciones::badge( $s ), asde_html_permitido() );
 								}
 							} else {
-								echo '<span class="asde-badge asde-badge--estado-desactivado">Sin membresía activa</span>';
+								echo '<span class="asde-badge asde-badge--estado-desactivado">' . esc_html__( 'No active membership', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . '</span>';
 							}
 							?>
 						</td>
