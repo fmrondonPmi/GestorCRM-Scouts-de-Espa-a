@@ -290,6 +290,20 @@ try {
 	$estado = $elegir_prop->getValue();
 	$res    = $paso2( (string) $estado['token'], 'prueba-acc-1' );
 	$ok( str_starts_with( $res, 'asde-redirect:' ) && get_current_user_id() === $ids['prueba-acc-1'], 'elegir la cuenta de scouter → entra en la de scouter' );
+	// v0.64.10: los usuarios son nº de socio/a (numéricos) y PHP convierte esas claves en enteros: elegir uno no puede dar «elige una de la lista».
+	$num_a = wp_insert_user( array( 'user_login' => '9900141', 'user_pass' => 'x-Num-141!', 'user_email' => 'num141@example.invalid' ) );
+	$num_b = wp_insert_user( array( 'user_login' => '9900142', 'user_pass' => 'x-Num-141!', 'user_email' => 'num142@example.invalid' ) );
+	$ofrecer = new ReflectionMethod( AccesoView::class, 'ofrecer_cuentas' );
+	$_POST   = array( 'recordar' => '' );
+	$elegir_prop->setValue( null, null );
+	$ofrecer->invoke( new AccesoView(), $grupo['id'], 'num@example.invalid', 'x-Num-141!', array( '9900141', '9900142' ) );
+	$estado_num = $elegir_prop->getValue();
+	$ok( is_array( $estado_num ), 'cuentas con usuario numérico → se ofrece elegir' );
+	$menu = (string) ( $estado_num ? $paso2( (string) $estado_num['token'], '9900141' ) : 'x' );
+	$ok( ! str_contains( $menu, 'Elige una de las cuentas' ), 'elegir una cuenta de usuario numérico → la acepta (no «Elige una de las cuentas de la lista»)' );
+	wp_delete_user( (int) $num_a );
+	wp_delete_user( (int) $num_b );
+	wp_set_current_user( 0 );
 	// Caducidad: si el acceso a medias ya no está guardado, no se entra.
 	$enviar( $marta, $claves['prueba-acc-1'] );
 	$estado = $elegir_prop->getValue();

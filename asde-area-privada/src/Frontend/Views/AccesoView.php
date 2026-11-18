@@ -221,7 +221,7 @@ final class AccesoView extends View {
 			'grupo'    => $grupo,
 			'login'    => $login,
 			'clave'    => $clave,
-			'cuentas'  => array_keys( $cuentas ),
+			'cuentas'  => array_map( 'strval', array_keys( $cuentas ) ), // v0.64.10: con usuarios numéricos PHP las daba como enteros.
 			'recordar' => '1' === $this->post( 'recordar' ),
 		);
 		set_transient( 'asde_acc_' . $token, Crypto::encrypt( (string) wp_json_encode( $datos ) ), self::MINUTOS_ELEGIR * MINUTE_IN_SECONDS );
@@ -281,7 +281,7 @@ final class AccesoView extends View {
 		$_POST['grupo']   = $pend['grupo'];
 		$_POST['usuario'] = $pend['login'];
 		$cuenta           = Identificacion::canonico( $pend['login'] );
-		if ( ! in_array( $elegida, $pend['cuentas'], true ) ) {
+		if ( ! in_array( $elegida, array_map( 'strval', (array) $pend['cuentas'] ), true ) ) { // Los nº de socio/a son numéricos: se comparan como texto.
 			self::$error = __( 'Choose one of the accounts in the list.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 			self::reabrir_elegir( $token, $pend, '' );
 			return;
