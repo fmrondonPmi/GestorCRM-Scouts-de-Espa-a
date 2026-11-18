@@ -64,7 +64,7 @@ $accion = add_query_arg(
 		<fieldset>
 			<legend><?php esc_html_e( 'Invited sections', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></legend>
 			<?php if ( $validado ) : ?>
-				<p class="asde-help"><?php esc_html_e( 'The budget is validated: the sections and expected participants cannot be changed (Treasury can reopen it).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
+				<p class="asde-help"><?php esc_html_e( 'The event is published and the price is fixed: the sections and expected participants can no longer be changed.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 				<?php foreach ( $e['secciones'] as $s ) : ?>
 					<?php echo wp_kses( Secciones::badge( $s ), asde_html_permitido() ); ?>
 					<input type="hidden" name="secciones[]" value="<?php echo esc_attr( $s ); ?>">
@@ -98,6 +98,13 @@ $accion = add_query_arg(
 	<section class="asde-card">
 		<h3 class="asde-card__title"><?php esc_html_e( 'Participants and places', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h3>
 		<p class="asde-help"><?php esc_html_e( 'The expected participants of each section are used to calculate the price and the monitor ratio. Places are the maximum (0 = no limit).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
+		<?php
+		$cuentas_eq = ! empty( $e['id'] ) ? \AsdeBalears\AreaPrivada\Eventos\InscripcionesTable::cuentas_equipo( (int) $e['id'] ) : array();
+		$auto       = array_filter( $cuentas_eq );
+		if ( $auto ) :
+			?>
+			<p class="asde-help"><?php esc_html_e( 'The places for Scouters and Support volunteers are the people of the team with that function: they change when you add or remove people in the Team tab.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
+		<?php endif; ?>
 		<table class="asde-table asde-table--plazas" data-asde-sin-paginar="editor de plazas por seccion (pocas filas fijas)">
 			<thead>
 				<tr>
@@ -114,10 +121,10 @@ $accion = add_query_arg(
 							<?php if ( $validado ) : ?>
 								<?php echo absint( $d[ 'previstas_' . $s ] ); ?><input type="hidden" name="previstas_<?php echo esc_attr( $s ); ?>" value="<?php echo absint( $d[ 'previstas_' . $s ] ); ?>">
 							<?php else : ?>
-								<input type="number" name="previstas_<?php echo esc_attr( $s ); ?>" value="<?php echo esc_attr( $d[ 'previstas_' . $s ] ?? '0' ); ?>" min="0" max="999" inputmode="numeric" aria-label="<?php echo esc_attr( sprintf( /* translators: %s: text */ __( 'Expected participants of %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Secciones::nombre( $s ) ) ); ?>">
+								<input type="number" name="previstas_<?php echo esc_attr( $s ); ?>" value="<?php echo esc_attr( $d[ 'previstas_' . $s ] ?? '0' ); ?>"<?php echo isset( $auto[ $s ] ) ? ' readonly' : ''; ?> min="0" max="999" inputmode="numeric" aria-label="<?php echo esc_attr( sprintf( /* translators: %s: text */ __( 'Expected participants of %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Secciones::nombre( $s ) ) ); ?>">
 							<?php endif; ?>
 						</td>
-						<td data-label="<?php echo esc_attr( esc_attr__( 'Places', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><input type="number" name="maximas_<?php echo esc_attr( $s ); ?>" value="<?php echo esc_attr( $d[ 'maximas_' . $s ] ?? '0' ); ?>" min="0" max="999" inputmode="numeric" aria-label="<?php echo esc_attr( sprintf( /* translators: %s: text */ __( 'Places of %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Secciones::nombre( $s ) ) ); ?>"></td>
+						<td data-label="<?php echo esc_attr( esc_attr__( 'Places', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><input type="number" name="maximas_<?php echo esc_attr( $s ); ?>"<?php echo isset( $auto[ $s ] ) ? ' readonly' : ''; ?> value="<?php echo esc_attr( $d[ 'maximas_' . $s ] ?? '0' ); ?>" min="0" max="999" inputmode="numeric" aria-label="<?php echo esc_attr( sprintf( /* translators: %s: text */ __( 'Places of %s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), Secciones::nombre( $s ) ) ); ?>"></td>
 					</tr>
 				<?php endforeach; ?>
 			</tbody>
@@ -160,7 +167,7 @@ $accion = add_query_arg(
 		<h3 class="asde-card__title"><?php esc_html_e( 'Cost, insurance and regulations', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h3>
 		<?php if ( $validado ) : ?>
 			<input type="hidden" name="con_coste" value="<?php echo $d['con_coste'] ? '1' : ''; ?>">
-			<p><?php echo esc_html( $d['con_coste'] ? __( 'It has a cost for families (budget validated).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : __( 'No cost for families.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?></p>
+			<p><?php echo esc_html( $d['con_coste'] ? __( 'It has a cost for families (the price is fixed).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) : __( 'No cost for families.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?></p>
 		<?php else : ?>
 			<label class="asde-choice"><input type="checkbox" name="con_coste" value="1" <?php checked( $d['con_coste'] ); ?>><span><?php esc_html_e( 'It has a cost for families (the price comes from the budget, which Treasury validates)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span></label>
 		<?php endif; ?>

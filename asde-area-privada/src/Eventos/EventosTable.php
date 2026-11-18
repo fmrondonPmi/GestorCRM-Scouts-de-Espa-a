@@ -433,6 +433,17 @@ final class EventosTable {
 		$f['id']            = (int) $f['id'];
 		$f['secciones']     = array_values( array_filter( explode( ',', (string) $f['secciones'] ) ) );
 		$f['plazas']        = self::plazas( json_decode( (string) $f['plazas'], true ) );
+		// v0.64.7: las plazas de Scouters y de Voluntariado de apoyo son las personas de esas funciones dadas de alta en el equipo
+		// (mientras no haya nadie en el equipo, valen las escritas a mano: p. ej. una formación a la que se apuntan los scouters).
+		$equipo = InscripcionesTable::cuentas_equipo( (int) $f['id'] );
+		foreach ( array( 'scouters', 'voluntariado' ) as $s ) {
+			if ( $equipo[ $s ] > 0 && in_array( $s, $f['secciones'], true ) ) {
+				$f['plazas'][ $s ] = array(
+					'previstas' => $equipo[ $s ],
+					'maximas'   => $equipo[ $s ],
+				);
+			}
+		}
 		$f['plazas_max']    = (int) $f['plazas_max'];
 		$f['edad_min']      = null === $f['edad_min'] ? null : (int) $f['edad_min'];
 		$f['edad_max']      = null === $f['edad_max'] ? null : (int) $f['edad_max'];

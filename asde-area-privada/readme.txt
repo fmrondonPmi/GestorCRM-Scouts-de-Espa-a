@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.64.6
+Stable tag: 0.64.7
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -61,6 +61,10 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.64.7 =
+* Events: the places for the Scouters and Support volunteers sections are now the people of the team with that function (Support = support volunteers; director, monitor, in training and scouter without qualification = scouters). They change when people are added to or removed from the Team tab; while the team is empty, the places typed by hand are kept.
+* Events: in a draft, the event form no longer locks the sections, expected participants and cost after Treasury approves the budget (a change withdraws the approval); it locks only once the event is published.
 
 = 0.64.6 =
 * Events, team: a new function "Scouter without qualification" in the Team tab. The person is on the team (can manage the event, does not pay) but does not count towards the monitor ratio.
@@ -200,6 +204,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * The changelog of versions 0.42.0 and earlier is in changelog.txt, in the plugin folder.
 
 == Upgrade Notice ==
+
+= 0.64.7 =
+Event places for Scouters and Support volunteers follow the team. No database changes.
 
 = 0.64.6 =
 New team function "Scouter without qualification" for events. No database changes.

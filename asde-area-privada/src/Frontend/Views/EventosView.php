@@ -157,7 +157,7 @@ final class EventosView extends EventosBaseView {
 				'cfg'        => $cfg,
 				'secciones'  => array_values( array_unique( array_merge( Servicio::secciones_para( $a ), $e['secciones'] ) ) ),
 				'ambitos'    => array_values( array_unique( array_merge( Servicio::ambitos_para( $a ), array( $e['ambito'] ) ) ) ),
-				'validado'   => null !== $e['validado_en'],
+				'validado'   => null !== $e['validado_en'] && EventosTable::BORRADOR !== $e['estado'], // Con el evento publicado el precio es fijo; en borrador, el visto bueno no cierra nada.
 				'url'        => $this->url( 'eventos' ),
 				'volver'     => $this->url( 'eventos', array( 'evento' => (string) $e['id'] ) ),
 			)

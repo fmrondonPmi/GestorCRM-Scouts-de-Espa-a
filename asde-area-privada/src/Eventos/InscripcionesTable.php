@@ -143,8 +143,41 @@ final class InscripcionesTable {
 	}
 
 	/** @return int Id de la fila (0 si ya estaba o no se ha podido guardar). */
+	/** @var array<int, array{scouters:int, voluntariado:int}>|null Recuento del equipo por evento (una consulta por petición). */
+	private static ?array $cuentas_equipo = null;
+
+	/**
+	 * Cuántas personas del equipo cuentan como Scouters y cuántas como Voluntariado de apoyo en un evento (v0.64.7): las de
+	 * función «Apoyo» son voluntariado; las demás (director, monitor, en prácticas, scouter sin titulación), scouters. Son las
+	 * plazas de esas dos secciones en el evento.
+	 *
+	 * @return array{scouters:int, voluntariado:int}
+	 */
+	public static function cuentas_equipo( int $evento_id ): array {
+		global $wpdb;
+		if ( null === self::$cuentas_equipo ) {
+			self::$cuentas_equipo = array();
+			$papeles              = array_keys( self::papeles() );
+			$marcas               = implode( ',', array_fill( 0, count( $papeles ), '%s' ) );
+			$filas                = (array) $wpdb->get_results( $wpdb->prepare( "SELECT evento_id, papel, COUNT(*) AS n FROM %i WHERE grupo = %s AND papel IN ($marcas) GROUP BY evento_id, papel", array_merge( array( self::table(), Grupo::numero() ), $papeles ) ), ARRAY_A ); // phpcs:ignore WordPress.DB
+			foreach ( $filas as $f ) {
+				$e = (int) $f['evento_id'];
+				self::$cuentas_equipo[ $e ] ??= array(
+					'scouters'     => 0,
+					'voluntariado' => 0,
+				);
+				self::$cuentas_equipo[ $e ][ 'apoyo' === $f['papel'] ? 'voluntariado' : 'scouters' ] += (int) $f['n'];
+			}
+		}
+		return self::$cuentas_equipo[ $evento_id ] ?? array(
+			'scouters'     => 0,
+			'voluntariado' => 0,
+		);
+	}
+
 	public static function anadir( int $evento_id, string $socio, array $secciones, bool $adulto, string $papel ): int {
 		global $wpdb;
+		self::$cuentas_equipo = null;
 		if ( self::de_socio( $evento_id, $socio ) ) {
 			return 0;
 		}
@@ -166,6 +199,7 @@ final class InscripcionesTable {
 
 	public static function cambiar_papel( int $id, string $papel ): bool {
 		global $wpdb;
+		self::$cuentas_equipo = null;
 		return false !== $wpdb->update(
 			self::table(),
 			array( 'papel' => $papel ),
@@ -185,6 +219,7 @@ final class InscripcionesTable {
 	/** Quita a alguien del equipo (no es un justificante de nada: se borra la fila). */
 	public static function quitar( int $id ): bool {
 		global $wpdb;
+		self::$cuentas_equipo = null;
 		return (bool) $wpdb->delete(
 			self::table(),
 			array(
@@ -364,6 +399,7 @@ final class InscripcionesTable {
 	/** Borra todas las filas de un evento (al borrar un borrador). */
 	public static function borrar_evento( int $evento_id ): void {
 		global $wpdb;
+		self::$cuentas_equipo = null;
 		$wpdb->delete(
 			self::table(),
 			array(

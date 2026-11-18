@@ -379,6 +379,42 @@ try {
 
 	// v0.64.6: «Scouter sin titulación» es una función más del equipo: está en el equipo pero no cubre la ratio.
 	$ok( isset( InscripcionesTable::papeles()['sin_titulacion'] ) && 'Scouter sin titulación' === InscripcionesTable::papeles()['sin_titulacion'], 'entre las funciones del equipo está «Scouter sin titulación»' );
+
+	// v0.64.7: las plazas de Scouters y de Voluntariado de apoyo son las personas del equipo con esa función.
+	$id_pl = EventosTable::crear(
+		array(
+			'tipo'      => 'acampada',
+			'ambito'    => 'secciones',
+			'nombre'    => 'Plazas del equipo',
+			'inicio'    => $ini . ' 10:00:00',
+			'fin'       => $fin . ' 17:00:00',
+			'secciones' => array( 'lobatos', 'scouters', 'voluntariado' ),
+			'plazas'    => array(
+				'lobatos'      => array( 'previstas' => 10, 'maximas' => 0 ),
+				'scouters'     => array( 'previstas' => 5, 'maximas' => 6 ),
+				'voluntariado' => array( 'previstas' => 2, 'maximas' => 0 ),
+			),
+		)
+	);
+	$pl = static fn() => EventosTable::obtener( $id_pl )['plazas'];
+	$ok( 5 === $pl()['scouters']['previstas'] && 6 === $pl()['scouters']['maximas'] && 2 === $pl()['voluntariado']['previstas'], 'sin nadie en el equipo valen las plazas escritas a mano (p. ej. una formación a la que se apuntan los scouters)' );
+	$f_dir = InscripcionesTable::anadir( $id_pl, '990031', array( 'scouters' ), true, 'director' );
+	$f_mon = InscripcionesTable::anadir( $id_pl, '990032', array( 'scouters' ), true, 'monitor' );
+	$f_sin = InscripcionesTable::anadir( $id_pl, '990033', array( 'scouters' ), true, 'sin_titulacion' );
+	$f_apo = InscripcionesTable::anadir( $id_pl, '990034', array( 'voluntariado' ), true, 'apoyo' );
+	$ok( 3 === $pl()['scouters']['previstas'] && 3 === $pl()['scouters']['maximas'] && 1 === $pl()['voluntariado']['previstas'] && 1 === $pl()['voluntariado']['maximas'], 'con 3 scouters y 1 voluntario de apoyo en el equipo, las plazas son 3 y 1 (previstas y máximas)' );
+	$ok( 10 === $pl()['lobatos']['previstas'] && 0 === $pl()['lobatos']['maximas'], 'las demás secciones no cambian' );
+	InscripcionesTable::cambiar_papel( $f_mon, 'apoyo' );
+	$ok( 2 === $pl()['scouters']['previstas'] && 2 === $pl()['voluntariado']['previstas'], 'al cambiar la función de un monitor a apoyo, pasa de scouters a voluntariado (2 y 2)' );
+	InscripcionesTable::quitar( $f_sin );
+	$ok( 1 === $pl()['scouters']['previstas'] && 1 === $pl()['scouters']['maximas'], 'al quitar a alguien del equipo, las plazas bajan' );
+	$c_pl = Presupuesto::previstos( EventosTable::obtener( $id_pl ) );
+	$ok( 1 === $c_pl['scouters'] && 2 === $c_pl['voluntariado'] && 10 === $c_pl['lobatos'], 'y el presupuesto usa esos números (los de Scouters y Voluntariado no pagan, pero se ven)' );
+	$a_pl = $como( $u_coord );
+	$h    = $pintar( new EventosView(), array( 'evento' => (string) $id_pl, 'editar' => '1' ) );
+	$ok( str_contains( $h, 'readonly' ) && str_contains( $h, 'son las personas del equipo' ), 'en el formulario del evento esas plazas no se escriben: salen fijas y con la explicación' );
+	InscripcionesTable::borrar_evento( $id_pl );
+	$wpdb->delete( EventosTable::table(), array( 'id' => $id_pl ) ); // phpcs:ignore WordPress.DB
 	$c_sin = Normativa::comprobar_equipo( $e_40, array_merge( $eq_ok, array( $mk( 's1', 'sin_titulacion' ), $mk( 's2', 'sin_titulacion' ) ) ), array(), $fi_ok + array( 's1' => $ficha( '' ), 's2' => $ficha( 'Monitor de tiempo libre' ) ), Config::de() );
 	$ok( 4 === $c_sin['ratio']['monitores'] && ! $c_sin['avisos'], 'un scouter sin titulación en el equipo no cubre la ratio (ni siquiera con título en la ficha) y no da avisos' );
 	$a_eq = $como( $u_lob );

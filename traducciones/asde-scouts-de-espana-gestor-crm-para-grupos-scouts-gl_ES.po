@@ -1659,7 +1659,7 @@ msgstr "Unha familia agrupa irmáns (e, se se quere, aos seus pais scouters) par
 msgid "A group (or several groups)"
 msgstr ""
 
-#: templates/eventos/asistente.php:188 templates/eventos/formulario.php:186
+#: templates/eventos/asistente.php:188 templates/eventos/formulario.php:193
 msgid "A lifeguard will be present"
 msgstr "Haberá un socorrista presente"
 
@@ -4439,7 +4439,7 @@ msgstr "Custo por participante"
 msgid "Cost per usual unit, in euros (optional)"
 msgstr "Custo por unidade habitual, en euros (opcional)"
 
-#: templates/eventos/formulario.php:160
+#: templates/eventos/formulario.php:167
 msgid "Cost, insurance and regulations"
 msgstr "Custo, seguro e normativa"
 
@@ -4960,7 +4960,7 @@ msgstr "Descrición do trastorno"
 msgid "Description of the treatment"
 msgstr "Descrición do tratamento"
 
-#: templates/eventos/asistente.php:224 templates/eventos/formulario.php:150
+#: templates/eventos/asistente.php:224 templates/eventos/formulario.php:157
 msgid "Description or circular"
 msgstr "Descrición ou circular"
 
@@ -5962,12 +5962,12 @@ msgstr "Cotas previstas das familias"
 msgid "Expected fees from families (round"
 msgstr "Cotas esperadas das familias (rolda"
 
-#: templates/eventos/asistente.php:145 templates/eventos/asistente.php:242 templates/eventos/formulario.php:105 templates/eventos/formulario.php:113
+#: templates/eventos/asistente.php:145 templates/eventos/asistente.php:242 templates/eventos/formulario.php:112 templates/eventos/formulario.php:120
 msgid "Expected participants"
 msgstr "Participantes previstos"
 
 #. translators: %s: text
-#: templates/eventos/formulario.php:117
+#: templates/eventos/formulario.php:124
 #, php-format
 msgid "Expected participants of %s"
 msgstr "Participantes previstos de %s"
@@ -6573,7 +6573,7 @@ msgstr "Por exemplo: chegada do pedido, reconto…"
 msgid "For example: recorded twice"
 msgstr "Por exemplo: rexistrado dúas veces"
 
-#: templates/eventos/formulario.php:148
+#: templates/eventos/formulario.php:155
 msgid "For families"
 msgstr "Para as familias"
 
@@ -8002,7 +8002,7 @@ msgstr "Seguro segundo táboa de primas"
 msgid "Insurance by table"
 msgstr "Seguro segundo táboa"
 
-#: src/Informes/Catalogo.php:121 templates/eventos/asistente.php:184 templates/eventos/formulario.php:177
+#: src/Informes/Catalogo.php:121 templates/eventos/asistente.php:184 templates/eventos/formulario.php:184
 msgid "Insurance company"
 msgstr "Compañía do seguro"
 
@@ -8026,7 +8026,7 @@ msgstr ""
 msgid "Interest · fees · custody · expenses and taxes"
 msgstr "Xuros · comisións · custodia · gastos e impostos"
 
-#: templates/eventos/formulario.php:175
+#: templates/eventos/formulario.php:182
 msgid "International (all or part outside Spain): needs separate insurance"
 msgstr "Internacional (toda ou parte fóra de España): necesita un seguro á parte"
 
@@ -8227,13 +8227,13 @@ msgstr "Antes necesita: %s"
 msgid "It first needs: %s."
 msgstr "Antes necesita: %s."
 
-#: templates/eventos/formulario.php:163
-msgid "It has a cost for families (budget validated)."
-msgstr "Ten custo para as familias (orzamento validado)."
-
-#: templates/eventos/formulario.php:165
+#: templates/eventos/formulario.php:172
 msgid "It has a cost for families (the price comes from the budget, which Treasury validates)"
 msgstr "Ten custo para as familias (o prezo sae do orzamento, que valida Tesouraría)"
+
+#: templates/eventos/formulario.php:170
+msgid "It has a cost for families (the price is fixed)."
+msgstr "Ten custo para as familias (o prezo é fixo)."
 
 #: src/Tesoreria/FamiliasTable.php:220
 msgid "It has bank transactions assigned: it cannot be deleted."
@@ -9161,7 +9161,7 @@ msgstr "Coincide co cobrado"
 msgid "Maximum %d per person"
 msgstr "Máximo %d por persoa"
 
-#: templates/eventos/asistente.php:151 templates/eventos/formulario.php:128
+#: templates/eventos/asistente.php:151 templates/eventos/formulario.php:135
 msgid "Maximum age (optional)"
 msgstr "Idade máxima (opcional)"
 
@@ -9381,7 +9381,7 @@ msgstr "Meu · compartido"
 msgid "Minimum"
 msgstr "Mínimo"
 
-#: templates/eventos/asistente.php:150 templates/eventos/formulario.php:127
+#: templates/eventos/asistente.php:150 templates/eventos/formulario.php:134
 msgid "Minimum age (optional)"
 msgstr "Idade mínima (opcional)"
 
@@ -9401,7 +9401,7 @@ msgstr "Varios"
 msgid "Mobile"
 msgstr "Móbil"
 
-#: templates/eventos/formulario.php:135 templates/eventos/inscripciones.php:92
+#: templates/eventos/formulario.php:142 templates/eventos/inscripciones.php:92
 msgid "Mode"
 msgstr "Modalidade"
 
@@ -9797,7 +9797,7 @@ msgstr ""
 msgid "No cost"
 msgstr "Sen custo"
 
-#: src/Eventos/Normativa.php:308 templates/eventos/formulario.php:163
+#: src/Eventos/Normativa.php:308 templates/eventos/formulario.php:170
 msgid "No cost for families."
 msgstr "Sen custo para as familias."
 
@@ -10875,7 +10875,7 @@ msgstr "Participantes e prazas"
 msgid "Participants of the account"
 msgstr "Participantes da conta"
 
-#: templates/eventos/formulario.php:188
+#: templates/eventos/formulario.php:195
 msgid "Participants with recognised dependency: write only how many (no names). The regulations require more support monitors."
 msgstr "Participantes con dependencia recoñecida: escribe só cantos (sen nomes). A normativa pide máis monitores de apoio."
 
@@ -11233,7 +11233,7 @@ msgstr "Datos persoais"
 msgid "Personal equipment"
 msgstr "Material persoal"
 
-#: templates/eventos/asistente.php:228 templates/eventos/formulario.php:154
+#: templates/eventos/asistente.php:228 templates/eventos/formulario.php:161
 msgid "Personal equipment (what each participant brings)"
 msgstr "Material persoal (o que leva cada participante)"
 
@@ -11309,12 +11309,12 @@ msgstr "Facer o pedido de camisas ao provedor"
 msgid "Place: %s"
 msgstr "Lugar: %s"
 
-#: templates/eventos/asistente.php:146 templates/eventos/formulario.php:106 templates/eventos/formulario.php:120 templates/eventos/inscripciones.php:104
+#: templates/eventos/asistente.php:146 templates/eventos/formulario.php:113 templates/eventos/formulario.php:127 templates/eventos/inscripciones.php:104
 msgid "Places"
 msgstr "Prazas"
 
 #. translators: %s: text
-#: templates/eventos/formulario.php:120
+#: templates/eventos/formulario.php:127
 #, php-format
 msgid "Places of %s"
 msgstr "Prazas de %s"
@@ -11347,7 +11347,7 @@ msgstr "Gastos previstos"
 msgid "Planned income"
 msgstr "Ingresos previstos"
 
-#: src/Informes/Catalogo.php:122 templates/eventos/asistente.php:185 templates/eventos/formulario.php:178
+#: src/Informes/Catalogo.php:122 templates/eventos/asistente.php:185 templates/eventos/formulario.php:185
 msgid "Policy no."
 msgstr "Nº de póliza"
 
@@ -12407,7 +12407,7 @@ msgstr ""
 msgid "Report not available."
 msgstr "Informe non dispoñible."
 
-#: templates/eventos/formulario.php:168
+#: templates/eventos/formulario.php:175
 msgid "Report to ASDE Baleares (30 days before)"
 msgstr "Comunicación a ASDE Baleares (30 días antes)"
 
@@ -12890,7 +12890,7 @@ msgstr "Gardar o axuste"
 msgid "Save the cash count"
 msgstr "Gardar o arqueo"
 
-#: templates/eventos/formulario.php:196
+#: templates/eventos/formulario.php:203
 msgid "Save the changes"
 msgstr "Gardar os cambios"
 
@@ -13646,7 +13646,7 @@ msgstr ""
 msgid "Sign-in was not possible."
 msgstr "Non se puido iniciar sesión."
 
-#: templates/eventos/asistente.php:41 templates/eventos/formulario.php:133 templates/eventos/inscripciones.php:90 templates/tesoreria/cuotas.php:66
+#: templates/eventos/asistente.php:41 templates/eventos/formulario.php:140 templates/eventos/inscripciones.php:90 templates/tesoreria/cuotas.php:66
 msgid "Sign-up"
 msgstr "Inscrición"
 
@@ -13674,7 +13674,7 @@ msgstr "Inscrición borrada da lista de espera."
 msgid "Sign-up for this event is not open."
 msgstr "A inscrición deste evento non está aberta."
 
-#: templates/eventos/asistente.php:219 templates/eventos/formulario.php:141
+#: templates/eventos/asistente.php:219 templates/eventos/formulario.php:148
 msgid "Sign-up from (optional)"
 msgstr "Inscrición desde (opcional)"
 
@@ -13720,7 +13720,7 @@ msgstr "Inscrición gardada."
 msgid "Sign-up saved. See below what is missing to confirm it."
 msgstr "Inscrición gardada. Mira abaixo o que falta para confirmala."
 
-#: templates/eventos/asistente.php:220 templates/eventos/formulario.php:142
+#: templates/eventos/asistente.php:220 templates/eventos/formulario.php:149
 msgid "Sign-up until (optional)"
 msgstr "Inscrición ata (opcional)"
 
@@ -15052,10 +15052,6 @@ msgstr "O orzamento xa é un borrador."
 msgid "The budget is already approved."
 msgstr "O orzamento xa está aprobado."
 
-#: templates/eventos/formulario.php:67
-msgid "The budget is validated: the sections and expected participants cannot be changed (Treasury can reopen it)."
-msgstr "O orzamento está validado: as seccións e os participantes previstos non se poden cambiar (Tesouraría pode reabrilo)."
-
 #: src/Eventos/Normativa.php:305
 msgid "The budget still has to be prepared and sent to Treasury for its go-ahead."
 msgstr ""
@@ -15323,6 +15319,10 @@ msgstr "O evento aínda non rematou."
 #: src/Eventos/Servicio.php:301
 msgid "The event is already published and the price is fixed: the sections, the expected participants and whether it has a cost can no longer be changed."
 msgstr ""
+
+#: templates/eventos/formulario.php:67
+msgid "The event is published and the price is fixed: the sections and expected participants can no longer be changed."
+msgstr "O evento está publicado e o prezo é fixo: xa non se poden cambiar as seccións nin os participantes previstos."
 
 #: templates/eventos/agenda.php:32
 msgid "The events of your sections and those whose team you are on."
@@ -16001,6 +16001,10 @@ msgstr "A propia persoa"
 msgid "The person themselves (from \"Forgot your password?\")"
 msgstr "A propia persoa (desde «Esqueceches o contrasinal?»)"
 
+#: templates/eventos/formulario.php:106
+msgid "The places for Scouters and Support volunteers are the people of the team with that function: they change when you add or remove people in the Team tab."
+msgstr "As prazas de Scouters e de Voluntariado de apoio son as persoas do equipo con esa función: cambian ao engadir ou quitar xente na lapela Equipo."
+
 #: src/Domain/Grupos.php:215
 msgid "The postcode must have 5 digits."
 msgstr "O código postal ten que ter 5 cifras."
@@ -16662,7 +16666,7 @@ msgstr "Non quedan unidades suficientes de «%s»."
 msgid "There are several records in your group with this document: they would have to be merged in the CRM."
 msgstr "Hai varias fichas no teu grupo con este documento: habería que unificalas no CRM."
 
-#: templates/eventos/formulario.php:180
+#: templates/eventos/formulario.php:187
 msgid "There are specialised-risk activities (high mountain, canyoning, climbing, diving, sailing)"
 msgstr "Hai actividades de risco especializado (alta montaña, barrancos, escalada, mergullo, náutica)"
 
@@ -16686,7 +16690,7 @@ msgstr[1] ""
 msgid "There is a SEPA batch for the event whose collections have not been recorded."
 msgstr "Hai unha remesa SEPA do evento sen rexistrar os seus cobros."
 
-#: templates/eventos/formulario.php:184
+#: templates/eventos/formulario.php:191
 msgid "There is a swimming pool or sea"
 msgstr "Hai piscina ou mar"
 
@@ -17569,7 +17573,7 @@ msgstr "Importe total, só entre os dunha sección"
 msgid "Total of other items"
 msgstr "Total doutros conceptos"
 
-#: templates/eventos/formulario.php:126
+#: templates/eventos/formulario.php:133
 msgid "Total places (0 = no limit)"
 msgstr "Prazas en total (0 = sen límite)"
 
@@ -18739,11 +18743,11 @@ msgstr "Con membresía activa"
 msgid "With an instalment, each family is charged what it is missing up to that instalment (counting what it has already paid)."
 msgstr "Cun prazo, cóbraselle a cada familia o que lle falta ata ese prazo (contando o que xa pagou)."
 
-#: templates/eventos/asistente.php:193 templates/eventos/formulario.php:190
+#: templates/eventos/asistente.php:193 templates/eventos/formulario.php:197
 msgid "With grade I or II"
 msgstr "Con grao I ou II"
 
-#: templates/eventos/asistente.php:194 templates/eventos/formulario.php:191
+#: templates/eventos/asistente.php:194 templates/eventos/formulario.php:198
 msgid "With grade III"
 msgstr "Con grao III"
 
@@ -18767,7 +18771,7 @@ msgstr "Con prazos vencidos"
 msgid "With overdue instalments unpaid"
 msgstr "Con prazos vencidos sen pagar"
 
-#: templates/eventos/asistente.php:190 templates/eventos/formulario.php:182
+#: templates/eventos/asistente.php:190 templates/eventos/formulario.php:189
 msgid "With staff qualified in that activity"
 msgstr "Con persoal titulado nesa actividade"
 
@@ -18872,7 +18876,7 @@ msgstr "Sen sección, escolle polo menos unha responsabilidade: Secretaría, Coo
 msgid "Without dates, sign-up opens on publishing and closes when the event starts."
 msgstr ""
 
-#: templates/eventos/formulario.php:144
+#: templates/eventos/formulario.php:151
 msgid "Without dates, sign-up opens on publishing and closes when the event starts. After the deadline, only the team signs people up. If there are no places left, new sign-ups go on the waiting list."
 msgstr "Sen datas, a inscrición ábrese ao publicar e péchase cando comeza o evento. Pasado o prazo, só inscribe o equipo. Se non quedan prazas, as novas inscricións entran na lista de espera."
 
@@ -19859,7 +19863,7 @@ msgstr "p. ex. Compra de comida"
 msgid "e.g. Grupo Scout Myotragus 684"
 msgstr "p. ex. Grupo Scout Myotragus 684"
 
-#: templates/eventos/asistente.php:229 templates/eventos/formulario.php:155
+#: templates/eventos/asistente.php:229 templates/eventos/formulario.php:162
 msgid "e.g. sleeping bag, mat, torch, uniform…"
 msgstr "p. ex. saco de durmir, esterilla, lanterna, uniforme…"
 
