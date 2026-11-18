@@ -149,7 +149,7 @@ $form    = static function ( string $accion, string $boton, string $clase = 'asd
 			<?php elseif ( $activo && null !== $p['pedido_en'] && \AsdeBalears\AreaPrivada\Tienda\Proveedor::esperando( $p ) ) : ?>
 				<br><span class="asde-help asde-help--warning"><?php esc_html_e( 'It has not arrived from the supplier yet: it can be delivered when Coordination marks its order as received.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span>
 			<?php elseif ( $activo && Servicio::puede_entregar( $p, $ambito ) ) : ?>
-				<br><?php echo wp_kses( $form( 'uniforme_entregar', esc_html( __( 'Mark as delivered', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ), 'button' ), asde_html_permitido() ); ?>
+				<br><?php echo wp_kses( $form( 'uniforme_entregar', esc_html( __( 'Mark as delivered', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ), 'button', esc_html( __( 'Mark this order as delivered? The member or their family will be notified and asked to confirm it.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) ), asde_html_permitido() ); ?>
 				<?php if ( null === $p['pedido_en'] ) : ?>
 					<span class="asde-help asde-help--warning"><?php esc_html_e( 'It is not in any group order.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span>
 				<?php endif; ?>

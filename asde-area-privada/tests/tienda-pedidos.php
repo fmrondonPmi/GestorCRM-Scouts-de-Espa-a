@@ -307,8 +307,26 @@ try {
 	$ok( null === PedidosTable::obtener( $p1['id'] )['pago_en'], 'y lo puede deshacer' );
 	$enviar( new TiendaGestionView(), array( 'asde_action' => 'uniforme_pago', 'pedido' => (string) $p1['id'], 'metodo' => 'efectivo', 'fecha' => wp_date( 'Y-m-d' ), 'importe' => '14' ), 'asde_uniforme_' . $p1['id'] );
 	$como( $u_coord );
+	// v0.64.8: «marcar entregado» pide confirmación (en la lista y en el detalle) y una entrega marcada por error se puede deshacer.
+	$enviar_pedido = static function () use ( $p1 ) {
+		$_GET['pedido'] = (string) $p1['id'];
+		$d              = ( new TiendaGestionView() )->render();
+		unset( $_GET['pedido'] );
+		return array( ( new TiendaGestionView() )->render(), $d );
+	};
+	$ent_antes = $p1['entregado_en'] ?? null;
+	$ok( null === PedidosTable::obtener( $p1['id'] )['entregado_en'], 'el pedido aún no está entregado' );
+	[ $lista_h, $det_h ] = $enviar_pedido();
+	$ok( str_contains( $lista_h, 'asde-uni-entregar-' . $p1['id'] ) && str_contains( $lista_h, 'data-asde-confirmar="¿Marcar este pedido como entregado?' ), 'en la lista, «Marcar entregado» pide confirmar' );
+	$ok( str_contains( $det_h, 'data-asde-confirmar="¿Marcar este pedido como entregado?' ) && str_contains( $det_h, 'value="uniforme_entregar"' ), 'en el detalle, también' );
 	$enviar( new TiendaGestionView(), array( 'asde_action' => 'uniforme_entregar', 'pedido' => (string) $p1['id'] ), 'asde_uniforme_' . $p1['id'] );
 	$ok( null !== PedidosTable::obtener( $p1['id'] )['entregado_en'], 'la administración marca entregado' );
+	[ $lista_h, $det_h ] = $enviar_pedido();
+	$ok( str_contains( $lista_h, 'id="asde-uni-deshacer-' . $p1['id'] . '"' ) && str_contains( $lista_h, 'form="asde-uni-deshacer-' . $p1['id'] . '"' ), 'ya entregado, la lista ofrece «Deshacer» la entrega' );
+	$enviar( new TiendaGestionView(), array( 'asde_action' => 'uniforme_deshacer_entrega', 'pedido' => (string) $p1['id'] ), 'asde_uniforme_' . $p1['id'] );
+	$ok( null === PedidosTable::obtener( $p1['id'] )['entregado_en'] && 0 === PedidosTable::obtener( $p1['id'] )['entregado_por'], 'deshacer la entrega la deja pendiente otra vez' );
+	$enviar( new TiendaGestionView(), array( 'asde_action' => 'uniforme_entregar', 'pedido' => (string) $p1['id'] ), 'asde_uniforme_' . $p1['id'] );
+	$ok( null !== PedidosTable::obtener( $p1['id'] )['entregado_en'], 'y se vuelve a marcar entregado' );
 	$como( $u_fam );
 	$enviar( new TiendaPedidosView(), array( 'asde_action' => 'uniforme_recibido', 'pedido' => (string) $p1['id'] ), 'asde_uniforme_' . $p1['id'] );
 	$ok( null !== PedidosTable::obtener( $p1['id'] )['recibido_en'], 'y la familia confirma que lo ha recibido' );

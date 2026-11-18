@@ -33,6 +33,7 @@ $fecha    = static fn( ?string $f ) => $f ? wp_date( 'd/m/Y', strtotime( $f . ( 
 $lote     = current_user_can( Servicio::CAP_PEDIDO );
 $marca    = static fn( bool $si, string $detalle = '' ) => $si ? '<span class="asde-check" title="' . esc_attr( $detalle ) . '">✓</span>' . ( '' !== $detalle ? ' <span class="asde-muted">' . esc_html( $detalle ) . '</span>' : '' ) : '<span class="asde-muted">—</span>';
 $entregar = array();
+$deshacer = array(); // v0.64.8: las ya entregadas, para poder deshacer la entrega marcada por error.
 $ref      = static fn( string $r ): string => PedidosTable::REF_INVENTARIO === $r ? asde_guardado( PedidosTable::REF_INVENTARIO ) : $r;
 // Resumen de arriba: «1 pendiente de entregar», «2 pendientes de entregar».
 $singular = array(
@@ -116,6 +117,9 @@ $singular = array(
 						if ( $activo && null !== $p['pedido_en'] && null === $p['entregado_en'] && Servicio::puede_entregar( $p, $ambito ) ) {
 							$entregar[] = $p['id'];
 						}
+						if ( $activo && null !== $p['entregado_en'] && Servicio::puede_entregar( $p, $ambito ) ) {
+							$deshacer[] = $p['id'];
+						}
 						?>
 						<tr<?php echo $activo ? '' : ' class="asde-fila--cancelada"'; ?>>
 							<?php if ( $lote ) : ?>
@@ -147,6 +151,9 @@ $singular = array(
 								<td data-label="<?php echo esc_attr( esc_attr__( 'Delivered', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
 									<?php if ( null !== $p['entregado_en'] ) : ?>
 										<?php echo wp_kses( $marca( true, $fecha( $p['entregado_en'] ) ), asde_html_permitido() ); ?>
+										<?php if ( in_array( $p['id'], $deshacer, true ) ) : ?>
+											<button type="submit" form="asde-uni-deshacer-<?php echo (int) $p['id']; ?>" class="asde-btn-link"><?php esc_html_e( 'Undo', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
+										<?php endif; ?>
 									<?php elseif ( in_array( $p['id'], $entregar, true ) ) : ?>
 										<button type="submit" form="asde-uni-entregar-<?php echo (int) $p['id']; ?>" class="asde-btn-link"><?php esc_html_e( 'Mark delivered', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 									<?php else : ?>
@@ -168,9 +175,17 @@ $singular = array(
 			<?php endif; ?>
 		</form>
 		<?php foreach ( $entregar as $id ) : ?>
-			<form method="post" id="asde-uni-entregar-<?php echo (int) $id; ?>" hidden data-asde-recarga>
+			<form method="post" id="asde-uni-entregar-<?php echo (int) $id; ?>" hidden data-asde-recarga data-asde-confirmar="<?php echo esc_attr( __( 'Mark this order as delivered? The member or their family will be notified and asked to confirm it.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
 				<?php wp_nonce_field( 'asde_uniforme_' . $id ); ?>
 				<input type="hidden" name="asde_action" value="uniforme_entregar">
+				<input type="hidden" name="pedido" value="<?php echo (int) $id; ?>">
+				<input type="hidden" name="volver" value="<?php echo esc_url( $volver ); ?>">
+			</form>
+		<?php endforeach; ?>
+		<?php foreach ( $deshacer as $id ) : ?>
+			<form method="post" id="asde-uni-deshacer-<?php echo (int) $id; ?>" hidden data-asde-recarga data-asde-confirmar="<?php echo esc_attr( __( 'Undo the delivery? The member\'s confirmation is also deleted, if there was one.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
+				<?php wp_nonce_field( 'asde_uniforme_' . $id ); ?>
+				<input type="hidden" name="asde_action" value="uniforme_deshacer_entrega">
 				<input type="hidden" name="pedido" value="<?php echo (int) $id; ?>">
 				<input type="hidden" name="volver" value="<?php echo esc_url( $volver ); ?>">
 			</form>

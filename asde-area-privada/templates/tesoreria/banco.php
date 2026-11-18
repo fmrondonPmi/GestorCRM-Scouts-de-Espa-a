@@ -43,6 +43,14 @@ $asociar   = static fn( int $id ) => add_query_arg(
 	),
 	$url
 );
+$pagar_pedido = static fn( int $id ) => add_query_arg(
+	array(
+		'cobrar_pedido' => $id,
+		'volver'        => rawurlencode( $aqui ),
+	),
+	$url
+);
+$tienda_banco = \AsdeBalears\AreaPrivada\Tienda\ConciliacionBanco::disponible();
 $revisar = static fn( array $ids ) => add_query_arg(
 	array(
 		'revisar' => '1',
@@ -271,6 +279,9 @@ $revisar = static fn( array $ids ) => add_query_arg(
 										<input type="hidden" name="mov" value="<?php echo (int) $m['id']; ?>">
 										<button type="submit" class="asde-btn-link"><?php esc_html_e( 'Remove link', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 									</form>
+								<?php endif; ?>
+								<?php if ( BancoTable::PENDIENTE === $m['estado'] && $ingreso && $tienda_banco ) : ?>
+									<a href="<?php echo esc_url( $pagar_pedido( (int) $m['id'] ) ); ?>" data-asde-modal><?php esc_html_e( 'Pay a shop order…', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a>
 								<?php endif; ?>
 								<?php if ( BancoTable::PENDIENTE === $m['estado'] ) : ?>
 									<a href="<?php echo esc_url( $revisar( array( (int) $m['id'] ) ) ); ?>" data-asde-modal><?php echo $ingreso ? esc_html( __( 'It is not a fee…', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) : esc_html( __( 'Mark reviewed…', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?></a>

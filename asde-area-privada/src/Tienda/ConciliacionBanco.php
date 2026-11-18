@@ -100,6 +100,65 @@ final class ConciliacionBanco {
 		if ( BancoTable::PENDIENTE !== $m['estado'] || $m['importe'] <= 0 || PedidosTable::numero( $p ) !== self::referencia( self::texto( $m ), Grupo::numero() ) ) {
 			return new \WP_Error( 'asde_tienda', __( 'That income is already reviewed or does not correspond to this order.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
+		return self::aplicar( $p, $m );
+	}
+
+	/**
+	 * Pedidos sin pagar entre los que Tesorería elige a mano el de un ingreso (v0.64.8): el concepto del banco no lleva el nº.
+	 *
+	 * @return array[] Cada uno: el pedido con 'a_cobrar' y 'comprador'; los más recientes primero.
+	 */
+	public static function pedidos_por_pagar( string $q = '' ): array {
+		if ( ! self::disponible() ) {
+			return array();
+		}
+		$q   = mb_strtolower( trim( $q ) );
+		$out = array();
+		foreach ( PedidosTable::todos() as $p ) {
+			if ( null !== $p['pago_en'] || null !== $p['cancelado_en'] ) {
+				continue;
+			}
+			$p['a_cobrar']  = Servicio::importe_a_cobrar( $p );
+			$p['comprador'] = Servicio::comprador( $p );
+			if ( $p['a_cobrar'] <= 0 ) {
+				continue;
+			}
+			if ( '' !== $q && ! str_contains( mb_strtolower( PedidosTable::numero( $p ) . ' ' . $p['comprador'] . ' ' . $p['socio'] ), $q ) ) {
+				continue;
+			}
+			$out[] = $p;
+		}
+		return $out;
+	}
+
+	/**
+	 * Marca el pedido como pagado con este ingreso elegido a mano por Tesorería (v0.64.8, petición del usuario: «en el banco no
+	 * hay manera de asociar un ingreso a un pedido»). A diferencia de confirmar(), no hace falta que el concepto lleve el nº.
+	 * Deshacer el pago del pedido devuelve el ingreso a «por conciliar», igual que con los propuestos.
+	 *
+	 * @return true|\WP_Error
+	 */
+	public static function asociar( int $pedido_id, int $mov_id ) {
+		if ( ! self::disponible() ) {
+			return new \WP_Error( 'asde_tienda', __( 'The bank is only used by Treasury and whoever manages the Treasury settings, with the Bank module on.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
+		}
+		$p = PedidosTable::obtener( $pedido_id );
+		$m = BancoTable::obtener( $mov_id );
+		if ( ! $p || ! $m ) {
+			return new \WP_Error( 'asde_tienda', __( 'That order or that transaction no longer exists.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
+		}
+		if ( null !== $p['pago_en'] || null !== $p['cancelado_en'] ) {
+			return new \WP_Error( 'asde_tienda', __( 'That order is already paid or cancelled.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
+		}
+		if ( BancoTable::PENDIENTE !== $m['estado'] || $m['importe'] <= 0 ) {
+			return new \WP_Error( 'asde_tienda', __( 'That income is already reviewed or does not exist.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
+		}
+		return self::aplicar( $p, $m );
+	}
+
+	/** Toma el ingreso y paga el pedido con él (lo comparten confirmar() y asociar()). @return true|\WP_Error */
+	private static function aplicar( array $p, array $m ) {
+		$mov_id = (int) $m['id'];
 		// Primero se toma el ingreso (solo si sigue pendiente, en una sola sentencia) y después se paga el pedido: dos
 		// confirmaciones a la vez no pagan dos pedidos con el mismo ingreso (doc 59, RC-TES-6).
 		if ( ! BancoTable::revisar( $mov_id, 0, sprintf( self::NOTA, PedidosTable::numero( $p ) ), 0, 0, BancoTable::PENDIENTE ) ) {

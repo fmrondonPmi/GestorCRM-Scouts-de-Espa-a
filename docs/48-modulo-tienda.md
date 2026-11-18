@@ -49,3 +49,5 @@ Pedidos abiertos, datáfono, IBAN, Bizum, texto de cómo pagar, días para recor
 ## Pedidos antiguos
 
 Los hechos antes de la v0.44 (con camisa e insignias en sus líneas) se siguen viendo, cobrando, entregando y confirmando.
+
+**v0.64.8 (2026-11-18):** (1) Banco → un ingreso pendiente se asocia a mano con un pedido sin pagar («Pagar un pedido de la tienda…», `?cobrar_pedido=<mov>` en la ventana emergente; acción `pagar_pedido` de `BancoView`): `ConciliacionBanco::asociar()` hace lo mismo que `confirmar()` (toma el ingreso con `BancoTable::revisar` y luego `marcar_pago`, con la nota «Pedido de la tienda U…») pero sin exigir el nº en el concepto, así que deshacer el pago devuelve el ingreso a «por conciliar». Pide confirmar si el importe no coincide. (2) «Marcar entregado» pide confirmación en la lista y en el detalle; la lista ofrece «Deshacer» en los entregados (`uniforme_deshacer_entrega`, que ya existía en el detalle y borra también la confirmación de recepción).

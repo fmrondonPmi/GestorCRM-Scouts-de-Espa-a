@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.64.7
+Stable tag: 0.64.8
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -61,6 +61,10 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.64.8 =
+* Shop and bank: in Treasury → Bank, a pending income can now be linked by hand to an unpaid shop order ("Pay a shop order…"): the order is marked as paid with the date and amount of the income, and undoing the payment returns the income to pending. Until now this only worked when the bank description carried the order number.
+* Shop: "Mark as delivered" now asks for confirmation (in the list and in the order), and the list offers "Undo" on delivered orders to roll back a delivery marked by mistake.
 
 = 0.64.7 =
 * Events: the places for the Scouters and Support volunteers sections are now the people of the team with that function (Support = support volunteers; director, monitor, in training and scouter without qualification = scouters). They change when people are added to or removed from the Team tab; while the team is empty, the places typed by hand are kept.
@@ -204,6 +208,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * The changelog of versions 0.42.0 and earlier is in changelog.txt, in the plugin folder.
 
 == Upgrade Notice ==
+
+= 0.64.8 =
+Link bank incomes to shop orders by hand; confirm and undo deliveries. No database changes.
 
 = 0.64.7 =
 Event places for Scouters and Support volunteers follow the team. No database changes.

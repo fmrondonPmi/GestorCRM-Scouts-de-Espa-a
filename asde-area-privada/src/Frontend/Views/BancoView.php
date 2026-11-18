@@ -62,6 +62,11 @@ final class BancoView extends TesoreriaBaseView {
 		if ( '' !== $asociar ) {
 			return $this->layout( 'tesoreria', ( self::es_modal() ? '' : $this->subnav( 'banco', $ronda ) ) . $this->asociar( $asociar ) );
 		}
+		// v0.64.8: asociar un ingreso con un pedido de la tienda (su pago), también en la ventana emergente.
+		$cobrar = $this->get( 'cobrar_pedido' );
+		if ( '' !== $cobrar ) {
+			return $this->layout( 'tesoreria', ( self::es_modal() ? '' : $this->subnav( 'banco', $ronda ) ) . $this->pedido_de_ingreso( $cobrar ) );
+		}
 		$token = $this->get( 'previa' );
 		if ( $token ) {
 			$previa = $this->previa( $token );
@@ -149,6 +154,27 @@ final class BancoView extends TesoreriaBaseView {
 				'q'          => $this->get( 'q' ),
 				'url'        => $url,
 				'volver'     => wp_validate_redirect( esc_url_raw( $this->get( 'volver' ) ), $url ) ?: $url,
+			)
+		);
+	}
+
+	/** Ventana «Pagar un pedido con este ingreso» (v0.64.8): el ingreso y los pedidos sin pagar, con buscador. */
+	private function pedido_de_ingreso( string $cobrar ): string {
+		$url = $this->url( 'banco' );
+		if ( 'hecho' === $cobrar ) {
+			return $this->tpl( 'tesoreria/banco-pedido', array( 'hecho' => true, 'url' => $url ) );
+		}
+		$m = BancoTable::obtener( absint( $cobrar ) );
+		$q = $this->get( 'q' );
+		return $this->tpl(
+			'tesoreria/banco-pedido',
+			array(
+				'hecho'   => false,
+				'mov'     => $m && BancoTable::PENDIENTE === $m['estado'] && $m['importe'] > 0 ? $m : null,
+				'pedidos' => \AsdeBalears\AreaPrivada\Tienda\ConciliacionBanco::pedidos_por_pagar( $q ),
+				'q'       => $q,
+				'url'     => $url,
+				'volver'  => wp_validate_redirect( esc_url_raw( $this->get( 'volver' ) ), $url ) ?: $url,
 			)
 		);
 	}
@@ -412,6 +438,18 @@ final class BancoView extends TesoreriaBaseView {
 				}
 				$lista = wp_validate_redirect( esc_url_raw( $this->post( 'volver' ) ), $this->url( 'banco' ) );
 				$this->redirect( Router::pide_modal() && ! is_wp_error( $r ) ? $this->url( 'banco', array( 'asociar' => 'hecho' ) ) : ( is_wp_error( $r ) ? $this->url( 'banco', array( 'asociar' => $id ) ) : $lista ) );
+				break;
+
+			case 'pagar_pedido':
+				// v0.64.8: el ingreso es el pago de un pedido de la tienda elegido a mano.
+				$id = (int) $this->post( 'mov' );
+				check_admin_referer( 'asde_banco_mov_' . $id );
+				$r = \AsdeBalears\AreaPrivada\Tienda\ConciliacionBanco::asociar( (int) $this->post( 'pedido' ), $id );
+				is_wp_error( $r )
+					? Notices::add( 'error', esc_html( $r->get_error_message() ) )
+					: Notices::add( 'success', __( 'Order marked as paid with this deposit.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
+				$lista = wp_validate_redirect( esc_url_raw( $this->post( 'volver' ) ), $this->url( 'banco' ) );
+				$this->redirect( Router::pide_modal() && ! is_wp_error( $r ) ? $this->url( 'banco', array( 'cobrar_pedido' => 'hecho' ) ) : ( is_wp_error( $r ) ? $this->url( 'banco', array( 'cobrar_pedido' => $id ) ) : $lista ) );
 				break;
 
 			case 'desasociar':

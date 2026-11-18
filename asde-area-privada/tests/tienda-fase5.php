@@ -17,6 +17,7 @@ use AsdeBalears\AreaPrivada\Audit\Logger;
 use AsdeBalears\AreaPrivada\Auth\Ambito;
 use AsdeBalears\AreaPrivada\Domain\Grupo;
 use AsdeBalears\AreaPrivada\Domain\Grupos;
+use AsdeBalears\AreaPrivada\Frontend\Views\BancoView;
 use AsdeBalears\AreaPrivada\Frontend\Views\TiendaConfigView;
 use AsdeBalears\AreaPrivada\Frontend\Views\TiendaGestionView;
 use AsdeBalears\AreaPrivada\Install\Roles;
@@ -322,6 +323,35 @@ try {
 	}
 	$ok( $adelantada && is_wp_error( $r ) && null === PedidosTable::por_id( $a )['pago_en'] && 'Otra petición' === BancoTable::obtener( (int) $m_x['id'] )['nota'], 'si otra confirmación se lleva el ingreso a la vez, esta da error y no paga el pedido (RC-TES-6)' );
 	BancoTable::marcar( (int) $m_x['id'], BancoTable::PENDIENTE );
+
+	// v0.64.8: asociar a mano un ingreso (que no cita el nº del pedido) con un pedido sin pagar.
+	$pend = array_column( ConciliacionBanco::pedidos_por_pagar(), null, 'id' );
+	$ok( isset( $pend[ $a ] ) && 10.0 === $pend[ $a ]['a_cobrar'] && ! isset( $pend[ $c ] ), 'los pedidos entre los que elegir son los sin pagar (no el pagado)' );
+	$ok( isset( array_column( ConciliacionBanco::pedidos_por_pagar( $num_x ), null, 'id' )[ $a ] ) && 1 === count( ConciliacionBanco::pedidos_por_pagar( $num_x ) ), 'el buscador filtra por nº de pedido' );
+	$_GET = array( 'page' => 'x', 'cobrar_pedido' => (string) $m_otro['id'] );
+	$h    = ( new BancoView() )->render();
+	$_GET = array();
+	$ok( str_contains( $h, 'Pagar un pedido de la tienda con este ingreso' ) && str_contains( $h, 'name="pedido" value="' . $a . '"' ) && str_contains( $h, 'name="asde_action" value="pagar_pedido"' ), 'la ventana «Pagar un pedido» enseña el ingreso y los pedidos sin pagar' );
+	$como( $u_sc );
+	$ok( is_wp_error( ConciliacionBanco::asociar( $a, (int) $m_otro['id'] ) ) && null === PedidosTable::por_id( $a )['pago_en'], 'un scouter sin permisos de Tesorería no puede asociar' );
+	$como( $u_teso );
+	$ok( is_wp_error( ConciliacionBanco::asociar( $a, (int) $m_cargo['id'] ) ), 'un cargo no puede pagar un pedido' );
+	$ok( is_wp_error( ConciliacionBanco::asociar( $c, (int) $m_otro['id'] ) ), 'ni se paga dos veces un pedido ya pagado' );
+	$antes_pagados = $cuenta_asunto( 'Pago recibido' );
+	$ok( true === ConciliacionBanco::asociar( $a, (int) $m_otro['id'] ), 'Tesorería asocia el ingreso sin nº con el pedido' );
+	$pa = PedidosTable::por_id( $a );
+	$ok( null !== $pa['pago_en'] && 10.0 === $pa['pago_importe'] && '2026-10-13' === $pa['pago_fecha'] && BancoTable::IGNORADO === BancoTable::obtener( (int) $m_otro['id'] )['estado'], 'el pedido queda pagado con la fecha y el importe del ingreso, que queda revisado' );
+	$ok( $cuenta_asunto( 'Pago recibido' ) === $antes_pagados + 1 && is_wp_error( ConciliacionBanco::asociar( $a, (int) $m_otro['id'] ) ), 'avisa del pago y repetirlo no lo paga dos veces' );
+	$_POST    = array( 'asde_action' => 'uniforme_deshacer_pago', 'pedido' => (string) $a, '_wpnonce' => wp_create_nonce( 'asde_uniforme_' . $a ), 'desde' => 'detalle' );
+	$_REQUEST = $_POST;
+	try {
+		( new TiendaGestionView() )->handle_post();
+	} catch ( RuntimeException $e ) {
+		// Redirige.
+	}
+	$_POST    = array();
+	$_REQUEST = array();
+	$ok( null === PedidosTable::por_id( $a )['pago_en'] && BancoTable::PENDIENTE === BancoTable::obtener( (int) $m_otro['id'] )['estado'], 'si se deshace el pago, el ingreso asociado a mano vuelve a estar por conciliar' );
 	$como( 0 );
 
 	echo "\n== Parte D2 · Abono del datáfono en el banco (v0.46) ==\n";
