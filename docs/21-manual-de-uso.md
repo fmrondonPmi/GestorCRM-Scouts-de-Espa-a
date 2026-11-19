@@ -229,7 +229,7 @@ Textos (los cinco manuales y la ayuda del plugin, regenerada):
 - **Tienda** (`uniformes-gestion`): «Marcar entregado» pide confirmación, «Deshacer» quita la entrega, y «Pagar un pedido de la tienda…» asocia a mano un ingreso del banco a un pedido.
 - **Ventana** (`ventana`): los desplegables de datos o de más de 10 opciones se buscan escribiendo.
 
-Herramientas (fuera del repo): `manual-capturas.php` (volcado `acceso-elegir`) y `manual-envolver.php` (captura 133). Solo se hizo la captura 133. Quedan por rehacer, si se quiere verlas en el manual: la agenda de eventos (columna «Inscritos»), la ventana «Pagar un pedido de la tienda» y la lista de gestión de pedidos (botón «Deshacer»).
+Herramientas (fuera del repo): `manual-capturas.php` (volcado `acceso-elegir`) y `manual-envolver.php` (captura 133). Solo se hizo la captura 133. Las tres que quedaban se hicieron después (v0.64.14, solo ayuda): `134-eventos-agenda` (agenda con «Inscritos»; el volcado crea una «Salida de primavera» publicada con 3 inscritos), `135-tienda-banco-pedido` (ventana «Pagar un pedido de la tienda con este ingreso»; usuario Tesorería, otro ingreso sin nº de pedido) y `136-uniforme-entregado` (detalle de un pedido entregado con «Deshacer»; el volcado marca la entrega y la deshace al acabar). Los pies de captura pasan a la ayuda del plugin como texto, por eso sube a 0.64.14.
 
 ## Versión 4.10 · lote de mejoras (v0.29.0, 2026-10-11)
 
