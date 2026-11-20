@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.64.22
+Stable tag: 0.64.23
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -61,6 +61,10 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.64.23 =
+* My section: it now appears under "My space" for scouters, and Coordination and Secretary's office see it too when they have a section assigned. With more than one section, a selector at the top switches between them.
+* Faster pages: the event team accounts, the upcoming SEPA debits of all families and the event list are read once per request instead of once per person, family or call.
 
 = 0.64.22 =
 * Shop orders: the deposit list now has a search box, the deposit that quotes the order number comes preselected and in bold (the date and amount are filled in), and the payment methods offered are only the ones active in the shop settings.
@@ -252,6 +256,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * The changelog of versions 0.42.0 and earlier is in changelog.txt, in the plugin folder.
 
 == Upgrade Notice ==
+
+= 0.64.23 =
+My section in "My space" with a section selector, and fewer database queries. Secretary's office gets read-only access to My section (needs a section assigned). No database changes.
 
 = 0.64.22 =
 Deposit search and preselection when validating an order payment; only active payment methods offered. No database changes.
