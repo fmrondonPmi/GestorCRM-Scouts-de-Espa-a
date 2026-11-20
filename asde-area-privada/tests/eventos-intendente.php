@@ -296,8 +296,10 @@ try {
 	$correos = array();
 	AvisoAlergenos::olvidar( $e['id'] );
 	$wpdb->update( EventosTable::table(), array( 'estado' => EventosTable::CANCELADO ), array( 'id' => $e['id'] ) ); // phpcs:ignore WordPress.DB
+	EventosTable::olvidar(); // El test escribe directo en la tabla.
 	$ok( 0 === AvisoAlergenos::diario( $toca, array( $e['id'] ) ) && ! $correos, 'un evento cancelado no genera avisos' );
 	$wpdb->update( EventosTable::table(), array( 'estado' => $e['estado'] ), array( 'id' => $e['id'] ) ); // phpcs:ignore WordPress.DB
+	EventosTable::olvidar(); // El test escribe directo en la tabla.
 	$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . TareasTable::table() . ' WHERE evento_id = %d AND enlace = %s', $e['id'], 'menu' ) ); // phpcs:ignore WordPress.DB
 	$ok( 0 === AvisoAlergenos::diario( $toca, array( $e['id'] ) ), 'sin la tarea «Revisar alergias…» en el calendario del evento, no se avisa' );
 } catch ( Throwable $e ) {

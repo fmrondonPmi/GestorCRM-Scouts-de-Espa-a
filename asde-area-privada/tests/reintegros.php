@@ -318,13 +318,17 @@ try {
 	$como( $u_teso );
 	Servicio::aprobar( ReintegrosTable::obtener( (int) $id_cer ) );
 	$wpdb->update( EventosTable::table(), array( 'cerrado_en' => current_time( 'mysql', true ) ), array( 'id' => $evento ) );
+	EventosTable::olvidar(); // El test escribe directo en la tabla.
 	$res = Servicio::pagar( ReintegrosTable::obtener( (int) $id_cer ), $hoy, '' );
 	$ok( is_array( $res ) && $res['evento'] && ! $res['gasto'] && 0 === ReintegrosTable::obtener( (int) $id_cer )['gasto_id'] && ReintegrosTable::PAGADO === ReintegrosTable::obtener( (int) $id_cer )['estado'], 'con las cuentas del evento cerradas se paga igual, sin gasto, y se avisa' );
 	$wpdb->update( EventosTable::table(), array( 'cerrado_en' => null ), array( 'id' => $evento ) );
+	EventosTable::olvidar(); // El test escribe directo en la tabla.
 	$como( $u_sc );
 	$wpdb->update( EventosTable::table(), array( 'cerrado_en' => current_time( 'mysql', true ) ), array( 'id' => $evento ) );
+	EventosTable::olvidar(); // El test escribe directo en la tabla.
 	$ok( array() === Servicio::eventos(), 'cerrado el evento, ya no se puede asociar un reintegro nuevo' );
 	$wpdb->update( EventosTable::table(), array( 'cerrado_en' => null ), array( 'id' => $evento ) );
+	EventosTable::olvidar(); // El test escribe directo en la tabla.
 
 	echo "\n== Parte H · Justificante, aislamiento y auditoría ==\n";
 	$como( $u_sc2 );
