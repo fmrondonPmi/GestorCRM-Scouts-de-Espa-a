@@ -705,15 +705,34 @@ final class Remesas {
 	 * @return array[] [fecha, centimos, umr, concepto, remesa]
 	 */
 	public static function proximos_de_familia( int $familia_id ): array {
-		$hoy = current_time( 'Y-m-d' );
+		return self::proximos_de_familias( array( $familia_id ) )[ $familia_id ];
+	}
+
+	/**
+	 * Lo mismo para varias familias de una vez: lee y descifra cada remesa una sola vez (antes, una por
+	 * familia) y deja fuera en la propia consulta las anuladas y las de cobro pasado.
+	 *
+	 * @param int[] $familia_ids Ids de familia.
+	 * @return array<int, array[]> familia => [fecha, centimos, umr, iban, concepto, remesa] (todas las familias pedidas, aunque sin adeudos)
+	 */
+	public static function proximos_de_familias( array $familia_ids ): array {
+		global $wpdb;
 		$out = array();
-		foreach ( self::listado() as $r ) {
-			if ( self::ANULADA === $r['estado'] || $r['fecha_cobro'] < $hoy ) {
-				continue;
-			}
+		foreach ( $familia_ids as $id ) {
+			$out[ (int) $id ] = array();
+		}
+		if ( ! $out ) {
+			return $out;
+		}
+		$filas = array_map(
+			array( self::class, 'preparar_fila' ),
+			(array) $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM %i WHERE grupo = %s AND estado <> %s AND fecha_cobro >= %s ORDER BY id DESC', self::table(), Grupo::numero(), self::ANULADA, current_time( 'Y-m-d' ) ), ARRAY_A ) // phpcs:ignore WordPress.DB
+		);
+		foreach ( $filas as $r ) {
 			foreach ( self::lineas( $r ) as $l ) {
-				if ( (int) $l['familia'] === $familia_id && self::PENDIENTE === $l['estado'] ) {
-					$out[] = array(
+				$f = (int) $l['familia'];
+				if ( isset( $out[ $f ] ) && self::PENDIENTE === $l['estado'] ) {
+					$out[ $f ][] = array(
 						'fecha'    => $r['fecha_cobro'],
 						'centimos' => (int) $l['centimos'],
 						'umr'      => $l['umr'],
@@ -724,7 +743,10 @@ final class Remesas {
 				}
 			}
 		}
-		usort( $out, static fn( $a, $b ) => strcmp( $a['fecha'], $b['fecha'] ) );
+		foreach ( $out as $f => $lista ) {
+			usort( $lista, static fn( $a, $b ) => strcmp( $a['fecha'], $b['fecha'] ) );
+			$out[ $f ] = $lista;
+		}
 		return $out;
 	}
 

@@ -173,13 +173,15 @@ final class MisPagosView extends View {
 			'texto'    => Mandatos::texto( $sepa_cfg ),
 			'familias' => array(),
 		);
+		// Los adeudos próximos de todas las familias, leyendo las remesas una sola vez.
+		$proximos = Remesas::proximos_de_familias( array_keys( $familias ) );
 		foreach ( $familias as $id => $f ) {
 			$m                       = Mandatos::activo_de_familia( $id );
 			$sepa['familias'][ $id ] = array(
 				'mandato'  => $m,
 				'cuenta'   => $m ? self::cuenta( $repo, $f, $m ) : null,
 				'puede'    => Mandatos::puede_firmar( $a, $f ),
-				'proximos' => Remesas::proximos_de_familia( $id ),
+				'proximos' => $proximos[ $id ] ?? array(),
 				'valores'  => self::$valores && (int) ( self::$valores['familia'] ?? 0 ) === $id ? self::$valores['datos'] : null,
 			);
 		}
