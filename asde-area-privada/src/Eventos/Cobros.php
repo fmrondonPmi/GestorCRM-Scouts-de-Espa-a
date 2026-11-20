@@ -107,10 +107,11 @@ final class Cobros {
 	 * familia haya pagado algo a mano o le hayan hecho una rebaja: se reparte lo pendiente y lo que sobra va a la última
 	 * inscripción (queda como saldo a devolver; `$sobra` dice cuánto, para avisar a Tesorería).
 	 *
-	 * @param float $sobra Salida: lo cobrado por encima de lo pendiente (solo con $sepa).
+	 * @param float  $sobra Salida: lo cobrado por encima de lo pendiente (solo con $sepa).
+	 * @param string $lote  v0.64.16: el lote de los movimientos (el pago que viene de un movimiento del banco usa «b» + su id); vacío = uno nuevo.
 	 * @return int|\WP_Error Cuántas inscripciones ha cubierto.
 	 */
-	public static function pagar_familia( array $e, int $familia_id, float $importe, string $forma, string $fecha, string $referencia, string $nota, bool $sepa = false, float &$sobra = 0.0 ) {
+	public static function pagar_familia( array $e, int $familia_id, float $importe, string $forma, string $fecha, string $referencia, string $nota, bool $sepa = false, float &$sobra = 0.0, string $lote = '' ) {
 		$sobra = 0.0;
 		if ( ! self::puede() ) {
 			return new \WP_Error( 'asde_cobro', __( 'Payments for sign-ups are recorded by Treasury.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
@@ -133,7 +134,7 @@ final class Cobros {
 		if ( ! $sepa && $importe > $lista['pendiente'] + 0.001 ) {
 			return new \WP_Error( 'asde_cobro', sprintf( /* translators: %s: text */ __( 'It is more than what is left to pay (%s).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), \AsdeBalears\AreaPrivada\Tesoreria\Calculadora::euros( $lista['pendiente'] ) ) );
 		}
-		$lote   = substr( md5( uniqid( 'evento', true ) ), 0, 16 );
+		$lote   = '' !== $lote ? $lote : substr( md5( uniqid( 'evento', true ) ), 0, 16 );
 		$resto  = round( $importe, 2 );
 		$n      = 0;
 		$filas  = array_values( $lista['filas'] );

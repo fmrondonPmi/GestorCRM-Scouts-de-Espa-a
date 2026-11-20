@@ -86,6 +86,9 @@ $mov_antes    = $max_id( MovimientosTable::table() );
 $gas_antes    = $max_id( GastosTable::table() );
 $ant_antes    = $max_id( AnticiposTable::table() );
 $fam_antes    = $max_id( FamiliasTable::table() );
+$ban_antes    = $max_id( \AsdeBalears\AreaPrivada\Tesoreria\Banco\BancoTable::table() );
+$lot_antes    = $max_id( \AsdeBalears\AreaPrivada\Tesoreria\Banco\BancoTable::table_lotes() );
+$tip_antes    = $max_id( \AsdeBalears\AreaPrivada\Tesoreria\Banco\TiposMovimiento::table() );
 $man_antes    = $max_id( Mandatos::table() );
 $rem_antes    = $max_id( Remesas::table() );
 $emails_antes = $max_id( RegistroEmails::table() );
@@ -434,6 +437,32 @@ try {
 	$ok( ! Cobros::puede(), 'quien gestiona el evento no apunta pagos (sin selector de evento en su ficha)' );
 	$como( $u_teso );
 
+	// v0.64.16: un ingreso del banco revisado con evento y familia se apunta como pago de sus inscripciones.
+	echo "\n== Parte G1 · Ingreso del banco con evento y familia = pago del evento (v0.64.16) ==\n";
+	$BT    = \AsdeBalears\AreaPrivada\Tesoreria\Banco\BancoTable::class;
+	$CO    = \AsdeBalears\AreaPrivada\Tesoreria\Banco\Conciliacion::class;
+	$t_ing = \AsdeBalears\AreaPrivada\Tesoreria\Banco\TiposMovimiento::crear( 'Cuota de evento (prueba)', 'ingreso' );
+	$base  = array( 'cuenta' => '9999 0001 ******0001', 'fecha_valor' => null, 'concepto_comun' => '', 'concepto_propio' => '', 'documento' => '', 'referencia1' => '', 'referencia2' => '', 'ordenante' => '' );
+	$movs  = $BT::clasificar( array_map( static fn( $m ) => $m + $base, array( array( 'fecha' => $hoy, 'importe' => 10.0, 'concepto' => 'PRUEBA-V064 pago del evento' ), array( 'fecha' => $hoy, 'importe' => 5000.0, 'concepto' => 'PRUEBA-V064 de mas' ) ) ) );
+	$BT::importar( array( 'movimientos' => $movs, 'cuentas' => array( array( 'cuenta' => '9999 0001 ******0001', 'saldo_final' => null ) ) ), 'csv', 'prueba-v064.csv', hash( 'sha256', wp_json_encode( $movs ) ) );
+	$mb    = current( $BT::movimientos( array( 'q' => 'pago del evento' ) ) );
+	$mg    = current( $BT::movimientos( array( 'q' => 'PRUEBA-V064 de mas' ) ) );
+	$pend  = static fn() => round( $cobro( $id_e, '990081' )['pendiente'] + $cobro( $id_e, '990082' )['pendiente'], 2 );
+	$antes = $pend();
+	$como( $u_teso );
+	$ok( true === $CO::ignorar( (int) $mb['id'], $t_ing, '', $id_e, $f1 ) && abs( $pend() - ( $antes - 10 ) ) < 0.001, 'revisar un ingreso con evento y familia lo apunta como pago y baja lo pendiente' );
+	$ok( 1 <= count( MovimientosTable::de_lote( 'b' . $mb['id'] ) ), 'el pago lleva el lote del movimiento del banco' );
+	$ok( true === $CO::ignorar( (int) $mb['id'], $t_ing, 'otra nota', $id_e, $f1 ) && abs( $pend() - ( $antes - 10 ) ) < 0.001, 'revisarlo otra vez con lo mismo no duplica el pago' );
+	$ok( true === $CO::ignorar( (int) $mb['id'], $t_ing, '', 0, $f1 ) && abs( $pend() - $antes ) < 0.001 && ! MovimientosTable::de_lote( 'b' . $mb['id'] ), 'quitarle el evento anula el pago' );
+	$CO::ignorar( (int) $mb['id'], $t_ing, '', $id_e, $f1 );
+	$ok( true === $CO::deshacer( (int) $mb['id'] ) && abs( $pend() - $antes ) < 0.001 && $BT::PENDIENTE === $BT::obtener( (int) $mb['id'] )['estado'], 'deshacer la revisión anula también el pago del evento' );
+	$r = $CO::ignorar( (int) $mg['id'], $t_ing, '', $id_e, $f1 );
+	$ok( is_wp_error( $r ) && $BT::PENDIENTE === $BT::obtener( (int) $mg['id'] )['estado'] && abs( $pend() - $antes ) < 0.001, 'más de lo pendiente: se rechaza y el movimiento sigue pendiente' );
+	$como( $u_lob );
+	$r = $CO::ignorar( (int) $mb['id'], $t_ing, '', $id_e, $f1 );
+	$ok( is_wp_error( $r ) && $BT::PENDIENTE === $BT::obtener( (int) $mb['id'] )['estado'], 'quien no es Tesorería no apunta pagos de evento desde el banco' );
+	$como( $u_teso );
+
 	// v0.37.1 (P-167): Tesorería a secas ve informes de pagos de todo el grupo, pero solo identidad y pagos.
 	$u_solo = $crear( 'prueba-eco-solo', array( Roles::TESORERIA ), array( Usuarios::META_SOCIO => '990086' ) );
 	$a_solo = $como( $u_solo );
@@ -669,7 +698,7 @@ try {
 		}
 	}
 	$lista = implode( ',', array_map( 'intval', $ids ) ) ?: '0';
-	foreach ( array( EventosTable::table() => $ev_antes, InscripcionesTable::table() => $ins_antes, PartidasTable::table() => $par_antes, MovimientosTable::table() => $mov_antes, GastosTable::table() => $gas_antes, AnticiposTable::table() => $ant_antes, Mandatos::table() => $man_antes, Remesas::table() => $rem_antes ) as $tabla => $antes_id ) {
+	foreach ( array( EventosTable::table() => $ev_antes, InscripcionesTable::table() => $ins_antes, PartidasTable::table() => $par_antes, MovimientosTable::table() => $mov_antes, GastosTable::table() => $gas_antes, AnticiposTable::table() => $ant_antes, Mandatos::table() => $man_antes, Remesas::table() => $rem_antes, \AsdeBalears\AreaPrivada\Tesoreria\Banco\BancoTable::table() => $ban_antes, \AsdeBalears\AreaPrivada\Tesoreria\Banco\BancoTable::table_lotes() => $lot_antes, \AsdeBalears\AreaPrivada\Tesoreria\Banco\TiposMovimiento::table() => $tip_antes ) as $tabla => $antes_id ) {
 		$wpdb->query( $wpdb->prepare( 'DELETE FROM %i WHERE id > %d', $tabla, $antes_id ) ); // phpcs:ignore WordPress.DB
 	}
 	$wpdb->query( $wpdb->prepare( 'DELETE FROM ' . RegistroEmails::table() . " WHERE id > %d AND user_id IN ($lista)", $emails_antes ) ); // phpcs:ignore WordPress.DB

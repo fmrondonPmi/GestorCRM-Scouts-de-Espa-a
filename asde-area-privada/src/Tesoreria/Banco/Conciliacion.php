@@ -228,8 +228,14 @@ final class Conciliacion {
 		if ( $familia_id && ! FamiliasTable::obtener( $familia_id ) ) {
 			return new \WP_Error( 'asde_banco', __( 'The chosen family no longer exists: choose another.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
+		// v0.64.16: un ingreso con evento y familia se apunta como pago de sus inscripciones (antes solo quedaba como referencia).
+		$pago_evento = self::pago_de_evento( $m, $evento_id, $familia_id );
+		if ( is_wp_error( $pago_evento ) ) {
+			return $pago_evento;
+		}
 		$antes = $m['estado'];
 		if ( ! BancoTable::revisar( $mov_id, $tipo_id, $nota, $evento_id, $familia_id, $antes ) ) {
+			self::anular_pago_evento( $mov_id );
 			// Otra petición lo ha conciliado o deshecho entretanto (doc 59, RC-TES-1).
 			return new \WP_Error( 'asde_banco', __( 'That transaction cannot be marked as reviewed (it may already be reconciled with a family).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 		}
@@ -246,6 +252,49 @@ final class Conciliacion {
 		return true;
 	}
 
+	/**
+	 * v0.64.16: el pago de evento que sale de un movimiento (lote «b» + su id) sigue a su evento y su familia: si son los mismos
+	 * no se toca; si cambian, se anula y se apunta de nuevo. Sin evento, sin familia o con un gasto, no hay pago.
+	 *
+	 * @return true|\WP_Error
+	 */
+	private static function pago_de_evento( array $m, int $evento_id, int $familia_id ) {
+		$lote    = 'b' . (int) $m['id'];
+		$quiere  = $m['importe'] > 0 && $evento_id && $familia_id;
+		$previos = \AsdeBalears\AreaPrivada\Eventos\MovimientosTable::de_lote( $lote );
+		if ( $previos ) {
+			if ( $quiere && (int) $previos[0]['evento_id'] === $evento_id && (int) ( $m['familia_id'] ?? 0 ) === $familia_id ) {
+				return true;
+			}
+			$anterior = \AsdeBalears\AreaPrivada\Eventos\EventosTable::obtener( (int) $previos[0]['evento_id'] );
+			if ( $anterior ) {
+				$r = \AsdeBalears\AreaPrivada\Eventos\Cobros::anular( $anterior, (int) $previos[0]['id'] );
+				if ( is_wp_error( $r ) ) {
+					return $r;
+				}
+			}
+		}
+		if ( ! $quiere ) {
+			return true;
+		}
+		$e = \AsdeBalears\AreaPrivada\Eventos\EventosTable::obtener( $evento_id );
+		if ( ! $e || \AsdeBalears\AreaPrivada\Eventos\EventosTable::PUBLICADO !== $e['estado'] ) {
+			return true; // Un evento sin publicar no tiene inscripciones: queda solo como referencia.
+		}
+		$sobra = 0.0;
+		$r     = \AsdeBalears\AreaPrivada\Eventos\Cobros::pagar_familia( $e, $familia_id, (float) $m['importe'], 'transferencia', (string) $m['fecha'], (string) ( $m['documento'] ?? '' ), sprintf( 'Banco: movimiento del %s', wp_date( 'd/m/Y', strtotime( $m['fecha'] . ' 12:00' ) ) ), false, $sobra, $lote );
+		return is_wp_error( $r ) ? $r : true;
+	}
+
+	/** Anula el pago de evento que salió de este movimiento, si lo hay y las cuentas siguen abiertas. */
+	private static function anular_pago_evento( int $mov_id ): void {
+		$previos = \AsdeBalears\AreaPrivada\Eventos\MovimientosTable::de_lote( 'b' . $mov_id );
+		$e       = $previos ? \AsdeBalears\AreaPrivada\Eventos\EventosTable::obtener( (int) $previos[0]['evento_id'] ) : null;
+		if ( $e ) {
+			\AsdeBalears\AreaPrivada\Eventos\Cobros::anular( $e, (int) $previos[0]['id'] );
+		}
+	}
+
 	/** Vuelve a pendiente; si estaba conciliado, anula el pago que se creó. */
 	public static function deshacer( int $mov_id ) {
 		$m = BancoTable::obtener( $mov_id );
@@ -259,6 +308,7 @@ final class Conciliacion {
 		if ( BancoTable::CONCILIADO === $m['estado'] && $m['pago_id'] ) {
 			MovimientosTable::anular( (int) $m['pago_id'], 'Se deshizo la conciliación con el banco.' ); // Lo que se guarda va en castellano.
 		}
+		self::anular_pago_evento( $mov_id ); // v0.64.16: y el pago del evento, si lo había.
 		Logger::log( 'banco_deshecho', 'banco', (string) $mov_id, array( 'pago_anulado' => (int) $m['pago_id'] ) );
 		return true;
 	}

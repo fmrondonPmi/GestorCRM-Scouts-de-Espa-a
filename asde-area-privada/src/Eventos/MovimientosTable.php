@@ -146,6 +146,13 @@ final class MovimientosTable {
 		return $out;
 	}
 
+	/** Los movimientos no anulados de un lote (v0.64.16: el de un pago que viene del banco es «b» + el id del movimiento). @return array[] */
+	public static function de_lote( string $lote ): array {
+		global $wpdb;
+		$filas = (array) $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM %i WHERE grupo = %s AND lote = %s AND anulado_en IS NULL ORDER BY id ASC', self::table(), Grupo::numero(), $lote ), ARRAY_A ); // phpcs:ignore WordPress.DB
+		return array_map( array( self::class, 'preparar' ), $filas );
+	}
+
 	/** @return array<int, array[]> Lo mismo para estas inscripciones (de varios eventos: «Mis pagos»). */
 	public static function de_inscripciones( array $ids ): array {
 		global $wpdb;
