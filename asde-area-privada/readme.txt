@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.64.17
+Stable tag: 0.64.18
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -61,6 +61,9 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.64.18 =
+* Treasury: the unpaid shop orders are listed in the payment control, and each one can be paid by choosing the bank deposit that covers it (a pop-up with the matching deposits first). Together with the shop and the bank, a shop order can now be paid from all three places. No database changes.
 
 = 0.64.17 =
 * Bank: guided assignment. When a bank transaction carries a family code (F6840001), an order code (U6840007) or an event code (E6840012), a pop-up lists them after importing a file (and from a button in the bank list) with the proposed assignment: fee payment, order paid, or event payment. Nothing is assigned until Treasury confirms; the reliable ones come ticked, two codes or a different amount come unticked with a warning. No database changes.
@@ -237,6 +240,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * The changelog of versions 0.42.0 and earlier is in changelog.txt, in the plugin folder.
 
 == Upgrade Notice ==
+
+= 0.64.18 =
+Shop orders can be paid with a bank deposit from Treasury. No database changes.
 
 = 0.64.17 =
 Bank imports now offer a guided assignment of deposits carrying a family, order or event code. No database changes.

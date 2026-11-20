@@ -199,6 +199,9 @@ final class TesoreriaView extends TesoreriaBaseView {
 			'tesoreria/control',
 			array(
 				'ronda'     => $ronda,
+				// v0.64.18: pedidos de la tienda por cobrar, para pagarlos con un ingreso del banco desde aquí (solo Tesorería con banco).
+				'pedidos'   => \AsdeBalears\AreaPrivada\Tienda\ConciliacionBanco::pedidos_por_pagar(),
+				'url_banco' => $this->url( 'banco' ),
 				'cfg'       => $cfg,
 				'lista'     => $lista,
 				'personas'  => $personas,

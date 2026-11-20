@@ -10,7 +10,7 @@ msgstr ""
 "X-Domain: asde-scouts-de-espana-gestor-crm-para-grupos-scouts\n"
 
 #. translators: %d: number
-#: src/Frontend/Views/BancoView.php:691
+#: src/Frontend/Views/BancoView.php:736
 #, php-format
 msgid " (%d were already imported and have been ignored)"
 msgstr " (%d jada inportatuta zeuden eta alde batera utzi dira)"
@@ -659,7 +659,7 @@ msgstr[0] "%d ezabatuta"
 msgstr[1] "%d ezabatuta"
 
 #. translators: %d: number
-#: src/Frontend/Views/BancoView.php:523
+#: src/Frontend/Views/BancoView.php:565
 #, php-format
 msgid "%d deposit assigned."
 msgid_plural "%d deposits assigned."
@@ -675,7 +675,7 @@ msgstr[0] "%d diru-sarrera bateratzeko"
 msgstr[1] "%d diru-sarrera bateratzeko"
 
 #. translators: %d: number
-#: src/Frontend/Views/BancoView.php:526
+#: src/Frontend/Views/BancoView.php:568
 #, php-format
 msgid "%d deposit was already reviewed and has not been touched."
 msgid_plural "%d deposits were already reviewed and have not been touched."
@@ -683,7 +683,7 @@ msgstr[0] "%d sarrera jada berrikusita zegoen eta ez da ukitu."
 msgstr[1] "%d sarrera jada berrikusita zeuden eta ez dira ukitu."
 
 #. translators: %d: number
-#: src/Frontend/Views/BancoView.php:457
+#: src/Frontend/Views/BancoView.php:499
 #, php-format
 msgid "%d deposits reconciled by their family reference."
 msgstr "%d sarrera bateratu dira familia-erreferentziaren bidez."
@@ -749,7 +749,7 @@ msgid "%d families could not be notified by email (no email or no account): noti
 msgstr "%d familiari ezin izan zaie emailez abisatu (emailik gabe edo konturik gabe): abisatu beste bide batetik."
 
 #. translators: %d: number
-#: src/Frontend/Views/TesoreriaView.php:350
+#: src/Frontend/Views/TesoreriaView.php:353
 #, php-format
 msgid "%d family"
 msgid_plural "%d families"
@@ -1065,7 +1065,7 @@ msgid "%d to review"
 msgstr "%d berrikusteko"
 
 #. translators: %d: number
-#: src/Frontend/Views/BancoView.php:348 templates/tesoreria/banco.php:309
+#: src/Frontend/Views/BancoView.php:390 templates/tesoreria/banco.php:309
 #, php-format
 msgid "%d transaction"
 msgid_plural "%d transactions"
@@ -1073,7 +1073,7 @@ msgstr[0] "%d mugimendu"
 msgstr[1] "%d mugimendu"
 
 #. translators: %d: number
-#: src/Frontend/Views/BancoView.php:490
+#: src/Frontend/Views/BancoView.php:532
 #, php-format
 msgid "%d transaction marked as reviewed."
 msgid_plural "%d transactions marked as reviewed."
@@ -2164,7 +2164,7 @@ msgid "Adjustment of %s recorded"
 msgstr "%s(e)ko doikuntza erregistratua"
 
 #. translators: %s: text
-#: src/Frontend/Views/TesoreriaView.php:459
+#: src/Frontend/Views/TesoreriaView.php:462
 #, php-format
 msgid "Adjustment of %s recorded."
 msgstr "%s(r)en doikuntza erregistratu da."
@@ -2176,7 +2176,7 @@ msgid "Adjustment of %s removed"
 msgstr "%s(e)ko doikuntza ezabatua"
 
 #. translators: %s: text
-#: src/Frontend/Views/TesoreriaView.php:476
+#: src/Frontend/Views/TesoreriaView.php:479
 #, php-format
 msgid "Adjustment of %s removed. It remains in the family's history."
 msgstr "%s(e)ko doikuntza ezabatu da. Familiaren historian geratzen da."
@@ -2420,7 +2420,7 @@ msgstr "Ikusi baja emandakoak ere"
 msgid "Always"
 msgstr "Beti"
 
-#: src/Frontend/Views/BancoView.php:342 src/Frontend/Views/TiendaGestionView.php:248 src/Frontend/Views/TiendaGestionView.php:262 src/Frontend/Views/TiendaGestionView.php:276
+#: src/Frontend/Views/BancoView.php:384 src/Frontend/Views/TiendaGestionView.php:248 src/Frontend/Views/TiendaGestionView.php:262 src/Frontend/Views/TiendaGestionView.php:276
 msgid "Amount"
 msgstr "Zenbatekoa"
 
@@ -3033,11 +3033,11 @@ msgstr "Bankuaren hasierako saldoa: %2$s (%1$s)"
 msgid "Bank report"
 msgstr "Bankuaren txostena"
 
-#: src/Frontend/Views/BancoView.php:344
+#: src/Frontend/Views/BancoView.php:386
 msgid "Bank transactions"
 msgstr "Bankuko mugimenduak"
 
-#: src/Frontend/Views/TesoreriaView.php:83 src/Frontend/Views/TesoreriaView.php:445
+#: src/Frontend/Views/TesoreriaView.php:83 src/Frontend/Views/TesoreriaView.php:448
 msgid "Bank transactions are only used by the Secretary's office, Coordination and Treasury."
 msgstr "Bankuko mugimenduak Idazkaritzak, Koordinazioak eta Diruzaintzak bakarrik erabiltzen dituzte."
 
@@ -3259,6 +3259,10 @@ msgstr "Janaria erosi eta paketatu"
 msgid "Buy in the shop"
 msgstr "Dendan erosi"
 
+#: templates/tesoreria/control.php:162 templates/tesoreria/control.php:171
+msgid "Buyer"
+msgstr "Erosle"
+
 #: templates/tesoreria/banco.php:106 templates/tesoreria/banco.php:116
 msgid "By"
 msgstr "Nork"
@@ -3309,7 +3313,7 @@ msgstr "CRMrako sarbidea"
 msgid "CRM data, read-only: not stored on the website. If something is wrong, correct it in the CRM."
 msgstr "CRMko datuak, irakurtzeko soilik: ez dira webean gordetzen. Zerbait okerra bada, zuzendu CRMan."
 
-#: src/Frontend/Views/TesoreriaView.php:317 src/Usuarios/AltaScouterService.php:118
+#: src/Frontend/Views/TesoreriaView.php:320 src/Usuarios/AltaScouterService.php:118
 msgid "CRM not configured."
 msgstr "CRMa ez dago konfiguratuta."
 
@@ -3803,7 +3807,7 @@ msgstr "Garbantzuak"
 msgid "Children"
 msgstr "Seme-alabak"
 
-#: src/Frontend/Views/TesoreriaView.php:343 templates/tesoreria/control.php:34
+#: src/Frontend/Views/TesoreriaView.php:346 templates/tesoreria/control.php:34
 msgid "Children who pay"
 msgstr "Ordaintzen duten seme-alabak"
 
@@ -3959,7 +3963,7 @@ msgstr "Aukeratu zein aurrerakinekin ordaindu zen (entregatua eta likidatu gabea
 msgid "Choose the bank transaction that corresponds to this transfer: that way the general ledger does not count it as an expense or income. Those of the same amount come first."
 msgstr "Aukeratu lekualdaketa honi dagokion bankuko mugimendua: horrela liburu nagusiak ez du gastutzat ez diru-sarreratzat zenbatzen. Lehenik zenbateko bera dutenak ageri dira."
 
-#: src/Frontend/Views/BancoView.php:607
+#: src/Frontend/Views/BancoView.php:652
 msgid "Choose the bank transactions file."
 msgstr "Aukeratu bankuko mugimenduen fitxategia."
 
@@ -3978,6 +3982,10 @@ msgstr "Aukeratu bajaren data eta arrazoia."
 #: src/Frontend/Views/AccesosView.php:319
 msgid "Choose the date until which the permission is valid, or \"No expiry\"."
 msgstr "Aukeratu baimenak noiz arte balio duen, edo «Iraungitzerik gabe»."
+
+#: templates/tesoreria/banco-pedido-ingreso.php:44
+msgid "Choose the deposit that pays this order: it is marked as paid with the date and amount of the deposit. The ones with the order number or the same amount come first."
+msgstr "Aukeratu eskaera hau ordaintzen duen sarrera: sarreraren data eta zenbatekoarekin ordainduta geratuko da. Eskaera zenbakia edo zenbateko bera dutenak lehenengo agertzen dira."
 
 #: src/Tesoreria/Banco/Conciliacion.php:213
 msgid "Choose the expense or income type."
@@ -4151,7 +4159,7 @@ msgstr "Itxi zeregina"
 msgid "Close this window to go back to the cash box: it now shows the update."
 msgstr "Itxi leiho hau kutxara itzultzeko: eguneratuta agertzen da jada."
 
-#: templates/tesoreria/banco-asignar.php:42 templates/tesoreria/banco-asociar.php:28 templates/tesoreria/banco-pedido.php:27 templates/tesoreria/banco-revisado.php:12
+#: templates/tesoreria/banco-asignar.php:42 templates/tesoreria/banco-asociar.php:28 templates/tesoreria/banco-pedido-ingreso.php:28 templates/tesoreria/banco-pedido.php:27
 msgid "Close this window to go back to the list: it now shows the update."
 msgstr "Itxi leiho hau zerrendara itzultzeko: eguneratuta agertzen da jada."
 
@@ -4701,7 +4709,7 @@ msgstr "Uneko web-sarbidea"
 msgid "Cut-off age for youth members (years)"
 msgstr "Hezigaien ebaketa-adina (urteak)"
 
-#: src/Frontend/Views/BancoView.php:342 src/Frontend/Views/CajaView.php:122 src/Frontend/Views/LibroMayorView.php:86 src/Frontend/Views/TiendaGestionView.php:262
+#: src/Frontend/Views/BancoView.php:384 src/Frontend/Views/CajaView.php:122 src/Frontend/Views/LibroMayorView.php:86 src/Frontend/Views/TiendaGestionView.php:262
 msgid "Date"
 msgstr "Data"
 
@@ -4914,7 +4922,7 @@ msgstr "Txantiloi hau ezabatu? Dagoeneko aplikatu duten ekitaldiak ez dira aldat
 msgid "Delete…"
 msgstr "Ezabatu…"
 
-#: src/Frontend/Views/TesoreriaView.php:465
+#: src/Frontend/Views/TesoreriaView.php:468
 msgid "Deleting a payment or an adjustment is done by Treasury."
 msgstr "Ordainketa edo doikuntza bat ezabatzea Diruzaintzak egiten du."
 
@@ -4962,7 +4970,7 @@ msgstr "Gauen eta adingabeen arabera"
 msgid "Depending on nights and minors (2 or more nights and 10 or more minors)"
 msgstr "Gauen eta adingabeen arabera (2 gau edo gehiago eta 10 adingabe edo gehiago)"
 
-#: templates/tesoreria/banco-asignar.php:64 templates/tesoreria/banco-asignar.php:78
+#: templates/tesoreria/banco-asignar.php:64 templates/tesoreria/banco-asignar.php:78 templates/tesoreria/banco-pedido-ingreso.php:59 templates/tesoreria/banco-pedido-ingreso.php:68
 msgid "Deposit"
 msgstr "Sarrera"
 
@@ -4974,7 +4982,7 @@ msgstr "Kontuan sarrera"
 msgid "Deposit or transfer"
 msgstr "Diru-sarrera edo transferentzia"
 
-#: src/Frontend/Views/BancoView.php:443
+#: src/Frontend/Views/BancoView.php:485
 msgid "Deposit reconciled: the payment has been recorded in the family's payment control."
 msgstr "Sarrera bateratu da: ordainketa familiaren ordainketen kontrolean erregistratu da."
 
@@ -4986,7 +4994,7 @@ msgstr "Bateratzeko sarrerak"
 msgid "Descending"
 msgstr "Beheranzkoa"
 
-#: src/Frontend/Views/BancoView.php:342 src/Frontend/Views/CajaView.php:122 src/Frontend/Views/LibroMayorView.php:86 src/Inventario/Importador.php:36
+#: src/Frontend/Views/BancoView.php:384 src/Frontend/Views/CajaView.php:122 src/Frontend/Views/LibroMayorView.php:86 src/Inventario/Importador.php:36
 msgid "Description"
 msgstr "Deskribapena"
 
@@ -5014,7 +5022,7 @@ msgstr "Deskribapena edo zirkularra"
 msgid "Description or serial no."
 msgstr "Deskribapena edo serie-zenbakia"
 
-#: templates/tesoreria/banco-asociar.php:52 templates/tesoreria/banco.php:150
+#: templates/tesoreria/banco-asociar.php:52 templates/tesoreria/banco-pedido-ingreso.php:49 templates/tesoreria/banco.php:150
 msgid "Description, payer or reference"
 msgstr "Kontzeptua, ordenatzailea edo erreferentzia"
 
@@ -5224,7 +5232,7 @@ msgstr "Deskargatu Excelen"
 msgid "Download it from online banking (Colonya Directa) in the format"
 msgstr "Deskargatu online bankatik (Colonya Directa) formatu honetan:"
 
-#: src/Frontend/Views/BancoView.php:242 src/Frontend/Views/BancoView.php:245 src/Frontend/Views/CajaView.php:95 src/Frontend/Views/CajaView.php:98
+#: src/Frontend/Views/BancoView.php:284 src/Frontend/Views/BancoView.php:287 src/Frontend/Views/CajaView.php:95 src/Frontend/Views/CajaView.php:98
 msgid "Download link not valid or expired."
 msgstr "Deskarga-esteka baliogabea edo iraungia."
 
@@ -5816,7 +5824,7 @@ msgstr "Guztira (estimatua): %s"
 msgid "Evaluate the camp"
 msgstr "Kanpaldia ebaluatu"
 
-#: src/Eventos/Cuentas.php:542 src/Frontend/Views/BancoView.php:342 templates/email/reintegro.php:39 templates/eventos/agenda.php:69
+#: src/Eventos/Cuentas.php:542 src/Frontend/Views/BancoView.php:384 templates/email/reintegro.php:39 templates/eventos/agenda.php:69
 msgid "Event"
 msgstr "Ekitaldia"
 
@@ -6192,7 +6200,7 @@ msgstr "Familien izen-ematea eta asegurua"
 msgid "Families: the minor's member number followed by a"
 msgstr "Familiak: adingabearen bazkide-zenbakia, ondoren"
 
-#: src/Frontend/Views/BancoView.php:342 src/Informes/Catalogo.php:90 templates/eventos/inscripciones.php:377 templates/pagos/mis-pagos.php:45
+#: src/Frontend/Views/BancoView.php:384 src/Informes/Catalogo.php:90 templates/eventos/inscripciones.php:377 templates/pagos/mis-pagos.php:45
 msgid "Family"
 msgstr "Familia"
 
@@ -6283,7 +6291,7 @@ msgstr "Familia-kontua: anai-arrebak eta emaila"
 msgid "Family email (for the invitation, for signing in and for recovering the password)"
 msgstr "Familiaren emaila (gonbidapenerako, sartzeko eta pasahitza berreskuratzeko)"
 
-#: src/Frontend/Views/TesoreriaView.php:343 templates/tesoreria/familias.php:77 templates/tesoreria/familias.php:86
+#: src/Frontend/Views/TesoreriaView.php:346 templates/tesoreria/familias.php:77 templates/tesoreria/familias.php:86
 msgid "Family no."
 msgstr "Familia-zk."
 
@@ -6347,7 +6355,7 @@ msgstr "Kostu federatiboa ·"
 msgid "Federation fees"
 msgstr "Federazio-kuotak"
 
-#: src/Frontend/Views/TesoreriaView.php:343 templates/tesoreria/control.php:112 templates/tesoreria/control.php:141 templates/tesoreria/presupuestos.php:65
+#: src/Frontend/Views/TesoreriaView.php:346 templates/tesoreria/control.php:112 templates/tesoreria/control.php:141 templates/tesoreria/presupuestos.php:65
 msgid "Fee"
 msgstr "Kuota"
 
@@ -6588,7 +6596,7 @@ msgstr "%d otordukorentzat"
 msgid "For %d portions"
 msgstr "%d zatirentzat"
 
-#: src/Frontend/Views/TesoreriaView.php:433
+#: src/Frontend/Views/TesoreriaView.php:436
 msgid "For an event, the payment method is cash, transfer or Bizum."
 msgstr "Ekitaldi baterako, ordainketa-modua eskudirua, transferentzia edo Bizum da."
 
@@ -6700,7 +6708,7 @@ msgstr "Inprimakiaren eremu propioak"
 msgid "Format"
 msgstr "Formatua"
 
-#: src/Frontend/Views/BancoView.php:615
+#: src/Frontend/Views/BancoView.php:660
 msgid "Format not supported: upload the Norma 43 file (.n43, .q43, .aeb, .txt) or a CSV."
 msgstr "Formatu ez onartua: igo 43 Arauaren fitxategia (.n43, .q43, .aeb, .txt) edo CSV bat."
 
@@ -7799,7 +7807,7 @@ msgid "Import transactions"
 msgstr "Inportatu mugimenduak"
 
 #. translators: 1: number, 2: text
-#: src/Frontend/Views/BancoView.php:691
+#: src/Frontend/Views/BancoView.php:736
 #, php-format
 msgid "Imported %1$d new transactions%2$s. The file has not been saved."
 msgstr "%1$d mugimendu berri inportatu dira%2$s. Fitxategia ez da gorde."
@@ -7936,7 +7944,7 @@ msgid "Income"
 msgstr "Diru-sarrerak"
 
 #. translators: 1: text, 2: text, 3: text
-#: src/Frontend/Views/BancoView.php:346
+#: src/Frontend/Views/BancoView.php:388
 #, php-format
 msgid "Income %1$s · expenses %2$s · generated on %3$s"
 msgstr "Sarrerak %1$s · gastuak %2$s · %3$s egunean sortua"
@@ -8121,7 +8129,7 @@ msgstr "Intolerantziak"
 msgid "Invalid CRM identifier."
 msgstr "CRMko identifikatzaile baliogabea."
 
-#: src/Frontend/Views/TesoreriaView.php:414
+#: src/Frontend/Views/TesoreriaView.php:417
 msgid "Invalid family."
 msgstr "Familia baliogabea."
 
@@ -8214,7 +8222,7 @@ msgstr "Igerilekurik edo itsasorik badago?"
 msgid "Is under %d years old and has no document"
 msgstr "%d urte baino gutxiago ditu eta ez du dokumenturik"
 
-#: src/Frontend/Views/TesoreriaView.php:482
+#: src/Frontend/Views/TesoreriaView.php:485
 msgid "It came from the collection of a SEPA batch: the batch still considers it collected."
 msgstr "SEPA remesa baten kobrantzatik zetorren: remesak kobratutzat ematen jarraitzen du."
 
@@ -8478,7 +8486,7 @@ msgstr "Zure rola da: ezin dituzu baimenak gehitu"
 msgid "It leaves the CRM memberships."
 msgstr "CRMko kidetzetatik ateratzen da."
 
-#: src/Frontend/Views/BancoView.php:619
+#: src/Frontend/Views/BancoView.php:664
 msgid "It looks like an Excel file or another binary format. Download it from the bank as Norma 43 or as CSV."
 msgstr "Excel fitxategia edo beste formatu bitar bat dirudi. Deskargatu bankutik 43 Arau gisa edo CSV gisa."
 
@@ -8862,7 +8870,7 @@ msgstr "Lotu"
 msgid "Link in the website menu (text; empty = no link)"
 msgstr "Webguneko menuko esteka (testua; hutsik = esteka gabe)"
 
-#: src/Frontend/Views/BancoView.php:556 src/Frontend/Views/CajaView.php:182
+#: src/Frontend/Views/BancoView.php:601 src/Frontend/Views/CajaView.php:182
 msgid "Link removed."
 msgstr "Lotura kendu da."
 
@@ -8886,11 +8894,11 @@ msgstr "Lotutako banku-mugimenduak"
 msgid "Linked transactions"
 msgstr "Lotutako mugimenduak"
 
-#: src/Frontend/Views/BancoView.php:512
+#: src/Frontend/Views/BancoView.php:554
 msgid "Linked transactions."
 msgstr "Mugimenduak lotu dira."
 
-#: src/Frontend/Views/BancoView.php:342 templates/tesoreria/banco.php:240
+#: src/Frontend/Views/BancoView.php:384 templates/tesoreria/banco.php:240
 msgid "Linked with"
 msgstr "Honekin lotuta:"
 
@@ -9368,7 +9376,7 @@ msgstr "Bazkidearen datuak"
 msgid "Member's first name and surname"
 msgstr "Bazkidearen izen-abizenak"
 
-#: src/Frontend/Views/TesoreriaView.php:343 templates/tesoreria/control.php:111 templates/tesoreria/control.php:127 templates/tesoreria/familias.php:78
+#: src/Frontend/Views/TesoreriaView.php:346 templates/tesoreria/control.php:111 templates/tesoreria/control.php:127 templates/tesoreria/familias.php:78
 msgid "Members"
 msgstr "Bazkideak"
 
@@ -10012,7 +10020,7 @@ msgstr "Ez da mugimendurik geratzen: ezabatutakoak historian daude."
 msgid "No transaction with a valid date and amount was found. Check the chosen columns."
 msgstr "Ez da data eta zenbateko baliozkoak dituen mugimendurik aurkitu. Berrikusi aukeratutako zutabeak."
 
-#: src/Frontend/Views/BancoView.php:330 src/Tesoreria/HistorialPagos.php:93 templates/eventos/cuentas.php:143 templates/inventario/lista.php:54
+#: src/Frontend/Views/BancoView.php:372 src/Tesoreria/HistorialPagos.php:93 templates/eventos/cuentas.php:143 templates/inventario/lista.php:54
 msgid "No type"
 msgstr "Motarik gabe"
 
@@ -10206,7 +10214,7 @@ msgstr "Oraindik erabili gabe: lehen kobrantza FRST gisa joango da."
 msgid "Not yet"
 msgstr "Oraindik ez"
 
-#: src/Frontend/Views/BancoView.php:342 src/Inventario/ListaPdf.php:111 templates/eventos/calendario.php:163 templates/eventos/cuentas.php:406
+#: src/Frontend/Views/BancoView.php:384 src/Inventario/ListaPdf.php:111 templates/eventos/calendario.php:163 templates/eventos/cuentas.php:406
 msgid "Note"
 msgstr "Oharra"
 
@@ -10691,7 +10699,7 @@ msgstr "Eskaera ezeztatu da."
 msgid "Order management"
 msgstr "Eskaeren kudeaketa"
 
-#: src/Frontend/Views/BancoView.php:545
+#: src/Frontend/Views/BancoView.php:587
 msgid "Order marked as paid with this deposit."
 msgstr "Eskaera ordainduta bezala markatu da sarrera honekin."
 
@@ -10715,7 +10723,7 @@ msgstr "Eskaera-zenbakia edo eroslea"
 msgid "Order of arrival in their section"
 msgstr "Iritsiera-ordena bere atalean"
 
-#: templates/tesoreria/banco-pedido.php:26
+#: templates/tesoreria/banco-pedido-ingreso.php:27 templates/tesoreria/banco-pedido.php:26
 msgid "Order paid"
 msgstr "Eskaera ordaindua"
 
@@ -10929,7 +10937,7 @@ msgstr "%s. orria"
 msgid "Pagination"
 msgstr "Orrikapena"
 
-#: src/Frontend/Views/TesoreriaView.php:40 src/Frontend/Views/TesoreriaView.php:343 src/Frontend/Views/TiendaGestionView.php:315 src/Informes/Catalogo.php:93
+#: src/Frontend/Views/TesoreriaView.php:40 src/Frontend/Views/TesoreriaView.php:346 src/Frontend/Views/TiendaGestionView.php:315 src/Informes/Catalogo.php:93
 msgid "Paid"
 msgstr "Ordainduta"
 
@@ -11037,7 +11045,15 @@ msgstr "Sartu bankuan"
 msgid "Pay this one"
 msgstr "Hau ordaindu"
 
-#: src/Frontend/Views/BancoView.php:342
+#: templates/tesoreria/banco-pedido-ingreso.php:33 templates/tesoreria/banco-pedido-ingreso.php:39
+msgid "Pay this order with a bank deposit"
+msgstr "Ordaindu eskaera hau bankuko sarrera batekin"
+
+#: templates/tesoreria/control.php:173
+msgid "Pay with a bank deposit"
+msgstr "Ordaindu bankuko sarrera batekin"
+
+#: src/Frontend/Views/BancoView.php:384
 msgid "Payer"
 msgstr "Agindu-emailea"
 
@@ -11053,7 +11069,7 @@ msgstr "Diruzaintzari eskuz ordaintzea bazkideentzat soilik dago eskuragarri."
 msgid "Payment"
 msgstr "Ordainketa"
 
-#: src/Frontend/Views/TesoreriaBaseView.php:25 src/Frontend/Views/TesoreriaView.php:342 src/Frontend/Views/TesoreriaView.php:346
+#: src/Frontend/Views/TesoreriaBaseView.php:25 src/Frontend/Views/TesoreriaView.php:345 src/Frontend/Views/TesoreriaView.php:349
 msgid "Payment control"
 msgstr "Ordainketen kontrola"
 
@@ -11108,13 +11124,13 @@ msgid "Payment of %1$s (%2$s) validated on order %3$s."
 msgstr "%1$s(r)en (%2$s) ordainketa balioztatu da %3$s eskaeran."
 
 #. translators: 1: text, 2: text
-#: src/Frontend/Views/TesoreriaView.php:438
+#: src/Frontend/Views/TesoreriaView.php:441
 #, php-format
 msgid "Payment of %1$s recorded in the event \"%2$s\". It remains in the family's payment history."
 msgstr "%1$s(r)en ordainketa erregistratu da «%2$s» ekitaldian. Familiaren ordainketa-historian geratzen da."
 
 #. translators: 1: text, 2: text
-#: src/Frontend/Views/TesoreriaView.php:450
+#: src/Frontend/Views/TesoreriaView.php:453
 #, php-format
 msgid "Payment of %1$s recorded with the bank deposit of %2$s, which is reconciled with this family."
 msgstr "%1$s(e)ko ordainketa erregistratu da %2$s(e)ko bankuko diru-sarrerarekin, eta familia honekin bateratuta geratzen da."
@@ -11138,7 +11154,7 @@ msgid "Payment of %s deleted"
 msgstr "%s(e)ko ordainketa ezabatua"
 
 #. translators: %s: text
-#: src/Frontend/Views/TesoreriaView.php:474
+#: src/Frontend/Views/TesoreriaView.php:477
 #, php-format
 msgid "Payment of %s deleted. It remains in the family's history."
 msgstr "%s(e)ko ordainketa ezabatu da. Familiaren historian geratzen da."
@@ -11156,7 +11172,7 @@ msgid "Payment of %s recorded and split among the family's sign-ups."
 msgstr "%s(e)ko ordainketa erregistratuta eta familiaren izen-emateen artean banatuta."
 
 #. translators: %s: text
-#: src/Frontend/Views/EventosView.php:638 src/Frontend/Views/TesoreriaView.php:454
+#: src/Frontend/Views/EventosView.php:638 src/Frontend/Views/TesoreriaView.php:457
 #, php-format
 msgid "Payment of %s recorded."
 msgstr "%s(r)en ordainketa erregistratu da."
@@ -11208,7 +11224,7 @@ msgstr "Kakahueteak"
 msgid "Peas"
 msgstr "Ilarrak"
 
-#: src/Eventos/InscripcionesTable.php:54 src/Frontend/Views/TesoreriaView.php:38 src/Frontend/Views/TesoreriaView.php:343 src/Idiomas/Guardados.php:240
+#: src/Eventos/InscripcionesTable.php:54 src/Frontend/Views/TesoreriaView.php:38 src/Frontend/Views/TesoreriaView.php:346 src/Idiomas/Guardados.php:240
 msgid "Pending"
 msgstr "Zain"
 
@@ -12186,7 +12202,7 @@ msgstr "Erreferentzia:"
 msgid "Reference: %s"
 msgstr "Erreferentzia: %s"
 
-#: src/Frontend/Views/BancoView.php:342
+#: src/Frontend/Views/BancoView.php:384
 msgid "References"
 msgstr "Erreferentziak"
 
@@ -12845,7 +12861,7 @@ msgid "Round"
 msgstr "Txanda"
 
 #. translators: 1: text, 2: text
-#: src/Frontend/Views/TesoreriaView.php:339
+#: src/Frontend/Views/TesoreriaView.php:342
 #, php-format
 msgid "Round %1$s · generated on %2$s"
 msgstr "Txanda: %1$s · sortua: %2$s"
@@ -13569,7 +13585,7 @@ msgstr "Konfiguratu orain"
 msgid "Set the document"
 msgstr "Jarri dokumentua"
 
-#: src/Frontend/Views/EventosBaseView.php:14 src/Frontend/Views/TesoreriaView.php:343 src/Frontend/Views/TiendaBaseView.php:36 templates/tesoreria/familia.php:83
+#: src/Frontend/Views/EventosBaseView.php:14 src/Frontend/Views/TesoreriaView.php:346 src/Frontend/Views/TiendaBaseView.php:36 templates/tesoreria/familia.php:83
 msgid "Settings"
 msgstr "Konfigurazioa"
 
@@ -13640,6 +13656,10 @@ msgstr "Dendako %d. eskaera"
 #: templates/tienda/gestion.php:48
 msgid "Shop orders"
 msgstr "Dendako eskaerak"
+
+#: templates/tesoreria/control.php:156
+msgid "Shop orders to collect"
+msgstr "Kobratzeko dendako eskaerak"
 
 #: templates/tienda/config.php:19
 msgid "Shop · settings"
@@ -14485,7 +14505,7 @@ msgstr "Ekitaldi hori ez dago."
 msgid "That event is not available. Choose another or leave it without an event."
 msgstr "Ekitaldi hori ez dago eskuragarri. Aukeratu beste bat edo utzi ekitaldirik gabe."
 
-#: src/Frontend/Views/TesoreriaView.php:429
+#: src/Frontend/Views/TesoreriaView.php:432
 msgid "That event is not open for sign-ups or this family has nothing pending in it."
 msgstr "Ekitaldi hori ez dago izen-emateetarako irekita edo familia honek ez du ezer zain hartan."
 
@@ -14505,7 +14525,7 @@ msgstr "Gastu hori ez dago itzultzeko zain."
 msgid "That expense is not pending review."
 msgstr "Gastu hori ez dago berrikusteko zain."
 
-#: src/Frontend/Views/TesoreriaView.php:83 src/Frontend/Views/TesoreriaView.php:224 src/Frontend/Views/TesoreriaView.php:241 src/Sepa/Mandatos.php:190
+#: src/Frontend/Views/TesoreriaView.php:83 src/Frontend/Views/TesoreriaView.php:227 src/Frontend/Views/TesoreriaView.php:244 src/Sepa/Mandatos.php:190
 msgid "That family does not exist."
 msgstr "Familia hori ez dago."
 
@@ -14593,7 +14613,7 @@ msgstr "Eskaera horrek ez du kobratzeko ezer."
 msgid "That order is already marked as received."
 msgstr "Eskaera hori jada jasotzat markatuta dago."
 
-#: src/Tienda/ConciliacionBanco.php:98 src/Tienda/ConciliacionBanco.php:151 src/Tienda/ConciliacionBanco.php:176
+#: src/Tienda/ConciliacionBanco.php:98 src/Tienda/ConciliacionBanco.php:151 src/Tienda/ConciliacionBanco.php:176 templates/tesoreria/banco-pedido-ingreso.php:34
 msgid "That order is already paid or cancelled."
 msgstr "Eskaera hori ordainduta edo ezeztatuta dago jada."
 
@@ -15089,7 +15109,7 @@ msgstr "Zenbatekoak zenbaki positiboa izan behar du."
 msgid "The amount must be greater than 0."
 msgstr "Zenbatekoak 0 baino handiagoa izan behar du."
 
-#: templates/tesoreria/banco-pedido.php:71
+#: templates/tesoreria/banco-pedido-ingreso.php:71 templates/tesoreria/banco-pedido.php:71
 msgid "The amount of the deposit is not the amount of the order. Mark the order as paid with this deposit anyway?"
 msgstr "Sarreraren zenbatekoa ez da eskaeraren zenbatekoa. Eskaera sarrera honekin ordainduta bezala markatu nahi duzu hala ere?"
 
@@ -15121,7 +15141,7 @@ msgstr "Baimena zure amak, aitak edo tutoreak sinatu behar du bere kontutik: adi
 msgid "The bank and each cash box, with their balance at the start and end of the period, and the summary by item. Transfers between the group's accounts appear in each account, but not in the summary."
 msgstr "Bankua eta eskudiru-kutxa bakoitza, aldiaren hasierako eta amaierako saldoarekin, eta partidaren araberako laburpena. Taldeko kontuen arteko lekualdaketak kontu bakoitzean ageri dira, baina ez laburpenean."
 
-#: src/Frontend/Views/TesoreriaView.php:431
+#: src/Frontend/Views/TesoreriaView.php:434
 msgid "The bank deposit is only linked to the round's fee. For an event, remove the deposit and record the payment."
 msgstr "Banku-sarrera txandako kuotari soilik lotzen zaio. Ekitaldi baterako, kendu sarrera eta idatzi ordainketa."
 
@@ -15130,7 +15150,7 @@ msgid "The bank deposit is pending reconciliation again."
 msgstr "Bankuko sarrera berriro dago adiskidetzeko."
 
 #. translators: %s: text
-#: src/Frontend/Views/TesoreriaView.php:479
+#: src/Frontend/Views/TesoreriaView.php:482
 #, php-format
 msgid "The bank deposit of %s is pending reconciliation again."
 msgstr "%s(e)ko bankuko diru-sarrera berriro dago bateratzeko."
@@ -15608,11 +15628,11 @@ msgstr "Fitxategia ez da CSV bat (Excel orri bat edo beste formatu bat dirudi). 
 msgid "The file is too large (at most %d MB)."
 msgstr "Fitxategia handiegia da (gehienez %d MB)."
 
-#: src/Frontend/Views/BancoView.php:612
+#: src/Frontend/Views/BancoView.php:657
 msgid "The file is too large (maximum 5 MB)."
 msgstr "Fitxategia handiegia da (gehienez 5 MB)."
 
-#: src/Frontend/Views/BancoView.php:607
+#: src/Frontend/Views/BancoView.php:652
 msgid "The file is too large."
 msgstr "Fitxategia handiegia da."
 
@@ -16150,7 +16170,7 @@ msgstr "Scouter-en eta laguntza-boluntariotzaren plazak funtzio hori duten talde
 msgid "The postcode must have 5 digits."
 msgstr "Posta-kodeak 5 zifra izan behar ditu."
 
-#: src/Frontend/Views/BancoView.php:82 src/Frontend/Views/BancoView.php:639 src/Frontend/Views/BancoView.php:665
+#: src/Frontend/Views/BancoView.php:87 src/Frontend/Views/BancoView.php:684 src/Frontend/Views/BancoView.php:710
 msgid "The preview has expired. Upload the file again."
 msgstr "Aurrebista iraungi da. Igo berriro fitxategia."
 
@@ -16909,6 +16929,10 @@ msgstr "Ez dago kopiatzeko aurreko txandako aurrekonturik."
 msgid "There is no deposit to reconcile with a family, order or event code."
 msgstr "Ez dago familia, eskaera edo ekitaldi koderik duen sarrerarik bateratzeko."
 
+#: templates/tesoreria/banco-pedido-ingreso.php:53
+msgid "There is no deposit to reconcile with this filter."
+msgstr "Ez dago iragazki honekin bateratzeko sarrerarik."
+
 #: src/Sepa/Pain008.php:34 src/Sepa/Remesas.php:341
 msgid "There is no direct debit to include."
 msgstr "Ez dago barne hartzeko kargurik."
@@ -17304,7 +17328,7 @@ msgstr "Familia honek badu jada tutoreen %1$d kontuak (%2$s). Baten emaila aldat
 msgid "This field cannot be edited from the website."
 msgstr "Eremu hau ezin da webetik editatu."
 
-#: src/Frontend/Views/BancoView.php:669
+#: src/Frontend/Views/BancoView.php:714
 msgid "This file has errors and cannot be imported."
 msgstr "Fitxategi honek akatsak ditu eta ezin da inportatu."
 
@@ -17610,7 +17634,7 @@ msgstr "Aurrerakin bat emateko, pertsonak ekitaldiaren taldean egon behar du eta
 msgid "To order from the supplier"
 msgstr "Hornitzaileari eskatzeko"
 
-#: src/Frontend/Views/TesoreriaView.php:343 templates/tesoreria/familia.php:85
+#: src/Frontend/Views/TesoreriaView.php:346 templates/tesoreria/familia.php:85
 msgid "To pay"
 msgstr "Ordaintzeko"
 
@@ -17698,7 +17722,7 @@ msgstr "Akats gehiegi: fitxategia irakurtzeari uzten zaio."
 msgid "Too many failed attempts. Wait a few minutes before trying again or recover your password."
 msgstr "Saiakera huts gehiegi. Itxaron minutu batzuk berriro saiatu aurretik edo berreskuratu zure pasahitza."
 
-#: src/Frontend/Views/BancoView.php:348 src/Frontend/Views/CajaView.php:129 src/Frontend/Views/LibroMayorView.php:115 src/Frontend/Views/TesoreriaView.php:350
+#: src/Frontend/Views/BancoView.php:390 src/Frontend/Views/CajaView.php:129 src/Frontend/Views/LibroMayorView.php:115 src/Frontend/Views/TesoreriaView.php:353
 msgid "Total"
 msgstr "Guztira"
 
@@ -17772,7 +17796,7 @@ msgstr "Mugimendua ezeztatu da."
 msgid "Transaction data not valid."
 msgstr "Mugimenduaren datu baliogabeak."
 
-#: src/Frontend/Views/BancoView.php:467
+#: src/Frontend/Views/BancoView.php:509
 msgid "Transaction pending again (if it had a payment, it has been cancelled)."
 msgstr "Mugimendua berriro zain dago (ordainketarik bazuen, ezeztatu da)."
 
@@ -17964,11 +17988,11 @@ msgstr "«%s» mota sortu da."
 msgid "Type \"%s\" deleted."
 msgstr "«%s» mota ezabatu da."
 
-#: src/Frontend/Views/BancoView.php:588
+#: src/Frontend/Views/BancoView.php:633
 msgid "Type created."
 msgstr "Mota sortu da."
 
-#: src/Frontend/Views/BancoView.php:588
+#: src/Frontend/Views/BancoView.php:633
 msgid "Type deleted."
 msgstr "Mota ezabatu da."
 
@@ -17976,11 +18000,11 @@ msgstr "Mota ezabatu da."
 msgid "Type of diet"
 msgstr "Erregimen mota"
 
-#: src/Frontend/Views/BancoView.php:342 templates/tesoreria/banco.php:164 templates/tesoreria/caja.php:179
+#: src/Frontend/Views/BancoView.php:384 templates/tesoreria/banco.php:164 templates/tesoreria/caja.php:179
 msgid "Type of expense or income"
 msgstr "Gastu edo diru-sarrera mota"
 
-#: src/Frontend/Views/BancoView.php:588
+#: src/Frontend/Views/BancoView.php:633
 msgid "Type saved."
 msgstr "Mota gorde da."
 
@@ -18082,7 +18106,7 @@ msgstr "Itzulitako unitateak"
 msgid "Units to buy, line %d"
 msgstr "Erosteko unitateak, %d. lerroa"
 
-#: src/Frontend/Views/AltaUsuariosView.php:197 src/Frontend/Views/BancoView.php:595 src/Frontend/Views/CajaView.php:188 src/Frontend/Views/EventosView.php:502
+#: src/Frontend/Views/AltaUsuariosView.php:197 src/Frontend/Views/BancoView.php:640 src/Frontend/Views/CajaView.php:188 src/Frontend/Views/EventosView.php:502
 msgid "Unknown action."
 msgstr "Ekintza ezezaguna."
 
@@ -18097,6 +18121,10 @@ msgstr "Errore ezezaguna"
 #: templates/tienda/config.php:40
 msgid "Unpaid orders"
 msgstr "Ordaindu gabeko eskaerak"
+
+#: templates/tesoreria/control.php:157
+msgid "Unpaid orders of the shop. Pay one with the bank deposit that covers it (the same can be done from the shop and from the bank)."
+msgstr "Dendako ordaindu gabeko eskaerak. Ordaindu bat estaltzen duen bankuko sarrerarekin (gauza bera dendatik eta bankutik ere egin daiteke)."
 
 #: templates/tienda/informe.php:34
 msgid "Until"
@@ -18161,6 +18189,10 @@ msgstr "Kanpaldiko argazkiak taldearen webgunera igo"
 #: src/Admin/SettingsPage.php:224
 msgid "Use in each group a CRM user dedicated to the website, which sees only its own group. With edit permission on Contacts, the private area allows editing records; with a read-only role, everything is shown read-only."
 msgstr "Talde bakoitzean, erabili webgunerako bereziki CRM erabiltzaile bat, bere taldea soilik ikusten duena. Kontaktuetan edizio-baimenarekin, eremu pribatuak fitxak editatzea onartzen du; irakurtzeko soilik rolarekin, dena irakurtzeko soilik erakusten da."
+
+#: templates/tesoreria/banco-pedido-ingreso.php:81
+msgid "Use this one"
+msgstr "Erabili hau"
 
 #: src/Admin/OrganizacionPage.php:213 templates/comun/ayuda.php:28
 msgid "User manual"
@@ -18232,7 +18264,7 @@ msgstr "%1$s(e)k balioztatua %2$s(e)an"
 msgid "Validated on %2$s"
 msgstr "%2$s(e)an balioztatua"
 
-#: src/Frontend/Views/BancoView.php:342 src/Tesoreria/Banco/CsvBanco.php:25
+#: src/Frontend/Views/BancoView.php:384 src/Tesoreria/Banco/CsvBanco.php:25
 msgid "Value date"
 msgstr "Balio-data"
 
@@ -19003,7 +19035,7 @@ msgstr "Baja"
 msgid "Withdrawal date"
 msgstr "Baja-data"
 
-#: src/Frontend/Views/TesoreriaView.php:407
+#: src/Frontend/Views/TesoreriaView.php:410
 msgid "Withdrawal marked as seen."
 msgstr "Baja ikusitzat markatu da."
 
@@ -19409,11 +19441,11 @@ msgstr "Ez duzu atalik esleituta bere aurrekontua prestatzeko."
 msgid "You have no sections assigned (or they do not match those of the report). Ask the Secretary's office to check your registration."
 msgstr "Ez duzu atalik esleituta (edo ez datoz bat txostenekoekin). Eskatu Idazkaritzari zure alta berrikusteko."
 
-#: src/Frontend/Views/BancoView.php:532
+#: src/Frontend/Views/BancoView.php:574
 msgid "You have not chosen any deposit."
 msgstr "Ez duzu sarrerarik aukeratu."
 
-#: src/Frontend/Views/BancoView.php:496
+#: src/Frontend/Views/BancoView.php:538
 msgid "You have not chosen any transaction."
 msgstr "Ez duzu mugimendurik aukeratu."
 
@@ -20817,7 +20849,7 @@ msgstr "← %s: fitxa"
 msgid "← Agenda"
 msgstr "← Agenda"
 
-#: templates/eventos/asistente.php:257
+#: templates/eventos/asistente.php:257 templates/tesoreria/banco-pedido-ingreso.php:29 templates/tesoreria/banco-pedido-ingreso.php:35 templates/tesoreria/banco-pedido-ingreso.php:89
 msgid "← Back"
 msgstr "← Itzuli"
 

@@ -73,6 +73,11 @@ final class BancoView extends TesoreriaBaseView {
 		if ( '' !== $asignar ) {
 			return $this->layout( 'tesoreria', ( self::es_modal() ? '' : $this->subnav( 'banco', $ronda ) ) . $this->asignar_guiada( $asignar ) );
 		}
+		// v0.64.18: pagar un pedido de la tienda eligiendo su ingreso (se llega desde Tesorería y desde el banco), también en la ventana emergente.
+		$pagar = $this->get( 'pagar_pedido' );
+		if ( '' !== $pagar ) {
+			return $this->layout( 'tesoreria', ( self::es_modal() ? '' : $this->subnav( 'banco', $ronda ) ) . $this->ingreso_de_pedido( $pagar ) );
+		}
 		$token = $this->get( 'previa' );
 		if ( $token ) {
 			$previa = $this->previa( $token );
@@ -208,6 +213,43 @@ final class BancoView extends TesoreriaBaseView {
 				'familias'   => $this->familias()['etiquetas'],
 				'url'        => $url,
 				'volver'     => wp_validate_redirect( esc_url_raw( $this->get( 'volver' ) ), $url ) ?: $url,
+			)
+		);
+	}
+
+	/** Ventana «Pagar este pedido con un ingreso» (v0.64.18): el pedido y los ingresos por conciliar (los que casan, primero), con buscador. */
+	private function ingreso_de_pedido( string $pagar ): string {
+		$url = $this->url( 'banco' );
+		if ( 'hecho' === $pagar ) {
+			return $this->tpl( 'tesoreria/banco-pedido-ingreso', array( 'hecho' => true, 'url' => $url ) );
+		}
+		$ped = null;
+		foreach ( \AsdeBalears\AreaPrivada\Tienda\ConciliacionBanco::pedidos_por_pagar() as $p ) {
+			if ( (int) $p['id'] === absint( $pagar ) ) {
+				$ped = $p;
+			}
+		}
+		$q     = $this->get( 'q' );
+		$movs  = array();
+		$grupo = (string) Grupo::numero();
+		if ( $ped ) {
+			foreach ( BancoTable::movimientos( array( 'estado' => BancoTable::PENDIENTE, 'tipo' => 'ingresos', 'q' => $q ) ) as $m ) {
+				$ref          = \AsdeBalears\AreaPrivada\Tienda\ConciliacionBanco::referencia( AsignacionGuiada::texto( $m ), $grupo );
+				$m['codigo']  = $ref === \AsdeBalears\AreaPrivada\Tienda\PedidosTable::numero( $ped );
+				$m['igual']   = abs( (float) $m['importe'] - $ped['a_cobrar'] ) < 0.005;
+				$movs[]       = $m;
+			}
+			usort( $movs, static fn( $a, $b ) => array( (int) $b['codigo'], (int) $b['igual'], $b['fecha'] ) <=> array( (int) $a['codigo'], (int) $a['igual'], $a['fecha'] ) );
+		}
+		return $this->tpl(
+			'tesoreria/banco-pedido-ingreso',
+			array(
+				'hecho'  => false,
+				'pedido' => $ped,
+				'movs'   => $movs,
+				'q'      => $q,
+				'url'    => $url,
+				'volver' => wp_validate_redirect( esc_url_raw( $this->get( 'volver' ) ), $url ) ?: $url,
 			)
 		);
 	}
@@ -544,7 +586,10 @@ final class BancoView extends TesoreriaBaseView {
 					? Notices::add( 'error', esc_html( $r->get_error_message() ) )
 					: Notices::add( 'success', __( 'Order marked as paid with this deposit.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
 				$lista = wp_validate_redirect( esc_url_raw( $this->post( 'volver' ) ), $this->url( 'banco' ) );
-				$this->redirect( Router::pide_modal() && ! is_wp_error( $r ) ? $this->url( 'banco', array( 'cobrar_pedido' => 'hecho' ) ) : ( is_wp_error( $r ) ? $this->url( 'banco', array( 'cobrar_pedido' => $id ) ) : $lista ) );
+				// v0.64.18: si se eligió el ingreso desde un pedido (Tesorería), la ventana vuelve a la de ese pedido.
+				$clave = 'pedido' === $this->post( 'desde' ) ? 'pagar_pedido' : 'cobrar_pedido';
+				$ref   = 'pedido' === $this->post( 'desde' ) ? (int) $this->post( 'pedido' ) : $id;
+				$this->redirect( Router::pide_modal() && ! is_wp_error( $r ) ? $this->url( 'banco', array( $clave => 'hecho' ) ) : ( is_wp_error( $r ) ? $this->url( 'banco', array( $clave => $ref ) ) : $lista ) );
 				break;
 
 			case 'desasociar':

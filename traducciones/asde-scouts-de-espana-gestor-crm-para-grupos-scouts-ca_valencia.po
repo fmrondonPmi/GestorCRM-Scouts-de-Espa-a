@@ -10,7 +10,7 @@ msgstr ""
 "X-Domain: asde-scouts-de-espana-gestor-crm-para-grupos-scouts\n"
 
 #. translators: %d: number
-#: src/Frontend/Views/BancoView.php:691
+#: src/Frontend/Views/BancoView.php:736
 #, php-format
 msgid " (%d were already imported and have been ignored)"
 msgstr " (%d ja estaven importats i s'han ignorat)"
@@ -659,7 +659,7 @@ msgstr[0] "%d eliminat"
 msgstr[1] "%d eliminats"
 
 #. translators: %d: number
-#: src/Frontend/Views/BancoView.php:523
+#: src/Frontend/Views/BancoView.php:565
 #, php-format
 msgid "%d deposit assigned."
 msgid_plural "%d deposits assigned."
@@ -675,7 +675,7 @@ msgstr[0] "%d ingrés per conciliar"
 msgstr[1] "%d ingressos per conciliar"
 
 #. translators: %d: number
-#: src/Frontend/Views/BancoView.php:526
+#: src/Frontend/Views/BancoView.php:568
 #, php-format
 msgid "%d deposit was already reviewed and has not been touched."
 msgid_plural "%d deposits were already reviewed and have not been touched."
@@ -683,7 +683,7 @@ msgstr[0] "%d ingrés ja estava revisat i no s'ha tocat."
 msgstr[1] "%d ingressos ja estaven revisats i no s'han tocat."
 
 #. translators: %d: number
-#: src/Frontend/Views/BancoView.php:457
+#: src/Frontend/Views/BancoView.php:499
 #, php-format
 msgid "%d deposits reconciled by their family reference."
 msgstr "%d ingressos conciliats per la seva referència de família."
@@ -749,7 +749,7 @@ msgid "%d families could not be notified by email (no email or no account): noti
 msgstr "A %d famílies no s'ha pogut avisar per email (sense email o sense compte): avisa-les per un altre mitjà."
 
 #. translators: %d: number
-#: src/Frontend/Views/TesoreriaView.php:350
+#: src/Frontend/Views/TesoreriaView.php:353
 #, php-format
 msgid "%d family"
 msgid_plural "%d families"
@@ -1065,7 +1065,7 @@ msgid "%d to review"
 msgstr "%d per revisar"
 
 #. translators: %d: number
-#: src/Frontend/Views/BancoView.php:348 templates/tesoreria/banco.php:309
+#: src/Frontend/Views/BancoView.php:390 templates/tesoreria/banco.php:309
 #, php-format
 msgid "%d transaction"
 msgid_plural "%d transactions"
@@ -1073,7 +1073,7 @@ msgstr[0] "%d moviment"
 msgstr[1] "%d moviments"
 
 #. translators: %d: number
-#: src/Frontend/Views/BancoView.php:490
+#: src/Frontend/Views/BancoView.php:532
 #, php-format
 msgid "%d transaction marked as reviewed."
 msgid_plural "%d transactions marked as reviewed."
@@ -2164,7 +2164,7 @@ msgid "Adjustment of %s recorded"
 msgstr "Ajust de %s registrat"
 
 #. translators: %s: text
-#: src/Frontend/Views/TesoreriaView.php:459
+#: src/Frontend/Views/TesoreriaView.php:462
 #, php-format
 msgid "Adjustment of %s recorded."
 msgstr "Ajust de %s registrat."
@@ -2176,7 +2176,7 @@ msgid "Adjustment of %s removed"
 msgstr "Ajust de %s eliminat"
 
 #. translators: %s: text
-#: src/Frontend/Views/TesoreriaView.php:476
+#: src/Frontend/Views/TesoreriaView.php:479
 #, php-format
 msgid "Adjustment of %s removed. It remains in the family's history."
 msgstr "Ajust de %s eliminat. Queda a l'historial de la família."
@@ -2420,7 +2420,7 @@ msgstr "Mostra també els donats de baixa"
 msgid "Always"
 msgstr "Sempre"
 
-#: src/Frontend/Views/BancoView.php:342 src/Frontend/Views/TiendaGestionView.php:248 src/Frontend/Views/TiendaGestionView.php:262 src/Frontend/Views/TiendaGestionView.php:276
+#: src/Frontend/Views/BancoView.php:384 src/Frontend/Views/TiendaGestionView.php:248 src/Frontend/Views/TiendaGestionView.php:262 src/Frontend/Views/TiendaGestionView.php:276
 msgid "Amount"
 msgstr "Import"
 
@@ -3033,11 +3033,11 @@ msgstr "Saldo inicial del banc: %2$s el %1$s"
 msgid "Bank report"
 msgstr "Informe del banc"
 
-#: src/Frontend/Views/BancoView.php:344
+#: src/Frontend/Views/BancoView.php:386
 msgid "Bank transactions"
 msgstr "Moviments del banc"
 
-#: src/Frontend/Views/TesoreriaView.php:83 src/Frontend/Views/TesoreriaView.php:445
+#: src/Frontend/Views/TesoreriaView.php:83 src/Frontend/Views/TesoreriaView.php:448
 msgid "Bank transactions are only used by the Secretary's office, Coordination and Treasury."
 msgstr "Els moviments del banc només els fan servir Secretaria, Coordinació i Tresoreria."
 
@@ -3259,6 +3259,10 @@ msgstr "Comprar el menjar i embalar-lo"
 msgid "Buy in the shop"
 msgstr "Comprar a la botiga"
 
+#: templates/tesoreria/control.php:162 templates/tesoreria/control.php:171
+msgid "Buyer"
+msgstr "Comprador/a"
+
 #: templates/tesoreria/banco.php:106 templates/tesoreria/banco.php:116
 msgid "By"
 msgstr "Per"
@@ -3309,7 +3313,7 @@ msgstr "Accés al CRM"
 msgid "CRM data, read-only: not stored on the website. If something is wrong, correct it in the CRM."
 msgstr "Dades del CRM, només lectura: no es desen al web. Si alguna cosa és incorrecta, corregeix-la al CRM."
 
-#: src/Frontend/Views/TesoreriaView.php:317 src/Usuarios/AltaScouterService.php:118
+#: src/Frontend/Views/TesoreriaView.php:320 src/Usuarios/AltaScouterService.php:118
 msgid "CRM not configured."
 msgstr "CRM no configurat."
 
@@ -3803,7 +3807,7 @@ msgstr "Cigrons"
 msgid "Children"
 msgstr "Fills"
 
-#: src/Frontend/Views/TesoreriaView.php:343 templates/tesoreria/control.php:34
+#: src/Frontend/Views/TesoreriaView.php:346 templates/tesoreria/control.php:34
 msgid "Children who pay"
 msgstr "Fills que paguen"
 
@@ -3959,7 +3963,7 @@ msgstr "Tria la bestreta amb què es va pagar (una de lliurada i sense liquidar)
 msgid "Choose the bank transaction that corresponds to this transfer: that way the general ledger does not count it as an expense or income. Those of the same amount come first."
 msgstr "Tria el moviment del banc que correspon a aquest traspàs: així el llibre major no el compta com a despesa ni com a ingrés. Primer surten els del mateix import."
 
-#: src/Frontend/Views/BancoView.php:607
+#: src/Frontend/Views/BancoView.php:652
 msgid "Choose the bank transactions file."
 msgstr "Tria el fitxer de moviments del banc."
 
@@ -3978,6 +3982,10 @@ msgstr "Tria la data i el motiu de la baixa."
 #: src/Frontend/Views/AccesosView.php:319
 msgid "Choose the date until which the permission is valid, or \"No expiry\"."
 msgstr "Tria la data fins a la qual val el permís, o «Sense caducitat»."
+
+#: templates/tesoreria/banco-pedido-ingreso.php:44
+msgid "Choose the deposit that pays this order: it is marked as paid with the date and amount of the deposit. The ones with the order number or the same amount come first."
+msgstr "Tria l'ingrés que paga aquesta comanda: queda pagada amb la data i l'import de l'ingrés. Els que porten el nre. de comanda o el mateix import surten primer."
 
 #: src/Tesoreria/Banco/Conciliacion.php:213
 msgid "Choose the expense or income type."
@@ -4151,7 +4159,7 @@ msgstr "Tanca la tasca"
 msgid "Close this window to go back to the cash box: it now shows the update."
 msgstr "Tanca aquesta finestra per tornar a la caixa: ja surt actualitzada."
 
-#: templates/tesoreria/banco-asignar.php:42 templates/tesoreria/banco-asociar.php:28 templates/tesoreria/banco-pedido.php:27 templates/tesoreria/banco-revisado.php:12
+#: templates/tesoreria/banco-asignar.php:42 templates/tesoreria/banco-asociar.php:28 templates/tesoreria/banco-pedido-ingreso.php:28 templates/tesoreria/banco-pedido.php:27
 msgid "Close this window to go back to the list: it now shows the update."
 msgstr "Tanca aquesta finestra per tornar a la llista: ja surt actualitzada."
 
@@ -4701,7 +4709,7 @@ msgstr "Accés web actual"
 msgid "Cut-off age for youth members (years)"
 msgstr "Edat de tall dels educands (anys)"
 
-#: src/Frontend/Views/BancoView.php:342 src/Frontend/Views/CajaView.php:122 src/Frontend/Views/LibroMayorView.php:86 src/Frontend/Views/TiendaGestionView.php:262
+#: src/Frontend/Views/BancoView.php:384 src/Frontend/Views/CajaView.php:122 src/Frontend/Views/LibroMayorView.php:86 src/Frontend/Views/TiendaGestionView.php:262
 msgid "Date"
 msgstr "Data"
 
@@ -4914,7 +4922,7 @@ msgstr "Esborrar aquesta plantilla? Els esdeveniments que ja l'han aplicat no ca
 msgid "Delete…"
 msgstr "Elimina…"
 
-#: src/Frontend/Views/TesoreriaView.php:465
+#: src/Frontend/Views/TesoreriaView.php:468
 msgid "Deleting a payment or an adjustment is done by Treasury."
 msgstr "Eliminar un pagament o un ajust ho fa Tresoreria."
 
@@ -4962,7 +4970,7 @@ msgstr "Segons nits i menors"
 msgid "Depending on nights and minors (2 or more nights and 10 or more minors)"
 msgstr "Segons les nits i els menors (2 o més nits i 10 o més menors)"
 
-#: templates/tesoreria/banco-asignar.php:64 templates/tesoreria/banco-asignar.php:78
+#: templates/tesoreria/banco-asignar.php:64 templates/tesoreria/banco-asignar.php:78 templates/tesoreria/banco-pedido-ingreso.php:59 templates/tesoreria/banco-pedido-ingreso.php:68
 msgid "Deposit"
 msgstr "Ingrés"
 
@@ -4974,7 +4982,7 @@ msgstr "Ingrés al compte"
 msgid "Deposit or transfer"
 msgstr "Ingrés o transferència"
 
-#: src/Frontend/Views/BancoView.php:443
+#: src/Frontend/Views/BancoView.php:485
 msgid "Deposit reconciled: the payment has been recorded in the family's payment control."
 msgstr "Ingrés conciliat: s'ha registrat el pagament al control de pagaments de la família."
 
@@ -4986,7 +4994,7 @@ msgstr "Ingressos per conciliar"
 msgid "Descending"
 msgstr "Descendent"
 
-#: src/Frontend/Views/BancoView.php:342 src/Frontend/Views/CajaView.php:122 src/Frontend/Views/LibroMayorView.php:86 src/Inventario/Importador.php:36
+#: src/Frontend/Views/BancoView.php:384 src/Frontend/Views/CajaView.php:122 src/Frontend/Views/LibroMayorView.php:86 src/Inventario/Importador.php:36
 msgid "Description"
 msgstr "Descripció"
 
@@ -5014,7 +5022,7 @@ msgstr "Descripció o circular"
 msgid "Description or serial no."
 msgstr "Descripció o núm. de sèrie"
 
-#: templates/tesoreria/banco-asociar.php:52 templates/tesoreria/banco.php:150
+#: templates/tesoreria/banco-asociar.php:52 templates/tesoreria/banco-pedido-ingreso.php:49 templates/tesoreria/banco.php:150
 msgid "Description, payer or reference"
 msgstr "Concepte, ordenant o referència"
 
@@ -5224,7 +5232,7 @@ msgstr "Descarrega en Excel"
 msgid "Download it from online banking (Colonya Directa) in the format"
 msgstr "Descarrega'l de la banca en línia (Colonya Directa) en format"
 
-#: src/Frontend/Views/BancoView.php:242 src/Frontend/Views/BancoView.php:245 src/Frontend/Views/CajaView.php:95 src/Frontend/Views/CajaView.php:98
+#: src/Frontend/Views/BancoView.php:284 src/Frontend/Views/BancoView.php:287 src/Frontend/Views/CajaView.php:95 src/Frontend/Views/CajaView.php:98
 msgid "Download link not valid or expired."
 msgstr "Enllaç de descàrrega no vàlid o caducat."
 
@@ -5816,7 +5824,7 @@ msgstr "Total estimat: %s"
 msgid "Evaluate the camp"
 msgstr "Avaluar l'acampada"
 
-#: src/Eventos/Cuentas.php:542 src/Frontend/Views/BancoView.php:342 templates/email/reintegro.php:39 templates/eventos/agenda.php:69
+#: src/Eventos/Cuentas.php:542 src/Frontend/Views/BancoView.php:384 templates/email/reintegro.php:39 templates/eventos/agenda.php:69
 msgid "Event"
 msgstr "Esdeveniment"
 
@@ -6192,7 +6200,7 @@ msgstr "Inscripció i assegurança de les famílies"
 msgid "Families: the minor's member number followed by a"
 msgstr "Les famílies: número de soci/sòcia del menor seguit d'una"
 
-#: src/Frontend/Views/BancoView.php:342 src/Informes/Catalogo.php:90 templates/eventos/inscripciones.php:377 templates/pagos/mis-pagos.php:45
+#: src/Frontend/Views/BancoView.php:384 src/Informes/Catalogo.php:90 templates/eventos/inscripciones.php:377 templates/pagos/mis-pagos.php:45
 msgid "Family"
 msgstr "Família"
 
@@ -6283,7 +6291,7 @@ msgstr "Compte familiar: germans/es i email"
 msgid "Family email (for the invitation, for signing in and for recovering the password)"
 msgstr "Email de la família (per a la invitació, per entrar i per recuperar la contrasenya)"
 
-#: src/Frontend/Views/TesoreriaView.php:343 templates/tesoreria/familias.php:77 templates/tesoreria/familias.php:86
+#: src/Frontend/Views/TesoreriaView.php:346 templates/tesoreria/familias.php:77 templates/tesoreria/familias.php:86
 msgid "Family no."
 msgstr "Núm. família"
 
@@ -6347,7 +6355,7 @@ msgstr "Cost federatiu ·"
 msgid "Federation fees"
 msgstr "Quotes federatives"
 
-#: src/Frontend/Views/TesoreriaView.php:343 templates/tesoreria/control.php:112 templates/tesoreria/control.php:141 templates/tesoreria/presupuestos.php:65
+#: src/Frontend/Views/TesoreriaView.php:346 templates/tesoreria/control.php:112 templates/tesoreria/control.php:141 templates/tesoreria/presupuestos.php:65
 msgid "Fee"
 msgstr "Quota"
 
@@ -6588,7 +6596,7 @@ msgstr "Per a %d comensals"
 msgid "For %d portions"
 msgstr "Per a %d porcions"
 
-#: src/Frontend/Views/TesoreriaView.php:433
+#: src/Frontend/Views/TesoreriaView.php:436
 msgid "For an event, the payment method is cash, transfer or Bizum."
 msgstr "Per a un esdeveniment, la forma de pagament és efectiu, transferència o Bizum."
 
@@ -6700,7 +6708,7 @@ msgstr "Camps propis del formulari"
 msgid "Format"
 msgstr "Format"
 
-#: src/Frontend/Views/BancoView.php:615
+#: src/Frontend/Views/BancoView.php:660
 msgid "Format not supported: upload the Norma 43 file (.n43, .q43, .aeb, .txt) or a CSV."
 msgstr "Format no admès: puja el fitxer Norma 43 (.n43, .q43, .aeb, .txt) o un CSV."
 
@@ -7799,7 +7807,7 @@ msgid "Import transactions"
 msgstr "Importa moviments"
 
 #. translators: 1: number, 2: text
-#: src/Frontend/Views/BancoView.php:691
+#: src/Frontend/Views/BancoView.php:736
 #, php-format
 msgid "Imported %1$d new transactions%2$s. The file has not been saved."
 msgstr "Importats %1$d moviments nous%2$s. El fitxer no s'ha desat."
@@ -7936,7 +7944,7 @@ msgid "Income"
 msgstr "Ingressos"
 
 #. translators: 1: text, 2: text, 3: text
-#: src/Frontend/Views/BancoView.php:346
+#: src/Frontend/Views/BancoView.php:388
 #, php-format
 msgid "Income %1$s · expenses %2$s · generated on %3$s"
 msgstr "Ingressos %1$s · despeses %2$s · generat el %3$s"
@@ -8121,7 +8129,7 @@ msgstr "Intoleràncies"
 msgid "Invalid CRM identifier."
 msgstr "Identificador de CRM no vàlid."
 
-#: src/Frontend/Views/TesoreriaView.php:414
+#: src/Frontend/Views/TesoreriaView.php:417
 msgid "Invalid family."
 msgstr "Família no vàlida."
 
@@ -8214,7 +8222,7 @@ msgstr "Hi ha piscina o mar?"
 msgid "Is under %d years old and has no document"
 msgstr "Té menys de %d anys i no té document"
 
-#: src/Frontend/Views/TesoreriaView.php:482
+#: src/Frontend/Views/TesoreriaView.php:485
 msgid "It came from the collection of a SEPA batch: the batch still considers it collected."
 msgstr "Venia del cobrament d'una remesa SEPA: la remesa el continua donant per cobrat."
 
@@ -8478,7 +8486,7 @@ msgstr "És el teu rol: no et pots afegir permisos"
 msgid "It leaves the CRM memberships."
 msgstr "Surt de les membresies del CRM."
 
-#: src/Frontend/Views/BancoView.php:619
+#: src/Frontend/Views/BancoView.php:664
 msgid "It looks like an Excel file or another binary format. Download it from the bank as Norma 43 or as CSV."
 msgstr "Sembla un fitxer Excel o un altre format binari. Descarrega'l del banc com a Norma 43 o com a CSV."
 
@@ -8862,7 +8870,7 @@ msgstr "Associar"
 msgid "Link in the website menu (text; empty = no link)"
 msgstr "Enllaç al menú de la web (text; buit = sense enllaç)"
 
-#: src/Frontend/Views/BancoView.php:556 src/Frontend/Views/CajaView.php:182
+#: src/Frontend/Views/BancoView.php:601 src/Frontend/Views/CajaView.php:182
 msgid "Link removed."
 msgstr "Associació treta."
 
@@ -8886,11 +8894,11 @@ msgstr "Moviments del banc associats"
 msgid "Linked transactions"
 msgstr "Moviments associats"
 
-#: src/Frontend/Views/BancoView.php:512
+#: src/Frontend/Views/BancoView.php:554
 msgid "Linked transactions."
 msgstr "Moviments associats."
 
-#: src/Frontend/Views/BancoView.php:342 templates/tesoreria/banco.php:240
+#: src/Frontend/Views/BancoView.php:384 templates/tesoreria/banco.php:240
 msgid "Linked with"
 msgstr "Associat amb"
 
@@ -9368,7 +9376,7 @@ msgstr "Dades del soci/sòcia"
 msgid "Member's first name and surname"
 msgstr "Nom i cognoms del soci/sòcia"
 
-#: src/Frontend/Views/TesoreriaView.php:343 templates/tesoreria/control.php:111 templates/tesoreria/control.php:127 templates/tesoreria/familias.php:78
+#: src/Frontend/Views/TesoreriaView.php:346 templates/tesoreria/control.php:111 templates/tesoreria/control.php:127 templates/tesoreria/familias.php:78
 msgid "Members"
 msgstr "Socis"
 
@@ -10012,7 +10020,7 @@ msgstr "No queda cap moviment: els eliminats són a l'historial."
 msgid "No transaction with a valid date and amount was found. Check the chosen columns."
 msgstr "No s'ha trobat cap moviment amb data i import vàlids. Revisa les columnes triades."
 
-#: src/Frontend/Views/BancoView.php:330 src/Tesoreria/HistorialPagos.php:93 templates/eventos/cuentas.php:143 templates/inventario/lista.php:54
+#: src/Frontend/Views/BancoView.php:372 src/Tesoreria/HistorialPagos.php:93 templates/eventos/cuentas.php:143 templates/inventario/lista.php:54
 msgid "No type"
 msgstr "Sense tipus"
 
@@ -10206,7 +10214,7 @@ msgstr "Encara sense fer servir: el primer cobrament anirà com a FRST."
 msgid "Not yet"
 msgstr "Encara no"
 
-#: src/Frontend/Views/BancoView.php:342 src/Inventario/ListaPdf.php:111 templates/eventos/calendario.php:163 templates/eventos/cuentas.php:406
+#: src/Frontend/Views/BancoView.php:384 src/Inventario/ListaPdf.php:111 templates/eventos/calendario.php:163 templates/eventos/cuentas.php:406
 msgid "Note"
 msgstr "Nota"
 
@@ -10691,7 +10699,7 @@ msgstr "Comanda cancel·lada."
 msgid "Order management"
 msgstr "Gestió de comandes"
 
-#: src/Frontend/Views/BancoView.php:545
+#: src/Frontend/Views/BancoView.php:587
 msgid "Order marked as paid with this deposit."
 msgstr "Comanda marcada com a pagada amb este ingrés."
 
@@ -10715,7 +10723,7 @@ msgstr "Núm. de comanda o comprador"
 msgid "Order of arrival in their section"
 msgstr "Ordre d'arribada a la seva secció"
 
-#: templates/tesoreria/banco-pedido.php:26
+#: templates/tesoreria/banco-pedido-ingreso.php:27 templates/tesoreria/banco-pedido.php:26
 msgid "Order paid"
 msgstr "Comanda pagada"
 
@@ -10929,7 +10937,7 @@ msgstr "Pàgina %s"
 msgid "Pagination"
 msgstr "Paginació"
 
-#: src/Frontend/Views/TesoreriaView.php:40 src/Frontend/Views/TesoreriaView.php:343 src/Frontend/Views/TiendaGestionView.php:315 src/Informes/Catalogo.php:93
+#: src/Frontend/Views/TesoreriaView.php:40 src/Frontend/Views/TesoreriaView.php:346 src/Frontend/Views/TiendaGestionView.php:315 src/Informes/Catalogo.php:93
 msgid "Paid"
 msgstr "Pagat"
 
@@ -11037,7 +11045,15 @@ msgstr "Ingressa'l al banc"
 msgid "Pay this one"
 msgstr "Pagar esta"
 
-#: src/Frontend/Views/BancoView.php:342
+#: templates/tesoreria/banco-pedido-ingreso.php:33 templates/tesoreria/banco-pedido-ingreso.php:39
+msgid "Pay this order with a bank deposit"
+msgstr "Paga aquesta comanda amb un ingrés del banc"
+
+#: templates/tesoreria/control.php:173
+msgid "Pay with a bank deposit"
+msgstr "Paga amb un ingrés del banc"
+
+#: src/Frontend/Views/BancoView.php:384
 msgid "Payer"
 msgstr "Ordenant"
 
@@ -11053,7 +11069,7 @@ msgstr "Pagar en físic a Tresoreria només està disponible per a socis i sòci
 msgid "Payment"
 msgstr "Pagament"
 
-#: src/Frontend/Views/TesoreriaBaseView.php:25 src/Frontend/Views/TesoreriaView.php:342 src/Frontend/Views/TesoreriaView.php:346
+#: src/Frontend/Views/TesoreriaBaseView.php:25 src/Frontend/Views/TesoreriaView.php:345 src/Frontend/Views/TesoreriaView.php:349
 msgid "Payment control"
 msgstr "Control de pagaments"
 
@@ -11108,13 +11124,13 @@ msgid "Payment of %1$s (%2$s) validated on order %3$s."
 msgstr "Pagament de %1$s (%2$s) validat a la comanda %3$s."
 
 #. translators: 1: text, 2: text
-#: src/Frontend/Views/TesoreriaView.php:438
+#: src/Frontend/Views/TesoreriaView.php:441
 #, php-format
 msgid "Payment of %1$s recorded in the event \"%2$s\". It remains in the family's payment history."
 msgstr "Pagament de %1$s registrat a l'esdeveniment «%2$s». Queda a l'historial de pagaments de la família."
 
 #. translators: 1: text, 2: text
-#: src/Frontend/Views/TesoreriaView.php:450
+#: src/Frontend/Views/TesoreriaView.php:453
 #, php-format
 msgid "Payment of %1$s recorded with the bank deposit of %2$s, which is reconciled with this family."
 msgstr "Pagament de %1$s registrat amb l'ingrés del banc del %2$s, que queda conciliat amb aquesta família."
@@ -11138,7 +11154,7 @@ msgid "Payment of %s deleted"
 msgstr "Pagament de %s eliminat"
 
 #. translators: %s: text
-#: src/Frontend/Views/TesoreriaView.php:474
+#: src/Frontend/Views/TesoreriaView.php:477
 #, php-format
 msgid "Payment of %s deleted. It remains in the family's history."
 msgstr "Pagament de %s eliminat. Queda a l'historial de la família."
@@ -11156,7 +11172,7 @@ msgid "Payment of %s recorded and split among the family's sign-ups."
 msgstr "Pagament de %s registrat i repartit entre les inscripcions de la família."
 
 #. translators: %s: text
-#: src/Frontend/Views/EventosView.php:638 src/Frontend/Views/TesoreriaView.php:454
+#: src/Frontend/Views/EventosView.php:638 src/Frontend/Views/TesoreriaView.php:457
 #, php-format
 msgid "Payment of %s recorded."
 msgstr "Pagament de %s registrat."
@@ -11208,7 +11224,7 @@ msgstr "Cacauets"
 msgid "Peas"
 msgstr "Pèsols"
 
-#: src/Eventos/InscripcionesTable.php:54 src/Frontend/Views/TesoreriaView.php:38 src/Frontend/Views/TesoreriaView.php:343 src/Idiomas/Guardados.php:240
+#: src/Eventos/InscripcionesTable.php:54 src/Frontend/Views/TesoreriaView.php:38 src/Frontend/Views/TesoreriaView.php:346 src/Idiomas/Guardados.php:240
 msgid "Pending"
 msgstr "Pendent"
 
@@ -12186,7 +12202,7 @@ msgstr "Referència:"
 msgid "Reference: %s"
 msgstr "Referència: %s"
 
-#: src/Frontend/Views/BancoView.php:342
+#: src/Frontend/Views/BancoView.php:384
 msgid "References"
 msgstr "Referències"
 
@@ -12845,7 +12861,7 @@ msgid "Round"
 msgstr "Ronda"
 
 #. translators: 1: text, 2: text
-#: src/Frontend/Views/TesoreriaView.php:339
+#: src/Frontend/Views/TesoreriaView.php:342
 #, php-format
 msgid "Round %1$s · generated on %2$s"
 msgstr "Ronda %1$s · generat el %2$s"
@@ -13569,7 +13585,7 @@ msgstr "Configura-ho ara"
 msgid "Set the document"
 msgstr "Posa el document"
 
-#: src/Frontend/Views/EventosBaseView.php:14 src/Frontend/Views/TesoreriaView.php:343 src/Frontend/Views/TiendaBaseView.php:36 templates/tesoreria/familia.php:83
+#: src/Frontend/Views/EventosBaseView.php:14 src/Frontend/Views/TesoreriaView.php:346 src/Frontend/Views/TiendaBaseView.php:36 templates/tesoreria/familia.php:83
 msgid "Settings"
 msgstr "Configuració"
 
@@ -13640,6 +13656,10 @@ msgstr "Comanda de la botiga núm. %d"
 #: templates/tienda/gestion.php:48
 msgid "Shop orders"
 msgstr "Comandes de la botiga"
+
+#: templates/tesoreria/control.php:156
+msgid "Shop orders to collect"
+msgstr "Comandes de la botiga per cobrar"
 
 #: templates/tienda/config.php:19
 msgid "Shop · settings"
@@ -14485,7 +14505,7 @@ msgstr "Aquest esdeveniment no existeix."
 msgid "That event is not available. Choose another or leave it without an event."
 msgstr "Aquest esdeveniment no està disponible. Tria'n un altre o deixa-ho sense esdeveniment."
 
-#: src/Frontend/Views/TesoreriaView.php:429
+#: src/Frontend/Views/TesoreriaView.php:432
 msgid "That event is not open for sign-ups or this family has nothing pending in it."
 msgstr "Aquest esdeveniment no està obert a inscripcions o aquesta família no hi té res pendent."
 
@@ -14505,7 +14525,7 @@ msgstr "Aquesta despesa no està pendent de reemborsament."
 msgid "That expense is not pending review."
 msgstr "Aquesta despesa no està per revisar."
 
-#: src/Frontend/Views/TesoreriaView.php:83 src/Frontend/Views/TesoreriaView.php:224 src/Frontend/Views/TesoreriaView.php:241 src/Sepa/Mandatos.php:190
+#: src/Frontend/Views/TesoreriaView.php:83 src/Frontend/Views/TesoreriaView.php:227 src/Frontend/Views/TesoreriaView.php:244 src/Sepa/Mandatos.php:190
 msgid "That family does not exist."
 msgstr "Aquesta família no existeix."
 
@@ -14593,7 +14613,7 @@ msgstr "Aquesta comanda no té res a cobrar."
 msgid "That order is already marked as received."
 msgstr "Aquesta comanda ja està marcada com a rebuda."
 
-#: src/Tienda/ConciliacionBanco.php:98 src/Tienda/ConciliacionBanco.php:151 src/Tienda/ConciliacionBanco.php:176
+#: src/Tienda/ConciliacionBanco.php:98 src/Tienda/ConciliacionBanco.php:151 src/Tienda/ConciliacionBanco.php:176 templates/tesoreria/banco-pedido-ingreso.php:34
 msgid "That order is already paid or cancelled."
 msgstr "Aquesta comanda ja està pagada o cancel·lada."
 
@@ -15089,7 +15109,7 @@ msgstr "L'import ha de ser un número positiu."
 msgid "The amount must be greater than 0."
 msgstr "L'import ha de ser major que 0."
 
-#: templates/tesoreria/banco-pedido.php:71
+#: templates/tesoreria/banco-pedido-ingreso.php:71 templates/tesoreria/banco-pedido.php:71
 msgid "The amount of the deposit is not the amount of the order. Mark the order as paid with this deposit anyway?"
 msgstr "L'import de l'ingrés no és el de la comanda. Vols marcar la comanda com a pagada amb este ingrés igualment?"
 
@@ -15121,7 +15141,7 @@ msgstr "L'autorització l'ha de signar la teva mare, pare o tutor/a des del seu 
 msgid "The bank and each cash box, with their balance at the start and end of the period, and the summary by item. Transfers between the group's accounts appear in each account, but not in the summary."
 msgstr "El banc i cada caixa d'efectiu, amb el seu saldo en començar i en acabar el període, i el resum per partida. Els traspassos entre comptes del grup surten a cada compte, però no al resum."
 
-#: src/Frontend/Views/TesoreriaView.php:431
+#: src/Frontend/Views/TesoreriaView.php:434
 msgid "The bank deposit is only linked to the round's fee. For an event, remove the deposit and record the payment."
 msgstr "L'ingrés del banc només s'associa a la quota de la ronda. Per a un esdeveniment, treu l'ingrés i escriu el pagament."
 
@@ -15130,7 +15150,7 @@ msgid "The bank deposit is pending reconciliation again."
 msgstr "L'ingrés del banc torna a estar per conciliar."
 
 #. translators: %s: text
-#: src/Frontend/Views/TesoreriaView.php:479
+#: src/Frontend/Views/TesoreriaView.php:482
 #, php-format
 msgid "The bank deposit of %s is pending reconciliation again."
 msgstr "L'ingrés del banc del %s torna a estar per conciliar."
@@ -15608,11 +15628,11 @@ msgstr "El fitxer no és un CSV (sembla un full d'Excel o un altre format). Desa
 msgid "The file is too large (at most %d MB)."
 msgstr "El fitxer és massa gran (com a màxim %d MB)."
 
-#: src/Frontend/Views/BancoView.php:612
+#: src/Frontend/Views/BancoView.php:657
 msgid "The file is too large (maximum 5 MB)."
 msgstr "El fitxer és massa gran (màxim 5 MB)."
 
-#: src/Frontend/Views/BancoView.php:607
+#: src/Frontend/Views/BancoView.php:652
 msgid "The file is too large."
 msgstr "El fitxer és massa gran."
 
@@ -16150,7 +16170,7 @@ msgstr "Les places de Scouters i de Voluntariat de suport són les persones de l
 msgid "The postcode must have 5 digits."
 msgstr "El codi postal ha de tenir 5 xifres."
 
-#: src/Frontend/Views/BancoView.php:82 src/Frontend/Views/BancoView.php:639 src/Frontend/Views/BancoView.php:665
+#: src/Frontend/Views/BancoView.php:87 src/Frontend/Views/BancoView.php:684 src/Frontend/Views/BancoView.php:710
 msgid "The preview has expired. Upload the file again."
 msgstr "La vista prèvia ha caducat. Torna a pujar el fitxer."
 
@@ -16909,6 +16929,10 @@ msgstr "No hi ha pressupost de la ronda anterior per copiar."
 msgid "There is no deposit to reconcile with a family, order or event code."
 msgstr "No hi ha cap ingrés per conciliar amb codi de família, comanda o esdeveniment."
 
+#: templates/tesoreria/banco-pedido-ingreso.php:53
+msgid "There is no deposit to reconcile with this filter."
+msgstr "No hi ha cap ingrés per conciliar amb aquest filtre."
+
 #: src/Sepa/Pain008.php:34 src/Sepa/Remesas.php:341
 msgid "There is no direct debit to include."
 msgstr "No hi ha cap càrrec que incloure."
@@ -17304,7 +17328,7 @@ msgstr "Aquesta família ja té els %1$d comptes de tutor/a (%2$s). Per canviar 
 msgid "This field cannot be edited from the website."
 msgstr "Aquest camp no es pot editar des del web."
 
-#: src/Frontend/Views/BancoView.php:669
+#: src/Frontend/Views/BancoView.php:714
 msgid "This file has errors and cannot be imported."
 msgstr "Aquest fitxer té errors i no es pot importar."
 
@@ -17610,7 +17634,7 @@ msgstr "Per donar una bestreta, la persona ha d'estar a l'equip de l'esdevenimen
 msgid "To order from the supplier"
 msgstr "Per demanar al proveïdor"
 
-#: src/Frontend/Views/TesoreriaView.php:343 templates/tesoreria/familia.php:85
+#: src/Frontend/Views/TesoreriaView.php:346 templates/tesoreria/familia.php:85
 msgid "To pay"
 msgstr "A pagar"
 
@@ -17698,7 +17722,7 @@ msgstr "Massa errors: es deixa de llegir el fitxer."
 msgid "Too many failed attempts. Wait a few minutes before trying again or recover your password."
 msgstr "Massa intents fallits. Espera uns minuts abans de tornar-ho a provar o recupera la teva contrasenya."
 
-#: src/Frontend/Views/BancoView.php:348 src/Frontend/Views/CajaView.php:129 src/Frontend/Views/LibroMayorView.php:115 src/Frontend/Views/TesoreriaView.php:350
+#: src/Frontend/Views/BancoView.php:390 src/Frontend/Views/CajaView.php:129 src/Frontend/Views/LibroMayorView.php:115 src/Frontend/Views/TesoreriaView.php:353
 msgid "Total"
 msgstr "Total"
 
@@ -17772,7 +17796,7 @@ msgstr "Moviment anul·lat."
 msgid "Transaction data not valid."
 msgstr "Dades del moviment no vàlides."
 
-#: src/Frontend/Views/BancoView.php:467
+#: src/Frontend/Views/BancoView.php:509
 msgid "Transaction pending again (if it had a payment, it has been cancelled)."
 msgstr "Moviment de nou pendent (si tenia un pagament, s'ha anul·lat)."
 
@@ -17964,11 +17988,11 @@ msgstr "Tipus «%s» creat."
 msgid "Type \"%s\" deleted."
 msgstr "Tipus «%s» esborrat."
 
-#: src/Frontend/Views/BancoView.php:588
+#: src/Frontend/Views/BancoView.php:633
 msgid "Type created."
 msgstr "Tipus creat."
 
-#: src/Frontend/Views/BancoView.php:588
+#: src/Frontend/Views/BancoView.php:633
 msgid "Type deleted."
 msgstr "Tipus esborrat."
 
@@ -17976,11 +18000,11 @@ msgstr "Tipus esborrat."
 msgid "Type of diet"
 msgstr "Tipus de règim"
 
-#: src/Frontend/Views/BancoView.php:342 templates/tesoreria/banco.php:164 templates/tesoreria/caja.php:179
+#: src/Frontend/Views/BancoView.php:384 templates/tesoreria/banco.php:164 templates/tesoreria/caja.php:179
 msgid "Type of expense or income"
 msgstr "Tipus de despesa o ingrés"
 
-#: src/Frontend/Views/BancoView.php:588
+#: src/Frontend/Views/BancoView.php:633
 msgid "Type saved."
 msgstr "Tipus desat."
 
@@ -18082,7 +18106,7 @@ msgstr "Unitats tornades"
 msgid "Units to buy, line %d"
 msgstr "Unitats a comprar, línia %d"
 
-#: src/Frontend/Views/AltaUsuariosView.php:197 src/Frontend/Views/BancoView.php:595 src/Frontend/Views/CajaView.php:188 src/Frontend/Views/EventosView.php:502
+#: src/Frontend/Views/AltaUsuariosView.php:197 src/Frontend/Views/BancoView.php:640 src/Frontend/Views/CajaView.php:188 src/Frontend/Views/EventosView.php:502
 msgid "Unknown action."
 msgstr "Acció desconeguda."
 
@@ -18097,6 +18121,10 @@ msgstr "Error desconegut"
 #: templates/tienda/config.php:40
 msgid "Unpaid orders"
 msgstr "Comandes sense pagar"
+
+#: templates/tesoreria/control.php:157
+msgid "Unpaid orders of the shop. Pay one with the bank deposit that covers it (the same can be done from the shop and from the bank)."
+msgstr "Comandes de la botiga sense pagar. Paga'n una amb l'ingrés del banc que la cobreix (el mateix es pot fer des de la botiga i des del banc)."
 
 #: templates/tienda/informe.php:34
 msgid "Until"
@@ -18161,6 +18189,10 @@ msgstr "Pujar fotos de l'acampada a la web del grup"
 #: src/Admin/SettingsPage.php:224
 msgid "Use in each group a CRM user dedicated to the website, which sees only its own group. With edit permission on Contacts, the private area allows editing records; with a read-only role, everything is shown read-only."
 msgstr "Fes servir a cada grup un usuari del CRM dedicat al web, que vegi només el seu grup. Amb permís d'edició a Contactes, l'àrea privada permet editar fitxes; amb un rol de només lectura, tot es mostra en mode de lectura."
+
+#: templates/tesoreria/banco-pedido-ingreso.php:81
+msgid "Use this one"
+msgstr "Fes servir aquest"
 
 #: src/Admin/OrganizacionPage.php:213 templates/comun/ayuda.php:28
 msgid "User manual"
@@ -18232,7 +18264,7 @@ msgstr "Validat per %1$s el %2$s"
 msgid "Validated on %2$s"
 msgstr "Validat el %2$s"
 
-#: src/Frontend/Views/BancoView.php:342 src/Tesoreria/Banco/CsvBanco.php:25
+#: src/Frontend/Views/BancoView.php:384 src/Tesoreria/Banco/CsvBanco.php:25
 msgid "Value date"
 msgstr "Data valor"
 
@@ -19003,7 +19035,7 @@ msgstr "Baixa"
 msgid "Withdrawal date"
 msgstr "Data de baixa"
 
-#: src/Frontend/Views/TesoreriaView.php:407
+#: src/Frontend/Views/TesoreriaView.php:410
 msgid "Withdrawal marked as seen."
 msgstr "Baixa marcada com a vista."
 
@@ -19409,11 +19441,11 @@ msgstr "No tens cap secció assignada per preparar-ne el pressupost."
 msgid "You have no sections assigned (or they do not match those of the report). Ask the Secretary's office to check your registration."
 msgstr "No tens seccions assignades (o no coincideixen amb les de l'informe). Demana a Secretaria que revisi la teva alta."
 
-#: src/Frontend/Views/BancoView.php:532
+#: src/Frontend/Views/BancoView.php:574
 msgid "You have not chosen any deposit."
 msgstr "No has triat cap ingrés."
 
-#: src/Frontend/Views/BancoView.php:496
+#: src/Frontend/Views/BancoView.php:538
 msgid "You have not chosen any transaction."
 msgstr "No has triat cap moviment."
 
@@ -20817,7 +20849,7 @@ msgstr "← Fitxa de %s"
 msgid "← Agenda"
 msgstr "← Agenda"
 
-#: templates/eventos/asistente.php:257
+#: templates/eventos/asistente.php:257 templates/tesoreria/banco-pedido-ingreso.php:29 templates/tesoreria/banco-pedido-ingreso.php:35 templates/tesoreria/banco-pedido-ingreso.php:89
 msgid "← Back"
 msgstr "← Torna"
 

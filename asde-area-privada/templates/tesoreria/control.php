@@ -150,3 +150,30 @@ $pct = $resumen['a_pagar'] > 0 ? round( 100 * $resumen['pagado'] / $resumen['a_p
 	<?php endif; ?>
 	</div>
 </section>
+
+<?php if ( ! empty( $pedidos ) ) : // v0.64.18: pedidos de la tienda por cobrar, para pagarlos con un ingreso del banco. ?>
+<section class="asde-card" data-asde-inicio="cerrado">
+	<h2 class="asde-card__title"><?php esc_html_e( 'Shop orders to collect', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h2>
+	<p class="asde-muted"><?php esc_html_e( 'Unpaid orders of the shop. Pay one with the bank deposit that covers it (the same can be done from the shop and from the bank).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
+	<table class="asde-table" data-asde-paginar>
+		<thead>
+			<tr>
+				<th scope="col"><?php esc_html_e( 'Order', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
+				<th scope="col"><?php esc_html_e( 'Buyer', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
+				<th scope="col"><?php esc_html_e( 'Amount', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
+				<th scope="col"><span class="screen-reader-text"><?php esc_html_e( 'Actions', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span></th>
+			</tr>
+		</thead>
+		<tbody>
+			<?php foreach ( $pedidos as $ped ) : ?>
+				<tr>
+					<td data-label="<?php echo esc_attr( esc_attr__( 'Order', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><strong><?php echo esc_html( \AsdeBalears\AreaPrivada\Tienda\PedidosTable::numero( $ped ) ); ?></strong></td>
+					<td data-label="<?php echo esc_attr( esc_attr__( 'Buyer', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( $ped['comprador'] ); ?></td>
+					<td data-label="<?php echo esc_attr( esc_attr__( 'Amount', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>" class="asde-importe"><?php echo esc_html( Calculadora::euros( $ped['a_cobrar'] ) ); ?></td>
+					<td data-label=""><a href="<?php echo esc_url( add_query_arg( array( 'pagar_pedido' => (int) $ped['id'], 'volver' => rawurlencode( add_query_arg( array() ) ) ), $url_banco ) ); ?>" data-asde-modal><?php esc_html_e( 'Pay with a bank deposit', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a></td>
+				</tr>
+			<?php endforeach; ?>
+		</tbody>
+	</table>
+</section>
+<?php endif; ?>

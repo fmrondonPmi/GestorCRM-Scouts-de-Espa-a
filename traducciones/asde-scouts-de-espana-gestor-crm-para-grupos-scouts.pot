@@ -8,7 +8,7 @@ msgstr ""
 "X-Domain: asde-scouts-de-espana-gestor-crm-para-grupos-scouts\n"
 
 #. translators: %d: number
-#: src/Frontend/Views/BancoView.php:691
+#: src/Frontend/Views/BancoView.php:736
 #, php-format
 msgid " (%d were already imported and have been ignored)"
 msgstr ""
@@ -657,7 +657,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %d: number
-#: src/Frontend/Views/BancoView.php:523
+#: src/Frontend/Views/BancoView.php:565
 #, php-format
 msgid "%d deposit assigned."
 msgid_plural "%d deposits assigned."
@@ -673,7 +673,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %d: number
-#: src/Frontend/Views/BancoView.php:526
+#: src/Frontend/Views/BancoView.php:568
 #, php-format
 msgid "%d deposit was already reviewed and has not been touched."
 msgid_plural "%d deposits were already reviewed and have not been touched."
@@ -681,7 +681,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %d: number
-#: src/Frontend/Views/BancoView.php:457
+#: src/Frontend/Views/BancoView.php:499
 #, php-format
 msgid "%d deposits reconciled by their family reference."
 msgstr ""
@@ -747,7 +747,7 @@ msgid "%d families could not be notified by email (no email or no account): noti
 msgstr ""
 
 #. translators: %d: number
-#: src/Frontend/Views/TesoreriaView.php:350
+#: src/Frontend/Views/TesoreriaView.php:353
 #, php-format
 msgid "%d family"
 msgid_plural "%d families"
@@ -1063,7 +1063,7 @@ msgid "%d to review"
 msgstr ""
 
 #. translators: %d: number
-#: src/Frontend/Views/BancoView.php:348 templates/tesoreria/banco.php:309
+#: src/Frontend/Views/BancoView.php:390 templates/tesoreria/banco.php:309
 #, php-format
 msgid "%d transaction"
 msgid_plural "%d transactions"
@@ -1071,7 +1071,7 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %d: number
-#: src/Frontend/Views/BancoView.php:490
+#: src/Frontend/Views/BancoView.php:532
 #, php-format
 msgid "%d transaction marked as reviewed."
 msgid_plural "%d transactions marked as reviewed."
@@ -2162,7 +2162,7 @@ msgid "Adjustment of %s recorded"
 msgstr ""
 
 #. translators: %s: text
-#: src/Frontend/Views/TesoreriaView.php:459
+#: src/Frontend/Views/TesoreriaView.php:462
 #, php-format
 msgid "Adjustment of %s recorded."
 msgstr ""
@@ -2174,7 +2174,7 @@ msgid "Adjustment of %s removed"
 msgstr ""
 
 #. translators: %s: text
-#: src/Frontend/Views/TesoreriaView.php:476
+#: src/Frontend/Views/TesoreriaView.php:479
 #, php-format
 msgid "Adjustment of %s removed. It remains in the family's history."
 msgstr ""
@@ -2418,7 +2418,7 @@ msgstr ""
 msgid "Always"
 msgstr ""
 
-#: src/Frontend/Views/BancoView.php:342 src/Frontend/Views/TiendaGestionView.php:248 src/Frontend/Views/TiendaGestionView.php:262 src/Frontend/Views/TiendaGestionView.php:276
+#: src/Frontend/Views/BancoView.php:384 src/Frontend/Views/TiendaGestionView.php:248 src/Frontend/Views/TiendaGestionView.php:262 src/Frontend/Views/TiendaGestionView.php:276
 msgid "Amount"
 msgstr ""
 
@@ -3031,11 +3031,11 @@ msgstr ""
 msgid "Bank report"
 msgstr ""
 
-#: src/Frontend/Views/BancoView.php:344
+#: src/Frontend/Views/BancoView.php:386
 msgid "Bank transactions"
 msgstr ""
 
-#: src/Frontend/Views/TesoreriaView.php:83 src/Frontend/Views/TesoreriaView.php:445
+#: src/Frontend/Views/TesoreriaView.php:83 src/Frontend/Views/TesoreriaView.php:448
 msgid "Bank transactions are only used by the Secretary's office, Coordination and Treasury."
 msgstr ""
 
@@ -3257,6 +3257,10 @@ msgstr ""
 msgid "Buy in the shop"
 msgstr ""
 
+#: templates/tesoreria/control.php:162 templates/tesoreria/control.php:171
+msgid "Buyer"
+msgstr ""
+
 #: templates/tesoreria/banco.php:106 templates/tesoreria/banco.php:116
 msgid "By"
 msgstr ""
@@ -3307,7 +3311,7 @@ msgstr ""
 msgid "CRM data, read-only: not stored on the website. If something is wrong, correct it in the CRM."
 msgstr ""
 
-#: src/Frontend/Views/TesoreriaView.php:317 src/Usuarios/AltaScouterService.php:118
+#: src/Frontend/Views/TesoreriaView.php:320 src/Usuarios/AltaScouterService.php:118
 msgid "CRM not configured."
 msgstr ""
 
@@ -3801,7 +3805,7 @@ msgstr ""
 msgid "Children"
 msgstr ""
 
-#: src/Frontend/Views/TesoreriaView.php:343 templates/tesoreria/control.php:34
+#: src/Frontend/Views/TesoreriaView.php:346 templates/tesoreria/control.php:34
 msgid "Children who pay"
 msgstr ""
 
@@ -3957,7 +3961,7 @@ msgstr ""
 msgid "Choose the bank transaction that corresponds to this transfer: that way the general ledger does not count it as an expense or income. Those of the same amount come first."
 msgstr ""
 
-#: src/Frontend/Views/BancoView.php:607
+#: src/Frontend/Views/BancoView.php:652
 msgid "Choose the bank transactions file."
 msgstr ""
 
@@ -3975,6 +3979,10 @@ msgstr ""
 
 #: src/Frontend/Views/AccesosView.php:319
 msgid "Choose the date until which the permission is valid, or \"No expiry\"."
+msgstr ""
+
+#: templates/tesoreria/banco-pedido-ingreso.php:44
+msgid "Choose the deposit that pays this order: it is marked as paid with the date and amount of the deposit. The ones with the order number or the same amount come first."
 msgstr ""
 
 #: src/Tesoreria/Banco/Conciliacion.php:213
@@ -4149,7 +4157,7 @@ msgstr ""
 msgid "Close this window to go back to the cash box: it now shows the update."
 msgstr ""
 
-#: templates/tesoreria/banco-asignar.php:42 templates/tesoreria/banco-asociar.php:28 templates/tesoreria/banco-pedido.php:27 templates/tesoreria/banco-revisado.php:12
+#: templates/tesoreria/banco-asignar.php:42 templates/tesoreria/banco-asociar.php:28 templates/tesoreria/banco-pedido-ingreso.php:28 templates/tesoreria/banco-pedido.php:27
 msgid "Close this window to go back to the list: it now shows the update."
 msgstr ""
 
@@ -4699,7 +4707,7 @@ msgstr ""
 msgid "Cut-off age for youth members (years)"
 msgstr ""
 
-#: src/Frontend/Views/BancoView.php:342 src/Frontend/Views/CajaView.php:122 src/Frontend/Views/LibroMayorView.php:86 src/Frontend/Views/TiendaGestionView.php:262
+#: src/Frontend/Views/BancoView.php:384 src/Frontend/Views/CajaView.php:122 src/Frontend/Views/LibroMayorView.php:86 src/Frontend/Views/TiendaGestionView.php:262
 msgid "Date"
 msgstr ""
 
@@ -4912,7 +4920,7 @@ msgstr ""
 msgid "Delete…"
 msgstr ""
 
-#: src/Frontend/Views/TesoreriaView.php:465
+#: src/Frontend/Views/TesoreriaView.php:468
 msgid "Deleting a payment or an adjustment is done by Treasury."
 msgstr ""
 
@@ -4960,7 +4968,7 @@ msgstr ""
 msgid "Depending on nights and minors (2 or more nights and 10 or more minors)"
 msgstr ""
 
-#: templates/tesoreria/banco-asignar.php:64 templates/tesoreria/banco-asignar.php:78
+#: templates/tesoreria/banco-asignar.php:64 templates/tesoreria/banco-asignar.php:78 templates/tesoreria/banco-pedido-ingreso.php:59 templates/tesoreria/banco-pedido-ingreso.php:68
 msgid "Deposit"
 msgstr ""
 
@@ -4972,7 +4980,7 @@ msgstr ""
 msgid "Deposit or transfer"
 msgstr ""
 
-#: src/Frontend/Views/BancoView.php:443
+#: src/Frontend/Views/BancoView.php:485
 msgid "Deposit reconciled: the payment has been recorded in the family's payment control."
 msgstr ""
 
@@ -4984,7 +4992,7 @@ msgstr ""
 msgid "Descending"
 msgstr ""
 
-#: src/Frontend/Views/BancoView.php:342 src/Frontend/Views/CajaView.php:122 src/Frontend/Views/LibroMayorView.php:86 src/Inventario/Importador.php:36
+#: src/Frontend/Views/BancoView.php:384 src/Frontend/Views/CajaView.php:122 src/Frontend/Views/LibroMayorView.php:86 src/Inventario/Importador.php:36
 msgid "Description"
 msgstr ""
 
@@ -5012,7 +5020,7 @@ msgstr ""
 msgid "Description or serial no."
 msgstr ""
 
-#: templates/tesoreria/banco-asociar.php:52 templates/tesoreria/banco.php:150
+#: templates/tesoreria/banco-asociar.php:52 templates/tesoreria/banco-pedido-ingreso.php:49 templates/tesoreria/banco.php:150
 msgid "Description, payer or reference"
 msgstr ""
 
@@ -5222,7 +5230,7 @@ msgstr ""
 msgid "Download it from online banking (Colonya Directa) in the format"
 msgstr ""
 
-#: src/Frontend/Views/BancoView.php:242 src/Frontend/Views/BancoView.php:245 src/Frontend/Views/CajaView.php:95 src/Frontend/Views/CajaView.php:98
+#: src/Frontend/Views/BancoView.php:284 src/Frontend/Views/BancoView.php:287 src/Frontend/Views/CajaView.php:95 src/Frontend/Views/CajaView.php:98
 msgid "Download link not valid or expired."
 msgstr ""
 
@@ -5814,7 +5822,7 @@ msgstr ""
 msgid "Evaluate the camp"
 msgstr ""
 
-#: src/Eventos/Cuentas.php:542 src/Frontend/Views/BancoView.php:342 templates/email/reintegro.php:39 templates/eventos/agenda.php:69
+#: src/Eventos/Cuentas.php:542 src/Frontend/Views/BancoView.php:384 templates/email/reintegro.php:39 templates/eventos/agenda.php:69
 msgid "Event"
 msgstr ""
 
@@ -6190,7 +6198,7 @@ msgstr ""
 msgid "Families: the minor's member number followed by a"
 msgstr ""
 
-#: src/Frontend/Views/BancoView.php:342 src/Informes/Catalogo.php:90 templates/eventos/inscripciones.php:377 templates/pagos/mis-pagos.php:45
+#: src/Frontend/Views/BancoView.php:384 src/Informes/Catalogo.php:90 templates/eventos/inscripciones.php:377 templates/pagos/mis-pagos.php:45
 msgid "Family"
 msgstr ""
 
@@ -6281,7 +6289,7 @@ msgstr ""
 msgid "Family email (for the invitation, for signing in and for recovering the password)"
 msgstr ""
 
-#: src/Frontend/Views/TesoreriaView.php:343 templates/tesoreria/familias.php:77 templates/tesoreria/familias.php:86
+#: src/Frontend/Views/TesoreriaView.php:346 templates/tesoreria/familias.php:77 templates/tesoreria/familias.php:86
 msgid "Family no."
 msgstr ""
 
@@ -6345,7 +6353,7 @@ msgstr ""
 msgid "Federation fees"
 msgstr ""
 
-#: src/Frontend/Views/TesoreriaView.php:343 templates/tesoreria/control.php:112 templates/tesoreria/control.php:141 templates/tesoreria/presupuestos.php:65
+#: src/Frontend/Views/TesoreriaView.php:346 templates/tesoreria/control.php:112 templates/tesoreria/control.php:141 templates/tesoreria/presupuestos.php:65
 msgid "Fee"
 msgstr ""
 
@@ -6586,7 +6594,7 @@ msgstr ""
 msgid "For %d portions"
 msgstr ""
 
-#: src/Frontend/Views/TesoreriaView.php:433
+#: src/Frontend/Views/TesoreriaView.php:436
 msgid "For an event, the payment method is cash, transfer or Bizum."
 msgstr ""
 
@@ -6698,7 +6706,7 @@ msgstr ""
 msgid "Format"
 msgstr ""
 
-#: src/Frontend/Views/BancoView.php:615
+#: src/Frontend/Views/BancoView.php:660
 msgid "Format not supported: upload the Norma 43 file (.n43, .q43, .aeb, .txt) or a CSV."
 msgstr ""
 
@@ -7797,7 +7805,7 @@ msgid "Import transactions"
 msgstr ""
 
 #. translators: 1: number, 2: text
-#: src/Frontend/Views/BancoView.php:691
+#: src/Frontend/Views/BancoView.php:736
 #, php-format
 msgid "Imported %1$d new transactions%2$s. The file has not been saved."
 msgstr ""
@@ -7934,7 +7942,7 @@ msgid "Income"
 msgstr ""
 
 #. translators: 1: text, 2: text, 3: text
-#: src/Frontend/Views/BancoView.php:346
+#: src/Frontend/Views/BancoView.php:388
 #, php-format
 msgid "Income %1$s · expenses %2$s · generated on %3$s"
 msgstr ""
@@ -8119,7 +8127,7 @@ msgstr ""
 msgid "Invalid CRM identifier."
 msgstr ""
 
-#: src/Frontend/Views/TesoreriaView.php:414
+#: src/Frontend/Views/TesoreriaView.php:417
 msgid "Invalid family."
 msgstr ""
 
@@ -8212,7 +8220,7 @@ msgstr ""
 msgid "Is under %d years old and has no document"
 msgstr ""
 
-#: src/Frontend/Views/TesoreriaView.php:482
+#: src/Frontend/Views/TesoreriaView.php:485
 msgid "It came from the collection of a SEPA batch: the batch still considers it collected."
 msgstr ""
 
@@ -8476,7 +8484,7 @@ msgstr ""
 msgid "It leaves the CRM memberships."
 msgstr ""
 
-#: src/Frontend/Views/BancoView.php:619
+#: src/Frontend/Views/BancoView.php:664
 msgid "It looks like an Excel file or another binary format. Download it from the bank as Norma 43 or as CSV."
 msgstr ""
 
@@ -8860,7 +8868,7 @@ msgstr ""
 msgid "Link in the website menu (text; empty = no link)"
 msgstr ""
 
-#: src/Frontend/Views/BancoView.php:556 src/Frontend/Views/CajaView.php:182
+#: src/Frontend/Views/BancoView.php:601 src/Frontend/Views/CajaView.php:182
 msgid "Link removed."
 msgstr ""
 
@@ -8884,11 +8892,11 @@ msgstr ""
 msgid "Linked transactions"
 msgstr ""
 
-#: src/Frontend/Views/BancoView.php:512
+#: src/Frontend/Views/BancoView.php:554
 msgid "Linked transactions."
 msgstr ""
 
-#: src/Frontend/Views/BancoView.php:342 templates/tesoreria/banco.php:240
+#: src/Frontend/Views/BancoView.php:384 templates/tesoreria/banco.php:240
 msgid "Linked with"
 msgstr ""
 
@@ -9366,7 +9374,7 @@ msgstr ""
 msgid "Member's first name and surname"
 msgstr ""
 
-#: src/Frontend/Views/TesoreriaView.php:343 templates/tesoreria/control.php:111 templates/tesoreria/control.php:127 templates/tesoreria/familias.php:78
+#: src/Frontend/Views/TesoreriaView.php:346 templates/tesoreria/control.php:111 templates/tesoreria/control.php:127 templates/tesoreria/familias.php:78
 msgid "Members"
 msgstr ""
 
@@ -10010,7 +10018,7 @@ msgstr ""
 msgid "No transaction with a valid date and amount was found. Check the chosen columns."
 msgstr ""
 
-#: src/Frontend/Views/BancoView.php:330 src/Tesoreria/HistorialPagos.php:93 templates/eventos/cuentas.php:143 templates/inventario/lista.php:54
+#: src/Frontend/Views/BancoView.php:372 src/Tesoreria/HistorialPagos.php:93 templates/eventos/cuentas.php:143 templates/inventario/lista.php:54
 msgid "No type"
 msgstr ""
 
@@ -10204,7 +10212,7 @@ msgstr ""
 msgid "Not yet"
 msgstr ""
 
-#: src/Frontend/Views/BancoView.php:342 src/Inventario/ListaPdf.php:111 templates/eventos/calendario.php:163 templates/eventos/cuentas.php:406
+#: src/Frontend/Views/BancoView.php:384 src/Inventario/ListaPdf.php:111 templates/eventos/calendario.php:163 templates/eventos/cuentas.php:406
 msgid "Note"
 msgstr ""
 
@@ -10689,7 +10697,7 @@ msgstr ""
 msgid "Order management"
 msgstr ""
 
-#: src/Frontend/Views/BancoView.php:545
+#: src/Frontend/Views/BancoView.php:587
 msgid "Order marked as paid with this deposit."
 msgstr ""
 
@@ -10713,7 +10721,7 @@ msgstr ""
 msgid "Order of arrival in their section"
 msgstr ""
 
-#: templates/tesoreria/banco-pedido.php:26
+#: templates/tesoreria/banco-pedido-ingreso.php:27 templates/tesoreria/banco-pedido.php:26
 msgid "Order paid"
 msgstr ""
 
@@ -10927,7 +10935,7 @@ msgstr ""
 msgid "Pagination"
 msgstr ""
 
-#: src/Frontend/Views/TesoreriaView.php:40 src/Frontend/Views/TesoreriaView.php:343 src/Frontend/Views/TiendaGestionView.php:315 src/Informes/Catalogo.php:93
+#: src/Frontend/Views/TesoreriaView.php:40 src/Frontend/Views/TesoreriaView.php:346 src/Frontend/Views/TiendaGestionView.php:315 src/Informes/Catalogo.php:93
 msgid "Paid"
 msgstr ""
 
@@ -11035,7 +11043,15 @@ msgstr ""
 msgid "Pay this one"
 msgstr ""
 
-#: src/Frontend/Views/BancoView.php:342
+#: templates/tesoreria/banco-pedido-ingreso.php:33 templates/tesoreria/banco-pedido-ingreso.php:39
+msgid "Pay this order with a bank deposit"
+msgstr ""
+
+#: templates/tesoreria/control.php:173
+msgid "Pay with a bank deposit"
+msgstr ""
+
+#: src/Frontend/Views/BancoView.php:384
 msgid "Payer"
 msgstr ""
 
@@ -11051,7 +11067,7 @@ msgstr ""
 msgid "Payment"
 msgstr ""
 
-#: src/Frontend/Views/TesoreriaBaseView.php:25 src/Frontend/Views/TesoreriaView.php:342 src/Frontend/Views/TesoreriaView.php:346
+#: src/Frontend/Views/TesoreriaBaseView.php:25 src/Frontend/Views/TesoreriaView.php:345 src/Frontend/Views/TesoreriaView.php:349
 msgid "Payment control"
 msgstr ""
 
@@ -11106,13 +11122,13 @@ msgid "Payment of %1$s (%2$s) validated on order %3$s."
 msgstr ""
 
 #. translators: 1: text, 2: text
-#: src/Frontend/Views/TesoreriaView.php:438
+#: src/Frontend/Views/TesoreriaView.php:441
 #, php-format
 msgid "Payment of %1$s recorded in the event \"%2$s\". It remains in the family's payment history."
 msgstr ""
 
 #. translators: 1: text, 2: text
-#: src/Frontend/Views/TesoreriaView.php:450
+#: src/Frontend/Views/TesoreriaView.php:453
 #, php-format
 msgid "Payment of %1$s recorded with the bank deposit of %2$s, which is reconciled with this family."
 msgstr ""
@@ -11136,7 +11152,7 @@ msgid "Payment of %s deleted"
 msgstr ""
 
 #. translators: %s: text
-#: src/Frontend/Views/TesoreriaView.php:474
+#: src/Frontend/Views/TesoreriaView.php:477
 #, php-format
 msgid "Payment of %s deleted. It remains in the family's history."
 msgstr ""
@@ -11154,7 +11170,7 @@ msgid "Payment of %s recorded and split among the family's sign-ups."
 msgstr ""
 
 #. translators: %s: text
-#: src/Frontend/Views/EventosView.php:638 src/Frontend/Views/TesoreriaView.php:454
+#: src/Frontend/Views/EventosView.php:638 src/Frontend/Views/TesoreriaView.php:457
 #, php-format
 msgid "Payment of %s recorded."
 msgstr ""
@@ -11206,7 +11222,7 @@ msgstr ""
 msgid "Peas"
 msgstr ""
 
-#: src/Eventos/InscripcionesTable.php:54 src/Frontend/Views/TesoreriaView.php:38 src/Frontend/Views/TesoreriaView.php:343 src/Idiomas/Guardados.php:240
+#: src/Eventos/InscripcionesTable.php:54 src/Frontend/Views/TesoreriaView.php:38 src/Frontend/Views/TesoreriaView.php:346 src/Idiomas/Guardados.php:240
 msgid "Pending"
 msgstr ""
 
@@ -12184,7 +12200,7 @@ msgstr ""
 msgid "Reference: %s"
 msgstr ""
 
-#: src/Frontend/Views/BancoView.php:342
+#: src/Frontend/Views/BancoView.php:384
 msgid "References"
 msgstr ""
 
@@ -12843,7 +12859,7 @@ msgid "Round"
 msgstr ""
 
 #. translators: 1: text, 2: text
-#: src/Frontend/Views/TesoreriaView.php:339
+#: src/Frontend/Views/TesoreriaView.php:342
 #, php-format
 msgid "Round %1$s · generated on %2$s"
 msgstr ""
@@ -13567,7 +13583,7 @@ msgstr ""
 msgid "Set the document"
 msgstr ""
 
-#: src/Frontend/Views/EventosBaseView.php:14 src/Frontend/Views/TesoreriaView.php:343 src/Frontend/Views/TiendaBaseView.php:36 templates/tesoreria/familia.php:83
+#: src/Frontend/Views/EventosBaseView.php:14 src/Frontend/Views/TesoreriaView.php:346 src/Frontend/Views/TiendaBaseView.php:36 templates/tesoreria/familia.php:83
 msgid "Settings"
 msgstr ""
 
@@ -13637,6 +13653,10 @@ msgstr ""
 
 #: templates/tienda/gestion.php:48
 msgid "Shop orders"
+msgstr ""
+
+#: templates/tesoreria/control.php:156
+msgid "Shop orders to collect"
 msgstr ""
 
 #: templates/tienda/config.php:19
@@ -14483,7 +14503,7 @@ msgstr ""
 msgid "That event is not available. Choose another or leave it without an event."
 msgstr ""
 
-#: src/Frontend/Views/TesoreriaView.php:429
+#: src/Frontend/Views/TesoreriaView.php:432
 msgid "That event is not open for sign-ups or this family has nothing pending in it."
 msgstr ""
 
@@ -14503,7 +14523,7 @@ msgstr ""
 msgid "That expense is not pending review."
 msgstr ""
 
-#: src/Frontend/Views/TesoreriaView.php:83 src/Frontend/Views/TesoreriaView.php:224 src/Frontend/Views/TesoreriaView.php:241 src/Sepa/Mandatos.php:190
+#: src/Frontend/Views/TesoreriaView.php:83 src/Frontend/Views/TesoreriaView.php:227 src/Frontend/Views/TesoreriaView.php:244 src/Sepa/Mandatos.php:190
 msgid "That family does not exist."
 msgstr ""
 
@@ -14591,7 +14611,7 @@ msgstr ""
 msgid "That order is already marked as received."
 msgstr ""
 
-#: src/Tienda/ConciliacionBanco.php:98 src/Tienda/ConciliacionBanco.php:151 src/Tienda/ConciliacionBanco.php:176
+#: src/Tienda/ConciliacionBanco.php:98 src/Tienda/ConciliacionBanco.php:151 src/Tienda/ConciliacionBanco.php:176 templates/tesoreria/banco-pedido-ingreso.php:34
 msgid "That order is already paid or cancelled."
 msgstr ""
 
@@ -15087,7 +15107,7 @@ msgstr ""
 msgid "The amount must be greater than 0."
 msgstr ""
 
-#: templates/tesoreria/banco-pedido.php:71
+#: templates/tesoreria/banco-pedido-ingreso.php:71 templates/tesoreria/banco-pedido.php:71
 msgid "The amount of the deposit is not the amount of the order. Mark the order as paid with this deposit anyway?"
 msgstr ""
 
@@ -15119,7 +15139,7 @@ msgstr ""
 msgid "The bank and each cash box, with their balance at the start and end of the period, and the summary by item. Transfers between the group's accounts appear in each account, but not in the summary."
 msgstr ""
 
-#: src/Frontend/Views/TesoreriaView.php:431
+#: src/Frontend/Views/TesoreriaView.php:434
 msgid "The bank deposit is only linked to the round's fee. For an event, remove the deposit and record the payment."
 msgstr ""
 
@@ -15128,7 +15148,7 @@ msgid "The bank deposit is pending reconciliation again."
 msgstr ""
 
 #. translators: %s: text
-#: src/Frontend/Views/TesoreriaView.php:479
+#: src/Frontend/Views/TesoreriaView.php:482
 #, php-format
 msgid "The bank deposit of %s is pending reconciliation again."
 msgstr ""
@@ -15606,11 +15626,11 @@ msgstr ""
 msgid "The file is too large (at most %d MB)."
 msgstr ""
 
-#: src/Frontend/Views/BancoView.php:612
+#: src/Frontend/Views/BancoView.php:657
 msgid "The file is too large (maximum 5 MB)."
 msgstr ""
 
-#: src/Frontend/Views/BancoView.php:607
+#: src/Frontend/Views/BancoView.php:652
 msgid "The file is too large."
 msgstr ""
 
@@ -16148,7 +16168,7 @@ msgstr ""
 msgid "The postcode must have 5 digits."
 msgstr ""
 
-#: src/Frontend/Views/BancoView.php:82 src/Frontend/Views/BancoView.php:639 src/Frontend/Views/BancoView.php:665
+#: src/Frontend/Views/BancoView.php:87 src/Frontend/Views/BancoView.php:684 src/Frontend/Views/BancoView.php:710
 msgid "The preview has expired. Upload the file again."
 msgstr ""
 
@@ -16907,6 +16927,10 @@ msgstr ""
 msgid "There is no deposit to reconcile with a family, order or event code."
 msgstr ""
 
+#: templates/tesoreria/banco-pedido-ingreso.php:53
+msgid "There is no deposit to reconcile with this filter."
+msgstr ""
+
 #: src/Sepa/Pain008.php:34 src/Sepa/Remesas.php:341
 msgid "There is no direct debit to include."
 msgstr ""
@@ -17302,7 +17326,7 @@ msgstr ""
 msgid "This field cannot be edited from the website."
 msgstr ""
 
-#: src/Frontend/Views/BancoView.php:669
+#: src/Frontend/Views/BancoView.php:714
 msgid "This file has errors and cannot be imported."
 msgstr ""
 
@@ -17608,7 +17632,7 @@ msgstr ""
 msgid "To order from the supplier"
 msgstr ""
 
-#: src/Frontend/Views/TesoreriaView.php:343 templates/tesoreria/familia.php:85
+#: src/Frontend/Views/TesoreriaView.php:346 templates/tesoreria/familia.php:85
 msgid "To pay"
 msgstr ""
 
@@ -17696,7 +17720,7 @@ msgstr ""
 msgid "Too many failed attempts. Wait a few minutes before trying again or recover your password."
 msgstr ""
 
-#: src/Frontend/Views/BancoView.php:348 src/Frontend/Views/CajaView.php:129 src/Frontend/Views/LibroMayorView.php:115 src/Frontend/Views/TesoreriaView.php:350
+#: src/Frontend/Views/BancoView.php:390 src/Frontend/Views/CajaView.php:129 src/Frontend/Views/LibroMayorView.php:115 src/Frontend/Views/TesoreriaView.php:353
 msgid "Total"
 msgstr ""
 
@@ -17770,7 +17794,7 @@ msgstr ""
 msgid "Transaction data not valid."
 msgstr ""
 
-#: src/Frontend/Views/BancoView.php:467
+#: src/Frontend/Views/BancoView.php:509
 msgid "Transaction pending again (if it had a payment, it has been cancelled)."
 msgstr ""
 
@@ -17962,11 +17986,11 @@ msgstr ""
 msgid "Type \"%s\" deleted."
 msgstr ""
 
-#: src/Frontend/Views/BancoView.php:588
+#: src/Frontend/Views/BancoView.php:633
 msgid "Type created."
 msgstr ""
 
-#: src/Frontend/Views/BancoView.php:588
+#: src/Frontend/Views/BancoView.php:633
 msgid "Type deleted."
 msgstr ""
 
@@ -17974,11 +17998,11 @@ msgstr ""
 msgid "Type of diet"
 msgstr ""
 
-#: src/Frontend/Views/BancoView.php:342 templates/tesoreria/banco.php:164 templates/tesoreria/caja.php:179
+#: src/Frontend/Views/BancoView.php:384 templates/tesoreria/banco.php:164 templates/tesoreria/caja.php:179
 msgid "Type of expense or income"
 msgstr ""
 
-#: src/Frontend/Views/BancoView.php:588
+#: src/Frontend/Views/BancoView.php:633
 msgid "Type saved."
 msgstr ""
 
@@ -18080,7 +18104,7 @@ msgstr ""
 msgid "Units to buy, line %d"
 msgstr ""
 
-#: src/Frontend/Views/AltaUsuariosView.php:197 src/Frontend/Views/BancoView.php:595 src/Frontend/Views/CajaView.php:188 src/Frontend/Views/EventosView.php:502
+#: src/Frontend/Views/AltaUsuariosView.php:197 src/Frontend/Views/BancoView.php:640 src/Frontend/Views/CajaView.php:188 src/Frontend/Views/EventosView.php:502
 msgid "Unknown action."
 msgstr ""
 
@@ -18094,6 +18118,10 @@ msgstr ""
 
 #: templates/tienda/config.php:40
 msgid "Unpaid orders"
+msgstr ""
+
+#: templates/tesoreria/control.php:157
+msgid "Unpaid orders of the shop. Pay one with the bank deposit that covers it (the same can be done from the shop and from the bank)."
 msgstr ""
 
 #: templates/tienda/informe.php:34
@@ -18158,6 +18186,10 @@ msgstr ""
 
 #: src/Admin/SettingsPage.php:224
 msgid "Use in each group a CRM user dedicated to the website, which sees only its own group. With edit permission on Contacts, the private area allows editing records; with a read-only role, everything is shown read-only."
+msgstr ""
+
+#: templates/tesoreria/banco-pedido-ingreso.php:81
+msgid "Use this one"
 msgstr ""
 
 #: src/Admin/OrganizacionPage.php:213 templates/comun/ayuda.php:28
@@ -18230,7 +18262,7 @@ msgstr ""
 msgid "Validated on %2$s"
 msgstr ""
 
-#: src/Frontend/Views/BancoView.php:342 src/Tesoreria/Banco/CsvBanco.php:25
+#: src/Frontend/Views/BancoView.php:384 src/Tesoreria/Banco/CsvBanco.php:25
 msgid "Value date"
 msgstr ""
 
@@ -19001,7 +19033,7 @@ msgstr ""
 msgid "Withdrawal date"
 msgstr ""
 
-#: src/Frontend/Views/TesoreriaView.php:407
+#: src/Frontend/Views/TesoreriaView.php:410
 msgid "Withdrawal marked as seen."
 msgstr ""
 
@@ -19407,11 +19439,11 @@ msgstr ""
 msgid "You have no sections assigned (or they do not match those of the report). Ask the Secretary's office to check your registration."
 msgstr ""
 
-#: src/Frontend/Views/BancoView.php:532
+#: src/Frontend/Views/BancoView.php:574
 msgid "You have not chosen any deposit."
 msgstr ""
 
-#: src/Frontend/Views/BancoView.php:496
+#: src/Frontend/Views/BancoView.php:538
 msgid "You have not chosen any transaction."
 msgstr ""
 
@@ -20815,7 +20847,7 @@ msgstr ""
 msgid "← Agenda"
 msgstr ""
 
-#: templates/eventos/asistente.php:257
+#: templates/eventos/asistente.php:257 templates/tesoreria/banco-pedido-ingreso.php:29 templates/tesoreria/banco-pedido-ingreso.php:35 templates/tesoreria/banco-pedido-ingreso.php:89
 msgid "← Back"
 msgstr ""
 

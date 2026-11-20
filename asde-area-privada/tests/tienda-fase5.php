@@ -332,6 +332,15 @@ try {
 	$h    = ( new BancoView() )->render();
 	$_GET = array();
 	$ok( str_contains( $h, 'Pagar un pedido de la tienda con este ingreso' ) && str_contains( $h, 'name="pedido" value="' . $a . '"' ) && str_contains( $h, 'name="asde_action" value="pagar_pedido"' ), 'la ventana «Pagar un pedido» enseña el ingreso y los pedidos sin pagar' );
+	// v0.64.18: el camino desde el pedido (lista de Tesorería): la ventana enseña los ingresos por conciliar y paga con el elegido.
+	$_GET = array( 'page' => 'x', 'pagar_pedido' => (string) $a );
+	$h    = ( new BancoView() )->render();
+	$_GET = array();
+	$ok( str_contains( $h, 'Pagar este pedido con un ingreso del banco' ) && str_contains( $h, 'name="pedido" value="' . $a . '"' ) && str_contains( $h, 'name="mov" value="' . (int) $m_otro['id'] . '"' ) && str_contains( $h, 'name="desde" value="pedido"' ), 'la ventana «Pagar este pedido» enseña el pedido y los ingresos por conciliar' );
+	$_GET = array( 'page' => 'x', 'pagar_pedido' => (string) $c );
+	$h    = ( new BancoView() )->render();
+	$_GET = array();
+	$ok( str_contains( $h, 'ya está pagado o cancelado' ) && ! str_contains( $h, 'name="mov"' ), 'de un pedido ya pagado no ofrece ingresos' );
 	$como( $u_sc );
 	$ok( is_wp_error( ConciliacionBanco::asociar( $a, (int) $m_otro['id'] ) ) && null === PedidosTable::por_id( $a )['pago_en'], 'un scouter sin permisos de Tesorería no puede asociar' );
 	$como( $u_teso );
