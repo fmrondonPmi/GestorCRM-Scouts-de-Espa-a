@@ -13,6 +13,7 @@
 // phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound, WordPress.WP.GlobalVariablesOverride.Prohibited -- Plantilla: TemplateLoader::render() la incluye dentro de una función; sus variables son locales.
 use AsdeBalears\AreaPrivada\Domain\Secciones;
 use AsdeBalears\AreaPrivada\Tesoreria\Calculadora;
+use AsdeBalears\AreaPrivada\Tienda\ConciliacionBanco;
 use AsdeBalears\AreaPrivada\Tienda\PedidosTable;
 use AsdeBalears\AreaPrivada\Tienda\Servicio;
 
@@ -105,6 +106,37 @@ $form    = static function ( string $accion, string $boton, string $clase = 'asd
 						<label><?php esc_html_e( 'Reference (optional)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <input type="text" name="referencia" maxlength="120" placeholder="<?php echo esc_attr( PedidosTable::numero( $p ) ); ?>"></label>
 						<button type="submit" class="button"><?php esc_html_e( 'Validate the payment', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 					</p>
+						<?php
+						// v0.64.21: con «Ingreso en cuenta» salen los ingresos del banco sin conciliar; el elegido paga el pedido con su fecha e importe.
+						$ingresos = ConciliacionBanco::ingresos_para( $p );
+						if ( $ingresos ) :
+							?>
+							<div class="asde-pago-ingresos" data-asde-pago-ingresos data-importe="<?php echo esc_attr( number_format( $a_cobrar, 2, ',', '' ) ); ?>" data-confirmar="<?php echo esc_attr( esc_attr__( 'The amount of the deposit is not the amount of the order. Mark the order as paid with this deposit anyway?', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"<?php echo 'ingreso' === ( PedidosTable::METODO_DE_FORMA[ $p['forma_pago'] ] ?? 'efectivo' ) ? '' : ' hidden'; ?>>
+								<input type="hidden" name="importe_distinto" value="">
+								<p class="asde-help"><?php esc_html_e( 'Bank deposits not yet reconciled. Choose the one that pays this order, or leave none to enter the payment by hand. The ones with the order number or the same amount come first.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
+								<table class="asde-table" data-asde-paginar>
+									<thead>
+										<tr>
+											<th scope="col"><span class="screen-reader-text"><?php esc_html_e( 'Choose', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span></th>
+											<th scope="col"><?php esc_html_e( 'Date', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
+											<th scope="col"><?php esc_html_e( 'Deposit', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
+											<th scope="col"><?php esc_html_e( 'Amount', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
+										</tr>
+									</thead>
+									<tbody>
+										<?php foreach ( $ingresos as $m ) : ?>
+											<tr<?php echo $m['codigo'] || $m['igual'] ? ' class="asde-banco-asociar__igual"' : ''; ?>>
+												<td data-label=""><input type="radio" name="ingreso_banco" value="<?php echo (int) $m['id']; ?>" data-fecha="<?php echo esc_attr( $m['fecha'] ); ?>" data-importe="<?php echo esc_attr( number_format( (float) $m['importe'], 2, ',', '' ) ); ?>" aria-label="<?php echo esc_attr( esc_attr__( 'Use this deposit', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"></td>
+												<td data-label="<?php echo esc_attr( esc_attr__( 'Date', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( wp_date( 'd/m/Y', strtotime( $m['fecha'] . ' 12:00' ) ) ); ?></td>
+												<td data-label="<?php echo esc_attr( esc_attr__( 'Deposit', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( trim( $m['ordenante'] . ' ' . ( '' !== $m['concepto'] ? $m['concepto'] : ( \AsdeBalears\AreaPrivada\Tesoreria\Banco\Norma43::conceptos()[ $m['concepto_comun'] ] ?? '—' ) ) ) ); ?></td>
+												<td data-label="<?php echo esc_attr( esc_attr__( 'Amount', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>" class="asde-importe">+<?php echo esc_html( Calculadora::euros( (float) $m['importe'] ) ); ?></td>
+											</tr>
+										<?php endforeach; ?>
+									</tbody>
+								</table>
+								<p><button type="button" class="button" data-asde-pago-ingresos-quitar><?php esc_html_e( 'Enter it by hand instead', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button></p>
+							</div>
+						<?php endif; ?>
 					<?php if ( $p['provisional'] ) : ?>
 						<p class="asde-help asde-help--warning"><?php esc_html_e( 'It was ordered with items that have no price: the proposed amount uses today\'s prices', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?><?php echo Servicio::total( $p['lineas'], \AsdeBalears\AreaPrivada\Tienda\Config::de() )['provisional'] ? esc_html( __( ', and some still have no price: enter what was collected', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) : ''; ?>.</p>
 					<?php endif; ?>

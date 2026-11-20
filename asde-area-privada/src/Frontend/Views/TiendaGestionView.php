@@ -419,6 +419,17 @@ final class TiendaGestionView extends TiendaBaseView {
 				if ( ! Servicio::puede_pagar( $p ) ) {
 					break;
 				}
+				// v0.64.21: con «Ingreso en cuenta» se puede elegir un ingreso del banco sin conciliar: paga el pedido con su fecha e importe.
+				$mov = absint( $this->post( 'ingreso_banco' ) );
+				if ( $mov > 0 && 'ingreso' === sanitize_key( $this->post( 'metodo' ) ) ) {
+					$r = ConciliacionBanco::asociar( (int) $p['id'], $mov, '1' === $this->post( 'importe_distinto' ) );
+					if ( is_wp_error( $r ) ) {
+						$error = $r->get_error_message();
+						break;
+					}
+					$hecho = sprintf( /* translators: %s: text */ __( 'Order %s marked as paid with the bank deposit.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $num );
+					break;
+				}
 				$metodo  = sanitize_key( $this->post( 'metodo' ) );
 				$fecha   = $this->post( 'fecha' );
 				$importe = (float) str_replace( ',', '.', $this->post( 'importe' ) );

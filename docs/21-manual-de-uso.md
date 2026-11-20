@@ -301,3 +301,7 @@ Solo textos (las capturas **no** se han rehecho todavía: las de informes, Perso
 - **Coordinación (Tesorería) y Uniformes (gestión):** los textos explican el menú «Acción» (Conciliar, Pago tienda, Otro, Asociar) en vez de los tres enlaces de cada movimiento, y que el ordenante se ve en una línea con el resto como tooltip (o tocándolo en el móvil).
 - **Captura rehecha:** `20-banco` (columna «Acción», ordenante en una línea, la tabla cabe en su tarjeta). La nota de la versión 4.12 que dice «sin capturas nuevas» no es cierta: allí se añadieron las capturas 137, 138 y 139.
 - La ayuda del plugin (`ayuda/`) se ha regenerado.
+
+## Versión 4.14 · pago de un pedido con un ingreso del banco (v0.64.21, 2026-11-20)
+
+Solo cambia el texto de la tienda (`uniformes-gestion`, fila «Pago»): con «Ingreso en cuenta» salen los ingresos sin conciliar para elegir uno. Sin capturas nuevas. Ayuda del plugin regenerada.

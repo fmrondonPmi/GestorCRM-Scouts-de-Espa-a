@@ -481,6 +481,50 @@
 	document.addEventListener( 'click', alternarDescripcion );
 	document.addEventListener( 'keydown', alternarDescripcion );
 
+	// v0.64.21: en la gestión de un pedido, «Ingreso en cuenta» enseña los ingresos del banco sin conciliar; el elegido rellena la
+	// fecha y el importe (y el servidor paga el pedido con él). Si su importe no es el del pedido, se pregunta antes de enviar.
+	function ingresosDelPago( e ) {
+		var t = e.target;
+		var form = t && t.closest ? t.closest( 'form' ) : null;
+		var caja = form ? form.querySelector( '[data-asde-pago-ingresos]' ) : null;
+		if ( ! caja ) {
+			return;
+		}
+		if ( 'metodo' === t.name ) {
+			caja.hidden = 'ingreso' !== t.value;
+			return;
+		}
+		if ( 'ingreso_banco' === t.name && t.checked ) {
+			if ( form.elements.fecha ) {
+				form.elements.fecha.value = t.getAttribute( 'data-fecha' );
+			}
+			if ( form.elements.importe ) {
+				form.elements.importe.value = t.getAttribute( 'data-importe' );
+			}
+			var distinto = t.getAttribute( 'data-importe' ) !== caja.getAttribute( 'data-importe' );
+			form.elements.importe_distinto.value = distinto ? '1' : '';
+			if ( distinto ) {
+				form.setAttribute( 'data-asde-confirmar', caja.getAttribute( 'data-confirmar' ) );
+			} else {
+				form.removeAttribute( 'data-asde-confirmar' );
+			}
+		}
+	}
+	document.addEventListener( 'change', ingresosDelPago );
+	document.addEventListener( 'click', function ( e ) {
+		var b = e.target.closest ? e.target.closest( '[data-asde-pago-ingresos-quitar]' ) : null;
+		if ( ! b ) {
+			return;
+		}
+		var form = b.closest( 'form' );
+		var marcado = form.querySelector( 'input[name="ingreso_banco"]:checked' );
+		if ( marcado ) {
+			marcado.checked = false;
+		}
+		form.elements.importe_distinto.value = '';
+		form.removeAttribute( 'data-asde-confirmar' );
+	} );
+
 	// v0.64.17: tras importar un fichero del banco con códigos, la ventana de asignación guiada se abre sola.
 	var auto = document.querySelector ? document.querySelector( 'a[data-asde-modal][data-asde-auto]' ) : null;
 	if ( auto ) {

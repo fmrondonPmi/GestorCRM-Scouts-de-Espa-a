@@ -396,7 +396,7 @@ msgid "%1$s has prepared the equipment shopping list <strong>%2$s</strong> and i
 msgstr "%1$s ha preparat la llista de compra de material <strong>%2$s</strong> i espera el <strong>vistiplau de Tresoreria</strong>. Fins que no l'hi donis, no es pot imprimir."
 
 #. translators: 1: text, 2: text, 3: text
-#: templates/tienda/detalle.php:83
+#: templates/tienda/detalle.php:84
 #, php-format
 msgid "%1$s in %2$s on %3$s"
 msgstr "%1$s en %2$s el %3$s"
@@ -1065,7 +1065,7 @@ msgid "%d to review"
 msgstr "%d per revisar"
 
 #. translators: %d: number
-#: src/Frontend/Views/BancoView.php:390 templates/tesoreria/banco.php:319
+#: src/Frontend/Views/BancoView.php:390 templates/tesoreria/banco.php:321
 #, php-format
 msgid "%d transaction"
 msgid_plural "%d transactions"
@@ -1286,7 +1286,7 @@ msgstr "(marge del %s %% i arrodoniment)"
 msgid "(2 minutes, with an app such as Google Authenticator)."
 msgstr "(2 minuts, amb una app com Google Authenticator)."
 
-#: templates/tienda/detalle.php:119
+#: templates/tienda/detalle.php:151
 msgid "(Coordination)"
 msgstr "(Coordinació)"
 
@@ -1306,7 +1306,7 @@ msgstr "(Recomanat, ABANS de registrar els grups) Afegeix una clau pròpia a wp-
 msgid "(The text of the message is not stored in the email log.)"
 msgstr "(El text del missatge no es guarda al registre d'emails.)"
 
-#: templates/tienda/detalle.php:81
+#: templates/tienda/detalle.php:82
 msgid "(Treasury)"
 msgstr "(Tresoreria)"
 
@@ -1338,7 +1338,7 @@ msgstr "(anul·lat)"
 msgid "(choose what each one corresponds to)"
 msgstr "(tria a què correspon cadascuna)"
 
-#: templates/tienda/detalle.php:163
+#: templates/tienda/detalle.php:195
 msgid "(confirmed by the member or their family)"
 msgstr "(ho confirma el soci/sòcia o la seva família)"
 
@@ -1423,7 +1423,7 @@ msgstr "(només l'arrodoniment: marge desactivat)"
 msgid "(says yes, but does not say to what)"
 msgstr "(diu que sí, però no indica a què)"
 
-#: templates/tienda/detalle.php:145
+#: templates/tienda/detalle.php:177
 msgid "(the group)"
 msgstr "(el grup)"
 
@@ -1495,7 +1495,7 @@ msgstr "+ sense preu"
 msgid ", \"Cuaderno 19.14\"), families are notified of each charge and the collections are recorded."
 msgstr ", «Quadern 19.14»), s'avisa les famílies de cada càrrec i es registren els cobraments."
 
-#: templates/tienda/detalle.php:109
+#: templates/tienda/detalle.php:141
 msgid ", and some still have no price: enter what was collected"
 msgstr ", i alguna continua sense preu: escriu el que s'ha cobrat"
 
@@ -1965,7 +1965,7 @@ msgstr "Comptes que no es poden canviar (continuen entrant com abans)"
 msgid "Achieved"
 msgstr "Assolit"
 
-#: templates/tesoreria/banco.php:278
+#: templates/tesoreria/banco.php:280
 msgid "Action"
 msgstr "Acció"
 
@@ -3007,6 +3007,10 @@ msgstr "Ingrés del banc (opcional)"
 msgid "Bank deposits for family %s"
 msgstr "Ingressos del banc per a la família %s"
 
+#: templates/tienda/detalle.php:116
+msgid "Bank deposits not yet reconciled. Choose the one that pays this order, or leave none to enter the payment by hand. The ones with the order number or the same amount come first."
+msgstr "Ingressos del banc encara sense conciliar. Tria el que paga aquesta comanda, o no en triïs cap per anotar el pagament a mà. Els que porten el nre. de comanda o el mateix import surten primer."
+
 #: templates/tienda/banco-sugerencias.php:22
 msgid "Bank deposits that look like order payments"
 msgstr "Ingressos del banc que semblen pagaments de comandes"
@@ -3421,7 +3425,7 @@ msgstr "Vols cancel·lar l'esdeveniment? No es pot desfer."
 msgid "Cancel the list"
 msgstr "Cancel·la la llista"
 
-#: templates/tienda/detalle.php:176 templates/tienda/detalle.php:186 templates/tienda/mis-pedidos.php:85 templates/tienda/publica.php:83
+#: templates/tienda/detalle.php:208 templates/tienda/detalle.php:218 templates/tienda/mis-pedidos.php:85 templates/tienda/publica.php:83
 msgid "Cancel the order"
 msgstr "Cancel·la la comanda"
 
@@ -3466,13 +3470,13 @@ msgid "Cancelled on %1$s. Reason: %2$s"
 msgstr "Cancel·lat el %1$s. Motiu: %2$s"
 
 #. translators: 2: text, 1: text
-#: templates/tienda/detalle.php:72
+#: templates/tienda/detalle.php:73
 #, php-format
 msgid "Cancelled on %2$s by %1$s."
 msgstr "Cancel·lada el %2$s per %1$s."
 
 #. translators: %2$s: text
-#: templates/tienda/detalle.php:72
+#: templates/tienda/detalle.php:73
 #, php-format
 msgid "Cancelled on %2$s."
 msgstr "Cancel·lada el %2$s."
@@ -3665,7 +3669,7 @@ msgstr "Canviar les dades del grup (nom, CIF, adreça i província)"
 msgid "Change the status"
 msgstr "Canvia l'estat"
 
-#: templates/tesoreria/banco.php:303
+#: templates/tesoreria/banco.php:305
 msgid "Change the type"
 msgstr "Canvia el tipus"
 
@@ -3783,7 +3787,7 @@ msgstr "Comprovat amb el document i la data de naixement"
 msgid "Checklist"
 msgstr "Llista de comprovació"
 
-#: templates/tienda/detalle.php:77
+#: templates/tienda/detalle.php:78
 msgid "Checks"
 msgstr "Comprovacions"
 
@@ -3819,7 +3823,7 @@ msgstr "Fills que paguen"
 msgid "Chocolate and cocoa"
 msgstr "Xocolata i cacau"
 
-#: templates/tesoreria/banco.php:208 templates/tesoreria/familia-banco.php:98
+#: templates/tesoreria/banco.php:209 templates/tesoreria/familia-banco.php:98 templates/tienda/detalle.php:120
 msgid "Choose"
 msgstr "Tria"
 
@@ -3995,7 +3999,7 @@ msgstr "Tria l'ingrés que paga aquesta comanda: queda pagada amb la data i l'im
 msgid "Choose the expense or income type."
 msgstr "Tria el tipus de despesa o d'ingrés."
 
-#: templates/tesoreria/banco-asignar.php:97 templates/tesoreria/banco.php:257
+#: templates/tesoreria/banco-asignar.php:97 templates/tesoreria/banco.php:258
 msgid "Choose the family…"
 msgstr "Tria la família…"
 
@@ -4054,7 +4058,7 @@ msgid "Choose the size…"
 msgstr "Tria la talla…"
 
 #. translators: 1: text, 2: text
-#: templates/tesoreria/banco.php:210 templates/tesoreria/familia-banco.php:98
+#: templates/tesoreria/banco.php:211 templates/tesoreria/familia-banco.php:98
 #, php-format
 msgid "Choose the transaction of %1$s for %2$s"
 msgstr "Tria el moviment del %1$s de %2$s"
@@ -4312,13 +4316,13 @@ msgid "Confirmed"
 msgstr "Confirmada"
 
 #. translators: 1: text, 2: text
-#: templates/tienda/detalle.php:165
+#: templates/tienda/detalle.php:197
 #, php-format
 msgid "Confirmed by %1$s on %2$s"
 msgstr "Confirmada per %1$s el %2$s"
 
 #. translators: %2$s: text
-#: templates/tienda/detalle.php:165
+#: templates/tienda/detalle.php:197
 #, php-format
 msgid "Confirmed on %2$s"
 msgstr "Confirmada el %2$s"
@@ -4934,7 +4938,7 @@ msgstr "Eliminar un pagament o un ajust ho fa Tresoreria."
 msgid "Deliver orders"
 msgstr "Lliurar comandes"
 
-#: src/Frontend/Views/TiendaGestionView.php:315 src/Tienda/PedidosTable.php:312 templates/tienda/detalle.php:145 templates/tienda/gestion.php:107
+#: src/Frontend/Views/TiendaGestionView.php:315 src/Tienda/PedidosTable.php:312 templates/tienda/detalle.php:177 templates/tienda/gestion.php:107
 msgid "Delivered"
 msgstr "Lliurat"
 
@@ -4943,7 +4947,7 @@ msgid "Delivered, unconfirmed"
 msgstr "Lliurades sense confirmar"
 
 #. translators: %s: text
-#: src/Frontend/Views/TiendaGestionView.php:470
+#: src/Frontend/Views/TiendaGestionView.php:481
 #, php-format
 msgid "Delivery undone on order %s."
 msgstr "Lliurament desfet a la comanda %s."
@@ -5570,6 +5574,10 @@ msgstr "Escriu almenys 3 caràcters."
 msgid "Enter how many people are travelling, the places on each bus and what one costs."
 msgstr "Escriu quantes persones viatgen, les places de cada autobús i el que costa un."
 
+#: templates/tienda/detalle.php:137
+msgid "Enter it by hand instead"
+msgstr "Anota-ho a mà"
+
 #: templates/seguridad/pagina.php:29
 msgid "Enter the 6-digit code the app shows you and press \"Activate\"."
 msgstr "Escriu el codi de 6 xifres que et mostra l'app i prem «Activate»."
@@ -5922,7 +5930,7 @@ msgstr "Equip de l'esdeveniment"
 msgid "Event team (optional: you can complete it later)."
 msgstr "Equip de l'esdeveniment (opcional: el pots completar més tard)."
 
-#: templates/tesoreria/banco.php:231
+#: templates/tesoreria/banco.php:232
 msgid "Event:"
 msgstr "Esdeveniment:"
 
@@ -6321,7 +6329,7 @@ msgstr "Família de %s"
 msgid "Family removed."
 msgstr "Família eliminada."
 
-#: templates/tesoreria/banco-asignar.php:96 templates/tesoreria/banco-revisar.php:123 templates/tesoreria/banco.php:256
+#: templates/tesoreria/banco-asignar.php:96 templates/tesoreria/banco-revisar.php:123 templates/tesoreria/banco.php:257
 msgid "Family: no. or surname (3 letters)…"
 msgstr "Família: núm. o cognom (3 lletres)…"
 
@@ -7402,7 +7410,7 @@ msgstr "Telèfon de casa"
 msgid "Honey"
 msgstr "Mel"
 
-#: templates/lista-espera/detalle.php:114 templates/tienda/detalle.php:96
+#: templates/lista-espera/detalle.php:114 templates/tienda/detalle.php:97
 msgid "How"
 msgstr "Com"
 
@@ -7923,7 +7931,7 @@ msgstr "Inclou"
 msgid "Include %s in the order"
 msgstr "Inclou %s a la comanda"
 
-#: templates/tienda/detalle.php:132 templates/tienda/gestion.php:99
+#: templates/tienda/detalle.php:164 templates/tienda/gestion.php:99
 msgid "Include in the order"
 msgstr "Inclou a la comanda"
 
@@ -7931,7 +7939,7 @@ msgstr "Inclou a la comanda"
 msgid "Include the ticked ones in the order"
 msgstr "Inclou els marcats a la comanda"
 
-#: templates/tienda/detalle.php:119
+#: templates/tienda/detalle.php:151
 msgid "Included in the group's order"
 msgstr "Inclosa a la comanda del grup"
 
@@ -8338,7 +8346,7 @@ msgstr "L'ha revisada %s."
 msgid "It has direct debit authorisations: it cannot be deleted."
 msgstr "Té autoritzacions de domiciliació: no es pot eliminar."
 
-#: templates/tienda/detalle.php:150
+#: templates/tienda/detalle.php:182
 msgid "It has not arrived from the supplier yet: it can be delivered when Coordination marks its order as received."
 msgstr "Encara no ha arribat del proveïdor: es podrà lliurar quan Coordinació marqui la seva comanda com a rebuda."
 
@@ -8414,11 +8422,11 @@ msgstr "És més del que es va pagar (%s)."
 msgid "It is named \"%s\""
 msgstr "Porta el nom «%s»"
 
-#: templates/tesoreria/banco.php:286
+#: templates/tesoreria/banco.php:288
 msgid "It is not a fee: mark it as reviewed with its type."
 msgstr "No és una quota: marca'l com a revisat amb el seu tipus."
 
-#: templates/tienda/detalle.php:154
+#: templates/tienda/detalle.php:186
 msgid "It is not in any group order."
 msgstr "No consta en cap comanda del grup."
 
@@ -8528,7 +8536,7 @@ msgstr "Es queda al grup."
 msgid "It was left unfinished. Try again: it will continue where it stopped, without creating another record. Reason: "
 msgstr "S'ha quedat a mitges. Torna-ho a provar: continuarà on es va quedar, sense crear una altra fitxa. Motiu: "
 
-#: templates/tienda/detalle.php:109
+#: templates/tienda/detalle.php:141
 msgid "It was ordered with items that have no price: the proposed amount uses today's prices"
 msgstr "Es va demanar amb articles sense preu: l'import proposat fa servir els preus d'avui"
 
@@ -8866,7 +8874,7 @@ msgstr "Línia %d: moviment (22) fora d'un compte."
 msgid "Line %d: transaction with an invalid date, amount or debit/credit key."
 msgstr "Línia %d: moviment amb data, import o clau deure/haver no vàlids."
 
-#: templates/tesoreria/banco-asociar.php:83 templates/tesoreria/banco.php:288 templates/tesoreria/caja-banco.php:58
+#: templates/tesoreria/banco-asociar.php:83 templates/tesoreria/banco.php:290 templates/tesoreria/caja-banco.php:58
 msgid "Link"
 msgstr "Associar"
 
@@ -8878,7 +8886,7 @@ msgstr "Enllaç al menú de la web (text; buit = sense enllaç)"
 msgid "Link removed."
 msgstr "Associació treta."
 
-#: templates/tesoreria/banco.php:288
+#: templates/tesoreria/banco.php:290
 msgid "Link this transaction with another one (for example a transfer or a return)."
 msgstr "Associa aquest moviment amb un altre (per exemple una transferència o una devolució)."
 
@@ -8906,7 +8914,7 @@ msgstr "Moviments associats"
 msgid "Linked transactions."
 msgstr "Moviments associats."
 
-#: src/Frontend/Views/BancoView.php:384 templates/tesoreria/banco.php:240
+#: src/Frontend/Views/BancoView.php:384 templates/tesoreria/banco.php:241
 msgid "Linked with"
 msgstr "Associat amb"
 
@@ -9154,7 +9162,7 @@ msgstr "Enllaç al mapa (opcional)"
 msgid "Margin (%)"
 msgstr "Marge (%)"
 
-#: templates/tesoreria/banco.php:284
+#: templates/tesoreria/banco.php:286
 msgid "Mark a shop order as paid with this deposit."
 msgstr "Marca una comanda de la botiga com a pagada amb aquest ingrés."
 
@@ -9162,7 +9170,7 @@ msgstr "Marca una comanda de la botiga com a pagada amb aquest ingrés."
 msgid "Mark as bought"
 msgstr "Marca com a comprada"
 
-#: templates/tienda/detalle.php:152
+#: templates/tienda/detalle.php:184
 msgid "Mark as delivered"
 msgstr "Marca com a lliurada"
 
@@ -9232,7 +9240,7 @@ msgstr "Marcar com a pagats els reintegraments"
 msgid "Mark the paper one as received"
 msgstr "Marca la de paper com a rebuda"
 
-#: templates/tienda/detalle.php:152 templates/tienda/gestion.php:178
+#: templates/tienda/detalle.php:184 templates/tienda/gestion.php:178
 msgid "Mark this order as delivered? The member or their family will be notified and asked to confirm it."
 msgstr "Vols marcar aquesta comanda com a lliurada? El soci o la seva família rebrà un avís i ho haurà de confirmar."
 
@@ -9618,7 +9626,7 @@ msgstr "Nom a la botiga (talla, color…)"
 msgid "Name of the new type"
 msgstr "Nom del tipus nou"
 
-#: templates/tienda/detalle.php:131 templates/tienda/gestion.php:171
+#: templates/tienda/detalle.php:163 templates/tienda/gestion.php:171
 msgid "Name of the supplier order"
 msgstr "Nom de la comanda al proveïdor"
 
@@ -10260,7 +10268,7 @@ msgstr "Observacions (opcional)"
 msgid "Notes for the team"
 msgstr "Observacions per a l'equip"
 
-#: templates/eventos/inscripciones.php:171 templates/tienda/detalle.php:68
+#: templates/eventos/inscripciones.php:171 templates/tienda/detalle.php:69
 msgid "Notes:"
 msgstr "Observacions:"
 
@@ -10642,13 +10650,13 @@ msgid "Order %1$s paid (%2$s)"
 msgstr "Comanda %1$s pagada (%2$s)"
 
 #. translators: %s: text
-#: src/Frontend/Views/TiendaGestionView.php:499 src/Tienda/Proveedor.php:145 templates/tienda/detalle.php:131 templates/tienda/gestion.php:171
+#: src/Frontend/Views/TiendaGestionView.php:510 src/Tienda/Proveedor.php:145 templates/tienda/detalle.php:163 templates/tienda/gestion.php:171
 #, php-format
 msgid "Order %s"
 msgstr "Comanda %s"
 
 #. translators: %s: text
-#: src/Frontend/Views/TiendaGestionView.php:483
+#: src/Frontend/Views/TiendaGestionView.php:494
 #, php-format
 msgid "Order %s cancelled."
 msgstr "Comanda %s cancel·lada."
@@ -10666,25 +10674,25 @@ msgid "Order %s has been delivered. When you have it, confirm it in \"My orders\
 msgstr "La comanda %s ja està lliurada. Quan la tinguis, confirma-ho a «Les meves comandes»."
 
 #. translators: %s: text
-#: src/Frontend/Views/TiendaGestionView.php:448
+#: src/Frontend/Views/TiendaGestionView.php:459
 #, php-format
 msgid "Order %s included in the group's order."
 msgstr "Comanda %s inclosa a la comanda del grup."
 
 #. translators: %s: text
-#: src/Frontend/Views/TiendaGestionView.php:455
+#: src/Frontend/Views/TiendaGestionView.php:466
 #, php-format
 msgid "Order %s is no longer part of the group's order."
 msgstr "La comanda %s ja no consta a la comanda del grup."
 
 #. translators: %s: text
-#: src/Frontend/Views/TiendaGestionView.php:463
+#: src/Frontend/Views/TiendaGestionView.php:474
 #, php-format
 msgid "Order %s marked as delivered. The member or their family still has to confirm it."
 msgstr "Comanda %s marcada com a lliurada. Falta que la confirmi el soci/sòcia o la seva família."
 
 #. translators: %s: text
-#: src/Frontend/Views/TiendaGestionView.php:400
+#: src/Frontend/Views/TiendaGestionView.php:400 src/Frontend/Views/TiendaGestionView.php:430
 #, php-format
 msgid "Order %s marked as paid with the bank deposit."
 msgstr "Comanda %s marcada com a pagada amb l'ingrés del banc."
@@ -10752,13 +10760,13 @@ msgid "Ordered from the supplier (goes through \"included in the group's order\"
 msgstr "Es demana al proveïdor (passa per «inclòs a la comanda del grup» abans de lliurar-se)"
 
 #. translators: 2: text, 1: text
-#: templates/tienda/detalle.php:70
+#: templates/tienda/detalle.php:71
 #, php-format
 msgid "Ordered on %2$s by %1$s."
 msgstr "Demanada el %2$s per %1$s."
 
 #. translators: %2$s: text
-#: templates/tienda/detalle.php:70
+#: templates/tienda/detalle.php:71
 #, php-format
 msgid "Ordered on %2$s."
 msgstr "Demanada el %2$s."
@@ -11041,7 +11049,7 @@ msgstr "Paga amb targeta, en persona, amb el datàfon del grup en recollir-ho, i
 msgid "Pay it into the bank"
 msgstr "Ingressa'l al banc"
 
-#: templates/tesoreria/banco.php:281
+#: templates/tesoreria/banco.php:283
 msgid "Pay the fee of a family with this deposit."
 msgstr "Paga la quota d'una família amb aquest ingrés."
 
@@ -11113,7 +11121,7 @@ msgstr "Mètodes de pagament que accepta el grup"
 msgid "Payment missing"
 msgstr "Falta el pagament"
 
-#: templates/tienda/detalle.php:135
+#: templates/tienda/detalle.php:167
 msgid "Payment not yet recorded."
 msgstr "Encara no consta el pagament."
 
@@ -11122,7 +11130,7 @@ msgid "Payment of"
 msgstr "Pagament de"
 
 #. translators: 1: text, 2: text, 3: text
-#: src/Frontend/Views/TiendaGestionView.php:432
+#: src/Frontend/Views/TiendaGestionView.php:443
 #, php-format
 msgid "Payment of %1$s (%2$s) validated on order %3$s."
 msgstr "Pagament de %1$s (%2$s) validat a la comanda %3$s."
@@ -11191,7 +11199,7 @@ msgid "Payment type"
 msgstr "Tipus de pagament"
 
 #. translators: %s: text
-#: src/Frontend/Views/TiendaGestionView.php:438
+#: src/Frontend/Views/TiendaGestionView.php:449
 #, php-format
 msgid "Payment undone on order %s."
 msgstr "Pagament desfet a la comanda %s."
@@ -11248,7 +11256,7 @@ msgstr "Pendent de cobrament"
 msgid "Pending collections"
 msgstr "Pendents de cobrament"
 
-#: templates/tienda/detalle.php:167
+#: templates/tienda/detalle.php:199
 msgid "Pending confirmation in their private area ("
 msgstr "Pendent que ho confirmi a la seva àrea privada ("
 
@@ -12004,7 +12012,7 @@ msgstr "Recepta desada."
 msgid "Recipes"
 msgstr "Receptes"
 
-#: templates/tesoreria/banco.php:269 templates/tesoreria/banco.php:281
+#: templates/tesoreria/banco.php:283
 msgid "Reconcile"
 msgstr "Concilia"
 
@@ -12168,7 +12176,7 @@ msgstr "Recurrent"
 msgid "Recurrent (RCUR)"
 msgstr "Recurrent (RCUR)"
 
-#: templates/tesoreria/banco.php:221 templates/tesoreria/familia-banco.php:84
+#: templates/tesoreria/banco.php:220 templates/tesoreria/familia-banco.php:84
 msgid "Ref.:"
 msgstr "Ref.:"
 
@@ -12182,7 +12190,7 @@ msgstr "Referència"
 msgid "Reference %s in the description"
 msgstr "Referència %s al concepte"
 
-#: templates/reintegros/index.php:82 templates/tienda/detalle.php:105
+#: templates/reintegros/index.php:82 templates/tienda/detalle.php:106
 msgid "Reference (optional)"
 msgstr "Referència (opcional)"
 
@@ -12436,7 +12444,7 @@ msgstr "Vols eliminar %s del web? Deixa de sortir a Persones, surt de la seva fa
 msgid "Remove from the website"
 msgstr "Elimina del web"
 
-#: templates/tesoreria/banco.php:298
+#: templates/tesoreria/banco.php:300
 msgid "Remove link"
 msgstr "Treure l'associació"
 
@@ -12452,7 +12460,7 @@ msgstr "Treu l'ingrés"
 msgid "Remove the link"
 msgstr "Treu l'associació"
 
-#: templates/tesoreria/banco.php:294
+#: templates/tesoreria/banco.php:296
 msgid "Remove the link between these two transactions?"
 msgstr "Vols treure l'associació entre aquests dos moviments?"
 
@@ -12464,7 +12472,7 @@ msgstr "Treu la tasca"
 msgid "Remove this member from the family?"
 msgstr "Vols treure aquest soci de la família?"
 
-#: templates/tienda/detalle.php:123
+#: templates/tienda/detalle.php:155
 msgid "Remove this order from the group's order?"
 msgstr "Vols treure aquesta comanda de la comanda del grup?"
 
@@ -12860,7 +12868,7 @@ msgstr "Rols"
 msgid "Roles, sections and family account"
 msgstr "Rols, seccions i compte familiar"
 
-#: templates/tesoreria/banco.php:262 templates/tesoreria/familia-movimientos.php:51 templates/tesoreria/familia-movimientos.php:61 templates/tesoreria/sepa-remesa.php:39
+#: templates/tesoreria/banco.php:263 templates/tesoreria/familia-movimientos.php:51 templates/tesoreria/familia-movimientos.php:61 templates/tesoreria/sepa-remesa.php:39
 msgid "Round"
 msgstr "Ronda"
 
@@ -13231,7 +13239,7 @@ msgstr "núm. de soci/sòcia de Scouts de España"
 msgid "Scouts de España member no. (username)"
 msgstr "Núm. soci/sòcia Scouts de España (usuari)"
 
-#: src/Informes/Catalogo.php:57 templates/personas/listado.php:50 templates/tienda/detalle.php:57 templates/usuarios/fila.php:74
+#: src/Informes/Catalogo.php:57 templates/personas/listado.php:50 templates/tienda/detalle.php:58 templates/usuarios/fila.php:74
 msgid "Scouts de España no."
 msgstr "Núm. Scouts de España"
 
@@ -13665,7 +13673,7 @@ msgstr "Comandes de la botiga"
 msgid "Shop orders to collect"
 msgstr "Comandes de la botiga per cobrar"
 
-#: templates/tesoreria/banco.php:284
+#: templates/tesoreria/banco.php:286
 msgid "Shop payment"
 msgstr "Pagament botiga"
 
@@ -14053,7 +14061,7 @@ msgstr "Comença"
 msgid "State at least one educational section for the Scouter role."
 msgstr "Indica almenys una secció educativa per al rol de Scouter."
 
-#: src/Frontend/Views/TiendaGestionView.php:426
+#: src/Frontend/Views/TiendaGestionView.php:437
 msgid "State how it was paid (cash, deposit, Bizum or card terminal), the date (not later than today) and the amount."
 msgstr "Indica com s'ha pagat (efectiu, ingrés, Bizum o datàfon), la data (no posterior a avui) i l'import."
 
@@ -14077,7 +14085,7 @@ msgstr "Indica el núm. de comanda al concepte. Quan Tresoreria rebi el pagament
 msgid "State the payment date (not later than today)."
 msgstr "Indica la data del pagament (no posterior a avui)."
 
-#: src/Eventos/Servicio.php:711 src/Frontend/Views/TiendaGestionView.php:478
+#: src/Eventos/Servicio.php:711 src/Frontend/Views/TiendaGestionView.php:489
 msgid "State the reason for the cancellation."
 msgstr "Indica el motiu de la cancel·lació."
 
@@ -14211,7 +14219,7 @@ msgstr "Suggerits per a aquesta família"
 msgid "Suggested price"
 msgstr "Preu suggerit"
 
-#: templates/tesoreria/banco.php:248 templates/tesoreria/familia-banco.php:87
+#: templates/tesoreria/banco.php:249 templates/tesoreria/familia-banco.php:87
 msgid "Suggested:"
 msgstr "Suggerida:"
 
@@ -14557,11 +14565,11 @@ msgstr "Aquest grup no existeix."
 msgid "That group no. is already registered or pending review. If it is yours, talk to the office."
 msgstr "Aquest nº de grup ja està donat d'alta o pendent de revisar. Si és el vostre, parleu amb l'oficina."
 
-#: src/Tienda/ConciliacionBanco.php:101 src/Tienda/ConciliacionBanco.php:180
+#: src/Tienda/ConciliacionBanco.php:101 src/Tienda/ConciliacionBanco.php:204
 msgid "That income is already reviewed or does not correspond to this order."
 msgstr "Aquest ingrés ja està revisat o no correspon a aquesta comanda."
 
-#: src/Tienda/ConciliacionBanco.php:154 src/Tienda/ConciliacionBanco.php:272 src/Tienda/ConciliacionBanco.php:284 templates/tesoreria/banco-pedido.php:33
+#: src/Tienda/ConciliacionBanco.php:178 src/Tienda/ConciliacionBanco.php:296 src/Tienda/ConciliacionBanco.php:308 templates/tesoreria/banco-pedido.php:33
 msgid "That income is already reviewed or does not exist."
 msgstr "Aquest ingrés ja està revisat o no existeix."
 
@@ -14613,7 +14621,7 @@ msgstr "Aquesta comanda ja no es pot cancel·lar des d'aquí: ja consta el pagam
 msgid "That order does not exist."
 msgstr "Aquesta comanda no existeix."
 
-#: src/Tienda/ConciliacionBanco.php:158
+#: src/Tienda/ConciliacionBanco.php:182
 msgid "That order has nothing to pay."
 msgstr "Aquesta comanda no té res a cobrar."
 
@@ -14621,7 +14629,7 @@ msgstr "Aquesta comanda no té res a cobrar."
 msgid "That order is already marked as received."
 msgstr "Aquesta comanda ja està marcada com a rebuda."
 
-#: src/Tienda/ConciliacionBanco.php:98 src/Tienda/ConciliacionBanco.php:151 src/Tienda/ConciliacionBanco.php:176 templates/tesoreria/banco-pedido-ingreso.php:34
+#: src/Tienda/ConciliacionBanco.php:98 src/Tienda/ConciliacionBanco.php:175 src/Tienda/ConciliacionBanco.php:200 templates/tesoreria/banco-pedido-ingreso.php:34
 msgid "That order is already paid or cancelled."
 msgstr "Aquesta comanda ja està pagada o cancel·lada."
 
@@ -14629,7 +14637,7 @@ msgstr "Aquesta comanda ja està pagada o cancel·lada."
 msgid "That order is not yet recorded as delivered."
 msgstr "Aquesta comanda encara no consta com a lliurada."
 
-#: src/Tienda/ConciliacionBanco.php:95 src/Tienda/ConciliacionBanco.php:148
+#: src/Tienda/ConciliacionBanco.php:95 src/Tienda/ConciliacionBanco.php:172
 msgid "That order or that transaction no longer exists."
 msgstr "Aquesta comanda o aquest moviment ja no existeixen."
 
@@ -15117,11 +15125,11 @@ msgstr "L'import ha de ser un número positiu."
 msgid "The amount must be greater than 0."
 msgstr "L'import ha de ser major que 0."
 
-#: templates/tesoreria/banco-pedido-ingreso.php:71 templates/tesoreria/banco-pedido.php:71
+#: templates/tesoreria/banco-pedido-ingreso.php:71 templates/tesoreria/banco-pedido.php:71 templates/tienda/detalle.php:114
 msgid "The amount of the deposit is not the amount of the order. Mark the order as paid with this deposit anyway?"
 msgstr "L'import de l'ingrés no és el de la comanda. Vols marcar la comanda com a pagada amb aquest ingrés igualment?"
 
-#: src/Tienda/ConciliacionBanco.php:162
+#: src/Tienda/ConciliacionBanco.php:186
 msgid "The amount of the deposit is not the amount of the order: confirm it to continue."
 msgstr "L'import de l'ingrés no és el de la comanda: confirma-ho per continuar."
 
@@ -15153,7 +15161,7 @@ msgstr "El banc i cada caixa d'efectiu, amb el seu saldo en començar i en acaba
 msgid "The bank deposit is only linked to the round's fee. For an event, remove the deposit and record the payment."
 msgstr "L'ingrés del banc només s'associa a la quota de la ronda. Per a un esdeveniment, treu l'ingrés i escriu el pagament."
 
-#: src/Frontend/Views/TiendaGestionView.php:440
+#: src/Frontend/Views/TiendaGestionView.php:451
 msgid "The bank deposit is pending reconciliation again."
 msgstr "L'ingrés del banc torna a estar per conciliar."
 
@@ -15175,7 +15183,7 @@ msgstr "El banc no està actiu al teu grup."
 msgid "The bank is only seen by the Secretary's office, Coordination and Treasury."
 msgstr "El banc només el veuen Secretaria, Coordinació i Tresoreria."
 
-#: src/Tienda/ConciliacionBanco.php:90 src/Tienda/ConciliacionBanco.php:143 src/Tienda/ConciliacionBanco.php:268
+#: src/Tienda/ConciliacionBanco.php:90 src/Tienda/ConciliacionBanco.php:167 src/Tienda/ConciliacionBanco.php:292
 msgid "The bank is only used by Treasury and whoever manages the Treasury settings, with the Bank module on."
 msgstr "El banc només l'usen Tresoreria i qui porti la configuració de Tresoreria, amb el mòdul Banc actiu."
 
@@ -15219,7 +15227,7 @@ msgstr "Encara cal preparar el pressupost i enviar-lo a Tresoreria per al seu vi
 msgid "The budget, if families pay, and Treasury's validation"
 msgstr "El pressupost, si paguen les famílies, i la validació de Tresoreria"
 
-#: src/Tienda/ConciliacionBanco.php:280
+#: src/Tienda/ConciliacionBanco.php:304
 msgid "The card payments no longer match that deposit. Check the list."
 msgstr "Els cobraments amb datàfon ja no quadren amb aquest ingrés. Revisa la llista."
 
@@ -16146,7 +16154,7 @@ msgstr "L'import del pagament ha de ser major que 0."
 msgid "The payment date cannot be later than today."
 msgstr "La data del pagament no pot ser posterior a avui."
 
-#: templates/tesoreria/banco.php:305
+#: templates/tesoreria/banco.php:307
 msgid "The payment recorded on the family will be cancelled."
 msgstr "S'anul·larà el pagament que es va registrar a la família."
 
@@ -17869,7 +17877,7 @@ msgid "Transfer to the group's account, stating order no. %s as the description.
 msgstr "Transferència al compte del grup, indicant com a concepte el núm. de comanda %s."
 
 #. translators: %s: text
-#: templates/tesoreria/banco.php:236
+#: templates/tesoreria/banco.php:237
 #, php-format
 msgid "Transfer: %s"
 msgstr "Traspàs: %s"
@@ -18046,7 +18054,7 @@ msgstr "Per sota de %d anys cal el tutor/a 1: nom, cognoms i email."
 msgid "Under %d years old"
 msgstr "Menors de %d anys"
 
-#: templates/tesoreria/banco.php:309 templates/tienda/detalle.php:85 templates/tienda/detalle.php:123 templates/tienda/detalle.php:148
+#: templates/tesoreria/banco.php:311 templates/tienda/detalle.php:86 templates/tienda/detalle.php:155 templates/tienda/detalle.php:180
 msgid "Undo"
 msgstr "Desfés"
 
@@ -18054,15 +18062,15 @@ msgstr "Desfés"
 msgid "Undo the approval"
 msgstr "Desfés el vistiplau"
 
-#: templates/tienda/detalle.php:148 templates/tienda/gestion.php:186
+#: templates/tienda/detalle.php:180 templates/tienda/gestion.php:186
 msgid "Undo the delivery? The member's confirmation is also deleted, if there was one."
 msgstr "Vols desfer el lliurament? També s'esborra la confirmació del soci/sòcia, si n'hi havia."
 
-#: templates/tienda/detalle.php:85
+#: templates/tienda/detalle.php:86
 msgid "Undo this order's payment?"
 msgstr "Vols desfer el pagament d'aquesta comanda?"
 
-#: templates/tesoreria/banco.php:305
+#: templates/tesoreria/banco.php:307
 msgid "Undo?"
 msgstr "Vols desfer-ho?"
 
@@ -18070,7 +18078,7 @@ msgstr "Vols desfer-ho?"
 msgid "Unidad"
 msgstr "Unitat"
 
-#: src/Idiomas/Guardados.php:311 src/Tienda/ImportadorProductos.php:262 templates/pagos/mis-pagos.php:131 templates/tienda/detalle.php:167
+#: src/Idiomas/Guardados.php:311 src/Tienda/ImportadorProductos.php:262 templates/pagos/mis-pagos.php:131 templates/tienda/detalle.php:199
 msgid "Uniform"
 msgstr "Uniforme"
 
@@ -18198,6 +18206,10 @@ msgstr "Pujar fotos de l'acampada a la web del grup"
 msgid "Use in each group a CRM user dedicated to the website, which sees only its own group. With edit permission on Contacts, the private area allows editing records; with a read-only role, everything is shown read-only."
 msgstr "Fes servir a cada grup un usuari del CRM dedicat al web, que vegi només el seu grup. Amb permís d'edició a Contactes, l'àrea privada permet editar fitxes; amb un rol de només lectura, tot es mostra en mode de lectura."
 
+#: templates/tienda/detalle.php:129
+msgid "Use this deposit"
+msgstr "Fes servir aquest ingrés"
+
 #: templates/tesoreria/banco-pedido-ingreso.php:81
 msgid "Use this one"
 msgstr "Fes servir aquest"
@@ -18252,7 +18264,7 @@ msgstr "Valida"
 msgid "Validate budgets and keep the accounts"
 msgstr "Validar pressupostos i portar els comptes"
 
-#: templates/tienda/detalle.php:106
+#: templates/tienda/detalle.php:107
 msgid "Validate the payment"
 msgstr "Valida el pagament"
 
@@ -18261,13 +18273,13 @@ msgid "Validated"
 msgstr "Validada"
 
 #. translators: 1: text, 2: text
-#: templates/tienda/detalle.php:84
+#: templates/tienda/detalle.php:85
 #, php-format
 msgid "Validated by %1$s on %2$s"
 msgstr "Validat per %1$s el %2$s"
 
 #. translators: %2$s: text
-#: templates/tienda/detalle.php:84
+#: templates/tienda/detalle.php:85
 #, php-format
 msgid "Validated on %2$s"
 msgstr "Validat el %2$s"
@@ -18881,7 +18893,7 @@ msgid "Whoever is on the team can manage the event. The team does not pay: its c
 msgstr "Qui és a l'equip pot gestionar l'esdeveniment. L'equip no paga: el seu cost es reparteix en el preu dels participants."
 
 #. translators: %s: text
-#: templates/tienda/detalle.php:93
+#: templates/tienda/detalle.php:94
 #, php-format
 msgid "Whoever ordered chose to pay with: %s."
 msgstr "Qui el va demanar va triar pagar amb: %s."
@@ -19949,7 +19961,7 @@ msgid "brought forward from %s"
 msgstr "avançada des del %s"
 
 #. translators: 1: text, 2: text
-#: templates/tienda/detalle.php:122 templates/tienda/detalle.php:147
+#: templates/tienda/detalle.php:154 templates/tienda/detalle.php:179
 #, php-format
 msgid "by %1$s on %2$s"
 msgstr "per %1$s el %2$s"
@@ -20352,7 +20364,7 @@ msgid "on %1$s at %2$s"
 msgstr "el %1$s a les %2$s"
 
 #. translators: %2$s: text
-#: templates/tienda/detalle.php:122 templates/tienda/detalle.php:147
+#: templates/tienda/detalle.php:154 templates/tienda/detalle.php:179
 #, php-format
 msgid "on %2$s"
 msgstr "el %2$s"
@@ -20917,7 +20929,7 @@ msgstr "← Inventari"
 msgid "← My payments"
 msgstr "← Els meus pagaments"
 
-#: templates/tienda/detalle.php:39
+#: templates/tienda/detalle.php:40
 msgid "← Order management"
 msgstr "← Gestió de comandes"
 

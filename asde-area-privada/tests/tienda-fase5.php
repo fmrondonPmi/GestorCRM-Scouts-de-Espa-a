@@ -341,6 +341,32 @@ try {
 	$h    = ( new BancoView() )->render();
 	$_GET = array();
 	$ok( str_contains( $h, 'ya está pagado o cancelado' ) && ! str_contains( $h, 'name="mov"' ), 'de un pedido ya pagado no ofrece ingresos' );
+	// v0.64.21: desde la gestión del pedido, «Ingreso en cuenta» enseña los ingresos sin conciliar y pagar con uno lo concilia.
+	$_GET = array( 'page' => 'x', 'pedido' => (string) $a );
+	$h    = ( new TiendaGestionView() )->render();
+	$_GET = array();
+	$ok( str_contains( $h, 'data-asde-pago-ingresos' ) && str_contains( $h, 'name="ingreso_banco" value="' . (int) $m_otro['id'] . '"' ), 'la gestión del pedido enseña los ingresos sin conciliar para elegir uno' );
+	$_POST    = array( 'asde_action' => 'uniforme_pago', 'pedido' => (string) $a, '_wpnonce' => wp_create_nonce( 'asde_uniforme_' . $a ), 'desde' => 'detalle', 'metodo' => 'ingreso', 'ingreso_banco' => (string) (int) $m_otro['id'], 'fecha' => '2026-01-01', 'importe' => '1,00' );
+	$_REQUEST = $_POST;
+	try {
+		( new TiendaGestionView() )->handle_post();
+	} catch ( RuntimeException $e ) {
+		// Redirige.
+	}
+	$_POST    = array();
+	$_REQUEST = array();
+	$pa = PedidosTable::por_id( $a );
+	$ok( null !== $pa['pago_en'] && 10.0 === $pa['pago_importe'] && '2026-10-13' === $pa['pago_fecha'] && BancoTable::IGNORADO === BancoTable::obtener( (int) $m_otro['id'] )['estado'], 'pagar desde la gestión con un ingreso elegido usa su fecha e importe (no los escritos) y lo deja conciliado' );
+	$_POST    = array( 'asde_action' => 'uniforme_deshacer_pago', 'pedido' => (string) $a, '_wpnonce' => wp_create_nonce( 'asde_uniforme_' . $a ), 'desde' => 'detalle' );
+	$_REQUEST = $_POST;
+	try {
+		( new TiendaGestionView() )->handle_post();
+	} catch ( RuntimeException $e ) {
+		// Redirige.
+	}
+	$_POST    = array();
+	$_REQUEST = array();
+	$ok( null === PedidosTable::por_id( $a )['pago_en'] && BancoTable::PENDIENTE === BancoTable::obtener( (int) $m_otro['id'] )['estado'], 'y al deshacer el pago, el ingreso vuelve a estar por conciliar' );
 	$como( $u_sc );
 	$ok( is_wp_error( ConciliacionBanco::asociar( $a, (int) $m_otro['id'] ) ) && null === PedidosTable::por_id( $a )['pago_en'], 'un scouter sin permisos de Tesorería no puede asociar' );
 	$como( $u_teso );

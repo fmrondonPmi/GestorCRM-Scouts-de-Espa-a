@@ -396,7 +396,7 @@ msgid "%1$s has prepared the equipment shopping list <strong>%2$s</strong> and i
 msgstr "%1$s(e)k <strong>%2$s</strong> material-erosketako zerrenda prestatu du eta <strong>Diruzaintzaren oniritziaren</strong> zain dago. Ematen diozun arte, ezin da inprimatu."
 
 #. translators: 1: text, 2: text, 3: text
-#: templates/tienda/detalle.php:83
+#: templates/tienda/detalle.php:84
 #, php-format
 msgid "%1$s in %2$s on %3$s"
 msgstr "%1$s, %2$s, %3$s(e)an"
@@ -1065,7 +1065,7 @@ msgid "%d to review"
 msgstr "%d berrikusteko"
 
 #. translators: %d: number
-#: src/Frontend/Views/BancoView.php:390 templates/tesoreria/banco.php:319
+#: src/Frontend/Views/BancoView.php:390 templates/tesoreria/banco.php:321
 #, php-format
 msgid "%d transaction"
 msgid_plural "%d transactions"
@@ -1286,7 +1286,7 @@ msgstr "(%s %%eko marjina eta biribiltzea)"
 msgid "(2 minutes, with an app such as Google Authenticator)."
 msgstr "(2 minutu, Google Authenticator bezalako aplikazio batekin)."
 
-#: templates/tienda/detalle.php:119
+#: templates/tienda/detalle.php:151
 msgid "(Coordination)"
 msgstr "(Koordinazioa)"
 
@@ -1306,7 +1306,7 @@ msgstr "(Gomendatua, taldeak erregistratu AURRETIK) Gehitu zure gako propioa wp-
 msgid "(The text of the message is not stored in the email log.)"
 msgstr "(Mezuaren testua ez da emailen erregistroan gordetzen.)"
 
-#: templates/tienda/detalle.php:81
+#: templates/tienda/detalle.php:82
 msgid "(Treasury)"
 msgstr "(Diruzaintza)"
 
@@ -1338,7 +1338,7 @@ msgstr "(ezeztatua)"
 msgid "(choose what each one corresponds to)"
 msgstr "(aukeratu bakoitza zeri dagokion)"
 
-#: templates/tienda/detalle.php:163
+#: templates/tienda/detalle.php:195
 msgid "(confirmed by the member or their family)"
 msgstr "(bazkideak edo bere familiak berresten du)"
 
@@ -1423,7 +1423,7 @@ msgstr "(biribiltzea soilik: marjina desaktibatuta)"
 msgid "(says yes, but does not say to what)"
 msgstr "(baietz dio, baina ez du zeri buruz adierazten)"
 
-#: templates/tienda/detalle.php:145
+#: templates/tienda/detalle.php:177
 msgid "(the group)"
 msgstr "(taldea)"
 
@@ -1495,7 +1495,7 @@ msgstr "+ preziorik gabe"
 msgid ", \"Cuaderno 19.14\"), families are notified of each charge and the collections are recorded."
 msgstr ", «19.14 koadernoa»), familiei kargu bakoitzaren berri ematen zaie eta kobrantzak erregistratzen dira."
 
-#: templates/tienda/detalle.php:109
+#: templates/tienda/detalle.php:141
 msgid ", and some still have no price: enter what was collected"
 msgstr ", eta batzuek oraindik ez dute preziorik: idatzi kobratu dena"
 
@@ -1965,7 +1965,7 @@ msgstr "Alda ezin daitezkeen kontuak (lehen bezala sartzen jarraitzen dute)"
 msgid "Achieved"
 msgstr "Lortuta"
 
-#: templates/tesoreria/banco.php:278
+#: templates/tesoreria/banco.php:280
 msgid "Action"
 msgstr "Ekintza"
 
@@ -3007,6 +3007,10 @@ msgstr "Bankuko diru-sarrera (aukerakoa)"
 msgid "Bank deposits for family %s"
 msgstr "Bankuko diru-sarrerak %s familiarentzat"
 
+#: templates/tienda/detalle.php:116
+msgid "Bank deposits not yet reconciled. Choose the one that pays this order, or leave none to enter the payment by hand. The ones with the order number or the same amount come first."
+msgstr "Oraindik bateratu gabeko bankuko sarrerak. Aukeratu eskaera hau ordaintzen duena, edo ez aukeratu bat ere ordainketa eskuz idazteko. Eskaera zenbakia edo zenbateko bera dutenak lehenengo agertzen dira."
+
 #: templates/tienda/banco-sugerencias.php:22
 msgid "Bank deposits that look like order payments"
 msgstr "Eskaeren ordainketak diruditen bankuko sarrerak"
@@ -3421,7 +3425,7 @@ msgstr "Ekitaldia bertan behera utzi? Ezin da desegin."
 msgid "Cancel the list"
 msgstr "Ezeztatu zerrenda"
 
-#: templates/tienda/detalle.php:176 templates/tienda/detalle.php:186 templates/tienda/mis-pedidos.php:85 templates/tienda/publica.php:83
+#: templates/tienda/detalle.php:208 templates/tienda/detalle.php:218 templates/tienda/mis-pedidos.php:85 templates/tienda/publica.php:83
 msgid "Cancel the order"
 msgstr "Ezeztatu eskaera"
 
@@ -3466,13 +3470,13 @@ msgid "Cancelled on %1$s. Reason: %2$s"
 msgstr "Bertan behera utzia: %1$s. Arrazoia: %2$s"
 
 #. translators: 2: text, 1: text
-#: templates/tienda/detalle.php:72
+#: templates/tienda/detalle.php:73
 #, php-format
 msgid "Cancelled on %2$s by %1$s."
 msgstr "%1$s(e)k ezeztatua %2$s(e)an."
 
 #. translators: %2$s: text
-#: templates/tienda/detalle.php:72
+#: templates/tienda/detalle.php:73
 #, php-format
 msgid "Cancelled on %2$s."
 msgstr "%2$s(e)an ezeztatua."
@@ -3665,7 +3669,7 @@ msgstr "Taldearen datuak aldatu (izena, IFK, helbidea eta probintzia)"
 msgid "Change the status"
 msgstr "Aldatu egoera"
 
-#: templates/tesoreria/banco.php:303
+#: templates/tesoreria/banco.php:305
 msgid "Change the type"
 msgstr "Aldatu mota"
 
@@ -3783,7 +3787,7 @@ msgstr "Dokumentuarekin eta jaiotze-datarekin egiaztatua"
 msgid "Checklist"
 msgstr "Egiaztapen-zerrenda"
 
-#: templates/tienda/detalle.php:77
+#: templates/tienda/detalle.php:78
 msgid "Checks"
 msgstr "Egiaztapenak"
 
@@ -3819,7 +3823,7 @@ msgstr "Ordaintzen duten seme-alabak"
 msgid "Chocolate and cocoa"
 msgstr "Txokolatea eta kakaoa"
 
-#: templates/tesoreria/banco.php:208 templates/tesoreria/familia-banco.php:98
+#: templates/tesoreria/banco.php:209 templates/tesoreria/familia-banco.php:98 templates/tienda/detalle.php:120
 msgid "Choose"
 msgstr "Aukeratu"
 
@@ -3995,7 +3999,7 @@ msgstr "Aukeratu eskaera hau ordaintzen duen sarrera: sarreraren data eta zenbat
 msgid "Choose the expense or income type."
 msgstr "Aukeratu gastu edo diru-sarrera mota."
 
-#: templates/tesoreria/banco-asignar.php:97 templates/tesoreria/banco.php:257
+#: templates/tesoreria/banco-asignar.php:97 templates/tesoreria/banco.php:258
 msgid "Choose the family…"
 msgstr "Aukeratu familia…"
 
@@ -4054,7 +4058,7 @@ msgid "Choose the size…"
 msgstr "Aukeratu neurria…"
 
 #. translators: 1: text, 2: text
-#: templates/tesoreria/banco.php:210 templates/tesoreria/familia-banco.php:98
+#: templates/tesoreria/banco.php:211 templates/tesoreria/familia-banco.php:98
 #, php-format
 msgid "Choose the transaction of %1$s for %2$s"
 msgstr "Aukeratu %1$s(e)ko %2$s(e)ko mugimendua"
@@ -4312,13 +4316,13 @@ msgid "Confirmed"
 msgstr "Berretsita"
 
 #. translators: 1: text, 2: text
-#: templates/tienda/detalle.php:165
+#: templates/tienda/detalle.php:197
 #, php-format
 msgid "Confirmed by %1$s on %2$s"
 msgstr "%1$s(e)k berretsia %2$s(e)an"
 
 #. translators: %2$s: text
-#: templates/tienda/detalle.php:165
+#: templates/tienda/detalle.php:197
 #, php-format
 msgid "Confirmed on %2$s"
 msgstr "%2$s(e)an berretsia"
@@ -4934,7 +4938,7 @@ msgstr "Ordainketa edo doikuntza bat ezabatzea Diruzaintzak egiten du."
 msgid "Deliver orders"
 msgstr "Eskaerak entregatu"
 
-#: src/Frontend/Views/TiendaGestionView.php:315 src/Tienda/PedidosTable.php:312 templates/tienda/detalle.php:145 templates/tienda/gestion.php:107
+#: src/Frontend/Views/TiendaGestionView.php:315 src/Tienda/PedidosTable.php:312 templates/tienda/detalle.php:177 templates/tienda/gestion.php:107
 msgid "Delivered"
 msgstr "Entregatua"
 
@@ -4943,7 +4947,7 @@ msgid "Delivered, unconfirmed"
 msgstr "Berretsi gabe entregatuak"
 
 #. translators: %s: text
-#: src/Frontend/Views/TiendaGestionView.php:470
+#: src/Frontend/Views/TiendaGestionView.php:481
 #, php-format
 msgid "Delivery undone on order %s."
 msgstr "Entrega desegin da %s eskaeran."
@@ -5570,6 +5574,10 @@ msgstr "Idatzi gutxienez 3 karaktere."
 msgid "Enter how many people are travelling, the places on each bus and what one costs."
 msgstr "Idatzi zenbat pertsona doazen, autobus bakoitzaren plazak eta bakoitzak zenbat balio duen."
 
+#: templates/tienda/detalle.php:137
+msgid "Enter it by hand instead"
+msgstr "Eskuz idatzi"
+
 #: templates/seguridad/pagina.php:29
 msgid "Enter the 6-digit code the app shows you and press \"Activate\"."
 msgstr "Idatzi aplikazioak erakusten dizun 6 zifrako kodea eta sakatu «Activate»."
@@ -5922,7 +5930,7 @@ msgstr "Ekitaldiaren taldea"
 msgid "Event team (optional: you can complete it later)."
 msgstr "Ekitaldiaren taldea (aukerakoa: geroago osa dezakezu)."
 
-#: templates/tesoreria/banco.php:231
+#: templates/tesoreria/banco.php:232
 msgid "Event:"
 msgstr "Ekitaldia:"
 
@@ -6321,7 +6329,7 @@ msgstr "%s(r)en familia"
 msgid "Family removed."
 msgstr "Familia ezabatu da."
 
-#: templates/tesoreria/banco-asignar.php:96 templates/tesoreria/banco-revisar.php:123 templates/tesoreria/banco.php:256
+#: templates/tesoreria/banco-asignar.php:96 templates/tesoreria/banco-revisar.php:123 templates/tesoreria/banco.php:257
 msgid "Family: no. or surname (3 letters)…"
 msgstr "Familia: zk. edo abizena (3 letra)…"
 
@@ -7402,7 +7410,7 @@ msgstr "Etxeko telefonoa"
 msgid "Honey"
 msgstr "Eztia"
 
-#: templates/lista-espera/detalle.php:114 templates/tienda/detalle.php:96
+#: templates/lista-espera/detalle.php:114 templates/tienda/detalle.php:97
 msgid "How"
 msgstr "Nola"
 
@@ -7923,7 +7931,7 @@ msgstr "Sartu"
 msgid "Include %s in the order"
 msgstr "Sartu %s eskaeran"
 
-#: templates/tienda/detalle.php:132 templates/tienda/gestion.php:99
+#: templates/tienda/detalle.php:164 templates/tienda/gestion.php:99
 msgid "Include in the order"
 msgstr "Sartu eskaeran"
 
@@ -7931,7 +7939,7 @@ msgstr "Sartu eskaeran"
 msgid "Include the ticked ones in the order"
 msgstr "Sartu markatuak eskaeran"
 
-#: templates/tienda/detalle.php:119
+#: templates/tienda/detalle.php:151
 msgid "Included in the group's order"
 msgstr "Taldearen eskaeran sartua"
 
@@ -8338,7 +8346,7 @@ msgstr "%s(e)k berrikusi du."
 msgid "It has direct debit authorisations: it cannot be deleted."
 msgstr "Helbideratze-baimenak ditu: ezin da ezabatu."
 
-#: templates/tienda/detalle.php:150
+#: templates/tienda/detalle.php:182
 msgid "It has not arrived from the supplier yet: it can be delivered when Coordination marks its order as received."
 msgstr "Oraindik ez da hornitzailearengandik iritsi: Koordinazioak bere eskaera jasotzat markatzen duenean eman ahal izango da."
 
@@ -8414,11 +8422,11 @@ msgstr "Ordaindutakoa baino gehiago da (%s)."
 msgid "It is named \"%s\""
 msgstr "«%s» izena darama"
 
-#: templates/tesoreria/banco.php:286
+#: templates/tesoreria/banco.php:288
 msgid "It is not a fee: mark it as reviewed with its type."
 msgstr "Ez da kuota bat: markatu berrikusi gisa bere motarekin."
 
-#: templates/tienda/detalle.php:154
+#: templates/tienda/detalle.php:186
 msgid "It is not in any group order."
 msgstr "Ez dago taldearen inolako eskaeratan."
 
@@ -8528,7 +8536,7 @@ msgstr "Taldean geratzen da."
 msgid "It was left unfinished. Try again: it will continue where it stopped, without creating another record. Reason: "
 msgstr "Erdibidean geratu da. Saiatu berriro: utzi zuen tokitik jarraituko du, beste fitxarik sortu gabe. Arrazoia: "
 
-#: templates/tienda/detalle.php:109
+#: templates/tienda/detalle.php:141
 msgid "It was ordered with items that have no price: the proposed amount uses today's prices"
 msgstr "Prezio gabeko artikuluekin eskatu zen: proposatutako zenbatekoak gaurko prezioak erabiltzen ditu"
 
@@ -8866,7 +8874,7 @@ msgstr "%d. lerroa: mugimendua (22) kontu batetik kanpo."
 msgid "Line %d: transaction with an invalid date, amount or debit/credit key."
 msgstr "%d. lerroa: data, zenbateko edo zor/saldo gako baliogabeak dituen mugimendua."
 
-#: templates/tesoreria/banco-asociar.php:83 templates/tesoreria/banco.php:288 templates/tesoreria/caja-banco.php:58
+#: templates/tesoreria/banco-asociar.php:83 templates/tesoreria/banco.php:290 templates/tesoreria/caja-banco.php:58
 msgid "Link"
 msgstr "Lotu"
 
@@ -8878,7 +8886,7 @@ msgstr "Webguneko menuko esteka (testua; hutsik = esteka gabe)"
 msgid "Link removed."
 msgstr "Lotura kendu da."
 
-#: templates/tesoreria/banco.php:288
+#: templates/tesoreria/banco.php:290
 msgid "Link this transaction with another one (for example a transfer or a return)."
 msgstr "Lotu mugimendu hau beste batekin (adibidez transferentzia edo itzulketa bat)."
 
@@ -8906,7 +8914,7 @@ msgstr "Lotutako mugimenduak"
 msgid "Linked transactions."
 msgstr "Mugimenduak lotu dira."
 
-#: src/Frontend/Views/BancoView.php:384 templates/tesoreria/banco.php:240
+#: src/Frontend/Views/BancoView.php:384 templates/tesoreria/banco.php:241
 msgid "Linked with"
 msgstr "Honekin lotuta:"
 
@@ -9154,7 +9162,7 @@ msgstr "Maparako esteka (aukerakoa)"
 msgid "Margin (%)"
 msgstr "Marjina (%)"
 
-#: templates/tesoreria/banco.php:284
+#: templates/tesoreria/banco.php:286
 msgid "Mark a shop order as paid with this deposit."
 msgstr "Markatu dendako eskaera bat ordainduta sarrera honekin."
 
@@ -9162,7 +9170,7 @@ msgstr "Markatu dendako eskaera bat ordainduta sarrera honekin."
 msgid "Mark as bought"
 msgstr "Markatu erosita gisa"
 
-#: templates/tienda/detalle.php:152
+#: templates/tienda/detalle.php:184
 msgid "Mark as delivered"
 msgstr "Markatu entregatutzat"
 
@@ -9232,7 +9240,7 @@ msgstr "Dirua itzultzeko eskaerak ordainduta gisa markatu"
 msgid "Mark the paper one as received"
 msgstr "Markatu paperezkoa jasota bezala"
 
-#: templates/tienda/detalle.php:152 templates/tienda/gestion.php:178
+#: templates/tienda/detalle.php:184 templates/tienda/gestion.php:178
 msgid "Mark this order as delivered? The member or their family will be notified and asked to confirm it."
 msgstr "Eskaera hau entregatuta bezala markatu nahi duzu? Bazkideak edo bere familiak abisua jasoko du eta berretsi egin beharko du."
 
@@ -9618,7 +9626,7 @@ msgstr "Izena dendan (tailla, kolorea…)"
 msgid "Name of the new type"
 msgstr "Mota berriaren izena"
 
-#: templates/tienda/detalle.php:131 templates/tienda/gestion.php:171
+#: templates/tienda/detalle.php:163 templates/tienda/gestion.php:171
 msgid "Name of the supplier order"
 msgstr "Hornitzaileari egindako eskaeraren izena"
 
@@ -10260,7 +10268,7 @@ msgstr "Oharrak (aukerakoa)"
 msgid "Notes for the team"
 msgstr "Taldearentzako oharrak"
 
-#: templates/eventos/inscripciones.php:171 templates/tienda/detalle.php:68
+#: templates/eventos/inscripciones.php:171 templates/tienda/detalle.php:69
 msgid "Notes:"
 msgstr "Oharrak:"
 
@@ -10642,13 +10650,13 @@ msgid "Order %1$s paid (%2$s)"
 msgstr "%1$s eskaera ordainduta (%2$s)"
 
 #. translators: %s: text
-#: src/Frontend/Views/TiendaGestionView.php:499 src/Tienda/Proveedor.php:145 templates/tienda/detalle.php:131 templates/tienda/gestion.php:171
+#: src/Frontend/Views/TiendaGestionView.php:510 src/Tienda/Proveedor.php:145 templates/tienda/detalle.php:163 templates/tienda/gestion.php:171
 #, php-format
 msgid "Order %s"
 msgstr "%s eskaera"
 
 #. translators: %s: text
-#: src/Frontend/Views/TiendaGestionView.php:483
+#: src/Frontend/Views/TiendaGestionView.php:494
 #, php-format
 msgid "Order %s cancelled."
 msgstr "%s eskaera ezeztatu da."
@@ -10666,25 +10674,25 @@ msgid "Order %s has been delivered. When you have it, confirm it in \"My orders\
 msgstr "%s eskaera entregatuta dago. Eskuan duzunean, berretsi ezazu «Nire eskaerak» atalean."
 
 #. translators: %s: text
-#: src/Frontend/Views/TiendaGestionView.php:448
+#: src/Frontend/Views/TiendaGestionView.php:459
 #, php-format
 msgid "Order %s included in the group's order."
 msgstr "%s eskaera taldearen eskaeran sartu da."
 
 #. translators: %s: text
-#: src/Frontend/Views/TiendaGestionView.php:455
+#: src/Frontend/Views/TiendaGestionView.php:466
 #, php-format
 msgid "Order %s is no longer part of the group's order."
 msgstr "%s eskaera ez dago jada taldearen eskaeran."
 
 #. translators: %s: text
-#: src/Frontend/Views/TiendaGestionView.php:463
+#: src/Frontend/Views/TiendaGestionView.php:474
 #, php-format
 msgid "Order %s marked as delivered. The member or their family still has to confirm it."
 msgstr "%s eskaera entregatutzat markatu da. Bazkideak edo bere familiak berretsi behar du."
 
 #. translators: %s: text
-#: src/Frontend/Views/TiendaGestionView.php:400
+#: src/Frontend/Views/TiendaGestionView.php:400 src/Frontend/Views/TiendaGestionView.php:430
 #, php-format
 msgid "Order %s marked as paid with the bank deposit."
 msgstr "%s eskaera ordainduta bezala markatu da bankuko sarrerarekin."
@@ -10752,13 +10760,13 @@ msgid "Ordered from the supplier (goes through \"included in the group's order\"
 msgstr "Hornitzaileari eskatzen zaio («taldearen eskaeran sartuta» urratsetik pasatzen da entregatu aurretik)"
 
 #. translators: 2: text, 1: text
-#: templates/tienda/detalle.php:70
+#: templates/tienda/detalle.php:71
 #, php-format
 msgid "Ordered on %2$s by %1$s."
 msgstr "%1$s(e)k eskatua %2$s(e)an."
 
 #. translators: %2$s: text
-#: templates/tienda/detalle.php:70
+#: templates/tienda/detalle.php:71
 #, php-format
 msgid "Ordered on %2$s."
 msgstr "%2$s(e)an eskatua."
@@ -11041,7 +11049,7 @@ msgstr "Ordaindu txartelaz, pertsonalki, taldeko datafonoarekin jasotzean, eskae
 msgid "Pay it into the bank"
 msgstr "Sartu bankuan"
 
-#: templates/tesoreria/banco.php:281
+#: templates/tesoreria/banco.php:283
 msgid "Pay the fee of a family with this deposit."
 msgstr "Ordaindu familia baten kuota sarrera honekin."
 
@@ -11113,7 +11121,7 @@ msgstr "Taldeak onartzen dituen ordainketa-moduak"
 msgid "Payment missing"
 msgstr "Ordainketa falta da"
 
-#: templates/tienda/detalle.php:135
+#: templates/tienda/detalle.php:167
 msgid "Payment not yet recorded."
 msgstr "Oraindik ez da ordainketarik agertzen."
 
@@ -11122,7 +11130,7 @@ msgid "Payment of"
 msgstr "Ordainketaren xedea"
 
 #. translators: 1: text, 2: text, 3: text
-#: src/Frontend/Views/TiendaGestionView.php:432
+#: src/Frontend/Views/TiendaGestionView.php:443
 #, php-format
 msgid "Payment of %1$s (%2$s) validated on order %3$s."
 msgstr "%1$s(r)en (%2$s) ordainketa balioztatu da %3$s eskaeran."
@@ -11191,7 +11199,7 @@ msgid "Payment type"
 msgstr "Ordainketa mota"
 
 #. translators: %s: text
-#: src/Frontend/Views/TiendaGestionView.php:438
+#: src/Frontend/Views/TiendaGestionView.php:449
 #, php-format
 msgid "Payment undone on order %s."
 msgstr "Ordainketa desegin da %s eskaeran."
@@ -11248,7 +11256,7 @@ msgstr "Kobratzeko zain"
 msgid "Pending collections"
 msgstr "Kobratzeke daudenak"
 
-#: templates/tienda/detalle.php:167
+#: templates/tienda/detalle.php:199
 msgid "Pending confirmation in their private area ("
 msgstr "Bere eremu pribatuan berresteko zain ("
 
@@ -12004,7 +12012,7 @@ msgstr "Errezeta gorde da."
 msgid "Recipes"
 msgstr "Errezetak"
 
-#: templates/tesoreria/banco.php:269 templates/tesoreria/banco.php:281
+#: templates/tesoreria/banco.php:283
 msgid "Reconcile"
 msgstr "Bateratu"
 
@@ -12168,7 +12176,7 @@ msgstr "Errepikakorra"
 msgid "Recurrent (RCUR)"
 msgstr "Errepikakorra (RCUR)"
 
-#: templates/tesoreria/banco.php:221 templates/tesoreria/familia-banco.php:84
+#: templates/tesoreria/banco.php:220 templates/tesoreria/familia-banco.php:84
 msgid "Ref.:"
 msgstr "Erref.:"
 
@@ -12182,7 +12190,7 @@ msgstr "Erreferentzia"
 msgid "Reference %s in the description"
 msgstr "%s erreferentzia kontzeptuan"
 
-#: templates/reintegros/index.php:82 templates/tienda/detalle.php:105
+#: templates/reintegros/index.php:82 templates/tienda/detalle.php:106
 msgid "Reference (optional)"
 msgstr "Erreferentzia (aukerakoa)"
 
@@ -12436,7 +12444,7 @@ msgstr "%s webetik ezabatu? Pertsonak atalean ez da gehiago agertuko, bere famil
 msgid "Remove from the website"
 msgstr "Ezabatu webetik"
 
-#: templates/tesoreria/banco.php:298
+#: templates/tesoreria/banco.php:300
 msgid "Remove link"
 msgstr "Kendu lotura"
 
@@ -12452,7 +12460,7 @@ msgstr "Kendu diru-sarrera"
 msgid "Remove the link"
 msgstr "Kendu lotura"
 
-#: templates/tesoreria/banco.php:294
+#: templates/tesoreria/banco.php:296
 msgid "Remove the link between these two transactions?"
 msgstr "Bi mugimendu hauen arteko lotura kendu?"
 
@@ -12464,7 +12472,7 @@ msgstr "Kendu zeregina"
 msgid "Remove this member from the family?"
 msgstr "Bazkide hau familiatik kendu nahi duzu?"
 
-#: templates/tienda/detalle.php:123
+#: templates/tienda/detalle.php:155
 msgid "Remove this order from the group's order?"
 msgstr "Eskaera hau taldearen eskaeratik kendu nahi duzu?"
 
@@ -12860,7 +12868,7 @@ msgstr "Rolak"
 msgid "Roles, sections and family account"
 msgstr "Rolak, atalak eta familia-kontua"
 
-#: templates/tesoreria/banco.php:262 templates/tesoreria/familia-movimientos.php:51 templates/tesoreria/familia-movimientos.php:61 templates/tesoreria/sepa-remesa.php:39
+#: templates/tesoreria/banco.php:263 templates/tesoreria/familia-movimientos.php:51 templates/tesoreria/familia-movimientos.php:61 templates/tesoreria/sepa-remesa.php:39
 msgid "Round"
 msgstr "Txanda"
 
@@ -13231,7 +13239,7 @@ msgstr "Scouts de Españako bazkide-zenbakia"
 msgid "Scouts de España member no. (username)"
 msgstr "Scouts de Españako bazkide-zk. (erabiltzailea)"
 
-#: src/Informes/Catalogo.php:57 templates/personas/listado.php:50 templates/tienda/detalle.php:57 templates/usuarios/fila.php:74
+#: src/Informes/Catalogo.php:57 templates/personas/listado.php:50 templates/tienda/detalle.php:58 templates/usuarios/fila.php:74
 msgid "Scouts de España no."
 msgstr "Scouts de Españako zk."
 
@@ -13665,7 +13673,7 @@ msgstr "Dendako eskaerak"
 msgid "Shop orders to collect"
 msgstr "Kobratzeko dendako eskaerak"
 
-#: templates/tesoreria/banco.php:284
+#: templates/tesoreria/banco.php:286
 msgid "Shop payment"
 msgstr "Dendako ordainketa"
 
@@ -14053,7 +14061,7 @@ msgstr "Hasiera"
 msgid "State at least one educational section for the Scouter role."
 msgstr "Adierazi gutxienez hezkuntza-atal bat Scouter rolerako."
 
-#: src/Frontend/Views/TiendaGestionView.php:426
+#: src/Frontend/Views/TiendaGestionView.php:437
 msgid "State how it was paid (cash, deposit, Bizum or card terminal), the date (not later than today) and the amount."
 msgstr "Adierazi nola ordaindu den (eskudirua, sarrera, Bizum edo datafonoa), data (gaurkoa baino geroagokoa ez) eta zenbatekoa."
 
@@ -14077,7 +14085,7 @@ msgstr "Adierazi eskaera-zenbakia kontzeptuan. Diruzaintzak ordainketa jasotzen 
 msgid "State the payment date (not later than today)."
 msgstr "Adierazi ordainketaren data (gaurkoa baino geroagokoa ez)."
 
-#: src/Eventos/Servicio.php:711 src/Frontend/Views/TiendaGestionView.php:478
+#: src/Eventos/Servicio.php:711 src/Frontend/Views/TiendaGestionView.php:489
 msgid "State the reason for the cancellation."
 msgstr "Adierazi ezeztatzearen arrazoia."
 
@@ -14211,7 +14219,7 @@ msgstr "Familia honetarako iradokiak"
 msgid "Suggested price"
 msgstr "Iradokitako prezioa"
 
-#: templates/tesoreria/banco.php:248 templates/tesoreria/familia-banco.php:87
+#: templates/tesoreria/banco.php:249 templates/tesoreria/familia-banco.php:87
 msgid "Suggested:"
 msgstr "Iradokia:"
 
@@ -14557,11 +14565,11 @@ msgstr "Talde hori ez dago."
 msgid "That group no. is already registered or pending review. If it is yours, talk to the office."
 msgstr "Taldearen zenbaki hori alta emanda dago edo berrikusteke dago. Zuena bada, hitz egin bulegoarekin."
 
-#: src/Tienda/ConciliacionBanco.php:101 src/Tienda/ConciliacionBanco.php:180
+#: src/Tienda/ConciliacionBanco.php:101 src/Tienda/ConciliacionBanco.php:204
 msgid "That income is already reviewed or does not correspond to this order."
 msgstr "Sarrera hau berrikusita dago jada edo ez dagokio eskaera honi."
 
-#: src/Tienda/ConciliacionBanco.php:154 src/Tienda/ConciliacionBanco.php:272 src/Tienda/ConciliacionBanco.php:284 templates/tesoreria/banco-pedido.php:33
+#: src/Tienda/ConciliacionBanco.php:178 src/Tienda/ConciliacionBanco.php:296 src/Tienda/ConciliacionBanco.php:308 templates/tesoreria/banco-pedido.php:33
 msgid "That income is already reviewed or does not exist."
 msgstr "Sarrera hori jada berrikusita dago edo ez da existitzen."
 
@@ -14613,7 +14621,7 @@ msgstr "Eskaera hau ezin da hemendik ezeztatu jada: ordainketa dagoeneko agertze
 msgid "That order does not exist."
 msgstr "Eskaera hori ez da existitzen."
 
-#: src/Tienda/ConciliacionBanco.php:158
+#: src/Tienda/ConciliacionBanco.php:182
 msgid "That order has nothing to pay."
 msgstr "Eskaera horrek ez du kobratzeko ezer."
 
@@ -14621,7 +14629,7 @@ msgstr "Eskaera horrek ez du kobratzeko ezer."
 msgid "That order is already marked as received."
 msgstr "Eskaera hori jada jasotzat markatuta dago."
 
-#: src/Tienda/ConciliacionBanco.php:98 src/Tienda/ConciliacionBanco.php:151 src/Tienda/ConciliacionBanco.php:176 templates/tesoreria/banco-pedido-ingreso.php:34
+#: src/Tienda/ConciliacionBanco.php:98 src/Tienda/ConciliacionBanco.php:175 src/Tienda/ConciliacionBanco.php:200 templates/tesoreria/banco-pedido-ingreso.php:34
 msgid "That order is already paid or cancelled."
 msgstr "Eskaera hori ordainduta edo ezeztatuta dago jada."
 
@@ -14629,7 +14637,7 @@ msgstr "Eskaera hori ordainduta edo ezeztatuta dago jada."
 msgid "That order is not yet recorded as delivered."
 msgstr "Eskaera hori ez dago oraindik entregatutzat."
 
-#: src/Tienda/ConciliacionBanco.php:95 src/Tienda/ConciliacionBanco.php:148
+#: src/Tienda/ConciliacionBanco.php:95 src/Tienda/ConciliacionBanco.php:172
 msgid "That order or that transaction no longer exists."
 msgstr "Eskaera edo mugimendu hori ez dira existitzen jada."
 
@@ -15117,11 +15125,11 @@ msgstr "Zenbatekoak zenbaki positiboa izan behar du."
 msgid "The amount must be greater than 0."
 msgstr "Zenbatekoak 0 baino handiagoa izan behar du."
 
-#: templates/tesoreria/banco-pedido-ingreso.php:71 templates/tesoreria/banco-pedido.php:71
+#: templates/tesoreria/banco-pedido-ingreso.php:71 templates/tesoreria/banco-pedido.php:71 templates/tienda/detalle.php:114
 msgid "The amount of the deposit is not the amount of the order. Mark the order as paid with this deposit anyway?"
 msgstr "Sarreraren zenbatekoa ez da eskaeraren zenbatekoa. Eskaera sarrera honekin ordainduta bezala markatu nahi duzu hala ere?"
 
-#: src/Tienda/ConciliacionBanco.php:162
+#: src/Tienda/ConciliacionBanco.php:186
 msgid "The amount of the deposit is not the amount of the order: confirm it to continue."
 msgstr "Sarreraren zenbatekoa ez da eskaeraren zenbatekoa: berretsi jarraitzeko."
 
@@ -15153,7 +15161,7 @@ msgstr "Bankua eta eskudiru-kutxa bakoitza, aldiaren hasierako eta amaierako sal
 msgid "The bank deposit is only linked to the round's fee. For an event, remove the deposit and record the payment."
 msgstr "Banku-sarrera txandako kuotari soilik lotzen zaio. Ekitaldi baterako, kendu sarrera eta idatzi ordainketa."
 
-#: src/Frontend/Views/TiendaGestionView.php:440
+#: src/Frontend/Views/TiendaGestionView.php:451
 msgid "The bank deposit is pending reconciliation again."
 msgstr "Bankuko sarrera berriro dago adiskidetzeko."
 
@@ -15175,7 +15183,7 @@ msgstr "Bankua ez dago aktibo zure taldean."
 msgid "The bank is only seen by the Secretary's office, Coordination and Treasury."
 msgstr "Bankua Idazkaritzak, Koordinazioak eta Diruzaintzak soilik ikusten dute."
 
-#: src/Tienda/ConciliacionBanco.php:90 src/Tienda/ConciliacionBanco.php:143 src/Tienda/ConciliacionBanco.php:268
+#: src/Tienda/ConciliacionBanco.php:90 src/Tienda/ConciliacionBanco.php:167 src/Tienda/ConciliacionBanco.php:292
 msgid "The bank is only used by Treasury and whoever manages the Treasury settings, with the Bank module on."
 msgstr "Bankua Diruzaintzak eta Diruzaintzaren konfigurazioa daramana soilik erabil dezakete, Banku modulua aktibo dagoenean."
 
@@ -15219,7 +15227,7 @@ msgstr "Aurrekontua oraindik prestatu eta Diruzaintzari bidali behar zaio onirit
 msgid "The budget, if families pay, and Treasury's validation"
 msgstr "Aurrekontua, familiek ordaintzen badute, eta Diruzaintzaren balidazioa"
 
-#: src/Tienda/ConciliacionBanco.php:280
+#: src/Tienda/ConciliacionBanco.php:304
 msgid "The card payments no longer match that deposit. Check the list."
 msgstr "Datafonoko kobrantzak jada ez datoz bat sarrera horrekin. Berrikusi zerrenda."
 
@@ -16146,7 +16154,7 @@ msgstr "Ordainketaren zenbatekoak 0 baino handiagoa izan behar du."
 msgid "The payment date cannot be later than today."
 msgstr "Ordainketaren data ezin da gaur baino geroagokoa izan."
 
-#: templates/tesoreria/banco.php:305
+#: templates/tesoreria/banco.php:307
 msgid "The payment recorded on the family will be cancelled."
 msgstr "Familian erregistratu zen ordainketa ezeztatuko da."
 
@@ -17869,7 +17877,7 @@ msgid "Transfer to the group's account, stating order no. %s as the description.
 msgstr "Transferentzia taldearen kontura, kontzeptu gisa %s eskaera-zenbakia adieraziz."
 
 #. translators: %s: text
-#: templates/tesoreria/banco.php:236
+#: templates/tesoreria/banco.php:237
 #, php-format
 msgid "Transfer: %s"
 msgstr "Lekualdaketa: %s"
@@ -18046,7 +18054,7 @@ msgstr "%d urtetik behera 1. tutorea behar da: izena, abizenak eta emaila."
 msgid "Under %d years old"
 msgstr "%d urtetik beherakoak"
 
-#: templates/tesoreria/banco.php:309 templates/tienda/detalle.php:85 templates/tienda/detalle.php:123 templates/tienda/detalle.php:148
+#: templates/tesoreria/banco.php:311 templates/tienda/detalle.php:86 templates/tienda/detalle.php:155 templates/tienda/detalle.php:180
 msgid "Undo"
 msgstr "Desegin"
 
@@ -18054,15 +18062,15 @@ msgstr "Desegin"
 msgid "Undo the approval"
 msgstr "Desegin oniritzia"
 
-#: templates/tienda/detalle.php:148 templates/tienda/gestion.php:186
+#: templates/tienda/detalle.php:180 templates/tienda/gestion.php:186
 msgid "Undo the delivery? The member's confirmation is also deleted, if there was one."
 msgstr "Entrega desegin nahi duzu? Bazkidearen berrespena ere ezabatzen da, bazegoen."
 
-#: templates/tienda/detalle.php:85
+#: templates/tienda/detalle.php:86
 msgid "Undo this order's payment?"
 msgstr "Eskaera honen ordainketa desegin nahi duzu?"
 
-#: templates/tesoreria/banco.php:305
+#: templates/tesoreria/banco.php:307
 msgid "Undo?"
 msgstr "Desegin nahi duzu?"
 
@@ -18070,7 +18078,7 @@ msgstr "Desegin nahi duzu?"
 msgid "Unidad"
 msgstr "Unitatea"
 
-#: src/Idiomas/Guardados.php:311 src/Tienda/ImportadorProductos.php:262 templates/pagos/mis-pagos.php:131 templates/tienda/detalle.php:167
+#: src/Idiomas/Guardados.php:311 src/Tienda/ImportadorProductos.php:262 templates/pagos/mis-pagos.php:131 templates/tienda/detalle.php:199
 msgid "Uniform"
 msgstr "Uniformea"
 
@@ -18198,6 +18206,10 @@ msgstr "Kanpaldiko argazkiak taldearen webgunera igo"
 msgid "Use in each group a CRM user dedicated to the website, which sees only its own group. With edit permission on Contacts, the private area allows editing records; with a read-only role, everything is shown read-only."
 msgstr "Talde bakoitzean, erabili webgunerako bereziki CRM erabiltzaile bat, bere taldea soilik ikusten duena. Kontaktuetan edizio-baimenarekin, eremu pribatuak fitxak editatzea onartzen du; irakurtzeko soilik rolarekin, dena irakurtzeko soilik erakusten da."
 
+#: templates/tienda/detalle.php:129
+msgid "Use this deposit"
+msgstr "Erabili sarrera hau"
+
 #: templates/tesoreria/banco-pedido-ingreso.php:81
 msgid "Use this one"
 msgstr "Erabili hau"
@@ -18252,7 +18264,7 @@ msgstr "Balioztatu"
 msgid "Validate budgets and keep the accounts"
 msgstr "Aurrekontuak balioztatu eta kontuak eraman"
 
-#: templates/tienda/detalle.php:106
+#: templates/tienda/detalle.php:107
 msgid "Validate the payment"
 msgstr "Balioztatu ordainketa"
 
@@ -18261,13 +18273,13 @@ msgid "Validated"
 msgstr "Balioztatua"
 
 #. translators: 1: text, 2: text
-#: templates/tienda/detalle.php:84
+#: templates/tienda/detalle.php:85
 #, php-format
 msgid "Validated by %1$s on %2$s"
 msgstr "%1$s(e)k balioztatua %2$s(e)an"
 
 #. translators: %2$s: text
-#: templates/tienda/detalle.php:84
+#: templates/tienda/detalle.php:85
 #, php-format
 msgid "Validated on %2$s"
 msgstr "%2$s(e)an balioztatua"
@@ -18881,7 +18893,7 @@ msgid "Whoever is on the team can manage the event. The team does not pay: its c
 msgstr "Taldean dagoenak ekitaldia kudea dezake. Taldeak ez du ordaintzen: haren kostua parte-hartzaileen prezioan banatzen da."
 
 #. translators: %s: text
-#: templates/tienda/detalle.php:93
+#: templates/tienda/detalle.php:94
 #, php-format
 msgid "Whoever ordered chose to pay with: %s."
 msgstr "Eskatu zuenak honela ordaintzea aukeratu zuen: %s."
@@ -19949,7 +19961,7 @@ msgid "brought forward from %s"
 msgstr "%s egunetik aurreratua"
 
 #. translators: 1: text, 2: text
-#: templates/tienda/detalle.php:122 templates/tienda/detalle.php:147
+#: templates/tienda/detalle.php:154 templates/tienda/detalle.php:179
 #, php-format
 msgid "by %1$s on %2$s"
 msgstr "%1$s(e)k, %2$s(e)an"
@@ -20352,7 +20364,7 @@ msgid "on %1$s at %2$s"
 msgstr "%1$s(e)an, %2$s(e)tan"
 
 #. translators: %2$s: text
-#: templates/tienda/detalle.php:122 templates/tienda/detalle.php:147
+#: templates/tienda/detalle.php:154 templates/tienda/detalle.php:179
 #, php-format
 msgid "on %2$s"
 msgstr "%2$s(e)an"
@@ -20917,7 +20929,7 @@ msgstr "← Inbentarioa"
 msgid "← My payments"
 msgstr "← Nire ordainketak"
 
-#: templates/tienda/detalle.php:39
+#: templates/tienda/detalle.php:40
 msgid "← Order management"
 msgstr "← Eskaeren kudeaketa"
 

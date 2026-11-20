@@ -132,6 +132,30 @@ final class ConciliacionBanco {
 	}
 
 	/**
+	 * Ingresos del banco por conciliar entre los que se elige el que paga un pedido (v0.64.21, desde la gestión del pedido): los
+	 * mismos de la pantalla del banco. Salen primero los que llevan el nº del pedido y después los del mismo importe.
+	 *
+	 * @param array $p Pedido sin pagar.
+	 * @return array[] Movimientos con 'codigo' (lleva el nº del pedido) e 'igual' (mismo importe); vacío si el banco no está disponible.
+	 */
+	public static function ingresos_para( array $p ): array {
+		if ( ! self::disponible() || null !== $p['pago_en'] || null !== $p['cancelado_en'] ) {
+			return array();
+		}
+		$a_cobrar = Servicio::importe_a_cobrar( $p );
+		$numero   = PedidosTable::numero( $p );
+		$grupo    = (string) Grupo::numero();
+		$out      = array();
+		foreach ( BancoTable::movimientos( array( 'estado' => BancoTable::PENDIENTE, 'tipo' => 'ingresos' ) ) as $m ) {
+			$m['codigo'] = self::referencia( \AsdeBalears\AreaPrivada\Tesoreria\Banco\AsignacionGuiada::texto( $m ), $grupo ) === $numero;
+			$m['igual']  = abs( (float) $m['importe'] - $a_cobrar ) < 0.005;
+			$out[]       = $m;
+		}
+		usort( $out, static fn( $a, $b ) => array( (int) $b['codigo'], (int) $b['igual'], $b['fecha'] ) <=> array( (int) $a['codigo'], (int) $a['igual'], $a['fecha'] ) );
+		return $out;
+	}
+
+	/**
 	 * Marca el pedido como pagado con este ingreso elegido a mano por Tesorería (v0.64.8, petición del usuario: «en el banco no
 	 * hay manera de asociar un ingreso a un pedido»). A diferencia de confirmar(), no hace falta que el concepto lleve el nº.
 	 * Deshacer el pago del pedido devuelve el ingreso a «por conciliar», igual que con los propuestos.

@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.64.20
+Stable tag: 0.64.21
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -61,6 +61,9 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.64.21 =
+* Shop orders: when validating a payment as "Deposit into account", the unreconciled bank deposits are listed (the same as in the bank screen). Choosing one pays the order with its date and amount and reconciles the deposit.
 
 = 0.64.20 =
 * Bank: the list fits its card on narrower screens (shorter payer and family field). Help texts updated for the new Action menu.
@@ -246,6 +249,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * The changelog of versions 0.42.0 and earlier is in changelog.txt, in the plugin folder.
 
 == Upgrade Notice ==
+
+= 0.64.21 =
+Choose the bank deposit when validating an order payment. No database changes.
 
 = 0.64.20 =
 Bank list layout adjusted. No database changes.
