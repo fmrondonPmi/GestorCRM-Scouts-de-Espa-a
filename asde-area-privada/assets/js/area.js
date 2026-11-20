@@ -332,8 +332,14 @@
 			cerrar();
 		} );
 		dialogo.addEventListener( 'click', function ( e ) {
+			// Clic fuera de la ventana. Solo si el puntero está de verdad fuera del recuadro: al elegir
+			// una opción de un desplegable predictivo (su lista cuelga del <dialog>) la lista se oculta
+			// en el mousedown y el clic cae sobre el propio <dialog> sin haber salido de él.
 			if ( e.target === dialogo ) {
-				cerrar(); // Clic fuera de la ventana.
+				var r = dialogo.getBoundingClientRect();
+				if ( e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom ) {
+					cerrar();
+				}
 			}
 		} );
 		cuerpo.addEventListener( 'submit', enviarDentro );

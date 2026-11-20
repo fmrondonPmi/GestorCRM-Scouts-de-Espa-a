@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.64.14
+Stable tag: 0.64.15
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -61,6 +61,10 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.64.15 =
+* Fix: choosing an option in a predictive drop-down (for example the event when reviewing a bank transaction) no longer closes the pop-up window.
+* Reviewing bank transactions: the event list now offers only published events (plus the one already linked).
 
 = 0.64.14 =
 * Built-in help: the events agenda, paying a shop order from a bank deposit and undoing a delivery now have their screens described. Text only; no code changes.
@@ -227,6 +231,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * The changelog of versions 0.42.0 and earlier is in changelog.txt, in the plugin folder.
 
 == Upgrade Notice ==
+
+= 0.64.15 =
+Fixes a pop-up closing when choosing from a drop-down. No database changes.
 
 = 0.64.14 =
 Help text only. No database changes.

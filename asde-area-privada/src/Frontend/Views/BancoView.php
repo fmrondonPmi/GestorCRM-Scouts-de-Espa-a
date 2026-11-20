@@ -296,6 +296,27 @@ final class BancoView extends TesoreriaBaseView {
 		return array( $cabecera, $filas, $opciones );
 	}
 
+	/**
+	 * Eventos que se ofrecen al revisar un movimiento: solo los publicados (los borradores y cancelados no reciben pagos),
+	 * más el que un movimiento ya tenga asociado, para no perderlo al guardar.
+	 *
+	 * @param array[] $movs Los movimientos de la ventana.
+	 * @return array<int, string> id => nombre (vacío si el módulo Eventos está apagado).
+	 */
+	private function eventos_para_elegir( array $movs ): array {
+		if ( ! \AsdeBalears\AreaPrivada\Domain\Modulos::activo( \AsdeBalears\AreaPrivada\Domain\Modulos::EVENTOS ) ) {
+			return array();
+		}
+		$ya = array_filter( array_map( 'intval', array_column( $movs, 'evento_id' ) ) );
+		$r  = array();
+		foreach ( \AsdeBalears\AreaPrivada\Eventos\EventosTable::todos() as $e ) {
+			if ( \AsdeBalears\AreaPrivada\Eventos\EventosTable::PUBLICADO === $e['estado'] || in_array( (int) $e['id'], $ya, true ) ) {
+				$r[ (int) $e['id'] ] = $e['nombre'];
+			}
+		}
+		return $r;
+	}
+
 	/** Ventana «Marcar como revisado»: los movimientos elegidos (?m[]=id), cada uno con su tipo. */
 	private function revisar(): string {
 		$ids  = isset( $_GET['m'] ) && is_array( $_GET['m'] ) ? array_map( 'absint', wp_unslash( $_GET['m'] ) ) : array(); // phpcs:ignore WordPress.Security.NonceVerification.Recommended,WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- solo números (absint) para pintar un formulario
@@ -307,7 +328,7 @@ final class BancoView extends TesoreriaBaseView {
 				'movs'   => $movs,
 				'tipos'  => TiposMovimiento::todos(),
 				// v0.52: a qué evento y a qué familia se asocia (los dos opcionales).
-				'eventos'  => \AsdeBalears\AreaPrivada\Domain\Modulos::activo( \AsdeBalears\AreaPrivada\Domain\Modulos::EVENTOS ) ? array_column( \AsdeBalears\AreaPrivada\Eventos\EventosTable::todos(), 'nombre', 'id' ) : array(),
+				'eventos'  => $this->eventos_para_elegir( $movs ),
 				'familias' => $this->familias()['etiquetas'],
 				'url'    => add_query_arg( 'revisar', '1', $url ),
 				'volver' => wp_validate_redirect( esc_url_raw( $this->get( 'volver' ) ), $url ) ?: $url,
