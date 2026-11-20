@@ -129,8 +129,8 @@ final class MisPagosView extends View {
 			}
 		}
 		// v0.35: inscripciones a eventos (lo pagado y lo que queda, con su referencia).
-		$eventos      = array_column( EventosTable::todos(), null, 'id' );
 		$inscripciones = InscripcionesTable::de_socios( $nums );
+		$eventos      = array_column( EventosTable::por_ids( array_column( $inscripciones, 'evento_id' ) ), null, 'id' );
 		$ev_movs      = EventosMovimientos::de_inscripciones( array_column( $inscripciones, 'id' ) );
 		$hay_eventos  = false;
 		foreach ( $inscripciones as $f ) {

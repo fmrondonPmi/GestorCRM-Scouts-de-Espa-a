@@ -26,6 +26,9 @@ defined( 'ABSPATH' ) || exit;
  */
 final class EventosTable {
 
+	/** @var array<string, array[]> Memoria por petición de `todos()`: nº de grupo => eventos. */
+	private static array $memoria = array();
+
 	public const BORRADOR  = 'borrador';
 	public const PUBLICADO = 'publicado';
 	public const CANCELADO = 'cancelado';
@@ -150,6 +153,7 @@ final class EventosTable {
 	/** @return int Id del evento. */
 	public static function crear( array $datos ): int {
 		global $wpdb;
+		self::olvidar();
 		$wpdb->insert(
 			self::table(),
 			array_merge(
@@ -177,11 +181,46 @@ final class EventosTable {
 		return $fila ? self::preparar( $fila ) : null;
 	}
 
-	/** @return array[] Todos los del grupo actual, por fecha de inicio. */
+	/**
+	 * @return array[] Todos los del grupo actual, por fecha de inicio. Se leen una vez por petición
+	 *                 (más de quince pantallas y tareas lo piden); cualquier escritura de esta clase
+	 *                 la vacía y `olvidar()` la vacía a mano si algo escribe por otro camino.
+	 */
 	public static function todos(): array {
 		global $wpdb;
-		$filas = (array) $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM %i WHERE grupo = %s ORDER BY inicio ASC, id ASC', self::table(), Grupo::numero() ), ARRAY_A ); // phpcs:ignore WordPress.DB
+		$grupo = Grupo::numero();
+		if ( ! isset( self::$memoria[ $grupo ] ) ) {
+			$filas                   = (array) $wpdb->get_results( $wpdb->prepare( 'SELECT * FROM %i WHERE grupo = %s ORDER BY inicio ASC, id ASC', self::table(), $grupo ), ARRAY_A ); // phpcs:ignore WordPress.DB
+			self::$memoria[ $grupo ] = array_map( array( self::class, 'preparar' ), $filas );
+		}
+		return self::$memoria[ $grupo ];
+	}
+
+	/**
+	 * Solo los eventos pedidos, del grupo actual y en el mismo orden que `todos()` (para las pantallas
+	 * que necesitan unos pocos, como «Mis pagos»). Con todos ya leídos, se sirven de memoria.
+	 *
+	 * @param int[] $ids Ids de evento.
+	 * @return array[]
+	 */
+	public static function por_ids( array $ids ): array {
+		global $wpdb;
+		$ids = array_values( array_unique( array_filter( array_map( 'intval', $ids ) ) ) );
+		if ( ! $ids ) {
+			return array();
+		}
+		$grupo = Grupo::numero();
+		if ( isset( self::$memoria[ $grupo ] ) ) {
+			return array_values( array_filter( self::$memoria[ $grupo ], static fn( array $e ) => in_array( $e['id'], $ids, true ) ) );
+		}
+		$marcas = implode( ',', array_fill( 0, count( $ids ), '%d' ) );
+		$filas  = (array) $wpdb->get_results( $wpdb->prepare( "SELECT * FROM %i WHERE grupo = %s AND id IN ($marcas) ORDER BY inicio ASC, id ASC", array_merge( array( self::table(), $grupo ), $ids ) ), ARRAY_A ); // phpcs:ignore WordPress.DB
 		return array_map( array( self::class, 'preparar' ), $filas );
+	}
+
+	/** Vacía la memoria de `todos()` (tras escribir en la tabla por un camino que no es esta clase). */
+	public static function olvidar(): void {
+		self::$memoria = array();
 	}
 
 	/**
@@ -343,6 +382,7 @@ final class EventosTable {
 	 */
 	public static function cerrar( int $id, array $balance ): bool {
 		global $wpdb;
+		self::olvidar();
 		return (bool) $wpdb->update(
 			self::table(),
 			array(
@@ -364,12 +404,14 @@ final class EventosTable {
 	 */
 	public static function reabrir_cuentas( int $id ): bool {
 		global $wpdb;
+		self::olvidar();
 		return (bool) $wpdb->query( $wpdb->prepare( 'UPDATE %i SET cerrado_en = NULL, cerrado_por = 0 WHERE id = %d AND grupo = %s AND cerrado_en IS NOT NULL', self::table(), $id, Grupo::numero() ) ); // phpcs:ignore WordPress.DB
 	}
 
 	/** Borra un borrador (no hay pagos ni inscripciones: no es un justificante de nada). */
 	public static function borrar( int $id ): bool {
 		global $wpdb;
+		self::olvidar();
 		return (bool) $wpdb->delete(
 			self::table(),
 			array(
@@ -419,6 +461,7 @@ final class EventosTable {
 
 	private static function actualizar( int $id, array $datos ): bool {
 		global $wpdb;
+		self::olvidar();
 		return false !== $wpdb->update(
 			self::table(),
 			$datos,
