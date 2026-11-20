@@ -34,9 +34,12 @@ final class Cuentas {
 	 * @return array<int, string> user_id => nº de Scouts de España
 	 */
 	public static function personas( array $e ): array {
-		$out = array();
-		foreach ( InscripcionesTable::equipo( $e['id'] ) as $m ) {
-			$u = Usuarios::por_socio( (string) $m['socio'] );
+		$out     = array();
+		$equipo  = InscripcionesTable::equipo( $e['id'] );
+		// Una sola consulta de cuentas para todo el equipo (antes, una por persona).
+		$cuentas = Usuarios::por_socios( array_map( static fn( array $m ) => (string) $m['socio'], $equipo ) );
+		foreach ( $equipo as $m ) {
+			$u = $cuentas[ (string) $m['socio'] ] ?? null;
 			if ( $u ) {
 				$out[ (int) $u->ID ] = (string) $m['socio'];
 			}
