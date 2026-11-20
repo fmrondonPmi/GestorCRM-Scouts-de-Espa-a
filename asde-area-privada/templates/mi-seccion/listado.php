@@ -26,6 +26,16 @@ $lista  = array_values(
 );
 $enlace = static fn( array $args ): string => esc_url( add_query_arg( $args + array( 'seccion' => $seccion ), $url ) );
 ?>
+<?php if ( count( $secciones ) > 1 ) : ?>
+	<?php /* Arriba del todo: una pestaña por sección (enlaces: sin JavaScript y dentro de la ventana emergente). */ ?>
+	<nav class="asde-subnav" aria-label="<?php echo esc_attr( esc_attr__( 'Section', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
+		<ul class="asde-subnav__tabs">
+			<?php foreach ( $secciones as $s ) : ?>
+				<li><a href="<?php echo esc_url( add_query_arg( array( 'seccion' => $s ), $url ) ); ?>"<?php echo $s === $seccion ? ' class="is-active" aria-current="page"' : ''; ?>><?php echo esc_html( Secciones::nombre( $s ) ); ?></a></li>
+			<?php endforeach; ?>
+		</ul>
+	</nav>
+<?php endif; ?>
 <section class="asde-card">
 	<h2 class="asde-card__title"><?php esc_html_e( 'My section', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <?php echo wp_kses( Secciones::badge( $seccion ), asde_html_permitido() ); ?></h2>
 	<p class="asde-help"><?php esc_html_e( 'The programme asks for a review at least every quarter. The stage describes where each person is; it is not a prize and people are not compared.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
@@ -35,16 +45,7 @@ $enlace = static fn( array $args ): string => esc_url( add_query_arg( $args + ar
 		<a href="<?php echo $enlace( array( 'solo' => 'propuesta' ) ); // phpcs:ignore WordPress.Security.EscapeOutput -- escapado en $enlace ?>"><?php echo esc_html( sprintf( /* translators: %d: number of people */ __( '%d stage changes proposed', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), count( array_filter( array_column( array_column( $filas, 'r' ), 'propuesta' ) ) ) ) ); ?></a>
 	</p>
 	<form method="get" action="<?php echo esc_url( $url ); ?>" class="asde-filter asde-filter--una-linea">
-		<?php if ( count( $secciones ) > 1 ) : ?>
-			<label for="asde-seg-seccion"><?php esc_html_e( 'Section', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
-			<select id="asde-seg-seccion" name="seccion" data-asde-autoenviar>
-				<?php foreach ( $secciones as $s ) : ?>
-					<option value="<?php echo esc_attr( $s ); ?>" <?php selected( $seccion, $s ); ?>><?php echo esc_html( Secciones::nombre( $s ) ); ?></option>
-				<?php endforeach; ?>
-			</select>
-		<?php else : ?>
-			<input type="hidden" name="seccion" value="<?php echo esc_attr( $seccion ); ?>">
-		<?php endif; ?>
+		<input type="hidden" name="seccion" value="<?php echo esc_attr( $seccion ); ?>">
 		<label for="asde-seg-etapa"><?php esc_html_e( 'Stage', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></label>
 		<select id="asde-seg-etapa" name="etapa" data-asde-autoenviar>
 			<option value="0"><?php esc_html_e( 'All', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></option>

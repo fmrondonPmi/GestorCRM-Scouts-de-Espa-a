@@ -96,7 +96,12 @@ final class Menu {
 			$gestion['lista_espera'] = __( 'Waiting list', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . ( $n ? ' (' . $n . ')' : '' );
 		}
 		if ( current_user_can( 'asde_seguimiento' ) ) {
-			$gestion['mi_seccion'] = __( 'My section', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); // v0.63 (doc 65).
+			// v0.63 (doc 65): quien tiene ficha propia (scouters) la lleva en «Mi espacio»; Secretaría, Coordinación o administración sin ficha, en la gestión.
+			if ( $ambito && $ambito->persona ) {
+				$personal['mi_seccion'] = __( 'My section', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
+			} else {
+				$gestion['mi_seccion'] = __( 'My section', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
+			}
 		}
 		if ( current_user_can( 'asde_tesoreria_acceso' ) ) {
 			$gestion['tesoreria'] = __( 'Treasury', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );

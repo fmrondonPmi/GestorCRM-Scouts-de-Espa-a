@@ -18,6 +18,7 @@ use AsdeBalears\AreaPrivada\Crm\Crypto;
 use AsdeBalears\AreaPrivada\Domain\Grupo;
 use AsdeBalears\AreaPrivada\Domain\Grupos;
 use AsdeBalears\AreaPrivada\Domain\Modulos;
+use AsdeBalears\AreaPrivada\Frontend\Menu;
 use AsdeBalears\AreaPrivada\Frontend\Views\MiSeccionView;
 use AsdeBalears\AreaPrivada\Install\Roles;
 use AsdeBalears\AreaPrivada\Seguimiento\Catalogo;
@@ -91,6 +92,9 @@ $crear = static function ( string $login, string $rol, array $meta = array() ) u
 $u_sc    = $crear( 'prueba-seg-sc', Roles::SCOUTER, array( Usuarios::META_SOCIO => '990090', Usuarios::META_SECCION => 'scouts' ) );
 $u_coord = $crear( 'prueba-seg-coord', Roles::COORDINACION, array( Usuarios::META_SOCIO => '990091' ) );
 $u_secre = $crear( 'prueba-seg-secre', Roles::SECRETARIA, array( Usuarios::META_SOCIO => '990092' ) );
+$u_dos   = $crear( 'prueba-seg-dos', Roles::SCOUTER, array( Usuarios::META_SOCIO => '990090' ) );
+add_user_meta( $u_dos, Usuarios::META_SECCION, 'scouts' );
+add_user_meta( $u_dos, Usuarios::META_SECCION, 'lobatos' );
 $u_fam   = $crear( 'prueba-seg-fam', Roles::TUTOR, array( Usuarios::META_REPRESENTADO => '990041' ) );
 
 $como = static function ( int $uid ): void {
@@ -148,6 +152,14 @@ try {
 	$ok( str_contains( $html, 'Pau Seguimiento Coll' ) && str_contains( $html, 'Eli Seguimiento Rey' ), 'el listado enseña a su sección' );
 	$ok( ! str_contains( $html, 'Leo Seguimiento Gil' ), 'no enseña a otra sección' );
 	$ok( ! str_contains( $ver( array( 'seccion' => 'lobatos' ) ), 'Leo Seguimiento Gil' ), 'pedir otra sección no la abre' );
+	$ok( ! str_contains( $html, 'class="asde-subnav__tabs"' ), 'con una sola sección no hay selector' );
+	$como( $u_dos );
+	$h_dos = $ver();
+	$ok( str_contains( $h_dos, 'class="asde-subnav__tabs"' ) && str_contains( $h_dos, 'seccion=lobatos' ) && str_contains( $h_dos, 'seccion=scouts' ), 'con dos secciones sale arriba el selector con las dos' );
+	$ok( str_contains( $h_dos, 'Leo Seguimiento Gil' ) && ! str_contains( $h_dos, 'Pau Seguimiento Coll' ), 'por defecto, la primera sección (en el orden del programa: Lobatos)' );
+	$ok( str_contains( $ver( array( 'seccion' => 'scouts' ) ), 'Pau Seguimiento Coll' ) && ! str_contains( $ver( array( 'seccion' => 'scouts' ) ), 'Leo Seguimiento Gil' ), 'elegir la otra sección enseña la otra' );
+	$ok( isset( Menu::grupos( Ambito::actual() )[ Menu::PERSONAL ]['items']['mi_seccion'] ) && ! isset( Menu::grupos( Ambito::actual() )[ Menu::GESTION ]['items']['mi_seccion'] ), '«Mi sección» está en «Mi espacio» del scouter y no en la gestión' );
+	$como( $u_sc );
 	$ficha = $ver( array( 'persona' => $pau ) );
 	$ok( 8 === substr_count( $ficha, 'asde-seguimiento__aspecto"' ) && str_contains( $ficha, 'button-primary' ), 'la ficha lleva sus 8 aspectos y el botón de guardar' );
 	$ok( ! str_contains( $ver( array( 'persona' => '990043' ) ), 'Leo Seguimiento Gil' ), 'la ficha de otra sección no se abre' );
