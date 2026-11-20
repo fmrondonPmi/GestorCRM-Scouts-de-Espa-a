@@ -454,6 +454,12 @@
 		}
 	}, true );
 
+	// v0.64.17: tras importar un fichero del banco con códigos, la ventana de asignación guiada se abre sola.
+	var auto = document.querySelector ? document.querySelector( 'a[data-asde-modal][data-asde-auto]' ) : null;
+	if ( auto ) {
+		abrir( auto.href );
+	}
+
 	function enviarDentro( e ) {
 		var form = e.target;
 		// v0.58: un buscador (GET) marcado con data-asde-en-ventana se queda en la ventana (p. ej. «Asociar…» del banco).

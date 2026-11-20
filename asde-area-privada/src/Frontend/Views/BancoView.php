@@ -8,6 +8,7 @@ use AsdeBalears\AreaPrivada\Crm\PersonaRepository;
 use AsdeBalears\AreaPrivada\Domain\Grupo;
 use AsdeBalears\AreaPrivada\Frontend\Notices;
 use AsdeBalears\AreaPrivada\Frontend\Tabla;
+use AsdeBalears\AreaPrivada\Tesoreria\Banco\AsignacionGuiada;
 use AsdeBalears\AreaPrivada\Tesoreria\Banco\BancoTable;
 use AsdeBalears\AreaPrivada\Tesoreria\Banco\Codificacion;
 use AsdeBalears\AreaPrivada\Tesoreria\Banco\Conciliacion;
@@ -67,6 +68,11 @@ final class BancoView extends TesoreriaBaseView {
 		if ( '' !== $cobrar ) {
 			return $this->layout( 'tesoreria', ( self::es_modal() ? '' : $this->subnav( 'banco', $ronda ) ) . $this->pedido_de_ingreso( $cobrar ) );
 		}
+		// v0.64.17: asignación guiada de los ingresos que traen un código de evento, pedido o familia, también en la ventana emergente.
+		$asignar = $this->get( 'asignar' );
+		if ( '' !== $asignar ) {
+			return $this->layout( 'tesoreria', ( self::es_modal() ? '' : $this->subnav( 'banco', $ronda ) ) . $this->asignar_guiada( $asignar ) );
+		}
 		$token = $this->get( 'previa' );
 		if ( $token ) {
 			$previa = $this->previa( $token );
@@ -119,6 +125,9 @@ final class BancoView extends TesoreriaBaseView {
 					'tabla'      => $tabla,
 					'filtros'    => $filtros,
 					'familias'   => $familias,
+					'asignables' => count( AsignacionGuiada::propuestas() ),
+					'asig_auto'  => '1' === $this->get( 'asignar_auto' ),
+					'url_asig'   => $this->url( 'banco', array( 'asignar' => '1' ) ),
 					'resumen'    => BancoTable::resumen(),
 					'lotes'      => BancoTable::lotes( 5 ),
 					'rondas'     => Config::rondas(),
@@ -152,6 +161,51 @@ final class BancoView extends TesoreriaBaseView {
 				'mov'        => $m,
 				'candidatos' => $m && empty( $m['asociado_id'] ) ? BancoTable::candidatos( $m, $this->get( 'q' ) ) : array(),
 				'q'          => $this->get( 'q' ),
+				'url'        => $url,
+				'volver'     => wp_validate_redirect( esc_url_raw( $this->get( 'volver' ) ), $url ) ?: $url,
+			)
+		);
+	}
+
+	/** Lo marcado en la ventana de asignación guiada: id de movimiento => ok, como, familia. */
+	private function asignaciones(): array {
+		$ok    = $this->post_mapa( 'ok' );
+		$como  = $this->post_mapa( 'como' );
+		$fam   = $this->post_mapa( 'fam' );
+		$filas = array();
+		foreach ( $ok as $id => $v ) {
+			$filas[ $id ] = array(
+				'ok'      => '1' === $v ? '1' : '',
+				'como'    => $como[ $id ] ?? '',
+				'familia' => (int) ( $fam[ $id ] ?? 0 ),
+			);
+		}
+		return $filas;
+	}
+
+	/** Ventana «Asignación guiada» (v0.64.17): los ingresos con código de familia, pedido o evento y lo que se propone para cada uno. */
+	private function asignar_guiada( string $asignar ): string {
+		$url = $this->url( 'banco' );
+		if ( 'hecho' === $asignar ) {
+			return $this->tpl( 'tesoreria/banco-asignar', array( 'hecho' => true, 'url' => $url ) );
+		}
+		$propuestas = AsignacionGuiada::propuestas();
+		$tipos      = TiposMovimiento::para( 1.0 );
+		$elegido    = 0;
+		foreach ( $tipos as $t ) {
+			if ( false !== mb_stripos( $t['nombre'], 'inscrip' ) ) {
+				$elegido = (int) $t['id'];
+				break;
+			}
+		}
+		return $this->tpl(
+			'tesoreria/banco-asignar',
+			array(
+				'hecho'      => false,
+				'propuestas' => $propuestas,
+				'tipos'      => $tipos,
+				'tipo'       => $elegido,
+				'familias'   => $this->familias()['etiquetas'],
 				'url'        => $url,
 				'volver'     => wp_validate_redirect( esc_url_raw( $this->get( 'volver' ) ), $url ) ?: $url,
 			)
@@ -461,6 +515,26 @@ final class BancoView extends TesoreriaBaseView {
 				$this->redirect( Router::pide_modal() && ! is_wp_error( $r ) ? $this->url( 'banco', array( 'asociar' => 'hecho' ) ) : ( is_wp_error( $r ) ? $this->url( 'banco', array( 'asociar' => $id ) ) : $lista ) );
 				break;
 
+			case 'asignar_guiada':
+				// v0.64.17: lo que Tesorería ha confirmado en la ventana de asignación guiada (se recalcula todo al aplicar).
+				check_admin_referer( 'asde_banco_asignar' );
+				$res = AsignacionGuiada::aplicar( $this->asignaciones(), (int) $this->post( 'tipo' ) );
+				if ( $res['hechos'] ) {
+					Notices::add( 'success', esc_html( sprintf( /* translators: %d: number */ _n( '%d deposit assigned.', '%d deposits assigned.', $res['hechos'], 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $res['hechos'] ) ) );
+				}
+				if ( $res['ya'] ) {
+					Notices::add( 'warning', esc_html( sprintf( /* translators: %d: number */ _n( '%d deposit was already reviewed and has not been touched.', '%d deposits were already reviewed and have not been touched.', $res['ya'], 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $res['ya'] ) ) );
+				}
+				foreach ( $res['errores'] as $e ) {
+					Notices::add( 'error', esc_html( $e ) );
+				}
+				if ( ! $res['hechos'] && ! $res['ya'] && ! $res['errores'] ) {
+					Notices::add( 'error', __( 'You have not chosen any deposit.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) );
+				}
+				$lista = wp_validate_redirect( esc_url_raw( $this->post( 'volver' ) ), $this->url( 'banco' ) );
+				$this->redirect( Router::pide_modal() ? $this->url( 'banco', array( 'asignar' => 'hecho' ) ) : $lista );
+				break;
+
 			case 'pagar_pedido':
 				// v0.64.8: el ingreso es el pago de un pedido de la tienda elegido a mano.
 				$id = (int) $this->post( 'mov' );
@@ -612,8 +686,10 @@ final class BancoView extends TesoreriaBaseView {
 				'duplicados' => $r['duplicados'],
 			)
 		);
+		// v0.64.17: si entre los ingresos por conciliar hay alguno con código de familia, pedido o evento, se abre la ventana de asignación.
+		$con_codigo = AsignacionGuiada::propuestas() ? true : false;
 		Notices::add( 'success', sprintf( /* translators: 1: number, 2: text */ __( 'Imported %1$d new transactions%2$s. The file has not been saved.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $r['nuevos'], $r['duplicados'] ? sprintf( /* translators: %d: number */ __( ' (%d were already imported and have been ignored)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), $r['duplicados'] ) : '' ) );
-		$this->redirect( $this->url( 'banco' ) );
+		$this->redirect( $this->url( 'banco', $con_codigo ? array( 'asignar_auto' => '1' ) : array() ) );
 	}
 
 	/** Lee el fichero de la vista previa con el formato, la codificación y (en CSV) las columnas elegidas. */

@@ -463,6 +463,61 @@ try {
 	$ok( is_wp_error( $r ) && $BT::PENDIENTE === $BT::obtener( (int) $mb['id'] )['estado'], 'quien no es Tesorería no apunta pagos de evento desde el banco' );
 	$como( $u_teso );
 
+	// v0.64.17: asignación guiada de los ingresos con código de evento, pedido o familia.
+	echo "\n== Parte G2 · Asignación guiada (v0.64.17) ==\n";
+	$AG    = \AsdeBalears\AreaPrivada\Tesoreria\Banco\AsignacionGuiada::class;
+	$g     = (string) \AsdeBalears\AreaPrivada\Domain\Grupo::numero();
+	$ev_n  = EventosTable::numero( $ev( $id_e ) );
+	$fam_n = \AsdeBalears\AreaPrivada\Tesoreria\FamiliasTable::obtener( $f1 )['numero'];
+	$ok( $id_e === $AG::referencia_evento( 'pago ' . $ev_n . ' gracias', $g ) && $id_e === $AG::referencia_evento( 'E ' . substr( $ev_n, 1, 3 ) . '-' . substr( $ev_n, 4 ), $g ) && 0 === $AG::referencia_evento( 'E0009990001', $g ) && 0 === $AG::referencia_evento( 'XE' . substr( $ev_n, 1 ), $g ), 'el código de evento se detecta (con espacios y guiones) y solo el del grupo' );
+	$movs2 = $BT::clasificar( array_map( static fn( $m ) => $m + $base, array(
+		array( 'fecha' => $hoy, 'importe' => 10.0, 'concepto' => 'PRUEBA-G2 ' . $ev_n . ' ' . $fam_n ),
+		array( 'fecha' => $hoy, 'importe' => 10.0, 'concepto' => 'PRUEBA-G2 solo evento ' . $ev_n ),
+		array( 'fecha' => $hoy, 'importe' => 5000.0, 'concepto' => 'PRUEBA-G2 de mas ' . $ev_n . ' ' . $fam_n ),
+		array( 'fecha' => $hoy, 'importe' => 12.0, 'concepto' => 'PRUEBA-G2 solo familia ' . $fam_n ),
+		array( 'fecha' => $hoy, 'importe' => 7.0, 'concepto' => 'PRUEBA-G2 sin codigo' ),
+	) ) );
+	$BT::importar( array( 'movimientos' => $movs2, 'cuentas' => array( array( 'cuenta' => '9999 0001 ******0001', 'saldo_final' => null ) ) ), 'csv', 'prueba-g2.csv', hash( 'sha256', wp_json_encode( $movs2 ) ) );
+	$g2    = static fn( string $q ) => current( $BT::movimientos( array( 'q' => $q ) ) );
+	$m_ok  = $g2( $ev_n . ' ' . $fam_n . '' ) ?: null;
+	$m_ev  = $g2( 'solo evento' );
+	$m_mas = $g2( 'G2 de mas' );
+	$m_fam = $g2( 'solo familia' );
+	$m_sin = $g2( 'sin codigo' );
+	$m_ok  = null;
+	foreach ( $BT::movimientos( array( 'q' => 'PRUEBA-G2' ) ) as $x ) {
+		if ( 10.0 === (float) $x['importe'] && str_contains( $x['concepto'], $fam_n ) && str_contains( $x['concepto'], $ev_n ) ) {
+			$m_ok = $x;
+		}
+	}
+	$pr = $AG::propuestas();
+	$ok( isset( $pr[ (int) $m_ok['id'] ], $pr[ (int) $m_ev['id'] ], $pr[ (int) $m_mas['id'] ], $pr[ (int) $m_fam['id'] ] ) && ! isset( $pr[ (int) $m_sin['id'] ] ), 'detecta los movimientos con código (evento, evento+familia, familia) y no el que no lo lleva' );
+	$ok( $pr[ (int) $m_ok['id'] ]['marcada'] && $AG::COMO_EVENTO === $pr[ (int) $m_ok['id'] ]['como'], 'evento + familia con importe que cabe: pago del evento, marcado' );
+	$ok( ! $pr[ (int) $m_ev['id'] ]['marcada'] && $pr[ (int) $m_ev['id'] ]['avisos'], 'evento sin familia: sin marcar y avisado' );
+	$ok( ! $pr[ (int) $m_mas['id'] ]['marcada'] && $pr[ (int) $m_mas['id'] ]['avisos'], 'más de lo pendiente: sin marcar y avisado' );
+	$ok( $pr[ (int) $m_fam['id'] ]['marcada'] && $AG::COMO_FAMILIA === $pr[ (int) $m_fam['id'] ]['como'], 'solo familia: pago de cuota, marcado' );
+	$antes = $pend();
+	$res   = $AG::aplicar( array( (int) $m_ok['id'] => array( 'ok' => '1', 'como' => 'evento' ), (int) $m_ev['id'] => array( 'ok' => '', 'como' => 'evento' ) ), $t_ing );
+	$ok( 1 === $res['hechos'] && ! $res['errores'] && abs( $pend() - ( $antes - 10 ) ) < 0.001 && $BT::IGNORADO === $BT::obtener( (int) $m_ok['id'] )['estado'] && $BT::PENDIENTE === $BT::obtener( (int) $m_ev['id'] )['estado'], 'confirmar aplica solo lo marcado: el pago del evento baja lo pendiente y lo demás sigue pendiente' );
+	$res = $AG::aplicar( array( (int) $m_ok['id'] => array( 'ok' => '1', 'como' => 'evento' ) ), $t_ing );
+	$ok( 0 === $res['hechos'] && 1 === $res['ya'] && abs( $pend() - ( $antes - 10 ) ) < 0.001, 'confirmar otra vez el mismo no duplica nada' );
+	$res = $AG::aplicar( array( (int) $m_ev['id'] => array( 'ok' => '1', 'como' => 'evento', 'familia' => 0 ) ), $t_ing );
+	$ok( 0 === $res['hechos'] && $res['errores'] && $BT::PENDIENTE === $BT::obtener( (int) $m_ev['id'] )['estado'], 'evento sin familia elegida: error y sigue pendiente' );
+	$res = $AG::aplicar( array( (int) $m_ev['id'] => array( 'ok' => '1', 'como' => 'evento', 'familia' => $f1 ) ), $t_ing );
+	$ok( 1 === $res['hechos'] && abs( $pend() - ( $antes - 20 ) ) < 0.001, 'con la familia elegida en la ventana se apunta el pago del evento' );
+	$res = $AG::aplicar( array( (int) $m_fam['id'] => array( 'ok' => '1', 'como' => 'pedido' ) ), $t_ing );
+	$ok( 0 === $res['hechos'] && $res['errores'] && $BT::PENDIENTE === $BT::obtener( (int) $m_fam['id'] )['estado'], 'una asignación que el movimiento no ofrece se rechaza (se recalcula en el servidor)' );
+	$res = $AG::aplicar( array( (int) $m_fam['id'] => array( 'ok' => '1', 'como' => 'familia' ) ), $t_ing );
+	$ok( 1 === $res['hechos'] && $BT::CONCILIADO === $BT::obtener( (int) $m_fam['id'] )['estado'], 'solo familia: queda conciliado como pago de cuota' );
+	$como( $u_lob );
+	$res = $AG::aplicar( array( (int) $m_mas['id'] => array( 'ok' => '1', 'como' => 'evento' ) ), $t_ing );
+	$ok( 0 === $res['hechos'] && $BT::PENDIENTE === $BT::obtener( (int) $m_mas['id'] )['estado'], 'quien no es Tesorería no asigna nada' );
+	$como( $u_teso );
+	$CO::deshacer( (int) $m_ok['id'] );
+	$CO::deshacer( (int) $m_ev['id'] );
+	$CO::deshacer( (int) $m_fam['id'] );
+	$ok( abs( $pend() - $antes ) < 0.001, 'deshacer devuelve todo a como estaba' );
+
 	// v0.37.1 (P-167): Tesorería a secas ve informes de pagos de todo el grupo, pero solo identidad y pagos.
 	$u_solo = $crear( 'prueba-eco-solo', array( Roles::TESORERIA ), array( Usuarios::META_SOCIO => '990086' ) );
 	$a_solo = $como( $u_solo );

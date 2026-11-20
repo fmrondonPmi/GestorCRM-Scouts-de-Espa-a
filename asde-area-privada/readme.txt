@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.64.16
+Stable tag: 0.64.17
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -61,6 +61,9 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.64.17 =
+* Bank: guided assignment. When a bank transaction carries a family code (F6840001), an order code (U6840007) or an event code (E6840012), a pop-up lists them after importing a file (and from a button in the bank list) with the proposed assignment: fee payment, order paid, or event payment. Nothing is assigned until Treasury confirms; the reliable ones come ticked, two codes or a different amount come unticked with a warning. No database changes.
 
 = 0.64.16 =
 * Bank: an income reviewed with an event and a family is now recorded as a payment of the family's sign-ups in that event (it shows in the event's payments and counts in its balance). Changing the event or family, or undoing the review, cancels that payment. No database changes.
@@ -234,6 +237,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * The changelog of versions 0.42.0 and earlier is in changelog.txt, in the plugin folder.
 
 == Upgrade Notice ==
+
+= 0.64.17 =
+Bank imports now offer a guided assignment of deposits carrying a family, order or event code. No database changes.
 
 = 0.64.16 =
 Bank deposits linked to an event and a family become event payments. No database changes.

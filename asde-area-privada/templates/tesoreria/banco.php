@@ -33,7 +33,7 @@ $columnas = array(
 	'importe'  => __( 'Amount', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 	'estado'   => __( 'Status', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ),
 );
-$aqui    = add_query_arg( array() ); // Este listado, con sus filtros (para volver después de revisar).
+$aqui    = remove_query_arg( 'asignar_auto', add_query_arg( array() ) ); // Este listado, con sus filtros (para volver después de revisar).
 $asociados = $asociados ?? array();
 $traspasos = $traspasos ?? array();
 $asociar   = static fn( int $id ) => add_query_arg(
@@ -126,6 +126,9 @@ $revisar = static fn( array $ids ) => add_query_arg(
 	<header class="asde-card__header asde-card__header--split">
 		<h3 class="asde-card__title"><?php esc_html_e( 'Transactions', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h3>
 		<span class="asde-actions">
+			<?php if ( ! empty( $asignables ) ) : // v0.64.17: ingresos con código de familia, pedido o evento: se abre sola tras importar un fichero. ?>
+				<a href="<?php echo esc_url( add_query_arg( 'volver', rawurlencode( $aqui ), $url_asig ) ); ?>" data-asde-modal<?php echo ! empty( $asig_auto ) ? ' data-asde-auto' : ''; ?>><?php echo esc_html( sprintf( /* translators: %d: number */ __( 'Guided assignment (%d)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), (int) $asignables ) ); ?></a>
+			<?php endif; ?>
 			<a href="<?php echo esc_url( add_query_arg( 'tipos', '1', $url ) ); ?>"><?php esc_html_e( 'Expense and income types', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a>
 			<?php if ( ! empty( $url_excel ) ) : ?>
 				<a class="no-transition" href="<?php echo esc_url( $url_excel ); ?>" data-asde-descarga title="<?php echo esc_attr( esc_attr__( 'The transactions of this filter (with "All", all the records)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php esc_html_e( 'Download Excel', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a>
