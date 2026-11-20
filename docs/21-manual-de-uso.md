@@ -219,6 +219,13 @@ Solo textos, sin capturas nuevas: apartado nuevo `lista-espera.html` (`#lista-es
 - **Fase 5 de la tienda:** en `uniformes-gestion.html`, «Pagos que llegan al banco», «Ventas e informes» y los plazos de «Pedidos sin pagar»; en `uniforme-pedir.html`, el recordatorio y la cancelación automática. Capturas nuevas `106-tienda-banco`, `107-tienda-informes` y `108-tienda-config-sin-pagar`; rehechas `36b`, `37`, `38`, `56` y `100` (cabecera «Pedidos de la tienda»).
 - **Herramientas** (`manual-capturas.php`, fuera del repo): renombradas las vistas de Uniformes a las de la tienda; el volcado crea productos, un pedido con varias líneas, una compra sin sesión, una acampada con el calendario aplicado y deja todo como estaba (aparta los productos y eventos reales del grupo mientras dura). Paquete `manual-de-uso-0.40.0.zip`; no se ha publicado nada.
 
+## Versión 4.12 · asignación guiada del banco y pedidos desde Tesorería (v0.64.17–v0.64.18, 2026-11-20)
+
+Solo textos (manual del equipo de coordinación y ayuda del plugin, regenerada); **sin capturas nuevas** (la ventana «Asignación guiada» y el cuadro «Pedidos de la tienda por cobrar» no están en el volcado: pendiente si el usuario las quiere):
+
+- **`tesoreria.html`**: apartado nuevo `banco-asignacion-guiada` (ingresos con código F/U/E, ventana, casillas, avisos, tipo de ingreso, «Confirmar»).
+- **`uniformes-gestion.html`**: el cuadro «Pedidos de la tienda por cobrar» del control de pagos y la ventana «Pagar con un ingreso del banco».
+
 ## Versión 4.11 · hasta la v0.64.13 (2026-11-19)
 
 Textos (los cinco manuales y la ayuda del plugin, regenerada):

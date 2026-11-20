@@ -152,7 +152,7 @@ $pct = $resumen['a_pagar'] > 0 ? round( 100 * $resumen['pagado'] / $resumen['a_p
 </section>
 
 <?php if ( ! empty( $pedidos ) ) : // v0.64.18: pedidos de la tienda por cobrar, para pagarlos con un ingreso del banco. ?>
-<section class="asde-card" data-asde-inicio="cerrado">
+<section class="asde-card" id="asde-pedidos-por-cobrar" data-asde-inicio="cerrado">
 	<h2 class="asde-card__title"><?php esc_html_e( 'Shop orders to collect', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></h2>
 	<p class="asde-muted"><?php esc_html_e( 'Unpaid orders of the shop. Pay one with the bank deposit that covers it (the same can be done from the shop and from the bank).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 	<table class="asde-table" data-asde-paginar>
