@@ -510,6 +510,23 @@
 			}
 		}
 	}
+	document.addEventListener( 'keydown', function ( e ) {
+		if ( 'Enter' === e.key && e.target.hasAttribute && e.target.hasAttribute( 'data-asde-pago-ingresos-buscar' ) ) {
+			e.preventDefault(); // Enter no debe validar el pago.
+		}
+	} );
+	// v0.64.21: buscador de los ingresos del pago de un pedido (filtra las filas; grids.js recuenta las páginas).
+	document.addEventListener( 'input', function ( e ) {
+		var t = e.target;
+		if ( ! t.hasAttribute || ! t.hasAttribute( 'data-asde-pago-ingresos-buscar' ) ) {
+			return;
+		}
+		var q = t.value.toLowerCase().trim();
+		var filas = t.closest( '[data-asde-pago-ingresos]' ).querySelectorAll( 'tbody tr' );
+		Array.prototype.forEach.call( filas, function ( tr ) {
+			tr.hidden = '' !== q && -1 === tr.textContent.toLowerCase().indexOf( q );
+		} );
+	} );
 	document.addEventListener( 'change', ingresosDelPago );
 	document.addEventListener( 'click', function ( e ) {
 		var b = e.target.closest ? e.target.closest( '[data-asde-pago-ingresos-quitar]' ) : null;

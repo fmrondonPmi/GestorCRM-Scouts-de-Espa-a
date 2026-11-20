@@ -54,6 +54,26 @@ final class PedidosTable {
 		'datafono'      => 'tpv',
 	);
 
+	/**
+	 * Métodos con los que Tesorería puede validar un pago (v0.64.21): los de las formas de pago activas en la configuración de la
+	 * tienda. El método del propio pedido (lo que eligió quien pidió) se conserva aunque ya no esté activo.
+	 *
+	 * @param array|null $p Pedido (opcional).
+	 * @return array<string, string> clave => etiqueta
+	 */
+	public static function metodos_activos( ?array $p = null ): array {
+		$permitidos = array();
+		foreach ( Config::de()['formas'] as $forma ) {
+			if ( isset( self::METODO_DE_FORMA[ $forma ] ) ) {
+				$permitidos[] = self::METODO_DE_FORMA[ $forma ];
+			}
+		}
+		if ( $p && isset( self::METODO_DE_FORMA[ $p['forma_pago'] ] ) ) {
+			$permitidos[] = self::METODO_DE_FORMA[ $p['forma_pago'] ];
+		}
+		return array_intersect_key( self::metodos(), array_flip( $permitidos ) );
+	}
+
 	/** v0.39: referencia del pago de un pedido que no cuesta nada. */
 	public const REF_GRATIS = 'Sin coste';
 

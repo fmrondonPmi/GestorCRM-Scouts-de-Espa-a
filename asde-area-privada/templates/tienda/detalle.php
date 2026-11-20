@@ -85,7 +85,19 @@ $form    = static function ( string $accion, string $boton, string $clase = 'asd
 				<span class="asde-muted"><?php echo esc_html( $cuando( /* translators: 1: text, 2: text */ __( 'Validated by %1$s on %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), /* translators: %2$s: text */ __( 'Validated on %2$s', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), (int) $p['pago_por'], $fecha( $p['pago_en'] ) ) ); ?></span>
 				<?php echo wp_kses( Servicio::puede_pagar( $p ) ? $form( 'uniforme_deshacer_pago', esc_html( __( 'Undo', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ), 'asde-btn-link', esc_html( __( 'Undo this order\'s payment?', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) ) : '', asde_html_permitido() ); ?>
 			<?php elseif ( $activo && Servicio::puede_pagar( $p ) ) : ?>
-				<form method="post" class="asde-form asde-form--compacta">
+				<?php
+				// v0.64.21: ingresos del banco sin conciliar; si uno lleva el nº del pedido en el concepto, sale elegido (con su fecha e importe).
+				$ingresos = ConciliacionBanco::ingresos_para( $p );
+				$elegido  = null;
+				foreach ( $ingresos as $ing ) {
+					if ( $ing['codigo'] ) {
+						$elegido = $ing;
+						break;
+					}
+				}
+				$distinto = $elegido && ! $elegido['igual'];
+				?>
+				<form method="post" class="asde-form asde-form--compacta"<?php echo $distinto ? ' data-asde-confirmar="' . esc_attr( __( 'The amount of the deposit is not the amount of the order. Mark the order as paid with this deposit anyway?', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) . '"' : ''; ?>>
 					<?php wp_nonce_field( 'asde_uniforme_' . $p['id'] ); ?>
 					<input type="hidden" name="asde_action" value="uniforme_pago">
 					<input type="hidden" name="pedido" value="<?php echo (int) $p['id']; ?>">
@@ -96,23 +108,20 @@ $form    = static function ( string $accion, string $boton, string $clase = 'asd
 					<p class="asde-form__fila asde-form__fila--una-linea">
 						<label><?php esc_html_e( 'How', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?>
 							<select name="metodo">
-								<?php foreach ( ( PedidosTable::metodos() ) as $m => $etiqueta ) : ?>
-									<option value="<?php echo esc_attr( $m ); ?>" <?php selected( PedidosTable::METODO_DE_FORMA[ $p['forma_pago'] ] ?? 'efectivo', $m ); ?>><?php echo esc_html( $etiqueta ); ?></option>
+								<?php foreach ( PedidosTable::metodos_activos( $p ) as $m => $etiqueta ) : ?>
+									<option value="<?php echo esc_attr( $m ); ?>" <?php selected( $elegido ? 'ingreso' : ( PedidosTable::METODO_DE_FORMA[ $p['forma_pago'] ] ?? 'efectivo' ), $m ); ?>><?php echo esc_html( $etiqueta ); ?></option>
 								<?php endforeach; ?>
 							</select>
 						</label>
-						<label><?php esc_html_e( 'Date', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <input type="date" name="fecha" value="<?php echo esc_attr( wp_date( 'Y-m-d' ) ); ?>" max="<?php echo esc_attr( wp_date( 'Y-m-d' ) ); ?>" required></label>
-						<label><?php esc_html_e( 'Amount (€)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <input type="text" name="importe" value="<?php echo esc_attr( number_format( $a_cobrar, 2, ',', '' ) ); ?>" inputmode="decimal" size="8" required></label>
+						<label><?php esc_html_e( 'Date', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <input type="date" name="fecha" value="<?php echo esc_attr( $elegido ? $elegido['fecha'] : wp_date( 'Y-m-d' ) ); ?>" max="<?php echo esc_attr( wp_date( 'Y-m-d' ) ); ?>" required></label>
+						<label><?php esc_html_e( 'Amount (€)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <input type="text" name="importe" value="<?php echo esc_attr( number_format( $elegido ? (float) $elegido['importe'] : $a_cobrar, 2, ',', '' ) ); ?>" inputmode="decimal" size="8" required></label>
 						<label><?php esc_html_e( 'Reference (optional)', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <input type="text" name="referencia" maxlength="120" placeholder="<?php echo esc_attr( PedidosTable::numero( $p ) ); ?>"></label>
 						<button type="submit" class="button"><?php esc_html_e( 'Validate the payment', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 					</p>
-						<?php
-						// v0.64.21: con «Ingreso en cuenta» salen los ingresos del banco sin conciliar; el elegido paga el pedido con su fecha e importe.
-						$ingresos = ConciliacionBanco::ingresos_para( $p );
-						if ( $ingresos ) :
-							?>
-							<div class="asde-pago-ingresos" data-asde-pago-ingresos data-importe="<?php echo esc_attr( number_format( $a_cobrar, 2, ',', '' ) ); ?>" data-confirmar="<?php echo esc_attr( esc_attr__( 'The amount of the deposit is not the amount of the order. Mark the order as paid with this deposit anyway?', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"<?php echo 'ingreso' === ( PedidosTable::METODO_DE_FORMA[ $p['forma_pago'] ] ?? 'efectivo' ) ? '' : ' hidden'; ?>>
-								<input type="hidden" name="importe_distinto" value="">
+						<?php if ( $ingresos ) : // Con «Ingreso en cuenta» salen los ingresos sin conciliar; el elegido paga el pedido con su fecha e importe. ?>
+							<div class="asde-pago-ingresos" data-asde-pago-ingresos data-importe="<?php echo esc_attr( number_format( $a_cobrar, 2, ',', '' ) ); ?>" data-confirmar="<?php echo esc_attr( esc_attr__( 'The amount of the deposit is not the amount of the order. Mark the order as paid with this deposit anyway?', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"<?php echo $elegido || 'ingreso' === ( PedidosTable::METODO_DE_FORMA[ $p['forma_pago'] ] ?? 'efectivo' ) ? '' : ' hidden'; ?>>
+								<input type="hidden" name="importe_distinto" value="<?php echo $distinto ? '1' : ''; ?>">
+								<p><input type="search" data-asde-pago-ingresos-buscar placeholder="<?php echo esc_attr( esc_attr__( 'Description, payer or reference', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>" aria-label="<?php echo esc_attr( esc_attr__( 'Search', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"></p>
 								<p class="asde-help"><?php esc_html_e( 'Bank deposits not yet reconciled. Choose the one that pays this order, or leave none to enter the payment by hand. The ones with the order number or the same amount come first.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></p>
 								<table class="asde-table" data-asde-paginar>
 									<thead>
@@ -125,8 +134,8 @@ $form    = static function ( string $accion, string $boton, string $clase = 'asd
 									</thead>
 									<tbody>
 										<?php foreach ( $ingresos as $m ) : ?>
-											<tr<?php echo $m['codigo'] || $m['igual'] ? ' class="asde-banco-asociar__igual"' : ''; ?>>
-												<td data-label=""><input type="radio" name="ingreso_banco" value="<?php echo (int) $m['id']; ?>" data-fecha="<?php echo esc_attr( $m['fecha'] ); ?>" data-importe="<?php echo esc_attr( number_format( (float) $m['importe'], 2, ',', '' ) ); ?>" aria-label="<?php echo esc_attr( esc_attr__( 'Use this deposit', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"></td>
+											<tr class="<?php echo $m['codigo'] || $m['igual'] ? 'asde-banco-asociar__igual' : ''; ?><?php echo $m['codigo'] ? ' asde-banco-asociar__codigo' : ''; ?>">
+												<td data-label=""><input type="radio"<?php echo $elegido && (int) $elegido['id'] === (int) $m['id'] ? ' checked' : ''; ?> name="ingreso_banco" value="<?php echo (int) $m['id']; ?>" data-fecha="<?php echo esc_attr( $m['fecha'] ); ?>" data-importe="<?php echo esc_attr( number_format( (float) $m['importe'], 2, ',', '' ) ); ?>" aria-label="<?php echo esc_attr( esc_attr__( 'Use this deposit', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"></td>
 												<td data-label="<?php echo esc_attr( esc_attr__( 'Date', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( wp_date( 'd/m/Y', strtotime( $m['fecha'] . ' 12:00' ) ) ); ?></td>
 												<td data-label="<?php echo esc_attr( esc_attr__( 'Deposit', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( trim( $m['ordenante'] . ' ' . ( '' !== $m['concepto'] ? $m['concepto'] : ( \AsdeBalears\AreaPrivada\Tesoreria\Banco\Norma43::conceptos()[ $m['concepto_comun'] ] ?? '—' ) ) ) ); ?></td>
 												<td data-label="<?php echo esc_attr( esc_attr__( 'Amount', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>" class="asde-importe">+<?php echo esc_html( Calculadora::euros( (float) $m['importe'] ) ); ?></td>

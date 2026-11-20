@@ -3279,6 +3279,9 @@ dialog.asde-modal--mini .asde-publicar h3 {
 .asde-ap .asde-banco-asociar__igual td {
 	background: var(--asde-ok-bg);
 }
+.asde-ap .asde-banco-asociar__codigo td {
+	font-weight: 700;
+}
 
 /* v0.59 · Caja y libro mayor (doc 61): los formularios de la caja en una línea (importes cortos, el concepto se estira). */
 #top .asde-ap .asde-caja-form input[name="importe"],

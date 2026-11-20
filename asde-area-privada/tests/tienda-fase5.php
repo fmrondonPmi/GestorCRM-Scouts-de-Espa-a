@@ -346,6 +346,9 @@ try {
 	$h    = ( new TiendaGestionView() )->render();
 	$_GET = array();
 	$ok( str_contains( $h, 'data-asde-pago-ingresos' ) && str_contains( $h, 'name="ingreso_banco" value="' . (int) $m_otro['id'] . '"' ), 'la gestión del pedido enseña los ingresos sin conciliar para elegir uno' );
+	$ok( str_contains( $h, 'data-asde-pago-ingresos-buscar' ), 'y un buscador para filtrarlos' );
+	$formas_cfg = \AsdeBalears\AreaPrivada\Tienda\Config::de()['formas'];
+	$ok( in_array( 'datafono', $formas_cfg, true ) === str_contains( $h, 'value="tpv"' ) && in_array( 'fisico', $formas_cfg, true ) === str_contains( $h, 'value="efectivo"' ), 'los métodos del pago son los de las formas de pago activas en la configuración de la tienda' );
 	$_POST    = array( 'asde_action' => 'uniforme_pago', 'pedido' => (string) $a, '_wpnonce' => wp_create_nonce( 'asde_uniforme_' . $a ), 'desde' => 'detalle', 'metodo' => 'ingreso', 'ingreso_banco' => (string) (int) $m_otro['id'], 'fecha' => '2026-01-01', 'importe' => '1,00' );
 	$_REQUEST = $_POST;
 	try {

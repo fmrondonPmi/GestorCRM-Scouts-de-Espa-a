@@ -305,3 +305,7 @@ Solo textos (las capturas **no** se han rehecho todavía: las de informes, Perso
 ## Versión 4.14 · pago de un pedido con un ingreso del banco (v0.64.21, 2026-11-20)
 
 Solo cambia el texto de la tienda (`uniformes-gestion`, fila «Pago»): con «Ingreso en cuenta» salen los ingresos sin conciliar para elegir uno. Sin capturas nuevas. Ayuda del plugin regenerada.
+
+## Versión 4.15 · buscador y preselección en el pago con ingreso (v0.64.22, 2026-11-20)
+
+Solo texto (`uniformes-gestion`, fila «Pago»): buscador, ingreso que cita el pedido marcado y en negrita, y formas de pago limitadas a las activas. Sin capturas nuevas. Ayuda del plugin regenerada.

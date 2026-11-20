@@ -433,7 +433,7 @@ final class TiendaGestionView extends TiendaBaseView {
 				$metodo  = sanitize_key( $this->post( 'metodo' ) );
 				$fecha   = $this->post( 'fecha' );
 				$importe = (float) str_replace( ',', '.', $this->post( 'importe' ) );
-				if ( ! isset( PedidosTable::metodos()[ $metodo ] ) || ! preg_match( '/^\d{4}-\d{2}-\d{2}$/', $fecha ) || $fecha > wp_date( 'Y-m-d' ) || $importe < 0 ) {
+				if ( ! isset( PedidosTable::metodos_activos( $p )[ $metodo ] ) || ! preg_match( '/^\d{4}-\d{2}-\d{2}$/', $fecha ) || $fecha > wp_date( 'Y-m-d' ) || $importe < 0 ) {
 					$error = __( 'State how it was paid (cash, deposit, Bizum or card terminal), the date (not later than today) and the amount.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );
 					break;
 				}
