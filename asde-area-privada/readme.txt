@@ -3,7 +3,7 @@ Tags: scouts, crm, members, treasury, private area
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 8.0
-Stable tag: 0.64.19
+Stable tag: 0.64.20
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -61,6 +61,9 @@ Only when a person with permission asks for it (editing a record, fixing a membe
 In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 
 == Changelog ==
+
+= 0.64.20 =
+* Bank: the list fits its card on narrower screens (shorter payer and family field). Help texts updated for the new Action menu.
 
 = 0.64.19 =
 * Bank: the actions of a pending transaction are now one "Action" drop-down menu (Reconcile, Shop payment, Other, Link) with a help tooltip on each option, in its own column. The family and the round stay on one line, rows are vertically centred and the description shows only the payer (the rest is a tooltip).
@@ -243,6 +246,9 @@ In the separate plugin "ASDE Scouts de España - App móvil del Gestor CRM".
 * The changelog of versions 0.42.0 and earlier is in changelog.txt, in the plugin folder.
 
 == Upgrade Notice ==
+
+= 0.64.20 =
+Bank list layout adjusted. No database changes.
 
 = 0.64.19 =
 The bank list has an Action menu per transaction. No database changes.

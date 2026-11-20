@@ -639,7 +639,7 @@ html.asde-cabecera-oculta .asde-ap .asde-nav {
 @media (min-width: 768px) {
 	.asde-ap .asde-banco-desc__texto {
 		display: inline-block;
-		max-width: 340px;
+		max-width: 250px;
 		overflow: hidden;
 		text-overflow: ellipsis;
 		white-space: nowrap;
@@ -656,7 +656,7 @@ html.asde-cabecera-oculta .asde-ap .asde-nav {
 		display: flex;
 		align-items: center;
 		flex-wrap: nowrap;
-		width: 280px;
+		width: 250px;
 		margin: 0 !important; /* el tema fuerza un margen inferior con #top */
 		vertical-align: middle;
 	}

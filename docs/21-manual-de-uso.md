@@ -295,3 +295,9 @@ Solo textos (las capturas **no** se han rehecho todavía: las de informes, Perso
 - Cada grupo elige qué formas de pago acepta la tienda. Textos en `fuentes/uniforme-pedir.html`, `uniformes-gestion.html` (configuración y cobros con datáfono) y `scouters-uniformes.html`; capturas: rehecha la `38-uniformes-config`.
 - **Herramientas** (`manual-capturas.php`): arreglado el volcado, que moría en silencio porque usaba la constante `Modulos::LISTA`, que ya no existe (ahora `Modulos::lista()`); el datáfono se activa con `$tcfg['formas'][] = 'datafono'`; lleva un registro de errores en `capt-error.log`. Trampa: con `SIN_VOLCADO=1` hay que volver a ejecutar `manual-envolver.php` con `PHPRC` puesto (necesita GD), si no la captura sale con «Falta …». Un volcado cortado deja usuarios `99*`, familias y tipos de banco duplicados en el Local: hay que borrarlos antes de repetir.
 - El generador pasa a la versión 0.62; regenerada la ayuda del plugin. Paquetes `manual-de-uso-0.62.0.zip` y `asde-area-privada-0.62.0.zip`, copia en `app/public/temporal/` de Local y en `C:\DriveFMR\UtilsMadeByme\`. **No se ha publicado nada.**
+
+## Versión 4.13 · menú «Acción» del banco (v0.64.20, 2026-11-20)
+
+- **Coordinación (Tesorería) y Uniformes (gestión):** los textos explican el menú «Acción» (Conciliar, Pago tienda, Otro, Asociar) en vez de los tres enlaces de cada movimiento, y que el ordenante se ve en una línea con el resto como tooltip (o tocándolo en el móvil).
+- **Captura rehecha:** `20-banco` (columna «Acción», ordenante en una línea, la tabla cabe en su tarjeta). La nota de la versión 4.12 que dice «sin capturas nuevas» no es cierta: allí se añadieron las capturas 137, 138 y 139.
+- La ayuda del plugin (`ayuda/`) se ha regenerado.
