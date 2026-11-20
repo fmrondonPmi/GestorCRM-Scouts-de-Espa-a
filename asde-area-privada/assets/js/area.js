@@ -454,6 +454,33 @@
 		}
 	}, true );
 
+	// v0.64.19: menú de acciones del banco: se cierra al elegir algo o al pulsar fuera.
+	document.addEventListener( 'click', function ( e ) {
+		var abiertos = document.querySelectorAll( 'details.asde-menu-acc[open]' );
+		var item = e.target.closest ? e.target.closest( '.asde-menu-acc__item' ) : null;
+		for ( var i = 0; i < abiertos.length; i++ ) {
+			if ( item || ! abiertos[ i ].contains( e.target ) ) {
+				abiertos[ i ].removeAttribute( 'open' );
+			}
+		}
+	} );
+
+	// v0.64.19: en el móvil no hay tooltip: al tocar el ordenante del banco se despliega debajo el texto completo.
+	function alternarDescripcion( e ) {
+		var t = e.target.closest ? e.target.closest( '.asde-banco-desc__texto' ) : null;
+		if ( ! t || ( 'keydown' === e.type && 'Enter' !== e.key && ' ' !== e.key ) ) {
+			return;
+		}
+		e.preventDefault();
+		var mas = t.nextElementSibling;
+		if ( mas ) {
+			mas.hidden = ! mas.hidden;
+			t.setAttribute( 'aria-expanded', mas.hidden ? 'false' : 'true' );
+		}
+	}
+	document.addEventListener( 'click', alternarDescripcion );
+	document.addEventListener( 'keydown', alternarDescripcion );
+
 	// v0.64.17: tras importar un fichero del banco con códigos, la ventana de asignación guiada se abre sola.
 	var auto = document.querySelector ? document.querySelector( 'a[data-asde-modal][data-asde-auto]' ) : null;
 	if ( auto ) {

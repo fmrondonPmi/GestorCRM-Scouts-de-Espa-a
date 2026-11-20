@@ -1063,7 +1063,7 @@ msgid "%d to review"
 msgstr ""
 
 #. translators: %d: number
-#: src/Frontend/Views/BancoView.php:390 templates/tesoreria/banco.php:309
+#: src/Frontend/Views/BancoView.php:390 templates/tesoreria/banco.php:319
 #, php-format
 msgid "%d transaction"
 msgid_plural "%d transactions"
@@ -1961,6 +1961,10 @@ msgstr ""
 
 #: src/Seguimiento/Catalogo.php:49
 msgid "Achieved"
+msgstr ""
+
+#: templates/tesoreria/banco.php:278
+msgid "Action"
 msgstr ""
 
 #: src/Admin/SettingsPage.php:174 templates/accesos/persona.php:44 templates/accesos/personas.php:51 templates/alta/buscar.php:47
@@ -3659,7 +3663,7 @@ msgstr ""
 msgid "Change the status"
 msgstr ""
 
-#: templates/tesoreria/banco.php:293
+#: templates/tesoreria/banco.php:303
 msgid "Change the type"
 msgstr ""
 
@@ -8408,8 +8412,8 @@ msgstr ""
 msgid "It is named \"%s\""
 msgstr ""
 
-#: templates/tesoreria/banco.php:290
-msgid "It is not a fee…"
+#: templates/tesoreria/banco.php:286
+msgid "It is not a fee: mark it as reviewed with its type."
 msgstr ""
 
 #: templates/tienda/detalle.php:154
@@ -8860,7 +8864,7 @@ msgstr ""
 msgid "Line %d: transaction with an invalid date, amount or debit/credit key."
 msgstr ""
 
-#: templates/tesoreria/banco-asociar.php:83 templates/tesoreria/caja-banco.php:58
+#: templates/tesoreria/banco-asociar.php:83 templates/tesoreria/banco.php:288 templates/tesoreria/caja-banco.php:58
 msgid "Link"
 msgstr ""
 
@@ -8870,6 +8874,10 @@ msgstr ""
 
 #: src/Frontend/Views/BancoView.php:601 src/Frontend/Views/CajaView.php:182
 msgid "Link removed."
+msgstr ""
+
+#: templates/tesoreria/banco.php:288
+msgid "Link this transaction with another one (for example a transfer or a return)."
 msgstr ""
 
 #: templates/tesoreria/banco-asociar.php:33 templates/tesoreria/banco-asociar.php:39
@@ -8898,10 +8906,6 @@ msgstr ""
 
 #: src/Frontend/Views/BancoView.php:384 templates/tesoreria/banco.php:240
 msgid "Linked with"
-msgstr ""
-
-#: templates/tesoreria/banco.php:277
-msgid "Link…"
 msgstr ""
 
 #: templates/inventario/compras.php:60 templates/inventario/compras.php:72
@@ -9148,6 +9152,10 @@ msgstr ""
 msgid "Margin (%)"
 msgstr ""
 
+#: templates/tesoreria/banco.php:284
+msgid "Mark a shop order as paid with this deposit."
+msgstr ""
+
 #: templates/inventario/compra.php:116
 msgid "Mark as bought"
 msgstr ""
@@ -9216,10 +9224,6 @@ msgstr ""
 
 #: src/Idiomas/Guardados.php:200
 msgid "Mark reimbursements as paid"
-msgstr ""
-
-#: templates/tesoreria/banco.php:290
-msgid "Mark reviewed…"
 msgstr ""
 
 #: templates/eventos/inscripciones.php:185
@@ -11025,10 +11029,6 @@ msgstr ""
 msgid "Pay a shop order with this deposit"
 msgstr ""
 
-#: templates/tesoreria/banco.php:287
-msgid "Pay a shop order…"
-msgstr ""
-
 #. translators: %s: text
 #: src/Tienda/Servicio.php:440
 #, php-format
@@ -11037,6 +11037,10 @@ msgstr ""
 
 #: templates/tesoreria/caja.php:210
 msgid "Pay it into the bank"
+msgstr ""
+
+#: templates/tesoreria/banco.php:281
+msgid "Pay the fee of a family with this deposit."
 msgstr ""
 
 #: templates/tesoreria/banco-pedido.php:80
@@ -11998,7 +12002,7 @@ msgstr ""
 msgid "Recipes"
 msgstr ""
 
-#: templates/tesoreria/banco.php:269
+#: templates/tesoreria/banco.php:269 templates/tesoreria/banco.php:281
 msgid "Reconcile"
 msgstr ""
 
@@ -12430,7 +12434,7 @@ msgstr ""
 msgid "Remove from the website"
 msgstr ""
 
-#: templates/tesoreria/banco.php:283
+#: templates/tesoreria/banco.php:298
 msgid "Remove link"
 msgstr ""
 
@@ -12446,7 +12450,7 @@ msgstr ""
 msgid "Remove the link"
 msgstr ""
 
-#: templates/tesoreria/banco.php:279
+#: templates/tesoreria/banco.php:294
 msgid "Remove the link between these two transactions?"
 msgstr ""
 
@@ -13657,6 +13661,10 @@ msgstr ""
 
 #: templates/tesoreria/control.php:156
 msgid "Shop orders to collect"
+msgstr ""
+
+#: templates/tesoreria/banco.php:284
+msgid "Shop payment"
 msgstr ""
 
 #: templates/tienda/config.php:19
@@ -16136,7 +16144,7 @@ msgstr ""
 msgid "The payment date cannot be later than today."
 msgstr ""
 
-#: templates/tesoreria/banco.php:295
+#: templates/tesoreria/banco.php:305
 msgid "The payment recorded on the family will be cancelled."
 msgstr ""
 
@@ -18036,7 +18044,7 @@ msgstr ""
 msgid "Under %d years old"
 msgstr ""
 
-#: templates/tesoreria/banco.php:299 templates/tienda/detalle.php:85 templates/tienda/detalle.php:123 templates/tienda/detalle.php:148
+#: templates/tesoreria/banco.php:309 templates/tienda/detalle.php:85 templates/tienda/detalle.php:123 templates/tienda/detalle.php:148
 msgid "Undo"
 msgstr ""
 
@@ -18052,7 +18060,7 @@ msgstr ""
 msgid "Undo this order's payment?"
 msgstr ""
 
-#: templates/tesoreria/banco.php:295
+#: templates/tesoreria/banco.php:305
 msgid "Undo?"
 msgstr ""
 

@@ -621,6 +621,68 @@ html.asde-cabecera-oculta .asde-ap .asde-nav {
 	gap: 6px;
 	margin: 4px 0;
 }
+/* v0.64.19: las filas del banco, alineadas al centro en vertical */
+.asde-ap .asde-table--banco td {
+	vertical-align: middle;
+}
+.asde-ap .asde-banco-desc__texto {
+	cursor: pointer;
+}
+.asde-ap .asde-banco-desc__mas {
+	display: block;
+	margin-top: 4px;
+}
+.asde-ap .asde-banco-desc__mas[hidden] {
+	display: none;
+}
+/* v0.64.19: la familia, la ronda y el botón de acción en una sola línea */
+@media (min-width: 768px) {
+	.asde-ap .asde-banco-desc__texto {
+		display: inline-block;
+		max-width: 340px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		vertical-align: middle;
+	}
+	.asde-ap .asde-banco-familia {
+		white-space: nowrap;
+	}
+	.asde-ap .asde-banco-familia .asde-help {
+		display: block;
+		white-space: normal;
+	}
+	.asde-ap .asde-banco-familia .asde-conciliar {
+		display: flex;
+		align-items: center;
+		flex-wrap: nowrap;
+		width: 280px;
+		margin: 0 !important; /* el tema fuerza un margen inferior con #top */
+		vertical-align: middle;
+	}
+	.asde-ap .asde-banco-familia .asde-conciliar > *,
+	.asde-ap .asde-banco-familia .asde-conciliar input,
+	.asde-ap .asde-banco-familia .asde-conciliar select {
+		margin: 0 !important; /* el tema fuerza 20px con #top */
+	}
+	.asde-ap .asde-banco-familia .asde-conciliar .asde-combobox {
+		flex: 1 1 0;
+		min-width: 120px;
+	}
+	.asde-ap .asde-banco-familia .asde-conciliar select[name="ronda_pago"] {
+		flex: 0 0 110px;
+		width: 110px;
+	}
+	.asde-ap .asde-banco-acciones {
+		white-space: nowrap;
+	}
+	.asde-ap .asde-banco-acciones .asde-actions {
+		display: inline-flex;
+		flex-wrap: nowrap;
+		align-items: center;
+		margin: 0;
+	}
+}
 .asde-ap .asde-conciliar select {
 	width: auto;
 	max-width: 100%;
@@ -872,6 +934,51 @@ html.asde-cabecera-oculta .asde-ap .asde-nav {
 }
 .asde-ap .asde-actions form {
 	margin: 0;
+}
+/* v0.64.19: menú desplegable de acciones (banco) */
+.asde-ap .asde-menu-acc {
+	position: relative;
+}
+.asde-ap .asde-menu-acc > summary {
+	display: inline-block;
+	list-style: none;
+	cursor: pointer;
+}
+.asde-ap .asde-menu-acc > summary::-webkit-details-marker {
+	display: none;
+}
+.asde-ap .asde-menu-acc > summary::after {
+	content: " \25BE";
+}
+.asde-ap .asde-menu-acc__lista {
+	position: absolute;
+	z-index: 20;
+	left: 0;
+	min-width: 180px;
+	margin: 4px 0 0;
+	padding: 4px 0;
+	list-style: none;
+	background: var(--asde-surface);
+	border: 1px solid var(--asde-border);
+	border-radius: 4px;
+	box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+.asde-ap .asde-menu-acc__item {
+	display: block;
+	width: 100%;
+	padding: 8px 14px;
+	border: 0;
+	background: none;
+	color: inherit;
+	font: inherit;
+	text-align: left;
+	text-decoration: none;
+	cursor: pointer;
+}
+.asde-ap .asde-menu-acc__item:hover,
+.asde-ap .asde-menu-acc__item:focus {
+	background: var(--asde-neutral-bg);
+	text-decoration: none;
 }
 .asde-ap .asde-btn-link {
 	padding: 0;

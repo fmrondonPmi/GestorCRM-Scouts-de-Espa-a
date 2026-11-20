@@ -195,6 +195,7 @@ $revisar = static fn( array $ids ) => add_query_arg(
 						<th scope="col"<?php echo wp_kses( $tabla->aria_sort( $col ), asde_html_permitido() ); ?>><?php echo wp_kses( $tabla->cabecera( $col, $etiqueta ), asde_html_permitido() ); ?></th>
 					<?php endforeach; ?>
 					<th scope="col"><?php esc_html_e( 'Family', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></th>
+					<th scope="col"><span class="screen-reader-text"><?php esc_html_e( 'Actions', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></span></th>
 				</tr>
 			</thead>
 			<tbody>
@@ -212,14 +213,14 @@ $revisar = static fn( array $ids ) => add_query_arg(
 							</td>
 						<?php endif; ?>
 						<td data-label="<?php echo esc_attr( esc_attr__( 'Date', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php echo esc_html( wp_date( 'd/m/Y', strtotime( $m['fecha'] . ' 12:00' ) ) ); ?></td>
-						<td data-label="<?php echo esc_attr( esc_attr__( 'Description', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
-							<?php if ( '' !== $m['ordenante'] ) : ?>
-								<strong><?php echo esc_html( $m['ordenante'] ); ?></strong><br>
-							<?php endif; ?>
-							<?php echo esc_html( '' !== $m['concepto'] ? $m['concepto'] : ( ( Norma43::conceptos()[ $m['concepto_comun'] ] ?? '—' ) ) ); ?>
-							<?php if ( '' !== $m['referencia1'] . $m['referencia2'] ) : ?>
-								<br><span class="asde-muted"><?php esc_html_e( 'Ref.:', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <?php echo esc_html( trim( $m['referencia1'] . ' ' . $m['referencia2'] ) ); ?></span>
-							<?php endif; ?>
+						<?php
+						$cp         = '' !== $m['concepto'] ? $m['concepto'] : ( Norma43::conceptos()[ $m['concepto_comun'] ] ?? '—' );
+						$desc_corta = '' !== $m['ordenante'] ? ( preg_match( '/^(?:[^\p{Ll}\s]+(?:\s+|$))+/u', $m['ordenante'], $mm ) ? trim( $mm[0] ) : $m['ordenante'] ) : $cp; // El ordenante viene en MAYÚSCULAS: se corta donde acaban.
+						$ref_txt    = trim( $m['referencia1'] . ' ' . $m['referencia2'] );
+						$desc_larga = trim( $m['ordenante'] . ' · ' . $cp . ( '' !== $ref_txt ? ' · ' . __( 'Ref.:', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . ' ' . $ref_txt : '' ), ' ·' );
+						?>
+						<td class="asde-banco-desc" data-label="<?php echo esc_attr( esc_attr__( 'Description', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
+							<strong class="asde-banco-desc__texto" title="<?php echo esc_attr( $desc_larga ); ?>" role="button" tabindex="0" aria-expanded="false"><?php echo esc_html( $desc_corta ); ?></strong><span class="asde-banco-desc__mas asde-muted" hidden><?php echo esc_html( $desc_larga ); ?></span><?php // v0.64.19: una línea; el resto, en el tooltip. ?>
 						</td>
 						<td data-label="<?php echo esc_attr( esc_attr__( 'Amount', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>" class="asde-importe <?php echo $ingreso ? 'asde-importe--ingreso' : 'asde-importe--gasto'; ?>"><?php echo esc_html( ( $ingreso ? '+' : '' ) . Calculadora::euros( $m['importe'] ) ); ?></td>
 						<td data-label="<?php echo esc_attr( esc_attr__( 'Status', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
@@ -240,7 +241,7 @@ $revisar = static fn( array $ids ) => add_query_arg(
 								<br><span class="asde-banco-asociado">↔ <?php esc_html_e( 'Linked with', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <?php echo $otro ? esc_html( wp_date( 'd/m/Y', strtotime( $otro['fecha'] . ' 12:00' ) ) . ' · ' . ( $otro['importe'] > 0 ? '+' : '' ) . Calculadora::euros( $otro['importe'] ) ) : '—'; ?></span>
 							<?php endif; ?>
 						</td>
-						<td data-label="<?php echo esc_attr( esc_attr__( 'Family', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
+						<td class="asde-banco-familia" data-label="<?php echo esc_attr( esc_attr__( 'Family', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
 							<?php if ( BancoTable::CONCILIADO === $m['estado'] || ( BancoTable::IGNORADO === $m['estado'] && ! empty( $m['familia_id'] ) ) ) : ?>
 								<?php echo esc_html( $familias['etiquetas'][ (int) $m['familia_id'] ] ?? '—' ); ?>
 							<?php elseif ( BancoTable::PENDIENTE === $m['estado'] && $ingreso ) : ?>
@@ -248,7 +249,7 @@ $revisar = static fn( array $ids ) => add_query_arg(
 									<span class="asde-help<?php echo $sug['fiable'] ? '' : ' asde-help--warning'; ?>"><?php esc_html_e( 'Suggested:', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <?php echo esc_html( $sug['motivo'] ); ?></span>
 								<?php endif; ?>
 								<?php if ( $familias['etiquetas'] ) : ?>
-									<form method="post" class="asde-conciliar">
+									<form method="post" class="asde-conciliar" id="asde-conc-<?php echo (int) $m['id']; ?>">
 										<?php wp_nonce_field( 'asde_banco_mov_' . (int) $m['id'] ); ?>
 										<input type="hidden" name="asde_action" value="conciliar">
 										<input type="hidden" name="mov" value="<?php echo (int) $m['id']; ?>">
@@ -266,16 +267,32 @@ $revisar = static fn( array $ids ) => add_query_arg(
 												<option value="<?php echo esc_attr( $r ); ?>" <?php selected( $rd, $r ); ?>><?php echo esc_html( $r ); ?></option>
 											<?php endforeach; ?>
 										</select>
-										<button type="submit" class="button"><?php esc_html_e( 'Reconcile', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 									</form>
 								<?php else : ?>
 									<span class="asde-muted"><?php esc_html_e( 'First create the', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?> <a href="<?php echo esc_url( $url_fam ); ?>"><?php esc_html_e( 'families', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a>.</span>
 								<?php endif; ?>
 							<?php endif; ?>
+						</td>
+						<td class="asde-banco-acciones" data-label="">
 							<div class="asde-actions">
-								<?php if ( empty( $m['asociado_id'] ) ) : ?>
-									<a href="<?php echo esc_url( $asociar( (int) $m['id'] ) ); ?>" data-asde-modal><?php esc_html_e( 'Link…', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a>
-								<?php else : ?>
+								<?php if ( BancoTable::PENDIENTE === $m['estado'] ) : // v0.64.19: un menú desplegable en vez de tres enlaces. ?>
+									<details class="asde-menu-acc">
+										<summary class="button"><?php esc_html_e( 'Action', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></summary>
+										<ul class="asde-menu-acc__lista">
+											<?php if ( $ingreso && $familias['etiquetas'] ) : ?>
+												<li><button type="submit" form="asde-conc-<?php echo (int) $m['id']; ?>" class="asde-menu-acc__item" title="<?php echo esc_attr( esc_attr__( 'Pay the fee of a family with this deposit.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php esc_html_e( 'Reconcile', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button></li>
+											<?php endif; ?>
+											<?php if ( $ingreso && $tienda_banco ) : ?>
+												<li><a class="asde-menu-acc__item" href="<?php echo esc_url( $pagar_pedido( (int) $m['id'] ) ); ?>" data-asde-modal title="<?php echo esc_attr( esc_attr__( 'Mark a shop order as paid with this deposit.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php esc_html_e( 'Shop payment', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a></li>
+											<?php endif; ?>
+											<li><a class="asde-menu-acc__item" href="<?php echo esc_url( $revisar( array( (int) $m['id'] ) ) ); ?>" data-asde-modal title="<?php echo esc_attr( esc_attr__( 'It is not a fee: mark it as reviewed with its type.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php esc_html_e( 'Other', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a></li>
+											<?php if ( empty( $m['asociado_id'] ) ) : ?>
+												<li><a class="asde-menu-acc__item" href="<?php echo esc_url( $asociar( (int) $m['id'] ) ); ?>" data-asde-modal title="<?php echo esc_attr( esc_attr__( 'Link this transaction with another one (for example a transfer or a return).', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>"><?php esc_html_e( 'Link', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a></li>
+											<?php endif; ?>
+										</ul>
+									</details>
+								<?php endif; ?>
+								<?php if ( ! empty( $m['asociado_id'] ) ) : ?>
 									<form method="post" data-asde-confirmar="<?php echo esc_attr( __( 'Remove the link between these two transactions?', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?>">
 										<?php wp_nonce_field( 'asde_banco_mov_' . (int) $m['id'] ); ?>
 										<input type="hidden" name="asde_action" value="desasociar">
@@ -283,12 +300,7 @@ $revisar = static fn( array $ids ) => add_query_arg(
 										<button type="submit" class="asde-btn-link"><?php esc_html_e( 'Remove link', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></button>
 									</form>
 								<?php endif; ?>
-								<?php if ( BancoTable::PENDIENTE === $m['estado'] && $ingreso && $tienda_banco ) : ?>
-									<a href="<?php echo esc_url( $pagar_pedido( (int) $m['id'] ) ); ?>" data-asde-modal><?php esc_html_e( 'Pay a shop order…', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a>
-								<?php endif; ?>
-								<?php if ( BancoTable::PENDIENTE === $m['estado'] ) : ?>
-									<a href="<?php echo esc_url( $revisar( array( (int) $m['id'] ) ) ); ?>" data-asde-modal><?php echo $ingreso ? esc_html( __( 'It is not a fee…', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ) : esc_html( __( 'Mark reviewed…', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) ); ?></a>
-								<?php else : ?>
+								<?php if ( BancoTable::PENDIENTE !== $m['estado'] ) : ?>
 									<?php if ( BancoTable::IGNORADO === $m['estado'] ) : ?>
 										<a href="<?php echo esc_url( $revisar( array( (int) $m['id'] ) ) ); ?>" data-asde-modal><?php esc_html_e( 'Change the type', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ); ?></a>
 									<?php endif; ?>

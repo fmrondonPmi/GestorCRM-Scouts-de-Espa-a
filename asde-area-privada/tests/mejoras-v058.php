@@ -210,7 +210,7 @@ try {
 			'url_excel' => home_url( '/banco/?formato=xlsx' ),
 		)
 	);
-	$ok( str_contains( $h_lista, 'Asociado con' ) && str_contains( $h_lista, 'Quitar asociación' ) && str_contains( $h_lista, 'Asociar…' ) && str_contains( $h_lista, 'Descargar Excel' ), 'el listado enseña «Asociado con», «Quitar asociación», «Asociar…» y «Descargar Excel»' );
+	$ok( str_contains( $h_lista, 'Asociado con' ) && str_contains( $h_lista, 'Quitar asociación' ) && str_contains( $h_lista, 'asde-menu-acc__item' ) && str_contains( $h_lista, 'Descargar Excel' ), 'el listado enseña «Asociado con», «Quitar asociación», «Asociar…» y «Descargar Excel»' );
 	$h_vent = TemplateLoader::render(
 		'tesoreria/banco-asociar',
 		array(

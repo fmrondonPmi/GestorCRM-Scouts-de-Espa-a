@@ -1065,7 +1065,7 @@ msgid "%d to review"
 msgstr "%d por revisar"
 
 #. translators: %d: number
-#: src/Frontend/Views/BancoView.php:390 templates/tesoreria/banco.php:309
+#: src/Frontend/Views/BancoView.php:390 templates/tesoreria/banco.php:319
 #, php-format
 msgid "%d transaction"
 msgid_plural "%d transactions"
@@ -1964,6 +1964,10 @@ msgstr "Contas que non se poden cambiar (seguen entrando coma antes)"
 #: src/Seguimiento/Catalogo.php:49
 msgid "Achieved"
 msgstr "Logrado"
+
+#: templates/tesoreria/banco.php:278
+msgid "Action"
+msgstr "Acción"
 
 #: src/Admin/SettingsPage.php:174 templates/accesos/persona.php:44 templates/accesos/personas.php:51 templates/alta/buscar.php:47
 msgid "Actions"
@@ -3661,7 +3665,7 @@ msgstr "Cambiar os datos do grupo (nome, CIF, enderezo e provincia)"
 msgid "Change the status"
 msgstr "Cambiar o estado"
 
-#: templates/tesoreria/banco.php:293
+#: templates/tesoreria/banco.php:303
 msgid "Change the type"
 msgstr "Cambiar o tipo"
 
@@ -8410,9 +8414,9 @@ msgstr "É máis do que se pagou (%s)."
 msgid "It is named \"%s\""
 msgstr "Leva o nome «%s»"
 
-#: templates/tesoreria/banco.php:290
-msgid "It is not a fee…"
-msgstr "Non é unha cota…"
+#: templates/tesoreria/banco.php:286
+msgid "It is not a fee: mark it as reviewed with its type."
+msgstr "Non é unha cota: márcao como revisado co seu tipo."
 
 #: templates/tienda/detalle.php:154
 msgid "It is not in any group order."
@@ -8862,7 +8866,7 @@ msgstr "Liña %d: movemento (22) fóra dunha conta."
 msgid "Line %d: transaction with an invalid date, amount or debit/credit key."
 msgstr "Liña %d: movemento con data, importe ou clave debe/haber non válidos."
 
-#: templates/tesoreria/banco-asociar.php:83 templates/tesoreria/caja-banco.php:58
+#: templates/tesoreria/banco-asociar.php:83 templates/tesoreria/banco.php:288 templates/tesoreria/caja-banco.php:58
 msgid "Link"
 msgstr "Asociar"
 
@@ -8873,6 +8877,10 @@ msgstr "Ligazón no menú da web (texto; baleiro = sen ligazón)"
 #: src/Frontend/Views/BancoView.php:601 src/Frontend/Views/CajaView.php:182
 msgid "Link removed."
 msgstr "Asociación quitada."
+
+#: templates/tesoreria/banco.php:288
+msgid "Link this transaction with another one (for example a transfer or a return)."
+msgstr "Asocia este movemento con outro (por exemplo unha transferencia ou unha devolución)."
 
 #: templates/tesoreria/banco-asociar.php:33 templates/tesoreria/banco-asociar.php:39
 msgid "Link with another transaction"
@@ -8901,10 +8909,6 @@ msgstr "Movementos asociados."
 #: src/Frontend/Views/BancoView.php:384 templates/tesoreria/banco.php:240
 msgid "Linked with"
 msgstr "Asociado con"
-
-#: templates/tesoreria/banco.php:277
-msgid "Link…"
-msgstr "Asociar…"
 
 #: templates/inventario/compras.php:60 templates/inventario/compras.php:72
 msgid "List"
@@ -9150,6 +9154,10 @@ msgstr "Ligazón ao mapa (opcional)"
 msgid "Margin (%)"
 msgstr "Marxe (%)"
 
+#: templates/tesoreria/banco.php:284
+msgid "Mark a shop order as paid with this deposit."
+msgstr "Marca un pedido da tenda como pagado con este ingreso."
+
 #: templates/inventario/compra.php:116
 msgid "Mark as bought"
 msgstr "Marcar como comprada"
@@ -9219,10 +9227,6 @@ msgstr "Marcar como pagados os pedidos"
 #: src/Idiomas/Guardados.php:200
 msgid "Mark reimbursements as paid"
 msgstr "Marcar como pagados os reintegros"
-
-#: templates/tesoreria/banco.php:290
-msgid "Mark reviewed…"
-msgstr "Marcar revisado…"
 
 #: templates/eventos/inscripciones.php:185
 msgid "Mark the paper one as received"
@@ -11027,10 +11031,6 @@ msgstr "Contrasinal gardado. Xa podes entrar co teu número de socio/a (ou o teu
 msgid "Pay a shop order with this deposit"
 msgstr "Pagar un pedido da tenda con este ingreso"
 
-#: templates/tesoreria/banco.php:287
-msgid "Pay a shop order…"
-msgstr "Pagar un pedido da tenda…"
-
 #. translators: %s: text
 #: src/Tienda/Servicio.php:440
 #, php-format
@@ -11040,6 +11040,10 @@ msgstr "Paga con tarxeta, en persoa, co datáfono do grupo ao recollelo, indican
 #: templates/tesoreria/caja.php:210
 msgid "Pay it into the bank"
 msgstr "Ingresalo no banco"
+
+#: templates/tesoreria/banco.php:281
+msgid "Pay the fee of a family with this deposit."
+msgstr "Paga a cota dunha familia con este ingreso."
 
 #: templates/tesoreria/banco-pedido.php:80
 msgid "Pay this one"
@@ -12000,7 +12004,7 @@ msgstr "Receita gardada."
 msgid "Recipes"
 msgstr "Receitas"
 
-#: templates/tesoreria/banco.php:269
+#: templates/tesoreria/banco.php:269 templates/tesoreria/banco.php:281
 msgid "Reconcile"
 msgstr "Conciliar"
 
@@ -12432,7 +12436,7 @@ msgstr "Eliminar a %s da web? Deixa de saír en Persoas, sae da súa familia e a
 msgid "Remove from the website"
 msgstr "Eliminar da web"
 
-#: templates/tesoreria/banco.php:283
+#: templates/tesoreria/banco.php:298
 msgid "Remove link"
 msgstr "Quitar a asociación"
 
@@ -12448,7 +12452,7 @@ msgstr "Quitar o ingreso"
 msgid "Remove the link"
 msgstr "Quitar a asociación"
 
-#: templates/tesoreria/banco.php:279
+#: templates/tesoreria/banco.php:294
 msgid "Remove the link between these two transactions?"
 msgstr "Quitar a asociación entre estes dous movementos?"
 
@@ -13660,6 +13664,10 @@ msgstr "Pedidos da tenda"
 #: templates/tesoreria/control.php:156
 msgid "Shop orders to collect"
 msgstr "Pedidos da tenda por cobrar"
+
+#: templates/tesoreria/banco.php:284
+msgid "Shop payment"
+msgstr "Pagamento tenda"
 
 #: templates/tienda/config.php:19
 msgid "Shop · settings"
@@ -16138,7 +16146,7 @@ msgstr "O importe do pago debe ser maior que 0."
 msgid "The payment date cannot be later than today."
 msgstr "A data do pago non pode ser posterior a hoxe."
 
-#: templates/tesoreria/banco.php:295
+#: templates/tesoreria/banco.php:305
 msgid "The payment recorded on the family will be cancelled."
 msgstr "Anularase o pago que se rexistrou na familia."
 
@@ -18038,7 +18046,7 @@ msgstr "Por debaixo de %d anos fai falta o titor/a 1: nome, apelidos e email."
 msgid "Under %d years old"
 msgstr "Menores de %d anos"
 
-#: templates/tesoreria/banco.php:299 templates/tienda/detalle.php:85 templates/tienda/detalle.php:123 templates/tienda/detalle.php:148
+#: templates/tesoreria/banco.php:309 templates/tienda/detalle.php:85 templates/tienda/detalle.php:123 templates/tienda/detalle.php:148
 msgid "Undo"
 msgstr "Desfacer"
 
@@ -18054,7 +18062,7 @@ msgstr "Queres desfacer a entrega? Tamén se borra a confirmación do socio/a, s
 msgid "Undo this order's payment?"
 msgstr "Queres desfacer o pago deste pedido?"
 
-#: templates/tesoreria/banco.php:295
+#: templates/tesoreria/banco.php:305
 msgid "Undo?"
 msgstr "Desfacer?"
 
