@@ -95,7 +95,7 @@ final class Menu {
 			$n                       = \AsdeBalears\AreaPrivada\ListaEspera\Inscripciones::contar_sin_contactar();
 			$gestion['lista_espera'] = __( 'Waiting list', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ) . ( $n ? ' (' . $n . ')' : '' );
 		}
-		if ( current_user_can( 'asde_seguimiento' ) ) {
+		if ( \AsdeBalears\AreaPrivada\Frontend\Views\MiSeccionView::acceso() ) {
 			// v0.63 (doc 65): quien tiene ficha propia (scouters) la lleva en «Mi espacio»; Secretaría, Coordinación o administración sin ficha, en la gestión.
 			if ( $ambito && $ambito->persona ) {
 				$personal['mi_seccion'] = __( 'My section', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' );

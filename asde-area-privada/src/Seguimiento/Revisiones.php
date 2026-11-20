@@ -79,7 +79,7 @@ final class Revisiones {
 			'objetivo' => $objetivo,
 			'notas'    => array_filter( array_map( 'trim', $notas ) ),
 		);
-		return (bool) $wpdb->insert(
+		return (bool) $wpdb->insert( // phpcs:ignore WordPress.DB.DirectDatabaseQuery -- tabla propia del plugin; no hay función de WordPress para ella.
 			self::table(),
 			array(
 				'grupo'     => $grupo,

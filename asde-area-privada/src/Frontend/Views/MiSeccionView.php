@@ -9,6 +9,7 @@ use AsdeBalears\AreaPrivada\Domain\Persona;
 use AsdeBalears\AreaPrivada\Frontend\Notices;
 use AsdeBalears\AreaPrivada\Seguimiento\Catalogo;
 use AsdeBalears\AreaPrivada\Seguimiento\Revisiones;
+use AsdeBalears\AreaPrivada\Usuarios\Usuarios;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -23,6 +24,17 @@ final class MiSeccionView extends View {
 
 	/** Días sin revisar a partir de los cuales se avisa (el programa pide una revisión al trimestre). */
 	public const DIAS_REVISAR = 90;
+
+	/**
+	 * ¿Entra en «Mi sección»? Con el permiso (scouters, Coordinación, Secretaría…) y una sección asignada
+	 * en su cuenta; la administración, sin ficha, entra siempre.
+	 */
+	public static function acceso(): bool {
+		if ( ! current_user_can( self::CAP ) ) {
+			return false;
+		}
+		return Ambito::actual()->es_admin() || (bool) Usuarios::secciones( get_current_user_id() );
+	}
 
 	/** @return string[] Secciones que puede ver quien entra. */
 	private function secciones(): array {
@@ -43,7 +55,7 @@ final class MiSeccionView extends View {
 	}
 
 	public function render( string $content = '' ): string {
-		$secciones = current_user_can( self::CAP ) ? $this->secciones() : array();
+		$secciones = self::acceso() ? $this->secciones() : array();
 		if ( ! $secciones ) {
 			return $this->denegado();
 		}
@@ -99,7 +111,7 @@ final class MiSeccionView extends View {
 	}
 
 	public function handle_post(): void {
-		$secciones = current_user_can( self::CAP_EDITAR ) ? $this->secciones() : array();
+		$secciones = self::acceso() && current_user_can( self::CAP_EDITAR ) ? $this->secciones() : array();
 		if ( ! $secciones || 'guardar_seguimiento' !== $this->post( 'asde_action' ) ) {
 			wp_die( esc_html__( 'You do not have permission to do this.', 'asde-scouts-de-espana-gestor-crm-para-grupos-scouts' ), 403 );
 		}

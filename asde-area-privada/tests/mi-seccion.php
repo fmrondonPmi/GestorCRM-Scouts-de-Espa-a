@@ -90,8 +90,9 @@ $crear = static function ( string $login, string $rol, array $meta = array() ) u
 	return $id;
 };
 $u_sc    = $crear( 'prueba-seg-sc', Roles::SCOUTER, array( Usuarios::META_SOCIO => '990090', Usuarios::META_SECCION => 'scouts' ) );
-$u_coord = $crear( 'prueba-seg-coord', Roles::COORDINACION, array( Usuarios::META_SOCIO => '990091' ) );
+$u_coord = $crear( 'prueba-seg-coord', Roles::COORDINACION, array( Usuarios::META_SOCIO => '990091', Usuarios::META_SECCION => 'rovers' ) );
 $u_secre = $crear( 'prueba-seg-secre', Roles::SECRETARIA, array( Usuarios::META_SOCIO => '990092' ) );
+$u_secre2 = $crear( 'prueba-seg-secre2', Roles::SECRETARIA, array( Usuarios::META_SOCIO => '990092', Usuarios::META_SECCION => 'castores' ) );
 $u_dos   = $crear( 'prueba-seg-dos', Roles::SCOUTER, array( Usuarios::META_SOCIO => '990090' ) );
 add_user_meta( $u_dos, Usuarios::META_SECCION, 'scouts' );
 add_user_meta( $u_dos, Usuarios::META_SECCION, 'lobatos' );
@@ -130,7 +131,11 @@ try {
 	$como( $u_coord );
 	$ok( current_user_can( MiSeccionView::CAP ) && ! current_user_can( MiSeccionView::CAP_EDITAR ), 'Coordinación solo ve' );
 	$como( $u_secre );
-	$ok( ! current_user_can( MiSeccionView::CAP ), 'Secretaría no entra' );
+	$ok( ! MiSeccionView::acceso(), 'Secretaría sin sección asignada no entra' );
+	$como( $u_secre2 );
+	$ok( MiSeccionView::acceso() && ! current_user_can( MiSeccionView::CAP_EDITAR ), 'Secretaría con una sección asignada entra, solo lectura' );
+	$como( $u_coord );
+	$ok( MiSeccionView::acceso(), 'Coordinación con sección asignada entra' );
 	$como( $u_fam );
 	$ok( ! current_user_can( MiSeccionView::CAP ), 'una familia no entra' );
 

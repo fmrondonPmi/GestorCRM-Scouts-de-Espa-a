@@ -80,6 +80,7 @@ final class Roles {
 					'asde_inventario'        => true,
 					'asde_lista_espera'      => true,
 					'asde_lista_espera_alta' => true, // Asignar sección, dar de alta en el CRM y borrar (v0.32).
+					'asde_seguimiento'       => true, // Mi sección: solo lectura, si tiene una sección asignada (MiSeccionView::acceso()).
 					'asde_eventos_inscribir' => true,
 					'asde_eventos_gestion'   => true, // Los de sección de todo el grupo.
 					'asde_menus_recetas'     => true,
